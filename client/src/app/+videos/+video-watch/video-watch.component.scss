@@ -152,7 +152,7 @@ $video-info-margin-left: 44px;
       .video-info-name {
         @include peertube-word-wrap;
 
-        margin-right: 30px;
+        @include margin-right(30px);
         min-height: 40px; // Align with the action buttons
         font-size: 27px;
         font-weight: $font-semibold;
@@ -167,9 +167,10 @@ $video-info-margin-left: 44px;
       }
 
       .video-info-date-views {
-        align-self: start;
+        @include margin-right(10px);
+
         margin-bottom: 10px;
-        margin-right: 10px;
+        align-self: start;
         font-size: 1em;
       }
 
@@ -209,15 +210,19 @@ $video-info-margin-left: 44px;
         }
 
         my-subscribe-button {
-          margin-left: 5px;
+          @include margin-left(5px);
         }
       }
 
       .video-actions-rates {
-        margin: 0 0 10px;
+        @include margin-left(auto);
+        @include margin-right(0);
+
+        margin-top: 0;
+        margin-bottom: 10px;
+
         align-items: start;
         width: max-content;
-        margin-left: auto;
 
         .video-actions {
           height: 40px; // Align with the title
@@ -227,7 +232,7 @@ $video-info-margin-left: 44px;
           .action-button:not(:first-child),
           .action-dropdown,
           my-video-actions-dropdown {
-            margin-left: 5px;
+            @include margin-left(5px);
           }
 
           ::ng-deep.action-button {
@@ -305,7 +310,7 @@ $video-info-margin-left: 44px;
             }
 
             .icon-text {
-              margin-left: 3px;
+              @include margin-left(3px);
             }
           }
         }
@@ -341,8 +346,11 @@ $video-info-margin-left: 44px;
     }
 
     .video-info-description {
-      margin: 20px 0;
-      margin-left: $video-info-margin-left;
+      @include margin-left($video-info-margin-left);
+      @include margin-right(0);
+
+      margin-top: 20px;
+      margin-bottom: 20px;
       font-size: 15px;
 
       .video-info-description-html {
@@ -355,7 +363,7 @@ $video-info-margin-left: 44px;
 
       .glyphicon,
       .description-loading {
-        margin-left: 3px;
+        @include margin-left(3px);
       }
 
       .description-loading {
@@ -376,7 +384,7 @@ $video-info-margin-left: 44px;
     }
 
     .video-attributes {
-      margin-left: $video-info-margin-left;
+      @include margin-left($video-info-margin-left);
     }
 
     .video-attributes .video-attribute {
@@ -385,8 +393,9 @@ $video-info-margin-left: 44px;
       margin-bottom: 12px;
 
       .video-attribute-label {
+        @include padding-right(5px);
+
         min-width: 142px;
-        padding-right: 5px;
         display: inline-block;
         color: pvar(--greyForegroundColor);
         font-weight: $font-bold;
@@ -413,8 +422,9 @@ $video-info-margin-left: 44px;
 }
 
 my-recommended-videos {
+  @include padding-left(15px);
+
   display: block;
-  padding-left: 15px;
   min-width: 250px;
 }
 
@@ -432,14 +442,15 @@ my-video-comments {
 
 @media screen and (max-width: $small-view) {
   .privacy-concerns {
-    margin-left: $menu-width - 15px; // Menu is absolute
+    @include margin-left($menu-width - 15px); // Menu is absolute
   }
 }
 
 :host-context(.expanded) {
   .privacy-concerns {
+    @include margin-left(-15px);
+
     width: 100%;
-    margin-left: -15px;
   }
 }
 
@@ -473,8 +484,9 @@ my-video-comments {
   }
 
   .privacy-concerns-button {
+    @include margin-left(auto);
+
     padding: 5px 8px 5px 7px;
-    margin-left: auto;
     border-radius: 3px;
     white-space: nowrap;
     cursor: pointer;
@@ -487,8 +499,9 @@ my-video-comments {
   }
 
   .privacy-concerns-okay {
+    @include margin-left(10px);
+
     background-color: pvar(--mainColor);
-    margin-left: 10px;
   }
 }
 
@@ -525,7 +538,7 @@ my-video-comments {
   }
 
   my-recommended-videos {
-    padding-left: 0;
+    @include padding-left(0);
   }
 }
 

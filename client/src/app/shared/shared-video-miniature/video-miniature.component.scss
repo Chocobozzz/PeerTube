@@ -13,7 +13,7 @@ $more-button-width: 40px;
 }
 
 my-actor-avatar {
-  margin: 10px 10px 0 0;
+  @include margin(10px, 10px, 0, 0);
 }
 
 .video-miniature-created-at-views {
@@ -155,10 +155,11 @@ my-actor-avatar {
   }
 
   my-video-thumbnail {
+    @include margin-right(10px);
+
     min-width: var(--rowThumbnailWidth);
     max-width: var(--rowThumbnailWidth);
     height: var(--rowThumbnailHeight);
-    margin-right: 10px;
   }
 
   .video-miniature-name {

@@ -7,7 +7,7 @@ input[type=text] {
 
 .peertube-select-container {
   @include peertube-select-container(auto);
-  margin-left: 0.5rem;
+  @include margin-left(0.5rem);
 }
 
 h1 {
@@ -20,7 +20,7 @@ h1 {
     @include button-with-icon(18px, 3px, -1px);
 
     &:not(:last-child) {
-      margin-right: 10px;
+      @include margin-right(10px);
     }
   }
 }
@@ -38,13 +38,14 @@ h1 {
 }
 
 .action-button {
+  @include margin-left(10px);
+
   display: flex;
-  margin-left: 10px;
   align-self: flex-end;
 }
 
 my-edit-button {
-  margin-right: 10px;
+  @include margin-right(10px);
 }
 
 @include on-small-main-col {
@@ -58,8 +59,9 @@ my-edit-button {
   }
 
   .action-button {
+    @include margin-left(auto);
+
     margin-top: 10px;
-    margin-left: auto;
   }
 }
 
@@ -72,11 +74,11 @@ my-edit-button {
       margin-bottom: 12px;
     }
     .peertube-select-container {
-      margin-left: 0;
+      @include margin-left(0);
     }
   }
 
   .action-button {
-    margin-left: 0;
+    @include margin-left(0);
   }
 }

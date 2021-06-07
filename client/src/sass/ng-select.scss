@@ -31,7 +31,7 @@ $ng-select-value-font-size: 15px;
   }
 
   .ng-arrow-wrapper {
-    padding-right: 12px;
+    @include padding-right(12px);
   }
 
   &.ng-select-single .ng-value-container .ng-value {
@@ -44,10 +44,10 @@ $ng-select-value-font-size: 15px;
   }
 
   &.ng-select-multiple .ng-select-container .ng-value-container {
-    padding-left: 12px;
+    @include padding-left(12px);
 
     .ng-value { /* stylelint-disable-line */
-      margin-left: 3px;
+      @include margin-left(12px);
     }
   }
 }

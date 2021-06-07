@@ -12,8 +12,9 @@
   margin-bottom: 10px;
 
   .plugin-name {
+    @include margin-right(10px);
+
     font-size: 16px;
-    margin-right: 10px;
     font-weight: $font-semibold;
   }
 
@@ -22,7 +23,7 @@
   }
 
   .plugin-icon {
-    margin-left: 10px;
+    @include margin-left(10px);
 
     my-global-icon {
       @include apply-svg-color(pvar(--greyForegroundColor));
@@ -34,11 +35,11 @@
   }
 
   .buttons {
-    margin-left: auto;
+    @include margin-left(auto);
     width: max-content;
 
     > *:not(:last-child) {
-      margin-right: 10px;
+      @include margin-right(10px);
     }
   }
 }

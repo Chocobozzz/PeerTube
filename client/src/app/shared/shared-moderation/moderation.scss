@@ -9,7 +9,7 @@
     font-weight: $font-semibold;
     display: inline-block;
     vertical-align: top;
-    text-align: right;
+    text-align: end;
   }
 
   .moderation-expanded-text {
@@ -79,10 +79,10 @@ my-action-dropdown.show {
     $image-height: 45px;
 
     @include miniature-thumbnail;
+    @include margin-right(0.5rem);
 
     height: $image-height;
     width: #{(16/9) * $image-height};
-    margin-right: 0.5rem;
     border-radius: 2px;
     border: 0;
     background: transparent;
@@ -121,9 +121,10 @@ my-action-dropdown.show {
     line-height: 1rem;
 
     div .glyphicon {
+      @include margin-left(0.1rem);
+
       font-size: 80%;
       color: #808080;
-      margin-left: 0.1rem;
     }
 
     div + div {

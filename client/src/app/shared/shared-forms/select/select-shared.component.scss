@@ -43,10 +43,10 @@ ng-select ::ng-deep {
 my-select-options + input {
   @include peertube-input-text($form-base-input-width);
 
-  margin-left: 5px;
+  @include margin-left(5px);
   display: block;
 }
 
 .input-suffix {
-  margin-left: 5px;
+  @include margin-left(5px);
 }

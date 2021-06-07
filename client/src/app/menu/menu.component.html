@@ -3,7 +3,10 @@
     <div class="top-menu">
       <div *ngIf="isLoggedIn" class="logged-in-block">
         <div>
-          <div class="logged-in-more" ngbDropdown #dropdown="ngbDropdown" placement="bottom-left" [container]="dropdownContainer" (openChange)="onDropdownOpenChange($event)" autoClose="outside">
+          <div
+            class="logged-in-more" ngbDropdown #dropdown="ngbDropdown" placement="bottom-left auto"
+            [container]="dropdownContainer" (openChange)="onDropdownOpenChange($event)" autoClose="outside"
+          >
             <div ngbDropdownToggle>
               <my-actor-avatar [account]="user.account" size="34"></my-actor-avatar>
               <div class="logged-in-info">
@@ -18,8 +21,10 @@
             </div>
 
             <div ngbDropdownMenu>
-              <a *ngIf="user.account" ngbDropdownItem ngbDropdownToggle class="dropdown-item" [routerLink]="[ '/a', user.account.nameWithHost ]"
-                #profile (click)="onActiveLinkScrollToAnchor(profile)">
+              <a
+                *ngIf="user.account" ngbDropdownItem ngbDropdownToggle class="dropdown-item" [routerLink]="[ '/a', user.account.nameWithHost ]"
+                #profile (click)="onActiveLinkScrollToAnchor(profile)"
+              >
                 <my-global-icon iconName="go" aria-hidden="true"></my-global-icon> <ng-container i18n>Public profile</ng-container>
               </a>
 

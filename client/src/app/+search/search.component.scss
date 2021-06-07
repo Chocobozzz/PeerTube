@@ -37,10 +37,10 @@
 
       .icon.icon-filter {
         @include icon(20px);
+        @include margin-right(5px);
 
         position: relative;
         top: -1px;
-        margin-right: 5px;
         background-image: url('../../assets/images/feather/filter.svg');
       }
     }
@@ -78,9 +78,10 @@
 }
 
 .video-channel-name {
+  @include margin-left(5px);
+
   font-size: $video-miniature-row-info-font-size;
   color: pvar(--greyForegroundColor);
-  margin-left: 5px;
 }
 
 // Use the same breakpoints than in video-miniature

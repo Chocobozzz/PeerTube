@@ -38,7 +38,7 @@ my-user-notifications {
     }
 
     .peertube-select-container {
-      margin-left: 0 !important;
+      @include margin-left(0 !important);
     }
   }
 }

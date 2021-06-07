@@ -15,9 +15,9 @@
 
 .wrapper {
   @include actor-avatar-size(35px);
+  @include margin-right(5px);
 
   position: relative;
-  margin-right: 5px;
   margin-bottom: 5px;
 
   &.generic-channel {

@@ -163,6 +163,14 @@ and the web server is automatically restarted.
 $ npm run dev
 ```
 
+### RTL layout
+
+To test RTL layout using `ar` locale:
+
+```
+$ npm run dev -- --ar-locale
+```
+
 ### Testing
 
 Your code contributions must pass the tests before they can be merged. Tests ensure most of the application behaves

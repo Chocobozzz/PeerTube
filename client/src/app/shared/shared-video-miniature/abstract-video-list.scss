@@ -21,7 +21,8 @@ $icon-size: 16px;
   }
 
   .moderation-block {
-    margin-left: .4rem;
+    @include margin-left(.4rem);
+
     display: flex;
     justify-content: flex-end;
     align-items: center;
@@ -54,8 +55,8 @@ $icon-size: 16px;
 }
 
 .display-as-row.videos {
-  margin-left: pvar(--horizontalMarginContent);
-  margin-right: pvar(--horizontalMarginContent);
+  @include margin-left(pvar(--horizontalMarginContent));
+  @include margin-right(pvar(--horizontalMarginContent));
 
   .video-wrapper {
     margin-bottom: 15px;
@@ -70,8 +71,9 @@ $icon-size: 16px;
     margin-bottom: 10px;
 
     .title-page {
+      @include margin-right(0);
+
       margin-bottom: 10px;
-      margin-right: 0;
     }
   }
 }

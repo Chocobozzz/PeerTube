@@ -30,7 +30,8 @@
   }
 
   > div {
-    margin-left: $img-margin;
+    @include margin-left($img-margin);
+
     min-width: 1px;
   }
 

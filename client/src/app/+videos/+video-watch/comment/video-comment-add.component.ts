@@ -1,5 +1,18 @@
 import { Observable } from 'rxjs'
-import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core'
+import { getLocaleDirection } from '@angular/common'
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Inject,
+  Input,
+  LOCALE_ID,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+  ViewChild
+} from '@angular/core'
 import { Router } from '@angular/router'
 import { Notifier, User } from '@app/core'
 import { VIDEO_COMMENT_TEXT_VALIDATOR } from '@app/shared/form-validators/video-comment-validators'
@@ -37,7 +50,8 @@ export class VideoCommentAddComponent extends FormReactive implements OnChanges,
     private notifier: Notifier,
     private videoCommentService: VideoCommentService,
     private modalService: NgbModal,
-    private router: Router
+    private router: Router,
+    @Inject(LOCALE_ID) private localeId: string
   ) {
     super()
   }
@@ -151,6 +165,10 @@ export class VideoCommentAddComponent extends FormReactive implements OnChanges,
   cancelCommentReply () {
     this.cancel.emit(null)
     this.form.value['text'] = this.textareaElement.nativeElement.value = ''
+  }
+
+  isRTL () {
+    return getLocaleDirection(this.localeId) === 'rtl'
   }
 
   private addCommentReply (commentCreate: VideoCommentCreate) {

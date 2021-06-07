@@ -14,7 +14,7 @@ form {
   margin-bottom: 10px;
 
   my-actor-avatar {
-    margin-right: 10px;
+    @include margin-right(10px);
   }
 
   .form-group {
@@ -26,12 +26,12 @@ form {
   textarea {
     @include peertube-textarea(100%, $peertube-textarea-height);
     @include button-focus(pvar(--mainColorLightest));
+    @include padding-right($markdown-icon-width + 15px !important);
 
     min-height: calc(#{$peertube-textarea-height} - 15px * 2);
-    padding-right: $markdown-icon-width + 15px !important;
 
     @media screen and (max-width: 600px) {
-      padding-right: $markdown-icon-width + 19px !important;
+      @include padding-right($markdown-icon-width + 19px !important);
     }
 
     &:focus::placeholder {
@@ -44,6 +44,12 @@ form {
   position: absolute;
   top: 5px;
   right: 9px;
+
+  // inset-inline is not well supported by web browsers
+  &.is-rtl {
+    right: unset;
+    left: 9px;
+  }
 
   ::ng-deep .help-tooltip-button {
     my-global-icon {
@@ -86,9 +92,10 @@ form {
     flex: 1;
 
     code {
+      @include margin-left(5px);
+
       display: inline-block;
       vertical-align: middle;
-      margin-left: 5px;
     }
   }
 }

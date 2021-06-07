@@ -52,7 +52,7 @@ my-peertube-checkbox {
 }
 
 .captions-header {
-  text-align: right;
+  text-align: end;
   margin-bottom: 1rem;
 }
 
@@ -77,10 +77,10 @@ my-peertube-checkbox {
   }
 
   .caption-entry-label {
+    @include margin-right(20px);
+
     font-size: 15px;
     font-weight: bold;
-
-    margin-right: 20px;
     width: 150px;
   }
 
@@ -108,12 +108,12 @@ my-peertube-checkbox {
 }
 
 .submit-container {
-  text-align: right;
+  text-align: end;
 
   .message-submit {
-    display: inline-block;
-    margin-right: 25px;
+    @include margin-right(25px);
 
+    display: inline-block;
     color: pvar(--greyForegroundColor);
     font-size: 15px;
   }

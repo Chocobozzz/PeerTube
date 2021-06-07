@@ -6,10 +6,11 @@
   display: flex;
 
   .left {
+    @include margin-right(10px);
+
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-right: 10px;
 
     .vertical-border {
       width: 2px;
@@ -51,6 +52,9 @@ my-actor-avatar {
 }
 
 .video-author {
+  @include padding-right(6px);
+  @include padding-left(6px);
+
   height: 20px;
   background-color: #888888;
   border-radius: 12px;
@@ -60,8 +64,6 @@ my-actor-avatar {
   flex-direction: row;
   align-items: center;
   display: inline-flex;
-  padding-right: 6px;
-  padding-left: 6px;
   color: #fff !important;
 }
 
@@ -86,9 +88,10 @@ my-actor-avatar {
 }
 
 .comment-date {
+  @include margin-left(5px);
+
   font-size: 90%;
   color: pvar(--greyForegroundColor);
-  margin-left: 5px;
   text-decoration: none;
 
   &:hover {
@@ -129,9 +132,10 @@ my-actor-avatar {
 
   ::ng-deep .dropdown-toggle,
   .comment-action-reply {
+    @include margin-right(10px);
+
     color: pvar(--greyForegroundColor);
     cursor: pointer;
-    margin-right: 10px;
 
     &:hover,
     &:active,
@@ -162,25 +166,25 @@ my-video-comment-add {
   }
 
   .left {
-    margin-right: 6px;
+    @include margin-right(6px);
   }
 }
 
 @media screen and (max-width: 1200px) {
   .children {
-    margin-left: -10px;
+    @include margin-left(-10px);
   }
 }
 
 @media screen and (max-width: 600px) {
   .children {
-    margin-left: -20px;
+    @include margin-left(-20px);
 
     .left {
       align-items: flex-start;
 
       .vertical-border {
-        margin-left: 2px;
+        @include margin-left(2px);
       }
     }
   }
@@ -189,7 +193,7 @@ my-video-comment-add {
     flex-direction: column;
 
     .comment-date {
-      margin-left: 0;
+      @include margin-left(0);
     }
   }
 }

@@ -14,7 +14,7 @@ input[type=email] {
 }
 
 .modal-body {
-  text-align: left;
+  text-align: start;
 
   .forgot-password-instructions {
     margin-bottom: 20px;
@@ -55,13 +55,14 @@ input[type=email] {
   }
 
   .login-form-and-externals {
+    @include margin-left(10px);
+    @include margin-right(10px);
+
     display: flex;
     flex-wrap: wrap;
     font-size: 15px;
     max-width: 450px;
     margin-bottom: 40px;
-    margin-left: 10px;
-    margin-right: 10px;
 
     form {
       margin: 0;
@@ -125,11 +126,12 @@ input[type=email] {
   }
 
   .instance-information {
+    @include margin-left(10px);
+    @include margin-right(10px);
+
     max-width: 600px;
     min-width: 350px;
     margin-bottom: 40px;
-    margin-left: 10px;
-    margin-right: 10px;
   }
 
   .terms-anchor {
@@ -146,9 +148,10 @@ input[type=email] {
 
   .login-form-and-externals,
   .instance-information {
+    @include margin-left(0);
+    @include margin-right(0);
+
     width: 100%;
-    margin-left: 0;
-    margin-right: 0;
     max-width: 450px;
     min-width: unset;
     align-self: center;

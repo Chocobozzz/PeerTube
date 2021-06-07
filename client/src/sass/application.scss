@@ -65,6 +65,9 @@ body {
   // Allow to disable the scrollbar instead of hide it when the content fit the body
   // And not move the content and header horizontally sticked to right when the content is updating
   overflow-y: scroll;
+
+  // Fix "reboot" style that set text-align: left
+  text-align: start;
 }
 
 ::selection {
@@ -130,8 +133,7 @@ my-input-toggle-hidden ::ng-deep input {
 
 .full-width {
   width: 100%;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 0 auto;
   max-width: initial;
 }
 
@@ -144,13 +146,13 @@ my-input-toggle-hidden ::ng-deep input {
 }
 
 .main-col {
-  margin-left: $menu-width;
+  @include margin-left($menu-width);
+
   width: calc(100% - #{$menu-width});
   outline: none;
 
   .margin-content {
-    margin-left: pvar(--horizontalMarginContent);
-    margin-right: pvar(--horizontalMarginContent);
+    margin: 0 pvar(--horizontalMarginContent);
     flex-grow: 1;
   }
 
@@ -159,8 +161,7 @@ my-input-toggle-hidden ::ng-deep input {
     width: 100%;
     display: flex;
     align-items: center;
-    padding-left: pvar(--horizontalMarginContent);
-    padding-right: pvar(--horizontalMarginContent);
+    padding: 0 pvar(--horizontalMarginContent);
     height: $sub-menu-height;
     margin-bottom: $sub-menu-margin-bottom;
     overflow-x: auto;
@@ -182,7 +183,7 @@ my-input-toggle-hidden ::ng-deep input {
     --horizontalMarginContent: #{$expanded-horizontal-margins};
     --mainColWidth: 100vw;
 
-    margin-left: 0;
+    @include margin-left(0);
     width: 100%;
   }
 
@@ -199,12 +200,12 @@ my-input-toggle-hidden ::ng-deep input {
 
 .title-page {
   @include disable-default-a-behaviour;
+  @include margin-right(55px);
 
   opacity: 0.6;
   color: pvar(--mainForegroundColor);
   font-size: 16px;
   display: inline-block;
-  margin-right: 55px;
   font-weight: $font-semibold;
   border-bottom: 2px solid transparent;
 
@@ -237,7 +238,7 @@ my-input-toggle-hidden ::ng-deep input {
   }
 
   @media screen and (max-width: $mobile-view) {
-    margin-right: 15px;
+    @include margin-left(15px);
   }
 }
 
@@ -365,8 +366,7 @@ ngx-loading-bar {
     --horizontalMarginContent: #{$expanded-horizontal-margins / 3};
 
     .sub-menu {
-      padding-left: 50px;
-      padding-right: 50px;
+      padding: 0 50px;
 
       .title-page {
         font-size: 17px;
@@ -386,12 +386,11 @@ ngx-loading-bar {
   .main-col.expanded {
     --horizontalMarginContent: 15px;
 
-    margin-left: 0;
+    @include margin-left(0);
 
     .sub-menu {
       width: 100vw;
-      padding-left: 15px;
-      padding-right: 15px;
+      padding: 0 15px;
       margin-bottom: $sub-menu-margin-bottom-small-view;
       overflow-x: auto;
     }
@@ -405,7 +404,8 @@ ngx-loading-bar {
       flex-direction: column;
 
       .form-sub-title {
-        margin-right: 0 !important;
+        @include margin-right(0 !important);
+
         margin-bottom: 10px;
         text-align: center;
       }
@@ -419,7 +419,7 @@ ngx-loading-bar {
         width: 100%;
 
         a {
-          margin-left: 5px;
+          @include margin-left(5px);
         }
       }
     }

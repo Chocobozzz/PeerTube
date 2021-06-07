@@ -43,7 +43,7 @@ input {
   &[type=submit] {
     @include peertube-button;
     @include orange-button;
-    margin-left: auto;
+    @include margin-left(auto);
   }
 }
 

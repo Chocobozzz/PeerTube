@@ -22,8 +22,9 @@
     text-align: center;
 
     li {
+      @include margin-right(10px);
+
       display: inline-block;
-      margin-right: 10px;
     }
   }
 }

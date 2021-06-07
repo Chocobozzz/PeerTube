@@ -5,8 +5,8 @@ $grey-color: #9CA3AB;
 $index-block-height: 32px;
 
 .container {
-  padding-left: 0;
-  padding-right: 0;
+  @include padding-left(0);
+  @include padding-right(0);
   max-width: unset !important;
 }
 

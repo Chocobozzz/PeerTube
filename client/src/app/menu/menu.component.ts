@@ -94,6 +94,7 @@ export class MenuComponent implements OnInit {
     this.htmlServerConfig = this.serverService.getHTMLConfig()
     this.currentInterfaceLanguage = this.languageChooserModal.getCurrentLanguage()
 
+    this.isLoggedIn = this.authService.isLoggedIn()
     this.updateUserState()
     this.buildMenuSections()
 

@@ -5,7 +5,7 @@
   display: flex;
 
   my-actor-avatar {
-    margin-right: 15px;
+    @include margin-right(15px);
   }
 
   .actor-info {

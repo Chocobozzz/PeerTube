@@ -23,9 +23,10 @@
   margin-bottom: 20px;
 
   .badge {
+    @include margin-right(5px);
+
     font-size: 12px;
     font-weight: $font-semibold;
-    margin-right: 5px;
 
     &.category {
       background-color: pvar(--mainColor);
@@ -66,9 +67,10 @@
   &:hover,
   &:active {
     &::after {
+      @include margin-left(0.2em);
+
       content: '#';
       display: inline-block;
-      margin-left: 0.2em;
     }
   }
 

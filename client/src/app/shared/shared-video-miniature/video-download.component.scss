@@ -19,7 +19,7 @@
   }
 
   .glyphicon {
-    margin-right: 5px;
+    @include margin-right(5px);
   }
 }
 
@@ -46,9 +46,9 @@
 
   .peertube-radio-container {
     @include peertube-radio-container;
+    @include margin-right(30px);
 
     display: inline-block;
-    margin-right: 30px;
   }
 }
 
@@ -66,8 +66,9 @@
   margin-bottom: 12px;
 
   .metadata-attribute-label {
+    @include padding-right(5px);
+
     min-width: 142px;
-    padding-right: 5px;
     display: inline-block;
     color: pvar(--greyForegroundColor);
     font-weight: $font-bold;
@@ -75,6 +76,7 @@
 
   a.metadata-attribute-value {
     @include disable-default-a-behaviour;
+
     color: pvar(--mainForegroundColor);
 
     &:hover {

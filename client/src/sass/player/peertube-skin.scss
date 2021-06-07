@@ -20,8 +20,9 @@ body {
   color: pvar(--embedForegroundColor);
 
   .vjs-dock-text {
+    @include padding-right(60px);
+
     padding: $dock-padding;
-    padding-right: 60px;
     background: linear-gradient(to bottom, rgba(0, 0, 0, .6) 0, rgba(0, 0, 0, 0.2) 70%, rgba(0, 0, 0, 0) 100%);
   }
 
@@ -34,11 +35,11 @@ body {
     font-size: 11px;
 
     .text::before {
-      margin-right: 4px;
+      @include margin-right(4px);
     }
 
     .text::after {
-      margin-left: 4px;
+      @include margin-left(4px);
       transform: scale(-1, 1);
     }
   }
@@ -55,6 +56,8 @@ body {
     $big-play-width: 1.2em;
     $big-play-height: 1.2em;
 
+    @include margin-left(-($big-play-width / 2));
+
     outline: 0;
     font-size: 6em;
 
@@ -66,7 +69,6 @@ body {
     width: $big-play-width;
     height: $big-play-height;
     line-height: $big-play-height;
-    margin-left: -($big-play-width / 2);
     margin-top: -($big-play-height / 2);
     transition: 0.4s opacity;
 
@@ -157,7 +159,7 @@ body {
     text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
 
     > button:first-child {
-      margin-left: $first-control-bar-element-margin-left;
+      @include margin-left($first-control-bar-element-margin-left);
     }
 
     .vjs-progress-control,
@@ -188,11 +190,12 @@ body {
     }
 
     .vjs-progress-control {
+      @include margin-left($progress-margin);
+
       position: absolute;
       z-index: 100; // On top of the progress bar
       bottom: 29px;
       width: calc(100% - (2 * #{$progress-margin}));
-      margin-left: $progress-margin;
       height: 14px;
 
       .vjs-slider {
@@ -261,17 +264,19 @@ body {
       line-height: inherit;
 
       &.vjs-current-time {
+        @include margin-left(.5em);
+
         font-size: $font-size;
         display: inline-block;
         padding: 0;
-        margin-left: .5em;
 
         .vjs-current-time-display {
           line-height: calc(#{$control-bar-height} - 1px);
 
           &::after {
+            @include margin(0, 1px, 0, 2px);
+
             content: '/';
-            margin: 0 1px 0 2px;
           }
         }
       }
@@ -298,10 +303,11 @@ body {
     }
 
     .vjs-peertube {
+      @include margin-right(6px);
+
       width: 100%;
       line-height: $control-bar-height;
-      text-align: right;
-      margin-right: 6px;
+      text-align: end;
       overflow: hidden;
 
       .vjs-peertube-displayed {
@@ -323,7 +329,7 @@ body {
       .upload-speed-text,
       .peers-text,
       .http-fallback {
-        margin-right: 15px;
+        @include margin-right(15px);
       }
 
       .icon {
@@ -340,7 +346,7 @@ body {
     .vjs-next-video,
     .vjs-previous-video {
       line-height: $control-bar-height;
-      text-align: right;
+      text-align: end;
 
       .icon {
         &.icon-next,
@@ -415,8 +421,9 @@ body {
     }
 
     .vjs-volume-control {
+      @include margin(0, 5px, 0, 0);
+
       width: 30px;
-      margin: 0 5px 0 0;
     }
 
     .vjs-volume-bar {
@@ -490,9 +497,9 @@ body {
 
     .vjs-theater-control {
       @include disable-outline;
+      @include margin-right(1px);
 
       width: 37px;
-      margin-right: 1px;
       cursor: pointer;
 
       .vjs-icon-placeholder {
@@ -512,9 +519,9 @@ body {
 
     .vjs-fullscreen-control {
       @include disable-outline;
+      @include margin-left($first-control-bar-element-margin-left);
 
       width: 37px;
-      margin-right: $first-control-bar-element-margin-left;
 
       .vjs-icon-placeholder {
         display: inline-block;
@@ -641,12 +648,12 @@ body {
 
     .vjs-control-bar {
       > button:first-child {
-        margin-left: $first-control-bar-element-margin-left-small-width;
+        @include margin-left($first-control-bar-element-margin-left-small-width);
       }
     }
 
     .vjs-fullscreen-control {
-      margin-right: $first-control-bar-element-margin-left-small-width;
+      @include margin-right($first-control-bar-element-margin-left-small-width);
     }
 
     &.vjs-live {

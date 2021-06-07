@@ -23,19 +23,17 @@ $browser-context: 16;
   }
 
   .vjs-upnext-top {
+    margin: 0 auto;
     width: 100%;
     position: absolute;
-    margin-left: auto;
-    margin-right: auto;
     bottom: 50%;
     margin-bottom: 60px;
   }
 
   .vjs-upnext-bottom {
+    margin: 0 auto;
     width: 100%;
     position: absolute;
-    margin-left: auto;
-    margin-right: auto;
     top: 50%;
     margin-top: 52px;
   }

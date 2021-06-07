@@ -25,7 +25,7 @@ $context-menu-width: 350px;
     cursor: pointer;
     font-size: 1em;
     padding: 8px 16px;
-    text-align: left;
+    text-align: start;
     text-transform: none;
 
     &:hover {
@@ -35,6 +35,8 @@ $context-menu-width: 350px;
     [class^='vjs-icon-'] {
       $icons: 'link-2', 'repeat', 'code', 'tick-white', 'info';
 
+      @include margin-right(0.8rem !important);
+
       display: inline-flex;
       position: relative;
       top: 2px;
@@ -43,7 +45,6 @@ $context-menu-width: 350px;
       height: 14px;
       background-color: #fff;
       mask-size: cover;
-      margin-right: 0.8rem !important;
 
       @each $icon in $icons {
         &[class$="-#{$icon}"] {

@@ -88,9 +88,10 @@
   display: flex;
 
   .miniature-thumbnail {
+    @include margin-right(10px);
+
     width: var(--rowThumbnailWidth);
     height: var(--rowThumbnailHeight);
-    margin-right: 10px;
   }
 }
 

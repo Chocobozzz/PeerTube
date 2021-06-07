@@ -14,8 +14,9 @@
   }
 
   &.blur-filter {
+    @include padding-left(4px);
+
     filter: blur(3px);
-    padding-left: 4px;
   }
 }
 
@@ -102,11 +103,11 @@
   --gridVideosMiniatureMargins: #{pvar(--videosHorizontalMarginContent)};
 
   @if $margin {
-    margin-left: var(--gridVideosMiniatureMargins) !important;
-    margin-right: var(--gridVideosMiniatureMargins) !important;
+    @include margin-left(var(--gridVideosMiniatureMargins) !important);
+    @include margin-right(var(--gridVideosMiniatureMargins) !important);
   } @else {
-    padding-left: var(--gridVideosMiniatureMargins) !important;
-    padding-right: var(--gridVideosMiniatureMargins) !important;
+    @include padding-left(var(--gridVideosMiniatureMargins) !important);
+    @include padding-right(var(--gridVideosMiniatureMargins) !important);
   }
 
   @media screen and (max-width: $mobile-view) {

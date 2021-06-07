@@ -202,6 +202,21 @@
                 }
               ]
             },
+            "ar-locale": {
+              "localize": ["ar"],
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.hmr.ts"
+                }
+              ]
+            },
             "hmr": {
               "localize": false,
               "budgets": [
@@ -246,6 +261,9 @@
             },
             "hmr": {
               "browserTarget": "PeerTube:build:hmr"
+            },
+            "ar-locale": {
+              "browserTarget": "PeerTube:build:ar-locale"
             },
             "e2e": {
               "browserTarget": "PeerTube:build:e2e",

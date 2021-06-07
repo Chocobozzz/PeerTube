@@ -25,7 +25,7 @@
 
   .select-filter-block {
     &:not(:last-child) {
-      margin-right: 10px;
+      @include margin-right(10px);
     }
 
     label {
@@ -43,7 +43,7 @@
 }
 
 td .glyphicon {
-  margin-right: 10px;
+  @include margin-right(10px);
 }
 
 pre {

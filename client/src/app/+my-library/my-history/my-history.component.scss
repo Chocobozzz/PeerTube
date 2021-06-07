@@ -24,11 +24,11 @@
   }
 
   .history-switch {
-    grid-column: 3;
+    @include margin-left(auto);
+    @include margin-right(15px);
 
+    grid-column: 3;
     display: flex;
-    margin-left: auto;
-    margin-right: 15px;
 
     label {
       margin: 0 0 0 5px;

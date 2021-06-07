@@ -2,7 +2,7 @@
 @import '_mixins';
 
 my-video-miniature {
-  margin-right: 15px;
+  @include margin-right(15px);
   display: inline-block;
   min-width: $video-thumbnail-width;
   max-width: $video-thumbnail-width;

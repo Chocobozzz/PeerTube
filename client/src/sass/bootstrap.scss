@@ -62,7 +62,7 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
   font-size: 15px;
 
   .dropdown-header {
-    padding-left: 1rem;
+    @include padding-left(1rem);
   }
 
   .dropdown-item {
@@ -105,7 +105,7 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
   }
 
   .modal-dialog {
-    text-align: left;
+    text-align: start;
 
     &:not(.modal-lg):not(.modal-xl) {
       min-width: 500px;
@@ -153,10 +153,10 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
 
   .inputs {
     margin-bottom: 0;
-    text-align: right;
+    text-align: end;
 
     > .peertube-button:not(:first-child) {
-      margin-left: 10px;
+      @include margin-left(10px);
     }
   }
 }
@@ -342,7 +342,7 @@ ngb-tooltip-window {
   position: relative;
 
   input {
-    padding-right: 1.5rem !important;
+    @include padding-right(1.5rem !important);
   }
 
   .form-control-clear {
@@ -390,5 +390,24 @@ ngb-tooltip-window {
   &.callout-info {
     border-color: pvar(--mainColorLightest);
     border-left-color: pvar(--mainColor);
+  }
+}
+
+// Override these properties for Bidi support
+@each $size, $length in $spacers {
+  .ml-#{$size} {
+    @include margin-left($length);
+  }
+
+  .mr-#{$size} {
+    @include margin-right($length);
+  }
+
+  .pl-#{$size} {
+    @include padding-left($length);
+  }
+
+  .pr-#{$size} {
+    @include padding-right($length);
   }
 }

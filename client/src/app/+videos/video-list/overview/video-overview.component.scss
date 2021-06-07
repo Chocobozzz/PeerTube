@@ -53,17 +53,18 @@
 
         my-actor-avatar {
           @include actor-avatar-size(28px);
+          @include margin-right(8px);
 
           font-size: initial;
-          margin-right: 8px;
         }
       }
 
       .followers {
+        @include margin-left(10px);
+
         color: pvar(--greyForegroundColor);
         font-weight: normal;
         font-size: 14px;
-        margin-left: 10px;
         position: relative;
         top: 2px;
       }
@@ -87,8 +88,9 @@
     overflow: initial;
 
     .section-title {
+      @include margin-left(10px);
+
       font-size: 17px;
-      margin-left: 10px;
     }
   }
 }

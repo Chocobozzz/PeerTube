@@ -1,6 +1,6 @@
 import { Hotkey, HotkeysService } from 'angular2-hotkeys'
 import { filter, map, pairwise, switchMap } from 'rxjs/operators'
-import { DOCUMENT, PlatformLocation, ViewportScroller } from '@angular/common'
+import { DOCUMENT, getLocaleDirection, PlatformLocation, ViewportScroller } from '@angular/common'
 import { AfterViewInit, Component, Inject, LOCALE_ID, OnInit, ViewChild } from '@angular/core'
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
 import { Event, GuardsCheckStart, NavigationEnd, RouteConfigLoadEnd, RouteConfigLoadStart, Router, Scroll } from '@angular/router'
@@ -107,6 +107,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.openModalsIfNeeded()
 
     this.document.documentElement.lang = getShortLocale(this.localeId)
+    this.document.documentElement.dir = getLocaleDirection(this.localeId)
   }
 
   ngAfterViewInit () {

@@ -24,12 +24,13 @@ $input-border-radius: 3px;
     }
 
     .nav-preview {
+      @include padding-left(10px);
+      @include padding-right(10px);
+
       display: block;
-      text-align: right;
+      text-align: end;
       padding-top: 10px;
       padding-bottom: 10px;
-      padding-left: 10px;
-      padding-right: 10px;
       border-top: 1px dashed $input-border-color;
       border-left: 1px solid $input-border-color;
       border-right: 1px solid $input-border-color;
@@ -77,7 +78,7 @@ $input-border-radius: 3px;
   border-bottom: 2px solid pvar(--mainColor);
 
   :first-child {
-    margin-left: auto;
+    @include margin-left(auto);
   }
 
   ::ng-deep {
@@ -91,7 +92,7 @@ $input-border-radius: 3px;
     }
 
     .maximize-button {
-      margin-left: 5px;
+      @include margin-left(5px);
     }
   }
 }
@@ -120,10 +121,11 @@ $input-border-radius: 3px;
 
   .nav-preview {
     @include nav-preview-medium();
+    @include padding-right(0);
+    @include padding-left(0);
+
     padding-top: #{$nav-preview-vertical-padding / 2};
     padding-bottom: #{$nav-preview-vertical-padding / 2};
-    padding-left: 0;
-    padding-right: 0;
     position: absolute;
     background-color: pvar(--mainBackgroundColor);
     width: 100% !important;
@@ -132,7 +134,7 @@ $input-border-radius: 3px;
     border-right: 0;
 
     :last-child {
-      margin-right: pvar(--horizontalMarginContent);
+      @include margin-right(pvar(--horizontalMarginContent));
     }
   }
 
@@ -181,11 +183,11 @@ $input-border-radius: 3px;
     .nav-preview {
       ::ng-deep .nav-link {
         @include ellipsis();
+        @include margin-right(10px !important);
 
         display: block !important;
         max-width: 45% !important;
         padding: 5px 0 !important;
-        margin-right: 10px !important;
         text-align: center;
 
         &:not(.active) {

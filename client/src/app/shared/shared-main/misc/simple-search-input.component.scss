@@ -6,9 +6,10 @@
 }
 
 my-global-icon {
+  @include margin-left(10px);
+
   height: 28px;
   width: 28px;
-  margin-left: 10px;
   cursor: pointer;
 
   &:hover {

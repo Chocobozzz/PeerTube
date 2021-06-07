@@ -1,7 +1,7 @@
 @import 'mixins';
 
 my-feed {
-  margin-left: 5px;
+  @include margin-left(5px);
   display: inline-block;
   width: 15px;
 }

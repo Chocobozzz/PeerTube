@@ -141,7 +141,7 @@
   position: relative;
 
   .unread-notifications {
-    margin-left: 20px;
+    @include margin-left(20px);
   }
 
   .unread-notifications {
