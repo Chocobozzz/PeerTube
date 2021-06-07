@@ -150,8 +150,11 @@
 
   <ng-template pTemplate="rowexpansion" let-abuse>
       <tr>
-        <td class="expand-cell" colspan="8">
-          <my-abuse-details [abuse]="abuse" [isAdminView]="isAdminView()"></my-abuse-details>
+        <td *ngIf="isAdminView()" class="expand-cell" colspan="8">
+          <my-abuse-details [abuse]="abuse" [isAdminView]="true"></my-abuse-details>
+        </td>
+        <td *ngIf="!isAdminView()" class="expand-cell" colspan="6">
+          <my-abuse-details [abuse]="abuse" [isAdminView]="false"></my-abuse-details>
         </td>
       </tr>
   </ng-template>
