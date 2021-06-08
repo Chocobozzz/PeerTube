@@ -934,7 +934,7 @@ describe('Test multiple servers', function () {
           expect(deletedComment.text).to.equal('')
           expect(deletedComment.inReplyToCommentId).to.be.null
           expect(deletedComment.account).to.be.null
-          expect(deletedComment.totalReplies).to.equal(3)
+          expect(deletedComment.totalReplies).to.equal(2)
           expect(dateIsValid(deletedComment.createdAt as string)).to.be.true
           expect(dateIsValid(deletedComment.updatedAt as string)).to.be.true
           expect(dateIsValid(deletedComment.deletedAt as string)).to.be.true
@@ -976,7 +976,7 @@ describe('Test multiple servers', function () {
           expect(comment.createdAt).to.not.be.null
           expect(comment.deletedAt).to.not.be.null
           expect(comment.account).to.be.null
-          expect(comment.totalReplies).to.equal(3)
+          expect(comment.totalReplies).to.equal(2)
         }
       }
     })

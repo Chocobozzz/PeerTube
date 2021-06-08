@@ -231,7 +231,7 @@ describe('Test video comments', function () {
       expect(res.body.data[0].isDeleted).to.be.true
       expect(res.body.data[0].deletedAt).to.not.be.null
       expect(res.body.data[0].account).to.be.null
-      expect(res.body.data[0].totalReplies).to.equal(3)
+      expect(res.body.data[0].totalReplies).to.equal(2)
       expect(res.body.data[1].text).to.equal('super thread 2')
       expect(res.body.data[1].totalReplies).to.equal(0)
       expect(res.body.data[2].text).to.equal('super thread 3')
