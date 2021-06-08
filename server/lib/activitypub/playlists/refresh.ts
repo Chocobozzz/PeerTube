@@ -10,6 +10,8 @@ async function refreshVideoPlaylistIfNeeded (videoPlaylist: MVideoPlaylistOwner)
 
   const lTags = loggerTagsFactory('ap', 'video-playlist', 'refresh', videoPlaylist.uuid, videoPlaylist.url)
 
+  logger.info('Refreshing playlist %s.', videoPlaylist.url, lTags())
+
   try {
     const { playlistObject } = await fetchRemoteVideoPlaylist(videoPlaylist.url)
 

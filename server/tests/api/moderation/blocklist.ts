@@ -215,7 +215,7 @@ describe('Test blocklist', function () {
 
         const threads: VideoComment[] = resThreads.body.data
         expect(threads).to.have.lengthOf(1)
-        expect(threads[0].totalReplies).to.equal(0)
+        expect(threads[0].totalReplies).to.equal(1)
 
         const t = threads.find(t => t.text === 'comment user 1')
         expect(t).to.be.undefined
@@ -565,7 +565,7 @@ describe('Test blocklist', function () {
           threads = threads.filter(t => t.isDeleted === false)
 
           expect(threads).to.have.lengthOf(1)
-          expect(threads[0].totalReplies).to.equal(0)
+          expect(threads[0].totalReplies).to.equal(1)
 
           const t = threads.find(t => t.text === 'comment user 1')
           expect(t).to.be.undefined

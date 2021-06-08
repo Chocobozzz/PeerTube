@@ -22,6 +22,8 @@ async function refreshVideoIfNeeded (options: {
 
   const lTags = loggerTagsFactory('ap', 'video', 'refresh', video.uuid, video.url)
 
+  logger.info('Refreshing video %s.', video.url, lTags())
+
   try {
     const { videoObject } = await fetchRemoteVideo(video.url)
 

@@ -519,7 +519,7 @@ describe('Test follows', function () {
         expect(deletedComment.text).to.equal('')
         expect(deletedComment.inReplyToCommentId).to.be.null
         expect(deletedComment.account).to.be.null
-        expect(deletedComment.totalReplies).to.equal(3)
+        expect(deletedComment.totalReplies).to.equal(2)
         expect(dateIsValid(deletedComment.deletedAt as string)).to.be.true
 
         const res2 = await getVideoThreadComments(servers[0].url, video4.id, deletedComment.threadId)
