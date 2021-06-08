@@ -88,6 +88,9 @@ export class VideoCommentAddComponent extends FormReactive implements OnChanges,
   }
 
   ngOnChanges (changes: SimpleChanges) {
+    // Not initialized yet
+    if (!this.form) return
+
     if (changes.textValue && changes.textValue.currentValue && changes.textValue.currentValue !== changes.textValue.previousValue) {
       this.patchTextValue(changes.textValue.currentValue, true)
     }
