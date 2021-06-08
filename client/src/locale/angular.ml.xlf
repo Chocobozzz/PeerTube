@@ -261,7 +261,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.AM" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="ssor,     OnCh"/></source>
-        <target/>
+        <target><x id="INTERPOLATION" equiv-text="ssor,     OnCh"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">141,116</context>
@@ -445,7 +445,7 @@
       </trans-unit>
       <trans-unit id="3076079242537393946" datatype="html">
         <source>Moderation information</source>
-        <target/>
+        <target>മോഡറേഷൻ വിവരങ്ങൾ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">140</context>
@@ -461,7 +461,7 @@
       </trans-unit>
       <trans-unit id="4127416011499804250" datatype="html">
         <source>Code of conduct</source>
-        <target/>
+        <target>പെരുമാറ്റച്ചട്ടം</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">154</context>
@@ -497,7 +497,7 @@
       </trans-unit>
       <trans-unit id="9178042134345945115" datatype="html">
         <source>OTHER INFORMATION</source>
-        <target/>
+        <target>മറ്റ് വിവരങ്ങൾ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">183,184</context>
@@ -505,7 +505,7 @@
       </trans-unit>
       <trans-unit id="4281738631669138686" datatype="html">
         <source>Hardware information</source>
-        <target/>
+        <target>ഹാർഡ്‌വെയർ വിവരങ്ങൾ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">195</context>
@@ -529,7 +529,7 @@
       </trans-unit>
       <trans-unit id="892073694820881630" datatype="html">
         <source>Link copied</source>
-        <target/>
+        <target>ലിങ്ക് പകർത്തി</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.ts</context>
           <context context-type="linenumber">91</context>
@@ -537,7 +537,6 @@
       </trans-unit>
       <trans-unit id="6613567056718289931" datatype="html">
         <source>Contact <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> administrator</source>
-        <target/>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/contact-admin-modal.component.html</context>
           <context context-type="linenumber">3</context>
@@ -705,7 +704,7 @@
       </trans-unit>
       <trans-unit id="8351124097389031348" datatype="html">
         <source>What is PeerTube?</source>
-        <target/>
+        <target>എന്താണ് PeerTube?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">3,4</context>
