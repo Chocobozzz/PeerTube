@@ -149,7 +149,7 @@
       </trans-unit>
       <trans-unit id="ngb.progressbar.value" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="(): number { re"/></source>
-        <target/>
+        <target><x id="INTERPOLATION" equiv-text="(): number { re"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/src/progressbar/progressbar.ts</context>
           <context context-type="linenumber">31,35</context>
@@ -1148,7 +1148,7 @@
       </trans-unit>
       <trans-unit id="6823616469362610020" datatype="html">
         <source>Account video channels</source>
-        <target/>
+        <target>അക്കൗണ്ട് വീഡിയോ ചാനലുകൾ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts-routing.module.ts</context>
           <context context-type="linenumber">27</context>
@@ -1156,7 +1156,7 @@
       </trans-unit>
       <trans-unit id="819067926858619041" datatype="html">
         <source>Account videos</source>
-        <target/>
+        <target>അക്കൗണ്ട് വീഡിയോകൾ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts-routing.module.ts</context>
           <context context-type="linenumber">36</context>
@@ -1264,7 +1264,7 @@
       </trans-unit>
       <trans-unit id="1311667768861466464" datatype="html">
         <source>Search account videos</source>
-        <target/>
+        <target>അക്കൗണ്ട് വീഡിയോകൾ തിരയുക</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.html</context>
           <context context-type="linenumber">80</context>
@@ -1352,7 +1352,7 @@
       </trans-unit>
       <trans-unit id="4682675125751819107" datatype="html">
         <source>Instances you follow</source>
-        <target/>
+        <target>നിങ്ങൾ പിന്തുടരുന്ന മേഖലകൾ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">29</context>
@@ -1364,7 +1364,7 @@
       </trans-unit>
       <trans-unit id="8899833753704589712" datatype="html">
         <source>Instances following you</source>
-        <target/>
+        <target>നിങ്ങളെ പിന്തുടരുന്ന മേഖലകൾ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">34</context>
@@ -1548,7 +1548,7 @@
       </trans-unit>
       <trans-unit id="6879611446286948126" datatype="html">
         <source>CACHE</source>
-        <target/>
+        <target>കാഷെ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">5</context>
@@ -1744,7 +1744,7 @@
       </trans-unit>
       <trans-unit id="7097094470713539753" datatype="html">
         <source>Display a message on your instance</source>
-        <target/>
+        <target>ഒരു സന്ദേശം നിങ്ങളുടെ മേഖലയിൽ പ്രദർശിപ്പിക്കുക</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">66,67</context>
@@ -1776,7 +1776,7 @@
       </trans-unit>
       <trans-unit id="8066608938393600549" datatype="html">
         <source>Message</source>
-        <target/>
+        <target>സന്ദേശം</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">103</context>
@@ -2368,7 +2368,7 @@
       </trans-unit>
       <trans-unit id="6920964195632624609" datatype="html">
         <source>INSTANCE HOMEPAGE</source>
-        <target/>
+        <target>മേഖല ഹോംപേജ്</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-homepage.component.html</context>
           <context context-type="linenumber">7</context>
@@ -2376,7 +2376,7 @@
       </trans-unit>
       <trans-unit id="7396175500300709096" datatype="html">
         <source>INSTANCE</source>
-        <target/>
+        <target>മേഖല</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">7</context>
@@ -2416,7 +2416,7 @@
       </trans-unit>
       <trans-unit id="6588040559347368313" datatype="html">
         <source>Add a new category</source>
-        <target/>
+        <target>ഒരു പുതിയ വിഭാഗം ചേർക്കുക</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">53</context>
@@ -2424,7 +2424,7 @@
       </trans-unit>
       <trans-unit id="5983800192187691457" datatype="html">
         <source>Main languages you/your moderators speak</source>
-        <target/>
+        <target>നിങ്ങൾ/നിങ്ങളുടെ മോഡറേറ്റർമാർ സംസാരിക്കുന്ന പ്രധാന ഭാഷകൾ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">60</context>
@@ -2564,7 +2564,7 @@
       </trans-unit>
       <trans-unit id="2047672753819413550" datatype="html">
         <source>YOU AND YOUR INSTANCE</source>
-        <target/>
+        <target>നിങ്ങളും നിങ്ങളുടെ മേഖലയും</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">163</context>
