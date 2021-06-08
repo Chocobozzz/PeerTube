@@ -329,7 +329,7 @@
       </trans-unit>
       <trans-unit id="3174354408404578867" datatype="html">
         <source>About <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></source>
-        <target/>
+        <target><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> കുറിച്ച്</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">5</context>
@@ -728,7 +728,7 @@
       </trans-unit>
       <trans-unit id="7257048945916143687" datatype="html">
         <source>For more information, please visit <x id="START_LINK" ctype="x-a" equiv-text="&lt;a target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://joinpeertube.org&quot;&gt;"/>joinpeertube.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target/>
+        <target>കൂടുതൽ വിവരങ്ങൾക്ക്, <x id="START_LINK" ctype="x-a" equiv-text="&lt;a target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://joinpeertube.org&quot;&gt;"/>joinpeertube.org സന്ദർശിക്കുക </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">19,20</context>
@@ -960,7 +960,7 @@
       </trans-unit>
       <trans-unit id="4195286790385468087" datatype="html">
         <source>About this instance</source>
-        <target/>
+        <target>ഈ ഇൻസ്റ്റൻസിനെ കുറിച്ച്</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-routing.module.ts</context>
           <context context-type="linenumber">24</context>
@@ -1028,7 +1028,7 @@
       </trans-unit>
       <trans-unit id="3755500631176893489" datatype="html">
         <source>Published <x id="PH" equiv-text="total"/> videos</source>
-        <target/>
+        <target>ആകെ <x id="PH" equiv-text="total"/> വീഡിയോകൾ പ്രസിദ്ധീകരിച്ചു</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/account-search/account-search.component.ts</context>
           <context context-type="linenumber">95</context>
@@ -1044,7 +1044,7 @@
       </trans-unit>
       <trans-unit id="3666829335406793239" datatype="html">
         <source>This account does not have channels.</source>
-        <target/>
+        <target>ഈ അക്കൗണ്ടിനു ചാനലുകൾ ഒന്നും ഇല്ല</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context>
           <context context-type="linenumber">5</context>
@@ -1052,7 +1052,7 @@
       </trans-unit>
       <trans-unit id="7828153032795614080" datatype="html">
         <source>See this video channel</source>
-        <target/>
+        <target>ഈ വീഡിയോ ചാനൽ കാണുക</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context>
           <context context-type="linenumber">13</context>
@@ -1084,7 +1084,7 @@
       </trans-unit>
       <trans-unit id="3068011377000255023" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 videos} other {<x id="INTERPOLATION"/> videos}}</source>
-        <target/>
+        <target>{VAR_PLURAL, plural, =1 {1 വീഡിയോ} other {<x id="INTERPOLATION"/> വീഡിയോകൾ}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context>
           <context context-type="linenumber">26</context>
@@ -1124,7 +1124,7 @@
       </trans-unit>
       <trans-unit id="4071627711041975501" datatype="html">
         <source>Show this channel</source>
-        <target/>
+        <target>ഈ ചാനൽ കാണിക്കുക</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context>
           <context context-type="linenumber">35</context>
@@ -1132,7 +1132,7 @@
       </trans-unit>
       <trans-unit id="1545109431751219382" datatype="html">
         <source>This channel doesn't have any videos.</source>
-        <target/>
+        <target>ഈ ചാനലിൽ വീഡിയോകൾ ഒന്നുമില്ല.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context>
           <context context-type="linenumber">38</context>
@@ -1140,7 +1140,7 @@
       </trans-unit>
       <trans-unit id="2705478076887104088" datatype="html">
         <source>SHOW THIS CHANNEL &gt;</source>
-        <target/>
+        <target>ഈ ചാനൽ കാണിക്കൂ &gt;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context>
           <context context-type="linenumber">46</context>
@@ -1172,7 +1172,7 @@
       </trans-unit>
       <trans-unit id="4750061469619896229" datatype="html">
         <source>PEERTUBE ACCOUNT</source>
-        <target/>
+        <target>PEERTUBE അക്കൗണ്ട്</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.html</context>
           <context context-type="linenumber">8</context>
@@ -1296,7 +1296,7 @@
       </trans-unit>
       <trans-unit id="25349740244798533" datatype="html">
         <source>Username copied</source>
-        <target/>
+        <target>ഉപയോക്തൃനാമം പകർത്തി</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context>
           <context context-type="linenumber">121</context>
@@ -1704,7 +1704,7 @@
       </trans-unit>
       <trans-unit id="421622604352196374" datatype="html">
         <source>Best videos</source>
-        <target/>
+        <target>മികച്ച വീഡിയോകൾ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">47</context>
@@ -1712,7 +1712,7 @@
       </trans-unit>
       <trans-unit id="554741830445276244" datatype="html">
         <source>Hot videos</source>
-        <target/>
+        <target>'ഹോട്ട്' വീഡിയോകൾ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">48</context>
@@ -1720,7 +1720,7 @@
       </trans-unit>
       <trans-unit id="4203746847864415875" datatype="html">
         <source>Most viewed videos</source>
-        <target/>
+        <target>ഏറ്റവും കൂടുതൽ കണ്ട വീഡിയോകൾ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">49</context>
@@ -1728,7 +1728,7 @@
       </trans-unit>
       <trans-unit id="8177374861384376651" datatype="html">
         <source>Most liked videos</source>
-        <target/>
+        <target>കൂടുതൽ ലൈക്കുള്ള വീഡിയോകൾ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">50</context>
@@ -1784,7 +1784,7 @@
       </trans-unit>
       <trans-unit id="5631159720194597622" datatype="html">
         <source>NEW USERS</source>
-        <target/>
+        <target>പുതിയ ഉപയോക്താക്കൾ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">120</context>
@@ -1800,7 +1800,7 @@
       </trans-unit>
       <trans-unit id="7456307533995141215" datatype="html">
         <source>Enable Signup</source>
-        <target/>
+        <target>അംഗത്വം പ്രാപ്തമാക്കുക</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">132</context>
@@ -1832,7 +1832,7 @@
       </trans-unit>
       <trans-unit id="8133107840061687919" datatype="html">
         <source>Signup limit</source>
-        <target/>
+        <target>അംഗത്വ പരിധി</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">147</context>
@@ -2000,7 +2000,7 @@
       </trans-unit>
       <trans-unit id="6476750382562952780" datatype="html">
         <source>Enable global search</source>
-        <target/>
+        <target>ആഗോള തിരയൽ പ്രാപ്തമാക്കുക</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">299</context>
@@ -2160,7 +2160,7 @@
       </trans-unit>
       <trans-unit id="4087837092261487511" datatype="html">
         <source>Your Twitter username</source>
-        <target/>
+        <target>നിങ്ങളുടെ ട്വിറ്റർ ഉപയോക്തൃനാമം</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">472</context>
@@ -2316,7 +2316,7 @@
       </trans-unit>
       <trans-unit id="5975271795105968425" datatype="html">
         <source>Live streaming</source>
-        <target/>
+        <target>തത്സമയ സംപ്രേക്ഷണം</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">42</context>
@@ -2432,7 +2432,7 @@
       </trans-unit>
       <trans-unit id="2658703380934466003" datatype="html">
         <source>Add a new language</source>
-        <target/>
+        <target>ഒരു പുതിയ ഭാഷ ചേർക്കുക</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">67</context>
@@ -2528,7 +2528,7 @@
       </trans-unit>
       <trans-unit id="8930852890861583005" datatype="html">
         <source>Blur thumbnails</source>
-        <target/>
+        <target>ലഘുചിത്രങ്ങൾ മങ്ങിക്കുക</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">116</context>
@@ -2540,7 +2540,7 @@
       </trans-unit>
       <trans-unit id="6812930637022637485" datatype="html">
         <source>Display</source>
-        <target/>
+        <target>പ്രദർശിപ്പിക്കുക</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">117</context>
@@ -2636,7 +2636,7 @@
       </trans-unit>
       <trans-unit id="6853511883515031762" datatype="html">
         <source>OTHER INFORMATION</source>
-        <target/>
+        <target>മറ്റ് വിവരങ്ങൾ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">221</context>
@@ -2680,7 +2680,7 @@
       </trans-unit>
       <trans-unit id="2281161665447607254" datatype="html">
         <source>Allow live streaming</source>
-        <target/>
+        <target>തത്സമയ സംപ്രേക്ഷണം അനുവദിക്കുക</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">18</context>
@@ -2832,7 +2832,7 @@
       </trans-unit>
       <trans-unit id="931255636742351800" datatype="html">
         <source>No limit</source>
-        <target/>
+        <target>പരിധിയില്ല</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.ts</context>
           <context context-type="linenumber">34</context>
@@ -2900,7 +2900,7 @@
       </trans-unit>
       <trans-unit id="9035429011363248302" datatype="html">
         <source>Read guidelines</source>
-        <target/>
+        <target>മാർഗ്ഗനിർദ്ദേശങ്ങൾ വായിക്കുക</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">17,18</context>
@@ -4504,7 +4504,7 @@
       </trans-unit>
       <trans-unit id="3148804384763272950" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {result} other {results}}</source>
-        <target/>
+        <target>{VAR_PLURAL, plural, =1 {ഭലം} other {ഭലങ്ങൾ}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">23</context>
@@ -5189,7 +5189,7 @@
       </trans-unit>
       <trans-unit id="5248717555542428023" datatype="html">
         <source>Username</source>
-        <target/>
+        <target>ഉപയോക്തൃനാമം</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">83</context>
@@ -5869,7 +5869,7 @@
       </trans-unit>
       <trans-unit id="2308975396733519902" datatype="html">
         <source>Create an account</source>
-        <target/>
+        <target>ഒരു അക്കൗണ്ട്</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">50</context>
