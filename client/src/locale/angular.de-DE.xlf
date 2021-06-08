@@ -4951,7 +4951,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="6201638315245239510" datatype="html">
         <source>Advanced</source>
-        <target state="translated">Fortgeschrittene</target>
+        <target state="translated">Erweitert</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">51</context>
@@ -6622,7 +6622,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="1305357231288135414" datatype="html">
         <source>Homepage</source>
-        <target state="new">Homepage</target>
+        <target state="translated">Homepage</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">7</context>
@@ -6634,7 +6634,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="5037437391296624618" datatype="html">
         <source>Information</source>
-        <target state="new">Information</target>
+        <target state="translated">Information</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">15</context>
@@ -6655,7 +6655,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="6920964195632624609" datatype="html">
         <source>INSTANCE HOMEPAGE</source>
-        <target state="new">INSTANCE HOMEPAGE</target>
+        <target state="translated">INSTANZ HOMEPAGE</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-homepage.component.html</context>
           <context context-type="linenumber">7</context>
@@ -7881,7 +7881,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="1636934520301910285" datatype="html">
         <source>Reset password</source>
-        <target state="new">Reset password</target>
+        <target state="translated">Passwort zurücksetzen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+reset-password/reset-password-routing.module.ts</context>
           <context context-type="linenumber">11</context>
