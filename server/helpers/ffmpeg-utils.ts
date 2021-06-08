@@ -3,14 +3,12 @@ import * as ffmpeg from 'fluent-ffmpeg'
 import { readFile, remove, writeFile } from 'fs-extra'
 import { dirname, join } from 'path'
 import { FFMPEG_NICE, VIDEO_LIVE } from '@server/initializers/constants'
-import { AvailableEncoders, EncoderOptionsBuilder, EncoderOptions, EncoderProfile, VideoResolution } from '../../shared/models/videos'
+import { AvailableEncoders, EncoderOptions, EncoderOptionsBuilder, EncoderProfile, VideoResolution } from '../../shared/models/videos'
 import { CONFIG } from '../initializers/config'
-import { execPromise, isOdd, promisify0 } from './core-utils'
+import { execPromise, promisify0 } from './core-utils'
 import { computeFPS, getAudioStream, getVideoFileFPS } from './ffprobe-utils'
 import { processImage } from './image-utils'
 import { logger } from './logger'
-import { FilterSpecification } from 'fluent-ffmpeg'
-import { findCommentId } from '@shared/extra-utils'
 
 /**
  *

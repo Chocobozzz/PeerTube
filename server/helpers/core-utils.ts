@@ -248,7 +248,7 @@ function isOdd (num: number) {
 }
 
 function toEven (num: number) {
-  if (isOdd) return num + 1
+  if (isOdd(num)) return num + 1
 
   return num
 }
