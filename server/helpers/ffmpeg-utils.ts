@@ -226,7 +226,7 @@ async function getLiveTranscodingCommand (options: {
 
   const varStreamMap: string[] = []
 
-  const complexFilter: FilterSpecification[] = [
+  const complexFilter: ffmpeg.FilterSpecification[] = [
     {
       inputs: '[v:0]',
       filter: 'split',
