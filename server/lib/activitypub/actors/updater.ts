@@ -39,13 +39,13 @@ export class APActorUpdater {
       if (this.accountOrChannel instanceof VideoChannelModel) this.accountOrChannel.support = this.actorObject.support
 
       await runInReadCommittedTransaction(async t => {
-        await this.actor.save({ transaction: t })
-        await this.accountOrChannel.save({ transaction: t })
+        await updateActorImageInstance(this.actor, ActorImageType.AVATAR, avatarInfo, t)
+        await updateActorImageInstance(this.actor, ActorImageType.BANNER, bannerInfo, t)
       })
 
       await runInReadCommittedTransaction(async t => {
-        await updateActorImageInstance(this.actor, ActorImageType.AVATAR, avatarInfo, t)
-        await updateActorImageInstance(this.actor, ActorImageType.BANNER, bannerInfo, t)
+        await this.actor.save({ transaction: t })
+        await this.accountOrChannel.save({ transaction: t })
       })
 
       logger.info('Remote account %s updated', this.actorObject.url)
