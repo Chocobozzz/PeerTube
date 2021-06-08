@@ -121,7 +121,7 @@ const videosAddResumableValidator = [
       if (!sessionResponse) {
         res.setHeader('Retry-After', 300) // ask to retry after 5 min, knowing the upload_id is kept for up to 15 min after completion
         res.fail({
-          status: HttpStatusCode.CONFLICT_409,
+          status: HttpStatusCode.SERVICE_UNAVAILABLE_503,
           message: 'The upload is already being processed'
         })
       } else {

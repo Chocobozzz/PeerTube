@@ -2039,11 +2039,18 @@ paths:
         '404':
           description: upload not found
         '409':
-          description: chunk doesn't match range or upload being processed
+          description: chunk doesn't match range
         '422':
           description: video unreadable
         '429':
           description: too many concurrent requests
+        '503':
+          description: upload is already being processed
+          headers:
+            'Retry-After':
+              schema:
+                type: number
+                example: 300
     delete:
       summary: Cancel the resumable upload of a video, deleting any data uploaded so far
       description: Uses [a resumable protocol](https://github.com/kukhariev/node-uploadx/blob/master/proto.md) to cancel the upload of a video
