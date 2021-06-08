@@ -2016,7 +2016,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="7306351600905511107" datatype="html">
         <source>ratio 6/1, recommended size: 1920x317, max size: <x id="PH" equiv-text="getBytes(this.maxBannerSize)"/>, extensions: <x id="PH_1" equiv-text="this.bannerExtensions"/></source>
-        <target state="new">ratio 6/1, recommended size: 1920x317, max size: <x id="PH" equiv-text="getBytes(this.maxBannerSize)"/>, extensions: <x id="PH_1" equiv-text="this.bannerExtensions"/></target>
+        <target state="translated">Verhältnis 6/1, empfohlene Größe: 1920x317, maximale Größe: <x id="PH" equiv-text="getBytes(this.maxBannerSize)"/>, Erweiterungen: <x id="PH_1" equiv-text="this.bannerExtensions"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-banner-edit.component.ts</context>
           <context context-type="linenumber">45</context>
@@ -2436,7 +2436,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="6161604372916832458" datatype="html">
         <source>Upload on hold</source>
-        <target state="new">Upload on hold</target>
+        <target state="translated">Hochgeladenes in Warteposition</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context>
           <context context-type="linenumber">125</context>
