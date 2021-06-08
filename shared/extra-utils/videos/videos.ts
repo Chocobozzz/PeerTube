@@ -4,10 +4,11 @@ import { expect } from 'chai'
 import { createReadStream, pathExists, readdir, readFile, stat } from 'fs-extra'
 import got, { Response as GotResponse } from 'got/dist/source'
 import * as parseTorrent from 'parse-torrent'
-import { extname, join } from 'path'
+import { join } from 'path'
 import * as request from 'supertest'
 import { v4 as uuidv4 } from 'uuid'
 import validator from 'validator'
+import { getLowercaseExtension } from '@server/helpers/core-utils'
 import { HttpStatusCode } from '@shared/core-utils'
 import { VideosCommonQuery } from '@shared/models'
 import { loadLanguages, VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_PRIVACIES } from '../../../server/initializers/constants'
@@ -738,7 +739,7 @@ async function completeVideoCheck (
     const file = videoDetails.files.find(f => f.resolution.id === attributeFile.resolution)
     expect(file).not.to.be.undefined
 
-    let extension = extname(attributes.fixture)
+    let extension = getLowercaseExtension(attributes.fixture)
     // Transcoding enabled: extension will always be .mp4
     if (attributes.files.length > 1) extension = '.mp4'
 

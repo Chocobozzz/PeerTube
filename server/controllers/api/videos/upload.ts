@@ -1,6 +1,6 @@
 import * as express from 'express'
 import { move } from 'fs-extra'
-import { extname } from 'path'
+import { getLowercaseExtension } from '@server/helpers/core-utils'
 import { deleteResumableUploadMetaFile, getResumableUploadPath } from '@server/helpers/upload'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
 import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url'
@@ -225,7 +225,7 @@ async function addVideo (options: {
 
 async function buildNewFile (video: MVideo, videoPhysicalFile: express.VideoUploadFile) {
   const videoFile = new VideoFileModel({
-    extname: extname(videoPhysicalFile.filename),
+    extname: getLowercaseExtension(videoPhysicalFile.filename),
     size: videoPhysicalFile.size,
     videoStreamingPlaylistId: null,
     metadata: await getMetadataFromFile(videoPhysicalFile.path)

@@ -1,7 +1,7 @@
 import { copy, readFile, remove, rename } from 'fs-extra'
 import * as Jimp from 'jimp'
-import { extname } from 'path'
 import { v4 as uuidv4 } from 'uuid'
+import { getLowercaseExtension } from './core-utils'
 import { convertWebPToJPG, processGIF } from './ffmpeg-utils'
 import { logger } from './logger'
 
@@ -15,7 +15,7 @@ async function processImage (
   newSize: { width: number, height: number },
   keepOriginal = false
 ) {
-  const extension = extname(path)
+  const extension = getLowercaseExtension(path)
 
   if (path === destination) {
     throw new Error('Jimp/FFmpeg needs an input path different that the output path.')
@@ -61,7 +61,8 @@ async function jimpProcessor (path: string, destination: string, newSize: { widt
   await remove(destination)
 
   // Optimization if the source file has the appropriate size
-  if (await skipProcessing({ jimpInstance, newSize, imageBytes: inputBuffer.byteLength, inputExt, outputExt: extname(destination) })) {
+  const outputExt = getLowercaseExtension(destination)
+  if (skipProcessing({ jimpInstance, newSize, imageBytes: inputBuffer.byteLength, inputExt, outputExt })) {
     return copy(path, destination)
   }
 

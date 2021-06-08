@@ -1,5 +1,4 @@
 import { values } from 'lodash'
-import { extname } from 'path'
 import { literal, Op, Transaction } from 'sequelize'
 import {
   AllowNull,
@@ -17,6 +16,7 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
+import { getLowercaseExtension } from '@server/helpers/core-utils'
 import { ModelCache } from '@server/models/model-cache'
 import { AttributesOnly } from '@shared/core-utils'
 import { ActivityIconObject, ActivityPubActorType } from '../../../shared/models/activitypub'
@@ -567,7 +567,7 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
     let image: ActivityIconObject
 
     if (this.avatarId) {
-      const extension = extname(this.Avatar.filename)
+      const extension = getLowercaseExtension(this.Avatar.filename)
 
       icon = {
         type: 'Image',
@@ -580,7 +580,7 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
 
     if (this.bannerId) {
       const banner = (this as MActorAPChannel).Banner
-      const extension = extname(banner.filename)
+      const extension = getLowercaseExtension(banner.filename)
 
       image = {
         type: 'Image',

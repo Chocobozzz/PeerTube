@@ -1,6 +1,7 @@
 import * as Bull from 'bull'
 import { move, remove, stat } from 'fs-extra'
 import { extname } from 'path'
+import { getLowercaseExtension } from '@server/helpers/core-utils'
 import { retryTransactionWrapper } from '@server/helpers/database-utils'
 import { YoutubeDL } from '@server/helpers/youtube-dl'
 import { isPostImportVideoAccepted } from '@server/lib/moderation'
@@ -119,7 +120,7 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
     const duration = await getDurationFromVideoFile(tempVideoPath)
 
     // Prepare video file object for creation in database
-    const fileExt = extname(tempVideoPath)
+    const fileExt = getLowercaseExtension(tempVideoPath)
     const videoFileData = {
       extname: fileExt,
       resolution: videoFileResolution,

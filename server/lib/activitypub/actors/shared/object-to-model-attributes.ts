@@ -1,5 +1,5 @@
-import { extname } from 'path'
 import { v4 as uuidv4 } from 'uuid'
+import { getLowercaseExtension } from '@server/helpers/core-utils'
 import { isActivityPubUrlValid } from '@server/helpers/custom-validators/activitypub/misc'
 import { MIMETYPES } from '@server/initializers/constants'
 import { ActorModel } from '@server/models/actor/actor'
@@ -43,7 +43,7 @@ function getImageInfoFromObject (actorObject: ActivityPubActor, type: ActorImage
   if (icon.mediaType) {
     extension = mimetypes.MIMETYPE_EXT[icon.mediaType]
   } else {
-    const tmp = extname(icon.url)
+    const tmp = getLowercaseExtension(icon.url)
 
     if (mimetypes.EXT_MIMETYPE[tmp] !== undefined) extension = tmp
   }
