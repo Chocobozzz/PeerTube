@@ -1,6 +1,5 @@
-import { resetSequelizeInstance } from '@server/helpers/database-utils'
+import { resetSequelizeInstance, runInReadCommittedTransaction } from '@server/helpers/database-utils'
 import { logger } from '@server/helpers/logger'
-import { sequelizeTypescript } from '@server/initializers/database'
 import { VideoChannelModel } from '@server/models/video/video-channel'
 import { MAccount, MActor, MActorFull, MChannel } from '@server/types/models'
 import { ActivityPubActor, ActorImageType } from '@shared/models'
@@ -32,20 +31,21 @@ export class APActorUpdater {
     const bannerInfo = getImageInfoFromObject(this.actorObject, ActorImageType.BANNER)
 
     try {
-      await sequelizeTypescript.transaction(async t => {
-        await this.updateActorInstance(this.actor, this.actorObject)
+      await this.updateActorInstance(this.actor, this.actorObject)
 
+      this.accountOrChannel.name = this.actorObject.name || this.actorObject.preferredUsername
+      this.accountOrChannel.description = this.actorObject.summary
+
+      if (this.accountOrChannel instanceof VideoChannelModel) this.accountOrChannel.support = this.actorObject.support
+
+      await runInReadCommittedTransaction(async t => {
+        await this.actor.save({ transaction: t })
+        await this.accountOrChannel.save({ transaction: t })
+      })
+
+      await runInReadCommittedTransaction(async t => {
         await updateActorImageInstance(this.actor, ActorImageType.AVATAR, avatarInfo, t)
         await updateActorImageInstance(this.actor, ActorImageType.BANNER, bannerInfo, t)
-
-        await this.actor.save({ transaction: t })
-
-        this.accountOrChannel.name = this.actorObject.name || this.actorObject.preferredUsername
-        this.accountOrChannel.description = this.actorObject.summary
-
-        if (this.accountOrChannel instanceof VideoChannelModel) this.accountOrChannel.support = this.actorObject.support
-
-        await this.accountOrChannel.save({ transaction: t })
       })
 
       logger.info('Remote account %s updated', this.actorObject.url)

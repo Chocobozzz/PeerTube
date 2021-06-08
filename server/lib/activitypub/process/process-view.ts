@@ -24,12 +24,11 @@ async function processCreateView (activity: ActivityView | ActivityCreate, byAct
     ? activity.object
     : (activity.object as ViewObject).object
 
-  const options = {
+  const { video } = await getOrCreateAPVideo({
     videoObject,
-    fetchType: 'only-video' as 'only-video',
-    allowRefresh: false as false
-  }
-  const { video } = await getOrCreateAPVideo(options)
+    fetchType: 'only-video',
+    allowRefresh: false
+  })
 
   if (!video.isLive) {
     await Redis.Instance.addVideoView(video.id)

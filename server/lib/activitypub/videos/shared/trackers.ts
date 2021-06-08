@@ -28,7 +28,7 @@ function getTrackerUrls (object: VideoObject, video: MVideoWithHost) {
 async function setVideoTrackers (options: {
   video: MVideo
   trackers: string[]
-  transaction?: Transaction
+  transaction: Transaction
 }) {
   const { video, trackers, transaction } = options
 

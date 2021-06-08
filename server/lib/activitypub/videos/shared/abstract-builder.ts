@@ -49,7 +49,7 @@ export abstract class APVideoAbstractBuilder {
     })
   }
 
-  protected async setPreview (video: MVideoFullLight, t: Transaction) {
+  protected async setPreview (video: MVideoFullLight, t?: Transaction) {
     // Don't fetch the preview that could be big, create a placeholder instead
     const previewIcon = getPreviewFromIcons(this.videoObject)
     if (!previewIcon) return

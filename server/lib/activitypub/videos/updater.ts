@@ -1,7 +1,6 @@
 import { Transaction } from 'sequelize/types'
-import { resetSequelizeInstance } from '@server/helpers/database-utils'
+import { resetSequelizeInstance, runInReadCommittedTransaction } from '@server/helpers/database-utils'
 import { logger, loggerTagsFactory, LoggerTagsFn } from '@server/helpers/logger'
-import { sequelizeTypescript } from '@server/initializers/database'
 import { Notifier } from '@server/lib/notifier'
 import { PeerTubeSocket } from '@server/lib/peertube-socket'
 import { autoBlacklistVideoIfNeeded } from '@server/lib/video-blacklist'
@@ -48,23 +47,25 @@ export class APVideoUpdater extends APVideoAbstractBuilder {
 
       const thumbnailModel = await this.tryToGenerateThumbnail(this.video)
 
-      const videoUpdated = await sequelizeTypescript.transaction(async t => {
-        this.checkChannelUpdateOrThrow(channelActor)
+      this.checkChannelUpdateOrThrow(channelActor)
 
-        const videoUpdated = await this.updateVideo(channelActor.VideoChannel, t, overrideTo)
+      const videoUpdated = await this.updateVideo(channelActor.VideoChannel, undefined, overrideTo)
 
-        if (thumbnailModel) await videoUpdated.addAndSaveThumbnail(thumbnailModel, t)
+      if (thumbnailModel) await videoUpdated.addAndSaveThumbnail(thumbnailModel)
 
-        await this.setPreview(videoUpdated, t)
+      await runInReadCommittedTransaction(async t => {
         await this.setWebTorrentFiles(videoUpdated, t)
         await this.setStreamingPlaylists(videoUpdated, t)
-        await this.setTags(videoUpdated, t)
-        await this.setTrackers(videoUpdated, t)
-        await this.setCaptions(videoUpdated, t)
-        await this.setOrDeleteLive(videoUpdated, t)
-
-        return videoUpdated
       })
+
+      await Promise.all([
+        runInReadCommittedTransaction(t => this.setTags(videoUpdated, t)),
+        runInReadCommittedTransaction(t => this.setTrackers(videoUpdated, t)),
+        this.setOrDeleteLive(videoUpdated),
+        this.setPreview(videoUpdated)
+      ])
+
+      await runInReadCommittedTransaction(t => this.setCaptions(videoUpdated, t))
 
       await autoBlacklistVideoIfNeeded({
         video: videoUpdated,
@@ -103,7 +104,7 @@ export class APVideoUpdater extends APVideoAbstractBuilder {
     }
   }
 
-  private updateVideo (channel: MChannelId, transaction: Transaction, overrideTo?: string[]) {
+  private updateVideo (channel: MChannelId, transaction?: Transaction, overrideTo?: string[]) {
     const to = overrideTo || this.videoObject.to
     const videoData = getVideoAttributesFromObject(channel, this.videoObject, to)
     this.video.name = videoData.name
@@ -140,7 +141,9 @@ export class APVideoUpdater extends APVideoAbstractBuilder {
     await this.insertOrReplaceCaptions(videoUpdated, t)
   }
 
-  private async setOrDeleteLive (videoUpdated: MVideoFullLight, transaction: Transaction) {
+  private async setOrDeleteLive (videoUpdated: MVideoFullLight, transaction?: Transaction) {
+    if (!this.video.isLive) return
+
     if (this.video.isLive) return this.insertOrReplaceLive(videoUpdated, transaction)
 
     // Delete existing live if it exists

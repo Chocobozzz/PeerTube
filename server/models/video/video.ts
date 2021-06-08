@@ -1886,7 +1886,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     return Array.isArray(this.VideoFiles) === true && this.VideoFiles.length !== 0
   }
 
-  async addAndSaveThumbnail (thumbnail: MThumbnail, transaction: Transaction) {
+  async addAndSaveThumbnail (thumbnail: MThumbnail, transaction?: Transaction) {
     thumbnail.videoId = this.id
 
     const savedThumbnail = await thumbnail.save({ transaction })

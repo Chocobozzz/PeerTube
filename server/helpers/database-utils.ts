@@ -58,7 +58,7 @@ function transactionRetryer <T> (func: (err: any, data: T) => any) {
 
         errorFilter: err => {
           const willRetry = (err.name === 'SequelizeDatabaseError')
-          logger.debug('Maybe retrying the transaction function.', { willRetry, err })
+          logger.debug('Maybe retrying the transaction function.', { willRetry, err, tags: [ 'sql', 'retry' ] })
           return willRetry
         }
       },
@@ -67,6 +67,8 @@ function transactionRetryer <T> (func: (err: any, data: T) => any) {
     )
   })
 }
+
+// ---------------------------------------------------------------------------
 
 function updateInstanceWithAnother <M, T extends U, U extends Model<M>> (instanceToUpdate: T, baseInstance: U) {
   const obj = baseInstance.toJSON()
@@ -80,12 +82,6 @@ function resetSequelizeInstance (instance: Model<any>, savedFields: object) {
   Object.keys(savedFields).forEach(key => {
     instance[key] = savedFields[key]
   })
-}
-
-function afterCommitIfTransaction (t: Transaction, fn: Function) {
-  if (t) return t.afterCommit(() => fn())
-
-  return fn()
 }
 
 function deleteNonExistingModels <T extends { hasSameUniqueKeysThan (other: T): boolean } & Pick<Model, 'destroy'>> (
@@ -111,6 +107,18 @@ function setAsUpdated (table: string, id: number, transaction?: Transaction) {
 
 // ---------------------------------------------------------------------------
 
+function runInReadCommittedTransaction <T> (fn: (t: Transaction) => Promise<T>) {
+  return sequelizeTypescript.transaction(t => fn(t))
+}
+
+function afterCommitIfTransaction (t: Transaction, fn: Function) {
+  if (t) return t.afterCommit(() => fn())
+
+  return fn()
+}
+
+// ---------------------------------------------------------------------------
+
 export {
   resetSequelizeInstance,
   retryTransactionWrapper,
@@ -118,5 +126,6 @@ export {
   updateInstanceWithAnother,
   afterCommitIfTransaction,
   deleteNonExistingModels,
-  setAsUpdated
+  setAsUpdated,
+  runInReadCommittedTransaction
 }
