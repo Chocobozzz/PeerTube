@@ -8,6 +8,7 @@ import {
   ActivitypubHttpFetcherPayload,
   ActivitypubHttpUnicastPayload,
   ActorKeysPayload,
+  DeleteResumableUploadMetaFilePayload,
   EmailPayload,
   JobState,
   JobType,
@@ -34,6 +35,7 @@ import { processVideoImport } from './handlers/video-import'
 import { processVideoLiveEnding } from './handlers/video-live-ending'
 import { processVideoTranscoding } from './handlers/video-transcoding'
 import { processVideosViews } from './handlers/video-views'
+import { processDeleteResumableUploadMetaFile } from './handlers/delete-resumable-upload-meta-file'
 
 type CreateJobArgument =
   { type: 'activitypub-http-broadcast', payload: ActivitypubHttpBroadcastPayload } |
@@ -49,7 +51,8 @@ type CreateJobArgument =
   { type: 'videos-views', payload: {} } |
   { type: 'video-live-ending', payload: VideoLiveEndingPayload } |
   { type: 'actor-keys', payload: ActorKeysPayload } |
-  { type: 'video-redundancy', payload: VideoRedundancyPayload }
+  { type: 'video-redundancy', payload: VideoRedundancyPayload } |
+  { type: 'delete-resumable-upload-meta-file', payload: DeleteResumableUploadMetaFilePayload }
 
 type CreateJobOptions = {
   delay?: number
@@ -70,7 +73,8 @@ const handlers: { [id in JobType]: (job: Bull.Job) => Promise<any> } = {
   'activitypub-refresher': refreshAPObject,
   'video-live-ending': processVideoLiveEnding,
   'actor-keys': processActorKeys,
-  'video-redundancy': processVideoRedundancy
+  'video-redundancy': processVideoRedundancy,
+  'delete-resumable-upload-meta-file': processDeleteResumableUploadMetaFile
 }
 
 const jobTypes: JobType[] = [
@@ -87,7 +91,8 @@ const jobTypes: JobType[] = [
   'activitypub-refresher',
   'video-redundancy',
   'actor-keys',
-  'video-live-ending'
+  'video-live-ending',
+  'delete-resumable-upload-meta-file'
 ]
 
 class JobQueue {

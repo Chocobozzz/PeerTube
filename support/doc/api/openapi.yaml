@@ -2039,7 +2039,7 @@ paths:
         '404':
           description: upload not found
         '409':
-          description: chunk doesn't match range
+          description: chunk doesn't match range or upload being processed
         '422':
           description: video unreadable
         '429':

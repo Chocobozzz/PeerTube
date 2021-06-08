@@ -1,7 +1,7 @@
 import * as express from 'express'
 import { move } from 'fs-extra'
 import { getLowercaseExtension } from '@server/helpers/core-utils'
-import { deleteResumableUploadMetaFile, getResumableUploadPath } from '@server/helpers/upload'
+import { getResumableUploadPath, scheduleDeleteResumableUploadMetaFile } from '@server/helpers/upload'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
 import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url'
 import { addOptimizeOrMergeAudioJob, buildLocalVideoFromReq, buildVideoThumbnailsFromReq, setVideoTags } from '@server/lib/video'
@@ -35,6 +35,7 @@ import {
 import { ScheduleVideoUpdateModel } from '../../../models/video/schedule-video-update'
 import { VideoModel } from '../../../models/video/video'
 import { VideoFileModel } from '../../../models/video/video-file'
+import { Redis } from '@server/lib/redis'
 
 const lTags = loggerTagsFactory('api', 'video')
 const auditLogger = auditLoggerFactory('videos')
@@ -112,18 +113,21 @@ export async function addVideoLegacy (req: express.Request, res: express.Respons
   const videoInfo: VideoCreate = req.body
   const files = req.files
 
-  return addVideo({ res, videoPhysicalFile, videoInfo, files })
+  const response = addVideo({ res, videoPhysicalFile, videoInfo, files })
+  return res.json(response)
 }
 
-export async function addVideoResumable (_req: express.Request, res: express.Response) {
+export async function addVideoResumable (req: express.Request, res: express.Response) {
   const videoPhysicalFile = res.locals.videoFileResumable
   const videoInfo = videoPhysicalFile.metadata
   const files = { previewfile: videoInfo.previewfile }
 
   // Don't need the meta file anymore
-  await deleteResumableUploadMetaFile(videoPhysicalFile.path)
+  scheduleDeleteResumableUploadMetaFile(videoPhysicalFile.path)
 
-  return addVideo({ res, videoPhysicalFile, videoInfo, files })
+  const response = await addVideo({ res, videoPhysicalFile, videoInfo, files })
+  await Redis.Instance.setUploadSession(req.query.upload_id, response.video)
+  return res.json(response)
 }
 
 async function addVideo (options: {
@@ -215,12 +219,12 @@ async function addVideo (options: {
 
   Hooks.runAction('action:api.video.uploaded', { video: videoCreated })
 
-  return res.json({
+  return {
     video: {
       id: videoCreated.id,
       uuid: videoCreated.uuid
     }
-  })
+  }
 }
 
 async function buildNewFile (video: MVideo, videoPhysicalFile: express.VideoUploadFile) {

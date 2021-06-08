@@ -1,3 +1,4 @@
+import { JobQueue } from '@server/lib/job-queue'
 import { METAFILE_EXTNAME } from '@uploadx/core'
 import { remove } from 'fs-extra'
 import { join } from 'path'
@@ -13,9 +14,15 @@ function deleteResumableUploadMetaFile (filepath: string) {
   return remove(filepath + METAFILE_EXTNAME)
 }
 
+function scheduleDeleteResumableUploadMetaFile (filepath: string) {
+  const payload = { filepath }
+  JobQueue.Instance.createJob({ type: 'delete-resumable-upload-meta-file', payload }, { delay: 900 * 1000 }) // executed in 15 min
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   getResumableUploadPath,
-  deleteResumableUploadMetaFile
+  deleteResumableUploadMetaFile,
+  scheduleDeleteResumableUploadMetaFile
 }

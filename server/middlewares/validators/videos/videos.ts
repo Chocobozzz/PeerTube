@@ -1,5 +1,6 @@
 import * as express from 'express'
 import { body, header, param, query, ValidationChain } from 'express-validator'
+import { Redis } from '@server/lib/redis'
 import { getResumableUploadPath } from '@server/helpers/upload'
 import { isAbleToUploadVideo } from '@server/lib/user'
 import { getServerActor } from '@server/models/application/application'
@@ -109,11 +110,27 @@ const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
 const videosAddResumableValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const user = res.locals.oauth.token.User
-
     const body: express.CustomUploadXFile<express.UploadXFileMetadata> = req.body
     const file = { ...body, duration: undefined, path: getResumableUploadPath(body.id), filename: body.metadata.filename }
-
     const cleanup = () => deleteFileAndCatch(file.path)
+
+    const uploadId = req.query.upload_id
+    const sessionExists = await Redis.Instance.doesUploadSessionExist(uploadId)
+    if (sessionExists) {
+      const sessionResponse = await Redis.Instance.getUploadSession(uploadId)
+      if (!sessionResponse) {
+        res.setHeader('Retry-After', 300) // ask to retry after 5 min, knowing the upload_id is kept for up to 15 min after completion
+        res.fail({
+          status: HttpStatusCode.CONFLICT_409,
+          message: 'The upload is already being processed'
+        })
+      } else {
+        res.json({ video: sessionResponse })
+      }
+      return
+    } else {
+      await Redis.Instance.setUploadSession(uploadId)
+    }
 
     if (!await doesVideoChannelOfAccountExist(file.metadata.channelId, user, res)) return cleanup()
 

@@ -19,6 +19,7 @@ export type JobType =
   | 'video-redundancy'
   | 'video-live-ending'
   | 'actor-keys'
+  | 'delete-resumable-upload-meta-file'
 
 export interface Job {
   id: number
@@ -136,4 +137,8 @@ export interface VideoLiveEndingPayload {
 
 export interface ActorKeysPayload {
   actorId: number
+}
+
+export interface DeleteResumableUploadMetaFilePayload {
+  filepath: string
 }
