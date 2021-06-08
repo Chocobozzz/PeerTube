@@ -5869,7 +5869,7 @@
       </trans-unit>
       <trans-unit id="2308975396733519902" datatype="html">
         <source>Create an account</source>
-        <target>ഒരു അക്കൗണ്ട്</target>
+        <target>ഒരു അക്കൗണ്ട് സൃഷ്ടിക്കുക</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">50</context>
@@ -6110,7 +6110,7 @@
       </trans-unit>
       <trans-unit id="2333314224059826550" datatype="html">
         <source>Mark all as read</source>
-        <target/>
+        <target>എല്ലാം വായിച്ചതായി കാണിക്കുക</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-notifications/my-account-notifications.component.html</context>
           <context context-type="linenumber">20</context>
@@ -6238,7 +6238,7 @@
       </trans-unit>
       <trans-unit id="8656126574213649581" datatype="html">
         <source>Confirm new password</source>
-        <target/>
+        <target>പുതിയ രഹസ്യവാക്ക് ഉറപ്പാക്കുക</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-password/my-account-change-password.component.html</context>
           <context context-type="linenumber">26</context>
@@ -6262,7 +6262,7 @@
       </trans-unit>
       <trans-unit id="3122895472333547524" datatype="html">
         <source>Delete your account</source>
-        <target/>
+        <target>നിങ്ങളുടെ അക്കൗണ്ട് ഇല്ലാതാക്കുക</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.html</context>
           <context context-type="linenumber">4</context>
@@ -6290,7 +6290,7 @@
       </trans-unit>
       <trans-unit id="2520605306994744004" datatype="html">
         <source>Delete my account</source>
-        <target/>
+        <target>എന്റെ അക്കൗണ്ട് ഇല്ലാതാക്കുക</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context>
           <context context-type="linenumber">26</context>
@@ -6298,7 +6298,7 @@
       </trans-unit>
       <trans-unit id="3902597758945766483" datatype="html">
         <source>Your account is deleted.</source>
-        <target/>
+        <target>നിങ്ങളുടെ അക്കൗണ്ട് ഇല്ലാതാക്കി.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context>
           <context context-type="linenumber">32</context>
@@ -6618,7 +6618,7 @@
       </trans-unit>
       <trans-unit id="1137937154872046253" datatype="html">
         <source>Video channel <x id="PH" equiv-text="videoChannelCreate.displayName"/> created.</source>
-        <target/>
+        <target>Video channel <x id="PH" equiv-text="videoChannelCreate.displayName"/> സൃഷ്ടിച്ചു.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channel-create.component.ts</context>
           <context context-type="linenumber">67</context>
@@ -6794,7 +6794,7 @@
       </trans-unit>
       <trans-unit id="7040375308762081154" datatype="html">
         <source>My video channels</source>
-        <target/>
+        <target>എന്റെ വീഡിയോ ചാനലുകൾ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels-routing.module.ts</context>
           <context context-type="linenumber">13</context>
@@ -6802,7 +6802,7 @@
       </trans-unit>
       <trans-unit id="7418836785553125957" datatype="html">
         <source>Create a new video channel</source>
-        <target/>
+        <target>ഒരു പുതിയ വീഡിയോ ചാനൽ സൃഷ്ടിക്കുക</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels-routing.module.ts</context>
           <context context-type="linenumber">22</context>
@@ -6826,7 +6826,7 @@
       </trans-unit>
       <trans-unit id="7000850040589508423" datatype="html">
         <source>Create video channel</source>
-        <target/>
+        <target>വീഡിയോ ചാനൽ സൃഷ്ടിക്കുക</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.html</context>
           <context context-type="linenumber">12</context>
@@ -6834,7 +6834,7 @@
       </trans-unit>
       <trans-unit id="5700655611297335752" datatype="html">
         <source>No channel found.</source>
-        <target/>
+        <target>ചാനലുകളൊന്നും കണ്ടെത്തിയില്ല.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.html</context>
           <context context-type="linenumber">16</context>
