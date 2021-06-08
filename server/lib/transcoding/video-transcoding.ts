@@ -1,6 +1,7 @@
 import { Job } from 'bull'
 import { copyFile, ensureDir, move, remove, stat } from 'fs-extra'
 import { basename, extname as extnameUtil, join } from 'path'
+import { toEven } from '@server/helpers/core-utils'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
 import { MStreamingPlaylistFilesVideo, MVideoFile, MVideoFullLight } from '@server/types/models'
 import { VideoResolution } from '../../../shared/models/videos'
@@ -35,6 +36,8 @@ async function optimizeOriginalVideofile (video: MVideoFullLight, inputVideoFile
     ? 'quick-transcode'
     : 'video'
 
+  const resolution = toEven(inputVideoFile.resolution)
+
   const transcodeOptions: TranscodeOptions = {
     type: transcodeType,
 
@@ -44,7 +47,7 @@ async function optimizeOriginalVideofile (video: MVideoFullLight, inputVideoFile
     availableEncoders: VideoTranscodingProfilesManager.Instance.getAvailableEncoders(),
     profile: CONFIG.TRANSCODING.PROFILE,
 
-    resolution: inputVideoFile.resolution,
+    resolution,
 
     job
   }
@@ -57,7 +60,7 @@ async function optimizeOriginalVideofile (video: MVideoFullLight, inputVideoFile
 
     // Important to do this before getVideoFilename() to take in account the new filename
     inputVideoFile.extname = newExtname
-    inputVideoFile.filename = generateVideoFilename(video, false, inputVideoFile.resolution, newExtname)
+    inputVideoFile.filename = generateVideoFilename(video, false, resolution, newExtname)
 
     const videoOutputPath = getVideoFilePath(video, inputVideoFile)
 

@@ -243,6 +243,18 @@ function execShell (command: string, options?: ExecOptions) {
 
 // ---------------------------------------------------------------------------
 
+function isOdd (num: number) {
+  return (num % 2) !== 0
+}
+
+function toEven (num: number) {
+  if (isOdd) return num + 1
+
+  return num
+}
+
+// ---------------------------------------------------------------------------
+
 function promisify0<A> (func: (cb: (err: any, result: A) => void) => void): () => Promise<A> {
   return function promisified (): Promise<A> {
     return new Promise<A>((resolve: (arg: A) => void, reject: (err: any) => void) => {
@@ -310,5 +322,8 @@ export {
   execPromise,
   pipelinePromise,
 
-  parseSemVersion
+  parseSemVersion,
+
+  isOdd,
+  toEven
 }
