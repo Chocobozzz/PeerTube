@@ -1605,7 +1605,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="5842982307680337701">
         <source>See all your notifications</source>
-        <target>Sieh alle deine Benachrichtigungen</target>
+        <target>Alle deine Benachrichtigungen anzeigen</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/notification.component.html</context><context context-type="linenumber">49</context></context-group>
       </trans-unit>
       <trans-unit id="4424964105331349857" datatype="html">
@@ -1719,7 +1719,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="1843010981261389722" datatype="html">
         <source>using <x id="INTERPOLATION"/></source>
-        <target state="translated">using <x id="INTERPOLATION"/></target>
+        <target state="translated">mit <x id="INTERPOLATION"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="4070041848101291003" datatype="html">
@@ -3097,7 +3097,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="7944777648309302794" datatype="html">
         <source>Feed URL</source>
-        <target state="translated">Feed URL</target>
+        <target state="translated">Datenstromadresse</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.html</context>
           <context context-type="linenumber">18</context>
@@ -8181,7 +8181,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="2821179408673282599" datatype="html">
         <source>Home</source>
-        <target state="new">Home</target>
+        <target state="translated">Startseite</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/menu/menu.service.ts</context>
           <context context-type="linenumber">97</context>
@@ -8380,7 +8380,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="8392321423487952834" datatype="html">
         <source>1 year ago</source>
-        <target state="new">1 year ago</target>
+        <target state="translated">vor einem Jahr</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">12</context>
@@ -8399,7 +8399,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="6874778750344205852" datatype="html">
         <source>1 month ago</source>
-        <target state="new">1 month ago</target>
+        <target state="translated">vor einem Monat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">19</context>
@@ -8418,7 +8418,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="6538455390369999912" datatype="html">
         <source>1 week ago</source>
-        <target state="new">1 week ago</target>
+        <target state="translated">vor einer Woche</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">26</context>
@@ -8433,7 +8433,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="3927517496763161987" datatype="html">
         <source>1 day ago</source>
-        <target state="new">1 day ago</target>
+        <target state="translated">vor einem Tag</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">30</context>
@@ -8448,7 +8448,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="6285422673271535468" datatype="html">
         <source>1 hour ago</source>
-        <target state="new">1 hour ago</target>
+        <target state="translated">vor einer Stunde</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">34</context>
