@@ -451,7 +451,7 @@
       </trans-unit>
       <trans-unit id="7688104409544625220" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 view} other {<x id="INTERPOLATION"/> views}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {1 view} other {<x id="INTERPOLATION"/> просмотров}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 просмотр} other {<x id="INTERPOLATION"/> просмотров}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video/video-views-counter.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="8856905278208146821" datatype="html">
