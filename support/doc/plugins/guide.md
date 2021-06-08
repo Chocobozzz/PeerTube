@@ -753,7 +753,7 @@ Left menu links can be filtered (add/remove a section or add/remove links) using
 ### Publishing
 
 PeerTube plugins and themes should be published on [NPM](https://www.npmjs.com/) so that PeerTube indexes
-take into account your plugin (after ~ 1 day). An official PeerTube index is available on https://packages.joinpeertube.org/ (it's just a REST API, so don't expect a beautiful website).
+take into account your plugin (after ~ 1 day).
 
 ## Write a plugin/theme
 
