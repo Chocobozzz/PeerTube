@@ -144,7 +144,7 @@ describe('Test plugin helpers', function () {
     let videoUUIDServer1: string
 
     before(async function () {
-      this.timeout(30000)
+      this.timeout(60000)
 
       {
         const res = await uploadVideoAndGetId({ server: servers[0], videoName: 'video server 1' })
