@@ -245,7 +245,7 @@ const CONSTRAINTS_FIELDS = {
     CAPTION_FILE: {
       EXTNAME: [ '.vtt', '.srt' ],
       FILE_SIZE: {
-        max: 2 * 1024 * 1024 // 2MB
+        max: 4 * 1024 * 1024 // 4MB
       }
     }
   },
@@ -274,7 +274,7 @@ const CONSTRAINTS_FIELDS = {
     IMAGE: {
       EXTNAME: [ '.png', '.jpg', '.jpeg', '.webp' ],
       FILE_SIZE: {
-        max: 2 * 1024 * 1024 // 2MB
+        max: 4 * 1024 * 1024 // 4MB
       }
     },
     EXTNAME: [] as string[],
@@ -296,7 +296,7 @@ const CONSTRAINTS_FIELDS = {
     IMAGE: {
       EXTNAME: [ '.jpg', '.jpeg' ],
       FILE_SIZE: {
-        max: 2 * 1024 * 1024 // 2MB
+        max: 4 * 1024 * 1024 // 4MB
       }
     }
   },
@@ -307,7 +307,7 @@ const CONSTRAINTS_FIELDS = {
     IMAGE: {
       EXTNAME: [ '.png', '.jpeg', '.jpg', '.gif', '.webp' ],
       FILE_SIZE: {
-        max: 2 * 1024 * 1024 // 2MB
+        max: 4 * 1024 * 1024 // 4MB
       }
     }
   },
