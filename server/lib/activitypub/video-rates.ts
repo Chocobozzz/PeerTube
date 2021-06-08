@@ -19,7 +19,7 @@ async function createRates (ratesUrl: string[], video: MVideo, rate: VideoRateTy
     try {
       await createRate(rateUrl, video, rate)
     } catch (err) {
-      logger.warn('Cannot add rate %s.', rateUrl, { err, ...lTags(rateUrl, video.uuid, video.url) })
+      logger.info('Cannot add rate %s.', rateUrl, { err, ...lTags(rateUrl, video.uuid, video.url) })
     }
   }, { concurrency: CRAWL_REQUEST_CONCURRENCY })
 }
