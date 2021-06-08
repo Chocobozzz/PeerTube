@@ -106,7 +106,7 @@ describe('Permenant live', function () {
   })
 
   it('Should stream into this permanent live', async function () {
-    this.timeout(60000)
+    this.timeout(120000)
 
     const command = await sendRTMPStreamInVideo(servers[0].url, servers[0].accessToken, videoUUID)
 
