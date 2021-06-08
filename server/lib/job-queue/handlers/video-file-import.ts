@@ -1,6 +1,5 @@
 import * as Bull from 'bull'
 import { copy, stat } from 'fs-extra'
-import { extname } from 'path'
 import { getLowercaseExtension } from '@server/helpers/core-utils'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
 import { generateVideoFilename, getVideoFilePath } from '@server/lib/video-paths'

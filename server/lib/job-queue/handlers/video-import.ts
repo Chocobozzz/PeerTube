@@ -1,6 +1,5 @@
 import * as Bull from 'bull'
 import { move, remove, stat } from 'fs-extra'
-import { extname } from 'path'
 import { getLowercaseExtension } from '@server/helpers/core-utils'
 import { retryTransactionWrapper } from '@server/helpers/database-utils'
 import { YoutubeDL } from '@server/helpers/youtube-dl'
