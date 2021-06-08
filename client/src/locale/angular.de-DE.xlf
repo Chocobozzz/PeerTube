@@ -3097,7 +3097,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="7944777648309302794" datatype="html">
         <source>Feed URL</source>
-        <target state="translated">Datenstromadresse</target>
+        <target state="translated">Feed URL</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.html</context>
           <context context-type="linenumber">18</context>
