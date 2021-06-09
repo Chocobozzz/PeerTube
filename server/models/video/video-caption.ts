@@ -154,7 +154,7 @@ export class VideoCaptionModel extends Model<Partial<AttributesOnly<VideoCaption
     return caption.save({ transaction })
   }
 
-  static listVideoCaptions (videoId: number, transaction: Transaction): Promise<MVideoCaptionVideo[]> {
+  static listVideoCaptions (videoId: number, transaction?: Transaction): Promise<MVideoCaptionVideo[]> {
     const query = {
       order: [ [ 'language', 'ASC' ] ] as OrderItem[],
       where: {
