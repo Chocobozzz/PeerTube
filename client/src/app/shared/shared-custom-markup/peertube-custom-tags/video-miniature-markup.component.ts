@@ -14,6 +14,7 @@ import { MiniatureDisplayOptions } from '../../shared-video-miniature'
 })
 export class VideoMiniatureMarkupComponent implements OnInit {
   @Input() uuid: string
+  @Input() onlyDisplayTitle: boolean
 
   video: Video
 
@@ -38,6 +39,12 @@ export class VideoMiniatureMarkupComponent implements OnInit {
   }
 
   ngOnInit () {
+    if (this.onlyDisplayTitle) {
+      for (const key of Object.keys(this.displayOptions)) {
+        this.displayOptions[key] = false
+      }
+    }
+
     this.videoService.getVideo({ videoId: this.uuid })
       .subscribe(video => this.video = video)
   }

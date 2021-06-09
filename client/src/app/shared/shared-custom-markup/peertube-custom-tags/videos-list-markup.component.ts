@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core'
 import { AuthService } from '@app/core'
-import { VideoSortField } from '@shared/models'
+import { VideoFilter, VideoSortField } from '@shared/models'
 import { Video, VideoService } from '../../shared-main'
 import { MiniatureDisplayOptions } from '../../shared-video-miniature'
 
@@ -14,15 +14,17 @@ import { MiniatureDisplayOptions } from '../../shared-video-miniature'
   styleUrls: [ 'videos-list-markup.component.scss' ]
 })
 export class VideosListMarkupComponent implements OnInit {
-  @Input() sort = '-publishedAt'
+  @Input() sort: string
   @Input() categoryOneOf: number[]
   @Input() languageOneOf: string[]
-  @Input() count = 10
+  @Input() count: number
+  @Input() onlyDisplayTitle: boolean
+  @Input() filter: VideoFilter
 
   videos: Video[]
 
   displayOptions: MiniatureDisplayOptions = {
-    date: true,
+    date: false,
     views: true,
     by: true,
     avatar: false,
@@ -42,6 +44,12 @@ export class VideosListMarkupComponent implements OnInit {
   }
 
   ngOnInit () {
+    if (this.onlyDisplayTitle) {
+      for (const key of Object.keys(this.displayOptions)) {
+        this.displayOptions[key] = false
+      }
+    }
+
     const options = {
       videoPagination: {
         currentPage: 1,
@@ -49,6 +57,7 @@ export class VideosListMarkupComponent implements OnInit {
       },
       categoryOneOf: this.categoryOneOf,
       languageOneOf: this.languageOneOf,
+      filter: this.filter,
       sort: this.sort as VideoSortField
     }
 

@@ -6,6 +6,7 @@ import {
   ContainerMarkupData,
   EmbedMarkupData,
   PlaylistMiniatureMarkupData,
+  VideoFilter,
   VideoMiniatureMarkupData,
   VideosListMarkupData
 } from '@shared/models'
@@ -108,15 +109,6 @@ export class CustomMarkupService {
     return component
   }
 
-  private videoMiniatureBuilder (el: HTMLElement) {
-    const data = el.dataset as VideoMiniatureMarkupData
-    const component = this.dynamicElementService.createElement(VideoMiniatureMarkupComponent)
-
-    this.dynamicElementService.setModel(component, { uuid: data.uuid })
-
-    return component
-  }
-
   private playlistMiniatureBuilder (el: HTMLElement) {
     const data = el.dataset as PlaylistMiniatureMarkupData
     const component = this.dynamicElementService.createElement(PlaylistMiniatureMarkupComponent)
@@ -150,14 +142,30 @@ export class CustomMarkupService {
     return component
   }
 
+  private videoMiniatureBuilder (el: HTMLElement) {
+    const data = el.dataset as VideoMiniatureMarkupData
+    const component = this.dynamicElementService.createElement(VideoMiniatureMarkupComponent)
+
+    const model = {
+      uuid: data.uuid,
+      onlyDisplayTitle: this.buildBoolean(data.onlyDisplayTitle) ?? false
+    }
+
+    this.dynamicElementService.setModel(component, model)
+
+    return component
+  }
+
   private videosListBuilder (el: HTMLElement) {
     const data = el.dataset as VideosListMarkupData
     const component = this.dynamicElementService.createElement(VideosListMarkupComponent)
 
     const model = {
-      sort: data.sort,
-      categoryOneOf: this.buildArrayNumber(data.categoryOneOf),
-      languageOneOf: this.buildArrayString(data.languageOneOf),
+      onlyDisplayTitle: this.buildBoolean(data.onlyDisplayTitle) ?? false,
+      sort: data.sort || '-publishedAt',
+      categoryOneOf: this.buildArrayNumber(data.categoryOneOf) ?? [],
+      languageOneOf: this.buildArrayString(data.languageOneOf) ?? [],
+      filter: this.buildBoolean(data.onlyLocal) ? 'local' as VideoFilter : undefined,
       count: this.buildNumber(data.count) || 10
     }
 

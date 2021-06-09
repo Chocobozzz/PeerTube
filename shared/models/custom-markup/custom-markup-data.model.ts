@@ -6,6 +6,8 @@ export type EmbedMarkupData = {
 export type VideoMiniatureMarkupData = {
   // Video uuid
   uuid: string
+
+  onlyDisplayTitle?: string // boolean
 }
 
 export type PlaylistMiniatureMarkupData = {
@@ -19,17 +21,22 @@ export type ChannelMiniatureMarkupData = {
 }
 
 export type VideosListMarkupData = {
-  sort: string
-  categoryOneOf: string // coma separated values
-  languageOneOf: string // coma separated values
-  count: string
+  onlyDisplayTitle?: string // boolean
+
+  sort?: string
+  count?: string
+
+  categoryOneOf?: string // coma separated values
+  languageOneOf?: string // coma separated values
+
+  onlyLocal?: string // boolean
 }
 
 export type ButtonMarkupData = {
   theme: 'primary' | 'secondary'
   href: string
   label: string
-  blankTarget?: string
+  blankTarget?: string // boolean
 }
 
 export type ContainerMarkupData = {
