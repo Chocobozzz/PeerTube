@@ -14,8 +14,6 @@ import { MiniatureDisplayOptions } from '../../shared-video-miniature'
   styleUrls: [ 'videos-list-markup.component.scss' ]
 })
 export class VideosListMarkupComponent implements OnInit {
-  @Input() title: string
-  @Input() description: string
   @Input() sort = '-publishedAt'
   @Input() categoryOneOf: number[]
   @Input() languageOneOf: string[]

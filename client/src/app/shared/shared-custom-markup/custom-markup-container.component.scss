@@ -1,0 +1,10 @@
+.custom-markup-container {
+
+  ::ng-deep .peertube-container {
+    margin: 30px 0 15px;
+
+    h4 {
+      margin-bottom: 0;
+    }
+  }
+}

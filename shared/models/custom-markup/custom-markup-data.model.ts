@@ -19,8 +19,6 @@ export type ChannelMiniatureMarkupData = {
 }
 
 export type VideosListMarkupData = {
-  title: string
-  description: string
   sort: string
   categoryOneOf: string // coma separated values
   languageOneOf: string // coma separated values
@@ -32,4 +30,10 @@ export type ButtonMarkupData = {
   href: string
   label: string
   blankTarget?: string
+}
+
+export type ContainerMarkupData = {
+  width?: string
+  title?: string
+  description?: string
 }
