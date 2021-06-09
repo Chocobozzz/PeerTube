@@ -138,10 +138,10 @@ export class CustomMarkupService {
     const component = this.dynamicElementService.createElement(ButtonMarkupComponent)
 
     const model = {
-      theme: data.theme,
+      theme: data.theme ?? 'primary',
       href: data.href,
       label: data.label,
-      blankTarget: this.buildBoolean(data.blankTarget)
+      blankTarget: this.buildBoolean(data.blankTarget) ?? false
     }
     this.dynamicElementService.setModel(component, model)
 

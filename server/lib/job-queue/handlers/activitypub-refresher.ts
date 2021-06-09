@@ -47,7 +47,7 @@ async function refreshActor (actorUrl: string) {
   const actor = await ActorModel.loadByUrlAndPopulateAccountAndChannel(actorUrl)
 
   if (actor) {
-    await refreshActorIfNeeded(actor, fetchType)
+    await refreshActorIfNeeded({ actor, fetchedType: fetchType })
   }
 }
 

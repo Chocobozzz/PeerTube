@@ -34,7 +34,6 @@ export type VideosListMarkupData = {
   languageOneOf?: string // coma separated values
 
   onlyLocal?: string // boolean
-
 }
 
 export type ButtonMarkupData = {

@@ -56,7 +56,7 @@ async function getOrCreateAPActor (
   if (actor.Account) (actor as MActorAccountChannelIdActor).Account.Actor = actor
   if (actor.VideoChannel) (actor as MActorAccountChannelIdActor).VideoChannel.Actor = actor
 
-  const { actor: actorRefreshed, refreshed } = await refreshActorIfNeeded(actor, fetchType)
+  const { actor: actorRefreshed, refreshed } = await refreshActorIfNeeded({ actor, fetchedType: fetchType })
   if (!actorRefreshed) throw new Error('Actor ' + actor.url + ' does not exist anymore.')
 
   await scheduleOutboxFetchIfNeeded(actor, created, refreshed, updateCollections)
