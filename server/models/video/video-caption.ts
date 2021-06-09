@@ -109,11 +109,12 @@ export class VideoCaptionModel extends Model<Partial<AttributesOnly<VideoCaption
     return undefined
   }
 
-  static loadByVideoIdAndLanguage (videoId: string | number, language: string): Promise<MVideoCaptionVideo> {
+  static loadByVideoIdAndLanguage (videoId: string | number, language: string, transaction?: Transaction): Promise<MVideoCaptionVideo> {
     const videoInclude = {
       model: VideoModel.unscoped(),
       attributes: [ 'id', 'remote', 'uuid' ],
-      where: buildWhereIdOrUUID(videoId)
+      where: buildWhereIdOrUUID(videoId),
+      transaction
     }
 
     const query = {
@@ -145,19 +146,21 @@ export class VideoCaptionModel extends Model<Partial<AttributesOnly<VideoCaption
   }
 
   static async insertOrReplaceLanguage (caption: MVideoCaption, transaction: Transaction) {
-    const existing = await VideoCaptionModel.loadByVideoIdAndLanguage(caption.videoId, caption.language)
+    const existing = await VideoCaptionModel.loadByVideoIdAndLanguage(caption.videoId, caption.language, transaction)
+
     // Delete existing file
     if (existing) await existing.destroy({ transaction })
 
     return caption.save({ transaction })
   }
 
-  static listVideoCaptions (videoId: number): Promise<MVideoCaptionVideo[]> {
+  static listVideoCaptions (videoId: number, transaction: Transaction): Promise<MVideoCaptionVideo[]> {
     const query = {
       order: [ [ 'language', 'ASC' ] ] as OrderItem[],
       where: {
         videoId
-      }
+      },
+      transaction
     }
 
     return VideoCaptionModel.scope(ScopeNames.WITH_VIDEO_UUID_AND_REMOTE).findAll(query)
@@ -210,5 +213,11 @@ export class VideoCaptionModel extends Model<Partial<AttributesOnly<VideoCaption
     if (video.isOwned()) return WEBSERVER.URL + this.getCaptionStaticPath()
 
     return this.fileUrl
+  }
+
+  isEqual (this: MVideoCaption, other: MVideoCaption) {
+    if (this.fileUrl) return this.fileUrl === other.fileUrl
+
+    return this.filename === other.filename
   }
 }

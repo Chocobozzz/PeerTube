@@ -75,11 +75,28 @@ export abstract class APVideoAbstractBuilder {
   }
 
   protected async insertOrReplaceCaptions (video: MVideoFullLight, t: Transaction) {
-    const videoCaptionsPromises = getCaptionAttributesFromObject(video, this.videoObject)
-      .map(a => new VideoCaptionModel(a) as MVideoCaption)
-      .map(c => VideoCaptionModel.insertOrReplaceLanguage(c, t))
+    const existingCaptions = await VideoCaptionModel.listVideoCaptions(video.id, t)
 
-    await Promise.all(videoCaptionsPromises)
+    let captionsToCreate = getCaptionAttributesFromObject(video, this.videoObject)
+                            .map(a => new VideoCaptionModel(a) as MVideoCaption)
+
+    for (const existingCaption of existingCaptions) {
+      // Only keep captions that do not already exist
+      const filtered = captionsToCreate.filter(c => !c.isEqual(existingCaption))
+
+      // This caption already exists, we don't need to destroy and create it
+      if (filtered.length !== captionsToCreate.length) {
+        captionsToCreate = filtered
+        continue
+      }
+
+      // Destroy this caption that does not exist anymore
+      await existingCaption.destroy({ transaction: t })
+    }
+
+    for (const captionToCreate of captionsToCreate) {
+      await captionToCreate.save({ transaction: t })
+    }
   }
 
   protected async insertOrReplaceLive (video: MVideoFullLight, transaction: Transaction) {
