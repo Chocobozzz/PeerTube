@@ -122,7 +122,13 @@ export class CustomMarkupService {
     const data = el.dataset as ChannelMiniatureMarkupData
     const component = this.dynamicElementService.createElement(ChannelMiniatureMarkupComponent)
 
-    this.dynamicElementService.setModel(component, { name: data.name })
+    const model = {
+      name: data.name,
+      displayLatestVideo: this.buildBoolean(data.displayLatestVideo) ?? true,
+      displayDescription: this.buildBoolean(data.displayDescription) ?? true
+    }
+
+    this.dynamicElementService.setModel(component, model)
 
     return component
   }
@@ -178,7 +184,12 @@ export class CustomMarkupService {
     const data = el.dataset as ContainerMarkupData
 
     const root = document.createElement('div')
-    root.classList.add('peertube-container')
+
+    const layoutClass = data.layout
+      ? 'layout-' + data.layout
+      : 'layout-row'
+
+    root.classList.add('peertube-container', layoutClass)
 
     if (data.width) {
       root.setAttribute('width', data.width)

@@ -18,6 +18,9 @@ export type PlaylistMiniatureMarkupData = {
 export type ChannelMiniatureMarkupData = {
   // Channel name (username)
   name: string
+
+  displayLatestVideo?: string // boolean
+  displayDescription?: string // boolean
 }
 
 export type VideosListMarkupData = {
@@ -43,4 +46,5 @@ export type ContainerMarkupData = {
   width?: string
   title?: string
   description?: string
+  layout?: 'row' | 'column'
 }

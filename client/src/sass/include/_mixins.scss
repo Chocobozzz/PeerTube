@@ -569,6 +569,19 @@
   min-height: $size;
 }
 
+@mixin actor-counters ($separator-margin: 10px) {
+  color: pvar(--greyForegroundColor);
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+
+  > *:not(:last-child)::after {
+    content: '•';
+    margin: 0 $separator-margin;
+    color: pvar(--mainColor);
+  }
+}
+
 @mixin chevron ($size, $border-width) {
   border-style: solid;
   border-width: $border-width $border-width 0 0;

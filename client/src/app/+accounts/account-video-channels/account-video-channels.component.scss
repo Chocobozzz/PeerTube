@@ -52,19 +52,10 @@
 
   .actor-counters {
     @include margin-left(15px);
+    @include actor-counters;
 
     grid-row: 1;
     grid-column: 3;
-    color: pvar(--greyForegroundColor);
-    font-size: 16px;
-    display: flex;
-    align-items: center;
-  }
-
-  .actor-counters > *:not(:last-child)::after {
-    content: '•';
-    margin: 0 10px;
-    color: pvar(--mainColor);
   }
 
   .description-html {
@@ -94,6 +85,7 @@ my-subscribe-button {
 
   my-video-miniature {
     @include margin-right(15px);
+
     min-width: $video-thumbnail-medium-width;
     max-width: $video-thumbnail-medium-width;
   }

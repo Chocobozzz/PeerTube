@@ -6,5 +6,15 @@
     h4 {
       margin-bottom: 0;
     }
+
+    .layout-row {
+      display: flex;
+      flex-direction: row;
+    }
+
+    .layout-column {
+      display: flex;
+      flex-direction: column;
+    }
   }
 }
