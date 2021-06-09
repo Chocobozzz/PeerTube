@@ -14,7 +14,7 @@
 }
 
 .margin-content {
-  @include grid-videos-miniature-layout;
+  @include grid-videos-miniature-layout-with-margins;
 }
 
 @media screen and (max-width: $mobile-view) {

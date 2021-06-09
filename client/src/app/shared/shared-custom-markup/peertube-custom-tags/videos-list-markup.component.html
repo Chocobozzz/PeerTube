@@ -1,8 +1,13 @@
-<div class="videos">
-  <my-video-miniature
-    *ngFor="let video of videos"
-    [video]="video" [user]="getUser()" [displayAsRow]="false"
-    [displayVideoActions]="false" [displayOptions]="displayOptions"
-  >
-  </my-video-miniature>
+<div class="root">
+  <div class="videos" [ngStyle]="limitRowsStyle()">
+
+    <div class="video-wrapper" *ngFor="let video of videos">
+      <my-video-miniature
+        [video]="video" [user]="getUser()" [displayAsRow]="false"
+        [displayVideoActions]="false" [displayOptions]="displayOptions"
+      >
+      </my-video-miniature>
+    </div>
+
+  </div>
 </div>

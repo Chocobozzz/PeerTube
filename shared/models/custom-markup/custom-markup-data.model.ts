@@ -25,14 +25,16 @@ export type ChannelMiniatureMarkupData = {
 
 export type VideosListMarkupData = {
   onlyDisplayTitle?: string // boolean
+  maxRows?: string // number
 
   sort?: string
-  count?: string
+  count?: string // number
 
   categoryOneOf?: string // coma separated values
   languageOneOf?: string // coma separated values
 
   onlyLocal?: string // boolean
+
 }
 
 export type ButtonMarkupData = {

@@ -168,11 +168,15 @@ export class CustomMarkupService {
 
     const model = {
       onlyDisplayTitle: this.buildBoolean(data.onlyDisplayTitle) ?? false,
+      maxRows: this.buildNumber(data.maxRows) ?? -1,
+
       sort: data.sort || '-publishedAt',
+      count: this.buildNumber(data.count) || 10,
+
       categoryOneOf: this.buildArrayNumber(data.categoryOneOf) ?? [],
       languageOneOf: this.buildArrayString(data.languageOneOf) ?? [],
-      filter: this.buildBoolean(data.onlyLocal) ? 'local' as VideoFilter : undefined,
-      count: this.buildNumber(data.count) || 10
+
+      filter: this.buildBoolean(data.onlyLocal) ? 'local' as VideoFilter : undefined
     }
 
     this.dynamicElementService.setModel(component, model)
@@ -183,11 +187,16 @@ export class CustomMarkupService {
   private containerBuilder (el: HTMLElement) {
     const data = el.dataset as ContainerMarkupData
 
+    // Move inner HTML in the new element we'll create
+    const content = el.innerHTML
+    el.innerHTML = ''
+
     const root = document.createElement('div')
+    root.innerHTML = content
 
     const layoutClass = data.layout
       ? 'layout-' + data.layout
-      : 'layout-row'
+      : 'layout-column'
 
     root.classList.add('peertube-container', layoutClass)
 
@@ -195,16 +204,23 @@ export class CustomMarkupService {
       root.setAttribute('width', data.width)
     }
 
-    if (data.title) {
-      const titleElement = document.createElement('h4')
-      titleElement.innerText = data.title
-      root.appendChild(titleElement)
-    }
+    if (data.title || data.description) {
+      const headerElement = document.createElement('div')
+      headerElement.classList.add('header')
 
-    if (data.description) {
-      const descriptionElement = document.createElement('div')
-      descriptionElement.innerText = data.description
-      root.appendChild(descriptionElement)
+      if (data.title) {
+        const titleElement = document.createElement('h4')
+        titleElement.innerText = data.title
+        headerElement.appendChild(titleElement)
+      }
+
+      if (data.description) {
+        const descriptionElement = document.createElement('div')
+        descriptionElement.innerText = data.description
+        headerElement.append(descriptionElement)
+      }
+
+      root.insertBefore(headerElement, root.firstChild)
     }
 
     return root

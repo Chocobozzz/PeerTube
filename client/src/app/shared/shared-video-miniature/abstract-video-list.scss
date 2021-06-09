@@ -51,7 +51,7 @@ $icon-size: 16px;
 }
 
 .margin-content {
-  @include grid-videos-miniature-layout;
+  @include grid-videos-miniature-layout-with-margins;
 }
 
 .display-as-row.videos {

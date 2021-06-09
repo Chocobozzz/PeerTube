@@ -118,8 +118,6 @@
 }
 
 @mixin grid-videos-miniature-layout {
-  @include grid-videos-miniature-margins;
-
   @media screen and (min-width: $mobile-view) {
     .videos,
     .playlists {
@@ -155,4 +153,9 @@
       }
     }
   }
+}
+
+@mixin grid-videos-miniature-layout-with-margins {
+  @include grid-videos-miniature-margins;
+  @include grid-videos-miniature-layout;
 }
