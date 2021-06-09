@@ -108,7 +108,9 @@ function setAsUpdated (table: string, id: number, transaction?: Transaction) {
 // ---------------------------------------------------------------------------
 
 function runInReadCommittedTransaction <T> (fn: (t: Transaction) => Promise<T>) {
-  return sequelizeTypescript.transaction(t => fn(t))
+  const options = { isolationLevel: Transaction.ISOLATION_LEVELS.READ_COMMITTED }
+
+  return sequelizeTypescript.transaction(options, t => fn(t))
 }
 
 function afterCommitIfTransaction (t: Transaction, fn: Function) {
