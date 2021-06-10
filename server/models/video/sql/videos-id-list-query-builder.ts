@@ -6,6 +6,12 @@ import { MUserAccountId, MUserId } from '@server/types/models'
 import { VideoFilter, VideoPrivacy, VideoState } from '@shared/models'
 import { AbstractVideosQueryBuilder } from './shared/abstract-videos-query-builder'
 
+/**
+ *
+ * Build videos list SQL query to fetch rows
+ *
+ */
+
 export type BuildVideosListQueryOptions = {
   attributes?: string[]
 

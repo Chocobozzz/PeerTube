@@ -1,19 +1,24 @@
+import validator from 'validator'
 import { AbstractVideosQueryBuilder } from './abstract-videos-query-builder'
 import { VideoAttributes } from './video-attributes'
-import { VideoModelBuilder } from './video-model-builder'
+
+/**
+ *
+ * Abstract builder to create SQL query and fetch video models
+ *
+ */
 
 export class AbstractVideosModelQueryBuilder extends AbstractVideosQueryBuilder {
   protected attributes: { [key: string]: string } = {}
   protected joins: string[] = []
+  protected where: string
 
   protected videoAttributes: VideoAttributes
-  protected videoModelBuilder: VideoModelBuilder
 
-  constructor (private readonly mode: 'list' | 'get') {
+  constructor (protected readonly mode: 'list' | 'get') {
     super()
 
     this.videoAttributes = new VideoAttributes(this.mode)
-    this.videoModelBuilder = new VideoModelBuilder(this.mode, this.videoAttributes)
   }
 
   protected buildSelect () {
@@ -78,20 +83,29 @@ export class AbstractVideosModelQueryBuilder extends AbstractVideosQueryBuilder 
     }
   }
 
-  protected includeFiles () {
+  protected includeWebtorrentFiles (required: boolean) {
+    const joinType = required ? 'INNER' : 'LEFT'
+    this.joins.push(joinType + ' JOIN "videoFile" AS "VideoFiles" ON "VideoFiles"."videoId" = "video"."id"')
+
+    this.attributes = {
+      ...this.attributes,
+
+      ...this.buildAttributesObject('VideoFiles', this.videoAttributes.getFileAttributes())
+    }
+  }
+
+  protected includeStreamingPlaylistFiles (required: boolean) {
+    const joinType = required ? 'INNER' : 'LEFT'
+
     this.joins.push(
-      'LEFT JOIN "videoFile" AS "VideoFiles" ON "VideoFiles"."videoId" = "video"."id"',
+      joinType + ' JOIN "videoStreamingPlaylist" AS "VideoStreamingPlaylists" ON "VideoStreamingPlaylists"."videoId" = "video"."id"',
 
-      'LEFT JOIN "videoStreamingPlaylist" AS "VideoStreamingPlaylists" ON "VideoStreamingPlaylists"."videoId" = "video"."id"',
-
-      'LEFT JOIN "videoFile" AS "VideoStreamingPlaylists->VideoFiles" ' +
+      joinType + ' JOIN "videoFile" AS "VideoStreamingPlaylists->VideoFiles" ' +
         'ON "VideoStreamingPlaylists->VideoFiles"."videoStreamingPlaylistId" = "VideoStreamingPlaylists"."id"'
     )
 
     this.attributes = {
       ...this.attributes,
-
-      ...this.buildAttributesObject('VideoFiles', this.videoAttributes.getFileAttributes()),
 
       ...this.buildAttributesObject('VideoStreamingPlaylists', this.videoAttributes.getStreamingPlaylistAttributes()),
       ...this.buildAttributesObject('VideoStreamingPlaylists->VideoFiles', this.videoAttributes.getFileAttributes())
@@ -196,11 +210,8 @@ export class AbstractVideosModelQueryBuilder extends AbstractVideosQueryBuilder 
     }
   }
 
-  protected includeRedundancies () {
+  protected includeWebTorrentRedundancies () {
     this.joins.push(
-      'LEFT OUTER JOIN "videoRedundancy" AS "VideoStreamingPlaylists->RedundancyVideos" ' +
-        'ON "VideoStreamingPlaylists"."id" = "VideoStreamingPlaylists->RedundancyVideos"."videoStreamingPlaylistId"',
-
       'LEFT OUTER JOIN "videoRedundancy" AS "VideoFiles->RedundancyVideos" ON ' +
         '"VideoFiles"."id" = "VideoFiles->RedundancyVideos"."videoFileId"'
     )
@@ -208,7 +219,19 @@ export class AbstractVideosModelQueryBuilder extends AbstractVideosQueryBuilder 
     this.attributes = {
       ...this.attributes,
 
-      ...this.buildAttributesObject('VideoFiles->RedundancyVideos', this.videoAttributes.getRedundancyAttributes()),
+      ...this.buildAttributesObject('VideoFiles->RedundancyVideos', this.videoAttributes.getRedundancyAttributes())
+    }
+  }
+
+  protected includeStreamingPlaylistRedundancies () {
+    this.joins.push(
+      'LEFT OUTER JOIN "videoRedundancy" AS "VideoStreamingPlaylists->RedundancyVideos" ' +
+        'ON "VideoStreamingPlaylists"."id" = "VideoStreamingPlaylists->RedundancyVideos"."videoStreamingPlaylistId"'
+    )
+
+    this.attributes = {
+      ...this.attributes,
+
       ...this.buildAttributesObject('VideoStreamingPlaylists->RedundancyVideos', this.videoAttributes.getRedundancyAttributes())
     }
   }
@@ -235,5 +258,15 @@ export class AbstractVideosModelQueryBuilder extends AbstractVideosQueryBuilder 
     }
 
     return result
+  }
+
+  protected whereId (id: string | number) {
+    if (validator.isInt('' + id)) {
+      this.where = 'WHERE "video".id = :videoId'
+    } else {
+      this.where = 'WHERE uuid = :videoId'
+    }
+
+    this.replacements.videoId = id
   }
 }

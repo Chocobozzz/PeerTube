@@ -147,7 +147,7 @@ async function getVideo (_req: express.Request, res: express.Response) {
 
   const video = await Hooks.wrapPromiseFun(
     VideoModel.loadForGetAPI,
-    { id: res.locals.onlyVideoWithRights.id, userId },
+    { id: _req.params.id, userId },
     'filter:api.video.get.result'
   )
 

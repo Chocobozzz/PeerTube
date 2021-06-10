@@ -1,6 +1,13 @@
 import { Sequelize } from 'sequelize'
 import { AbstractVideosModelQueryBuilder } from './shared/abstract-videos-model-query-builder'
+import { VideoModelBuilder } from './shared/video-model-builder'
 import { BuildVideosListQueryOptions, VideosIdListQueryBuilder } from './videos-id-list-query-builder'
+
+/**
+ *
+ * Build videos list SQL query and create video models
+ *
+ */
 
 export class VideosModelListQueryBuilder extends AbstractVideosModelQueryBuilder {
   protected attributes: { [key: string]: string }
@@ -9,8 +16,12 @@ export class VideosModelListQueryBuilder extends AbstractVideosModelQueryBuilder
   private innerQuery: string
   private innerSort: string
 
+  private readonly videoModelBuilder: VideoModelBuilder
+
   constructor (protected readonly sequelize: Sequelize) {
     super('list')
+
+    this.videoModelBuilder = new VideoModelBuilder(this.mode, this.videoAttributes)
   }
 
   queryVideos (options: BuildVideosListQueryOptions) {
@@ -41,7 +52,8 @@ export class VideosModelListQueryBuilder extends AbstractVideosModelQueryBuilder
     this.includeThumbnails()
 
     if (options.withFiles) {
-      this.includeFiles()
+      this.includeWebtorrentFiles(false)
+      this.includeStreamingPlaylistFiles(false)
     }
 
     if (options.user) {

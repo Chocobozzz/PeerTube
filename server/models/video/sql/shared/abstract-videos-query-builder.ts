@@ -1,6 +1,12 @@
 import { QueryTypes, Sequelize, Transaction } from 'sequelize'
 import { logger } from '@server/helpers/logger'
 
+/**
+ *
+ * Abstact builder to run video SQL queries
+ *
+ */
+
 export class AbstractVideosQueryBuilder {
   protected sequelize: Sequelize
 

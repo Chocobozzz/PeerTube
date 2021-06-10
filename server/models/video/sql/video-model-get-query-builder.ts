@@ -1,6 +1,14 @@
 import { Sequelize, Transaction } from 'sequelize'
-import validator from 'validator'
 import { AbstractVideosModelQueryBuilder } from './shared/abstract-videos-model-query-builder'
+import { VideoAttributes } from './shared/video-attributes'
+import { VideoFileQueryBuilder } from './shared/video-file-query-builder'
+import { VideoModelBuilder } from './shared/video-model-builder'
+
+/**
+ *
+ * Build a GET SQL query, fetch rows and create the video model
+ *
+ */
 
 export type BuildVideoGetQueryOptions = {
   id: number | string
@@ -9,31 +17,57 @@ export type BuildVideoGetQueryOptions = {
   forGetAPI?: boolean
 }
 
-export class VideosModelGetQueryBuilder extends AbstractVideosModelQueryBuilder {
+export class VideosModelGetQueryBuilder {
+  videoQueryBuilder: VideosModelGetQuerySubBuilder
+  webtorrentFilesQueryBuilder: VideoFileQueryBuilder
+  streamingPlaylistFilesQueryBuilder: VideoFileQueryBuilder
+
+  private readonly videoModelBuilder: VideoModelBuilder
+
+  constructor (protected readonly sequelize: Sequelize) {
+    this.videoQueryBuilder = new VideosModelGetQuerySubBuilder(sequelize)
+    this.webtorrentFilesQueryBuilder = new VideoFileQueryBuilder(sequelize)
+    this.streamingPlaylistFilesQueryBuilder = new VideoFileQueryBuilder(sequelize)
+
+    this.videoModelBuilder = new VideoModelBuilder('get', new VideoAttributes('get'))
+  }
+
+  async queryVideos (options: BuildVideoGetQueryOptions) {
+    const [ videoRows, webtorrentFilesRows, streamingPlaylistFilesRows ] = await Promise.all([
+      this.videoQueryBuilder.queryVideos(options),
+      this.webtorrentFilesQueryBuilder.queryWebTorrentVideos(options),
+      this.streamingPlaylistFilesQueryBuilder.queryStreamingPlaylistVideos(options)
+    ])
+
+    const videos = this.videoModelBuilder.buildVideosFromRows(videoRows, webtorrentFilesRows, streamingPlaylistFilesRows)
+
+    if (videos.length > 1) {
+      throw new Error('Video results is more than ')
+    }
+
+    if (videos.length === 0) return null
+    return videos[0]
+  }
+}
+
+export class VideosModelGetQuerySubBuilder extends AbstractVideosModelQueryBuilder {
   protected attributes: { [key: string]: string }
   protected joins: string[] = []
-  protected where: string
+
+  protected webtorrentFilesQuery: string
+  protected streamingPlaylistFilesQuery: string
 
   constructor (protected readonly sequelize: Sequelize) {
     super('get')
   }
 
   queryVideos (options: BuildVideoGetQueryOptions) {
-    this.buildGetQuery(options)
+    this.buildMainGetQuery(options)
 
-    return this.runQuery(options.transaction, true).then(rows => {
-      const videos = this.videoModelBuilder.buildVideosFromRows(rows)
-
-      if (videos.length > 1) {
-        throw new Error('Video results is more than ')
-      }
-
-      if (videos.length === 0) return null
-      return videos[0]
-    })
+    return this.runQuery(options.transaction, true)
   }
 
-  private buildGetQuery (options: BuildVideoGetQueryOptions) {
+  private buildMainGetQuery (options: BuildVideoGetQueryOptions) {
     this.attributes = {
       '"video".*': ''
     }
@@ -44,8 +78,6 @@ export class VideosModelGetQueryBuilder extends AbstractVideosModelQueryBuilder 
     this.includeTags()
 
     this.includeThumbnails()
-
-    this.includeFiles()
 
     this.includeBlacklisted()
 
@@ -59,28 +91,17 @@ export class VideosModelGetQueryBuilder extends AbstractVideosModelQueryBuilder 
 
     if (options.forGetAPI === true) {
       this.includeTrackers()
-      this.includeRedundancies()
     }
 
     this.whereId(options.id)
 
-    const select = this.buildSelect()
-    const order = this.buildOrder()
-
-    this.query = `${select} FROM "video" ${this.joins.join(' ')} ${this.where} ${order}`
+    this.query = this.buildQuery()
   }
 
-  private whereId (id: string | number) {
-    if (validator.isInt('' + id)) {
-      this.where = 'WHERE "video".id = :videoId'
-    } else {
-      this.where = 'WHERE uuid = :videoId'
-    }
+  private buildQuery () {
+    const order = 'ORDER BY "Tags"."name" ASC'
+    const from = `SELECT * FROM "video" ${this.where} LIMIT 1`
 
-    this.replacements.videoId = id
-  }
-
-  private buildOrder () {
-    return 'ORDER BY "Tags"."name" ASC'
+    return `${this.buildSelect()} FROM (${from}) AS "video" ${this.joins.join(' ')} ${this.where} ${order}`
   }
 }

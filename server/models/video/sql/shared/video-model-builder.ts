@@ -17,6 +17,12 @@ import { VideoLiveModel } from '../../video-live'
 import { VideoStreamingPlaylistModel } from '../../video-streaming-playlist'
 import { VideoAttributes } from './video-attributes'
 
+/**
+ *
+ * Build video models from SQL rows
+ *
+ */
+
 export class VideoModelBuilder {
   private videosMemo: { [ id: number ]: VideoModel }
   private videoStreamingPlaylistMemo: { [ id: number ]: VideoStreamingPlaylistModel }
@@ -43,7 +49,7 @@ export class VideoModelBuilder {
 
   }
 
-  buildVideosFromRows (rows: any[]) {
+  buildVideosFromRows (rows: any[], rowsWebtorrentFiles?: any[], rowsStreamingPlaylist?: any[]) {
     this.reinit()
 
     for (const row of rows) {
@@ -53,10 +59,15 @@ export class VideoModelBuilder {
 
       this.setUserHistory(row, videoModel)
       this.addThumbnail(row, videoModel)
-      this.addWebTorrentFile(row, videoModel)
 
-      this.addStreamingPlaylist(row, videoModel)
-      this.addStreamingPlaylistFile(row)
+      if (!rowsWebtorrentFiles) {
+        this.addWebTorrentFile(row, videoModel)
+      }
+
+      if (!rowsStreamingPlaylist) {
+        this.addStreamingPlaylist(row, videoModel)
+        this.addStreamingPlaylistFile(row)
+      }
 
       if (this.mode === 'get') {
         this.addTag(row, videoModel)
@@ -65,14 +76,28 @@ export class VideoModelBuilder {
         this.setScheduleVideoUpdate(row, videoModel)
         this.setLive(row, videoModel)
 
-        if (row.VideoFiles.id) {
+        if (!rowsWebtorrentFiles && row.VideoFiles.id) {
           this.addRedundancy(row.VideoFiles.RedundancyVideos, this.videoFileMemo[row.VideoFiles.id])
         }
 
-        if (row.VideoStreamingPlaylists.id) {
+        if (!rowsStreamingPlaylist && row.VideoStreamingPlaylists.id) {
           this.addRedundancy(row.VideoStreamingPlaylists.RedundancyVideos, this.videoStreamingPlaylistMemo[row.VideoStreamingPlaylists.id])
         }
       }
+    }
+
+    for (const row of rowsWebtorrentFiles || []) {
+      const videoModel = this.videosMemo[row.id]
+      this.addWebTorrentFile(row, videoModel)
+      this.addRedundancy(row.VideoFiles.RedundancyVideos, this.videoFileMemo[row.VideoFiles.id])
+    }
+
+    for (const row of rowsStreamingPlaylist || []) {
+      const videoModel = this.videosMemo[row.id]
+
+      this.addStreamingPlaylist(row, videoModel)
+      this.addStreamingPlaylistFile(row)
+      this.addRedundancy(row.VideoStreamingPlaylists.RedundancyVideos, this.videoStreamingPlaylistMemo[row.VideoStreamingPlaylists.id])
     }
 
     return this.videos

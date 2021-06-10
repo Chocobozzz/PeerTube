@@ -1,3 +1,9 @@
+
+/**
+ *
+ * Class to build video attributes we want to fetch from the database
+ *
+ */
 export class VideoAttributes {
 
   constructor (readonly mode: 'get' | 'list') {
