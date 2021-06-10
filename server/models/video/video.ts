@@ -118,6 +118,7 @@ import {
   videoModelToFormattedJSON
 } from './formatter/video-format-utils'
 import { ScheduleVideoUpdateModel } from './schedule-video-update'
+import { VideosModelGetQueryBuilder } from './sql/video-model-get-query-builder'
 import { BuildVideosListQueryOptions, VideosIdListQueryBuilder } from './sql/videos-id-list-query-builder'
 import { VideosModelListQueryBuilder } from './sql/videos-model-list-query-builder'
 import { TagModel } from './tag'
@@ -1475,33 +1476,9 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     userId?: number
   }): Promise<MVideoDetails> {
     const { id, t, userId } = parameters
-    const where = buildWhereIdOrUUID(id)
+    const queryBuilder = new VideosModelGetQueryBuilder(VideoModel.sequelize)
 
-    const options = {
-      order: [ [ 'Tags', 'name', 'ASC' ] ] as any, // FIXME: sequelize typings
-      where,
-      transaction: t
-    }
-
-    const scopes: (string | ScopeOptions)[] = [
-      ScopeNames.WITH_TAGS,
-      ScopeNames.WITH_BLACKLISTED,
-      ScopeNames.WITH_ACCOUNT_DETAILS,
-      ScopeNames.WITH_SCHEDULED_UPDATE,
-      ScopeNames.WITH_THUMBNAILS,
-      ScopeNames.WITH_LIVE,
-      ScopeNames.WITH_TRACKERS,
-      { method: [ ScopeNames.WITH_WEBTORRENT_FILES, true ] },
-      { method: [ ScopeNames.WITH_STREAMING_PLAYLISTS, true ] }
-    ]
-
-    if (userId) {
-      scopes.push({ method: [ ScopeNames.WITH_USER_HISTORY, userId ] })
-    }
-
-    return VideoModel
-      .scope(scopes)
-      .findOne(options)
+    return queryBuilder.queryVideos({ id, transaction: t, forGetAPI: true, userId })
   }
 
   static async getStats () {

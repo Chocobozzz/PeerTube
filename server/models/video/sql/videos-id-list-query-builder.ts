@@ -4,7 +4,7 @@ import { exists } from '@server/helpers/custom-validators/misc'
 import { buildDirectionAndField, createSafeIn } from '@server/models/utils'
 import { MUserAccountId, MUserId } from '@server/types/models'
 import { VideoFilter, VideoPrivacy, VideoState } from '@shared/models'
-import { AbstractVideosQueryBuilder } from './abstract-videos-query-builder'
+import { AbstractVideosQueryBuilder } from './shared/abstract-videos-query-builder'
 
 export type BuildVideosListQueryOptions = {
   attributes?: string[]
@@ -57,11 +57,12 @@ export type BuildVideosListQueryOptions = {
 }
 
 export class VideosIdListQueryBuilder extends AbstractVideosQueryBuilder {
-  private attributes: string[]
-
   protected replacements: any = {}
-  private readonly and: string[] = []
+
+  private attributes: string[]
   private joins: string[] = []
+
+  private readonly and: string[] = []
 
   private readonly cte: string[] = []
 
