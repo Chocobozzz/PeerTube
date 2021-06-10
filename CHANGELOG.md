@@ -326,7 +326,7 @@
 
 ### IMPORTANT NOTES
 
- * Update the default configuration to not federate unlisted videos. We recommend to admins to update [this setting](https://github.com/Chocobozzz/PeerTube/blob/develop/config/production.yaml.example#L182)
+ * Update the default configuration to not federate unlisted videos. We recommend to admins to update [this setting](https://github.com/Chocobozzz/PeerTube/blob/develop/config/production.yaml.example#L196)
  * Update the default configuration to remove remote video views to reduce DB size and improve performances. We recommend to admins to update [this setting](https://github.com/Chocobozzz/PeerTube/blob/develop/config/production.yaml.example#L170)
  * Remove deprecated video abuse API
 
