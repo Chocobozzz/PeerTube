@@ -1,17 +1,17 @@
 import { generateMagnetUri } from '@server/helpers/webtorrent'
 import { getLocalVideoFileMetadataUrl } from '@server/lib/video-paths'
 import { VideoFile } from '@shared/models/videos/video-file.model'
-import { ActivityTagObject, ActivityUrlObject, VideoObject } from '../../../shared/models/activitypub/objects'
-import { Video, VideoDetails } from '../../../shared/models/videos'
-import { VideoStreamingPlaylist } from '../../../shared/models/videos/video-streaming-playlist.model'
-import { isArray } from '../../helpers/custom-validators/misc'
-import { MIMETYPES, WEBSERVER } from '../../initializers/constants'
+import { ActivityTagObject, ActivityUrlObject, VideoObject } from '../../../../shared/models/activitypub/objects'
+import { Video, VideoDetails } from '../../../../shared/models/videos'
+import { VideoStreamingPlaylist } from '../../../../shared/models/videos/video-streaming-playlist.model'
+import { isArray } from '../../../helpers/custom-validators/misc'
+import { MIMETYPES, WEBSERVER } from '../../../initializers/constants'
 import {
   getLocalVideoCommentsActivityPubUrl,
   getLocalVideoDislikesActivityPubUrl,
   getLocalVideoLikesActivityPubUrl,
   getLocalVideoSharesActivityPubUrl
-} from '../../lib/activitypub/url'
+} from '../../../lib/activitypub/url'
 import {
   MStreamingPlaylistRedundanciesOpt,
   MVideo,
@@ -19,10 +19,10 @@ import {
   MVideoFile,
   MVideoFormattable,
   MVideoFormattableDetails
-} from '../../types/models'
-import { MVideoFileRedundanciesOpt } from '../../types/models/video/video-file'
-import { VideoModel } from './video'
-import { VideoCaptionModel } from './video-caption'
+} from '../../../types/models'
+import { MVideoFileRedundanciesOpt } from '../../../types/models/video/video-file'
+import { VideoModel } from '../video'
+import { VideoCaptionModel } from '../video-caption'
 
 export type VideoFormattingJSONOptions = {
   completeDescription?: boolean

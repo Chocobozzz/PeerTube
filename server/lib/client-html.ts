@@ -21,9 +21,9 @@ import {
   WEBSERVER
 } from '../initializers/constants'
 import { AccountModel } from '../models/account/account'
+import { getActivityStreamDuration } from '../models/video/formatter/video-format-utils'
 import { VideoModel } from '../models/video/video'
 import { VideoChannelModel } from '../models/video/video-channel'
-import { getActivityStreamDuration } from '../models/video/video-format-utils'
 import { VideoPlaylistModel } from '../models/video/video-playlist'
 import { MAccountActor, MChannelActor } from '../types/models'
 import { ServerConfigManager } from './server-config-manager'
