@@ -756,14 +756,14 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
   }
 
   @BeforeDestroy
-  static async removeFiles (instance: VideoModel) {
+  static async removeFiles (instance: VideoModel, options) {
     const tasks: Promise<any>[] = []
 
     logger.info('Removing files of video %s.', instance.url)
 
     if (instance.isOwned()) {
       if (!Array.isArray(instance.VideoFiles)) {
-        instance.VideoFiles = await instance.$get('VideoFiles')
+        instance.VideoFiles = await instance.$get('VideoFiles', { transaction: options.transaction })
       }
 
       // Remove physical files and torrents
@@ -774,7 +774,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
 
       // Remove playlists file
       if (!Array.isArray(instance.VideoStreamingPlaylists)) {
-        instance.VideoStreamingPlaylists = await instance.$get('VideoStreamingPlaylists')
+        instance.VideoStreamingPlaylists = await instance.$get('VideoStreamingPlaylists', { transaction: options.transaction })
       }
 
       for (const p of instance.VideoStreamingPlaylists) {
@@ -797,7 +797,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
 
     logger.info('Stopping live of video %s after video deletion.', instance.uuid)
 
-    return LiveManager.Instance.stopSessionOf(instance.id)
+    LiveManager.Instance.stopSessionOf(instance.id)
   }
 
   @BeforeDestroy
@@ -810,7 +810,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     const tasks: Promise<any>[] = []
 
     if (!Array.isArray(instance.VideoAbuses)) {
-      instance.VideoAbuses = await instance.$get('VideoAbuses')
+      instance.VideoAbuses = await instance.$get('VideoAbuses', { transaction: options.transaction })
 
       if (instance.VideoAbuses.length === 0) return undefined
     }
@@ -825,12 +825,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
       tasks.push(abuse.save({ transaction: options.transaction }))
     }
 
-    Promise.all(tasks)
-           .catch(err => {
-             logger.error('Some errors when saving details of video %s in its abuses before destroy hook.', instance.uuid, { err })
-           })
-
-    return undefined
+    await Promise.all(tasks)
   }
 
   static listLocal (): Promise<MVideo[]> {
