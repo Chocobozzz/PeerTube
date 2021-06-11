@@ -99,6 +99,7 @@ export class VideosModelGetQuerySubBuilder extends AbstractVideosModelQueryBuild
     'api',
     'full-light',
     'account-blacklist-files',
+    'all-files',
     'thumbnails',
     'thumbnails-blacklist'
   ])
