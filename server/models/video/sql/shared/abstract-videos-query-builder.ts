@@ -1,5 +1,4 @@
 import { QueryTypes, Sequelize, Transaction } from 'sequelize'
-import { logger } from '@server/helpers/logger'
 
 /**
  *
@@ -14,8 +13,6 @@ export class AbstractVideosQueryBuilder {
   protected replacements: any = {}
 
   protected runQuery (options: { transaction?: Transaction, logging?: boolean } = {}) {
-    logger.debug('Running videos query.', { query: this.query, replacements: this.replacements })
-
     const queryOptions = {
       transaction: options.transaction,
       logging: options.logging,
