@@ -1556,26 +1556,6 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     }
   }
 
-  static getCategoryLabel (id: number) {
-    return VIDEO_CATEGORIES[id] || 'Misc'
-  }
-
-  static getLicenceLabel (id: number) {
-    return VIDEO_LICENCES[id] || 'Unknown'
-  }
-
-  static getLanguageLabel (id: string) {
-    return VIDEO_LANGUAGES[id] || 'Unknown'
-  }
-
-  static getPrivacyLabel (id: number) {
-    return VIDEO_PRIVACIES[id] || 'Unknown'
-  }
-
-  static getStateLabel (id: number) {
-    return VIDEO_STATES[id] || 'Unknown'
-  }
-
   isBlacklisted () {
     return !!this.VideoBlacklist
   }

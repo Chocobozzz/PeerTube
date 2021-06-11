@@ -5,7 +5,15 @@ import { ActivityTagObject, ActivityUrlObject, VideoObject } from '../../../../s
 import { Video, VideoDetails } from '../../../../shared/models/videos'
 import { VideoStreamingPlaylist } from '../../../../shared/models/videos/video-streaming-playlist.model'
 import { isArray } from '../../../helpers/custom-validators/misc'
-import { MIMETYPES, WEBSERVER } from '../../../initializers/constants'
+import {
+  MIMETYPES,
+  VIDEO_CATEGORIES,
+  VIDEO_LANGUAGES,
+  VIDEO_LICENCES,
+  VIDEO_PRIVACIES,
+  VIDEO_STATES,
+  WEBSERVER
+} from '../../../initializers/constants'
 import {
   getLocalVideoCommentsActivityPubUrl,
   getLocalVideoDislikesActivityPubUrl,
@@ -21,7 +29,6 @@ import {
   MVideoFormattableDetails
 } from '../../../types/models'
 import { MVideoFileRedundanciesOpt } from '../../../types/models/video/video-file'
-import { VideoModel } from '../video'
 import { VideoCaptionModel } from '../video-caption'
 
 export type VideoFormattingJSONOptions = {
@@ -43,19 +50,19 @@ function videoModelToFormattedJSON (video: MVideoFormattable, options?: VideoFor
     name: video.name,
     category: {
       id: video.category,
-      label: VideoModel.getCategoryLabel(video.category)
+      label: getCategoryLabel(video.category)
     },
     licence: {
       id: video.licence,
-      label: VideoModel.getLicenceLabel(video.licence)
+      label: getLicenceLabel(video.licence)
     },
     language: {
       id: video.language,
-      label: VideoModel.getLanguageLabel(video.language)
+      label: getLanguageLabel(video.language)
     },
     privacy: {
       id: video.privacy,
-      label: VideoModel.getPrivacyLabel(video.privacy)
+      label: getPrivacyLabel(video.privacy)
     },
     nsfw: video.nsfw,
 
@@ -93,7 +100,7 @@ function videoModelToFormattedJSON (video: MVideoFormattable, options?: VideoFor
     if (options.additionalAttributes.state === true) {
       videoObject.state = {
         id: video.state,
-        label: VideoModel.getStateLabel(video.state)
+        label: getStateLabel(video.state)
       }
     }
 
@@ -140,7 +147,7 @@ function videoModelToFormattedDetailsJSON (video: MVideoFormattableDetails): Vid
     waitTranscoding: video.waitTranscoding,
     state: {
       id: video.state,
-      label: VideoModel.getStateLabel(video.state)
+      label: getStateLabel(video.state)
     },
 
     trackerUrls: video.getTrackerUrls(),
@@ -283,7 +290,7 @@ function videoModelToActivityPubObject (video: MVideoAP): VideoObject {
   if (video.language) {
     language = {
       identifier: video.language,
-      name: VideoModel.getLanguageLabel(video.language)
+      name: getLanguageLabel(video.language)
     }
   }
 
@@ -291,7 +298,7 @@ function videoModelToActivityPubObject (video: MVideoAP): VideoObject {
   if (video.category) {
     category = {
       identifier: video.category + '',
-      name: VideoModel.getCategoryLabel(video.category)
+      name: getCategoryLabel(video.category)
     }
   }
 
@@ -299,7 +306,7 @@ function videoModelToActivityPubObject (video: MVideoAP): VideoObject {
   if (video.licence) {
     licence = {
       identifier: video.licence + '',
-      name: VideoModel.getLicenceLabel(video.licence)
+      name: getLicenceLabel(video.licence)
     }
   }
 
@@ -425,10 +432,36 @@ function getActivityStreamDuration (duration: number) {
   return 'PT' + duration + 'S'
 }
 
+function getCategoryLabel (id: number) {
+  return VIDEO_CATEGORIES[id] || 'Misc'
+}
+
+function getLicenceLabel (id: number) {
+  return VIDEO_LICENCES[id] || 'Unknown'
+}
+
+function getLanguageLabel (id: string) {
+  return VIDEO_LANGUAGES[id] || 'Unknown'
+}
+
+function getPrivacyLabel (id: number) {
+  return VIDEO_PRIVACIES[id] || 'Unknown'
+}
+
+function getStateLabel (id: number) {
+  return VIDEO_STATES[id] || 'Unknown'
+}
+
 export {
   videoModelToFormattedJSON,
   videoModelToFormattedDetailsJSON,
   videoFilesModelToFormattedJSON,
   videoModelToActivityPubObject,
-  getActivityStreamDuration
+  getActivityStreamDuration,
+
+  getCategoryLabel,
+  getLicenceLabel,
+  getLanguageLabel,
+  getPrivacyLabel,
+  getStateLabel
 }

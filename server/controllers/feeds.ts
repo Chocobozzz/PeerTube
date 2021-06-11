@@ -1,5 +1,6 @@
 import * as express from 'express'
 import * as Feed from 'pfeed'
+import { getCategoryLabel } from '@server/models/video/formatter/video-format-utils'
 import { VideoFilter } from '../../shared/models/videos/video-query.type'
 import { buildNSFWFilter } from '../helpers/express-utils'
 import { CONFIG } from '../initializers/config'
@@ -286,7 +287,7 @@ function addVideosToFeed (feed, videos: VideoModel[]) {
     if (video.category) {
       categories.push({
         value: video.category,
-        label: VideoModel.getCategoryLabel(video.category)
+        label: getCategoryLabel(video.category)
       })
     }
 
