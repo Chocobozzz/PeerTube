@@ -56,19 +56,7 @@ import {
 import { getVideoFileResolution } from '../../helpers/ffprobe-utils'
 import { logger } from '../../helpers/logger'
 import { CONFIG } from '../../initializers/config'
-import {
-  ACTIVITY_PUB,
-  API_VERSION,
-  CONSTRAINTS_FIELDS,
-  LAZY_STATIC_PATHS,
-  STATIC_PATHS,
-  VIDEO_CATEGORIES,
-  VIDEO_LANGUAGES,
-  VIDEO_LICENCES,
-  VIDEO_PRIVACIES,
-  VIDEO_STATES,
-  WEBSERVER
-} from '../../initializers/constants'
+import { ACTIVITY_PUB, API_VERSION, CONSTRAINTS_FIELDS, LAZY_STATIC_PATHS, STATIC_PATHS, WEBSERVER } from '../../initializers/constants'
 import { sendDeleteVideo } from '../../lib/activitypub/send'
 import {
   MChannel,
@@ -136,20 +124,16 @@ import { VideoTagModel } from './video-tag'
 import { VideoViewModel } from './video-view'
 
 export enum ScopeNames {
-  AVAILABLE_FOR_LIST_IDS = 'AVAILABLE_FOR_LIST_IDS',
   FOR_API = 'FOR_API',
   WITH_ACCOUNT_DETAILS = 'WITH_ACCOUNT_DETAILS',
   WITH_TAGS = 'WITH_TAGS',
-  WITH_TRACKERS = 'WITH_TRACKERS',
   WITH_WEBTORRENT_FILES = 'WITH_WEBTORRENT_FILES',
   WITH_SCHEDULED_UPDATE = 'WITH_SCHEDULED_UPDATE',
   WITH_BLACKLISTED = 'WITH_BLACKLISTED',
-  WITH_USER_HISTORY = 'WITH_USER_HISTORY',
   WITH_STREAMING_PLAYLISTS = 'WITH_STREAMING_PLAYLISTS',
-  WITH_USER_ID = 'WITH_USER_ID',
   WITH_IMMUTABLE_ATTRIBUTES = 'WITH_IMMUTABLE_ATTRIBUTES',
-  WITH_THUMBNAILS = 'WITH_THUMBNAILS',
-  WITH_LIVE = 'WITH_LIVE'
+  WITH_USER_HISTORY = 'WITH_USER_HISTORY',
+  WITH_THUMBNAILS = 'WITH_THUMBNAILS'
 }
 
 export type ForAPIOptions = {
@@ -245,30 +229,6 @@ export type AvailableForListIDsOptions = {
       }
     ]
   },
-  [ScopeNames.WITH_LIVE]: {
-    include: [
-      {
-        model: VideoLiveModel.unscoped(),
-        required: false
-      }
-    ]
-  },
-  [ScopeNames.WITH_USER_ID]: {
-    include: [
-      {
-        attributes: [ 'accountId' ],
-        model: VideoChannelModel.unscoped(),
-        required: true,
-        include: [
-          {
-            attributes: [ 'userId' ],
-            model: AccountModel.unscoped(),
-            required: true
-          }
-        ]
-      }
-    ]
-  },
   [ScopeNames.WITH_ACCOUNT_DETAILS]: {
     include: [
       {
@@ -325,14 +285,6 @@ export type AvailableForListIDsOptions = {
   },
   [ScopeNames.WITH_TAGS]: {
     include: [ TagModel ]
-  },
-  [ScopeNames.WITH_TRACKERS]: {
-    include: [
-      {
-        attributes: [ 'id', 'url' ],
-        model: TrackerModel
-      }
-    ]
   },
   [ScopeNames.WITH_BLACKLISTED]: {
     include: [
@@ -1439,7 +1391,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
 
     const rawQuery = `UPDATE "video" SET "${field}" = ` +
       '(' +
-      'SELECT COUNT(id) FROM "accountVideoRate" WHERE "accountVideoRate"."videoId" = "video"."id" AND type = :rateType' +
+        'SELECT COUNT(id) FROM "accountVideoRate" WHERE "accountVideoRate"."videoId" = "video"."id" AND type = :rateType' +
       ') ' +
       'WHERE "video"."id" = :videoId'
 
@@ -1467,15 +1419,15 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
                      .then(results => results.length === 1)
   }
 
-  static bulkUpdateSupportField (videoChannel: MChannel, t: Transaction) {
+  static bulkUpdateSupportField (ofChannel: MChannel, t: Transaction) {
     const options = {
       where: {
-        channelId: videoChannel.id
+        channelId: ofChannel.id
       },
       transaction: t
     }
 
-    return VideoModel.update({ support: videoChannel.support }, options)
+    return VideoModel.update({ support: ofChannel.support }, options)
   }
 
   static getAllIdsFromChannel (videoChannel: MChannelId): Promise<number[]> {
