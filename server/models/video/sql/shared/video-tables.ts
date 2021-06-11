@@ -1,10 +1,10 @@
 
 /**
  *
- * Class to build video attributes we want to fetch from the database
+ * Class to build video attributes/join names we want to fetch from the database
  *
  */
-export class VideoAttributes {
+export class VideoTables {
 
   constructor (readonly mode: 'get' | 'list') {
 
@@ -199,6 +199,7 @@ export class VideoAttributes {
     let attributeKeys = [
       'id',
       'filename',
+      'type',
       'fileUrl',
       'onDisk',
       'createdAt',

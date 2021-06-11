@@ -19,13 +19,13 @@ export class VideoFileQueryBuilder extends AbstractVideosModelQueryBuilder {
   queryWebTorrentVideos (options: BuildVideoGetQueryOptions) {
     this.buildWebtorrentFilesQuery(options)
 
-    return this.runQuery(options.transaction, true)
+    return this.runQuery(options.transaction)
   }
 
   queryStreamingPlaylistVideos (options: BuildVideoGetQueryOptions) {
     this.buildVideoStreamingPlaylistFilesQuery(options)
 
-    return this.runQuery(options.transaction, true)
+    return this.runQuery(options.transaction)
   }
 
   private buildWebtorrentFilesQuery (options: BuildVideoGetQueryOptions) {

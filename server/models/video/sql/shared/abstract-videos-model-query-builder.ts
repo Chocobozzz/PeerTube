@@ -1,6 +1,6 @@
 import validator from 'validator'
 import { AbstractVideosQueryBuilder } from './abstract-videos-query-builder'
-import { VideoAttributes } from './video-attributes'
+import { VideoTables } from './video-tables'
 
 /**
  *
@@ -13,12 +13,12 @@ export class AbstractVideosModelQueryBuilder extends AbstractVideosQueryBuilder 
   protected joins: string[] = []
   protected where: string
 
-  protected videoAttributes: VideoAttributes
+  protected tables: VideoTables
 
   constructor (protected readonly mode: 'list' | 'get') {
     super()
 
-    this.videoAttributes = new VideoAttributes(this.mode)
+    this.tables = new VideoTables(this.mode)
   }
 
   protected buildSelect () {
@@ -44,7 +44,7 @@ export class AbstractVideosModelQueryBuilder extends AbstractVideosQueryBuilder 
     this.attributes = {
       ...this.attributes,
 
-      ...this.buildAttributesObject('VideoChannel', this.videoAttributes.getChannelAttributes()),
+      ...this.buildAttributesObject('VideoChannel', this.tables.getChannelAttributes()),
       ...this.buildActorInclude('VideoChannel->Actor'),
       ...this.buildAvatarInclude('VideoChannel->Actor->Avatar'),
       ...this.buildServerInclude('VideoChannel->Actor->Server')
@@ -66,7 +66,7 @@ export class AbstractVideosModelQueryBuilder extends AbstractVideosQueryBuilder 
     this.attributes = {
       ...this.attributes,
 
-      ...this.buildAttributesObject('VideoChannel->Account', this.videoAttributes.getAccountAttributes()),
+      ...this.buildAttributesObject('VideoChannel->Account', this.tables.getAccountAttributes()),
       ...this.buildActorInclude('VideoChannel->Account->Actor'),
       ...this.buildAvatarInclude('VideoChannel->Account->Actor->Avatar'),
       ...this.buildServerInclude('VideoChannel->Account->Actor->Server')
@@ -79,7 +79,7 @@ export class AbstractVideosModelQueryBuilder extends AbstractVideosQueryBuilder 
     this.attributes = {
       ...this.attributes,
 
-      ...this.buildAttributesObject('Thumbnails', this.videoAttributes.getThumbnailAttributes())
+      ...this.buildAttributesObject('Thumbnails', this.tables.getThumbnailAttributes())
     }
   }
 
@@ -90,7 +90,7 @@ export class AbstractVideosModelQueryBuilder extends AbstractVideosQueryBuilder 
     this.attributes = {
       ...this.attributes,
 
-      ...this.buildAttributesObject('VideoFiles', this.videoAttributes.getFileAttributes())
+      ...this.buildAttributesObject('VideoFiles', this.tables.getFileAttributes())
     }
   }
 
@@ -107,8 +107,8 @@ export class AbstractVideosModelQueryBuilder extends AbstractVideosQueryBuilder 
     this.attributes = {
       ...this.attributes,
 
-      ...this.buildAttributesObject('VideoStreamingPlaylists', this.videoAttributes.getStreamingPlaylistAttributes()),
-      ...this.buildAttributesObject('VideoStreamingPlaylists->VideoFiles', this.videoAttributes.getFileAttributes())
+      ...this.buildAttributesObject('VideoStreamingPlaylists', this.tables.getStreamingPlaylistAttributes()),
+      ...this.buildAttributesObject('VideoStreamingPlaylists->VideoFiles', this.tables.getFileAttributes())
     }
   }
 
@@ -123,7 +123,7 @@ export class AbstractVideosModelQueryBuilder extends AbstractVideosQueryBuilder 
     this.attributes = {
       ...this.attributes,
 
-      ...this.buildAttributesObject('userVideoHistory', this.videoAttributes.getUserHistoryAttributes())
+      ...this.buildAttributesObject('userVideoHistory', this.tables.getUserHistoryAttributes())
     }
   }
 
@@ -138,7 +138,7 @@ export class AbstractVideosModelQueryBuilder extends AbstractVideosQueryBuilder 
     this.attributes = {
       ...this.attributes,
 
-      ...this.buildAttributesObject('VideoPlaylistElement', this.videoAttributes.getPlaylistAttributes())
+      ...this.buildAttributesObject('VideoPlaylistElement', this.tables.getPlaylistAttributes())
     }
   }
 
@@ -153,8 +153,8 @@ export class AbstractVideosModelQueryBuilder extends AbstractVideosQueryBuilder 
     this.attributes = {
       ...this.attributes,
 
-      ...this.buildAttributesObject('Tags', this.videoAttributes.getTagAttributes()),
-      ...this.buildAttributesObject('Tags->VideoTagModel', this.videoAttributes.getVideoTagAttributes())
+      ...this.buildAttributesObject('Tags', this.tables.getTagAttributes()),
+      ...this.buildAttributesObject('Tags->VideoTagModel', this.tables.getVideoTagAttributes())
     }
   }
 
@@ -166,7 +166,7 @@ export class AbstractVideosModelQueryBuilder extends AbstractVideosQueryBuilder 
     this.attributes = {
       ...this.attributes,
 
-      ...this.buildAttributesObject('VideoBlacklist', this.videoAttributes.getBlacklistedAttributes())
+      ...this.buildAttributesObject('VideoBlacklist', this.tables.getBlacklistedAttributes())
     }
   }
 
@@ -178,7 +178,7 @@ export class AbstractVideosModelQueryBuilder extends AbstractVideosQueryBuilder 
     this.attributes = {
       ...this.attributes,
 
-      ...this.buildAttributesObject('ScheduleVideoUpdate', this.videoAttributes.getScheduleUpdateAttributes())
+      ...this.buildAttributesObject('ScheduleVideoUpdate', this.tables.getScheduleUpdateAttributes())
     }
   }
 
@@ -190,7 +190,7 @@ export class AbstractVideosModelQueryBuilder extends AbstractVideosQueryBuilder 
     this.attributes = {
       ...this.attributes,
 
-      ...this.buildAttributesObject('VideoLive', this.videoAttributes.getLiveAttributes())
+      ...this.buildAttributesObject('VideoLive', this.tables.getLiveAttributes())
     }
   }
 
@@ -205,8 +205,8 @@ export class AbstractVideosModelQueryBuilder extends AbstractVideosQueryBuilder 
     this.attributes = {
       ...this.attributes,
 
-      ...this.buildAttributesObject('Trackers', this.videoAttributes.getTrackerAttributes()),
-      ...this.buildAttributesObject('Trackers->VideoTrackerModel', this.videoAttributes.getVideoTrackerAttributes())
+      ...this.buildAttributesObject('Trackers', this.tables.getTrackerAttributes()),
+      ...this.buildAttributesObject('Trackers->VideoTrackerModel', this.tables.getVideoTrackerAttributes())
     }
   }
 
@@ -219,7 +219,7 @@ export class AbstractVideosModelQueryBuilder extends AbstractVideosQueryBuilder 
     this.attributes = {
       ...this.attributes,
 
-      ...this.buildAttributesObject('VideoFiles->RedundancyVideos', this.videoAttributes.getRedundancyAttributes())
+      ...this.buildAttributesObject('VideoFiles->RedundancyVideos', this.tables.getRedundancyAttributes())
     }
   }
 
@@ -232,20 +232,20 @@ export class AbstractVideosModelQueryBuilder extends AbstractVideosQueryBuilder 
     this.attributes = {
       ...this.attributes,
 
-      ...this.buildAttributesObject('VideoStreamingPlaylists->RedundancyVideos', this.videoAttributes.getRedundancyAttributes())
+      ...this.buildAttributesObject('VideoStreamingPlaylists->RedundancyVideos', this.tables.getRedundancyAttributes())
     }
   }
 
   protected buildActorInclude (prefixKey: string) {
-    return this.buildAttributesObject(prefixKey, this.videoAttributes.getActorAttributes())
+    return this.buildAttributesObject(prefixKey, this.tables.getActorAttributes())
   }
 
   protected buildAvatarInclude (prefixKey: string) {
-    return this.buildAttributesObject(prefixKey, this.videoAttributes.getAvatarAttributes())
+    return this.buildAttributesObject(prefixKey, this.tables.getAvatarAttributes())
   }
 
   protected buildServerInclude (prefixKey: string) {
-    return this.buildAttributesObject(prefixKey, this.videoAttributes.getServerAttributes())
+    return this.buildAttributesObject(prefixKey, this.tables.getServerAttributes())
   }
 
   protected buildAttributesObject (prefixKey: string, attributeKeys: string[]) {

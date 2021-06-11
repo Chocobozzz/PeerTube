@@ -1,8 +1,8 @@
 import { Sequelize, Transaction } from 'sequelize'
 import { AbstractVideosModelQueryBuilder } from './shared/abstract-videos-model-query-builder'
-import { VideoAttributes } from './shared/video-attributes'
 import { VideoFileQueryBuilder } from './shared/video-file-query-builder'
 import { VideoModelBuilder } from './shared/video-model-builder'
+import { VideoTables } from './shared/video-tables'
 
 /**
  *
@@ -29,7 +29,7 @@ export class VideosModelGetQueryBuilder {
     this.webtorrentFilesQueryBuilder = new VideoFileQueryBuilder(sequelize)
     this.streamingPlaylistFilesQueryBuilder = new VideoFileQueryBuilder(sequelize)
 
-    this.videoModelBuilder = new VideoModelBuilder('get', new VideoAttributes('get'))
+    this.videoModelBuilder = new VideoModelBuilder('get', new VideoTables('get'))
   }
 
   async queryVideos (options: BuildVideoGetQueryOptions) {
@@ -64,7 +64,7 @@ export class VideosModelGetQuerySubBuilder extends AbstractVideosModelQueryBuild
   queryVideos (options: BuildVideoGetQueryOptions) {
     this.buildMainGetQuery(options)
 
-    return this.runQuery(options.transaction, true)
+    return this.runQuery(options.transaction)
   }
 
   private buildMainGetQuery (options: BuildVideoGetQueryOptions) {
@@ -102,6 +102,6 @@ export class VideosModelGetQuerySubBuilder extends AbstractVideosModelQueryBuild
     const order = 'ORDER BY "Tags"."name" ASC'
     const from = `SELECT * FROM "video" ${this.where} LIMIT 1`
 
-    return `${this.buildSelect()} FROM (${from}) AS "video" ${this.joins.join(' ')} ${this.where} ${order}`
+    return `${this.buildSelect()} FROM (${from}) AS "video" ${this.joins.join(' ')} ${order}`
   }
 }

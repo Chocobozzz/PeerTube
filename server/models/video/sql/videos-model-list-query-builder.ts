@@ -21,14 +21,14 @@ export class VideosModelListQueryBuilder extends AbstractVideosModelQueryBuilder
   constructor (protected readonly sequelize: Sequelize) {
     super('list')
 
-    this.videoModelBuilder = new VideoModelBuilder(this.mode, this.videoAttributes)
+    this.videoModelBuilder = new VideoModelBuilder(this.mode, this.tables)
   }
 
   queryVideos (options: BuildVideosListQueryOptions) {
     this.buildInnerQuery(options)
     this.buildListQueryFromIdsQuery(options)
 
-    return this.runQuery(undefined, true).then(rows => this.videoModelBuilder.buildVideosFromRows(rows))
+    return this.runQuery(undefined).then(rows => this.videoModelBuilder.buildVideosFromRows(rows))
   }
 
   private buildInnerQuery (options: BuildVideosListQueryOptions) {
