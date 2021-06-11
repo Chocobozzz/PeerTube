@@ -52,7 +52,6 @@ export class VideosModelGetQueryBuilder {
 
 export class VideosModelGetQuerySubBuilder extends AbstractVideosModelQueryBuilder {
   protected attributes: { [key: string]: string }
-  protected joins: string[] = []
 
   protected webtorrentFilesQuery: string
   protected streamingPlaylistFilesQuery: string
@@ -102,6 +101,6 @@ export class VideosModelGetQuerySubBuilder extends AbstractVideosModelQueryBuild
     const order = 'ORDER BY "Tags"."name" ASC'
     const from = `SELECT * FROM "video" ${this.where} LIMIT 1`
 
-    return `${this.buildSelect()} FROM (${from}) AS "video" ${this.joins.join(' ')} ${order}`
+    return `${this.buildSelect()} FROM (${from}) AS "video" ${this.joins} ${order}`
   }
 }

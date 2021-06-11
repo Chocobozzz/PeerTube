@@ -10,7 +10,8 @@ import { VideoTables } from './video-tables'
 
 export class AbstractVideosModelQueryBuilder extends AbstractVideosQueryBuilder {
   protected attributes: { [key: string]: string } = {}
-  protected joins: string[] = []
+
+  protected joins = ''
   protected where: string
 
   protected tables: VideoTables
@@ -31,12 +32,14 @@ export class AbstractVideosModelQueryBuilder extends AbstractVideosQueryBuilder 
   }
 
   protected includeChannels () {
-    this.joins.push(
-      'INNER JOIN "videoChannel" AS "VideoChannel" ON "video"."channelId" = "VideoChannel"."id"',
-      'INNER JOIN "actor" AS "VideoChannel->Actor" ON "VideoChannel"."actorId" = "VideoChannel->Actor"."id"',
+    this.addJoin('INNER JOIN "videoChannel" AS "VideoChannel" ON "video"."channelId" = "VideoChannel"."id"')
+    this.addJoin('INNER JOIN "actor" AS "VideoChannel->Actor" ON "VideoChannel"."actorId" = "VideoChannel->Actor"."id"')
 
-      'LEFT OUTER JOIN "server" AS "VideoChannel->Actor->Server" ON "VideoChannel->Actor"."serverId" = "VideoChannel->Actor->Server"."id"',
+    this.addJoin(
+      'LEFT OUTER JOIN "server" AS "VideoChannel->Actor->Server" ON "VideoChannel->Actor"."serverId" = "VideoChannel->Actor->Server"."id"'
+    )
 
+    this.addJoin(
       'LEFT OUTER JOIN "actorImage" AS "VideoChannel->Actor->Avatar" ' +
         'ON "VideoChannel->Actor"."avatarId" = "VideoChannel->Actor->Avatar"."id"'
     )
@@ -52,13 +55,17 @@ export class AbstractVideosModelQueryBuilder extends AbstractVideosQueryBuilder 
   }
 
   protected includeAccounts () {
-    this.joins.push(
-      'INNER JOIN "account" AS "VideoChannel->Account" ON "VideoChannel"."accountId" = "VideoChannel->Account"."id"',
-      'INNER JOIN "actor" AS "VideoChannel->Account->Actor" ON "VideoChannel->Account"."actorId" = "VideoChannel->Account->Actor"."id"',
+    this.addJoin('INNER JOIN "account" AS "VideoChannel->Account" ON "VideoChannel"."accountId" = "VideoChannel->Account"."id"')
+    this.addJoin(
+      'INNER JOIN "actor" AS "VideoChannel->Account->Actor" ON "VideoChannel->Account"."actorId" = "VideoChannel->Account->Actor"."id"'
+    )
 
+    this.addJoin(
       'LEFT OUTER JOIN "server" AS "VideoChannel->Account->Actor->Server" ' +
-        'ON "VideoChannel->Account->Actor"."serverId" = "VideoChannel->Account->Actor->Server"."id"',
+        'ON "VideoChannel->Account->Actor"."serverId" = "VideoChannel->Account->Actor->Server"."id"'
+    )
 
+    this.addJoin(
       'LEFT OUTER JOIN "actorImage" AS "VideoChannel->Account->Actor->Avatar" ' +
         'ON "VideoChannel->Account->Actor"."avatarId" = "VideoChannel->Account->Actor->Avatar"."id"'
     )
@@ -74,7 +81,7 @@ export class AbstractVideosModelQueryBuilder extends AbstractVideosQueryBuilder 
   }
 
   protected includeThumbnails () {
-    this.joins.push('LEFT OUTER JOIN "thumbnail" AS "Thumbnails" ON "video"."id" = "Thumbnails"."videoId"')
+    this.addJoin('LEFT OUTER JOIN "thumbnail" AS "Thumbnails" ON "video"."id" = "Thumbnails"."videoId"')
 
     this.attributes = {
       ...this.attributes,
@@ -85,7 +92,7 @@ export class AbstractVideosModelQueryBuilder extends AbstractVideosQueryBuilder 
 
   protected includeWebtorrentFiles (required: boolean) {
     const joinType = required ? 'INNER' : 'LEFT'
-    this.joins.push(joinType + ' JOIN "videoFile" AS "VideoFiles" ON "VideoFiles"."videoId" = "video"."id"')
+    this.addJoin(joinType + ' JOIN "videoFile" AS "VideoFiles" ON "VideoFiles"."videoId" = "video"."id"')
 
     this.attributes = {
       ...this.attributes,
@@ -97,9 +104,11 @@ export class AbstractVideosModelQueryBuilder extends AbstractVideosQueryBuilder 
   protected includeStreamingPlaylistFiles (required: boolean) {
     const joinType = required ? 'INNER' : 'LEFT'
 
-    this.joins.push(
-      joinType + ' JOIN "videoStreamingPlaylist" AS "VideoStreamingPlaylists" ON "VideoStreamingPlaylists"."videoId" = "video"."id"',
+    this.addJoin(
+      joinType + ' JOIN "videoStreamingPlaylist" AS "VideoStreamingPlaylists" ON "VideoStreamingPlaylists"."videoId" = "video"."id"'
+    )
 
+    this.addJoin(
       joinType + ' JOIN "videoFile" AS "VideoStreamingPlaylists->VideoFiles" ' +
         'ON "VideoStreamingPlaylists->VideoFiles"."videoStreamingPlaylistId" = "VideoStreamingPlaylists"."id"'
     )
@@ -113,7 +122,7 @@ export class AbstractVideosModelQueryBuilder extends AbstractVideosQueryBuilder 
   }
 
   protected includeUserHistory (userId: number) {
-    this.joins.push(
+    this.addJoin(
       'LEFT OUTER JOIN "userVideoHistory" ' +
         'ON "video"."id" = "userVideoHistory"."videoId" AND "userVideoHistory"."userId" = :userVideoHistoryId'
     )
@@ -128,7 +137,7 @@ export class AbstractVideosModelQueryBuilder extends AbstractVideosQueryBuilder 
   }
 
   protected includePlaylist (playlistId: number) {
-    this.joins.push(
+    this.addJoin(
       'INNER JOIN "videoPlaylistElement" as "VideoPlaylistElement" ON "videoPlaylistElement"."videoId" = "video"."id" ' +
         'AND "VideoPlaylistElement"."videoPlaylistId" = :videoPlaylistId'
     )
@@ -143,7 +152,7 @@ export class AbstractVideosModelQueryBuilder extends AbstractVideosQueryBuilder 
   }
 
   protected includeTags () {
-    this.joins.push(
+    this.addJoin(
       'LEFT OUTER JOIN (' +
         '"videoTag" AS "Tags->VideoTagModel" INNER JOIN "tag" AS "Tags" ON "Tags"."id" = "Tags->VideoTagModel"."tagId"' +
       ') ' +
@@ -159,7 +168,7 @@ export class AbstractVideosModelQueryBuilder extends AbstractVideosQueryBuilder 
   }
 
   protected includeBlacklisted () {
-    this.joins.push(
+    this.addJoin(
       'LEFT OUTER JOIN "videoBlacklist" AS "VideoBlacklist" ON "video"."id" = "VideoBlacklist"."videoId"'
     )
 
@@ -171,7 +180,7 @@ export class AbstractVideosModelQueryBuilder extends AbstractVideosQueryBuilder 
   }
 
   protected includeScheduleUpdate () {
-    this.joins.push(
+    this.addJoin(
       'LEFT OUTER JOIN "scheduleVideoUpdate" AS "ScheduleVideoUpdate" ON "video"."id" = "ScheduleVideoUpdate"."videoId"'
     )
 
@@ -183,7 +192,7 @@ export class AbstractVideosModelQueryBuilder extends AbstractVideosQueryBuilder 
   }
 
   protected includeLive () {
-    this.joins.push(
+    this.addJoin(
       'LEFT OUTER JOIN "videoLive" AS "VideoLive" ON "video"."id" = "VideoLive"."videoId"'
     )
 
@@ -195,7 +204,7 @@ export class AbstractVideosModelQueryBuilder extends AbstractVideosQueryBuilder 
   }
 
   protected includeTrackers () {
-    this.joins.push(
+    this.addJoin(
       'LEFT OUTER JOIN (' +
         '"videoTracker" AS "Trackers->VideoTrackerModel" ' +
           'INNER JOIN "tracker" AS "Trackers" ON "Trackers"."id" = "Trackers->VideoTrackerModel"."trackerId"' +
@@ -211,7 +220,7 @@ export class AbstractVideosModelQueryBuilder extends AbstractVideosQueryBuilder 
   }
 
   protected includeWebTorrentRedundancies () {
-    this.joins.push(
+    this.addJoin(
       'LEFT OUTER JOIN "videoRedundancy" AS "VideoFiles->RedundancyVideos" ON ' +
         '"VideoFiles"."id" = "VideoFiles->RedundancyVideos"."videoFileId"'
     )
@@ -224,7 +233,7 @@ export class AbstractVideosModelQueryBuilder extends AbstractVideosQueryBuilder 
   }
 
   protected includeStreamingPlaylistRedundancies () {
-    this.joins.push(
+    this.addJoin(
       'LEFT OUTER JOIN "videoRedundancy" AS "VideoStreamingPlaylists->RedundancyVideos" ' +
         'ON "VideoStreamingPlaylists"."id" = "VideoStreamingPlaylists->RedundancyVideos"."videoStreamingPlaylistId"'
     )
@@ -268,5 +277,9 @@ export class AbstractVideosModelQueryBuilder extends AbstractVideosQueryBuilder 
     }
 
     this.replacements.videoId = id
+  }
+
+  protected addJoin (join: string) {
+    this.joins += join + ' '
   }
 }

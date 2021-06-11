@@ -10,7 +10,6 @@ import { AbstractVideosModelQueryBuilder } from './abstract-videos-model-query-b
 
 export class VideoFileQueryBuilder extends AbstractVideosModelQueryBuilder {
   protected attributes: { [key: string]: string }
-  protected joins: string[] = []
 
   constructor (protected readonly sequelize: Sequelize) {
     super('get')
@@ -61,6 +60,6 @@ export class VideoFileQueryBuilder extends AbstractVideosModelQueryBuilder {
   }
 
   private buildQuery () {
-    return `${this.buildSelect()} FROM "video" ${this.joins.join(' ')} ${this.where}`
+    return `${this.buildSelect()} FROM "video" ${this.joins} ${this.where}`
   }
 }

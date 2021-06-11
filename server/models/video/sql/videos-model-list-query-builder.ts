@@ -11,7 +11,6 @@ import { BuildVideosListQueryOptions, VideosIdListQueryBuilder } from './videos-
 
 export class VideosModelListQueryBuilder extends AbstractVideosModelQueryBuilder {
   protected attributes: { [key: string]: string }
-  protected joins: string[] = []
 
   private innerQuery: string
   private innerSort: string
@@ -45,7 +44,7 @@ export class VideosModelListQueryBuilder extends AbstractVideosModelQueryBuilder
       '"video".*': ''
     }
 
-    this.joins = [ 'INNER JOIN "video" ON "tmp"."id" = "video"."id"' ]
+    this.addJoin('INNER JOIN "video" ON "tmp"."id" = "video"."id"')
 
     this.includeChannels()
     this.includeAccounts()
@@ -66,6 +65,6 @@ export class VideosModelListQueryBuilder extends AbstractVideosModelQueryBuilder
 
     const select = this.buildSelect()
 
-    this.query = `${select} FROM (${this.innerQuery}) AS "tmp" ${this.joins.join(' ')} ${this.innerSort}`
+    this.query = `${select} FROM (${this.innerQuery}) AS "tmp" ${this.joins} ${this.innerSort}`
   }
 }
