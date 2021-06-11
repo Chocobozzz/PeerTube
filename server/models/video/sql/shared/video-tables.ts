@@ -43,6 +43,7 @@ export class VideoTables {
     if (this.mode === 'get') {
       attributeKeys = attributeKeys.concat([
         'description',
+        'userId',
         'createdAt',
         'updatedAt'
       ])
