@@ -10,8 +10,7 @@ import {
   MVideoFullLight,
   MVideoId,
   MVideoImmutable,
-  MVideoThumbnail,
-  MVideoWithRights
+  MVideoThumbnail
 } from '@server/types/models'
 import { HttpStatusCode } from '@shared/core-utils'
 import { UserRight } from '@shared/models'

@@ -10,11 +10,21 @@ import { VideoTables } from './shared/video-tables'
  *
  */
 
+export type GetType =
+  'api' |
+  'full-light' |
+  'account-blacklist-files' |
+  'all-files' |
+  'thumbnails' |
+  'thumbnails-blacklist' |
+  'id' |
+  'blacklist-rights'
+
 export type BuildVideoGetQueryOptions = {
   id?: number | string
   url?: string
 
-  type: 'api' | 'full-light' | 'account-blacklist-files' | 'all-files' | 'thumbnails' | 'thumbnails-blacklist' | 'id' | 'blacklist-rights'
+  type: GetType
 
   userId?: number
   transaction?: Transaction
@@ -29,6 +39,8 @@ export class VideosModelGetQueryBuilder {
 
   private readonly videoModelBuilder: VideoModelBuilder
 
+  private static readonly videoFilesInclude = new Set<GetType>([ 'api', 'full-light', 'account-blacklist-files', 'all-files' ])
+
   constructor (protected readonly sequelize: Sequelize) {
     this.videoQueryBuilder = new VideosModelGetQuerySubBuilder(sequelize)
     this.webtorrentFilesQueryBuilder = new VideoFileQueryBuilder(sequelize)
@@ -41,11 +53,11 @@ export class VideosModelGetQueryBuilder {
     const [ videoRows, webtorrentFilesRows, streamingPlaylistFilesRows ] = await Promise.all([
       this.videoQueryBuilder.queryVideos(options),
 
-      this.shouldQueryVideoFiles(options)
+      VideosModelGetQueryBuilder.videoFilesInclude.has(options.type)
         ? this.webtorrentFilesQueryBuilder.queryWebTorrentVideos(options)
         : Promise.resolve(undefined),
 
-      this.shouldQueryVideoFiles(options)
+      VideosModelGetQueryBuilder.videoFilesInclude.has(options.type)
         ? this.streamingPlaylistFilesQueryBuilder.queryStreamingPlaylistVideos(options)
         : Promise.resolve(undefined)
     ])
@@ -59,10 +71,6 @@ export class VideosModelGetQueryBuilder {
     if (videos.length === 0) return null
     return videos[0]
   }
-
-  private shouldQueryVideoFiles (options: BuildVideoGetQueryOptions) {
-    return [ 'api', 'full-light', 'account-blacklist-files', 'all-files' ].includes(options.type)
-  }
 }
 
 export class VideosModelGetQuerySubBuilder extends AbstractVideosModelQueryBuilder {
@@ -70,6 +78,30 @@ export class VideosModelGetQuerySubBuilder extends AbstractVideosModelQueryBuild
 
   protected webtorrentFilesQuery: string
   protected streamingPlaylistFilesQuery: string
+
+  private static readonly trackersInclude = new Set<GetType>([ 'api' ])
+  private static readonly liveInclude = new Set<GetType>([ 'api', 'full-light' ])
+  private static readonly scheduleUpdateInclude = new Set<GetType>([ 'api', 'full-light' ])
+  private static readonly tagsInclude = new Set<GetType>([ 'api', 'full-light' ])
+  private static readonly userHistoryInclude = new Set<GetType>([ 'api', 'full-light' ])
+  private static readonly accountInclude = new Set<GetType>([ 'api', 'full-light', 'account-blacklist-files' ])
+  private static readonly ownerUserInclude = new Set<GetType>([ 'blacklist-rights' ])
+
+  private static readonly blacklistedInclude = new Set<GetType>([
+    'api',
+    'full-light',
+    'account-blacklist-files',
+    'thumbnails-blacklist',
+    'blacklist-rights'
+  ])
+
+  private static readonly thumbnailsInclude = new Set<GetType>([
+    'api',
+    'full-light',
+    'account-blacklist-files',
+    'thumbnails',
+    'thumbnails-blacklist'
+  ])
 
   constructor (protected readonly sequelize: Sequelize) {
     super('get')
@@ -86,40 +118,40 @@ export class VideosModelGetQuerySubBuilder extends AbstractVideosModelQueryBuild
       '"video".*': ''
     }
 
-    if (this.shouldIncludeThumbnails(options)) {
+    if (VideosModelGetQuerySubBuilder.thumbnailsInclude.has(options.type)) {
       this.includeThumbnails()
     }
 
-    if (this.shouldIncludeBlacklisted(options)) {
+    if (VideosModelGetQuerySubBuilder.blacklistedInclude.has(options.type)) {
       this.includeBlacklisted()
     }
 
-    if (this.shouldIncludeAccount(options)) {
+    if (VideosModelGetQuerySubBuilder.accountInclude.has(options.type)) {
       this.includeChannels()
       this.includeAccounts()
     }
 
-    if (this.shouldIncludeTags(options)) {
+    if (VideosModelGetQuerySubBuilder.tagsInclude.has(options.type)) {
       this.includeTags()
     }
 
-    if (this.shouldIncludeScheduleUpdate(options)) {
+    if (VideosModelGetQuerySubBuilder.scheduleUpdateInclude.has(options.type)) {
       this.includeScheduleUpdate()
     }
 
-    if (this.shouldIncludeLive(options)) {
+    if (VideosModelGetQuerySubBuilder.liveInclude.has(options.type)) {
       this.includeLive()
     }
 
-    if (options.userId && this.shouldIncludeUserHistory(options)) {
+    if (options.userId && VideosModelGetQuerySubBuilder.userHistoryInclude.has(options.type)) {
       this.includeUserHistory(options.userId)
     }
 
-    if (this.shouldIncludeOwnerUser(options)) {
+    if (VideosModelGetQuerySubBuilder.ownerUserInclude.has(options.type)) {
       this.includeOwnerUser()
     }
 
-    if (this.shouldIncludeTrackers(options)) {
+    if (VideosModelGetQuerySubBuilder.trackersInclude.has(options.type)) {
       this.includeTrackers()
     }
 
@@ -129,48 +161,12 @@ export class VideosModelGetQuerySubBuilder extends AbstractVideosModelQueryBuild
   }
 
   private buildQuery (options: BuildVideoGetQueryOptions) {
-    const order = this.shouldIncludeTags(options)
+    const order = VideosModelGetQuerySubBuilder.tagsInclude.has(options.type)
       ? 'ORDER BY "Tags"."name" ASC'
       : ''
 
     const from = `SELECT * FROM "video" ${this.where} LIMIT 1`
 
     return `${this.buildSelect()} FROM (${from}) AS "video" ${this.joins} ${order}`
-  }
-
-  private shouldIncludeTrackers (options: BuildVideoGetQueryOptions) {
-    return options.type === 'api'
-  }
-
-  private shouldIncludeLive (options: BuildVideoGetQueryOptions) {
-    return [ 'api', 'full-light' ].includes(options.type)
-  }
-
-  private shouldIncludeScheduleUpdate (options: BuildVideoGetQueryOptions) {
-    return [ 'api', 'full-light' ].includes(options.type)
-  }
-
-  private shouldIncludeTags (options: BuildVideoGetQueryOptions) {
-    return [ 'api', 'full-light' ].includes(options.type)
-  }
-
-  private shouldIncludeUserHistory (options: BuildVideoGetQueryOptions) {
-    return [ 'api', 'full-light' ].includes(options.type)
-  }
-
-  private shouldIncludeAccount (options: BuildVideoGetQueryOptions) {
-    return [ 'api', 'full-light', 'account-blacklist-files' ].includes(options.type)
-  }
-
-  private shouldIncludeBlacklisted (options: BuildVideoGetQueryOptions) {
-    return [ 'api', 'full-light', 'account-blacklist-files', 'thumbnails-blacklist', 'blacklist-rights' ].includes(options.type)
-  }
-
-  private shouldIncludeOwnerUser (options: BuildVideoGetQueryOptions) {
-    return options.type === 'blacklist-rights'
-  }
-
-  private shouldIncludeThumbnails (options: BuildVideoGetQueryOptions) {
-    return [ 'api', 'full-light', 'account-blacklist-files', 'thumbnails', 'thumbnails-blacklist' ].includes(options.type)
   }
 }

@@ -5,8 +5,7 @@ import {
   MVideoFullLight,
   MVideoId,
   MVideoImmutable,
-  MVideoThumbnail,
-  MVideoWithRights
+  MVideoThumbnail
 } from '@server/types/models'
 import { Hooks } from '../plugins/hooks'
 

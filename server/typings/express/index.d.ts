@@ -37,11 +37,9 @@ import {
   MVideoBlacklist,
   MVideoCaptionVideo,
   MVideoFullLight,
-  MVideoIdThumbnail,
   MVideoRedundancyVideo,
   MVideoShareActor,
-  MVideoThumbnail,
-  MVideoWithRights
+  MVideoThumbnail
 } from '../../types/models'
 
 declare module 'express' {
