@@ -1472,13 +1472,13 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
 
   static loadForGetAPI (parameters: {
     id: number | string
-    t?: Transaction
+    transaction?: Transaction
     userId?: number
   }): Promise<MVideoDetails> {
-    const { id, t, userId } = parameters
+    const { id, transaction, userId } = parameters
     const queryBuilder = new VideosModelGetQueryBuilder(VideoModel.sequelize)
 
-    return queryBuilder.queryVideos({ id, transaction: t, forGetAPI: true, userId })
+    return queryBuilder.queryVideos({ id, transaction, forGetAPI: true, userId })
   }
 
   static async getStats () {

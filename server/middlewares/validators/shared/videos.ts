@@ -6,6 +6,7 @@ import {
   MUser,
   MUserAccountId,
   MVideoAccountLight,
+  MVideoFormattableDetails,
   MVideoFullLight,
   MVideoIdThumbnail,
   MVideoImmutable,
@@ -29,6 +30,10 @@ async function doesVideoExist (id: number | string, res: Response, fetchType: Vi
   }
 
   switch (fetchType) {
+    case 'for-api':
+      res.locals.videoAPI = video as MVideoFormattableDetails
+      break
+
     case 'all':
       res.locals.videoAll = video as MVideoFullLight
       break

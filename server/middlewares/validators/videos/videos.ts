@@ -258,7 +258,7 @@ async function checkVideoFollowConstraints (req: express.Request, res: express.R
 }
 
 const videosCustomGetValidator = (
-  fetchType: 'all' | 'only-video' | 'only-video-with-rights' | 'only-immutable-attributes',
+  fetchType: 'for-api' | 'all' | 'only-video' | 'only-video-with-rights' | 'only-immutable-attributes',
   authenticateInQuery = false
 ) => {
   return [

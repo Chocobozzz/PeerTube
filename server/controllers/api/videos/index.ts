@@ -100,7 +100,7 @@ videosRouter.get('/:id/metadata/:videoFileId',
 videosRouter.get('/:id',
   openapiOperationDoc({ operationId: 'getVideo' }),
   optionalAuthenticate,
-  asyncMiddleware(videosCustomGetValidator('only-video-with-rights')),
+  asyncMiddleware(videosCustomGetValidator('for-api')),
   asyncMiddleware(checkVideoFollowConstraints),
   asyncMiddleware(getVideo)
 )
@@ -142,14 +142,7 @@ function listVideoPrivacies (_req: express.Request, res: express.Response) {
 }
 
 async function getVideo (_req: express.Request, res: express.Response) {
-  // We need more attributes
-  const userId: number = res.locals.oauth ? res.locals.oauth.token.User.id : null
-
-  const video = await Hooks.wrapPromiseFun(
-    VideoModel.loadForGetAPI,
-    { id: _req.params.id, userId },
-    'filter:api.video.get.result'
-  )
+  const video = res.locals.videoAPI
 
   if (video.isOutdated()) {
     JobQueue.Instance.createJob({ type: 'activitypub-refresher', payload: { type: 'video', url: video.url } })

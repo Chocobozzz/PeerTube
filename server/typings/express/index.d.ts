@@ -10,6 +10,7 @@ import {
   MStreamingPlaylist,
   MVideoChangeOwnershipFull,
   MVideoFile,
+  MVideoFormattableDetails,
   MVideoImmutable,
   MVideoLive,
   MVideoPlaylistFull,
@@ -101,6 +102,7 @@ declare module 'express' {
     locals: {
       docUrl?: string
 
+      videoAPI?: MVideoFormattableDetails
       videoAll?: MVideoFullLight
       onlyImmutableVideo?: MVideoImmutable
       onlyVideo?: MVideoThumbnail

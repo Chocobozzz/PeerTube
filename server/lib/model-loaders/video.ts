@@ -1,15 +1,18 @@
 import { VideoModel } from '@server/models/video/video'
 import {
   MVideoAccountLightBlacklistAllFiles,
+  MVideoFormattableDetails,
   MVideoFullLight,
   MVideoIdThumbnail,
   MVideoImmutable,
   MVideoThumbnail,
   MVideoWithRights
 } from '@server/types/models'
+import { Hooks } from '../plugins/hooks'
 
-type VideoLoadType = 'all' | 'only-video' | 'only-video-with-rights' | 'id' | 'none' | 'only-immutable-attributes'
+type VideoLoadType = 'for-api' | 'all' | 'only-video' | 'only-video-with-rights' | 'id' | 'none' | 'only-immutable-attributes'
 
+function loadVideo (id: number | string, fetchType: 'for-api', userId?: number): Promise<MVideoFormattableDetails>
 function loadVideo (id: number | string, fetchType: 'all', userId?: number): Promise<MVideoFullLight>
 function loadVideo (id: number | string, fetchType: 'only-immutable-attributes'): Promise<MVideoImmutable>
 function loadVideo (id: number | string, fetchType: 'only-video', userId?: number): Promise<MVideoThumbnail>
@@ -25,6 +28,15 @@ function loadVideo (
   fetchType: VideoLoadType,
   userId?: number
 ): Promise<MVideoFullLight | MVideoThumbnail | MVideoWithRights | MVideoIdThumbnail | MVideoImmutable> {
+
+  if (fetchType === 'for-api') {
+    return Hooks.wrapPromiseFun(
+      VideoModel.loadForGetAPI,
+      { id, userId },
+      'filter:api.video.get.result'
+    )
+  }
+
   if (fetchType === 'all') return VideoModel.loadAndPopulateAccountAndServerAndTags(id, undefined, userId)
 
   if (fetchType === 'only-immutable-attributes') return VideoModel.loadImmutableAttributes(id)
