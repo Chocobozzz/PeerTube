@@ -43,7 +43,7 @@ activityPubClientRouter.use(cors())
 // Intercept ActivityPub client requests
 
 activityPubClientRouter.get(
-  [ '/accounts?/:name', '/accounts?/:name/video-channels' ],
+  [ '/accounts?/:name', '/accounts?/:name/video-channels', '/a/:name', '/a/:name/video-channels' ],
   executeIfActivityPub,
   asyncMiddleware(localAccountValidator),
   accountController
@@ -74,7 +74,8 @@ activityPubClientRouter.get('/accounts?/:name/dislikes/:videoId',
   getAccountVideoRateFactory('dislike')
 )
 
-activityPubClientRouter.get('/videos/watch/:id',
+activityPubClientRouter.get(
+  [ '/videos/watch/:id', '/w/:id' ],
   executeIfActivityPub,
   asyncMiddleware(cacheRoute()(ROUTE_CACHE_LIFETIME.ACTIVITY_PUB.VIDEOS)),
   asyncMiddleware(videosCustomGetValidator('all')),
@@ -122,7 +123,7 @@ activityPubClientRouter.get('/videos/watch/:videoId/comments/:commentId/activity
 )
 
 activityPubClientRouter.get(
-  [ '/video-channels/:name', '/video-channels/:name/videos' ],
+  [ '/video-channels/:name', '/video-channels/:name/videos', '/c/:name', '/c/:name/videos' ],
   executeIfActivityPub,
   asyncMiddleware(localVideoChannelValidator),
   videoChannelController
