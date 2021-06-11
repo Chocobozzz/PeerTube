@@ -113,7 +113,7 @@ export class VideoModelBuilder {
 
       const videoModel = this.videosMemo[row.id]
       this.addWebTorrentFile(row, videoModel)
-      this.addRedundancy(row, 'VideoFiles.RedundancyVideos', this.videoFileMemo[id])
+      this.addRedundancy(row, 'VideoFiles', this.videoFileMemo[id])
     }
   }
 
@@ -128,11 +128,7 @@ export class VideoModelBuilder {
 
       this.addStreamingPlaylist(row, videoModel)
       this.addStreamingPlaylistFile(row)
-      this.addRedundancy(
-        row,
-        'VideoStreamingPlaylists.RedundancyVideos',
-        this.videoStreamingPlaylistMemo[id]
-      )
+      this.addRedundancy(row, 'VideoStreamingPlaylists', this.videoStreamingPlaylistMemo[id])
     }
   }
 
