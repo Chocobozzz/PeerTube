@@ -108,9 +108,12 @@ export class VideoModelBuilder {
     if (!rowsWebTorrentFiles) return
 
     for (const row of rowsWebTorrentFiles) {
+      const id = row['VideoFiles.id']
+      if (!id) continue
+
       const videoModel = this.videosMemo[row.id]
       this.addWebTorrentFile(row, videoModel)
-      this.addRedundancy(row, 'VideoFiles.RedundancyVideos', this.videoFileMemo[row['VideoFiles.id']])
+      this.addRedundancy(row, 'VideoFiles.RedundancyVideos', this.videoFileMemo[id])
     }
   }
 
@@ -118,6 +121,9 @@ export class VideoModelBuilder {
     if (!rowsStreamingPlaylist) return
 
     for (const row of rowsStreamingPlaylist || []) {
+      const id = row['VideoStreamingPlaylists.id']
+      if (!id) continue
+
       const videoModel = this.videosMemo[row.id]
 
       this.addStreamingPlaylist(row, videoModel)
@@ -125,7 +131,7 @@ export class VideoModelBuilder {
       this.addRedundancy(
         row,
         'VideoStreamingPlaylists.RedundancyVideos',
-        this.videoStreamingPlaylistMemo[row['VideoStreamingPlaylists.id']]
+        this.videoStreamingPlaylistMemo[id]
       )
     }
   }

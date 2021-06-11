@@ -52,8 +52,8 @@ export class VideosModelListQueryBuilder extends AbstractVideosModelQueryBuilder
     this.includeThumbnails()
 
     if (options.withFiles) {
-      this.includeWebtorrentFiles(false)
-      this.includeStreamingPlaylistFiles(false)
+      this.includeWebtorrentFiles()
+      this.includeStreamingPlaylistFiles()
     }
 
     if (options.user) {

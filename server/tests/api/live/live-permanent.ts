@@ -27,7 +27,7 @@ import {
 
 const expect = chai.expect
 
-describe('Permenant live', function () {
+describe('Permanent live', function () {
   let servers: ServerInfo[] = []
   let videoUUID: string
 

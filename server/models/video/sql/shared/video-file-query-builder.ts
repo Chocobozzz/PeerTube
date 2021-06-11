@@ -32,7 +32,7 @@ export class VideoFileQueryBuilder extends AbstractVideosModelQueryBuilder {
       '"video"."id"': ''
     }
 
-    this.includeWebtorrentFiles(true)
+    this.includeWebtorrentFiles()
 
     if (this.shouldIncludeRedundancies(options)) {
       this.includeWebTorrentRedundancies()
@@ -48,7 +48,7 @@ export class VideoFileQueryBuilder extends AbstractVideosModelQueryBuilder {
       '"video"."id"': ''
     }
 
-    this.includeStreamingPlaylistFiles(true)
+    this.includeStreamingPlaylistFiles()
 
     if (this.shouldIncludeRedundancies(options)) {
       this.includeStreamingPlaylistRedundancies()

@@ -102,9 +102,8 @@ export class AbstractVideosModelQueryBuilder extends AbstractVideosQueryBuilder 
     }
   }
 
-  protected includeWebtorrentFiles (required: boolean) {
-    const joinType = required ? 'INNER' : 'LEFT'
-    this.addJoin(joinType + ' JOIN "videoFile" AS "VideoFiles" ON "VideoFiles"."videoId" = "video"."id"')
+  protected includeWebtorrentFiles () {
+    this.addJoin('LEFT JOIN "videoFile" AS "VideoFiles" ON "VideoFiles"."videoId" = "video"."id"')
 
     this.attributes = {
       ...this.attributes,
@@ -113,15 +112,13 @@ export class AbstractVideosModelQueryBuilder extends AbstractVideosQueryBuilder 
     }
   }
 
-  protected includeStreamingPlaylistFiles (required: boolean) {
-    const joinType = required ? 'INNER' : 'LEFT'
-
+  protected includeStreamingPlaylistFiles () {
     this.addJoin(
-      joinType + ' JOIN "videoStreamingPlaylist" AS "VideoStreamingPlaylists" ON "VideoStreamingPlaylists"."videoId" = "video"."id"'
+      'LEFT JOIN "videoStreamingPlaylist" AS "VideoStreamingPlaylists" ON "VideoStreamingPlaylists"."videoId" = "video"."id"'
     )
 
     this.addJoin(
-      joinType + ' JOIN "videoFile" AS "VideoStreamingPlaylists->VideoFiles" ' +
+      'LEFT JOIN "videoFile" AS "VideoStreamingPlaylists->VideoFiles" ' +
         'ON "VideoStreamingPlaylists->VideoFiles"."videoStreamingPlaylistId" = "VideoStreamingPlaylists"."id"'
     )
 
