@@ -27,7 +27,8 @@ export class VideosModelListQueryBuilder extends AbstractVideosModelQueryBuilder
     this.buildInnerQuery(options)
     this.buildListQueryFromIdsQuery(options)
 
-    return this.runQuery(undefined).then(rows => this.videoModelBuilder.buildVideosFromRows(rows))
+    return this.runQuery()
+      .then(rows => this.videoModelBuilder.buildVideosFromRows(rows))
   }
 
   private buildInnerQuery (options: BuildVideosListQueryOptions) {

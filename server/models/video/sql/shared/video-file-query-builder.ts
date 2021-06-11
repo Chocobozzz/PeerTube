@@ -18,13 +18,13 @@ export class VideoFileQueryBuilder extends AbstractVideosModelQueryBuilder {
   queryWebTorrentVideos (options: BuildVideoGetQueryOptions) {
     this.buildWebtorrentFilesQuery(options)
 
-    return this.runQuery(options.transaction)
+    return this.runQuery(options)
   }
 
   queryStreamingPlaylistVideos (options: BuildVideoGetQueryOptions) {
     this.buildVideoStreamingPlaylistFilesQuery(options)
 
-    return this.runQuery(options.transaction)
+    return this.runQuery(options)
   }
 
   private buildWebtorrentFilesQuery (options: BuildVideoGetQueryOptions) {
@@ -34,11 +34,11 @@ export class VideoFileQueryBuilder extends AbstractVideosModelQueryBuilder {
 
     this.includeWebtorrentFiles(true)
 
-    if (options.forGetAPI === true) {
+    if (this.shouldIncludeRedundancies(options)) {
       this.includeWebTorrentRedundancies()
     }
 
-    this.whereId(options.id)
+    this.whereId(options)
 
     this.query = this.buildQuery()
   }
@@ -50,16 +50,20 @@ export class VideoFileQueryBuilder extends AbstractVideosModelQueryBuilder {
 
     this.includeStreamingPlaylistFiles(true)
 
-    if (options.forGetAPI === true) {
+    if (this.shouldIncludeRedundancies(options)) {
       this.includeStreamingPlaylistRedundancies()
     }
 
-    this.whereId(options.id)
+    this.whereId(options)
 
     this.query = this.buildQuery()
   }
 
   private buildQuery () {
     return `${this.buildSelect()} FROM "video" ${this.joins} ${this.where}`
+  }
+
+  private shouldIncludeRedundancies (options: BuildVideoGetQueryOptions) {
+    return options.type === 'api'
   }
 }

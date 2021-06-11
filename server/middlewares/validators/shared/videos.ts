@@ -8,7 +8,7 @@ import {
   MVideoAccountLight,
   MVideoFormattableDetails,
   MVideoFullLight,
-  MVideoIdThumbnail,
+  MVideoId,
   MVideoImmutable,
   MVideoThumbnail,
   MVideoWithRights
@@ -43,15 +43,11 @@ async function doesVideoExist (id: number | string, res: Response, fetchType: Vi
       break
 
     case 'id':
-      res.locals.videoId = video as MVideoIdThumbnail
+      res.locals.videoId = video as MVideoId
       break
 
     case 'only-video':
       res.locals.onlyVideo = video as MVideoThumbnail
-      break
-
-    case 'only-video-with-rights':
-      res.locals.onlyVideoWithRights = video as MVideoWithRights
       break
   }
 

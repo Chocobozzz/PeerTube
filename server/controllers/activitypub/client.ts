@@ -78,12 +78,12 @@ activityPubClientRouter.get('/accounts?/:name/dislikes/:videoId',
 activityPubClientRouter.get('/videos/watch/:id',
   executeIfActivityPub,
   asyncMiddleware(cacheRoute()(ROUTE_CACHE_LIFETIME.ACTIVITY_PUB.VIDEOS)),
-  asyncMiddleware(videosCustomGetValidator('only-video-with-rights')),
+  asyncMiddleware(videosCustomGetValidator('all')),
   asyncMiddleware(videoController)
 )
 activityPubClientRouter.get('/videos/watch/:id/activity',
   executeIfActivityPub,
-  asyncMiddleware(videosCustomGetValidator('only-video-with-rights')),
+  asyncMiddleware(videosCustomGetValidator('all')),
   asyncMiddleware(videoController)
 )
 activityPubClientRouter.get('/videos/watch/:id/announces',
@@ -222,8 +222,7 @@ function getAccountVideoRateFactory (rateType: VideoRateType) {
 }
 
 async function videoController (req: express.Request, res: express.Response) {
-  // We need more attributes
-  const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(res.locals.onlyVideoWithRights.id)
+  const video = res.locals.videoAll
 
   if (redirectIfNotOwned(video.url, res)) return
 

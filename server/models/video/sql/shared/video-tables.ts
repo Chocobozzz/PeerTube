@@ -10,6 +10,10 @@ export class VideoTables {
 
   }
 
+  getChannelAttributesForUser () {
+    return [ 'id', 'accountId' ]
+  }
+
   getChannelAttributes () {
     let attributeKeys = [
       'id',
@@ -27,6 +31,10 @@ export class VideoTables {
     }
 
     return attributeKeys
+  }
+
+  getUserAccountAttributes () {
+    return [ 'id', 'userId' ]
   }
 
   getAccountAttributes () {

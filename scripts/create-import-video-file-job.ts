@@ -36,7 +36,7 @@ async function run () {
     return
   }
 
-  const video = await VideoModel.loadByUUID(options.video)
+  const video = await VideoModel.load(options.video)
   if (!video) throw new Error('Video not found.')
   if (video.isOwned() === false) throw new Error('Cannot import files of a non owned video.')
 
@@ -45,7 +45,7 @@ async function run () {
     filePath: resolve(options.import)
   }
 
-  await JobQueue.Instance.init()
+  JobQueue.Instance.init()
   await JobQueue.Instance.createJobWithPromise({ type: 'video-file-import', payload: dataInput })
   console.log('Import job for video %s created.', video.uuid)
 }

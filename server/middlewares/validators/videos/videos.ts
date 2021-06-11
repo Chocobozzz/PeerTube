@@ -4,7 +4,7 @@ import { getResumableUploadPath } from '@server/helpers/upload'
 import { isAbleToUploadVideo } from '@server/lib/user'
 import { getServerActor } from '@server/models/application/application'
 import { ExpressPromiseHandler } from '@server/types/express'
-import { MUserAccountId, MVideoWithRights } from '@server/types/models'
+import { MUserAccountId, MVideoFullLight } from '@server/types/models'
 import { ServerErrorCode, UserRight, VideoChangeOwnershipStatus, VideoPrivacy } from '../../../../shared'
 import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import { VideoChangeOwnershipAccept } from '../../../../shared/models/videos/change-ownership/video-change-ownership-accept.model'
@@ -258,7 +258,7 @@ async function checkVideoFollowConstraints (req: express.Request, res: express.R
 }
 
 const videosCustomGetValidator = (
-  fetchType: 'for-api' | 'all' | 'only-video' | 'only-video-with-rights' | 'only-immutable-attributes',
+  fetchType: 'for-api' | 'all' | 'only-video' | 'only-immutable-attributes',
   authenticateInQuery = false
 ) => {
   return [
@@ -273,7 +273,7 @@ const videosCustomGetValidator = (
       // Controllers does not need to check video rights
       if (fetchType === 'only-immutable-attributes') return next()
 
-      const video = getVideoWithAttributes(res) as MVideoWithRights
+      const video = getVideoWithAttributes(res) as MVideoFullLight
 
       // Video private or blacklisted
       if (video.requiresAuth()) {

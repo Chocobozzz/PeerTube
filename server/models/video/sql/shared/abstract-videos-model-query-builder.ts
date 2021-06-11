@@ -80,6 +80,18 @@ export class AbstractVideosModelQueryBuilder extends AbstractVideosQueryBuilder 
     }
   }
 
+  protected includeOwnerUser () {
+    this.addJoin('INNER JOIN "videoChannel" AS "VideoChannel" ON "video"."channelId" = "VideoChannel"."id"')
+    this.addJoin('INNER JOIN "account" AS "VideoChannel->Account" ON "VideoChannel"."accountId" = "VideoChannel->Account"."id"')
+
+    this.attributes = {
+      ...this.attributes,
+
+      ...this.buildAttributesObject('VideoChannel', this.tables.getChannelAttributes()),
+      ...this.buildAttributesObject('VideoChannel->Account', this.tables.getUserAccountAttributes())
+    }
+  }
+
   protected includeThumbnails () {
     this.addJoin('LEFT OUTER JOIN "thumbnail" AS "Thumbnails" ON "video"."id" = "Thumbnails"."videoId"')
 
@@ -269,14 +281,20 @@ export class AbstractVideosModelQueryBuilder extends AbstractVideosQueryBuilder 
     return result
   }
 
-  protected whereId (id: string | number) {
-    if (validator.isInt('' + id)) {
+  protected whereId (options: { id?: string | number, url?: string }) {
+    if (options.url) {
+      this.where = 'WHERE "video"."url" = :videoUrl'
+      this.replacements.videoUrl = options.url
+      return
+    }
+
+    if (validator.isInt('' + options.id)) {
       this.where = 'WHERE "video".id = :videoId'
     } else {
       this.where = 'WHERE uuid = :videoId'
     }
 
-    this.replacements.videoId = id
+    this.replacements.videoId = options.id
   }
 
   protected addJoin (join: string) {

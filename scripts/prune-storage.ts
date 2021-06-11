@@ -89,7 +89,7 @@ async function pruneDirectory (directory: string, existFun: ExistFun) {
 function doesVideoExist (keepOnlyOwned: boolean) {
   return async (file: string) => {
     const uuid = getUUIDFromFilename(file)
-    const video = await VideoModel.loadByUUID(uuid)
+    const video = await VideoModel.load(uuid)
 
     return video && (keepOnlyOwned === false || video.isOwned())
   }

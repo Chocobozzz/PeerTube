@@ -1,5 +1,4 @@
 
-import { logger } from '@server/helpers/logger'
 import { AccountModel } from '@server/models/account/account'
 import { ActorModel } from '@server/models/actor/actor'
 import { ActorImageModel } from '@server/models/actor/actor-image'
@@ -56,7 +55,7 @@ export class VideoModelBuilder {
     this.reinit()
 
     for (const row of rows) {
-      this.buildVideo(row)
+      this.buildVideoAndAccount(row)
 
       const videoModel = this.videosMemo[row.id]
 
@@ -131,22 +130,10 @@ export class VideoModelBuilder {
     }
   }
 
-  private buildVideo (row: SQLRow) {
+  private buildVideoAndAccount (row: SQLRow) {
     if (this.videosMemo[row.id]) return
 
-    // Build Channel
-    const channelModel = new VideoChannelModel(this.grab(row, this.tables.getChannelAttributes(), 'VideoChannel'), this.buildOpts)
-    channelModel.Actor = this.buildActor(row, 'VideoChannel')
-
-    const accountModel = new AccountModel(this.grab(row, this.tables.getAccountAttributes(), 'VideoChannel.Account'), this.buildOpts)
-    accountModel.Actor = this.buildActor(row, 'VideoChannel.Account')
-
-    channelModel.Account = accountModel
-
     const videoModel = new VideoModel(this.grab(row, this.tables.getVideoAttributes(), ''), this.buildOpts)
-    videoModel.VideoChannel = channelModel
-
-    this.videosMemo[row.id] = videoModel
 
     videoModel.UserVideoHistories = []
     videoModel.Thumbnails = []
@@ -155,8 +142,27 @@ export class VideoModelBuilder {
     videoModel.Tags = []
     videoModel.Trackers = []
 
+    this.buildAccount(row, videoModel)
+
+    this.videosMemo[row.id] = videoModel
+
     // Keep rows order
     this.videos.push(videoModel)
+  }
+
+  private buildAccount (row: SQLRow, videoModel: VideoModel) {
+    const id = row['VideoChannel.Account.id']
+    if (!id) return
+
+    const channelModel = new VideoChannelModel(this.grab(row, this.tables.getChannelAttributes(), 'VideoChannel'), this.buildOpts)
+    channelModel.Actor = this.buildActor(row, 'VideoChannel')
+
+    const accountModel = new AccountModel(this.grab(row, this.tables.getAccountAttributes(), 'VideoChannel.Account'), this.buildOpts)
+    accountModel.Actor = this.buildActor(row, 'VideoChannel.Account')
+
+    channelModel.Account = accountModel
+
+    videoModel.VideoChannel = channelModel
   }
 
   private buildActor (row: SQLRow, prefix: string) {

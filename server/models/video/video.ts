@@ -88,13 +88,12 @@ import {
   MVideoFormattableDetails,
   MVideoForUser,
   MVideoFullLight,
-  MVideoIdThumbnail,
+  MVideoId,
   MVideoImmutable,
   MVideoThumbnail,
   MVideoThumbnailBlacklist,
   MVideoWithAllFiles,
-  MVideoWithFile,
-  MVideoWithRights
+  MVideoWithFile
 } from '../../types/models'
 import { MThumbnail } from '../../types/models/video/thumbnail'
 import { MVideoFile, MVideoFileStreamingPlaylistVideo } from '../../types/models/video/video-file'
@@ -1301,27 +1300,16 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     return VideoModel.count(options)
   }
 
-  static load (id: number | string, t?: Transaction): Promise<MVideoThumbnail> {
-    const where = buildWhereIdOrUUID(id)
-    const options = {
-      where,
-      transaction: t
-    }
+  static load (id: number | string, transaction?: Transaction): Promise<MVideoThumbnail> {
+    const queryBuilder = new VideosModelGetQueryBuilder(VideoModel.sequelize)
 
-    return VideoModel.scope(ScopeNames.WITH_THUMBNAILS).findOne(options)
+    return queryBuilder.queryVideo({ id, transaction, type: 'thumbnails' })
   }
 
-  static loadWithBlacklist (id: number | string, t?: Transaction): Promise<MVideoThumbnailBlacklist> {
-    const where = buildWhereIdOrUUID(id)
-    const options = {
-      where,
-      transaction: t
-    }
+  static loadWithBlacklist (id: number | string, transaction?: Transaction): Promise<MVideoThumbnailBlacklist> {
+    const queryBuilder = new VideosModelGetQueryBuilder(VideoModel.sequelize)
 
-    return VideoModel.scope([
-      ScopeNames.WITH_THUMBNAILS,
-      ScopeNames.WITH_BLACKLISTED
-    ]).findOne(options)
+    return queryBuilder.queryVideo({ id, transaction, type: 'thumbnails-blacklist' })
   }
 
   static loadImmutableAttributes (id: number | string, t?: Transaction): Promise<MVideoImmutable> {
@@ -1340,68 +1328,6 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
       deleteKey: 'video',
       fun
     })
-  }
-
-  static loadWithRights (id: number | string, t?: Transaction): Promise<MVideoWithRights> {
-    const where = buildWhereIdOrUUID(id)
-    const options = {
-      where,
-      transaction: t
-    }
-
-    return VideoModel.scope([
-      ScopeNames.WITH_BLACKLISTED,
-      ScopeNames.WITH_USER_ID
-    ]).findOne(options)
-  }
-
-  static loadOnlyId (id: number | string, t?: Transaction): Promise<MVideoIdThumbnail> {
-    const where = buildWhereIdOrUUID(id)
-
-    const options = {
-      attributes: [ 'id' ],
-      where,
-      transaction: t
-    }
-
-    return VideoModel.scope(ScopeNames.WITH_THUMBNAILS).findOne(options)
-  }
-
-  static loadWithFiles (id: number | string, t?: Transaction, logging?: boolean): Promise<MVideoWithAllFiles> {
-    const where = buildWhereIdOrUUID(id)
-
-    const query = {
-      where,
-      transaction: t,
-      logging
-    }
-
-    return VideoModel.scope([
-      ScopeNames.WITH_WEBTORRENT_FILES,
-      ScopeNames.WITH_STREAMING_PLAYLISTS,
-      ScopeNames.WITH_THUMBNAILS
-    ]).findOne(query)
-  }
-
-  static loadByUUID (uuid: string): Promise<MVideoThumbnail> {
-    const options = {
-      where: {
-        uuid
-      }
-    }
-
-    return VideoModel.scope(ScopeNames.WITH_THUMBNAILS).findOne(options)
-  }
-
-  static loadByUrl (url: string, transaction?: Transaction): Promise<MVideoThumbnail> {
-    const query: FindOptions = {
-      where: {
-        url
-      },
-      transaction
-    }
-
-    return VideoModel.scope(ScopeNames.WITH_THUMBNAILS).findOne(query)
   }
 
   static loadByUrlImmutableAttributes (url: string, transaction?: Transaction): Promise<MVideoImmutable> {
@@ -1424,50 +1350,34 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     })
   }
 
-  static loadByUrlAndPopulateAccount (url: string, transaction?: Transaction): Promise<MVideoAccountLightBlacklistAllFiles> {
-    const query: FindOptions = {
-      where: {
-        url
-      },
-      transaction
-    }
+  static loadOnlyId (id: number | string, transaction?: Transaction): Promise<MVideoId> {
+    const queryBuilder = new VideosModelGetQueryBuilder(VideoModel.sequelize)
 
-    return VideoModel.scope([
-      ScopeNames.WITH_ACCOUNT_DETAILS,
-      ScopeNames.WITH_WEBTORRENT_FILES,
-      ScopeNames.WITH_STREAMING_PLAYLISTS,
-      ScopeNames.WITH_THUMBNAILS,
-      ScopeNames.WITH_BLACKLISTED
-    ]).findOne(query)
+    return queryBuilder.queryVideo({ id, transaction, type: 'id' })
+  }
+
+  static loadWithFiles (id: number | string, transaction?: Transaction, logging?: boolean): Promise<MVideoWithAllFiles> {
+    const queryBuilder = new VideosModelGetQueryBuilder(VideoModel.sequelize)
+
+    return queryBuilder.queryVideo({ id, transaction, type: 'all-files', logging })
+  }
+
+  static loadByUrl (url: string, transaction?: Transaction): Promise<MVideoThumbnail> {
+    const queryBuilder = new VideosModelGetQueryBuilder(VideoModel.sequelize)
+
+    return queryBuilder.queryVideo({ url, transaction, type: 'thumbnails' })
+  }
+
+  static loadByUrlAndPopulateAccount (url: string, transaction?: Transaction): Promise<MVideoAccountLightBlacklistAllFiles> {
+    const queryBuilder = new VideosModelGetQueryBuilder(VideoModel.sequelize)
+
+    return queryBuilder.queryVideo({ url, transaction, type: 'account-blacklist-files' })
   }
 
   static loadAndPopulateAccountAndServerAndTags (id: number | string, t?: Transaction, userId?: number): Promise<MVideoFullLight> {
-    const where = buildWhereIdOrUUID(id)
+    const queryBuilder = new VideosModelGetQueryBuilder(VideoModel.sequelize)
 
-    const options = {
-      order: [ [ 'Tags', 'name', 'ASC' ] ] as any,
-      where,
-      transaction: t
-    }
-
-    const scopes: (string | ScopeOptions)[] = [
-      ScopeNames.WITH_TAGS,
-      ScopeNames.WITH_BLACKLISTED,
-      ScopeNames.WITH_ACCOUNT_DETAILS,
-      ScopeNames.WITH_SCHEDULED_UPDATE,
-      ScopeNames.WITH_WEBTORRENT_FILES,
-      ScopeNames.WITH_STREAMING_PLAYLISTS,
-      ScopeNames.WITH_THUMBNAILS,
-      ScopeNames.WITH_LIVE
-    ]
-
-    if (userId) {
-      scopes.push({ method: [ ScopeNames.WITH_USER_HISTORY, userId ] })
-    }
-
-    return VideoModel
-      .scope(scopes)
-      .findOne(options)
+    return queryBuilder.queryVideo({ id, transaction: t, type: 'full-light', userId })
   }
 
   static loadForGetAPI (parameters: {
@@ -1478,7 +1388,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     const { id, transaction, userId } = parameters
     const queryBuilder = new VideosModelGetQueryBuilder(VideoModel.sequelize)
 
-    return queryBuilder.queryVideos({ id, transaction, forGetAPI: true, userId })
+    return queryBuilder.queryVideo({ id, transaction, type: 'api', userId })
   }
 
   static async getStats () {

@@ -11,6 +11,7 @@ import {
   MVideoChangeOwnershipFull,
   MVideoFile,
   MVideoFormattableDetails,
+  MVideoId,
   MVideoImmutable,
   MVideoLive,
   MVideoPlaylistFull,
@@ -106,8 +107,7 @@ declare module 'express' {
       videoAll?: MVideoFullLight
       onlyImmutableVideo?: MVideoImmutable
       onlyVideo?: MVideoThumbnail
-      onlyVideoWithRights?: MVideoWithRights
-      videoId?: MVideoIdThumbnail
+      videoId?: MVideoId
 
       videoLive?: MVideoLive
 

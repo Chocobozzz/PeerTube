@@ -13,16 +13,17 @@ export class AbstractVideosQueryBuilder {
   protected query: string
   protected replacements: any = {}
 
-  protected runQuery (transaction?: Transaction) {
+  protected runQuery (options: { transaction?: Transaction, logging?: boolean } = {}) {
     logger.debug('Running videos query.', { query: this.query, replacements: this.replacements })
 
-    const options = {
-      transaction,
+    const queryOptions = {
+      transaction: options.transaction,
+      logging: options.logging,
       replacements: this.replacements,
       type: QueryTypes.SELECT as QueryTypes.SELECT,
       next: false
     }
 
-    return this.sequelize.query<any>(this.query, options)
+    return this.sequelize.query<any>(this.query, queryOptions)
   }
 }
