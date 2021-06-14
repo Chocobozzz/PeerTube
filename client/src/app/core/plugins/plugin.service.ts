@@ -190,9 +190,9 @@ export class PluginService implements ClientHook {
       },
 
       notifier: {
-        info: (text: string, title?: string, timeout?: number) => this.notifier.info(text, title, timeout),
-        error: (text: string, title?: string, timeout?: number) => this.notifier.error(text, title, timeout),
-        success: (text: string, title?: string, timeout?: number) => this.notifier.success(text, title, timeout)
+        info: (text: string, title?: string, timeout?: number) => this.zone.run(() => this.notifier.info(text, title, timeout)),
+        error: (text: string, title?: string, timeout?: number) => this.zone.run(() => this.notifier.error(text, title, timeout)),
+        success: (text: string, title?: string, timeout?: number) => this.zone.run(() => this.notifier.success(text, title, timeout))
       },
 
       showModal: (input: {
@@ -202,7 +202,7 @@ export class PluginService implements ClientHook {
         cancel?: { value: string, action?: () => void },
         confirm?: { value: string, action?: () => void }
       }) => {
-        this.customModal.show(input)
+        this.zone.run(() => this.customModal.show(input))
       },
 
       markdownRenderer: {
