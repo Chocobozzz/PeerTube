@@ -95,6 +95,6 @@
     "Done": "انجام شد",
     "Caption Settings Dialog": "پنجره تنظیمات‌عنوان",
     "Beginning of dialog window. Escape will cancel and close the window.": "شروع پنجره گفتگو . برای ستن این پنجره دکمه escape را بزنید.",
-    "End of dialog window.": "انتهای پنجره دیالوگ",
-    "{1} is loading.": "{1}در حال بارگزاری"
+    "End of dialog window.": "انتهای پنجره دیالوگ.",
+    "{1} is loading.": "{1} در حال بارگیری است."
 }
