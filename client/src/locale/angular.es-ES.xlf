@@ -2760,7 +2760,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="8426539297729416784" datatype="html">
         <source>{VAR_SELECT, select, undefined {Unsubscribe} other {Unsubscribe from all channels} }</source>
-        <target state="translated">{VAR_SELECT, Selecciona, indefinido{Unsubscribe} other {Darse de baja de todos los canales} }</target>
+        <target state="translated">{VAR_SELECT, select, undefined {Unsubscribe} other {Darse de baja de todos los canales} }</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">34</context></context-group>
       </trans-unit>
       <trans-unit id="7215101881367554791">
