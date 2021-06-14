@@ -61,6 +61,8 @@ async function getOrCreateAPVideo (
   const { videoObject } = await fetchRemoteVideo(videoUrl)
   if (!videoObject) throw new Error('Cannot fetch remote video with url: ' + videoUrl)
 
+  if (videoObject.id !== videoUrl) return getOrCreateAPVideo({ ...options, fetchType: 'all', videoObject })
+
   try {
     const creator = new APVideoCreator(videoObject)
     const { autoBlacklisted, videoCreated } = await retryTransactionWrapper(creator.create.bind(creator), syncParam.thumbnail)
