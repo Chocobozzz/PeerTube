@@ -5,7 +5,6 @@ import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-c
 import {
   HTMLServerConfig,
   OAuth2ErrorCode,
-  PluginType,
   ResultList,
   UserRefreshToken,
   VideoCaption,
