@@ -2,8 +2,9 @@
 
 import 'mocha'
 import { omit } from 'lodash'
-import { join } from 'path'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import {
+  buildAbsoluteFixturePath,
   cleanupTests,
   createUser,
   flushAndRunServer,
@@ -22,9 +23,8 @@ import {
   checkBadSortPagination,
   checkBadStartPagination
 } from '../../../../shared/extra-utils/requests/check-api-params'
-import { getMagnetURI, getGoodVideoUrl } from '../../../../shared/extra-utils/videos/video-imports'
+import { getGoodVideoUrl, getMagnetURI } from '../../../../shared/extra-utils/videos/video-imports'
 import { VideoPrivacy } from '../../../../shared/models/videos/video-privacy.enum'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 describe('Test video imports API validator', function () {
   const path = '/api/v1/videos/imports'
@@ -201,7 +201,7 @@ describe('Test video imports API validator', function () {
     it('Should fail with an incorrect thumbnail file', async function () {
       const fields = baseCorrectParams
       const attaches = {
-        thumbnailfile: join(__dirname, '..', '..', 'fixtures', 'video_short.mp4')
+        thumbnailfile: buildAbsoluteFixturePath('video_short.mp4')
       }
 
       await makeUploadRequest({ url: server.url, path, token: server.accessToken, fields, attaches })
@@ -210,7 +210,7 @@ describe('Test video imports API validator', function () {
     it('Should fail with a big thumbnail file', async function () {
       const fields = baseCorrectParams
       const attaches = {
-        thumbnailfile: join(__dirname, '..', '..', 'fixtures', 'preview-big.png')
+        thumbnailfile: buildAbsoluteFixturePath('preview-big.png')
       }
 
       await makeUploadRequest({ url: server.url, path, token: server.accessToken, fields, attaches })
@@ -219,7 +219,7 @@ describe('Test video imports API validator', function () {
     it('Should fail with an incorrect preview file', async function () {
       const fields = baseCorrectParams
       const attaches = {
-        previewfile: join(__dirname, '..', '..', 'fixtures', 'video_short.mp4')
+        previewfile: buildAbsoluteFixturePath('video_short.mp4')
       }
 
       await makeUploadRequest({ url: server.url, path, token: server.accessToken, fields, attaches })
@@ -228,7 +228,7 @@ describe('Test video imports API validator', function () {
     it('Should fail with a big preview file', async function () {
       const fields = baseCorrectParams
       const attaches = {
-        previewfile: join(__dirname, '..', '..', 'fixtures', 'preview-big.png')
+        previewfile: buildAbsoluteFixturePath('preview-big.png')
       }
 
       await makeUploadRequest({ url: server.url, path, token: server.accessToken, fields, attaches })
@@ -237,7 +237,7 @@ describe('Test video imports API validator', function () {
     it('Should fail with an invalid torrent file', async function () {
       const fields = omit(baseCorrectParams, 'targetUrl')
       const attaches = {
-        torrentfile: join(__dirname, '..', '..', 'fixtures', 'avatar-big.png')
+        torrentfile: buildAbsoluteFixturePath('avatar-big.png')
       }
 
       await makeUploadRequest({ url: server.url, path, token: server.accessToken, fields, attaches })
@@ -312,7 +312,7 @@ describe('Test video imports API validator', function () {
 
       fields = omit(fields, 'magnetUri')
       const attaches = {
-        torrentfile: join(__dirname, '..', '..', 'fixtures', 'video-720p.torrent')
+        torrentfile: buildAbsoluteFixturePath('video-720p.torrent')
       }
 
       await makeUploadRequest({

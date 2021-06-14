@@ -326,7 +326,7 @@ describe('Test plugin filter hooks', function () {
     })
 
     it('Should blacklist on remote upload', async function () {
-      this.timeout(60000)
+      this.timeout(120000)
 
       const res = await uploadVideo(servers[1].url, servers[1].accessToken, { name: 'remote please blacklist me' })
       await waitJobs(servers)
@@ -335,7 +335,7 @@ describe('Test plugin filter hooks', function () {
     })
 
     it('Should blacklist on remote update', async function () {
-      this.timeout(60000)
+      this.timeout(120000)
 
       const res = await uploadVideo(servers[1].url, servers[1].accessToken, { name: 'video' })
       await waitJobs(servers)

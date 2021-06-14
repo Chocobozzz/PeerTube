@@ -54,6 +54,10 @@ describe('Test contact form', function () {
   })
 
   it('Should not be able to send another contact form because of the anti spam checker', async function () {
+    this.timeout(10000)
+
+    await wait(1000)
+
     await sendContactForm({
       url: server.url,
       fromEmail: 'toto@example.com',

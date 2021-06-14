@@ -5,6 +5,7 @@ import * as chai from 'chai'
 import { buildDigest } from '@server/helpers/peertube-crypto'
 import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import {
+  buildAbsoluteFixturePath,
   cleanupTests,
   closeAllSequelize,
   flushAndRunMultipleServers,
@@ -40,7 +41,7 @@ function setUpdatedAtOfServer (onServer: ServerInfo, ofServer: ServerInfo, updat
 }
 
 function getAnnounceWithoutContext (server: ServerInfo) {
-  const json = require('./json/peertube/announce-without-context.json')
+  const json = require(buildAbsoluteFixturePath('./ap-json/peertube/announce-without-context.json'))
   const result: typeof json = {}
 
   for (const key of Object.keys(json)) {
@@ -58,8 +59,8 @@ describe('Test ActivityPub security', function () {
   let servers: ServerInfo[]
   let url: string
 
-  const keys = require('./json/peertube/keys.json')
-  const invalidKeys = require('./json/peertube/invalid-keys.json')
+  const keys = require(buildAbsoluteFixturePath('./ap-json/peertube/keys.json'))
+  const invalidKeys = require(buildAbsoluteFixturePath('./ap-json/peertube/invalid-keys.json'))
   const baseHttpSignature = () => ({
     algorithm: HTTP_SIGNATURE.ALGORITHM,
     authorizationHeaderName: HTTP_SIGNATURE.HEADER_NAME,

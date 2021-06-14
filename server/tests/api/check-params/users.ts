@@ -2,12 +2,12 @@
 
 import 'mocha'
 import { omit } from 'lodash'
-import { join } from 'path'
 import { User, UserRole } from '../../../../shared'
 import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import {
   addVideoChannel,
   blockUser,
+  buildAbsoluteFixturePath,
   cleanupTests,
   createUser,
   deleteMe,
@@ -600,7 +600,7 @@ describe('Test users API validators', function () {
     it('Should fail without an incorrect input file', async function () {
       const fields = {}
       const attaches = {
-        avatarfile: join(__dirname, '..', '..', 'fixtures', 'video_short.mp4')
+        avatarfile: buildAbsoluteFixturePath('video_short.mp4')
       }
       await makeUploadRequest({ url: server.url, path: path + '/me/avatar/pick', token: server.accessToken, fields, attaches })
     })
@@ -608,7 +608,7 @@ describe('Test users API validators', function () {
     it('Should fail with a big file', async function () {
       const fields = {}
       const attaches = {
-        avatarfile: join(__dirname, '..', '..', 'fixtures', 'avatar-big.png')
+        avatarfile: buildAbsoluteFixturePath('avatar-big.png')
       }
       await makeUploadRequest({ url: server.url, path: path + '/me/avatar/pick', token: server.accessToken, fields, attaches })
     })
@@ -616,7 +616,7 @@ describe('Test users API validators', function () {
     it('Should fail with an unauthenticated user', async function () {
       const fields = {}
       const attaches = {
-        avatarfile: join(__dirname, '..', '..', 'fixtures', 'avatar.png')
+        avatarfile: buildAbsoluteFixturePath('avatar.png')
       }
       await makeUploadRequest({
         url: server.url,
@@ -630,7 +630,7 @@ describe('Test users API validators', function () {
     it('Should succeed with the correct params', async function () {
       const fields = {}
       const attaches = {
-        avatarfile: join(__dirname, '..', '..', 'fixtures', 'avatar.png')
+        avatarfile: buildAbsoluteFixturePath('avatar.png')
       }
       await makeUploadRequest({
         url: server.url,

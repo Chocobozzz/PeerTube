@@ -6,13 +6,14 @@ import { buildRequestStub } from '../../../../shared/extra-utils/miscs/stubs'
 import { isHTTPSignatureVerified, isJsonLDSignatureVerified, parseHTTPSignature } from '../../../helpers/peertube-crypto'
 import { cloneDeep } from 'lodash'
 import { buildSignedActivity } from '../../../helpers/activitypub'
+import { buildAbsoluteFixturePath } from '@shared/extra-utils'
 
 describe('Test activity pub helpers', function () {
   describe('When checking the Linked Signature', function () {
 
     it('Should fail with an invalid Mastodon signature', async function () {
-      const body = require('./json/mastodon/create-bad-signature.json')
-      const publicKey = require('./json/mastodon/public-key.json').publicKey
+      const body = require(buildAbsoluteFixturePath('./ap-json/mastodon/create-bad-signature.json'))
+      const publicKey = require(buildAbsoluteFixturePath('./ap-json/mastodon/public-key.json')).publicKey
       const fromActor = { publicKey, url: 'http://localhost:9002/accounts/peertube' }
 
       const result = await isJsonLDSignatureVerified(fromActor as any, body)
@@ -21,8 +22,8 @@ describe('Test activity pub helpers', function () {
     })
 
     it('Should fail with an invalid public key', async function () {
-      const body = require('./json/mastodon/create.json')
-      const publicKey = require('./json/mastodon/bad-public-key.json').publicKey
+      const body = require(buildAbsoluteFixturePath('./ap-json/mastodon/create.json'))
+      const publicKey = require(buildAbsoluteFixturePath('./ap-json/mastodon/bad-public-key.json')).publicKey
       const fromActor = { publicKey, url: 'http://localhost:9002/accounts/peertube' }
 
       const result = await isJsonLDSignatureVerified(fromActor as any, body)
@@ -31,8 +32,8 @@ describe('Test activity pub helpers', function () {
     })
 
     it('Should succeed with a valid Mastodon signature', async function () {
-      const body = require('./json/mastodon/create.json')
-      const publicKey = require('./json/mastodon/public-key.json').publicKey
+      const body = require(buildAbsoluteFixturePath('./ap-json/mastodon/create.json'))
+      const publicKey = require(buildAbsoluteFixturePath('./ap-json/mastodon/public-key.json')).publicKey
       const fromActor = { publicKey, url: 'http://localhost:9002/accounts/peertube' }
 
       const result = await isJsonLDSignatureVerified(fromActor as any, body)
@@ -41,8 +42,8 @@ describe('Test activity pub helpers', function () {
     })
 
     it('Should fail with an invalid PeerTube signature', async function () {
-      const keys = require('./json/peertube/invalid-keys.json')
-      const body = require('./json/peertube/announce-without-context.json')
+      const keys = require(buildAbsoluteFixturePath('./ap-json/peertube/invalid-keys.json'))
+      const body = require(buildAbsoluteFixturePath('./ap-json/peertube/announce-without-context.json'))
 
       const actorSignature = { url: 'http://localhost:9002/accounts/peertube', privateKey: keys.privateKey }
       const signedBody = await buildSignedActivity(actorSignature as any, body)
@@ -54,8 +55,8 @@ describe('Test activity pub helpers', function () {
     })
 
     it('Should succeed with a valid PeerTube signature', async function () {
-      const keys = require('./json/peertube/keys.json')
-      const body = require('./json/peertube/announce-without-context.json')
+      const keys = require(buildAbsoluteFixturePath('./ap-json/peertube/keys.json'))
+      const body = require(buildAbsoluteFixturePath('./ap-json/peertube/announce-without-context.json'))
 
       const actorSignature = { url: 'http://localhost:9002/accounts/peertube', privateKey: keys.privateKey }
       const signedBody = await buildSignedActivity(actorSignature as any, body)
@@ -73,12 +74,12 @@ describe('Test activity pub helpers', function () {
       req.method = 'POST'
       req.url = '/accounts/ronan/inbox'
 
-      const mastodonObject = cloneDeep(require('./json/mastodon/bad-http-signature.json'))
+      const mastodonObject = cloneDeep(require(buildAbsoluteFixturePath('./ap-json/mastodon/bad-http-signature.json')))
       req.body = mastodonObject.body
       req.headers = mastodonObject.headers
 
       const parsed = parseHTTPSignature(req, 3600 * 1000 * 365 * 10)
-      const publicKey = require('./json/mastodon/public-key.json').publicKey
+      const publicKey = require(buildAbsoluteFixturePath('./ap-json/mastodon/public-key.json')).publicKey
 
       const actor = { publicKey }
       const verified = isHTTPSignatureVerified(parsed, actor as any)
@@ -91,12 +92,12 @@ describe('Test activity pub helpers', function () {
       req.method = 'POST'
       req.url = '/accounts/ronan/inbox'
 
-      const mastodonObject = cloneDeep(require('./json/mastodon/http-signature.json'))
+      const mastodonObject = cloneDeep(require(buildAbsoluteFixturePath('./ap-json/mastodon/http-signature.json')))
       req.body = mastodonObject.body
       req.headers = mastodonObject.headers
 
       const parsed = parseHTTPSignature(req, 3600 * 1000 * 365 * 10)
-      const publicKey = require('./json/mastodon/bad-public-key.json').publicKey
+      const publicKey = require(buildAbsoluteFixturePath('./ap-json/mastodon/bad-public-key.json')).publicKey
 
       const actor = { publicKey }
       const verified = isHTTPSignatureVerified(parsed, actor as any)
@@ -109,7 +110,7 @@ describe('Test activity pub helpers', function () {
       req.method = 'POST'
       req.url = '/accounts/ronan/inbox'
 
-      const mastodonObject = cloneDeep(require('./json/mastodon/http-signature.json'))
+      const mastodonObject = cloneDeep(require(buildAbsoluteFixturePath('./ap-json/mastodon/http-signature.json')))
       req.body = mastodonObject.body
       req.headers = mastodonObject.headers
 
@@ -128,7 +129,7 @@ describe('Test activity pub helpers', function () {
       req.method = 'POST'
       req.url = '/accounts/ronan/inbox'
 
-      const mastodonObject = cloneDeep(require('./json/mastodon/http-signature.json'))
+      const mastodonObject = cloneDeep(require(buildAbsoluteFixturePath('./ap-json/mastodon/http-signature.json')))
       req.body = mastodonObject.body
       req.headers = mastodonObject.headers
       req.headers = 'Signature ' + mastodonObject.headers
@@ -148,12 +149,12 @@ describe('Test activity pub helpers', function () {
       req.method = 'POST'
       req.url = '/accounts/ronan/inbox'
 
-      const mastodonObject = cloneDeep(require('./json/mastodon/http-signature.json'))
+      const mastodonObject = cloneDeep(require(buildAbsoluteFixturePath('./ap-json/mastodon/http-signature.json')))
       req.body = mastodonObject.body
       req.headers = mastodonObject.headers
 
       const parsed = parseHTTPSignature(req, 3600 * 1000 * 365 * 10)
-      const publicKey = require('./json/mastodon/public-key.json').publicKey
+      const publicKey = require(buildAbsoluteFixturePath('./ap-json/mastodon/public-key.json')).publicKey
 
       const actor = { publicKey }
       const verified = isHTTPSignatureVerified(parsed, actor as any)
