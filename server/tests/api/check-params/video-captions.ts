@@ -1,7 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
+
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import {
+  buildAbsoluteFixturePath,
   cleanupTests,
   createUser,
   flushAndRunServer,
@@ -13,9 +16,7 @@ import {
   uploadVideo,
   userLogin
 } from '../../../../shared/extra-utils'
-import { join } from 'path'
 import { createVideoCaption } from '../../../../shared/extra-utils/videos/video-captions'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 describe('Test video captions API validator', function () {
   const path = '/api/v1/videos/'
@@ -51,7 +52,7 @@ describe('Test video captions API validator', function () {
   describe('When adding video caption', function () {
     const fields = { }
     const attaches = {
-      captionfile: join(__dirname, '..', '..', 'fixtures', 'subtitle-good1.vtt')
+      captionfile: buildAbsoluteFixturePath('subtitle-good1.vtt')
     }
 
     it('Should fail without a valid uuid', async function () {
@@ -129,7 +130,7 @@ describe('Test video captions API validator', function () {
     // We accept any file now
     // it('Should fail with an invalid captionfile extension', async function () {
     //   const attaches = {
-    //     'captionfile': join(__dirname, '..', '..', 'fixtures', 'subtitle-bad.txt')
+    //     'captionfile': buildAbsoluteFixturePath('subtitle-bad.txt')
     //   }
     //
     //   const captionPath = path + videoUUID + '/captions/fr'
@@ -171,7 +172,7 @@ describe('Test video captions API validator', function () {
     // We don't check the file validity yet
     // it('Should fail with an invalid captionfile srt', async function () {
     //   const attaches = {
-    //     'captionfile': join(__dirname, '..', '..', 'fixtures', 'subtitle-bad.srt')
+    //     'captionfile': buildAbsoluteFixturePath('subtitle-bad.srt')
     //   }
     //
     //   const captionPath = path + videoUUID + '/captions/fr'

@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
+import 'mocha'
 import * as chai from 'chai'
 import { omit } from 'lodash'
-import 'mocha'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import {
+  buildAbsoluteFixturePath,
   cleanupTests,
   createUser,
   deleteVideoChannel,
@@ -23,9 +25,7 @@ import {
   checkBadSortPagination,
   checkBadStartPagination
 } from '../../../../shared/extra-utils/requests/check-api-params'
-import { join } from 'path'
 import { VideoChannelUpdate } from '../../../../shared/models/videos'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const expect = chai.expect
 
@@ -246,7 +246,7 @@ describe('Test video channels API validator', function () {
       for (const type of types) {
         const fields = {}
         const attaches = {
-          [type + 'file']: join(__dirname, '..', '..', 'fixtures', 'video_short.mp4')
+          [type + 'file']: buildAbsoluteFixturePath('video_short.mp4')
         }
 
         await makeUploadRequest({ url: server.url, path: `${path}/${type}/pick`, token: server.accessToken, fields, attaches })
@@ -257,7 +257,7 @@ describe('Test video channels API validator', function () {
       for (const type of types) {
         const fields = {}
         const attaches = {
-          [type + 'file']: join(__dirname, '..', '..', 'fixtures', 'avatar-big.png')
+          [type + 'file']: buildAbsoluteFixturePath('avatar-big.png')
         }
         await makeUploadRequest({ url: server.url, path: `${path}/${type}/pick`, token: server.accessToken, fields, attaches })
       }
@@ -267,7 +267,7 @@ describe('Test video channels API validator', function () {
       for (const type of types) {
         const fields = {}
         const attaches = {
-          [type + 'file']: join(__dirname, '..', '..', 'fixtures', 'avatar.png')
+          [type + 'file']: buildAbsoluteFixturePath('avatar.png')
         }
         await makeUploadRequest({
           url: server.url,
@@ -283,7 +283,7 @@ describe('Test video channels API validator', function () {
       for (const type of types) {
         const fields = {}
         const attaches = {
-          [type + 'file']: join(__dirname, '..', '..', 'fixtures', 'avatar.png')
+          [type + 'file']: buildAbsoluteFixturePath('avatar.png')
         }
         await makeUploadRequest({
           url: server.url,

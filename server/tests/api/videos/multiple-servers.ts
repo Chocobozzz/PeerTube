@@ -2,11 +2,11 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { join } from 'path'
 import * as request from 'supertest'
 import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import {
   addVideoChannel,
+  buildAbsoluteFixturePath,
   checkTmpIsEmpty,
   checkVideoFilesWereRemoved,
   cleanupTests,
@@ -1018,9 +1018,7 @@ describe('Test multiple servers', function () {
         .field('privacy', '1')
         .field('channelId', '1')
 
-      const filePath = join(__dirname, '..', '..', 'fixtures', 'video_short.webm')
-
-      await req.attach('videofile', filePath)
+      await req.attach('videofile', buildAbsoluteFixturePath('video_short.webm'))
                .expect(HttpStatusCode.OK_200)
 
       await waitJobs(servers)

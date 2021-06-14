@@ -2,9 +2,10 @@
 
 import 'mocha'
 import { omit } from 'lodash'
-import { join } from 'path'
 import { LiveVideo, VideoPrivacy } from '@shared/models'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import {
+  buildAbsoluteFixturePath,
   cleanupTests,
   createUser,
   flushAndRunServer,
@@ -24,7 +25,6 @@ import {
   userLogin,
   waitUntilLivePublished
 } from '../../../../shared/extra-utils'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 describe('Test video lives API validator', function () {
   const path = '/api/v1/videos/live'
@@ -180,7 +180,7 @@ describe('Test video lives API validator', function () {
     it('Should fail with an incorrect thumbnail file', async function () {
       const fields = baseCorrectParams
       const attaches = {
-        thumbnailfile: join(__dirname, '..', '..', 'fixtures', 'video_short.mp4')
+        thumbnailfile: buildAbsoluteFixturePath('video_short.mp4')
       }
 
       await makeUploadRequest({ url: server.url, path, token: server.accessToken, fields, attaches })
@@ -189,7 +189,7 @@ describe('Test video lives API validator', function () {
     it('Should fail with a big thumbnail file', async function () {
       const fields = baseCorrectParams
       const attaches = {
-        thumbnailfile: join(__dirname, '..', '..', 'fixtures', 'preview-big.png')
+        thumbnailfile: buildAbsoluteFixturePath('preview-big.png')
       }
 
       await makeUploadRequest({ url: server.url, path, token: server.accessToken, fields, attaches })
@@ -198,7 +198,7 @@ describe('Test video lives API validator', function () {
     it('Should fail with an incorrect preview file', async function () {
       const fields = baseCorrectParams
       const attaches = {
-        previewfile: join(__dirname, '..', '..', 'fixtures', 'video_short.mp4')
+        previewfile: buildAbsoluteFixturePath('video_short.mp4')
       }
 
       await makeUploadRequest({ url: server.url, path, token: server.accessToken, fields, attaches })
@@ -207,7 +207,7 @@ describe('Test video lives API validator', function () {
     it('Should fail with a big preview file', async function () {
       const fields = baseCorrectParams
       const attaches = {
-        previewfile: join(__dirname, '..', '..', 'fixtures', 'preview-big.png')
+        previewfile: buildAbsoluteFixturePath('preview-big.png')
       }
 
       await makeUploadRequest({ url: server.url, path, token: server.accessToken, fields, attaches })
