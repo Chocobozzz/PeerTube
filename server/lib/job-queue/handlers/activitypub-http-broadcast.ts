@@ -3,7 +3,7 @@ import * as Bull from 'bull'
 import { ActivitypubHttpBroadcastPayload } from '@shared/models'
 import { logger } from '../../../helpers/logger'
 import { doRequest } from '../../../helpers/requests'
-import { BROADCAST_CONCURRENCY, REQUEST_TIMEOUT } from '../../../initializers/constants'
+import { BROADCAST_CONCURRENCY } from '../../../initializers/constants'
 import { ActorFollowScoreCache } from '../../files-cache'
 import { buildGlobalHeaders, buildSignedRequestOptions, computeBody } from './utils/activitypub-http-utils'
 
@@ -19,7 +19,6 @@ async function processActivityPubHttpBroadcast (job: Bull.Job) {
     method: 'POST' as 'POST',
     json: body,
     httpSignature: httpSignatureOptions,
-    timeout: REQUEST_TIMEOUT,
     headers: buildGlobalHeaders(body)
   }
 
