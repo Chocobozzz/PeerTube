@@ -152,7 +152,7 @@ const JOB_ATTEMPTS: { [id in JobType]: number } = {
 const JOB_CONCURRENCY: { [id in Exclude<JobType, 'video-transcoding' | 'video-import'>]: number } = {
   'activitypub-http-broadcast': 1,
   'activitypub-http-unicast': 5,
-  'activitypub-http-fetcher': 1,
+  'activitypub-http-fetcher': 3,
   'activitypub-cleaner': 1,
   'activitypub-follow': 1,
   'video-file-import': 1,
