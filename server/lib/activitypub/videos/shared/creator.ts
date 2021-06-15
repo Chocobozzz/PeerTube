@@ -23,7 +23,7 @@ export class APVideoCreator extends APVideoAbstractBuilder {
     const channelActor = await this.getOrCreateVideoChannelFromVideoObject()
     const channel = channelActor.VideoChannel
 
-    const videoData = await getVideoAttributesFromObject(channel, this.videoObject, this.videoObject.to)
+    const videoData = getVideoAttributesFromObject(channel, this.videoObject, this.videoObject.to)
     const video = VideoModel.build(videoData) as MVideoThumbnail
 
     const promiseThumbnail = this.tryToGenerateThumbnail(video)
