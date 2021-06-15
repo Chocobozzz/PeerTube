@@ -11,15 +11,10 @@
   }
 
   .contact-admin {
-    @include peertube-button;
+    @include peertube-button-link;
     @include orange-button;
 
     height: fit-content;
-
-    &:hover,
-    &:active {
-      text-decoration: none;
-    }
   }
 }
 
@@ -57,6 +52,10 @@
 .block {
   margin-bottom: 75px;
   font-size: 15px;
+}
+
+.short-description {
+  margin-top: 10px;
 }
 
 .short-description .dedicated-to-nsfw {

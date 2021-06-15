@@ -27,13 +27,20 @@ const aboutRoutes: Routes = [
         },
         resolve: {
           instanceData: AboutInstanceResolver
+        }
+      },
+      {
+        path: 'contact',
+        component: AboutInstanceComponent,
+        data: {
+          meta: {
+            title: $localize`Contact`
+          },
+          isContact: true
         },
-        children: [
-          {
-            path: 'contact',
-            component: ContactAdminModalComponent
-          }
-        ]
+        resolve: {
+          instanceData: AboutInstanceResolver
+        }
       },
       {
         path: 'peertube',

@@ -4,7 +4,7 @@
     <div class="about-instance-title">
       <h1 i18n class="title">About {{ instanceName }}</h1>
 
-      <a routerLink="contact" i18n *ngIf="isContactFormEnabled" class="contact-admin">Contact administrator</a>
+      <a routerLink="/about/contact" i18n *ngIf="isContactFormEnabled" class="contact-admin">Contact administrator</a>
     </div>
 
     <div class="instance-badges" *ngIf="categories.length !== 0 || languages.length !== 0">
@@ -218,4 +218,4 @@
   </div>
 </div>
 
-<my-contact-admin-modal></my-contact-admin-modal>
+<my-contact-admin-modal #contactAdminModal></my-contact-admin-modal>

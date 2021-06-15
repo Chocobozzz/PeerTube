@@ -1,13 +1,12 @@
 import { ViewportScroller } from '@angular/common'
 import { AfterViewChecked, Component, ElementRef, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
-import { ContactAdminModalComponent } from '@app/+about/about-instance/contact-admin-modal.component'
 import { Notifier, ServerService } from '@app/core'
-import { CustomMarkupService } from '@app/shared/shared-custom-markup'
 import { InstanceService } from '@app/shared/shared-instance'
-import { About, HTMLServerConfig, ServerConfig } from '@shared/models'
-import { copyToClipboard } from '../../../root-helpers/utils'
+import { copyToClipboard } from '@root-helpers/utils'
+import { HTMLServerConfig } from '@shared/models/server'
 import { ResolverData } from './about-instance.resolver'
+import { ContactAdminModalComponent } from './contact-admin-modal.component'
 
 @Component({
   selector: 'my-about-instance',
@@ -16,6 +15,7 @@ import { ResolverData } from './about-instance.resolver'
 })
 export class AboutInstanceComponent implements OnInit, AfterViewChecked {
   @ViewChild('descriptionWrapper') descriptionWrapper: ElementRef<HTMLInputElement>
+  @ViewChild('contactAdminModal', { static: true }) contactAdminModal: ContactAdminModalComponent
 
   shortDescription = ''
   descriptionContent: string
@@ -64,6 +64,14 @@ export class AboutInstanceComponent implements OnInit, AfterViewChecked {
     const { about, languages, categories }: ResolverData = this.route.snapshot.data.instanceData
 
     this.serverConfig = this.serverService.getHTMLConfig()
+
+    this.route.data.subscribe(data => {
+      if (!data?.isContact) return
+
+      const prefill = this.route.snapshot.queryParams
+
+      this.contactAdminModal.show(prefill)
+    })
 
     this.languages = languages
     this.categories = categories

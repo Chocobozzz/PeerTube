@@ -102,7 +102,7 @@
     opacity: 0.7;
   }
 
-  @media screen and (max-width: $width) {
+  @media screen and (max-width: calc(#{$width} + 40px)) {
     width: 100%;
   }
 }
