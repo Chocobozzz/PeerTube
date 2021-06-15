@@ -102,7 +102,7 @@
     "http-problem-details": "^0.1.5",
     "http-signature": "1.3.5",
     "ip-anonymize": "^0.1.0",
-    "ipaddr.js": "2.0.0",
+    "ipaddr.js": "2.0.1",
     "is-cidr": "^4.0.0",
     "iso-639-3": "2.2.0",
     "jimp": "^0.16.0",
@@ -141,7 +141,7 @@
     "uuid": "^8.1.0",
     "validator": "^13.0.0",
     "webfinger.js": "^2.6.6",
-    "webtorrent": "^0.118.0",
+    "webtorrent": "^1.0.0",
     "winston": "3.3.3",
     "ws": "^7.0.0",
     "youtube-dl": "^3.0.2"
@@ -199,13 +199,13 @@
     "maildev": "^1.0.0-rc3",
     "marked": "^2.0.1",
     "marked-man": "^0.7.0",
-    "mocha": "^8.0.1",
+    "mocha": "^9.0.0",
     "nodemon": "^2.0.1",
     "socket.io-client": "^4.0.1",
     "source-map-support": "^0.5.0",
     "supertest": "^6.0.1",
     "swagger-cli": "^4.0.2",
-    "ts-node": "9.1.1",
+    "ts-node": "10.0.0",
     "typescript": "^4.0.5"
   },
   "bundlewatch": {
