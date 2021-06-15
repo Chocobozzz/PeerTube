@@ -1,12 +1,13 @@
-import { MActorFollowActors } from '../../types/models'
+import { Transaction } from 'sequelize'
+import { getServerActor } from '@server/models/application/application'
+import { logger } from '../../helpers/logger'
 import { CONFIG } from '../../initializers/config'
 import { SERVER_ACTOR_NAME } from '../../initializers/constants'
-import { JobQueue } from '../job-queue'
-import { logger } from '../../helpers/logger'
 import { ServerModel } from '../../models/server/server'
-import { getServerActor } from '@server/models/application/application'
+import { MActorFollowActors } from '../../types/models'
+import { JobQueue } from '../job-queue'
 
-async function autoFollowBackIfNeeded (actorFollow: MActorFollowActors) {
+async function autoFollowBackIfNeeded (actorFollow: MActorFollowActors, transaction?: Transaction) {
   if (!CONFIG.FOLLOWINGS.INSTANCE.AUTO_FOLLOW_BACK.ENABLED) return
 
   const follower = actorFollow.ActorFollower
@@ -16,7 +17,7 @@ async function autoFollowBackIfNeeded (actorFollow: MActorFollowActors) {
 
     const me = await getServerActor()
 
-    const server = await ServerModel.load(follower.serverId)
+    const server = await ServerModel.load(follower.serverId, transaction)
     const host = server.host
 
     const payload = {

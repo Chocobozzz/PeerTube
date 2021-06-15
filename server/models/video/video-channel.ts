@@ -522,10 +522,10 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
       })
   }
 
-  static loadAndPopulateAccount (id: number): Promise<MChannelBannerAccountDefault> {
+  static loadAndPopulateAccount (id: number, transaction?: Transaction): Promise<MChannelBannerAccountDefault> {
     return VideoChannelModel.unscoped()
       .scope([ ScopeNames.WITH_ACTOR_BANNER, ScopeNames.WITH_ACCOUNT ])
-      .findByPk(id)
+      .findByPk(id, { transaction })
   }
 
   static loadByUrlAndPopulateAccount (url: string): Promise<MChannelBannerAccountDefault> {

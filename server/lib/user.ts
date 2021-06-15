@@ -44,11 +44,11 @@ async function createUserAccountAndChannelAndPlaylist (parameters: {
       displayName: userDisplayName,
       userId: userCreated.id,
       applicationId: null,
-      t: t
+      t
     })
     userCreated.Account = accountCreated
 
-    const channelAttributes = await buildChannelAttributes(userCreated, channelNames)
+    const channelAttributes = await buildChannelAttributes(userCreated, t, channelNames)
     const videoChannel = await createLocalVideoChannel(channelAttributes, accountCreated, t)
 
     const videoPlaylist = await createWatchLaterPlaylist(accountCreated, t)
@@ -203,13 +203,13 @@ function createDefaultUserNotificationSettings (user: MUserId, t: Transaction | 
   return UserNotificationSettingModel.create(values, { transaction: t })
 }
 
-async function buildChannelAttributes (user: MUser, channelNames?: ChannelNames) {
+async function buildChannelAttributes (user: MUser, transaction?: Transaction, channelNames?: ChannelNames) {
   if (channelNames) return channelNames
 
   let channelName = user.username + '_channel'
 
   // Conflict, generate uuid instead
-  const actor = await ActorModel.loadLocalByName(channelName)
+  const actor = await ActorModel.loadLocalByName(channelName, transaction)
   if (actor) channelName = uuidv4()
 
   const videoChannelDisplayName = `Main ${user.username} channel`

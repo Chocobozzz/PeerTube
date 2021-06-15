@@ -151,35 +151,31 @@ async function onVideoFileOptimizer (
   // Outside the transaction (IO on disk)
   const { videoFileResolution, isPortraitMode } = await videoArg.getMaxQualityResolution()
 
-  const { videoDatabase, videoPublished } = await sequelizeTypescript.transaction(async t => {
-    // Maybe the video changed in database, refresh it
-    const videoDatabase = await VideoModel.loadAndPopulateAccountAndServerAndTags(videoArg.uuid, t)
-    // Video does not exist anymore
-    if (!videoDatabase) return undefined
+  // Maybe the video changed in database, refresh it
+  const videoDatabase = await VideoModel.loadAndPopulateAccountAndServerAndTags(videoArg.uuid)
+  // Video does not exist anymore
+  if (!videoDatabase) return undefined
 
-    let videoPublished = false
+  let videoPublished = false
 
-    // Generate HLS version of the original file
-    const originalFileHLSPayload = Object.assign({}, payload, {
-      isPortraitMode,
-      resolution: videoDatabase.getMaxQualityFile().resolution,
-      // If we quick transcoded original file, force transcoding for HLS to avoid some weird playback issues
-      copyCodecs: transcodeType !== 'quick-transcode',
-      isMaxQuality: true
-    })
-    const hasHls = await createHlsJobIfEnabled(user, originalFileHLSPayload)
-
-    const hasNewResolutions = await createLowerResolutionsJobs(videoDatabase, user, videoFileResolution, isPortraitMode, 'webtorrent')
-
-    if (!hasHls && !hasNewResolutions) {
-      // No transcoding to do, it's now published
-      videoPublished = await videoDatabase.publishIfNeededAndSave(t)
-    }
-
-    await federateVideoIfNeeded(videoDatabase, payload.isNewVideo, t)
-
-    return { videoDatabase, videoPublished }
+  // Generate HLS version of the original file
+  const originalFileHLSPayload = Object.assign({}, payload, {
+    isPortraitMode,
+    resolution: videoDatabase.getMaxQualityFile().resolution,
+    // If we quick transcoded original file, force transcoding for HLS to avoid some weird playback issues
+    copyCodecs: transcodeType !== 'quick-transcode',
+    isMaxQuality: true
   })
+  const hasHls = await createHlsJobIfEnabled(user, originalFileHLSPayload)
+
+  const hasNewResolutions = await createLowerResolutionsJobs(videoDatabase, user, videoFileResolution, isPortraitMode, 'webtorrent')
+
+  if (!hasHls && !hasNewResolutions) {
+    // No transcoding to do, it's now published
+    videoPublished = await videoDatabase.publishIfNeededAndSave(undefined)
+  }
+
+  await federateVideoIfNeeded(videoDatabase, payload.isNewVideo)
 
   if (payload.isNewVideo) Notifier.Instance.notifyOnNewVideoIfNeeded(videoDatabase)
   if (videoPublished) Notifier.Instance.notifyOnVideoPublishedAfterTranscoding(videoDatabase)

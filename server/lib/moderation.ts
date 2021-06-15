@@ -221,7 +221,7 @@ async function createAbuse (options: {
   const { isOwned } = await associateFun(abuseInstance)
 
   if (isOwned === false) {
-    await sendAbuse(reporterAccount.Actor, abuseInstance, abuseInstance.FlaggedAccount, transaction)
+    sendAbuse(reporterAccount.Actor, abuseInstance, abuseInstance.FlaggedAccount, transaction)
   }
 
   const abuseJSON = abuseInstance.toFormattedAdminJSON()

@@ -176,7 +176,7 @@ async function removeOrRejectFollower (req: express.Request, res: express.Respon
 async function acceptFollower (req: express.Request, res: express.Response) {
   const follow = res.locals.follow
 
-  await sendAccept(follow)
+  sendAccept(follow)
 
   follow.state = 'accepted'
   await follow.save()

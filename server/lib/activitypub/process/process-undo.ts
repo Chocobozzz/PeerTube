@@ -106,7 +106,7 @@ async function processUndoCacheFile (byActor: MActorSignature, activity: Activit
   const { video } = await getOrCreateAPVideo({ videoObject: cacheFileObject.object })
 
   return sequelizeTypescript.transaction(async t => {
-    const cacheFile = await VideoRedundancyModel.loadByUrl(cacheFileObject.id)
+    const cacheFile = await VideoRedundancyModel.loadByUrl(cacheFileObject.id, t)
     if (!cacheFile) {
       logger.debug('Cannot undo unknown video cache %s.', cacheFileObject.id)
       return
@@ -114,7 +114,7 @@ async function processUndoCacheFile (byActor: MActorSignature, activity: Activit
 
     if (cacheFile.actorId !== byActor.id) throw new Error('Cannot delete redundancy ' + cacheFile.url + ' of another actor.')
 
-    await cacheFile.destroy()
+    await cacheFile.destroy({ transaction: t })
 
     if (video.isOwned()) {
       // Don't resend the activity to the sender

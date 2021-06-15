@@ -739,6 +739,12 @@ export class VideoCommentModel extends Model<Partial<AttributesOnly<VideoComment
     return this.Account.isOwned()
   }
 
+  markAsDeleted () {
+    this.text = ''
+    this.deletedAt = new Date()
+    this.accountId = null
+  }
+
   isDeleted () {
     return this.deletedAt !== null
   }

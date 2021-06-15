@@ -91,9 +91,9 @@ export class VideoCaptionModel extends Model<Partial<AttributesOnly<VideoCaption
   Video: VideoModel
 
   @BeforeDestroy
-  static async removeFiles (instance: VideoCaptionModel) {
+  static async removeFiles (instance: VideoCaptionModel, options) {
     if (!instance.Video) {
-      instance.Video = await instance.$get('Video')
+      instance.Video = await instance.$get('Video', { transaction: options.transaction })
     }
 
     if (instance.isOwned()) {
@@ -113,8 +113,7 @@ export class VideoCaptionModel extends Model<Partial<AttributesOnly<VideoCaption
     const videoInclude = {
       model: VideoModel.unscoped(),
       attributes: [ 'id', 'remote', 'uuid' ],
-      where: buildWhereIdOrUUID(videoId),
-      transaction
+      where: buildWhereIdOrUUID(videoId)
     }
 
     const query = {
@@ -123,7 +122,8 @@ export class VideoCaptionModel extends Model<Partial<AttributesOnly<VideoCaption
       },
       include: [
         videoInclude
-      ]
+      ],
+      transaction
     }
 
     return VideoCaptionModel.findOne(query)
