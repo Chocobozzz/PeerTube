@@ -372,7 +372,7 @@ describe('Test plugin filter hooks', function () {
     const downloadVideos: VideoDetails[] = []
 
     before(async function () {
-      this.timeout(60000)
+      this.timeout(120000)
 
       await updateCustomSubConfig(servers[0].url, servers[0].accessToken, {
         transcoding: {
