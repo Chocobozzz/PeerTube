@@ -140,7 +140,7 @@ function toTimeFormat (time: string) {
 
   if (isNaN(timestamp) === true) return 'Unknown date'
 
-  return new Date(timestamp).toISOString()
+  return new Date(timestamp).toLocaleString()
 }
 
 function containsTags (loggerTags: string[], optionsTags: string[]) {
