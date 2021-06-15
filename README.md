@@ -136,7 +136,7 @@ You can also join the cheerful bunch that makes our community:
 
 * Chat<a name="contact"></a>:
   * Matrix (bridged on IRC and [Discord](https://discord.gg/wj8DDUT)) : **[#peertube:matrix.org](https://matrix.to/#/#peertube:matrix.org)**
-  * IRC : **[#peertube on irc.libera.chat:6697](https://kiwiirc.com/nextclient/irc.libera.chat/#peertube)**
+  * IRC : **[#peertube on irc.libera.chat:6697](https://web.libera.chat/#peertube)**
 * Forum:
   * Framacolibri: [https://framacolibri.org/c/peertube](https://framacolibri.org/c/peertube)
 
