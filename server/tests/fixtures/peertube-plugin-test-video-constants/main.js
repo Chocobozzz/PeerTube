@@ -11,8 +11,10 @@ async function register ({
 }) {
   videoLanguageManager.addLanguage('al_bhed', 'Al Bhed')
   videoLanguageManager.addLanguage('al_bhed2', 'Al Bhed 2')
+  videoLanguageManager.addLanguage('al_bhed3', 'Al Bhed 3')
   videoLanguageManager.deleteLanguage('en')
   videoLanguageManager.deleteLanguage('fr')
+  videoLanguageManager.deleteLanguage('al_bhed3')
 
   videoCategoryManager.addCategory(42, 'Best category')
   videoCategoryManager.addCategory(43, 'High best category')

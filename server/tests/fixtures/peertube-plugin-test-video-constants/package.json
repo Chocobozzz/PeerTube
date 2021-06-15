@@ -1,7 +1,7 @@
 {
-  "name": "peertube-plugin-test-three",
+  "name": "peertube-plugin-test-video-constants",
   "version": "0.0.1",
-  "description": "Plugin test 3",
+  "description": "Plugin test video constants",
   "engine": {
     "peertube": ">=1.3.0"
   },
