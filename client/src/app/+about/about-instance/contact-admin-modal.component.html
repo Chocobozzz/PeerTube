@@ -6,7 +6,7 @@
 
   <div class="modal-body">
 
-    <form novalidate [formGroup]="form" (ngSubmit)="sendForm()">
+    <form *ngIf="isContactFormEnabled()" novalidate [formGroup]="form" (ngSubmit)="sendForm()">
       <div class="form-group">
         <label i18n for="fromName">Your name</label>
         <input
@@ -52,6 +52,8 @@
         <input type="submit" i18n-value value="Submit" class="peertube-button orange-button" [disabled]="!form.valid" />
       </div>
     </form>
+
+    <div *ngIf="!isContactFormEnabled()" class="alert alert-error" i18n>The contact form is not enabled on this instance.</div>
 
   </div>
 </ng-template>
