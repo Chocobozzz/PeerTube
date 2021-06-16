@@ -15,6 +15,7 @@ import {
   getAccountVideos,
   getConfig,
   getMyVideos,
+  getPlaylistVideos,
   getPluginTestPath,
   getVideo,
   getVideoChannelVideos,
@@ -53,6 +54,7 @@ describe('Test plugin filter hooks', function () {
   let servers: ServerInfo[]
   let videoUUID: string
   let threadId: number
+  let playlistId: number
 
   before(async function () {
     this.timeout(60000)
@@ -77,6 +79,20 @@ describe('Test plugin filter hooks', function () {
     for (let i = 0; i < 10; i++) {
       await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'default video ' + i })
     }
+
+    const createPlaylistRes = await createVideoPlaylist({
+      url: servers[0].url,
+      token: servers[0].accessToken,
+      playlistAttrs: {
+        displayName: 'my super playlist',
+        privacy: VideoPlaylistPrivacy.PUBLIC,
+        description: 'my super description',
+        thumbnailfile: 'thumbnail.jpg',
+        videoChannelId: servers[0].videoChannel.id
+      }
+    })
+
+    playlistId = createPlaylistRes.body.videoPlaylist.id
 
     const res = await getVideosList(servers[0].url)
     videoUUID = res.body.data[0].uuid
@@ -133,6 +149,20 @@ describe('Test plugin filter hooks', function () {
 
     // Plugin do +3 to the total result
     expect(res.body.total).to.equal(13)
+  })
+
+  it('Should run filter:api.video-playlists.videos.list.params', async function () {
+    const res = await getPlaylistVideos(servers[0].url, servers[0].accessToken, playlistId, 0, 20)
+
+    // 1 plugin do +4 to the count parameter
+    expect(res.body.data).to.have.lengthOf(4)
+  })
+
+  it('Should run filter:api.video-playlists.videos.list.result', async function () {
+    const res = await getPlaylistVideos(servers[0].url, servers[0].accessToken, playlistId, 0, 20)
+
+    // Plugin do +7 to the total result
+    expect(res.body.total).to.equal(7)
   })
 
   it('Should run filter:api.user.me.videos.list.params', async function () {

@@ -43,6 +43,7 @@ import { AccountModel } from '../../models/account/account'
 import { VideoPlaylistModel } from '../../models/video/video-playlist'
 import { VideoPlaylistElementModel } from '../../models/video/video-playlist-element'
 import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
+import { Hooks } from '@server/lib/plugins/hooks'
 
 const reqThumbnailFile = createReqFiles([ 'thumbnailfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT, { thumbnailfile: CONFIG.STORAGE.TMP_DIR })
 
@@ -449,13 +450,19 @@ async function getVideoPlaylistVideos (req: express.Request, res: express.Respon
   const user = res.locals.oauth ? res.locals.oauth.token.User : undefined
   const server = await getServerActor()
 
-  const resultList = await VideoPlaylistElementModel.listForApi({
+  const apiOptions = await Hooks.wrapObject({
     start: req.query.start,
     count: req.query.count,
     videoPlaylistId: videoPlaylistInstance.id,
     serverAccount: server.Account,
     user
-  })
+  }, 'filter:api.video-playlists.videos.list.params')
+
+  const resultList = await Hooks.wrapPromiseFun(
+    VideoPlaylistElementModel.listForApi,
+    apiOptions,
+    'filter:api.video-playlists.videos.list.result'
+  )
 
   const options = {
     displayNSFW: buildNSFWFilter(res, req.query.nsfw),
