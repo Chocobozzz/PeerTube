@@ -63,9 +63,9 @@ elif [ "$1" = "api-1" ]; then
 elif [ "$1" = "api-2" ]; then
     npm run build:server
 
+    liveFiles=$(findTestFiles ./dist/server/tests/api/live)
     serverFiles=$(findTestFiles ./dist/server/tests/api/server)
     usersFiles=$(findTestFiles ./dist/server/tests/api/users)
-    liveFiles=$(findTestFiles ./dist/server/tests/api/live)
 
     MOCHA_PARALLEL=true runTest "$1" 3 $serverFiles $usersFiles $liveFiles
 elif [ "$1" = "api-3" ]; then

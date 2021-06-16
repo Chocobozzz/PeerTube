@@ -1,7 +1,7 @@
 import * as express from 'express'
 import toInt from 'validator/lib/toInt'
 import { doJSONRequest } from '@server/helpers/requests'
-import { LiveManager } from '@server/lib/live-manager'
+import { LiveManager } from '@server/lib/live'
 import { openapiOperationDoc } from '@server/middlewares/doc'
 import { getServerActor } from '@server/models/application/application'
 import { MVideoAccountLight } from '@server/types/models'

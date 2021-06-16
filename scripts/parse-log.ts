@@ -85,6 +85,8 @@ function run () {
     const files = await getFiles()
 
     for (const file of files) {
+      if (file === 'peertube-audit.log') continue
+
       console.log('Opening %s.', file)
 
       const stream = createReadStream(file)
