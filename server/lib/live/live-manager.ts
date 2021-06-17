@@ -160,8 +160,8 @@ class LiveManager {
 
     const muxingSession = this.muxingSessions.get(sessionId)
     if (muxingSession) {
+      // Muxing session will fire and event so we correctly cleanup the session
       muxingSession.abort()
-      muxingSession.destroy()
 
       this.muxingSessions.delete(sessionId)
     }

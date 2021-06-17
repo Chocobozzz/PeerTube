@@ -60,8 +60,6 @@ class MuxingSession extends EventEmitter {
   private readonly videoUUID: string
   private readonly saveReplay: boolean
 
-  private toto: Buffer
-
   private readonly lTags: LoggerTagsFn
 
   private segmentsToProcessPerPlaylist: { [playlistId: string]: string[] } = {}
