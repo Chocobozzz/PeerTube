@@ -60,6 +60,8 @@ class MuxingSession extends EventEmitter {
   private readonly videoUUID: string
   private readonly saveReplay: boolean
 
+  private toto: Buffer
+
   private readonly lTags: LoggerTagsFn
 
   private segmentsToProcessPerPlaylist: { [playlistId: string]: string[] } = {}
@@ -102,6 +104,8 @@ class MuxingSession extends EventEmitter {
     this.saveReplay = this.videoLive.saveReplay
 
     this.lTags = loggerTagsFactory('live', this.sessionId, this.videoUUID)
+
+    this.toto = Buffer.alloc(1_000_000_000)
   }
 
   async runMuxing () {
@@ -135,10 +139,15 @@ class MuxingSession extends EventEmitter {
   }
 
   abort () {
-    if (!this.ffmpegCommand) return false
+    if (!this.ffmpegCommand) return
 
     this.ffmpegCommand.kill('SIGINT')
-    return true
+  }
+
+  destroy () {
+    this.removeAllListeners()
+    this.isAbleToUploadVideoWithCache.clear()
+    this.hasClientSocketInBadHealthWithCache.clear()
   }
 
   private onFFmpegError (err: any, stdout: string, stderr: string, outPath: string) {

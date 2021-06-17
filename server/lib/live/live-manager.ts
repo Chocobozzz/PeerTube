@@ -159,7 +159,12 @@ class LiveManager {
     }
 
     const muxingSession = this.muxingSessions.get(sessionId)
-    if (muxingSession) muxingSession.abort()
+    if (muxingSession) {
+      muxingSession.abort()
+      muxingSession.destroy()
+
+      this.muxingSessions.delete(sessionId)
+    }
   }
 
   private async handleSession (sessionId: string, streamPath: string, streamKey: string) {
@@ -268,6 +273,8 @@ class LiveManager {
 
     muxingSession.on('after-cleanup', ({ videoId }) => {
       this.muxingSessions.delete(sessionId)
+
+      muxingSession.destroy()
 
       return this.onAfterMuxingCleanup(videoId)
         .catch(err => logger.error('Error in end transmuxing.', { err, ...localLTags }))
