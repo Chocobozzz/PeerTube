@@ -14,10 +14,6 @@ export const serverFilterHookObject = {
   'filter:api.video-channels.videos.list.params': true,
   'filter:api.video-channels.videos.list.result': true,
 
-  // Filter params/result used to list playlist videos for the REST API
-  'filter:api.video-playlists.videos.list.params': true,
-  'filter:api.video-playlists.videos.list.result': true,
-
   // Filter params/result used to list my user videos for the REST API
   'filter:api.user.me.videos.list.params': true,
   'filter:api.user.me.videos.list.result': true,
