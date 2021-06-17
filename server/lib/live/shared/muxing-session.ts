@@ -102,8 +102,6 @@ class MuxingSession extends EventEmitter {
     this.saveReplay = this.videoLive.saveReplay
 
     this.lTags = loggerTagsFactory('live', this.sessionId, this.videoUUID)
-
-    this.toto = Buffer.alloc(1_000_000_000)
   }
 
   async runMuxing () {
