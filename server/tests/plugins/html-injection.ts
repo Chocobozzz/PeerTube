@@ -15,7 +15,7 @@ import {
 
 const expect = chai.expect
 
-describe('Test plugins HTML inection', function () {
+describe('Test plugins HTML injection', function () {
   let server: ServerInfo = null
 
   before(async function () {
