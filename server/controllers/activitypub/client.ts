@@ -155,7 +155,8 @@ activityPubClientRouter.get('/redundancy/streaming-playlists/:streamingPlaylistT
   asyncMiddleware(videoRedundancyController)
 )
 
-activityPubClientRouter.get('/video-playlists/:playlistId',
+activityPubClientRouter.get(
+  [ '/video-playlists/:playlistId', '/videos/watch/playlist/:playlistId', '/w/p/:playlistId' ],
   executeIfActivityPub,
   asyncMiddleware(videoPlaylistsGetValidator('all')),
   asyncMiddleware(videoPlaylistController)

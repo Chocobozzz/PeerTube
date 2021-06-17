@@ -434,8 +434,8 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
     sort: string
   }) {
     const attributesInclude = []
-    const escapedSearch = VideoModel.sequelize.escape(options.search)
-    const escapedLikeSearch = VideoModel.sequelize.escape('%' + options.search + '%')
+    const escapedSearch = VideoChannelModel.sequelize.escape(options.search)
+    const escapedLikeSearch = VideoChannelModel.sequelize.escape('%' + options.search + '%')
     attributesInclude.push(createSimilarityAttribute('VideoChannelModel.name', options.search))
 
     const query = {

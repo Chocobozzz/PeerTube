@@ -1,11 +1,11 @@
 import { ACTIVITY_PUB } from '@server/initializers/constants'
 import { VideoPlaylistModel } from '@server/models/video/video-playlist'
 import { VideoPlaylistElementModel } from '@server/models/video/video-playlist-element'
-import { MAccountId, MVideoId, MVideoPlaylistId } from '@server/types/models'
+import { MVideoId, MVideoPlaylistId } from '@server/types/models'
 import { AttributesOnly } from '@shared/core-utils'
 import { PlaylistElementObject, PlaylistObject, VideoPlaylistPrivacy } from '@shared/models'
 
-function playlistObjectToDBAttributes (playlistObject: PlaylistObject, byAccount: MAccountId, to: string[]) {
+function playlistObjectToDBAttributes (playlistObject: PlaylistObject, to: string[]) {
   const privacy = to.includes(ACTIVITY_PUB.PUBLIC)
     ? VideoPlaylistPrivacy.PUBLIC
     : VideoPlaylistPrivacy.UNLISTED
@@ -16,7 +16,7 @@ function playlistObjectToDBAttributes (playlistObject: PlaylistObject, byAccount
     privacy,
     url: playlistObject.id,
     uuid: playlistObject.uuid,
-    ownerAccountId: byAccount.id,
+    ownerAccountId: null,
     videoChannelId: null,
     createdAt: new Date(playlistObject.published),
     updatedAt: new Date(playlistObject.updated)

@@ -49,11 +49,12 @@ const videoChannelsListSearchValidator = [
   }
 ]
 
-const videoChannelsOwnSearchValidator = [
-  query('search').optional().not().isEmpty().withMessage('Should have a valid search'),
+const videoPlaylistsListSearchValidator = [
+  query('search').not().isEmpty().withMessage('Should have a valid search'),
+  query('searchTarget').optional().custom(isSearchTargetValid).withMessage('Should have a valid search target'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking video channels search query', { parameters: req.query })
+    logger.debug('Checking video playlists search query', { parameters: req.query })
 
     if (areValidationErrors(req, res)) return
 
@@ -66,5 +67,5 @@ const videoChannelsOwnSearchValidator = [
 export {
   videosSearchValidator,
   videoChannelsListSearchValidator,
-  videoChannelsOwnSearchValidator
+  videoPlaylistsListSearchValidator
 }

@@ -31,7 +31,7 @@ describe('Test plugin translations', function () {
     await installPlugin({
       url: server.url,
       accessToken: server.accessToken,
-      path: getPluginTestPath('-two')
+      path: getPluginTestPath('-filter-translations')
     })
   })
 
@@ -48,7 +48,7 @@ describe('Test plugin translations', function () {
       'peertube-plugin-test': {
         Hi: 'Coucou'
       },
-      'peertube-plugin-test-two': {
+      'peertube-plugin-test-filter-translations': {
         'Hello world': 'Bonjour le monde'
       }
     })
@@ -58,14 +58,14 @@ describe('Test plugin translations', function () {
     const res = await getPluginTranslations({ url: server.url, locale: 'it-IT' })
 
     expect(res.body).to.deep.equal({
-      'peertube-plugin-test-two': {
+      'peertube-plugin-test-filter-translations': {
         'Hello world': 'Ciao, mondo!'
       }
     })
   })
 
   it('Should remove the plugin and remove the locales', async function () {
-    await uninstallPlugin({ url: server.url, accessToken: server.accessToken, npmName: 'peertube-plugin-test-two' })
+    await uninstallPlugin({ url: server.url, accessToken: server.accessToken, npmName: 'peertube-plugin-test-filter-translations' })
 
     {
       const res = await getPluginTranslations({ url: server.url, locale: 'fr-FR' })

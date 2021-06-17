@@ -241,6 +241,10 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
       'filter:api.search.video-channels.local.list.result',
       'filter:api.search.video-channels.index.list.params',
       'filter:api.search.video-channels.index.list.result',
+      'filter:api.search.video-playlists.local.list.params',
+      'filter:api.search.video-playlists.local.list.result',
+      'filter:api.search.video-playlists.index.list.params',
+      'filter:api.search.video-playlists.index.list.result'
     ]
 
     for (const h of searchHooks) {

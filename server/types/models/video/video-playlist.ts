@@ -69,7 +69,7 @@ export type MVideoPlaylistAccountChannelDefault =
 // With all associations
 
 export type MVideoPlaylistFull =
-  MVideoPlaylist &
+  MVideoPlaylistVideosLength &
   Use<'OwnerAccount', MAccountDefault> &
   Use<'VideoChannel', MChannelDefault> &
   Use<'Thumbnail', MThumbnail>
@@ -84,7 +84,7 @@ export type MVideoPlaylistAccountChannelSummary =
   Use<'VideoChannel', MChannelSummary>
 
 export type MVideoPlaylistFullSummary =
-  MVideoPlaylist &
+  MVideoPlaylistVideosLength &
   Use<'Thumbnail', MThumbnail> &
   Use<'OwnerAccount', MAccountSummary> &
   Use<'VideoChannel', MChannelSummary>

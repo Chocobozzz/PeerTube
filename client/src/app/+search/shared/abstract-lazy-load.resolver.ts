@@ -1,14 +1,10 @@
+import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
-import { Injectable } from '@angular/core'
 import { ActivatedRouteSnapshot, Resolve, Router } from '@angular/router'
-import { SearchService } from '@app/shared/shared-search'
+import { ResultList } from '@shared/models/result-list.model'
 
-@Injectable()
-export class ChannelLazyLoadResolver implements Resolve<any> {
-  constructor (
-    private router: Router,
-    private searchService: SearchService
-  ) { }
+export abstract class AbstractLazyLoadResolver <T> implements Resolve<any> {
+  protected router: Router
 
   resolve (route: ActivatedRouteSnapshot) {
     const url = route.params.url
@@ -18,7 +14,7 @@ export class ChannelLazyLoadResolver implements Resolve<any> {
       return this.router.navigateByUrl('/404')
     }
 
-    return this.searchService.searchVideoChannels({ search: url })
+    return this.finder(url)
       .pipe(
         map(result => {
           if (result.data.length !== 1) {
@@ -26,10 +22,13 @@ export class ChannelLazyLoadResolver implements Resolve<any> {
             return this.router.navigateByUrl('/404')
           }
 
-          const channel = result.data[0]
+          const redirectUrl = this.buildUrl(result.data[0])
 
-          return this.router.navigateByUrl('/video-channels/' + channel.nameWithHost)
+          return this.router.navigateByUrl(redirectUrl)
         })
       )
   }
+
+  protected abstract finder (url: string): Observable<ResultList<T>>
+  protected abstract buildUrl (e: T): string
 }

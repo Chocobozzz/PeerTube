@@ -140,6 +140,30 @@ describe('Test videos API validator', function () {
     })
   })
 
+  describe('When searching video playlists', function () {
+    const path = '/api/v1/search/video-playlists/'
+
+    const query = {
+      search: 'coucou'
+    }
+
+    it('Should fail with a bad start pagination', async function () {
+      await checkBadStartPagination(server.url, path, null, query)
+    })
+
+    it('Should fail with a bad count pagination', async function () {
+      await checkBadCountPagination(server.url, path, null, query)
+    })
+
+    it('Should fail with an incorrect sort', async function () {
+      await checkBadSortPagination(server.url, path, null, query)
+    })
+
+    it('Should success with the correct parameters', async function () {
+      await makeGetRequest({ url: server.url, path, query, statusCodeExpected: HttpStatusCode.OK_200 })
+    })
+  })
+
   describe('When searching video channels', function () {
     const path = '/api/v1/search/video-channels/'
 
@@ -171,6 +195,7 @@ describe('Test videos API validator', function () {
 
       const query = { search: 'coucou' }
       const paths = [
+        '/api/v1/search/video-playlists/',
         '/api/v1/search/video-channels/',
         '/api/v1/search/videos/'
       ]

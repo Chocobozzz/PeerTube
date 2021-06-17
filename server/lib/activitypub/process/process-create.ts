@@ -128,5 +128,5 @@ async function processCreatePlaylist (activity: ActivityCreate, byActor: MActorS
 
   if (!byAccount) throw new Error('Cannot create video playlist with the non account actor ' + byActor.url)
 
-  await createOrUpdateVideoPlaylist(playlistObject, byAccount, activity.to)
+  await createOrUpdateVideoPlaylist(playlistObject, activity.to)
 }

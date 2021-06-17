@@ -116,7 +116,7 @@ async function scheduleOutboxFetchIfNeeded (actor: MActor, created: boolean, ref
 async function schedulePlaylistFetchIfNeeded (actor: MActorAccountId, created: boolean, accountPlaylistsUrl: string) {
   // We created a new account: fetch the playlists
   if (created === true && actor.Account && accountPlaylistsUrl) {
-    const payload = { uri: accountPlaylistsUrl, accountId: actor.Account.id, type: 'account-playlists' as 'account-playlists' }
+    const payload = { uri: accountPlaylistsUrl, type: 'account-playlists' as 'account-playlists' }
     await JobQueue.Instance.createJobWithPromise({ type: 'activitypub-http-fetcher', payload })
   }
 }

@@ -77,14 +77,33 @@ describe('Test ActivityPub videos search', function () {
     expect(res.body.data[0].name).to.equal('video 1 on server 1')
   })
 
-  it('Should search a remote video', async function () {
-    const search = 'http://localhost:' + servers[1].port + '/videos/watch/' + videoServer2UUID
-    const res = await searchVideoWithToken(servers[0].url, search, servers[0].accessToken)
+  it('Should search a local video with an alternative URL', async function () {
+    const search = 'http://localhost:' + servers[0].port + '/w/' + videoServer1UUID
+    const res1 = await searchVideo(servers[0].url, search)
+    const res2 = await searchVideoWithToken(servers[0].url, search, servers[0].accessToken)
 
-    expect(res.body.total).to.equal(1)
-    expect(res.body.data).to.be.an('array')
-    expect(res.body.data).to.have.lengthOf(1)
-    expect(res.body.data[0].name).to.equal('video 1 on server 2')
+    for (const res of [ res1, res2 ]) {
+      expect(res.body.total).to.equal(1)
+      expect(res.body.data).to.be.an('array')
+      expect(res.body.data).to.have.lengthOf(1)
+      expect(res.body.data[0].name).to.equal('video 1 on server 1')
+    }
+  })
+
+  it('Should search a remote video', async function () {
+    const searches = [
+      'http://localhost:' + servers[1].port + '/w/' + videoServer2UUID,
+      'http://localhost:' + servers[1].port + '/videos/watch/' + videoServer2UUID
+    ]
+
+    for (const search of searches) {
+      const res = await searchVideoWithToken(servers[0].url, search, servers[0].accessToken)
+
+      expect(res.body.total).to.equal(1)
+      expect(res.body.data).to.be.an('array')
+      expect(res.body.data).to.have.lengthOf(1)
+      expect(res.body.data[0].name).to.equal('video 1 on server 2')
+    }
   })
 
   it('Should not list this remote video', async function () {
@@ -95,7 +114,7 @@ describe('Test ActivityPub videos search', function () {
   })
 
   it('Should update video of server 2, and refresh it on server 1', async function () {
-    this.timeout(60000)
+    this.timeout(120000)
 
     const channelAttributes = {
       name: 'super_channel',
@@ -134,7 +153,7 @@ describe('Test ActivityPub videos search', function () {
   })
 
   it('Should delete video of server 2, and delete it on server 1', async function () {
-    this.timeout(60000)
+    this.timeout(120000)
 
     await removeVideo(servers[1].url, servers[1].accessToken, videoServer2UUID)
 

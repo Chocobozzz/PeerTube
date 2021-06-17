@@ -141,6 +141,18 @@ const videoChannelStatsValidator = [
   }
 ]
 
+const videoChannelsListValidator = [
+  query('search').optional().not().isEmpty().withMessage('Should have a valid search'),
+
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking video channels search query', { parameters: req.query })
+
+    if (areValidationErrors(req, res)) return
+
+    return next()
+  }
+]
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -148,6 +160,7 @@ export {
   videoChannelsUpdateValidator,
   videoChannelsRemoveValidator,
   videoChannelsNameWithHostValidator,
+  videoChannelsListValidator,
   localVideoChannelValidator,
   videoChannelStatsValidator
 }

@@ -1,3 +1,5 @@
+import * as Bluebird from 'bluebird'
+import { getAPId } from '@server/helpers/activitypub'
 import { isArray } from '@server/helpers/custom-validators/misc'
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
 import { CRAWL_REQUEST_CONCURRENCY } from '@server/initializers/constants'
@@ -6,7 +8,7 @@ import { updatePlaylistMiniatureFromUrl } from '@server/lib/thumbnail'
 import { VideoPlaylistModel } from '@server/models/video/video-playlist'
 import { VideoPlaylistElementModel } from '@server/models/video/video-playlist-element'
 import { FilteredModelAttributes } from '@server/types'
-import { MAccountDefault, MAccountId, MThumbnail, MVideoPlaylist, MVideoPlaylistFull } from '@server/types/models'
+import { MThumbnail, MVideoPlaylist, MVideoPlaylistFull, MVideoPlaylistVideosLength } from '@server/types/models'
 import { AttributesOnly } from '@shared/core-utils'
 import { PlaylistObject } from '@shared/models'
 import { getOrCreateAPActor } from '../actors'
@@ -19,11 +21,9 @@ import {
   playlistObjectToDBAttributes
 } from './shared'
 
-import Bluebird = require('bluebird')
-
 const lTags = loggerTagsFactory('ap', 'video-playlist')
 
-async function createAccountPlaylists (playlistUrls: string[], account: MAccountDefault) {
+async function createAccountPlaylists (playlistUrls: string[]) {
   await Bluebird.map(playlistUrls, async playlistUrl => {
     try {
       const exists = await VideoPlaylistModel.doesPlaylistExist(playlistUrl)
@@ -35,19 +35,19 @@ async function createAccountPlaylists (playlistUrls: string[], account: MAccount
         throw new Error(`Cannot refresh remote playlist ${playlistUrl}: invalid body.`)
       }
 
-      return createOrUpdateVideoPlaylist(playlistObject, account, playlistObject.to)
+      return createOrUpdateVideoPlaylist(playlistObject)
     } catch (err) {
       logger.warn('Cannot add playlist element %s.', playlistUrl, { err, ...lTags(playlistUrl) })
     }
   }, { concurrency: CRAWL_REQUEST_CONCURRENCY })
 }
 
-async function createOrUpdateVideoPlaylist (playlistObject: PlaylistObject, byAccount: MAccountId, to: string[]) {
-  const playlistAttributes = playlistObjectToDBAttributes(playlistObject, byAccount, to)
+async function createOrUpdateVideoPlaylist (playlistObject: PlaylistObject, to?: string[]) {
+  const playlistAttributes = playlistObjectToDBAttributes(playlistObject, to || playlistObject.to)
 
-  await setVideoChannelIfNeeded(playlistObject, playlistAttributes)
+  await setVideoChannel(playlistObject, playlistAttributes)
 
-  const [ upsertPlaylist ] = await VideoPlaylistModel.upsert<MVideoPlaylist>(playlistAttributes, { returning: true })
+  const [ upsertPlaylist ] = await VideoPlaylistModel.upsert<MVideoPlaylistVideosLength>(playlistAttributes, { returning: true })
 
   const playlistElementUrls = await fetchElementUrls(playlistObject)
 
@@ -56,7 +56,10 @@ async function createOrUpdateVideoPlaylist (playlistObject: PlaylistObject, byAc
 
   await updatePlaylistThumbnail(playlistObject, playlist)
 
-  return rebuildVideoPlaylistElements(playlistElementUrls, playlist)
+  const elementsLength = await rebuildVideoPlaylistElements(playlistElementUrls, playlist)
+  playlist.setVideosLength(elementsLength)
+
+  return playlist
 }
 
 // ---------------------------------------------------------------------------
@@ -68,10 +71,12 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function setVideoChannelIfNeeded (playlistObject: PlaylistObject, playlistAttributes: AttributesOnly<VideoPlaylistModel>) {
-  if (!isArray(playlistObject.attributedTo) || playlistObject.attributedTo.length !== 1) return
+async function setVideoChannel (playlistObject: PlaylistObject, playlistAttributes: AttributesOnly<VideoPlaylistModel>) {
+  if (!isArray(playlistObject.attributedTo) || playlistObject.attributedTo.length !== 1) {
+    throw new Error('Not attributed to for playlist object ' + getAPId(playlistObject))
+  }
 
-  const actor = await getOrCreateAPActor(playlistObject.attributedTo[0])
+  const actor = await getOrCreateAPActor(playlistObject.attributedTo[0], 'all')
 
   if (!actor.VideoChannel) {
     logger.warn('Playlist "attributedTo" %s is not a video channel.', playlistObject.id, { playlistObject, ...lTags(playlistObject.id) })
@@ -79,6 +84,7 @@ async function setVideoChannelIfNeeded (playlistObject: PlaylistObject, playlist
   }
 
   playlistAttributes.videoChannelId = actor.VideoChannel.id
+  playlistAttributes.ownerAccountId = actor.VideoChannel.Account.id
 }
 
 async function fetchElementUrls (playlistObject: PlaylistObject) {
@@ -128,7 +134,7 @@ async function rebuildVideoPlaylistElements (elementUrls: string[], playlist: MV
 
   logger.info('Rebuilt playlist %s with %s elements.', playlist.url, elementsToCreate.length, lTags(playlist.uuid, playlist.url))
 
-  return undefined
+  return elementsToCreate.length
 }
 
 async function buildElementsDBAttributes (elementUrls: string[], playlist: MVideoPlaylist) {

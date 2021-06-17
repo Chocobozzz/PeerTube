@@ -1,5 +1,5 @@
 import { getAbsoluteAPIUrl, getAbsoluteEmbedUrl } from '@app/helpers'
-import { Account, Actor, VideoChannel } from '@app/shared/shared-main'
+import { Actor } from '@app/shared/shared-main'
 import { peertubeTranslate } from '@shared/core-utils/i18n'
 import {
   AccountSummary,
@@ -15,11 +15,11 @@ export class VideoPlaylist implements ServerVideoPlaylist {
   uuid: string
   isLocal: boolean
 
+  url: string
+
   displayName: string
   description: string
   privacy: VideoConstant<VideoPlaylistPrivacy>
-
-  thumbnailPath: string
 
   videosLength: number
 
@@ -31,6 +31,7 @@ export class VideoPlaylist implements ServerVideoPlaylist {
   ownerAccount: AccountSummary
   videoChannel?: VideoChannelSummary
 
+  thumbnailPath: string
   thumbnailUrl: string
 
   embedPath: string
@@ -40,14 +41,12 @@ export class VideoPlaylist implements ServerVideoPlaylist {
 
   videoChannelBy?: string
 
-  private thumbnailVersion: number
-  private originThumbnailUrl: string
-
   constructor (hash: ServerVideoPlaylist, translations: {}) {
     const absoluteAPIUrl = getAbsoluteAPIUrl()
 
     this.id = hash.id
     this.uuid = hash.uuid
+    this.url = hash.url
     this.isLocal = hash.isLocal
 
     this.displayName = hash.displayName
@@ -57,15 +56,12 @@ export class VideoPlaylist implements ServerVideoPlaylist {
 
     this.thumbnailPath = hash.thumbnailPath
 
-    if (this.thumbnailPath) {
-      this.thumbnailUrl = absoluteAPIUrl + hash.thumbnailPath
-      this.originThumbnailUrl = this.thumbnailUrl
-    } else {
-      this.thumbnailUrl = window.location.origin + '/client/assets/images/default-playlist.jpg'
-    }
+    this.thumbnailUrl = this.thumbnailPath
+      ? hash.thumbnailUrl || (absoluteAPIUrl + hash.thumbnailPath)
+      : absoluteAPIUrl + '/client/assets/images/default-playlist.jpg'
 
     this.embedPath = hash.embedPath
-    this.embedUrl = getAbsoluteEmbedUrl() + hash.embedPath
+    this.embedUrl = hash.embedUrl || (getAbsoluteEmbedUrl() + hash.embedPath)
 
     this.videosLength = hash.videosLength
 
@@ -87,14 +83,5 @@ export class VideoPlaylist implements ServerVideoPlaylist {
     if (this.type.id === VideoPlaylistType.WATCH_LATER) {
       this.displayName = peertubeTranslate(this.displayName, translations)
     }
-  }
-
-  refreshThumbnail () {
-    if (!this.originThumbnailUrl) return
-
-    if (!this.thumbnailVersion) this.thumbnailVersion = 0
-    this.thumbnailVersion++
-
-    this.thumbnailUrl = this.originThumbnailUrl + '?v' + this.thumbnailVersion
   }
 }

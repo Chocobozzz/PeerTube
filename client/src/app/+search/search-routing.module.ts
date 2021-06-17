@@ -1,8 +1,7 @@
 import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
-import { ChannelLazyLoadResolver } from './channel-lazy-load.resolver'
 import { SearchComponent } from './search.component'
-import { VideoLazyLoadResolver } from './video-lazy-load.resolver'
+import { ChannelLazyLoadResolver, PlaylistLazyLoadResolver, VideoLazyLoadResolver } from './shared'
 
 const searchRoutes: Routes = [
   {
@@ -26,6 +25,13 @@ const searchRoutes: Routes = [
     component: SearchComponent,
     resolve: {
       data: ChannelLazyLoadResolver
+    }
+  },
+  {
+    path: 'lazy-load-playlist',
+    component: SearchComponent,
+    resolve: {
+      data: PlaylistLazyLoadResolver
     }
   }
 ]
