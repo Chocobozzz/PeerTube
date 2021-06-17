@@ -6,7 +6,7 @@ import { updatePlaylistMiniatureFromUrl } from '@server/lib/thumbnail'
 import { VideoPlaylistModel } from '@server/models/video/video-playlist'
 import { VideoPlaylistElementModel } from '@server/models/video/video-playlist-element'
 import { FilteredModelAttributes } from '@server/types'
-import { MAccountDefault, MAccountId, MVideoPlaylist, MVideoPlaylistFull } from '@server/types/models'
+import { MAccountDefault, MAccountId, MThumbnail, MVideoPlaylist, MVideoPlaylistFull } from '@server/types/models'
 import { AttributesOnly } from '@shared/core-utils'
 import { PlaylistObject } from '@shared/models'
 import { getOrCreateAPActor } from '../actors'
@@ -54,11 +54,7 @@ async function createOrUpdateVideoPlaylist (playlistObject: PlaylistObject, byAc
   // Refetch playlist from DB since elements fetching could be long in time
   const playlist = await VideoPlaylistModel.loadWithAccountAndChannel(upsertPlaylist.id, null)
 
-  try {
-    await updatePlaylistThumbnail(playlistObject, playlist)
-  } catch (err) {
-    logger.warn('Cannot update thumbnail of %s.', playlistObject.id, { err, ...lTags(playlistObject.id, playlist.uuid, playlist.url) })
-  }
+  await updatePlaylistThumbnail(playlistObject, playlist)
 
   return rebuildVideoPlaylistElements(playlistElementUrls, playlist)
 }
@@ -98,8 +94,16 @@ async function fetchElementUrls (playlistObject: PlaylistObject) {
 
 async function updatePlaylistThumbnail (playlistObject: PlaylistObject, playlist: MVideoPlaylistFull) {
   if (playlistObject.icon) {
-    const thumbnailModel = await updatePlaylistMiniatureFromUrl({ downloadUrl: playlistObject.icon.url, playlist })
-    await playlist.setAndSaveThumbnail(thumbnailModel, undefined)
+    let thumbnailModel: MThumbnail
+
+    try {
+      thumbnailModel = await updatePlaylistMiniatureFromUrl({ downloadUrl: playlistObject.icon.url, playlist })
+      await playlist.setAndSaveThumbnail(thumbnailModel, undefined)
+    } catch (err) {
+      logger.warn('Cannot set thumbnail of %s.', playlistObject.id, { err, ...lTags(playlistObject.id, playlist.uuid, playlist.url) })
+
+      if (thumbnailModel) await thumbnailModel.removeThumbnail()
+    }
 
     return
   }

@@ -12,6 +12,7 @@ import {
   flushAndRunMultipleServers,
   getAccount,
   getEnvCli,
+  killallServers,
   makeGetRequest,
   ServerInfo,
   setAccessTokensToServers,
@@ -116,6 +117,9 @@ describe('Test prune storage scripts', function () {
     await wait(1000)
 
     await waitJobs(servers)
+    killallServers(servers)
+
+    await wait(1000)
   })
 
   it('Should have the files on the disk', async function () {
