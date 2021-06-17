@@ -1,9 +1,16 @@
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
 import { PeerTubeRequestError } from '@server/helpers/requests'
-import { MVideoPlaylistOwner } from '@server/types/models'
+import { JobQueue } from '@server/lib/job-queue'
+import { MVideoPlaylist, MVideoPlaylistOwner } from '@server/types/models'
 import { HttpStatusCode } from '@shared/core-utils'
 import { createOrUpdateVideoPlaylist } from './create-update'
 import { fetchRemoteVideoPlaylist } from './shared'
+
+function scheduleRefreshIfNeeded (playlist: MVideoPlaylist) {
+  if (!playlist.isOutdated()) return
+
+  JobQueue.Instance.createJob({ type: 'activitypub-refresher', payload: { type: 'video-playlist', url: playlist.url } })
+}
 
 async function refreshVideoPlaylistIfNeeded (videoPlaylist: MVideoPlaylistOwner): Promise<MVideoPlaylistOwner> {
   if (!videoPlaylist.isOutdated()) return videoPlaylist
@@ -22,8 +29,7 @@ async function refreshVideoPlaylistIfNeeded (videoPlaylist: MVideoPlaylistOwner)
       return videoPlaylist
     }
 
-    const byAccount = videoPlaylist.OwnerAccount
-    await createOrUpdateVideoPlaylist(playlistObject, byAccount, playlistObject.to)
+    await createOrUpdateVideoPlaylist(playlistObject)
 
     return videoPlaylist
   } catch (err) {
@@ -42,5 +48,6 @@ async function refreshVideoPlaylistIfNeeded (videoPlaylist: MVideoPlaylistOwner)
 }
 
 export {
+  scheduleRefreshIfNeeded,
   refreshVideoPlaylistIfNeeded
 }

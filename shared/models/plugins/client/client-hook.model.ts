@@ -37,9 +37,12 @@ export const clientFilterHookObject = {
   // Filter params/result of the function that fetch videos according to the user search
   'filter:api.search.videos.list.params': true,
   'filter:api.search.videos.list.result': true,
-  // Filter params/result of the function that fetch video-channels according to the user search
+  // Filter params/result of the function that fetch video channels according to the user search
   'filter:api.search.video-channels.list.params': true,
   'filter:api.search.video-channels.list.result': true,
+  // Filter params/result of the function that fetch video playlists according to the user search
+  'filter:api.search.video-playlists.list.params': true,
+  'filter:api.search.video-playlists.list.result': true,
 
   // Filter form
   'filter:api.signup.registration.create.params': true,

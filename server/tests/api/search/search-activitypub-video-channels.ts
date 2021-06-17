@@ -106,9 +106,25 @@ describe('Test ActivityPub video channels search', function () {
     }
   })
 
+  it('Should search a local video channel with an alternative URL', async function () {
+    const search = 'http://localhost:' + servers[0].port + '/c/channel1_server1'
+
+    for (const token of [ undefined, servers[0].accessToken ]) {
+      const res = await searchVideoChannel(servers[0].url, search, token)
+
+      expect(res.body.total).to.equal(1)
+      expect(res.body.data).to.be.an('array')
+      expect(res.body.data).to.have.lengthOf(1)
+      expect(res.body.data[0].name).to.equal('channel1_server1')
+      expect(res.body.data[0].displayName).to.equal('Channel 1 server 1')
+    }
+  })
+
   it('Should search a remote video channel with URL or handle', async function () {
     const searches = [
       'http://localhost:' + servers[1].port + '/video-channels/channel1_server2',
+      'http://localhost:' + servers[1].port + '/c/channel1_server2',
+      'http://localhost:' + servers[1].port + '/c/channel1_server2/videos',
       'channel1_server2@localhost:' + servers[1].port
     ]
 

@@ -53,7 +53,6 @@ export type ActivitypubHttpFetcherPayload = {
   uri: string
   type: FetchType
   videoId?: number
-  accountId?: number
 }
 
 export type ActivitypubHttpUnicastPayload = {

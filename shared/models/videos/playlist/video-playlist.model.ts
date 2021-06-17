@@ -8,17 +8,21 @@ export interface VideoPlaylist {
   uuid: string
   isLocal: boolean
 
+  url: string
+
   displayName: string
   description: string
   privacy: VideoConstant<VideoPlaylistPrivacy>
 
   thumbnailPath: string
+  thumbnailUrl?: string
 
   videosLength: number
 
   type: VideoConstant<VideoPlaylistType>
 
   embedPath: string
+  embedUrl?: string
 
   createdAt: Date | string
   updatedAt: Date | string

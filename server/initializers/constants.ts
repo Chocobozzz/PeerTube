@@ -77,6 +77,7 @@ const SORTABLE_COLUMNS = {
   // Don't forget to update peertube-search-index with the same values
   VIDEOS_SEARCH: [ 'name', 'duration', 'createdAt', 'publishedAt', 'originallyPublishedAt', 'views', 'likes', 'match' ],
   VIDEO_CHANNELS_SEARCH: [ 'match', 'displayName', 'createdAt' ],
+  VIDEO_PLAYLISTS_SEARCH: [ 'match', 'displayName', 'createdAt' ],
 
   ABUSES: [ 'id', 'createdAt', 'state' ],
 

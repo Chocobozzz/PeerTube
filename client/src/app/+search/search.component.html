@@ -59,9 +59,16 @@
     <div *ngIf="isVideo(result)" class="entry video">
       <my-video-miniature
         [video]="result" [user]="userMiniature" [displayAsRow]="true" [displayVideoActions]="!hideActions()"
-        [displayOptions]="videoDisplayOptions" [videoLinkType]="getVideoLinkType()"
+        [displayOptions]="videoDisplayOptions" [videoLinkType]="getLinkType()"
         (videoBlocked)="removeVideoFromArray(result)" (videoRemoved)="removeVideoFromArray(result)"
       ></my-video-miniature>
+    </div>
+
+    <div *ngIf="isPlaylist(result)" class="entry video-playlist">
+      <my-video-playlist-miniature
+        [playlist]="result" [displayAsRow]="true" [displayChannel]="true"
+        [linkType]="getLinkType()"
+      ></my-video-playlist-miniature>
     </div>
   </ng-container>
 

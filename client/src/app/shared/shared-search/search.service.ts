@@ -3,10 +3,17 @@ import { catchError, map, switchMap } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { ComponentPaginationLight, RestExtractor, RestPagination, RestService } from '@app/core'
-import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 import { Video, VideoChannel, VideoChannelService, VideoService } from '@app/shared/shared-main'
-import { ResultList, SearchTargetType, Video as VideoServerModel, VideoChannel as VideoChannelServerModel } from '@shared/models'
+import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
+import {
+  ResultList,
+  SearchTargetType,
+  Video as VideoServerModel,
+  VideoChannel as VideoChannelServerModel,
+  VideoPlaylist as VideoPlaylistServerModel
+} from '@shared/models'
 import { environment } from '../../../environments/environment'
+import { VideoPlaylist, VideoPlaylistService } from '../shared-video-playlist'
 import { AdvancedSearch } from './advanced-search.model'
 
 @Injectable()
@@ -17,7 +24,8 @@ export class SearchService {
     private authHttp: HttpClient,
     private restExtractor: RestExtractor,
     private restService: RestService,
-    private videoService: VideoService
+    private videoService: VideoService,
+    private playlistService: VideoPlaylistService
   ) {
     // Add ability to override search endpoint if the user updated this local storage key
     const searchUrl = peertubeLocalStorage.getItem('search-url')
@@ -82,6 +90,36 @@ export class SearchService {
                .get<ResultList<VideoChannelServerModel>>(url, { params })
                .pipe(
                  map(res => VideoChannelService.extractVideoChannels(res)),
+                 catchError(err => this.restExtractor.handleError(err))
+               )
+  }
+
+  searchVideoPlaylists (parameters: {
+    search: string,
+    searchTarget?: SearchTargetType,
+    componentPagination?: ComponentPaginationLight
+  }): Observable<ResultList<VideoPlaylist>> {
+    const { search, componentPagination, searchTarget } = parameters
+
+    const url = SearchService.BASE_SEARCH_URL + 'video-playlists'
+
+    let pagination: RestPagination
+    if (componentPagination) {
+      pagination = this.restService.componentPaginationToRestPagination(componentPagination)
+    }
+
+    let params = new HttpParams()
+    params = this.restService.addRestGetParams(params, pagination)
+    params = params.append('search', search)
+
+    if (searchTarget) {
+      params = params.append('searchTarget', searchTarget as string)
+    }
+
+    return this.authHttp
+               .get<ResultList<VideoPlaylistServerModel>>(url, { params })
+               .pipe(
+                 switchMap(res => this.playlistService.extractPlaylists(res)),
                  catchError(err => this.restExtractor.handleError(err))
                )
   }

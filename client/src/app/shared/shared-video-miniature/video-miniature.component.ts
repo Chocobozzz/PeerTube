@@ -12,6 +12,7 @@ import {
 } from '@angular/core'
 import { AuthService, ScreenService, ServerService, User } from '@app/core'
 import { HTMLServerConfig, VideoPlaylistType, VideoPrivacy, VideoState } from '@shared/models'
+import { LinkType } from '../../../types/link.type'
 import { ActorAvatarSize } from '../shared-actor-image/actor-avatar.component'
 import { Video } from '../shared-main'
 import { VideoPlaylistService } from '../shared-video-playlist'
@@ -28,8 +29,6 @@ export type MiniatureDisplayOptions = {
   blacklistInfo?: boolean
   nsfw?: boolean
 }
-export type VideoLinkType = 'internal' | 'lazy-load' | 'external'
-
 @Component({
   selector: 'my-video-miniature',
   styleUrls: [ './video-miniature.component.scss' ],
@@ -56,7 +55,7 @@ export class VideoMiniatureComponent implements OnInit {
 
   @Input() displayAsRow = false
 
-  @Input() videoLinkType: VideoLinkType = 'internal'
+  @Input() videoLinkType: LinkType = 'internal'
 
   @Output() videoBlocked = new EventEmitter()
   @Output() videoUnblocked = new EventEmitter()

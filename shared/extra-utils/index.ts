@@ -19,6 +19,8 @@ export * from './plugins/mock-blocklist'
 export * from './requests/check-api-params'
 export * from './requests/requests'
 
+export * from './search/video-channels'
+export * from './search/video-playlists'
 export * from './search/videos'
 
 export * from './server/activitypub'
