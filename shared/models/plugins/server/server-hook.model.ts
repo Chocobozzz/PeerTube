@@ -110,7 +110,10 @@ export const serverActionHookObject = {
   'action:api.user.updated': true,
 
   // Fired when a user got a new oauth2 token
-  'action:api.user.oauth2-got-token': true
+  'action:api.user.oauth2-got-token': true,
+
+  // Fired when a video is added to a playlist
+  'action:api.video-playlist-element.created': true
 }
 
 export type ServerActionHookName = keyof typeof serverActionHookObject

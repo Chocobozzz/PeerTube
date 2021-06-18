@@ -43,6 +43,7 @@ import { AccountModel } from '../../models/account/account'
 import { VideoPlaylistModel } from '../../models/video/video-playlist'
 import { VideoPlaylistElementModel } from '../../models/video/video-playlist-element'
 import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
+import { Hooks } from '@server/lib/plugins/hooks'
 
 const reqThumbnailFile = createReqFiles([ 'thumbnailfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT, { thumbnailfile: CONFIG.STORAGE.TMP_DIR })
 
@@ -331,6 +332,8 @@ async function addVideoInPlaylist (req: express.Request, res: express.Response) 
     .catch(err => logger.error('Cannot send video playlist update.', { err }))
 
   logger.info('Video added in playlist %s at position %d.', videoPlaylist.uuid, playlistElement.position)
+
+  Hooks.runAction('action:api.video-playlist-element.created', { playlistElement })
 
   return res.json({
     videoPlaylistElement: {
