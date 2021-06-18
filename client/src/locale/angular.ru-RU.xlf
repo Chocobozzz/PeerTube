@@ -4557,7 +4557,7 @@
       </trans-unit>
       <trans-unit id="8342879272354516454" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {year old} other {years old}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {год назад} other {лет назад}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {год} other {лет}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">170</context>
