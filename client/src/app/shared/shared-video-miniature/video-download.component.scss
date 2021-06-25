@@ -23,18 +23,12 @@
   }
 }
 
-.peertube-select-container {
-  @include peertube-select-container(85px);
+.peertube-select-container.title-select {
+  @include peertube-select-container(auto);
 
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-  border-right: 0;
-
-  select {
-    height: inherit;
-    border-top-left-radius: .2rem;
-    border-bottom-left-radius: .2rem;
-  }
+  display: inline-block;
+  margin-left: 10px;
+  vertical-align: top;
 }
 
 #dropdown-download-type {
