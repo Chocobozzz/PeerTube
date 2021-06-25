@@ -2,7 +2,7 @@ import { registerTSPaths } from '../../server/helpers/register-ts-paths'
 registerTSPaths()
 
 import { initDatabaseModels } from '../../server/initializers/database'
-import * as program from 'commander'
+import { program } from 'commander'
 import { PluginManager } from '../../server/lib/plugins/plugin-manager'
 import { isAbsolute } from 'path'
 

@@ -30,9 +30,7 @@ function buildNSFWFilter (res?: express.Response, paramNSFW?: string) {
   return null
 }
 
-function cleanUpReqFiles (
-  req: { files: { [fieldname: string]: Express.Multer.File[] } | Express.Multer.File[] }
-) {
+function cleanUpReqFiles (req: express.Request) {
   const filesObject = req.files
   if (!filesObject) return
 

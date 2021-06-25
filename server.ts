@@ -14,7 +14,7 @@ import * as cookieParser from 'cookie-parser'
 import * as helmet from 'helmet'
 import * as useragent from 'useragent'
 import * as anonymize from 'ip-anonymize'
-import * as cli from 'commander'
+import { program as cli } from 'commander'
 
 process.title = 'peertube'
 

@@ -1,7 +1,7 @@
 import { registerTSPaths } from '../server/helpers/register-ts-paths'
 registerTSPaths()
 
-import * as program from 'commander'
+import { program } from 'commander'
 import { createReadStream, readdir } from 'fs-extra'
 import { join } from 'path'
 import { createInterface } from 'readline'
