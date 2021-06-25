@@ -3,12 +3,12 @@ import { getAppNumber, isTestInstance } from '../helpers/core-utils'
 import { join } from 'path'
 import { root } from '../../shared/extra-utils/miscs/miscs'
 import { getVideoChannel } from '../../shared/extra-utils/videos/video-channels'
-import { CommanderStatic } from 'commander'
 import { VideoChannel, VideoPrivacy } from '../../shared/models/videos'
 import { createLogger, format, transports } from 'winston'
 import { getMyUserInformation } from '@shared/extra-utils/users/users'
 import { User, UserRole } from '@shared/models'
 import { getAccessToken } from '@shared/extra-utils/users/login'
+import { Command } from 'commander'
 
 let configName = 'PeerTube/CLI'
 if (isTestInstance()) configName += `-${getAppNumber()}`
@@ -69,7 +69,7 @@ function deleteSettings () {
 }
 
 function getRemoteObjectOrDie (
-  program: CommanderStatic,
+  program: Command,
   settings: Settings,
   netrc: Netrc
 ): { url: string, username: string, password: string } {
@@ -106,7 +106,7 @@ function getRemoteObjectOrDie (
   }
 }
 
-function buildCommonVideoOptions (command: CommanderStatic) {
+function buildCommonVideoOptions (command: Command) {
   function list (val) {
     return val.split(',')
   }
@@ -128,7 +128,7 @@ function buildCommonVideoOptions (command: CommanderStatic) {
     .option('-v, --verbose <verbose>', 'Verbosity, from 0/\'error\' to 4/\'debug\'', 'info')
 }
 
-async function buildVideoAttributesFromCommander (url: string, command: CommanderStatic, defaultAttributes: any = {}) {
+async function buildVideoAttributesFromCommander (url: string, command: Command, defaultAttributes: any = {}) {
   const options = command.opts()
 
   const defaultBooleanAttributes = {
@@ -177,7 +177,7 @@ async function buildVideoAttributesFromCommander (url: string, command: Commande
   return videoAttributes
 }
 
-function getServerCredentials (program: CommanderStatic) {
+function getServerCredentials (program: Command) {
   return Promise.all([ getSettings(), getNetrc() ])
                 .then(([ settings, netrc ]) => {
                   return getRemoteObjectOrDie(program, settings, netrc)

@@ -2,7 +2,7 @@ import { registerTSPaths } from '../helpers/register-ts-paths'
 registerTSPaths()
 
 import { LiveVideo, LiveVideoCreate, VideoPrivacy } from '@shared/models'
-import * as program from 'commander'
+import { program } from 'commander'
 import {
   createLive,
   flushAndRunServer,
