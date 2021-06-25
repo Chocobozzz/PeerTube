@@ -1740,6 +1740,9 @@ paths:
                 commentsEnabled:
                   description: Enable or disable comments for this video
                   type: boolean
+                downloadEnabled:
+                  description: Enable or disable downloading for this video
+                  type: boolean
                 originallyPublishedAt:
                   description: Date when the content was originally published
                   type: string
@@ -2203,7 +2206,7 @@ paths:
                   description: Enable or disable comments for this live video/replay
                   type: boolean
                 downloadEnabled:
-                  description: Enable or disable downloading for the replay of this live
+                  description: Enable or disable downloading for the replay of this live video
                   type: boolean
               required:
                 - channelId
