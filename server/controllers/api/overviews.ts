@@ -7,6 +7,7 @@ import { CategoryOverview, ChannelOverview, TagOverview, VideosOverview } from '
 import { MEMOIZE_TTL, OVERVIEWS } from '../../initializers/constants'
 import * as memoizee from 'memoizee'
 import { logger } from '@server/helpers/logger'
+import { Hooks } from '../../lib/plugins/hooks'
 
 const overviewsRouter = express.Router()
 
@@ -108,7 +109,7 @@ async function getVideos (
   res: express.Response,
   where: { videoChannelId?: number, tagsOneOf?: string[], categoryOneOf?: number[] }
 ) {
-  const query = Object.assign({
+  let query = Object.assign({
     start: 0,
     count: 12,
     sort: '-createdAt',
@@ -119,7 +120,13 @@ async function getVideos (
     countVideos: false
   }, where)
 
-  const { data } = await VideoModel.listForApi(query)
+  query = await Hooks.wrapObject(query, 'filter:api.overviews.videos.list.params')
+
+  const { data } = await Hooks.wrapPromiseFun(
+    VideoModel.listForApi,
+    query,
+    'filter:api.overviews.videos.list.result'
+  )
 
   return data.map(d => d.toFormattedJSON())
 }
