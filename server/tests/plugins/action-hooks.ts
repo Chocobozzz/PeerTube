@@ -1,13 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-import { ServerHookName, VideoPrivacy } from '@shared/models'
+import { ServerHookName, VideoPlaylistPrivacy, VideoPrivacy } from '@shared/models'
 import {
   addVideoCommentReply,
   addVideoCommentThread,
+  addVideoInPlaylist,
   blockUser,
   createLive,
   createUser,
+  createVideoPlaylist,
   deleteVideoComment,
   getPluginTestPath,
   installPlugin,
@@ -65,6 +67,36 @@ describe('Test plugin action hooks', function () {
   describe('Application hooks', function () {
     it('Should run action:application.listening', async function () {
       await checkHook('action:application.listening')
+    })
+  })
+
+  describe('Playlist hooks', function () {
+    let playlistId
+    let videoId
+
+    before(async function () {
+      const { body } = await createVideoPlaylist({
+        url: servers[0].url,
+        token: servers[0].accessToken,
+        playlistAttrs: {
+          displayName: 'My playlist',
+          privacy: VideoPlaylistPrivacy.PUBLIC
+        }
+      })
+      playlistId = body.videoPlaylist.id
+
+      const res = await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'my super name' })
+      videoId = res.body.video.id
+    })
+
+    it('Should run action:api.video-playlist-element.created', async function () {
+      await addVideoInPlaylist({
+        url: servers[0].url,
+        token: servers[0].accessToken,
+        playlistId,
+        elementAttrs: { videoId }
+      })
+      await checkHook('action:api.video-playlist-element.created')
     })
   })
 
