@@ -19,7 +19,9 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
     'action:api.user.created',
     'action:api.user.deleted',
     'action:api.user.updated',
-    'action:api.user.oauth2-got-token'
+    'action:api.user.oauth2-got-token',
+
+    'action:api.video-playlist-element.created'
   ]
 
   for (const h of actionHooks) {
