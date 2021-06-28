@@ -12,8 +12,8 @@ body {
 @mixin big-play-button-triangle-size($triangle-size) {
   width: $triangle-size;
   height: $triangle-size;
-  top: calc(50% - math.div($triangle-size, 2));
-  left: calc(53% - math.div($triangle-size, 2));
+  top: calc(50% - #{math.div($triangle-size, 2)});
+  left: calc(53% - #{math.div($triangle-size, 2)});
 }
 
 .video-js.vjs-peertube-skin {
