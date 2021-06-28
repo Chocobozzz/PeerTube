@@ -14,7 +14,7 @@ import * as cookieParser from 'cookie-parser'
 import * as helmet from 'helmet'
 import * as useragent from 'useragent'
 import * as anonymize from 'ip-anonymize'
-import * as cli from 'commander'
+import { program as cli } from 'commander'
 
 process.title = 'peertube'
 
@@ -124,7 +124,7 @@ import { PluginsCheckScheduler } from './server/lib/schedulers/plugins-check-sch
 import { PeerTubeVersionCheckScheduler } from './server/lib/schedulers/peertube-version-check-scheduler'
 import { Hooks } from './server/lib/plugins/hooks'
 import { PluginManager } from './server/lib/plugins/plugin-manager'
-import { LiveManager } from './server/lib/live-manager'
+import { LiveManager } from './server/lib/live'
 import { HttpStatusCode } from './shared/core-utils/miscs/http-error-codes'
 import { VideosTorrentCache } from '@server/lib/files-cache/videos-torrent-cache'
 import { ServerConfigManager } from '@server/lib/server-config-manager'

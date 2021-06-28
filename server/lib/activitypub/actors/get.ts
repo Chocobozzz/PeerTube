@@ -40,6 +40,9 @@ async function getOrCreateAPActor (
     const { actorObject } = await fetchRemoteActor(actorUrl)
     if (actorObject === undefined) throw new Error('Cannot fetch remote actor ' + actorUrl)
 
+    // actorUrl is just an alias/rediraction, so process object id instead
+    if (actorObject.id !== actorUrl) return getOrCreateAPActor(actorObject, 'all', recurseIfNeeded, updateCollections)
+
     // Create the attributed to actor
     // In PeerTube a video channel is owned by an account
     let ownerActor: MActorFullActor
@@ -113,7 +116,7 @@ async function scheduleOutboxFetchIfNeeded (actor: MActor, created: boolean, ref
 async function schedulePlaylistFetchIfNeeded (actor: MActorAccountId, created: boolean, accountPlaylistsUrl: string) {
   // We created a new account: fetch the playlists
   if (created === true && actor.Account && accountPlaylistsUrl) {
-    const payload = { uri: accountPlaylistsUrl, accountId: actor.Account.id, type: 'account-playlists' as 'account-playlists' }
+    const payload = { uri: accountPlaylistsUrl, type: 'account-playlists' as 'account-playlists' }
     await JobQueue.Instance.createJobWithPromise({ type: 'activitypub-http-fetcher', payload })
   }
 }

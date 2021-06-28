@@ -1,7 +1,7 @@
 {
-  "name": "peertube-plugin-test-two",
+  "name": "peertube-plugin-test-filter-translations",
   "version": "0.0.1",
-  "description": "Plugin test 2",
+  "description": "Plugin test filter and translations",
   "engine": {
     "peertube": ">=1.3.0"
   },

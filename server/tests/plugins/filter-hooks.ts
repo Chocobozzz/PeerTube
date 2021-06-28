@@ -8,6 +8,7 @@ import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-code
 import {
   addVideoCommentReply,
   addVideoCommentThread,
+  advancedVideoPlaylistSearch,
   advancedVideosSearch,
   createLive,
   createVideoPlaylist,
@@ -71,7 +72,7 @@ describe('Test plugin filter hooks', function () {
     await installPlugin({
       url: servers[0].url,
       accessToken: servers[0].accessToken,
-      path: getPluginTestPath('-two')
+      path: getPluginTestPath('-filter-translations')
     })
 
     for (let i = 0; i < 10; i++) {
@@ -524,6 +525,27 @@ describe('Test plugin filter hooks', function () {
       await waitUntilLog(servers[0], 'Run hook filter:api.search.video-channels.local.list.result', 1)
       await waitUntilLog(servers[0], 'Run hook filter:api.search.video-channels.index.list.params', 1)
       await waitUntilLog(servers[0], 'Run hook filter:api.search.video-channels.index.list.result', 1)
+    })
+
+    it('Should run filter:api.search.video-playlists.local.list.{params,result}', async function () {
+      await advancedVideoPlaylistSearch(servers[0].url, {
+        search: 'Sun Jian'
+      })
+
+      await waitUntilLog(servers[0], 'Run hook filter:api.search.video-playlists.local.list.params', 1)
+      await waitUntilLog(servers[0], 'Run hook filter:api.search.video-playlists.local.list.result', 1)
+    })
+
+    it('Should run filter:api.search.video-playlists.index.list.{params,result}', async function () {
+      await advancedVideoPlaylistSearch(servers[0].url, {
+        search: 'Sun Jian',
+        searchTarget: 'search-index'
+      })
+
+      await waitUntilLog(servers[0], 'Run hook filter:api.search.video-playlists.local.list.params', 1)
+      await waitUntilLog(servers[0], 'Run hook filter:api.search.video-playlists.local.list.result', 1)
+      await waitUntilLog(servers[0], 'Run hook filter:api.search.video-playlists.index.list.params', 1)
+      await waitUntilLog(servers[0], 'Run hook filter:api.search.video-playlists.index.list.result', 1)
     })
   })
 

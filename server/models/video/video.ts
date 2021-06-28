@@ -27,7 +27,7 @@ import {
 import { setAsUpdated } from '@server/helpers/database-utils'
 import { buildNSFWFilter } from '@server/helpers/express-utils'
 import { getPrivaciesForFederation, isPrivacyForFederation, isStateForFederation } from '@server/helpers/video'
-import { LiveManager } from '@server/lib/live-manager'
+import { LiveManager } from '@server/lib/live/live-manager'
 import { getHLSDirectory, getVideoFilePath } from '@server/lib/video-paths'
 import { getServerActor } from '@server/models/application/application'
 import { ModelCache } from '@server/models/model-cache'

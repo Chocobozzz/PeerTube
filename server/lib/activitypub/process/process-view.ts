@@ -4,7 +4,7 @@ import { Redis } from '../../redis'
 import { ActivityCreate, ActivityView, ViewObject } from '../../../../shared/models/activitypub'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model'
 import { MActorSignature } from '../../../types/models'
-import { LiveManager } from '@server/lib/live-manager'
+import { LiveManager } from '@server/lib/live/live-manager'
 
 async function processViewActivity (options: APProcessorOptions<ActivityCreate | ActivityView>) {
   const { activity, byActor } = options

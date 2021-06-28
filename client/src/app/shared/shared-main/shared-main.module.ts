@@ -4,7 +4,7 @@ import { CommonModule, DatePipe } from '@angular/common'
 import { HttpClientModule } from '@angular/common/http'
 import { NgModule } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
-import { ActivatedRouteSnapshot, RouterModule } from '@angular/router'
+import { RouterModule } from '@angular/router'
 import {
   NgbButtonsModule,
   NgbCollapseModule,
@@ -24,6 +24,7 @@ import {
   DurationFormatterPipe,
   FromNowPipe,
   InfiniteScrollerDirective,
+  LinkComponent,
   NumberFormatterPipe,
   PeerTubeTemplateDirective
 } from './angular'
@@ -35,11 +36,11 @@ import { FeedComponent } from './feeds'
 import { LoaderComponent, SmallLoaderComponent } from './loaders'
 import { HelpComponent, ListOverflowComponent, SimpleSearchInputComponent, TopMenuDropdownComponent } from './misc'
 import { PluginPlaceholderComponent } from './plugins'
+import { ActorRedirectGuard } from './router'
 import { UserHistoryService, UserNotificationsComponent, UserNotificationService, UserQuotaComponent } from './users'
 import { RedundancyService, VideoImportService, VideoOwnershipService, VideoService } from './video'
 import { VideoCaptionService } from './video-caption'
 import { VideoChannelService } from './video-channel'
-import { ActorRedirectGuard } from './router'
 
 @NgModule({
   imports: [
@@ -76,6 +77,7 @@ import { ActorRedirectGuard } from './router'
 
     InfiniteScrollerDirective,
     PeerTubeTemplateDirective,
+    LinkComponent,
 
     ActionDropdownComponent,
     ButtonComponent,
@@ -130,6 +132,7 @@ import { ActorRedirectGuard } from './router'
 
     InfiniteScrollerDirective,
     PeerTubeTemplateDirective,
+    LinkComponent,
 
     ActionDropdownComponent,
     ButtonComponent,

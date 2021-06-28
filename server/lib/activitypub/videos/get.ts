@@ -3,6 +3,7 @@ import { retryTransactionWrapper } from '@server/helpers/database-utils'
 import { JobQueue } from '@server/lib/job-queue'
 import { loadVideoByUrl, VideoLoadByUrlType } from '@server/lib/model-loaders'
 import { MVideoAccountLightBlacklistAllFiles, MVideoImmutable, MVideoThumbnail } from '@server/types/models'
+import { APObject } from '@shared/models'
 import { refreshVideoIfNeeded } from './refresh'
 import { APVideoCreator, fetchRemoteVideo, SyncParam, syncVideoExternalAttributes } from './shared'
 
@@ -13,21 +14,21 @@ type GetVideoResult <T> = Promise<{
 }>
 
 type GetVideoParamAll = {
-  videoObject: { id: string } | string
+  videoObject: APObject
   syncParam?: SyncParam
   fetchType?: 'all'
   allowRefresh?: boolean
 }
 
 type GetVideoParamImmutable = {
-  videoObject: { id: string } | string
+  videoObject: APObject
   syncParam?: SyncParam
   fetchType: 'only-immutable-attributes'
   allowRefresh: false
 }
 
 type GetVideoParamOther = {
-  videoObject: { id: string } | string
+  videoObject: APObject
   syncParam?: SyncParam
   fetchType?: 'all' | 'only-video'
   allowRefresh?: boolean
@@ -61,6 +62,7 @@ async function getOrCreateAPVideo (
   const { videoObject } = await fetchRemoteVideo(videoUrl)
   if (!videoObject) throw new Error('Cannot fetch remote video with url: ' + videoUrl)
 
+  // videoUrl is just an alias/rediraction, so process object id instead
   if (videoObject.id !== videoUrl) return getOrCreateAPVideo({ ...options, fetchType: 'all', videoObject })
 
   try {

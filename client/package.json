@@ -25,9 +25,6 @@
     "stylelint": "stylelint"
   },
   "typings": "*.d.ts",
-  "resolutions": {
-    "@types/mousetrap": "1.6.3"
-  },
   "devDependencies": {
     "@angular-devkit/build-angular": "^12.0.0",
     "@angular/animations": "^12.0.0",
@@ -45,7 +42,7 @@
     "@angular/service-worker": "^12.0.0",
     "@neos21/bootstrap3-glyphicons": "^1.0.1",
     "@ng-bootstrap/ng-bootstrap": "^9.0.2",
-    "@ng-select/ng-select": "^6.0.0",
+    "@ng-select/ng-select": "^7.0.1",
     "@ngx-i18nsupport/ngx-i18nsupport": "^1.1.6",
     "@ngx-i18nsupport/tooling": "^8.0.3",
     "@ngx-loading-bar/core": "^5.0.0",
@@ -93,7 +90,7 @@
     "karma-jasmine-html-reporter": "^1.5.0",
     "linkifyjs": "^2.1.5",
     "lodash-es": "^4.17.4",
-    "markdown-it": "12.0.4",
+    "markdown-it": "12.0.6",
     "mini-css-extract-plugin": "^1.6.0",
     "ngx-uploadx": "^4.1.0",
     "p2p-media-loader-hlsjs": "^0.6.2",
@@ -119,7 +116,7 @@
     "tslint": "~6.1.0",
     "tslint-angular": "^3.0.2",
     "tslint-config-standard": "^9.0.0",
-    "typescript": "~4.2.4",
+    "typescript": "~4.3.4",
     "video.js": "^7",
     "videojs-contextmenu-pt": "^5.4.1",
     "videojs-contrib-quality-levels": "^2.0.9",

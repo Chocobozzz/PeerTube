@@ -649,7 +649,7 @@ class WebTorrentPlugin extends Plugin {
   }
 
   private changeQuality () {
-    const resolutionId = this.currentVideoFile.resolution.id
+    const resolutionId = this.currentVideoFile.resolution.id as number
     const qualityLevels = this.player.qualityLevels()
 
     if (resolutionId === -1) {

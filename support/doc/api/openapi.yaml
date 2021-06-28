@@ -1740,6 +1740,9 @@ paths:
                 commentsEnabled:
                   description: Enable or disable comments for this video
                   type: boolean
+                downloadEnabled:
+                  description: Enable or disable downloading for this video
+                  type: boolean
                 originallyPublishedAt:
                   description: Date when the content was originally published
                   type: string
@@ -2203,7 +2206,7 @@ paths:
                   description: Enable or disable comments for this live video/replay
                   type: boolean
                 downloadEnabled:
-                  description: Enable or disable downloading for the replay of this live
+                  description: Enable or disable downloading for the replay of this live video
                   type: boolean
               required:
                 - channelId
@@ -3581,6 +3584,47 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/VideoChannelList'
+        '500':
+          description: search index unavailable
+
+  /search/video-playlists:
+    get:
+      tags:
+        - Search
+      summary: Search playlists
+      operationId: searchPlaylists
+      parameters:
+        - name: search
+          in: query
+          required: true
+          description: >
+            String to search. If the user can make a remote URI search, and the string is an URI then the
+            PeerTube instance will fetch the remote object and add it to its database. Then,
+            you can use the REST API to fetch the complete playlist information and interact with it.
+          schema:
+            type: string
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/searchTarget'
+        - $ref: '#/components/parameters/sort'
+      callbacks:
+        'searchTarget === search-index':
+          $ref: '#/components/callbacks/searchIndex'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                    example: 1
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/VideoPlaylist'
         '500':
           description: search index unavailable
 

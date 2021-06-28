@@ -40,7 +40,7 @@ languages=(
 
 cd client
 
-rm -rf ./dist ./compiled
+rm -rf ./dist
 
 # Don't build other languages if --light arg is provided
 if [ -z ${1+x} ] || ([ "$1" != "--light" ] && [ "$1" != "--analyze-bundle" ]); then

@@ -32,7 +32,7 @@ import {
   videoChannelsUpdateValidator,
   videoPlaylistsSortValidator
 } from '../../middlewares'
-import { videoChannelsNameWithHostValidator, videoChannelsOwnSearchValidator, videosSortValidator } from '../../middlewares/validators'
+import { videoChannelsListValidator, videoChannelsNameWithHostValidator, videosSortValidator } from '../../middlewares/validators'
 import { updateAvatarValidator, updateBannerValidator } from '../../middlewares/validators/actor-image'
 import { commonVideoPlaylistFiltersValidator } from '../../middlewares/validators/videos/video-playlists'
 import { AccountModel } from '../../models/account/account'
@@ -51,7 +51,7 @@ videoChannelRouter.get('/',
   videoChannelsSortValidator,
   setDefaultSort,
   setDefaultPagination,
-  videoChannelsOwnSearchValidator,
+  videoChannelsListValidator,
   asyncMiddleware(listVideoChannels)
 )
 

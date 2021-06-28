@@ -33,24 +33,33 @@ runTest () {
 }
 
 findTestFiles () {
-    find $1 -type f -name "*.js" | grep -v "/index.js" | xargs echo
+    exception="-not -name index.js"
+
+    if [ ! -z ${2+x} ]; then
+        exception="$exception -not -name $2"
+    fi
+
+    find $1 -type f -name "*.js" $exception | xargs echo
 }
 
-if [ "$1" = "misc" ]; then
+if [ "$1" = "client" ]; then
     npm run build
 
     feedsFiles=$(findTestFiles ./dist/server/tests/feeds)
     helperFiles=$(findTestFiles ./dist/server/tests/helpers)
-    pluginsFiles=$(findTestFiles ./dist/server/tests/plugins)
     miscFiles="./dist/server/tests/client.js ./dist/server/tests/misc-endpoints.js"
+    # Not in plugin task, it needs an index.html
+    pluginFiles="./dist/server/tests/plugins/html-injection.js"
 
-    MOCHA_PARALLEL=true runTest "$1" 2 $feedsFiles $helperFiles $pluginsFiles $miscFiles
-elif [ "$1" = "cli" ]; then
+    MOCHA_PARALLEL=true runTest "$1" 2 $feedsFiles $helperFiles $miscFiles $pluginFiles
+elif [ "$1" = "cli-plugin" ]; then
     npm run build:server
     npm run setup:cli
 
+    pluginsFiles=$(findTestFiles ./dist/server/tests/plugins html-injection.js)
     cliFiles=$(findTestFiles ./dist/server/tests/cli)
 
+    MOCHA_PARALLEL=true runTest "$1" 2 $pluginsFiles
     runTest "$1" 1 $cliFiles
 elif [ "$1" = "api-1" ]; then
     npm run build:server
@@ -63,9 +72,9 @@ elif [ "$1" = "api-1" ]; then
 elif [ "$1" = "api-2" ]; then
     npm run build:server
 
+    liveFiles=$(findTestFiles ./dist/server/tests/api/live)
     serverFiles=$(findTestFiles ./dist/server/tests/api/server)
     usersFiles=$(findTestFiles ./dist/server/tests/api/users)
-    liveFiles=$(findTestFiles ./dist/server/tests/api/live)
 
     MOCHA_PARALLEL=true runTest "$1" 3 $serverFiles $usersFiles $liveFiles
 elif [ "$1" = "api-3" ]; then

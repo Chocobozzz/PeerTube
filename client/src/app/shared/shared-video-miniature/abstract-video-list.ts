@@ -196,7 +196,6 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, AfterConte
     // No more results
     if (this.lastQueryLength !== undefined && this.lastQueryLength < this.pagination.itemsPerPage) return
 
-    console.log('near of bottom')
     this.pagination.currentPage += 1
 
     this.setScrollRouteParams()

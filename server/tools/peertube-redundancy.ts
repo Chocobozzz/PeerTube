@@ -3,7 +3,7 @@
 import { registerTSPaths } from '../helpers/register-ts-paths'
 registerTSPaths()
 
-import * as program from 'commander'
+import { program, Command } from 'commander'
 import { getAdminTokenOrDie, getServerCredentials } from './cli'
 import { VideoRedundanciesTarget, VideoRedundancy } from '@shared/models'
 import { addVideoRedundancy, listVideoRedundancies, removeVideoRedundancy } from '@shared/extra-utils/server/redundancy'
@@ -14,7 +14,6 @@ import { URL } from 'url'
 import { uniq } from 'lodash'
 
 import bytes = require('bytes')
-import commander = require('commander')
 
 program
   .name('plugins')
@@ -105,7 +104,7 @@ async function listRedundanciesCLI (target: VideoRedundanciesTarget) {
   process.exit(0)
 }
 
-async function addRedundancyCLI (options: { video: number }, command: commander.CommanderStatic) {
+async function addRedundancyCLI (options: { video: number }, command: Command) {
   const { url, username, password } = await getServerCredentials(command)
   const accessToken = await getAdminTokenOrDie(url, username, password)
 
@@ -138,7 +137,7 @@ async function addRedundancyCLI (options: { video: number }, command: commander.
   }
 }
 
-async function removeRedundancyCLI (options: { video: number }, command: commander.CommanderStatic) {
+async function removeRedundancyCLI (options: { video: number }, command: Command) {
   const { url, username, password } = await getServerCredentials(command)
   const accessToken = await getAdminTokenOrDie(url, username, password)
 

@@ -69,9 +69,10 @@ function getStoredLastSubtitle () {
   return getLocalStorage('last-subtitle')
 }
 
-function saveVideoWatchHistory(videoUUID: string, duration: number) {
+function saveVideoWatchHistory (videoUUID: string, duration: number) {
   return setLocalStorage(`video-watch-history`, JSON.stringify({
     ...getStoredVideoWatchHistory(),
+
     [videoUUID]: {
       duration,
       date: `${(new Date()).toISOString()}`
@@ -79,11 +80,14 @@ function saveVideoWatchHistory(videoUUID: string, duration: number) {
   }))
 }
 
-function getStoredVideoWatchHistory(videoUUID?: string) {
+function getStoredVideoWatchHistory (videoUUID?: string) {
   let data
 
   try {
-    data = JSON.parse(getLocalStorage('video-watch-history'))
+    const value = getLocalStorage('video-watch-history')
+    if (!value) return {}
+
+    data = JSON.parse(value)
   } catch (error) {
     console.error('Cannot parse video watch history from local storage: ', error)
   }
@@ -95,8 +99,9 @@ function getStoredVideoWatchHistory(videoUUID?: string) {
   return data
 }
 
-function cleanupVideoWatch() {
+function cleanupVideoWatch () {
   const data = getStoredVideoWatchHistory()
+  if (!data) return
 
   const newData = Object.keys(data).reduce((acc, videoUUID) => {
     const date = Date.parse(data[videoUUID].date)

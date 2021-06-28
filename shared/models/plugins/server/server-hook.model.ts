@@ -27,6 +27,10 @@ export const serverFilterHookObject = {
   'filter:api.search.video-channels.local.list.result': true,
   'filter:api.search.video-channels.index.list.params': true,
   'filter:api.search.video-channels.index.list.result': true,
+  'filter:api.search.video-playlists.local.list.params': true,
+  'filter:api.search.video-playlists.local.list.result': true,
+  'filter:api.search.video-playlists.index.list.params': true,
+  'filter:api.search.video-playlists.index.list.result': true,
 
   // Filter the result of the get function
   // Used to get detailed video information (video watch page for example)

@@ -18,7 +18,7 @@ export class AbstractVideosQueryBuilder {
       logging: options.logging,
       replacements: this.replacements,
       type: QueryTypes.SELECT as QueryTypes.SELECT,
-      next: false
+      nest: false
     }
 
     return this.sequelize.query<any>(this.query, queryOptions)

@@ -75,7 +75,10 @@
 }
 
 .miniature:not(.display-as-row) {
+
   .miniature-thumbnail {
+    @include block-ratio($selector: '::ng-deep a');
+
     margin-top: 10px;
     margin-bottom: 5px;
   }
