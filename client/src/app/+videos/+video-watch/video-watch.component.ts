@@ -312,7 +312,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   getVideoUrl () {
     if (!this.video.url) {
-      return this.video.originInstanceUrl + VideoDetails.buildClientUrl(this.video.uuid)
+      return this.video.originInstanceUrl + VideoDetails.buildWatchUrl(this.video)
     }
     return this.video.url
   }
@@ -415,7 +415,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   private loadVideo (videoId: string) {
     // Video did not change
-    if (this.video && this.video.uuid === videoId) return
+    if (
+      this.video &&
+      (this.video.uuid === videoId || this.video.shortUUID === videoId)
+    ) return
 
     if (this.player) this.player.pause()
 
@@ -489,7 +492,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   private loadPlaylist (playlistId: string) {
     // Playlist did not change
-    if (this.playlist && this.playlist.uuid === playlistId) return
+    if (
+      this.playlist &&
+      (this.playlist.uuid === playlistId || this.playlist.shortUUID === playlistId)
+    ) return
 
     this.playlistService.getVideoPlaylist(playlistId)
       .pipe(
@@ -772,13 +778,13 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   private flushPlayer () {
     // Remove player if it exists
-    if (this.player) {
-      try {
-        this.player.dispose()
-        this.player = undefined
-      } catch (err) {
-        console.error('Cannot dispose player.', err)
-      }
+    if (!this.player) return
+
+    try {
+      this.player.dispose()
+      this.player = undefined
+    } catch (err) {
+      console.error('Cannot dispose player.', err)
     }
   }
 

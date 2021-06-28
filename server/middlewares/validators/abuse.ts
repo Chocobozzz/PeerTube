@@ -12,7 +12,7 @@ import {
   isAbuseTimestampValid,
   isAbuseVideoIsValid
 } from '@server/helpers/custom-validators/abuses'
-import { exists, isIdOrUUIDValid, isIdValid, toIntOrNull } from '@server/helpers/custom-validators/misc'
+import { exists, isIdOrUUIDValid, isIdValid, toCompleteUUID, toIntOrNull } from '@server/helpers/custom-validators/misc'
 import { logger } from '@server/helpers/logger'
 import { AbuseMessageModel } from '@server/models/abuse/abuse-message'
 import { AbuseCreate, UserRight } from '@shared/models'
@@ -27,6 +27,7 @@ const abuseReportValidator = [
 
   body('video.id')
     .optional()
+    .customSanitizer(toCompleteUUID)
     .custom(isIdOrUUIDValid)
     .withMessage('Should have a valid videoId'),
   body('video.startAt')

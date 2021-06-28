@@ -116,11 +116,11 @@ export class AbuseListTableComponent extends RestTable implements OnInit {
   }
 
   getVideoUrl (abuse: AdminAbuse) {
-    return Video.buildClientUrl(abuse.video.uuid)
+    return Video.buildWatchUrl(abuse.video)
   }
 
   getCommentUrl (abuse: AdminAbuse) {
-    return Video.buildClientUrl(abuse.comment.video.uuid) + ';threadId=' + abuse.comment.threadId
+    return Video.buildWatchUrl(abuse.comment.video) + ';threadId=' + abuse.comment.threadId
   }
 
   getAccountUrl (abuse: ProcessedAbuse) {

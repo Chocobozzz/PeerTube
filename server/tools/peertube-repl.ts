@@ -4,7 +4,6 @@ registerTSPaths()
 import * as repl from 'repl'
 import * as path from 'path'
 import * as _ from 'lodash'
-import { uuidv1, uuidv3, uuidv4, uuidv5 } from 'uuid'
 import * as Sequelize from 'sequelize'
 import * as YoutubeDL from 'youtube-dl'
 import { initDatabaseModels, sequelizeTypescript } from '../initializers/database'
@@ -31,10 +30,6 @@ const start = async () => {
         env: process.env,
         lodash: _,
         path,
-        uuidv1,
-        uuidv3,
-        uuidv4,
-        uuidv5,
         cli,
         logger,
         constants,

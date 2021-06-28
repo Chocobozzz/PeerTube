@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-import { v4 as uuidv4 } from 'uuid'
+import { buildUUID } from '@server/helpers/uuid'
 import { AbuseState } from '@shared/models'
 import {
   addAbuseMessage,
@@ -85,7 +85,7 @@ describe('Test moderation notifications', function () {
     it('Should send a notification to moderators on local video abuse', async function () {
       this.timeout(20000)
 
-      const name = 'video for abuse ' + uuidv4()
+      const name = 'video for abuse ' + buildUUID()
       const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name })
       const video = resVideo.body.video
 
@@ -98,7 +98,7 @@ describe('Test moderation notifications', function () {
     it('Should send a notification to moderators on remote video abuse', async function () {
       this.timeout(20000)
 
-      const name = 'video for abuse ' + uuidv4()
+      const name = 'video for abuse ' + buildUUID()
       const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name })
       const video = resVideo.body.video
 
@@ -114,10 +114,10 @@ describe('Test moderation notifications', function () {
     it('Should send a notification to moderators on local comment abuse', async function () {
       this.timeout(20000)
 
-      const name = 'video for abuse ' + uuidv4()
+      const name = 'video for abuse ' + buildUUID()
       const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name })
       const video = resVideo.body.video
-      const resComment = await addVideoCommentThread(servers[0].url, userAccessToken, video.id, 'comment abuse ' + uuidv4())
+      const resComment = await addVideoCommentThread(servers[0].url, userAccessToken, video.id, 'comment abuse ' + buildUUID())
       const comment = resComment.body.comment
 
       await waitJobs(servers)
@@ -131,10 +131,10 @@ describe('Test moderation notifications', function () {
     it('Should send a notification to moderators on remote comment abuse', async function () {
       this.timeout(20000)
 
-      const name = 'video for abuse ' + uuidv4()
+      const name = 'video for abuse ' + buildUUID()
       const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name })
       const video = resVideo.body.video
-      await addVideoCommentThread(servers[0].url, userAccessToken, video.id, 'comment abuse ' + uuidv4())
+      await addVideoCommentThread(servers[0].url, userAccessToken, video.id, 'comment abuse ' + buildUUID())
 
       await waitJobs(servers)
 
@@ -188,7 +188,7 @@ describe('Test moderation notifications', function () {
         token: userAccessToken
       }
 
-      const name = 'abuse ' + uuidv4()
+      const name = 'abuse ' + buildUUID()
       const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name })
       const video = resVideo.body.video
 
@@ -236,7 +236,7 @@ describe('Test moderation notifications', function () {
         token: servers[0].accessToken
       }
 
-      const name = 'abuse ' + uuidv4()
+      const name = 'abuse ' + buildUUID()
       const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name })
       const video = resVideo.body.video
 
@@ -307,7 +307,7 @@ describe('Test moderation notifications', function () {
     it('Should send a notification to video owner on blacklist', async function () {
       this.timeout(10000)
 
-      const name = 'video for abuse ' + uuidv4()
+      const name = 'video for abuse ' + buildUUID()
       const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name })
       const uuid = resVideo.body.video.uuid
 
@@ -320,7 +320,7 @@ describe('Test moderation notifications', function () {
     it('Should send a notification to video owner on unblacklist', async function () {
       this.timeout(10000)
 
-      const name = 'video for abuse ' + uuidv4()
+      const name = 'video for abuse ' + buildUUID()
       const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name })
       const uuid = resVideo.body.video.uuid
 
@@ -507,7 +507,7 @@ describe('Test moderation notifications', function () {
     it('Should send notification to moderators on new video with auto-blacklist', async function () {
       this.timeout(40000)
 
-      videoName = 'video with auto-blacklist ' + uuidv4()
+      videoName = 'video with auto-blacklist ' + buildUUID()
       const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name: videoName })
       videoUUID = resVideo.body.video.uuid
 
@@ -553,7 +553,7 @@ describe('Test moderation notifications', function () {
 
       const updateAt = new Date(new Date().getTime() + 1000000)
 
-      const name = 'video with auto-blacklist and future schedule ' + uuidv4()
+      const name = 'video with auto-blacklist and future schedule ' + buildUUID()
 
       const data = {
         name,
@@ -586,7 +586,7 @@ describe('Test moderation notifications', function () {
       // In 2 seconds
       const updateAt = new Date(new Date().getTime() + 2000)
 
-      const name = 'video with schedule done and still auto-blacklisted ' + uuidv4()
+      const name = 'video with schedule done and still auto-blacklisted ' + buildUUID()
 
       const data = {
         name,
@@ -609,7 +609,7 @@ describe('Test moderation notifications', function () {
     it('Should not send a notification to moderators on new video without auto-blacklist', async function () {
       this.timeout(60000)
 
-      const name = 'video without auto-blacklist ' + uuidv4()
+      const name = 'video without auto-blacklist ' + buildUUID()
 
       // admin with blacklist right will not be auto-blacklisted
       const resVideo = await uploadVideo(servers[0].url, servers[0].accessToken, { name })

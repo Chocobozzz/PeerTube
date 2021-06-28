@@ -35,3 +35,4 @@ export * from './video-transcoding-fps.model'
 
 export * from './video-update.model'
 export * from './video.model'
+export * from './video-create-result.model'

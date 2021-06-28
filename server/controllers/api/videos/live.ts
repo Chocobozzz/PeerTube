@@ -1,6 +1,6 @@
 import * as express from 'express'
-import { v4 as uuidv4 } from 'uuid'
 import { createReqFiles } from '@server/helpers/express-utils'
+import { buildUUID, uuidToShort } from '@server/helpers/uuid'
 import { CONFIG } from '@server/initializers/config'
 import { ASSETS_PATH, MIMETYPES } from '@server/initializers/constants'
 import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url'
@@ -11,12 +11,12 @@ import { videoLiveAddValidator, videoLiveGetValidator, videoLiveUpdateValidator 
 import { VideoLiveModel } from '@server/models/video/video-live'
 import { MVideoDetails, MVideoFullLight } from '@server/types/models'
 import { LiveVideoCreate, LiveVideoUpdate, VideoState } from '../../../../shared'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import { logger } from '../../../helpers/logger'
 import { sequelizeTypescript } from '../../../initializers/database'
 import { updateVideoMiniatureFromExisting } from '../../../lib/thumbnail'
 import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate } from '../../../middlewares'
 import { VideoModel } from '../../../models/video/video'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const liveRouter = express.Router()
 
@@ -94,7 +94,7 @@ async function addLiveVideo (req: express.Request, res: express.Response) {
   const videoLive = new VideoLiveModel()
   videoLive.saveReplay = videoInfo.saveReplay || false
   videoLive.permanentLive = videoInfo.permanentLive || false
-  videoLive.streamKey = uuidv4()
+  videoLive.streamKey = buildUUID()
 
   const [ thumbnailModel, previewModel ] = await buildVideoThumbnailsFromReq({
     video,
@@ -138,6 +138,7 @@ async function addLiveVideo (req: express.Request, res: express.Response) {
   return res.json({
     video: {
       id: videoCreated.id,
+      shortUUID: uuidToShort(videoCreated.uuid),
       uuid: videoCreated.uuid
     }
   })

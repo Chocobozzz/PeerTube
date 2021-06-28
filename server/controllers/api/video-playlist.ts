@@ -1,6 +1,8 @@
 import * as express from 'express'
 import { join } from 'path'
+import { uuidToShort } from '@server/helpers/uuid'
 import { scheduleRefreshIfNeeded } from '@server/lib/activitypub/playlists'
+import { Hooks } from '@server/lib/plugins/hooks'
 import { getServerActor } from '@server/models/application/application'
 import { MVideoPlaylistFull, MVideoPlaylistThumbnail, MVideoThumbnail } from '@server/types/models'
 import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
@@ -43,7 +45,6 @@ import {
 import { AccountModel } from '../../models/account/account'
 import { VideoPlaylistModel } from '../../models/video/video-playlist'
 import { VideoPlaylistElementModel } from '../../models/video/video-playlist-element'
-import { Hooks } from '@server/lib/plugins/hooks'
 
 const reqThumbnailFile = createReqFiles([ 'thumbnailfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT, { thumbnailfile: CONFIG.STORAGE.TMP_DIR })
 
@@ -199,6 +200,7 @@ async function addVideoPlaylist (req: express.Request, res: express.Response) {
   return res.json({
     videoPlaylist: {
       id: videoPlaylistCreated.id,
+      shortUUID: uuidToShort(videoPlaylistCreated.uuid),
       uuid: videoPlaylistCreated.uuid
     }
   })

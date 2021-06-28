@@ -19,6 +19,6 @@ export class VideoLazyLoadResolver extends AbstractLazyLoadResolver<Video> {
   }
 
   protected buildUrl (video: Video) {
-    return '/w/' + video.uuid
+    return Video.buildWatchUrl(video)
   }
 }

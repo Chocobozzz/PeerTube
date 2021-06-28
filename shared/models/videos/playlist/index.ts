@@ -1,4 +1,5 @@
 export * from './video-exist-in-playlist.model'
+export * from './video-playlist-create-result.model'
 export * from './video-playlist-create.model'
 export * from './video-playlist-element-create.model'
 export * from './video-playlist-element-update.model'

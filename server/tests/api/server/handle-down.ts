@@ -47,7 +47,7 @@ describe('Test handle downs', function () {
   let missedVideo2: Video
   let unlistedVideo: Video
 
-  const videoIdsServer1: number[] = []
+  const videoIdsServer1: string[] = []
 
   const videoAttributes = {
     name: 'my super name for server 1',

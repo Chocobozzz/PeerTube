@@ -10,7 +10,7 @@ export interface AbuseCreate {
   }
 
   video?: {
-    id: number
+    id: number | string
     startAt?: number
     endAt?: number
   }

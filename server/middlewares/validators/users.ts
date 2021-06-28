@@ -7,7 +7,7 @@ import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-code
 import { UserRole } from '../../../shared/models/users'
 import { UserRegister } from '../../../shared/models/users/user-register.model'
 import { isActorPreferredUsernameValid } from '../../helpers/custom-validators/activitypub/actor'
-import { isIdOrUUIDValid, toBooleanOrNull, toIntOrNull } from '../../helpers/custom-validators/misc'
+import { toBooleanOrNull, toIntOrNull } from '../../helpers/custom-validators/misc'
 import { isThemeNameValid } from '../../helpers/custom-validators/plugins'
 import {
   isNoInstanceConfigWarningModal,
@@ -35,7 +35,7 @@ import { Redis } from '../../lib/redis'
 import { isSignupAllowed, isSignupAllowedForCurrentIP } from '../../lib/signup'
 import { ActorModel } from '../../models/actor/actor'
 import { UserModel } from '../../models/user/user'
-import { areValidationErrors, doesVideoExist } from './shared'
+import { areValidationErrors, doesVideoExist, isValidVideoIdParam } from './shared'
 
 const usersListValidator = [
   query('blocked')
@@ -302,7 +302,7 @@ const usersGetValidator = [
 ]
 
 const usersVideoRatingValidator = [
-  param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid video id'),
+  isValidVideoIdParam('videoId'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking usersVideoRating parameters', { parameters: req.params })

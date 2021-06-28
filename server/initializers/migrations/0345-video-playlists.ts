@@ -1,6 +1,6 @@
 import * as Sequelize from 'sequelize'
+import { buildUUID } from '@server/helpers/uuid'
 import { VideoPlaylistPrivacy, VideoPlaylistType } from '../../../shared/models/videos'
-import { v4 as uuidv4 } from 'uuid'
 import { WEBSERVER } from '../constants'
 
 async function up (utils: {
@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS "videoPlaylistElement"
     const usernames = userResult.map(r => r.username)
 
     for (const username of usernames) {
-      const uuid = uuidv4()
+      const uuid = buildUUID()
 
       const baseUrl = WEBSERVER.URL + '/video-playlists/' + uuid
       const query = `

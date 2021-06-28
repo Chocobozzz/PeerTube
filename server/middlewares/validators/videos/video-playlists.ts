@@ -11,6 +11,7 @@ import {
   isIdOrUUIDValid,
   isIdValid,
   isUUIDValid,
+  toCompleteUUID,
   toIntArray,
   toIntOrNull,
   toValueOrNull
@@ -29,7 +30,14 @@ import { CONSTRAINTS_FIELDS } from '../../../initializers/constants'
 import { VideoPlaylistElementModel } from '../../../models/video/video-playlist-element'
 import { MVideoPlaylist } from '../../../types/models/video/video-playlist'
 import { authenticatePromiseIfNeeded } from '../../auth'
-import { areValidationErrors, doesVideoChannelIdExist, doesVideoExist, doesVideoPlaylistExist, VideoPlaylistFetchType } from '../shared'
+import {
+  areValidationErrors,
+  doesVideoChannelIdExist,
+  doesVideoExist,
+  doesVideoPlaylistExist,
+  isValidPlaylistIdParam,
+  VideoPlaylistFetchType
+} from '../shared'
 
 const videoPlaylistsAddValidator = getCommonPlaylistEditAttributes().concat([
   body('displayName')
@@ -43,10 +51,13 @@ const videoPlaylistsAddValidator = getCommonPlaylistEditAttributes().concat([
     const body: VideoPlaylistCreate = req.body
     if (body.videoChannelId && !await doesVideoChannelIdExist(body.videoChannelId, res)) return cleanUpReqFiles(req)
 
-    if (body.privacy === VideoPlaylistPrivacy.PUBLIC && !body.videoChannelId) {
+    if (
+      !body.videoChannelId &&
+      (body.privacy === VideoPlaylistPrivacy.PUBLIC || body.privacy === VideoPlaylistPrivacy.UNLISTED)
+    ) {
       cleanUpReqFiles(req)
 
-      return res.fail({ message: 'Cannot set "public" a playlist that is not assigned to a channel.' })
+      return res.fail({ message: 'Cannot set "public" or "unlisted" a playlist that is not assigned to a channel.' })
     }
 
     return next()
@@ -54,8 +65,7 @@ const videoPlaylistsAddValidator = getCommonPlaylistEditAttributes().concat([
 ])
 
 const videoPlaylistsUpdateValidator = getCommonPlaylistEditAttributes().concat([
-  param('playlistId')
-    .custom(isIdOrUUIDValid).withMessage('Should have a valid playlist id/uuid'),
+  isValidPlaylistIdParam('playlistId'),
 
   body('displayName')
     .optional()
@@ -101,8 +111,7 @@ const videoPlaylistsUpdateValidator = getCommonPlaylistEditAttributes().concat([
 ])
 
 const videoPlaylistsDeleteValidator = [
-  param('playlistId')
-    .custom(isIdOrUUIDValid).withMessage('Should have a valid playlist id/uuid'),
+  isValidPlaylistIdParam('playlistId'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoPlaylistsDeleteValidator parameters', { parameters: req.params })
@@ -126,8 +135,7 @@ const videoPlaylistsDeleteValidator = [
 
 const videoPlaylistsGetValidator = (fetchType: VideoPlaylistFetchType) => {
   return [
-    param('playlistId')
-      .custom(isIdOrUUIDValid).withMessage('Should have a valid playlist id/uuid'),
+    isValidPlaylistIdParam('playlistId'),
 
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       logger.debug('Checking videoPlaylistsGetValidator parameters', { parameters: req.params })
@@ -184,9 +192,10 @@ const videoPlaylistsSearchValidator = [
 ]
 
 const videoPlaylistsAddVideoValidator = [
-  param('playlistId')
-    .custom(isIdOrUUIDValid).withMessage('Should have a valid playlist id/uuid'),
+  isValidPlaylistIdParam('playlistId'),
+
   body('videoId')
+    .customSanitizer(toCompleteUUID)
     .custom(isIdOrUUIDValid).withMessage('Should have a valid video id/uuid'),
   body('startTimestamp')
     .optional()
@@ -214,9 +223,9 @@ const videoPlaylistsAddVideoValidator = [
 ]
 
 const videoPlaylistsUpdateOrRemoveVideoValidator = [
-  param('playlistId')
-    .custom(isIdOrUUIDValid).withMessage('Should have a valid playlist id/uuid'),
+  isValidPlaylistIdParam('playlistId'),
   param('playlistElementId')
+    .customSanitizer(toCompleteUUID)
     .custom(isIdValid).withMessage('Should have an element id/uuid'),
   body('startTimestamp')
     .optional()
@@ -251,8 +260,7 @@ const videoPlaylistsUpdateOrRemoveVideoValidator = [
 ]
 
 const videoPlaylistElementAPGetValidator = [
-  param('playlistId')
-    .custom(isIdOrUUIDValid).withMessage('Should have a valid playlist id/uuid'),
+  isValidPlaylistIdParam('playlistId'),
   param('playlistElementId')
     .custom(isIdValid).withMessage('Should have an playlist element id'),
 
@@ -287,8 +295,7 @@ const videoPlaylistElementAPGetValidator = [
 ]
 
 const videoPlaylistsReorderVideosValidator = [
-  param('playlistId')
-    .custom(isIdOrUUIDValid).withMessage('Should have a valid playlist id/uuid'),
+  isValidPlaylistIdParam('playlistId'),
   body('startPosition')
     .isInt({ min: 1 }).withMessage('Should have a valid start position'),
   body('insertAfterPosition')

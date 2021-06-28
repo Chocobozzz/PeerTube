@@ -39,7 +39,7 @@ export class VideoPlaylistMiniatureComponent implements OnInit {
     }
 
     if (this.linkType === 'internal' || !this.playlist.url) {
-      this.routerLink = [ '/w/p', this.playlist.uuid ]
+      this.routerLink = VideoPlaylist.buildWatchUrl(this.playlist)
       return
     }
 

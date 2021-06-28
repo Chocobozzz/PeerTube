@@ -26,12 +26,18 @@ export class Video implements VideoServerModel {
   licence: VideoConstant<number>
   language: VideoConstant<string>
   privacy: VideoConstant<VideoPrivacy>
+
   description: string
+
   duration: number
   durationLabel: string
+
   id: number
   uuid: string
+  shortUUID: string
+
   isLocal: boolean
+
   name: string
   serverHost: string
   thumbnailPath: string
@@ -85,8 +91,12 @@ export class Video implements VideoServerModel {
 
   pluginData?: any
 
-  static buildClientUrl (videoUUID: string) {
-    return '/w/' + videoUUID
+  static buildWatchUrl (video: Partial<Pick<Video, 'uuid' | 'shortUUID'>>) {
+    return '/w/' + (video.shortUUID || video.uuid)
+  }
+
+  static buildUpdateUrl (video: Pick<Video, 'uuid'>) {
+    return '/videos/update/' + video.uuid
   }
 
   constructor (hash: VideoServerModel, translations = {}) {
@@ -109,6 +119,7 @@ export class Video implements VideoServerModel {
 
     this.id = hash.id
     this.uuid = hash.uuid
+    this.shortUUID = hash.shortUUID
 
     this.isLocal = hash.isLocal
     this.name = hash.name

@@ -2,7 +2,7 @@
 
 import 'mocha'
 import { omit } from 'lodash'
-import { User, UserRole } from '../../../../shared'
+import { User, UserRole, VideoCreateResult } from '../../../../shared'
 import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import {
   addVideoChannel,
@@ -45,7 +45,7 @@ describe('Test users API validators', function () {
   let userId: number
   let rootId: number
   let moderatorId: number
-  let videoId: number
+  let video: VideoCreateResult
   let server: ServerInfo
   let serverWithRegistrationDisabled: ServerInfo
   let userAccessToken = ''
@@ -126,7 +126,7 @@ describe('Test users API validators', function () {
 
     {
       const res = await uploadVideo(server.url, server.accessToken, {})
-      videoId = res.body.video.id
+      video = res.body.video
     }
 
     {
@@ -829,7 +829,7 @@ describe('Test users API validators', function () {
 
   describe('When getting my video rating', function () {
     it('Should fail with a non authenticated user', async function () {
-      await getMyUserVideoRating(server.url, 'fake_token', videoId, HttpStatusCode.UNAUTHORIZED_401)
+      await getMyUserVideoRating(server.url, 'fake_token', video.id, HttpStatusCode.UNAUTHORIZED_401)
     })
 
     it('Should fail with an incorrect video uuid', async function () {
@@ -841,7 +841,9 @@ describe('Test users API validators', function () {
     })
 
     it('Should succeed with the correct parameters', async function () {
-      await getMyUserVideoRating(server.url, server.accessToken, videoId)
+      await getMyUserVideoRating(server.url, server.accessToken, video.id)
+      await getMyUserVideoRating(server.url, server.accessToken, video.uuid)
+      await getMyUserVideoRating(server.url, server.accessToken, video.shortUUID)
     })
   })
 

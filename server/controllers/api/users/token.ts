@@ -1,7 +1,7 @@
 import * as express from 'express'
 import * as RateLimit from 'express-rate-limit'
-import { v4 as uuidv4 } from 'uuid'
 import { logger } from '@server/helpers/logger'
+import { buildUUID } from '@server/helpers/uuid'
 import { CONFIG } from '@server/initializers/config'
 import { getAuthNameFromRefreshGrant, getBypassFromExternalAuth, getBypassFromPasswordGrant } from '@server/lib/auth/external-auth'
 import { handleOAuthToken } from '@server/lib/auth/oauth'
@@ -107,7 +107,7 @@ function getScopedTokens (req: express.Request, res: express.Response) {
 async function renewScopedTokens (req: express.Request, res: express.Response) {
   const user = res.locals.oauth.token.user
 
-  user.feedToken = uuidv4()
+  user.feedToken = buildUUID()
   await user.save()
 
   return res.json({

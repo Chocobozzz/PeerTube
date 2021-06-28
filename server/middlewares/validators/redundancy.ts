@@ -2,15 +2,24 @@ import * as express from 'express'
 import { body, param, query } from 'express-validator'
 import { isVideoRedundancyTarget } from '@server/helpers/custom-validators/video-redundancies'
 import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
-import { exists, isBooleanValid, isIdOrUUIDValid, isIdValid, toBooleanOrNull, toIntOrNull } from '../../helpers/custom-validators/misc'
+import {
+  exists,
+  isBooleanValid,
+  isIdOrUUIDValid,
+  isIdValid,
+  toBooleanOrNull,
+  toCompleteUUID,
+  toIntOrNull
+} from '../../helpers/custom-validators/misc'
 import { isHostValid } from '../../helpers/custom-validators/servers'
 import { logger } from '../../helpers/logger'
 import { VideoRedundancyModel } from '../../models/redundancy/video-redundancy'
 import { ServerModel } from '../../models/server/server'
-import { areValidationErrors, doesVideoExist } from './shared'
+import { areValidationErrors, doesVideoExist, isValidVideoIdParam } from './shared'
 
 const videoFileRedundancyGetValidator = [
-  param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid video id'),
+  isValidVideoIdParam('videoId'),
+
   param('resolution')
     .customSanitizer(toIntOrNull)
     .custom(exists).withMessage('Should have a valid resolution'),
@@ -56,9 +65,8 @@ const videoFileRedundancyGetValidator = [
 ]
 
 const videoPlaylistRedundancyGetValidator = [
-  param('videoId')
-    .custom(isIdOrUUIDValid)
-    .not().isEmpty().withMessage('Should have a valid video id'),
+  isValidVideoIdParam('videoId'),
+
   param('streamingPlaylistType')
     .customSanitizer(toIntOrNull)
     .custom(exists).withMessage('Should have a valid streaming playlist type'),
@@ -135,7 +143,8 @@ const listVideoRedundanciesValidator = [
 
 const addVideoRedundancyValidator = [
   body('videoId')
-    .custom(isIdValid)
+    .customSanitizer(toCompleteUUID)
+    .custom(isIdOrUUIDValid)
     .withMessage('Should have a valid video id'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {

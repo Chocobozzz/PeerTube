@@ -1,11 +1,11 @@
 
 import { forkJoin } from 'rxjs'
-import { AfterViewChecked, AfterViewInit, Component, EventEmitter, OnInit, Output } from '@angular/core'
+import { AfterViewInit, Component, EventEmitter, OnInit, Output } from '@angular/core'
 import { Router } from '@angular/router'
 import { AuthService, CanComponentDeactivate, HooksService, Notifier, ServerService } from '@app/core'
 import { scrollToTop } from '@app/helpers'
 import { FormValidatorService } from '@app/shared/shared-forms'
-import { VideoCaptionService, VideoEdit, VideoService } from '@app/shared/shared-main'
+import { Video, VideoCaptionService, VideoEdit, VideoService } from '@app/shared/shared-main'
 import { LiveVideoService } from '@app/shared/shared-video-live'
 import { LoadingBarService } from '@ngx-loading-bar/core'
 import { LiveVideo, LiveVideoCreate, LiveVideoUpdate, PeerTubeProblemDocument, ServerErrorCode, VideoPrivacy } from '@shared/models'
@@ -127,7 +127,7 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, AfterView
       () => {
         this.notifier.success($localize`Live published.`)
 
-        this.router.navigate(['/w', video.uuid])
+        this.router.navigateByUrl(Video.buildWatchUrl(video))
       },
 
       err => {

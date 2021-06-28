@@ -122,7 +122,7 @@ export class VideoBlockListComponent extends RestTable implements OnInit {
   }
 
   getVideoUrl (videoBlock: VideoBlacklist) {
-    return Video.buildClientUrl(videoBlock.video.uuid)
+    return Video.buildWatchUrl(videoBlock.video)
   }
 
   toHtml (text: string) {
