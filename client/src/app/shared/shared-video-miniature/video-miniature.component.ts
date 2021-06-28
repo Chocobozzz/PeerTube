@@ -85,7 +85,7 @@ export class VideoMiniatureComponent implements OnInit {
     playlistElementId?: number
   }
 
-  videoRouterLink: any[] = []
+  videoRouterLink: string | any[] = []
   videoHref: string
   videoTarget: string
 
@@ -120,7 +120,7 @@ export class VideoMiniatureComponent implements OnInit {
 
   buildVideoLink () {
     if (this.videoLinkType === 'internal' || !this.video.url) {
-      this.videoRouterLink = [ '/w', this.video.uuid ]
+      this.videoRouterLink = Video.buildWatchUrl(this.video)
       return
     }
 

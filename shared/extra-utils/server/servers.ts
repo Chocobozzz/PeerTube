@@ -43,6 +43,7 @@ interface ServerInfo {
   video?: {
     id: number
     uuid: string
+    shortUUID: string
     name?: string
     url?: string
 

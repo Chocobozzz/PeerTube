@@ -3003,6 +3003,8 @@ paths:
                         $ref: '#/components/schemas/VideoPlaylist/properties/id'
                       uuid:
                         $ref: '#/components/schemas/VideoPlaylist/properties/uuid'
+                      shortUUID:
+                        $ref: '#/components/schemas/VideoPlaylist/properties/shortUUID'
       requestBody:
         content:
           multipart/form-data:
@@ -4543,11 +4545,12 @@ components:
       name: id
       in: path
       required: true
-      description: The object id or uuid
+      description: The object id, uuid or short uuid
       schema:
         oneOf:
           - $ref: '#/components/schemas/id'
           - $ref: '#/components/schemas/UUIDv4'
+          - $ref: '#/components/schemas/shortUUID'
     playlistId:
       name: playlistId
       in: path
@@ -4812,6 +4815,10 @@ components:
       pattern: '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$'
       minLength: 36
       maxLength: 36
+    shortUUID:
+      type: string
+      description: translation of a uuid v4 with a bigger alphabet to have a shorter uuid
+      example: 2y84q2MQUMWPbiEcxNXMgC
     username:
       type: string
       description: immutable name of the user, used to find or mention its actor
@@ -5141,6 +5148,9 @@ components:
           description: universal identifier for the video, that can be used across instances
           allOf:
             - $ref: '#/components/schemas/UUIDv4'
+        shortUUID:
+          allOf:
+            - $ref: '#/components/schemas/shortUUID'
         isLive:
           type: boolean
         createdAt:
@@ -5520,6 +5530,9 @@ components:
           $ref: '#/components/schemas/id'
         uuid:
           $ref: '#/components/schemas/UUIDv4'
+        shortUUID:
+          allOf:
+            - $ref: '#/components/schemas/shortUUID'
         createdAt:
           type: string
           format: date-time
@@ -6295,6 +6308,8 @@ components:
               $ref: '#/components/schemas/Video/properties/id'
             uuid:
               $ref: '#/components/schemas/Video/properties/uuid'
+            shortUUID:
+              $ref: '#/components/schemas/Video/properties/shortUUID'
     CommentThreadResponse:
       properties:
         total:

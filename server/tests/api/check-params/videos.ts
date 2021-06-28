@@ -5,7 +5,7 @@ import * as chai from 'chai'
 import { omit } from 'lodash'
 import { join } from 'path'
 import { randomInt } from '@shared/core-utils'
-import { PeerTubeProblemDocument } from '@shared/models'
+import { PeerTubeProblemDocument, VideoCreateResult } from '@shared/models'
 import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import {
   checkUploadVideoParam,
@@ -42,7 +42,7 @@ describe('Test videos API validator', function () {
   let accountName: string
   let channelId: number
   let channelName: string
-  let videoId
+  let video: VideoCreateResult
 
   // ---------------------------------------------------------------
 
@@ -490,7 +490,7 @@ describe('Test videos API validator', function () {
 
     before(async function () {
       const res = await getVideosList(server.url)
-      videoId = res.body.data[0].uuid
+      video = res.body.data[0]
     })
 
     it('Should fail with nothing', async function () {
@@ -518,79 +518,79 @@ describe('Test videos API validator', function () {
     it('Should fail with a long name', async function () {
       const fields = immutableAssign(baseCorrectParams, { name: 'super'.repeat(65) })
 
-      await makePutBodyRequest({ url: server.url, path: path + videoId, token: server.accessToken, fields })
+      await makePutBodyRequest({ url: server.url, path: path + video.shortUUID, token: server.accessToken, fields })
     })
 
     it('Should fail with a bad category', async function () {
       const fields = immutableAssign(baseCorrectParams, { category: 125 })
 
-      await makePutBodyRequest({ url: server.url, path: path + videoId, token: server.accessToken, fields })
+      await makePutBodyRequest({ url: server.url, path: path + video.shortUUID, token: server.accessToken, fields })
     })
 
     it('Should fail with a bad licence', async function () {
       const fields = immutableAssign(baseCorrectParams, { licence: 125 })
 
-      await makePutBodyRequest({ url: server.url, path: path + videoId, token: server.accessToken, fields })
+      await makePutBodyRequest({ url: server.url, path: path + video.shortUUID, token: server.accessToken, fields })
     })
 
     it('Should fail with a bad language', async function () {
       const fields = immutableAssign(baseCorrectParams, { language: 'a'.repeat(15) })
 
-      await makePutBodyRequest({ url: server.url, path: path + videoId, token: server.accessToken, fields })
+      await makePutBodyRequest({ url: server.url, path: path + video.shortUUID, token: server.accessToken, fields })
     })
 
     it('Should fail with a long description', async function () {
       const fields = immutableAssign(baseCorrectParams, { description: 'super'.repeat(2500) })
 
-      await makePutBodyRequest({ url: server.url, path: path + videoId, token: server.accessToken, fields })
+      await makePutBodyRequest({ url: server.url, path: path + video.shortUUID, token: server.accessToken, fields })
     })
 
     it('Should fail with a long support text', async function () {
       const fields = immutableAssign(baseCorrectParams, { support: 'super'.repeat(201) })
 
-      await makePutBodyRequest({ url: server.url, path: path + videoId, token: server.accessToken, fields })
+      await makePutBodyRequest({ url: server.url, path: path + video.shortUUID, token: server.accessToken, fields })
     })
 
     it('Should fail with a bad channel', async function () {
       const fields = immutableAssign(baseCorrectParams, { channelId: 545454 })
 
-      await makePutBodyRequest({ url: server.url, path: path + videoId, token: server.accessToken, fields })
+      await makePutBodyRequest({ url: server.url, path: path + video.shortUUID, token: server.accessToken, fields })
     })
 
     it('Should fail with too many tags', async function () {
       const fields = immutableAssign(baseCorrectParams, { tags: [ 'tag1', 'tag2', 'tag3', 'tag4', 'tag5', 'tag6' ] })
 
-      await makePutBodyRequest({ url: server.url, path: path + videoId, token: server.accessToken, fields })
+      await makePutBodyRequest({ url: server.url, path: path + video.shortUUID, token: server.accessToken, fields })
     })
 
     it('Should fail with a tag length too low', async function () {
       const fields = immutableAssign(baseCorrectParams, { tags: [ 'tag1', 't' ] })
 
-      await makePutBodyRequest({ url: server.url, path: path + videoId, token: server.accessToken, fields })
+      await makePutBodyRequest({ url: server.url, path: path + video.shortUUID, token: server.accessToken, fields })
     })
 
     it('Should fail with a tag length too big', async function () {
       const fields = immutableAssign(baseCorrectParams, { tags: [ 'tag1', 'my_super_tag_too_long_long_long_long_long_long' ] })
 
-      await makePutBodyRequest({ url: server.url, path: path + videoId, token: server.accessToken, fields })
+      await makePutBodyRequest({ url: server.url, path: path + video.shortUUID, token: server.accessToken, fields })
     })
 
     it('Should fail with a bad schedule update (miss updateAt)', async function () {
       const fields = immutableAssign(baseCorrectParams, { scheduleUpdate: { privacy: VideoPrivacy.PUBLIC } })
 
-      await makePutBodyRequest({ url: server.url, path: path + videoId, token: server.accessToken, fields })
+      await makePutBodyRequest({ url: server.url, path: path + video.shortUUID, token: server.accessToken, fields })
     })
 
     it('Should fail with a bad schedule update (wrong updateAt)', async function () {
       const fields = immutableAssign(baseCorrectParams, { scheduleUpdate: { updateAt: 'toto', privacy: VideoPrivacy.PUBLIC } })
 
-      await makePutBodyRequest({ url: server.url, path: path + videoId, token: server.accessToken, fields })
+      await makePutBodyRequest({ url: server.url, path: path + video.shortUUID, token: server.accessToken, fields })
     })
 
     it('Should fail with a bad originally published at param', async function () {
       const fields = immutableAssign(baseCorrectParams, { originallyPublishedAt: 'toto' })
 
-      await makePutBodyRequest({ url: server.url, path: path + videoId, token: server.accessToken, fields })
+      await makePutBodyRequest({ url: server.url, path: path + video.shortUUID, token: server.accessToken, fields })
     })
 
     it('Should fail with an incorrect thumbnail file', async function () {
@@ -602,7 +602,7 @@ describe('Test videos API validator', function () {
       await makeUploadRequest({
         url: server.url,
         method: 'PUT',
-        path: path + videoId,
+        path: path + video.shortUUID,
         token: server.accessToken,
         fields,
         attaches
@@ -618,7 +618,7 @@ describe('Test videos API validator', function () {
       await makeUploadRequest({
         url: server.url,
         method: 'PUT',
-        path: path + videoId,
+        path: path + video.shortUUID,
         token: server.accessToken,
         fields,
         attaches
@@ -634,7 +634,7 @@ describe('Test videos API validator', function () {
       await makeUploadRequest({
         url: server.url,
         method: 'PUT',
-        path: path + videoId,
+        path: path + video.shortUUID,
         token: server.accessToken,
         fields,
         attaches
@@ -650,7 +650,7 @@ describe('Test videos API validator', function () {
       await makeUploadRequest({
         url: server.url,
         method: 'PUT',
-        path: path + videoId,
+        path: path + video.shortUUID,
         token: server.accessToken,
         fields,
         attaches
@@ -662,7 +662,7 @@ describe('Test videos API validator', function () {
 
       await makePutBodyRequest({
         url: server.url,
-        path: path + videoId,
+        path: path + video.shortUUID,
         token: userAccessToken,
         fields,
         statusCodeExpected: HttpStatusCode.FORBIDDEN_403
@@ -674,7 +674,7 @@ describe('Test videos API validator', function () {
     it('Shoud report the appropriate error', async function () {
       const fields = immutableAssign(baseCorrectParams, { licence: 125 })
 
-      const res = await makePutBodyRequest({ url: server.url, path: path + videoId, token: server.accessToken, fields })
+      const res = await makePutBodyRequest({ url: server.url, path: path + video.shortUUID, token: server.accessToken, fields })
       const error = res.body as PeerTubeProblemDocument
 
       expect(error.docs).to.equal('https://docs.joinpeertube.org/api-rest-reference.html#operation/putVideo')
@@ -694,7 +694,7 @@ describe('Test videos API validator', function () {
 
       await makePutBodyRequest({
         url: server.url,
-        path: path + videoId,
+        path: path + video.shortUUID,
         token: server.accessToken,
         fields,
         statusCodeExpected: HttpStatusCode.NO_CONTENT_204
@@ -739,7 +739,7 @@ describe('Test videos API validator', function () {
     })
 
     it('Should succeed with the correct parameters', async function () {
-      await getVideo(server.url, videoId)
+      await getVideo(server.url, video.shortUUID)
     })
   })
 
@@ -810,7 +810,7 @@ describe('Test videos API validator', function () {
     })
 
     it('Should fail with a video of another user without the appropriate right', async function () {
-      await removeVideo(server.url, userAccessToken, videoId, HttpStatusCode.FORBIDDEN_403)
+      await removeVideo(server.url, userAccessToken, video.uuid, HttpStatusCode.FORBIDDEN_403)
     })
 
     it('Should fail with a video of another server')
@@ -832,7 +832,7 @@ describe('Test videos API validator', function () {
     })
 
     it('Should succeed with the correct parameters', async function () {
-      await removeVideo(server.url, server.accessToken, videoId)
+      await removeVideo(server.url, server.accessToken, video.uuid)
     })
   })
 

@@ -1,12 +1,12 @@
 import { copy, readFile, remove, rename } from 'fs-extra'
 import * as Jimp from 'jimp'
-import { v4 as uuidv4 } from 'uuid'
 import { getLowercaseExtension } from './core-utils'
 import { convertWebPToJPG, processGIF } from './ffmpeg-utils'
 import { logger } from './logger'
+import { buildUUID } from './uuid'
 
 function generateImageFilename (extension = '.jpg') {
-  return uuidv4() + extension
+  return buildUUID() + extension
 }
 
 async function processImage (

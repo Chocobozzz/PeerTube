@@ -258,7 +258,7 @@ describe('Test abuses API validators', function () {
     })
 
     it('Should succeed with the correct parameters (basic)', async function () {
-      const fields: AbuseCreate = { video: { id: server.video.id }, reason: 'my super reason' }
+      const fields: AbuseCreate = { video: { id: server.video.shortUUID }, reason: 'my super reason' }
 
       const res = await makePostBodyRequest({
         url: server.url,

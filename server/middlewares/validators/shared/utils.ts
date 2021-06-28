@@ -1,5 +1,6 @@
 import * as express from 'express'
-import { query, validationResult } from 'express-validator'
+import { param, query, validationResult } from 'express-validator'
+import { isIdOrUUIDValid, toCompleteUUID } from '@server/helpers/custom-validators/misc'
 import { logger } from '../../../helpers/logger'
 
 function areValidationErrors (req: express.Request, res: express.Response) {
@@ -41,10 +42,24 @@ function createSortableColumns (sortableColumns: string[]) {
   return sortableColumns.concat(sortableColumnDesc)
 }
 
+function isValidVideoIdParam (paramName: string) {
+  return param(paramName)
+    .customSanitizer(toCompleteUUID)
+    .custom(isIdOrUUIDValid).withMessage('Should have a valid video id')
+}
+
+function isValidPlaylistIdParam (paramName: string) {
+  return param(paramName)
+    .customSanitizer(toCompleteUUID)
+    .custom(isIdOrUUIDValid).withMessage('Should have a valid playlist id')
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   areValidationErrors,
   checkSort,
-  createSortableColumns
+  createSortableColumns,
+  isValidVideoIdParam,
+  isValidPlaylistIdParam
 }

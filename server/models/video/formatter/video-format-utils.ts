@@ -1,3 +1,4 @@
+import { uuidToShort } from '@server/helpers/uuid'
 import { generateMagnetUri } from '@server/helpers/webtorrent'
 import { getLocalVideoFileMetadataUrl } from '@server/lib/video-paths'
 import { VideoFile } from '@shared/models/videos/video-file.model'
@@ -47,6 +48,8 @@ function videoModelToFormattedJSON (video: MVideoFormattable, options?: VideoFor
   const videoObject: Video = {
     id: video.id,
     uuid: video.uuid,
+    shortUUID: uuidToShort(video.uuid),
+
     name: video.name,
     category: {
       id: video.category,

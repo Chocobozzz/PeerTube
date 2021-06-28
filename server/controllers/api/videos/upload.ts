@@ -2,6 +2,7 @@ import * as express from 'express'
 import { move } from 'fs-extra'
 import { getLowercaseExtension } from '@server/helpers/core-utils'
 import { deleteResumableUploadMetaFile, getResumableUploadPath } from '@server/helpers/upload'
+import { uuidToShort } from '@server/helpers/uuid'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
 import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url'
 import { addOptimizeOrMergeAudioJob, buildLocalVideoFromReq, buildVideoThumbnailsFromReq, setVideoTags } from '@server/lib/video'
@@ -218,6 +219,7 @@ async function addVideo (options: {
   return res.json({
     video: {
       id: videoCreated.id,
+      shortUUID: uuidToShort(videoCreated.uuid),
       uuid: videoCreated.uuid
     }
   })

@@ -3,9 +3,8 @@
 import 'mocha'
 import * as chai from 'chai'
 import { omit } from 'lodash'
-import * as request from 'supertest'
 import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
-import { Account, CustomConfig, HTMLServerConfig, ServerConfig, VideoPlaylistPrivacy } from '@shared/models'
+import { Account, CustomConfig, HTMLServerConfig, ServerConfig, VideoPlaylistCreateResult, VideoPlaylistPrivacy } from '@shared/models'
 import {
   addVideoInPlaylist,
   cleanupTests,
@@ -50,12 +49,15 @@ describe('Test a client controllers', function () {
 
   const playlistName = 'super playlist name'
   const playlistDescription = 'super playlist description'
-  let playlistUUID: string
+  let playlist: VideoPlaylistCreateResult
 
   const channelDescription = 'my super channel description'
 
   const watchVideoBasePaths = [ '/videos/watch/', '/w/' ]
   const watchPlaylistBasePaths = [ '/videos/watch/playlist/', '/w/p/' ]
+
+  let videoIds: (string | number)[] = []
+  let playlistIds: (string | number)[] = []
 
   before(async function () {
     this.timeout(120000)
@@ -79,7 +81,9 @@ describe('Test a client controllers', function () {
     const videos = resVideosRequest.body.data
     expect(videos.length).to.equal(1)
 
-    servers[0].video = videos[0]
+    const video = videos[0]
+    servers[0].video = video
+    videoIds = [ video.id, video.uuid, video.shortUUID ]
 
     // Playlist
 
@@ -91,16 +95,14 @@ describe('Test a client controllers', function () {
     }
 
     const resVideoPlaylistRequest = await createVideoPlaylist({ url: servers[0].url, token: servers[0].accessToken, playlistAttrs })
-
-    const playlist = resVideoPlaylistRequest.body.videoPlaylist
-    const playlistId = playlist.id
-    playlistUUID = playlist.uuid
+    playlist = resVideoPlaylistRequest.body.videoPlaylist
+    playlistIds = [ playlist.id, playlist.shortUUID, playlist.uuid ]
 
     await addVideoInPlaylist({
       url: servers[0].url,
       token: servers[0].accessToken,
-      playlistId,
-      elementAttrs: { videoId: servers[0].video.id }
+      playlistId: playlist.shortUUID,
+      elementAttrs: { videoId: video.id }
     })
 
     // Account
@@ -117,36 +119,43 @@ describe('Test a client controllers', function () {
 
     it('Should have valid oEmbed discovery tags for videos', async function () {
       for (const basePath of watchVideoBasePaths) {
-        const path = basePath + servers[0].video.uuid
-        const res = await request(servers[0].url)
-          .get(path)
-          .set('Accept', 'text/html')
-          .expect(HttpStatusCode.OK_200)
+        for (const id of videoIds) {
+          const res = await makeGetRequest({
+            url: servers[0].url,
+            path: basePath + id,
+            accept: 'text/html',
+            statusCodeExpected: HttpStatusCode.OK_200
+          })
 
-        const port = servers[0].port
+          const port = servers[0].port
 
-        const expectedLink = '<link rel="alternate" type="application/json+oembed" href="http://localhost:' + port + '/services/oembed?' +
-          `url=http%3A%2F%2Flocalhost%3A${port}%2Fw%2F${servers[0].video.uuid}" ` +
-          `title="${servers[0].video.name}" />`
+          const expectedLink = '<link rel="alternate" type="application/json+oembed" href="http://localhost:' + port + '/services/oembed?' +
+            `url=http%3A%2F%2Flocalhost%3A${port}%2Fw%2F${servers[0].video.uuid}" ` +
+            `title="${servers[0].video.name}" />`
 
-        expect(res.text).to.contain(expectedLink)
+          expect(res.text).to.contain(expectedLink)
+        }
       }
     })
 
     it('Should have valid oEmbed discovery tags for a playlist', async function () {
       for (const basePath of watchPlaylistBasePaths) {
-        const res = await request(servers[0].url)
-          .get(basePath + playlistUUID)
-          .set('Accept', 'text/html')
-          .expect(HttpStatusCode.OK_200)
+        for (const id of playlistIds) {
+          const res = await makeGetRequest({
+            url: servers[0].url,
+            path: basePath + id,
+            accept: 'text/html',
+            statusCodeExpected: HttpStatusCode.OK_200
+          })
 
-        const port = servers[0].port
+          const port = servers[0].port
 
-        const expectedLink = '<link rel="alternate" type="application/json+oembed" href="http://localhost:' + port + '/services/oembed?' +
-          `url=http%3A%2F%2Flocalhost%3A${port}%2Fw%2Fp%2F${playlistUUID}" ` +
-          `title="${playlistName}" />`
+          const expectedLink = '<link rel="alternate" type="application/json+oembed" href="http://localhost:' + port + '/services/oembed?' +
+            `url=http%3A%2F%2Flocalhost%3A${port}%2Fw%2Fp%2F${playlist.uuid}" ` +
+            `title="${playlistName}" />`
 
-        expect(res.text).to.contain(expectedLink)
+          expect(res.text).to.contain(expectedLink)
+        }
       }
     })
   })
@@ -190,7 +199,7 @@ describe('Test a client controllers', function () {
       expect(text).to.contain(`<meta property="og:title" content="${playlistName}" />`)
       expect(text).to.contain(`<meta property="og:description" content="${playlistDescription}" />`)
       expect(text).to.contain('<meta property="og:type" content="video" />')
-      expect(text).to.contain(`<meta property="og:url" content="${servers[0].url}/w/p/${playlistUUID}" />`)
+      expect(text).to.contain(`<meta property="og:url" content="${servers[0].url}/w/p/${playlist.uuid}" />`)
     }
 
     it('Should have valid Open Graph tags on the account page', async function () {
@@ -206,15 +215,19 @@ describe('Test a client controllers', function () {
     })
 
     it('Should have valid Open Graph tags on the watch page', async function () {
-      await watchVideoPageTest('/videos/watch/' + servers[0].video.id)
-      await watchVideoPageTest('/videos/watch/' + servers[0].video.uuid)
-      await watchVideoPageTest('/w/' + servers[0].video.uuid)
-      await watchVideoPageTest('/w/' + servers[0].video.id)
+      for (const path of watchVideoBasePaths) {
+        for (const id of videoIds) {
+          await watchVideoPageTest(path + id)
+        }
+      }
     })
 
     it('Should have valid Open Graph tags on the watch playlist page', async function () {
-      await watchPlaylistPageTest('/videos/watch/playlist/' + playlistUUID)
-      await watchPlaylistPageTest('/w/p/' + playlistUUID)
+      for (const path of watchPlaylistBasePaths) {
+        for (const id of playlistIds) {
+          await watchPlaylistPageTest(path + id)
+        }
+      }
     })
   })
 
@@ -263,15 +276,19 @@ describe('Test a client controllers', function () {
       }
 
       it('Should have valid twitter card on the watch video page', async function () {
-        await watchVideoPageTest('/videos/watch/' + servers[0].video.id)
-        await watchVideoPageTest('/videos/watch/' + servers[0].video.uuid)
-        await watchVideoPageTest('/w/' + servers[0].video.uuid)
-        await watchVideoPageTest('/w/' + servers[0].video.id)
+        for (const path of watchVideoBasePaths) {
+          for (const id of videoIds) {
+            await watchVideoPageTest(path + id)
+          }
+        }
       })
 
       it('Should have valid twitter card on the watch playlist page', async function () {
-        await watchPlaylistPageTest('/videos/watch/playlist/' + playlistUUID)
-        await watchPlaylistPageTest('/w/p/' + playlistUUID)
+        for (const path of watchPlaylistBasePaths) {
+          for (const id of playlistIds) {
+            await watchPlaylistPageTest(path + id)
+          }
+        }
       })
 
       it('Should have valid twitter card on the account page', async function () {
@@ -333,15 +350,19 @@ describe('Test a client controllers', function () {
       }
 
       it('Should have valid twitter card on the watch video page', async function () {
-        await watchVideoPageTest('/videos/watch/' + servers[0].video.id)
-        await watchVideoPageTest('/videos/watch/' + servers[0].video.uuid)
-        await watchVideoPageTest('/w/' + servers[0].video.uuid)
-        await watchVideoPageTest('/w/' + servers[0].video.id)
+        for (const path of watchVideoBasePaths) {
+          for (const id of videoIds) {
+            await watchVideoPageTest(path + id)
+          }
+        }
       })
 
       it('Should have valid twitter card on the watch playlist page', async function () {
-        await watchPlaylistPageTest('/videos/watch/playlist/' + playlistUUID)
-        await watchPlaylistPageTest('/w/p/' + playlistUUID)
+        for (const path of watchPlaylistBasePaths) {
+          for (const id of playlistIds) {
+            await watchPlaylistPageTest(path + id)
+          }
+        }
       })
 
       it('Should have valid twitter card on the account page', async function () {
@@ -399,8 +420,10 @@ describe('Test a client controllers', function () {
 
     it('Should use the original video URL for the canonical tag', async function () {
       for (const basePath of watchVideoBasePaths) {
-        const res = await makeHTMLRequest(servers[1].url, basePath + servers[0].video.uuid)
-        expect(res.text).to.contain(`<link rel="canonical" href="${servers[0].url}/videos/watch/${servers[0].video.uuid}" />`)
+        for (const id of videoIds) {
+          const res = await makeHTMLRequest(servers[1].url, basePath + id)
+          expect(res.text).to.contain(`<link rel="canonical" href="${servers[0].url}/videos/watch/${servers[0].video.uuid}" />`)
+        }
       }
     })
 
@@ -426,8 +449,10 @@ describe('Test a client controllers', function () {
 
     it('Should use the original playlist URL for the canonical tag', async function () {
       for (const basePath of watchPlaylistBasePaths) {
-        const res = await makeHTMLRequest(servers[1].url, basePath + playlistUUID)
-        expect(res.text).to.contain(`<link rel="canonical" href="${servers[0].url}/video-playlists/${playlistUUID}" />`)
+        for (const id of playlistIds) {
+          const res = await makeHTMLRequest(servers[1].url, basePath + id)
+          expect(res.text).to.contain(`<link rel="canonical" href="${servers[0].url}/video-playlists/${playlist.uuid}" />`)
+        }
       }
     })
   })

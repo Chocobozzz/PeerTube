@@ -2,7 +2,7 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { v4 as uuidv4 } from 'uuid'
+import { buildUUID } from '@server/helpers/uuid'
 import {
   cleanupTests,
   updateMyUser,
@@ -207,7 +207,7 @@ describe('Test user notifications', function () {
     it('Should send a new video notification after a video import', async function () {
       this.timeout(100000)
 
-      const name = 'video import ' + uuidv4()
+      const name = 'video import ' + buildUUID()
 
       const attributes = {
         name,
@@ -278,7 +278,7 @@ describe('Test user notifications', function () {
     it('Should send a notification when an imported video is transcoded', async function () {
       this.timeout(50000)
 
-      const name = 'video import ' + uuidv4()
+      const name = 'video import ' + buildUUID()
 
       const attributes = {
         name,
@@ -347,7 +347,7 @@ describe('Test user notifications', function () {
     it('Should send a notification when the video import failed', async function () {
       this.timeout(70000)
 
-      const name = 'video import ' + uuidv4()
+      const name = 'video import ' + buildUUID()
 
       const attributes = {
         name,
@@ -365,7 +365,7 @@ describe('Test user notifications', function () {
     it('Should send a notification when the video import succeeded', async function () {
       this.timeout(70000)
 
-      const name = 'video import ' + uuidv4()
+      const name = 'video import ' + buildUUID()
 
       const attributes = {
         name,

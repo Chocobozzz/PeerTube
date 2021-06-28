@@ -1,5 +1,5 @@
 import { Transaction } from 'sequelize/types'
-import { v4 as uuidv4 } from 'uuid'
+import { buildUUID } from '@server/helpers/uuid'
 import { UserModel } from '@server/models/user/user'
 import { MActorDefault } from '@server/types/models/actor'
 import { ActivityPubActorType } from '../../shared/models/activitypub'
@@ -210,7 +210,7 @@ async function buildChannelAttributes (user: MUser, transaction?: Transaction, c
 
   // Conflict, generate uuid instead
   const actor = await ActorModel.loadLocalByName(channelName, transaction)
-  if (actor) channelName = uuidv4()
+  if (actor) channelName = buildUUID()
 
   const videoChannelDisplayName = `Main ${user.username} channel`
 

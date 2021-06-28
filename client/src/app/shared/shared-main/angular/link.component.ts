@@ -6,7 +6,7 @@ import { Component, Input, ViewEncapsulation } from '@angular/core'
   templateUrl: './link.component.html'
 })
 export class LinkComponent {
-  @Input() internalLink?: any[]
+  @Input() internalLink?: string | any[]
 
   @Input() href?: string
   @Input() target?: string

@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-
+import { VideoCreateResult } from '@shared/models'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import {
   checkBadCountPagination,
   checkBadSortPagination,
@@ -9,20 +10,24 @@ import {
   cleanupTests,
   createUser,
   doubleFollow,
-  flushAndRunMultipleServers, makeDeleteRequest,
-  makeGetRequest, makePostBodyRequest,
+  flushAndRunMultipleServers,
+  getVideo,
+  makeDeleteRequest,
+  makeGetRequest,
+  makePostBodyRequest,
   makePutBodyRequest,
   ServerInfo,
-  setAccessTokensToServers, uploadVideoAndGetId,
-  userLogin, waitJobs, getVideoIdFromUUID
+  setAccessTokensToServers,
+  uploadVideoAndGetId,
+  userLogin,
+  waitJobs
 } from '../../../../shared/extra-utils'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 describe('Test server redundancy API validators', function () {
   let servers: ServerInfo[]
   let userAccessToken = null
   let videoIdLocal: number
-  let videoIdRemote: number
+  let videoRemote: VideoCreateResult
 
   // ---------------------------------------------------------------
 
@@ -48,7 +53,8 @@ describe('Test server redundancy API validators', function () {
 
     await waitJobs(servers)
 
-    videoIdRemote = await getVideoIdFromUUID(servers[0].url, remoteUUID)
+    const resVideo = await getVideo(servers[0].url, remoteUUID)
+    videoRemote = resVideo.body
   })
 
   describe('When listing redundancies', function () {
@@ -131,7 +137,13 @@ describe('Test server redundancy API validators', function () {
     })
 
     it('Should succeed with the correct params', async function () {
-      await makePostBodyRequest({ url, path, token, fields: { videoId: videoIdRemote }, statusCodeExpected: HttpStatusCode.NO_CONTENT_204 })
+      await makePostBodyRequest({
+        url,
+        path,
+        token,
+        fields: { videoId: videoRemote.shortUUID },
+        statusCodeExpected: HttpStatusCode.NO_CONTENT_204
+      })
     })
 
     it('Should fail if the video is already duplicated', async function () {
@@ -139,7 +151,13 @@ describe('Test server redundancy API validators', function () {
 
       await waitJobs(servers)
 
-      await makePostBodyRequest({ url, path, token, fields: { videoId: videoIdRemote }, statusCodeExpected: HttpStatusCode.CONFLICT_409 })
+      await makePostBodyRequest({
+        url,
+        path,
+        token,
+        fields: { videoId: videoRemote.uuid },
+        statusCodeExpected: HttpStatusCode.CONFLICT_409
+      })
     })
   })
 

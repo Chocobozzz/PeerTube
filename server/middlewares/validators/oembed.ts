@@ -6,7 +6,7 @@ import { VideoPlaylistModel } from '@server/models/video/video-playlist'
 import { VideoPlaylistPrivacy, VideoPrivacy } from '@shared/models'
 import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 import { isTestInstance } from '../../helpers/core-utils'
-import { isIdOrUUIDValid } from '../../helpers/custom-validators/misc'
+import { isIdOrUUIDValid, toCompleteUUID } from '../../helpers/custom-validators/misc'
 import { logger } from '../../helpers/logger'
 import { WEBSERVER } from '../../initializers/constants'
 import { areValidationErrors } from './shared'
@@ -79,7 +79,7 @@ const oembedValidator = [
       })
     }
 
-    const elementId = matches[1]
+    const elementId = toCompleteUUID(matches[1])
     if (isIdOrUUIDValid(elementId) === false) {
       return res.fail({ message: 'Invalid video or playlist id.' })
     }

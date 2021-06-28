@@ -2,8 +2,8 @@ import 'multer'
 import { queue } from 'async'
 import * as LRUCache from 'lru-cache'
 import { join } from 'path'
-import { v4 as uuidv4 } from 'uuid'
 import { getLowercaseExtension } from '@server/helpers/core-utils'
+import { buildUUID } from '@server/helpers/uuid'
 import { ActorModel } from '@server/models/actor/actor'
 import { ActivityPubActorType, ActorImageType } from '@shared/models'
 import { retryTransactionWrapper } from '../helpers/database-utils'
@@ -44,7 +44,7 @@ async function updateLocalActorImageFile (
 
   const extension = getLowercaseExtension(imagePhysicalFile.filename)
 
-  const imageName = uuidv4() + extension
+  const imageName = buildUUID() + extension
   const destination = join(CONFIG.STORAGE.ACTOR_IMAGES, imageName)
   await processImage(imagePhysicalFile.path, destination, imageSize)
 

@@ -1,5 +1,5 @@
+import { buildUUID } from '@server/helpers/uuid'
 import * as Sequelize from 'sequelize'
-import { v4 as uuidv4 } from 'uuid'
 
 async function up (utils: {
   transaction: Sequelize.Transaction
@@ -23,7 +23,7 @@ async function up (utils: {
   {
     const authors = await utils.db.Author.findAll()
     for (const author of authors) {
-      author.uuid = uuidv4()
+      author.uuid = buildUUID()
       await author.save()
     }
   }

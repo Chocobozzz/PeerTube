@@ -6,6 +6,8 @@ import { VideoPlaylistType } from './video-playlist-type.model'
 export interface VideoPlaylist {
   id: number
   uuid: string
+  shortUUID: string
+
   isLocal: boolean
 
   url: string

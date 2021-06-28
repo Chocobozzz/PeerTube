@@ -17,8 +17,8 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { v4 as uuidv4 } from 'uuid'
 import { setAsUpdated } from '@server/helpers/database-utils'
+import { buildUUID, uuidToShort } from '@server/helpers/uuid'
 import { MAccountId, MChannelId } from '@server/types/models'
 import { AttributesOnly } from '@shared/core-utils'
 import { ActivityIconObject } from '../../../shared/models/activitypub/objects'
@@ -545,7 +545,7 @@ export class VideoPlaylistModel extends Model<Partial<AttributesOnly<VideoPlayli
   generateThumbnailName () {
     const extension = '.jpg'
 
-    return 'playlist-' + uuidv4() + extension
+    return 'playlist-' + buildUUID() + extension
   }
 
   getThumbnailUrl () {
@@ -617,6 +617,8 @@ export class VideoPlaylistModel extends Model<Partial<AttributesOnly<VideoPlayli
     return {
       id: this.id,
       uuid: this.uuid,
+      shortUUID: uuidToShort(this.uuid),
+
       isLocal: this.isOwned(),
 
       url: this.url,

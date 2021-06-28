@@ -13,6 +13,8 @@ import {
 export class VideoPlaylist implements ServerVideoPlaylist {
   id: number
   uuid: string
+  shortUUID: string
+
   isLocal: boolean
 
   url: string
@@ -41,11 +43,17 @@ export class VideoPlaylist implements ServerVideoPlaylist {
 
   videoChannelBy?: string
 
+  static buildWatchUrl (playlist: Pick<VideoPlaylist, 'uuid' | 'shortUUID'>) {
+    return '/w/p/' + (playlist.uuid || playlist.shortUUID)
+  }
+
   constructor (hash: ServerVideoPlaylist, translations: {}) {
     const absoluteAPIUrl = getAbsoluteAPIUrl()
 
     this.id = hash.id
     this.uuid = hash.uuid
+    this.shortUUID = hash.shortUUID
+
     this.url = hash.url
     this.isLocal = hash.isLocal
 

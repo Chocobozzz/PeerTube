@@ -19,6 +19,6 @@ export class PlaylistLazyLoadResolver extends AbstractLazyLoadResolver<VideoPlay
   }
 
   protected buildUrl (playlist: VideoPlaylist) {
-    return '/w/p/' + playlist.uuid
+    return VideoPlaylist.buildWatchUrl(playlist)
   }
 }

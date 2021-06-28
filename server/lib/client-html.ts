@@ -27,6 +27,7 @@ import { VideoChannelModel } from '../models/video/video-channel'
 import { VideoPlaylistModel } from '../models/video/video-playlist'
 import { MAccountActor, MChannelActor } from '../types/models'
 import { ServerConfigManager } from './server-config-manager'
+import { toCompleteUUID } from '@server/helpers/custom-validators/misc'
 
 type Tags = {
   ogType: string
@@ -78,7 +79,9 @@ class ClientHtml {
     return customHtml
   }
 
-  static async getWatchHTMLPage (videoId: string, req: express.Request, res: express.Response) {
+  static async getWatchHTMLPage (videoIdArg: string, req: express.Request, res: express.Response) {
+    const videoId = toCompleteUUID(videoIdArg)
+
     // Let Angular application handle errors
     if (!validator.isInt(videoId) && !validator.isUUID(videoId, 4)) {
       res.status(HttpStatusCode.NOT_FOUND_404)
@@ -136,7 +139,9 @@ class ClientHtml {
     return customHtml
   }
 
-  static async getWatchPlaylistHTMLPage (videoPlaylistId: string, req: express.Request, res: express.Response) {
+  static async getWatchPlaylistHTMLPage (videoPlaylistIdArg: string, req: express.Request, res: express.Response) {
+    const videoPlaylistId = toCompleteUUID(videoPlaylistIdArg)
+
     // Let Angular application handle errors
     if (!validator.isInt(videoPlaylistId) && !validator.isUUID(videoPlaylistId, 4)) {
       res.status(HttpStatusCode.NOT_FOUND_404)

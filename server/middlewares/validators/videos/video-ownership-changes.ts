@@ -1,6 +1,6 @@
 import * as express from 'express'
 import { param } from 'express-validator'
-import { isIdOrUUIDValid } from '@server/helpers/custom-validators/misc'
+import { isIdValid } from '@server/helpers/custom-validators/misc'
 import { checkUserCanTerminateOwnershipChange } from '@server/helpers/custom-validators/video-ownership'
 import { logger } from '@server/helpers/logger'
 import { isAbleToUploadVideo } from '@server/lib/user'
@@ -13,11 +13,12 @@ import {
   checkUserCanManageVideo,
   doesChangeVideoOwnershipExist,
   doesVideoChannelOfAccountExist,
-  doesVideoExist
+  doesVideoExist,
+  isValidVideoIdParam
 } from '../shared'
 
 const videosChangeOwnershipValidator = [
-  param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
+  isValidVideoIdParam('videoId'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking changeOwnership parameters', { parameters: req.params })
@@ -40,7 +41,8 @@ const videosChangeOwnershipValidator = [
 ]
 
 const videosTerminateChangeOwnershipValidator = [
-  param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
+  param('id')
+    .custom(isIdValid).withMessage('Should have a valid id'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking changeOwnership parameters', { parameters: req.params })

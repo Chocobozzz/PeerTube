@@ -12,7 +12,6 @@ import {
   isBooleanValid,
   isDateValid,
   isFileFieldValid,
-  isIdOrUUIDValid,
   isIdValid,
   isUUIDValid,
   toArray,
@@ -53,7 +52,8 @@ import {
   checkUserCanManageVideo,
   doesVideoChannelOfAccountExist,
   doesVideoExist,
-  doesVideoFileOfVideoExist
+  doesVideoFileOfVideoExist,
+  isValidVideoIdParam
 } from '../shared'
 
 const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
@@ -195,7 +195,8 @@ const videosAddResumableInitValidator = getCommonVideoEditAttributes().concat([
 ])
 
 const videosUpdateValidator = getCommonVideoEditAttributes().concat([
-  param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
+  isValidVideoIdParam('id'),
+
   body('name')
     .optional()
     .trim()
@@ -258,7 +259,7 @@ const videosCustomGetValidator = (
   authenticateInQuery = false
 ) => {
   return [
-    param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
+    isValidVideoIdParam('id'),
 
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       logger.debug('Checking videosGet parameters', { parameters: req.params })
@@ -309,8 +310,10 @@ const videosGetValidator = videosCustomGetValidator('all')
 const videosDownloadValidator = videosCustomGetValidator('all', true)
 
 const videoFileMetadataGetValidator = getCommonVideoEditAttributes().concat([
-  param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
-  param('videoFileId').custom(isIdValid).not().isEmpty().withMessage('Should have a valid videoFileId'),
+  isValidVideoIdParam('id'),
+
+  param('videoFileId')
+    .custom(isIdValid).not().isEmpty().withMessage('Should have a valid videoFileId'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoFileMetadataGet parameters', { parameters: req.params })
@@ -323,7 +326,7 @@ const videoFileMetadataGetValidator = getCommonVideoEditAttributes().concat([
 ])
 
 const videosRemoveValidator = [
-  param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
+  isValidVideoIdParam('id'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videosRemove parameters', { parameters: req.params })

@@ -15,7 +15,7 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { v4 as uuidv4 } from 'uuid'
+import { buildUUID } from '@server/helpers/uuid'
 import { MVideo, MVideoCaption, MVideoCaptionFormattable, MVideoCaptionVideo } from '@server/types/models'
 import { AttributesOnly } from '@shared/core-utils'
 import { VideoCaption } from '../../../shared/models/videos/caption/video-caption.model'
@@ -182,7 +182,7 @@ export class VideoCaptionModel extends Model<Partial<AttributesOnly<VideoCaption
   }
 
   static generateCaptionName (language: string) {
-    return `${uuidv4()}-${language}.vtt`
+    return `${buildUUID()}-${language}.vtt`
   }
 
   isOwned () {

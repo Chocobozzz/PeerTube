@@ -247,7 +247,7 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
       this.componentPagination.totalItems = null
       this.totalNotDeletedComments = null
 
-      this.syndicationItems = this.videoCommentService.getVideoCommentsFeeds(this.video.uuid)
+      this.syndicationItems = this.videoCommentService.getVideoCommentsFeeds(this.video)
       this.loadMoreThreads()
     }
   }

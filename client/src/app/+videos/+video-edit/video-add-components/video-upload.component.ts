@@ -1,16 +1,16 @@
+import { UploadState, UploadxOptions, UploadxService } from 'ngx-uploadx'
+import { HttpErrorResponse, HttpEventType, HttpHeaders } from '@angular/common/http'
 import { AfterViewInit, Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core'
 import { Router } from '@angular/router'
-import { UploadxOptions, UploadState, UploadxService } from 'ngx-uploadx'
-import { UploaderXFormData } from './uploaderx-form-data'
 import { AuthService, CanComponentDeactivate, HooksService, Notifier, ServerService, UserService } from '@app/core'
-import { scrollToTop, genericUploadErrorHandler } from '@app/helpers'
+import { genericUploadErrorHandler, scrollToTop } from '@app/helpers'
 import { FormValidatorService } from '@app/shared/shared-forms'
-import { BytesPipe, VideoCaptionService, VideoEdit, VideoService } from '@app/shared/shared-main'
+import { BytesPipe, Video, VideoCaptionService, VideoEdit, VideoService } from '@app/shared/shared-main'
 import { LoadingBarService } from '@ngx-loading-bar/core'
 import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 import { VideoPrivacy } from '@shared/models'
+import { UploaderXFormData } from './uploaderx-form-data'
 import { VideoSend } from './video-send'
-import { HttpErrorResponse, HttpEventType, HttpHeaders } from '@angular/common/http'
 
 @Component({
   selector: 'my-video-upload',
@@ -243,7 +243,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
             this.isUploadingVideo = false
 
             this.notifier.success($localize`Video published.`)
-            this.router.navigate([ '/w', video.uuid ])
+            this.router.navigateByUrl(Video.buildWatchUrl(video))
           },
 
           err => {
