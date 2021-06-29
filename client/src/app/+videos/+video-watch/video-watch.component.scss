@@ -239,7 +239,6 @@ $video-info-margin-left: 44px;
           ::ng-deep.action-button {
             @include peertube-button;
             @include button-with-icon(21px, 0, -1px);
-            @include apply-svg-color(pvar(--actionButtonColor));
 
             font-size: 100%;
             font-weight: $font-semibold;
@@ -256,35 +255,6 @@ $video-info-margin-left: 44px;
 
             &:hover {
               opacity: 0.9;
-            }
-
-            &.action-button-like,
-            &.action-button-dislike {
-              filter: brightness(120%);
-
-              .count {
-                margin: 0 5px;
-              }
-            }
-
-            &.action-button-like.activated {
-              .count {
-                color: pvar(--activatedActionButtonColor);
-              }
-
-              my-global-icon {
-                @include apply-svg-color(pvar(--activatedActionButtonColor));
-              }
-            }
-
-            &.action-button-dislike.activated {
-              .count {
-                color: pvar(--activatedActionButtonColor);
-              }
-
-              my-global-icon {
-                @include apply-svg-color(pvar(--activatedActionButtonColor));
-              }
             }
 
             &.action-button-support {
