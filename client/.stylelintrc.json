@@ -28,7 +28,7 @@
     "property-no-vendor-prefix": [
       true,
       {
-        "ignoreProperties": [ "mask-image" ]
+        "ignoreProperties": [ "mask-image", "mask-size" ]
       }
     ]
   }

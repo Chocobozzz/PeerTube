@@ -44,6 +44,8 @@ $context-menu-width: 350px;
       width: 14px;
       height: 14px;
       background-color: #fff;
+
+      -webkit-mask-size: cover;
       mask-size: cover;
 
       @each $icon in $icons {

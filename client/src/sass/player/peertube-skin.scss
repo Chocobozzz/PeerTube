@@ -354,9 +354,10 @@ body {
         &.icon-previous {
           mask-image: url('#{$assets-path}/player/images/next.svg');
           -webkit-mask-image: url('#{$assets-path}/player/images/next.svg');
+          mask-size: cover;
+          -webkit-mask-size: cover;
 
           background-color: #fff;
-          mask-size: cover;
           width: 11px;
           height: 11px;
           margin-top: -2px;
