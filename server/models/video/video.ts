@@ -43,11 +43,8 @@ import { peertubeTruncate } from '../../helpers/core-utils'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import { isBooleanValid } from '../../helpers/custom-validators/misc'
 import {
-  isVideoCategoryValid,
   isVideoDescriptionValid,
   isVideoDurationValid,
-  isVideoLanguageValid,
-  isVideoLicenceValid,
   isVideoNameValid,
   isVideoPrivacyValid,
   isVideoStateValid,
@@ -458,19 +455,16 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
 
   @AllowNull(true)
   @Default(null)
-  @Is('VideoCategory', value => throwIfNotValid(value, isVideoCategoryValid, 'category', true))
   @Column
   category: number
 
   @AllowNull(true)
   @Default(null)
-  @Is('VideoLicence', value => throwIfNotValid(value, isVideoLicenceValid, 'licence', true))
   @Column
   licence: number
 
   @AllowNull(true)
   @Default(null)
-  @Is('VideoLanguage', value => throwIfNotValid(value, isVideoLanguageValid, 'language', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEOS.LANGUAGE.max))
   language: string
 
