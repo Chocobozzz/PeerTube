@@ -42,9 +42,6 @@
 
   .miniature-name {
     @include miniature-name;
-
-    margin-top: 10px;
-    margin-bottom: 5px;
   }
 
   .by {
@@ -76,6 +73,11 @@
 
 .miniature:not(.display-as-row) {
 
+  .miniature-name {
+    margin-top: 10px;
+    margin-bottom: 5px;
+  }
+
   .miniature-thumbnail {
     @include block-ratio($selector: '::ng-deep a');
 
@@ -89,6 +91,10 @@
   --rowThumbnailHeight: #{$video-thumbnail-height};
 
   display: flex;
+
+  .miniature-name {
+    @include ellipsis-multiline($video-miniature-row-name-font-size, 2);
+  }
 
   .miniature-thumbnail {
     @include margin-right(10px);
