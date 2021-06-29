@@ -237,12 +237,19 @@ function register ({
 You can add/delete video categories, licences or languages using the appropriate managers:
 
 ```js
-function register (...) {
+function register ({ 
+  videoLanguageManager, 
+  videoCategoryManager, 
+  videoLicenceManager, 
+  videoPrivacyManager, 
+  playlistPrivacyManager 
+}) {
   videoLanguageManager.addLanguage('al_bhed', 'Al Bhed')
   videoLanguageManager.deleteLanguage('fr')
 
   videoCategoryManager.addCategory(42, 'Best category')
   videoCategoryManager.deleteCategory(1) // Music
+  videoCategoryManager.resetCategories() // Reset to initial categories
 
   videoLicenceManager.addLicence(42, 'Best licence')
   videoLicenceManager.deleteLicence(7) // Public domain

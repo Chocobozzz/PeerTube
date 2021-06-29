@@ -1,13 +1,10 @@
 async function register ({
-  registerHook,
-  registerSetting,
-  settingsManager,
-  storageManager,
   videoCategoryManager,
   videoLicenceManager,
   videoLanguageManager,
   videoPrivacyManager,
-  playlistPrivacyManager
+  playlistPrivacyManager,
+  getRouter
 }) {
   videoLanguageManager.addLanguage('al_bhed', 'Al Bhed')
   videoLanguageManager.addLanguage('al_bhed2', 'Al Bhed 2')
@@ -28,19 +25,20 @@ async function register ({
 
   videoPrivacyManager.deletePrivacy(2)
   playlistPrivacyManager.deletePlaylistPrivacy(3)
+
+  {
+    const router = getRouter()
+    router.get('/reset-categories', (req, res) => {
+      videoCategoryManager.resetCategories()
+
+      res.sendStatus(204)
+    })
+  }
 }
 
-async function unregister () {
-  return
-}
+async function unregister () {}
 
 module.exports = {
   register,
   unregister
-}
-
-// ############################################################################
-
-function addToCount (obj) {
-  return Object.assign({}, obj, { count: obj.count + 1 })
 }
