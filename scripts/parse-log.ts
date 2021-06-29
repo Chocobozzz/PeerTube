@@ -142,7 +142,8 @@ function toTimeFormat (time: string) {
 
   if (isNaN(timestamp) === true) return 'Unknown date'
 
-  return new Date(timestamp).toLocaleString()
+  const d = new Date(timestamp)
+  return d.toLocaleString() + `.${d.getMilliseconds()}`
 }
 
 function containsTags (loggerTags: string[], optionsTags: string[]) {
