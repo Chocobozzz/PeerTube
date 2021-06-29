@@ -18,7 +18,8 @@ import {
   VideoAvatarChannelComponent,
   VideoDescriptionComponent,
   VideoRateComponent,
-  VideoWatchPlaylistComponent
+  VideoWatchPlaylistComponent,
+  PrivacyConcernsComponent
 } from './shared'
 import { VideoCommentAddComponent } from './shared/comment/video-comment-add.component'
 import { VideoCommentComponent } from './shared/comment/video-comment.component'
@@ -51,6 +52,7 @@ import { VideoWatchComponent } from './video-watch.component'
     VideoWatchPlaylistComponent,
     VideoRateComponent,
     VideoDescriptionComponent,
+    PrivacyConcernsComponent,
 
     VideoCommentsComponent,
     VideoCommentAddComponent,

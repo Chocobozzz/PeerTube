@@ -1,0 +1,15 @@
+<div class="privacy-concerns" *ngIf="hasAlreadyAcceptedPrivacyConcern === false">
+  <div class="privacy-concerns-text">
+    <span class="mr-2">
+      <strong i18n>Friendly Reminder: </strong>
+      <ng-container i18n>
+        the sharing system used for this video implies that some technical information about your system (such as a public IP address) can be sent to other peers.
+      </ng-container>
+    </span>
+    <a i18n i18n-title title="Get more information" target="_blank" rel="noopener noreferrer" href="/about/peertube#privacy">More information</a>
+  </div>
+
+  <div i18n class="privacy-concerns-button privacy-concerns-okay" (click)="acceptedPrivacyConcern()">
+    OK
+  </div>
+</div>

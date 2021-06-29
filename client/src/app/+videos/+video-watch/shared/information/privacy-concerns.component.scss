@@ -1,0 +1,80 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+.privacy-concerns {
+  position: fixed;
+  bottom: 0;
+
+  width: calc(100% - #{$menu-width});
+  z-index: z(privacymsg);
+
+  padding: 5px 15px;
+
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-between;
+  background-color: rgba(0, 0, 0, 0.9);
+  color: #fff;
+}
+
+// If the view is expanded
+:host-context(.expanded) {
+  .privacy-concerns {
+    width: 100%;
+  }
+}
+
+// Or if we are in the small view
+@media screen and (max-width: $small-view) {
+  .privacy-concerns {
+    width: 100%;
+  }
+}
+
+.privacy-concerns-text {
+  margin: 0 5px;
+}
+
+a {
+  @include disable-default-a-behaviour;
+
+  color: pvar(--mainColor);
+  transition: color 0.3s;
+
+  &:hover {
+    color: #fff;
+  }
+}
+
+.privacy-concerns-button {
+  @include margin-left(auto);
+
+  padding: 5px 8px 5px 7px;
+  border-radius: 3px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-weight: $font-semibold;
+
+  &:hover {
+    background-color: #000;
+  }
+}
+
+.privacy-concerns-okay {
+  @include margin-left(10px);
+
+  background-color: pvar(--mainColor);
+}
+
+@media screen and (max-width: 1300px) {
+  .privacy-concerns {
+    font-size: 12px;
+    padding: 2px 5px;
+  }
+
+  .privacy-concerns-text {
+    margin: 0;
+  }
+}

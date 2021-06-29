@@ -1,4 +1,5 @@
 export * from './comment'
+export * from './information'
 export * from './metadata'
 export * from './playlist'
 export * from './recommendations'

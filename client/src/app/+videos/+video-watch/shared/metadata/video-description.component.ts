@@ -2,7 +2,6 @@ import { Component, EventEmitter, Inject, Input, LOCALE_ID, OnChanges, Output } 
 import { MarkdownService, Notifier } from '@app/core'
 import { VideoDetails, VideoService } from '@app/shared/shared-main'
 
-
 @Component({
   selector: 'my-video-description',
   templateUrl: './video-description.component.html',

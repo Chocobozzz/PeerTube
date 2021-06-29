@@ -26,7 +26,6 @@ import { SupportModalComponent } from '@app/shared/shared-support-modal'
 import { SubscribeButtonComponent } from '@app/shared/shared-user-subscription'
 import { VideoActionsDisplayType, VideoDownloadComponent } from '@app/shared/shared-video-miniature'
 import { VideoPlaylist, VideoPlaylistService } from '@app/shared/shared-video-playlist'
-import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 import {
   HTMLServerConfig,
@@ -37,12 +36,7 @@ import {
   VideoPrivacy,
   VideoState
 } from '@shared/models'
-import {
-  cleanupVideoWatch,
-  getStoredP2PEnabled,
-  getStoredTheater,
-  getStoredVideoWatchHistory
-} from '../../../assets/player/peertube-player-local-storage'
+import { cleanupVideoWatch, getStoredTheater, getStoredVideoWatchHistory } from '../../../assets/player/peertube-player-local-storage'
 import {
   CustomizationOptions,
   P2PMediaLoaderOptions,
@@ -51,7 +45,7 @@ import {
   PlayerMode,
   videojs
 } from '../../../assets/player/peertube-player-manager'
-import { isWebRTCDisabled, timeToInt } from '../../../assets/player/utils'
+import { timeToInt } from '../../../assets/player/utils'
 import { environment } from '../../../environments/environment'
 import { VideoWatchPlaylistComponent } from './shared'
 
@@ -63,8 +57,6 @@ type URLOptions = CustomizationOptions & { playerMode: PlayerMode }
   styleUrls: [ './video-watch.component.scss' ]
 })
 export class VideoWatchComponent implements OnInit, OnDestroy {
-  private static LOCAL_STORAGE_PRIVACY_CONCERN_KEY = 'video-watch-privacy-concern'
-
   @ViewChild('videoWatchPlaylist', { static: true }) videoWatchPlaylist: VideoWatchPlaylistComponent
   @ViewChild('videoShareModal') videoShareModal: VideoShareComponent
   @ViewChild('supportModal') supportModal: SupportModalComponent
@@ -84,15 +76,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   playlistPosition: number
   playlist: VideoPlaylist = null
 
-  descriptionLoading = false
-  completeDescriptionShown = false
-  completeVideoDescription: string
-  shortVideoDescription: string
-  videoHTMLDescription = ''
-
   likesBarTooltipText = ''
 
-  hasAlreadyAcceptedPrivacyConcern = false
   remoteServerDown = false
 
   tooltipSupport = ''
@@ -159,6 +144,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit () {
+    this.serverConfig = this.serverService.getHTMLConfig()
+
     // Hide the tooltips for unlogged users in mobile view, this adds confusion with the popover
     if (this.user || !this.screenService.isInMobileView()) {
       this.tooltipSupport = $localize`Support options for this video`
@@ -166,16 +153,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     }
 
     PeertubePlayerManager.initState()
-
-    this.serverConfig = this.serverService.getHTMLConfig()
-    if (
-      isWebRTCDisabled() ||
-      this.serverConfig.tracker.enabled === false ||
-      getStoredP2PEnabled() === false ||
-      peertubeLocalStorage.getItem(VideoWatchComponent.LOCAL_STORAGE_PRIVACY_CONCERN_KEY) === 'true'
-    ) {
-      this.hasAlreadyAcceptedPrivacyConcern = true
-    }
 
     this.paramsSub = this.route.params.subscribe(routeParams => {
       const videoId = routeParams[ 'videoId' ]
@@ -270,16 +247,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   onVideoRemoved () {
     this.redirectService.redirectToHomepage()
-  }
-
-  declinedPrivacyConcern () {
-    peertubeLocalStorage.setItem(VideoWatchComponent.LOCAL_STORAGE_PRIVACY_CONCERN_KEY, 'false')
-    this.hasAlreadyAcceptedPrivacyConcern = false
-  }
-
-  acceptedPrivacyConcern () {
-    peertubeLocalStorage.setItem(VideoWatchComponent.LOCAL_STORAGE_PRIVACY_CONCERN_KEY, 'true')
-    this.hasAlreadyAcceptedPrivacyConcern = true
   }
 
   isVideoToTranscode () {
@@ -486,9 +453,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     // Re init attributes
     this.playerPlaceholderImgSrc = undefined
-    this.descriptionLoading = false
-    this.completeDescriptionShown = false
-    this.completeVideoDescription = undefined
     this.remoteServerDown = false
     this.currentTime = undefined
 
