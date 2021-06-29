@@ -4,15 +4,12 @@
 @use '_bootstrap-variables';
 @use '_miniature' as *;
 
-$player-factor: math.div(16, 9);
-$video-info-margin-left: 44px;
-
 @function getPlayerHeight ($width) {
-  @return calc(#{$width} / #{$player-factor});
+  @return calc(#{$width} / #{$video-watch-player-factor});
 }
 
 @function getPlayerWidth ($height) {
-  @return calc(#{$height} * #{$player-factor});
+  @return calc(#{$height} * #{$video-watch-player-factor});
 }
 
 @mixin playlist-below-player {
@@ -316,46 +313,8 @@ $video-info-margin-left: 44px;
       }
     }
 
-    .video-info-description {
-      @include margin-left($video-info-margin-left);
-      @include margin-right(0);
-
-      margin-top: 20px;
-      margin-bottom: 20px;
-      font-size: 15px;
-
-      .video-info-description-html {
-        @include peertube-word-wrap;
-
-        ::ng-deep a {
-          text-decoration: none;
-        }
-      }
-
-      .glyphicon,
-      .description-loading {
-        @include margin-left(3px);
-      }
-
-      .description-loading {
-        display: inline-block;
-      }
-
-      .video-info-description-more {
-        cursor: pointer;
-        font-weight: $font-semibold;
-        color: pvar(--greyForegroundColor);
-        font-size: 14px;
-
-        .glyphicon {
-          position: relative;
-          top: 2px;
-        }
-      }
-    }
-
     .video-attributes {
-      @include margin-left($video-info-margin-left);
+      @include margin-left($video-watch-info-margin-left);
     }
 
     .video-attributes .video-attribute {
@@ -554,10 +513,6 @@ my-video-comments {
       .video-actions-rates {
         margin-top: 10px;
       }
-    }
-
-    .video-info-description {
-      font-size: 14px !important;
     }
   }
 }

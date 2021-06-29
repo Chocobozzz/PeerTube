@@ -19,6 +19,7 @@ import { PlayerStylesComponent } from './player-styles.component'
 import { RecommendationsModule } from './recommendations/recommendations.module'
 import { TimestampRouteTransformerDirective } from './timestamp-route-transformer.directive'
 import { VideoAvatarChannelComponent } from './video-avatar-channel.component'
+import { VideoDescriptionComponent } from './video-description.component'
 import { VideoRateComponent } from './video-rate.component'
 import { VideoWatchPlaylistComponent } from './video-watch-playlist.component'
 import { VideoWatchRoutingModule } from './video-watch-routing.module'
@@ -47,6 +48,7 @@ import { VideoWatchComponent } from './video-watch.component'
     VideoWatchComponent,
     VideoWatchPlaylistComponent,
     VideoRateComponent,
+    VideoDescriptionComponent,
 
     VideoCommentsComponent,
     VideoCommentAddComponent,

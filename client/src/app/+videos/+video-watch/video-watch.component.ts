@@ -8,7 +8,6 @@ import {
   AuthService,
   AuthUser,
   ConfirmService,
-  MarkdownService,
   MetaService,
   Notifier,
   PeerTubeSocket,
@@ -139,7 +138,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     private serverService: ServerService,
     private restExtractor: RestExtractor,
     private notifier: Notifier,
-    private markdownService: MarkdownService,
     private zone: NgZone,
     private redirectService: RedirectService,
     private videoCaptionService: VideoCaptionService,
@@ -228,48 +226,12 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.hotkeysService.remove(this.hotkeys)
   }
 
-  showMoreDescription () {
-    if (this.completeVideoDescription === undefined) {
-      return this.loadCompleteDescription()
-    }
-
-    this.updateVideoDescription(this.completeVideoDescription)
-    this.completeDescriptionShown = true
-  }
-
-  showLessDescription () {
-    this.updateVideoDescription(this.shortVideoDescription)
-    this.completeDescriptionShown = false
-  }
-
   showDownloadModal () {
     this.videoDownloadModal.show(this.video, this.videoCaptions)
   }
 
   isVideoDownloadable () {
     return this.video && this.video instanceof VideoDetails && this.video.downloadEnabled && !this.video.isLive
-  }
-
-  loadCompleteDescription () {
-    this.descriptionLoading = true
-
-    this.videoService.loadCompleteDescription(this.video.descriptionPath)
-        .subscribe(
-          description => {
-            this.completeDescriptionShown = true
-            this.descriptionLoading = false
-
-            this.shortVideoDescription = this.video.description
-            this.completeVideoDescription = description
-
-            this.updateVideoDescription(this.completeVideoDescription)
-          },
-
-          error => {
-            this.descriptionLoading = false
-            this.notifier.error(error.message)
-          }
-        )
   }
 
   showSupportModal () {
@@ -492,17 +454,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       })
   }
 
-  private updateVideoDescription (description: string) {
-    this.video.description = description
-    this.setVideoDescriptionHTML()
-      .catch(err => console.error(err))
-  }
-
-  private async setVideoDescriptionHTML () {
-    const html = await this.markdownService.textMarkdownToHTML(this.video.description)
-    this.videoHTMLDescription = this.markdownService.processVideoTimestamps(html)
-  }
-
   private setVideoLikesBarTooltipText () {
     this.likesBarTooltipText = `${this.video.likes} likes / ${this.video.dislikes} dislikes`
   }
@@ -552,7 +503,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.buildPlayer(urlOptions)
       .catch(err => console.error('Cannot build the player', err))
 
-    this.setVideoDescriptionHTML()
     this.setVideoLikesBarTooltipText()
 
     this.setOpenGraphTags()
