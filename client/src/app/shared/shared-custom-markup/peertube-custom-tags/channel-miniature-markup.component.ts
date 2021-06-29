@@ -1,8 +1,9 @@
 import { map, switchMap } from 'rxjs/operators'
-import { Component, Input, OnInit } from '@angular/core'
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { MarkdownService, UserService } from '@app/core'
 import { Video, VideoSortField } from '@shared/models/videos'
 import { VideoChannel, VideoChannelService, VideoService } from '../../shared-main'
+import { CustomMarkupComponent } from './shared'
 
 /*
  * Markup component that creates a channel miniature only
@@ -13,10 +14,12 @@ import { VideoChannel, VideoChannelService, VideoService } from '../../shared-ma
   templateUrl: 'channel-miniature-markup.component.html',
   styleUrls: [ 'channel-miniature-markup.component.scss' ]
 })
-export class ChannelMiniatureMarkupComponent implements OnInit {
+export class ChannelMiniatureMarkupComponent implements CustomMarkupComponent, OnInit {
   @Input() name: string
   @Input() displayLatestVideo: boolean
   @Input() displayDescription: boolean
+
+  @Output() loaded = new EventEmitter<boolean>()
 
   channel: VideoChannel
   descriptionHTML: string
@@ -61,9 +64,13 @@ export class ChannelMiniatureMarkupComponent implements OnInit {
         map(user => user.nsfwPolicy),
         switchMap(nsfwPolicy => this.videoService.getVideoChannelVideos({ ...videoOptions, nsfwPolicy }))
       )
-      .subscribe(({ total, data }) => {
-        this.totalVideos = total
-        this.video = data[0]
+      .subscribe({
+        next: ({ total, data }) => {
+          this.totalVideos = total
+          this.video = data[0]
+        },
+
+        complete: () => this.loaded.emit(true)
       })
   }
 }

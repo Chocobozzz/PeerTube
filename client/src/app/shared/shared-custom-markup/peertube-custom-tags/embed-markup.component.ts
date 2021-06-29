@@ -1,14 +1,17 @@
 import { buildPlaylistLink, buildVideoLink, buildVideoOrPlaylistEmbed } from 'src/assets/player/utils'
 import { environment } from 'src/environments/environment'
 import { Component, ElementRef, Input, OnInit } from '@angular/core'
+import { CustomMarkupComponent } from './shared'
 
 @Component({
   selector: 'my-embed-markup',
   template: ''
 })
-export class EmbedMarkupComponent implements OnInit {
+export class EmbedMarkupComponent implements CustomMarkupComponent, OnInit {
   @Input() uuid: string
   @Input() type: 'video' | 'playlist' = 'video'
+
+  loaded: undefined
 
   constructor (private el: ElementRef) { }
 

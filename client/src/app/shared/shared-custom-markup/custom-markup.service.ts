@@ -1,3 +1,4 @@
+import { first } from 'rxjs/operators'
 import { ComponentRef, Injectable } from '@angular/core'
 import { MarkdownService } from '@app/core'
 import {
@@ -19,8 +20,9 @@ import {
   VideoMiniatureMarkupComponent,
   VideosListMarkupComponent
 } from './peertube-custom-tags'
+import { CustomMarkupComponent } from './peertube-custom-tags/shared'
 
-type AngularBuilderFunction = (el: HTMLElement) => ComponentRef<any>
+type AngularBuilderFunction = (el: HTMLElement) => ComponentRef<CustomMarkupComponent>
 type HTMLBuilderFunction = (el: HTMLElement) => HTMLElement
 
 @Injectable()
@@ -45,7 +47,10 @@ export class CustomMarkupService {
     private dynamicElementService: DynamicElementService,
     private markdown: MarkdownService
   ) {
-    this.customMarkdownRenderer = async (text: string) => this.buildElement(text)
+    this.customMarkdownRenderer = (text: string) => {
+      return this.buildElement(text)
+        .then(({ rootElement }) => rootElement)
+    }
   }
 
   getCustomMarkdownRenderer () {
@@ -60,22 +65,29 @@ export class CustomMarkupService {
 
     for (const selector of Object.keys(this.htmlBuilders)) {
       rootElement.querySelectorAll(selector)
-        .forEach((e: HTMLElement) => {
-          try {
-            const element = this.execHTMLBuilder(selector, e)
-            // Insert as first child
-            e.insertBefore(element, e.firstChild)
-          } catch (err) {
-            console.error('Cannot inject component %s.', selector, err)
-          }
-        })
+      .forEach((e: HTMLElement) => {
+        try {
+          const element = this.execHTMLBuilder(selector, e)
+          // Insert as first child
+          e.insertBefore(element, e.firstChild)
+        } catch (err) {
+          console.error('Cannot inject component %s.', selector, err)
+        }
+      })
     }
+
+    const loadedPromises: Promise<boolean>[] = []
 
     for (const selector of Object.keys(this.angularBuilders)) {
       rootElement.querySelectorAll(selector)
         .forEach((e: HTMLElement) => {
           try {
             const component = this.execAngularBuilder(selector, e)
+
+            if (component.instance.loaded) {
+              const p = component.instance.loaded.pipe(first()).toPromise()
+              loadedPromises.push(p)
+            }
 
             this.dynamicElementService.injectElement(e, component)
           } catch (err) {
@@ -84,7 +96,7 @@ export class CustomMarkupService {
         })
     }
 
-    return rootElement
+    return { rootElement, componentsLoaded: Promise.all(loadedPromises) }
   }
 
   private getSupportedTags () {

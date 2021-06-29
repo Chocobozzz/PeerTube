@@ -1,8 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core'
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { AuthService } from '@app/core'
 import { VideoFilter, VideoSortField } from '@shared/models'
 import { Video, VideoService } from '../../shared-main'
 import { MiniatureDisplayOptions } from '../../shared-video-miniature'
+import { CustomMarkupComponent } from './shared'
 
 /*
  * Markup component list videos depending on criterias
@@ -13,7 +14,7 @@ import { MiniatureDisplayOptions } from '../../shared-video-miniature'
   templateUrl: 'videos-list-markup.component.html',
   styleUrls: [ 'videos-list-markup.component.scss' ]
 })
-export class VideosListMarkupComponent implements OnInit {
+export class VideosListMarkupComponent implements CustomMarkupComponent, OnInit {
   @Input() sort: string
   @Input() categoryOneOf: number[]
   @Input() languageOneOf: string[]
@@ -21,6 +22,8 @@ export class VideosListMarkupComponent implements OnInit {
   @Input() onlyDisplayTitle: boolean
   @Input() filter: VideoFilter
   @Input() maxRows: number
+
+  @Output() loaded = new EventEmitter<boolean>()
 
   videos: Video[]
 
@@ -73,6 +76,10 @@ export class VideosListMarkupComponent implements OnInit {
     }
 
     this.videoService.getVideos(options)
-      .subscribe(({ data }) => this.videos = data)
+      .subscribe({
+        next: ({ data }) => this.videos = data,
+
+        complete: () => this.loaded.emit(true)
+      })
   }
 }

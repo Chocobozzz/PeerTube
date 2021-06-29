@@ -1,7 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core'
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { AuthService } from '@app/core'
 import { Video, VideoService } from '../../shared-main'
 import { MiniatureDisplayOptions } from '../../shared-video-miniature'
+import { CustomMarkupComponent } from './shared'
 
 /*
  * Markup component that creates a video miniature only
@@ -12,9 +13,11 @@ import { MiniatureDisplayOptions } from '../../shared-video-miniature'
   templateUrl: 'video-miniature-markup.component.html',
   styleUrls: [ 'video-miniature-markup.component.scss' ]
 })
-export class VideoMiniatureMarkupComponent implements OnInit {
+export class VideoMiniatureMarkupComponent implements CustomMarkupComponent, OnInit {
   @Input() uuid: string
   @Input() onlyDisplayTitle: boolean
+
+  @Output() loaded = new EventEmitter<boolean>()
 
   video: Video
 
@@ -46,6 +49,10 @@ export class VideoMiniatureMarkupComponent implements OnInit {
     }
 
     this.videoService.getVideo({ videoId: this.uuid })
-      .subscribe(video => this.video = video)
+      .subscribe({
+        next: video => this.video = video,
+
+        complete: () => this.loaded.emit(true)
+      })
   }
 }

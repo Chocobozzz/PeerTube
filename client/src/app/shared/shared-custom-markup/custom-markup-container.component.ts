@@ -10,6 +10,8 @@ export class CustomMarkupContainerComponent implements OnChanges {
 
   @Input() content: string
 
+  displayed = false
+
   constructor (
     private customMarkupService: CustomMarkupService
   ) { }
@@ -19,8 +21,13 @@ export class CustomMarkupContainerComponent implements OnChanges {
   }
 
   private async buildElement () {
-    const element = await this.customMarkupService.buildElement(this.content)
-    this.contentWrapper.nativeElement.appendChild(element)
-  }
+    if (!this.content) return
 
+    const { rootElement, componentsLoaded } = await this.customMarkupService.buildElement(this.content)
+    this.contentWrapper.nativeElement.appendChild(rootElement)
+
+    await componentsLoaded
+
+    this.displayed = true
+  }
 }
