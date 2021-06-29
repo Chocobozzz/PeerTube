@@ -234,21 +234,29 @@ function register ({
 
 #### Update video constants
 
-You can add/delete video categories, licences or languages using the appropriate managers:
+You can add/delete video categories, licences or languages using the appropriate constant managers:
 
 ```js
-function register (...) {
-  videoLanguageManager.addLanguage('al_bhed', 'Al Bhed')
-  videoLanguageManager.deleteLanguage('fr')
+function register ({ 
+  videoLanguageManager, 
+  videoCategoryManager, 
+  videoLicenceManager, 
+  videoPrivacyManager, 
+  playlistPrivacyManager 
+}) {
+  videoLanguageManager.addConstant('al_bhed', 'Al Bhed')
+  videoLanguageManager.deleteConstant('fr')
 
-  videoCategoryManager.addCategory(42, 'Best category')
-  videoCategoryManager.deleteCategory(1) // Music
+  videoCategoryManager.addConstant(42, 'Best category')
+  videoCategoryManager.deleteConstant(1) // Music
+  videoCategoryManager.resetConstants() // Reset to initial categories
+  videoCategoryManager.getConstants() // Retrieve all category constants
 
-  videoLicenceManager.addLicence(42, 'Best licence')
-  videoLicenceManager.deleteLicence(7) // Public domain
+  videoLicenceManager.addConstant(42, 'Best licence')
+  videoLicenceManager.deleteConstant(7) // Public domain
 
-  videoPrivacyManager.deletePrivacy(2) // Remove Unlisted video privacy
-  playlistPrivacyManager.deletePlaylistPrivacy(3) // Remove Private video playlist privacy
+  videoPrivacyManager.deleteConstant(2) // Remove Unlisted video privacy
+  playlistPrivacyManager.deleteConstant(3) // Remove Private video playlist privacy
 }
 ```
 
