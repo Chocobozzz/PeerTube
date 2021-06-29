@@ -151,6 +151,7 @@
         @include peertube-word-wrap;
 
         @include margin-right(30px);
+
         min-height: 40px; // Align with the action buttons
         font-size: 27px;
         font-weight: $font-semibold;
@@ -211,106 +212,6 @@
           @include margin-left(5px);
         }
       }
-
-      .video-actions-rates {
-        @include margin-left(auto);
-        @include margin-right(0);
-
-        margin-top: 0;
-        margin-bottom: 10px;
-
-        align-items: start;
-        width: max-content;
-
-        .video-actions {
-          height: 40px; // Align with the title
-          display: flex;
-          align-items: center;
-
-          .action-button:not(:first-child),
-          .action-dropdown,
-          my-video-actions-dropdown {
-            @include margin-left(5px);
-          }
-
-          ::ng-deep.action-button {
-            @include peertube-button;
-            @include button-with-icon(21px, 0, -1px);
-
-            font-size: 100%;
-            font-weight: $font-semibold;
-            display: inline-block;
-            padding: 0 10px;
-            white-space: nowrap;
-            background-color: transparent !important;
-            color: pvar(--actionButtonColor);
-            text-transform: uppercase;
-
-            &::after {
-              display: none;
-            }
-
-            &:hover {
-              opacity: 0.9;
-            }
-
-            &.action-button-support {
-              color: pvar(--supportButtonColor);
-
-              my-global-icon {
-                @include apply-svg-color(pvar(--supportButtonColor));
-              }
-            }
-
-            &.action-button-support {
-              my-global-icon {
-                ::ng-deep path:first-child {
-                  fill: pvar(--supportButtonHeartColor) !important;
-                }
-              }
-            }
-
-            &.action-button-save {
-              my-global-icon {
-                top: 0 !important;
-                right: -1px;
-              }
-            }
-
-            .icon-text {
-              @include margin-left(3px);
-            }
-          }
-        }
-
-        .video-info-likes-dislikes-bar-outer-container {
-          position: relative;
-        }
-
-        .video-info-likes-dislikes-bar-inner-container {
-          position: absolute;
-          height: 20px;
-        }
-
-        .video-info-likes-dislikes-bar {
-          $likes-bar-height: 2px;
-          height: $likes-bar-height;
-          margin-top: -$likes-bar-height;
-          width: 120px;
-          background-color: #ccc;
-          position: relative;
-          top: 10px;
-
-          .likes-bar {
-            height: 100%;
-            background-color: #909090;
-
-            &.liked {
-              background-color: pvar(--activatedActionButtonColor);
-            }
-          }
-        }
-      }
     }
 
     .video-attributes {
@@ -349,6 +250,18 @@
       }
     }
   }
+}
+
+my-action-buttons {
+  @include margin-left(auto);
+  @include margin-right(0);
+
+  display: block;
+  margin-top: 0;
+  margin-bottom: 10px;
+
+  align-items: start;
+  width: max-content;
 }
 
 my-recommended-videos {
@@ -411,10 +324,6 @@ my-video-comments {
 
 @media screen and (max-width: 450px) {
   .video-bottom {
-    .action-button .icon-text {
-      display: none !important;
-    }
-
     .video-info .video-info-first-row {
       .video-info-name {
         font-size: 18px;
@@ -423,11 +332,11 @@ my-video-comments {
       .video-info-date-views {
         font-size: 14px;
       }
-
-      .video-actions-rates {
-        margin-top: 10px;
-      }
     }
+  }
+
+  my-action-buttons {
+    margin-top: 10px;
   }
 }
 

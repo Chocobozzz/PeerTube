@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Inject, Input, LOCALE_ID, OnChanges, Output } from '@angular/core'
+import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core'
 import { MarkdownService, Notifier } from '@app/core'
 import { VideoDetails, VideoService } from '@app/shared/shared-main'
 
@@ -21,8 +21,7 @@ export class VideoDescriptionComponent implements OnChanges {
   constructor (
     private videoService: VideoService,
     private notifier: Notifier,
-    private markdownService: MarkdownService,
-    @Inject(LOCALE_ID) private localeId: string
+    private markdownService: MarkdownService
   ) { }
 
   ngOnChanges () {

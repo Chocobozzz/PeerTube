@@ -31,7 +31,7 @@ export class VideoRateComponent implements OnInit, OnChanges, OnDestroy {
     private screenService: ScreenService
   ) { }
 
-  async ngOnInit () {
+  ngOnInit () {
     // Hide the tooltips for unlogged users in mobile view, this adds confusion with the popover
     if (this.isUserLoggedIn || !this.screenService.isInMobileView()) {
       this.tooltipLike = $localize`Like this video`

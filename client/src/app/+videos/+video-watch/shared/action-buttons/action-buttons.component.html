@@ -1,0 +1,85 @@
+<div class="video-actions-rates">
+  <div class="video-actions full-width justify-content-end">
+    <my-video-rate
+      [video]="video" [isUserLoggedIn]="isUserLoggedIn"
+      (rateUpdated)="onRateUpdated($event)" (userRatingLoaded)="onRateUpdated($event)"
+    ></my-video-rate>
+
+    <button *ngIf="video.support" (click)="showSupportModal()" (keyup.enter)="showSupportModal()" class="action-button action-button-support" [attr.aria-label]="tooltipSupport"
+      [ngbTooltip]="tooltipSupport"
+      placement="bottom auto"
+    >
+      <my-global-icon iconName="support" aria-hidden="true"></my-global-icon>
+      <span class="icon-text" i18n>SUPPORT</span>
+    </button>
+
+    <button (click)="showShareModal()" (keyup.enter)="showShareModal()" class="action-button">
+      <my-global-icon iconName="share" aria-hidden="true"></my-global-icon>
+      <span class="icon-text" i18n>SHARE</span>
+    </button>
+
+    <div
+      class="action-dropdown" ngbDropdown placement="top" role="button" autoClose="outside"
+       *ngIf="isUserLoggedIn" (openChange)="addContent.openChange($event)"
+       [ngbTooltip]="tooltipSaveToPlaylist"
+       placement="bottom auto"
+    >
+      <button class="action-button action-button-save" ngbDropdownToggle>
+        <my-global-icon iconName="playlist-add" aria-hidden="true"></my-global-icon>
+        <span class="icon-text" i18n>SAVE</span>
+      </button>
+
+      <div ngbDropdownMenu>
+        <my-video-add-to-playlist #addContent [video]="video"></my-video-add-to-playlist>
+      </div>
+    </div>
+
+    <ng-container *ngIf="!isUserLoggedIn && !video.isLive">
+      <button
+        *ngIf="isVideoDownloadable()" class="action-button action-button-save"
+        (click)="showDownloadModal()" (keydown.enter)="showDownloadModal()"
+      >
+        <my-global-icon iconName="download" aria-hidden="true"></my-global-icon>
+        <span class="icon-text d-none d-sm-inline" i18n>DOWNLOAD</span>
+      </button>
+
+      <my-video-download #videoDownloadModal></my-video-download>
+    </ng-container>
+
+    <ng-container *ngIf="isUserLoggedIn">
+      <my-video-actions-dropdown
+        placement="bottom auto" buttonDirection="horizontal" [buttonStyled]="true" [video]="video" [videoCaptions]="videoCaptions"
+        [displayOptions]="videoActionsOptions" (videoRemoved)="onVideoRemoved()"
+      ></my-video-actions-dropdown>
+    </ng-container>
+  </div>
+
+  <div class="likes-dislikes-bar-outer-container">
+    <div
+      class="likes-dislikes-bar-inner-container"
+      *ngIf="video.likes !== 0 || video.dislikes !== 0"
+      [ngbTooltip]="likesBarTooltipText"
+      placement="bottom"
+    >
+      <div
+        class="likes-dislikes-bar"
+      >
+        <div class="likes-bar" [ngClass]="{ 'liked': userRating !== 'none' }" [ngStyle]="{ 'width.%': video.likesPercent }"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="likes-dislikes-bar"
+  *ngIf="video.likes !== 0 || video.dislikes !== 0"
+  [ngbTooltip]="likesBarTooltipText"
+  placement="bottom"
+>
+  <div class="likes-bar" [ngStyle]="{ 'width.%': video.likesPercent }"></div>
+</div>
+
+<ng-container *ngIf="video">
+  <my-support-modal #supportModal [video]="video"></my-support-modal>
+  <my-video-share #videoShareModal [video]="video" [videoCaptions]="videoCaptions" [playlist]="playlist"></my-video-share>
+</ng-container>

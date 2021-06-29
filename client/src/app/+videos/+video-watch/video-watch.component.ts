@@ -18,24 +18,13 @@ import {
   UserService
 } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
-import { RedirectService } from '@app/core/routing/redirect.service'
 import { isXPercentInViewport, scrollToTop } from '@app/helpers'
 import { Video, VideoCaptionService, VideoDetails, VideoService } from '@app/shared/shared-main'
-import { VideoShareComponent } from '@app/shared/shared-share-modal'
-import { SupportModalComponent } from '@app/shared/shared-support-modal'
 import { SubscribeButtonComponent } from '@app/shared/shared-user-subscription'
-import { VideoActionsDisplayType, VideoDownloadComponent } from '@app/shared/shared-video-miniature'
+import { VideoActionsDisplayType } from '@app/shared/shared-video-miniature'
 import { VideoPlaylist, VideoPlaylistService } from '@app/shared/shared-video-playlist'
 import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
-import {
-  HTMLServerConfig,
-  PeerTubeProblemDocument,
-  ServerErrorCode,
-  UserVideoRateType,
-  VideoCaption,
-  VideoPrivacy,
-  VideoState
-} from '@shared/models'
+import { HTMLServerConfig, PeerTubeProblemDocument, ServerErrorCode, VideoCaption, VideoPrivacy, VideoState } from '@shared/models'
 import { cleanupVideoWatch, getStoredTheater, getStoredVideoWatchHistory } from '../../../assets/player/peertube-player-local-storage'
 import {
   CustomizationOptions,
@@ -58,10 +47,7 @@ type URLOptions = CustomizationOptions & { playerMode: PlayerMode }
 })
 export class VideoWatchComponent implements OnInit, OnDestroy {
   @ViewChild('videoWatchPlaylist', { static: true }) videoWatchPlaylist: VideoWatchPlaylistComponent
-  @ViewChild('videoShareModal') videoShareModal: VideoShareComponent
-  @ViewChild('supportModal') supportModal: SupportModalComponent
   @ViewChild('subscribeButton') subscribeButton: SubscribeButtonComponent
-  @ViewChild('videoDownloadModal') videoDownloadModal: VideoDownloadComponent
 
   player: any
   playerElement: HTMLVideoElement
@@ -95,8 +81,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     liveInfo: true
   }
 
-  userRating: UserVideoRateType
-
   private nextVideoUuid = ''
   private nextVideoTitle = ''
   private currentTime: number
@@ -124,7 +108,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     private restExtractor: RestExtractor,
     private notifier: Notifier,
     private zone: NgZone,
-    private redirectService: RedirectService,
     private videoCaptionService: VideoCaptionService,
     private hotkeysService: HotkeysService,
     private hooks: HooksService,
@@ -203,20 +186,12 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.hotkeysService.remove(this.hotkeys)
   }
 
-  showDownloadModal () {
-    this.videoDownloadModal.show(this.video, this.videoCaptions)
+  getCurrentTime () {
+    return this.currentTime
   }
 
-  isVideoDownloadable () {
-    return this.video && this.video instanceof VideoDetails && this.video.downloadEnabled && !this.video.isLive
-  }
-
-  showSupportModal () {
-    this.supportModal.show()
-  }
-
-  showShareModal () {
-    this.videoShareModal.show(this.currentTime, this.videoWatchPlaylist.currentPlaylistPosition)
+  getCurrentPlaylistPosition () {
+    return this.videoWatchPlaylist.currentPlaylistPosition
   }
 
   isUserLoggedIn () {
@@ -245,10 +220,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     }
   }
 
-  onVideoRemoved () {
-    this.redirectService.redirectToHomepage()
-  }
-
   isVideoToTranscode () {
     return this.video && this.video.state.id === VideoState.TO_TRANSCODE
   }
@@ -259,10 +230,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   hasVideoScheduledPublication () {
     return this.video && this.video.scheduledUpdate !== undefined
-  }
-
-  isLive () {
-    return !!(this.video?.isLive)
   }
 
   isWaitingForLive () {
@@ -309,11 +276,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   onPlaylistVideoFound (videoId: string) {
     this.loadVideo(videoId)
-  }
-
-  onRateUpdated (userRating: UserVideoRateType) {
-    this.userRating = userRating
-    this.setVideoLikesBarTooltipText()
   }
 
   displayOtherVideosAsRow () {
@@ -421,10 +383,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       })
   }
 
-  private setVideoLikesBarTooltipText () {
-    this.likesBarTooltipText = `${this.video.likes} likes / ${this.video.dislikes} dislikes`
-  }
-
   private handleError (err: any) {
     const errorMessage: string = typeof err === 'string' ? err : err.message
     if (!errorMessage) return
@@ -466,8 +424,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     this.buildPlayer(urlOptions)
       .catch(err => console.error('Cannot build the player', err))
-
-    this.setVideoLikesBarTooltipText()
 
     this.setOpenGraphTags()
 
