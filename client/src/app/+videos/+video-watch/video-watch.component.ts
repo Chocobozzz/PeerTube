@@ -53,7 +53,7 @@ import {
 } from '../../../assets/player/peertube-player-manager'
 import { isWebRTCDisabled, timeToInt } from '../../../assets/player/utils'
 import { environment } from '../../../environments/environment'
-import { VideoWatchPlaylistComponent } from './video-watch-playlist.component'
+import { VideoWatchPlaylistComponent } from './shared'
 
 type URLOptions = CustomizationOptions & { playerMode: PlayerMode }
 
