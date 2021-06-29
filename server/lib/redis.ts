@@ -9,7 +9,8 @@ import {
   USER_PASSWORD_CREATE_LIFETIME,
   VIEW_LIFETIME,
   WEBSERVER,
-  TRACKER_RATE_LIMITS
+  TRACKER_RATE_LIMITS,
+  RESUMABLE_UPLOAD_SESSION_LIFETIME
 } from '../initializers/constants'
 import { CONFIG } from '../initializers/config'
 
@@ -200,6 +201,25 @@ class Redis {
       this.deleteFromSet(keySet, videoId.toString()),
       this.deleteKey(keyIncr)
     ])
+  }
+
+  /* ************ Resumable uploads final responses ************ */
+
+  setUploadSession (uploadId: string, video?: { id: number, uuid: string }) {
+    return this.setValue(
+      'resumable-upload-' + uploadId,
+      video ? JSON.stringify(video) : '',
+      RESUMABLE_UPLOAD_SESSION_LIFETIME
+    )
+  }
+
+  doesUploadSessionExist (uploadId: string) {
+    return this.exists('resumable-upload-' + uploadId)
+  }
+
+  getUploadSession (uploadId: string) {
+    return this.getValue('resumable-upload-' + uploadId)
+      .then(value => value ? JSON.parse(value) : '')
   }
 
   /* ************ Keys generation ************ */
