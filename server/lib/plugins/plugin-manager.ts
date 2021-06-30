@@ -304,21 +304,27 @@ export class PluginManager implements ServerHook {
         uninstalled: false,
         peertubeEngine: packageJSON.engine.peertube
       }, { returning: true })
-    } catch (err) {
-      logger.error('Cannot install plugin %s, removing it...', toInstall, { err })
+
+      logger.info('Successful installation of plugin %s.', toInstall)
+
+      await this.registerPluginOrTheme(plugin)
+    } catch (rootErr) {
+      logger.error('Cannot install plugin %s, removing it...', toInstall, { err: rootErr })
 
       try {
-        await removeNpmPlugin(npmName)
+        await this.uninstall(npmName)
       } catch (err) {
-        logger.error('Cannot remove plugin %s after failed installation.', toInstall, { err })
+        logger.error('Cannot uninstall plugin %s after failed installation.', toInstall, { err })
+
+        try {
+          await removeNpmPlugin(npmName)
+        } catch (err) {
+          logger.error('Cannot remove plugin %s after failed installation.', toInstall, { err })
+        }
       }
 
-      throw err
+      throw rootErr
     }
-
-    logger.info('Successful installation of plugin %s.', toInstall)
-
-    await this.registerPluginOrTheme(plugin)
 
     return plugin
   }
@@ -425,8 +431,7 @@ export class PluginManager implements ServerHook {
 
     await ensureDir(registerOptions.peertubeHelpers.plugin.getDataDirectoryPath())
 
-    library.register(registerOptions)
-           .catch(err => logger.error('Cannot register plugin %s.', npmName, { err }))
+    await library.register(registerOptions)
 
     logger.info('Add plugin %s CSS to global file.', npmName)
 
