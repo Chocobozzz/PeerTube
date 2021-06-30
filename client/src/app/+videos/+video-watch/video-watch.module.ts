@@ -14,13 +14,14 @@ import { SharedActorImageModule } from '../../shared/shared-actor-image/shared-a
 import { VideoCommentService } from '../../shared/shared-video-comment/video-comment.service'
 import { PlayerStylesComponent } from './player-styles.component'
 import {
+  ActionButtonsComponent,
+  PrivacyConcernsComponent,
   RecommendationsModule,
+  VideoAlertComponent,
   VideoAvatarChannelComponent,
   VideoDescriptionComponent,
   VideoRateComponent,
-  VideoWatchPlaylistComponent,
-  ActionButtonsComponent,
-  PrivacyConcernsComponent
+  VideoWatchPlaylistComponent
 } from './shared'
 import { VideoCommentAddComponent } from './shared/comment/video-comment-add.component'
 import { VideoCommentComponent } from './shared/comment/video-comment.component'
@@ -55,6 +56,7 @@ import { VideoWatchComponent } from './video-watch.component'
     VideoDescriptionComponent,
     PrivacyConcernsComponent,
     ActionButtonsComponent,
+    VideoAlertComponent,
 
     VideoCommentsComponent,
     VideoCommentAddComponent,

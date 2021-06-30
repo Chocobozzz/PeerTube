@@ -20,32 +20,7 @@
     <my-plugin-placeholder pluginId="player-next"></my-plugin-placeholder>
   </div>
 
-  <div class="row">
-    <div i18n class="col-md-12 alert alert-warning" *ngIf="isVideoToImport()">
-      The video is being imported, it will be available when the import is finished.
-    </div>
-
-    <div i18n class="col-md-12 alert alert-warning" *ngIf="isVideoToTranscode()">
-      The video is being transcoded, it may not work properly.
-    </div>
-
-    <div i18n class="col-md-12 alert alert-info" *ngIf="hasVideoScheduledPublication()">
-      This video will be published on {{ video.scheduledUpdate.updateAt | date: 'full' }}.
-    </div>
-
-    <div i18n class="col-md-12 alert alert-info" *ngIf="isWaitingForLive()">
-      This live has not started yet.
-    </div>
-
-    <div i18n class="col-md-12 alert alert-info" *ngIf="isLiveEnded()">
-      This live has ended.
-    </div>
-
-    <div class="col-md-12 alert alert-danger" *ngIf="video?.blacklisted">
-      <div class="blocked-label" i18n>This video is blocked.</div>
-      {{ video.blockedReason }}
-    </div>
-  </div>
+  <my-video-alert [video]="video"></my-video-alert>
 
   <!-- Video information -->
   <div *ngIf="video" class="margin-content video-bottom">

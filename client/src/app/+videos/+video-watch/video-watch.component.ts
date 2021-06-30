@@ -220,26 +220,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     }
   }
 
-  isVideoToTranscode () {
-    return this.video && this.video.state.id === VideoState.TO_TRANSCODE
-  }
-
-  isVideoToImport () {
-    return this.video && this.video.state.id === VideoState.TO_IMPORT
-  }
-
-  hasVideoScheduledPublication () {
-    return this.video && this.video.scheduledUpdate !== undefined
-  }
-
-  isWaitingForLive () {
-    return this.video?.state.id === VideoState.WAITING_FOR_LIVE
-  }
-
-  isLiveEnded () {
-    return this.video?.state.id === VideoState.LIVE_ENDED
-  }
-
   isVideoBlur (video: Video) {
     return video.isVideoNSFWForUser(this.user, this.serverConfig)
   }
