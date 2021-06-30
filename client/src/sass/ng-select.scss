@@ -15,7 +15,7 @@ $ng-select-height: 30px;
 $ng-select-value-padding-left: 15px;
 $ng-select-value-font-size: 15px;
 
-@use '~@ng-select/ng-select/scss/default.theme';
+@import '~@ng-select/ng-select/scss/default.theme';
 
 .ng-select {
   font-size: $ng-select-value-font-size;
@@ -28,7 +28,6 @@ $ng-select-value-font-size: 15px;
 
   .ng-select-container {
     background-color: pvar(--inputBackgroundColor);
-
   }
 
   .ng-arrow-wrapper {
