@@ -1,5 +1,78 @@
 # Changelog
 
+## v3.3.0-rc.1 (~July)
+
+### IMPORTANT NOTES
+
+ * **Important:** v3.2.0 introduced a `pg_dump` export bug in the auto upgrade script. v3.2.1 fixed this bug. To upgrade from v3.2.**0**:
+   * You can upgrade manually https://docs.joinpeertube.org/install-any-os?id=manually
+   * Or you can apply the changes introduced in this commit: https://github.com/Chocobozzz/PeerTube/commit/86dc0b9cc9374cba7548bb613ff43d92f90570a8 and then use the auto upgrade script
+
+### Maintenance
+
+ * Increase max image/caption/torrent upload size to `4MB`
+ * Increase fetcher job concurrency to `3`
+
+### Docker
+
+ * Support log level env parameter `PEERTUBE_LOG_LEVEL` [#4149](https://github.com/Chocobozzz/PeerTube/pull/4149)
+
+### Plugins/Themes/Embed API
+
+ * Add client helpers:
+   * `getBaseRouterRoute()` [#4153](https://github.com/Chocobozzz/PeerTube/pull/4153)
+ * Add client plugin hooks (https://docs.joinpeertube.org/api-plugins):
+   * `filter:left-menu.links.create.result` to add/remove left menu links
+   * `filter:internal.player.videojs.options.result` to filter options sent to videojs player [#4126](https://github.com/Chocobozzz/PeerTube/pull/4126)
+ * Add server plugin hooks (https://docs.joinpeertube.org/api-plugins):
+   * `action:api.video-playlist-element.created`
+
+
+### Features
+
+ * :tada: Add ability to create a custom homepage using HTML, markdown and [custom HTML tags](https://docs.joinpeertube.org/api-custom-client-markup) [#4007](https://github.com/Chocobozzz/PeerTube/pull/4007)
+ * :tada: Add ability to search playlists in PeerTube instance and [SepiaSearch](https://sepiasearch.org/)
+ * :tada: Shorter public URLs (old URLs are still supported):
+   * Handle short UUID (`8r4jooaQpHp8tw1E1qpSeYq` instead of `3caf7bea-5ceb-4959-81a0-b44d184e897c`) for playlists and videos
+   * Use `/w/:id` instead of `/videos/watch/:id` and `/w/p/:id` instead of `/videos/watch/playlist/:id`
+   * Use `/a/:accountName` instead of `/accounts/:accountName` and `/c/:channelName` instead of `/video-channels/:channelName` [#4009](https://github.com/Chocobozzz/PeerTube/pull/4009)
+   * Provide `/@:username` page that automatically redirect to the account or channel page [#4009](https://github.com/Chocobozzz/PeerTube/pull/4009)
+ * :tada: Add RTL layout support
+ * Add ability to use HTML, markdown and [custom HTML tags](https://docs.joinpeertube.org/api-custom-client-markup) in instance description
+ * Default to dark theme (if available) if requested by the web browser
+ * Add ability for admins to configure minimum signup page [#4010](https://github.com/Chocobozzz/PeerTube/pull/4010)
+ * Use a dedicated URL for each tab in publish page
+ * Add ability to prefill contact form using query parameters in URL [#4161](https://github.com/Chocobozzz/PeerTube/pull/4161)
+ * Accessibility/UI:
+   * Show logo in mobile view [#4141](https://github.com/Chocobozzz/PeerTube/pull/4141)
+   * Improve download modal to download video subtitles
+   * Better error message when trying to import a torrent containing multiple files
+ * REST API errors:
+   * Use [RFC 7807](https://datatracker.ietf.org/doc/html/rfc7807) format to display errors [#4143](https://github.com/Chocobozzz/PeerTube/pull/4143)
+   * Improve date format error messages
+   * Improve video name and tag error messages
+ * Performance:
+   * Use raw SQL to fetch a video from database (~ latency / 2)
+   * Inject server config in HTML
+   * Speed up client plugin loading
+   * Cache refresh actor promises
+   * Optimize activity pub video update
+   * Relax some database transactions
+
+### Bug fixes
+
+ * Fix video upload with a capitalized extension
+ * Fix "height not divisible by 2" ffmpeg error
+ * Don't count deleted comment for replies
+ * Fix UI bug when a plugin deleted the public privacy setting [#4163](https://github.com/Chocobozzz/PeerTube/pull/4163)
+ * Fix `player.getResolutions()` embed API when the video is has not been played yet
+ * Fix live placeholder image aspect ratio in theatre mode
+ * Fix plugin modal/notifier
+ * Fix some 404 errors for remote avatar
+ * Fix daily quota display
+ * Fix ownership change with a live video
+
+
 ## v3.2.1
 
 ### IMPORTANT NOTES
