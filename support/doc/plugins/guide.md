@@ -754,6 +754,8 @@ Left menu links can be filtered (add/remove a section or add/remove links) using
 
 PeerTube plugins and themes should be published on [NPM](https://www.npmjs.com/) so that PeerTube indexes take into account your plugin (after ~ 1 day). An official plugin index is available on [packages.joinpeertube.org](https://packages.joinpeertube.org/api/v1/plugins), with no interface to present packages.
 
+> The official plugin index source code is available at https://framagit.org/framasoft/peertube/plugin-index
+
 ## Write a plugin/theme
 
 Steps:
@@ -936,6 +938,12 @@ $ npm publish
 
 Every time you want to publish another version of your plugin/theme, just update the `version` key from the `package.json`
 and republish it on NPM. Remember that the PeerTube index will take into account your new plugin/theme version after ~24 hours.
+
+> If you need to force your plugin update on a specific __PeerTube__ instance, you may update the latest available version manually:
+> ```sql
+> UPDATE "plugin" SET "latestVersion" = 'X.X.X' WHERE "plugin"."name" = 'plugin-shortname';
+> ```
+> You'll then be able to click the __Update plugin__ button on the plugin list.
 
 ### Unpublish
 
