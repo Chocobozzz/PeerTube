@@ -130,7 +130,7 @@ export class VideoWatchPlaylistComponent {
 
         setTimeout(() => {
           document.querySelector('.element-' + this.currentPlaylistPosition).scrollIntoView(false)
-        }, 0)
+        })
 
         return
       }

@@ -199,40 +199,11 @@ my-subscribe-button {
   @include margin-left(5px);
 }
 
-.video-attributes {
+my-video-attributes {
   @include margin-left($video-watch-info-margin-left);
 
-  .video-attribute {
-    font-size: 13px;
-    display: block;
-    margin-bottom: 12px;
-  }
-}
-
-.video-attribute-label {
-  @include padding-right(5px);
-
-  min-width: 142px;
-  display: inline-block;
-  color: pvar(--greyForegroundColor);
-  font-weight: $font-bold;
-}
-
-a.video-attribute-value {
-  @include disable-default-a-behaviour;
-  color: pvar(--mainForegroundColor);
-
-  &:hover {
-    opacity: 0.9;
-  }
-}
-
-.video-attribute-tags {
-  .video-attribute-value:not(:nth-child(2)) {
-    &::before {
-      content: ', ';
-    }
-  }
+  display: block;
+  margin-bottom: 15px;
 }
 
 my-action-buttons {
@@ -258,12 +229,6 @@ my-video-comments {
   display: inline-block;
   width: 100%;
   margin-bottom: 20px;
-}
-
-@media screen and (max-width: 1600px) {
-  .video-attributes .video-attribute {
-    margin-bottom: 5px;
-  }
 }
 
 // Use the same breakpoint than in the typescript component to display the other video miniatures as row

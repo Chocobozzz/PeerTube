@@ -1,8 +1,7 @@
 import { Hotkey, HotkeysService } from 'angular2-hotkeys'
 import { forkJoin, Subscription } from 'rxjs'
-import { catchError } from 'rxjs/operators'
 import { PlatformLocation } from '@angular/common'
-import { ChangeDetectorRef, Component, ElementRef, Inject, LOCALE_ID, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core'
+import { Component, ElementRef, Inject, LOCALE_ID, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import {
   AuthService,
@@ -21,7 +20,6 @@ import { HooksService } from '@app/core/plugins/hooks.service'
 import { isXPercentInViewport, scrollToTop } from '@app/helpers'
 import { Video, VideoCaptionService, VideoDetails, VideoService } from '@app/shared/shared-main'
 import { SubscribeButtonComponent } from '@app/shared/shared-user-subscription'
-import { VideoActionsDisplayType } from '@app/shared/shared-video-miniature'
 import { VideoPlaylist, VideoPlaylistService } from '@app/shared/shared-video-playlist'
 import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 import { HTMLServerConfig, PeerTubeProblemDocument, ServerErrorCode, VideoCaption, VideoPrivacy, VideoState } from '@shared/models'
@@ -51,10 +49,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   player: any
   playerElement: HTMLVideoElement
-
-  theaterEnabled = false
-
   playerPlaceholderImgSrc: string
+  theaterEnabled = false
 
   video: VideoDetails = null
   videoCaptions: VideoCaption[] = []
@@ -62,28 +58,13 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   playlistPosition: number
   playlist: VideoPlaylist = null
 
-  likesBarTooltipText = ''
-
   remoteServerDown = false
 
-  tooltipSupport = ''
-  tooltipSaveToPlaylist = ''
-
-  videoActionsOptions: VideoActionsDisplayType = {
-    playlist: false,
-    download: true,
-    update: true,
-    blacklist: true,
-    delete: true,
-    report: true,
-    duplicate: true,
-    mute: true,
-    liveInfo: true
-  }
-
-  private nextVideoUuid = ''
+  private nextVideoUUID = ''
   private nextVideoTitle = ''
+
   private currentTime: number
+
   private paramsSub: Subscription
   private queryParamsSub: Subscription
   private configSub: Subscription
@@ -95,7 +76,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   constructor (
     private elementRef: ElementRef,
-    private changeDetector: ChangeDetectorRef,
     private route: ActivatedRoute,
     private router: Router,
     private videoService: VideoService,
@@ -129,40 +109,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   async ngOnInit () {
     this.serverConfig = this.serverService.getHTMLConfig()
 
-    // Hide the tooltips for unlogged users in mobile view, this adds confusion with the popover
-    if (this.user || !this.screenService.isInMobileView()) {
-      this.tooltipSupport = $localize`Support options for this video`
-      this.tooltipSaveToPlaylist = $localize`Save to playlist`
-    }
-
     PeertubePlayerManager.initState()
 
-    this.paramsSub = this.route.params.subscribe(routeParams => {
-      const videoId = routeParams[ 'videoId' ]
-      if (videoId) this.loadVideo(videoId)
-
-      const playlistId = routeParams[ 'playlistId' ]
-      if (playlistId) this.loadPlaylist(playlistId)
-    })
-
-    this.queryParamsSub = this.route.queryParams.subscribe(queryParams => {
-      // Handle the ?playlistPosition
-      const positionParam = queryParams[ 'playlistPosition' ] ?? 1
-
-      this.playlistPosition = positionParam === 'last'
-        ? -1 // Handle the "last" index
-        : parseInt(positionParam + '', 10)
-
-      if (isNaN(this.playlistPosition)) {
-        console.error(`playlistPosition query param '${positionParam}' was parsed as NaN, defaulting to 1.`)
-        this.playlistPosition = 1
-      }
-
-      this.videoWatchPlaylist.updatePlaylistIndex(this.playlistPosition)
-
-      const start = queryParams[ 'start' ]
-      if (this.player && start) this.player.currentTime(parseInt(start, 10))
-    })
+    this.loadRouteParams()
+    this.loadRouteQuery()
 
     this.initHotkeys()
 
@@ -194,41 +144,13 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     return this.videoWatchPlaylist.currentPlaylistPosition
   }
 
-  isUserLoggedIn () {
-    return this.authService.isLoggedIn()
-  }
-
-  getVideoUrl () {
-    if (!this.video.url) {
-      return this.video.originInstanceUrl + VideoDetails.buildWatchUrl(this.video)
-    }
-    return this.video.url
-  }
-
-  getVideoTags () {
-    if (!this.video || Array.isArray(this.video.tags) === false) return []
-
-    return this.video.tags
-  }
-
   onRecommendations (videos: Video[]) {
-    if (videos.length > 0) {
-      // The recommended videos's first element should be the next video
-      const video = videos[0]
-      this.nextVideoUuid = video.uuid
-      this.nextVideoTitle = video.name
-    }
-  }
+    if (videos.length === 0) return
 
-  isVideoBlur (video: Video) {
-    return video.isVideoNSFWForUser(this.user, this.serverConfig)
-  }
-
-  isAutoPlayEnabled () {
-    return (
-      (this.user && this.user.autoPlayNextVideo) ||
-      this.anonymousUser.autoPlayNextVideo
-    )
+    // The recommended videos's first element should be the next video
+    const video = videos[0]
+    this.nextVideoUUID = video.uuid
+    this.nextVideoTitle = video.name
   }
 
   handleTimestampClicked (timestamp: number) {
@@ -238,11 +160,16 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     scrollToTop()
   }
 
-  isPlaylistAutoPlayEnabled () {
-    return (
-      (this.user && this.user.autoPlayNextVideoPlaylist) ||
-      this.anonymousUser.autoPlayNextVideoPlaylist
-    )
+  onPlaylistVideoFound (videoId: string) {
+    this.loadVideo(videoId)
+  }
+
+  isUserLoggedIn () {
+    return this.authService.isLoggedIn()
+  }
+
+  isVideoBlur (video: Video) {
+    return video.isVideoNSFWForUser(this.user, this.serverConfig)
   }
 
   isChannelDisplayNameGeneric () {
@@ -254,21 +181,44 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     return genericChannelDisplayName.includes(this.video.channel.displayName)
   }
 
-  onPlaylistVideoFound (videoId: string) {
-    this.loadVideo(videoId)
-  }
-
   displayOtherVideosAsRow () {
     // Use the same value as in the SASS file
     return this.screenService.getWindowInnerWidth() <= 1100
   }
 
+  private loadRouteParams () {
+    this.paramsSub = this.route.params.subscribe(routeParams => {
+      const videoId = routeParams[ 'videoId' ]
+      if (videoId) return this.loadVideo(videoId)
+
+      const playlistId = routeParams[ 'playlistId' ]
+      if (playlistId) return this.loadPlaylist(playlistId)
+    })
+  }
+
+  private loadRouteQuery () {
+    this.queryParamsSub = this.route.queryParams.subscribe(queryParams => {
+      // Handle the ?playlistPosition
+      const positionParam = queryParams[ 'playlistPosition' ] ?? 1
+
+      this.playlistPosition = positionParam === 'last'
+        ? -1 // Handle the "last" index
+        : parseInt(positionParam + '', 10)
+
+      if (isNaN(this.playlistPosition)) {
+        console.error(`playlistPosition query param '${positionParam}' was parsed as NaN, defaulting to 1.`)
+        this.playlistPosition = 1
+      }
+
+      this.videoWatchPlaylist.updatePlaylistIndex(this.playlistPosition)
+
+      const start = queryParams[ 'start' ]
+      if (this.player && start) this.player.currentTime(parseInt(start, 10))
+    })
+  }
+
   private loadVideo (videoId: string) {
-    // Video did not change
-    if (
-      this.video &&
-      (this.video.uuid === videoId || this.video.shortUUID === videoId)
-    ) return
+    if (this.isSameElement(this.video, videoId)) return
 
     if (this.player) this.player.pause()
 
@@ -280,90 +230,77 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       'filter:api.video-watch.video.get.result'
     )
 
-    // Video did change
-    forkJoin([
-      videoObs,
-      this.videoCaptionService.listCaptions(videoId)
-    ])
-      .pipe(
-        // If 400, 403 or 404, the video is private or blocked so redirect to 404
-        catchError(err => {
-          const errorBody = err.body as PeerTubeProblemDocument
+    forkJoin([ videoObs, this.videoCaptionService.listCaptions(videoId)])
+      .subscribe(
+        ([ video, captionsResult ]) => {
+          const queryParams = this.route.snapshot.queryParams
 
-          if (errorBody.code === ServerErrorCode.DOES_NOT_RESPECT_FOLLOW_CONSTRAINTS && errorBody.originUrl) {
-            const search = window.location.search
-            let originUrl = errorBody.originUrl
-            if (search) originUrl += search
+          const urlOptions = {
+            resume: queryParams.resume,
 
-            this.confirmService.confirm(
-              $localize`This video is not available on this instance. Do you want to be redirected on the origin instance: <a href="${originUrl}">${originUrl}</a>?`,
-              $localize`Redirection`
-            ).then(res => {
-              if (res === false) {
-                return this.restExtractor.redirectTo404IfNotFound(err, 'video', [
-                  HttpStatusCode.BAD_REQUEST_400,
-                  HttpStatusCode.FORBIDDEN_403,
-                  HttpStatusCode.NOT_FOUND_404
-                ])
-              }
+            startTime: queryParams.start,
+            stopTime: queryParams.stop,
 
-              return window.location.href = originUrl
-            })
+            muted: queryParams.muted,
+            loop: queryParams.loop,
+            subtitle: queryParams.subtitle,
+
+            playerMode: queryParams.mode,
+            peertubeLink: false
           }
 
-          return this.restExtractor.redirectTo404IfNotFound(err, 'video', [
-            HttpStatusCode.BAD_REQUEST_400,
-            HttpStatusCode.FORBIDDEN_403,
-            HttpStatusCode.NOT_FOUND_404
-          ])
-        })
+          this.onVideoFetched(video, captionsResult.data, urlOptions)
+              .catch(err => this.handleGlobalError(err))
+        },
+
+        err => this.handleRequestError(err)
       )
-      .subscribe(([ video, captionsResult ]) => {
-        const queryParams = this.route.snapshot.queryParams
-
-        const urlOptions = {
-          resume: queryParams.resume,
-
-          startTime: queryParams.start,
-          stopTime: queryParams.stop,
-
-          muted: queryParams.muted,
-          loop: queryParams.loop,
-          subtitle: queryParams.subtitle,
-
-          playerMode: queryParams.mode,
-          peertubeLink: false
-        }
-
-        this.onVideoFetched(video, captionsResult.data, urlOptions)
-            .catch(err => this.handleError(err))
-      })
   }
 
   private loadPlaylist (playlistId: string) {
-    // Playlist did not change
-    if (
-      this.playlist &&
-      (this.playlist.uuid === playlistId || this.playlist.shortUUID === playlistId)
-    ) return
+    if (this.isSameElement(this.playlist, playlistId)) return
 
     this.playlistService.getVideoPlaylist(playlistId)
-      .pipe(
-        // If 400 or 403, the video is private or blocked so redirect to 404
-        catchError(err => this.restExtractor.redirectTo404IfNotFound(err, 'video', [
-          HttpStatusCode.BAD_REQUEST_400,
-          HttpStatusCode.FORBIDDEN_403,
-          HttpStatusCode.NOT_FOUND_404
-        ]))
-      )
-      .subscribe(playlist => {
-        this.playlist = playlist
+      .subscribe(
+        playlist => {
+          this.playlist = playlist
 
-        this.videoWatchPlaylist.loadPlaylistElements(playlist, !this.playlistPosition, this.playlistPosition)
-      })
+          this.videoWatchPlaylist.loadPlaylistElements(playlist, !this.playlistPosition, this.playlistPosition)
+        },
+
+        err => this.handleRequestError(err)
+      )
   }
 
-  private handleError (err: any) {
+  private isSameElement (element: VideoDetails | VideoPlaylist, newId: string) {
+    if (!element) return false
+
+    return (element.id + '') === newId || element.uuid === newId || element.shortUUID === newId
+  }
+
+  private async handleRequestError (err: any) {
+    const errorBody = err.body as PeerTubeProblemDocument
+
+    if (errorBody.code === ServerErrorCode.DOES_NOT_RESPECT_FOLLOW_CONSTRAINTS && errorBody.originUrl) {
+      const originUrl = errorBody.originUrl + (window.location.search ?? '')
+
+      const res = await this.confirmService.confirm(
+        $localize`This video is not available on this instance. Do you want to be redirected on the origin instance: <a href="${originUrl}">${originUrl}</a>?`,
+        $localize`Redirection`
+      )
+
+      if (res === true) return window.location.href = originUrl
+    }
+
+    // If 400, 403 or 404, the video is private or blocked so redirect to 404
+    return this.restExtractor.redirectTo404IfNotFound(err, 'video', [
+      HttpStatusCode.BAD_REQUEST_400,
+      HttpStatusCode.FORBIDDEN_403,
+      HttpStatusCode.NOT_FOUND_404
+    ])
+  }
+
+  private handleGlobalError (err: any) {
     const errorMessage: string = typeof err === 'string' ? err : err.message
     if (!errorMessage) return
 
@@ -371,7 +308,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     if (errorMessage.indexOf('from xs param') !== -1) {
       this.flushPlayer()
       this.remoteServerDown = true
-      this.changeDetector.detectChanges()
 
       return
     }
@@ -449,39 +385,44 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.zone.runOutsideAngular(async () => {
       this.player = await PeertubePlayerManager.initialize(playerMode, playerOptions, player => this.player = player)
 
-      this.player.on('customError', ({ err }: { err: any }) => this.handleError(err))
+      this.player.on('customError', ({ err }: { err: any }) => {
+        this.zone.run(() => this.handleGlobalError(err))
+      })
 
       this.player.on('timeupdate', () => {
+        // Don't need to trigger angular change for this variable, that is sent to children components on click
         this.currentTime = Math.floor(this.player.currentTime())
       })
 
       /**
-       * replaces this.player.one('ended')
-       * 'condition()': true to make the upnext functionality trigger,
-       *                false to disable the upnext functionality
-       * go to the next video in 'condition()' if you don't want of the timer.
-       * 'next': function triggered at the end of the timer.
-       * 'suspended': function used at each clic of the timer checking if we need
-       * to reset progress and wait until 'suspended' becomes truthy again.
+       * condition: true to make the upnext functionality trigger, false to disable the upnext functionality
+       *            go to the next video in 'condition()' if you don't want of the timer.
+       * next: function triggered at the end of the timer.
+       * suspended: function used at each click of the timer checking if we need to reset progress
+       *            and wait until suspended becomes truthy again.
        */
       this.player.upnext({
-        timeout: 10000, // 10s
+        timeout: 5000, // 5s
+
         headText: $localize`Up Next`,
         cancelText: $localize`Cancel`,
         suspendedText: $localize`Autoplay is suspended`,
+
         getTitle: () => this.nextVideoTitle,
-        next: () => this.zone.run(() => this.autoplayNext()),
+
+        next: () => this.zone.run(() => this.playNextVideoInAngularZone()),
         condition: () => {
-          if (this.playlist) {
-            if (this.isPlaylistAutoPlayEnabled()) {
-              // upnext will not trigger, and instead the next video will play immediately
-              this.zone.run(() => this.videoWatchPlaylist.navigateToNextPlaylistVideo())
-            }
-          } else if (this.isAutoPlayEnabled()) {
-            return true // upnext will trigger
+          if (!this.playlist) return this.isAutoPlayNext()
+
+          // Don't wait timeout to play the next playlist video
+          if (this.isPlaylistAutoPlayNext()) {
+            this.playNextVideoInAngularZone()
+            return undefined
           }
-          return false // upnext will not trigger, and instead leave the video stopping
+
+          return false
         },
+
         suspended: () => {
           return (
             !isXPercentInViewport(this.player.el(), 80) ||
@@ -491,8 +432,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       })
 
       this.player.one('stopped', () => {
-        if (this.playlist) {
-          if (this.isPlaylistAutoPlayEnabled()) this.zone.run(() => this.videoWatchPlaylist.navigateToNextPlaylistVideo())
+        if (this.playlist && this.isPlaylistAutoPlayNext()) {
+          this.playNextVideoInAngularZone()
         }
       })
 
@@ -510,33 +451,16 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     })
   }
 
-  private autoplayNext () {
+  private playNextVideoInAngularZone () {
     if (this.playlist) {
       this.zone.run(() => this.videoWatchPlaylist.navigateToNextPlaylistVideo())
-    } else if (this.nextVideoUuid) {
-      this.router.navigate([ '/w', this.nextVideoUuid ])
+      return
     }
-  }
 
-  private setOpenGraphTags () {
-    this.metaService.setTitle(this.video.name)
-
-    this.metaService.setTag('og:type', 'video')
-
-    this.metaService.setTag('og:title', this.video.name)
-    this.metaService.setTag('name', this.video.name)
-
-    this.metaService.setTag('og:description', this.video.description)
-    this.metaService.setTag('description', this.video.description)
-
-    this.metaService.setTag('og:image', this.video.previewPath)
-
-    this.metaService.setTag('og:duration', this.video.duration.toString())
-
-    this.metaService.setTag('og:site_name', 'PeerTube')
-
-    this.metaService.setTag('og:url', window.location.href)
-    this.metaService.setTag('url', window.location.href)
+    if (this.nextVideoUUID) {
+      this.router.navigate([ '/w', this.nextVideoUUID ])
+      return
+    }
   }
 
   private isAutoplay () {
@@ -548,6 +472,20 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     // Be sure the autoPlay is set to false
     return this.user.autoPlayVideo !== false
+  }
+
+  private isAutoPlayNext () {
+    return (
+      (this.user && this.user.autoPlayNextVideo) ||
+      this.anonymousUser.autoPlayNextVideo
+    )
+  }
+
+  private isPlaylistAutoPlayNext () {
+    return (
+      (this.user && this.user.autoPlayNextVideoPlaylist) ||
+      this.anonymousUser.autoPlayNextVideoPlaylist
+    )
   }
 
   private flushPlayer () {
@@ -569,6 +507,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     user?: AuthUser
   }) {
     const { video, videoCaptions, urlOptions, user } = params
+
     const getStartTime = () => {
       const byUrl = urlOptions.startTime !== undefined
       const byHistory = video.userHistory && (!this.playlist || urlOptions.resume !== undefined)
@@ -595,7 +534,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     const options: PeertubePlayerManagerOptions = {
       common: {
         autoplay: this.isAutoplay(),
-        nextVideo: () => this.zone.run(() => this.autoplayNext()),
+        nextVideo: () => this.playNextVideoInAngularZone(),
 
         playerElement: this.playerElement,
         onPlayerElementChange: (element: HTMLVideoElement) => this.playerElement = element,
@@ -663,7 +602,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       else mode = 'webtorrent'
     }
 
-    // p2p-media-loader needs TextEncoder, try to fallback on WebTorrent
+    // p2p-media-loader needs TextEncoder, fallback on WebTorrent if not available
     if (typeof TextEncoder === 'undefined') {
       mode = 'webtorrent'
     }
@@ -717,7 +656,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     const videoUUID = this.video.uuid
 
-    // Reset to refetch the video
+    // Reset to force refresh the video
     this.video = undefined
     this.loadVideo(videoUUID)
   }
@@ -764,5 +703,26 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     }
 
     this.hotkeysService.add(this.hotkeys)
+  }
+
+  private setOpenGraphTags () {
+    this.metaService.setTitle(this.video.name)
+
+    this.metaService.setTag('og:type', 'video')
+
+    this.metaService.setTag('og:title', this.video.name)
+    this.metaService.setTag('name', this.video.name)
+
+    this.metaService.setTag('og:description', this.video.description)
+    this.metaService.setTag('description', this.video.description)
+
+    this.metaService.setTag('og:image', this.video.previewPath)
+
+    this.metaService.setTag('og:duration', this.video.duration.toString())
+
+    this.metaService.setTag('og:site_name', 'PeerTube')
+
+    this.metaService.setTag('og:url', window.location.href)
+    this.metaService.setTag('url', window.location.href)
   }
 }
