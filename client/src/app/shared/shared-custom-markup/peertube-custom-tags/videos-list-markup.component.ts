@@ -1,5 +1,6 @@
+import { finalize } from 'rxjs/operators'
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
-import { AuthService } from '@app/core'
+import { AuthService, Notifier } from '@app/core'
 import { VideoFilter, VideoSortField } from '@shared/models'
 import { Video, VideoService } from '../../shared-main'
 import { MiniatureDisplayOptions } from '../../shared-video-miniature'
@@ -40,7 +41,8 @@ export class VideosListMarkupComponent implements CustomMarkupComponent, OnInit 
 
   constructor (
     private auth: AuthService,
-    private videoService: VideoService
+    private videoService: VideoService,
+    private notifier: Notifier
   ) { }
 
   getUser () {
@@ -76,10 +78,11 @@ export class VideosListMarkupComponent implements CustomMarkupComponent, OnInit 
     }
 
     this.videoService.getVideos(options)
-      .subscribe({
-        next: ({ data }) => this.videos = data,
+      .pipe(finalize(() => this.loaded.emit(true)))
+      .subscribe(
+        ({ data }) => this.videos = data,
 
-        complete: () => this.loaded.emit(true)
-      })
+        err => this.notifier.error('Error in videos list component: ' + err.message)
+      )
   }
 }

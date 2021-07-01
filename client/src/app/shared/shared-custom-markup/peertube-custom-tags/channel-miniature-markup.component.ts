@@ -1,6 +1,7 @@
-import { map, switchMap } from 'rxjs/operators'
+import { from } from 'rxjs'
+import { finalize, map, switchMap, tap } from 'rxjs/operators'
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
-import { MarkdownService, UserService } from '@app/core'
+import { MarkdownService, Notifier, UserService } from '@app/core'
 import { Video, VideoSortField } from '@shared/models/videos'
 import { VideoChannel, VideoChannelService, VideoService } from '../../shared-main'
 import { CustomMarkupComponent } from './shared'
@@ -30,25 +31,33 @@ export class ChannelMiniatureMarkupComponent implements CustomMarkupComponent, O
     private markdown: MarkdownService,
     private channelService: VideoChannelService,
     private videoService: VideoService,
-    private userService: UserService
+    private userService: UserService,
+    private notifier: Notifier
   ) { }
 
   ngOnInit () {
     this.channelService.getVideoChannel(this.name)
-      .subscribe(async channel => {
-        this.channel = channel
+      .pipe(
+        tap(channel => this.channel = channel),
+        switchMap(() => from(this.markdown.textMarkdownToHTML(this.channel.description))),
+        tap(html => this.descriptionHTML = html),
+        switchMap(() => this.loadVideosObservable()),
+        finalize(() => this.loaded.emit(true))
+      ).subscribe(
+        ({ total, data }) => {
+          this.totalVideos = total
+          this.video = data[0]
+        },
 
-        this.descriptionHTML = await this.markdown.textMarkdownToHTML(channel.description)
-
-        this.loadVideos()
-      })
+        err => this.notifier.error('Error in channel miniature component: ' + err.message)
+      )
   }
 
   getVideoChannelLink () {
     return [ '/c', this.channel.nameWithHost ]
   }
 
-  private loadVideos () {
+  private loadVideosObservable () {
     const videoOptions = {
       videoChannel: this.channel,
       videoPagination: {
@@ -59,18 +68,10 @@ export class ChannelMiniatureMarkupComponent implements CustomMarkupComponent, O
       count: 1
     }
 
-    this.userService.getAnonymousOrLoggedUser()
+    return this.userService.getAnonymousOrLoggedUser()
       .pipe(
         map(user => user.nsfwPolicy),
         switchMap(nsfwPolicy => this.videoService.getVideoChannelVideos({ ...videoOptions, nsfwPolicy }))
       )
-      .subscribe({
-        next: ({ total, data }) => {
-          this.totalVideos = total
-          this.video = data[0]
-        },
-
-        complete: () => this.loaded.emit(true)
-      })
   }
 }

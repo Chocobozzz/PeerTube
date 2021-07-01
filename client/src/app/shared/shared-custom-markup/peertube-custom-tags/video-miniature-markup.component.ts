@@ -1,5 +1,6 @@
+import { finalize } from 'rxjs/operators'
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
-import { AuthService } from '@app/core'
+import { AuthService, Notifier } from '@app/core'
 import { Video, VideoService } from '../../shared-main'
 import { MiniatureDisplayOptions } from '../../shared-video-miniature'
 import { CustomMarkupComponent } from './shared'
@@ -34,7 +35,8 @@ export class VideoMiniatureMarkupComponent implements CustomMarkupComponent, OnI
 
   constructor (
     private auth: AuthService,
-    private videoService: VideoService
+    private videoService: VideoService,
+    private notifier: Notifier
   ) { }
 
   getUser () {
@@ -49,10 +51,11 @@ export class VideoMiniatureMarkupComponent implements CustomMarkupComponent, OnI
     }
 
     this.videoService.getVideo({ videoId: this.uuid })
-      .subscribe({
-        next: video => this.video = video,
+      .pipe(finalize(() => this.loaded.emit(true)))
+      .subscribe(
+        video => this.video = video,
 
-        complete: () => this.loaded.emit(true)
-      })
+        err => this.notifier.error('Error in video miniature component: ' + err.message)
+      )
   }
 }

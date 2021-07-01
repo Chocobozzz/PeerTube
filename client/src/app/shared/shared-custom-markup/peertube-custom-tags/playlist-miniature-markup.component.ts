@@ -1,4 +1,6 @@
+import { finalize } from 'rxjs/operators'
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
+import { Notifier } from '@app/core'
 import { MiniatureDisplayOptions } from '../../shared-video-miniature'
 import { VideoPlaylist, VideoPlaylistService } from '../../shared-video-playlist'
 import { CustomMarkupComponent } from './shared'
@@ -31,15 +33,17 @@ export class PlaylistMiniatureMarkupComponent implements CustomMarkupComponent, 
   }
 
   constructor (
-    private playlistService: VideoPlaylistService
+    private playlistService: VideoPlaylistService,
+    private notifier: Notifier
   ) { }
 
   ngOnInit () {
     this.playlistService.getVideoPlaylist(this.uuid)
-      .subscribe({
-        next: playlist => this.playlist = playlist,
+      .pipe(finalize(() => this.loaded.emit(true)))
+      .subscribe(
+        playlist => this.playlist = playlist,
 
-        complete: () => this.loaded.emit(true)
-      })
+        err => this.notifier.error('Error in playlist miniature component: ' + err.message)
+      )
   }
 }
