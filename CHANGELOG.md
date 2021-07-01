@@ -7,10 +7,12 @@
  * **Important:** v3.2.0 introduced a `pg_dump` export bug in the auto upgrade script. v3.2.1 fixed this bug. To upgrade from v3.2.**0**:
    * You can upgrade manually https://docs.joinpeertube.org/install-any-os?id=manually
    * Or you can apply the changes introduced in this commit: https://github.com/Chocobozzz/PeerTube/commit/86dc0b9cc9374cba7548bb613ff43d92f90570a8 and then use the auto upgrade script
+ * **Important:** Due to a bug in ffmpeg, PeerTube is not compatible with ffmpeg 4.4. See https://github.com/Chocobozzz/PeerTube/issues/3990
+
 
 ### Maintenance
 
- * Increase max image/caption/torrent upload size to `4MB`
+ * Increase max image/caption/torrent upload size to `4MB`. You need to update your nginx configuration to handle this change
  * Increase fetcher job concurrency to `3`
 
 ### Docker
