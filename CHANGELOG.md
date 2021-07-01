@@ -42,7 +42,7 @@
  * :tada: Add RTL layout support
  * Add ability to use HTML, markdown and [custom HTML tags](https://docs.joinpeertube.org/api-custom-client-markup) in instance description
  * Default to dark theme (if available) if requested by the web browser
- * Add ability for admins to configure minimum signup page [#4010](https://github.com/Chocobozzz/PeerTube/pull/4010)
+ * Add ability for admins to configure minimum age required in signup page [#4010](https://github.com/Chocobozzz/PeerTube/pull/4010)
  * Use a dedicated URL for each tab in publish page
  * Add ability to prefill contact form using query parameters in URL [#4161](https://github.com/Chocobozzz/PeerTube/pull/4161)
  * Accessibility/UI:
