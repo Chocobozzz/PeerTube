@@ -2,7 +2,7 @@
 
 import * as chai from 'chai'
 import * as ffmpeg from 'fluent-ffmpeg'
-import { ensureDir, exists, pathExists, readFile, stat } from 'fs-extra'
+import { ensureDir, pathExists, readFile, stat } from 'fs-extra'
 import { basename, dirname, isAbsolute, join, resolve } from 'path'
 import * as request from 'supertest'
 import * as WebTorrent from 'webtorrent'

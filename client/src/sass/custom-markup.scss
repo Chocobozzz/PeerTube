@@ -18,3 +18,9 @@ peertube-container {
     }
   }
 }
+
+peertube-video-miniature,
+peertube-playlist-miniature,
+peertube-channel-miniature {
+  margin-right: 30px;
+}
