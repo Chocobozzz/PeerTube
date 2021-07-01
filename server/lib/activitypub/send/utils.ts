@@ -22,7 +22,9 @@ async function sendVideoRelatedActivity (activityBuilder: (audience: ActivityAud
 
   // Send to origin
   if (video.isOwned() === false) {
-    const accountActor = (video as MVideoAccountLight).VideoChannel?.Account?.Actor || await ActorModel.loadAccountActorByVideoId(video.id)
+    let accountActor: MActorLight = (video as MVideoAccountLight).VideoChannel?.Account?.Actor
+
+    if (!accountActor) accountActor = await ActorModel.loadAccountActorByVideoId(video.id, transaction)
 
     const audience = getRemoteVideoAudience(accountActor, actorsInvolvedInVideo)
     const activity = activityBuilder(audience)

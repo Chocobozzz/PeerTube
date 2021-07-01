@@ -496,7 +496,7 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
     }, { where, transaction })
   }
 
-  static loadAccountActorByVideoId (videoId: number): Promise<MActor> {
+  static loadAccountActorByVideoId (videoId: number, transaction: Transaction): Promise<MActor> {
     const query = {
       include: [
         {
@@ -520,7 +520,8 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
             }
           ]
         }
-      ]
+      ],
+      transaction
     }
 
     return ActorModel.unscoped().findOne(query)

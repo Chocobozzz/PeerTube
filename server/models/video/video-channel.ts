@@ -291,8 +291,7 @@ export class VideoChannelModel extends Model<Partial<AttributesOnly<VideoChannel
   @BelongsTo(() => AccountModel, {
     foreignKey: {
       allowNull: false
-    },
-    hooks: true
+    }
   })
   Account: AccountModel
 

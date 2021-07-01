@@ -2,7 +2,7 @@
 
 import * as chai from 'chai'
 import * as ffmpeg from 'fluent-ffmpeg'
-import { ensureDir, pathExists, readFile, stat } from 'fs-extra'
+import { ensureDir, exists, pathExists, readFile, stat } from 'fs-extra'
 import { basename, dirname, isAbsolute, join, resolve } from 'path'
 import * as request from 'supertest'
 import * as WebTorrent from 'webtorrent'
@@ -60,8 +60,14 @@ async function testImage (url: string, imageName: string, imagePath: string, ext
   const minLength = body.length - ((30 * body.length) / 100)
   const maxLength = body.length + ((30 * body.length) / 100)
 
-  expect(data.length).to.be.above(minLength, "the generated image is way smaller than the recorded fixture")
-  expect(data.length).to.be.below(maxLength, "the generated image is way larger than the recorded fixture")
+  expect(data.length).to.be.above(minLength, 'the generated image is way smaller than the recorded fixture')
+  expect(data.length).to.be.below(maxLength, 'the generated image is way larger than the recorded fixture')
+}
+
+async function testFileExistsOrNot (server: { internalServerNumber: number }, directory: string, filePath: string, exist: boolean) {
+  const base = buildServerDirectory(server, directory)
+
+  expect(await pathExists(join(base, filePath))).to.equal(exist)
 }
 
 function isGithubCI () {
@@ -157,6 +163,7 @@ export {
   testImage,
   isGithubCI,
   buildAbsoluteFixturePath,
+  testFileExistsOrNot,
   root,
   generateHighBitrateVideo,
   generateVideoWithFramerate

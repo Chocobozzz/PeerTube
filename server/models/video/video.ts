@@ -572,7 +572,6 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     foreignKey: {
       allowNull: true
     },
-    hooks: true,
     onDelete: 'cascade'
   })
   VideoChannel: VideoChannelModel
