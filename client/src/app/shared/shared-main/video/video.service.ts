@@ -145,7 +145,7 @@ export class VideoService implements VideosProvider {
   }
 
   getAccountVideos (parameters: {
-    account: Account,
+    account: Pick<Account, 'nameWithHost'>,
     videoPagination: ComponentPaginationLight,
     sort: VideoSortField
     nsfwPolicy?: NSFWPolicyType
@@ -180,7 +180,7 @@ export class VideoService implements VideosProvider {
   }
 
   getVideoChannelVideos (parameters: {
-    videoChannel: VideoChannel,
+    videoChannel: Pick<VideoChannel, 'nameWithHost'>,
     videoPagination: ComponentPaginationLight,
     sort: VideoSortField,
     nsfwPolicy?: NSFWPolicyType

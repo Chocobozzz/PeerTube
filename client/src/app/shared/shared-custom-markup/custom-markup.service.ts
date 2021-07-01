@@ -188,6 +188,9 @@ export class CustomMarkupService {
       categoryOneOf: this.buildArrayNumber(data.categoryOneOf) ?? [],
       languageOneOf: this.buildArrayString(data.languageOneOf) ?? [],
 
+      accountHandle: data.accountHandle || undefined,
+      channelHandle: data.channelHandle || undefined,
+
       filter: this.buildBoolean(data.onlyLocal) ? 'local' as VideoFilter : undefined
     }
 

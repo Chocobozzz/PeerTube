@@ -30,8 +30,11 @@ export type VideosListMarkupData = {
   sort?: string
   count?: string // number
 
-  categoryOneOf?: string // coma separated values
+  categoryOneOf?: string // coma separated values, number[]
   languageOneOf?: string // coma separated values
+
+  channelHandle?: string
+  accountHandle?: string
 
   onlyLocal?: string // boolean
 }
