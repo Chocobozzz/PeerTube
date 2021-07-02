@@ -185,6 +185,7 @@ function buildGotOptions (options: PeerTubeRequestOptions) {
 
   return {
     method: options.method,
+    dnsCache: true,
     json: options.json,
     searchParams: options.searchParams,
     timeout: options.timeout ?? REQUEST_TIMEOUT,
