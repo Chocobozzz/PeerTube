@@ -43,7 +43,6 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   private subActivatedRoute: Subscription
   private isInitialLoad = false // set to false to show the search filters on first arrival
-  private firstSearch = true
 
   private channelsPerPage = 2
   private playlistsPerPage = 2
