@@ -502,9 +502,7 @@
       </trans-unit>
       <trans-unit id="3044142083883783523">
         <source>Updated <x id="INTERPOLATION"/></source>
-        <target>Đã cập nhật vào 
-          <x id="INTERPOLATION" equiv-text="{{ playlist.updatedAt | myFromNow }}"/>
-        </target>
+        <target>Cập nhật <x id="INTERPOLATION" equiv-text="{{ playlist.updatedAt | myFromNow }}"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-miniature.component.html</context><context context-type="linenumber">32</context></context-group>
       </trans-unit>
       <trans-unit id="5643561794785412000" datatype="html">
@@ -745,7 +743,7 @@
       </trans-unit>
       <trans-unit id="330610135077253864" datatype="html">
         <source>Live streaming enabled</source>
-        <target state="translated">Cho phép phát trực tiếp</target>
+        <target state="translated">Cho phép livestream</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">71</context></context-group>
       </trans-unit>
       <trans-unit id="8135461567542503937" datatype="html">
@@ -2202,7 +2200,7 @@
       </trans-unit>
       <trans-unit id="6297019164970912850" datatype="html">
         <source>You can stream multiple times in a permanent live. The URL for your viewers won't change but you cannot save replays of your lives</source>
-        <target state="translated">Bạn có thể truyền nhiều lần trong một buổi trực tiếp vĩnh viễn. URL cho khán giả không thay đổi nhưng bạn không thể lưu phát lại của nó</target>
+        <target state="translated">Bạn có thể phát nhiều lần trong một buổi livestream vĩnh viễn. URL cho khán giả không thay đổi nhưng bạn không thể lưu phát lại của nó</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">236</context></context-group>
       </trans-unit>
       <trans-unit id="3272292170221289235" datatype="html">
@@ -2217,7 +2215,7 @@
       </trans-unit>
       <trans-unit id="8891497955962997247" datatype="html">
         <source>Automatically publish a replay when your live ends</source>
-        <target state="translated">Đăng video phát lại sau khi buổi trực tiếp kết thúc</target>
+        <target state="translated">Đăng video phát lại sau khi livestream kết thúc</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">244</context></context-group>
       </trans-unit>
       <trans-unit id="2602773901491715295" datatype="html">
@@ -2502,7 +2500,7 @@
       </trans-unit>
       <trans-unit id="3282368691598224543" datatype="html">
         <source>Max live duration is <x id="INTERPOLATION"/>. If your live reaches this limit, it will be automatically terminated. </source>
-        <target state="translated">Độ dài tối đa buổi phát trực tiếp là <x id="INTERPOLATION"/>. Nếu đạt tới giới hạn này, buổi phát trực tiếp sẽ bị kết thúc. </target>
+        <target state="translated">Độ dài tối đa buổi livestream là <x id="INTERPOLATION"/>. Nếu đạt tới giới hạn này, buổi livestream sẽ tự chấm dứt. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.html</context><context context-type="linenumber">30</context></context-group>
       </trans-unit>
       <trans-unit id="2993949426196989262" datatype="html">
@@ -2698,12 +2696,12 @@
       </trans-unit>
       <trans-unit id="6937615021170545681" datatype="html">
         <source>This live has not started yet.</source>
-        <target state="translated">Buổi phát trực tiếp chưa thể bắt đầu.</target>
+        <target state="translated">Chưa thể bắt đầu livestream.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
       <trans-unit id="1598621320854281428" datatype="html">
         <source>This live has ended.</source>
-        <target state="translated">Buổi phát trực tiếp đã kết thúc.</target>
+        <target state="translated">Buổi livestream đã kết thúc.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="4416005356063364306" datatype="html">
@@ -4823,7 +4821,7 @@
       </trans-unit>
       <trans-unit id="1429138002697017359" datatype="html">
         <source>Enable users of your instance to stream live.</source>
-        <target state="translated">Cho phép người dùng trên máy chủ được phát trực tiếp.</target>
+        <target state="translated">Cho phép người dùng trên máy chủ được live stream.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">7,8</context>
@@ -4831,7 +4829,7 @@
       </trans-unit>
       <trans-unit id="8894612824234881672" datatype="html">
         <source>⚠️ Enabling live streaming requires trust in your users and extra moderation work</source>
-        <target state="translated">⚠️ Cho phép phát trực tiếp là bạn phải tin tưởng người dùng và chế độ kiểm duyệt</target>
+        <target state="translated">⚠️ Bạn phải tin tưởng người dùng và chế độ kiểm duyệt nếu cho phép live stream</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">22</context></context-group>
       </trans-unit>
       <trans-unit id="5205613575147327732" datatype="html">
@@ -4844,12 +4842,12 @@
       </trans-unit>
       <trans-unit id="6421580347313273983" datatype="html">
         <source>Allow your users to automatically publish a replay of their live</source>
-        <target state="translated">Cho phép người dùng tự động đăng một bản phát lại của buổi trực tiếp của họ</target>
+        <target state="translated">Cho phép người dùng đăng lại buổi livestream của họ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">31</context></context-group>
       </trans-unit>
       <trans-unit id="3472969629566153023" datatype="html">
         <source>If the user quota is reached, PeerTube will automatically terminate the live streaming</source>
-        <target state="translated">Khi đạt tới dung lượng giới hạn, PeerTube sẽ tự động kết thúc buổi phát trực tiếp</target>
+        <target state="translated">Khi đạt tới dung lượng giới hạn, PeerTube sẽ tự động kết thúc buổi livestream</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">34,35</context>
@@ -4857,7 +4855,7 @@
       </trans-unit>
       <trans-unit id="4420104899393268652" datatype="html">
         <source>Max simultaneous lives created on your instance <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;text-muted&quot;&gt;"/>(-1 for "unlimited")<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></source>
-        <target state="translated">Số buổi phát trực tiếp cùng lúc tối đa trên máy chủ của bạn <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;text-muted&quot;&gt;"/>(-1 là "không giới hạn")<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></target>
+        <target state="translated">Số livestream cùng lúc tối đa trên máy chủ của bạn <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;text-muted&quot;&gt;"/>(-1 là "không giới hạn")<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">41</context>
@@ -4871,7 +4869,7 @@
       </trans-unit>
       <trans-unit id="7210210728441530221" datatype="html">
         <source>Max simultaneous lives created per user <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;text-muted&quot;&gt;"/>(-1 for "unlimited")<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></source>
-        <target state="translated">Số buổi phát trực tiếp tối của mỗi tài khoản <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;text-muted&quot;&gt;"/>(-1 là "không giới hạn")<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></target>
+        <target state="translated">Số lần livestream của mỗi tài khoản <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;text-muted&quot;&gt;"/>(-1 là "không giới hạn")<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">54</context>
@@ -4889,7 +4887,7 @@
       </trans-unit>
       <trans-unit id="5309195634424105927" datatype="html">
         <source>Live transcoding threads</source>
-        <target state="translated">Chủ đề chuyển độ phân giải buổi phát trực tiếp</target>
+        <target state="translated">Chủ đề chuyển độ phân giải buổi livestream</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">128</context></context-group>
       </trans-unit>
       <trans-unit id="4240037618955024499" datatype="html">
@@ -4915,27 +4913,27 @@
       </trans-unit>
       <trans-unit id="8294583621306221742" datatype="html">
         <source>new live transcoding profiles can be added by PeerTube plugins</source>
-        <target state="translated">hồ sơ chuyển độ phân giải buổi phát trực tiếp có thể thêm thông qua những plugin của PeerTube</target>
+        <target state="translated">hồ sơ chuyển độ phân giải livestream có thể thêm thông qua những plugin của PeerTube</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">151</context></context-group>
       </trans-unit>
       <trans-unit id="6727057461851446921" datatype="html">
         <source>Live resolutions to generate</source>
-        <target state="translated">Độ phân giải buổi phát trực tiếp để tạo</target>
+        <target state="translated">Độ phân giải livestream để tạo</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">107</context></context-group>
       </trans-unit>
       <trans-unit id="2281161665447607254" datatype="html">
         <source>Allow live streaming</source>
-        <target state="translated">Cho phép phát trực tiếp</target>
+        <target state="translated">Cho phép live stream</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">18</context></context-group>
       </trans-unit>
       <trans-unit id="6759167469686242835" datatype="html">
         <source>Transcoding enabled for live streams</source>
-        <target state="translated">Đã bật chuyển độ phân giải cho buổi phát trực tiếp</target>
+        <target state="translated">Đã bật chuyển độ phân giải cho livestream</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">101</context></context-group>
       </trans-unit>
       <trans-unit id="5975271795105968425" datatype="html">
         <source>Live streaming</source>
-        <target state="translated">Buổi phát trực tiếp</target>
+        <target state="translated">Live stream</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">42</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">67</context></context-group>
       </trans-unit>
@@ -4955,7 +4953,7 @@
       </trans-unit>
       <trans-unit id="8212237880239644112" datatype="html">
         <source>Same as VOD transcoding, transcoding live streams so that they are in a streamable form that any device can play. Requires a beefy CPU, and then some.</source>
-        <target state="translated">Cũng giống như VOD transcoding, transcoding buổi phát trực tiếp để chúng có thể phát trên bất kỳ thiết bị nào. Yêu cầu có CPU mạnh như trâu.</target>
+        <target state="translated">Cũng giống như VOD, hãy transcode live stream để chúng có thể phát trên bất kỳ thiết bị nào. Yêu cầu có CPU mạnh như trâu.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">87,88</context>
@@ -5172,7 +5170,7 @@
       </trans-unit>
       <trans-unit id="283725429207896837" datatype="html">
         <source>You cannot allow live replay if you don't enable transcoding.</source>
-        <target state="translated">Bạn không thể cho phát lại buổi trực tiếp nếu bạn không bật transcoding.</target>
+        <target state="translated">Bạn không thể cho phát lại livestream nếu bạn không bật transcoding.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">77</context></context-group>
       </trans-unit>
       <trans-unit id="8167543029214637769" datatype="html">
@@ -6045,7 +6043,7 @@
       </trans-unit>
       <trans-unit id="8495040351808033345" datatype="html">
         <source>Features found on this instance</source>
-        <target state="translated">Tính năng có trên máy chủ này</target>
+        <target state="translated">Tính năng trên máy chủ này</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">4</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-about-accordion.component.html</context><context context-type="linenumber">6</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-about-accordion.component.html</context><context context-type="linenumber">6</context></context-group>
@@ -7756,7 +7754,7 @@
       </trans-unit>
       <trans-unit id="3326446048041727269" datatype="html">
         <source>Display/Video settings updated.</source>
-        <target state="translated">Đã cập nhật Hiển thị/Cài đặt Video.</target>
+        <target state="translated">Đã cập nhật thiết lập video.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.ts</context><context context-type="linenumber">178</context></context-group>
       </trans-unit>
       <trans-unit id="1137937154872046253" datatype="html">
