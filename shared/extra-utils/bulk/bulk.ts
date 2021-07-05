@@ -1,25 +1,24 @@
-import { BulkRemoveCommentsOfBody } from "@shared/models/bulk/bulk-remove-comments-of-body.model"
-import { makePostBodyRequest } from "../requests/requests"
+
+import { BulkRemoveCommentsOfBody } from '@shared/models/bulk/bulk-remove-comments-of-body.model'
 import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
+import { AbstractCommand, CommonCommandOptions } from '../shared'
 
-function bulkRemoveCommentsOf (options: {
-  url: string
-  token: string
-  attributes: BulkRemoveCommentsOfBody
-  expectedStatus?: number
-}) {
-  const { url, token, attributes, expectedStatus } = options
-  const path = '/api/v1/bulk/remove-comments-of'
+class BulkCommand extends AbstractCommand {
 
-  return makePostBodyRequest({
-    url,
-    path,
-    token,
-    fields: attributes,
-    statusCodeExpected: expectedStatus || HttpStatusCode.NO_CONTENT_204
-  })
+  removeCommentsOf (options: CommonCommandOptions & {
+    attributes: BulkRemoveCommentsOfBody
+  }) {
+    const { attributes } = options
+
+    return this.postBodyRequest({
+      ...options,
+      path: '/api/v1/bulk/remove-comments-of',
+      fields: attributes,
+      defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
+    })
+  }
 }
 
 export {
-  bulkRemoveCommentsOf
+  BulkCommand
 }
