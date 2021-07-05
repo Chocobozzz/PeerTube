@@ -6,7 +6,7 @@ import { Video, VideoComment } from '@shared/models'
 import {
   addVideoCommentReply,
   addVideoCommentThread,
-  bulkRemoveCommentsOf,
+  BulkCommand,
   cleanupTests,
   createUser,
   doubleFollow,
@@ -29,6 +29,8 @@ describe('Test bulk actions', function () {
   let user1AccessToken: string
   let user2AccessToken: string
   let user3AccessToken: string
+
+  let bulkCommand: BulkCommand
 
   before(async function () {
     this.timeout(30000)
@@ -60,6 +62,8 @@ describe('Test bulk actions', function () {
     }
 
     await doubleFollow(servers[0], servers[1])
+
+    bulkCommand = new BulkCommand(servers[0])
   })
 
   describe('Bulk remove comments', function () {
@@ -133,8 +137,7 @@ describe('Test bulk actions', function () {
     it('Should delete comments of an account on my videos', async function () {
       this.timeout(60000)
 
-      await bulkRemoveCommentsOf({
-        url: servers[0].url,
+      await bulkCommand.removeCommentsOf({
         token: user1AccessToken,
         attributes: {
           accountName: 'user2',
@@ -164,9 +167,7 @@ describe('Test bulk actions', function () {
     it('Should delete comments of an account on the instance', async function () {
       this.timeout(60000)
 
-      await bulkRemoveCommentsOf({
-        url: servers[0].url,
-        token: servers[0].accessToken,
+      await bulkCommand.removeCommentsOf({
         attributes: {
           accountName: 'user3@localhost:' + servers[1].port,
           scope: 'instance'
