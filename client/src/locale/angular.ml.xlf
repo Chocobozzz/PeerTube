@@ -2208,7 +2208,7 @@
       </trans-unit>
       <trans-unit id="3768852440495368591" datatype="html">
         <source>240p</source>
-        <target/>
+        <target>240പി</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context>
           <context context-type="linenumber">22</context>
@@ -2216,7 +2216,7 @@
       </trans-unit>
       <trans-unit id="6824490596490222280" datatype="html">
         <source>360p</source>
-        <target/>
+        <target>360പി</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context>
           <context context-type="linenumber">26</context>
@@ -2224,7 +2224,7 @@
       </trans-unit>
       <trans-unit id="4039682741786530029" datatype="html">
         <source>480p</source>
-        <target/>
+        <target>480പി</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context>
           <context context-type="linenumber">30</context>
@@ -2232,7 +2232,7 @@
       </trans-unit>
       <trans-unit id="5165245100010036661" datatype="html">
         <source>720p</source>
-        <target/>
+        <target>720പി</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context>
           <context context-type="linenumber">34</context>
@@ -2240,7 +2240,7 @@
       </trans-unit>
       <trans-unit id="7709767791012306261" datatype="html">
         <source>1080p</source>
-        <target/>
+        <target>1080പി</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context>
           <context context-type="linenumber">38</context>
@@ -2248,7 +2248,7 @@
       </trans-unit>
       <trans-unit id="3671005503070777897" datatype="html">
         <source>1440p</source>
-        <target/>
+        <target>1440പി</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context>
           <context context-type="linenumber">42</context>
@@ -2256,7 +2256,7 @@
       </trans-unit>
       <trans-unit id="597839553814574067" datatype="html">
         <source>2160p</source>
-        <target/>
+        <target>2160പി</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context>
           <context context-type="linenumber">46</context>
@@ -2292,7 +2292,7 @@
       </trans-unit>
       <trans-unit id="5037437391296624618" datatype="html">
         <source>Information</source>
-        <target/>
+        <target>വിവരം</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">15</context>
@@ -3124,7 +3124,7 @@
       </trans-unit>
       <trans-unit id="616370606803836610" datatype="html">
         <source>100MB</source>
-        <target/>
+        <target>100എംബി</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context>
           <context context-type="linenumber">24</context>
@@ -3136,7 +3136,7 @@
       </trans-unit>
       <trans-unit id="9162997081789455476" datatype="html">
         <source>500MB</source>
-        <target/>
+        <target>500എംബി</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context>
           <context context-type="linenumber">25</context>
@@ -3148,7 +3148,7 @@
       </trans-unit>
       <trans-unit id="1541266817985876981" datatype="html">
         <source>1GB</source>
-        <target/>
+        <target>1ജിബി</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context>
           <context context-type="linenumber">26</context>
@@ -3156,7 +3156,7 @@
       </trans-unit>
       <trans-unit id="6075751004411938819" datatype="html">
         <source>5GB</source>
-        <target/>
+        <target>5ജിബി</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context>
           <context context-type="linenumber">27</context>
@@ -3168,7 +3168,7 @@
       </trans-unit>
       <trans-unit id="246811372655482890" datatype="html">
         <source>20GB</source>
-        <target/>
+        <target>20ജിബി</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context>
           <context context-type="linenumber">28</context>
@@ -3180,7 +3180,7 @@
       </trans-unit>
       <trans-unit id="2491910291056632032" datatype="html">
         <source>50GB</source>
-        <target/>
+        <target>50ജിബി</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context>
           <context context-type="linenumber">29</context>
@@ -3192,7 +3192,7 @@
       </trans-unit>
       <trans-unit id="5514849824631859021" datatype="html">
         <source>100GB</source>
-        <target/>
+        <target>100ജിബി</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context>
           <context context-type="linenumber">30</context>
@@ -3200,7 +3200,7 @@
       </trans-unit>
       <trans-unit id="8245180845645676506" datatype="html">
         <source>200GB</source>
-        <target/>
+        <target>200ജിബി</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context>
           <context context-type="linenumber">31</context>
@@ -4652,7 +4652,7 @@
       </trans-unit>
       <trans-unit id="2798270190074840767" datatype="html">
         <source>Themes</source>
-        <target/>
+        <target>തീമുകൾ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/shared/plugin-api.service.ts</context>
           <context context-type="linenumber">37</context>
@@ -4668,7 +4668,7 @@
       </trans-unit>
       <trans-unit id="840045833311458646" datatype="html">
         <source>theme</source>
-        <target/>
+        <target>തീം</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/shared/plugin-api.service.ts</context>
           <context context-type="linenumber">48</context>
@@ -4793,7 +4793,7 @@
       </trans-unit>
       <trans-unit id="8040881171107393560" datatype="html">
         <source>ID</source>
-        <target/>
+        <target>ഐഡി</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">45</context>
@@ -4925,7 +4925,7 @@
       </trans-unit>
       <trans-unit id="4279081882680795350" datatype="html">
         <source>info</source>
-        <target/>
+        <target>വിവരം</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context>
           <context context-type="linenumber">113</context>
@@ -4941,7 +4941,7 @@
       </trans-unit>
       <trans-unit id="8772116786769251214" datatype="html">
         <source>error</source>
-        <target/>
+        <target>പിശക്</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context>
           <context context-type="linenumber">121</context>
@@ -4977,7 +4977,7 @@
       </trans-unit>
       <trans-unit id="4804785061014590286" datatype="html">
         <source>Logs</source>
-        <target/>
+        <target>ലോഗുകൾ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/system.component.html</context>
           <context context-type="linenumber">5</context>
@@ -5982,7 +5982,7 @@
       </trans-unit>
       <trans-unit id="6658000829978978023" datatype="html">
         <source>Applications</source>
-        <target/>
+        <target>അപ്ലിക്കേഷനുകൾ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.html</context>
           <context context-type="linenumber">3</context>
@@ -6550,7 +6550,7 @@
       </trans-unit>
       <trans-unit id="9138757724802460941" datatype="html">
         <source>INTERFACE</source>
-        <target/>
+        <target>ഇന്റർഫേസ്</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context>
           <context context-type="linenumber">47</context>
@@ -7106,7 +7106,7 @@
       </trans-unit>
       <trans-unit id="1812379335568847528" datatype="html">
         <source>Subscriptions</source>
-        <target/>
+        <target>സബ്സ്ക്രിപ്ഷനുകൾ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-library.component.ts</context>
           <context context-type="linenumber">66</context>
@@ -8653,7 +8653,7 @@
       </trans-unit>
       <trans-unit id="3131904093925601441" datatype="html">
         <source>PLAYLISTS</source>
-        <target/>
+        <target>പ്ലേലിസ്റ്റുകൾ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-channels/video-channels.component.ts</context>
           <context context-type="linenumber">77</context>
@@ -9050,7 +9050,7 @@
       </trans-unit>
       <trans-unit id="5922757127987546008" datatype="html">
         <source>yy-mm-dd</source>
-        <target/>
+        <target>വർഷം-മാസം-ദിവസം</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">83</context>
@@ -9724,7 +9724,7 @@
       </trans-unit>
       <trans-unit id="6932865105766151309" datatype="html">
         <source>Upload</source>
-        <target/>
+        <target>അ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context>
           <context context-type="linenumber">223</context>
@@ -9908,7 +9908,7 @@
       </trans-unit>
       <trans-unit id="8756167649220050929" datatype="html">
         <source>Lists</source>
-        <target/>
+        <target>ലിസ്റ്റുകൾ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">20</context>
@@ -10036,7 +10036,7 @@
       </trans-unit>
       <trans-unit id="8432562579042371182" datatype="html">
         <source>Options</source>
-        <target/>
+        <target>ഓപ്ഷനുകൾ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/comment/video-comment.component.html</context>
           <context context-type="linenumber">40</context>
@@ -10076,7 +10076,7 @@
       </trans-unit>
       <trans-unit id="4814285799071780083" datatype="html">
         <source>Remove</source>
-        <target/>
+        <target>നീക്കംചെയ്യുക</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/comment/video-comment.component.ts</context>
           <context context-type="linenumber">186</context>
@@ -10837,7 +10837,7 @@
       </trans-unit>
       <trans-unit id="676860092433275829" datatype="html">
         <source>Hot</source>
-        <target/>
+        <target>'ഹോട്ട്'</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/trending/video-trending-header.component.ts</context>
           <context context-type="linenumber">48</context>
@@ -11135,7 +11135,7 @@
       </trans-unit>
       <trans-unit id="232050922346936574" datatype="html">
         <source>Trending</source>
-        <target/>
+        <target>ട്രെൻഡുചെയ്യുന്നു</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/menu/menu.service.ts</context>
           <context context-type="linenumber">74</context>
@@ -11407,7 +11407,7 @@
       </trans-unit>
       <trans-unit id="7773271640656013365" datatype="html">
         <source>Interface:</source>
-        <target/>
+        <target>ഇന്റർഫേസ്:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">30</context>
@@ -11559,7 +11559,7 @@
       </trans-unit>
       <trans-unit id="2806917038528218276" datatype="html">
         <source>FAQ</source>
-        <target/>
+        <target>പതിവുചോദ്യങ്ങൾ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">156</context>
@@ -11567,7 +11567,7 @@
       </trans-unit>
       <trans-unit id="4088311569349098646" datatype="html">
         <source>Stats</source>
-        <target/>
+        <target>സ്ഥിതിവിവരക്കണക്കുകൾ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">157</context>
@@ -11583,7 +11583,7 @@
       </trans-unit>
       <trans-unit id="8942351587754185907" datatype="html">
         <source>API</source>
-        <target/>
+        <target>എപിഐ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">158</context>
@@ -16295,7 +16295,7 @@
       </trans-unit>
       <trans-unit id="5201790281220738609" datatype="html">
         <source>Search playlists</source>
-        <target/>
+        <target>പ്ലേലിസ്റ്റുകൾ തിരയുക</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-playlist/video-add-to-playlist.component.html</context>
           <context context-type="linenumber">9</context>
@@ -16403,7 +16403,7 @@
       </trans-unit>
       <trans-unit id="7708270344948043036" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ playlist.videoChannelBy }}"/> </source>
-        <target/>
+        <target><x id="INTERPOLATION" equiv-text="{{ playlist.videoChannelBy }}"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-miniature.component.html</context>
           <context context-type="linenumber">22,24</context>
