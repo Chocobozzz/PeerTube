@@ -7,9 +7,7 @@ import {
   buildServerDirectory,
   cleanupTests,
   doubleFollow,
-  execCLI,
   flushAndRunMultipleServers,
-  getEnvCli,
   getVideo,
   makeRawRequest,
   ServerInfo,
@@ -91,8 +89,7 @@ describe('Test regenerate thumbnails script', function () {
   it('Should regenerate local thumbnails from the CLI', async function () {
     this.timeout(15000)
 
-    const env = getEnvCli(servers[0])
-    await execCLI(`${env} npm run regenerate-thumbnails`)
+    await servers[0].cliCommand.execWithEnv(`npm run regenerate-thumbnails`)
   })
 
   it('Should have generated new thumbnail files', async function () {

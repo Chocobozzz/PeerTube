@@ -2,13 +2,10 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { VideoDetails } from '../../../shared/models/videos'
 import {
   cleanupTests,
   doubleFollow,
-  execCLI,
   flushAndRunMultipleServers,
-  getEnvCli,
   getVideo,
   getVideosList,
   ServerInfo,
@@ -17,6 +14,7 @@ import {
   uploadVideo
 } from '../../../shared/extra-utils'
 import { waitJobs } from '../../../shared/extra-utils/server/jobs'
+import { VideoDetails } from '../../../shared/models/videos'
 
 const expect = chai.expect
 
@@ -81,9 +79,7 @@ describe('Test create transcoding jobs', function () {
   it('Should run a transcoding job on video 2', async function () {
     this.timeout(60000)
 
-    const env = getEnvCli(servers[0])
-    await execCLI(`${env} npm run create-transcoding-job -- -v ${videosUUID[1]}`)
-
+    await servers[0].cliCommand.execWithEnv(`npm run create-transcoding-job -- -v ${videosUUID[1]}`)
     await waitJobs(servers)
 
     for (const server of servers) {
@@ -123,8 +119,7 @@ describe('Test create transcoding jobs', function () {
   it('Should run a transcoding job on video 1 with resolution', async function () {
     this.timeout(60000)
 
-    const env = getEnvCli(servers[0])
-    await execCLI(`${env} npm run create-transcoding-job -- -v ${videosUUID[0]} -r 480`)
+    await servers[0].cliCommand.execWithEnv(`npm run create-transcoding-job -- -v ${videosUUID[0]} -r 480`)
 
     await waitJobs(servers)
 
@@ -147,8 +142,7 @@ describe('Test create transcoding jobs', function () {
   it('Should generate an HLS resolution', async function () {
     this.timeout(120000)
 
-    const env = getEnvCli(servers[0])
-    await execCLI(`${env} npm run create-transcoding-job -- -v ${videosUUID[2]} --generate-hls -r 480`)
+    await servers[0].cliCommand.execWithEnv(`npm run create-transcoding-job -- -v ${videosUUID[2]} --generate-hls -r 480`)
 
     await waitJobs(servers)
 
@@ -168,8 +162,7 @@ describe('Test create transcoding jobs', function () {
   it('Should not duplicate an HLS resolution', async function () {
     this.timeout(120000)
 
-    const env = getEnvCli(servers[0])
-    await execCLI(`${env} npm run create-transcoding-job -- -v ${videosUUID[2]} --generate-hls -r 480`)
+    await servers[0].cliCommand.execWithEnv(`npm run create-transcoding-job -- -v ${videosUUID[2]} --generate-hls -r 480`)
 
     await waitJobs(servers)
 
@@ -186,8 +179,7 @@ describe('Test create transcoding jobs', function () {
   it('Should generate all HLS resolutions', async function () {
     this.timeout(120000)
 
-    const env = getEnvCli(servers[0])
-    await execCLI(`${env} npm run create-transcoding-job -- -v ${videosUUID[3]} --generate-hls`)
+    await servers[0].cliCommand.execWithEnv(`npm run create-transcoding-job -- -v ${videosUUID[3]} --generate-hls`)
 
     await waitJobs(servers)
 
@@ -209,8 +201,7 @@ describe('Test create transcoding jobs', function () {
     config.transcoding.hls.enabled = true
     await updateCustomSubConfig(servers[0].url, servers[0].accessToken, config)
 
-    const env = getEnvCli(servers[0])
-    await execCLI(`${env} npm run create-transcoding-job -- -v ${videosUUID[4]}`)
+    await servers[0].cliCommand.execWithEnv(`npm run create-transcoding-job -- -v ${videosUUID[4]}`)
 
     await waitJobs(servers)
 

@@ -1,6 +1,6 @@
-export * from './bulk/bulk'
+export * from './bulk'
 
-export * from './cli/cli'
+export * from './cli'
 
 export * from './custom-pages/custom-pages'
 

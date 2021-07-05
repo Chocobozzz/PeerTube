@@ -6,6 +6,8 @@ import { copy, ensureDir, pathExists, readdir, readFile, remove } from 'fs-extra
 import { join } from 'path'
 import { randomInt } from '../../core-utils/miscs/miscs'
 import { VideoChannel } from '../../models/videos'
+import { BulkCommand } from '../bulk'
+import { CLICommand } from '../cli'
 import { buildServerDirectory, getFileSize, isGithubCI, root, wait } from '../miscs/miscs'
 import { makeGetRequest } from '../requests/requests'
 
@@ -60,6 +62,9 @@ interface ServerInfo {
   }
 
   videos?: { id: number, uuid: string }[]
+
+  bulkCommand?: BulkCommand
+  cliCommand?: CLICommand
 }
 
 function parallelTests () {
@@ -264,6 +269,9 @@ async function runServer (server: ServerInfo, configOverrideArg?: any, args = []
           process.kill(server.app.pid)
         } catch { /* empty */ }
       })
+
+      server.bulkCommand = new BulkCommand(server)
+      server.cliCommand = new CLICommand(server)
 
       res(server)
     })
