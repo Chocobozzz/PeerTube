@@ -1,7 +1,7 @@
 import { registerTSPaths } from '../server/helpers/register-ts-paths'
 registerTSPaths()
 
-import { execCLI } from '@shared/extra-utils'
+import { CLICommand } from '@shared/extra-utils'
 
 run()
   .then(() => process.exit(0))
@@ -59,7 +59,7 @@ async function run () {
 }
 
 async function getGitContributors () {
-  const output = await execCLI(`git --no-pager shortlog -sn < /dev/tty | sed 's/^\\s\\+[0-9]\\+\\s\\+//g'`)
+  const output = await CLICommand.exec(`git --no-pager shortlog -sn < /dev/tty | sed 's/^\\s\\+[0-9]\\+\\s\\+//g'`)
 
   return output.split('\n')
                .filter(l => !!l)

@@ -2,27 +2,26 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { VideoDetails } from '../../../shared/models/videos'
-import { waitJobs } from '../../../shared/extra-utils/server/jobs'
-import { addVideoCommentThread } from '../../../shared/extra-utils/videos/video-comments'
 import {
   addVideoChannel,
   cleanupTests,
   createUser,
-  execCLI,
   flushAndRunServer,
-  getEnvCli,
   getVideo,
   getVideoChannelsList,
   getVideosList,
   killallServers,
   makeActivityPubGetRequest,
-  parseTorrentVideo, reRunServer,
+  parseTorrentVideo,
+  reRunServer,
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo
 } from '../../../shared/extra-utils'
+import { waitJobs } from '../../../shared/extra-utils/server/jobs'
 import { getAccountsList } from '../../../shared/extra-utils/users/accounts'
+import { addVideoCommentThread } from '../../../shared/extra-utils/videos/video-comments'
+import { VideoDetails } from '../../../shared/models/videos'
 
 const expect = chai.expect
 
@@ -72,8 +71,7 @@ describe('Test update host scripts', function () {
     // Run server with standard configuration
     await reRunServer(server)
 
-    const env = getEnvCli(server)
-    await execCLI(`${env} npm run update-host`)
+    await server.cliCommand.execWithEnv(`npm run update-host`)
   })
 
   it('Should have updated videos url', async function () {

@@ -1,24 +1,27 @@
 import { exec } from 'child_process'
+import { AbstractCommand } from '../shared'
 
-import { ServerInfo } from '../server/servers'
+class CLICommand extends AbstractCommand {
 
-function getEnvCli (server?: ServerInfo) {
-  return `NODE_ENV=test NODE_APP_INSTANCE=${server.internalServerNumber}`
-}
+  static exec (command: string) {
+    return new Promise<string>((res, rej) => {
+      exec(command, (err, stdout, _stderr) => {
+        if (err) return rej(err)
 
-async function execCLI (command: string) {
-  return new Promise<string>((res, rej) => {
-    exec(command, (err, stdout, stderr) => {
-      if (err) return rej(err)
-
-      return res(stdout)
+        return res(stdout)
+      })
     })
-  })
-}
+  }
 
-// ---------------------------------------------------------------------------
+  getEnv () {
+    return `NODE_ENV=test NODE_APP_INSTANCE=${this.server.internalServerNumber}`
+  }
+
+  async execWithEnv (command: string) {
+    return CLICommand.exec(`${this.getEnv()} ${command}`)
+  }
+}
 
 export {
-  execCLI,
-  getEnvCli
+  CLICommand
 }

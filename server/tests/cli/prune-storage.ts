@@ -9,12 +9,11 @@ import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-code
 import {
   buildServerDirectory,
   cleanupTests,
+  CLICommand,
   createVideoPlaylist,
   doubleFollow,
-  execCLI,
   flushAndRunMultipleServers,
   getAccount,
-  getEnvCli,
   killallServers,
   makeGetRequest,
   ServerInfo,
@@ -193,8 +192,8 @@ describe('Test prune storage scripts', function () {
   it('Should run prune storage', async function () {
     this.timeout(30000)
 
-    const env = getEnvCli(servers[0])
-    await execCLI(`echo y | ${env} npm run prune-storage`)
+    const env = servers[0].cliCommand.getEnv()
+    await CLICommand.exec(`echo y | ${env} npm run prune-storage`)
   })
 
   it('Should have removed files', async function () {

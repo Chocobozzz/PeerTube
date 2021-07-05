@@ -8,11 +8,10 @@ import {
   areHttpImportTestsDisabled,
   buildAbsoluteFixturePath,
   cleanupTests,
+  CLICommand,
   createUser,
   doubleFollow,
-  execCLI,
   flushAndRunServer,
-  getEnvCli,
   getLocalIdByUUID,
   getVideo,
   getVideosList,
@@ -30,6 +29,8 @@ describe('Test CLI wrapper', function () {
   let server: ServerInfo
   let userAccessToken: string
 
+  let cliCommand: CLICommand
+
   const cmd = 'node ./dist/server/tools/peertube.js'
 
   before(async function () {
@@ -46,6 +47,8 @@ describe('Test CLI wrapper', function () {
       const args = { name: 'user_channel', displayName: 'User channel', support: 'super support text' }
       await addVideoChannel(server.url, userAccessToken, args)
     }
+
+    cliCommand = server.cliCommand
   })
 
   describe('Authentication and instance selection', function () {
@@ -53,46 +56,38 @@ describe('Test CLI wrapper', function () {
     it('Should display no selected instance', async function () {
       this.timeout(60000)
 
-      const env = getEnvCli(server)
-      const stdout = await execCLI(`${env} ${cmd} --help`)
-
+      const stdout = await cliCommand.execWithEnv(`${cmd} --help`)
       expect(stdout).to.contain('no instance selected')
     })
 
     it('Should add a user', async function () {
       this.timeout(60000)
 
-      const env = getEnvCli(server)
-      await execCLI(`${env} ${cmd} auth add -u ${server.url} -U user_1 -p super_password`)
+      await cliCommand.execWithEnv(`${cmd} auth add -u ${server.url} -U user_1 -p super_password`)
     })
 
     it('Should not fail to add a user if there is a slash at the end of the instance URL', async function () {
       this.timeout(60000)
 
-      const env = getEnvCli(server)
-      let fullServerURL
-      fullServerURL = server.url + '/'
-      await execCLI(`${env} ${cmd} auth add -u ${fullServerURL} -U user_1 -p super_password`)
+      let fullServerURL = server.url + '/'
+
+      await cliCommand.execWithEnv(`${cmd} auth add -u ${fullServerURL} -U user_1 -p super_password`)
 
       fullServerURL = server.url + '/asdfasdf'
-      await execCLI(`${env} ${cmd} auth add -u ${fullServerURL} -U user_1 -p super_password`)
+      await cliCommand.execWithEnv(`${cmd} auth add -u ${fullServerURL} -U user_1 -p super_password`)
     })
 
     it('Should default to this user', async function () {
       this.timeout(60000)
 
-      const env = getEnvCli(server)
-      const stdout = await execCLI(`${env} ${cmd} --help`)
-
+      const stdout = await cliCommand.execWithEnv(`${cmd} --help`)
       expect(stdout).to.contain(`instance ${server.url} selected`)
     })
 
     it('Should remember the user', async function () {
       this.timeout(60000)
 
-      const env = getEnvCli(server)
-      const stdout = await execCLI(`${env} ${cmd} auth list`)
-
+      const stdout = await cliCommand.execWithEnv(`${cmd} auth list`)
       expect(stdout).to.contain(server.url)
     })
   })
@@ -102,13 +97,10 @@ describe('Test CLI wrapper', function () {
     it('Should upload a video', async function () {
       this.timeout(60000)
 
-      const env = getEnvCli(server)
-
       const fixture = buildAbsoluteFixturePath('60fps_720p_small.mp4')
-
       const params = `-f ${fixture} --video-name 'test upload' --channel-name user_channel --support 'support_text'`
 
-      await execCLI(`${env} ${cmd} upload ${params}`)
+      await cliCommand.execWithEnv(`${cmd} upload ${params}`)
     })
 
     it('Should have the video uploaded', async function () {
@@ -130,11 +122,8 @@ describe('Test CLI wrapper', function () {
 
       this.timeout(60000)
 
-      const env = getEnvCli(server)
-
       const params = `--target-url ${getYoutubeVideoUrl()} --channel-name user_channel`
-
-      await execCLI(`${env} ${cmd} import ${params}`)
+      await cliCommand.execWithEnv(`${cmd} import ${params}`)
     })
 
     it('Should have imported the video', async function () {
@@ -166,11 +155,8 @@ describe('Test CLI wrapper', function () {
 
       this.timeout(60000)
 
-      const env = getEnvCli(server)
-
       const params = `--target-url ${getYoutubeVideoUrl()} --channel-name user_channel --video-name toto --nsfw --support support`
-
-      await execCLI(`${env} ${cmd} import ${params}`)
+      await cliCommand.execWithEnv(`${cmd} import ${params}`)
 
       await waitJobs([ server ])
 
@@ -194,18 +180,14 @@ describe('Test CLI wrapper', function () {
   describe('Admin auth', function () {
 
     it('Should remove the auth user', async function () {
-      const env = getEnvCli(server)
+      await cliCommand.execWithEnv(`${cmd} auth del ${server.url}`)
 
-      await execCLI(`${env} ${cmd} auth del ${server.url}`)
-
-      const stdout = await execCLI(`${env} ${cmd} --help`)
-
+      const stdout = await cliCommand.execWithEnv(`${cmd} --help`)
       expect(stdout).to.contain('no instance selected')
     })
 
     it('Should add the admin user', async function () {
-      const env = getEnvCli(server)
-      await execCLI(`${env} ${cmd} auth add -u ${server.url} -U root -p test${server.internalServerNumber}`)
+      await cliCommand.execWithEnv(`${cmd} auth add -u ${server.url} -U root -p test${server.internalServerNumber}`)
     })
   })
 
@@ -214,8 +196,7 @@ describe('Test CLI wrapper', function () {
     it('Should install a plugin', async function () {
       this.timeout(60000)
 
-      const env = getEnvCli(server)
-      await execCLI(`${env} ${cmd} plugins install --npm-name peertube-plugin-hello-world`)
+      await cliCommand.execWithEnv(`${cmd} plugins install --npm-name peertube-plugin-hello-world`)
     })
 
     it('Should have registered settings', async function () {
@@ -223,15 +204,13 @@ describe('Test CLI wrapper', function () {
     })
 
     it('Should list installed plugins', async function () {
-      const env = getEnvCli(server)
-      const res = await execCLI(`${env} ${cmd} plugins list`)
+      const res = await cliCommand.execWithEnv(`${cmd} plugins list`)
 
       expect(res).to.contain('peertube-plugin-hello-world')
     })
 
     it('Should uninstall the plugin', async function () {
-      const env = getEnvCli(server)
-      const res = await execCLI(`${env} ${cmd} plugins uninstall --npm-name peertube-plugin-hello-world`)
+      const res = await cliCommand.execWithEnv(`${cmd} plugins uninstall --npm-name peertube-plugin-hello-world`)
 
       expect(res).to.not.contain('peertube-plugin-hello-world')
     })
@@ -262,11 +241,8 @@ describe('Test CLI wrapper', function () {
     it('Should add a redundancy', async function () {
       this.timeout(60000)
 
-      const env = getEnvCli(server)
-
       const params = `add --video ${video1Server2}`
-
-      await execCLI(`${env} ${cmd} redundancy ${params}`)
+      await cliCommand.execWithEnv(`${cmd} redundancy ${params}`)
 
       await waitJobs(servers)
     })
@@ -275,10 +251,8 @@ describe('Test CLI wrapper', function () {
       this.timeout(60000)
 
       {
-        const env = getEnvCli(server)
-
         const params = 'list-my-redundancies'
-        const stdout = await execCLI(`${env} ${cmd} redundancy ${params}`)
+        const stdout = await cliCommand.execWithEnv(`${cmd} redundancy ${params}`)
 
         expect(stdout).to.contain('super video')
         expect(stdout).to.contain(`localhost:${server.port}`)
@@ -288,18 +262,14 @@ describe('Test CLI wrapper', function () {
     it('Should remove a redundancy', async function () {
       this.timeout(60000)
 
-      const env = getEnvCli(server)
-
       const params = `remove --video ${video1Server2}`
-
-      await execCLI(`${env} ${cmd} redundancy ${params}`)
+      await cliCommand.execWithEnv(`${cmd} redundancy ${params}`)
 
       await waitJobs(servers)
 
       {
-        const env = getEnvCli(server)
         const params = 'list-my-redundancies'
-        const stdout = await execCLI(`${env} ${cmd} redundancy ${params}`)
+        const stdout = await cliCommand.execWithEnv(`${cmd} redundancy ${params}`)
 
         expect(stdout).to.not.contain('super video')
       }

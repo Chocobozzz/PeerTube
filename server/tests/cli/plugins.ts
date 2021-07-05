@@ -1,12 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
+import { expect } from 'chai'
 import {
   cleanupTests,
-  execCLI,
   flushAndRunServer,
   getConfig,
-  getEnvCli,
   getPluginTestPath,
   killallServers,
   reRunServer,
@@ -14,7 +13,6 @@ import {
   setAccessTokensToServers
 } from '../../../shared/extra-utils'
 import { ServerConfig } from '../../../shared/models/server'
-import { expect } from 'chai'
 
 describe('Test plugin scripts', function () {
   let server: ServerInfo
@@ -31,15 +29,13 @@ describe('Test plugin scripts', function () {
 
     const packagePath = getPluginTestPath()
 
-    const env = getEnvCli(server)
-    await execCLI(`${env} npm run plugin:install -- --plugin-path ${packagePath}`)
+    await server.cliCommand.execWithEnv(`npm run plugin:install -- --plugin-path ${packagePath}`)
   })
 
   it('Should install a theme from stateless CLI', async function () {
     this.timeout(60000)
 
-    const env = getEnvCli(server)
-    await execCLI(`${env} npm run plugin:install -- --npm-name peertube-theme-background-red`)
+    await server.cliCommand.execWithEnv(`npm run plugin:install -- --npm-name peertube-theme-background-red`)
   })
 
   it('Should have the theme and the plugin registered when we restart peertube', async function () {
@@ -63,8 +59,7 @@ describe('Test plugin scripts', function () {
   it('Should uninstall a plugin from stateless CLI', async function () {
     this.timeout(60000)
 
-    const env = getEnvCli(server)
-    await execCLI(`${env} npm run plugin:uninstall -- --npm-name peertube-plugin-test`)
+    await server.cliCommand.execWithEnv(`npm run plugin:uninstall -- --npm-name peertube-plugin-test`)
   })
 
   it('Should have removed the plugin on another peertube restart', async function () {

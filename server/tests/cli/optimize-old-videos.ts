@@ -7,10 +7,8 @@ import {
   buildServerDirectory,
   cleanupTests,
   doubleFollow,
-  execCLI,
   flushAndRunMultipleServers,
   generateHighBitrateVideo,
-  getEnvCli,
   getVideo,
   getVideosList,
   ServerInfo,
@@ -73,9 +71,7 @@ describe('Test optimize old videos', function () {
   it('Should run optimize script', async function () {
     this.timeout(200000)
 
-    const env = getEnvCli(servers[0])
-    await execCLI(`${env} npm run optimize-old-videos`)
-
+    await servers[0].cliCommand.execWithEnv('npm run optimize-old-videos')
     await waitJobs(servers)
 
     for (const server of servers) {
