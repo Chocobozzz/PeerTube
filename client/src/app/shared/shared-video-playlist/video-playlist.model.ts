@@ -44,7 +44,7 @@ export class VideoPlaylist implements ServerVideoPlaylist {
   videoChannelBy?: string
 
   static buildWatchUrl (playlist: Pick<VideoPlaylist, 'uuid' | 'shortUUID'>) {
-    return '/w/p/' + (playlist.uuid || playlist.shortUUID)
+    return '/w/p/' + (playlist.shortUUID || playlist.uuid)
   }
 
   constructor (hash: ServerVideoPlaylist, translations: {}) {
