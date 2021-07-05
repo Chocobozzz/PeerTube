@@ -1,6 +1,6 @@
 # Changelog
 
-## v3.3.0-rc.1 (~July)
+## v3.3.0-rc.1
 
 ### IMPORTANT NOTES
 
@@ -60,6 +60,8 @@
    * Cache refresh actor promises
    * Optimize activity pub video update
    * Relax some database transactions
+   * Use an internal cache for DNS resolution.
+   This should speed up federation and fix weird acquire timeouts in sequelize pool (causing slowness in the client interface)
 
 ### Bug fixes
 
@@ -73,6 +75,9 @@
  * Fix some 404 errors for remote avatar
  * Fix daily quota display
  * Fix ownership change with a live video
+ * Correctly handle broken plugin install
+ * Fix channel deletion when it has videos
+ * Force TLS for webfinger in production
 
 
 ## v3.2.1
