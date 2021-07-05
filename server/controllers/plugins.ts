@@ -38,6 +38,12 @@ pluginsRouter.get('/plugins/:pluginName/:pluginVersion/static/:staticEndpoint(*)
   servePluginStaticDirectory
 )
 
+pluginsRouter.get('/plugins/:pluginName/:pluginVersion/service-worker-scripts/:staticEndpoint(*)',
+  getPluginValidator(PluginType.PLUGIN),
+  pluginStaticDirectoryValidator,
+  servePluginServiceWorkerDirectory
+)
+
 pluginsRouter.get('/plugins/:pluginName/:pluginVersion/client-scripts/:staticEndpoint(*)',
   getPluginValidator(PluginType.PLUGIN),
   pluginStaticDirectoryValidator,
@@ -113,7 +119,19 @@ function servePluginStaticDirectory (req: express.Request, res: express.Response
   if (!staticPath) return res.status(HttpStatusCode.NOT_FOUND_404).end()
 
   const filepath = file.join('/')
+
   return res.sendFile(join(plugin.path, staticPath, filepath), sendFileOptions)
+}
+
+function servePluginServiceWorkerDirectory (req: express.Request, res: express.Response) {
+  const plugin: RegisteredPlugin = res.locals.registeredPlugin
+  const staticEndpoint = req.params.staticEndpoint
+
+  if (!plugin.serviceWorkerScripts.includes(staticEndpoint)) return res.status(HttpStatusCode.NOT_FOUND_404).end()
+
+  return res.set({
+    'Service-Worker-Allowed': `/plugins/${plugin.name}`
+  }).sendFile(join(plugin.path, staticEndpoint), sendFileOptions)
 }
 
 function servePluginCustomRoutes (req: express.Request, res: express.Response, next: express.NextFunction) {

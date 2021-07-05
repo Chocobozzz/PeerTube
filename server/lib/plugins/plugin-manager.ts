@@ -32,6 +32,7 @@ export interface RegisteredPlugin {
 
   staticDirs: { [name: string]: string }
   clientScripts: { [name: string]: ClientScript }
+  serviceWorkerScripts: string[]
 
   css: string[]
 
@@ -407,6 +408,7 @@ export class PluginManager implements ServerHook {
       path: pluginPath,
       staticDirs: packageJSON.staticDirs,
       clientScripts,
+      serviceWorkerScripts: packageJSON.serviceWorkerScripts,
       css: packageJSON.css,
       registerHelpers: registerHelpers || undefined,
       unregister: library ? library.unregister : undefined

@@ -21,6 +21,7 @@ export type PluginPackageJson = {
   library: string
 
   staticDirs: { [ name: string ]: string }
+  serviceWorkerScripts: string[]
   css: string[]
 
   clientScripts: ClientScript[]
