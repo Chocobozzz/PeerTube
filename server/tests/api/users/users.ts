@@ -2,9 +2,7 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { AbuseState, AbuseUpdate, MyUser, User, UserRole, Video, VideoPlaylistType } from '@shared/models'
-import { CustomConfig, OAuth2ErrorCode } from '@shared/models/server'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '@shared/core-utils'
 import {
   addVideoCommentThread,
   blockUser,
@@ -13,13 +11,14 @@ import {
   createUser,
   deleteMe,
   flushAndRunServer,
+  follow,
   getAccountRatings,
-  getAdminAbusesList,
   getBlacklistedVideosList,
   getCustomConfig,
   getMyUserInformation,
   getMyUserVideoQuotaUsed,
   getMyUserVideoRating,
+  getMyVideos,
   getUserInformation,
   getUsersList,
   getUsersListPaginationAndSort,
@@ -28,18 +27,19 @@ import {
   installPlugin,
   killallServers,
   login,
+  logout,
   makePutBodyRequest,
   rateVideo,
+  refreshToken,
   registerUserWithChannel,
   removeUser,
   removeVideo,
-  reportAbuse,
   reRunServer,
   ServerInfo,
+  setAccessTokensToServers,
   setTokenField,
   testImage,
   unblockUser,
-  updateAbuse,
   updateCustomSubConfig,
   updateMyAvatar,
   updateMyUser,
@@ -47,11 +47,8 @@ import {
   uploadVideo,
   userLogin,
   waitJobs
-} from '../../../../shared/extra-utils'
-import { follow } from '../../../../shared/extra-utils/server/follows'
-import { logout, refreshToken, setAccessTokensToServers } from '../../../../shared/extra-utils/users/login'
-import { getMyVideos } from '../../../../shared/extra-utils/videos/videos'
-import { UserAdminFlag } from '../../../../shared/models/users/user-flag.model'
+} from '@shared/extra-utils'
+import { AbuseState, CustomConfig, MyUser, OAuth2ErrorCode, User, UserAdminFlag, UserRole, Video, VideoPlaylistType } from '@shared/models'
 
 const expect = chai.expect
 
@@ -1002,10 +999,10 @@ describe('Test users', function () {
 
     it('Should report correct abuses counts', async function () {
       const reason = 'my super bad reason'
-      await reportAbuse({ url: server.url, token: user17AccessToken, videoId, reason })
+      await server.abusesCommand.report({ token: user17AccessToken, videoId, reason })
 
-      const res1 = await getAdminAbusesList({ url: server.url, token: server.accessToken })
-      const abuseId = res1.body.data[0].id
+      const body1 = await server.abusesCommand.getAdminList()
+      const abuseId = body1.data[0].id
 
       const res2 = await getUserInformation(server.url, server.accessToken, user17Id, true)
       const user2: User = res2.body
@@ -1013,8 +1010,7 @@ describe('Test users', function () {
       expect(user2.abusesCount).to.equal(1) // number of incriminations
       expect(user2.abusesCreatedCount).to.equal(1) // number of reports created
 
-      const body: AbuseUpdate = { state: AbuseState.ACCEPTED }
-      await updateAbuse(server.url, server.accessToken, abuseId, body)
+      await server.abusesCommand.update({ abuseId, body: { state: AbuseState.ACCEPTED } })
 
       const res3 = await getUserInformation(server.url, server.accessToken, user17Id, true)
       const user3: User = res3.body

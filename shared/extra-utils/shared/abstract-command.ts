@@ -1,5 +1,5 @@
 import { HttpStatusCode } from '@shared/core-utils'
-import { makeGetRequest, makePostBodyRequest, makePutBodyRequest, unwrapBody, unwrapText } from '../requests/requests'
+import { makeDeleteRequest, makeGetRequest, makePostBodyRequest, makePutBodyRequest, unwrapBody, unwrapText } from '../requests/requests'
 import { ServerInfo } from '../server/servers'
 
 export interface OverrideCommandOptions {
@@ -42,6 +42,10 @@ abstract class AbstractCommand {
 
   protected getRequestText (options: GetCommandOptions) {
     return unwrapText(this.getRequest(options))
+  }
+
+  protected deleteRequest (options: CommonCommandOptions) {
+    return makeDeleteRequest(this.buildCommonRequestOptions(options))
   }
 
   protected putBodyRequest (options: CommonCommandOptions & {

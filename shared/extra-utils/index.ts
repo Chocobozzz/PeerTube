@@ -5,8 +5,8 @@ export * from './feeds'
 export * from './logs'
 export * from './miscs'
 export * from './mock-servers'
+export * from './moderation'
 
-export * from './moderation/abuses'
 export * from './plugins/mock-blocklist'
 
 export * from './requests/check-api-params'
