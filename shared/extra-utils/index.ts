@@ -1,19 +1,10 @@
 export * from './bulk'
-
 export * from './cli'
-
 export * from './custom-pages'
-
 export * from './feeds'
-
 export * from './logs'
-
+export * from './miscs'
 export * from './mock-servers'
-
-export * from './miscs/email'
-export * from './miscs/sql'
-export * from './miscs/miscs'
-export * from './miscs/stubs'
 
 export * from './moderation/abuses'
 export * from './plugins/mock-blocklist'

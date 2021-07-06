@@ -6,7 +6,7 @@ import { MockJoinPeerTubeVersions } from '@shared/extra-utils'
 import { PluginType } from '@shared/models'
 import { cleanupTests, installPlugin, setPluginLatestVersion, setPluginVersion, wait } from '../../../../shared/extra-utils'
 import { ServerInfo } from '../../../../shared/extra-utils/index'
-import { MockSmtpServer } from '../../../../shared/extra-utils/miscs/email'
+import { MockSmtpServer } from '../../../../shared/extra-utils/mock-servers/mock-email'
 import {
   CheckerBaseParams,
   checkNewPeerTubeVersion,
