@@ -1,31 +1,30 @@
+import { CustomPage } from '@shared/models'
 import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
-import { makeGetRequest, makePutBodyRequest } from '../requests/requests'
+import { AbstractCommand, OverrideCommandOptions } from '../shared'
 
-function getInstanceHomepage (url: string, statusCodeExpected = HttpStatusCode.OK_200) {
-  const path = '/api/v1/custom-pages/homepage/instance'
+export class CustomPagesCommand extends AbstractCommand {
 
-  return makeGetRequest({
-    url,
-    path,
-    statusCodeExpected
-  })
-}
+  getInstanceHomepage (options: OverrideCommandOptions = {}) {
+    const path = '/api/v1/custom-pages/homepage/instance'
 
-function updateInstanceHomepage (url: string, token: string, content: string) {
-  const path = '/api/v1/custom-pages/homepage/instance'
+    return this.getRequestBody<CustomPage>({
+      ...options,
+      path,
+      defaultExpectedStatus: HttpStatusCode.OK_200
+    })
+  }
 
-  return makePutBodyRequest({
-    url,
-    path,
-    token,
-    fields: { content },
-    statusCodeExpected: HttpStatusCode.NO_CONTENT_204
-  })
-}
+  updateInstanceHomepage (options: OverrideCommandOptions & {
+    content: string
+  }) {
+    const { content } = options
+    const path = '/api/v1/custom-pages/homepage/instance'
 
-// ---------------------------------------------------------------------------
-
-export {
-  getInstanceHomepage,
-  updateInstanceHomepage
+    return this.putBodyRequest({
+      ...options,
+      path,
+      fields: { content },
+      defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
+    })
+  }
 }

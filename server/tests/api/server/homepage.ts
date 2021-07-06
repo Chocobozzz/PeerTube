@@ -3,17 +3,16 @@
 import 'mocha'
 import * as chai from 'chai'
 import { HttpStatusCode } from '@shared/core-utils'
-import { CustomPage, ServerConfig } from '@shared/models'
+import { ServerConfig } from '@shared/models'
 import {
   cleanupTests,
+  CustomPagesCommand,
   flushAndRunServer,
   getConfig,
-  getInstanceHomepage,
   killallServers,
   reRunServer,
   ServerInfo,
-  setAccessTokensToServers,
-  updateInstanceHomepage
+  setAccessTokensToServers
 } from '../../../../shared/extra-utils/index'
 
 const expect = chai.expect
@@ -27,26 +26,28 @@ async function getHomepageState (server: ServerInfo) {
 
 describe('Test instance homepage actions', function () {
   let server: ServerInfo
+  let command: CustomPagesCommand
 
   before(async function () {
     this.timeout(30000)
 
     server = await flushAndRunServer(1)
     await setAccessTokensToServers([ server ])
+
+    command = server.customPageCommand
   })
 
   it('Should not have a homepage', async function () {
     const state = await getHomepageState(server)
     expect(state).to.be.false
 
-    await getInstanceHomepage(server.url, HttpStatusCode.NOT_FOUND_404)
+    await command.getInstanceHomepage({ expectedStatus: HttpStatusCode.NOT_FOUND_404 })
   })
 
   it('Should set a homepage', async function () {
-    await updateInstanceHomepage(server.url, server.accessToken, '<picsou-magazine></picsou-magazine>')
+    await command.updateInstanceHomepage({ content: '<picsou-magazine></picsou-magazine>' })
 
-    const res = await getInstanceHomepage(server.url)
-    const page: CustomPage = res.body
+    const page = await command.getInstanceHomepage()
     expect(page.content).to.equal('<picsou-magazine></picsou-magazine>')
 
     const state = await getHomepageState(server)
@@ -60,8 +61,7 @@ describe('Test instance homepage actions', function () {
 
     await reRunServer(server)
 
-    const res = await getInstanceHomepage(server.url)
-    const page: CustomPage = res.body
+    const page = await command.getInstanceHomepage()
     expect(page.content).to.equal('<picsou-magazine></picsou-magazine>')
 
     const state = await getHomepageState(server)
@@ -69,10 +69,9 @@ describe('Test instance homepage actions', function () {
   })
 
   it('Should empty the homepage', async function () {
-    await updateInstanceHomepage(server.url, server.accessToken, '')
+    await command.updateInstanceHomepage({ content: '' })
 
-    const res = await getInstanceHomepage(server.url)
-    const page: CustomPage = res.body
+    const page = await command.getInstanceHomepage()
     expect(page.content).to.be.empty
 
     const state = await getHomepageState(server)

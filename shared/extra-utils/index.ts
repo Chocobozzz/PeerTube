@@ -2,7 +2,7 @@ export * from './bulk'
 
 export * from './cli'
 
-export * from './custom-pages/custom-pages'
+export * from './custom-pages'
 
 export * from './feeds/feeds'
 

@@ -8,6 +8,7 @@ import { randomInt } from '../../core-utils/miscs/miscs'
 import { VideoChannel } from '../../models/videos'
 import { BulkCommand } from '../bulk'
 import { CLICommand } from '../cli'
+import { CustomPagesCommand } from '../custom-pages'
 import { buildServerDirectory, getFileSize, isGithubCI, root, wait } from '../miscs/miscs'
 import { makeGetRequest } from '../requests/requests'
 
@@ -65,6 +66,7 @@ interface ServerInfo {
 
   bulkCommand?: BulkCommand
   cliCommand?: CLICommand
+  customPageCommand?: CustomPagesCommand
 }
 
 function parallelTests () {
@@ -272,6 +274,7 @@ async function runServer (server: ServerInfo, configOverrideArg?: any, args = []
 
       server.bulkCommand = new BulkCommand(server)
       server.cliCommand = new CLICommand(server)
+      server.customPageCommand = new CustomPagesCommand(server)
 
       res(server)
     })

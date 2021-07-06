@@ -182,6 +182,10 @@ function decodeQueryString (path: string) {
   return decode(path.split('?')[1])
 }
 
+function unwrap <T> (test: request.Test): Promise<T> {
+  return test.then(res => res.body)
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -194,5 +198,6 @@ export {
   makePutBodyRequest,
   makeDeleteRequest,
   makeRawRequest,
+  unwrap,
   updateImageRequest
 }
