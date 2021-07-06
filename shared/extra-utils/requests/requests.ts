@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/no-floating-promises */
 
-import * as request from 'supertest'
-import { buildAbsoluteFixturePath, root } from '../miscs/miscs'
 import { isAbsolute, join } from 'path'
-import { URL } from 'url'
 import { decode } from 'querystring'
+import * as request from 'supertest'
+import { URL } from 'url'
 import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
+import { buildAbsoluteFixturePath, root } from '../miscs/miscs'
 
 function get4KFileUrl () {
   return 'https://download.cpy.re/peertube/4k_file.txt'
@@ -154,6 +154,15 @@ function makeHTMLRequest (url: string, path: string) {
     .expect(HttpStatusCode.OK_200)
 }
 
+function makeActivityPubGetRequest (url: string, path: string, expectedStatus = HttpStatusCode.OK_200) {
+  return makeGetRequest({
+    url,
+    path,
+    statusCodeExpected: expectedStatus,
+    accept: 'application/activity+json,text/html;q=0.9,\\*/\\*;q=0.8'
+  })
+}
+
 function updateImageRequest (options: {
   url: string
   path: string
@@ -202,6 +211,7 @@ export {
   makePutBodyRequest,
   makeDeleteRequest,
   makeRawRequest,
+  makeActivityPubGetRequest,
   unwrapBody,
   unwrapText,
   updateImageRequest

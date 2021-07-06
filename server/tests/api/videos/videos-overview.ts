@@ -2,7 +2,6 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { Response } from 'superagent'
 import {
   addAccountToAccountBlocklist,
   cleanupTests,

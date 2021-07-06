@@ -72,7 +72,7 @@ describe('Test ActivityPub videos search', function () {
 
   it('Should search a local video', async function () {
     const search = 'http://localhost:' + servers[0].port + '/videos/watch/' + videoServer1UUID
-    const body  = await command.searchVideos({ search })
+    const body = await command.searchVideos({ search })
 
     expect(body.total).to.equal(1)
     expect(body.data).to.be.an('array')

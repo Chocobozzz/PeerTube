@@ -13,7 +13,6 @@ export * from './requests/requests'
 
 export * from './search'
 
-export * from './server/activitypub'
 export * from './server/clients'
 export * from './server/config'
 export * from './server/debug'
