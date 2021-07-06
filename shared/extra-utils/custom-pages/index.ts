@@ -1,1 +1,1 @@
-export * from './custom-pages'
+export * from './custom-pages-command'

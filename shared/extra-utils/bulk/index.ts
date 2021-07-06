@@ -1,1 +1,1 @@
-export * from './bulk'
+export * from './bulk-command'

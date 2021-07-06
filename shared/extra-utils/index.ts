@@ -4,7 +4,7 @@ export * from './cli'
 
 export * from './custom-pages'
 
-export * from './feeds/feeds'
+export * from './feeds'
 
 export * from './mock-servers/mock-instances-index'
 
