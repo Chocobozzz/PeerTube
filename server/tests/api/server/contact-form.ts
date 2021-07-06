@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
 import 'mocha'
-import { cleanupTests, flushAndRunServer, ServerInfo, setAccessTokensToServers, wait } from '../../../../shared/extra-utils'
-import { MockSmtpServer } from '../../../../shared/extra-utils/miscs/email'
-import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
-import { sendContactForm } from '../../../../shared/extra-utils/server/contact-form'
+import * as chai from 'chai'
 import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { cleanupTests, flushAndRunServer, ServerInfo, setAccessTokensToServers, wait } from '../../../../shared/extra-utils'
+import { MockSmtpServer } from '../../../../shared/extra-utils/mock-servers/mock-email'
+import { sendContactForm } from '../../../../shared/extra-utils/server/contact-form'
+import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 
 const expect = chai.expect
 

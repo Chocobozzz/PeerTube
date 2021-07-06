@@ -32,7 +32,7 @@ import {
   uploadVideo,
   userLogin
 } from '../../../../shared/extra-utils'
-import { MockSmtpServer } from '../../../../shared/extra-utils/miscs/email'
+import { MockSmtpServer } from '../../../../shared/extra-utils/mock-servers/mock-email'
 import {
   checkBadCountPagination,
   checkBadSortPagination,

@@ -2,6 +2,7 @@
 
 import 'mocha'
 import * as chai from 'chai'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import {
   addVideoToBlacklist,
   askResetPassword,
@@ -20,9 +21,8 @@ import {
   userLogin,
   verifyEmail
 } from '../../../../shared/extra-utils'
-import { MockSmtpServer } from '../../../../shared/extra-utils/miscs/email'
+import { MockSmtpServer } from '../../../../shared/extra-utils/mock-servers/mock-email'
 import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const expect = chai.expect
 

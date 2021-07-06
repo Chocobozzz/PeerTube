@@ -27,7 +27,7 @@ import {
   wait
 } from '../../../../shared/extra-utils'
 import { ServerInfo, uploadVideo } from '../../../../shared/extra-utils/index'
-import { MockSmtpServer } from '../../../../shared/extra-utils/miscs/email'
+import { MockSmtpServer } from '../../../../shared/extra-utils/mock-servers/mock-email'
 import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 import {
   checkAbuseStateChange,

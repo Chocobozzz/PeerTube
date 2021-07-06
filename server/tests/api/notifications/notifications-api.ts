@@ -5,7 +5,7 @@ import * as chai from 'chai'
 import { addUserSubscription } from '@shared/extra-utils/users/user-subscriptions'
 import { cleanupTests, getMyUserInformation, immutableAssign, uploadRandomVideo, waitJobs } from '../../../../shared/extra-utils'
 import { ServerInfo } from '../../../../shared/extra-utils/index'
-import { MockSmtpServer } from '../../../../shared/extra-utils/miscs/email'
+import { MockSmtpServer } from '../../../../shared/extra-utils/mock-servers/mock-email'
 import {
   CheckerBaseParams,
   checkNewVideoFromSubscription,

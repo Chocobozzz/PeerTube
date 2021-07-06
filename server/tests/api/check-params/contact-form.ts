@@ -1,11 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-
-import { cleanupTests, flushAndRunServer, immutableAssign, killallServers, reRunServer, ServerInfo } from '../../../../shared/extra-utils'
-import { sendContactForm } from '../../../../shared/extra-utils/server/contact-form'
-import { MockSmtpServer } from '../../../../shared/extra-utils/miscs/email'
 import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { cleanupTests, flushAndRunServer, immutableAssign, killallServers, reRunServer, ServerInfo } from '../../../../shared/extra-utils'
+import { MockSmtpServer } from '../../../../shared/extra-utils/mock-servers/mock-email'
+import { sendContactForm } from '../../../../shared/extra-utils/server/contact-form'
 
 describe('Test contact form API validators', function () {
   let server: ServerInfo
