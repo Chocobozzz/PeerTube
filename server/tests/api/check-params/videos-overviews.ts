@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-import { cleanupTests, flushAndRunServer, ServerInfo } from '../../../../shared/extra-utils'
-import { getVideosOverview } from '@shared/extra-utils/overviews/overviews'
+import { cleanupTests, flushAndRunServer, ServerInfo } from '@shared/extra-utils'
 
 describe('Test videos overview', function () {
   let server: ServerInfo
@@ -18,12 +17,12 @@ describe('Test videos overview', function () {
   describe('When getting videos overview', function () {
 
     it('Should fail with a bad pagination', async function () {
-      await getVideosOverview(server.url, 0, 400)
-      await getVideosOverview(server.url, 100, 400)
+      await server.overviewsCommand.getVideos({ page: 0, expectedStatus: 400 })
+      await server.overviewsCommand.getVideos({ page: 100, expectedStatus: 400 })
     })
 
     it('Should succeed with a good pagination', async function () {
-      await getVideosOverview(server.url, 1)
+      await server.overviewsCommand.getVideos({ page: 1 })
     })
   })
 

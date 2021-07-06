@@ -2,8 +2,9 @@
 
 import 'mocha'
 import * as chai from 'chai'
-
+import { Response } from 'superagent'
 import {
+  addAccountToAccountBlocklist,
   cleanupTests,
   flushAndRunServer,
   generateUserAccessToken,
@@ -11,20 +12,15 @@ import {
   setAccessTokensToServers,
   uploadVideo,
   wait
-} from '../../../../shared/extra-utils'
-import { getVideosOverview, getVideosOverviewWithToken } from '../../../../shared/extra-utils/overviews/overviews'
-import { VideosOverview } from '../../../../shared/models/overviews'
-import { addAccountToAccountBlocklist } from '@shared/extra-utils/users/blocklist'
-import { Response } from 'superagent'
+} from '@shared/extra-utils'
+import { VideosOverview } from '@shared/models'
 
 const expect = chai.expect
 
 describe('Test a videos overview', function () {
   let server: ServerInfo = null
 
-  function testOverviewCount (res: Response, expected: number) {
-    const overview: VideosOverview = res.body
-
+  function testOverviewCount (overview: VideosOverview, expected: number) {
     expect(overview.tags).to.have.lengthOf(expected)
     expect(overview.categories).to.have.lengthOf(expected)
     expect(overview.channels).to.have.lengthOf(expected)
@@ -39,9 +35,9 @@ describe('Test a videos overview', function () {
   })
 
   it('Should send empty overview', async function () {
-    const res = await getVideosOverview(server.url, 1)
+    const body = await server.overviewsCommand.getVideos({ page: 1 })
 
-    testOverviewCount(res, 0)
+    testOverviewCount(body, 0)
   })
 
   it('Should upload 5 videos in a specific category, tag and channel but not include them in overview', async function () {
@@ -55,34 +51,35 @@ describe('Test a videos overview', function () {
       tags: [ 'coucou1', 'coucou2' ]
     })
 
-    const res = await getVideosOverview(server.url, 1)
+    const body = await server.overviewsCommand.getVideos({ page: 1 })
 
-    testOverviewCount(res, 0)
+    testOverviewCount(body, 0)
   })
 
   it('Should upload another video and include all videos in the overview', async function () {
     this.timeout(30000)
 
-    for (let i = 1; i < 6; i++) {
-      await uploadVideo(server.url, server.accessToken, {
-        name: 'video ' + i,
-        category: 3,
-        tags: [ 'coucou1', 'coucou2' ]
-      })
-    }
-
-    await wait(3000)
-
     {
-      const res = await getVideosOverview(server.url, 1)
+      for (let i = 1; i < 6; i++) {
+        await uploadVideo(server.url, server.accessToken, {
+          name: 'video ' + i,
+          category: 3,
+          tags: [ 'coucou1', 'coucou2' ]
+        })
+      }
 
-      testOverviewCount(res, 1)
+      await wait(3000)
     }
 
     {
-      const res = await getVideosOverview(server.url, 2)
+      const body = await server.overviewsCommand.getVideos({ page: 1 })
 
-      const overview: VideosOverview = res.body
+      testOverviewCount(body, 1)
+    }
+
+    {
+      const overview = await server.overviewsCommand.getVideos({ page: 2 })
+
       expect(overview.tags).to.have.lengthOf(1)
       expect(overview.categories).to.have.lengthOf(0)
       expect(overview.channels).to.have.lengthOf(0)
@@ -90,20 +87,10 @@ describe('Test a videos overview', function () {
   })
 
   it('Should have the correct overview', async function () {
-    const res1 = await getVideosOverview(server.url, 1)
-    const res2 = await getVideosOverview(server.url, 2)
+    const overview1 = await server.overviewsCommand.getVideos({ page: 1 })
+    const overview2 = await server.overviewsCommand.getVideos({ page: 2 })
 
-    const overview1: VideosOverview = res1.body
-    const overview2: VideosOverview = res2.body
-
-    const tmp = [
-      overview1.tags,
-      overview1.categories,
-      overview1.channels,
-      overview2.tags
-    ]
-
-    for (const arr of tmp) {
+    for (const arr of [ overview1.tags, overview1.categories, overview1.channels, overview2.tags ]) {
       expect(arr).to.have.lengthOf(1)
 
       const obj = arr[0]
@@ -132,15 +119,15 @@ describe('Test a videos overview', function () {
     await addAccountToAccountBlocklist(server.url, token, 'root@' + server.host)
 
     {
-      const res = await getVideosOverview(server.url, 1)
+      const body = await server.overviewsCommand.getVideos({ page: 1 })
 
-      testOverviewCount(res, 1)
+      testOverviewCount(body, 1)
     }
 
     {
-      const res = await getVideosOverviewWithToken(server.url, 1, token)
+      const body = await server.overviewsCommand.getVideos({ page: 1, token })
 
-      testOverviewCount(res, 0)
+      testOverviewCount(body, 0)
     }
   })
 
