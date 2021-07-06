@@ -1,33 +1,42 @@
-import * as request from 'supertest'
+
 import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
+import { AbstractCommand, OverrideCommandOptions } from '../shared'
 
 type FeedType = 'videos' | 'video-comments' | 'subscriptions'
 
-function getXMLfeed (url: string, feed: FeedType, format?: string) {
-  const path = '/feeds/' + feed + '.xml'
+export class FeedCommand extends AbstractCommand {
 
-  return request(url)
-          .get(path)
-          .query((format) ? { format: format } : {})
-          .set('Accept', 'application/xml')
-          .expect(HttpStatusCode.OK_200)
-          .expect('Content-Type', /xml/)
-}
+  getXML (options: OverrideCommandOptions & {
+    feed: FeedType
+    format?: string
+  }) {
+    const { feed, format } = options
+    const path = '/feeds/' + feed + '.xml'
 
-function getJSONfeed (url: string, feed: FeedType, query: any = {}, statusCodeExpected = HttpStatusCode.OK_200) {
-  const path = '/feeds/' + feed + '.json'
+    return this.getRequestText({
+      ...options,
 
-  return request(url)
-          .get(path)
-          .query(query)
-          .set('Accept', 'application/json')
-          .expect(statusCodeExpected)
-          .expect('Content-Type', /json/)
-}
+      path,
+      query: format ? { format } : undefined,
+      accept: 'application/xml',
+      defaultExpectedStatus: HttpStatusCode.OK_200
+    })
+  }
 
-// ---------------------------------------------------------------------------
+  getJSON (options: OverrideCommandOptions & {
+    feed: FeedType
+    query?: { [ id: string ]: any }
+  }) {
+    const { feed, query } = options
+    const path = '/feeds/' + feed + '.json'
 
-export {
-  getXMLfeed,
-  getJSONfeed
+    return this.getRequestText({
+      ...options,
+
+      path,
+      query,
+      accept: 'application/json',
+      defaultExpectedStatus: HttpStatusCode.OK_200
+    })
+  }
 }

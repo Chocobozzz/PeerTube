@@ -1,5 +1,5 @@
 import { HttpStatusCode } from '@shared/core-utils'
-import { makeGetRequest, makePostBodyRequest, makePutBodyRequest, unwrap } from '../requests/requests'
+import { makeGetRequest, makePostBodyRequest, makePutBodyRequest, unwrap, unwrapBody, unwrapText } from '../requests/requests'
 import { ServerInfo } from '../server/servers'
 
 export interface OverrideCommandOptions {
@@ -10,6 +10,12 @@ export interface OverrideCommandOptions {
 interface CommonCommandOptions extends OverrideCommandOptions {
   path: string
   defaultExpectedStatus: number
+}
+
+interface GetCommandOptions extends CommonCommandOptions {
+  query?: { [ id: string ]: string }
+  contentType?: string
+  accept?: string
 }
 
 abstract class AbstractCommand {
@@ -30,8 +36,12 @@ abstract class AbstractCommand {
     this.expectedStatus = status
   }
 
-  protected getRequestBody <T> (options: CommonCommandOptions) {
-    return unwrap<T>(makeGetRequest(this.buildCommonRequestOptions(options)))
+  protected getRequestBody <T> (options: GetCommandOptions) {
+    return unwrapBody<T>(this.getRequest(options))
+  }
+
+  protected getRequestText (options: GetCommandOptions) {
+    return unwrapText(this.getRequest(options))
   }
 
   protected putBodyRequest (options: CommonCommandOptions & {
@@ -67,6 +77,18 @@ abstract class AbstractCommand {
       token: token ?? this.server.accessToken,
       statusCodeExpected: expectedStatus ?? this.expectedStatus ?? defaultExpectedStatus
     }
+  }
+
+  private getRequest (options: GetCommandOptions) {
+    const { query, contentType, accept } = options
+
+    return makeGetRequest({
+      ...this.buildCommonRequestOptions(options),
+
+      query,
+      contentType,
+      accept
+    })
   }
 }
 
