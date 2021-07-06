@@ -8,7 +8,7 @@ export * from './feeds'
 
 export * from './logs'
 
-export * from './mock-servers/mock-instances-index'
+export * from './mock-servers'
 
 export * from './miscs/email'
 export * from './miscs/sql'
