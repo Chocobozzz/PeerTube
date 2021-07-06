@@ -235,7 +235,7 @@ describe('Test moderation notifications', function () {
       const video = resVideo.body.video
 
       {
-        const body  = await servers[0].abusesCommand.report({ token: userAccessToken, videoId: video.id, reason: 'super reason' })
+        const body = await servers[0].abusesCommand.report({ token: userAccessToken, videoId: video.id, reason: 'super reason' })
         abuseId = body.abuse.id
       }
 
