@@ -1,34 +1,33 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
 import 'mocha'
-import { cleanupTests, getVideosList, ServerInfo, setAccessTokensToServers, uploadVideo } from '../../../../shared/extra-utils/index'
-import { userLogin } from '../../../../shared/extra-utils/users/login'
-import { createUser } from '../../../../shared/extra-utils/users/users'
-import { getMyVideos } from '../../../../shared/extra-utils/videos/videos'
+import * as chai from 'chai'
 import {
+  cleanupTests,
+  createUser,
   flushAndRunServer,
   getAccountVideos,
   getConfig,
   getCustomConfig,
   getMyUserInformation,
+  getMyVideos,
   getVideoChannelVideos,
+  getVideosList,
   getVideosListWithToken,
   searchVideo,
   searchVideoWithToken,
+  ServerInfo,
+  setAccessTokensToServers,
   updateCustomConfig,
-  updateMyUser
-} from '../../../../shared/extra-utils'
-import { ServerConfig, VideosOverview } from '../../../../shared/models'
-import { CustomConfig } from '../../../../shared/models/server/custom-config.model'
-import { User } from '../../../../shared/models/users'
-import { getVideosOverview, getVideosOverviewWithToken } from '@shared/extra-utils/overviews/overviews'
+  updateMyUser,
+  uploadVideo,
+  userLogin
+} from '@shared/extra-utils'
+import { CustomConfig, ServerConfig, User, VideosOverview } from '@shared/models'
 
 const expect = chai.expect
 
-function createOverviewRes (res: any) {
-  const overview = res.body as VideosOverview
-
+function createOverviewRes (overview: VideosOverview) {
   const videos = overview.categories[0].videos
   return { body: { data: videos, total: videos.length } }
 }
@@ -57,7 +56,9 @@ describe('Test video NSFW policy', function () {
 
           // Overviews do not support video filters
           if (!hasQuery) {
-            promises.push(getVideosOverviewWithToken(server.url, 1, token).then(res => createOverviewRes(res)))
+            const p = server.overviewsCommand.getVideos({ page: 1, token })
+                                             .then(res => createOverviewRes(res))
+            promises.push(p)
           }
 
           return Promise.all(promises)
@@ -72,7 +73,9 @@ describe('Test video NSFW policy', function () {
 
         // Overviews do not support video filters
         if (!hasQuery) {
-          promises.push(getVideosOverview(server.url, 1).then(res => createOverviewRes(res)))
+          const p = server.overviewsCommand.getVideos({ page: 1 })
+                                           .then(res => createOverviewRes(res))
+          promises.push(p)
         }
 
         return Promise.all(promises)

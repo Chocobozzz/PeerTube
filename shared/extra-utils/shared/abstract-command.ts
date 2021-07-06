@@ -78,7 +78,10 @@ abstract class AbstractCommand {
     return {
       url: this.server.url,
       path,
-      token: token ?? this.server.accessToken,
+
+      // Token can be null if we don't want to add it
+      token: token !== undefined ? token : this.server.accessToken,
+
       statusCodeExpected: expectedStatus ?? this.expectedStatus ?? defaultExpectedStatus
     }
   }

@@ -13,6 +13,7 @@ import { FeedCommand } from '../feeds'
 import { LogsCommand } from '../logs'
 import { buildServerDirectory, getFileSize, isGithubCI, root, wait } from '../miscs/miscs'
 import { AbusesCommand } from '../moderation'
+import { OverviewsCommand } from '../overviews'
 import { makeGetRequest } from '../requests/requests'
 
 interface ServerInfo {
@@ -73,6 +74,7 @@ interface ServerInfo {
   feedCommand?: FeedCommand
   logsCommand?: LogsCommand
   abusesCommand?: AbusesCommand
+  overviewsCommand?: OverviewsCommand
 }
 
 function parallelTests () {
@@ -284,6 +286,7 @@ async function runServer (server: ServerInfo, configOverrideArg?: any, args = []
       server.feedCommand = new FeedCommand(server)
       server.logsCommand = new LogsCommand(server)
       server.abusesCommand = new AbusesCommand(server)
+      server.overviewsCommand = new OverviewsCommand(server)
 
       res(server)
     })
