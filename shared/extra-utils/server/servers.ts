@@ -16,6 +16,7 @@ import { AbusesCommand } from '../moderation'
 import { OverviewsCommand } from '../overviews'
 import { makeGetRequest } from '../requests/requests'
 import { SearchCommand } from '../search'
+import { ContactFormCommand } from './contact-form-command'
 
 interface ServerInfo {
   app: ChildProcess
@@ -77,6 +78,7 @@ interface ServerInfo {
   abusesCommand?: AbusesCommand
   overviewsCommand?: OverviewsCommand
   searchCommand?: SearchCommand
+  contactFormCommand?: ContactFormCommand
 }
 
 function parallelTests () {
@@ -290,6 +292,7 @@ async function runServer (server: ServerInfo, configOverrideArg?: any, args = []
       server.abusesCommand = new AbusesCommand(server)
       server.overviewsCommand = new OverviewsCommand(server)
       server.searchCommand = new SearchCommand(server)
+      server.contactFormCommand = new ContactFormCommand(server)
 
       res(server)
     })

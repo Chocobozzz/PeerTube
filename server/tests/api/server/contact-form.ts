@@ -2,17 +2,16 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
-import { cleanupTests, flushAndRunServer, ServerInfo, setAccessTokensToServers, wait } from '../../../../shared/extra-utils'
-import { MockSmtpServer } from '../../../../shared/extra-utils/mock-servers/mock-email'
-import { sendContactForm } from '../../../../shared/extra-utils/server/contact-form'
-import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
+import { HttpStatusCode } from '@shared/core-utils'
+import { cleanupTests, flushAndRunServer, MockSmtpServer, ServerInfo, setAccessTokensToServers, wait, waitJobs } from '@shared/extra-utils'
+import { ContactFormCommand } from '@shared/extra-utils/server'
 
 const expect = chai.expect
 
 describe('Test contact form', function () {
   let server: ServerInfo
   const emails: object[] = []
+  let command: ContactFormCommand
 
   before(async function () {
     this.timeout(30000)
@@ -27,13 +26,14 @@ describe('Test contact form', function () {
     }
     server = await flushAndRunServer(1, overrideConfig)
     await setAccessTokensToServers([ server ])
+
+    command = server.contactFormCommand
   })
 
   it('Should send a contact form', async function () {
     this.timeout(10000)
 
-    await sendContactForm({
-      url: server.url,
+    await command.send({
       fromEmail: 'toto@example.com',
       body: 'my super message',
       subject: 'my subject',
@@ -58,16 +58,14 @@ describe('Test contact form', function () {
 
     await wait(1000)
 
-    await sendContactForm({
-      url: server.url,
+    await command.send({
       fromEmail: 'toto@example.com',
       body: 'my super message',
       subject: 'my subject',
       fromName: 'Super toto'
     })
 
-    await sendContactForm({
-      url: server.url,
+    await command.send({
       fromEmail: 'toto@example.com',
       body: 'my super message',
       fromName: 'Super toto',
@@ -79,8 +77,7 @@ describe('Test contact form', function () {
   it('Should be able to send another contact form after a while', async function () {
     await wait(1000)
 
-    await sendContactForm({
-      url: server.url,
+    await command.send({
       fromEmail: 'toto@example.com',
       fromName: 'Super toto',
       subject: 'my subject',
