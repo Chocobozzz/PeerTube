@@ -2,17 +2,15 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { advancedVideoChannelSearch } from '@shared/extra-utils/search/video-channels'
-import { ServerConfig } from '@shared/models'
-import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '@shared/core-utils'
 import {
   addVideoCommentReply,
   addVideoCommentThread,
-  advancedVideoPlaylistSearch,
-  advancedVideosSearch,
+  cleanupTests,
   createLive,
   createVideoPlaylist,
   doubleFollow,
+  flushAndRunMultipleServers,
   getAccountVideos,
   getConfig,
   getMyVideos,
@@ -28,17 +26,19 @@ import {
   installPlugin,
   makeRawRequest,
   registerUser,
+  ServerInfo,
   setAccessTokensToServers,
   setDefaultVideoChannel,
   updateCustomSubConfig,
   updateVideo,
   uploadVideo,
   uploadVideoAndGetId,
-  waitJobs
-} from '../../../shared/extra-utils'
-import { cleanupTests, flushAndRunMultipleServers, ServerInfo, waitUntilLog } from '../../../shared/extra-utils/server/servers'
-import { getGoodVideoUrl, getMyVideoImports, importVideo } from '../../../shared/extra-utils/videos/video-imports'
+  waitJobs,
+  waitUntilLog
+} from '@shared/extra-utils'
+import { getGoodVideoUrl, getMyVideoImports, importVideo } from '@shared/extra-utils/videos/video-imports'
 import {
+  ServerConfig,
   VideoCommentThreadTree,
   VideoDetails,
   VideoImport,
@@ -46,7 +46,7 @@ import {
   VideoPlaylist,
   VideoPlaylistPrivacy,
   VideoPrivacy
-} from '../../../shared/models/videos'
+} from '@shared/models'
 
 const expect = chai.expect
 
@@ -486,8 +486,10 @@ describe('Test plugin filter hooks', function () {
     })
 
     it('Should run filter:api.search.videos.local.list.{params,result}', async function () {
-      await advancedVideosSearch(servers[0].url, {
-        search: 'Sun Quan'
+      await servers[0].searchCommand.advancedVideoSearch({
+        search: {
+          search: 'Sun Quan'
+        }
       })
 
       await waitUntilLog(servers[0], 'Run hook filter:api.search.videos.local.list.params', 1)
@@ -495,9 +497,11 @@ describe('Test plugin filter hooks', function () {
     })
 
     it('Should run filter:api.search.videos.index.list.{params,result}', async function () {
-      await advancedVideosSearch(servers[0].url, {
-        search: 'Sun Quan',
-        searchTarget: 'search-index'
+      await servers[0].searchCommand.advancedVideoSearch({
+        search: {
+          search: 'Sun Quan',
+          searchTarget: 'search-index'
+        }
       })
 
       await waitUntilLog(servers[0], 'Run hook filter:api.search.videos.local.list.params', 1)
@@ -507,8 +511,10 @@ describe('Test plugin filter hooks', function () {
     })
 
     it('Should run filter:api.search.video-channels.local.list.{params,result}', async function () {
-      await advancedVideoChannelSearch(servers[0].url, {
-        search: 'Sun Ce'
+      await servers[0].searchCommand.advancedChannelSearch({
+        search: {
+          search: 'Sun Ce'
+        }
       })
 
       await waitUntilLog(servers[0], 'Run hook filter:api.search.video-channels.local.list.params', 1)
@@ -516,9 +522,11 @@ describe('Test plugin filter hooks', function () {
     })
 
     it('Should run filter:api.search.video-channels.index.list.{params,result}', async function () {
-      await advancedVideoChannelSearch(servers[0].url, {
-        search: 'Sun Ce',
-        searchTarget: 'search-index'
+      await servers[0].searchCommand.advancedChannelSearch({
+        search: {
+          search: 'Sun Ce',
+          searchTarget: 'search-index'
+        }
       })
 
       await waitUntilLog(servers[0], 'Run hook filter:api.search.video-channels.local.list.params', 1)
@@ -528,8 +536,10 @@ describe('Test plugin filter hooks', function () {
     })
 
     it('Should run filter:api.search.video-playlists.local.list.{params,result}', async function () {
-      await advancedVideoPlaylistSearch(servers[0].url, {
-        search: 'Sun Jian'
+      await servers[0].searchCommand.advancedPlaylistSearch({
+        search: {
+          search: 'Sun Jian'
+        }
       })
 
       await waitUntilLog(servers[0], 'Run hook filter:api.search.video-playlists.local.list.params', 1)
@@ -537,9 +547,11 @@ describe('Test plugin filter hooks', function () {
     })
 
     it('Should run filter:api.search.video-playlists.index.list.{params,result}', async function () {
-      await advancedVideoPlaylistSearch(servers[0].url, {
-        search: 'Sun Jian',
-        searchTarget: 'search-index'
+      await servers[0].searchCommand.advancedPlaylistSearch({
+        search: {
+          search: 'Sun Jian',
+          searchTarget: 'search-index'
+        }
       })
 
       await waitUntilLog(servers[0], 'Run hook filter:api.search.video-playlists.local.list.params', 1)

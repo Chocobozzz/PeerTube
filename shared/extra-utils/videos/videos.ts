@@ -10,7 +10,7 @@ import validator from 'validator'
 import { getLowercaseExtension } from '@server/helpers/core-utils'
 import { buildUUID } from '@server/helpers/uuid'
 import { HttpStatusCode } from '@shared/core-utils'
-import { VideosCommonQuery } from '@shared/models'
+import { BooleanBothQuery, VideosCommonQuery } from '@shared/models'
 import { loadLanguages, VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_PRIVACIES } from '../../../server/initializers/constants'
 import { VideoDetails, VideoPrivacy } from '../../models/videos'
 import {
@@ -159,7 +159,7 @@ function getVideosList (url: string) {
           .expect('Content-Type', /json/)
 }
 
-function getVideosListWithToken (url: string, token: string, query: { nsfw?: boolean } = {}) {
+function getVideosListWithToken (url: string, token: string, query: { nsfw?: BooleanBothQuery } = {}) {
   const path = '/api/v1/videos'
 
   return request(url)
@@ -219,7 +219,7 @@ function getAccountVideos (
   count: number,
   sort?: string,
   query: {
-    nsfw?: boolean
+    nsfw?: BooleanBothQuery
     search?: string
   } = {}
 ) {
@@ -245,7 +245,7 @@ function getVideoChannelVideos (
   start: number,
   count: number,
   sort?: string,
-  query: { nsfw?: boolean } = {}
+  query: { nsfw?: BooleanBothQuery } = {}
 ) {
   const path = '/api/v1/video-channels/' + videoChannelName + '/videos'
 

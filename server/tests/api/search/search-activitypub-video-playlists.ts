@@ -9,15 +9,15 @@ import {
   deleteVideoPlaylist,
   flushAndRunMultipleServers,
   getVideoPlaylistsList,
-  searchVideoPlaylists,
+  SearchCommand,
   ServerInfo,
   setAccessTokensToServers,
   setDefaultVideoChannel,
   uploadVideoAndGetId,
-  wait
-} from '../../../../shared/extra-utils'
-import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
-import { VideoPlaylist, VideoPlaylistPrivacy } from '../../../../shared/models/videos'
+  wait,
+  waitJobs
+} from '@shared/extra-utils'
+import { VideoPlaylistPrivacy } from '@shared/models'
 
 const expect = chai.expect
 
@@ -26,6 +26,8 @@ describe('Test ActivityPub playlists search', function () {
   let playlistServer1UUID: string
   let playlistServer2UUID: string
   let video2Server2: string
+
+  let command: SearchCommand
 
   before(async function () {
     this.timeout(120000)
@@ -78,38 +80,40 @@ describe('Test ActivityPub playlists search', function () {
     }
 
     await waitJobs(servers)
+
+    command = servers[0].searchCommand
   })
 
   it('Should not find a remote playlist', async function () {
     {
       const search = 'http://localhost:' + servers[1].port + '/video-playlists/43'
-      const res = await searchVideoPlaylists(servers[0].url, search, servers[0].accessToken)
+      const body = await command.searchPlaylists({ search, token: servers[0].accessToken })
 
-      expect(res.body.total).to.equal(0)
-      expect(res.body.data).to.be.an('array')
-      expect(res.body.data).to.have.lengthOf(0)
+      expect(body.total).to.equal(0)
+      expect(body.data).to.be.an('array')
+      expect(body.data).to.have.lengthOf(0)
     }
 
     {
       // Without token
       const search = 'http://localhost:' + servers[1].port + '/video-playlists/' + playlistServer2UUID
-      const res = await searchVideoPlaylists(servers[0].url, search)
+      const body = await command.searchPlaylists({ search })
 
-      expect(res.body.total).to.equal(0)
-      expect(res.body.data).to.be.an('array')
-      expect(res.body.data).to.have.lengthOf(0)
+      expect(body.total).to.equal(0)
+      expect(body.data).to.be.an('array')
+      expect(body.data).to.have.lengthOf(0)
     }
   })
 
   it('Should search a local playlist', async function () {
     const search = 'http://localhost:' + servers[0].port + '/video-playlists/' + playlistServer1UUID
-    const res = await searchVideoPlaylists(servers[0].url, search)
+    const body = await command.searchPlaylists({ search })
 
-    expect(res.body.total).to.equal(1)
-    expect(res.body.data).to.be.an('array')
-    expect(res.body.data).to.have.lengthOf(1)
-    expect(res.body.data[0].displayName).to.equal('playlist 1 on server 1')
-    expect(res.body.data[0].videosLength).to.equal(2)
+    expect(body.total).to.equal(1)
+    expect(body.data).to.be.an('array')
+    expect(body.data).to.have.lengthOf(1)
+    expect(body.data[0].displayName).to.equal('playlist 1 on server 1')
+    expect(body.data[0].videosLength).to.equal(2)
   })
 
   it('Should search a local playlist with an alternative URL', async function () {
@@ -120,13 +124,13 @@ describe('Test ActivityPub playlists search', function () {
 
     for (const search of searches) {
       for (const token of [ undefined, servers[0].accessToken ]) {
-        const res = await searchVideoPlaylists(servers[0].url, search, token)
+        const body = await command.searchPlaylists({ search, token })
 
-        expect(res.body.total).to.equal(1)
-        expect(res.body.data).to.be.an('array')
-        expect(res.body.data).to.have.lengthOf(1)
-        expect(res.body.data[0].displayName).to.equal('playlist 1 on server 1')
-        expect(res.body.data[0].videosLength).to.equal(2)
+        expect(body.total).to.equal(1)
+        expect(body.data).to.be.an('array')
+        expect(body.data).to.have.lengthOf(1)
+        expect(body.data[0].displayName).to.equal('playlist 1 on server 1')
+        expect(body.data[0].videosLength).to.equal(2)
       }
     }
   })
@@ -139,13 +143,13 @@ describe('Test ActivityPub playlists search', function () {
     ]
 
     for (const search of searches) {
-      const res = await searchVideoPlaylists(servers[0].url, search, servers[0].accessToken)
+      const body = await command.searchPlaylists({ search, token: servers[0].accessToken })
 
-      expect(res.body.total).to.equal(1)
-      expect(res.body.data).to.be.an('array')
-      expect(res.body.data).to.have.lengthOf(1)
-      expect(res.body.data[0].displayName).to.equal('playlist 1 on server 2')
-      expect(res.body.data[0].videosLength).to.equal(1)
+      expect(body.total).to.equal(1)
+      expect(body.data).to.be.an('array')
+      expect(body.data).to.have.lengthOf(1)
+      expect(body.data[0].displayName).to.equal('playlist 1 on server 2')
+      expect(body.data[0].videosLength).to.equal(1)
     }
   })
 
@@ -172,16 +176,16 @@ describe('Test ActivityPub playlists search', function () {
 
     // Will run refresh async
     const search = 'http://localhost:' + servers[1].port + '/video-playlists/' + playlistServer2UUID
-    await searchVideoPlaylists(servers[0].url, search, servers[0].accessToken)
+    await command.searchPlaylists({ search, token: servers[0].accessToken })
 
     // Wait refresh
     await wait(5000)
 
-    const res = await searchVideoPlaylists(servers[0].url, search, servers[0].accessToken)
-    expect(res.body.total).to.equal(1)
-    expect(res.body.data).to.have.lengthOf(1)
+    const body = await command.searchPlaylists({ search, token: servers[0].accessToken })
+    expect(body.total).to.equal(1)
+    expect(body.data).to.have.lengthOf(1)
 
-    const playlist: VideoPlaylist = res.body.data[0]
+    const playlist = body.data[0]
     expect(playlist.videosLength).to.equal(2)
   })
 
@@ -196,14 +200,14 @@ describe('Test ActivityPub playlists search', function () {
 
     // Will run refresh async
     const search = 'http://localhost:' + servers[1].port + '/video-playlists/' + playlistServer2UUID
-    await searchVideoPlaylists(servers[0].url, search, servers[0].accessToken)
+    await command.searchPlaylists({ search, token: servers[0].accessToken })
 
     // Wait refresh
     await wait(5000)
 
-    const res = await searchVideoPlaylists(servers[0].url, search, servers[0].accessToken)
-    expect(res.body.total).to.equal(0)
-    expect(res.body.data).to.have.lengthOf(0)
+    const body = await command.searchPlaylists({ search, token: servers[0].accessToken })
+    expect(body.total).to.equal(0)
+    expect(body.data).to.have.lengthOf(0)
   })
 
   after(async function () {
