@@ -105,6 +105,9 @@ declare module 'express' {
       videoAll?: MVideoFullLight
       onlyImmutableVideo?: MVideoImmutable
       onlyVideo?: MVideoThumbnail
+
+      video?: MVideoFullLight
+
       videoId?: MVideoId
 
       videoLive?: MVideoLive
