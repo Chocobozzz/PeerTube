@@ -10,6 +10,7 @@ import { BulkCommand } from '../bulk'
 import { CLICommand } from '../cli'
 import { CustomPagesCommand } from '../custom-pages'
 import { FeedCommand } from '../feeds'
+import { LogsCommand } from '../logs'
 import { buildServerDirectory, getFileSize, isGithubCI, root, wait } from '../miscs/miscs'
 import { makeGetRequest } from '../requests/requests'
 
@@ -69,6 +70,7 @@ interface ServerInfo {
   cliCommand?: CLICommand
   customPageCommand?: CustomPagesCommand
   feedCommand?: FeedCommand
+  logsCommand?: LogsCommand
 }
 
 function parallelTests () {
@@ -278,6 +280,7 @@ async function runServer (server: ServerInfo, configOverrideArg?: any, args = []
       server.cliCommand = new CLICommand(server)
       server.customPageCommand = new CustomPagesCommand(server)
       server.feedCommand = new FeedCommand(server)
+      server.logsCommand = new LogsCommand(server)
 
       res(server)
     })

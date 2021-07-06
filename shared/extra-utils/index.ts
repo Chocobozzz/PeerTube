@@ -6,6 +6,8 @@ export * from './custom-pages'
 
 export * from './feeds'
 
+export * from './logs'
+
 export * from './mock-servers/mock-instances-index'
 
 export * from './miscs/email'

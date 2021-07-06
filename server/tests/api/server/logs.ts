@@ -6,25 +6,28 @@ import {
   cleanupTests,
   flushAndRunServer,
   killallServers,
+  LogsCommand,
   makePingRequest,
   reRunServer,
   ServerInfo,
-  setAccessTokensToServers
-} from '../../../../shared/extra-utils/index'
-import { getAuditLogs, getLogs } from '../../../../shared/extra-utils/logs/logs'
-import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
-import { uploadVideo } from '../../../../shared/extra-utils/videos/videos'
+  setAccessTokensToServers,
+  uploadVideo,
+  waitJobs
+} from '@shared/extra-utils'
 
 const expect = chai.expect
 
 describe('Test logs', function () {
   let server: ServerInfo
+  let logsCommand: LogsCommand
 
   before(async function () {
     this.timeout(30000)
 
     server = await flushAndRunServer(1)
     await setAccessTokensToServers([ server ])
+
+    logsCommand = server.logsCommand
   })
 
   describe('With the standard log file', function () {
@@ -40,8 +43,8 @@ describe('Test logs', function () {
       await uploadVideo(server.url, server.accessToken, { name: 'video 2' })
       await waitJobs([ server ])
 
-      const res = await getLogs(server.url, server.accessToken, now)
-      const logsString = JSON.stringify(res.body)
+      const body = await logsCommand.getLogs({ startDate: now })
+      const logsString = JSON.stringify(body)
 
       expect(logsString.includes('video 1')).to.be.false
       expect(logsString.includes('video 2')).to.be.true
@@ -63,8 +66,8 @@ describe('Test logs', function () {
       await uploadVideo(server.url, server.accessToken, { name: 'video 5' })
       await waitJobs([ server ])
 
-      const res = await getLogs(server.url, server.accessToken, now1, now2)
-      const logsString = JSON.stringify(res.body)
+      const body = await logsCommand.getLogs({ startDate: now1, endDate: now2 })
+      const logsString = JSON.stringify(body)
 
       expect(logsString.includes('video 3')).to.be.false
       expect(logsString.includes('video 4')).to.be.true
@@ -80,15 +83,15 @@ describe('Test logs', function () {
       await waitJobs([ server ])
 
       {
-        const res = await getLogs(server.url, server.accessToken, now, undefined, 'info')
-        const logsString = JSON.stringify(res.body)
+        const body = await logsCommand.getLogs({ startDate: now, level: 'info' })
+        const logsString = JSON.stringify(body)
 
         expect(logsString.includes('video 6')).to.be.true
       }
 
       {
-        const res = await getLogs(server.url, server.accessToken, now, undefined, 'warn')
-        const logsString = JSON.stringify(res.body)
+        const body = await logsCommand.getLogs({ startDate: now, level: 'warn' })
+        const logsString = JSON.stringify(body)
 
         expect(logsString.includes('video 6')).to.be.false
       }
@@ -101,8 +104,8 @@ describe('Test logs', function () {
 
       await makePingRequest(server)
 
-      const res = await getLogs(server.url, server.accessToken, now, undefined, 'info')
-      const logsString = JSON.stringify(res.body)
+      const body = await logsCommand.getLogs({ startDate: now, level: 'info' })
+      const logsString = JSON.stringify(body)
 
       expect(logsString.includes('/api/v1/ping')).to.be.true
     })
@@ -118,8 +121,8 @@ describe('Test logs', function () {
 
       await makePingRequest(server)
 
-      const res = await getLogs(server.url, server.accessToken, now, undefined, 'info')
-      const logsString = JSON.stringify(res.body)
+      const body = await logsCommand.getLogs({ startDate: now, level: 'info' })
+      const logsString = JSON.stringify(body)
 
       expect(logsString.includes('/api/v1/ping')).to.be.false
     })
@@ -137,15 +140,15 @@ describe('Test logs', function () {
       await uploadVideo(server.url, server.accessToken, { name: 'video 8' })
       await waitJobs([ server ])
 
-      const res = await getAuditLogs(server.url, server.accessToken, now)
-      const logsString = JSON.stringify(res.body)
+      const body = await logsCommand.getAuditLogs({ startDate: now })
+      const logsString = JSON.stringify(body)
 
       expect(logsString.includes('video 7')).to.be.false
       expect(logsString.includes('video 8')).to.be.true
 
-      expect(res.body).to.have.lengthOf(1)
+      expect(body).to.have.lengthOf(1)
 
-      const item = res.body[0]
+      const item = body[0]
 
       const message = JSON.parse(item.message)
       expect(message.domain).to.equal('videos')
@@ -168,8 +171,8 @@ describe('Test logs', function () {
       await uploadVideo(server.url, server.accessToken, { name: 'video 11' })
       await waitJobs([ server ])
 
-      const res = await getAuditLogs(server.url, server.accessToken, now1, now2)
-      const logsString = JSON.stringify(res.body)
+      const body = await logsCommand.getAuditLogs({ startDate: now1, endDate: now2 })
+      const logsString = JSON.stringify(body)
 
       expect(logsString.includes('video 9')).to.be.false
       expect(logsString.includes('video 10')).to.be.true
