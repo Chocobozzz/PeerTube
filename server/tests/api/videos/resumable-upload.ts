@@ -12,7 +12,6 @@ import {
   flushAndRunServer,
   getMyUserInformation,
   prepareResumableUpload,
-  sendDebugCommand,
   sendResumableChunks,
   ServerInfo,
   setAccessTokensToServers,
@@ -138,13 +137,13 @@ describe('Test resumable upload', function () {
     })
 
     it('Should not delete recent uploads', async function () {
-      await sendDebugCommand(server.url, server.accessToken, { command: 'remove-dandling-resumable-uploads' })
+      await server.debugCommand.sendCommand({ body: { command: 'remove-dandling-resumable-uploads' } })
 
       expect(await countResumableUploads()).to.equal(2)
     })
 
     it('Should delete old uploads', async function () {
-      await sendDebugCommand(server.url, server.accessToken, { command: 'remove-dandling-resumable-uploads' })
+      await server.debugCommand.sendCommand({ body: { command: 'remove-dandling-resumable-uploads' } })
 
       expect(await countResumableUploads()).to.equal(0)
     })

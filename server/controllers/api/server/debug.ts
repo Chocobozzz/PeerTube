@@ -1,8 +1,8 @@
+import * as express from 'express'
 import { InboxManager } from '@server/lib/activitypub/inbox-manager'
 import { RemoveDanglingResumableUploadsScheduler } from '@server/lib/schedulers/remove-dangling-resumable-uploads-scheduler'
+import { Debug, SendDebugCommand } from '@shared/models'
 import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
-import { SendDebugCommand } from '@shared/models'
-import * as express from 'express'
 import { UserRight } from '../../../../shared/models/users'
 import { authenticate, ensureUserHasRight } from '../../../middlewares'
 
@@ -32,7 +32,7 @@ function getDebug (req: express.Request, res: express.Response) {
   return res.json({
     ip: req.ip,
     activityPubMessagesWaiting: InboxManager.Instance.getActivityPubMessagesWaiting()
-  })
+  } as Debug)
 }
 
 async function runCommand (req: express.Request, res: express.Response) {
