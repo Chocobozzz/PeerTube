@@ -1,11 +1,11 @@
 
 import { BulkRemoveCommentsOfBody } from '@shared/models/bulk/bulk-remove-comments-of-body.model'
 import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
-import { AbstractCommand, CommonCommandOptions } from '../shared'
+import { AbstractCommand, OverrideCommandOptions } from '../shared'
 
-class BulkCommand extends AbstractCommand {
+export class BulkCommand extends AbstractCommand {
 
-  removeCommentsOf (options: CommonCommandOptions & {
+  removeCommentsOf (options: OverrideCommandOptions & {
     attributes: BulkRemoveCommentsOfBody
   }) {
     const { attributes } = options
@@ -17,8 +17,4 @@ class BulkCommand extends AbstractCommand {
       defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
     })
   }
-}
-
-export {
-  BulkCommand
 }

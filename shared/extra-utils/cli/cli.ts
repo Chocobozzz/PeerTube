@@ -1,7 +1,7 @@
 import { exec } from 'child_process'
 import { AbstractCommand } from '../shared'
 
-class CLICommand extends AbstractCommand {
+export class CLICommand extends AbstractCommand {
 
   static exec (command: string) {
     return new Promise<string>((res, rej) => {
@@ -20,8 +20,4 @@ class CLICommand extends AbstractCommand {
   async execWithEnv (command: string) {
     return CLICommand.exec(`${this.getEnv()} ${command}`)
   }
-}
-
-export {
-  CLICommand
 }
