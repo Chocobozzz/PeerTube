@@ -6,7 +6,7 @@ import { sequelizeTypescript } from '@server/initializers/database'
 import { logger } from './logger'
 
 function retryTransactionWrapper <T, A, B, C, D> (
-  functionToRetry: (arg1: A, arg2: B, arg3: C, arg4: D) => Promise<T> | Bluebird<T>,
+  functionToRetry: (arg1: A, arg2: B, arg3: C, arg4: D) => Promise<T>,
   arg1: A,
   arg2: B,
   arg3: C,
@@ -14,20 +14,20 @@ function retryTransactionWrapper <T, A, B, C, D> (
 ): Promise<T>
 
 function retryTransactionWrapper <T, A, B, C> (
-  functionToRetry: (arg1: A, arg2: B, arg3: C) => Promise<T> | Bluebird<T>,
+  functionToRetry: (arg1: A, arg2: B, arg3: C) => Promise<T>,
   arg1: A,
   arg2: B,
   arg3: C
 ): Promise<T>
 
 function retryTransactionWrapper <T, A, B> (
-  functionToRetry: (arg1: A, arg2: B) => Promise<T> | Bluebird<T>,
+  functionToRetry: (arg1: A, arg2: B) => Promise<T>,
   arg1: A,
   arg2: B
 ): Promise<T>
 
 function retryTransactionWrapper <T, A> (
-  functionToRetry: (arg1: A) => Promise<T> | Bluebird<T>,
+  functionToRetry: (arg1: A) => Promise<T>,
   arg1: A
 ): Promise<T>
 
@@ -36,7 +36,7 @@ function retryTransactionWrapper <T> (
 ): Promise<T>
 
 function retryTransactionWrapper <T> (
-  functionToRetry: (...args: any[]) => Promise<T> | Bluebird<T>,
+  functionToRetry: (...args: any[]) => Promise<T>,
   ...args: any[]
 ): Promise<T> {
   return transactionRetryer<T>(callback => {

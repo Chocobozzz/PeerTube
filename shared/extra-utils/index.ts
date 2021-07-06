@@ -15,7 +15,6 @@ export * from './search'
 
 export * from './server/clients'
 export * from './server/config'
-export * from './server/debug'
 export * from './server/follows'
 export * from './server/jobs'
 export * from './server/plugins'

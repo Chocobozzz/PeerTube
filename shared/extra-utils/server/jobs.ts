@@ -1,7 +1,7 @@
 import * as request from 'supertest'
 import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
-import { getDebug, makeGetRequest } from '../../../shared/extra-utils'
-import { Job, JobState, JobType, ServerDebug } from '../../models'
+import { makeGetRequest } from '../../../shared/extra-utils'
+import { Job, JobState, JobType } from '../../models'
 import { wait } from '../miscs/miscs'
 import { ServerInfo } from './servers'
 
@@ -90,9 +90,8 @@ async function waitJobs (serversArg: ServerInfo[] | ServerInfo) {
         tasks.push(p)
       }
 
-      const p = getDebug(server.url, server.accessToken)
-        .then(res => res.body)
-        .then((obj: ServerDebug) => {
+      const p = server.debugCommand.getDebug()
+        .then(obj => {
           if (obj.activityPubMessagesWaiting !== 0) {
             pendingRequests = true
           }
