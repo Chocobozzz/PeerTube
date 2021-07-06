@@ -12,7 +12,6 @@ import {
   createUser,
   flushAndRunServer,
   removeVideoFromBlacklist,
-  reportAbuse,
   resetPassword,
   ServerInfo,
   setAccessTokensToServers,
@@ -190,7 +189,7 @@ describe('Test emails', function () {
       this.timeout(10000)
 
       const reason = 'my super bad reason'
-      await reportAbuse({ url: server.url, token: server.accessToken, videoId, reason })
+      await server.abusesCommand.report({ videoId, reason })
 
       await waitJobs(server)
       expect(emails).to.have.lengthOf(3)

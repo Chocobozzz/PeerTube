@@ -12,6 +12,7 @@ import { CustomPagesCommand } from '../custom-pages'
 import { FeedCommand } from '../feeds'
 import { LogsCommand } from '../logs'
 import { buildServerDirectory, getFileSize, isGithubCI, root, wait } from '../miscs/miscs'
+import { AbusesCommand } from '../moderation'
 import { makeGetRequest } from '../requests/requests'
 
 interface ServerInfo {
@@ -71,6 +72,7 @@ interface ServerInfo {
   customPageCommand?: CustomPagesCommand
   feedCommand?: FeedCommand
   logsCommand?: LogsCommand
+  abusesCommand?: AbusesCommand
 }
 
 function parallelTests () {
@@ -281,6 +283,7 @@ async function runServer (server: ServerInfo, configOverrideArg?: any, args = []
       server.customPageCommand = new CustomPagesCommand(server)
       server.feedCommand = new FeedCommand(server)
       server.logsCommand = new LogsCommand(server)
+      server.abusesCommand = new AbusesCommand(server)
 
       res(server)
     })
