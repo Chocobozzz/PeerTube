@@ -13,7 +13,7 @@ interface CommonCommandOptions extends OverrideCommandOptions {
 }
 
 interface GetCommandOptions extends CommonCommandOptions {
-  query?: { [ id: string ]: string }
+  query?: { [ id: string ]: any }
   contentType?: string
   accept?: string
 }
