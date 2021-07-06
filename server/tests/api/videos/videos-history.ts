@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
 import 'mocha'
+import * as chai from 'chai'
+import { HttpStatusCode } from '@shared/core-utils'
 import {
   cleanupTests,
   createUser,
@@ -10,17 +11,15 @@ import {
   getVideoWithToken,
   killallServers,
   reRunServer,
-  searchVideoWithToken,
   ServerInfo,
   setAccessTokensToServers,
   updateMyUser,
   uploadVideo,
   userLogin,
   wait
-} from '../../../../shared/extra-utils'
-import { Video, VideoDetails } from '../../../../shared/models/videos'
-import { listMyVideosHistory, removeMyVideosHistory, userWatchVideo } from '../../../../shared/extra-utils/videos/video-history'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+} from '@shared/extra-utils'
+import { listMyVideosHistory, removeMyVideosHistory, userWatchVideo } from '@shared/extra-utils/videos/video-history'
+import { Video, VideoDetails } from '@shared/models'
 
 const expect = chai.expect
 
@@ -89,8 +88,8 @@ describe('Test videos history', function () {
     }
 
     {
-      const res = await searchVideoWithToken(server.url, 'video', server.accessToken)
-      videosOfVideos.push(res.body.data)
+      const body = await server.searchCommand.searchVideos({ token: server.accessToken, search: 'video' })
+      videosOfVideos.push(body.data)
     }
 
     for (const videos of videosOfVideos) {

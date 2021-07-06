@@ -14,8 +14,6 @@ import {
   getVideoChannelVideos,
   getVideosList,
   getVideosListWithToken,
-  searchVideo,
-  searchVideoWithToken,
   ServerInfo,
   setAccessTokensToServers,
   updateCustomConfig,
@@ -23,7 +21,7 @@ import {
   uploadVideo,
   userLogin
 } from '@shared/extra-utils'
-import { CustomConfig, ServerConfig, User, VideosOverview } from '@shared/models'
+import { BooleanBothQuery, CustomConfig, ServerConfig, User, VideosOverview } from '@shared/models'
 
 const expect = chai.expect
 
@@ -37,7 +35,7 @@ describe('Test video NSFW policy', function () {
   let userAccessToken: string
   let customConfig: CustomConfig
 
-  function getVideosFunctions (token?: string, query = {}) {
+  function getVideosFunctions (token?: string, query: { nsfw?: BooleanBothQuery } = {}) {
     return getMyUserInformation(server.url, server.accessToken)
       .then(res => {
         const user: User = res.body
@@ -49,7 +47,7 @@ describe('Test video NSFW policy', function () {
         if (token) {
           promises = [
             getVideosListWithToken(server.url, token, query),
-            searchVideoWithToken(server.url, 'n', token, query),
+            server.searchCommand.advancedVideoSearch({ token, search: { search: 'n', ...query } }),
             getAccountVideos(server.url, token, accountName, 0, 5, undefined, query),
             getVideoChannelVideos(server.url, token, videoChannelName, 0, 5, undefined, query)
           ]
@@ -66,7 +64,7 @@ describe('Test video NSFW policy', function () {
 
         promises = [
           getVideosList(server.url),
-          searchVideo(server.url, 'n'),
+          server.searchCommand.searchVideos({ search: 'n' }),
           getAccountVideos(server.url, undefined, accountName, 0, 5),
           getVideoChannelVideos(server.url, undefined, videoChannelName, 0, 5)
         ]
@@ -230,7 +228,7 @@ describe('Test video NSFW policy', function () {
     })
 
     it('Should display NSFW videos when the nsfw param === true', async function () {
-      for (const res of await getVideosFunctions(server.accessToken, { nsfw: true })) {
+      for (const res of await getVideosFunctions(server.accessToken, { nsfw: 'true' })) {
         expect(res.body.total).to.equal(1)
 
         const videos = res.body.data
@@ -240,7 +238,7 @@ describe('Test video NSFW policy', function () {
     })
 
     it('Should hide NSFW videos when the nsfw param === true', async function () {
-      for (const res of await getVideosFunctions(server.accessToken, { nsfw: false })) {
+      for (const res of await getVideosFunctions(server.accessToken, { nsfw: 'false' })) {
         expect(res.body.total).to.equal(1)
 
         const videos = res.body.data

@@ -6,7 +6,6 @@ export class OverviewsCommand extends AbstractCommand {
 
   getVideos (options: OverrideCommandOptions & {
     page: number
-    token?: string
   }) {
     const { token, page } = options
     const path = '/api/v1/overviews/videos'

@@ -11,9 +11,7 @@ export * from './overviews'
 export * from './requests/check-api-params'
 export * from './requests/requests'
 
-export * from './search/video-channels'
-export * from './search/video-playlists'
-export * from './search/videos'
+export * from './search'
 
 export * from './server/activitypub'
 export * from './server/clients'

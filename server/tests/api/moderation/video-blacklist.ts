@@ -7,6 +7,7 @@ import {
   addVideoToBlacklist,
   cleanupTests,
   createUser,
+  doubleFollow,
   flushAndRunMultipleServers,
   getBlacklistedVideosList,
   getMyUserInformation,
@@ -15,20 +16,16 @@ import {
   killallServers,
   removeVideoFromBlacklist,
   reRunServer,
-  searchVideo,
   ServerInfo,
   setAccessTokensToServers,
   updateVideo,
   updateVideoBlacklist,
   uploadVideo,
-  userLogin
-} from '../../../../shared/extra-utils/index'
-import { doubleFollow } from '../../../../shared/extra-utils/server/follows'
-import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
-import { getGoodVideoUrl, getMagnetURI, importVideo } from '../../../../shared/extra-utils/videos/video-imports'
-import { User, UserRole } from '../../../../shared/models/users'
-import { UserAdminFlag } from '../../../../shared/models/users/user-flag.model'
-import { VideoBlacklist, VideoBlacklistType } from '../../../../shared/models/videos'
+  userLogin,
+  waitJobs
+} from '@shared/extra-utils'
+import { getGoodVideoUrl, getMagnetURI, importVideo } from '@shared/extra-utils/videos/video-imports'
+import { User, UserAdminFlag, UserRole, VideoBlacklist, VideoBlacklistType } from '@shared/models'
 
 const expect = chai.expect
 
@@ -80,11 +77,11 @@ describe('Test video blacklist', function () {
       }
 
       {
-        const res = await searchVideo(servers[0].url, 'name')
+        const body = await servers[0].searchCommand.searchVideos({ search: 'name' })
 
-        expect(res.body.total).to.equal(0)
-        expect(res.body.data).to.be.an('array')
-        expect(res.body.data.length).to.equal(0)
+        expect(body.total).to.equal(0)
+        expect(body.data).to.be.an('array')
+        expect(body.data.length).to.equal(0)
       }
     })
 
@@ -98,11 +95,11 @@ describe('Test video blacklist', function () {
       }
 
       {
-        const res = await searchVideo(servers[1].url, 'video')
+        const body = await servers[1].searchCommand.searchVideos({ search: 'name' })
 
-        expect(res.body.total).to.equal(2)
-        expect(res.body.data).to.be.an('array')
-        expect(res.body.data.length).to.equal(2)
+        expect(body.total).to.equal(2)
+        expect(body.data).to.be.an('array')
+        expect(body.data.length).to.equal(2)
       }
     })
   })

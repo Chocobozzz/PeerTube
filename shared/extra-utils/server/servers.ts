@@ -15,6 +15,7 @@ import { buildServerDirectory, getFileSize, isGithubCI, root, wait } from '../mi
 import { AbusesCommand } from '../moderation'
 import { OverviewsCommand } from '../overviews'
 import { makeGetRequest } from '../requests/requests'
+import { SearchCommand } from '../search'
 
 interface ServerInfo {
   app: ChildProcess
@@ -75,6 +76,7 @@ interface ServerInfo {
   logsCommand?: LogsCommand
   abusesCommand?: AbusesCommand
   overviewsCommand?: OverviewsCommand
+  searchCommand?: SearchCommand
 }
 
 function parallelTests () {
@@ -287,6 +289,7 @@ async function runServer (server: ServerInfo, configOverrideArg?: any, args = []
       server.logsCommand = new LogsCommand(server)
       server.abusesCommand = new AbusesCommand(server)
       server.overviewsCommand = new OverviewsCommand(server)
+      server.searchCommand = new SearchCommand(server)
 
       res(server)
     })

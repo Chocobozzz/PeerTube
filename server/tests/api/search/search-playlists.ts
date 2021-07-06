@@ -2,14 +2,13 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { VideoPlaylist, VideoPlaylistPrivacy } from '@shared/models'
+import { VideoPlaylistPrivacy } from '@shared/models'
 import {
   addVideoInPlaylist,
-  advancedVideoPlaylistSearch,
   cleanupTests,
   createVideoPlaylist,
   flushAndRunServer,
-  searchVideoPlaylists,
+  SearchCommand,
   ServerInfo,
   setAccessTokensToServers,
   setDefaultVideoChannel,
@@ -20,6 +19,7 @@ const expect = chai.expect
 
 describe('Test playlists search', function () {
   let server: ServerInfo = null
+  let command: SearchCommand
 
   before(async function () {
     this.timeout(30000)
@@ -71,13 +71,15 @@ describe('Test playlists search', function () {
       }
       await createVideoPlaylist({ url: server.url, token: server.accessToken, playlistAttrs: attributes })
     }
+
+    command = server.searchCommand
   })
 
   it('Should make a simple search and not have results', async function () {
-    const res = await searchVideoPlaylists(server.url, 'abc')
+    const body = await command.searchPlaylists({ search: 'abc' })
 
-    expect(res.body.total).to.equal(0)
-    expect(res.body.data).to.have.lengthOf(0)
+    expect(body.total).to.equal(0)
+    expect(body.data).to.have.lengthOf(0)
   })
 
   it('Should make a search and have results', async function () {
@@ -87,11 +89,11 @@ describe('Test playlists search', function () {
         start: 0,
         count: 1
       }
-      const res = await advancedVideoPlaylistSearch(server.url, search)
-      expect(res.body.total).to.equal(1)
-      expect(res.body.data).to.have.lengthOf(1)
+      const body = await command.advancedPlaylistSearch({ search })
+      expect(body.total).to.equal(1)
+      expect(body.data).to.have.lengthOf(1)
 
-      const playlist: VideoPlaylist = res.body.data[0]
+      const playlist = body.data[0]
       expect(playlist.displayName).to.equal('Dr. Kenzo Tenma hospital videos')
       expect(playlist.url).to.equal(server.url + '/video-playlists/' + playlist.uuid)
     }
@@ -102,11 +104,11 @@ describe('Test playlists search', function () {
         start: 0,
         count: 1
       }
-      const res = await advancedVideoPlaylistSearch(server.url, search)
-      expect(res.body.total).to.equal(1)
-      expect(res.body.data).to.have.lengthOf(1)
+      const body = await command.advancedPlaylistSearch({ search })
+      expect(body.total).to.equal(1)
+      expect(body.data).to.have.lengthOf(1)
 
-      const playlist: VideoPlaylist = res.body.data[0]
+      const playlist = body.data[0]
       expect(playlist.displayName).to.equal('Johan & Anna Libert musics')
     }
   })
@@ -117,9 +119,9 @@ describe('Test playlists search', function () {
       start: 0,
       count: 1
     }
-    const res = await advancedVideoPlaylistSearch(server.url, search)
-    expect(res.body.total).to.equal(0)
-    expect(res.body.data).to.have.lengthOf(0)
+    const body = await command.advancedPlaylistSearch({ search })
+    expect(body.total).to.equal(0)
+    expect(body.data).to.have.lengthOf(0)
   })
 
   after(async function () {

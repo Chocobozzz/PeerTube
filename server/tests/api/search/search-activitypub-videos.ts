@@ -1,15 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
 import 'mocha'
+import * as chai from 'chai'
 import {
   addVideoChannel,
   cleanupTests,
   flushAndRunMultipleServers,
   getVideosList,
   removeVideo,
-  searchVideo,
-  searchVideoWithToken,
+  SearchCommand,
   ServerInfo,
   setAccessTokensToServers,
   updateVideo,
@@ -17,7 +16,7 @@ import {
   wait
 } from '../../../../shared/extra-utils'
 import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
-import { Video, VideoPrivacy } from '../../../../shared/models/videos'
+import { VideoPrivacy } from '../../../../shared/models/videos'
 
 const expect = chai.expect
 
@@ -25,6 +24,8 @@ describe('Test ActivityPub videos search', function () {
   let servers: ServerInfo[]
   let videoServer1UUID: string
   let videoServer2UUID: string
+
+  let command: SearchCommand
 
   before(async function () {
     this.timeout(120000)
@@ -44,49 +45,51 @@ describe('Test ActivityPub videos search', function () {
     }
 
     await waitJobs(servers)
+
+    command = servers[0].searchCommand
   })
 
   it('Should not find a remote video', async function () {
     {
       const search = 'http://localhost:' + servers[1].port + '/videos/watch/43'
-      const res = await searchVideoWithToken(servers[0].url, search, servers[0].accessToken)
+      const body = await command.searchVideos({ search, token: servers[0].accessToken })
 
-      expect(res.body.total).to.equal(0)
-      expect(res.body.data).to.be.an('array')
-      expect(res.body.data).to.have.lengthOf(0)
+      expect(body.total).to.equal(0)
+      expect(body.data).to.be.an('array')
+      expect(body.data).to.have.lengthOf(0)
     }
 
     {
       // Without token
       const search = 'http://localhost:' + servers[1].port + '/videos/watch/' + videoServer2UUID
-      const res = await searchVideo(servers[0].url, search)
+      const body = await command.searchVideos({ search })
 
-      expect(res.body.total).to.equal(0)
-      expect(res.body.data).to.be.an('array')
-      expect(res.body.data).to.have.lengthOf(0)
+      expect(body.total).to.equal(0)
+      expect(body.data).to.be.an('array')
+      expect(body.data).to.have.lengthOf(0)
     }
   })
 
   it('Should search a local video', async function () {
     const search = 'http://localhost:' + servers[0].port + '/videos/watch/' + videoServer1UUID
-    const res = await searchVideo(servers[0].url, search)
+    const body  = await command.searchVideos({ search })
 
-    expect(res.body.total).to.equal(1)
-    expect(res.body.data).to.be.an('array')
-    expect(res.body.data).to.have.lengthOf(1)
-    expect(res.body.data[0].name).to.equal('video 1 on server 1')
+    expect(body.total).to.equal(1)
+    expect(body.data).to.be.an('array')
+    expect(body.data).to.have.lengthOf(1)
+    expect(body.data[0].name).to.equal('video 1 on server 1')
   })
 
   it('Should search a local video with an alternative URL', async function () {
     const search = 'http://localhost:' + servers[0].port + '/w/' + videoServer1UUID
-    const res1 = await searchVideo(servers[0].url, search)
-    const res2 = await searchVideoWithToken(servers[0].url, search, servers[0].accessToken)
+    const body1 = await command.searchVideos({ search })
+    const body2 = await command.searchVideos({ search, token: servers[0].accessToken })
 
-    for (const res of [ res1, res2 ]) {
-      expect(res.body.total).to.equal(1)
-      expect(res.body.data).to.be.an('array')
-      expect(res.body.data).to.have.lengthOf(1)
-      expect(res.body.data[0].name).to.equal('video 1 on server 1')
+    for (const body of [ body1, body2 ]) {
+      expect(body.total).to.equal(1)
+      expect(body.data).to.be.an('array')
+      expect(body.data).to.have.lengthOf(1)
+      expect(body.data[0].name).to.equal('video 1 on server 1')
     }
   })
 
@@ -97,12 +100,12 @@ describe('Test ActivityPub videos search', function () {
     ]
 
     for (const search of searches) {
-      const res = await searchVideoWithToken(servers[0].url, search, servers[0].accessToken)
+      const body = await command.searchVideos({ search, token: servers[0].accessToken })
 
-      expect(res.body.total).to.equal(1)
-      expect(res.body.data).to.be.an('array')
-      expect(res.body.data).to.have.lengthOf(1)
-      expect(res.body.data[0].name).to.equal('video 1 on server 2')
+      expect(body.total).to.equal(1)
+      expect(body.data).to.be.an('array')
+      expect(body.data).to.have.lengthOf(1)
+      expect(body.data[0].name).to.equal('video 1 on server 2')
     }
   })
 
@@ -137,16 +140,16 @@ describe('Test ActivityPub videos search', function () {
 
     // Will run refresh async
     const search = 'http://localhost:' + servers[1].port + '/videos/watch/' + videoServer2UUID
-    await searchVideoWithToken(servers[0].url, search, servers[0].accessToken)
+    await command.searchVideos({ search, token: servers[0].accessToken })
 
     // Wait refresh
     await wait(5000)
 
-    const res = await searchVideoWithToken(servers[0].url, search, servers[0].accessToken)
-    expect(res.body.total).to.equal(1)
-    expect(res.body.data).to.have.lengthOf(1)
+    const body = await command.searchVideos({ search, token: servers[0].accessToken })
+    expect(body.total).to.equal(1)
+    expect(body.data).to.have.lengthOf(1)
 
-    const video: Video = res.body.data[0]
+    const video = body.data[0]
     expect(video.name).to.equal('updated')
     expect(video.channel.name).to.equal('super_channel')
     expect(video.privacy.id).to.equal(VideoPrivacy.UNLISTED)
@@ -163,14 +166,14 @@ describe('Test ActivityPub videos search', function () {
 
     // Will run refresh async
     const search = 'http://localhost:' + servers[1].port + '/videos/watch/' + videoServer2UUID
-    await searchVideoWithToken(servers[0].url, search, servers[0].accessToken)
+    await command.searchVideos({ search, token: servers[0].accessToken })
 
     // Wait refresh
     await wait(5000)
 
-    const res = await searchVideoWithToken(servers[0].url, search, servers[0].accessToken)
-    expect(res.body.total).to.equal(0)
-    expect(res.body.data).to.have.lengthOf(0)
+    const body = await command.searchVideos({ search, token: servers[0].accessToken })
+    expect(body.total).to.equal(0)
+    expect(body.data).to.have.lengthOf(0)
   })
 
   after(async function () {
