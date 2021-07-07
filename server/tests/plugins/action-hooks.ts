@@ -11,8 +11,7 @@ import {
   createUser,
   createVideoPlaylist,
   deleteVideoComment,
-  getPluginTestPath,
-  installPlugin,
+  PluginsCommand,
   registerUser,
   removeUser,
   setAccessTokensToServers,
@@ -49,11 +48,7 @@ describe('Test plugin action hooks', function () {
     await setAccessTokensToServers(servers)
     await setDefaultVideoChannel(servers)
 
-    await installPlugin({
-      url: servers[0].url,
-      accessToken: servers[0].accessToken,
-      path: getPluginTestPath()
-    })
+    await servers[0].pluginsCommand.install({ path: PluginsCommand.getPluginTestPath() })
 
     killallServers([ servers[0] ])
 

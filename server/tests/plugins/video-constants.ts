@@ -1,22 +1,24 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
 import 'mocha'
-import { cleanupTests, flushAndRunServer, ServerInfo } from '../../../shared/extra-utils/server/servers'
+import * as chai from 'chai'
+import { HttpStatusCode } from '@shared/core-utils'
 import {
+  cleanupTests,
   createVideoPlaylist,
-  getPluginTestPath,
+  flushAndRunServer,
   getVideo,
   getVideoCategories,
   getVideoLanguages,
-  getVideoLicences, getVideoPlaylistPrivacies, getVideoPrivacies,
-  installPlugin,
+  getVideoLicences,
+  getVideoPlaylistPrivacies,
+  getVideoPrivacies,
+  PluginsCommand,
+  ServerInfo,
   setAccessTokensToServers,
-  uninstallPlugin,
   uploadVideo
-} from '../../../shared/extra-utils'
-import { VideoDetails, VideoPlaylistPrivacy } from '../../../shared/models/videos'
-import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
+} from '@shared/extra-utils'
+import { VideoDetails, VideoPlaylistPrivacy } from '@shared/models'
 
 const expect = chai.expect
 
@@ -29,11 +31,7 @@ describe('Test plugin altering video constants', function () {
     server = await flushAndRunServer(1)
     await setAccessTokensToServers([ server ])
 
-    await installPlugin({
-      url: server.url,
-      accessToken: server.accessToken,
-      path: getPluginTestPath('-video-constants')
-    })
+    await server.pluginsCommand.install({ path: PluginsCommand.getPluginTestPath('-video-constants') })
   })
 
   it('Should have updated languages', async function () {
@@ -117,7 +115,7 @@ describe('Test plugin altering video constants', function () {
   })
 
   it('Should uninstall the plugin and reset languages, categories, licences and privacies', async function () {
-    await uninstallPlugin({ url: server.url, accessToken: server.accessToken, npmName: 'peertube-plugin-test-video-constants' })
+    await server.pluginsCommand.uninstall({ npmName: 'peertube-plugin-test-video-constants' })
 
     {
       const res = await getVideoLanguages(server.url)

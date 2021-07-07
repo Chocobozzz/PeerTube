@@ -7,11 +7,9 @@ import {
   doubleFollow,
   getBlacklistedVideosList,
   getVideosList,
-  installPlugin,
   MockBlocklist,
   removeVideoFromBlacklist,
   setAccessTokensToServers,
-  updatePluginSettings,
   uploadVideoAndGetId,
   wait
 } from '../../../shared/extra-utils'
@@ -28,11 +26,8 @@ async function check (server: ServerInfo, videoUUID: string, exists = true) {
 
   const video = res.body.data.find(v => v.uuid === videoUUID)
 
-  if (exists) {
-    expect(video).to.not.be.undefined
-  } else {
-    expect(video).to.be.undefined
-  }
+  if (exists) expect(video).to.not.be.undefined
+  else expect(video).to.be.undefined
 }
 
 describe('Official plugin auto-block videos', function () {
@@ -49,11 +44,7 @@ describe('Official plugin auto-block videos', function () {
     await setAccessTokensToServers(servers)
 
     for (const server of servers) {
-      await installPlugin({
-        url: server.url,
-        accessToken: server.accessToken,
-        npmName: 'peertube-plugin-auto-block-videos'
-      })
+      await server.pluginsCommand.install({ npmName: 'peertube-plugin-auto-block-videos' })
     }
 
     blocklistServer = new MockBlocklist()
@@ -78,9 +69,7 @@ describe('Official plugin auto-block videos', function () {
   })
 
   it('Should update plugin settings', async function () {
-    await updatePluginSettings({
-      url: servers[0].url,
-      accessToken: servers[0].accessToken,
+    await servers[0].pluginsCommand.updateSettings({
       npmName: 'peertube-plugin-auto-block-videos',
       settings: {
         'blocklist-urls': `http://localhost:${port}/blocklist`,

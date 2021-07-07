@@ -1,21 +1,25 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-import { cleanupTests, flushAndRunServer, ServerInfo, waitUntilLog } from '../../../shared/extra-utils/server/servers'
+import { expect } from 'chai'
 import {
+  cleanupTests,
+  flushAndRunServer,
+  getConfig,
   getMyUserInformation,
-  getPluginTestPath,
-  installPlugin,
+  getUsersList,
+  login,
   logout,
+  PluginsCommand,
+  refreshToken,
+  ServerInfo,
   setAccessTokensToServers,
-  uninstallPlugin,
   updateMyUser,
   userLogin,
   wait,
-  login, refreshToken, getConfig, updatePluginSettings, getUsersList
-} from '../../../shared/extra-utils'
-import { User, UserRole, ServerConfig } from '@shared/models'
-import { expect } from 'chai'
+  waitUntilLog
+} from '@shared/extra-utils'
+import { ServerConfig, User, UserRole } from '@shared/models'
 
 describe('Test id and pass auth plugins', function () {
   let server: ServerInfo
@@ -33,11 +37,7 @@ describe('Test id and pass auth plugins', function () {
     await setAccessTokensToServers([ server ])
 
     for (const suffix of [ 'one', 'two', 'three' ]) {
-      await installPlugin({
-        url: server.url,
-        accessToken: server.accessToken,
-        path: getPluginTestPath('-id-pass-auth-' + suffix)
-      })
+      await server.pluginsCommand.install({ path: PluginsCommand.getPluginTestPath('-id-pass-auth-' + suffix) })
     }
   })
 
@@ -180,9 +180,7 @@ describe('Test id and pass auth plugins', function () {
   })
 
   it('Should unregister spyro-auth and do not login existing Spyro', async function () {
-    await updatePluginSettings({
-      url: server.url,
-      accessToken: server.accessToken,
+    await server.pluginsCommand.updateSettings({
       npmName: 'peertube-plugin-test-id-pass-auth-one',
       settings: { disableSpyro: true }
     })
@@ -204,11 +202,7 @@ describe('Test id and pass auth plugins', function () {
   })
 
   it('Should uninstall the plugin one and do not login existing Crash', async function () {
-    await uninstallPlugin({
-      url: server.url,
-      accessToken: server.accessToken,
-      npmName: 'peertube-plugin-test-id-pass-auth-one'
-    })
+    await server.pluginsCommand.uninstall({ npmName: 'peertube-plugin-test-id-pass-auth-one' })
 
     await userLogin(server, { username: 'crash', password: 'crash password' }, 400)
   })

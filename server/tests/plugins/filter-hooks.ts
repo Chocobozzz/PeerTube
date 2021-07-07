@@ -14,7 +14,6 @@ import {
   getAccountVideos,
   getConfig,
   getMyVideos,
-  getPluginTestPath,
   getVideo,
   getVideoChannelVideos,
   getVideoCommentThreads,
@@ -23,8 +22,8 @@ import {
   getVideosListPagination,
   getVideoThreadComments,
   getVideoWithToken,
-  installPlugin,
   makeRawRequest,
+  PluginsCommand,
   registerUser,
   ServerInfo,
   setAccessTokensToServers,
@@ -63,17 +62,8 @@ describe('Test plugin filter hooks', function () {
     await setDefaultVideoChannel(servers)
     await doubleFollow(servers[0], servers[1])
 
-    await installPlugin({
-      url: servers[0].url,
-      accessToken: servers[0].accessToken,
-      path: getPluginTestPath()
-    })
-
-    await installPlugin({
-      url: servers[0].url,
-      accessToken: servers[0].accessToken,
-      path: getPluginTestPath('-filter-translations')
-    })
+    await servers[0].pluginsCommand.install({ path: PluginsCommand.getPluginTestPath() })
+    await servers[0].pluginsCommand.install({ path: PluginsCommand.getPluginTestPath('-filter-translations') })
 
     for (let i = 0; i < 10; i++) {
       await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'default video ' + i })

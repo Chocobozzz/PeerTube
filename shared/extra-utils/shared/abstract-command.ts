@@ -16,6 +16,7 @@ interface GetCommandOptions extends CommonCommandOptions {
   query?: { [ id: string ]: any }
   contentType?: string
   accept?: string
+  redirects?: number
 }
 
 abstract class AbstractCommand {
@@ -42,6 +43,19 @@ abstract class AbstractCommand {
 
   protected getRequestText (options: GetCommandOptions) {
     return unwrapText(this.getRequest(options))
+  }
+
+  protected getRequest (options: GetCommandOptions) {
+    const { redirects, query, contentType, accept } = options
+
+    return makeGetRequest({
+      ...this.buildCommonRequestOptions(options),
+
+      redirects,
+      query,
+      contentType,
+      accept
+    })
   }
 
   protected deleteRequest (options: CommonCommandOptions) {
@@ -84,18 +98,6 @@ abstract class AbstractCommand {
 
       statusCodeExpected: expectedStatus ?? this.expectedStatus ?? defaultExpectedStatus
     }
-  }
-
-  private getRequest (options: GetCommandOptions) {
-    const { query, contentType, accept } = options
-
-    return makeGetRequest({
-      ...this.buildCommonRequestOptions(options),
-
-      query,
-      contentType,
-      accept
-    })
   }
 }
 

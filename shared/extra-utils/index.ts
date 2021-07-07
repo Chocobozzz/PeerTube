@@ -15,7 +15,6 @@ export * from './requests/requests'
 
 export * from './server/clients'
 export * from './server/config'
-export * from './server/plugins'
 export * from './server/servers'
 
 export * from './users/accounts'

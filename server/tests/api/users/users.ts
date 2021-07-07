@@ -23,7 +23,6 @@ import {
   getUsersListPaginationAndSort,
   getVideoChannel,
   getVideosList,
-  installPlugin,
   killallServers,
   login,
   logout,
@@ -75,7 +74,7 @@ describe('Test users', function () {
 
     await setAccessTokensToServers([ server ])
 
-    await installPlugin({ url: server.url, accessToken: server.accessToken, npmName: 'peertube-theme-background-red' })
+    await server.pluginsCommand.install({ npmName: 'peertube-theme-background-red' })
   })
 
   describe('OAuth client', function () {

@@ -9,34 +9,25 @@ import {
   flushAndRunServer,
   getConfig,
   getMyUserInformation,
-  getPlugin,
-  getPluginPackageJSON,
-  getPluginTestPath,
-  getPublicSettings,
-  installPlugin,
   killallServers,
-  listAvailablePlugins,
-  listPlugins,
+  PluginsCommand,
   reRunServer,
   ServerInfo,
   setAccessTokensToServers,
   setPluginVersion,
   testHelloWorldRegisteredSettings,
-  uninstallPlugin,
   updateCustomSubConfig,
   updateMyUser,
-  updatePlugin,
-  updatePluginPackageJSON,
-  updatePluginSettings,
   wait,
   waitUntilLog
 } from '@shared/extra-utils'
-import { PeerTubePlugin, PeerTubePluginIndex, PluginPackageJson, PluginType, PublicServerSetting, ServerConfig, User } from '@shared/models'
+import { PluginType, ServerConfig, User } from '@shared/models'
 
 const expect = chai.expect
 
 describe('Test plugins', function () {
   let server: ServerInfo = null
+  let command: PluginsCommand
 
   before(async function () {
     this.timeout(30000)
@@ -54,60 +45,51 @@ describe('Test plugins', function () {
     this.timeout(30000)
 
     {
-      const res = await listAvailablePlugins({
-        url: server.url,
-        accessToken: server.accessToken,
+      const body = await command.listAvailable({
         count: 1,
         start: 0,
         pluginType: PluginType.THEME,
         search: 'background-red'
       })
 
-      expect(res.body.total).to.be.at.least(1)
-      expect(res.body.data).to.have.lengthOf(1)
+      expect(body.total).to.be.at.least(1)
+      expect(body.data).to.have.lengthOf(1)
     }
 
     {
-      const res1 = await listAvailablePlugins({
-        url: server.url,
-        accessToken: server.accessToken,
+      const body1 = await command.listAvailable({
         count: 2,
         start: 0,
         sort: 'npmName'
       })
-      const data1: PeerTubePluginIndex[] = res1.body.data
+      expect(body1.total).to.be.at.least(2)
 
-      expect(res1.body.total).to.be.at.least(2)
+      const data1 = body1.data
       expect(data1).to.have.lengthOf(2)
 
-      const res2 = await listAvailablePlugins({
-        url: server.url,
-        accessToken: server.accessToken,
+      const body2 = await command.listAvailable({
         count: 2,
         start: 0,
         sort: '-npmName'
       })
-      const data2: PeerTubePluginIndex[] = res2.body.data
+      expect(body2.total).to.be.at.least(2)
 
-      expect(res2.body.total).to.be.at.least(2)
+      const data2 = body2.data
       expect(data2).to.have.lengthOf(2)
 
       expect(data1[0].npmName).to.not.equal(data2[0].npmName)
     }
 
     {
-      const res = await listAvailablePlugins({
-        url: server.url,
-        accessToken: server.accessToken,
+      const body = await command.listAvailable({
         count: 10,
         start: 0,
         pluginType: PluginType.THEME,
         search: 'background-red',
         currentPeerTubeEngine: '1.0.0'
       })
-      const data: PeerTubePluginIndex[] = res.body.data
 
-      const p = data.find(p => p.npmName === 'peertube-theme-background-red')
+      const p = body.data.find(p => p.npmName === 'peertube-theme-background-red')
       expect(p).to.be.undefined
     }
   })
@@ -115,17 +97,8 @@ describe('Test plugins', function () {
   it('Should install a plugin and a theme', async function () {
     this.timeout(30000)
 
-    await installPlugin({
-      url: server.url,
-      accessToken: server.accessToken,
-      npmName: 'peertube-plugin-hello-world'
-    })
-
-    await installPlugin({
-      url: server.url,
-      accessToken: server.accessToken,
-      npmName: 'peertube-theme-background-red'
-    })
+    await command.install({ npmName: 'peertube-plugin-hello-world' })
+    await command.install({ npmName: 'peertube-theme-background-red' })
   })
 
   it('Should have the plugin loaded in the configuration', async function () {
@@ -161,45 +134,38 @@ describe('Test plugins', function () {
 
   it('Should list plugins and themes', async function () {
     {
-      const res = await listPlugins({
-        url: server.url,
-        accessToken: server.accessToken,
+      const body = await command.list({
         count: 1,
         start: 0,
         pluginType: PluginType.THEME
       })
-      const data: PeerTubePlugin[] = res.body.data
+      expect(body.total).to.be.at.least(1)
 
-      expect(res.body.total).to.be.at.least(1)
+      const data = body.data
       expect(data).to.have.lengthOf(1)
       expect(data[0].name).to.equal('background-red')
     }
 
     {
-      const res = await listPlugins({
-        url: server.url,
-        accessToken: server.accessToken,
+      const body = await command.list({
         count: 2,
         start: 0,
         sort: 'name'
       })
-      const data: PeerTubePlugin[] = res.body.data
 
+      const data = body
       expect(data[0].name).to.equal('background-red')
       expect(data[1].name).to.equal('hello-world')
     }
 
     {
-      const res = await listPlugins({
-        url: server.url,
-        accessToken: server.accessToken,
+      const body = await command.list({
         count: 2,
         start: 1,
         sort: 'name'
       })
-      const data: PeerTubePlugin[] = res.body.data
 
-      expect(data[0].name).to.equal('hello-world')
+      expect(body.data[0].name).to.equal('hello-world')
     }
   })
 
@@ -208,9 +174,8 @@ describe('Test plugins', function () {
   })
 
   it('Should get public settings', async function () {
-    const res = await getPublicSettings({ url: server.url, npmName: 'peertube-plugin-hello-world' })
-
-    const publicSettings = (res.body as PublicServerSetting).publicSettings
+    const body = await command.getPublicSettings({ npmName: 'peertube-plugin-hello-world' })
+    const publicSettings = body.publicSettings
 
     expect(Object.keys(publicSettings)).to.have.lengthOf(1)
     expect(Object.keys(publicSettings)).to.deep.equal([ 'user-name' ])
@@ -222,9 +187,7 @@ describe('Test plugins', function () {
       'admin-name': 'Cid'
     }
 
-    await updatePluginSettings({
-      url: server.url,
-      accessToken: server.accessToken,
+    await command.updateSettings({
       npmName: 'peertube-plugin-hello-world',
       settings
     })
@@ -238,13 +201,7 @@ describe('Test plugins', function () {
 
   it('Should get a plugin and a theme', async function () {
     {
-      const res = await getPlugin({
-        url: server.url,
-        accessToken: server.accessToken,
-        npmName: 'peertube-plugin-hello-world'
-      })
-
-      const plugin: PeerTubePlugin = res.body
+      const plugin = await command.get({ npmName: 'peertube-plugin-hello-world' })
 
       expect(plugin.type).to.equal(PluginType.PLUGIN)
       expect(plugin.name).to.equal('hello-world')
@@ -262,13 +219,7 @@ describe('Test plugins', function () {
     }
 
     {
-      const res = await getPlugin({
-        url: server.url,
-        accessToken: server.accessToken,
-        npmName: 'peertube-theme-background-red'
-      })
-
-      const plugin: PeerTubePlugin = res.body
+      const plugin = await command.get({ npmName: 'peertube-theme-background-red' })
 
       expect(plugin.type).to.equal(PluginType.THEME)
       expect(plugin.name).to.equal('background-red')
@@ -295,92 +246,59 @@ describe('Test plugins', function () {
     await setPluginVersion(server.internalServerNumber, 'hello-world', '0.0.1')
 
     // Fake update package.json
-    const packageJSON: PluginPackageJson = await getPluginPackageJSON(server, 'peertube-plugin-hello-world')
+    const packageJSON = await command.getPackageJSON('peertube-plugin-hello-world')
     const oldVersion = packageJSON.version
 
     packageJSON.version = '0.0.1'
-    await updatePluginPackageJSON(server, 'peertube-plugin-hello-world', packageJSON)
+    await command.updatePackageJSON('peertube-plugin-hello-world', packageJSON)
 
     // Restart the server to take into account this change
     killallServers([ server ])
     await reRunServer(server)
 
     {
-      const res = await listPlugins({
-        url: server.url,
-        accessToken: server.accessToken,
-        pluginType: PluginType.PLUGIN
-      })
+      const body = await command.list({ pluginType: PluginType.PLUGIN })
 
-      const plugin: PeerTubePlugin = res.body.data[0]
-
+      const plugin = body.data[0]
       expect(plugin.version).to.equal('0.0.1')
       expect(plugin.latestVersion).to.exist
       expect(plugin.latestVersion).to.not.equal('0.0.1')
     }
 
     {
-      await updatePlugin({
-        url: server.url,
-        accessToken: server.accessToken,
-        npmName: 'peertube-plugin-hello-world'
-      })
+      await command.update({ npmName: 'peertube-plugin-hello-world' })
 
-      const res = await listPlugins({
-        url: server.url,
-        accessToken: server.accessToken,
-        pluginType: PluginType.PLUGIN
-      })
+      const body = await command.list({ pluginType: PluginType.PLUGIN })
 
-      const plugin: PeerTubePlugin = res.body.data[0]
-
+      const plugin = body.data[0]
       expect(plugin.version).to.equal(oldVersion)
 
-      const updatedPackageJSON: PluginPackageJson = await getPluginPackageJSON(server, 'peertube-plugin-hello-world')
+      const updatedPackageJSON = await command.getPackageJSON('peertube-plugin-hello-world')
       expect(updatedPackageJSON.version).to.equal(oldVersion)
     }
   })
 
   it('Should uninstall the plugin', async function () {
-    await uninstallPlugin({
-      url: server.url,
-      accessToken: server.accessToken,
-      npmName: 'peertube-plugin-hello-world'
-    })
+    await command.uninstall({ npmName: 'peertube-plugin-hello-world' })
 
-    const res = await listPlugins({
-      url: server.url,
-      accessToken: server.accessToken,
-      pluginType: PluginType.PLUGIN
-    })
-
-    expect(res.body.total).to.equal(0)
-    expect(res.body.data).to.have.lengthOf(0)
+    const body = await command.list({ pluginType: PluginType.PLUGIN })
+    expect(body.total).to.equal(0)
+    expect(body.data).to.have.lengthOf(0)
   })
 
   it('Should list uninstalled plugins', async function () {
-    const res = await listPlugins({
-      url: server.url,
-      accessToken: server.accessToken,
-      pluginType: PluginType.PLUGIN,
-      uninstalled: true
-    })
+    const body = await command.list({ pluginType: PluginType.PLUGIN, uninstalled: true })
+    expect(body.total).to.equal(1)
+    expect(body.data).to.have.lengthOf(1)
 
-    expect(res.body.total).to.equal(1)
-    expect(res.body.data).to.have.lengthOf(1)
-
-    const plugin: PeerTubePlugin = res.body.data[0]
+    const plugin = body.data[0]
     expect(plugin.name).to.equal('hello-world')
     expect(plugin.enabled).to.be.false
     expect(plugin.uninstalled).to.be.true
   })
 
   it('Should uninstall the theme', async function () {
-    await uninstallPlugin({
-      url: server.url,
-      accessToken: server.accessToken,
-      npmName: 'peertube-theme-background-red'
-    })
+    await command.uninstall({ npmName: 'peertube-theme-background-red' })
   })
 
   it('Should have updated the configuration', async function () {
@@ -406,21 +324,13 @@ describe('Test plugins', function () {
     this.timeout(60000)
 
     async function check () {
-      const res = await listPlugins({
-        url: server.url,
-        accessToken: server.accessToken,
-        pluginType: PluginType.PLUGIN
-      })
-
-      const plugins: PeerTubePlugin[] = res.body.data
-
+      const body = await command.list({ pluginType: PluginType.PLUGIN })
+      const plugins = body.data
       expect(plugins.find(p => p.name === 'test-broken')).to.not.exist
     }
 
-    await installPlugin({
-      url: server.url,
-      accessToken: server.accessToken,
-      path: getPluginTestPath('-broken'),
+    await command.install({
+      path: PluginsCommand.getPluginTestPath('-broken'),
       expectedStatus: HttpStatusCode.BAD_REQUEST_400
     })
 

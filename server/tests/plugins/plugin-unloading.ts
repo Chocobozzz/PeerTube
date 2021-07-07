@@ -1,18 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-import {
-  cleanupTests,
-  flushAndRunServer,
-  getPluginTestPath,
-  makeGetRequest,
-  installPlugin,
-  uninstallPlugin,
-  ServerInfo,
-  setAccessTokensToServers
-} from '../../../shared/extra-utils'
-import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 import { expect } from 'chai'
+import { HttpStatusCode } from '@shared/core-utils'
+import { cleanupTests, flushAndRunServer, makeGetRequest, PluginsCommand, ServerInfo, setAccessTokensToServers } from '@shared/extra-utils'
 
 describe('Test plugins module unloading', function () {
   let server: ServerInfo = null
@@ -25,11 +16,7 @@ describe('Test plugins module unloading', function () {
     server = await flushAndRunServer(1)
     await setAccessTokensToServers([ server ])
 
-    await installPlugin({
-      url: server.url,
-      accessToken: server.accessToken,
-      path: getPluginTestPath('-unloading')
-    })
+    await server.pluginsCommand.install({ path: PluginsCommand.getPluginTestPath('-unloading') })
   })
 
   it('Should return a numeric value', async function () {
@@ -54,11 +41,7 @@ describe('Test plugins module unloading', function () {
   })
 
   it('Should uninstall the plugin and free the route', async function () {
-    await uninstallPlugin({
-      url: server.url,
-      accessToken: server.accessToken,
-      npmName: 'peertube-plugin-test-unloading'
-    })
+    await server.pluginsCommand.uninstall({ npmName: 'peertube-plugin-test-unloading' })
 
     await makeGetRequest({
       url: server.url,
@@ -68,11 +51,8 @@ describe('Test plugins module unloading', function () {
   })
 
   it('Should return a different numeric value', async function () {
-    await installPlugin({
-      url: server.url,
-      accessToken: server.accessToken,
-      path: getPluginTestPath('-unloading')
-    })
+    await server.pluginsCommand.install({ path: PluginsCommand.getPluginTestPath('-unloading') })
+
     const res = await makeGetRequest({
       url: server.url,
       path: requestPath,

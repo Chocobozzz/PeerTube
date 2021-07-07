@@ -20,6 +20,7 @@ import { ContactFormCommand } from './contact-form-command'
 import { DebugCommand } from './debug-command'
 import { FollowsCommand } from './follows-command'
 import { JobsCommand } from './jobs-command'
+import { PluginsCommand } from './plugins-command'
 
 interface ServerInfo {
   app: ChildProcess
@@ -85,6 +86,7 @@ interface ServerInfo {
   debugCommand?: DebugCommand
   followsCommand?: FollowsCommand
   jobsCommand?: JobsCommand
+  pluginsCommand?: PluginsCommand
 }
 
 function parallelTests () {
@@ -302,6 +304,7 @@ async function runServer (server: ServerInfo, configOverrideArg?: any, args = []
       server.debugCommand = new DebugCommand(server)
       server.followsCommand = new FollowsCommand(server)
       server.jobsCommand = new JobsCommand(server)
+      server.pluginsCommand = new PluginsCommand(server)
 
       res(server)
     })

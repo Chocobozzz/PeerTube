@@ -2,18 +2,20 @@
 
 import 'mocha'
 import { expect } from 'chai'
-import { MockJoinPeerTubeVersions } from '@shared/extra-utils'
-import { PluginType } from '@shared/models'
-import { cleanupTests, installPlugin, setPluginLatestVersion, setPluginVersion, wait } from '../../../../shared/extra-utils'
-import { ServerInfo } from '../../../../shared/extra-utils/index'
-import { MockSmtpServer } from '../../../../shared/extra-utils/mock-servers/mock-email'
 import {
   CheckerBaseParams,
   checkNewPeerTubeVersion,
   checkNewPluginVersion,
-  prepareNotificationsTest
-} from '../../../../shared/extra-utils/users/user-notifications'
-import { UserNotification, UserNotificationType } from '../../../../shared/models/users'
+  cleanupTests,
+  MockJoinPeerTubeVersions,
+  MockSmtpServer,
+  prepareNotificationsTest,
+  ServerInfo,
+  setPluginLatestVersion,
+  setPluginVersion,
+  wait
+} from '@shared/extra-utils'
+import { PluginType, UserNotification, UserNotificationType } from '@shared/models'
 
 describe('Test admin notifications', function () {
   let server: ServerInfo
@@ -58,17 +60,8 @@ describe('Test admin notifications', function () {
       token: server.accessToken
     }
 
-    await installPlugin({
-      url: server.url,
-      accessToken: server.accessToken,
-      npmName: 'peertube-plugin-hello-world'
-    })
-
-    await installPlugin({
-      url: server.url,
-      accessToken: server.accessToken,
-      npmName: 'peertube-theme-background-red'
-    })
+    await server.pluginsCommand.install({ npmName: 'peertube-plugin-hello-world' })
+    await server.pluginsCommand.install({ npmName: 'peertube-theme-background-red' })
   })
 
   describe('Latest PeerTube version notification', function () {

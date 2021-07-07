@@ -6,8 +6,8 @@ import {
   cleanupTests,
   flushAndRunServer,
   getConfig,
-  getPluginTestPath,
   killallServers,
+  PluginsCommand,
   reRunServer,
   ServerInfo,
   setAccessTokensToServers
@@ -27,7 +27,7 @@ describe('Test plugin scripts', function () {
   it('Should install a plugin from stateless CLI', async function () {
     this.timeout(60000)
 
-    const packagePath = getPluginTestPath()
+    const packagePath = PluginsCommand.getPluginTestPath()
 
     await server.cliCommand.execWithEnv(`npm run plugin:install -- --plugin-path ${packagePath}`)
   })
