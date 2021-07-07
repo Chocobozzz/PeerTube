@@ -14,7 +14,6 @@ import {
   setAccessTokensToServers,
   setDefaultVideoChannel,
   stopFfmpeg,
-  updateCustomSubConfig,
   uploadVideo,
   wait,
   waitUntilLivePublished
@@ -486,13 +485,13 @@ describe('Test videos search', function () {
     this.timeout(30000)
 
     {
-      const options = {
+      const newConfig = {
         search: {
           searchIndex: { enabled: false }
         },
         live: { enabled: true }
       }
-      await updateCustomSubConfig(server.url, server.accessToken, options)
+      await server.configCommand.updateCustomSubConfig({ newConfig })
     }
 
     {

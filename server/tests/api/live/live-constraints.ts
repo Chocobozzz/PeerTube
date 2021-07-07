@@ -6,17 +6,16 @@ import { VideoDetails, VideoPrivacy } from '@shared/models'
 import {
   checkLiveCleanup,
   cleanupTests,
+  ConfigCommand,
   createLive,
   doubleFollow,
   flushAndRunMultipleServers,
   generateUser,
-  getCustomConfigResolutions,
   getVideo,
   runAndTestFfmpegStreamError,
   ServerInfo,
   setAccessTokensToServers,
   setDefaultVideoChannel,
-  updateCustomSubConfig,
   updateUser,
   wait,
   waitJobs,
@@ -80,12 +79,14 @@ describe('Test live constraints', function () {
     await setAccessTokensToServers(servers)
     await setDefaultVideoChannel(servers)
 
-    await updateCustomSubConfig(servers[0].url, servers[0].accessToken, {
-      live: {
-        enabled: true,
-        allowReplay: true,
-        transcoding: {
-          enabled: false
+    await servers[0].configCommand.updateCustomSubConfig({
+      newConfig: {
+        live: {
+          enabled: true,
+          allowReplay: true,
+          transcoding: {
+            enabled: false
+          }
         }
       }
     })
@@ -157,14 +158,16 @@ describe('Test live constraints', function () {
   it('Should have max duration limit', async function () {
     this.timeout(60000)
 
-    await updateCustomSubConfig(servers[0].url, servers[0].accessToken, {
-      live: {
-        enabled: true,
-        allowReplay: true,
-        maxDuration: 1,
-        transcoding: {
+    await servers[0].configCommand.updateCustomSubConfig({
+      newConfig: {
+        live: {
           enabled: true,
-          resolutions: getCustomConfigResolutions(true)
+          allowReplay: true,
+          maxDuration: 1,
+          transcoding: {
+            enabled: true,
+            resolutions: ConfigCommand.getCustomConfigResolutions(true)
+          }
         }
       }
     })

@@ -9,10 +9,10 @@ import {
   addVideoToBlacklist,
   checkLiveCleanup,
   cleanupTests,
+  ConfigCommand,
   createLive,
   doubleFollow,
   flushAndRunMultipleServers,
-  getCustomConfigResolutions,
   getVideo,
   getVideosList,
   removeVideo,
@@ -22,7 +22,6 @@ import {
   setDefaultVideoChannel,
   stopFfmpeg,
   testFfmpegStreamError,
-  updateCustomSubConfig,
   updateVideo,
   wait,
   waitJobs,
@@ -102,14 +101,16 @@ describe('Save replay setting', function () {
     // Server 1 and server 2 follow each other
     await doubleFollow(servers[0], servers[1])
 
-    await updateCustomSubConfig(servers[0].url, servers[0].accessToken, {
-      live: {
-        enabled: true,
-        allowReplay: true,
-        maxDuration: -1,
-        transcoding: {
-          enabled: false,
-          resolutions: getCustomConfigResolutions(true)
+    await servers[0].configCommand.updateCustomSubConfig({
+      newConfig: {
+        live: {
+          enabled: true,
+          allowReplay: true,
+          maxDuration: -1,
+          transcoding: {
+            enabled: false,
+            resolutions: ConfigCommand.getCustomConfigResolutions(true)
+          }
         }
       }
     })

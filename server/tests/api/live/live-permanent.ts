@@ -5,10 +5,10 @@ import * as chai from 'chai'
 import { LiveVideoCreate, VideoDetails, VideoPrivacy, VideoState } from '@shared/models'
 import {
   cleanupTests,
+  ConfigCommand,
   createLive,
   doubleFollow,
   flushAndRunMultipleServers,
-  getCustomConfigResolutions,
   getLive,
   getPlaylistsCount,
   getVideo,
@@ -17,7 +17,6 @@ import {
   setAccessTokensToServers,
   setDefaultVideoChannel,
   stopFfmpeg,
-  updateCustomSubConfig,
   updateLive,
   wait,
   waitJobs,
@@ -63,14 +62,16 @@ describe('Permanent live', function () {
     // Server 1 and server 2 follow each other
     await doubleFollow(servers[0], servers[1])
 
-    await updateCustomSubConfig(servers[0].url, servers[0].accessToken, {
-      live: {
-        enabled: true,
-        allowReplay: true,
-        maxDuration: -1,
-        transcoding: {
+    await servers[0].configCommand.updateCustomSubConfig({
+      newConfig: {
+        live: {
           enabled: true,
-          resolutions: getCustomConfigResolutions(true)
+          allowReplay: true,
+          maxDuration: -1,
+          transcoding: {
+            enabled: true,
+            resolutions: ConfigCommand.getCustomConfigResolutions(true)
+          }
         }
       }
     })
@@ -145,14 +146,16 @@ describe('Permanent live', function () {
   it('Should be able to stream again in the permanent live', async function () {
     this.timeout(20000)
 
-    await updateCustomSubConfig(servers[0].url, servers[0].accessToken, {
-      live: {
-        enabled: true,
-        allowReplay: true,
-        maxDuration: -1,
-        transcoding: {
+    await servers[0].configCommand.updateCustomSubConfig({
+      newConfig: {
+        live: {
           enabled: true,
-          resolutions: getCustomConfigResolutions(false)
+          allowReplay: true,
+          maxDuration: -1,
+          transcoding: {
+            enabled: true,
+            resolutions: ConfigCommand.getCustomConfigResolutions(false)
+          }
         }
       }
     })

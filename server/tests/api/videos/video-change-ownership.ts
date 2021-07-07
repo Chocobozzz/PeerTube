@@ -20,7 +20,6 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   setDefaultVideoChannel,
-  updateCustomSubConfig,
   uploadVideo,
   userLogin
 } from '../../../../shared/extra-utils'
@@ -58,12 +57,14 @@ describe('Test video change ownership - nominal', function () {
     await setAccessTokensToServers(servers)
     await setDefaultVideoChannel(servers)
 
-    await updateCustomSubConfig(servers[0].url, servers[0].accessToken, {
-      transcoding: {
-        enabled: false
-      },
-      live: {
-        enabled: true
+    await servers[0].configCommand.updateCustomSubConfig({
+      newConfig: {
+        transcoding: {
+          enabled: false
+        },
+        live: {
+          enabled: true
+        }
       }
     })
 

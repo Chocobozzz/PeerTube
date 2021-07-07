@@ -9,7 +9,6 @@ import {
   SearchCommand,
   ServerInfo,
   setAccessTokensToServers,
-  updateCustomSubConfig,
   uploadVideo
 } from '@shared/extra-utils'
 import { VideoPlaylistPrivacy, VideoPlaylistType, VideosSearchQuery } from '@shared/models'
@@ -39,12 +38,14 @@ describe('Test videos search', function () {
     it('Should make a local videos search by default', async function () {
       this.timeout(10000)
 
-      await updateCustomSubConfig(server.url, server.accessToken, {
-        search: {
-          searchIndex: {
-            enabled: true,
-            isDefaultSearch: false,
-            disableLocalSearch: false
+      await server.configCommand.updateCustomSubConfig({
+        newConfig: {
+          search: {
+            searchIndex: {
+              enabled: true,
+              isDefaultSearch: false,
+              disableLocalSearch: false
+            }
           }
         }
       })
@@ -64,12 +65,14 @@ describe('Test videos search', function () {
     })
 
     it('Should make an index videos search by default', async function () {
-      await updateCustomSubConfig(server.url, server.accessToken, {
-        search: {
-          searchIndex: {
-            enabled: true,
-            isDefaultSearch: true,
-            disableLocalSearch: false
+      await server.configCommand.updateCustomSubConfig({
+        newConfig: {
+          search: {
+            searchIndex: {
+              enabled: true,
+              isDefaultSearch: true,
+              disableLocalSearch: false
+            }
           }
         }
       })
@@ -84,12 +87,14 @@ describe('Test videos search', function () {
     })
 
     it('Should make an index videos search if local search is disabled', async function () {
-      await updateCustomSubConfig(server.url, server.accessToken, {
-        search: {
-          searchIndex: {
-            enabled: true,
-            isDefaultSearch: false,
-            disableLocalSearch: true
+      await server.configCommand.updateCustomSubConfig({
+        newConfig: {
+          search: {
+            searchIndex: {
+              enabled: true,
+              isDefaultSearch: false,
+              disableLocalSearch: true
+            }
           }
         }
       })
@@ -216,7 +221,11 @@ describe('Test videos search', function () {
       let nsfwUUID: string
 
       {
-        await updateCustomSubConfig(server.url, server.accessToken, { instance: { defaultNSFWPolicy: 'display' } })
+        await server.configCommand.updateCustomSubConfig({
+          newConfig: {
+            instance: { defaultNSFWPolicy: 'display' }
+          }
+        })
 
         const body = await command.searchVideos({ search: 'NSFW search index', sort: '-match' })
         expect(body.data).to.have.length.greaterThan(0)
@@ -228,7 +237,11 @@ describe('Test videos search', function () {
       }
 
       {
-        await updateCustomSubConfig(server.url, server.accessToken, { instance: { defaultNSFWPolicy: 'do_not_list' } })
+        await server.configCommand.updateCustomSubConfig({
+          newConfig: {
+            instance: { defaultNSFWPolicy: 'do_not_list' }
+          }
+        })
 
         const body = await command.searchVideos({ search: 'NSFW search index', sort: '-match' })
 

@@ -12,7 +12,6 @@ import {
   doubleFollow,
   flushAndRunMultipleServers,
   getAccountVideos,
-  getConfig,
   getMyVideos,
   getVideo,
   getVideoChannelVideos,
@@ -28,7 +27,6 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   setDefaultVideoChannel,
-  updateCustomSubConfig,
   updateVideo,
   uploadVideo,
   uploadVideoAndGetId,
@@ -37,7 +35,6 @@ import {
 } from '@shared/extra-utils'
 import { getGoodVideoUrl, getMyVideoImports, importVideo } from '@shared/extra-utils/videos/video-imports'
 import {
-  ServerConfig,
   VideoCommentThreadTree,
   VideoDetails,
   VideoImport,
@@ -72,13 +69,15 @@ describe('Test plugin filter hooks', function () {
     const res = await getVideosList(servers[0].url)
     videoUUID = res.body.data[0].uuid
 
-    await updateCustomSubConfig(servers[0].url, servers[0].accessToken, {
-      live: { enabled: true },
-      signup: { enabled: true },
-      import: {
-        videos: {
-          http: { enabled: true },
-          torrent: { enabled: true }
+    await servers[0].configCommand.updateCustomSubConfig({
+      newConfig: {
+        live: { enabled: true },
+        signup: { enabled: true },
+        import: {
+          videos: {
+            http: { enabled: true },
+            torrent: { enabled: true }
+          }
         }
       }
     })
@@ -344,8 +343,8 @@ describe('Test plugin filter hooks', function () {
   describe('Should run filter:api.user.signup.allowed.result', function () {
 
     it('Should run on config endpoint', async function () {
-      const res = await getConfig(servers[0].url)
-      expect((res.body as ServerConfig).signup.allowed).to.be.true
+      const body = await servers[0].configCommand.getConfig()
+      expect(body.signup.allowed).to.be.true
     })
 
     it('Should allow a signup', async function () {
@@ -365,13 +364,15 @@ describe('Test plugin filter hooks', function () {
     before(async function () {
       this.timeout(120000)
 
-      await updateCustomSubConfig(servers[0].url, servers[0].accessToken, {
-        transcoding: {
-          webtorrent: {
-            enabled: true
-          },
-          hls: {
-            enabled: true
+      await servers[0].configCommand.updateCustomSubConfig({
+        newConfig: {
+          transcoding: {
+            webtorrent: {
+              enabled: true
+            },
+            hls: {
+              enabled: true
+            }
           }
         }
       })
@@ -427,9 +428,11 @@ describe('Test plugin filter hooks', function () {
     before(async function () {
       this.timeout(60000)
 
-      await updateCustomSubConfig(servers[0].url, servers[0].accessToken, {
-        transcoding: {
-          enabled: false
+      await servers[0].configCommand.updateCustomSubConfig({
+        newConfig: {
+          transcoding: {
+            enabled: false
+          }
         }
       })
 
@@ -464,12 +467,14 @@ describe('Test plugin filter hooks', function () {
   describe('Search filters', function () {
 
     before(async function () {
-      await updateCustomSubConfig(servers[0].url, servers[0].accessToken, {
-        search: {
-          searchIndex: {
-            enabled: true,
-            isDefaultSearch: false,
-            disableLocalSearch: false
+      await servers[0].configCommand.updateCustomSubConfig({
+        newConfig: {
+          search: {
+            searchIndex: {
+              enabled: true,
+              isDefaultSearch: false,
+              disableLocalSearch: false
+            }
           }
         }
       })

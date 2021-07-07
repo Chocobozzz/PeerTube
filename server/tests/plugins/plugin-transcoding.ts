@@ -9,7 +9,6 @@ import {
   cleanupTests,
   createLive,
   flushAndRunServer,
-  getConfig,
   getVideo,
   PluginsCommand,
   sendRTMPStreamInVideo,
@@ -17,12 +16,11 @@ import {
   setAccessTokensToServers,
   setDefaultVideoChannel,
   testFfmpegStreamError,
-  updateCustomSubConfig,
   uploadVideoAndGetId,
   waitJobs,
   waitUntilLivePublished
 } from '@shared/extra-utils'
-import { ServerConfig, VideoDetails, VideoPrivacy } from '@shared/models'
+import { VideoDetails, VideoPrivacy } from '@shared/models'
 
 async function createLiveWrapper (server: ServerInfo) {
   const liveAttributes = {
@@ -36,32 +34,34 @@ async function createLiveWrapper (server: ServerInfo) {
 }
 
 function updateConf (server: ServerInfo, vodProfile: string, liveProfile: string) {
-  return updateCustomSubConfig(server.url, server.accessToken, {
-    transcoding: {
-      enabled: true,
-      profile: vodProfile,
-      hls: {
-        enabled: true
-      },
-      webtorrent: {
-        enabled: true
-      },
-      resolutions: {
-        '240p': true,
-        '360p': false,
-        '480p': false,
-        '720p': true
-      }
-    },
-    live: {
+  return server.configCommand.updateCustomSubConfig({
+    newConfig: {
       transcoding: {
-        profile: liveProfile,
         enabled: true,
+        profile: vodProfile,
+        hls: {
+          enabled: true
+        },
+        webtorrent: {
+          enabled: true
+        },
         resolutions: {
           '240p': true,
           '360p': false,
           '480p': false,
           '720p': true
+        }
+      },
+      live: {
+        transcoding: {
+          profile: liveProfile,
+          enabled: true,
+          resolutions: {
+            '240p': true,
+            '360p': false,
+            '480p': false,
+            '720p': true
+          }
         }
       }
     }
@@ -113,8 +113,7 @@ describe('Test transcoding plugins', function () {
     })
 
     it('Should have the appropriate available profiles', async function () {
-      const res = await getConfig(server.url)
-      const config = res.body as ServerConfig
+      const config = await server.configCommand.getConfig()
 
       expect(config.transcoding.availableProfiles).to.have.members([ 'default', 'low-vod', 'input-options-vod', 'bad-scale-vod' ])
       expect(config.live.transcoding.availableProfiles).to.have.members([ 'default', 'low-live', 'input-options-live', 'bad-scale-live' ])
@@ -223,8 +222,7 @@ describe('Test transcoding plugins', function () {
 
       await server.pluginsCommand.uninstall({ npmName: 'peertube-plugin-test-transcoding-one' })
 
-      const res = await getConfig(server.url)
-      const config = res.body as ServerConfig
+      const config = await server.configCommand.getConfig()
 
       expect(config.transcoding.availableProfiles).to.deep.equal([ 'default' ])
       expect(config.live.transcoding.availableProfiles).to.deep.equal([ 'default' ])

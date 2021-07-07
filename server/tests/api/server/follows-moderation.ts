@@ -8,7 +8,6 @@ import {
   FollowsCommand,
   ServerInfo,
   setAccessTokensToServers,
-  updateCustomSubConfig,
   waitJobs
 } from '@shared/extra-utils'
 
@@ -94,7 +93,7 @@ describe('Test follows moderation', function () {
       }
     }
 
-    await updateCustomSubConfig(servers[1].url, servers[1].accessToken, subConfig)
+    await servers[1].configCommand.updateCustomSubConfig({ newConfig: subConfig })
 
     await commands[0].follow({ targets: [ servers[1].url ] })
     await waitJobs(servers)
@@ -114,7 +113,7 @@ describe('Test follows moderation', function () {
       }
     }
 
-    await updateCustomSubConfig(servers[1].url, servers[1].accessToken, subConfig)
+    await servers[1].configCommand.updateCustomSubConfig({ newConfig: subConfig })
 
     await commands[0].follow({ targets: [ servers[1].url ] })
     await waitJobs(servers)
@@ -137,8 +136,8 @@ describe('Test follows moderation', function () {
       }
     }
 
-    await updateCustomSubConfig(servers[1].url, servers[1].accessToken, subConfig)
-    await updateCustomSubConfig(servers[2].url, servers[2].accessToken, subConfig)
+    await servers[1].configCommand.updateCustomSubConfig({ newConfig: subConfig })
+    await servers[2].configCommand.updateCustomSubConfig({ newConfig: subConfig })
 
     await commands[0].follow({ targets: [ servers[1].url ] })
     await waitJobs(servers)

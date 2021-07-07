@@ -10,7 +10,6 @@ import {
   getVideosList,
   ServerInfo,
   setAccessTokensToServers,
-  updateCustomSubConfig,
   uploadVideo
 } from '../../../shared/extra-utils'
 import { waitJobs } from '../../../shared/extra-utils/server/jobs'
@@ -47,7 +46,7 @@ describe('Test create transcoding jobs', function () {
     servers = await flushAndRunMultipleServers(2)
     await setAccessTokensToServers(servers)
 
-    await updateCustomSubConfig(servers[0].url, servers[0].accessToken, config)
+    await servers[0].configCommand.updateCustomSubConfig({ newConfig: config })
 
     await doubleFollow(servers[0], servers[1])
 
@@ -199,7 +198,7 @@ describe('Test create transcoding jobs', function () {
     this.timeout(120000)
 
     config.transcoding.hls.enabled = true
-    await updateCustomSubConfig(servers[0].url, servers[0].accessToken, config)
+    await servers[0].configCommand.updateCustomSubConfig({ newConfig: config })
 
     await servers[0].cliCommand.execWithEnv(`npm run create-transcoding-job -- -v ${videosUUID[4]}`)
 

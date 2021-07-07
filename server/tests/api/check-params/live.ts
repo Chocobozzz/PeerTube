@@ -19,7 +19,6 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   stopFfmpeg,
-  updateCustomSubConfig,
   updateLive,
   uploadVideoAndGetId,
   userLogin,
@@ -43,12 +42,14 @@ describe('Test video lives API validator', function () {
 
     await setAccessTokensToServers([ server ])
 
-    await updateCustomSubConfig(server.url, server.accessToken, {
-      live: {
-        enabled: true,
-        maxInstanceLives: 20,
-        maxUserLives: 20,
-        allowReplay: true
+    await server.configCommand.updateCustomSubConfig({
+      newConfig: {
+        live: {
+          enabled: true,
+          maxInstanceLives: 20,
+          maxUserLives: 20,
+          allowReplay: true
+        }
       }
     })
 
@@ -234,9 +235,11 @@ describe('Test video lives API validator', function () {
     })
 
     it('Should forbid if live is disabled', async function () {
-      await updateCustomSubConfig(server.url, server.accessToken, {
-        live: {
-          enabled: false
+      await server.configCommand.updateCustomSubConfig({
+        newConfig: {
+          live: {
+            enabled: false
+          }
         }
       })
 
@@ -252,10 +255,12 @@ describe('Test video lives API validator', function () {
     it('Should forbid to save replay if not enabled by the admin', async function () {
       const fields = immutableAssign(baseCorrectParams, { saveReplay: true })
 
-      await updateCustomSubConfig(server.url, server.accessToken, {
-        live: {
-          enabled: true,
-          allowReplay: false
+      await server.configCommand.updateCustomSubConfig({
+        newConfig: {
+          live: {
+            enabled: true,
+            allowReplay: false
+          }
         }
       })
 
@@ -271,10 +276,12 @@ describe('Test video lives API validator', function () {
     it('Should allow to save replay if enabled by the admin', async function () {
       const fields = immutableAssign(baseCorrectParams, { saveReplay: true })
 
-      await updateCustomSubConfig(server.url, server.accessToken, {
-        live: {
-          enabled: true,
-          allowReplay: true
+      await server.configCommand.updateCustomSubConfig({
+        newConfig: {
+          live: {
+            enabled: true,
+            allowReplay: true
+          }
         }
       })
 
@@ -288,10 +295,12 @@ describe('Test video lives API validator', function () {
     })
 
     it('Should not allow live if max instance lives is reached', async function () {
-      await updateCustomSubConfig(server.url, server.accessToken, {
-        live: {
-          enabled: true,
-          maxInstanceLives: 1
+      await server.configCommand.updateCustomSubConfig({
+        newConfig: {
+          live: {
+            enabled: true,
+            maxInstanceLives: 1
+          }
         }
       })
 
@@ -305,11 +314,13 @@ describe('Test video lives API validator', function () {
     })
 
     it('Should not allow live if max user lives is reached', async function () {
-      await updateCustomSubConfig(server.url, server.accessToken, {
-        live: {
-          enabled: true,
-          maxInstanceLives: 20,
-          maxUserLives: 1
+      await server.configCommand.updateCustomSubConfig({
+        newConfig: {
+          live: {
+            enabled: true,
+            maxInstanceLives: 20,
+            maxUserLives: 1
+          }
         }
       })
 
@@ -393,10 +404,12 @@ describe('Test video lives API validator', function () {
     })
 
     it('Should fail to update replay status if replay is not allowed on the instance', async function () {
-      await updateCustomSubConfig(server.url, server.accessToken, {
-        live: {
-          enabled: true,
-          allowReplay: false
+      await server.configCommand.updateCustomSubConfig({
+        newConfig: {
+          live: {
+            enabled: true,
+            allowReplay: false
+          }
         }
       })
 

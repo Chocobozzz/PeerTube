@@ -7,8 +7,6 @@ import {
   createUser,
   flushAndRunServer,
   getAccountVideos,
-  getConfig,
-  getCustomConfig,
   getMyUserInformation,
   getMyVideos,
   getVideoChannelVideos,
@@ -16,12 +14,11 @@ import {
   getVideosListWithToken,
   ServerInfo,
   setAccessTokensToServers,
-  updateCustomConfig,
   updateMyUser,
   uploadVideo,
   userLogin
 } from '@shared/extra-utils'
-import { BooleanBothQuery, CustomConfig, ServerConfig, User, VideosOverview } from '@shared/models'
+import { BooleanBothQuery, CustomConfig, User, VideosOverview } from '@shared/models'
 
 const expect = chai.expect
 
@@ -97,16 +94,12 @@ describe('Test video NSFW policy', function () {
       await uploadVideo(server.url, server.accessToken, attributes)
     }
 
-    {
-      const res = await getCustomConfig(server.url, server.accessToken)
-      customConfig = res.body
-    }
+    customConfig = await server.configCommand.getCustomConfig()
   })
 
   describe('Instance default NSFW policy', function () {
     it('Should display NSFW videos with display default NSFW policy', async function () {
-      const resConfig = await getConfig(server.url)
-      const serverConfig: ServerConfig = resConfig.body
+      const serverConfig = await server.configCommand.getConfig()
       expect(serverConfig.instance.defaultNSFWPolicy).to.equal('display')
 
       for (const res of await getVideosFunctions()) {
@@ -121,10 +114,9 @@ describe('Test video NSFW policy', function () {
 
     it('Should not display NSFW videos with do_not_list default NSFW policy', async function () {
       customConfig.instance.defaultNSFWPolicy = 'do_not_list'
-      await updateCustomConfig(server.url, server.accessToken, customConfig)
+      await server.configCommand.updateCustomConfig({ newCustomConfig: customConfig })
 
-      const resConfig = await getConfig(server.url)
-      const serverConfig: ServerConfig = resConfig.body
+      const serverConfig = await server.configCommand.getConfig()
       expect(serverConfig.instance.defaultNSFWPolicy).to.equal('do_not_list')
 
       for (const res of await getVideosFunctions()) {
@@ -138,10 +130,9 @@ describe('Test video NSFW policy', function () {
 
     it('Should display NSFW videos with blur default NSFW policy', async function () {
       customConfig.instance.defaultNSFWPolicy = 'blur'
-      await updateCustomConfig(server.url, server.accessToken, customConfig)
+      await server.configCommand.updateCustomConfig({ newCustomConfig: customConfig })
 
-      const resConfig = await getConfig(server.url)
-      const serverConfig: ServerConfig = resConfig.body
+      const serverConfig = await server.configCommand.getConfig()
       expect(serverConfig.instance.defaultNSFWPolicy).to.equal('blur')
 
       for (const res of await getVideosFunctions()) {
@@ -172,7 +163,7 @@ describe('Test video NSFW policy', function () {
 
     it('Should display NSFW videos with blur user NSFW policy', async function () {
       customConfig.instance.defaultNSFWPolicy = 'do_not_list'
-      await updateCustomConfig(server.url, server.accessToken, customConfig)
+      await server.configCommand.updateCustomConfig({ newCustomConfig: customConfig })
 
       for (const res of await getVideosFunctions(userAccessToken)) {
         expect(res.body.total).to.equal(2)

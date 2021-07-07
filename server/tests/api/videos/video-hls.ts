@@ -3,6 +3,7 @@
 import 'mocha'
 import * as chai from 'chai'
 import { join } from 'path'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import {
   checkDirectoryIsEmpty,
   checkResolutionsInMasterPlaylist,
@@ -17,7 +18,6 @@ import {
   removeVideo,
   ServerInfo,
   setAccessTokensToServers,
-  updateCustomSubConfig,
   updateVideo,
   uploadVideo,
   waitJobs,
@@ -26,7 +26,6 @@ import {
 import { VideoDetails } from '../../../../shared/models/videos'
 import { VideoStreamingPlaylistType } from '../../../../shared/models/videos/video-streaming-playlist.type'
 import { DEFAULT_AUDIO_RESOLUTION } from '../../../initializers/constants'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const expect = chai.expect
 
@@ -192,24 +191,26 @@ describe('Test HLS videos', function () {
   describe('With only HLS enabled', function () {
 
     before(async function () {
-      await updateCustomSubConfig(servers[0].url, servers[0].accessToken, {
-        transcoding: {
-          enabled: true,
-          allowAudioFiles: true,
-          resolutions: {
-            '240p': true,
-            '360p': true,
-            '480p': true,
-            '720p': true,
-            '1080p': true,
-            '1440p': true,
-            '2160p': true
-          },
-          hls: {
-            enabled: true
-          },
-          webtorrent: {
-            enabled: false
+      await servers[0].configCommand.updateCustomSubConfig({
+        newConfig: {
+          transcoding: {
+            enabled: true,
+            allowAudioFiles: true,
+            resolutions: {
+              '240p': true,
+              '360p': true,
+              '480p': true,
+              '720p': true,
+              '1080p': true,
+              '1440p': true,
+              '2160p': true
+            },
+            hls: {
+              enabled: true
+            },
+            webtorrent: {
+              enabled: false
+            }
           }
         }
       })

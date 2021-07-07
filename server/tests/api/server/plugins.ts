@@ -7,7 +7,6 @@ import {
   cleanupTests,
   closeAllSequelize,
   flushAndRunServer,
-  getConfig,
   getMyUserInformation,
   killallServers,
   PluginsCommand,
@@ -16,12 +15,11 @@ import {
   setAccessTokensToServers,
   setPluginVersion,
   testHelloWorldRegisteredSettings,
-  updateCustomSubConfig,
   updateMyUser,
   wait,
   waitUntilLog
 } from '@shared/extra-utils'
-import { PluginType, ServerConfig, User } from '@shared/models'
+import { PluginType, User } from '@shared/models'
 
 const expect = chai.expect
 
@@ -102,8 +100,7 @@ describe('Test plugins', function () {
   })
 
   it('Should have the plugin loaded in the configuration', async function () {
-    const res = await getConfig(server.url)
-    const config: ServerConfig = res.body
+    const config = await server.configCommand.getConfig()
 
     const theme = config.theme.registered.find(r => r.name === 'background-red')
     expect(theme).to.not.be.undefined
@@ -113,11 +110,13 @@ describe('Test plugins', function () {
   })
 
   it('Should update the default theme in the configuration', async function () {
-    await updateCustomSubConfig(server.url, server.accessToken, { theme: { default: 'background-red' } })
+    await server.configCommand.updateCustomSubConfig({
+      newConfig: {
+        theme: { default: 'background-red' }
+      }
+    })
 
-    const res = await getConfig(server.url)
-    const config: ServerConfig = res.body
-
+    const config = await server.configCommand.getConfig()
     expect(config.theme.default).to.equal('background-red')
   })
 
@@ -302,9 +301,7 @@ describe('Test plugins', function () {
   })
 
   it('Should have updated the configuration', async function () {
-    // get /config (default theme + registered themes + registered plugins)
-    const res = await getConfig(server.url)
-    const config: ServerConfig = res.body
+    const config = await server.configCommand.getConfig()
 
     expect(config.theme.default).to.equal('default')
 

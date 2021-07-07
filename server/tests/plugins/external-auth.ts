@@ -8,7 +8,6 @@ import {
   createUser,
   decodeQueryString,
   flushAndRunServer,
-  getConfig,
   getMyUserInformation,
   loginUsingExternalToken,
   logout,
@@ -21,7 +20,7 @@ import {
   wait,
   waitUntilLog
 } from '@shared/extra-utils'
-import { ServerConfig, User, UserRole } from '@shared/models'
+import { User, UserRole } from '@shared/models'
 
 async function loginExternal (options: {
   server: ServerInfo
@@ -78,9 +77,7 @@ describe('Test external auth plugins', function () {
   })
 
   it('Should display the correct configuration', async function () {
-    const res = await getConfig(server.url)
-
-    const config: ServerConfig = res.body
+    const config = await server.configCommand.getConfig()
 
     const auths = config.plugin.registeredExternalAuths
     expect(auths).to.have.lengthOf(8)
@@ -288,9 +285,7 @@ describe('Test external auth plugins', function () {
   })
 
   it('Should have disabled this auth', async function () {
-    const res = await getConfig(server.url)
-
-    const config: ServerConfig = res.body
+    const config = await server.configCommand.getConfig()
 
     const auths = config.plugin.registeredExternalAuths
     expect(auths).to.have.lengthOf(7)
@@ -354,9 +349,7 @@ describe('Test external auth plugins', function () {
   })
 
   it('Should display the correct configuration', async function () {
-    const res = await getConfig(server.url)
-
-    const config: ServerConfig = res.body
+    const config = await server.configCommand.getConfig()
 
     const auths = config.plugin.registeredExternalAuths
     expect(auths).to.have.lengthOf(6)
