@@ -2,27 +2,26 @@
 
 import 'mocha'
 import { expect } from 'chai'
-import { ServerConfig, User, UserRole } from '@shared/models'
+import { HttpStatusCode } from '@shared/core-utils'
 import {
+  cleanupTests,
+  createUser,
   decodeQueryString,
+  flushAndRunServer,
   getConfig,
-  getExternalAuth,
   getMyUserInformation,
-  getPluginTestPath,
-  installPlugin,
   loginUsingExternalToken,
   logout,
+  PluginsCommand,
   refreshToken,
+  ServerInfo,
   setAccessTokensToServers,
-  uninstallPlugin,
   updateMyUser,
-  wait,
   userLogin,
-  updatePluginSettings,
-  createUser
-} from '../../../shared/extra-utils'
-import { cleanupTests, flushAndRunServer, ServerInfo, waitUntilLog } from '../../../shared/extra-utils/server/servers'
-import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
+  wait,
+  waitUntilLog
+} from '@shared/extra-utils'
+import { ServerConfig, User, UserRole } from '@shared/models'
 
 async function loginExternal (options: {
   server: ServerInfo
@@ -33,13 +32,12 @@ async function loginExternal (options: {
   statusCodeExpected?: HttpStatusCode
   statusCodeExpectedStep2?: HttpStatusCode
 }) {
-  const res = await getExternalAuth({
-    url: options.server.url,
+  const res = await options.server.pluginsCommand.getExternalAuth({
     npmName: options.npmName,
     npmVersion: '0.0.1',
     authName: options.authName,
     query: options.query,
-    statusCodeExpected: options.statusCodeExpected || HttpStatusCode.FOUND_302
+    expectedStatus: options.statusCodeExpected || HttpStatusCode.FOUND_302
   })
 
   if (res.status !== HttpStatusCode.FOUND_302) return
@@ -75,11 +73,7 @@ describe('Test external auth plugins', function () {
     await setAccessTokensToServers([ server ])
 
     for (const suffix of [ 'one', 'two', 'three' ]) {
-      await installPlugin({
-        url: server.url,
-        accessToken: server.accessToken,
-        path: getPluginTestPath('-external-auth-' + suffix)
-      })
+      await server.pluginsCommand.install({ path: PluginsCommand.getPluginTestPath('-external-auth-' + suffix) })
     }
   })
 
@@ -98,15 +92,14 @@ describe('Test external auth plugins', function () {
   })
 
   it('Should redirect for a Cyan login', async function () {
-    const res = await getExternalAuth({
-      url: server.url,
+    const res = await server.pluginsCommand.getExternalAuth({
       npmName: 'test-external-auth-one',
       npmVersion: '0.0.1',
       authName: 'external-auth-1',
       query: {
         username: 'cyan'
       },
-      statusCodeExpected: HttpStatusCode.FOUND_302
+      expectedStatus: HttpStatusCode.FOUND_302
     })
 
     const location = res.header.location
@@ -275,9 +268,7 @@ describe('Test external auth plugins', function () {
   })
 
   it('Should unregister external-auth-2 and do not login existing Kefka', async function () {
-    await updatePluginSettings({
-      url: server.url,
-      accessToken: server.accessToken,
+    await server.pluginsCommand.updateSettings({
       npmName: 'peertube-plugin-test-external-auth-one',
       settings: { disableKefka: true }
     })
@@ -309,11 +300,7 @@ describe('Test external auth plugins', function () {
   })
 
   it('Should uninstall the plugin one and do not login Cyan', async function () {
-    await uninstallPlugin({
-      url: server.url,
-      accessToken: server.accessToken,
-      npmName: 'peertube-plugin-test-external-auth-one'
-    })
+    await server.pluginsCommand.uninstall({ npmName: 'peertube-plugin-test-external-auth-one' })
 
     await loginExternal({
       server,

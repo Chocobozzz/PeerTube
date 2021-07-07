@@ -1,16 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-import { cleanupTests, flushAndRunServer, ServerInfo } from '../../../shared/extra-utils/server/servers'
+import { expect } from 'chai'
+import { HttpStatusCode } from '@shared/core-utils'
 import {
-  getPluginTestPath,
-  installPlugin,
+  cleanupTests,
+  flushAndRunServer,
   makeGetRequest,
   makePostBodyRequest,
-  setAccessTokensToServers, uninstallPlugin
-} from '../../../shared/extra-utils'
-import { expect } from 'chai'
-import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
+  PluginsCommand,
+  ServerInfo,
+  setAccessTokensToServers
+} from '@shared/extra-utils'
 
 describe('Test plugin helpers', function () {
   let server: ServerInfo
@@ -25,11 +26,7 @@ describe('Test plugin helpers', function () {
     server = await flushAndRunServer(1)
     await setAccessTokensToServers([ server ])
 
-    await installPlugin({
-      url: server.url,
-      accessToken: server.accessToken,
-      path: getPluginTestPath('-five')
-    })
+    await server.pluginsCommand.install({ path: PluginsCommand.getPluginTestPath('-five') })
   })
 
   it('Should answer "pong"', async function () {
@@ -85,11 +82,7 @@ describe('Test plugin helpers', function () {
   })
 
   it('Should remove the plugin and remove the routes', async function () {
-    await uninstallPlugin({
-      url: server.url,
-      accessToken: server.accessToken,
-      npmName: 'peertube-plugin-test-five'
-    })
+    await server.pluginsCommand.uninstall({ npmName: 'peertube-plugin-test-five' })
 
     for (const path of basePaths) {
       await makeGetRequest({

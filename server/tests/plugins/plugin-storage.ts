@@ -7,13 +7,14 @@ import { join } from 'path'
 import { HttpStatusCode } from '@shared/core-utils'
 import {
   buildServerDirectory,
-  getPluginTestPath,
-  installPlugin,
+  cleanupTests,
+  flushAndRunServer,
   makeGetRequest,
+  PluginsCommand,
+  ServerInfo,
   setAccessTokensToServers,
-  uninstallPlugin
-} from '../../../shared/extra-utils'
-import { cleanupTests, flushAndRunServer, ServerInfo, waitUntilLog } from '../../../shared/extra-utils/server/servers'
+  waitUntilLog
+} from '@shared/extra-utils'
 
 describe('Test plugin storage', function () {
   let server: ServerInfo
@@ -24,11 +25,7 @@ describe('Test plugin storage', function () {
     server = await flushAndRunServer(1)
     await setAccessTokensToServers([ server ])
 
-    await installPlugin({
-      url: server.url,
-      accessToken: server.accessToken,
-      path: getPluginTestPath('-six')
-    })
+    await server.pluginsCommand.install({ path: PluginsCommand.getPluginTestPath('-six') })
   })
 
   describe('DB storage', function () {
@@ -76,22 +73,14 @@ describe('Test plugin storage', function () {
     })
 
     it('Should still have the file after an uninstallation', async function () {
-      await uninstallPlugin({
-        url: server.url,
-        accessToken: server.accessToken,
-        npmName: 'peertube-plugin-test-six'
-      })
+      await server.pluginsCommand.uninstall({ npmName: 'peertube-plugin-test-six' })
 
       const content = await getFileContent()
       expect(content).to.equal('Prince Ali')
     })
 
     it('Should still have the file after the reinstallation', async function () {
-      await installPlugin({
-        url: server.url,
-        accessToken: server.accessToken,
-        path: getPluginTestPath('-six')
-      })
+      await server.pluginsCommand.install({ path: PluginsCommand.getPluginTestPath('-six') })
 
       const content = await getFileContent()
       expect(content).to.equal('Prince Ali')

@@ -10,7 +10,6 @@ import {
   createUser,
   flushAndRunServer,
   immutableAssign,
-  installPlugin,
   makeGetRequest,
   makePostBodyRequest,
   makePutBodyRequest,
@@ -50,13 +49,13 @@ describe('Test server plugins API validators', function () {
     userAccessToken = await userLogin(server, user)
 
     {
-      const res = await installPlugin({ url: server.url, accessToken: server.accessToken, npmName: npmPlugin })
+      const res = await server.pluginsCommand.install({ npmName: npmPlugin })
       const plugin = res.body as PeerTubePlugin
       npmVersion = plugin.version
     }
 
     {
-      const res = await installPlugin({ url: server.url, accessToken: server.accessToken, npmName: themePlugin })
+      const res = await server.pluginsCommand.install({ npmName: themePlugin })
       const plugin = res.body as PeerTubePlugin
       themeVersion = plugin.version
     }

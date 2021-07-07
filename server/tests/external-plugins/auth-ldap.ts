@@ -3,17 +3,7 @@
 import 'mocha'
 import { expect } from 'chai'
 import { User } from '@shared/models/users/user.model'
-import {
-  blockUser,
-  getMyUserInformation,
-  installPlugin,
-  setAccessTokensToServers,
-  unblockUser,
-  uninstallPlugin,
-  updatePluginSettings,
-  uploadVideo,
-  userLogin
-} from '../../../shared/extra-utils'
+import { blockUser, getMyUserInformation, setAccessTokensToServers, unblockUser, uploadVideo, userLogin } from '../../../shared/extra-utils'
 import { cleanupTests, flushAndRunServer, ServerInfo } from '../../../shared/extra-utils/server/servers'
 
 describe('Official plugin auth-ldap', function () {
@@ -27,11 +17,7 @@ describe('Official plugin auth-ldap', function () {
     server = await flushAndRunServer(1)
     await setAccessTokensToServers([ server ])
 
-    await installPlugin({
-      url: server.url,
-      accessToken: server.accessToken,
-      npmName: 'peertube-plugin-auth-ldap'
-    })
+    await server.pluginsCommand.install({ npmName: 'peertube-plugin-auth-ldap' })
   })
 
   it('Should not login with without LDAP settings', async function () {
@@ -39,9 +25,7 @@ describe('Official plugin auth-ldap', function () {
   })
 
   it('Should not login with bad LDAP settings', async function () {
-    await updatePluginSettings({
-      url: server.url,
-      accessToken: server.accessToken,
+    await server.pluginsCommand.updateSettings({
       npmName: 'peertube-plugin-auth-ldap',
       settings: {
         'bind-credentials': 'GoodNewsEveryone',
@@ -59,9 +43,7 @@ describe('Official plugin auth-ldap', function () {
   })
 
   it('Should not login with good LDAP settings but wrong username/password', async function () {
-    await updatePluginSettings({
-      url: server.url,
-      accessToken: server.accessToken,
+    await server.pluginsCommand.updateSettings({
       npmName: 'peertube-plugin-auth-ldap',
       settings: {
         'bind-credentials': 'GoodNewsEveryone',
@@ -114,7 +96,7 @@ describe('Official plugin auth-ldap', function () {
   })
 
   it('Should not login if the plugin is uninstalled', async function () {
-    await uninstallPlugin({ url: server.url, accessToken: server.accessToken, npmName: 'peertube-plugin-auth-ldap' })
+    await server.pluginsCommand.uninstall({ npmName: 'peertube-plugin-auth-ldap' })
 
     await userLogin(server, { username: 'fry@planetexpress.com', password: 'fry' }, 400)
   })

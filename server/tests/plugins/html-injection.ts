@@ -5,30 +5,31 @@ import * as chai from 'chai'
 import {
   cleanupTests,
   flushAndRunServer,
-  getPluginsCSS,
-  installPlugin,
   makeHTMLRequest,
+  PluginsCommand,
   ServerInfo,
-  setAccessTokensToServers,
-  uninstallPlugin
+  setAccessTokensToServers
 } from '../../../shared/extra-utils'
 
 const expect = chai.expect
 
 describe('Test plugins HTML injection', function () {
   let server: ServerInfo = null
+  let command: PluginsCommand
 
   before(async function () {
     this.timeout(30000)
 
     server = await flushAndRunServer(1)
     await setAccessTokensToServers([ server ])
+
+    command = server.pluginsCommand
   })
 
   it('Should not inject global css file in HTML', async function () {
     {
-      const res = await getPluginsCSS(server.url)
-      expect(res.text).to.be.empty
+      const text = await command.getCSS()
+      expect(text).to.be.empty
     }
 
     for (const path of [ '/', '/videos/embed/1', '/video-playlists/embed/1' ]) {
@@ -40,17 +41,13 @@ describe('Test plugins HTML injection', function () {
   it('Should install a plugin and a theme', async function () {
     this.timeout(30000)
 
-    await installPlugin({
-      url: server.url,
-      accessToken: server.accessToken,
-      npmName: 'peertube-plugin-hello-world'
-    })
+    await command.install({ npmName: 'peertube-plugin-hello-world' })
   })
 
   it('Should have the correct global css', async function () {
     {
-      const res = await getPluginsCSS(server.url)
-      expect(res.text).to.contain('background-color: red')
+      const text = await command.getCSS()
+      expect(text).to.contain('background-color: red')
     }
 
     for (const path of [ '/', '/videos/embed/1', '/video-playlists/embed/1' ]) {
@@ -60,15 +57,11 @@ describe('Test plugins HTML injection', function () {
   })
 
   it('Should have an empty global css on uninstall', async function () {
-    await uninstallPlugin({
-      url: server.url,
-      accessToken: server.accessToken,
-      npmName: 'peertube-plugin-hello-world'
-    })
+    await command.uninstall({ npmName: 'peertube-plugin-hello-world' })
 
     {
-      const res = await getPluginsCSS(server.url)
-      expect(res.text).to.be.empty
+      const text = await command.getCSS()
+      expect(text).to.be.empty
     }
 
     for (const path of [ '/', '/videos/embed/1', '/video-playlists/embed/1' ]) {

@@ -2,30 +2,24 @@
 
 import 'mocha'
 import { expect } from 'chai'
+import { HttpStatusCode } from '@shared/core-utils'
 import {
   addAccountToServerBlocklist,
   addServerToAccountBlocklist,
-  removeAccountFromServerBlocklist
-} from '@shared/extra-utils/users/blocklist'
-import {
+  cleanupTests,
   doubleFollow,
+  flushAndRunMultipleServers,
   getVideosList,
-  installPlugin,
+  killallServers,
   makeGetRequest,
   MockBlocklist,
+  removeAccountFromServerBlocklist,
+  reRunServer,
+  ServerInfo,
   setAccessTokensToServers,
-  updatePluginSettings,
   uploadVideoAndGetId,
   wait
-} from '../../../shared/extra-utils'
-import {
-  cleanupTests,
-  flushAndRunMultipleServers,
-  killallServers,
-  reRunServer,
-  ServerInfo
-} from '../../../shared/extra-utils/server/servers'
-import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
+} from '@shared/extra-utils'
 
 describe('Official plugin auto-mute', function () {
   const autoMuteListPath = '/plugins/auto-mute/router/api/v1/mute-list'
@@ -40,11 +34,7 @@ describe('Official plugin auto-mute', function () {
     await setAccessTokensToServers(servers)
 
     for (const server of servers) {
-      await installPlugin({
-        url: server.url,
-        accessToken: server.accessToken,
-        npmName: 'peertube-plugin-auto-mute'
-      })
+      await server.pluginsCommand.install({ npmName: 'peertube-plugin-auto-mute' })
     }
 
     blocklistServer = new MockBlocklist()
@@ -57,9 +47,7 @@ describe('Official plugin auto-mute', function () {
   })
 
   it('Should update plugin settings', async function () {
-    await updatePluginSettings({
-      url: servers[0].url,
-      accessToken: servers[0].accessToken,
+    await servers[0].pluginsCommand.updateSettings({
       npmName: 'peertube-plugin-auto-mute',
       settings: {
         'blocklist-urls': `http://localhost:${port}/blocklist`,
@@ -185,9 +173,7 @@ describe('Official plugin auto-mute', function () {
   })
 
   it('Should enable auto mute list', async function () {
-    await updatePluginSettings({
-      url: servers[0].url,
-      accessToken: servers[0].accessToken,
+    await servers[0].pluginsCommand.updateSettings({
       npmName: 'peertube-plugin-auto-mute',
       settings: {
         'blocklist-urls': '',
@@ -206,9 +192,7 @@ describe('Official plugin auto-mute', function () {
   it('Should mute an account on server 1, and server 2 auto mutes it', async function () {
     this.timeout(20000)
 
-    await updatePluginSettings({
-      url: servers[1].url,
-      accessToken: servers[1].accessToken,
+    await servers[1].pluginsCommand.updateSettings({
       npmName: 'peertube-plugin-auto-mute',
       settings: {
         'blocklist-urls': 'http://localhost:' + servers[0].port + autoMuteListPath,

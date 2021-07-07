@@ -1,0 +1,245 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+
+import { readJSON, writeJSON } from 'fs-extra'
+import { join } from 'path'
+import { root } from '@server/helpers/core-utils'
+import { HttpStatusCode } from '@shared/core-utils'
+import {
+  PeerTubePlugin,
+  PeerTubePluginIndex,
+  PeertubePluginIndexList,
+  PluginPackageJson,
+  PluginTranslation,
+  PluginType,
+  PublicServerSetting,
+  RegisteredServerSettings,
+  ResultList
+} from '@shared/models'
+import { buildServerDirectory } from '../miscs'
+import { AbstractCommand, OverrideCommandOptions } from '../shared'
+
+export class PluginsCommand extends AbstractCommand {
+
+  static getPluginTestPath (suffix = '') {
+    return join(root(), 'server', 'tests', 'fixtures', 'peertube-plugin-test' + suffix)
+  }
+
+  list (options: OverrideCommandOptions & {
+    start?: number
+    count?: number
+    sort?: string
+    pluginType?: PluginType
+    uninstalled?: boolean
+  }) {
+    const { start, count, sort, pluginType, uninstalled } = options
+    const path = '/api/v1/plugins'
+
+    return this.getRequestBody<ResultList<PeerTubePlugin>>({
+      ...options,
+
+      path,
+      query: {
+        start,
+        count,
+        sort,
+        pluginType,
+        uninstalled
+      },
+      defaultExpectedStatus: HttpStatusCode.OK_200
+    })
+  }
+
+  listAvailable (options: OverrideCommandOptions & {
+    start?: number
+    count?: number
+    sort?: string
+    pluginType?: PluginType
+    currentPeerTubeEngine?: string
+    search?: string
+    expectedStatus?: HttpStatusCode
+  }) {
+    const { start, count, sort, pluginType, search, currentPeerTubeEngine } = options
+    const path = '/api/v1/plugins/available'
+
+    const query: PeertubePluginIndexList = {
+      start,
+      count,
+      sort,
+      pluginType,
+      currentPeerTubeEngine,
+      search
+    }
+
+    return this.getRequestBody<ResultList<PeerTubePluginIndex>>({
+      ...options,
+
+      path,
+      query,
+      defaultExpectedStatus: HttpStatusCode.OK_200
+    })
+  }
+
+  get (options: OverrideCommandOptions & {
+    npmName: string
+  }) {
+    const path = '/api/v1/plugins/' + options.npmName
+
+    return this.getRequestBody<PeerTubePlugin>({
+      ...options,
+
+      path,
+      defaultExpectedStatus: HttpStatusCode.OK_200
+    })
+  }
+
+  updateSettings (options: OverrideCommandOptions & {
+    npmName: string
+    settings: any
+  }) {
+    const { npmName, settings } = options
+    const path = '/api/v1/plugins/' + npmName + '/settings'
+
+    return this.putBodyRequest({
+      ...options,
+
+      path,
+      fields: { settings },
+      defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
+    })
+  }
+
+  getRegisteredSettings (options: OverrideCommandOptions & {
+    npmName: string
+  }) {
+    const path = '/api/v1/plugins/' + options.npmName + '/registered-settings'
+
+    return this.getRequestBody<RegisteredServerSettings>({
+      ...options,
+
+      path,
+      defaultExpectedStatus: HttpStatusCode.OK_200
+    })
+  }
+
+  getPublicSettings (options: OverrideCommandOptions & {
+    npmName: string
+  }) {
+    const { npmName } = options
+    const path = '/api/v1/plugins/' + npmName + '/public-settings'
+
+    return this.getRequestBody<PublicServerSetting>({
+      ...options,
+
+      path,
+      defaultExpectedStatus: HttpStatusCode.OK_200
+    })
+  }
+
+  getTranslations (options: OverrideCommandOptions & {
+    locale: string
+  }) {
+    const { locale } = options
+    const path = '/plugins/translations/' + locale + '.json'
+
+    return this.getRequestBody<PluginTranslation>({
+      ...options,
+
+      path,
+      defaultExpectedStatus: HttpStatusCode.OK_200
+    })
+  }
+
+  install (options: OverrideCommandOptions & {
+    path?: string
+    npmName?: string
+  }) {
+    const { npmName, path } = options
+    const apiPath = '/api/v1/plugins/install'
+
+    return this.postBodyRequest({
+      ...options,
+
+      path: apiPath,
+      fields: { npmName, path },
+      defaultExpectedStatus: HttpStatusCode.OK_200
+    })
+  }
+
+  update (options: OverrideCommandOptions & {
+    path?: string
+    npmName?: string
+  }) {
+    const { npmName, path } = options
+    const apiPath = '/api/v1/plugins/update'
+
+    return this.postBodyRequest({
+      ...options,
+
+      path: apiPath,
+      fields: { npmName, path },
+      defaultExpectedStatus: HttpStatusCode.OK_200
+    })
+  }
+
+  uninstall (options: OverrideCommandOptions & {
+    npmName: string
+  }) {
+    const { npmName } = options
+    const apiPath = '/api/v1/plugins/uninstall'
+
+    return this.postBodyRequest({
+      ...options,
+
+      path: apiPath,
+      fields: { npmName },
+      defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
+    })
+  }
+
+  getCSS (options: OverrideCommandOptions = {}) {
+    const path = '/plugins/global.css'
+
+    return this.getRequestText({
+      ...options,
+
+      path,
+      defaultExpectedStatus: HttpStatusCode.OK_200
+    })
+  }
+
+  getExternalAuth (options: OverrideCommandOptions & {
+    npmName: string
+    npmVersion: string
+    authName: string
+    query?: any
+  }) {
+    const { npmName, npmVersion, authName, query } = options
+
+    const path = '/plugins/' + npmName + '/' + npmVersion + '/auth/' + authName
+
+    return this.getRequest({
+      ...options,
+
+      path,
+      query,
+      defaultExpectedStatus: HttpStatusCode.OK_200,
+      redirects: 0
+    })
+  }
+
+  updatePackageJSON (npmName: string, json: any) {
+    const path = this.getPackageJSONPath(npmName)
+
+    return writeJSON(path, json)
+  }
+
+  getPackageJSON (npmName: string): Promise<PluginPackageJson> {
+    const path = this.getPackageJSONPath(npmName)
+
+    return readJSON(path)
+  }
+
+  private getPackageJSONPath (npmName: string) {
+    return buildServerDirectory(this.server, join('plugins', 'node_modules', npmName, 'package.json'))
+  }
+}

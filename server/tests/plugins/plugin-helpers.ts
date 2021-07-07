@@ -1,23 +1,25 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
+import { expect } from 'chai'
+import { HttpStatusCode } from '@shared/core-utils'
 import {
   checkVideoFilesWereRemoved,
+  cleanupTests,
   doubleFollow,
-  getPluginTestPath,
+  flushAndRunMultipleServers,
   getVideo,
-  installPlugin,
+  getVideosList,
+  makeGetRequest,
   makePostBodyRequest,
+  PluginsCommand,
+  ServerInfo,
   setAccessTokensToServers,
   uploadVideoAndGetId,
   viewVideo,
-  getVideosList,
   waitJobs,
-  makeGetRequest
-} from '../../../shared/extra-utils'
-import { cleanupTests, flushAndRunMultipleServers, ServerInfo, waitUntilLog } from '../../../shared/extra-utils/server/servers'
-import { expect } from 'chai'
-import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
+  waitUntilLog
+} from '@shared/extra-utils'
 
 function postCommand (server: ServerInfo, command: string, bodyArg?: object) {
   const body = { command }
@@ -42,11 +44,7 @@ describe('Test plugin helpers', function () {
 
     await doubleFollow(servers[0], servers[1])
 
-    await installPlugin({
-      url: servers[0].url,
-      accessToken: servers[0].accessToken,
-      path: getPluginTestPath('-four')
-    })
+    await servers[0].pluginsCommand.install({ path: PluginsCommand.getPluginTestPath('-four') })
   })
 
   describe('Logger', function () {

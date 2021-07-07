@@ -4,25 +4,25 @@ import 'mocha'
 import { expect } from 'chai'
 import { join } from 'path'
 import { getAudioStream, getVideoFileFPS, getVideoStreamFromFile } from '@server/helpers/ffprobe-utils'
-import { ServerConfig, VideoDetails, VideoPrivacy } from '@shared/models'
 import {
   buildServerDirectory,
+  cleanupTests,
   createLive,
+  flushAndRunServer,
   getConfig,
-  getPluginTestPath,
   getVideo,
-  installPlugin,
+  PluginsCommand,
   sendRTMPStreamInVideo,
+  ServerInfo,
   setAccessTokensToServers,
   setDefaultVideoChannel,
   testFfmpegStreamError,
-  uninstallPlugin,
   updateCustomSubConfig,
   uploadVideoAndGetId,
   waitJobs,
   waitUntilLivePublished
-} from '../../../shared/extra-utils'
-import { cleanupTests, flushAndRunServer, ServerInfo } from '../../../shared/extra-utils/server/servers'
+} from '@shared/extra-utils'
+import { ServerConfig, VideoDetails, VideoPrivacy } from '@shared/models'
 
 async function createLiveWrapper (server: ServerInfo) {
   const liveAttributes = {
@@ -109,11 +109,7 @@ describe('Test transcoding plugins', function () {
     }
 
     before(async function () {
-      await installPlugin({
-        url: server.url,
-        accessToken: server.accessToken,
-        path: getPluginTestPath('-transcoding-one')
-      })
+      await server.pluginsCommand.install({ path: PluginsCommand.getPluginTestPath('-transcoding-one') })
     })
 
     it('Should have the appropriate available profiles', async function () {
@@ -225,7 +221,7 @@ describe('Test transcoding plugins', function () {
     it('Should default to the default profile if the specified profile does not exist', async function () {
       this.timeout(240000)
 
-      await uninstallPlugin({ url: server.url, accessToken: server.accessToken, npmName: 'peertube-plugin-test-transcoding-one' })
+      await server.pluginsCommand.uninstall({ npmName: 'peertube-plugin-test-transcoding-one' })
 
       const res = await getConfig(server.url)
       const config = res.body as ServerConfig
@@ -244,11 +240,7 @@ describe('Test transcoding plugins', function () {
   describe('When using a plugin adding new encoders', function () {
 
     before(async function () {
-      await installPlugin({
-        url: server.url,
-        accessToken: server.accessToken,
-        path: getPluginTestPath('-transcoding-two')
-      })
+      await server.pluginsCommand.install({ path: PluginsCommand.getPluginTestPath('-transcoding-two') })
 
       await updateConf(server, 'test-vod-profile', 'test-live-profile')
     })
