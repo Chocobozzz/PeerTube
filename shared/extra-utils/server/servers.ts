@@ -17,6 +17,7 @@ import { OverviewsCommand } from '../overviews'
 import { makeGetRequest } from '../requests/requests'
 import { SearchCommand } from '../search'
 import { SocketIOCommand } from '../socket'
+import { AccountsCommand } from '../users'
 import { ConfigCommand } from './config-command'
 import { ContactFormCommand } from './contact-form-command'
 import { DebugCommand } from './debug-command'
@@ -95,6 +96,7 @@ interface ServerInfo {
   statsCommand?: StatsCommand
   configCommand?: ConfigCommand
   socketIOCommand?: SocketIOCommand
+  accountsCommand?: AccountsCommand
 }
 
 function parallelTests () {
@@ -317,6 +319,7 @@ async function runServer (server: ServerInfo, configOverrideArg?: any, args = []
       server.statsCommand = new StatsCommand(server)
       server.configCommand = new ConfigCommand(server)
       server.socketIOCommand = new SocketIOCommand(server)
+      server.accountsCommand = new AccountsCommand(server)
 
       res(server)
     })

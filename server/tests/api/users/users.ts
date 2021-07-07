@@ -11,7 +11,6 @@ import {
   createUser,
   deleteMe,
   flushAndRunServer,
-  getAccountRatings,
   getBlacklistedVideosList,
   getMyUserInformation,
   getMyUserVideoQuotaUsed,
@@ -194,25 +193,22 @@ describe('Test users', function () {
     it('Should retrieve ratings list', async function () {
       await rateVideo(server.url, accessToken, videoId, 'like')
 
-      const res = await getAccountRatings(server.url, server.user.username, server.accessToken, null, HttpStatusCode.OK_200)
-      const ratings = res.body
+      const body = await server.accountsCommand.listRatings({ accountName: server.user.username })
 
-      expect(ratings.total).to.equal(1)
-      expect(ratings.data[0].video.id).to.equal(videoId)
-      expect(ratings.data[0].rating).to.equal('like')
+      expect(body.total).to.equal(1)
+      expect(body.data[0].video.id).to.equal(videoId)
+      expect(body.data[0].rating).to.equal('like')
     })
 
     it('Should retrieve ratings list by rating type', async function () {
       {
-        const res = await getAccountRatings(server.url, server.user.username, server.accessToken, 'like')
-        const ratings = res.body
-        expect(ratings.data.length).to.equal(1)
+        const body = await server.accountsCommand.listRatings({ accountName: server.user.username, rating: 'like' })
+        expect(body.data.length).to.equal(1)
       }
 
       {
-        const res = await getAccountRatings(server.url, server.user.username, server.accessToken, 'dislike')
-        const ratings = res.body
-        expect(ratings.data.length).to.equal(0)
+        const body = await server.accountsCommand.listRatings({ accountName: server.user.username, rating: 'dislike' })
+        expect(body.data.length).to.equal(0)
       }
     })
   })

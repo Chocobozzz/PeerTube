@@ -1,43 +1,25 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as request from 'supertest'
 import { expect } from 'chai'
-import { existsSync, readdir } from 'fs-extra'
+import { pathExists, readdir } from 'fs-extra'
 import { join } from 'path'
-import { Account } from '../../models/actors'
-import { root } from '../miscs/miscs'
-import { makeGetRequest } from '../requests/requests'
-import { VideoRateType } from '../../models/videos'
-import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
+import { root } from '@server/helpers/core-utils'
+import { ServerInfo } from '../server'
 
-function getAccountsList (url: string, sort = '-createdAt', statusCodeExpected = HttpStatusCode.OK_200) {
-  const path = '/api/v1/accounts'
+async function expectAccountFollows (options: {
+  server: ServerInfo
+  handle: string
+  followers: number
+  following: number
+}) {
+  const { server, handle, followers, following } = options
 
-  return makeGetRequest({
-    url,
-    query: { sort },
-    path,
-    statusCodeExpected
-  })
-}
+  const body = await server.accountsCommand.list()
+  const account = body.data.find(a => a.name + '@' + a.host === handle)
 
-function getAccount (url: string, accountName: string, statusCodeExpected = HttpStatusCode.OK_200) {
-  const path = '/api/v1/accounts/' + accountName
-
-  return makeGetRequest({
-    url,
-    path,
-    statusCodeExpected
-  })
-}
-
-async function expectAccountFollows (url: string, nameWithDomain: string, followersCount: number, followingCount: number) {
-  const res = await getAccountsList(url)
-  const account = res.body.data.find((a: Account) => a.name + '@' + a.host === nameWithDomain)
-
-  const message = `${nameWithDomain} on ${url}`
-  expect(account.followersCount).to.equal(followersCount, message)
-  expect(account.followingCount).to.equal(followingCount, message)
+  const message = `${handle} on ${server.url}`
+  expect(account.followersCount).to.equal(followers, message)
+  expect(account.followingCount).to.equal(following, message)
 }
 
 async function checkActorFilesWereRemoved (filename: string, serverNumber: number) {
@@ -46,7 +28,7 @@ async function checkActorFilesWereRemoved (filename: string, serverNumber: numbe
   for (const directory of [ 'avatars' ]) {
     const directoryPath = join(root(), testDirectory, directory)
 
-    const directoryExists = existsSync(directoryPath)
+    const directoryExists = await pathExists(directoryPath)
     expect(directoryExists).to.be.true
 
     const files = await readdir(directoryPath)
@@ -56,32 +38,7 @@ async function checkActorFilesWereRemoved (filename: string, serverNumber: numbe
   }
 }
 
-function getAccountRatings (
-  url: string,
-  accountName: string,
-  accessToken: string,
-  rating?: VideoRateType,
-  statusCodeExpected = HttpStatusCode.OK_200
-) {
-  const path = '/api/v1/accounts/' + accountName + '/ratings'
-
-  const query = rating ? { rating } : {}
-
-  return request(url)
-          .get(path)
-          .query(query)
-          .set('Accept', 'application/json')
-          .set('Authorization', 'Bearer ' + accessToken)
-          .expect(statusCodeExpected)
-          .expect('Content-Type', /json/)
-}
-
-// ---------------------------------------------------------------------------
-
 export {
-  getAccount,
   expectAccountFollows,
-  getAccountsList,
-  checkActorFilesWereRemoved,
-  getAccountRatings
+  checkActorFilesWereRemoved
 }

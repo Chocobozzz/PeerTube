@@ -22,7 +22,6 @@ import {
   cleanupTests,
   createUser,
   generateUserAccessToken,
-  getAccount,
   getVideoCommentThreads,
   getVideoIdFromUUID,
   immutableAssign,
@@ -157,8 +156,8 @@ describe('Test moderation notifications', function () {
 
       await waitJobs(servers)
 
-      const resAccount = await getAccount(servers[1].url, username + '@' + servers[0].host)
-      await servers[1].abusesCommand.report({ accountId: resAccount.body.id, reason: 'super reason' })
+      const account = await servers[1].accountsCommand.get({ accountName: username + '@' + servers[0].host })
+      await servers[1].abusesCommand.report({ accountId: account.id, reason: 'super reason' })
 
       await waitJobs(servers)
       await checkNewAccountAbuseForModerators(baseParams, username, 'presence')

@@ -13,7 +13,6 @@ import {
   doubleFollow,
   flushAndRunMultipleServers,
   generateUserAccessToken,
-  getAccount,
   getVideoCommentThreads,
   getVideoIdFromUUID,
   getVideosList,
@@ -606,10 +605,8 @@ describe('Test abuses', function () {
 
   describe('Account abuses', function () {
 
-    async function getAccountFromServer (url: string, name: string, server: ServerInfo) {
-      const res = await getAccount(url, name + '@' + server.host)
-
-      return res.body as Account
+    function getAccountFromServer (server: ServerInfo, targetName: string, targetServer: ServerInfo) {
+      return server.accountsCommand.get({ accountName: targetName + '@' + targetServer.host })
     }
 
     before(async function () {
@@ -626,7 +623,7 @@ describe('Test abuses', function () {
     it('Should report abuse on an account', async function () {
       this.timeout(15000)
 
-      const account = await getAccountFromServer(servers[0].url, 'user_1', servers[0])
+      const account = await getAccountFromServer(servers[0], 'user_1', servers[0])
 
       const reason = 'it is a bad account'
       await commands[0].report({ accountId: account.id, reason })
@@ -664,7 +661,7 @@ describe('Test abuses', function () {
     it('Should report abuse on a remote account', async function () {
       this.timeout(10000)
 
-      const account = await getAccountFromServer(servers[0].url, 'user_2', servers[1])
+      const account = await getAccountFromServer(servers[0], 'user_2', servers[1])
 
       const reason = 'it is a really bad account'
       await commands[0].report({ accountId: account.id, reason })
@@ -718,7 +715,7 @@ describe('Test abuses', function () {
     it('Should keep the account abuse when deleting the account', async function () {
       this.timeout(10000)
 
-      const account = await getAccountFromServer(servers[1].url, 'user_2', servers[1])
+      const account = await getAccountFromServer(servers[1], 'user_2', servers[1])
       await removeUser(servers[1].url, account.userId, servers[1].accessToken)
 
       await waitJobs(servers)

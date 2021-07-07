@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
 import 'mocha'
-import { Account } from '../../../../shared/models/actors'
+import * as chai from 'chai'
 import {
+  checkActorFilesWereRemoved,
   checkTmpIsEmpty,
   checkVideoFilesWereRemoved,
   cleanupTests,
@@ -11,17 +11,19 @@ import {
   doubleFollow,
   flushAndRunMultipleServers,
   getAccountVideos,
+  getMyUserInformation,
   getVideoChannelsList,
   removeUser,
+  ServerInfo,
+  setAccessTokensToServers,
+  testImage,
+  updateMyAvatar,
   updateMyUser,
-  userLogin
-} from '../../../../shared/extra-utils'
-import { getMyUserInformation, ServerInfo, testImage, updateMyAvatar, uploadVideo } from '../../../../shared/extra-utils/index'
-import { checkActorFilesWereRemoved, getAccount, getAccountsList } from '../../../../shared/extra-utils/users/accounts'
-import { setAccessTokensToServers } from '../../../../shared/extra-utils/users/login'
-import { User } from '../../../../shared/models/users'
-import { VideoChannel } from '../../../../shared/models/videos'
-import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
+  uploadVideo,
+  userLogin,
+  waitJobs
+} from '@shared/extra-utils'
+import { User, VideoChannel } from '@shared/models'
 
 const expect = chai.expect
 
@@ -133,13 +135,12 @@ describe('Test users with multiple servers', function () {
     let createdAt: string | Date
 
     for (const server of servers) {
-      const resAccounts = await getAccountsList(server.url, '-createdAt')
+      const body = await server.accountsCommand.list({ sort: '-createdAt' })
 
-      const resList = resAccounts.body.data.find(a => a.name === 'root' && a.host === 'localhost:' + servers[0].port) as Account
+      const resList = body.data.find(a => a.name === 'root' && a.host === 'localhost:' + servers[0].port)
       expect(resList).not.to.be.undefined
 
-      const resAccount = await getAccount(server.url, resList.name + '@' + resList.host)
-      const account = resAccount.body as Account
+      const account = await server.accountsCommand.get({ accountName: resList.name + '@' + resList.host })
 
       if (!createdAt) createdAt = account.createdAt
 
@@ -193,9 +194,9 @@ describe('Test users with multiple servers', function () {
     this.timeout(10_000)
 
     for (const server of servers) {
-      const resAccounts = await getAccountsList(server.url, '-createdAt')
+      const body = await server.accountsCommand.list({ sort: '-createdAt' })
 
-      const accountDeleted = resAccounts.body.data.find(a => a.name === 'user1' && a.host === 'localhost:' + servers[0].port) as Account
+      const accountDeleted = body.data.find(a => a.name === 'user1' && a.host === 'localhost:' + servers[0].port)
       expect(accountDeleted).not.to.be.undefined
 
       const resVideoChannels = await getVideoChannelsList(server.url, 0, 10)
@@ -210,9 +211,9 @@ describe('Test users with multiple servers', function () {
     await waitJobs(servers)
 
     for (const server of servers) {
-      const resAccounts = await getAccountsList(server.url, '-createdAt')
+      const body = await server.accountsCommand.list({ sort: '-createdAt' })
 
-      const accountDeleted = resAccounts.body.data.find(a => a.name === 'user1' && a.host === 'localhost:' + servers[0].port) as Account
+      const accountDeleted = body.data.find(a => a.name === 'user1' && a.host === 'localhost:' + servers[0].port)
       expect(accountDeleted).to.be.undefined
 
       const resVideoChannels = await getVideoChannelsList(server.url, 0, 10)

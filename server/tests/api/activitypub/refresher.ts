@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
+import { HttpStatusCode } from '@shared/core-utils'
 import {
-  cleanupTests, closeAllSequelize,
+  cleanupTests,
+  closeAllSequelize,
   createVideoPlaylist,
   doubleFollow,
   flushAndRunMultipleServers,
@@ -21,10 +23,8 @@ import {
   uploadVideoAndGetId,
   wait,
   waitJobs
-} from '../../../../shared/extra-utils'
-import { getAccount } from '../../../../shared/extra-utils/users/accounts'
-import { VideoPlaylistPrivacy } from '../../../../shared/models/videos'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+} from '@shared/extra-utils'
+import { VideoPlaylistPrivacy } from '@shared/models'
 
 describe('Test AP refresher', function () {
   let servers: ServerInfo[] = []
@@ -116,19 +116,21 @@ describe('Test AP refresher', function () {
     it('Should remove a deleted actor', async function () {
       this.timeout(60000)
 
+      const command = servers[0].accountsCommand
+
       await wait(10000)
 
       // Change actor name so the remote server returns a 404
       const to = 'http://localhost:' + servers[1].port + '/accounts/user2'
       await setActorField(servers[1].internalServerNumber, to, 'preferredUsername', 'toto')
 
-      await getAccount(servers[0].url, 'user1@localhost:' + servers[1].port)
-      await getAccount(servers[0].url, 'user2@localhost:' + servers[1].port)
+      await command.get({ accountName: 'user1@localhost:' + servers[1].port })
+      await command.get({ accountName: 'user2@localhost:' + servers[1].port })
 
       await waitJobs(servers)
 
-      await getAccount(servers[0].url, 'user1@localhost:' + servers[1].port, HttpStatusCode.OK_200)
-      await getAccount(servers[0].url, 'user2@localhost:' + servers[1].port, HttpStatusCode.NOT_FOUND_404)
+      await command.get({ accountName: 'user1@localhost:' + servers[1].port, expectedStatus: HttpStatusCode.OK_200 })
+      await command.get({ accountName: 'user2@localhost:' + servers[1].port, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
     })
   })
 

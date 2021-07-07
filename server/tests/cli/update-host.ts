@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-import * as chai from 'chai'
 import {
   addVideoChannel,
+  addVideoCommentThread,
   cleanupTests,
   createUser,
   flushAndRunServer,
@@ -16,12 +16,10 @@ import {
   reRunServer,
   ServerInfo,
   setAccessTokensToServers,
-  uploadVideo
-} from '../../../shared/extra-utils'
-import { waitJobs } from '../../../shared/extra-utils/server/jobs'
-import { getAccountsList } from '../../../shared/extra-utils/users/accounts'
-import { addVideoCommentThread } from '../../../shared/extra-utils/videos/video-comments'
-import { VideoDetails } from '../../../shared/models/videos'
+  uploadVideo,
+  waitJobs
+} from '@shared/extra-utils'
+import { VideoDetails } from '@shared/models'
 
 const expect = chai.expect
 
@@ -104,10 +102,10 @@ describe('Test update host scripts', function () {
   })
 
   it('Should have updated accounts url', async function () {
-    const res = await getAccountsList(server.url)
-    expect(res.body.total).to.equal(3)
+    const body = await server.accountsCommand.list()
+    expect(body.total).to.equal(3)
 
-    for (const account of res.body.data) {
+    for (const account of body.data) {
       const usernameWithDomain = account.name
       const { body } = await makeActivityPubGetRequest(server.url, '/accounts/' + usernameWithDomain)
 

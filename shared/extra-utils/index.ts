@@ -10,16 +10,10 @@ export * from './overviews'
 export * from './search'
 export * from './server'
 export * from './socket'
+export * from './users'
 
 export * from './requests/check-api-params'
 export * from './requests/requests'
-
-export * from './users/accounts'
-export * from './users/blocklist'
-export * from './users/login'
-export * from './users/user-notifications'
-export * from './users/user-subscriptions'
-export * from './users/users'
 
 export * from './videos/live'
 export * from './videos/services'
