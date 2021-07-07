@@ -132,19 +132,13 @@ export async function addVideoResumable (_req: express.Request, res: express.Res
 
 async function addVideo (options: {
   res: express.Response
-  videoPhysicalFile: express.VideoUploadFile
   videoInfo: VideoCreate
   files: express.UploadFiles
 }) {
-  const { res, videoPhysicalFile, videoInfo, files } = options
+  const { res, videoInfo, files } = options
   const video = res.locals.video
   const videoFile = res.locals.videoFile
   const user = res.locals.oauth.token.User
-  const destination = getVideoFilePath(video, videoFile)
-
-  // This is important in case if there is another attempt in the retry process
-  videoPhysicalFile.filename = getVideoFilePath(video, videoFile)
-  videoPhysicalFile.path = destination
 
   const [ thumbnailModel, previewModel ] = await buildVideoThumbnailsFromReq({
     video,
