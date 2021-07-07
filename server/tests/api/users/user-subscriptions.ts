@@ -3,25 +3,19 @@
 import 'mocha'
 import * as chai from 'chai'
 import {
-  addUserSubscription,
-  areSubscriptionsExist,
   cleanupTests,
   createUser,
   doubleFollow,
   flushAndRunMultipleServers,
-  getUserSubscription,
   getVideosList,
-  listUserSubscriptions,
-  listUserSubscriptionVideos,
-  removeUserSubscription,
   ServerInfo,
   setAccessTokensToServers,
+  SubscriptionsCommand,
   updateVideo,
   uploadVideo,
   userLogin,
   waitJobs
 } from '@shared/extra-utils'
-import { Video, VideoChannel } from '@shared/models'
 
 const expect = chai.expect
 
@@ -29,6 +23,8 @@ describe('Test users subscriptions', function () {
   let servers: ServerInfo[] = []
   const users: { accessToken: string }[] = []
   let video3UUID: string
+
+  let command: SubscriptionsCommand
 
   before(async function () {
     this.timeout(120000)
@@ -58,6 +54,8 @@ describe('Test users subscriptions', function () {
     }
 
     await waitJobs(servers)
+
+    command = servers[0].subscriptionsCommand
   })
 
   it('Should display videos of server 2 on server 1', async function () {
@@ -69,8 +67,8 @@ describe('Test users subscriptions', function () {
   it('User of server 1 should follow user of server 3 and root of server 1', async function () {
     this.timeout(60000)
 
-    await addUserSubscription(servers[0].url, users[0].accessToken, 'user3_channel@localhost:' + servers[2].port)
-    await addUserSubscription(servers[0].url, users[0].accessToken, 'root_channel@localhost:' + servers[0].port)
+    await command.add({ token: users[0].accessToken, targetUri: 'user3_channel@localhost:' + servers[2].port })
+    await command.add({ token: users[0].accessToken, targetUri: 'root_channel@localhost:' + servers[0].port })
 
     await waitJobs(servers)
 
@@ -93,17 +91,17 @@ describe('Test users subscriptions', function () {
 
   it('Should list subscriptions', async function () {
     {
-      const res = await listUserSubscriptions({ url: servers[0].url, token: servers[0].accessToken })
-      expect(res.body.total).to.equal(0)
-      expect(res.body.data).to.be.an('array')
-      expect(res.body.data).to.have.lengthOf(0)
+      const body = await command.list()
+      expect(body.total).to.equal(0)
+      expect(body.data).to.be.an('array')
+      expect(body.data).to.have.lengthOf(0)
     }
 
     {
-      const res = await listUserSubscriptions({ url: servers[0].url, token: users[0].accessToken, sort: 'createdAt' })
-      expect(res.body.total).to.equal(2)
+      const body = await command.list({ token: users[0].accessToken, sort: 'createdAt' })
+      expect(body.total).to.equal(2)
 
-      const subscriptions: VideoChannel[] = res.body.data
+      const subscriptions = body.data
       expect(subscriptions).to.be.an('array')
       expect(subscriptions).to.have.lengthOf(2)
 
@@ -114,8 +112,7 @@ describe('Test users subscriptions', function () {
 
   it('Should get subscription', async function () {
     {
-      const res = await getUserSubscription(servers[0].url, users[0].accessToken, 'user3_channel@localhost:' + servers[2].port)
-      const videoChannel: VideoChannel = res.body
+      const videoChannel = await command.get({ token: users[0].accessToken, uri: 'user3_channel@localhost:' + servers[2].port })
 
       expect(videoChannel.name).to.equal('user3_channel')
       expect(videoChannel.host).to.equal('localhost:' + servers[2].port)
@@ -125,8 +122,7 @@ describe('Test users subscriptions', function () {
     }
 
     {
-      const res = await getUserSubscription(servers[0].url, users[0].accessToken, 'root_channel@localhost:' + servers[0].port)
-      const videoChannel: VideoChannel = res.body
+      const videoChannel = await command.get({ token: users[0].accessToken, uri: 'root_channel@localhost:' + servers[0].port })
 
       expect(videoChannel.name).to.equal('root_channel')
       expect(videoChannel.host).to.equal('localhost:' + servers[0].port)
@@ -144,8 +140,7 @@ describe('Test users subscriptions', function () {
       'user3_channel@localhost:' + servers[0].port
     ]
 
-    const res = await areSubscriptionsExist(servers[0].url, users[0].accessToken, uris)
-    const body = res.body
+    const body = await command.exist({ token: users[0].accessToken, uris })
 
     expect(body['user3_channel@localhost:' + servers[2].port]).to.be.true
     expect(body['root2_channel@localhost:' + servers[0].port]).to.be.false
@@ -155,45 +150,31 @@ describe('Test users subscriptions', function () {
 
   it('Should search among subscriptions', async function () {
     {
-      const res = await listUserSubscriptions({
-        url: servers[0].url,
-        token: users[0].accessToken,
-        sort: '-createdAt',
-        search: 'user3_channel'
-      })
-      expect(res.body.total).to.equal(1)
-
-      const subscriptions = res.body.data
-      expect(subscriptions).to.have.lengthOf(1)
+      const body = await command.list({ token: users[0].accessToken, sort: '-createdAt', search: 'user3_channel' })
+      expect(body.total).to.equal(1)
+      expect(body.data).to.have.lengthOf(1)
     }
 
     {
-      const res = await listUserSubscriptions({
-        url: servers[0].url,
-        token: users[0].accessToken,
-        sort: '-createdAt',
-        search: 'toto'
-      })
-      expect(res.body.total).to.equal(0)
-
-      const subscriptions = res.body.data
-      expect(subscriptions).to.have.lengthOf(0)
+      const body = await command.list({ token: users[0].accessToken, sort: '-createdAt', search: 'toto' })
+      expect(body.total).to.equal(0)
+      expect(body.data).to.have.lengthOf(0)
     }
   })
 
   it('Should list subscription videos', async function () {
     {
-      const res = await listUserSubscriptionVideos(servers[0].url, servers[0].accessToken)
-      expect(res.body.total).to.equal(0)
-      expect(res.body.data).to.be.an('array')
-      expect(res.body.data).to.have.lengthOf(0)
+      const body = await command.listVideos()
+      expect(body.total).to.equal(0)
+      expect(body.data).to.be.an('array')
+      expect(body.data).to.have.lengthOf(0)
     }
 
     {
-      const res = await listUserSubscriptionVideos(servers[0].url, users[0].accessToken, 'createdAt')
-      expect(res.body.total).to.equal(3)
+      const body = await command.listVideos({ token: users[0].accessToken, sort: 'createdAt' })
+      expect(body.total).to.equal(3)
 
-      const videos: Video[] = res.body.data
+      const videos = body.data
       expect(videos).to.be.an('array')
       expect(videos).to.have.lengthOf(3)
 
@@ -212,17 +193,17 @@ describe('Test users subscriptions', function () {
     await waitJobs(servers)
 
     {
-      const res = await listUserSubscriptionVideos(servers[0].url, servers[0].accessToken)
-      expect(res.body.total).to.equal(0)
-      expect(res.body.data).to.be.an('array')
-      expect(res.body.data).to.have.lengthOf(0)
+      const body = await command.listVideos()
+      expect(body.total).to.equal(0)
+      expect(body.data).to.be.an('array')
+      expect(body.data).to.have.lengthOf(0)
     }
 
     {
-      const res = await listUserSubscriptionVideos(servers[0].url, users[0].accessToken, 'createdAt')
-      expect(res.body.total).to.equal(4)
+      const body = await command.listVideos({ token: users[0].accessToken, sort: 'createdAt' })
+      expect(body.total).to.equal(4)
 
-      const videos: Video[] = res.body.data
+      const videos = body.data
       expect(videos).to.be.an('array')
       expect(videos).to.have.lengthOf(4)
 
@@ -281,17 +262,17 @@ describe('Test users subscriptions', function () {
 
   it('Should still list subscription videos', async function () {
     {
-      const res = await listUserSubscriptionVideos(servers[0].url, servers[0].accessToken)
-      expect(res.body.total).to.equal(0)
-      expect(res.body.data).to.be.an('array')
-      expect(res.body.data).to.have.lengthOf(0)
+      const body = await command.listVideos()
+      expect(body.total).to.equal(0)
+      expect(body.data).to.be.an('array')
+      expect(body.data).to.have.lengthOf(0)
     }
 
     {
-      const res = await listUserSubscriptionVideos(servers[0].url, users[0].accessToken, 'createdAt')
-      expect(res.body.total).to.equal(4)
+      const body = await command.listVideos({ token: users[0].accessToken, sort: 'createdAt' })
+      expect(body.total).to.equal(4)
 
-      const videos: Video[] = res.body.data
+      const videos = body.data
       expect(videos).to.be.an('array')
       expect(videos).to.have.lengthOf(4)
 
@@ -309,44 +290,41 @@ describe('Test users subscriptions', function () {
 
     await waitJobs(servers)
 
-    const res = await listUserSubscriptionVideos(servers[0].url, users[0].accessToken, 'createdAt')
-    const videos: Video[] = res.body.data
-    expect(videos[2].name).to.equal('video server 3 added after follow updated')
+    const body = await command.listVideos({ token: users[0].accessToken, sort: 'createdAt' })
+    expect(body.data[2].name).to.equal('video server 3 added after follow updated')
   })
 
   it('Should remove user of server 3 subscription', async function () {
     this.timeout(30000)
 
-    await removeUserSubscription(servers[0].url, users[0].accessToken, 'user3_channel@localhost:' + servers[2].port)
+    await command.remove({ token: users[0].accessToken, uri: 'user3_channel@localhost:' + servers[2].port })
 
     await waitJobs(servers)
   })
 
   it('Should not display its videos anymore', async function () {
-    {
-      const res = await listUserSubscriptionVideos(servers[0].url, users[0].accessToken, 'createdAt')
-      expect(res.body.total).to.equal(1)
+    const body = await command.listVideos({ token: users[0].accessToken, sort: 'createdAt' })
+    expect(body.total).to.equal(1)
 
-      const videos: Video[] = res.body.data
-      expect(videos).to.be.an('array')
-      expect(videos).to.have.lengthOf(1)
+    const videos = body.data
+    expect(videos).to.be.an('array')
+    expect(videos).to.have.lengthOf(1)
 
-      expect(videos[0].name).to.equal('video server 1 added after follow')
-    }
+    expect(videos[0].name).to.equal('video server 1 added after follow')
   })
 
   it('Should remove the root subscription and not display the videos anymore', async function () {
     this.timeout(30000)
 
-    await removeUserSubscription(servers[0].url, users[0].accessToken, 'root_channel@localhost:' + servers[0].port)
+    await command.remove({ token: users[0].accessToken, uri: 'root_channel@localhost:' + servers[0].port })
 
     await waitJobs(servers)
 
     {
-      const res = await listUserSubscriptionVideos(servers[0].url, users[0].accessToken, 'createdAt')
-      expect(res.body.total).to.equal(0)
+      const body = await command.list({ token: users[0].accessToken, sort: 'createdAt' })
+      expect(body.total).to.equal(0)
 
-      const videos: Video[] = res.body.data
+      const videos = body.data
       expect(videos).to.be.an('array')
       expect(videos).to.have.lengthOf(0)
     }
@@ -366,15 +344,15 @@ describe('Test users subscriptions', function () {
   it('Should follow user of server 3 again', async function () {
     this.timeout(60000)
 
-    await addUserSubscription(servers[0].url, users[0].accessToken, 'user3_channel@localhost:' + servers[2].port)
+    await command.add({ token: users[0].accessToken, targetUri: 'user3_channel@localhost:' + servers[2].port })
 
     await waitJobs(servers)
 
     {
-      const res = await listUserSubscriptionVideos(servers[0].url, users[0].accessToken, 'createdAt')
-      expect(res.body.total).to.equal(3)
+      const body = await command.listVideos({ token: users[0].accessToken, sort: 'createdAt' })
+      expect(body.total).to.equal(3)
 
-      const videos: Video[] = res.body.data
+      const videos = body.data
       expect(videos).to.be.an('array')
       expect(videos).to.have.lengthOf(3)
 

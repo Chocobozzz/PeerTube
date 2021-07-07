@@ -3,7 +3,6 @@
 import 'mocha'
 import * as chai from 'chai'
 import {
-  addUserSubscription,
   addVideoCommentThread,
   cleanupTests,
   createUser,
@@ -11,7 +10,6 @@ import {
   flushAndRunMultipleServers,
   getUserNotifications,
   markAsReadAllNotifications,
-  removeUserSubscription,
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo,
@@ -44,8 +42,8 @@ describe('Test blocklist', function () {
 
   async function resetState () {
     try {
-      await removeUserSubscription(servers[1].url, remoteUserToken, 'user1_channel@' + servers[0].host)
-      await removeUserSubscription(servers[1].url, remoteUserToken, 'user2_channel@' + servers[0].host)
+      await servers[1].subscriptionsCommand.remove({ token: remoteUserToken, uri: 'user1_channel@' + servers[0].host })
+      await servers[1].subscriptionsCommand.remove({ token: remoteUserToken, uri: 'user2_channel@' + servers[0].host })
     } catch {}
 
     await waitJobs(servers)
@@ -66,8 +64,8 @@ describe('Test blocklist', function () {
 
     {
 
-      await addUserSubscription(servers[1].url, remoteUserToken, 'user1_channel@' + servers[0].host)
-      await addUserSubscription(servers[1].url, remoteUserToken, 'user2_channel@' + servers[0].host)
+      await servers[1].subscriptionsCommand.add({ token: remoteUserToken, targetUri: 'user1_channel@' + servers[0].host })
+      await servers[1].subscriptionsCommand.add({ token: remoteUserToken, targetUri: 'user2_channel@' + servers[0].host })
     }
 
     await waitJobs(servers)

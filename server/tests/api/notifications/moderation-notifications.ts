@@ -3,7 +3,6 @@
 import 'mocha'
 import { buildUUID } from '@server/helpers/uuid'
 import {
-  addUserSubscription,
   addVideoCommentThread,
   addVideoToBlacklist,
   checkAbuseStateChange,
@@ -29,7 +28,6 @@ import {
   MockSmtpServer,
   prepareNotificationsTest,
   registerUser,
-  removeUserSubscription,
   removeVideoFromBlacklist,
   ServerInfo,
   uploadVideo,
@@ -488,8 +486,8 @@ describe('Test moderation notifications', function () {
       autoBlacklistTestsCustomConfig.transcoding.enabled = true
       await servers[0].configCommand.updateCustomConfig({ newCustomConfig: autoBlacklistTestsCustomConfig })
 
-      await addUserSubscription(servers[0].url, servers[0].accessToken, 'user_1_channel@localhost:' + servers[0].port)
-      await addUserSubscription(servers[1].url, servers[1].accessToken, 'user_1_channel@localhost:' + servers[0].port)
+      await servers[0].subscriptionsCommand.add({ targetUri: 'user_1_channel@localhost:' + servers[0].port })
+      await servers[1].subscriptionsCommand.add({ targetUri: 'user_1_channel@localhost:' + servers[0].port })
 
     })
 
@@ -611,8 +609,8 @@ describe('Test moderation notifications', function () {
     after(async () => {
       await servers[0].configCommand.updateCustomConfig({ newCustomConfig: currentCustomConfig })
 
-      await removeUserSubscription(servers[0].url, servers[0].accessToken, 'user_1_channel@localhost:' + servers[0].port)
-      await removeUserSubscription(servers[1].url, servers[1].accessToken, 'user_1_channel@localhost:' + servers[0].port)
+      await servers[0].subscriptionsCommand.remove({ uri: 'user_1_channel@localhost:' + servers[0].port })
+      await servers[1].subscriptionsCommand.remove({ uri: 'user_1_channel@localhost:' + servers[0].port })
     })
   })
 

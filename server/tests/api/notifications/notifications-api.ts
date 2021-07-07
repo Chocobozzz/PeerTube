@@ -2,21 +2,24 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { addUserSubscription } from '@shared/extra-utils/users/user-subscriptions'
-import { cleanupTests, getMyUserInformation, immutableAssign, uploadRandomVideo, waitJobs } from '../../../../shared/extra-utils'
-import { ServerInfo } from '../../../../shared/extra-utils/index'
-import { MockSmtpServer } from '../../../../shared/extra-utils/mock-servers/mock-email'
 import {
   CheckerBaseParams,
   checkNewVideoFromSubscription,
+  cleanupTests,
   getAllNotificationsSettings,
+  getMyUserInformation,
   getUserNotifications,
+  immutableAssign,
   markAsReadAllNotifications,
   markAsReadNotifications,
+  MockSmtpServer,
   prepareNotificationsTest,
-  updateMyNotificationSettings
-} from '../../../../shared/extra-utils/users/user-notifications'
-import { User, UserNotification, UserNotificationSettingValue } from '../../../../shared/models/users'
+  ServerInfo,
+  updateMyNotificationSettings,
+  uploadRandomVideo,
+  waitJobs
+} from '@shared/extra-utils'
+import { User, UserNotification, UserNotificationSettingValue } from '@shared/models'
 
 const expect = chai.expect
 
@@ -35,7 +38,7 @@ describe('Test notifications API', function () {
     userNotifications = res.userNotifications
     server = res.servers[0]
 
-    await addUserSubscription(server.url, userAccessToken, 'root_channel@localhost:' + server.port)
+    await server.subscriptionsCommand.add({ token: userAccessToken, targetUri: 'root_channel@localhost:' + server.port })
 
     for (let i = 0; i < 10; i++) {
       await uploadRandomVideo(server, false)
