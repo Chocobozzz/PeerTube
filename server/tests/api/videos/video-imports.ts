@@ -14,8 +14,7 @@ import {
   listVideoCaptions,
   ServerInfo,
   setAccessTokensToServers,
-  testCaptionFile,
-  updateCustomSubConfig
+  testCaptionFile
 } from '../../../../shared/extra-utils'
 import { areHttpImportTestsDisabled, testImage } from '../../../../shared/extra-utils/miscs/miscs'
 import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
@@ -333,7 +332,7 @@ Ajouter un sous-titre est vraiment facile`)
         }
       }
     }
-    await updateCustomSubConfig(servers[0].url, servers[0].accessToken, config)
+    await servers[0].configCommand.updateCustomSubConfig({ newConfig: config })
 
     const attributes = {
       name: 'hdr video',

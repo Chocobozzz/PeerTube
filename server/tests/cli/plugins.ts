@@ -5,14 +5,12 @@ import { expect } from 'chai'
 import {
   cleanupTests,
   flushAndRunServer,
-  getConfig,
   killallServers,
   PluginsCommand,
   reRunServer,
   ServerInfo,
   setAccessTokensToServers
 } from '../../../shared/extra-utils'
-import { ServerConfig } from '../../../shared/models/server'
 
 describe('Test plugin scripts', function () {
   let server: ServerInfo
@@ -44,8 +42,7 @@ describe('Test plugin scripts', function () {
     killallServers([ server ])
     await reRunServer(server)
 
-    const res = await getConfig(server.url)
-    const config: ServerConfig = res.body
+    const config = await server.configCommand.getConfig()
 
     const plugin = config.plugin.registered
                          .find(p => p.name === 'test')
@@ -68,8 +65,7 @@ describe('Test plugin scripts', function () {
     killallServers([ server ])
     await reRunServer(server)
 
-    const res = await getConfig(server.url)
-    const config: ServerConfig = res.body
+    const config = await server.configCommand.getConfig()
 
     const plugin = config.plugin.registered
                          .find(p => p.name === 'test')

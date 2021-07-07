@@ -13,7 +13,6 @@ import {
   flushAndRunServer,
   getAccountRatings,
   getBlacklistedVideosList,
-  getCustomConfig,
   getMyUserInformation,
   getMyUserVideoQuotaUsed,
   getMyUserVideoRating,
@@ -38,7 +37,6 @@ import {
   setTokenField,
   testImage,
   unblockUser,
-  updateCustomSubConfig,
   updateMyAvatar,
   updateMyUser,
   updateUser,
@@ -46,7 +44,7 @@ import {
   userLogin,
   waitJobs
 } from '@shared/extra-utils'
-import { AbuseState, CustomConfig, MyUser, OAuth2ErrorCode, User, UserAdminFlag, UserRole, Video, VideoPlaylistType } from '@shared/models'
+import { AbuseState, MyUser, OAuth2ErrorCode, User, UserAdminFlag, UserRole, Video, VideoPlaylistType } from '@shared/models'
 
 const expect = chai.expect
 
@@ -418,12 +416,11 @@ describe('Test users', function () {
       this.timeout(60000)
 
       {
-        const res = await getCustomConfig(server.url, server.accessToken)
-        const config = res.body as CustomConfig
+        const config = await server.configCommand.getCustomConfig()
         config.transcoding.webtorrent.enabled = false
         config.transcoding.hls.enabled = true
         config.transcoding.enabled = true
-        await updateCustomSubConfig(server.url, server.accessToken, config)
+        await server.configCommand.updateCustomSubConfig({ newConfig: config })
       }
 
       {

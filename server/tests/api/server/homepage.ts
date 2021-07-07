@@ -3,12 +3,10 @@
 import 'mocha'
 import * as chai from 'chai'
 import { HttpStatusCode } from '@shared/core-utils'
-import { ServerConfig } from '@shared/models'
 import {
   cleanupTests,
   CustomPagesCommand,
   flushAndRunServer,
-  getConfig,
   killallServers,
   reRunServer,
   ServerInfo,
@@ -18,9 +16,8 @@ import {
 const expect = chai.expect
 
 async function getHomepageState (server: ServerInfo) {
-  const res = await getConfig(server.url)
+  const config = await server.configCommand.getConfig()
 
-  const config = res.body as ServerConfig
   return config.homepage.enabled
 }
 

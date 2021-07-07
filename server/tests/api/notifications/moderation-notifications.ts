@@ -23,7 +23,6 @@ import {
   createUser,
   generateUserAccessToken,
   getAccount,
-  getCustomConfig,
   getVideoCommentThreads,
   getVideoIdFromUUID,
   immutableAssign,
@@ -34,8 +33,6 @@ import {
   removeUserSubscription,
   removeVideoFromBlacklist,
   ServerInfo,
-  updateCustomConfig,
-  updateCustomSubConfig,
   uploadVideo,
   wait,
   waitJobs
@@ -407,7 +404,7 @@ describe('Test moderation notifications', function () {
           }
         }
       }
-      await updateCustomSubConfig(servers[0].url, servers[0].accessToken, config)
+      await servers[0].configCommand.updateCustomSubConfig({ newConfig: config })
 
       await servers[2].followsCommand.follow({ targets: [ servers[0].url ] })
 
@@ -421,7 +418,7 @@ describe('Test moderation notifications', function () {
       await checkAutoInstanceFollowing(immutableAssign(baseParams, userOverride), followerHost, followingHost, 'absence')
 
       config.followings.instance.autoFollowBack.enabled = false
-      await updateCustomSubConfig(servers[0].url, servers[0].accessToken, config)
+      await servers[0].configCommand.updateCustomSubConfig({ newConfig: config })
       await servers[0].followsCommand.unfollow({ target: servers[2] })
       await servers[2].followsCommand.unfollow({ target: servers[0] })
     })
@@ -430,7 +427,7 @@ describe('Test moderation notifications', function () {
       this.timeout(30000)
       await servers[0].followsCommand.unfollow({ target: servers[1] })
 
-      await updateCustomSubConfig(servers[0].url, servers[0].accessToken, config)
+      await servers[0].configCommand.updateCustomSubConfig({ newConfig: config })
 
       await wait(5000)
       await waitJobs(servers)
@@ -440,7 +437,7 @@ describe('Test moderation notifications', function () {
       await checkAutoInstanceFollowing(baseParams, followerHost, followingHost, 'presence')
 
       config.followings.instance.autoFollowIndex.enabled = false
-      await updateCustomSubConfig(servers[0].url, servers[0].accessToken, config)
+      await servers[0].configCommand.updateCustomSubConfig({ newConfig: config })
       await servers[0].followsCommand.unfollow({ target: servers[1] })
     })
   })
@@ -476,8 +473,8 @@ describe('Test moderation notifications', function () {
         token: userAccessToken
       }
 
-      const resCustomConfig = await getCustomConfig(servers[0].url, servers[0].accessToken)
-      currentCustomConfig = resCustomConfig.body
+      currentCustomConfig = await servers[0].configCommand.getCustomConfig()
+
       const autoBlacklistTestsCustomConfig = immutableAssign(currentCustomConfig, {
         autoBlacklist: {
           videos: {
@@ -487,9 +484,10 @@ describe('Test moderation notifications', function () {
           }
         }
       })
+
       // enable transcoding otherwise own publish notification after transcoding not expected
       autoBlacklistTestsCustomConfig.transcoding.enabled = true
-      await updateCustomConfig(servers[0].url, servers[0].accessToken, autoBlacklistTestsCustomConfig)
+      await servers[0].configCommand.updateCustomConfig({ newCustomConfig: autoBlacklistTestsCustomConfig })
 
       await addUserSubscription(servers[0].url, servers[0].accessToken, 'user_1_channel@localhost:' + servers[0].port)
       await addUserSubscription(servers[1].url, servers[1].accessToken, 'user_1_channel@localhost:' + servers[0].port)
@@ -612,7 +610,7 @@ describe('Test moderation notifications', function () {
     })
 
     after(async () => {
-      await updateCustomConfig(servers[0].url, servers[0].accessToken, currentCustomConfig)
+      await servers[0].configCommand.updateCustomConfig({ newCustomConfig: currentCustomConfig })
 
       await removeUserSubscription(servers[0].url, servers[0].accessToken, 'user_1_channel@localhost:' + servers[0].port)
       await removeUserSubscription(servers[1].url, servers[1].accessToken, 'user_1_channel@localhost:' + servers[0].port)

@@ -2,9 +2,12 @@
 
 import 'mocha'
 import { omit } from 'lodash'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '@shared/core-utils'
 import {
   buildAbsoluteFixturePath,
+  checkBadCountPagination,
+  checkBadSortPagination,
+  checkBadStartPagination,
   cleanupTests,
   createUser,
   flushAndRunServer,
@@ -15,16 +18,10 @@ import {
   makeUploadRequest,
   ServerInfo,
   setAccessTokensToServers,
-  updateCustomSubConfig,
   userLogin
-} from '../../../../shared/extra-utils'
-import {
-  checkBadCountPagination,
-  checkBadSortPagination,
-  checkBadStartPagination
-} from '../../../../shared/extra-utils/requests/check-api-params'
-import { getGoodVideoUrl, getMagnetURI } from '../../../../shared/extra-utils/videos/video-imports'
-import { VideoPrivacy } from '../../../../shared/models/videos/video-privacy.enum'
+} from '@shared/extra-utils'
+import { getGoodVideoUrl, getMagnetURI } from '@shared/extra-utils/videos/video-imports'
+import { VideoPrivacy } from '@shared/models'
 
 describe('Test video imports API validator', function () {
   const path = '/api/v1/videos/imports'
@@ -263,14 +260,16 @@ describe('Test video imports API validator', function () {
     })
 
     it('Should forbid to import http videos', async function () {
-      await updateCustomSubConfig(server.url, server.accessToken, {
-        import: {
-          videos: {
-            http: {
-              enabled: false
-            },
-            torrent: {
-              enabled: true
+      await server.configCommand.updateCustomSubConfig({
+        newConfig: {
+          import: {
+            videos: {
+              http: {
+                enabled: false
+              },
+              torrent: {
+                enabled: true
+              }
             }
           }
         }
@@ -286,14 +285,16 @@ describe('Test video imports API validator', function () {
     })
 
     it('Should forbid to import torrent videos', async function () {
-      await updateCustomSubConfig(server.url, server.accessToken, {
-        import: {
-          videos: {
-            http: {
-              enabled: true
-            },
-            torrent: {
-              enabled: false
+      await server.configCommand.updateCustomSubConfig({
+        newConfig: {
+          import: {
+            videos: {
+              http: {
+                enabled: true
+              },
+              torrent: {
+                enabled: false
+              }
             }
           }
         }

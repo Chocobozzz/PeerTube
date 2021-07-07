@@ -34,7 +34,6 @@ import {
   stopFfmpeg,
   testFfmpegStreamError,
   testImage,
-  updateCustomSubConfig,
   updateLive,
   uploadVideoAndGetId,
   wait,
@@ -59,12 +58,14 @@ describe('Test live', function () {
     await setAccessTokensToServers(servers)
     await setDefaultVideoChannel(servers)
 
-    await updateCustomSubConfig(servers[0].url, servers[0].accessToken, {
-      live: {
-        enabled: true,
-        allowReplay: true,
-        transcoding: {
-          enabled: false
+    await servers[0].configCommand.updateCustomSubConfig({
+      newConfig: {
+        live: {
+          enabled: true,
+          allowReplay: true,
+          transcoding: {
+            enabled: false
+          }
         }
       }
     })
@@ -422,20 +423,22 @@ describe('Test live', function () {
     }
 
     function updateConf (resolutions: number[]) {
-      return updateCustomSubConfig(servers[0].url, servers[0].accessToken, {
-        live: {
-          enabled: true,
-          allowReplay: true,
-          maxDuration: -1,
-          transcoding: {
+      return servers[0].configCommand.updateCustomSubConfig({
+        newConfig: {
+          live: {
             enabled: true,
-            resolutions: {
-              '240p': resolutions.includes(240),
-              '360p': resolutions.includes(360),
-              '480p': resolutions.includes(480),
-              '720p': resolutions.includes(720),
-              '1080p': resolutions.includes(1080),
-              '2160p': resolutions.includes(2160)
+            allowReplay: true,
+            maxDuration: -1,
+            transcoding: {
+              enabled: true,
+              resolutions: {
+                '240p': resolutions.includes(240),
+                '360p': resolutions.includes(360),
+                '480p': resolutions.includes(480),
+                '720p': resolutions.includes(720),
+                '1080p': resolutions.includes(1080),
+                '2160p': resolutions.includes(2160)
+              }
             }
           }
         }

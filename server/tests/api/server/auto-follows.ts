@@ -8,7 +8,6 @@ import {
   MockInstancesIndex,
   ServerInfo,
   setAccessTokensToServers,
-  updateCustomSubConfig,
   wait,
   waitJobs
 } from '@shared/extra-utils'
@@ -87,7 +86,7 @@ describe('Test auto follows', function () {
           }
         }
       }
-      await updateCustomSubConfig(servers[1].url, servers[1].accessToken, config)
+      await servers[1].configCommand.updateCustomSubConfig({ newConfig: config })
 
       await server1Follows2(servers)
 
@@ -112,7 +111,7 @@ describe('Test auto follows', function () {
           }
         }
       }
-      await updateCustomSubConfig(servers[1].url, servers[1].accessToken, config)
+      await servers[1].configCommand.updateCustomSubConfig({ newConfig: config })
 
       await server1Follows2(servers)
 
@@ -129,7 +128,7 @@ describe('Test auto follows', function () {
 
       config.followings.instance.autoFollowBack.enabled = false
       config.followers.instance.manualApproval = false
-      await updateCustomSubConfig(servers[1].url, servers[1].accessToken, config)
+      await servers[1].configCommand.updateCustomSubConfig({ newConfig: config })
     })
   })
 
@@ -166,7 +165,7 @@ describe('Test auto follows', function () {
           }
         }
       }
-      await updateCustomSubConfig(servers[0].url, servers[0].accessToken, config)
+      await servers[0].configCommand.updateCustomSubConfig({ newConfig: config })
 
       await wait(5000)
       await waitJobs(servers)

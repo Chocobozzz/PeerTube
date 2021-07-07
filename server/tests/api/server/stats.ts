@@ -12,7 +12,6 @@ import {
   flushAndRunMultipleServers,
   ServerInfo,
   setAccessTokensToServers,
-  updateCustomSubConfig,
   uploadVideo,
   userLogin,
   viewVideo,
@@ -197,24 +196,26 @@ describe('Test stats (excluding redundancy)', function () {
   it('Should correctly count video file sizes if transcoding is enabled', async function () {
     this.timeout(60000)
 
-    await updateCustomSubConfig(servers[0].url, servers[0].accessToken, {
-      transcoding: {
-        enabled: true,
-        webtorrent: {
-          enabled: true
-        },
-        hls: {
-          enabled: true
-        },
-        resolutions: {
-          '0p': false,
-          '240p': false,
-          '360p': false,
-          '480p': false,
-          '720p': false,
-          '1080p': false,
-          '1440p': false,
-          '2160p': false
+    await servers[0].configCommand.updateCustomSubConfig({
+      newConfig: {
+        transcoding: {
+          enabled: true,
+          webtorrent: {
+            enabled: true
+          },
+          hls: {
+            enabled: true
+          },
+          resolutions: {
+            '0p': false,
+            '240p': false,
+            '360p': false,
+            '480p': false,
+            '720p': false,
+            '1080p': false,
+            '1440p': false,
+            '2160p': false
+          }
         }
       }
     })
@@ -238,9 +239,11 @@ describe('Test stats (excluding redundancy)', function () {
   it('Should have the correct AP stats', async function () {
     this.timeout(60000)
 
-    await updateCustomSubConfig(servers[0].url, servers[0].accessToken, {
-      transcoding: {
-        enabled: false
+    await servers[0].configCommand.updateCustomSubConfig({
+      newConfig: {
+        transcoding: {
+          enabled: false
+        }
       }
     })
 

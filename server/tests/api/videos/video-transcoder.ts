@@ -5,7 +5,6 @@ import * as chai from 'chai'
 import { FfprobeData } from 'fluent-ffmpeg'
 import { omit } from 'lodash'
 import { join } from 'path'
-import { Job } from '@shared/models'
 import { VIDEO_TRANSCODING_FPS } from '../../../../server/initializers/constants'
 import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import {
@@ -24,7 +23,6 @@ import {
   makeGetRequest,
   ServerInfo,
   setAccessTokensToServers,
-  updateCustomSubConfig,
   uploadVideo,
   uploadVideoAndGetId,
   waitJobs,
@@ -43,22 +41,24 @@ import {
 const expect = chai.expect
 
 function updateConfigForTranscoding (server: ServerInfo) {
-  return updateCustomSubConfig(server.url, server.accessToken, {
-    transcoding: {
-      enabled: true,
-      allowAdditionalExtensions: true,
-      allowAudioFiles: true,
-      hls: { enabled: true },
-      webtorrent: { enabled: true },
-      resolutions: {
-        '0p': false,
-        '240p': true,
-        '360p': true,
-        '480p': true,
-        '720p': true,
-        '1080p': true,
-        '1440p': true,
-        '2160p': true
+  return server.configCommand.updateCustomSubConfig({
+    newConfig: {
+      transcoding: {
+        enabled: true,
+        allowAdditionalExtensions: true,
+        allowAudioFiles: true,
+        hls: { enabled: true },
+        webtorrent: { enabled: true },
+        resolutions: {
+          '0p': false,
+          '240p': true,
+          '360p': true,
+          '480p': true,
+          '720p': true,
+          '1080p': true,
+          '1440p': true,
+          '2160p': true
+        }
       }
     }
   })
@@ -363,19 +363,21 @@ describe('Test video transcoding', function () {
     function runSuite (mode: 'legacy' | 'resumable') {
 
       before(async function () {
-        await updateCustomSubConfig(servers[1].url, servers[1].accessToken, {
-          transcoding: {
-            hls: { enabled: true },
-            webtorrent: { enabled: true },
-            resolutions: {
-              '0p': false,
-              '240p': false,
-              '360p': false,
-              '480p': false,
-              '720p': false,
-              '1080p': false,
-              '1440p': false,
-              '2160p': false
+        await servers[1].configCommand.updateCustomSubConfig({
+          newConfig: {
+            transcoding: {
+              hls: { enabled: true },
+              webtorrent: { enabled: true },
+              resolutions: {
+                '0p': false,
+                '240p': false,
+                '360p': false,
+                '480p': false,
+                '720p': false,
+                '1080p': false,
+                '1440p': false,
+                '2160p': false
+              }
             }
           }
         })
@@ -434,14 +436,16 @@ describe('Test video transcoding', function () {
       it('Should upload an audio file and create an audio version only', async function () {
         this.timeout(60_000)
 
-        await updateCustomSubConfig(servers[1].url, servers[1].accessToken, {
-          transcoding: {
-            hls: { enabled: true },
-            webtorrent: { enabled: true },
-            resolutions: {
-              '0p': true,
-              '240p': false,
-              '360p': false
+        await servers[1].configCommand.updateCustomSubConfig({
+          newConfig: {
+            transcoding: {
+              hls: { enabled: true },
+              webtorrent: { enabled: true },
+              resolutions: {
+                '0p': true,
+                '240p': false,
+                '360p': false
+              }
             }
           }
         })
@@ -601,7 +605,7 @@ describe('Test video transcoding', function () {
     it('Should not transcode to an higher bitrate than the original file', async function () {
       this.timeout(160_000)
 
-      const config = {
+      const newConfig = {
         transcoding: {
           enabled: true,
           resolutions: {
@@ -617,7 +621,7 @@ describe('Test video transcoding', function () {
           hls: { enabled: true }
         }
       }
-      await updateCustomSubConfig(servers[1].url, servers[1].accessToken, config)
+      await servers[1].configCommand.updateCustomSubConfig({ newConfig })
 
       const videoAttributes = {
         name: 'low bitrate',

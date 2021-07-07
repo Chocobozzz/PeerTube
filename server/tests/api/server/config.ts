@@ -2,15 +2,10 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { About } from '../../../../shared/models/server/about.model'
-import { CustomConfig } from '../../../../shared/models/server/custom-config.model'
+import { HttpStatusCode } from '@shared/core-utils'
 import {
   cleanupTests,
-  deleteCustomConfig,
   flushAndRunServer,
-  getAbout,
-  getConfig,
-  getCustomConfig,
   killallServers,
   makeGetRequest,
   parallelTests,
@@ -18,11 +13,9 @@ import {
   reRunServer,
   ServerInfo,
   setAccessTokensToServers,
-  updateCustomConfig,
   uploadVideo
-} from '../../../../shared/extra-utils'
-import { ServerConfig } from '../../../../shared/models'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+} from '@shared/extra-utils'
+import { CustomConfig } from '@shared/models'
 
 const expect = chai.expect
 
@@ -213,7 +206,7 @@ function checkUpdatedConfig (data: CustomConfig) {
 }
 
 describe('Test config', function () {
-  let server = null
+  let server: ServerInfo = null
 
   before(async function () {
     this.timeout(30000)
@@ -223,8 +216,7 @@ describe('Test config', function () {
   })
 
   it('Should have a correct config on a server with registration enabled', async function () {
-    const res = await getConfig(server.url)
-    const data: ServerConfig = res.body
+    const data = await server.configCommand.getConfig()
 
     expect(data.signup.allowed).to.be.true
   })
@@ -238,15 +230,13 @@ describe('Test config', function () {
       registerUser(server.url, 'user3', 'super password')
     ])
 
-    const res = await getConfig(server.url)
-    const data: ServerConfig = res.body
+    const data = await server.configCommand.getConfig()
 
     expect(data.signup.allowed).to.be.false
   })
 
   it('Should have the correct video allowed extensions', async function () {
-    const res = await getConfig(server.url)
-    const data: ServerConfig = res.body
+    const data = await server.configCommand.getConfig()
 
     expect(data.video.file.extensions).to.have.lengthOf(3)
     expect(data.video.file.extensions).to.contain('.mp4')
@@ -260,8 +250,7 @@ describe('Test config', function () {
   })
 
   it('Should get the customized configuration', async function () {
-    const res = await getCustomConfig(server.url, server.accessToken)
-    const data = res.body as CustomConfig
+    const data = await server.configCommand.getCustomConfig()
 
     checkInitialConfig(server, data)
   })
@@ -438,19 +427,16 @@ describe('Test config', function () {
         }
       }
     }
-    await updateCustomConfig(server.url, server.accessToken, newCustomConfig)
+    await server.configCommand.updateCustomConfig({ newCustomConfig })
 
-    const res = await getCustomConfig(server.url, server.accessToken)
-    const data = res.body
-
+    const data = await server.configCommand.getCustomConfig()
     checkUpdatedConfig(data)
   })
 
   it('Should have the correct updated video allowed extensions', async function () {
     this.timeout(10000)
 
-    const res = await getConfig(server.url)
-    const data: ServerConfig = res.body
+    const data = await server.configCommand.getConfig()
 
     expect(data.video.file.extensions).to.have.length.above(4)
     expect(data.video.file.extensions).to.contain('.mp4')
@@ -474,15 +460,13 @@ describe('Test config', function () {
 
     await reRunServer(server)
 
-    const res = await getCustomConfig(server.url, server.accessToken)
-    const data = res.body
+    const data = await server.configCommand.getCustomConfig()
 
     checkUpdatedConfig(data)
   })
 
   it('Should fetch the about information', async function () {
-    const res = await getAbout(server.url)
-    const data: About = res.body
+    const data = await server.configCommand.getAbout()
 
     expect(data.instance.name).to.equal('PeerTube updated')
     expect(data.instance.shortDescription).to.equal('my short description')
@@ -504,11 +488,9 @@ describe('Test config', function () {
   it('Should remove the custom configuration', async function () {
     this.timeout(10000)
 
-    await deleteCustomConfig(server.url, server.accessToken)
+    await server.configCommand.deleteCustomConfig()
 
-    const res = await getCustomConfig(server.url, server.accessToken)
-    const data = res.body
-
+    const data = await server.configCommand.getCustomConfig()
     checkInitialConfig(server, data)
   })
 

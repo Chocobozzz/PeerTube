@@ -11,7 +11,6 @@ import {
   login,
   registerUser,
   ServerInfo,
-  updateCustomSubConfig,
   updateMyUser,
   userLogin,
   verifyEmail
@@ -58,11 +57,13 @@ describe('Test users account verification', function () {
   it('Should register user and send verification email if verification required', async function () {
     this.timeout(30000)
 
-    await updateCustomSubConfig(server.url, server.accessToken, {
-      signup: {
-        enabled: true,
-        requiresEmailVerification: true,
-        limit: 10
+    await server.configCommand.updateCustomSubConfig({
+      newConfig: {
+        signup: {
+          enabled: true,
+          requiresEmailVerification: true,
+          limit: 10
+        }
       }
     })
 
@@ -148,11 +149,13 @@ describe('Test users account verification', function () {
 
   it('Should register user not requiring email verification if setting not enabled', async function () {
     this.timeout(5000)
-    await updateCustomSubConfig(server.url, server.accessToken, {
-      signup: {
-        enabled: true,
-        requiresEmailVerification: false,
-        limit: 10
+    await server.configCommand.updateCustomSubConfig({
+      newConfig: {
+        signup: {
+          enabled: true,
+          requiresEmailVerification: false,
+          limit: 10
+        }
       }
     })
 
@@ -168,11 +171,13 @@ describe('Test users account verification', function () {
   })
 
   it('Should allow login for user with unverified email when setting later enabled', async function () {
-    await updateCustomSubConfig(server.url, server.accessToken, {
-      signup: {
-        enabled: true,
-        requiresEmailVerification: true,
-        limit: 10
+    await server.configCommand.updateCustomSubConfig({
+      newConfig: {
+        signup: {
+          enabled: true,
+          requiresEmailVerification: true,
+          limit: 10
+        }
       }
     })
 

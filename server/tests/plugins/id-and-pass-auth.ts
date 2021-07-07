@@ -5,7 +5,6 @@ import { expect } from 'chai'
 import {
   cleanupTests,
   flushAndRunServer,
-  getConfig,
   getMyUserInformation,
   getUsersList,
   login,
@@ -19,7 +18,7 @@ import {
   wait,
   waitUntilLog
 } from '@shared/extra-utils'
-import { ServerConfig, User, UserRole } from '@shared/models'
+import { User, UserRole } from '@shared/models'
 
 describe('Test id and pass auth plugins', function () {
   let server: ServerInfo
@@ -42,9 +41,7 @@ describe('Test id and pass auth plugins', function () {
   })
 
   it('Should display the correct configuration', async function () {
-    const res = await getConfig(server.url)
-
-    const config: ServerConfig = res.body
+    const config = await server.configCommand.getConfig()
 
     const auths = config.plugin.registeredIdAndPassAuths
     expect(auths).to.have.lengthOf(8)
@@ -190,9 +187,7 @@ describe('Test id and pass auth plugins', function () {
   })
 
   it('Should have disabled this auth', async function () {
-    const res = await getConfig(server.url)
-
-    const config: ServerConfig = res.body
+    const config = await server.configCommand.getConfig()
 
     const auths = config.plugin.registeredIdAndPassAuths
     expect(auths).to.have.lengthOf(7)
@@ -208,9 +203,7 @@ describe('Test id and pass auth plugins', function () {
   })
 
   it('Should display the correct configuration', async function () {
-    const res = await getConfig(server.url)
-
-    const config: ServerConfig = res.body
+    const config = await server.configCommand.getConfig()
 
     const auths = config.plugin.registeredIdAndPassAuths
     expect(auths).to.have.lengthOf(6)

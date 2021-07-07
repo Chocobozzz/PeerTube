@@ -1,28 +1,27 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
+import { HttpStatusCode } from '@shared/core-utils'
 import {
+  checkBadCountPagination,
+  checkBadSortPagination,
+  checkBadStartPagination,
   cleanupTests,
   flushAndRunServer,
   immutableAssign,
   makeGetRequest,
   ServerInfo,
-  updateCustomSubConfig,
   setAccessTokensToServers
-} from '../../../../shared/extra-utils'
-import {
-  checkBadCountPagination,
-  checkBadSortPagination,
-  checkBadStartPagination
-} from '../../../../shared/extra-utils/requests/check-api-params'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+} from '@shared/extra-utils'
 
 function updateSearchIndex (server: ServerInfo, enabled: boolean, disableLocalSearch = false) {
-  return updateCustomSubConfig(server.url, server.accessToken, {
-    search: {
-      searchIndex: {
-        enabled,
-        disableLocalSearch
+  return server.configCommand.updateCustomSubConfig({
+    newConfig: {
+      search: {
+        searchIndex: {
+          enabled,
+          disableLocalSearch
+        }
       }
     }
   })
