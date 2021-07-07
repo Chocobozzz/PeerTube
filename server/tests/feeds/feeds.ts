@@ -5,7 +5,6 @@ import * as chai from 'chai'
 import * as xmlParser from 'fast-xml-parser'
 import { HttpStatusCode } from '@shared/core-utils'
 import {
-  addUserSubscription,
   addVideoCommentThread,
   cleanupTests,
   createUser,
@@ -14,7 +13,6 @@ import {
   flushAndRunServer,
   getMyUserInformation,
   getUserScopedTokens,
-  listUserSubscriptionVideos,
   renewUserScopedTokens,
   ServerInfo,
   setAccessTokensToServers,
@@ -319,8 +317,8 @@ describe('Test syndication feeds', () => {
       }
 
       {
-        const res = await listUserSubscriptionVideos(servers[0].url, feeduserAccessToken)
-        expect(res.body.total).to.equal(0)
+        const body = await servers[0].subscriptionsCommand.listVideos({ token: feeduserAccessToken })
+        expect(body.total).to.equal(0)
 
         const query = { accountId: feeduserAccountId, token: feeduserFeedToken }
         const json = await servers[0].feedCommand.getJSON({ feed: 'subscriptions', query })
@@ -340,8 +338,8 @@ describe('Test syndication feeds', () => {
     })
 
     it('Should list no videos for a user with videos but no subscriptions', async function () {
-      const res = await listUserSubscriptionVideos(servers[0].url, userAccessToken)
-      expect(res.body.total).to.equal(0)
+      const body = await servers[0].subscriptionsCommand.listVideos({ token: userAccessToken })
+      expect(body.total).to.equal(0)
 
       const query = { accountId: userAccountId, token: userFeedToken }
       const json = await servers[0].feedCommand.getJSON({ feed: 'subscriptions', query })
@@ -352,13 +350,13 @@ describe('Test syndication feeds', () => {
     it('Should list self videos for a user with a subscription to themselves', async function () {
       this.timeout(30000)
 
-      await addUserSubscription(servers[0].url, userAccessToken, 'john_channel@localhost:' + servers[0].port)
+      await servers[0].subscriptionsCommand.add({ token: userAccessToken, targetUri: 'john_channel@localhost:' + servers[0].port })
       await waitJobs(servers)
 
       {
-        const res = await listUserSubscriptionVideos(servers[0].url, userAccessToken)
-        expect(res.body.total).to.equal(1)
-        expect(res.body.data[0].name).to.equal('user video')
+        const body = await servers[0].subscriptionsCommand.listVideos({ token: userAccessToken })
+        expect(body.total).to.equal(1)
+        expect(body.data[0].name).to.equal('user video')
 
         const query = { accountId: userAccountId, token: userFeedToken, version: 1 }
         const json = await servers[0].feedCommand.getJSON({ feed: 'subscriptions', query })
@@ -370,12 +368,12 @@ describe('Test syndication feeds', () => {
     it('Should list videos of a user\'s subscription', async function () {
       this.timeout(30000)
 
-      await addUserSubscription(servers[0].url, userAccessToken, 'root_channel@localhost:' + servers[0].port)
+      await servers[0].subscriptionsCommand.add({ token: userAccessToken, targetUri: 'root_channel@localhost:' + servers[0].port })
       await waitJobs(servers)
 
       {
-        const res = await listUserSubscriptionVideos(servers[0].url, userAccessToken)
-        expect(res.body.total).to.equal(2, "there should be 2 videos part of the subscription")
+        const body = await servers[0].subscriptionsCommand.listVideos({ token: userAccessToken })
+        expect(body.total).to.equal(2, "there should be 2 videos part of the subscription")
 
         const query = { accountId: userAccountId, token: userFeedToken, version: 2 }
         const json = await servers[0].feedCommand.getJSON({ feed: 'subscriptions', query })

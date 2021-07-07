@@ -4,5 +4,5 @@ export * from './blocklist-command'
 
 export * from './login'
 export * from './user-notifications'
-export * from './user-subscriptions'
+export * from './subscriptions-command'
 export * from './users'

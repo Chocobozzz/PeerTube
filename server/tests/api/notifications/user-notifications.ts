@@ -4,29 +4,25 @@ import 'mocha'
 import * as chai from 'chai'
 import { buildUUID } from '@server/helpers/uuid'
 import {
-  cleanupTests,
-  updateMyUser,
-  updateVideo,
-  updateVideoChannel,
-  uploadRandomVideoOnServers,
-  wait
-} from '../../../../shared/extra-utils'
-import { ServerInfo } from '../../../../shared/extra-utils/index'
-import { MockSmtpServer } from '../../../../shared/extra-utils/mock-servers/mock-email'
-import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
-import {
   CheckerBaseParams,
   checkMyVideoImportIsFinished,
   checkNewActorFollow,
   checkNewVideoFromSubscription,
   checkVideoIsPublished,
+  cleanupTests,
   getLastNotification,
-  prepareNotificationsTest
-} from '../../../../shared/extra-utils/users/user-notifications'
-import { addUserSubscription, removeUserSubscription } from '../../../../shared/extra-utils/users/user-subscriptions'
-import { getBadVideoUrl, getGoodVideoUrl, importVideo } from '../../../../shared/extra-utils/videos/video-imports'
-import { UserNotification, UserNotificationType } from '../../../../shared/models/users'
-import { VideoPrivacy } from '../../../../shared/models/videos'
+  MockSmtpServer,
+  prepareNotificationsTest,
+  ServerInfo,
+  updateMyUser,
+  updateVideo,
+  updateVideoChannel,
+  uploadRandomVideoOnServers,
+  wait,
+  waitJobs
+} from '@shared/extra-utils'
+import { getBadVideoUrl, getGoodVideoUrl, importVideo } from '@shared/extra-utils/videos/video-imports'
+import { UserNotification, UserNotificationType, VideoPrivacy } from '@shared/models'
 
 const expect = chai.expect
 
@@ -79,7 +75,7 @@ describe('Test user notifications', function () {
     it('Should send a new video notification if the user follows the local video publisher', async function () {
       this.timeout(15000)
 
-      await addUserSubscription(servers[0].url, userAccessToken, 'root_channel@localhost:' + servers[0].port)
+      await servers[0].subscriptionsCommand.add({ token: userAccessToken, targetUri: 'root_channel@localhost:' + servers[0].port })
       await waitJobs(servers)
 
       const { name, uuid } = await uploadRandomVideoOnServers(servers, 1)
@@ -89,7 +85,7 @@ describe('Test user notifications', function () {
     it('Should send a new video notification from a remote account', async function () {
       this.timeout(150000) // Server 2 has transcoding enabled
 
-      await addUserSubscription(servers[0].url, userAccessToken, 'root_channel@localhost:' + servers[1].port)
+      await servers[0].subscriptionsCommand.add({ token: userAccessToken, targetUri: 'root_channel@localhost:' + servers[1].port })
       await waitJobs(servers)
 
       const { name, uuid } = await uploadRandomVideoOnServers(servers, 2)
@@ -418,23 +414,23 @@ describe('Test user notifications', function () {
     it('Should notify when a local channel is following one of our channel', async function () {
       this.timeout(50000)
 
-      await addUserSubscription(servers[0].url, servers[0].accessToken, 'user_1_channel@localhost:' + servers[0].port)
+      await servers[0].subscriptionsCommand.add({ targetUri: 'user_1_channel@localhost:' + servers[0].port })
       await waitJobs(servers)
 
       await checkNewActorFollow(baseParams, 'channel', 'root', 'super root name', myChannelName, 'presence')
 
-      await removeUserSubscription(servers[0].url, servers[0].accessToken, 'user_1_channel@localhost:' + servers[0].port)
+      await servers[0].subscriptionsCommand.remove({ uri: 'user_1_channel@localhost:' + servers[0].port })
     })
 
     it('Should notify when a remote channel is following one of our channel', async function () {
       this.timeout(50000)
 
-      await addUserSubscription(servers[1].url, servers[1].accessToken, 'user_1_channel@localhost:' + servers[0].port)
+      await servers[1].subscriptionsCommand.add({ targetUri: 'user_1_channel@localhost:' + servers[0].port })
       await waitJobs(servers)
 
       await checkNewActorFollow(baseParams, 'channel', 'root', 'super root 2 name', myChannelName, 'presence')
 
-      await removeUserSubscription(servers[1].url, servers[1].accessToken, 'user_1_channel@localhost:' + servers[0].port)
+      await servers[1].subscriptionsCommand.remove({ uri: 'user_1_channel@localhost:' + servers[0].port })
     })
 
     // PeerTube does not support accout -> account follows
