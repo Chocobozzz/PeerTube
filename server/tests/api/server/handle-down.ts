@@ -1,39 +1,33 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
 import 'mocha'
-import { JobState, Video } from '../../../../shared/models'
-import { VideoPrivacy } from '../../../../shared/models/videos'
-import { VideoCommentThreadTree } from '../../../../shared/models/videos/comment/video-comment.model'
-
+import * as chai from 'chai'
+import { HttpStatusCode } from '@shared/core-utils'
 import {
+  addVideoCommentReply,
+  addVideoCommentThread,
   cleanupTests,
   closeAllSequelize,
   completeVideoCheck,
   flushAndRunMultipleServers,
+  getJobsListPaginationAndSort,
   getVideo,
+  getVideoCommentThreads,
   getVideosList,
+  getVideoThreadComments,
   immutableAssign,
   killallServers,
   reRunServer,
   ServerInfo,
   setAccessTokensToServers,
   setActorFollowScores,
-  unfollow,
   updateVideo,
   uploadVideo,
   uploadVideoAndGetId,
-  wait
-} from '../../../../shared/extra-utils'
-import { follow, getFollowersListPaginationAndSort } from '../../../../shared/extra-utils/server/follows'
-import { getJobsListPaginationAndSort, waitJobs } from '../../../../shared/extra-utils/server/jobs'
-import {
-  addVideoCommentReply,
-  addVideoCommentThread,
-  getVideoCommentThreads,
-  getVideoThreadComments
-} from '../../../../shared/extra-utils/videos/video-comments'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+  wait,
+  waitJobs
+} from '@shared/extra-utils'
+import { JobState, Video, VideoCommentThreadTree, VideoPrivacy } from '@shared/models'
 
 const expect = chai.expect
 
@@ -118,8 +112,8 @@ describe('Test handle downs', function () {
     this.timeout(240000)
 
     // Server 2 and 3 follow server 1
-    await follow(servers[1].url, [ servers[0].url ], servers[1].accessToken)
-    await follow(servers[2].url, [ servers[0].url ], servers[2].accessToken)
+    await servers[1].followsCommand.follow({ targets: [ servers[0].url ] })
+    await servers[2].followsCommand.follow({ targets: [ servers[0].url ] })
 
     await waitJobs(servers)
 
@@ -177,10 +171,10 @@ describe('Test handle downs', function () {
     await wait(11000)
 
     // Only server 3 is still a follower of server 1
-    const res = await getFollowersListPaginationAndSort({ url: servers[0].url, start: 0, count: 2, sort: 'createdAt' })
-    expect(res.body.data).to.be.an('array')
-    expect(res.body.data).to.have.lengthOf(1)
-    expect(res.body.data[0].follower.host).to.equal('localhost:' + servers[2].port)
+    const body = await servers[0].followsCommand.getFollowers({ start: 0, count: 2, sort: 'createdAt' })
+    expect(body.data).to.be.an('array')
+    expect(body.data).to.have.lengthOf(1)
+    expect(body.data[0].follower.host).to.equal('localhost:' + servers[2].port)
   })
 
   it('Should not have pending/processing jobs anymore', async function () {
@@ -205,16 +199,16 @@ describe('Test handle downs', function () {
     await reRunServer(servers[1])
     await reRunServer(servers[2])
 
-    await unfollow(servers[1].url, servers[1].accessToken, servers[0])
+    await servers[1].followsCommand.unfollow({ target: servers[0] })
     await waitJobs(servers)
 
-    await follow(servers[1].url, [ servers[0].url ], servers[1].accessToken)
+    await servers[1].followsCommand.follow({ targets: [ servers[0].url ] })
 
     await waitJobs(servers)
 
-    const res = await getFollowersListPaginationAndSort({ url: servers[0].url, start: 0, count: 2, sort: 'createdAt' })
-    expect(res.body.data).to.be.an('array')
-    expect(res.body.data).to.have.lengthOf(2)
+    const body = await servers[0].followsCommand.getFollowers({ start: 0, count: 2, sort: 'createdAt' })
+    expect(body.data).to.be.an('array')
+    expect(body.data).to.have.lengthOf(2)
   })
 
   it('Should send an update to server 3, and automatically fetch the video', async function () {

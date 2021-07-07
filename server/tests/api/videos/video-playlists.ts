@@ -2,8 +2,12 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '@shared/core-utils'
 import {
+  addAccountToAccountBlocklist,
+  addAccountToServerBlocklist,
+  addServerToAccountBlocklist,
+  addServerToServerBlocklist,
   addVideoChannel,
   addVideoInPlaylist,
   addVideoToBlacklist,
@@ -27,6 +31,10 @@ import {
   getVideoPlaylistPrivacies,
   getVideoPlaylistsList,
   getVideoPlaylistWithToken,
+  removeAccountFromAccountBlocklist,
+  removeAccountFromServerBlocklist,
+  removeServerFromAccountBlocklist,
+  removeServerFromServerBlocklist,
   removeUser,
   removeVideoFromBlacklist,
   removeVideoFromPlaylist,
@@ -35,7 +43,6 @@ import {
   setAccessTokensToServers,
   setDefaultVideoChannel,
   testImage,
-  unfollow,
   updateVideo,
   updateVideoPlaylist,
   updateVideoPlaylistElement,
@@ -44,24 +51,18 @@ import {
   userLogin,
   wait,
   waitJobs
-} from '../../../../shared/extra-utils'
+} from '@shared/extra-utils'
 import {
-  addAccountToAccountBlocklist,
-  addAccountToServerBlocklist,
-  addServerToAccountBlocklist,
-  addServerToServerBlocklist,
-  removeAccountFromAccountBlocklist,
-  removeAccountFromServerBlocklist,
-  removeServerFromAccountBlocklist,
-  removeServerFromServerBlocklist
-} from '../../../../shared/extra-utils/users/blocklist'
-import { User } from '../../../../shared/models/users'
-import { VideoPlaylistCreateResult, VideoPrivacy } from '../../../../shared/models/videos'
-import { VideoExistInPlaylist } from '../../../../shared/models/videos/playlist/video-exist-in-playlist.model'
-import { VideoPlaylistElement, VideoPlaylistElementType } from '../../../../shared/models/videos/playlist/video-playlist-element.model'
-import { VideoPlaylistPrivacy } from '../../../../shared/models/videos/playlist/video-playlist-privacy.model'
-import { VideoPlaylistType } from '../../../../shared/models/videos/playlist/video-playlist-type.model'
-import { VideoPlaylist } from '../../../../shared/models/videos/playlist/video-playlist.model'
+  User,
+  VideoExistInPlaylist,
+  VideoPlaylist,
+  VideoPlaylistCreateResult,
+  VideoPlaylistElement,
+  VideoPlaylistElementType,
+  VideoPlaylistPrivacy,
+  VideoPlaylistType,
+  VideoPrivacy
+} from '@shared/models'
 
 const expect = chai.expect
 
@@ -1171,7 +1172,7 @@ describe('Test video playlists', function () {
         expect(finder(res.body.data)).to.not.be.undefined
       }
 
-      await unfollow(servers[2].url, servers[2].accessToken, servers[0])
+      await servers[2].followsCommand.unfollow({ target: servers[0] })
 
       {
         const res = await getVideoPlaylistsList(servers[2].url, 0, 5)

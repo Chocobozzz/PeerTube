@@ -12,7 +12,6 @@ import {
   cleanupTests,
   doubleFollow,
   flushAndRunMultipleServers,
-  getFollowingListPaginationAndSort,
   getVideo,
   getVideoWithToken,
   immutableAssign,
@@ -23,7 +22,6 @@ import {
   root,
   ServerInfo,
   setAccessTokensToServers,
-  unfollow,
   updateVideo,
   uploadVideo,
   viewVideo,
@@ -38,7 +36,6 @@ import {
   updateRedundancy
 } from '../../../../shared/extra-utils/server/redundancy'
 import { getStats } from '../../../../shared/extra-utils/server/stats'
-import { ActorFollow } from '../../../../shared/models/actors'
 import { VideoRedundancy, VideoRedundancyStrategy, VideoRedundancyStrategyWithManual } from '../../../../shared/models/redundancy'
 import { ServerStats } from '../../../../shared/models/server/server-stats.model'
 import { VideoDetails, VideoPrivacy } from '../../../../shared/models/videos'
@@ -272,13 +269,19 @@ async function checkStatsWithoutRedundancy (strategy: VideoRedundancyStrategyWit
   expect(stat.totalVideos).to.equal(0)
 }
 
+async function findServerFollows () {
+  const body = await servers[0].followsCommand.getFollowings({ start: 0, count: 5, sort: '-createdAt' })
+  const follows = body.data
+  const server2 = follows.find(f => f.following.host === `localhost:${servers[1].port}`)
+  const server3 = follows.find(f => f.following.host === `localhost:${servers[2].port}`)
+
+  return { server2, server3 }
+}
+
 async function enableRedundancyOnServer1 () {
   await updateRedundancy(servers[0].url, servers[0].accessToken, servers[1].host, true)
 
-  const res = await getFollowingListPaginationAndSort({ url: servers[0].url, start: 0, count: 5, sort: '-createdAt' })
-  const follows: ActorFollow[] = res.body.data
-  const server2 = follows.find(f => f.following.host === `localhost:${servers[1].port}`)
-  const server3 = follows.find(f => f.following.host === `localhost:${servers[2].port}`)
+  const { server2, server3 } = await findServerFollows()
 
   expect(server3).to.not.be.undefined
   expect(server3.following.hostRedundancyAllowed).to.be.false
@@ -290,10 +293,7 @@ async function enableRedundancyOnServer1 () {
 async function disableRedundancyOnServer1 () {
   await updateRedundancy(servers[0].url, servers[0].accessToken, servers[1].host, false)
 
-  const res = await getFollowingListPaginationAndSort({ url: servers[0].url, start: 0, count: 5, sort: '-createdAt' })
-  const follows: ActorFollow[] = res.body.data
-  const server2 = follows.find(f => f.following.host === `localhost:${servers[1].port}`)
-  const server3 = follows.find(f => f.following.host === `localhost:${servers[2].port}`)
+  const { server2, server3 } = await findServerFollows()
 
   expect(server3).to.not.be.undefined
   expect(server3.following.hostRedundancyAllowed).to.be.false
@@ -388,7 +388,7 @@ describe('Test videos redundancy', function () {
     it('Should unfollow on server 1 and remove duplicated videos', async function () {
       this.timeout(80000)
 
-      await unfollow(servers[0].url, servers[0].accessToken, servers[1])
+      await servers[0].followsCommand.unfollow({ target: servers[1] })
 
       await waitJobs(servers)
       await wait(5000)

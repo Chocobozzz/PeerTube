@@ -7,15 +7,14 @@ export * from './miscs'
 export * from './mock-servers'
 export * from './moderation'
 export * from './overviews'
+export * from './search'
+export * from './server'
 
 export * from './requests/check-api-params'
 export * from './requests/requests'
 
-export * from './search'
-
 export * from './server/clients'
 export * from './server/config'
-export * from './server/follows'
 export * from './server/jobs'
 export * from './server/plugins'
 export * from './server/servers'

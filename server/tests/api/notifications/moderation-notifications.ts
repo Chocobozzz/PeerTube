@@ -21,7 +21,6 @@ import {
   checkVideoIsPublished,
   cleanupTests,
   createUser,
-  follow,
   generateUserAccessToken,
   getAccount,
   getCustomConfig,
@@ -35,7 +34,6 @@ import {
   removeUserSubscription,
   removeVideoFromBlacklist,
   ServerInfo,
-  unfollow,
   updateCustomConfig,
   updateCustomSubConfig,
   uploadVideo,
@@ -386,7 +384,7 @@ describe('Test moderation notifications', function () {
     it('Should send a notification only to admin when there is a new instance follower', async function () {
       this.timeout(20000)
 
-      await follow(servers[2].url, [ servers[0].url ], servers[2].accessToken)
+      await servers[2].followsCommand.follow({ targets: [ servers[0].url ] })
 
       await waitJobs(servers)
 
@@ -399,7 +397,7 @@ describe('Test moderation notifications', function () {
     it('Should send a notification on auto follow back', async function () {
       this.timeout(40000)
 
-      await unfollow(servers[2].url, servers[2].accessToken, servers[0])
+      await servers[2].followsCommand.unfollow({ target: servers[0] })
       await waitJobs(servers)
 
       const config = {
@@ -411,7 +409,7 @@ describe('Test moderation notifications', function () {
       }
       await updateCustomSubConfig(servers[0].url, servers[0].accessToken, config)
 
-      await follow(servers[2].url, [ servers[0].url ], servers[2].accessToken)
+      await servers[2].followsCommand.follow({ targets: [ servers[0].url ] })
 
       await waitJobs(servers)
 
@@ -424,13 +422,13 @@ describe('Test moderation notifications', function () {
 
       config.followings.instance.autoFollowBack.enabled = false
       await updateCustomSubConfig(servers[0].url, servers[0].accessToken, config)
-      await unfollow(servers[0].url, servers[0].accessToken, servers[2])
-      await unfollow(servers[2].url, servers[2].accessToken, servers[0])
+      await servers[0].followsCommand.unfollow({ target: servers[2] })
+      await servers[2].followsCommand.unfollow({ target: servers[0] })
     })
 
     it('Should send a notification on auto instances index follow', async function () {
       this.timeout(30000)
-      await unfollow(servers[0].url, servers[0].accessToken, servers[1])
+      await servers[0].followsCommand.unfollow({ target: servers[1] })
 
       await updateCustomSubConfig(servers[0].url, servers[0].accessToken, config)
 
@@ -443,7 +441,7 @@ describe('Test moderation notifications', function () {
 
       config.followings.instance.autoFollowIndex.enabled = false
       await updateCustomSubConfig(servers[0].url, servers[0].accessToken, config)
-      await unfollow(servers[0].url, servers[0].accessToken, servers[1])
+      await servers[0].followsCommand.unfollow({ target: servers[1] })
     })
   })
 

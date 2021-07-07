@@ -4,27 +4,23 @@ import 'mocha'
 import * as chai from 'chai'
 import {
   addVideoChannel,
+  addVideoCommentThread,
   cleanupTests,
   createUser,
   createVideoPlaylist,
   doubleFollow,
   flushAndRunMultipleServers,
-  follow,
   ServerInfo,
-  unfollow,
+  setAccessTokensToServers,
   updateCustomSubConfig,
   uploadVideo,
   userLogin,
   viewVideo,
-  wait
-} from '../../../../shared/extra-utils'
-import { setAccessTokensToServers } from '../../../../shared/extra-utils/index'
-import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
-import { getStats } from '../../../../shared/extra-utils/server/stats'
-import { addVideoCommentThread } from '../../../../shared/extra-utils/videos/video-comments'
-import { ServerStats } from '../../../../shared/models/server/server-stats.model'
-import { VideoPlaylistPrivacy } from '../../../../shared/models/videos/playlist/video-playlist-privacy.model'
-import { ActivityType } from '@shared/models'
+  wait,
+  waitJobs
+} from '@shared/extra-utils'
+import { getStats } from '@shared/extra-utils/server/stats'
+import { ActivityType, ServerStats, VideoPlaylistPrivacy } from '@shared/models'
 
 const expect = chai.expect
 
@@ -57,7 +53,7 @@ describe('Test stats (excluding redundancy)', function () {
     // Wait the video views repeatable job
     await wait(8000)
 
-    await follow(servers[2].url, [ servers[0].url ], servers[2].accessToken)
+    await servers[2].followsCommand.follow({ targets: [ servers[0].url ] })
     await waitJobs(servers)
   })
 
@@ -111,7 +107,7 @@ describe('Test stats (excluding redundancy)', function () {
   it('Should have the correct total videos stats after an unfollow', async function () {
     this.timeout(15000)
 
-    await unfollow(servers[2].url, servers[2].accessToken, servers[0])
+    await servers[2].followsCommand.unfollow({ target: servers[0] })
     await waitJobs(servers)
 
     const res = await getStats(servers[2].url)

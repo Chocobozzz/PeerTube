@@ -15,7 +15,6 @@ import {
   doubleFollow,
   findCommentId,
   flushAndRunMultipleServers,
-  follow,
   getAccountBlocklistByAccount,
   getAccountBlocklistByServer,
   getServerBlocklistByAccount,
@@ -31,7 +30,6 @@ import {
   removeServerFromServerBlocklist,
   ServerInfo,
   setAccessTokensToServers,
-  unfollow,
   uploadVideo,
   userLogin,
   waitJobs
@@ -742,9 +740,9 @@ describe('Test blocklist', function () {
 
         {
           const now = new Date()
-          await unfollow(servers[1].url, servers[1].accessToken, servers[0])
+          await servers[1].followsCommand.unfollow({ target: servers[0] })
           await waitJobs(servers)
-          await follow(servers[1].url, [ servers[0].host ], servers[1].accessToken)
+          await servers[1].followsCommand.follow({ targets: [ servers[0].host ] })
 
           await waitJobs(servers)
 
@@ -807,9 +805,9 @@ describe('Test blocklist', function () {
 
         {
           const now = new Date()
-          await unfollow(servers[1].url, servers[1].accessToken, servers[0])
+          await servers[1].followsCommand.unfollow({ target: servers[0] })
           await waitJobs(servers)
-          await follow(servers[1].url, [ servers[0].host ], servers[1].accessToken)
+          await servers[1].followsCommand.follow({ targets: [ servers[0].host ] })
 
           await waitJobs(servers)
 

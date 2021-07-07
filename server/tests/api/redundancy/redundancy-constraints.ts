@@ -7,7 +7,6 @@ import { VideoPrivacy } from '@shared/models'
 import {
   cleanupTests,
   flushAndRunServer,
-  follow,
   killallServers,
   reRunServer,
   ServerInfo,
@@ -98,7 +97,7 @@ describe('Test redundancy constraints', function () {
     await waitJobs(servers)
 
     // Server 1 and server 2 follow each other
-    await follow(remoteServer.url, [ localServer.url ], remoteServer.accessToken)
+    await remoteServer.followsCommand.follow({ targets: [ localServer.url ] })
     await waitJobs(servers)
     await updateRedundancy(remoteServer.url, remoteServer.accessToken, localServer.host, true)
 
@@ -184,7 +183,7 @@ describe('Test redundancy constraints', function () {
   it('Should have redundancy on server 1 and on server 2 with followings filter now server 2 follows server 1', async function () {
     this.timeout(120000)
 
-    await follow(localServer.url, [ remoteServer.url ], localServer.accessToken)
+    await localServer.followsCommand.follow({ targets: [ remoteServer.url ] })
     await waitJobs(servers)
 
     await uploadWrapper('video 4 server 2')
