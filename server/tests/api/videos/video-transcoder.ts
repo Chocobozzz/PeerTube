@@ -16,7 +16,6 @@ import {
   flushAndRunMultipleServers,
   generateHighBitrateVideo,
   generateVideoWithFramerate,
-  getJobsListPaginationAndSort,
   getMyVideos,
   getServerFileSize,
   getVideo,
@@ -709,17 +708,14 @@ describe('Test video transcoding', function () {
   describe('Transcoding job queue', function () {
 
     it('Should have the appropriate priorities for transcoding jobs', async function () {
-      const res = await getJobsListPaginationAndSort({
-        url: servers[1].url,
-        accessToken: servers[1].accessToken,
+      const body = await servers[1].jobsCommand.getJobsList({
         start: 0,
         count: 100,
         sort: '-createdAt',
         jobType: 'video-transcoding'
       })
 
-      const jobs = res.body.data as Job[]
-
+      const jobs = body.data
       const transcodingJobs = jobs.filter(j => j.data.videoUUID === video4k)
 
       expect(transcodingJobs).to.have.lengthOf(14)
