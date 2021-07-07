@@ -10,7 +10,6 @@ import {
   closeAllSequelize,
   completeVideoCheck,
   flushAndRunMultipleServers,
-  getJobsListPaginationAndSort,
   getVideo,
   getVideoCommentThreads,
   getVideosList,
@@ -181,15 +180,13 @@ describe('Test handle downs', function () {
     const states: JobState[] = [ 'waiting', 'active' ]
 
     for (const state of states) {
-      const res = await getJobsListPaginationAndSort({
-        url: servers[0].url,
-        accessToken: servers[0].accessToken,
+      const body = await servers[0].jobsCommand.getJobsList({
         state: state,
         start: 0,
         count: 50,
         sort: '-createdAt'
       })
-      expect(res.body.data).to.have.length(0)
+      expect(body.data).to.have.length(0)
     }
   })
 

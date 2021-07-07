@@ -1,56 +1,7 @@
-import * as request from 'supertest'
-import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
-import { makeGetRequest } from '../../../shared/extra-utils'
-import { Job, JobState, JobType } from '../../models'
+
+import { JobState } from '../../models'
 import { wait } from '../miscs/miscs'
 import { ServerInfo } from './servers'
-
-function buildJobsUrl (state?: JobState) {
-  let path = '/api/v1/jobs'
-
-  if (state) path += '/' + state
-
-  return path
-}
-
-function getJobsList (url: string, accessToken: string, state?: JobState) {
-  const path = buildJobsUrl(state)
-
-  return request(url)
-    .get(path)
-    .set('Accept', 'application/json')
-    .set('Authorization', 'Bearer ' + accessToken)
-    .expect(HttpStatusCode.OK_200)
-    .expect('Content-Type', /json/)
-}
-
-function getJobsListPaginationAndSort (options: {
-  url: string
-  accessToken: string
-  start: number
-  count: number
-  sort: string
-  state?: JobState
-  jobType?: JobType
-}) {
-  const { url, accessToken, state, start, count, sort, jobType } = options
-  const path = buildJobsUrl(state)
-
-  const query = {
-    start,
-    count,
-    sort,
-    jobType
-  }
-
-  return makeGetRequest({
-    url,
-    path,
-    token: accessToken,
-    statusCodeExpected: HttpStatusCode.OK_200,
-    query
-  })
-}
 
 async function waitJobs (serversArg: ServerInfo[] | ServerInfo) {
   const pendingJobWait = process.env.NODE_PENDING_JOB_WAIT
@@ -72,15 +23,13 @@ async function waitJobs (serversArg: ServerInfo[] | ServerInfo) {
     // Check if each server has pending request
     for (const server of servers) {
       for (const state of states) {
-        const p = getJobsListPaginationAndSort({
-          url: server.url,
-          accessToken: server.accessToken,
-          state: state,
+        const p = server.jobsCommand.getJobsList({
+          state,
           start: 0,
           count: 10,
           sort: '-createdAt'
-        }).then(res => res.body.data)
-          .then((jobs: Job[]) => jobs.filter(j => !repeatableJobs.includes(j.type)))
+        }).then(body => body.data)
+          .then(jobs => jobs.filter(j => !repeatableJobs.includes(j.type)))
           .then(jobs => {
             if (jobs.length !== 0) {
               pendingRequests = true
@@ -122,7 +71,5 @@ async function waitJobs (serversArg: ServerInfo[] | ServerInfo) {
 // ---------------------------------------------------------------------------
 
 export {
-  getJobsList,
-  waitJobs,
-  getJobsListPaginationAndSort
+  waitJobs
 }
