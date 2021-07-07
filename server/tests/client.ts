@@ -11,7 +11,6 @@ import {
   createVideoPlaylist,
   doubleFollow,
   flushAndRunMultipleServers,
-  getAccount,
   getVideosList,
   makeGetRequest,
   makeHTMLRequest,
@@ -105,8 +104,7 @@ describe('Test a client controllers', function () {
 
     await updateMyUser({ url: servers[0].url, accessToken: servers[0].accessToken, description: 'my account description' })
 
-    const resAccountRequest = await getAccount(servers[0].url, `${servers[0].user.username}@${servers[0].host}`)
-    account = resAccountRequest.body
+    account = await servers[0].accountsCommand.get({ accountName: `${servers[0].user.username}@${servers[0].host}` })
 
     await waitJobs(servers)
   })

@@ -5,7 +5,7 @@ import * as chai from 'chai'
 import { createFile, readdir } from 'fs-extra'
 import { join } from 'path'
 import { buildUUID } from '@server/helpers/uuid'
-import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '@shared/core-utils'
 import {
   buildServerDirectory,
   cleanupTests,
@@ -13,7 +13,6 @@ import {
   createVideoPlaylist,
   doubleFollow,
   flushAndRunMultipleServers,
-  getAccount,
   killallServers,
   makeGetRequest,
   ServerInfo,
@@ -21,10 +20,10 @@ import {
   setDefaultVideoChannel,
   updateMyAvatar,
   uploadVideo,
-  wait
-} from '../../../shared/extra-utils'
-import { waitJobs } from '../../../shared/extra-utils/server/jobs'
-import { Account, VideoPlaylistPrivacy } from '../../../shared/models'
+  wait,
+  waitJobs
+} from '@shared/extra-utils'
+import { VideoPlaylistPrivacy } from '@shared/models'
 
 const expect = chai.expect
 
@@ -94,8 +93,7 @@ describe('Test prune storage scripts', function () {
 
     // Lazy load the remote avatar
     {
-      const res = await getAccount(servers[0].url, 'root@localhost:' + servers[1].port)
-      const account: Account = res.body
+      const account = await servers[0].accountsCommand.get({ accountName: 'root@localhost:' + servers[1].port })
       await makeGetRequest({
         url: servers[0].url,
         path: account.avatar.path,
@@ -104,8 +102,7 @@ describe('Test prune storage scripts', function () {
     }
 
     {
-      const res = await getAccount(servers[1].url, 'root@localhost:' + servers[0].port)
-      const account: Account = res.body
+      const account = await servers[1].accountsCommand.get({ accountName: 'root@localhost:' + servers[0].port })
       await makeGetRequest({
         url: servers[1].url,
         path: account.avatar.path,
