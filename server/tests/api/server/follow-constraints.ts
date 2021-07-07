@@ -1,9 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
 import 'mocha'
+import * as chai from 'chai'
+import { HttpStatusCode } from '@shared/core-utils'
+import { PeerTubeProblemDocument, ServerErrorCode } from '@shared/models'
 import {
   cleanupTests,
+  createUser,
   doubleFollow,
   flushAndRunMultipleServers,
   getAccountVideos,
@@ -12,13 +15,9 @@ import {
   getVideoWithToken,
   ServerInfo,
   setAccessTokensToServers,
-  uploadVideo
+  uploadVideo,
+  userLogin
 } from '../../../../shared/extra-utils'
-import { unfollow } from '../../../../shared/extra-utils/server/follows'
-import { userLogin } from '../../../../shared/extra-utils/users/login'
-import { createUser } from '../../../../shared/extra-utils/users/users'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
-import { PeerTubeProblemDocument, ServerErrorCode } from '@shared/models'
 
 const expect = chai.expect
 
@@ -144,7 +143,7 @@ describe('Test follow constraints', function () {
     before(async function () {
       this.timeout(30000)
 
-      await unfollow(servers[0].url, servers[0].accessToken, servers[1])
+      await servers[0].followsCommand.unfollow({ target: servers[1] })
     })
 
     describe('With an unlogged user', function () {

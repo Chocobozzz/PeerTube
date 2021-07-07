@@ -18,6 +18,7 @@ import { makeGetRequest } from '../requests/requests'
 import { SearchCommand } from '../search'
 import { ContactFormCommand } from './contact-form-command'
 import { DebugCommand } from './debug-command'
+import { FollowsCommand } from './follows-command'
 
 interface ServerInfo {
   app: ChildProcess
@@ -81,6 +82,7 @@ interface ServerInfo {
   searchCommand?: SearchCommand
   contactFormCommand?: ContactFormCommand
   debugCommand?: DebugCommand
+  followsCommand?: FollowsCommand
 }
 
 function parallelTests () {
@@ -296,6 +298,7 @@ async function runServer (server: ServerInfo, configOverrideArg?: any, args = []
       server.searchCommand = new SearchCommand(server)
       server.contactFormCommand = new ContactFormCommand(server)
       server.debugCommand = new DebugCommand(server)
+      server.followsCommand = new FollowsCommand(server)
 
       res(server)
     })

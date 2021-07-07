@@ -3,64 +3,46 @@
 import 'mocha'
 import * as chai from 'chai'
 import {
-  acceptFollower,
   cleanupTests,
   flushAndRunMultipleServers,
   MockInstancesIndex,
   ServerInfo,
   setAccessTokensToServers,
-  unfollow,
   updateCustomSubConfig,
-  wait
-} from '../../../../shared/extra-utils/index'
-import { follow, getFollowersListPaginationAndSort, getFollowingListPaginationAndSort } from '../../../../shared/extra-utils/server/follows'
-import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
-import { ActorFollow } from '../../../../shared/models/actors'
+  wait,
+  waitJobs
+} from '@shared/extra-utils'
 
 const expect = chai.expect
 
 async function checkFollow (follower: ServerInfo, following: ServerInfo, exists: boolean) {
   {
-    const res = await getFollowersListPaginationAndSort({ url: following.url, start: 0, count: 5, sort: '-createdAt' })
-    const follows = res.body.data as ActorFollow[]
+    const body = await following.followsCommand.getFollowers({ start: 0, count: 5, sort: '-createdAt' })
+    const follow = body.data.find(f => f.follower.host === follower.host && f.state === 'accepted')
 
-    const follow = follows.find(f => {
-      return f.follower.host === follower.host && f.state === 'accepted'
-    })
-
-    if (exists === true) {
-      expect(follow).to.exist
-    } else {
-      expect(follow).to.be.undefined
-    }
+    if (exists === true) expect(follow).to.exist
+    else expect(follow).to.be.undefined
   }
 
   {
-    const res = await getFollowingListPaginationAndSort({ url: follower.url, start: 0, count: 5, sort: '-createdAt' })
-    const follows = res.body.data as ActorFollow[]
+    const body = await follower.followsCommand.getFollowings({ start: 0, count: 5, sort: '-createdAt' })
+    const follow = body.data.find(f => f.following.host === following.host && f.state === 'accepted')
 
-    const follow = follows.find(f => {
-      return f.following.host === following.host && f.state === 'accepted'
-    })
-
-    if (exists === true) {
-      expect(follow).to.exist
-    } else {
-      expect(follow).to.be.undefined
-    }
+    if (exists === true) expect(follow).to.exist
+    else expect(follow).to.be.undefined
   }
 }
 
 async function server1Follows2 (servers: ServerInfo[]) {
-  await follow(servers[0].url, [ servers[1].host ], servers[0].accessToken)
+  await servers[0].followsCommand.follow({ targets: [ servers[1].host ] })
 
   await waitJobs(servers)
 }
 
 async function resetFollows (servers: ServerInfo[]) {
   try {
-    await unfollow(servers[0].url, servers[0].accessToken, servers[1])
-    await unfollow(servers[1].url, servers[1].accessToken, servers[0])
+    await servers[0].followsCommand.unfollow({ target: servers[1] })
+    await servers[1].followsCommand.unfollow({ target: servers[0] })
   } catch { /* empty */
   }
 
@@ -137,7 +119,7 @@ describe('Test auto follows', function () {
       await checkFollow(servers[0], servers[1], false)
       await checkFollow(servers[1], servers[0], false)
 
-      await acceptFollower(servers[1].url, servers[1].accessToken, 'peertube@' + servers[0].host)
+      await servers[1].followsCommand.acceptFollower({ follower: 'peertube@' + servers[0].host })
       await waitJobs(servers)
 
       await checkFollow(servers[0], servers[1], true)

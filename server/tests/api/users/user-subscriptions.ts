@@ -1,30 +1,27 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
 import 'mocha'
+import * as chai from 'chai'
 import {
+  addUserSubscription,
+  areSubscriptionsExist,
   cleanupTests,
   createUser,
   doubleFollow,
   flushAndRunMultipleServers,
-  follow,
-  getVideosList,
-  unfollow,
-  updateVideo,
-  userLogin
-} from '../../../../shared/extra-utils'
-import { ServerInfo, uploadVideo } from '../../../../shared/extra-utils/index'
-import { setAccessTokensToServers } from '../../../../shared/extra-utils/users/login'
-import { Video, VideoChannel } from '../../../../shared/models/videos'
-import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
-import {
-  addUserSubscription,
-  areSubscriptionsExist,
   getUserSubscription,
+  getVideosList,
   listUserSubscriptions,
   listUserSubscriptionVideos,
-  removeUserSubscription
-} from '../../../../shared/extra-utils/users/user-subscriptions'
+  removeUserSubscription,
+  ServerInfo,
+  setAccessTokensToServers,
+  updateVideo,
+  uploadVideo,
+  userLogin,
+  waitJobs
+} from '@shared/extra-utils'
+import { Video, VideoChannel } from '@shared/models'
 
 const expect = chai.expect
 
@@ -250,7 +247,7 @@ describe('Test users subscriptions', function () {
   it('Should have server 1 follow server 3 and display server 3 videos', async function () {
     this.timeout(60000)
 
-    await follow(servers[0].url, [ servers[2].url ], servers[0].accessToken)
+    await servers[0].followsCommand.follow({ targets: [ servers[2].url ] })
 
     await waitJobs(servers)
 
@@ -268,7 +265,7 @@ describe('Test users subscriptions', function () {
   it('Should remove follow server 1 -> server 3 and hide server 3 videos', async function () {
     this.timeout(60000)
 
-    await unfollow(servers[0].url, servers[0].accessToken, servers[2])
+    await servers[0].followsCommand.unfollow({ target: servers[2] })
 
     await waitJobs(servers)
 

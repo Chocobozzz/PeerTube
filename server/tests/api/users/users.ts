@@ -11,7 +11,6 @@ import {
   createUser,
   deleteMe,
   flushAndRunServer,
-  follow,
   getAccountRatings,
   getBlacklistedVideosList,
   getCustomConfig,
@@ -138,7 +137,12 @@ describe('Test users', function () {
 
     it('Should not be able to follow', async function () {
       accessToken = 'my_super_token'
-      await follow(server.url, [ 'http://example.com' ], accessToken, HttpStatusCode.UNAUTHORIZED_401)
+
+      await server.followsCommand.follow({
+        targets: [ 'http://example.com' ],
+        token: accessToken,
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
+      })
     })
 
     it('Should not be able to unfollow')
