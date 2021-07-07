@@ -332,7 +332,7 @@ dev-db/postgresql
 dev-db/redis
 dev-vcs/git
 app-arch/unzip
-dev-lang/python:2.7
+dev-lang/python
 www-servers/nginx
 
 # Optional, client for Let’s Encrypt:
