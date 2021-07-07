@@ -13,10 +13,6 @@ export * from './server'
 export * from './requests/check-api-params'
 export * from './requests/requests'
 
-export * from './server/clients'
-export * from './server/config'
-export * from './server/servers'
-
 export * from './users/accounts'
 export * from './users/blocklist'
 export * from './users/login'

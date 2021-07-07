@@ -19,8 +19,7 @@ import {
   wait,
   waitJobs
 } from '@shared/extra-utils'
-import { getStats } from '@shared/extra-utils/server/stats'
-import { ActivityType, ServerStats, VideoPlaylistPrivacy } from '@shared/models'
+import { ActivityType, VideoPlaylistPrivacy } from '@shared/models'
 
 const expect = chai.expect
 
@@ -58,8 +57,7 @@ describe('Test stats (excluding redundancy)', function () {
   })
 
   it('Should have the correct stats on instance 1', async function () {
-    const res = await getStats(servers[0].url)
-    const data: ServerStats = res.body
+    const data = await servers[0].statsCommand.get()
 
     expect(data.totalLocalVideoComments).to.equal(1)
     expect(data.totalLocalVideos).to.equal(1)
@@ -74,8 +72,7 @@ describe('Test stats (excluding redundancy)', function () {
   })
 
   it('Should have the correct stats on instance 2', async function () {
-    const res = await getStats(servers[1].url)
-    const data: ServerStats = res.body
+    const data = await servers[1].statsCommand.get()
 
     expect(data.totalLocalVideoComments).to.equal(0)
     expect(data.totalLocalVideos).to.equal(0)
@@ -90,8 +87,7 @@ describe('Test stats (excluding redundancy)', function () {
   })
 
   it('Should have the correct stats on instance 3', async function () {
-    const res = await getStats(servers[2].url)
-    const data: ServerStats = res.body
+    const data = await servers[2].statsCommand.get()
 
     expect(data.totalLocalVideoComments).to.equal(0)
     expect(data.totalLocalVideos).to.equal(0)
@@ -110,8 +106,7 @@ describe('Test stats (excluding redundancy)', function () {
     await servers[2].followsCommand.unfollow({ target: servers[0] })
     await waitJobs(servers)
 
-    const res = await getStats(servers[2].url)
-    const data: ServerStats = res.body
+    const data = await servers[2].statsCommand.get()
 
     expect(data.totalVideos).to.equal(0)
   })
@@ -120,8 +115,8 @@ describe('Test stats (excluding redundancy)', function () {
     const server = servers[0]
 
     {
-      const res = await getStats(server.url)
-      const data: ServerStats = res.body
+      const data = await server.statsCommand.get()
+
       expect(data.totalDailyActiveUsers).to.equal(1)
       expect(data.totalWeeklyActiveUsers).to.equal(1)
       expect(data.totalMonthlyActiveUsers).to.equal(1)
@@ -130,8 +125,8 @@ describe('Test stats (excluding redundancy)', function () {
     {
       await userLogin(server, user)
 
-      const res = await getStats(server.url)
-      const data: ServerStats = res.body
+      const data = await server.statsCommand.get()
+
       expect(data.totalDailyActiveUsers).to.equal(2)
       expect(data.totalWeeklyActiveUsers).to.equal(2)
       expect(data.totalMonthlyActiveUsers).to.equal(2)
@@ -142,8 +137,8 @@ describe('Test stats (excluding redundancy)', function () {
     const server = servers[0]
 
     {
-      const res = await getStats(server.url)
-      const data: ServerStats = res.body
+      const data = await server.statsCommand.get()
+
       expect(data.totalLocalDailyActiveVideoChannels).to.equal(1)
       expect(data.totalLocalWeeklyActiveVideoChannels).to.equal(1)
       expect(data.totalLocalMonthlyActiveVideoChannels).to.equal(1)
@@ -157,8 +152,8 @@ describe('Test stats (excluding redundancy)', function () {
       const resChannel = await addVideoChannel(server.url, server.accessToken, channelAttributes)
       channelId = resChannel.body.videoChannel.id
 
-      const res = await getStats(server.url)
-      const data: ServerStats = res.body
+      const data = await server.statsCommand.get()
+
       expect(data.totalLocalDailyActiveVideoChannels).to.equal(1)
       expect(data.totalLocalWeeklyActiveVideoChannels).to.equal(1)
       expect(data.totalLocalMonthlyActiveVideoChannels).to.equal(1)
@@ -167,8 +162,8 @@ describe('Test stats (excluding redundancy)', function () {
     {
       await uploadVideo(server.url, server.accessToken, { fixture: 'video_short.webm', channelId })
 
-      const res = await getStats(server.url)
-      const data: ServerStats = res.body
+      const data = await server.statsCommand.get()
+
       expect(data.totalLocalDailyActiveVideoChannels).to.equal(2)
       expect(data.totalLocalWeeklyActiveVideoChannels).to.equal(2)
       expect(data.totalLocalMonthlyActiveVideoChannels).to.equal(2)
@@ -179,9 +174,8 @@ describe('Test stats (excluding redundancy)', function () {
     const server = servers[0]
 
     {
-      const resStats = await getStats(server.url)
-      const dataStats: ServerStats = resStats.body
-      expect(dataStats.totalLocalPlaylists).to.equal(0)
+      const data = await server.statsCommand.get()
+      expect(data.totalLocalPlaylists).to.equal(0)
     }
 
     {
@@ -195,9 +189,8 @@ describe('Test stats (excluding redundancy)', function () {
         }
       })
 
-      const resStats = await getStats(server.url)
-      const dataStats: ServerStats = resStats.body
-      expect(dataStats.totalLocalPlaylists).to.equal(1)
+      const data = await server.statsCommand.get()
+      expect(data.totalLocalPlaylists).to.equal(1)
     }
   })
 
@@ -231,14 +224,12 @@ describe('Test stats (excluding redundancy)', function () {
     await waitJobs(servers)
 
     {
-      const res = await getStats(servers[1].url)
-      const data: ServerStats = res.body
+      const data = await servers[1].statsCommand.get()
       expect(data.totalLocalVideoFilesSize).to.equal(0)
     }
 
     {
-      const res = await getStats(servers[0].url)
-      const data: ServerStats = res.body
+      const data = await servers[0].statsCommand.get()
       expect(data.totalLocalVideoFilesSize).to.be.greaterThan(500000)
       expect(data.totalLocalVideoFilesSize).to.be.lessThan(600000)
     }
@@ -253,8 +244,7 @@ describe('Test stats (excluding redundancy)', function () {
       }
     })
 
-    const res1 = await getStats(servers[1].url)
-    const first = res1.body as ServerStats
+    const first = await servers[1].statsCommand.get()
 
     for (let i = 0; i < 10; i++) {
       await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'video' })
@@ -264,10 +254,9 @@ describe('Test stats (excluding redundancy)', function () {
 
     await wait(6000)
 
-    const res2 = await getStats(servers[1].url)
-    const second: ServerStats = res2.body
-
+    const second = await servers[1].statsCommand.get()
     expect(second.totalActivityPubMessagesProcessed).to.be.greaterThan(first.totalActivityPubMessagesProcessed)
+
     const apTypes: ActivityType[] = [
       'Create', 'Update', 'Delete', 'Follow', 'Accept', 'Announce', 'Undo', 'Like', 'Reject', 'View', 'Dislike', 'Flag'
     ]
@@ -287,9 +276,7 @@ describe('Test stats (excluding redundancy)', function () {
 
     await wait(6000)
 
-    const res3 = await getStats(servers[1].url)
-    const third: ServerStats = res3.body
-
+    const third = await servers[1].statsCommand.get()
     expect(third.totalActivityPubMessagesWaiting).to.equal(0)
     expect(third.activityPubMessagesProcessedPerSecond).to.be.lessThan(second.activityPubMessagesProcessedPerSecond)
   })

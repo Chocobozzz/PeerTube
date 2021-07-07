@@ -5,7 +5,6 @@ import * as chai from 'chai'
 import { readdir } from 'fs-extra'
 import * as magnetUtil from 'magnet-uri'
 import { join } from 'path'
-import { removeVideoRedundancy } from '@server/lib/redundancy'
 import { HttpStatusCode } from '@shared/core-utils'
 import {
   checkSegmentHash,
@@ -30,15 +29,7 @@ import {
   waitJobs,
   waitUntilLog
 } from '@shared/extra-utils'
-import { getStats } from '@shared/extra-utils/server/stats'
-import {
-  ServerStats,
-  VideoDetails,
-  VideoPrivacy,
-  VideoRedundancy,
-  VideoRedundancyStrategy,
-  VideoRedundancyStrategyWithManual
-} from '@shared/models'
+import { VideoDetails, VideoPrivacy, VideoRedundancyStrategy, VideoRedundancyStrategyWithManual } from '@shared/models'
 
 const expect = chai.expect
 
@@ -241,9 +232,7 @@ async function checkStatsGlobal (strategy: VideoRedundancyStrategyWithManual) {
     statsLength = 2
   }
 
-  const res = await getStats(servers[0].url)
-  const data: ServerStats = res.body
-
+  const data = await servers[0].statsCommand.get()
   expect(data.videosRedundancy).to.have.lengthOf(statsLength)
 
   const stat = data.videosRedundancy[0]
