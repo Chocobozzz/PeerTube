@@ -9,6 +9,7 @@ export * from './moderation'
 export * from './overviews'
 export * from './search'
 export * from './server'
+export * from './socket'
 
 export * from './requests/check-api-params'
 export * from './requests/requests'

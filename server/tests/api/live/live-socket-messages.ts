@@ -2,7 +2,6 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { getLiveNotificationSocket } from '@shared/extra-utils/socket/socket-io'
 import { VideoPrivacy, VideoState } from '@shared/models'
 import {
   cleanupTests,
@@ -77,7 +76,7 @@ describe('Test live', function () {
       {
         const videoId = await getVideoIdFromUUID(servers[0].url, liveVideoUUID)
 
-        const localSocket = getLiveNotificationSocket(servers[0].url)
+        const localSocket = servers[0].socketIOCommand.getLiveNotificationSocket()
         localSocket.on('state-change', data => localStateChanges.push(data.state))
         localSocket.emit('subscribe', { videoId })
       }
@@ -85,7 +84,7 @@ describe('Test live', function () {
       {
         const videoId = await getVideoIdFromUUID(servers[1].url, liveVideoUUID)
 
-        const remoteSocket = getLiveNotificationSocket(servers[1].url)
+        const remoteSocket = servers[1].socketIOCommand.getLiveNotificationSocket()
         remoteSocket.on('state-change', data => remoteStateChanges.push(data.state))
         remoteSocket.emit('subscribe', { videoId })
       }
@@ -125,7 +124,7 @@ describe('Test live', function () {
       {
         const videoId = await getVideoIdFromUUID(servers[0].url, liveVideoUUID)
 
-        const localSocket = getLiveNotificationSocket(servers[0].url)
+        const localSocket = servers[0].socketIOCommand.getLiveNotificationSocket()
         localSocket.on('views-change', data => { localLastVideoViews = data.views })
         localSocket.emit('subscribe', { videoId })
       }
@@ -133,7 +132,7 @@ describe('Test live', function () {
       {
         const videoId = await getVideoIdFromUUID(servers[1].url, liveVideoUUID)
 
-        const remoteSocket = getLiveNotificationSocket(servers[1].url)
+        const remoteSocket = servers[1].socketIOCommand.getLiveNotificationSocket()
         remoteSocket.on('views-change', data => { remoteLastVideoViews = data.views })
         remoteSocket.emit('subscribe', { videoId })
       }
@@ -169,7 +168,7 @@ describe('Test live', function () {
 
       const videoId = await getVideoIdFromUUID(servers[0].url, liveVideoUUID)
 
-      const socket = getLiveNotificationSocket(servers[0].url)
+      const socket = servers[0].socketIOCommand.getLiveNotificationSocket()
       socket.on('state-change', data => stateChanges.push(data.state))
       socket.emit('subscribe', { videoId })
 

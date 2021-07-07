@@ -9,7 +9,6 @@ import { MockSmtpServer } from '../mock-servers/mock-email'
 import { makeGetRequest, makePostBodyRequest, makePutBodyRequest } from '../requests/requests'
 import { doubleFollow } from '../server/follows'
 import { flushAndRunMultipleServers, ServerInfo } from '../server/servers'
-import { getUserNotificationSocket } from '../socket/socket-io'
 import { setAccessTokensToServers, userLogin } from './login'
 import { createUser, getMyUserInformation } from './users'
 
@@ -748,16 +747,16 @@ async function prepareNotificationsTest (serversCount = 3, overrideConfigArg: an
   }
 
   {
-    const socket = getUserNotificationSocket(servers[0].url, userAccessToken)
+    const socket = servers[0].socketIOCommand.getUserNotificationSocket({ token: userAccessToken })
     socket.on('new-notification', n => userNotifications.push(n))
   }
   {
-    const socket = getUserNotificationSocket(servers[0].url, servers[0].accessToken)
+    const socket = servers[0].socketIOCommand.getUserNotificationSocket()
     socket.on('new-notification', n => adminNotifications.push(n))
   }
 
   if (serversCount > 1) {
-    const socket = getUserNotificationSocket(servers[1].url, servers[1].accessToken)
+    const socket = servers[1].socketIOCommand.getUserNotificationSocket()
     socket.on('new-notification', n => adminNotificationsServer2.push(n))
   }
 
