@@ -2,30 +2,23 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { getUserNotifications, markAsReadAllNotifications } from '@shared/extra-utils/users/user-notifications'
-import { addUserSubscription, removeUserSubscription } from '@shared/extra-utils/users/user-subscriptions'
-import { UserNotification, UserNotificationType } from '@shared/models'
 import {
+  addUserSubscription,
+  addVideoCommentThread,
   cleanupTests,
   createUser,
   doubleFollow,
   flushAndRunMultipleServers,
+  getUserNotifications,
+  markAsReadAllNotifications,
+  removeUserSubscription,
   ServerInfo,
+  setAccessTokensToServers,
   uploadVideo,
-  userLogin
-} from '../../../../shared/extra-utils/index'
-import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
-import {
-  addAccountToAccountBlocklist,
-  addAccountToServerBlocklist,
-  addServerToAccountBlocklist,
-  addServerToServerBlocklist,
-  removeAccountFromAccountBlocklist,
-  removeAccountFromServerBlocklist,
-  removeServerFromAccountBlocklist
-} from '../../../../shared/extra-utils/users/blocklist'
-import { setAccessTokensToServers } from '../../../../shared/extra-utils/users/login'
-import { addVideoCommentThread } from '../../../../shared/extra-utils/videos/video-comments'
+  userLogin,
+  waitJobs
+} from '@shared/extra-utils'
+import { UserNotification, UserNotificationType } from '@shared/models'
 
 const expect = chai.expect
 
@@ -134,7 +127,7 @@ describe('Test blocklist', function () {
     it('Should block an account', async function () {
       this.timeout(10000)
 
-      await addAccountToAccountBlocklist(servers[0].url, userToken1, 'user3@' + servers[1].host)
+      await servers[0].blocklistCommand.addToMyBlocklist({ token: userToken1, account: 'user3@' + servers[1].host })
       await waitJobs(servers)
     })
 
@@ -147,7 +140,7 @@ describe('Test blocklist', function () {
 
       await checkNotifications(servers[0].url, userToken2, notifs)
 
-      await removeAccountFromAccountBlocklist(servers[0].url, userToken1, 'user3@' + servers[1].host)
+      await servers[0].blocklistCommand.removeFromMyBlocklist({ token: userToken1, account: 'user3@' + servers[1].host })
     })
   })
 
@@ -167,7 +160,7 @@ describe('Test blocklist', function () {
     it('Should block an account', async function () {
       this.timeout(10000)
 
-      await addServerToAccountBlocklist(servers[0].url, userToken1, servers[1].host)
+      await servers[0].blocklistCommand.addToMyBlocklist({ token: userToken1, server: servers[1].host })
       await waitJobs(servers)
     })
 
@@ -180,7 +173,7 @@ describe('Test blocklist', function () {
 
       await checkNotifications(servers[0].url, userToken2, notifs)
 
-      await removeServerFromAccountBlocklist(servers[0].url, userToken1, servers[1].host)
+      await servers[0].blocklistCommand.removeFromMyBlocklist({ token: userToken1, server: servers[1].host })
     })
   })
 
@@ -207,7 +200,7 @@ describe('Test blocklist', function () {
     it('Should block an account', async function () {
       this.timeout(10000)
 
-      await addAccountToServerBlocklist(servers[0].url, servers[0].accessToken, 'user3@' + servers[1].host)
+      await servers[0].blocklistCommand.addToServerBlocklist({ account: 'user3@' + servers[1].host })
       await waitJobs(servers)
     })
 
@@ -215,7 +208,7 @@ describe('Test blocklist', function () {
       await checkNotifications(servers[0].url, userToken1, [])
       await checkNotifications(servers[0].url, userToken2, [])
 
-      await removeAccountFromServerBlocklist(servers[0].url, servers[0].accessToken, 'user3@' + servers[1].host)
+      await servers[0].blocklistCommand.removeFromServerBlocklist({ account: 'user3@' + servers[1].host })
     })
   })
 
@@ -242,7 +235,7 @@ describe('Test blocklist', function () {
     it('Should block an account', async function () {
       this.timeout(10000)
 
-      await addServerToServerBlocklist(servers[0].url, servers[0].accessToken, servers[1].host)
+      await servers[0].blocklistCommand.addToServerBlocklist({ server: servers[1].host })
       await waitJobs(servers)
     })
 

@@ -3,7 +3,6 @@
 import 'mocha'
 import * as chai from 'chai'
 import {
-  addAccountToAccountBlocklist,
   cleanupTests,
   flushAndRunServer,
   generateUserAccessToken,
@@ -115,7 +114,7 @@ describe('Test a videos overview', function () {
   it('Should hide muted accounts', async function () {
     const token = await generateUserAccessToken(server, 'choco')
 
-    await addAccountToAccountBlocklist(server.url, token, 'root@' + server.host)
+    await server.blocklistCommand.addToMyBlocklist({ token, account: 'root@' + server.host })
 
     {
       const body = await server.overviewsCommand.getVideos({ page: 1 })

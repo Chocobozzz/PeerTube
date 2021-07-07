@@ -3,7 +3,6 @@
 import 'mocha'
 import * as chai from 'chai'
 import {
-  addAccountToAccountBlocklist,
   addVideoCommentReply,
   addVideoCommentThread,
   checkCommentMention,
@@ -14,7 +13,6 @@ import {
   getVideoThreadComments,
   MockSmtpServer,
   prepareNotificationsTest,
-  removeAccountFromAccountBlocklist,
   ServerInfo,
   updateMyUser,
   uploadVideo,
@@ -86,7 +84,7 @@ describe('Test comments notifications', function () {
     it('Should not send a new comment notification if the account is muted', async function () {
       this.timeout(20000)
 
-      await addAccountToAccountBlocklist(servers[0].url, userAccessToken, 'root')
+      await servers[0].blocklistCommand.addToMyBlocklist({ token: userAccessToken, account: 'root' })
 
       const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name: 'super video' })
       const uuid = resVideo.body.video.uuid
@@ -97,7 +95,7 @@ describe('Test comments notifications', function () {
       await waitJobs(servers)
       await checkNewCommentOnMyVideo(baseParams, uuid, commentId, commentId, 'absence')
 
-      await removeAccountFromAccountBlocklist(servers[0].url, userAccessToken, 'root')
+      await servers[0].blocklistCommand.removeFromMyBlocklist({ token: userAccessToken, account: 'root' })
     })
 
     it('Should send a new comment notification after a local comment on my video', async function () {
@@ -244,7 +242,7 @@ describe('Test comments notifications', function () {
     it('Should not send a new mention notification if the account is muted', async function () {
       this.timeout(10000)
 
-      await addAccountToAccountBlocklist(servers[0].url, userAccessToken, 'root')
+      await servers[0].blocklistCommand.addToMyBlocklist({ token: userAccessToken, account: 'root' })
 
       const resVideo = await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'super video' })
       const uuid = resVideo.body.video.uuid
@@ -255,7 +253,7 @@ describe('Test comments notifications', function () {
       await waitJobs(servers)
       await checkCommentMention(baseParams, uuid, commentId, commentId, 'super root name', 'absence')
 
-      await removeAccountFromAccountBlocklist(servers[0].url, userAccessToken, 'root')
+      await servers[0].blocklistCommand.removeFromMyBlocklist({ token: userAccessToken, account: 'root' })
     })
 
     it('Should not send a new mention notification if the remote account mention a local account', async function () {

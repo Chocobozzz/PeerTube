@@ -3,16 +3,10 @@
 import 'mocha'
 import * as chai from 'chai'
 import * as xmlParser from 'fast-xml-parser'
+import { HttpStatusCode } from '@shared/core-utils'
 import {
-  addAccountToAccountBlocklist,
-  addAccountToServerBlocklist,
-  removeAccountFromServerBlocklist
-} from '@shared/extra-utils/users/blocklist'
-import { addUserSubscription, listUserSubscriptionVideos } from '@shared/extra-utils/users/user-subscriptions'
-import { VideoPrivacy } from '@shared/models'
-import { ScopedToken } from '@shared/models/users/user-scoped-token'
-import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
-import {
+  addUserSubscription,
+  addVideoCommentThread,
   cleanupTests,
   createUser,
   doubleFollow,
@@ -20,16 +14,17 @@ import {
   flushAndRunServer,
   getMyUserInformation,
   getUserScopedTokens,
+  listUserSubscriptionVideos,
   renewUserScopedTokens,
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo,
   uploadVideoAndGetId,
-  userLogin
-} from '../../../shared/extra-utils'
-import { waitJobs } from '../../../shared/extra-utils/server/jobs'
-import { addVideoCommentThread } from '../../../shared/extra-utils/videos/video-comments'
-import { User } from '../../../shared/models/users'
+  userLogin,
+  waitJobs
+} from '@shared/extra-utils'
+import { User, VideoPrivacy } from '@shared/models'
+import { ScopedToken } from '@shared/models/users/user-scoped-token'
 
 chai.use(require('chai-xml'))
 chai.use(require('chai-json-schema'))
@@ -271,7 +266,7 @@ describe('Test syndication feeds', () => {
 
       const remoteHandle = 'root@localhost:' + servers[0].port
 
-      await addAccountToServerBlocklist(servers[1].url, servers[1].accessToken, remoteHandle)
+      await servers[1].blocklistCommand.addToServerBlocklist({ account: remoteHandle })
 
       {
         const json = await servers[1].feedCommand.getJSON({ feed: 'video-comments', query: { version: 2 } })
@@ -279,7 +274,7 @@ describe('Test syndication feeds', () => {
         expect(jsonObj.items.length).to.be.equal(0)
       }
 
-      await removeAccountFromServerBlocklist(servers[1].url, servers[1].accessToken, remoteHandle)
+      await servers[1].blocklistCommand.removeFromServerBlocklist({ account: remoteHandle })
 
       {
         const videoUUID = (await uploadVideoAndGetId({ server: servers[1], videoName: 'server 2' })).uuid
@@ -292,7 +287,7 @@ describe('Test syndication feeds', () => {
         expect(jsonObj.items.length).to.be.equal(3)
       }
 
-      await addAccountToAccountBlocklist(servers[1].url, servers[1].accessToken, remoteHandle)
+      await servers[1].blocklistCommand.addToMyBlocklist({ account: remoteHandle })
 
       {
         const json = await servers[1].feedCommand.getJSON({ feed: 'video-comments', query: { version: 4 } })

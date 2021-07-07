@@ -4,8 +4,6 @@ import 'mocha'
 import * as chai from 'chai'
 import {
   AbusesCommand,
-  addAccountToServerBlocklist,
-  addServerToServerBlocklist,
   addVideoCommentThread,
   cleanupTests,
   createUser,
@@ -16,8 +14,6 @@ import {
   getVideoCommentThreads,
   getVideoIdFromUUID,
   getVideosList,
-  removeAccountFromServerBlocklist,
-  removeServerFromServerBlocklist,
   removeUser,
   removeVideo,
   ServerInfo,
@@ -27,7 +23,7 @@ import {
   userLogin,
   waitJobs
 } from '@shared/extra-utils'
-import { AbuseMessage, AbusePredefinedReasonsString, AbuseState, Account, AdminAbuse, UserAbuse, VideoComment } from '@shared/models'
+import { AbuseMessage, AbusePredefinedReasonsString, AbuseState, AdminAbuse, UserAbuse, VideoComment } from '@shared/models'
 
 const expect = chai.expect
 
@@ -225,7 +221,7 @@ describe('Test abuses', function () {
       const accountToBlock = 'root@' + servers[1].host
 
       {
-        await addAccountToServerBlocklist(servers[0].url, servers[0].accessToken, accountToBlock)
+        await servers[0].blocklistCommand.addToServerBlocklist({ account: accountToBlock })
 
         const body = await commands[0].getAdminList()
         expect(body.total).to.equal(2)
@@ -235,7 +231,7 @@ describe('Test abuses', function () {
       }
 
       {
-        await removeAccountFromServerBlocklist(servers[0].url, servers[0].accessToken, accountToBlock)
+        await servers[0].blocklistCommand.removeFromServerBlocklist({ account: accountToBlock })
 
         const body = await commands[0].getAdminList()
         expect(body.total).to.equal(3)
@@ -246,7 +242,7 @@ describe('Test abuses', function () {
       const serverToBlock = servers[1].host
 
       {
-        await addServerToServerBlocklist(servers[0].url, servers[0].accessToken, servers[1].host)
+        await servers[0].blocklistCommand.addToServerBlocklist({ server: serverToBlock })
 
         const body = await commands[0].getAdminList()
         expect(body.total).to.equal(2)
@@ -256,7 +252,7 @@ describe('Test abuses', function () {
       }
 
       {
-        await removeServerFromServerBlocklist(servers[0].url, servers[0].accessToken, serverToBlock)
+        await servers[0].blocklistCommand.removeFromServerBlocklist({ server: serverToBlock })
 
         const body = await commands[0].getAdminList()
         expect(body.total).to.equal(3)

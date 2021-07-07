@@ -4,10 +4,6 @@ import 'mocha'
 import * as chai from 'chai'
 import { HttpStatusCode } from '@shared/core-utils'
 import {
-  addAccountToAccountBlocklist,
-  addAccountToServerBlocklist,
-  addServerToAccountBlocklist,
-  addServerToServerBlocklist,
   addVideoChannel,
   addVideoInPlaylist,
   addVideoToBlacklist,
@@ -31,10 +27,6 @@ import {
   getVideoPlaylistPrivacies,
   getVideoPlaylistsList,
   getVideoPlaylistWithToken,
-  removeAccountFromAccountBlocklist,
-  removeAccountFromServerBlocklist,
-  removeServerFromAccountBlocklist,
-  removeServerFromServerBlocklist,
   removeUser,
   removeVideoFromBlacklist,
   removeVideoFromPlaylist,
@@ -760,56 +752,58 @@ describe('Test video playlists', function () {
     it('Should update the element type if the account or server of the video is blocked', async function () {
       this.timeout(90000)
 
+      const command = servers[0].blocklistCommand
+
       const name = 'video 90'
       const position = 2
 
       {
-        await addAccountToAccountBlocklist(servers[0].url, userAccessTokenServer1, 'root@localhost:' + servers[1].port)
+        await command.addToMyBlocklist({ token: userAccessTokenServer1, account: 'root@localhost:' + servers[1].port })
         await waitJobs(servers)
 
         await checkPlaylistElementType(groupUser1, playlistServer1UUID2, VideoPlaylistElementType.UNAVAILABLE, position, name, 3)
         await checkPlaylistElementType(group2, playlistServer1UUID2, VideoPlaylistElementType.REGULAR, position, name, 3)
 
-        await removeAccountFromAccountBlocklist(servers[0].url, userAccessTokenServer1, 'root@localhost:' + servers[1].port)
+        await command.removeFromMyBlocklist({ token: userAccessTokenServer1, account: 'root@localhost:' + servers[1].port })
         await waitJobs(servers)
 
         await checkPlaylistElementType(group2, playlistServer1UUID2, VideoPlaylistElementType.REGULAR, position, name, 3)
       }
 
       {
-        await addServerToAccountBlocklist(servers[0].url, userAccessTokenServer1, 'localhost:' + servers[1].port)
+        await command.addToMyBlocklist({ token: userAccessTokenServer1, server: 'localhost:' + servers[1].port })
         await waitJobs(servers)
 
         await checkPlaylistElementType(groupUser1, playlistServer1UUID2, VideoPlaylistElementType.UNAVAILABLE, position, name, 3)
         await checkPlaylistElementType(group2, playlistServer1UUID2, VideoPlaylistElementType.REGULAR, position, name, 3)
 
-        await removeServerFromAccountBlocklist(servers[0].url, userAccessTokenServer1, 'localhost:' + servers[1].port)
+        await command.removeFromMyBlocklist({ token: userAccessTokenServer1, server: 'localhost:' + servers[1].port })
         await waitJobs(servers)
 
         await checkPlaylistElementType(group2, playlistServer1UUID2, VideoPlaylistElementType.REGULAR, position, name, 3)
       }
 
       {
-        await addAccountToServerBlocklist(servers[0].url, servers[0].accessToken, 'root@localhost:' + servers[1].port)
+        await command.addToServerBlocklist({ account: 'root@localhost:' + servers[1].port })
         await waitJobs(servers)
 
         await checkPlaylistElementType(groupUser1, playlistServer1UUID2, VideoPlaylistElementType.UNAVAILABLE, position, name, 3)
         await checkPlaylistElementType(group2, playlistServer1UUID2, VideoPlaylistElementType.REGULAR, position, name, 3)
 
-        await removeAccountFromServerBlocklist(servers[0].url, servers[0].accessToken, 'root@localhost:' + servers[1].port)
+        await command.removeFromServerBlocklist({ account: 'root@localhost:' + servers[1].port })
         await waitJobs(servers)
 
         await checkPlaylistElementType(group2, playlistServer1UUID2, VideoPlaylistElementType.REGULAR, position, name, 3)
       }
 
       {
-        await addServerToServerBlocklist(servers[0].url, servers[0].accessToken, 'localhost:' + servers[1].port)
+        await command.addToServerBlocklist({ server: 'localhost:' + servers[1].port })
         await waitJobs(servers)
 
         await checkPlaylistElementType(groupUser1, playlistServer1UUID2, VideoPlaylistElementType.UNAVAILABLE, position, name, 3)
         await checkPlaylistElementType(group2, playlistServer1UUID2, VideoPlaylistElementType.REGULAR, position, name, 3)
 
-        await removeServerFromServerBlocklist(servers[0].url, servers[0].accessToken, 'localhost:' + servers[1].port)
+        await command.removeFromServerBlocklist({ server: 'localhost:' + servers[1].port })
         await waitJobs(servers)
 
         await checkPlaylistElementType(group2, playlistServer1UUID2, VideoPlaylistElementType.REGULAR, position, name, 3)
