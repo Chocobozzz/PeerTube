@@ -5,7 +5,7 @@ export class SocketIOCommand extends AbstractCommand {
 
   getUserNotificationSocket (options: OverrideCommandOptions = {}) {
     return io(this.server.url + '/user-notifications', {
-      query: { accessToken: this.server.accessToken }
+      query: { accessToken: options.token ?? this.server.accessToken }
     })
   }
 

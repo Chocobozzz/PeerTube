@@ -4,8 +4,6 @@ import 'mocha'
 import { expect } from 'chai'
 import { HttpStatusCode } from '@shared/core-utils'
 import {
-  addAccountToServerBlocklist,
-  addServerToAccountBlocklist,
   cleanupTests,
   doubleFollow,
   flushAndRunMultipleServers,
@@ -13,7 +11,6 @@ import {
   killallServers,
   makeGetRequest,
   MockBlocklist,
-  removeAccountFromServerBlocklist,
   reRunServer,
   ServerInfo,
   setAccessTokensToServers,
@@ -147,7 +144,7 @@ describe('Official plugin auto-mute', function () {
       expect(res.body.total).to.equal(1)
     }
 
-    await removeAccountFromServerBlocklist(servers[0].url, servers[0].accessToken, account)
+    await servers[0].blocklistCommand.removeFromServerBlocklist({ account })
 
     {
       const res = await getVideosList(servers[0].url)
@@ -201,8 +198,8 @@ describe('Official plugin auto-mute', function () {
       }
     })
 
-    await addAccountToServerBlocklist(servers[0].url, servers[0].accessToken, 'root@localhost:' + servers[1].port)
-    await addServerToAccountBlocklist(servers[0].url, servers[0].accessToken, 'localhost:' + servers[1].port)
+    await servers[0].blocklistCommand.addToServerBlocklist({ account: 'root@localhost:' + servers[1].port })
+    await servers[0].blocklistCommand.addToMyBlocklist({ server: 'localhost:' + servers[1].port })
 
     const res = await makeGetRequest({
       url: servers[0].url,

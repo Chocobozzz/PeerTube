@@ -3,46 +3,27 @@
 import 'mocha'
 import * as chai from 'chai'
 import {
-  addAccountToAccountBlocklist,
-  addAccountToServerBlocklist,
-  addServerToAccountBlocklist,
-  addServerToServerBlocklist,
   addVideoCommentReply,
   addVideoCommentThread,
+  BlocklistCommand,
   cleanupTests,
   createUser,
   deleteVideoComment,
   doubleFollow,
   findCommentId,
   flushAndRunMultipleServers,
-  getAccountBlocklistByAccount,
-  getAccountBlocklistByServer,
-  getServerBlocklistByAccount,
-  getServerBlocklistByServer,
   getUserNotifications,
   getVideoCommentThreads,
   getVideosList,
   getVideosListWithToken,
   getVideoThreadComments,
-  removeAccountFromAccountBlocklist,
-  removeAccountFromServerBlocklist,
-  removeServerFromAccountBlocklist,
-  removeServerFromServerBlocklist,
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo,
   userLogin,
   waitJobs
 } from '@shared/extra-utils'
-import {
-  AccountBlock,
-  ServerBlock,
-  UserNotification,
-  UserNotificationType,
-  Video,
-  VideoComment,
-  VideoCommentThreadTree
-} from '@shared/models'
+import { UserNotification, UserNotificationType, Video, VideoComment, VideoCommentThreadTree } from '@shared/models'
 
 const expect = chai.expect
 
@@ -108,6 +89,8 @@ describe('Test blocklist', function () {
   let userModeratorToken: string
   let userToken2: string
 
+  let command: BlocklistCommand
+
   before(async function () {
     this.timeout(120000)
 
@@ -167,6 +150,8 @@ describe('Test blocklist', function () {
     }
 
     await waitJobs(servers)
+
+    command = servers[0].blocklistCommand
   })
 
   describe('User blocklist', function () {
@@ -181,7 +166,7 @@ describe('Test blocklist', function () {
       })
 
       it('Should block a remote account', async function () {
-        await addAccountToAccountBlocklist(servers[0].url, servers[0].accessToken, 'user2@localhost:' + servers[1].port)
+        await command.addToMyBlocklist({ account: 'user2@localhost:' + servers[1].port })
       })
 
       it('Should hide its videos', async function () {
@@ -195,7 +180,7 @@ describe('Test blocklist', function () {
       })
 
       it('Should block a local account', async function () {
-        await addAccountToAccountBlocklist(servers[0].url, servers[0].accessToken, 'user1')
+        await command.addToMyBlocklist({ account: 'user1' })
       })
 
       it('Should hide its videos', async function () {
@@ -251,12 +236,10 @@ describe('Test blocklist', function () {
 
       it('Should list blocked accounts', async function () {
         {
-          const res = await getAccountBlocklistByAccount(servers[0].url, servers[0].accessToken, 0, 1, 'createdAt')
-          const blocks: AccountBlock[] = res.body.data
+          const body = await command.listMyAccountBlocklist({ start: 0, count: 1, sort: 'createdAt' })
+          expect(body.total).to.equal(2)
 
-          expect(res.body.total).to.equal(2)
-
-          const block = blocks[0]
+          const block = body.data[0]
           expect(block.byAccount.displayName).to.equal('root')
           expect(block.byAccount.name).to.equal('root')
           expect(block.blockedAccount.displayName).to.equal('user2')
@@ -265,12 +248,10 @@ describe('Test blocklist', function () {
         }
 
         {
-          const res = await getAccountBlocklistByAccount(servers[0].url, servers[0].accessToken, 1, 2, 'createdAt')
-          const blocks: AccountBlock[] = res.body.data
+          const body = await command.listMyAccountBlocklist({ start: 1, count: 2, sort: 'createdAt' })
+          expect(body.total).to.equal(2)
 
-          expect(res.body.total).to.equal(2)
-
-          const block = blocks[0]
+          const block = body.data[0]
           expect(block.byAccount.displayName).to.equal('root')
           expect(block.byAccount.name).to.equal('root')
           expect(block.blockedAccount.displayName).to.equal('user1')
@@ -335,7 +316,7 @@ describe('Test blocklist', function () {
       })
 
       it('Should unblock the remote account', async function () {
-        await removeAccountFromAccountBlocklist(servers[0].url, servers[0].accessToken, 'user2@localhost:' + servers[1].port)
+        await command.removeFromMyBlocklist({ account: 'user2@localhost:' + servers[1].port })
       })
 
       it('Should display its videos', async function () {
@@ -374,7 +355,7 @@ describe('Test blocklist', function () {
       })
 
       it('Should unblock the local account', async function () {
-        await removeAccountFromAccountBlocklist(servers[0].url, servers[0].accessToken, 'user1')
+        await command.removeFromMyBlocklist({ account: 'user1' })
       })
 
       it('Should display its comments', function () {
@@ -402,6 +383,7 @@ describe('Test blocklist', function () {
     })
 
     describe('When managing server blocklist', function () {
+
       it('Should list all videos', function () {
         return checkAllVideos(servers[0].url, servers[0].accessToken)
       })
@@ -411,7 +393,7 @@ describe('Test blocklist', function () {
       })
 
       it('Should block a remote server', async function () {
-        await addServerToAccountBlocklist(servers[0].url, servers[0].accessToken, 'localhost:' + servers[1].port)
+        await command.addToMyBlocklist({ server: 'localhost:' + servers[1].port })
       })
 
       it('Should hide its videos', async function () {
@@ -464,19 +446,17 @@ describe('Test blocklist', function () {
       })
 
       it('Should list blocked servers', async function () {
-        const res = await getServerBlocklistByAccount(servers[0].url, servers[0].accessToken, 0, 1, 'createdAt')
-        const blocks: ServerBlock[] = res.body.data
+        const body = await command.listMyServerBlocklist({ start: 0, count: 1, sort: 'createdAt' })
+        expect(body.total).to.equal(1)
 
-        expect(res.body.total).to.equal(1)
-
-        const block = blocks[0]
+        const block = body.data[0]
         expect(block.byAccount.displayName).to.equal('root')
         expect(block.byAccount.name).to.equal('root')
         expect(block.blockedServer.host).to.equal('localhost:' + servers[1].port)
       })
 
       it('Should unblock the remote server', async function () {
-        await removeServerFromAccountBlocklist(servers[0].url, servers[0].accessToken, 'localhost:' + servers[1].port)
+        await command.removeFromMyBlocklist({ server: 'localhost:' + servers[1].port })
       })
 
       it('Should display its videos', function () {
@@ -524,7 +504,7 @@ describe('Test blocklist', function () {
       })
 
       it('Should block a remote account', async function () {
-        await addAccountToServerBlocklist(servers[0].url, servers[0].accessToken, 'user2@localhost:' + servers[1].port)
+        await command.addToServerBlocklist({ account: 'user2@localhost:' + servers[1].port })
       })
 
       it('Should hide its videos', async function () {
@@ -540,7 +520,7 @@ describe('Test blocklist', function () {
       })
 
       it('Should block a local account', async function () {
-        await addAccountToServerBlocklist(servers[0].url, servers[0].accessToken, 'user1')
+        await command.addToServerBlocklist({ account: 'user1' })
       })
 
       it('Should hide its videos', async function () {
@@ -598,12 +578,10 @@ describe('Test blocklist', function () {
 
       it('Should list blocked accounts', async function () {
         {
-          const res = await getAccountBlocklistByServer(servers[0].url, servers[0].accessToken, 0, 1, 'createdAt')
-          const blocks: AccountBlock[] = res.body.data
+          const body = await command.listServerAccountBlocklist({ start: 0, count: 1, sort: 'createdAt' })
+          expect(body.total).to.equal(2)
 
-          expect(res.body.total).to.equal(2)
-
-          const block = blocks[0]
+          const block = body.data[0]
           expect(block.byAccount.displayName).to.equal('peertube')
           expect(block.byAccount.name).to.equal('peertube')
           expect(block.blockedAccount.displayName).to.equal('user2')
@@ -612,12 +590,10 @@ describe('Test blocklist', function () {
         }
 
         {
-          const res = await getAccountBlocklistByServer(servers[0].url, servers[0].accessToken, 1, 2, 'createdAt')
-          const blocks: AccountBlock[] = res.body.data
+          const body = await command.listServerAccountBlocklist({ start: 1, count: 2, sort: 'createdAt' })
+          expect(body.total).to.equal(2)
 
-          expect(res.body.total).to.equal(2)
-
-          const block = blocks[0]
+          const block = body.data[0]
           expect(block.byAccount.displayName).to.equal('peertube')
           expect(block.byAccount.name).to.equal('peertube')
           expect(block.blockedAccount.displayName).to.equal('user1')
@@ -627,7 +603,7 @@ describe('Test blocklist', function () {
       })
 
       it('Should unblock the remote account', async function () {
-        await removeAccountFromServerBlocklist(servers[0].url, servers[0].accessToken, 'user2@localhost:' + servers[1].port)
+        await command.removeFromServerBlocklist({ account: 'user2@localhost:' + servers[1].port })
       })
 
       it('Should display its videos', async function () {
@@ -643,7 +619,7 @@ describe('Test blocklist', function () {
       })
 
       it('Should unblock the local account', async function () {
-        await removeAccountFromServerBlocklist(servers[0].url, servers[0].accessToken, 'user1')
+        await command.removeFromServerBlocklist({ account: 'user1' })
       })
 
       it('Should display its comments', async function () {
@@ -686,7 +662,7 @@ describe('Test blocklist', function () {
       })
 
       it('Should block a remote server', async function () {
-        await addServerToServerBlocklist(servers[0].url, servers[0].accessToken, 'localhost:' + servers[1].port)
+        await command.addToServerBlocklist({ server: 'localhost:' + servers[1].port })
       })
 
       it('Should hide its videos', async function () {
@@ -758,19 +734,17 @@ describe('Test blocklist', function () {
       })
 
       it('Should list blocked servers', async function () {
-        const res = await getServerBlocklistByServer(servers[0].url, servers[0].accessToken, 0, 1, 'createdAt')
-        const blocks: ServerBlock[] = res.body.data
+        const body = await command.listServerServerBlocklist({ start: 0, count: 1, sort: 'createdAt' })
+        expect(body.total).to.equal(1)
 
-        expect(res.body.total).to.equal(1)
-
-        const block = blocks[0]
+        const block = body.data[0]
         expect(block.byAccount.displayName).to.equal('peertube')
         expect(block.byAccount.name).to.equal('peertube')
         expect(block.blockedServer.host).to.equal('localhost:' + servers[1].port)
       })
 
       it('Should unblock the remote server', async function () {
-        await removeServerFromServerBlocklist(servers[0].url, servers[0].accessToken, 'localhost:' + servers[1].port)
+        await command.removeFromServerBlocklist({ server: 'localhost:' + servers[1].port })
       })
 
       it('Should list all videos', async function () {
