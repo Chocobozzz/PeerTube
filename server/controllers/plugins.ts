@@ -1,13 +1,15 @@
 import * as express from 'express'
-import { PLUGIN_GLOBAL_CSS_PATH } from '../initializers/constants'
 import { join } from 'path'
-import { PluginManager, RegisteredPlugin } from '../lib/plugins/plugin-manager'
-import { getPluginValidator, pluginStaticDirectoryValidator, getExternalAuthValidator } from '../middlewares/validators/plugins'
-import { serveThemeCSSValidator } from '../middlewares/validators/themes'
+import { logger } from '@server/helpers/logger'
+import { optionalAuthenticate } from '@server/middlewares/auth'
+import { getCompleteLocale, is18nLocale } from '../../shared/core-utils/i18n'
+import { HttpStatusCode } from '../../shared/core-utils/miscs/http-error-codes'
 import { PluginType } from '../../shared/models/plugins/plugin.type'
 import { isTestInstance } from '../helpers/core-utils'
-import { getCompleteLocale, is18nLocale } from '../../shared/core-utils/i18n'
-import { logger } from '@server/helpers/logger'
+import { PLUGIN_GLOBAL_CSS_PATH } from '../initializers/constants'
+import { PluginManager, RegisteredPlugin } from '../lib/plugins/plugin-manager'
+import { getExternalAuthValidator, getPluginValidator, pluginStaticDirectoryValidator } from '../middlewares/validators/plugins'
+import { serveThemeCSSValidator } from '../middlewares/validators/themes'
 
 const sendFileOptions = {
   maxAge: '30 days',
@@ -44,11 +46,13 @@ pluginsRouter.get('/plugins/:pluginName/:pluginVersion/client-scripts/:staticEnd
 
 pluginsRouter.use('/plugins/:pluginName/router',
   getPluginValidator(PluginType.PLUGIN, false),
+  optionalAuthenticate,
   servePluginCustomRoutes
 )
 
 pluginsRouter.use('/plugins/:pluginName/:pluginVersion/router',
   getPluginValidator(PluginType.PLUGIN),
+  optionalAuthenticate,
   servePluginCustomRoutes
 )
 
@@ -96,7 +100,7 @@ function getPluginTranslations (req: express.Request, res: express.Response) {
     return res.json(json)
   }
 
-  return res.sendStatus(404)
+  return res.status(HttpStatusCode.NOT_FOUND_404).end()
 }
 
 function servePluginStaticDirectory (req: express.Request, res: express.Response) {
@@ -106,7 +110,7 @@ function servePluginStaticDirectory (req: express.Request, res: express.Response
   const [ directory, ...file ] = staticEndpoint.split('/')
 
   const staticPath = plugin.staticDirs[directory]
-  if (!staticPath) return res.sendStatus(404)
+  if (!staticPath) return res.status(HttpStatusCode.NOT_FOUND_404).end()
 
   const filepath = file.join('/')
   return res.sendFile(join(plugin.path, staticPath, filepath), sendFileOptions)
@@ -116,7 +120,7 @@ function servePluginCustomRoutes (req: express.Request, res: express.Response, n
   const plugin: RegisteredPlugin = res.locals.registeredPlugin
   const router = PluginManager.Instance.getRouter(plugin.npmName)
 
-  if (!router) return res.sendStatus(404)
+  if (!router) return res.status(HttpStatusCode.NOT_FOUND_404).end()
 
   return router(req, res, next)
 }
@@ -126,7 +130,7 @@ function servePluginClientScripts (req: express.Request, res: express.Response) 
   const staticEndpoint = req.params.staticEndpoint
 
   const file = plugin.clientScripts[staticEndpoint]
-  if (!file) return res.sendStatus(404)
+  if (!file) return res.status(HttpStatusCode.NOT_FOUND_404).end()
 
   return res.sendFile(join(plugin.path, staticEndpoint), sendFileOptions)
 }
@@ -136,7 +140,7 @@ function serveThemeCSSDirectory (req: express.Request, res: express.Response) {
   const staticEndpoint = req.params.staticEndpoint
 
   if (plugin.css.includes(staticEndpoint) === false) {
-    return res.sendStatus(404)
+    return res.status(HttpStatusCode.NOT_FOUND_404).end()
   }
 
   return res.sendFile(join(plugin.path, staticEndpoint), sendFileOptions)

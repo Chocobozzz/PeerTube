@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core'
+import { PrimeNGConfig } from 'primeng/api'
 
 @Injectable()
 export class I18nPrimengCalendarService {
-  private readonly calendarLocale: any = {}
 
-  constructor () {
-    this.calendarLocale = {
-      firstDayOfWeek: 0,
+  constructor (private config: PrimeNGConfig) {
+    this.config.setTranslation({
       dayNames: [
         $localize`Sunday`,
         $localize`Monday`,
@@ -70,11 +69,7 @@ export class I18nPrimengCalendarService {
       today: $localize`Today`,
 
       clear: $localize`Clear`
-    }
-  }
-
-  getCalendarLocale () {
-    return this.calendarLocale
+    })
   }
 
   getTimezone () {

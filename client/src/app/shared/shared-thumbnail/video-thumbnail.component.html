@@ -26,7 +26,11 @@
   <div class="video-thumbnail-label-overlay warning"><ng-content select="label-warning"></ng-content></div>
   <div class="video-thumbnail-label-overlay danger"><ng-content select="label-danger"></ng-content></div>
 
-  <div class="video-thumbnail-duration-overlay">{{ video.durationLabel }}</div>
+  <div class="video-thumbnail-duration-overlay" *ngIf="!video.isLive">{{ video.durationLabel }}</div>
+  <div  class="video-thumbnail-live-overlay" [ngClass]="{ 'live-ended': isLiveEnded() }" *ngIf="video.isLive">
+    <ng-container i18n *ngIf="!isLiveEnded()">LIVE</ng-container>
+    <ng-container i18n *ngIf="isLiveEnded()">LIVE ENDED</ng-container>
+  </div>
 
   <div class="play-overlay">
     <div class="icon"></div>

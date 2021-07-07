@@ -20,6 +20,7 @@ import {
 } from '../../../../shared/extra-utils'
 import { Video, VideoDetails } from '../../../../shared/models/videos'
 import { listMyVideosHistory, removeMyVideosHistory, userWatchVideo } from '../../../../shared/extra-utils/videos/video-history'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const expect = chai.expect
 
@@ -151,6 +152,15 @@ describe('Test videos history', function () {
     expect(res.body.data).to.have.lengthOf(0)
   })
 
+  it('Should be able to search through videos in my history', async function () {
+    const res = await listMyVideosHistory(server.url, server.accessToken, '2')
+
+    expect(res.body.total).to.equal(1)
+
+    const videos: Video[] = res.body.data
+    expect(videos[0].name).to.equal('video 2')
+  })
+
   it('Should clear my history', async function () {
     await removeMyVideosHistory(server.url, server.accessToken, video3WatchedDate.toISOString())
   })
@@ -171,7 +181,7 @@ describe('Test videos history', function () {
       videosHistoryEnabled: false
     })
 
-    await userWatchVideo(server.url, server.accessToken, video2UUID, 8, 409)
+    await userWatchVideo(server.url, server.accessToken, video2UUID, 8, HttpStatusCode.CONFLICT_409)
   })
 
   it('Should re-enable videos history', async function () {

@@ -1,12 +1,12 @@
-@import 'variables';
-@import 'mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 $width-size: 190px;
 
 .alert.alert-danger {
   text-align: center;
 
-  & > div {
+  > div {
     font-weight: $font-semibold;
   }
 }
@@ -17,10 +17,10 @@ $width-size: 190px;
   align-items: center;
 
   .upload-icon {
+    @include apply-svg-color(#C6C6C6);
+
     width: 90px;
     margin-bottom: 25px;
-
-    @include apply-svg-color(#C6C6C6);
   }
 
   .peertube-select-container {

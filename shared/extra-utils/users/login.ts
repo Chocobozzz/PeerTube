@@ -2,12 +2,13 @@ import * as request from 'supertest'
 
 import { ServerInfo } from '../server/servers'
 import { getClient } from '../server/clients'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 type Client = { id: string, secret: string }
 type User = { username: string, password: string }
 type Server = { url: string, client: Client, user: User }
 
-function login (url: string, client: Client, user: User, expectedStatus = 200) {
+function login (url: string, client: Client, user: User, expectedStatus = HttpStatusCode.OK_200) {
   const path = '/api/v1/users/token'
 
   const body = {
@@ -27,7 +28,7 @@ function login (url: string, client: Client, user: User, expectedStatus = 200) {
           .expect(expectedStatus)
 }
 
-function logout (url: string, token: string, expectedStatus = 200) {
+function logout (url: string, token: string, expectedStatus = HttpStatusCode.OK_200) {
   const path = '/api/v1/users/revoke-token'
 
   return request(url)
@@ -38,12 +39,12 @@ function logout (url: string, token: string, expectedStatus = 200) {
 }
 
 async function serverLogin (server: Server) {
-  const res = await login(server.url, server.client, server.user, 200)
+  const res = await login(server.url, server.client, server.user, HttpStatusCode.OK_200)
 
   return res.body.access_token as string
 }
 
-function refreshToken (server: ServerInfo, refreshToken: string, expectedStatus = 200) {
+function refreshToken (server: ServerInfo, refreshToken: string, expectedStatus = HttpStatusCode.OK_200) {
   const path = '/api/v1/users/token'
 
   const body = {
@@ -61,7 +62,7 @@ function refreshToken (server: ServerInfo, refreshToken: string, expectedStatus 
     .expect(expectedStatus)
 }
 
-async function userLogin (server: Server, user: User, expectedStatus = 200) {
+async function userLogin (server: Server, user: User, expectedStatus = HttpStatusCode.OK_200) {
   const res = await login(server.url, server.client, user, expectedStatus)
 
   return res.body.access_token as string
@@ -95,7 +96,7 @@ function setAccessTokensToServers (servers: ServerInfo[]) {
   return Promise.all(tasks)
 }
 
-function loginUsingExternalToken (server: Server, username: string, externalAuthToken: string, expectedStatus = 200) {
+function loginUsingExternalToken (server: Server, username: string, externalAuthToken: string, expectedStatus = HttpStatusCode.OK_200) {
   const path = '/api/v1/users/token'
 
   const body = {

@@ -1,8 +1,13 @@
-@import 'variables';
-@import 'mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
+
+.modal-body {
+  text-align: left;
+}
 
 input[type=text] {
   @include peertube-input-text(340px);
+
   display: block;
 }
 

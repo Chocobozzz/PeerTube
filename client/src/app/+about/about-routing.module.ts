@@ -1,17 +1,16 @@
 import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
-import { MetaGuard } from '@ngx-meta/core'
-import { AboutComponent } from './about.component'
-import { AboutInstanceComponent } from '@app/+about/about-instance/about-instance.component'
-import { AboutPeertubeComponent } from '@app/+about/about-peertube/about-peertube.component'
 import { AboutFollowsComponent } from '@app/+about/about-follows/about-follows.component'
+import { AboutInstanceComponent } from '@app/+about/about-instance/about-instance.component'
 import { AboutInstanceResolver } from '@app/+about/about-instance/about-instance.resolver'
+import { ContactAdminModalComponent } from '@app/+about/about-instance/contact-admin-modal.component'
+import { AboutPeertubeComponent } from '@app/+about/about-peertube/about-peertube.component'
+import { AboutComponent } from './about.component'
 
 const aboutRoutes: Routes = [
   {
     path: '',
     component: AboutComponent,
-    canActivateChild: [ MetaGuard ],
     children: [
       {
         path: '',
@@ -31,6 +30,19 @@ const aboutRoutes: Routes = [
         }
       },
       {
+        path: 'contact',
+        component: AboutInstanceComponent,
+        data: {
+          meta: {
+            title: $localize`Contact`
+          },
+          isContact: true
+        },
+        resolve: {
+          instanceData: AboutInstanceResolver
+        }
+      },
+      {
         path: 'peertube',
         component: AboutPeertubeComponent,
         data: {
@@ -44,7 +56,7 @@ const aboutRoutes: Routes = [
         component: AboutFollowsComponent,
         data: {
           meta: {
-            title: $localize`About follows`
+            title: $localize`About this instance's network`
           }
         }
       }

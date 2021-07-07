@@ -1,0 +1,15 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+input {
+  @include peertube-input-text(auto);
+  @include padding-left(15px !important);
+  @include padding-right(15px !important);
+
+  // set again properties of peertube-input-text that are overriden by .input-group
+  font-size: 15px !important;
+}
+
+.eye-button {
+  line-height: 1 !important;
+}

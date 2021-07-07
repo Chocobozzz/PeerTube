@@ -2,10 +2,20 @@ import { Subscription } from 'rxjs'
 import { catchError, distinctUntilChanged, map, switchMap, tap } from 'rxjs/operators'
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
-import { AuthService, Notifier, RedirectService, RestExtractor, ScreenService, UserService } from '@app/core'
-import { Account, AccountService, DropdownAction, ListOverflowItem, VideoChannel, VideoChannelService } from '@app/shared/shared-main'
+import { AuthService, MarkdownService, Notifier, RedirectService, RestExtractor, ScreenService, UserService } from '@app/core'
+import {
+  Account,
+  AccountService,
+  DropdownAction,
+  ListOverflowItem,
+  VideoChannel,
+  VideoChannelService,
+  VideoService
+} from '@app/shared/shared-main'
 import { AccountReportComponent } from '@app/shared/shared-moderation'
+import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 import { User, UserRight } from '@shared/models'
+import { AccountSearchComponent } from './account-search/account-search.component'
 
 @Component({
   templateUrl: './accounts.component.html',
@@ -14,13 +24,21 @@ import { User, UserRight } from '@shared/models'
 export class AccountsComponent implements OnInit, OnDestroy {
   @ViewChild('accountReportModal') accountReportModal: AccountReportComponent
 
+  accountSearch: AccountSearchComponent
+
   account: Account
   accountUser: User
-  videoChannels: VideoChannel[] = []
-  links: ListOverflowItem[] = []
 
-  isAccountManageable = false
+  videoChannels: VideoChannel[] = []
+
+  links: ListOverflowItem[] = []
+  hideMenu = false
+
   accountFollowerTitle = ''
+
+  accountVideosCount: number
+  accountDescriptionHTML = ''
+  accountDescriptionExpanded = false
 
   prependModerationActions: DropdownAction<any>[]
 
@@ -35,6 +53,8 @@ export class AccountsComponent implements OnInit, OnDestroy {
     private restExtractor: RestExtractor,
     private redirectService: RedirectService,
     private authService: AuthService,
+    private videoService: VideoService,
+    private markdown: MarkdownService,
     private screenService: ScreenService
   ) {
   }
@@ -46,8 +66,11 @@ export class AccountsComponent implements OnInit, OnDestroy {
                           distinctUntilChanged(),
                           switchMap(accountId => this.accountService.getAccount(accountId)),
                           tap(account => this.onAccount(account)),
-                          switchMap(account => this.videoChannelService.listAccountVideoChannels(account)),
-                          catchError(err => this.restExtractor.redirectTo404IfNotFound(err, [ 400, 404 ]))
+                          switchMap(account => this.videoChannelService.listAccountVideoChannels({ account })),
+                          catchError(err => this.restExtractor.redirectTo404IfNotFound(err, 'other', [
+                            HttpStatusCode.BAD_REQUEST_400,
+                            HttpStatusCode.NOT_FOUND_404
+                          ]))
                         )
                         .subscribe(
                           videoChannels => this.videoChannels = videoChannels.data,
@@ -56,9 +79,8 @@ export class AccountsComponent implements OnInit, OnDestroy {
                         )
 
     this.links = [
-      { label: $localize`VIDEO CHANNELS`, routerLink: 'video-channels' },
-      { label: $localize`VIDEOS`, routerLink: 'videos' },
-      { label: $localize`ABOUT`, routerLink: 'about' }
+      { label: $localize`CHANNELS`, routerLink: 'video-channels' },
+      { label: $localize`VIDEOS`, routerLink: 'videos' }
     ]
   }
 
@@ -66,19 +88,29 @@ export class AccountsComponent implements OnInit, OnDestroy {
     if (this.routeSub) this.routeSub.unsubscribe()
   }
 
-  get naiveAggregatedSubscribers () {
+  naiveAggregatedSubscribers () {
     return this.videoChannels.reduce(
       (acc, val) => acc + val.followersCount,
       this.account.followersCount // accumulator starts with the base number of subscribers the account has
     )
   }
 
-  get isInSmallView () {
+  isUserLoggedIn () {
+    return this.authService.isLoggedIn()
+  }
+
+  isInSmallView () {
     return this.screenService.isInSmallView()
   }
 
+  isManageable () {
+    if (!this.isUserLoggedIn()) return false
+
+    return this.account?.userId === this.authService.getUser().id
+  }
+
   onUserChanged () {
-    this.getUserIfNeeded(this.account)
+    this.loadUserIfNeeded(this.account)
   }
 
   onUserDeleted () {
@@ -95,40 +127,50 @@ export class AccountsComponent implements OnInit, OnDestroy {
     return $localize`${count} subscribers`
   }
 
-  private onAccount (account: Account) {
+  onOutletLoaded (component: Component) {
+    if (component instanceof AccountSearchComponent) {
+      this.accountSearch = component
+    } else {
+      this.accountSearch = undefined
+    }
+  }
+
+  searchChanged (search: string) {
+    if (this.accountSearch) this.accountSearch.updateSearch(search)
+  }
+
+  onSearchInputDisplayChanged (displayed: boolean) {
+    this.hideMenu = this.isInSmallView() && displayed
+  }
+
+  hasVideoChannels () {
+    return this.videoChannels.length !== 0
+  }
+
+  hasShowMoreDescription () {
+    return !this.accountDescriptionExpanded && this.accountDescriptionHTML.length > 100
+  }
+
+  private async onAccount (account: Account) {
+    this.accountFollowerTitle = $localize`${account.followersCount} direct account followers`
+
     this.prependModerationActions = undefined
 
+    this.accountDescriptionHTML = await this.markdown.textMarkdownToHTML(account.description)
+
+    // After the markdown renderer to avoid layout changes
     this.account = account
 
-    if (this.authService.isLoggedIn()) {
-      this.authService.userInformationLoaded.subscribe(
-        () => {
-          this.isAccountManageable = this.account.userId && this.account.userId === this.authService.getUser().id
-
-          const followers = this.subscribersDisplayFor(account.followersCount)
-          this.accountFollowerTitle = $localize`${followers} direct account followers`
-
-          // It's not our account, we can report it
-          if (!this.isAccountManageable) {
-            this.prependModerationActions = [
-              {
-                label: $localize`Report this account`,
-                handler: () => this.showReportModal()
-              }
-            ]
-          }
-        }
-      )
-    }
-
-    this.getUserIfNeeded(account)
+    this.updateModerationActions()
+    this.loadUserIfNeeded(account)
+    this.loadAccountVideosCount()
   }
 
   private showReportModal () {
     this.accountReportModal.show()
   }
 
-  private getUserIfNeeded (account: Account) {
+  private loadUserIfNeeded (account: Account) {
     if (!account.userId || !this.authService.isLoggedIn()) return
 
     const user = this.authService.getUser()
@@ -139,5 +181,34 @@ export class AccountsComponent implements OnInit, OnDestroy {
         err => this.notifier.error(err.message)
       )
     }
+  }
+
+  private updateModerationActions () {
+    if (!this.authService.isLoggedIn()) return
+
+    this.authService.userInformationLoaded.subscribe(
+      () => {
+        if (this.isManageable()) return
+
+        // It's not our account, we can report it
+        this.prependModerationActions = [
+          {
+            label: $localize`Report this account`,
+            handler: () => this.showReportModal()
+          }
+        ]
+      }
+    )
+  }
+
+  private loadAccountVideosCount () {
+    this.videoService.getAccountVideos({
+      account: this.account,
+      videoPagination: {
+        currentPage: 1,
+        itemsPerPage: 0
+      },
+      sort: '-publishedAt'
+    }).subscribe(res => this.accountVideosCount = res.total)
   }
 }

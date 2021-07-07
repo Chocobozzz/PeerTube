@@ -1,11 +1,11 @@
-import * as Bull from 'bull'
 import * as Bluebird from 'bluebird'
+import * as Bull from 'bull'
+import { ActivitypubHttpBroadcastPayload } from '@shared/models'
 import { logger } from '../../../helpers/logger'
 import { doRequest } from '../../../helpers/requests'
-import { buildGlobalHeaders, buildSignedRequestOptions, computeBody } from './utils/activitypub-http-utils'
-import { BROADCAST_CONCURRENCY, JOB_REQUEST_TIMEOUT } from '../../../initializers/constants'
+import { BROADCAST_CONCURRENCY } from '../../../initializers/constants'
 import { ActorFollowScoreCache } from '../../files-cache'
-import { ActivitypubHttpBroadcastPayload } from '@shared/models'
+import { buildGlobalHeaders, buildSignedRequestOptions, computeBody } from './utils/activitypub-http-utils'
 
 async function processActivityPubHttpBroadcast (job: Bull.Job) {
   logger.info('Processing ActivityPub broadcast in job %d.', job.id)
@@ -16,11 +16,9 @@ async function processActivityPubHttpBroadcast (job: Bull.Job) {
   const httpSignatureOptions = await buildSignedRequestOptions(payload)
 
   const options = {
-    method: 'POST',
-    uri: '',
+    method: 'POST' as 'POST',
     json: body,
     httpSignature: httpSignatureOptions,
-    timeout: JOB_REQUEST_TIMEOUT,
     headers: buildGlobalHeaders(body)
   }
 
@@ -28,7 +26,7 @@ async function processActivityPubHttpBroadcast (job: Bull.Job) {
   const goodUrls: string[] = []
 
   await Bluebird.map(payload.uris, uri => {
-    return doRequest(Object.assign({}, options, { uri }))
+    return doRequest(uri, options)
       .then(() => goodUrls.push(uri))
       .catch(() => badUrls.push(uri))
   }, { concurrency: BROADCAST_CONCURRENCY })

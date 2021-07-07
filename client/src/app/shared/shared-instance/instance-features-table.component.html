@@ -1,4 +1,4 @@
-<div class="feature-table">
+<div *ngIf="serverConfig" class="feature-table">
 
   <table class="table" *ngIf="serverConfig">
     <caption i18n>Features found on this instance</caption>
@@ -11,7 +11,7 @@
     <tr>
       <th i18n class="label" scope="row">
         <div>Default NSFW/sensitive videos policy</div>
-        <div class="more-info">can be redefined by the users</div>
+        <div class="c-hand more-info" (click)="openQuickSettingsHighlight()">can be redefined by the users</div>
       </th>
 
       <td class="value">{{ buildNSFWLabel() }}</td>
@@ -60,6 +60,31 @@
         <ng-container i18n *ngIf="initialUserVideoQuota === -1">
           Unlimited <ng-container *ngIf="dailyUserVideoQuota !== -1">({{ dailyUserVideoQuota | bytes: 0 }} per day)</ng-container>
         </ng-container>
+      </td>
+    </tr>
+
+    <tr>
+      <th i18n class="label" colspan="2">Live streaming</th>
+    </tr>
+
+    <tr>
+      <th i18n class="sub-label" scope="row">Live streaming enabled</th>
+      <td>
+        <my-feature-boolean [value]="serverConfig.live.enabled"></my-feature-boolean>
+      </td>
+    </tr>
+
+    <tr>
+      <th i18n class="sub-label" scope="row">Transcode live video in multiple resolutions</th>
+      <td>
+        <my-feature-boolean [value]="serverConfig.live.transcoding.enabled && serverConfig.live.transcoding.enabledResolutions.length > 1"></my-feature-boolean>
+      </td>
+    </tr>
+
+    <tr>
+      <th i18n class="sub-label" scope="row">Max parallel lives</th>
+      <td i18n>
+        {{ maxUserLives }} per user / {{ maxInstanceLives }} per instance
       </td>
     </tr>
 

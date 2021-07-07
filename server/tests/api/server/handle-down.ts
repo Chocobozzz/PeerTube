@@ -4,7 +4,7 @@ import * as chai from 'chai'
 import 'mocha'
 import { JobState, Video } from '../../../../shared/models'
 import { VideoPrivacy } from '../../../../shared/models/videos'
-import { VideoCommentThreadTree } from '../../../../shared/models/videos/video-comment.model'
+import { VideoCommentThreadTree } from '../../../../shared/models/videos/comment/video-comment.model'
 
 import {
   cleanupTests,
@@ -33,6 +33,7 @@ import {
   getVideoCommentThreads,
   getVideoThreadComments
 } from '../../../../shared/extra-utils/videos/video-comments'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const expect = chai.expect
 
@@ -46,7 +47,7 @@ describe('Test handle downs', function () {
   let missedVideo2: Video
   let unlistedVideo: Video
 
-  const videoIdsServer1: number[] = []
+  const videoIdsServer1: string[] = []
 
   const videoAttributes = {
     name: 'my super name for server 1',
@@ -142,7 +143,7 @@ describe('Test handle downs', function () {
       await uploadVideo(servers[0].url, servers[0].accessToken, videoAttributes)
     }
 
-    await waitJobs(servers[0])
+    await waitJobs([ servers[0], servers[2] ])
 
     // Kill server 3
     killallServers([ servers[2] ])
@@ -345,14 +346,16 @@ describe('Test handle downs', function () {
     // Wait video expiration
     await wait(11000)
 
-    for (let i = 0; i < 3; i++) {
-      await getVideo(servers[1].url, videoIdsServer1[i])
-      await wait(1000)
-      await waitJobs([ servers[1] ])
+    for (let i = 0; i < 5; i++) {
+      try {
+        await getVideo(servers[1].url, videoIdsServer1[i])
+        await waitJobs([ servers[1] ])
+        await wait(1500)
+      } catch {}
     }
 
     for (const id of videoIdsServer1) {
-      await getVideo(servers[1].url, id, 403)
+      await getVideo(servers[1].url, id, HttpStatusCode.FORBIDDEN_403)
     }
   })
 

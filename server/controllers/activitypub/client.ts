@@ -1,11 +1,21 @@
-import * as express from 'express'
 import * as cors from 'cors'
+import * as express from 'express'
+import { getServerActor } from '@server/models/application/application'
+import { MAccountId, MActorId, MChannelId, MVideoId } from '@server/types/models'
 import { VideoPrivacy, VideoRateType } from '../../../shared/models/videos'
+import { VideoPlaylistPrivacy } from '../../../shared/models/videos/playlist/video-playlist-privacy.model'
 import { activityPubCollectionPagination, activityPubContextify } from '../../helpers/activitypub'
 import { ROUTE_CACHE_LIFETIME, WEBSERVER } from '../../initializers/constants'
-import { buildAnnounceWithVideoAudience, buildLikeActivity } from '../../lib/activitypub/send'
 import { audiencify, getAudience } from '../../lib/activitypub/audience'
+import { buildAnnounceWithVideoAudience, buildLikeActivity } from '../../lib/activitypub/send'
 import { buildCreateActivity } from '../../lib/activitypub/send/send-create'
+import { buildDislikeActivity } from '../../lib/activitypub/send/send-dislike'
+import {
+  getLocalVideoCommentsActivityPubUrl,
+  getLocalVideoDislikesActivityPubUrl,
+  getLocalVideoLikesActivityPubUrl,
+  getLocalVideoSharesActivityPubUrl
+} from '../../lib/activitypub/url'
 import {
   asyncMiddleware,
   executeIfActivityPub,
@@ -14,37 +24,26 @@ import {
   videosCustomGetValidator,
   videosShareValidator
 } from '../../middlewares'
-import { getAccountVideoRateValidatorFactory, videoCommentGetValidator } from '../../middlewares/validators'
-import { AccountModel } from '../../models/account/account'
-import { ActorFollowModel } from '../../models/activitypub/actor-follow'
-import { VideoModel } from '../../models/video/video'
-import { VideoCommentModel } from '../../models/video/video-comment'
-import { VideoShareModel } from '../../models/video/video-share'
 import { cacheRoute } from '../../middlewares/cache'
-import { activityPubResponse } from './utils'
-import { AccountVideoRateModel } from '../../models/account/account-video-rate'
-import {
-  getVideoCommentsActivityPubUrl,
-  getVideoDislikesActivityPubUrl,
-  getVideoLikesActivityPubUrl,
-  getVideoSharesActivityPubUrl
-} from '../../lib/activitypub/url'
-import { VideoCaptionModel } from '../../models/video/video-caption'
+import { getAccountVideoRateValidatorFactory, videoCommentGetValidator } from '../../middlewares/validators'
 import { videoFileRedundancyGetValidator, videoPlaylistRedundancyGetValidator } from '../../middlewares/validators/redundancy'
-import { buildDislikeActivity } from '../../lib/activitypub/send/send-dislike'
 import { videoPlaylistElementAPGetValidator, videoPlaylistsGetValidator } from '../../middlewares/validators/videos/video-playlists'
+import { AccountModel } from '../../models/account/account'
+import { AccountVideoRateModel } from '../../models/account/account-video-rate'
+import { ActorFollowModel } from '../../models/actor/actor-follow'
+import { VideoCaptionModel } from '../../models/video/video-caption'
+import { VideoCommentModel } from '../../models/video/video-comment'
 import { VideoPlaylistModel } from '../../models/video/video-playlist'
-import { VideoPlaylistPrivacy } from '../../../shared/models/videos/playlist/video-playlist-privacy.model'
-import { MAccountId, MActorId, MVideoAPWithoutCaption, MVideoId, MChannelId } from '@server/types/models'
-import { getServerActor } from '@server/models/application/application'
-import { getRateUrl } from '@server/lib/activitypub/video-rates'
+import { VideoShareModel } from '../../models/video/video-share'
+import { activityPubResponse } from './utils'
 
 const activityPubClientRouter = express.Router()
 activityPubClientRouter.use(cors())
 
 // Intercept ActivityPub client requests
 
-activityPubClientRouter.get('/accounts?/:name',
+activityPubClientRouter.get(
+  [ '/accounts?/:name', '/accounts?/:name/video-channels', '/a/:name', '/a/:name/video-channels' ],
   executeIfActivityPub,
   asyncMiddleware(localAccountValidator),
   accountController
@@ -75,15 +74,16 @@ activityPubClientRouter.get('/accounts?/:name/dislikes/:videoId',
   getAccountVideoRateFactory('dislike')
 )
 
-activityPubClientRouter.get('/videos/watch/:id',
+activityPubClientRouter.get(
+  [ '/videos/watch/:id', '/w/:id' ],
   executeIfActivityPub,
   asyncMiddleware(cacheRoute()(ROUTE_CACHE_LIFETIME.ACTIVITY_PUB.VIDEOS)),
-  asyncMiddleware(videosCustomGetValidator('only-video-with-rights')),
+  asyncMiddleware(videosCustomGetValidator('all')),
   asyncMiddleware(videoController)
 )
 activityPubClientRouter.get('/videos/watch/:id/activity',
   executeIfActivityPub,
-  asyncMiddleware(videosCustomGetValidator('only-video-with-rights')),
+  asyncMiddleware(videosCustomGetValidator('all')),
   asyncMiddleware(videoController)
 )
 activityPubClientRouter.get('/videos/watch/:id/announces',
@@ -122,7 +122,8 @@ activityPubClientRouter.get('/videos/watch/:videoId/comments/:commentId/activity
   asyncMiddleware(videoCommentController)
 )
 
-activityPubClientRouter.get('/video-channels/:name',
+activityPubClientRouter.get(
+  [ '/video-channels/:name', '/video-channels/:name/videos', '/c/:name', '/c/:name/videos' ],
   executeIfActivityPub,
   asyncMiddleware(localVideoChannelValidator),
   videoChannelController
@@ -154,7 +155,8 @@ activityPubClientRouter.get('/redundancy/streaming-playlists/:streamingPlaylistT
   asyncMiddleware(videoRedundancyController)
 )
 
-activityPubClientRouter.get('/video-playlists/:playlistId',
+activityPubClientRouter.get(
+  [ '/video-playlists/:playlistId', '/videos/watch/playlist/:playlistId', '/w/p/:playlistId' ],
   executeIfActivityPub,
   asyncMiddleware(videoPlaylistsGetValidator('all')),
   asyncMiddleware(videoPlaylistController)
@@ -212,20 +214,18 @@ function getAccountVideoRateFactory (rateType: VideoRateType) {
     const accountVideoRate = res.locals.accountVideoRate
 
     const byActor = accountVideoRate.Account.Actor
-    const url = getRateUrl(rateType, byActor, accountVideoRate.Video)
     const APObject = rateType === 'like'
-      ? buildLikeActivity(url, byActor, accountVideoRate.Video)
-      : buildDislikeActivity(url, byActor, accountVideoRate.Video)
+      ? buildLikeActivity(accountVideoRate.url, byActor, accountVideoRate.Video)
+      : buildDislikeActivity(accountVideoRate.url, byActor, accountVideoRate.Video)
 
     return activityPubResponse(activityPubContextify(APObject), res)
   }
 }
 
 async function videoController (req: express.Request, res: express.Response) {
-  // We need more attributes
-  const video = await VideoModel.loadForGetAPI({ id: res.locals.onlyVideoWithRights.id }) as MVideoAPWithoutCaption
+  const video = res.locals.videoAll
 
-  if (video.url.startsWith(WEBSERVER.URL) === false) return res.redirect(video.url)
+  if (redirectIfNotOwned(video.url, res)) return
 
   // We need captions to render AP object
   const captions = await VideoCaptionModel.listVideoCaptions(video.id)
@@ -245,7 +245,7 @@ async function videoController (req: express.Request, res: express.Response) {
 async function videoAnnounceController (req: express.Request, res: express.Response) {
   const share = res.locals.videoShare
 
-  if (share.url.startsWith(WEBSERVER.URL) === false) return res.redirect(share.url)
+  if (redirectIfNotOwned(share.url, res)) return
 
   const { activity } = await buildAnnounceWithVideoAudience(share.Actor, share, res.locals.videoAll, undefined)
 
@@ -255,6 +255,8 @@ async function videoAnnounceController (req: express.Request, res: express.Respo
 async function videoAnnouncesController (req: express.Request, res: express.Response) {
   const video = res.locals.onlyImmutableVideo
 
+  if (redirectIfNotOwned(video.url, res)) return
+
   const handler = async (start: number, count: number) => {
     const result = await VideoShareModel.listAndCountByVideoId(video.id, start, count)
     return {
@@ -262,27 +264,35 @@ async function videoAnnouncesController (req: express.Request, res: express.Resp
       data: result.rows.map(r => r.url)
     }
   }
-  const json = await activityPubCollectionPagination(getVideoSharesActivityPubUrl(video), handler, req.query.page)
+  const json = await activityPubCollectionPagination(getLocalVideoSharesActivityPubUrl(video), handler, req.query.page)
 
   return activityPubResponse(activityPubContextify(json), res)
 }
 
 async function videoLikesController (req: express.Request, res: express.Response) {
   const video = res.locals.onlyImmutableVideo
-  const json = await videoRates(req, 'like', video, getVideoLikesActivityPubUrl(video))
+
+  if (redirectIfNotOwned(video.url, res)) return
+
+  const json = await videoRates(req, 'like', video, getLocalVideoLikesActivityPubUrl(video))
 
   return activityPubResponse(activityPubContextify(json), res)
 }
 
 async function videoDislikesController (req: express.Request, res: express.Response) {
   const video = res.locals.onlyImmutableVideo
-  const json = await videoRates(req, 'dislike', video, getVideoDislikesActivityPubUrl(video))
+
+  if (redirectIfNotOwned(video.url, res)) return
+
+  const json = await videoRates(req, 'dislike', video, getLocalVideoDislikesActivityPubUrl(video))
 
   return activityPubResponse(activityPubContextify(json), res)
 }
 
 async function videoCommentsController (req: express.Request, res: express.Response) {
   const video = res.locals.onlyImmutableVideo
+
+  if (redirectIfNotOwned(video.url, res)) return
 
   const handler = async (start: number, count: number) => {
     const result = await VideoCommentModel.listAndCountByVideoForAP(video, start, count)
@@ -291,7 +301,7 @@ async function videoCommentsController (req: express.Request, res: express.Respo
       data: result.rows.map(r => r.url)
     }
   }
-  const json = await activityPubCollectionPagination(getVideoCommentsActivityPubUrl(video), handler, req.query.page)
+  const json = await activityPubCollectionPagination(getLocalVideoCommentsActivityPubUrl(video), handler, req.query.page)
 
   return activityPubResponse(activityPubContextify(json), res)
 }
@@ -319,7 +329,7 @@ async function videoChannelFollowingController (req: express.Request, res: expre
 async function videoCommentController (req: express.Request, res: express.Response) {
   const videoComment = res.locals.videoCommentFull
 
-  if (videoComment.url.startsWith(WEBSERVER.URL) === false) return res.redirect(videoComment.url)
+  if (redirectIfNotOwned(videoComment.url, res)) return
 
   const threadParentComments = await VideoCommentModel.listThreadParentComments(videoComment, undefined)
   const isPublic = true // Comments are always public
@@ -340,7 +350,8 @@ async function videoCommentController (req: express.Request, res: express.Respon
 
 async function videoRedundancyController (req: express.Request, res: express.Response) {
   const videoRedundancy = res.locals.videoRedundancy
-  if (videoRedundancy.url.startsWith(WEBSERVER.URL) === false) return res.redirect(videoRedundancy.url)
+
+  if (redirectIfNotOwned(videoRedundancy.url, res)) return
 
   const serverActor = await getServerActor()
 
@@ -358,6 +369,8 @@ async function videoRedundancyController (req: express.Request, res: express.Res
 async function videoPlaylistController (req: express.Request, res: express.Response) {
   const playlist = res.locals.videoPlaylistFull
 
+  if (redirectIfNotOwned(playlist.url, res)) return
+
   // We need more attributes
   playlist.OwnerAccount = await AccountModel.load(playlist.ownerAccountId)
 
@@ -370,6 +383,8 @@ async function videoPlaylistController (req: express.Request, res: express.Respo
 
 function videoPlaylistElementController (req: express.Request, res: express.Response) {
   const videoPlaylistElement = res.locals.videoPlaylistElementAP
+
+  if (redirectIfNotOwned(videoPlaylistElement.url, res)) return
 
   const json = videoPlaylistElement.toActivityPubObject()
   return activityPubResponse(activityPubContextify(json), res)
@@ -410,4 +425,13 @@ function videoRates (req: express.Request, rateType: VideoRateType, video: MVide
     }
   }
   return activityPubCollectionPagination(url, handler, req.query.page)
+}
+
+function redirectIfNotOwned (url: string, res: express.Response) {
+  if (url.startsWith(WEBSERVER.URL) === false) {
+    res.redirect(url)
+    return true
+  }
+
+  return false
 }

@@ -1,0 +1,18 @@
+<div class="root">
+  <my-select-options
+    [items]="itemsWithCustom"
+    [clearable]="clearable"
+    [searchable]="searchable"
+    [groupBy]="groupBy"
+    [labelForId]="labelForId"
+
+    [(ngModel)]="selectedId"
+    (ngModelChange)="onModelChange()"
+  ></my-select-options>
+
+  <ng-container *ngIf="isCustomValue()">
+    <input [(ngModel)]="customValue" (ngModelChange)="onModelChange()" [type]="inputType" class="form-control" />
+
+    <span *ngIf="inputSuffix" class="input-suffix">{{ inputSuffix }}</span>
+  </ng-container>
+</div>

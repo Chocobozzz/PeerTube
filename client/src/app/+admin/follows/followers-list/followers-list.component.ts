@@ -59,7 +59,7 @@ export class FollowersListComponent extends RestTable implements OnInit {
             const handle = follow.follower.name + '@' + follow.follower.host
             this.notifier.success($localize`${handle} rejected from instance followers`)
 
-            this.loadData()
+            this.reloadData()
           },
 
           err => {
@@ -80,14 +80,14 @@ export class FollowersListComponent extends RestTable implements OnInit {
             const handle = follow.follower.name + '@' + follow.follower.host
             this.notifier.success($localize`${handle} removed from instance followers`)
 
-            this.loadData()
+            this.reloadData()
           },
 
           err => this.notifier.error(err.message)
         )
   }
 
-  protected loadData () {
+  protected reloadData () {
     this.followService.getFollowers({ pagination: this.pagination, sort: this.sort, search: this.search })
                       .subscribe(
                         resultList => {

@@ -1,0 +1,84 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+input[type=text] {
+  @include peertube-input-text(300px);
+}
+
+.peertube-select-container {
+  @include peertube-select-container(auto);
+  @include margin-left(0.5rem);
+}
+
+h1 {
+  display: flex;
+  justify-content: space-between;
+
+  .button-link {
+    @include peertube-button-link;
+    @include grey-button;
+    @include button-with-icon(18px, 3px, -1px);
+
+    &:not(:last-child) {
+      @include margin-right(10px);
+    }
+  }
+}
+
+.action-button-delete-selection {
+  @include peertube-button;
+  @include orange-button;
+  @include button-with-icon(21px);
+
+  display: inline-block;
+
+  my-global-icon {
+    @include apply-svg-color(#fff);
+  }
+}
+
+.action-button {
+  @include margin-left(10px);
+
+  display: flex;
+  align-self: flex-end;
+}
+
+my-edit-button {
+  @include margin-right(10px);
+}
+
+@include on-small-main-col {
+  h1 {
+    flex-direction: column;
+
+    > span,
+    .button-link {
+      margin-bottom: 10px;
+    }
+  }
+
+  .action-button {
+    @include margin-left(auto);
+
+    margin-top: 10px;
+  }
+}
+
+@include on-mobile-main-col {
+  .videos-header {
+    flex-direction: column;
+
+    input[type=text] {
+      width: 100%;
+      margin-bottom: 12px;
+    }
+    .peertube-select-container {
+      @include margin-left(0);
+    }
+  }
+
+  .action-button {
+    @include margin-left(0);
+  }
+}

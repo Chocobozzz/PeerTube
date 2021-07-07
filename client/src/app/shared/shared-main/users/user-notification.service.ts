@@ -1,7 +1,7 @@
 import { catchError, map, tap } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import { ComponentPaginationLight, RestExtractor, RestService, User, UserNotificationSocket, AuthService } from '@app/core'
+import { ComponentPaginationLight, RestExtractor, RestService, User, PeerTubeSocket, AuthService } from '@app/core'
 import { ResultList, UserNotification as UserNotificationServer, UserNotificationSetting } from '@shared/models'
 import { environment } from '../../../../environments/environment'
 import { UserNotification } from './user-notification.model'
@@ -17,7 +17,7 @@ export class UserNotificationService {
     private auth: AuthService,
     private restExtractor: RestExtractor,
     private restService: RestService,
-    private userNotificationSocket: UserNotificationSocket
+    private peertubeSocket: PeerTubeSocket
   ) {}
 
   listMyNotifications (parameters: {
@@ -57,7 +57,7 @@ export class UserNotificationService {
     return this.authHttp.post(url, body, { headers })
                .pipe(
                  map(this.restExtractor.extractDataBool),
-                 tap(() => this.userNotificationSocket.dispatch('read')),
+                 tap(() => this.peertubeSocket.dispatchNotificationEvent('read')),
                  catchError(res => this.restExtractor.handleError(res))
                )
   }
@@ -69,12 +69,12 @@ export class UserNotificationService {
     return this.authHttp.post(url, {}, { headers })
                .pipe(
                  map(this.restExtractor.extractDataBool),
-                 tap(() => this.userNotificationSocket.dispatch('read-all')),
+                 tap(() => this.peertubeSocket.dispatchNotificationEvent('read-all')),
                  catchError(res => this.restExtractor.handleError(res))
                )
   }
 
-  updateNotificationSettings (user: User, settings: UserNotificationSetting) {
+  updateNotificationSettings (settings: UserNotificationSetting) {
     const url = UserNotificationService.BASE_NOTIFICATION_SETTINGS
 
     return this.authHttp.put(url, settings)

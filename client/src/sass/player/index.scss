@@ -1,8 +1,9 @@
-@import './peertube-skin';
-@import './mobile';
-@import './context-menu';
-@import './settings-menu';
-@import './spinner';
-@import './upnext';
-@import './bezels.scss';
-@import './playlist.scss';
+@use './peertube-skin';
+@use './mobile';
+@use './context-menu';
+@use './settings-menu';
+@use './spinner';
+@use './upnext';
+@use './bezels';
+@use './playlist';
+@use './stats';

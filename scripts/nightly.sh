@@ -18,7 +18,7 @@ today=$(date '+%F')
 directory_name="peertube-nightly-$today"
 tar_name="peertube-nightly-$today.tar.xz"
 
-npm run build
+npm run build -- --source-map
 
 nightly_version="nightly-$today"
 sed -i 's/"version": "\([^"]\+\)"/"version": "\1-'"$nightly_version"'"/' ./package.json

@@ -18,18 +18,22 @@
           <my-global-icon iconName="home"></my-global-icon>
         </a>
 
-        <a class="plugin-icon" target="_blank" rel="noopener noreferrer" [href]="'https://www.npmjs.com/package/peertube-plugin-' + plugin.name" i18n-title title="Plugin homepage (new window)">
+        <a class="plugin-icon" target="_blank" rel="noopener noreferrer" [href]="getPluginOrThemeHref(plugin.name)" i18n-title title="Plugin homepage (new window)">
           <my-global-icon iconName="npm"></my-global-icon>
         </a>
 
         <div class="buttons">
-          <my-edit-button *ngIf="pluginType !== PluginType.THEME" [routerLink]="getShowRouterLink(plugin)" label="Settings" i18n-label></my-edit-button>
+          <my-edit-button
+            *ngIf="!isTheme(plugin)" [routerLink]="getShowRouterLink(plugin)" label="Settings" i18n-label
+            [responsiveLabel]="true"
+          ></my-edit-button>
 
-          <my-button class="update-button" *ngIf="isUpdateAvailable(plugin)" (click)="update(plugin)" [loading]="isUpdating(plugin)"
-                     [label]="getUpdateLabel(plugin)" icon="refresh" [attr.disabled]="isUpdating(plugin)"
+          <my-button
+            class="update-button" *ngIf="isUpdateAvailable(plugin)" (click)="update(plugin)" [loading]="isUpdating(plugin)"
+            [label]="getUpdateLabel(plugin)" icon="refresh" [attr.disabled]="isUpdating(plugin)" [responsiveLabel]="true"
           ></my-button>
 
-          <my-delete-button (click)="uninstall(plugin)" label="Uninstall" i18n-label></my-delete-button>
+          <my-delete-button (click)="uninstall(plugin)" label="Uninstall" i18n-label [responsiveLabel]="true"></my-delete-button>
         </div>
       </div>
 

@@ -3,19 +3,20 @@ import { ConfigService } from '@app/+admin/config/shared/config.service'
 import { AuthService, ScreenService, ServerService, User } from '@app/core'
 import { FormReactive } from '@app/shared/shared-forms'
 import { USER_ROLE_LABELS } from '@shared/core-utils/users'
-import { ServerConfig, UserAdminFlag, UserRole, VideoResolution } from '@shared/models'
+import { HTMLServerConfig, UserAdminFlag, UserRole, VideoResolution } from '@shared/models'
+import { SelectOptionsItem } from '../../../../types/select-options-item.model'
 
 @Directive()
 // tslint:disable-next-line: directive-class-suffix
 export abstract class UserEdit extends FormReactive implements OnInit {
-  videoQuotaOptions: { value: string, label: string, disabled?: boolean }[] = []
-  videoQuotaDailyOptions: { value: string, label: string, disabled?: boolean }[] = []
+  videoQuotaOptions: SelectOptionsItem[] = []
+  videoQuotaDailyOptions: SelectOptionsItem[] = []
   username: string
   user: User
 
   roles: { value: string, label: string }[] = []
 
-  protected serverConfig: ServerConfig
+  protected serverConfig: HTMLServerConfig
 
   protected abstract serverService: ServerService
   protected abstract configService: ConfigService
@@ -25,9 +26,7 @@ export abstract class UserEdit extends FormReactive implements OnInit {
   abstract getFormButtonTitle (): string
 
   ngOnInit (): void {
-    this.serverConfig = this.serverService.getTmpConfig()
-    this.serverService.getConfig()
-        .subscribe(config => this.serverConfig = config)
+    this.serverConfig = this.serverService.getHTMLConfig()
 
     this.buildRoles()
   }
@@ -40,6 +39,11 @@ export abstract class UserEdit extends FormReactive implements OnInit {
       ? this.user.videoChannels.map(c => c.followersCount).reduce((a, b) => a + b, 0)
       : 0
     return forAccount + forChannels
+  }
+
+  getAuthPlugins () {
+    return this.serverConfig.plugin.registeredIdAndPassAuths.map(p => p.npmName)
+      .concat(this.serverConfig.plugin.registeredExternalAuths.map(p => p.npmName))
   }
 
   isInBigView () {
@@ -92,24 +96,7 @@ export abstract class UserEdit extends FormReactive implements OnInit {
   }
 
   protected buildQuotaOptions () {
-    // These are used by a HTML select, so convert key into strings
-    this.videoQuotaOptions = this.configService
-                                 .videoQuotaOptions.map(q => ({
-                                   value: q.value?.toString(),
-                                   label: q.label,
-                                   disabled: q.disabled
-                                 }))
-
-    this.videoQuotaDailyOptions = this.configService
-                                      .videoQuotaDailyOptions.map(q => ({
-                                        value: q.value?.toString(),
-                                        label: q.label,
-                                        disabled: q.disabled
-                                      }))
-
-    console.log(
-      this.videoQuotaOptions,
-      this.videoQuotaDailyOptions
-    )
+    this.videoQuotaOptions = this.configService.videoQuotaOptions
+    this.videoQuotaDailyOptions = this.configService.videoQuotaDailyOptions
   }
 }

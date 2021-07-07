@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core'
 import { Notifier, RedirectService, ServerService, UserService } from '@app/core'
 import { USER_EMAIL_VALIDATOR } from '@app/shared/form-validators/user-validators'
 import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
-import { ServerConfig } from '@shared/models'
 
 @Component({
   selector: 'my-verify-account-ask-send-email',
@@ -11,7 +10,7 @@ import { ServerConfig } from '@shared/models'
 })
 
 export class VerifyAccountAskSendEmailComponent extends FormReactive implements OnInit {
-  private serverConfig: ServerConfig
+  requiresEmailVerification = false
 
   constructor (
     protected formValidatorService: FormValidatorService,
@@ -19,18 +18,13 @@ export class VerifyAccountAskSendEmailComponent extends FormReactive implements 
     private serverService: ServerService,
     private notifier: Notifier,
     private redirectService: RedirectService
-    ) {
+  ) {
     super()
   }
 
-  get requiresEmailVerification () {
-    return this.serverConfig.signup.requiresEmailVerification
-  }
-
   ngOnInit () {
-    this.serverConfig = this.serverService.getTmpConfig()
     this.serverService.getConfig()
-        .subscribe(config => this.serverConfig = config)
+        .subscribe(config => this.requiresEmailVerification = config.signup.requiresEmailVerification)
 
     this.buildForm({
       'verify-email-email': USER_EMAIL_VALIDATOR

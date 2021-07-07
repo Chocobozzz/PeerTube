@@ -1,9 +1,5 @@
-@import '_variables';
-@import '_mixins';
-@import '~bootstrap/scss/functions';
-@import '~bootstrap/scss/variables';
-
-$assets-path: '../assets';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 .peertube-container {
   padding-bottom: 20px;
@@ -28,68 +24,68 @@ $assets-path: '../assets';
   z-index: z(header);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.16);
   display: flex;
+}
 
-  .top-left-block {
-    z-index: 1;
-    height: $header-height;
-    display: flex;
-    align-items: center;
-    min-width: 0;
+.top-left-block {
+  z-index: 1;
+  height: $header-height;
+  display: flex;
+  align-items: center;
+  min-width: 0;
 
-    .icon {
-      @include icon(24px);
+  .icon {
+    @include icon(24px);
+  }
 
-      &.icon-menu {
-        background-color: pvar(--mainForegroundColor);
-        mask-image: url('#{$assets-path}/images/misc/menu.svg');
-        margin: 0 18px 0 20px;
-      }
-    }
+  .icon-menu {
+    mask-image: url('../assets/images/misc/menu.svg');
+    -webkit-mask-image: url('../assets/images/misc/menu.svg');
 
-    .peertube-title {
-      @include disable-default-a-behaviour;
-
-      font-size: 20px;
-      font-weight: $font-bold;
-      color: inherit !important;
-      display: flex;
-      align-items: center;
-      overflow: hidden;
-
-      .instance-name {
-        @include ellipsis;
-
-        width: 100%;
-      }
-
-      .icon.icon-logo {
-        display: inline-block;
-        width: 23px;
-        height: 24px;
-        margin-right: .5rem;
-      }
-    }
+    background-color: pvar(--mainForegroundColor);
+    margin: 0 18px 0 20px;
 
     @media screen and (max-width: $mobile-view) {
-      width: 70px;
-
-      .peertube-title {
-        display: none;
-      }
+      margin: 0 10px;
     }
+  }
+}
 
-    @media screen and (max-width: 350px) {
-      flex: auto;
+.header-right {
+  height: $header-height;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  white-space: nowrap;
+  flex: 1;
+}
+
+.peertube-title {
+  @include disable-default-a-behaviour;
+
+  font-size: 20px;
+  font-weight: $font-bold;
+  color: inherit !important;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  padding: 0 0 0 10px;
+
+  .instance-name {
+    @include ellipsis;
+
+    width: 100%;
+
+    @media screen and (max-width: $mobile-view) {
+      display: none;
     }
   }
 
-  .header-right {
-    height: $header-height;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    white-space: nowrap;
-    flex: 1;
+  .icon.icon-logo {
+    @include margin-right(0.5rem);
+
+    display: inline-block;
+    width: 23px;
+    height: 24px;
   }
 }
 
@@ -106,16 +102,7 @@ $assets-path: '../assets';
     justify-self: center;
     align-self: center;
     cursor: pointer;
-
     width: 20px;
-  }
-
-  @each $color, $value in $theme-colors {
-    &.alert-#{$color} {
-      my-global-icon {
-        @include apply-svg-color(theme-color-level($color, $alert-color-level));
-      }
-    }
   }
 
   ::ng-deep {

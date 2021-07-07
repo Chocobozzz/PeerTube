@@ -1,0 +1,23 @@
+<ng-template #ratePopoverText>
+  <span [innerHTML]="getRatePopoverText()"></span>
+</ng-template>
+
+<button
+  [ngbPopover]="getRatePopoverText() && ratePopoverText" [ngClass]="{ 'activated': userRating === 'like' }" (click)="setLike()" (keyup.enter)="setLike()"
+  class="action-button action-button-like" [attr.aria-pressed]="userRating === 'like'" [attr.aria-label]="tooltipLike"
+  [ngbTooltip]="tooltipLike"
+  placement="bottom auto"
+>
+  <my-global-icon iconName="like"></my-global-icon>
+  <span *ngIf="video.likes" class="count">{{ video.likes }}</span>
+</button>
+
+<button
+  [ngbPopover]="getRatePopoverText() && ratePopoverText" [ngClass]="{ 'activated': userRating === 'dislike' }" (click)="setDislike()" (keyup.enter)="setDislike()"
+  class="action-button action-button-dislike" [attr.aria-pressed]="userRating === 'dislike'" [attr.aria-label]="tooltipDislike"
+  [ngbTooltip]="tooltipDislike"
+  placement="bottom auto"
+>
+  <my-global-icon iconName="dislike"></my-global-icon>
+  <span *ngIf="video.dislikes" class="count">{{ video.dislikes }}</span>
+</button>

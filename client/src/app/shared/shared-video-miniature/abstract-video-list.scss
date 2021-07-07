@@ -1,43 +1,36 @@
-@import '_bootstrap-variables';
-@import '_variables';
-@import '_mixins';
-@import '_miniature';
+@use '_bootstrap-variables';
+@use '_variables' as *;
+@use '_mixins' as *;
+@use '_miniature' as *;
 
-$iconSize: 16px;
+$icon-size: 16px;
+
+::ng-deep my-video-list-header {
+  display: flex;
+  flex-grow: 1;
+}
 
 .videos-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 
-  .title-page.title-page-single {
-    display: flex;
-    flex-grow: 1;
-  }
-
-  .action-block {
-    ::ng-deep my-feed {
-      my-global-icon {
-        width: calc(#{$iconSize} - 2px);
-      }
-    }
-
-    a button {
-      @include peertube-button;
-      @include grey-button;
-      @include button-with-icon($iconSize, 3px, -1px);
-    }
+  my-feed {
+    display: inline-block;
+    width: calc(#{$icon-size} - 2px);
   }
 
   .moderation-block {
-    div {
-      @include button-with-icon($iconSize, 3px, -1px);
-    }
+    @include margin-left(.4rem);
 
-    margin-left: .2rem;
     display: flex;
     justify-content: flex-end;
     align-items: center;
+
+    my-global-icon {
+      position: relative;
+      width: $icon-size;
+    }
   }
 }
 
@@ -58,7 +51,16 @@ $iconSize: 16px;
 }
 
 .margin-content {
-  @include fluid-videos-miniature-layout;
+  @include grid-videos-miniature-layout-with-margins;
+}
+
+.display-as-row.videos {
+  @include margin-left(pvar(--horizontalMarginContent));
+  @include margin-right(pvar(--horizontalMarginContent));
+
+  .video-wrapper {
+    margin-bottom: 15px;
+  }
 }
 
 @media screen and (max-width: $mobile-view) {
@@ -69,8 +71,9 @@ $iconSize: 16px;
     margin-bottom: 10px;
 
     .title-page {
+      @include margin-right(0);
+
       margin-bottom: 10px;
-      margin-right: 0px;
     }
   }
 }

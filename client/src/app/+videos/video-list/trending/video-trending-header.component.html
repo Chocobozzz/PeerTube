@@ -1,0 +1,8 @@
+<div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="data.model" (ngModelChange)="setSort()">
+  <ng-container *ngFor="let button of buttons">
+    <label *ngIf="!button.hidden" ngbButtonLabel class="btn-light" placement="bottom right-bottom left-bottom" [ngbTooltip]="button.tooltip" container="body">
+      <my-global-icon [iconName]="button.iconName"></my-global-icon>
+      <input ngbButton type="radio" [value]="button.value"> {{ button.label }}
+    </label>
+  </ng-container>
+</div>

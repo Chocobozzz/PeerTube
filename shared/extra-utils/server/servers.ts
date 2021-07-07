@@ -1,19 +1,24 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/no-floating-promises */
 
-import { ChildProcess, exec, fork } from 'child_process'
-import { join } from 'path'
-import { root, wait } from '../miscs/miscs'
-import { copy, pathExists, readdir, readFile, remove } from 'fs-extra'
 import { expect } from 'chai'
-import { VideoChannel } from '../../models/videos'
+import { ChildProcess, exec, fork } from 'child_process'
+import { copy, ensureDir, pathExists, readdir, readFile, remove } from 'fs-extra'
+import { join } from 'path'
 import { randomInt } from '../../core-utils/miscs/miscs'
+import { VideoChannel } from '../../models/videos'
+import { buildServerDirectory, getFileSize, isGithubCI, root, wait } from '../miscs/miscs'
+import { makeGetRequest } from '../requests/requests'
 
 interface ServerInfo {
   app: ChildProcess
+
   url: string
   host: string
-
+  hostname: string
   port: number
+
+  rtmpPort: number
+
   parallel: boolean
   internalServerNumber: number
   serverNumber: number
@@ -32,15 +37,21 @@ interface ServerInfo {
   customConfigFile?: string
 
   accessToken?: string
+  refreshToken?: string
   videoChannel?: VideoChannel
 
   video?: {
     id: number
     uuid: string
+    shortUUID: string
     name?: string
+    url?: string
+
     account?: {
       name: string
     }
+
+    embedPath?: string
   }
 
   remoteVideo?: {
@@ -93,10 +104,23 @@ function randomServer () {
   return randomInt(low, high)
 }
 
-async function flushAndRunServer (serverNumber: number, configOverride?: Object, args = []) {
+function randomRTMP () {
+  const low = 1900
+  const high = 2100
+
+  return randomInt(low, high)
+}
+
+type RunServerOptions = {
+  hideLogs?: boolean
+  execArgv?: string[]
+}
+
+async function flushAndRunServer (serverNumber: number, configOverride?: Object, args = [], options: RunServerOptions = {}) {
   const parallel = parallelTests()
 
   const internalServerNumber = parallel ? randomServer() : serverNumber
+  const rtmpPort = parallel ? randomRTMP() : 1936
   const port = 9000 + internalServerNumber
 
   await flushTests(internalServerNumber)
@@ -105,10 +129,12 @@ async function flushAndRunServer (serverNumber: number, configOverride?: Object,
     app: null,
     port,
     internalServerNumber,
+    rtmpPort,
     parallel,
     serverNumber,
     url: `http://localhost:${port}`,
     host: `localhost:${port}`,
+    hostname: 'localhost',
     client: {
       id: null,
       secret: null
@@ -119,13 +145,13 @@ async function flushAndRunServer (serverNumber: number, configOverride?: Object,
     }
   }
 
-  return runServer(server, configOverride, args)
+  return runServer(server, configOverride, args, options)
 }
 
-async function runServer (server: ServerInfo, configOverrideArg?: any, args = []) {
+async function runServer (server: ServerInfo, configOverrideArg?: any, args = [], options: RunServerOptions = {}) {
   // These actions are async so we need to be sure that they have both been done
   const serverRunString = {
-    'Server listening': false
+    'HTTP server listening': false
   }
   const key = 'Database peertube_test' + server.internalServerNumber + ' is ready'
   serverRunString[key] = false
@@ -175,6 +201,11 @@ async function runServer (server: ServerInfo, configOverrideArg?: any, args = []
       },
       admin: {
         email: `admin${server.internalServerNumber}@example.com`
+      },
+      live: {
+        rtmp: {
+          port: server.rtmpPort
+        }
       }
     })
   }
@@ -189,14 +220,15 @@ async function runServer (server: ServerInfo, configOverrideArg?: any, args = []
   env['NODE_APP_INSTANCE'] = server.internalServerNumber.toString()
   env['NODE_CONFIG'] = JSON.stringify(configOverride)
 
-  const options = {
+  const forkOptions = {
     silent: true,
     env,
-    detached: true
+    detached: true,
+    execArgv: options.execArgv || []
   }
 
   return new Promise<ServerInfo>(res => {
-    server.app = fork(join(root(), 'dist', 'server.js'), args, options)
+    server.app = fork(join(root(), 'dist', 'server.js'), args, forkOptions)
     server.app.stdout.on('data', function onStdout (data) {
       let dontContinue = false
 
@@ -221,7 +253,11 @@ async function runServer (server: ServerInfo, configOverrideArg?: any, args = []
       // If no, there is maybe one thing not already initialized (client/user credentials generation...)
       if (dontContinue === true) return
 
-      server.app.stdout.removeListener('data', onStdout)
+      if (options.hideLogs === false) {
+        console.log(data.toString())
+      } else {
+        server.app.stdout.removeListener('data', onStdout)
+      }
 
       process.on('exit', () => {
         try {
@@ -241,8 +277,12 @@ async function reRunServer (server: ServerInfo, configOverride?: any) {
   return server
 }
 
-function checkTmpIsEmpty (server: ServerInfo) {
-  return checkDirectoryIsEmpty(server, 'tmp', [ 'plugins-global.css' ])
+async function checkTmpIsEmpty (server: ServerInfo) {
+  await checkDirectoryIsEmpty(server, 'tmp', [ 'plugins-global.css', 'hls', 'resumable-uploads' ])
+
+  if (await pathExists(join('test' + server.internalServerNumber, 'tmp', 'hls'))) {
+    await checkDirectoryIsEmpty(server, 'tmp/hls')
+  }
 }
 
 async function checkDirectoryIsEmpty (server: ServerInfo, directory: string, exceptions: string[] = []) {
@@ -268,11 +308,23 @@ function killallServers (servers: ServerInfo[]) {
   }
 }
 
-function cleanupTests (servers: ServerInfo[]) {
+async function cleanupTests (servers: ServerInfo[]) {
   killallServers(servers)
+
+  if (isGithubCI()) {
+    await ensureDir('artifacts')
+  }
 
   const p: Promise<any>[] = []
   for (const server of servers) {
+    if (isGithubCI()) {
+      const origin = await buildServerDirectory(server, 'logs/peertube.log')
+      const destname = `peertube-${server.internalServerNumber}.log`
+      console.log('Saving logs %s.', destname)
+
+      await copy(origin, join('artifacts', destname))
+    }
+
     if (server.parallel) {
       p.push(flushTests(server.internalServerNumber))
     }
@@ -286,7 +338,7 @@ function cleanupTests (servers: ServerInfo[]) {
 }
 
 async function waitUntilLog (server: ServerInfo, str: string, count = 1, strictCount = true) {
-  const logfile = join(root(), 'test' + server.internalServerNumber, 'logs/peertube.log')
+  const logfile = buildServerDirectory(server, 'logs/peertube.log')
 
   while (true) {
     const buf = await readFile(logfile)
@@ -299,16 +351,32 @@ async function waitUntilLog (server: ServerInfo, str: string, count = 1, strictC
   }
 }
 
+async function getServerFileSize (server: ServerInfo, subPath: string) {
+  const path = buildServerDirectory(server, subPath)
+
+  return getFileSize(path)
+}
+
+function makePingRequest (server: ServerInfo) {
+  return makeGetRequest({
+    url: server.url,
+    path: '/api/v1/ping',
+    statusCodeExpected: 200
+  })
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   checkDirectoryIsEmpty,
   checkTmpIsEmpty,
+  getServerFileSize,
   ServerInfo,
   parallelTests,
   cleanupTests,
   flushAndRunMultipleServers,
   flushTests,
+  makePingRequest,
   flushAndRunServer,
   killallServers,
   reRunServer,

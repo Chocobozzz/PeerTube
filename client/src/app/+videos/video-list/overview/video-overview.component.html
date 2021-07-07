@@ -14,7 +14,7 @@
         </h1>
 
         <div class="video-wrapper" *ngFor="let video of buildVideos(object.videos)">
-          <my-video-miniature [video]="video" [fitWidth]="true" [user]="userMiniature" [displayVideoActions]="true">
+          <my-video-miniature [video]="video" [user]="userMiniature" [displayVideoActions]="true">
           </my-video-miniature>
         </div>
       </div>
@@ -25,22 +25,22 @@
         </h2>
 
         <div class="video-wrapper" *ngFor="let video of buildVideos(object.videos)">
-          <my-video-miniature [video]="video" [fitWidth]="true" [user]="userMiniature" [displayVideoActions]="true">
+          <my-video-miniature [video]="video" [user]="userMiniature" [displayVideoActions]="true">
           </my-video-miniature>
         </div>
       </div>
 
       <div class="section channel videos" *ngFor="let object of overview.channels">
         <div class="section-title">
-          <a [routerLink]="[ '/video-channels', buildVideoChannelBy(object) ]">
-            <img [src]="buildVideoChannelAvatarUrl(object)" alt="Avatar" />
+          <a [routerLink]="[ '/c', buildVideoChannelBy(object) ]">
+            <my-actor-avatar [channel]="buildVideoChannel(object)"></my-actor-avatar>
 
             <h2 class="section-title">{{ object.channel.displayName }}</h2>
           </a>
         </div>
 
         <div class="video-wrapper" *ngFor="let video of buildVideos(object.videos)">
-          <my-video-miniature [video]="video" [fitWidth]="true" [user]="userMiniature" [displayVideoActions]="true">
+          <my-video-miniature [video]="video" [user]="userMiniature" [displayVideoActions]="true">
           </my-video-miniature>
         </div>
       </div>

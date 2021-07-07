@@ -1,5 +1,5 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 $optional-rows-checkbox-width: 34px;
 $timestamp-width: 50px;
@@ -37,7 +37,15 @@ $timestamp-margin-right: 10px;
 }
 
 .playlist {
-  padding: 8px 10px 8px 24px;
+  padding: 0;
+
+  > .primary-row {
+    padding: 8px 10px 8px 24px;
+  }
+
+  > .optional-rows {
+    @include padding-left(24px);
+  }
 
   &.has-optional-row:hover {
     background-color: inherit;
@@ -49,7 +57,7 @@ $timestamp-margin-right: 10px;
   display: flex;
 
   my-peertube-checkbox {
-    margin-right: 10px;
+    @include margin-right(10px);
     align-self: center;
   }
 
@@ -70,15 +78,15 @@ $timestamp-margin-right: 10px;
 
     my-global-icon {
       @include apply-svg-color(#333);
+      @include margin-right(0);
 
       width: 19px;
       height: 19px;
-      margin-right: 0;
     }
   }
 
   my-timestamp-input {
-    margin-right: $timestamp-margin-right;
+    @include margin-right($timestamp-margin-right);
 
     ::ng-deep .ui-inputtext {
       padding: 0;
@@ -93,20 +101,23 @@ $timestamp-margin-right: 10px;
   }
 
   my-peertube-checkbox {
+    @include margin-right(0 !important);
+
     display: block;
     width: $optional-rows-checkbox-width;
-    margin-right: 0 !important;
   }
 
   .labels {
-    margin-left: $optional-rows-checkbox-width;
+    @include margin-left($optional-rows-checkbox-width);
+
     font-size: 13px;
     color: pvar(--greyForegroundColor);
     padding-top: 5px;
     padding-bottom: 0;
 
     div {
-      margin-right: $timestamp-margin-right;
+      @include margin-right($timestamp-margin-right);
+
       width: $timestamp-width;
     }
   }
@@ -118,16 +129,16 @@ $timestamp-margin-right: 10px;
   border-top: 1px solid $separator-border-color;
 }
 
-.new-playlist-button  {
+.new-playlist-button {
   cursor: pointer;
 
   my-global-icon {
     @include apply-svg-color(#333);
+    @include margin-right(4px);
 
     position: relative;
     left: -1px;
     top: -1px;
-    margin-right: 4px;
     width: 21px;
     height: 21px;
   }

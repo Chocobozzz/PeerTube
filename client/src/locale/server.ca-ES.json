@@ -31,6 +31,8 @@
     "Published": "Publicat",
     "To transcode": "Transcodificar",
     "To import": "Per importar",
+    "Waiting for livestream": "Waiting for livestream",
+    "Livestream ended": "Livestream ended",
     "Pending": "Pendent",
     "Success": "Èxit",
     "Failed": "Ha fallat",
@@ -240,5 +242,7 @@
     "Yoruba": "Ioruba",
     "Zhuang": "Zhuang",
     "Chinese": "Xinès",
-    "Zulu": "Zulu"
+    "Zulu": "Zulu",
+    "Normal mode": "Normal mode",
+    "Theater mode": "Theater mode"
 }

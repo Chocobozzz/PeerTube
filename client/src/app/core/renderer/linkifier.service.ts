@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core'
 import { getAbsoluteAPIUrl } from '@app/helpers/utils'
-import * as linkify from 'linkifyjs'
-import linkifyHtml from 'linkifyjs/html'
 
 @Injectable()
 export class LinkifierService {
-
   static CLASSNAME = 'linkified'
+
+  private linkifyModule: any
+  private linkifyHtmlModule: any
 
   private linkifyOptions = {
     className: {
@@ -15,20 +15,27 @@ export class LinkifierService {
     }
   }
 
-  constructor () {
-    // Apply plugin
-    this.mentionWithDomainPlugin(linkify)
+  async linkify (text: string) {
+    if (!this.linkifyModule) {
+      const result = await Promise.all([
+        import('linkifyjs'), // ES module
+        import('linkifyjs/html').then(m => m.default)
+      ])
+
+      this.linkifyModule = result[0]
+      this.linkifyHtmlModule = result[1]
+
+      this.mentionWithDomainPlugin()
+    }
+
+    return this.linkifyHtmlModule(text, this.linkifyOptions)
   }
 
-  linkify (text: string) {
-    return linkifyHtml(text, this.linkifyOptions)
-  }
-
-  private mentionWithDomainPlugin (linkify: any) {
-    const TT = linkify.scanner.TOKENS // Text tokens
-    const { TOKENS: MT, State } = linkify.parser // Multi tokens, state
+  private mentionWithDomainPlugin () {
+    const TT = this.linkifyModule.scanner.TOKENS // Text tokens
+    const { TOKENS: MT, State } = this.linkifyModule.parser // Multi tokens, state
     const MultiToken = MT.Base
-    const S_START = linkify.parser.start
+    const S_START = this.linkifyModule.parser.start
 
     const TT_AT = TT.AT
     const TT_DOMAIN = TT.DOMAIN
@@ -44,7 +51,7 @@ export class LinkifierService {
       this.v = value
     }
 
-    linkify.inherits(MultiToken, MENTION, {
+    this.linkifyModule.inherits(MultiToken, MENTION, {
       type: 'mentionWithDomain',
       isLink: true,
       toHref () {

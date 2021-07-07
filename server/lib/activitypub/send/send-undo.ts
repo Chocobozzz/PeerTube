@@ -8,18 +8,11 @@ import {
   ActivityLike,
   ActivityUndo
 } from '../../../../shared/models/activitypub'
-import { VideoModel } from '../../../models/video/video'
-import { getActorFollowActivityPubUrl, getUndoActivityPubUrl, getVideoDislikeActivityPubUrl, getVideoLikeActivityPubUrl } from '../url'
-import { broadcastToFollowers, sendVideoRelatedActivity, unicastTo } from './utils'
-import { audiencify, getAudience } from '../audience'
-import { buildCreateActivity } from './send-create'
-import { buildFollowActivity } from './send-follow'
-import { buildLikeActivity } from './send-like'
-import { buildAnnounceWithVideoAudience } from './send-announce'
 import { logger } from '../../../helpers/logger'
-import { buildDislikeActivity } from './send-dislike'
+import { VideoModel } from '../../../models/video/video'
 import {
-  MActor, MActorAudience,
+  MActor,
+  MActorAudience,
   MActorFollowActors,
   MActorLight,
   MVideo,
@@ -27,6 +20,14 @@ import {
   MVideoRedundancyVideo,
   MVideoShare
 } from '../../../types/models'
+import { audiencify, getAudience } from '../audience'
+import { getUndoActivityPubUrl, getVideoDislikeActivityPubUrlByLocalActor, getVideoLikeActivityPubUrlByLocalActor } from '../url'
+import { buildAnnounceWithVideoAudience } from './send-announce'
+import { buildCreateActivity } from './send-create'
+import { buildDislikeActivity } from './send-dislike'
+import { buildFollowActivity } from './send-follow'
+import { buildLikeActivity } from './send-like'
+import { broadcastToFollowers, sendVideoRelatedActivity, unicastTo } from './utils'
 
 function sendUndoFollow (actorFollow: MActorFollowActors, t: Transaction) {
   const me = actorFollow.ActorFollower
@@ -37,10 +38,9 @@ function sendUndoFollow (actorFollow: MActorFollowActors, t: Transaction) {
 
   logger.info('Creating job to send an unfollow request to %s.', following.url)
 
-  const followUrl = getActorFollowActivityPubUrl(me, following)
-  const undoUrl = getUndoActivityPubUrl(followUrl)
+  const undoUrl = getUndoActivityPubUrl(actorFollow.url)
 
-  const followActivity = buildFollowActivity(followUrl, me, following)
+  const followActivity = buildFollowActivity(actorFollow.url, me, following)
   const undoActivity = undoActivityData(undoUrl, me, followActivity)
 
   t.afterCommit(() => unicastTo(undoActivity, me, following.inboxUrl))
@@ -61,7 +61,7 @@ async function sendUndoAnnounce (byActor: MActorLight, videoShare: MVideoShare, 
 async function sendUndoLike (byActor: MActor, video: MVideoAccountLight, t: Transaction) {
   logger.info('Creating job to undo a like of video %s.', video.url)
 
-  const likeUrl = getVideoLikeActivityPubUrl(byActor, video)
+  const likeUrl = getVideoLikeActivityPubUrlByLocalActor(byActor, video)
   const likeActivity = buildLikeActivity(likeUrl, byActor, video)
 
   return sendUndoVideoRelatedActivity({ byActor, video, url: likeUrl, activity: likeActivity, transaction: t })
@@ -70,7 +70,7 @@ async function sendUndoLike (byActor: MActor, video: MVideoAccountLight, t: Tran
 async function sendUndoDislike (byActor: MActor, video: MVideoAccountLight, t: Transaction) {
   logger.info('Creating job to undo a dislike of video %s.', video.url)
 
-  const dislikeUrl = getVideoDislikeActivityPubUrl(byActor, video)
+  const dislikeUrl = getVideoDislikeActivityPubUrlByLocalActor(byActor, video)
   const dislikeActivity = buildDislikeActivity(dislikeUrl, byActor, video)
 
   return sendUndoVideoRelatedActivity({ byActor, video, url: dislikeUrl, activity: dislikeActivity, transaction: t })
@@ -79,8 +79,13 @@ async function sendUndoDislike (byActor: MActor, video: MVideoAccountLight, t: T
 async function sendUndoCacheFile (byActor: MActor, redundancyModel: MVideoRedundancyVideo, t: Transaction) {
   logger.info('Creating job to undo cache file %s.', redundancyModel.url)
 
-  const videoId = redundancyModel.getVideo().id
-  const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(videoId)
+  const associatedVideo = redundancyModel.getVideo()
+  if (!associatedVideo) {
+    logger.warn('Cannot send undo activity for redundancy %s: no video files associated.', redundancyModel.url)
+    return
+  }
+
+  const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(associatedVideo.id)
   const createActivity = buildCreateActivity(redundancyModel.url, byActor, redundancyModel.toActivityPubObject())
 
   return sendUndoVideoRelatedActivity({ byActor, video, url: redundancyModel.url, activity: createActivity, transaction: t })

@@ -1,17 +1,24 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
 import 'mocha'
+import * as chai from 'chai'
+import { VideoPrivacy } from '@shared/models'
 import {
   advancedVideosSearch,
   cleanupTests,
+  createLive,
   flushAndRunServer,
   immutableAssign,
   searchVideo,
+  sendRTMPStreamInVideo,
   ServerInfo,
   setAccessTokensToServers,
+  setDefaultVideoChannel,
+  stopFfmpeg,
+  updateCustomSubConfig,
   uploadVideo,
-  wait
+  wait,
+  waitUntilLivePublished
 } from '../../../../shared/extra-utils'
 import { createVideoCaption } from '../../../../shared/extra-utils/videos/video-captions'
 
@@ -28,6 +35,7 @@ describe('Test videos search', function () {
     server = await flushAndRunServer(1)
 
     await setAccessTokensToServers([ server ])
+    await setDefaultVideoChannel([ server ])
 
     {
       const attributes1 = {
@@ -447,6 +455,43 @@ describe('Test videos search', function () {
 
     expect(res.body.total).to.equal(1)
     expect(res.body.data[0].name).to.equal('1111 2222 3333 - 3')
+  })
+
+  it('Should search by live', async function () {
+    this.timeout(30000)
+
+    {
+      const options = {
+        search: {
+          searchIndex: { enabled: false }
+        },
+        live: { enabled: true }
+      }
+      await updateCustomSubConfig(server.url, server.accessToken, options)
+    }
+
+    {
+      const res = await advancedVideosSearch(server.url, { isLive: true })
+
+      expect(res.body.total).to.equal(0)
+      expect(res.body.data).to.have.lengthOf(0)
+    }
+
+    {
+      const liveOptions = { name: 'live', privacy: VideoPrivacy.PUBLIC, channelId: server.videoChannel.id }
+      const resLive = await createLive(server.url, server.accessToken, liveOptions)
+      const liveVideoId = resLive.body.video.uuid
+
+      const command = await sendRTMPStreamInVideo(server.url, server.accessToken, liveVideoId)
+      await waitUntilLivePublished(server.url, server.accessToken, liveVideoId)
+
+      const res = await advancedVideosSearch(server.url, { isLive: true })
+
+      expect(res.body.total).to.equal(1)
+      expect(res.body.data[0].name).to.equal('live')
+
+      await stopFfmpeg(command)
+    }
   })
 
   after(async function () {

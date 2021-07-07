@@ -3,106 +3,156 @@
     <h4 class="modal-title">
       <ng-container i18n>Download</ng-container>
 
-      <div *ngIf="videoCaptions" ngbDropdown class="d-inline-block">
-        <span id="dropdownDownloadType" ngbDropdownToggle>
-          {{ type }}
-        </span>
-        <div ngbDropdownMenu aria-labelledby="dropdownDownloadType">
-          <button *ngIf="type === 'video'" (click)="switchToType('subtitles')" ngbDropdownItem i18n>subtitles</button>
-          <button *ngIf="type === 'subtitles'" (click)="switchToType('video')" ngbDropdownItem i18n>video</button>
-        </div>
+      <div class="peertube-select-container title-select" *ngIf="hasCaptions()">
+        <select id="type" name="type" [(ngModel)]="type" class="form-control">
+          <option value="video" i18n>Video</option>
+          <option value="subtitles" i18n>Subtitles</option>
+        </select>
       </div>
     </h4>
+
     <my-global-icon iconName="cross" aria-label="Close" role="button" (click)="hide()"></my-global-icon>
   </div>
 
   <div class="modal-body">
-    <div class="form-group">
-      <div class="input-group input-group-sm">
-        <div class="input-group-prepend peertube-select-container">
-          <select *ngIf="type === 'video'" [(ngModel)]="resolutionId" (ngModelChange)="onResolutionIdChange()">
-            <option *ngFor="let file of getVideoFiles()" [value]="file.resolution.id">{{ file.resolution.label }}</option>
-          </select>
-
-          <select *ngIf="type === 'subtitles'" [(ngModel)]="subtitleLanguageId">
-            <option *ngFor="let caption of videoCaptions" [value]="caption.language.id">{{ caption.language.label }}</option>
-          </select>
-        </div>
-
-        <input #urlInput (click)="urlInput.select()" type="text" class="form-control input-sm readonly" readonly [value]="getLink()" />
-        <div class="input-group-append">
-          <button [cdkCopyToClipboard]="urlInput.value" (click)="activateCopiedMessage()" type="button" class="btn btn-outline-secondary">
-            <span class="glyphicon glyphicon-copy"></span>
-          </button>
-        </div>
-      </div>
+    <div class="alert alert-warning" *ngIf="isConfidentialVideo()" i18n>
+      The following link contains a private token and should not be shared with anyone.
     </div>
 
-    <ng-container *ngIf="type === 'video' && videoFile?.metadata">
-      <div ngbNav #nav="ngbNav" class="nav-tabs">
+    <!-- Subtitle tab -->
+    <ng-container *ngIf="type === 'subtitles'">
+      <div ngbNav #subtitleNav="ngbNav" class="nav-tabs" [activeId]="subtitleLanguageId" (activeIdChange)="onSubtitleIdChange($event)">
 
-        <ng-container ngbNavItem>
-          <a ngbNavLink i18n>Format</a>
-          <ng-template ngbNavContent>
-            <div class="file-metadata">
-              <div class="metadata-attribute metadata-attribute-tags" *ngFor="let item of videoFileMetadataFormat | keyvalue">
-                <span i18n class="metadata-attribute-label">{{ item.value.label }}</span>
-                <span class="metadata-attribute-value">{{ item.value.value }}</span>
-              </div>
-            </div>
-          </ng-template>
-        </ng-container>
+        <ng-container *ngFor="let caption of getCaptions()" [ngbNavItem]="caption.language.id">
+          <a ngbNavLink i18n>{{ caption.language.label }}</a>
 
-        <ng-container ngbNavItem [disabled]="videoFileMetadataVideoStream === undefined">
-          <a ngbNavLink i18n>Video stream</a>
           <ng-template ngbNavContent>
-            <div class="file-metadata">
-              <div class="metadata-attribute metadata-attribute-tags" *ngFor="let item of videoFileMetadataVideoStream | keyvalue">
-                <span i18n class="metadata-attribute-label">{{ item.value.label }}</span>
-                <span class="metadata-attribute-value">{{ item.value.value }}</span>
-              </div>
-            </div>
-          </ng-template>
-        </ng-container>
+            <div class="nav-content">
+              <div class="input-group input-group-sm">
+                <input #urlInput (click)="urlInput.select()" type="text" class="form-control input-sm readonly" readonly [value]="getLink()" />
 
-        <ng-container ngbNavItem [disabled]="videoFileMetadataAudioStream === undefined">
-          <a ngbNavLink i18n>Audio stream</a>
-          <ng-template ngbNavContent>
-            <div class="file-metadata">
-              <div class="metadata-attribute metadata-attribute-tags" *ngFor="let item of videoFileMetadataAudioStream | keyvalue">
-                <span i18n class="metadata-attribute-label">{{ item.value.label }}</span>
-                <span class="metadata-attribute-value">{{ item.value.value }}</span>
+                <div class="input-group-append" *ngIf="!isConfidentialVideo()">
+                  <button [cdkCopyToClipboard]="urlInput.value" (click)="activateCopiedMessage()" type="button" class="btn btn-outline-secondary">
+                    <span class="glyphicon glyphicon-duplicate"></span>
+                  </button>
+                </div>
               </div>
             </div>
           </ng-template>
         </ng-container>
       </div>
 
-      <div [ngbNavOutlet]="nav"></div>
+      <div [ngbNavOutlet]="subtitleNav"></div>
     </ng-container>
 
-    <div class="download-type" *ngIf="type === 'video'">
-      <div class="peertube-radio-container">
-        <input type="radio" name="download" id="download-direct" [(ngModel)]="downloadType" value="direct">
-        <label i18n for="download-direct">Direct download</label>
+    <!-- Video tab -->
+    <ng-container *ngIf="type === 'video'">
+      <div ngbNav #resolutionNav="ngbNav" class="nav-tabs" [activeId]="resolutionId" (activeIdChange)="onResolutionIdChange($event)">
+        <ng-container *ngFor="let file of getVideoFiles()" [ngbNavItem]="file.resolution.id">
+          <a ngbNavLink i18n>{{ file.resolution.label }}</a>
+
+          <ng-template ngbNavContent>
+            <div class="nav-content">
+              <div class="input-group input-group-sm">
+                <input #urlInput (click)="urlInput.select()" type="text" class="form-control input-sm readonly" readonly [value]="getLink()" />
+                <div class="input-group-append" *ngIf="!isConfidentialVideo()">
+                  <button [cdkCopyToClipboard]="urlInput.value" (click)="activateCopiedMessage()" type="button" class="btn btn-outline-secondary">
+                    <span class="glyphicon glyphicon-duplicate"></span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </ng-container>
       </div>
 
-      <div class="peertube-radio-container">
-        <input type="radio" name="download" id="download-torrent" [(ngModel)]="downloadType" value="torrent">
-        <label i18n for="download-torrent">Torrent (.torrent file)</label>
+      <div [ngbNavOutlet]="resolutionNav"></div>
+
+      <div class="advanced-filters collapse-transition" [ngbCollapse]="isAdvancedCustomizationCollapsed">
+        <div ngbNav #navMetadata="ngbNav" class="nav-tabs nav-metadata">
+          <ng-container ngbNavItem>
+            <a ngbNavLink i18n>Format</a>
+            <ng-template ngbNavContent>
+              <div class="file-metadata">
+                <div class="metadata-attribute metadata-attribute-tags" *ngFor="let item of videoFileMetadataFormat | keyvalue">
+                  <span i18n class="metadata-attribute-label">{{ item.value.label }}</span>
+                  <span class="metadata-attribute-value">{{ item.value.value }}</span>
+                </div>
+              </div>
+            </ng-template>
+
+            <ng-container ngbNavItem [disabled]="videoFileMetadataVideoStream === undefined">
+              <a ngbNavLink i18n>Video stream</a>
+              <ng-template ngbNavContent>
+                <div class="file-metadata">
+                  <div class="metadata-attribute metadata-attribute-tags" *ngFor="let item of videoFileMetadataVideoStream | keyvalue">
+                    <span i18n class="metadata-attribute-label">{{ item.value.label }}</span>
+                    <span class="metadata-attribute-value">{{ item.value.value }}</span>
+                  </div>
+                </div>
+              </ng-template>
+            </ng-container>
+
+            <ng-container ngbNavItem [disabled]="videoFileMetadataAudioStream === undefined">
+              <a ngbNavLink i18n>Audio stream</a>
+              <ng-template ngbNavContent>
+                <div class="file-metadata">
+                  <div class="metadata-attribute metadata-attribute-tags" *ngFor="let item of videoFileMetadataAudioStream | keyvalue">
+                    <span i18n class="metadata-attribute-label">{{ item.value.label }}</span>
+                    <span class="metadata-attribute-value">{{ item.value.value }}</span>
+                  </div>
+                </div>
+              </ng-template>
+            </ng-container>
+
+          </ng-container>
+        </div>
+
+        <div *ngIf="getFileMetadata()" [ngbNavOutlet]="navMetadata"></div>
+
+        <div class="download-type">
+          <div class="peertube-radio-container">
+            <input type="radio" name="download" id="download-direct" [(ngModel)]="downloadType" value="direct">
+            <label i18n for="download-direct">Direct download</label>
+          </div>
+
+          <div class="peertube-radio-container">
+            <input type="radio" name="download" id="download-torrent" [(ngModel)]="downloadType" value="torrent">
+            <label i18n for="download-torrent">Torrent (.torrent file)</label>
+          </div>
+        </div>
       </div>
-    </div>
+
+      <div
+        (click)="isAdvancedCustomizationCollapsed = !isAdvancedCustomizationCollapsed"
+        role="button" class="advanced-filters-button"
+        [attr.aria-expanded]="!isAdvancedCustomizationCollapsed" aria-controls="collapseBasic"
+      >
+        <ng-container *ngIf="isAdvancedCustomizationCollapsed">
+          <span class="glyphicon glyphicon-menu-down"></span>
+
+          <ng-container i18n>
+            Advanced
+          </ng-container>
+        </ng-container>
+
+        <ng-container *ngIf="!isAdvancedCustomizationCollapsed">
+          <span class="glyphicon glyphicon-menu-up"></span>
+
+          <ng-container i18n>
+            Simple
+          </ng-container>
+        </ng-container>
+      </div>
+    </ng-container>
   </div>
 
   <div class="modal-footer inputs">
     <input
-      type="button" role="button" i18n-value value="Cancel" class="action-button action-button-cancel"
+      type="button" role="button" i18n-value value="Cancel" class="peertube-button grey-button"
       (click)="hide()" (key.enter)="hide()"
     >
 
-    <input
-      type="submit" i18n-value value="Download" class="action-button-submit"
-      (click)="download()"
-    >
+    <input type="submit" i18n-value value="Download" class="peertube-button orange-button" (click)="download()" />
   </div>
 </ng-template>

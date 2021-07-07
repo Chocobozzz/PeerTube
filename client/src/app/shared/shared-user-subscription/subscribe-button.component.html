@@ -1,5 +1,7 @@
-<div class="btn-group-subscribe btn-group"
-    [ngClass]="{'subscribe-button': !isAllChannelsSubscribed, 'unsubscribe-button': isAllChannelsSubscribed, 'big': isBigButton }">
+<div
+  class="btn-group-subscribe btn-group"
+  [ngClass]="{'subscribe-button': !isAllChannelsSubscribed, 'unsubscribe-button': isAllChannelsSubscribed, 'big': isBigButton }"
+>
 
   <ng-template #userLoggedOut>
     <span [ngClass]="{ 'extra-text': isAtLeastOneChannelSubscribed }">
@@ -18,9 +20,10 @@
   </ng-template>
 
   <ng-template #userLoggedIn>
-    <button *ngIf="!isAllChannelsSubscribed" type="button"
-            class="btn btn-sm" role="button"
-            (click)="subscribe()">
+    <button
+      *ngIf="!isAllChannelsSubscribed" type="button"
+      class="btn btn-sm" (click)="subscribe()"
+    >
       <ng-template [ngTemplateOutlet]="userLoggedOut"></ng-template>
     </button>
 
@@ -36,10 +39,11 @@
     *ngIf="isUserLoggedIn(); then userLoggedIn">
   </ng-container>
 
-  <div class="btn-group" ngbDropdown autoClose="outside"
-       placement="bottom-right" role="group"
-       aria-label="Multiple ways to subscribe to the current channel">
-    <button class="btn btn-sm dropdown-toggle-split" ngbDropdownToggle>
+  <div
+    class="btn-group" ngbDropdown autoClose="outside" placement="bottom-right bottom-left"
+    role="group" aria-label="Multiple ways to subscribe to the current channel" i18n-aria-label
+  >
+    <button class="btn btn-sm dropdown-toggle-split" ngbDropdownToggle aria-label="Open subscription dropdown" i18n-aria-label>
       <ng-container
         *ngIf="!isUserLoggedIn(); then userLoggedOut">
       </ng-container>
@@ -54,8 +58,10 @@
         <span *ngIf="isUserLoggedIn()" i18n>Subscribe with your local account</span>
       </button>
 
-      <button class="dropdown-item dropdown-item-neutral" i18n>Subscribe with a Mastodon account:</button>
-      <my-remote-subscribe [showHelp]="true" [uri]="uri"></my-remote-subscribe>
+      <button class="dropdown-item dropdown-item-neutral">
+        <div class="mb-1" i18n>Subscribe with a remote account:</div>
+        <my-remote-subscribe [showHelp]="true" [uri]="uri"></my-remote-subscribe>
+      </button>
 
       <div class="dropdown-divider"></div>
 

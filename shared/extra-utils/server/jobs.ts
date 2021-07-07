@@ -1,31 +1,40 @@
 import * as request from 'supertest'
-import { Job, JobState, JobType } from '../../models'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
+import { getDebug, makeGetRequest } from '../../../shared/extra-utils'
+import { Job, JobState, JobType, ServerDebug } from '../../models'
 import { wait } from '../miscs/miscs'
 import { ServerInfo } from './servers'
-import { makeGetRequest } from '../../../shared/extra-utils'
 
-function getJobsList (url: string, accessToken: string, state: JobState) {
-  const path = '/api/v1/jobs/' + state
+function buildJobsUrl (state?: JobState) {
+  let path = '/api/v1/jobs'
+
+  if (state) path += '/' + state
+
+  return path
+}
+
+function getJobsList (url: string, accessToken: string, state?: JobState) {
+  const path = buildJobsUrl(state)
 
   return request(url)
     .get(path)
     .set('Accept', 'application/json')
     .set('Authorization', 'Bearer ' + accessToken)
-    .expect(200)
+    .expect(HttpStatusCode.OK_200)
     .expect('Content-Type', /json/)
 }
 
 function getJobsListPaginationAndSort (options: {
   url: string
   accessToken: string
-  state: JobState
   start: number
   count: number
   sort: string
+  state?: JobState
   jobType?: JobType
 }) {
   const { url, accessToken, state, start, count, sort, jobType } = options
-  const path = '/api/v1/jobs/' + state
+  const path = buildJobsUrl(state)
 
   const query = {
     start,
@@ -38,19 +47,23 @@ function getJobsListPaginationAndSort (options: {
     url,
     path,
     token: accessToken,
-    statusCodeExpected: 200,
+    statusCodeExpected: HttpStatusCode.OK_200,
     query
   })
 }
 
 async function waitJobs (serversArg: ServerInfo[] | ServerInfo) {
-  const pendingJobWait = process.env.NODE_PENDING_JOB_WAIT ? parseInt(process.env.NODE_PENDING_JOB_WAIT, 10) : 2000
+  const pendingJobWait = process.env.NODE_PENDING_JOB_WAIT
+    ? parseInt(process.env.NODE_PENDING_JOB_WAIT, 10)
+    : 250
+
   let servers: ServerInfo[]
 
   if (Array.isArray(serversArg) === false) servers = [ serversArg as ServerInfo ]
   else servers = serversArg as ServerInfo[]
 
   const states: JobState[] = [ 'waiting', 'active', 'delayed' ]
+  const repeatableJobs = [ 'videos-views', 'activitypub-cleaner' ]
   let pendingRequests: boolean
 
   function tasksBuilder () {
@@ -66,16 +79,26 @@ async function waitJobs (serversArg: ServerInfo[] | ServerInfo) {
           start: 0,
           count: 10,
           sort: '-createdAt'
-        })
-          .then(res => res.body.data)
-          .then((jobs: Job[]) => jobs.filter(j => j.type !== 'videos-views'))
+        }).then(res => res.body.data)
+          .then((jobs: Job[]) => jobs.filter(j => !repeatableJobs.includes(j.type)))
           .then(jobs => {
             if (jobs.length !== 0) {
               pendingRequests = true
             }
           })
+
         tasks.push(p)
       }
+
+      const p = getDebug(server.url, server.accessToken)
+        .then(res => res.body)
+        .then((obj: ServerDebug) => {
+          if (obj.activityPubMessagesWaiting !== 0) {
+            pendingRequests = true
+          }
+        })
+
+      tasks.push(p)
     }
 
     return tasks
@@ -92,7 +115,7 @@ async function waitJobs (serversArg: ServerInfo[] | ServerInfo) {
     }
 
     if (pendingRequests) {
-      await wait(1000)
+      await wait(pendingJobWait)
     }
   } while (pendingRequests)
 }

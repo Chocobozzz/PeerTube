@@ -13,7 +13,8 @@ export class ModerationComponent implements OnInit {
   ) { }
 
   ngOnInit (): void {
-    this.serverService.getConfig()
-      .subscribe(config => this.autoBlockVideosEnabled = config.autoBlacklist.videos.ofUsers.enabled)
+    const serverConfig = this.serverService.getHTMLConfig()
+
+    this.autoBlockVideosEnabled = serverConfig.autoBlacklist.videos.ofUsers.enabled
   }
 }

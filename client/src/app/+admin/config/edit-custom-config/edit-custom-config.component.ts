@@ -1,6 +1,9 @@
+
+import omit from 'lodash-es/omit'
 import { forkJoin } from 'rxjs'
-import { ViewportScroller } from '@angular/common'
-import { AfterViewChecked, Component, OnInit, ViewChild } from '@angular/core'
+import { SelectOptionsItem } from 'src/types/select-options-item.model'
+import { Component, OnInit } from '@angular/core'
+import { ActivatedRoute, Router } from '@angular/router'
 import { ConfigService } from '@app/+admin/config/shared/config.service'
 import { Notifier } from '@app/core'
 import { ServerService } from '@app/core/server/server.service'
@@ -8,112 +11,62 @@ import {
   ADMIN_EMAIL_VALIDATOR,
   CACHE_CAPTIONS_SIZE_VALIDATOR,
   CACHE_PREVIEWS_SIZE_VALIDATOR,
+  CONCURRENCY_VALIDATOR,
   INDEX_URL_VALIDATOR,
   INSTANCE_NAME_VALIDATOR,
   INSTANCE_SHORT_DESCRIPTION_VALIDATOR,
+  MAX_INSTANCE_LIVES_VALIDATOR,
+  MAX_LIVE_DURATION_VALIDATOR,
+  MAX_USER_LIVES_VALIDATOR,
   SEARCH_INDEX_URL_VALIDATOR,
   SERVICES_TWITTER_USERNAME_VALIDATOR,
   SIGNUP_LIMIT_VALIDATOR,
+  SIGNUP_MINIMUM_AGE_VALIDATOR,
   TRANSCODING_THREADS_VALIDATOR
 } from '@app/shared/form-validators/custom-config-validators'
 import { USER_VIDEO_QUOTA_DAILY_VALIDATOR, USER_VIDEO_QUOTA_VALIDATOR } from '@app/shared/form-validators/user-validators'
-import { FormReactive, FormValidatorService, SelectOptionsItem } from '@app/shared/shared-forms'
-import { NgbNav } from '@ng-bootstrap/ng-bootstrap'
-import { CustomConfig, ServerConfig } from '@shared/models'
+import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
+import { CustomPageService } from '@app/shared/shared-main/custom-page'
+import { CustomConfig, CustomPage, HTMLServerConfig } from '@shared/models'
+import { EditConfigurationService } from './edit-configuration.service'
+
+type ComponentCustomConfig = CustomConfig & {
+  instanceCustomHomepage: CustomPage
+}
 
 @Component({
   selector: 'my-edit-custom-config',
   templateUrl: './edit-custom-config.component.html',
   styleUrls: [ './edit-custom-config.component.scss' ]
 })
-export class EditCustomConfigComponent extends FormReactive implements OnInit, AfterViewChecked {
-  // FIXME: use built-in router
-  @ViewChild('nav') nav: NgbNav
+export class EditCustomConfigComponent extends FormReactive implements OnInit {
+  activeNav: string
 
-  initDone = false
-  customConfig: CustomConfig
+  customConfig: ComponentCustomConfig
+  serverConfig: HTMLServerConfig
 
-  resolutions: { id: string, label: string, description?: string }[] = []
-  transcodingThreadOptions: { label: string, value: number }[] = []
+  homepage: CustomPage
 
   languageItems: SelectOptionsItem[] = []
   categoryItems: SelectOptionsItem[] = []
 
-  private serverConfig: ServerConfig
-
   constructor (
-    private viewportScroller: ViewportScroller,
+    private router: Router,
+    private route: ActivatedRoute,
     protected formValidatorService: FormValidatorService,
     private notifier: Notifier,
     private configService: ConfigService,
-    private serverService: ServerService
+    private customPage: CustomPageService,
+    private serverService: ServerService,
+    private editConfigurationService: EditConfigurationService
   ) {
     super()
-
-    this.resolutions = [
-      {
-        id: '0p',
-        label: $localize`Audio-only`,
-        description: $localize`A <code>.mp4</code> that keeps the original audio track, with no video`
-      },
-      {
-        id: '240p',
-        label: $localize`240p`
-      },
-      {
-        id: '360p',
-        label: $localize`360p`
-      },
-      {
-        id: '480p',
-        label: $localize`480p`
-      },
-      {
-        id: '720p',
-        label: $localize`720p`
-      },
-      {
-        id: '1080p',
-        label: $localize`1080p`
-      },
-      {
-        id: '2160p',
-        label: $localize`2160p`
-      }
-    ]
-
-    this.transcodingThreadOptions = [
-      { value: 0, label: $localize`Auto (via ffmpeg)` },
-      { value: 1, label: '1' },
-      { value: 2, label: '2' },
-      { value: 4, label: '4' },
-      { value: 8, label: '8' }
-    ]
-  }
-
-  get videoQuotaOptions () {
-    return this.configService.videoQuotaOptions
-  }
-
-  get videoQuotaDailyOptions () {
-    return this.configService.videoQuotaDailyOptions
-  }
-
-  get availableThemes () {
-    return this.serverConfig.theme.registered
-      .map(t => t.name)
-  }
-
-  getResolutionKey (resolution: string) {
-    return 'transcoding.resolutions.' + resolution
   }
 
   ngOnInit () {
-    this.serverConfig = this.serverService.getTmpConfig()
-    this.serverService.getConfig()
-        .subscribe(config => this.serverConfig = config)
+    this.serverConfig = this.serverService.getHTMLConfig()
 
-    const formGroupData: { [key in keyof CustomConfig ]: any } = {
+    const formGroupData: { [key in keyof ComponentCustomConfig ]: any } = {
       instance: {
         name: INSTANCE_NAME_VALIDATOR,
         shortDescription: INSTANCE_SHORT_DESCRIPTION_VALIDATOR,
@@ -158,20 +111,33 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
         },
         captions: {
           size: CACHE_CAPTIONS_SIZE_VALIDATOR
+        },
+        torrents: {
+          size: CACHE_CAPTIONS_SIZE_VALIDATOR
         }
       },
       signup: {
         enabled: null,
         limit: SIGNUP_LIMIT_VALIDATOR,
-        requiresEmailVerification: null
+        requiresEmailVerification: null,
+        minimumAge: SIGNUP_MINIMUM_AGE_VALIDATOR
       },
       import: {
         videos: {
+          concurrency: CONCURRENCY_VALIDATOR,
           http: {
             enabled: null
           },
           torrent: {
             enabled: null
+          }
+        }
+      },
+      trending: {
+        videos: {
+          algorithms: {
+            enabled: null,
+            default: null
           }
         }
       },
@@ -190,12 +156,29 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
         threads: TRANSCODING_THREADS_VALIDATOR,
         allowAdditionalExtensions: null,
         allowAudioFiles: null,
+        profile: null,
+        concurrency: CONCURRENCY_VALIDATOR,
         resolutions: {},
         hls: {
           enabled: null
         },
         webtorrent: {
           enabled: null
+        }
+      },
+      live: {
+        enabled: null,
+
+        maxDuration: MAX_LIVE_DURATION_VALIDATOR,
+        maxInstanceLives: MAX_INSTANCE_LIVES_VALIDATOR,
+        maxUserLives: MAX_USER_LIVES_VALIDATOR,
+        allowReplay: null,
+
+        transcoding: {
+          enabled: null,
+          threads: TRANSCODING_THREADS_VALIDATOR,
+          profile: null,
+          resolutions: {}
         }
       },
       autoBlacklist: {
@@ -239,55 +222,62 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
           disableLocalSearch: null,
           isDefaultSearch: null
         }
+      },
+
+      instanceCustomHomepage: {
+        content: null
       }
     }
 
     const defaultValues = {
       transcoding: {
         resolutions: {}
+      },
+      live: {
+        transcoding: {
+          resolutions: {}
+        }
       }
     }
-    for (const resolution of this.resolutions) {
+
+    for (const resolution of this.editConfigurationService.getVODResolutions()) {
       defaultValues.transcoding.resolutions[resolution.id] = 'false'
       formGroupData.transcoding.resolutions[resolution.id] = null
     }
 
-    this.buildForm(formGroupData)
-    this.loadForm()
-    this.checkTranscodingFields()
-  }
-
-  ngAfterViewChecked () {
-    if (!this.initDone) {
-      this.initDone = true
-      this.gotoAnchor()
+    for (const resolution of this.editConfigurationService.getLiveResolutions()) {
+      defaultValues.live.transcoding.resolutions[resolution.id] = 'false'
+      formGroupData.live.transcoding.resolutions[resolution.id] = null
     }
-  }
 
-  isTranscodingEnabled () {
-    return this.form.value['transcoding']['enabled'] === true
-  }
+    this.buildForm(formGroupData)
 
-  isSignupEnabled () {
-    return this.form.value['signup']['enabled'] === true
-  }
+    if (this.route.snapshot.fragment) {
+      this.onNavChange(this.route.snapshot.fragment)
+    }
 
-  isSearchIndexEnabled () {
-    return this.form.value['search']['searchIndex']['enabled'] === true
-  }
-
-  isAutoFollowIndexEnabled () {
-    return this.form.value['followings']['instance']['autoFollowIndex']['enabled'] === true
+    this.loadConfigAndUpdateForm()
+    this.loadCategoriesAndLanguages()
   }
 
   async formValidated () {
-    this.configService.updateCustomConfig(this.form.getRawValue())
+    const value: ComponentCustomConfig = this.form.getRawValue()
+
+    forkJoin([
+      this.configService.updateCustomConfig(omit(value, 'instanceCustomHomepage')),
+      this.customPage.updateInstanceHomepage(value.instanceCustomHomepage.content)
+    ])
       .subscribe(
-        res => {
-          this.customConfig = res
+        ([ resConfig ]) => {
+          const instanceCustomHomepage = {
+            content: value.instanceCustomHomepage.content
+          }
+
+          this.customConfig = { ...resConfig, instanceCustomHomepage }
 
           // Reload general configuration
           this.serverService.resetConfig()
+            .subscribe(config => this.serverConfig = config)
 
           this.updateForm()
 
@@ -298,33 +288,60 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
       )
   }
 
-  gotoAnchor () {
-    const hashToNav = {
-      'customizations': 'advanced-configuration'
-    }
-    const hash = window.location.hash.replace('#', '')
+  hasConsistentOptions () {
+    if (this.hasLiveAllowReplayConsistentOptions()) return true
 
-    if (hash && Object.keys(hashToNav).includes(hash)) {
-      this.nav.select(hashToNav[hash])
-      setTimeout(() => this.viewportScroller.scrollToAnchor(hash), 100)
+    return false
+  }
+
+  hasLiveAllowReplayConsistentOptions () {
+    if (
+      this.editConfigurationService.isTranscodingEnabled(this.form) === false &&
+      this.editConfigurationService.isLiveEnabled(this.form) &&
+      this.form.value['live']['allowReplay'] === true
+    ) {
+      return false
     }
+
+    return true
+  }
+
+  onNavChange (newActiveNav: string) {
+    this.activeNav = newActiveNav
+
+    this.router.navigate([], { fragment: this.activeNav })
+  }
+
+  grabAllErrors (errorObjectArg?: any) {
+    const errorObject = errorObjectArg || this.formErrors
+
+    let acc: string[] = []
+
+    for (const key of Object.keys(errorObject)) {
+      const value = errorObject[key]
+      if (!value) continue
+
+      if (typeof value === 'string') {
+        acc.push(value)
+      } else {
+        acc = acc.concat(this.grabAllErrors(value))
+      }
+    }
+
+    return acc
   }
 
   private updateForm () {
     this.form.patchValue(this.customConfig)
   }
 
-  private loadForm () {
+  private loadConfigAndUpdateForm () {
     forkJoin([
       this.configService.getCustomConfig(),
-      this.serverService.getVideoLanguages(),
-      this.serverService.getVideoCategories()
-    ]).subscribe(
-      ([ config, languages, categories ]) => {
-        this.customConfig = config
-
-        this.languageItems = languages.map(l => ({ label: l.label, id: l.id }))
-        this.categoryItems = categories.map(l => ({ label: l.label, id: l.id + '' }))
+      this.customPage.getInstanceHomepage()
+    ])
+      .subscribe(([ config, homepage ]) => {
+        this.customConfig = { ...config, instanceCustomHomepage: homepage }
 
         this.updateForm()
         // Force form validation
@@ -335,30 +352,17 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
     )
   }
 
-  private checkTranscodingFields () {
-    const hlsControl = this.form.get('transcoding.hls.enabled')
-    const webtorrentControl = this.form.get('transcoding.webtorrent.enabled')
+  private loadCategoriesAndLanguages () {
+    forkJoin([
+      this.serverService.getVideoLanguages(),
+      this.serverService.getVideoCategories()
+    ]).subscribe(
+      ([ languages, categories ]) => {
+        this.languageItems = languages.map(l => ({ label: l.label, id: l.id }))
+        this.categoryItems = categories.map(l => ({ label: l.label, id: l.id + '' }))
+      },
 
-    webtorrentControl.valueChanges
-                     .subscribe(newValue => {
-                       if (newValue === false && !hlsControl.disabled) {
-                         hlsControl.disable()
-                       }
-
-                       if (newValue === true && !hlsControl.enabled) {
-                         hlsControl.enable()
-                       }
-                     })
-
-    hlsControl.valueChanges
-              .subscribe(newValue => {
-                if (newValue === false && !webtorrentControl.disabled) {
-                  webtorrentControl.disable()
-                }
-
-                if (newValue === true && !webtorrentControl.enabled) {
-                  webtorrentControl.enable()
-                }
-              })
+      err => this.notifier.error(err.message)
+    )
   }
 }

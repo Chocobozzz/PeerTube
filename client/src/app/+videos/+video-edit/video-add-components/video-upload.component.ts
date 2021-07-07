@@ -1,13 +1,15 @@
-import { Subscription } from 'rxjs'
-import { HttpEventType, HttpResponse } from '@angular/common/http'
-import { Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core'
+import { UploadState, UploadxOptions, UploadxService } from 'ngx-uploadx'
+import { HttpErrorResponse, HttpEventType, HttpHeaders } from '@angular/common/http'
+import { AfterViewInit, Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core'
 import { Router } from '@angular/router'
-import { AuthService, CanComponentDeactivate, Notifier, ServerService, UserService } from '@app/core'
-import { scrollToTop } from '@app/helpers'
+import { AuthService, CanComponentDeactivate, HooksService, Notifier, ServerService, UserService } from '@app/core'
+import { genericUploadErrorHandler, scrollToTop } from '@app/helpers'
 import { FormValidatorService } from '@app/shared/shared-forms'
-import { BytesPipe, VideoCaptionService, VideoEdit, VideoService } from '@app/shared/shared-main'
+import { BytesPipe, Video, VideoCaptionService, VideoEdit, VideoService } from '@app/shared/shared-main'
 import { LoadingBarService } from '@ngx-loading-bar/core'
+import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 import { VideoPrivacy } from '@shared/models'
+import { UploaderXFormData } from './uploaderx-form-data'
 import { VideoSend } from './video-send'
 
 @Component({
@@ -19,35 +21,36 @@ import { VideoSend } from './video-send'
     './video-send.scss'
   ]
 })
-export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy, CanComponentDeactivate {
+export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy, AfterViewInit, CanComponentDeactivate {
   @Output() firstStepDone = new EventEmitter<string>()
   @Output() firstStepError = new EventEmitter<void>()
   @ViewChild('videofileInput') videofileInput: ElementRef<HTMLInputElement>
-
-  // So that it can be accessed in the template
-  readonly SPECIAL_SCHEDULED_PRIVACY = VideoEdit.SPECIAL_SCHEDULED_PRIVACY
 
   userVideoQuotaUsed = 0
   userVideoQuotaUsedDaily = 0
 
   isUploadingAudioFile = false
   isUploadingVideo = false
-  isUpdatingVideo = false
 
   videoUploaded = false
-  videoUploadObservable: Subscription = null
   videoUploadPercents = 0
   videoUploadedIds = {
     id: 0,
     uuid: ''
   }
+  formData: FormData
 
-  waitTranscodingEnabled = true
   previewfileUpload: File
 
   error: string
+  enableRetryAfterError: boolean
 
-  protected readonly DEFAULT_VIDEO_PRIVACY = VideoPrivacy.PUBLIC
+  // So that it can be accessed in the template
+  protected readonly BASE_VIDEO_UPLOAD_URL = VideoService.BASE_VIDEO_URL + 'upload-resumable'
+
+  private uploadxOptions: UploadxOptions
+  private isUpdatingVideo = false
+  private fileToUpload: File
 
   constructor (
     protected formValidatorService: FormValidatorService,
@@ -58,13 +61,76 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     protected videoService: VideoService,
     protected videoCaptionService: VideoCaptionService,
     private userService: UserService,
-    private router: Router
-    ) {
+    private router: Router,
+    private hooks: HooksService,
+    private resumableUploadService: UploadxService
+  ) {
     super()
+
+    this.uploadxOptions = {
+      endpoint: this.BASE_VIDEO_UPLOAD_URL,
+      multiple: false,
+      token: this.authService.getAccessToken(),
+      uploaderClass: UploaderXFormData,
+      retryConfig: {
+        maxAttempts: 6,
+        shouldRetry: (code: number) => {
+          return code < 400 || code >= 501
+        }
+      }
+    }
   }
 
   get videoExtensions () {
     return this.serverConfig.video.file.extensions.join(', ')
+  }
+
+  onUploadVideoOngoing (state: UploadState) {
+    switch (state.status) {
+      case 'error':
+        const error = state.response?.error || 'Unknow error'
+
+        this.handleUploadError({
+          error: new Error(error),
+          name: 'HttpErrorResponse',
+          message: error,
+          ok: false,
+          headers: new HttpHeaders(state.responseHeaders),
+          status: +state.responseStatus,
+          statusText: error,
+          type: HttpEventType.Response,
+          url: state.url
+        })
+        break
+
+      case 'cancelled':
+        this.isUploadingVideo = false
+        this.videoUploadPercents = 0
+
+        this.firstStepError.emit()
+        this.enableRetryAfterError = false
+        this.error = ''
+        break
+
+      case 'queue':
+        this.closeFirstStep(state.name)
+        break
+
+      case 'uploading':
+        this.videoUploadPercents = state.progress
+        break
+
+      case 'paused':
+        this.notifier.info($localize`Upload on hold`)
+        break
+
+      case 'complete':
+        this.videoUploaded = true
+        this.videoUploadPercents = 100
+
+        this.videoUploadedIds = state?.response.video
+        break
+    }
   }
 
   ngOnInit () {
@@ -75,17 +141,24 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
           this.userVideoQuotaUsed = data.videoQuotaUsed
           this.userVideoQuotaUsedDaily = data.videoQuotaUsedDaily
         })
+
+    this.resumableUploadService.events
+      .subscribe(state => this.onUploadVideoOngoing(state))
+  }
+
+  ngAfterViewInit () {
+    this.hooks.runAction('action:video-upload.init', 'video-edit')
   }
 
   ngOnDestroy () {
-    if (this.videoUploadObservable) this.videoUploadObservable.unsubscribe()
+    this.cancelUpload()
   }
 
   canDeactivate () {
     let text = ''
 
     if (this.videoUploaded === true) {
-      // FIXME: cannot concatenate strings inside i18n service :/
+      // FIXME: cannot concatenate strings using $localize
       text = $localize`Your video was uploaded to your account and is private.` + ' ' +
         $localize`But associated data (tags, description...) will be lost, are you sure you want to leave this page?`
     } else {
@@ -98,121 +171,43 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     }
   }
 
-  getVideoFile () {
-    return this.videofileInput.nativeElement.files[0]
-  }
-
-  setVideoFile (files: FileList) {
+  onFileDropped (files: FileList) {
     this.videofileInput.nativeElement.files = files
-    this.fileChange()
+
+    this.onFileChange({ target: this.videofileInput.nativeElement })
   }
 
-  getAudioUploadLabel () {
-    const videofile = this.getVideoFile()
-    if (!videofile) return $localize`Upload`
+  onFileChange (event: Event | { target: HTMLInputElement }) {
+    const file = (event.target as HTMLInputElement).files[0]
 
-    return $localize`Upload ${videofile.name}`
-  }
+    if (!file) return
 
-  fileChange () {
-    this.uploadFirstStep()
-  }
+    if (!this.checkGlobalUserQuota(file)) return
+    if (!this.checkDailyUserQuota(file)) return
 
-  cancelUpload () {
-    if (this.videoUploadObservable !== null) {
-      this.videoUploadObservable.unsubscribe()
-
-      this.isUploadingVideo = false
-      this.videoUploadPercents = 0
-      this.videoUploadObservable = null
-
-      this.firstStepError.emit()
-
-      this.notifier.info($localize`Upload cancelled`)
-    }
-  }
-
-  uploadFirstStep (clickedOnButton = false) {
-    const videofile = this.getVideoFile()
-    if (!videofile) return
-
-    if (!this.checkGlobalUserQuota(videofile)) return
-    if (!this.checkDailyUserQuota(videofile)) return
-
-    if (clickedOnButton === false && this.isAudioFile(videofile.name)) {
+    if (this.isAudioFile(file.name)) {
       this.isUploadingAudioFile = true
       return
     }
 
-    // Build name field
-    const nameWithoutExtension = videofile.name.replace(/\.[^/.]+$/, '')
-    let name: string
-
-    // If the name of the file is very small, keep the extension
-    if (nameWithoutExtension.length < 3) name = videofile.name
-    else name = nameWithoutExtension
-
-    // Force user to wait transcoding for unsupported video types in web browsers
-    if (!videofile.name.endsWith('.mp4') && !videofile.name.endsWith('.webm') && !videofile.name.endsWith('.ogv')) {
-      this.waitTranscodingEnabled = false
-    }
-
-    const privacy = this.firstStepPrivacyId.toString()
-    const nsfw = this.serverConfig.instance.isNSFW
-    const waitTranscoding = true
-    const commentsEnabled = true
-    const downloadEnabled = true
-    const channelId = this.firstStepChannelId.toString()
-
-    const formData = new FormData()
-    formData.append('name', name)
-    // Put the video "private" -> we are waiting the user validation of the second step
-    formData.append('privacy', VideoPrivacy.PRIVATE.toString())
-    formData.append('nsfw', '' + nsfw)
-    formData.append('commentsEnabled', '' + commentsEnabled)
-    formData.append('downloadEnabled', '' + downloadEnabled)
-    formData.append('waitTranscoding', '' + waitTranscoding)
-    formData.append('channelId', '' + channelId)
-    formData.append('videofile', videofile)
-
-    if (this.previewfileUpload) {
-      formData.append('previewfile', this.previewfileUpload)
-      formData.append('thumbnailfile', this.previewfileUpload)
-    }
-
     this.isUploadingVideo = true
-    this.firstStepDone.emit(name)
+    this.fileToUpload = file
 
-    this.form.patchValue({
-      name,
-      privacy: this.firstStepPrivacyId,
-      nsfw,
-      channelId: this.firstStepChannelId,
-      previewfile: this.previewfileUpload
-    })
+    this.uploadFile(file)
+  }
 
-    this.videoUploadObservable = this.videoService.uploadVideo(formData).subscribe(
-      event => {
-        if (event.type === HttpEventType.UploadProgress) {
-          this.videoUploadPercents = Math.round(100 * event.loaded / event.total)
-        } else if (event instanceof HttpResponse) {
-          this.videoUploaded = true
+  uploadAudio () {
+    this.uploadFile(this.getInputVideoFile(), this.previewfileUpload)
+  }
 
-          this.videoUploadedIds = event.body.video
+  retryUpload () {
+    this.enableRetryAfterError = false
+    this.error = ''
+    this.uploadFile(this.fileToUpload)
+  }
 
-          this.videoUploadObservable = null
-        }
-      },
-
-      err => {
-        // Reset progress
-        this.isUploadingVideo = false
-        this.videoUploadPercents = 0
-        this.videoUploadObservable = null
-        this.firstStepError.emit()
-        this.notifier.error(err.message)
-      }
-    )
+  cancelUpload () {
+    this.resumableUploadService.control({ action: 'cancel' })
   }
 
   isPublishingButtonDisabled () {
@@ -220,6 +215,13 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
       this.isUpdatingVideo === true ||
       this.videoUploaded !== true ||
       !this.videoUploadedIds.id
+  }
+
+  getAudioUploadLabel () {
+    const videofile = this.getInputVideoFile()
+    if (!videofile) return $localize`Upload`
+
+    return $localize`Upload ${videofile.name}`
   }
 
   updateSecondStep () {
@@ -241,7 +243,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
             this.isUploadingVideo = false
 
             this.notifier.success($localize`Video published.`)
-            this.router.navigate([ '/videos/watch', video.uuid ])
+            this.router.navigateByUrl(Video.buildWatchUrl(video))
           },
 
           err => {
@@ -250,6 +252,62 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
             console.error(err)
           }
         )
+  }
+
+  private getInputVideoFile () {
+    return this.videofileInput.nativeElement.files[0]
+  }
+
+  private uploadFile (file: File, previewfile?: File) {
+    const metadata = {
+      waitTranscoding: true,
+      commentsEnabled: true,
+      downloadEnabled: true,
+      channelId: this.firstStepChannelId,
+      nsfw: this.serverConfig.instance.isNSFW,
+      privacy: VideoPrivacy.PRIVATE.toString(),
+      filename: file.name,
+      previewfile: previewfile as any
+    }
+
+    this.resumableUploadService.handleFiles(file, {
+      ...this.uploadxOptions,
+      metadata
+    })
+
+    this.isUploadingVideo = true
+  }
+
+  private handleUploadError (err: HttpErrorResponse) {
+    // Reset progress (but keep isUploadingVideo true)
+    this.videoUploadPercents = 0
+    this.enableRetryAfterError = true
+
+    this.error = genericUploadErrorHandler({
+      err,
+      name: $localize`video`,
+      notifier: this.notifier,
+      sticky: false
+    })
+
+    if (err.status === HttpStatusCode.UNSUPPORTED_MEDIA_TYPE_415) {
+      this.cancelUpload()
+    }
+  }
+
+  private closeFirstStep (filename: string) {
+    const nameWithoutExtension = filename.replace(/\.[^/.]+$/, '')
+    const name = nameWithoutExtension.length < 3 ? filename : nameWithoutExtension
+
+    this.form.patchValue({
+      name,
+      privacy: this.firstStepPrivacyId,
+      nsfw: this.serverConfig.instance.isNSFW,
+      channelId: this.firstStepChannelId,
+      previewfile: this.previewfileUpload
+    })
+
+    this.firstStepDone.emit(name)
   }
 
   private checkGlobalUserQuota (videofile: File) {
@@ -262,8 +320,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
       const videoQuotaUsedBytes = bytePipes.transform(this.userVideoQuotaUsed, 0)
       const videoQuotaBytes = bytePipes.transform(videoQuota, 0)
 
-      const msg = $localize`Your video quota is exceeded with this video (
-video size: ${videoSizeBytes}, used: ${videoQuotaUsedBytes}, quota: ${videoQuotaBytes})`
+      const msg = $localize`Your video quota is exceeded with this video (video size: ${videoSizeBytes}, used: ${videoQuotaUsedBytes}, quota: ${videoQuotaBytes})`
       this.notifier.error(msg)
 
       return false
@@ -281,9 +338,7 @@ video size: ${videoSizeBytes}, used: ${videoQuotaUsedBytes}, quota: ${videoQuota
       const videoSizeBytes = bytePipes.transform(videofile.size, 0)
       const quotaUsedDailyBytes = bytePipes.transform(this.userVideoQuotaUsedDaily, 0)
       const quotaDailyBytes = bytePipes.transform(videoQuotaDaily, 0)
-
-      const msg = $localize`Your daily video quota is exceeded with this video (
-video size: ${videoSizeBytes}, used: ${quotaUsedDailyBytes}, quota: ${quotaDailyBytes})`
+      const msg = $localize`Your daily video quota is exceeded with this video (video size: ${videoSizeBytes}, used: ${quotaUsedDailyBytes}, quota: ${quotaDailyBytes})`
       this.notifier.error(msg)
 
       return false

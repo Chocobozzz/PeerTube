@@ -1,13 +1,8 @@
-import { VideoFilter } from '../videos'
-import { NSFWQuery } from './nsfw-query.model'
 import { SearchTargetQuery } from './search-target-query.model'
+import { VideosCommonQuery } from './videos-common-query.model'
 
-export interface VideosSearchQuery extends SearchTargetQuery {
+export interface VideosSearchQuery extends SearchTargetQuery, VideosCommonQuery {
   search?: string
-
-  start?: number
-  count?: number
-  sort?: string
 
   startDate?: string // ISO 8601
   endDate?: string // ISO 8601
@@ -15,19 +10,6 @@ export interface VideosSearchQuery extends SearchTargetQuery {
   originallyPublishedStartDate?: string // ISO 8601
   originallyPublishedEndDate?: string // ISO 8601
 
-  nsfw?: NSFWQuery
-
-  categoryOneOf?: number[]
-
-  licenceOneOf?: number[]
-
-  languageOneOf?: string[]
-
-  tagsOneOf?: string[]
-  tagsAllOf?: string[]
-
   durationMin?: number // seconds
   durationMax?: number // seconds
-
-  filter?: VideoFilter
 }

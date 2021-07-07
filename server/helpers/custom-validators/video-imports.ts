@@ -2,8 +2,6 @@ import 'multer'
 import validator from 'validator'
 import { CONSTRAINTS_FIELDS, MIMETYPES, VIDEO_IMPORT_STATES } from '../../initializers/constants'
 import { exists, isFileValid } from './misc'
-import * as express from 'express'
-import { VideoImportModel } from '../../models/video/video-import'
 
 function isVideoImportTargetUrlValid (url: string) {
   const isURLOptions = {
@@ -31,26 +29,10 @@ function isVideoImportTorrentFile (files: { [ fieldname: string ]: Express.Multe
   return isFileValid(files, videoTorrentImportRegex, 'torrentfile', CONSTRAINTS_FIELDS.VIDEO_IMPORTS.TORRENT_FILE.FILE_SIZE.max, true)
 }
 
-async function doesVideoImportExist (id: number, res: express.Response) {
-  const videoImport = await VideoImportModel.loadAndPopulateVideo(id)
-
-  if (!videoImport) {
-    res.status(404)
-       .json({ error: 'Video import not found' })
-       .end()
-
-    return false
-  }
-
-  res.locals.videoImport = videoImport
-  return true
-}
-
 // ---------------------------------------------------------------------------
 
 export {
   isVideoImportStateValid,
   isVideoImportTargetUrlValid,
-  doesVideoImportExist,
   isVideoImportTorrentFile
 }

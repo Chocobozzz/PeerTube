@@ -2,44 +2,63 @@ version: "3.3"
 
 services:
 
-  reverse-proxy:
-    image: traefik:v1.7
-    network_mode: "host"
-    command:
-      - "--docker" # Tells Træfik to listen to docker
-      - "--acme.email=${TRAEFIK_ACME_EMAIL}" # Let's Encrypt ACME email
-      - "--acme.domains=${TRAEFIK_ACME_DOMAINS}" # Let's Encrypt ACME domain list
+  # You can comment this webserver section if you want to use another webserver/proxy
+  webserver:
+    image: chocobozzz/peertube-webserver:latest
+    # If you don't want to use the official image and build one from sources:
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile.nginx
+    env_file:
+      - .env
     ports:
-      - "80:80"     # The HTTP port
-      - "443:443"   # The HTTPS port
+     - "80:80"
+     - "443:443"
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock # So that Traefik can listen to the Docker events
-      - ./docker-volume/traefik/acme.json:/etc/acme.json
-      - ./docker-volume/traefik/traefik.toml:/traefik.toml
+      - type: bind
+        # Switch sources if you downloaded the whole repository
+        #source: ../../nginx/peertube
+        source: ./docker-volume/nginx/peertube
+        target: /etc/nginx/conf.d/peertube.template
+      - assets:/var/www/peertube/peertube-latest/client/dist:ro
+      - ./docker-volume/data:/var/www/peertube/storage
+      - certbot-www:/var/www/certbot
+      - ./docker-volume/certbot/conf:/etc/letsencrypt
+    depends_on:
+      - peertube
     restart: "always"
-    # If you want to use the Traefik dashboard, you should expose it on a
-    # subdomain with HTTPS and authentification:
-    # https://medium.com/@xavier.priour/secure-traefik-dashboard-with-https-and-password-in-docker-5b657e2aa15f
-    # https://github.com/containous/traefik/issues/880#issuecomment-310301168
+
+  # You can comment this certbot section if you want to use another webserver/proxy
+  certbot:
+    container_name: certbot
+    image: certbot/certbot
+    volumes:
+      - ./docker-volume/certbot/conf:/etc/letsencrypt
+      - certbot-www:/var/www/certbot
+    restart: unless-stopped
+    entrypoint: /bin/sh -c "trap exit TERM; while :; do certbot renew --webroot -w /var/www/certbot; sleep 12h & wait $${!}; done;"
+    depends_on:
+      - webserver
 
   peertube:
-    # If you don't want to use the official image and build one from sources
+    # If you don't want to use the official image and build one from sources:
     # build:
     #   context: .
     #   dockerfile: ./support/docker/production/Dockerfile.buster
     image: chocobozzz/peertube:production-buster
+    # Use a static IP for this container because nginx does not handle proxy host change without reload
+    # This container could be restarted on crash or until the postgresql database is ready for connection
+    networks:
+      default:
+        ipv4_address: 172.18.0.42
     env_file:
       - .env
-    # Traefik labels are suggested as an example for people using Traefik,
-    # remove them if you are using another reverse proxy.
-    labels:
-      traefik.enable: "true"
-      traefik.frontend.rule: "Host:${PEERTUBE_WEBSERVER_HOSTNAME}"
-      traefik.port: "9000"
-    # If you don't want to use a reverse proxy (not suitable for production!)
-    # ports:
-      # - "80:9000"
+
+    ports:
+     - "1935:1935" # If you don't want to use the live feature, you can comment this line
+    #  - "9000:9000" # If you provide your own webserver and reverse-proxy, otherwise not suitable for production
     volumes:
+      - assets:/app/client/dist
       - ./docker-volume/data:/data
       - ./docker-volume/config:/config
     depends_on:
@@ -49,22 +68,18 @@ services:
     restart: "always"
 
   postgres:
-    image: postgres:10-alpine
+    image: postgres:13-alpine
     env_file:
       - .env
     volumes:
       - ./docker-volume/db:/var/lib/postgresql/data
     restart: "always"
-    labels:
-      traefik.enable: "false"
 
   redis:
-    image: redis:4-alpine
+    image: redis:6-alpine
     volumes:
       - ./docker-volume/redis:/data
     restart: "always"
-    labels:
-      traefik.enable: "false"
 
   postfix:
     image: mwader/postfix-relay
@@ -72,8 +87,6 @@ services:
       - .env
     volumes:
       - ./docker-volume/opendkim/keys:/etc/opendkim/keys
-    labels:
-      traefik.enable: "false"
     restart: "always"
 
 networks:
@@ -81,4 +94,8 @@ networks:
     ipam:
       driver: default
       config:
-      - subnet:  172.18.0.0/16
+      - subnet: 172.18.0.0/16
+
+volumes:
+  assets:
+  certbot-www:

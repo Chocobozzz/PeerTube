@@ -18,8 +18,10 @@ Interested in contributing? Awesome!
   - [Server side](#server-side)
   - [Client side](#client-side)
   - [Client and server side](#client-and-server-side)
-  - [Testing the federation of PeerTube servers](#testing-the-federation-of-peertube-servers)
-  - [Unit tests](#unit-tests)
+  - [RTL layout](#rtl-layout)
+  - [Testing](#testing)
+    - [Unit tests](#unit-tests)
+    - [Testing the federation of PeerTube servers](#testing-the-federation-of-peertube-servers)
   - [Emails](#emails)
 - [Plugins & Themes](#plugins--themes)
 
@@ -74,17 +76,16 @@ link your PR to the issues it solves by using the GitHub syntax: "fixes #issue_n
 
 First, you should use a server or PC with at least 4GB of RAM. Less RAM may lead to crashes.
 
-Make sure that you have followed
+1) Make sure that you have followed
 [the steps](/support/doc/dependencies.md)
 to install the dependencies.
-
-Fork the github repository,
-and then clone the sources and install node modules:
-
+1) Install [parallel](https://www.gnu.org/software/parallel/) to be able to run tests.
+1) Fork the Github repository.
+1) Run the following commands.
 ```
 $ git clone https://github.com/Chocobozzz/PeerTube
-$ git remote add me git@github.com:YOUR_GITHUB_USERNAME/PeerTube.git
 $ cd PeerTube
+$ git remote add me git@github.com:YOUR_GITHUB_USERNAME/PeerTube.git
 $ yarn install --pure-lockfile
 ```
 
@@ -164,6 +165,14 @@ and the web server is automatically restarted.
 $ npm run dev
 ```
 
+### RTL layout
+
+To test RTL layout using `ar` locale:
+
+```
+$ npm run dev -- --ar-locale
+```
+
 ### Testing
 
 Your code contributions must pass the tests before they can be merged. Tests ensure most of the application behaves
@@ -192,7 +201,13 @@ $ npm test
 If you just want to run 1 test (which is what you want to debug a specific test rapidly):
 
 ```
-$ npm run mocha -- --exit -r ts-node/register -r tsconfig-paths/register --bail server/tests/api/index.ts
+$ TS_NODE_FILES=true npm run mocha -- --exit -r ts-node/register -r tsconfig-paths/register --bail server/tests/api/videos/single-server.ts
+```
+
+While testing, you might want to display a server's logs:
+
+```
+NODE_APP_INSTANCE=1 NODE_ENV=test npm run parse-log -- --level debug | less +GF
 ```
 
 Instance configurations are in `config/test-{1,2,3,4,5,6}.yaml`.
@@ -211,14 +226,16 @@ $ createdb -O peertube peertube_test{1,2,3}
 Build the application and flush the old tests data:
 
 ```
-$ npm run build -- --light
+$ npm run build
 $ npm run clean:server:test
 ```
 
-This will run 3 nodes:
+To run 3 nodes:
 
 ```
-$ npm run play
+$ NODE_APP_INSTANCE=1 NODE_ENV=test npm start
+$ NODE_APP_INSTANCE=2 NODE_ENV=test npm start
+$ NODE_APP_INSTANCE=3 NODE_ENV=test npm start
 ```
 
 Then you will get access to the three nodes at `http://localhost:900{1,2,3}`

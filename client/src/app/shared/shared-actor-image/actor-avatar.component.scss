@@ -1,0 +1,101 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+.avatar {
+  --avatarSize: 100%;
+  --initialFontSize: 22px;
+
+  width: var(--avatarSize);
+  height: var(--avatarSize);
+  min-width: var(--avatarSize);
+  min-height: var(--avatarSize);
+
+  &.account {
+    object-fit: cover;
+    border-radius: 50%;
+  }
+
+  &.channel {
+    border-radius: 5px;
+  }
+}
+
+.avatar-18 {
+  --avatarSize: 18px;
+  --initialFontSize: 13px;
+}
+
+.avatar-25 {
+  --avatarSize: 25px;
+}
+
+.avatar-32 {
+  --avatarSize: 32px;
+}
+
+.avatar-34 {
+  --avatarSize: 34px;
+}
+
+.avatar-36 {
+  --avatarSize: 36px;
+}
+
+.avatar-40 {
+  --avatarSize: 40px;
+}
+
+.avatar-100 {
+  --avatarSize: 100px;
+  --initialFontSize: 40px;
+}
+
+.avatar-120 {
+  --avatarSize: 120px;
+  --initialFontSize: 46px;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+.initial {
+  background-color: #3C2109;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--initialFontSize);
+
+  &.blue {
+    background-color: #009FD4;
+  }
+
+  &.green {
+    background-color: #00AA55;
+  }
+
+  &.purple {
+    background-color: #B381B3;
+  }
+
+  &.gray {
+    background-color: #939393;
+  }
+
+  &.yellow {
+    background-color: #AA8F00;
+  }
+
+  &.orange {
+    background-color: #D47500;
+  }
+
+  &.red {
+    background-color: #E76E3C;
+  }
+
+  &.dark-blue {
+    background-color: #0A3055;
+  }
+}

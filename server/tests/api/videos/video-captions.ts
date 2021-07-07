@@ -24,11 +24,13 @@ import { VideoCaption } from '../../../../shared/models/videos/caption/video-cap
 const expect = chai.expect
 
 describe('Test video captions', function () {
+  const uuidRegex = '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}'
+
   let servers: ServerInfo[]
   let videoUUID: string
 
   before(async function () {
-    this.timeout(30000)
+    this.timeout(60000)
 
     servers = await flushAndRunMultipleServers(2)
 
@@ -83,13 +85,13 @@ describe('Test video captions', function () {
       const caption1: VideoCaption = res.body.data[0]
       expect(caption1.language.id).to.equal('ar')
       expect(caption1.language.label).to.equal('Arabic')
-      expect(caption1.captionPath).to.equal('/lazy-static/video-captions/' + videoUUID + '-ar.vtt')
+      expect(caption1.captionPath).to.match(new RegExp('^/lazy-static/video-captions/' + uuidRegex + '-ar.vtt$'))
       await testCaptionFile(server.url, caption1.captionPath, 'Subtitle good 1.')
 
       const caption2: VideoCaption = res.body.data[1]
       expect(caption2.language.id).to.equal('zh')
       expect(caption2.language.label).to.equal('Chinese')
-      expect(caption2.captionPath).to.equal('/lazy-static/video-captions/' + videoUUID + '-zh.vtt')
+      expect(caption2.captionPath).to.match(new RegExp('^/lazy-static/video-captions/' + uuidRegex + '-zh.vtt$'))
       await testCaptionFile(server.url, caption2.captionPath, 'Subtitle good 2.')
     }
   })
@@ -117,7 +119,7 @@ describe('Test video captions', function () {
       const caption1: VideoCaption = res.body.data[0]
       expect(caption1.language.id).to.equal('ar')
       expect(caption1.language.label).to.equal('Arabic')
-      expect(caption1.captionPath).to.equal('/lazy-static/video-captions/' + videoUUID + '-ar.vtt')
+      expect(caption1.captionPath).to.match(new RegExp('^/lazy-static/video-captions/' + uuidRegex + '-ar.vtt$'))
       await testCaptionFile(server.url, caption1.captionPath, 'Subtitle good 2.')
     }
   })
@@ -148,7 +150,7 @@ describe('Test video captions', function () {
       const caption1: VideoCaption = res.body.data[0]
       expect(caption1.language.id).to.equal('ar')
       expect(caption1.language.label).to.equal('Arabic')
-      expect(caption1.captionPath).to.equal('/lazy-static/video-captions/' + videoUUID + '-ar.vtt')
+      expect(caption1.captionPath).to.match(new RegExp('^/lazy-static/video-captions/' + uuidRegex + '-ar.vtt$'))
 
       const expected = 'WEBVTT FILE\r\n' +
         '\r\n' +
@@ -185,7 +187,7 @@ describe('Test video captions', function () {
 
       expect(caption.language.id).to.equal('zh')
       expect(caption.language.label).to.equal('Chinese')
-      expect(caption.captionPath).to.equal('/lazy-static/video-captions/' + videoUUID + '-zh.vtt')
+      expect(caption.captionPath).to.match(new RegExp('^/lazy-static/video-captions/' + uuidRegex + '-zh.vtt$'))
       await testCaptionFile(server.url, caption.captionPath, 'Subtitle good 2.')
     }
   })

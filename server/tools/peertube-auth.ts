@@ -3,7 +3,7 @@
 import { registerTSPaths } from '../helpers/register-ts-paths'
 registerTSPaths()
 
-import * as program from 'commander'
+import { OptionValues, program } from 'commander'
 import * as prompt from 'prompt'
 import { getNetrc, getSettings, writeSettings } from './cli'
 import { isUserUsernameValid } from '../helpers/custom-validators/users'
@@ -46,6 +46,15 @@ function isURLaPeerTubeInstance (url: string) {
   return url.startsWith('http://') || url.startsWith('https://')
 }
 
+function stripExtraneousFromPeerTubeUrl (url: string) {
+  // Get everything before the 3rd /.
+  const urlLength = url.includes('/', 8)
+    ? url.indexOf('/', 8)
+    : url.length
+
+  return url.substr(0, urlLength)
+}
+
 program
   .name('auth')
   .usage('[command] [options]')
@@ -57,7 +66,8 @@ program
   .option('-U, --username <username>', 'Username')
   .option('-p, --password <token>', 'Password')
   .option('--default', 'add the entry as the new default')
-  .action(options => {
+  .action((options: OptionValues) => {
+    /* eslint-disable no-import-assign */
     prompt.override = options
     prompt.start()
     prompt.get({
@@ -80,15 +90,20 @@ program
         }
       }
     }, async (_, result) => {
+
       // Check credentials
       try {
+        // Strip out everything after the domain:port.
+        // @see https://github.com/Chocobozzz/PeerTube/issues/3520
+        result.url = stripExtraneousFromPeerTubeUrl(result.url)
+
         await getAccessToken(result.url, result.username, result.password)
       } catch (err) {
         console.error(err.message)
         process.exit(-1)
       }
 
-      await setInstance(result.url, result.username, result.password, program['default'])
+      await setInstance(result.url, result.username, result.password, options.default)
 
       process.exit(0)
     })
@@ -146,15 +161,12 @@ program
     }
   })
 
-program.on('--help', function () {
-  console.log('  Examples:')
-  console.log()
-  console.log('    $ peertube auth add -u https://peertube.cpy.re -U "PEERTUBE_USER" --password "PEERTUBE_PASSWORD"')
-  console.log('    $ peertube auth add -u https://peertube.cpy.re -U root')
-  console.log('    $ peertube auth list')
-  console.log('    $ peertube auth del https://peertube.cpy.re')
-  console.log()
-})
+program.addHelpText('after', '\n\n  Examples:\n\n' +
+  '    $ peertube auth add -u https://peertube.cpy.re -U "PEERTUBE_USER" --password "PEERTUBE_PASSWORD"\n' +
+  '    $ peertube auth add -u https://peertube.cpy.re -U root\n' +
+  '    $ peertube auth list\n' +
+  '    $ peertube auth del https://peertube.cpy.re\n'
+)
 
 if (!process.argv.slice(2).length) {
   program.outputHelp()

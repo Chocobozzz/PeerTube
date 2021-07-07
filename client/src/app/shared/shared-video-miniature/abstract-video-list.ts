@@ -1,7 +1,17 @@
-import { fromEvent, Observable, Subject, Subscription } from 'rxjs'
+import { fromEvent, Observable, ReplaySubject, Subject, Subscription } from 'rxjs'
 import { debounceTime, switchMap, tap } from 'rxjs/operators'
-import { Directive, OnDestroy, OnInit } from '@angular/core'
-import { ActivatedRoute, Router } from '@angular/router'
+import {
+  AfterContentInit,
+  ComponentFactoryResolver,
+  Directive,
+  Injector,
+  OnDestroy,
+  OnInit,
+  Type,
+  ViewChild,
+  ViewContainerRef
+} from '@angular/core'
+import { ActivatedRoute, Params, Router } from '@angular/router'
 import {
   AuthService,
   ComponentPaginationLight,
@@ -14,24 +24,31 @@ import {
 } from '@app/core'
 import { DisableForReuseHook } from '@app/core/routing/disable-for-reuse-hook'
 import { GlobalIconName } from '@app/shared/shared-icons'
-import { isLastMonth, isLastWeek, isToday, isYesterday } from '@shared/core-utils/miscs/date'
-import { ServerConfig, VideoSortField } from '@shared/models'
+import { isLastMonth, isLastWeek, isThisMonth, isToday, isYesterday } from '@shared/core-utils/miscs/date'
+import { HTMLServerConfig, UserRight, VideoFilter, VideoSortField } from '@shared/models'
 import { NSFWPolicyType } from '@shared/models/videos/nsfw-policy.type'
 import { Syndication, Video } from '../shared-main'
-import { MiniatureDisplayOptions, OwnerDisplayType } from './video-miniature.component'
+import { GenericHeaderComponent, VideoListHeaderComponent } from './video-list-header.component'
+import { MiniatureDisplayOptions } from './video-miniature.component'
 
 enum GroupDate {
   UNKNOWN = 0,
   TODAY = 1,
   YESTERDAY = 2,
-  LAST_WEEK = 3,
-  LAST_MONTH = 4,
-  OLDER = 5
+  THIS_WEEK = 3,
+  THIS_MONTH = 4,
+  LAST_MONTH = 5,
+  OLDER = 6
 }
 
 @Directive()
 // tslint:disable-next-line: directive-class-suffix
-export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableForReuseHook {
+export abstract class AbstractVideoList implements OnInit, OnDestroy, AfterContentInit, DisableForReuseHook {
+  @ViewChild('videoListHeader', { static: true, read: ViewContainerRef }) videoListHeader: ViewContainerRef
+
+  HeaderComponent: Type<GenericHeaderComponent> = VideoListHeaderComponent
+  headerComponentInjector: Injector
+
   pagination: ComponentPaginationLight = {
     currentPage: 1,
     itemsPerPage: 25
@@ -46,8 +63,8 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
   syndicationItems: Syndication[] = []
 
   loadOnInit = true
-  useUserVideoPreferences = false
-  ownerDisplayType: OwnerDisplayType = 'account'
+  loadUserVideoPreferences = false
+
   displayModerationBlock = false
   titleTooltip: string
   displayVideoActions = true
@@ -69,16 +86,21 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
   }
 
   actions: {
-    routerLink: string
     iconName: GlobalIconName
     label: string
+    justIcon?: boolean
+    routerLink?: string
+    href?: string
+    click?: (e: Event) => void
   }[] = []
 
   onDataSubject = new Subject<any[]>()
 
   userMiniature: User
 
-  protected serverConfig: ServerConfig
+  protected onUserLoadedSubject = new ReplaySubject<void>(1)
+
+  protected serverConfig: HTMLServerConfig
 
   protected abstract notifier: Notifier
   protected abstract authService: AuthService
@@ -88,6 +110,7 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
   protected abstract screenService: ScreenService
   protected abstract storageService: LocalStorageService
   protected abstract router: Router
+  protected abstract cfr: ComponentFactoryResolver
   abstract titlePage: string
 
   private resizeSubscription: Subscription
@@ -103,15 +126,14 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
   abstract generateSyndicationList (): void
 
   ngOnInit () {
-    this.serverConfig = this.serverService.getTmpConfig()
-    this.serverService.getConfig()
-      .subscribe(config => this.serverConfig = config)
+    this.serverConfig = this.serverService.getHTMLConfig()
 
     this.groupedDateLabels = {
       [GroupDate.UNKNOWN]: null,
       [GroupDate.TODAY]: $localize`Today`,
       [GroupDate.YESTERDAY]: $localize`Yesterday`,
-      [GroupDate.LAST_WEEK]: $localize`Last week`,
+      [GroupDate.THIS_WEEK]: $localize`This week`,
+      [GroupDate.THIS_MONTH]: $localize`This month`,
       [GroupDate.LAST_MONTH]: $localize`Last month`,
       [GroupDate.OLDER]: $localize`Older`
     }
@@ -127,10 +149,11 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
     this.calcPageSizes()
 
     const loadUserObservable = this.loadUserAndSettings()
+    loadUserObservable.subscribe(() => {
+      this.onUserLoadedSubject.next()
 
-    if (this.loadOnInit === true) {
-      loadUserObservable.subscribe(() => this.loadMoreVideos())
-    }
+      if (this.loadOnInit === true) this.loadMoreVideos()
+    })
 
     this.userService.listenAnonymousUpdate()
       .pipe(switchMap(() => this.loadUserAndSettings()))
@@ -146,6 +169,13 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
 
   ngOnDestroy () {
     if (this.resizeSubscription) this.resizeSubscription.unsubscribe()
+  }
+
+  ngAfterContentInit () {
+    if (this.videoListHeader) {
+      // some components don't use the header: they use their own template, like my-history.component.html
+      this.setHeader.apply(this, [ this.HeaderComponent, this.headerComponentInjector ])
+    }
   }
 
   disableForReuse () {
@@ -203,10 +233,6 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
     this.loadMoreVideos(true)
   }
 
-  toggleModerationDisplay () {
-    throw new Error('toggleModerationDisplay is not implemented')
-  }
-
   removeVideoFromArray (video: Video) {
     this.videos = this.videos.filter(v => v.id !== video.id)
   }
@@ -214,46 +240,48 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
   buildGroupedDateLabels () {
     let currentGroupedDate: GroupDate = GroupDate.UNKNOWN
 
+    const periods = [
+      {
+        value: GroupDate.TODAY,
+        validator: (d: Date) => isToday(d)
+      },
+      {
+        value: GroupDate.YESTERDAY,
+        validator: (d: Date) => isYesterday(d)
+      },
+      {
+        value: GroupDate.THIS_WEEK,
+        validator: (d: Date) => isLastWeek(d)
+      },
+      {
+        value: GroupDate.THIS_MONTH,
+        validator: (d: Date) => isThisMonth(d)
+      },
+      {
+        value: GroupDate.LAST_MONTH,
+        validator: (d: Date) => isLastMonth(d)
+      },
+      {
+        value: GroupDate.OLDER,
+        validator: () => true
+      }
+    ]
+
     for (const video of this.videos) {
       const publishedDate = video.publishedAt
 
-      if (currentGroupedDate <= GroupDate.TODAY && isToday(publishedDate)) {
-        if (currentGroupedDate === GroupDate.TODAY) continue
+      for (let i = 0; i < periods.length; i++) {
+        const period = periods[i]
 
-        currentGroupedDate = GroupDate.TODAY
-        this.groupedDates[ video.id ] = currentGroupedDate
-        continue
-      }
+        if (currentGroupedDate <= period.value && period.validator(publishedDate)) {
 
-      if (currentGroupedDate <= GroupDate.YESTERDAY && isYesterday(publishedDate)) {
-        if (currentGroupedDate === GroupDate.YESTERDAY) continue
+          if (currentGroupedDate !== period.value) {
+            currentGroupedDate = period.value
+            this.groupedDates[ video.id ] = currentGroupedDate
+          }
 
-        currentGroupedDate = GroupDate.YESTERDAY
-        this.groupedDates[ video.id ] = currentGroupedDate
-        continue
-      }
-
-      if (currentGroupedDate <= GroupDate.LAST_WEEK && isLastWeek(publishedDate)) {
-        if (currentGroupedDate === GroupDate.LAST_WEEK) continue
-
-        currentGroupedDate = GroupDate.LAST_WEEK
-        this.groupedDates[ video.id ] = currentGroupedDate
-        continue
-      }
-
-      if (currentGroupedDate <= GroupDate.LAST_MONTH && isLastMonth(publishedDate)) {
-        if (currentGroupedDate === GroupDate.LAST_MONTH) continue
-
-        currentGroupedDate = GroupDate.LAST_MONTH
-        this.groupedDates[ video.id ] = currentGroupedDate
-        continue
-      }
-
-      if (currentGroupedDate <= GroupDate.OLDER) {
-        if (currentGroupedDate === GroupDate.OLDER) continue
-
-        currentGroupedDate = GroupDate.OLDER
-        this.groupedDates[ video.id ] = currentGroupedDate
+          break
+        }
       }
     }
   }
@@ -264,13 +292,71 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
     return this.groupedDateLabels[this.groupedDates[video.id]]
   }
 
+  toggleModerationDisplay () {
+    throw new Error('toggleModerationDisplay ' + $localize`function is not implemented`)
+  }
+
+  setHeader (
+    t: Type<any> = this.HeaderComponent,
+    i: Injector = this.headerComponentInjector
+  ) {
+    const injector = i || Injector.create({
+      providers: [{
+        provide: 'data',
+        useValue: {
+          titlePage: this.titlePage,
+          titleTooltip: this.titleTooltip
+        }
+      }]
+    })
+    const viewContainerRef = this.videoListHeader
+    viewContainerRef.clear()
+
+    const componentFactory = this.cfr.resolveComponentFactory(t)
+    viewContainerRef.createComponent(componentFactory, 0, injector)
+  }
+
+  // Can be redefined by child
+  displayAsRow () {
+    return false
+  }
+
   // On videos hook for children that want to do something
   protected onMoreVideos () { /* empty */ }
 
-  protected loadRouteParams (routeParams: { [ key: string ]: any }) {
-    this.sort = routeParams[ 'sort' ] as VideoSortField || this.defaultSort
-    this.categoryOneOf = routeParams[ 'categoryOneOf' ]
-    this.angularState = routeParams[ 'a-state' ]
+  protected load () { /* empty */ }
+
+  // Hook if the page has custom route params
+  protected loadPageRouteParams (_queryParams: Params) { /* empty */ }
+
+  protected loadRouteParams (queryParams: Params) {
+    this.sort = queryParams[ 'sort' ] as VideoSortField || this.defaultSort
+    this.categoryOneOf = queryParams[ 'categoryOneOf' ]
+    this.angularState = queryParams[ 'a-state' ]
+
+    this.loadPageRouteParams(queryParams)
+  }
+
+  protected buildLocalFilter (existing: VideoFilter, base: VideoFilter) {
+    if (base === 'local') {
+      return existing === 'local'
+        ? 'all-local' as 'all-local'
+        : 'local' as 'local'
+    }
+
+    return existing === 'all'
+      ? null
+      : 'all'
+  }
+
+  protected enableAllFilterIfPossible () {
+    if (!this.authService.isLoggedIn()) return
+
+    this.authService.userInformationLoaded
+      .subscribe(() => {
+        const user = this.authService.getUser()
+        this.displayModerationBlock = user.hasRight(UserRight.SEE_ALL_VIDEOS)
+      })
   }
 
   private calcPageSizes () {
@@ -290,7 +376,7 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
       categoryOneOf: this.categoryOneOf
     }
 
-    let path = this.router.url
+    let path = this.getUrlWithoutParams()
     if (!path || path === '/') path = this.serverConfig.instance.defaultClientRoute
 
     this.router.navigate([ path ], { queryParams, replaceUrl: true, queryParamsHandling: 'merge' })
@@ -301,10 +387,17 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
       .pipe(tap(user => {
         this.userMiniature = user
 
-        if (!this.useUserVideoPreferences) return
+        if (!this.loadUserVideoPreferences) return
 
         this.languageOneOf = user.videoLanguages
         this.nsfwPolicy = user.nsfwPolicy
       }))
+  }
+
+  private getUrlWithoutParams () {
+    const urlTree = this.router.parseUrl(this.router.url)
+    urlTree.queryParams = {}
+
+    return urlTree.toString()
   }
 }

@@ -1,5 +1,5 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 $form-base-input-width: 340px;
 
@@ -14,12 +14,25 @@ form {
 
 input[type=text] {
   @include peertube-input-text($form-base-input-width);
+
   display: block;
 }
 
 input[type=number] {
-  @include peertube-input-text(315px);
+  @include peertube-input-text($form-base-input-width);
+
   display: block;
+}
+
+.number-with-unit {
+  position: relative;
+  width: min-content;
+
+  input[type=number] + span {
+    position: absolute;
+    top: 5px;
+    right: 2.5rem;
+  }
 }
 
 input[type=checkbox] {
@@ -30,20 +43,25 @@ input[type=checkbox] {
   @include peertube-select-container($form-base-input-width);
 }
 
+my-select-options,
+my-select-custom-value,
 my-select-checkbox {
-  @include ng-select($form-base-input-width);
+  @include responsive-width($form-base-input-width);
+
+  display: block;
 }
 
 input[type=submit] {
   @include peertube-button;
   @include orange-button;
+  @include margin-left(auto);
 
   display: flex;
-  margin-left: auto;
 
-  & + .form-error {
+  + .form-error {
+    @include margin-left(5px);
+
     display: inline;
-    margin-left: 5px;
   }
 }
 
@@ -68,7 +86,8 @@ textarea {
 }
 
 .disabled-checkbox-extra {
-  &, ::ng-deep label {
+  &,
+  ::ng-deep label {
     opacity: .5;
     pointer-events: none;
   }
@@ -86,4 +105,29 @@ ngb-tabset:not(.previews) ::ng-deep {
 
 .submit-error {
   margin-bottom: 20px;
+}
+
+.alert-signup {
+  width: fit-content;
+  margin-top: 10px;
+}
+
+.callout-container {
+  position: absolute;
+  display: flex;
+  height: 0;
+  width: 100%;
+  justify-content: right;
+
+  .callout-link {
+    @include peertube-button-link;
+
+    position: relative;
+    right: 3.3em;
+    top: .3em;
+    font-size: 90%;
+    color: pvar(--mainColor);
+    background-color: pvar(--mainBackgroundColor);
+    padding: 0 .3em;
+  }
 }

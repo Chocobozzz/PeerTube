@@ -2,14 +2,21 @@ import { ActivityDelete } from '../../../../shared/models/activitypub'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { logger } from '../../../helpers/logger'
 import { sequelizeTypescript } from '../../../initializers/database'
-import { ActorModel } from '../../../models/activitypub/actor'
+import { ActorModel } from '../../../models/actor/actor'
 import { VideoModel } from '../../../models/video/video'
 import { VideoCommentModel } from '../../../models/video/video-comment'
-import { markCommentAsDeleted } from '../../video-comment'
-import { forwardVideoRelatedActivity } from '../send/utils'
 import { VideoPlaylistModel } from '../../../models/video/video-playlist'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model'
-import { MAccountActor, MActor, MActorSignature, MChannelActor, MChannelActorAccountActor } from '../../../types/models'
+import {
+  MAccountActor,
+  MActor,
+  MActorFull,
+  MActorSignature,
+  MChannelAccountActor,
+  MChannelActor,
+  MCommentOwnerVideo
+} from '../../../types/models'
+import { forwardVideoRelatedActivity } from '../send/utils'
 
 async function processDeleteActivity (options: APProcessorOptions<ActivityDelete>) {
   const { activity, byActor } = options
@@ -30,9 +37,8 @@ async function processDeleteActivity (options: APProcessorOptions<ActivityDelete
     } else if (byActorFull.type === 'Group') {
       if (!byActorFull.VideoChannel) throw new Error('Actor ' + byActorFull.url + ' is a group but we cannot find it in database.')
 
-      const channelToDelete = byActorFull.VideoChannel as MChannelActorAccountActor
+      const channelToDelete = byActorFull.VideoChannel as MChannelAccountActor & { Actor: MActorFull }
       channelToDelete.Actor = byActorFull
-
       return retryTransactionWrapper(processDeleteVideoChannel, channelToDelete)
     }
   }
@@ -121,7 +127,10 @@ async function processDeleteVideoChannel (videoChannelToRemove: MChannelActor) {
   logger.info('Remote video channel %s removed.', videoChannelToRemove.Actor.url)
 }
 
-function processDeleteVideoComment (byActor: MActorSignature, videoComment: VideoCommentModel, activity: ActivityDelete) {
+function processDeleteVideoComment (byActor: MActorSignature, videoComment: MCommentOwnerVideo, activity: ActivityDelete) {
+  // Already deleted
+  if (videoComment.isDeleted()) return Promise.resolve()
+
   logger.debug('Removing remote video comment "%s".', videoComment.url)
 
   return sequelizeTypescript.transaction(async t => {
@@ -129,11 +138,9 @@ function processDeleteVideoComment (byActor: MActorSignature, videoComment: Vide
       throw new Error(`Account ${byActor.url} does not own video comment ${videoComment.url} or video ${videoComment.Video.url}`)
     }
 
-    await sequelizeTypescript.transaction(async t => {
-      markCommentAsDeleted(videoComment)
+    videoComment.markAsDeleted()
 
-      await videoComment.save()
-    })
+    await videoComment.save({ transaction: t })
 
     if (videoComment.Video.isOwned()) {
       // Don't resend the activity to the sender

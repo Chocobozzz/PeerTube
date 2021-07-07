@@ -1,6 +1,6 @@
-@import '_variables';
-@import '_mixins';
-@import '_miniature';
+@use '_variables' as *;
+@use '_mixins' as *;
+@use '_miniature' as *;
 
 $thumbnail-width: 130px;
 $thumbnail-height: 72px;
@@ -17,8 +17,9 @@ my-video-thumbnail {
 
 my-video-thumbnail,
 .fake-thumbnail {
+  @include margin-right(10px);
+
   display: flex; // Avoids an issue with line-height that adds space below the element
-  margin-right: 10px;
 }
 
 .video {
@@ -60,8 +61,9 @@ my-video-thumbnail,
     cursor: pointer;
 
     .position {
+      @include margin-right(10px);
+
       font-weight: $font-semibold;
-      margin-right: 10px;
       color: pvar(--greyForegroundColor);
       min-width: 25px;
 
@@ -84,23 +86,26 @@ my-video-thumbnail,
         width: auto;
       }
 
-      .video-info-account, .video-info-timestamp {
+      .video-info-account,
+      .video-info-timestamp {
         color: pvar(--greyForegroundColor);
       }
     }
   }
 
   .video-info-name {
+    @include ellipsis;
+
     font-size: 18px;
     font-weight: $font-semibold;
     display: inline-block;
-
-    @include ellipsis;
   }
 
-  .more, my-edit-button {
+  .more,
+  my-edit-button {
+    @include margin-left(auto);
+
     justify-self: flex-end;
-    margin-left: auto;
     cursor: pointer;
     min-width: 24px;
   }
@@ -118,30 +123,41 @@ my-video-thumbnail,
       display: flex;
 
       &::after {
-        border: none;
+        border: 0;
       }
     }
+  }
+}
 
-    .dropdown-item {
-      @include dropdown-with-icon-item;
+.dropdown-menu {
+
+  .dropdown-item {
+    @include dropdown-with-icon-item;
+
+    cursor: pointer;
+  }
+
+  .timestamp-options {
+    @include padding-left(35px);
+
+    padding-top: 0;
+    margin-bottom: 15px;
+
+    > div {
+      display: flex;
+      align-items: center;
+      margin-bottom: 5px;
     }
 
-    .timestamp-options {
-      padding-top: 0;
-      padding-left: 35px;
-      margin-bottom: 15px;
+    my-peertube-checkbox {
+      @include margin-right(5px);
+    }
 
-      > div {
-        display: flex;
-        align-items: center;
-      }
+    input {
+      @include peertube-button;
+      @include orange-button;
 
-      input {
-        @include peertube-button;
-        @include orange-button;
-
-        margin-top: 10px;
-      }
+      margin-top: 10px;
     }
   }
 }

@@ -1,159 +1,120 @@
-@import '_variables';
-@import '_mixins';
+@use 'sass:math';
+@use '_variables' as *;
+@use '_mixins' as *;
+
+@mixin build-channel-img-size ($video-img-width) {
+  $image-size: min(130px, $video-img-width);
+  $margin-size: math.div(($video-img-width - $image-size), 2); // So we have the same width than the video miniature
+
+  @include actor-avatar-size($image-size);
+
+  margin: 0 $margin-size 0 $margin-size;
+}
 
 .search-result {
   padding: 40px;
+}
 
-  .results-header {
-    font-size: 16px;
-    padding-bottom: 20px;
-    margin-bottom: 30px;
-    border-bottom: 1px solid #DADADA;
+.results-header {
+  font-size: 16px;
+  padding-bottom: 20px;
+  margin-bottom: 30px;
+  border-bottom: 1px solid #DADADA;
 
-    .first-line {
-      display: flex;
-      flex-direction: row;
-
-      .results-counter {
-        flex-grow: 1;
-
-        .search-value {
-          font-weight: $font-semibold;
-        }
-      }
-
-      .results-filter-button {
-        cursor: pointer;
-
-        .icon.icon-filter {
-          @include icon(20px);
-
-          position: relative;
-          top: -1px;
-          margin-right: 5px;
-          background-image: url('../../assets/images/feather/filter.svg');
-        }
-      }
-    }
-  }
-
-  .entry {
+  .first-line {
     display: flex;
-    min-height: 130px;
-    padding-bottom: 20px;
-    margin-bottom: 20px;
+    flex-direction: row;
 
-    &.video-channel {
-      img {
-        $image-size: 130px;
-        $margin-size: ($video-thumbnail-width - $image-size) / 2; // So we have the same width than the video miniature
+    .results-counter {
+      flex-grow: 1;
 
-        @include avatar($image-size);
-
-        margin: 0 ($margin-size + 10) 0 $margin-size;
+      .search-value {
+        font-weight: $font-semibold;
       }
+    }
 
-      .video-channel-info {
-        flex-grow: 1;
-        width: fit-content;
+    .results-filter-button {
+      cursor: pointer;
 
-        .video-channel-names {
-          @include disable-default-a-behaviour;
+      .icon.icon-filter {
+        @include icon(20px);
+        @include margin-right(5px);
 
-          display: flex;
-          align-items: baseline;
-          color: pvar(--mainForegroundColor);
-          width: fit-content;
-
-          .video-channel-display-name {
-            font-weight: $font-semibold;
-            font-size: 18px;
-          }
-
-          .video-channel-name {
-            font-size: 14px;
-            color: $grey-actor-name;
-            margin-left: 5px;
-          }
-        }
+        position: relative;
+        top: -1px;
+        background-image: url('../../assets/images/feather/filter.svg');
       }
     }
   }
 }
 
-@media screen and (min-width: $small-view) and (max-width: breakpoint(xl)) {
-  .video-channel-info .video-channel-names {
-    flex-direction: column !important;
+.entry {
+  display: flex;
+  margin-bottom: 40px;
+  max-width: 800px;
+}
 
-    .video-channel-name {
-      @include ellipsis; // Ellipsis and max-width on channel-name to not break screen
+.video-channel my-actor-avatar {
+  @include build-channel-img-size($video-thumbnail-width);
+}
 
-      max-width: 250px;
-      margin-left: 0 !important;
+.video-channel-info {
+  flex-grow: 1;
+  margin: 0 10px;
+  width: fit-content;
+}
+
+.video-channel-names {
+  @include disable-default-a-behaviour;
+
+  display: flex;
+  align-items: baseline;
+  color: pvar(--mainForegroundColor);
+  width: fit-content;
+}
+
+.video-channel-display-name {
+  font-weight: $font-semibold;
+  font-size: $video-miniature-row-name-font-size;
+}
+
+.video-channel-name {
+  @include margin-left(5px);
+
+  font-size: $video-miniature-row-info-font-size;
+  color: pvar(--greyForegroundColor);
+}
+
+// Use the same breakpoints than in video-miniature
+@include on-small-main-col {
+  .video-channel {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto;
+
+    my-actor-avatar {
+      @include build-channel-img-size($video-thumbnail-medium-width);
+
+      grid-column: 1;
+      grid-row: 1 / -1;
     }
   }
 
-  :host-context(.main-col:not(.expanded)) {
-    // Override the min-width: 500px to not break screen
-    ::ng-deep .video-miniature-information {
-      min-width: 300px !important;
-    }
+  .video-channel-info {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  my-subscribe-button {
+    grid-column: 2;
+    grid-row: 2;
+    align-self: end;
   }
 }
 
-@media screen and (min-width: $small-view) and (max-width: breakpoint(lg)) {
-  :host-context(.main-col:not(.expanded)) {
-    .video-channel-info .video-channel-names {
-      .video-channel-name {
-        max-width: 160px;
-      }
-    }
-
-    // Override the min-width: 500px to not break screen
-    ::ng-deep .video-miniature-information {
-      min-width: $video-thumbnail-width !important;
-    }
-  }
-
-  :host-context(.expanded) {
-    // Override the min-width: 500px to not break screen
-    ::ng-deep .video-miniature-information {
-      min-width: 300px !important;
-    }
-  }
-}
-
-@media screen and (max-width: $small-view) {
-  .search-result {
-    .entry.video-channel,
-    .entry.video {
-      flex-direction: column;
-      height: auto;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-
-      img {
-        margin: 0;
-      }
-
-      img {
-        margin: 0;
-      }
-
-      .video-channel-info .video-channel-names {
-        align-items: center;
-        flex-direction: column !important;
-
-        .video-channel-name {
-          margin-left: 0 !important;
-        }
-      }
-
-      my-subscribe-button {
-        margin-top: 5px;
-      }
-    }
+@include on-mobile-main-col {
+  .video-channel my-actor-avatar {
+    @include build-channel-img-size($video-thumbnail-small-width);
   }
 }
 
@@ -164,28 +125,13 @@
     .results-header {
       font-size: 15px !important;
     }
+  }
 
-    .entry {
-      &.video {
-        .video-info-name,
-        .video-info-account {
-          margin: auto;
-        }
+  .video-channel-display-name {
+    font-size: $video-miniature-row-mobile-name-font-size;
+  }
 
-        my-video-thumbnail {
-          margin-right: 0 !important;
-
-          ::ng-deep .video-thumbnail {
-            width: 100%;
-            height: auto;
-
-            img {
-              width: 100%;
-              height: auto;
-            }
-          }
-        }
-      }
-    }
+  .video-channel-name {
+    font-size: $video-miniature-row-mobile-info-font-size;
   }
 }

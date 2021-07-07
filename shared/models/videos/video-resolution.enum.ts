@@ -7,6 +7,7 @@ export const enum VideoResolution {
   H_480P = 480,
   H_720P = 720,
   H_1080P = 1080,
+  H_1440P = 1440,
   H_4K = 2160
 }
 
@@ -53,9 +54,15 @@ function getBaseBitrate (resolution: number) {
     return 5200 * 1000
   }
 
+  if (resolution <= VideoResolution.H_1440P) {
+    // quality according to Google Live Encoder: 6000 - 13000 Kbps
+    // Quality according to YouTube Video Info: 8600 (av01) - 17000 (vp9.2) Kbps
+    return 10_000 * 1000
+  }
+
   // 4K
   // quality according to Google Live Encoder: 13000 - 34000 Kbps
-  return 22000 * 1000
+  return 22_000 * 1000
 }
 
 /**
@@ -81,7 +88,7 @@ export function getTargetBitrate (resolution: number, fps: number, fpsTranscodin
   // Example outputs:
   // 1080p10: 2420 kbps, 1080p30: 3300 kbps, 1080p60: 4620 kbps
   //  720p10: 1283 kbps,  720p30: 1750 kbps,  720p60: 2450 kbps
-  return baseBitrate + (fps - fpsTranscodingConstants.AVERAGE) * (maxBitrateDifference / maxFpsDifference)
+  return Math.floor(baseBitrate + (fps - fpsTranscodingConstants.AVERAGE) * (maxBitrateDifference / maxFpsDifference))
 }
 
 /**

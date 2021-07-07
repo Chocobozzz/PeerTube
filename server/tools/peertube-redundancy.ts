@@ -3,10 +3,11 @@
 import { registerTSPaths } from '../helpers/register-ts-paths'
 registerTSPaths()
 
-import * as program from 'commander'
+import { program, Command } from 'commander'
 import { getAdminTokenOrDie, getServerCredentials } from './cli'
 import { VideoRedundanciesTarget, VideoRedundancy } from '@shared/models'
 import { addVideoRedundancy, listVideoRedundancies, removeVideoRedundancy } from '@shared/extra-utils/server/redundancy'
+import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 import validator from 'validator'
 import * as CliTable3 from 'cli-table3'
 import { URL } from 'url'
@@ -41,7 +42,7 @@ program
   .option('-U, --username <username>', 'Username')
   .option('-p, --password <token>', 'Password')
   .option('-v, --video <videoId>', 'Video id to duplicate')
-  .action((options) => addRedundancyCLI(options))
+  .action((options, command) => addRedundancyCLI(options, command))
 
 program
   .command('remove')
@@ -50,7 +51,7 @@ program
   .option('-U, --username <username>', 'Username')
   .option('-p, --password <token>', 'Password')
   .option('-v, --video <videoId>', 'Video id to remove from redundancies')
-  .action((options) => removeRedundancyCLI(options))
+  .action((options, command) => removeRedundancyCLI(options, command))
 
 if (!process.argv.slice(2).length) {
   program.outputHelp()
@@ -103,13 +104,13 @@ async function listRedundanciesCLI (target: VideoRedundanciesTarget) {
   process.exit(0)
 }
 
-async function addRedundancyCLI (options: { videoId: number }) {
-  const { url, username, password } = await getServerCredentials(program)
+async function addRedundancyCLI (options: { video: number }, command: Command) {
+  const { url, username, password } = await getServerCredentials(command)
   const accessToken = await getAdminTokenOrDie(url, username, password)
 
-  if (!options['video'] || validator.isInt('' + options['video']) === false) {
+  if (!options.video || validator.isInt('' + options.video) === false) {
     console.error('You need to specify the video id to duplicate and it should be a number.\n')
-    program.outputHelp()
+    command.outputHelp()
     process.exit(-1)
   }
 
@@ -117,16 +118,16 @@ async function addRedundancyCLI (options: { videoId: number }) {
     await addVideoRedundancy({
       url,
       accessToken,
-      videoId: options['video']
+      videoId: options.video
     })
 
     console.log('Video will be duplicated by your instance!')
 
     process.exit(0)
   } catch (err) {
-    if (err.message.includes(409)) {
+    if (err.message.includes(HttpStatusCode.CONFLICT_409)) {
       console.error('This video is already duplicated by your instance.')
-    } else if (err.message.includes(404)) {
+    } else if (err.message.includes(HttpStatusCode.NOT_FOUND_404)) {
       console.error('This video id does not exist.')
     } else {
       console.error(err)
@@ -136,17 +137,17 @@ async function addRedundancyCLI (options: { videoId: number }) {
   }
 }
 
-async function removeRedundancyCLI (options: { videoId: number }) {
-  const { url, username, password } = await getServerCredentials(program)
+async function removeRedundancyCLI (options: { video: number }, command: Command) {
+  const { url, username, password } = await getServerCredentials(command)
   const accessToken = await getAdminTokenOrDie(url, username, password)
 
-  if (!options['video'] || validator.isInt('' + options['video']) === false) {
+  if (!options.video || validator.isInt('' + options.video) === false) {
     console.error('You need to specify the video id to remove from your redundancies.\n')
-    program.outputHelp()
+    command.outputHelp()
     process.exit(-1)
   }
 
-  const videoId = parseInt(options['video'] + '', 10)
+  const videoId = parseInt(options.video + '', 10)
 
   let redundancies = await listVideoRedundanciesData(url, accessToken, 'my-videos')
   let videoRedundancy = redundancies.find(r => videoId === r.id)

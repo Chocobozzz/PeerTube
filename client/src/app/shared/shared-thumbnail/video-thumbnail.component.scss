@@ -1,74 +1,85 @@
-@import '_variables';
-@import '_mixins';
-@import '_miniature';
+@use '_variables' as *;
+@use '_mixins' as *;
+@use '_miniature' as *;
 
 .video-thumbnail {
   @include miniature-thumbnail;
+}
 
-  .progress-bar {
-    height: 3px;
-    width: 100%;
-    position: absolute;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.20);
+.progress-bar {
+  height: 3px;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.2);
 
-    div {
-      height: 100%;
-      background-color: pvar(--mainColor);
-    }
+  div {
+    height: 100%;
+    background-color: pvar(--mainColor);
   }
+}
 
-  .video-thumbnail-watch-later-overlay,
-  .video-thumbnail-label-overlay,
-  .video-thumbnail-duration-overlay {
-    @include static-thumbnail-overlay;
+.video-thumbnail-watch-later-overlay,
+.video-thumbnail-label-overlay,
+.video-thumbnail-duration-overlay,
+.video-thumbnail-live-overlay {
+  @include static-thumbnail-overlay;
 
-    border-radius: 3px;
-    font-size: 12px;
-    font-weight: $font-semibold;
-    line-height: 1.2;
-    z-index: z(miniature);
+  border-radius: 3px;
+  font-size: 12px;
+  font-weight: $font-semibold;
+  line-height: 1.1;
+  z-index: z(miniature);
+}
+
+.video-thumbnail-label-overlay {
+  position: absolute;
+  padding: 0 5px;
+  left: 5px;
+  top: 5px;
+  font-weight: $font-bold;
+
+  &.warning { background-color: #ffa500; }
+  &.danger { background-color: #ff0000; }
+}
+
+.video-thumbnail-duration-overlay,
+.video-thumbnail-live-overlay {
+  position: absolute;
+  padding: 0 3px;
+  right: 5px;
+  bottom: 5px;
+}
+
+.video-thumbnail-live-overlay {
+  font-weight: $font-semibold;
+  color: #fff;
+
+  &:not(.live-ended) {
+    background-color: rgba(224, 8, 8, 0.7);
   }
+}
 
-  .video-thumbnail-label-overlay {
-    position: absolute;
-    padding: 0 5px;
-    left: 5px;
-    top: 5px;
-    font-weight: $font-bold;
+.video-thumbnail-actions-overlay {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  right: 5px;
+  top: 5px;
+  opacity: 0;
 
-    &.warning { background-color: orange; }
-    &.danger { background-color: red; }
+  div:not(:first-child) {
+    margin-top: 2px;
   }
+}
 
-  .video-thumbnail-duration-overlay {
-    position: absolute;
-    padding: 0 3px;
-    right: 5px;
-    bottom: 5px;
-  }
+.video-thumbnail-watch-later-overlay {
+  padding: 3px;
 
-  .video-thumbnail-actions-overlay {
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    right: 5px;
-    top: 5px;
-    opacity: 0;
+  my-global-icon {
+    @include apply-svg-color(#fff);
 
-    div:not(:first-child) {
-      margin-top: 2px;
-    }
-
-    .video-thumbnail-watch-later-overlay {
-      padding: 3px;
-
-      my-global-icon {
-        width: 22px;
-        height: 22px;
-
-        @include apply-svg-color(#fff);
-      }
-    }
+    width: 22px;
+    height: 22px;
   }
 }

@@ -1,6 +1,11 @@
-@import 'variables';
-@import 'mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 textarea {
   @include peertube-textarea(100%, 100px);
+}
+
+.live-info {
+  font-size: 15px;
+  margin: 40px 0 20px;
 }

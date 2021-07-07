@@ -1,17 +1,18 @@
 import * as express from 'express'
 import { body, param, query } from 'express-validator'
+import { isFollowStateValid } from '@server/helpers/custom-validators/follows'
+import { loadActorUrlOrGetFromWebfinger } from '@server/lib/activitypub/actors'
+import { getServerActor } from '@server/models/application/application'
+import { MActorFollowActorsDefault } from '@server/types/models'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 import { isTestInstance } from '../../helpers/core-utils'
+import { isActorTypeValid, isValidActorHandle } from '../../helpers/custom-validators/activitypub/actor'
 import { isEachUniqueHostValid, isHostValid } from '../../helpers/custom-validators/servers'
 import { logger } from '../../helpers/logger'
 import { SERVER_ACTOR_NAME, WEBSERVER } from '../../initializers/constants'
-import { ActorFollowModel } from '../../models/activitypub/actor-follow'
-import { areValidationErrors } from './utils'
-import { ActorModel } from '../../models/activitypub/actor'
-import { loadActorUrlOrGetFromWebfinger } from '../../helpers/webfinger'
-import { isActorTypeValid, isValidActorHandle } from '../../helpers/custom-validators/activitypub/actor'
-import { MActorFollowActorsDefault } from '@server/types/models'
-import { isFollowStateValid } from '@server/helpers/custom-validators/follows'
-import { getServerActor } from '@server/models/application/application'
+import { ActorModel } from '../../models/actor/actor'
+import { ActorFollowModel } from '../../models/actor/actor-follow'
+import { areValidationErrors } from './shared'
 
 const listFollowsValidator = [
   query('state')
@@ -34,7 +35,8 @@ const followValidator = [
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     // Force https if the administrator wants to make friends
     if (isTestInstance() === false && WEBSERVER.SCHEME === 'http') {
-      return res.status(500)
+      return res
+        .status(HttpStatusCode.INTERNAL_SERVER_ERROR_500)
         .json({
           error: 'Cannot follow on a non HTTPS web server.'
         })
@@ -61,12 +63,10 @@ const removeFollowingValidator = [
     const follow = await ActorFollowModel.loadByActorAndTargetNameAndHostForAPI(serverActor.id, SERVER_ACTOR_NAME, req.params.host)
 
     if (!follow) {
-      return res
-        .status(404)
-        .json({
-          error: `Following ${req.params.host} not found.`
-        })
-        .end()
+      return res.fail({
+        status: HttpStatusCode.NOT_FOUND_404,
+        message: `Following ${req.params.host} not found.`
+      })
     }
 
     res.locals.follow = follow
@@ -94,12 +94,10 @@ const getFollowerValidator = [
     }
 
     if (!follow) {
-      return res
-        .status(404)
-        .json({
-          error: `Follower ${req.params.nameWithHost} not found.`
-        })
-        .end()
+      return res.fail({
+        status: HttpStatusCode.NOT_FOUND_404,
+        message: `Follower ${req.params.nameWithHost} not found.`
+      })
     }
 
     res.locals.follow = follow
@@ -113,7 +111,7 @@ const acceptOrRejectFollowerValidator = [
 
     const follow = res.locals.follow
     if (follow.state !== 'pending') {
-      return res.status(400).json({ error: 'Follow is not in pending state.' }).end()
+      return res.fail({ message: 'Follow is not in pending state.' })
     }
 
     return next()

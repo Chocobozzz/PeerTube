@@ -1,10 +1,11 @@
 import { AuthUser } from '@app/core'
 import { User } from '@app/core/users/user.model'
 import { durationToString, getAbsoluteAPIUrl, getAbsoluteEmbedUrl } from '@app/helpers'
+import { Actor } from '@app/shared/shared-main/account/actor.model'
 import { peertubeTranslate } from '@shared/core-utils/i18n'
 import {
-  Avatar,
-  ServerConfig,
+  ActorImage,
+  HTMLServerConfig,
   UserRight,
   Video as VideoServerModel,
   VideoConstant,
@@ -12,14 +13,10 @@ import {
   VideoScheduleUpdate,
   VideoState
 } from '@shared/models'
-import { Actor } from '../account/actor.model'
 
 export class Video implements VideoServerModel {
   byVideoChannel: string
   byAccount: string
-
-  accountAvatarUrl: string
-  videoChannelAvatarUrl: string
 
   createdAt: Date
   updatedAt: Date
@@ -29,16 +26,24 @@ export class Video implements VideoServerModel {
   licence: VideoConstant<number>
   language: VideoConstant<string>
   privacy: VideoConstant<VideoPrivacy>
+
   description: string
+
   duration: number
   durationLabel: string
+
   id: number
   uuid: string
+  shortUUID: string
+
   isLocal: boolean
+
   name: string
   serverHost: string
   thumbnailPath: string
   thumbnailUrl: string
+
+  isLive: boolean
 
   previewPath: string
   previewUrl: string
@@ -68,7 +73,7 @@ export class Video implements VideoServerModel {
     displayName: string
     url: string
     host: string
-    avatar?: Avatar
+    avatar?: ActorImage
   }
 
   channel: {
@@ -77,7 +82,7 @@ export class Video implements VideoServerModel {
     displayName: string
     url: string
     host: string
-    avatar?: Avatar
+    avatar?: ActorImage
   }
 
   userHistory?: {
@@ -86,8 +91,12 @@ export class Video implements VideoServerModel {
 
   pluginData?: any
 
-  static buildClientUrl (videoUUID: string) {
-    return '/videos/watch/' + videoUUID
+  static buildWatchUrl (video: Partial<Pick<Video, 'uuid' | 'shortUUID'>>) {
+    return '/w/' + (video.shortUUID || video.uuid)
+  }
+
+  static buildUpdateUrl (video: Pick<Video, 'uuid'>) {
+    return '/videos/update/' + video.uuid
   }
 
   constructor (hash: VideoServerModel, translations = {}) {
@@ -103,20 +112,27 @@ export class Video implements VideoServerModel {
     this.state = hash.state
     this.description = hash.description
 
+    this.isLive = hash.isLive
+
     this.duration = hash.duration
     this.durationLabel = durationToString(hash.duration)
 
     this.id = hash.id
     this.uuid = hash.uuid
+    this.shortUUID = hash.shortUUID
 
     this.isLocal = hash.isLocal
     this.name = hash.name
 
     this.thumbnailPath = hash.thumbnailPath
-    this.thumbnailUrl = hash.thumbnailUrl || (absoluteAPIUrl + hash.thumbnailPath)
+    this.thumbnailUrl = this.thumbnailPath
+      ? hash.thumbnailUrl || (absoluteAPIUrl + hash.thumbnailPath)
+      : null
 
     this.previewPath = hash.previewPath
-    this.previewUrl = hash.previewUrl || (absoluteAPIUrl + hash.previewPath)
+    this.previewUrl = this.previewPath
+      ? hash.previewUrl || (absoluteAPIUrl + hash.previewPath)
+      : null
 
     this.embedPath = hash.embedPath
     this.embedUrl = hash.embedUrl || (getAbsoluteEmbedUrl() + hash.embedPath)
@@ -134,8 +150,6 @@ export class Video implements VideoServerModel {
 
     this.byAccount = Actor.CREATE_BY_STRING(hash.account.name, hash.account.host)
     this.byVideoChannel = Actor.CREATE_BY_STRING(hash.channel.name, hash.channel.host)
-    this.accountAvatarUrl = Actor.GET_ACTOR_AVATAR_URL(this.account)
-    this.videoChannelAvatarUrl = Actor.GET_ACTOR_AVATAR_URL(this.channel)
 
     this.category.label = peertubeTranslate(this.category.label, translations)
     this.licence.label = peertubeTranslate(this.licence.label, translations)
@@ -158,7 +172,7 @@ export class Video implements VideoServerModel {
     this.pluginData = hash.pluginData
   }
 
-  isVideoNSFWForUser (user: User, serverConfig: ServerConfig) {
+  isVideoNSFWForUser (user: User, serverConfig: HTMLServerConfig) {
     // Video is not NSFW, skip
     if (this.nsfw === false) return false
 
@@ -185,7 +199,22 @@ export class Video implements VideoServerModel {
     return user && this.isLocal === true && (this.account.name === user.username || user.hasRight(UserRight.UPDATE_ANY_VIDEO))
   }
 
+  isLiveInfoAvailableBy (user: AuthUser) {
+    return this.isLive &&
+      user && this.isLocal === true && (this.account.name === user.username || user.hasRight(UserRight.GET_ANY_LIVE))
+  }
+
   canBeDuplicatedBy (user: AuthUser) {
     return user && this.isLocal === false && user.hasRight(UserRight.MANAGE_VIDEOS_REDUNDANCIES)
+  }
+
+  getExactNumberOfViews () {
+    if (this.views < 1000) return ''
+
+    if (this.isLive) {
+      return $localize`${this.views} viewers`
+    }
+
+    return $localize`${this.views} views`
   }
 }

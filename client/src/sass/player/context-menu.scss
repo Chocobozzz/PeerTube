@@ -1,6 +1,6 @@
-@import '_variables';
-@import '_mixins';
-@import './_player-variables';
+@use '_variables' as *;
+@use '_mixins' as *;
+@use './_player-variables' as *;
 
 $context-menu-width: 350px;
 
@@ -8,13 +8,15 @@ $context-menu-width: 350px;
 
 .video-js .vjs-contextmenu-ui-menu {
   position: absolute;
-  background-color: rgba(0, 0, 0, 0.5);
-  padding: 5px 0;
+  background-color: $primary-background-color;
+  padding: 8px 0;
+  border-radius: 4px;
   width: $context-menu-width;
+  z-index: 105; // On top of the progress bar
 
   .vjs-menu-content {
     opacity: $primary-foreground-opacity;
-    color: pvar(--embedForegroundCsolor);
+    color: pvar(--embedForegroundColor);
     font-size: $font-size !important;
     font-weight: $font-semibold;
   }
@@ -23,11 +25,40 @@ $context-menu-width: 350px;
     cursor: pointer;
     font-size: 1em;
     padding: 8px 16px;
-    text-align: left;
+    text-align: start;
     text-transform: none;
 
     &:hover {
       background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    [class^='vjs-icon-'] {
+      $icons: 'link-2', 'repeat', 'code', 'tick-white', 'info';
+
+      @include margin-right(0.8rem !important);
+
+      display: inline-flex;
+      position: relative;
+      top: 2px;
+      cursor: pointer;
+      width: 14px;
+      height: 14px;
+      background-color: #fff;
+
+      -webkit-mask-size: cover;
+      mask-size: cover;
+
+      @each $icon in $icons {
+        &[class$="-#{$icon}"] {
+          mask-image: url('#{$assets-path}/player/images/#{$icon}.svg');
+          -webkit-mask-image: url('#{$assets-path}/player/images/#{$icon}.svg');
+        }
+      }
+
+      &[class$='-tick-white'] {
+        float: right;
+        margin: 0 !important;
+      }
     }
   }
 }

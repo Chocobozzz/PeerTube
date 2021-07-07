@@ -1,2 +1,2 @@
 export * from './notifier.service'
-export * from './user-notification-socket.service'
+export * from './peertube-socket.service'

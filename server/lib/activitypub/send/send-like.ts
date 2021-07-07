@@ -1,6 +1,6 @@
 import { Transaction } from 'sequelize'
 import { ActivityAudience, ActivityLike } from '../../../../shared/models/activitypub'
-import { getVideoLikeActivityPubUrl } from '../url'
+import { getVideoLikeActivityPubUrlByLocalActor } from '../url'
 import { sendVideoRelatedActivity } from './utils'
 import { audiencify, getAudience } from '../audience'
 import { logger } from '../../../helpers/logger'
@@ -10,7 +10,7 @@ function sendLike (byActor: MActor, video: MVideoAccountLight, t: Transaction) {
   logger.info('Creating job to like %s.', video.url)
 
   const activityBuilder = (audience: ActivityAudience) => {
-    const url = getVideoLikeActivityPubUrl(byActor, video)
+    const url = getVideoLikeActivityPubUrlByLocalActor(byActor, video)
 
     return buildLikeActivity(url, byActor, video, audience)
   }

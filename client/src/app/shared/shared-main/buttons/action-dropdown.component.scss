@@ -1,5 +1,5 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 .dropdown-divider:last-child {
   display: none;
@@ -7,6 +7,9 @@
 
 .action-button {
   @include peertube-button;
+
+  display: inline-block;
+  padding: 0 10px;
 
   &.button-styled {
 
@@ -18,13 +21,12 @@
       @include orange-button;
     }
 
-    &:hover, &:active, &:focus {
+    &:hover,
+    &:active,
+    &:focus {
       background-color: $grey-background-color;
     }
   }
-
-  display: inline-block;
-  padding: 0 10px;
 
   &::after {
     display: none;
@@ -64,7 +66,8 @@
       @include dropdown-with-icon-item;
     }
 
-    a, span {
+    a,
+    span {
       display: block;
       width: 100%;
     }

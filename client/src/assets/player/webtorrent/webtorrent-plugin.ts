@@ -132,11 +132,15 @@ class WebTorrentPlugin extends Plugin {
     done: () => void = () => { /* empty */ }
   ) {
     // Automatically choose the adapted video file
-    if (videoFile === undefined) {
+    if (!videoFile) {
       const savedAverageBandwidth = getAverageBandwidthInStore()
       videoFile = savedAverageBandwidth
         ? this.getAppropriateFile(savedAverageBandwidth)
         : this.pickAverageVideoFile()
+    }
+
+    if (!videoFile) {
+      throw Error(`Can't update video file since videoFile is undefined.`)
     }
 
     // Don't add the same video file once again
@@ -245,6 +249,8 @@ class WebTorrentPlugin extends Plugin {
     options: PlayOptions,
     done: Function
   ) {
+    if (!magnetOrTorrentUrl) return this.fallbackToHttp(options, done)
+
     console.log('Adding ' + magnetOrTorrentUrl + '.')
 
     const oldTorrent = this.torrent
@@ -487,6 +493,7 @@ class WebTorrentPlugin extends Plugin {
       if (this.webtorrent.downloadSpeed !== 0) this.downloadSpeeds.push(this.webtorrent.downloadSpeed)
 
       return this.player.trigger('p2pInfo', {
+        source: 'webtorrent',
         http: {
           downloadSpeed: 0,
           uploadSpeed: 0,
@@ -499,7 +506,8 @@ class WebTorrentPlugin extends Plugin {
           uploadSpeed: this.torrent.uploadSpeed,
           downloaded: this.torrent.downloaded,
           uploaded: this.torrent.uploaded
-        }
+        },
+        bandwidthEstimate: this.webtorrent.downloadSpeed
       } as PlayerNetworkInfo)
     }, this.CONSTANTS.INFO_SCHEDULER)
   }
@@ -549,7 +557,8 @@ class WebTorrentPlugin extends Plugin {
   private pickAverageVideoFile () {
     if (this.videoFiles.length === 1) return this.videoFiles[0]
 
-    return this.videoFiles[Math.floor(this.videoFiles.length / 2)]
+    const files = this.videoFiles.filter(f => f.resolution.id !== 0)
+    return files[Math.floor(files.length / 2)]
   }
 
   private stopTorrent (torrent: WebTorrent.Torrent) {
@@ -640,7 +649,7 @@ class WebTorrentPlugin extends Plugin {
   }
 
   private changeQuality () {
-    const resolutionId = this.currentVideoFile.resolution.id
+    const resolutionId = this.currentVideoFile.resolution.id as number
     const qualityLevels = this.player.qualityLevels()
 
     if (resolutionId === -1) {

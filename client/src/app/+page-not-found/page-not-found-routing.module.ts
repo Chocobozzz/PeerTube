@@ -1,13 +1,14 @@
 import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
 import { PageNotFoundComponent } from './page-not-found.component'
-import { MetaGuard } from '@ngx-meta/core'
+import { MenuGuards } from '@app/core'
 
 const pageNotFoundRoutes: Routes = [
   {
     path: '',
     component: PageNotFoundComponent,
-    canActivate: [ MetaGuard ],
+    canActivate: [ MenuGuards.close(true) ],
+    canDeactivate: [ MenuGuards.open(true) ],
     data: {
       meta: {
         title: $localize`Not found`

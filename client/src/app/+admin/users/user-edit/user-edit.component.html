@@ -10,7 +10,7 @@
     <ng-container *ngIf="!isCreation()">
       <li class="breadcrumb-item active" i18n>Edit</li>
       <li class="breadcrumb-item active" aria-current="page">
-        <a *ngIf="user" [routerLink]="[ '/accounts', user?.username ]">{{ user?.username }}</a>
+        <a *ngIf="user" [routerLink]="[ '/a', user?.username ]">{{ user?.username }}</a>
       </li>
     </ng-container>
   </ol>
@@ -60,7 +60,7 @@
 <div class="form-row" *ngIf="!isInBigView()"> <!-- hidden on large screens, as it is then displayed on the right side of the form -->
   <div class="col-12 col-xl-3"></div>
 
-  <div class="form-group-right col-12 col-xl-9">
+  <div class="col-12 col-xl-9">
     <ng-template *ngTemplateOutlet="dashboard"></ng-template>
   </div>
 </div>
@@ -72,11 +72,11 @@
     <div class="anchor" id="user"></div> <!-- user anchor -->
     <div *ngIf="isCreation()" class="account-title" i18n>NEW USER</div>
     <div *ngIf="!isCreation() && user" class="account-title">
-      <my-actor-avatar-info [actor]="user.account"></my-actor-avatar-info>
+      <my-actor-avatar-edit [actor]="user.account" [editable]="false" [displaySubscribers]="false" [displayUsername]="false"></my-actor-avatar-edit>
     </div>
   </div>
 
-  <div class="form-group form-group-right col-12 col-lg-8 col-xl-9" [ngClass]="{ 'form-row': isInBigView() }">
+  <div class="form-group col-12 col-lg-8 col-xl-9" [ngClass]="{ 'form-row': isInBigView() }">
 
     <form role="form" (ngSubmit)="formValidated()" [formGroup]="form" [ngClass]="{ 'col-5': isInBigView() }">
       <div class="form-group" *ngIf="isCreation()">
@@ -122,10 +122,11 @@
             </ng-container>
           </ng-template>
         </my-help>
-        <input
-          type="password" id="password" autocomplete="new-password" class="form-control"
-          formControlName="password" [ngClass]="{ 'input-error': formErrors['password'] }"
-        >
+
+        <my-input-toggle-hidden
+          formControlName="password" inputId="password" [ngClass]="{ 'input-error': formErrors['password'] }" autocomplete="new-password"
+        ></my-input-toggle-hidden>
+
         <div *ngIf="formErrors.password" class="form-error">
           {{ formErrors.password }}
         </div>
@@ -148,27 +149,48 @@
 
       <div class="form-group">
         <label i18n for="videoQuota">Video quota</label>
-        <div class="peertube-select-container">
-          <select id="videoQuota" formControlName="videoQuota" class="form-control">
-            <option *ngFor="let videoQuotaOption of videoQuotaOptions" [value]="videoQuotaOption.value" [disabled]="videoQuotaOption.disabled">
-              {{ videoQuotaOption.label }}
-            </option>
-          </select>
-        </div>
+
+        <my-select-custom-value
+          id="videoQuota"
+          [items]="videoQuotaOptions"
+          formControlName="videoQuota"
+          i18n-inputSuffix inputSuffix="bytes" inputType="number"
+          [clearable]="false"
+        ></my-select-custom-value>
 
         <div i18n class="transcoding-information" *ngIf="isTranscodingInformationDisplayed()">
           Transcoding is enabled. The video quota only takes into account <strong>original</strong> video size. <br />
           At most, this user could upload ~ {{ computeQuotaWithTranscoding() | bytes: 0 }}.
         </div>
+
+        <div *ngIf="formErrors.videoQuota" class="form-error">
+          {{ formErrors.videoQuota }}
+        </div>
       </div>
 
       <div class="form-group">
         <label i18n for="videoQuotaDaily">Daily video quota</label>
+
+        <my-select-custom-value
+          id="videoQuotaDaily"
+          [items]="videoQuotaDailyOptions"
+          formControlName="videoQuotaDaily"
+          i18n-inputSuffix inputSuffix="bytes" inputType="number"
+          [clearable]="false"
+        ></my-select-custom-value>
+
+        <div *ngIf="formErrors.videoQuotaDaily" class="form-error">
+          {{ formErrors.videoQuotaDaily }}
+        </div>
+      </div>
+
+      <div class="form-group" *ngIf="!isCreation() && getAuthPlugins().length !== 0">
+        <label i18n for="pluginAuth">Auth plugin</label>
+
         <div class="peertube-select-container">
-          <select id="videoQuotaDaily" formControlName="videoQuotaDaily" class="form-control">
-            <option *ngFor="let videoQuotaDailyOption of videoQuotaDailyOptions" [value]="videoQuotaDailyOption.value" [disabled]="videoQuotaDailyOption.disabled">
-              {{ videoQuotaDailyOption.label }}
-            </option>
+          <select id="pluginAuth" formControlName="pluginAuth" class="form-control">
+            <option [value]="null" i18n>None (local authentication)</option>
+            <option *ngFor="let authPlugin of getAuthPlugins()" [value]="authPlugin">{{ authPlugin }}</option>
           </select>
         </div>
       </div>
@@ -197,7 +219,7 @@
     <div i18n class="account-title account-title-danger">DANGER ZONE</div>
   </div>
 
-  <div class="form-group form-group-right col-12 col-lg-8 col-xl-9" [ngClass]="{ 'form-row': isInBigView() }">
+  <div class="form-group col-12 col-lg-8 col-xl-9" [ngClass]="{ 'form-row': isInBigView() }">
 
     <div class="danger-zone">
       <div class="form-group reset-password-email">

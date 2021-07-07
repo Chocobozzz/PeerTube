@@ -1,9 +1,31 @@
 
 import { VideoImportCreate } from '../../models/videos'
 import { makeGetRequest, makeUploadRequest } from '../requests/requests'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 function getYoutubeVideoUrl () {
-  return 'http://www.youtube.com/watch?v=msX3jv1XdvM'
+  return 'https://www.youtube.com/watch?v=msX3jv1XdvM'
+}
+
+function getYoutubeHDRVideoUrl () {
+  /**
+   * The video is used to check format-selection correctness wrt. HDR,
+   * which brings its own set of oddities outside of a MediaSource.
+   * FIXME: refactor once HDR is supported at playback
+   *
+   * The video needs to have the following format_ids:
+   * (which you can check by using `youtube-dl <url> -F`):
+   * - 303 (1080p webm vp9)
+   * - 299 (1080p mp4 avc1)
+   * - 335 (1080p webm vp9.2 HDR)
+   *
+   * 15 jan. 2021: TEST VIDEO NOT CURRENTLY PROVIDING
+   * - 400 (1080p mp4 av01)
+   * - 315 (2160p webm vp9 HDR)
+   * - 337 (2160p webm vp9.2 HDR)
+   * - 401 (2160p mp4 av01 HDR)
+   */
+  return 'https://www.youtube.com/watch?v=qR5vOXbZsI4'
 }
 
 function getMagnetURI () {
@@ -19,7 +41,12 @@ function getGoodVideoUrl () {
   return 'https://download.cpy.re/peertube/good_video.mp4'
 }
 
-function importVideo (url: string, token: string, attributes: VideoImportCreate & { torrentfile?: string }, statusCodeExpected = 200) {
+function importVideo (
+  url: string,
+  token: string,
+  attributes: VideoImportCreate & { torrentfile?: string },
+  statusCodeExpected = HttpStatusCode.OK_200
+) {
   const path = '/api/v1/videos/imports'
 
   let attaches: any = {}
@@ -46,7 +73,7 @@ function getMyVideoImports (url: string, token: string, sort?: string) {
     query,
     path,
     token,
-    statusCodeExpected: 200
+    statusCodeExpected: HttpStatusCode.OK_200
   })
 }
 
@@ -55,6 +82,7 @@ function getMyVideoImports (url: string, token: string, sort?: string) {
 export {
   getBadVideoUrl,
   getYoutubeVideoUrl,
+  getYoutubeHDRVideoUrl,
   importVideo,
   getMagnetURI,
   getMyVideoImports,

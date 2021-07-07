@@ -1,7 +1,10 @@
-@import '_variables';
+@use 'sass:math';
+@use '_variables' as *;
 
 @mixin disable-default-a-behaviour {
-  &:hover, &:focus, &:active {
+  &:hover,
+  &:focus,
+  &:active {
     text-decoration: none !important;
     outline: none !important;
   }
@@ -22,57 +25,47 @@
 @mixin ellipsis-multiline($font-size: 16px, $number-of-lines: 2) {
   display: block;
   /* Fallback for non-webkit */
-  display: -webkit-box;
-  max-height: $font-size * $number-of-lines;
+  display: -webkit-box; /* stylelint-disable-line value-no-vendor-prefix */
+  -webkit-line-clamp: $number-of-lines;
   /* Fallback for non-webkit */
   font-size: $font-size;
   line-height: $font-size;
   overflow: hidden;
   text-overflow: ellipsis;
+  max-height: $font-size * $number-of-lines;
 }
 
-@mixin prefix($property, $parameters...) {
-  @each $prefix in -webkit-, -moz-, -ms-, -o-, "" {
-    #{$prefix}#{$property}: $parameters;
+@mixin fade-text ($fade-after, $background-color) {
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    content: '';
+    pointer-events: none;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: linear-gradient(transparent $fade-after, $background-color);
   }
 }
 
-@mixin peertube-word-wrap {
+@mixin peertube-word-wrap ($with-hyphen: true) {
   word-break: break-word;
   word-wrap: break-word;
   overflow-wrap: break-word;
-  -webkit-hyphens: auto;
-  -ms-hyphens: auto;
-  -moz-hyphens: auto;
-  hyphens: auto;
+
+  @if $with-hyphen {
+    hyphens: auto;
+  }
 }
 
 @mixin apply-svg-color ($color) {
   ::ng-deep .feather,
-  ::ng-deep .material {
+  ::ng-deep .material,
+  ::ng-deep .misc {
     color: $color;
-  }
-
-  ::ng-deep svg {
-    path[fill="#000"],
-    g[fill="#000"],
-    rect[fill="#000"],
-    circle[fill="#000"],
-    polygon[fill="#000"] {
-      fill: $color;
-    }
-
-    path[stroke="#000"],
-    g[stroke="#000"],
-    rect[stroke="#000"],
-    circle[stroke="#000"],
-    polygon[stroke="#000"] {
-      stroke: $color;
-    }
-
-    stop[stop-color="#000"] {
-      stop-color: $color;
-    }
   }
 }
 
@@ -92,6 +85,7 @@
 }
 
 @mixin peertube-input-text($width) {
+  padding: 0 15px;
   display: inline-block;
   height: $button-height;
   width: $width;
@@ -99,8 +93,6 @@
   background-color: pvar(--inputBackgroundColor);
   border: 1px solid #C6C6C6;
   border-radius: 3px;
-  padding-left: 15px;
-  padding-right: 15px;
   font-size: 15px;
 
   &::placeholder {
@@ -111,7 +103,7 @@
     opacity: 0.7;
   }
 
-  @media screen and (max-width: $width) {
+  @media screen and (max-width: calc(#{$width} + 40px)) {
     width: 100%;
   }
 }
@@ -121,10 +113,11 @@
   min-height: $button-height;
   padding-top: 0;
   padding-bottom: 0;
+  flex-wrap: nowrap;
 
-  .input-group-text{
+  .input-group-text {
     font-size: 14px;
-    color: gray;
+    color: #808080;
   }
 }
 
@@ -141,7 +134,9 @@
 @mixin orange-button {
   @include button-focus(pvar(--mainColorLightest));
 
-  &, &:active, &:focus {
+  &,
+  &:active,
+  &:focus {
     color: #fff;
     background-color: pvar(--mainColor);
   }
@@ -151,14 +146,45 @@
     background-color: pvar(--mainHoverColor);
   }
 
-  &[disabled], &.disabled {
+  &[disabled],
+  &.disabled {
     cursor: default;
     color: #fff;
     background-color: #C6C6C6;
   }
 
   my-global-icon {
-    @include apply-svg-color(#fff)
+    @include apply-svg-color(#fff);
+  }
+}
+
+@mixin orange-button-inverted {
+  @include button-focus(pvar(--mainColorLightest));
+
+  border: 2px solid pvar(--mainColor);
+  font-weight: $font-semibold;
+
+  &,
+  &:active,
+  &:focus {
+    color: pvar(--mainColor);
+    background-color: pvar(--mainBackgroundColor);
+  }
+
+  &:hover {
+    color: pvar(--mainColor);
+    background-color: pvar(--mainColorLightest);
+  }
+
+  &[disabled],
+  &.disabled {
+    cursor: default;
+    color: pvar(--mainColor);
+    background-color: #C6C6C6;
+  }
+
+  my-global-icon {
+    @include apply-svg-color(pvar(--mainColor));
   }
 }
 
@@ -168,31 +194,38 @@
   color: pvar(--greyForegroundColor);
   background-color: transparent;
 
-  &[disabled], &.disabled {
+  &[disabled],
+  .disabled {
     cursor: default;
   }
 
   my-global-icon {
-    @include apply-svg-color(transparent)
+    @include apply-svg-color(transparent);
   }
 }
 
 @mixin grey-button {
   @include button-focus($grey-button-outline-color);
+
   background-color: $grey-background-color;
   color: pvar(--greyForegroundColor);
 
-  &:hover, &:active, &:focus, &[disabled], &.disabled {
+  &:hover,
+  &:active,
+  &:focus,
+  &[disabled],
+  &.disabled {
     color: pvar(--greyForegroundColor);
     background-color: $grey-background-hover-color;
   }
 
-  &[disabled], &.disabled {
+  &[disabled],
+  &.disabled {
     cursor: default;
   }
 
   my-global-icon {
-    @include apply-svg-color(pvar(--greyForegroundColor))
+    @include apply-svg-color(pvar(--greyForegroundColor));
   }
 }
 
@@ -201,67 +234,76 @@
   $text: #fff6f5;
 
   @include button-focus(scale-color($color, $alpha: -95%));
+
   background-color: $color;
   color: $text;
 
-  &:hover, &:active, &:focus, &[disabled], &.disabled {
+  &:hover,
+  &:active,
+  &:focus,
+  &[disabled],
+  &.disabled {
     background-color: lighten($color: $color, $amount: 10);
   }
 
-  &[disabled], &.disabled {
+  &[disabled],
+  &.disabled {
     cursor: default;
   }
 
   my-global-icon {
-    @include apply-svg-color($text)
+    @include apply-svg-color($text);
   }
 }
 
 @mixin peertube-button {
-  border: none;
+  @include padding(0, 17px, 0, 13px);
+
+  border: 0;
   font-weight: $font-semibold;
   font-size: 15px;
   height: $button-height;
   line-height: $button-height;
-  border-radius: 3px;
+  // FIXME: because of primeng that redefines border-radius of all input[type="..."]
+  border-radius: 3px !important;
   text-align: center;
-  padding: 0 17px 0 13px;
   cursor: pointer;
 }
 
 @mixin peertube-button-link {
-  display: inline-block;
-
   @include disable-default-a-behaviour;
   @include peertube-button;
+
+  display: inline-block;
 }
 
 @mixin peertube-button-outline {
-  display: inline-block;
-
   @include disable-default-a-behaviour;
   @include peertube-button;
 
+  display: inline-block;
   border: 1px solid;
 }
 
 @mixin button-with-icon($width: 20px, $margin-right: 3px, $top: -1px) {
+  display: inline-flex;
+  align-items: center;
+  line-height: normal !important;
+
   my-global-icon {
+    @include margin-right($margin-right);
+
     position: relative;
     width: $width;
-    margin-right: $margin-right;
     top: $top;
   }
 }
 
-@mixin peertube-button-file ($width) {
+@mixin peertube-file {
   position: relative;
   overflow: hidden;
   display: inline-block;
-  width: $width;
   min-height: 30px;
-
-  @include peertube-button;
 
   input[type=file] {
     position: absolute;
@@ -270,14 +312,21 @@
     width: 100%;
     height: 100%;
     font-size: 100px;
-    text-align: right;
+    text-align: end;
     filter: alpha(opacity=0);
     opacity: 0;
     outline: none;
-    background: white;
+    background: #fff;
     cursor: inherit;
     display: block;
   }
+}
+
+@mixin peertube-button-file ($width) {
+  @include peertube-file;
+  @include peertube-button;
+
+  width: $width;
 }
 
 @mixin icon ($size) {
@@ -290,28 +339,11 @@
   cursor: pointer;
 }
 
-@mixin select-arrow-down {
-  top: 50%;
-  right: calc(0% + 15px);
-  content: " ";
-  height: 0;
-  width: 0;
-  position: absolute;
-  pointer-events: none;
-  border: 5px solid rgba(0, 0, 0, 0);
-  border-top-color: #000;
-  margin-top: -2px;
-  z-index: 100;
-}
+@mixin responsive-width ($width) {
+  width: $width;
 
-
-@mixin ng-select ($width) {
-  ::ng-deep ng-select {
-    width: $width;
-
-    @media screen and (max-width: $width) {
-      width: 100%;
-    }
+  @media screen and (max-width: $width) {
+    width: 100%;
   }
 }
 
@@ -337,8 +369,18 @@
     width: 100%;
   }
 
-  &:after {
-    @include select-arrow-down;
+  &::after {
+    top: 50%;
+    right: calc(0% + 15px);
+    content: ' ';
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border: 5px solid rgba(0, 0, 0, 0);
+    border-top-color: #000;
+    margin-top: -2px;
+    z-index: 100;
   }
 
   select {
@@ -373,21 +415,23 @@
     option {
       font-weight: $font-semibold;
       color: pvar(--greyForegroundColor);
-      border: none;
+      border: 0;
     }
   }
 }
 
 // Thanks: https://codepen.io/triss90/pen/XNEdRe/
 @mixin peertube-radio-container {
-  input[type="radio"] {
+  input[type=radio] {
     display: none;
 
-    & + label {
+    + label {
       font-weight: $font-regular;
       cursor: pointer;
 
-      &:before {
+      &::before {
+        @include margin-right(10px);
+
         position: relative;
         top: -2px;
         content: '';
@@ -400,16 +444,15 @@
         vertical-align: middle;
         cursor: pointer;
         text-align: center;
-        margin-right: 10px;
       }
     }
 
-    &:checked + label:before {
+    &:checked + label::before {
       background-color: #000;
       box-shadow: inset 0 0 0 4px #fff;
     }
 
-    &:focus + label:before {
+    &:focus + label::before {
       outline: none;
       border-color: #000;
     }
@@ -424,7 +467,7 @@
     box-shadow: #{$focus-box-shadow-form} pvar(--mainColorLightest);
   }
 
-  & + span {
+  + span {
     position: relative;
     width: 18px;
     min-width: 18px;
@@ -434,7 +477,7 @@
     vertical-align: middle;
     cursor: pointer;
 
-    &:after {
+    &::after {
       content: '';
       position: absolute;
       top: calc(2px - #{$border-width});
@@ -453,22 +496,23 @@
     background: pvar(--mainColor);
     animation: jelly 0.6s ease;
 
-    &:after {
+    &::after {
       opacity: 1;
       transform: rotate(45deg) scale(1);
     }
   }
 
-  & + span + span {
+  + span + span {
+    @include margin-left(5px);
+
     font-size: 15px;
     font-weight: $font-regular;
-    margin-left: 5px;
     cursor: pointer;
     display: inline;
   }
 
   &[disabled] + span,
-  &[disabled] + span + span{
+  &[disabled] + span + span {
     opacity: 0.5;
     cursor: default;
   }
@@ -518,13 +562,25 @@
   }
 }
 
-@mixin avatar ($size) {
-  object-fit: cover;
-  border-radius: 50%;
+@mixin actor-avatar-size ($size) {
+  display: inline-block;
   width: $size;
   height: $size;
   min-width: $size;
   min-height: $size;
+}
+
+@mixin actor-counters ($separator-margin: 10px) {
+  color: pvar(--greyForegroundColor);
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+
+  > *:not(:last-child)::after {
+    content: '•';
+    margin: 0 $separator-margin;
+    color: pvar(--mainColor);
+  }
 }
 
 @mixin chevron ($size, $border-width) {
@@ -566,118 +622,29 @@
   margin-bottom: 10px;
 }
 
-@mixin actor-owner {
-  @include disable-default-a-behaviour;
-
-  font-size: 13px;
-  margin-top: 4px;
-  color: pvar(--mainForegroundColor);
-
-  span:hover {
-    opacity: 0.8;
-  }
-
-  img {
-    @include avatar(18px);
-
-    margin-left: 7px;
-    position: relative;
-    top: -2px;
-  }
-}
-
-@mixin sub-menu-with-actor {
-  position: initial;
-  z-index: unset;
-  height: max-content;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-
-  .actor {
-    display: flex;
-    margin-top: 20px;
-    margin-bottom: 20px;
-
-    img {
-      @include avatar(80px);
-
-      margin-right: 20px;
-    }
-
-    .actor-info {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-
-      .actor-names {
-        display: flex;
-        align-items: center;
-        flex-wrap: wrap;
-
-        .actor-display-name {
-          font-size: 23px;
-          font-weight: $font-bold;
-          margin-right: 7px;
-        }
-
-        .actor-name {
-          position: relative;
-          top: 3px;
-          font-size: 14px;
-          color: $grey-actor-name;
-        }
-      }
-
-      .actor-lower {
-        grid-area: lower;
-      }
-
-      .actor-followers {
-        font-size: 15px;
-      }
-
-      .actor-owner {
-        @include actor-owner;
-      }
-    }
-  }
-
-  .links {
-    margin-top: 0;
-    margin-bottom: 15px;
-
-    a {
-      margin-top: 0;
-      margin-bottom: 0;
-      text-transform: uppercase;
-      font-weight: 600;
-      font-size: 110%;
-
-      @media screen and (max-width: $mobile-view) {
-        font-size: 130%;
-      }
-    }
-  }
-}
-
 @mixin create-button {
   @include peertube-button-link;
   @include orange-button;
   @include button-with-icon(20px, 5px, -1px);
 }
 
-@mixin row-blocks {
+@mixin row-blocks ($column-responsive: true) {
   display: flex;
   min-height: 130px;
   padding-bottom: 20px;
   margin-bottom: 20px;
   border-bottom: 1px solid #C6C6C6;
 
-  @media screen and (max-width: 800px) {
-    flex-direction: column;
-    height: auto;
-    align-items: center;
+  @media screen and (max-width: $small-view) {
+    @if $column-responsive {
+      flex-direction: column;
+      height: auto;
+      align-items: center;
+    } @else {
+      min-height: initial;
+      padding-bottom: 10px;
+      margin-bottom: 10px;
+    }
   }
 }
 
@@ -685,10 +652,10 @@
   padding: 6px 15px;
 
   my-global-icon {
+    @include margin-right(10px);
+
     width: 22px;
     opacity: .7;
-
-    margin-right: 10px;
     position: relative;
     top: -2px;
   }
@@ -731,6 +698,10 @@
     &.secondary {
       background-color: pvar(--secondaryColor);
     }
+
+    &.red {
+      background-color: lighten($color: #c54130, $amount: 10);
+    }
   }
 }
 
@@ -740,7 +711,7 @@
   padding: 0.75rem 1rem;
   margin-bottom: 1rem;
   list-style: none;
-  background-color: pvar(--submenuColor);
+  background-color: pvar(--submenuBackgroundColor);
   border-radius: 0.25rem;
 
   .breadcrumb-item {
@@ -750,13 +721,15 @@
       color: pvar(--mainColor);
     }
 
-    & + .breadcrumb-item {
-      padding-left: 0.5rem;
+    + .breadcrumb-item {
+      @include padding-left(0.5rem);
+
       &::before {
+        @include padding-right(0.5rem);
+
         display: inline-block;
-        padding-right: 0.5rem;
         color: #6c757d;
-        content: "/";
+        content: '/';
       }
     }
 
@@ -771,13 +744,13 @@
   flex-wrap: wrap;
   margin: 0 -5px;
 
-  & > div {
+  > div {
     box-sizing: border-box;
-    flex: 0 0 percentage(1/3);
+    flex: 0 0 percentage(math.div(1, 3));
     padding: 0 5px;
     margin-bottom: 10px;
 
-    & > a {
+    > a {
       @include disable-default-a-behaviour;
 
       text-decoration: none;
@@ -792,20 +765,20 @@
       }
     }
 
-    & > a,
-    & > div {
+    > a,
+    > div {
       padding: 20px;
-      background: pvar(--submenuColor);
+      background: pvar(--submenuBackgroundColor);
       border-radius: 4px;
       box-sizing: border-box;
       height: 100%;
     }
   }
 
-  .dashboard-num, .dashboard-text {
+  .dashboard-num,
+  .dashboard-text {
     text-align: center;
     font-size: 130%;
-    line-height: 21px;
     color: pvar(--mainForegroundColor);
     line-height: 30px;
     margin-bottom: 20px;
@@ -818,7 +791,7 @@
   }
 }
 
-@mixin divider($color: pvar(--submenuColor), $background: pvar(--mainBackgroundColor)) {
+@mixin divider($color: pvar(--submenuBackgroundColor), $background: pvar(--mainBackgroundColor)) {
   width: 95%;
   border-top: .05rem solid $color;
   height: .05rem;
@@ -867,17 +840,9 @@
     --chip-padding: .2rem .3rem;
   }
 
-  .avatar {
-    margin-left: -.4rem;
-    margin-right: .2rem;
-    height: $avatar-height;
-    width: $avatar-height;
-
-    border-radius: 50%;
-    display: inline-block;
-    line-height: 1.25;
-    position: relative;
-    vertical-align: middle;
+  my-actor-avatar {
+    @include margin-left(-.4rem);
+    @include margin-right(.2rem);
   }
 
   &.two-lines {
@@ -885,59 +850,38 @@
 
     height: $avatar-height;
 
-    .avatar {
-      height: $avatar-height;
-      width: $avatar-height;
+    my-actor-avatar {
+      @include actor-avatar-size($avatar-height);
     }
 
     div {
+      margin: 0 .1rem;
+
       display: flex;
       flex-direction: column;
       height: $avatar-height;
-      margin-left: .1rem;
-      margin-right: .1rem;
       justify-content: center;
     }
   }
 }
 
-@mixin admin-sub-header-responsive ($horizontal-margins) {
-  flex-direction: column;
-
-  .form-sub-title {
-    margin-right: 0px !important;
-    margin-bottom: 10px;
-    text-align: center;
-  }
-
-  .admin-sub-nav {
-    display: block;
-    overflow-x: auto;
-    white-space: nowrap;
-    height: 50px;
-    padding: 10px 0;
-    width: calc(100vw - #{$horizontal-margins*2});
-
-    a {
-      margin-left: 5px;
-    }
-  }
-}
-
-// applies 16:9 ratio to a child element (using $selector) only using
-// an immediate's parent size. This allows 16:9 ratio without explicit
+// applies ratio (default to 16:9) to a child element (using $selector) only using
+// an immediate's parent size. This allows to set a ratio without explicit
 // dimensions, as width/height cannot be computed from each other.
-@mixin large-screen-ratio ($selector: 'div') {
+@mixin block-ratio ($selector: 'div', $inverted-ratio: math.div(9, 16)) {
+  $padding-percent: percentage($inverted-ratio);
+
   position: relative;
   height: 0;
   width: 100%;
-  padding-top: 56%;
+  padding-top: $padding-percent;
 
   #{$selector} {
     position: absolute;
     width: 100%;
     height: 100%;
     top: 0;
+
     @content;
   }
 }
@@ -949,15 +893,17 @@
     padding-bottom: 15px;
     margin-bottom: $sub-menu-margin-bottom;
 
-    my-global-icon {
-      margin-right: 10px;
-      vertical-align: bottom;
+    > span > my-global-icon,
+    > my-global-icon {
+      @include margin-right(10px);
       width: 24px;
       height: 24px;
+      vertical-align: top;
     }
 
     .badge {
-      margin-left: 7px;
+      @include margin-left(7px);
+      vertical-align: top;
     }
   }
 }
@@ -971,8 +917,92 @@
   top: 50%;
   transform: translate(-50%, -50%) scale(0.5);
 
-  border-top: ($height / 2) solid transparent;
-  border-bottom: ($height / 2) solid transparent;
+  border-top: #{math.div($height, 2)} solid transparent;
+  border-bottom: #{math.div($height, 2)} solid transparent;
 
   border-left: $width solid rgba(255, 255, 255, 0.95);
+}
+
+@mixin on-small-main-col () {
+  :host-context(.main-col:not(.expanded)) {
+    @media screen and (max-width: $small-view + $menu-width) {
+      @content;
+    }
+  }
+
+  :host-context(.main-col.expanded) {
+    @media screen and (max-width: $small-view) {
+      @content;
+    }
+  }
+}
+
+@mixin on-mobile-main-col () {
+  :host-context(.main-col:not(.expanded)) {
+    @media screen and (max-width: $mobile-view + $menu-width) {
+      @content;
+    }
+  }
+
+  :host-context(.main-col.expanded) {
+    @media screen and (max-width: $mobile-view) {
+      @content;
+    }
+  }
+}
+
+@mixin margin ($block-start, $inline-end, $block-end, $inline-start) {
+  @include margin-left($inline-start);
+  @include margin-right($inline-end);
+
+  margin-top: $block-start;
+  margin-bottom: $block-end;
+}
+
+@mixin padding ($block-start, $inline-end, $block-end, $inline-start) {
+  @include padding-left($inline-start);
+  @include padding-right($inline-end);
+
+  padding-top: $block-start;
+  padding-bottom: $block-end;
+}
+
+@mixin margin-left ($value) {
+  @supports (margin-inline-start: $value) {
+    margin-inline-start: $value;
+  }
+
+  @supports not (margin-inline-start: $value) {
+    margin-left: $value;
+  }
+}
+
+@mixin margin-right ($value) {
+  @supports (margin-inline-end: $value) {
+    margin-inline-end: $value;
+  }
+
+  @supports not (margin-inline-end: $value) {
+    margin-right: $value;
+  }
+}
+
+@mixin padding-left ($value) {
+  @supports (padding-inline-start: $value) {
+    padding-inline-start: $value;
+  }
+
+  @supports not (padding-inline-start: $value) {
+    padding-left: $value;
+  }
+}
+
+@mixin padding-right ($value) {
+  @supports (padding-inline-end: $value) {
+    padding-inline-end: $value;
+  }
+
+  @supports not (padding-inline-end: $value) {
+    padding-right: $value;
+  }
 }

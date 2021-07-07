@@ -1,5 +1,5 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 .logs {
   font-family: monospace;
@@ -19,8 +19,9 @@
   }
 
   .log-level {
+    @include margin-right(5px);
+
     font-weight: $font-semibold;
-    margin-right: 5px;
   }
 
   .log-by {
@@ -54,7 +55,7 @@
   my-button,
   .peertube-select-container,
   ng-select {
-    margin-left: 10px;
+    @include margin-left(10px);
   }
 }
 
@@ -65,8 +66,9 @@
     .peertube-select-container,
     ng-select,
     my-button {
+      @include margin-left(0 !important);
+
       width: 100% !important;
-      margin-left: 0px !important;
       margin-bottom: 10px !important;
     }
 
@@ -84,8 +86,9 @@
       .peertube-select-container,
       ng-select,
       my-button {
+        @include margin-left(0 !important);
+
         width: 100% !important;
-        margin-left: 0px !important;
         margin-bottom: 10px !important;
       }
 

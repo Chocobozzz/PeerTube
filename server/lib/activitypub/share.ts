@@ -1,15 +1,17 @@
-import { Transaction } from 'sequelize'
-import { VideoShareModel } from '../../models/video/video-share'
-import { sendUndoAnnounce, sendVideoAnnounce } from './send'
-import { getVideoAnnounceActivityPubUrl } from './url'
 import * as Bluebird from 'bluebird'
-import { doRequest } from '../../helpers/requests'
-import { getOrCreateActorAndServerAndModel } from './actor'
-import { logger } from '../../helpers/logger'
-import { CRAWL_REQUEST_CONCURRENCY } from '../../initializers/constants'
-import { checkUrlsSameHost, getAPId } from '../../helpers/activitypub'
-import { MChannelActorLight, MVideo, MVideoAccountLight, MVideoId } from '../../types/models/video'
+import { Transaction } from 'sequelize'
 import { getServerActor } from '@server/models/application/application'
+import { checkUrlsSameHost, getAPId } from '../../helpers/activitypub'
+import { logger, loggerTagsFactory } from '../../helpers/logger'
+import { doJSONRequest } from '../../helpers/requests'
+import { CRAWL_REQUEST_CONCURRENCY } from '../../initializers/constants'
+import { VideoShareModel } from '../../models/video/video-share'
+import { MChannelActorLight, MVideo, MVideoAccountLight, MVideoId } from '../../types/models/video'
+import { getOrCreateAPActor } from './actors'
+import { sendUndoAnnounce, sendVideoAnnounce } from './send'
+import { getLocalVideoAnnounceActivityPubUrl } from './url'
+
+const lTags = loggerTagsFactory('share')
 
 async function shareVideoByServerAndChannel (video: MVideoAccountLight, t: Transaction) {
   if (!video.hasPrivacyForFederation()) return undefined
@@ -25,7 +27,10 @@ async function changeVideoChannelShare (
   oldVideoChannel: MChannelActorLight,
   t: Transaction
 ) {
-  logger.info('Updating video channel of video %s: %s -> %s.', video.uuid, oldVideoChannel.name, video.VideoChannel.name)
+  logger.info(
+    'Updating video channel of video %s: %s -> %s.', video.uuid, oldVideoChannel.name, video.VideoChannel.name,
+    lTags(video.uuid)
+  )
 
   await undoShareByVideoChannel(video, oldVideoChannel, t)
 
@@ -35,28 +40,7 @@ async function changeVideoChannelShare (
 async function addVideoShares (shareUrls: string[], video: MVideoId) {
   await Bluebird.map(shareUrls, async shareUrl => {
     try {
-      // Fetch url
-      const { body } = await doRequest<any>({
-        uri: shareUrl,
-        json: true,
-        activityPub: true
-      })
-      if (!body || !body.actor) throw new Error('Body or body actor is invalid')
-
-      const actorUrl = getAPId(body.actor)
-      if (checkUrlsSameHost(shareUrl, actorUrl) !== true) {
-        throw new Error(`Actor url ${actorUrl} has not the same host than the share url ${shareUrl}`)
-      }
-
-      const actor = await getOrCreateActorAndServerAndModel(actorUrl)
-
-      const entry = {
-        actorId: actor.id,
-        videoId: video.id,
-        url: shareUrl
-      }
-
-      await VideoShareModel.upsert(entry)
+      await addVideoShare(shareUrl, video)
     } catch (err) {
       logger.warn('Cannot add share %s.', shareUrl, { err })
     }
@@ -71,10 +55,30 @@ export {
 
 // ---------------------------------------------------------------------------
 
+async function addVideoShare (shareUrl: string, video: MVideoId) {
+  const { body } = await doJSONRequest<any>(shareUrl, { activityPub: true })
+  if (!body || !body.actor) throw new Error('Body or body actor is invalid')
+
+  const actorUrl = getAPId(body.actor)
+  if (checkUrlsSameHost(shareUrl, actorUrl) !== true) {
+    throw new Error(`Actor url ${actorUrl} has not the same host than the share url ${shareUrl}`)
+  }
+
+  const actor = await getOrCreateAPActor(actorUrl)
+
+  const entry = {
+    actorId: actor.id,
+    videoId: video.id,
+    url: shareUrl
+  }
+
+  await VideoShareModel.upsert(entry)
+}
+
 async function shareByServer (video: MVideo, t: Transaction) {
   const serverActor = await getServerActor()
 
-  const serverShareUrl = getVideoAnnounceActivityPubUrl(serverActor, video)
+  const serverShareUrl = getLocalVideoAnnounceActivityPubUrl(serverActor, video)
   const [ serverShare ] = await VideoShareModel.findOrCreate({
     defaults: {
       actorId: serverActor.id,
@@ -91,7 +95,7 @@ async function shareByServer (video: MVideo, t: Transaction) {
 }
 
 async function shareByVideoChannel (video: MVideoAccountLight, t: Transaction) {
-  const videoChannelShareUrl = getVideoAnnounceActivityPubUrl(video.VideoChannel.Actor, video)
+  const videoChannelShareUrl = getLocalVideoAnnounceActivityPubUrl(video.VideoChannel.Actor, video)
   const [ videoChannelShare ] = await VideoShareModel.findOrCreate({
     defaults: {
       actorId: video.VideoChannel.actorId,

@@ -1,8 +1,10 @@
 import * as express from 'express'
 import { getServerActor } from '@server/models/application/application'
+import { VideosWithSearchCommonQuery } from '@shared/models'
 import { buildNSFWFilter, getCountVideos, isUserAbleToSearchRemoteURI } from '../../helpers/express-utils'
 import { getFormattedObjects } from '../../helpers/utils'
 import { JobQueue } from '../../lib/job-queue'
+import { Hooks } from '../../lib/plugins/hooks'
 import {
   asyncMiddleware,
   authenticate,
@@ -157,25 +159,34 @@ async function listAccountVideos (req: express.Request, res: express.Response) {
   const account = res.locals.account
   const followerActorId = isUserAbleToSearchRemoteURI(res) ? null : undefined
   const countVideos = getCountVideos(req)
+  const query = req.query as VideosWithSearchCommonQuery
 
-  const resultList = await VideoModel.listForApi({
+  const apiOptions = await Hooks.wrapObject({
     followerActorId,
-    start: req.query.start,
-    count: req.query.count,
-    sort: req.query.sort,
+    start: query.start,
+    count: query.count,
+    sort: query.sort,
     includeLocalVideos: true,
-    categoryOneOf: req.query.categoryOneOf,
-    licenceOneOf: req.query.licenceOneOf,
-    languageOneOf: req.query.languageOneOf,
-    tagsOneOf: req.query.tagsOneOf,
-    tagsAllOf: req.query.tagsAllOf,
-    filter: req.query.filter,
-    nsfw: buildNSFWFilter(res, req.query.nsfw),
+    categoryOneOf: query.categoryOneOf,
+    licenceOneOf: query.licenceOneOf,
+    languageOneOf: query.languageOneOf,
+    tagsOneOf: query.tagsOneOf,
+    tagsAllOf: query.tagsAllOf,
+    filter: query.filter,
+    isLive: query.isLive,
+    nsfw: buildNSFWFilter(res, query.nsfw),
     withFiles: false,
     accountId: account.id,
     user: res.locals.oauth ? res.locals.oauth.token.User : undefined,
-    countVideos
-  })
+    countVideos,
+    search: query.search
+  }, 'filter:api.accounts.videos.list.params')
+
+  const resultList = await Hooks.wrapPromiseFun(
+    VideoModel.listForApi,
+    apiOptions,
+    'filter:api.accounts.videos.list.result'
+  )
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }

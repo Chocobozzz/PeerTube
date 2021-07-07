@@ -4,7 +4,7 @@ export interface ComponentPagination {
   totalItems: number
 }
 
-export type ComponentPaginationLight = Omit<ComponentPagination, 'totalItems'>
+export type ComponentPaginationLight = Omit<ComponentPagination, 'totalItems'> & { totalItems?: number }
 
 export function hasMoreItems (componentPagination: ComponentPagination) {
   // No results

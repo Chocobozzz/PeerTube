@@ -1,4 +1,5 @@
 import { AllowNull, BelongsTo, Column, CreatedAt, DataType, Default, ForeignKey, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { AttributesOnly } from '@shared/core-utils'
 import { VideoDetails } from '@shared/models'
 import { VideoModel } from '../video/video'
 import { AbuseModel } from './abuse'
@@ -14,7 +15,7 @@ import { AbuseModel } from './abuse'
     }
   ]
 })
-export class VideoAbuseModel extends Model<VideoAbuseModel> {
+export class VideoAbuseModel extends Model<Partial<AttributesOnly<VideoAbuseModel>>> {
 
   @CreatedAt
   createdAt: Date

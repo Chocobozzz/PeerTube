@@ -1,7 +1,8 @@
 import { forkJoin } from 'rxjs'
 import { map } from 'rxjs/operators'
+import { SelectChannelItem } from 'src/types/select-options-item.model'
 import { Component, EventEmitter, Input, NgZone, OnDestroy, OnInit, Output, ViewChild } from '@angular/core'
-import { FormArray, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms'
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms'
 import { HooksService, PluginService, ServerService } from '@app/core'
 import { removeElementFromArray } from '@app/helpers'
 import {
@@ -17,15 +18,27 @@ import {
   VIDEO_SUPPORT_VALIDATOR,
   VIDEO_TAGS_ARRAY_VALIDATOR
 } from '@app/shared/form-validators/video-validators'
-import { FormReactiveValidationMessages, FormValidatorService, SelectChannelItem } from '@app/shared/shared-forms'
+import { FormReactiveValidationMessages, FormValidatorService } from '@app/shared/shared-forms'
 import { InstanceService } from '@app/shared/shared-instance'
 import { VideoCaptionEdit, VideoEdit, VideoService } from '@app/shared/shared-main'
-import { ServerConfig, VideoConstant, VideoPrivacy } from '@shared/models'
-import { RegisterClientFormFieldOptions, RegisterClientVideoFieldOptions } from '@shared/models/plugins/register-client-form-field.model'
+import {
+  HTMLServerConfig,
+  LiveVideo,
+  RegisterClientFormFieldOptions,
+  RegisterClientVideoFieldOptions,
+  VideoConstant,
+  VideoDetails,
+  VideoPrivacy
+} from '@shared/models'
 import { I18nPrimengCalendarService } from './i18n-primeng-calendar.service'
 import { VideoCaptionAddModalComponent } from './video-caption-add-modal.component'
+import { VideoEditType } from './video-edit.type'
 
 type VideoLanguages = VideoConstant<string> & { group?: string }
+type PluginField = {
+  commonOptions: RegisterClientFormFieldOptions
+  videoFormOptions: RegisterClientVideoFieldOptions
+}
 
 @Component({
   selector: 'my-video-edit',
@@ -36,11 +49,17 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   @Input() form: FormGroup
   @Input() formErrors: { [ id: string ]: string } = {}
   @Input() validationMessages: FormReactiveValidationMessages = {}
+
+  @Input() videoToUpdate: VideoDetails
+
   @Input() userVideoChannels: SelectChannelItem[] = []
   @Input() schedulePublicationPossible = true
+
   @Input() videoCaptions: (VideoCaptionEdit & { captionPath?: string })[] = []
+
   @Input() waitTranscodingEnabled = true
-  @Input() type: 'import-url' | 'import-torrent' | 'upload' | 'update'
+  @Input() type: VideoEditType
+  @Input() liveVideo: LiveVideo
 
   @ViewChild('videoCaptionAddModal', { static: true }) videoCaptionAddModal: VideoCaptionAddModalComponent
 
@@ -54,9 +73,6 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   videoLicences: VideoConstant<number>[] = []
   videoLanguages: VideoLanguages[] = []
 
-  tagValidators: ValidatorFn[]
-  tagValidatorsMessages: { [ name: string ]: string }
-
   pluginDataFormGroup: FormGroup
 
   schedulePublicationEnabled = false
@@ -68,12 +84,9 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   calendarTimezone: string
   calendarDateFormat: string
 
-  serverConfig: ServerConfig
+  serverConfig: HTMLServerConfig
 
-  pluginFields: {
-    commonOptions: RegisterClientFormFieldOptions
-    videoFormOptions: RegisterClientVideoFieldOptions
-  }[] = []
+  pluginFields: PluginField[] = []
 
   private schedulerInterval: any
   private firstPatchDone = false
@@ -89,15 +102,8 @@ export class VideoEditComponent implements OnInit, OnDestroy {
     private ngZone: NgZone,
     private hooks: HooksService
   ) {
-    this.calendarLocale = this.i18nPrimengCalendarService.getCalendarLocale()
     this.calendarTimezone = this.i18nPrimengCalendarService.getTimezone()
     this.calendarDateFormat = this.i18nPrimengCalendarService.getDateFormat()
-  }
-
-  get existingCaptions () {
-    return this.videoCaptions
-               .filter(c => c.action !== 'REMOVE')
-               .map(c => c.language.id)
   }
 
   updateForm () {
@@ -124,7 +130,10 @@ export class VideoEditComponent implements OnInit, OnDestroy {
       previewfile: null,
       support: VIDEO_SUPPORT_VALIDATOR,
       schedulePublicationAt: VIDEO_SCHEDULE_PUBLICATION_AT_VALIDATOR,
-      originallyPublishedAt: VIDEO_ORIGINALLY_PUBLISHED_AT_VALIDATOR
+      originallyPublishedAt: VIDEO_ORIGINALLY_PUBLISHED_AT_VALIDATOR,
+      liveStreamKey: null,
+      permanentLive: null,
+      saveReplay: null
     }
 
     this.formValidatorService.updateForm(
@@ -144,6 +153,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
 
     this.trackChannelChange()
     this.trackPrivacyChange()
+    this.trackLivePermanentFieldChange()
   }
 
   ngOnInit () {
@@ -174,7 +184,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
 
     this.serverService.getVideoPrivacies()
       .subscribe(privacies => {
-        this.videoPrivacies = this.videoService.explainedPrivacyLabels(privacies)
+        this.videoPrivacies = this.videoService.explainedPrivacyLabels(privacies).videoPrivacies
         if (this.schedulePublicationPossible) {
           this.videoPrivacies.push({
             id: this.SPECIAL_SCHEDULED_PRIVACY,
@@ -184,9 +194,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
         }
       })
 
-    this.serverConfig = this.serverService.getTmpConfig()
-    this.serverService.getConfig()
-      .subscribe(config => this.serverConfig = config)
+    this.serverConfig = this.serverService.getHTMLConfig()
 
     this.initialVideoCaptions = this.videoCaptions.map(c => c.language.id)
 
@@ -199,6 +207,12 @@ export class VideoEditComponent implements OnInit, OnDestroy {
 
   ngOnDestroy () {
     if (this.schedulerInterval) clearInterval(this.schedulerInterval)
+  }
+
+  getExistingCaptions () {
+    return this.videoCaptions
+               .filter(c => c.action !== 'REMOVE')
+               .map(c => c.language.id)
   }
 
   onCaptionAdded (caption: VideoCaptionEdit) {
@@ -234,6 +248,24 @@ export class VideoEditComponent implements OnInit, OnDestroy {
 
   openAddCaptionModal () {
     this.videoCaptionAddModal.show()
+  }
+
+  isSaveReplayEnabled () {
+    return this.serverConfig.live.allowReplay
+  }
+
+  isPermanentLiveEnabled () {
+    return this.form.value['permanentLive'] === true
+  }
+
+  isPluginFieldHidden (pluginField: PluginField) {
+    if (typeof pluginField.commonOptions.hidden !== 'function') return false
+
+    return pluginField.commonOptions.hidden({
+      formValues: this.form.value,
+      videoToUpdate: this.videoToUpdate,
+      liveVideo: this.liveVideo
+    })
   }
 
   private sortVideoCaptions () {
@@ -320,7 +352,12 @@ export class VideoEditComponent implements OnInit, OnDestroy {
             const currentSupport = this.form.value[ 'support' ]
 
             // First time we set the channel?
-            if (isNaN(oldChannelId) && !currentSupport) return this.updateSupportField(newChannel.support)
+            if (isNaN(oldChannelId)) {
+              // Fill support if it's empty
+              if (!currentSupport) this.updateSupportField(newChannel.support)
+
+              return
+            }
 
             const oldChannel = this.userVideoChannels.find(c => c.id === oldChannelId)
             if (!newChannel || !oldChannel) {
@@ -335,6 +372,24 @@ export class VideoEditComponent implements OnInit, OnDestroy {
             // Update the support text with our new channel
             this.updateSupportField(newChannel.support)
           })
+        }
+      )
+  }
+
+  private trackLivePermanentFieldChange () {
+    // We will update the "support" field depending on the channel
+    this.form.controls['permanentLive']
+      .valueChanges
+      .subscribe(
+        permanentLive => {
+          const saveReplayControl = this.form.controls['saveReplay']
+
+          if (permanentLive === true) {
+            saveReplayControl.setValue(false)
+            saveReplayControl.disable()
+          } else {
+            saveReplayControl.enable()
+          }
         }
       )
   }

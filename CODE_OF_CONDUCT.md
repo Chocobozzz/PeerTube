@@ -74,7 +74,7 @@ Project maintainers may further define and clarify representation of a project.
 
 ## Enforcement
 
-You should report any instances of abusive, harassing, or otherwise unacceptable behaviour to the project team at me@florianbigard.com. The project team will review and investigate all complaints, and will respond in a way that it deems appropriate to the circumstances. The project team is obligated to maintain the anonymity of the reporter of an incident. We may post further details of specific enforcement policies separately.
+You should report any instances of abusive, harassing, or otherwise unacceptable behaviour to the project team at chocobozzz@framasoft.org. The project team will review and investigate all complaints, and will respond in a way that it deems appropriate to the circumstances. The project team is obligated to maintain the anonymity of the reporter of an incident. We may post further details of specific enforcement policies separately.
 
 Project maintainers who do not follow or enforce this code of conduct in good faith may face temporary or permanent consequences. These will be determined by members of the project's leadership.
 

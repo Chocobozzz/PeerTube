@@ -1,26 +1,29 @@
-import { VideoModel } from '../../../models/video/video'
 import { PickWith, PickWithOpt } from '@shared/core-utils'
+import { VideoModel } from '../../../models/video/video'
+import { MTrackerUrl } from '../server/tracker'
+import { MUserVideoHistoryTime } from '../user/user-video-history'
+import { MScheduleVideoUpdate } from './schedule-video-update'
+import { MTag } from './tag'
+import { MThumbnail } from './thumbnail'
+import { MVideoBlacklist, MVideoBlacklistLight, MVideoBlacklistUnfederated } from './video-blacklist'
+import { MVideoCaptionLanguage, MVideoCaptionLanguageUrl } from './video-caption'
 import {
   MChannelAccountDefault,
   MChannelAccountLight,
   MChannelAccountSummaryFormattable,
   MChannelActor,
   MChannelFormattable,
+  MChannelHost,
   MChannelUserId
 } from './video-channels'
-import { MTag } from './tag'
-import { MVideoCaptionLanguage, MVideoCaptionLanguageUrl } from './video-caption'
+import { MVideoFile, MVideoFileRedundanciesAll, MVideoFileRedundanciesOpt } from './video-file'
+import { MVideoLive } from './video-live'
 import {
   MStreamingPlaylistFiles,
   MStreamingPlaylistRedundancies,
   MStreamingPlaylistRedundanciesAll,
   MStreamingPlaylistRedundanciesOpt
 } from './video-streaming-playlist'
-import { MVideoFile, MVideoFileRedundanciesAll, MVideoFileRedundanciesOpt } from './video-file'
-import { MThumbnail } from './thumbnail'
-import { MVideoBlacklist, MVideoBlacklistLight, MVideoBlacklistUnfederated } from './video-blacklist'
-import { MScheduleVideoUpdate } from './schedule-video-update'
-import { MUserVideoHistoryTime } from '../user/user-video-history'
 
 type Use<K extends keyof VideoModel, M> = PickWith<VideoModel, K, M>
 
@@ -29,7 +32,7 @@ type Use<K extends keyof VideoModel, M> = PickWith<VideoModel, K, M>
 export type MVideo =
   Omit<VideoModel, 'VideoChannel' | 'Tags' | 'Thumbnails' | 'VideoPlaylistElements' | 'VideoAbuses' |
   'VideoFiles' | 'VideoStreamingPlaylists' | 'VideoShares' | 'AccountVideoRates' | 'VideoComments' | 'VideoViews' | 'UserVideoHistories' |
-  'ScheduleVideoUpdate' | 'VideoBlacklist' | 'VideoImport' | 'VideoCaptions'>
+  'ScheduleVideoUpdate' | 'VideoBlacklist' | 'VideoImport' | 'VideoCaptions' | 'VideoLive' | 'Trackers'>
 
 // ############################################################################
 
@@ -104,7 +107,6 @@ export type MVideoAccountLight =
 export type MVideoWithRights =
   MVideo &
   Use<'VideoBlacklist', MVideoBlacklistLight> &
-  Use<'Thumbnails', MThumbnail[]> &
   Use<'VideoChannel', MChannelUserId>
 
 // ############################################################################
@@ -142,6 +144,10 @@ export type MVideoWithChannelActor =
   MVideo &
   Use<'VideoChannel', MChannelActor>
 
+export type MVideoWithHost =
+  MVideo &
+  Use<'VideoChannel', MChannelHost>
+
 export type MVideoFullLight =
   MVideo &
   Use<'Thumbnails', MThumbnail[]> &
@@ -151,7 +157,8 @@ export type MVideoFullLight =
   Use<'UserVideoHistories', MUserVideoHistoryTime[]> &
   Use<'VideoFiles', MVideoFile[]> &
   Use<'ScheduleVideoUpdate', MScheduleVideoUpdate> &
-  Use<'VideoStreamingPlaylists', MStreamingPlaylistFiles[]>
+  Use<'VideoStreamingPlaylists', MStreamingPlaylistFiles[]> &
+  Use<'VideoLive', MVideoLive>
 
 // ############################################################################
 
@@ -165,7 +172,8 @@ export type MVideoAP =
   Use<'VideoCaptions', MVideoCaptionLanguageUrl[]> &
   Use<'VideoBlacklist', MVideoBlacklistUnfederated> &
   Use<'VideoFiles', MVideoFileRedundanciesOpt[]> &
-  Use<'Thumbnails', MThumbnail[]>
+  Use<'Thumbnails', MThumbnail[]> &
+  Use<'VideoLive', MVideoLive>
 
 export type MVideoAPWithoutCaption = Omit<MVideoAP, 'VideoCaptions'>
 
@@ -178,7 +186,8 @@ export type MVideoDetails =
   Use<'Thumbnails', MThumbnail[]> &
   Use<'UserVideoHistories', MUserVideoHistoryTime[]> &
   Use<'VideoStreamingPlaylists', MStreamingPlaylistRedundancies[]> &
-  Use<'VideoFiles', MVideoFileRedundanciesOpt[]>
+  Use<'VideoFiles', MVideoFileRedundanciesOpt[]> &
+  Use<'Trackers', MTrackerUrl[]>
 
 export type MVideoForUser =
   MVideo &
@@ -208,4 +217,5 @@ export type MVideoFormattableDetails =
   Use<'VideoChannel', MChannelFormattable> &
   Use<'Tags', MTag[]> &
   Use<'VideoStreamingPlaylists', MStreamingPlaylistRedundanciesOpt[]> &
-  Use<'VideoFiles', MVideoFileRedundanciesOpt[]>
+  Use<'VideoFiles', MVideoFileRedundanciesOpt[]> &
+  PickWithOpt<VideoModel, 'Trackers', MTrackerUrl[]>

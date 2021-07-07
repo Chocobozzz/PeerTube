@@ -1,25 +1,18 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 a {
   @include disable-default-a-behaviour;
   display: inline-block;
 
-  &, &:hover {
+  &,
+  &:hover {
     color: pvar(--mainForegroundColor);
   }
 
   span {
     font-size: 80%;
     color: pvar(--inputPlaceholderColor);
-  }
-}
-
-.caption {
-  justify-content: flex-end;
-
-  input {
-    @include peertube-input-text(250px);
   }
 }
 

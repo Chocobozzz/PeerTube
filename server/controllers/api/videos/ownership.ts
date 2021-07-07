@@ -19,6 +19,7 @@ import { changeVideoChannelShare } from '../../../lib/activitypub/share'
 import { sendUpdateVideo } from '../../../lib/activitypub/send'
 import { VideoModel } from '../../../models/video/video'
 import { MVideoFullLight } from '@server/types/models'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const ownershipVideoRouter = express.Router()
 
@@ -80,7 +81,9 @@ async function giveVideoOwnership (req: express.Request, res: express.Response) 
   })
 
   logger.info('Ownership change for video %s created.', videoInstance.name)
-  return res.type('json').status(204).end()
+  return res.type('json')
+            .status(HttpStatusCode.NO_CONTENT_204)
+            .end()
 }
 
 async function listVideoOwnership (req: express.Request, res: express.Response) {
@@ -96,15 +99,15 @@ async function listVideoOwnership (req: express.Request, res: express.Response) 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
-async function acceptOwnership (req: express.Request, res: express.Response) {
+function acceptOwnership (req: express.Request, res: express.Response) {
   return sequelizeTypescript.transaction(async t => {
     const videoChangeOwnership = res.locals.videoChangeOwnership
     const channel = res.locals.videoChannel
 
     // We need more attributes for federation
-    const targetVideo = await VideoModel.loadAndPopulateAccountAndServerAndTags(videoChangeOwnership.Video.id)
+    const targetVideo = await VideoModel.loadAndPopulateAccountAndServerAndTags(videoChangeOwnership.Video.id, t)
 
-    const oldVideoChannel = await VideoChannelModel.loadByIdAndPopulateAccount(targetVideo.channelId)
+    const oldVideoChannel = await VideoChannelModel.loadAndPopulateAccount(targetVideo.channelId, t)
 
     targetVideo.channelId = channel.id
 
@@ -119,17 +122,17 @@ async function acceptOwnership (req: express.Request, res: express.Response) {
     videoChangeOwnership.status = VideoChangeOwnershipStatus.ACCEPTED
     await videoChangeOwnership.save({ transaction: t })
 
-    return res.sendStatus(204)
+    return res.status(HttpStatusCode.NO_CONTENT_204).end()
   })
 }
 
-async function refuseOwnership (req: express.Request, res: express.Response) {
+function refuseOwnership (req: express.Request, res: express.Response) {
   return sequelizeTypescript.transaction(async t => {
     const videoChangeOwnership = res.locals.videoChangeOwnership
 
     videoChangeOwnership.status = VideoChangeOwnershipStatus.REFUSED
     await videoChangeOwnership.save({ transaction: t })
 
-    return res.sendStatus(204)
+    return res.status(HttpStatusCode.NO_CONTENT_204).end()
   })
 }

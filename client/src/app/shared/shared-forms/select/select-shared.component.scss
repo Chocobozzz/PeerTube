@@ -1,5 +1,5 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 $form-base-input-width: auto;
 
@@ -29,4 +29,24 @@ ng-select ::ng-deep {
     height: 20px;
     width: 20px;
   }
+}
+
+.root {
+  display: flex;
+  align-items: center;
+
+  > my-select-options {
+    flex-grow: 1;
+  }
+}
+
+my-select-options + input {
+  @include peertube-input-text($form-base-input-width);
+
+  @include margin-left(5px);
+  display: block;
+}
+
+.input-suffix {
+  @include margin-left(5px);
 }

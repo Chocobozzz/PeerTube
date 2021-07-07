@@ -1,6 +1,6 @@
 import { AfterContentInit, Component, ContentChildren, Input, OnChanges, OnInit, QueryList, TemplateRef } from '@angular/core'
-import { MarkdownService } from '@app/core'
 import { GlobalIconName } from '@app/shared/shared-icons'
+import { ENHANCED_RULES, TEXT_RULES } from '@shared/core-utils/renderer/markdown'
 import { PeerTubeTemplateDirective } from '../angular'
 
 @Component({
@@ -60,12 +60,12 @@ export class HelpComponent implements OnInit, OnChanges, AfterContentInit {
 
   private init () {
     if (this.helpType === 'markdownText') {
-      this.mainHtml = this.formatMarkdownSupport(MarkdownService.TEXT_RULES)
+      this.mainHtml = this.formatMarkdownSupport(TEXT_RULES)
       return
     }
 
     if (this.helpType === 'markdownEnhanced') {
-      this.mainHtml = this.formatMarkdownSupport(MarkdownService.ENHANCED_RULES)
+      this.mainHtml = this.formatMarkdownSupport(ENHANCED_RULES)
       return
     }
   }

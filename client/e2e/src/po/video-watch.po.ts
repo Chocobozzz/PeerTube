@@ -43,7 +43,7 @@ export class VideoWatchPage {
 
   async goOnAssociatedEmbed () {
     let url = await browser.getCurrentUrl()
-    url = url.replace('/watch/', '/embed/')
+    url = url.replace('/w/', '/embed/')
     url = url.replace(':3333', ':9001')
 
     return browser.get(url)
@@ -65,7 +65,7 @@ export class VideoWatchPage {
     await browser.wait(browser.ExpectedConditions.elementToBeClickable(video))
     await video.click()
 
-    await browser.wait(browser.ExpectedConditions.urlContains('/watch/'))
+    await browser.wait(browser.ExpectedConditions.urlContains('/w/'))
   }
 
   async clickOnFirstVideo () {
@@ -78,7 +78,7 @@ export class VideoWatchPage {
     const textToReturn = videoName.getText()
     await video.click()
 
-    await browser.wait(browser.ExpectedConditions.urlContains('/watch/'))
+    await browser.wait(browser.ExpectedConditions.urlContains('/w/'))
     return textToReturn
   }
 
@@ -86,7 +86,7 @@ export class VideoWatchPage {
     const dropdown = element(by.css('my-video-actions-dropdown .action-button'))
     await dropdown.click()
 
-    const items: ElementFinder[] = await element.all(by.css('my-video-actions-dropdown .dropdown-menu .dropdown-item'))
+    const items: ElementFinder[] = await element.all(by.css('.dropdown-menu.show .dropdown-item'))
 
     for (const item of items) {
       const href = await item.getAttribute('href')

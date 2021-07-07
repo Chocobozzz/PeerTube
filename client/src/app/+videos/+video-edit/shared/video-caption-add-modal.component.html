@@ -34,12 +34,12 @@
 
     <div class="modal-footer inputs">
       <input
-        type="button" role="button" i18n-value value="Cancel" class="action-button action-button-cancel"
+        type="button" role="button" i18n-value value="Cancel" class="peertube-button grey-button"
         (click)="hide()" (key.enter)="hide()"
       >
 
       <input
-        type="submit" i18n-value value="Add this caption" class="action-button-submit"
+        type="submit" i18n-value value="Add this caption" class="peertube-button orange-button"
         [disabled]="!form.valid" (click)="addCaption()"
       >
     </div>

@@ -1,165 +1,135 @@
 <div class="menu-wrapper">
-  <menu [ngClass]="{ 'logged-in': isLoggedIn }">
+  <menu [ngClass]="{ 'is-logged-in': isLoggedIn }">
     <div class="top-menu">
       <div *ngIf="isLoggedIn" class="logged-in-block">
-        <my-avatar-notification [user]="user" (navigate)="onSameUrlRestoreScrollPosition($event)"></my-avatar-notification>
+        <div>
+          <div
+            class="logged-in-more" ngbDropdown #dropdown="ngbDropdown" placement="bottom-left auto"
+            [container]="dropdownContainer" (openChange)="onDropdownOpenChange($event)" autoClose="outside"
+          >
+            <div ngbDropdownToggle>
+              <my-actor-avatar [account]="user.account" size="34"></my-actor-avatar>
+              <div class="logged-in-info">
+                <div class="logged-in-display-name">{{ user.account?.displayName }}</div>
 
-        <div class="logged-in-info">
-          <a *ngIf="user.account" [routerLink]="[ '/accounts', user.account.nameWithHost ]" class="logged-in-display-name">{{ user.account?.displayName }}</a>
-          <a *ngIf="!user.account" routerLink="/my-account/settings" class="logged-in-display-name">{{ user.account?.displayName }}</a>
+                <div class="logged-in-username">@{{ user.username }}</div>
+              </div>
 
-          <div class="logged-in-username">{{ user.username }}</div>
-        </div>
+              <div class="dropdown-toggle-indicator">
+                <span class="glyphicon glyphicon-chevron-down"></span>
+              </div>
+            </div>
 
-        <div class="logged-in-more" ngbDropdown [placement]="placement" container="body" autoClose="outside">
-          <my-global-icon iconName="more-vertical" ngbDropdownToggle role="button"></my-global-icon>
+            <div ngbDropdownMenu>
+              <a
+                *ngIf="user.account" ngbDropdownItem ngbDropdownToggle class="dropdown-item" [routerLink]="[ '/a', user.account.nameWithHost ]"
+                #profile (click)="onActiveLinkScrollToAnchor(profile)"
+              >
+                <my-global-icon iconName="go" aria-hidden="true"></my-global-icon> <ng-container i18n>Public profile</ng-container>
+              </a>
 
-          <div ngbDropdownMenu>
-            <a *ngIf="user.account" ngbDropdownItem ngbDropdownToggle class="dropdown-item" [routerLink]="[ '/accounts', user.account.nameWithHost ]">
-              <my-global-icon iconName="go" aria-hidden="true"></my-global-icon> <ng-container i18n>Public profile</ng-container>
-            </a>
+              <div class="dropdown-divider"></div>
 
-            <div class="dropdown-divider"></div>
+              <a ngbDropdownItem ngbDropdownToggle class="dropdown-item" (click)="openLanguageChooser()">
+                <my-global-icon iconName="language" aria-hidden="true"></my-global-icon>
+                <span i18n>Interface:</span>
+                <span class="ml-auto text-muted">{{ currentInterfaceLanguage }}</span>
+              </a>
 
-            <a ngbDropdownItem ngbDropdownToggle class="dropdown-item" routerLink="/my-account/settings"
-              #settingsLink (click)="onSameUrlRestoreScrollPosition(settingsLink)">
-              <my-global-icon iconName="user" aria-hidden="true"></my-global-icon> <ng-container i18n>Account settings</ng-container>
-            </a>
+              <a ngbDropdownItem ngbDropdownToggle class="dropdown-item" routerLink="/my-account/settings" fragment="video-languages-subtitles"
+                #settingsLanguagesSubtitles (click)="onActiveLinkScrollToAnchor(settingsLanguagesSubtitles)">
+                <my-global-icon iconName="video-lang" aria-hidden="true"></my-global-icon>
+                <span i18n>Videos:</span>
+                <span class="ml-auto text-muted">{{ videoLanguages.join(', ') }}</span>
+              </a>
 
-            <a ngbDropdownItem ngbDropdownToggle class="dropdown-item" routerLink="/my-account/video-channels"
-              #channelsLink (click)="onSameUrlRestoreScrollPosition(channelsLink)">
-              <my-global-icon iconName="channel" aria-hidden="true"></my-global-icon> <ng-container i18n>Channels settings</ng-container>
-            </a>
+              <a ngbDropdownItem ngbDropdownToggle class="dropdown-item settings-sensitive" routerLink="/my-account/settings"
+                fragment="video-sensitive-content-policy" #settingsSensitiveContentPolicy
+                (click)="onActiveLinkScrollToAnchor(settingsSensitiveContentPolicy)"
+              >
+                <my-global-icon class="hover-display-toggle" [hidden]="user.nsfwPolicy === 'display'" iconName="sensitive" aria-hidden="true"></my-global-icon>
+                <my-global-icon class="hover-display-toggle" [hidden]="user.nsfwPolicy !== 'display'" iconName="unsensitive" aria-hidden="true"></my-global-icon>
+                <span i18n>Sensitive:</span>
+                <span class="ml-auto text-muted">{{ nsfwPolicy }}</span>
+              </a>
 
-            <div class="dropdown-divider"></div>
+              <a ngbDropdownItem class="dropdown-item" (click)="toggleUseP2P()">
+                <my-global-icon iconName="p2p" aria-hidden="true"></my-global-icon>
+                <ng-container i18n>Help share videos</ng-container>
 
-            <a ngbDropdownItem ngbDropdownToggle class="dropdown-item" (click)="openLanguageChooser()">
-              <my-global-icon iconName="language" aria-hidden="true"></my-global-icon>
-              <span i18n>Interface:</span>
-              <span class="ml-auto text-muted">{{ language }}</span>
-            </a>
+                <my-input-switch class="ml-auto" [checked]="user.webTorrentEnabled"></my-input-switch>
+              </a>
 
-            <a ngbDropdownItem ngbDropdownToggle class="dropdown-item" routerLink="/my-account/settings" fragment="video-languages-subtitles"
-              #settingsLanguagesSubtitles (click)="onSameUrlRestoreScrollPosition(settingsLanguagesSubtitles)">
-              <my-global-icon iconName="video-lang" aria-hidden="true"></my-global-icon>
-              <span i18n>Videos:</span>
-              <span class="ml-auto text-muted">{{ videoLanguages.join(', ') }}</span>
-            </a>
+              <div class="dropdown-divider"></div>
 
-            <a ngbDropdownItem ngbDropdownToggle class="dropdown-item" routerLink="/my-account/settings"
-              fragment="video-sensitive-content-policy" #settingsSensitiveContentPolicy
-              (click)="onSameUrlRestoreScrollPosition(settingsSensitiveContentPolicy)">
-              <my-global-icon class="hover-display-toggle" [ngClass]="{ 'not-displayed': user.nsfwPolicy === 'display' }" iconName="sensitive" aria-hidden="true"></my-global-icon>
-              <my-global-icon class="hover-display-toggle" [ngClass]="{ 'not-displayed': user.nsfwPolicy !== 'display' }" iconName="unsensitive" aria-hidden="true"></my-global-icon>
-              <span i18n>Sensitive:</span>
-              <span class="ml-auto text-muted">{{ nsfwPolicy }}</span>
-            </a>
+              <a *ngIf="!isInMobileView" ngbDropdownItem ngbDropdownToggle class="dropdown-item" (click)="openHotkeysCheatSheet()">
+                <my-global-icon iconName="command" aria-hidden="true"></my-global-icon>
+                <ng-container i18n>Keyboard shortcuts</ng-container>
+              </a>
 
-            <a ngbDropdownItem class="dropdown-item" (click)="toggleUseP2P()">
-              <my-global-icon iconName="p2p" aria-hidden="true"></my-global-icon>
-              <ng-container i18n>Help share videos</ng-container>
-              <input type="checkbox" [checked]="user.webTorrentEnabled"/><label class="ml-auto" for="switch">Toggle p2p</label>
-            </a>
-
-            <a ngbDropdownItem ngbDropdownToggle class="dropdown-item" routerLink="/my-account/settings"
-              #settingsMoreLink (click)="onSameUrlRestoreScrollPosition(settingsMoreLink)">
-              <my-global-icon iconName="more-horizontal" aria-hidden="true"></my-global-icon> <ng-container i18n>More account settings</ng-container>
-            </a>
-
-            <div class="dropdown-divider"></div>
-
-            <a ngbDropdownItem ngbDropdownToggle class="dropdown-item" (click)="openHotkeysCheatSheet()">
-              <i class="icon icon-shortcuts" aria-hidden="true"></i> <ng-container i18n>Keyboard shortcuts</ng-container>
-            </a>
-
-            <a ngbDropdownItem ngbDropdownToggle (click)="logout($event)" class="dropdown-item" href="#">
-              <my-global-icon iconName="sign-out" aria-hidden="true"></my-global-icon> <ng-container i18n>Log out</ng-container>
-            </a>
+              <a ngbDropdownItem ngbDropdownToggle (click)="logout($event)" class="dropdown-item" href="#">
+                <my-global-icon iconName="sign-out" aria-hidden="true"></my-global-icon>
+                <ng-container i18n>Log out</ng-container>
+              </a>
+            </div>
           </div>
+
+          <my-notification (navigate)="onActiveLinkScrollToAnchor($event)"></my-notification>
+        </div>
+
+        <div class="logged-in-menu">
+          <a class="menu-link" routerLink="/my-account" routerLinkActive="active" #settingsLink (click)="onActiveLinkScrollToAnchor(settingsLink)">
+            <my-global-icon iconName="user" aria-hidden="true"></my-global-icon>
+            <ng-container i18n>My account</ng-container>
+          </a>
+
+          <a class="menu-link" routerLink="/my-library" routerLinkActive="active" #libraryLink (click)="onActiveLinkScrollToAnchor(libraryLink)">
+            <my-global-icon iconName="channel" aria-hidden="true"></my-global-icon>
+            <ng-container i18n>My library</ng-container>
+          </a>
+
+          <a class="menu-link" *ngIf="userHasAdminAccess" [routerLink]="getFirstAdminRouteAvailable()" routerLinkActive="active">
+            <my-global-icon iconName="cog" aria-hidden="true"></my-global-icon>
+            <ng-container i18n>Administration</ng-container>
+          </a>
         </div>
       </div>
 
-      <div *ngIf="!isLoggedIn" class="button-block">
-        <a i18n routerLink="/login" class="login-button">Login</a>
-        <a i18n *ngIf="isRegistrationAllowed()" routerLink="/signup" class="create-account-button">Create an account</a>
+      <div *ngIf="!isLoggedIn" class="login-buttons-block">
+        <a i18n routerLink="/login" class="peertube-button-link orange-button">Login</a>
+        <a i18n *ngIf="isRegistrationAllowed()" routerLink="/signup" class="peertube-button-link create-account-button">Create an account</a>
       </div>
 
-      <div *ngIf="isLoggedIn" class="panel-block">
-        <div i18n class="block-title">MY LIBRARY</div>
+      <ng-container *ngFor="let menuSection of menuSections" >
+        <div [ngClass]="[ menuSection.key, 'menu-block' ]">
+          <div i18n class="block-title">{{ menuSection.title }}</div>
 
-        <a *ngIf="user.canSeeVideosLink" routerLink="/my-account/videos" routerLinkActive="active">
-          <my-global-icon iconName="videos" aria-hidden="true"></my-global-icon>
-          <ng-container i18n>Videos</ng-container>
-        </a>
-
-        <a routerLink="/my-account/video-playlists" routerLinkActive="active">
-          <my-global-icon iconName="playlists" aria-hidden="true"></my-global-icon>
-          <ng-container i18n>Playlists</ng-container>
-        </a>
-
-        <a routerLink="/videos/subscriptions" routerLinkActive="active">
-          <my-global-icon iconName="subscriptions" aria-hidden="true"></my-global-icon>
-          <ng-container i18n>Subscriptions</ng-container>
-        </a>
-
-        <a routerLink="/my-account/history/videos" routerLinkActive="active">
-          <my-global-icon iconName="history" aria-hidden="true"></my-global-icon>
-          <ng-container i18n>History</ng-container>
-        </a>
-
-      </div>
-
-      <div class="panel-block">
-        <div i18n class="block-title">VIDEOS</div>
-
-        <a routerLink="/videos/overview" routerLinkActive="active">
-          <my-global-icon iconName="globe" aria-hidden="true"></my-global-icon>
-          <ng-container i18n>Discover</ng-container>
-        </a>
-
-        <a routerLink="/videos/trending" routerLinkActive="active">
-          <my-global-icon iconName="trending" aria-hidden="true"></my-global-icon>
-          <ng-container i18n>Trending</ng-container>
-        </a>
-
-        <a routerLink="/videos/most-liked" routerLinkActive="active">
-          <my-global-icon iconName="like" aria-hidden="true"></my-global-icon>
-          <ng-container i18n>Most liked</ng-container>
-        </a>
-
-        <a routerLink="/videos/recently-added" routerLinkActive="active">
-          <my-global-icon iconName="recently-added" aria-hidden="true"></my-global-icon>
-          <ng-container i18n>Recently added</ng-container>
-        </a>
-
-        <a routerLink="/videos/local" routerLinkActive="active">
-          <my-global-icon iconName="home" aria-hidden="true"></my-global-icon>
-          <ng-container i18n>Local</ng-container>
-        </a>
-      </div>
+          <a class="menu-link" *ngFor="let link of menuSection.links" [routerLink]="link.path" routerLinkActive="active">
+            <my-global-icon [iconName]="link.icon" aria-hidden="true"></my-global-icon>
+            <ng-container>{{ link.shortLabel }}</ng-container>
+          </a>
+        </div>
+      </ng-container>
     </div>
 
     <div class="footer">
-      <div class="panel-block">
-        <a *ngIf="userHasAdminAccess" [routerLink]="getFirstAdminRouteAvailable()" routerLinkActive="active">
+      <div class="footer-block">
+        <a *ngIf="!isLoggedIn" class="menu-link" (click)="openQuickSettings()">
           <my-global-icon iconName="cog" aria-hidden="true"></my-global-icon>
-          <ng-container i18n>Administration</ng-container>
+          <ng-container i18n>My settings</ng-container>
         </a>
-        <a *ngIf="!isLoggedIn" (click)="openQuickSettings()">
-          <my-global-icon iconName="cog" aria-hidden="true"></my-global-icon>
-          <ng-container i18n>Settings</ng-container>
-        </a>
-        <a routerLink="/about/instance">
+
+        <a class="menu-link" routerLink="/about" routerLinkActive="active">
           <my-global-icon iconName="help" aria-hidden="true"></my-global-icon>
           <ng-container i18n>About</ng-container>
         </a>
       </div>
 
-      <div class="bottom-links">
+      <div class="footer-bottom">
 
         <div class="footer-links">
           <div *ngIf="isLoggedIn === false">
-            <span role="button" (click)="openLanguageChooser()" class="c-hand" i18n>Interface: {{ language }}</span>
+            <span role="button" (click)="openLanguageChooser()" class="c-hand" i18n>Interface: {{ currentInterfaceLanguage }}</span>
           </div>
 
           <div>
@@ -168,16 +138,16 @@
             <a i18n href="https://joinpeertube.org/faq" i18n-title title="Frequently asked questions about PeerTube" target="_blank" rel="noopener noreferrer">FAQ</a>
             <a i18n routerLink="/about/instance" fragment="statistics">Stats</a>
             <a i18n href="https://docs.joinpeertube.org/api-rest-reference.html" i18n-title title="API documentation" target="_blank" rel="noopener noreferrer">API</a>
-            <a (click)="openHotkeysCheatSheet()" class="c-hand" i18n>Shortcuts</a>
+            <a (click)="openHotkeysCheatSheet()" class="c-hand" i18n>Keyboard shortcuts</a>
           </div>
         </div>
 
         <div class="footer-copyleft">
-          <small class="d-inline" i18n-title title="powered by PeerTube - CopyLeft 2015-2020">
+          <small class="d-inline" i18n-title title="powered by PeerTube - CopyLeft 2015-2021">
             <a href="https://joinpeertube.org" class="mr-1" target="_blank" rel="noopener noreferrer" i18n>powered by PeerTube</a>
 
             <a href="https://github.com/Chocobozzz/PeerTube/blob/develop/LICENSE" target="_blank" rel="noopener noreferrer">
-              <span aria-label="copyleft" class="d-inline-block" style="transform: rotateY(180deg)">&copy;</span> 2015-2020
+              <span aria-label="copyleft" class="d-inline-block" style="transform: rotateY(180deg)">&copy;</span> 2015-2021
             </a>
           </small>
         </div>

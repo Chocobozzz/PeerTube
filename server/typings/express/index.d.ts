@@ -1,13 +1,19 @@
+
 import { RegisterServerAuthExternalOptions } from '@server/types'
 import {
   MAbuseMessage,
   MAbuseReporter,
   MAccountBlocklist,
+  MActorFollowActorsDefault,
   MActorUrl,
+  MChannelBannerAccountDefault,
   MStreamingPlaylist,
   MVideoChangeOwnershipFull,
   MVideoFile,
+  MVideoFormattableDetails,
+  MVideoId,
   MVideoImmutable,
+  MVideoLive,
   MVideoPlaylistFull,
   MVideoPlaylistFullSummary
 } from '@server/types/models'
@@ -16,61 +22,98 @@ import { MPlugin, MServer, MServerBlocklist } from '@server/types/models/server'
 import { MVideoImportDefault } from '@server/types/models/video/video-import'
 import { MVideoPlaylistElement, MVideoPlaylistElementVideoUrlPlaylistPrivacy } from '@server/types/models/video/video-playlist-element'
 import { MAccountVideoRateAccountVideo } from '@server/types/models/video/video-rate'
-import { UserRole } from '@shared/models'
+import { HttpMethod } from '@shared/core-utils/miscs/http-methods'
+import { PeerTubeProblemDocumentData, ServerErrorCode, VideoCreate } from '@shared/models'
+import { File as UploadXFile, Metadata } from '@uploadx/core'
 import { RegisteredPlugin } from '../../lib/plugins/plugin-manager'
 import {
   MAccountDefault,
   MActorAccountChannelId,
-  MActorFollowActorsDefault,
   MActorFollowActorsDefaultSubscription,
   MActorFull,
-  MChannelAccountDefault,
   MComment,
   MCommentOwnerVideoReply,
   MUserDefault,
   MVideoBlacklist,
   MVideoCaptionVideo,
   MVideoFullLight,
-  MVideoIdThumbnail,
   MVideoRedundancyVideo,
   MVideoShareActor,
-  MVideoThumbnail,
-  MVideoWithRights
+  MVideoThumbnail
 } from '../../types/models'
 
 declare module 'express' {
   export interface Request {
     query: any
+    method: HttpMethod
   }
 
+  // Upload using multer or uploadx middleware
+  export type MulterOrUploadXFile = UploadXFile | Express.Multer.File
+
+  export type UploadFiles = {
+    [fieldname: string]: MulterOrUploadXFile[]
+  } | MulterOrUploadXFile[]
+
+  // Partial object used by some functions to check the file mimetype/extension
+  export type UploadFileForCheck = {
+    originalname: string
+    mimetype: string
+  }
+
+  export type UploadFilesForCheck = {
+    [fieldname: string]: UploadFileForCheck[]
+  } | UploadFileForCheck[]
+
+  // Upload file with a duration added by our middleware
+  export type VideoUploadFile = Pick<Express.Multer.File, 'path' | 'filename' | 'size'> & {
+    duration: number
+  }
+
+  // Extends Metadata property of UploadX object
+  export type UploadXFileMetadata = Metadata & VideoCreate & {
+    previewfile: Express.Multer.File[]
+    thumbnailfile: Express.Multer.File[]
+  }
+
+  // Our custom UploadXFile object using our custom metadata
+  export type CustomUploadXFile <T extends Metadata> = UploadXFile & { metadata: T }
+
+  export type EnhancedUploadXFile = CustomUploadXFile<UploadXFileMetadata> & {
+    duration: number
+    path: string
+    filename: string
+  }
+
+  // Extends Response with added functions and potential variables passed by middlewares
   interface Response {
+    fail: (options: {
+      message: string
+
+      title?: string
+      status?: number
+      type?: ServerErrorCode
+      instance?: string
+
+      data?: PeerTubeProblemDocumentData
+    }) => void
 
     locals: {
-      bypassLogin?: {
-        bypass: boolean
-        pluginName: string
-        authName?: string
-        user: {
-          username: string
-          email: string
-          displayName: string
-          role: UserRole
-        }
-      }
+      docUrl?: string
 
-      refreshTokenAuthName?: string
-
-      explicitLogout: boolean
-
+      videoAPI?: MVideoFormattableDetails
       videoAll?: MVideoFullLight
       onlyImmutableVideo?: MVideoImmutable
       onlyVideo?: MVideoThumbnail
-      onlyVideoWithRights?: MVideoWithRights
-      videoId?: MVideoIdThumbnail
+      videoId?: MVideoId
+
+      videoLive?: MVideoLive
 
       videoShare?: MVideoShareActor
 
       videoFile?: MVideoFile
+
+      videoFileResumable?: EnhancedUploadXFile
 
       videoImport?: MVideoImportDefault
 
@@ -83,7 +126,7 @@ declare module 'express' {
 
       videoStreamingPlaylist?: MStreamingPlaylist
 
-      videoChannel?: MChannelAccountDefault
+      videoChannel?: MChannelBannerAccountDefault
 
       videoPlaylistFull?: MVideoPlaylistFull
       videoPlaylistSummary?: MVideoPlaylistFullSummary

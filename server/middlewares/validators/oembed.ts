@@ -1,19 +1,34 @@
 import * as express from 'express'
 import { query } from 'express-validator'
 import { join } from 'path'
-import { fetchVideo } from '@server/helpers/video'
+import { loadVideo } from '@server/lib/model-loaders'
 import { VideoPlaylistModel } from '@server/models/video/video-playlist'
 import { VideoPlaylistPrivacy, VideoPrivacy } from '@shared/models'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 import { isTestInstance } from '../../helpers/core-utils'
-import { isIdOrUUIDValid } from '../../helpers/custom-validators/misc'
+import { isIdOrUUIDValid, toCompleteUUID } from '../../helpers/custom-validators/misc'
 import { logger } from '../../helpers/logger'
 import { WEBSERVER } from '../../initializers/constants'
-import { areValidationErrors } from './utils'
+import { areValidationErrors } from './shared'
 
-const startVideoPlaylistsURL = WEBSERVER.SCHEME + '://' + join(WEBSERVER.HOST, 'videos', 'watch', 'playlist') + '/'
-const startVideosURL = WEBSERVER.SCHEME + '://' + join(WEBSERVER.HOST, 'videos', 'watch') + '/'
+const playlistPaths = [
+  join('videos', 'watch', 'playlist'),
+  join('w', 'p')
+]
 
-const watchRegex = new RegExp('([^/]+)$')
+const videoPaths = [
+  join('videos', 'watch'),
+  'w'
+]
+
+function buildUrls (paths: string[]) {
+  return paths.map(p => WEBSERVER.SCHEME + '://' + join(WEBSERVER.HOST, p) + '/')
+}
+
+const startPlaylistURLs = buildUrls(playlistPaths)
+const startVideoURLs = buildUrls(videoPaths)
+
+const watchRegex = /([^/]+)$/
 const isURLOptions = {
   require_host: true,
   require_tld: true
@@ -36,41 +51,54 @@ const oembedValidator = [
     if (areValidationErrors(req, res)) return
 
     if (req.query.format !== undefined && req.query.format !== 'json') {
-      return res.status(501)
-        .json({ error: 'Requested format is not implemented on server.' })
+      return res.fail({
+        status: HttpStatusCode.NOT_IMPLEMENTED_501,
+        message: 'Requested format is not implemented on server.',
+        data: {
+          format: req.query.format
+        }
+      })
     }
 
     const url = req.query.url as string
 
-    const isPlaylist = url.startsWith(startVideoPlaylistsURL)
-    const isVideo = isPlaylist ? false : url.startsWith(startVideosURL)
+    const isPlaylist = startPlaylistURLs.some(u => url.startsWith(u))
+    const isVideo = isPlaylist ? false : startVideoURLs.some(u => url.startsWith(u))
 
     const startIsOk = isVideo || isPlaylist
 
     const matches = watchRegex.exec(url)
 
     if (startIsOk === false || matches === null) {
-      return res.status(400)
-        .json({ error: 'Invalid url.' })
+      return res.fail({
+        status: HttpStatusCode.BAD_REQUEST_400,
+        message: 'Invalid url.',
+        data: {
+          url
+        }
+      })
     }
 
-    const elementId = matches[1]
+    const elementId = toCompleteUUID(matches[1])
     if (isIdOrUUIDValid(elementId) === false) {
-      return res.status(400)
-        .json({ error: 'Invalid video or playlist id.' })
+      return res.fail({ message: 'Invalid video or playlist id.' })
     }
 
     if (isVideo) {
-      const video = await fetchVideo(elementId, 'all')
+      const video = await loadVideo(elementId, 'all')
 
       if (!video) {
-        return res.status(404)
-          .json({ error: 'Video not found' })
+        return res.fail({
+          status: HttpStatusCode.NOT_FOUND_404,
+          message: 'Video not found'
+        })
       }
 
       if (video.privacy !== VideoPrivacy.PUBLIC) {
-        return res.status(403)
-          .json({ error: 'Video is not public' })
+        return res.fail({
+          status: HttpStatusCode.FORBIDDEN_403,
+          message: 'Video is not public'
+        })
       }
 
       res.locals.videoAll = video
@@ -81,13 +109,17 @@ const oembedValidator = [
 
     const videoPlaylist = await VideoPlaylistModel.loadWithAccountAndChannelSummary(elementId, undefined)
     if (!videoPlaylist) {
-      return res.status(404)
-        .json({ error: 'Video playlist not found' })
+      return res.fail({
+        status: HttpStatusCode.NOT_FOUND_404,
+        message: 'Video playlist not found'
+      })
     }
 
     if (videoPlaylist.privacy !== VideoPlaylistPrivacy.PUBLIC) {
-      return res.status(403)
-        .json({ error: 'Playlist is not public' })
+      return res.fail({
+        status: HttpStatusCode.FORBIDDEN_403,
+        message: 'Playlist is not public'
+      })
     }
 
     res.locals.videoPlaylistSummary = videoPlaylist

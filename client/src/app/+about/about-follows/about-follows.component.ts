@@ -1,5 +1,4 @@
 import { SortMeta } from 'primeng/api'
-import { Subject } from 'rxjs'
 import { Component, OnInit } from '@angular/core'
 import { ComponentPagination, hasMoreItems, Notifier, RestService } from '@app/core'
 import { InstanceFollowService } from '@app/shared/shared-instance'
@@ -14,24 +13,25 @@ export class AboutFollowsComponent implements OnInit {
   followers: string[] = []
   followings: string[] = []
 
+  loadedAllFollowers = false
+  loadedAllFollowings = false
+
   followersPagination: ComponentPagination = {
     currentPage: 1,
     itemsPerPage: 20,
-    totalItems: null
+    totalItems: 0
   }
 
   followingsPagination: ComponentPagination = {
     currentPage: 1,
     itemsPerPage: 20,
-    totalItems: null
+    totalItems: 0
   }
 
   sort: SortMeta = {
     field: 'createdAt',
     order: -1
   }
-
-  onDataSubject = new Subject<any[]>()
 
   constructor (
     private restService: RestService,
@@ -45,60 +45,78 @@ export class AboutFollowsComponent implements OnInit {
     this.loadMoreFollowings()
   }
 
-  onNearOfBottom () {
-    this.onNearOfFollowersBottom()
+  loadAllFollowings () {
+    if (this.loadedAllFollowings) return
 
-    this.onNearOfFollowingsBottom()
+    this.loadedAllFollowings = true
+    this.followingsPagination.itemsPerPage = 100
+
+    this.loadMoreFollowings(true)
+
+    while (hasMoreItems(this.followingsPagination)) {
+      this.followingsPagination.currentPage += 1
+
+      this.loadMoreFollowings()
+    }
   }
 
-  onNearOfFollowersBottom () {
-    if (!hasMoreItems(this.followersPagination)) return
+  loadAllFollowers () {
+    if (this.loadedAllFollowers) return
 
-    this.followersPagination.currentPage += 1
-    this.loadMoreFollowers()
-  }
+    this.loadedAllFollowers = true
+    this.followersPagination.itemsPerPage = 100
 
-  onNearOfFollowingsBottom () {
-    if (!hasMoreItems(this.followingsPagination)) return
+    this.loadMoreFollowers(true)
 
-    this.followingsPagination.currentPage += 1
-    this.loadMoreFollowings()
+    while (hasMoreItems(this.followersPagination)) {
+      this.followersPagination.currentPage += 1
+
+      this.loadMoreFollowers()
+    }
   }
 
   buildLink (host: string) {
     return window.location.protocol + '//' + host
   }
 
-  private loadMoreFollowers () {
+  canLoadMoreFollowers () {
+    return this.loadedAllFollowers || this.followersPagination.totalItems > this.followersPagination.itemsPerPage
+  }
+
+  canLoadMoreFollowings () {
+    return this.loadedAllFollowings || this.followingsPagination.totalItems > this.followingsPagination.itemsPerPage
+  }
+
+  private loadMoreFollowers (reset = false) {
     const pagination = this.restService.componentPaginationToRestPagination(this.followersPagination)
 
     this.followService.getFollowers({ pagination: pagination, sort: this.sort, state: 'accepted' })
         .subscribe(
           resultList => {
+            if (reset) this.followers = []
+
             const newFollowers = resultList.data.map(r => r.follower.host)
             this.followers = this.followers.concat(newFollowers)
 
             this.followersPagination.totalItems = resultList.total
-
-            this.onDataSubject.next(newFollowers)
           },
 
           err => this.notifier.error(err.message)
         )
   }
 
-  private loadMoreFollowings () {
+  private loadMoreFollowings (reset = false) {
     const pagination = this.restService.componentPaginationToRestPagination(this.followingsPagination)
 
     this.followService.getFollowing({ pagination, sort: this.sort, state: 'accepted' })
         .subscribe(
           resultList => {
+            if (reset) this.followings = []
+
             const newFollowings = resultList.data.map(r => r.following.host)
             this.followings = this.followings.concat(newFollowings)
 
             this.followingsPagination.totalItems = resultList.total
-
-            this.onDataSubject.next(newFollowings)
           },
 
           err => this.notifier.error(err.message)

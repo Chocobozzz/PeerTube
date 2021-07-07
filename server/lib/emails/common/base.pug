@@ -199,7 +199,7 @@ body(width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule:
                       td(width="40px")
                         img(src=`${WEBSERVER.URL}/client/assets/images/icons/icon-192x192.png` width="auto" height="30px" alt="" border="0" style="height: 30px; background: #ffffff; font-family: sans-serif; font-size: 15px; line-height: 15px; color: #555555;")
                       td
-                        h1(style='margin: 10px 0 10px 0; font-family: sans-serif; font-size: 25px; line-height: 30px; color: #333333; font-weight: normal;') 
+                        h1(style='margin: 10px 0 10px 0; font-family: sans-serif; font-size: 25px; line-height: 30px; color: #333333; font-weight: normal;')
                           block title
                             if title
                               | #{title}
@@ -230,21 +230,22 @@ body(width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule:
                 tr
                   td(style='padding: 20px; font-family: sans-serif; font-size: 15px; line-height: 20px; color: #555555;')
                     p(style='margin: 0;')
-                      | You are receiving this email as part of your notification settings on #{WEBSERVER.HOST} for your account #{username}.
+                      | You are receiving this email as part of your notification settings on #{instanceName} for your account #{username}.
         //- 1 Column Text : END
       //- Email Body : END
       //- Email Footer : BEGIN
-      table(align='center' role='presentation' cellspacing='0' cellpadding='0' border='0' width='100%' style='margin: auto;')
-        tr
-          td(style='padding: 20px; padding-bottom: 0px; font-family: sans-serif; font-size: 12px; line-height: 15px; text-align: center; color: #888888;')
-            webversion
-              a.nocolor(href=`${WEBSERVER.URL}/my-account/notifications` style='color: #cccccc; font-weight: bold;') View in your notifications
-            br
-        tr
-          td(style='padding: 20px; padding-top: 10px; font-family: sans-serif; font-size: 12px; line-height: 15px; text-align: center; color: #888888;')
-            unsubscribe
-              a.nocolor(href=`${WEBSERVER.URL}/my-account/settings#notifications` style='color: #888888;') Manage your notification preferences in your profile
-            br
+      unless hideNotificationPreferences
+        table(align='center' role='presentation' cellspacing='0' cellpadding='0' border='0' width='100%' style='margin: auto;')
+          tr
+            td(style='padding: 20px; padding-bottom: 0px; font-family: sans-serif; font-size: 12px; line-height: 15px; text-align: center; color: #888888;')
+              webversion
+                a.nocolor(href=`${WEBSERVER.URL}/my-account/notifications` style='color: #cccccc; font-weight: bold;') View in your notifications
+              br
+          tr
+            td(style='padding: 20px; padding-top: 10px; font-family: sans-serif; font-size: 12px; line-height: 15px; text-align: center; color: #888888;')
+              unsubscribe
+                a.nocolor(href=`${WEBSERVER.URL}/my-account/settings#notifications` style='color: #888888;') Manage your notification preferences in your profile
+              br
       //- Email Footer : END
       //if mso
     //- Full Bleed Background Section : BEGIN

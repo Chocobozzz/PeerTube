@@ -1,5 +1,5 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 .no-notification {
   display: flex;
@@ -21,17 +21,21 @@
   }
 
   my-global-icon {
-    width: 24px;
-    margin-right: 11px;
-    margin-left: 3px;
-
     @include apply-svg-color(#333);
+    @include margin-right(11px);
+    @include margin-left(3px);
+
+    width: 24px;
   }
 
   .avatar {
-    @include avatar(30px);
+    @include margin-right(10px);
 
-    margin-right: 10px;
+    width: 30px;
+    height: 30px;
+    min-width: 30px;
+    min-height: 30px;
+    border-radius: 5px;
   }
 
   .message {
@@ -43,11 +47,12 @@
   }
 
   .from-date {
+    @include padding-left(5px);
+    @include margin-left(auto);
+
     font-size: 0.85em;
     color: pvar(--greyForegroundColor);
-    padding-left: 5px;
     min-width: 70px;
-    text-align: right;
-    margin-left: auto;
+    text-align: end;
   }
 }

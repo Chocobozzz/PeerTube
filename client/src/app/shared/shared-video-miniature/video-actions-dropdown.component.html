@@ -1,6 +1,8 @@
 <ng-container *ngIf="videoActions.length !== 0">
 
-  <div class="playlist-dropdown" ngbDropdown #playlistDropdown="ngbDropdown" role="button" autoClose="outside" [placement]="getPlaylistDropdownPlacement()"
+  <div
+    role="button" aria-label="Open video actions" i18n-aria-label
+    class="playlist-dropdown" ngbDropdown #playlistDropdown="ngbDropdown" autoClose="outside" [placement]="getPlaylistDropdownPlacement()"
     *ngIf="isUserLoggedIn() && displayOptions.playlist" (openChange)="playlistAdd.openChange($event)"
   >
     <span class="anchor" ngbDropdownAnchor></span>
@@ -13,9 +15,11 @@
   <my-action-dropdown
     [actions]="videoActions" [label]="label" [entry]="{ video: video }" (click)="loadDropdownInformation()"
     [buttonSize]="buttonSize" [placement]="placement" [buttonDirection]="buttonDirection" [buttonStyled]="buttonStyled"
+    container="body"
   ></my-action-dropdown>
 
   <my-video-download #videoDownloadModal></my-video-download>
   <my-video-report #videoReportModal [video]="video"></my-video-report>
   <my-video-block #videoBlockModal [video]="video" (videoBlocked)="onVideoBlocked()"></my-video-block>
+  <my-live-stream-information #liveStreamInformationModal *ngIf="displayOptions.liveInfo"></my-live-stream-information>
 </ng-container>

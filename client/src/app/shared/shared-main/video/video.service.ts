@@ -43,6 +43,7 @@ export interface VideosProvider {
 export class VideoService implements VideosProvider {
   static BASE_VIDEO_URL = environment.apiUrl + '/api/v1/videos/'
   static BASE_FEEDS_URL = environment.apiUrl + '/feeds/videos.'
+  static BASE_SUBSCRIPTION_FEEDS_URL = environment.apiUrl + '/feeds/subscriptions.'
 
   constructor (
     private authHttp: HttpClient,
@@ -123,7 +124,17 @@ export class VideoService implements VideosProvider {
 
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
-    params = this.restService.addObjectParams(params, { search })
+
+    if (search) {
+      const filters = this.restService.parseQueryStringFilter(search, {
+        isLive: {
+          prefix: 'isLive:',
+          isBoolean: true
+        }
+      })
+
+      params = this.restService.addObjectParams(params, filters)
+    }
 
     return this.authHttp
                .get<ResultList<Video>>(UserService.BASE_USERS_URL + 'me/videos', { params })
@@ -133,15 +144,32 @@ export class VideoService implements VideosProvider {
                )
   }
 
-  getAccountVideos (
-    account: Account,
+  getAccountVideos (parameters: {
+    account: Pick<Account, 'nameWithHost'>,
     videoPagination: ComponentPaginationLight,
     sort: VideoSortField
-  ): Observable<ResultList<Video>> {
+    nsfwPolicy?: NSFWPolicyType
+    videoFilter?: VideoFilter
+    search?: string
+  }): Observable<ResultList<Video>> {
+    const { account, videoPagination, sort, videoFilter, nsfwPolicy, search } = parameters
+
     const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
 
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
+
+    if (nsfwPolicy) {
+      params = params.set('nsfw', this.nsfwPolicyToParam(nsfwPolicy))
+    }
+
+    if (videoFilter) {
+      params = params.set('filter', videoFilter)
+    }
+
+    if (search) {
+      params = params.set('search', search)
+    }
 
     return this.authHttp
                .get<ResultList<Video>>(AccountService.BASE_ACCOUNT_URL + account.nameWithHost + '/videos', { params })
@@ -151,12 +179,15 @@ export class VideoService implements VideosProvider {
                )
   }
 
-  getVideoChannelVideos (
-    videoChannel: VideoChannel,
+  getVideoChannelVideos (parameters: {
+    videoChannel: Pick<VideoChannel, 'nameWithHost'>,
     videoPagination: ComponentPaginationLight,
     sort: VideoSortField,
     nsfwPolicy?: NSFWPolicyType
-  ): Observable<ResultList<Video>> {
+    videoFilter?: VideoFilter
+  }): Observable<ResultList<Video>> {
+    const { videoChannel, videoPagination, sort, nsfwPolicy, videoFilter } = parameters
+
     const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
 
     let params = new HttpParams()
@@ -164,6 +195,10 @@ export class VideoService implements VideosProvider {
 
     if (nsfwPolicy) {
       params = params.set('nsfw', this.nsfwPolicyToParam(nsfwPolicy))
+    }
+
+    if (videoFilter) {
+      params = params.set('filter', videoFilter)
     }
 
     return this.authHttp
@@ -217,22 +252,22 @@ export class VideoService implements VideosProvider {
                )
   }
 
-  buildBaseFeedUrls (params: HttpParams) {
+  buildBaseFeedUrls (params: HttpParams, base = VideoService.BASE_FEEDS_URL) {
     const feeds = [
       {
         format: FeedFormat.RSS,
         label: 'media rss 2.0',
-        url: VideoService.BASE_FEEDS_URL + FeedFormat.RSS.toLowerCase()
+        url: base + FeedFormat.RSS.toLowerCase()
       },
       {
         format: FeedFormat.ATOM,
         label: 'atom 1.0',
-        url: VideoService.BASE_FEEDS_URL + FeedFormat.ATOM.toLowerCase()
+        url: base + FeedFormat.ATOM.toLowerCase()
       },
       {
         format: FeedFormat.JSON,
         label: 'json 1.0',
-        url: VideoService.BASE_FEEDS_URL + FeedFormat.JSON.toLowerCase()
+        url: base + FeedFormat.JSON.toLowerCase()
       }
     ]
 
@@ -271,6 +306,14 @@ export class VideoService implements VideosProvider {
     params = params.set('videoChannelId', videoChannelId.toString())
 
     return this.buildBaseFeedUrls(params)
+  }
+
+  getVideoSubscriptionFeedUrls (accountId: number, feedToken: string) {
+    let params = this.restService.addRestGetParams(new HttpParams())
+    params = params.set('accountId', accountId.toString())
+    params = params.set('token', feedToken)
+
+    return this.buildBaseFeedUrls(params, VideoService.BASE_SUBSCRIPTION_FEEDS_URL)
   }
 
   getVideoFileMetadata (metadataUrl: string) {
@@ -335,7 +378,7 @@ export class VideoService implements VideosProvider {
                )
   }
 
-  explainedPrivacyLabels (privacies: VideoConstant<VideoPrivacy>[]) {
+  explainedPrivacyLabels (privacies: VideoConstant<VideoPrivacy>[], defaultPrivacyId = VideoPrivacy.PUBLIC) {
     const base = [
       {
         id: VideoPrivacy.PRIVATE,
@@ -355,9 +398,14 @@ export class VideoService implements VideosProvider {
       }
     ]
 
-    return base
+    const videoPrivacies = base
       .filter(o => !!privacies.find(p => p.id === o.id)) // filter down to privacies that where in the input
       .map(o => ({ ...privacies[o.id - 1], ...o })) // merge the input privacies that contain a label, and extend them with a description
+
+    return {
+      defaultPrivacyId: videoPrivacies.find(p => p.id === defaultPrivacyId)?.id || videoPrivacies[0].id,
+      videoPrivacies
+    }
   }
 
   nsfwPolicyToParam (nsfwPolicy: NSFWPolicyType) {

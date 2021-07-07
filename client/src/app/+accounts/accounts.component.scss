@@ -1,54 +1,35 @@
-// Bootstrap grid utilities require functions, variables and mixins
-@import 'node_modules/bootstrap/scss/functions';
-@import 'node_modules/bootstrap/scss/variables';
-@import 'node_modules/bootstrap/scss/mixins';
-@import 'node_modules/bootstrap/scss/grid';
+@use '_variables' as *;
+@use '_mixins' as *;
+@use '_actor' as *;
+@use '_miniature' as *;
 
-@import '_variables';
-@import '_mixins';
-
-.sub-menu {
-  @include sub-menu-with-actor;
-
-  .actor {
-    width: 100%;
-  }
+.root {
+  --myGlobalTopPadding: 60px;
+  --myImgMargin: 30px;
+  --myFontSize: 16px;
+  --myGreyFontSize: 16px;
 }
 
-.margin-content {
-  // margin-content is required, but child views have their own margins
-  // that match views outside the scope of accounts, so we only align
-  // them with the margins of .sub-menu when required.
-  margin: 0;
+.section-label {
+  @include section-label-responsive;
 }
 
-.right-buttons {
+.links {
+  @include grid-videos-miniature-margins;
+
   display: flex;
-  height: max-content;
-  margin-left: auto;
-  margin-top: 10px;
+  justify-content: space-between;
+  align-items: center;
+  max-width: $max-channels-width;
 
-  @include media-breakpoint-down(lg) {
-    flex-flow: column-reverse;
-
-    a {
-      margin-top: 0.25rem;
-      margin-right: 0 !important;
-    }
-  }
-
-  a {
-    @include peertube-button-outline;
-  }
-
-  my-subscribe-button {
-    min-height: 30px;
+  simple-search-input {
+    @include margin-left(auto);
   }
 }
 
 my-user-moderation-dropdown,
 .badge {
-  margin-left: 10px;
+  @include margin-left(10px);
 
   position: relative;
   top: 3px;
@@ -59,36 +40,102 @@ my-user-moderation-dropdown,
 }
 
 .copy-button {
-  border: none;
-  padding: 5px;
-  margin-top: -2px;
+  border: 0;
+}
+
+.account-info {
+  @include grid-videos-miniature-margins(false, 15px);
+
+  display: grid;
+  grid-template-columns: 1fr min-content;
+  grid-template-rows: auto auto;
+
+  background-color: pvar(--submenuBackgroundColor);
+  margin-bottom: 45px;
+  padding-top: var(--myGlobalTopPadding);
+  padding-bottom: var(--myGlobalTopPadding);
+  font-size: var(--myFontSize);
+}
+
+.account-avatar-row {
+  @include avatar-row-responsive(var(--myImgMargin), var(--myGreyFontSize));
+}
+
+.description {
+  grid-column: 1 / 3;
+  max-width: 1000px;
+  word-break: break-word;
+}
+
+.show-more {
+  @include show-more-description;
+
+  display: none;
+  text-align: center;
+}
+
+.buttons {
+  grid-column: 2;
+  grid-row: 1;
+
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-content: flex-start;
+
+  > *:not(:last-child) {
+    margin-bottom: 15px;
+  }
+
+  > a {
+    white-space: nowrap;
+  }
+}
+
+@media screen and (max-width: $small-view) {
+  .root {
+    --myGlobalTopPadding: 45px;
+    --myChannelImgMargin: 15px;
+  }
+
+  .account-info {
+    display: block;
+    padding-bottom: 60px;
+  }
+
+  .description:not(.expanded) {
+    @include fade-text(30px, pvar(--submenuBackgroundColor));
+
+    max-height: 70px;
+  }
+
+  .show-more {
+    display: block;
+  }
+
+  .buttons {
+    justify-content: center;
+  }
 }
 
 @media screen and (max-width: $mobile-view) {
-  .sub-menu {
-    .actor {
-      flex-direction: column;
-      align-items: center;
+  .root {
+    --myGlobalTopPadding: 15px;
+    --myFontSize: 14px;
+    --myGreyFontSize: 13px;
+  }
 
-      img,
-      .actor-info .actor-names .actor-display-name {
-        margin-right: 0;
-      }
+  .account-info {
+    display: block;
+    padding-bottom: 30px;
+  }
 
-      .actor-info  {
-        .actor-names {
-          flex-direction: column;
-          align-items: center;
-        }
+  .links {
+    margin: auto !important;
+    width: min-content;
+  }
 
-        my-user-moderation-dropdown {
-          margin-left: 0;
-        }
-
-        .actor-followers {
-          text-align: center;
-        }
-      }
-    }
+  .show-more {
+    margin-bottom: 30px;
   }
 }

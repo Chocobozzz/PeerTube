@@ -1,5 +1,5 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 .select-job-state {
   min-width: 120px;
@@ -9,7 +9,9 @@
   max-width: 30vw !important;
 }
 
-.job-type {
+.job-type,
+.job-state,
+.job-priority {
   width: 150px !important;
 }
 
@@ -23,7 +25,7 @@
 
   .select-filter-block {
     &:not(:last-child) {
-      margin-right: 10px;
+      @include margin-right(10px);
     }
 
     label {
@@ -34,10 +36,14 @@
       @include peertube-select-container(auto);
     }
   }
+
+  .button-filter-block {
+    align-self: flex-end;
+  }
 }
 
 td .glyphicon {
-  margin-right: 10px;
+  @include margin-right(10px);
 }
 
 pre {
@@ -45,7 +51,7 @@ pre {
 }
 
 .job-error {
-  color: red;
+  color: #ff0000;
 }
 
 .badge {

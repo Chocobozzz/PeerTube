@@ -1,61 +1,121 @@
+import { join } from 'path'
+
+import { ThumbnailType } from '../../shared/models/videos/thumbnail.type'
 import { generateImageFromVideoFile } from '../helpers/ffmpeg-utils'
+import { generateImageFilename, processImage } from '../helpers/image-utils'
+import { downloadImage } from '../helpers/requests'
 import { CONFIG } from '../initializers/config'
 import { ASSETS_PATH, PREVIEWS_SIZE, THUMBNAILS_SIZE } from '../initializers/constants'
 import { ThumbnailModel } from '../models/video/thumbnail'
-import { ThumbnailType } from '../../shared/models/videos/thumbnail.type'
-import { processImage } from '../helpers/image-utils'
-import { join } from 'path'
-import { downloadImage } from '../helpers/requests'
-import { MVideoPlaylistThumbnail } from '../types/models/video/video-playlist'
-import { MVideoFile, MVideoThumbnail } from '../types/models'
+import { MVideoFile, MVideoThumbnail, MVideoUUID } from '../types/models'
 import { MThumbnail } from '../types/models/video/thumbnail'
+import { MVideoPlaylistThumbnail } from '../types/models/video/video-playlist'
 import { getVideoFilePath } from './video-paths'
 
-type ImageSize = { height: number, width: number }
+type ImageSize = { height?: number, width?: number }
 
-function createPlaylistMiniatureFromExisting (
-  inputPath: string,
-  playlist: MVideoPlaylistThumbnail,
-  automaticallyGenerated: boolean,
-  keepOriginal = false,
+function updatePlaylistMiniatureFromExisting (options: {
+  inputPath: string
+  playlist: MVideoPlaylistThumbnail
+  automaticallyGenerated: boolean
+  keepOriginal?: boolean // default to false
   size?: ImageSize
-) {
+}) {
+  const { inputPath, playlist, automaticallyGenerated, keepOriginal = false, size } = options
   const { filename, outputPath, height, width, existingThumbnail } = buildMetadataFromPlaylist(playlist, size)
   const type = ThumbnailType.MINIATURE
 
   const thumbnailCreator = () => processImage(inputPath, outputPath, { width, height }, keepOriginal)
-  return createThumbnailFromFunction({ thumbnailCreator, filename, height, width, type, automaticallyGenerated, existingThumbnail })
+  return updateThumbnailFromFunction({
+    thumbnailCreator,
+    filename,
+    height,
+    width,
+    type,
+    automaticallyGenerated,
+    existingThumbnail
+  })
 }
 
-function createPlaylistMiniatureFromUrl (fileUrl: string, playlist: MVideoPlaylistThumbnail, size?: ImageSize) {
+function updatePlaylistMiniatureFromUrl (options: {
+  downloadUrl: string
+  playlist: MVideoPlaylistThumbnail
+  size?: ImageSize
+}) {
+  const { downloadUrl, playlist, size } = options
   const { filename, basePath, height, width, existingThumbnail } = buildMetadataFromPlaylist(playlist, size)
   const type = ThumbnailType.MINIATURE
 
-  const thumbnailCreator = () => downloadImage(fileUrl, basePath, filename, { width, height })
-  return createThumbnailFromFunction({ thumbnailCreator, filename, height, width, type, existingThumbnail, fileUrl })
+  // Only save the file URL if it is a remote playlist
+  const fileUrl = playlist.isOwned()
+    ? null
+    : downloadUrl
+
+  const thumbnailCreator = () => downloadImage(downloadUrl, basePath, filename, { width, height })
+  return updateThumbnailFromFunction({ thumbnailCreator, filename, height, width, type, existingThumbnail, fileUrl })
 }
 
-function createVideoMiniatureFromUrl (fileUrl: string, video: MVideoThumbnail, type: ThumbnailType, size?: ImageSize) {
-  const { filename, basePath, height, width, existingThumbnail } = buildMetadataFromVideo(video, type, size)
-  const thumbnailCreator = () => downloadImage(fileUrl, basePath, filename, { width, height })
-
-  return createThumbnailFromFunction({ thumbnailCreator, filename, height, width, type, existingThumbnail, fileUrl })
-}
-
-function createVideoMiniatureFromExisting (
-  inputPath: string,
-  video: MVideoThumbnail,
-  type: ThumbnailType,
-  automaticallyGenerated: boolean,
+function updateVideoMiniatureFromUrl (options: {
+  downloadUrl: string
+  video: MVideoThumbnail
+  type: ThumbnailType
   size?: ImageSize
-) {
-  const { filename, outputPath, height, width, existingThumbnail } = buildMetadataFromVideo(video, type, size)
-  const thumbnailCreator = () => processImage(inputPath, outputPath, { width, height })
+}) {
+  const { downloadUrl, video, type, size } = options
+  const { filename: updatedFilename, basePath, height, width, existingThumbnail } = buildMetadataFromVideo(video, type, size)
 
-  return createThumbnailFromFunction({ thumbnailCreator, filename, height, width, type, automaticallyGenerated, existingThumbnail })
+  // Only save the file URL if it is a remote video
+  const fileUrl = video.isOwned()
+    ? null
+    : downloadUrl
+
+  const thumbnailUrlChanged = hasThumbnailUrlChanged(existingThumbnail, downloadUrl, video)
+
+  // Do not change the thumbnail filename if the file did not change
+  const filename = thumbnailUrlChanged
+    ? updatedFilename
+    : existingThumbnail.filename
+
+  const thumbnailCreator = () => {
+    if (thumbnailUrlChanged) return downloadImage(downloadUrl, basePath, filename, { width, height })
+
+    return Promise.resolve()
+  }
+
+  return updateThumbnailFromFunction({ thumbnailCreator, filename, height, width, type, existingThumbnail, fileUrl })
 }
 
-function generateVideoMiniature (video: MVideoThumbnail, videoFile: MVideoFile, type: ThumbnailType) {
+function updateVideoMiniatureFromExisting (options: {
+  inputPath: string
+  video: MVideoThumbnail
+  type: ThumbnailType
+  automaticallyGenerated: boolean
+  size?: ImageSize
+  keepOriginal?: boolean // default to false
+}) {
+  const { inputPath, video, type, automaticallyGenerated, size, keepOriginal = false } = options
+
+  const { filename, outputPath, height, width, existingThumbnail } = buildMetadataFromVideo(video, type, size)
+  const thumbnailCreator = () => processImage(inputPath, outputPath, { width, height }, keepOriginal)
+
+  return updateThumbnailFromFunction({
+    thumbnailCreator,
+    filename,
+    height,
+    width,
+    type,
+    automaticallyGenerated,
+    existingThumbnail
+  })
+}
+
+function generateVideoMiniature (options: {
+  video: MVideoThumbnail
+  videoFile: MVideoFile
+  type: ThumbnailType
+}) {
+  const { video, videoFile, type } = options
+
   const input = getVideoFilePath(video, videoFile)
 
   const { filename, basePath, height, width, existingThumbnail, outputPath } = buildMetadataFromVideo(video, type)
@@ -63,13 +123,34 @@ function generateVideoMiniature (video: MVideoThumbnail, videoFile: MVideoFile, 
     ? () => processImage(ASSETS_PATH.DEFAULT_AUDIO_BACKGROUND, outputPath, { width, height }, true)
     : () => generateImageFromVideoFile(input, basePath, filename, { height, width })
 
-  return createThumbnailFromFunction({ thumbnailCreator, filename, height, width, type, automaticallyGenerated: true, existingThumbnail })
+  return updateThumbnailFromFunction({
+    thumbnailCreator,
+    filename,
+    height,
+    width,
+    type,
+    automaticallyGenerated: true,
+    existingThumbnail
+  })
 }
 
-function createPlaceholderThumbnail (fileUrl: string, video: MVideoThumbnail, type: ThumbnailType, size: ImageSize) {
-  const { filename, height, width, existingThumbnail } = buildMetadataFromVideo(video, type, size)
+function updatePlaceholderThumbnail (options: {
+  fileUrl: string
+  video: MVideoThumbnail
+  type: ThumbnailType
+  size: ImageSize
+}) {
+  const { fileUrl, video, type, size } = options
+  const { filename: updatedFilename, height, width, existingThumbnail } = buildMetadataFromVideo(video, type, size)
+
+  const thumbnailUrlChanged = hasThumbnailUrlChanged(existingThumbnail, fileUrl, video)
 
   const thumbnail = existingThumbnail || new ThumbnailModel()
+
+  // Do not change the thumbnail filename if the file did not change
+  const filename = thumbnailUrlChanged
+    ? updatedFilename
+    : existingThumbnail.filename
 
   thumbnail.filename = filename
   thumbnail.height = height
@@ -84,11 +165,20 @@ function createPlaceholderThumbnail (fileUrl: string, video: MVideoThumbnail, ty
 
 export {
   generateVideoMiniature,
-  createVideoMiniatureFromUrl,
-  createVideoMiniatureFromExisting,
-  createPlaceholderThumbnail,
-  createPlaylistMiniatureFromUrl,
-  createPlaylistMiniatureFromExisting
+  updateVideoMiniatureFromUrl,
+  updateVideoMiniatureFromExisting,
+  updatePlaceholderThumbnail,
+  updatePlaylistMiniatureFromUrl,
+  updatePlaylistMiniatureFromExisting
+}
+
+function hasThumbnailUrlChanged (existingThumbnail: MThumbnail, downloadUrl: string, video: MVideoUUID) {
+  const existingUrl = existingThumbnail
+    ? existingThumbnail.fileUrl
+    : null
+
+  // If the thumbnail URL did not change and has a unique filename (introduced in 3.1), avoid thumbnail processing
+  return !existingUrl || existingUrl !== downloadUrl || downloadUrl.endsWith(`${video.uuid}.jpg`)
 }
 
 function buildMetadataFromPlaylist (playlist: MVideoPlaylistThumbnail, size: ImageSize) {
@@ -111,7 +201,7 @@ function buildMetadataFromVideo (video: MVideoThumbnail, type: ThumbnailType, si
     : undefined
 
   if (type === ThumbnailType.MINIATURE) {
-    const filename = video.generateThumbnailName()
+    const filename = generateImageFilename()
     const basePath = CONFIG.STORAGE.THUMBNAILS_DIR
 
     return {
@@ -125,7 +215,7 @@ function buildMetadataFromVideo (video: MVideoThumbnail, type: ThumbnailType, si
   }
 
   if (type === ThumbnailType.PREVIEW) {
-    const filename = video.generatePreviewName()
+    const filename = generateImageFilename()
     const basePath = CONFIG.STORAGE.PREVIEWS_DIR
 
     return {
@@ -141,7 +231,7 @@ function buildMetadataFromVideo (video: MVideoThumbnail, type: ThumbnailType, si
   return undefined
 }
 
-async function createThumbnailFromFunction (parameters: {
+async function updateThumbnailFromFunction (parameters: {
   thumbnailCreator: () => Promise<any>
   filename: string
   height: number
@@ -151,9 +241,22 @@ async function createThumbnailFromFunction (parameters: {
   fileUrl?: string
   existingThumbnail?: MThumbnail
 }) {
-  const { thumbnailCreator, filename, width, height, type, existingThumbnail, automaticallyGenerated = null, fileUrl = null } = parameters
+  const {
+    thumbnailCreator,
+    filename,
+    width,
+    height,
+    type,
+    existingThumbnail,
+    automaticallyGenerated = null,
+    fileUrl = null
+  } = parameters
 
-  const thumbnail = existingThumbnail || new ThumbnailModel()
+  const oldFilename = existingThumbnail && existingThumbnail.filename !== filename
+    ? existingThumbnail.filename
+    : undefined
+
+  const thumbnail: MThumbnail = existingThumbnail || new ThumbnailModel()
 
   thumbnail.filename = filename
   thumbnail.height = height
@@ -161,6 +264,8 @@ async function createThumbnailFromFunction (parameters: {
   thumbnail.type = type
   thumbnail.fileUrl = fileUrl
   thumbnail.automaticallyGenerated = automaticallyGenerated
+
+  if (oldFilename) thumbnail.previousThumbnailFilename = oldFilename
 
   await thumbnailCreator()
 

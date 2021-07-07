@@ -1,16 +1,19 @@
 import * as express from 'express'
-import { getFormattedObjects } from '../../helpers/utils'
+import { logger } from '@server/helpers/logger'
+import { getFormattedObjects } from '@server/helpers/utils'
+import { listAvailablePluginsFromIndex } from '@server/lib/plugins/plugin-index'
+import { PluginManager } from '@server/lib/plugins/plugin-manager'
 import {
   asyncMiddleware,
   authenticate,
+  availablePluginsSortValidator,
   ensureUserHasRight,
+  openapiOperationDoc,
   paginationValidator,
+  pluginsSortValidator,
   setDefaultPagination,
   setDefaultSort
-} from '../../middlewares'
-import { availablePluginsSortValidator, pluginsSortValidator } from '../../middlewares/validators'
-import { PluginModel } from '../../models/server/plugin'
-import { UserRight } from '../../../shared/models/users'
+} from '@server/middlewares'
 import {
   existingPluginValidator,
   installOrUpdatePluginValidator,
@@ -18,19 +21,22 @@ import {
   listPluginsValidator,
   uninstallPluginValidator,
   updatePluginSettingsValidator
-} from '../../middlewares/validators/plugins'
-import { PluginManager } from '../../lib/plugins/plugin-manager'
-import { InstallOrUpdatePlugin } from '../../../shared/models/plugins/install-plugin.model'
-import { ManagePlugin } from '../../../shared/models/plugins/manage-plugin.model'
-import { logger } from '../../helpers/logger'
-import { listAvailablePluginsFromIndex } from '../../lib/plugins/plugin-index'
-import { PeertubePluginIndexList } from '../../../shared/models/plugins/peertube-plugin-index-list.model'
-import { RegisteredServerSettings } from '../../../shared/models/plugins/register-server-setting.model'
-import { PublicServerSetting } from '../../../shared/models/plugins/public-server.setting'
+} from '@server/middlewares/validators/plugins'
+import { PluginModel } from '@server/models/server/plugin'
+import { HttpStatusCode } from '@shared/core-utils'
+import {
+  InstallOrUpdatePlugin,
+  ManagePlugin,
+  PeertubePluginIndexList,
+  PublicServerSetting,
+  RegisteredServerSettings,
+  UserRight
+} from '@shared/models'
 
 const pluginRouter = express.Router()
 
 pluginRouter.get('/available',
+  openapiOperationDoc({ operationId: 'getAvailablePlugins' }),
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_PLUGINS),
   listAvailablePluginsValidator,
@@ -42,6 +48,7 @@ pluginRouter.get('/available',
 )
 
 pluginRouter.get('/',
+  openapiOperationDoc({ operationId: 'getPlugins' }),
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_PLUGINS),
   listPluginsValidator,
@@ -80,6 +87,7 @@ pluginRouter.get('/:npmName',
 )
 
 pluginRouter.post('/install',
+  openapiOperationDoc({ operationId: 'addPlugin' }),
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_PLUGINS),
   installOrUpdatePluginValidator,
@@ -87,6 +95,7 @@ pluginRouter.post('/install',
 )
 
 pluginRouter.post('/update',
+  openapiOperationDoc({ operationId: 'updatePlugin' }),
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_PLUGINS),
   installOrUpdatePluginValidator,
@@ -94,6 +103,7 @@ pluginRouter.post('/update',
 )
 
 pluginRouter.post('/uninstall',
+  openapiOperationDoc({ operationId: 'uninstallPlugin' }),
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_PLUGINS),
   uninstallPluginValidator,
@@ -140,7 +150,7 @@ async function installPlugin (req: express.Request, res: express.Response) {
     return res.json(plugin.toFormattedJSON())
   } catch (err) {
     logger.warn('Cannot install plugin %s.', toInstall, { err })
-    return res.sendStatus(400)
+    return res.fail({ message: 'Cannot install plugin ' + toInstall })
   }
 }
 
@@ -150,12 +160,12 @@ async function updatePlugin (req: express.Request, res: express.Response) {
   const fromDisk = !!body.path
   const toUpdate = body.npmName || body.path
   try {
-    const plugin = await PluginManager.Instance.update(toUpdate, undefined, fromDisk)
+    const plugin = await PluginManager.Instance.update(toUpdate, fromDisk)
 
     return res.json(plugin.toFormattedJSON())
   } catch (err) {
     logger.warn('Cannot update plugin %s.', toUpdate, { err })
-    return res.sendStatus(400)
+    return res.fail({ message: 'Cannot update plugin ' + toUpdate })
   }
 }
 
@@ -164,7 +174,7 @@ async function uninstallPlugin (req: express.Request, res: express.Response) {
 
   await PluginManager.Instance.uninstall(body.npmName)
 
-  return res.sendStatus(204)
+  return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
 function getPublicPluginSettings (req: express.Request, res: express.Response) {
@@ -193,7 +203,7 @@ async function updatePluginSettings (req: express.Request, res: express.Response
 
   await PluginManager.Instance.onSettingsChanged(plugin.name, plugin.settings)
 
-  return res.sendStatus(204)
+  return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
 async function listAvailablePlugins (req: express.Request, res: express.Response) {
@@ -202,9 +212,10 @@ async function listAvailablePlugins (req: express.Request, res: express.Response
   const resultList = await listAvailablePluginsFromIndex(query)
 
   if (!resultList) {
-    return res.status(503)
-      .json({ error: 'Plugin index unavailable. Please retry later' })
-      .end()
+    return res.fail({
+      status: HttpStatusCode.SERVICE_UNAVAILABLE_503,
+      message: 'Plugin index unavailable. Please retry later'
+    })
   }
 
   return res.json(resultList)

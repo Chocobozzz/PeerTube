@@ -1,13 +1,13 @@
 <div class="margin-content">
-  <div i18n class="title-page title-page-single">
-    Created {{ pagination.totalItems }} playlists
+  <div i18n class="title-page title-page-single" *ngIf="pagination.totalItems">
+    Created {pagination.totalItems, plural, =1 {1 playlist} other {{{ pagination.totalItems }} playlists}}
   </div>
 
   <div i18n class="no-results" *ngIf="pagination.totalItems === 0">This channel does not have playlists.</div>
 
-  <div class="video-playlist" myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [dataObservable]="onDataSubject.asObservable()">
-    <div *ngFor="let playlist of videoPlaylists" class="playlist-miniature-container">
-      <my-video-playlist-miniature [playlist]="playlist" [toManage]="false"></my-video-playlist-miniature>
+  <div class="playlists" myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [autoInit]="true" [dataObservable]="onDataSubject.asObservable()">
+    <div *ngFor="let playlist of videoPlaylists" class="playlist-wrapper">
+      <my-video-playlist-miniature [playlist]="playlist" [toManage]="false" [displayAsRow]="displayAsRow()"></my-video-playlist-miniature>
     </div>
   </div>
 </div>

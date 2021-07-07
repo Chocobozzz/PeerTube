@@ -1,23 +1,40 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
+
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
 
 label {
   display: block;
 }
 
-input:not([type=submit]) {
+input[type=text],
+input[type=email] {
   @include peertube-input-text(340px);
-  display: inline-block;
-  margin-right: 5px;
-
 }
 
-input[type=submit] {
-  @include peertube-button;
-  @include orange-button;
+.modal-body {
+  text-align: start;
+
+  .forgot-password-instructions {
+    margin-bottom: 20px;
+  }
 }
 
-.create-an-account, .forgot-password-button {
+@media screen and (max-width: #{map-get($container-max-widths, sm)}) {
+  .modal-body {
+    #forgot-password-email {
+      width: 100%;
+    }
+  }
+
+  .modal-footer .grey-button {
+    display: none;
+  }
+}
+
+.create-an-account,
+.forgot-password-button {
   color: pvar(--mainForegroundColor);
   cursor: pointer;
   transition: opacity cubic-bezier(0.39, 0.575, 0.565, 1);
@@ -28,39 +45,143 @@ input[type=submit] {
   }
 }
 
-.login-form-and-externals {
+.wrapper {
   display: flex;
+  justify-content: space-around;
   flex-wrap: wrap;
-  font-size: 15px;
 
-  form {
-    margin: 0 50px 20px 0;
+  > div {
+    flex: 1 1;
   }
 
-  .external-login-blocks {
-    min-width: 200px;
+  .login-form-and-externals {
+    @include margin-left(10px);
+    @include margin-right(10px);
 
-    .block-title {
-      font-weight: $font-semibold;
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 15px;
+    max-width: 450px;
+    margin-bottom: 40px;
+
+    form {
+      margin: 0;
+
+      &,
+      input {
+        width: 100%;
+      }
+
+      .additionnal-links {
+        display: block;
+        text-align: center;
+        margin-top: 20px;
+        margin-bottom: 20px;
+
+        .forgot-password-button,
+        .create-an-account {
+          padding: 4px;
+          display: inline-block;
+
+          color: var(--mainColor);
+
+          &:hover,
+          &:active {
+            color: var(--mainHoverColor);
+          }
+        }
+      }
     }
 
-    .external-login-block {
-      @include disable-default-a-behaviour;
+    .external-login-blocks {
+      min-width: 200px;
 
-      cursor: pointer;
-      border: 1px solid #d1d7e0;
-      border-radius: 5px;
-      color: pvar(--mainForegroundColor);
-      margin: 10px 10px 0 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 35px;
-      min-width: 100px;
-
-      &:hover {
-        background-color: rgba(209, 215, 224, 0.5)
+      .block-title {
+        font-weight: $font-semibold;
       }
+
+      .external-login-block {
+        @include disable-default-a-behaviour;
+
+        cursor: pointer;
+        border: 1px solid #d1d7e0;
+        border-radius: 5px;
+        color: pvar(--mainForegroundColor);
+        margin: 10px 10px 0 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 35px;
+        min-width: 100px;
+
+        &:hover {
+          background-color: rgba(209, 215, 224, 0.5);
+        }
+      }
+    }
+
+    .signup-link {
+      display: inline-block;
+    }
+  }
+
+  .instance-information {
+    @include margin-left(10px);
+    @include margin-right(10px);
+
+    max-width: 600px;
+    min-width: 350px;
+    margin-bottom: 40px;
+  }
+
+  .terms-anchor {
+    display: inline;
+  }
+
+  .terms-link {
+    display: none;
+  }
+}
+
+@mixin column-reverse-display {
+  flex-direction: column-reverse;
+
+  .login-form-and-externals,
+  .instance-information {
+    @include margin-left(0);
+    @include margin-right(0);
+
+    width: 100%;
+    max-width: 450px;
+    min-width: unset;
+    align-self: center;
+  }
+
+  .instance-information {
+    ::ng-deep .accordion {
+      display: none;
+    }
+  }
+
+  .terms-anchor {
+    display: none;
+  }
+
+  .terms-link {
+    display: inline;
+  }
+}
+
+@media screen and (max-width: breakpoint(md)) {
+  .wrapper {
+    @include column-reverse-display();
+  }
+}
+
+@media screen and (max-width: breakpoint(md) + $menu-width) {
+  :host-context(.main-col:not(.expanded)) {
+    .wrapper {
+      @include column-reverse-display();
     }
   }
 }

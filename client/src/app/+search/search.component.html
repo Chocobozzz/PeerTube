@@ -2,14 +2,12 @@
   <div class="results-header">
     <div class="first-line">
       <div class="results-counter" *ngIf="pagination.totalItems">
-        <span i18n>{{ pagination.totalItems | myNumberFormatter }} {pagination.totalItems, plural, =1 {result} other {results}} </span>
+        <span class="mr-1" i18n>{{ pagination.totalItems | myNumberFormatter }} {pagination.totalItems, plural, =1 {result} other {results}}</span>
 
-        <span i18n *ngIf="advancedSearch.searchTarget === 'local'">on this instance</span>
-        <span i18n *ngIf="advancedSearch.searchTarget === 'search-index'">on the vidiverse</span>
+        <span class="mr-1" i18n *ngIf="advancedSearch.searchTarget === 'local'">on this instance</span>
+        <span class="mr-1" i18n *ngIf="advancedSearch.searchTarget === 'search-index'">on the vidiverse</span>
 
-        <span *ngIf="currentSearch" i18n>
-          for <span class="search-value">{{ currentSearch }}</span>
-        </span>
+        <span *ngIf="currentSearch" i18n>for <span class="search-value">{{ currentSearch }}</span></span>
       </div>
 
       <div
@@ -35,20 +33,15 @@
 
   <ng-container *ngFor="let result of results">
     <div *ngIf="isVideoChannel(result)" class="entry video-channel">
-      <a *ngIf="!isExternalChannelUrl()" [routerLink]="getChannelUrl(result)">
-        <img [src]="result.avatarUrl" alt="Avatar" />
-      </a>
 
-      <a *ngIf="isExternalChannelUrl()" [href]="getChannelUrl(result)" target="_blank">
-        <img [src]="result.avatarUrl" alt="Avatar" />
-      </a>
+      <my-actor-avatar [channel]="result" [internalHref]="getInternalChannelUrl(result)" [href]="getExternalChannelUrl(result)"></my-actor-avatar>
 
       <div class="video-channel-info">
-        <a *ngIf="!isExternalChannelUrl()" [routerLink]="getChannelUrl(result)" class="video-channel-names">
+        <a *ngIf="!isExternalChannelUrl()" [routerLink]="getInternalChannelUrl(result)" class="video-channel-names">
           <ng-container *ngTemplateOutlet="aContent"></ng-container>
         </a>
 
-        <a *ngIf="isExternalChannelUrl()" [href]="getChannelUrl(result)" target="_blank" class="video-channel-names">
+        <a *ngIf="isExternalChannelUrl()" [href]="getExternalChannelUrl(result)" target="_blank" class="video-channel-names">
           <ng-container *ngTemplateOutlet="aContent"></ng-container>
         </a>
 
@@ -66,9 +59,16 @@
     <div *ngIf="isVideo(result)" class="entry video">
       <my-video-miniature
         [video]="result" [user]="userMiniature" [displayAsRow]="true" [displayVideoActions]="!hideActions()"
-        [displayOptions]="videoDisplayOptions" [videoLinkType]="getVideoLinkType()"
+        [displayOptions]="videoDisplayOptions" [videoLinkType]="getLinkType()"
         (videoBlocked)="removeVideoFromArray(result)" (videoRemoved)="removeVideoFromArray(result)"
       ></my-video-miniature>
+    </div>
+
+    <div *ngIf="isPlaylist(result)" class="entry video-playlist">
+      <my-video-playlist-miniature
+        [playlist]="result" [displayAsRow]="true" [displayChannel]="true"
+        [linkType]="getLinkType()"
+      ></my-video-playlist-miniature>
     </div>
   </ng-container>
 

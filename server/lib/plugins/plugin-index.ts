@@ -1,22 +1,22 @@
-import { doRequest } from '../../helpers/requests'
-import { CONFIG } from '../../initializers/config'
-import {
-  PeertubePluginLatestVersionRequest,
-  PeertubePluginLatestVersionResponse
-} from '../../../shared/models/plugins/peertube-plugin-latest-version.model'
-import { PeertubePluginIndexList } from '../../../shared/models/plugins/peertube-plugin-index-list.model'
-import { ResultList } from '../../../shared/models'
-import { PeerTubePluginIndex } from '../../../shared/models/plugins/peertube-plugin-index.model'
-import { PluginModel } from '../../models/server/plugin'
-import { PluginManager } from './plugin-manager'
-import { logger } from '../../helpers/logger'
-import { PEERTUBE_VERSION } from '../../initializers/constants'
 import { sanitizeUrl } from '@server/helpers/core-utils'
+import { logger } from '@server/helpers/logger'
+import { doJSONRequest } from '@server/helpers/requests'
+import { CONFIG } from '@server/initializers/config'
+import { PEERTUBE_VERSION } from '@server/initializers/constants'
+import { PluginModel } from '@server/models/server/plugin'
+import {
+  PeerTubePluginIndex,
+  PeertubePluginIndexList,
+  PeertubePluginLatestVersionRequest,
+  PeertubePluginLatestVersionResponse,
+  ResultList
+} from '@shared/models'
+import { PluginManager } from './plugin-manager'
 
 async function listAvailablePluginsFromIndex (options: PeertubePluginIndexList) {
   const { start = 0, count = 20, search, sort = 'npmName', pluginType } = options
 
-  const qs: PeertubePluginIndexList = {
+  const searchParams: PeertubePluginIndexList & Record<string, string | number> = {
     start,
     count,
     sort,
@@ -28,7 +28,7 @@ async function listAvailablePluginsFromIndex (options: PeertubePluginIndexList) 
   const uri = CONFIG.PLUGINS.INDEX.URL + '/api/v1/plugins'
 
   try {
-    const { body } = await doRequest<any>({ uri, qs, json: true })
+    const { body } = await doJSONRequest<any>(uri, { searchParams })
 
     logger.debug('Got result from PeerTube index.', { body })
 
@@ -58,12 +58,28 @@ async function getLatestPluginsVersion (npmNames: string[]): Promise<PeertubePlu
 
   const uri = sanitizeUrl(CONFIG.PLUGINS.INDEX.URL) + '/api/v1/plugins/latest-version'
 
-  const { body } = await doRequest<any>({ uri, body: bodyRequest, json: true, method: 'POST' })
+  const options = {
+    json: bodyRequest,
+    method: 'POST' as 'POST'
+  }
+  const { body } = await doJSONRequest<PeertubePluginLatestVersionResponse>(uri, options)
 
   return body
 }
 
+async function getLatestPluginVersion (npmName: string) {
+  const results = await getLatestPluginsVersion([ npmName ])
+
+  if (Array.isArray(results) === false || results.length !== 1) {
+    logger.warn('Cannot get latest supported plugin version of %s.', npmName)
+    return undefined
+  }
+
+  return results[0].latestVersion
+}
+
 export {
   listAvailablePluginsFromIndex,
+  getLatestPluginVersion,
   getLatestPluginsVersion
 }

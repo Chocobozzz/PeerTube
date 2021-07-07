@@ -5,4 +5,8 @@ export type VideoSortField =
   'createdAt' | '-createdAt' |
   'views' | '-views' |
   'likes' | '-likes' |
-  'trending' | '-trending'
+
+  // trending sorts
+  'trending' | '-trending' |
+  'hot' | '-hot' |
+  'best' | '-best'

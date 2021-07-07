@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-import { v4 as uuidv4 } from 'uuid'
-
+import { buildUUID } from '@server/helpers/uuid'
+import { AbuseState } from '@shared/models'
 import {
+  addAbuseMessage,
   addVideoCommentThread,
   addVideoToBlacklist,
   cleanupTests,
@@ -20,18 +21,19 @@ import {
   removeVideoFromBlacklist,
   reportAbuse,
   unfollow,
+  updateAbuse,
   updateCustomConfig,
   updateCustomSubConfig,
-  wait,
-  updateAbuse,
-  addAbuseMessage
+  wait
 } from '../../../../shared/extra-utils'
 import { ServerInfo, uploadVideo } from '../../../../shared/extra-utils/index'
 import { MockSmtpServer } from '../../../../shared/extra-utils/miscs/email'
 import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 import {
+  checkAbuseStateChange,
   checkAutoInstanceFollowing,
   CheckerBaseParams,
+  checkNewAbuseMessage,
   checkNewAccountAbuseForModerators,
   checkNewBlacklistOnMyVideo,
   checkNewCommentAbuseForModerators,
@@ -41,15 +43,12 @@ import {
   checkUserRegistered,
   checkVideoAutoBlacklistForModerators,
   checkVideoIsPublished,
-  prepareNotificationsTest,
-  checkAbuseStateChange,
-  checkNewAbuseMessage
+  prepareNotificationsTest
 } from '../../../../shared/extra-utils/users/user-notifications'
 import { addUserSubscription, removeUserSubscription } from '../../../../shared/extra-utils/users/user-subscriptions'
 import { CustomConfig } from '../../../../shared/models/server'
 import { UserNotification } from '../../../../shared/models/users'
 import { VideoPrivacy } from '../../../../shared/models/videos'
-import { AbuseState } from '@shared/models'
 
 describe('Test moderation notifications', function () {
   let servers: ServerInfo[] = []
@@ -86,7 +85,7 @@ describe('Test moderation notifications', function () {
     it('Should send a notification to moderators on local video abuse', async function () {
       this.timeout(20000)
 
-      const name = 'video for abuse ' + uuidv4()
+      const name = 'video for abuse ' + buildUUID()
       const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name })
       const video = resVideo.body.video
 
@@ -99,7 +98,7 @@ describe('Test moderation notifications', function () {
     it('Should send a notification to moderators on remote video abuse', async function () {
       this.timeout(20000)
 
-      const name = 'video for abuse ' + uuidv4()
+      const name = 'video for abuse ' + buildUUID()
       const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name })
       const video = resVideo.body.video
 
@@ -115,11 +114,13 @@ describe('Test moderation notifications', function () {
     it('Should send a notification to moderators on local comment abuse', async function () {
       this.timeout(20000)
 
-      const name = 'video for abuse ' + uuidv4()
+      const name = 'video for abuse ' + buildUUID()
       const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name })
       const video = resVideo.body.video
-      const resComment = await addVideoCommentThread(servers[0].url, userAccessToken, video.id, 'comment abuse ' + uuidv4())
+      const resComment = await addVideoCommentThread(servers[0].url, userAccessToken, video.id, 'comment abuse ' + buildUUID())
       const comment = resComment.body.comment
+
+      await waitJobs(servers)
 
       await reportAbuse({ url: servers[0].url, token: servers[0].accessToken, commentId: comment.id, reason: 'super reason' })
 
@@ -130,10 +131,10 @@ describe('Test moderation notifications', function () {
     it('Should send a notification to moderators on remote comment abuse', async function () {
       this.timeout(20000)
 
-      const name = 'video for abuse ' + uuidv4()
+      const name = 'video for abuse ' + buildUUID()
       const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name })
       const video = resVideo.body.video
-      await addVideoCommentThread(servers[0].url, userAccessToken, video.id, 'comment abuse ' + uuidv4())
+      await addVideoCommentThread(servers[0].url, userAccessToken, video.id, 'comment abuse ' + buildUUID())
 
       await waitJobs(servers)
 
@@ -187,7 +188,7 @@ describe('Test moderation notifications', function () {
         token: userAccessToken
       }
 
-      const name = 'abuse ' + uuidv4()
+      const name = 'abuse ' + buildUUID()
       const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name })
       const video = resVideo.body.video
 
@@ -235,7 +236,7 @@ describe('Test moderation notifications', function () {
         token: servers[0].accessToken
       }
 
-      const name = 'abuse ' + uuidv4()
+      const name = 'abuse ' + buildUUID()
       const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name })
       const video = resVideo.body.video
 
@@ -306,7 +307,7 @@ describe('Test moderation notifications', function () {
     it('Should send a notification to video owner on blacklist', async function () {
       this.timeout(10000)
 
-      const name = 'video for abuse ' + uuidv4()
+      const name = 'video for abuse ' + buildUUID()
       const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name })
       const uuid = resVideo.body.video.uuid
 
@@ -319,7 +320,7 @@ describe('Test moderation notifications', function () {
     it('Should send a notification to video owner on unblacklist', async function () {
       this.timeout(10000)
 
-      const name = 'video for abuse ' + uuidv4()
+      const name = 'video for abuse ' + buildUUID()
       const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name })
       const uuid = resVideo.body.video.uuid
 
@@ -362,16 +363,7 @@ describe('Test moderation notifications', function () {
 
   describe('New instance follows', function () {
     const instanceIndexServer = new MockInstancesIndex()
-    const config = {
-      followings: {
-        instance: {
-          autoFollowIndex: {
-            indexUrl: 'http://localhost:42101/api/v1/instances/hosts',
-            enabled: true
-          }
-        }
-      }
-    }
+    let config: any
     let baseParams: CheckerBaseParams
 
     before(async () => {
@@ -382,8 +374,19 @@ describe('Test moderation notifications', function () {
         token: servers[0].accessToken
       }
 
-      await instanceIndexServer.initialize()
+      const port = await instanceIndexServer.initialize()
       instanceIndexServer.addInstance(servers[1].host)
+
+      config = {
+        followings: {
+          instance: {
+            autoFollowIndex: {
+              indexUrl: `http://localhost:${port}/api/v1/instances/hosts`,
+              enabled: true
+            }
+          }
+        }
+      }
     })
 
     it('Should send a notification only to admin when there is a new instance follower', async function () {
@@ -502,9 +505,9 @@ describe('Test moderation notifications', function () {
     })
 
     it('Should send notification to moderators on new video with auto-blacklist', async function () {
-      this.timeout(20000)
+      this.timeout(40000)
 
-      videoName = 'video with auto-blacklist ' + uuidv4()
+      videoName = 'video with auto-blacklist ' + buildUUID()
       const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name: videoName })
       videoUUID = resVideo.body.video.uuid
 
@@ -525,7 +528,7 @@ describe('Test moderation notifications', function () {
     })
 
     it('Should send video published and unblacklist after video unblacklisted', async function () {
-      this.timeout(20000)
+      this.timeout(40000)
 
       await removeVideoFromBlacklist(servers[0].url, servers[0].accessToken, videoUUID)
 
@@ -546,11 +549,11 @@ describe('Test moderation notifications', function () {
     })
 
     it('Should send unblacklist but not published/subscription notes after unblacklisted if scheduled update pending', async function () {
-      this.timeout(20000)
+      this.timeout(40000)
 
       const updateAt = new Date(new Date().getTime() + 1000000)
 
-      const name = 'video with auto-blacklist and future schedule ' + uuidv4()
+      const name = 'video with auto-blacklist and future schedule ' + buildUUID()
 
       const data = {
         name,
@@ -578,12 +581,12 @@ describe('Test moderation notifications', function () {
     })
 
     it('Should not send publish/subscription notifications after scheduled update if video still auto-blacklisted', async function () {
-      this.timeout(20000)
+      this.timeout(40000)
 
       // In 2 seconds
       const updateAt = new Date(new Date().getTime() + 2000)
 
-      const name = 'video with schedule done and still auto-blacklisted ' + uuidv4()
+      const name = 'video with schedule done and still auto-blacklisted ' + buildUUID()
 
       const data = {
         name,
@@ -604,9 +607,9 @@ describe('Test moderation notifications', function () {
     })
 
     it('Should not send a notification to moderators on new video without auto-blacklist', async function () {
-      this.timeout(20000)
+      this.timeout(60000)
 
-      const name = 'video without auto-blacklist ' + uuidv4()
+      const name = 'video without auto-blacklist ' + buildUUID()
 
       // admin with blacklist right will not be auto-blacklisted
       const resVideo = await uploadVideo(servers[0].url, servers[0].accessToken, { name })

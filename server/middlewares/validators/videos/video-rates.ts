@@ -1,17 +1,18 @@
 import * as express from 'express'
 import { body, param, query } from 'express-validator'
-import { isIdOrUUIDValid } from '../../../helpers/custom-validators/misc'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { VideoRateType } from '../../../../shared/models/videos'
+import { isAccountNameValid } from '../../../helpers/custom-validators/accounts'
+import { isIdValid } from '../../../helpers/custom-validators/misc'
 import { isRatingValid } from '../../../helpers/custom-validators/video-rates'
 import { isVideoRatingTypeValid } from '../../../helpers/custom-validators/videos'
 import { logger } from '../../../helpers/logger'
-import { areValidationErrors } from '../utils'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
-import { VideoRateType } from '../../../../shared/models/videos'
-import { isAccountNameValid } from '../../../helpers/custom-validators/accounts'
-import { doesVideoExist } from '../../../helpers/middlewares'
+import { areValidationErrors, doesVideoExist, isValidVideoIdParam } from '../shared'
 
 const videoUpdateRateValidator = [
-  param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
+  isValidVideoIdParam('id'),
+
   body('rating').custom(isVideoRatingTypeValid).withMessage('Should have a valid rate type'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -27,18 +28,19 @@ const videoUpdateRateValidator = [
 const getAccountVideoRateValidatorFactory = function (rateType: VideoRateType) {
   return [
     param('name').custom(isAccountNameValid).withMessage('Should have a valid account name'),
-    param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid videoId'),
+    param('videoId').custom(isIdValid).not().isEmpty().withMessage('Should have a valid videoId'),
 
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       logger.debug('Checking videoCommentGetValidator parameters.', { parameters: req.params })
 
       if (areValidationErrors(req, res)) return
 
-      const rate = await AccountVideoRateModel.loadLocalAndPopulateVideo(rateType, req.params.name, req.params.videoId)
+      const rate = await AccountVideoRateModel.loadLocalAndPopulateVideo(rateType, req.params.name, +req.params.videoId)
       if (!rate) {
-        return res.status(404)
-                  .json({ error: 'Video rate not found' })
-                  .end()
+        return res.fail({
+          status: HttpStatusCode.NOT_FOUND_404,
+          message: 'Video rate not found'
+        })
       }
 
       res.locals.accountVideoRate = rate

@@ -1,6 +1,6 @@
 import { makeDeleteRequest, makeGetRequest, makePutBodyRequest } from '../requests/requests'
 import { CustomConfig } from '../../models/server/custom-config.model'
-import { DeepPartial } from '@shared/core-utils'
+import { DeepPartial, HttpStatusCode } from '@shared/core-utils'
 import { merge } from 'lodash'
 
 function getConfig (url: string) {
@@ -9,7 +9,7 @@ function getConfig (url: string) {
   return makeGetRequest({
     url,
     path,
-    statusCodeExpected: 200
+    statusCodeExpected: HttpStatusCode.OK_200
   })
 }
 
@@ -19,11 +19,11 @@ function getAbout (url: string) {
   return makeGetRequest({
     url,
     path,
-    statusCodeExpected: 200
+    statusCodeExpected: HttpStatusCode.OK_200
   })
 }
 
-function getCustomConfig (url: string, token: string, statusCodeExpected = 200) {
+function getCustomConfig (url: string, token: string, statusCodeExpected = HttpStatusCode.OK_200) {
   const path = '/api/v1/config/custom'
 
   return makeGetRequest({
@@ -34,7 +34,7 @@ function getCustomConfig (url: string, token: string, statusCodeExpected = 200) 
   })
 }
 
-function updateCustomConfig (url: string, token: string, newCustomConfig: CustomConfig, statusCodeExpected = 200) {
+function updateCustomConfig (url: string, token: string, newCustomConfig: CustomConfig, statusCodeExpected = HttpStatusCode.OK_200) {
   const path = '/api/v1/config/custom'
 
   return makePutBodyRequest({
@@ -65,9 +65,11 @@ function updateCustomSubConfig (url: string, token: string, newConfig: DeepParti
       languages: [ 'en', 'es' ],
       categories: [ 1, 2 ],
 
-      defaultClientRoute: '/videos/recently-added',
       isNSFW: true,
       defaultNSFWPolicy: 'blur',
+
+      defaultClientRoute: '/videos/recently-added',
+
       customizations: {
         javascript: 'alert("coucou")',
         css: 'body { background-color: red; }'
@@ -88,12 +90,16 @@ function updateCustomSubConfig (url: string, token: string, newConfig: DeepParti
       },
       captions: {
         size: 3
+      },
+      torrents: {
+        size: 4
       }
     },
     signup: {
       enabled: false,
       limit: 5,
-      requiresEmailVerification: false
+      requiresEmailVerification: false,
+      minimumAge: 16
     },
     admin: {
       email: 'superadmin1@example.com'
@@ -110,6 +116,8 @@ function updateCustomSubConfig (url: string, token: string, newConfig: DeepParti
       allowAdditionalExtensions: true,
       allowAudioFiles: true,
       threads: 1,
+      concurrency: 3,
+      profile: 'default',
       resolutions: {
         '0p': false,
         '240p': false,
@@ -117,6 +125,7 @@ function updateCustomSubConfig (url: string, token: string, newConfig: DeepParti
         '480p': true,
         '720p': false,
         '1080p': false,
+        '1440p': false,
         '2160p': false
       },
       webtorrent: {
@@ -126,13 +135,43 @@ function updateCustomSubConfig (url: string, token: string, newConfig: DeepParti
         enabled: false
       }
     },
+    live: {
+      enabled: true,
+      allowReplay: false,
+      maxDuration: -1,
+      maxInstanceLives: -1,
+      maxUserLives: 50,
+      transcoding: {
+        enabled: true,
+        threads: 4,
+        profile: 'default',
+        resolutions: {
+          '240p': true,
+          '360p': true,
+          '480p': true,
+          '720p': true,
+          '1080p': true,
+          '1440p': true,
+          '2160p': true
+        }
+      }
+    },
     import: {
       videos: {
+        concurrency: 3,
         http: {
           enabled: false
         },
         torrent: {
           enabled: false
+        }
+      }
+    },
+    trending: {
+      videos: {
+        algorithms: {
+          enabled: [ 'best', 'hot', 'most-viewed', 'most-liked' ],
+          default: 'hot'
         }
       }
     },
@@ -185,7 +224,19 @@ function updateCustomSubConfig (url: string, token: string, newConfig: DeepParti
   return updateCustomConfig(url, token, updateParams)
 }
 
-function deleteCustomConfig (url: string, token: string, statusCodeExpected = 200) {
+function getCustomConfigResolutions (enabled: boolean) {
+  return {
+    '240p': enabled,
+    '360p': enabled,
+    '480p': enabled,
+    '720p': enabled,
+    '1080p': enabled,
+    '1440p': enabled,
+    '2160p': enabled
+  }
+}
+
+function deleteCustomConfig (url: string, token: string, statusCodeExpected = HttpStatusCode.OK_200) {
   const path = '/api/v1/config/custom'
 
   return makeDeleteRequest({
@@ -204,5 +255,6 @@ export {
   updateCustomConfig,
   getAbout,
   deleteCustomConfig,
-  updateCustomSubConfig
+  updateCustomSubConfig,
+  getCustomConfigResolutions
 }

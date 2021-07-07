@@ -5,7 +5,7 @@
       <a ngbNavLink i18n>Basic info</a>
 
       <ng-template ngbNavContent>
-        <div class="row">
+        <div class="form-columns">
           <div class="col-video-edit">
             <div class="form-group">
               <label i18n for="name">Title</label>
@@ -72,6 +72,15 @@
 
             <div class="form-group">
               <label i18n for="licence">Licence</label>
+
+              <my-help>
+                <ng-template ptTemplate="customHtml">
+                  <ng-container i18n>
+                    <a href="https://chooser-beta.creativecommons.org/" target="_blank" rel="noopener noreferrer">Choose</a> the appropriate licence for your work.
+                  </ng-container>
+                </ng-template>
+              </my-help>
+
               <my-select-options
                 labelForId="licence" [items]="videoLicences" formControlName="licence" [clearable]="true"
               ></my-select-options>
@@ -108,7 +117,7 @@
               <label i18n for="schedulePublicationAt">Schedule publication ({{ calendarTimezone }})</label>
               <p-calendar
                 id="schedulePublicationAt" formControlName="schedulePublicationAt" [dateFormat]="calendarDateFormat"
-                [locale]="calendarLocale" [minDate]="minScheduledDate" [showTime]="true" [hideOnDateTimeSelect]="true"
+                [firstDayOfWeek]="0" [minDate]="minScheduledDate" [showTime]="true" [hideOnDateTimeSelect]="true"
               >
               </p-calendar>
 
@@ -123,7 +132,7 @@
               </ng-template>
 
               <ng-template ptTemplate="help">
-                <ng-container i18n>Some instances do not list videos containing mature or explicit content by default.</ng-container>
+                <ng-container i18n>Some instances hide videos containing mature or explicit content by default.</ng-container>
               </ng-template>
             </my-peertube-checkbox>
 
@@ -142,7 +151,7 @@
       </ng-template>
     </ng-container>
 
-    <ng-container ngbNavItem>
+    <ng-container ngbNavItem *ngIf="!liveVideo">
       <a ngbNavLink i18n>Captions</a>
 
       <ng-template ngbNavContent>
@@ -195,6 +204,58 @@
       </ng-template>
     </ng-container>
 
+    <ng-container ngbNavItem *ngIf="liveVideo">
+      <a ngbNavLink i18n>Live settings</a>
+
+      <ng-template ngbNavContent>
+        <div class="row live-settings">
+          <div class="col-md-12">
+            <div class="alert alert-info">
+              <my-live-documentation-link></my-live-documentation-link>
+            </div>
+
+            <div class="form-group">
+              <label for="liveVideoRTMPUrl" i18n>Live RTMP Url</label>
+              <my-input-toggle-hidden inputId="liveVideoRTMPUrl" [value]="liveVideo.rtmpUrl" [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"></my-input-toggle-hidden>
+            </div>
+
+            <div class="form-group">
+              <label for="liveVideoStreamKey" i18n>Live stream key</label>
+              <my-input-toggle-hidden inputId="liveVideoStreamKey" [value]="liveVideo.streamKey" [withCopy]="true" [readonly]="true"></my-input-toggle-hidden>
+
+              <div class="form-group-description" i18n>⚠️ Never share your stream key with anyone.</div>
+            </div>
+
+            <div class="form-group">
+              <my-peertube-checkbox inputName="liveVideoPermanentLive" formControlName="permanentLive">
+                <ng-template ptTemplate="label">
+                  <ng-container i18n>This is a permanent live</ng-container>
+                </ng-template>
+
+                <ng-container ngProjectAs="description">
+                  <span i18n>You can stream multiple times in a permanent live. The URL for your viewers won't change but you cannot save replays of your lives</span>
+                </ng-container>
+              </my-peertube-checkbox>
+            </div>
+
+            <div class="form-group" *ngIf="isSaveReplayEnabled()">
+              <my-peertube-checkbox inputName="liveVideoSaveReplay" formControlName="saveReplay">
+                <ng-template ptTemplate="label">
+                  <ng-container i18n>Automatically publish a replay when your live ends</ng-container>
+                </ng-template>
+
+                <ng-container ngProjectAs="description">
+                  <span i18n>⚠️ If you enable this option, your live will be terminated if you exceed your video quota</span>
+                </ng-container>
+              </my-peertube-checkbox>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+
+    </ng-container>
+
+
     <ng-container ngbNavItem>
       <a ngbNavLink i18n>Advanced settings</a>
 
@@ -241,8 +302,8 @@
                 </ng-template>
               </my-help>
               <p-calendar
-                id="originallyPublishedAt" formControlName="originallyPublishedAt" [dateFormat]="calendarDateFormat"
-                [locale]="calendarLocale" [showTime]="true" [hideOnDateTimeSelect]="true" [monthNavigator]="true" [yearNavigator]="true" [yearRange]="myYearRange"
+                id="originallyPublishedAt" formControlName="originallyPublishedAt" [dateFormat]="calendarDateFormat" [firstDayOfWeek]="0"
+                [showTime]="true" [hideOnDateTimeSelect]="true" [monthNavigator]="true" [yearNavigator]="true" [yearRange]="myYearRange"
               >
               </p-calendar>
 
@@ -272,7 +333,7 @@
         <div class="row plugin-settings">
 
           <div class="col-md-12 col-xl-8">
-            <div *ngFor="let pluginSetting of pluginFields" class="form-group">
+            <div *ngFor="let pluginSetting of pluginFields" class="form-group" [hidden]="isPluginFieldHidden(pluginSetting)">
               <my-dynamic-form-field [form]="pluginDataFormGroup" [formErrors]="formErrors" [setting]="pluginSetting.commonOptions"></my-dynamic-form-field>
             </div>
           </div>
@@ -286,5 +347,5 @@
 </div>
 
 <my-video-caption-add-modal
-  #videoCaptionAddModal [existingCaptions]="existingCaptions" [serverConfig]="serverConfig" (captionAdded)="onCaptionAdded($event)"
+  #videoCaptionAddModal [existingCaptions]="getExistingCaptions()" [serverConfig]="serverConfig" (captionAdded)="onCaptionAdded($event)"
 ></my-video-caption-add-modal>

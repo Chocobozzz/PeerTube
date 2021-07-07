@@ -36,9 +36,9 @@ export interface ServerConfig {
   instance: {
     name: string
     shortDescription: string
-    defaultClientRoute: string
     isNSFW: boolean
     defaultNSFWPolicy: NSFWPolicyType
+    defaultClientRoute: string
     customizations: {
       javascript: string
       css: string
@@ -84,6 +84,7 @@ export interface ServerConfig {
     allowed: boolean
     allowedForCurrentIP: boolean
     requiresEmailVerification: boolean
+    minimumAge: number
   }
 
   transcoding: {
@@ -96,6 +97,31 @@ export interface ServerConfig {
     }
 
     enabledResolutions: number[]
+
+    profile: string
+    availableProfiles: string[]
+  }
+
+  live: {
+    enabled: boolean
+
+    maxDuration: number
+    maxInstanceLives: number
+    maxUserLives: number
+    allowReplay: boolean
+
+    transcoding: {
+      enabled: boolean
+
+      enabledResolutions: number[]
+
+      profile: string
+      availableProfiles: string[]
+    }
+
+    rtmp: {
+      port: number
+    }
   }
 
   import: {
@@ -118,6 +144,15 @@ export interface ServerConfig {
   }
 
   avatar: {
+    file: {
+      size: {
+        max: number
+      }
+      extensions: string[]
+    }
+  }
+
+  banner: {
     file: {
       size: {
         max: number
@@ -155,6 +190,10 @@ export interface ServerConfig {
   trending: {
     videos: {
       intervalDays: number
+      algorithms: {
+        enabled: string[]
+        default: string
+      }
     }
   }
 
@@ -176,4 +215,10 @@ export interface ServerConfig {
     level: BroadcastMessageLevel
     dismissable: boolean
   }
+
+  homepage: {
+    enabled: boolean
+  }
 }
+
+export type HTMLServerConfig = Omit<ServerConfig, 'signup'>

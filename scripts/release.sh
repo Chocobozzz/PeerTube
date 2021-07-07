@@ -65,7 +65,7 @@ npm version -f --no-git-tag-version --no-commit-hooks "$1"
 git commit package.json client/package.json ./support/doc/api/openapi.yaml -m "Bumped to version $version"
 git tag -s -a "$version" -m "$version"
 
-npm run build
+npm run build -- --source-map
 rm -f "./client/dist/en-US/stats.json"
 rm -f "./client/dist/embed-stats.json"
 
@@ -85,9 +85,9 @@ rm -f "./client/dist/embed-stats.json"
   ln -s "PeerTube" "$directory_name"
 
   # archive creation + signing
-  zip -r "PeerTube/$zip_name" "${directories_to_archive[@]}"
+  zip -9 -r "PeerTube/$zip_name" "${directories_to_archive[@]}"
   gpg --armor --detach-sign -u "$maintainer_public_key" "PeerTube/$zip_name"
-  XZ_OPT=-e9 tar cfJ "PeerTube/$tar_name" "${directories_to_archive[@]}"
+  XZ_OPT="-e9 -T0" tar cfJ "PeerTube/$tar_name" "${directories_to_archive[@]}"
   gpg --armor --detach-sign -u "$maintainer_public_key" "PeerTube/$tar_name"
 
   # temporary setup destruction

@@ -1,11 +1,11 @@
 import * as express from 'express'
 import { body } from 'express-validator'
 import { isBulkRemoveCommentsOfScopeValid } from '@server/helpers/custom-validators/bulk'
-import { doesAccountNameWithHostExist } from '@server/helpers/middlewares'
+import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 import { UserRight } from '@shared/models'
 import { BulkRemoveCommentsOfBody } from '@shared/models/bulk/bulk-remove-comments-of-body.model'
 import { logger } from '../../helpers/logger'
-import { areValidationErrors } from './utils'
+import { areValidationErrors, doesAccountNameWithHostExist } from './shared'
 
 const bulkRemoveCommentsOfValidator = [
   body('accountName').exists().withMessage('Should have an account name with host'),
@@ -22,9 +22,9 @@ const bulkRemoveCommentsOfValidator = [
     const body = req.body as BulkRemoveCommentsOfBody
 
     if (body.scope === 'instance' && user.hasRight(UserRight.REMOVE_ANY_VIDEO_COMMENT) !== true) {
-      return res.status(403)
-      .json({
-        error: 'User cannot remove any comments of this instance.'
+      return res.fail({
+        status: HttpStatusCode.FORBIDDEN_403,
+        message: 'User cannot remove any comments of this instance.'
       })
     }
 

@@ -2,19 +2,21 @@
 
 import 'mocha'
 import * as chai from 'chai'
+import { advancedVideoChannelSearch, searchVideoChannel } from '@shared/extra-utils/search/video-channels'
+import { Video, VideoChannel, VideoPlaylist, VideoPlaylistPrivacy, VideoPlaylistType, VideosSearchQuery } from '@shared/models'
 import {
+  advancedVideoPlaylistSearch,
+  advancedVideosSearch,
   cleanupTests,
   flushAndRunServer,
+  immutableAssign,
   searchVideo,
+  searchVideoPlaylists,
   ServerInfo,
   setAccessTokensToServers,
   updateCustomSubConfig,
-  uploadVideo,
-  advancedVideosSearch,
-  immutableAssign
+  uploadVideo
 } from '../../../../shared/extra-utils'
-import { searchVideoChannel, advancedVideoChannelSearch } from '@shared/extra-utils/search/video-channels'
-import { VideosSearchQuery, Video, VideoChannel } from '@shared/models'
 
 const expect = chai.expect
 
@@ -105,7 +107,7 @@ describe('Test videos search', function () {
   describe('Videos search', async function () {
 
     it('Should make a simple search and not have results', async function () {
-      const res = await searchVideo(server.url, 'a'.repeat(500))
+      const res = await searchVideo(server.url, 'djidane'.repeat(50))
 
       expect(res.body.total).to.equal(0)
       expect(res.body.data).to.have.lengthOf(0)
@@ -216,7 +218,7 @@ describe('Test videos search', function () {
       {
         await updateCustomSubConfig(server.url, server.accessToken, { instance: { defaultNSFWPolicy: 'display' } })
 
-        const res = await searchVideo(server.url, 'NSFW search index')
+        const res = await searchVideo(server.url, 'NSFW search index', '-match')
         const video = res.body.data[0] as Video
 
         expect(res.body.data).to.have.length.greaterThan(0)
@@ -228,7 +230,7 @@ describe('Test videos search', function () {
       {
         await updateCustomSubConfig(server.url, server.accessToken, { instance: { defaultNSFWPolicy: 'do_not_list' } })
 
-        const res = await searchVideo(server.url, 'NSFW search index')
+        const res = await searchVideo(server.url, 'NSFW search index', '-match')
 
         try {
           expect(res.body.data).to.have.lengthOf(0)
@@ -267,6 +269,56 @@ describe('Test videos search', function () {
       expect(videoChannel.ownerAccount.name).to.equal('framasoft')
       expect(videoChannel.ownerAccount.host).to.equal('framatube.org')
       expect(videoChannel.ownerAccount.avatar).to.exist
+    })
+
+    it('Should have a correct pagination', async function () {
+      const res = await advancedVideoChannelSearch(server.url, { search: 'root', start: 0, count: 2 })
+
+      expect(res.body.total).to.be.greaterThan(2)
+      expect(res.body.data).to.have.lengthOf(2)
+    })
+  })
+
+  describe('Playlists search', async function () {
+
+    it('Should make a simple search and not have results', async function () {
+      const res = await searchVideoPlaylists(server.url, 'a'.repeat(500))
+
+      expect(res.body.total).to.equal(0)
+      expect(res.body.data).to.have.lengthOf(0)
+    })
+
+    it('Should make a search and have results', async function () {
+      const res = await advancedVideoPlaylistSearch(server.url, { search: 'E2E playlist', sort: '-match' })
+
+      expect(res.body.total).to.be.greaterThan(0)
+      expect(res.body.data).to.have.length.greaterThan(0)
+
+      const videoPlaylist: VideoPlaylist = res.body.data[0]
+
+      expect(videoPlaylist.url).to.equal('https://peertube2.cpy.re/videos/watch/playlist/73804a40-da9a-40c2-b1eb-2c6d9eec8f0a')
+      expect(videoPlaylist.thumbnailUrl).to.exist
+      expect(videoPlaylist.embedUrl).to.equal('https://peertube2.cpy.re/video-playlists/embed/73804a40-da9a-40c2-b1eb-2c6d9eec8f0a')
+
+      expect(videoPlaylist.type.id).to.equal(VideoPlaylistType.REGULAR)
+      expect(videoPlaylist.privacy.id).to.equal(VideoPlaylistPrivacy.PUBLIC)
+      expect(videoPlaylist.videosLength).to.exist
+
+      expect(videoPlaylist.createdAt).to.exist
+      expect(videoPlaylist.updatedAt).to.exist
+
+      expect(videoPlaylist.uuid).to.equal('73804a40-da9a-40c2-b1eb-2c6d9eec8f0a')
+      expect(videoPlaylist.displayName).to.exist
+
+      expect(videoPlaylist.ownerAccount.url).to.equal('https://peertube2.cpy.re/accounts/chocobozzz')
+      expect(videoPlaylist.ownerAccount.name).to.equal('chocobozzz')
+      expect(videoPlaylist.ownerAccount.host).to.equal('peertube2.cpy.re')
+      expect(videoPlaylist.ownerAccount.avatar).to.exist
+
+      expect(videoPlaylist.videoChannel.url).to.equal('https://peertube2.cpy.re/video-channels/chocobozzz_channel')
+      expect(videoPlaylist.videoChannel.name).to.equal('chocobozzz_channel')
+      expect(videoPlaylist.videoChannel.host).to.equal('peertube2.cpy.re')
+      expect(videoPlaylist.videoChannel.avatar).to.exist
     })
 
     it('Should have a correct pagination', async function () {

@@ -12,10 +12,12 @@ import {
   uploadVideoAndGetId,
   viewVideo,
   getVideosList,
-  waitJobs
+  waitJobs,
+  makeGetRequest
 } from '../../../shared/extra-utils'
 import { cleanupTests, flushAndRunMultipleServers, ServerInfo, waitUntilLog } from '../../../shared/extra-utils/server/servers'
 import { expect } from 'chai'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 function postCommand (server: ServerInfo, command: string, bodyArg?: object) {
   const body = { command }
@@ -25,7 +27,7 @@ function postCommand (server: ServerInfo, command: string, bodyArg?: object) {
     url: server.url,
     path: '/plugins/test-four/router/commander',
     fields: body,
-    statusCodeExpected: 204
+    statusCodeExpected: HttpStatusCode.NO_CONTENT_204
   })
 }
 
@@ -67,6 +69,17 @@ describe('Test plugin helpers', function () {
     it('Should have the correct webserver url', async function () {
       await waitUntilLog(servers[0], `server url is http://localhost:${servers[0].port}`)
     })
+
+    it('Should have the correct config', async function () {
+      const res = await makeGetRequest({
+        url: servers[0].url,
+        path: '/plugins/test-four/router/server-config',
+        statusCodeExpected: HttpStatusCode.OK_200
+      })
+
+      expect(res.body.serverConfig).to.exist
+      expect(res.body.serverConfig.instance.name).to.equal('PeerTube')
+    })
   })
 
   describe('Server', function () {
@@ -76,11 +89,62 @@ describe('Test plugin helpers', function () {
     })
   })
 
+  describe('Plugin', function () {
+
+    it('Should get the base static route', async function () {
+      const res = await makeGetRequest({
+        url: servers[0].url,
+        path: '/plugins/test-four/router/static-route',
+        statusCodeExpected: HttpStatusCode.OK_200
+      })
+
+      expect(res.body.staticRoute).to.equal('/plugins/test-four/0.0.1/static/')
+    })
+
+    it('Should get the base static route', async function () {
+      const baseRouter = '/plugins/test-four/0.0.1/router/'
+
+      const res = await makeGetRequest({
+        url: servers[0].url,
+        path: baseRouter + 'router-route',
+        statusCodeExpected: HttpStatusCode.OK_200
+      })
+
+      expect(res.body.routerRoute).to.equal(baseRouter)
+    })
+  })
+
+  describe('User', function () {
+
+    it('Should not get a user if not authenticated', async function () {
+      await makeGetRequest({
+        url: servers[0].url,
+        path: '/plugins/test-four/router/user',
+        statusCodeExpected: HttpStatusCode.NOT_FOUND_404
+      })
+    })
+
+    it('Should get a user if authenticated', async function () {
+      const res = await makeGetRequest({
+        url: servers[0].url,
+        token: servers[0].accessToken,
+        path: '/plugins/test-four/router/user',
+        statusCodeExpected: HttpStatusCode.OK_200
+      })
+
+      expect(res.body.username).to.equal('root')
+      expect(res.body.displayName).to.equal('root')
+      expect(res.body.isAdmin).to.be.true
+      expect(res.body.isModerator).to.be.false
+      expect(res.body.isUser).to.be.false
+    })
+  })
+
   describe('Moderation', function () {
     let videoUUIDServer1: string
 
     before(async function () {
-      this.timeout(15000)
+      this.timeout(60000)
 
       {
         const res = await uploadVideoAndGetId({ server: servers[0], videoName: 'video server 1' })
@@ -179,7 +243,7 @@ describe('Test plugin helpers', function () {
     })
 
     it('Should remove a video after a view', async function () {
-      this.timeout(20000)
+      this.timeout(40000)
 
       // Should not throw -> video exists
       await getVideo(servers[0].url, videoUUID)

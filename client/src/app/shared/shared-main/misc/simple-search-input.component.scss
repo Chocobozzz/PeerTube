@@ -1,0 +1,30 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+.root {
+  display: flex;
+}
+
+my-global-icon {
+  @include margin-left(10px);
+
+  height: 28px;
+  width: 28px;
+  cursor: pointer;
+
+  &:hover {
+    color: pvar(--mainHoverColor);
+  }
+
+  &[iconName=search] {
+    color: pvar(--mainForegroundColor);
+  }
+
+  &[iconName=cross] {
+    color: pvar(--mainForegroundColor);
+  }
+}
+
+input {
+  @include peertube-input-text(200px);
+}

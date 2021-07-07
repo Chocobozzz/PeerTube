@@ -1,11 +1,16 @@
-import { Component, OnDestroy, OnInit } from '@angular/core'
+
+import { switchMap } from 'rxjs/operators'
+import { Component, ComponentFactoryResolver, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { AuthService, LocalStorageService, Notifier, ScreenService, ServerService, UserService } from '@app/core'
+import { AuthService, LocalStorageService, Notifier, ScopedTokensService, ScreenService, ServerService, UserService } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { immutableAssign } from '@app/helpers'
+import { VideoService } from '@app/shared/shared-main'
 import { UserSubscriptionService } from '@app/shared/shared-user-subscription'
-import { AbstractVideoList, OwnerDisplayType } from '@app/shared/shared-video-miniature'
-import { VideoSortField } from '@shared/models'
+import { AbstractVideoList } from '@app/shared/shared-video-miniature'
+import { FeedFormat, VideoSortField } from '@shared/models'
+import { environment } from '../../../environments/environment'
+import { copyToClipboard } from '../../../root-helpers/utils'
 
 @Component({
   selector: 'my-videos-user-subscriptions',
@@ -15,7 +20,6 @@ import { VideoSortField } from '@shared/models'
 export class VideoUserSubscriptionsComponent extends AbstractVideoList implements OnInit, OnDestroy {
   titlePage: string
   sort = '-publishedAt' as VideoSortField
-  ownerDisplayType: OwnerDisplayType = 'auto'
   groupByDate = true
 
   constructor (
@@ -28,13 +32,17 @@ export class VideoUserSubscriptionsComponent extends AbstractVideoList implement
     protected screenService: ScreenService,
     protected storageService: LocalStorageService,
     private userSubscription: UserSubscriptionService,
-    private hooks: HooksService
+    protected cfr: ComponentFactoryResolver,
+    private hooks: HooksService,
+    private videoService: VideoService,
+    private scopedTokensService: ScopedTokensService
   ) {
     super()
 
     this.titlePage = $localize`Videos from your subscriptions`
+
     this.actions.push({
-      routerLink: '/my-account/subscriptions',
+      routerLink: '/my-library/subscriptions',
       label: $localize`Subscriptions`,
       iconName: 'cog'
     })
@@ -42,6 +50,34 @@ export class VideoUserSubscriptionsComponent extends AbstractVideoList implement
 
   ngOnInit () {
     super.ngOnInit()
+
+    const user = this.authService.getUser()
+    let feedUrl = environment.originServerUrl
+
+    this.authService.userInformationLoaded
+      .pipe(switchMap(() => this.scopedTokensService.getScopedTokens()))
+      .subscribe(
+        tokens => {
+          const feeds = this.videoService.getVideoSubscriptionFeedUrls(user.account.id, tokens.feedToken)
+          feedUrl = feedUrl + feeds.find(f => f.format === FeedFormat.RSS).url
+
+          this.actions.unshift({
+            label: $localize`Copy feed URL`,
+            iconName: 'syndication',
+            justIcon: true,
+            href: feedUrl,
+            click: e => {
+              e.preventDefault()
+              copyToClipboard(feedUrl)
+              this.activateCopiedMessage()
+            }
+          })
+        },
+
+        err => {
+          this.notifier.error(err.message)
+        }
+      )
   }
 
   ngOnDestroy () {
@@ -66,6 +102,11 @@ export class VideoUserSubscriptionsComponent extends AbstractVideoList implement
   }
 
   generateSyndicationList () {
-    // not implemented yet
+    /* method disabled: the view provides its own */
+    throw new Error('Method not implemented.')
+  }
+
+  activateCopiedMessage () {
+    this.notifier.success($localize`Feed URL copied`)
   }
 }

@@ -11,6 +11,7 @@ import { environment } from '../../../environments/environment'
 import { RestExtractor } from '../rest/rest-extractor.service'
 import { AuthStatus } from './auth-status.model'
 import { AuthUser } from './auth-user.model'
+import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 
 interface UserLoginWithUsername extends UserLogin {
   access_token: string
@@ -62,15 +63,15 @@ export class AuthService {
         return false
       }, undefined, $localize`Go to my subscriptions`),
       new Hotkey('m v', (event: KeyboardEvent): boolean => {
-        this.router.navigate([ '/my-account/videos' ])
+        this.router.navigate([ '/my-library/videos' ])
         return false
       }, undefined, $localize`Go to my videos`),
       new Hotkey('m i', (event: KeyboardEvent): boolean => {
-        this.router.navigate([ '/my-account/video-imports' ])
+        this.router.navigate([ '/my-library/video-imports' ])
         return false
       }, undefined, $localize`Go to my imports`),
       new Hotkey('m c', (event: KeyboardEvent): boolean => {
-        this.router.navigate([ '/my-account/video-channels' ])
+        this.router.navigate([ '/my-library/video-channels' ])
         return false
       }, undefined, $localize`Go to my channels`)
     ]
@@ -94,7 +95,7 @@ export class AuthService {
           error => {
             let errorMessage = error.message
 
-            if (error.status === 403) {
+            if (error.status === HttpStatusCode.FORBIDDEN_403) {
               errorMessage = $localize`Cannot retrieve OAuth Client credentials: ${error.text}.
 Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.`
             }
@@ -167,9 +168,13 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
     const authHeaderValue = this.getRequestHeaderValue()
     const headers = new HttpHeaders().set('Authorization', authHeaderValue)
 
-    this.http.post<void>(AuthService.BASE_REVOKE_TOKEN_URL, {}, { headers })
+    this.http.post<{ redirectUrl?: string }>(AuthService.BASE_REVOKE_TOKEN_URL, {}, { headers })
     .subscribe(
-      () => { /* nothing to do */ },
+      res => {
+        if (res.redirectUrl) {
+          window.location.href = res.redirectUrl
+        }
+      },
 
       err => console.error(err)
     )

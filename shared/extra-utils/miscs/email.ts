@@ -1,6 +1,8 @@
-import { ChildProcess, fork } from 'child_process'
+import { ChildProcess } from 'child_process'
 import { randomInt } from '../../core-utils/miscs/miscs'
 import { parallelTests } from '../server/servers'
+
+const MailDev = require('maildev')
 
 class MockSmtpServer {
 
@@ -9,38 +11,32 @@ class MockSmtpServer {
   private emailChildProcess: ChildProcess
   private emails: object[]
 
-  private constructor () {
-    this.emailChildProcess = fork(`${__dirname}/email-child-process`, [])
-
-    this.emailChildProcess.on('message', (msg: any) => {
-      if (msg.email) {
-        return this.emails.push(msg.email)
-      }
-    })
-
-    process.on('exit', () => this.kill())
-  }
+  private constructor () { }
 
   collectEmails (emailsCollection: object[]) {
     return new Promise<number>((res, rej) => {
       const port = parallelTests() ? randomInt(1000, 2000) : 1025
+      this.emails = emailsCollection
 
       if (this.started) {
-        this.emails = emailsCollection
-        return res()
+        return res(undefined)
       }
 
-      // ensure maildev isn't started until
-      // unexpected exit can be reported to test runner
-      this.emailChildProcess.send({ start: true, port })
-      this.emailChildProcess.on('exit', () => {
-        return rej(new Error('maildev exited unexpectedly, confirm port not in use'))
+      const maildev = new MailDev({
+        ip: '127.0.0.1',
+        smtp: port,
+        disableWeb: true,
+        silent: true
       })
-      this.emailChildProcess.on('message', (msg: any) => {
-        if (msg.err) return rej(new Error(msg.err))
+
+      maildev.on('new', email => {
+        this.emails.push(email)
+      })
+
+      maildev.listen(err => {
+        if (err) return rej(err)
 
         this.started = true
-        this.emails = emailsCollection
 
         return res(port)
       })

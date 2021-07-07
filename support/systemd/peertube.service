@@ -8,7 +8,7 @@ Environment=NODE_ENV=production
 Environment=NODE_CONFIG_DIR=/var/www/peertube/config
 User=peertube
 Group=peertube
-ExecStart=/usr/bin/npm start
+ExecStart=/usr/bin/node dist/server
 WorkingDirectory=/var/www/peertube/peertube-latest
 StandardOutput=syslog
 StandardError=syslog

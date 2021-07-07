@@ -75,7 +75,13 @@ async function sendUpdateActor (accountOrChannel: MChannelDefault | MAccountDefa
 async function sendUpdateCacheFile (byActor: MActorLight, redundancyModel: MVideoRedundancyVideo) {
   logger.info('Creating job to update cache file %s.', redundancyModel.url)
 
-  const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(redundancyModel.getVideo().id)
+  const associatedVideo = redundancyModel.getVideo()
+  if (!associatedVideo) {
+    logger.warn('Cannot send update activity for redundancy %s: no video files associated.', redundancyModel.url)
+    return
+  }
+
+  const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(associatedVideo.id)
 
   const activityBuilder = (audience: ActivityAudience) => {
     const redundancyObject = redundancyModel.toActivityPubObject()

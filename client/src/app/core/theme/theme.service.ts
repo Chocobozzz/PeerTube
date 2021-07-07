@@ -1,7 +1,7 @@
 import { first } from 'rxjs/operators'
 import { Injectable } from '@angular/core'
 import { UserLocalStorageKeys } from '@root-helpers/users'
-import { ServerConfig, ServerConfigTheme } from '@shared/models'
+import { HTMLServerConfig, ServerConfigTheme } from '@shared/models'
 import { environment } from '../../../environments/environment'
 import { AuthService } from '../auth'
 import { PluginService } from '../plugins/plugin.service'
@@ -18,7 +18,7 @@ export class ThemeService {
   private themeFromLocalStorage: ServerConfigTheme
   private themeDOMLinksFromLocalStorage: HTMLLinkElement[] = []
 
-  private serverConfig: ServerConfig
+  private serverConfig: HTMLServerConfig
 
   constructor (
     private auth: AuthService,
@@ -32,18 +32,13 @@ export class ThemeService {
     // Try to load from local storage first, so we don't have to wait network requests
     this.loadAndSetFromLocalStorage()
 
-    this.serverConfig = this.server.getTmpConfig()
-    this.server.getConfig()
-        .subscribe(config => {
-          this.serverConfig = config
+    this.serverConfig = this.server.getHTMLConfig()
+    const themes = this.serverConfig.theme.registered
 
-          const themes = this.serverConfig.theme.registered
+    this.removeThemeFromLocalStorageIfNeeded(themes)
+    this.injectThemes(themes)
 
-          this.removeThemeFromLocalStorageIfNeeded(themes)
-          this.injectThemes(themes)
-
-          this.listenUserTheme()
-        })
+    this.listenUserTheme()
   }
 
   private injectThemes (themes: ServerConfigTheme[], fromLocalStorage = false) {
@@ -82,7 +77,19 @@ export class ThemeService {
       : this.userService.getAnonymousUser().theme
 
     if (theme !== 'instance-default') return theme
-    return this.serverConfig.theme.default
+
+    const instanceTheme = this.serverConfig.theme.default
+    if (instanceTheme !== 'default') return instanceTheme
+
+    // Default to dark theme if available and wanted by the user
+    if (
+      this.themes.find(t => t.name === 'dark') &&
+      window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+    ) {
+      return 'dark'
+    }
+
+    return instanceTheme
   }
 
   private loadTheme (name: string) {
@@ -107,6 +114,7 @@ export class ThemeService {
     const theme = this.getTheme(currentTheme)
     if (theme) {
       console.log('Adding scripts of theme %s.', currentTheme)
+
       this.pluginService.addPlugin(theme, true)
 
       this.pluginService.reloadLoadedScopes()

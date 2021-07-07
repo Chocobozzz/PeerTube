@@ -1,7 +1,8 @@
-<div class="video-feed">
+<div class="feed">
   <my-global-icon
+    role="button" aria-label="Open syndication dropdown" i18n-aria-label
     *ngIf="syndicationItems.length !== 0" [ngbPopover]="feedsList" [autoClose]="true" placement="bottom left auto"
-    class="icon-syndication" role="button" iconName="syndication"
+    class="icon-syndication" iconName="syndication"
   >
   </my-global-icon>
 

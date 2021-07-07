@@ -1,26 +1,26 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 my-search-typeahead {
-  margin-right: 15px;
+  @include margin-right(15px);
 }
 
-.upload-button {
+.publish-button {
   @include peertube-button-link;
   @include orange-button;
   @include button-with-icon(22px, 3px, -1px);
-
-  margin-right: 25px;
+  @include margin-right(25px);
 
   @media screen and (max-width: 600px) {
-    margin-right: 10px;
+    @include margin-right(10px);
+
     padding: 0 10px;
 
     .icon.icon-upload {
-      margin-right: 0;
+      @include margin-right(0);
     }
 
-    .upload-button-label {
+    .publish-button-label {
       display: none;
     }
   }

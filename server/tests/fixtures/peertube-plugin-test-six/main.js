@@ -1,6 +1,10 @@
+const fs = require('fs')
+const path = require('path')
+
 async function register ({
   storageManager,
-  peertubeHelpers
+  peertubeHelpers,
+  getRouter
 }) {
   const { logger } = peertubeHelpers
 
@@ -10,6 +14,18 @@ async function register ({
 
     const result = await storageManager.getData('superkey')
     logger.info('superkey stored value is %s', result.value)
+  }
+
+  {
+    getRouter().get('/create-file', async (req, res) => {
+      const basePath = peertubeHelpers.plugin.getDataDirectoryPath()
+
+      fs.writeFile(path.join(basePath, 'Aladdin.txt'), 'Prince Ali', function (err) {
+        if (err) return res.sendStatus(500)
+
+        res.sendStatus(200)
+      })
+    })
   }
 }
 

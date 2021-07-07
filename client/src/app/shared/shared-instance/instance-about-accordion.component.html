@@ -1,0 +1,53 @@
+<h2 class="instance-name">{{ about?.instance.name }}</h2>
+
+<div class="instance-short-description">{{ about?.instance.shortDescription }}</div>
+
+<ngb-accordion #accordion="ngbAccordion" [closeOthers]="true">
+  <ngb-panel *ngIf="panels.features" id="instance-features" i18n-title title="Features found on this instance">
+    <ng-template ngbPanelContent>
+      <my-instance-features-table></my-instance-features-table>
+    </ng-template>
+  </ngb-panel>
+
+  <ng-container *ngIf="about">
+    <ngb-panel
+      *ngIf="getAdministratorsPanel()"
+      id="admin-sustainability" i18n-title title="Administrators & Sustainability"
+    >
+      <ng-template ngbPanelContent>
+        <div class="block">
+          <strong i18n>Who are we?</strong>
+          <div [innerHTML]="aboutHtml.administrator"></div>
+        </div>
+
+        <div class="block">
+          <strong i18n>How long do we plan to maintain this instance?</strong>
+          <div [innerHTML]="about.instance.maintenanceLifetime"></div>
+        </div>
+
+        <div class="block">
+          <strong i18n>How will we finance this instance?</strong>
+          <div [innerHTML]="about.instance.businessModel"></div>
+        </div>
+      </ng-template>
+    </ngb-panel>
+
+    <ngb-panel *ngIf="termsPanel" id="terms" i18n-title title="Terms">
+      <ng-template ngbPanelContent>
+        <div class="block" [innerHTML]="aboutHtml.terms"></div>
+      </ng-template>
+    </ngb-panel>
+
+    <ngb-panel *ngIf="moderationPanel" id="moderation-information" i18n-title title="Moderation information">
+      <ng-template ngbPanelContent>
+        <div class="block" [innerHTML]="aboutHtml.moderationInformation"></div>
+      </ng-template>
+    </ngb-panel>
+
+    <ngb-panel *ngIf="codeOfConductPanel" id="code-of-conduct" i18n-title title="Code of conduct">
+      <ng-template ngbPanelContent>
+        <div class="block" [innerHTML]="aboutHtml.codeOfConduct"></div>
+      </ng-template>
+    </ngb-panel>
+  </ng-container>
+</ngb-accordion>

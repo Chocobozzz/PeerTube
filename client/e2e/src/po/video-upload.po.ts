@@ -4,7 +4,7 @@ import { join } from 'path'
 
 export class VideoUploadPage {
   async navigateTo () {
-    await element(by.css('.header .upload-button')).click()
+    await element(by.css('.header .publish-button')).click()
 
     return browser.wait(browser.ExpectedConditions.visibilityOf(element(by.css('.upload-video-container'))))
   }
@@ -26,7 +26,12 @@ export class VideoUploadPage {
     await elem.sendKeys(fileToUpload)
 
     // Wait for the upload to finish
-    await browser.wait(browser.ExpectedConditions.elementToBeClickable(this.getSecondStepSubmitButton()))
+    await browser.wait(async () => {
+      const actionButton = this.getSecondStepSubmitButton().element(by.css('.action-button'))
+
+      const klass = await actionButton.getAttribute('class')
+      return !klass.includes('disabled')
+    })
   }
 
   async validSecondUploadStep (videoName: string) {
@@ -36,10 +41,10 @@ export class VideoUploadPage {
 
     await this.getSecondStepSubmitButton().click()
 
-    return browser.wait(browser.ExpectedConditions.urlContains('/watch/'))
+    return browser.wait(browser.ExpectedConditions.urlContains('/w/'))
   }
 
   private getSecondStepSubmitButton () {
-    return element(by.css('.submit-button:not(.disabled)'))
+    return element(by.css('.submit-container my-button'))
   }
 }

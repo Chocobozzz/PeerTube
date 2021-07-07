@@ -1,21 +1,20 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 .help-tooltip-button {
-  cursor: pointer;
-  border: none;
+  @include disable-outline;
 
+  cursor: pointer;
+  border: 0;
   margin: 5px;
 
   my-global-icon {
+    @include apply-svg-color(pvar(--greyForegroundColor));
+
     width: 17px;
     position: relative;
     top: -1px;
-
-    @include apply-svg-color(pvar(--greyForegroundColor))
   }
-
-  @include disable-outline;
 }
 
 ::ng-deep {
@@ -25,7 +24,7 @@
 
     .popover-body {
       font-family: $main-fonts;
-      text-align: left;
+      text-align: start;
       padding: 10px;
       font-size: 13px;
       background-color: pvar(--mainBackgroundColor);
@@ -37,7 +36,7 @@
       }
 
       ul {
-        padding-left: 20px;
+        @include padding-left(20px);
         margin-bottom: 0;
       }
     }

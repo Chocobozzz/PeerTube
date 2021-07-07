@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core'
 import { ScreenService } from '@app/core'
+import { VideoState } from '@shared/models'
 import { Video } from '../shared-main'
 
 @Component({
@@ -11,7 +12,7 @@ export class VideoThumbnailComponent {
   @Input() video: Video
   @Input() nsfw = false
 
-  @Input() videoRouterLink: any[]
+  @Input() videoRouterLink: string | any[]
   @Input() queryParams: { [ p: string ]: any }
   @Input() videoHref: string
   @Input() videoTarget: string
@@ -27,6 +28,12 @@ export class VideoThumbnailComponent {
   constructor (private screenService: ScreenService) {
     this.addToWatchLaterText = $localize`Add to watch later`
     this.addedToWatchLaterText = $localize`Remove from watch later`
+  }
+
+  isLiveEnded () {
+    if (!this.video.state) return
+
+    return this.video.state.id === VideoState.LIVE_ENDED
   }
 
   getImageUrl () {
@@ -50,7 +57,7 @@ export class VideoThumbnailComponent {
   getVideoRouterLink () {
     if (this.videoRouterLink) return this.videoRouterLink
 
-    return [ '/videos/watch', this.video.uuid ]
+    return Video.buildWatchUrl(this.video)
   }
 
   onWatchLaterClick (event: Event) {

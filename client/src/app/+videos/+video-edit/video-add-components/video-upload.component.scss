@@ -1,5 +1,5 @@
-@import 'variables';
-@import 'mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 .first-step-block {
   .form-group-channel {
@@ -16,27 +16,29 @@
   }
 }
 
+.upload-progress-retry,
 .upload-progress-cancel {
   display: flex;
-  margin-top: 25px;
   margin-bottom: 40px;
 
   .progress {
     @include progressbar;
+
     flex-grow: 1;
     height: 30px;
-    font-size: 15px;
+    font-size: 14px;
     background-color: rgba(11, 204, 41, 0.16);
 
     .progress-bar {
       background-color: $green;
       line-height: 30px;
-      text-align: left;
-      font-weight: $font-bold;
+      text-align: start;
+      font-weight: $font-semibold;
 
       span {
+        @include margin-left(13px);
+
         color: pvar(--mainBackgroundColor);
-        margin-left: 18px;
       }
     }
   }
@@ -44,7 +46,6 @@
   input {
     @include peertube-button;
     @include grey-button;
-
-    margin-left: 10px;
+    @include margin-left(10px);
   }
 }

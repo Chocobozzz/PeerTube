@@ -15,7 +15,7 @@ yarn-error.log
 /server/tests/fixtures/video_59fps.mp4
 
 # Production
-/storage/
+/storage
 /config/production.yaml
 /config/local*
 /ffmpeg/
@@ -30,9 +30,11 @@ yarn-error.log
 # IDE
 /*.sublime-project
 /*.sublime-workspace
+/*.vscode
 /**/.idea
 /dist
 /PeerTube.iml
+*.swp
 
 # Zanata
 /.zanata-cache

@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import * as chai from 'chai'
+import * as ffmpeg from 'fluent-ffmpeg'
+import { ensureDir, pathExists, readFile, stat } from 'fs-extra'
 import { basename, dirname, isAbsolute, join, resolve } from 'path'
 import * as request from 'supertest'
 import * as WebTorrent from 'webtorrent'
-import { ensureDir, pathExists, readFile } from 'fs-extra'
-import * as ffmpeg from 'fluent-ffmpeg'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 const expect = chai.expect
 let webtorrent: WebTorrent.Instance
@@ -44,14 +45,14 @@ function root () {
   return root
 }
 
-function buildServerDirectory (internalServerNumber: number, directory: string) {
-  return join(root(), 'test' + internalServerNumber, directory)
+function buildServerDirectory (server: { internalServerNumber: number }, directory: string) {
+  return join(root(), 'test' + server.internalServerNumber, directory)
 }
 
 async function testImage (url: string, imageName: string, imagePath: string, extension = '.jpg') {
   const res = await request(url)
     .get(imagePath)
-    .expect(200)
+    .expect(HttpStatusCode.OK_200)
 
   const body = res.body
 
@@ -59,8 +60,18 @@ async function testImage (url: string, imageName: string, imagePath: string, ext
   const minLength = body.length - ((30 * body.length) / 100)
   const maxLength = body.length + ((30 * body.length) / 100)
 
-  expect(data.length).to.be.above(minLength, "the generated image is way smaller than the recorded fixture")
-  expect(data.length).to.be.below(maxLength, "the generated image is way larger than the recorded fixture")
+  expect(data.length).to.be.above(minLength, 'the generated image is way smaller than the recorded fixture')
+  expect(data.length).to.be.below(maxLength, 'the generated image is way larger than the recorded fixture')
+}
+
+async function testFileExistsOrNot (server: { internalServerNumber: number }, directory: string, filePath: string, exist: boolean) {
+  const base = buildServerDirectory(server, directory)
+
+  expect(await pathExists(join(base, filePath))).to.equal(exist)
+}
+
+function isGithubCI () {
+  return !!process.env.GITHUB_WORKSPACE
 }
 
 function buildAbsoluteFixturePath (path: string, customCIPath = false) {
@@ -88,6 +99,7 @@ async function generateHighBitrateVideo () {
 
   const exists = await pathExists(tempFixturePath)
   if (!exists) {
+    console.log('Generating high bitrate video.')
 
     // Generate a random, high bitrate video on the fly, so we don't have to include
     // a large file in the repo. The video needs to have a certain minimum length so
@@ -115,6 +127,8 @@ async function generateVideoWithFramerate (fps = 60) {
 
   const exists = await pathExists(tempFixturePath)
   if (!exists) {
+    console.log('Generating video with framerate %d.', fps)
+
     return new Promise<string>((res, rej) => {
       ffmpeg()
         .outputOptions([ '-f rawvideo', '-video_size 1280x720', '-i /dev/urandom' ])
@@ -130,6 +144,12 @@ async function generateVideoWithFramerate (fps = 60) {
   return tempFixturePath
 }
 
+async function getFileSize (path: string) {
+  const stats = await stat(path)
+
+  return stats.size
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -138,9 +158,12 @@ export {
   areHttpImportTestsDisabled,
   buildServerDirectory,
   webtorrentAdd,
+  getFileSize,
   immutableAssign,
   testImage,
+  isGithubCI,
   buildAbsoluteFixturePath,
+  testFileExistsOrNot,
   root,
   generateHighBitrateVideo,
   generateVideoWithFramerate

@@ -1,21 +1,22 @@
+import { StatsManager } from '@server/lib/stat-manager'
 import { Activity, ActivityType } from '../../../../shared/models/activitypub'
 import { checkUrlsSameHost, getAPId } from '../../../helpers/activitypub'
 import { logger } from '../../../helpers/logger'
+import { APProcessorOptions } from '../../../types/activitypub-processor.model'
+import { MActorDefault, MActorSignature } from '../../../types/models'
+import { getOrCreateAPActor } from '../actors'
 import { processAcceptActivity } from './process-accept'
 import { processAnnounceActivity } from './process-announce'
 import { processCreateActivity } from './process-create'
 import { processDeleteActivity } from './process-delete'
+import { processDislikeActivity } from './process-dislike'
+import { processFlagActivity } from './process-flag'
 import { processFollowActivity } from './process-follow'
 import { processLikeActivity } from './process-like'
 import { processRejectActivity } from './process-reject'
 import { processUndoActivity } from './process-undo'
 import { processUpdateActivity } from './process-update'
-import { getOrCreateActorAndServerAndModel } from '../actor'
-import { processDislikeActivity } from './process-dislike'
-import { processFlagActivity } from './process-flag'
 import { processViewActivity } from './process-view'
-import { APProcessorOptions } from '../../../types/activitypub-processor.model'
-import { MActorDefault, MActorSignature } from '../../../types/models'
 
 const processActivity: { [ P in ActivityType ]: (options: APProcessorOptions<Activity>) => Promise<any> } = {
   Create: processCreateActivity,
@@ -64,7 +65,7 @@ async function processActivities (
       continue
     }
 
-    const byActor = signatureActor || actorsCache[actorUrl] || await getOrCreateActorAndServerAndModel(actorUrl)
+    const byActor = signatureActor || actorsCache[actorUrl] || await getOrCreateAPActor(actorUrl)
     actorsCache[actorUrl] = byActor
 
     const activityProcessor = processActivity[activity.type]
@@ -75,8 +76,12 @@ async function processActivities (
 
     try {
       await activityProcessor({ activity, byActor, inboxActor, fromFetch })
+
+      StatsManager.Instance.addInboxProcessedSuccess(activity.type)
     } catch (err) {
       logger.warn('Cannot process activity %s.', activity.type, { err })
+
+      StatsManager.Instance.addInboxProcessedError(activity.type)
     }
   }
 }

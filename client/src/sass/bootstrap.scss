@@ -1,12 +1,43 @@
 $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
-@import '_bootstrap';
 
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
+
+@import './_bootstrap-variables';
+
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+
+@import '~bootstrap/scss/mixins';
+@import '~bootstrap/scss/root';
+@import '~bootstrap/scss/reboot';
+@import '~bootstrap/scss/type';
+@import '~bootstrap/scss/grid';
+@import '~bootstrap/scss/tables';
+@import '~bootstrap/scss/forms';
+@import '~bootstrap/scss/buttons';
+@import '~bootstrap/scss/dropdown';
+@import '~bootstrap/scss/button-group';
+@import '~bootstrap/scss/input-group';
+@import '~bootstrap/scss/nav';
+@import '~bootstrap/scss/card';
+@import '~bootstrap/scss/badge';
+@import '~bootstrap/scss/alert';
+@import '~bootstrap/scss/close';
+@import '~bootstrap/scss/modal';
+@import '~bootstrap/scss/tooltip';
+@import '~bootstrap/scss/popover';
+@import '~bootstrap/scss/utilities';
+
+@import '~@neos21/bootstrap3-glyphicons/assets/stylesheets/bootstrap3-glyphicons';
 
 // Thanks https://gist.github.com/alexandrevicenzi/680147013e902a4eaa5d
 .glyphicon-refresh-animate {
-  animation: spin .7s infinite linear;
+  animation: spin 0.7s infinite linear;
+}
+
+.glyphicon-duplicate {
+  font-size: 70%;
 }
 
 .flex-auto {
@@ -21,6 +52,7 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
   from {
     transform: scale(1) rotate(0deg);
   }
+
   to {
     transform: scale(1) rotate(360deg);
   }
@@ -44,6 +76,10 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
   z-index: inherit !important;
 }
 
+.btn-group > .btn:not(:first-child) {
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}
 
 .dropdown-menu {
   z-index: z(dropdown) + 1 !important;
@@ -53,7 +89,7 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
   font-size: 15px;
 
   .dropdown-header {
-    padding-left: 1rem;
+    @include padding-left(1rem);
   }
 
   .dropdown-item {
@@ -62,7 +98,11 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
     &.active {
       color: pvar(--mainBackgroundColor) !important;
       background-color: pvar(--mainHoverColor);
-      opacity: .9;
+      opacity: 0.9;
+    }
+
+    &:active {
+      color: pvar(--mainForegroundColor) !important;
     }
 
     &::after {
@@ -80,16 +120,19 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
   }
 }
 
+.badge {
+  line-height: 1.1;
+}
 
 @media screen and (min-width: #{breakpoint(md)}) {
-  .modal:before {
+  .modal::before {
     vertical-align: middle;
-    content: " ";
+    content: ' ';
     height: 100%;
   }
 
   .modal-dialog {
-    text-align: left;
+    text-align: start;
 
     &:not(.modal-lg):not(.modal-xl) {
       min-width: 500px;
@@ -104,10 +147,11 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
 
   .modal-content {
     background-color: pvar(--mainBackgroundColor);
+    word-break: break-word;
   }
 
   .modal-header {
-    border-bottom: none;
+    border-bottom: 0;
     margin-bottom: 5px;
 
     .modal-title {
@@ -124,10 +168,11 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
 
       margin: 0;
       padding: 0;
-      opacity: .5;
+      opacity: 0.5;
 
-      &[iconName="cross"] {
+      &[iconName=cross] { /* stylelint-disable-line selector-max-compound-selectors */
         @include icon(16px);
+
         top: -3px;
       }
     }
@@ -135,19 +180,10 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
 
   .inputs {
     margin-bottom: 0;
-    text-align: right;
+    text-align: end;
 
-    .action-button-cancel {
-      @include peertube-button;
-      @include tertiary-button;
-
-      display: inline-block;
-      margin-right: 10px;
-    }
-
-    .action-button-submit {
-      @include peertube-button;
-      @include orange-button;
+    > .peertube-button:not(:first-child) {
+      @include margin-left(10px);
     }
   }
 }
@@ -161,7 +197,8 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
 
 // On touchscreen devices, simply overflow: hidden to avoid detached overlay on scroll
 @media (hover: none) and (pointer: coarse) {
-  .modal-open, .menu-open {
+  .modal-open,
+  .menu-open {
     overflow: hidden !important;
   }
 
@@ -169,7 +206,7 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
   .menu-open {
     .main-col {
       &::before {
-        background-color: black;
+        background-color: #000;
         width: 100vw;
         height: 100vh;
         opacity: 0.75;
@@ -197,7 +234,10 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
   .nav-link {
     opacity: 0.6 !important;
 
-    &.active, &:hover, &:active, &:focus {
+    &.active,
+    &:hover,
+    &:active,
+    &:focus {
       opacity: 1 !important;
     }
   }
@@ -214,7 +254,7 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
 
   color: pvar(--mainForegroundColor);
   font-weight: $font-semibold;
-  border: none;
+  border: 0;
   border-bottom: 2px solid transparent;
   opacity: 0.6;
 
@@ -224,7 +264,10 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
     border-bottom-color: pvar(--mainColor);
   }
 
-  &.active, &:hover, &:active, &:focus {
+  &.active,
+  &:hover,
+  &:active,
+  &:focus {
     opacity: 1;
   }
 }
@@ -307,9 +350,10 @@ ngb-tooltip-window {
 }
 
 .input-group {
-  & > .form-control {
+  > .form-control {
     flex: initial;
   }
+
   input.form-control {
     width: unset !important;
     flex-grow: 1;
@@ -325,7 +369,7 @@ ngb-tooltip-window {
   position: relative;
 
   input {
-    padding-right: 1.5rem !important;
+    @include padding-right(1.5rem !important);
   }
 
   .form-control-clear {
@@ -351,5 +395,46 @@ ngb-tooltip-window {
 
   input:placeholder-shown + .form-control-clear {
     display: none;
+  }
+}
+
+.callout {
+  padding: 1.25rem;
+  border: 1px solid #eee;
+  border-radius: .25rem;
+
+  > label {
+    position: relative;
+    top: -5px;
+    left: -10px;
+    color: #6c757d !important;
+  }
+
+  &:not(.callout-light) {
+    border-left-width: .25rem;
+  }
+
+  &.callout-info {
+    border-color: pvar(--mainColorLightest);
+    border-left-color: pvar(--mainColor);
+  }
+}
+
+// Override these properties for Bidi support
+@each $size, $length in $spacers {
+  .ml-#{$size} {
+    @include margin-left($length);
+  }
+
+  .mr-#{$size} {
+    @include margin-right($length);
+  }
+
+  .pl-#{$size} {
+    @include padding-left($length);
+  }
+
+  .pr-#{$size} {
+    @include padding-right($length);
   }
 }

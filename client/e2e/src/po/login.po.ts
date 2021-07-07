@@ -4,6 +4,9 @@ export class LoginPage {
   async loginAsRootUser () {
     await browser.get('/login')
 
+    await browser.executeScript(`window.localStorage.setItem('no_instance_config_warning_modal', 'true')`)
+    await browser.executeScript(`window.localStorage.setItem('no_welcome_modal', 'true')`)
+
     element(by.css('input#username')).sendKeys('root')
     element(by.css('input#password')).sendKeys('test1')
 

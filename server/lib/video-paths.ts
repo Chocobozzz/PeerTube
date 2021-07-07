@@ -1,19 +1,23 @@
-import { isStreamingPlaylist, MStreamingPlaylistVideo, MVideo, MVideoFile, MVideoUUID } from '@server/types/models'
 import { join } from 'path'
-import { CONFIG } from '@server/initializers/config'
-import { HLS_REDUNDANCY_DIRECTORY, HLS_STREAMING_PLAYLIST_DIRECTORY } from '@server/initializers/constants'
 import { extractVideo } from '@server/helpers/video'
+import { CONFIG } from '@server/initializers/config'
+import { HLS_REDUNDANCY_DIRECTORY, HLS_STREAMING_PLAYLIST_DIRECTORY, STATIC_PATHS, WEBSERVER } from '@server/initializers/constants'
+import { isStreamingPlaylist, MStreamingPlaylist, MStreamingPlaylistVideo, MVideo, MVideoFile, MVideoUUID } from '@server/types/models'
 
 // ################## Video file name ##################
 
-function getVideoFilename (videoOrPlaylist: MVideo | MStreamingPlaylistVideo, videoFile: MVideoFile) {
+function generateVideoFilename (videoOrPlaylist: MVideo | MStreamingPlaylistVideo, isHls: boolean, resolution: number, extname: string) {
   const video = extractVideo(videoOrPlaylist)
 
-  if (isStreamingPlaylist(videoOrPlaylist)) {
-    return generateVideoStreamingPlaylistName(video.uuid, videoFile.resolution)
+  // FIXME: use a generated uuid instead, that will break compatibility with PeerTube < 3.1
+  // const uuid = uuidv4()
+  const uuid = video.uuid
+
+  if (isHls) {
+    return generateVideoStreamingPlaylistName(uuid, resolution)
   }
 
-  return generateWebTorrentVideoName(video.uuid, videoFile.resolution, videoFile.extname)
+  return generateWebTorrentVideoName(uuid, resolution, extname)
 }
 
 function generateVideoStreamingPlaylistName (uuid: string, resolution: number) {
@@ -25,38 +29,67 @@ function generateWebTorrentVideoName (uuid: string, resolution: number, extname:
 }
 
 function getVideoFilePath (videoOrPlaylist: MVideo | MStreamingPlaylistVideo, videoFile: MVideoFile, isRedundancy = false) {
-  if (isStreamingPlaylist(videoOrPlaylist)) {
+  if (videoFile.isHLS()) {
     const video = extractVideo(videoOrPlaylist)
-    return join(HLS_STREAMING_PLAYLIST_DIRECTORY, video.uuid, getVideoFilename(videoOrPlaylist, videoFile))
+
+    return join(getHLSDirectory(video), videoFile.filename)
   }
 
-  const baseDir = isRedundancy ? CONFIG.STORAGE.REDUNDANCY_DIR : CONFIG.STORAGE.VIDEOS_DIR
-  return join(baseDir, getVideoFilename(videoOrPlaylist, videoFile))
+  const baseDir = isRedundancy
+    ? CONFIG.STORAGE.REDUNDANCY_DIR
+    : CONFIG.STORAGE.VIDEOS_DIR
+
+  return join(baseDir, videoFile.filename)
+}
+
+// ################## Redundancy ##################
+
+function generateHLSRedundancyUrl (video: MVideo, playlist: MStreamingPlaylist) {
+  // Base URL used by our HLS player
+  return WEBSERVER.URL + STATIC_PATHS.REDUNDANCY + playlist.getStringType() + '/' + video.uuid
+}
+
+function generateWebTorrentRedundancyUrl (file: MVideoFile) {
+  return WEBSERVER.URL + STATIC_PATHS.REDUNDANCY + file.filename
 }
 
 // ################## Streaming playlist ##################
 
 function getHLSDirectory (video: MVideoUUID, isRedundancy = false) {
-  const baseDir = isRedundancy ? HLS_REDUNDANCY_DIRECTORY : HLS_STREAMING_PLAYLIST_DIRECTORY
+  const baseDir = isRedundancy
+    ? HLS_REDUNDANCY_DIRECTORY
+    : HLS_STREAMING_PLAYLIST_DIRECTORY
 
   return join(baseDir, video.uuid)
 }
 
 // ################## Torrents ##################
 
-function getTorrentFileName (videoOrPlaylist: MVideo | MStreamingPlaylistVideo, videoFile: MVideoFile) {
+function generateTorrentFileName (videoOrPlaylist: MVideo | MStreamingPlaylistVideo, resolution: number) {
   const video = extractVideo(videoOrPlaylist)
   const extension = '.torrent'
 
+  // FIXME: use a generated uuid instead, that will break compatibility with PeerTube < 3.1
+  // const uuid = uuidv4()
+  const uuid = video.uuid
+
   if (isStreamingPlaylist(videoOrPlaylist)) {
-    return `${video.uuid}-${videoFile.resolution}-${videoOrPlaylist.getStringType()}${extension}`
+    return `${uuid}-${resolution}-${videoOrPlaylist.getStringType()}${extension}`
   }
 
-  return video.uuid + '-' + videoFile.resolution + extension
+  return uuid + '-' + resolution + extension
 }
 
-function getTorrentFilePath (videoOrPlaylist: MVideo | MStreamingPlaylistVideo, videoFile: MVideoFile) {
-  return join(CONFIG.STORAGE.TORRENTS_DIR, getTorrentFileName(videoOrPlaylist, videoFile))
+function getTorrentFilePath (videoFile: MVideoFile) {
+  return join(CONFIG.STORAGE.TORRENTS_DIR, videoFile.torrentFilename)
+}
+
+// ################## Meta data ##################
+
+function getLocalVideoFileMetadataUrl (video: MVideoUUID, videoFile: MVideoFile) {
+  const path = '/api/v1/videos/'
+
+  return WEBSERVER.URL + path + video.uuid + '/metadata/' + videoFile.id
 }
 
 // ---------------------------------------------------------------------------
@@ -64,11 +97,16 @@ function getTorrentFilePath (videoOrPlaylist: MVideo | MStreamingPlaylistVideo, 
 export {
   generateVideoStreamingPlaylistName,
   generateWebTorrentVideoName,
-  getVideoFilename,
+  generateVideoFilename,
   getVideoFilePath,
 
-  getTorrentFileName,
+  generateTorrentFileName,
   getTorrentFilePath,
 
-  getHLSDirectory
+  getHLSDirectory,
+
+  getLocalVideoFileMetadataUrl,
+
+  generateWebTorrentRedundancyUrl,
+  generateHLSRedundancyUrl
 }

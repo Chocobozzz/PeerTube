@@ -9,6 +9,7 @@ import {
   checkBadStartPagination
 } from '../../../../shared/extra-utils/requests/check-api-params'
 import { getAccount } from '../../../../shared/extra-utils/users/accounts'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 describe('Test accounts API validators', function () {
   const path = '/api/v1/accounts/'
@@ -38,7 +39,7 @@ describe('Test accounts API validators', function () {
 
   describe('When getting an account', function () {
     it('Should return 404 with a non existing name', async function () {
-      await getAccount(server.url, 'arfaze', 404)
+      await getAccount(server.url, 'arfaze', HttpStatusCode.NOT_FOUND_404)
     })
   })
 

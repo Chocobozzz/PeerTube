@@ -1,0 +1,44 @@
+@use '_mixins' as *;
+
+my-feed {
+  @include margin-left(5px);
+  display: inline-block;
+  width: 15px;
+}
+
+my-global-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.video {
+  display: flex;
+  flex-direction: column;
+
+  em {
+    font-size: 11px;
+  }
+
+  a {
+    @include ellipsis;
+
+    color: pvar(--mainForegroundColor);
+  }
+}
+
+.comment-html {
+  ::ng-deep {
+    > div {
+      max-height: 22px;
+    }
+
+    div,
+    p {
+      @include ellipsis;
+    }
+
+    p {
+      margin: 0;
+    }
+  }
+}

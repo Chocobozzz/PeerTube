@@ -1,7 +1,7 @@
-@import '_mixins';
-@import '_variables';
+@use '_mixins' as *;
+@use '_variables' as *;
 
-my-input-readonly-copy {
+my-input-toggle-hidden {
   width: 100%;
 }
 
@@ -36,6 +36,10 @@ my-input-readonly-copy {
 .filters {
   margin-top: 30px;
 
+  .advanced-filters.show {
+    overflow: visible !important;
+  }
+
   .advanced-filters-button {
     display: flex;
     justify-content: center;
@@ -46,7 +50,7 @@ my-input-readonly-copy {
     cursor: pointer;
 
     .glyphicon {
-      margin-right: 5px;
+      @include margin-right(5px);
     }
   }
 
@@ -62,7 +66,7 @@ my-input-readonly-copy {
     align-items: center;
 
     .peertube-select-container {
-      margin-left: 10px;
+      @include margin-left(10px);
     }
   }
 
@@ -73,7 +77,7 @@ my-input-readonly-copy {
     align-items: center;
 
     my-timestamp-input {
-      margin-left: 10px;
+      @include margin-left(10px);
     }
   }
 }

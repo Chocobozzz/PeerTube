@@ -4,6 +4,7 @@ listen:
   hostname: '127.0.0.1'
   port: 9000
 
+# Correspond to your reverse proxy server_name/listen configuration (i.e., your public PeerTube instance URL)
 webserver:
   https: false
   hostname: 'localhost'
@@ -13,7 +14,7 @@ rates_limit:
   api:
     # 50 attempts in 10 seconds
     window: 10 seconds
-    max: 100
+    max: 50
   login:
     # 15 attempts in 5 min
     window: 5 minutes
@@ -44,6 +45,7 @@ database:
   pool:
     max: 5
 
+# Redis server for short time storage
 # You can also specify a 'socket' path to a unix socket but first need to
 # comment out hostname and port
 redis:
@@ -52,16 +54,17 @@ redis:
   auth: null
   db: 0
 
+# SMTP server to send emails
 smtp:
   # smtp or sendmail
   transport: smtp
   # Path to sendmail command. Required if you use sendmail transport
   sendmail: null
   hostname: null
-  port: 465
+  port: 465 # If you use StartTLS: 587
   username: null
   password: null
-  tls: true
+  tls: true # If you use StartTLS: false
   disable_starttls: false
   ca_file: null # Used for self signed certificates
   from_address: 'admin@example.com'
@@ -74,7 +77,7 @@ email:
 
 # From the project root directory
 storage:
-  tmp: 'storage/tmp/' # Use to download data (imports etc), store uploaded files before processing...
+  tmp: 'storage/tmp/' # Use to download data (imports etc), store uploaded files before and during processing...
   avatars: 'storage/avatars/'
   videos: 'storage/videos/'
   streaming_playlists: 'storage/streaming-playlists/'
@@ -93,16 +96,25 @@ storage:
   client_overrides: 'storage/client-overrides/'
 
 log:
-  level: 'info' # debug/info/warning/error
+  level: 'info' # 'debug' | 'info' | 'warn' | 'error'
   rotation:
-    enabled : true
+    enabled : true # Enabled by default, if disabled make sure that 'storage.logs' is pointing to a folder handled by logrotate
     maxFileSize: 12MB
     maxFiles: 20
   anonymizeIP: false
+  log_ping_requests: true
+  prettify_sql: false
 
 trending:
   videos:
     interval_days: 7 # Compute trending videos for the last x days
+    algorithms:
+      enabled:
+        - 'best' # adaptation of Reddit's 'Best' algorithm (Hot minus History)
+        - 'hot' # adaptation of Reddit's 'Hot' algorithm
+        - 'most-viewed' # default, used initially by PeerTube as the trending page
+        - 'most-liked'
+      default: 'most-viewed'
 
 # Cache remote videos on your server, to help other instances to broadcast the video
 # You can define multiple caches using different sizes/strategies
@@ -141,6 +153,11 @@ csp:
   report_only: true # CSP directives are still being tested, so disable the report only mode at your own risk!
   report_uri:
 
+security:
+  # Set the X-Frame-Options header to help to mitigate clickjacking attacks
+  frameguard:
+    enabled: true
+
 tracker:
   # If you disable the tracker, you disable the P2P aspect of PeerTube
   enabled: true
@@ -166,7 +183,7 @@ views:
     # -1 means no cleanup
     # Other values could be '6 months' or '30 days' etc (PeerTube will periodically delete old entries from database)
     remote:
-      max_age: -1
+      max_age: '30 days'
 
 plugins:
   # The website PeerTube will ask for available PeerTube plugins and themes
@@ -178,13 +195,28 @@ plugins:
 
 federation:
   videos:
-    federate_unlisted: true
+    federate_unlisted: false
+
+    # Add a weekly job that cleans up remote AP interactions on local videos (shares, rates and comments)
+    # It removes objects that do not exist anymore, and potentially fix their URLs
+    # This setting is opt-in because due to an old bug in PeerTube, remote rates sent by instance before PeerTube 3.0 will be deleted
+    # We still suggest you to enable this setting even if your users will loose most of their video's likes/dislikes
+    cleanup_remote_interactions: false
+
+peertube:
+  check_latest_version:
+    # Check and notify admins of new PeerTube versions
+    enabled: true
+    # You can use a custom URL if your want, that respect the format behind https://joinpeertube.org/api/v1/versions.json
+    url: 'https://joinpeertube.org/api/v1/versions.json'
 
 cache:
   previews:
     size: 500 # Max number of previews you want to cache
   captions:
     size: 500 # Max number of video captions/subtitles you want to cache
+  torrents:
+    size: 500 # Max number of video torrents you want to cache
 
 admin:
   # Used to generate the root user at first startup
@@ -197,6 +229,7 @@ contact_form:
 signup:
   enabled: false
   limit: 10 # When the limit is reached, registrations are disabled. -1 == unlimited
+  minimum_age: 16 # Used to configure the signup form
   requires_email_verification: false
   filters:
     cidr: # You can specify CIDR ranges to whitelist (empty = no filtering) or blacklist
@@ -214,11 +247,23 @@ user:
 # Please, do not disable transcoding since many uploaded videos will not work
 transcoding:
   enabled: true
+
   # Allow your users to upload .mkv, .mov, .avi, .wmv, .flv, .f4v, .3g2, .3gp, .mts, m2ts, .mxf, .nut videos
   allow_additional_extensions: true
+
   # If a user uploads an audio file, PeerTube will create a video by merging the preview file and the audio file
   allow_audio_files: true
+
+  # Amount of threads used by ffmpeg for 1 transcoding job
   threads: 1
+  # Amount of transcoding jobs to execute in parallel
+  concurrency: 1
+
+  # Choose the transcoding profile
+  # New profiles can be added by plugins
+  # Available in core PeerTube: 'default'
+  profile: 'default'
+
   resolutions: # Only created if the original video has a higher resolution, uses more storage!
     0p: false # audio-only (creates mp4 without video stream, always created when enabled)
     240p: false
@@ -226,13 +271,14 @@ transcoding:
     480p: false
     720p: false
     1080p: false
+    1440p: false
     2160p: false
 
   # Generate videos in a WebTorrent format (what we do since the first PeerTube release)
   # If you also enabled the hls format, it will multiply videos storage by 2
   # If disabled, breaks federation with PeerTube instances < 2.1
   webtorrent:
-    enabled: true
+    enabled: false
 
   # /!\ Requires ffmpeg >= 4.1
   # Generate HLS playlists and fragmented MP4 files. Better playback than with WebTorrent:
@@ -241,13 +287,64 @@ transcoding:
   #     * More stable playback (less bugs/infinite loading)
   # If you also enabled the webtorrent format, it will multiply videos storage by 2
   hls:
-    enabled: false
+    enabled: true
+
+live:
+  enabled: false
+
+  # Limit lives duration
+  # -1 == unlimited
+  max_duration: -1 # For example: '5 hours'
+
+  # Limit max number of live videos created on your instance
+  # -1 == unlimited
+  max_instance_lives: 20
+
+  # Limit max number of live videos created by a user on your instance
+  # -1 == unlimited
+  max_user_lives: 3
+
+  # Allow your users to save a replay of their live
+  # PeerTube will transcode segments in a video file
+  # If the user daily/total quota is reached, PeerTube will stop the live
+  # /!\ transcoding.enabled (and not live.transcoding.enabled) has to be true to create a replay
+  allow_replay: true
+
+  # Your firewall should accept traffic from this port in TCP if you enable live
+  rtmp:
+    port: 1935
+
+  # Allow to transcode the live streaming in multiple live resolutions
+  transcoding:
+    enabled: true
+    threads: 2
+
+    # Choose the transcoding profile
+    # New profiles can be added by plugins
+    # Available in core PeerTube: 'default'
+    profile: 'default'
+
+    resolutions:
+      240p: false
+      360p: false
+      480p: false
+      720p: false
+      1080p: false
+      1440p: false
+      2160p: false
 
 import:
   # Add ability for your users to import remote videos (from YouTube, torrent...)
   videos:
+    # Amount of import jobs to execute in parallel
+    concurrency: 1
+
     http: # Classic HTTP or all sites supported by youtube-dl https://rg3.github.io/youtube-dl/supportedsites.html
       enabled: false
+
+      # IPv6 is very strongly rate-limited on most sites supported by youtube-dl
+      force_ipv4: false
+
       # You can use an HTTP/HTTPS/SOCKS proxy with youtube-dl
       proxy:
         enabled: false
@@ -261,6 +358,7 @@ auto_blacklist:
     of_users:
       enabled: false
 
+# Instance settings
 instance:
   name: 'PeerTube'
   short_description: 'PeerTube, an ActivityPub-federated video streaming platform using P2P directly in your web browser.'
@@ -272,16 +370,16 @@ instance:
   moderation_information: '' # Supports markdown
 
   # Why did you create this instance?
-  creation_reason: ''
+  creation_reason: '' # Supports Markdown
 
   # Who is behind the instance? A single person? A non profit?
-  administrator: ''
+  administrator: '' # Supports Markdown
 
   # How long do you plan to maintain this instance?
-  maintenance_lifetime: ''
+  maintenance_lifetime: '' # Supports Markdown
 
   # How will you pay the PeerTube instance server? With your own funds? With users donations? Advertising?
-  business_model: ''
+  business_model: '' # Supports Markdown
 
   # If you want to explain on what type of hardware your PeerTube instance runs
   # Example: "2 vCore, 2GB RAM..."
@@ -358,7 +456,6 @@ followers:
 followings:
   instance:
     # If you want to automatically follow back new instance followers
-    # Only follows accepted followers (in case you enabled manual followers approbation)
     # If this option is enabled, use the mute feature instead of deleting followings
     # /!\ Don't enable this if you don't have a reactive moderation team /!\
     auto_follow_back:

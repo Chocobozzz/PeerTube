@@ -1,6 +1,6 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
-.update-button[disabled="true"] ::ng-deep .action-button {
+.update-button[disabled=true] ::ng-deep .action-button {
   cursor: default !important;
 }

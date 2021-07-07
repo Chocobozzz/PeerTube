@@ -1,4 +1,5 @@
 import { VideoFile } from '@shared/models'
+import { escapeHTML } from '@shared/core-utils/renderer'
 
 function toTitleCase (str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1)
@@ -64,11 +65,11 @@ function buildVideoLink (options: {
 
   const url = baseUrl
     ? baseUrl
-    : window.location.origin + window.location.pathname.replace('/embed/', '/watch/')
+    : window.location.origin + window.location.pathname.replace('/embed/', '/w/')
 
   const params = generateParams(window.location.search)
 
-  if (options.startTime) {
+  if (options.startTime !== undefined && options.startTime !== null) {
     const startTimeInt = Math.floor(options.startTime)
     params.set('start', secondsToTime(startTimeInt))
   }
@@ -94,13 +95,13 @@ function buildVideoLink (options: {
 function buildPlaylistLink (options: {
   baseUrl?: string
 
-  playlistPosition: number
+  playlistPosition?: number
 }) {
   const { baseUrl } = options
 
   const url = baseUrl
     ? baseUrl
-    : window.location.origin + window.location.pathname.replace('/video-playlists/embed/', '/videos/watch/playlist/')
+    : window.location.origin + window.location.pathname.replace('/video-playlists/embed/', '/w/p/')
 
   const params = generateParams(window.location.search)
 
@@ -146,6 +147,8 @@ function timeToInt (time: number | string) {
 function secondsToTime (seconds: number, full = false, symbol?: string) {
   let time = ''
 
+  if (seconds === 0 && !full) return '0s'
+
   const hourSymbol = (symbol || 'h')
   const minuteSymbol = (symbol || 'm')
   const secondsSymbol = full ? '' : 's'
@@ -168,24 +171,14 @@ function secondsToTime (seconds: number, full = false, symbol?: string) {
   return time
 }
 
-function buildVideoOrPlaylistEmbed (embedUrl: string) {
+function buildVideoOrPlaylistEmbed (embedUrl: string, embedTitle: string) {
+  const title = escapeHTML(embedTitle)
   return '<iframe width="560" height="315" ' +
     'sandbox="allow-same-origin allow-scripts allow-popups" ' +
+    'title="' + title + '" ' +
     'src="' + embedUrl + '" ' +
     'frameborder="0" allowfullscreen>' +
     '</iframe>'
-}
-
-function copyToClipboard (text: string) {
-  const el = document.createElement('textarea')
-  el.value = text
-  el.setAttribute('readonly', '')
-  el.style.position = 'absolute'
-  el.style.left = '-9999px'
-  document.body.appendChild(el)
-  el.select()
-  document.execCommand('copy')
-  document.body.removeChild(el)
 }
 
 function videoFileMaxByResolution (files: VideoFile[]) {
@@ -236,7 +229,6 @@ export {
   buildVideoOrPlaylistEmbed,
   videoFileMaxByResolution,
   videoFileMinByResolution,
-  copyToClipboard,
   isMobile,
   bytes,
   isIOS,

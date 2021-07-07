@@ -1,4 +1,5 @@
 import { Transaction } from 'sequelize'
+import { afterCommitIfTransaction } from '@server/helpers/database-utils'
 import { sequelizeTypescript } from '@server/initializers/database'
 import {
   MUser,
@@ -10,13 +11,16 @@ import {
 } from '@server/types/models'
 import { UserRight, VideoBlacklistCreate, VideoBlacklistType } from '../../shared/models'
 import { UserAdminFlag } from '../../shared/models/users/user-flag.model'
-import { logger } from '../helpers/logger'
+import { logger, loggerTagsFactory } from '../helpers/logger'
 import { CONFIG } from '../initializers/config'
 import { VideoBlacklistModel } from '../models/video/video-blacklist'
 import { sendDeleteVideo } from './activitypub/send'
 import { federateVideoIfNeeded } from './activitypub/videos'
+import { LiveManager } from './live/live-manager'
 import { Notifier } from './notifier'
 import { Hooks } from './plugins/hooks'
+
+const lTags = loggerTagsFactory('blacklist')
 
 async function autoBlacklistVideoIfNeeded (parameters: {
   video: MVideoWithBlacklistLight
@@ -52,9 +56,13 @@ async function autoBlacklistVideoIfNeeded (parameters: {
 
   videoBlacklist.Video = video
 
-  if (notify) Notifier.Instance.notifyOnVideoAutoBlacklist(videoBlacklist)
+  if (notify) {
+    afterCommitIfTransaction(transaction, () => {
+      Notifier.Instance.notifyOnVideoAutoBlacklist(videoBlacklist)
+    })
+  }
 
-  logger.info('Video %s auto-blacklisted.', video.uuid)
+  logger.info('Video %s auto-blacklisted.', video.uuid, lTags(video.uuid))
 
   return true
 }
@@ -71,6 +79,10 @@ async function blacklistVideo (videoInstance: MVideoAccountLight, options: Video
 
   if (options.unfederate === true) {
     await sendDeleteVideo(videoInstance, undefined)
+  }
+
+  if (videoInstance.isLive) {
+    LiveManager.Instance.stopSessionOf(videoInstance.id)
   }
 
   Notifier.Instance.notifyOnVideoBlacklist(blacklist)

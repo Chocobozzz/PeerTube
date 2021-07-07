@@ -1,5 +1,15 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
+
+@mixin responsive-label {
+  .action-button {
+    padding: 0 13px;
+  }
+
+  .button-label {
+    display: none;
+  }
+}
 
 :host {
   outline: none;
@@ -14,13 +24,13 @@ my-small-loader ::ng-deep .root {
 a[class$=-button],
 span[class$=-button] {
   > span {
-    margin-left: 5px;
+    @include margin-left(5px);
   }
 }
 
 .action-button {
   @include peertube-button-link;
-  @include button-with-icon(21px, 0, -1px);
+  @include button-with-icon(21px);
 }
 
 .orange-button {
@@ -46,12 +56,12 @@ span[class$=-button] {
 // In a table, try to minimize the space taken by this button
 @media screen and (max-width: 1400px) {
   :host-context(td) {
-    .action-button {
-      padding: 0 13px;
-    }
+    @include responsive-label;
+  }
+}
 
-    .button-label {
-      display: none;
-    }
+@media screen and (max-width: $small-view) {
+  .responsive-label {
+    @include responsive-label;
   }
 }

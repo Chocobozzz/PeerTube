@@ -1,0 +1,121 @@
+name: Benchmark
+
+on:
+  push:
+    branches:
+      - ci
+  schedule:
+    - cron: '0 */12 * * *'
+
+jobs:
+
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      redis:
+        image: redis
+        ports:
+          - 6379:6379
+
+      postgres:
+        image: postgres:9.6
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: peertube
+          POSTGRES_HOST_AUTH_METHOD: trust
+
+    env:
+      PGUSER: peertube
+      PGHOST: localhost
+      NODE_PENDING_JOB_WAIT: 500
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+
+      - name: Setup system dependencies
+        run: |
+          sudo apt-get install postgresql-client-common redis-tools parallel
+          wget --quiet --no-check-certificate "https://download.cpy.re/ffmpeg/ffmpeg-release-4.3.1-64bit-static.tar.xz"
+          tar xf ffmpeg-release-4.3.1-64bit-static.tar.xz
+          mkdir -p $HOME/bin
+          cp ffmpeg-*/{ffmpeg,ffprobe} $HOME/bin
+          echo "$HOME/bin" >> $GITHUB_PATH
+
+      - name: Cache Node.js modules
+        uses: actions/cache@v2
+        with:
+          path: |
+            **/node_modules
+          key: ${{ runner.OS }}-node-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.OS }}-node-
+            ${{ runner.OS }}-
+
+      - name: Cache fixtures
+        uses: actions/cache@v2
+        with:
+          path: |
+            fixtures
+          key: ${{ runner.OS }}-fixtures-${{ matrix.test_suite }}-${{ hashFiles('fixtures/*') }}
+          restore-keys: |
+            ${{ runner.OS }}-fixtures-${{ matrix.test_suite }}-
+            ${{ runner.OS }}-fixtures-
+            ${{ runner.OS }}-
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Build
+        run: |
+          startClient=`date +%s`
+          npm run build:client
+          endClient=`date +%s`
+          clientBuildTime=$((endClient-startClient))
+
+          startServer=`date +%s`
+          npm run build:server
+          endServer=`date +%s`
+          serverBuildTime=$((endServer-startServer))
+
+          echo '{"clientBuildTime":'$clientBuildTime',"serverBuildTime":'$serverBuildTime'}'> build-time.json
+
+      - name: Run benchmark
+        run: |
+          node dist/scripts/benchmark.js benchmark.json
+
+      - name: Display result
+        run: |
+          cat benchmark.json build-time.json
+
+      - name: Upload benchmark result
+        env:
+          STATS_DEPLOYEMENT_KNOWN_HOSTS: ${{ secrets.STATS_DEPLOYEMENT_KNOWN_HOSTS }}
+          STATS_DEPLOYEMENT_KEY: ${{ secrets.STATS_DEPLOYEMENT_KEY }}
+          STATS_DEPLOYEMENT_USER: ${{ secrets.STATS_DEPLOYEMENT_USER }}
+          STATS_DEPLOYEMENT_HOST: ${{ secrets.STATS_DEPLOYEMENT_HOST }}
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700  ~/.ssh
+          if [ ! -z ${STATS_DEPLOYEMENT_KNOWN_HOSTS+x} ]; then
+            echo "Adding ssh key to known hosts"
+            echo -e "${STATS_DEPLOYEMENT_KNOWN_HOSTS}" > ~/.ssh/known_hosts;
+          fi
+
+          eval `ssh-agent -s`
+
+          if [ ! -z ${STATS_DEPLOYEMENT_KEY+x} ]; then
+            echo "Adding ssh reployement key"
+            ssh-add <(echo "${STATS_DEPLOYEMENT_KEY}");
+          fi
+
+          if [ ! -z ${STATS_DEPLOYEMENT_KEY+x} ]; then
+            echo "Uploading files"
+            scp benchmark.json build-time.json ${STATS_DEPLOYEMENT_USER}@${STATS_DEPLOYEMENT_HOST}:../../web/peertube-stats;
+          fi

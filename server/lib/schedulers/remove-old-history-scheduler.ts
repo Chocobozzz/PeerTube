@@ -1,7 +1,7 @@
 import { logger } from '../../helpers/logger'
 import { AbstractScheduler } from './abstract-scheduler'
 import { SCHEDULER_INTERVALS_MS } from '../../initializers/constants'
-import { UserVideoHistoryModel } from '../../models/account/user-video-history'
+import { UserVideoHistoryModel } from '../../models/user/user-video-history'
 import { CONFIG } from '../../initializers/config'
 
 export class RemoveOldHistoryScheduler extends AbstractScheduler {

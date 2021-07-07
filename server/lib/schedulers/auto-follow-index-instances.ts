@@ -1,7 +1,7 @@
 import { chunk } from 'lodash'
-import { doRequest } from '@server/helpers/requests'
+import { doJSONRequest } from '@server/helpers/requests'
 import { JobQueue } from '@server/lib/job-queue'
-import { ActorFollowModel } from '@server/models/activitypub/actor-follow'
+import { ActorFollowModel } from '@server/models/actor/actor-follow'
 import { getServerActor } from '@server/models/application/application'
 import { logger } from '../../helpers/logger'
 import { CONFIG } from '../../initializers/config'
@@ -34,12 +34,12 @@ export class AutoFollowIndexInstances extends AbstractScheduler {
     try {
       const serverActor = await getServerActor()
 
-      const qs = { count: 1000 }
-      if (this.lastCheck) Object.assign(qs, { since: this.lastCheck.toISOString() })
+      const searchParams = { count: 1000 }
+      if (this.lastCheck) Object.assign(searchParams, { since: this.lastCheck.toISOString() })
 
       this.lastCheck = new Date()
 
-      const { body } = await doRequest<any>({ uri: indexUrl, qs, json: true })
+      const { body } = await doJSONRequest<any>(indexUrl, { searchParams })
       if (!body.data || Array.isArray(body.data) === false) {
         logger.error('Cannot auto follow instances of index %s. Please check the auto follow URL.', indexUrl, { body })
         return

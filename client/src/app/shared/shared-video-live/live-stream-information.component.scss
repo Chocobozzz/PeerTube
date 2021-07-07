@@ -1,0 +1,18 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+p-autocomplete {
+  display: block;
+}
+
+.form-group {
+  margin: 20px 0;
+}
+
+.alert-info {
+  margin: 1rem 0;
+}
+
+.badge {
+  font-size: 13px;
+}

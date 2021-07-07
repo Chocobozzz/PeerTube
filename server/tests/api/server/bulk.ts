@@ -2,12 +2,14 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { VideoComment } from '@shared/models/videos/video-comment.model'
+import { Video, VideoComment } from '@shared/models'
 import {
+  addVideoCommentReply,
   addVideoCommentThread,
   bulkRemoveCommentsOf,
   cleanupTests,
   createUser,
+  doubleFollow,
   flushAndRunMultipleServers,
   getVideoCommentThreads,
   getVideosList,
@@ -15,11 +17,8 @@ import {
   setAccessTokensToServers,
   uploadVideo,
   userLogin,
-  waitJobs,
-  addVideoCommentReply
+  waitJobs
 } from '../../../../shared/extra-utils/index'
-import { doubleFollow } from '../../../../shared/extra-utils/server/follows'
-import { Video } from '@shared/models'
 
 const expect = chai.expect
 
@@ -99,7 +98,7 @@ describe('Test bulk actions', function () {
     }
 
     before(async function () {
-      this.timeout(60000)
+      this.timeout(120000)
 
       await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'video 1 server 1' })
       await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'video 2 server 1' })

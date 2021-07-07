@@ -1,5 +1,5 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 // Thanks to https://loading.io/css/ (CC0 License)
 
@@ -20,7 +20,7 @@
   border: 4px solid;
   border-radius: 50%;
   animation: loader 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-  border-color: #999999 transparent transparent transparent;
+  border-color: #999999 transparent transparent;
 }
 
 .loader div:nth-child(1) {

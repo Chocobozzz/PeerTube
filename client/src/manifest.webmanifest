@@ -1,4 +1,7 @@
 {
+  "name": "PeerTube",
+  "short_name": "PeerTube",
+  "start_url": "/",
   "background_color": "#fff",
   "theme_color": "#fff",
   "description": "A federated video streaming platform using P2P",
@@ -40,8 +43,5 @@
       "sizes": "512x512",
       "type": "image/png"
     }
-  ],
-  "name": "PeerTube",
-  "short_name": "PeerTube",
-  "start_url": "/"
+  ]
 }

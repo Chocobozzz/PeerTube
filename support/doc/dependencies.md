@@ -1,5 +1,9 @@
 # Dependencies
 
+Follow the below guides, and check their versions match [required external dependencies versions](https://github.com/Chocobozzz/PeerTube/blob/master/engines.yaml). You can check them automatically via `sudo npx engineslist`.
+
+_note_: only **LTS** versions of external dependencies are supported. If no LTS version matching the version constraint is available, only **release** versions are supported.
+
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
@@ -7,6 +11,7 @@
 - [Debian / Ubuntu and derivatives](#debian--ubuntu-and-derivatives)
 - [Arch Linux](#arch-linux)
 - [CentOS 7](#centos-7)
+- [CentOS 8](#centos-8)
 - [Fedora](#fedora)
 - [FreeBSD](#freebsd)
 - [macOS](#macos)
@@ -25,18 +30,16 @@
 
 2. It would be wise to disable root access and to continue this tutorial with a user with sudoers group access
 
-3. Install certbot (choose instructions for nginx and your distribution) :
-[https://certbot.eff.org/all-instructions](https://certbot.eff.org/all-instructions)
-4. Install NodeJS 10.x:
+3. Install NodeJS 12.x:
 [https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions)
-5. Install yarn, and be sure to have [a recent version](https://github.com/yarnpkg/yarn/releases/latest):
+4. Install yarn, and be sure to have [a recent version](https://github.com/yarnpkg/yarn/releases/latest):
 [https://yarnpkg.com/en/docs/install#linux-tab](https://yarnpkg.com/en/docs/install#linux-tab)
 
-6. Run:
+5. Run:
 
 ```
 sudo apt update
-sudo apt install nginx ffmpeg postgresql postgresql-contrib openssl g++ make redis-server git python-dev
+sudo apt install certbot nginx ffmpeg postgresql postgresql-contrib openssl g++ make redis-server git python-dev cron wget
 ffmpeg -version # Should be >= 4.1
 g++ -v # Should be >= 5.x
 ```
@@ -63,7 +66,7 @@ sudo systemctl start redis postgresql
 
 ## CentOS 7
 
-1. Install NodeJS 10.x:
+1. Install NodeJS 12.x:
 [https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora](https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora)
 
 2. Install yarn:
@@ -110,7 +113,7 @@ sudo systemctl enable --now postgresql
 
 ## Centos 8
 
-1. Install NodeJS 10.x:
+1. Install NodeJS 12.x:
 [https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora](https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora)
 
 2. Install yarn:
@@ -166,10 +169,10 @@ usermod my-peertube-user -a -G wheel	# Add my-peertube-user to sudoers
 su my-peertube-user
 ```
 
-3. (Optional) Install certbot (choose instructions for nginx and your distribution):
+3. (Optional) Install certbot (choose instructions for your distribution):
 [https://certbot.eff.org/all-instructions](https://certbot.eff.org/all-instructions)
 
-4. Install NodeJS 10.x:
+4. Install NodeJS 12.x:
 [https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora](https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora)
 
 5. Install yarn:
@@ -253,7 +256,7 @@ On a fresh install of [FreeBSD](https://www.freebsd.org), new system or new jail
 ```
 pkg
 pkg update
-pkg install -y sudo bash wget git python nginx pkgconf vips postgresql96-server postgresql96-contrib redis openssl node npm yarn ffmpeg unzip
+pkg install -y sudo bash wget git python nginx pkgconf postgresql13-server postgresql13-contrib redis openssl node npm yarn ffmpeg unzip
 ```
 
 2. Allow users in the wheel group (hope you don't forgot to add your user on wheel group!) to use sudo.
@@ -289,16 +292,33 @@ service nginx start
 
 1. Add the packages:
 
+```sh
+brew install bash ffmpeg nginx postgresql openssl gcc make redis git yarn
 ```
-brew install ffmpeg nginx postgresql openssl gcc make redis git yarn
+
+You may need to update your default version of bash.
+
+**How to change your default shell**
+
+```sh
+which -a bash # Check where bash is installed
+bash --version # You need a version at least as recent as 4.0
+sudo vim /etc/shells # Add in this file : /usr/local/bin/bash
+chsh -s /usr/local/bin/bash # To set the brew-installed bash as default bash
 ```
+
+In a new shell, type `bash --version` to assert your changes took effect and 
+correctly modified your default bash version.
 
 2. Run the services:
 
-```
+```sh
 brew services run postgresql
 brew services run redis
 ```
+
+On macOS, the `postgresql` user can be `_postgres` instead of `postgres`.
+If `sudo -u postgres createuser -P peertube` gives you an `unknown user: postgres` error, you can try `sudo -u _postgres createuser -U peertube`.
 
 ## Gentoo
 
@@ -317,7 +337,6 @@ www-servers/nginx
 
 # Optional, client for Let’s Encrypt:
 # app-crypt/certbot
-# app-crypt/certbot-nginx
 ```
 
 2. If you are on a "stable" Gentoo you need to accept the testing keyword ~amd64 yarn:
@@ -349,6 +368,37 @@ rc-update add redis
 rc-update add postgresql-11
 rc-service redis start
 rc-service postgresql-11 start
+```
+
+## OpenBSD
+
+1. Install Packages:
+
+```
+pkg_add sudo bash wget git python nginx pkgconf postgresql-server postgresql-contrib redis openssl
+```
+
+2. Install yarn:
+
+```
+npm install --global yarn
+```
+
+3. Allow users in the wheel group to use sudo
+
+```
+visudo
+```
+Uncomment line #43:
+
+```
+%wheel ALL=(ALL) ALL
+```
+
+4. Enable services:
+
+```
+rcctl enable postgresql redis nginx
 ```
 
 ## Other distributions

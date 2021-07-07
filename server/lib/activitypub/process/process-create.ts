@@ -1,5 +1,6 @@
+import { isBlockedByServerOrAccount } from '@server/lib/blocklist'
 import { isRedundancyAccepted } from '@server/lib/redundancy'
-import { ActivityCreate, CacheFileObject, VideoTorrentObject } from '../../../../shared'
+import { ActivityCreate, CacheFileObject, VideoObject } from '../../../../shared'
 import { PlaylistObject } from '../../../../shared/models/activitypub/objects/playlist-object'
 import { VideoCommentObject } from '../../../../shared/models/activitypub/objects/video-comment-object'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
@@ -9,11 +10,10 @@ import { APProcessorOptions } from '../../../types/activitypub-processor.model'
 import { MActorSignature, MCommentOwnerVideo, MVideoAccountLightBlacklistAllFiles } from '../../../types/models'
 import { Notifier } from '../../notifier'
 import { createOrUpdateCacheFile } from '../cache-file'
-import { createOrUpdateVideoPlaylist } from '../playlist'
+import { createOrUpdateVideoPlaylist } from '../playlists'
 import { forwardVideoRelatedActivity } from '../send/utils'
 import { resolveThread } from '../video-comments'
-import { getOrCreateVideoAndAccountAndChannel } from '../videos'
-import { isBlockedByServerOrAccount } from '@server/lib/blocklist'
+import { getOrCreateAPVideo } from '../videos'
 
 async function processCreateActivity (options: APProcessorOptions<ActivityCreate>) {
   const { activity, byActor } = options
@@ -52,10 +52,10 @@ export {
 // ---------------------------------------------------------------------------
 
 async function processCreateVideo (activity: ActivityCreate, notify: boolean) {
-  const videoToCreateData = activity.object as VideoTorrentObject
+  const videoToCreateData = activity.object as VideoObject
 
   const syncParam = { likes: false, dislikes: false, shares: false, comments: false, thumbnail: true, refreshVideo: false }
-  const { video, created } = await getOrCreateVideoAndAccountAndChannel({ videoObject: videoToCreateData, syncParam })
+  const { video, created } = await getOrCreateAPVideo({ videoObject: videoToCreateData, syncParam })
 
   if (created && notify) Notifier.Instance.notifyOnNewVideoIfNeeded(video)
 
@@ -67,7 +67,7 @@ async function processCreateCacheFile (activity: ActivityCreate, byActor: MActor
 
   const cacheFile = activity.object as CacheFileObject
 
-  const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: cacheFile.object })
+  const { video } = await getOrCreateAPVideo({ videoObject: cacheFile.object })
 
   await sequelizeTypescript.transaction(async t => {
     return createOrUpdateCacheFile(cacheFile, video, byActor, t)
@@ -91,6 +91,7 @@ async function processCreateVideoComment (activity: ActivityCreate, byActor: MAc
   let comment: MCommentOwnerVideo
   try {
     const resolveThreadResult = await resolveThread({ url: commentObject.id, isVideo: false })
+
     video = resolveThreadResult.video
     created = resolveThreadResult.commentCreated
     comment = resolveThreadResult.comment
@@ -104,16 +105,18 @@ async function processCreateVideoComment (activity: ActivityCreate, byActor: MAc
   }
 
   // Try to not forward unwanted commments on our videos
-  if (video.isOwned() && await isBlockedByServerOrAccount(comment.Account, video.VideoChannel.Account)) {
-    logger.info('Skip comment forward from blocked account or server %s.', comment.Account.Actor.url)
-    return
-  }
+  if (video.isOwned()) {
+    if (await isBlockedByServerOrAccount(comment.Account, video.VideoChannel.Account)) {
+      logger.info('Skip comment forward from blocked account or server %s.', comment.Account.Actor.url)
+      return
+    }
 
-  if (video.isOwned() && created === true) {
-    // Don't resend the activity to the sender
-    const exceptions = [ byActor ]
+    if (created === true) {
+      // Don't resend the activity to the sender
+      const exceptions = [ byActor ]
 
-    await forwardVideoRelatedActivity(activity, undefined, exceptions, video)
+      await forwardVideoRelatedActivity(activity, undefined, exceptions, video)
+    }
   }
 
   if (created && notify) Notifier.Instance.notifyOnNewComment(comment)
@@ -125,5 +128,5 @@ async function processCreatePlaylist (activity: ActivityCreate, byActor: MActorS
 
   if (!byAccount) throw new Error('Cannot create video playlist with the non account actor ' + byActor.url)
 
-  await createOrUpdateVideoPlaylist(playlistObject, byAccount, activity.to)
+  await createOrUpdateVideoPlaylist(playlistObject, activity.to)
 }

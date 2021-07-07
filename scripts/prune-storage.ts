@@ -11,8 +11,9 @@ import { VideoRedundancyModel } from '../server/models/redundancy/video-redundan
 import * as Bluebird from 'bluebird'
 import { getUUIDFromFilename } from '../server/helpers/utils'
 import { ThumbnailModel } from '../server/models/video/thumbnail'
-import { AvatarModel } from '../server/models/avatar/avatar'
+import { ActorImageModel } from '../server/models/actor/actor-image'
 import { uniq, values } from 'lodash'
+import { ThumbnailType } from '@shared/models'
 
 run()
   .then(() => process.exit(0))
@@ -33,16 +34,18 @@ async function run () {
 
   let toDelete: string[] = []
 
+  console.log('Detecting files to remove, it could take a while...')
+
   toDelete = toDelete.concat(
     await pruneDirectory(CONFIG.STORAGE.VIDEOS_DIR, doesVideoExist(true)),
     await pruneDirectory(CONFIG.STORAGE.TORRENTS_DIR, doesVideoExist(true)),
 
     await pruneDirectory(CONFIG.STORAGE.REDUNDANCY_DIR, doesRedundancyExist),
 
-    await pruneDirectory(CONFIG.STORAGE.PREVIEWS_DIR, doesThumbnailExist(true)),
-    await pruneDirectory(CONFIG.STORAGE.THUMBNAILS_DIR, doesThumbnailExist(false)),
+    await pruneDirectory(CONFIG.STORAGE.PREVIEWS_DIR, doesThumbnailExist(true, ThumbnailType.PREVIEW)),
+    await pruneDirectory(CONFIG.STORAGE.THUMBNAILS_DIR, doesThumbnailExist(false, ThumbnailType.MINIATURE)),
 
-    await pruneDirectory(CONFIG.STORAGE.AVATARS_DIR, doesAvatarExist)
+    await pruneDirectory(CONFIG.STORAGE.ACTOR_IMAGES, doesActorImageExist)
   )
 
   const tmpFiles = await readdir(CONFIG.STORAGE.TMP_DIR)
@@ -86,15 +89,15 @@ async function pruneDirectory (directory: string, existFun: ExistFun) {
 function doesVideoExist (keepOnlyOwned: boolean) {
   return async (file: string) => {
     const uuid = getUUIDFromFilename(file)
-    const video = await VideoModel.loadByUUID(uuid)
+    const video = await VideoModel.load(uuid)
 
     return video && (keepOnlyOwned === false || video.isOwned())
   }
 }
 
-function doesThumbnailExist (keepOnlyOwned: boolean) {
+function doesThumbnailExist (keepOnlyOwned: boolean, type: ThumbnailType) {
   return async (file: string) => {
-    const thumbnail = await ThumbnailModel.loadByName(file)
+    const thumbnail = await ThumbnailModel.loadByFilename(file, type)
     if (!thumbnail) return false
 
     if (keepOnlyOwned) {
@@ -106,10 +109,10 @@ function doesThumbnailExist (keepOnlyOwned: boolean) {
   }
 }
 
-async function doesAvatarExist (file: string) {
-  const avatar = await AvatarModel.loadByName(file)
+async function doesActorImageExist (file: string) {
+  const image = await ActorImageModel.loadByName(file)
 
-  return !!avatar
+  return !!image
 }
 
 async function doesRedundancyExist (file: string) {

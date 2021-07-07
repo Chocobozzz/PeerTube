@@ -1,18 +1,19 @@
 import { registerTSPaths } from '../helpers/register-ts-paths'
 registerTSPaths()
 
-import * as program from 'commander'
-import { join } from 'path'
-import { doRequestAndSaveToFile } from '../helpers/requests'
-import { CONSTRAINTS_FIELDS } from '../initializers/constants'
-import { getClient, getVideoCategories, login, searchVideoWithSort, uploadVideo } from '../../shared/extra-utils/index'
-import { truncate } from 'lodash'
-import * as prompt from 'prompt'
+import { program } from 'commander'
 import { accessSync, constants } from 'fs'
 import { remove } from 'fs-extra'
+import { truncate } from 'lodash'
+import { join } from 'path'
+import * as prompt from 'prompt'
+import { promisify } from 'util'
+import { advancedVideosSearch, getClient, getVideoCategories, login, uploadVideo } from '../../shared/extra-utils/index'
 import { sha256 } from '../helpers/core-utils'
-import { buildOriginallyPublishedAt, safeGetYoutubeDL } from '../helpers/youtube-dl'
+import { doRequestAndSaveToFile } from '../helpers/requests'
+import { CONSTRAINTS_FIELDS } from '../initializers/constants'
 import { buildCommonVideoOptions, buildVideoAttributesFromCommander, getLogger, getServerCredentials } from './cli'
+import { YoutubeDL } from '@server/helpers/youtube-dl'
 
 type UserInfo = {
   username: string
@@ -37,26 +38,29 @@ command
   .option('--until <until>', 'Publication date (inclusive) until which the videos can be imported (YYYY-MM-DD)', parseDate)
   .option('--first <first>', 'Process first n elements of returned playlist')
   .option('--last <last>', 'Process last n elements of returned playlist')
+  .option('--wait-interval <waitInterval>', 'Duration between two video imports (in seconds)', convertIntoMs)
   .option('-T, --tmpdir <tmpdir>', 'Working directory', __dirname)
   .usage("[global options] [ -- youtube-dl options]")
   .parse(process.argv)
 
-const log = getLogger(program['verbose'])
+const options = command.opts()
+
+const log = getLogger(options.verbose)
 
 getServerCredentials(command)
   .then(({ url, username, password }) => {
-    if (!program['targetUrl']) {
+    if (!options.targetUrl) {
       exitError('--target-url field is required.')
     }
 
     try {
-      accessSync(program['tmpdir'], constants.R_OK | constants.W_OK)
+      accessSync(options.tmpdir, constants.R_OK | constants.W_OK)
     } catch (e) {
-      exitError('--tmpdir %s: directory does not exist or is not accessible', program['tmpdir'])
+      exitError('--tmpdir %s: directory does not exist or is not accessible', options.tmpdir)
     }
 
     url = normalizeTargetUrl(url)
-    program['targetUrl'] = normalizeTargetUrl(program['targetUrl'])
+    options.targetUrl = normalizeTargetUrl(options.targetUrl)
 
     const user = { username, password }
 
@@ -70,122 +74,122 @@ async function run (url: string, user: UserInfo) {
     user.password = await promptPassword()
   }
 
-  const youtubeDL = await safeGetYoutubeDL()
+  const youtubeDLBinary = await YoutubeDL.safeGetYoutubeDL()
 
-  const options = [ '-j', '--flat-playlist', '--playlist-reverse', ...command.args ]
+  let info = await getYoutubeDLInfo(youtubeDLBinary, options.targetUrl, command.args)
 
-  youtubeDL.getInfo(program['targetUrl'], options, processOptions, async (err, info) => {
-    if (err) {
-      exitError(err.stderr + ' ' + err.message)
-    }
+  if (!Array.isArray(info)) info = [ info ]
 
-    let infoArray: any[]
+  // Try to fix youtube channels upload
+  const uploadsObject = info.find(i => !i.ie_key && !i.duration && i.title === 'Uploads')
 
-    // Normalize utf8 fields
-    infoArray = [].concat(info)
-    if (program['first']) {
-      infoArray = infoArray.slice(0, program['first'])
-    } else if (program['last']) {
-      infoArray = infoArray.slice(-program['last'])
-    }
-    infoArray = infoArray.map(i => normalizeObject(i))
+  if (uploadsObject) {
+    console.log('Fixing URL to %s.', uploadsObject.url)
 
-    log.info('Will download and upload %d videos.\n', infoArray.length)
+    info = await getYoutubeDLInfo(youtubeDLBinary, uploadsObject.url, command.args)
+  }
 
-    for (const info of infoArray) {
-      try {
-        await processVideo({
-          cwd: program['tmpdir'],
-          url,
-          user,
-          youtubeInfo: info
-        })
-      } catch (err) {
-        console.error('Cannot process video.', { info, url })
+  let infoArray: any[]
+
+  infoArray = [].concat(info)
+  if (options.first) {
+    infoArray = infoArray.slice(0, options.first)
+  } else if (options.last) {
+    infoArray = infoArray.slice(-options.last)
+  }
+  // Normalize utf8 fields
+  infoArray = infoArray.map(i => normalizeObject(i))
+
+  log.info('Will download and upload %d videos.\n', infoArray.length)
+
+  for (const [ index, info ] of infoArray.entries()) {
+    try {
+      if (index > 0 && options.waitInterval) {
+        log.info("Wait for %d seconds before continuing.", options.waitInterval / 1000)
+        await new Promise(res => setTimeout(res, options.waitInterval))
       }
+      await processVideo({
+        cwd: options.tmpdir,
+        url,
+        user,
+        youtubeInfo: info
+      })
+    } catch (err) {
+      console.error('Cannot process video.', { info, url, err })
     }
+  }
 
-    log.info('Video/s for user %s imported: %s', user.username, program['targetUrl'])
-    process.exit(0)
-  })
+  log.info('Video/s for user %s imported: %s', user.username, options.targetUrl)
+  process.exit(0)
 }
 
-function processVideo (parameters: {
+async function processVideo (parameters: {
   cwd: string
   url: string
   user: { username: string, password: string }
   youtubeInfo: any
 }) {
   const { youtubeInfo, cwd, url, user } = parameters
+  const youtubeDL = new YoutubeDL('', [])
 
-  return new Promise(async res => {
-    log.debug('Fetching object.', youtubeInfo)
+  log.debug('Fetching object.', youtubeInfo)
 
-    const videoInfo = await fetchObject(youtubeInfo)
-    log.debug('Fetched object.', videoInfo)
+  const videoInfo = await fetchObject(youtubeInfo)
+  log.debug('Fetched object.', videoInfo)
 
-    if (program['since']) {
-      if (buildOriginallyPublishedAt(videoInfo).getTime() < program['since'].getTime()) {
-        log.info('Video "%s" has been published before "%s", don\'t upload it.\n',
-          videoInfo.title, formatDate(program['since']))
-        return res()
-      }
-    }
-    if (program['until']) {
-      if (buildOriginallyPublishedAt(videoInfo).getTime() > program['until'].getTime()) {
-        log.info('Video "%s" has been published after "%s", don\'t upload it.\n',
-          videoInfo.title, formatDate(program['until']))
-        return res()
-      }
-    }
+  const originallyPublishedAt = youtubeDL.buildOriginallyPublishedAt(videoInfo)
+  if (options.since && originallyPublishedAt && originallyPublishedAt.getTime() < options.since.getTime()) {
+    log.info('Video "%s" has been published before "%s", don\'t upload it.\n',
+      videoInfo.title, formatDate(options.since))
+    return
+  }
+  if (options.until && originallyPublishedAt && originallyPublishedAt.getTime() > options.until.getTime()) {
+    log.info('Video "%s" has been published after "%s", don\'t upload it.\n',
+      videoInfo.title, formatDate(options.until))
+    return
+  }
 
-    const result = await searchVideoWithSort(url, videoInfo.title, '-match')
+  const result = await advancedVideosSearch(url, { search: videoInfo.title, sort: '-match', searchTarget: 'local' })
 
-    log.info('############################################################\n')
+  log.info('############################################################\n')
 
-    if (result.body.data.find(v => v.name === videoInfo.title)) {
-      log.info('Video "%s" already exists, don\'t reupload it.\n', videoInfo.title)
-      return res()
-    }
+  if (result.body.data.find(v => v.name === videoInfo.title)) {
+    log.info('Video "%s" already exists, don\'t reupload it.\n', videoInfo.title)
+    return
+  }
 
-    const path = join(cwd, sha256(videoInfo.url) + '.mp4')
+  const path = join(cwd, sha256(videoInfo.url) + '.mp4')
 
-    log.info('Downloading video "%s"...', videoInfo.title)
+  log.info('Downloading video "%s"...', videoInfo.title)
 
-    const options = [ '-f', 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best', ...command.args, '-o', path ]
-    try {
-      const youtubeDL = await safeGetYoutubeDL()
-      youtubeDL.exec(videoInfo.url, options, processOptions, async (err, output) => {
-        if (err) {
-          log.error(err)
-          return res()
-        }
-
-        log.info(output.join('\n'))
-        await uploadVideoOnPeerTube({
-          cwd,
-          url,
-          user,
-          videoInfo: normalizeObject(videoInfo),
-          videoPath: path
-        })
-        return res()
-      })
-    } catch (err) {
-      log.error(err.message)
-      return res()
-    }
-  })
+  const youtubeDLOptions = [ '-f', youtubeDL.getYoutubeDLVideoFormat(), ...command.args, '-o', path ]
+  try {
+    const youtubeDLBinary = await YoutubeDL.safeGetYoutubeDL()
+    const youtubeDLExec = promisify(youtubeDLBinary.exec).bind(youtubeDLBinary)
+    const output = await youtubeDLExec(videoInfo.url, youtubeDLOptions, processOptions)
+    log.info(output.join('\n'))
+    await uploadVideoOnPeerTube({
+      youtubeDL,
+      cwd,
+      url,
+      user,
+      videoInfo: normalizeObject(videoInfo),
+      videoPath: path
+    })
+  } catch (err) {
+    log.error(err.message)
+  }
 }
 
 async function uploadVideoOnPeerTube (parameters: {
+  youtubeDL: YoutubeDL
   videoInfo: any
   videoPath: string
   cwd: string
   url: string
   user: { username: string, password: string }
 }) {
-  const { videoInfo, videoPath, cwd, url, user } = parameters
+  const { youtubeDL, videoInfo, videoPath, cwd, url, user } = parameters
 
   const category = await getCategory(videoInfo.categories, url)
   const licence = getLicence(videoInfo.license)
@@ -201,13 +205,10 @@ async function uploadVideoOnPeerTube (parameters: {
   if (videoInfo.thumbnail) {
     thumbnailfile = join(cwd, sha256(videoInfo.thumbnail) + '.jpg')
 
-    await doRequestAndSaveToFile({
-      method: 'GET',
-      uri: videoInfo.thumbnail
-    }, thumbnailfile)
+    await doRequestAndSaveToFile(videoInfo.thumbnail, thumbnailfile)
   }
 
-  const originallyPublishedAt = buildOriginallyPublishedAt(videoInfo)
+  const originallyPublishedAt = youtubeDL.buildOriginallyPublishedAt(videoInfo)
 
   const defaultAttributes = {
     name: truncate(videoInfo.title, {
@@ -306,7 +307,7 @@ function fetchObject (info: any) {
   const url = buildUrl(info)
 
   return new Promise<any>(async (res, rej) => {
-    const youtubeDL = await safeGetYoutubeDL()
+    const youtubeDL = await YoutubeDL.safeGetYoutubeDL()
     youtubeDL.getInfo(url, undefined, processOptions, (err, videoInfo) => {
       if (err) return rej(err)
 
@@ -392,8 +393,28 @@ function formatDate (date: Date): string {
   return date.toISOString().split('T')[0]
 }
 
+function convertIntoMs (secondsAsStr: string): number {
+  const seconds = parseInt(secondsAsStr, 10)
+  if (seconds <= 0) {
+    exitError(`Invalid duration passed: ${seconds}. Expected duration to be strictly positive and in seconds`)
+  }
+  return Math.round(seconds * 1000)
+}
+
 function exitError (message: string, ...meta: any[]) {
   // use console.error instead of log.error here
   console.error(message, ...meta)
   process.exit(-1)
+}
+
+function getYoutubeDLInfo (youtubeDL: any, url: string, args: string[]) {
+  return new Promise<any>((res, rej) => {
+    const options = [ '-j', '--flat-playlist', '--playlist-reverse', ...args ]
+
+    youtubeDL.getInfo(url, options, processOptions, async (err, info) => {
+      if (err) return rej(err)
+
+      return res(info)
+    })
+  })
 }

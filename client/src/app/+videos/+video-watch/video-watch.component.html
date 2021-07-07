@@ -7,44 +7,37 @@
       Please try again later.
     </div>
 
-    <div id="videojs-wrapper"></div>
+    <div id="videojs-wrapper">
+      <img class="placeholder-image" *ngIf="playerPlaceholderImgSrc" [src]="playerPlaceholderImgSrc" alt="Placeholder image" i18n-alt>
+    </div>
 
     <my-video-watch-playlist
       #videoWatchPlaylist
       [playlist]="playlist" class="playlist"
       (videoFound)="onPlaylistVideoFound($event)"
     ></my-video-watch-playlist>
+
+    <my-plugin-placeholder pluginId="player-next"></my-plugin-placeholder>
   </div>
 
-  <div class="row">
-    <div i18n class="col-md-12 alert alert-warning" *ngIf="isVideoToImport()">
-      The video is being imported, it will be available when the import is finished.
-    </div>
-
-    <div i18n class="col-md-12 alert alert-warning" *ngIf="isVideoToTranscode()">
-      The video is being transcoded, it may not work properly.
-    </div>
-
-    <div i18n class="col-md-12 alert alert-info" *ngIf="hasVideoScheduledPublication()">
-      This video will be published on {{ video.scheduledUpdate.updateAt | date: 'full' }}.
-    </div>
-
-    <div class="col-md-12 alert alert-danger" *ngIf="video?.blacklisted">
-      <div class="blocked-label" i18n>This video is blocked.</div>
-      {{ video.blockedReason }}
-    </div>
-  </div>
+  <my-video-alert [video]="video"></my-video-alert>
 
   <!-- Video information -->
   <div *ngIf="video" class="margin-content video-bottom">
     <div class="video-info">
       <div class="video-info-first-row">
         <div>
+          <ng-template #publishedTemplate>
+            <ng-container i18n>Published <my-date-toggle [date]="video.publishedAt"></my-date-toggle></ng-container>
+            •
+            <my-video-views-counter [video]="video"></my-video-views-counter>
+          </ng-template>
+
           <div class="d-block d-md-none"> <!-- only shown on medium devices, has its counterpart for larger viewports below -->
             <h1 class="video-info-name">{{ video.name }}</h1>
 
-            <div i18n class="video-info-date-views">
-              Published <my-date-toggle [date]="video.publishedAt"></my-date-toggle> <span class="views"> • {{ video.views | myNumberFormatter }} views</span>
+            <div class="video-info-date-views">
+              <ng-template *ngTemplateOutlet="publishedTemplate"></ng-template>
             </div>
           </div>
 
@@ -54,125 +47,33 @@
             </div>
 
             <div class="video-info-first-row-bottom">
-              <div i18n class="d-none d-md-block video-info-date-views">
-                Published <my-date-toggle [date]="video.publishedAt"></my-date-toggle> <span class="views"> • {{ video.views | myNumberFormatter }} views</span>
+              <div class="d-none d-md-block video-info-date-views">
+                <ng-template *ngTemplateOutlet="publishedTemplate"></ng-template>
               </div>
 
-              <div class="video-actions-rates">
-                <div class="video-actions fullWidth justify-content-end">
-                  <button
-                    [ngbPopover]="getRatePopoverText()" [ngClass]="{ 'activated': userRating === 'like' }" (click)="setLike()" (keyup.enter)="setLike()"
-                    class="action-button action-button-like" [attr.aria-pressed]="userRating === 'like'" [attr.aria-label]="tooltipLike"
-                    [ngbTooltip]="tooltipLike"
-                    placement="bottom auto"
-                  >
-                    <my-global-icon iconName="like"></my-global-icon>
-                    <span *ngIf="video.likes" class="count">{{ video.likes }}</span>
-                </button>
-
-                  <button
-                    [ngbPopover]="getRatePopoverText()" [ngClass]="{ 'activated': userRating === 'dislike' }" (click)="setDislike()" (keyup.enter)="setDislike()"
-                    class="action-button action-button-dislike" [attr.aria-pressed]="userRating === 'dislike'" [attr.aria-label]="tooltipDislike"
-                    [ngbTooltip]="tooltipDislike"
-                    placement="bottom auto"
-                  >
-                    <my-global-icon iconName="dislike"></my-global-icon>
-                    <span *ngIf="video.dislikes" class="count">{{ video.dislikes }}</span>
-                  </button>
-
-                  <button *ngIf="video.support" (click)="showSupportModal()" (keyup.enter)="showSupportModal()" class="action-button action-button-support" [attr.aria-label]="tooltipSupport"
-                    [ngbTooltip]="tooltipSupport"
-                    placement="bottom auto"
-                  >
-                    <my-global-icon iconName="support" aria-hidden="true"></my-global-icon>
-                    <span class="icon-text" i18n>SUPPORT</span>
-                  </button>
-
-                  <button (click)="showShareModal()" (keyup.enter)="showShareModal()" class="action-button">
-                    <my-global-icon iconName="share" aria-hidden="true"></my-global-icon>
-                    <span class="icon-text" i18n>SHARE</span>
-                  </button>
-
-                  <div
-                    class="action-dropdown" ngbDropdown placement="top" role="button" autoClose="outside"
-                     *ngIf="isUserLoggedIn()" (openChange)="addContent.openChange($event)"
-                     [ngbTooltip]="tooltipSaveToPlaylist"
-                     placement="bottom auto"
-                  >
-                    <button class="action-button action-button-save" ngbDropdownToggle>
-                      <my-global-icon iconName="playlist-add" aria-hidden="true"></my-global-icon>
-                      <span class="icon-text" i18n>SAVE</span>
-                    </button>
-
-                    <div ngbDropdownMenu>
-                      <my-video-add-to-playlist #addContent [video]="video"></my-video-add-to-playlist>
-                    </div>
-                  </div>
-
-                  <ng-container *ngIf="!isUserLoggedIn()">
-                    <button
-                      *ngIf="isVideoDownloadable()" class="action-button action-button-save"
-                      (click)="showDownloadModal()" (keydown.enter)="showDownloadModal()"
-                    >
-                      <my-global-icon iconName="download" aria-hidden="true"></my-global-icon>
-                      <span class="icon-text d-none d-sm-inline" i18n>DOWNLOAD</span>
-                    </button>
-
-                    <my-video-download #videoDownloadModal></my-video-download>
-                  </ng-container>
-
-                  <ng-container *ngIf="isUserLoggedIn()">
-                    <my-video-actions-dropdown
-                      placement="bottom auto" buttonDirection="horizontal" [buttonStyled]="true" [video]="video" [videoCaptions]="videoCaptions"
-                      (videoRemoved)="onVideoRemoved()" (modalOpened)="onModalOpened()"
-                    ></my-video-actions-dropdown>
-                  </ng-container>
-                </div>
-
-                <div class="video-info-likes-dislikes-bar-outer-container">
-                  <div
-                    class="video-info-likes-dislikes-bar-inner-container"
-                    *ngIf="video.likes !== 0 || video.dislikes !== 0"
-                    [ngbTooltip]="likesBarTooltipText"
-                    placement="bottom"
-                  >
-                    <div
-                      class="video-info-likes-dislikes-bar"
-                    >
-                      <div class="likes-bar" [ngClass]="{ 'liked': userRating !== 'none' }" [ngStyle]="{ 'width.%': video.likesPercent }"></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div
-                class="video-info-likes-dislikes-bar"
-                *ngIf="video.likes !== 0 || video.dislikes !== 0"
-                [ngbTooltip]="likesBarTooltipText"
-                placement="bottom"
-              >
-                <div class="likes-bar" [ngStyle]="{ 'width.%': video.likesPercent }"></div>
-              </div>
+              <my-action-buttons
+                [video]="video" [isUserLoggedIn]="isUserLoggedIn()" [videoCaptions]="videoCaptions" [playlist]="playlist"
+                [currentTime]="getCurrentTime()" [currentPlaylistPosition]="getCurrentPlaylistPosition()"
+              ></my-action-buttons>
             </div>
           </div>
 
-
           <div class="pt-3 border-top video-info-channel d-flex">
             <div class="video-info-channel-left d-flex">
-              <avatar-channel [video]="video" [genericChannel]="isChannelDisplayNameGeneric()"></avatar-channel>
+              <my-video-avatar-channel [video]="video" [genericChannel]="isChannelDisplayNameGeneric()"></my-video-avatar-channel>
 
               <div class="video-info-channel-left-links ml-1">
                 <ng-container *ngIf="!isChannelDisplayNameGeneric()">
-                  <a [routerLink]="[ '/video-channels', video.byVideoChannel ]" i18n-title title="Channel page">
+                  <a [routerLink]="[ '/c', video.byVideoChannel ]" i18n-title title="Channel page">
                     {{ video.channel.displayName }}
                   </a>
-                  <a [routerLink]="[ '/accounts', video.byAccount ]" i18n-title title="Account page">
+                  <a [routerLink]="[ '/a', video.byAccount ]" i18n-title title="Account page">
                     <span i18n>By {{ video.byAccount }}</span>
                   </a>
                 </ng-container>
 
                 <ng-container *ngIf="isChannelDisplayNameGeneric()">
-                  <a [routerLink]="[ '/accounts', video.byAccount ]" class="single-link" i18n-title title="Account page">
+                  <a [routerLink]="[ '/a', video.byAccount ]" class="single-link" i18n-title title="Account page">
                     <span i18n>{{ video.byAccount }}</span>
                   </a>
                 </ng-container>
@@ -185,82 +86,9 @@
 
       </div>
 
-      <div class="video-info-description">
-        <div
-          class="video-info-description-html"
-          [innerHTML]="videoHTMLDescription"
-          (timestampClicked)="handleTimestampClicked($event)"
-          timestampRouteTransformer
-        ></div>
+      <my-video-description [video]="video"></my-video-description>
 
-        <div class="video-info-description-more" *ngIf="completeDescriptionShown === false && video.description?.length >= 250" (click)="showMoreDescription()">
-          <ng-container i18n>Show more</ng-container>
-          <span *ngIf="descriptionLoading === false" class="glyphicon glyphicon-menu-down"></span>
-          <my-small-loader class="description-loading" [loading]="descriptionLoading"></my-small-loader>
-        </div>
-
-        <div *ngIf="completeDescriptionShown === true" (click)="showLessDescription()" class="video-info-description-more">
-          <ng-container i18n>Show less</ng-container>
-          <span *ngIf="descriptionLoading === false" class="glyphicon glyphicon-menu-up"></span>
-        </div>
-      </div>
-
-      <div class="video-attributes mb-3">
-        <div class="video-attribute">
-          <span i18n class="video-attribute-label">Privacy</span>
-          <span class="video-attribute-value">{{ video.privacy.label }}</span>
-        </div>
-
-        <div *ngIf="video.isLocal === false" class="video-attribute">
-          <span i18n class="video-attribute-label">Origin instance</span>
-          <a class="video-attribute-value" target="_blank" rel="noopener noreferrer" [href]="video.originInstanceUrl">{{ video.originInstanceHost }}</a>
-        </div>
-
-        <div *ngIf="!!video.originallyPublishedAt" class="video-attribute">
-          <span i18n class="video-attribute-label">Originally published</span>
-          <span class="video-attribute-value">{{ video.originallyPublishedAt | date: 'dd MMMM yyyy' }}</span>
-        </div>
-
-        <div class="video-attribute">
-          <span i18n class="video-attribute-label">Category</span>
-          <span *ngIf="!video.category.id" class="video-attribute-value">{{ video.category.label }}</span>
-          <a
-            *ngIf="video.category.id" class="video-attribute-value"
-            [routerLink]="[ '/search' ]" [queryParams]="{ categoryOneOf: [ video.category.id ] }"
-          >{{ video.category.label }}</a>
-        </div>
-
-        <div class="video-attribute">
-          <span i18n class="video-attribute-label">Licence</span>
-          <span *ngIf="!video.licence.id" class="video-attribute-value">{{ video.licence.label }}</span>
-          <a
-            *ngIf="video.licence.id" class="video-attribute-value"
-            [routerLink]="[ '/search' ]" [queryParams]="{ licenceOneOf: [ video.licence.id ] }"
-          >{{ video.licence.label }}</a>
-        </div>
-
-        <div class="video-attribute">
-          <span i18n class="video-attribute-label">Language</span>
-          <span *ngIf="!video.language.id" class="video-attribute-value">{{ video.language.label }}</span>
-          <a
-            *ngIf="video.language.id" class="video-attribute-value"
-            [routerLink]="[ '/search' ]" [queryParams]="{ languageOneOf: [ video.language.id ] }"
-          >{{ video.language.label }}</a>
-        </div>
-
-        <div class="video-attribute video-attribute-tags">
-          <span i18n class="video-attribute-label">Tags</span>
-          <a
-            *ngFor="let tag of getVideoTags()"
-            class="video-attribute-value" [routerLink]="[ '/search' ]" [queryParams]="{ tagsOneOf: [ tag ] }"
-          >{{ tag }}</a>
-        </div>
-
-        <div class="video-attribute">
-          <span i18n class="video-attribute-label">Duration</span>
-          <span class="video-attribute-value">{{ video.duration | myVideoDurationFormatter }}</span>
-        </div>
-      </div>
+      <my-video-attributes [video]="video"></my-video-attributes>
 
       <my-video-comments
         class="border-top"
@@ -271,30 +99,14 @@
     </div>
 
     <my-recommended-videos
+      [displayAsRow]="displayOtherVideosAsRow()"
       [inputRecommendation]="{ uuid: video.uuid, tags: video.tags }"
       [playlist]="playlist"
       (gotRecommendations)="onRecommendations($event)"
     ></my-recommended-videos>
   </div>
 
-  <div class="row privacy-concerns" *ngIf="hasAlreadyAcceptedPrivacyConcern === false">
-    <div class="privacy-concerns-text">
-      <span class="mr-2">
-        <strong i18n>Friendly Reminder: </strong>
-        <ng-container i18n>
-          the sharing system used for this video implies that some technical information about your system (such as a public IP address) can be sent to other peers.
-        </ng-container>
-      </span>
-      <a i18n i18n-title title="Get more information" target="_blank" rel="noopener noreferrer" href="/about/peertube#privacy">More information</a>
-    </div>
-
-    <div i18n class="privacy-concerns-button privacy-concerns-okay" (click)="acceptedPrivacyConcern()">
-      OK
-    </div>
-  </div>
+  <my-privacy-concerns></my-privacy-concerns>
 </div>
 
-<ng-container *ngIf="video !== null">
-  <my-video-support #videoSupportModal [video]="video"></my-video-support>
-  <my-video-share #videoShareModal [video]="video" [videoCaptions]="videoCaptions" [playlist]="playlist"></my-video-share>
-</ng-container>
+<my-player-styles></my-player-styles>

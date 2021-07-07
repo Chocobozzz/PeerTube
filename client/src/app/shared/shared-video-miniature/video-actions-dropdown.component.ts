@@ -13,6 +13,7 @@ import {
   VideoDetails,
   VideoService
 } from '../shared-main'
+import { LiveStreamInformationComponent } from '../shared-video-live'
 import { VideoAddToPlaylistComponent } from '../shared-video-playlist'
 import { VideoDownloadComponent } from './video-download.component'
 
@@ -25,6 +26,7 @@ export type VideoActionsDisplayType = {
   report?: boolean
   duplicate?: boolean
   mute?: boolean
+  liveInfo?: boolean
 }
 
 @Component({
@@ -39,6 +41,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
   @ViewChild('videoDownloadModal') videoDownloadModal: VideoDownloadComponent
   @ViewChild('videoReportModal') videoReportModal: VideoReportComponent
   @ViewChild('videoBlockModal') videoBlockModal: VideoBlockComponent
+  @ViewChild('liveStreamInformationModal') liveStreamInformationModal: LiveStreamInformationComponent
 
   @Input() video: Video | VideoDetails
   @Input() videoCaptions: VideoCaption[] = []
@@ -51,7 +54,8 @@ export class VideoActionsDropdownComponent implements OnChanges {
     delete: true,
     report: true,
     duplicate: true,
-    mute: true
+    mute: true,
+    liveInfo: false
   }
   @Input() placement = 'left'
 
@@ -89,7 +93,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
   ngOnChanges () {
     if (this.loaded) {
       this.loaded = false
-      this.playlistAdd.reload()
+      if (this.playlistAdd) this.playlistAdd.reload()
     }
 
     this.buildActions()
@@ -127,6 +131,12 @@ export class VideoActionsDropdownComponent implements OnChanges {
     this.videoBlockModal.show()
   }
 
+  showLiveInfoModal (video: Video) {
+    this.modalOpened.emit()
+
+    this.liveStreamInformationModal.show(video)
+  }
+
   /* Actions checker */
 
   isVideoUpdatable () {
@@ -145,12 +155,19 @@ export class VideoActionsDropdownComponent implements OnChanges {
     return this.video.isUnblockableBy(this.user)
   }
 
+  isVideoLiveInfoAvailable () {
+    return this.video.isLiveInfoAvailableBy(this.user)
+  }
+
   isVideoDownloadable () {
-    return this.video && this.video instanceof VideoDetails && this.video.downloadEnabled
+    return this.video &&
+      this.video.isLive !== true &&
+      this.video instanceof VideoDetails &&
+      this.video.downloadEnabled
   }
 
   canVideoBeDuplicated () {
-    return this.video.canBeDuplicatedBy(this.user)
+    return !this.video.isLive && this.video.canBeDuplicatedBy(this.user)
   }
 
   isVideoAccountMutable () {
@@ -183,7 +200,12 @@ export class VideoActionsDropdownComponent implements OnChanges {
   async removeVideo () {
     this.modalOpened.emit()
 
-    const res = await this.confirmService.confirm($localize`Do you really want to delete this video?`, $localize`Delete`)
+    let message = $localize`Do you really want to delete this video?`
+    if (this.video.isLive) {
+      message += ' ' + $localize`The live stream will be automatically terminated.`
+    }
+
+    const res = await this.confirmService.confirm(message, $localize`Delete`)
     if (res === false) return
 
     this.videoService.removeVideo(this.video.id)
@@ -251,6 +273,12 @@ export class VideoActionsDropdownComponent implements OnChanges {
           handler: () => this.showDownloadModal(),
           isDisplayed: () => this.displayOptions.download && this.isVideoDownloadable(),
           iconName: 'download'
+        },
+        {
+          label: $localize`Display live information`,
+          handler: ({ video }) => this.showLiveInfoModal(video),
+          isDisplayed: () => this.displayOptions.liveInfo && this.isVideoLiveInfoAvailable(),
+          iconName: 'live'
         },
         {
           label: $localize`Update`,

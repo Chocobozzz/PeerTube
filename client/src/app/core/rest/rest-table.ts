@@ -1,9 +1,8 @@
-import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
-import { LazyLoadEvent, SortMeta } from 'primeng/api'
-import { RestPagination } from './rest-pagination'
-import { Subject } from 'rxjs'
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators'
 import * as debug from 'debug'
+import { LazyLoadEvent, SortMeta } from 'primeng/api'
+import { ActivatedRoute, Router } from '@angular/router'
+import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
+import { RestPagination } from './rest-pagination'
 
 const logger = debug('peertube:tables:RestTable')
 
@@ -13,18 +12,19 @@ export abstract class RestTable {
   abstract sort: SortMeta
   abstract pagination: RestPagination
 
-  search: string
   rowsPerPageOptions = [ 10, 20, 50, 100 ]
   rowsPerPage = this.rowsPerPageOptions[0]
   expandedRows = {}
 
-  protected searchStream: Subject<string>
+  search: string
+
+  protected route: ActivatedRoute
+  protected router: Router
 
   abstract getIdentifier (): string
 
   initialize () {
     this.loadSort()
-    this.initSearch()
   }
 
   loadSort () {
@@ -52,34 +52,12 @@ export abstract class RestTable {
       count: this.rowsPerPage
     }
 
-    this.loadData()
+    this.reloadData()
     this.saveSort()
   }
 
   saveSort () {
     peertubeLocalStorage.setItem(this.getSortLocalStorageKey(), JSON.stringify(this.sort))
-  }
-
-  initSearch () {
-    this.searchStream = new Subject()
-
-    this.searchStream
-      .pipe(
-        debounceTime(400),
-        distinctUntilChanged()
-      )
-      .subscribe(search => {
-        this.search = search
-
-        logger('On search %s.', this.search)
-
-        this.loadData()
-      })
-  }
-
-  onSearch (event: Event) {
-    const target = event.target as HTMLInputElement
-    this.searchStream.next(target.value)
   }
 
   onPage (event: { first: number, rows: number }) {
@@ -92,24 +70,18 @@ export abstract class RestTable {
         count: this.rowsPerPage
       }
 
-      this.loadData()
+      this.reloadData()
     }
 
     this.expandedRows = {}
   }
 
-  setTableFilter (filter: string) {
-    // FIXME: cannot use ViewChild, so create a component for the filter input
-    const filterInput = document.getElementById('table-filter') as HTMLInputElement
-    if (filterInput) filterInput.value = filter
+  onSearch (search: string) {
+    this.search = search
+    this.reloadData()
   }
 
-  resetSearch () {
-    this.searchStream.next('')
-    this.setTableFilter('')
-  }
-
-  protected abstract loadData (): void
+  protected abstract reloadData (): void
 
   private getSortLocalStorageKey () {
     return 'rest-table-sort-' + this.getIdentifier()

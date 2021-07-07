@@ -1,13 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
 import 'mocha'
-import { join } from 'path'
+import * as chai from 'chai'
 import * as request from 'supertest'
-import { VideoPrivacy } from '../../../../shared/models/videos'
-import { VideoComment, VideoCommentThreadTree } from '../../../../shared/models/videos/video-comment.model'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import {
   addVideoChannel,
+  buildAbsoluteFixturePath,
   checkTmpIsEmpty,
   checkVideoFilesWereRemoved,
   cleanupTests,
@@ -32,15 +31,16 @@ import {
   wait,
   webtorrentAdd
 } from '../../../../shared/extra-utils'
+import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 import {
   addVideoCommentReply,
   addVideoCommentThread,
   deleteVideoComment,
+  findCommentId,
   getVideoCommentThreads,
-  getVideoThreadComments,
-  findCommentId
+  getVideoThreadComments
 } from '../../../../shared/extra-utils/videos/video-comments'
-import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
+import { VideoComment, VideoCommentThreadTree, VideoPrivacy } from '../../../../shared/models/videos'
 
 const expect = chai.expect
 
@@ -158,7 +158,7 @@ describe('Test multiple servers', function () {
     })
 
     it('Should upload the video on server 2 and propagate on each server', async function () {
-      this.timeout(50000)
+      this.timeout(100000)
 
       const user = {
         username: 'user1',
@@ -180,7 +180,7 @@ describe('Test multiple servers', function () {
         thumbnailfile: 'thumbnail.jpg',
         previewfile: 'preview.jpg'
       }
-      await uploadVideo(servers[1].url, userAccessToken, videoAttributes)
+      await uploadVideo(servers[1].url, userAccessToken, videoAttributes, HttpStatusCode.OK_200, 'resumable')
 
       // Transcoding
       await waitJobs(servers)
@@ -216,19 +216,19 @@ describe('Test multiple servers', function () {
           files: [
             {
               resolution: 240,
-              size: 189000
+              size: 270000
             },
             {
               resolution: 360,
-              size: 278000
+              size: 359000
             },
             {
               resolution: 480,
-              size: 384000
+              size: 465000
             },
             {
               resolution: 720,
-              size: 706000
+              size: 788000
             }
           ],
           thumbnailfile: 'thumbnail',
@@ -576,7 +576,7 @@ describe('Test multiple servers', function () {
     })
 
     it('Should like and dislikes videos on different services', async function () {
-      this.timeout(20000)
+      this.timeout(50000)
 
       await rateVideo(servers[0].url, servers[0].accessToken, remoteVideosServer1[0], 'like')
       await wait(500)
@@ -591,6 +591,7 @@ describe('Test multiple servers', function () {
       await rateVideo(servers[2].url, servers[2].accessToken, remoteVideosServer3[0], 'like')
 
       await waitJobs(servers)
+      await wait(5000)
 
       let baseVideos = null
       for (const server of servers) {
@@ -933,7 +934,7 @@ describe('Test multiple servers', function () {
           expect(deletedComment.text).to.equal('')
           expect(deletedComment.inReplyToCommentId).to.be.null
           expect(deletedComment.account).to.be.null
-          expect(deletedComment.totalReplies).to.equal(3)
+          expect(deletedComment.totalReplies).to.equal(2)
           expect(dateIsValid(deletedComment.createdAt as string)).to.be.true
           expect(dateIsValid(deletedComment.updatedAt as string)).to.be.true
           expect(dateIsValid(deletedComment.deletedAt as string)).to.be.true
@@ -975,7 +976,7 @@ describe('Test multiple servers', function () {
           expect(comment.createdAt).to.not.be.null
           expect(comment.deletedAt).to.not.be.null
           expect(comment.account).to.be.null
-          expect(comment.totalReplies).to.equal(3)
+          expect(comment.totalReplies).to.equal(2)
         }
       }
     })
@@ -998,7 +999,7 @@ describe('Test multiple servers', function () {
         expect(res.body.downloadEnabled).to.be.false
 
         const text = 'my super forbidden comment'
-        await addVideoCommentThread(server.url, server.accessToken, videoUUID, text, 409)
+        await addVideoCommentThread(server.url, server.accessToken, videoUUID, text, HttpStatusCode.CONFLICT_409)
       }
     })
   })
@@ -1017,10 +1018,8 @@ describe('Test multiple servers', function () {
         .field('privacy', '1')
         .field('channelId', '1')
 
-      const filePath = join(__dirname, '..', '..', 'fixtures', 'video_short.webm')
-
-      await req.attach('videofile', filePath)
-               .expect(200)
+      await req.attach('videofile', buildAbsoluteFixturePath('video_short.webm'))
+               .expect(HttpStatusCode.OK_200)
 
       await waitJobs(servers)
 
@@ -1057,19 +1056,19 @@ describe('Test multiple servers', function () {
           files: [
             {
               resolution: 720,
-              size: 72000
+              size: 59000
             },
             {
               resolution: 480,
-              size: 45000
+              size: 34000
             },
             {
               resolution: 360,
-              size: 34600
+              size: 31000
             },
             {
               resolution: 240,
-              size: 24770
+              size: 23000
             }
           ]
         }

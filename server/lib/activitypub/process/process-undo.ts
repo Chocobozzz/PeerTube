@@ -4,14 +4,14 @@ import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { logger } from '../../../helpers/logger'
 import { sequelizeTypescript } from '../../../initializers/database'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
-import { ActorModel } from '../../../models/activitypub/actor'
-import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
-import { forwardVideoRelatedActivity } from '../send/utils'
-import { getOrCreateVideoAndAccountAndChannel } from '../videos'
-import { VideoShareModel } from '../../../models/video/video-share'
+import { ActorModel } from '../../../models/actor/actor'
+import { ActorFollowModel } from '../../../models/actor/actor-follow'
 import { VideoRedundancyModel } from '../../../models/redundancy/video-redundancy'
+import { VideoShareModel } from '../../../models/video/video-share'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model'
 import { MActorSignature } from '../../../types/models'
+import { forwardVideoRelatedActivity } from '../send/utils'
+import { getOrCreateAPVideo } from '../videos'
 
 async function processUndoActivity (options: APProcessorOptions<ActivityUndo>) {
   const { activity, byActor } = options
@@ -22,9 +22,7 @@ async function processUndoActivity (options: APProcessorOptions<ActivityUndo>) {
   }
 
   if (activityToUndo.type === 'Create') {
-    if (activityToUndo.object.type === 'Dislike') {
-      return retryTransactionWrapper(processUndoDislike, byActor, activity)
-    } else if (activityToUndo.object.type === 'CacheFile') {
+    if (activityToUndo.object.type === 'CacheFile') {
       return retryTransactionWrapper(processUndoCacheFile, byActor, activity)
     }
   }
@@ -57,7 +55,7 @@ export {
 async function processUndoLike (byActor: MActorSignature, activity: ActivityUndo) {
   const likeActivity = activity.object as ActivityLike
 
-  const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: likeActivity.object })
+  const { video } = await getOrCreateAPVideo({ videoObject: likeActivity.object })
 
   return sequelizeTypescript.transaction(async t => {
     if (!byActor.Account) throw new Error('Unknown account ' + byActor.url)
@@ -82,7 +80,7 @@ async function processUndoDislike (byActor: MActorSignature, activity: ActivityU
     ? activity.object
     : activity.object.object as DislikeObject
 
-  const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: dislike.object })
+  const { video } = await getOrCreateAPVideo({ videoObject: dislike.object })
 
   return sequelizeTypescript.transaction(async t => {
     if (!byActor.Account) throw new Error('Unknown account ' + byActor.url)
@@ -105,10 +103,10 @@ async function processUndoDislike (byActor: MActorSignature, activity: ActivityU
 async function processUndoCacheFile (byActor: MActorSignature, activity: ActivityUndo) {
   const cacheFileObject = activity.object.object as CacheFileObject
 
-  const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: cacheFileObject.object })
+  const { video } = await getOrCreateAPVideo({ videoObject: cacheFileObject.object })
 
   return sequelizeTypescript.transaction(async t => {
-    const cacheFile = await VideoRedundancyModel.loadByUrl(cacheFileObject.id)
+    const cacheFile = await VideoRedundancyModel.loadByUrl(cacheFileObject.id, t)
     if (!cacheFile) {
       logger.debug('Cannot undo unknown video cache %s.', cacheFileObject.id)
       return
@@ -116,7 +114,7 @@ async function processUndoCacheFile (byActor: MActorSignature, activity: Activit
 
     if (cacheFile.actorId !== byActor.id) throw new Error('Cannot delete redundancy ' + cacheFile.url + ' of another actor.')
 
-    await cacheFile.destroy()
+    await cacheFile.destroy({ transaction: t })
 
     if (video.isOwned()) {
       // Don't resend the activity to the sender

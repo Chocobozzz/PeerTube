@@ -3,11 +3,10 @@
 import { registerTSPaths } from '../helpers/register-ts-paths'
 registerTSPaths()
 
-import * as program from 'commander'
-import { PluginType } from '../../shared/models/plugins/plugin.type'
+import { program, Command, OptionValues } from 'commander'
 import { installPlugin, listPlugins, uninstallPlugin, updatePlugin } from '../../shared/extra-utils/server/plugins'
 import { getAdminTokenOrDie, getServerCredentials } from './cli'
-import { PeerTubePlugin } from '../../shared/models/plugins/peertube-plugin.model'
+import { PeerTubePlugin, PluginType } from '../../shared/models'
 import { isAbsolute } from 'path'
 import * as CliTable3 from 'cli-table3'
 
@@ -23,7 +22,7 @@ program
   .option('-p, --password <token>', 'Password')
   .option('-t, --only-themes', 'List themes only')
   .option('-P, --only-plugins', 'List plugins only')
-  .action(() => pluginsListCLI())
+  .action((options, command) => pluginsListCLI(command, options))
 
 program
   .command('install')
@@ -33,7 +32,7 @@ program
   .option('-p, --password <token>', 'Password')
   .option('-P --path <path>', 'Install from a path')
   .option('-n, --npm-name <npmName>', 'Install from npm')
-  .action((options) => installPluginCLI(options))
+  .action((options, command) => installPluginCLI(command, options))
 
 program
   .command('update')
@@ -43,7 +42,7 @@ program
   .option('-p, --password <token>', 'Password')
   .option('-P --path <path>', 'Update from a path')
   .option('-n, --npm-name <npmName>', 'Update from npm')
-  .action((options) => updatePluginCLI(options))
+  .action((options, command) => updatePluginCLI(command, options))
 
 program
   .command('uninstall')
@@ -52,7 +51,7 @@ program
   .option('-U, --username <username>', 'Username')
   .option('-p, --password <token>', 'Password')
   .option('-n, --npm-name <npmName>', 'NPM plugin/theme name')
-  .action(options => uninstallPluginCLI(options))
+  .action((options, command) => uninstallPluginCLI(command, options))
 
 if (!process.argv.slice(2).length) {
   program.outputHelp()
@@ -62,13 +61,13 @@ program.parse(process.argv)
 
 // ----------------------------------------------------------------------------
 
-async function pluginsListCLI () {
-  const { url, username, password } = await getServerCredentials(program)
+async function pluginsListCLI (command: Command, options: OptionValues) {
+  const { url, username, password } = await getServerCredentials(command)
   const accessToken = await getAdminTokenOrDie(url, username, password)
 
   let pluginType: PluginType
-  if (program['onlyThemes']) pluginType = PluginType.THEME
-  if (program['onlyPlugins']) pluginType = PluginType.PLUGIN
+  if (options.onlyThemes) pluginType = PluginType.THEME
+  if (options.onlyPlugins) pluginType = PluginType.PLUGIN
 
   const res = await listPlugins({
     url,
@@ -101,27 +100,27 @@ async function pluginsListCLI () {
   process.exit(0)
 }
 
-async function installPluginCLI (options: any) {
-  if (!options['path'] && !options['npmName']) {
+async function installPluginCLI (command: Command, options: OptionValues) {
+  if (!options.path && !options.npmName) {
     console.error('You need to specify the npm name or the path of the plugin you want to install.\n')
     program.outputHelp()
     process.exit(-1)
   }
 
-  if (options['path'] && !isAbsolute(options['path'])) {
+  if (options.path && !isAbsolute(options.path)) {
     console.error('Path should be absolute.')
     process.exit(-1)
   }
 
-  const { url, username, password } = await getServerCredentials(options)
+  const { url, username, password } = await getServerCredentials(command)
   const accessToken = await getAdminTokenOrDie(url, username, password)
 
   try {
     await installPlugin({
       url,
       accessToken,
-      npmName: options['npmName'],
-      path: options['path']
+      npmName: options.npmName,
+      path: options.path
     })
   } catch (err) {
     console.error('Cannot install plugin.', err)
@@ -132,27 +131,27 @@ async function installPluginCLI (options: any) {
   process.exit(0)
 }
 
-async function updatePluginCLI (options: any) {
-  if (!options['path'] && !options['npmName']) {
+async function updatePluginCLI (command: Command, options: OptionValues) {
+  if (!options.path && !options.npmName) {
     console.error('You need to specify the npm name or the path of the plugin you want to update.\n')
     program.outputHelp()
     process.exit(-1)
   }
 
-  if (options['path'] && !isAbsolute(options['path'])) {
+  if (options.path && !isAbsolute(options.path)) {
     console.error('Path should be absolute.')
     process.exit(-1)
   }
 
-  const { url, username, password } = await getServerCredentials(options)
+  const { url, username, password } = await getServerCredentials(command)
   const accessToken = await getAdminTokenOrDie(url, username, password)
 
   try {
     await updatePlugin({
       url,
       accessToken,
-      npmName: options['npmName'],
-      path: options['path']
+      npmName: options.npmName,
+      path: options.path
     })
   } catch (err) {
     console.error('Cannot update plugin.', err)
@@ -163,21 +162,21 @@ async function updatePluginCLI (options: any) {
   process.exit(0)
 }
 
-async function uninstallPluginCLI (options: any) {
-  if (!options['npmName']) {
+async function uninstallPluginCLI (command: Command, options: OptionValues) {
+  if (!options.npmName) {
     console.error('You need to specify the npm name of the plugin/theme you want to uninstall.\n')
     program.outputHelp()
     process.exit(-1)
   }
 
-  const { url, username, password } = await getServerCredentials(options)
+  const { url, username, password } = await getServerCredentials(command)
   const accessToken = await getAdminTokenOrDie(url, username, password)
 
   try {
     await uninstallPlugin({
       url,
       accessToken,
-      npmName: options['npmName']
+      npmName: options.npmName
     })
   } catch (err) {
     console.error('Cannot uninstall plugin.', err)

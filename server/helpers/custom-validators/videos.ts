@@ -1,4 +1,6 @@
+import { UploadFilesForCheck } from 'express'
 import { values } from 'lodash'
+import * as magnetUtil from 'magnet-uri'
 import validator from 'validator'
 import { VideoFilter, VideoPrivacy, VideoRateType } from '../../../shared'
 import {
@@ -6,17 +8,17 @@ import {
   MIMETYPES,
   VIDEO_CATEGORIES,
   VIDEO_LICENCES,
+  VIDEO_LIVE,
   VIDEO_PRIVACIES,
   VIDEO_RATE_TYPES,
   VIDEO_STATES
 } from '../../initializers/constants'
-import { exists, isArray, isDateValid, isFileValid } from './misc'
-import * as magnetUtil from 'magnet-uri'
+import { exists, isArray, isDateValid, isFileMimeTypeValid, isFileValid } from './misc'
 
 const VIDEOS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEOS
 
 function isVideoFilterValid (filter: VideoFilter) {
-  return filter === 'local' || filter === 'all-local'
+  return filter === 'local' || filter === 'all-local' || filter === 'all'
 }
 
 function isVideoCategoryValid (value: any) {
@@ -77,11 +79,11 @@ function isVideoRatingTypeValid (value: string) {
 }
 
 function isVideoFileExtnameValid (value: string) {
-  return exists(value) && MIMETYPES.VIDEO.EXT_MIMETYPE[value] !== undefined
+  return exists(value) && (value === VIDEO_LIVE.EXTENSION || MIMETYPES.VIDEO.EXT_MIMETYPE[value] !== undefined)
 }
 
-function isVideoFile (files: { [ fieldname: string ]: Express.Multer.File[] } | Express.Multer.File[]) {
-  return isFileValid(files, MIMETYPES.VIDEO.MIMETYPES_REGEX, 'videofile', null)
+function isVideoFileMimeTypeValid (files: UploadFilesForCheck) {
+  return isFileMimeTypeValid(files, MIMETYPES.VIDEO.MIMETYPES_REGEX, 'videofile')
 }
 
 const videoImageTypes = CONSTRAINTS_FIELDS.VIDEOS.IMAGE.EXTNAME
@@ -142,12 +144,12 @@ export {
   isVideoFPSResolutionValid,
   isScheduleVideoUpdatePrivacyValid,
   isVideoOriginallyPublishedAtValid,
-  isVideoFile,
   isVideoMagnetUriValid,
   isVideoStateValid,
   isVideoViewsValid,
   isVideoRatingTypeValid,
   isVideoFileExtnameValid,
+  isVideoFileMimeTypeValid,
   isVideoDurationValid,
   isVideoTagValid,
   isVideoPrivacyValid,

@@ -53,7 +53,8 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
       role: USER_ROLE_VALIDATOR,
       videoQuota: USER_VIDEO_QUOTA_VALIDATOR,
       videoQuotaDaily: USER_VIDEO_QUOTA_DAILY_VALIDATOR,
-      byPassAutoBlock: null
+      byPassAutoBlock: null,
+      pluginAuth: null
     }, defaultValues)
 
     this.paramsSub = this.route.params.subscribe(routeParams => {
@@ -79,6 +80,8 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
     // A select in HTML is always mapped as a string, we convert it to number
     userUpdate.videoQuota = parseInt(this.form.value['videoQuota'], 10)
     userUpdate.videoQuotaDaily = parseInt(this.form.value['videoQuotaDaily'], 10)
+
+    if (userUpdate.pluginAuth === 'null') userUpdate.pluginAuth = null
 
     this.userService.updateUser(this.user.id, userUpdate).subscribe(
       () => {
@@ -120,6 +123,7 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
       role: userJson.role.toString(),
       videoQuota: userJson.videoQuota,
       videoQuotaDaily: userJson.videoQuotaDaily,
+      pluginAuth: userJson.pluginAuth,
       byPassAutoBlock: userJson.adminFlags & UserAdminFlag.BYPASS_VIDEO_AUTO_BLACKLIST
     })
   }

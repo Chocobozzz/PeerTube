@@ -50,7 +50,11 @@ function isHTTPSignatureVerified (httpSignatureParsed: any, actor: MActor): bool
 }
 
 function parseHTTPSignature (req: Request, clockSkew?: number) {
-  return httpSignature.parse(req, { clockSkew })
+  const headers = req.method === 'POST'
+    ? HTTP_SIGNATURE.REQUIRED_HEADERS.POST
+    : HTTP_SIGNATURE.REQUIRED_HEADERS.ALL
+
+  return httpSignature.parse(req, { clockSkew, headers })
 }
 
 // JSONLD
@@ -80,7 +84,7 @@ async function isJsonLDRSA2017Verified (fromActor: MActor, signedDocument: any) 
   return verify.verify(fromActor.publicKey, signedDocument.signature.signatureValue, 'base64')
 }
 
-async function signJsonLDObject (byActor: MActor, data: any) {
+async function signJsonLDObject <T> (byActor: MActor, data: T) {
   const signature = {
     type: 'RsaSignature2017',
     creator: byActor.url,

@@ -1,0 +1,34 @@
+<div class="actor" *ngIf="actor">
+  <div class="actor-img-edit-container">
+    <div class="banner-placeholder">
+      <img *ngIf="hasBanner()" [src]="preview || actor.bannerUrl" alt="Banner" />
+    </div>
+
+    <div *ngIf="!hasBanner()" class="actor-img-edit-button" [ngbTooltip]="bannerFormat" placement="right" container="body">
+      <my-global-icon iconName="upload"></my-global-icon>
+      <label for="bannerfile" i18n>Upload a new banner</label>
+      <input #bannerfileInput type="file" name="bannerfile" id="bannerfile" [accept]="bannerExtensions" (change)="onBannerChange(bannerfileInput)"/>
+    </div>
+
+    <div
+      *ngIf="hasBanner()" class="actor-img-edit-button"
+      #bannerPopover="ngbPopover" [ngbPopover]="bannerEditContent" popoverClass="popover-image-info" autoClose="outside" placement="right"
+    >
+      <my-global-icon iconName="edit"></my-global-icon>
+      <label for="bannerMenu" i18n>Change your banner</label>
+    </div>
+  </div>
+</div>
+
+<ng-template #bannerEditContent>
+  <div class="dropdown-item c-hand" [ngbTooltip]="bannerFormat" placement="right" container="body">
+    <my-global-icon iconName="upload"></my-global-icon>
+    <span for="bannerfile" i18n>Upload a new banner</span>
+    <input #bannerfileInput type="file" name="bannerfile" id="bannerfile" [accept]="bannerExtensions" (change)="onBannerChange(bannerfileInput)"/>
+  </div>
+
+  <div class="dropdown-item c-hand" (click)="deleteBanner()" (key.enter)="deleteBanner()">
+    <my-global-icon iconName="delete"></my-global-icon>
+    <span i18n>Remove banner</span>
+  </div>
+</ng-template>

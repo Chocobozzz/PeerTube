@@ -1,0 +1,42 @@
+<h1>
+  <my-global-icon iconName="channel" aria-hidden="true"></my-global-icon>
+  <ng-container i18n>My channels</ng-container>
+  <span class="badge badge-secondary">{{ totalItems }}</span>
+</h1>
+
+<div class="video-channels-header d-flex justify-content-between">
+  <my-advanced-input-filter (search)="onSearch($event)"></my-advanced-input-filter>
+
+  <a class="create-button" routerLink="create">
+    <my-global-icon iconName="add" aria-hidden="true"></my-global-icon>
+    <ng-container i18n>Create video channel</ng-container>
+  </a>
+</div>
+
+<div class="no-results" i18n *ngIf="totalItems === 0">No channel found.</div>
+
+<div class="video-channels">
+  <div *ngFor="let videoChannel of videoChannels; let i = index" class="video-channel">
+    <my-actor-avatar [channel]="videoChannel" [internalHref]="[ '/c', videoChannel.nameWithHost ]"></my-actor-avatar>
+
+    <div class="video-channel-info">
+      <a [routerLink]="[ '/c', videoChannel.nameWithHost ]" class="video-channel-names" i18n-title title="Channel page">
+        <div class="video-channel-display-name">{{ videoChannel.displayName }}</div>
+        <div class="video-channel-name">{{ videoChannel.nameWithHost }}</div>
+      </a>
+
+      <div i18n class="video-channel-followers">{videoChannel.followersCount, plural, =1 {1 subscriber} other {{{ videoChannel.followersCount }} subscribers}}</div>
+
+      <div i18n class="video-channel-videos">{videoChannel.videosCount, plural, =0 {No videos} =1 {1 video} other {{{ videoChannel.videosCount }} videos}}</div>
+
+      <div class="video-channel-buttons">
+        <my-edit-button label [routerLink]="[ 'update', videoChannel.nameWithHost ]"></my-edit-button>
+        <my-delete-button label (click)="deleteVideoChannel(videoChannel)"></my-delete-button>
+      </div>
+
+      <div *ngIf="!isInSmallView" class="w-100 d-flex justify-content-end">
+        <p-chart *ngIf="chartOptions && videoChannelsChartData && videoChannelsChartData[i]" type="line" [data]="videoChannelsChartData[i]" [options]="chartOptions" width="40vw" height="100px"></p-chart>
+      </div>
+    </div>
+  </div>
+</div>

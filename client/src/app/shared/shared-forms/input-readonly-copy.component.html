@@ -1,9 +1,0 @@
-<div class="input-group input-group-sm">
-  <input #urlInput (click)="urlInput.select()" type="text" class="form-control readonly" readonly [value]="value" />
-
-  <div class="input-group-append">
-    <button [cdkCopyToClipboard]="urlInput.value" (click)="activateCopiedMessage()" type="button" class="btn btn-outline-secondary">
-      <span class="glyphicon glyphicon-copy"></span>
-    </button>
-  </div>
-</div>

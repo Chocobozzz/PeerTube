@@ -31,6 +31,8 @@
     "Published": "Publikované",
     "To transcode": "K transkódování",
     "To import": "To import",
+    "Waiting for livestream": "Waiting for livestream",
+    "Livestream ended": "Livestream ended",
     "Pending": "Čekající",
     "Success": "Úspěch",
     "Failed": "Neúspěch",
@@ -240,5 +242,7 @@
     "Yoruba": "Jorubština",
     "Zhuang": "Čuangština",
     "Chinese": "Čínština",
-    "Zulu": "Zuluština"
+    "Zulu": "Zuluština",
+    "Normal mode": "Normal mode",
+    "Theater mode": "Theater mode"
 }

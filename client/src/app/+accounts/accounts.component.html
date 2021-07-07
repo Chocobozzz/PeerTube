@@ -1,55 +1,87 @@
-<div *ngIf="account" class="row">
-  <div class="sub-menu">
+<div *ngIf="account" class="root">
+  <div class="account-info">
 
-    <div class="actor">
-      <img [src]="account.avatarUrl" alt="Avatar" />
+    <div class="account-avatar-row">
+      <my-actor-avatar class="main-avatar" [account]="account"></my-actor-avatar>
 
-      <div class="actor-info">
-        <div class="actor-names">
-          <div class="actor-display-name">{{ account.displayName }}</div>
-          <div class="actor-name">
-            <span>{{ account.nameWithHost }}</span>
-            <button [cdkCopyToClipboard]="account.nameWithHostForced" (click)="activateCopiedMessage()"
-                    class="btn btn-outline-secondary btn-sm copy-button"
-            >
-              <span class="glyphicon glyphicon-copy"></span>
-            </button>
+      <div>
+        <div class="section-label" i18n>ACCOUNT</div>
+
+        <div class="actor-info">
+          <div>
+            <div class="actor-display-name">
+              <h1 i18n-title [title]="'Created on ' + (account.createdAt | date)">{{ account.displayName }}</h1>
+
+              <my-user-moderation-dropdown
+                [prependActions]="prependModerationActions"
+                buttonSize="small" [account]="account" [user]="accountUser" placement="bottom-left auto"
+                (userChanged)="onUserChanged()" (userDeleted)="onUserDeleted()"
+              ></my-user-moderation-dropdown>
+
+              <span *ngIf="accountUser?.blocked" [ngbTooltip]="accountUser.blockedReason" class="badge badge-danger" i18n>Banned</span>
+              <span *ngIf="account.mutedByUser" class="badge badge-danger" i18n>Muted</span>
+              <span *ngIf="account.mutedServerByUser" class="badge badge-danger" i18n>Instance muted</span>
+              <span *ngIf="account.mutedByInstance" class="badge badge-danger" i18n>Muted by your instance</span>
+              <span *ngIf="account.mutedServerByInstance" class="badge badge-danger" i18n>Instance muted by your instance</span>
+            </div>
+
+            <div class="actor-handle">
+              <span>@{{ account.nameWithHost }}</span>
+              <button [cdkCopyToClipboard]="account.nameWithHostForced" (click)="activateCopiedMessage()"
+                      class="btn btn-outline-secondary btn-sm copy-button" title="Copy account handle" i18n-title
+              >
+                <span class="glyphicon glyphicon-duplicate"></span>
+              </button>
+            </div>
+
+            <div class="actor-counters">
+              <span i18n>{naiveAggregatedSubscribers(), plural, =1 {1 subscriber} other {{{ naiveAggregatedSubscribers() }} subscribers}}</span>
+
+              <span class="videos-count" *ngIf="accountVideosCount !== undefined" i18n>
+                {accountVideosCount, plural, =1 {1 videos} other {{{ accountVideosCount }} videos}}
+              </span>
+            </div>
           </div>
-          <span *ngIf="accountUser?.blocked" [ngbTooltip]="accountUser.blockedReason" class="badge badge-danger" i18n>Banned</span>
-          <span *ngIf="account.mutedByUser" class="badge badge-danger" i18n>Muted</span>
-          <span *ngIf="account.mutedServerByUser" class="badge badge-danger" i18n>Instance muted</span>
-          <span *ngIf="account.mutedByInstance" class="badge badge-danger" i18n>Muted by your instance</span>
-          <span *ngIf="account.mutedServerByInstance" class="badge badge-danger" i18n>Instance muted by your instance</span>
-
-          <my-user-moderation-dropdown
-            [prependActions]="prependModerationActions"
-            buttonSize="small" [account]="account" [user]="accountUser" placement="bottom-left auto"
-            (userChanged)="onUserChanged()" (userDeleted)="onUserDeleted()"
-          ></my-user-moderation-dropdown>
         </div>
-        <div class="actor-followers" [title]="accountFollowerTitle">
-          {{ subscribersDisplayFor(naiveAggregatedSubscribers) }}
-        </div>
-      </div>
-
-      <div class="right-buttons">
-        <a *ngIf="isAccountManageable && !isInSmallView" routerLink="/my-account" class="btn btn-outline-tertiary mr-2" i18n>Manage account</a>
-        <my-subscribe-button *ngIf="videoChannels" [account]="account" [videoChannels]="videoChannels"></my-subscribe-button>
       </div>
     </div>
 
-    <div class="links w-100">
-      <ng-template #linkTemplate let-item="item">
-        <a [routerLink]="item.routerLink" routerLinkActive="active" class="title-page">{{ item.label }}</a>
-      </ng-template>
+    <div class="description" [ngClass]="{ expanded: accountDescriptionExpanded }">
+      <div class="description-html" [innerHTML]="accountDescriptionHTML"></div>
+    </div>
 
-      <list-overflow [items]="links" [itemTemplate]="linkTemplate"></list-overflow>
+    <div *ngIf="hasShowMoreDescription()" class="show-more" role="button"
+      (click)="accountDescriptionExpanded = !accountDescriptionExpanded"
+      title="Show the complete description" i18n-title i18n
+    >
+      Show more...
+    </div>
+
+    <div class="buttons">
+      <a *ngIf="isManageable()" routerLink="/my-account" class="peertube-button-link orange-button" i18n>
+        Manage account
+      </a>
+
+      <my-subscribe-button *ngIf="hasVideoChannels() && !isManageable()" [account]="account" [videoChannels]="videoChannels"></my-subscribe-button>
     </div>
   </div>
 
-  <div class="margin-content">
-    <router-outlet></router-outlet>
+  <div class="links">
+    <ng-template #linkTemplate let-item="item">
+      <a [routerLink]="item.routerLink" routerLinkActive="active" class="title-page">{{ item.label }}</a>
+    </ng-template>
+
+    <list-overflow [hidden]="hideMenu" [items]="links" [itemTemplate]="linkTemplate"></list-overflow>
+
+    <simple-search-input
+      [alwaysShow]="!isInSmallView()" (searchChanged)="searchChanged($event)"
+      (inputDisplayChanged)="onSearchInputDisplayChanged($event)" name="search-videos"
+      i18n-iconTitle icon-title="Search account videos"
+      i18n-placeholder placeholder="Search account videos"
+    ></simple-search-input>
   </div>
+
+  <router-outlet (activate)="onOutletLoaded($event)"></router-outlet>
 </div>
 
 <ng-container *ngIf="prependModerationActions">

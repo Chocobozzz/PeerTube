@@ -7,7 +7,7 @@ import {
 } from './common-objects'
 import { VideoState } from '../../videos'
 
-export interface VideoTorrentObject {
+export interface VideoObject {
   type: 'Video'
   id: string
   name: string
@@ -19,7 +19,13 @@ export interface VideoTorrentObject {
   language: ActivityIdentifierObject
   subtitleLanguage: ActivityIdentifierObject[]
   views: number
+
   sensitive: boolean
+
+  isLiveBroadcast: boolean
+  liveSaveReplay: boolean
+  permanentLive: boolean
+
   commentsEnabled: boolean
   downloadEnabled: boolean
   waitTranscoding: boolean
@@ -34,11 +40,14 @@ export interface VideoTorrentObject {
   icon: ActivityIconObject[]
 
   url: ActivityUrlObject[]
+
   likes: string
   dislikes: string
   shares: string
   comments: string
+
   attributedTo: ActivityPubAttributedTo[]
+
   to?: string[]
   cc?: string[]
 }

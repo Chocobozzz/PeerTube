@@ -1,6 +1,6 @@
-@import '_variables';
-@import '_mixins';
-@import './_player-variables';
+@use '_variables' as *;
+@use '_mixins' as *;
+@use './_player-variables' as *;
 
 $setting-transition-duration: 0.15s;
 $setting-transition-easing: ease-out;
@@ -56,13 +56,13 @@ $setting-transition-easing: ease-out;
     }
 
     .vjs-settings-sub-menu-title {
-      text-align: left;
+      text-align: start;
       font-weight: $font-semibold;
     }
 
     .vjs-settings-sub-menu-value {
       width: 100%;
-      text-align: right;
+      text-align: end;
 
       small {
         font-size: 0.85em;
@@ -132,7 +132,7 @@ $setting-transition-easing: ease-out;
         .vjs-settings-sub-menu-value::after {
           @include chevron-right(9px, 2px);
 
-          margin-left: 5px;
+          @include margin-left(5px);
         }
       }
 
@@ -142,20 +142,20 @@ $setting-transition-easing: ease-out;
         .vjs-menu-item {
           outline: 0;
           font-weight: $font-semibold;
-          text-align: right;
+          text-align: end;
           padding: 5px 8px;
 
           &.vjs-back-button {
             background-color: inherit;
             padding: 8px 8px 13px 12px;
             margin-bottom: 5px;
-            border-bottom: 1px solid grey;
-            text-align: left;
+            border-bottom: 1px solid #808080;
+            text-align: start;
 
             &::before {
               @include chevron-left(9px, 2px);
 
-              margin-right: 5px;
+              @include margin-right(5px);
             }
           }
 
@@ -182,10 +182,10 @@ $setting-transition-easing: ease-out;
           width: 200px;
 
           .vjs-menu-item {
-            text-align: left;
+            text-align: start;
 
             .vjs-menu-item-text {
-              margin-left: 25px;
+              @include margin-left(25px);
               text-transform: capitalize;
             }
           }

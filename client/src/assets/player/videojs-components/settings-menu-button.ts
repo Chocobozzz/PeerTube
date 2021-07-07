@@ -27,7 +27,7 @@ class SettingsButton extends Button {
 
   addSettingsItemHandler: typeof SettingsButton.prototype.onAddSettingsItem
   disposeSettingsItemHandler: typeof SettingsButton.prototype.onDisposeSettingsItem
-  playerClickHandler: typeof SettingsButton.prototype.onPlayerClick
+  documentClickHandler: typeof SettingsButton.prototype.onDocumentClick
   userInactiveHandler: typeof SettingsButton.prototype.onUserInactive
 
   private settingsButtonOptions: SettingsButtonOptions
@@ -51,7 +51,7 @@ class SettingsButton extends Button {
     // Event handlers
     this.addSettingsItemHandler = this.onAddSettingsItem.bind(this)
     this.disposeSettingsItemHandler = this.onDisposeSettingsItem.bind(this)
-    this.playerClickHandler = this.onPlayerClick.bind(this)
+    this.documentClickHandler = this.onDocumentClick.bind(this)
     this.userInactiveHandler = this.onUserInactive.bind(this)
 
     this.buildMenu()
@@ -61,9 +61,10 @@ class SettingsButton extends Button {
     this.player().one('play', () => this.hideDialog())
   }
 
-  onPlayerClick (event: MouseEvent) {
+  onDocumentClick (event: MouseEvent) {
     const element = event.target as HTMLElement
-    if (element.classList.contains('vjs-settings') || element.parentElement.classList.contains('vjs-settings')) {
+
+    if (element?.classList?.contains('vjs-settings') || element?.parentElement?.classList?.contains('vjs-settings')) {
       return
     }
 
@@ -98,6 +99,14 @@ class SettingsButton extends Button {
     }
   }
 
+  dispose () {
+    document.removeEventListener('click', this.documentClickHandler)
+
+    if (this.isInIframe()) {
+      window.removeEventListener('blur', this.documentClickHandler)
+    }
+  }
+
   onAddSettingsItem (event: any, data: any) {
     const [ entry, options ] = data
 
@@ -112,7 +121,11 @@ class SettingsButton extends Button {
   }
 
   bindEvents () {
-    this.player().on('click', this.playerClickHandler)
+    document.addEventListener('click', this.documentClickHandler)
+    if (this.isInIframe()) {
+      window.addEventListener('blur', this.documentClickHandler)
+    }
+
     this.player().on('addsettingsitem', this.addSettingsItemHandler)
     this.player().on('disposesettingsitem', this.disposeSettingsItemHandler)
     this.player().on('userinactive', this.userInactiveHandler)
@@ -246,6 +259,10 @@ class SettingsButton extends Button {
     for (const menuChild of this.menu.children()) {
       (menuChild as SettingsMenuItem).hideSubMenu()
     }
+  }
+
+  isInIframe () {
+    return window.self !== window.top
   }
 
 }

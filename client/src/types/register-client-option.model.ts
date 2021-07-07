@@ -1,10 +1,17 @@
-import { RegisterClientFormFieldOptions, RegisterClientVideoFieldOptions } from '@shared/models/plugins/register-client-form-field.model'
-import { RegisterClientHookOptions } from '@shared/models/plugins/register-client-hook.model'
+import {
+  RegisterClientFormFieldOptions,
+  RegisterClientHookOptions,
+  RegisterClientSettingsScript,
+  RegisterClientVideoFieldOptions,
+  ServerConfig
+} from '@shared/models'
 
 export type RegisterClientOptions = {
   registerHook: (options: RegisterClientHookOptions) => void
 
   registerVideoField: (commonOptions: RegisterClientFormFieldOptions, videoFormOptions: RegisterClientVideoFieldOptions) => void
+
+  registerSettingsScript: (options: RegisterClientSettingsScript) => void
 
   peertubeHelpers: RegisterClientHelpers
 }
@@ -12,9 +19,15 @@ export type RegisterClientOptions = {
 export type RegisterClientHelpers = {
   getBaseStaticRoute: () => string
 
+  getBaseRouterRoute: () => string
+
   isLoggedIn: () => boolean
 
+  getAuthHeader: () => { 'Authorization': string } | undefined
+
   getSettings: () => Promise<{ [ name: string ]: string }>
+
+  getServerConfig: () => Promise<ServerConfig>
 
   notifier: {
     info: (text: string, title?: string, timeout?: number) => void,

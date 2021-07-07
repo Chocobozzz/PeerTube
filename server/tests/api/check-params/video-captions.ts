@@ -1,7 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
+import { VideoCreateResult } from '@shared/models'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import {
+  buildAbsoluteFixturePath,
   cleanupTests,
   createUser,
   flushAndRunServer,
@@ -13,7 +16,6 @@ import {
   uploadVideo,
   userLogin
 } from '../../../../shared/extra-utils'
-import { join } from 'path'
 import { createVideoCaption } from '../../../../shared/extra-utils/videos/video-captions'
 
 describe('Test video captions API validator', function () {
@@ -21,7 +23,7 @@ describe('Test video captions API validator', function () {
 
   let server: ServerInfo
   let userAccessToken: string
-  let videoUUID: string
+  let video: VideoCreateResult
 
   // ---------------------------------------------------------------
 
@@ -34,7 +36,7 @@ describe('Test video captions API validator', function () {
 
     {
       const res = await uploadVideo(server.url, server.accessToken, {})
-      videoUUID = res.body.video.uuid
+      video = res.body.video
     }
 
     {
@@ -50,14 +52,14 @@ describe('Test video captions API validator', function () {
   describe('When adding video caption', function () {
     const fields = { }
     const attaches = {
-      captionfile: join(__dirname, '..', '..', 'fixtures', 'subtitle-good1.vtt')
+      captionfile: buildAbsoluteFixturePath('subtitle-good1.vtt')
     }
 
     it('Should fail without a valid uuid', async function () {
       await makeUploadRequest({
         method: 'PUT',
         url: server.url,
-        path: path + '4da6fde3-88f7-4d16-b119-108df563d0b06/captions',
+        path: path + '4da6fde3-88f7-4d16-b119-108df563d0b06/captions/fr',
         token: server.accessToken,
         fields,
         attaches
@@ -68,15 +70,16 @@ describe('Test video captions API validator', function () {
       await makeUploadRequest({
         method: 'PUT',
         url: server.url,
-        path: path + '4da6fde3-88f7-4d16-b119-108df5630b06/captions',
+        path: path + '4da6fde3-88f7-4d16-b119-108df5630b06/captions/fr',
         token: server.accessToken,
         fields,
-        attaches
+        attaches,
+        statusCodeExpected: 404
       })
     })
 
     it('Should fail with a missing language in path', async function () {
-      const captionPath = path + videoUUID + '/captions'
+      const captionPath = path + video.uuid + '/captions'
       await makeUploadRequest({
         method: 'PUT',
         url: server.url,
@@ -88,7 +91,7 @@ describe('Test video captions API validator', function () {
     })
 
     it('Should fail with an unknown language', async function () {
-      const captionPath = path + videoUUID + '/captions/15'
+      const captionPath = path + video.uuid + '/captions/15'
       await makeUploadRequest({
         method: 'PUT',
         url: server.url,
@@ -100,19 +103,19 @@ describe('Test video captions API validator', function () {
     })
 
     it('Should fail without access token', async function () {
-      const captionPath = path + videoUUID + '/captions/fr'
+      const captionPath = path + video.uuid + '/captions/fr'
       await makeUploadRequest({
         method: 'PUT',
         url: server.url,
         path: captionPath,
         fields,
         attaches,
-        statusCodeExpected: 401
+        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
       })
     })
 
     it('Should fail with a bad access token', async function () {
-      const captionPath = path + videoUUID + '/captions/fr'
+      const captionPath = path + video.uuid + '/captions/fr'
       await makeUploadRequest({
         method: 'PUT',
         url: server.url,
@@ -120,17 +123,17 @@ describe('Test video captions API validator', function () {
         token: 'blabla',
         fields,
         attaches,
-        statusCodeExpected: 401
+        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
       })
     })
 
     // We accept any file now
     // it('Should fail with an invalid captionfile extension', async function () {
     //   const attaches = {
-    //     'captionfile': join(__dirname, '..', '..', 'fixtures', 'subtitle-bad.txt')
+    //     'captionfile': buildAbsoluteFixturePath('subtitle-bad.txt')
     //   }
     //
-    //   const captionPath = path + videoUUID + '/captions/fr'
+    //   const captionPath = path + video.uuid + '/captions/fr'
     //   await makeUploadRequest({
     //     method: 'PUT',
     //     url: server.url,
@@ -138,7 +141,7 @@ describe('Test video captions API validator', function () {
     //     token: server.accessToken,
     //     fields,
     //     attaches,
-    //     statusCodeExpected: 400
+    //     statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
     //   })
     // })
 
@@ -148,10 +151,10 @@ describe('Test video captions API validator', function () {
     //     url: server.url,
     //     accessToken: server.accessToken,
     //     language: 'zh',
-    //     videoId: videoUUID,
+    //     videoId: video.uuid,
     //     fixture: 'subtitle-bad.txt',
     //     mimeType: 'application/octet-stream',
-    //     statusCodeExpected: 400
+    //     statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
     //   })
     // })
 
@@ -160,7 +163,7 @@ describe('Test video captions API validator', function () {
         url: server.url,
         accessToken: server.accessToken,
         language: 'zh',
-        videoId: videoUUID,
+        videoId: video.uuid,
         fixture: 'subtitle-good.srt',
         mimeType: 'application/octet-stream'
       })
@@ -169,10 +172,10 @@ describe('Test video captions API validator', function () {
     // We don't check the file validity yet
     // it('Should fail with an invalid captionfile srt', async function () {
     //   const attaches = {
-    //     'captionfile': join(__dirname, '..', '..', 'fixtures', 'subtitle-bad.srt')
+    //     'captionfile': buildAbsoluteFixturePath('subtitle-bad.srt')
     //   }
     //
-    //   const captionPath = path + videoUUID + '/captions/fr'
+    //   const captionPath = path + video.uuid + '/captions/fr'
     //   await makeUploadRequest({
     //     method: 'PUT',
     //     url: server.url,
@@ -180,12 +183,12 @@ describe('Test video captions API validator', function () {
     //     token: server.accessToken,
     //     fields,
     //     attaches,
-    //     statusCodeExpected: 500
+    //     statusCodeExpected: HttpStatusCode.INTERNAL_SERVER_ERROR_500
     //   })
     // })
 
     it('Should success with the correct parameters', async function () {
-      const captionPath = path + videoUUID + '/captions/fr'
+      const captionPath = path + video.uuid + '/captions/fr'
       await makeUploadRequest({
         method: 'PUT',
         url: server.url,
@@ -193,7 +196,7 @@ describe('Test video captions API validator', function () {
         token: server.accessToken,
         fields,
         attaches,
-        statusCodeExpected: 204
+        statusCodeExpected: HttpStatusCode.NO_CONTENT_204
       })
     })
   })
@@ -204,11 +207,15 @@ describe('Test video captions API validator', function () {
     })
 
     it('Should fail with an unknown id', async function () {
-      await makeGetRequest({ url: server.url, path: path + '4da6fde3-88f7-4d16-b119-108df5630b06/captions', statusCodeExpected: 404 })
+      await makeGetRequest({
+        url: server.url,
+        path: path + '4da6fde3-88f7-4d16-b119-108df5630b06/captions',
+        statusCodeExpected: HttpStatusCode.NOT_FOUND_404
+      })
     })
 
     it('Should success with the correct parameters', async function () {
-      await makeGetRequest({ url: server.url, path: path + videoUUID + '/captions', statusCodeExpected: 200 })
+      await makeGetRequest({ url: server.url, path: path + video.shortUUID + '/captions', statusCodeExpected: HttpStatusCode.OK_200 })
     })
   })
 
@@ -226,7 +233,7 @@ describe('Test video captions API validator', function () {
         url: server.url,
         path: path + '4da6fde3-88f7-4d16-b119-108df5630b06/captions/fr',
         token: server.accessToken,
-        statusCodeExpected: 404
+        statusCodeExpected: HttpStatusCode.NOT_FOUND_404
       })
     })
 
@@ -239,33 +246,43 @@ describe('Test video captions API validator', function () {
     })
 
     it('Should fail with a missing language', async function () {
-      const captionPath = path + videoUUID + '/captions'
+      const captionPath = path + video.shortUUID + '/captions'
       await makeDeleteRequest({ url: server.url, path: captionPath, token: server.accessToken })
     })
 
     it('Should fail with an unknown language', async function () {
-      const captionPath = path + videoUUID + '/captions/15'
+      const captionPath = path + video.shortUUID + '/captions/15'
       await makeDeleteRequest({ url: server.url, path: captionPath, token: server.accessToken })
     })
 
     it('Should fail without access token', async function () {
-      const captionPath = path + videoUUID + '/captions/fr'
-      await makeDeleteRequest({ url: server.url, path: captionPath, statusCodeExpected: 401 })
+      const captionPath = path + video.shortUUID + '/captions/fr'
+      await makeDeleteRequest({ url: server.url, path: captionPath, statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
     it('Should fail with a bad access token', async function () {
-      const captionPath = path + videoUUID + '/captions/fr'
-      await makeDeleteRequest({ url: server.url, path: captionPath, token: 'coucou', statusCodeExpected: 401 })
+      const captionPath = path + video.shortUUID + '/captions/fr'
+      await makeDeleteRequest({ url: server.url, path: captionPath, token: 'coucou', statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
     it('Should fail with another user', async function () {
-      const captionPath = path + videoUUID + '/captions/fr'
-      await makeDeleteRequest({ url: server.url, path: captionPath, token: userAccessToken, statusCodeExpected: 403 })
+      const captionPath = path + video.shortUUID + '/captions/fr'
+      await makeDeleteRequest({
+        url: server.url,
+        path: captionPath,
+        token: userAccessToken,
+        statusCodeExpected: HttpStatusCode.FORBIDDEN_403
+      })
     })
 
     it('Should success with the correct parameters', async function () {
-      const captionPath = path + videoUUID + '/captions/fr'
-      await makeDeleteRequest({ url: server.url, path: captionPath, token: server.accessToken, statusCodeExpected: 204 })
+      const captionPath = path + video.shortUUID + '/captions/fr'
+      await makeDeleteRequest({
+        url: server.url,
+        path: captionPath,
+        token: server.accessToken,
+        statusCodeExpected: HttpStatusCode.NO_CONTENT_204
+      })
     })
   })
 

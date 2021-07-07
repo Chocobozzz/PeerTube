@@ -19,6 +19,9 @@ database:
   suffix: "PEERTUBE_DB_SUFFIX"
   username: "PEERTUBE_DB_USERNAME"
   password: "PEERTUBE_DB_PASSWORD"
+  ssl:
+    __name: "PEERTUBE_DB_SSL"
+    __format: "json"
 
 redis:
   hostname: "PEERTUBE_REDIS_HOSTNAME"
@@ -41,6 +44,12 @@ smtp:
     __name: "PEERTUBE_SMTP_DISABLE_STARTTLS"
     __format: "json"
   from_address: "PEERTUBE_SMTP_FROM"
+
+log:
+  level: "PEERTUBE_LOG_LEVEL"
+  log_ping_requests:
+    __name: "PEERTUBE_LOG_PING_REQUESTS"
+    __format: "json"
 
 user:
   video_quota:
@@ -106,8 +115,15 @@ transcoding:
     1080p:
       __name: "PEERTUBE_TRANSCODING_1080P"
       __format: "json"
+    1440p:
+      __name: "PEERTUBE_TRANSCODING_1440P"
+      __format: "json"
     2160p:
       __name: "PEERTUBE_TRANSCODING_2160P"
+      __format: "json"
+  webtorrent:
+    enabled:
+      __name: "PEERTUBE_TRANSCODING_WEBTORRENT_ENABLED"
       __format: "json"
   hls:
     enabled:

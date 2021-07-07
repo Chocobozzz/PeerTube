@@ -42,7 +42,9 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
       newInstanceFollower: $localize`Your instance has a new follower`,
       autoInstanceFollowing: $localize`Your instance automatically followed another instance`,
       abuseNewMessage: $localize`An abuse report received a new message`,
-      abuseStateChange: $localize`One of your abuse reports has been accepted or rejected by moderators`
+      abuseStateChange: $localize`One of your abuse reports has been accepted or rejected by moderators`,
+      newPeerTubeVersion: $localize`A new PeerTube version is available`,
+      newPluginVersion: $localize`One of your plugin/theme has a new available version`
     }
     this.notificationSettingKeys = Object.keys(this.labelNotifications) as (keyof UserNotificationSetting)[]
 
@@ -51,15 +53,15 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
       videoAutoBlacklistAsModerator: UserRight.MANAGE_VIDEO_BLACKLIST,
       newUserRegistration: UserRight.MANAGE_USERS,
       newInstanceFollower: UserRight.MANAGE_SERVER_FOLLOW,
-      autoInstanceFollowing: UserRight.MANAGE_CONFIGURATION
+      autoInstanceFollowing: UserRight.MANAGE_CONFIGURATION,
+      newPeerTubeVersion: UserRight.MANAGE_DEBUG,
+      newPluginVersion: UserRight.MANAGE_DEBUG
     }
   }
 
   ngOnInit () {
-    this.serverService.getConfig()
-        .subscribe(config => {
-          this.emailEnabled = config.email.enabled
-        })
+    const serverConfig = this.serverService.getHTMLConfig()
+    this.emailEnabled = serverConfig.email.enabled
 
     this.userInformationLoaded.subscribe(() => this.loadNotificationSettings())
   }
@@ -86,7 +88,7 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
   }
 
   private savePreferencesImpl () {
-    this.userNotificationService.updateNotificationSettings(this.user, this.user.notificationSettings)
+    this.userNotificationService.updateNotificationSettings(this.user.notificationSettings)
       .subscribe(
         () => {
           this.notifier.success($localize`Preferences saved`, undefined, 2000)

@@ -1,0 +1,35 @@
+{
+  "extends": "stylelint-config-sass-guidelines",
+  "rules": {
+    "scss/at-import-no-partial-leading-underscore": null,
+    "color-hex-case": null,
+    "color-hex-length": null,
+    "order/properties-alphabetical-order": null,
+    "selector-pseudo-element-no-unknown": [
+      true,
+      {
+        "ignorePseudoElements": [ "ng-deep" ]
+      }
+    ],
+    "max-nesting-depth": [
+      8,
+      {
+        "ignore": [ "blockless-at-rules", "pseudo-classes" ]
+      }
+    ],
+    "selector-max-compound-selectors": 9,
+    "selector-no-qualifying-type": null,
+    "scss/at-extend-no-missing-placeholder": null,
+    "number-leading-zero": null,
+    "rule-empty-line-before": null,
+    "selector-max-id": null,
+    "scss/at-function-pattern": null,
+    "function-parentheses-space-inside": "never-single-line",
+    "property-no-vendor-prefix": [
+      true,
+      {
+        "ignoreProperties": [ "mask-image", "mask-size" ]
+      }
+    ]
+  }
+}

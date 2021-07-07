@@ -62,6 +62,13 @@ export class AdminComponent implements OnInit {
         iconName: 'cross'
       })
     }
+    if (this.hasVideoCommentsRight()) {
+      moderationItems.children.push({
+        label: $localize`Video comments`,
+        routerLink: '/admin/moderation/video-comments/list',
+        iconName: 'message-circle'
+      })
+    }
     if (this.hasAccountsBlocklistRight()) {
       moderationItems.children.push({
         label: $localize`Muted accounts`,
@@ -139,5 +146,9 @@ export class AdminComponent implements OnInit {
 
   hasDebugRight () {
     return this.auth.getUser().hasRight(UserRight.MANAGE_DEBUG)
+  }
+
+  hasVideoCommentsRight () {
+    return this.auth.getUser().hasRight(UserRight.SEE_ALL_COMMENTS)
   }
 }

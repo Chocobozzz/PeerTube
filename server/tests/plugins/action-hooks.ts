@@ -1,6 +1,29 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
+import { ServerHookName, VideoPlaylistPrivacy, VideoPrivacy } from '@shared/models'
+import {
+  addVideoCommentReply,
+  addVideoCommentThread,
+  addVideoInPlaylist,
+  blockUser,
+  createLive,
+  createUser,
+  createVideoPlaylist,
+  deleteVideoComment,
+  getPluginTestPath,
+  installPlugin,
+  registerUser,
+  removeUser,
+  setAccessTokensToServers,
+  setDefaultVideoChannel,
+  unblockUser,
+  updateUser,
+  updateVideo,
+  uploadVideo,
+  userLogin,
+  viewVideo
+} from '../../../shared/extra-utils'
 import {
   cleanupTests,
   flushAndRunMultipleServers,
@@ -9,31 +32,13 @@ import {
   ServerInfo,
   waitUntilLog
 } from '../../../shared/extra-utils/server/servers'
-import {
-  addVideoCommentReply,
-  addVideoCommentThread,
-  blockUser,
-  createUser,
-  deleteVideoComment,
-  getPluginTestPath,
-  installPlugin,
-  registerUser,
-  removeUser,
-  setAccessTokensToServers,
-  unblockUser,
-  updateUser,
-  updateVideo,
-  uploadVideo,
-  userLogin,
-  viewVideo
-} from '../../../shared/extra-utils'
 
 describe('Test plugin action hooks', function () {
   let servers: ServerInfo[]
   let videoUUID: string
   let threadId: number
 
-  function checkHook (hook: string) {
+  function checkHook (hook: ServerHookName) {
     return waitUntilLog(servers[0], 'Run hook ' + hook)
   }
 
@@ -42,6 +47,7 @@ describe('Test plugin action hooks', function () {
 
     servers = await flushAndRunMultipleServers(2)
     await setAccessTokensToServers(servers)
+    await setDefaultVideoChannel(servers)
 
     await installPlugin({
       url: servers[0].url,
@@ -51,7 +57,11 @@ describe('Test plugin action hooks', function () {
 
     killallServers([ servers[0] ])
 
-    await reRunServer(servers[0])
+    await reRunServer(servers[0], {
+      live: {
+        enabled: true
+      }
+    })
   })
 
   describe('Application hooks', function () {
@@ -61,6 +71,7 @@ describe('Test plugin action hooks', function () {
   })
 
   describe('Videos hooks', function () {
+
     it('Should run action:api.video.uploaded', async function () {
       const res = await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'video' })
       videoUUID = res.body.video.uuid
@@ -78,6 +89,21 @@ describe('Test plugin action hooks', function () {
       await viewVideo(servers[0].url, videoUUID)
 
       await checkHook('action:api.video.viewed')
+    })
+  })
+
+  describe('Live hooks', function () {
+
+    it('Should run action:api.live-video.created', async function () {
+      const attributes = {
+        name: 'live',
+        privacy: VideoPrivacy.PUBLIC,
+        channelId: servers[0].videoChannel.id
+      }
+
+      await createLive(servers[0].url, servers[0].accessToken, attributes)
+
+      await checkHook('action:api.live-video.created')
     })
   })
 
@@ -151,6 +177,41 @@ describe('Test plugin action hooks', function () {
       await removeUser(servers[0].url, userId, servers[0].accessToken)
 
       await checkHook('action:api.user.deleted')
+    })
+  })
+
+  describe('Playlist hooks', function () {
+    let playlistId: number
+    let videoId: number
+
+    before(async function () {
+      {
+        const res = await createVideoPlaylist({
+          url: servers[0].url,
+          token: servers[0].accessToken,
+          playlistAttrs: {
+            displayName: 'My playlist',
+            privacy: VideoPlaylistPrivacy.PRIVATE
+          }
+        })
+        playlistId = res.body.videoPlaylist.id
+      }
+
+      {
+        const res = await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'my super name' })
+        videoId = res.body.video.id
+      }
+    })
+
+    it('Should run action:api.video-playlist-element.created', async function () {
+      await addVideoInPlaylist({
+        url: servers[0].url,
+        token: servers[0].accessToken,
+        playlistId,
+        elementAttrs: { videoId }
+      })
+
+      await checkHook('action:api.video-playlist-element.created')
     })
   })
 

@@ -1,12 +1,21 @@
-import { AbstractControl, ValidationErrors, ValidatorFn, Validators } from '@angular/forms'
+import { AbstractControl, ValidationErrors, ValidatorFn, Validators, FormControl } from '@angular/forms'
 import { BuildFormValidator } from './form-validator.model'
+
+export const trimValidator: ValidatorFn = (control: FormControl) => {
+  if (control.value.startsWith(' ') || control.value.endsWith(' ')) {
+    return { spaces: true }
+  }
+
+  return null
+}
 
 export const VIDEO_NAME_VALIDATOR: BuildFormValidator = {
   VALIDATORS: [ Validators.required, Validators.minLength(3), Validators.maxLength(120) ],
   MESSAGES: {
     'required': $localize`Video name is required.`,
     'minlength': $localize`Video name must be at least 3 characters long.`,
-    'maxlength': $localize`Video name cannot be more than 120 characters long.`
+    'maxlength': $localize`Video name cannot be more than 120 characters long.`,
+    'spaces': $localize`Video name has leading or trailing whitespace.`
   }
 }
 
@@ -64,7 +73,7 @@ export const VIDEO_TAGS_ARRAY_VALIDATOR: BuildFormValidator = {
   VALIDATORS: [ Validators.maxLength(5), arrayTagLengthValidator() ],
   MESSAGES: {
     'maxlength': $localize`A maximum of 5 tags can be used on a video.`,
-    'arrayTagLength': $localize`A tag should be more than 2, and less than 30 characters long.`
+    'arrayTagLength': $localize`A tag should be more than 1 and less than 30 characters long.`
   }
 }
 
@@ -92,7 +101,7 @@ function arrayTagLengthValidator (min = 2, max = 30): ValidatorFn {
   return (control: AbstractControl): ValidationErrors => {
     const array = control.value as Array<string>
 
-    if (array.every(e => e.length > min && e.length < max)) {
+    if (array.every(e => e.length >= min && e.length <= max)) {
       return null
     }
 

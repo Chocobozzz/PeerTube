@@ -31,6 +31,8 @@
     "Published": "已發佈",
     "To transcode": "待轉換編碼",
     "To import": "待匯入",
+    "Waiting for livestream": "等待直播",
+    "Livestream ended": "直播已結束",
     "Pending": "擱置中",
     "Success": "成功",
     "Failed": "失敗",
@@ -43,8 +45,8 @@
     "This video is not available because the remote instance is not responding.": "此影片不可用，因為遠端站臺沒有回應。",
     "This playlist does not exist": "此播放清單不存在",
     "We cannot fetch the playlist. Please try again later.": "我們無法擷取播放清單。請稍後再試。",
-    "Playlist: {1}": "Playlist: {1}",
-    "By {1}": "By {1}",
+    "Playlist: {1}": "播放清單: {1}",
+    "By {1}": "{1} 製作",
     "Unavailable video": "影片不可用",
     "Misc": "雜項",
     "Unknown": "未知",
@@ -240,5 +242,7 @@
     "Yoruba": "約魯巴語",
     "Zhuang": "壯語",
     "Chinese": "漢語",
-    "Zulu": "祖魯語"
+    "Zulu": "祖魯語",
+    "Normal mode": "一般模式",
+    "Theater mode": "劇院模式"
 }

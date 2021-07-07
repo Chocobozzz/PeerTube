@@ -1,0 +1,51 @@
+<div class="root">
+
+  <div class="playlist-info">
+    <my-video-playlist-miniature
+      *ngIf="playlist" [playlist]="playlist" [toManage]="false" [displayChannel]="true"
+      [displayDescription]="true" [displayPrivacy]="true"
+    ></my-video-playlist-miniature>
+
+    <div class="playlist-buttons">
+      <button (click)="showShareModal()" class="action-button share-button">
+        <my-global-icon iconName="share" aria-hidden="true"></my-global-icon>
+        <span class="icon-text" i18n>Share</span>
+      </button>
+
+      <my-action-dropdown
+        *ngIf="isRegularPlaylist(playlist)"
+        [entry]="playlist" [actions]="playlistActions" label="More"
+      ></my-action-dropdown>
+    </div>
+
+  </div>
+
+  <div class="playlist-elements">
+    <div class="no-results" *ngIf="pagination.totalItems === 0">
+      <div i18n>No videos in this playlist.</div>
+
+      <div i18n>
+        Browse videos on PeerTube to add them in your playlist.
+      </div>
+
+      <div i18n>
+        See the <a target="_blank" href="https://docs.joinpeertube.org/use-library?id=playlist">documentation</a> for more information.
+      </div>
+    </div>
+
+    <div
+      class="videos" myInfiniteScroller [autoInit]="true" (nearOfBottom)="onNearOfBottom()"
+      cdkDropList (cdkDropListDropped)="drop($event)" [dataObservable]="onDataSubject.asObservable()"
+    >
+      <div class="video" *ngFor="let playlistElement of playlistElements; trackBy: trackByFn" cdkDrag [cdkDragStartDelay]="getDragStartDelay()">
+        <my-video-playlist-element-miniature
+          [playlistElement]="playlistElement" [playlist]="playlist" [owned]="true" (elementRemoved)="onElementRemoved($event)"
+          [position]="playlistElement.position"
+        >
+        </my-video-playlist-element-miniature>
+      </div>
+    </div>
+  </div>
+</div>
+
+<my-video-share #videoShareModal [playlist]="playlist"></my-video-share>

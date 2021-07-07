@@ -4,11 +4,14 @@ block title
   | Account verification
 
 block content
-  p Welcome to PeerTube!
+  p Welcome to #{instanceName}!
   p.
-    You just created an account #[a(href=WEBSERVER.URL) #{WEBSERVER.HOST}], your new PeerTube instance. 
+    You just created an account at #[a(href=WEBSERVER.URL) #{instanceName}].
     Your username there is: #{username}.
   p.
-    To start using PeerTube on #[a(href=WEBSERVER.URL) #{WEBSERVER.HOST}] you must verify your email first! 
-    Please follow #[a(href=verifyEmailUrl) this link] to verify this email belongs to you: #[a(href=verifyEmailUrl) #{verifyEmailUrl}] 
+    To start using your account you must verify your email first!
+    Please follow #[a(href=verifyEmailUrl) this link] to verify this email belongs to you.
+  p.
+    If you can't see the verification link above you can use the following link #[a(href=verifyEmailUrl) #{verifyEmailUrl}]
+  p.
     If you are not the person who initiated this request, please ignore this email.

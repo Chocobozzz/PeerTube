@@ -1,27 +1,23 @@
-import { ACTIVITY_PUB, JOB_REQUEST_TIMEOUT, WEBSERVER } from '../../initializers/constants'
-import { doRequest } from '../../helpers/requests'
-import { logger } from '../../helpers/logger'
 import * as Bluebird from 'bluebird'
-import { ActivityPubOrderedCollection } from '../../../shared/models/activitypub'
 import { URL } from 'url'
+import { ActivityPubOrderedCollection } from '../../../shared/models/activitypub'
+import { logger } from '../../helpers/logger'
+import { doJSONRequest } from '../../helpers/requests'
+import { ACTIVITY_PUB, WEBSERVER } from '../../initializers/constants'
 
 type HandlerFunction<T> = (items: T[]) => (Promise<any> | Bluebird<any>)
 type CleanerFunction = (startedDate: Date) => (Promise<any> | Bluebird<any>)
 
-async function crawlCollectionPage <T> (uri: string, handler: HandlerFunction<T>, cleaner?: CleanerFunction) {
-  logger.info('Crawling ActivityPub data on %s.', uri)
+async function crawlCollectionPage <T> (argUrl: string, handler: HandlerFunction<T>, cleaner?: CleanerFunction) {
+  let url = argUrl
 
-  const options = {
-    method: 'GET',
-    uri,
-    json: true,
-    activityPub: true,
-    timeout: JOB_REQUEST_TIMEOUT
-  }
+  logger.info('Crawling ActivityPub data on %s.', url)
+
+  const options = { activityPub: true }
 
   const startDate = new Date()
 
-  const response = await doRequest<ActivityPubOrderedCollection<T>>(options)
+  const response = await doJSONRequest<ActivityPubOrderedCollection<T>>(url, options)
   const firstBody = response.body
 
   const limit = ACTIVITY_PUB.FETCH_PAGE_LIMIT
@@ -35,9 +31,9 @@ async function crawlCollectionPage <T> (uri: string, handler: HandlerFunction<T>
       const remoteHost = new URL(nextLink).host
       if (remoteHost === WEBSERVER.HOST) continue
 
-      options.uri = nextLink
+      url = nextLink
 
-      const res = await doRequest<ActivityPubOrderedCollection<T>>(options)
+      const res = await doJSONRequest<ActivityPubOrderedCollection<T>>(url, options)
       body = res.body
     } else {
       // nextLink is already the object we want
@@ -49,7 +45,7 @@ async function crawlCollectionPage <T> (uri: string, handler: HandlerFunction<T>
 
     if (Array.isArray(body.orderedItems)) {
       const items = body.orderedItems
-      logger.info('Processing %i ActivityPub items for %s.', items.length, options.uri)
+      logger.info('Processing %i ActivityPub items for %s.', items.length, url)
 
       await handler(items)
     }

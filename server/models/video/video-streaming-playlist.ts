@@ -1,28 +1,19 @@
+import * as memoizee from 'memoizee'
+import { join } from 'path'
+import { Op, QueryTypes } from 'sequelize'
 import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, HasMany, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { VideoFileModel } from '@server/models/video/video-file'
+import { MStreamingPlaylist } from '@server/types/models'
+import { VideoStreamingPlaylistType } from '../../../shared/models/videos/video-streaming-playlist.type'
+import { sha1 } from '../../helpers/core-utils'
+import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
+import { isArrayOf } from '../../helpers/custom-validators/misc'
 import { isVideoFileInfoHashValid } from '../../helpers/custom-validators/videos'
+import { CONSTRAINTS_FIELDS, MEMOIZE_LENGTH, MEMOIZE_TTL, P2P_MEDIA_LOADER_PEER_VERSION, STATIC_PATHS } from '../../initializers/constants'
+import { VideoRedundancyModel } from '../redundancy/video-redundancy'
 import { throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
-import { VideoRedundancyModel } from '../redundancy/video-redundancy'
-import { VideoStreamingPlaylistType } from '../../../shared/models/videos/video-streaming-playlist.type'
-import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
-import {
-  CONSTRAINTS_FIELDS,
-  MEMOIZE_LENGTH,
-  MEMOIZE_TTL,
-  P2P_MEDIA_LOADER_PEER_VERSION,
-  STATIC_DOWNLOAD_PATHS,
-  STATIC_PATHS
-} from '../../initializers/constants'
-import { join } from 'path'
-import { sha1 } from '../../helpers/core-utils'
-import { isArrayOf } from '../../helpers/custom-validators/misc'
-import { Op, QueryTypes } from 'sequelize'
-import { MStreamingPlaylist, MStreamingPlaylistVideo, MVideoFile } from '@server/types/models'
-import { VideoFileModel } from '@server/models/video/video-file'
-import { getTorrentFileName, getTorrentFilePath, getVideoFilename } from '@server/lib/video-paths'
-import * as memoizee from 'memoizee'
-import { remove } from 'fs-extra'
-import { logger } from '@server/helpers/logger'
+import { AttributesOnly } from '@shared/core-utils'
 
 @Table({
   tableName: 'videoStreamingPlaylist',
@@ -40,7 +31,7 @@ import { logger } from '@server/helpers/logger'
     }
   ]
 })
-export class VideoStreamingPlaylistModel extends Model<VideoStreamingPlaylistModel> {
+export class VideoStreamingPlaylistModel extends Model<Partial<AttributesOnly<VideoStreamingPlaylistModel>>> {
   @CreatedAt
   createdAt: Date
 
@@ -153,6 +144,17 @@ export class VideoStreamingPlaylistModel extends Model<VideoStreamingPlaylistMod
     return VideoStreamingPlaylistModel.findByPk(id, options)
   }
 
+  static loadHLSPlaylistByVideo (videoId: number) {
+    const options = {
+      where: {
+        type: VideoStreamingPlaylistType.HLS,
+        videoId
+      }
+    }
+
+    return VideoStreamingPlaylistModel.findOne(options)
+  }
+
   static getHlsPlaylistFilename (resolution: number) {
     return resolution + '.m3u8'
   }
@@ -173,7 +175,9 @@ export class VideoStreamingPlaylistModel extends Model<VideoStreamingPlaylistMod
     return join(STATIC_PATHS.STREAMING_PLAYLISTS.HLS, videoUUID, VideoStreamingPlaylistModel.getHlsPlaylistFilename(resolution))
   }
 
-  static getHlsSha256SegmentsStaticPath (videoUUID: string) {
+  static getHlsSha256SegmentsStaticPath (videoUUID: string, isLive: boolean) {
+    if (isLive) return join('/live', 'segments-sha256', videoUUID)
+
     return join(STATIC_PATHS.STREAMING_PLAYLISTS.HLS, videoUUID, VideoStreamingPlaylistModel.getHlsSha256SegmentsFilename())
   }
 
@@ -183,26 +187,6 @@ export class VideoStreamingPlaylistModel extends Model<VideoStreamingPlaylistMod
     return 'unknown'
   }
 
-  getVideoRedundancyUrl (baseUrlHttp: string) {
-    return baseUrlHttp + STATIC_PATHS.REDUNDANCY + this.getStringType() + '/' + this.Video.uuid
-  }
-
-  getTorrentDownloadUrl (videoFile: MVideoFile, baseUrlHttp: string) {
-    return baseUrlHttp + STATIC_DOWNLOAD_PATHS.TORRENTS + getTorrentFileName(this, videoFile)
-  }
-
-  getVideoFileDownloadUrl (videoFile: MVideoFile, baseUrlHttp: string) {
-    return baseUrlHttp + STATIC_DOWNLOAD_PATHS.HLS_VIDEOS + getVideoFilename(this, videoFile)
-  }
-
-  getVideoFileUrl (videoFile: MVideoFile, baseUrlHttp: string) {
-    return baseUrlHttp + join(STATIC_PATHS.STREAMING_PLAYLISTS.HLS, this.Video.uuid, getVideoFilename(this, videoFile))
-  }
-
-  getTorrentUrl (videoFile: MVideoFile, baseUrlHttp: string) {
-    return baseUrlHttp + join(STATIC_PATHS.TORRENTS, getTorrentFileName(this, videoFile))
-  }
-
   getTrackerUrls (baseUrlHttp: string, baseUrlWs: string) {
     return [ baseUrlWs + '/tracker/socket', baseUrlHttp + '/tracker/announce' ]
   }
@@ -210,11 +194,5 @@ export class VideoStreamingPlaylistModel extends Model<VideoStreamingPlaylistMod
   hasSameUniqueKeysThan (other: MStreamingPlaylist) {
     return this.type === other.type &&
       this.videoId === other.videoId
-  }
-
-  removeTorrent (this: MStreamingPlaylistVideo, videoFile: MVideoFile) {
-    const torrentPath = getTorrentFilePath(this, videoFile)
-    return remove(torrentPath)
-      .catch(err => logger.warn('Cannot delete torrent %s.', torrentPath, { err }))
   }
 }

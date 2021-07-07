@@ -1,0 +1,41 @@
+<ng-template #modal let-close="close" let-dismiss="dismiss">
+  <div class="modal-header">
+    <h4 i18n class="modal-title">Live information</h4>
+
+    <my-global-icon iconName="cross" aria-label="Close" role="button" (click)="dismiss()"></my-global-icon>
+  </div>
+
+  <div class="modal-body" *ngIf="live">
+    <div>
+      <div class="badge badge-info" *ngIf="live.permanentLive" i18n>Permanent live</div>
+      <div class="badge badge-info" *ngIf="live.saveReplay" i18n>Replay will be saved</div>
+    </div>
+
+    <div class="alert alert-info">
+      <my-live-documentation-link></my-live-documentation-link>
+    </div>
+
+    <div class="form-group">
+      <label for="liveVideoRTMPUrl" i18n>Live RTMP Url</label>
+      <my-input-toggle-hidden inputId="liveVideoRTMPUrl" [value]="live.rtmpUrl" [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"></my-input-toggle-hidden>
+    </div>
+
+    <div class="form-group">
+      <label for="liveVideoStreamKey" i18n>Live stream key</label>
+      <my-input-toggle-hidden inputId="liveVideoStreamKey" [value]="live.streamKey" [withCopy]="true" [readonly]="true"></my-input-toggle-hidden>
+
+      <div class="form-group-description" i18n>⚠️ Never share your stream key with anyone.</div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <div class="form-group inputs">
+      <input type="button" role="button" i18n-value value="Close" class="peertube-button grey-button" (click)="dismiss()" />
+
+      <my-edit-button
+        i18n-label label="Update live settings"
+        [routerLink]="[ '/videos', 'update', video.uuid ]" (click)="dismiss()"
+      ></my-edit-button>
+    </div>
+  </div>
+</ng-template>

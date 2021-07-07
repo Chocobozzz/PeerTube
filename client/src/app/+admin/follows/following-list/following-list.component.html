@@ -4,31 +4,30 @@
 </h1>
 
 <p-table
-  [value]="following" [lazy]="true" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions"
+  [value]="following" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions"
   [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)" (onPage)="onPage($event)"
+  [lazy]="true" (onLazyLoad)="loadLazy($event)" [lazyLoadOnInit]="false"
   [showCurrentPageReport]="true" i18n-currentPageReportTemplate
   currentPageReportTemplate="Showing {{'{first}'}} to {{'{last}'}} of {{'{totalRecords}'}} hosts"
 >
   <ng-template pTemplate="caption">
     <div class="caption">
-      <div class="ml-auto has-feedback has-clear">
-        <input
-          type="text" name="table-filter" id="table-filter" i18n-placeholder placeholder="Filter..."
-          (keyup)="onSearch($event)"
-        >
-        <a class="glyphicon glyphicon-remove-sign form-control-feedback form-control-clear" (click)="resetSearch()"></a>
-        <span class="sr-only" i18n>Clear filters</span>
+      <div class="left-buttons">
+        <a class="follow-button" (click)="addDomainsToFollow()" (key.enter)="addDomainsToFollow()">
+          <my-global-icon iconName="following" aria-hidden="true"></my-global-icon>
+          <ng-container i18n>Follow instances</ng-container>
+        </a>
       </div>
-      <a class="ml-2 follow-button" (click)="addDomainsToFollow()" (key.enter)="addDomainsToFollow()">
-        <my-global-icon iconName="following" aria-hidden="true"></my-global-icon>
-        <ng-container i18n>Follow domain</ng-container>
-      </a>
+
+      <div class="ml-auto">
+        <my-advanced-input-filter (search)="onSearch($event)"></my-advanced-input-filter>
+      </div>
     </div>
   </ng-template>
 
   <ng-template pTemplate="header">
     <tr>
-      <th style="width: 150px;">Action</th>
+      <th style="width: 150px;" i18n>Action</th>
       <th i18n>Host</th>
       <th style="width: 100px;" i18n pSortableColumn="state">State <p-sortIcon field="state"></p-sortIcon></th>
       <th style="width: 150px;" i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
@@ -39,7 +38,7 @@
   <ng-template pTemplate="body" let-follow>
     <tr>
       <td class="action-cell">
-        <my-delete-button label (click)="removeFollowing(follow)"></my-delete-button>
+        <my-delete-button label="Unfollow" i18n-label (click)="removeFollowing(follow)"></my-delete-button>
       </td>
       <td>
         <a [href]="'https://' + follow.following.host" i18n-title title="Open instance in a new tab" target="_blank" rel="noopener noreferrer">

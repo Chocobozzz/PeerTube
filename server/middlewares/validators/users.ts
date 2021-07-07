@@ -1,8 +1,14 @@
-import * as Bluebird from 'bluebird'
 import * as express from 'express'
 import { body, param, query } from 'express-validator'
 import { omit } from 'lodash'
-import { isIdOrUUIDValid, toBooleanOrNull, toIntOrNull } from '../../helpers/custom-validators/misc'
+import { Hooks } from '@server/lib/plugins/hooks'
+import { MUserDefault } from '@server/types/models'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
+import { UserRole } from '../../../shared/models/users'
+import { UserRegister } from '../../../shared/models/users/user-register.model'
+import { isActorPreferredUsernameValid } from '../../helpers/custom-validators/activitypub/actor'
+import { toBooleanOrNull, toIntOrNull } from '../../helpers/custom-validators/misc'
+import { isThemeNameValid } from '../../helpers/custom-validators/plugins'
 import {
   isNoInstanceConfigWarningModal,
   isNoWelcomeModal,
@@ -22,25 +28,19 @@ import {
   isUserVideoQuotaValid,
   isUserVideosHistoryEnabledValid
 } from '../../helpers/custom-validators/users'
-import { logger } from '../../helpers/logger'
-import { isSignupAllowed, isSignupAllowedForCurrentIP } from '../../helpers/signup'
-import { Redis } from '../../lib/redis'
-import { UserModel } from '../../models/account/user'
-import { areValidationErrors } from './utils'
-import { ActorModel } from '../../models/activitypub/actor'
-import { isActorPreferredUsernameValid } from '../../helpers/custom-validators/activitypub/actor'
 import { isVideoChannelNameValid } from '../../helpers/custom-validators/video-channels'
-import { UserRegister } from '../../../shared/models/users/user-register.model'
-import { isThemeNameValid } from '../../helpers/custom-validators/plugins'
+import { logger } from '../../helpers/logger'
 import { isThemeRegistered } from '../../lib/plugins/theme-utils'
-import { doesVideoExist } from '../../helpers/middlewares'
-import { UserRole } from '../../../shared/models/users'
-import { MUserDefault } from '@server/types/models'
-import { Hooks } from '@server/lib/plugins/hooks'
+import { Redis } from '../../lib/redis'
+import { isSignupAllowed, isSignupAllowedForCurrentIP } from '../../lib/signup'
+import { ActorModel } from '../../models/actor/actor'
+import { UserModel } from '../../models/user/user'
+import { areValidationErrors, doesVideoExist, isValidVideoIdParam } from './shared'
 
 const usersListValidator = [
   query('blocked')
     .optional()
+    .customSanitizer(toBooleanOrNull)
     .isBoolean().withMessage('Should be a valid boolean banned state'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -72,20 +72,23 @@ const usersAddValidator = [
 
     const authUser = res.locals.oauth.token.User
     if (authUser.role !== UserRole.ADMINISTRATOR && req.body.role !== UserRole.USER) {
-      return res.status(403)
-        .json({ error: 'You can only create users (and not administrators or moderators)' })
+      return res.fail({
+        status: HttpStatusCode.FORBIDDEN_403,
+        message: 'You can only create users (and not administrators or moderators)'
+      })
     }
 
     if (req.body.channelName) {
       if (req.body.channelName === req.body.username) {
-        return res.status(400)
-          .json({ error: 'Channel name cannot be the same as user username.' })
+        return res.fail({ message: 'Channel name cannot be the same as user username.' })
       }
 
       const existing = await ActorModel.loadLocalByName(req.body.channelName)
       if (existing) {
-        return res.status(409)
-          .json({ error: `Channel with name ${req.body.channelName} already exists.` })
+        return res.fail({
+          status: HttpStatusCode.CONFLICT_409,
+          message: `Channel with name ${req.body.channelName} already exists.`
+        })
       }
     }
 
@@ -117,19 +120,19 @@ const usersRegisterValidator = [
     const body: UserRegister = req.body
     if (body.channel) {
       if (!body.channel.name || !body.channel.displayName) {
-        return res.status(400)
-          .json({ error: 'Channel is optional but if you specify it, channel.name and channel.displayName are required.' })
+        return res.fail({ message: 'Channel is optional but if you specify it, channel.name and channel.displayName are required.' })
       }
 
       if (body.channel.name === body.username) {
-        return res.status(400)
-                  .json({ error: 'Channel name cannot be the same as user username.' })
+        return res.fail({ message: 'Channel name cannot be the same as user username.' })
       }
 
       const existing = await ActorModel.loadLocalByName(body.channel.name)
       if (existing) {
-        return res.status(409)
-                  .json({ error: `Channel with name ${body.channel.name} already exists.` })
+        return res.fail({
+          status: HttpStatusCode.CONFLICT_409,
+          message: `Channel with name ${body.channel.name} already exists.`
+        })
       }
     }
 
@@ -148,8 +151,7 @@ const usersRemoveValidator = [
 
     const user = res.locals.user
     if (user.username === 'root') {
-      return res.status(400)
-                .json({ error: 'Cannot remove the root user' })
+      return res.fail({ message: 'Cannot remove the root user' })
     }
 
     return next()
@@ -168,8 +170,7 @@ const usersBlockingValidator = [
 
     const user = res.locals.user
     if (user.username === 'root') {
-      return res.status(400)
-                .json({ error: 'Cannot block the root user' })
+      return res.fail({ message: 'Cannot block the root user' })
     }
 
     return next()
@@ -180,9 +181,7 @@ const deleteMeValidator = [
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const user = res.locals.oauth.token.User
     if (user.username === 'root') {
-      return res.status(400)
-                .json({ error: 'You cannot delete your root account.' })
-                .end()
+      return res.fail({ message: 'You cannot delete your root account.' })
     }
 
     return next()
@@ -191,11 +190,13 @@ const deleteMeValidator = [
 
 const usersUpdateValidator = [
   param('id').isInt().not().isEmpty().withMessage('Should have a valid id'),
+
   body('password').optional().custom(isUserPasswordValid).withMessage('Should have a valid password'),
   body('email').optional().isEmail().withMessage('Should have a valid email attribute'),
   body('emailVerified').optional().isBoolean().withMessage('Should have a valid email verified attribute'),
   body('videoQuota').optional().custom(isUserVideoQuotaValid).withMessage('Should have a valid user quota'),
   body('videoQuotaDaily').optional().custom(isUserVideoQuotaDailyValid).withMessage('Should have a valid daily user quota'),
+  body('pluginAuth').optional(),
   body('role')
     .optional()
     .customSanitizer(toIntOrNull)
@@ -210,8 +211,7 @@ const usersUpdateValidator = [
 
     const user = res.locals.user
     if (user.username === 'root' && req.body.role !== undefined && user.role !== req.body.role) {
-      return res.status(400)
-        .json({ error: 'Cannot change root role.' })
+      return res.fail({ message: 'Cannot change root role.' })
     }
 
     return next()
@@ -266,18 +266,18 @@ const usersUpdateMeValidator = [
 
     if (req.body.password || req.body.email) {
       if (user.pluginAuth !== null) {
-        return res.status(400)
-                  .json({ error: 'You cannot update your email or password that is associated with an external auth system.' })
+        return res.fail({ message: 'You cannot update your email or password that is associated with an external auth system.' })
       }
 
       if (!req.body.currentPassword) {
-        return res.status(400)
-                  .json({ error: 'currentPassword parameter is missing.' })
+        return res.fail({ message: 'currentPassword parameter is missing.' })
       }
 
       if (await user.isPasswordMatch(req.body.currentPassword) !== true) {
-        return res.status(401)
-                  .json({ error: 'currentPassword is invalid.' })
+        return res.fail({
+          status: HttpStatusCode.UNAUTHORIZED_401,
+          message: 'currentPassword is invalid.'
+        })
       }
     }
 
@@ -302,7 +302,7 @@ const usersGetValidator = [
 ]
 
 const usersVideoRatingValidator = [
-  param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid video id'),
+  isValidVideoIdParam('videoId'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking usersVideoRating parameters', { parameters: req.params })
@@ -328,8 +328,10 @@ const ensureUserRegistrationAllowed = [
     )
 
     if (allowedResult.allowed === false) {
-      return res.status(403)
-                .json({ error: allowedResult.errorMessage || 'User registration is not enabled or user limit is reached.' })
+      return res.fail({
+        status: HttpStatusCode.FORBIDDEN_403,
+        message: allowedResult.errorMessage || 'User registration is not enabled or user limit is reached.'
+      })
     }
 
     return next()
@@ -341,8 +343,10 @@ const ensureUserRegistrationAllowedForIP = [
     const allowed = isSignupAllowedForCurrentIP(req.ip)
 
     if (allowed === false) {
-      return res.status(403)
-                .json({ error: 'You are not on a network authorized for registration.' })
+      return res.fail({
+        status: HttpStatusCode.FORBIDDEN_403,
+        message: 'You are not on a network authorized for registration.'
+      })
     }
 
     return next()
@@ -361,7 +365,7 @@ const usersAskResetPasswordValidator = [
     if (!exists) {
       logger.debug('User with email %s does not exist (asking reset password).', req.body.email)
       // Do not leak our emails
-      return res.status(204).end()
+      return res.status(HttpStatusCode.NO_CONTENT_204).end()
     }
 
     return next()
@@ -383,9 +387,10 @@ const usersResetPasswordValidator = [
     const redisVerificationString = await Redis.Instance.getResetPasswordLink(user.id)
 
     if (redisVerificationString !== req.body.verificationString) {
-      return res
-        .status(403)
-        .json({ error: 'Invalid verification string.' })
+      return res.fail({
+        status: HttpStatusCode.FORBIDDEN_403,
+        message: 'Invalid verification string.'
+      })
     }
 
     return next()
@@ -403,7 +408,7 @@ const usersAskSendVerifyEmailValidator = [
     if (!exists) {
       logger.debug('User with email %s does not exist (asking verify email).', req.body.email)
       // Do not leak our emails
-      return res.status(204).end()
+      return res.status(HttpStatusCode.NO_CONTENT_204).end()
     }
 
     return next()
@@ -430,9 +435,10 @@ const usersVerifyEmailValidator = [
     const redisVerificationString = await Redis.Instance.getVerifyEmailLink(user.id)
 
     if (redisVerificationString !== req.body.verificationString) {
-      return res
-        .status(403)
-        .json({ error: 'Invalid verification string.' })
+      return res.fail({
+        status: HttpStatusCode.FORBIDDEN_403,
+        message: 'Invalid verification string.'
+      })
     }
 
     return next()
@@ -448,8 +454,10 @@ const ensureAuthUserOwnsAccountValidator = [
     const user = res.locals.oauth.token.User
 
     if (res.locals.account.id !== user.Account.id) {
-      return res.status(403)
-                .json({ error: 'Only owner can access ratings list.' })
+      return res.fail({
+        status: HttpStatusCode.FORBIDDEN_403,
+        message: 'Only owner can access ratings list.'
+      })
     }
 
     return next()
@@ -464,8 +472,10 @@ const ensureCanManageUser = [
     if (authUser.role === UserRole.ADMINISTRATOR) return next()
     if (authUser.role === UserRole.MODERATOR && onUser.role === UserRole.USER) return next()
 
-    return res.status(403)
-      .json({ error: 'A moderator can only manager users.' })
+    return res.fail({
+      status: HttpStatusCode.FORBIDDEN_403,
+      message: 'A moderator can only manager users.'
+    })
   }
 ]
 
@@ -497,7 +507,7 @@ export {
 
 function checkUserIdExist (idArg: number | string, res: express.Response, withStats = false) {
   const id = parseInt(idArg + '', 10)
-  return checkUserExist(() => UserModel.loadById(id, withStats), res)
+  return checkUserExist(() => UserModel.loadByIdWithChannels(id, withStats), res)
 }
 
 function checkUserEmailExist (email: string, res: express.Response, abortResponse = true) {
@@ -508,34 +518,39 @@ async function checkUserNameOrEmailDoesNotAlreadyExist (username: string, email:
   const user = await UserModel.loadByUsernameOrEmail(username, email)
 
   if (user) {
-    res.status(409)
-              .json({ error: 'User with this username or email already exists.' })
+    res.fail({
+      status: HttpStatusCode.CONFLICT_409,
+      message: 'User with this username or email already exists.'
+    })
     return false
   }
 
   const actor = await ActorModel.loadLocalByName(username)
   if (actor) {
-    res.status(409)
-       .json({ error: 'Another actor (account/channel) with this name on this instance already exists or has already existed.' })
+    res.fail({
+      status: HttpStatusCode.CONFLICT_409,
+      message: 'Another actor (account/channel) with this name on this instance already exists or has already existed.'
+    })
     return false
   }
 
   return true
 }
 
-async function checkUserExist (finder: () => Bluebird<MUserDefault>, res: express.Response, abortResponse = true) {
+async function checkUserExist (finder: () => Promise<MUserDefault>, res: express.Response, abortResponse = true) {
   const user = await finder()
 
   if (!user) {
     if (abortResponse === true) {
-      res.status(404)
-        .json({ error: 'User not found' })
+      res.fail({
+        status: HttpStatusCode.NOT_FOUND_404,
+        message: 'User not found'
+      })
     }
 
     return false
   }
 
   res.locals.user = user
-
   return true
 }

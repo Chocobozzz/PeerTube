@@ -1,0 +1,125 @@
+<ng-container [formGroup]="form">
+
+  <div class="form-row mt-5"> <!-- cache grid -->
+    <div class="form-group col-12 col-lg-4 col-xl-3">
+      <div i18n class="inner-form-title">CACHE</div>
+      <div i18n class="inner-form-description">
+        Some files are not federated, and fetched when necessary. Define their caching policies.
+      </div>
+    </div>
+
+    <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
+
+      <ng-container formGroupName="cache">
+        <div class="form-group" formGroupName="previews">
+          <label i18n for="cachePreviewsSize">Number of previews to keep in cache</label>
+
+          <div class="number-with-unit">
+            <input
+              type="number" min="0" id="cachePreviewsSize" class="form-control"
+              formControlName="size" [ngClass]="{ 'input-error': formErrors['cache.previews.size'] }"
+            >
+            <span i18n>{getCacheSize('previews'), plural, =1 {cached image} other {cached images}}</span>
+          </div>
+
+          <div *ngIf="formErrors.cache.previews.size" class="form-error">{{ formErrors.cache.previews.size }}</div>
+        </div>
+
+        <div class="form-group" formGroupName="captions">
+          <label i18n for="cacheCaptionsSize">Number of video captions to keep in cache</label>
+
+          <div class="number-with-unit">
+            <input
+              type="number" min="0" id="cacheCaptionsSize" class="form-control"
+              formControlName="size" [ngClass]="{ 'input-error': formErrors['cache.captions.size'] }"
+            >
+            <span i18n>{getCacheSize('captions'), plural, =1 {cached caption} other {cached captions}}</span>
+          </div>
+
+          <div *ngIf="formErrors.cache.captions.size" class="form-error">{{ formErrors.cache.captions.size }}</div>
+        </div>
+
+        <div class="form-group" formGroupName="torrents">
+          <label i18n for="cacheTorrentsSize">Number of video torrents to keep in cache</label>
+
+          <div class="number-with-unit">
+            <input
+              type="number" min="0" id="cacheTorrentsSize" class="form-control"
+              formControlName="size" [ngClass]="{ 'input-error': formErrors['cache.torrents.size'] }"
+            >
+            <span i18n>{getCacheSize('torrents'), plural, =1 {cached torrent} other {cached torrents}}</span>
+          </div>
+
+          <div *ngIf="formErrors.cache.torrents.size" class="form-error">{{ formErrors.cache.torrents.size }}</div>
+        </div>
+      </ng-container>
+
+    </div>
+  </div>
+
+  <div class="form-row mt-4"> <!-- cache grid -->
+    <div class="form-group col-12 col-lg-4 col-xl-3">
+      <div class="anchor" id="customizations"></div> <!-- customizations anchor -->
+      <div i18n class="inner-form-title">CUSTOMIZATIONS</div>
+      <div i18n class="inner-form-description">
+        Slight modifications to your PeerTube instance for when creating a plugin or theme is overkill.
+      </div>
+    </div>
+
+    <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
+
+      <ng-container formGroupName="instance">
+        <ng-container formGroupName="customizations">
+          <div class="form-group">
+            <label i18n for="customizationJavascript">JavaScript</label>
+            <my-help>
+              <ng-template ptTemplate="customHtml">
+                <ng-container i18n>
+                  Write JavaScript code directly.<br />Example: <pre>console.log('my instance is amazing');</pre>
+                </ng-container>
+              </ng-template>
+            </my-help>
+
+            <textarea
+              id="customizationJavascript" formControlName="javascript" class="form-control"
+              [ngClass]="{ 'input-error': formErrors['instance.customizations.javascript'] }"
+            ></textarea>
+
+            <div *ngIf="formErrors.instance.customizations.javascript" class="form-error">{{ formErrors.instance.customizations.javascript }}</div>
+          </div>
+
+          <div class="form-group">
+            <label for="customizationCSS">CSS</label>
+
+            <my-help>
+              <ng-template ptTemplate="customHtml">
+                <ng-container i18n>
+                  Write CSS code directly. Example:<br /><br />
+<pre>
+#custom-css {{ '{' }}
+color: red;
+{{ '}' }}
+</pre>
+                  Prepend with <em>#custom-css</em> to override styles. Example:<br /><br />
+<pre>
+#custom-css .logged-in-email {{ '{' }}
+color: red;
+{{ '}' }}
+</pre>
+                </ng-container>
+              </ng-template>
+            </my-help>
+
+            <textarea
+              id="customizationCSS" formControlName="css" class="form-control"
+              [ngClass]="{ 'input-error': formErrors['instance.customizations.css'] }"
+            ></textarea>
+            <div *ngIf="formErrors.instance.customizations.css" class="form-error">{{ formErrors.instance.customizations.css }}</div>
+          </div>
+        </ng-container>
+      </ng-container>
+
+    </div>
+  </div>
+
+</ng-container>

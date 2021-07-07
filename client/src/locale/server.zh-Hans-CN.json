@@ -4,7 +4,7 @@
     "Vehicles": "汽车",
     "Art": "艺术",
     "Sports": "体育",
-    "Travels": "旅游",
+    "Travels": "旅行",
     "Gaming": "游戏",
     "People": "人物",
     "Comedy": "喜剧",
@@ -31,6 +31,8 @@
     "Published": "已发布",
     "To transcode": "转码中",
     "To import": "导入中",
+    "Waiting for livestream": "Waiting for livestream",
+    "Livestream ended": "Livestream ended",
     "Pending": "等待中",
     "Success": "成功",
     "Failed": "失败",
@@ -240,5 +242,7 @@
     "Yoruba": "约鲁巴语",
     "Zhuang": "壮语",
     "Chinese": "汉语",
-    "Zulu": "祖鲁语"
+    "Zulu": "祖鲁语",
+    "Normal mode": "一般模式",
+    "Theater mode": "剧场模式"
 }

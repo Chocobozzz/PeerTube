@@ -12,4 +12,4 @@ rm -rf ./dist/server/tools/
 mkdir -p "./dist/server/tools"
 cp -r "./server/tools/node_modules" "./dist/server/tools"
 
-npm run tsc -- --watch --project ./server/tools/tsconfig.json
+npm run tsc -- --watch --sourceMap --project ./server/tools/tsconfig.json

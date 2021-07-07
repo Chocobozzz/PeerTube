@@ -11,8 +11,8 @@ abstract class StorageService {
     return StorageService.storageSub.asObservable().pipe(filter(val => keys ? keys.includes(val) : true))
   }
 
-  getItem (key: string) {
-    return this.instance.getItem(key)
+  getItem <T extends string> (key: string) {
+    return this.instance.getItem(key) as T
   }
 
   setItem (key: string, data: any, notifyOfUpdate = true) {

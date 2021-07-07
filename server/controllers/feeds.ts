@@ -1,8 +1,10 @@
 import * as express from 'express'
 import * as Feed from 'pfeed'
+import { getCategoryLabel } from '@server/models/video/formatter/video-format-utils'
+import { VideoFilter } from '../../shared/models/videos/video-query.type'
 import { buildNSFWFilter } from '../helpers/express-utils'
 import { CONFIG } from '../initializers/config'
-import { FEEDS, ROUTE_CACHE_LIFETIME, THUMBNAILS_SIZE, WEBSERVER } from '../initializers/constants'
+import { FEEDS, PREVIEWS_SIZE, ROUTE_CACHE_LIFETIME, WEBSERVER } from '../initializers/constants'
 import {
   asyncMiddleware,
   commonVideosFiltersValidator,
@@ -11,7 +13,8 @@ import {
   setFeedFormatContentType,
   videoCommentsFeedsValidator,
   videoFeedsValidator,
-  videosSortValidator
+  videosSortValidator,
+  videoSubscriptionFeedsValidator
 } from '../middlewares'
 import { cacheRoute } from '../middlewares/cache'
 import { VideoModel } from '../models/video/video'
@@ -47,6 +50,21 @@ feedsRouter.get('/feeds/videos.:format',
   asyncMiddleware(generateVideoFeed)
 )
 
+feedsRouter.get('/feeds/subscriptions.:format',
+  videosSortValidator,
+  setDefaultVideosSort,
+  feedsFormatValidator,
+  setFeedFormatContentType,
+  asyncMiddleware(cacheRoute({
+    headerBlacklist: [
+      'Content-Type'
+    ]
+  })(ROUTE_CACHE_LIFETIME.FEEDS)),
+  commonVideosFiltersValidator,
+  asyncMiddleware(videoSubscriptionFeedsValidator),
+  asyncMiddleware(generateVideoFeedForSubscriptions)
+)
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -57,7 +75,6 @@ export {
 
 async function generateVideoCommentsFeed (req: express.Request, res: express.Response) {
   const start = 0
-
   const video = res.locals.videoAll
   const account = res.locals.account
   const videoChannel = res.locals.videoChannel
@@ -121,7 +138,6 @@ async function generateVideoCommentsFeed (req: express.Request, res: express.Res
 
 async function generateVideoFeed (req: express.Request, res: express.Response) {
   const start = 0
-
   const account = res.locals.account
   const videoChannel = res.locals.videoChannel
   const nsfw = buildNSFWFilter(res, req.query.nsfw)
@@ -147,90 +163,59 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
     queryString: new URL(WEBSERVER.URL + req.url).search
   })
 
-  const resultList = await VideoModel.listForApi({
+  const options = {
+    accountId: account ? account.id : null,
+    videoChannelId: videoChannel ? videoChannel.id : null
+  }
+
+  const { data } = await VideoModel.listForApi({
     start,
     count: FEEDS.COUNT,
     sort: req.query.sort,
     includeLocalVideos: true,
     nsfw,
-    filter: req.query.filter,
+    filter: req.query.filter as VideoFilter,
     withFiles: true,
-    accountId: account ? account.id : null,
-    videoChannelId: videoChannel ? videoChannel.id : null
+    countVideos: false,
+    ...options
   })
 
-  // Adding video items to the feed, one at a time
-  resultList.data.forEach(video => {
-    const formattedVideoFiles = video.getFormattedVideoFilesJSON()
+  addVideosToFeed(feed, data)
 
-    const torrents = formattedVideoFiles.map(videoFile => ({
-      title: video.name,
-      url: videoFile.torrentUrl,
-      size_in_bytes: videoFile.size
-    }))
+  // Now the feed generation is done, let's send it!
+  return sendFeed(feed, req, res)
+}
 
-    const videos = formattedVideoFiles.map(videoFile => {
-      const result = {
-        type: 'video/mp4',
-        medium: 'video',
-        height: videoFile.resolution.label.replace('p', ''),
-        fileSize: videoFile.size,
-        url: videoFile.fileUrl,
-        framerate: videoFile.fps,
-        duration: video.duration
-      }
+async function generateVideoFeedForSubscriptions (req: express.Request, res: express.Response) {
+  const start = 0
+  const account = res.locals.account
+  const nsfw = buildNSFWFilter(res, req.query.nsfw)
+  const name = account.getDisplayName()
+  const description = account.description
 
-      if (video.language) Object.assign(result, { lang: video.language })
-
-      return result
-    })
-
-    const categories: { value: number, label: string }[] = []
-    if (video.category) {
-      categories.push({
-        value: video.category,
-        label: VideoModel.getCategoryLabel(video.category)
-      })
-    }
-
-    feed.addItem({
-      title: video.name,
-      id: video.url,
-      link: WEBSERVER.URL + '/videos/watch/' + video.uuid,
-      description: video.getTruncatedDescription(),
-      content: video.description,
-      author: [
-        {
-          name: video.VideoChannel.Account.getDisplayName(),
-          link: video.VideoChannel.Account.Actor.url
-        }
-      ],
-      date: video.publishedAt,
-      nsfw: video.nsfw,
-      torrent: torrents,
-      videos,
-      embed: {
-        url: video.getEmbedStaticPath(),
-        allowFullscreen: true
-      },
-      player: {
-        url: video.getWatchStaticPath()
-      },
-      categories,
-      community: {
-        statistics: {
-          views: video.views
-        }
-      },
-      thumbnail: [
-        {
-          url: WEBSERVER.URL + video.getMiniatureStaticPath(),
-          height: THUMBNAILS_SIZE.height,
-          width: THUMBNAILS_SIZE.width
-        }
-      ]
-    })
+  const feed = initFeed({
+    name,
+    description,
+    resourceType: 'videos',
+    queryString: new URL(WEBSERVER.URL + req.url).search
   })
+
+  const { data } = await VideoModel.listForApi({
+    start,
+    count: FEEDS.COUNT,
+    sort: req.query.sort,
+    includeLocalVideos: false,
+    nsfw,
+    filter: req.query.filter as VideoFilter,
+
+    withFiles: true,
+    countVideos: false,
+
+    followerActorId: res.locals.user.Account.Actor.id,
+    user: res.locals.user
+  })
+
+  addVideosToFeed(feed, data)
 
   // Now the feed generation is done, let's send it!
   return sendFeed(feed, req, res)
@@ -267,6 +252,83 @@ function initFeed (parameters: {
       link: `${webserverUrl}/about`
     }
   })
+}
+
+function addVideosToFeed (feed, videos: VideoModel[]) {
+  /**
+   * Adding video items to the feed object, one at a time
+   */
+  for (const video of videos) {
+    const formattedVideoFiles = video.getFormattedVideoFilesJSON(false)
+
+    const torrents = formattedVideoFiles.map(videoFile => ({
+      title: video.name,
+      url: videoFile.torrentUrl,
+      size_in_bytes: videoFile.size
+    }))
+
+    const videos = formattedVideoFiles.map(videoFile => {
+      const result = {
+        type: 'video/mp4',
+        medium: 'video',
+        height: videoFile.resolution.label.replace('p', ''),
+        fileSize: videoFile.size,
+        url: videoFile.fileUrl,
+        framerate: videoFile.fps,
+        duration: video.duration
+      }
+
+      if (video.language) Object.assign(result, { lang: video.language })
+
+      return result
+    })
+
+    const categories: { value: number, label: string }[] = []
+    if (video.category) {
+      categories.push({
+        value: video.category,
+        label: getCategoryLabel(video.category)
+      })
+    }
+
+    feed.addItem({
+      title: video.name,
+      id: video.url,
+      link: WEBSERVER.URL + '/w/' + video.uuid,
+      description: video.getTruncatedDescription(),
+      content: video.description,
+      author: [
+        {
+          name: video.VideoChannel.Account.getDisplayName(),
+          link: video.VideoChannel.Account.Actor.url
+        }
+      ],
+      date: video.publishedAt,
+      nsfw: video.nsfw,
+      torrent: torrents,
+      videos,
+      embed: {
+        url: video.getEmbedStaticPath(),
+        allowFullscreen: true
+      },
+      player: {
+        url: video.getWatchStaticPath()
+      },
+      categories,
+      community: {
+        statistics: {
+          views: video.views
+        }
+      },
+      thumbnail: [
+        {
+          url: WEBSERVER.URL + video.getPreviewStaticPath(),
+          height: PREVIEWS_SIZE.height,
+          width: PREVIEWS_SIZE.width
+        }
+      ]
+    })
+  }
 }
 
 function sendFeed (feed, req: express.Request, res: express.Response) {

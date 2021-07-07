@@ -1,11 +1,12 @@
 import { ViewportScroller } from '@angular/common'
-import { AfterViewChecked, Component, OnInit, ViewChild } from '@angular/core'
+import { AfterViewChecked, Component, ElementRef, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
-import { ContactAdminModalComponent } from '@app/+about/about-instance/contact-admin-modal.component'
-import { ServerService } from '@app/core'
+import { Notifier, ServerService } from '@app/core'
 import { InstanceService } from '@app/shared/shared-instance'
-import { ServerConfig } from '@shared/models'
+import { copyToClipboard } from '@root-helpers/utils'
+import { HTMLServerConfig } from '@shared/models/server'
 import { ResolverData } from './about-instance.resolver'
+import { ContactAdminModalComponent } from './contact-admin-modal.component'
 
 @Component({
   selector: 'my-about-instance',
@@ -13,33 +14,36 @@ import { ResolverData } from './about-instance.resolver'
   styleUrls: [ './about-instance.component.scss' ]
 })
 export class AboutInstanceComponent implements OnInit, AfterViewChecked {
+  @ViewChild('descriptionWrapper') descriptionWrapper: ElementRef<HTMLInputElement>
   @ViewChild('contactAdminModal', { static: true }) contactAdminModal: ContactAdminModalComponent
 
   shortDescription = ''
+  descriptionContent: string
 
   html = {
-    description: '',
     terms: '',
     codeOfConduct: '',
     moderationInformation: '',
     administrator: '',
+    creationReason: '',
+    maintenanceLifetime: '',
+    businessModel: '',
     hardwareInformation: ''
   }
-
-  creationReason = ''
-  maintenanceLifetime = ''
-  businessModel = ''
 
   languages: string[] = []
   categories: string[] = []
 
-  serverConfig: ServerConfig
+  initialized = false
+
+  private serverConfig: HTMLServerConfig
 
   private lastScrollHash: string
 
   constructor (
     private viewportScroller: ViewportScroller,
     private route: ActivatedRoute,
+    private notifier: Notifier,
     private serverService: ServerService,
     private instanceService: InstanceService
   ) {}
@@ -57,33 +61,40 @@ export class AboutInstanceComponent implements OnInit, AfterViewChecked {
   }
 
   async ngOnInit () {
-    this.serverConfig = this.serverService.getTmpConfig()
-    this.serverService.getConfig()
-        .subscribe(config => this.serverConfig = config)
-
     const { about, languages, categories }: ResolverData = this.route.snapshot.data.instanceData
+
+    this.serverConfig = this.serverService.getHTMLConfig()
+
+    this.route.data.subscribe(data => {
+      if (!data?.isContact) return
+
+      const prefill = this.route.snapshot.queryParams
+
+      this.contactAdminModal.show(prefill)
+    })
 
     this.languages = languages
     this.categories = categories
 
     this.shortDescription = about.instance.shortDescription
-
-    this.creationReason = about.instance.creationReason
-    this.maintenanceLifetime = about.instance.maintenanceLifetime
-    this.businessModel = about.instance.businessModel
+    this.descriptionContent = about.instance.description
 
     this.html = await this.instanceService.buildHtml(about)
+
+    this.initialized = true
   }
 
   ngAfterViewChecked () {
-    if (window.location.hash && window.location.hash !== this.lastScrollHash) {
+    if (this.initialized && window.location.hash && window.location.hash !== this.lastScrollHash) {
       this.viewportScroller.scrollToAnchor(window.location.hash.replace('#', ''))
 
       this.lastScrollHash = window.location.hash
     }
   }
 
-  openContactModal () {
-    return this.contactAdminModal.show()
+  onClickCopyLink (anchor: HTMLAnchorElement) {
+    const link = anchor.href
+    copyToClipboard(link)
+    this.notifier.success(link, $localize `Link copied`)
   }
 }

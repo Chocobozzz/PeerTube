@@ -21,6 +21,7 @@
     (ngModelChange)="refresh()"
     [clearable]="false"
     [searchable]="false"
+    *ngIf="!isAuditLog()"
   >
     <ng-option *ngFor="let levelChoice of levelChoices" [value]="levelChoice.id">
       <ng-container *ngIf="levelChoice.id === 'debug'"><span style="font-size:80%;color:lightgray;vertical-align:text-top;">&#11044;</span> {{ levelChoice.label }}</ng-container>

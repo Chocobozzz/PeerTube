@@ -1,6 +1,11 @@
-import * as express from 'express'
 import 'multer'
+import * as express from 'express'
+import { logger } from '@server/helpers/logger'
+import { UserNotificationModel } from '@server/models/user/user-notification'
+import { getServerActor } from '@server/models/application/application'
+import { UserRight } from '../../../../shared/models/users'
 import { getFormattedObjects } from '../../../helpers/utils'
+import { addAccountInBlocklist, addServerInBlocklist, removeAccountFromBlocklist, removeServerFromBlocklist } from '../../../lib/blocklist'
 import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
@@ -19,10 +24,8 @@ import {
   unblockServerByServerValidator
 } from '../../../middlewares/validators'
 import { AccountBlocklistModel } from '../../../models/account/account-blocklist'
-import { addAccountInBlocklist, addServerInBlocklist, removeAccountFromBlocklist, removeServerFromBlocklist } from '../../../lib/blocklist'
 import { ServerBlocklistModel } from '../../../models/server/server-blocklist'
-import { UserRight } from '../../../../shared/models/users'
-import { getServerActor } from '@server/models/application/application'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const serverBlocklistRouter = express.Router()
 
@@ -100,7 +103,13 @@ async function blockAccount (req: express.Request, res: express.Response) {
 
   await addAccountInBlocklist(serverActor.Account.id, accountToBlock.id)
 
-  return res.status(204).end()
+  UserNotificationModel.removeNotificationsOf({
+    id: accountToBlock.id,
+    type: 'account',
+    forUserId: null // For all users
+  }).catch(err => logger.error('Cannot remove notifications after an account mute.', { err }))
+
+  return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
 async function unblockAccount (req: express.Request, res: express.Response) {
@@ -108,7 +117,7 @@ async function unblockAccount (req: express.Request, res: express.Response) {
 
   await removeAccountFromBlocklist(accountBlock)
 
-  return res.status(204).end()
+  return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
 async function listBlockedServers (req: express.Request, res: express.Response) {
@@ -131,7 +140,13 @@ async function blockServer (req: express.Request, res: express.Response) {
 
   await addServerInBlocklist(serverActor.Account.id, serverToBlock.id)
 
-  return res.status(204).end()
+  UserNotificationModel.removeNotificationsOf({
+    id: serverToBlock.id,
+    type: 'server',
+    forUserId: null // For all users
+  }).catch(err => logger.error('Cannot remove notifications after a server mute.', { err }))
+
+  return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
 async function unblockServer (req: express.Request, res: express.Response) {
@@ -139,5 +154,5 @@ async function unblockServer (req: express.Request, res: express.Response) {
 
   await removeServerFromBlocklist(serverBlock)
 
-  return res.status(204).end()
+  return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }

@@ -1,28 +1,30 @@
 import { QueryTypes, Transaction } from 'sequelize'
 import { Sequelize as SequelizeTypescript } from 'sequelize-typescript'
-import { AbuseModel } from '@server/models/abuse/abuse'
-import { AbuseMessageModel } from '@server/models/abuse/abuse-message'
-import { VideoAbuseModel } from '@server/models/abuse/video-abuse'
-import { VideoCommentAbuseModel } from '@server/models/abuse/video-comment-abuse'
+import { TrackerModel } from '@server/models/server/tracker'
+import { VideoTrackerModel } from '@server/models/server/video-tracker'
+import { UserModel } from '@server/models/user/user'
+import { UserNotificationModel } from '@server/models/user/user-notification'
+import { UserVideoHistoryModel } from '@server/models/user/user-video-history'
 import { isTestInstance } from '../helpers/core-utils'
 import { logger } from '../helpers/logger'
+import { AbuseModel } from '../models/abuse/abuse'
+import { AbuseMessageModel } from '../models/abuse/abuse-message'
+import { VideoAbuseModel } from '../models/abuse/video-abuse'
+import { VideoCommentAbuseModel } from '../models/abuse/video-comment-abuse'
 import { AccountModel } from '../models/account/account'
 import { AccountBlocklistModel } from '../models/account/account-blocklist'
 import { AccountVideoRateModel } from '../models/account/account-video-rate'
-import { UserModel } from '../models/account/user'
-import { UserNotificationModel } from '../models/account/user-notification'
-import { UserNotificationSettingModel } from '../models/account/user-notification-setting'
-import { UserVideoHistoryModel } from '../models/account/user-video-history'
-import { ActorModel } from '../models/activitypub/actor'
-import { ActorFollowModel } from '../models/activitypub/actor-follow'
+import { ActorModel } from '../models/actor/actor'
+import { ActorFollowModel } from '../models/actor/actor-follow'
+import { ActorImageModel } from '../models/actor/actor-image'
 import { ApplicationModel } from '../models/application/application'
-import { AvatarModel } from '../models/avatar/avatar'
 import { OAuthClientModel } from '../models/oauth/oauth-client'
 import { OAuthTokenModel } from '../models/oauth/oauth-token'
 import { VideoRedundancyModel } from '../models/redundancy/video-redundancy'
 import { PluginModel } from '../models/server/plugin'
 import { ServerModel } from '../models/server/server'
 import { ServerBlocklistModel } from '../models/server/server-blocklist'
+import { UserNotificationSettingModel } from '../models/user/user-notification-setting'
 import { ScheduleVideoUpdateModel } from '../models/video/schedule-video-update'
 import { TagModel } from '../models/video/tag'
 import { ThumbnailModel } from '../models/video/thumbnail'
@@ -34,6 +36,7 @@ import { VideoChannelModel } from '../models/video/video-channel'
 import { VideoCommentModel } from '../models/video/video-comment'
 import { VideoFileModel } from '../models/video/video-file'
 import { VideoImportModel } from '../models/video/video-import'
+import { VideoLiveModel } from '../models/video/video-live'
 import { VideoPlaylistModel } from '../models/video/video-playlist'
 import { VideoPlaylistElementModel } from '../models/video/video-playlist-element'
 import { VideoShareModel } from '../models/video/video-share'
@@ -41,6 +44,7 @@ import { VideoStreamingPlaylistModel } from '../models/video/video-streaming-pla
 import { VideoTagModel } from '../models/video/video-tag'
 import { VideoViewModel } from '../models/video/video-view'
 import { CONFIG } from './config'
+import { ActorCustomPageModel } from '@server/models/account/actor-custom-page'
 
 require('pg').defaults.parseInt8 = true // Avoid BIGINT to be converted to string
 
@@ -48,18 +52,27 @@ const dbname = CONFIG.DATABASE.DBNAME
 const username = CONFIG.DATABASE.USERNAME
 const password = CONFIG.DATABASE.PASSWORD
 const host = CONFIG.DATABASE.HOSTNAME
-const ssl = CONFIG.DATABASE.SSL
 const port = CONFIG.DATABASE.PORT
 const poolMax = CONFIG.DATABASE.POOL.MAX
+
+let dialectOptions: any = {}
+
+if (CONFIG.DATABASE.SSL) {
+  dialectOptions = {
+    ssl: {
+      rejectUnauthorized: false
+    }
+  }
+}
 
 const sequelizeTypescript = new SequelizeTypescript({
   database: dbname,
   dialect: 'postgres',
+  dialectOptions,
   host,
   port,
   username,
   password,
-  ssl,
   pool: {
     max: poolMax
   },
@@ -68,12 +81,12 @@ const sequelizeTypescript = new SequelizeTypescript({
   logging: (message: string, benchmark: number) => {
     if (process.env.NODE_DB_LOG === 'false') return
 
-    let newMessage = message
+    let newMessage = 'Executed SQL request'
     if (isTestInstance() === true && benchmark !== undefined) {
-      newMessage += ' | ' + benchmark + 'ms'
+      newMessage += ' in ' + benchmark + 'ms'
     }
 
-    logger.debug(newMessage)
+    logger.debug(newMessage, { sql: message, tags: [ 'sql' ] })
   }
 })
 
@@ -92,7 +105,7 @@ async function initDatabaseModels (silent: boolean) {
     ApplicationModel,
     ActorModel,
     ActorFollowModel,
-    AvatarModel,
+    ActorImageModel,
     AccountModel,
     OAuthClientModel,
     OAuthTokenModel,
@@ -118,6 +131,7 @@ async function initDatabaseModels (silent: boolean) {
     VideoViewModel,
     VideoRedundancyModel,
     UserVideoHistoryModel,
+    VideoLiveModel,
     AccountBlocklistModel,
     ServerBlocklistModel,
     UserNotificationModel,
@@ -126,7 +140,10 @@ async function initDatabaseModels (silent: boolean) {
     VideoPlaylistModel,
     VideoPlaylistElementModel,
     ThumbnailModel,
-    PluginModel
+    TrackerModel,
+    VideoTrackerModel,
+    PluginModel,
+    ActorCustomPageModel
   ])
 
   // Check extensions exist in the database

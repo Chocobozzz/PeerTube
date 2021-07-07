@@ -1,4 +1,4 @@
-FROM node:10-buster-slim
+FROM node:12-buster-slim
 
 # Allow to pass extra options to the npm run build
 # eg: --light --light-fr to not build all client languages
@@ -7,7 +7,7 @@ ARG NPM_RUN_BUILD_OPTS
 
 # Install dependencies
 RUN apt update \
- && apt install -y --no-install-recommends openssl ffmpeg python ca-certificates gnupg gosu \
+ && apt install -y --no-install-recommends openssl ffmpeg python ca-certificates gnupg gosu build-essential curl \
  && gosu nobody true \
  && rm /var/lib/apt/lists/* -fR
 
@@ -38,9 +38,11 @@ ENV NODE_CONFIG_DIR /config
 VOLUME /data
 VOLUME /config
 
-COPY ./support/docker/production/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
-ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+COPY ./support/docker/production/entrypoint.sh /usr/local/bin/entrypoint.sh
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+
+# Expose API and RTMP
+EXPOSE 9000 1935
 
 # Run the application
 CMD ["npm", "start"]
-EXPOSE 9000

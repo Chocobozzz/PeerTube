@@ -1,0 +1,27 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+.banner-placeholder {
+  @include block-ratio('> div, > img', $banner-inverted-ratio);
+}
+
+.banner-placeholder {
+  background-color: pvar(--greyBackgroundColor);
+}
+
+.actor-img-edit-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.actor-img-edit-button {
+  position: absolute;
+  width: auto;
+
+  label {
+    font-weight: $font-semibold;
+    margin-bottom: 0;
+  }
+}

@@ -1,8 +1,9 @@
-import { AllowNull, BelongsTo, Column, CreatedAt, Default, ForeignKey, Model, Table, UpdatedAt } from 'sequelize-typescript'
-import { ScopeNames as VideoScopeNames, VideoModel } from './video'
-import { VideoPrivacy } from '../../../shared/models/videos'
 import { Op, Transaction } from 'sequelize'
-import { MScheduleVideoUpdateFormattable, MScheduleVideoUpdateVideoAll } from '@server/types/models'
+import { AllowNull, BelongsTo, Column, CreatedAt, Default, ForeignKey, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { MScheduleVideoUpdateFormattable, MScheduleVideoUpdate } from '@server/types/models'
+import { AttributesOnly } from '@shared/core-utils'
+import { VideoPrivacy } from '../../../shared/models/videos'
+import { VideoModel } from './video'
 
 @Table({
   tableName: 'scheduleVideoUpdate',
@@ -16,7 +17,7 @@ import { MScheduleVideoUpdateFormattable, MScheduleVideoUpdateVideoAll } from '@
     }
   ]
 })
-export class ScheduleVideoUpdateModel extends Model<ScheduleVideoUpdateModel> {
+export class ScheduleVideoUpdateModel extends Model<Partial<AttributesOnly<ScheduleVideoUpdateModel>>> {
 
   @AllowNull(false)
   @Default(null)
@@ -61,31 +62,17 @@ export class ScheduleVideoUpdateModel extends Model<ScheduleVideoUpdateModel> {
       .then(res => !!res)
   }
 
-  static listVideosToUpdate (t: Transaction) {
+  static listVideosToUpdate (transaction?: Transaction) {
     const query = {
       where: {
         updateAt: {
           [Op.lte]: new Date()
         }
       },
-      include: [
-        {
-          model: VideoModel.scope(
-            [
-              VideoScopeNames.WITH_WEBTORRENT_FILES,
-              VideoScopeNames.WITH_STREAMING_PLAYLISTS,
-              VideoScopeNames.WITH_ACCOUNT_DETAILS,
-              VideoScopeNames.WITH_BLACKLISTED,
-              VideoScopeNames.WITH_THUMBNAILS,
-              VideoScopeNames.WITH_TAGS
-            ]
-          )
-        }
-      ],
-      transaction: t
+      transaction
     }
 
-    return ScheduleVideoUpdateModel.findAll<MScheduleVideoUpdateVideoAll>(query)
+    return ScheduleVideoUpdateModel.findAll<MScheduleVideoUpdate>(query)
   }
 
   static deleteByVideoId (videoId: number, t: Transaction) {

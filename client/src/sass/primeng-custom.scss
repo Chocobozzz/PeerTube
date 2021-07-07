@@ -1,8 +1,501 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
-@import '~primeng/resources/primeng.css';
-@import '~primeng/resources/themes/nova-light/theme.css';
+/* stylelint-disable */
+@use 'primeng/resources/primeng';
+
+// Override primeng style we don't want
+input[type=button] {
+  border-radius: inherit;
+}
+
+p-table .p-datatable-header .caption {
+  margin-bottom: 15px;
+}
+
+// Taken from old nova light theme
+
+body .p-disabled {
+  opacity: 0.5;
+}
+
+// Checkbox
+body .p-checkbox {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0;
+  width: 20px;
+  height: 20px;
+}
+body .p-checkbox .p-checkbox-box {
+  border: 1px solid #a6a6a6;
+  background-color: #ffffff;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  border-radius: 3px;
+  transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+body .p-checkbox .p-checkbox-box:not(.p-disabled):hover {
+  border-color: #212121;
+}
+body .p-checkbox .p-checkbox-box .p-checkbox-icon {
+  overflow: hidden;
+  position: relative;
+  font-size: 18px;
+}
+
+// Paginator
+body .p-paginator {
+  background-color: #f4f4f4;
+  border: 1px solid #c8c8c8;
+  padding: 0;
+}
+body .p-paginator .p-paginator-first,
+body .p-paginator .p-paginator-prev,
+body .p-paginator .p-paginator-next,
+body .p-paginator .p-paginator-last {
+  color: #848484;
+  height: 2.286em;
+  min-width: 2.286em;
+  border: 0 none;
+  line-height: 2.286em;
+  padding: 0;
+  margin: 0;
+  vertical-align: top;
+  transition: box-shadow 0.2s;
+  border-radius: 0;
+}
+body .p-paginator .p-paginator-first:not(.p-disabled):not(.p-highlight):hover,
+body .p-paginator .p-paginator-prev:not(.p-disabled):not(.p-highlight):hover,
+body .p-paginator .p-paginator-next:not(.p-disabled):not(.p-highlight):hover,
+body .p-paginator .p-paginator-last:not(.p-disabled):not(.p-highlight):hover {
+  background-color: #e0e0e0;
+  color: #333333;
+}
+body .p-paginator .p-paginator-first:focus,
+body .p-paginator .p-paginator-prev:focus,
+body .p-paginator .p-paginator-next:focus,
+body .p-paginator .p-paginator-last:focus {
+  outline: 0 none;
+  outline-offset: 0;
+  box-shadow: 0 0 0 0.2em pvar(--mainColorLightest);
+}
+body .p-paginator .p-paginator-current {
+  color: #333333;
+  height: 2.286em;
+  min-width: 2.286em;
+  line-height: 2.286em;
+}
+body .p-paginator .p-dropdown {
+  border: 0 none;
+}
+body .p-paginator .p-dropdown .p-dropdown-trigger, body .p-paginator .p-dropdown .p-dropdown-label {
+  color: #848484;
+}
+body .p-paginator .p-dropdown:hover .p-dropdown-trigger, body .p-paginator .p-dropdown:hover .p-dropdown-label {
+  color: #333333;
+}
+body .p-paginator .p-paginator-first:before {
+  position: relative;
+  top: 1px;
+}
+body .p-paginator .p-paginator-prev:before {
+  position: relative;
+  top: 1px;
+}
+body .p-paginator .p-paginator-next:before {
+  position: relative;
+  top: 1px;
+}
+body .p-paginator .p-paginator-last:before {
+  position: relative;
+  top: 1px;
+}
+body .p-paginator .p-paginator-pages {
+  vertical-align: top;
+  display: inline-block;
+  padding: 0;
+}
+body .p-paginator .p-paginator-pages .p-paginator-page {
+  color: #848484;
+  height: 2.286em;
+  min-width: 2.286em;
+  border: 0 none;
+  line-height: 2.286em;
+  padding: 0;
+  margin: 0;
+  vertical-align: top;
+  transition: box-shadow 0.2s;
+  border-radius: 0;
+}
+body .p-paginator .p-paginator-pages .p-paginator-page:not(.p-highlight):hover {
+  background-color: #e0e0e0;
+  color: #333333;
+}
+body .p-paginator .p-paginator-pages .p-paginator-page:focus {
+  outline: 0 none;
+  outline-offset: 0;
+  box-shadow: 0 0 0 0.2em pvar(--mainColorLightest);
+}
+body .p-paginator .p-dropdown {
+  @include margin-left(0.5em);
+
+  height: 2.286em;
+  min-width: auto;
+}
+
+// Dropdown
+
+body .p-dropdown {
+  background: #ffffff;
+  border: 1px solid #a6a6a6;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+body .p-dropdown:not(.p-disabled):hover {
+  border-color: #212121;
+}
+body .p-dropdown:not(.p-disabled).p-focus {
+  outline: 0 none;
+  outline-offset: 0;
+  box-shadow: 0 0 0 0.2em pvar(--mainColorLightest);
+  border-color: pvar(--mainColor);
+}
+body .p-dropdown .p-dropdown-label {
+  @include padding-right(2em);
+}
+body .p-dropdown .p-dropdown-trigger {
+  background-color: #ffffff;
+  width: 2em;
+  line-height: 2em;
+  text-align: center;
+  padding: 0;
+  color: #848484;
+}
+body .p-dropdown .p-dropdown-clear-icon {
+  color: #848484;
+}
+body .p-dropdown.p-dropdown-clearable .p-dropdown-label {
+  @include padding-right(4em);
+}
+body .p-dropdown-panel {
+  padding: 0;
+  border: 1px solid #c8c8c8;
+  background-color: #ffffff;
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+}
+body .p-dropdown-panel .p-dropdown-filter-container {
+  padding: 0.429em 0.857em 0.429em 0.857em;
+  border-bottom: 1px solid #eaeaea;
+  color: #333333;
+  background-color: #ffffff;
+  margin: 0;
+}
+body .p-dropdown-panel .p-dropdown-filter-container .p-dropdown-filter {
+  @include padding-right(2em);
+
+  width: 100%;
+}
+body .p-dropdown-panel .p-dropdown-filter-container .p-dropdown-filter-icon {
+  top: 50%;
+  margin-top: -0.5em;
+  right: 1.357em;
+  color: pvar(--mainColor);
+}
+body .p-dropdown-panel .p-dropdown-items {
+  padding: 0;
+}
+body .p-dropdown-panel .p-dropdown-items .p-dropdown-item, body .p-dropdown-panel .p-dropdown-items .p-dropdown-item-group {
+  margin: 0;
+  padding: 0.429em 0.857em;
+  border: 0 none;
+  color: #333333;
+  background-color: transparent;
+  -moz-border-radius: 0;
+  -webkit-border-radius: 0;
+  border-radius: 0;
+}
+body .p-dropdown-panel .p-dropdown-items .p-dropdown-item.p-highlight,
+body .p-dropdown-panel .p-dropdown-items .p-dropdown-item-group.p-highlight {
+  color: #ffffff;
+  background-color: pvar(--mainColor);
+}
+body .p-dropdown-panel .p-dropdown-items .p-dropdown-item:not(.p-highlight):not(.p-disabled):hover,
+body .p-dropdown-panel .p-dropdown-items .p-dropdown-item-group:not(.p-highlight):not(.p-disabled):hover {
+  color: #333333;
+  background-color: #eaeaea;
+}
+body p-dropdown.ng-dirty.ng-invalid > .p-dropdown {
+  border: 1px solid #a80000;
+}
+
+// p-toast
+body .p-toast .p-toast-message {
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+  margin: 0 0 1em 0;
+}
+
+// p-calendar
+body .p-datepicker {
+  padding: 0.857em;
+  min-width: 20em;
+  background-color: #ffffff;
+  color: #333333;
+  border: 1px solid #a6a6a6;
+}
+
+body .p-datepicker:not(.p-datepicker-inline) {
+  border: 1px solid #c8c8c8;
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+}
+body .p-datepicker:not(.p-disabled) .p-datepicker-header .p-datepicker-prev:focus,
+body .p-datepicker:not(.p-disabled) .p-datepicker-header .p-datepicker-next:focus {
+  outline: 0 none;
+  outline-offset: 0;
+  box-shadow: 0 0 0 0.2em pvar(--mainColorLightest);
+}
+body .p-datepicker:not(.p-disabled) table td a:not(.p-highlight):not(.p-highlight):hover {
+  background-color: #eaeaea;
+}
+body .p-datepicker:not(.p-disabled) .p-monthpicker a.p-monthpicker-month:not(.p-highlight):hover {
+  background-color: #eaeaea;
+}
+body .p-datepicker .p-datepicker-header {
+  padding: 0.429em 0.857em 0.429em 0.857em;
+  background-color: #ffffff;
+  color: #333333;
+  -moz-border-radius: 0;
+  -webkit-border-radius: 0;
+  border-radius: 0;
+}
+body .p-datepicker .p-datepicker-header .p-datepicker-prev,
+body .p-datepicker .p-datepicker-header .p-datepicker-next {
+  cursor: pointer;
+  top: 0;
+  color: #a6a6a6;
+  transition: color 0.2s, box-shadow 0.2s;
+}
+body .p-datepicker .p-datepicker-header .p-datepicker-title {
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+}
+body .p-datepicker .p-datepicker-header .p-datepicker-title select {
+  margin-top: -0.35em;
+  margin-bottom: 0;
+  transition: color 0.2s, box-shadow 0.2s;
+}
+body .p-datepicker .p-datepicker-header .p-datepicker-title select:focus {
+  outline: 0 none;
+  outline-offset: 0;
+  box-shadow: 0 0 0 0.2em pvar(--mainColorLightest);
+}
+body .p-datepicker table {
+  font-size: 14px;
+  margin: 0.857em 0 0 0;
+}
+body .p-datepicker table th {
+  padding: 0.5em;
+}
+body .p-datepicker table th.p-datepicker-weekheader {
+  border-right: 1px solid #a6a6a6;
+}
+body .p-datepicker table td {
+  padding: 0.5em;
+}
+body .p-datepicker table td > a,
+body .p-datepicker table td > span {
+  display: block;
+  text-align: center;
+  color: #333333;
+  padding: 0.5em;
+  transition: box-shadow 0.2s;
+  border-radius: 3px;
+}
+body .p-datepicker table td > a.p-highlight,
+body .p-datepicker table td > span.p-highlight {
+  color: #ffffff;
+  background-color: pvar(--mainColor);
+}
+body .p-datepicker table td > a {
+  cursor: pointer;
+}
+body .p-datepicker table td > a:focus {
+  outline: 0 none;
+  outline-offset: 0;
+  box-shadow: 0 0 0 0.2em pvar(--mainColorLightest);
+}
+body .p-datepicker table td.p-datepicker-today > a,
+body .p-datepicker table td.p-datepicker-today > span {
+  background-color: #d0d0d0;
+  color: #333333;
+}
+body .p-datepicker table td.p-datepicker-today > a.p-highlight,
+body .p-datepicker table td.p-datepicker-today > span.p-highlight {
+  color: #ffffff;
+  background-color: pvar(--mainColor);
+}
+body .p-datepicker table td.p-datepicker-weeknumber {
+  border-right: 1px solid #a6a6a6;
+}
+body .p-datepicker .p-datepicker-buttonbar {
+  border-top: 1px solid #d8dae2;
+}
+body .p-datepicker .p-timepicker {
+  border: 0 none;
+  border-top: 1px solid #d8dae2;
+  padding: 0.857em;
+}
+body .p-datepicker .p-timepicker a {
+  color: #333333;
+  font-size: 1.286em;
+}
+body .p-datepicker .p-timepicker a:hover {
+  color: pvar(--mainColor);
+}
+body .p-datepicker .p-timepicker span {
+  font-size: 1.286em;
+}
+body .p-datepicker .p-monthpicker .p-monthpicker-month {
+  color: #333333;
+}
+body .p-datepicker .p-monthpicker .p-monthpicker-month.p-highlight {
+  color: #ffffff;
+  background-color: pvar(--mainColor);
+}
+body .p-datepicker.p-datepicker-timeonly {
+  padding: 0;
+}
+body .p-datepicker.p-datepicker-timeonly .p-timepicker {
+  border-top: 0 none;
+}
+body .p-datepicker.p-datepicker-multiple-month .p-datepicker-group {
+  @include padding-right(0.857em);
+  @include padding-left(0.857em);
+
+  border-right: 1px solid #d8dae2;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+body .p-datepicker.p-datepicker-multiple-month .p-datepicker-group:first-child {
+  @include padding-left(0);
+}
+body .p-datepicker.p-datepicker-multiple-month .p-datepicker-group:last-child {
+  @include padding-right(0);
+  border-right: 0 none;
+}
+body .p-calendar.p-calendar-w-btn .p-inputtext {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-right: 0 none;
+}
+body .p-calendar.p-calendar-w-btn .p-inputtext:enabled:hover:not(.p-error),
+body .p-calendar.p-calendar-w-btn .p-inputtext:enabled:focus:not(.p-error) {
+  border-right: 0 none;
+}
+body .p-calendar.p-calendar-w-btn .p-datepicker-trigger.p-button {
+  width: 2.357em;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+body .ui-fluid .p-calendar.p-calendar-w-btn input.p-inputtext {
+  width: calc(100% - 2.357em);
+}
+body p-calendar.ng-dirty.ng-invalid > .p-calendar > .p-inputtext {
+  border: 1px solid #a80000;
+}
+body .p-timepicker .p-separator {
+  @include margin-left(0);
+  min-width: 0.75rem;
+}
+
+// auto complete
+body .p-autocomplete .p-autocomplete-input {
+  padding: 0.429em;
+}
+body .p-autocomplete-panel {
+  padding: 0;
+  border: 1px solid #c8c8c8;
+  background-color: #ffffff;
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+}
+body .p-autocomplete-panel .p-autocomplete-items {
+  padding: 0;
+}
+body .p-autocomplete-panel .p-autocomplete-items .p-autocomplete-item {
+  margin: 0;
+  padding: 0.429em 0.857em;
+  border: 0 none;
+  color: #333333;
+  background-color: transparent;
+  border-radius: 0;
+}
+body .p-autocomplete-panel .p-autocomplete-items .p-autocomplete-item.p-highlight,
+body .p-autocomplete-panel .p-autocomplete-items .p-autocomplete-item:hover {
+  color: #ffffff;
+  background-color: pvar(--mainColor);
+}
+body .p-autocomplete-panel .p-autocomplete-items .p-autocomplete-group {
+  padding: 0.429em 0.857em;
+  background-color: #d8dae2;
+  color: #333333;
+}
+body p-autocomplete.ng-dirty.ng-invalid > .p-autocomplete > .p-inputtext {
+  border: 1px solid #a80000;
+}
+
+// select button
+body .p-selectbutton .p-button {
+  background-color: #dadada;
+  border: 1px solid #dadada;
+  color: #333333;
+  overflow: hidden;
+  transition: background-color 0.2s, box-shadow 0.2s;
+}
+body .p-selectbutton .p-button .p-button-icon-left {
+  color: #666666;
+}
+body .p-selectbutton .p-button:not(.p-disabled):not(.p-highlight):hover {
+  background-color: #c8c8c8;
+  border-color: #c8c8c8;
+  color: #333333;
+}
+body .p-selectbutton .p-button:not(.p-disabled):not(.p-highlight):hover .p-button-icon-left {
+  color: #212121;
+}
+body .p-selectbutton .p-button:not(.p-disabled):not(.p-highlight).ui-state-focus {
+  box-shadow: 0 0 0 0.2em #8dcdff;
+  z-index: 1;
+}
+body .p-selectbutton .p-button.p-highlight {
+  background-color: pvar(--mainColor);
+  border-color: pvar(--mainColor);
+  color: #ffffff;
+}
+body .p-selectbutton .p-button.p-highlight .p-button-icon-left {
+  color: #ffffff;
+}
+body .p-selectbutton .p-button.p-highlight:not(.p-disabled):hover {
+  background-color: pvar(--mainColorLighter);
+  border-color: pvar(--mainColorLighter);
+  color: #ffffff;
+}
+body .p-selectbutton .p-button.p-highlight:not(.p-disabled):hover .p-button-icon-left {
+  color: #ffffff;
+}
+body .p-selectbutton .p-button:first-child {
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
+body .p-selectbutton .p-button:last-child {
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+body p-selectbutton.ng-dirty.ng-invalid .p-button {
+  border: 1px solid #a80000;
+}
+
+//
 
 @mixin glyphicon-light {
   font-family: 'Glyphicons Halflings';
@@ -11,20 +504,9 @@
   font-display: swap;
 }
 
-my-edit-button,
-my-delete-button,
-my-button {
-  height: max-content;
-}
-
-// focus box-shadow for primeng
-.ui-inputtext:enabled:focus:not(.ui-state-error) {
-  box-shadow: #{$focus-box-shadow-form} pvar(--mainColorLightest) !important;
-}
-
 // data table customizations
 p-table {
-  .ui-table-caption {
+  .p-datatable-header {
     border: none !important;
     background-color: pvar(--mainBackgroundColor) !important;
 
@@ -34,8 +516,8 @@ p-table {
       display: inline-flex;
       align-items: center;
 
-      .input-group-text {
-        background-color: transparent;
+      .left-buttons {
+        @include padding-left(15px);
       }
     }
   }
@@ -43,6 +525,9 @@ p-table {
   th {
     background-color: pvar(--mainBackgroundColor) !important;
     outline: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   td, th {
@@ -52,9 +537,13 @@ p-table {
   }
 
   td {
-    padding-left: 15px !important;
+    @include padding-left(15px !important);
 
-    &:not(.action-cell):not(.expand-cell) {
+    &.expand-cell {
+      padding: 10px 15px;
+    }
+
+    &:not(.action-cell):not(.expand-cell):not(.checkbox-cell) {
       overflow: hidden !important;
       text-overflow: ellipsis !important;
       white-space: nowrap !important;
@@ -66,8 +555,8 @@ p-table {
     background-color: pvar(--mainBackgroundColor) !important;
     height: 46px;
 
-    &.ui-state-highlight {
-      background-color: pvar(--submenuColor) !important;
+    &.p-highlight {
+      background-color: pvar(--submenuBackgroundColor) !important;
 
       td, td > a {
         color: pvar(--mainForegroundColor) !important;
@@ -75,14 +564,15 @@ p-table {
     }
   }
 
-  .ui-table-tbody {
+  .p-datatable-tbody {
     tr {
       &:hover {
-        background-color: pvar(--submenuColor) !important;
+        background-color: pvar(--submenuBackgroundColor) !important;
       }
 
       td {
         border: none !important;
+        white-space: normal !important;
       }
 
       &:first-child td {
@@ -109,16 +599,16 @@ p-table {
   th {
     border: none !important;
     border-bottom: 1px solid !important;
-    border-color: pvar(--submenuColor) !important;
+    border-color: pvar(--submenuBackgroundColor) !important;
     text-align: left !important;
     padding: 5px 0 5px 15px !important;
     font-weight: $font-semibold !important;
     color: pvar(--mainForegroundColor) !important;
 
-    &.ui-sortable-column:hover {
-      background-color: pvar(--submenuColor) !important;
+    &.p-sortable-column:hover {
+      background-color: pvar(--submenuBackgroundColor) !important;
       border: 1px solid !important;
-      border-color: pvar(--submenuColor) !important;
+      border-color: pvar(--submenuBackgroundColor) !important;
       border-width: 0 1px !important;
 
       &:first-child {
@@ -126,24 +616,24 @@ p-table {
       }
     }
 
-    &.ui-state-highlight {
-      background-color: pvar(--submenuColor) !important;
+    &.p-highlight {
+      background-color: pvar(--submenuBackgroundColor) !important;
 
       .pi {
-        @extend .glyphicon;
+        @extend .glyphicon !optional;
 
         color: #000 !important;
         font-size: 11px !important;
         top: 0 !important;
 
         &.pi-sort-amount-up-alt {
-          @extend .glyphicon-triangle-top;
+          @extend .glyphicon-triangle-top !optional;
 
           color: pvar(--mainForegroundColor) !important;
         }
 
         &.pi-sort-amount-down {
-          @extend .glyphicon-triangle-bottom;
+          @extend .glyphicon-triangle-bottom !optional;
 
           color: pvar(--mainForegroundColor) !important;
         }
@@ -153,58 +643,57 @@ p-table {
 
   .action-cell {
     width: 250px !important;
-    padding: 0 !important;
-    text-align: center;
 
     .dropdown-root,
     my-edit-button,
     my-delete-button,
     my-button {
       display: inline-block !important;
-      margin-left: 5px;
+      @include margin-left(5px);
 
-      :first-child {
-        margin-left: 0
+      &:first-child {
+        @include margin-left(0)
       }
     }
   }
 
   p-paginator {
-    .ui-paginator-bottom {
+    .p-paginator-bottom {
       background-color: pvar(--mainBackgroundColor) !important;
       position: relative;
       border: none;
       border-top: 1px solid !important;
-      border-color: pvar(--submenuColor) !important;
+      border-color: pvar(--submenuBackgroundColor) !important;
       height: 40px;
       display: flex;
       justify-content: center;
       align-items: center;
 
-      .ui-dropdown {
+      .p-dropdown {
         position: absolute;
-        top: 3px;
+        top: 10px;
         left: 0;
 
-        &.ui-state-focus {
+        &.p-focus {
           box-shadow: #{$focus-box-shadow-form} pvar(--mainColorLightest);
         }
 
-        .ui-dropdown-label {
+        .p-label {
           color: pvar(--inputPlaceholderColor);
         }
       }
 
-      .ui-paginator-current {
+      .p-paginator-current {
         position: absolute;
         right: 0;
         color: pvar(--inputPlaceholderColor);
+        overflow: visible;
       }
 
-      .ui-paginator-first,
-      .ui-paginator-prev,
-      .ui-paginator-next,
-      .ui-paginator-last {
+      .p-paginator-first,
+      .p-paginator-prev,
+      .p-paginator-next,
+      .p-paginator-last {
         @include glyphicon-light;
         padding: 5px 2px;
         height: auto;
@@ -217,42 +706,40 @@ p-table {
           box-shadow: #{$focus-box-shadow-form} pvar(--mainColorLightest);
         }
 
-        &.ui-state-disabled:hover {
+        &.p-disabled:hover {
           background-color: #fff !important;
         }
 
-        &.ui-paginator-first {
-          @extend .glyphicon-step-backward;
+        &.p-paginator-first {
+          @extend .glyphicon-step-backward !optional;
         }
 
-        &.ui-paginator-prev {
-          @extend .glyphicon-chevron-left;
+        &.p-paginator-prev {
+          @extend .glyphicon-chevron-left !optional;
 
-          margin-right: 10px;
+          @include margin-right(10px);
         }
 
-        &.ui-paginator-next {
-          @extend .glyphicon-chevron-right;
+        &.p-paginator-next {
+          @extend .glyphicon-chevron-right !optional;
 
-          margin-left: 10px;
+          @include margin-left(10px);
         }
 
-        &.ui-paginator-last {
-          @extend .glyphicon-step-forward;
+        &.p-paginator-last {
+          @extend .glyphicon-step-forward !optional;
         }
       }
 
-      .ui-paginator-pages {
+      .p-paginator-pages {
         height: auto !important;
 
-        .ui-paginator-page {
+        .p-paginator-page {
           &.focus-within,
           &:focus {
             box-shadow: #{$focus-box-shadow-form} pvar(--mainColorLightest) !important;
           }
-        }
 
-        a {
           color: pvar(--mainForegroundColor) !important;
           font-weight: $font-semibold !important;
           margin: 0 5px !important;
@@ -262,7 +749,7 @@ p-table {
           height: auto !important;
           line-height: initial !important;
 
-          &.ui-state-active {
+          &.p-highlight {
             &, &:hover, &:active, &:focus {
               color: #fff !important;
               background-color: pvar(--mainColor) !important;
@@ -275,64 +762,67 @@ p-table {
 }
 
 // overflow data table
-@mixin overflow-datatable ($table-min-width, $horizontal-margins, $mobile-paginator: true) {
-  p-table {
-    .ui-table-wrapper {
-      overflow-x: auto;
-      max-width: calc(100vw - #{$horizontal-margins * 2});
+p-table {
+  .p-datatable-wrapper {
+    overflow-x: auto;
+    max-width: 100%;
 
-      table {
-        min-width: $table-min-width;
+    table {
+      min-width: breakpoint(lg);
+    }
+  }
+
+  @media screen and (max-width: #{breakpoint(lg)}) {
+    // Prevent overflow
+    p-paginator {
+      .p-paginator-current,
+      .p-dropdown {
+        top: 0;
+        margin-top: 30px;
       }
     }
+  }
 
-    @if $mobile-paginator {
-      p-paginator .ui-paginator-bottom {
-        display: block;
-
-        .ui-paginator-current {
-          position: relative;
-          display: block;
-        }
-
-        a, .ui-paginator-pages {
-          vertical-align: middle;
-        }
+  @media screen and (max-width: $mobile-view) {
+    // Prevent overflow
+    p-paginator {
+      .p-paginator-pages > .p-paginator-page:not(.p-highlight) {
+        display: none;
       }
     }
   }
 }
 
 // PrimeNG calendar tweaks
-p-calendar .ui-datepicker {
+p-calendar .p-datepicker {
   a {
     @include disable-default-a-behaviour;
   }
 
-  .ui-datepicker-header {
+  .p-datepicker-header {
 
-    .ui-datepicker-year {
-      margin-left: 5px;
+    .p-datepicker-year {
+      @include margin-left(5px);
     }
 
-    .ui-datepicker-next {
-      @extend .glyphicon-chevron-right;
+    .p-datepicker-next {
+      @extend .glyphicon-chevron-right !optional;
       @include glyphicon-light;
 
       color: #000 !important;
-      text-align: right;
+      text-align: end;
 
       .pi.pi-chevron-right {
         display: none !important;
       }
     }
 
-    .ui-datepicker-prev {
-      @extend .glyphicon-chevron-left;
+    .p-datepicker-prev {
+      @extend .glyphicon-chevron-left !optional;
       @include glyphicon-light;
 
       color: #000 !important;
-      text-align: left;
+      text-align: start;
 
       .pi.pi-chevron-left {
         display: none !important;
@@ -340,17 +830,17 @@ p-calendar .ui-datepicker {
     }
   }
 
-  .ui-timepicker {
+  .p-timepicker {
 
     .pi.pi-chevron-up {
-      @extend .glyphicon-chevron-up;
+      @extend .glyphicon-chevron-up !optional;
       @include glyphicon-light;
 
       color: #000 !important;
     }
 
     .pi.pi-chevron-down {
-      @extend .glyphicon-chevron-down;
+      @extend .glyphicon-chevron-down !optional;
       @include glyphicon-light;
 
       color: #000 !important;
@@ -358,32 +848,32 @@ p-calendar .ui-datepicker {
   }
 }
 
-p-tablecheckbox:hover div .ui-chkbox-box {
+p-tablecheckbox:hover div .p-checkbox-box {
   box-shadow: 0 0 0 .1rem rgba(87, 85, 217, .2);
 }
 
-.ui-chkbox {
+.p-checkbox {
 
-  &, .ui-chkbox-box {
+  &, .p-checkbox-box {
     width: 18px !important;
     height: 18px !important;
   }
 
-  .ui-chkbox-box {
-    &.ui-state-active {
+  .p-checkbox-box {
+    &.p-highlight {
       border-color: pvar(--mainColor) !important;
       background-color: pvar(--mainColor) !important;
     }
 
-    .ui-chkbox-icon {
+    .p-checkbox-icon {
       position: relative;
       overflow: visible !important;
 
       &:after {
         content: '';
         position: absolute;
-        top: 1px;
-        left: 6px;
+        bottom: -5px;
+        left: -2px;
         width: 5px;
         height: 12px;
         opacity: 0;
@@ -400,51 +890,31 @@ p-tablecheckbox:hover div .ui-chkbox-box {
   }
 }
 
-p-inputswitch {
-  height: 26px;
-
-  .ui-inputswitch-checked .ui-inputswitch-slider {
-    background-color: pvar(--mainColor) !important;
-  }
-
-  &.small {
-    height: 20px;
-
-    .ui-inputswitch {
-      width: 2.5em !important;
-      height: 1.45em !important;
-
-      .ui-inputswitch-slider::before {
-        height: 1em !important;
-        width: 1em !important;
-      }
-    }
-
-    .ui-inputswitch-checked .ui-inputswitch-slider::before {
-      transform: translateX(1em) !important;
-    }
-  }
-}
-
 p-toast {
-  .ui-toast {
+  .p-toast {
+    width: auto;
+    max-width: 300px;
+    min-width: 200px;
     z-index: z(notification) !important;
 
-    .ui-toast-close-icon {
+    .p-toast-icon-close {
       font-family: "Glyphicons Halflings";
       opacity: 0;
+      position: absolute;
+      right: 5px;
+      top: 5px;
 
       &:after {
         content: "\e014";
       }
     }
 
-    &:hover .ui-toast-close-icon {
+    &:hover .p-toast-icon-close {
       opacity: .3;
     }
   }
 
-  .ui-toast-message {
+  .p-toast-message {
     font-family: $main-fonts;
     background-color: pvar(--mainBackgroundColor) !important;
     color: pvar(--mainForegroundColor) !important;
@@ -454,29 +924,31 @@ p-toast {
     box-shadow: 0 2px 12px 0 rgba(0, 0 , 0, .1);
     overflow: hidden;
 
-    &.ui-toast-message-success .glyphicon {
+    &.p-toast-message-success .glyphicon {
       color: #8BC34A !important;
     }
 
-    &.ui-toast-message-error .glyphicon {
+    &.p-toast-message-error .glyphicon {
       color: #F44336 !important;
     }
 
-    &.ui-toast-message-warn .glyphicon {
+    &.p-toast-message-warn .glyphicon {
       color: #F1680D !important;
     }
 
-    &.ui-toast-message-info .glyphicon {
+    &.p-toast-message-info .glyphicon {
       color: #03A9F4 !important;
     }
 
     .notification-block {
       display: flex;
       align-items: center;
-      padding: 5px;
+      width: 100%;
+      padding: 10px 20px;
 
       .message {
         flex-grow: 1;
+        @include margin-right(20px);
 
         h3 {
           font-size: 21px;
@@ -490,12 +962,20 @@ p-toast {
 
       .glyphicon {
         font-size: 32px;
-        margin-right: 5px;
+        @include margin-right(5px);
       }
     }
   }
 }
 
-.ui-widget {
-  font-family: $main-fonts !important;
+.p-selectbutton {
+  .p-button:focus {
+    outline: none;
+  }
+
+  .p-button-label {
+    padding: 5px 15px;
+    font-size: 15px;
+    font-weight: 600;
+  }
 }

@@ -1,28 +1,19 @@
 import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
-import { MetaGuard } from '@ngx-meta/core'
 import { LoginGuard } from '../core'
+import { MyAccountAbusesListComponent } from './my-account-abuses/my-account-abuses-list.component'
+import { MyAccountApplicationsComponent } from './my-account-applications/my-account-applications.component'
 import { MyAccountBlocklistComponent } from './my-account-blocklist/my-account-blocklist.component'
 import { MyAccountServerBlocklistComponent } from './my-account-blocklist/my-account-server-blocklist.component'
-import { MyAccountHistoryComponent } from './my-account-history/my-account-history.component'
 import { MyAccountNotificationsComponent } from './my-account-notifications/my-account-notifications.component'
-import { MyAccountOwnershipComponent } from './my-account-ownership/my-account-ownership.component'
 import { MyAccountSettingsComponent } from './my-account-settings/my-account-settings.component'
-import { MyAccountSubscriptionsComponent } from './my-account-subscriptions/my-account-subscriptions.component'
-import { MyAccountVideoImportsComponent } from './my-account-video-imports/my-account-video-imports.component'
-import { MyAccountVideoPlaylistCreateComponent } from './my-account-video-playlists/my-account-video-playlist-create.component'
-import { MyAccountVideoPlaylistElementsComponent } from './my-account-video-playlists/my-account-video-playlist-elements.component'
-import { MyAccountVideoPlaylistUpdateComponent } from './my-account-video-playlists/my-account-video-playlist-update.component'
-import { MyAccountVideoPlaylistsComponent } from './my-account-video-playlists/my-account-video-playlists.component'
-import { MyAccountVideosComponent } from './my-account-videos/my-account-videos.component'
 import { MyAccountComponent } from './my-account.component'
-import { MyAccountAbusesListComponent } from './my-account-abuses/my-account-abuses-list.component'
 
 const myAccountRoutes: Routes = [
   {
     path: '',
     component: MyAccountComponent,
-    canActivateChild: [ MetaGuard, LoginGuard ],
+    canActivateChild: [ LoginGuard ],
     children: [
       {
         path: '',
@@ -41,88 +32,50 @@ const myAccountRoutes: Routes = [
 
       {
         path: 'video-channels',
-        loadChildren: () => {
-          return import('./+my-account-video-channels/my-account-video-channels.module')
-            .then(m => m.MyAccountVideoChannelsModule)
-        }
+        redirectTo: '/my-library/video-channels',
+        pathMatch: 'full'
       },
 
       {
         path: 'video-playlists',
-        component: MyAccountVideoPlaylistsComponent,
-        data: {
-          meta: {
-            title: $localize`Account playlists`
-          }
-        }
+        redirectTo: '/my-library/video-playlists',
+        pathMatch: 'full'
       },
       {
         path: 'video-playlists/create',
-        component: MyAccountVideoPlaylistCreateComponent,
-        data: {
-          meta: {
-            title: $localize`Create new playlist`
-          }
-        }
+        redirectTo: '/my-library/video-playlists/create',
+        pathMatch: 'full'
       },
       {
         path: 'video-playlists/:videoPlaylistId',
-        component: MyAccountVideoPlaylistElementsComponent,
-        data: {
-          meta: {
-            title: $localize`Playlist elements`
-          }
-        }
+        redirectTo: '/my-library/video-playlists/:videoPlaylistId',
+        pathMatch: 'full'
       },
       {
         path: 'video-playlists/update/:videoPlaylistId',
-        component: MyAccountVideoPlaylistUpdateComponent,
-        data: {
-          meta: {
-            title: $localize`Update playlist`
-          }
-        }
+        redirectTo: '/my-library/video-playlists/update/:videoPlaylistId',
+        pathMatch: 'full'
       },
 
       {
         path: 'videos',
-        component: MyAccountVideosComponent,
-        data: {
-          meta: {
-            title: $localize`Account videos`
-          },
-          reuse: {
-            enabled: true,
-            key: 'my-account-videos-list'
-          }
-        }
+        redirectTo: '/my-library/videos',
+        pathMatch: 'full'
       },
       {
         path: 'video-imports',
-        component: MyAccountVideoImportsComponent,
-        data: {
-          meta: {
-            title: $localize`Account video imports`
-          }
-        }
+        redirectTo: '/my-library/video-imports',
+        pathMatch: 'full'
       },
       {
         path: 'subscriptions',
-        component: MyAccountSubscriptionsComponent,
-        data: {
-          meta: {
-            title: $localize`Account subscriptions`
-          }
-        }
+        redirectTo: '/my-library/subscriptions',
+        pathMatch: 'full'
       },
       {
         path: 'ownership',
-        component: MyAccountOwnershipComponent,
-        data: {
-          meta: {
-            title: $localize`Ownership changes`
-          }
-        }
+        redirectTo: '/my-library/ownership',
+        pathMatch: 'full'
       },
       {
         path: 'blocklist/accounts',
@@ -144,16 +97,8 @@ const myAccountRoutes: Routes = [
       },
       {
         path: 'history/videos',
-        component: MyAccountHistoryComponent,
-        data: {
-          meta: {
-            title: $localize`Videos history`
-          },
-          reuse: {
-            enabled: true,
-            key: 'my-videos-history-list'
-          }
-        }
+        redirectTo: '/my-library/history/videos',
+        pathMatch: 'full'
       },
       {
         path: 'notifications',
@@ -170,6 +115,15 @@ const myAccountRoutes: Routes = [
         data: {
           meta: {
             title: $localize`My abuse reports`
+          }
+        }
+      },
+      {
+        path: 'applications',
+        component: MyAccountApplicationsComponent,
+        data: {
+          meta: {
+            title: $localize`Applications`
           }
         }
       }

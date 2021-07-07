@@ -1,7 +1,7 @@
 import { filter } from 'rxjs/operators'
 import { Component, OnInit } from '@angular/core'
 import { AuthService, Notifier, UserService } from '@app/core'
-import { USER_CONFIRM_PASSWORD_VALIDATOR, USER_PASSWORD_VALIDATOR } from '@app/shared/form-validators/user-validators'
+import { USER_CONFIRM_PASSWORD_VALIDATOR, USER_PASSWORD_VALIDATOR, USER_EXISTING_PASSWORD_VALIDATOR } from '@app/shared/form-validators/user-validators'
 import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
 import { User } from '@shared/models'
 
@@ -25,7 +25,7 @@ export class MyAccountChangePasswordComponent extends FormReactive implements On
 
   ngOnInit () {
     this.buildForm({
-      'current-password': USER_PASSWORD_VALIDATOR,
+      'current-password': USER_EXISTING_PASSWORD_VALIDATOR,
       'new-password': USER_PASSWORD_VALIDATOR,
       'new-confirmed-password': USER_CONFIRM_PASSWORD_VALIDATOR
     })

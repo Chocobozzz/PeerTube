@@ -25,11 +25,13 @@ import {
   reRunServer,
   ServerInfo
 } from '../../../shared/extra-utils/server/servers'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 describe('Official plugin auto-mute', function () {
   const autoMuteListPath = '/plugins/auto-mute/router/api/v1/mute-list'
   let servers: ServerInfo[]
   let blocklistServer: MockBlocklist
+  let port: number
 
   before(async function () {
     this.timeout(30000)
@@ -46,7 +48,7 @@ describe('Official plugin auto-mute', function () {
     }
 
     blocklistServer = new MockBlocklist()
-    await blocklistServer.initialize()
+    port = await blocklistServer.initialize()
 
     await uploadVideoAndGetId({ server: servers[0], videoName: 'video server 1' })
     await uploadVideoAndGetId({ server: servers[1], videoName: 'video server 2' })
@@ -60,7 +62,7 @@ describe('Official plugin auto-mute', function () {
       accessToken: servers[0].accessToken,
       npmName: 'peertube-plugin-auto-mute',
       settings: {
-        'blocklist-urls': 'http://localhost:42100/blocklist',
+        'blocklist-urls': `http://localhost:${port}/blocklist`,
         'check-seconds-interval': 1
       }
     })
@@ -178,7 +180,7 @@ describe('Official plugin auto-mute', function () {
     await makeGetRequest({
       url: servers[0].url,
       path: '/plugins/auto-mute/router/api/v1/mute-list',
-      statusCodeExpected: 403
+      statusCodeExpected: HttpStatusCode.FORBIDDEN_403
     })
   })
 
@@ -197,7 +199,7 @@ describe('Official plugin auto-mute', function () {
     await makeGetRequest({
       url: servers[0].url,
       path: '/plugins/auto-mute/router/api/v1/mute-list',
-      statusCodeExpected: 200
+      statusCodeExpected: HttpStatusCode.OK_200
     })
   })
 
@@ -221,7 +223,7 @@ describe('Official plugin auto-mute', function () {
     const res = await makeGetRequest({
       url: servers[0].url,
       path: '/plugins/auto-mute/router/api/v1/mute-list',
-      statusCodeExpected: 200
+      statusCodeExpected: HttpStatusCode.OK_200
     })
 
     const data = res.body.data

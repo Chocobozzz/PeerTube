@@ -18,7 +18,7 @@
           <ng-template ngbNavContent>
             <div class="nav-content">
 
-              <my-input-readonly-copy [value]="getPlaylistUrl()"></my-input-readonly-copy>
+              <my-input-toggle-hidden [value]="getPlaylistUrl()" [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"></my-input-toggle-hidden>
             </div>
           </ng-template>
         </ng-container>
@@ -38,7 +38,7 @@
 
           <ng-template ngbNavContent>
             <div class="nav-content">
-              <my-input-readonly-copy [value]="getPlaylistIframeCode()"></my-input-readonly-copy>
+              <my-input-toggle-hidden [value]="getPlaylistIframeCode()" [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"></my-input-toggle-hidden>
 
               <div i18n *ngIf="notSecure()" class="alert alert-warning">
                 The url is not secured (no HTTPS), so the embed video won't work on HTTPS websites (web browsers block non secured HTTP requests on HTTPS websites).
@@ -72,7 +72,7 @@
 
           <ng-template ngbNavContent>
             <div class="nav-content">
-              <my-input-readonly-copy [value]="getVideoUrl()"></my-input-readonly-copy>
+              <my-input-toggle-hidden [value]="getVideoUrl()" [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"></my-input-toggle-hidden>
             </div>
           </ng-template>
         </ng-container>
@@ -92,7 +92,7 @@
 
           <ng-template ngbNavContent>
             <div class="nav-content">
-              <my-input-readonly-copy [value]="getVideoIframeCode()"></my-input-readonly-copy>
+              <my-input-toggle-hidden [value]="getVideoIframeCode()" [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"></my-input-toggle-hidden>
 
               <div i18n *ngIf="notSecure()" class="alert alert-warning">
                 The url is not secured (no HTTPS), so the embed video won't work on HTTPS websites (web browsers block non secured HTTP requests on HTTPS websites).
@@ -107,7 +107,7 @@
 
       <div class="filters">
         <div>
-          <div class="form-group start-at">
+          <div class="form-group start-at" *ngIf="!video.isLive">
             <my-peertube-checkbox
               inputName="startAt" [(ngModel)]="customizations.startAtCheckbox"
               i18n-labelText labelText="Start at"
@@ -138,7 +138,7 @@
 
         <div class="advanced-filters collapse-transition" [ngbCollapse]="isAdvancedCustomizationCollapsed">
           <div>
-            <div class="form-group stop-at">
+            <div class="form-group stop-at" *ngIf="!video.isLive">
               <my-peertube-checkbox
                 inputName="stopAt" [(ngModel)]="customizations.stopAtCheckbox"
                 i18n-labelText labelText="Stop at"
@@ -167,10 +167,17 @@
               ></my-peertube-checkbox>
             </div>
 
-            <div class="form-group">
+            <div class="form-group" *ngIf="!video.isLive">
               <my-peertube-checkbox
                 inputName="loop" [(ngModel)]="customizations.loop"
                 i18n-labelText labelText="Loop"
+              ></my-peertube-checkbox>
+            </div>
+
+            <div *ngIf="!isLocalVideo() && !isVideoInEmbedTab()" class="form-group">
+              <my-peertube-checkbox
+                inputName="originUrl" [(ngModel)]="customizations.originUrl"
+                i18n-labelText labelText="Use origin instance URL"
               ></my-peertube-checkbox>
             </div>
           </div>

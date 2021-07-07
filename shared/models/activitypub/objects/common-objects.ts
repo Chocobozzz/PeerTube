@@ -9,7 +9,7 @@ export interface ActivityIdentifierObject {
 export interface ActivityIconObject {
   type: 'Image'
   url: string
-  mediaType: 'image/jpeg' | 'image/png'
+  mediaType: string
   width?: number
   height?: number
 }
@@ -30,13 +30,20 @@ export type ActivityPlaylistSegmentHashesObject = {
   href: string
 }
 
-export type ActivityVideoFileMetadataObject = {
+export type ActivityVideoFileMetadataUrlObject = {
   type: 'Link'
   rel: [ 'metadata', any ]
   mediaType: 'application/json'
   height: number
   href: string
   fps: number
+}
+
+export type ActivityTrackerUrlObject = {
+  type: 'Link'
+  rel: [ 'tracker', 'websocket' | 'http' ]
+  name: string
+  href: string
 }
 
 export type ActivityPlaylistInfohashesObject = {
@@ -96,7 +103,7 @@ export type ActivityTagObject =
   | ActivityMentionObject
   | ActivityBitTorrentUrlObject
   | ActivityMagnetUrlObject
-  | ActivityVideoFileMetadataObject
+  | ActivityVideoFileMetadataUrlObject
 
 export type ActivityUrlObject =
   ActivityVideoUrlObject
@@ -104,7 +111,8 @@ export type ActivityUrlObject =
   | ActivityBitTorrentUrlObject
   | ActivityMagnetUrlObject
   | ActivityHtmlUrlObject
-  | ActivityVideoFileMetadataObject
+  | ActivityVideoFileMetadataUrlObject
+  | ActivityTrackerUrlObject
 
 export interface ActivityPubAttributedTo {
   type: 'Group' | 'Person'

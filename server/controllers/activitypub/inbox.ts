@@ -1,12 +1,11 @@
 import * as express from 'express'
+import { InboxManager } from '@server/lib/activitypub/inbox-manager'
 import { Activity, ActivityPubCollection, ActivityPubOrderedCollection, RootActivity } from '../../../shared'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 import { isActivityValid } from '../../helpers/custom-validators/activitypub/activity'
 import { logger } from '../../helpers/logger'
-import { processActivities } from '../../lib/activitypub/process/process'
 import { asyncMiddleware, checkSignature, localAccountValidator, localVideoChannelValidator, signatureValidator } from '../../middlewares'
 import { activityPubValidator } from '../../middlewares/validators/activitypub/activity'
-import { queue } from 'async'
-import { MActorDefault, MActorSignature } from '../../types/models'
 
 const inboxRouter = express.Router()
 
@@ -40,18 +39,6 @@ export {
 
 // ---------------------------------------------------------------------------
 
-type QueueParam = { activities: Activity[], signatureActor?: MActorSignature, inboxActor?: MActorDefault }
-const inboxQueue = queue<QueueParam, Error>((task, cb) => {
-  const options = { signatureActor: task.signatureActor, inboxActor: task.inboxActor }
-
-  processActivities(task.activities, options)
-    .then(() => cb())
-    .catch(err => {
-      logger.error('Error in process activities.', { err })
-      cb()
-    })
-})
-
 function inboxController (req: express.Request, res: express.Response) {
   const rootActivity: RootActivity = req.body
   let activities: Activity[]
@@ -73,11 +60,13 @@ function inboxController (req: express.Request, res: express.Response) {
 
   logger.info('Receiving inbox requests for %d activities by %s.', activities.length, res.locals.signature.actor.url)
 
-  inboxQueue.push({
+  InboxManager.Instance.addInboxMessage({
     activities,
     signatureActor: res.locals.signature.actor,
-    inboxActor: accountOrChannel ? accountOrChannel.Actor : undefined
+    inboxActor: accountOrChannel
+      ? accountOrChannel.Actor
+      : undefined
   })
 
-  return res.status(204).end()
+  return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }

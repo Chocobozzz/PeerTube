@@ -1,0 +1,28 @@
+<div *ngIf="channel" class="channel">
+
+  <div class="channel-avatar-row">
+    <my-actor-avatar [channel]="channel" [internalHref]="getVideoChannelLink()" i18n-title title="See this video channel"></my-actor-avatar>
+
+    <h6>
+      <a [routerLink]="getVideoChannelLink()" i18n-title title="See this video channel">
+        {{ channel.displayName }}
+      </a>
+    </h6>
+
+    <div class="actor-counters">
+      <div class="followers" i18n>{channel.followersCount, plural, =1 {1 subscriber} other {{{ channel.followersCount }} subscribers}}</div>
+
+      <span class="videos-count" *ngIf="totalVideos !== undefined" i18n>
+        {totalVideos, plural, =1 {1 videos} other {{{ totalVideos }} videos}}
+      </span>
+    </div>
+
+    <div *ngIf="displayDescription" class="description-html" [innerHTML]="descriptionHTML"></div>
+  </div>
+
+  <div class="video" *ngIf="video && displayLatestVideo">
+    <div i18n class="video-label">Latest published video</div>
+
+    <my-video-miniature-markup [uuid]="video.uuid" [onlyDisplayTitle]="true"></my-video-miniature-markup>
+  </div>
+</div>

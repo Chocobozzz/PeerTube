@@ -1,12 +1,13 @@
-import { body, param } from 'express-validator'
 import * as express from 'express'
-import { isIdOrUUIDValid, toIntOrNull } from '../../../helpers/custom-validators/misc'
-import { areValidationErrors } from '../utils'
+import { body } from 'express-validator'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { toIntOrNull } from '../../../helpers/custom-validators/misc'
 import { logger } from '../../../helpers/logger'
-import { doesVideoExist } from '../../../helpers/middlewares'
+import { areValidationErrors, doesVideoExist, isValidVideoIdParam } from '../shared'
 
 const videoWatchingValidator = [
-  param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
+  isValidVideoIdParam('videoId'),
+
   body('currentTime')
     .customSanitizer(toIntOrNull)
     .isInt().withMessage('Should have correct current time'),
@@ -20,7 +21,10 @@ const videoWatchingValidator = [
     const user = res.locals.oauth.token.User
     if (user.videosHistoryEnabled === false) {
       logger.warn('Cannot set videos to watch by user %d: videos history is disabled.', user.id)
-      return res.status(409).end()
+      return res.fail({
+        status: HttpStatusCode.CONFLICT_409,
+        message: 'Video history is disabled'
+      })
     }
 
     return next()

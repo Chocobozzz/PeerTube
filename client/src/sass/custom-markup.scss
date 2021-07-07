@@ -1,0 +1,26 @@
+peertube-container {
+  > .layout-row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  > .layout-column {
+    display: flex;
+    flex-direction: column;
+  }
+
+  > .header {
+    margin: 30px 0 15px;
+
+    > h4 {
+      margin-bottom: 0;
+    }
+  }
+}
+
+peertube-video-miniature,
+peertube-playlist-miniature,
+peertube-channel-miniature {
+  margin-right: 30px;
+}

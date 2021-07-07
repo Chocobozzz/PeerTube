@@ -1,0 +1,54 @@
+<div class="video-attribute">
+  <span i18n class="video-attribute-label">Privacy</span>
+  <span class="video-attribute-value">{{ video.privacy.label }}</span>
+</div>
+
+<div *ngIf="video.isLocal === false" class="video-attribute">
+  <span i18n class="video-attribute-label">Origin</span>
+  <a class="video-attribute-value" target="_blank" rel="noopener noreferrer" [href]="getVideoUrl()">{{ video.originInstanceHost }}</a>
+</div>
+
+<div *ngIf="!!video.originallyPublishedAt" class="video-attribute">
+  <span i18n class="video-attribute-label">Originally published</span>
+  <span class="video-attribute-value">{{ video.originallyPublishedAt | date: 'dd MMMM yyyy' }}</span>
+</div>
+
+<div class="video-attribute">
+  <span i18n class="video-attribute-label">Category</span>
+  <span *ngIf="!video.category.id" class="video-attribute-value">{{ video.category.label }}</span>
+  <a
+    *ngIf="video.category.id" class="video-attribute-value"
+    [routerLink]="[ '/search' ]" [queryParams]="{ categoryOneOf: [ video.category.id ] }"
+  >{{ video.category.label }}</a>
+</div>
+
+<div class="video-attribute">
+  <span i18n class="video-attribute-label">Licence</span>
+  <span *ngIf="!video.licence.id" class="video-attribute-value">{{ video.licence.label }}</span>
+  <a
+    *ngIf="video.licence.id" class="video-attribute-value"
+    [routerLink]="[ '/search' ]" [queryParams]="{ licenceOneOf: [ video.licence.id ] }"
+  >{{ video.licence.label }}</a>
+</div>
+
+<div class="video-attribute">
+  <span i18n class="video-attribute-label">Language</span>
+  <span *ngIf="!video.language.id" class="video-attribute-value">{{ video.language.label }}</span>
+  <a
+    *ngIf="video.language.id" class="video-attribute-value"
+    [routerLink]="[ '/search' ]" [queryParams]="{ languageOneOf: [ video.language.id ] }"
+  >{{ video.language.label }}</a>
+</div>
+
+<div class="video-attribute video-attribute-tags">
+  <span i18n class="video-attribute-label">Tags</span>
+  <a
+    *ngFor="let tag of getVideoTags()"
+    class="video-attribute-value" [routerLink]="[ '/search' ]" [queryParams]="{ tagsOneOf: [ tag ] }"
+  >{{ tag }}</a>
+</div>
+
+<div class="video-attribute" *ngIf="!video.isLive">
+  <span i18n class="video-attribute-label">Duration</span>
+  <span class="video-attribute-value">{{ video.duration | myDurationFormatter }}</span>
+</div>

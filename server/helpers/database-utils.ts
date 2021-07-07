@@ -1,8 +1,17 @@
 import * as retry from 'async/retry'
 import * as Bluebird from 'bluebird'
+import { QueryTypes, Transaction } from 'sequelize'
 import { Model } from 'sequelize-typescript'
+import { sequelizeTypescript } from '@server/initializers/database'
 import { logger } from './logger'
-import { Transaction } from 'sequelize'
+
+function retryTransactionWrapper <T, A, B, C, D> (
+  functionToRetry: (arg1: A, arg2: B, arg3: C, arg4: D) => Promise<T> | Bluebird<T>,
+  arg1: A,
+  arg2: B,
+  arg3: C,
+  arg4: D,
+): Promise<T>
 
 function retryTransactionWrapper <T, A, B, C> (
   functionToRetry: (arg1: A, arg2: B, arg3: C) => Promise<T> | Bluebird<T>,
@@ -49,7 +58,7 @@ function transactionRetryer <T> (func: (err: any, data: T) => any) {
 
         errorFilter: err => {
           const willRetry = (err.name === 'SequelizeDatabaseError')
-          logger.debug('Maybe retrying the transaction function.', { willRetry, err })
+          logger.debug('Maybe retrying the transaction function.', { willRetry, err, tags: [ 'sql', 'retry' ] })
           return willRetry
         }
       },
@@ -59,7 +68,9 @@ function transactionRetryer <T> (func: (err: any, data: T) => any) {
   })
 }
 
-function updateInstanceWithAnother <T extends Model<T>> (instanceToUpdate: Model<T>, baseInstance: Model<T>) {
+// ---------------------------------------------------------------------------
+
+function updateInstanceWithAnother <M, T extends U, U extends Model<M>> (instanceToUpdate: T, baseInstance: U) {
   const obj = baseInstance.toJSON()
 
   for (const key of Object.keys(obj)) {
@@ -73,19 +84,39 @@ function resetSequelizeInstance (instance: Model<any>, savedFields: object) {
   })
 }
 
-function afterCommitIfTransaction (t: Transaction, fn: Function) {
-  if (t) return t.afterCommit(() => fn())
-
-  return fn()
-}
-
-function deleteNonExistingModels <T extends { hasSameUniqueKeysThan (other: T): boolean } & Model<T>> (
+function deleteNonExistingModels <T extends { hasSameUniqueKeysThan (other: T): boolean } & Pick<Model, 'destroy'>> (
   fromDatabase: T[],
   newModels: T[],
   t: Transaction
 ) {
   return fromDatabase.filter(f => !newModels.find(newModel => newModel.hasSameUniqueKeysThan(f)))
               .map(f => f.destroy({ transaction: t }))
+}
+
+// Sequelize always skip the update if we only update updatedAt field
+function setAsUpdated (table: string, id: number, transaction?: Transaction) {
+  return sequelizeTypescript.query(
+    `UPDATE "${table}" SET "updatedAt" = :updatedAt WHERE id = :id`,
+    {
+      replacements: { table, id, updatedAt: new Date() },
+      type: QueryTypes.UPDATE,
+      transaction
+    }
+  )
+}
+
+// ---------------------------------------------------------------------------
+
+function runInReadCommittedTransaction <T> (fn: (t: Transaction) => Promise<T>) {
+  const options = { isolationLevel: Transaction.ISOLATION_LEVELS.READ_COMMITTED }
+
+  return sequelizeTypescript.transaction(options, t => fn(t))
+}
+
+function afterCommitIfTransaction (t: Transaction, fn: Function) {
+  if (t) return t.afterCommit(() => fn())
+
+  return fn()
 }
 
 // ---------------------------------------------------------------------------
@@ -96,5 +127,7 @@ export {
   transactionRetryer,
   updateInstanceWithAnother,
   afterCommitIfTransaction,
-  deleteNonExistingModels
+  deleteNonExistingModels,
+  setAsUpdated,
+  runInReadCommittedTransaction
 }

@@ -1,0 +1,129 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+h1 my-global-icon {
+  position: relative;
+  top: -2px;
+}
+
+.create-button {
+  @include create-button;
+}
+
+input[type=text] {
+  @include peertube-input-text(300px);
+}
+
+my-edit-button {
+  @include margin-right(10px);
+}
+
+.video-channel {
+  @include row-blocks;
+
+  padding-bottom: 0;
+
+  my-actor-avatar {
+    @include actor-avatar-size(80px);
+    @include margin-right(10px);
+  }
+}
+
+.video-channel-info {
+  flex-grow: 1;
+}
+
+.video-channel-names {
+  @include disable-default-a-behaviour;
+
+  width: fit-content;
+  display: flex;
+  align-items: baseline;
+  color: pvar(--mainForegroundColor);
+}
+
+.video-channel-display-name {
+  font-weight: $font-semibold;
+  font-size: 18px;
+}
+
+.video-channel-name {
+  @include margin-left(5px);
+
+  font-size: 14px;
+  color: $grey-actor-name;
+}
+
+.video-channel-buttons {
+  margin-top: 10px;
+  min-width: 190px;
+}
+
+::ng-deep .chartjs-render-monitor {
+  position: relative;
+  top: 1px;
+}
+
+.video-channels-header {
+  margin-bottom: 30px;
+}
+
+@media screen and (max-width: $small-view) {
+  .video-channels-header {
+    text-align: center;
+  }
+
+  .video-channel {
+    padding-bottom: 10px;
+
+    img {
+      @include margin-right(0);
+    }
+
+    .video-channel-buttons {
+      align-self: center;
+    }
+  }
+
+  .video-channel-info {
+    padding-bottom: 10px;
+    text-align: center;
+  }
+
+  .video-channel-names {
+    flex-direction: column;
+    align-items: center !important;
+    margin: auto;
+  }
+
+  .video-channel-name {
+    @include margin-left(0 !important);
+  }
+}
+
+@media screen and (max-width: $mobile-view) {
+  .video-channels-header {
+    flex-direction: column;
+
+    input[type=text] {
+      width: 100% !important;
+      margin-bottom: 12px;
+    }
+  }
+}
+
+@media screen and (min-width: breakpoint(lg)) {
+  :host-context(.main-col:not(.expanded)) {
+    .video-channel-buttons {
+      float: right;
+    }
+  }
+}
+
+@media screen and (min-width: $small-view) {
+  :host-context(.expanded) {
+    .video-channel-buttons {
+      float: right;
+    }
+  }
+}

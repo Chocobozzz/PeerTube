@@ -1,31 +1,53 @@
-@import 'variables';
-@import 'mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
-.peertube-select-container {
-  @include peertube-select-container(100px);
+.nav-content {
+  margin-top: 30px;
+}
 
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-  border-right: none;
+.advanced-filters-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
 
-  select {
-    height: inherit;
+  .nav-tabs {
+    margin-top: 10x;
+  }
+
+  .glyphicon {
+    @include margin-right(5px);
   }
 }
 
-#dropdownDownloadType {
+.peertube-select-container.title-select {
+  @include peertube-select-container(auto);
+
+  display: inline-block;
+  margin-left: 10px;
+  vertical-align: top;
+}
+
+#dropdown-download-type {
   cursor: pointer;
 }
 
 .download-type {
-  margin-top: 30px;
+  margin-top: 20px;
 
   .peertube-radio-container {
     @include peertube-radio-container;
+    @include margin-right(30px);
 
     display: inline-block;
-    margin-right: 30px;
   }
+}
+
+.nav-metadata {
+  margin-top: 20px;
 }
 
 .file-metadata {
@@ -38,8 +60,9 @@
   margin-bottom: 12px;
 
   .metadata-attribute-label {
+    @include padding-right(5px);
+
     min-width: 142px;
-    padding-right: 5px;
     display: inline-block;
     color: pvar(--greyForegroundColor);
     font-weight: $font-bold;
@@ -47,6 +70,7 @@
 
   a.metadata-attribute-value {
     @include disable-default-a-behaviour;
+
     color: pvar(--mainForegroundColor);
 
     &:hover {
@@ -57,7 +81,7 @@
   &.metadata-attribute-tags {
     .metadata-attribute-value:not(:nth-child(2)) {
       &::before {
-        content: ', '
+        content: ', ';
       }
     }
   }

@@ -1,0 +1,109 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+@use '_miniature' as *;
+
+.root {
+  display: grid;
+  grid-template-columns: auto 1fr;
+}
+
+.playlist-info {
+  @include margin-left(calc(#{pvar(--horizontalMarginContent)} * -1));
+
+  grid-column: 1;
+  background-color: pvar(--submenuBackgroundColor);
+  margin-top: -$sub-menu-margin-bottom;
+
+  padding: 15px;
+
+  display: flex;
+  flex-direction: column;
+
+  /* fix ellipsis dots background color */
+  ::ng-deep .miniature-name::after {
+    background-color: pvar(--submenuBackgroundColor) !important;
+  }
+}
+
+.playlist-buttons {
+  display: flex;
+  margin: 30px 0 10px;
+
+  .share-button {
+    @include peertube-button;
+    @include button-with-icon(17px, 3px, -1px);
+    @include grey-button;
+    @include apply-svg-color(pvar(--actionButtonColor));
+
+    @include margin-right(10px);
+  }
+}
+
+// Thanks Angular CDK <3 https://material.angular.io/cdk/drag-drop/examples
+.cdk-drag-preview {
+  box-sizing: border-box;
+  border-radius: 4px;
+  box-shadow:
+    0 5px 5px -3px rgba(0, 0, 0, 0.2),
+    0 8px 10px 1px rgba(0, 0, 0, 0.14),
+    0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.cdk-drag-placeholder {
+  opacity: 0;
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.video:last-child {
+  border: 0;
+}
+
+.videos.cdk-drop-list-dragging .video:not(.cdk-drag-placeholder) {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.playlist-elements {
+  grid-column: 2;
+}
+
+my-video-playlist-miniature {
+  width: $video-thumbnail-width;
+}
+
+@include on-small-main-col {
+  my-video-playlist-miniature {
+    width: $video-thumbnail-medium-width;
+  }
+}
+
+@include on-mobile-main-col {
+  .root {
+    display: block;
+  }
+
+  .playlist-info {
+    width: calc(100% + (2 * var(--horizontalMarginContent)));
+    padding-top: 20px;
+    margin-bottom: 10px;
+  }
+
+  my-video-playlist-miniature,
+  .playlist-buttons {
+    @include margin-left(auto);
+    @include margin-right(auto);
+  }
+
+  ::ng-deep my-video-playlist-element-miniature {
+
+    .video {
+      padding: 5px !important;
+    }
+
+    .position {
+      @include margin-right(5px !important);
+    }
+  }
+}

@@ -2,12 +2,13 @@ import { ContextType } from '../activitypub/context'
 import { VideoResolution } from '../videos/video-resolution.enum'
 import { SendEmailOptions } from './emailer.model'
 
-export type JobState = 'active' | 'completed' | 'failed' | 'waiting' | 'delayed'
+export type JobState = 'active' | 'completed' | 'failed' | 'waiting' | 'delayed' | 'paused'
 
 export type JobType =
   | 'activitypub-http-unicast'
   | 'activitypub-http-broadcast'
   | 'activitypub-http-fetcher'
+  | 'activitypub-cleaner'
   | 'activitypub-follow'
   | 'video-file-import'
   | 'video-transcoding'
@@ -16,12 +17,16 @@ export type JobType =
   | 'videos-views'
   | 'activitypub-refresher'
   | 'video-redundancy'
+  | 'video-live-ending'
+  | 'actor-keys'
 
 export interface Job {
   id: number
   state: JobState
   type: JobType
   data: any
+  priority: number
+  progress: number
   error: any
   createdAt: Date | string
   finishedOn: Date | string
@@ -48,13 +53,12 @@ export type ActivitypubHttpFetcherPayload = {
   uri: string
   type: FetchType
   videoId?: number
-  accountId?: number
 }
 
 export type ActivitypubHttpUnicastPayload = {
   uri: string
   signatureActorId?: number
-  body: any
+  body: object
   contextType?: ContextType
 }
 
@@ -77,9 +81,6 @@ export type VideoImportYoutubeDLPayload = {
   type: VideoImportYoutubeDLPayloadType
   videoImportId: number
 
-  generateThumbnail: boolean
-  generatePreview: boolean
-
   fileExt?: string
 }
 export type VideoImportTorrentPayload = {
@@ -99,26 +100,27 @@ interface BaseTranscodingPayload {
   isNewVideo?: boolean
 }
 
-interface HLSTranscodingPayload extends BaseTranscodingPayload {
-  type: 'hls'
+export interface HLSTranscodingPayload extends BaseTranscodingPayload {
+  type: 'new-resolution-to-hls'
   isPortraitMode?: boolean
   resolution: VideoResolution
   copyCodecs: boolean
+  isMaxQuality: boolean
 }
 
 export interface NewResolutionTranscodingPayload extends BaseTranscodingPayload {
-  type: 'new-resolution'
+  type: 'new-resolution-to-webtorrent'
   isPortraitMode?: boolean
   resolution: VideoResolution
 }
 
 export interface MergeAudioTranscodingPayload extends BaseTranscodingPayload {
-  type: 'merge-audio'
+  type: 'merge-audio-to-webtorrent'
   resolution: VideoResolution
 }
 
 export interface OptimizeTranscodingPayload extends BaseTranscodingPayload {
-  type: 'optimize'
+  type: 'optimize-to-webtorrent'
 }
 
 export type VideoTranscodingPayload =
@@ -126,3 +128,11 @@ export type VideoTranscodingPayload =
   | NewResolutionTranscodingPayload
   | OptimizeTranscodingPayload
   | MergeAudioTranscodingPayload
+
+export interface VideoLiveEndingPayload {
+  videoId: number
+}
+
+export interface ActorKeysPayload {
+  actorId: number
+}

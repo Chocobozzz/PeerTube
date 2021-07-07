@@ -1,37 +1,35 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
 import 'mocha'
-import { Video, VideoPrivacy } from '../../../../shared/models/videos'
-import { VideoComment, VideoCommentThreadTree } from '../../../../shared/models/videos/video-comment.model'
-import { cleanupTests, completeVideoCheck, deleteVideoComment } from '../../../../shared/extra-utils'
-import {
-  flushAndRunMultipleServers,
-  getVideosList,
-  ServerInfo,
-  setAccessTokensToServers,
-  uploadVideo
-} from '../../../../shared/extra-utils/index'
-import { dateIsValid } from '../../../../shared/extra-utils/miscs/miscs'
-import {
-  follow,
-  getFollowersListPaginationAndSort,
-  getFollowingListPaginationAndSort,
-  unfollow
-} from '../../../../shared/extra-utils/server/follows'
-import { expectAccountFollows } from '../../../../shared/extra-utils/users/accounts'
-import { userLogin } from '../../../../shared/extra-utils/users/login'
-import { createUser } from '../../../../shared/extra-utils/users/users'
+import * as chai from 'chai'
 import {
   addVideoCommentReply,
   addVideoCommentThread,
+  cleanupTests,
+  completeVideoCheck,
+  createUser,
+  createVideoCaption,
+  dateIsValid,
+  deleteVideoComment,
+  expectAccountFollows,
+  flushAndRunMultipleServers,
+  follow,
+  getFollowersListPaginationAndSort,
+  getFollowingListPaginationAndSort,
   getVideoCommentThreads,
-  getVideoThreadComments
-} from '../../../../shared/extra-utils/videos/video-comments'
-import { rateVideo } from '../../../../shared/extra-utils/videos/videos'
-import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
-import { createVideoCaption, listVideoCaptions, testCaptionFile } from '../../../../shared/extra-utils/videos/video-captions'
-import { VideoCaption } from '../../../../shared/models/videos/caption/video-caption.model'
+  getVideosList,
+  getVideoThreadComments,
+  listVideoCaptions,
+  rateVideo,
+  ServerInfo,
+  setAccessTokensToServers,
+  testCaptionFile,
+  unfollow,
+  uploadVideo,
+  userLogin,
+  waitJobs
+} from '@shared/extra-utils'
+import { Video, VideoCaption, VideoComment, VideoCommentThreadTree, VideoPrivacy } from '@shared/models'
 
 const expect = chai.expect
 
@@ -302,7 +300,7 @@ describe('Test follows', function () {
   })
 
   it('Should upload a video on server 2 and 3 and propagate only the video of server 2', async function () {
-    this.timeout(35000)
+    this.timeout(60000)
 
     await uploadVideo(servers[1].url, servers[1].accessToken, { name: 'server2' })
     await uploadVideo(servers[2].url, servers[2].accessToken, { name: 'server3' })
@@ -521,7 +519,7 @@ describe('Test follows', function () {
         expect(deletedComment.text).to.equal('')
         expect(deletedComment.inReplyToCommentId).to.be.null
         expect(deletedComment.account).to.be.null
-        expect(deletedComment.totalReplies).to.equal(3)
+        expect(deletedComment.totalReplies).to.equal(2)
         expect(dateIsValid(deletedComment.deletedAt as string)).to.be.true
 
         const res2 = await getVideoThreadComments(servers[0].url, video4.id, deletedComment.threadId)
@@ -558,7 +556,7 @@ describe('Test follows', function () {
       const caption1: VideoCaption = res.body.data[0]
       expect(caption1.language.id).to.equal('ar')
       expect(caption1.language.label).to.equal('Arabic')
-      expect(caption1.captionPath).to.equal('/lazy-static/video-captions/' + video4.uuid + '-ar.vtt')
+      expect(caption1.captionPath).to.match(new RegExp('^/lazy-static/video-captions/.+-ar.vtt$'))
       await testCaptionFile(servers[0].url, caption1.captionPath, 'Subtitle good 2.')
     })
 

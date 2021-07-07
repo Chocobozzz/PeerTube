@@ -1,17 +1,14 @@
+import decache from 'decache'
+import * as express from 'express'
 import { createReadStream, createWriteStream } from 'fs'
-import { outputFile, readJSON } from 'fs-extra'
+import { ensureDir, outputFile, readJSON } from 'fs-extra'
 import { basename, join } from 'path'
 import { MOAuthTokenUser, MUser } from '@server/types/models'
-import { RegisterServerHookOptions } from '@shared/models/plugins/register-server-hook.model'
+import { getCompleteLocale } from '@shared/core-utils'
+import { ClientScript, PluginPackageJson, PluginTranslation, PluginTranslationPaths, RegisterServerHookOptions } from '@shared/models'
 import { getHookType, internalRunHook } from '../../../shared/core-utils/plugins/hooks'
-import {
-  ClientScript,
-  PluginPackageJson,
-  PluginTranslationPaths as PackagePluginTranslations
-} from '../../../shared/models/plugins/plugin-package-json.model'
-import { PluginTranslation } from '../../../shared/models/plugins/plugin-translation.model'
 import { PluginType } from '../../../shared/models/plugins/plugin.type'
-import { ServerHook, ServerHookName } from '../../../shared/models/plugins/server-hook.model'
+import { ServerHook, ServerHookName } from '../../../shared/models/plugins/server/server-hook.model'
 import { isLibraryCodeValid, isPackageJSONValid } from '../../helpers/custom-validators/plugins'
 import { logger } from '../../helpers/logger'
 import { CONFIG } from '../../initializers/config'
@@ -19,7 +16,7 @@ import { PLUGIN_GLOBAL_CSS_PATH } from '../../initializers/constants'
 import { PluginModel } from '../../models/server/plugin'
 import { PluginLibrary, RegisterServerAuthExternalOptions, RegisterServerAuthPassOptions, RegisterServerOptions } from '../../types/plugins'
 import { ClientHtml } from '../client-html'
-import { RegisterHelpersStore } from './register-helpers-store'
+import { RegisterHelpers } from './register-helpers'
 import { installNpmPlugin, installNpmPluginFromDisk, removeNpmPlugin } from './yarn'
 
 export interface RegisteredPlugin {
@@ -39,7 +36,7 @@ export interface RegisteredPlugin {
   css: string[]
 
   // Only if this is a plugin
-  registerHelpersStore?: RegisterHelpersStore
+  registerHelpers?: RegisterHelpers
   unregister?: Function
 }
 
@@ -108,7 +105,7 @@ export class PluginManager implements ServerHook {
         npmName: p.npmName,
         name: p.name,
         version: p.version,
-        idAndPassAuths: p.registerHelpersStore.getIdAndPassAuths()
+        idAndPassAuths: p.registerHelpers.getIdAndPassAuths()
       }))
       .filter(v => v.idAndPassAuths.length !== 0)
   }
@@ -119,7 +116,7 @@ export class PluginManager implements ServerHook {
         npmName: p.npmName,
         name: p.name,
         version: p.version,
-        externalAuths: p.registerHelpersStore.getExternalAuths()
+        externalAuths: p.registerHelpers.getExternalAuths()
       }))
       .filter(v => v.externalAuths.length !== 0)
   }
@@ -128,14 +125,14 @@ export class PluginManager implements ServerHook {
     const result = this.getRegisteredPluginOrTheme(npmName)
     if (!result || result.type !== PluginType.PLUGIN) return []
 
-    return result.registerHelpersStore.getSettings()
+    return result.registerHelpers.getSettings()
   }
 
   getRouter (npmName: string) {
     const result = this.getRegisteredPluginOrTheme(npmName)
     if (!result || result.type !== PluginType.PLUGIN) return null
 
-    return result.registerHelpersStore.getRouter()
+    return result.registerHelpers.getRouter()
   }
 
   getTranslations (locale: string) {
@@ -166,29 +163,36 @@ export class PluginManager implements ServerHook {
 
   // ###################### External events ######################
 
-  onLogout (npmName: string, authName: string, user: MUser) {
+  async onLogout (npmName: string, authName: string, user: MUser, req: express.Request) {
     const auth = this.getAuth(npmName, authName)
 
     if (auth?.onLogout) {
       logger.info('Running onLogout function from auth %s of plugin %s', authName, npmName)
 
       try {
-        auth.onLogout(user)
+        // Force await, in case or onLogout returns a promise
+        const result = await auth.onLogout(user, req)
+
+        return typeof result === 'string'
+          ? result
+          : undefined
       } catch (err) {
         logger.warn('Cannot run onLogout function from auth %s of plugin %s.', authName, npmName, { err })
       }
     }
+
+    return undefined
   }
 
-  onSettingsChanged (name: string, settings: any) {
+  async onSettingsChanged (name: string, settings: any) {
     const registered = this.getRegisteredPluginByShortName(name)
     if (!registered) {
       logger.error('Cannot find plugin %s to call on settings changed.', name)
     }
 
-    for (const cb of registered.registerHelpersStore.getOnSettingsChangedCallbacks()) {
+    for (const cb of registered.registerHelpers.getOnSettingsChangedCallbacks()) {
       try {
-        cb(settings)
+        await cb(settings)
       } catch (err) {
         logger.error('Cannot run on settings changed callback for %s.', registered.npmName, { err })
       }
@@ -260,8 +264,9 @@ export class PluginManager implements ServerHook {
         this.hooks[key] = this.hooks[key].filter(h => h.npmName !== npmName)
       }
 
-      const store = plugin.registerHelpersStore
+      const store = plugin.registerHelpers
       store.reinitVideoConstants(plugin.npmName)
+      store.reinitTranscodingProfilesAndEncoders(plugin.npmName)
 
       logger.info('Regenerating registered plugin CSS to global file.')
       await this.regeneratePluginGlobalCSS()
@@ -299,29 +304,42 @@ export class PluginManager implements ServerHook {
         uninstalled: false,
         peertubeEngine: packageJSON.engine.peertube
       }, { returning: true })
-    } catch (err) {
-      logger.error('Cannot install plugin %s, removing it...', toInstall, { err })
+
+      logger.info('Successful installation of plugin %s.', toInstall)
+
+      await this.registerPluginOrTheme(plugin)
+    } catch (rootErr) {
+      logger.error('Cannot install plugin %s, removing it...', toInstall, { err: rootErr })
 
       try {
-        await removeNpmPlugin(npmName)
+        await this.uninstall(npmName)
       } catch (err) {
-        logger.error('Cannot remove plugin %s after failed installation.', toInstall, { err })
+        logger.error('Cannot uninstall plugin %s after failed installation.', toInstall, { err })
+
+        try {
+          await removeNpmPlugin(npmName)
+        } catch (err) {
+          logger.error('Cannot remove plugin %s after failed installation.', toInstall, { err })
+        }
       }
 
-      throw err
+      throw rootErr
     }
-
-    logger.info('Successful installation of plugin %s.', toInstall)
-
-    await this.registerPluginOrTheme(plugin)
 
     return plugin
   }
 
-  async update (toUpdate: string, version?: string, fromDisk = false) {
+  async update (toUpdate: string, fromDisk = false) {
     const npmName = fromDisk ? basename(toUpdate) : toUpdate
 
     logger.info('Updating plugin %s.', npmName)
+
+    // Use the latest version from DB, to not upgrade to a version that does not support our PeerTube version
+    let version: string
+    if (!fromDisk) {
+      const plugin = await PluginModel.loadByNpmName(toUpdate)
+      version = plugin.latestVersion
+    }
 
     // Unregister old hooks
     await this.unregister(npmName)
@@ -367,11 +385,11 @@ export class PluginManager implements ServerHook {
     this.sanitizeAndCheckPackageJSONOrThrow(packageJSON, plugin.type)
 
     let library: PluginLibrary
-    let registerHelpersStore: RegisterHelpersStore
+    let registerHelpers: RegisterHelpers
     if (plugin.type === PluginType.PLUGIN) {
       const result = await this.registerPlugin(plugin, pluginPath, packageJSON)
       library = result.library
-      registerHelpersStore = result.registerStore
+      registerHelpers = result.registerStore
     }
 
     const clientScripts: { [id: string]: ClientScript } = {}
@@ -390,7 +408,7 @@ export class PluginManager implements ServerHook {
       staticDirs: packageJSON.staticDirs,
       clientScripts,
       css: packageJSON.css,
-      registerHelpersStore: registerHelpersStore || undefined,
+      registerHelpers: registerHelpers || undefined,
       unregister: library ? library.unregister : undefined
     }
 
@@ -402,7 +420,7 @@ export class PluginManager implements ServerHook {
 
     // Delete cache if needed
     const modulePath = join(pluginPath, packageJSON.library)
-    delete require.cache[modulePath]
+    decache(modulePath)
     const library: PluginLibrary = require(modulePath)
 
     if (!isLibraryCodeValid(library)) {
@@ -410,8 +428,10 @@ export class PluginManager implements ServerHook {
     }
 
     const { registerOptions, registerStore } = this.getRegisterHelpers(npmName, plugin)
-    library.register(registerOptions)
-           .catch(err => logger.error('Cannot register plugin %s.', npmName, { err }))
+
+    await ensureDir(registerOptions.peertubeHelpers.plugin.getDataDirectoryPath())
+
+    await library.register(registerOptions)
 
     logger.info('Add plugin %s CSS to global file.', npmName)
 
@@ -422,15 +442,17 @@ export class PluginManager implements ServerHook {
 
   // ###################### Translations ######################
 
-  private async addTranslations (plugin: PluginModel, npmName: string, translationPaths: PackagePluginTranslations) {
+  private async addTranslations (plugin: PluginModel, npmName: string, translationPaths: PluginTranslationPaths) {
     for (const locale of Object.keys(translationPaths)) {
       const path = translationPaths[locale]
       const json = await readJSON(join(this.getPluginPath(plugin.name, plugin.type), path))
 
-      if (!this.translations[locale]) this.translations[locale] = {}
-      this.translations[locale][npmName] = json
+      const completeLocale = getCompleteLocale(locale)
 
-      logger.info('Added locale %s of plugin %s.', locale, npmName)
+      if (!this.translations[completeLocale]) this.translations[completeLocale] = {}
+      this.translations[completeLocale][npmName] = json
+
+      logger.info('Added locale %s of plugin %s.', completeLocale, npmName)
     }
   }
 
@@ -504,8 +526,8 @@ export class PluginManager implements ServerHook {
     const plugin = this.getRegisteredPluginOrTheme(npmName)
     if (!plugin || plugin.type !== PluginType.PLUGIN) return null
 
-    let auths: (RegisterServerAuthPassOptions | RegisterServerAuthExternalOptions)[] = plugin.registerHelpersStore.getIdAndPassAuths()
-    auths = auths.concat(plugin.registerHelpersStore.getExternalAuths())
+    let auths: (RegisterServerAuthPassOptions | RegisterServerAuthExternalOptions)[] = plugin.registerHelpers.getIdAndPassAuths()
+    auths = auths.concat(plugin.registerHelpers.getExternalAuths())
 
     return auths.find(a => a.authName === authName)
   }
@@ -530,7 +552,7 @@ export class PluginManager implements ServerHook {
   private getRegisterHelpers (
     npmName: string,
     plugin: PluginModel
-  ): { registerStore: RegisterHelpersStore, registerOptions: RegisterServerOptions } {
+  ): { registerStore: RegisterHelpers, registerOptions: RegisterServerOptions } {
     const onHookAdded = (options: RegisterServerHookOptions) => {
       if (!this.hooks[options.target]) this.hooks[options.target] = []
 
@@ -542,11 +564,11 @@ export class PluginManager implements ServerHook {
       })
     }
 
-    const registerHelpersStore = new RegisterHelpersStore(npmName, plugin, onHookAdded.bind(this))
+    const registerHelpers = new RegisterHelpers(npmName, plugin, onHookAdded.bind(this))
 
     return {
-      registerStore: registerHelpersStore,
-      registerOptions: registerHelpersStore.buildRegisterHelpers()
+      registerStore: registerHelpers,
+      registerOptions: registerHelpers.buildRegisterHelpers()
     }
   }
 

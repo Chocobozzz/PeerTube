@@ -1,0 +1,26 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+.peertube-button {
+  @include peertube-button;
+}
+
+.peertube-button-link {
+  @include peertube-button-link;
+}
+
+.orange-button {
+  @include orange-button;
+}
+
+.orange-button-inverted {
+  @include orange-button-inverted;
+}
+
+.grey-button {
+  @include grey-button;
+}
+
+.tertiary-button {
+  @include tertiary-button;
+}

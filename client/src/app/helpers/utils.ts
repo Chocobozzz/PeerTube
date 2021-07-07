@@ -1,5 +1,9 @@
+import { first, map } from 'rxjs/operators'
+import { SelectChannelItem } from 'src/types/select-options-item.model'
 import { DatePipe } from '@angular/common'
-import { SelectChannelItem } from '@app/shared/shared-forms'
+import { HttpErrorResponse } from '@angular/common/http'
+import { Notifier } from '@app/core'
+import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 import { environment } from '../../environments/environment'
 import { AuthService } from '../core/auth'
 
@@ -17,31 +21,31 @@ function getParameterByName (name: string, url: string) {
   return decodeURIComponent(results[2].replace(/\+/g, ' '))
 }
 
-function populateAsyncUserVideoChannels (
-  authService: AuthService,
-  channel: SelectChannelItem[]
-) {
-  return new Promise(res => {
-    authService.userInformationLoaded
-      .subscribe(
-        () => {
-          const user = authService.getUser()
-          if (!user) return
+function listUserChannels (authService: AuthService) {
+  return authService.userInformationLoaded
+    .pipe(
+      first(),
+      map(() => {
+        const user = authService.getUser()
+        if (!user) return undefined
 
-          const videoChannels = user.videoChannels
-          if (Array.isArray(videoChannels) === false) return
+        const videoChannels = user.videoChannels
+        if (Array.isArray(videoChannels) === false) return undefined
 
-          videoChannels.forEach(c => channel.push({
+        return videoChannels
+          .sort((a, b) => {
+            if (a.updatedAt < b.updatedAt) return 1
+            if (a.updatedAt > b.updatedAt) return -1
+            return 0
+          })
+          .map(c => ({
             id: c.id,
             label: c.displayName,
             support: c.support,
             avatarPath: c.avatar?.path
-          }))
-
-          return res()
-        }
-      )
-  })
+          }) as SelectChannelItem)
+      })
+    )
 }
 
 function getAbsoluteAPIUrl () {
@@ -58,7 +62,7 @@ function getAbsoluteAPIUrl () {
 }
 
 function getAbsoluteEmbedUrl () {
-  let absoluteEmbedUrl = environment.embedUrl
+  let absoluteEmbedUrl = environment.originServerUrl
   if (!absoluteEmbedUrl) {
     // The Embed is on the same domain
     absoluteEmbedUrl = window.location.origin
@@ -144,8 +148,12 @@ function sortBy (obj: any[], key1: string, key2?: string) {
   })
 }
 
-function scrollToTop () {
-  window.scroll(0, 0)
+function scrollToTop (behavior: 'auto' | 'smooth' = 'auto') {
+  window.scrollTo({
+    left: 0,
+    top: 0,
+    behavior
+  })
 }
 
 function isInViewport (el: HTMLElement) {
@@ -168,12 +176,41 @@ function isXPercentInViewport (el: HTMLElement, percentVisible: number) {
   )
 }
 
+function genericUploadErrorHandler (parameters: {
+  err: Pick<HttpErrorResponse, 'message' | 'status' | 'headers'>
+  name: string
+  notifier: Notifier
+  sticky?: boolean
+}) {
+  const { err, name, notifier, sticky } = { sticky: false, ...parameters }
+  const title = $localize`The upload failed`
+  let message = err.message
+
+  if (err instanceof ErrorEvent) { // network error
+    message = $localize`The connection was interrupted`
+    notifier.error(message, title, null, sticky)
+  } else if (err.status === HttpStatusCode.INTERNAL_SERVER_ERROR_500) {
+    message = $localize`The server encountered an error`
+    notifier.error(message, title, null, sticky)
+  } else if (err.status === HttpStatusCode.REQUEST_TIMEOUT_408) {
+    message = $localize`Your ${name} file couldn't be transferred before the set timeout (usually 10min)`
+    notifier.error(message, title, null, sticky)
+  } else if (err.status === HttpStatusCode.PAYLOAD_TOO_LARGE_413) {
+    const maxFileSize = err.headers?.get('X-File-Maximum-Size') || '8G'
+    message = $localize`Your ${name} file was too large (max. size: ${maxFileSize})`
+    notifier.error(message, title, null, sticky)
+  } else {
+    notifier.error(err.message, title)
+  }
+
+  return message
+}
+
 export {
   sortBy,
   durationToString,
   lineFeedToHtml,
   getParameterByName,
-  populateAsyncUserVideoChannels,
   getAbsoluteAPIUrl,
   dateToHuman,
   immutableAssign,
@@ -183,5 +220,7 @@ export {
   removeElementFromArray,
   scrollToTop,
   isInViewport,
-  isXPercentInViewport
+  isXPercentInViewport,
+  listUserChannels,
+  genericUploadErrorHandler
 }

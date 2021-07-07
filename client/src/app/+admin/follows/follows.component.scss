@@ -1,8 +1,9 @@
-@import "mixins";
+@use '_mixins' as *;
 
 .form-sub-title {
+  @include margin-right(30px);
+
   flex-grow: 0;
-  margin-right: 30px;
 }
 
 .badge {

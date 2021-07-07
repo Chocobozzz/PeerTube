@@ -1,10 +1,18 @@
-<div *ngIf="!isUploadingVideo" class="upload-video-container" dragDrop (fileDropped)="setVideoFile($event)">
+<div *ngIf="!isUploadingVideo" class="upload-video-container" dragDrop (fileDropped)="onFileDropped($event)">
   <div class="first-step-block">
     <my-global-icon class="upload-icon" iconName="upload" aria-hidden="true"></my-global-icon>
 
     <div class="button-file form-control" [ngbTooltip]="'(extensions: ' + videoExtensions + ')'">
       <span i18n>Select the file to upload</span>
-      <input #videofileInput type="file" name="videofile" id="videofile" [accept]="videoExtensions" (change)="fileChange()" autofocus />
+      <input
+        aria-label="Select the file to upload"
+        i18n-aria-label
+        #videofileInput
+        [accept]="videoExtensions"
+        (change)="onFileChange($event)"
+        id="videofile"
+        type="file"
+      />
     </div>
 
     <div class="form-group form-group-channel">
@@ -38,23 +46,43 @@
       </div>
 
       <div class="form-group upload-audio-button">
-        <my-button className="orange-button" i18n-label [label]="getAudioUploadLabel()" icon="upload" (click)="uploadFirstStep(true)"></my-button>
+        <my-button
+          className="orange-button"
+          [label]="getAudioUploadLabel()"
+          icon="upload"
+          (click)="uploadAudio()"
+        >
+        </my-button>
       </div>
     </ng-container>
   </div>
 </div>
 
+<!-- Upload progress/cancel/error/success header -->
 <div *ngIf="isUploadingVideo && !error" class="upload-progress-cancel">
-  <div class="progress" i18n-title title="Total video quota">
+  <div class="progress" i18n-title title="Total video uploaded">
     <div class="progress-bar" role="progressbar" [style]="{ width: videoUploadPercents + '%' }" [attr.aria-valuenow]="videoUploadPercents" aria-valuemin="0" [attr.aria-valuemax]="100">
       <span *ngIf="videoUploadPercents === 100 && videoUploaded === false" i18n>Processing…</span>
       <span *ngIf="videoUploadPercents !== 100 || videoUploaded">{{ videoUploadPercents }}%</span>
     </div>
   </div>
-  <input *ngIf="videoUploaded === false" type="button" value="Cancel" (click)="cancelUpload()" />
+  <input *ngIf="videoUploaded === false" type="button" i18n-value="Cancel ongoing upload of a video" value="Cancel" (click)="cancelUpload()" />
 </div>
 
-<div *ngIf="error" class="alert alert-danger">
+<div *ngIf="error && enableRetryAfterError" class="upload-progress-retry">
+  <div class="progress">
+    <div class="progress-bar red" role="progressbar" [style]="{ width: '100%' }" [attr.aria-valuenow]="100" aria-valuemin="0" [attr.aria-valuemax]="100">
+      <span>{{ error }}</span>
+    </div>
+  </div>
+
+  <div class="btn-group" role="group">
+    <input type="button" class="btn" i18n-value="Retry failed upload of a video" value="Retry" (click)="retryUpload()" />
+    <input type="button" class="btn" i18n-value="Cancel ongoing upload of a video" value="Cancel" (click)="cancelUpload()" />
+  </div>
+</div>
+
+<div *ngIf="error && !enableRetryAfterError" class="alert alert-danger">
   <div i18n>Sorry, but something went wrong</div>
   {{ error }}
 </div>
@@ -68,14 +96,14 @@
   <my-video-edit
     [form]="form" [formErrors]="formErrors" [videoCaptions]="videoCaptions"
     [validationMessages]="validationMessages" [userVideoChannels]="userVideoChannels"
-    [waitTranscodingEnabled]="waitTranscodingEnabled"
+    [waitTranscodingEnabled]="true"
     type="upload"
   ></my-video-edit>
 
   <div class="submit-container">
     <div i18n *ngIf="videoUploaded === false" class="message-submit">Publish will be available when upload is finished</div>
 
-    <my-button className="submit-button orange-button" i18n-label label="Publish" icon="circle-tick"
+    <my-button className="orange-button" i18n-label label="Publish" icon="circle-tick"
                (click)="updateSecondStep()" (keydown.enter)="updateSecondStep()"
                [disabled]="isPublishingButtonDisabled()"
     ></my-button>

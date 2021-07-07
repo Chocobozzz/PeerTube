@@ -1,23 +1,25 @@
+import { getServerActor } from '@server/models/application/application'
 import { ActivityFollow } from '../../../../shared/models/activitypub'
+import { getAPId } from '../../../helpers/activitypub'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { logger } from '../../../helpers/logger'
-import { sequelizeTypescript } from '../../../initializers/database'
-import { ActorModel } from '../../../models/activitypub/actor'
-import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
-import { sendAccept, sendReject } from '../send'
-import { Notifier } from '../../notifier'
-import { getAPId } from '../../../helpers/activitypub'
 import { CONFIG } from '../../../initializers/config'
+import { sequelizeTypescript } from '../../../initializers/database'
+import { ActorModel } from '../../../models/actor/actor'
+import { ActorFollowModel } from '../../../models/actor/actor-follow'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model'
 import { MActorFollowActors, MActorSignature } from '../../../types/models'
+import { Notifier } from '../../notifier'
 import { autoFollowBackIfNeeded } from '../follow'
-import { getServerActor } from '@server/models/application/application'
+import { sendAccept, sendReject } from '../send'
 
 async function processFollowActivity (options: APProcessorOptions<ActivityFollow>) {
   const { activity, byActor } = options
-  const activityObject = getAPId(activity.object)
 
-  return retryTransactionWrapper(processFollow, byActor, activityObject)
+  const activityId = activity.id
+  const objectId = getAPId(activity.object)
+
+  return retryTransactionWrapper(processFollow, byActor, activityId, objectId)
 }
 
 // ---------------------------------------------------------------------------
@@ -28,7 +30,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function processFollow (byActor: MActorSignature, targetActorURL: string) {
+async function processFollow (byActor: MActorSignature, activityId: string, targetActorURL: string) {
   const { actorFollow, created, isFollowingInstance, targetActor } = await sequelizeTypescript.transaction(async t => {
     const targetActor = await ActorModel.loadByUrlAndPopulateAccountAndChannel(targetActorURL, t)
 
@@ -41,7 +43,7 @@ async function processFollow (byActor: MActorSignature, targetActorURL: string) 
     if (isFollowingInstance && CONFIG.FOLLOWERS.INSTANCE.ENABLED === false) {
       logger.info('Rejecting %s because instance followers are disabled.', targetActor.url)
 
-      await sendReject(byActor, targetActor)
+      sendReject(activityId, byActor, targetActor)
 
       return { actorFollow: undefined as MActorFollowActors }
     }
@@ -54,7 +56,11 @@ async function processFollow (byActor: MActorSignature, targetActorURL: string) 
       defaults: {
         actorId: byActor.id,
         targetActorId: targetActor.id,
-        state: CONFIG.FOLLOWERS.INSTANCE.MANUAL_APPROVAL ? 'pending' : 'accepted'
+        url: activityId,
+
+        state: CONFIG.FOLLOWERS.INSTANCE.MANUAL_APPROVAL
+          ? 'pending'
+          : 'accepted'
       },
       transaction: t
     })
@@ -63,6 +69,13 @@ async function processFollow (byActor: MActorSignature, targetActorURL: string) 
     // Or if the instance automatically accepts followers
     if (actorFollow.state !== 'accepted' && (isFollowingInstance === false || CONFIG.FOLLOWERS.INSTANCE.MANUAL_APPROVAL === false)) {
       actorFollow.state = 'accepted'
+
+      await actorFollow.save({ transaction: t })
+    }
+
+    // Before PeerTube V3 we did not save the follow ID. Try to fix these old follows
+    if (!actorFollow.url) {
+      actorFollow.url = activityId
       await actorFollow.save({ transaction: t })
     }
 
@@ -71,8 +84,9 @@ async function processFollow (byActor: MActorSignature, targetActorURL: string) 
 
     // Target sends to actor he accepted the follow request
     if (actorFollow.state === 'accepted') {
-      await sendAccept(actorFollow)
-      await autoFollowBackIfNeeded(actorFollow)
+      sendAccept(actorFollow)
+
+      await autoFollowBackIfNeeded(actorFollow, t)
     }
 
     return { actorFollow, created, isFollowingInstance, targetActor }

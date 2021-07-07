@@ -5,12 +5,14 @@
   Useful to avoid circular dependencies.
 */
 
-import { createHash, HexBase64Latin1Encoding, randomBytes } from 'crypto'
-import { basename, isAbsolute, join, resolve } from 'path'
-import * as pem from 'pem'
-import { URL } from 'url'
-import { truncate } from 'lodash'
 import { exec, ExecOptions } from 'child_process'
+import { BinaryToTextEncoding, createHash, randomBytes } from 'crypto'
+import { truncate } from 'lodash'
+import { basename, extname, isAbsolute, join, resolve } from 'path'
+import * as pem from 'pem'
+import { pipeline } from 'stream'
+import { URL } from 'url'
+import { promisify } from 'util'
 
 const objectConverter = (oldObject: any, keyConverter: (e: string) => string, valueConverter: (e: any) => any) => {
   if (!oldObject || typeof oldObject !== 'object') {
@@ -30,6 +32,18 @@ const objectConverter = (oldObject: any, keyConverter: (e: string) => string, va
   return newObject
 }
 
+function mapToJSON (map: Map<any, any>) {
+  const obj: any = {}
+
+  for (const [ k, v ] of map) {
+    obj[k] = v
+  }
+
+  return obj
+}
+
+// ---------------------------------------------------------------------------
+
 const timeTable = {
   ms: 1,
   second: 1000,
@@ -41,6 +55,7 @@ const timeTable = {
 }
 
 export function parseDurationToMs (duration: number | string): number {
+  if (duration === null) return null
   if (typeof duration === 'number') return duration
 
   if (typeof duration === 'string') {
@@ -107,6 +122,8 @@ export function parseBytes (value: string | number): number {
   }
 }
 
+// ---------------------------------------------------------------------------
+
 function sanitizeUrl (url: string) {
   const urlObject = new URL(url)
 
@@ -126,6 +143,8 @@ function sanitizeHost (host: string, remoteScheme: string) {
   return host.replace(new RegExp(`:${toRemove}$`), '')
 }
 
+// ---------------------------------------------------------------------------
+
 function isTestInstance () {
   return process.env.NODE_ENV === 'test'
 }
@@ -137,6 +156,8 @@ function isProdInstance () {
 function getAppNumber () {
   return process.env.NODE_APP_INSTANCE
 }
+
+// ---------------------------------------------------------------------------
 
 let rootPath: string
 
@@ -151,35 +172,19 @@ function root () {
   return rootPath
 }
 
-// Thanks: https://stackoverflow.com/a/12034334
-function escapeHTML (stringParam) {
-  if (!stringParam) return ''
-
-  const entityMap = {
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    '\'': '&#39;',
-    '/': '&#x2F;',
-    '`': '&#x60;',
-    '=': '&#x3D;'
-  }
-
-  return String(stringParam).replace(/[&<>"'`=/]/g, s => entityMap[s])
-}
-
-function pageToStartAndCount (page: number, itemsPerPage: number) {
-  const start = (page - 1) * itemsPerPage
-
-  return { start, count: itemsPerPage }
-}
-
 function buildPath (path: string) {
   if (isAbsolute(path)) return path
 
   return join(root(), path)
 }
+
+function getLowercaseExtension (filename: string) {
+  const ext = extname(filename) || ''
+
+  return ext.toLowerCase()
+}
+
+// ---------------------------------------------------------------------------
 
 // Consistent with .length, lodash truncate function is not
 function peertubeTruncate (str: string, options: { length: number, separator?: RegExp, omission?: string }) {
@@ -194,13 +199,36 @@ function peertubeTruncate (str: string, options: { length: number, separator?: R
   return truncate(str, options)
 }
 
-function sha256 (str: string | Buffer, encoding: HexBase64Latin1Encoding = 'hex') {
+function pageToStartAndCount (page: number, itemsPerPage: number) {
+  const start = (page - 1) * itemsPerPage
+
+  return { start, count: itemsPerPage }
+}
+
+// ---------------------------------------------------------------------------
+
+type SemVersion = { major: number, minor: number, patch: number }
+function parseSemVersion (s: string) {
+  const parsed = s.match(/^v?(\d+)\.(\d+)\.(\d+)$/i)
+
+  return {
+    major: parseInt(parsed[1]),
+    minor: parseInt(parsed[2]),
+    patch: parseInt(parsed[3])
+  } as SemVersion
+}
+
+// ---------------------------------------------------------------------------
+
+function sha256 (str: string | Buffer, encoding: BinaryToTextEncoding = 'hex') {
   return createHash('sha256').update(str).digest(encoding)
 }
 
-function sha1 (str: string | Buffer, encoding: HexBase64Latin1Encoding = 'hex') {
+function sha1 (str: string | Buffer, encoding: BinaryToTextEncoding = 'hex') {
   return createHash('sha1').update(str).digest(encoding)
 }
+
+// ---------------------------------------------------------------------------
 
 function execShell (command: string, options?: ExecOptions) {
   return new Promise<{ err?: Error, stdout: string, stderr: string }>((res, rej) => {
@@ -212,6 +240,20 @@ function execShell (command: string, options?: ExecOptions) {
     })
   })
 }
+
+// ---------------------------------------------------------------------------
+
+function isOdd (num: number) {
+  return (num % 2) !== 0
+}
+
+function toEven (num: number) {
+  if (isOdd(num)) return num + 1
+
+  return num
+}
+
+// ---------------------------------------------------------------------------
 
 function promisify0<A> (func: (cb: (err: any, result: A) => void) => void): () => Promise<A> {
   return function promisified (): Promise<A> {
@@ -243,6 +285,7 @@ const createPrivateKey = promisify1<number, { key: string }>(pem.createPrivateKe
 const getPublicKey = promisify1<string, { publicKey: string }>(pem.getPublicKey)
 const execPromise2 = promisify2<string, any, string>(exec)
 const execPromise = promisify1<string, string>(exec)
+const pipelinePromise = promisify(pipeline)
 
 // ---------------------------------------------------------------------------
 
@@ -252,13 +295,17 @@ export {
   getAppNumber,
 
   objectConverter,
+  mapToJSON,
+
   root,
-  escapeHTML,
-  pageToStartAndCount,
+  buildPath,
+  getLowercaseExtension,
   sanitizeUrl,
   sanitizeHost,
-  buildPath,
+
   execShell,
+
+  pageToStartAndCount,
   peertubeTruncate,
 
   sha256,
@@ -272,5 +319,11 @@ export {
   createPrivateKey,
   getPublicKey,
   execPromise2,
-  execPromise
+  execPromise,
+  pipelinePromise,
+
+  parseSemVersion,
+
+  isOdd,
+  toEven
 }

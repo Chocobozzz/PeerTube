@@ -1,10 +1,8 @@
-import * as Bluebird from 'bluebird'
 import { FindAndCountOptions, json, QueryTypes } from 'sequelize'
 import { AllowNull, Column, CreatedAt, DataType, DefaultScope, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import { MPlugin, MPluginFormattable } from '@server/types/models'
-import { PeerTubePlugin } from '../../../shared/models/plugins/peertube-plugin.model'
-import { PluginType } from '../../../shared/models/plugins/plugin.type'
-import { RegisterServerSettingOptions } from '../../../shared/models/plugins/register-server-setting.model'
+import { AttributesOnly } from '@shared/core-utils'
+import { PeerTubePlugin, PluginType, RegisterServerSettingOptions } from '../../../shared/models'
 import {
   isPluginDescriptionValid,
   isPluginHomepage,
@@ -29,7 +27,7 @@ import { getSort, throwIfNotValid } from '../utils'
     }
   ]
 })
-export class PluginModel extends Model<PluginModel> {
+export class PluginModel extends Model<Partial<AttributesOnly<PluginModel>>> {
 
   @AllowNull(false)
   @Is('PluginName', value => throwIfNotValid(value, isPluginNameValid, 'name'))
@@ -87,7 +85,7 @@ export class PluginModel extends Model<PluginModel> {
   @UpdatedAt
   updatedAt: Date
 
-  static listEnabledPluginsAndThemes (): Bluebird<MPlugin[]> {
+  static listEnabledPluginsAndThemes (): Promise<MPlugin[]> {
     const query = {
       where: {
         enabled: true,
@@ -98,7 +96,7 @@ export class PluginModel extends Model<PluginModel> {
     return PluginModel.findAll(query)
   }
 
-  static loadByNpmName (npmName: string): Bluebird<MPlugin> {
+  static loadByNpmName (npmName: string): Promise<MPlugin> {
     const name = this.normalizePluginName(npmName)
     const type = this.getTypeFromNpmName(npmName)
 
@@ -252,7 +250,7 @@ export class PluginModel extends Model<PluginModel> {
       })
   }
 
-  static listInstalled (): Bluebird<MPlugin[]> {
+  static listInstalled (): Promise<MPlugin[]> {
     const query = {
       where: {
         uninstalled: false
@@ -285,7 +283,7 @@ export class PluginModel extends Model<PluginModel> {
     for (const r of registeredSettings) {
       if (r.private !== false) continue
 
-      result[r.name] = settings[r.name] || r.default || null
+      result[r.name] = settings[r.name] ?? r.default ?? null
     }
 
     return result

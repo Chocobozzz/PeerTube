@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
 import 'mocha'
+import * as chai from 'chai'
+import { listVideoRedundancies, updateRedundancy } from '@shared/extra-utils/server/redundancy'
+import { VideoPrivacy } from '@shared/models'
 import {
   cleanupTests,
   flushAndRunServer,
@@ -10,11 +12,11 @@ import {
   reRunServer,
   ServerInfo,
   setAccessTokensToServers,
+  updateVideo,
   uploadVideo,
   waitUntilLog
 } from '../../../../shared/extra-utils'
 import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
-import { listVideoRedundancies, updateRedundancy } from '@shared/extra-utils/server/redundancy'
 
 const expect = chai.expect
 
@@ -22,6 +24,31 @@ describe('Test redundancy constraints', function () {
   let remoteServer: ServerInfo
   let localServer: ServerInfo
   let servers: ServerInfo[]
+
+  const remoteServerConfig = {
+    redundancy: {
+      videos: {
+        check_interval: '1 second',
+        strategies: [
+          {
+            strategy: 'recently-added',
+            min_lifetime: '1 hour',
+            size: '100MB',
+            min_views: 0
+          }
+        ]
+      }
+    }
+  }
+
+  async function uploadWrapper (videoName: string) {
+    // Wait for transcoding
+    const res = await uploadVideo(localServer.url, localServer.accessToken, { name: 'to transcode', privacy: VideoPrivacy.PRIVATE })
+    await waitJobs([ localServer ])
+
+    // Update video to schedule a federation
+    await updateVideo(localServer.url, localServer.accessToken, res.body.video.id, { name: videoName, privacy: VideoPrivacy.PUBLIC })
+  }
 
   async function getTotalRedundanciesLocalServer () {
     const res = await listVideoRedundancies({
@@ -47,22 +74,7 @@ describe('Test redundancy constraints', function () {
     this.timeout(120000)
 
     {
-      const config = {
-        redundancy: {
-          videos: {
-            check_interval: '1 second',
-            strategies: [
-              {
-                strategy: 'recently-added',
-                min_lifetime: '1 hour',
-                size: '100MB',
-                min_views: 0
-              }
-            ]
-          }
-        }
-      }
-      remoteServer = await flushAndRunServer(1, config)
+      remoteServer = await flushAndRunServer(1, remoteServerConfig)
     }
 
     {
@@ -124,9 +136,8 @@ describe('Test redundancy constraints', function () {
     await killallServers([ localServer ])
     await reRunServer(localServer, config)
 
-    await uploadVideo(localServer.url, localServer.accessToken, { name: 'video 2 server 2' })
+    await uploadWrapper('video 2 server 2')
 
-    await waitJobs(servers)
     await waitUntilLog(remoteServer, 'Duplicated ', 10)
     await waitJobs(servers)
 
@@ -154,9 +165,8 @@ describe('Test redundancy constraints', function () {
     await killallServers([ localServer ])
     await reRunServer(localServer, config)
 
-    await uploadVideo(localServer.url, localServer.accessToken, { name: 'video 3 server 2' })
+    await uploadWrapper('video 3 server 2')
 
-    await waitJobs(servers)
     await waitUntilLog(remoteServer, 'Duplicated ', 15)
     await waitJobs(servers)
 
@@ -177,9 +187,7 @@ describe('Test redundancy constraints', function () {
     await follow(localServer.url, [ remoteServer.url ], localServer.accessToken)
     await waitJobs(servers)
 
-    await uploadVideo(localServer.url, localServer.accessToken, { name: 'video 4 server 2' })
-
-    await waitJobs(servers)
+    await uploadWrapper('video 4 server 2')
     await waitUntilLog(remoteServer, 'Duplicated ', 20)
     await waitJobs(servers)
 

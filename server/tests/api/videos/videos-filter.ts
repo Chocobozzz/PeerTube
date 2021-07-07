@@ -15,10 +15,11 @@ import {
 } from '../../../../shared/extra-utils'
 import { Video, VideoPrivacy } from '../../../../shared/models/videos'
 import { UserRole } from '../../../../shared/models/users'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const expect = chai.expect
 
-async function getVideosNames (server: ServerInfo, token: string, filter: string, statusCodeExpected = 200) {
+async function getVideosNames (server: ServerInfo, token: string, filter: string, statusCodeExpected = HttpStatusCode.OK_200) {
   const paths = [
     '/api/v1/video-channels/root_channel/videos',
     '/api/v1/accounts/root/videos',
@@ -46,13 +47,13 @@ async function getVideosNames (server: ServerInfo, token: string, filter: string
   return videosResults
 }
 
-describe('Test videos filter validator', function () {
+describe('Test videos filter', function () {
   let servers: ServerInfo[]
 
   // ---------------------------------------------------------------
 
   before(async function () {
-    this.timeout(120000)
+    this.timeout(160000)
 
     servers = await flushAndRunMultipleServers(2)
 
@@ -113,6 +114,20 @@ describe('Test videos filter validator', function () {
             expect(names[1]).to.equal('unlisted ' + server.serverNumber)
             expect(names[2]).to.equal('private ' + server.serverNumber)
           }
+        }
+      }
+    })
+
+    it('Should display all videos by the admin or the moderator', async function () {
+      for (const server of servers) {
+        for (const token of [ server.accessToken, server['moderatorAccessToken'] ]) {
+
+          const [ channelVideos, accountVideos, videos, searchVideos ] = await getVideosNames(server, token, 'all')
+          expect(channelVideos).to.have.lengthOf(3)
+          expect(accountVideos).to.have.lengthOf(3)
+
+          expect(videos).to.have.lengthOf(5)
+          expect(searchVideos).to.have.lengthOf(5)
         }
       }
     })

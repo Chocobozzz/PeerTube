@@ -1,8 +1,8 @@
 <section class="container">
-  <header>
+  <header *ngIf="steps.length > 2">
     <ng-container *ngFor="let step of steps; let i = index; let isLast = last;">
       <div
-        class="step-info" [ngClass]="{ active: selectedIndex === i, completed: isCompleted(step) }" [attr.aria-current]="selectedIndex === i"
+        class="step-info" [ngClass]="{ active: selectedIndex === i, completed: isCompleted(step), 'c-hand': isAccessible(i) }" [attr.aria-current]="selectedIndex === i"
         (click)="onClick(i)"
       >
         <div class="step-index">

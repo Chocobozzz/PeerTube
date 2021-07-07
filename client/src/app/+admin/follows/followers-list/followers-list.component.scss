@@ -1,19 +1,12 @@
-@import '_variables';
-@import '_mixins';
-
-.caption {
-  justify-content: flex-end;
-
-  input {
-    @include peertube-input-text(250px);
-  }
-}
+@use '_variables' as *;
+@use '_mixins' as *;
 
 a {
   @include disable-default-a-behaviour;
   display: inline-block;
 
-  &, &:hover {
+  &,
+  &:hover {
     color: pvar(--mainForegroundColor);
   }
 
@@ -25,6 +18,6 @@ a {
 
 .action-cell {
   my-button:first-child {
-    margin-right: 10px;
+    @include margin-right(10px);
   }
 }

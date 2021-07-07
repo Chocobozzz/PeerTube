@@ -2,15 +2,15 @@ import { registerTSPaths } from '../server/helpers/register-ts-paths'
 registerTSPaths()
 
 import { WEBSERVER } from '../server/initializers/constants'
-import { ActorFollowModel } from '../server/models/activitypub/actor-follow'
+import { ActorFollowModel } from '../server/models/actor/actor-follow'
 import { VideoModel } from '../server/models/video/video'
-import { ActorModel } from '../server/models/activitypub/actor'
+import { ActorModel } from '../server/models/actor/actor'
 import {
-  getAccountActivityPubUrl,
-  getVideoActivityPubUrl,
-  getVideoAnnounceActivityPubUrl,
-  getVideoChannelActivityPubUrl,
-  getVideoCommentActivityPubUrl
+  getLocalAccountActivityPubUrl,
+  getLocalVideoActivityPubUrl,
+  getLocalVideoAnnounceActivityPubUrl,
+  getLocalVideoChannelActivityPubUrl,
+  getLocalVideoCommentActivityPubUrl
 } from '../server/lib/activitypub/url'
 import { VideoShareModel } from '../server/models/video/video-share'
 import { VideoCommentModel } from '../server/models/video/video-comment'
@@ -62,8 +62,8 @@ async function run () {
     console.log('Updating actor ' + actor.url)
 
     const newUrl = actor.Account
-      ? getAccountActivityPubUrl(actor.preferredUsername)
-      : getVideoChannelActivityPubUrl(actor.preferredUsername)
+      ? getLocalAccountActivityPubUrl(actor.preferredUsername)
+      : getLocalVideoChannelActivityPubUrl(actor.preferredUsername)
 
     actor.url = newUrl
     actor.inboxUrl = newUrl + '/inbox'
@@ -85,7 +85,7 @@ async function run () {
 
     console.log('Updating video share ' + videoShare.url)
 
-    videoShare.url = getVideoAnnounceActivityPubUrl(videoShare.Actor, videoShare.Video)
+    videoShare.url = getLocalVideoAnnounceActivityPubUrl(videoShare.Actor, videoShare.Video)
     await videoShare.save()
   }
 
@@ -110,17 +110,19 @@ async function run () {
 
     console.log('Updating comment ' + comment.url)
 
-    comment.url = getVideoCommentActivityPubUrl(comment.Video, comment)
+    comment.url = getLocalVideoCommentActivityPubUrl(comment.Video, comment)
     await comment.save()
   }
 
   console.log('Updating video and torrent files.')
 
-  const videos = await VideoModel.listLocal()
-  for (const video of videos) {
+  const localVideos = await VideoModel.listLocal()
+  for (const localVideo of localVideos) {
+    const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(localVideo.id)
+
     console.log('Updating video ' + video.uuid)
 
-    video.url = getVideoActivityPubUrl(video)
+    video.url = getLocalVideoActivityPubUrl(video)
     await video.save()
 
     for (const file of video.VideoFiles) {
@@ -130,7 +132,7 @@ async function run () {
 
     for (const playlist of video.VideoStreamingPlaylists) {
       playlist.playlistUrl = WEBSERVER.URL + VideoStreamingPlaylistModel.getHlsMasterPlaylistStaticPath(video.uuid)
-      playlist.segmentsSha256Url = WEBSERVER.URL + VideoStreamingPlaylistModel.getHlsSha256SegmentsStaticPath(video.uuid)
+      playlist.segmentsSha256Url = WEBSERVER.URL + VideoStreamingPlaylistModel.getHlsSha256SegmentsStaticPath(video.uuid, video.isLive)
 
       await playlist.save()
     }

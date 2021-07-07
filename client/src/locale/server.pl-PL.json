@@ -31,6 +31,8 @@
     "Published": "Opublikowano",
     "To transcode": "Transkodować",
     "To import": "Importować",
+    "Waiting for livestream": "Waiting for livestream",
+    "Livestream ended": "Livestream ended",
     "Pending": "Oczekiwanie",
     "Success": "Sukces",
     "Failed": "Niepowodzenie",
@@ -240,5 +242,7 @@
     "Yoruba": "Joruba",
     "Zhuang": "Zhuang",
     "Chinese": "Chiński",
-    "Zulu": "Zulu"
+    "Zulu": "Zulu",
+    "Normal mode": "Normal mode",
+    "Theater mode": "Tryb kinowy"
 }

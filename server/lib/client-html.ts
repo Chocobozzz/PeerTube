@@ -1,27 +1,33 @@
 import * as express from 'express'
+import { readFile } from 'fs-extra'
+import { join } from 'path'
+import validator from 'validator'
+import { escapeHTML } from '@shared/core-utils/renderer'
+import { HTMLServerConfig } from '@shared/models'
 import { buildFileLocale, getDefaultLocale, is18nLocale, POSSIBLE_LOCALES } from '../../shared/core-utils/i18n/i18n'
+import { HttpStatusCode } from '../../shared/core-utils/miscs/http-error-codes'
+import { VideoPlaylistPrivacy, VideoPrivacy } from '../../shared/models/videos'
+import { isTestInstance, sha256 } from '../helpers/core-utils'
+import { logger } from '../helpers/logger'
+import { mdToPlainText } from '../helpers/markdown'
+import { CONFIG } from '../initializers/config'
 import {
-  AVATARS_SIZE,
+  ACCEPT_HEADERS,
+  ACTOR_IMAGES_SIZE,
   CUSTOM_HTML_TAG_COMMENTS,
   EMBED_SIZE,
+  FILES_CONTENT_HASH,
   PLUGIN_GLOBAL_CSS_PATH,
-  WEBSERVER,
-  FILES_CONTENT_HASH
+  WEBSERVER
 } from '../initializers/constants'
-import { join } from 'path'
-import { escapeHTML, sha256 } from '../helpers/core-utils'
-import { VideoModel } from '../models/video/video'
-import { VideoPlaylistModel } from '../models/video/video-playlist'
-import validator from 'validator'
-import { VideoPrivacy, VideoPlaylistPrivacy } from '../../shared/models/videos'
-import { readFile } from 'fs-extra'
-import { getActivityStreamDuration } from '../models/video/video-format-utils'
 import { AccountModel } from '../models/account/account'
+import { getActivityStreamDuration } from '../models/video/formatter/video-format-utils'
+import { VideoModel } from '../models/video/video'
 import { VideoChannelModel } from '../models/video/video-channel'
-import * as Bluebird from 'bluebird'
-import { CONFIG } from '../initializers/config'
-import { logger } from '../helpers/logger'
+import { VideoPlaylistModel } from '../models/video/video-playlist'
 import { MAccountActor, MChannelActor } from '../types/models'
+import { ServerConfigManager } from './server-config-manager'
+import { toCompleteUUID } from '@server/helpers/custom-validators/misc'
 
 type Tags = {
   ogType: string
@@ -35,6 +41,7 @@ type Tags = {
   siteName: string
   title: string
   url: string
+  originUrl: string
   description: string
 
   embed?: {
@@ -51,7 +58,7 @@ type Tags = {
   }
 }
 
-export class ClientHtml {
+class ClientHtml {
 
   private static htmlCache: { [path: string]: string } = {}
 
@@ -72,10 +79,12 @@ export class ClientHtml {
     return customHtml
   }
 
-  static async getWatchHTMLPage (videoId: string, req: express.Request, res: express.Response) {
+  static async getWatchHTMLPage (videoIdArg: string, req: express.Request, res: express.Response) {
+    const videoId = toCompleteUUID(videoIdArg)
+
     // Let Angular application handle errors
     if (!validator.isInt(videoId) && !validator.isUUID(videoId, 4)) {
-      res.status(404)
+      res.status(HttpStatusCode.NOT_FOUND_404)
       return ClientHtml.getIndexHTML(req, res)
     }
 
@@ -86,17 +95,18 @@ export class ClientHtml {
 
     // Let Angular application handle errors
     if (!video || video.privacy === VideoPrivacy.PRIVATE || video.privacy === VideoPrivacy.INTERNAL || video.VideoBlacklist) {
-      res.status(404)
+      res.status(HttpStatusCode.NOT_FOUND_404)
       return html
     }
 
     let customHtml = ClientHtml.addTitleTag(html, escapeHTML(video.name))
-    customHtml = ClientHtml.addDescriptionTag(customHtml, escapeHTML(video.description))
+    customHtml = ClientHtml.addDescriptionTag(customHtml, mdToPlainText(video.description))
 
     const url = WEBSERVER.URL + video.getWatchStaticPath()
+    const originUrl = video.url
     const title = escapeHTML(video.name)
     const siteName = escapeHTML(CONFIG.INSTANCE.NAME)
-    const description = escapeHTML(video.description)
+    const description = mdToPlainText(video.description)
 
     const image = {
       url: WEBSERVER.URL + video.getPreviewStaticPath()
@@ -113,15 +123,28 @@ export class ClientHtml {
     const twitterCard = CONFIG.SERVICES.TWITTER.WHITELISTED ? 'player' : 'summary_large_image'
     const schemaType = 'VideoObject'
 
-    customHtml = ClientHtml.addTags(customHtml, { url, siteName, title, description, image, embed, ogType, twitterCard, schemaType })
+    customHtml = ClientHtml.addTags(customHtml, {
+      url,
+      originUrl,
+      siteName,
+      title,
+      description,
+      image,
+      embed,
+      ogType,
+      twitterCard,
+      schemaType
+    })
 
     return customHtml
   }
 
-  static async getWatchPlaylistHTMLPage (videoPlaylistId: string, req: express.Request, res: express.Response) {
+  static async getWatchPlaylistHTMLPage (videoPlaylistIdArg: string, req: express.Request, res: express.Response) {
+    const videoPlaylistId = toCompleteUUID(videoPlaylistIdArg)
+
     // Let Angular application handle errors
     if (!validator.isInt(videoPlaylistId) && !validator.isUUID(videoPlaylistId, 4)) {
-      res.status(404)
+      res.status(HttpStatusCode.NOT_FOUND_404)
       return ClientHtml.getIndexHTML(req, res)
     }
 
@@ -132,17 +155,18 @@ export class ClientHtml {
 
     // Let Angular application handle errors
     if (!videoPlaylist || videoPlaylist.privacy === VideoPlaylistPrivacy.PRIVATE) {
-      res.status(404)
+      res.status(HttpStatusCode.NOT_FOUND_404)
       return html
     }
 
     let customHtml = ClientHtml.addTitleTag(html, escapeHTML(videoPlaylist.name))
-    customHtml = ClientHtml.addDescriptionTag(customHtml, escapeHTML(videoPlaylist.description))
+    customHtml = ClientHtml.addDescriptionTag(customHtml, mdToPlainText(videoPlaylist.description))
 
     const url = videoPlaylist.getWatchUrl()
+    const originUrl = videoPlaylist.url
     const title = escapeHTML(videoPlaylist.name)
     const siteName = escapeHTML(CONFIG.INSTANCE.NAME)
-    const description = escapeHTML(videoPlaylist.description)
+    const description = mdToPlainText(videoPlaylist.description)
 
     const image = {
       url: videoPlaylist.getThumbnailUrl()
@@ -161,28 +185,56 @@ export class ClientHtml {
     const twitterCard = CONFIG.SERVICES.TWITTER.WHITELISTED ? 'player' : 'summary'
     const schemaType = 'ItemList'
 
-    customHtml = ClientHtml.addTags(customHtml, { url, siteName, embed, title, description, image, list, ogType, twitterCard, schemaType })
+    customHtml = ClientHtml.addTags(customHtml, {
+      url,
+      originUrl,
+      siteName,
+      embed,
+      title,
+      description,
+      image,
+      list,
+      ogType,
+      twitterCard,
+      schemaType
+    })
 
     return customHtml
   }
 
   static async getAccountHTMLPage (nameWithHost: string, req: express.Request, res: express.Response) {
-    return this.getAccountOrChannelHTMLPage(() => AccountModel.loadByNameWithHost(nameWithHost), req, res)
+    const accountModelPromise = AccountModel.loadByNameWithHost(nameWithHost)
+    return this.getAccountOrChannelHTMLPage(() => accountModelPromise, req, res)
   }
 
   static async getVideoChannelHTMLPage (nameWithHost: string, req: express.Request, res: express.Response) {
-    return this.getAccountOrChannelHTMLPage(() => VideoChannelModel.loadByNameWithHostAndPopulateAccount(nameWithHost), req, res)
+    const videoChannelModelPromise = VideoChannelModel.loadByNameWithHostAndPopulateAccount(nameWithHost)
+    return this.getAccountOrChannelHTMLPage(() => videoChannelModelPromise, req, res)
+  }
+
+  static async getActorHTMLPage (nameWithHost: string, req: express.Request, res: express.Response) {
+    const [ account, channel ] = await Promise.all([
+      AccountModel.loadByNameWithHost(nameWithHost),
+      VideoChannelModel.loadByNameWithHostAndPopulateAccount(nameWithHost)
+    ])
+
+    return this.getAccountOrChannelHTMLPage(() => Promise.resolve(account || channel), req, res)
   }
 
   static async getEmbedHTML () {
     const path = ClientHtml.getEmbedPath()
 
-    if (ClientHtml.htmlCache[path]) return ClientHtml.htmlCache[path]
+    if (!isTestInstance() && ClientHtml.htmlCache[path]) return ClientHtml.htmlCache[path]
 
     const buffer = await readFile(path)
+    const serverConfig = await ServerConfigManager.Instance.getHTMLServerConfig()
 
     let html = buffer.toString()
     html = await ClientHtml.addAsyncPluginCSS(html)
+    html = ClientHtml.addCustomCSS(html)
+    html = ClientHtml.addTitleTag(html)
+    html = ClientHtml.addDescriptionTag(html)
+    html = ClientHtml.addServerConfig(html, serverConfig)
 
     ClientHtml.htmlCache[path] = html
 
@@ -190,7 +242,7 @@ export class ClientHtml {
   }
 
   private static async getAccountOrChannelHTMLPage (
-    loader: () => Bluebird<MAccountActor | MChannelActor>,
+    loader: () => Promise<MAccountActor | MChannelActor>,
     req: express.Request,
     res: express.Response
   ) {
@@ -201,38 +253,50 @@ export class ClientHtml {
 
     // Let Angular application handle errors
     if (!entity) {
-      res.status(404)
+      res.status(HttpStatusCode.NOT_FOUND_404)
       return ClientHtml.getIndexHTML(req, res)
     }
 
     let customHtml = ClientHtml.addTitleTag(html, escapeHTML(entity.getDisplayName()))
-    customHtml = ClientHtml.addDescriptionTag(customHtml, escapeHTML(entity.description))
+    customHtml = ClientHtml.addDescriptionTag(customHtml, mdToPlainText(entity.description))
 
-    const url = entity.Actor.url
+    const url = entity.getLocalUrl()
+    const originUrl = entity.Actor.url
     const siteName = escapeHTML(CONFIG.INSTANCE.NAME)
     const title = escapeHTML(entity.getDisplayName())
-    const description = escapeHTML(entity.description)
+    const description = mdToPlainText(entity.description)
 
     const image = {
       url: entity.Actor.getAvatarUrl(),
-      width: AVATARS_SIZE.width,
-      height: AVATARS_SIZE.height
+      width: ACTOR_IMAGES_SIZE.AVATARS.width,
+      height: ACTOR_IMAGES_SIZE.AVATARS.height
     }
 
     const ogType = 'website'
     const twitterCard = 'summary'
     const schemaType = 'ProfilePage'
 
-    customHtml = ClientHtml.addTags(customHtml, { url, title, siteName, description, image, ogType, twitterCard, schemaType })
+    customHtml = ClientHtml.addTags(customHtml, {
+      url,
+      originUrl,
+      title,
+      siteName,
+      description,
+      image,
+      ogType,
+      twitterCard,
+      schemaType
+    })
 
     return customHtml
   }
 
   private static async getIndexHTML (req: express.Request, res: express.Response, paramLang?: string) {
     const path = ClientHtml.getIndexPath(req, res, paramLang)
-    if (ClientHtml.htmlCache[path]) return ClientHtml.htmlCache[path]
+    if (!isTestInstance() && ClientHtml.htmlCache[path]) return ClientHtml.htmlCache[path]
 
     const buffer = await readFile(path)
+    const serverConfig = await ServerConfigManager.Instance.getHTMLServerConfig()
 
     let html = buffer.toString()
 
@@ -241,6 +305,7 @@ export class ClientHtml {
     html = ClientHtml.addFaviconContentHash(html)
     html = ClientHtml.addLogoContentHash(html)
     html = ClientHtml.addCustomCSS(html)
+    html = ClientHtml.addServerConfig(html, serverConfig)
     html = await ClientHtml.addAsyncPluginCSS(html)
 
     ClientHtml.htmlCache[path] = html
@@ -313,6 +378,13 @@ export class ClientHtml {
     return htmlStringPage.replace(CUSTOM_HTML_TAG_COMMENTS.CUSTOM_CSS, styleTag)
   }
 
+  private static addServerConfig (htmlStringPage: string, serverConfig: HTMLServerConfig) {
+    const serverConfigString = JSON.stringify(serverConfig)
+    const configScriptTag = `<script type="application/javascript">window.PeerTubeServerConfig = '${serverConfigString}'</script>`
+
+    return htmlStringPage.replace(CUSTOM_HTML_TAG_COMMENTS.SERVER_CONFIG, configScriptTag)
+  }
+
   private static async addAsyncPluginCSS (htmlStringPage: string) {
     const globalCSSContent = await readFile(PLUGIN_GLOBAL_CSS_PATH)
     if (globalCSSContent.byteLength === 0) return htmlStringPage
@@ -337,7 +409,7 @@ export class ClientHtml {
     }
 
     metaTags['og:url'] = tags.url
-    metaTags['og:description'] = tags.description
+    metaTags['og:description'] = mdToPlainText(tags.description)
 
     if (tags.embed) {
       metaTags['og:video:url'] = tags.embed.url
@@ -353,7 +425,7 @@ export class ClientHtml {
   private static generateStandardMetaTags (tags: Tags) {
     return {
       name: tags.title,
-      description: tags.description,
+      description: mdToPlainText(tags.description),
       image: tags.image.url
     }
   }
@@ -416,7 +488,7 @@ export class ClientHtml {
     const twitterCardMetaTags = this.generateTwitterCardMetaTags(tagsValues)
     const schemaTags = this.generateSchemaTags(tagsValues)
 
-    const { url, title, embed } = tagsValues
+    const { url, title, embed, originUrl } = tagsValues
 
     const oembedLinkTags: { type: string, href: string, title: string }[] = []
 
@@ -462,8 +534,43 @@ export class ClientHtml {
     }
 
     // SEO, use origin URL
-    tagsString += `<link rel="canonical" href="${url}" />`
+    tagsString += `<link rel="canonical" href="${originUrl}" />`
 
     return htmlStringPage.replace(CUSTOM_HTML_TAG_COMMENTS.META_TAGS, tagsString)
   }
+}
+
+function sendHTML (html: string, res: express.Response) {
+  res.set('Content-Type', 'text/html; charset=UTF-8')
+
+  return res.send(html)
+}
+
+async function serveIndexHTML (req: express.Request, res: express.Response) {
+  if (req.accepts(ACCEPT_HEADERS) === 'html' ||
+      !req.headers.accept) {
+    try {
+      await generateHTMLPage(req, res, req.params.language)
+      return
+    } catch (err) {
+      logger.error('Cannot generate HTML page.', err)
+      return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR_500).end()
+    }
+  }
+
+  return res.status(HttpStatusCode.NOT_ACCEPTABLE_406).end()
+}
+
+// ---------------------------------------------------------------------------
+
+export {
+  ClientHtml,
+  sendHTML,
+  serveIndexHTML
+}
+
+async function generateHTMLPage (req: express.Request, res: express.Response, paramLang?: string) {
+  const html = await ClientHtml.getDefaultHTMLPage(req, res, paramLang)
+
+  return sendHTML(html, res)
 }

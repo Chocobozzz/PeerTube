@@ -1,22 +1,22 @@
 import { values } from 'lodash'
-import { FindOptions, Op, Transaction } from 'sequelize'
+import { FindOptions, Op, QueryTypes, Transaction } from 'sequelize'
 import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
-import { VideoRateType } from '../../../shared/models/videos'
-import { CONSTRAINTS_FIELDS, VIDEO_RATE_TYPES } from '../../initializers/constants'
-import { VideoModel } from '../video/video'
-import { AccountModel } from './account'
-import { ActorModel } from '../activitypub/actor'
-import { buildLocalAccountIdsIn, getSort, throwIfNotValid } from '../utils'
-import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
-import { AccountVideoRate } from '../../../shared'
-import { ScopeNames as VideoChannelScopeNames, SummaryOptions, VideoChannelModel } from '../video/video-channel'
-import * as Bluebird from 'bluebird'
 import {
   MAccountVideoRate,
   MAccountVideoRateAccountUrl,
   MAccountVideoRateAccountVideo,
   MAccountVideoRateFormattable
 } from '@server/types/models/video/video-rate'
+import { AttributesOnly } from '@shared/core-utils'
+import { AccountVideoRate } from '../../../shared'
+import { VideoRateType } from '../../../shared/models/videos'
+import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
+import { CONSTRAINTS_FIELDS, VIDEO_RATE_TYPES } from '../../initializers/constants'
+import { ActorModel } from '../actor/actor'
+import { buildLocalAccountIdsIn, getSort, throwIfNotValid } from '../utils'
+import { VideoModel } from '../video/video'
+import { ScopeNames as VideoChannelScopeNames, SummaryOptions, VideoChannelModel } from '../video/video-channel'
+import { AccountModel } from './account'
 
 /*
   Account rates per video.
@@ -43,7 +43,7 @@ import {
     }
   ]
 })
-export class AccountVideoRateModel extends Model<AccountVideoRateModel> {
+export class AccountVideoRateModel extends Model<Partial<AttributesOnly<AccountVideoRateModel>>> {
 
   @AllowNull(false)
   @Column(DataType.ENUM(...values(VIDEO_RATE_TYPES)))
@@ -84,7 +84,7 @@ export class AccountVideoRateModel extends Model<AccountVideoRateModel> {
   })
   Account: AccountModel
 
-  static load (accountId: number, videoId: number, transaction?: Transaction): Bluebird<MAccountVideoRate> {
+  static load (accountId: number, videoId: number, transaction?: Transaction): Promise<MAccountVideoRate> {
     const options: FindOptions = {
       where: {
         accountId,
@@ -96,7 +96,7 @@ export class AccountVideoRateModel extends Model<AccountVideoRateModel> {
     return AccountVideoRateModel.findOne(options)
   }
 
-  static loadByAccountAndVideoOrUrl (accountId: number, videoId: number, url: string, t?: Transaction): Bluebird<MAccountVideoRate> {
+  static loadByAccountAndVideoOrUrl (accountId: number, videoId: number, url: string, t?: Transaction): Promise<MAccountVideoRate> {
     const options: FindOptions = {
       where: {
         [Op.or]: [
@@ -147,12 +147,24 @@ export class AccountVideoRateModel extends Model<AccountVideoRateModel> {
     return AccountVideoRateModel.findAndCountAll(query)
   }
 
+  static listRemoteRateUrlsOfLocalVideos () {
+    const query = `SELECT "accountVideoRate".url FROM "accountVideoRate" ` +
+      `INNER JOIN account ON account.id = "accountVideoRate"."accountId" ` +
+      `INNER JOIN actor ON actor.id = account."actorId" AND actor."serverId" IS NOT NULL ` +
+      `INNER JOIN video ON video.id = "accountVideoRate"."videoId" AND video.remote IS FALSE`
+
+    return AccountVideoRateModel.sequelize.query<{ url: string }>(query, {
+      type: QueryTypes.SELECT,
+      raw: true
+    }).then(rows => rows.map(r => r.url))
+  }
+
   static loadLocalAndPopulateVideo (
     rateType: VideoRateType,
     accountName: string,
-    videoId: number | string,
+    videoId: number,
     t?: Transaction
-  ): Bluebird<MAccountVideoRateAccountVideo> {
+  ): Promise<MAccountVideoRateAccountVideo> {
     const options: FindOptions = {
       where: {
         videoId,
@@ -168,7 +180,8 @@ export class AccountVideoRateModel extends Model<AccountVideoRateModel> {
               model: ActorModel.unscoped(),
               required: true,
               where: {
-                preferredUsername: accountName
+                preferredUsername: accountName,
+                serverId: null
               }
             }
           ]
@@ -239,17 +252,9 @@ export class AccountVideoRateModel extends Model<AccountVideoRateModel> {
         transaction: t
       }
 
-      const deleted = await AccountVideoRateModel.destroy(query)
+      await AccountVideoRateModel.destroy(query)
 
-      const options = {
-        transaction: t,
-        where: {
-          id: videoId
-        }
-      }
-
-      if (type === 'like') await VideoModel.increment({ likes: -deleted }, options)
-      else if (type === 'dislike') await VideoModel.increment({ dislikes: -deleted }, options)
+      return VideoModel.updateRatesOf(videoId, type, t)
     })
   }
 

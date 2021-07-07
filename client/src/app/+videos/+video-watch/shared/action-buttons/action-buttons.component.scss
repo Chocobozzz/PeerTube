@@ -1,0 +1,99 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+.video-actions {
+  height: 40px; // Align with the title
+  display: flex;
+  align-items: center;
+
+  .action-button:not(:first-child),
+  .action-dropdown,
+  my-video-actions-dropdown {
+    @include margin-left(5px);
+  }
+
+  ::ng-deep.action-button {
+    @include peertube-button;
+    @include button-with-icon(21px, 0, -1px);
+
+    font-size: 100%;
+    font-weight: $font-semibold;
+    display: inline-block;
+    padding: 0 10px;
+    white-space: nowrap;
+    background-color: transparent !important;
+    color: pvar(--actionButtonColor);
+    text-transform: uppercase;
+
+    &::after {
+      display: none;
+    }
+
+    &:hover {
+      opacity: 0.9;
+    }
+
+    &.action-button-support {
+      color: pvar(--supportButtonColor);
+
+      my-global-icon {
+        @include apply-svg-color(pvar(--supportButtonColor));
+      }
+    }
+
+    &.action-button-support {
+      my-global-icon {
+        ::ng-deep path:first-child {
+          fill: pvar(--supportButtonHeartColor) !important;
+        }
+      }
+    }
+
+    &.action-button-save {
+      my-global-icon {
+        top: 0 !important;
+        right: -1px;
+      }
+    }
+
+    .icon-text {
+      @include margin-left(3px);
+    }
+  }
+}
+
+.likes-dislikes-bar-outer-container {
+  position: relative;
+}
+
+.likes-dislikes-bar-inner-container {
+  position: absolute;
+  height: 20px;
+}
+
+.likes-dislikes-bar {
+  $likes-bar-height: 2px;
+
+  height: $likes-bar-height;
+  margin-top: -$likes-bar-height;
+
+  width: 120px;
+  background-color: #ccc;
+  position: relative;
+  top: 10px;
+
+  .likes-bar {
+    height: 100%;
+    background-color: #909090;
+
+    &.liked {
+      background-color: pvar(--activatedActionButtonColor);
+    }
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .action-button .icon-text {
+    display: none !important;
+  }
+}

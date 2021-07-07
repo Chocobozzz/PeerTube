@@ -4,7 +4,7 @@
   <div *ngFor="let notification of notifications" class="notification" [ngClass]="{ unread: !notification.read }" (click)="markAsRead(notification)">
 
     <ng-container [ngSwitch]="notification.type">
-      <ng-container *ngSwitchCase="UserNotificationType.NEW_VIDEO_FROM_SUBSCRIPTION">
+      <ng-container *ngSwitchCase="1"> <!-- UserNotificationType.NEW_VIDEO_FROM_SUBSCRIPTION -->
         <ng-container *ngIf="notification.video; then hasVideo; else noVideo"></ng-container>
 
         <ng-template #hasVideo>
@@ -26,7 +26,7 @@
         </ng-template>
       </ng-container>
 
-      <ng-container *ngSwitchCase="UserNotificationType.UNBLACKLIST_ON_MY_VIDEO">
+      <ng-container *ngSwitchCase="5"> <!-- UserNotificationType.UNBLACKLIST_ON_MY_VIDEO -->
         <my-global-icon iconName="undo" aria-hidden="true"></my-global-icon>
 
         <div class="message" i18n>
@@ -34,7 +34,7 @@
         </div>
       </ng-container>
 
-      <ng-container *ngSwitchCase="UserNotificationType.BLACKLIST_ON_MY_VIDEO">
+      <ng-container *ngSwitchCase="4"> <!-- UserNotificationType.BLACKLIST_ON_MY_VIDEO -->
         <my-global-icon iconName="no" aria-hidden="true"></my-global-icon>
 
         <div class="message" i18n>
@@ -42,7 +42,7 @@
         </div>
       </ng-container>
 
-      <ng-container *ngSwitchCase="UserNotificationType.NEW_ABUSE_FOR_MODERATORS">
+      <ng-container *ngSwitchCase="3"> <!-- UserNotificationType.NEW_ABUSE_FOR_MODERATORS -->
         <my-global-icon iconName="flag" aria-hidden="true"></my-global-icon>
 
         <div class="message" *ngIf="notification.videoUrl" i18n>
@@ -63,7 +63,7 @@
         </div>
       </ng-container>
 
-      <ng-container *ngSwitchCase="UserNotificationType.ABUSE_STATE_CHANGE">
+      <ng-container *ngSwitchCase="15"> <!-- UserNotificationType.ABUSE_STATE_CHANGE -->
         <my-global-icon iconName="flag" aria-hidden="true"></my-global-icon>
 
         <div class="message" i18n>
@@ -73,7 +73,7 @@
         </div>
       </ng-container>
 
-      <ng-container *ngSwitchCase="UserNotificationType.ABUSE_NEW_MESSAGE">
+      <ng-container *ngSwitchCase="16"> <!-- UserNotificationType.ABUSE_NEW_MESSAGE -->
         <my-global-icon iconName="flag" aria-hidden="true"></my-global-icon>
 
         <div class="message" i18n>
@@ -81,7 +81,7 @@
         </div>
       </ng-container>
 
-      <ng-container *ngSwitchCase="UserNotificationType.VIDEO_AUTO_BLACKLIST_FOR_MODERATORS">
+      <ng-container *ngSwitchCase="12"> <!-- UserNotificationType.VIDEO_AUTO_BLACKLIST_FOR_MODERATORS -->
         <my-global-icon iconName="no" aria-hidden="true"></my-global-icon>
 
         <div class="message" i18n>
@@ -89,10 +89,8 @@
         </div>
       </ng-container>
 
-      <ng-container *ngSwitchCase="UserNotificationType.NEW_COMMENT_ON_MY_VIDEO">
-        <ng-container *ngIf="notification.comment; then hasComment; else noComment"></ng-container>
-
-        <ng-template #hasComment>
+      <ng-container *ngSwitchCase="2">
+        <ng-container *ngIf="notification.comment">
           <a (click)="markAsRead(notification)" [routerLink]="notification.accountUrl">
             <img alt="" aria-labelledby="avatar" class="avatar" [src]="notification.comment.account.avatarUrl" />
           </a>
@@ -100,18 +98,18 @@
           <div class="message" i18n>
             <a (click)="markAsRead(notification)" [routerLink]="notification.accountUrl">{{ notification.comment.account.displayName }}</a> commented your video <a (click)="markAsRead(notification)" [routerLink]="notification.commentUrl">{{ notification.comment.video.name }}</a>
           </div>
-        </ng-template>
+        </ng-container>
 
-        <ng-template #noComment>
+        <ng-container *ngIf="!notification.comment">
           <my-global-icon iconName="alert" aria-hidden="true"></my-global-icon>
 
           <div class="message" i18n>
             The notification concerns a comment now unavailable
           </div>
-        </ng-template>
+        </ng-container>
       </ng-container>
 
-      <ng-container *ngSwitchCase="UserNotificationType.MY_VIDEO_PUBLISHED">
+      <ng-container *ngSwitchCase="6"> <!-- UserNotificationType.MY_VIDEO_PUBLISHED -->
         <my-global-icon iconName="film" aria-hidden="true"></my-global-icon>
 
         <div class="message" i18n>
@@ -119,7 +117,7 @@
         </div>
       </ng-container>
 
-      <ng-container *ngSwitchCase="UserNotificationType.MY_VIDEO_IMPORT_SUCCESS">
+      <ng-container *ngSwitchCase="7"> <!-- UserNotificationType.MY_VIDEO_IMPORT_SUCCESS -->
         <my-global-icon iconName="cloud-download" aria-hidden="true"></my-global-icon>
 
         <div class="message" i18n>
@@ -127,7 +125,7 @@
         </div>
       </ng-container>
 
-      <ng-container *ngSwitchCase="UserNotificationType.MY_VIDEO_IMPORT_ERROR">
+      <ng-container *ngSwitchCase="8"> <!-- UserNotificationType.MY_VIDEO_IMPORT_ERROR -->
         <my-global-icon iconName="cloud-error" aria-hidden="true"></my-global-icon>
 
         <div class="message" i18n>
@@ -135,7 +133,7 @@
         </div>
       </ng-container>
 
-      <ng-container *ngSwitchCase="UserNotificationType.NEW_USER_REGISTRATION">
+      <ng-container *ngSwitchCase="9"> <!-- UserNotificationType.NEW_USER_REGISTRATION -->
         <my-global-icon iconName="user-add" aria-hidden="true"></my-global-icon>
 
         <div class="message" i18n>
@@ -143,7 +141,7 @@
         </div>
       </ng-container>
 
-      <ng-container *ngSwitchCase="UserNotificationType.NEW_FOLLOW">
+      <ng-container *ngSwitchCase="10"> <!-- UserNotificationType.NEW_FOLLOW -->
         <a (click)="markAsRead(notification)" [routerLink]="notification.accountUrl">
           <img alt="" aria-labelledby="avatar" class="avatar" [src]="notification.actorFollow.follower.avatarUrl" />
         </a>
@@ -156,17 +154,27 @@
         </div>
       </ng-container>
 
-      <ng-container *ngSwitchCase="UserNotificationType.COMMENT_MENTION">
-        <a (click)="markAsRead(notification)" [routerLink]="notification.accountUrl">
-          <img alt="" aria-labelledby="avatar" class="avatar" [src]="notification.comment.account.avatarUrl" />
-        </a>
+      <ng-container *ngSwitchCase="11">
+        <ng-container *ngIf="notification.comment">
+          <a (click)="markAsRead(notification)" [routerLink]="notification.accountUrl">
+            <img alt="" aria-labelledby="avatar" class="avatar" [src]="notification.comment.account.avatarUrl" />
+          </a>
 
-        <div class="message" i18n>
-          <a (click)="markAsRead(notification)" [routerLink]="notification.accountUrl">{{ notification.comment.account.displayName }}</a> mentioned you on <a (click)="markAsRead(notification)" [routerLink]="notification.commentUrl">video {{ notification.comment.video.name }}</a>
-        </div>
+          <div class="message" i18n>
+            <a (click)="markAsRead(notification)" [routerLink]="notification.accountUrl">{{ notification.comment.account.displayName }}</a> mentioned you on <a (click)="markAsRead(notification)" [routerLink]="notification.commentUrl">video {{ notification.comment.video.name }}</a>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="!notification.comment">
+          <my-global-icon iconName="alert" aria-hidden="true"></my-global-icon>
+
+          <div class="message" i18n>
+            The notification concerns a comment now unavailable
+          </div>
+        </ng-container>
       </ng-container>
 
-      <ng-container *ngSwitchCase="UserNotificationType.NEW_INSTANCE_FOLLOWER">
+      <ng-container *ngSwitchCase="13"> <!-- UserNotificationType.NEW_INSTANCE_FOLLOWER -->
         <my-global-icon iconName="users" aria-hidden="true"></my-global-icon>
 
         <div class="message" i18n>
@@ -175,7 +183,7 @@
         </div>
       </ng-container>
 
-      <ng-container *ngSwitchCase="UserNotificationType.AUTO_INSTANCE_FOLLOWING">
+      <ng-container *ngSwitchCase="14"> <!-- UserNotificationType.AUTO_INSTANCE_FOLLOWING -->
         <my-global-icon iconName="users" aria-hidden="true"></my-global-icon>
 
         <div class="message" i18n>
@@ -183,11 +191,27 @@
         </div>
       </ng-container>
 
+      <ng-container *ngSwitchCase="17"> <!-- UserNotificationType.NEW_PLUGIN_VERSION -->
+        <my-global-icon iconName="cog" aria-hidden="true"></my-global-icon>
+
+        <div class="message" i18n>
+          <a (click)="markAsRead(notification)" [routerLink]="notification.pluginUrl" [queryParams]="notification.pluginQueryParams">A new version of the plugin/theme {{ notification.plugin.name }}</a> is available: {{ notification.plugin.latestVersion }}
+        </div>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="18"> <!-- UserNotificationType.NEW_PEERTUBE_VERSION -->
+        <my-global-icon iconName="cog" aria-hidden="true"></my-global-icon>
+
+        <div class="message" i18n>
+            <a (click)="markAsRead(notification)" [href]="notification.peertubeVersionLink" target="_blank" rel="noopener noreferer">A new version of PeerTube</a> is available: {{ notification.peertube.latestVersion }}
+        </div>
+      </ng-container>
+
       <ng-container *ngSwitchDefault>
         <my-global-icon iconName="alert" aria-hidden="true"></my-global-icon>
 
         <div class="message" i18n>
-          The notification points to a content now unavailable
+          The notification points to content now unavailable
         </div>
       </ng-container>
     </ng-container>

@@ -16,6 +16,8 @@ const icons = {
   'playlist-add': require('!!raw-loader?!../../../assets/images/misc/playlist-add.svg').default, // material ui
   'follower': require('!!raw-loader?!../../../assets/images/misc/account-arrow-left.svg').default, // material ui
   'following': require('!!raw-loader?!../../../assets/images/misc/account-arrow-right.svg').default, // material ui
+  'flame': require('!!raw-loader?!../../../assets/images/misc/flame.svg').default,
+  'local': require('!!raw-loader?!../../../assets/images/misc/local.svg').default,
 
   // feather icons
   'flag': require('!!raw-loader?!../../../assets/images/feather/flag.svg').default,
@@ -36,7 +38,7 @@ const icons = {
   'clock': require('!!raw-loader?!../../../assets/images/feather/clock.svg').default,
   'cog': require('!!raw-loader?!../../../assets/images/feather/cog.svg').default,
   'delete': require('!!raw-loader?!../../../assets/images/feather/delete.svg').default,
-  'inbox-full': require('!!raw-loader?!../../../assets/images/feather/inbox-full.svg').default,
+  'bell': require('!!raw-loader?!../../../assets/images/feather/bell.svg').default,
   'sign-out': require('!!raw-loader?!../../../assets/images/feather/log-out.svg').default,
   'sign-in': require('!!raw-loader?!../../../assets/images/feather/log-in.svg').default,
   'download': require('!!raw-loader?!../../../assets/images/feather/download.svg').default,
@@ -62,12 +64,16 @@ const icons = {
   'sensitive': require('!!raw-loader?!../../../assets/images/feather/eye.svg').default,
   'unsensitive': require('!!raw-loader?!../../../assets/images/feather/eye-off.svg').default,
   'refresh': require('!!raw-loader?!../../../assets/images/feather/refresh-cw.svg').default,
+  'command': require('!!raw-loader?!../../../assets/images/feather/command.svg').default,
   'go': require('!!raw-loader?!../../../assets/images/feather/arrow-up-right.svg').default,
   'cross': require('!!raw-loader?!../../../assets/images/feather/x.svg').default,
   'tick': require('!!raw-loader?!../../../assets/images/feather/check.svg').default,
   'columns': require('!!raw-loader?!../../../assets/images/feather/columns.svg').default,
+  'live': require('!!raw-loader?!../../../assets/images/feather/live.svg').default,
   'repeat': require('!!raw-loader?!../../../assets/images/feather/repeat.svg').default,
-  'message-circle': require('!!raw-loader?!../../../assets/images/feather/message-circle.svg').default
+  'message-circle': require('!!raw-loader?!../../../assets/images/feather/message-circle.svg').default,
+  'codesandbox': require('!!raw-loader?!../../../assets/images/feather/codesandbox.svg').default,
+  'award': require('!!raw-loader?!../../../assets/images/feather/award.svg').default
 }
 
 export type GlobalIconName = keyof typeof icons

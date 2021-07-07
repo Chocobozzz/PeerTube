@@ -1,7 +1,7 @@
-import * as Bluebird from 'bluebird'
 import { Op } from 'sequelize'
 import { BelongsTo, Column, CreatedAt, ForeignKey, Model, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
 import { MServerBlocklist, MServerBlocklistAccountServer, MServerBlocklistFormattable } from '@server/types/models'
+import { AttributesOnly } from '@shared/core-utils'
 import { ServerBlock } from '@shared/models'
 import { AccountModel } from '../account/account'
 import { getSort, searchAttribute } from '../utils'
@@ -43,7 +43,7 @@ enum ScopeNames {
     }
   ]
 })
-export class ServerBlocklistModel extends Model<ServerBlocklistModel> {
+export class ServerBlocklistModel extends Model<Partial<AttributesOnly<ServerBlocklistModel>>> {
 
   @CreatedAt
   createdAt: Date
@@ -101,7 +101,7 @@ export class ServerBlocklistModel extends Model<ServerBlocklistModel> {
                                 })
   }
 
-  static loadByAccountAndHost (accountId: number, host: string): Bluebird<MServerBlocklist> {
+  static loadByAccountAndHost (accountId: number, host: string): Promise<MServerBlocklist> {
     const query = {
       where: {
         accountId
@@ -120,7 +120,7 @@ export class ServerBlocklistModel extends Model<ServerBlocklistModel> {
     return ServerBlocklistModel.findOne(query)
   }
 
-  static listHostsBlockedBy (accountIds: number[]): Bluebird<string[]> {
+  static listHostsBlockedBy (accountIds: number[]): Promise<string[]> {
     const query = {
       attributes: [ ],
       where: {

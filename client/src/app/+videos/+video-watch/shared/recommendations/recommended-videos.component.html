@@ -1,0 +1,26 @@
+<div class="other-videos" [ngClass]="{ 'display-as-row': displayAsRow }">
+  <ng-container *ngIf="hasVideos$ | async">
+    <div class="title-page-container">
+      <h2 i18n class="title-page title-page-single">
+        Other videos
+      </h2>
+      <div *ngIf="!playlist" class="title-page-autoplay"
+        [ngbTooltip]="autoPlayNextVideoTooltip" placement="bottom-right auto"
+      >
+        <span i18n>AUTOPLAY</span>
+        <my-input-switch  class="small" [(ngModel)]="autoPlayNextVideo" (ngModelChange)="switchAutoPlayNextVideo()"></my-input-switch>
+      </div>
+    </div>
+
+    <ng-container *ngFor="let video of (videos$ | async); let i = index; let length = count">
+      <my-video-miniature
+        [displayOptions]="displayOptions" [video]="video" [user]="userMiniature" [displayAsRow]="displayAsRow"
+        (videoBlocked)="onVideoRemoved()" (videoRemoved)="onVideoRemoved()" (videoAccountMuted)="onVideoRemoved()"
+        actorImageSize="32"
+      >
+      </my-video-miniature>
+
+      <hr *ngIf="!playlist && i == 0 && length > 1" />
+    </ng-container>
+  </ng-container>
+</div>

@@ -3,6 +3,7 @@ import { EMBED_SIZE, PREVIEWS_SIZE, WEBSERVER, THUMBNAILS_SIZE } from '../initia
 import { asyncMiddleware, oembedValidator } from '../middlewares'
 import { accountNameWithHostGetValidator } from '../middlewares/validators'
 import { MChannelSummary } from '@server/types/models'
+import { escapeHTML } from '@shared/core-utils/renderer'
 
 const servicesRouter = express.Router()
 
@@ -77,15 +78,17 @@ function buildOEmbed (options: {
   const maxWidth = parseInt(req.query.maxwidth, 10)
 
   const embedUrl = webserverUrl + embedPath
-  let embedWidth = EMBED_SIZE.width
-  let embedHeight = EMBED_SIZE.height
+  const embedTitle = escapeHTML(title)
 
   let thumbnailUrl = previewPath
     ? webserverUrl + previewPath
     : undefined
 
-  if (maxHeight < embedHeight) embedHeight = maxHeight
+  let embedWidth = EMBED_SIZE.width
   if (maxWidth < embedWidth) embedWidth = maxWidth
+
+  let embedHeight = EMBED_SIZE.height
+  if (maxHeight < embedHeight) embedHeight = maxHeight
 
   // Our thumbnail is too big for the consumer
   if (
@@ -96,7 +99,7 @@ function buildOEmbed (options: {
   }
 
   const html = `<iframe width="${embedWidth}" height="${embedHeight}" sandbox="allow-same-origin allow-scripts" ` +
-    `src="${embedUrl}" frameborder="0" allowfullscreen></iframe>`
+    `title="${embedTitle}" src="${embedUrl}" frameborder="0" allowfullscreen></iframe>`
 
   const json: any = {
     type: 'video',

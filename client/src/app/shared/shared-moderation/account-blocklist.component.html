@@ -11,20 +11,15 @@
 >
   <ng-template pTemplate="caption">
     <div class="caption">
-      <div class="ml-auto has-feedback has-clear">
-        <input
-          type="text" name="table-filter" id="table-filter" i18n-placeholder placeholder="Filter..."
-          (keyup)="onSearch($event)"
-        >
-        <a class="glyphicon glyphicon-remove-sign form-control-feedback form-control-clear" (click)="resetSearch()"></a>
-        <span class="sr-only" i18n>Clear filters</span>
+      <div class="ml-auto">
+        <my-advanced-input-filter (search)="onSearch($event)"></my-advanced-input-filter>
       </div>
     </div>
   </ng-template>
 
   <ng-template pTemplate="header">
     <tr>
-      <th style="width: 150px;">Action</th> <!-- column for action buttons -->
+      <th style="width: 150px;" i18n>Action</th> <!-- column for action buttons -->
       <th style="width: calc(100% - 300px);" i18n>Account</th>
       <th style="width: 150px;" i18n pSortableColumn="createdAt">Muted at <p-sortIcon field="createdAt"></p-sortIcon></th>
     </tr>
@@ -38,12 +33,7 @@
       <td>
         <a [href]="accountBlock.blockedAccount.url" i18n-title title="Open account in a new tab" target="_blank" rel="noopener noreferrer">
           <div class="chip two-lines">
-            <img
-              class="avatar"
-              [src]="accountBlock.blockedAccount.avatar?.path"
-              (error)="switchToDefaultAvatar($event)"
-              alt="Avatar"
-            >
+            <my-actor-avatar [account]="accountBlock.blockedAccount"></my-actor-avatar>
             <div>
               {{ accountBlock.blockedAccount.displayName }}
               <span class="text-muted">{{ accountBlock.blockedAccount.nameWithHost }}</span>

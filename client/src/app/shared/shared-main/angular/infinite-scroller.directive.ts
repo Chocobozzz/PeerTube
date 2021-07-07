@@ -1,11 +1,11 @@
 import { fromEvent, Observable, Subscription } from 'rxjs'
 import { distinctUntilChanged, filter, map, share, startWith, throttleTime } from 'rxjs/operators'
-import { AfterContentChecked, Directive, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core'
+import { AfterViewChecked, Directive, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core'
 
 @Directive({
   selector: '[myInfiniteScroller]'
 })
-export class InfiniteScrollerDirective implements OnInit, OnDestroy, AfterContentChecked {
+export class InfiniteScrollerDirective implements OnInit, OnDestroy, AfterViewChecked {
   @Input() percentLimit = 70
   @Input() autoInit = false
   @Input() onItself = false
@@ -24,13 +24,14 @@ export class InfiniteScrollerDirective implements OnInit, OnDestroy, AfterConten
     this.decimalLimit = this.percentLimit / 100
   }
 
-  ngAfterContentChecked () {
+  ngAfterViewChecked () {
     if (this.checkScroll) {
       this.checkScroll = false
 
-      console.log('Checking if the initial state has a scroll.')
-
-      if (this.hasScroll() === false) this.nearOfBottom.emit()
+      // Wait HTML update
+      setTimeout(() => {
+        if (this.hasScroll() === false) this.nearOfBottom.emit()
+      })
     }
   }
 

@@ -1,6 +1,8 @@
+import { VideoUploadFile } from 'express'
 import { PathLike } from 'fs-extra'
 import { Transaction } from 'sequelize/types'
 import { AbuseAuditView, auditLoggerFactory } from '@server/helpers/audit-logger'
+import { afterCommitIfTransaction } from '@server/helpers/database-utils'
 import { logger } from '@server/helpers/logger'
 import { AbuseModel } from '@server/models/abuse/abuse'
 import { VideoAbuseModel } from '@server/models/abuse/video-abuse'
@@ -18,12 +20,12 @@ import {
   MVideoAccountLightBlacklistAllFiles
 } from '@server/types/models'
 import { ActivityCreate } from '../../shared/models/activitypub'
-import { VideoTorrentObject } from '../../shared/models/activitypub/objects'
+import { VideoObject } from '../../shared/models/activitypub/objects'
 import { VideoCommentObject } from '../../shared/models/activitypub/objects/video-comment-object'
-import { VideoCreate, VideoImportCreate } from '../../shared/models/videos'
-import { VideoCommentCreate } from '../../shared/models/videos/video-comment.model'
-import { UserModel } from '../models/account/user'
-import { ActorModel } from '../models/activitypub/actor'
+import { LiveVideoCreate, VideoCreate, VideoImportCreate } from '../../shared/models/videos'
+import { VideoCommentCreate } from '../../shared/models/videos/comment/video-comment.model'
+import { ActorModel } from '../models/actor/actor'
+import { UserModel } from '../models/user/user'
 import { VideoModel } from '../models/video/video'
 import { VideoCommentModel } from '../models/video/video-comment'
 import { sendAbuse } from './activitypub/send/send-flag'
@@ -37,7 +39,14 @@ export type AcceptResult = {
 // Can be filtered by plugins
 function isLocalVideoAccepted (object: {
   videoBody: VideoCreate
-  videoFile: Express.Multer.File & { duration?: number }
+  videoFile: VideoUploadFile
+  user: UserModel
+}): AcceptResult {
+  return { accepted: true }
+}
+
+function isLocalLiveVideoAccepted (object: {
+  liveVideoBody: LiveVideoCreate
   user: UserModel
 }): AcceptResult {
   return { accepted: true }
@@ -62,7 +71,7 @@ function isLocalVideoCommentReplyAccepted (_object: {
 
 function isRemoteVideoAccepted (_object: {
   activity: ActivityCreate
-  videoAP: VideoTorrentObject
+  videoAP: VideoObject
   byActor: ActorModel
 }): AcceptResult {
   return { accepted: true }
@@ -175,6 +184,8 @@ function createAccountAbuse (options: {
 }
 
 export {
+  isLocalLiveVideoAccepted,
+
   isLocalVideoAccepted,
   isLocalVideoThreadAccepted,
   isRemoteVideoAccepted,
@@ -210,16 +221,18 @@ async function createAbuse (options: {
   const { isOwned } = await associateFun(abuseInstance)
 
   if (isOwned === false) {
-    await sendAbuse(reporterAccount.Actor, abuseInstance, abuseInstance.FlaggedAccount, transaction)
+    sendAbuse(reporterAccount.Actor, abuseInstance, abuseInstance.FlaggedAccount, transaction)
   }
 
   const abuseJSON = abuseInstance.toFormattedAdminJSON()
   auditLogger.create(reporterAccount.Actor.getIdentifier(), new AbuseAuditView(abuseJSON))
 
-  Notifier.Instance.notifyOnNewAbuse({
-    abuse: abuseJSON,
-    abuseInstance,
-    reporter: reporterAccount.Actor.getIdentifier()
+  afterCommitIfTransaction(transaction, () => {
+    Notifier.Instance.notifyOnNewAbuse({
+      abuse: abuseJSON,
+      abuseInstance,
+      reporter: reporterAccount.Actor.getIdentifier()
+    })
   })
 
   logger.info('Abuse report %d created.', abuseInstance.id)

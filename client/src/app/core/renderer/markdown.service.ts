@@ -1,6 +1,13 @@
 import * as MarkdownIt from 'markdown-it'
 import { buildVideoLink } from 'src/assets/player/utils'
 import { Injectable } from '@angular/core'
+import {
+  COMPLETE_RULES,
+  ENHANCED_RULES,
+  ENHANCED_WITH_HTML_RULES,
+  TEXT_RULES,
+  TEXT_WITH_HTML_RULES
+} from '@shared/core-utils/renderer/markdown'
 import { HtmlRendererService } from './html-renderer.service'
 
 type MarkdownParsers = {
@@ -10,12 +17,15 @@ type MarkdownParsers = {
   enhancedMarkdownIt: MarkdownIt
   enhancedWithHTMLMarkdownIt: MarkdownIt
 
-  completeMarkdownIt: MarkdownIt
+  unsafeMarkdownIt: MarkdownIt
+
+  customPageMarkdownIt: MarkdownIt
 }
 
 type MarkdownConfig = {
   rules: string[]
   html: boolean
+  breaks: boolean
   escape?: boolean
 }
 
@@ -25,57 +35,54 @@ type MarkdownParserConfigs = {
 
 @Injectable()
 export class MarkdownService {
-  static TEXT_RULES = [
-    'linkify',
-    'autolink',
-    'emphasis',
-    'link',
-    'newline',
-    'list'
-  ]
-  static TEXT_WITH_HTML_RULES = MarkdownService.TEXT_RULES.concat([ 'html_inline', 'html_block' ])
-
-  static ENHANCED_RULES = MarkdownService.TEXT_RULES.concat([ 'image' ])
-  static ENHANCED_WITH_HTML_RULES = MarkdownService.TEXT_WITH_HTML_RULES.concat([ 'image' ])
-
-  static COMPLETE_RULES = MarkdownService.ENHANCED_WITH_HTML_RULES.concat([ 'block', 'inline', 'heading', 'paragraph' ])
-
   private markdownParsers: MarkdownParsers = {
     textMarkdownIt: null,
     textWithHTMLMarkdownIt: null,
+
     enhancedMarkdownIt: null,
     enhancedWithHTMLMarkdownIt: null,
-    completeMarkdownIt: null
+
+    unsafeMarkdownIt: null,
+
+    customPageMarkdownIt: null
   }
   private parsersConfig: MarkdownParserConfigs = {
-    textMarkdownIt: { rules: MarkdownService.TEXT_RULES, html: false },
-    textWithHTMLMarkdownIt: { rules: MarkdownService.TEXT_WITH_HTML_RULES, html: true, escape: true },
+    textMarkdownIt: { rules: TEXT_RULES, breaks: true, html: false },
+    textWithHTMLMarkdownIt: { rules: TEXT_WITH_HTML_RULES, breaks: true, html: true, escape: true },
 
-    enhancedMarkdownIt: { rules: MarkdownService.ENHANCED_RULES, html: false },
-    enhancedWithHTMLMarkdownIt: { rules: MarkdownService.ENHANCED_WITH_HTML_RULES, html: true, escape: true },
+    enhancedMarkdownIt: { rules: ENHANCED_RULES, breaks: true, html: false },
+    enhancedWithHTMLMarkdownIt: { rules: ENHANCED_WITH_HTML_RULES, breaks: true, html: true, escape: true },
 
-    completeMarkdownIt: { rules: MarkdownService.COMPLETE_RULES, html: true }
+    unsafeMarkdownIt: { rules: COMPLETE_RULES, breaks: true, html: true, escape: false },
+
+    customPageMarkdownIt: { rules: COMPLETE_RULES, breaks: false, html: true, escape: true }
   }
+
+  private emojiModule: any
 
   constructor (private htmlRenderer: HtmlRendererService) {}
 
   textMarkdownToHTML (markdown: string, withHtml = false, withEmoji = false) {
-    if (withHtml) return this.render('textWithHTMLMarkdownIt', markdown, withEmoji)
+    if (withHtml) return this.render({ name: 'textWithHTMLMarkdownIt', markdown, withEmoji })
 
-    return this.render('textMarkdownIt', markdown, withEmoji)
+    return this.render({ name: 'textMarkdownIt', markdown, withEmoji })
   }
 
   enhancedMarkdownToHTML (markdown: string, withHtml = false, withEmoji = false) {
-    if (withHtml) return this.render('enhancedWithHTMLMarkdownIt', markdown, withEmoji)
+    if (withHtml) return this.render({ name: 'enhancedWithHTMLMarkdownIt', markdown, withEmoji })
 
-    return this.render('enhancedMarkdownIt', markdown, withEmoji)
+    return this.render({ name: 'enhancedMarkdownIt', markdown, withEmoji })
   }
 
-  completeMarkdownToHTML (markdown: string) {
-    return this.render('completeMarkdownIt', markdown, true)
+  unsafeMarkdownToHTML (markdown: string, _trustedInput: true) {
+    return this.render({ name: 'unsafeMarkdownIt', markdown, withEmoji: true })
   }
 
-  async processVideoTimestamps (html: string) {
+  customPageMarkdownToHTML (markdown: string, additionalAllowedTags: string[]) {
+    return this.render({ name: 'customPageMarkdownIt', markdown, withEmoji: true, additionalAllowedTags })
+  }
+
+  processVideoTimestamps (html: string) {
     return html.replace(/((\d{1,2}):)?(\d{1,2}):(\d{1,2})/g, function (str, _, h, m, s) {
       const t = (3600 * +(h || 0)) + (60 * +(m || 0)) + (+(s || 0))
       const url = buildVideoLink({ startTime: t })
@@ -83,7 +90,13 @@ export class MarkdownService {
     })
   }
 
-  private async render (name: keyof MarkdownParsers, markdown: string, withEmoji = false) {
+  private async render (options: {
+    name: keyof MarkdownParsers
+    markdown: string
+    withEmoji: boolean
+    additionalAllowedTags?: string[]
+  }) {
+    const { name, markdown, withEmoji, additionalAllowedTags } = options
     if (!markdown) return ''
 
     const config = this.parsersConfig[ name ]
@@ -91,16 +104,18 @@ export class MarkdownService {
       this.markdownParsers[ name ] = await this.createMarkdownIt(config)
 
       if (withEmoji) {
-        // TODO: write types
-        const emoji = require('markdown-it-emoji/light')
-        this.markdownParsers[ name ].use(emoji)
+        if (!this.emojiModule) {
+          this.emojiModule = (await import('markdown-it-emoji/light')).default
+        }
+
+        this.markdownParsers[ name ].use(this.emojiModule)
       }
     }
 
     let html = this.markdownParsers[ name ].render(markdown)
     html = this.avoidTruncatedTags(html)
 
-    if (config.escape) return this.htmlRenderer.toSafeHtml(html)
+    if (config.escape) return this.htmlRenderer.toSafeHtml(html, additionalAllowedTags)
 
     return html
   }
@@ -109,7 +124,7 @@ export class MarkdownService {
     // FIXME: import('...') returns a struct module, containing a "default" field
     const MarkdownItClass: typeof import ('markdown-it') = (await import('markdown-it') as any).default
 
-    const markdownIt = new MarkdownItClass('zero', { linkify: true, breaks: true, html: config.html })
+    const markdownIt = new MarkdownItClass('zero', { linkify: true, breaks: config.breaks, html: config.html })
 
     for (const rule of config.rules) {
       markdownIt.enable(rule)

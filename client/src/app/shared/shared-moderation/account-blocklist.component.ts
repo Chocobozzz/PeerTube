@@ -1,7 +1,7 @@
 import { SortMeta } from 'primeng/api'
 import { Directive, OnInit } from '@angular/core'
 import { Notifier, RestPagination, RestTable } from '@app/core'
-import { Actor } from '@app/shared/shared-main'
+import { Account } from '@app/shared/shared-main'
 import { AccountBlock } from './account-block.model'
 import { BlocklistComponentType, BlocklistService } from './blocklist.service'
 
@@ -30,10 +30,6 @@ export class GenericAccountBlocklistComponent extends RestTable implements OnIni
     this.initialize()
   }
 
-  switchToDefaultAvatar ($event: Event) {
-    ($event.target as HTMLImageElement).src = Actor.GET_DEFAULT_AVATAR_URL()
-  }
-
   unblockAccount (accountBlock: AccountBlock) {
     const blockedAccount = accountBlock.blockedAccount
     const operation = this.mode === BlocklistComponentType.Account
@@ -48,12 +44,12 @@ export class GenericAccountBlocklistComponent extends RestTable implements OnIni
             : $localize`Account ${blockedAccount.nameWithHost} unmuted by your instance.`
         )
 
-        this.loadData()
+        this.reloadData()
       }
     )
   }
 
-  protected loadData () {
+  protected reloadData () {
     const operation = this.mode === BlocklistComponentType.Account
       ? this.blocklistService.getUserAccountBlocklist({
         pagination: this.pagination,

@@ -2,7 +2,10 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { waitJobs } from '../../../shared/extra-utils/server/jobs'
+import { createFile, readdir } from 'fs-extra'
+import { join } from 'path'
+import { buildUUID } from '@server/helpers/uuid'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 import {
   buildServerDirectory,
   cleanupTests,
@@ -12,6 +15,7 @@ import {
   flushAndRunMultipleServers,
   getAccount,
   getEnvCli,
+  killallServers,
   makeGetRequest,
   ServerInfo,
   setAccessTokensToServers,
@@ -20,21 +24,19 @@ import {
   uploadVideo,
   wait
 } from '../../../shared/extra-utils'
+import { waitJobs } from '../../../shared/extra-utils/server/jobs'
 import { Account, VideoPlaylistPrivacy } from '../../../shared/models'
-import { createFile, readdir } from 'fs-extra'
-import { v4 as uuidv4 } from 'uuid'
-import { join } from 'path'
 
 const expect = chai.expect
 
 async function countFiles (internalServerNumber: number, directory: string) {
-  const files = await readdir(buildServerDirectory(internalServerNumber, directory))
+  const files = await readdir(buildServerDirectory({ internalServerNumber }, directory))
 
   return files.length
 }
 
 async function assertNotExists (internalServerNumber: number, directory: string, substring: string) {
-  const files = await readdir(buildServerDirectory(internalServerNumber, directory))
+  const files = await readdir(buildServerDirectory({ internalServerNumber }, directory))
 
   for (const f of files) {
     expect(f).to.not.contain(substring)
@@ -98,7 +100,7 @@ describe('Test prune storage scripts', function () {
       await makeGetRequest({
         url: servers[0].url,
         path: account.avatar.path,
-        statusCodeExpected: 200
+        statusCodeExpected: HttpStatusCode.OK_200
       })
     }
 
@@ -108,13 +110,16 @@ describe('Test prune storage scripts', function () {
       await makeGetRequest({
         url: servers[1].url,
         path: account.avatar.path,
-        statusCodeExpected: 200
+        statusCodeExpected: HttpStatusCode.OK_200
       })
     }
 
     await wait(1000)
 
     await waitJobs(servers)
+    killallServers(servers)
+
+    await wait(1000)
   })
 
   it('Should have the files on the disk', async function () {
@@ -124,10 +129,10 @@ describe('Test prune storage scripts', function () {
   it('Should create some dirty files', async function () {
     for (let i = 0; i < 2; i++) {
       {
-        const base = buildServerDirectory(servers[0].internalServerNumber, 'videos')
+        const base = buildServerDirectory(servers[0], 'videos')
 
-        const n1 = uuidv4() + '.mp4'
-        const n2 = uuidv4() + '.webm'
+        const n1 = buildUUID() + '.mp4'
+        const n2 = buildUUID() + '.webm'
 
         await createFile(join(base, n1))
         await createFile(join(base, n2))
@@ -136,10 +141,10 @@ describe('Test prune storage scripts', function () {
       }
 
       {
-        const base = buildServerDirectory(servers[0].internalServerNumber, 'torrents')
+        const base = buildServerDirectory(servers[0], 'torrents')
 
-        const n1 = uuidv4() + '-240.torrent'
-        const n2 = uuidv4() + '-480.torrent'
+        const n1 = buildUUID() + '-240.torrent'
+        const n2 = buildUUID() + '-480.torrent'
 
         await createFile(join(base, n1))
         await createFile(join(base, n2))
@@ -148,10 +153,10 @@ describe('Test prune storage scripts', function () {
       }
 
       {
-        const base = buildServerDirectory(servers[0].internalServerNumber, 'thumbnails')
+        const base = buildServerDirectory(servers[0], 'thumbnails')
 
-        const n1 = uuidv4() + '.jpg'
-        const n2 = uuidv4() + '.jpg'
+        const n1 = buildUUID() + '.jpg'
+        const n2 = buildUUID() + '.jpg'
 
         await createFile(join(base, n1))
         await createFile(join(base, n2))
@@ -160,10 +165,10 @@ describe('Test prune storage scripts', function () {
       }
 
       {
-        const base = buildServerDirectory(servers[0].internalServerNumber, 'previews')
+        const base = buildServerDirectory(servers[0], 'previews')
 
-        const n1 = uuidv4() + '.jpg'
-        const n2 = uuidv4() + '.jpg'
+        const n1 = buildUUID() + '.jpg'
+        const n2 = buildUUID() + '.jpg'
 
         await createFile(join(base, n1))
         await createFile(join(base, n2))
@@ -172,10 +177,10 @@ describe('Test prune storage scripts', function () {
       }
 
       {
-        const base = buildServerDirectory(servers[0].internalServerNumber, 'avatars')
+        const base = buildServerDirectory(servers[0], 'avatars')
 
-        const n1 = uuidv4() + '.png'
-        const n2 = uuidv4() + '.jpg'
+        const n1 = buildUUID() + '.png'
+        const n2 = buildUUID() + '.jpg'
 
         await createFile(join(base, n1))
         await createFile(join(base, n2))

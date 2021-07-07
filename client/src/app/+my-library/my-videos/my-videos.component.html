@@ -1,0 +1,64 @@
+<h1>
+  <span>
+    <my-global-icon iconName="videos" aria-hidden="true"></my-global-icon>
+    <ng-container i18n>My videos</ng-container>
+    <span class="badge badge-secondary"> {{ pagination.totalItems }}</span>
+  </span>
+
+  <div>
+    <a routerLink="/my-library/video-imports" class="button-link">
+      <my-global-icon iconName="cloud-download" aria-hidden="true"></my-global-icon>
+      <ng-container i18n>My imports</ng-container>
+    </a>
+
+    <a routerLink="/my-library/ownership" class="button-link">
+      <my-global-icon iconName="users" aria-hidden="true"></my-global-icon>
+      <ng-container i18n>Ownership changes</ng-container>
+    </a>
+  </div>
+</h1>
+
+<div class="videos-header d-flex justify-content-between">
+  <my-advanced-input-filter [filters]="inputFilters" (search)="onSearch($event)"></my-advanced-input-filter>
+
+  <div class="peertube-select-container peertube-select-button">
+    <select [(ngModel)]="sort" (ngModelChange)="onChangeSortColumn()" class="form-control">
+      <option value="undefined" disabled>Sort by</option>
+      <option value="-publishedAt" i18n>Last published first</option>
+      <option value="-createdAt" i18n>Last created first</option>
+      <option value="-views" i18n>Most viewed first</option>
+      <option value="-likes" i18n>Most liked first</option>
+      <option value="-duration" i18n>Longest first</option>
+    </select>
+  </div>
+</div>
+
+<my-videos-selection
+  [pagination]="pagination"
+  [(selection)]="selection"
+  [(videosModel)]="videos"
+  [miniatureDisplayOptions]="miniatureDisplayOptions"
+  [titlePage]="titlePage"
+  [getVideosObservableFunction]="getVideosObservableFunction"
+  [user]="user"
+  [loadOnInit]="false"
+  #videosSelection
+>
+  <ng-template ptTemplate="globalButtons">
+    <span class="action-button action-button-delete-selection" (click)="deleteSelectedVideos()">
+      <my-global-icon iconName="delete" aria-hidden="true"></my-global-icon>
+      <ng-container i18n>Delete</ng-container>
+    </span>
+  </ng-template>
+
+  <ng-template ptTemplate="rowButtons" let-video>
+    <div class="action-button">
+      <my-edit-button label [routerLink]="[ '/videos', 'update', video.uuid ]"></my-edit-button>
+
+      <my-action-dropdown [actions]="videoActions" [entry]="{ video: video }"></my-action-dropdown>
+    </div>
+  </ng-template>
+</my-videos-selection>
+
+<my-video-change-ownership #videoChangeOwnershipModal></my-video-change-ownership>
+<my-live-stream-information #liveStreamInformationModal></my-live-stream-information>

@@ -1,5 +1,5 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 table {
   font-size: 14px;
@@ -12,14 +12,15 @@ table {
     }
 
     &.sub-label {
+      @include padding-left(30px);
+
       font-weight: $font-regular;
-      padding-left: 30px;
     }
 
     .more-info {
       font-style: italic;
       font-weight: initial;
-      font-size: 14px
+      font-size: 14px;
     }
   }
 

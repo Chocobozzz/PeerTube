@@ -1,5 +1,5 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 .modal-body {
   font-size: 15px;
@@ -17,5 +17,3 @@ input[type=text] {
 .form-group {
   margin: 20px 0;
 }
-
-

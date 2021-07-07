@@ -1,10 +1,12 @@
 <ng-template #modal let-hide="close">
   <div class="modal-header">
-    <h4 i18n class="modal-title">Settings</h4>
+    <h4 i18n class="modal-title">My settings</h4>
     <my-global-icon iconName="cross" aria-label="Close" role="button" (click)="hide()"></my-global-icon>
   </div>
 
   <div class="modal-body">
+    <div i18n class="mb-4 font-italic">These settings apply only to your session on this instance.</div>
+
     <div i18n class="mb-4 quick-settings-title">Display settings</div>
 
     <my-user-video-settings

@@ -1,5 +1,5 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 input:not([type=submit]) {
   @include peertube-input-text(340px);
@@ -21,4 +21,8 @@ textarea {
   font-style: italic;
   margin-bottom: 10px;
   font-size: 13px;
+}
+
+my-peertube-checkbox + .label-small-info {
+  margin-top: 5px;
 }

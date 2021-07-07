@@ -8,22 +8,22 @@
 
     <div class="block-documentation">
       <div class="columns">
-        <a class="link-block" href="https://docs.joinpeertube.org/#/maintain-tools" target="_blank" rel="noopener noreferrer">
-          <a i18n class="link-title" href="https://docs.joinpeertube.org/#/maintain-tools" target="_blank" rel="noopener noreferrer">CLI
+        <a class="link-block" href="https://docs.joinpeertube.org/maintain-tools" target="_blank" rel="noopener noreferrer">
+          <a i18n class="link-title" href="https://docs.joinpeertube.org/maintain-tools" target="_blank" rel="noopener noreferrer">CLI
             documentation</a>
 
           <div i18n>Upload or import videos, parse logs, prune storage directories, reset user password...</div>
         </a>
 
-        <a class="link-block" href="https://docs.joinpeertube.org/#/admin-following-instances" target="_blank" rel="noopener noreferrer">
-          <a i18n class="link-title" href="https://docs.joinpeertube.org/#/admin-following-instances" target="_blank" rel="noopener noreferrer">Administer
+        <a class="link-block" href="https://docs.joinpeertube.org/admin-following-instances" target="_blank" rel="noopener noreferrer">
+          <a i18n class="link-title" href="https://docs.joinpeertube.org/admin-following-instances" target="_blank" rel="noopener noreferrer">Administer
             documentation</a>
 
           <div i18n>Managing users, following other instances, dealing with spammers...</div>
         </a>
 
-        <a class="link-block" href="https://docs.joinpeertube.org/#/use-setup-account" target="_blank" rel="noopener noreferrer">
-          <a i18n class="link-title" href="https://docs.joinpeertube.org/#/use-setup-account" target="_blank" rel="noopener noreferrer">Use
+        <a class="link-block" href="https://docs.joinpeertube.org/use-setup-account" target="_blank" rel="noopener noreferrer">
+          <a i18n class="link-title" href="https://docs.joinpeertube.org/use-setup-account" target="_blank" rel="noopener noreferrer">Use
             documentation</a>
 
           <div i18n>Setup your account, managing video playlists, discover third-party applications...</div>
@@ -61,11 +61,9 @@
         </p>
 
         <p i18n>
-          If you want to open registrations, please decide what are <strong>your moderation rules</strong>, fill your <strong>instance
-          terms</strong>
-          and specify the categories and languages you speak. This way, you will help users to register on <strong>the
-          appropriate</strong>
-          PeerTube instance.
+          If you want to open registrations, please decide what <strong>your moderation rules</strong> and <strong>instance
+          terms of service</strong> are, as well as specify the categories and languages and your moderators speak.
+          This way, you will help users to register on <strong>the appropriate</strong> PeerTube instance.
         </p>
       </div>
     </div>
@@ -73,12 +71,12 @@
 
   <div class="modal-footer inputs">
     <input
-      type="button" role="button" i18n-value value="Remind me later" class="action-button action-button-understood"
+      type="button" role="button" i18n-value value="Remind me later" class="peertube-button grey-button"
       (click)="hide()" (key.enter)="hide()"
     >
 
     <a i18n (click)="doNotOpenAgain(); hide()" (key.enter)="doNotOpenAgain(); hide()"
-       class="configure-instance-button" href="/admin/config/edit-custom" target="_blank"
+       class="peertube-button-link orange-button" href="/admin/config/edit-custom" target="_blank"
        rel="noopener noreferrer" ngbAutofocus>
       Configure my instance
     </a>

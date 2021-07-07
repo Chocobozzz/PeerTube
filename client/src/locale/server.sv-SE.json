@@ -7,7 +7,7 @@
     "Travels": "Resor",
     "Gaming": "Spel",
     "People": "Människor",
-    "Comedy": "Komedi",
+    "Comedy": "Humor",
     "Entertainment": "Underhållning",
     "News & Politics": "Nyheter och politik",
     "How To": "Instruktioner",
@@ -17,7 +17,7 @@
     "Animals": "Djur",
     "Kids": "Barn",
     "Food": "Mat",
-    "Attribution": "Attribution",
+    "Attribution": "Erkännande",
     "Attribution - Share Alike": "Erkännande, dela lika",
     "Attribution - No Derivatives": "Erkännande, inga bearbetningar",
     "Attribution - Non Commercial": "Erkännande, icke-kommersiell",
@@ -31,6 +31,8 @@
     "Published": "Publicerad",
     "To transcode": "Att omkoda",
     "To import": "Att importera",
+    "Waiting for livestream": "Väntar på direktsändning",
+    "Livestream ended": "Sändningen har avslutats",
     "Pending": "I kö",
     "Success": "Lyckades",
     "Failed": "Misslyckades",
@@ -240,5 +242,7 @@
     "Yoruba": "Yoruba",
     "Zhuang": "Zhuang",
     "Chinese": "Kinesiska",
-    "Zulu": "Zulu"
+    "Zulu": "Zulu",
+    "Normal mode": "Normal mode",
+    "Theater mode": "Biografläge"
 }

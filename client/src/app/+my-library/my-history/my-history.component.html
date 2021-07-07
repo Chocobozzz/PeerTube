@@ -1,0 +1,33 @@
+<h1>
+  <my-global-icon iconName="history" aria-hidden="true"></my-global-icon>
+  <ng-container i18n>My watch history</ng-container> <span class="badge badge-secondary">{{ pagination.totalItems }}</span>
+</h1>
+
+<div class="top-buttons">
+  <div class="search-wrapper">
+    <my-advanced-input-filter (search)="onSearch($event)"></my-advanced-input-filter>
+  </div>
+
+  <div class="history-switch">
+    <my-input-switch [(ngModel)]="videosHistoryEnabled" (ngModelChange)="onVideosHistoryChange()"></my-input-switch>
+    <label i18n>Track watch history</label>
+  </div>
+
+  <button class="delete-history" (click)="deleteHistory()" i18n>
+    <my-global-icon iconName="delete" aria-hidden="true"></my-global-icon>
+    Delete history
+  </button>
+</div>
+
+<my-videos-selection
+  [pagination]="pagination"
+  [(videosModel)]="videos"
+  [miniatureDisplayOptions]="miniatureDisplayOptions"
+  [titlePage]="titlePage"
+  [getVideosObservableFunction]="getVideosObservableFunction"
+  [user]="user"
+  [loadOnInit]="false"
+  i18n-noResultMessage noResultMessage="You don't have any video in your watch history yet."
+  [enableSelection]="false"
+  #videosSelection
+></my-videos-selection>

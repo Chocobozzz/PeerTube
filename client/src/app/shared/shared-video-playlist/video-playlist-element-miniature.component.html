@@ -20,7 +20,7 @@
           [attr.title]="playlistElement.video.name"
         >{{ playlistElement.video.name }}</a>
 
-        <a *ngIf="accountLink" tabindex="-1" class="video-info-account" [routerLink]="[ '/accounts', playlistElement.video.byAccount ]">
+        <a *ngIf="accountLink" tabindex="-1" class="video-info-account" [routerLink]="[ '/a', playlistElement.video.byAccount ]">
           {{ playlistElement.video.byAccount }}
         </a>
         <span *ngIf="!accountLink" tabindex="-1" class="video-info-account">{{ playlistElement.video.byAccount }}</span>
@@ -36,10 +36,10 @@
     </div>
   </a>
 
-  <my-edit-button *ngIf="owned && touchScreenEditButton" [routerLink]="[ '/my-account', 'video-playlists', playlist.uuid ]"></my-edit-button>
+  <my-edit-button *ngIf="owned && touchScreenEditButton" [routerLink]="[ '/my-library', 'video-playlists', playlist.uuid ]"></my-edit-button>
 
-  <div *ngIf="owned" class="more" ngbDropdown #moreDropdown="ngbDropdown" placement="left auto"
-       (openChange)="onDropdownOpenChange()" autoClose="outside"
+  <div *ngIf="owned" class="more dropdown-root" ngbDropdown #moreDropdown="ngbDropdown" placement="left auto"
+       (openChange)="onDropdownOpenChange()" autoClose="outside" container="body"
   >
     <my-global-icon iconName="more-vertical" ngbDropdownToggle role="button" class="icon-more" (click)="$event.preventDefault()"></my-global-icon>
 

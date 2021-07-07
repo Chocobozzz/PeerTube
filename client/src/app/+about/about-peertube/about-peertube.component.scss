@@ -1,5 +1,5 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 .root {
   max-width: 1200px;
@@ -18,7 +18,7 @@
   margin: 20px auto;
 }
 
-/deep/ .section-title {
+::ng-deep .section-title {
   font-weight: $font-semibold;
   font-size: 20px;
   margin-bottom: 5px;
@@ -44,8 +44,9 @@
 .description,
 .p2p-privacy,
 my-about-peertube-contributors {
-  /deep/ {
-    p, li {
+  ::ng-deep {
+    p,
+    li {
       font-size: 15px;
     }
   }

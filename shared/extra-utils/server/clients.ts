@@ -1,5 +1,6 @@
 import * as request from 'supertest'
 import { URL } from 'url'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 function getClient (url: string) {
   const path = '/api/v1/oauth-clients/local'
@@ -8,7 +9,7 @@ function getClient (url: string) {
           .get(path)
           .set('Host', new URL(url).host)
           .set('Accept', 'application/json')
-          .expect(200)
+          .expect(HttpStatusCode.OK_200)
           .expect('Content-Type', /json/)
 }
 

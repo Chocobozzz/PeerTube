@@ -1,5 +1,5 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 .subtitle {
   font-size: 18px;
@@ -15,4 +15,11 @@ a {
 
 .no-results {
   justify-content: flex-start;
+}
+
+.show-more {
+  @include peertube-button-link;
+  @include grey-button;
+
+  margin-top: 1%;
 }

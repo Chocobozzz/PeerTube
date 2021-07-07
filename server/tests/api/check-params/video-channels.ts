@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
+import 'mocha'
 import * as chai from 'chai'
 import { omit } from 'lodash'
-import 'mocha'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import {
+  buildAbsoluteFixturePath,
   cleanupTests,
   createUser,
   deleteVideoChannel,
@@ -23,7 +25,6 @@ import {
   checkBadSortPagination,
   checkBadStartPagination
 } from '../../../../shared/extra-utils/requests/check-api-params'
-import { join } from 'path'
 import { VideoChannelUpdate } from '../../../../shared/models/videos'
 
 const expect = chai.expect
@@ -83,14 +84,14 @@ describe('Test video channels API validator', function () {
     })
 
     it('Should fail with a unknown account', async function () {
-      await getAccountVideoChannelsList({ url: server.url, accountName: 'unknown', specialStatus: 404 })
+      await getAccountVideoChannelsList({ url: server.url, accountName: 'unknown', specialStatus: HttpStatusCode.NOT_FOUND_404 })
     })
 
     it('Should succeed with the correct parameters', async function () {
       await makeGetRequest({
         url: server.url,
         path: accountChannelPath,
-        statusCodeExpected: 200
+        statusCodeExpected: HttpStatusCode.OK_200
       })
     })
   })
@@ -109,7 +110,7 @@ describe('Test video channels API validator', function () {
         path: videoChannelPath,
         token: 'none',
         fields: baseCorrectParams,
-        statusCodeExpected: 401
+        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
       })
     })
 
@@ -154,7 +155,7 @@ describe('Test video channels API validator', function () {
         path: videoChannelPath,
         token: server.accessToken,
         fields: baseCorrectParams,
-        statusCodeExpected: 200
+        statusCodeExpected: HttpStatusCode.OK_200
       })
     })
 
@@ -164,7 +165,7 @@ describe('Test video channels API validator', function () {
         path: videoChannelPath,
         token: server.accessToken,
         fields: baseCorrectParams,
-        statusCodeExpected: 409
+        statusCodeExpected: HttpStatusCode.CONFLICT_409
       })
     })
   })
@@ -188,7 +189,7 @@ describe('Test video channels API validator', function () {
         path,
         token: 'hi',
         fields: baseCorrectParams,
-        statusCodeExpected: 401
+        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
       })
     })
 
@@ -198,7 +199,7 @@ describe('Test video channels API validator', function () {
         path,
         token: accessTokenUser,
         fields: baseCorrectParams,
-        statusCodeExpected: 403
+        statusCodeExpected: HttpStatusCode.FORBIDDEN_403
       })
     })
 
@@ -228,12 +229,13 @@ describe('Test video channels API validator', function () {
         path,
         token: server.accessToken,
         fields: baseCorrectParams,
-        statusCodeExpected: 204
+        statusCodeExpected: HttpStatusCode.NO_CONTENT_204
       })
     })
   })
 
-  describe('When updating video channel avatar', function () {
+  describe('When updating video channel avatar/banner', function () {
+    const types = [ 'avatar', 'banner' ]
     let path: string
 
     before(async function () {
@@ -241,48 +243,57 @@ describe('Test video channels API validator', function () {
     })
 
     it('Should fail with an incorrect input file', async function () {
-      const fields = {}
-      const attaches = {
-        avatarfile: join(__dirname, '..', '..', 'fixtures', 'video_short.mp4')
+      for (const type of types) {
+        const fields = {}
+        const attaches = {
+          [type + 'file']: buildAbsoluteFixturePath('video_short.mp4')
+        }
+
+        await makeUploadRequest({ url: server.url, path: `${path}/${type}/pick`, token: server.accessToken, fields, attaches })
       }
-      await makeUploadRequest({ url: server.url, path: path + '/avatar/pick', token: server.accessToken, fields, attaches })
     })
 
     it('Should fail with a big file', async function () {
-      const fields = {}
-      const attaches = {
-        avatarfile: join(__dirname, '..', '..', 'fixtures', 'avatar-big.png')
+      for (const type of types) {
+        const fields = {}
+        const attaches = {
+          [type + 'file']: buildAbsoluteFixturePath('avatar-big.png')
+        }
+        await makeUploadRequest({ url: server.url, path: `${path}/${type}/pick`, token: server.accessToken, fields, attaches })
       }
-      await makeUploadRequest({ url: server.url, path: path + '/avatar/pick', token: server.accessToken, fields, attaches })
     })
 
     it('Should fail with an unauthenticated user', async function () {
-      const fields = {}
-      const attaches = {
-        avatarfile: join(__dirname, '..', '..', 'fixtures', 'avatar.png')
+      for (const type of types) {
+        const fields = {}
+        const attaches = {
+          [type + 'file']: buildAbsoluteFixturePath('avatar.png')
+        }
+        await makeUploadRequest({
+          url: server.url,
+          path: `${path}/${type}/pick`,
+          fields,
+          attaches,
+          statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+        })
       }
-      await makeUploadRequest({
-        url: server.url,
-        path: path + '/avatar/pick',
-        fields,
-        attaches,
-        statusCodeExpected: 401
-      })
     })
 
     it('Should succeed with the correct params', async function () {
-      const fields = {}
-      const attaches = {
-        avatarfile: join(__dirname, '..', '..', 'fixtures', 'avatar.png')
+      for (const type of types) {
+        const fields = {}
+        const attaches = {
+          [type + 'file']: buildAbsoluteFixturePath('avatar.png')
+        }
+        await makeUploadRequest({
+          url: server.url,
+          path: `${path}/${type}/pick`,
+          token: server.accessToken,
+          fields,
+          attaches,
+          statusCodeExpected: HttpStatusCode.OK_200
+        })
       }
-      await makeUploadRequest({
-        url: server.url,
-        path: path + '/avatar/pick',
-        token: server.accessToken,
-        fields,
-        attaches,
-        statusCodeExpected: 200
-      })
     })
   })
 
@@ -291,7 +302,7 @@ describe('Test video channels API validator', function () {
       const res = await makeGetRequest({
         url: server.url,
         path: videoChannelPath,
-        statusCodeExpected: 200
+        statusCodeExpected: HttpStatusCode.OK_200
       })
 
       expect(res.body.data).to.be.an('array')
@@ -301,7 +312,7 @@ describe('Test video channels API validator', function () {
       await makeGetRequest({
         url: server.url,
         path: videoChannelPath + '/super_channel2',
-        statusCodeExpected: 404
+        statusCodeExpected: HttpStatusCode.NOT_FOUND_404
       })
     })
 
@@ -309,22 +320,22 @@ describe('Test video channels API validator', function () {
       await makeGetRequest({
         url: server.url,
         path: videoChannelPath + '/super_channel',
-        statusCodeExpected: 200
+        statusCodeExpected: HttpStatusCode.OK_200
       })
     })
   })
 
   describe('When deleting a video channel', function () {
     it('Should fail with a non authenticated user', async function () {
-      await deleteVideoChannel(server.url, 'coucou', 'super_channel', 401)
+      await deleteVideoChannel(server.url, 'coucou', 'super_channel', HttpStatusCode.UNAUTHORIZED_401)
     })
 
     it('Should fail with another authenticated user', async function () {
-      await deleteVideoChannel(server.url, accessTokenUser, 'super_channel', 403)
+      await deleteVideoChannel(server.url, accessTokenUser, 'super_channel', HttpStatusCode.FORBIDDEN_403)
     })
 
     it('Should fail with an unknown video channel id', async function () {
-      await deleteVideoChannel(server.url, server.accessToken, 'super_channel2', 404)
+      await deleteVideoChannel(server.url, server.accessToken, 'super_channel2', HttpStatusCode.NOT_FOUND_404)
     })
 
     it('Should succeed with the correct parameters', async function () {
@@ -332,7 +343,7 @@ describe('Test video channels API validator', function () {
     })
 
     it('Should fail to delete the last user video channel', async function () {
-      await deleteVideoChannel(server.url, server.accessToken, 'root_channel', 409)
+      await deleteVideoChannel(server.url, server.accessToken, 'root_channel', HttpStatusCode.CONFLICT_409)
     })
   })
 

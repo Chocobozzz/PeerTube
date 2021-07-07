@@ -7,10 +7,7 @@
   [searchable]="searchable"
 >
   <ng-option *ngFor="let channel of channels" [value]="channel.id">
-    <img
-      class="avatar mr-1"
-      [src]="channel.avatarPath"
-    />
+    <img alt="" class="avatar mr-1" [src]="channel.avatarPath" />
     {{ channel.label }}
   </ng-option>
 </ng-select>

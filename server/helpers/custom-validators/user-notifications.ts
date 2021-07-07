@@ -1,10 +1,9 @@
-import { exists } from './misc'
 import validator from 'validator'
-import { UserNotificationType } from '../../../shared/models/users'
 import { UserNotificationSettingValue } from '../../../shared/models/users/user-notification-setting.model'
+import { exists } from './misc'
 
 function isUserNotificationTypeValid (value: any) {
-  return exists(value) && validator.isInt('' + value) && UserNotificationType[value] !== undefined
+  return exists(value) && validator.isInt('' + value)
 }
 
 function isUserNotificationSettingValid (value: any) {

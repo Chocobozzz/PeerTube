@@ -6,6 +6,7 @@ import { PluginModel } from '../../models/server/plugin'
 import { chunk } from 'lodash'
 import { getLatestPluginsVersion } from '../plugins/plugin-index'
 import { compareSemVer } from '../../../shared/core-utils/miscs/miscs'
+import { Notifier } from '../notifier'
 
 export class PluginsCheckScheduler extends AbstractScheduler {
 
@@ -52,6 +53,11 @@ export class PluginsCheckScheduler extends AbstractScheduler {
           ) {
             plugin.latestVersion = result.latestVersion
             await plugin.save()
+
+            // Notify if there is an higher plugin version available
+            if (compareSemVer(plugin.version, result.latestVersion) < 0) {
+              Notifier.Instance.notifyOfNewPluginVersion(plugin)
+            }
 
             logger.info('Plugin %s has a new latest version %s.', result.npmName, plugin.latestVersion)
           }

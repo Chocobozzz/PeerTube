@@ -13,7 +13,7 @@ type Metadata = {
   levels: Hlsjs.Level[]
 }
 
-type CustomAudioTrack = Hlsjs.AudioTrack & { name?: string, lang?: string }
+type CustomAudioTrack = Hlsjs.HlsAudioTrack & { name?: string, lang?: string }
 
 const registerSourceHandler = function (vjs: typeof videojs) {
   if (!Hlsjs.isSupported()) {
@@ -102,9 +102,8 @@ class Html5Hlsjs {
   private dvrDuration: number = null
   private edgeMargin: number = null
 
-  private handlers: { [ id in 'play' | 'addtrack' | 'playing' | 'textTracksChange' | 'audioTracksChange' ]: EventListener } = {
+  private handlers: { [ id in 'play' | 'playing' | 'textTracksChange' | 'audioTracksChange' ]: EventListener } = {
     play: null,
-    addtrack: null,
     playing: null,
     textTracksChange: null,
     audioTracksChange: null
@@ -124,8 +123,11 @@ class Html5Hlsjs {
 
     this.videoElement.addEventListener('error', event => {
       let errorTxt: string
-      const mediaError = (event.currentTarget as HTMLVideoElement).error
+      const mediaError = ((event.currentTarget || event.target) as HTMLVideoElement).error
 
+      if (!mediaError) return
+
+      console.log(mediaError)
       switch (mediaError.code) {
         case mediaError.MEDIA_ERR_ABORTED:
           errorTxt = 'You aborted the video playback'
@@ -174,7 +176,6 @@ class Html5Hlsjs {
   // See comment for `initialize` method.
   dispose () {
     this.videoElement.removeEventListener('play', this.handlers.play)
-    this.videoElement.textTracks.removeEventListener('addtrack', this.handlers.addtrack)
     this.videoElement.removeEventListener('playing', this.handlers.playing)
 
     this.player.textTracks().removeEventListener('change', this.handlers.textTracksChange)
@@ -226,46 +227,61 @@ class Html5Hlsjs {
 
     if (this.errorCounts[ Hlsjs.ErrorTypes.MEDIA_ERROR ] > 2) {
       console.info('bubbling media error up to VIDEOJS')
+      this.hls.destroy()
       this.tech.error = () => error
       this.tech.trigger('error')
       return
     }
   }
 
+  private _handleNetworkError (error: any) {
+    if (this.errorCounts[ Hlsjs.ErrorTypes.NETWORK_ERROR] <= 5) {
+      console.info('trying to recover network error')
+
+      // Wait 1 second and retry
+      setTimeout(() => this.hls.startLoad(), 1000)
+
+      // Reset error count on success
+      this.hls.once(Hlsjs.Events.FRAG_LOADED, () => {
+        this.errorCounts[ Hlsjs.ErrorTypes.NETWORK_ERROR] = 0
+      })
+
+      return
+    }
+
+    console.info('bubbling network error up to VIDEOJS')
+    this.hls.destroy()
+    this.tech.error = () => error
+    this.tech.trigger('error')
+  }
+
   private _onError (_event: any, data: Hlsjs.errorData) {
     const error: { message: string, code?: number } = {
       message: `HLS.js error: ${data.type} - fatal: ${data.fatal} - ${data.details}`
     }
-    console.error(error.message)
 
     // increment/set error count
     if (this.errorCounts[ data.type ]) this.errorCounts[ data.type ] += 1
     else this.errorCounts[ data.type ] = 1
 
-    // Implement simple error handling based on hls.js documentation
-    // https://github.com/dailymotion/hls.js/blob/master/API.md#fifth-step-error-handling
-    if (data.fatal) {
-      switch (data.type) {
-        case Hlsjs.ErrorTypes.NETWORK_ERROR:
-          console.info('bubbling network error up to VIDEOJS')
-          error.code = 2
-          this.tech.error = () => error as any
-          this.tech.trigger('error')
-          break
+    if (!data.fatal) {
+      console.warn(error.message)
+      return
+    }
 
-        case Hlsjs.ErrorTypes.MEDIA_ERROR:
-          error.code = 3
-          this._handleMediaError(error)
-          break
+    console.error(error.message)
 
-        default:
-          // cannot recover
-          this.hls.destroy()
-          console.info('bubbling error up to VIDEOJS')
-          this.tech.error = () => error as any
-          this.tech.trigger('error')
-          break
-      }
+    if (data.type === Hlsjs.ErrorTypes.NETWORK_ERROR) {
+      error.code = 2
+      this._handleNetworkError(error)
+    } else if (data.type === Hlsjs.ErrorTypes.MEDIA_ERROR && data.details !== 'manifestIncompatibleCodecsError') {
+      error.code = 3
+      this._handleMediaError(error)
+    } else {
+      this.hls.destroy()
+      console.info('bubbling error up to VIDEOJS')
+      this.tech.error = () => error as any
+      this.tech.trigger('error')
     }
   }
 
@@ -607,9 +623,6 @@ class Html5Hlsjs {
     })
 
     this.hls.attachMedia(this.videoElement)
-
-    this.handlers.addtrack = this._updateTextTrackList.bind(this)
-    this.videoElement.textTracks.addEventListener('addtrack', this.handlers.addtrack)
 
     this.hls.loadSource(this.source.src)
   }

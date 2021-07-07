@@ -1,9 +1,11 @@
 import 'videojs-hotkeys/videojs.hotkeys'
 import 'videojs-dock'
-import 'videojs-contextmenu-ui'
+import 'videojs-contextmenu-pt'
 import 'videojs-contrib-quality-levels'
 import './upnext/end-card'
 import './upnext/upnext-plugin'
+import './stats/stats-card'
+import './stats/stats-plugin'
 import './bezels/bezels-plugin'
 import './peertube-plugin'
 import './videojs-components/next-previous-video-button'
@@ -20,8 +22,10 @@ import './videojs-components/settings-panel-child'
 import './videojs-components/theater-button'
 import './playlist/playlist-plugin'
 import videojs from 'video.js'
+import { PluginsManager } from '@root-helpers/plugins-manager'
 import { isDefaultLocale } from '@shared/core-utils/i18n'
 import { VideoFile } from '@shared/models'
+import { copyToClipboard } from '../../root-helpers/utils'
 import { RedundancyUrlManager } from './p2p-media-loader/redundancy-url-manager'
 import { segmentUrlBuilderFactory } from './p2p-media-loader/segment-url-builder'
 import { segmentValidatorFactory } from './p2p-media-loader/segment-validator'
@@ -35,7 +39,7 @@ import {
   VideoJSPluginOptions
 } from './peertube-videojs-typings'
 import { TranslationsManager } from './translations-manager'
-import { buildVideoOrPlaylistEmbed, buildVideoLink, copyToClipboard, getRtcConfig, isSafari, isIOS } from './utils'
+import { buildVideoLink, buildVideoOrPlaylistEmbed, getRtcConfig, isIOS, isSafari } from './utils'
 
 // Change 'Playback Rate' to 'Speed' (smaller for our settings menu)
 (videojs.getComponent('PlaybackRateMenuButton') as any).prototype.controlText_ = 'Speed'
@@ -97,10 +101,15 @@ export interface CommonOptions extends CustomizationOptions {
 
   videoViewUrl: string
   embedUrl: string
+  embedTitle: string
+
+  isLive: boolean
 
   language?: string
 
   videoCaptions: VideoJSCaption[]
+
+  videoUUID: string
 
   userWatching?: UserWatching
 
@@ -108,22 +117,26 @@ export interface CommonOptions extends CustomizationOptions {
 }
 
 export type PeertubePlayerManagerOptions = {
-  common: CommonOptions,
-  webtorrent: WebtorrentOptions,
+  common: CommonOptions
+  webtorrent: WebtorrentOptions
   p2pMediaLoader?: P2PMediaLoaderOptions
+
+  pluginsManager: PluginsManager
 }
 
 export class PeertubePlayerManager {
   private static playerElementClassName: string
   private static onPlayerChange: (player: videojs.Player) => void
-
   private static alreadyPlayed = false
+  private static pluginsManager: PluginsManager
 
   static initState () {
     PeertubePlayerManager.alreadyPlayed = false
   }
 
   static async initialize (mode: PlayerMode, options: PeertubePlayerManagerOptions, onPlayerChange: (player: videojs.Player) => void) {
+    this.pluginsManager = options.pluginsManager
+
     let p2pMediaLoader: any
 
     this.onPlayerChange = onPlayerChange
@@ -137,7 +150,7 @@ export class PeertubePlayerManager {
       ])
     }
 
-    const videojsOptions = this.getVideojsOptions(mode, options, p2pMediaLoader)
+    const videojsOptions = await this.getVideojsOptions(mode, options, p2pMediaLoader)
 
     await TranslationsManager.loadLocaleInVideoJS(options.common.serverUrl, options.common.language, videojs)
 
@@ -162,9 +175,14 @@ export class PeertubePlayerManager {
           PeertubePlayerManager.alreadyPlayed = true
         })
 
-        self.addContextMenu(mode, player, options.common.embedUrl)
+        self.addContextMenu(mode, player, options.common.embedUrl, options.common.embedTitle)
 
         player.bezels()
+        player.stats({
+          videoUUID: options.common.videoUUID,
+          videoIsLive: options.common.isLive,
+          mode
+        })
 
         return res(player)
       })
@@ -194,39 +212,43 @@ export class PeertubePlayerManager {
     await import('./webtorrent/webtorrent-plugin')
 
     const mode = 'webtorrent'
-    const videojsOptions = this.getVideojsOptions(mode, options)
+    const videojsOptions = await this.getVideojsOptions(mode, options)
 
     const self = this
     videojs(newVideoElement, videojsOptions, function (this: videojs.Player) {
       const player = this
 
-      self.addContextMenu(mode, player, options.common.embedUrl)
+      self.addContextMenu(mode, player, options.common.embedUrl, options.common.embedTitle)
 
       PeertubePlayerManager.onPlayerChange(player)
     })
   }
 
-  private static getVideojsOptions (
+  private static async getVideojsOptions (
     mode: PlayerMode,
     options: PeertubePlayerManagerOptions,
     p2pMediaLoaderModule?: any
-  ): videojs.PlayerOptions {
+  ): Promise<videojs.PlayerOptions> {
     const commonOptions = options.common
     const isHLS = mode === 'p2p-media-loader'
 
     let autoplay = this.getAutoPlayValue(commonOptions.autoplay)
-    let html5 = {}
+    const html5 = {
+      preloadTextTracks: false
+    }
 
     const plugins: VideoJSPluginOptions = {
       peertube: {
         mode,
-        autoplay, // Use peertube plugin autoplay because we get the file by webtorrent
+        autoplay, // Use peertube plugin autoplay because we could get the file by webtorrent
         videoViewUrl: commonOptions.videoViewUrl,
         videoDuration: commonOptions.videoDuration,
         userWatching: commonOptions.userWatching,
         subtitle: commonOptions.subtitle,
         videoCaptions: commonOptions.videoCaptions,
-        stopTime: commonOptions.stopTime
+        stopTime: commonOptions.stopTime,
+        isLive: commonOptions.isLive,
+        videoUUID: commonOptions.videoUUID
       }
     }
 
@@ -241,7 +263,7 @@ export class PeertubePlayerManager {
     if (isHLS) {
       const { hlsjs } = PeertubePlayerManager.addP2PMediaLoaderOptions(plugins, options, p2pMediaLoaderModule)
 
-      html5 = hlsjs.html5
+      Object.assign(html5, hlsjs.html5)
     }
 
     if (mode === 'webtorrent') {
@@ -267,7 +289,7 @@ export class PeertubePlayerManager {
 
       poster: commonOptions.poster,
       inactivityTimeout: commonOptions.inactivityTimeout,
-      playbackRates: [ 0.5, 0.75, 1, 1.25, 1.5, 2 ],
+      playbackRates: [ 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2 ],
 
       plugins,
 
@@ -290,7 +312,7 @@ export class PeertubePlayerManager {
       Object.assign(videojsOptions, { language: commonOptions.language })
     }
 
-    return videojsOptions
+    return this.pluginsManager.runHook('filter:internal.player.videojs.options.result', videojsOptions)
   }
 
   private static addP2PMediaLoaderOptions (
@@ -323,9 +345,9 @@ export class PeertubePlayerManager {
     const p2pMediaLoaderConfig = {
       loader: {
         trackerAnnounce,
-        segmentValidator: segmentValidatorFactory(options.p2pMediaLoader.segmentsSha256Url),
+        segmentValidator: segmentValidatorFactory(options.p2pMediaLoader.segmentsSha256Url, options.common.isLive),
         rtcConfig: getRtcConfig(),
-        requiredSegmentsPriority: 5,
+        requiredSegmentsPriority: 1,
         segmentUrlBuilder: segmentUrlBuilderFactory(redundancyUrlManager),
         useP2P: getStoredP2PEnabled(),
         consumeOnly
@@ -339,10 +361,8 @@ export class PeertubePlayerManager {
         const resolution = Math.min(level.height || 0, level.width || 0)
 
         const file = p2pMediaLoaderOptions.videoFiles.find(f => f.resolution.id === resolution)
-        if (!file) {
-          console.error('Cannot find video file for level %d.', level.height)
-          return level.height
-        }
+        // We don't have files for live videos
+        if (!file) return level.height
 
         let label = file.resolution.label
         if (file.fps >= 50) label += file.fps
@@ -353,7 +373,7 @@ export class PeertubePlayerManager {
         hlsjsConfig: {
           capLevelToPlayerSize: true,
           autoStartLoad: false,
-          liveSyncDurationCount: 7,
+          liveSyncDurationCount: 5,
           loader: new p2pMediaLoaderModule.Engine(p2pMediaLoaderConfig).createLoaderClass()
         }
       }
@@ -490,41 +510,69 @@ export class PeertubePlayerManager {
     return children
   }
 
-  private static addContextMenu (mode: PlayerMode, player: videojs.Player, videoEmbedUrl: string) {
-    const content = [
-      {
-        label: player.localize('Copy the video URL'),
-        listener: function () {
-          copyToClipboard(buildVideoLink())
+  private static addContextMenu (mode: PlayerMode, player: videojs.Player, videoEmbedUrl: string, videoEmbedTitle: string) {
+    const content = () => {
+      const isLoopEnabled = player.options_['loop']
+      const items = [
+        {
+          icon: 'repeat',
+          label: player.localize('Play in loop') + (isLoopEnabled ? '<span class="vjs-icon-tick-white"></span>' : ''),
+          listener: function () {
+            player.options_['loop'] = !isLoopEnabled
+          }
+        },
+        {
+          label: player.localize('Copy the video URL'),
+          listener: function () {
+            copyToClipboard(buildVideoLink())
+          }
+        },
+        {
+          label: player.localize('Copy the video URL at the current time'),
+          listener: function (this: videojs.Player) {
+            copyToClipboard(buildVideoLink({ startTime: this.currentTime() }))
+          }
+        },
+        {
+          icon: 'code',
+          label: player.localize('Copy embed code'),
+          listener: () => {
+            copyToClipboard(buildVideoOrPlaylistEmbed(videoEmbedUrl, videoEmbedTitle))
+          }
         }
-      },
-      {
-        label: player.localize('Copy the video URL at the current time'),
-        listener: function (this: videojs.Player) {
-          copyToClipboard(buildVideoLink({ startTime: this.currentTime() }))
-        }
-      },
-      {
-        label: player.localize('Copy embed code'),
-        listener: () => {
-          copyToClipboard(buildVideoOrPlaylistEmbed(videoEmbedUrl))
-        }
-      }
-    ]
+      ]
 
-    if (mode === 'webtorrent') {
-      content.push({
-        label: player.localize('Copy magnet URI'),
-        listener: function (this: videojs.Player) {
-          copyToClipboard(this.webtorrent().getCurrentVideoFile().magnetUri)
+      if (mode === 'webtorrent') {
+        items.push({
+          label: player.localize('Copy magnet URI'),
+          listener: function (this: videojs.Player) {
+            copyToClipboard(this.webtorrent().getCurrentVideoFile().magnetUri)
+          }
+        })
+      }
+
+      items.push({
+        icon: 'info',
+        label: player.localize('Stats for nerds'),
+        listener: () => {
+          player.stats().show()
         }
       })
+
+      return items.map(i => ({
+        ...i,
+        label: `<span class="vjs-icon-${i.icon || 'link-2'}"></span>` + i.label
+      }))
     }
 
+    // adding the menu
     player.contextmenuUI({ content })
   }
 
   private static addHotkeysOptions (plugins: VideoJSPluginOptions) {
+    const isNaked = (event: KeyboardEvent, key: string) =>
+      (!event.ctrlKey && !event.altKey && !event.metaKey && !event.shiftKey && event.key === key)
+
     Object.assign(plugins, {
       hotkeys: {
         skipInitialFocus: true,
@@ -538,28 +586,23 @@ export class PeertubePlayerManager {
         enableVolumeScroll: false,
         enableModifiersForNumbers: false,
 
-        fullscreenKey: function (event: KeyboardEvent) {
-          // fullscreen with the f key or Ctrl+Enter
-          return event.key === 'f' || (event.ctrlKey && event.key === 'Enter')
+        rewindKey: function (event: KeyboardEvent) {
+          return isNaked(event, 'ArrowLeft')
         },
 
-        seekStep: function (event: KeyboardEvent) {
-          // mimic VLC seek behavior, and default to 5 (original value is 5).
-          if (event.ctrlKey && event.altKey) {
-            return 5 * 60
-          } else if (event.ctrlKey) {
-            return 60
-          } else if (event.altKey) {
-            return 10
-          } else {
-            return 5
-          }
+        forwardKey: function (event: KeyboardEvent) {
+          return isNaked(event, 'ArrowRight')
+        },
+
+        fullscreenKey: function (event: KeyboardEvent) {
+          // fullscreen with the f key or Ctrl+Enter
+          return isNaked(event, 'f') || (!event.altKey && event.ctrlKey && event.key === 'Enter')
         },
 
         customKeys: {
           increasePlaybackRateKey: {
             key: function (event: KeyboardEvent) {
-              return event.key === '>'
+              return isNaked(event, '>')
             },
             handler: function (player: videojs.Player) {
               const newValue = Math.min(player.playbackRate() + 0.1, 5)
@@ -568,7 +611,7 @@ export class PeertubePlayerManager {
           },
           decreasePlaybackRateKey: {
             key: function (event: KeyboardEvent) {
-              return event.key === '<'
+              return isNaked(event, '<')
             },
             handler: function (player: videojs.Player) {
               const newValue = Math.max(player.playbackRate() - 0.1, 0.10)
@@ -577,7 +620,7 @@ export class PeertubePlayerManager {
           },
           frameByFrame: {
             key: function (event: KeyboardEvent) {
-              return event.key === '.'
+              return isNaked(event, '.')
             },
             handler: function (player: videojs.Player) {
               player.pause()

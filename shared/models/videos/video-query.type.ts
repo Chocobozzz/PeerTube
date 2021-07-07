@@ -1,1 +1,1 @@
-export type VideoFilter = 'local' | 'all-local'
+export type VideoFilter = 'local' | 'all-local' | 'all'

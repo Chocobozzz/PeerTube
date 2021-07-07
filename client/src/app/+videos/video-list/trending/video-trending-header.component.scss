@@ -1,0 +1,20 @@
+@use '_mixins' as *;
+
+.btn-group label {
+  border: 1px solid transparent;
+  border-radius: 9999px !important;
+  padding: 5px 16px;
+  opacity: .8;
+
+  &:not(:first-child) {
+    @include margin-left(.5rem);
+  }
+
+  my-global-icon {
+    @include margin-right(.1rem);
+
+    position: relative;
+    top: -2px;
+    height: 1rem;
+  }
+}

@@ -1,6 +1,5 @@
-import * as Bluebird from 'bluebird'
 import { invert } from 'lodash'
-import { literal, Op, QueryTypes, WhereOptions } from 'sequelize'
+import { literal, Op, QueryTypes } from 'sequelize'
 import {
   AllowNull,
   BelongsTo,
@@ -17,7 +16,7 @@ import {
   UpdatedAt
 } from 'sequelize-typescript'
 import { isAbuseModerationCommentValid, isAbuseReasonValid, isAbuseStateValid } from '@server/helpers/custom-validators/abuses'
-import { abusePredefinedReasonsMap } from '@shared/core-utils/abuse'
+import { abusePredefinedReasonsMap, AttributesOnly } from '@shared/core-utils'
 import {
   AbuseFilter,
   AbuseObject,
@@ -188,7 +187,7 @@ export enum ScopeNames {
     }
   ]
 })
-export class AbuseModel extends Model<AbuseModel> {
+export class AbuseModel extends Model<Partial<AttributesOnly<AbuseModel>>> {
 
   @AllowNull(false)
   @Default(null)
@@ -265,33 +264,7 @@ export class AbuseModel extends Model<AbuseModel> {
   })
   VideoAbuse: VideoAbuseModel
 
-  // FIXME: deprecated in 2.3. Remove these validators
-  static loadByIdAndVideoId (id: number, videoId?: number, uuid?: string): Bluebird<MAbuseReporter> {
-    const videoWhere: WhereOptions = {}
-
-    if (videoId) videoWhere.videoId = videoId
-    if (uuid) videoWhere.deletedVideo = { uuid }
-
-    const query = {
-      include: [
-        {
-          model: VideoAbuseModel,
-          required: true,
-          where: videoWhere
-        },
-        {
-          model: AccountModel,
-          as: 'ReporterAccount'
-        }
-      ],
-      where: {
-        id
-      }
-    }
-    return AbuseModel.findOne(query)
-  }
-
-  static loadByIdWithReporter (id: number): Bluebird<MAbuseReporter> {
+  static loadByIdWithReporter (id: number): Promise<MAbuseReporter> {
     const query = {
       where: {
         id
@@ -307,7 +280,7 @@ export class AbuseModel extends Model<AbuseModel> {
     return AbuseModel.findOne(query)
   }
 
-  static loadFull (id: number): Bluebird<MAbuseFull> {
+  static loadFull (id: number): Promise<MAbuseFull> {
     const query = {
       where: {
         id
@@ -461,10 +434,10 @@ export class AbuseModel extends Model<AbuseModel> {
   }
 
   buildBaseVideoCommentAbuse (this: MAbuseUserFormattable) {
-    if (!this.VideoCommentAbuse) return null
+    // Associated video comment could have been destroyed if the video has been deleted
+    if (!this.VideoCommentAbuse || !this.VideoCommentAbuse.VideoComment) return null
 
-    const abuseModel = this.VideoCommentAbuse
-    const entity = abuseModel.VideoComment
+    const entity = this.VideoCommentAbuse.VideoComment
 
     return {
       id: entity.id,
@@ -561,13 +534,7 @@ export class AbuseModel extends Model<AbuseModel> {
         : null,
 
       countReportsForReporter: (countReportsForReporter || 0),
-      countReportsForReportee: (countReportsForReportee || 0),
-
-      // FIXME: deprecated in 2.3, remove this
-      startAt: null,
-      endAt: null,
-      count: countReportsForVideo || 0,
-      nth: nthReportForVideo || 0
+      countReportsForReportee: (countReportsForReportee || 0)
     })
   }
 

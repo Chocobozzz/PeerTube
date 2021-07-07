@@ -1,5 +1,5 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 .about-instance-title {
   display: flex;
@@ -11,7 +11,7 @@
   }
 
   .contact-admin {
-    @include peertube-button;
+    @include peertube-button-link;
     @include orange-button;
 
     height: fit-content;
@@ -20,11 +20,13 @@
 
 .instance-badges {
   font-size: 16px;
+  margin-bottom: 20px;
 
   .badge {
+    @include margin-right(5px);
+
     font-size: 12px;
     font-weight: $font-semibold;
-    margin-right: 5px;
 
     &.category {
       background-color: pvar(--mainColor);
@@ -43,13 +45,17 @@
 .middle-title {
   @include in-content-small-title;
 
-  margin-top: 45px;
+  margin-top: 0;
   margin-bottom: 25px;
 }
 
 .block {
-  margin-bottom: 30px;
+  margin-bottom: 75px;
   font-size: 15px;
+}
+
+.short-description {
+  margin-top: 10px;
 }
 
 .short-description .dedicated-to-nsfw {
@@ -62,19 +68,22 @@
 
   position: relative;
 
-  &:hover, &:active {
+  &:hover,
+  &:active {
     &::after {
+      @include margin-left(0.2em);
+
       content: '#';
       display: inline-block;
-      margin-left: 0.2em;
     }
   }
 
-  .middle-title, .section-title {
+  .middle-title,
+  .section-title {
     display: inline-block;
   }
 
   .section-title {
-    color: initial;
+    color: var(--mainForegroundColor);
   }
 }

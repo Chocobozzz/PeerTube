@@ -1,18 +1,18 @@
-import { basename, dirname, join } from 'path'
-import { HLS_STREAMING_PLAYLIST_DIRECTORY, P2P_MEDIA_LOADER_PEER_VERSION } from '../initializers/constants'
 import { close, ensureDir, move, open, outputJSON, pathExists, read, readFile, remove, writeFile } from 'fs-extra'
-import { getVideoStreamSize, getAudioStreamCodec, getVideoStreamCodec } from '../helpers/ffmpeg-utils'
+import { flatten, uniq } from 'lodash'
+import { basename, dirname, join } from 'path'
+import { MVideoWithFile } from '@server/types/models'
 import { sha256 } from '../helpers/core-utils'
-import { VideoStreamingPlaylistModel } from '../models/video/video-streaming-playlist'
+import { getAudioStreamCodec, getVideoStreamCodec, getVideoStreamSize } from '../helpers/ffprobe-utils'
 import { logger } from '../helpers/logger'
 import { doRequest, doRequestAndSaveToFile } from '../helpers/requests'
 import { generateRandomString } from '../helpers/utils'
-import { flatten, uniq } from 'lodash'
-import { VideoFileModel } from '../models/video/video-file'
 import { CONFIG } from '../initializers/config'
+import { HLS_STREAMING_PLAYLIST_DIRECTORY, P2P_MEDIA_LOADER_PEER_VERSION } from '../initializers/constants'
 import { sequelizeTypescript } from '../initializers/database'
-import { MVideoWithFile } from '@server/types/models'
-import { getVideoFilename, getVideoFilePath } from './video-paths'
+import { VideoFileModel } from '../models/video/video-file'
+import { VideoStreamingPlaylistModel } from '../models/video/video-streaming-playlist'
+import { getVideoFilePath } from './video-paths'
 
 async function updateStreamingPlaylistsInfohashesIfNeeded () {
   const playlistsToUpdate = await VideoStreamingPlaylistModel.listByIncorrectPeerVersion()
@@ -50,13 +50,12 @@ async function updateMasterHLSPlaylist (video: MVideoWithFile) {
     let line = `#EXT-X-STREAM-INF:${bandwidth},${resolution}`
     if (file.fps) line += ',FRAME-RATE=' + file.fps
 
-    const videoCodec = await getVideoStreamCodec(videoFilePath)
-    line += `,CODECS="${videoCodec}`
+    const codecs = await Promise.all([
+      getVideoStreamCodec(videoFilePath),
+      getAudioStreamCodec(videoFilePath)
+    ])
 
-    const audioCodec = await getAudioStreamCodec(videoFilePath)
-    if (audioCodec) line += `,${audioCodec}`
-
-    line += '"'
+    line += `,CODECS="${codecs.filter(c => !!c).join(',')}"`
 
     masterPlaylists.push(line)
     masterPlaylists.push(VideoStreamingPlaylistModel.getHlsPlaylistFilename(file.resolution))
@@ -65,7 +64,7 @@ async function updateMasterHLSPlaylist (video: MVideoWithFile) {
   await writeFile(masterPlaylistPath, masterPlaylists.join('\n') + '\n')
 }
 
-async function updateSha256Segments (video: MVideoWithFile) {
+async function updateSha256VODSegments (video: MVideoWithFile) {
   const json: { [filename: string]: { [range: string]: string } } = {}
 
   const playlistDirectory = join(HLS_STREAMING_PLAYLIST_DIRECTORY, video.uuid)
@@ -93,7 +92,7 @@ async function updateSha256Segments (video: MVideoWithFile) {
     }
     await close(fd)
 
-    const videoFilename = getVideoFilename(hlsPlaylist, file)
+    const videoFilename = file.filename
     json[videoFilename] = rangeHashes
   }
 
@@ -101,20 +100,9 @@ async function updateSha256Segments (video: MVideoWithFile) {
   await outputJSON(outputPath, json)
 }
 
-function getRangesFromPlaylist (playlistContent: string) {
-  const ranges: { offset: number, length: number }[] = []
-  const lines = playlistContent.split('\n')
-  const regex = /^#EXT-X-BYTERANGE:(\d+)@(\d+)$/
-
-  for (const line of lines) {
-    const captured = regex.exec(line)
-
-    if (captured) {
-      ranges.push({ length: parseInt(captured[1], 10), offset: parseInt(captured[2], 10) })
-    }
-  }
-
-  return ranges
+async function buildSha256Segment (segmentPath: string) {
+  const buf = await readFile(segmentPath)
+  return sha256(buf)
 }
 
 function downloadPlaylistSegments (playlistUrl: string, destinationDir: string, timeout: number) {
@@ -122,7 +110,7 @@ function downloadPlaylistSegments (playlistUrl: string, destinationDir: string, 
 
   logger.info('Importing HLS playlist %s', playlistUrl)
 
-  return new Promise<string>(async (res, rej) => {
+  return new Promise<void>(async (res, rej) => {
     const tmpDirectory = join(CONFIG.STORAGE.TMP_DIR, await generateRandomString(10))
 
     await ensureDir(tmpDirectory)
@@ -146,7 +134,7 @@ function downloadPlaylistSegments (playlistUrl: string, destinationDir: string, 
         const destPath = join(tmpDirectory, basename(fileUrl))
 
         const bodyKBLimit = 10 * 1000 * 1000 // 10GB
-        await doRequestAndSaveToFile({ uri: fileUrl }, destPath, bodyKBLimit)
+        await doRequestAndSaveToFile(fileUrl, destPath, { bodyKBLimit })
       }
 
       clearTimeout(timer)
@@ -167,7 +155,7 @@ function downloadPlaylistSegments (playlistUrl: string, destinationDir: string, 
   }
 
   async function fetchUniqUrls (playlistUrl: string) {
-    const { body } = await doRequest<string>({ uri: playlistUrl })
+    const { body } = await doRequest(playlistUrl)
 
     if (!body) return []
 
@@ -187,9 +175,26 @@ function downloadPlaylistSegments (playlistUrl: string, destinationDir: string, 
 
 export {
   updateMasterHLSPlaylist,
-  updateSha256Segments,
+  updateSha256VODSegments,
+  buildSha256Segment,
   downloadPlaylistSegments,
   updateStreamingPlaylistsInfohashesIfNeeded
 }
 
 // ---------------------------------------------------------------------------
+
+function getRangesFromPlaylist (playlistContent: string) {
+  const ranges: { offset: number, length: number }[] = []
+  const lines = playlistContent.split('\n')
+  const regex = /^#EXT-X-BYTERANGE:(\d+)@(\d+)$/
+
+  for (const line of lines) {
+    const captured = regex.exec(line)
+
+    if (captured) {
+      ranges.push({ length: parseInt(captured[1], 10), offset: parseInt(captured[2], 10) })
+    }
+  }
+
+  return ranges
+}

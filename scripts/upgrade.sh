@@ -2,7 +2,7 @@
 
 set -eu
 
-PEERTUBE_PATH=${1:-/var/www/peertube/}
+PEERTUBE_PATH=${1:-/var/www/peertube}
 
 if [ ! -e "$PEERTUBE_PATH" ]; then
   echo "Error - path \"$PEERTUBE_PATH\" wasn't found"
@@ -33,14 +33,15 @@ fi
 
 # Backup database
 if [ -x "$(command -v pg_dump)" ]
-then 
-  SQL_BACKUP_PATH="$PEERTUBE_PATH/backup/sql-peertube_prod-$(date +"%Y%m%d-%H%M").bak" 
-  DB_USER=$(node -e "console.log(require('js-yaml').safeLoad(fs.readFileSync('$PEERTUBE_PATH/config/production.yaml', 'utf8'))['database']['username'])")
-  DB_PASS=$(node -e "console.log(require('js-yaml').safeLoad(fs.readFileSync('$PEERTUBE_PATH/config/production.yaml', 'utf8'))['database']['password'])")
-  DB_HOST=$(node -e "console.log(require('js-yaml').safeLoad(fs.readFileSync('$PEERTUBE_PATH/config/production.yaml', 'utf8'))['database']['hostname'])")
-  DB_SUFFIX=$(node -e "console.log(require('js-yaml').safeLoad(fs.readFileSync('$PEERTUBE_PATH/config/production.yaml', 'utf8'))['database']['suffix'])")
+then
+  SQL_BACKUP_PATH="$PEERTUBE_PATH/backup/sql-peertube_prod-$(date +"%Y%m%d-%H%M").bak"
+  DB_USER=$(node -e "console.log(require('js-yaml').load(fs.readFileSync('$PEERTUBE_PATH/config/production.yaml', 'utf8'))['database']['username'])")
+  DB_PASS=$(node -e "console.log(require('js-yaml').load(fs.readFileSync('$PEERTUBE_PATH/config/production.yaml', 'utf8'))['database']['password'])")
+  DB_HOST=$(node -e "console.log(require('js-yaml').load(fs.readFileSync('$PEERTUBE_PATH/config/production.yaml', 'utf8'))['database']['hostname'])")
+  DB_SUFFIX=$(node -e "console.log(require('js-yaml').load(fs.readFileSync('$PEERTUBE_PATH/config/production.yaml', 'utf8'))['database']['suffix'])")
+  DB_NAME=$(node -e "console.log(require('js-yaml').load(fs.readFileSync('$PEERTUBE_PATH/config/production.yaml', 'utf8'))['database']['name'] || '')")
   mkdir -p $PEERTUBE_PATH/backup
-  PGPASSWORD=$DB_PASS pg_dump -U $DB_USER -h $DB_HOST -F c "peertube${DB_SUFFIX}" -f "$SQL_BACKUP_PATH"
+  PGPASSWORD=$DB_PASS pg_dump -U $DB_USER -h $DB_HOST -F c "${DB_NAME:-peertube${DB_SUFFIX}}" -f "$SQL_BACKUP_PATH"
 else
   echo "pg_dump not found. Cannot make a SQL backup!"
 fi
@@ -71,7 +72,7 @@ rm -f "peertube-${VERSION}.zip"
 rm -rf $PEERTUBE_PATH/peertube-latest
 ln -s "$PEERTUBE_PATH/versions/peertube-${VERSION}" $PEERTUBE_PATH/peertube-latest
 cd $PEERTUBE_PATH/peertube-latest
-yarn install --production --pure-lockfile 
+yarn install --production --pure-lockfile
 cp $PEERTUBE_PATH/peertube-latest/config/default.yaml $PEERTUBE_PATH/config/default.yaml
 
 echo "Differences in configuration files..."

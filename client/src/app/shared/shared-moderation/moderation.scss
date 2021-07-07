@@ -1,6 +1,7 @@
-@import 'variables';
-@import 'mixins';
-@import 'miniature';
+@use 'sass:math';
+@use '_mixins' as *;
+@use '_variables' as *;
+@use '_miniature' as *;
 
 .moderation-expanded {
   font-size: 90%;
@@ -9,7 +10,7 @@
     font-weight: $font-semibold;
     display: inline-block;
     vertical-align: top;
-    text-align: right;
+    text-align: end;
   }
 
   .moderation-expanded-text {
@@ -17,12 +18,18 @@
     word-wrap: break-word;
 
     ::ng-deep p:last-child {
-      margin-bottom: 0px !important;
+      margin-bottom: 0 !important;
     }
   }
 }
 
 .screenratio {
+  @include block-ratio($selector: 'div, ::ng-deep iframe') {
+    width: 100% !important;
+    height: 100% !important;
+    left: 0;
+  };
+
   div {
     @include miniature-thumbnail;
 
@@ -31,33 +38,10 @@
     align-items: center;
     color: pvar(--inputPlaceholderColor);
   }
-
-  @include large-screen-ratio($selector: 'div, ::ng-deep iframe') {
-    width: 100% !important;
-    height: 100% !important;
-    left: 0;
-  };
-}
-
-.input-group {
-  @include peertube-input-group(300px);
-
-  .dropdown-toggle::after {
-    margin-left: 0;
-  }
 }
 
 .chip {
   @include chip;
-}
-
-.caption {
-  justify-content: flex-end;
-
-  input {
-    @include peertube-input-text(250px);
-    flex-grow: 1;
-  }
 }
 
 my-action-dropdown.show {
@@ -93,19 +77,18 @@ my-action-dropdown.show {
   display: inline-flex;
 
   .table-video-image {
-    @include miniature-thumbnail;
-
     $image-height: 45px;
 
+    @include miniature-thumbnail;
+    @include margin-right(0.5rem);
+
     height: $image-height;
-    width: #{(16/9) * $image-height};
-    margin-right: 0.5rem;
+    width: #{math.div(16, 9) * $image-height};
     border-radius: 2px;
-    border: none;
+    border: 0;
     background: transparent;
     display: inline-flex;
     justify-content: center;
-    align-items: center;
     position: relative;
 
     img {
@@ -139,9 +122,10 @@ my-action-dropdown.show {
     line-height: 1rem;
 
     div .glyphicon {
+      @include margin-left(0.1rem);
+
       font-size: 80%;
-      color: gray;
-      margin-left: 0.1rem;
+      color: #808080;
     }
 
     div + div {

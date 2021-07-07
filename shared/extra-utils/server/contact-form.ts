@@ -1,5 +1,6 @@
 import * as request from 'supertest'
 import { ContactForm } from '../../models/server'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 function sendContactForm (options: {
   url: string
@@ -20,7 +21,7 @@ function sendContactForm (options: {
   return request(options.url)
     .post(path)
     .send(body)
-    .expect(options.expectedStatus || 204)
+    .expect(options.expectedStatus || HttpStatusCode.NO_CONTENT_204)
 }
 
 // ---------------------------------------------------------------------------

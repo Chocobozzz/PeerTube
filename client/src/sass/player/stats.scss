@@ -1,0 +1,43 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+@use './_player-variables' as *;
+
+$stats-width: 420px;
+$contextmenu-background-color: rgba(0, 0, 0, 0.6);
+
+.video-js {
+
+  .vjs-stats-content {
+    transition: opacity 0.1s;
+
+    position: absolute;
+    background-color: $contextmenu-background-color;
+    padding: 5px 0;
+    border-radius: 4px;
+    width: $stats-width;
+    min-width: 27em;
+    max-width: calc(100vw - 20px);
+    left: 10px;
+    top: 10px;
+    z-index: 64;
+    font-size: 12px;
+    line-height: 1.2;
+  }
+
+  .vjs-stats-close {
+    cursor: pointer;
+    position: absolute;
+    right: 3px;
+    top: 3px;
+    padding: 0;
+  }
+
+  .vjs-stats-list > div > div {
+    display: inline-block;
+    font-weight: 600;
+    padding: 0 .5em;
+    text-align: end;
+    width: 11.5em;
+    white-space: nowrap;
+  }
+}

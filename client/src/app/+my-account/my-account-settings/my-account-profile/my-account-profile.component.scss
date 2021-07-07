@@ -1,5 +1,5 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 label {
   font-weight: $font-regular;
@@ -8,6 +8,10 @@ label {
 
 .form-group:first-child {
   margin-bottom: 15px;
+}
+
+input#username + .text-muted {
+  margin-top: 5px;
 }
 
 input[type=text] {
@@ -24,7 +28,7 @@ input[type=submit] {
 }
 
 textarea {
-  @include peertube-textarea(500px, 150px);
+  @include peertube-textarea(100%, 150px);
   max-width: 100%;
 
   display: block;

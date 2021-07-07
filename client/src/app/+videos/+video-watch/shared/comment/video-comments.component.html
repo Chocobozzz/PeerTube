@@ -1,0 +1,100 @@
+<div>
+  <div class="title-block">
+    <h2 class="title-page title-page-single">
+      {totalNotDeletedComments, plural, =0 {Comments} =1 {1 Comment} other {{{totalNotDeletedComments}} Comments}}
+    </h2>
+
+    <my-feed [syndicationItems]="syndicationItems"></my-feed>
+
+    <div ngbDropdown class="d-inline-block ml-4 dropdown-root">
+      <button class="btn btn-sm btn-outline-secondary" id="dropdown-sort-comments" ngbDropdownToggle i18n>
+        SORT BY
+      </button>
+      <div ngbDropdownMenu aria-labelledby="dropdown-sort-comments">
+        <button (click)="handleSortChange('-createdAt')" ngbDropdownItem i18n>Most recent first (default)</button>
+        <button (click)="handleSortChange('-totalReplies')" ngbDropdownItem i18n>Most replies first</button>
+      </div>
+    </div>
+  </div>
+
+  <ng-template [ngIf]="video.commentsEnabled === true">
+    <my-video-comment-add
+      [video]="video"
+      [user]="user"
+      (commentCreated)="onCommentThreadCreated($event)"
+      [textValue]="commentThreadRedraftValue"
+    ></my-video-comment-add>
+
+    <div *ngIf="totalNotDeletedComments === 0 && comments.length === 0" i18n>No comments.</div>
+
+    <div
+      class="comment-threads"
+      myInfiniteScroller
+      [autoInit]="true"
+      (nearOfBottom)="onNearOfBottom()"
+      [dataObservable]="onDataSubject.asObservable()"
+    >
+      <div>
+        <div class="anchor" #commentHighlightBlock id="highlighted-comment"></div>
+        <my-video-comment
+          *ngIf="highlightedThread"
+          [comment]="highlightedThread"
+          [video]="video"
+          [inReplyToCommentId]="inReplyToCommentId"
+          [commentTree]="threadComments[highlightedThread.id]"
+          [highlightedComment]="true"
+          [firstInThread]="true"
+          (wantedToReply)="onWantedToReply($event)"
+          (wantedToDelete)="onWantedToDelete($event)"
+          (wantedToRedraft)="onWantedToRedraft($event)"
+          (threadCreated)="onThreadCreated($event)"
+          (resetReply)="onResetReply()"
+          (timestampClicked)="handleTimestampClicked($event)"
+          [redraftValue]="commentReplyRedraftValue"
+        ></my-video-comment>
+      </div>
+
+      <div *ngFor="let comment of comments; index as i">
+        <my-video-comment
+          *ngIf="!highlightedThread || comment.id !== highlightedThread.id"
+          [comment]="comment"
+          [video]="video"
+          [inReplyToCommentId]="inReplyToCommentId"
+          [commentTree]="threadComments[comment.id]"
+          [firstInThread]="i + 1 !== comments.length"
+          (wantedToReply)="onWantedToReply($event)"
+          (wantedToDelete)="onWantedToDelete($event)"
+          (wantedToRedraft)="onWantedToRedraft($event)"
+          (threadCreated)="onThreadCreated($event)"
+          (resetReply)="onResetReply()"
+          (timestampClicked)="handleTimestampClicked($event)"
+          [redraftValue]="commentReplyRedraftValue"
+        >
+          <div *ngIf="comment.totalReplies !== 0 && !threadComments[comment.id]" (click)="viewReplies(comment.id)" class="view-replies mb-2">
+            <span class="glyphicon glyphicon-menu-down"></span>
+
+            <ng-container *ngIf="comment.totalRepliesFromVideoAuthor > 0; then hasAuthorComments; else noAuthorComments"></ng-container>
+
+            <ng-template #hasAuthorComments>
+              <ng-container *ngIf="comment.totalReplies !== comment.totalRepliesFromVideoAuthor; else onlyAuthorComments" i18n>
+                View {comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}} from {{ video?.account?.displayName || 'the author' }} and others
+              </ng-container>
+              <ng-template i18n #onlyAuthorComments>
+                View {comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}} from {{ video?.account?.displayName || 'the author' }}
+              </ng-template>
+            </ng-template>
+
+            <ng-template i18n #noAuthorComments>View {comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}</ng-template>
+
+            <my-small-loader class="comment-thread-loading ml-1" [loading]="threadLoading[comment.id]"></my-small-loader>
+          </div>
+        </my-video-comment>
+
+      </div>
+    </div>
+  </ng-template>
+
+  <div *ngIf="video.commentsEnabled === false" i18n>
+    Comments are disabled.
+  </div>
+</div>

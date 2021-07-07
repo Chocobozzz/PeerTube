@@ -5,7 +5,8 @@ import { AuthService, Notifier, RedirectService, UserService } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { LOGIN_PASSWORD_VALIDATOR, LOGIN_USERNAME_VALIDATOR } from '@app/shared/form-validators/login-validators'
 import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
+import { InstanceAboutAccordionComponent } from '@app/shared/shared-instance'
+import { NgbAccordion, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { RegisteredExternalAuthConfig, ServerConfig } from '@shared/models'
 
 @Component({
@@ -15,15 +16,23 @@ import { RegisteredExternalAuthConfig, ServerConfig } from '@shared/models'
 })
 
 export class LoginComponent extends FormReactive implements OnInit, AfterViewInit {
-  @ViewChild('usernameInput', { static: false }) usernameInput: ElementRef
   @ViewChild('forgotPasswordModal', { static: true }) forgotPasswordModal: ElementRef
 
+  accordion: NgbAccordion
   error: string = null
   forgotPasswordEmail = ''
 
   isAuthenticatedWithExternalAuth = false
   externalAuthError = false
   externalLogins: string[] = []
+
+  instanceInformationPanels = {
+    terms: true,
+    administrators: false,
+    features: false,
+    moderation: false,
+    codeOfConduct: false
+  }
 
   private openedForgotPasswordModal: NgbModalRef
   private serverConfig: ServerConfig
@@ -45,12 +54,27 @@ export class LoginComponent extends FormReactive implements OnInit, AfterViewIni
     return this.serverConfig.signup.allowed === true
   }
 
+  onTermsClick (event: Event, instanceInformation: HTMLElement) {
+    event.preventDefault()
+
+    if (this.accordion) {
+      this.accordion.expand('terms')
+      instanceInformation.scrollIntoView({ behavior: 'smooth' })
+    }
+  }
+
   isEmailDisabled () {
     return this.serverConfig.email.enabled === false
   }
 
   ngOnInit () {
     const snapshot = this.route.snapshot
+
+    // Avoid undefined errors when accessing form error properties
+    this.buildForm({
+      username: LOGIN_USERNAME_VALIDATOR,
+      password: LOGIN_PASSWORD_VALIDATOR
+    })
 
     this.serverConfig = snapshot.data.serverConfig
 
@@ -63,18 +87,9 @@ export class LoginComponent extends FormReactive implements OnInit, AfterViewIni
       this.externalAuthError = true
       return
     }
-
-    this.buildForm({
-      username: LOGIN_USERNAME_VALIDATOR,
-      password: LOGIN_PASSWORD_VALIDATOR
-    })
   }
 
   ngAfterViewInit () {
-    if (this.usernameInput) {
-      this.usernameInput.nativeElement.focus()
-    }
-
     this.hooks.runAction('action:login.init', 'login')
   }
 
@@ -120,6 +135,10 @@ The link will expire within 1 hour.`
 
   hideForgotPasswordModal () {
     this.openedForgotPasswordModal.close()
+  }
+
+  onInstanceAboutAccordionInit (instanceAboutAccordion: InstanceAboutAccordionComponent) {
+    this.accordion = instanceAboutAccordion.accordion
   }
 
   private loadExternalAuthToken (username: string, token: string) {

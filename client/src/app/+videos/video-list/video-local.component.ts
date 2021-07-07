@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Component, ComponentFactoryResolver, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, LocalStorageService, Notifier, ScreenService, ServerService, UserService } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
@@ -17,7 +17,7 @@ export class VideoLocalComponent extends AbstractVideoList implements OnInit, On
   sort = '-publishedAt' as VideoSortField
   filter: VideoFilter = 'local'
 
-  useUserVideoPreferences = true
+  loadUserVideoPreferences = true
 
   constructor (
     protected router: Router,
@@ -28,6 +28,7 @@ export class VideoLocalComponent extends AbstractVideoList implements OnInit, On
     protected userService: UserService,
     protected screenService: ScreenService,
     protected storageService: LocalStorageService,
+    protected cfr: ComponentFactoryResolver,
     private videoService: VideoService,
     private hooks: HooksService
   ) {
@@ -39,11 +40,7 @@ export class VideoLocalComponent extends AbstractVideoList implements OnInit, On
   ngOnInit () {
     super.ngOnInit()
 
-    if (this.authService.isLoggedIn()) {
-      const user = this.authService.getUser()
-      this.displayModerationBlock = user.hasRight(UserRight.SEE_ALL_VIDEOS)
-    }
-
+    this.enableAllFilterIfPossible()
     this.generateSyndicationList()
   }
 
@@ -77,7 +74,7 @@ export class VideoLocalComponent extends AbstractVideoList implements OnInit, On
   }
 
   toggleModerationDisplay () {
-    this.filter = this.filter === 'local' ? 'all-local' as 'all-local' : 'local' as 'local'
+    this.filter = this.buildLocalFilter(this.filter, 'local')
 
     this.reloadVideos()
   }

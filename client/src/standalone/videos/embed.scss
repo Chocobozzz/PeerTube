@@ -1,10 +1,10 @@
-@import '_variables';
-@import '_mixins';
-@import '~video.js/dist/video-js.css';
-@import '~videojs-dock/dist/videojs-dock.css';
+@use '_variables' as *;
+@use '_mixins' as *;
+@use 'video.js/dist/video-js';
+@use 'videojs-dock/dist/videojs-dock';
 
 $assets-path: '../../assets/';
-@import '../../sass/player/index';
+@use '../../sass/player/index';
 
 [hidden] {
   display: none !important;
@@ -21,7 +21,8 @@ video {
 }
 
 /* fill the entire space */
-html, body {
+html,
+body {
   height: 100%;
   margin: 0;
   background-color: #000;
@@ -70,18 +71,18 @@ html, body {
   text-align: center;
   width: 100%;
   height: 100%;
-  color: white;
+  color: #fff;
   box-sizing: border-box;
   font-family: sans-serif;
+}
 
-  #error-title {
-    font-size: 45px;
-    margin-bottom: 5px;
-  }
+#error-title {
+  font-size: 45px;
+  margin-bottom: 5px;
+}
 
-  #error-content {
-    font-size: 24px;
-  }
+#error-content {
+  font-size: 24px;
 }
 
 #placeholder-preview {
@@ -97,10 +98,10 @@ html, body {
 @media screen and (max-width: 300px) {
   #error-block {
     font-size: 36px;
+  }
 
-    #error-content {
-      font-size: 14px;
-    }
+  #error-content {
+    font-size: 14px;
   }
 }
 

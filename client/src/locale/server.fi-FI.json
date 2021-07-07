@@ -31,6 +31,8 @@
     "Published": "Julkaistu",
     "To transcode": "Transkoodata",
     "To import": "Tuoda",
+    "Waiting for livestream": "Waiting for livestream",
+    "Livestream ended": "Livestream ended",
     "Pending": "Odottaa",
     "Success": "Onnistui",
     "Failed": "Epäonnistui",
@@ -240,5 +242,7 @@
     "Yoruba": "Yoruba",
     "Zhuang": "Zhuang",
     "Chinese": "Chinese",
-    "Zulu": "Zulu"
+    "Zulu": "Zulu",
+    "Normal mode": "Normal mode",
+    "Theater mode": "Theater mode"
 }

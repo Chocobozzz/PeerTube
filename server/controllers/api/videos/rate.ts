@@ -2,11 +2,12 @@ import * as express from 'express'
 import { UserVideoRateUpdate } from '../../../../shared'
 import { logger } from '../../../helpers/logger'
 import { VIDEO_RATE_TYPES } from '../../../initializers/constants'
-import { getRateUrl, sendVideoRateChange } from '../../../lib/activitypub/video-rates'
+import { getLocalRateUrl, sendVideoRateChange } from '../../../lib/activitypub/video-rates'
 import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate, videoUpdateRateValidator } from '../../../middlewares'
 import { AccountModel } from '../../../models/account/account'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
 import { sequelizeTypescript } from '../../../initializers/database'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const rateVideoRouter = express.Router()
 
@@ -36,6 +37,9 @@ async function rateVideo (req: express.Request, res: express.Response) {
     const accountInstance = await AccountModel.load(userAccount.id, t)
     const previousRate = await AccountVideoRateModel.load(accountInstance.id, videoInstance.id, t)
 
+    // Same rate, nothing do to
+    if (rateType === 'none' && !previousRate || previousRate?.type === rateType) return
+
     let likesToIncrement = 0
     let dislikesToIncrement = 0
 
@@ -52,7 +56,7 @@ async function rateVideo (req: express.Request, res: express.Response) {
         await previousRate.destroy(sequelizeOptions)
       } else { // Update previous rate
         previousRate.type = rateType
-        previousRate.url = getRateUrl(rateType, userAccount.Actor, videoInstance)
+        previousRate.url = getLocalRateUrl(rateType, userAccount.Actor, videoInstance)
         await previousRate.save(sequelizeOptions)
       }
     } else if (rateType !== 'none') { // There was not a previous rate, insert a new one if there is a rate
@@ -60,7 +64,7 @@ async function rateVideo (req: express.Request, res: express.Response) {
         accountId: accountInstance.id,
         videoId: videoInstance.id,
         type: rateType,
-        url: getRateUrl(rateType, userAccount.Actor, videoInstance)
+        url: getLocalRateUrl(rateType, userAccount.Actor, videoInstance)
       }
 
       await AccountVideoRateModel.create(query, sequelizeOptions)
@@ -78,5 +82,7 @@ async function rateVideo (req: express.Request, res: express.Response) {
     logger.info('Account video rate for video %s of account %s updated.', videoInstance.name, accountInstance.name)
   })
 
-  return res.type('json').status(204).end()
+  return res.type('json')
+            .status(HttpStatusCode.NO_CONTENT_204)
+            .end()
 }

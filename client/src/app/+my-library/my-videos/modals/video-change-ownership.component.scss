@@ -1,0 +1,10 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+p-autocomplete {
+  display: block;
+}
+
+.form-group {
+  margin: 20px 0;
+}

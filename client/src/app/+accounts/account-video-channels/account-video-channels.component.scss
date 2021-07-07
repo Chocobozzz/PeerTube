@@ -1,39 +1,171 @@
-@import '_variables';
-@import '_mixins';
-@import '_miniature';
+@use 'sass:math';
+@use '_variables' as *;
+@use '_mixins' as *;
+@use '_miniature' as *;
 
 .margin-content {
-  @include fluid-videos-miniature-layout;
+  @include grid-videos-miniature-margins;
 }
 
-.section {
-  @include miniature-rows;
+.channel {
+  max-width: $max-channels-width;
+  background-color: pvar(--channelBackgroundColor);
+  padding: 30px;
 
-  padding-top: 0 !important;
+  margin: 30px 0;
 
-  .section-title {
-    align-items: center;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto auto;
+  column-gap: 15px;
+}
+
+.channel-avatar-row {
+  grid-column: 1;
+  grid-row: 1;
+
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  grid-template-rows: auto 1fr;
+
+  my-actor-avatar {
+    @include actor-avatar-size(75px);
+    @include margin-right(15px);
+
+    grid-column: 1;
+    grid-row: 1 / 3;
   }
 
-  .videos {
-    overflow: hidden;
+  a {
+    @include peertube-word-wrap;
 
-    .no-results {
-      height: 50px;
-    }
+    color: pvar(--mainForegroundColor);
   }
 
-  my-video-miniature ::ng-deep my-video-actions-dropdown > my-action-dropdown {
-    // Fix our overflow
-    position: absolute;
+  h2 {
+    grid-row: 1;
+    grid-column: 2;
+    font-size: 20px;
+    line-height: 1;
+    font-weight: $font-bold;
+    margin: 0;
   }
+
+  .actor-counters {
+    @include margin-left(15px);
+    @include actor-counters;
+
+    grid-row: 1;
+    grid-column: 3;
+  }
+
+  .description-html {
+    @include fade-text(30px, pvar(--channelBackgroundColor));
+
+    grid-column: 2 / 4;
+    grid-row: 2;
+
+    max-height: 80px;
+    font-size: 16px;
+  }
+}
+
+my-subscribe-button {
+  grid-row: 1;
+  grid-column: 2;
+}
+
+.videos {
+  display: flex;
+  grid-column: 1 / 3;
+  grid-row: 2;
+  margin-top: 30px;
+
+  position: relative;
+  overflow: hidden;
+
+  my-video-miniature {
+    @include margin-right(15px);
+
+    min-width: $video-thumbnail-medium-width;
+    max-width: $video-thumbnail-medium-width;
+  }
+
+  .no-results {
+    height: auto;
+  }
+}
+
+.miniature-show-channel {
+  height: 100%;
+  position: absolute;
+  right: 0;
+  background: linear-gradient(90deg, transparent 0, pvar(--channelBackgroundColor) 45px);
+  padding: (math.div($video-thumbnail-medium-height, 2) - 10px) 15px 0 60px;
+  z-index: z(miniature) + 1;
+
+  a {
+    color: pvar(--mainColor);
+    font-size: 16px;
+    font-weight: $font-semibold;
+  }
+}
+
+.button-show-channel {
+  display: none;
 }
 
 @media screen and (max-width: $mobile-view) {
-  .section {
-    .section-title {
-      flex-direction: column;
-      align-items: normal;
+  .channel {
+    padding: 15px;
+  }
+
+  .channel-avatar-row {
+    grid-template-columns: auto auto auto 1fr;
+
+    .avatar-link {
+      grid-row: 1 / 4;
     }
+
+    h2 {
+      font-size: 16px;
+    }
+
+    .actor-counters {
+      margin: 0;
+      font-size: 13px;
+      grid-row: 2;
+      grid-column: 2 / 4;
+    }
+
+    .description-html {
+      grid-row: 3;
+      font-size: 14px;
+    }
+  }
+
+  .show-channel a {
+    @include peertube-button-link;
+    @include orange-button-inverted;
+  }
+
+  .videos {
+    display: none;
+  }
+
+  my-subscribe-button,
+  .button-show-channel {
+    grid-column: 1 / 4;
+    grid-row: 3;
+    margin-top: 15px;
+  }
+
+  my-subscribe-button {
+    justify-self: start;
+  }
+
+  .button-show-channel {
+    display: block;
+    justify-self: end;
   }
 }

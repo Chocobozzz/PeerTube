@@ -1,4 +1,7 @@
-<a class="action-button action-button-edit grey-button" [routerLink]="routerLink" [ngbTooltip]="title">
+<a
+  class="action-button action-button-edit grey-button"
+  [ngClass]="{ 'responsive-label': responsiveLabel }" [routerLink]="routerLink" [ngbTooltip]="title"
+>
   <my-global-icon iconName="edit" aria-hidden="true"></my-global-icon>
 
   <span class="button-label" *ngIf="label">{{ label }}</span>

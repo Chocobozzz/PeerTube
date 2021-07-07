@@ -1,5 +1,5 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 .header {
   display: flex;
@@ -32,12 +32,13 @@ my-user-notifications {
   .header {
     flex-direction: column;
 
-    & >:first-child, .peertube-select-container {
+    > :first-child,
+    .peertube-select-container {
       margin-bottom: 15px;
     }
 
     .peertube-select-container {
-      margin-left: 0 !important;
+      @include margin-left(0 !important);
     }
   }
 }

@@ -1,21 +1,21 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
 import 'mocha'
+import * as chai from 'chai'
+import { join } from 'path'
+import { getAudioStream, getVideoStreamSize } from '@server/helpers/ffprobe-utils'
 import {
+  buildServerDirectory,
   cleanupTests,
   doubleFollow,
   flushAndRunMultipleServers,
   getVideo,
-  root,
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo,
   waitJobs
 } from '../../../../shared/extra-utils'
 import { VideoDetails } from '../../../../shared/models/videos'
-import { join } from 'path'
-import { audio, getVideoStreamSize } from '@server/helpers/ffmpeg-utils'
 
 const expect = chai.expect
 
@@ -36,6 +36,7 @@ describe('Test audio only video transcoding', function () {
           '480p': false,
           '720p': false,
           '1080p': false,
+          '1440p': false,
           '2160p': false
         },
         hls: {
@@ -80,12 +81,12 @@ describe('Test audio only video transcoding', function () {
 
   it('0p transcoded video should not have video', async function () {
     const paths = [
-      join(root(), 'test' + servers[0].internalServerNumber, 'videos', videoUUID + '-0.mp4'),
-      join(root(), 'test' + servers[0].internalServerNumber, 'streaming-playlists', 'hls', videoUUID, videoUUID + '-0-fragmented.mp4')
+      buildServerDirectory(servers[0], join('videos', videoUUID + '-0.mp4')),
+      buildServerDirectory(servers[0], join('streaming-playlists', 'hls', videoUUID, videoUUID + '-0-fragmented.mp4'))
     ]
 
     for (const path of paths) {
-      const { audioStream } = await audio.get(path)
+      const { audioStream } = await getAudioStream(path)
       expect(audioStream['codec_name']).to.be.equal('aac')
       expect(audioStream['bit_rate']).to.be.at.most(384 * 8000)
 

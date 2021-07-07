@@ -40,7 +40,7 @@ class ModelCache {
   doCache<T extends Model> (options: {
     cacheType: ModelCacheType
     key: string
-    fun: () => Bluebird<T>
+    fun: () => Promise<T>
     whitelist?: () => boolean
     deleteKey?: DeleteKey
   }) {

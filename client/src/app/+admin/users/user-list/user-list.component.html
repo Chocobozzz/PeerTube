@@ -1,53 +1,37 @@
 <p-table
-  [value]="users" [lazy]="true" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions"
-  [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)" dataKey="id" [resizableColumns]="true"
-  [(selection)]="selectedUsers"
+  [value]="users" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions"
+  [sortField]="sort.field" [sortOrder]="sort.order"  dataKey="id" [resizableColumns]="true" [(selection)]="selectedUsers"
+  [lazy]="true" (onLazyLoad)="loadLazy($event)" [lazyLoadOnInit]="false"
   [showCurrentPageReport]="true" i18n-currentPageReportTemplate
   currentPageReportTemplate="Showing {{'{first}'}} to {{'{last}'}} of {{'{totalRecords}'}} users"
   (onPage)="onPage($event)" [expandedRowKeys]="expandedRows"
 >
   <ng-template pTemplate="caption">
     <div class="caption">
-      <div>
+      <div class="left-buttons">
         <my-action-dropdown
           *ngIf="isInSelectionMode()" i18n-label label="Batch actions" theme="orange"
           [actions]="bulkUserActions" [entry]="selectedUsers"
         >
         </my-action-dropdown>
+
+        <a *ngIf="!isInSelectionMode()" class="add-button" routerLink="/admin/users/create">
+          <my-global-icon iconName="user-add" aria-hidden="true"></my-global-icon>
+          <ng-container i18n>Create user</ng-container>
+        </a>
       </div>
 
       <div class="ml-auto">
-        <div class="input-group has-feedback has-clear">
-          <div class="input-group-prepend c-hand" ngbDropdown placement="bottom-left auto" container="body">
-            <div class="input-group-text" ngbDropdownToggle>
-              <span class="caret" aria-haspopup="menu" role="button"></span>
-            </div>
-
-            <div role="menu" ngbDropdownMenu>
-              <h6 class="dropdown-header" i18n>Advanced user filters</h6>
-              <a [routerLink]="[ '/admin/users/list' ]" [queryParams]="{ 'search': 'banned:true' }" class="dropdown-item" i18n>Banned users</a>
-            </div>
-          </div>
-          <input
-            type="text" name="table-filter" id="table-filter" i18n-placeholder placeholder="Filter..."
-            (keyup)="onUserSearch($event)"
-          >
-          <a class="glyphicon glyphicon-remove-sign form-control-feedback form-control-clear" (click)="resetTableFilter()"></a>
-          <span class="sr-only" i18n>Clear filters</span>
-        </div>
+        <my-advanced-input-filter [filters]="inputFilters" (search)="onSearch($event)"></my-advanced-input-filter>
       </div>
 
-      <a class="ml-2 add-button" routerLink="/admin/users/create">
-        <my-global-icon iconName="user-add" aria-hidden="true"></my-global-icon>
-        <ng-container i18n>Create user</ng-container>
-      </a>
     </div>
   </ng-template>
 
   <ng-template pTemplate="header">
     <tr>
       <th style="width: 40px">
-        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+        <p-tableHeaderCheckbox ariaLabel="Select all rows" i18n-ariaLabel></p-tableHeaderCheckbox>
       </th>
       <th style="width: 40px"></th>
       <th style="width: 60px;">
@@ -86,8 +70,8 @@
   <ng-template pTemplate="body" let-expanded="expanded" let-user>
 
     <tr [pSelectableRow]="user" [ngClass]="{ banned: highlightBannedUsers && user.blocked }">
-      <td>
-        <p-tableCheckbox [value]="user"></p-tableCheckbox>
+      <td class="checkbox-cell">
+        <p-tableCheckbox [value]="user" ariaLabel="Select this row" i18n-ariaLabel></p-tableCheckbox>
       </td>
 
       <td class="expand-cell">
@@ -103,15 +87,10 @@
       </td>
 
       <td *ngIf="isSelected('username')">
-        <a i18n-title title="Open account in a new tab" target="_blank" rel="noopener noreferrer" [routerLink]="[ '/accounts/' + user.username ]">
+        <a i18n-title title="Open account in a new tab" target="_blank" rel="noopener noreferrer" [routerLink]="[ '/a/' + user.username ]">
           <div class="chip two-lines">
-            <img
-              class="avatar"
-              [src]="user?.account?.avatar?.path"
-              (error)="switchToDefaultAvatar($event)"
-              alt="Avatar"
-            >
-            <div>
+            <my-actor-avatar [account]="user?.account" size="32"></my-actor-avatar>
+           <div>
               <span class="user-table-primary-text">{{ user.account.displayName }}</span>
               <span class="text-muted">{{ user.username }}</span>
             </div>

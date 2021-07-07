@@ -3,7 +3,7 @@ import { catchError, map, tap } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { ComponentPaginationLight, RestExtractor, RestService } from '@app/core'
-import { Avatar, ResultList, VideoChannel as VideoChannelServer, VideoChannelCreate, VideoChannelUpdate } from '@shared/models'
+import { ActorImage, ResultList, VideoChannel as VideoChannelServer, VideoChannelCreate, VideoChannelUpdate } from '@shared/models'
 import { environment } from '../../../../environments/environment'
 import { Account } from '../account'
 import { AccountService } from '../account/account.service'
@@ -40,23 +40,24 @@ export class VideoChannelService {
                )
   }
 
-  listAccountVideoChannels (
-    account: Account,
-    componentPagination?: ComponentPaginationLight,
-    withStats = false,
+  listAccountVideoChannels (options: {
+    account: Account
+    componentPagination?: ComponentPaginationLight
+    withStats?: boolean
+    sort?: string
     search?: string
-  ): Observable<ResultList<VideoChannel>> {
+  }): Observable<ResultList<VideoChannel>> {
+    const { account, componentPagination, withStats = false, sort, search } = options
+
     const pagination = componentPagination
       ? this.restService.componentPaginationToRestPagination(componentPagination)
       : { start: 0, count: 20 }
 
     let params = new HttpParams()
-    params = this.restService.addRestGetParams(params, pagination)
+    params = this.restService.addRestGetParams(params, pagination, sort)
     params = params.set('withStats', withStats + '')
 
-    if (search) {
-      params = params.set('search', search)
-    }
+    if (search) params = params.set('search', search)
 
     const url = AccountService.BASE_ACCOUNT_URL + account.nameWithHost + '/video-channels'
     return this.authHttp.get<ResultList<VideoChannelServer>>(url, { params })
@@ -82,11 +83,21 @@ export class VideoChannelService {
                )
   }
 
-  changeVideoChannelAvatar (videoChannelName: string, avatarForm: FormData) {
-    const url = VideoChannelService.BASE_VIDEO_CHANNEL_URL + videoChannelName + '/avatar/pick'
+  changeVideoChannelImage (videoChannelName: string, avatarForm: FormData, type: 'avatar' | 'banner') {
+    const url = VideoChannelService.BASE_VIDEO_CHANNEL_URL + videoChannelName + '/' + type + '/pick'
 
-    return this.authHttp.post<{ avatar: Avatar }>(url, avatarForm)
+    return this.authHttp.post<{ avatar?: ActorImage, banner?: ActorImage }>(url, avatarForm)
                .pipe(catchError(err => this.restExtractor.handleError(err)))
+  }
+
+  deleteVideoChannelImage (videoChannelName: string, type: 'avatar' | 'banner') {
+    const url = VideoChannelService.BASE_VIDEO_CHANNEL_URL + videoChannelName + '/' + type
+
+    return this.authHttp.delete(url)
+               .pipe(
+                 map(this.restExtractor.extractDataBool),
+                 catchError(err => this.restExtractor.handleError(err))
+               )
   }
 
   removeVideoChannel (videoChannel: VideoChannel) {

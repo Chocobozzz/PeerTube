@@ -1,6 +1,6 @@
 import validator from 'validator'
 import { CONSTRAINTS_FIELDS } from '../../../initializers/constants'
-import { exists, isArray } from '../misc'
+import { exists, isArray, isDateValid } from '../misc'
 import { isActivityPubUrlValid, isBaseActivityValid, setValidAttributedTo } from './misc'
 import { isHostValid } from '../servers'
 import { peertubeTruncate } from '@server/helpers/core-utils'
@@ -47,7 +47,21 @@ function isActorPrivateKeyValid (privateKey: string) {
     validator.isLength(privateKey, CONSTRAINTS_FIELDS.ACTORS.PRIVATE_KEY)
 }
 
-function isActorObjectValid (actor: any) {
+function isActorFollowingCountValid (value: string) {
+  return exists(value) && validator.isInt('' + value, { min: 0 })
+}
+
+function isActorFollowersCountValid (value: string) {
+  return exists(value) && validator.isInt('' + value, { min: 0 })
+}
+
+function isActorDeleteActivityValid (activity: any) {
+  return isBaseActivityValid(activity, 'Delete')
+}
+
+function sanitizeAndCheckActorObject (actor: any) {
+  normalizeActor(actor)
+
   return exists(actor) &&
     isActivityPubUrlValid(actor.id) &&
     isActorTypeValid(actor.type) &&
@@ -62,27 +76,10 @@ function isActorObjectValid (actor: any) {
     (!actor.followers || isActivityPubUrlValid(actor.followers)) &&
 
     setValidAttributedTo(actor) &&
+    setValidDescription(actor) &&
     // If this is a group (a channel), it should be attributed to an account
     // In PeerTube we use this to attach a video channel to a specific account
     (actor.type !== 'Group' || actor.attributedTo.length !== 0)
-}
-
-function isActorFollowingCountValid (value: string) {
-  return exists(value) && validator.isInt('' + value, { min: 0 })
-}
-
-function isActorFollowersCountValid (value: string) {
-  return exists(value) && validator.isInt('' + value, { min: 0 })
-}
-
-function isActorDeleteActivityValid (activity: any) {
-  return isBaseActivityValid(activity, 'Delete')
-}
-
-function sanitizeAndCheckActorObject (object: any) {
-  normalizeActor(object)
-
-  return isActorObjectValid(object)
 }
 
 function normalizeActor (actor: any) {
@@ -93,6 +90,8 @@ function normalizeActor (actor: any) {
   } else if (typeof actor.url !== 'string') {
     actor.url = actor.url.href || actor.url.url
   }
+
+  if (!isDateValid(actor.published)) actor.published = undefined
 
   if (actor.summary && typeof actor.summary === 'string') {
     actor.summary = peertubeTruncate(actor.summary, { length: CONSTRAINTS_FIELDS.USERS.DESCRIPTION.max })
@@ -116,6 +115,12 @@ function areValidActorHandles (handles: string[]) {
   return isArray(handles) && handles.every(h => isValidActorHandle(h))
 }
 
+function setValidDescription (obj: any) {
+  if (!obj.summary) obj.summary = null
+
+  return true
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -128,7 +133,6 @@ export {
   isActorPublicKeyValid,
   isActorPreferredUsernameValid,
   isActorPrivateKeyValid,
-  isActorObjectValid,
   isActorFollowingCountValid,
   isActorFollowersCountValid,
   isActorDeleteActivityValid,

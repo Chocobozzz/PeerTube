@@ -2,8 +2,10 @@ import * as express from 'express'
 import * as RateLimit from 'express-rate-limit'
 import { tokensRouter } from '@server/controllers/api/users/token'
 import { Hooks } from '@server/lib/plugins/hooks'
+import { OAuthTokenModel } from '@server/models/oauth/oauth-token'
 import { MUser, MUserAccountDefault } from '@server/types/models'
 import { UserCreate, UserRight, UserRole, UserUpdate } from '../../../../shared'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import { UserAdminFlag } from '../../../../shared/models/users/user-flag.model'
 import { UserRegister } from '../../../../shared/models/users/user-register.model'
 import { auditLoggerFactory, getAuditIdFromRes, UserAuditView } from '../../../helpers/audit-logger'
@@ -14,7 +16,6 @@ import { WEBSERVER } from '../../../initializers/constants'
 import { sequelizeTypescript } from '../../../initializers/database'
 import { Emailer } from '../../../lib/emailer'
 import { Notifier } from '../../../lib/notifier'
-import { deleteUserToken } from '../../../lib/oauth-model'
 import { Redis } from '../../../lib/redis'
 import { createUserAccountAndChannelAndPlaylist, sendVerifyUserEmail } from '../../../lib/user'
 import {
@@ -44,7 +45,7 @@ import {
   usersResetPasswordValidator,
   usersVerifyEmailValidator
 } from '../../../middlewares/validators'
-import { UserModel } from '../../../models/account/user'
+import { UserModel } from '../../../models/user/user'
 import { meRouter } from './me'
 import { myAbusesRouter } from './my-abuses'
 import { myBlocklistRouter } from './my-blocklist'
@@ -220,7 +221,7 @@ async function createUser (req: express.Request, res: express.Response) {
         id: account.id
       }
     }
-  }).end()
+  })
 }
 
 async function registerUser (req: express.Request, res: express.Response) {
@@ -255,7 +256,7 @@ async function registerUser (req: express.Request, res: express.Response) {
 
   Hooks.runAction('action:api.user.registered', { body, user, account, videoChannel })
 
-  return res.type('json').status(204).end()
+  return res.type('json').status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
 async function unblockUser (req: express.Request, res: express.Response) {
@@ -265,7 +266,7 @@ async function unblockUser (req: express.Request, res: express.Response) {
 
   Hooks.runAction('action:api.user.unblocked', { user })
 
-  return res.status(204).end()
+  return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
 async function blockUser (req: express.Request, res: express.Response) {
@@ -276,7 +277,7 @@ async function blockUser (req: express.Request, res: express.Response) {
 
   Hooks.runAction('action:api.user.blocked', { user })
 
-  return res.status(204).end()
+  return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
 function getUser (req: express.Request, res: express.Response) {
@@ -304,13 +305,16 @@ async function listUsers (req: express.Request, res: express.Response) {
 async function removeUser (req: express.Request, res: express.Response) {
   const user = res.locals.user
 
-  await user.destroy()
-
   auditLogger.delete(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON()))
+
+  await sequelizeTypescript.transaction(async t => {
+    // Use a transaction to avoid inconsistencies with hooks (account/channel deletion & federation)
+    await user.destroy({ transaction: t })
+  })
 
   Hooks.runAction('action:api.user.deleted', { user })
 
-  return res.sendStatus(204)
+  return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
 async function updateUser (req: express.Request, res: express.Response) {
@@ -319,18 +323,25 @@ async function updateUser (req: express.Request, res: express.Response) {
   const oldUserAuditView = new UserAuditView(userToUpdate.toFormattedJSON())
   const roleChanged = body.role !== undefined && body.role !== userToUpdate.role
 
-  if (body.password !== undefined) userToUpdate.password = body.password
-  if (body.email !== undefined) userToUpdate.email = body.email
-  if (body.emailVerified !== undefined) userToUpdate.emailVerified = body.emailVerified
-  if (body.videoQuota !== undefined) userToUpdate.videoQuota = body.videoQuota
-  if (body.videoQuotaDaily !== undefined) userToUpdate.videoQuotaDaily = body.videoQuotaDaily
-  if (body.role !== undefined) userToUpdate.role = body.role
-  if (body.adminFlags !== undefined) userToUpdate.adminFlags = body.adminFlags
+  const keysToUpdate: (keyof UserUpdate)[] = [
+    'password',
+    'email',
+    'emailVerified',
+    'videoQuota',
+    'videoQuotaDaily',
+    'role',
+    'adminFlags',
+    'pluginAuth'
+  ]
+
+  for (const key of keysToUpdate) {
+    if (body[key] !== undefined) userToUpdate.set(key, body[key])
+  }
 
   const user = await userToUpdate.save()
 
   // Destroy user token to refresh rights
-  if (roleChanged || body.password !== undefined) await deleteUserToken(userToUpdate.id)
+  if (roleChanged || body.password !== undefined) await OAuthTokenModel.deleteUserToken(userToUpdate.id)
 
   auditLogger.update(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON()), oldUserAuditView)
 
@@ -338,7 +349,7 @@ async function updateUser (req: express.Request, res: express.Response) {
 
   // Don't need to send this update to followers, these attributes are not federated
 
-  return res.sendStatus(204)
+  return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
 async function askResetUserPassword (req: express.Request, res: express.Response) {
@@ -348,7 +359,7 @@ async function askResetUserPassword (req: express.Request, res: express.Response
   const url = WEBSERVER.URL + '/reset-password?userId=' + user.id + '&verificationString=' + verificationString
   await Emailer.Instance.addPasswordResetEmailJob(user.username, user.email, url)
 
-  return res.status(204).end()
+  return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
 async function resetUserPassword (req: express.Request, res: express.Response) {
@@ -358,7 +369,7 @@ async function resetUserPassword (req: express.Request, res: express.Response) {
   await user.save()
   await Redis.Instance.removePasswordVerificationString(user.id)
 
-  return res.status(204).end()
+  return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
 async function reSendVerifyUserEmail (req: express.Request, res: express.Response) {
@@ -366,7 +377,7 @@ async function reSendVerifyUserEmail (req: express.Request, res: express.Respons
 
   await sendVerifyUserEmail(user)
 
-  return res.status(204).end()
+  return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
 async function verifyUserEmail (req: express.Request, res: express.Response) {
@@ -380,7 +391,7 @@ async function verifyUserEmail (req: express.Request, res: express.Response) {
 
   await user.save()
 
-  return res.status(204).end()
+  return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
 async function changeUserBlock (res: express.Response, user: MUserAccountDefault, block: boolean, reason?: string) {
@@ -390,7 +401,7 @@ async function changeUserBlock (res: express.Response, user: MUserAccountDefault
   user.blockedReason = reason || null
 
   await sequelizeTypescript.transaction(async t => {
-    await deleteUserToken(user.id, t)
+    await OAuthTokenModel.deleteUserToken(user.id, t)
 
     await user.save({ transaction: t })
   })

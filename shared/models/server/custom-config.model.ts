@@ -1,6 +1,16 @@
 import { NSFWPolicyType } from '../videos/nsfw-policy.type'
 import { BroadcastMessageLevel } from './broadcast-message-level.type'
 
+export type ConfigResolutions = {
+  '240p': boolean
+  '360p': boolean
+  '480p': boolean
+  '720p': boolean
+  '1080p': boolean
+  '1440p': boolean
+  '2160p': boolean
+}
+
 export interface CustomConfig {
   instance: {
     name: string
@@ -20,8 +30,10 @@ export interface CustomConfig {
     categories: number[]
 
     isNSFW: boolean
-    defaultClientRoute: string
     defaultNSFWPolicy: NSFWPolicyType
+
+    defaultClientRoute: string
+
     customizations: {
       javascript?: string
       css?: string
@@ -47,12 +59,17 @@ export interface CustomConfig {
     captions: {
       size: number
     }
+
+    torrents: {
+      size: number
+    }
   }
 
   signup: {
     enabled: boolean
     limit: number
     requiresEmailVerification: boolean
+    minimumAge: number
   }
 
   admin: {
@@ -75,15 +92,11 @@ export interface CustomConfig {
     allowAudioFiles: boolean
 
     threads: number
-    resolutions: {
-      '0p': boolean
-      '240p': boolean
-      '360p': boolean
-      '480p': boolean
-      '720p': boolean
-      '1080p': boolean
-      '2160p': boolean
-    }
+    concurrency: number
+
+    profile: string
+
+    resolutions: ConfigResolutions & { '0p': boolean }
 
     webtorrent: {
       enabled: boolean
@@ -94,13 +107,41 @@ export interface CustomConfig {
     }
   }
 
+  live: {
+    enabled: boolean
+
+    allowReplay: boolean
+
+    maxDuration: number
+    maxInstanceLives: number
+    maxUserLives: number
+
+    transcoding: {
+      enabled: boolean
+      threads: number
+      profile: string
+      resolutions: ConfigResolutions
+    }
+  }
+
   import: {
     videos: {
+      concurrency: number
+
       http: {
         enabled: boolean
       }
       torrent: {
         enabled: boolean
+      }
+    }
+  }
+
+  trending: {
+    videos: {
+      algorithms: {
+        enabled: string[]
+        default: string
       }
     }
   }

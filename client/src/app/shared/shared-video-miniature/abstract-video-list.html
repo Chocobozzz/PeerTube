@@ -1,16 +1,28 @@
 <div class="margin-content">
   <div class="videos-header">
-    <h1 *ngIf="titlePage" class="title-page title-page-single">
-      <div placement="bottom" [ngbTooltip]="titleTooltip" container="body">
-        {{ titlePage }}
-      </div>
-    </h1>
+    <ng-template #videoListHeader></ng-template>
 
     <div class="action-block">
-      <my-feed *ngIf="titlePage" [syndicationItems]="syndicationItems"></my-feed>
-      <a [routerLink]="action.routerLink" routerLinkActive="active" *ngFor="let action of actions">
-        <my-button [icon]="action.iconName" [label]="action.label"></my-button>
-      </a>
+      <my-feed *ngIf="syndicationItems" [syndicationItems]="syndicationItems"></my-feed>
+
+      <ng-container *ngFor="let action of actions">
+        <a *ngIf="action.routerLink" class="ml-2" [routerLink]="action.routerLink" routerLinkActive="active">
+          <ng-container *ngTemplateOutlet="actionContent; context:{ $implicit: action }"></ng-container>
+        </a>
+
+        <a *ngIf="!action.routerLink && !action.href && action.click" class="ml-2" (click)="action.click($event)" (key.enter)="action.click($event)">
+          <ng-container *ngTemplateOutlet="actionContent; context:{ $implicit: action }"></ng-container>
+        </a>
+
+        <a *ngIf="!action.routerLink && action.href && action.click" class="ml-2" (click)="action.click($event)" (key.enter)="action.click($event)" [href]="action.href">
+          <ng-container *ngTemplateOutlet="actionContent; context:{ $implicit: action }"></ng-container>
+        </a>
+
+        <ng-template #actionContent let-action>
+          <my-button *ngIf="!action.justIcon" [icon]="action.iconName" [label]="action.label"></my-button>
+          <my-button *ngIf="action.justIcon" [icon]="action.iconName" [ngbTooltip]="action.label"></my-button>
+        </ng-template>
+      </ng-container>
     </div>
 
     <div class="moderation-block" *ngIf="displayModerationBlock">
@@ -21,7 +33,7 @@
           <div class="dropdown-item">
             <my-peertube-checkbox
               (change)="toggleModerationDisplay()"
-              inputName="display-unlisted-private" i18n-labelText labelText="Display unlisted and private videos"
+              inputName="display-unlisted-private" i18n-labelText labelText="Display all videos (private, unlisted or not yet published)"
             ></my-peertube-checkbox>
           </div>
         </div>
@@ -32,7 +44,7 @@
   <div class="no-results" i18n *ngIf="hasDoneFirstQuery && videos.length === 0">No results.</div>
   <div
     myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [autoInit]="true" [dataObservable]="onDataSubject.asObservable()"
-    class="videos"
+    class="videos" [ngClass]="{ 'display-as-row': displayAsRow() }"
   >
     <ng-container *ngFor="let video of videos; trackBy: videoById;">
       <h2 class="date-title" *ngIf="getCurrentGroupedDateLabel(video)">
@@ -41,8 +53,7 @@
 
       <div class="video-wrapper">
         <my-video-miniature
-          [fitWidth]="true"
-          [video]="video" [user]="userMiniature" [ownerDisplayType]="ownerDisplayType"
+          [video]="video" [user]="userMiniature" [displayAsRow]="displayAsRow()"
           [displayVideoActions]="displayVideoActions" [displayOptions]="displayOptions"
           (videoBlocked)="removeVideoFromArray(video)" (videoRemoved)="removeVideoFromArray(video)"
         >

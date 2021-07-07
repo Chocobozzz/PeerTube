@@ -1,6 +1,7 @@
-import { AllowNull, Column, Default, DefaultScope, HasOne, IsInt, Model, Table } from 'sequelize-typescript'
-import { AccountModel } from '../account/account'
 import * as memoizee from 'memoizee'
+import { AllowNull, Column, Default, DefaultScope, HasOne, IsInt, Model, Table } from 'sequelize-typescript'
+import { AttributesOnly } from '@shared/core-utils'
+import { AccountModel } from '../account/account'
 
 export const getServerActor = memoizee(async function () {
   const application = await ApplicationModel.load()
@@ -24,13 +25,17 @@ export const getServerActor = memoizee(async function () {
   tableName: 'application',
   timestamps: false
 })
-export class ApplicationModel extends Model<ApplicationModel> {
+export class ApplicationModel extends Model<Partial<AttributesOnly<ApplicationModel>>> {
 
   @AllowNull(false)
   @Default(0)
   @IsInt
   @Column
   migrationVersion: number
+
+  @AllowNull(true)
+  @Column
+  latestPeerTubeVersion: string
 
   @HasOne(() => AccountModel, {
     foreignKey: {

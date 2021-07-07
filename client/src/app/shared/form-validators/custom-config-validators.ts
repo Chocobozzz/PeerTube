@@ -44,8 +44,17 @@ export const SIGNUP_LIMIT_VALIDATOR: BuildFormValidator = {
   VALIDATORS: [Validators.required, Validators.min(-1), Validators.pattern('-?[0-9]+')],
   MESSAGES: {
     'required': $localize`Signup limit is required.`,
-    'min': $localize`Signup limit must be greater than 1.`,
+    'min': $localize`Signup limit must be greater than 1. Use -1 to disable it.`,
     'pattern': $localize`Signup limit must be a number.`
+  }
+}
+
+export const SIGNUP_MINIMUM_AGE_VALIDATOR: BuildFormValidator = {
+  VALIDATORS: [Validators.required, Validators.min(1), Validators.pattern('[0-9]+')],
+  MESSAGES: {
+    'required': $localize`Signup minimum age is required.`,
+    'min': $localize`Signup minimum age must be greater than 1.`,
+    'pattern': $localize`Signup minimum age must be a number.`
   }
 }
 
@@ -62,6 +71,38 @@ export const TRANSCODING_THREADS_VALIDATOR: BuildFormValidator = {
   MESSAGES: {
     'required': $localize`Transcoding threads is required.`,
     'min': $localize`Transcoding threads must be greater or equal to 0.`
+  }
+}
+
+export const MAX_LIVE_DURATION_VALIDATOR: BuildFormValidator = {
+  VALIDATORS: [Validators.required, Validators.min(-1)],
+  MESSAGES: {
+    'required': $localize`Max live duration is required.`,
+    'min': $localize`Max live duration should be greater or equal to -1.`
+  }
+}
+
+export const MAX_INSTANCE_LIVES_VALIDATOR: BuildFormValidator = {
+  VALIDATORS: [Validators.required, Validators.min(-1)],
+  MESSAGES: {
+    'required': $localize`Max instance lives is required.`,
+    'min': $localize`Max instance lives should be greater or equal to -1.`
+  }
+}
+
+export const MAX_USER_LIVES_VALIDATOR: BuildFormValidator = {
+  VALIDATORS: [Validators.required, Validators.min(-1)],
+  MESSAGES: {
+    'required': $localize`Max user lives is required.`,
+    'min': $localize`Max user lives should be greater or equal to -1.`
+  }
+}
+
+export const CONCURRENCY_VALIDATOR: BuildFormValidator = {
+  VALIDATORS: [Validators.required, Validators.min(1)],
+  MESSAGES: {
+    'required': $localize`Concurrency is required.`,
+    'min': $localize`Concurrency should be greater or equal to 1.`
   }
 }
 

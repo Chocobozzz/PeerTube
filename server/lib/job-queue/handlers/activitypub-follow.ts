@@ -1,17 +1,17 @@
 import * as Bull from 'bull'
+import { getLocalActorFollowActivityPubUrl } from '@server/lib/activitypub/url'
+import { ActivitypubFollowPayload } from '@shared/models'
+import { sanitizeHost } from '../../../helpers/core-utils'
+import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { logger } from '../../../helpers/logger'
 import { REMOTE_SCHEME, WEBSERVER } from '../../../initializers/constants'
-import { sendFollow } from '../../activitypub/send'
-import { sanitizeHost } from '../../../helpers/core-utils'
-import { loadActorUrlOrGetFromWebfinger } from '../../../helpers/webfinger'
-import { getOrCreateActorAndServerAndModel } from '../../activitypub/actor'
-import { retryTransactionWrapper } from '../../../helpers/database-utils'
-import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
-import { ActorModel } from '../../../models/activitypub/actor'
-import { Notifier } from '../../notifier'
 import { sequelizeTypescript } from '../../../initializers/database'
+import { ActorModel } from '../../../models/actor/actor'
+import { ActorFollowModel } from '../../../models/actor/actor-follow'
 import { MActor, MActorFollowActors, MActorFull } from '../../../types/models'
-import { ActivitypubFollowPayload } from '@shared/models'
+import { getOrCreateAPActor, loadActorUrlOrGetFromWebfinger } from '../../activitypub/actors'
+import { sendFollow } from '../../activitypub/send'
+import { Notifier } from '../../notifier'
 
 async function processActivityPubFollow (job: Bull.Job) {
   const payload = job.data as ActivitypubFollowPayload
@@ -25,7 +25,7 @@ async function processActivityPubFollow (job: Bull.Job) {
   } else {
     const sanitizedHost = sanitizeHost(host, REMOTE_SCHEME.HTTP)
     const actorUrl = await loadActorUrlOrGetFromWebfinger(payload.name + '@' + sanitizedHost)
-    targetActor = await getOrCreateActorAndServerAndModel(actorUrl, 'all')
+    targetActor = await getOrCreateAPActor(actorUrl, 'all')
   }
 
   if (payload.assertIsChannel && !targetActor.VideoChannel) {
@@ -61,6 +61,7 @@ async function follow (fromActor: MActor, targetActor: MActorFull, isAutoFollow 
       },
       defaults: {
         state,
+        url: getLocalActorFollowActivityPubUrl(fromActor, targetActor),
         actorId: fromActor.id,
         targetActorId: targetActor.id
       },

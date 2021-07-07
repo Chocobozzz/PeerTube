@@ -9,18 +9,23 @@ import {
   MAccountSummaryBlocks,
   MAccountSummaryFormattable,
   MAccountUrl,
-  MAccountUserId,
+  MAccountUserId
+} from '../account'
+import {
   MActor,
   MActorAccountChannelId,
-  MActorAP,
+  MActorAPChannel,
   MActorAPI,
   MActorDefault,
+  MActorDefaultBanner,
   MActorDefaultLight,
   MActorFormattable,
+  MActorHost,
   MActorLight,
   MActorSummary,
-  MActorSummaryFormattable, MActorUrl
-} from '../account'
+  MActorSummaryFormattable,
+  MActorUrl
+} from '../actor'
 import { MVideo } from './video'
 
 type Use<K extends keyof VideoChannelModel, M> = PickWith<VideoChannelModel, K, M>
@@ -54,13 +59,13 @@ export type MChannelDefault =
   MChannel &
   Use<'Actor', MActorDefault>
 
+export type MChannelBannerDefault =
+  MChannel &
+  Use<'Actor', MActorDefaultBanner>
+
 // ############################################################################
 
 // Not all association attributes
-
-export type MChannelLight =
-  MChannel &
-  Use<'Actor', MActorDefaultLight>
 
 export type MChannelActorLight =
   MChannel &
@@ -71,6 +76,10 @@ export type MChannelAccountLight =
   Use<'Actor', MActorDefaultLight> &
   Use<'Account', MAccountLight>
 
+export type MChannelHost =
+  MChannelId &
+  Use<'Actor', MActorHost>
+
 // ############################################################################
 
 // Account associations
@@ -79,27 +88,21 @@ export type MChannelAccountActor =
   MChannel &
   Use<'Account', MAccountActor>
 
+export type MChannelBannerAccountDefault =
+  MChannel &
+  Use<'Actor', MActorDefaultBanner> &
+  Use<'Account', MAccountDefault>
+
 export type MChannelAccountDefault =
   MChannel &
   Use<'Actor', MActorDefault> &
   Use<'Account', MAccountDefault>
 
-export type MChannelActorAccountActor =
-  MChannel &
-  Use<'Account', MAccountActor> &
-  Use<'Actor', MActor>
-
 // ############################################################################
 
-// Videos  associations
+// Videos associations
 export type MChannelVideos =
   MChannel &
-  Use<'Videos', MVideo[]>
-
-export type MChannelActorAccountDefaultVideos =
-  MChannel &
-  Use<'Actor', MActorDefault> &
-  Use<'Account', MAccountDefault> &
   Use<'Videos', MVideo[]>
 
 // ############################################################################
@@ -141,5 +144,5 @@ export type MChannelFormattable =
 
 export type MChannelAP =
   Pick<MChannel, 'name' | 'description' | 'support'> &
-  Use<'Actor', MActorAP> &
+  Use<'Actor', MActorAPChannel> &
   Use<'Account', MAccountUrl>

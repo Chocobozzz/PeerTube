@@ -1,9 +1,5 @@
-@import '_variables';
-@import '_mixins';
-@import "./_bootstrap-variables";
-
-@import '~bootstrap/scss/functions';
-@import '~bootstrap/scss/variables';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 .alert {
   font-size: 15px;
@@ -12,41 +8,20 @@
 
 .wrapper {
   display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
+  flex-direction: column;
 
-  & > div {
-    margin-bottom: 40px;
+  .register-form {
+    max-width: 600px;
+    align-self: center;
+  }
 
-    &.register-form {
-      width: 450px;
-    }
+  .register-form,
+  .instance-information {
+    width: 100%;
+  }
 
-    &.instance-information {
-      width: 600px;
-      margin-bottom: 40px;
-
-      .block {
-        font-size: 15px;
-        margin-bottom: 15px;
-        padding: 0 $btn-padding-x;
-      }
-
-      @media screen and (max-width: 1500px) {
-        width: 450px;
-      }
-
-      ngb-accordion ::ng-deep {
-        .btn {
-          font-weight: $font-semibold !important;
-          color: pvar(--mainForegroundColor) !important;
-        }
-      }
-    }
-
-    @media screen and (max-width: $mobile-view) {
-      width: auto;
-    }
+  .instance-information {
+    margin-bottom: 15px;
   }
 }
 
@@ -55,16 +30,19 @@
 }
 
 .input-group {
-  @include peertube-input-group(400px);
+  @include peertube-input-group(100%);
 }
 
 .input-group-append {
   height: 30px;
 }
 
-input:not([type=submit]) {
-  @include peertube-input-text(400px);
+.form-group-terms {
+  width: 100% !important;
+}
 
+input:not([type=submit]) {
+  @include peertube-input-text(100%);
   display: block;
 
   &#username,
@@ -77,7 +55,16 @@ input:not([type=submit]) {
 input[type=submit],
 button {
   @include peertube-button;
-  @include orange-button;
+
+  &[cdkStepperNext] {
+    @include orange-button;
+    float: inline-end;
+  }
+
+  &[cdkStepperPrevious] {
+    @include grey-button;
+    float: inline-start;
+  }
 }
 
 .name-information {
@@ -97,7 +84,7 @@ button {
       border-color: pvar(--mainColor) transparent transparent transparent;
     }
 
-    & + div {
+    + div {
       font-size: 15px;
     }
   }

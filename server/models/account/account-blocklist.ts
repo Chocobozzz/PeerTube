@@ -1,9 +1,9 @@
-import * as Bluebird from 'bluebird'
 import { Op } from 'sequelize'
 import { BelongsTo, Column, CreatedAt, ForeignKey, Model, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
 import { MAccountBlocklist, MAccountBlocklistAccounts, MAccountBlocklistFormattable } from '@server/types/models'
+import { AttributesOnly } from '@shared/core-utils'
 import { AccountBlock } from '../../../shared/models'
-import { ActorModel } from '../activitypub/actor'
+import { ActorModel } from '../actor/actor'
 import { ServerModel } from '../server/server'
 import { getSort, searchAttribute } from '../utils'
 import { AccountModel } from './account'
@@ -41,7 +41,7 @@ enum ScopeNames {
     }
   ]
 })
-export class AccountBlocklistModel extends Model<AccountBlocklistModel> {
+export class AccountBlocklistModel extends Model<Partial<AttributesOnly<AccountBlocklistModel>>> {
 
   @CreatedAt
   createdAt: Date
@@ -102,7 +102,7 @@ export class AccountBlocklistModel extends Model<AccountBlocklistModel> {
                                 })
   }
 
-  static loadByAccountAndTarget (accountId: number, targetAccountId: number): Bluebird<MAccountBlocklist> {
+  static loadByAccountAndTarget (accountId: number, targetAccountId: number): Promise<MAccountBlocklist> {
     const query = {
       where: {
         accountId,
@@ -151,9 +151,9 @@ export class AccountBlocklistModel extends Model<AccountBlocklistModel> {
       })
   }
 
-  static listHandlesBlockedBy (accountIds: number[]): Bluebird<string[]> {
+  static listHandlesBlockedBy (accountIds: number[]): Promise<string[]> {
     const query = {
-      attributes: [],
+      attributes: [ 'id' ],
       where: {
         accountId: {
           [Op.in]: accountIds

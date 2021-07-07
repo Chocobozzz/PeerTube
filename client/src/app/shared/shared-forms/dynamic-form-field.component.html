@@ -1,9 +1,24 @@
 <div [formGroup]="form">
-  <label *ngIf="setting.type !== 'input-checkbox'" [attr.for]="setting.name" [innerHTML]="setting.label"></label>
+  <label *ngIf="setting.label && setting.type !== 'input-checkbox'" [attr.for]="setting.name" [innerHTML]="setting.label"></label>
+
+  <my-peertube-checkbox
+    *ngIf="setting.type === 'input-checkbox'"
+    [inputName]="setting.name"
+    [formControlName]="setting.name"
+    [labelInnerHTML]="setting.label"
+  ></my-peertube-checkbox>
 
   <div *ngIf="setting.descriptionHTML" class="label-small-info" [innerHTML]="setting.descriptionHTML"></div>
 
   <input *ngIf="setting.type === 'input'" type="text" [id]="setting.name" [formControlName]="setting.name" />
+
+  <div *ngIf="setting.type === 'select'" class="peertube-select-container">
+    <select  [id]="setting.name" [formControlName]="setting.name" class="form-control">
+      <option *ngFor="let option of setting.options" [value]="option.value">{{ option.label }}</option>
+    </select>
+  </div>
+
+  <my-input-toggle-hidden *ngIf="setting.type === 'input-password'" [formControlName]="setting.name" [inputId]="setting.name"></my-input-toggle-hidden>
 
   <textarea *ngIf="setting.type === 'input-textarea'" type="text" [id]="setting.name" [formControlName]="setting.name"></textarea>
 
@@ -23,12 +38,7 @@
     [classes]="{ 'input-error': formErrors['settings.name'] }"
   ></my-markdown-textarea>
 
-  <my-peertube-checkbox
-    *ngIf="setting.type === 'input-checkbox'"
-    [id]="setting.name"
-    [formControlName]="setting.name"
-    [labelInnerHTML]="setting.label"
-  ></my-peertube-checkbox>
+  <div *ngIf="setting.type === 'html'" [innerHTML]="setting.html"></div>
 
   <div *ngIf="formErrors[setting.name]" class="form-error">
     {{ formErrors[setting.name] }}

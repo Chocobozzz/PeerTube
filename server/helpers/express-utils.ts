@@ -1,11 +1,12 @@
 import * as express from 'express'
 import * as multer from 'multer'
-import { REMOTE_SCHEME } from '../initializers/constants'
-import { logger } from './logger'
-import { deleteFileAsync, generateRandomString } from './utils'
-import { extname } from 'path'
-import { isArray } from './custom-validators/misc'
+import { HttpStatusCode } from '../../shared/core-utils/miscs/http-error-codes'
 import { CONFIG } from '../initializers/config'
+import { REMOTE_SCHEME } from '../initializers/constants'
+import { getLowercaseExtension } from './core-utils'
+import { isArray } from './custom-validators/misc'
+import { logger } from './logger'
+import { deleteFileAndCatch, generateRandomString } from './utils'
 import { getExtFromMimetype } from './video'
 
 function buildNSFWFilter (res?: express.Response, paramNSFW?: string) {
@@ -29,21 +30,19 @@ function buildNSFWFilter (res?: express.Response, paramNSFW?: string) {
   return null
 }
 
-function cleanUpReqFiles (req: { files: { [fieldname: string]: Express.Multer.File[] } | Express.Multer.File[] }) {
-  const files = req.files
+function cleanUpReqFiles (req: express.Request) {
+  const filesObject = req.files
+  if (!filesObject) return
 
-  if (!files) return
-
-  if (isArray(files)) {
-    (files as Express.Multer.File[]).forEach(f => deleteFileAsync(f.path))
+  if (isArray(filesObject)) {
+    filesObject.forEach(f => deleteFileAndCatch(f.path))
     return
   }
 
-  for (const key of Object.keys(files)) {
-    const file = files[key]
+  for (const key of Object.keys(filesObject)) {
+    const files = filesObject[key]
 
-    if (isArray(file)) file.forEach(f => deleteFileAsync(f.path))
-    else deleteFileAsync(file.path)
+    files.forEach(f => deleteFileAndCatch(f.path))
   }
 }
 
@@ -61,7 +60,9 @@ function getHostWithPort (host: string) {
 }
 
 function badRequest (req: express.Request, res: express.Response) {
-  return res.type('json').status(400).end()
+  return res.type('json')
+            .status(HttpStatusCode.BAD_REQUEST_400)
+            .end()
 }
 
 function createReqFiles (
@@ -76,7 +77,7 @@ function createReqFiles (
 
     filename: async (req, file, cb) => {
       let extension: string
-      const fileExtension = extname(file.originalname)
+      const fileExtension = getLowercaseExtension(file.originalname)
       const extensionFromMimetype = getExtFromMimetype(mimeTypes, file.mimetype)
 
       // Take the file extension if we don't understand the mime type

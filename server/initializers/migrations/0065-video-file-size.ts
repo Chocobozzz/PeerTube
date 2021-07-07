@@ -1,5 +1,4 @@
 import * as Sequelize from 'sequelize'
-import * as Promise from 'bluebird'
 import { stat } from 'fs-extra'
 import { VideoModel } from '../../models/video/video'
 import { getVideoFilePath } from '@server/lib/video-paths'

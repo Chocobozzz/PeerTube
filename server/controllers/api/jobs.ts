@@ -1,26 +1,28 @@
 import * as express from 'express'
 import { ResultList } from '../../../shared'
-import { Job, JobType, JobState } from '../../../shared/models'
+import { Job, JobState, JobType } from '../../../shared/models'
 import { UserRight } from '../../../shared/models/users'
+import { isArray } from '../../helpers/custom-validators/misc'
 import { JobQueue } from '../../lib/job-queue'
 import {
   asyncMiddleware,
   authenticate,
   ensureUserHasRight,
   jobsSortValidator,
+  openapiOperationDoc,
+  paginationValidatorBuilder,
   setDefaultPagination,
   setDefaultSort
 } from '../../middlewares'
-import { paginationValidator } from '../../middlewares/validators'
 import { listJobsValidator } from '../../middlewares/validators/jobs'
-import { isArray } from '../../helpers/custom-validators/misc'
 
 const jobsRouter = express.Router()
 
-jobsRouter.get('/:state',
+jobsRouter.get('/:state?',
+  openapiOperationDoc({ operationId: 'getJobs' }),
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_JOBS),
-  paginationValidator,
+  paginationValidatorBuilder([ 'jobs' ]),
   jobsSortValidator,
   setDefaultSort,
   setDefaultPagination,
@@ -48,23 +50,28 @@ async function listJobs (req: express.Request, res: express.Response) {
     asc,
     jobType
   })
-  const total = await JobQueue.Instance.count(state)
+  const total = await JobQueue.Instance.count(state, jobType)
 
   const result: ResultList<Job> = {
     total,
-    data: jobs.map(j => formatJob(j, state))
+    data: await Promise.all(jobs.map(j => formatJob(j, state)))
   }
+
   return res.json(result)
 }
 
-function formatJob (job: any, state: JobState): Job {
-  const error = isArray(job.stacktrace) && job.stacktrace.length !== 0 ? job.stacktrace[0] : null
+async function formatJob (job: any, state?: JobState): Promise<Job> {
+  const error = isArray(job.stacktrace) && job.stacktrace.length !== 0
+    ? job.stacktrace[0]
+    : null
 
   return {
     id: job.id,
-    state: state,
+    state: state || await job.getState(),
     type: job.queue.name as JobType,
     data: job.data,
+    progress: await job.progress(),
+    priority: job.opts.priority,
     error,
     createdAt: new Date(job.timestamp),
     finishedOn: new Date(job.finishedOn),

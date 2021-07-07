@@ -94,7 +94,6 @@ export class PluginApiService {
 
     return this.authHttp.get<RegisteredServerSettings>(path)
                .pipe(
-                 switchMap(res => this.translateSettingsLabel(npmName, res)),
                  catchError(res => this.restExtractor.handleError(res))
                )
   }
@@ -134,18 +133,11 @@ export class PluginApiService {
                .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
-  private translateSettingsLabel (npmName: string, res: RegisteredServerSettings): Observable<RegisteredServerSettings> {
-    return this.pluginService.translationsObservable
-      .pipe(
-        map(allTranslations => allTranslations[npmName]),
-        map(translations => {
-          const registeredSettings = res.registeredSettings
-                                        .map(r => {
-                                          return Object.assign({}, r, { label: peertubeTranslate(r.label, translations) })
-                                        })
+  getPluginOrThemeHref (type: PluginType, name: string) {
+    const typeString = type === PluginType.PLUGIN
+      ? 'plugin'
+      : 'theme'
 
-          return { registeredSettings }
-        })
-      )
+    return `https://www.npmjs.com/package/peertube-${typeString}-${name}`
   }
 }

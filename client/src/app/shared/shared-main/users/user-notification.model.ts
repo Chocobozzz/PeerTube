@@ -1,14 +1,18 @@
+import { AuthUser } from '@app/core'
+import { Account } from '@app/shared/shared-main/account/account.model'
+import { Actor } from '@app/shared/shared-main/account/actor.model'
+import { VideoChannel } from '@app/shared/shared-main/video-channel/video-channel.model'
 import {
   AbuseState,
   ActorInfo,
   FollowState,
+  PluginType,
   UserNotification as UserNotificationServer,
   UserNotificationType,
-  VideoInfo,
-  UserRight
+  UserRight,
+  VideoInfo
 } from '@shared/models'
-import { Actor } from '../account/actor.model'
-import { AuthUser } from '@app/core'
+import { Video } from '../video'
 
 export class UserNotification implements UserNotificationServer {
   id: number
@@ -72,19 +76,39 @@ export class UserNotification implements UserNotificationServer {
     }
   }
 
+  plugin?: {
+    name: string
+    type: PluginType
+    latestVersion: string
+  }
+
+  peertube?: {
+    latestVersion: string
+  }
+
   createdAt: string
   updatedAt: string
 
   // Additional fields
   videoUrl?: string
   commentUrl?: any[]
+
   abuseUrl?: string
   abuseQueryParams?: { [id: string]: string } = {}
+
   videoAutoBlacklistUrl?: string
+
   accountUrl?: string
+
   videoImportIdentifier?: string
   videoImportUrl?: string
+
   instanceFollowUrl?: string
+
+  peertubeVersionLink?: string
+
+  pluginUrl?: string
+  pluginQueryParams?: { [id: string]: string } = {}
 
   constructor (hash: UserNotificationServer, user: AuthUser) {
     this.id = hash.id
@@ -95,22 +119,25 @@ export class UserNotification implements UserNotificationServer {
     // To prevent a notification popup crash in case of bug, wrap it inside a try/catch
     try {
       this.video = hash.video
-      if (this.video) this.setAvatarUrl(this.video.channel)
+      if (this.video) this.setVideoChannelAvatarUrl(this.video.channel)
 
       this.videoImport = hash.videoImport
 
       this.comment = hash.comment
-      if (this.comment) this.setAvatarUrl(this.comment.account)
+      if (this.comment) this.setAccountAvatarUrl(this.comment.account)
 
       this.abuse = hash.abuse
 
       this.videoBlacklist = hash.videoBlacklist
 
       this.account = hash.account
-      if (this.account) this.setAvatarUrl(this.account)
+      if (this.account) this.setAccountAvatarUrl(this.account)
 
       this.actorFollow = hash.actorFollow
-      if (this.actorFollow) this.setAvatarUrl(this.actorFollow.follower)
+      if (this.actorFollow) this.setAccountAvatarUrl(this.actorFollow.follower)
+
+      this.plugin = hash.plugin
+      this.peertube = hash.peertube
 
       this.createdAt = hash.createdAt
       this.updatedAt = hash.updatedAt
@@ -195,6 +222,15 @@ export class UserNotification implements UserNotificationServer {
         case UserNotificationType.AUTO_INSTANCE_FOLLOWING:
           this.instanceFollowUrl = '/admin/follows/following-list'
           break
+
+        case UserNotificationType.NEW_PEERTUBE_VERSION:
+          this.peertubeVersionLink = 'https://joinpeertube.org/news'
+          break
+
+        case UserNotificationType.NEW_PLUGIN_VERSION:
+          this.pluginUrl = `/admin/plugins/list-installed`
+          this.pluginQueryParams.pluginType = this.plugin.type + ''
+          break
       }
     } catch (err) {
       this.type = null
@@ -203,15 +239,15 @@ export class UserNotification implements UserNotificationServer {
   }
 
   private buildVideoUrl (video: { uuid: string }) {
-    return '/videos/watch/' + video.uuid
+    return Video.buildWatchUrl(video)
   }
 
   private buildAccountUrl (account: { name: string, host: string }) {
-    return '/accounts/' + Actor.CREATE_BY_STRING(account.name, account.host)
+    return '/a/' + Actor.CREATE_BY_STRING(account.name, account.host)
   }
 
   private buildVideoImportUrl () {
-    return '/my-account/video-imports'
+    return '/my-library/video-imports'
   }
 
   private buildVideoImportIdentifier (videoImport: { targetUrl?: string, magnetUri?: string, torrentName?: string }) {
@@ -222,7 +258,11 @@ export class UserNotification implements UserNotificationServer {
     return [ this.buildVideoUrl(comment.video), { threadId: comment.threadId } ]
   }
 
-  private setAvatarUrl (actor: { avatarUrl?: string, avatar?: { url?: string, path: string } }) {
-    actor.avatarUrl = Actor.GET_ACTOR_AVATAR_URL(actor)
+  private setAccountAvatarUrl (actor: { avatarUrl?: string, avatar?: { url?: string, path: string } }) {
+    actor.avatarUrl = Account.GET_ACTOR_AVATAR_URL(actor) || Account.GET_DEFAULT_AVATAR_URL()
+  }
+
+  private setVideoChannelAvatarUrl (actor: { avatarUrl?: string, avatar?: { url?: string, path: string } }) {
+    actor.avatarUrl = VideoChannel.GET_ACTOR_AVATAR_URL(actor) || VideoChannel.GET_DEFAULT_AVATAR_URL()
   }
 }

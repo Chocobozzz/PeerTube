@@ -1,5 +1,27 @@
 import * as express from 'express'
+import { join } from 'path'
+import { uuidToShort } from '@server/helpers/uuid'
+import { scheduleRefreshIfNeeded } from '@server/lib/activitypub/playlists'
+import { Hooks } from '@server/lib/plugins/hooks'
+import { getServerActor } from '@server/models/application/application'
+import { MVideoPlaylistFull, MVideoPlaylistThumbnail, MVideoThumbnail } from '@server/types/models'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
+import { VideoPlaylistCreate } from '../../../shared/models/videos/playlist/video-playlist-create.model'
+import { VideoPlaylistElementCreate } from '../../../shared/models/videos/playlist/video-playlist-element-create.model'
+import { VideoPlaylistElementUpdate } from '../../../shared/models/videos/playlist/video-playlist-element-update.model'
+import { VideoPlaylistPrivacy } from '../../../shared/models/videos/playlist/video-playlist-privacy.model'
+import { VideoPlaylistReorder } from '../../../shared/models/videos/playlist/video-playlist-reorder.model'
+import { VideoPlaylistUpdate } from '../../../shared/models/videos/playlist/video-playlist-update.model'
+import { resetSequelizeInstance } from '../../helpers/database-utils'
+import { buildNSFWFilter, createReqFiles } from '../../helpers/express-utils'
+import { logger } from '../../helpers/logger'
 import { getFormattedObjects } from '../../helpers/utils'
+import { CONFIG } from '../../initializers/config'
+import { MIMETYPES, VIDEO_PLAYLIST_PRIVACIES } from '../../initializers/constants'
+import { sequelizeTypescript } from '../../initializers/database'
+import { sendCreateVideoPlaylist, sendDeleteVideoPlaylist, sendUpdateVideoPlaylist } from '../../lib/activitypub/send'
+import { getLocalVideoPlaylistActivityPubUrl, getLocalVideoPlaylistElementActivityPubUrl } from '../../lib/activitypub/url'
+import { updatePlaylistMiniatureFromExisting } from '../../lib/thumbnail'
 import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
@@ -10,11 +32,6 @@ import {
   setDefaultSort
 } from '../../middlewares'
 import { videoPlaylistsSortValidator } from '../../middlewares/validators'
-import { buildNSFWFilter, createReqFiles } from '../../helpers/express-utils'
-import { MIMETYPES, VIDEO_PLAYLIST_PRIVACIES } from '../../initializers/constants'
-import { logger } from '../../helpers/logger'
-import { resetSequelizeInstance } from '../../helpers/database-utils'
-import { VideoPlaylistModel } from '../../models/video/video-playlist'
 import {
   commonVideoPlaylistFiltersValidator,
   videoPlaylistsAddValidator,
@@ -25,23 +42,9 @@ import {
   videoPlaylistsUpdateOrRemoveVideoValidator,
   videoPlaylistsUpdateValidator
 } from '../../middlewares/validators/videos/video-playlists'
-import { VideoPlaylistCreate } from '../../../shared/models/videos/playlist/video-playlist-create.model'
-import { VideoPlaylistPrivacy } from '../../../shared/models/videos/playlist/video-playlist-privacy.model'
-import { join } from 'path'
-import { sendCreateVideoPlaylist, sendDeleteVideoPlaylist, sendUpdateVideoPlaylist } from '../../lib/activitypub/send'
-import { getVideoPlaylistActivityPubUrl, getVideoPlaylistElementActivityPubUrl } from '../../lib/activitypub/url'
-import { VideoPlaylistUpdate } from '../../../shared/models/videos/playlist/video-playlist-update.model'
-import { VideoPlaylistElementModel } from '../../models/video/video-playlist-element'
-import { VideoPlaylistElementCreate } from '../../../shared/models/videos/playlist/video-playlist-element-create.model'
-import { VideoPlaylistElementUpdate } from '../../../shared/models/videos/playlist/video-playlist-element-update.model'
 import { AccountModel } from '../../models/account/account'
-import { VideoPlaylistReorder } from '../../../shared/models/videos/playlist/video-playlist-reorder.model'
-import { JobQueue } from '../../lib/job-queue'
-import { CONFIG } from '../../initializers/config'
-import { sequelizeTypescript } from '../../initializers/database'
-import { createPlaylistMiniatureFromExisting } from '../../lib/thumbnail'
-import { MVideoPlaylistFull, MVideoPlaylistThumbnail, MVideoThumbnail } from '@server/types/models'
-import { getServerActor } from '@server/models/application/application'
+import { VideoPlaylistModel } from '../../models/video/video-playlist'
+import { VideoPlaylistElementModel } from '../../models/video/video-playlist-element'
 
 const reqThumbnailFile = createReqFiles([ 'thumbnailfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT, { thumbnailfile: CONFIG.STORAGE.TMP_DIR })
 
@@ -143,9 +146,7 @@ async function listVideoPlaylists (req: express.Request, res: express.Response) 
 function getVideoPlaylist (req: express.Request, res: express.Response) {
   const videoPlaylist = res.locals.videoPlaylistSummary
 
-  if (videoPlaylist.isOutdated()) {
-    JobQueue.Instance.createJob({ type: 'activitypub-refresher', payload: { type: 'video-playlist', url: videoPlaylist.url } })
-  }
+  scheduleRefreshIfNeeded(videoPlaylist)
 
   return res.json(videoPlaylist.toFormattedJSON())
 }
@@ -161,7 +162,7 @@ async function addVideoPlaylist (req: express.Request, res: express.Response) {
     ownerAccountId: user.Account.id
   }) as MVideoPlaylistFull
 
-  videoPlaylist.url = getVideoPlaylistActivityPubUrl(videoPlaylist) // We use the UUID, so set the URL after building the object
+  videoPlaylist.url = getLocalVideoPlaylistActivityPubUrl(videoPlaylist) // We use the UUID, so set the URL after building the object
 
   if (videoPlaylistInfo.videoChannelId) {
     const videoChannel = res.locals.videoChannel
@@ -172,7 +173,11 @@ async function addVideoPlaylist (req: express.Request, res: express.Response) {
 
   const thumbnailField = req.files['thumbnailfile']
   const thumbnailModel = thumbnailField
-    ? await createPlaylistMiniatureFromExisting(thumbnailField[0].path, videoPlaylist, false)
+    ? await updatePlaylistMiniatureFromExisting({
+      inputPath: thumbnailField[0].path,
+      playlist: videoPlaylist,
+      automaticallyGenerated: false
+    })
     : undefined
 
   const videoPlaylistCreated = await sequelizeTypescript.transaction(async t => {
@@ -195,9 +200,10 @@ async function addVideoPlaylist (req: express.Request, res: express.Response) {
   return res.json({
     videoPlaylist: {
       id: videoPlaylistCreated.id,
+      shortUUID: uuidToShort(videoPlaylistCreated.uuid),
       uuid: videoPlaylistCreated.uuid
     }
-  }).end()
+  })
 }
 
 async function updateVideoPlaylist (req: express.Request, res: express.Response) {
@@ -210,7 +216,11 @@ async function updateVideoPlaylist (req: express.Request, res: express.Response)
 
   const thumbnailField = req.files['thumbnailfile']
   const thumbnailModel = thumbnailField
-    ? await createPlaylistMiniatureFromExisting(thumbnailField[0].path, videoPlaylistInstance, false)
+    ? await updatePlaylistMiniatureFromExisting({
+      inputPath: thumbnailField[0].path,
+      playlist: videoPlaylistInstance,
+      automaticallyGenerated: false
+    })
     : undefined
 
   try {
@@ -271,7 +281,7 @@ async function updateVideoPlaylist (req: express.Request, res: express.Response)
     throw err
   }
 
-  return res.type('json').status(204).end()
+  return res.type('json').status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
 async function removeVideoPlaylist (req: express.Request, res: express.Response) {
@@ -285,7 +295,7 @@ async function removeVideoPlaylist (req: express.Request, res: express.Response)
     logger.info('Video playlist %s deleted.', videoPlaylistInstance.uuid)
   })
 
-  return res.type('json').status(204).end()
+  return res.type('json').status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
 async function addVideoInPlaylist (req: express.Request, res: express.Response) {
@@ -304,7 +314,7 @@ async function addVideoInPlaylist (req: express.Request, res: express.Response) 
       videoId: video.id
     }, { transaction: t })
 
-    playlistElement.url = getVideoPlaylistElementActivityPubUrl(videoPlaylist, playlistElement)
+    playlistElement.url = getLocalVideoPlaylistElementActivityPubUrl(videoPlaylist, playlistElement)
     await playlistElement.save({ transaction: t })
 
     videoPlaylist.changed('updatedAt', true)
@@ -322,6 +332,8 @@ async function addVideoInPlaylist (req: express.Request, res: express.Response) 
     .catch(err => logger.error('Cannot send video playlist update.', { err }))
 
   logger.info('Video added in playlist %s at position %d.', videoPlaylist.uuid, playlistElement.position)
+
+  Hooks.runAction('action:api.video-playlist-element.created', { playlistElement })
 
   return res.json({
     videoPlaylistElement: {
@@ -351,7 +363,7 @@ async function updateVideoPlaylistElement (req: express.Request, res: express.Re
 
   logger.info('Element of position %d of playlist %s updated.', playlistElement.position, videoPlaylist.uuid)
 
-  return res.type('json').status(204).end()
+  return res.type('json').status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
 async function removeVideoFromPlaylist (req: express.Request, res: express.Response) {
@@ -379,7 +391,7 @@ async function removeVideoFromPlaylist (req: express.Request, res: express.Respo
   sendUpdateVideoPlaylist(videoPlaylist, undefined)
     .catch(err => logger.error('Cannot send video playlist update.', { err }))
 
-  return res.type('json').status(204).end()
+  return res.type('json').status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
 async function reorderVideosPlaylist (req: express.Request, res: express.Response) {
@@ -391,7 +403,7 @@ async function reorderVideosPlaylist (req: express.Request, res: express.Respons
   const reorderLength: number = body.reorderLength || 1
 
   if (start === insertAfter) {
-    return res.status(204).end()
+    return res.status(HttpStatusCode.NO_CONTENT_204).end()
   }
 
   // Example: if we reorder position 2 and insert after position 5 (so at position 6): # 1 2 3 4 5 6 7 8 9
@@ -432,7 +444,7 @@ async function reorderVideosPlaylist (req: express.Request, res: express.Respons
     videoPlaylist.uuid, insertAfter, start, start + reorderLength - 1
   )
 
-  return res.type('json').status(204).end()
+  return res.type('json').status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
 async function getVideoPlaylistVideos (req: express.Request, res: express.Response) {
@@ -473,7 +485,12 @@ async function generateThumbnailForPlaylist (videoPlaylist: MVideoPlaylistThumbn
   }
 
   const inputPath = join(CONFIG.STORAGE.THUMBNAILS_DIR, videoMiniature.filename)
-  const thumbnailModel = await createPlaylistMiniatureFromExisting(inputPath, videoPlaylist, true, true)
+  const thumbnailModel = await updatePlaylistMiniatureFromExisting({
+    inputPath,
+    playlist: videoPlaylist,
+    automaticallyGenerated: true,
+    keepOriginal: true
+  })
 
   thumbnailModel.videoPlaylistId = videoPlaylist.id
 

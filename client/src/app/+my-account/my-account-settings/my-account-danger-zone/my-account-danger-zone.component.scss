@@ -1,9 +1,7 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 .delete-me {
-  font-size: 15px;
-
   button {
     @include peertube-button;
     @include danger-button;

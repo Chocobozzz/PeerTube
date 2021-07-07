@@ -1,6 +1,7 @@
 <p-table
-  [value]="abuses" [lazy]="true" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions"
-  [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)" dataKey="id" [resizableColumns]="true" [lazyLoadOnInit]="false"
+  [value]="abuses" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions"
+  [sortField]="sort.field" [sortOrder]="sort.order" dataKey="id" [resizableColumns]="true"
+  [lazy]="true" (onLazyLoad)="loadLazy($event)" [lazyLoadOnInit]="false"
   [showCurrentPageReport]="true" i18n-currentPageReportTemplate
   currentPageReportTemplate="Showing {{'{first}'}} to {{'{last}'}} of {{'{totalRecords}'}} reports"
   (onPage)="onPage($event)" [expandedRowKeys]="expandedRows"
@@ -8,28 +9,7 @@
   <ng-template pTemplate="caption">
     <div class="caption">
       <div class="ml-auto">
-        <div class="input-group has-feedback has-clear">
-          <div class="input-group-prepend c-hand" ngbDropdown placement="bottom-left auto" container="body">
-            <div class="input-group-text" ngbDropdownToggle>
-              <span class="caret" aria-haspopup="menu" role="button"></span>
-            </div>
-
-            <div role="menu" ngbDropdownMenu>
-              <h6 class="dropdown-header" i18n>Advanced report filters</h6>
-              <a [routerLink]="[ baseRoute ]" [queryParams]="{ 'search': 'state:pending' }" class="dropdown-item" i18n>Unsolved reports</a>
-              <a [routerLink]="[ baseRoute ]" [queryParams]="{ 'search': 'state:accepted' }" class="dropdown-item" i18n>Accepted reports</a>
-              <a [routerLink]="[ baseRoute ]" [queryParams]="{ 'search': 'state:rejected' }" class="dropdown-item" i18n>Refused reports</a>
-              <a [routerLink]="[ baseRoute ]" [queryParams]="{ 'search': 'videoIs:blacklisted' }" class="dropdown-item" i18n>Reports with blocked videos</a>
-              <a [routerLink]="[ baseRoute ]" [queryParams]="{ 'search': 'videoIs:deleted' }" class="dropdown-item" i18n>Reports with deleted videos</a>
-            </div>
-          </div>
-          <input
-            type="text" name="table-filter" id="table-filter" i18n-placeholder placeholder="Filter..."
-            (keyup)="onAbuseSearch($event)"
-          >
-          <a class="glyphicon glyphicon-remove-sign form-control-feedback form-control-clear" (click)="resetTableFilter()"></a>
-          <span class="sr-only" i18n>Clear filters</span>
-        </div>
+        <my-advanced-input-filter [filters]="inputFilters" (search)="onSearch($event)"></my-advanced-input-filter>
       </div>
     </div>
   </ng-template>
@@ -37,33 +17,35 @@
   <ng-template pTemplate="header">
     <tr> <!-- header -->
       <th style="width: 40px;"></th>
+      <th style="width: 150px;"></th>
       <th *ngIf="isAdminView()" style="width: 20%;" pResizableColumn i18n>Reporter</th>
       <th i18n>Video/Comment/Account</th>
       <th style="width: 150px;" i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
       <th i18n pSortableColumn="state" style="width: 80px;">State <p-sortIcon field="state"></p-sortIcon></th>
       <th i18n style="width: 80px;">Messages</th>
       <th i18n *ngIf="isAdminView()" style="width: 100px;">Internal note</th>
-      <th style="width: 150px;"></th>
     </tr>
   </ng-template>
 
   <ng-template pTemplate="body" let-expanded="expanded" let-abuse>
     <tr>
-      <td class="c-hand" [pRowToggler]="abuse" i18n-ngbTooltip ngbTooltip="More information" placement="top-left" container="body">
+      <td class="expand-cell c-hand" [pRowToggler]="abuse" i18n-ngbTooltip ngbTooltip="More information" placement="top-left" container="body">
         <span class="expander">
           <i [ngClass]="expanded ? 'glyphicon glyphicon-menu-down' : 'glyphicon glyphicon-menu-right'"></i>
         </span>
       </td>
 
+      <td class="action-cell">
+        <my-action-dropdown
+          [ngClass]="{ 'show': expanded }" placement="bottom-right top-right left auto" container="body"
+          i18n-label label="Actions" [actions]="abuseActions" [entry]="abuse"
+        ></my-action-dropdown>
+      </td>
+
       <td *ngIf="isAdminView()">
         <a *ngIf="abuse.reporterAccount" [href]="abuse.reporterAccount.url" i18n-title title="Open account in a new tab" target="_blank" rel="noopener noreferrer">
           <div class="chip two-lines">
-            <img
-              class="avatar"
-              [src]="abuse.reporterAccount.avatar?.path"
-              (error)="switchToDefaultAvatar($event)"
-              alt="Avatar"
-            >
+            <my-actor-avatar [account]="abuse.reporterAccount"></my-actor-avatar>
             <div>
               {{ abuse.reporterAccount.displayName }}
               <span>{{ abuse.reporterAccount.nameWithHost }}</span>
@@ -163,20 +145,16 @@
       <td *ngIf="isAdminView()" class="internal-note" container="body" placement="left auto" [ngbTooltip]="abuse.moderationComment">
         {{ abuse.moderationComment }}
       </td>
-
-      <td class="action-cell">
-        <my-action-dropdown
-          [ngClass]="{ 'show': expanded }" placement="bottom-right top-right left auto" container="body"
-          i18n-label label="Actions" [actions]="abuseActions" [entry]="abuse"
-        ></my-action-dropdown>
-      </td>
     </tr>
   </ng-template>
 
   <ng-template pTemplate="rowexpansion" let-abuse>
       <tr>
-        <td class="expand-cell" colspan="8">
-          <my-abuse-details [abuse]="abuse" [baseRoute]="baseRoute" [isAdminView]="isAdminView()"></my-abuse-details>
+        <td *ngIf="isAdminView()" class="expand-cell" colspan="8">
+          <my-abuse-details [abuse]="abuse" [isAdminView]="true"></my-abuse-details>
+        </td>
+        <td *ngIf="!isAdminView()" class="expand-cell" colspan="6">
+          <my-abuse-details [abuse]="abuse" [isAdminView]="false"></my-abuse-details>
         </td>
       </tr>
   </ng-template>

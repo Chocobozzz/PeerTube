@@ -5,8 +5,7 @@ import { PluginApiService } from '@app/+admin/plugins/shared/plugin-api.service'
 import { ComponentPagination, ConfirmService, hasMoreItems, Notifier } from '@app/core'
 import { PluginService } from '@app/core/plugins/plugin.service'
 import { compareSemVer } from '@shared/core-utils/miscs/miscs'
-import { PeerTubePlugin } from '@shared/models/plugins/peertube-plugin.model'
-import { PluginType } from '@shared/models/plugins/plugin.type'
+import { PeerTubePlugin, PluginType } from '@shared/models'
 
 @Component({
   selector: 'my-plugin-list-installed',
@@ -30,8 +29,6 @@ export class PluginListInstalledComponent implements OnInit {
 
   plugins: PeerTubePlugin[] = []
   updating: { [name: string]: boolean } = {}
-
-  PluginType = PluginType
 
   onDataSubject = new Subject<any[]>()
 
@@ -104,6 +101,10 @@ export class PluginListInstalledComponent implements OnInit {
     return !!this.updating[this.getUpdatingKey(plugin)]
   }
 
+  isTheme (plugin: PeerTubePlugin) {
+    return plugin.type === PluginType.THEME
+  }
+
   async uninstall (plugin: PeerTubePlugin) {
     const res = await this.confirmService.confirm(
       $localize`Do you really want to uninstall ${plugin.name}?`,
@@ -128,6 +129,16 @@ export class PluginListInstalledComponent implements OnInit {
     const updatingKey = this.getUpdatingKey(plugin)
     if (this.updating[updatingKey]) return
 
+    if (this.isMajorUpgrade(plugin)) {
+      const res = await this.confirmService.confirm(
+        $localize`This is a major plugin upgrade. Please go on the plugin homepage to check potential release notes.`,
+        $localize`Upgrade`,
+        $localize`Proceed upgrade`
+      )
+
+      if (res === false) return
+    }
+
     this.updating[updatingKey] = true
 
     this.pluginApiService.update(plugin.name, plugin.type)
@@ -149,7 +160,20 @@ export class PluginListInstalledComponent implements OnInit {
     return [ '/admin', 'plugins', 'show', this.pluginService.nameToNpmName(plugin.name, plugin.type) ]
   }
 
+  getPluginOrThemeHref (name: string) {
+    return this.pluginApiService.getPluginOrThemeHref(this.pluginType, name)
+  }
+
   private getUpdatingKey (plugin: PeerTubePlugin) {
     return plugin.name + plugin.type
+  }
+
+  private isMajorUpgrade (plugin: PeerTubePlugin) {
+    if (!plugin.latestVersion) return false
+
+    const latestMajor = plugin.latestVersion.split('.')[0]
+    const currentMajor = plugin.version.split('.')[0]
+
+    return latestMajor > currentMajor
   }
 }

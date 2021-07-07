@@ -17,10 +17,17 @@
       [clearable]="false"
       [searchable]="false"
     >
+      <ng-option value="all">
+        <span i18n="Selector for the list displaying jobs, filtering by their state">any</span>
+      </ng-option>
       <ng-option *ngFor="let state of jobStates" [value]="state">
         <span class="badge" [ngClass]="getJobStateClass(state)">{{ state }}</span>
       </ng-option>
     </ng-select>
+  </div>
+
+  <div class="button-filter-block">
+    <my-button i18n-label label="Refresh" icon="refresh" (click)="refresh()"></my-button>
   </div>
 </div>
 
@@ -37,27 +44,40 @@
       <th style="width: 40px"></th>
       <th style="width: calc(100% - 390px)" class="job-id" i18n>ID</th>
       <th style="width: 200px" class="job-type" i18n>Type</th>
+      <th style="width: 200px" class="job-priority" i18n>Priority <small>(1 = highest priority)</small></th>
+      <th style="width: 200px" class="job-state" i18n *ngIf="jobState === 'all'">State</th>
+      <th style="width: 100px" class="job-progress" i18n *ngIf="hasProgress()">Progress</th>
       <th style="width: 150px" class="job-date" i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
     </tr>
   </ng-template>
 
   <ng-template pTemplate="body" let-expanded="expanded" let-job>
     <tr>
-      <td class="expand-cell" [pRowToggler]="job" i18n-ngbTooltip ngbTooltip="More information" placement="top-left" container="body">
+      <td class="expand-cell c-hand" [pRowToggler]="job" i18n-ngbTooltip ngbTooltip="More information" placement="top-left" container="body">
         <span class="expander">
           <i [ngClass]="expanded ? 'glyphicon glyphicon-menu-down' : 'glyphicon glyphicon-menu-right'"></i>
         </span>
       </td>
 
-      <td class="job-id" [pRowToggler]="job" [title]="job.id">{{ job.id }}</td>
-      <td class="job-type" [pRowToggler]="job">{{ job.type }}</td>
-      <td class="job-date" [pRowToggler]="job">{{ job.createdAt | date: 'short' }}</td>
+      <td class="job-id c-hand" [pRowToggler]="job" [title]="job.id">{{ job.id }}</td>
+      <td class="job-type c-hand" [pRowToggler]="job">{{ job.type }}</td>
+      <td class="job-priority c-hand" [pRowToggler]="job">{{ job.priority }}</td>
+
+      <td class="job-state c-hand" [pRowToggler]="job" *ngIf="jobState === 'all'">
+        <span class="badge" [ngClass]="getJobStateClass(job.state)">{{ job.state }}</span>
+      </td>
+
+      <td class="job-progress c-hand" [pRowToggler]="job" *ngIf="hasProgress()">
+        {{ getProgress(job) }}
+      </td>
+
+      <td class="job-date c-hand" [pRowToggler]="job">{{ job.createdAt | date: 'short' }}</td>
     </tr>
   </ng-template>
 
   <ng-template pTemplate="rowexpansion" let-job>
     <tr>
-      <td colspan="4">
+      <td [attr.colspan]="getColspan()">
         <pre>{{ [
           'Job: ' + job.id,
           'Type: ' + job.type,
@@ -67,12 +87,12 @@
       </td>
     </tr>
     <tr>
-      <td colspan="4">
+      <td [attr.colspan]="getColspan()">
         <pre>{{ job.data }}</pre>
       </td>
     </tr>
     <tr class="job-error" *ngIf="job.error">
-      <td colspan="4">
+      <td [attr.colspan]="getColspan()">
         <pre>{{ job.error }}</pre>
       </td>
     </tr>
@@ -80,11 +100,17 @@
 
   <ng-template pTemplate="emptymessage">
     <tr>
-      <td colspan="4">
+      <td [attr.colspan]="getColspan()">
         <div class="no-results">
           <div class="d-block">
-            <ng-container *ngIf="jobType === 'all'" i18n>No <span class="badge" [ngClass]="getJobStateClass(jobState)">{{ jobState }}</span> jobs found.</ng-container>
-            <ng-container *ngIf="jobType !== 'all'" i18n>No <code>{{ jobType }}</code> jobs found that are <span class="badge" [ngClass]="getJobStateClass(jobState)">{{ jobState }}</span>.</ng-container>
+            <ng-container *ngIf="jobState === 'all'">
+              <ng-container *ngIf="jobType === 'all'" i18n>No jobs found.</ng-container>
+              <ng-container *ngIf="jobType !== 'all'" i18n>No <code>{{ jobType }}</code> jobs found.</ng-container>
+            </ng-container>
+            <ng-container *ngIf="jobState !== 'all'">
+              <ng-container *ngIf="jobType === 'all'" i18n>No <span class="badge" [ngClass]="getJobStateClass(jobState)">{{ jobState }}</span> jobs found.</ng-container>
+              <ng-container *ngIf="jobType !== 'all'" i18n>No <code>{{ jobType }}</code> jobs found that are <span class="badge" [ngClass]="getJobStateClass(jobState)">{{ jobState }}</span>.</ng-container>
+            </ng-container>
           </div>
         </div>
       </td>

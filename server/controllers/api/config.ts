@@ -1,192 +1,56 @@
-import { Hooks } from '@server/lib/plugins/hooks'
+import { ServerConfigManager } from '@server/lib/server-config-manager'
 import * as express from 'express'
 import { remove, writeJSON } from 'fs-extra'
 import { snakeCase } from 'lodash'
 import validator from 'validator'
-import { RegisteredExternalAuthConfig, RegisteredIdAndPassAuthConfig, ServerConfig, UserRight } from '../../../shared'
+import { UserRight } from '../../../shared'
 import { About } from '../../../shared/models/server/about.model'
 import { CustomConfig } from '../../../shared/models/server/custom-config.model'
 import { auditLoggerFactory, CustomConfigAuditView, getAuditIdFromRes } from '../../helpers/audit-logger'
 import { objectConverter } from '../../helpers/core-utils'
-import { isSignupAllowed, isSignupAllowedForCurrentIP } from '../../helpers/signup'
-import { getServerCommit } from '../../helpers/utils'
-import { CONFIG, isEmailEnabled, reloadConfig } from '../../initializers/config'
-import { CONSTRAINTS_FIELDS, DEFAULT_THEME_NAME, PEERTUBE_VERSION } from '../../initializers/constants'
+import { CONFIG, reloadConfig } from '../../initializers/config'
 import { ClientHtml } from '../../lib/client-html'
-import { PluginManager } from '../../lib/plugins/plugin-manager'
-import { getThemeOrDefault } from '../../lib/plugins/theme-utils'
-import { asyncMiddleware, authenticate, ensureUserHasRight } from '../../middlewares'
+import { asyncMiddleware, authenticate, ensureUserHasRight, openapiOperationDoc } from '../../middlewares'
 import { customConfigUpdateValidator } from '../../middlewares/validators/config'
 
 const configRouter = express.Router()
 
 const auditLogger = auditLoggerFactory('config')
 
-configRouter.get('/about', getAbout)
 configRouter.get('/',
+  openapiOperationDoc({ operationId: 'getConfig' }),
   asyncMiddleware(getConfig)
 )
 
+configRouter.get('/about',
+  openapiOperationDoc({ operationId: 'getAbout' }),
+  getAbout
+)
+
 configRouter.get('/custom',
+  openapiOperationDoc({ operationId: 'getCustomConfig' }),
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
   getCustomConfig
 )
+
 configRouter.put('/custom',
+  openapiOperationDoc({ operationId: 'putCustomConfig' }),
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
   customConfigUpdateValidator,
   asyncMiddleware(updateCustomConfig)
 )
+
 configRouter.delete('/custom',
+  openapiOperationDoc({ operationId: 'delCustomConfig' }),
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
   asyncMiddleware(deleteCustomConfig)
 )
 
-let serverCommit: string
-
 async function getConfig (req: express.Request, res: express.Response) {
-  const { allowed } = await Hooks.wrapPromiseFun(
-    isSignupAllowed,
-    {
-      ip: req.ip
-    },
-    'filter:api.user.signup.allowed.result'
-  )
-
-  const allowedForCurrentIP = isSignupAllowedForCurrentIP(req.ip)
-  const defaultTheme = getThemeOrDefault(CONFIG.THEME.DEFAULT, DEFAULT_THEME_NAME)
-
-  if (serverCommit === undefined) serverCommit = await getServerCommit()
-
-  const json: ServerConfig = {
-    instance: {
-      name: CONFIG.INSTANCE.NAME,
-      shortDescription: CONFIG.INSTANCE.SHORT_DESCRIPTION,
-      defaultClientRoute: CONFIG.INSTANCE.DEFAULT_CLIENT_ROUTE,
-      isNSFW: CONFIG.INSTANCE.IS_NSFW,
-      defaultNSFWPolicy: CONFIG.INSTANCE.DEFAULT_NSFW_POLICY,
-      customizations: {
-        javascript: CONFIG.INSTANCE.CUSTOMIZATIONS.JAVASCRIPT,
-        css: CONFIG.INSTANCE.CUSTOMIZATIONS.CSS
-      }
-    },
-    search: {
-      remoteUri: {
-        users: CONFIG.SEARCH.REMOTE_URI.USERS,
-        anonymous: CONFIG.SEARCH.REMOTE_URI.ANONYMOUS
-      },
-      searchIndex: {
-        enabled: CONFIG.SEARCH.SEARCH_INDEX.ENABLED,
-        url: CONFIG.SEARCH.SEARCH_INDEX.URL,
-        disableLocalSearch: CONFIG.SEARCH.SEARCH_INDEX.DISABLE_LOCAL_SEARCH,
-        isDefaultSearch: CONFIG.SEARCH.SEARCH_INDEX.IS_DEFAULT_SEARCH
-      }
-    },
-    plugin: {
-      registered: getRegisteredPlugins(),
-      registeredExternalAuths: getExternalAuthsPlugins(),
-      registeredIdAndPassAuths: getIdAndPassAuthPlugins()
-    },
-    theme: {
-      registered: getRegisteredThemes(),
-      default: defaultTheme
-    },
-    email: {
-      enabled: isEmailEnabled()
-    },
-    contactForm: {
-      enabled: CONFIG.CONTACT_FORM.ENABLED
-    },
-    serverVersion: PEERTUBE_VERSION,
-    serverCommit,
-    signup: {
-      allowed,
-      allowedForCurrentIP,
-      requiresEmailVerification: CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION
-    },
-    transcoding: {
-      hls: {
-        enabled: CONFIG.TRANSCODING.HLS.ENABLED
-      },
-      webtorrent: {
-        enabled: CONFIG.TRANSCODING.WEBTORRENT.ENABLED
-      },
-      enabledResolutions: getEnabledResolutions()
-    },
-    import: {
-      videos: {
-        http: {
-          enabled: CONFIG.IMPORT.VIDEOS.HTTP.ENABLED
-        },
-        torrent: {
-          enabled: CONFIG.IMPORT.VIDEOS.TORRENT.ENABLED
-        }
-      }
-    },
-    autoBlacklist: {
-      videos: {
-        ofUsers: {
-          enabled: CONFIG.AUTO_BLACKLIST.VIDEOS.OF_USERS.ENABLED
-        }
-      }
-    },
-    avatar: {
-      file: {
-        size: {
-          max: CONSTRAINTS_FIELDS.ACTORS.AVATAR.FILE_SIZE.max
-        },
-        extensions: CONSTRAINTS_FIELDS.ACTORS.AVATAR.EXTNAME
-      }
-    },
-    video: {
-      image: {
-        extensions: CONSTRAINTS_FIELDS.VIDEOS.IMAGE.EXTNAME,
-        size: {
-          max: CONSTRAINTS_FIELDS.VIDEOS.IMAGE.FILE_SIZE.max
-        }
-      },
-      file: {
-        extensions: CONSTRAINTS_FIELDS.VIDEOS.EXTNAME
-      }
-    },
-    videoCaption: {
-      file: {
-        size: {
-          max: CONSTRAINTS_FIELDS.VIDEO_CAPTIONS.CAPTION_FILE.FILE_SIZE.max
-        },
-        extensions: CONSTRAINTS_FIELDS.VIDEO_CAPTIONS.CAPTION_FILE.EXTNAME
-      }
-    },
-    user: {
-      videoQuota: CONFIG.USER.VIDEO_QUOTA,
-      videoQuotaDaily: CONFIG.USER.VIDEO_QUOTA_DAILY
-    },
-    trending: {
-      videos: {
-        intervalDays: CONFIG.TRENDING.VIDEOS.INTERVAL_DAYS
-      }
-    },
-    tracker: {
-      enabled: CONFIG.TRACKER.ENABLED
-    },
-
-    followings: {
-      instance: {
-        autoFollowIndex: {
-          indexUrl: CONFIG.FOLLOWINGS.INSTANCE.AUTO_FOLLOW_INDEX.INDEX_URL
-        }
-      }
-    },
-
-    broadcastMessage: {
-      enabled: CONFIG.BROADCAST_MESSAGE.ENABLED,
-      message: CONFIG.BROADCAST_MESSAGE.MESSAGE,
-      level: CONFIG.BROADCAST_MESSAGE.LEVEL,
-      dismissable: CONFIG.BROADCAST_MESSAGE.DISMISSABLE
-    }
-  }
+  const json = await ServerConfigManager.Instance.getServerConfig(req.ip)
 
   return res.json(json)
 }
@@ -213,13 +77,13 @@ function getAbout (req: express.Request, res: express.Response) {
     }
   }
 
-  return res.json(about).end()
+  return res.json(about)
 }
 
 function getCustomConfig (req: express.Request, res: express.Response) {
   const data = customConfig()
 
-  return res.json(data).end()
+  return res.json(data)
 }
 
 async function deleteCustomConfig (req: express.Request, res: express.Response) {
@@ -232,7 +96,7 @@ async function deleteCustomConfig (req: express.Request, res: express.Response) 
 
   const data = customConfig()
 
-  return res.json(data).end()
+  return res.json(data)
 }
 
 async function updateCustomConfig (req: express.Request, res: express.Response) {
@@ -254,79 +118,13 @@ async function updateCustomConfig (req: express.Request, res: express.Response) 
     oldCustomConfigAuditKeys
   )
 
-  return res.json(data).end()
-}
-
-function getRegisteredThemes () {
-  return PluginManager.Instance.getRegisteredThemes()
-                      .map(t => ({
-                        name: t.name,
-                        version: t.version,
-                        description: t.description,
-                        css: t.css,
-                        clientScripts: t.clientScripts
-                      }))
-}
-
-function getEnabledResolutions () {
-  return Object.keys(CONFIG.TRANSCODING.RESOLUTIONS)
-               .filter(key => CONFIG.TRANSCODING.ENABLED && CONFIG.TRANSCODING.RESOLUTIONS[key] === true)
-               .map(r => parseInt(r, 10))
-}
-
-function getRegisteredPlugins () {
-  return PluginManager.Instance.getRegisteredPlugins()
-                      .map(p => ({
-                        name: p.name,
-                        version: p.version,
-                        description: p.description,
-                        clientScripts: p.clientScripts
-                      }))
-}
-
-function getIdAndPassAuthPlugins () {
-  const result: RegisteredIdAndPassAuthConfig[] = []
-
-  for (const p of PluginManager.Instance.getIdAndPassAuths()) {
-    for (const auth of p.idAndPassAuths) {
-      result.push({
-        npmName: p.npmName,
-        name: p.name,
-        version: p.version,
-        authName: auth.authName,
-        weight: auth.getWeight()
-      })
-    }
-  }
-
-  return result
-}
-
-function getExternalAuthsPlugins () {
-  const result: RegisteredExternalAuthConfig[] = []
-
-  for (const p of PluginManager.Instance.getExternalAuths()) {
-    for (const auth of p.externalAuths) {
-      result.push({
-        npmName: p.npmName,
-        name: p.name,
-        version: p.version,
-        authName: auth.authName,
-        authDisplayName: auth.authDisplayName()
-      })
-    }
-  }
-
-  return result
+  return res.json(data)
 }
 
 // ---------------------------------------------------------------------------
 
 export {
-  configRouter,
-  getEnabledResolutions,
-  getRegisteredPlugins,
-  getRegisteredThemes
+  configRouter
 }
 
 // ---------------------------------------------------------------------------
@@ -351,8 +149,10 @@ function customConfig (): CustomConfig {
       categories: CONFIG.INSTANCE.CATEGORIES,
 
       isNSFW: CONFIG.INSTANCE.IS_NSFW,
-      defaultClientRoute: CONFIG.INSTANCE.DEFAULT_CLIENT_ROUTE,
       defaultNSFWPolicy: CONFIG.INSTANCE.DEFAULT_NSFW_POLICY,
+
+      defaultClientRoute: CONFIG.INSTANCE.DEFAULT_CLIENT_ROUTE,
+
       customizations: {
         css: CONFIG.INSTANCE.CUSTOMIZATIONS.CSS,
         javascript: CONFIG.INSTANCE.CUSTOMIZATIONS.JAVASCRIPT
@@ -373,12 +173,16 @@ function customConfig (): CustomConfig {
       },
       captions: {
         size: CONFIG.CACHE.VIDEO_CAPTIONS.SIZE
+      },
+      torrents: {
+        size: CONFIG.CACHE.TORRENTS.SIZE
       }
     },
     signup: {
       enabled: CONFIG.SIGNUP.ENABLED,
       limit: CONFIG.SIGNUP.LIMIT,
-      requiresEmailVerification: CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION
+      requiresEmailVerification: CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION,
+      minimumAge: CONFIG.SIGNUP.MINIMUM_AGE
     },
     admin: {
       email: CONFIG.ADMIN.EMAIL
@@ -395,6 +199,8 @@ function customConfig (): CustomConfig {
       allowAdditionalExtensions: CONFIG.TRANSCODING.ALLOW_ADDITIONAL_EXTENSIONS,
       allowAudioFiles: CONFIG.TRANSCODING.ALLOW_AUDIO_FILES,
       threads: CONFIG.TRANSCODING.THREADS,
+      concurrency: CONFIG.TRANSCODING.CONCURRENCY,
+      profile: CONFIG.TRANSCODING.PROFILE,
       resolutions: {
         '0p': CONFIG.TRANSCODING.RESOLUTIONS['0p'],
         '240p': CONFIG.TRANSCODING.RESOLUTIONS['240p'],
@@ -402,6 +208,7 @@ function customConfig (): CustomConfig {
         '480p': CONFIG.TRANSCODING.RESOLUTIONS['480p'],
         '720p': CONFIG.TRANSCODING.RESOLUTIONS['720p'],
         '1080p': CONFIG.TRANSCODING.RESOLUTIONS['1080p'],
+        '1440p': CONFIG.TRANSCODING.RESOLUTIONS['1440p'],
         '2160p': CONFIG.TRANSCODING.RESOLUTIONS['2160p']
       },
       webtorrent: {
@@ -411,13 +218,43 @@ function customConfig (): CustomConfig {
         enabled: CONFIG.TRANSCODING.HLS.ENABLED
       }
     },
+    live: {
+      enabled: CONFIG.LIVE.ENABLED,
+      allowReplay: CONFIG.LIVE.ALLOW_REPLAY,
+      maxDuration: CONFIG.LIVE.MAX_DURATION,
+      maxInstanceLives: CONFIG.LIVE.MAX_INSTANCE_LIVES,
+      maxUserLives: CONFIG.LIVE.MAX_USER_LIVES,
+      transcoding: {
+        enabled: CONFIG.LIVE.TRANSCODING.ENABLED,
+        threads: CONFIG.LIVE.TRANSCODING.THREADS,
+        profile: CONFIG.LIVE.TRANSCODING.PROFILE,
+        resolutions: {
+          '240p': CONFIG.LIVE.TRANSCODING.RESOLUTIONS['240p'],
+          '360p': CONFIG.LIVE.TRANSCODING.RESOLUTIONS['360p'],
+          '480p': CONFIG.LIVE.TRANSCODING.RESOLUTIONS['480p'],
+          '720p': CONFIG.LIVE.TRANSCODING.RESOLUTIONS['720p'],
+          '1080p': CONFIG.LIVE.TRANSCODING.RESOLUTIONS['1080p'],
+          '1440p': CONFIG.LIVE.TRANSCODING.RESOLUTIONS['1440p'],
+          '2160p': CONFIG.LIVE.TRANSCODING.RESOLUTIONS['2160p']
+        }
+      }
+    },
     import: {
       videos: {
+        concurrency: CONFIG.IMPORT.VIDEOS.CONCURRENCY,
         http: {
           enabled: CONFIG.IMPORT.VIDEOS.HTTP.ENABLED
         },
         torrent: {
           enabled: CONFIG.IMPORT.VIDEOS.TORRENT.ENABLED
+        }
+      }
+    },
+    trending: {
+      videos: {
+        algorithms: {
+          enabled: CONFIG.TRENDING.VIDEOS.ALGORITHMS.ENABLED,
+          default: CONFIG.TRENDING.VIDEOS.ALGORITHMS.DEFAULT
         }
       }
     },

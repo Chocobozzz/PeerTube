@@ -3,11 +3,11 @@ import * as Sequelize from 'sequelize'
 import { logger } from '@server/helpers/logger'
 import { sequelizeTypescript } from '@server/initializers/database'
 import { ResultList } from '../../shared/models'
-import { VideoCommentThreadTree } from '../../shared/models/videos/video-comment.model'
+import { VideoCommentThreadTree } from '../../shared/models/videos/comment/video-comment.model'
 import { VideoCommentModel } from '../models/video/video-comment'
-import { MAccountDefault, MComment, MCommentOwnerVideoReply, MVideoFullLight, MCommentOwnerVideo } from '../types/models'
+import { MAccountDefault, MComment, MCommentOwnerVideo, MCommentOwnerVideoReply, MVideoFullLight } from '../types/models'
 import { sendCreateVideoComment, sendDeleteVideoComment } from './activitypub/send'
-import { getVideoCommentActivityPubUrl } from './activitypub/url'
+import { getLocalVideoCommentActivityPubUrl } from './activitypub/url'
 import { Hooks } from './plugins/hooks'
 
 async function removeComment (videoCommentInstance: MCommentOwnerVideo) {
@@ -18,9 +18,9 @@ async function removeComment (videoCommentInstance: MCommentOwnerVideo) {
       await sendDeleteVideoComment(videoCommentInstance, t)
     }
 
-    markCommentAsDeleted(videoCommentInstance)
+    videoCommentInstance.markAsDeleted()
 
-    await videoCommentInstance.save()
+    await videoCommentInstance.save({ transaction: t })
   })
 
   logger.info('Video comment %d deleted.', videoCommentInstance.id)
@@ -51,7 +51,7 @@ async function createVideoComment (obj: {
     url: new Date().toISOString()
   }, { transaction: t, validate: false })
 
-  comment.url = getVideoCommentActivityPubUrl(obj.video, comment)
+  comment.url = getLocalVideoCommentActivityPubUrl(obj.video, comment)
 
   const savedComment: MCommentOwnerVideoReply = await comment.save({ transaction: t })
   savedComment.InReplyToVideoComment = obj.inReplyToComment
@@ -95,17 +95,10 @@ function buildFormattedCommentTree (resultList: ResultList<VideoCommentModel>): 
   return thread
 }
 
-function markCommentAsDeleted (comment: MComment): void {
-  comment.text = ''
-  comment.deletedAt = new Date()
-  comment.accountId = null
-}
-
 // ---------------------------------------------------------------------------
 
 export {
   removeComment,
   createVideoComment,
-  buildFormattedCommentTree,
-  markCommentAsDeleted
+  buildFormattedCommentTree
 }

@@ -1,11 +1,12 @@
 import * as express from 'express'
 import { body, param, query } from 'express-validator'
-import { logger } from '../../helpers/logger'
-import { areValidationErrors } from './utils'
-import { ActorFollowModel } from '../../models/activitypub/actor-follow'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 import { areValidActorHandles, isValidActorHandle } from '../../helpers/custom-validators/activitypub/actor'
 import { toArray } from '../../helpers/custom-validators/misc'
+import { logger } from '../../helpers/logger'
 import { WEBSERVER } from '../../initializers/constants'
+import { ActorFollowModel } from '../../models/actor/actor-follow'
+import { areValidationErrors } from './shared'
 
 const userSubscriptionListValidator = [
   query('search').optional().not().isEmpty().withMessage('Should have a valid search'),
@@ -60,11 +61,10 @@ const userSubscriptionGetValidator = [
     const subscription = await ActorFollowModel.loadByActorAndTargetNameAndHostForAPI(user.Account.Actor.id, name, host)
 
     if (!subscription || !subscription.ActorFollowing.VideoChannel) {
-      return res
-        .status(404)
-        .json({
-          error: `Subscription ${req.params.uri} not found.`
-        })
+      return res.fail({
+        status: HttpStatusCode.NOT_FOUND_404,
+        message: `Subscription ${req.params.uri} not found.`
+      })
     }
 
     res.locals.subscription = subscription

@@ -29,20 +29,27 @@ languages=(
     ["ja"]="ja-JP"
     ["eu"]="eu-ES"
     ["ca"]="ca-ES"
+    ["gl"]="gl-ES"
     ["cs"]="cs-CZ"
     ["eo"]="eo"
     ["de"]="de-DE"
     ["it"]="it-IT"
+    ["sq"]="sq"
     ["kab"]="kab"
 )
 
 cd client
 
-rm -rf ./dist ./compiled
+rm -rf ./dist
 
 # Don't build other languages if --light arg is provided
-if [ -z ${1+x} ] || ([ "$1" != "--light" ] && [ "$1" != "--analyze-bundle" ] && [ "$1" != "--i18n" ]); then
-    npm run ng build -- --prod --output-path "dist/build"
+if [ -z ${1+x} ] || ([ "$1" != "--light" ] && [ "$1" != "--analyze-bundle" ]); then
+    additionalParams=""
+    if [ ! -z ${1+x} ] && [ "$1" == "--source-map" ]; then
+        additionalParams="--sourceMap=true"
+    fi
+
+    node --max_old_space_size=8192 node_modules/.bin/ng build --configuration production --output-path "dist/build" $additionalParams
 
     for key in "${!languages[@]}"; do
         lang=${languages[$key]}
@@ -56,7 +63,6 @@ if [ -z ${1+x} ] || ([ "$1" != "--light" ] && [ "$1" != "--analyze-bundle" ] && 
     done
 
     mv "./dist/$defaultLanguage/assets" "./dist"
-    mv "./dist/$defaultLanguage/manifest.webmanifest" "./dist/manifest.webmanifest"
 
     rmdir "dist/build"
 else
@@ -66,13 +72,11 @@ else
         export ANALYZE_BUNDLE=true
     fi
 
-    if [ ! -z ${1+x} ] && [ "$1" == "--i18n" ]; then
-        additionalParams="--configuration=i18n"
-        export ANALYZE_BUNDLE=true
-    fi
-
-    npm run ng build -- --localize=false --output-path "dist/$defaultLanguage/" --deploy-url "/client/$defaultLanguage/" --prod --stats-json $additionalParams
+    node --max_old_space_size=8192 node_modules/.bin/ng build --localize=false --output-path "dist/$defaultLanguage/" \
+                        --deploy-url "/client/$defaultLanguage/" --configuration production --stats-json $additionalParams
 fi
+
+cp "./dist/$defaultLanguage/manifest.webmanifest" "./dist/manifest.webmanifest"
 
 cd ../ && npm run build:embed && cd client/
 

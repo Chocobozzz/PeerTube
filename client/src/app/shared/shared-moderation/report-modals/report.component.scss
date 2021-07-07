@@ -1,5 +1,5 @@
-@import 'variables';
-@import 'mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 .information {
   margin-bottom: 20px;
@@ -16,12 +16,12 @@ textarea {
   align-items: center;
 
   my-timestamp-input {
-    margin-left: 10px;
+    @include margin-left(10px);
   }
 }
 
 .screenratio {
-  @include large-screen-ratio($selector: 'div, ::ng-deep iframe') {
+  @include block-ratio($selector: 'div, ::ng-deep iframe') {
     left: 0;
   };
 }

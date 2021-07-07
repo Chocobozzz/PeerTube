@@ -1,4 +1,5 @@
 {
+  "$schema": "../node_modules/@angular/service-worker/config/schema.json",
   "index": "/index.html",
   "assetGroups": [
     {
@@ -7,10 +8,9 @@
       "resources": {
         "files": [
           "/index.html",
-          "/client/assets/images/favicon.png",
-          "/client/*.bundle.css",
-          "/client/*.bundle.js",
-          "/client/*.chunk.js",
+          "/client/assets/images/icons/favicon.png",
+          "/client/*.css",
+          "/client/*.js",
           "/manifest.webmanifest"
         ]
       }

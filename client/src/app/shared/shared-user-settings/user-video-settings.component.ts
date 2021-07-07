@@ -3,9 +3,10 @@ import { forkJoin, Subject, Subscription } from 'rxjs'
 import { first } from 'rxjs/operators'
 import { Component, Input, OnDestroy, OnInit } from '@angular/core'
 import { AuthService, Notifier, ServerService, User, UserService } from '@app/core'
-import { FormReactive, FormValidatorService, ItemSelectCheckboxValue, SelectOptionsItem } from '@app/shared/shared-forms'
+import { FormReactive, FormValidatorService, ItemSelectCheckboxValue } from '@app/shared/shared-forms'
 import { UserUpdateMe } from '@shared/models'
 import { NSFWPolicyType } from '@shared/models/videos/nsfw-policy.type'
+import { SelectOptionsItem } from '../../../types/select-options-item.model'
 
 @Component({
   selector: 'my-user-video-settings',
@@ -37,8 +38,6 @@ export class UserVideoSettingsComponent extends FormReactive implements OnInit, 
   ngOnInit () {
     this.allLanguagesGroup = $localize`All languages`
 
-    let oldForm: any
-
     this.buildForm({
       nsfwPolicy: null,
       webTorrentEnabled: null,
@@ -49,9 +48,8 @@ export class UserVideoSettingsComponent extends FormReactive implements OnInit, 
 
     forkJoin([
       this.serverService.getVideoLanguages(),
-      this.serverService.getConfig(),
       this.userInformationLoaded.pipe(first())
-    ]).subscribe(([ languages, config ]) => {
+    ]).subscribe(([ languages ]) => {
       const group = this.allLanguagesGroup
 
       this.languageItems = [ { label: $localize`Unknown language`, id: '_unknown', group } ]
@@ -62,7 +60,8 @@ export class UserVideoSettingsComponent extends FormReactive implements OnInit, 
         ? this.user.videoLanguages.map(l => ({ id: l }))
         : [ { group } ]
 
-      this.defaultNSFWPolicy = config.instance.defaultNSFWPolicy
+      const serverConfig = this.serverService.getHTMLConfig()
+      this.defaultNSFWPolicy = serverConfig.instance.defaultNSFWPolicy
 
       this.form.patchValue({
         nsfwPolicy: this.user.nsfwPolicy || this.defaultNSFWPolicy,
@@ -72,16 +71,7 @@ export class UserVideoSettingsComponent extends FormReactive implements OnInit, 
         videoLanguages
       })
 
-      if (this.reactiveUpdate) {
-        oldForm = { ...this.form.value }
-
-        this.formValuesWatcher = this.form.valueChanges.subscribe((formValue: any) => {
-          const updatedKey = Object.keys(formValue).find(k => formValue[k] !== oldForm[k])
-          oldForm = { ...this.form.value }
-
-          this.updateDetails([ updatedKey ])
-        })
-      }
+      if (this.reactiveUpdate) this.handleReactiveUpdate()
     })
   }
 
@@ -95,7 +85,7 @@ export class UserVideoSettingsComponent extends FormReactive implements OnInit, 
     const autoPlayVideo = this.form.value['autoPlayVideo']
     const autoPlayNextVideo = this.form.value['autoPlayNextVideo']
 
-    const videoLanguagesForm = this.form.value['videoLanguages']
+    let videoLanguagesForm = this.form.value['videoLanguages']
 
     if (Array.isArray(videoLanguagesForm)) {
       if (videoLanguagesForm.length > 20) {
@@ -103,13 +93,14 @@ export class UserVideoSettingsComponent extends FormReactive implements OnInit, 
         return
       }
 
+      // Automatically use "All languages" if the user did not select any language
       if (videoLanguagesForm.length === 0) {
-        this.notifier.error($localize`You need to enable at least 1 video language.`)
-        return
+        videoLanguagesForm = [ this.allLanguagesGroup ]
+        this.form.patchValue({ videoLanguages: [ { group: this.allLanguagesGroup } ] })
       }
     }
 
-    const videoLanguages = this.getVideoLanguages(videoLanguagesForm)
+    const videoLanguages = this.buildLanguagesFromForm(videoLanguagesForm)
 
     let details: UserUpdateMe = {
       nsfwPolicy,
@@ -126,22 +117,13 @@ export class UserVideoSettingsComponent extends FormReactive implements OnInit, 
     if (onlyKeys) details = pick(details, onlyKeys)
 
     if (this.authService.isLoggedIn()) {
-      this.userService.updateMyProfile(details).subscribe(
-        () => {
-          this.authService.refreshUserInformation()
-
-          if (this.notifyOnUpdate) this.notifier.success($localize`Video settings updated.`)
-        },
-
-        err => this.notifier.error(err.message)
-      )
-    } else {
-      this.userService.updateMyAnonymousProfile(details)
-      if (this.notifyOnUpdate) this.notifier.success($localize`Display/Video settings updated.`)
+      return this.updateLoggedProfile(details)
     }
+
+    return this.updateAnonymousProfile(details)
   }
 
-  private getVideoLanguages (videoLanguages: ItemSelectCheckboxValue[]) {
+  private buildLanguagesFromForm (videoLanguages: ItemSelectCheckboxValue[]) {
     if (!Array.isArray(videoLanguages)) return undefined
 
     // null means "All"
@@ -164,5 +146,35 @@ export class UserVideoSettingsComponent extends FormReactive implements OnInit, 
 
       return l.id + ''
     })
+  }
+
+  private handleReactiveUpdate () {
+    let oldForm = { ...this.form.value }
+
+    this.formValuesWatcher = this.form.valueChanges.subscribe((formValue: any) => {
+      const updatedKey = Object.keys(formValue)
+                               .find(k => formValue[k] !== oldForm[k])
+
+      oldForm = { ...this.form.value }
+
+      this.updateDetails([ updatedKey ])
+    })
+  }
+
+  private updateLoggedProfile (details: UserUpdateMe) {
+    this.userService.updateMyProfile(details).subscribe(
+      () => {
+        this.authService.refreshUserInformation()
+
+        if (this.notifyOnUpdate) this.notifier.success($localize`Video settings updated.`)
+      },
+
+      err => this.notifier.error(err.message)
+    )
+  }
+
+  private updateAnonymousProfile (details: UserUpdateMe) {
+    this.userService.updateMyAnonymousProfile(details)
+    if (this.notifyOnUpdate) this.notifier.success($localize`Display/Video settings updated.`)
   }
 }

@@ -7,7 +7,6 @@ if (isTestInstance()) {
 }
 
 // ----------- Node modules -----------
-import * as bodyParser from 'body-parser'
 import * as express from 'express'
 import * as morgan from 'morgan'
 import * as cors from 'cors'
@@ -15,12 +14,12 @@ import * as cookieParser from 'cookie-parser'
 import * as helmet from 'helmet'
 import * as useragent from 'useragent'
 import * as anonymize from 'ip-anonymize'
-import * as cli from 'commander'
+import { program as cli } from 'commander'
 
 process.title = 'peertube'
 
 // Create our main app
-const app = express()
+const app = express().disable("x-powered-by")
 
 // ----------- Core checker -----------
 import { checkMissedConfig, checkFFmpeg, checkNodeVersion } from './server/initializers/checker-before-init'
@@ -44,7 +43,7 @@ checkFFmpeg(CONFIG)
 
 checkNodeVersion()
 
-import { checkConfig, checkActivityPubUrls } from './server/initializers/checker-after-init'
+import { checkConfig, checkActivityPubUrls, checkFFmpegVersion } from './server/initializers/checker-after-init'
 
 const errorMessage = checkConfig()
 if (errorMessage !== null) {
@@ -59,11 +58,11 @@ import { baseCSP } from './server/middlewares/csp'
 
 if (CONFIG.CSP.ENABLED) {
   app.use(baseCSP)
-  app.use(helmet({
-    frameguard: {
-      action: 'deny' // we only allow it for /videos/embed, see server/controllers/client.ts
-    },
-    hsts: false
+}
+
+if (CONFIG.SECURITY.FRAMEGUARD.ENABLED) {
+  app.use(helmet.frameguard({
+    action: 'deny' // we only allow it for /videos/embed, see server/controllers/client.ts
   }))
 }
 
@@ -98,12 +97,16 @@ import {
   staticRouter,
   lazyStaticRouter,
   servicesRouter,
+  liveRouter,
   pluginsRouter,
   webfingerRouter,
   trackerRouter,
-  createWebsocketTrackerServer, botsRouter
+  createWebsocketTrackerServer,
+  botsRouter,
+  downloadRouter
 } from './server/controllers'
 import { advertiseDoNotTrack } from './server/middlewares/dnt'
+import { apiFailMiddleware } from './server/middlewares/error'
 import { Redis } from './server/lib/redis'
 import { ActorFollowScheduler } from './server/lib/schedulers/actor-follow-scheduler'
 import { RemoveOldViewsScheduler } from './server/lib/schedulers/remove-old-views-scheduler'
@@ -113,12 +116,18 @@ import { YoutubeDlUpdateScheduler } from './server/lib/schedulers/youtube-dl-upd
 import { VideosRedundancyScheduler } from './server/lib/schedulers/videos-redundancy-scheduler'
 import { RemoveOldHistoryScheduler } from './server/lib/schedulers/remove-old-history-scheduler'
 import { AutoFollowIndexInstances } from './server/lib/schedulers/auto-follow-index-instances'
+import { RemoveDanglingResumableUploadsScheduler } from './server/lib/schedulers/remove-dangling-resumable-uploads-scheduler'
 import { isHTTPSignatureDigestValid } from './server/helpers/peertube-crypto'
 import { PeerTubeSocket } from './server/lib/peertube-socket'
 import { updateStreamingPlaylistsInfohashesIfNeeded } from './server/lib/hls'
 import { PluginsCheckScheduler } from './server/lib/schedulers/plugins-check-scheduler'
+import { PeerTubeVersionCheckScheduler } from './server/lib/schedulers/peertube-version-check-scheduler'
 import { Hooks } from './server/lib/plugins/hooks'
 import { PluginManager } from './server/lib/plugins/plugin-manager'
+import { LiveManager } from './server/lib/live'
+import { HttpStatusCode } from './shared/core-utils/miscs/http-error-codes'
+import { VideosTorrentCache } from '@server/lib/files-cache/videos-torrent-cache'
+import { ServerConfigManager } from '@server/lib/server-config-manager'
 
 // ----------- Command line -----------
 
@@ -139,14 +148,14 @@ if (isTestInstance()) {
 }
 
 // For the logger
-morgan.token<express.Request>('remote-addr', req => {
+morgan.token('remote-addr', (req: express.Request) => {
   if (CONFIG.LOG.ANONYMIZE_IP === true || req.get('DNT') === '1') {
     return anonymize(req.ip, 16, 16)
   }
 
   return req.ip
 })
-morgan.token<express.Request>('user-agent', req => {
+morgan.token('user-agent', (req: express.Request) => {
   if (req.get('DNT') === '1') {
     return useragent.parse(req.get('user-agent')).family
   }
@@ -154,17 +163,29 @@ morgan.token<express.Request>('user-agent', req => {
   return req.get('user-agent')
 })
 app.use(morgan('combined', {
-  stream: { write: logger.info.bind(logger) }
+  stream: {
+    write: (str: string) => logger.info(str, { tags: [ 'http' ] })
+  },
+  skip: req => CONFIG.LOG.LOG_PING_REQUESTS === false && req.originalUrl === '/api/v1/ping'
 }))
 
+// Add .fail() helper to response
+app.use(apiFailMiddleware)
+
 // For body requests
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json({
+app.use(express.urlencoded({ extended: false }))
+app.use(express.json({
   type: [ 'application/json', 'application/*+json' ],
   limit: '500kb',
-  verify: (req: express.Request, _, buf: Buffer) => {
+  verify: (req: express.Request, res: express.Response, buf: Buffer) => {
     const valid = isHTTPSignatureDigestValid(buf, req)
-    if (valid !== true) throw new Error('Invalid digest')
+
+    if (valid !== true) {
+      res.fail({
+        status: HttpStatusCode.FORBIDDEN_403,
+        message: 'Invalid digest'
+      })
+    }
   }
 }))
 
@@ -183,6 +204,9 @@ app.use(apiRoute, apiRouter)
 // Services (oembed...)
 app.use('/services', servicesRouter)
 
+// Live streaming
+app.use('/live', liveRouter)
+
 // Plugins & themes
 app.use('/', pluginsRouter)
 
@@ -194,31 +218,36 @@ app.use('/', botsRouter)
 
 // Static files
 app.use('/', staticRouter)
+app.use('/', downloadRouter)
 app.use('/', lazyStaticRouter)
 
 // Client files, last valid routes!
-if (cli.client) app.use('/', clientsRouter)
+const cliOptions = cli.opts()
+if (cliOptions.client) app.use('/', clientsRouter)
 
 // ----------- Errors -----------
 
-// Catch 404 and forward to error handler
-app.use(function (req, res, next) {
-  const err = new Error('Not Found')
-  err['status'] = 404
-  next(err)
+// Catch unmatched routes
+app.use((req, res: express.Response) => {
+  res.status(HttpStatusCode.NOT_FOUND_404).end()
 })
 
-app.use(function (err, req, res, next) {
+// Catch thrown errors
+app.use((err, req, res: express.Response, next) => {
+  // Format error to be logged
   let error = 'Unknown error.'
   if (err) {
     error = err.stack || err.message || err
   }
-
-  // Sequelize error
+  // Handling Sequelize error traces
   const sql = err.parent ? err.parent.sql : undefined
-
   logger.error('Error in controller.', { err: error, sql })
-  return res.status(err.status || 500).end()
+
+  return res.fail({
+    status: err.status || HttpStatusCode.INTERNAL_SERVER_ERROR_500,
+    message: err.message,
+    type: err.name
+  })
 })
 
 const server = createWebsocketTrackerServer(app)
@@ -238,17 +267,22 @@ async function startApplication () {
       process.exit(-1)
     })
 
+  checkFFmpegVersion()
+    .catch(err => logger.error('Cannot check ffmpeg version', { err }))
+
   // Email initialization
   Emailer.Instance.init()
 
   await Promise.all([
-    Emailer.Instance.checkConnectionOrDie(),
-    JobQueue.Instance.init()
+    Emailer.Instance.checkConnection(),
+    JobQueue.Instance.init(),
+    ServerConfigManager.Instance.init()
   ])
 
   // Caches initializations
   VideosPreviewCache.Instance.init(CONFIG.CACHE.PREVIEWS.SIZE, FILES_CACHE.PREVIEWS.MAX_AGE)
   VideosCaptionCache.Instance.init(CONFIG.CACHE.VIDEO_CAPTIONS.SIZE, FILES_CACHE.VIDEO_CAPTIONS.MAX_AGE)
+  VideosTorrentCache.Instance.init(CONFIG.CACHE.TORRENTS.SIZE, FILES_CACHE.TORRENTS.MAX_AGE)
 
   // Enable Schedulers
   ActorFollowScheduler.Instance.enable()
@@ -259,7 +293,9 @@ async function startApplication () {
   RemoveOldHistoryScheduler.Instance.enable()
   RemoveOldViewsScheduler.Instance.enable()
   PluginsCheckScheduler.Instance.enable()
+  PeerTubeVersionCheckScheduler.Instance.enable()
   AutoFollowIndexInstances.Instance.enable()
+  RemoveDanglingResumableUploadsScheduler.Instance.enable()
 
   // Redis initialization
   Redis.Instance.init()
@@ -269,11 +305,14 @@ async function startApplication () {
   updateStreamingPlaylistsInfohashesIfNeeded()
     .catch(err => logger.error('Cannot update streaming playlist infohashes.', { err }))
 
-  if (cli.plugins) await PluginManager.Instance.registerPluginsAndThemes()
+  if (cliOptions.plugins) await PluginManager.Instance.registerPluginsAndThemes()
+
+  LiveManager.Instance.init()
+  if (CONFIG.LIVE.ENABLED) LiveManager.Instance.run()
 
   // Make server listening
   server.listen(port, hostname, () => {
-    logger.info('Server listening on %s:%d', hostname, port)
+    logger.info('HTTP server listening on %s:%d', hostname, port)
     logger.info('Web server: %s', WEBSERVER.URL)
 
     Hooks.runAction('action:application.listening')

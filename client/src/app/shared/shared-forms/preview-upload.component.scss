@@ -1,5 +1,5 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 .root {
   height: auto;
@@ -21,7 +21,7 @@
       max-width: 100%;
 
       &.no-image {
-        border: 2px solid grey;
+        border: 2px solid #808080;
         background-color: pvar(--mainBackgroundColor);
       }
     }

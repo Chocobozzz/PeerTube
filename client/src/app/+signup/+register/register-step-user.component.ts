@@ -7,7 +7,6 @@ import {
   USER_DISPLAY_NAME_REQUIRED_VALIDATOR,
   USER_EMAIL_VALIDATOR,
   USER_PASSWORD_VALIDATOR,
-  USER_TERMS_VALIDATOR,
   USER_USERNAME_VALIDATOR
 } from '@app/shared/form-validators/user-validators'
 import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
@@ -18,11 +17,9 @@ import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
   styleUrls: [ './register.component.scss' ]
 })
 export class RegisterStepUserComponent extends FormReactive implements OnInit {
-  @Input() hasCodeOfConduct = false
+  @Input() videoUploadDisabled = false
 
   @Output() formBuilt = new EventEmitter<FormGroup>()
-  @Output() termsClick = new EventEmitter<void>()
-  @Output() codeOfConductClick = new EventEmitter<void>()
 
   constructor (
     protected formValidatorService: FormValidatorService,
@@ -40,8 +37,7 @@ export class RegisterStepUserComponent extends FormReactive implements OnInit {
       displayName: USER_DISPLAY_NAME_REQUIRED_VALIDATOR,
       username: USER_USERNAME_VALIDATOR,
       password: USER_PASSWORD_VALIDATOR,
-      email: USER_EMAIL_VALIDATOR,
-      terms: USER_TERMS_VALIDATOR
+      email: USER_EMAIL_VALIDATOR
     })
 
     setTimeout(() => this.formBuilt.emit(this.form))
@@ -51,16 +47,6 @@ export class RegisterStepUserComponent extends FormReactive implements OnInit {
       this.form.get('displayName').valueChanges
     ).pipe(pairwise())
      .subscribe(([ oldValue, newValue ]) => this.onDisplayNameChange(oldValue, newValue))
-  }
-
-  onTermsClick (event: Event) {
-    event.preventDefault()
-    this.termsClick.emit()
-  }
-
-  onCodeOfConductClick (event: Event) {
-    event.preventDefault()
-    this.codeOfConductClick.emit()
   }
 
   private onDisplayNameChange (oldDisplayName: string, newDisplayName: string) {

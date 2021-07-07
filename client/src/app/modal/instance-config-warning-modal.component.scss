@@ -1,9 +1,5 @@
-@import '_mixins';
-@import '_variables';
-
-.action-button-cancel {
-  margin-right: 0 !important;
-}
+@use '_mixins' as *;
+@use '_variables' as *;
 
 .modal-body {
   font-size: 15px;
@@ -17,12 +13,4 @@ li {
   display: block;
   margin: 0 auto 50px;
   width: 25%;
-}
-
-.action-button-configure {
-  display: inline-block;
-
-  @include peertube-button;
-  @include orange-button;
-  @include disable-default-a-behaviour;
 }

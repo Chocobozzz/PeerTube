@@ -1,0 +1,195 @@
+<ng-container [formGroup]="form">
+
+  <div class="form-row mt-4"> <!-- transcoding grid -->
+    <div class="form-group col-12 col-lg-4 col-xl-3"></div>
+    <div class="form-group form-group-right col-12 col-lg-8">
+
+      <div class="callout callout-info">
+        <span i18n>
+          Estimating a server's capacity to transcode and stream videos isn't easy and we can't tune PeerTube automatically.
+        </span>
+        <span i18n>
+          However, you may want to read our guidelines before tweaking the following values.
+        </span>
+
+        <div class="callout-container">
+          <a class="callout-link" target="_blank" rel="noopener noreferrer" href="https://docs.joinpeertube.org/admin-configuration?id=transcoding" i18n>
+            Read guidelines
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-row mt-2"> <!-- transcoding grid -->
+    <div class="form-group col-12 col-lg-4 col-xl-3">
+      <div i18n class="inner-form-title">TRANSCODING</div>
+      <div i18n class="inner-form-description">
+        Process uploaded videos so that they are in a streamable form that any device can play. Though costly in
+        resources, this is a critical part of PeerTube, so tread carefully.
+      </div>
+    </div>
+
+    <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
+
+      <ng-container formGroupName="transcoding">
+
+        <div class="form-group mb-0 col-12 col-xl-11">
+          <my-peertube-checkbox inputName="transcodingEnabled" formControlName="enabled" [recommended]="true">
+            <ng-template ptTemplate="label">
+              <ng-container i18n>Transcoding enabled</ng-container>
+            </ng-template>
+
+            <ng-container ngProjectAs="extra">
+
+              <div class="callout callout-light pt-2 pb-0">
+                <label i18n>Input formats</label>
+
+                <div class="form-group" [ngClass]="getTranscodingDisabledClass()">
+                  <my-peertube-checkbox
+                    inputName="transcodingAllowAdditionalExtensions" formControlName="allowAdditionalExtensions"
+                    i18n-labelText labelText="Allow additional extensions"
+                  >
+                    <ng-container ngProjectAs="description">
+                      <span i18n>Allows users to upload {{ additionalVideoExtensions }} videos.</span>
+                    </ng-container>
+                  </my-peertube-checkbox>
+                </div>
+
+                <div class="form-group" [ngClass]="getTranscodingDisabledClass()">
+                  <my-peertube-checkbox
+                    inputName="transcodingAllowAudioFiles" formControlName="allowAudioFiles"
+                    i18n-labelText labelText="Allow audio files upload"
+                  >
+                    <ng-container ngProjectAs="description">
+                      <div i18n>Allows users to upload .mp3, .ogg, .wma, .flac, .aac, or .ac3 audio files.</div>
+                      <div i18n>The file will be merged in a still image video with the preview file on upload.</div>
+                    </ng-container>
+                  </my-peertube-checkbox>
+                </div>
+              </div>
+
+              <div class="callout callout-light pt-2 mt-2 pb-0">
+                <label i18n>Output formats</label>
+
+                <ng-container formGroupName="webtorrent">
+                  <div class="form-group" [ngClass]="getTranscodingDisabledClass()">
+                    <my-peertube-checkbox
+                      inputName="transcodingWebTorrentEnabled" formControlName="enabled"
+                      i18n-labelText labelText="WebTorrent enabled"
+                    >
+                      <ng-template ptTemplate="help">
+                        <ng-container>
+                          <p i18n>If you also enabled HLS support, it will multiply videos storage by 2</p>
+                        </ng-container>
+                      </ng-template>
+                    </my-peertube-checkbox>
+                  </div>
+                </ng-container>
+
+                <ng-container formGroupName="hls">
+                  <div class="form-group" [ngClass]="getTranscodingDisabledClass()">
+                    <my-peertube-checkbox
+                      inputName="transcodingHlsEnabled" formControlName="enabled"
+                      i18n-labelText labelText="HLS with P2P support enabled"
+                      [recommended]="true"
+                    >
+                      <ng-template ptTemplate="help">
+                        <ng-container i18n>
+                          <strong>Requires ffmpeg >= 4.1</strong>
+
+                          <p>Generate HLS playlists and fragmented MP4 files resulting in a better playback than with plain WebTorrent:</p>
+                          <ul>
+                            <li>Resolution change is smoother</li>
+                            <li>Faster playback especially with long videos</li>
+                            <li>More stable playback (less bugs/infinite loading)</li>
+                          </ul>
+
+                          <p>If you also enabled WebTorrent support, it will multiply videos storage by 2</p>
+                        </ng-container>
+                      </ng-template>
+                    </my-peertube-checkbox>
+                  </div>
+                </ng-container>
+
+                <div class="form-group" [ngClass]="getTranscodingDisabledClass()">
+                  <label i18n>Resolutions to generate per enabled format</label>
+
+                  <div class="ml-2 mt-2 d-flex flex-column">
+                    <ng-container formGroupName="resolutions">
+                      <div class="form-group" *ngFor="let resolution of resolutions">
+                        <my-peertube-checkbox
+                          [inputName]="getResolutionKey(resolution.id)" [formControlName]="resolution.id"
+                          labelText="{{ resolution.label }}"
+                        >
+                          <ng-template *ngIf="resolution.description" ptTemplate="help">
+                            <div [innerHTML]="resolution.description"></div>
+                          </ng-template>
+                        </my-peertube-checkbox>
+                      </div>
+
+                      <span class="mb-2 text-muted" i18n>
+                        The original file resolution will be the default target if no option is selected.
+                      </span>
+                    </ng-container>
+                  </div>
+                </div>
+              </div>
+
+            </ng-container>
+          </my-peertube-checkbox>
+        </div>
+
+        <div class="form-group mt-4" [ngClass]="getTranscodingDisabledClass()">
+          <label i18n for="transcodingThreads">Transcoding threads</label>
+          <span class="text-muted ml-1">
+            <ng-container *ngIf="getTotalTranscodingThreads().atMost" i18n>
+              will claim at most {{ getTotalTranscodingThreads().value }} {{ getTotalTranscodingThreads().unit }} with live transcoding
+            </ng-container>
+
+            <ng-container *ngIf="!getTotalTranscodingThreads().atMost" i18n>
+              will claim at least {{ getTotalTranscodingThreads().value }} {{ getTotalTranscodingThreads().unit }} with live transcoding
+            </ng-container>
+          </span>
+
+          <my-select-custom-value
+            id="transcodingThreads"
+            [items]="transcodingThreadOptions"
+            formControlName="threads"
+            [clearable]="false"
+          ></my-select-custom-value>
+
+          <div *ngIf="formErrors.transcoding.threads" class="form-error">{{ formErrors.transcoding.threads }}</div>
+        </div>
+
+        <div class="form-group mt-4" [ngClass]="getTranscodingDisabledClass()">
+          <label i18n for="transcodingConcurrency">Transcoding jobs concurrency</label>
+          <span class="text-muted ml-1" i18n>allows to transcode multiple files in parallel. ⚠️ Requires a PeerTube restart</span>
+
+          <div class="number-with-unit">
+            <input type="number" name="transcodingConcurrency" formControlName="concurrency" />
+            <span i18n>jobs in parallel</span>
+          </div>
+
+          <div *ngIf="formErrors.transcoding.concurrency" class="form-error">{{ formErrors.transcoding.concurrency }}</div>
+        </div>
+
+        <div class="form-group mt-4" [ngClass]="getTranscodingDisabledClass()">
+          <label i18n for="transcodingProfile">Transcoding profile</label>
+          <span class="text-muted ml-1" i18n>new transcoding profiles can be added by PeerTube plugins</span>
+
+          <my-select-options
+            id="transcodingProfile"
+            formControlName="profile"
+            [items]="transcodingProfiles"
+            [clearable]="false"
+          ></my-select-options>
+
+          <div *ngIf="formErrors.transcoding.profile" class="form-error">{{ formErrors.transcoding.profile }}</div>
+        </div>
+
+      </ng-container>
+
+    </div>
+  </div>
+</ng-container>

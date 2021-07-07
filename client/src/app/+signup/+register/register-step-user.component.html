@@ -1,5 +1,9 @@
 <form role="form" [formGroup]="form">
 
+  <div class="capability-information alert alert-info" i18n *ngIf="videoUploadDisabled">
+    Video uploads are disabled on this instance, hence your account won't be able to upload videos.
+  </div>
+
   <div class="form-group">
     <label for="displayName" i18n>Display name</label>
 
@@ -20,7 +24,7 @@
 
     <div class="input-group">
       <input
-        type="text" id="username" i18n-placeholder placeholder="Example: jane_doe"
+        type="text" id="username" i18n-placeholder="Username choice placeholder in the registration form" placeholder="e.g. jane_doe"
         formControlName="username" class="form-control" [ngClass]="{ 'input-error': formErrors['username'] }"
       >
       <div class="input-group-append">
@@ -50,29 +54,13 @@
 
   <div class="form-group">
     <label for="password" i18n>Password</label>
-    <input
-      type="password" id="password" i18n-placeholder placeholder="Password" autocomplete="new-password"
-      formControlName="password" class="form-control" [ngClass]="{ 'input-error': formErrors['password'] }"
-    >
+    <my-input-toggle-hidden formControlName="password" inputId="password"
+                            i18n-placeholder placeholder="Password"
+                            [ngClass]="{ 'input-error': formErrors['password'] }"
+                            autocomplete="new-password"></my-input-toggle-hidden>
     <div *ngIf="formErrors.password" class="form-error">
       {{ formErrors.password }}
     </div>
   </div>
 
-  <div class="form-group form-group-terms">
-    <my-peertube-checkbox inputName="terms" formControlName="terms">
-      <ng-template ptTemplate="label">
-        <ng-container i18n>
-          I am at least 16 years old and agree
-          to the <a (click)="onTermsClick($event)" href='#'>Terms</a>
-          <ng-container *ngIf="hasCodeOfConduct"> and to the <a (click)="onCodeOfConductClick($event)" href='#'>Code of Conduct</a></ng-container>
-          of this instance
-        </ng-container>
-      </ng-template>
-    </my-peertube-checkbox>
-
-    <div *ngIf="formErrors.terms" class="form-error">
-      {{ formErrors.terms }}
-    </div>
-  </div>
 </form>

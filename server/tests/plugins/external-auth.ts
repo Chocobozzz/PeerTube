@@ -22,6 +22,7 @@ import {
   createUser
 } from '../../../shared/extra-utils'
 import { cleanupTests, flushAndRunServer, ServerInfo, waitUntilLog } from '../../../shared/extra-utils/server/servers'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 async function loginExternal (options: {
   server: ServerInfo
@@ -29,8 +30,8 @@ async function loginExternal (options: {
   authName: string
   username: string
   query?: any
-  statusCodeExpected?: number
-  statusCodeExpectedStep2?: number
+  statusCodeExpected?: HttpStatusCode
+  statusCodeExpectedStep2?: HttpStatusCode
 }) {
   const res = await getExternalAuth({
     url: options.server.url,
@@ -38,10 +39,10 @@ async function loginExternal (options: {
     npmVersion: '0.0.1',
     authName: options.authName,
     query: options.query,
-    statusCodeExpected: options.statusCodeExpected || 302
+    statusCodeExpected: options.statusCodeExpected || HttpStatusCode.FOUND_302
   })
 
-  if (res.status !== 302) return
+  if (res.status !== HttpStatusCode.FOUND_302) return
 
   const location = res.header.location
   const { externalAuthToken } = decodeQueryString(location)
@@ -73,7 +74,7 @@ describe('Test external auth plugins', function () {
     server = await flushAndRunServer(1)
     await setAccessTokensToServers([ server ])
 
-    for (const suffix of [ 'one', 'two' ]) {
+    for (const suffix of [ 'one', 'two', 'three' ]) {
       await installPlugin({
         url: server.url,
         accessToken: server.accessToken,
@@ -88,7 +89,7 @@ describe('Test external auth plugins', function () {
     const config: ServerConfig = res.body
 
     const auths = config.plugin.registeredExternalAuths
-    expect(auths).to.have.lengthOf(6)
+    expect(auths).to.have.lengthOf(8)
 
     const auth2 = auths.find((a) => a.authName === 'external-auth-2')
     expect(auth2).to.exist
@@ -105,7 +106,7 @@ describe('Test external auth plugins', function () {
       query: {
         username: 'cyan'
       },
-      statusCodeExpected: 302
+      statusCodeExpected: HttpStatusCode.FOUND_302
     })
 
     const location = res.header.location
@@ -120,13 +121,13 @@ describe('Test external auth plugins', function () {
   })
 
   it('Should reject auto external login with a missing or invalid token', async function () {
-    await loginUsingExternalToken(server, 'cyan', '', 400)
-    await loginUsingExternalToken(server, 'cyan', 'blabla', 400)
+    await loginUsingExternalToken(server, 'cyan', '', HttpStatusCode.BAD_REQUEST_400)
+    await loginUsingExternalToken(server, 'cyan', 'blabla', HttpStatusCode.BAD_REQUEST_400)
   })
 
   it('Should reject auto external login with a missing or invalid username', async function () {
-    await loginUsingExternalToken(server, '', externalAuthToken, 400)
-    await loginUsingExternalToken(server, '', externalAuthToken, 400)
+    await loginUsingExternalToken(server, '', externalAuthToken, HttpStatusCode.BAD_REQUEST_400)
+    await loginUsingExternalToken(server, '', externalAuthToken, HttpStatusCode.BAD_REQUEST_400)
   })
 
   it('Should reject auto external login with an expired token', async function () {
@@ -134,9 +135,9 @@ describe('Test external auth plugins', function () {
 
     await wait(5000)
 
-    await loginUsingExternalToken(server, 'cyan', externalAuthToken, 400)
+    await loginUsingExternalToken(server, 'cyan', externalAuthToken, HttpStatusCode.BAD_REQUEST_400)
 
-    await waitUntilLog(server, 'expired external auth token')
+    await waitUntilLog(server, 'expired external auth token', 2)
   })
 
   it('Should auto login Cyan, create the user and use the token', async function () {
@@ -202,7 +203,7 @@ describe('Test external auth plugins', function () {
     }
 
     {
-      await refreshToken(server, kefkaRefreshToken, 400)
+      await refreshToken(server, kefkaRefreshToken, HttpStatusCode.BAD_REQUEST_400)
     }
   })
 
@@ -228,7 +229,7 @@ describe('Test external auth plugins', function () {
   it('Should have logged out Cyan', async function () {
     await waitUntilLog(server, 'On logout cyan')
 
-    await getMyUserInformation(server.url, cyanAccessToken, 401)
+    await getMyUserInformation(server.url, cyanAccessToken, HttpStatusCode.UNAUTHORIZED_401)
   })
 
   it('Should login Cyan and keep the old existing profile', async function () {
@@ -261,7 +262,7 @@ describe('Test external auth plugins', function () {
       accessToken: cyanAccessToken,
       email: 'toto@example.com',
       currentPassword: 'toto',
-      statusCodeExpected: 400
+      statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
     })
   })
 
@@ -270,7 +271,7 @@ describe('Test external auth plugins', function () {
 
     await wait(5000)
 
-    await getMyUserInformation(server.url, kefkaAccessToken, 401)
+    await getMyUserInformation(server.url, kefkaAccessToken, HttpStatusCode.UNAUTHORIZED_401)
   })
 
   it('Should unregister external-auth-2 and do not login existing Kefka', async function () {
@@ -281,7 +282,7 @@ describe('Test external auth plugins', function () {
       settings: { disableKefka: true }
     })
 
-    await userLogin(server, { username: 'kefka', password: 'fake' }, 400)
+    await userLogin(server, { username: 'kefka', password: 'fake' }, HttpStatusCode.BAD_REQUEST_400)
 
     await loginExternal({
       server,
@@ -291,7 +292,7 @@ describe('Test external auth plugins', function () {
         username: 'kefka'
       },
       username: 'kefka',
-      statusCodeExpected: 404
+      statusCodeExpected: HttpStatusCode.NOT_FOUND_404
     })
   })
 
@@ -301,7 +302,7 @@ describe('Test external auth plugins', function () {
     const config: ServerConfig = res.body
 
     const auths = config.plugin.registeredExternalAuths
-    expect(auths).to.have.lengthOf(5)
+    expect(auths).to.have.lengthOf(7)
 
     const auth1 = auths.find(a => a.authName === 'external-auth-2')
     expect(auth1).to.not.exist
@@ -322,12 +323,12 @@ describe('Test external auth plugins', function () {
         username: 'cyan'
       },
       username: 'cyan',
-      statusCodeExpected: 404
+      statusCodeExpected: HttpStatusCode.NOT_FOUND_404
     })
 
-    await userLogin(server, { username: 'cyan', password: null }, 400)
-    await userLogin(server, { username: 'cyan', password: '' }, 400)
-    await userLogin(server, { username: 'cyan', password: 'fake' }, 400)
+    await userLogin(server, { username: 'cyan', password: null }, HttpStatusCode.BAD_REQUEST_400)
+    await userLogin(server, { username: 'cyan', password: '' }, HttpStatusCode.BAD_REQUEST_400)
+    await userLogin(server, { username: 'cyan', password: 'fake' }, HttpStatusCode.BAD_REQUEST_400)
   })
 
   it('Should not login kefka with another plugin', async function () {
@@ -336,7 +337,7 @@ describe('Test external auth plugins', function () {
       npmName: 'test-external-auth-two',
       authName: 'external-auth-4',
       username: 'kefka2',
-      statusCodeExpectedStep2: 400
+      statusCodeExpectedStep2: HttpStatusCode.BAD_REQUEST_400
     })
 
     await loginExternal({
@@ -344,7 +345,7 @@ describe('Test external auth plugins', function () {
       npmName: 'test-external-auth-two',
       authName: 'external-auth-4',
       username: 'kefka',
-      statusCodeExpectedStep2: 400
+      statusCodeExpectedStep2: HttpStatusCode.BAD_REQUEST_400
     })
   })
 
@@ -361,7 +362,7 @@ describe('Test external auth plugins', function () {
       npmName: 'test-external-auth-two',
       authName: 'external-auth-6',
       username: 'existing_user',
-      statusCodeExpectedStep2: 400
+      statusCodeExpectedStep2: HttpStatusCode.BAD_REQUEST_400
     })
   })
 
@@ -371,7 +372,7 @@ describe('Test external auth plugins', function () {
     const config: ServerConfig = res.body
 
     const auths = config.plugin.registeredExternalAuths
-    expect(auths).to.have.lengthOf(4)
+    expect(auths).to.have.lengthOf(6)
 
     const auth2 = auths.find((a) => a.authName === 'external-auth-2')
     expect(auth2).to.not.exist
@@ -379,5 +380,31 @@ describe('Test external auth plugins', function () {
 
   after(async function () {
     await cleanupTests([ server ])
+  })
+
+  it('Should forward the redirectUrl if the plugin returns one', async function () {
+    const resLogin = await loginExternal({
+      server,
+      npmName: 'test-external-auth-three',
+      authName: 'external-auth-7',
+      username: 'cid'
+    })
+
+    const resLogout = await logout(server.url, resLogin.access_token)
+
+    expect(resLogout.body.redirectUrl).to.equal('https://example.com/redirectUrl')
+  })
+
+  it('Should call the plugin\'s onLogout method with the request', async function () {
+    const resLogin = await loginExternal({
+      server,
+      npmName: 'test-external-auth-three',
+      authName: 'external-auth-8',
+      username: 'cid'
+    })
+
+    const resLogout = await logout(server.url, resLogin.access_token)
+
+    expect(resLogout.body.redirectUrl).to.equal('https://example.com/redirectUrl?access_token=' + resLogin.access_token)
   })
 })

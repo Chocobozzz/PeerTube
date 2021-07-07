@@ -1,0 +1,84 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+input[type=text] {
+  @include peertube-input-text(300px);
+}
+
+.video-channel {
+  @include row-blocks;
+
+  > my-actor-avatar {
+    @include actor-avatar-size(80px);
+
+    @include margin-right(10px);
+  }
+}
+
+.video-channel-info {
+  flex-grow: 1;
+
+  a.video-channel-names {
+    @include disable-default-a-behaviour;
+
+    width: fit-content;
+    display: flex;
+    align-items: baseline;
+    color: pvar(--mainForegroundColor);
+
+    .video-channel-display-name {
+      font-weight: $font-semibold;
+      font-size: 18px;
+    }
+
+    .video-channel-name {
+      @include margin-left(5px);
+
+      font-size: 14px;
+      color: $grey-actor-name;
+    }
+  }
+}
+
+.actor-owner {
+  @include disable-default-a-behaviour;
+
+  font-size: 13px;
+  color: pvar(--mainForegroundColor);
+
+  span:hover {
+    opacity: 0.8;
+  }
+
+  my-actor-avatar {
+    @include margin-left(7px);
+    display: inline-block;
+    vertical-align: top;
+  }
+}
+
+.video-subscriptions-header {
+  margin-bottom: 30px;
+  display: flex;
+}
+
+@media screen and (max-width: $small-view) {
+  .video-subscriptions-header input[type=text] {
+    width: 100% !important;
+  }
+
+  .video-channel-info {
+    padding-bottom: 10px;
+    text-align: center;
+
+    .video-channel-names {
+      flex-direction: column;
+      align-items: center !important;
+      margin: auto;
+    }
+  }
+
+  img {
+    @include margin-right(0);
+  }
+}

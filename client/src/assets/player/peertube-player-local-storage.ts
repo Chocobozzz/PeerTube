@@ -45,6 +45,7 @@ function saveTheaterInStore (enabled: boolean) {
 }
 
 function saveAverageBandwidth (value: number) {
+  /** used to choose the most fitting resolution */
   return setLocalStorage('average-bandwidth', value.toString())
 }
 
@@ -68,6 +69,56 @@ function getStoredLastSubtitle () {
   return getLocalStorage('last-subtitle')
 }
 
+function saveVideoWatchHistory (videoUUID: string, duration: number) {
+  return setLocalStorage(`video-watch-history`, JSON.stringify({
+    ...getStoredVideoWatchHistory(),
+
+    [videoUUID]: {
+      duration,
+      date: `${(new Date()).toISOString()}`
+    }
+  }))
+}
+
+function getStoredVideoWatchHistory (videoUUID?: string) {
+  let data
+
+  try {
+    const value = getLocalStorage('video-watch-history')
+    if (!value) return {}
+
+    data = JSON.parse(value)
+  } catch (error) {
+    console.error('Cannot parse video watch history from local storage: ', error)
+  }
+
+  data = data || {}
+
+  if (videoUUID) return data[videoUUID]
+
+  return data
+}
+
+function cleanupVideoWatch () {
+  const data = getStoredVideoWatchHistory()
+  if (!data) return
+
+  const newData = Object.keys(data).reduce((acc, videoUUID) => {
+    const date = Date.parse(data[videoUUID].date)
+
+    const diff = Math.ceil(((new Date()).getTime() - date) / (1000 * 3600 * 24))
+
+    if (diff > 30) return acc
+
+    return {
+      ...acc,
+      [videoUUID]: data[videoUUID]
+    }
+  }, {})
+
+  setLocalStorage('video-watch-history', JSON.stringify(newData))
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -81,7 +132,10 @@ export {
   saveAverageBandwidth,
   getAverageBandwidthInStore,
   saveLastSubtitle,
-  getStoredLastSubtitle
+  getStoredLastSubtitle,
+  saveVideoWatchHistory,
+  getStoredVideoWatchHistory,
+  cleanupVideoWatch
 }
 
 // ---------------------------------------------------------------------------

@@ -1,5 +1,4 @@
 import { browser } from 'protractor'
-import { AppPage } from './po/app.po'
 import { LoginPage } from './po/login.po'
 import { MyAccountPage } from './po/my-account'
 import { PlayerPage } from './po/player.po'
@@ -23,7 +22,6 @@ describe('Videos workflow', () => {
   let videoUpdatePage: VideoUpdatePage
   let myAccountPage: MyAccountPage
   let loginPage: LoginPage
-  let appPage: AppPage
   let playerPage: PlayerPage
 
   let videoName = new Date().getTime() + ' video'
@@ -37,7 +35,6 @@ describe('Videos workflow', () => {
     videoUpdatePage = new VideoUpdatePage()
     myAccountPage = new MyAccountPage()
     loginPage = new LoginPage()
-    appPage = new AppPage()
     playerPage = new PlayerPage()
 
     if (await isIOS()) {
@@ -66,12 +63,6 @@ describe('Videos workflow', () => {
     return loginPage.loginAsRootUser()
   })
 
-  it('Should close the welcome modal', async () => {
-    if (await skipIfUploadNotSupported()) return
-
-    await appPage.closeWelcomeModal()
-  })
-
   it('Should upload a video', async () => {
     if (await skipIfUploadNotSupported()) return
 
@@ -94,7 +85,7 @@ describe('Videos workflow', () => {
     let videoNameToExcept = videoName
 
     if (await isMobileDevice() || await isSafari()) {
-      await browser.get('https://peertube2.cpy.re/videos/watch/122d093a-1ede-43bd-bd34-59d2931ffc5e')
+      await browser.get('https://peertube2.cpy.re/w/122d093a-1ede-43bd-bd34-59d2931ffc5e')
       videoNameToExcept = 'E2E tests'
     } else {
       await videoWatchPage.clickOnVideo(videoName)
@@ -158,6 +149,7 @@ describe('Videos workflow', () => {
     await videoWatchPage.createPlaylist(playlistName)
 
     await videoWatchPage.saveToPlaylist(playlistName)
+    await browser.sleep(5000)
 
     await videoUploadPage.navigateTo()
 
@@ -205,6 +197,10 @@ describe('Videos workflow', () => {
     await browser.waitForAngularEnabled(false)
 
     await myAccountPage.goOnAssociatedPlaylistEmbed()
+
+    await playerPage.waitUntilPlayerWrapper()
+
+    console.log('Will set %s and %s tokens in local storage.', accessToken, refreshToken)
 
     await browser.executeScript(`window.localStorage.setItem('access_token', '${accessToken}');`)
     await browser.executeScript(`window.localStorage.setItem('refresh_token', '${refreshToken}');`)

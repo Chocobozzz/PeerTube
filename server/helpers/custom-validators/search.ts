@@ -11,7 +11,7 @@ function isStringArray (value: any) {
   return isArray(value) && value.every(v => typeof v === 'string')
 }
 
-function isNSFWQueryValid (value: any) {
+function isBooleanBothQueryValid (value: any) {
   return value === 'true' || value === 'false' || value === 'both'
 }
 
@@ -32,6 +32,6 @@ function isSearchTargetValid (value: SearchTargetType) {
 export {
   isNumberArray,
   isStringArray,
-  isNSFWQueryValid,
+  isBooleanBothQueryValid,
   isSearchTargetValid
 }

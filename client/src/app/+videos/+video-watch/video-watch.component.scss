@@ -1,17 +1,17 @@
-@import '_variables';
-@import '_mixins';
-@import '_bootstrap-variables';
-@import '_miniature';
+@use 'sass:math';
+@use '_variables' as *;
+@use '_mixins' as *;
+@use '_bootstrap-variables';
+@use '_miniature' as *;
 
-$player-factor: 1.7; // 16/9
-$video-info-margin-left: 44px;
+$video-height: 66vh;
 
-@function getPlayerHeight($width){
-  @return calc(#{$width} / #{$player-factor})
+@function getPlayerHeight ($width) {
+  @return calc(#{$width} / #{$video-watch-player-factor});
 }
 
-@function getPlayerWidth($height){
-  @return calc(#{$height} * #{$player-factor})
+@function getPlayerWidth ($height) {
+  @return calc(#{$height} * #{$video-watch-player-factor});
 }
 
 @mixin playlist-below-player {
@@ -22,18 +22,31 @@ $video-info-margin-left: 44px;
   border-bottom: 1px solid $separator-border-color !important;
 }
 
+.blocked-label {
+  font-weight: $font-semibold;
+}
+
+.placeholder-image {
+  height: 100%;
+}
+
+.flex-direction-column {
+  flex-direction: column;
+}
+
 .root {
   &.theater-enabled #video-wrapper {
+    $height: calc(100vh - #{$header-height} - #{$theater-bottom-space});
+
     flex-direction: column;
     justify-content: center;
 
     #videojs-wrapper {
       width: 100%;
+      height: $height;
     }
 
     ::ng-deep .video-js {
-      $height: calc(100vh - #{$header-height} - #{$theater-bottom-space});
-
       height: $height;
       width: 100%;
       max-width: initial;
@@ -45,46 +58,15 @@ $video-info-margin-left: 44px;
   }
 }
 
-.blocked-label {
-  font-weight: $font-semibold;
-}
-
 #video-wrapper {
   background-color: #000;
   display: flex;
   justify-content: center;
 
-  #videojs-wrapper {
-    display: flex;
-    justify-content: center;
-    flex-grow: 1;
-  }
-
-  .remote-server-down {
-    color: #fff;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    justify-content: center;
-    background-color: #141313;
-    width: 100%;
-    font-size: 24px;
-    height: 500px;
-
-    @media screen and (max-width: 1000px) {
-      font-size: 20px;
-    }
-
-    @media screen and (max-width: 600px) {
-      font-size: 16px;
-    }
-  }
-
   ::ng-deep .video-js {
     width: 100%;
-    max-width: getPlayerWidth(66vh);
-    height: 66vh;
+    max-width: getPlayerWidth($video-height);
+    height: $video-height;
 
     // VideoJS create an inner video player
     video {
@@ -92,23 +74,34 @@ $video-info-margin-left: 44px;
       position: relative !important;
     }
   }
+}
+
+#videojs-wrapper {
+  display: flex;
+  justify-content: center;
+  flex-grow: 1;
+  height: $video-height;
+}
+
+.remote-server-down {
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  background-color: #141313;
+  width: 100%;
+  font-size: 24px;
+  height: 500px;
+
+  @media screen and (max-width: 1000px) {
+    font-size: 20px;
+  }
 
   @media screen and (max-width: 600px) {
-    .remote-server-down,
-    ::ng-deep .video-js {
-      width: 100vw;
-      height: getPlayerHeight(100vw)
-    }
+    font-size: 16px;
   }
-}
-
-.alert {
-  text-align: center;
-  border-radius: 0;
-}
-
-.flex-direction-column {
-  flex-direction: column;
 }
 
 #video-not-found {
@@ -123,319 +116,113 @@ $video-info-margin-left: 44px;
 .video-bottom {
   display: flex;
   margin-top: 1.5rem;
+}
 
-  .video-info {
+.video-info {
+  flex-grow: 1;
+  // Set min width for flex item
+  min-width: 1px;
+  max-width: 100%;
+}
+
+.video-info-first-row {
+  display: flex;
+
+  > div:first-child {
     flex-grow: 1;
-    // Set min width for flex item
-    min-width: 1px;
-    max-width: 100%;
+  }
+}
 
-    .video-info-first-row {
-      display: flex;
+.video-info-name {
+  @include peertube-word-wrap;
 
-      & > div:first-child {
-        flex-grow: 1;
-      }
+  @include margin-right(30px);
 
-      .video-info-name {
-        margin-right: 30px;
-        min-height: 40px; // Align with the action buttons
-        font-size: 27px;
-        font-weight: $font-semibold;
-        flex-grow: 1;
-      }
+  min-height: 40px; // Align with the action buttons
+  font-size: 27px;
+  font-weight: $font-semibold;
+  flex-grow: 1;
+}
 
-      .video-info-first-row-bottom {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        width: 100%;
-      }
+.video-info-first-row-bottom {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  width: 100%;
+}
 
-      .video-info-date-views {
-        align-self: start;
-        margin-bottom: 10px;
-        margin-right: 10px;
-        font-size: 1em;
-      }
+.video-info-date-views {
+  @include margin-right(10px);
 
-      .video-info-channel {
-        font-weight: $font-semibold;
-        font-size: 15px;
+  margin-bottom: 10px;
+  align-self: start;
+  font-size: 1em;
+}
 
-        a {
-          @include disable-default-a-behaviour;
+.video-info-channel {
+  font-weight: $font-semibold;
+  font-size: 15px;
 
-          color: pvar(--mainForegroundColor);
+  a {
+    @include disable-default-a-behaviour;
+    @include peertube-word-wrap;
 
-          &:hover {
-            opacity: 0.8;
-          }
+    color: pvar(--mainForegroundColor);
 
-          img {
-            @include avatar(18px);
-
-            margin: -2px 5px 0 0;
-          }
-        }
-
-        .video-info-channel-left {
-          flex-grow: 1;
-
-          .video-info-channel-left-links {
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            line-height: 1.37;
-
-            a:nth-of-type(2) {
-              font-weight: 500;
-              font-size: 90%;
-            }
-
-            a.single-link {
-              margin-top: 7px;
-            }
-          }
-        }
-
-        my-subscribe-button {
-          margin-left: 5px;
-        }
-      }
-
-      my-feed {
-        margin-left: 5px;
-        margin-top: 1px;
-      }
-
-      .video-actions-rates {
-        margin: 0 0 10px 0;
-        align-items: start;
-        width: max-content;
-        margin-left: auto;
-
-        .video-actions {
-          height: 40px; // Align with the title
-          display: flex;
-          align-items: center;
-
-          .action-button:not(:first-child),
-          .action-dropdown,
-          my-video-actions-dropdown {
-            margin-left: 5px;
-          }
-
-          ::ng-deep.action-button {
-            @include peertube-button;
-            @include button-with-icon(21px, 0, -1px);
-            @include apply-svg-color(pvar(--actionButtonColor));
-
-            font-size: 100%;
-            font-weight: $font-semibold;
-            display: inline-block;
-            padding: 0 10px 0 10px;
-            white-space: nowrap;
-            background-color: transparent !important;
-            color: pvar(--actionButtonColor);
-            text-transform: uppercase;
-
-            &::after {
-              display: none;
-            }
-
-            &:hover {
-              opacity: 0.9;
-            }
-
-            &.action-button-like,
-            &.action-button-dislike {
-              filter: brightness(120%);
-
-              .count {
-                margin: 0 5px;
-              }
-            }
-
-            &.action-button-like.activated {
-              .count {
-                color: pvar(--activatedActionButtonColor);
-              }
-
-              my-global-icon {
-                @include apply-svg-color(pvar(--activatedActionButtonColor));
-              }
-            }
-
-            &.action-button-dislike.activated {
-              .count {
-                color: pvar(--activatedActionButtonColor);
-              }
-
-              my-global-icon {
-                @include apply-svg-color(pvar(--activatedActionButtonColor));
-              }
-            }
-
-            &.action-button-support {
-              color: pvar(--supportButtonColor);
-
-              my-global-icon {
-                @include apply-svg-color(pvar(--supportButtonColor));
-              }
-            }
-
-            &.action-button-support {
-              my-global-icon {
-                ::ng-deep path:first-child {
-                  fill: pvar(--supportButtonHeartColor) !important;
-                }
-              }
-            }
-
-            &.action-button-save {
-              my-global-icon {
-                top: 0 !important;
-                right: -1px;
-              }
-            }
-
-            .icon-text {
-              margin-left: 3px;
-            }
-          }
-        }
-
-        .video-info-likes-dislikes-bar-outer-container {
-          position: relative;
-        }
-
-        .video-info-likes-dislikes-bar-inner-container {
-          position: absolute;
-          height: 20px;
-        }
-
-        .video-info-likes-dislikes-bar {
-          $likes-bar-height: 2px;
-          height: $likes-bar-height;
-          margin-top: -$likes-bar-height;
-          width: 120px;
-          background-color: #ccc;
-          position: relative;
-          top: 10px;
-
-          .likes-bar {
-            height: 100%;
-            background-color: #909090;
-
-            &.liked {
-              background-color: pvar(--activatedActionButtonColor);
-            }
-          }
-        }
-      }
-    }
-
-    .video-info-description {
-      margin: 20px 0;
-      margin-left: $video-info-margin-left;
-      font-size: 15px;
-
-      .video-info-description-html {
-        @include peertube-word-wrap;
-
-        /deep/ a {
-          text-decoration: none;
-        }
-      }
-
-      .glyphicon, .description-loading {
-        margin-left: 3px;
-      }
-
-      .description-loading {
-        display: inline-block;
-      }
-
-      .video-info-description-more {
-        cursor: pointer;
-        font-weight: $font-semibold;
-        color: pvar(--greyForegroundColor);
-        font-size: 14px;
-
-        .glyphicon {
-          position: relative;
-          top: 2px;
-        }
-      }
-    }
-
-    .video-attributes {
-      margin-left: $video-info-margin-left;
-    }
-
-    .video-attributes .video-attribute {
-      font-size: 13px;
-      display: block;
-      margin-bottom: 12px;
-
-      .video-attribute-label {
-        min-width: 142px;
-        padding-right: 5px;
-        display: inline-block;
-        color: pvar(--greyForegroundColor);
-        font-weight: $font-bold;
-      }
-
-      a.video-attribute-value {
-        @include disable-default-a-behaviour;
-        color: pvar(--mainForegroundColor);
-
-        &:hover {
-          opacity: 0.9;
-        }
-      }
-
-      &.video-attribute-tags {
-        .video-attribute-value:not(:nth-child(2)) {
-          &::before {
-            content: ', '
-          }
-        }
-      }
+    &:hover {
+      opacity: 0.8;
     }
   }
+}
 
-  ::ng-deep .other-videos {
-    padding-left: 15px;
-    min-width: $video-miniature-width;
+.video-info-channel-left {
+  flex-grow: 1;
 
-    @media screen and (min-width: 1800px - (3* $video-miniature-width)) {
-      width: min-content;
+  .video-info-channel-left-links {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    line-height: 1.37;
+
+    a:nth-of-type(2) {
+      font-weight: $font-regular;
+      font-size: 90%;
     }
 
-    .title-page {
-      margin: 0 !important;
-    }
-
-    .video-miniature {
-      display: flex;
-      width: max-content;
-      height: 100%;
-      padding-bottom: 20px;
-      flex-wrap: wrap;
-    }
-
-    .video-bottom {
-      @media screen and (max-width: 1800px - (3* $video-miniature-width)) {
-        margin-left: 1rem;
-      }
-      @media screen and (max-width: 500px) {
-        margin-left: 0;
-        margin-top: .5rem;
-      }
+    a.single-link {
+      margin-top: 7px;
     }
   }
+}
+
+my-subscribe-button {
+  @include margin-left(5px);
+}
+
+my-video-attributes {
+  @include margin-left($video-watch-info-margin-left);
+
+  display: block;
+  margin-bottom: 15px;
+}
+
+my-action-buttons {
+  @include margin-left(auto);
+  @include margin-right(0);
+
+  display: block;
+  margin-top: 0;
+  margin-bottom: 10px;
+
+  align-items: start;
+  width: max-content;
+}
+
+my-recommended-videos {
+  @include padding-left(15px);
+
+  display: block;
+  min-width: 250px;
 }
 
 my-video-comments {
@@ -444,91 +231,7 @@ my-video-comments {
   margin-bottom: 20px;
 }
 
-// If the view is not expanded, take into account the menu
-.privacy-concerns {
-  z-index: z(dropdown) + 1;
-  width: calc(100% - #{$menu-width});
-}
-
-@media screen and (max-width: $small-view) {
-  .privacy-concerns {
-    margin-left: $menu-width - 15px; // Menu is absolute
-  }
-}
-
-:host-context(.expanded) {
-  .privacy-concerns {
-    width: 100%;
-    margin-left: -15px;
-  }
-}
-
-.privacy-concerns {
-  position: fixed;
-  bottom: 0;
-  z-index: z(privacymsg);
-
-  padding: 5px 15px;
-
-  display: flex;
-  flex-wrap: nowrap;
-  align-items: center;
-  justify-content: space-between;
-  background-color: rgba(0, 0, 0, 0.9);
-  color: #fff;
-
-  .privacy-concerns-text {
-    margin: 0 5px;
-  }
-
-  a {
-    @include disable-default-a-behaviour;
-
-    color: pvar(--mainColor);
-    transition: color 0.3s;
-
-    &:hover {
-      color: #fff;
-    }
-  }
-
-  .privacy-concerns-button {
-    padding: 5px 8px 5px 7px;
-    margin-left: auto;
-    border-radius: 3px;
-    white-space: nowrap;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    font-weight: $font-semibold;
-
-    &:hover {
-      background-color: #000;
-    }
-  }
-
-  .privacy-concerns-okay {
-    background-color: pvar(--mainColor);
-    margin-left: 10px;
-  }
-}
-
-@media screen and (max-width: 1600px) {
-  .video-bottom .video-info .video-attributes .video-attribute {
-    margin-bottom: 5px;
-  }
-}
-
-@media screen and (max-width: 1300px) {
-  .privacy-concerns {
-    font-size: 12px;
-    padding: 2px 5px;
-
-    .privacy-concerns-text {
-      margin: 0;
-    }
-  }
-}
-
+// Use the same breakpoint than in the typescript component to display the other video miniatures as row
 @media screen and (max-width: 1100px) {
   #video-wrapper {
     flex-direction: column;
@@ -541,75 +244,52 @@ my-video-comments {
 
   .video-bottom {
     flex-direction: column;
+  }
 
-    ::ng-deep .other-videos {
-      padding-left: 0 !important;
-
-      ::ng-deep .video-miniature  {
-        flex-direction: row;
-        width: auto;
-      }
-    }
+  my-recommended-videos {
+    @include padding-left(0);
   }
 }
 
 @media screen and (max-width: 600px) {
+  #videojs-wrapper {
+    height: getPlayerHeight(100vw) !important;
+
+    .remote-server-down,
+    ::ng-deep .video-js {
+      width: 100vw;
+      height: getPlayerHeight(100vw) !important;
+    }
+  }
+
   .video-bottom {
     margin-top: 20px !important;
     padding-bottom: 20px !important;
-
-    .video-info {
-      padding: 0;
-
-      .video-info-first-row {
-
-        .video-info-name {
-          font-size: 20px;
-          height: auto;
-        }
-      }
-    }
   }
 
-  ::ng-deep .other-videos .video-miniature  {
-    flex-direction: column;
+  .video-info {
+    padding: 0;
   }
 
-  .privacy-concerns {
-    width: 100%;
-
-    strong {
-      display: none;
-    }
+  .video-info-name {
+    font-size: 20px;
+    height: auto;
   }
 }
 
 @media screen and (max-width: 450px) {
-  .video-bottom {
-    .action-button .icon-text {
-      display: none !important;
-    }
+  .video-info-name {
+    font-size: 18px;
+  }
 
-    .video-info .video-info-first-row {
-      .video-info-name {
-        font-size: 18px;
-      }
+  .video-info-date-views {
+    font-size: 14px;
+  }
 
-      .video-info-date-views {
-        font-size: 14px;
-      }
-
-      .video-actions-rates {
-        margin-top: 10px;
-      }
-    }
-
-    .video-info-description {
-      font-size: 14px !important;
-    }
+  my-action-buttons {
+    margin-top: 10px;
   }
 }
-
 
 // Special case for iOS, that takes into account the width for fullscreens
 #video-wrapper ::ng-deep .video-js.vjs-fullscreen {

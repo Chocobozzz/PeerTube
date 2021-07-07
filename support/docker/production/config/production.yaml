@@ -43,7 +43,7 @@ redis:
 
 # From the project root directory
 storage:
-  tmp: '../data/tmp/'
+  tmp: '../data/tmp/' # Use to download data (imports etc), store uploaded files before and during processing...
   avatars: '../data/avatars/'
   videos: '../data/videos/'
   streaming_playlists: '../data/streaming-playlists'
@@ -62,11 +62,11 @@ storage:
   client_overrides: '../data/client-overrides/'
 
 log:
-  level: 'info' # debug/info/warning/error
+  level: 'info' # 'debug' | 'info' | 'warn' | 'error'
 
 tracker:
   enabled: true
-  reject_too_many_announces: false # false because we have issues with traefik and ws ip/port forwarding
+  reject_too_many_announces: false # false because we have issues with docker ws ip/port forwarding
 
 admin:
   email: null

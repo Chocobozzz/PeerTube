@@ -1,3 +1,5 @@
+import { join } from 'path'
+import { FindOptions, literal, Op, ScopeOptions, Sequelize, Transaction, WhereOptions } from 'sequelize'
 import {
   AllowNull,
   BelongsTo,
@@ -15,14 +17,22 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
+import { setAsUpdated } from '@server/helpers/database-utils'
+import { buildUUID, uuidToShort } from '@server/helpers/uuid'
+import { MAccountId, MChannelId } from '@server/types/models'
+import { AttributesOnly } from '@shared/core-utils'
+import { ActivityIconObject } from '../../../shared/models/activitypub/objects'
+import { PlaylistObject } from '../../../shared/models/activitypub/objects/playlist-object'
 import { VideoPlaylistPrivacy } from '../../../shared/models/videos/playlist/video-playlist-privacy.model'
-import { buildServerIdsFollowedBy, buildWhereIdOrUUID, getSort, isOutdated, throwIfNotValid } from '../utils'
+import { VideoPlaylistType } from '../../../shared/models/videos/playlist/video-playlist-type.model'
+import { VideoPlaylist } from '../../../shared/models/videos/playlist/video-playlist.model'
+import { activityPubCollectionPagination } from '../../helpers/activitypub'
+import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import {
   isVideoPlaylistDescriptionValid,
   isVideoPlaylistNameValid,
   isVideoPlaylistPrivacyValid
 } from '../../helpers/custom-validators/video-playlists'
-import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import {
   ACTIVITY_PUB,
   CONSTRAINTS_FIELDS,
@@ -32,18 +42,7 @@ import {
   VIDEO_PLAYLIST_TYPES,
   WEBSERVER
 } from '../../initializers/constants'
-import { VideoPlaylist } from '../../../shared/models/videos/playlist/video-playlist.model'
-import { AccountModel, ScopeNames as AccountScopeNames, SummaryOptions } from '../account/account'
-import { ScopeNames as VideoChannelScopeNames, VideoChannelModel } from './video-channel'
-import { join } from 'path'
-import { VideoPlaylistElementModel } from './video-playlist-element'
-import { PlaylistObject } from '../../../shared/models/activitypub/objects/playlist-object'
-import { activityPubCollectionPagination } from '../../helpers/activitypub'
-import { VideoPlaylistType } from '../../../shared/models/videos/playlist/video-playlist-type.model'
-import { ThumbnailModel } from './thumbnail'
-import { ActivityIconObject } from '../../../shared/models/activitypub/objects'
-import { FindOptions, literal, Op, ScopeOptions, Transaction, WhereOptions } from 'sequelize'
-import * as Bluebird from 'bluebird'
+import { MThumbnail } from '../../types/models/video/thumbnail'
 import {
   MVideoPlaylistAccountThumbnail,
   MVideoPlaylistAP,
@@ -52,8 +51,20 @@ import {
   MVideoPlaylistFullSummary,
   MVideoPlaylistIdWithElements
 } from '../../types/models/video/video-playlist'
-import { MThumbnail } from '../../types/models/video/thumbnail'
-import { MAccountId, MChannelId } from '@server/types/models'
+import { AccountModel, ScopeNames as AccountScopeNames, SummaryOptions } from '../account/account'
+import { ActorModel } from '../actor/actor'
+import {
+  buildServerIdsFollowedBy,
+  buildTrigramSearchIndex,
+  buildWhereIdOrUUID,
+  createSimilarityAttribute,
+  getPlaylistSort,
+  isOutdated,
+  throwIfNotValid
+} from '../utils'
+import { ThumbnailModel } from './thumbnail'
+import { ScopeNames as VideoChannelScopeNames, VideoChannelModel } from './video-channel'
+import { VideoPlaylistElementModel } from './video-playlist-element'
 
 enum ScopeNames {
   AVAILABLE_FOR_LIST = 'AVAILABLE_FOR_LIST',
@@ -65,12 +76,17 @@ enum ScopeNames {
 }
 
 type AvailableForListOptions = {
-  followerActorId: number
+  followerActorId?: number
   type?: VideoPlaylistType
   accountId?: number
   videoChannelId?: number
   listMyPlaylists?: boolean
   search?: string
+  withVideos?: boolean
+}
+
+function getVideoLengthSelect () {
+  return 'SELECT COUNT("id") FROM "videoPlaylistElement" WHERE "videoPlaylistId" = "VideoPlaylistModel"."id"'
 }
 
 @Scopes(() => ({
@@ -86,7 +102,7 @@ type AvailableForListOptions = {
     attributes: {
       include: [
         [
-          literal('(SELECT COUNT("id") FROM "videoPlaylistElement" WHERE "videoPlaylistId" = "VideoPlaylistModel"."id")'),
+          literal(`(${getVideoLengthSelect()})`),
           'videosLength'
         ]
       ]
@@ -125,7 +141,6 @@ type AvailableForListOptions = {
     ]
   },
   [ScopeNames.AVAILABLE_FOR_LIST]: (options: AvailableForListOptions) => {
-
     let whereActor: WhereOptions = {}
 
     const whereAnd: WhereOptions[] = []
@@ -135,20 +150,26 @@ type AvailableForListOptions = {
         privacy: VideoPlaylistPrivacy.PUBLIC
       })
 
-      // Only list local playlists OR playlists that are on an instance followed by actorId
-      const inQueryInstanceFollow = buildServerIdsFollowedBy(options.followerActorId)
+      // Only list local playlists
+      const whereActorOr: WhereOptions[] = [
+        {
+          serverId: null
+        }
+      ]
+
+      // … OR playlists that are on an instance followed by actorId
+      if (options.followerActorId) {
+        const inQueryInstanceFollow = buildServerIdsFollowedBy(options.followerActorId)
+
+        whereActorOr.push({
+          serverId: {
+            [Op.in]: literal(inQueryInstanceFollow)
+          }
+        })
+      }
 
       whereActor = {
-        [Op.or]: [
-          {
-            serverId: null
-          },
-          {
-            serverId: {
-              [Op.in]: literal(inQueryInstanceFollow)
-            }
-          }
-        ]
+        [Op.or]: whereActorOr
       }
     }
 
@@ -170,11 +191,28 @@ type AvailableForListOptions = {
       })
     }
 
+    if (options.withVideos === true) {
+      whereAnd.push(
+        literal(`(${getVideoLengthSelect()}) != 0`)
+      )
+    }
+
+    const attributesInclude = []
+
     if (options.search) {
+      const escapedSearch = VideoPlaylistModel.sequelize.escape(options.search)
+      const escapedLikeSearch = VideoPlaylistModel.sequelize.escape('%' + options.search + '%')
+      attributesInclude.push(createSimilarityAttribute('VideoPlaylistModel.name', options.search))
+
       whereAnd.push({
-        name: {
-          [Op.iLike]: '%' + options.search + '%'
-        }
+        [Op.or]: [
+          Sequelize.literal(
+            'lower(immutable_unaccent("VideoPlaylistModel"."name")) % lower(immutable_unaccent(' + escapedSearch + '))'
+          ),
+          Sequelize.literal(
+            'lower(immutable_unaccent("VideoPlaylistModel"."name")) LIKE lower(immutable_unaccent(' + escapedLikeSearch + '))'
+          )
+        ]
       })
     }
 
@@ -182,15 +220,16 @@ type AvailableForListOptions = {
       [Op.and]: whereAnd
     }
 
-    const accountScope = {
-      method: [ AccountScopeNames.SUMMARY, { whereActor } as SummaryOptions ]
-    }
-
     return {
+      attributes: {
+        include: attributesInclude
+      },
       where,
       include: [
         {
-          model: AccountModel.scope(accountScope),
+          model: AccountModel.scope({
+            method: [ AccountScopeNames.SUMMARY, { whereActor } as SummaryOptions ]
+          }),
           required: true
         },
         {
@@ -205,6 +244,8 @@ type AvailableForListOptions = {
 @Table({
   tableName: 'videoPlaylist',
   indexes: [
+    buildTrigramSearchIndex('video_playlist_name_trigram', 'name'),
+
     {
       fields: [ 'ownerAccountId' ]
     },
@@ -217,7 +258,7 @@ type AvailableForListOptions = {
     }
   ]
 })
-export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
+export class VideoPlaylistModel extends Model<Partial<AttributesOnly<VideoPlaylistModel>>> {
   @CreatedAt
   createdAt: Date
 
@@ -308,11 +349,12 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
     videoChannelId?: number
     listMyPlaylists?: boolean
     search?: string
+    withVideos?: boolean // false by default
   }) {
     const query = {
       offset: options.start,
       limit: options.count,
-      order: getSort(options.sort)
+      order: getPlaylistSort(options.sort)
     }
 
     const scopes: (string | ScopeOptions)[] = [
@@ -325,7 +367,8 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
             accountId: options.accountId,
             videoChannelId: options.videoChannelId,
             listMyPlaylists: options.listMyPlaylists,
-            search: options.search
+            search: options.search,
+            withVideos: options.withVideos || false
           } as AvailableForListOptions
         ]
       },
@@ -339,6 +382,21 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
       .then(({ rows, count }) => {
         return { total: count, data: rows }
       })
+  }
+
+  static searchForApi (options: {
+    followerActorId: number
+    start: number
+    count: number
+    sort: string
+    search?: string
+  }) {
+    return VideoPlaylistModel.listForApi({
+      ...options,
+      type: VideoPlaylistType.REGULAR,
+      listMyPlaylists: false,
+      withVideos: true
+    })
   }
 
   static listPublicUrlsOfForAP (options: { account?: MAccountId, channel?: MChannelId }, start: number, count: number) {
@@ -367,7 +425,7 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
                              })
   }
 
-  static listPlaylistIdsOf (accountId: number, videoIds: number[]): Bluebird<MVideoPlaylistIdWithElements[]> {
+  static listPlaylistIdsOf (accountId: number, videoIds: number[]): Promise<MVideoPlaylistIdWithElements[]> {
     const query = {
       attributes: [ 'id' ],
       where: {
@@ -392,7 +450,7 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
 
   static doesPlaylistExist (url: string) {
     const query = {
-      attributes: [],
+      attributes: [ 'id' ],
       where: {
         url
       }
@@ -403,7 +461,7 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
       .then(e => !!e)
   }
 
-  static loadWithAccountAndChannelSummary (id: number | string, transaction: Transaction): Bluebird<MVideoPlaylistFullSummary> {
+  static loadWithAccountAndChannelSummary (id: number | string, transaction: Transaction): Promise<MVideoPlaylistFullSummary> {
     const where = buildWhereIdOrUUID(id)
 
     const query = {
@@ -416,7 +474,7 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
       .findOne(query)
   }
 
-  static loadWithAccountAndChannel (id: number | string, transaction: Transaction): Bluebird<MVideoPlaylistFull> {
+  static loadWithAccountAndChannel (id: number | string, transaction: Transaction): Promise<MVideoPlaylistFull> {
     const where = buildWhereIdOrUUID(id)
 
     const query = {
@@ -429,7 +487,7 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
       .findOne(query)
   }
 
-  static loadByUrlAndPopulateAccount (url: string): Bluebird<MVideoPlaylistAccountThumbnail> {
+  static loadByUrlAndPopulateAccount (url: string): Promise<MVideoPlaylistAccountThumbnail> {
     const query = {
       where: {
         url
@@ -437,6 +495,18 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
     }
 
     return VideoPlaylistModel.scope([ ScopeNames.WITH_ACCOUNT, ScopeNames.WITH_THUMBNAIL ]).findOne(query)
+  }
+
+  static loadByUrlWithAccountAndChannelSummary (url: string): Promise<MVideoPlaylistFullSummary> {
+    const query = {
+      where: {
+        url
+      }
+    }
+
+    return VideoPlaylistModel
+      .scope([ ScopeNames.WITH_ACCOUNT_AND_CHANNEL_SUMMARY, ScopeNames.WITH_VIDEOS_LENGTH, ScopeNames.WITH_THUMBNAIL ])
+      .findOne(query)
   }
 
   static getPrivacyLabel (privacy: VideoPlaylistPrivacy) {
@@ -475,7 +545,7 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
   generateThumbnailName () {
     const extension = '.jpg'
 
-    return 'playlist-' + this.uuid + extension
+    return 'playlist-' + buildUUID() + extension
   }
 
   getThumbnailUrl () {
@@ -491,17 +561,46 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
   }
 
   getWatchUrl () {
-    return WEBSERVER.URL + '/videos/watch/playlist/' + this.uuid
+    return WEBSERVER.URL + '/w/p/' + this.uuid
   }
 
   getEmbedStaticPath () {
     return '/video-playlists/embed/' + this.uuid
   }
 
-  setAsRefreshed () {
-    this.changed('updatedAt', true)
+  static async getStats () {
+    const totalLocalPlaylists = await VideoPlaylistModel.count({
+      include: [
+        {
+          model: AccountModel,
+          required: true,
+          include: [
+            {
+              model: ActorModel,
+              required: true,
+              where: {
+                serverId: null
+              }
+            }
+          ]
+        }
+      ],
+      where: {
+        privacy: VideoPlaylistPrivacy.PUBLIC
+      }
+    })
 
-    return this.save()
+    return {
+      totalLocalPlaylists
+    }
+  }
+
+  setAsRefreshed () {
+    return setAsUpdated('videoPlaylist', this.id)
+  }
+
+  setVideosLength (videosLength: number) {
+    this.set('videosLength' as any, videosLength, { raw: true })
   }
 
   isOwned () {
@@ -518,7 +617,11 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
     return {
       id: this.id,
       uuid: this.uuid,
+      shortUUID: uuidToShort(this.uuid),
+
       isLocal: this.isOwned(),
+
+      url: this.url,
 
       displayName: this.name,
       description: this.description,

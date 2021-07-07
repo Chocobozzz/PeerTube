@@ -1,6 +1,6 @@
-@import '_variables';
-@import '_mixins';
-@import '_miniature';
+@use '_variables' as *;
+@use '_mixins' as *;
+@use '_miniature' as *;
 
 .section-title {
   // make the element span a full grid row within .videos grid
@@ -8,9 +8,89 @@
 }
 
 .margin-content {
-  @include fluid-videos-miniature-layout;
+  @include grid-videos-miniature-layout-with-margins;
 }
 
 .section {
-  @include miniature-rows;
+  &:first-child {
+    padding-top: 30px;
+
+    .section-title {
+      border-top: 0 !important;
+    }
+  }
+
+  .section-title {
+    font-size: 24px;
+    font-weight: $font-semibold;
+    padding-top: 15px;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+
+    &:not(h2) {
+      border-top: 1px solid $separator-border-color;
+    }
+
+    a {
+      color: pvar(--mainForegroundColor);
+
+      &:hover,
+      &:focus:not(.focus-visible),
+      &:active {
+        text-decoration: none;
+        outline: none;
+      }
+    }
+  }
+
+  &.channel {
+    .section-title {
+      a {
+        display: flex;
+        width: fit-content;
+        align-items: center;
+
+        my-actor-avatar {
+          @include actor-avatar-size(28px);
+          @include margin-right(8px);
+
+          font-size: initial;
+        }
+      }
+
+      .followers {
+        @include margin-left(10px);
+
+        color: pvar(--greyForegroundColor);
+        font-weight: normal;
+        font-size: 14px;
+        position: relative;
+        top: 2px;
+      }
+    }
+  }
+
+  .show-more {
+    position: relative;
+    top: -5px;
+    display: inline-block;
+    font-size: 16px;
+    text-transform: uppercase;
+    color: pvar(--greyForegroundColor);
+    margin-bottom: 10px;
+    font-weight: $font-semibold;
+    text-decoration: none;
+  }
+
+  @media screen and (max-width: $mobile-view) {
+    max-height: initial;
+    overflow: initial;
+
+    .section-title {
+      @include margin-left(10px);
+
+      font-size: 17px;
+    }
+  }
 }

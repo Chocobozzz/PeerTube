@@ -1,8 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
+import { VideoPlaylistCreateResult, VideoPlaylistPrivacy, VideoPlaylistType } from '@shared/models'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import {
   addVideoInPlaylist,
+  checkBadCountPagination,
+  checkBadSortPagination,
+  checkBadStartPagination,
   cleanupTests,
   createVideoPlaylist,
   deleteVideoPlaylist,
@@ -21,19 +26,14 @@ import {
   updateVideoPlaylistElement,
   uploadVideoAndGetId
 } from '../../../../shared/extra-utils'
-import {
-  checkBadCountPagination,
-  checkBadSortPagination,
-  checkBadStartPagination
-} from '../../../../shared/extra-utils/requests/check-api-params'
-import { VideoPlaylistPrivacy } from '../../../../shared/models/videos/playlist/video-playlist-privacy.model'
-import { VideoPlaylistType } from '../../../../shared/models/videos/playlist/video-playlist-type.model'
 
 describe('Test video playlists API validator', function () {
   let server: ServerInfo
   let userAccessToken: string
-  let playlistUUID: string
+
+  let playlist: VideoPlaylistCreateResult
   let privatePlaylistUUID: string
+
   let watchLaterPlaylistId: number
   let videoId: number
   let playlistElementId: number
@@ -66,7 +66,7 @@ describe('Test video playlists API validator', function () {
           videoChannelId: server.videoChannel.id
         }
       })
-      playlistUUID = res.body.videoPlaylist.uuid
+      playlist = res.body.videoPlaylist
     }
 
     {
@@ -114,19 +114,34 @@ describe('Test video playlists API validator', function () {
     it('Should fail with a bad account parameter', async function () {
       const accountPath = '/api/v1/accounts/root2/video-playlists'
 
-      await makeGetRequest({ url: server.url, path: accountPath, statusCodeExpected: 404, token: server.accessToken })
+      await makeGetRequest({
+        url: server.url,
+        path: accountPath,
+        statusCodeExpected: HttpStatusCode.NOT_FOUND_404,
+        token: server.accessToken
+      })
     })
 
     it('Should fail with a bad video channel parameter', async function () {
       const accountPath = '/api/v1/video-channels/bad_channel/video-playlists'
 
-      await makeGetRequest({ url: server.url, path: accountPath, statusCodeExpected: 404, token: server.accessToken })
+      await makeGetRequest({
+        url: server.url,
+        path: accountPath,
+        statusCodeExpected: HttpStatusCode.NOT_FOUND_404,
+        token: server.accessToken
+      })
     })
 
     it('Should success with the correct parameters', async function () {
-      await makeGetRequest({ url: server.url, path: globalPath, statusCodeExpected: 200, token: server.accessToken })
-      await makeGetRequest({ url: server.url, path: accountPath, statusCodeExpected: 200, token: server.accessToken })
-      await makeGetRequest({ url: server.url, path: videoChannelPath, statusCodeExpected: 200, token: server.accessToken })
+      await makeGetRequest({ url: server.url, path: globalPath, statusCodeExpected: HttpStatusCode.OK_200, token: server.accessToken })
+      await makeGetRequest({ url: server.url, path: accountPath, statusCodeExpected: HttpStatusCode.OK_200, token: server.accessToken })
+      await makeGetRequest({
+        url: server.url,
+        path: videoChannelPath,
+        statusCodeExpected: HttpStatusCode.OK_200,
+        token: server.accessToken
+      })
     })
   })
 
@@ -134,25 +149,25 @@ describe('Test video playlists API validator', function () {
     const path = '/api/v1/video-playlists/'
 
     it('Should fail with a bad start pagination', async function () {
-      await checkBadStartPagination(server.url, path + playlistUUID + '/videos', server.accessToken)
+      await checkBadStartPagination(server.url, path + playlist.shortUUID + '/videos', server.accessToken)
     })
 
     it('Should fail with a bad count pagination', async function () {
-      await checkBadCountPagination(server.url, path + playlistUUID + '/videos', server.accessToken)
+      await checkBadCountPagination(server.url, path + playlist.shortUUID + '/videos', server.accessToken)
     })
 
     it('Should success with the correct parameters', async function () {
-      await makeGetRequest({ url: server.url, path: path + playlistUUID + '/videos', statusCodeExpected: 200 })
+      await makeGetRequest({ url: server.url, path: path + playlist.shortUUID + '/videos', statusCodeExpected: HttpStatusCode.OK_200 })
     })
   })
 
   describe('When getting a video playlist', function () {
     it('Should fail with a bad id or uuid', async function () {
-      await getVideoPlaylist(server.url, 'toto', 400)
+      await getVideoPlaylist(server.url, 'toto', HttpStatusCode.BAD_REQUEST_400)
     })
 
     it('Should fail with an unknown playlist', async function () {
-      await getVideoPlaylist(server.url, 42, 404)
+      await getVideoPlaylist(server.url, 42, HttpStatusCode.NOT_FOUND_404)
     })
 
     it('Should fail to get an unlisted playlist with the number id', async function () {
@@ -161,24 +176,25 @@ describe('Test video playlists API validator', function () {
         token: server.accessToken,
         playlistAttrs: {
           displayName: 'super playlist',
+          videoChannelId: server.videoChannel.id,
           privacy: VideoPlaylistPrivacy.UNLISTED
         }
       })
       const playlist = res.body.videoPlaylist
 
-      await getVideoPlaylist(server.url, playlist.id, 404)
-      await getVideoPlaylist(server.url, playlist.uuid, 200)
+      await getVideoPlaylist(server.url, playlist.id, HttpStatusCode.NOT_FOUND_404)
+      await getVideoPlaylist(server.url, playlist.uuid, HttpStatusCode.OK_200)
     })
 
     it('Should succeed with the correct params', async function () {
-      await getVideoPlaylist(server.url, playlistUUID, 200)
+      await getVideoPlaylist(server.url, playlist.uuid, HttpStatusCode.OK_200)
     })
   })
 
   describe('When creating/updating a video playlist', function () {
     const getBase = (playlistAttrs: any = {}, wrapper: any = {}) => {
       return Object.assign({
-        expectedStatus: 400,
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400,
         url: server.url,
         token: server.accessToken,
         playlistAttrs: Object.assign({
@@ -194,10 +210,10 @@ describe('Test video playlists API validator', function () {
     }
 
     it('Should fail with an unauthenticated user', async function () {
-      const params = getBase({}, { token: null, expectedStatus: 401 })
+      const params = getBase({}, { token: null, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
 
       await createVideoPlaylist(params)
-      await updateVideoPlaylist(getUpdate(params, playlistUUID))
+      await updateVideoPlaylist(getUpdate(params, playlist.shortUUID))
     })
 
     it('Should fail without displayName', async function () {
@@ -210,35 +226,42 @@ describe('Test video playlists API validator', function () {
       const params = getBase({ displayName: 's'.repeat(300) })
 
       await createVideoPlaylist(params)
-      await updateVideoPlaylist(getUpdate(params, playlistUUID))
+      await updateVideoPlaylist(getUpdate(params, playlist.shortUUID))
     })
 
     it('Should fail with an incorrect description', async function () {
       const params = getBase({ description: 't' })
 
       await createVideoPlaylist(params)
-      await updateVideoPlaylist(getUpdate(params, playlistUUID))
+      await updateVideoPlaylist(getUpdate(params, playlist.shortUUID))
     })
 
     it('Should fail with an incorrect privacy', async function () {
       const params = getBase({ privacy: 45 })
 
       await createVideoPlaylist(params)
-      await updateVideoPlaylist(getUpdate(params, playlistUUID))
+      await updateVideoPlaylist(getUpdate(params, playlist.shortUUID))
     })
 
     it('Should fail with an unknown video channel id', async function () {
-      const params = getBase({ videoChannelId: 42 }, { expectedStatus: 404 })
+      const params = getBase({ videoChannelId: 42 }, { expectedStatus: HttpStatusCode.NOT_FOUND_404 })
 
       await createVideoPlaylist(params)
-      await updateVideoPlaylist(getUpdate(params, playlistUUID))
+      await updateVideoPlaylist(getUpdate(params, playlist.shortUUID))
     })
 
     it('Should fail with an incorrect thumbnail file', async function () {
-      const params = getBase({ thumbnailfile: 'avatar.png' })
+      const params = getBase({ thumbnailfile: 'video_short.mp4' })
 
       await createVideoPlaylist(params)
-      await updateVideoPlaylist(getUpdate(params, playlistUUID))
+      await updateVideoPlaylist(getUpdate(params, playlist.shortUUID))
+    })
+
+    it('Should fail with a thumbnail file too big', async function () {
+      const params = getBase({ thumbnailfile: 'preview-big.png' })
+
+      await createVideoPlaylist(params)
+      await updateVideoPlaylist(getUpdate(params, playlist.shortUUID))
     })
 
     it('Should fail to set "public" a playlist not assigned to a channel', async function () {
@@ -249,40 +272,40 @@ describe('Test video playlists API validator', function () {
       await createVideoPlaylist(params)
       await createVideoPlaylist(params2)
       await updateVideoPlaylist(getUpdate(params, privatePlaylistUUID))
-      await updateVideoPlaylist(getUpdate(params2, playlistUUID))
-      await updateVideoPlaylist(getUpdate(params3, playlistUUID))
+      await updateVideoPlaylist(getUpdate(params2, playlist.shortUUID))
+      await updateVideoPlaylist(getUpdate(params3, playlist.shortUUID))
     })
 
     it('Should fail with an unknown playlist to update', async function () {
       await updateVideoPlaylist(getUpdate(
-        getBase({}, { expectedStatus: 404 }),
+        getBase({}, { expectedStatus: HttpStatusCode.NOT_FOUND_404 }),
         42
       ))
     })
 
     it('Should fail to update a playlist of another user', async function () {
       await updateVideoPlaylist(getUpdate(
-        getBase({}, { token: userAccessToken, expectedStatus: 403 }),
-        playlistUUID
+        getBase({}, { token: userAccessToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 }),
+        playlist.shortUUID
       ))
     })
 
     it('Should fail to update the watch later playlist', async function () {
       await updateVideoPlaylist(getUpdate(
-        getBase({}, { expectedStatus: 400 }),
+        getBase({}, { expectedStatus: HttpStatusCode.BAD_REQUEST_400 }),
         watchLaterPlaylistId
       ))
     })
 
     it('Should succeed with the correct params', async function () {
       {
-        const params = getBase({}, { expectedStatus: 200 })
+        const params = getBase({}, { expectedStatus: HttpStatusCode.OK_200 })
         await createVideoPlaylist(params)
       }
 
       {
-        const params = getBase({}, { expectedStatus: 204 })
-        await updateVideoPlaylist(getUpdate(params, playlistUUID))
+        const params = getBase({}, { expectedStatus: HttpStatusCode.NO_CONTENT_204 })
+        await updateVideoPlaylist(getUpdate(params, playlist.shortUUID))
       }
     })
   })
@@ -290,10 +313,10 @@ describe('Test video playlists API validator', function () {
   describe('When adding an element in a playlist', function () {
     const getBase = (elementAttrs: any = {}, wrapper: any = {}) => {
       return Object.assign({
-        expectedStatus: 400,
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400,
         url: server.url,
         token: server.accessToken,
-        playlistId: playlistUUID,
+        playlistId: playlist.id,
         elementAttrs: Object.assign({
           videoId,
           startTimestamp: 2,
@@ -303,12 +326,12 @@ describe('Test video playlists API validator', function () {
     }
 
     it('Should fail with an unauthenticated user', async function () {
-      const params = getBase({}, { token: null, expectedStatus: 401 })
+      const params = getBase({}, { token: null, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
       await addVideoInPlaylist(params)
     })
 
     it('Should fail with the playlist of another user', async function () {
-      const params = getBase({}, { token: userAccessToken, expectedStatus: 403 })
+      const params = getBase({}, { token: userAccessToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
       await addVideoInPlaylist(params)
     })
 
@@ -319,13 +342,13 @@ describe('Test video playlists API validator', function () {
       }
 
       {
-        const params = getBase({}, { playlistId: 42, expectedStatus: 404 })
+        const params = getBase({}, { playlistId: 42, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
         await addVideoInPlaylist(params)
       }
     })
 
     it('Should fail with an unknown or incorrect video id', async function () {
-      const params = getBase({ videoId: 42 }, { expectedStatus: 404 })
+      const params = getBase({ videoId: 42 }, { expectedStatus: HttpStatusCode.NOT_FOUND_404 })
       await addVideoInPlaylist(params)
     })
 
@@ -342,7 +365,7 @@ describe('Test video playlists API validator', function () {
     })
 
     it('Succeed with the correct params', async function () {
-      const params = getBase({}, { expectedStatus: 200 })
+      const params = getBase({}, { expectedStatus: HttpStatusCode.OK_200 })
       const res = await addVideoInPlaylist(params)
       playlistElementId = res.body.videoPlaylistElement.id
     })
@@ -358,18 +381,18 @@ describe('Test video playlists API validator', function () {
           stopTimestamp: 2
         }, elementAttrs),
         playlistElementId,
-        playlistId: playlistUUID,
-        expectedStatus: 400
+        playlistId: playlist.id,
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
       }, wrapper)
     }
 
     it('Should fail with an unauthenticated user', async function () {
-      const params = getBase({}, { token: null, expectedStatus: 401 })
+      const params = getBase({}, { token: null, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
       await updateVideoPlaylistElement(params)
     })
 
     it('Should fail with the playlist of another user', async function () {
-      const params = getBase({}, { token: userAccessToken, expectedStatus: 403 })
+      const params = getBase({}, { token: userAccessToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
       await updateVideoPlaylistElement(params)
     })
 
@@ -380,7 +403,7 @@ describe('Test video playlists API validator', function () {
       }
 
       {
-        const params = getBase({}, { playlistId: 42, expectedStatus: 404 })
+        const params = getBase({}, { playlistId: 42, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
         await updateVideoPlaylistElement(params)
       }
     })
@@ -392,7 +415,7 @@ describe('Test video playlists API validator', function () {
       }
 
       {
-        const params = getBase({}, { playlistElementId: 42, expectedStatus: 404 })
+        const params = getBase({}, { playlistElementId: 42, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
         await updateVideoPlaylistElement(params)
       }
     })
@@ -410,12 +433,12 @@ describe('Test video playlists API validator', function () {
     })
 
     it('Should fail with an unknown element', async function () {
-      const params = getBase({}, { playlistElementId: 888, expectedStatus: 404 })
+      const params = getBase({}, { playlistElementId: 888, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
       await updateVideoPlaylistElement(params)
     })
 
     it('Succeed with the correct params', async function () {
-      const params = getBase({}, { expectedStatus: 204 })
+      const params = getBase({}, { expectedStatus: HttpStatusCode.NO_CONTENT_204 })
       await updateVideoPlaylistElement(params)
     })
   })
@@ -428,13 +451,13 @@ describe('Test video playlists API validator', function () {
       return Object.assign({
         url: server.url,
         token: server.accessToken,
-        playlistId: playlistUUID,
+        playlistId: playlist.shortUUID,
         elementAttrs: Object.assign({
           startPosition: 1,
           insertAfterPosition: 2,
           reorderLength: 3
         }, elementAttrs),
-        expectedStatus: 400
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
       }, wrapper)
     }
 
@@ -446,19 +469,19 @@ describe('Test video playlists API validator', function () {
         await addVideoInPlaylist({
           url: server.url,
           token: server.accessToken,
-          playlistId: playlistUUID,
+          playlistId: playlist.shortUUID,
           elementAttrs: { videoId: id }
         })
       }
     })
 
     it('Should fail with an unauthenticated user', async function () {
-      const params = getBase({}, { token: null, expectedStatus: 401 })
+      const params = getBase({}, { token: null, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
       await reorderVideosPlaylist(params)
     })
 
     it('Should fail with the playlist of another user', async function () {
-      const params = getBase({}, { token: userAccessToken, expectedStatus: 403 })
+      const params = getBase({}, { token: userAccessToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
       await reorderVideosPlaylist(params)
     })
 
@@ -469,7 +492,7 @@ describe('Test video playlists API validator', function () {
       }
 
       {
-        const params = getBase({}, { playlistId: 42, expectedStatus: 404 })
+        const params = getBase({}, { playlistId: 42, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
         await reorderVideosPlaylist(params)
       }
     })
@@ -526,7 +549,7 @@ describe('Test video playlists API validator', function () {
     })
 
     it('Succeed with the correct params', async function () {
-      const params = getBase({}, { expectedStatus: 204 })
+      const params = getBase({}, { expectedStatus: HttpStatusCode.NO_CONTENT_204 })
       await reorderVideosPlaylist(params)
     })
   })
@@ -539,7 +562,7 @@ describe('Test video playlists API validator', function () {
         url: server.url,
         path,
         query: { videoIds: [ 1, 2 ] },
-        statusCodeExpected: 401
+        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
       })
     })
 
@@ -572,7 +595,7 @@ describe('Test video playlists API validator', function () {
         token: server.accessToken,
         path,
         query: { videoIds: [ 1, 2 ] },
-        statusCodeExpected: 200
+        statusCodeExpected: HttpStatusCode.OK_200
       })
     })
   })
@@ -583,18 +606,18 @@ describe('Test video playlists API validator', function () {
         url: server.url,
         token: server.accessToken,
         playlistElementId,
-        playlistId: playlistUUID,
-        expectedStatus: 400
+        playlistId: playlist.uuid,
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
       }, wrapper)
     }
 
     it('Should fail with an unauthenticated user', async function () {
-      const params = getBase({ token: null, expectedStatus: 401 })
+      const params = getBase({ token: null, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
       await removeVideoFromPlaylist(params)
     })
 
     it('Should fail with the playlist of another user', async function () {
-      const params = getBase({ token: userAccessToken, expectedStatus: 403 })
+      const params = getBase({ token: userAccessToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
       await removeVideoFromPlaylist(params)
     })
 
@@ -605,7 +628,7 @@ describe('Test video playlists API validator', function () {
       }
 
       {
-        const params = getBase({ playlistId: 42, expectedStatus: 404 })
+        const params = getBase({ playlistId: 42, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
         await removeVideoFromPlaylist(params)
       }
     })
@@ -617,37 +640,37 @@ describe('Test video playlists API validator', function () {
       }
 
       {
-        const params = getBase({ playlistElementId: 42, expectedStatus: 404 })
+        const params = getBase({ playlistElementId: 42, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
         await removeVideoFromPlaylist(params)
       }
     })
 
     it('Should fail with an unknown element', async function () {
-      const params = getBase({ playlistElementId: 888, expectedStatus: 404 })
+      const params = getBase({ playlistElementId: 888, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
       await removeVideoFromPlaylist(params)
     })
 
     it('Succeed with the correct params', async function () {
-      const params = getBase({ expectedStatus: 204 })
+      const params = getBase({ expectedStatus: HttpStatusCode.NO_CONTENT_204 })
       await removeVideoFromPlaylist(params)
     })
   })
 
   describe('When deleting a playlist', function () {
     it('Should fail with an unknown playlist', async function () {
-      await deleteVideoPlaylist(server.url, server.accessToken, 42, 404)
+      await deleteVideoPlaylist(server.url, server.accessToken, 42, HttpStatusCode.NOT_FOUND_404)
     })
 
     it('Should fail with a playlist of another user', async function () {
-      await deleteVideoPlaylist(server.url, userAccessToken, playlistUUID, 403)
+      await deleteVideoPlaylist(server.url, userAccessToken, playlist.uuid, HttpStatusCode.FORBIDDEN_403)
     })
 
     it('Should fail with the watch later playlist', async function () {
-      await deleteVideoPlaylist(server.url, server.accessToken, watchLaterPlaylistId, 400)
+      await deleteVideoPlaylist(server.url, server.accessToken, watchLaterPlaylistId, HttpStatusCode.BAD_REQUEST_400)
     })
 
     it('Should succeed with the correct params', async function () {
-      await deleteVideoPlaylist(server.url, server.accessToken, playlistUUID)
+      await deleteVideoPlaylist(server.url, server.accessToken, playlist.uuid)
     })
   })
 

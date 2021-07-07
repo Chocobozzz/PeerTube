@@ -1,7 +1,7 @@
-<div class="miniature" [ngClass]="{ 'no-videos': playlist.videosLength === 0, 'to-manage': toManage }">
-  <a
-    [routerLink]="getPlaylistUrl()" [attr.title]="playlist.description"
-    class="miniature-thumbnail"
+<div class="miniature" [ngClass]="{ 'no-videos': playlist.videosLength === 0, 'to-manage': toManage, 'display-as-row': displayAsRow }">
+  <my-link
+    [internalLink]="routerLink" [href]="playlistHref" [target]="playlistTarget"
+    [title]="playlist.description" class="miniature-thumbnail"
   >
     <img alt="" [attr.aria-labelledby]="playlist.displayName" [attr.src]="playlist.thumbnailUrl" />
 
@@ -12,14 +12,17 @@
     <div class="play-overlay">
       <div class="icon"></div>
     </div>
-  </a>
+  </my-link>
 
   <div class="miniature-info">
-    <a tabindex="-1" class="miniature-name" [routerLink]="getPlaylistUrl()" [attr.title]="playlist.description">
+    <my-link
+      [internalLink]="routerLink" [href]="playlistHref" [target]="playlistTarget"
+      [title]="playlist.description" class="miniature-name" tabindex="-1"
+    >
       {{ playlist.displayName }}
-    </a>
+    </my-link>
 
-    <a i18n [routerLink]="[ '/video-channels', playlist.videoChannelBy ]" class="by" *ngIf="displayChannel && playlist.videoChannelBy">
+    <a i18n [routerLink]="[ '/c', playlist.videoChannelBy ]" class="by" *ngIf="displayChannel && playlist.videoChannelBy">
       {{ playlist.videoChannelBy }}
     </a>
 

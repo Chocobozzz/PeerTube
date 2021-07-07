@@ -1,10 +1,9 @@
 import * as Bull from 'bull'
+import { ActivitypubHttpUnicastPayload } from '@shared/models'
 import { logger } from '../../../helpers/logger'
 import { doRequest } from '../../../helpers/requests'
-import { buildGlobalHeaders, buildSignedRequestOptions, computeBody } from './utils/activitypub-http-utils'
-import { JOB_REQUEST_TIMEOUT } from '../../../initializers/constants'
 import { ActorFollowScoreCache } from '../../files-cache'
-import { ActivitypubHttpUnicastPayload } from '@shared/models'
+import { buildGlobalHeaders, buildSignedRequestOptions, computeBody } from './utils/activitypub-http-utils'
 
 async function processActivityPubHttpUnicast (job: Bull.Job) {
   logger.info('Processing ActivityPub unicast in job %d.', job.id)
@@ -16,16 +15,14 @@ async function processActivityPubHttpUnicast (job: Bull.Job) {
   const httpSignatureOptions = await buildSignedRequestOptions(payload)
 
   const options = {
-    method: 'POST',
-    uri,
+    method: 'POST' as 'POST',
     json: body,
     httpSignature: httpSignatureOptions,
-    timeout: JOB_REQUEST_TIMEOUT,
     headers: buildGlobalHeaders(body)
   }
 
   try {
-    await doRequest(options)
+    await doRequest(uri, options)
     ActorFollowScoreCache.Instance.updateActorFollowsScore([ uri ], [])
   } catch (err) {
     ActorFollowScoreCache.Instance.updateActorFollowsScore([], [ uri ])

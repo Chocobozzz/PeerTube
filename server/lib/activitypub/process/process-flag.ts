@@ -49,13 +49,12 @@ async function processCreateAbuse (activity: ActivityCreate | ActivityFlag, byAc
       logger.debug('Reporting remote abuse for object %s.', uri)
 
       await sequelizeTypescript.transaction(async t => {
-
-        const video = await VideoModel.loadByUrlAndPopulateAccount(uri)
+        const video = await VideoModel.loadByUrlAndPopulateAccount(uri, t)
         let videoComment: MCommentOwnerVideo
         let flaggedAccount: MAccountDefault
 
-        if (!video) videoComment = await VideoCommentModel.loadByUrlAndPopulateAccountAndVideo(uri)
-        if (!videoComment) flaggedAccount = await AccountModel.loadByUrl(uri)
+        if (!video) videoComment = await VideoCommentModel.loadByUrlAndPopulateAccountAndVideo(uri, t)
+        if (!videoComment) flaggedAccount = await AccountModel.loadByUrl(uri, t)
 
         if (!video && !videoComment && !flaggedAccount) {
           logger.warn('Cannot flag unknown entity %s.', object)

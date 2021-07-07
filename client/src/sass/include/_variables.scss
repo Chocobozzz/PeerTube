@@ -1,4 +1,4 @@
-@import '_bootstrap-variables';
+@use 'sass:math';
 
 $small-view: 800px;
 $mobile-view: 500px;
@@ -7,6 +7,7 @@ $main-fonts: 'Source Sans Pro', sans-serif;
 $font-regular: 400;
 $font-semibold: 600;
 $font-bold: 700;
+$line-height-normal: 1.2;
 
 $grey-background-color: #E5E5E5;
 $grey-background-hover-color: #EFEFEF;
@@ -14,13 +15,12 @@ $grey-foreground-color: #585858;
 $grey-foreground-hover-color: #303030;
 $grey-button-outline-color: scale-color($grey-foreground-color, $alpha: -95%);
 
-// Palette
 $main-color: hsl(24, 90%, 50%);
-$main-hover-color: lighten($main-color, 5%);
 $main-color-lighter: lighten($main-color, 10%);
 $main-color-lightest: lighten($main-color, 40%);
-$secondary-color: hsl(187, 77, 34);
-//
+$main-hover-color: lighten($main-color, 5%);
+
+$secondary-color: hsl(187, 77%, 34%);
 
 $support-button: inherit;
 $support-button-heart: #e83e8c;
@@ -48,18 +48,35 @@ $menu-bottom-color: #C6C6C6;
 $menu-width: 240px;
 $menu-lateral-padding: 26px;
 
-$sub-menu-color: #F7F7F7;
+$sub-menu-background-color: #F7F7F7;
 $sub-menu-height: 81px;
+
+$channel-background-color: #f6ede8;
+
+// FIXME: cannot use math.div here because of compilation error
+$banner-inverted-ratio: 0.1666666666;
+
+$max-channels-width: 1200px;
 
 $footer-height: 30px;
 $footer-margin: 30px;
 
-$separator-border-color: rgba(0, 0, 0, 0.10);
+$separator-border-color: rgba(0, 0, 0, 0.1);
 
-$video-miniature-width: 238px;
 $video-miniature-margin-bottom: 15px;
-$video-thumbnail-height: 122px;
-$video-thumbnail-width: 223px;
+
+$video-miniature-row-name-font-size: 1.3em;
+$video-miniature-row-mobile-name-font-size: 14px;
+
+$video-miniature-row-info-font-size: 14px;
+$video-miniature-row-mobile-info-font-size: 12px;
+
+$video-thumbnail-height: 153px;
+$video-thumbnail-width: 280px;
+$video-thumbnail-medium-height: 114px;
+$video-thumbnail-medium-width: 201px;
+$video-thumbnail-small-height: 71px;
+$video-thumbnail-small-width: 125px;
 
 $theater-bottom-space: 115px;
 
@@ -74,9 +91,12 @@ $markdown-textarea-background-color: $grey-background-hover-color;
 $sub-menu-margin-bottom: 30px;
 $sub-menu-margin-bottom-small-view: 10px;
 
-$activated-action-button-color: black;
+$activated-action-button-color: #000;
 
 $focus-box-shadow-form: 0 0 0 .2rem;
+
+$video-watch-player-factor: math.div(16, 9);
+$video-watch-info-margin-left: 44px;
 
 /*** map theme ***/
 
@@ -86,9 +106,12 @@ $variables: (
   --mainColor: var(--mainColor),
   --mainColorLighter: var(--mainColorLighter),
   --mainColorLightest: var(--mainColorLightest),
+
   --mainHoverColor: var(--mainHoverColor),
+
   --mainBackgroundColor: var(--mainBackgroundColor),
   --mainForegroundColor: var(--mainForegroundColor),
+
   --secondaryColor: var(--secondaryColor),
 
   --greyForegroundColor: var(--greyForegroundColor),
@@ -96,7 +119,9 @@ $variables: (
 
   --menuBackgroundColor: var(--menuBackgroundColor),
   --menuForegroundColor: var(--menuForegroundColor),
-  --submenuColor: var(--submenuColor),
+
+  --submenuBackgroundColor: var(--submenuBackgroundColor),
+  --channelBackgroundColor: var(--channelBackgroundColor),
 
   --inputForegroundColor: var(--inputForegroundColor),
   --inputBackgroundColor: var(--inputBackgroundColor),
@@ -114,11 +139,20 @@ $variables: (
   --supportButtonHeartColor: var(--supportButtonHeartColor),
 
   --embedForegroundColor: var(--embedForegroundColor),
-  --embedBigPlayBackgroundColor: var(--embedBigPlayBackgroundColor)
+  --embedBigPlayBackgroundColor: var(--embedBigPlayBackgroundColor),
+
+  --horizontalMarginContent: var(--horizontalMarginContent),
+  --videosHorizontalMarginContent: var(--videosHorizontalMarginContent),
+  --mainColWidth: var(--mainColWidth)
 );
 
+// SASS type check our CSS variables
 @function pvar($variable) {
-  @return map-get($variables, $variable);
+  @if map-has-key($variables, $variable) {
+    @return map-get($variables, $variable);
+  } @else {
+    @error 'ERROR: Variable #{$variable} does not exist';
+  }
 }
 
 /*** z-index groups ***/
@@ -126,7 +160,6 @@ $variables: (
 $zindex: (
   miniature       :    10,
   privacymsg      :    20,
-  dropdown        : 12000,
   sub-menu        : 12500,
   menu            : 12600,
   search-typeahead: 12650,
@@ -135,6 +168,7 @@ $zindex: (
   tooltip         : 14000,
   loadbar         : 15000,
   modal           : 16000,
+  dropdown        : 17000,
   help-popover    : 17000,
   notification    : 18000,
   hotkeys         : 19000

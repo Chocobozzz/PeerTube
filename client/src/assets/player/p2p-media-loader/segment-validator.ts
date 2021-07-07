@@ -1,22 +1,55 @@
+import { wait } from '@root-helpers/utils'
 import { Segment } from 'p2p-media-loader-core'
 import { basename } from 'path'
 
-function segmentValidatorFactory (segmentsSha256Url: string) {
-  const segmentsJSON = fetchSha256Segments(segmentsSha256Url)
+type SegmentsJSON = { [filename: string]: string | { [byterange: string]: string } }
+
+const maxRetries = 3
+
+function segmentValidatorFactory (segmentsSha256Url: string, isLive: boolean) {
+  let segmentsJSON = fetchSha256Segments(segmentsSha256Url)
   const regex = /bytes=(\d+)-(\d+)/
 
-  return async function segmentValidator (segment: Segment) {
+  return async function segmentValidator (segment: Segment, _method: string, _peerId: string, retry = 1) {
+    // Wait for hash generation from the server
+    if (isLive) await wait(1000)
+
     const filename = basename(segment.url)
-    const captured = regex.exec(segment.range)
 
-    const range = captured[1] + '-' + captured[2]
+    const segmentValue = (await segmentsJSON)[filename]
 
-    const hashShouldBe = (await segmentsJSON)[filename][range]
+    if (!segmentValue && retry > maxRetries) {
+      throw new Error(`Unknown segment name ${filename} in segment validator`)
+    }
+
+    if (!segmentValue) {
+      console.log('Refetching sha segments for %s.', filename)
+
+      await wait(1000)
+
+      segmentsJSON = fetchSha256Segments(segmentsSha256Url)
+      await segmentValidator(segment, _method, _peerId, retry + 1)
+
+      return
+    }
+
+    let hashShouldBe: string
+    let range = ''
+
+    if (typeof segmentValue === 'string') {
+      hashShouldBe = segmentValue
+    } else {
+      const captured = regex.exec(segment.range)
+      range = captured[1] + '-' + captured[2]
+
+      hashShouldBe = segmentValue[range]
+    }
+
     if (hashShouldBe === undefined) {
       throw new Error(`Unknown segment name ${filename}/${range} in segment validator`)
     }
 
-    const calculatedSha = bufferToEx(await sha256(segment.data))
+    const calculatedSha = await sha256Hex(segment.data)
     if (calculatedSha !== hashShouldBe) {
       throw new Error(
         `Hashes does not correspond for segment ${filename}/${range}` +
@@ -36,21 +69,28 @@ export {
 
 function fetchSha256Segments (url: string) {
   return fetch(url)
-    .then(res => res.json())
+    .then(res => res.json() as Promise<SegmentsJSON>)
     .catch(err => {
       console.error('Cannot get sha256 segments', err)
       return {}
     })
 }
 
-function sha256 (data?: ArrayBuffer) {
+async function sha256Hex (data?: ArrayBuffer) {
   if (!data) return undefined
 
-  return window.crypto.subtle.digest('SHA-256', data)
+  if (window.crypto.subtle) {
+    return window.crypto.subtle.digest('SHA-256', data)
+      .then(data => bufferToHex(data))
+  }
+
+  // Fallback for non HTTPS context
+  const shaModule = await import('sha.js')
+  return new shaModule.sha256().update(Buffer.from(data)).digest('hex')
 }
 
 // Thanks: https://stackoverflow.com/a/53307879
-function bufferToEx (buffer?: ArrayBuffer) {
+function bufferToHex (buffer?: ArrayBuffer) {
   if (!buffer) return ''
 
   let s = ''

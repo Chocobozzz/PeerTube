@@ -1,10 +1,11 @@
 import * as express from 'express'
 import { query } from 'express-validator'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 import { isWebfingerLocalResourceValid } from '../../helpers/custom-validators/webfinger'
-import { logger } from '../../helpers/logger'
-import { ActorModel } from '../../models/activitypub/actor'
-import { areValidationErrors } from './utils'
 import { getHostWithPort } from '../../helpers/express-utils'
+import { logger } from '../../helpers/logger'
+import { ActorModel } from '../../models/actor/actor'
+import { areValidationErrors } from './shared'
 
 const webfingerValidator = [
   query('resource').custom(isWebfingerLocalResourceValid).withMessage('Should have a valid webfinger resource'),
@@ -20,9 +21,10 @@ const webfingerValidator = [
 
     const actor = await ActorModel.loadLocalUrlByName(name)
     if (!actor) {
-      return res.status(404)
-        .send({ error: 'Actor not found' })
-        .end()
+      return res.fail({
+        status: HttpStatusCode.NOT_FOUND_404,
+        message: 'Actor not found'
+      })
     }
 
     res.locals.actorUrl = actor

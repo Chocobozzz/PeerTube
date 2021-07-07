@@ -15,6 +15,7 @@ export const I18N_LOCALES = {
   'fi-FI': 'suomi',
   'fr-FR': 'Français',
   'gd': 'Gàidhlig',
+  'gl-ES': 'galego',
   'hu-HU': 'magyar',
   'it-IT': 'Italiano',
   'ja-JP': '日本語',
@@ -25,7 +26,8 @@ export const I18N_LOCALES = {
   'pt-BR': 'Português (Brasil)',
   'pt-PT': 'Português (Portugal)',
   'ru-RU': 'русский',
-  'sv-SE': 'svenska',
+  'sq': 'Shqip',
+  'sv-SE': 'Svenska',
   'th-TH': 'ไทย',
   'vi-VN': 'Tiếng Việt',
   'zh-Hans-CN': '简体中文（中国）',
@@ -42,6 +44,7 @@ const I18N_LOCALE_ALIAS = {
   'es': 'es-ES',
   'eu': 'eu-ES',
   'fi': 'fi-FI',
+  'gl': 'gl-ES',
   'fr': 'fr-FR',
   'hu': 'hu-HU',
   'it': 'it-IT',
@@ -72,9 +75,9 @@ export function isDefaultLocale (locale: string) {
 }
 
 export function peertubeTranslate (str: string, translations?: { [ id: string ]: string }) {
-  // FIXME: remove disable rule when the client is upgraded to typescript 3.7
-  // eslint-disable-next-line
-  return translations && translations[str] ? translations[str] : str
+  if (!translations || !translations[str]) return str
+
+  return translations[str]
 }
 
 const possiblePaths = POSSIBLE_LOCALES.map(l => '/' + l)

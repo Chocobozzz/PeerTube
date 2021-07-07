@@ -1,6 +1,8 @@
+import { Location } from '@angular/common'
 import { Component, ElementRef, ViewChild } from '@angular/core'
 import { Notifier, UserService } from '@app/core'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
+import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 import { About } from '@shared/models/server'
 
 @Component({
@@ -14,13 +16,23 @@ export class InstanceConfigWarningModalComponent {
   stopDisplayModal = false
   about: About
 
+  private LOCAL_STORAGE_KEYS = {
+    NO_INSTANCE_CONFIG_WARNING_MODAL: 'no_instance_config_warning_modal'
+  }
+
   constructor (
     private userService: UserService,
+    private location: Location,
     private modalService: NgbModal,
     private notifier: Notifier
   ) { }
 
   show (about: About) {
+    const result = peertubeLocalStorage.getItem(this.LOCAL_STORAGE_KEYS.NO_INSTANCE_CONFIG_WARNING_MODAL)
+    if (result === 'true') return
+
+    if (this.location.path().startsWith('/admin/config/edit-custom')) return
+
     this.about = about
 
     const ref = this.modalService.open(this.modal, { centered: true })
@@ -31,11 +43,12 @@ export class InstanceConfigWarningModalComponent {
   }
 
   isDefaultShortDescription (description: string) {
-    return description === 'PeerTube, a federated (ActivityPub) video streaming platform using P2P (BitTorrent) directly ' +
-      'in the web browser with WebTorrent and Angular.'
+    return description === 'PeerTube, an ActivityPub-federated video streaming platform using P2P directly in your web browser.'
   }
 
   private doNotOpenAgain () {
+    peertubeLocalStorage.setItem(this.LOCAL_STORAGE_KEYS.NO_INSTANCE_CONFIG_WARNING_MODAL, 'true')
+
     this.userService.updateMyProfile({ noInstanceConfigWarningModal: true })
         .subscribe(
           () => console.log('We will not open the instance config warning modal again.'),

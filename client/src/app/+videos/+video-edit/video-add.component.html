@@ -13,15 +13,15 @@
     Instead, <a routerLink="/admin/users">create a dedicated account</a> to upload your videos.
   </div>
 
-  <my-user-quota *ngIf="!isInSecondStep()" [user]="user" [userInformationLoaded]="userInformationLoaded"></my-user-quota>
+  <my-user-quota *ngIf="!isInSecondStep() || secondStepType === 'go-live'" [user]="user" [userInformationLoaded]="userInformationLoaded"></my-user-quota>
 
   <div class="title-page title-page-single" *ngIf="isInSecondStep()">
     <ng-container *ngIf="secondStepType === 'import-url' || secondStepType === 'import-torrent'" i18n>Import {{ videoName }}</ng-container>
     <ng-container *ngIf="secondStepType === 'upload'" i18n>Upload {{ videoName }}</ng-container>
   </div>
 
-  <div ngbNav #nav="ngbNav" class="nav-tabs video-add-nav" [ngClass]="{ 'hide-nav': secondStepType !== undefined }">
-    <ng-container ngbNavItem>
+  <div ngbNav #nav="ngbNav" class="nav-tabs video-add-nav" [activeId]="activeNav" (activeIdChange)="onNavChange($event)" [ngClass]="{ 'hide-nav': !!secondStepType }">
+    <ng-container ngbNavItem="upload">
       <a ngbNavLink>
         <span i18n>Upload a file</span>
       </a>
@@ -31,7 +31,7 @@
       </ng-template>
     </ng-container>
 
-    <ng-container ngbNavItem *ngIf="isVideoImportHttpEnabled()">
+    <ng-container ngbNavItem="import-url" *ngIf="isVideoImportHttpEnabled()">
       <a ngbNavLink>
         <span i18n>Import with URL</span>
       </a>
@@ -41,13 +41,23 @@
       </ng-template>
     </ng-container>
 
-    <ng-container ngbNavItem *ngIf="isVideoImportTorrentEnabled()">
+    <ng-container ngbNavItem="import-torrent" *ngIf="isVideoImportTorrentEnabled()">
       <a ngbNavLink>
         <span i18n>Import with torrent</span>
       </a>
 
       <ng-template ngbNavContent>
         <my-video-import-torrent #videoImportTorrent (firstStepDone)="onFirstStepDone('import-torrent', $event)" (firstStepError)="onError()"></my-video-import-torrent>
+      </ng-template>
+    </ng-container>
+
+    <ng-container ngbNavItem="go-live" *ngIf="isVideoLiveEnabled()">
+      <a ngbNavLink>
+        <span i18n>Go live</span>
+      </a>
+
+      <ng-template ngbNavContent>
+        <my-video-go-live #videoGoLive (firstStepDone)="onFirstStepDone('go-live', $event)" (firstStepError)="onError()"></my-video-go-live>
       </ng-template>
     </ng-container>
   </div>

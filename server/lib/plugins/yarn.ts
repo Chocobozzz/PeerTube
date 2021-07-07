@@ -1,14 +1,17 @@
-import { execShell } from '../../helpers/core-utils'
-import { logger } from '../../helpers/logger'
-import { isNpmPluginNameValid, isPluginVersionValid } from '../../helpers/custom-validators/plugins'
-import { CONFIG } from '../../initializers/config'
 import { outputJSON, pathExists } from 'fs-extra'
 import { join } from 'path'
+import { execShell } from '../../helpers/core-utils'
+import { isNpmPluginNameValid, isPluginVersionValid } from '../../helpers/custom-validators/plugins'
+import { logger } from '../../helpers/logger'
+import { CONFIG } from '../../initializers/config'
+import { getLatestPluginVersion } from './plugin-index'
 
-async function installNpmPlugin (npmName: string, version?: string) {
+async function installNpmPlugin (npmName: string, versionArg?: string) {
   // Security check
   checkNpmPluginNameOrThrow(npmName)
-  if (version) checkPluginVersionOrThrow(version)
+  if (versionArg) checkPluginVersionOrThrow(versionArg)
+
+  const version = versionArg || await getLatestPluginVersion(npmName)
 
   let toInstall = npmName
   if (version) toInstall += `@${version}`

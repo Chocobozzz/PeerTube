@@ -24,8 +24,13 @@ async function register ({
     registerHook({
       target: 'action:api.video.viewed',
       handler: async ({ video }) => {
-        const videoFromDB = await peertubeHelpers.videos.loadByUrl(video.url)
-        logger.info('video from DB uuid is %s.', videoFromDB.uuid)
+        const videoFromDB1 = await peertubeHelpers.videos.loadByUrl(video.url)
+        const videoFromDB2 = await peertubeHelpers.videos.loadByIdOrUUID(video.id)
+        const videoFromDB3 = await peertubeHelpers.videos.loadByIdOrUUID(video.uuid)
+
+        if (videoFromDB1.uuid !== videoFromDB2.uuid || videoFromDB2.uuid !== videoFromDB3.uuid) return
+
+        logger.info('video from DB uuid is %s.', videoFromDB1.uuid)
 
         await peertubeHelpers.videos.removeVideo(video.id)
 
@@ -64,7 +69,43 @@ async function register ({
         res.sendStatus(500)
       }
     })
+
+    router.get('/server-config', async (req, res) => {
+      const serverConfig = await peertubeHelpers.config.getServerConfig()
+
+      return res.json({ serverConfig })
+    })
+
+    router.get('/static-route', async (req, res) => {
+      const staticRoute = peertubeHelpers.plugin.getBaseStaticRoute()
+
+      return res.json({ staticRoute })
+    })
+
+    router.get('/router-route', async (req, res) => {
+      const routerRoute = peertubeHelpers.plugin.getBaseRouterRoute()
+
+      return res.json({ routerRoute })
+    })
+
+    router.get('/user', async (req, res) => {
+      const user = await peertubeHelpers.user.getAuthUser(res)
+      if (!user) return res.sendStatus(404)
+
+      const isAdmin = user.role === 0
+      const isModerator = user.role === 1
+      const isUser = user.role === 2
+
+      return res.json({
+        username: user.username,
+        displayName: user.Account.name,
+        isAdmin,
+        isModerator,
+        isUser
+      })
+    })
   }
+
 }
 
 async function unregister () {

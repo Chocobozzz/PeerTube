@@ -1,6 +1,5 @@
 import { Component, Input } from '@angular/core'
 import { durationToString } from '@app/helpers'
-import { Actor } from '@app/shared/shared-main'
 import { AbusePredefinedReasonsString } from '@shared/models'
 import { ProcessedAbuse } from './processed-abuse.model'
 
@@ -12,7 +11,6 @@ import { ProcessedAbuse } from './processed-abuse.model'
 export class AbuseDetailsComponent {
   @Input() abuse: ProcessedAbuse
   @Input() isAdminView: boolean
-  @Input() baseRoute: string
 
   private predefinedReasonsTranslations: { [key in AbusePredefinedReasonsString]: string }
 
@@ -44,9 +42,5 @@ export class AbuseDetailsComponent {
       id: r,
       label: this.predefinedReasonsTranslations[r]
     }))
-  }
-
-  switchToDefaultAvatar ($event: Event) {
-    ($event.target as HTMLImageElement).src = Actor.GET_DEFAULT_AVATAR_URL()
   }
 }

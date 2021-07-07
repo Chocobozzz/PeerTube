@@ -1,16 +1,16 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 .help-to-translate {
   @include peertube-button-link;
   @include orange-button;
 
+  border-radius: 0;
+
   &.focus-visible,
   &:focus {
     box-shadow: none;
   }
-
-  border-radius: 0;
 }
 
 .modal-body {

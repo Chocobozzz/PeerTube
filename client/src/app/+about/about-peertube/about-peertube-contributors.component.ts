@@ -9,11 +9,11 @@ import { MarkdownService } from '@app/core'
 export class AboutPeertubeContributorsComponent implements OnInit {
   creditsHtml: string
 
-  private markdown = require('raw-loader!../../../../../CREDITS.md')
+  private markdown = require('raw-loader!../../../../../CREDITS.md').default
 
   constructor (private markdownService: MarkdownService) { }
 
   async ngOnInit () {
-    this.creditsHtml = await this.markdownService.completeMarkdownToHTML(this.markdown)
+    this.creditsHtml = await this.markdownService.unsafeMarkdownToHTML(this.markdown, true)
   }
 }

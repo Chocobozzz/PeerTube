@@ -1,6 +1,7 @@
 import * as express from 'express'
-import { ResultList } from '../../../../shared/models'
-import { VideoCommentCreate } from '../../../../shared/models/videos/video-comment.model'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { ResultList, ThreadsResultList, UserRight } from '../../../../shared/models'
+import { VideoCommentCreate } from '../../../../shared/models/videos/comment/video-comment.model'
 import { auditLoggerFactory, CommentAuditView, getAuditIdFromRes } from '../../../helpers/audit-logger'
 import { getFormattedObjects } from '../../../helpers/utils'
 import { sequelizeTypescript } from '../../../initializers/database'
@@ -11,6 +12,7 @@ import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
   authenticate,
+  ensureUserHasRight,
   optionalAuthenticate,
   paginationValidator,
   setDefaultPagination,
@@ -19,9 +21,11 @@ import {
 import {
   addVideoCommentReplyValidator,
   addVideoCommentThreadValidator,
+  listVideoCommentsValidator,
   listVideoCommentThreadsValidator,
   listVideoThreadCommentsValidator,
   removeVideoCommentValidator,
+  videoCommentsValidator,
   videoCommentThreadsSortValidator
 } from '../../../middlewares/validators'
 import { AccountModel } from '../../../models/account/account'
@@ -61,6 +65,17 @@ videoCommentRouter.delete('/:videoId/comments/:commentId',
   asyncRetryTransactionMiddleware(removeVideoComment)
 )
 
+videoCommentRouter.get('/comments',
+  authenticate,
+  ensureUserHasRight(UserRight.SEE_ALL_COMMENTS),
+  paginationValidator,
+  videoCommentsValidator,
+  setDefaultSort,
+  setDefaultPagination,
+  listVideoCommentsValidator,
+  asyncMiddleware(listComments)
+)
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -69,11 +84,31 @@ export {
 
 // ---------------------------------------------------------------------------
 
+async function listComments (req: express.Request, res: express.Response) {
+  const options = {
+    start: req.query.start,
+    count: req.query.count,
+    sort: req.query.sort,
+
+    isLocal: req.query.isLocal,
+    search: req.query.search,
+    searchAccount: req.query.searchAccount,
+    searchVideo: req.query.searchVideo
+  }
+
+  const resultList = await VideoCommentModel.listCommentsForApi(options)
+
+  return res.json({
+    total: resultList.total,
+    data: resultList.data.map(c => c.toFormattedAdminJSON())
+  })
+}
+
 async function listVideoThreads (req: express.Request, res: express.Response) {
   const video = res.locals.onlyVideo
   const user = res.locals.oauth ? res.locals.oauth.token.User : undefined
 
-  let resultList: ResultList<VideoCommentModel>
+  let resultList: ThreadsResultList<VideoCommentModel>
 
   if (video.commentsEnabled === true) {
     const apiOptions = await Hooks.wrapObject({
@@ -93,11 +128,15 @@ async function listVideoThreads (req: express.Request, res: express.Response) {
   } else {
     resultList = {
       total: 0,
+      totalNotDeletedComments: 0,
       data: []
     }
   }
 
-  return res.json(getFormattedObjects(resultList.data, resultList.total))
+  return res.json({
+    ...getFormattedObjects(resultList.data, resultList.total),
+    totalNotDeletedComments: resultList.totalNotDeletedComments
+  })
 }
 
 async function listVideoThreadComments (req: express.Request, res: express.Response) {
@@ -124,6 +163,13 @@ async function listVideoThreadComments (req: express.Request, res: express.Respo
       total: 0,
       data: []
     }
+  }
+
+  if (resultList.data.length === 0) {
+    return res.fail({
+      status: HttpStatusCode.NOT_FOUND_404,
+      message: 'No comments were found'
+    })
   }
 
   return res.json(buildFormattedCommentTree(resultList))
@@ -180,5 +226,7 @@ async function removeVideoComment (req: express.Request, res: express.Response) 
 
   auditLogger.delete(getAuditIdFromRes(res), new CommentAuditView(videoCommentInstance.toFormattedJSON()))
 
-  return res.type('json').status(204).end()
+  return res.type('json')
+            .status(HttpStatusCode.NO_CONTENT_204)
+            .end()
 }

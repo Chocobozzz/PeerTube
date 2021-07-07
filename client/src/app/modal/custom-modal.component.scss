@@ -1,5 +1,5 @@
-@import '_mixins';
-@import '_variables';
+@use '_mixins' as *;
+@use '_variables' as *;
 
 .modal-body {
   font-size: 15px;
@@ -7,14 +7,4 @@
 
 li {
   margin-bottom: 10px;
-}
-
-.action-button-cancel {
-  @include peertube-button;
-  @include grey-button;
-}
-
-.action-button-confirm {
-  @include peertube-button;
-  @include orange-button;
 }

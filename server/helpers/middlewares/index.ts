@@ -1,7 +1,0 @@
-export * from './abuses'
-export * from './accounts'
-export * from './video-blacklists'
-export * from './video-captions'
-export * from './video-channels'
-export * from './video-playlists'
-export * from './videos'

@@ -6,6 +6,7 @@ import { cleanupTests, flushAndRunServer, ServerInfo, setAccessTokensToServers, 
 import { MockSmtpServer } from '../../../../shared/extra-utils/miscs/email'
 import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 import { sendContactForm } from '../../../../shared/extra-utils/server/contact-form'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const expect = chai.expect
 
@@ -53,6 +54,10 @@ describe('Test contact form', function () {
   })
 
   it('Should not be able to send another contact form because of the anti spam checker', async function () {
+    this.timeout(10000)
+
+    await wait(1000)
+
     await sendContactForm({
       url: server.url,
       fromEmail: 'toto@example.com',
@@ -67,7 +72,7 @@ describe('Test contact form', function () {
       body: 'my super message',
       fromName: 'Super toto',
       subject: 'my subject',
-      expectedStatus: 403
+      expectedStatus: HttpStatusCode.FORBIDDEN_403
     })
   })
 
@@ -81,6 +86,11 @@ describe('Test contact form', function () {
       subject: 'my subject',
       body: 'my super message'
     })
+  })
+
+  it('Should not have the manage preferences link in the email', async function () {
+    const email = emails[0]
+    expect(email['text']).to.not.contain('Manage your notification preferences')
   })
 
   after(async function () {

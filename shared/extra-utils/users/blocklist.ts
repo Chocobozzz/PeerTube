@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { makeGetRequest, makeDeleteRequest, makePostBodyRequest } from '../requests/requests'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 function getAccountBlocklistByAccount (
   url: string,
@@ -8,7 +9,7 @@ function getAccountBlocklistByAccount (
   start: number,
   count: number,
   sort = '-createdAt',
-  statusCodeExpected = 200
+  statusCodeExpected = HttpStatusCode.OK_200
 ) {
   const path = '/api/v1/users/me/blocklist/accounts'
 
@@ -21,7 +22,12 @@ function getAccountBlocklistByAccount (
   })
 }
 
-function addAccountToAccountBlocklist (url: string, token: string, accountToBlock: string, statusCodeExpected = 204) {
+function addAccountToAccountBlocklist (
+  url: string,
+  token: string,
+  accountToBlock: string,
+  statusCodeExpected = HttpStatusCode.NO_CONTENT_204
+) {
   const path = '/api/v1/users/me/blocklist/accounts'
 
   return makePostBodyRequest({
@@ -35,7 +41,12 @@ function addAccountToAccountBlocklist (url: string, token: string, accountToBloc
   })
 }
 
-function removeAccountFromAccountBlocklist (url: string, token: string, accountToUnblock: string, statusCodeExpected = 204) {
+function removeAccountFromAccountBlocklist (
+  url: string,
+  token: string,
+  accountToUnblock: string,
+  statusCodeExpected = HttpStatusCode.NO_CONTENT_204
+) {
   const path = '/api/v1/users/me/blocklist/accounts/' + accountToUnblock
 
   return makeDeleteRequest({
@@ -52,7 +63,7 @@ function getServerBlocklistByAccount (
   start: number,
   count: number,
   sort = '-createdAt',
-  statusCodeExpected = 200
+  statusCodeExpected = HttpStatusCode.OK_200
 ) {
   const path = '/api/v1/users/me/blocklist/servers'
 
@@ -65,7 +76,12 @@ function getServerBlocklistByAccount (
   })
 }
 
-function addServerToAccountBlocklist (url: string, token: string, serverToBlock: string, statusCodeExpected = 204) {
+function addServerToAccountBlocklist (
+  url: string,
+  token: string,
+  serverToBlock: string,
+  statusCodeExpected = HttpStatusCode.NO_CONTENT_204
+) {
   const path = '/api/v1/users/me/blocklist/servers'
 
   return makePostBodyRequest({
@@ -79,7 +95,12 @@ function addServerToAccountBlocklist (url: string, token: string, serverToBlock:
   })
 }
 
-function removeServerFromAccountBlocklist (url: string, token: string, serverToBlock: string, statusCodeExpected = 204) {
+function removeServerFromAccountBlocklist (
+  url: string,
+  token: string,
+  serverToBlock: string,
+  statusCodeExpected = HttpStatusCode.NO_CONTENT_204
+) {
   const path = '/api/v1/users/me/blocklist/servers/' + serverToBlock
 
   return makeDeleteRequest({
@@ -96,7 +117,7 @@ function getAccountBlocklistByServer (
   start: number,
   count: number,
   sort = '-createdAt',
-  statusCodeExpected = 200
+  statusCodeExpected = HttpStatusCode.OK_200
 ) {
   const path = '/api/v1/server/blocklist/accounts'
 
@@ -109,7 +130,12 @@ function getAccountBlocklistByServer (
   })
 }
 
-function addAccountToServerBlocklist (url: string, token: string, accountToBlock: string, statusCodeExpected = 204) {
+function addAccountToServerBlocklist (
+  url: string,
+  token: string,
+  accountToBlock: string,
+  statusCodeExpected = HttpStatusCode.NO_CONTENT_204
+) {
   const path = '/api/v1/server/blocklist/accounts'
 
   return makePostBodyRequest({
@@ -123,7 +149,12 @@ function addAccountToServerBlocklist (url: string, token: string, accountToBlock
   })
 }
 
-function removeAccountFromServerBlocklist (url: string, token: string, accountToUnblock: string, statusCodeExpected = 204) {
+function removeAccountFromServerBlocklist (
+  url: string,
+  token: string,
+  accountToUnblock: string,
+  statusCodeExpected = HttpStatusCode.NO_CONTENT_204
+) {
   const path = '/api/v1/server/blocklist/accounts/' + accountToUnblock
 
   return makeDeleteRequest({
@@ -140,7 +171,7 @@ function getServerBlocklistByServer (
   start: number,
   count: number,
   sort = '-createdAt',
-  statusCodeExpected = 200
+  statusCodeExpected = HttpStatusCode.OK_200
 ) {
   const path = '/api/v1/server/blocklist/servers'
 
@@ -153,7 +184,12 @@ function getServerBlocklistByServer (
   })
 }
 
-function addServerToServerBlocklist (url: string, token: string, serverToBlock: string, statusCodeExpected = 204) {
+function addServerToServerBlocklist (
+  url: string,
+  token: string,
+  serverToBlock: string,
+  statusCodeExpected = HttpStatusCode.NO_CONTENT_204
+) {
   const path = '/api/v1/server/blocklist/servers'
 
   return makePostBodyRequest({
@@ -167,7 +203,12 @@ function addServerToServerBlocklist (url: string, token: string, serverToBlock: 
   })
 }
 
-function removeServerFromServerBlocklist (url: string, token: string, serverToBlock: string, statusCodeExpected = 204) {
+function removeServerFromServerBlocklist (
+  url: string,
+  token: string,
+  serverToBlock: string,
+  statusCodeExpected = HttpStatusCode.NO_CONTENT_204
+) {
   const path = '/api/v1/server/blocklist/servers/' + serverToBlock
 
   return makeDeleteRequest({

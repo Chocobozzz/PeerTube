@@ -1,46 +1,50 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
 import 'mocha'
-import { AccountBlock, ServerBlock, Video, UserNotification, UserNotificationType } from '../../../../shared/index'
-import {
-  cleanupTests,
-  createUser,
-  deleteVideoComment,
-  doubleFollow,
-  flushAndRunMultipleServers,
-  ServerInfo,
-  uploadVideo,
-  userLogin,
-  follow,
-  unfollow
-} from '../../../../shared/extra-utils/index'
-import { setAccessTokensToServers } from '../../../../shared/extra-utils/users/login'
-import { getVideosList, getVideosListWithToken } from '../../../../shared/extra-utils/videos/videos'
-import {
-  addVideoCommentReply,
-  addVideoCommentThread,
-  getVideoCommentThreads,
-  getVideoThreadComments,
-  findCommentId
-} from '../../../../shared/extra-utils/videos/video-comments'
-import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
-import { VideoComment, VideoCommentThreadTree } from '../../../../shared/models/videos/video-comment.model'
+import * as chai from 'chai'
 import {
   addAccountToAccountBlocklist,
   addAccountToServerBlocklist,
   addServerToAccountBlocklist,
   addServerToServerBlocklist,
+  addVideoCommentReply,
+  addVideoCommentThread,
+  cleanupTests,
+  createUser,
+  deleteVideoComment,
+  doubleFollow,
+  findCommentId,
+  flushAndRunMultipleServers,
+  follow,
   getAccountBlocklistByAccount,
   getAccountBlocklistByServer,
   getServerBlocklistByAccount,
   getServerBlocklistByServer,
+  getUserNotifications,
+  getVideoCommentThreads,
+  getVideosList,
+  getVideosListWithToken,
+  getVideoThreadComments,
   removeAccountFromAccountBlocklist,
   removeAccountFromServerBlocklist,
   removeServerFromAccountBlocklist,
-  removeServerFromServerBlocklist
-} from '../../../../shared/extra-utils/users/blocklist'
-import { getUserNotifications } from '../../../../shared/extra-utils/users/user-notifications'
+  removeServerFromServerBlocklist,
+  ServerInfo,
+  setAccessTokensToServers,
+  unfollow,
+  uploadVideo,
+  userLogin,
+  waitJobs
+} from '@shared/extra-utils'
+import {
+  AccountBlock,
+  ServerBlock,
+  UserNotification,
+  UserNotificationType,
+  Video,
+  VideoComment,
+  VideoCommentThreadTree
+} from '@shared/models'
 
 const expect = chai.expect
 
@@ -107,7 +111,7 @@ describe('Test blocklist', function () {
   let userToken2: string
 
   before(async function () {
-    this.timeout(60000)
+    this.timeout(120000)
 
     servers = await flushAndRunMultipleServers(3)
     await setAccessTokensToServers(servers)
@@ -211,7 +215,7 @@ describe('Test blocklist', function () {
 
         const threads: VideoComment[] = resThreads.body.data
         expect(threads).to.have.lengthOf(1)
-        expect(threads[0].totalReplies).to.equal(0)
+        expect(threads[0].totalReplies).to.equal(1)
 
         const t = threads.find(t => t.text === 'comment user 1')
         expect(t).to.be.undefined
@@ -561,7 +565,7 @@ describe('Test blocklist', function () {
           threads = threads.filter(t => t.isDeleted === false)
 
           expect(threads).to.have.lengthOf(1)
-          expect(threads[0].totalReplies).to.equal(0)
+          expect(threads[0].totalReplies).to.equal(1)
 
           const t = threads.find(t => t.text === 'comment user 1')
           expect(t).to.be.undefined

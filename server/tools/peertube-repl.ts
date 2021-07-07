@@ -4,7 +4,6 @@ registerTSPaths()
 import * as repl from 'repl'
 import * as path from 'path'
 import * as _ from 'lodash'
-import { uuidv1, uuidv3, uuidv4, uuidv5 } from 'uuid'
 import * as Sequelize from 'sequelize'
 import * as YoutubeDL from 'youtube-dl'
 import { initDatabaseModels, sequelizeTypescript } from '../initializers/database'
@@ -15,7 +14,6 @@ import * as modelsUtils from '../models/utils'
 import * as coreUtils from '../helpers/core-utils'
 import * as ffmpegUtils from '../helpers/ffmpeg-utils'
 import * as peertubeCryptoUtils from '../helpers/peertube-crypto'
-import * as signupUtils from '../helpers/signup'
 import * as utils from '../helpers/utils'
 import * as YoutubeDLUtils from '../helpers/youtube-dl'
 
@@ -32,10 +30,6 @@ const start = async () => {
         env: process.env,
         lodash: _,
         path,
-        uuidv1,
-        uuidv3,
-        uuidv4,
-        uuidv5,
         cli,
         logger,
         constants,
@@ -50,7 +44,6 @@ const start = async () => {
         coreUtils,
         ffmpegUtils,
         peertubeCryptoUtils,
-        signupUtils,
         utils,
         YoutubeDLUtils
       }
@@ -82,7 +75,6 @@ const start = async () => {
   }
   replServer.defineCommand('reset', resetCommand)
   replServer.defineCommand('r', resetCommand)
-
 }
 
 start()

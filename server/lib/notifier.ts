@@ -17,9 +17,9 @@ import { VideoPrivacy, VideoState } from '../../shared/models/videos'
 import { logger } from '../helpers/logger'
 import { CONFIG } from '../initializers/config'
 import { AccountBlocklistModel } from '../models/account/account-blocklist'
-import { UserModel } from '../models/account/user'
-import { UserNotificationModel } from '../models/account/user-notification'
-import { MAbuseFull, MAbuseMessage, MAccountServer, MActorFollowFull } from '../types/models'
+import { UserModel } from '../models/user/user'
+import { UserNotificationModel } from '../models/user/user-notification'
+import { MAbuseFull, MAbuseMessage, MAccountServer, MActorFollowFull, MApplication, MPlugin } from '../types/models'
 import { MCommentOwnerVideo, MVideoAccountLight, MVideoFullLight } from '../types/models/video'
 import { isBlockedByServerOrAccount } from './blocklist'
 import { Emailer } from './emailer'
@@ -141,6 +141,20 @@ class Notifier {
     this.notifyOfNewAbuseMessage(abuse, message)
       .catch(err => {
         logger.error('Cannot notify on new abuse %d message.', abuse.id, { err })
+      })
+  }
+
+  notifyOfNewPeerTubeVersion (application: MApplication, latestVersion: string) {
+    this.notifyAdminsOfNewPeerTubeVersion(application, latestVersion)
+      .catch(err => {
+        logger.error('Cannot notify on new PeerTubeb version %s.', latestVersion, { err })
+      })
+  }
+
+  notifyOfNewPluginVersion (plugin: MPlugin) {
+    this.notifyAdminsOfNewPluginVersion(plugin)
+      .catch(err => {
+        logger.error('Cannot notify on new plugin version %s.', plugin.name, { err })
       })
   }
 
@@ -463,11 +477,11 @@ class Notifier {
 
     async function buildReporterOptions () {
       // Only notify our users
-      if (abuse.ReporterAccount.isOwned() !== true) return
+      if (abuse.ReporterAccount.isOwned() !== true) return undefined
 
       const reporter = await UserModel.loadByAccountActorId(abuse.ReporterAccount.actorId)
       // Don't notify my own message
-      if (reporter.Account.id === message.accountId) return
+      if (reporter.Account.id === message.accountId) return undefined
 
       return { users: [ reporter ], settingGetter, notificationCreator, emailSender: emailSenderReporter }
     }
@@ -477,20 +491,21 @@ class Notifier {
       // Don't notify my own message
       moderators = moderators.filter(m => m.Account.id !== message.accountId)
 
-      if (moderators.length === 0) return
+      if (moderators.length === 0) return undefined
 
       return { users: moderators, settingGetter, notificationCreator, emailSender: emailSenderModerators }
     }
 
-    const [ reporterOptions, moderatorsOptions ] = await Promise.all([
+    const options = await Promise.all([
       buildReporterOptions(),
       buildModeratorsOptions()
     ])
 
-    return Promise.all([
-      this.notify(reporterOptions),
-      this.notify(moderatorsOptions)
-    ])
+    return Promise.all(
+      options
+        .filter(opt => !!opt)
+        .map(opt => this.notify(opt))
+    )
   }
 
   private async notifyModeratorsOfVideoAutoBlacklist (videoBlacklist: MVideoBlacklistLightVideo) {
@@ -664,6 +679,64 @@ class Notifier {
     }
 
     return this.notify({ users: moderators, settingGetter, notificationCreator, emailSender })
+  }
+
+  private async notifyAdminsOfNewPeerTubeVersion (application: MApplication, latestVersion: string) {
+    // Use the debug right to know who is an administrator
+    const admins = await UserModel.listWithRight(UserRight.MANAGE_DEBUG)
+    if (admins.length === 0) return
+
+    logger.info('Notifying %s admins of new PeerTube version %s.', admins.length, latestVersion)
+
+    function settingGetter (user: MUserWithNotificationSetting) {
+      return user.NotificationSetting.newPeerTubeVersion
+    }
+
+    async function notificationCreator (user: MUserWithNotificationSetting) {
+      const notification = await UserNotificationModel.create<UserNotificationModelForApi>({
+        type: UserNotificationType.NEW_PEERTUBE_VERSION,
+        userId: user.id,
+        applicationId: application.id
+      })
+      notification.Application = application
+
+      return notification
+    }
+
+    function emailSender (emails: string[]) {
+      return Emailer.Instance.addNewPeerTubeVersionNotification(emails, latestVersion)
+    }
+
+    return this.notify({ users: admins, settingGetter, notificationCreator, emailSender })
+  }
+
+  private async notifyAdminsOfNewPluginVersion (plugin: MPlugin) {
+    // Use the debug right to know who is an administrator
+    const admins = await UserModel.listWithRight(UserRight.MANAGE_DEBUG)
+    if (admins.length === 0) return
+
+    logger.info('Notifying %s admins of new plugin version %s@%s.', admins.length, plugin.name, plugin.latestVersion)
+
+    function settingGetter (user: MUserWithNotificationSetting) {
+      return user.NotificationSetting.newPluginVersion
+    }
+
+    async function notificationCreator (user: MUserWithNotificationSetting) {
+      const notification = await UserNotificationModel.create<UserNotificationModelForApi>({
+        type: UserNotificationType.NEW_PLUGIN_VERSION,
+        userId: user.id,
+        pluginId: plugin.id
+      })
+      notification.Plugin = plugin
+
+      return notification
+    }
+
+    function emailSender (emails: string[]) {
+      return Emailer.Instance.addNewPlugionVersionNotification(emails, plugin)
+    }
+
+    return this.notify({ users: admins, settingGetter, notificationCreator, emailSender })
   }
 
   private async notify<T extends MUserWithNotificationSetting> (options: {

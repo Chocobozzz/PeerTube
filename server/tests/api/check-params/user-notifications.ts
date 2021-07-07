@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-import * as io from 'socket.io-client'
+import { io } from 'socket.io-client'
 
 import {
   cleanupTests,
@@ -20,6 +20,7 @@ import {
   checkBadStartPagination
 } from '../../../../shared/extra-utils/requests/check-api-params'
 import { UserNotificationSetting, UserNotificationSettingValue } from '../../../../shared/models/users'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 describe('Test user notifications API validators', function () {
   let server: ServerInfo
@@ -57,7 +58,7 @@ describe('Test user notifications API validators', function () {
           unread: 'toto'
         },
         token: server.accessToken,
-        statusCodeExpected: 200
+        statusCodeExpected: HttpStatusCode.OK_200
       })
     })
 
@@ -65,7 +66,7 @@ describe('Test user notifications API validators', function () {
       await makeGetRequest({
         url: server.url,
         path,
-        statusCodeExpected: 401
+        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
       })
     })
 
@@ -74,7 +75,7 @@ describe('Test user notifications API validators', function () {
         url: server.url,
         path,
         token: server.accessToken,
-        statusCodeExpected: 200
+        statusCodeExpected: HttpStatusCode.OK_200
       })
     })
   })
@@ -90,7 +91,7 @@ describe('Test user notifications API validators', function () {
           ids: [ 'hello' ]
         },
         token: server.accessToken,
-        statusCodeExpected: 400
+        statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
       })
 
       await makePostBodyRequest({
@@ -100,7 +101,7 @@ describe('Test user notifications API validators', function () {
           ids: [ ]
         },
         token: server.accessToken,
-        statusCodeExpected: 400
+        statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
       })
 
       await makePostBodyRequest({
@@ -110,7 +111,7 @@ describe('Test user notifications API validators', function () {
           ids: 5
         },
         token: server.accessToken,
-        statusCodeExpected: 400
+        statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
       })
     })
 
@@ -121,7 +122,7 @@ describe('Test user notifications API validators', function () {
         fields: {
           ids: [ 5 ]
         },
-        statusCodeExpected: 401
+        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
       })
     })
 
@@ -133,7 +134,7 @@ describe('Test user notifications API validators', function () {
           ids: [ 5 ]
         },
         token: server.accessToken,
-        statusCodeExpected: 204
+        statusCodeExpected: HttpStatusCode.NO_CONTENT_204
       })
     })
   })
@@ -145,7 +146,7 @@ describe('Test user notifications API validators', function () {
       await makePostBodyRequest({
         url: server.url,
         path,
-        statusCodeExpected: 401
+        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
       })
     })
 
@@ -154,7 +155,7 @@ describe('Test user notifications API validators', function () {
         url: server.url,
         path,
         token: server.accessToken,
-        statusCodeExpected: 204
+        statusCodeExpected: HttpStatusCode.NO_CONTENT_204
       })
     })
   })
@@ -175,7 +176,9 @@ describe('Test user notifications API validators', function () {
       newInstanceFollower: UserNotificationSettingValue.WEB,
       autoInstanceFollowing: UserNotificationSettingValue.WEB,
       abuseNewMessage: UserNotificationSettingValue.WEB,
-      abuseStateChange: UserNotificationSettingValue.WEB
+      abuseStateChange: UserNotificationSettingValue.WEB,
+      newPeerTubeVersion: UserNotificationSettingValue.WEB,
+      newPluginVersion: UserNotificationSettingValue.WEB
     }
 
     it('Should fail with missing fields', async function () {
@@ -184,7 +187,7 @@ describe('Test user notifications API validators', function () {
         path,
         token: server.accessToken,
         fields: { newVideoFromSubscription: UserNotificationSettingValue.WEB },
-        statusCodeExpected: 400
+        statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
       })
     })
 
@@ -197,7 +200,7 @@ describe('Test user notifications API validators', function () {
           path,
           token: server.accessToken,
           fields,
-          statusCodeExpected: 400
+          statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
         })
       }
 
@@ -209,7 +212,7 @@ describe('Test user notifications API validators', function () {
           path,
           fields,
           token: server.accessToken,
-          statusCodeExpected: 400
+          statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
         })
       }
     })
@@ -219,7 +222,7 @@ describe('Test user notifications API validators', function () {
         url: server.url,
         path,
         fields: correctFields,
-        statusCodeExpected: 401
+        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
       })
     })
 
@@ -229,17 +232,17 @@ describe('Test user notifications API validators', function () {
         path,
         token: server.accessToken,
         fields: correctFields,
-        statusCodeExpected: 204
+        statusCodeExpected: HttpStatusCode.NO_CONTENT_204
       })
     })
   })
 
   describe('When connecting to my notification socket', function () {
+
     it('Should fail with no token', function (next) {
       const socket = io(`http://localhost:${server.port}/user-notifications`, { reconnection: false })
 
-      socket.on('error', () => {
-        socket.removeListener('error', this)
+      socket.once('connect_error', function () {
         socket.disconnect()
         next()
       })
@@ -256,8 +259,7 @@ describe('Test user notifications API validators', function () {
         reconnection: false
       })
 
-      socket.on('error', () => {
-        socket.removeListener('error', this)
+      socket.once('connect_error', function () {
         socket.disconnect()
         next()
       })
@@ -274,12 +276,13 @@ describe('Test user notifications API validators', function () {
         reconnection: false
       })
 
-      const errorListener = socket.on('error', err => {
+      function errorListener (err) {
         next(new Error('Error in connection: ' + err))
-      })
+      }
 
-      socket.on('connect', async () => {
-        socket.removeListener('error', errorListener)
+      socket.on('connect_error', errorListener)
+
+      socket.once('connect', async () => {
         socket.disconnect()
 
         await wait(500)

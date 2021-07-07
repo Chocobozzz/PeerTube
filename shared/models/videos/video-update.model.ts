@@ -1,6 +1,5 @@
 import { VideoPrivacy } from './video-privacy.enum'
 import { VideoScheduleUpdate } from './video-schedule-update.model'
-
 export interface VideoUpdate {
   name?: string
   category?: number

@@ -3,11 +3,13 @@
 import 'mocha'
 import * as chai from 'chai'
 import { AbuseState, AbuseUpdate, MyUser, User, UserRole, Video, VideoPlaylistType } from '@shared/models'
-import { CustomConfig } from '@shared/models/server'
+import { CustomConfig, OAuth2ErrorCode } from '@shared/models/server'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import {
   addVideoCommentThread,
   blockUser,
   cleanupTests,
+  closeAllSequelize,
   createUser,
   deleteMe,
   flushAndRunServer,
@@ -24,6 +26,7 @@ import {
   getVideoChannel,
   getVideosList,
   installPlugin,
+  killallServers,
   login,
   makePutBodyRequest,
   rateVideo,
@@ -31,7 +34,9 @@ import {
   removeUser,
   removeVideo,
   reportAbuse,
+  reRunServer,
   ServerInfo,
+  setTokenField,
   testImage,
   unblockUser,
   updateAbuse,
@@ -44,7 +49,7 @@ import {
   waitJobs
 } from '../../../../shared/extra-utils'
 import { follow } from '../../../../shared/extra-utils/server/follows'
-import { logout, serverLogin, setAccessTokensToServers } from '../../../../shared/extra-utils/users/login'
+import { logout, refreshToken, setAccessTokensToServers } from '../../../../shared/extra-utils/users/login'
 import { getMyVideos } from '../../../../shared/extra-utils/videos/videos'
 import { UserAdminFlag } from '../../../../shared/models/users/user-flag.model'
 
@@ -86,16 +91,22 @@ describe('Test users', function () {
 
     it('Should not login with an invalid client id', async function () {
       const client = { id: 'client', secret: server.client.secret }
-      const res = await login(server.url, client, server.user, 400)
+      const res = await login(server.url, client, server.user, HttpStatusCode.BAD_REQUEST_400)
 
+      expect(res.body.code).to.equal(OAuth2ErrorCode.INVALID_CLIENT)
       expect(res.body.error).to.contain('client is invalid')
+      expect(res.body.type.startsWith('https://')).to.be.true
+      expect(res.body.type).to.contain(OAuth2ErrorCode.INVALID_CLIENT)
     })
 
     it('Should not login with an invalid client secret', async function () {
       const client = { id: server.client.id, secret: 'coucou' }
-      const res = await login(server.url, client, server.user, 400)
+      const res = await login(server.url, client, server.user, HttpStatusCode.BAD_REQUEST_400)
 
+      expect(res.body.code).to.equal(OAuth2ErrorCode.INVALID_CLIENT)
       expect(res.body.error).to.contain('client is invalid')
+      expect(res.body.type.startsWith('https://')).to.be.true
+      expect(res.body.type).to.contain(OAuth2ErrorCode.INVALID_CLIENT)
     })
   })
 
@@ -103,47 +114,53 @@ describe('Test users', function () {
 
     it('Should not login with an invalid username', async function () {
       const user = { username: 'captain crochet', password: server.user.password }
-      const res = await login(server.url, server.client, user, 400)
+      const res = await login(server.url, server.client, user, HttpStatusCode.BAD_REQUEST_400)
 
+      expect(res.body.code).to.equal(OAuth2ErrorCode.INVALID_GRANT)
       expect(res.body.error).to.contain('credentials are invalid')
+      expect(res.body.type.startsWith('https://')).to.be.true
+      expect(res.body.type).to.contain(OAuth2ErrorCode.INVALID_GRANT)
     })
 
     it('Should not login with an invalid password', async function () {
       const user = { username: server.user.username, password: 'mew_three' }
-      const res = await login(server.url, server.client, user, 400)
+      const res = await login(server.url, server.client, user, HttpStatusCode.BAD_REQUEST_400)
 
+      expect(res.body.code).to.equal(OAuth2ErrorCode.INVALID_GRANT)
       expect(res.body.error).to.contain('credentials are invalid')
+      expect(res.body.type.startsWith('https://')).to.be.true
+      expect(res.body.type).to.contain(OAuth2ErrorCode.INVALID_GRANT)
     })
 
     it('Should not be able to upload a video', async function () {
       accessToken = 'my_super_token'
 
       const videoAttributes = {}
-      await uploadVideo(server.url, accessToken, videoAttributes, 401)
+      await uploadVideo(server.url, accessToken, videoAttributes, HttpStatusCode.UNAUTHORIZED_401)
     })
 
     it('Should not be able to follow', async function () {
       accessToken = 'my_super_token'
-      await follow(server.url, [ 'http://example.com' ], accessToken, 401)
+      await follow(server.url, [ 'http://example.com' ], accessToken, HttpStatusCode.UNAUTHORIZED_401)
     })
 
     it('Should not be able to unfollow')
 
     it('Should be able to login', async function () {
-      const res = await login(server.url, server.client, server.user, 200)
+      const res = await login(server.url, server.client, server.user, HttpStatusCode.OK_200)
 
       accessToken = res.body.access_token
     })
 
     it('Should be able to login with an insensitive username', async function () {
       const user = { username: 'RoOt', password: server.user.password }
-      await login(server.url, server.client, user, 200)
+      await login(server.url, server.client, user, HttpStatusCode.OK_200)
 
       const user2 = { username: 'rOoT', password: server.user.password }
-      await login(server.url, server.client, user2, 200)
+      await login(server.url, server.client, user2, HttpStatusCode.OK_200)
 
       const user3 = { username: 'ROOt', password: server.user.password }
-      await login(server.url, server.client, user3, 200)
+      await login(server.url, server.client, user3, HttpStatusCode.OK_200)
     })
   })
 
@@ -179,7 +196,7 @@ describe('Test users', function () {
     it('Should retrieve ratings list', async function () {
       await rateVideo(server.url, accessToken, videoId, 'like')
 
-      const res = await getAccountRatings(server.url, server.user.username, server.accessToken, null, 200)
+      const res = await getAccountRatings(server.url, server.user.username, server.accessToken, null, HttpStatusCode.OK_200)
       const ratings = res.body
 
       expect(ratings.total).to.equal(1)
@@ -204,7 +221,7 @@ describe('Test users', function () {
 
   describe('Remove video', function () {
     it('Should not be able to remove the video with an incorrect token', async function () {
-      await removeVideo(server.url, 'bad_token', videoId, 401)
+      await removeVideo(server.url, 'bad_token', videoId, HttpStatusCode.UNAUTHORIZED_401)
     })
 
     it('Should not be able to remove the video with the token of another account')
@@ -220,11 +237,11 @@ describe('Test users', function () {
     })
 
     it('Should not be able to get the user information', async function () {
-      await getMyUserInformation(server.url, server.accessToken, 401)
+      await getMyUserInformation(server.url, server.accessToken, HttpStatusCode.UNAUTHORIZED_401)
     })
 
     it('Should not be able to upload a video', async function () {
-      await uploadVideo(server.url, server.accessToken, { name: 'video' }, 401)
+      await uploadVideo(server.url, server.accessToken, { name: 'video' }, HttpStatusCode.UNAUTHORIZED_401)
     })
 
     it('Should not be able to rate a video', async function () {
@@ -238,18 +255,50 @@ describe('Test users', function () {
         path: path + videoId,
         token: 'wrong token',
         fields: data,
-        statusCodeExpected: 401
+        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
       }
       await makePutBodyRequest(options)
     })
 
     it('Should be able to login again', async function () {
-      server.accessToken = await serverLogin(server)
+      const res = await login(server.url, server.client, server.user)
+      server.accessToken = res.body.access_token
+      server.refreshToken = res.body.refresh_token
     })
 
-    it('Should have an expired access token')
+    it('Should be able to get my user information again', async function () {
+      await getMyUserInformation(server.url, server.accessToken)
+    })
 
-    it('Should refresh the token')
+    it('Should have an expired access token', async function () {
+      this.timeout(15000)
+
+      await setTokenField(server.internalServerNumber, server.accessToken, 'accessTokenExpiresAt', new Date().toISOString())
+      await setTokenField(server.internalServerNumber, server.accessToken, 'refreshTokenExpiresAt', new Date().toISOString())
+
+      killallServers([ server ])
+      await reRunServer(server)
+
+      await getMyUserInformation(server.url, server.accessToken, 401)
+    })
+
+    it('Should not be able to refresh an access token with an expired refresh token', async function () {
+      await refreshToken(server, server.refreshToken, 400)
+    })
+
+    it('Should refresh the token', async function () {
+      this.timeout(15000)
+
+      const futureDate = new Date(new Date().getTime() + 1000 * 60).toISOString()
+      await setTokenField(server.internalServerNumber, server.accessToken, 'refreshTokenExpiresAt', futureDate)
+
+      killallServers([ server ])
+      await reRunServer(server)
+
+      const res = await refreshToken(server, server.refreshToken)
+      server.accessToken = res.body.access_token
+      server.refreshToken = res.body.refresh_token
+    })
 
     it('Should be able to get my user information again', async function () {
       await getMyUserInformation(server.url, server.accessToken)
@@ -534,7 +583,7 @@ describe('Test users', function () {
       })
       user.password = 'new password'
 
-      await userLogin(server, user, 200)
+      await userLogin(server, user, HttpStatusCode.OK_200)
     })
 
     it('Should be able to change the NSFW display attribute', async function () {
@@ -602,8 +651,8 @@ describe('Test users', function () {
       expect(user.account.description).to.be.null
     })
 
-    it('Should be able to update my avatar', async function () {
-      const fixture = 'avatar.png'
+    it('Should be able to update my avatar with a gif', async function () {
+      const fixture = 'avatar.gif'
 
       await updateMyAvatar({
         url: server.url,
@@ -614,7 +663,24 @@ describe('Test users', function () {
       const res = await getMyUserInformation(server.url, accessTokenUser)
       const user = res.body
 
-      await testImage(server.url, 'avatar-resized', user.account.avatar.path, '.png')
+      await testImage(server.url, 'avatar-resized', user.account.avatar.path, '.gif')
+    })
+
+    it('Should be able to update my avatar with a gif, and then a png', async function () {
+      for (const extension of [ '.png', '.gif' ]) {
+        const fixture = 'avatar' + extension
+
+        await updateMyAvatar({
+          url: server.url,
+          accessToken: accessTokenUser,
+          fixture
+        })
+
+        const res = await getMyUserInformation(server.url, accessTokenUser)
+        const user = res.body
+
+        await testImage(server.url, 'avatar-resized', user.account.avatar.path, extension)
+      }
     })
 
     it('Should be able to update my display name', async function () {
@@ -698,11 +764,12 @@ describe('Test users', function () {
         emailVerified: true,
         videoQuota: 42,
         role: UserRole.MODERATOR,
-        adminFlags: UserAdminFlag.NONE
+        adminFlags: UserAdminFlag.NONE,
+        pluginAuth: 'toto'
       })
 
       const res = await getUserInformation(server.url, accessToken, userId)
-      const user = res.body
+      const user = res.body as User
 
       expect(user.username).to.equal('user_1')
       expect(user.email).to.equal('updated2@example.com')
@@ -712,10 +779,19 @@ describe('Test users', function () {
       expect(user.roleLabel).to.equal('Moderator')
       expect(user.id).to.be.a('number')
       expect(user.adminFlags).to.equal(UserAdminFlag.NONE)
+      expect(user.pluginAuth).to.equal('toto')
+    })
+
+    it('Should reset the auth plugin', async function () {
+      await updateUser({ url: server.url, userId, accessToken, pluginAuth: null })
+
+      const res = await getUserInformation(server.url, accessToken, userId)
+      const user = res.body as User
+      expect(user.pluginAuth).to.be.null
     })
 
     it('Should have removed the user token', async function () {
-      await getMyUserVideoQuotaUsed(server.url, accessTokenUser, 401)
+      await getMyUserVideoQuotaUsed(server.url, accessTokenUser, HttpStatusCode.UNAUTHORIZED_401)
 
       accessTokenUser = await userLogin(server, user)
     })
@@ -728,9 +804,9 @@ describe('Test users', function () {
         password: 'password updated'
       })
 
-      await getMyUserVideoQuotaUsed(server.url, accessTokenUser, 401)
+      await getMyUserVideoQuotaUsed(server.url, accessTokenUser, HttpStatusCode.UNAUTHORIZED_401)
 
-      await userLogin(server, user, 400)
+      await userLogin(server, user, HttpStatusCode.BAD_REQUEST_400)
 
       user.password = 'password updated'
       accessTokenUser = await userLogin(server, user)
@@ -749,7 +825,7 @@ describe('Test users', function () {
     })
 
     it('Should not be able to login with this user', async function () {
-      await userLogin(server, user, 400)
+      await userLogin(server, user, HttpStatusCode.BAD_REQUEST_400)
     })
 
     it('Should not have videos of this user', async function () {
@@ -835,11 +911,11 @@ describe('Test users', function () {
 
       user16AccessToken = await userLogin(server, user16)
 
-      await getMyUserInformation(server.url, user16AccessToken, 200)
+      await getMyUserInformation(server.url, user16AccessToken, HttpStatusCode.OK_200)
       await blockUser(server.url, user16Id, server.accessToken)
 
-      await getMyUserInformation(server.url, user16AccessToken, 401)
-      await userLogin(server, user16, 400)
+      await getMyUserInformation(server.url, user16AccessToken, HttpStatusCode.UNAUTHORIZED_401)
+      await userLogin(server, user16, HttpStatusCode.BAD_REQUEST_400)
     })
 
     it('Should search user by banned status', async function () {
@@ -867,7 +943,7 @@ describe('Test users', function () {
     it('Should unblock a user', async function () {
       await unblockUser(server.url, user16Id, server.accessToken)
       user16AccessToken = await userLogin(server, user16)
-      await getMyUserInformation(server.url, user16AccessToken, 200)
+      await getMyUserInformation(server.url, user16AccessToken, HttpStatusCode.OK_200)
     })
   })
 
@@ -948,6 +1024,7 @@ describe('Test users', function () {
   })
 
   after(async function () {
+    await closeAllSequelize([ server ])
     await cleanupTests([ server ])
   })
 })

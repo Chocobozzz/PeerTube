@@ -1,4 +1,5 @@
 import { AllowNull, Column, CreatedAt, DataType, HasMany, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { AttributesOnly } from '@shared/core-utils'
 import { OAuthTokenModel } from './oauth-token'
 
 @Table({
@@ -14,7 +15,7 @@ import { OAuthTokenModel } from './oauth-token'
     }
   ]
 })
-export class OAuthClientModel extends Model<OAuthClientModel> {
+export class OAuthClientModel extends Model<Partial<AttributesOnly<OAuthClientModel>>> {
 
   @AllowNull(false)
   @Column

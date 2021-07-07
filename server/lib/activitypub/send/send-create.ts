@@ -4,7 +4,7 @@ import { VideoPrivacy } from '../../../../shared/models/videos'
 import { VideoCommentModel } from '../../../models/video/video-comment'
 import { broadcastToActors, broadcastToFollowers, sendVideoRelatedActivity, unicastTo } from './utils'
 import { audiencify, getActorsInvolvedInVideo, getAudience, getAudienceFromFollowersOf, getVideoCommentAudience } from '../audience'
-import { logger } from '../../../helpers/logger'
+import { logger, loggerTagsFactory } from '../../../helpers/logger'
 import { VideoPlaylistPrivacy } from '../../../../shared/models/videos/playlist/video-playlist-privacy.model'
 import {
   MActorLight,
@@ -18,10 +18,12 @@ import {
 import { getServerActor } from '@server/models/application/application'
 import { ContextType } from '@shared/models/activitypub/context'
 
+const lTags = loggerTagsFactory('ap', 'create')
+
 async function sendCreateVideo (video: MVideoAP, t: Transaction) {
   if (!video.hasPrivacyForFederation()) return undefined
 
-  logger.info('Creating job to send video creation of %s.', video.url)
+  logger.info('Creating job to send video creation of %s.', video.url, lTags(video.uuid))
 
   const byActor = video.VideoChannel.Account.Actor
   const videoObject = video.toActivityPubObject()
@@ -37,7 +39,7 @@ async function sendCreateCacheFile (
   video: MVideoAccountLight,
   fileRedundancy: MVideoRedundancyStreamingPlaylistVideo | MVideoRedundancyFileVideo
 ) {
-  logger.info('Creating job to send file cache of %s.', fileRedundancy.url)
+  logger.info('Creating job to send file cache of %s.', fileRedundancy.url, lTags(video.uuid))
 
   return sendVideoRelatedCreateActivity({
     byActor,
@@ -51,7 +53,7 @@ async function sendCreateCacheFile (
 async function sendCreateVideoPlaylist (playlist: MVideoPlaylistFull, t: Transaction) {
   if (playlist.privacy === VideoPlaylistPrivacy.PRIVATE) return undefined
 
-  logger.info('Creating job to send create video playlist of %s.', playlist.url)
+  logger.info('Creating job to send create video playlist of %s.', playlist.url, lTags(playlist.uuid))
 
   const byActor = playlist.OwnerAccount.Actor
   const audience = getAudience(byActor, playlist.privacy === VideoPlaylistPrivacy.PUBLIC)

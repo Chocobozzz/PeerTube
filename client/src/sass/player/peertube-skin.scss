@@ -1,6 +1,7 @@
-@import '_variables';
-@import '_mixins';
-@import './_player-variables';
+@use 'sass:math';
+@use '_variables' as *;
+@use '_mixins' as *;
+@use './_player-variables' as *;
 
 body {
   --embedForegroundColor: #{$primary-foreground-color};
@@ -11,8 +12,8 @@ body {
 @mixin big-play-button-triangle-size($triangle-size) {
   width: $triangle-size;
   height: $triangle-size;
-  top: calc(50% - #{$triangle-size / 2});
-  left: calc(53% - #{($triangle-size / 2)});
+  top: calc(50% - #{math.div($triangle-size, 2)});
+  left: calc(53% - #{math.div($triangle-size, 2)});
 }
 
 .video-js.vjs-peertube-skin {
@@ -20,8 +21,9 @@ body {
   color: pvar(--embedForegroundColor);
 
   .vjs-dock-text {
+    @include padding-right(60px);
+
     padding: $dock-padding;
-    padding-right: 60px;
     background: linear-gradient(to bottom, rgba(0, 0, 0, .6) 0, rgba(0, 0, 0, 0.2) 70%, rgba(0, 0, 0, 0) 100%);
   }
 
@@ -34,17 +36,13 @@ body {
     font-size: 11px;
 
     .text::before {
-      margin-right: 4px;
+      @include margin-right(4px);
     }
 
     .text::after {
-      margin-left: 4px;
+      @include margin-left(4px);
       transform: scale(-1, 1);
     }
-  }
-
-  .vjs-button > .vjs-icon-placeholder::before {
-    line-height: $control-bar-height;
   }
 
   .vjs-volume-level::before {
@@ -56,11 +54,13 @@ body {
   }
 
   .vjs-big-play-button {
-    outline: 0;
-    font-size: 6em;
-
     $big-play-width: 1.2em;
     $big-play-height: 1.2em;
+
+    @include margin-left(-(math.div($big-play-width, 2)));
+
+    outline: 0;
+    font-size: 6em;
 
     border: 2px solid #fff;
     border-radius: 100%;
@@ -70,13 +70,12 @@ body {
     width: $big-play-width;
     height: $big-play-height;
     line-height: $big-play-height;
-    margin-left: -($big-play-width / 2);
-    margin-top: -($big-play-height / 2);
+    margin-top: -(math.div($big-play-height, 2));
     transition: 0.4s opacity;
 
     &::-moz-focus-inner {
       border: 0;
-      padding: 0
+      padding: 0;
     }
 
     .vjs-icon-placeholder::before {
@@ -86,8 +85,9 @@ body {
       background-image: url('#{$assets-path}/player/images/big-play-button.svg');
     }
 
-    &.focus-visible, &:hover {
-      background-color: var(--mainColor, dimgray);
+    &.focus-visible,
+    &:hover {
+      background-color: var(--mainColor, #696969);
     }
 
   }
@@ -95,16 +95,19 @@ body {
   // Small effect when we click on the play button
   &.vjs-has-big-play-button-clicked {
 
-    .vjs-big-play-button, .vjs-poster {
+    .vjs-big-play-button,
+    .vjs-poster {
       display: block;
       visibility: hidden;
 
-      &.vjs-big-play-button, &.vjs-big-play-button::before {
+      &.vjs-big-play-button,
+      &.vjs-big-play-button::before {
         opacity: 0;
         transition: visibility 0.2s, opacity 0.2s;
       }
 
-      &.vjs-poster, &.vjs-poster::before {
+      &.vjs-poster,
+      &.vjs-poster::before {
         opacity: 0;
         transition: visibility 0.3s, opacity 0.3s;
         transition-delay: 0.05s;
@@ -157,7 +160,7 @@ body {
     text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
 
     > button:first-child {
-      margin-left: $first-control-bar-element-margin-left;
+      @include margin-left($first-control-bar-element-margin-left);
     }
 
     .vjs-progress-control,
@@ -169,8 +172,7 @@ body {
     .vjs-fullscreen-control,
     .vjs-peertube-link,
     .vjs-theater-control,
-    .vjs-settings
-    {
+    .vjs-settings {
       color: pvar(--embedForegroundColor) !important;
 
       opacity: $primary-foreground-opacity;
@@ -189,11 +191,12 @@ body {
     }
 
     .vjs-progress-control {
+      @include margin-left($progress-margin);
+
       position: absolute;
       z-index: 100; // On top of the progress bar
       bottom: 29px;
       width: calc(100% - (2 * #{$progress-margin}));
-      margin-left: $progress-margin;
       height: 14px;
 
       .vjs-slider {
@@ -221,7 +224,8 @@ body {
         }
 
         .vjs-load-progress {
-          &, & div {
+          &,
+          div {
             background: rgba(255, 255, 255, .2);
           }
         }
@@ -242,25 +246,38 @@ body {
       @include disable-outline;
 
       cursor: pointer;
-      font-size: $font-size;
-      width: 3em;
+      width: 2em;
+
+      .vjs-icon-placeholder {
+        line-height: $control-bar-height;
+        position: relative;
+        top: -1px;
+
+        &::before {
+          font-size: 28px;
+          line-height: unset;
+          position: relative;
+        }
+      }
     }
 
     .vjs-time-control {
       line-height: inherit;
 
       &.vjs-current-time {
+        @include margin-left(.5em);
+
         font-size: $font-size;
         display: inline-block;
         padding: 0;
-        margin-left: .5em;
 
         .vjs-current-time-display {
-          line-height: calc(#{$control-bar-height} + 1px);
+          line-height: calc(#{$control-bar-height} - 1px);
 
           &::after {
-            content: "/";
-            margin: 0 1px 0 2px;
+            @include margin(0, 1px, 0, 2px);
+
+            content: '/';
           }
         }
       }
@@ -269,8 +286,9 @@ body {
         font-size: $font-size;
         display: inline-block;
         padding: 0;
+
         .vjs-duration-display {
-          line-height: calc(#{$control-bar-height} + 1px);
+          line-height: calc(#{$control-bar-height} - 1px);
         }
       }
 
@@ -279,11 +297,18 @@ body {
       }
     }
 
+    .vjs-live-control {
+      line-height: $control-bar-height;
+      min-width: 4em;
+      width: inherit;
+    }
+
     .vjs-peertube {
+      @include margin-right(6px);
+
       width: 100%;
       line-height: $control-bar-height;
-      text-align: right;
-      margin-right: 6px;
+      text-align: end;
       overflow: hidden;
 
       .vjs-peertube-displayed {
@@ -294,12 +319,18 @@ body {
         display: none;
       }
 
-      .download-speed-number, .upload-speed-number, .peers-number, .http-fallback {
+      .download-speed-number,
+      .upload-speed-number,
+      .peers-number,
+      .http-fallback {
         font-weight: $font-semibold;
       }
 
-      .download-speed-text, .upload-speed-text, .peers-text, .http-fallback {
-        margin-right: 15px;
+      .download-speed-text,
+      .upload-speed-text,
+      .peers-text,
+      .http-fallback {
+        @include margin-right(15px);
       }
 
       .icon {
@@ -316,16 +347,17 @@ body {
     .vjs-next-video,
     .vjs-previous-video {
       line-height: $control-bar-height;
-      text-align: right;
+      text-align: end;
 
       .icon {
         &.icon-next,
         &.icon-previous {
           mask-image: url('#{$assets-path}/player/images/next.svg');
           -webkit-mask-image: url('#{$assets-path}/player/images/next.svg');
-          background-color: white;
           mask-size: cover;
           -webkit-mask-size: cover;
+
+          background-color: #fff;
           width: 11px;
           height: 11px;
           margin-top: -2px;
@@ -368,7 +400,6 @@ body {
     .vjs-mute-control {
       @include disable-outline;
 
-      line-height: $control-bar-height;
       padding: 0;
       width: 30px;
 
@@ -392,12 +423,13 @@ body {
     }
 
     .vjs-volume-control {
+      @include margin(0, 5px, 0, 0);
+
       width: 30px;
-      margin: 0 5px 0 0;
     }
 
     .vjs-volume-bar {
-      background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAcCAQAAACw95UnAAAAMElEQVRIx2NgoBL4n4YKGUYNHkEG4zJg1OCRYDCpBowaPJwMppbLRg0eNXjUYBLEAXWNUA6QNm1lAAAAAElFTkSuQmCC) no-repeat;
+      background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAcCAQAAACw95UnAAAAMElEQVRIx2NgoBL4n4YKGUYNHkEG4zJg1OCRYDCpBowaPJwMppbLRg0eNXjUYBLEAXWNUA6QNm1lAAAAAElFTkSuQmCC') no-repeat;
       background-size: 22px 14px;
       height: 100%;
       width: 100%;
@@ -408,7 +440,7 @@ body {
       top: 3px;
 
       .vjs-volume-level {
-        background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAcAQAAAAAyhWABAAAAAnRSTlMAAHaTzTgAAAAZSURBVHgBYwAB/g9EUv+JokCqiaT+U4MCAPKPS7WUUOc1AAAAAElFTkSuQmCC) no-repeat;
+        background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAcAQAAAAAyhWABAAAAAnRSTlMAAHaTzTgAAAAZSURBVHgBYwAB/g9EUv+JokCqiaT+U4MCAPKPS7WUUOc1AAAAAElFTkSuQmCC') no-repeat;
         background-size: 22px 14px;
         max-width: 22px;
         max-height: 14px;
@@ -467,9 +499,9 @@ body {
 
     .vjs-theater-control {
       @include disable-outline;
+      @include margin-right(1px);
 
       width: 37px;
-      margin-right: 1px;
       cursor: pointer;
 
       .vjs-icon-placeholder {
@@ -489,9 +521,9 @@ body {
 
     .vjs-fullscreen-control {
       @include disable-outline;
+      @include margin-left($first-control-bar-element-margin-left);
 
       width: 37px;
-      margin-right: 11px;
 
       .vjs-icon-placeholder {
         display: inline-block;
@@ -576,9 +608,19 @@ body {
         display: none !important;
       }
     }
+
+    &.vjs-live {
+      .vjs-duration {
+        display: none !important;
+      }
+
+      .vjs-peertube {
+        display: none !important;
+      }
+    }
   }
 
-  @media screen and (max-width: 300px) {
+  @media screen and (max-width: 350px) {
     .vjs-dock-text {
       font-size: 13px;
     }
@@ -606,8 +648,20 @@ body {
       width: 33px;
     }
 
-    .vjs-play-control {
-      margin-left: $first-control-bar-element-margin-left;
+    .vjs-control-bar {
+      > button:first-child {
+        @include margin-left($first-control-bar-element-margin-left-small-width);
+      }
+    }
+
+    .vjs-fullscreen-control {
+      @include margin-right($first-control-bar-element-margin-left-small-width);
+    }
+
+    &.vjs-live {
+      .vjs-current-time {
+        display: none !important;
+      }
     }
   }
 

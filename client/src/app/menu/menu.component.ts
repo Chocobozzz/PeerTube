@@ -1,12 +1,27 @@
 import { HotkeysService } from 'angular2-hotkeys'
 import * as debug from 'debug'
 import { switchMap } from 'rxjs/operators'
+import { ViewportScroller } from '@angular/common'
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { Router } from '@angular/router'
-import { AuthService, AuthStatus, AuthUser, MenuService, RedirectService, ScreenService, ServerService, UserService } from '@app/core'
+import {
+  AuthService,
+  AuthStatus,
+  AuthUser,
+  HooksService,
+  MenuSection,
+  MenuService,
+  RedirectService,
+  ScreenService,
+  ServerService,
+  UserService
+} from '@app/core'
+import { scrollToTop } from '@app/helpers'
 import { LanguageChooserComponent } from '@app/menu/language-chooser.component'
 import { QuickSettingsModalComponent } from '@app/modal/quick-settings-modal.component'
-import { ServerConfig, UserRight, VideoConstant } from '@shared/models'
+import { PeertubeModalService } from '@app/shared/shared-main/peertube-modal/peertube-modal.service'
+import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap'
+import { HTMLServerConfig, ServerConfig, UserRight, VideoConstant } from '@shared/models'
 
 const logger = debug('peertube:menu:MenuComponent')
 
@@ -18,6 +33,7 @@ const logger = debug('peertube:menu:MenuComponent')
 export class MenuComponent implements OnInit {
   @ViewChild('languageChooserModal', { static: true }) languageChooserModal: LanguageChooserComponent
   @ViewChild('quickSettingsModal', { static: true }) quickSettingsModal: QuickSettingsModalComponent
+  @ViewChild('dropdown') dropdown: NgbDropdown
 
   user: AuthUser
   isLoggedIn: boolean
@@ -26,9 +42,17 @@ export class MenuComponent implements OnInit {
   helpVisible = false
 
   videoLanguages: string[] = []
+  nsfwPolicy: string
+
+  currentInterfaceLanguage: string
+
+  menuSections: MenuSection[] = []
 
   private languages: VideoConstant<string>[] = []
+
+  private htmlServerConfig: HTMLServerConfig
   private serverConfig: ServerConfig
+
   private routesPerRight: { [role in UserRight]?: string } = {
     [UserRight.MANAGE_USERS]: '/admin/users',
     [UserRight.MANAGE_SERVER_FOLLOW]: '/admin/friends',
@@ -39,6 +63,7 @@ export class MenuComponent implements OnInit {
   }
 
   constructor (
+    private viewportScroller: ViewportScroller,
     private authService: AuthService,
     private userService: UserService,
     private serverService: ServerService,
@@ -46,54 +71,43 @@ export class MenuComponent implements OnInit {
     private hotkeysService: HotkeysService,
     private screenService: ScreenService,
     private menuService: MenuService,
-    private router: Router
+    private modalService: PeertubeModalService,
+    private router: Router,
+    private hooks: HooksService
   ) { }
 
   get isInMobileView () {
     return this.screenService.isInMobileView()
   }
 
-  get placement () {
-    if (this.isInMobileView) {
-      return 'left-top auto'
-    } else {
-      return 'right-top auto'
-    }
+  get dropdownContainer () {
+    if (this.isInMobileView) return null
+
+    return 'body' as 'body'
+  }
+
+  get language () {
+    return this.languageChooserModal.getCurrentLanguage()
   }
 
   ngOnInit () {
-    this.serverConfig = this.serverService.getTmpConfig()
-    this.serverService.getConfig()
-      .subscribe(config => this.serverConfig = config)
+    this.htmlServerConfig = this.serverService.getHTMLConfig()
+    this.currentInterfaceLanguage = this.languageChooserModal.getCurrentLanguage()
 
     this.isLoggedIn = this.authService.isLoggedIn()
-    if (this.isLoggedIn === true) {
-      this.user = this.authService.getUser()
-      this.computeVideosLink()
-    }
-
-    this.computeAdminAccess()
+    this.updateUserState()
+    this.buildMenuSections()
 
     this.authService.loginChangedSource.subscribe(
       status => {
         if (status === AuthStatus.LoggedIn) {
           this.isLoggedIn = true
-          this.user = this.authService.getUser()
-
-          this.computeAdminAccess()
-          this.computeVideosLink()
-
-          logger('Logged in.')
         } else if (status === AuthStatus.LoggedOut) {
           this.isLoggedIn = false
-          this.user = undefined
-
-          this.computeAdminAccess()
-
-          logger('Logged out.')
-        } else {
-          console.error('Unknown auth status: ' + status)
         }
+
+        this.updateUserState()
+        this.buildMenuSections()
       }
     )
 
@@ -107,28 +121,14 @@ export class MenuComponent implements OnInit {
         this.authService.userInformationLoaded
           .subscribe(() => this.buildUserLanguages())
       })
-  }
 
-  get language () {
-    return this.languageChooserModal.getCurrentLanguage()
-  }
-
-  get nsfwPolicy () {
-    if (!this.user) return
-
-    switch (this.user.nsfwPolicy) {
-      case 'do_not_list':
-        return $localize`hide`
-
-      case 'blur':
-        return $localize`blur`
-
-      case 'display':
-        return $localize`display`
-    }
+    this.modalService.openQuickSettingsSubject
+      .subscribe(() => this.openQuickSettings())
   }
 
   isRegistrationAllowed () {
+    if (!this.serverConfig) return false
+
     return this.serverConfig.signup.allowed &&
       this.serverConfig.signup.allowedForCurrentIP
   }
@@ -195,28 +195,62 @@ export class MenuComponent implements OnInit {
     return this.languages.find(lang => lang.id === localeId).label
   }
 
-  onSameUrlRestoreScrollPosition (link: HTMLAnchorElement) {
+  onActiveLinkScrollToAnchor (link: HTMLAnchorElement) {
     const linkURL = link.getAttribute('href')
     const linkHash = link.getAttribute('fragment')
 
     // On same url without fragment restore top scroll position
     if (!linkHash && this.router.url.includes(linkURL)) {
-      window.scrollTo({
-        left: 0,
-        top: 0,
-        behavior: 'smooth'
-      })
+      scrollToTop('smooth')
     }
 
     // On same url with fragment restore anchor scroll position
     if (linkHash && this.router.url === linkURL) {
-      const anchor = document.getElementById(link.getAttribute('fragment'))
-      anchor.scrollIntoView({ behavior: 'smooth', inline: 'nearest' })
+      this.viewportScroller.scrollToAnchor(linkHash)
     }
 
     if (this.screenService.isInSmallView()) {
       this.menuService.toggleMenu()
     }
+  }
+
+  // Lock menu scroll when menu scroll to avoid fleeing / detached dropdown
+  onMenuScrollEvent () {
+    document.querySelector('menu').scrollTo(0, 0)
+  }
+
+  onDropdownOpenChange (opened: boolean) {
+    if (this.screenService.isInMobileView()) return
+
+    // Close dropdown when window scroll to avoid dropdown quick jump for re-position
+    const onWindowScroll = () => {
+      this.dropdown?.close()
+      window.removeEventListener('scroll', onWindowScroll)
+    }
+
+    if (opened) {
+      window.addEventListener('scroll', onWindowScroll)
+      document.querySelector('menu').scrollTo(0, 0) // Reset menu scroll to easy lock
+      document.querySelector('menu').addEventListener('scroll', this.onMenuScrollEvent)
+    } else {
+      document.querySelector('menu').removeEventListener('scroll', this.onMenuScrollEvent)
+    }
+  }
+
+  private async buildMenuSections () {
+    const menuSections = []
+
+    if (this.isLoggedIn) {
+      menuSections.push(
+        this.menuService.buildLibraryLinks(this.user?.canSeeVideosLink)
+      )
+    }
+
+    menuSections.push(
+      this.menuService.buildCommonLinks(this.htmlServerConfig)
+    )
+
+    this.menuSections = await this.hooks.wrapObject(menuSections, 'common', 'filter:left-menu.links.create.result')
   }
 
   private buildUserLanguages () {
@@ -226,7 +260,7 @@ export class MenuComponent implements OnInit {
     }
 
     if (!this.user.videoLanguages) {
-      this.videoLanguages = [$localize`any language`]
+      this.videoLanguages = [ $localize`any language` ]
       return
     }
 
@@ -242,6 +276,8 @@ export class MenuComponent implements OnInit {
   }
 
   private computeVideosLink () {
+    if (!this.isLoggedIn) return
+
     this.authService.userInformationLoaded
       .pipe(
         switchMap(() => this.user.computeCanSeeVideosLink(this.userService.getMyVideoQuotaUsed()))
@@ -249,5 +285,36 @@ export class MenuComponent implements OnInit {
         if (res === true) logger('User can see videos link.')
         else logger('User cannot see videos link.')
       })
+  }
+
+  private computeNSFWPolicy () {
+    if (!this.user) {
+      this.nsfwPolicy = null
+      return
+    }
+
+    switch (this.user.nsfwPolicy) {
+      case 'do_not_list':
+        this.nsfwPolicy = $localize`hide`
+        break
+
+      case 'blur':
+        this.nsfwPolicy = $localize`blur`
+        break
+
+      case 'display':
+        this.nsfwPolicy = $localize`display`
+        break
+    }
+  }
+
+  private updateUserState () {
+    this.user = this.isLoggedIn
+      ? this.authService.getUser()
+      : undefined
+
+    this.computeAdminAccess()
+    this.computeNSFWPolicy()
+    this.computeVideosLink()
   }
 }

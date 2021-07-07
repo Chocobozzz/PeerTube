@@ -6,14 +6,15 @@ import { VideoChannelModel } from '@server/models/video/video-channel'
 import { MVideoBlacklistLightVideo, MVideoBlacklistVideo } from '@server/types/models/video/video-blacklist'
 import { MVideoImport, MVideoImportVideo } from '@server/types/models/video/video-import'
 import { AbuseState, EmailPayload, UserAbuse } from '@shared/models'
-import { SendEmailOptions } from '../../shared/models/server/emailer.model'
+import { SendEmailDefaultOptions } from '../../shared/models/server/emailer.model'
 import { isTestInstance, root } from '../helpers/core-utils'
 import { bunyanLogger, logger } from '../helpers/logger'
 import { CONFIG, isEmailEnabled } from '../initializers/config'
 import { WEBSERVER } from '../initializers/constants'
-import { MAbuseFull, MAbuseMessage, MAccountDefault, MActorFollowActors, MActorFollowFull, MUser } from '../types/models'
+import { MAbuseFull, MAbuseMessage, MAccountDefault, MActorFollowActors, MActorFollowFull, MPlugin, MUser } from '../types/models'
 import { MCommentOwnerVideo, MVideo, MVideoAccountLight } from '../types/models/video'
 import { JobQueue } from './job-queue'
+import { toSafeHtml } from '../helpers/markdown'
 
 const Email = require('email-templates')
 
@@ -31,73 +32,30 @@ class Emailer {
     if (this.initialized === true) return
     this.initialized = true
 
-    if (isEmailEnabled()) {
-      if (CONFIG.SMTP.TRANSPORT === 'smtp') {
-        logger.info('Using %s:%s as SMTP server.', CONFIG.SMTP.HOSTNAME, CONFIG.SMTP.PORT)
-
-        let tls
-        if (CONFIG.SMTP.CA_FILE) {
-          tls = {
-            ca: [ readFileSync(CONFIG.SMTP.CA_FILE) ]
-          }
-        }
-
-        let auth
-        if (CONFIG.SMTP.USERNAME && CONFIG.SMTP.PASSWORD) {
-          auth = {
-            user: CONFIG.SMTP.USERNAME,
-            pass: CONFIG.SMTP.PASSWORD
-          }
-        }
-
-        this.transporter = createTransport({
-          host: CONFIG.SMTP.HOSTNAME,
-          port: CONFIG.SMTP.PORT,
-          secure: CONFIG.SMTP.TLS,
-          debug: CONFIG.LOG.LEVEL === 'debug',
-          logger: bunyanLogger as any,
-          ignoreTLS: CONFIG.SMTP.DISABLE_STARTTLS,
-          tls,
-          auth
-        })
-      } else { // sendmail
-        logger.info('Using sendmail to send emails')
-
-        this.transporter = createTransport({
-          sendmail: true,
-          newline: 'unix',
-          path: CONFIG.SMTP.SENDMAIL
-        })
-      }
-    } else {
+    if (!isEmailEnabled()) {
       if (!isTestInstance()) {
         logger.error('Cannot use SMTP server because of lack of configuration. PeerTube will not be able to send mails!')
       }
+
+      return
     }
+
+    if (CONFIG.SMTP.TRANSPORT === 'smtp') this.initSMTPTransport()
+    else if (CONFIG.SMTP.TRANSPORT === 'sendmail') this.initSendmailTransport()
   }
 
-  static isEnabled () {
-    if (CONFIG.SMTP.TRANSPORT === 'sendmail') {
-      return !!CONFIG.SMTP.SENDMAIL
-    } else if (CONFIG.SMTP.TRANSPORT === 'smtp') {
-      return !!CONFIG.SMTP.HOSTNAME && !!CONFIG.SMTP.PORT
-    } else {
-      return false
-    }
-  }
-
-  async checkConnectionOrDie () {
+  async checkConnection () {
     if (!this.transporter || CONFIG.SMTP.TRANSPORT !== 'smtp') return
 
     logger.info('Testing SMTP server...')
 
     try {
       const success = await this.transporter.verify()
-      if (success !== true) this.dieOnConnectionFailure()
+      if (success !== true) this.warnOnConnectionFailure()
 
       logger.info('Successfully connected to SMTP server.')
     } catch (err) {
-      this.dieOnConnectionFailure(err)
+      this.warnOnConnectionFailure(err)
     }
   }
 
@@ -209,7 +167,7 @@ class Emailer {
   }
 
   myVideoImportErrorNotification (to: string[], videoImport: MVideoImport) {
-    const importUrl = WEBSERVER.URL + '/my-account/video-imports'
+    const importUrl = WEBSERVER.URL + '/my-library/video-imports'
 
     const text =
       `Your video import "${videoImport.getTargetIdentifier()}" encountered an error.` +
@@ -236,6 +194,7 @@ class Emailer {
     const video = comment.Video
     const videoUrl = WEBSERVER.URL + comment.Video.getWatchStaticPath()
     const commentUrl = WEBSERVER.URL + comment.getCommentStaticPath()
+    const commentHtml = toSafeHtml(comment.text)
 
     const emailPayload: EmailPayload = {
       template: 'video-comment-new',
@@ -245,6 +204,7 @@ class Emailer {
         accountName: comment.Account.getDisplayName(),
         accountUrl: comment.Account.Actor.url,
         comment,
+        commentHtml,
         video,
         videoUrl,
         action: {
@@ -262,6 +222,7 @@ class Emailer {
     const video = comment.Video
     const videoUrl = WEBSERVER.URL + comment.Video.getWatchStaticPath()
     const commentUrl = WEBSERVER.URL + comment.getCommentStaticPath()
+    const commentHtml = toSafeHtml(comment.text)
 
     const emailPayload: EmailPayload = {
       template: 'video-comment-mention',
@@ -269,6 +230,7 @@ class Emailer {
       subject: 'Mention on video ' + video.name,
       locals: {
         comment,
+        commentHtml,
         video,
         videoUrl,
         accountName,
@@ -421,9 +383,9 @@ class Emailer {
   }
 
   async addVideoAutoBlacklistModeratorsNotification (to: string[], videoBlacklist: MVideoBlacklistLightVideo) {
-    const VIDEO_AUTO_BLACKLIST_URL = WEBSERVER.URL + '/admin/moderation/video-auto-blacklist/list'
+    const videoAutoBlacklistUrl = WEBSERVER.URL + '/admin/moderation/video-auto-blacklist/list'
     const videoUrl = WEBSERVER.URL + videoBlacklist.Video.getWatchStaticPath()
-    const channel = (await VideoChannelModel.loadByIdAndPopulateAccount(videoBlacklist.Video.channelId)).toFormattedSummaryJSON()
+    const channel = (await VideoChannelModel.loadAndPopulateAccount(videoBlacklist.Video.channelId)).toFormattedSummaryJSON()
 
     const emailPayload: EmailPayload = {
       template: 'video-auto-blacklist-new',
@@ -435,7 +397,7 @@ class Emailer {
         videoName: videoBlacklist.Video.name,
         action: {
           text: 'Review autoblacklist',
-          url: VIDEO_AUTO_BLACKLIST_URL
+          url: videoAutoBlacklistUrl
         }
       }
     }
@@ -447,7 +409,7 @@ class Emailer {
     const emailPayload: EmailPayload = {
       template: 'user-registered',
       to,
-      subject: `a new user registered on ${WEBSERVER.HOST}: ${user.username}`,
+      subject: `a new user registered on ${CONFIG.INSTANCE.NAME}: ${user.username}`,
       locals: {
         user
       }
@@ -461,7 +423,7 @@ class Emailer {
     const videoUrl = WEBSERVER.URL + videoBlacklist.Video.getWatchStaticPath()
 
     const reasonString = videoBlacklist.reason ? ` for the following reason: ${videoBlacklist.reason}` : ''
-    const blockedString = `Your video ${videoName} (${videoUrl} on ${WEBSERVER.HOST} has been blacklisted${reasonString}.`
+    const blockedString = `Your video ${videoName} (${videoUrl} on ${CONFIG.INSTANCE.NAME} has been blacklisted${reasonString}.`
 
     const emailPayload: EmailPayload = {
       to,
@@ -481,9 +443,39 @@ class Emailer {
     const emailPayload: EmailPayload = {
       to,
       subject: `Video ${video.name} unblacklisted`,
-      text: `Your video "${video.name}" (${videoUrl}) on ${WEBSERVER.HOST} has been unblacklisted.`,
+      text: `Your video "${video.name}" (${videoUrl}) on ${CONFIG.INSTANCE.NAME} has been unblacklisted.`,
       locals: {
         title: 'Your video was unblacklisted'
+      }
+    }
+
+    return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
+  }
+
+  addNewPeerTubeVersionNotification (to: string[], latestVersion: string) {
+    const emailPayload: EmailPayload = {
+      to,
+      template: 'peertube-version-new',
+      subject: `A new PeerTube version is available: ${latestVersion}`,
+      locals: {
+        latestVersion
+      }
+    }
+
+    return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
+  }
+
+  addNewPlugionVersionNotification (to: string[], plugin: MPlugin) {
+    const pluginUrl = WEBSERVER.URL + '/admin/plugins/list-installed?pluginType=' + plugin.type
+
+    const emailPayload: EmailPayload = {
+      to,
+      template: 'plugin-version-new',
+      subject: `A new plugin/theme version is available: ${plugin.name}@${plugin.latestVersion}`,
+      locals: {
+        pluginName: plugin.name,
+        latestVersion: plugin.latestVersion,
+        pluginUrl
       }
     }
 
@@ -522,7 +514,7 @@ class Emailer {
     const emailPayload: EmailPayload = {
       template: 'verify-email',
       to: [ to ],
-      subject: `Verify your email on ${WEBSERVER.HOST}`,
+      subject: `Verify your email on ${CONFIG.INSTANCE.NAME}`,
       locals: {
         username,
         verifyEmailUrl
@@ -540,7 +532,7 @@ class Emailer {
     const emailPayload: EmailPayload = {
       to: [ to ],
       subject: 'Account ' + blockedWord,
-      text: `Your account ${user.username} on ${WEBSERVER.HOST} has been ${blockedWord}${reasonString}.`
+      text: `Your account ${user.username} on ${CONFIG.INSTANCE.NAME} has been ${blockedWord}${reasonString}.`
     }
 
     return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
@@ -555,7 +547,10 @@ class Emailer {
       locals: {
         fromName,
         fromEmail,
-        body
+        body,
+
+        // There are not notification preferences for the contact form
+        hideNotificationPreferences: true
       }
     }
 
@@ -569,7 +564,7 @@ class Emailer {
 
     const fromDisplayName = options.from
       ? options.from
-      : WEBSERVER.HOST
+      : CONFIG.INSTANCE.NAME
 
     const email = new Email({
       send: true,
@@ -584,33 +579,75 @@ class Emailer {
     })
 
     for (const to of options.to) {
-      await email
-        .send(merge(
-          {
-            template: 'common',
-            message: {
-              to,
-              from: options.from,
-              subject: options.subject,
-              replyTo: options.replyTo
-            },
-            locals: { // default variables available in all templates
-              WEBSERVER,
-              EMAIL: CONFIG.EMAIL,
-              text: options.text,
-              subject: options.subject
-            }
-          },
-          options // overriden/new variables given for a specific template in the payload
-        ) as SendEmailOptions)
+      const baseOptions: SendEmailDefaultOptions = {
+        template: 'common',
+        message: {
+          to,
+          from: options.from,
+          subject: options.subject,
+          replyTo: options.replyTo
+        },
+        locals: { // default variables available in all templates
+          WEBSERVER,
+          EMAIL: CONFIG.EMAIL,
+          instanceName: CONFIG.INSTANCE.NAME,
+          text: options.text,
+          subject: options.subject
+        }
+      }
+
+      // overriden/new variables given for a specific template in the payload
+      const sendOptions = merge(baseOptions, options)
+
+      await email.send(sendOptions)
         .then(res => logger.debug('Sent email.', { res }))
         .catch(err => logger.error('Error in email sender.', { err }))
     }
   }
 
-  private dieOnConnectionFailure (err?: Error) {
+  private warnOnConnectionFailure (err?: Error) {
     logger.error('Failed to connect to SMTP %s:%d.', CONFIG.SMTP.HOSTNAME, CONFIG.SMTP.PORT, { err })
-    process.exit(-1)
+  }
+
+  private initSMTPTransport () {
+    logger.info('Using %s:%s as SMTP server.', CONFIG.SMTP.HOSTNAME, CONFIG.SMTP.PORT)
+
+    let tls
+    if (CONFIG.SMTP.CA_FILE) {
+      tls = {
+        ca: [ readFileSync(CONFIG.SMTP.CA_FILE) ]
+      }
+    }
+
+    let auth
+    if (CONFIG.SMTP.USERNAME && CONFIG.SMTP.PASSWORD) {
+      auth = {
+        user: CONFIG.SMTP.USERNAME,
+        pass: CONFIG.SMTP.PASSWORD
+      }
+    }
+
+    this.transporter = createTransport({
+      host: CONFIG.SMTP.HOSTNAME,
+      port: CONFIG.SMTP.PORT,
+      secure: CONFIG.SMTP.TLS,
+      debug: CONFIG.LOG.LEVEL === 'debug',
+      logger: bunyanLogger as any,
+      ignoreTLS: CONFIG.SMTP.DISABLE_STARTTLS,
+      tls,
+      auth
+    })
+  }
+
+  private initSendmailTransport () {
+    logger.info('Using sendmail to send emails')
+
+    this.transporter = createTransport({
+      sendmail: true,
+      newline: 'unix',
+      path: CONFIG.SMTP.SENDMAIL,
+      logger: bunyanLogger as any
+    })
   }
 
   static get Instance () {

@@ -1,0 +1,14 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+pre {
+  font-size: 11px;
+}
+
+.video-import-error {
+  color: #ff0000;
+}
+
+.badge {
+  @include table-badge;
+}

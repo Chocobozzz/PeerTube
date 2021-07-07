@@ -1,12 +1,14 @@
 import { Validators } from '@angular/forms'
 import { BuildFormValidator } from './form-validator.model'
 
+export const USER_USERNAME_REGEX_CHARACTERS = '[a-z0-9][a-z0-9._]'
+
 export const USER_USERNAME_VALIDATOR: BuildFormValidator = {
   VALIDATORS: [
     Validators.required,
     Validators.minLength(1),
     Validators.maxLength(50),
-    Validators.pattern(/^[a-z0-9][a-z0-9._]*$/)
+    Validators.pattern(new RegExp(`^${USER_USERNAME_REGEX_CHARACTERS}*$`))
   ],
   MESSAGES: {
     'required': $localize`Username is required.`,
@@ -27,7 +29,7 @@ export const USER_CHANNEL_NAME_VALIDATOR: BuildFormValidator = {
     'required': $localize`Channel name is required.`,
     'minlength': $localize`Channel name must be at least 1 character long.`,
     'maxlength': $localize`Channel name cannot be more than 50 characters long.`,
-    'pattern': $localize`Channel name should be lowercase alphanumeric; dots and underscores are allowed.`
+    'pattern': $localize`Channel name should be lowercase, and can contain only alphanumeric characters, dots and underscores.`
   }
 }
 
@@ -36,6 +38,26 @@ export const USER_EMAIL_VALIDATOR: BuildFormValidator = {
   MESSAGES: {
     'required': $localize`Email is required.`,
     'email': $localize`Email must be valid.`
+  }
+}
+
+export const USER_HANDLE_VALIDATOR: BuildFormValidator = {
+  VALIDATORS: [
+    Validators.required,
+    Validators.pattern(/@.+/)
+  ],
+  MESSAGES: {
+    'required': $localize`Handle is required.`,
+    'pattern': $localize`Handle must be valid (eg. chocobozzz@example.com).`
+  }
+}
+
+export const USER_EXISTING_PASSWORD_VALIDATOR: BuildFormValidator = {
+  VALIDATORS: [
+    Validators.required
+  ],
+  MESSAGES: {
+    'required': $localize`Password is required.`
   }
 }
 
@@ -106,9 +128,7 @@ export const USER_DESCRIPTION_VALIDATOR: BuildFormValidator = {
 }
 
 export const USER_TERMS_VALIDATOR: BuildFormValidator = {
-  VALIDATORS: [
-    Validators.requiredTrue
-  ],
+  VALIDATORS: [ Validators.requiredTrue ],
   MESSAGES: {
     'required': $localize`You must agree with the instance terms in order to register on it.`
   }

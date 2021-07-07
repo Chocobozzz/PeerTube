@@ -3,13 +3,13 @@ import { ActivityAudience, ActivityFlag } from '../../../../shared/models/activi
 import { logger } from '../../../helpers/logger'
 import { MAbuseAP, MAccountLight, MActor } from '../../../types/models'
 import { audiencify, getAudience } from '../audience'
-import { getAbuseActivityPubUrl } from '../url'
+import { getLocalAbuseActivityPubUrl } from '../url'
 import { unicastTo } from './utils'
 
 function sendAbuse (byActor: MActor, abuse: MAbuseAP, flaggedAccount: MAccountLight, t: Transaction) {
   if (!flaggedAccount.Actor.serverId) return // Local user
 
-  const url = getAbuseActivityPubUrl(abuse)
+  const url = getLocalAbuseActivityPubUrl(abuse)
 
   logger.info('Creating job to send abuse %s.', url)
 

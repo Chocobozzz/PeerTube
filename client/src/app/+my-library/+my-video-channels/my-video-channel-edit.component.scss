@@ -1,0 +1,73 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+label {
+  font-weight: $font-regular;
+  font-size: 100%;
+}
+
+.video-channel-title {
+  @include settings-big-title;
+}
+
+my-actor-avatar-edit,
+my-actor-banner-edit {
+  display: block;
+  margin-bottom: 20px;
+}
+
+my-actor-banner-edit {
+  max-width: 500px;
+}
+
+.input-group {
+  @include peertube-input-group(fit-content);
+}
+
+.input-group-append {
+  height: 30px;
+}
+
+input {
+  &[type=text] {
+    @include peertube-input-text(340px);
+
+    display: block;
+
+    &#name {
+      width: auto;
+      flex-grow: 1;
+    }
+  }
+
+  &[type=submit] {
+    @include peertube-button;
+    @include orange-button;
+    @include margin-left(auto);
+  }
+}
+
+textarea {
+  @include peertube-textarea(500px, 150px);
+
+  display: block;
+}
+
+.peertube-select-container {
+  @include peertube-select-container(340px);
+}
+
+.breadcrumb {
+  @include breadcrumb;
+}
+
+@media screen and (max-width: $small-view) {
+  input[type=text]#name {
+    width: auto !important;
+  }
+
+  label[for=name] + div,
+  textarea {
+    width: 100%;
+  }
+}

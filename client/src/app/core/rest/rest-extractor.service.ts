@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core'
 import { Router } from '@angular/router'
 import { dateToHuman } from '@app/helpers'
 import { ResultList } from '@shared/models'
+import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 
 @Injectable()
 export class RestExtractor {
@@ -40,7 +41,7 @@ export class RestExtractor {
 
     if (err.error instanceof Error) {
       // A client-side or network error occurred. Handle it accordingly.
-      errorMessage = err.error.message
+      errorMessage = err.error.detail || err.error.title
       console.error('An error occurred:', errorMessage)
     } else if (typeof err.error === 'string') {
       errorMessage = err.error
@@ -57,10 +58,9 @@ export class RestExtractor {
         errorMessage = errorsArray.join('. ')
       } else if (err.error && err.error.error) {
         errorMessage = err.error.error
-      } else if (err.status === 413) {
-        errorMessage = $localize`Request is too large for the server.
- Please contact you administrator if you want to increase the limit size.`
-      } else if (err.status === 429) {
+      } else if (err.status === HttpStatusCode.PAYLOAD_TOO_LARGE_413) {
+        errorMessage = $localize`Media is too large for the server. Please contact you administrator if you want to increase the limit size.`
+      } else if (err.status === HttpStatusCode.TOO_MANY_REQUESTS_429) {
         const secondsLeft = err.headers.get('retry-after')
         if (secondsLeft) {
           const minutesLeft = Math.floor(parseInt(secondsLeft, 10) / 60)
@@ -68,7 +68,7 @@ export class RestExtractor {
         } else {
           errorMessage = $localize`Too many attempts, please try again later.`
         }
-      } else if (err.status === 500) {
+      } else if (err.status === HttpStatusCode.INTERNAL_SERVER_ERROR_500) {
         errorMessage = $localize`Server error. Please retry later.`
       }
 
@@ -93,10 +93,10 @@ export class RestExtractor {
     return observableThrowError(errorObj)
   }
 
-  redirectTo404IfNotFound (obj: { status: number }, status = [ 404 ]) {
+  redirectTo404IfNotFound (obj: { status: number }, type: 'video' | 'other', status = [ HttpStatusCode.NOT_FOUND_404 ]) {
     if (obj && obj.status && status.indexOf(obj.status) !== -1) {
       // Do not use redirectService to avoid circular dependencies
-      this.router.navigate([ '/404' ], { skipLocationChange: true })
+      this.router.navigate([ '/404' ], { state: { type, obj }, skipLocationChange: true })
     }
 
     return observableThrowError(obj)

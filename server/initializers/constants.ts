@@ -1,34 +1,35 @@
-import { join } from 'path'
+import { CronRepeatOptions, EveryRepeatOptions } from 'bull'
 import { randomBytes } from 'crypto'
-import { ActivityPubActorType } from '../../shared/models/activitypub'
-import { FollowState } from '../../shared/models/actors'
+import { invert } from 'lodash'
+import { join } from 'path'
+import { randomInt } from '../../shared/core-utils/miscs/miscs'
 import {
   AbuseState,
+  JobType,
   VideoImportState,
   VideoPrivacy,
-  VideoTranscodingFPS,
-  JobType,
   VideoRateType,
   VideoResolution,
-  VideoState
+  VideoState,
+  VideoTranscodingFPS
 } from '../../shared/models'
-// Do not use barrels, remain constants as independent as possible
-import { isTestInstance, sanitizeHost, sanitizeUrl, root } from '../helpers/core-utils'
+import { ActivityPubActorType } from '../../shared/models/activitypub'
+import { FollowState } from '../../shared/models/actors'
 import { NSFWPolicyType } from '../../shared/models/videos/nsfw-policy.type'
-import { invert } from 'lodash'
-import { CronRepeatOptions, EveryRepeatOptions } from 'bull'
 import { VideoPlaylistPrivacy } from '../../shared/models/videos/playlist/video-playlist-privacy.model'
 import { VideoPlaylistType } from '../../shared/models/videos/playlist/video-playlist-type.model'
+// Do not use barrels, remain constants as independent as possible
+import { isTestInstance, root, sanitizeHost, sanitizeUrl } from '../helpers/core-utils'
 import { CONFIG, registerConfigChangedHandler } from './config'
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 530
+const LAST_MIGRATION_VERSION = 650
 
 // ---------------------------------------------------------------------------
 
 const API_VERSION = 'v1'
-const PEERTUBE_VERSION = require(join(root(), 'package.json')).version
+const PEERTUBE_VERSION: string = require(join(root(), 'package.json')).version
 
 const PAGINATION = {
   GLOBAL: {
@@ -50,7 +51,8 @@ const WEBSERVER = {
   SCHEME: '',
   WS: '',
   HOSTNAME: '',
-  PORT: 0
+  PORT: 0,
+  RTMP_URL: ''
 }
 
 // Sortable columns per schema
@@ -61,17 +63,21 @@ const SORTABLE_COLUMNS = {
   JOBS: [ 'createdAt' ],
   VIDEO_CHANNELS: [ 'id', 'name', 'updatedAt', 'createdAt' ],
   VIDEO_IMPORTS: [ 'createdAt' ],
+
   VIDEO_COMMENT_THREADS: [ 'createdAt', 'totalReplies' ],
+  VIDEO_COMMENTS: [ 'createdAt' ],
+
   VIDEO_RATES: [ 'createdAt' ],
   BLACKLISTS: [ 'id', 'name', 'duration', 'views', 'likes', 'dislikes', 'uuid', 'createdAt' ],
   FOLLOWERS: [ 'createdAt', 'state', 'score' ],
   FOLLOWING: [ 'createdAt', 'redundancyAllowed', 'state' ],
 
-  VIDEOS: [ 'name', 'duration', 'createdAt', 'publishedAt', 'originallyPublishedAt', 'views', 'likes', 'trending' ],
+  VIDEOS: [ 'name', 'duration', 'createdAt', 'publishedAt', 'originallyPublishedAt', 'views', 'likes', 'trending', 'hot', 'best' ],
 
   // Don't forget to update peertube-search-index with the same values
   VIDEOS_SEARCH: [ 'name', 'duration', 'createdAt', 'publishedAt', 'originallyPublishedAt', 'views', 'likes', 'match' ],
   VIDEO_CHANNELS_SEARCH: [ 'match', 'displayName', 'createdAt' ],
+  VIDEO_PLAYLISTS_SEARCH: [ 'match', 'displayName', 'createdAt' ],
 
   ABUSES: [ 'id', 'createdAt', 'state' ],
 
@@ -80,7 +86,7 @@ const SORTABLE_COLUMNS = {
 
   USER_NOTIFICATIONS: [ 'createdAt', 'read' ],
 
-  VIDEO_PLAYLISTS: [ 'displayName', 'createdAt', 'updatedAt' ],
+  VIDEO_PLAYLISTS: [ 'name', 'displayName', 'createdAt', 'updatedAt' ],
 
   PLUGINS: [ 'name', 'createdAt', 'updatedAt' ],
 
@@ -132,49 +138,64 @@ const JOB_ATTEMPTS: { [id in JobType]: number } = {
   'activitypub-http-unicast': 5,
   'activitypub-http-fetcher': 5,
   'activitypub-follow': 5,
+  'activitypub-cleaner': 1,
   'video-file-import': 1,
   'video-transcoding': 1,
   'video-import': 1,
   'email': 5,
+  'actor-keys': 3,
   'videos-views': 1,
   'activitypub-refresher': 1,
-  'video-redundancy': 1
+  'video-redundancy': 1,
+  'video-live-ending': 1
 }
-const JOB_CONCURRENCY: { [id in JobType]: number } = {
+// Excluded keys are jobs that can be configured by admins
+const JOB_CONCURRENCY: { [id in Exclude<JobType, 'video-transcoding' | 'video-import'>]: number } = {
   'activitypub-http-broadcast': 1,
   'activitypub-http-unicast': 5,
-  'activitypub-http-fetcher': 1,
+  'activitypub-http-fetcher': 3,
+  'activitypub-cleaner': 1,
   'activitypub-follow': 1,
   'video-file-import': 1,
-  'video-transcoding': 1,
-  'video-import': 1,
   'email': 5,
+  'actor-keys': 1,
   'videos-views': 1,
   'activitypub-refresher': 1,
-  'video-redundancy': 1
+  'video-redundancy': 1,
+  'video-live-ending': 10
 }
 const JOB_TTL: { [id in JobType]: number } = {
   'activitypub-http-broadcast': 60000 * 10, // 10 minutes
   'activitypub-http-unicast': 60000 * 10, // 10 minutes
   'activitypub-http-fetcher': 1000 * 3600 * 10, // 10 hours
   'activitypub-follow': 60000 * 10, // 10 minutes
+  'activitypub-cleaner': 1000 * 3600, // 1 hour
   'video-file-import': 1000 * 3600, // 1 hour
   'video-transcoding': 1000 * 3600 * 48, // 2 days, transcoding could be long
   'video-import': 1000 * 3600 * 2, // 2 hours
   'email': 60000 * 10, // 10 minutes
+  'actor-keys': 60000 * 20, // 20 minutes
   'videos-views': undefined, // Unlimited
   'activitypub-refresher': 60000 * 10, // 10 minutes
-  'video-redundancy': 1000 * 3600 * 3 // 3 hours
+  'video-redundancy': 1000 * 3600 * 3, // 3 hours
+  'video-live-ending': 1000 * 60 * 10 // 10 minutes
 }
 const REPEAT_JOBS: { [ id: string ]: EveryRepeatOptions | CronRepeatOptions } = {
   'videos-views': {
-    cron: '1 * * * *' // At 1 minute past the hour
+    cron: randomInt(1, 20) + ' * * * *' // Between 1-20 minutes past the hour
+  },
+  'activitypub-cleaner': {
+    cron: '30 5 * * ' + randomInt(0, 7) // 1 time per week (random day) at 5:30 AM
   }
 }
+const JOB_PRIORITY = {
+  TRANSCODING: 100
+}
 
-const BROADCAST_CONCURRENCY = 10 // How many requests in parallel we do in activitypub-http-broadcast job
+const BROADCAST_CONCURRENCY = 30 // How many requests in parallel we do in activitypub-http-broadcast job
+const AP_CLEANER_CONCURRENCY = 10 // How many requests in parallel we do in activitypub-cleaner job
 const CRAWL_REQUEST_CONCURRENCY = 1 // How many requests in parallel to fetch remote data (likes, shares...)
-const JOB_REQUEST_TIMEOUT = 3000 // 3 seconds
+const REQUEST_TIMEOUT = 7000 // 7 seconds
 const JOB_COMPLETED_LIFETIME = 60000 * 60 * 24 * 2 // 2 days
 const VIDEO_IMPORT_TIMEOUT = 1000 * 3600 // 1 hour
 
@@ -184,9 +205,12 @@ const SCHEDULER_INTERVALS_MS = {
   updateVideos: 60000, // 1 minute
   youtubeDLUpdate: 60000 * 60 * 24, // 1 day
   checkPlugins: CONFIG.PLUGINS.INDEX.CHECK_LATEST_VERSIONS_INTERVAL,
+  checkPeerTubeVersion: 60000 * 60 * 24, // 1 day
   autoFollowIndexInstances: 60000 * 60 * 24, // 1 day
   removeOldViews: 60000 * 60 * 24, // 1 day
-  removeOldHistory: 60000 * 60 * 24 // 1 day
+  removeOldHistory: 60000 * 60 * 24, // 1 day
+  updateInboxStats: 1000 * 60, // 1 minute
+  removeDanglingResumableUploads: 60000 * 60 * 16 // 16 hours
 }
 
 // ---------------------------------------------------------------------------
@@ -222,7 +246,7 @@ const CONSTRAINTS_FIELDS = {
     CAPTION_FILE: {
       EXTNAME: [ '.vtt', '.srt' ],
       FILE_SIZE: {
-        max: 2 * 1024 * 1024 // 2MB
+        max: 4 * 1024 * 1024 // 4MB
       }
     }
   },
@@ -249,9 +273,9 @@ const CONSTRAINTS_FIELDS = {
     DESCRIPTION: { min: 3, max: 10000 }, // Length
     SUPPORT: { min: 3, max: 1000 }, // Length
     IMAGE: {
-      EXTNAME: [ '.jpg', '.jpeg' ],
+      EXTNAME: [ '.png', '.jpg', '.jpeg', '.webp' ],
       FILE_SIZE: {
-        max: 2 * 1024 * 1024 // 2MB
+        max: 4 * 1024 * 1024 // 4MB
       }
     },
     EXTNAME: [] as string[],
@@ -259,12 +283,11 @@ const CONSTRAINTS_FIELDS = {
     DURATION: { min: 0 }, // Number
     TAGS: { min: 0, max: 5 }, // Number of total tags
     TAG: { min: 2, max: 30 }, // Length
-    THUMBNAIL: { min: 2, max: 30 },
-    THUMBNAIL_DATA: { min: 0, max: 20000 }, // Bytes
     VIEWS: { min: 0 },
     LIKES: { min: 0 },
     DISLIKES: { min: 0 },
-    FILE_SIZE: { min: 10 },
+    FILE_SIZE: { min: -1 },
+    PARTIAL_UPLOAD_SIZE: { max: 50 * 1024 * 1024 * 1024 }, // 50GB
     URL: { min: 3, max: 2000 } // Length
   },
   VIDEO_PLAYLISTS: {
@@ -274,7 +297,7 @@ const CONSTRAINTS_FIELDS = {
     IMAGE: {
       EXTNAME: [ '.jpg', '.jpeg' ],
       FILE_SIZE: {
-        max: 2 * 1024 * 1024 // 2MB
+        max: 4 * 1024 * 1024 // 4MB
       }
     }
   },
@@ -282,10 +305,10 @@ const CONSTRAINTS_FIELDS = {
     PUBLIC_KEY: { min: 10, max: 5000 }, // Length
     PRIVATE_KEY: { min: 10, max: 5000 }, // Length
     URL: { min: 3, max: 2000 }, // Length
-    AVATAR: {
-      EXTNAME: [ '.png', '.jpeg', '.jpg' ],
+    IMAGE: {
+      EXTNAME: [ '.png', '.jpeg', '.jpg', '.gif', '.webp' ],
       FILE_SIZE: {
-        max: 2 * 1024 * 1024 // 2MB
+        max: 4 * 1024 * 1024 // 4MB
       }
     }
   },
@@ -312,7 +335,11 @@ const CONSTRAINTS_FIELDS = {
   }
 }
 
-let VIDEO_VIEW_LIFETIME = 60000 * 60 // 1 hour
+const VIEW_LIFETIME = {
+  VIDEO: 60000 * 60, // 1 hour
+  LIVE: 60000 * 5 // 5 minutes
+}
+
 let CONTACT_FORM_LIFETIME = 60000 * 60 // 1 hour
 
 const VIDEO_TRANSCODING_FPS: VideoTranscodingFPS = {
@@ -332,8 +359,11 @@ const VIDEO_RATE_TYPES: { [ id: string ]: VideoRateType } = {
 }
 
 const FFMPEG_NICE: { [ id: string ]: number } = {
-  THUMBNAIL: 2, // 2 just for don't blocking servers
-  TRANSCODING: 15
+  // parent process defaults to niceness = 0
+  // reminder: lower = higher priority, max value is 19, lowest is -20
+  LIVE: 5, // prioritize over VOD and THUMBNAIL
+  THUMBNAIL: 10,
+  VOD: 15
 }
 
 const VIDEO_CATEGORIES = {
@@ -370,39 +400,41 @@ const VIDEO_LICENCES = {
 
 const VIDEO_LANGUAGES: { [id: string]: string } = {}
 
-const VIDEO_PRIVACIES = {
+const VIDEO_PRIVACIES: { [ id in VideoPrivacy ]: string } = {
   [VideoPrivacy.PUBLIC]: 'Public',
   [VideoPrivacy.UNLISTED]: 'Unlisted',
   [VideoPrivacy.PRIVATE]: 'Private',
   [VideoPrivacy.INTERNAL]: 'Internal'
 }
 
-const VIDEO_STATES = {
+const VIDEO_STATES: { [ id in VideoState ]: string } = {
   [VideoState.PUBLISHED]: 'Published',
   [VideoState.TO_TRANSCODE]: 'To transcode',
-  [VideoState.TO_IMPORT]: 'To import'
+  [VideoState.TO_IMPORT]: 'To import',
+  [VideoState.WAITING_FOR_LIVE]: 'Waiting for livestream',
+  [VideoState.LIVE_ENDED]: 'Livestream ended'
 }
 
-const VIDEO_IMPORT_STATES = {
+const VIDEO_IMPORT_STATES: { [ id in VideoImportState ]: string } = {
   [VideoImportState.FAILED]: 'Failed',
   [VideoImportState.PENDING]: 'Pending',
   [VideoImportState.SUCCESS]: 'Success',
   [VideoImportState.REJECTED]: 'Rejected'
 }
 
-const ABUSE_STATES = {
+const ABUSE_STATES: { [ id in AbuseState ]: string } = {
   [AbuseState.PENDING]: 'Pending',
   [AbuseState.REJECTED]: 'Rejected',
   [AbuseState.ACCEPTED]: 'Accepted'
 }
 
-const VIDEO_PLAYLIST_PRIVACIES = {
+const VIDEO_PLAYLIST_PRIVACIES: { [ id in VideoPlaylistPrivacy ]: string } = {
   [VideoPlaylistPrivacy.PUBLIC]: 'Public',
   [VideoPlaylistPrivacy.UNLISTED]: 'Unlisted',
   [VideoPlaylistPrivacy.PRIVATE]: 'Private'
 }
 
-const VIDEO_PLAYLIST_TYPES = {
+const VIDEO_PLAYLIST_TYPES: { [ id in VideoPlaylistType ]: string } = {
   [VideoPlaylistType.REGULAR]: 'Regular',
   [VideoPlaylistType.WATCH_LATER]: 'Watch later'
 }
@@ -419,6 +451,9 @@ const MIMETYPES = {
       'audio/x-flac': '.flac',
       'audio/flac': '.flac',
       '‎audio/aac': '.aac',
+      'audio/m4a': '.m4a',
+      'audio/mp4': '.m4a',
+      'audio/x-m4a': '.m4a',
       'audio/ac3': '.ac3'
     },
     EXT_MIMETYPE: null as { [ id: string ]: string }
@@ -431,6 +466,8 @@ const MIMETYPES = {
   IMAGE: {
     MIMETYPE_EXT: {
       'image/png': '.png',
+      'image/gif': '.gif',
+      'image/webp': '.webp',
       'image/jpg': '.jpg',
       'image/jpeg': '.jpg'
     },
@@ -502,6 +539,10 @@ const HTTP_SIGNATURE = {
   HEADER_NAME: 'signature',
   ALGORITHM: 'rsa-sha256',
   HEADERS_TO_SIGN: [ '(request-target)', 'host', 'date', 'digest' ],
+  REQUIRED_HEADERS: {
+    ALL: [ '(request-target)', 'host', 'date' ],
+    POST: [ '(request-target)', 'host', 'date', 'digest' ]
+  },
   CLOCK_SKEW_SECONDS: 1800
 }
 
@@ -527,16 +568,13 @@ const NSFW_POLICY_TYPES: { [ id: string ]: NSFWPolicyType } = {
 
 // Express static paths (router)
 const STATIC_PATHS = {
-  PREVIEWS: '/static/previews/',
   THUMBNAILS: '/static/thumbnails/',
   TORRENTS: '/static/torrents/',
   WEBSEED: '/static/webseed/',
   REDUNDANCY: '/static/redundancy/',
   STREAMING_PLAYLISTS: {
     HLS: '/static/streaming-playlists/hls'
-  },
-  AVATARS: '/static/avatars/',
-  VIDEO_CAPTIONS: '/static/video-captions/'
+  }
 }
 const STATIC_DOWNLOAD_PATHS = {
   TORRENTS: '/download/torrents/',
@@ -544,21 +582,24 @@ const STATIC_DOWNLOAD_PATHS = {
   HLS_VIDEOS: '/download/streaming-playlists/hls/videos/'
 }
 const LAZY_STATIC_PATHS = {
+  BANNERS: '/lazy-static/banners/',
   AVATARS: '/lazy-static/avatars/',
   PREVIEWS: '/lazy-static/previews/',
-  VIDEO_CAPTIONS: '/lazy-static/video-captions/'
+  VIDEO_CAPTIONS: '/lazy-static/video-captions/',
+  TORRENTS: '/lazy-static/torrents/'
 }
 
 // Cache control
 const STATIC_MAX_AGE = {
   SERVER: '2h',
+  LAZY_SERVER: '2d',
   CLIENT: '30d'
 }
 
 // Videos thumbnail size
 const THUMBNAILS_SIZE = {
-  width: 223,
-  height: 122,
+  width: 280,
+  height: 157,
   minWidth: 150
 }
 const PREVIEWS_SIZE = {
@@ -566,9 +607,15 @@ const PREVIEWS_SIZE = {
   height: 480,
   minWidth: 400
 }
-const AVATARS_SIZE = {
-  width: 120,
-  height: 120
+const ACTOR_IMAGES_SIZE = {
+  AVATARS: {
+    width: 120,
+    height: 120
+  },
+  BANNERS: {
+    width: 1920,
+    height: 317 // 6/1 ratio
+  }
 }
 
 const EMBED_SIZE = {
@@ -585,6 +632,10 @@ const FILES_CACHE = {
   VIDEO_CAPTIONS: {
     DIRECTORY: join(CONFIG.STORAGE.CACHE_DIR, 'video-captions'),
     MAX_AGE: 1000 * 3600 * 3 // 3 hours
+  },
+  TORRENTS: {
+    DIRECTORY: join(CONFIG.STORAGE.CACHE_DIR, 'torrents'),
+    MAX_AGE: 1000 * 3600 * 3 // 3 hours
   }
 }
 
@@ -592,17 +643,37 @@ const LRU_CACHE = {
   USER_TOKENS: {
     MAX_SIZE: 1000
   },
-  AVATAR_STATIC: {
+  ACTOR_IMAGE_STATIC: {
     MAX_SIZE: 500
   }
 }
 
+const RESUMABLE_UPLOAD_DIRECTORY = join(CONFIG.STORAGE.TMP_DIR, 'resumable-uploads')
 const HLS_STREAMING_PLAYLIST_DIRECTORY = join(CONFIG.STORAGE.STREAMING_PLAYLISTS_DIR, 'hls')
 const HLS_REDUNDANCY_DIRECTORY = join(CONFIG.STORAGE.REDUNDANCY_DIR, 'hls')
 
+const VIDEO_LIVE = {
+  EXTENSION: '.ts',
+  CLEANUP_DELAY: 1000 * 60 * 5, // 5 minutes
+  SEGMENT_TIME_SECONDS: 4, // 4 seconds
+  SEGMENTS_LIST_SIZE: 15, // 15 maximum segments in live playlist
+  REPLAY_DIRECTORY: 'replay',
+  EDGE_LIVE_DELAY_SEGMENTS_NOTIFICATION: 4,
+  MAX_SOCKET_WAITING_DATA: 1024 * 1000 * 100, // 100MB
+  RTMP: {
+    CHUNK_SIZE: 60000,
+    GOP_CACHE: true,
+    PING: 60,
+    PING_TIMEOUT: 30,
+    BASE_PATH: 'live'
+  }
+}
+
 const MEMOIZE_TTL = {
   OVERVIEWS_SAMPLE: 1000 * 3600 * 4, // 4 hours
-  INFO_HASH_EXISTS: 1000 * 3600 * 12 // 12 hours
+  INFO_HASH_EXISTS: 1000 * 3600 * 12, // 12 hours
+  LIVE_ABLE_TO_UPLOAD: 1000 * 60, // 1 minute
+  LIVE_CHECK_SOCKET_HEALTH: 1000 * 60 // 1 minute
 }
 
 const MEMOIZE_LENGTH = {
@@ -610,7 +681,7 @@ const MEMOIZE_LENGTH = {
 }
 
 const QUEUE_CONCURRENCY = {
-  AVATAR_PROCESS_IMAGE: 3
+  ACTOR_PROCESS_IMAGE: 3
 }
 
 const REDUNDANCY = {
@@ -622,7 +693,8 @@ const REDUNDANCY = {
 const ACCEPT_HEADERS = [ 'html', 'application/json' ].concat(ACTIVITY_PUB.POTENTIAL_ACCEPT_HEADERS)
 
 const ASSETS_PATH = {
-  DEFAULT_AUDIO_BACKGROUND: join(root(), 'dist', 'server', 'assets', 'default-audio-background.jpg')
+  DEFAULT_AUDIO_BACKGROUND: join(root(), 'dist', 'server', 'assets', 'default-audio-background.jpg'),
+  DEFAULT_LIVE_BACKGROUND: join(root(), 'dist', 'server', 'assets', 'default-live-background.jpg')
 }
 
 // ---------------------------------------------------------------------------
@@ -631,7 +703,8 @@ const CUSTOM_HTML_TAG_COMMENTS = {
   TITLE: '<!-- title tag -->',
   DESCRIPTION: '<!-- description tag -->',
   CUSTOM_CSS: '<!-- custom css tag -->',
-  META_TAGS: '<!-- meta tags -->'
+  META_TAGS: '<!-- meta tags -->',
+  SERVER_CONFIG: '<!-- server config -->'
 }
 
 // ---------------------------------------------------------------------------
@@ -650,7 +723,7 @@ const TRACKER_RATE_LIMITS = {
   INTERVAL: 60000 * 5, // 5 minutes
   ANNOUNCES_PER_IP_PER_INFOHASH: 15, // maximum announces per torrent in the interval
   ANNOUNCES_PER_IP: 30, // maximum announces for all our torrents in the interval
-  BLOCK_IP_LIFETIME: 60000 * 10 // 10 minutes
+  BLOCK_IP_LIFETIME: 60000 * 3 // 3 minutes
 }
 
 const P2P_MEDIA_LOADER_PEER_VERSION = 2
@@ -692,7 +765,8 @@ if (isTestInstance() === true) {
   ACTIVITY_PUB.VIDEO_REFRESH_INTERVAL = 10 * 1000 // 10 seconds
   ACTIVITY_PUB.VIDEO_PLAYLIST_REFRESH_INTERVAL = 10 * 1000 // 10 seconds
 
-  CONSTRAINTS_FIELDS.ACTORS.AVATAR.FILE_SIZE.max = 100 * 1024 // 100KB
+  CONSTRAINTS_FIELDS.ACTORS.IMAGE.FILE_SIZE.max = 100 * 1024 // 100KB
+  CONSTRAINTS_FIELDS.VIDEOS.IMAGE.FILE_SIZE.max = 400 * 1024 // 400KB
 
   SCHEDULER_INTERVALS_MS.actorFollowScores = 1000
   SCHEDULER_INTERVALS_MS.removeOldJobs = 10000
@@ -700,20 +774,29 @@ if (isTestInstance() === true) {
   SCHEDULER_INTERVALS_MS.removeOldViews = 5000
   SCHEDULER_INTERVALS_MS.updateVideos = 5000
   SCHEDULER_INTERVALS_MS.autoFollowIndexInstances = 5000
+  SCHEDULER_INTERVALS_MS.updateInboxStats = 5000
+  SCHEDULER_INTERVALS_MS.checkPeerTubeVersion = 2000
   REPEAT_JOBS['videos-views'] = { every: 5000 }
+  REPEAT_JOBS['activitypub-cleaner'] = { every: 5000 }
 
   REDUNDANCY.VIDEOS.RANDOMIZED_FACTOR = 1
 
-  VIDEO_VIEW_LIFETIME = 1000 // 1 second
+  VIEW_LIFETIME.VIDEO = 1000 // 1 second
+  VIEW_LIFETIME.LIVE = 1000 * 5 // 5 second
   CONTACT_FORM_LIFETIME = 1000 // 1 second
 
   JOB_ATTEMPTS['email'] = 1
 
   FILES_CACHE.VIDEO_CAPTIONS.MAX_AGE = 3000
   MEMOIZE_TTL.OVERVIEWS_SAMPLE = 3000
+  MEMOIZE_TTL.LIVE_ABLE_TO_UPLOAD = 3000
   OVERVIEWS.VIDEOS.SAMPLE_THRESHOLD = 2
 
   PLUGIN_EXTERNAL_AUTH_TOKEN_LIFETIME = 5000
+
+  VIDEO_LIVE.CLEANUP_DELAY = 5000
+  VIDEO_LIVE.SEGMENT_TIME_SECONDS = 2
+  VIDEO_LIVE.EDGE_LIVE_DELAY_SEGMENTS_NOTIFICATION = 1
 }
 
 updateWebserverUrls()
@@ -737,12 +820,14 @@ const FILES_CONTENT_HASH = {
 export {
   WEBSERVER,
   API_VERSION,
+  VIDEO_LIVE,
   PEERTUBE_VERSION,
   LAZY_STATIC_PATHS,
   SEARCH_INDEX,
+  RESUMABLE_UPLOAD_DIRECTORY,
   HLS_REDUNDANCY_DIRECTORY,
   P2P_MEDIA_LOADER_PEER_VERSION,
-  AVATARS_SIZE,
+  ACTOR_IMAGES_SIZE,
   ACCEPT_HEADERS,
   BCRYPT_SALT_SIZE,
   TRACKER_RATE_LIMITS,
@@ -753,6 +838,7 @@ export {
   REDUNDANCY,
   JOB_CONCURRENCY,
   JOB_ATTEMPTS,
+  AP_CLEANER_CONCURRENCY,
   LAST_MIGRATION_VERSION,
   OAUTH_LIFETIME,
   CUSTOM_HTML_TAG_COMMENTS,
@@ -791,12 +877,13 @@ export {
   VIDEO_STATES,
   QUEUE_CONCURRENCY,
   VIDEO_RATE_TYPES,
+  JOB_PRIORITY,
   VIDEO_TRANSCODING_FPS,
   FFMPEG_NICE,
   ABUSE_STATES,
   VIDEO_CHANNELS,
   LRU_CACHE,
-  JOB_REQUEST_TIMEOUT,
+  REQUEST_TIMEOUT,
   USER_PASSWORD_RESET_LIFETIME,
   USER_PASSWORD_CREATE_LIFETIME,
   MEMOIZE_TTL,
@@ -811,7 +898,7 @@ export {
   JOB_COMPLETED_LIFETIME,
   HTTP_SIGNATURE,
   VIDEO_IMPORT_STATES,
-  VIDEO_VIEW_LIFETIME,
+  VIEW_LIFETIME,
   CONTACT_FORM_LIFETIME,
   VIDEO_PLAYLIST_PRIVACIES,
   PLUGIN_EXTERNAL_AUTH_TOKEN_LIFETIME,
@@ -892,10 +979,13 @@ function buildVideoMimetypeExt () {
 function updateWebserverUrls () {
   WEBSERVER.URL = sanitizeUrl(CONFIG.WEBSERVER.SCHEME + '://' + CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT)
   WEBSERVER.HOST = sanitizeHost(CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT, REMOTE_SCHEME.HTTP)
-  WEBSERVER.SCHEME = CONFIG.WEBSERVER.SCHEME
   WEBSERVER.WS = CONFIG.WEBSERVER.WS
+
+  WEBSERVER.SCHEME = CONFIG.WEBSERVER.SCHEME
   WEBSERVER.HOSTNAME = CONFIG.WEBSERVER.HOSTNAME
   WEBSERVER.PORT = CONFIG.WEBSERVER.PORT
+
+  WEBSERVER.RTMP_URL = 'rtmp://' + CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.LIVE.RTMP.PORT + '/' + VIDEO_LIVE.RTMP.BASE_PATH
 }
 
 function updateWebserverConfig () {

@@ -1,11 +1,12 @@
-import { Subscription } from 'rxjs'
+import { forkJoin, Subscription } from 'rxjs'
 import { first, tap } from 'rxjs/operators'
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Component, ComponentFactoryResolver, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, ConfirmService, LocalStorageService, Notifier, ScreenService, ServerService, UserService } from '@app/core'
 import { immutableAssign } from '@app/helpers'
 import { Account, AccountService, VideoService } from '@app/shared/shared-main'
 import { AbstractVideoList } from '@app/shared/shared-video-miniature'
+import { VideoFilter } from '@shared/models'
 
 @Component({
   selector: 'my-account-videos',
@@ -15,8 +16,12 @@ import { AbstractVideoList } from '@app/shared/shared-video-miniature'
   ]
 })
 export class AccountVideosComponent extends AbstractVideoList implements OnInit, OnDestroy {
+  // No value because we don't want a page title
   titlePage: string
   loadOnInit = false
+  loadUserVideoPreferences = true
+
+  filter: VideoFilter = null
 
   private account: Account
   private accountSub: Subscription
@@ -32,7 +37,8 @@ export class AccountVideosComponent extends AbstractVideoList implements OnInit,
     protected screenService: ScreenService,
     protected storageService: LocalStorageService,
     private accountService: AccountService,
-    private videoService: VideoService
+    private videoService: VideoService,
+    protected cfr: ComponentFactoryResolver
   ) {
     super()
   }
@@ -40,15 +46,18 @@ export class AccountVideosComponent extends AbstractVideoList implements OnInit,
   ngOnInit () {
     super.ngOnInit()
 
-    // Parent get the account for us
-    this.accountSub = this.accountService.accountLoaded
-                          .pipe(first())
-                          .subscribe(account => {
-                            this.account = account
+    this.enableAllFilterIfPossible()
 
-                            this.reloadVideos()
-                            this.generateSyndicationList()
-                          })
+    // Parent get the account for us
+    this.accountSub = forkJoin([
+      this.accountService.accountLoaded.pipe(first()),
+      this.onUserLoadedSubject.pipe(first())
+    ]).subscribe(([ account ]) => {
+      this.account = account
+
+      this.reloadVideos()
+      this.generateSyndicationList()
+    })
   }
 
   ngOnDestroy () {
@@ -59,17 +68,29 @@ export class AccountVideosComponent extends AbstractVideoList implements OnInit,
 
   getVideosObservable (page: number) {
     const newPagination = immutableAssign(this.pagination, { currentPage: page })
+    const options = {
+      account: this.account,
+      videoPagination: newPagination,
+      sort: this.sort,
+      nsfwPolicy: this.nsfwPolicy,
+      videoFilter: this.filter
+    }
 
     return this.videoService
-               .getAccountVideos(this.account, newPagination, this.sort)
-               .pipe(
-                 tap(({ total }) => {
-                   this.titlePage = $localize`Published ${total} videos`
-                 })
-               )
+               .getAccountVideos(options)
+  }
+
+  toggleModerationDisplay () {
+    this.filter = this.buildLocalFilter(this.filter, null)
+
+    this.reloadVideos()
   }
 
   generateSyndicationList () {
     this.syndicationItems = this.videoService.getAccountFeedUrls(this.account.id)
+  }
+
+  displayAsRow () {
+    return this.screenService.isInMobileView()
   }
 }

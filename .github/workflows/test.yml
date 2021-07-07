@@ -5,6 +5,8 @@ on:
     branches:
       - develop
       - master
+      - ci
+      - next
   pull_request:
     types: [synchronize, opened]
   schedule:
@@ -30,19 +32,19 @@ jobs:
           POSTGRES_HOST_AUTH_METHOD: trust
 
       ldap:
-        image: rroemhild/test-openldap
+        image: chocobozzz/docker-test-openldap
         ports:
-          - 389:389
+          - 10389:10389
 
     strategy:
       fail-fast: false
       matrix:
-        test_suite: [ misc, api-1, api-2, api-3, api-4, cli, lint, external-plugins ]
+        test_suite: [ client, api-1, api-2, api-3, api-4, cli-plugin, lint, external-plugins ]
 
     env:
       PGUSER: peertube
       PGHOST: localhost
-      NODE_PENDING_JOB_WAIT: 2000
+      NODE_PENDING_JOB_WAIT: 250
 
     steps:
       - uses: actions/checkout@v2
@@ -55,11 +57,11 @@ jobs:
       - name: Setup system dependencies
         run: |
           sudo apt-get install postgresql-client-common redis-tools parallel
-          wget --quiet --no-check-certificate "https://download.cpy.re/ffmpeg/ffmpeg-release-4.0.3-64bit-static.tar.xz"
-          tar xf ffmpeg-release-4.0.3-64bit-static.tar.xz
+          wget --quiet --no-check-certificate "https://download.cpy.re/ffmpeg/ffmpeg-release-4.3.1-64bit-static.tar.xz"
+          tar xf ffmpeg-release-4.3.1-64bit-static.tar.xz
           mkdir -p $HOME/bin
           cp ffmpeg-*/{ffmpeg,ffprobe} $HOME/bin
-          echo "::add-path::$HOME/bin"
+          echo "$HOME/bin" >> $GITHUB_PATH
 
       - name: Cache Node.js modules
         uses: actions/cache@v2
@@ -88,16 +90,27 @@ jobs:
       - name: Set env test variable (schedule)
         if: github.event_name != 'schedule'
         run: |
-          echo "::set-env name=DISABLE_HTTP_IMPORT_TESTS::true"
+          echo "DISABLE_HTTP_IMPORT_TESTS=true" >> $GITHUB_ENV
 
       - name: Run Test
         # external-plugins tests only run on schedule
         if: github.event_name == 'schedule' || matrix.test_suite != 'external-plugins'
-        run: NODE_PENDING_JOB_WAIT=2000 npm run ci -- ${{ matrix.test_suite }}
+        run: npm run ci -- ${{ matrix.test_suite }}
+
+      - name: Display errors
+        if: ${{ always() }}
+        run: |
+          ( \
+            test -f dist/scripts/parse-log.js && \
+            cat *-ci.log | uniq -c && \
+            NODE_ENV=test node dist/scripts/parse-log.js -l error -f artifacts/*.log \
+          ) || \
+          echo "parse-log.js script does not exist, skipping."
 
       - name: Upload logs
         uses: actions/upload-artifact@v2
         if: failure()
         with:
           name: test-storages-${{ matrix.test_suite }}
-          path: test*/logs
+          path: artifacts
+          retention-days: 7

@@ -13,6 +13,7 @@ import {
   getStoredVolume,
   saveLastSubtitle,
   saveMuteInStore,
+  saveVideoWatchHistory,
   saveVolumeInStore
 } from './peertube-player-local-storage'
 
@@ -32,6 +33,8 @@ class PeerTubePlugin extends Plugin {
   private userWatchingVideoInterval: any
   private lastResolutionChange: ResolutionUpdateData
 
+  private isLive: boolean
+
   private menuOpened = false
   private mouseInControlBar = false
   private readonly savedInactivityTimeout: number
@@ -42,6 +45,7 @@ class PeerTubePlugin extends Plugin {
     this.videoViewUrl = options.videoViewUrl
     this.videoDuration = options.videoDuration
     this.videoCaptions = options.videoCaptions
+    this.isLive = options.isLive
 
     this.savedInactivityTimeout = player.options_.inactivityTimeout
 
@@ -117,7 +121,7 @@ class PeerTubePlugin extends Plugin {
       this.initializePlayer()
       this.runViewAdd()
 
-      if (options.userWatching) this.runUserWatchVideo(options.userWatching)
+      this.runUserWatchVideo(options.userWatching, options.videoUUID)
     })
   }
 
@@ -152,7 +156,9 @@ class PeerTubePlugin extends Plugin {
     // After 30 seconds (or 3/4 of the video), add a view to the video
     let minSecondsToView = 30
 
-    if (this.videoDuration < minSecondsToView) minSecondsToView = (this.videoDuration * 3) / 4
+    if (!this.isLive && this.videoDuration < minSecondsToView) {
+      minSecondsToView = (this.videoDuration * 3) / 4
+    }
 
     let secondsViewed = 0
     this.videoViewInterval = setInterval(() => {
@@ -160,7 +166,12 @@ class PeerTubePlugin extends Plugin {
         secondsViewed += 1
 
         if (secondsViewed > minSecondsToView) {
-          this.clearVideoViewInterval()
+          // Restart the loop if this is a live
+          if (this.isLive) {
+            secondsViewed = 0
+          } else {
+            this.clearVideoViewInterval()
+          }
 
           this.addViewToVideo().catch(err => console.error(err))
         }
@@ -168,7 +179,7 @@ class PeerTubePlugin extends Plugin {
     }, 1000)
   }
 
-  private runUserWatchVideo (options: UserWatching) {
+  private runUserWatchVideo (options: UserWatching, videoUUID: string) {
     let lastCurrentTime = 0
 
     this.userWatchingVideoInterval = setInterval(() => {
@@ -177,8 +188,12 @@ class PeerTubePlugin extends Plugin {
       if (currentTime - lastCurrentTime >= 1) {
         lastCurrentTime = currentTime
 
-        this.notifyUserIsWatching(currentTime, options.url, options.authorizationHeader)
-          .catch(err => console.error('Cannot notify user is watching.', err))
+        if (options) {
+          this.notifyUserIsWatching(currentTime, options.url, options.authorizationHeader)
+            .catch(err => console.error('Cannot notify user is watching.', err))
+        } else {
+          saveVideoWatchHistory(videoUUID, currentTime)
+        }
       }
     }, this.CONSTANTS.USER_WATCHING_VIDEO_INTERVAL)
   }

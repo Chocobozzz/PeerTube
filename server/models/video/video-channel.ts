@@ -1,3 +1,4 @@
+import { FindOptions, Includeable, literal, Op, QueryTypes, ScopeOptions, Transaction } from 'sequelize'
 import {
   AllowNull,
   BeforeDestroy,
@@ -16,6 +17,9 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
+import { setAsUpdated } from '@server/helpers/database-utils'
+import { MAccountActor } from '@server/types/models'
+import { AttributesOnly } from '@shared/core-utils'
 import { ActivityPubActor } from '../../../shared/models/activitypub'
 import { VideoChannel, VideoChannelSummary } from '../../../shared/models/videos'
 import {
@@ -23,31 +27,30 @@ import {
   isVideoChannelNameValid,
   isVideoChannelSupportValid
 } from '../../helpers/custom-validators/video-channels'
-import { sendDeleteActor } from '../../lib/activitypub/send'
-import { AccountModel, ScopeNames as AccountModelScopeNames, SummaryOptions as AccountSummaryOptions } from '../account/account'
-import { ActorModel, unusedActorAttributesForAPI } from '../activitypub/actor'
-import { buildServerIdsFollowedBy, buildTrigramSearchIndex, createSimilarityAttribute, getSort, throwIfNotValid } from '../utils'
-import { VideoModel } from './video'
 import { CONSTRAINTS_FIELDS, WEBSERVER } from '../../initializers/constants'
-import { ServerModel } from '../server/server'
-import { FindOptions, Op, literal, ScopeOptions } from 'sequelize'
-import { AvatarModel } from '../avatar/avatar'
-import { VideoPlaylistModel } from './video-playlist'
-import * as Bluebird from 'bluebird'
+import { sendDeleteActor } from '../../lib/activitypub/send'
 import {
-  MChannelAccountDefault,
   MChannelActor,
-  MChannelActorAccountDefaultVideos,
   MChannelAP,
+  MChannelBannerAccountDefault,
   MChannelFormattable,
   MChannelSummaryFormattable
 } from '../../types/models/video'
+import { AccountModel, ScopeNames as AccountModelScopeNames, SummaryOptions as AccountSummaryOptions } from '../account/account'
+import { ActorModel, unusedActorAttributesForAPI } from '../actor/actor'
+import { ActorFollowModel } from '../actor/actor-follow'
+import { ActorImageModel } from '../actor/actor-image'
+import { ServerModel } from '../server/server'
+import { buildServerIdsFollowedBy, buildTrigramSearchIndex, createSimilarityAttribute, getSort, throwIfNotValid } from '../utils'
+import { VideoModel } from './video'
+import { VideoPlaylistModel } from './video-playlist'
 
 export enum ScopeNames {
   FOR_API = 'FOR_API',
   SUMMARY = 'SUMMARY',
   WITH_ACCOUNT = 'WITH_ACCOUNT',
   WITH_ACTOR = 'WITH_ACTOR',
+  WITH_ACTOR_BANNER = 'WITH_ACTOR_BANNER',
   WITH_VIDEOS = 'WITH_VIDEOS',
   WITH_STATS = 'WITH_STATS'
 }
@@ -98,7 +101,14 @@ export type SummaryOptions = {
                 }
               }
             ]
-          }
+          },
+          include: [
+            {
+              model: ActorImageModel,
+              as: 'Banner',
+              required: false
+            }
+          ]
         },
         {
           model: AccountModel,
@@ -117,36 +127,40 @@ export type SummaryOptions = {
     }
   },
   [ScopeNames.SUMMARY]: (options: SummaryOptions = {}) => {
+    const include: Includeable[] = [
+      {
+        attributes: [ 'id', 'preferredUsername', 'url', 'serverId', 'avatarId' ],
+        model: ActorModel.unscoped(),
+        required: options.actorRequired ?? true,
+        include: [
+          {
+            attributes: [ 'host' ],
+            model: ServerModel.unscoped(),
+            required: false
+          },
+          {
+            model: ActorImageModel.unscoped(),
+            as: 'Avatar',
+            required: false
+          }
+        ]
+      }
+    ]
+
     const base: FindOptions = {
-      attributes: [ 'id', 'name', 'description', 'actorId' ],
-      include: [
-        {
-          attributes: [ 'id', 'preferredUsername', 'url', 'serverId', 'avatarId' ],
-          model: ActorModel.unscoped(),
-          required: options.actorRequired ?? true,
-          include: [
-            {
-              attributes: [ 'host' ],
-              model: ServerModel.unscoped(),
-              required: false
-            },
-            {
-              model: AvatarModel.unscoped(),
-              required: false
-            }
-          ]
-        }
-      ]
+      attributes: [ 'id', 'name', 'description', 'actorId' ]
     }
 
     if (options.withAccount === true) {
-      base.include.push({
+      include.push({
         model: AccountModel.scope({
           method: [ AccountModelScopeNames.SUMMARY, { withAccountBlockerIds: options.withAccountBlockerIds } as AccountSummaryOptions ]
         }),
         required: true
       })
     }
+
+    base.include = include
 
     return base
   },
@@ -161,6 +175,20 @@ export type SummaryOptions = {
   [ScopeNames.WITH_ACTOR]: {
     include: [
       ActorModel
+    ]
+  },
+  [ScopeNames.WITH_ACTOR_BANNER]: {
+    include: [
+      {
+        model: ActorModel,
+        include: [
+          {
+            model: ActorImageModel,
+            required: false,
+            as: 'Banner'
+          }
+        ]
+      }
     ]
   },
   [ScopeNames.WITH_VIDEOS]: {
@@ -219,7 +247,7 @@ export type SummaryOptions = {
     }
   ]
 })
-export class VideoChannelModel extends Model<VideoChannelModel> {
+export class VideoChannelModel extends Model<Partial<AttributesOnly<VideoChannelModel>>> {
 
   @AllowNull(false)
   @Is('VideoChannelName', value => throwIfNotValid(value, isVideoChannelNameValid, 'name'))
@@ -263,8 +291,7 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
   @BelongsTo(() => AccountModel, {
     foreignKey: {
       allowNull: false
-    },
-    hooks: true
+    }
   })
   Account: AccountModel
 
@@ -293,6 +320,8 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
       instance.Actor = await instance.$get('Actor', { transaction: options.transaction })
     }
 
+    await ActorFollowModel.removeFollowsOf(instance.Actor.id, options.transaction)
+
     if (instance.Actor.isOwned()) {
       return sendDeleteActor(instance.Actor, options.transaction)
     }
@@ -310,6 +339,47 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
     return VideoChannelModel.count(query)
   }
 
+  static async getStats () {
+
+    function getActiveVideoChannels (days: number) {
+      const options = {
+        type: QueryTypes.SELECT as QueryTypes.SELECT,
+        raw: true
+      }
+
+      const query = `
+SELECT          COUNT(DISTINCT("VideoChannelModel"."id")) AS "count"
+FROM            "videoChannel"                            AS "VideoChannelModel"
+INNER JOIN      "video"                                   AS "Videos"
+ON              "VideoChannelModel"."id" = "Videos"."channelId"
+AND             ("Videos"."publishedAt" > Now() - interval '${days}d')
+INNER JOIN      "account" AS "Account"
+ON              "VideoChannelModel"."accountId" = "Account"."id"
+INNER JOIN      "actor" AS "Account->Actor"
+ON              "Account"."actorId" = "Account->Actor"."id"
+AND             "Account->Actor"."serverId" IS NULL
+LEFT OUTER JOIN "server" AS "Account->Actor->Server"
+ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
+
+      return VideoChannelModel.sequelize.query<{ count: string }>(query, options)
+                              .then(r => parseInt(r[0].count, 10))
+    }
+
+    const totalLocalVideoChannels = await VideoChannelModel.count()
+    const totalLocalDailyActiveVideoChannels = await getActiveVideoChannels(1)
+    const totalLocalWeeklyActiveVideoChannels = await getActiveVideoChannels(7)
+    const totalLocalMonthlyActiveVideoChannels = await getActiveVideoChannels(30)
+    const totalHalfYearActiveVideoChannels = await getActiveVideoChannels(180)
+
+    return {
+      totalLocalVideoChannels,
+      totalLocalDailyActiveVideoChannels,
+      totalLocalWeeklyActiveVideoChannels,
+      totalLocalMonthlyActiveVideoChannels,
+      totalHalfYearActiveVideoChannels
+    }
+  }
+
   static listForApi (parameters: {
     actorId: number
     start: number
@@ -324,18 +394,17 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
       order: getSort(parameters.sort)
     }
 
-    const scopes = {
-      method: [ ScopeNames.FOR_API, { actorId } as AvailableForListOptions ]
-    }
     return VideoChannelModel
-      .scope(scopes)
+      .scope({
+        method: [ ScopeNames.FOR_API, { actorId } as AvailableForListOptions ]
+      })
       .findAndCountAll(query)
       .then(({ rows, count }) => {
         return { total: count, data: rows }
       })
   }
 
-  static listLocalsForSitemap (sort: string): Bluebird<MChannelActor[]> {
+  static listLocalsForSitemap (sort: string): Promise<MChannelActor[]> {
     const query = {
       attributes: [ ],
       offset: 0,
@@ -364,8 +433,8 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
     sort: string
   }) {
     const attributesInclude = []
-    const escapedSearch = VideoModel.sequelize.escape(options.search)
-    const escapedLikeSearch = VideoModel.sequelize.escape('%' + options.search + '%')
+    const escapedSearch = VideoChannelModel.sequelize.escape(options.search)
+    const escapedLikeSearch = VideoChannelModel.sequelize.escape('%' + options.search + '%')
     attributesInclude.push(createSimilarityAttribute('VideoChannelModel.name', options.search))
 
     const query = {
@@ -387,11 +456,10 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
       }
     }
 
-    const scopes = {
-      method: [ ScopeNames.FOR_API, { actorId: options.actorId } as AvailableForListOptions ]
-    }
     return VideoChannelModel
-      .scope(scopes)
+      .scope({
+        method: [ ScopeNames.FOR_API, { actorId: options.actorId } as AvailableForListOptions ]
+      })
       .findAndCountAll(query)
       .then(({ rows, count }) => {
         return { total: count, data: rows }
@@ -437,7 +505,7 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
       where
     }
 
-    const scopes: string | ScopeOptions | (string | ScopeOptions)[] = [ ScopeNames.WITH_ACTOR ]
+    const scopes: string | ScopeOptions | (string | ScopeOptions)[] = [ ScopeNames.WITH_ACTOR_BANNER ]
 
     if (options.withStats === true) {
       scopes.push({
@@ -453,32 +521,13 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
       })
   }
 
-  static loadByIdAndPopulateAccount (id: number): Bluebird<MChannelAccountDefault> {
+  static loadAndPopulateAccount (id: number, transaction?: Transaction): Promise<MChannelBannerAccountDefault> {
     return VideoChannelModel.unscoped()
-      .scope([ ScopeNames.WITH_ACTOR, ScopeNames.WITH_ACCOUNT ])
-      .findByPk(id)
+      .scope([ ScopeNames.WITH_ACTOR_BANNER, ScopeNames.WITH_ACCOUNT ])
+      .findByPk(id, { transaction })
   }
 
-  static loadByIdAndAccount (id: number, accountId: number): Bluebird<MChannelAccountDefault> {
-    const query = {
-      where: {
-        id,
-        accountId
-      }
-    }
-
-    return VideoChannelModel.unscoped()
-      .scope([ ScopeNames.WITH_ACTOR, ScopeNames.WITH_ACCOUNT ])
-      .findOne(query)
-  }
-
-  static loadAndPopulateAccount (id: number): Bluebird<MChannelAccountDefault> {
-    return VideoChannelModel.unscoped()
-      .scope([ ScopeNames.WITH_ACTOR, ScopeNames.WITH_ACCOUNT ])
-      .findByPk(id)
-  }
-
-  static loadByUrlAndPopulateAccount (url: string): Bluebird<MChannelAccountDefault> {
+  static loadByUrlAndPopulateAccount (url: string): Promise<MChannelBannerAccountDefault> {
     const query = {
       include: [
         {
@@ -486,7 +535,14 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
           required: true,
           where: {
             url
-          }
+          },
+          include: [
+            {
+              model: ActorImageModel,
+              required: false,
+              as: 'Banner'
+            }
+          ]
         }
       ]
     }
@@ -504,7 +560,7 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
     return VideoChannelModel.loadByNameAndHostAndPopulateAccount(name, host)
   }
 
-  static loadLocalByNameAndPopulateAccount (name: string): Bluebird<MChannelAccountDefault> {
+  static loadLocalByNameAndPopulateAccount (name: string): Promise<MChannelBannerAccountDefault> {
     const query = {
       include: [
         {
@@ -513,17 +569,24 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
           where: {
             preferredUsername: name,
             serverId: null
-          }
+          },
+          include: [
+            {
+              model: ActorImageModel,
+              required: false,
+              as: 'Banner'
+            }
+          ]
         }
       ]
     }
 
     return VideoChannelModel.unscoped()
-      .scope([ ScopeNames.WITH_ACTOR, ScopeNames.WITH_ACCOUNT ])
+      .scope([ ScopeNames.WITH_ACCOUNT ])
       .findOne(query)
   }
 
-  static loadByNameAndHostAndPopulateAccount (name: string, host: string): Bluebird<MChannelAccountDefault> {
+  static loadByNameAndHostAndPopulateAccount (name: string, host: string): Promise<MChannelBannerAccountDefault> {
     const query = {
       include: [
         {
@@ -537,6 +600,11 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
               model: ServerModel,
               required: true,
               where: { host }
+            },
+            {
+              model: ActorImageModel,
+              required: false,
+              as: 'Banner'
             }
           ]
         }
@@ -544,20 +612,8 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
     }
 
     return VideoChannelModel.unscoped()
-      .scope([ ScopeNames.WITH_ACTOR, ScopeNames.WITH_ACCOUNT ])
+      .scope([ ScopeNames.WITH_ACCOUNT ])
       .findOne(query)
-  }
-
-  static loadAndPopulateAccountAndVideos (id: number): Bluebird<MChannelActorAccountDefaultVideos> {
-    const options = {
-      include: [
-        VideoModel
-      ]
-    }
-
-    return VideoChannelModel.unscoped()
-      .scope([ ScopeNames.WITH_ACTOR, ScopeNames.WITH_ACCOUNT, ScopeNames.WITH_VIDEOS ])
-      .findByPk(id, options)
   }
 
   toFormattedSummaryJSON (this: MChannelSummaryFormattable): VideoChannelSummary {
@@ -598,7 +654,6 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
       description: this.description,
       support: this.support,
       isLocal: this.Actor.isOwned(),
-      createdAt: this.createdAt,
       updatedAt: this.updatedAt,
       ownerAccount: undefined,
       videosCount,
@@ -625,11 +680,19 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
     })
   }
 
+  getLocalUrl (this: MAccountActor | MChannelActor) {
+    return WEBSERVER.URL + `/video-channels/` + this.Actor.preferredUsername
+  }
+
   getDisplayName () {
     return this.name
   }
 
   isOutdated () {
     return this.Actor.isOutdated()
+  }
+
+  setAsUpdated (transaction: Transaction) {
+    return setAsUpdated('videoChannel', this.id, transaction)
   }
 }

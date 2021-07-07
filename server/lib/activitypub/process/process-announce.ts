@@ -3,7 +3,7 @@ import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { sequelizeTypescript } from '../../../initializers/database'
 import { VideoShareModel } from '../../../models/video/video-share'
 import { forwardVideoRelatedActivity } from '../send/utils'
-import { getOrCreateVideoAndAccountAndChannel } from '../videos'
+import { getOrCreateAPVideo } from '../videos'
 import { Notifier } from '../../notifier'
 import { logger } from '../../../helpers/logger'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model'
@@ -32,7 +32,7 @@ async function processVideoShare (actorAnnouncer: MActorSignature, activity: Act
   let videoCreated: boolean
 
   try {
-    const result = await getOrCreateVideoAndAccountAndChannel({ videoObject: objectUri })
+    const result = await getOrCreateAPVideo({ videoObject: objectUri })
     video = result.video
     videoCreated = result.created
   } catch (err) {

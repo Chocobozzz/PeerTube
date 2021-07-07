@@ -1,7 +1,7 @@
 <div class="margin-content">
   <div class="title-page title-page-single">
     <span class="mr-1" i18n>Update</span>
-    <a [routerLink]="[ '/videos/watch', video.uuid ]">{{ video?.name }}</a>
+    <a [routerLink]="getVideoUrl()">{{ video?.name }}</a>
   </div>
 
   <form novalidate [formGroup]="form">
@@ -9,8 +9,9 @@
     <my-video-edit
       [form]="form" [formErrors]="formErrors" [schedulePublicationPossible]="schedulePublicationPossible"
       [validationMessages]="validationMessages" [userVideoChannels]="userVideoChannels"
-      [videoCaptions]="videoCaptions" [waitTranscodingEnabled]="waitTranscodingEnabled"
+      [videoCaptions]="videoCaptions" [waitTranscodingEnabled]="isWaitTranscodingEnabled()"
       type="update" (pluginFieldsAdded)="hydratePluginFieldsFromVideo()"
+      [liveVideo]="liveVideo" [videoToUpdate]="videoDetails"
     ></my-video-edit>
 
     <div class="submit-container">

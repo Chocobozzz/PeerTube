@@ -1,0 +1,37 @@
+<h1>
+  <my-global-icon iconName="codesandbox" aria-hidden="true"></my-global-icon>
+  <ng-container i18n>Applications</ng-container>
+</h1>
+
+<div class="form-row"> <!-- built-in token grid -->
+  <div class="form-group col-12 col-lg-4 col-xl-3">
+    <h2 i18n class="applications-title">SUBSCRIPTION FEED</h2>
+    <div i18n class="applications-description">
+      Use third-party feed aggregators to retrieve the list of videos from
+      channels you subscribed to.
+    </div>
+  </div>
+
+  <div class="form-group col-12 col-lg-8 col-xl-9">
+
+    <div class="form-group">
+      <label i18n for="feed-url">Feed URL</label>
+      <my-input-toggle-hidden [value]="feedUrl" [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"></my-input-toggle-hidden>
+    </div>
+
+    <div class="form-group">
+      <label i18n for="feed-token">Feed Token</label>
+      <my-input-toggle-hidden [value]="feedToken" [withCopy]="true" [readonly]="true"></my-input-toggle-hidden>
+
+      <div class="form-group-description" i18n>⚠️ Never share your feed token with anyone.</div>
+    </div>
+
+  </div>
+</div>
+
+<div class="form-row mt-4"> <!-- submit placement block -->
+  <div class="col-md-7 col-xl-5"></div>
+  <div class="col-md-5 col-xl-5">
+    <input (click)="renewToken()" type="submit" i18n-value value="Renew token">
+  </div>
+</div>

@@ -1,8 +1,10 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 my-top-menu-dropdown {
   flex-grow: 1;
 }
 
-@include sub-menu-h1;
+.root {
+  @include sub-menu-h1;
+}

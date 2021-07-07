@@ -1,10 +1,10 @@
+import * as Hlsjs from 'hls.js/dist/hls.light.js'
+import { Events, Segment } from 'p2p-media-loader-core'
+import { Engine, initHlsJsPlayer, initVideoJsContribHlsJsPlayer } from 'p2p-media-loader-hlsjs'
 import videojs from 'video.js'
 import { P2PMediaLoaderPluginOptions, PlayerNetworkInfo } from '../peertube-videojs-typings'
-import { Engine, initHlsJsPlayer, initVideoJsContribHlsJsPlayer } from 'p2p-media-loader-hlsjs'
-import { Events, Segment } from 'p2p-media-loader-core'
 import { timeToInt } from '../utils'
 import { registerConfigPlugin, registerSourceHandler } from './hls-plugin'
-import * as Hlsjs from 'hls.js/dist/hls.light.js'
 
 registerConfigPlugin(videojs)
 registerSourceHandler(videojs)
@@ -35,6 +35,9 @@ class P2pMediaLoaderPlugin extends Plugin {
   private startTime: number
 
   private networkInfoInterval: any
+
+  private hlsjsCurrentLevel: number
+  private hlsjsLevels: Hlsjs.Level[]
 
   constructor (player: videojs.Player, options?: P2PMediaLoaderPluginOptions) {
     super(player)
@@ -84,6 +87,16 @@ class P2pMediaLoaderPlugin extends Plugin {
     clearInterval(this.networkInfoInterval)
   }
 
+  getCurrentLevel () {
+    return this.hlsjsLevels.find(l => l.level === this.hlsjsCurrentLevel)
+  }
+
+  getLiveLatency () {
+    return undefined as number
+    // FIXME: Use latency when hls >= V1
+    // return this.hlsjs.latency
+  }
+
   getHLSJS () {
     return this.hlsjs
   }
@@ -109,6 +122,10 @@ class P2pMediaLoaderPlugin extends Plugin {
 
     this.hlsjs.on(Hlsjs.Events.LEVEL_SWITCHING, (_: any, data: any) => {
       this.trigger('resolutionChange', { auto: this.hlsjs.autoLevelEnabled, resolutionId: data.height })
+    })
+
+    this.hlsjs.on(Hlsjs.Events.MANIFEST_LOADED, (_: any, data: any) => {
+      this.trigger('resolutionsLoaded')
     })
 
     this.p2pEngine.on(Events.SegmentError, (segment: Segment, err) => {
@@ -140,6 +157,14 @@ class P2pMediaLoaderPlugin extends Plugin {
     this.p2pEngine.on(Events.PeerConnect, () => this.statsP2PBytes.numPeers++)
     this.p2pEngine.on(Events.PeerClose, () => this.statsP2PBytes.numPeers--)
 
+    this.hlsjs.on(Hlsjs.Events.MANIFEST_PARSED, (_e, manifest) => {
+      this.hlsjsCurrentLevel = manifest.firstLevel
+      this.hlsjsLevels = manifest.levels
+    })
+    this.hlsjs.on(Hlsjs.Events.LEVEL_LOADED, (_e, level) => {
+      this.hlsjsCurrentLevel = level.levelId || (level as any).id
+    })
+
     this.networkInfoInterval = setInterval(() => {
       const p2pDownloadSpeed = this.arraySum(this.statsP2PBytes.pendingDownload)
       const p2pUploadSpeed = this.arraySum(this.statsP2PBytes.pendingUpload)
@@ -153,6 +178,7 @@ class P2pMediaLoaderPlugin extends Plugin {
       this.statsHTTPBytes.pendingUpload = []
 
       return this.player.trigger('p2pInfo', {
+        source: 'p2p-media-loader',
         http: {
           downloadSpeed: httpDownloadSpeed,
           uploadSpeed: httpUploadSpeed,
@@ -165,7 +191,8 @@ class P2pMediaLoaderPlugin extends Plugin {
           numPeers: this.statsP2PBytes.numPeers,
           downloaded: this.statsP2PBytes.totalDownload,
           uploaded: this.statsP2PBytes.totalUpload
-        }
+        },
+        bandwidthEstimate: (this.hlsjs as any).bandwidthEstimate / 8
       } as PlayerNetworkInfo)
     }, this.CONSTANTS.INFO_SCHEDULER)
   }

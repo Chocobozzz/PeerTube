@@ -1,5 +1,6 @@
-@import '_variables';
-@import '_mixins';
+@use 'sass:math';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 $nav-preview-tab-height: 30px;
 $base-padding: 15px;
@@ -18,18 +19,19 @@ $input-border-radius: 3px;
 
       font-family: monospace;
       font-size: 13px;
-      border-bottom: none;
+      border-bottom: 0;
       border-bottom-left-radius: unset;
       border-bottom-right-radius: unset;
     }
 
     .nav-preview {
+      @include padding-left(10px);
+      @include padding-right(10px);
+
       display: block;
-      text-align: right;
+      text-align: end;
       padding-top: 10px;
       padding-bottom: 10px;
-      padding-left: 10px;
-      padding-right: 10px;
       border-top: 1px dashed $input-border-color;
       border-left: 1px solid $input-border-color;
       border-right: 1px solid $input-border-color;
@@ -42,8 +44,21 @@ $input-border-radius: 3px;
           display: none !important;
         }
 
-        .grey-button {
-          padding: 0 7px 0 12px;
+        .maximize-button {
+          padding: 0 7px;
+          cursor: pointer;
+
+          svg {
+            stroke: var(--mainForegroundColor);
+            opacity: 0.6;
+          }
+
+          &:hover,
+          &:active {
+            svg {
+              opacity: 1;
+            }
+          }
         }
       }
     }
@@ -64,7 +79,7 @@ $input-border-radius: 3px;
   border-bottom: 2px solid pvar(--mainColor);
 
   :first-child {
-    margin-left: auto;
+    @include margin-left(auto);
   }
 
   ::ng-deep {
@@ -77,8 +92,8 @@ $input-border-radius: 3px;
       opacity: .7;
     }
 
-    .grey-button {
-      margin-left: 5px;
+    .maximize-button {
+      @include margin-left(5px);
     }
   }
 }
@@ -93,6 +108,8 @@ $input-border-radius: 3px;
 }
 
 @mixin maximized-base {
+  $nav-preview-vertical-padding: 40px;
+
   flex-direction: row;
   z-index: #{z(header) - 1};
   position: fixed;
@@ -103,23 +120,22 @@ $input-border-radius: 3px;
   width: calc(100% - #{$menu-width});
   height: calc(100vh - #{$header-height}) !important;
 
-  $nav-preview-vertical-padding: 40px;
-
   .nav-preview {
     @include nav-preview-medium();
-    padding-top: #{$nav-preview-vertical-padding / 2};
-    padding-bottom: #{$nav-preview-vertical-padding / 2};
-    padding-left: 0px;
-    padding-right: 0px;
+    @include padding-right(0);
+    @include padding-left(0);
+
+    padding-top: math.div($nav-preview-vertical-padding, 2);
+    padding-bottom: math.div($nav-preview-vertical-padding, 2);
     position: absolute;
     background-color: pvar(--mainBackgroundColor);
     width: 100% !important;
-    border-top: none;
-    border-left: none;
-    border-right: none;
+    border-top: 0;
+    border-left: 0;
+    border-right: 0;
 
     :last-child {
-      margin-right: $not-expanded-horizontal-margins;
+      @include margin-right(pvar(--horizontalMarginContent));
     }
   }
 
@@ -136,7 +152,7 @@ $input-border-radius: 3px;
     margin-top: #{$nav-preview-tab-height + $nav-preview-vertical-padding} !important;
     height: calc(100vh - #{$header-height + $nav-preview-tab-height + $nav-preview-vertical-padding}) !important;
     width: 50% !important;
-    border: none !important;
+    border: 0 !important;
     border-radius: unset !important;
   }
 
@@ -168,11 +184,11 @@ $input-border-radius: 3px;
     .nav-preview {
       ::ng-deep .nav-link {
         @include ellipsis();
+        @include margin-right(10px !important);
 
         display: block !important;
         max-width: 45% !important;
         padding: 5px 0 !important;
-        margin-right: 10px !important;
         text-align: center;
 
         &:not(.active) {
@@ -237,11 +253,11 @@ $input-border-radius: 3px;
 }
 
 @media only screen and (min-width: $small-view) {
+  @include maximized-in-medium-view();
+
   :host-context(.expanded) {
     @include in-medium-view();
   }
-
-  @include maximized-in-medium-view();
 }
 
 @media only screen and (min-width: #{$small-view + $menu-width}) {

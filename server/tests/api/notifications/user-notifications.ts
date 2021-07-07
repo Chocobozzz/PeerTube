@@ -2,7 +2,7 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { v4 as uuidv4 } from 'uuid'
+import { buildUUID } from '@server/helpers/uuid'
 import {
   cleanupTests,
   updateMyUser,
@@ -65,7 +65,7 @@ describe('Test user notifications', function () {
     })
 
     it('Should not send notifications if the user does not follow the video publisher', async function () {
-      this.timeout(30000)
+      this.timeout(50000)
 
       await uploadRandomVideoOnServers(servers, 1)
 
@@ -87,7 +87,7 @@ describe('Test user notifications', function () {
     })
 
     it('Should send a new video notification from a remote account', async function () {
-      this.timeout(50000) // Server 2 has transcoding enabled
+      this.timeout(150000) // Server 2 has transcoding enabled
 
       await addUserSubscription(servers[0].url, userAccessToken, 'root_channel@localhost:' + servers[1].port)
       await waitJobs(servers)
@@ -97,7 +97,7 @@ describe('Test user notifications', function () {
     })
 
     it('Should send a new video notification on a scheduled publication', async function () {
-      this.timeout(30000)
+      this.timeout(50000)
 
       // In 2 seconds
       const updateAt = new Date(new Date().getTime() + 2000)
@@ -116,7 +116,7 @@ describe('Test user notifications', function () {
     })
 
     it('Should send a new video notification on a remote scheduled publication', async function () {
-      this.timeout(50000)
+      this.timeout(100000)
 
       // In 2 seconds
       const updateAt = new Date(new Date().getTime() + 2000)
@@ -136,7 +136,7 @@ describe('Test user notifications', function () {
     })
 
     it('Should not send a notification before the video is published', async function () {
-      this.timeout(30000)
+      this.timeout(50000)
 
       const updateAt = new Date(new Date().getTime() + 1000000)
 
@@ -154,7 +154,7 @@ describe('Test user notifications', function () {
     })
 
     it('Should send a new video notification when a video becomes public', async function () {
-      this.timeout(30000)
+      this.timeout(50000)
 
       const data = { privacy: VideoPrivacy.PRIVATE }
       const { name, uuid } = await uploadRandomVideoOnServers(servers, 1, data)
@@ -163,12 +163,12 @@ describe('Test user notifications', function () {
 
       await updateVideo(servers[0].url, servers[0].accessToken, uuid, { privacy: VideoPrivacy.PUBLIC })
 
-      await wait(500)
+      await waitJobs(servers)
       await checkNewVideoFromSubscription(baseParams, name, uuid, 'presence')
     })
 
     it('Should send a new video notification when a remote video becomes public', async function () {
-      this.timeout(30000)
+      this.timeout(50000)
 
       const data = { privacy: VideoPrivacy.PRIVATE }
       const { name, uuid } = await uploadRandomVideoOnServers(servers, 2, data)
@@ -182,7 +182,7 @@ describe('Test user notifications', function () {
     })
 
     it('Should not send a new video notification when a video becomes unlisted', async function () {
-      this.timeout(30000)
+      this.timeout(50000)
 
       const data = { privacy: VideoPrivacy.PRIVATE }
       const { name, uuid } = await uploadRandomVideoOnServers(servers, 1, data)
@@ -193,7 +193,7 @@ describe('Test user notifications', function () {
     })
 
     it('Should not send a new video notification when a remote video becomes unlisted', async function () {
-      this.timeout(30000)
+      this.timeout(50000)
 
       const data = { privacy: VideoPrivacy.PRIVATE }
       const { name, uuid } = await uploadRandomVideoOnServers(servers, 2, data)
@@ -207,7 +207,7 @@ describe('Test user notifications', function () {
     it('Should send a new video notification after a video import', async function () {
       this.timeout(100000)
 
-      const name = 'video import ' + uuidv4()
+      const name = 'video import ' + buildUUID()
 
       const attributes = {
         name,
@@ -237,7 +237,7 @@ describe('Test user notifications', function () {
     })
 
     it('Should not send a notification if transcoding is not enabled', async function () {
-      this.timeout(30000)
+      this.timeout(50000)
 
       const { name, uuid } = await uploadRandomVideoOnServers(servers, 1)
       await waitJobs(servers)
@@ -278,7 +278,7 @@ describe('Test user notifications', function () {
     it('Should send a notification when an imported video is transcoded', async function () {
       this.timeout(50000)
 
-      const name = 'video import ' + uuidv4()
+      const name = 'video import ' + buildUUID()
 
       const attributes = {
         name,
@@ -314,7 +314,7 @@ describe('Test user notifications', function () {
     })
 
     it('Should not send a notification before the video is published', async function () {
-      this.timeout(40000)
+      this.timeout(50000)
 
       const updateAt = new Date(new Date().getTime() + 1000000)
 
@@ -347,7 +347,7 @@ describe('Test user notifications', function () {
     it('Should send a notification when the video import failed', async function () {
       this.timeout(70000)
 
-      const name = 'video import ' + uuidv4()
+      const name = 'video import ' + buildUUID()
 
       const attributes = {
         name,
@@ -365,7 +365,7 @@ describe('Test user notifications', function () {
     it('Should send a notification when the video import succeeded', async function () {
       this.timeout(70000)
 
-      const name = 'video import ' + uuidv4()
+      const name = 'video import ' + buildUUID()
 
       const attributes = {
         name,
@@ -416,7 +416,7 @@ describe('Test user notifications', function () {
     })
 
     it('Should notify when a local channel is following one of our channel', async function () {
-      this.timeout(30000)
+      this.timeout(50000)
 
       await addUserSubscription(servers[0].url, servers[0].accessToken, 'user_1_channel@localhost:' + servers[0].port)
       await waitJobs(servers)
@@ -427,7 +427,7 @@ describe('Test user notifications', function () {
     })
 
     it('Should notify when a remote channel is following one of our channel', async function () {
-      this.timeout(30000)
+      this.timeout(50000)
 
       await addUserSubscription(servers[1].url, servers[1].accessToken, 'user_1_channel@localhost:' + servers[0].port)
       await waitJobs(servers)
@@ -439,7 +439,7 @@ describe('Test user notifications', function () {
 
     // PeerTube does not support accout -> account follows
     // it('Should notify when a local account is following one of our channel', async function () {
-    //   this.timeout(30000)
+    //   this.timeout(50000)
     //
     //   await addUserSubscription(servers[0].url, servers[0].accessToken, 'user_1@localhost:' + servers[0].port)
     //
@@ -449,7 +449,7 @@ describe('Test user notifications', function () {
     // })
 
     // it('Should notify when a remote account is following one of our channel', async function () {
-    //   this.timeout(30000)
+    //   this.timeout(50000)
     //
     //   await addUserSubscription(servers[1].url, servers[1].accessToken, 'user_1@localhost:' + servers[0].port)
     //

@@ -1,0 +1,21 @@
+<div class="input-group input-group-sm">
+  <input
+    [id]="inputId" [autocomplete]="autocomplete" [value]="value" [placeholder]="placeholder" [tabindex]="tabindex"
+    [(ngModel)]="value" (ngModelChange)="update()" [ngClass]="{ 'readonly': readonly }" [readonly]="readonly"
+    #input (click)="input.select()" (input)="update()" (change)="update()" [type]="inputType" class="form-control"
+  />
+
+  <div *ngIf="withToggle || withCopy" class="input-group-append">
+    <button *ngIf="withToggle" (click)="toggle()" type="button" class="btn btn-outline-secondary eye-button" [title]="toggleTitle">
+      <span class="glyphicon glyphicon-eye-{{ show ? 'open' : 'close' }}"></span>
+    </button>
+
+    <button
+      *ngIf="withCopy" [cdkCopyToClipboard]="input.value" (click)="activateCopiedMessage()" type="button"
+      class="btn btn-outline-secondary text-uppercase" i18n-title title="Copy"
+    >
+      <span class="glyphicon glyphicon-duplicate"></span>
+      Copy
+    </button>
+  </div>
+</div>

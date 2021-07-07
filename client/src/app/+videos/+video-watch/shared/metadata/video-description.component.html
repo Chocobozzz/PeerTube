@@ -1,0 +1,19 @@
+<div class="video-info-description">
+  <div
+    class="video-info-description-html"
+    [innerHTML]="videoHTMLDescription"
+    (timestampClicked)="onTimestampClicked($event)"
+    timestampRouteTransformer
+  ></div>
+
+  <div class="video-info-description-more" *ngIf="completeDescriptionShown === false && video.description?.length >= 250" (click)="showMoreDescription()">
+    <ng-container i18n>Show more</ng-container>
+    <span *ngIf="descriptionLoading === false" class="glyphicon glyphicon-menu-down"></span>
+    <my-small-loader class="description-loading" [loading]="descriptionLoading"></my-small-loader>
+  </div>
+
+  <div *ngIf="completeDescriptionShown === true" (click)="showLessDescription()" class="video-info-description-more">
+    <ng-container i18n>Show less</ng-container>
+    <span *ngIf="descriptionLoading === false" class="glyphicon glyphicon-menu-up"></span>
+  </div>
+</div>

@@ -1,3 +1,5 @@
+import { sample } from 'lodash'
+import { literal, Op, QueryTypes, Transaction, WhereOptions } from 'sequelize'
 import {
   AllowNull,
   BeforeDestroy,
@@ -12,31 +14,30 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { ActorModel } from '../activitypub/actor'
-import { getSort, getVideoSort, parseAggregateResult, throwIfNotValid } from '../utils'
-import { isActivityPubUrlValid, isUrlValid } from '../../helpers/custom-validators/activitypub/misc'
-import { CONSTRAINTS_FIELDS, MIMETYPES } from '../../initializers/constants'
-import { VideoFileModel } from '../video/video-file'
-import { VideoModel } from '../video/video'
-import { VideoRedundancyStrategy, VideoRedundancyStrategyWithManual } from '../../../shared/models/redundancy'
-import { logger } from '../../helpers/logger'
-import { CacheFileObject, VideoPrivacy } from '../../../shared'
-import { VideoChannelModel } from '../video/video-channel'
-import { ServerModel } from '../server/server'
-import { sample } from 'lodash'
-import { isTestInstance } from '../../helpers/core-utils'
-import * as Bluebird from 'bluebird'
-import { col, FindOptions, fn, literal, Op, Transaction, WhereOptions } from 'sequelize'
-import { VideoStreamingPlaylistModel } from '../video/video-streaming-playlist'
-import { CONFIG } from '../../initializers/config'
-import { MVideoForRedundancyAPI, MVideoRedundancy, MVideoRedundancyAP, MVideoRedundancyVideo } from '@server/types/models'
+import { getServerActor } from '@server/models/application/application'
+import { MActor, MVideoForRedundancyAPI, MVideoRedundancy, MVideoRedundancyAP, MVideoRedundancyVideo } from '@server/types/models'
+import { AttributesOnly } from '@shared/core-utils'
 import { VideoRedundanciesTarget } from '@shared/models/redundancy/video-redundancies-filters.model'
 import {
   FileRedundancyInformation,
   StreamingPlaylistRedundancyInformation,
   VideoRedundancy
 } from '@shared/models/redundancy/video-redundancy.model'
-import { getServerActor } from '@server/models/application/application'
+import { CacheFileObject, VideoPrivacy } from '../../../shared'
+import { VideoRedundancyStrategy, VideoRedundancyStrategyWithManual } from '../../../shared/models/redundancy'
+import { isTestInstance } from '../../helpers/core-utils'
+import { isActivityPubUrlValid, isUrlValid } from '../../helpers/custom-validators/activitypub/misc'
+import { logger } from '../../helpers/logger'
+import { CONFIG } from '../../initializers/config'
+import { CONSTRAINTS_FIELDS, MIMETYPES } from '../../initializers/constants'
+import { ActorModel } from '../actor/actor'
+import { ServerModel } from '../server/server'
+import { getSort, getVideoSort, parseAggregateResult, throwIfNotValid } from '../utils'
+import { ScheduleVideoUpdateModel } from '../video/schedule-video-update'
+import { VideoModel } from '../video/video'
+import { VideoChannelModel } from '../video/video-channel'
+import { VideoFileModel } from '../video/video-file'
+import { VideoStreamingPlaylistModel } from '../video/video-streaming-playlist'
 
 export enum ScopeNames {
   WITH_VIDEO = 'WITH_VIDEO'
@@ -79,12 +80,15 @@ export enum ScopeNames {
       fields: [ 'actorId' ]
     },
     {
+      fields: [ 'expiresOn' ]
+    },
+    {
       fields: [ 'url' ],
       unique: true
     }
   ]
 })
-export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
+export class VideoRedundancyModel extends Model<Partial<AttributesOnly<VideoRedundancyModel>>> {
 
   @CreatedAt
   createdAt: Date
@@ -186,6 +190,57 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
     return VideoRedundancyModel.scope(ScopeNames.WITH_VIDEO).findOne(query)
   }
 
+  static async listLocalByVideoId (videoId: number): Promise<MVideoRedundancyVideo[]> {
+    const actor = await getServerActor()
+
+    const queryStreamingPlaylist = {
+      where: {
+        actorId: actor.id
+      },
+      include: [
+        {
+          model: VideoStreamingPlaylistModel.unscoped(),
+          required: true,
+          include: [
+            {
+              model: VideoModel.unscoped(),
+              required: true,
+              where: {
+                id: videoId
+              }
+            }
+          ]
+        }
+      ]
+    }
+
+    const queryFiles = {
+      where: {
+        actorId: actor.id
+      },
+      include: [
+        {
+          model: VideoFileModel,
+          required: true,
+          include: [
+            {
+              model: VideoModel,
+              required: true,
+              where: {
+                id: videoId
+              }
+            }
+          ]
+        }
+      ]
+    }
+
+    return Promise.all([
+      VideoRedundancyModel.findAll(queryStreamingPlaylist),
+      VideoRedundancyModel.findAll(queryFiles)
+    ]).then(([ r1, r2 ]) => r1.concat(r2))
+  }
+
   static async loadLocalByStreamingPlaylistId (videoStreamingPlaylistId: number): Promise<MVideoRedundancyVideo> {
     const actor = await getServerActor()
 
@@ -199,7 +254,7 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
     return VideoRedundancyModel.scope(ScopeNames.WITH_VIDEO).findOne(query)
   }
 
-  static loadByIdWithVideo (id: number, transaction?: Transaction): Bluebird<MVideoRedundancyVideo> {
+  static loadByIdWithVideo (id: number, transaction?: Transaction): Promise<MVideoRedundancyVideo> {
     const query = {
       where: { id },
       transaction
@@ -208,7 +263,7 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
     return VideoRedundancyModel.scope(ScopeNames.WITH_VIDEO).findOne(query)
   }
 
-  static loadByUrl (url: string, transaction?: Transaction): Bluebird<MVideoRedundancy> {
+  static loadByUrl (url: string, transaction?: Transaction): Promise<MVideoRedundancy> {
     const query = {
       where: {
         url
@@ -251,7 +306,7 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
                                .then(r => !!r)
   }
 
-  static async getVideoSample (p: Bluebird<VideoModel[]>) {
+  static async getVideoSample (p: Promise<VideoModel[]>) {
     const rows = await p
     if (rows.length === 0) return undefined
 
@@ -262,16 +317,19 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
   }
 
   static async findMostViewToDuplicate (randomizedFactor: number) {
+    const peertubeActor = await getServerActor()
+
     // On VideoModel!
     const query = {
       attributes: [ 'id', 'views' ],
       limit: randomizedFactor,
       order: getVideoSort('-views'),
       where: {
-        privacy: VideoPrivacy.PUBLIC
+        privacy: VideoPrivacy.PUBLIC,
+        isLive: false,
+        ...this.buildVideoIdsForDuplication(peertubeActor)
       },
       include: [
-        await VideoRedundancyModel.buildVideoFileForDuplication(),
         VideoRedundancyModel.buildServerRedundancyInclude()
       ]
     }
@@ -280,6 +338,8 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
   }
 
   static async findTrendingToDuplicate (randomizedFactor: number) {
+    const peertubeActor = await getServerActor()
+
     // On VideoModel!
     const query = {
       attributes: [ 'id', 'views' ],
@@ -288,10 +348,11 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
       limit: randomizedFactor,
       order: getVideoSort('-trending'),
       where: {
-        privacy: VideoPrivacy.PUBLIC
+        privacy: VideoPrivacy.PUBLIC,
+        isLive: false,
+        ...this.buildVideoIdsForDuplication(peertubeActor)
       },
       include: [
-        await VideoRedundancyModel.buildVideoFileForDuplication(),
         VideoRedundancyModel.buildServerRedundancyInclude(),
 
         VideoModel.buildTrendingQuery(CONFIG.TRENDING.VIDEOS.INTERVAL_DAYS)
@@ -302,6 +363,8 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
   }
 
   static async findRecentlyAddedToDuplicate (randomizedFactor: number, minViews: number) {
+    const peertubeActor = await getServerActor()
+
     // On VideoModel!
     const query = {
       attributes: [ 'id', 'publishedAt' ],
@@ -309,13 +372,20 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
       order: getVideoSort('-publishedAt'),
       where: {
         privacy: VideoPrivacy.PUBLIC,
+        isLive: false,
         views: {
           [Op.gte]: minViews
-        }
+        },
+        ...this.buildVideoIdsForDuplication(peertubeActor)
       },
       include: [
-        await VideoRedundancyModel.buildVideoFileForDuplication(),
-        VideoRedundancyModel.buildServerRedundancyInclude()
+        VideoRedundancyModel.buildServerRedundancyInclude(),
+
+        // Required by publishedAt sort
+        {
+          model: ScheduleVideoUpdateModel.unscoped(),
+          required: false
+        }
       ]
     }
 
@@ -339,50 +409,6 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
     }
 
     return VideoRedundancyModel.scope([ ScopeNames.WITH_VIDEO ]).findOne(query)
-  }
-
-  static async getTotalDuplicated (strategy: VideoRedundancyStrategy) {
-    const actor = await getServerActor()
-    const redundancyInclude = {
-      attributes: [],
-      model: VideoRedundancyModel,
-      required: true,
-      where: {
-        actorId: actor.id,
-        strategy
-      }
-    }
-
-    const queryFiles: FindOptions = {
-      include: [ redundancyInclude ]
-    }
-
-    const queryStreamingPlaylists: FindOptions = {
-      include: [
-        {
-          attributes: [],
-          model: VideoModel.unscoped(),
-          required: true,
-          include: [
-            {
-              required: true,
-              attributes: [],
-              model: VideoStreamingPlaylistModel.unscoped(),
-              include: [
-                redundancyInclude
-              ]
-            }
-          ]
-        }
-      ]
-    }
-
-    return Promise.all([
-      VideoFileModel.aggregate('size', 'SUM', queryFiles),
-      VideoFileModel.aggregate('size', 'SUM', queryStreamingPlaylists)
-    ]).then(([ r1, r2 ]) => {
-      return parseAggregateResult(r1) + parseAggregateResult(r2)
-    })
   }
 
   static async listLocalExpired () {
@@ -571,32 +597,35 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
   static async getStats (strategy: VideoRedundancyStrategyWithManual) {
     const actor = await getServerActor()
 
-    const query: FindOptions = {
-      raw: true,
-      attributes: [
-        [ fn('COALESCE', fn('SUM', col('VideoFile.size')), '0'), 'totalUsed' ],
-        [ fn('COUNT', fn('DISTINCT', col('videoId'))), 'totalVideos' ],
-        [ fn('COUNT', col('videoFileId')), 'totalVideoFiles' ]
-      ],
-      where: {
-        strategy,
-        actorId: actor.id
-      },
-      include: [
-        {
-          attributes: [],
-          model: VideoFileModel,
-          required: true
-        }
-      ]
-    }
+    const sql = `WITH "tmp" AS ` +
+      `(` +
+        `SELECT "videoFile"."size" AS "videoFileSize", "videoStreamingFile"."size" AS "videoStreamingFileSize", ` +
+          `"videoFile"."videoId" AS "videoFileVideoId", "videoStreamingPlaylist"."videoId" AS "videoStreamingVideoId"` +
+        `FROM "videoRedundancy" AS "videoRedundancy" ` +
+        `LEFT JOIN "videoFile" AS "videoFile" ON "videoRedundancy"."videoFileId" = "videoFile"."id" ` +
+        `LEFT JOIN "videoStreamingPlaylist" ON "videoRedundancy"."videoStreamingPlaylistId" = "videoStreamingPlaylist"."id" ` +
+        `LEFT JOIN "videoFile" AS "videoStreamingFile" ` +
+          `ON "videoStreamingPlaylist"."id" = "videoStreamingFile"."videoStreamingPlaylistId" ` +
+        `WHERE "videoRedundancy"."strategy" = :strategy AND "videoRedundancy"."actorId" = :actorId` +
+      `), ` +
+      `"videoIds" AS (` +
+        `SELECT "videoFileVideoId" AS "videoId" FROM "tmp" ` +
+        `UNION SELECT "videoStreamingVideoId" AS "videoId" FROM "tmp" ` +
+      `) ` +
+      `SELECT ` +
+      `COALESCE(SUM("videoFileSize"), '0') + COALESCE(SUM("videoStreamingFileSize"), '0') AS "totalUsed", ` +
+      `(SELECT COUNT("videoIds"."videoId") FROM "videoIds") AS "totalVideos", ` +
+      `COUNT(*) AS "totalVideoFiles" ` +
+      `FROM "tmp"`
 
-    return VideoRedundancyModel.findOne(query)
-                               .then((r: any) => ({
-                                 totalUsed: parseAggregateResult(r.totalUsed),
-                                 totalVideos: r.totalVideos,
-                                 totalVideoFiles: r.totalVideoFiles
-                               }))
+    return VideoRedundancyModel.sequelize.query<any>(sql, {
+      replacements: { strategy, actorId: actor.id },
+      type: QueryTypes.SELECT
+    }).then(([ row ]) => ({
+      totalUsed: parseAggregateResult(row.totalUsed),
+      totalVideos: row.totalVideos,
+      totalVideoFiles: row.totalVideoFiles
+    }))
   }
 
   static toFormattedJSONStatic (video: MVideoForRedundancyAPI): VideoRedundancy {
@@ -647,9 +676,11 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
   }
 
   getVideo () {
-    if (this.VideoFile) return this.VideoFile.Video
+    if (this.VideoFile?.Video) return this.VideoFile.Video
 
-    return this.VideoStreamingPlaylist.Video
+    if (this.VideoStreamingPlaylist?.Video) return this.VideoStreamingPlaylist.Video
+
+    return undefined
   }
 
   isOwned () {
@@ -688,23 +719,22 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
   }
 
   // Don't include video files we already duplicated
-  private static async buildVideoFileForDuplication () {
-    const actor = await getServerActor()
-
+  private static buildVideoIdsForDuplication (peertubeActor: MActor) {
     const notIn = literal(
       '(' +
-      `SELECT "videoFileId" FROM "videoRedundancy" WHERE "actorId" = ${actor.id} AND "videoFileId" IS NOT NULL` +
+        `SELECT "videoFile"."videoId" AS "videoId" FROM "videoRedundancy" ` +
+        `INNER JOIN "videoFile" ON "videoFile"."id" = "videoRedundancy"."videoFileId" ` +
+        `WHERE "videoRedundancy"."actorId" = ${peertubeActor.id} ` +
+        `UNION ` +
+        `SELECT "videoStreamingPlaylist"."videoId" AS "videoId" FROM "videoRedundancy" ` +
+        `INNER JOIN "videoStreamingPlaylist" ON "videoStreamingPlaylist"."id" = "videoRedundancy"."videoStreamingPlaylistId" ` +
+        `WHERE "videoRedundancy"."actorId" = ${peertubeActor.id} ` +
       ')'
     )
 
     return {
-      attributes: [],
-      model: VideoFileModel,
-      required: true,
-      where: {
-        id: {
-          [Op.notIn]: notIn
-        }
+      id: {
+        [Op.notIn]: notIn
       }
     }
   }

@@ -2,16 +2,16 @@ import * as express from 'express'
 import { body } from 'express-validator'
 import { isPreImportVideoAccepted } from '@server/lib/moderation'
 import { Hooks } from '@server/lib/plugins/hooks'
+import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 import { VideoImportCreate } from '@shared/models/videos/import/video-import-create.model'
 import { isIdValid, toIntOrNull } from '../../../helpers/custom-validators/misc'
 import { isVideoImportTargetUrlValid, isVideoImportTorrentFile } from '../../../helpers/custom-validators/video-imports'
 import { isVideoMagnetUriValid, isVideoNameValid } from '../../../helpers/custom-validators/videos'
 import { cleanUpReqFiles } from '../../../helpers/express-utils'
 import { logger } from '../../../helpers/logger'
-import { doesVideoChannelOfAccountExist } from '../../../helpers/middlewares'
 import { CONFIG } from '../../../initializers/config'
 import { CONSTRAINTS_FIELDS } from '../../../initializers/constants'
-import { areValidationErrors } from '../utils'
+import { areValidationErrors, doesVideoChannelOfAccountExist } from '../shared'
 import { getCommonVideoEditAttributes } from './videos'
 
 const videoImportAddValidator = getCommonVideoEditAttributes().concat([
@@ -32,7 +32,9 @@ const videoImportAddValidator = getCommonVideoEditAttributes().concat([
     ),
   body('name')
     .optional()
-    .custom(isVideoNameValid).withMessage('Should have a valid name'),
+    .custom(isVideoNameValid).withMessage(
+      `Should have a video name between ${CONSTRAINTS_FIELDS.VIDEOS.NAME.min} and ${CONSTRAINTS_FIELDS.VIDEOS.NAME.max} characters long`
+    ),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoImportAddValidator parameters', { parameters: req.body })
@@ -42,18 +44,22 @@ const videoImportAddValidator = getCommonVideoEditAttributes().concat([
 
     if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
 
-    if (req.body.targetUrl && CONFIG.IMPORT.VIDEOS.HTTP.ENABLED !== true) {
+    if (CONFIG.IMPORT.VIDEOS.HTTP.ENABLED !== true && req.body.targetUrl) {
       cleanUpReqFiles(req)
-      return res.status(409)
-        .json({ error: 'HTTP import is not enabled on this instance.' })
-        .end()
+
+      return res.fail({
+        status: HttpStatusCode.CONFLICT_409,
+        message: 'HTTP import is not enabled on this instance.'
+      })
     }
 
     if (CONFIG.IMPORT.VIDEOS.TORRENT.ENABLED !== true && (req.body.magnetUri || torrentFile)) {
       cleanUpReqFiles(req)
-      return res.status(409)
-                .json({ error: 'Torrent/magnet URI import is not enabled on this instance.' })
-                .end()
+
+      return res.fail({
+        status: HttpStatusCode.CONFLICT_409,
+        message: 'Torrent/magnet URI import is not enabled on this instance.'
+      })
     }
 
     if (!await doesVideoChannelOfAccountExist(req.body.channelId, user, res)) return cleanUpReqFiles(req)
@@ -62,9 +68,7 @@ const videoImportAddValidator = getCommonVideoEditAttributes().concat([
     if (!req.body.targetUrl && !req.body.magnetUri && !torrentFile) {
       cleanUpReqFiles(req)
 
-      return res.status(400)
-        .json({ error: 'Should have a magnetUri or a targetUrl or a torrent file.' })
-        .end()
+      return res.fail({ message: 'Should have a magnetUri or a targetUrl or a torrent file.' })
     }
 
     if (!await isImportAccepted(req, res)) return cleanUpReqFiles(req)
@@ -100,9 +104,11 @@ async function isImportAccepted (req: express.Request, res: express.Response) {
 
   if (!acceptedResult || acceptedResult.accepted !== true) {
     logger.info('Refused to import video.', { acceptedResult, acceptParameters })
-    res.status(403)
-       .json({ error: acceptedResult.errorMessage || 'Refused to import video' })
 
+    res.fail({
+      status: HttpStatusCode.FORBIDDEN_403,
+      message: acceptedResult.errorMessage || 'Refused to import video'
+    })
     return false
   }
 

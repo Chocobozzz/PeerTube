@@ -7,7 +7,9 @@ import { PlayerMode } from './peertube-player-manager'
 import { PeerTubePlugin } from './peertube-plugin'
 import { PlaylistPlugin } from './playlist/playlist-plugin'
 import { EndCardOptions } from './upnext/end-card'
+import { StatsCardOptions } from './stats/stats-card'
 import { WebTorrentPlugin } from './webtorrent/webtorrent-plugin'
+import { StatsForNerdsPlugin } from './stats/stats-plugin'
 
 declare module 'video.js' {
 
@@ -35,6 +37,8 @@ declare module 'video.js' {
     contextmenuUI (options: any): any
 
     bezels (): void
+
+    stats (options?: StatsCardOptions): StatsForNerdsPlugin
 
     qualityLevels (): QualityLevels
 
@@ -106,6 +110,10 @@ type PeerTubePluginOptions = {
   videoCaptions: VideoJSCaption[]
 
   stopTime: number | string
+
+  isLive: boolean
+
+  videoUUID: string
 }
 
 type PlaylistPluginOptions = {
@@ -175,6 +183,8 @@ type AutoResolutionUpdateData = {
 }
 
 type PlayerNetworkInfo = {
+  source: 'webtorrent' | 'p2p-media-loader'
+
   http: {
     downloadSpeed: number
     uploadSpeed: number
@@ -189,6 +199,9 @@ type PlayerNetworkInfo = {
     uploaded: number
     numPeers: number
   }
+
+  // In bytes
+  bandwidthEstimate: number
 }
 
 type PlaylistItemOptions = {

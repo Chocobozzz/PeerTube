@@ -1,5 +1,5 @@
-@import '_mixins';
-@import '_variables';
+@use '_mixins' as *;
+@use '_variables' as *;
 
 .modal-body {
   font-size: 15px;
@@ -17,9 +17,10 @@
 }
 
 .mascot {
+  @include margin-right(2rem);
+
   display: block;
   min-width: 170px;
-  margin-right: 2rem;
 }
 
 .subtitle {
@@ -42,48 +43,35 @@ li {
   text-align: center;
   font-weight: 600;
   font-size: 18px;
-  margin: 20px 0 40px 0;
+  margin: 20px 0 40px;
 }
 
 .columns {
   display: flex;
-
-  .link-block {
-    @include disable-default-a-behaviour;
-
-    color: pvar(--mainForegroundColor);
-    padding: 10px;
-    transition: background-color 0.2s ease-in;
-    flex-basis: 33%;
-
-    &:hover {
-      background-color: rgba(0, 0, 0, 0.05);
-    }
-
-    .link-title {
-      font-size: 16px;
-      font-weight: $font-semibold;
-      display: flex;
-      justify-content: center;
-      margin-bottom: 5px;
-    }
-
-    .link-title,
-    div {
-      text-align: center;
-    }
-  }
 }
 
-.configure-instance-button {
-  @include peertube-button;
-  @include orange-button;
+.link-block {
   @include disable-default-a-behaviour;
 
-  display: inline-block;
-}
+  color: pvar(--mainForegroundColor);
+  padding: 10px;
+  transition: background-color 0.2s ease-in;
+  flex-basis: 33%;
 
-.action-button-understood {
-  @include peertube-button;
-  @include grey-button;
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+
+  .link-title {
+    font-size: 16px;
+    font-weight: $font-semibold;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 5px;
+  }
+
+  .link-title,
+  div {
+    text-align: center;
+  }
 }

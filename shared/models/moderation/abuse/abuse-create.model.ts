@@ -10,7 +10,7 @@ export interface AbuseCreate {
   }
 
   video?: {
-    id: number
+    id: number | string
     startAt?: number
     endAt?: number
   }
@@ -18,12 +18,4 @@ export interface AbuseCreate {
   comment?: {
     id: number
   }
-}
-
-// FIXME: deprecated in 2.3. Remove it
-export interface VideoAbuseCreate {
-  reason: string
-  predefinedReasons?: AbusePredefinedReasonsString[]
-  startAt?: number
-  endAt?: number
 }

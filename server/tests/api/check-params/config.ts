@@ -16,6 +16,7 @@ import {
   setAccessTokensToServers,
   userLogin
 } from '../../../../shared/extra-utils'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 describe('Test config API validators', function () {
   const path = '/api/v1/config/custom'
@@ -40,8 +41,10 @@ describe('Test config API validators', function () {
       categories: [ 1, 2 ],
 
       isNSFW: true,
-      defaultClientRoute: '/videos/recently-added',
       defaultNSFWPolicy: 'blur',
+
+      defaultClientRoute: '/videos/recently-added',
+
       customizations: {
         javascript: 'alert("coucou")',
         css: 'body { background-color: red; }'
@@ -62,12 +65,16 @@ describe('Test config API validators', function () {
       },
       captions: {
         size: 3
+      },
+      torrents: {
+        size: 4
       }
     },
     signup: {
       enabled: false,
       limit: 5,
-      requiresEmailVerification: false
+      requiresEmailVerification: false,
+      minimumAge: 16
     },
     admin: {
       email: 'superadmin1@example.com'
@@ -83,7 +90,9 @@ describe('Test config API validators', function () {
       enabled: true,
       allowAdditionalExtensions: true,
       allowAudioFiles: true,
+      concurrency: 1,
       threads: 1,
+      profile: 'vod_profile',
       resolutions: {
         '0p': false,
         '240p': false,
@@ -91,6 +100,7 @@ describe('Test config API validators', function () {
         '480p': true,
         '720p': false,
         '1080p': false,
+        '1440p': false,
         '2160p': false
       },
       webtorrent: {
@@ -100,13 +110,45 @@ describe('Test config API validators', function () {
         enabled: false
       }
     },
+    live: {
+      enabled: true,
+
+      allowReplay: false,
+      maxDuration: 30,
+      maxInstanceLives: -1,
+      maxUserLives: 50,
+
+      transcoding: {
+        enabled: true,
+        threads: 4,
+        profile: 'live_profile',
+        resolutions: {
+          '240p': true,
+          '360p': true,
+          '480p': true,
+          '720p': true,
+          '1080p': true,
+          '1440p': true,
+          '2160p': true
+        }
+      }
+    },
     import: {
       videos: {
+        concurrency: 1,
         http: {
           enabled: false
         },
         torrent: {
           enabled: false
+        }
+      }
+    },
+    trending: {
+      videos: {
+        algorithms: {
+          enabled: [ 'best', 'hot', 'most-viewed', 'most-liked' ],
+          default: 'most-viewed'
         }
       }
     },
@@ -176,7 +218,7 @@ describe('Test config API validators', function () {
       await makeGetRequest({
         url: server.url,
         path,
-        statusCodeExpected: 401
+        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
       })
     })
 
@@ -185,7 +227,7 @@ describe('Test config API validators', function () {
         url: server.url,
         path,
         token: userAccessToken,
-        statusCodeExpected: 403
+        statusCodeExpected: HttpStatusCode.FORBIDDEN_403
       })
     })
   })
@@ -196,7 +238,7 @@ describe('Test config API validators', function () {
         url: server.url,
         path,
         fields: updateParams,
-        statusCodeExpected: 401
+        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
       })
     })
 
@@ -206,7 +248,7 @@ describe('Test config API validators', function () {
         path,
         fields: updateParams,
         token: userAccessToken,
-        statusCodeExpected: 403
+        statusCodeExpected: HttpStatusCode.FORBIDDEN_403
       })
     })
 
@@ -218,7 +260,7 @@ describe('Test config API validators', function () {
         path,
         fields: newUpdateParams,
         token: server.accessToken,
-        statusCodeExpected: 400
+        statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
       })
     })
 
@@ -234,7 +276,7 @@ describe('Test config API validators', function () {
         path,
         fields: newUpdateParams,
         token: server.accessToken,
-        statusCodeExpected: 400
+        statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
       })
     })
 
@@ -253,7 +295,7 @@ describe('Test config API validators', function () {
         path,
         fields: newUpdateParams,
         token: server.accessToken,
-        statusCodeExpected: 400
+        statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
       })
     })
 
@@ -274,7 +316,7 @@ describe('Test config API validators', function () {
         path,
         fields: newUpdateParams,
         token: server.accessToken,
-        statusCodeExpected: 400
+        statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
       })
     })
 
@@ -284,7 +326,7 @@ describe('Test config API validators', function () {
         path,
         fields: updateParams,
         token: server.accessToken,
-        statusCodeExpected: 200
+        statusCodeExpected: HttpStatusCode.OK_200
       })
     })
   })
@@ -294,7 +336,7 @@ describe('Test config API validators', function () {
       await makeDeleteRequest({
         url: server.url,
         path,
-        statusCodeExpected: 401
+        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
       })
     })
 
@@ -303,7 +345,7 @@ describe('Test config API validators', function () {
         url: server.url,
         path,
         token: userAccessToken,
-        statusCodeExpected: 403
+        statusCodeExpected: HttpStatusCode.FORBIDDEN_403
       })
     })
   })

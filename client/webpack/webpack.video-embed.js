@@ -4,8 +4,8 @@ const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin')
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
-const PurifyCSSPlugin = require('purifycss-webpack')
+const ProvidePlugin = require('webpack/lib/ProvidePlugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 module.exports = function () {
   const configuration = {
@@ -23,13 +23,22 @@ module.exports = function () {
        */
       extensions: [ '.ts', '.js', '.json', '.scss' ],
 
-      modules: [ helpers.root('src'), helpers.root('node_modules') ],
+      modules: [ helpers.root('src'), 'node_modules' ],
 
       alias: {
         'video.js$': path.resolve('node_modules/video.js/core.js'),
         '@root-helpers': path.resolve('src/root-helpers'),
         '@shared/models': path.resolve('../shared/models'),
         '@shared/core-utils': path.resolve('../shared/core-utils')
+      },
+
+      fallback: {
+        fs: [ path.resolve('src/shims/noop.ts') ],
+        http: [ path.resolve('src/shims/http.ts') ],
+        https: [ path.resolve('src/shims/https.ts') ],
+        path: [ path.resolve('src/shims/path.ts') ],
+        stream: [ path.resolve('src/shims/noop.ts') ],
+        crypto: [ path.resolve('src/shims/noop.ts') ]
       }
     },
 
@@ -38,10 +47,14 @@ module.exports = function () {
 
       filename: process.env.ANALYZE_BUNDLE === 'true'
         ? '[name].bundle.js'
-        : '[name].[hash].bundle.js',
+        : '[name].[contenthash].bundle.js',
 
       sourceMapFilename: '[file].map',
-      chunkFilename: '[id].[hash].chunk.js',
+
+      chunkFilename: process.env.ANALYZE_BUNDLE === 'true'
+        ? '[name].chunk.js'
+        : '[id].[contenthash].chunk.js',
+
       publicPath: '/client/standalone/videos/'
     },
 
@@ -64,29 +77,29 @@ module.exports = function () {
 
         {
           test: /\.(sass|scss)$/,
-          use: ExtractTextPlugin.extract({
-            fallback: 'style-loader',
-            use: [
-              {
-                loader: 'css-loader',
-                options: {
+          use: [
+            MiniCssExtractPlugin.loader,
+
+            {
+              loader: 'css-loader',
+              options: {
+                sourceMap: true,
+                importLoaders: 1
+              }
+            },
+
+            {
+              loader: 'sass-loader',
+              options: {
+                sassOptions: {
                   sourceMap: true,
-                  importLoaders: 1
-                }
-              },
-              {
-                loader: 'sass-loader',
-                options: {
-                  sassOptions: {
-                    sourceMap: true,
-                    includePaths: [
-                      helpers.root('src/sass/include')
-                    ]
-                  }
+                  includePaths: [
+                    helpers.root('src/sass/include')
+                  ]
                 }
               }
-            ]
-          })
+            }
+          ]
         },
 
         {
@@ -111,21 +124,15 @@ module.exports = function () {
     },
 
     plugins: [
-      new ExtractTextPlugin({
-        filename: process.env.ANALYZE_BUNDLE === 'true'
-          ? '[name].css'
-          : '[name].[hash].css'
+      new ProvidePlugin({
+        process: 'process/browser',
+        Buffer: [ 'buffer', 'Buffer' ]
       }),
 
-      new PurifyCSSPlugin({
-        paths: [
-          helpers.root('src/standalone/videos/embed.ts'),
-          helpers.root('src/standalone/videos/test-embed.html')
-        ],
-        purifyOptions: {
-          minify: true,
-          whitelist: [ '*vjs*', '*video-js*' ]
-        }
+      new MiniCssExtractPlugin({
+        filename: process.env.ANALYZE_BUNDLE === 'true'
+          ? '[name].css'
+          : '[name].[contenthash].css'
       }),
 
       new HtmlWebpackPlugin({
@@ -134,7 +141,15 @@ module.exports = function () {
         title: 'PeerTube',
         chunksSortMode: 'auto',
         inject: 'body',
-        chunks: ['video-embed']
+        chunks: [ 'video-embed' ],
+        minify: {
+          collapseWhitespace: true,
+          removeComments: false,
+          removeRedundantAttributes: true,
+          removeScriptTypeAttributes: true,
+          removeStyleLinkTypeAttributes: true,
+          useShortDoctype: true
+        }
       }),
 
       new HtmlWebpackPlugin({
@@ -143,7 +158,7 @@ module.exports = function () {
         title: 'PeerTube',
         chunksSortMode: 'auto',
         inject: 'body',
-        chunks: ['test-embed']
+        chunks: [ 'test-embed' ]
       }),
 
       /**
@@ -188,13 +203,7 @@ module.exports = function () {
     },
 
     node: {
-      global: true,
-      crypto: 'empty',
-      fs: 'empty',
-      process: true,
-      module: false,
-      clearImmediate: false,
-      setImmediate: false
+      global: true
     }
   }
 

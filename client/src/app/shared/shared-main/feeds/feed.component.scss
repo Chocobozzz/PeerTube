@@ -1,20 +1,18 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
-.video-feed {
-  width: min-content;
+.feed {
+  width: 100%;
 
   a {
-    color: black;
+    color: #000;
     display: block;
   }
+}
 
-  my-global-icon {
-    cursor: pointer;
-    width: 12px;
-    position: relative;
-    top: -2px;
+my-global-icon {
+  @include apply-svg-color(pvar(--mainForegroundColor));
 
-    @include apply-svg-color(pvar(--mainForegroundColor))
-  }
+  cursor: pointer;
+  width: 100%;
 }

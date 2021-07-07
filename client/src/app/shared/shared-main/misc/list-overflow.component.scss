@@ -1,4 +1,5 @@
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 :host {
   width: 100%;
@@ -15,13 +16,13 @@
 
 button {
   width: 30px;
-  border: none;
+  border: 0;
 
   &::after {
     display: none;
   }
 
-  &.routeActive {
+  &.route-active {
     &::after {
       display: inherit;
       border: 2px solid pvar(--mainColor);
@@ -36,7 +37,7 @@ button {
   margin-top: 0 !important;
   position: static;
   right: auto;
-  bottom: auto
+  bottom: auto;
 }
 
 .modal-body {

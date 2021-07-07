@@ -1,7 +1,10 @@
+import { remove } from 'fs-extra'
 import { join } from 'path'
 import {
   AfterDestroy,
   AllowNull,
+  BeforeCreate,
+  BeforeUpdate,
   BelongsTo,
   Column,
   CreatedAt,
@@ -12,15 +15,15 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { CONSTRAINTS_FIELDS, LAZY_STATIC_PATHS, STATIC_PATHS, WEBSERVER } from '../../initializers/constants'
+import { afterCommitIfTransaction } from '@server/helpers/database-utils'
+import { MThumbnail, MThumbnailVideo, MVideo } from '@server/types/models'
+import { AttributesOnly } from '@shared/core-utils'
+import { ThumbnailType } from '../../../shared/models/videos/thumbnail.type'
 import { logger } from '../../helpers/logger'
-import { remove } from 'fs-extra'
 import { CONFIG } from '../../initializers/config'
+import { CONSTRAINTS_FIELDS, LAZY_STATIC_PATHS, STATIC_PATHS, WEBSERVER } from '../../initializers/constants'
 import { VideoModel } from './video'
 import { VideoPlaylistModel } from './video-playlist'
-import { ThumbnailType } from '../../../shared/models/videos/thumbnail.type'
-import { MVideoAccountLight } from '@server/types/models'
-import { buildRemoteVideoBaseUrl } from '@server/helpers/activitypub'
 
 @Table({
   tableName: 'thumbnail',
@@ -31,10 +34,14 @@ import { buildRemoteVideoBaseUrl } from '@server/helpers/activitypub'
     {
       fields: [ 'videoPlaylistId' ],
       unique: true
+    },
+    {
+      fields: [ 'filename', 'type' ],
+      unique: true
     }
   ]
 })
-export class ThumbnailModel extends Model<ThumbnailModel> {
+export class ThumbnailModel extends Model<Partial<AttributesOnly<ThumbnailModel>>> {
 
   @AllowNull(false)
   @Column
@@ -92,6 +99,9 @@ export class ThumbnailModel extends Model<ThumbnailModel> {
   @UpdatedAt
   updatedAt: Date
 
+  // If this thumbnail replaced existing one, track the old name
+  previousThumbnailFilename: string
+
   private static readonly types: { [ id in ThumbnailType ]: { label: string, directory: string, staticPath: string } } = {
     [ThumbnailType.MINIATURE]: {
       label: 'miniature',
@@ -105,6 +115,12 @@ export class ThumbnailModel extends Model<ThumbnailModel> {
     }
   }
 
+  @BeforeCreate
+  @BeforeUpdate
+  static removeOldFile (instance: ThumbnailModel, options) {
+    return afterCommitIfTransaction(options.transaction, () => instance.removePreviousFilenameIfNeeded())
+  }
+
   @AfterDestroy
   static removeFiles (instance: ThumbnailModel) {
     logger.info('Removing %s file %s.', ThumbnailModel.types[instance.type].label, instance.filename)
@@ -114,36 +130,67 @@ export class ThumbnailModel extends Model<ThumbnailModel> {
             .catch(err => logger.error('Cannot remove thumbnail file %s.', instance.filename, err))
   }
 
-  static loadByName (filename: string) {
+  static loadByFilename (filename: string, thumbnailType: ThumbnailType): Promise<MThumbnail> {
     const query = {
       where: {
-        filename
+        filename,
+        type: thumbnailType
       }
     }
 
     return ThumbnailModel.findOne(query)
   }
 
-  static generateDefaultPreviewName (videoUUID: string) {
-    return videoUUID + '.jpg'
+  static loadWithVideoByFilename (filename: string, thumbnailType: ThumbnailType): Promise<MThumbnailVideo> {
+    const query = {
+      where: {
+        filename,
+        type: thumbnailType
+      },
+      include: [
+        {
+          model: VideoModel.unscoped(),
+          required: true
+        }
+      ]
+    }
+
+    return ThumbnailModel.findOne(query)
   }
 
-  getFileUrl (video: MVideoAccountLight) {
+  static buildPath (type: ThumbnailType, filename: string) {
+    const directory = ThumbnailModel.types[type].directory
+
+    return join(directory, filename)
+  }
+
+  getFileUrl (video: MVideo) {
     const staticPath = ThumbnailModel.types[this.type].staticPath + this.filename
 
     if (video.isOwned()) return WEBSERVER.URL + staticPath
-    if (this.fileUrl) return this.fileUrl
 
-    // Fallback if we don't have a file URL
-    return buildRemoteVideoBaseUrl(video, staticPath)
+    return this.fileUrl
   }
 
   getPath () {
-    const directory = ThumbnailModel.types[this.type].directory
-    return join(directory, this.filename)
+    return ThumbnailModel.buildPath(this.type, this.filename)
+  }
+
+  getPreviousPath () {
+    return ThumbnailModel.buildPath(this.type, this.previousThumbnailFilename)
   }
 
   removeThumbnail () {
     return remove(this.getPath())
+  }
+
+  removePreviousFilenameIfNeeded () {
+    if (!this.previousThumbnailFilename) return
+
+    const previousPath = this.getPreviousPath()
+    remove(previousPath)
+      .catch(err => logger.error('Cannot remove previous thumbnail file %s.', previousPath, { err }))
+
+    this.previousThumbnailFilename = undefined
   }
 }

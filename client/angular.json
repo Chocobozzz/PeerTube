@@ -69,6 +69,10 @@
             "translation": "src/locale/angular.ru-RU.xlf",
             "baseHref": "/client/ru-RU/"
           },
+          "sq": {
+            "translation": "src/locale/angular.sq.xlf",
+            "baseHref": "/client/sq/"
+          },
           "zh-Hans": {
             "translation": "src/locale/angular.zh-Hans-CN.xlf",
             "baseHref": "/client/zh-Hans-CN/"
@@ -92,6 +96,10 @@
           "ca": {
             "translation": "src/locale/angular.ca-ES.xlf",
             "baseHref": "/client/ca-ES/"
+          },
+          "gl": {
+            "translation": "src/locale/angular.gl-ES.xlf",
+            "baseHref": "/client/gl-ES/"
           },
           "cs": {
             "translation": "src/locale/angular.cs-CZ.xlf",
@@ -123,13 +131,14 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "aot": true,
             "localize": true,
             "outputPath": "dist",
             "index": "src/index.html",
             "main": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
             "polyfills": "src/polyfills.ts",
+            "baseHref": "/",
+            "deployUrl": "",
             "stylePreprocessorOptions": {
               "includePaths": [
                 "src/sass/include"
@@ -143,43 +152,32 @@
               "src/sass/application.scss"
             ],
             "allowedCommonJsDependencies": [
-              "@angularclass/hmr",
-              "debug",
-              "mousetrap",
-              "chart.js",
-              "linkifyjs/html",
-              "linkifyjs",
-              "markdown-it",
-              "sanitize-html",
-              "socket.io-client",
-              "socket.io-parser",
-              "@app/+about/about-peertube/about-peertube-contributors.component",
-              "path",
-              "video.js",
-              "p2p-media-loader-hlsjs",
-              "videojs-hotkeys/videojs.hotkeys",
-              "p2p-media-loader-core",
               "qrcode",
-              "webtorrent",
-              "cache-chunk-store",
-              "global/document",
-              "videojs-vtt.js",
-              "videojs-vtt.js",
-              "@babel/runtime/helpers/possibleConstructorReturn",
-              "@babel/runtime/helpers/inherits",
-              "@babel/runtime/helpers/construct",
-              "@videojs/xhr"
+              "chart.js",
+              "htmlparser2",
+              "markdown-it-emoji/light",
+              "sanitize-html",
+              "debug",
+              "p2p-media-loader-hlsjs",
+              "video.js",
+              "sha.js/sha1",
+              "postcss",
+              "core-js/features/reflect"
             ],
-            "scripts": []
+            "scripts": [],
+            "vendorChunk": true,
+            "extractLicenses": false,
+            "buildOptimizer": false,
+            "sourceMap": true,
+            "optimization": false,
+            "namedChunks": true
           },
           "configurations": {
             "production": {
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
-              "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
@@ -194,7 +192,7 @@
                 {
                   "type": "anyComponentStyle",
                   "maximumWarning": "6kb",
-                  "maximumError": "50kb"
+                  "maximumError": "100kb"
                 }
               ],
               "fileReplacements": [
@@ -204,15 +202,20 @@
                 }
               ]
             },
-            "i18n": {
-              "optimization": false,
-              "outputHashing": "none",
-              "sourceMap": true,
-              "extractCss": true,
-              "namedChunks": true,
-              "aot": true,
-              "buildOptimizer": false,
-              "budgets": []
+            "ar-locale": {
+              "localize": ["ar"],
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.hmr.ts"
+                }
+              ]
             },
             "hmr": {
               "localize": false,
@@ -249,8 +252,6 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "baseHref": "/",
-            "deployUrl": "client/",
             "browserTarget": "PeerTube:build",
             "proxyConfig": "proxy.config.json"
           },
@@ -260,6 +261,9 @@
             },
             "hmr": {
               "browserTarget": "PeerTube:build:hmr"
+            },
+            "ar-locale": {
+              "browserTarget": "PeerTube:build:ar-locale"
             },
             "e2e": {
               "browserTarget": "PeerTube:build:e2e",
@@ -313,6 +317,7 @@
               "languages": [
                 "ar",
                 "ca-ES",
+                "gl-ES",
                 "cs-CZ",
                 "da-DK",
                 "de-DE",

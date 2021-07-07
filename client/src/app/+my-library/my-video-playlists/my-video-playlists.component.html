@@ -1,0 +1,28 @@
+<h1>
+  <my-global-icon iconName="playlists" aria-hidden="true"></my-global-icon>
+  <ng-container i18n>My playlists</ng-container> <span class="badge badge-secondary">{{ pagination.totalItems }}</span>
+</h1>
+
+<div class="video-playlists-header d-flex justify-content-between">
+  <my-advanced-input-filter (search)="onSearch($event)"></my-advanced-input-filter>
+
+  <a class="create-button" routerLink="create">
+    <my-global-icon iconName="add" aria-hidden="true"></my-global-icon>
+    <ng-container i18n>Create playlist</ng-container>
+  </a>
+</div>
+
+<div class="video-playlists" myInfiniteScroller [autoInit]="true" (nearOfBottom)="onNearOfBottom()" [dataObservable]="onDataSubject.asObservable()">
+  <div *ngFor="let playlist of videoPlaylists" class="video-playlist">
+    <my-video-playlist-miniature
+      [playlist]="playlist" [toManage]="true" [displayChannel]="true"
+      [displayDescription]="true" [displayPrivacy]="true" [displayAsRow]="true"
+    ></my-video-playlist-miniature>
+
+    <div *ngIf="isRegularPlaylist(playlist)" class="video-playlist-buttons">
+      <my-delete-button label (click)="deleteVideoPlaylist(playlist)"></my-delete-button>
+
+      <my-edit-button label [routerLink]="[ 'update', playlist.uuid ]"></my-edit-button>
+    </div>
+  </div>
+</div>

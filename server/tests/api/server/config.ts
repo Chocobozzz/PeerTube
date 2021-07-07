@@ -12,6 +12,7 @@ import {
   getConfig,
   getCustomConfig,
   killallServers,
+  makeGetRequest,
   parallelTests,
   registerUser,
   reRunServer,
@@ -21,6 +22,7 @@ import {
   uploadVideo
 } from '../../../../shared/extra-utils'
 import { ServerConfig } from '../../../../shared/models'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const expect = chai.expect
 
@@ -54,9 +56,11 @@ function checkInitialConfig (server: ServerInfo, data: CustomConfig) {
 
   expect(data.cache.previews.size).to.equal(1)
   expect(data.cache.captions.size).to.equal(1)
+  expect(data.cache.torrents.size).to.equal(1)
 
   expect(data.signup.enabled).to.be.true
   expect(data.signup.limit).to.equal(4)
+  expect(data.signup.minimumAge).to.equal(16)
   expect(data.signup.requiresEmailVerification).to.be.false
 
   expect(data.admin.email).to.equal('admin' + server.internalServerNumber + '@example.com')
@@ -64,19 +68,40 @@ function checkInitialConfig (server: ServerInfo, data: CustomConfig) {
 
   expect(data.user.videoQuota).to.equal(5242880)
   expect(data.user.videoQuotaDaily).to.equal(-1)
+
   expect(data.transcoding.enabled).to.be.false
   expect(data.transcoding.allowAdditionalExtensions).to.be.false
   expect(data.transcoding.allowAudioFiles).to.be.false
   expect(data.transcoding.threads).to.equal(2)
+  expect(data.transcoding.concurrency).to.equal(2)
+  expect(data.transcoding.profile).to.equal('default')
   expect(data.transcoding.resolutions['240p']).to.be.true
   expect(data.transcoding.resolutions['360p']).to.be.true
   expect(data.transcoding.resolutions['480p']).to.be.true
   expect(data.transcoding.resolutions['720p']).to.be.true
   expect(data.transcoding.resolutions['1080p']).to.be.true
+  expect(data.transcoding.resolutions['1440p']).to.be.true
   expect(data.transcoding.resolutions['2160p']).to.be.true
   expect(data.transcoding.webtorrent.enabled).to.be.true
   expect(data.transcoding.hls.enabled).to.be.true
 
+  expect(data.live.enabled).to.be.false
+  expect(data.live.allowReplay).to.be.false
+  expect(data.live.maxDuration).to.equal(-1)
+  expect(data.live.maxInstanceLives).to.equal(20)
+  expect(data.live.maxUserLives).to.equal(3)
+  expect(data.live.transcoding.enabled).to.be.false
+  expect(data.live.transcoding.threads).to.equal(2)
+  expect(data.live.transcoding.profile).to.equal('default')
+  expect(data.live.transcoding.resolutions['240p']).to.be.false
+  expect(data.live.transcoding.resolutions['360p']).to.be.false
+  expect(data.live.transcoding.resolutions['480p']).to.be.false
+  expect(data.live.transcoding.resolutions['720p']).to.be.false
+  expect(data.live.transcoding.resolutions['1080p']).to.be.false
+  expect(data.live.transcoding.resolutions['1440p']).to.be.false
+  expect(data.live.transcoding.resolutions['2160p']).to.be.false
+
+  expect(data.import.videos.concurrency).to.equal(2)
   expect(data.import.videos.http.enabled).to.be.true
   expect(data.import.videos.torrent.enabled).to.be.true
   expect(data.autoBlacklist.videos.ofUsers.enabled).to.be.false
@@ -122,10 +147,12 @@ function checkUpdatedConfig (data: CustomConfig) {
 
   expect(data.cache.previews.size).to.equal(2)
   expect(data.cache.captions.size).to.equal(3)
+  expect(data.cache.torrents.size).to.equal(4)
 
   expect(data.signup.enabled).to.be.false
   expect(data.signup.limit).to.equal(5)
   expect(data.signup.requiresEmailVerification).to.be.false
+  expect(data.signup.minimumAge).to.equal(10)
 
   // We override admin email in parallel tests, so skip this exception
   if (parallelTests() === false) {
@@ -139,8 +166,10 @@ function checkUpdatedConfig (data: CustomConfig) {
 
   expect(data.transcoding.enabled).to.be.true
   expect(data.transcoding.threads).to.equal(1)
+  expect(data.transcoding.concurrency).to.equal(3)
   expect(data.transcoding.allowAdditionalExtensions).to.be.true
   expect(data.transcoding.allowAudioFiles).to.be.true
+  expect(data.transcoding.profile).to.equal('vod_profile')
   expect(data.transcoding.resolutions['240p']).to.be.false
   expect(data.transcoding.resolutions['360p']).to.be.true
   expect(data.transcoding.resolutions['480p']).to.be.true
@@ -150,6 +179,22 @@ function checkUpdatedConfig (data: CustomConfig) {
   expect(data.transcoding.hls.enabled).to.be.false
   expect(data.transcoding.webtorrent.enabled).to.be.true
 
+  expect(data.live.enabled).to.be.true
+  expect(data.live.allowReplay).to.be.true
+  expect(data.live.maxDuration).to.equal(5000)
+  expect(data.live.maxInstanceLives).to.equal(-1)
+  expect(data.live.maxUserLives).to.equal(10)
+  expect(data.live.transcoding.enabled).to.be.true
+  expect(data.live.transcoding.threads).to.equal(4)
+  expect(data.live.transcoding.profile).to.equal('live_profile')
+  expect(data.live.transcoding.resolutions['240p']).to.be.true
+  expect(data.live.transcoding.resolutions['360p']).to.be.true
+  expect(data.live.transcoding.resolutions['480p']).to.be.true
+  expect(data.live.transcoding.resolutions['720p']).to.be.true
+  expect(data.live.transcoding.resolutions['1080p']).to.be.true
+  expect(data.live.transcoding.resolutions['2160p']).to.be.true
+
+  expect(data.import.videos.concurrency).to.equal(4)
   expect(data.import.videos.http.enabled).to.be.false
   expect(data.import.videos.torrent.enabled).to.be.false
   expect(data.autoBlacklist.videos.ofUsers.enabled).to.be.true
@@ -208,8 +253,8 @@ describe('Test config', function () {
     expect(data.video.file.extensions).to.contain('.webm')
     expect(data.video.file.extensions).to.contain('.ogv')
 
-    await uploadVideo(server.url, server.accessToken, { fixture: 'video_short.mkv' }, 400)
-    await uploadVideo(server.url, server.accessToken, { fixture: 'sample.ogg' }, 400)
+    await uploadVideo(server.url, server.accessToken, { fixture: 'video_short.mkv' }, HttpStatusCode.UNSUPPORTED_MEDIA_TYPE_415)
+    await uploadVideo(server.url, server.accessToken, { fixture: 'sample.ogg' }, HttpStatusCode.UNSUPPORTED_MEDIA_TYPE_415)
 
     expect(data.contactForm.enabled).to.be.true
   })
@@ -240,9 +285,11 @@ describe('Test config', function () {
         languages: [ 'en', 'es' ],
         categories: [ 1, 2 ],
 
-        defaultClientRoute: '/videos/recently-added',
         isNSFW: true,
         defaultNSFWPolicy: 'blur' as 'blur',
+
+        defaultClientRoute: '/videos/recently-added',
+
         customizations: {
           javascript: 'alert("coucou")',
           css: 'body { background-color: red; }'
@@ -263,12 +310,16 @@ describe('Test config', function () {
         },
         captions: {
           size: 3
+        },
+        torrents: {
+          size: 4
         }
       },
       signup: {
         enabled: false,
         limit: 5,
-        requiresEmailVerification: false
+        requiresEmailVerification: false,
+        minimumAge: 10
       },
       admin: {
         email: 'superadmin1@example.com'
@@ -285,6 +336,8 @@ describe('Test config', function () {
         allowAdditionalExtensions: true,
         allowAudioFiles: true,
         threads: 1,
+        concurrency: 3,
+        profile: 'vod_profile',
         resolutions: {
           '0p': false,
           '240p': false,
@@ -292,6 +345,7 @@ describe('Test config', function () {
           '480p': true,
           '720p': false,
           '1080p': false,
+          '1440p': false,
           '2160p': false
         },
         webtorrent: {
@@ -301,13 +355,43 @@ describe('Test config', function () {
           enabled: false
         }
       },
+      live: {
+        enabled: true,
+        allowReplay: true,
+        maxDuration: 5000,
+        maxInstanceLives: -1,
+        maxUserLives: 10,
+        transcoding: {
+          enabled: true,
+          threads: 4,
+          profile: 'live_profile',
+          resolutions: {
+            '240p': true,
+            '360p': true,
+            '480p': true,
+            '720p': true,
+            '1080p': true,
+            '1440p': true,
+            '2160p': true
+          }
+        }
+      },
       import: {
         videos: {
+          concurrency: 4,
           http: {
             enabled: false
           },
           torrent: {
             enabled: false
+          }
+        }
+      },
+      trending: {
+        videos: {
+          algorithms: {
+            enabled: [ 'best', 'hot', 'most-viewed', 'most-liked' ],
+            default: 'hot'
           }
         }
       },
@@ -379,8 +463,8 @@ describe('Test config', function () {
     expect(data.video.file.extensions).to.contain('.ogg')
     expect(data.video.file.extensions).to.contain('.flac')
 
-    await uploadVideo(server.url, server.accessToken, { fixture: 'video_short.mkv' }, 200)
-    await uploadVideo(server.url, server.accessToken, { fixture: 'sample.ogg' }, 200)
+    await uploadVideo(server.url, server.accessToken, { fixture: 'video_short.mkv' }, HttpStatusCode.OK_200)
+    await uploadVideo(server.url, server.accessToken, { fixture: 'sample.ogg' }, HttpStatusCode.OK_200)
   })
 
   it('Should have the configuration updated after a restart', async function () {
@@ -426,6 +510,39 @@ describe('Test config', function () {
     const data = res.body
 
     checkInitialConfig(server, data)
+  })
+
+  it('Should enable frameguard', async function () {
+    this.timeout(25000)
+
+    {
+      const res = await makeGetRequest({
+        url: server.url,
+        path: '/api/v1/config',
+        statusCodeExpected: 200
+      })
+
+      expect(res.headers['x-frame-options']).to.exist
+    }
+
+    killallServers([ server ])
+
+    const config = {
+      security: {
+        frameguard: { enabled: false }
+      }
+    }
+    server = await reRunServer(server, config)
+
+    {
+      const res = await makeGetRequest({
+        url: server.url,
+        path: '/api/v1/config',
+        statusCodeExpected: 200
+      })
+
+      expect(res.headers['x-frame-options']).to.not.exist
+    }
   })
 
   after(async function () {

@@ -52,7 +52,7 @@ export class ReactiveFileComponent implements OnInit, ControlValueAccessor {
       }
 
       const extension = '.' + file.name.split('.').pop()
-      if (this.extensions.includes(extension) === false) {
+      if (this.extensions.includes(extension.toLowerCase()) === false) {
         const message = $localize`PeerTube cannot handle this kind of file. Accepted extensions are ${this.allowedExtensionsMessage}}.`
         this.notifier.error(message)
 

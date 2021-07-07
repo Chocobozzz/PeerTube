@@ -23,6 +23,7 @@
       "consistent-as-needed"
     ],
     "padded-blocks": "off",
+    "prefer-regex-literals": "off",
     "no-async-promise-executor": "off",
     "dot-notation": "off",
     "promise/param-names": "off",
@@ -87,6 +88,7 @@
     "@typescript-eslint/no-namespace": "off",
     "@typescript-eslint/no-empty-interface": "off",
     "@typescript-eslint/no-extraneous-class": "off",
+    "@typescript-eslint/no-use-before-define": "off",
     // bugged but useful
     "@typescript-eslint/restrict-plus-operands": "off"
   },

@@ -1,0 +1,11 @@
+<div class="wrapper" [ngClass]="{ 'generic-channel': genericChannel }">
+  <my-actor-avatar
+    class="channel" [channel]="video.channel"
+    [internalHref]="[ '/c', video.byVideoChannel ]" [title]="channelLinkTitle"
+  ></my-actor-avatar>
+
+  <my-actor-avatar
+    class="account" [account]="video.account"
+    [internalHref]="[ '/a', video.byAccount ]" [title]="accountLinkTitle">
+  </my-actor-avatar>
+</div>

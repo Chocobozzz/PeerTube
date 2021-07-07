@@ -1,0 +1,52 @@
+<div
+  [ngbPopover]="popContent" autoClose="outside" placement="bottom" container={this} popoverClass="popover-notifications"
+  i18n-title title="View your notifications" [ngClass]="{ 'notification-inbox-popover': true, 'shown': opened, 'hidden': isInMobileView }"
+  #popover="ngbPopover" (shown)="onPopoverShown()" (hidden)="onPopoverHidden()"
+>
+  <div *ngIf="unreadNotifications > 0" class="unread-notifications">{{ unreadNotifications }}</div>
+
+  <my-global-icon iconName="bell"></my-global-icon>
+</div>
+
+<div *ngIf="isInMobileView" i18n-title title="View your notifications" class="notification-inbox-link">
+  <div *ngIf="unreadNotifications > 0" class="unread-notifications">{{ unreadNotifications }}</div>
+
+  <a routerLink="/my-account/notifications" routerLinkActive="active" #link (click)="onNavigate(link)">
+    <my-global-icon iconName="bell"></my-global-icon>
+  </a>
+</div>
+
+<ng-template #popContent>
+  <div class="content" [ngClass]="{ loaded: loaded }">
+    <div class="notifications-header">
+      <div i18n>Notifications</div>
+
+      <div>
+        <button
+          *ngIf="unreadNotifications"
+          i18n-title title="Mark all as read" class="glyphicon glyphicon-ok mr-2"
+          (click)="markAllAsRead()"
+        ></button>
+        <a
+          i18n-title title="Update your notification preferences" class="glyphicon glyphicon-cog"
+          routerLink="/my-account/settings" fragment="notifications"
+          #settingsNotifications (click)="onNavigate(settingsNotifications)"
+        ></a>
+      </div>
+    </div>
+
+    <div *ngIf="!loaded" class="loader mt-4">
+      <my-loader [loading]="!loaded"></my-loader>
+    </div>
+
+    <my-user-notifications
+      [ignoreLoadingBar]="true" [infiniteScroll]="false" [itemsPerPage]="10"
+      [markAllAsReadSubject]="markAllAsReadSubject" (notificationsLoaded)="onNotificationLoaded()"
+    ></my-user-notifications>
+
+    <a *ngIf="loaded" class="all-notifications" routerLink="/my-account/notifications" #notifications (click)="onNavigate(notifications)">
+      <my-global-icon class="mr-1" iconName="bell" aria-hidden="true"></my-global-icon>
+      <span i18n>See all your notifications</span>
+    </a>
+  </div>
+</ng-template>

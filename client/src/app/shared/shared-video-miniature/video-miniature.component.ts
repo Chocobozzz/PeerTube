@@ -11,12 +11,13 @@ import {
   Output
 } from '@angular/core'
 import { AuthService, ScreenService, ServerService, User } from '@app/core'
-import { ServerConfig, VideoPlaylistType, VideoPrivacy, VideoState } from '@shared/models'
+import { HTMLServerConfig, VideoPlaylistType, VideoPrivacy, VideoState } from '@shared/models'
+import { LinkType } from '../../../types/link.type'
+import { ActorAvatarSize } from '../shared-actor-image/actor-avatar.component'
 import { Video } from '../shared-main'
 import { VideoPlaylistService } from '../shared-video-playlist'
 import { VideoActionsDisplayType } from './video-actions-dropdown.component'
 
-export type OwnerDisplayType = 'account' | 'videoChannel' | 'auto'
 export type MiniatureDisplayOptions = {
   date?: boolean
   views?: boolean
@@ -28,8 +29,6 @@ export type MiniatureDisplayOptions = {
   blacklistInfo?: boolean
   nsfw?: boolean
 }
-export type VideoLinkType = 'internal' | 'lazy-load' | 'external'
-
 @Component({
   selector: 'my-video-miniature',
   styleUrls: [ './video-miniature.component.scss' ],
@@ -40,7 +39,6 @@ export class VideoMiniatureComponent implements OnInit {
   @Input() user: User
   @Input() video: Video
 
-  @Input() ownerDisplayType: OwnerDisplayType = 'account'
   @Input() displayOptions: MiniatureDisplayOptions = {
     date: true,
     views: true,
@@ -51,11 +49,13 @@ export class VideoMiniatureComponent implements OnInit {
     state: false,
     blacklistInfo: false
   }
-  @Input() displayAsRow = false
   @Input() displayVideoActions = true
-  @Input() fitWidth = false
 
-  @Input() videoLinkType: VideoLinkType = 'internal'
+  @Input() actorImageSize: ActorAvatarSize = '40'
+
+  @Input() displayAsRow = false
+
+  @Input() videoLinkType: LinkType = 'internal'
 
   @Output() videoBlocked = new EventEmitter()
   @Output() videoUnblocked = new EventEmitter()
@@ -73,7 +73,7 @@ export class VideoMiniatureComponent implements OnInit {
     mute: true
   }
   showActions = false
-  serverConfig: ServerConfig
+  serverConfig: HTMLServerConfig
 
   addToWatchLaterText: string
   addedToWatchLaterText: string
@@ -85,11 +85,11 @@ export class VideoMiniatureComponent implements OnInit {
     playlistElementId?: number
   }
 
-  videoRouterLink: any[] = []
+  videoRouterLink: string | any[] = []
   videoHref: string
   videoTarget: string
 
-  private ownerDisplayTypeChosen: 'account' | 'videoChannel'
+  private ownerDisplayType: 'account' | 'videoChannel'
 
   constructor (
     private screenService: ScreenService,
@@ -105,12 +105,8 @@ export class VideoMiniatureComponent implements OnInit {
   }
 
   ngOnInit () {
-    this.serverConfig = this.serverService.getTmpConfig()
-    this.serverService.getConfig()
-        .subscribe(config => {
-          this.serverConfig = config
-          this.buildVideoLink()
-        })
+    this.serverConfig = this.serverService.getHTMLConfig()
+    this.buildVideoLink()
 
     this.setUpBy()
 
@@ -124,7 +120,7 @@ export class VideoMiniatureComponent implements OnInit {
 
   buildVideoLink () {
     if (this.videoLinkType === 'internal' || !this.video.url) {
-      this.videoRouterLink = [ '/videos/watch', this.video.uuid ]
+      this.videoRouterLink = Video.buildWatchUrl(this.video)
       return
     }
 
@@ -140,11 +136,11 @@ export class VideoMiniatureComponent implements OnInit {
   }
 
   displayOwnerAccount () {
-    return this.ownerDisplayTypeChosen === 'account'
+    return this.ownerDisplayType === 'account'
   }
 
   displayOwnerVideoChannel () {
-    return this.ownerDisplayTypeChosen === 'videoChannel'
+    return this.ownerDisplayType === 'videoChannel'
   }
 
   isUnlistedVideo () {
@@ -180,14 +176,6 @@ export class VideoMiniatureComponent implements OnInit {
     }
 
     return ''
-  }
-
-  getAvatarUrl () {
-    if (this.ownerDisplayTypeChosen === 'account') {
-      return this.video.accountAvatarUrl
-    }
-
-    return this.video.videoChannelAvatarUrl
   }
 
   loadActions () {
@@ -244,21 +232,26 @@ export class VideoMiniatureComponent implements OnInit {
     return this.displayVideoActions && this.isUserLoggedIn() && this.inWatchLaterPlaylist !== undefined
   }
 
-  private setUpBy () {
-    if (this.ownerDisplayType === 'account' || this.ownerDisplayType === 'videoChannel') {
-      this.ownerDisplayTypeChosen = this.ownerDisplayType
-      return
+  getClasses () {
+    return {
+      'display-as-row': this.displayAsRow
     }
+  }
 
-    // If the video channel name an UUID (not really displayable, we changed this behaviour in v1.0.0-beta.12)
+  private setUpBy () {
+    const accountName = this.video.account.name
+
+    // If the video channel name is an UUID (not really displayable, we changed this behaviour in v1.0.0-beta.12)
+    // Or has not been customized (default created channel display name)
     // -> Use the account name
     if (
-      this.video.channel.name === `${this.video.account.name}_channel` ||
+      this.video.channel.displayName === `Default ${accountName} channel` ||
+      this.video.channel.displayName === `Main ${accountName} channel` ||
       this.video.channel.name.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/)
     ) {
-      this.ownerDisplayTypeChosen = 'account'
+      this.ownerDisplayType = 'account'
     } else {
-      this.ownerDisplayTypeChosen = 'videoChannel'
+      this.ownerDisplayType = 'videoChannel'
     }
   }
 

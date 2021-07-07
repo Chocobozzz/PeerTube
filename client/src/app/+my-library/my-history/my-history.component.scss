@@ -1,0 +1,76 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+.no-history {
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+  font-weight: $font-semibold;
+  font-size: 16px;
+}
+
+.top-buttons {
+  margin-bottom: 30px;
+  display: grid;
+  grid-template-columns: 250px 1fr auto auto;
+  align-items: center;
+
+  .search-wrapper {
+    grid-column: 1;
+
+    input {
+      @include peertube-input-text(250px);
+    }
+  }
+
+  .history-switch {
+    @include margin-left(auto);
+    @include margin-right(15px);
+
+    grid-column: 3;
+    display: flex;
+
+    label {
+      margin: 0 0 0 5px;
+      color: var(--greyForegroundColor);
+      font-size: 15px;
+      font-weight: $font-semibold;
+    }
+  }
+
+  .delete-history {
+    @include peertube-button;
+    @include grey-button;
+    @include button-with-icon;
+
+    grid-column: 4;
+
+    font-size: 15px;
+  }
+}
+
+.video {
+  @include row-blocks($column-responsive: false);
+}
+
+@media screen and (max-width: $small-view) {
+  .top-buttons {
+    grid-template-columns: auto 1fr auto;
+    row-gap: 20px;
+
+    .history-switch {
+      grid-row: 1;
+      grid-column: 1;
+      margin: 0;
+    }
+
+    .delete-history {
+      grid-row: 1;
+      grid-column: 3;
+    }
+
+    .search-wrapper {
+      grid-column: 1 / 4;
+    }
+  }
+}

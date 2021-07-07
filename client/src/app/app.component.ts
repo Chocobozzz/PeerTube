@@ -1,20 +1,20 @@
 import { Hotkey, HotkeysService } from 'angular2-hotkeys'
-import { concat } from 'rxjs'
-import { filter, first, map, pairwise } from 'rxjs/operators'
-import { DOCUMENT, PlatformLocation, ViewportScroller } from '@angular/common'
+import { filter, map, pairwise, switchMap } from 'rxjs/operators'
+import { DOCUMENT, getLocaleDirection, PlatformLocation, ViewportScroller } from '@angular/common'
 import { AfterViewInit, Component, Inject, LOCALE_ID, OnInit, ViewChild } from '@angular/core'
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
-import { Event, GuardsCheckStart, NavigationEnd, Router, Scroll } from '@angular/router'
+import { Event, GuardsCheckStart, NavigationEnd, RouteConfigLoadEnd, RouteConfigLoadStart, Router, Scroll } from '@angular/router'
 import { AuthService, MarkdownService, RedirectService, ScreenService, ServerService, ThemeService, User } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { PluginService } from '@app/core/plugins/plugin.service'
 import { CustomModalComponent } from '@app/modal/custom-modal.component'
 import { InstanceConfigWarningModalComponent } from '@app/modal/instance-config-warning-modal.component'
 import { WelcomeModalComponent } from '@app/modal/welcome-modal.component'
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
+import { NgbConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap'
+import { LoadingBarService } from '@ngx-loading-bar/core'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
-import { getShortLocale, is18nPath } from '@shared/core-utils/i18n'
-import { BroadcastMessageLevel, ServerConfig, UserRole } from '@shared/models'
+import { getShortLocale } from '@shared/core-utils/i18n'
+import { BroadcastMessageLevel, HTMLServerConfig, ServerConfig, UserRole } from '@shared/models'
 import { MenuService } from './core/menu/menu.service'
 import { POP_STATE_MODAL_DISMISS } from './helpers'
 import { InstanceService } from './shared/shared-instance'
@@ -34,7 +34,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   customCSS: SafeHtml
   broadcastMessage: { message: string, dismissable: boolean, class: string } | null = null
 
-  private serverConfig: ServerConfig
+  private serverConfig: HTMLServerConfig
 
   constructor (
     @Inject(DOCUMENT) private document: Document,
@@ -54,25 +54,27 @@ export class AppComponent implements OnInit, AfterViewInit {
     private location: PlatformLocation,
     private modalService: NgbModal,
     private markdownService: MarkdownService,
+    private ngbConfig: NgbConfig,
+    private loadingBar: LoadingBarService,
     public menu: MenuService
-  ) { }
+  ) {
+    this.ngbConfig.animation = false
+  }
 
   get instanceName () {
     return this.serverConfig.instance.name
   }
 
-  get defaultRoute () {
-    return RedirectService.DEFAULT_ROUTE
+  goToDefaultRoute () {
+    return this.router.navigateByUrl(this.redirectService.getDefaultRoute())
   }
 
   ngOnInit () {
     document.getElementById('incompatible-browser').className += ' browser-ok'
 
-    this.serverConfig = this.serverService.getTmpConfig()
-    this.serverService.getConfig()
-        .subscribe(config => this.serverConfig = config)
+    this.serverConfig = this.serverService.getHTMLConfig()
 
-    this.loadPlugins()
+    this.hooks.runAction('action:application.init', 'common')
     this.themeService.initialize()
 
     this.authService.loadClientCredentials()
@@ -83,9 +85,20 @@ export class AppComponent implements OnInit, AfterViewInit {
     }
 
     this.initRouteEvents()
+
     this.injectJS()
     this.injectCSS()
     this.injectBroadcastMessage()
+
+    this.serverService.configReloaded
+      .subscribe(config => {
+        this.serverConfig = config
+
+        this.injectBroadcastMessage()
+        this.injectCSS()
+
+        // Don't reinject JS since it could conflict with existing one
+      })
 
     this.initHotkeys()
 
@@ -94,10 +107,17 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.openModalsIfNeeded()
 
     this.document.documentElement.lang = getShortLocale(this.localeId)
+    this.document.documentElement.dir = getLocaleDirection(this.localeId)
   }
 
   ngAfterViewInit () {
     this.pluginService.initializeCustomModal(this.customModal)
+  }
+
+  getToggleTitle () {
+    if (this.menu.isDisplayed()) return $localize`Close the left menu`
+
+    return $localize`Open the left menu`
   }
 
   isUserLoggedIn () {
@@ -117,11 +137,12 @@ export class AppComponent implements OnInit, AfterViewInit {
 
     const scrollEvent = eventsObs.pipe(filter((e: Event): e is Scroll => e instanceof Scroll))
 
+    // Handle anchors/restore position
     scrollEvent.subscribe(e => {
       // scrollToAnchor first to preserve anchor position when using history navigation
       if (e.anchor) {
         setTimeout(() => {
-          document.getElementById(e.anchor).scrollIntoView({ behavior: 'smooth', inline: 'nearest' })
+          this.viewportScroller.scrollToAnchor(e.anchor)
         })
 
         return
@@ -169,104 +190,94 @@ export class AppComponent implements OnInit, AfterViewInit {
                         }
                       })
 
-    navigationEndEvent.pipe(
-      map(() => window.location.pathname),
-      filter(pathname => !pathname || pathname === '/' || is18nPath(pathname))
-    ).subscribe(() => this.redirectService.redirectToHomepage(true))
-
+    // Plugin hooks
     navigationEndEvent.subscribe(e => {
       this.hooks.runAction('action:router.navigation-end', 'common', { path: e.url })
     })
 
+    // Automatically hide/display the menu
     eventsObs.pipe(
       filter((e: Event): e is GuardsCheckStart => e instanceof GuardsCheckStart),
       filter(() => this.screenService.isInSmallView() || this.screenService.isInTouchScreen())
     ).subscribe(() => this.menu.setMenuDisplay(false)) // User clicked on a link in the menu, change the page
+
+    // Handle lazy loaded module
+    eventsObs.pipe(
+      filter((e: Event): e is RouteConfigLoadStart => e instanceof RouteConfigLoadStart)
+    ).subscribe(() => this.loadingBar.useRef().start())
+
+    eventsObs.pipe(
+      filter((e: Event): e is RouteConfigLoadEnd => e instanceof RouteConfigLoadEnd)
+    ).subscribe(() => this.loadingBar.useRef().complete())
   }
 
-  private injectBroadcastMessage () {
-    concat(
-      this.serverService.getConfig().pipe(first()),
-      this.serverService.configReloaded
-    ).subscribe(async config => {
-      this.broadcastMessage = null
-      this.screenService.isBroadcastMessageDisplayed = false
+  private async injectBroadcastMessage () {
+    this.broadcastMessage = null
+    this.screenService.isBroadcastMessageDisplayed = false
 
-      const messageConfig = config.broadcastMessage
+    const messageConfig = this.serverConfig.broadcastMessage
 
-      if (messageConfig.enabled) {
-        // Already dismissed this message?
-        if (messageConfig.dismissable && localStorage.getItem(AppComponent.BROADCAST_MESSAGE_KEY) === messageConfig.message) {
-          return
-        }
-
-        const classes: { [id in BroadcastMessageLevel]: string } = {
-          info: 'alert-info',
-          warning: 'alert-warning',
-          error: 'alert-danger'
-        }
-
-        this.broadcastMessage = {
-          message: await this.markdownService.completeMarkdownToHTML(messageConfig.message),
-          dismissable: messageConfig.dismissable,
-          class: classes[messageConfig.level]
-        }
-
-        this.screenService.isBroadcastMessageDisplayed = true
+    if (messageConfig.enabled) {
+      // Already dismissed this message?
+      if (messageConfig.dismissable && localStorage.getItem(AppComponent.BROADCAST_MESSAGE_KEY) === messageConfig.message) {
+        return
       }
-    })
+
+      const classes: { [id in BroadcastMessageLevel]: string } = {
+        info: 'alert-info',
+        warning: 'alert-warning',
+        error: 'alert-danger'
+      }
+
+      this.broadcastMessage = {
+        message: await this.markdownService.unsafeMarkdownToHTML(messageConfig.message, true),
+        dismissable: messageConfig.dismissable,
+        class: classes[messageConfig.level]
+      }
+
+      this.screenService.isBroadcastMessageDisplayed = true
+    }
   }
 
   private injectJS () {
     // Inject JS
-    this.serverService.getConfig()
-        .subscribe(config => {
-          if (config.instance.customizations.javascript) {
-            try {
-              // tslint:disable:no-eval
-              eval(config.instance.customizations.javascript)
-            } catch (err) {
-              console.error('Cannot eval custom JavaScript.', err)
-            }
-          }
-        })
+    if (this.serverConfig.instance.customizations.javascript) {
+      try {
+        // tslint:disable:no-eval
+        eval(this.serverConfig.instance.customizations.javascript)
+      } catch (err) {
+        console.error('Cannot eval custom JavaScript.', err)
+      }
+    }
   }
 
   private injectCSS () {
-    // Inject CSS if modified (admin config settings)
-    concat(
-      this.serverService.getConfig().pipe(first()),
-      this.serverService.configReloaded
-    ).subscribe(config => {
-      const headStyle = document.querySelector('style.custom-css-style')
-      if (headStyle) headStyle.parentNode.removeChild(headStyle)
+    const headStyle = document.querySelector('style.custom-css-style')
+    if (headStyle) headStyle.parentNode.removeChild(headStyle)
 
-      // We test customCSS if the admin removed the css
-      if (this.customCSS || config.instance.customizations.css) {
-        const styleTag = '<style>' + config.instance.customizations.css + '</style>'
-        this.customCSS = this.domSanitizer.bypassSecurityTrustHtml(styleTag)
-      }
-    })
-  }
-
-  private async loadPlugins () {
-    this.pluginService.initializePlugins()
-
-    this.hooks.runAction('action:application.init', 'common')
+    // We test customCSS if the admin removed the css
+    if (this.customCSS || this.serverConfig.instance.customizations.css) {
+      const styleTag = '<style>' + this.serverConfig.instance.customizations.css + '</style>'
+      this.customCSS = this.domSanitizer.bypassSecurityTrustHtml(styleTag)
+    }
   }
 
   private async openModalsIfNeeded () {
     this.authService.userInformationLoaded
         .pipe(
           map(() => this.authService.getUser()),
-          filter(user => user.role === UserRole.ADMINISTRATOR)
-        ).subscribe(user => setTimeout(() => this._openAdminModalsIfNeeded(user))) // setTimeout because of ngIf in template
+          filter(user => user.role === UserRole.ADMINISTRATOR),
+          switchMap(user => {
+            return this.serverService.getConfig()
+              .pipe(map(serverConfig => ({ serverConfig, user })))
+          })
+        ).subscribe(({ serverConfig, user }) => this._openAdminModalsIfNeeded(serverConfig, user))
   }
 
-  private async _openAdminModalsIfNeeded (user: User) {
+  private async _openAdminModalsIfNeeded (serverConfig: ServerConfig, user: User) {
     if (user.noWelcomeModal !== true) return this.welcomeModal.show()
 
-    if (user.noInstanceConfigWarningModal === true || !this.serverConfig.signup.allowed) return
+    if (user.noInstanceConfigWarningModal === true || !serverConfig.signup.allowed) return
 
     this.instanceService.getAbout()
       .subscribe(about => {

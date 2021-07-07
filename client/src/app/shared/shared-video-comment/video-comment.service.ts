@@ -1,13 +1,17 @@
-import { Observable } from 'rxjs'
-import { catchError, map } from 'rxjs/operators'
+import { SortMeta } from 'primeng/api'
+import { from, Observable } from 'rxjs'
+import { catchError, concatMap, map, toArray } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import { ComponentPaginationLight, RestExtractor, RestService } from '@app/core'
+import { ComponentPaginationLight, RestExtractor, RestPagination, RestService } from '@app/core'
 import { objectLineFeedToHtml } from '@app/helpers'
 import {
   FeedFormat,
   ResultList,
+  ThreadsResultList,
+  Video,
   VideoComment as VideoCommentServerModel,
+  VideoCommentAdmin,
   VideoCommentCreate,
   VideoCommentThreadTree as VideoCommentThreadTreeServerModel
 } from '@shared/models'
@@ -17,8 +21,9 @@ import { VideoComment } from './video-comment.model'
 
 @Injectable()
 export class VideoCommentService {
+  static BASE_FEEDS_URL = environment.apiUrl + '/feeds/video-comments.'
+
   private static BASE_VIDEO_URL = environment.apiUrl + '/api/v1/videos/'
-  private static BASE_FEEDS_URL = environment.apiUrl + '/feeds/video-comments.'
 
   constructor (
     private authHttp: HttpClient,
@@ -48,11 +53,32 @@ export class VideoCommentService {
                )
   }
 
+  getAdminVideoComments (options: {
+    pagination: RestPagination,
+    sort: SortMeta,
+    search?: string
+  }): Observable<ResultList<VideoCommentAdmin>> {
+    const { pagination, sort, search } = options
+    const url = VideoCommentService.BASE_VIDEO_URL + 'comments'
+
+    let params = new HttpParams()
+    params = this.restService.addRestGetParams(params, pagination, sort)
+
+    if (search) {
+      params = this.buildParamsFromSearch(search, params)
+    }
+
+    return this.authHttp.get<ResultList<VideoCommentAdmin>>(url, { params })
+      .pipe(
+        catchError(res => this.restExtractor.handleError(res))
+      )
+  }
+
   getVideoCommentThreads (parameters: {
     videoId: number | string,
     componentPagination: ComponentPaginationLight,
     sort: string
-  }): Observable<ResultList<VideoComment>> {
+  }): Observable<ThreadsResultList<VideoComment>> {
     const { videoId, componentPagination, sort } = parameters
 
     const pagination = this.restService.componentPaginationToRestPagination(componentPagination)
@@ -61,7 +87,7 @@ export class VideoCommentService {
     params = this.restService.addRestGetParams(params, pagination, sort)
 
     const url = VideoCommentService.BASE_VIDEO_URL + videoId + '/comment-threads'
-    return this.authHttp.get<ResultList<VideoComment>>(url, { params })
+    return this.authHttp.get<ThreadsResultList<VideoComment>>(url, { params })
                .pipe(
                  map(result => this.extractVideoComments(result)),
                  catchError(err => this.restExtractor.handleError(err))
@@ -94,7 +120,15 @@ export class VideoCommentService {
                )
   }
 
-  getVideoCommentsFeeds (videoUUID?: string) {
+  deleteVideoComments (comments: { videoId: number | string, commentId: number }[]) {
+    return from(comments)
+      .pipe(
+        concatMap(c => this.deleteVideoComment(c.videoId, c.commentId)),
+        toArray()
+      )
+  }
+
+  getVideoCommentsFeeds (video: Pick<Video, 'uuid'>) {
     const feeds = [
       {
         format: FeedFormat.RSS,
@@ -113,9 +147,9 @@ export class VideoCommentService {
       }
     ]
 
-    if (videoUUID !== undefined) {
+    if (video !== undefined) {
       for (const feed of feeds) {
-        feed.url += '?videoId=' + videoUUID
+        feed.url += '?videoId=' + video.uuid
       }
     }
 
@@ -126,7 +160,7 @@ export class VideoCommentService {
     return new VideoComment(videoComment)
   }
 
-  private extractVideoComments (result: ResultList<VideoCommentServerModel>) {
+  private extractVideoComments (result: ThreadsResultList<VideoCommentServerModel>) {
     const videoCommentsJson = result.data
     const totalComments = result.total
     const comments: VideoComment[] = []
@@ -135,15 +169,35 @@ export class VideoCommentService {
       comments.push(new VideoComment(videoCommentJson))
     }
 
-    return { data: comments, total: totalComments }
+    return { data: comments, total: totalComments, totalNotDeletedComments: result.totalNotDeletedComments }
   }
 
-  private extractVideoCommentTree (tree: VideoCommentThreadTreeServerModel) {
-    if (!tree) return tree as VideoCommentThreadTree
+  private extractVideoCommentTree (serverTree: VideoCommentThreadTreeServerModel): VideoCommentThreadTree {
+    if (!serverTree) return null
 
-    tree.comment = new VideoComment(tree.comment)
-    tree.children.forEach(c => this.extractVideoCommentTree(c))
+    const tree = {
+      comment: new VideoComment(serverTree.comment),
+      children: serverTree.children.map(c => this.extractVideoCommentTree(c))
+    }
 
-    return tree as VideoCommentThreadTree
+    const hasDisplayedChildren = tree.children.length === 0
+      ? !tree.comment.isDeleted
+      : tree.children.some(c => c.hasDisplayedChildren)
+
+    return Object.assign(tree, { hasDisplayedChildren })
+  }
+
+  private buildParamsFromSearch (search: string, params: HttpParams) {
+    const filters = this.restService.parseQueryStringFilter(search, {
+      isLocal: {
+        prefix: 'local:',
+        isBoolean: true
+      },
+
+      searchAccount: { prefix: 'account:' },
+      searchVideo: { prefix: 'video:' }
+    })
+
+    return this.restService.addObjectParams(params, filters)
   }
 }

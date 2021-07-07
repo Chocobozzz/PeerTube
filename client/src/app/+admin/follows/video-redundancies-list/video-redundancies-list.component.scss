@@ -1,11 +1,12 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 a {
   @include disable-default-a-behaviour;
   display: inline-block;
 
-  &, &:hover {
+  &,
+  &:hover {
     color: pvar(--mainForegroundColor);
   }
 
@@ -24,7 +25,7 @@ a {
 
   .select-filter-block {
     &:not(:last-child) {
-      margin-right: 10px;
+      @include margin-right(10px);
     }
 
     label {

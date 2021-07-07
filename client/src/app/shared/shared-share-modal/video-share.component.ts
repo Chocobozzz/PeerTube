@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, ViewChild } from '@angular/core'
-import { VideoDetails } from '@app/shared/shared-main'
+import { Video, VideoDetails } from '@app/shared/shared-main'
 import { VideoPlaylist } from '@app/shared/shared-video-playlist'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { VideoCaption } from '@shared/models'
@@ -16,6 +16,7 @@ type Customizations = {
   subtitle: string
 
   loop: boolean
+  originUrl: boolean
   autoplay: boolean
   muted: boolean
   title: boolean
@@ -65,6 +66,7 @@ export class VideoShareComponent {
       subtitle,
 
       loop: false,
+      originUrl: false,
       autoplay: false,
       muted: false,
 
@@ -84,25 +86,27 @@ export class VideoShareComponent {
     const options = this.getVideoOptions(this.video.embedUrl)
 
     const embedUrl = buildVideoLink(options)
-    return buildVideoOrPlaylistEmbed(embedUrl)
+    return buildVideoOrPlaylistEmbed(embedUrl, this.video.name)
   }
 
   getPlaylistIframeCode () {
     const options = this.getPlaylistOptions(this.playlist.embedUrl)
 
     const embedUrl = buildPlaylistLink(options)
-    return buildVideoOrPlaylistEmbed(embedUrl)
+    return buildVideoOrPlaylistEmbed(embedUrl, this.playlist.displayName)
   }
 
   getVideoUrl () {
-    const baseUrl = window.location.origin + '/videos/watch/' + this.video.uuid
+    let baseUrl = this.customizations.originUrl ? this.video.originInstanceUrl : window.location.origin
+    baseUrl += Video.buildWatchUrl(this.video)
+
     const options = this.getVideoOptions(baseUrl)
 
     return buildVideoLink(options)
   }
 
   getPlaylistUrl () {
-    const base = window.location.origin + '/videos/watch/playlist/' + this.playlist.uuid
+    const base = window.location.origin + VideoPlaylist.buildWatchUrl(this.playlist)
 
     if (!this.includeVideoInPlaylist) return base
 
@@ -115,6 +119,10 @@ export class VideoShareComponent {
 
   isVideoInEmbedTab () {
     return this.activeVideoId === 'embed'
+  }
+
+  isLocalVideo () {
+    return this.video.isLocal
   }
 
   private getPlaylistOptions (baseUrl?: string) {

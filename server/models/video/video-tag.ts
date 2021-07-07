@@ -1,4 +1,5 @@
 import { Column, CreatedAt, ForeignKey, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { AttributesOnly } from '@shared/core-utils'
 import { TagModel } from './tag'
 import { VideoModel } from './video'
 
@@ -13,7 +14,7 @@ import { VideoModel } from './video'
     }
   ]
 })
-export class VideoTagModel extends Model<VideoTagModel> {
+export class VideoTagModel extends Model<Partial<AttributesOnly<VideoTagModel>>> {
   @CreatedAt
   createdAt: Date
 

@@ -9,11 +9,17 @@
     <div>{{ labelNotifications[notificationType] }}</div>
 
     <div>
-      <p-inputSwitch [(ngModel)]="webNotifications[notificationType]" (onChange)="updateWebSetting(notificationType, $event.checked)"></p-inputSwitch>
+      <my-input-switch
+        [(ngModel)]="webNotifications[notificationType]"
+        (ngModelChange)="updateWebSetting(notificationType, webNotifications[notificationType])"
+      ></my-input-switch>
     </div>
 
     <div *ngIf="emailEnabled">
-      <p-inputSwitch [(ngModel)]="emailNotifications[notificationType]" (onChange)="updateEmailSetting(notificationType, $event.checked)"></p-inputSwitch>
+      <my-input-switch
+        [(ngModel)]="emailNotifications[notificationType]"
+        (ngModelChange)="updateEmailSetting(notificationType, emailNotifications[notificationType])"
+      ></my-input-switch>
     </div>
   </div>
 </ng-container>

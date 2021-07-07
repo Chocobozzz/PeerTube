@@ -1,5 +1,5 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 $border-width: 3px;
 $border-type: solid;
@@ -44,7 +44,7 @@ $nav-link-height: 40px;
 
 ::ng-deep .video-add-nav {
   border-bottom: $border-width $border-type $border-color;
-  margin: 20px 0 0 0 !important;
+  margin: 20px 0 0 !important;
 
   &.hide-nav {
     display: none !important;
@@ -67,7 +67,7 @@ $nav-link-height: 40px;
     &.active {
       border-color: $border-color;
       border-bottom-color: transparent;
-      background-color: pvar(--submenuColor) !important;
+      background-color: pvar(--submenuBackgroundColor) !important;
 
       span {
         border-bottom-color: pvar(--mainColor);
@@ -84,7 +84,7 @@ $nav-link-height: 40px;
   border: $border-width $border-type $border-color;
   border-top: transparent;
 
-  background-color: pvar(--submenuColor);
+  background-color: pvar(--submenuBackgroundColor);
   border-bottom-left-radius: 3px;
   border-bottom-right-radius: 3px;
   width: 100%;

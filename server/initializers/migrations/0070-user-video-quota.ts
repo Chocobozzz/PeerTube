@@ -1,5 +1,4 @@
 import * as Sequelize from 'sequelize'
-import * as Promise from 'bluebird'
 import { Migration } from '../../models/migrations'
 
 function up (utils: {

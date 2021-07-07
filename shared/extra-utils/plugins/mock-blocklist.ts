@@ -1,5 +1,6 @@
 import * as express from 'express'
 import { Server } from 'http'
+import { randomInt } from '@shared/core-utils'
 
 type BlocklistResponse = {
   data: {
@@ -14,14 +15,15 @@ export class MockBlocklist {
   private server: Server
 
   initialize () {
-    return new Promise(res => {
+    return new Promise<number>(res => {
       const app = express()
 
       app.get('/blocklist', (req: express.Request, res: express.Response) => {
         return res.json(this.body)
       })
 
-      this.server = app.listen(42100, () => res())
+      const port = 42201 + randomInt(1, 100)
+      this.server = app.listen(port, () => res(port))
     })
   }
 

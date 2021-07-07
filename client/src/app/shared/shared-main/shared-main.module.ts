@@ -6,6 +6,7 @@ import { NgModule } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { RouterModule } from '@angular/router'
 import {
+  NgbButtonsModule,
   NgbCollapseModule,
   NgbDropdownModule,
   NgbModalModule,
@@ -13,15 +14,29 @@ import {
   NgbPopoverModule,
   NgbTooltipModule
 } from '@ng-bootstrap/ng-bootstrap'
+import { LoadingBarModule } from '@ngx-loading-bar/core'
+import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client'
 import { SharedGlobalIconModule } from '../shared-icons'
-import { AccountService, ActorAvatarInfoComponent, AvatarComponent } from './account'
-import { FromNowPipe, InfiniteScrollerDirective, NumberFormatterPipe, PeerTubeTemplateDirective, BytesPipe } from './angular'
+import { AccountService } from './account'
+import {
+  AutofocusDirective,
+  BytesPipe,
+  DurationFormatterPipe,
+  FromNowPipe,
+  InfiniteScrollerDirective,
+  LinkComponent,
+  NumberFormatterPipe,
+  PeerTubeTemplateDirective
+} from './angular'
 import { AUTH_INTERCEPTOR_PROVIDER } from './auth'
 import { ActionDropdownComponent, ButtonComponent, DeleteButtonComponent, EditButtonComponent } from './buttons'
+import { CustomPageService } from './custom-page'
 import { DateToggleComponent } from './date'
 import { FeedComponent } from './feeds'
 import { LoaderComponent, SmallLoaderComponent } from './loaders'
-import { HelpComponent, ListOverflowComponent, TopMenuDropdownComponent } from './misc'
+import { HelpComponent, ListOverflowComponent, SimpleSearchInputComponent, TopMenuDropdownComponent } from './misc'
+import { PluginPlaceholderComponent } from './plugins'
+import { ActorRedirectGuard } from './router'
 import { UserHistoryService, UserNotificationsComponent, UserNotificationService, UserQuotaComponent } from './users'
 import { RedundancyService, VideoImportService, VideoOwnershipService, VideoService } from './video'
 import { VideoCaptionService } from './video-caption'
@@ -35,12 +50,16 @@ import { VideoChannelService } from './video-channel'
     RouterModule,
     HttpClientModule,
 
+    LoadingBarHttpClientModule,
+    LoadingBarModule,
+
     NgbDropdownModule,
     NgbModalModule,
     NgbPopoverModule,
     NgbNavModule,
     NgbTooltipModule,
     NgbCollapseModule,
+    NgbButtonsModule,
 
     ClipboardModule,
 
@@ -50,14 +69,15 @@ import { VideoChannelService } from './video-channel'
   ],
 
   declarations: [
-    AvatarComponent,
-    ActorAvatarInfoComponent,
-
     FromNowPipe,
     NumberFormatterPipe,
     BytesPipe,
+    DurationFormatterPipe,
+    AutofocusDirective,
+
     InfiniteScrollerDirective,
     PeerTubeTemplateDirective,
+    LinkComponent,
 
     ActionDropdownComponent,
     ButtonComponent,
@@ -74,9 +94,12 @@ import { VideoChannelService } from './video-channel'
     HelpComponent,
     ListOverflowComponent,
     TopMenuDropdownComponent,
+    SimpleSearchInputComponent,
 
     UserQuotaComponent,
-    UserNotificationsComponent
+    UserNotificationsComponent,
+
+    PluginPlaceholderComponent
   ],
 
   exports: [
@@ -86,26 +109,30 @@ import { VideoChannelService } from './video-channel'
     RouterModule,
     HttpClientModule,
 
+    LoadingBarHttpClientModule,
+    LoadingBarModule,
+
     NgbDropdownModule,
     NgbModalModule,
     NgbPopoverModule,
     NgbNavModule,
     NgbTooltipModule,
     NgbCollapseModule,
+    NgbButtonsModule,
 
     ClipboardModule,
 
     PrimeSharedModule,
 
-    AvatarComponent,
-    ActorAvatarInfoComponent,
-
     FromNowPipe,
     BytesPipe,
     NumberFormatterPipe,
+    DurationFormatterPipe,
+    AutofocusDirective,
 
     InfiniteScrollerDirective,
     PeerTubeTemplateDirective,
+    LinkComponent,
 
     ActionDropdownComponent,
     ButtonComponent,
@@ -122,9 +149,12 @@ import { VideoChannelService } from './video-channel'
     HelpComponent,
     ListOverflowComponent,
     TopMenuDropdownComponent,
+    SimpleSearchInputComponent,
 
     UserQuotaComponent,
-    UserNotificationsComponent
+    UserNotificationsComponent,
+
+    PluginPlaceholderComponent
   ],
 
   providers: [
@@ -146,7 +176,11 @@ import { VideoChannelService } from './video-channel'
 
     VideoCaptionService,
 
-    VideoChannelService
+    VideoChannelService,
+
+    CustomPageService,
+
+    ActorRedirectGuard
   ]
 })
 export class SharedMainModule { }

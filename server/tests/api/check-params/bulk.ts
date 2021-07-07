@@ -10,6 +10,7 @@ import {
   userLogin
 } from '../../../../shared/extra-utils'
 import { makePostBodyRequest } from '../../../../shared/extra-utils/requests/requests'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 describe('Test bulk API validators', function () {
   let server: ServerInfo
@@ -37,7 +38,7 @@ describe('Test bulk API validators', function () {
         url: server.url,
         path,
         fields: { accountName: 'user1', scope: 'my-videos' },
-        statusCodeExpected: 401
+        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
       })
     })
 
@@ -47,7 +48,7 @@ describe('Test bulk API validators', function () {
         token: server.accessToken,
         path,
         fields: { accountName: 'user2', scope: 'my-videos' },
-        statusCodeExpected: 404
+        statusCodeExpected: HttpStatusCode.NOT_FOUND_404
       })
     })
 
@@ -57,7 +58,7 @@ describe('Test bulk API validators', function () {
         token: server.accessToken,
         path,
         fields: { accountName: 'user1', scope: 'my-videoss' },
-        statusCodeExpected: 400
+        statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
       })
     })
 
@@ -67,7 +68,7 @@ describe('Test bulk API validators', function () {
         token: userAccessToken,
         path,
         fields: { accountName: 'user1', scope: 'instance' },
-        statusCodeExpected: 403
+        statusCodeExpected: HttpStatusCode.FORBIDDEN_403
       })
     })
 
@@ -77,7 +78,7 @@ describe('Test bulk API validators', function () {
         token: server.accessToken,
         path,
         fields: { accountName: 'user1', scope: 'instance' },
-        statusCodeExpected: 204
+        statusCodeExpected: HttpStatusCode.NO_CONTENT_204
       })
     })
   })

@@ -2,8 +2,9 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { getMaxBitrate, Video, VideoDetails, VideoResolution } from '../../../shared/models/videos'
+import { join } from 'path'
 import {
+  buildServerDirectory,
   cleanupTests,
   doubleFollow,
   execCLI,
@@ -12,7 +13,6 @@ import {
   getEnvCli,
   getVideo,
   getVideosList,
-  root,
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo,
@@ -20,9 +20,9 @@ import {
   wait
 } from '../../../shared/extra-utils'
 import { waitJobs } from '../../../shared/extra-utils/server/jobs'
-import { getVideoFileBitrate, getVideoFileFPS, getVideoFileResolution } from '../../helpers/ffmpeg-utils'
+import { getMaxBitrate, Video, VideoDetails, VideoResolution } from '../../../shared/models/videos'
+import { getVideoFileBitrate, getVideoFileFPS, getVideoFileResolution } from '../../helpers/ffprobe-utils'
 import { VIDEO_TRANSCODING_FPS } from '../../initializers/constants'
-import { join } from 'path'
 
 const expect = chai.expect
 
@@ -100,7 +100,7 @@ describe('Test optimize old videos', function () {
 
         expect(file.size).to.be.below(8000000)
 
-        const path = join(root(), 'test' + servers[0].internalServerNumber, 'videos', video.uuid + '-' + file.resolution.id + '.mp4')
+        const path = buildServerDirectory(servers[0], join('videos', video.uuid + '-' + file.resolution.id + '.mp4'))
         const bitrate = await getVideoFileBitrate(path)
         const fps = await getVideoFileFPS(path)
         const resolution = await getVideoFileResolution(path)

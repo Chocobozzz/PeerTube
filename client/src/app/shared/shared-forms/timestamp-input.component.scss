@@ -1,15 +1,19 @@
-@import 'variables';
+@use '_variables' as *;
 
 p-inputmask {
   ::ng-deep input {
     width: 80px;
     font-size: 15px;
-
-    border: none;
+    border: 0;
 
     &:focus-within,
     &:focus {
       box-shadow: #{$focus-box-shadow-form} pvar(--mainColorLightest);
+    }
+
+    &:disabled {
+      background: pvar(--mainBackgroundColor);
+      opacity: 0.5;
     }
   }
 }

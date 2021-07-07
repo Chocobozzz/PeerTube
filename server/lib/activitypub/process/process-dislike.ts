@@ -3,11 +3,10 @@ import { DislikeObject } from '../../../../shared/models/activitypub/objects'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { sequelizeTypescript } from '../../../initializers/database'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
-import { getOrCreateVideoAndAccountAndChannel } from '../videos'
-import { forwardVideoRelatedActivity } from '../send/utils'
-import { getVideoDislikeActivityPubUrl } from '../url'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model'
 import { MActorSignature } from '../../../types/models'
+import { forwardVideoRelatedActivity } from '../send/utils'
+import { getOrCreateAPVideo } from '../videos'
 
 async function processDislikeActivity (options: APProcessorOptions<ActivityCreate | ActivityDislike>) {
   const { activity, byActor } = options
@@ -23,17 +22,18 @@ export {
 // ---------------------------------------------------------------------------
 
 async function processDislike (activity: ActivityCreate | ActivityDislike, byActor: MActorSignature) {
-  const dislikeObject = activity.type === 'Dislike' ? activity.object : (activity.object as DislikeObject).object
+  const dislikeObject = activity.type === 'Dislike'
+    ? activity.object
+    : (activity.object as DislikeObject).object
+
   const byAccount = byActor.Account
 
   if (!byAccount) throw new Error('Cannot create dislike with the non account actor ' + byActor.url)
 
-  const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: dislikeObject })
+  const { video } = await getOrCreateAPVideo({ videoObject: dislikeObject })
 
   return sequelizeTypescript.transaction(async t => {
-    const url = getVideoDislikeActivityPubUrl(byActor, video)
-
-    const existingRate = await AccountVideoRateModel.loadByAccountAndVideoOrUrl(byAccount.id, video.id, url)
+    const existingRate = await AccountVideoRateModel.loadByAccountAndVideoOrUrl(byAccount.id, video.id, activity.id, t)
     if (existingRate && existingRate.type === 'dislike') return
 
     await video.increment('dislikes', { transaction: t })
@@ -46,7 +46,7 @@ async function processDislike (activity: ActivityCreate | ActivityDislike, byAct
     rate.type = 'dislike'
     rate.videoId = video.id
     rate.accountId = byAccount.id
-    rate.url = url
+    rate.url = activity.id
 
     await rate.save({ transaction: t })
 

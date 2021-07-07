@@ -1,11 +1,12 @@
-import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core'
+import { AfterViewInit, Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core'
 import { Router } from '@angular/router'
-import { AuthService, CanComponentDeactivate, Notifier, ServerService } from '@app/core'
+import { AuthService, CanComponentDeactivate, HooksService, Notifier, ServerService } from '@app/core'
 import { scrollToTop } from '@app/helpers'
 import { FormValidatorService } from '@app/shared/shared-forms'
 import { VideoCaptionService, VideoEdit, VideoImportService, VideoService } from '@app/shared/shared-main'
 import { LoadingBarService } from '@ngx-loading-bar/core'
-import { VideoPrivacy, VideoUpdate } from '@shared/models'
+import { PeerTubeProblemDocument, ServerErrorCode, VideoPrivacy, VideoUpdate } from '@shared/models'
+import { hydrateFormFromVideo } from '../shared/video-edit-utils'
 import { VideoSend } from './video-send'
 
 @Component({
@@ -17,7 +18,7 @@ import { VideoSend } from './video-send'
     './video-send.scss'
   ]
 })
-export class VideoImportTorrentComponent extends VideoSend implements OnInit, CanComponentDeactivate {
+export class VideoImportTorrentComponent extends VideoSend implements OnInit, AfterViewInit, CanComponentDeactivate {
   @Output() firstStepDone = new EventEmitter<string>()
   @Output() firstStepError = new EventEmitter<void>()
   @ViewChild('torrentfileInput') torrentfileInput: ElementRef<HTMLInputElement>
@@ -31,8 +32,6 @@ export class VideoImportTorrentComponent extends VideoSend implements OnInit, Ca
   video: VideoEdit
   error: string
 
-  protected readonly DEFAULT_VIDEO_PRIVACY = VideoPrivacy.PUBLIC
-
   constructor (
     protected formValidatorService: FormValidatorService,
     protected loadingBar: LoadingBarService,
@@ -42,13 +41,18 @@ export class VideoImportTorrentComponent extends VideoSend implements OnInit, Ca
     protected videoService: VideoService,
     protected videoCaptionService: VideoCaptionService,
     private router: Router,
-    private videoImportService: VideoImportService
+    private videoImportService: VideoImportService,
+    private hooks: HooksService
     ) {
     super()
   }
 
   ngOnInit () {
     super.ngOnInit()
+  }
+
+  ngAfterViewInit () {
+    this.hooks.runAction('action:video-torrent-import.init', 'video-edit')
   }
 
   canDeactivate () {
@@ -75,7 +79,7 @@ export class VideoImportTorrentComponent extends VideoSend implements OnInit, Ca
     this.isImportingVideo = true
 
     const videoUpdate: VideoUpdate = {
-      privacy: this.firstStepPrivacyId,
+      privacy: VideoPrivacy.PRIVATE,
       waitTranscoding: false,
       commentsEnabled: true,
       downloadEnabled: true,
@@ -94,19 +98,28 @@ export class VideoImportTorrentComponent extends VideoSend implements OnInit, Ca
         this.video = new VideoEdit(Object.assign(res.video, {
           commentsEnabled: videoUpdate.commentsEnabled,
           downloadEnabled: videoUpdate.downloadEnabled,
+          privacy: { id: this.firstStepPrivacyId },
           support: null,
           thumbnailUrl: null,
           previewUrl: null
         }))
 
-        this.hydrateFormFromVideo()
+        hydrateFormFromVideo(this.form, this.video, false)
       },
 
       err => {
         this.loadingBar.useRef().complete()
         this.isImportingVideo = false
         this.firstStepError.emit()
-        this.notifier.error(err.message)
+
+        let message = err.message
+
+        const error = err.body as PeerTubeProblemDocument
+        if (error?.code === ServerErrorCode.INCORRECT_FILES_IN_TORRENT) {
+          message = $localize`Torrents with only 1 file are supported.`
+        }
+
+        this.notifier.error(message)
       }
     )
   }
@@ -127,7 +140,7 @@ export class VideoImportTorrentComponent extends VideoSend implements OnInit, Ca
             this.isUpdatingVideo = false
             this.notifier.success($localize`Video to import updated.`)
 
-            this.router.navigate([ '/my-account', 'video-imports' ])
+            this.router.navigate([ '/my-library', 'video-imports' ])
           },
 
           err => {
@@ -136,10 +149,5 @@ export class VideoImportTorrentComponent extends VideoSend implements OnInit, Ca
             console.error(err)
           }
         )
-
-  }
-
-  private hydrateFormFromVideo () {
-    this.form.patchValue(this.video.toFormPatch())
   }
 }

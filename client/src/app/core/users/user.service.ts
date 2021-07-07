@@ -7,8 +7,7 @@ import { AuthService } from '@app/core/auth'
 import { getBytes } from '@root-helpers/bytes'
 import { UserLocalStorageKeys } from '@root-helpers/users'
 import {
-  Avatar,
-  NSFWPolicyType,
+  ActorImage,
   ResultList,
   User as UserServerModel,
   UserCreate,
@@ -77,17 +76,34 @@ export class UserService {
   }
 
   updateMyAnonymousProfile (profile: UserUpdateMe) {
-    try {
-      this.localStorageService.setItem(UserLocalStorageKeys.NSFW_POLICY, profile.nsfwPolicy)
-      this.localStorageService.setItem(UserLocalStorageKeys.WEBTORRENT_ENABLED, profile.webTorrentEnabled)
+    const localStorageKeys: { [ id in keyof UserUpdateMe ]: string } = {
+      nsfwPolicy: UserLocalStorageKeys.NSFW_POLICY,
+      webTorrentEnabled: UserLocalStorageKeys.WEBTORRENT_ENABLED,
+      autoPlayNextVideo: UserLocalStorageKeys.AUTO_PLAY_VIDEO,
+      autoPlayNextVideoPlaylist: UserLocalStorageKeys.AUTO_PLAY_VIDEO_PLAYLIST,
+      theme: UserLocalStorageKeys.THEME,
+      videoLanguages: UserLocalStorageKeys.VIDEO_LANGUAGES
+    }
 
-      this.localStorageService.setItem(UserLocalStorageKeys.AUTO_PLAY_VIDEO, profile.autoPlayNextVideo)
-      this.localStorageService.setItem(UserLocalStorageKeys.AUTO_PLAY_VIDEO_PLAYLIST, profile.autoPlayNextVideoPlaylist)
+    const obj = Object.keys(localStorageKeys)
+      .filter(key => key in profile)
+      .map(key => ([ localStorageKeys[key], profile[key] ]))
 
-      this.localStorageService.setItem(UserLocalStorageKeys.THEME, profile.theme)
-      this.localStorageService.setItem(UserLocalStorageKeys.VIDEO_LANGUAGES, profile.videoLanguages)
-    } catch (err) {
-      console.error(`Cannot set item in localStorage. Likely due to a value impossible to stringify.`, err)
+    for (const [ key, value ] of obj) {
+      try {
+        if (value === undefined) {
+          this.localStorageService.removeItem(key)
+          continue
+        }
+
+        const localStorageValue = typeof value === 'string'
+          ? value
+          : JSON.stringify(value)
+
+        this.localStorageService.setItem(key, localStorageValue)
+      } catch (err) {
+        console.error(`Cannot set ${key}->${value} in localStorage. Likely due to a value impossible to stringify.`, err)
+      }
     }
   }
 
@@ -119,8 +135,18 @@ export class UserService {
   changeAvatar (avatarForm: FormData) {
     const url = UserService.BASE_USERS_URL + 'me/avatar/pick'
 
-    return this.authHttp.post<{ avatar: Avatar }>(url, avatarForm)
+    return this.authHttp.post<{ avatar: ActorImage }>(url, avatarForm)
                .pipe(catchError(err => this.restExtractor.handleError(err)))
+  }
+
+  deleteAvatar () {
+    const url = UserService.BASE_USERS_URL + 'me/avatar'
+
+    return this.authHttp.delete(url)
+               .pipe(
+                 map(this.restExtractor.extractDataBool),
+                 catchError(err => this.restExtractor.handleError(err))
+               )
   }
 
   signup (userCreate: UserRegister) {
@@ -256,7 +282,10 @@ export class UserService {
     let videoLanguages: string[]
 
     try {
-      videoLanguages = JSON.parse(this.localStorageService.getItem(UserLocalStorageKeys.VIDEO_LANGUAGES))
+      const languagesString = this.localStorageService.getItem(UserLocalStorageKeys.VIDEO_LANGUAGES)
+      videoLanguages = languagesString && languagesString !== 'undefined'
+        ? JSON.parse(languagesString)
+        : null
     } catch (err) {
       videoLanguages = null
       console.error('Cannot parse desired video languages from localStorage.', err)
@@ -264,7 +293,7 @@ export class UserService {
 
     return new User({
       // local storage keys
-      nsfwPolicy: this.localStorageService.getItem(UserLocalStorageKeys.NSFW_POLICY) as NSFWPolicyType,
+      nsfwPolicy: this.localStorageService.getItem(UserLocalStorageKeys.NSFW_POLICY),
       webTorrentEnabled: this.localStorageService.getItem(UserLocalStorageKeys.WEBTORRENT_ENABLED) !== 'false',
       theme: this.localStorageService.getItem(UserLocalStorageKeys.THEME) || 'instance-default',
       videoLanguages,
@@ -291,13 +320,7 @@ export class UserService {
       const filters = this.restService.parseQueryStringFilter(search, {
         blocked: {
           prefix: 'banned:',
-          isBoolean: true,
-          handler: v => {
-            if (v === 'true') return v
-            if (v === 'false') return v
-
-            return undefined
-          }
+          isBoolean: true
         }
       })
 

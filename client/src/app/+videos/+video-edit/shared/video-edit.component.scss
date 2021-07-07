@@ -1,11 +1,5 @@
-// Bootstrap grid utilities require functions, variables and mixins
-@import 'node_modules/bootstrap/scss/functions';
-@import 'node_modules/bootstrap/scss/variables';
-@import 'node_modules/bootstrap/scss/mixins';
-@import 'node_modules/bootstrap/scss/grid';
-
-@import 'variables';
-@import 'mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 label,
 my-dynamic-form-field ::ng-deep label {
@@ -57,92 +51,71 @@ my-peertube-checkbox {
   }
 }
 
-.captions {
+.captions-header {
+  text-align: end;
+  margin-bottom: 1rem;
+}
 
-  .captions-header {
-    text-align: right;
-    margin-bottom: 1rem;
+.create-caption {
+  @include create-button;
+}
 
-    .create-caption {
-      @include create-button;
+.caption-entry {
+  display: flex;
+  height: 40px;
+  align-items: center;
+
+  a.caption-entry-label {
+    @include disable-default-a-behaviour;
+
+    flex-grow: 1;
+    color: #000;
+
+    &:hover {
+      opacity: 0.8;
     }
   }
 
-  .caption-entry {
-    display: flex;
-    height: 40px;
-    align-items: center;
+  .caption-entry-label {
+    @include margin-right(20px);
 
-    a.caption-entry-label {
-      @include disable-default-a-behaviour;
-
-      flex-grow: 1;
-      color: #000;
-
-      &:hover {
-        opacity: 0.8;
-      }
-    }
-
-    .caption-entry-label {
-      font-size: 15px;
-      font-weight: bold;
-
-      margin-right: 20px;
-      width: 150px;
-    }
-
-    .caption-entry-state {
-      width: 200px;
-
-      &.caption-entry-state-create {
-        color: #39CC0B;
-      }
-
-      &.caption-entry-state-delete {
-        color: #FF0000;
-      }
-    }
-
-    .caption-entry-delete {
-      @include peertube-button;
-      @include grey-button;
-    }
-  }
-
-  .no-caption {
-    text-align: center;
     font-size: 15px;
+    font-weight: bold;
+    width: 150px;
+  }
+
+  .caption-entry-state {
+    width: 200px;
+
+    &.caption-entry-state-create {
+      color: #39CC0B;
+    }
+
+    &.caption-entry-state-delete {
+      color: #FF0000;
+    }
+  }
+
+  .caption-entry-delete {
+    @include peertube-button;
+    @include grey-button;
   }
 }
 
+.no-caption {
+  text-align: center;
+  font-size: 15px;
+}
+
 .submit-container {
-  text-align: right;
+  text-align: end;
 
   .message-submit {
-    display: inline-block;
-    margin-right: 25px;
+    @include margin-right(25px);
 
+    display: inline-block;
     color: pvar(--greyForegroundColor);
     font-size: 15px;
-  }
-
-  .submit-button {
-    @include peertube-button;
-    @include orange-button;
-    @include button-with-icon(20px, 1px);
-
-    display: inline-block;
-
-    input {
-      cursor: inherit;
-      background-color: inherit;
-      border: none;
-      padding: 0;
-      outline: 0;
-      color: inherit;
-      font-weight: $font-semibold;
-    }
   }
 }
 
@@ -150,47 +123,26 @@ p-calendar {
   display: block;
 
   ::ng-deep {
-    input,
-    .ui-calendar {
+    .p-calendar {
       width: 100%;
     }
 
-    input {
+    .p-inputtext {
       @include peertube-input-text(100%);
       color: #000;
     }
   }
 }
 
-// columns for the video
-.col-video-edit {
-  @include make-col-ready();
+.form-columns {
+  display: grid;
 
-  @include media-breakpoint-up(md) {
-    @include make-col(7);
-
-    & + .col-video-edit {
-      @include make-col(5);
-    }
-  }
-
-  @include media-breakpoint-up(xl) {
-    @include make-col(8);
-
-    & + .col-video-edit {
-      @include make-col(4);
-    }
-  }
+  grid-template-columns: 66% 1fr;
+  grid-gap: 30px;
 }
 
-:host-context(.expanded) {
-  .col-video-edit {
-    @include media-breakpoint-up(md) {
-      @include make-col(8);
-
-      & + .col-video-edit {
-        @include make-col(4);
-      }
-    }
+@include on-small-main-col {
+  .form-columns {
+    grid-template-columns: 1fr;
   }
 }

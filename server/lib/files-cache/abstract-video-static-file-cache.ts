@@ -2,7 +2,7 @@ import { remove } from 'fs-extra'
 import { logger } from '../../helpers/logger'
 import * as memoizee from 'memoizee'
 
-type GetFilePathResult = { isOwned: boolean, path: string } | undefined
+type GetFilePathResult = { isOwned: boolean, path: string, downloadName?: string } | undefined
 
 export abstract class AbstractVideoStaticFileCache <T> {
 

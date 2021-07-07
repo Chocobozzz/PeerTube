@@ -1,38 +1,40 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 .action-selection-mode {
   display: flex;
   justify-content: flex-end;
   flex-grow: 1;
+}
 
-  .action-selection-mode-child {
-    position: fixed;
+.action-selection-mode-child {
+  position: fixed;
 
-    .action-button {
-      display: block;
-      margin-left: 55px;
-    }
+  .action-button {
+    @include margin-left(55px);
 
-    .action-button-cancel-selection {
-      @include peertube-button;
-      @include grey-button;
-    }
+    display: block;
   }
 }
 
+.action-button-cancel-selection {
+  @include peertube-button;
+  @include grey-button;
+}
+
 .video {
-  @include row-blocks;
+  @include row-blocks($column-responsive: false);
 
   &:first-child {
     margin-top: 47px;
   }
 
   .checkbox-container {
+    @include margin-right(20px);
+    @include margin-left(12px);
+
     display: flex;
     align-items: center;
-    margin-right: 20px;
-    margin-left: 12px;
   }
 
   my-video-miniature {
@@ -40,18 +42,16 @@
   }
 }
 
-@media screen and (max-width: $small-view) {
+
+@include on-small-main-col {
   .video {
-    flex-direction: column;
-    height: auto;
+    flex-wrap: wrap;
+  }
+}
 
-    .checkbox-container {
-      display: none;
-    }
-
-    my-button {
-      margin-top: 10px;
-    }
+@include on-mobile-main-col {
+  .checkbox-container {
+    display: none;
   }
 
   .action-selection-mode {

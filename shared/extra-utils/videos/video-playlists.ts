@@ -10,6 +10,7 @@ import { root } from '..'
 import { readdir } from 'fs-extra'
 import { expect } from 'chai'
 import { VideoPlaylistType } from '../../models/videos/playlist/video-playlist-type.model'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 function getVideoPlaylistsList (url: string, start: number, count: number, sort?: string) {
   const path = '/api/v1/video-playlists'
@@ -24,7 +25,7 @@ function getVideoPlaylistsList (url: string, start: number, count: number, sort?
     url,
     path,
     query,
-    statusCodeExpected: 200
+    statusCodeExpected: HttpStatusCode.OK_200
   })
 }
 
@@ -41,7 +42,7 @@ function getVideoChannelPlaylistsList (url: string, videoChannelName: string, st
     url,
     path,
     query,
-    statusCodeExpected: 200
+    statusCodeExpected: HttpStatusCode.OK_200
   })
 }
 
@@ -59,7 +60,7 @@ function getAccountPlaylistsList (url: string, accountName: string, start: numbe
     url,
     path,
     query,
-    statusCodeExpected: 200
+    statusCodeExpected: HttpStatusCode.OK_200
   })
 }
 
@@ -86,11 +87,11 @@ function getAccountPlaylistsListWithToken (
     token,
     path,
     query,
-    statusCodeExpected: 200
+    statusCodeExpected: HttpStatusCode.OK_200
   })
 }
 
-function getVideoPlaylist (url: string, playlistId: number | string, statusCodeExpected = 200) {
+function getVideoPlaylist (url: string, playlistId: number | string, statusCodeExpected = HttpStatusCode.OK_200) {
   const path = '/api/v1/video-playlists/' + playlistId
 
   return makeGetRequest({
@@ -100,7 +101,7 @@ function getVideoPlaylist (url: string, playlistId: number | string, statusCodeE
   })
 }
 
-function getVideoPlaylistWithToken (url: string, token: string, playlistId: number | string, statusCodeExpected = 200) {
+function getVideoPlaylistWithToken (url: string, token: string, playlistId: number | string, statusCodeExpected = HttpStatusCode.OK_200) {
   const path = '/api/v1/video-playlists/' + playlistId
 
   return makeGetRequest({
@@ -111,7 +112,7 @@ function getVideoPlaylistWithToken (url: string, token: string, playlistId: numb
   })
 }
 
-function deleteVideoPlaylist (url: string, token: string, playlistId: number | string, statusCodeExpected = 204) {
+function deleteVideoPlaylist (url: string, token: string, playlistId: number | string, statusCodeExpected = HttpStatusCode.NO_CONTENT_204) {
   const path = '/api/v1/video-playlists/' + playlistId
 
   return makeDeleteRequest({
@@ -143,7 +144,7 @@ function createVideoPlaylist (options: {
     token: options.token,
     fields,
     attaches,
-    statusCodeExpected: options.expectedStatus || 200
+    statusCodeExpected: options.expectedStatus || HttpStatusCode.OK_200
   })
 }
 
@@ -169,7 +170,7 @@ function updateVideoPlaylist (options: {
     token: options.token,
     fields,
     attaches,
-    statusCodeExpected: options.expectedStatus || 204
+    statusCodeExpected: options.expectedStatus || HttpStatusCode.NO_CONTENT_204
   })
 }
 
@@ -189,7 +190,7 @@ async function addVideoInPlaylist (options: {
     path,
     token: options.token,
     fields: options.elementAttrs,
-    statusCodeExpected: options.expectedStatus || 200
+    statusCodeExpected: options.expectedStatus || HttpStatusCode.OK_200
   })
 }
 
@@ -208,7 +209,7 @@ function updateVideoPlaylistElement (options: {
     path,
     token: options.token,
     fields: options.elementAttrs,
-    statusCodeExpected: options.expectedStatus || 204
+    statusCodeExpected: options.expectedStatus || HttpStatusCode.NO_CONTENT_204
   })
 }
 
@@ -225,7 +226,7 @@ function removeVideoFromPlaylist (options: {
     url: options.url,
     path,
     token: options.token,
-    statusCodeExpected: options.expectedStatus || 204
+    statusCodeExpected: options.expectedStatus || HttpStatusCode.NO_CONTENT_204
   })
 }
 
@@ -247,7 +248,7 @@ function reorderVideosPlaylist (options: {
     path,
     token: options.token,
     fields: options.elementAttrs,
-    statusCodeExpected: options.expectedStatus || 204
+    statusCodeExpected: options.expectedStatus || HttpStatusCode.NO_CONTENT_204
   })
 }
 
@@ -274,7 +275,7 @@ function getVideoPlaylistPrivacies (url: string) {
   return makeGetRequest({
     url,
     path,
-    statusCodeExpected: 200
+    statusCodeExpected: HttpStatusCode.OK_200
   })
 }
 
@@ -286,7 +287,7 @@ function doVideosExistInMyPlaylist (url: string, token: string, videoIds: number
     token,
     path,
     query: { videoIds },
-    statusCodeExpected: 200
+    statusCodeExpected: HttpStatusCode.OK_200
   })
 }
 

@@ -1,4 +1,4 @@
-<div class="video-miniature" [ngClass]="{ 'display-as-row': displayAsRow, 'fit-width': fitWidth }" (mouseenter)="loadActions()">
+<div class="video-miniature" [ngClass]="getClasses()" (mouseenter)="loadActions()">
   <my-video-thumbnail
     [video]="video" [nsfw]="isVideoBlur" [videoRouterLink]="videoRouterLink" [videoHref]="videoHref" [videoTarget]="videoTarget"
     [displayWatchLaterPlaylist]="isWatchLaterPlaylistDisplayed()" [inWatchLaterPlaylist]="inWatchLaterPlaylist" (watchLaterClick)="onWatchLaterClick($event)"
@@ -9,33 +9,39 @@
 
   <div class="video-bottom">
     <div class="video-miniature-information">
-      <div class="d-inline-flex video-miniature-meta">
-        <a *ngIf="displayOptions.avatar" class="avatar" [routerLink]="[ '/video-channels', video.byVideoChannel ]" [title]="channelLinkTitle">
-          <img [src]="getAvatarUrl()" alt="" />
-        </a>
+      <div class="d-flex video-miniature-meta">
+        <my-actor-avatar
+          *ngIf="displayOptions.avatar && displayOwnerVideoChannel() && !displayAsRow" [title]="channelLinkTitle"
+          [channel]="video.channel" [size]="actorImageSize" [internalHref]="[ '/c', video.byVideoChannel ]"
+        ></my-actor-avatar>
+
+        <my-actor-avatar
+          *ngIf="displayOptions.avatar && displayOwnerAccount() && !displayAsRow" [title]="channelLinkTitle"
+          [account]="video.account" [size]="actorImageSize" [internalHref]="[ '/c', video.byVideoChannel ]"
+        ></my-actor-avatar>
 
         <div class="w-100 d-flex flex-column">
-          <a *ngIf="!videoHref" tabindex="-1" class="video-miniature-name"
-            [routerLink]="videoRouterLink" [attr.title]="video.name" [ngClass]="{ 'blur-filter': isVideoBlur }"
-          >{{ video.name }}</a>
-
-          <a *ngIf="videoHref" tabindex="-1" class="video-miniature-name"
-            [href]="videoHref" [target]="videoTarget" [attr.title]="video.name" [ngClass]="{ 'blur-filter': isVideoBlur }"
-          >{{ video.name }}</a>
+          <my-link
+            [internalLink]="videoRouterLink" [href]="videoHref" [target]="videoTarget"
+            [title]="video.name"class="video-miniature-name" [ngClass]="{ 'blur-filter': isVideoBlur }" tabindex="-1"
+          >
+            {{ video.name }}
+          </my-link>
 
           <span class="video-miniature-created-at-views">
             <my-date-toggle *ngIf="displayOptions.date" [date]="video.publishedAt"></my-date-toggle>
 
-            <span class="views">
+            <span class="views" [title]="video.getExactNumberOfViews()">
               <ng-container *ngIf="displayOptions.date && displayOptions.views"> • </ng-container>
-              <ng-container i18n *ngIf="displayOptions.views">{video.views, plural, =1 {1 view} other {{{ video.views | myNumberFormatter }} views}}</ng-container>
+
+              <my-video-views-counter *ngIf="displayOptions.views" [video]="video"></my-video-views-counter>
             </span>
           </span>
 
-          <a tabindex="-1" *ngIf="displayOptions.by && displayOwnerAccount()" class="video-miniature-account" [routerLink]="[ '/accounts', video.byAccount ]">
+          <a tabindex="-1" *ngIf="displayOptions.by && displayOwnerAccount()" class="video-miniature-account" [routerLink]="[ '/c', video.byVideoChannel ]">
             {{ video.byAccount }}
           </a>
-          <a tabindex="-1" *ngIf="displayOptions.by && displayOwnerVideoChannel()" class="video-miniature-channel" [routerLink]="[ '/video-channels', video.byVideoChannel ]">
+          <a tabindex="-1" *ngIf="displayOptions.by && displayOwnerVideoChannel()" class="video-miniature-channel" [routerLink]="[ '/c', video.byVideoChannel ]">
             {{ video.byVideoChannel }}
           </a>
 

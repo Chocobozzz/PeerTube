@@ -1,0 +1,46 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+.actor {
+  display: flex;
+
+  my-actor-avatar {
+    @include margin-right(15px);
+  }
+
+  .actor-info {
+    display: inline-flex;
+    flex-direction: column;
+
+    .actor-info-display-name {
+      font-size: 20px;
+      font-weight: $font-bold;
+
+      @media screen and (max-width: $small-view) {
+        font-size: 16px;
+      }
+    }
+
+    .actor-info-username {
+      position: relative;
+      font-size: 14px;
+      color: pvar(--greyForegroundColor);
+    }
+
+    .actor-info-followers {
+      font-size: 15px;
+      padding-bottom: .5rem;
+    }
+  }
+}
+
+.actor-img-edit-container {
+  position: relative;
+  width: 0;
+}
+
+.actor-img-edit-button {
+  top: 55px;
+  right: 45px;
+  border-radius: 50%;
+}

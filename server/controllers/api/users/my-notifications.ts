@@ -1,5 +1,9 @@
-import * as express from 'express'
 import 'multer'
+import * as express from 'express'
+import { UserNotificationModel } from '@server/models/user/user-notification'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { UserNotificationSetting } from '../../../../shared/models/users'
+import { getFormattedObjects } from '../../../helpers/utils'
 import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
@@ -9,16 +13,13 @@ import {
   setDefaultSort,
   userNotificationsSortValidator
 } from '../../../middlewares'
-import { getFormattedObjects } from '../../../helpers/utils'
-import { UserNotificationModel } from '../../../models/account/user-notification'
-import { meRouter } from './me'
 import {
   listUserNotificationsValidator,
   markAsReadUserNotificationsValidator,
   updateNotificationSettingsValidator
 } from '../../../middlewares/validators/user-notifications'
-import { UserNotificationSetting } from '../../../../shared/models/users'
-import { UserNotificationSettingModel } from '../../../models/account/user-notification-setting'
+import { UserNotificationSettingModel } from '../../../models/user/user-notification-setting'
+import { meRouter } from './me'
 
 const myNotificationsRouter = express.Router()
 
@@ -79,12 +80,14 @@ async function updateNotificationSettings (req: express.Request, res: express.Re
     newInstanceFollower: body.newInstanceFollower,
     autoInstanceFollowing: body.autoInstanceFollowing,
     abuseNewMessage: body.abuseNewMessage,
-    abuseStateChange: body.abuseStateChange
+    abuseStateChange: body.abuseStateChange,
+    newPeerTubeVersion: body.newPeerTubeVersion,
+    newPluginVersion: body.newPluginVersion
   }
 
   await UserNotificationSettingModel.update(values, query)
 
-  return res.status(204).end()
+  return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
 async function listUserNotifications (req: express.Request, res: express.Response) {
@@ -100,7 +103,7 @@ async function markAsReadUserNotifications (req: express.Request, res: express.R
 
   await UserNotificationModel.markAsRead(user.id, req.body.ids)
 
-  return res.status(204).end()
+  return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
 async function markAsReadAllUserNotifications (req: express.Request, res: express.Response) {
@@ -108,5 +111,5 @@ async function markAsReadAllUserNotifications (req: express.Request, res: expres
 
   await UserNotificationModel.markAllAsRead(user.id)
 
-  return res.status(204).end()
+  return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }

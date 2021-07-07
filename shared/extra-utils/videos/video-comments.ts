@@ -1,7 +1,42 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 
 import * as request from 'supertest'
-import { makeDeleteRequest } from '../requests/requests'
+import { makeDeleteRequest, makeGetRequest } from '../requests/requests'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
+
+function getAdminVideoComments (options: {
+  url: string
+  token: string
+  start: number
+  count: number
+  sort?: string
+  isLocal?: boolean
+  search?: string
+  searchAccount?: string
+  searchVideo?: string
+}) {
+  const { url, token, start, count, sort, isLocal, search, searchAccount, searchVideo } = options
+  const path = '/api/v1/videos/comments'
+
+  const query = {
+    start,
+    count,
+    sort: sort || '-createdAt'
+  }
+
+  if (isLocal !== undefined) Object.assign(query, { isLocal })
+  if (search !== undefined) Object.assign(query, { search })
+  if (searchAccount !== undefined) Object.assign(query, { searchAccount })
+  if (searchVideo !== undefined) Object.assign(query, { searchVideo })
+
+  return makeGetRequest({
+    url,
+    path,
+    token,
+    query,
+    statusCodeExpected: HttpStatusCode.OK_200
+  })
+}
 
 function getVideoCommentThreads (url: string, videoId: number | string, start: number, count: number, sort?: string, token?: string) {
   const path = '/api/v1/videos/' + videoId + '/comment-threads'
@@ -15,7 +50,7 @@ function getVideoCommentThreads (url: string, videoId: number | string, start: n
   if (token) req.set('Authorization', 'Bearer ' + token)
 
   return req.set('Accept', 'application/json')
-    .expect(200)
+    .expect(HttpStatusCode.OK_200)
     .expect('Content-Type', /json/)
 }
 
@@ -28,11 +63,17 @@ function getVideoThreadComments (url: string, videoId: number | string, threadId
 
   if (token) req.set('Authorization', 'Bearer ' + token)
 
-  return req.expect(200)
+  return req.expect(HttpStatusCode.OK_200)
             .expect('Content-Type', /json/)
 }
 
-function addVideoCommentThread (url: string, token: string, videoId: number | string, text: string, expectedStatus = 200) {
+function addVideoCommentThread (
+  url: string,
+  token: string,
+  videoId: number | string,
+  text: string,
+  expectedStatus = HttpStatusCode.OK_200
+) {
   const path = '/api/v1/videos/' + videoId + '/comment-threads'
 
   return request(url)
@@ -49,7 +90,7 @@ function addVideoCommentReply (
   videoId: number | string,
   inReplyToCommentId: number,
   text: string,
-  expectedStatus = 200
+  expectedStatus = HttpStatusCode.OK_200
 ) {
   const path = '/api/v1/videos/' + videoId + '/comments/' + inReplyToCommentId
 
@@ -72,7 +113,7 @@ function deleteVideoComment (
   token: string,
   videoId: number | string,
   commentId: number,
-  statusCodeExpected = 204
+  statusCodeExpected = HttpStatusCode.NO_CONTENT_204
 ) {
   const path = '/api/v1/videos/' + videoId + '/comments/' + commentId
 
@@ -88,6 +129,7 @@ function deleteVideoComment (
 
 export {
   getVideoCommentThreads,
+  getAdminVideoComments,
   getVideoThreadComments,
   addVideoCommentThread,
   addVideoCommentReply,

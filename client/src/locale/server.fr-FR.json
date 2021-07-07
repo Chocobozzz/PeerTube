@@ -31,6 +31,8 @@
     "Published": "Publiée",
     "To transcode": "À transcoder",
     "To import": "À importer",
+    "Waiting for livestream": "En attente de streaming",
+    "Livestream ended": "Streaming terminé",
     "Pending": "En cours",
     "Success": "Succès",
     "Failed": "Échoué",
@@ -42,9 +44,9 @@
     "Sorry": "Désolé",
     "This video is not available because the remote instance is not responding.": "Cette vidéo n'est pas disponible car l'instance distante ne répond pas.",
     "This playlist does not exist": "Cette liste de lecture n'existe pas",
-    "We cannot fetch the playlist. Please try again later.": "Nous ne pouvons pas récupérer la liste de lecture. Veuillez réessayer plus tard.",
+    "We cannot fetch the playlist. Please try again later.": "La liste de lecture n'a pas pu être retrouvée. Veuillez réessayer plus tard.",
     "Playlist: {1}": "Liste de lecture : {1}",
-    "By {1}": "Par {1}",
+    "By {1}": "De {1}",
     "Unavailable video": "Vidéo indisponible",
     "Misc": "Divers",
     "Unknown": "Inconnu",
@@ -240,5 +242,7 @@
     "Yoruba": "Yoruba",
     "Zhuang": "Zhuang",
     "Chinese": "Chinois",
-    "Zulu": "Zoulou"
+    "Zulu": "Zoulou",
+    "Normal mode": "Mode classique",
+    "Theater mode": "En mode cinéma"
 }

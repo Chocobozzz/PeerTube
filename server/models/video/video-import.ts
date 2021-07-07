@@ -13,15 +13,16 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
+import { afterCommitIfTransaction } from '@server/helpers/database-utils'
+import { MVideoImportDefault, MVideoImportFormattable } from '@server/types/models/video/video-import'
+import { AttributesOnly } from '@shared/core-utils'
+import { VideoImport, VideoImportState } from '../../../shared'
+import { isVideoImportStateValid, isVideoImportTargetUrlValid } from '../../helpers/custom-validators/video-imports'
+import { isVideoMagnetUriValid } from '../../helpers/custom-validators/videos'
 import { CONSTRAINTS_FIELDS, VIDEO_IMPORT_STATES } from '../../initializers/constants'
+import { UserModel } from '../user/user'
 import { getSort, throwIfNotValid } from '../utils'
 import { ScopeNames as VideoModelScopeNames, VideoModel } from './video'
-import { isVideoImportStateValid, isVideoImportTargetUrlValid } from '../../helpers/custom-validators/video-imports'
-import { VideoImport, VideoImportState } from '../../../shared'
-import { isVideoMagnetUriValid } from '../../helpers/custom-validators/videos'
-import { UserModel } from '../account/user'
-import * as Bluebird from 'bluebird'
-import { MVideoImportDefault, MVideoImportFormattable } from '@server/types/models/video/video-import'
 
 @DefaultScope(() => ({
   include: [
@@ -52,7 +53,7 @@ import { MVideoImportDefault, MVideoImportFormattable } from '@server/types/mode
     }
   ]
 })
-export class VideoImportModel extends Model<VideoImportModel> {
+export class VideoImportModel extends Model<Partial<AttributesOnly<VideoImportModel>>> {
   @CreatedAt
   createdAt: Date
 
@@ -114,13 +115,13 @@ export class VideoImportModel extends Model<VideoImportModel> {
   @AfterUpdate
   static deleteVideoIfFailed (instance: VideoImportModel, options) {
     if (instance.state === VideoImportState.FAILED) {
-      return instance.Video.destroy({ transaction: options.transaction })
+      return afterCommitIfTransaction(options.transaction, () => instance.Video.destroy())
     }
 
     return undefined
   }
 
-  static loadAndPopulateVideo (id: number): Bluebird<MVideoImportDefault> {
+  static loadAndPopulateVideo (id: number): Promise<MVideoImportDefault> {
     return VideoImportModel.findByPk(id)
   }
 

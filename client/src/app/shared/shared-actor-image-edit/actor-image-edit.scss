@@ -1,0 +1,35 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+.actor ::ng-deep .popover-image-info .popover-body {
+  padding: 0;
+
+  .dropdown-item {
+    padding: 6px 10px;
+    border-radius: 4px;
+
+    &:first-child {
+      @include peertube-file;
+      display: block;
+    }
+  }
+}
+
+.actor-img-edit-button {
+  @include peertube-button-file(21px);
+  @include button-with-icon(19px);
+  @include orange-button;
+
+  margin-top: 10px;
+  margin-bottom: 5px;
+  cursor: pointer;
+
+  input {
+    width: 30px;
+    height: 30px;
+  }
+
+  my-global-icon {
+    right: 7px;
+  }
+}

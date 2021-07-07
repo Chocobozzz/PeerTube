@@ -1,11 +1,12 @@
 import { catchError, switchMap, tap } from 'rxjs/operators'
+import { SelectChannelItem } from 'src/types/select-options-item.model'
 import { Directive, EventEmitter, OnInit } from '@angular/core'
 import { AuthService, CanComponentDeactivateResult, Notifier, ServerService } from '@app/core'
-import { populateAsyncUserVideoChannels } from '@app/helpers'
-import { FormReactive, SelectChannelItem } from '@app/shared/shared-forms'
+import { listUserChannels } from '@app/helpers'
+import { FormReactive } from '@app/shared/shared-forms'
 import { VideoCaptionEdit, VideoCaptionService, VideoEdit, VideoService } from '@app/shared/shared-main'
 import { LoadingBarService } from '@ngx-loading-bar/core'
-import { ServerConfig, VideoConstant, VideoPrivacy } from '@shared/models'
+import { HTMLServerConfig, VideoConstant, VideoPrivacy } from '@shared/models'
 
 @Directive()
 // tslint:disable-next-line: directive-class-suffix
@@ -19,7 +20,6 @@ export abstract class VideoSend extends FormReactive implements OnInit {
 
   abstract firstStepDone: EventEmitter<string>
   abstract firstStepError: EventEmitter<void>
-  protected abstract readonly DEFAULT_VIDEO_PRIVACY: VideoPrivacy
 
   protected loadingBar: LoadingBarService
   protected notifier: Notifier
@@ -27,26 +27,28 @@ export abstract class VideoSend extends FormReactive implements OnInit {
   protected serverService: ServerService
   protected videoService: VideoService
   protected videoCaptionService: VideoCaptionService
-  protected serverConfig: ServerConfig
+  protected serverConfig: HTMLServerConfig
 
   abstract canDeactivate (): CanComponentDeactivateResult
 
   ngOnInit () {
     this.buildForm({})
 
-    populateAsyncUserVideoChannels(this.authService, this.userVideoChannels)
-      .then(() => this.firstStepChannelId = this.userVideoChannels[ 0 ].id)
+    listUserChannels(this.authService)
+      .subscribe(channels => {
+        this.userVideoChannels = channels
+        this.firstStepChannelId = this.userVideoChannels[0].id
+      })
 
-    this.serverConfig = this.serverService.getTmpConfig()
-    this.serverService.getConfig()
-        .subscribe(config => this.serverConfig = config)
+    this.serverConfig = this.serverService.getHTMLConfig()
 
     this.serverService.getVideoPrivacies()
         .subscribe(
           privacies => {
-            this.videoPrivacies = this.videoService.explainedPrivacyLabels(privacies)
+            const { videoPrivacies, defaultPrivacyId } = this.videoService.explainedPrivacyLabels(privacies)
 
-            this.firstStepPrivacyId = this.DEFAULT_VIDEO_PRIVACY
+            this.videoPrivacies = videoPrivacies
+            this.firstStepPrivacyId = defaultPrivacyId
           })
   }
 
