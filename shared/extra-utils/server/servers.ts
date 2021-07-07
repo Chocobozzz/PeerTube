@@ -16,6 +16,7 @@ import { AbusesCommand } from '../moderation'
 import { OverviewsCommand } from '../overviews'
 import { makeGetRequest } from '../requests/requests'
 import { SearchCommand } from '../search'
+import { SocketIOCommand } from '../socket'
 import { ConfigCommand } from './config-command'
 import { ContactFormCommand } from './contact-form-command'
 import { DebugCommand } from './debug-command'
@@ -93,6 +94,7 @@ interface ServerInfo {
   redundancyCommand?: RedundancyCommand
   statsCommand?: StatsCommand
   configCommand?: ConfigCommand
+  socketIOCommand?: SocketIOCommand
 }
 
 function parallelTests () {
@@ -314,6 +316,7 @@ async function runServer (server: ServerInfo, configOverrideArg?: any, args = []
       server.redundancyCommand = new RedundancyCommand(server)
       server.statsCommand = new StatsCommand(server)
       server.configCommand = new ConfigCommand(server)
+      server.socketIOCommand = new SocketIOCommand(server)
 
       res(server)
     })
