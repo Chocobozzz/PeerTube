@@ -22,6 +22,7 @@ import { FollowsCommand } from './follows-command'
 import { JobsCommand } from './jobs-command'
 import { PluginsCommand } from './plugins-command'
 import { RedundancyCommand } from './redundancy-command'
+import { StatsCommand } from './stats-command'
 
 interface ServerInfo {
   app: ChildProcess
@@ -89,6 +90,7 @@ interface ServerInfo {
   jobsCommand?: JobsCommand
   pluginsCommand?: PluginsCommand
   redundancyCommand?: RedundancyCommand
+  statsCommand?: StatsCommand
 }
 
 function parallelTests () {
@@ -308,6 +310,7 @@ async function runServer (server: ServerInfo, configOverrideArg?: any, args = []
       server.jobsCommand = new JobsCommand(server)
       server.pluginsCommand = new PluginsCommand(server)
       server.redundancyCommand = new RedundancyCommand(server)
+      server.statsCommand = new StatsCommand(server)
 
       res(server)
     })
