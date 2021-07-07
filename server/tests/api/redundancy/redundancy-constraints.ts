@@ -1,9 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-import * as chai from 'chai'
-import { listVideoRedundancies, updateRedundancy } from '@shared/extra-utils/server/redundancy'
-import { VideoPrivacy } from '@shared/models'
 import {
   cleanupTests,
   flushAndRunServer,
@@ -13,9 +10,10 @@ import {
   setAccessTokensToServers,
   updateVideo,
   uploadVideo,
+  waitJobs,
   waitUntilLog
-} from '../../../../shared/extra-utils'
-import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
+} from '@shared/extra-utils'
+import { VideoPrivacy } from '@shared/models'
 
 const expect = chai.expect
 
@@ -50,23 +48,15 @@ describe('Test redundancy constraints', function () {
   }
 
   async function getTotalRedundanciesLocalServer () {
-    const res = await listVideoRedundancies({
-      url: localServer.url,
-      accessToken: localServer.accessToken,
-      target: 'my-videos'
-    })
+    const body = await localServer.redundancyCommand.listVideos({ target: 'my-videos' })
 
-    return res.body.total
+    return body.total
   }
 
   async function getTotalRedundanciesRemoteServer () {
-    const res = await listVideoRedundancies({
-      url: remoteServer.url,
-      accessToken: remoteServer.accessToken,
-      target: 'remote-videos'
-    })
+    const body = await remoteServer.redundancyCommand.listVideos({ target: 'remote-videos' })
 
-    return res.body.total
+    return body.total
   }
 
   before(async function () {
@@ -99,7 +89,7 @@ describe('Test redundancy constraints', function () {
     // Server 1 and server 2 follow each other
     await remoteServer.followsCommand.follow({ targets: [ localServer.url ] })
     await waitJobs(servers)
-    await updateRedundancy(remoteServer.url, remoteServer.accessToken, localServer.host, true)
+    await remoteServer.redundancyCommand.updateRedundancy({ host: localServer.host, redundancyAllowed: true })
 
     await waitJobs(servers)
   })
@@ -161,7 +151,7 @@ describe('Test redundancy constraints', function () {
         }
       }
     }
-    await killallServers([ localServer ])
+    killallServers([ localServer ])
     await reRunServer(localServer, config)
 
     await uploadWrapper('video 3 server 2')

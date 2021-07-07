@@ -5,7 +5,8 @@ import * as chai from 'chai'
 import { readdir } from 'fs-extra'
 import * as magnetUtil from 'magnet-uri'
 import { join } from 'path'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { removeVideoRedundancy } from '@server/lib/redundancy'
+import { HttpStatusCode } from '@shared/core-utils'
 import {
   checkSegmentHash,
   checkVideoFilesWereRemoved,
@@ -26,19 +27,18 @@ import {
   uploadVideo,
   viewVideo,
   wait,
+  waitJobs,
   waitUntilLog
-} from '../../../../shared/extra-utils'
-import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
+} from '@shared/extra-utils'
+import { getStats } from '@shared/extra-utils/server/stats'
 import {
-  addVideoRedundancy,
-  listVideoRedundancies,
-  removeVideoRedundancy,
-  updateRedundancy
-} from '../../../../shared/extra-utils/server/redundancy'
-import { getStats } from '../../../../shared/extra-utils/server/stats'
-import { VideoRedundancy, VideoRedundancyStrategy, VideoRedundancyStrategyWithManual } from '../../../../shared/models/redundancy'
-import { ServerStats } from '../../../../shared/models/server/server-stats.model'
-import { VideoDetails, VideoPrivacy } from '../../../../shared/models/videos'
+  ServerStats,
+  VideoDetails,
+  VideoPrivacy,
+  VideoRedundancy,
+  VideoRedundancyStrategy,
+  VideoRedundancyStrategyWithManual
+} from '@shared/models'
 
 const expect = chai.expect
 
@@ -279,7 +279,7 @@ async function findServerFollows () {
 }
 
 async function enableRedundancyOnServer1 () {
-  await updateRedundancy(servers[0].url, servers[0].accessToken, servers[1].host, true)
+  await servers[0].redundancyCommand.updateRedundancy({ host: servers[1].host, redundancyAllowed: true })
 
   const { server2, server3 } = await findServerFollows()
 
@@ -291,7 +291,7 @@ async function enableRedundancyOnServer1 () {
 }
 
 async function disableRedundancyOnServer1 () {
-  await updateRedundancy(servers[0].url, servers[0].accessToken, servers[1].host, false)
+  await servers[0].redundancyCommand.updateRedundancy({ host: servers[1].host, redundancyAllowed: false })
 
   const { server2, server3 } = await findServerFollows()
 
@@ -551,11 +551,7 @@ describe('Test videos redundancy', function () {
     })
 
     it('Should create a redundancy on first video', async function () {
-      await addVideoRedundancy({
-        url: servers[0].url,
-        accessToken: servers[0].accessToken,
-        videoId: video1Server2Id
-      })
+      await servers[0].redundancyCommand.addVideo({ videoId: video1Server2Id })
     })
 
     it('Should have 2 webseeds on the first video', async function () {
@@ -573,22 +569,15 @@ describe('Test videos redundancy', function () {
     it('Should manually remove redundancies on server 1 and remove duplicated videos', async function () {
       this.timeout(80000)
 
-      const res = await listVideoRedundancies({
-        url: servers[0].url,
-        accessToken: servers[0].accessToken,
-        target: 'remote-videos'
-      })
+      const body = await servers[0].redundancyCommand.listVideos({ target: 'remote-videos' })
 
-      const videos = res.body.data as VideoRedundancy[]
+      const videos = body.data
       expect(videos).to.have.lengthOf(1)
 
       const video = videos[0]
+
       for (const r of video.redundancies.files.concat(video.redundancies.streamingPlaylists)) {
-        await removeVideoRedundancy({
-          url: servers[0].url,
-          accessToken: servers[0].accessToken,
-          redundancyId: r.id
-        })
+        await servers[0].redundancyCommand.removeVideo({ redundancyId: r.id })
       }
 
       await waitJobs(servers)
