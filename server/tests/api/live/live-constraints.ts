@@ -7,19 +7,16 @@ import {
   checkLiveCleanup,
   cleanupTests,
   ConfigCommand,
-  createLive,
   doubleFollow,
   flushAndRunMultipleServers,
   generateUser,
   getVideo,
-  runAndTestFfmpegStreamError,
   ServerInfo,
   setAccessTokensToServers,
   setDefaultVideoChannel,
   updateUser,
   wait,
-  waitJobs,
-  waitUntilLivePublished
+  waitJobs
 } from '../../../../shared/extra-utils'
 
 const expect = chai.expect
@@ -38,8 +35,8 @@ describe('Test live constraints', function () {
       saveReplay
     }
 
-    const res = await createLive(servers[0].url, userAccessToken, liveAttributes)
-    return res.body.video.uuid as string
+    const { uuid } = await servers[0].liveCommand.createLive({ token: userAccessToken, fields: liveAttributes })
+    return uuid
   }
 
   async function checkSaveReplay (videoId: string, resolutions = [ 720 ]) {
@@ -56,7 +53,7 @@ describe('Test live constraints', function () {
 
   async function waitUntilLivePublishedOnAllServers (videoId: string) {
     for (const server of servers) {
-      await waitUntilLivePublished(server.url, server.accessToken, videoId)
+      await server.liveCommand.waitUntilLivePublished({ videoId })
     }
   }
 
@@ -108,7 +105,7 @@ describe('Test live constraints', function () {
     this.timeout(60000)
 
     const userVideoLiveoId = await createLiveWrapper(false)
-    await runAndTestFfmpegStreamError(servers[0].url, userAccessToken, userVideoLiveoId, false)
+    await servers[0].liveCommand.runAndTestFfmpegStreamError({ token: userAccessToken, videoId: userVideoLiveoId, shouldHaveError: false })
   })
 
   it('Should have size limit depending on user global quota if save replay is enabled', async function () {
@@ -118,7 +115,7 @@ describe('Test live constraints', function () {
     await wait(5000)
 
     const userVideoLiveoId = await createLiveWrapper(true)
-    await runAndTestFfmpegStreamError(servers[0].url, userAccessToken, userVideoLiveoId, true)
+    await servers[0].liveCommand.runAndTestFfmpegStreamError({ token: userAccessToken, videoId: userVideoLiveoId, shouldHaveError: true })
 
     await waitUntilLivePublishedOnAllServers(userVideoLiveoId)
     await waitJobs(servers)
@@ -135,7 +132,7 @@ describe('Test live constraints', function () {
     await updateQuota({ total: -1, daily: 1 })
 
     const userVideoLiveoId = await createLiveWrapper(true)
-    await runAndTestFfmpegStreamError(servers[0].url, userAccessToken, userVideoLiveoId, true)
+    await servers[0].liveCommand.runAndTestFfmpegStreamError({ token: userAccessToken, videoId: userVideoLiveoId, shouldHaveError: true })
 
     await waitUntilLivePublishedOnAllServers(userVideoLiveoId)
     await waitJobs(servers)
@@ -152,7 +149,7 @@ describe('Test live constraints', function () {
     await updateQuota({ total: 10 * 1000 * 1000, daily: -1 })
 
     const userVideoLiveoId = await createLiveWrapper(true)
-    await runAndTestFfmpegStreamError(servers[0].url, userAccessToken, userVideoLiveoId, false)
+    await servers[0].liveCommand.runAndTestFfmpegStreamError({ token: userAccessToken, videoId: userVideoLiveoId, shouldHaveError: false })
   })
 
   it('Should have max duration limit', async function () {
@@ -173,7 +170,7 @@ describe('Test live constraints', function () {
     })
 
     const userVideoLiveoId = await createLiveWrapper(true)
-    await runAndTestFfmpegStreamError(servers[0].url, userAccessToken, userVideoLiveoId, true)
+    await servers[0].liveCommand.runAndTestFfmpegStreamError({ token: userAccessToken, videoId: userVideoLiveoId, shouldHaveError: true })
 
     await waitUntilLivePublishedOnAllServers(userVideoLiveoId)
     await waitJobs(servers)

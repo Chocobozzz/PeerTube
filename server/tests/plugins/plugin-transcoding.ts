@@ -7,18 +7,15 @@ import { getAudioStream, getVideoFileFPS, getVideoStreamFromFile } from '@server
 import {
   buildServerDirectory,
   cleanupTests,
-  createLive,
   flushAndRunServer,
   getVideo,
   PluginsCommand,
-  sendRTMPStreamInVideo,
   ServerInfo,
   setAccessTokensToServers,
   setDefaultVideoChannel,
   testFfmpegStreamError,
   uploadVideoAndGetId,
-  waitJobs,
-  waitUntilLivePublished
+  waitJobs
 } from '@shared/extra-utils'
 import { VideoDetails, VideoPrivacy } from '@shared/models'
 
@@ -29,8 +26,9 @@ async function createLiveWrapper (server: ServerInfo) {
     privacy: VideoPrivacy.PUBLIC
   }
 
-  const res = await createLive(server.url, server.accessToken, liveAttributes)
-  return res.body.video.uuid
+  const { uuid } = await server.liveCommand.createLive({ fields: liveAttributes })
+
+  return uuid
 }
 
 function updateConf (server: ServerInfo, vodProfile: string, liveProfile: string) {
@@ -171,8 +169,8 @@ describe('Test transcoding plugins', function () {
 
       const liveVideoId = await createLiveWrapper(server)
 
-      await sendRTMPStreamInVideo(server.url, server.accessToken, liveVideoId, 'video_short2.webm')
-      await waitUntilLivePublished(server.url, server.accessToken, liveVideoId)
+      await server.liveCommand.sendRTMPStreamInVideo({ videoId: liveVideoId, fixtureName: 'video_short2.webm' })
+      await server.liveCommand.waitUntilLivePublished({ videoId: liveVideoId })
       await waitJobs([ server ])
 
       await checkLiveFPS(liveVideoId, 'above', 20)
@@ -185,8 +183,8 @@ describe('Test transcoding plugins', function () {
 
       const liveVideoId = await createLiveWrapper(server)
 
-      await sendRTMPStreamInVideo(server.url, server.accessToken, liveVideoId, 'video_short2.webm')
-      await waitUntilLivePublished(server.url, server.accessToken, liveVideoId)
+      await server.liveCommand.sendRTMPStreamInVideo({ videoId: liveVideoId, fixtureName: 'video_short2.webm' })
+      await server.liveCommand.waitUntilLivePublished({ videoId: liveVideoId })
       await waitJobs([ server ])
 
       await checkLiveFPS(liveVideoId, 'below', 12)
@@ -199,8 +197,8 @@ describe('Test transcoding plugins', function () {
 
       const liveVideoId = await createLiveWrapper(server)
 
-      await sendRTMPStreamInVideo(server.url, server.accessToken, liveVideoId, 'video_short2.webm')
-      await waitUntilLivePublished(server.url, server.accessToken, liveVideoId)
+      await server.liveCommand.sendRTMPStreamInVideo({ videoId: liveVideoId, fixtureName: 'video_short2.webm' })
+      await server.liveCommand.waitUntilLivePublished({ videoId: liveVideoId })
       await waitJobs([ server ])
 
       await checkLiveFPS(liveVideoId, 'below', 6)
@@ -213,7 +211,7 @@ describe('Test transcoding plugins', function () {
 
       const liveVideoId = await createLiveWrapper(server)
 
-      const command = await sendRTMPStreamInVideo(server.url, server.accessToken, liveVideoId, 'video_short2.webm')
+      const command = await server.liveCommand.sendRTMPStreamInVideo({ videoId: liveVideoId, fixtureName: 'video_short2.webm' })
       await testFfmpegStreamError(command, true)
     })
 
@@ -262,8 +260,8 @@ describe('Test transcoding plugins', function () {
 
       const liveVideoId = await createLiveWrapper(server)
 
-      await sendRTMPStreamInVideo(server.url, server.accessToken, liveVideoId, 'video_short2.webm')
-      await waitUntilLivePublished(server.url, server.accessToken, liveVideoId)
+      await server.liveCommand.sendRTMPStreamInVideo({ videoId: liveVideoId, fixtureName: 'video_short2.webm' })
+      await server.liveCommand.waitUntilLivePublished({ videoId: liveVideoId })
       await waitJobs([ server ])
 
       const playlistUrl = `${server.url}/static/streaming-playlists/hls/${liveVideoId}/0.m3u8`

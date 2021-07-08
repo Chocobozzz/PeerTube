@@ -10,13 +10,11 @@ import {
   checkLiveCleanup,
   cleanupTests,
   ConfigCommand,
-  createLive,
   doubleFollow,
   flushAndRunMultipleServers,
   getVideo,
   getVideosList,
   removeVideo,
-  sendRTMPStreamInVideo,
   ServerInfo,
   setAccessTokensToServers,
   setDefaultVideoChannel,
@@ -24,10 +22,7 @@ import {
   testFfmpegStreamError,
   updateVideo,
   wait,
-  waitJobs,
-  waitUntilLiveEnded,
-  waitUntilLivePublished,
-  waitUntilLiveSaved
+  waitJobs
 } from '../../../../shared/extra-utils'
 
 const expect = chai.expect
@@ -52,8 +47,8 @@ describe('Save replay setting', function () {
       saveReplay
     }
 
-    const res = await createLive(servers[0].url, servers[0].accessToken, attributes)
-    return res.body.video.uuid
+    const { uuid } = await servers[0].liveCommand.createLive({ fields: attributes })
+    return uuid
   }
 
   async function checkVideosExist (videoId: string, existsInList: boolean, getStatus?: number) {
@@ -79,13 +74,13 @@ describe('Save replay setting', function () {
 
   async function waitUntilLivePublishedOnAllServers (videoId: string) {
     for (const server of servers) {
-      await waitUntilLivePublished(server.url, server.accessToken, videoId)
+      await server.liveCommand.waitUntilLivePublished({ videoId })
     }
   }
 
   async function waitUntilLiveSavedOnAllServers (videoId: string) {
     for (const server of servers) {
-      await waitUntilLiveSaved(server.url, server.accessToken, videoId)
+      await server.liveCommand.waitUntilLiveSaved({ videoId })
     }
   }
 
@@ -136,7 +131,7 @@ describe('Save replay setting', function () {
     it('Should correctly have updated the live and federated it when streaming in the live', async function () {
       this.timeout(30000)
 
-      ffmpegCommand = await sendRTMPStreamInVideo(servers[0].url, servers[0].accessToken, liveVideoUUID)
+      ffmpegCommand = await servers[0].liveCommand.sendRTMPStreamInVideo({ videoId: liveVideoUUID })
 
       await waitUntilLivePublishedOnAllServers(liveVideoUUID)
 
@@ -152,7 +147,7 @@ describe('Save replay setting', function () {
       await stopFfmpeg(ffmpegCommand)
 
       for (const server of servers) {
-        await waitUntilLiveEnded(server.url, server.accessToken, liveVideoUUID)
+        await server.liveCommand.waitUntilLiveEnded({ videoId: liveVideoUUID })
       }
       await waitJobs(servers)
 
@@ -169,7 +164,7 @@ describe('Save replay setting', function () {
 
       liveVideoUUID = await createLiveWrapper(false)
 
-      ffmpegCommand = await sendRTMPStreamInVideo(servers[0].url, servers[0].accessToken, liveVideoUUID)
+      ffmpegCommand = await servers[0].liveCommand.sendRTMPStreamInVideo({ videoId: liveVideoUUID })
 
       await waitUntilLivePublishedOnAllServers(liveVideoUUID)
 
@@ -198,7 +193,7 @@ describe('Save replay setting', function () {
 
       liveVideoUUID = await createLiveWrapper(false)
 
-      ffmpegCommand = await sendRTMPStreamInVideo(servers[0].url, servers[0].accessToken, liveVideoUUID)
+      ffmpegCommand = await servers[0].liveCommand.sendRTMPStreamInVideo({ videoId: liveVideoUUID })
 
       await waitUntilLivePublishedOnAllServers(liveVideoUUID)
 
@@ -234,7 +229,7 @@ describe('Save replay setting', function () {
     it('Should correctly have updated the live and federated it when streaming in the live', async function () {
       this.timeout(20000)
 
-      ffmpegCommand = await sendRTMPStreamInVideo(servers[0].url, servers[0].accessToken, liveVideoUUID)
+      ffmpegCommand = await servers[0].liveCommand.sendRTMPStreamInVideo({ videoId: liveVideoUUID })
       await waitUntilLivePublishedOnAllServers(liveVideoUUID)
 
       await waitJobs(servers)
@@ -278,7 +273,7 @@ describe('Save replay setting', function () {
 
       liveVideoUUID = await createLiveWrapper(true)
 
-      ffmpegCommand = await sendRTMPStreamInVideo(servers[0].url, servers[0].accessToken, liveVideoUUID)
+      ffmpegCommand = await servers[0].liveCommand.sendRTMPStreamInVideo({ videoId: liveVideoUUID })
       await waitUntilLivePublishedOnAllServers(liveVideoUUID)
 
       await waitJobs(servers)
@@ -306,7 +301,7 @@ describe('Save replay setting', function () {
 
       liveVideoUUID = await createLiveWrapper(true)
 
-      ffmpegCommand = await sendRTMPStreamInVideo(servers[0].url, servers[0].accessToken, liveVideoUUID)
+      ffmpegCommand = await servers[0].liveCommand.sendRTMPStreamInVideo({ videoId: liveVideoUUID })
       await waitUntilLivePublishedOnAllServers(liveVideoUUID)
 
       await waitJobs(servers)

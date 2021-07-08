@@ -6,11 +6,9 @@ import { FfmpegCommand } from 'fluent-ffmpeg'
 import { VideoDetails, VideoPrivacy } from '@shared/models'
 import {
   cleanupTests,
-  createLive,
   doubleFollow,
   flushAndRunMultipleServers,
   getVideo,
-  sendRTMPStreamInVideo,
   ServerInfo,
   setAccessTokensToServers,
   setDefaultVideoChannel,
@@ -73,10 +71,10 @@ describe('Test live', function () {
         privacy: VideoPrivacy.PUBLIC
       }
 
-      const res = await createLive(servers[0].url, servers[0].accessToken, liveAttributes)
-      liveVideoId = res.body.video.uuid
+      const live = await servers[0].liveCommand.createLive({ fields: liveAttributes })
+      liveVideoId = live.uuid
 
-      command = await sendRTMPStreamInVideo(servers[0].url, servers[0].accessToken, liveVideoId)
+      command = await servers[0].liveCommand.sendRTMPStreamInVideo({ videoId: liveVideoId })
       await waitUntilLivePublishedOnAllServers(servers, liveVideoId)
       await waitJobs(servers)
     })

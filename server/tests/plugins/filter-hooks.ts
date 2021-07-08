@@ -7,7 +7,6 @@ import {
   addVideoCommentReply,
   addVideoCommentThread,
   cleanupTests,
-  createLive,
   createVideoPlaylist,
   doubleFollow,
   flushAndRunMultipleServers,
@@ -156,7 +155,7 @@ describe('Test plugin filter hooks', function () {
       channelId: servers[0].videoChannel.id
     }
 
-    await createLive(servers[0].url, servers[0].accessToken, attributes, HttpStatusCode.FORBIDDEN_403)
+    await servers[0].liveCommand.createLive({ fields: attributes, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
   })
 
   it('Should run filter:api.video.pre-import-url.accept.result', async function () {

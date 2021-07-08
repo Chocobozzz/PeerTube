@@ -1,5 +1,5 @@
 import { HttpStatusCode } from '@shared/core-utils'
-import { makeDeleteRequest, makeGetRequest, makePostBodyRequest, makePutBodyRequest, unwrapBody, unwrapText } from '../requests/requests'
+import { makeDeleteRequest, makeGetRequest, makePostBodyRequest, makePutBodyRequest, makeUploadRequest, unwrapBody, unwrapText } from '../requests/requests'
 import { ServerInfo } from '../server/servers'
 
 export interface OverrideCommandOptions {
@@ -83,6 +83,36 @@ abstract class AbstractCommand {
       ...this.buildCommonRequestOptions(options),
 
       fields
+    })
+  }
+
+  protected postUploadRequest (options: CommonCommandOptions & {
+    fields?: { [ fieldName: string ]: any }
+    attaches?: any
+  }) {
+    const { fields, attaches } = options
+
+    return makeUploadRequest({
+      ...this.buildCommonRequestOptions(options),
+
+      method: 'POST',
+      fields,
+      attaches
+    })
+  }
+
+  protected putUploadRequest (options: CommonCommandOptions & {
+    fields?: { [ fieldName: string ]: any }
+    attaches?: any
+  }) {
+    const { fields, attaches } = options
+
+    return makeUploadRequest({
+      ...this.buildCommonRequestOptions(options),
+
+      method: 'PUT',
+      fields,
+      attaches
     })
   }
 
