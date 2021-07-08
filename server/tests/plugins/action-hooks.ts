@@ -7,7 +7,6 @@ import {
   addVideoCommentThread,
   addVideoInPlaylist,
   blockUser,
-  createLive,
   createUser,
   createVideoPlaylist,
   deleteVideoComment,
@@ -96,7 +95,7 @@ describe('Test plugin action hooks', function () {
         channelId: servers[0].videoChannel.id
       }
 
-      await createLive(servers[0].url, servers[0].accessToken, attributes)
+      await servers[0].liveCommand.createLive({ fields: attributes })
 
       await checkHook('action:api.live-video.created')
     })

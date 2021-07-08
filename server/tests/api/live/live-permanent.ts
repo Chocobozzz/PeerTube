@@ -6,22 +6,15 @@ import { LiveVideoCreate, VideoDetails, VideoPrivacy, VideoState } from '@shared
 import {
   cleanupTests,
   ConfigCommand,
-  createLive,
   doubleFollow,
   flushAndRunMultipleServers,
-  getLive,
-  getPlaylistsCount,
   getVideo,
-  sendRTMPStreamInVideo,
   ServerInfo,
   setAccessTokensToServers,
   setDefaultVideoChannel,
   stopFfmpeg,
-  updateLive,
   wait,
-  waitJobs,
-  waitUntilLivePublished,
-  waitUntilLiveWaiting
+  waitJobs
 } from '../../../../shared/extra-utils'
 
 const expect = chai.expect
@@ -39,8 +32,8 @@ describe('Permanent live', function () {
       permanentLive
     }
 
-    const res = await createLive(servers[0].url, servers[0].accessToken, attributes)
-    return res.body.video.uuid
+    const { uuid } = await servers[0].liveCommand.createLive({ fields: attributes })
+    return uuid
   }
 
   async function checkVideoState (videoId: string, state: VideoState) {
@@ -83,15 +76,15 @@ describe('Permanent live', function () {
     const videoUUID = await createLiveWrapper(false)
 
     {
-      const res = await getLive(servers[0].url, servers[0].accessToken, videoUUID)
-      expect(res.body.permanentLive).to.be.false
+      const live = await servers[0].liveCommand.getLive({ videoId: videoUUID })
+      expect(live.permanentLive).to.be.false
     }
 
-    await updateLive(servers[0].url, servers[0].accessToken, videoUUID, { permanentLive: true })
+    await servers[0].liveCommand.updateLive({ videoId: videoUUID, fields: { permanentLive: true } })
 
     {
-      const res = await getLive(servers[0].url, servers[0].accessToken, videoUUID)
-      expect(res.body.permanentLive).to.be.true
+      const live = await servers[0].liveCommand.getLive({ videoId: videoUUID })
+      expect(live.permanentLive).to.be.true
     }
   })
 
@@ -100,8 +93,8 @@ describe('Permanent live', function () {
 
     videoUUID = await createLiveWrapper(true)
 
-    const res = await getLive(servers[0].url, servers[0].accessToken, videoUUID)
-    expect(res.body.permanentLive).to.be.true
+    const live = await servers[0].liveCommand.getLive({ videoId: videoUUID })
+    expect(live.permanentLive).to.be.true
 
     await waitJobs(servers)
   })
@@ -109,16 +102,16 @@ describe('Permanent live', function () {
   it('Should stream into this permanent live', async function () {
     this.timeout(120000)
 
-    const command = await sendRTMPStreamInVideo(servers[0].url, servers[0].accessToken, videoUUID)
+    const ffmpegCommand = await servers[0].liveCommand.sendRTMPStreamInVideo({ videoId: videoUUID })
 
     for (const server of servers) {
-      await waitUntilLivePublished(server.url, server.accessToken, videoUUID)
+      await server.liveCommand.waitUntilLivePublished({ videoId: videoUUID })
     }
 
     await checkVideoState(videoUUID, VideoState.PUBLISHED)
 
-    await stopFfmpeg(command)
-    await waitUntilLiveWaiting(servers[0].url, servers[0].accessToken, videoUUID)
+    await stopFfmpeg(ffmpegCommand)
+    await servers[0].liveCommand.waitUntilLiveWaiting({ videoId: videoUUID })
 
     await waitJobs(servers)
   })
@@ -160,19 +153,19 @@ describe('Permanent live', function () {
       }
     })
 
-    const command = await sendRTMPStreamInVideo(servers[0].url, servers[0].accessToken, videoUUID)
+    const ffmpegCommand = await servers[0].liveCommand.sendRTMPStreamInVideo({ videoId: videoUUID })
 
     for (const server of servers) {
-      await waitUntilLivePublished(server.url, server.accessToken, videoUUID)
+      await server.liveCommand.waitUntilLivePublished({ videoId: videoUUID })
     }
 
     await checkVideoState(videoUUID, VideoState.PUBLISHED)
 
-    const count = await getPlaylistsCount(servers[0], videoUUID)
+    const count = await servers[0].liveCommand.getPlaylistsCount({ videoUUID })
     // master playlist and 720p playlist
     expect(count).to.equal(2)
 
-    await stopFfmpeg(command)
+    await stopFfmpeg(ffmpegCommand)
   })
 
   after(async function () {

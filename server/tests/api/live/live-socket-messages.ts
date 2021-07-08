@@ -5,11 +5,9 @@ import * as chai from 'chai'
 import { VideoPrivacy, VideoState } from '@shared/models'
 import {
   cleanupTests,
-  createLive,
   doubleFollow,
   flushAndRunMultipleServers,
   getVideoIdFromUUID,
-  sendRTMPStreamInVideo,
   ServerInfo,
   setAccessTokensToServers,
   setDefaultVideoChannel,
@@ -17,7 +15,6 @@ import {
   viewVideo,
   wait,
   waitJobs,
-  waitUntilLiveEnded,
   waitUntilLivePublishedOnAllServers
 } from '../../../../shared/extra-utils'
 
@@ -60,8 +57,8 @@ describe('Test live', function () {
         privacy: VideoPrivacy.PUBLIC
       }
 
-      const res = await createLive(servers[0].url, servers[0].accessToken, liveAttributes)
-      return res.body.video.uuid
+      const { uuid } = await servers[0].liveCommand.createLive({ fields: liveAttributes })
+      return uuid
     }
 
     it('Should correctly send a message when the live starts and ends', async function () {
@@ -89,7 +86,7 @@ describe('Test live', function () {
         remoteSocket.emit('subscribe', { videoId })
       }
 
-      const command = await sendRTMPStreamInVideo(servers[0].url, servers[0].accessToken, liveVideoUUID)
+      const ffmpegCommand = await servers[0].liveCommand.sendRTMPStreamInVideo({ videoId: liveVideoUUID })
 
       await waitUntilLivePublishedOnAllServers(servers, liveVideoUUID)
       await waitJobs(servers)
@@ -99,10 +96,10 @@ describe('Test live', function () {
         expect(stateChanges[stateChanges.length - 1]).to.equal(VideoState.PUBLISHED)
       }
 
-      await stopFfmpeg(command)
+      await stopFfmpeg(ffmpegCommand)
 
       for (const server of servers) {
-        await waitUntilLiveEnded(server.url, server.accessToken, liveVideoUUID)
+        await server.liveCommand.waitUntilLiveEnded({ videoId: liveVideoUUID })
       }
       await waitJobs(servers)
 
@@ -137,7 +134,7 @@ describe('Test live', function () {
         remoteSocket.emit('subscribe', { videoId })
       }
 
-      const command = await sendRTMPStreamInVideo(servers[0].url, servers[0].accessToken, liveVideoUUID)
+      const ffmpegCommand = await servers[0].liveCommand.sendRTMPStreamInVideo({ videoId: liveVideoUUID })
 
       await waitUntilLivePublishedOnAllServers(servers, liveVideoUUID)
       await waitJobs(servers)
@@ -155,7 +152,7 @@ describe('Test live', function () {
       expect(localLastVideoViews).to.equal(2)
       expect(remoteLastVideoViews).to.equal(2)
 
-      await stopFfmpeg(command)
+      await stopFfmpeg(ffmpegCommand)
     })
 
     it('Should not receive a notification after unsubscribe', async function () {
@@ -172,7 +169,7 @@ describe('Test live', function () {
       socket.on('state-change', data => stateChanges.push(data.state))
       socket.emit('subscribe', { videoId })
 
-      const command = await sendRTMPStreamInVideo(servers[0].url, servers[0].accessToken, liveVideoUUID)
+      const command = await servers[0].liveCommand.sendRTMPStreamInVideo({ videoId: liveVideoUUID })
 
       await waitUntilLivePublishedOnAllServers(servers, liveVideoUUID)
       await waitJobs(servers)

@@ -2,23 +2,20 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { VideoPrivacy } from '@shared/models'
 import {
   cleanupTests,
-  createLive,
+  createVideoCaption,
   flushAndRunServer,
   immutableAssign,
   SearchCommand,
-  sendRTMPStreamInVideo,
   ServerInfo,
   setAccessTokensToServers,
   setDefaultVideoChannel,
   stopFfmpeg,
   uploadVideo,
-  wait,
-  waitUntilLivePublished
-} from '../../../../shared/extra-utils'
-import { createVideoCaption } from '../../../../shared/extra-utils/videos/video-captions'
+  wait
+} from '@shared/extra-utils'
+import { VideoPrivacy } from '@shared/models'
 
 const expect = chai.expect
 
@@ -502,12 +499,13 @@ describe('Test videos search', function () {
     }
 
     {
-      const liveOptions = { name: 'live', privacy: VideoPrivacy.PUBLIC, channelId: server.videoChannel.id }
-      const resLive = await createLive(server.url, server.accessToken, liveOptions)
-      const liveVideoId = resLive.body.video.uuid
+      const liveCommand = server.liveCommand
 
-      const ffmpegCommand = await sendRTMPStreamInVideo(server.url, server.accessToken, liveVideoId)
-      await waitUntilLivePublished(server.url, server.accessToken, liveVideoId)
+      const liveAttributes = { name: 'live', privacy: VideoPrivacy.PUBLIC, channelId: server.videoChannel.id }
+      const live = await liveCommand.createLive({ fields: liveAttributes })
+
+      const ffmpegCommand = await liveCommand.sendRTMPStreamInVideo({ videoId: live.id })
+      await liveCommand.waitUntilLivePublished({ videoId: live.id })
 
       const body = await command.advancedVideoSearch({ search: { isLive: true } })
 

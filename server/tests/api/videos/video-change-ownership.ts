@@ -7,7 +7,6 @@ import {
   acceptChangeOwnership,
   changeVideoOwnership,
   cleanupTests,
-  createLive,
   createUser,
   doubleFollow,
   flushAndRunMultipleServers,
@@ -112,9 +111,9 @@ describe('Test video change ownership - nominal', function () {
 
     {
       const attributes = { name: 'live', channelId: firstUserChannelId, privacy: VideoPrivacy.PUBLIC }
-      const res = await createLive(servers[0].url, firstUserAccessToken, attributes)
+      const video = await servers[0].liveCommand.createLive({ token: firstUserAccessToken, fields: attributes })
 
-      liveId = res.body.video.id
+      liveId = video.id
     }
 
     await doubleFollow(servers[0], servers[1])
