@@ -18,7 +18,16 @@ import { makeGetRequest } from '../requests/requests'
 import { SearchCommand } from '../search'
 import { SocketIOCommand } from '../socket'
 import { AccountsCommand, BlocklistCommand, SubscriptionsCommand } from '../users'
-import { BlacklistCommand, CaptionsCommand, ChangeOwnershipCommand, HistoryCommand, LiveCommand, PlaylistsCommand, ServicesCommand } from '../videos'
+import {
+  BlacklistCommand,
+  CaptionsCommand,
+  ChangeOwnershipCommand,
+  HistoryCommand,
+  ImportsCommand,
+  LiveCommand,
+  PlaylistsCommand,
+  ServicesCommand
+} from '../videos'
 import { ConfigCommand } from './config-command'
 import { ContactFormCommand } from './contact-form-command'
 import { DebugCommand } from './debug-command'
@@ -107,6 +116,7 @@ interface ServerInfo {
   changeOwnershipCommand?: ChangeOwnershipCommand
   playlistsCommand?: PlaylistsCommand
   historyCommand?: HistoryCommand
+  importsCommand?: ImportsCommand
 }
 
 function parallelTests () {
@@ -339,6 +349,7 @@ async function runServer (server: ServerInfo, configOverrideArg?: any, args = []
       server.changeOwnershipCommand = new ChangeOwnershipCommand(server)
       server.playlistsCommand = new PlaylistsCommand(server)
       server.historyCommand = new HistoryCommand(server)
+      server.importsCommand = new ImportsCommand(server)
 
       res(server)
     })

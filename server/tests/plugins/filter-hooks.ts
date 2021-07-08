@@ -18,6 +18,7 @@ import {
   getVideosListPagination,
   getVideoThreadComments,
   getVideoWithToken,
+  ImportsCommand,
   makeRawRequest,
   PluginsCommand,
   registerUser,
@@ -30,16 +31,7 @@ import {
   waitJobs,
   waitUntilLog
 } from '@shared/extra-utils'
-import { getGoodVideoUrl, getMyVideoImports, importVideo } from '@shared/extra-utils/videos/video-imports'
-import {
-  VideoCommentThreadTree,
-  VideoDetails,
-  VideoImport,
-  VideoImportState,
-  VideoPlaylist,
-  VideoPlaylistPrivacy,
-  VideoPrivacy
-} from '@shared/models'
+import { VideoCommentThreadTree, VideoDetails, VideoImportState, VideoPlaylist, VideoPlaylistPrivacy, VideoPrivacy } from '@shared/models'
 
 const expect = chai.expect
 
@@ -157,23 +149,23 @@ describe('Test plugin filter hooks', function () {
   })
 
   it('Should run filter:api.video.pre-import-url.accept.result', async function () {
-    const baseAttributes = {
+    const attributes = {
       name: 'normal title',
       privacy: VideoPrivacy.PUBLIC,
       channelId: servers[0].videoChannel.id,
-      targetUrl: getGoodVideoUrl() + 'bad'
+      targetUrl: ImportsCommand.getGoodVideoUrl() + 'bad'
     }
-    await importVideo(servers[0].url, servers[0].accessToken, baseAttributes, HttpStatusCode.FORBIDDEN_403)
+    await servers[0].importsCommand.importVideo({ attributes, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
   })
 
   it('Should run filter:api.video.pre-import-torrent.accept.result', async function () {
-    const baseAttributes = {
+    const attributes = {
       name: 'bad torrent',
       privacy: VideoPrivacy.PUBLIC,
       channelId: servers[0].videoChannel.id,
       torrentfile: 'video-720p.torrent' as any
     }
-    await importVideo(servers[0].url, servers[0].accessToken, baseAttributes, HttpStatusCode.FORBIDDEN_403)
+    await servers[0].importsCommand.importVideo({ attributes, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
   })
 
   it('Should run filter:api.video.post-import-url.accept.result', async function () {
@@ -182,21 +174,21 @@ describe('Test plugin filter hooks', function () {
     let videoImportId: number
 
     {
-      const baseAttributes = {
+      const attributes = {
         name: 'title with bad word',
         privacy: VideoPrivacy.PUBLIC,
         channelId: servers[0].videoChannel.id,
-        targetUrl: getGoodVideoUrl()
+        targetUrl: ImportsCommand.getGoodVideoUrl()
       }
-      const res = await importVideo(servers[0].url, servers[0].accessToken, baseAttributes)
-      videoImportId = res.body.id
+      const body = await servers[0].importsCommand.importVideo({ attributes })
+      videoImportId = body.id
     }
 
     await waitJobs(servers)
 
     {
-      const res = await getMyVideoImports(servers[0].url, servers[0].accessToken)
-      const videoImports = res.body.data as VideoImport[]
+      const body = await servers[0].importsCommand.getMyVideoImports()
+      const videoImports = body.data
 
       const videoImport = videoImports.find(i => i.id === videoImportId)
 
@@ -211,21 +203,20 @@ describe('Test plugin filter hooks', function () {
     let videoImportId: number
 
     {
-      const baseAttributes = {
+      const attributes = {
         name: 'title with bad word',
         privacy: VideoPrivacy.PUBLIC,
         channelId: servers[0].videoChannel.id,
         torrentfile: 'video-720p.torrent' as any
       }
-      const res = await importVideo(servers[0].url, servers[0].accessToken, baseAttributes)
-      videoImportId = res.body.id
+      const body = await servers[0].importsCommand.importVideo({ attributes })
+      videoImportId = body.id
     }
 
     await waitJobs(servers)
 
     {
-      const res = await getMyVideoImports(servers[0].url, servers[0].accessToken)
-      const videoImports = res.body.data as VideoImport[]
+      const { data: videoImports } = await servers[0].importsCommand.getMyVideoImports()
 
       const videoImport = videoImports.find(i => i.id === videoImportId)
 
@@ -278,17 +269,15 @@ describe('Test plugin filter hooks', function () {
 
   describe('Should run filter:video.auto-blacklist.result', function () {
 
-    async function checkIsBlacklisted (oldRes: any, value: boolean) {
-      const videoId = oldRes.body.video.uuid
-
-      const res = await getVideoWithToken(servers[0].url, servers[0].accessToken, videoId)
+    async function checkIsBlacklisted (id: number | string, value: boolean) {
+      const res = await getVideoWithToken(servers[0].url, servers[0].accessToken, id)
       const video: VideoDetails = res.body
       expect(video.blacklisted).to.equal(value)
     }
 
     it('Should blacklist on upload', async function () {
       const res = await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'video please blacklist me' })
-      await checkIsBlacklisted(res, true)
+      await checkIsBlacklisted(res.body.video.uuid, true)
     })
 
     it('Should blacklist on import', async function () {
@@ -296,20 +285,20 @@ describe('Test plugin filter hooks', function () {
 
       const attributes = {
         name: 'video please blacklist me',
-        targetUrl: getGoodVideoUrl(),
+        targetUrl: ImportsCommand.getGoodVideoUrl(),
         channelId: servers[0].videoChannel.id
       }
-      const res = await importVideo(servers[0].url, servers[0].accessToken, attributes)
-      await checkIsBlacklisted(res, true)
+      const body = await servers[0].importsCommand.importVideo({ attributes })
+      await checkIsBlacklisted(body.video.uuid, true)
     })
 
     it('Should blacklist on update', async function () {
       const res = await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'video' })
       const videoId = res.body.video.uuid
-      await checkIsBlacklisted(res, false)
+      await checkIsBlacklisted(videoId, false)
 
       await updateVideo(servers[0].url, servers[0].accessToken, videoId, { name: 'please blacklist me' })
-      await checkIsBlacklisted(res, true)
+      await checkIsBlacklisted(videoId, true)
     })
 
     it('Should blacklist on remote upload', async function () {
@@ -318,7 +307,7 @@ describe('Test plugin filter hooks', function () {
       const res = await uploadVideo(servers[1].url, servers[1].accessToken, { name: 'remote please blacklist me' })
       await waitJobs(servers)
 
-      await checkIsBlacklisted(res, true)
+      await checkIsBlacklisted(res.body.video.uuid, true)
     })
 
     it('Should blacklist on remote update', async function () {
@@ -328,12 +317,12 @@ describe('Test plugin filter hooks', function () {
       await waitJobs(servers)
 
       const videoId = res.body.video.uuid
-      await checkIsBlacklisted(res, false)
+      await checkIsBlacklisted(videoId, false)
 
       await updateVideo(servers[1].url, servers[1].accessToken, videoId, { name: 'please blacklist me' })
       await waitJobs(servers)
 
-      await checkIsBlacklisted(res, true)
+      await checkIsBlacklisted(videoId, true)
     })
   })
 

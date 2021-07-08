@@ -12,6 +12,7 @@ import {
   getMyUserInformation,
   getMyVideos,
   getVideosList,
+  ImportsCommand,
   killallServers,
   reRunServer,
   ServerInfo,
@@ -21,7 +22,6 @@ import {
   userLogin,
   waitJobs
 } from '@shared/extra-utils'
-import { getGoodVideoUrl, getMagnetURI, importVideo } from '@shared/extra-utils/videos/video-imports'
 import { User, UserAdminFlag, UserRole, VideoBlacklist, VideoBlacklistType } from '@shared/models'
 
 const expect = chai.expect
@@ -402,11 +402,11 @@ describe('Test video blacklist', function () {
       this.timeout(15000)
 
       const attributes = {
-        targetUrl: getGoodVideoUrl(),
+        targetUrl: ImportsCommand.getGoodVideoUrl(),
         name: 'URL import',
         channelId: channelOfUserWithoutFlag
       }
-      await importVideo(servers[0].url, userWithoutFlag, attributes)
+      await servers[0].importsCommand.importVideo({ token: userWithoutFlag, attributes })
 
       const body = await command.list({ sort: 'createdAt', type: VideoBlacklistType.AUTO_BEFORE_PUBLISHED })
       expect(body.total).to.equal(2)
@@ -415,11 +415,11 @@ describe('Test video blacklist', function () {
 
     it('Should auto blacklist a video on torrent import', async function () {
       const attributes = {
-        magnetUri: getMagnetURI(),
+        magnetUri: ImportsCommand.getMagnetURI(),
         name: 'Torrent import',
         channelId: channelOfUserWithoutFlag
       }
-      await importVideo(servers[0].url, userWithoutFlag, attributes)
+      await servers[0].importsCommand.importVideo({ token: userWithoutFlag, attributes })
 
       const body = await command.list({ sort: 'createdAt', type: VideoBlacklistType.AUTO_BEFORE_PUBLISHED })
       expect(body.total).to.equal(3)
