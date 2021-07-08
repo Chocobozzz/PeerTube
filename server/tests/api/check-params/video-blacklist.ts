@@ -1,32 +1,28 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-
+import { expect } from 'chai'
+import { HttpStatusCode } from '@shared/core-utils'
 import {
+  BlacklistCommand,
+  checkBadCountPagination,
+  checkBadSortPagination,
+  checkBadStartPagination,
   cleanupTests,
   createUser,
   doubleFollow,
   flushAndRunMultipleServers,
-  getBlacklistedVideosList,
   getVideo,
   getVideoWithToken,
   makePostBodyRequest,
   makePutBodyRequest,
-  removeVideoFromBlacklist,
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo,
   userLogin,
   waitJobs
-} from '../../../../shared/extra-utils'
-import {
-  checkBadCountPagination,
-  checkBadSortPagination,
-  checkBadStartPagination
-} from '../../../../shared/extra-utils/requests/check-api-params'
-import { VideoBlacklistType, VideoDetails } from '../../../../shared/models/videos'
-import { expect } from 'chai'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+} from '@shared/extra-utils'
+import { VideoBlacklistType, VideoDetails } from '@shared/models'
 
 describe('Test video blacklist API validators', function () {
   let servers: ServerInfo[]
@@ -34,6 +30,7 @@ describe('Test video blacklist API validators', function () {
   let remoteVideoUUID: string
   let userAccessToken1 = ''
   let userAccessToken2 = ''
+  let command: BlacklistCommand
 
   // ---------------------------------------------------------------
 
@@ -75,6 +72,8 @@ describe('Test video blacklist API validators', function () {
     }
 
     await waitJobs(servers)
+
+    command = servers[0].blacklistCommand
   })
 
   describe('When adding a video in blacklist', function () {
@@ -234,25 +233,26 @@ describe('Test video blacklist API validators', function () {
   })
 
   describe('When removing a video in blacklist', function () {
+
     it('Should fail with a non authenticated user', async function () {
-      await removeVideoFromBlacklist(servers[0].url, 'fake token', servers[0].video.uuid, HttpStatusCode.UNAUTHORIZED_401)
+      await command.remove({ token: 'fake token', videoId: servers[0].video.uuid, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
     it('Should fail with a non admin user', async function () {
-      await removeVideoFromBlacklist(servers[0].url, userAccessToken2, servers[0].video.uuid, HttpStatusCode.FORBIDDEN_403)
+      await command.remove({ token: userAccessToken2, videoId: servers[0].video.uuid, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
     })
 
     it('Should fail with an incorrect id', async function () {
-      await removeVideoFromBlacklist(servers[0].url, servers[0].accessToken, 'hello', HttpStatusCode.BAD_REQUEST_400)
+      await command.remove({ videoId: 'hello', expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     })
 
     it('Should fail with a not blacklisted video', async function () {
       // The video was not added to the blacklist so it should fail
-      await removeVideoFromBlacklist(servers[0].url, servers[0].accessToken, notBlacklistedVideoId, HttpStatusCode.NOT_FOUND_404)
+      await command.remove({ videoId: notBlacklistedVideoId, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
     })
 
     it('Should succeed with the correct params', async function () {
-      await removeVideoFromBlacklist(servers[0].url, servers[0].accessToken, servers[0].video.uuid, HttpStatusCode.NO_CONTENT_204)
+      await command.remove({ videoId: servers[0].video.uuid, expectedStatus: HttpStatusCode.NO_CONTENT_204 })
     })
   })
 
@@ -260,11 +260,11 @@ describe('Test video blacklist API validators', function () {
     const basePath = '/api/v1/videos/blacklist/'
 
     it('Should fail with a non authenticated user', async function () {
-      await getBlacklistedVideosList({ url: servers[0].url, token: 'fake token', specialStatus: HttpStatusCode.UNAUTHORIZED_401 })
+      await servers[0].blacklistCommand.list({ token: 'fake token', expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
     it('Should fail with a non admin user', async function () {
-      await getBlacklistedVideosList({ url: servers[0].url, token: userAccessToken2, specialStatus: HttpStatusCode.FORBIDDEN_403 })
+      await servers[0].blacklistCommand.list({ token: userAccessToken2, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
     })
 
     it('Should fail with a bad start pagination', async function () {
@@ -280,16 +280,11 @@ describe('Test video blacklist API validators', function () {
     })
 
     it('Should fail with an invalid type', async function () {
-      await getBlacklistedVideosList({
-        url: servers[0].url,
-        token: servers[0].accessToken,
-        type: 0,
-        specialStatus: HttpStatusCode.BAD_REQUEST_400
-      })
+      await servers[0].blacklistCommand.list({ type: 0, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     })
 
     it('Should succeed with the correct parameters', async function () {
-      await getBlacklistedVideosList({ url: servers[0].url, token: servers[0].accessToken, type: VideoBlacklistType.MANUAL })
+      await servers[0].blacklistCommand.list({ type: VideoBlacklistType.MANUAL })
     })
   })
 

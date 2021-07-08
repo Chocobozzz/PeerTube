@@ -11,7 +11,6 @@ import {
   createUser,
   deleteMe,
   flushAndRunServer,
-  getBlacklistedVideosList,
   getMyUserInformation,
   getMyUserVideoQuotaUsed,
   getMyUserVideoRating,
@@ -808,7 +807,7 @@ describe('Test users', function () {
 
   describe('Video blacklists', function () {
     it('Should be able to list video blacklist by a moderator', async function () {
-      await getBlacklistedVideosList({ url: server.url, token: accessTokenUser })
+      await server.blacklistCommand.list({ token: accessTokenUser })
     })
   })
 

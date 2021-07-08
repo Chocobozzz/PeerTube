@@ -2,13 +2,11 @@
 
 import 'mocha'
 import { expect } from 'chai'
-import { Video, VideoBlacklist } from '@shared/models'
+import { Video } from '@shared/models'
 import {
   doubleFollow,
-  getBlacklistedVideosList,
   getVideosList,
   MockBlocklist,
-  removeVideoFromBlacklist,
   setAccessTokensToServers,
   uploadVideoAndGetId,
   wait
@@ -97,10 +95,9 @@ describe('Official plugin auto-block videos', function () {
   })
 
   it('Should have video in blacklists', async function () {
-    const res = await getBlacklistedVideosList({ url: servers[0].url, token: servers[0].accessToken })
+    const body = await servers[0].blacklistCommand.list()
 
-    const videoBlacklists = res.body.data as VideoBlacklist[]
-
+    const videoBlacklists = body.data
     expect(videoBlacklists).to.have.lengthOf(1)
     expect(videoBlacklists[0].reason).to.contains('Automatically blocked from auto block plugin')
     expect(videoBlacklists[0].video.name).to.equal(server2Videos[0].name)
@@ -163,7 +160,7 @@ describe('Official plugin auto-block videos', function () {
 
     await check(servers[0], video.uuid, false)
 
-    await removeVideoFromBlacklist(servers[0].url, servers[0].accessToken, video.uuid)
+    await servers[0].blacklistCommand.remove({ videoId: video.uuid })
 
     await check(servers[0], video.uuid, true)
 

@@ -7,7 +7,6 @@ import { ffprobePromise, getVideoStreamFromFile } from '@server/helpers/ffprobe-
 import { LiveVideo, LiveVideoCreate, Video, VideoDetails, VideoPrivacy, VideoState, VideoStreamingPlaylistType } from '@shared/models'
 import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import {
-  addVideoToBlacklist,
   buildServerDirectory,
   checkLiveCleanup,
   checkLiveSegmentHash,
@@ -347,7 +346,7 @@ describe('Test live', function () {
 
       liveVideo = await createLiveWrapper()
 
-      await addVideoToBlacklist(servers[0].url, servers[0].accessToken, liveVideo.uuid)
+      await servers[0].blacklistCommand.add({ videoId: liveVideo.uuid })
 
       const command = sendRTMPStream(rtmpUrl + '/live', liveVideo.streamKey)
       await testFfmpegStreamError(command, true)

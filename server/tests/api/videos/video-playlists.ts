@@ -6,7 +6,6 @@ import { HttpStatusCode } from '@shared/core-utils'
 import {
   addVideoChannel,
   addVideoInPlaylist,
-  addVideoToBlacklist,
   checkPlaylistFilesWereRemoved,
   cleanupTests,
   createUser,
@@ -28,7 +27,6 @@ import {
   getVideoPlaylistsList,
   getVideoPlaylistWithToken,
   removeUser,
-  removeVideoFromBlacklist,
   removeVideoFromPlaylist,
   reorderVideosPlaylist,
   ServerInfo,
@@ -728,7 +726,7 @@ describe('Test video playlists', function () {
       const position = 1
 
       {
-        await addVideoToBlacklist(servers[0].url, servers[0].accessToken, video1, 'reason', true)
+        await servers[0].blacklistCommand.add({ videoId: video1, reason: 'reason', unfederate: true })
         await waitJobs(servers)
 
         await checkPlaylistElementType(groupUser1, playlistServer1UUID2, VideoPlaylistElementType.REGULAR, position, name, 3)
@@ -738,7 +736,7 @@ describe('Test video playlists', function () {
       }
 
       {
-        await removeVideoFromBlacklist(servers[0].url, servers[0].accessToken, video1)
+        await servers[0].blacklistCommand.remove({ videoId: video1 })
         await waitJobs(servers)
 
         await checkPlaylistElementType(groupUser1, playlistServer1UUID2, VideoPlaylistElementType.REGULAR, position, name, 3)

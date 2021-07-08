@@ -4,7 +4,6 @@ import 'mocha'
 import { buildUUID } from '@server/helpers/uuid'
 import {
   addVideoCommentThread,
-  addVideoToBlacklist,
   checkAbuseStateChange,
   checkAutoInstanceFollowing,
   CheckerBaseParams,
@@ -28,7 +27,6 @@ import {
   MockSmtpServer,
   prepareNotificationsTest,
   registerUser,
-  removeVideoFromBlacklist,
   ServerInfo,
   uploadVideo,
   wait,
@@ -297,7 +295,7 @@ describe('Test moderation notifications', function () {
       const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name })
       const uuid = resVideo.body.video.uuid
 
-      await addVideoToBlacklist(servers[0].url, servers[0].accessToken, uuid)
+      await servers[0].blacklistCommand.add({ videoId: uuid })
 
       await waitJobs(servers)
       await checkNewBlacklistOnMyVideo(baseParams, uuid, name, 'blacklist')
@@ -310,10 +308,10 @@ describe('Test moderation notifications', function () {
       const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name })
       const uuid = resVideo.body.video.uuid
 
-      await addVideoToBlacklist(servers[0].url, servers[0].accessToken, uuid)
+      await servers[0].blacklistCommand.add({ videoId: uuid })
 
       await waitJobs(servers)
-      await removeVideoFromBlacklist(servers[0].url, servers[0].accessToken, uuid)
+      await servers[0].blacklistCommand.remove({ videoId: uuid })
       await waitJobs(servers)
 
       await wait(500)
@@ -517,7 +515,7 @@ describe('Test moderation notifications', function () {
     it('Should send video published and unblacklist after video unblacklisted', async function () {
       this.timeout(40000)
 
-      await removeVideoFromBlacklist(servers[0].url, servers[0].accessToken, videoUUID)
+      await servers[0].blacklistCommand.remove({ videoId: videoUUID })
 
       await waitJobs(servers)
 
@@ -554,7 +552,7 @@ describe('Test moderation notifications', function () {
       const resVideo = await uploadVideo(servers[0].url, userAccessToken, data)
       const uuid = resVideo.body.video.uuid
 
-      await removeVideoFromBlacklist(servers[0].url, servers[0].accessToken, uuid)
+      await servers[0].blacklistCommand.remove({ videoId: uuid })
 
       await waitJobs(servers)
       await checkNewBlacklistOnMyVideo(userBaseParams, uuid, name, 'unblacklist')
