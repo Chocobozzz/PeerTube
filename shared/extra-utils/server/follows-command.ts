@@ -22,10 +22,9 @@ export class FollowsCommand extends AbstractCommand {
     return this.getRequestBody<ResultList<ActorFollow>>({
       ...options,
 
-      token: null,
-
       path,
       query,
+      implicitToken: false,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
   }
@@ -46,10 +45,9 @@ export class FollowsCommand extends AbstractCommand {
     return this.getRequestBody<ResultList<ActorFollow>>({
       ...options,
 
-      token: null,
-
       path,
       query,
+      implicitToken: false,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
   }
@@ -66,6 +64,7 @@ export class FollowsCommand extends AbstractCommand {
 
       path,
       fields: { hosts },
+      implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
     })
   }
@@ -79,6 +78,7 @@ export class FollowsCommand extends AbstractCommand {
       ...options,
 
       path,
+      implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
     })
   }
@@ -92,6 +92,7 @@ export class FollowsCommand extends AbstractCommand {
       ...options,
 
       path,
+      implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
     })
   }
@@ -105,6 +106,7 @@ export class FollowsCommand extends AbstractCommand {
       ...options,
 
       path,
+      implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
     })
   }
@@ -118,6 +120,7 @@ export class FollowsCommand extends AbstractCommand {
       ...options,
 
       path,
+      implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
     })
   }

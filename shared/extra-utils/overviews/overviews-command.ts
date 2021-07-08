@@ -7,7 +7,7 @@ export class OverviewsCommand extends AbstractCommand {
   getVideos (options: OverrideCommandOptions & {
     page: number
   }) {
-    const { token, page } = options
+    const { page } = options
     const path = '/api/v1/overviews/videos'
 
     const query = { page }
@@ -15,9 +15,9 @@ export class OverviewsCommand extends AbstractCommand {
     return this.getRequestBody<VideosOverview>({
       ...options,
 
-      token: token || null,
       path,
       query,
+      implicitToken: false,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
   }

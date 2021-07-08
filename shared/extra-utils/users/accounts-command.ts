@@ -17,6 +17,7 @@ export class AccountsCommand extends AbstractCommand {
 
       path,
       query: { sort },
+      implicitToken: false,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
   }
@@ -30,6 +31,7 @@ export class AccountsCommand extends AbstractCommand {
       ...options,
 
       path,
+      implicitToken: false,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
   }
@@ -48,6 +50,7 @@ export class AccountsCommand extends AbstractCommand {
 
       path,
       query,
+      implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
   }

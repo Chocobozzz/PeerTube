@@ -1,5 +1,13 @@
 import { HttpStatusCode } from '@shared/core-utils'
-import { makeDeleteRequest, makeGetRequest, makePostBodyRequest, makePutBodyRequest, makeUploadRequest, unwrapBody, unwrapText } from '../requests/requests'
+import {
+  makeDeleteRequest,
+  makeGetRequest,
+  makePostBodyRequest,
+  makePutBodyRequest,
+  makeUploadRequest,
+  unwrapBody,
+  unwrapText
+} from '../requests/requests'
 import { ServerInfo } from '../server/servers'
 
 export interface OverrideCommandOptions {
@@ -7,12 +15,14 @@ export interface OverrideCommandOptions {
   expectedStatus?: number
 }
 
-interface CommonCommandOptions extends OverrideCommandOptions {
+interface InternalCommonCommandOptions extends OverrideCommandOptions {
   path: string
+  // If we automatically send the server token if the token is not provided
+  implicitToken: boolean
   defaultExpectedStatus: number
 }
 
-interface GetCommandOptions extends CommonCommandOptions {
+interface InternalGetCommandOptions extends InternalCommonCommandOptions {
   query?: { [ id: string ]: any }
   contentType?: string
   accept?: string
@@ -37,15 +47,15 @@ abstract class AbstractCommand {
     this.expectedStatus = status
   }
 
-  protected getRequestBody <T> (options: GetCommandOptions) {
+  protected getRequestBody <T> (options: InternalGetCommandOptions) {
     return unwrapBody<T>(this.getRequest(options))
   }
 
-  protected getRequestText (options: GetCommandOptions) {
+  protected getRequestText (options: InternalGetCommandOptions) {
     return unwrapText(this.getRequest(options))
   }
 
-  protected getRequest (options: GetCommandOptions) {
+  protected getRequest (options: InternalGetCommandOptions) {
     const { redirects, query, contentType, accept } = options
 
     return makeGetRequest({
@@ -58,11 +68,11 @@ abstract class AbstractCommand {
     })
   }
 
-  protected deleteRequest (options: CommonCommandOptions) {
+  protected deleteRequest (options: InternalCommonCommandOptions) {
     return makeDeleteRequest(this.buildCommonRequestOptions(options))
   }
 
-  protected putBodyRequest (options: CommonCommandOptions & {
+  protected putBodyRequest (options: InternalCommonCommandOptions & {
     fields?: { [ fieldName: string ]: any }
   }) {
     const { fields } = options
@@ -74,7 +84,7 @@ abstract class AbstractCommand {
     })
   }
 
-  protected postBodyRequest (options: CommonCommandOptions & {
+  protected postBodyRequest (options: InternalCommonCommandOptions & {
     fields?: { [ fieldName: string ]: any }
   }) {
     const { fields } = options
@@ -86,7 +96,7 @@ abstract class AbstractCommand {
     })
   }
 
-  protected postUploadRequest (options: CommonCommandOptions & {
+  protected postUploadRequest (options: InternalCommonCommandOptions & {
     fields?: { [ fieldName: string ]: any }
     attaches?: any
   }) {
@@ -101,7 +111,7 @@ abstract class AbstractCommand {
     })
   }
 
-  protected putUploadRequest (options: CommonCommandOptions & {
+  protected putUploadRequest (options: InternalCommonCommandOptions & {
     fields?: { [ fieldName: string ]: any }
     attaches?: any
   }) {
@@ -116,15 +126,18 @@ abstract class AbstractCommand {
     })
   }
 
-  private buildCommonRequestOptions (options: CommonCommandOptions) {
+  private buildCommonRequestOptions (options: InternalCommonCommandOptions) {
     const { token, expectedStatus, defaultExpectedStatus, path } = options
+
+    const fallbackToken = options.implicitToken
+      ? this.server.accessToken
+      : undefined
 
     return {
       url: this.server.url,
       path,
 
-      // Token can be null if we don't want to add it
-      token: token !== undefined ? token : this.server.accessToken,
+      token: token !== undefined ? token : fallbackToken,
 
       statusCodeExpected: expectedStatus ?? this.expectedStatus ?? defaultExpectedStatus
     }

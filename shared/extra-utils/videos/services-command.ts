@@ -22,6 +22,7 @@ export class ServicesCommand extends AbstractCommand {
 
       path,
       query,
+      implicitToken: false,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
   }

@@ -23,6 +23,7 @@ export class LiveCommand extends AbstractCommand {
       ...options,
 
       path: path + '/' + options.videoId,
+      implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
   }
@@ -39,6 +40,7 @@ export class LiveCommand extends AbstractCommand {
 
       path: path + '/' + videoId,
       fields,
+      implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
     })
   }
@@ -59,6 +61,7 @@ export class LiveCommand extends AbstractCommand {
       path,
       attaches,
       fields: omit(fields, 'thumbnailfile', 'previewfile'),
+      implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     }))
 

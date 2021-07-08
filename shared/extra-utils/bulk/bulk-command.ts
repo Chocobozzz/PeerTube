@@ -12,8 +12,10 @@ export class BulkCommand extends AbstractCommand {
 
     return this.postBodyRequest({
       ...options,
+
       path: '/api/v1/bulk/remove-comments-of',
       fields: attributes,
+      implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
     })
   }

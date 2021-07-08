@@ -45,6 +45,7 @@ export class PluginsCommand extends AbstractCommand {
         pluginType,
         uninstalled
       },
+      implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
   }
@@ -75,6 +76,7 @@ export class PluginsCommand extends AbstractCommand {
 
       path,
       query,
+      implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
   }
@@ -88,6 +90,7 @@ export class PluginsCommand extends AbstractCommand {
       ...options,
 
       path,
+      implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
   }
@@ -104,6 +107,7 @@ export class PluginsCommand extends AbstractCommand {
 
       path,
       fields: { settings },
+      implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
     })
   }
@@ -117,6 +121,7 @@ export class PluginsCommand extends AbstractCommand {
       ...options,
 
       path,
+      implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
   }
@@ -131,6 +136,7 @@ export class PluginsCommand extends AbstractCommand {
       ...options,
 
       path,
+      implicitToken: false,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
   }
@@ -145,6 +151,7 @@ export class PluginsCommand extends AbstractCommand {
       ...options,
 
       path,
+      implicitToken: false,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
   }
@@ -161,6 +168,7 @@ export class PluginsCommand extends AbstractCommand {
 
       path: apiPath,
       fields: { npmName, path },
+      implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
   }
@@ -177,6 +185,7 @@ export class PluginsCommand extends AbstractCommand {
 
       path: apiPath,
       fields: { npmName, path },
+      implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
   }
@@ -192,6 +201,7 @@ export class PluginsCommand extends AbstractCommand {
 
       path: apiPath,
       fields: { npmName },
+      implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
     })
   }
@@ -203,6 +213,7 @@ export class PluginsCommand extends AbstractCommand {
       ...options,
 
       path,
+      implicitToken: false,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
   }
@@ -222,6 +233,7 @@ export class PluginsCommand extends AbstractCommand {
 
       path,
       query,
+      implicitToken: false,
       defaultExpectedStatus: HttpStatusCode.OK_200,
       redirects: 0
     })

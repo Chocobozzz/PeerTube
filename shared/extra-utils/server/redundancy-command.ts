@@ -16,6 +16,7 @@ export class RedundancyCommand extends AbstractCommand {
 
       path,
       fields: { redundancyAllowed },
+      implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
     })
   }
@@ -42,6 +43,7 @@ export class RedundancyCommand extends AbstractCommand {
         target
       },
 
+      implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
   }
@@ -57,6 +59,7 @@ export class RedundancyCommand extends AbstractCommand {
 
       path,
       fields: { videoId },
+      implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
     })
   }
@@ -71,6 +74,7 @@ export class RedundancyCommand extends AbstractCommand {
       ...options,
 
       path,
+      implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
     })
   }

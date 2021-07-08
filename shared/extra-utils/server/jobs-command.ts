@@ -21,6 +21,7 @@ export class JobsCommand extends AbstractCommand {
 
       path,
       query,
+      implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
   }

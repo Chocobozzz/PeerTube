@@ -19,6 +19,7 @@ export class FeedCommand extends AbstractCommand {
       path,
       query: format ? { format } : undefined,
       accept: 'application/xml',
+      implicitToken: false,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
   }
@@ -36,6 +37,7 @@ export class FeedCommand extends AbstractCommand {
       path,
       query,
       accept: 'application/json',
+      implicitToken: false,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
   }

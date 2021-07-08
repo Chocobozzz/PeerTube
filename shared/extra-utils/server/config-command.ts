@@ -24,8 +24,8 @@ export class ConfigCommand extends AbstractCommand {
     return this.getRequestBody<ServerConfig>({
       ...options,
 
-      token: null,
       path,
+      implicitToken: false,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
   }
@@ -36,8 +36,8 @@ export class ConfigCommand extends AbstractCommand {
     return this.getRequestBody<About>({
       ...options,
 
-      token: null,
       path,
+      implicitToken: false,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
   }
@@ -49,6 +49,7 @@ export class ConfigCommand extends AbstractCommand {
       ...options,
 
       path,
+      implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
   }
@@ -63,6 +64,7 @@ export class ConfigCommand extends AbstractCommand {
 
       path,
       fields: options.newCustomConfig,
+      implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
   }
@@ -74,6 +76,7 @@ export class ConfigCommand extends AbstractCommand {
       ...options,
 
       path,
+      implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
   }
