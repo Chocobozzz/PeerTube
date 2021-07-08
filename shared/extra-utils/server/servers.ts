@@ -18,7 +18,7 @@ import { makeGetRequest } from '../requests/requests'
 import { SearchCommand } from '../search'
 import { SocketIOCommand } from '../socket'
 import { AccountsCommand, BlocklistCommand, SubscriptionsCommand } from '../users'
-import { LiveCommand } from '../videos'
+import { LiveCommand, ServicesCommand } from '../videos'
 import { ConfigCommand } from './config-command'
 import { ContactFormCommand } from './contact-form-command'
 import { DebugCommand } from './debug-command'
@@ -101,6 +101,7 @@ interface ServerInfo {
   blocklistCommand?: BlocklistCommand
   subscriptionsCommand?: SubscriptionsCommand
   liveCommand?: LiveCommand
+  servicesCommand?: ServicesCommand
 }
 
 function parallelTests () {
@@ -327,6 +328,7 @@ async function runServer (server: ServerInfo, configOverrideArg?: any, args = []
       server.blocklistCommand = new BlocklistCommand(server)
       server.subscriptionsCommand = new SubscriptionsCommand(server)
       server.liveCommand = new LiveCommand(server)
+      server.servicesCommand = new ServicesCommand(server)
 
       res(server)
     })
