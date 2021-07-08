@@ -5,12 +5,10 @@ import { HttpStatusCode } from '@shared/core-utils'
 import {
   cleanupTests,
   closeAllSequelize,
-  createVideoPlaylist,
   doubleFollow,
   flushAndRunMultipleServers,
   generateUserAccessToken,
   getVideo,
-  getVideoPlaylist,
   killallServers,
   reRunServer,
   ServerInfo,
@@ -58,15 +56,15 @@ describe('Test AP refresher', function () {
     }
 
     {
-      const playlistAttrs = { displayName: 'playlist1', privacy: VideoPlaylistPrivacy.PUBLIC, videoChannelId: servers[1].videoChannel.id }
-      const res = await createVideoPlaylist({ url: servers[1].url, token: servers[1].accessToken, playlistAttrs })
-      playlistUUID1 = res.body.videoPlaylist.uuid
+      const attributes = { displayName: 'playlist1', privacy: VideoPlaylistPrivacy.PUBLIC, videoChannelId: servers[1].videoChannel.id }
+      const created = await servers[1].playlistsCommand.create({ attributes })
+      playlistUUID1 = created.uuid
     }
 
     {
-      const playlistAttrs = { displayName: 'playlist2', privacy: VideoPlaylistPrivacy.PUBLIC, videoChannelId: servers[1].videoChannel.id }
-      const res = await createVideoPlaylist({ url: servers[1].url, token: servers[1].accessToken, playlistAttrs })
-      playlistUUID2 = res.body.videoPlaylist.uuid
+      const attributes = { displayName: 'playlist2', privacy: VideoPlaylistPrivacy.PUBLIC, videoChannelId: servers[1].videoChannel.id }
+      const created = await servers[1].playlistsCommand.create({ attributes })
+      playlistUUID2 = created.uuid
     }
 
     await doubleFollow(servers[0], servers[1])
@@ -144,13 +142,13 @@ describe('Test AP refresher', function () {
       // Change UUID so the remote server returns a 404
       await setPlaylistField(servers[1].internalServerNumber, playlistUUID2, 'uuid', '304afe4f-39f9-4d49-8ed7-ac57b86b178e')
 
-      await getVideoPlaylist(servers[0].url, playlistUUID1)
-      await getVideoPlaylist(servers[0].url, playlistUUID2)
+      await servers[0].playlistsCommand.get({ playlistId: playlistUUID1 })
+      await servers[0].playlistsCommand.get({ playlistId: playlistUUID2 })
 
       await waitJobs(servers)
 
-      await getVideoPlaylist(servers[0].url, playlistUUID1, HttpStatusCode.OK_200)
-      await getVideoPlaylist(servers[0].url, playlistUUID2, HttpStatusCode.NOT_FOUND_404)
+      await servers[0].playlistsCommand.get({ playlistId: playlistUUID1, expectedStatus: HttpStatusCode.OK_200 })
+      await servers[0].playlistsCommand.get({ playlistId: playlistUUID2, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
     })
   })
 

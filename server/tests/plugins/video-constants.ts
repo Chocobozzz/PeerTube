@@ -5,13 +5,11 @@ import * as chai from 'chai'
 import { HttpStatusCode } from '@shared/core-utils'
 import {
   cleanupTests,
-  createVideoPlaylist,
   flushAndRunServer,
   getVideo,
   getVideoCategories,
   getVideoLanguages,
   getVideoLicences,
-  getVideoPlaylistPrivacies,
   getVideoPrivacies,
   PluginsCommand,
   ServerInfo,
@@ -79,8 +77,7 @@ describe('Test plugin altering video constants', function () {
   })
 
   it('Should have updated playlist privacies', async function () {
-    const res = await getVideoPlaylistPrivacies(server.url)
-    const playlistPrivacies = res.body
+    const playlistPrivacies = await server.playlistsCommand.getPrivacies()
 
     expect(playlistPrivacies[1]).to.exist
     expect(playlistPrivacies[2]).to.exist
@@ -93,13 +90,8 @@ describe('Test plugin altering video constants', function () {
   })
 
   it('Should not be able to create a video with this privacy', async function () {
-    const attrs = { displayName: 'video playlist', privacy: VideoPlaylistPrivacy.PRIVATE }
-    await createVideoPlaylist({
-      url: server.url,
-      token: server.accessToken,
-      playlistAttrs: attrs,
-      expectedStatus: HttpStatusCode.BAD_REQUEST_400
-    })
+    const attributes = { displayName: 'video playlist', privacy: VideoPlaylistPrivacy.PRIVATE }
+    await server.playlistsCommand.create({ attributes, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
   })
 
   it('Should be able to upload a video with these values', async function () {
@@ -162,8 +154,7 @@ describe('Test plugin altering video constants', function () {
     }
 
     {
-      const res = await getVideoPlaylistPrivacies(server.url)
-      const playlistPrivacies = res.body
+      const playlistPrivacies = await server.playlistsCommand.getPrivacies()
 
       expect(playlistPrivacies[1]).to.exist
       expect(playlistPrivacies[2]).to.exist

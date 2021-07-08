@@ -10,7 +10,6 @@ import {
   buildServerDirectory,
   cleanupTests,
   CLICommand,
-  createVideoPlaylist,
   doubleFollow,
   flushAndRunMultipleServers,
   killallServers,
@@ -77,10 +76,8 @@ describe('Test prune storage scripts', function () {
 
       await updateMyAvatar({ url: server.url, accessToken: server.accessToken, fixture: 'avatar.png' })
 
-      await createVideoPlaylist({
-        url: server.url,
-        token: server.accessToken,
-        playlistAttrs: {
+      await server.playlistsCommand.create({
+        attributes: {
           displayName: 'playlist',
           privacy: VideoPlaylistPrivacy.PUBLIC,
           videoChannelId: server.videoChannel.id,

@@ -7,7 +7,6 @@ import {
   addVideoCommentThread,
   cleanupTests,
   createUser,
-  createVideoPlaylist,
   doubleFollow,
   flushAndRunMultipleServers,
   ServerInfo,
@@ -178,10 +177,8 @@ describe('Test stats (excluding redundancy)', function () {
     }
 
     {
-      await createVideoPlaylist({
-        url: server.url,
-        token: server.accessToken,
-        playlistAttrs: {
+      await server.playlistsCommand.create({
+        attributes: {
           displayName: 'playlist for count',
           privacy: VideoPlaylistPrivacy.PUBLIC,
           videoChannelId: channelId

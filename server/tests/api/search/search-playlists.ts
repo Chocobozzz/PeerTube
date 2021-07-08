@@ -4,9 +4,7 @@ import 'mocha'
 import * as chai from 'chai'
 import { VideoPlaylistPrivacy } from '@shared/models'
 import {
-  addVideoInPlaylist,
   cleanupTests,
-  createVideoPlaylist,
   flushAndRunServer,
   SearchCommand,
   ServerInfo,
@@ -37,14 +35,9 @@ describe('Test playlists search', function () {
         privacy: VideoPlaylistPrivacy.PUBLIC,
         videoChannelId: server.videoChannel.id
       }
-      const res = await createVideoPlaylist({ url: server.url, token: server.accessToken, playlistAttrs: attributes })
+      const created = await server.playlistsCommand.create({ attributes })
 
-      await addVideoInPlaylist({
-        url: server.url,
-        token: server.accessToken,
-        playlistId: res.body.videoPlaylist.id,
-        elementAttrs: { videoId }
-      })
+      await server.playlistsCommand.addElement({ playlistId: created.id, attributes: { videoId } })
     }
 
     {
@@ -53,14 +46,9 @@ describe('Test playlists search', function () {
         privacy: VideoPlaylistPrivacy.PUBLIC,
         videoChannelId: server.videoChannel.id
       }
-      const res = await createVideoPlaylist({ url: server.url, token: server.accessToken, playlistAttrs: attributes })
+      const created = await server.playlistsCommand.create({ attributes })
 
-      await addVideoInPlaylist({
-        url: server.url,
-        token: server.accessToken,
-        playlistId: res.body.videoPlaylist.id,
-        elementAttrs: { videoId }
-      })
+      await server.playlistsCommand.addElement({ playlistId: created.id, attributes: { videoId } })
     }
 
     {
@@ -69,7 +57,7 @@ describe('Test playlists search', function () {
         privacy: VideoPlaylistPrivacy.PUBLIC,
         videoChannelId: server.videoChannel.id
       }
-      await createVideoPlaylist({ url: server.url, token: server.accessToken, playlistAttrs: attributes })
+      await server.playlistsCommand.create({ attributes })
     }
 
     command = server.searchCommand

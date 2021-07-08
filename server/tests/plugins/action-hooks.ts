@@ -5,10 +5,8 @@ import { ServerHookName, VideoPlaylistPrivacy, VideoPrivacy } from '@shared/mode
 import {
   addVideoCommentReply,
   addVideoCommentThread,
-  addVideoInPlaylist,
   blockUser,
   createUser,
-  createVideoPlaylist,
   deleteVideoComment,
   PluginsCommand,
   registerUser,
@@ -180,15 +178,13 @@ describe('Test plugin action hooks', function () {
 
     before(async function () {
       {
-        const res = await createVideoPlaylist({
-          url: servers[0].url,
-          token: servers[0].accessToken,
-          playlistAttrs: {
+        const { id } = await servers[0].playlistsCommand.create({
+          attributes: {
             displayName: 'My playlist',
             privacy: VideoPlaylistPrivacy.PRIVATE
           }
         })
-        playlistId = res.body.videoPlaylist.id
+        playlistId = id
       }
 
       {
@@ -198,12 +194,7 @@ describe('Test plugin action hooks', function () {
     })
 
     it('Should run action:api.video-playlist-element.created', async function () {
-      await addVideoInPlaylist({
-        url: servers[0].url,
-        token: servers[0].accessToken,
-        playlistId,
-        elementAttrs: { videoId }
-      })
+      await servers[0].playlistsCommand.addElement({ playlistId, attributes: { videoId } })
 
       await checkHook('action:api.video-playlist-element.created')
     })
