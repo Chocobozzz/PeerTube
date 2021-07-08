@@ -1,19 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-
+import { VideoPlaylistPrivacy } from '@shared/models'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import {
   cleanupTests,
   flushAndRunServer,
   makeGetRequest,
   ServerInfo,
   setAccessTokensToServers,
-  uploadVideo,
-  createVideoPlaylist,
-  setDefaultVideoChannel
+  setDefaultVideoChannel,
+  uploadVideo
 } from '../../../../shared/extra-utils'
-import { VideoPlaylistPrivacy } from '@shared/models'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 describe('Test services API validators', function () {
   let server: ServerInfo
@@ -34,17 +32,15 @@ describe('Test services API validators', function () {
     }
 
     {
-      const res = await createVideoPlaylist({
-        url: server.url,
-        token: server.accessToken,
-        playlistAttrs: {
+      const created = await server.playlistsCommand.create({
+        attributes: {
           displayName: 'super playlist',
           privacy: VideoPlaylistPrivacy.PUBLIC,
           videoChannelId: server.videoChannel.id
         }
       })
 
-      playlistUUID = res.body.videoPlaylist.uuid
+      playlistUUID = created.uuid
     }
   })
 

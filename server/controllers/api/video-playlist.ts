@@ -5,6 +5,7 @@ import { scheduleRefreshIfNeeded } from '@server/lib/activitypub/playlists'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { getServerActor } from '@server/models/application/application'
 import { MVideoPlaylistFull, MVideoPlaylistThumbnail, MVideoThumbnail } from '@server/types/models'
+import { VideoPlaylistCreateResult, VideoPlaylistElementCreateResult } from '@shared/models'
 import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 import { VideoPlaylistCreate } from '../../../shared/models/videos/playlist/video-playlist-create.model'
 import { VideoPlaylistElementCreate } from '../../../shared/models/videos/playlist/video-playlist-element-create.model'
@@ -202,7 +203,7 @@ async function addVideoPlaylist (req: express.Request, res: express.Response) {
       id: videoPlaylistCreated.id,
       shortUUID: uuidToShort(videoPlaylistCreated.uuid),
       uuid: videoPlaylistCreated.uuid
-    }
+    } as VideoPlaylistCreateResult
   })
 }
 
@@ -338,8 +339,8 @@ async function addVideoInPlaylist (req: express.Request, res: express.Response) 
   return res.json({
     videoPlaylistElement: {
       id: playlistElement.id
-    }
-  }).end()
+    } as VideoPlaylistElementCreateResult
+  })
 }
 
 async function updateVideoPlaylistElement (req: express.Request, res: express.Response) {

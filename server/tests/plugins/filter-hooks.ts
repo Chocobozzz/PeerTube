@@ -7,7 +7,6 @@ import {
   addVideoCommentReply,
   addVideoCommentThread,
   cleanupTests,
-  createVideoPlaylist,
   doubleFollow,
   flushAndRunMultipleServers,
   getAccountVideos,
@@ -15,7 +14,6 @@ import {
   getVideo,
   getVideoChannelVideos,
   getVideoCommentThreads,
-  getVideoPlaylist,
   getVideosList,
   getVideosListPagination,
   getVideoThreadComments,
@@ -443,11 +441,11 @@ describe('Test plugin filter hooks', function () {
         }
 
         {
-          const playlistAttrs = { displayName: name, videoChannelId: servers[0].videoChannel.id, privacy: VideoPlaylistPrivacy.PUBLIC }
-          const res = await createVideoPlaylist({ url: servers[0].url, token: servers[0].accessToken, playlistAttrs })
+          const attributes = { displayName: name, videoChannelId: servers[0].videoChannel.id, privacy: VideoPlaylistPrivacy.PUBLIC }
+          const { id } = await servers[0].playlistsCommand.create({ attributes })
 
-          const resPlaylist = await getVideoPlaylist(servers[0].url, res.body.videoPlaylist.id)
-          embedPlaylists.push(resPlaylist.body)
+          const playlist = await servers[0].playlistsCommand.get({ playlistId: id })
+          embedPlaylists.push(playlist)
         }
       }
     })

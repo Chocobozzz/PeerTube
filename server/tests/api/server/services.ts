@@ -4,8 +4,6 @@ import 'mocha'
 import * as chai from 'chai'
 import { Video, VideoPlaylistPrivacy } from '@shared/models'
 import {
-  addVideoInPlaylist,
-  createVideoPlaylist,
   getVideosList,
   ServerInfo,
   setAccessTokensToServers,
@@ -41,24 +39,20 @@ describe('Test services', function () {
     }
 
     {
-      const res = await createVideoPlaylist({
-        url: server.url,
-        token: server.accessToken,
-        playlistAttrs: {
+      const created = await server.playlistsCommand.create({
+        attributes: {
           displayName: 'The Life and Times of Scrooge McDuck',
           privacy: VideoPlaylistPrivacy.PUBLIC,
           videoChannelId: server.videoChannel.id
         }
       })
 
-      playlistUUID = res.body.videoPlaylist.uuid
+      playlistUUID = created.uuid
       playlistDisplayName = 'The Life and Times of Scrooge McDuck'
 
-      await addVideoInPlaylist({
-        url: server.url,
-        token: server.accessToken,
-        playlistId: res.body.videoPlaylist.id,
-        elementAttrs: {
+      await server.playlistsCommand.addElement({
+        playlistId: created.id,
+        attributes: {
           videoId: video.id
         }
       })

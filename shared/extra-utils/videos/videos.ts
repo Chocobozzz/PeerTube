@@ -262,28 +262,6 @@ function getVideoChannelVideos (
   })
 }
 
-function getPlaylistVideos (
-  url: string,
-  accessToken: string,
-  playlistId: number | string,
-  start: number,
-  count: number,
-  query: { nsfw?: boolean } = {}
-) {
-  const path = '/api/v1/video-playlists/' + playlistId + '/videos'
-
-  return makeGetRequest({
-    url,
-    path,
-    query: immutableAssign(query, {
-      start,
-      count
-    }),
-    token: accessToken,
-    statusCodeExpected: HttpStatusCode.OK_200
-  })
-}
-
 function getVideosListPagination (url: string, start: number, count: number, sort?: string, skipCount?: boolean) {
   const path = '/api/v1/videos'
 
@@ -871,7 +849,6 @@ export {
   getLocalVideos,
   completeVideoCheck,
   checkVideoFilesWereRemoved,
-  getPlaylistVideos,
   getMyVideosWithFilter,
   uploadVideoAndGetId,
   getLocalIdByUUID,

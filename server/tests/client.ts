@@ -6,9 +6,7 @@ import { omit } from 'lodash'
 import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 import { Account, HTMLServerConfig, ServerConfig, VideoPlaylistCreateResult, VideoPlaylistPrivacy } from '@shared/models'
 import {
-  addVideoInPlaylist,
   cleanupTests,
-  createVideoPlaylist,
   doubleFollow,
   flushAndRunMultipleServers,
   getVideosList,
@@ -82,23 +80,17 @@ describe('Test a client controllers', function () {
 
     // Playlist
 
-    const playlistAttrs = {
+    const attributes = {
       displayName: playlistName,
       description: playlistDescription,
       privacy: VideoPlaylistPrivacy.PUBLIC,
       videoChannelId: servers[0].videoChannel.id
     }
 
-    const resVideoPlaylistRequest = await createVideoPlaylist({ url: servers[0].url, token: servers[0].accessToken, playlistAttrs })
-    playlist = resVideoPlaylistRequest.body.videoPlaylist
+    playlist = await servers[0].playlistsCommand.create({ attributes })
     playlistIds = [ playlist.id, playlist.shortUUID, playlist.uuid ]
 
-    await addVideoInPlaylist({
-      url: servers[0].url,
-      token: servers[0].accessToken,
-      playlistId: playlist.shortUUID,
-      elementAttrs: { videoId: video.id }
-    })
+    await servers[0].playlistsCommand.addElement({ playlistId: playlist.shortUUID, attributes: { videoId: video.id } })
 
     // Account
 

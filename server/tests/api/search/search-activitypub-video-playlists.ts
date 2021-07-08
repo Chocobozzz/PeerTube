@@ -3,12 +3,8 @@
 import 'mocha'
 import * as chai from 'chai'
 import {
-  addVideoInPlaylist,
   cleanupTests,
-  createVideoPlaylist,
-  deleteVideoPlaylist,
   flushAndRunMultipleServers,
-  getVideoPlaylistsList,
   SearchCommand,
   ServerInfo,
   setAccessTokensToServers,
@@ -46,16 +42,11 @@ describe('Test ActivityPub playlists search', function () {
         privacy: VideoPlaylistPrivacy.PUBLIC,
         videoChannelId: servers[0].videoChannel.id
       }
-      const res = await createVideoPlaylist({ url: servers[0].url, token: servers[0].accessToken, playlistAttrs: attributes })
-      playlistServer1UUID = res.body.videoPlaylist.uuid
+      const created = await servers[0].playlistsCommand.create({ attributes })
+      playlistServer1UUID = created.uuid
 
       for (const videoId of [ video1, video2 ]) {
-        await addVideoInPlaylist({
-          url: servers[0].url,
-          token: servers[0].accessToken,
-          playlistId: playlistServer1UUID,
-          elementAttrs: { videoId }
-        })
+        await servers[0].playlistsCommand.addElement({ playlistId: playlistServer1UUID, attributes: { videoId } })
       }
     }
 
@@ -68,15 +59,10 @@ describe('Test ActivityPub playlists search', function () {
         privacy: VideoPlaylistPrivacy.PUBLIC,
         videoChannelId: servers[1].videoChannel.id
       }
-      const res = await createVideoPlaylist({ url: servers[1].url, token: servers[1].accessToken, playlistAttrs: attributes })
-      playlistServer2UUID = res.body.videoPlaylist.uuid
+      const created = await servers[1].playlistsCommand.create({ attributes })
+      playlistServer2UUID = created.uuid
 
-      await addVideoInPlaylist({
-        url: servers[1].url,
-        token: servers[1].accessToken,
-        playlistId: playlistServer2UUID,
-        elementAttrs: { videoId }
-      })
+      await servers[1].playlistsCommand.addElement({ playlistId: playlistServer2UUID, attributes: { videoId } })
     }
 
     await waitJobs(servers)
@@ -154,21 +140,16 @@ describe('Test ActivityPub playlists search', function () {
   })
 
   it('Should not list this remote playlist', async function () {
-    const res = await getVideoPlaylistsList(servers[0].url, 0, 10)
-    expect(res.body.total).to.equal(1)
-    expect(res.body.data).to.have.lengthOf(1)
-    expect(res.body.data[0].displayName).to.equal('playlist 1 on server 1')
+    const body = await servers[0].playlistsCommand.list({ start: 0, count: 10 })
+    expect(body.total).to.equal(1)
+    expect(body.data).to.have.lengthOf(1)
+    expect(body.data[0].displayName).to.equal('playlist 1 on server 1')
   })
 
   it('Should update the playlist of server 2, and refresh it on server 1', async function () {
     this.timeout(60000)
 
-    await addVideoInPlaylist({
-      url: servers[1].url,
-      token: servers[1].accessToken,
-      playlistId: playlistServer2UUID,
-      elementAttrs: { videoId: video2Server2 }
-    })
+    await servers[1].playlistsCommand.addElement({ playlistId: playlistServer2UUID, attributes: { videoId: video2Server2 } })
 
     await waitJobs(servers)
     // Expire playlist
@@ -192,7 +173,7 @@ describe('Test ActivityPub playlists search', function () {
   it('Should delete playlist of server 2, and delete it on server 1', async function () {
     this.timeout(60000)
 
-    await deleteVideoPlaylist(servers[1].url, servers[1].accessToken, playlistServer2UUID)
+    await servers[1].playlistsCommand.delete({ playlistId: playlistServer2UUID })
 
     await waitJobs(servers)
     // Expiration

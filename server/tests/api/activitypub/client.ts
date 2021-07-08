@@ -6,7 +6,6 @@ import { VideoPlaylistPrivacy } from '@shared/models'
 import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import {
   cleanupTests,
-  createVideoPlaylist,
   doubleFollow,
   flushAndRunMultipleServers,
   makeActivityPubGetRequest,
@@ -74,9 +73,8 @@ describe('Test activitypub', function () {
     }
 
     {
-      const playlistAttrs = { displayName: 'playlist', privacy: VideoPlaylistPrivacy.PUBLIC, videoChannelId: servers[0].videoChannel.id }
-      const resCreate = await createVideoPlaylist({ url: servers[0].url, token: servers[0].accessToken, playlistAttrs })
-      playlist = resCreate.body.videoPlaylist
+      const attributes = { displayName: 'playlist', privacy: VideoPlaylistPrivacy.PUBLIC, videoChannelId: servers[0].videoChannel.id }
+      playlist = await servers[0].playlistsCommand.create({ attributes })
     }
 
     await doubleFollow(servers[0], servers[1])
