@@ -57,7 +57,7 @@ describe('Test live', function () {
         privacy: VideoPrivacy.PUBLIC
       }
 
-      const { uuid } = await servers[0].liveCommand.createLive({ fields: liveAttributes })
+      const { uuid } = await servers[0].liveCommand.create({ fields: liveAttributes })
       return uuid
     }
 
@@ -99,7 +99,7 @@ describe('Test live', function () {
       await stopFfmpeg(ffmpegCommand)
 
       for (const server of servers) {
-        await server.liveCommand.waitUntilLiveEnded({ videoId: liveVideoUUID })
+        await server.liveCommand.waitUntilEnded({ videoId: liveVideoUUID })
       }
       await waitJobs(servers)
 

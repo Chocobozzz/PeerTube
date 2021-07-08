@@ -71,7 +71,7 @@ describe('Test live', function () {
         privacy: VideoPrivacy.PUBLIC
       }
 
-      const live = await servers[0].liveCommand.createLive({ fields: liveAttributes })
+      const live = await servers[0].liveCommand.create({ fields: liveAttributes })
       liveVideoId = live.uuid
 
       command = await servers[0].liveCommand.sendRTMPStreamInVideo({ videoId: liveVideoId })
