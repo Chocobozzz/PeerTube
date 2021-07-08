@@ -11,7 +11,6 @@ import {
   getVideo,
   getVideosList,
   immutableAssign,
-  listVideoCaptions,
   ServerInfo,
   setAccessTokensToServers,
   testCaptionFile
@@ -25,7 +24,7 @@ import {
   getYoutubeVideoUrl,
   importVideo
 } from '../../../../shared/extra-utils/videos/video-imports'
-import { VideoCaption, VideoDetails, VideoImport, VideoPrivacy, VideoResolution } from '../../../../shared/models/videos'
+import { VideoDetails, VideoImport, VideoPrivacy, VideoResolution } from '../../../../shared/models/videos'
 
 const expect = chai.expect
 
@@ -36,8 +35,8 @@ describe('Test video imports', function () {
 
   if (areHttpImportTestsDisabled()) return
 
-  async function checkVideosServer1 (url: string, idHttp: string, idMagnet: string, idTorrent: string) {
-    const resHttp = await getVideo(url, idHttp)
+  async function checkVideosServer1 (server: ServerInfo, idHttp: string, idMagnet: string, idTorrent: string) {
+    const resHttp = await getVideo(server.url, idHttp)
     const videoHttp: VideoDetails = resHttp.body
 
     expect(videoHttp.name).to.equal('small video - youtube')
@@ -55,9 +54,9 @@ describe('Test video imports', function () {
     expect(originallyPublishedAt.getMonth()).to.equal(0)
     expect(originallyPublishedAt.getFullYear()).to.equal(2019)
 
-    const resMagnet = await getVideo(url, idMagnet)
+    const resMagnet = await getVideo(server.url, idMagnet)
     const videoMagnet: VideoDetails = resMagnet.body
-    const resTorrent = await getVideo(url, idTorrent)
+    const resTorrent = await getVideo(server.url, idTorrent)
     const videoTorrent: VideoDetails = resTorrent.body
 
     for (const video of [ videoMagnet, videoTorrent ]) {
@@ -73,12 +72,12 @@ describe('Test video imports', function () {
     expect(videoTorrent.name).to.contain('你好 世界 720p.mp4')
     expect(videoMagnet.name).to.contain('super peertube2 video')
 
-    const resCaptions = await listVideoCaptions(url, idHttp)
-    expect(resCaptions.body.total).to.equal(2)
+    const bodyCaptions = await server.captionsCommand.listVideoCaptions({ videoId: idHttp })
+    expect(bodyCaptions.total).to.equal(2)
   }
 
-  async function checkVideoServer2 (url: string, id: number | string) {
-    const res = await getVideo(url, id)
+  async function checkVideoServer2 (server: ServerInfo, id: number | string) {
+    const res = await getVideo(server.url, id)
     const video: VideoDetails = res.body
 
     expect(video.name).to.equal('my super name')
@@ -91,8 +90,8 @@ describe('Test video imports', function () {
 
     expect(video.files).to.have.lengthOf(1)
 
-    const resCaptions = await listVideoCaptions(url, id)
-    expect(resCaptions.body.total).to.equal(2)
+    const bodyCaptions = await server.captionsCommand.listVideoCaptions({ videoId: id })
+    expect(bodyCaptions.total).to.equal(2)
   }
 
   before(async function () {
@@ -135,8 +134,8 @@ describe('Test video imports', function () {
       await testImage(servers[0].url, 'video_import_thumbnail', res.body.video.thumbnailPath)
       await testImage(servers[0].url, 'video_import_preview', res.body.video.previewPath)
 
-      const resCaptions = await listVideoCaptions(servers[0].url, res.body.video.id)
-      const videoCaptions: VideoCaption[] = resCaptions.body.data
+      const bodyCaptions = await servers[0].captionsCommand.listVideoCaptions({ videoId: res.body.video.id })
+      const videoCaptions = bodyCaptions.data
       expect(videoCaptions).to.have.lengthOf(2)
 
       const enCaption = videoCaptions.find(caption => caption.language.id === 'en')
@@ -241,7 +240,7 @@ Ajouter un sous-titre est vraiment facile`)
       expect(res.body.data).to.have.lengthOf(3)
 
       const [ videoHttp, videoMagnet, videoTorrent ] = res.body.data
-      await checkVideosServer1(server.url, videoHttp.uuid, videoMagnet.uuid, videoTorrent.uuid)
+      await checkVideosServer1(server, videoHttp.uuid, videoMagnet.uuid, videoTorrent.uuid)
     }
   })
 
@@ -273,10 +272,10 @@ Ajouter un sous-titre est vraiment facile`)
       expect(res.body.total).to.equal(4)
       expect(res.body.data).to.have.lengthOf(4)
 
-      await checkVideoServer2(server.url, res.body.data[0].uuid)
+      await checkVideoServer2(server, res.body.data[0].uuid)
 
       const [ , videoHttp, videoMagnet, videoTorrent ] = res.body.data
-      await checkVideosServer1(server.url, videoHttp.uuid, videoMagnet.uuid, videoTorrent.uuid)
+      await checkVideosServer1(server, videoHttp.uuid, videoMagnet.uuid, videoTorrent.uuid)
     }
   })
 

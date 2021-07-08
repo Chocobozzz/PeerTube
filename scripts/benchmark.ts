@@ -5,7 +5,6 @@ import * as autocannon from 'autocannon'
 import {
   addVideoCommentReply,
   addVideoCommentThread,
-  createVideoCaption,
   flushAndRunServer,
   getVideosList,
   killallServers,
@@ -244,9 +243,7 @@ async function prepare () {
   }
 
   for (const caption of [ 'ar', 'fr', 'en', 'zh' ]) {
-    await createVideoCaption({
-      url: server.url,
-      accessToken: server.accessToken,
+    await server.captionsCommand.createVideoCaption({
       language: caption,
       videoId: video.id,
       fixture: 'subtitle-good2.vtt'
