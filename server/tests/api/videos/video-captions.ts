@@ -1,25 +1,20 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
 import 'mocha'
+import * as chai from 'chai'
 import {
   checkVideoFilesWereRemoved,
   cleanupTests,
   doubleFollow,
   flushAndRunMultipleServers,
   removeVideo,
+  ServerInfo,
+  setAccessTokensToServers,
+  testCaptionFile,
   uploadVideo,
-  wait
-} from '../../../../shared/extra-utils'
-import { ServerInfo, setAccessTokensToServers } from '../../../../shared/extra-utils/index'
-import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
-import {
-  createVideoCaption,
-  deleteVideoCaption,
-  listVideoCaptions,
-  testCaptionFile
-} from '../../../../shared/extra-utils/videos/video-captions'
-import { VideoCaption } from '../../../../shared/models/videos/caption/video-caption.model'
+  wait,
+  waitJobs
+} from '@shared/extra-utils'
 
 const expect = chai.expect
 
@@ -47,26 +42,22 @@ describe('Test video captions', function () {
 
   it('Should list the captions and return an empty list', async function () {
     for (const server of servers) {
-      const res = await listVideoCaptions(server.url, videoUUID)
-      expect(res.body.total).to.equal(0)
-      expect(res.body.data).to.have.lengthOf(0)
+      const body = await server.captionsCommand.listVideoCaptions({ videoId: videoUUID })
+      expect(body.total).to.equal(0)
+      expect(body.data).to.have.lengthOf(0)
     }
   })
 
   it('Should create two new captions', async function () {
     this.timeout(30000)
 
-    await createVideoCaption({
-      url: servers[0].url,
-      accessToken: servers[0].accessToken,
+    await servers[0].captionsCommand.createVideoCaption({
       language: 'ar',
       videoId: videoUUID,
       fixture: 'subtitle-good1.vtt'
     })
 
-    await createVideoCaption({
-      url: servers[0].url,
-      accessToken: servers[0].accessToken,
+    await servers[0].captionsCommand.createVideoCaption({
       language: 'zh',
       videoId: videoUUID,
       fixture: 'subtitle-good2.vtt',
@@ -78,17 +69,17 @@ describe('Test video captions', function () {
 
   it('Should list these uploaded captions', async function () {
     for (const server of servers) {
-      const res = await listVideoCaptions(server.url, videoUUID)
-      expect(res.body.total).to.equal(2)
-      expect(res.body.data).to.have.lengthOf(2)
+      const body = await server.captionsCommand.listVideoCaptions({ videoId: videoUUID })
+      expect(body.total).to.equal(2)
+      expect(body.data).to.have.lengthOf(2)
 
-      const caption1: VideoCaption = res.body.data[0]
+      const caption1 = body.data[0]
       expect(caption1.language.id).to.equal('ar')
       expect(caption1.language.label).to.equal('Arabic')
       expect(caption1.captionPath).to.match(new RegExp('^/lazy-static/video-captions/' + uuidRegex + '-ar.vtt$'))
       await testCaptionFile(server.url, caption1.captionPath, 'Subtitle good 1.')
 
-      const caption2: VideoCaption = res.body.data[1]
+      const caption2 = body.data[1]
       expect(caption2.language.id).to.equal('zh')
       expect(caption2.language.label).to.equal('Chinese')
       expect(caption2.captionPath).to.match(new RegExp('^/lazy-static/video-captions/' + uuidRegex + '-zh.vtt$'))
@@ -99,9 +90,7 @@ describe('Test video captions', function () {
   it('Should replace an existing caption', async function () {
     this.timeout(30000)
 
-    await createVideoCaption({
-      url: servers[0].url,
-      accessToken: servers[0].accessToken,
+    await servers[0].captionsCommand.createVideoCaption({
       language: 'ar',
       videoId: videoUUID,
       fixture: 'subtitle-good2.vtt'
@@ -112,11 +101,11 @@ describe('Test video captions', function () {
 
   it('Should have this caption updated', async function () {
     for (const server of servers) {
-      const res = await listVideoCaptions(server.url, videoUUID)
-      expect(res.body.total).to.equal(2)
-      expect(res.body.data).to.have.lengthOf(2)
+      const body = await server.captionsCommand.listVideoCaptions({ videoId: videoUUID })
+      expect(body.total).to.equal(2)
+      expect(body.data).to.have.lengthOf(2)
 
-      const caption1: VideoCaption = res.body.data[0]
+      const caption1 = body.data[0]
       expect(caption1.language.id).to.equal('ar')
       expect(caption1.language.label).to.equal('Arabic')
       expect(caption1.captionPath).to.match(new RegExp('^/lazy-static/video-captions/' + uuidRegex + '-ar.vtt$'))
@@ -127,9 +116,7 @@ describe('Test video captions', function () {
   it('Should replace an existing caption with a srt file and convert it', async function () {
     this.timeout(30000)
 
-    await createVideoCaption({
-      url: servers[0].url,
-      accessToken: servers[0].accessToken,
+    await servers[0].captionsCommand.createVideoCaption({
       language: 'ar',
       videoId: videoUUID,
       fixture: 'subtitle-good.srt'
@@ -143,11 +130,11 @@ describe('Test video captions', function () {
 
   it('Should have this caption updated and converted', async function () {
     for (const server of servers) {
-      const res = await listVideoCaptions(server.url, videoUUID)
-      expect(res.body.total).to.equal(2)
-      expect(res.body.data).to.have.lengthOf(2)
+      const body = await server.captionsCommand.listVideoCaptions({ videoId: videoUUID })
+      expect(body.total).to.equal(2)
+      expect(body.data).to.have.lengthOf(2)
 
-      const caption1: VideoCaption = res.body.data[0]
+      const caption1 = body.data[0]
       expect(caption1.language.id).to.equal('ar')
       expect(caption1.language.label).to.equal('Arabic')
       expect(caption1.captionPath).to.match(new RegExp('^/lazy-static/video-captions/' + uuidRegex + '-ar.vtt$'))
@@ -172,18 +159,18 @@ describe('Test video captions', function () {
   it('Should remove one caption', async function () {
     this.timeout(30000)
 
-    await deleteVideoCaption(servers[0].url, servers[0].accessToken, videoUUID, 'ar')
+    await servers[0].captionsCommand.deleteVideoCaption({ videoId: videoUUID, language: 'ar' })
 
     await waitJobs(servers)
   })
 
   it('Should only list the caption that was not deleted', async function () {
     for (const server of servers) {
-      const res = await listVideoCaptions(server.url, videoUUID)
-      expect(res.body.total).to.equal(1)
-      expect(res.body.data).to.have.lengthOf(1)
+      const body = await server.captionsCommand.listVideoCaptions({ videoId: videoUUID })
+      expect(body.total).to.equal(1)
+      expect(body.data).to.have.lengthOf(1)
 
-      const caption: VideoCaption = res.body.data[0]
+      const caption = body.data[0]
 
       expect(caption.language.id).to.equal('zh')
       expect(caption.language.label).to.equal('Chinese')

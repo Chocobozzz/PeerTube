@@ -8,7 +8,6 @@ import {
   cleanupTests,
   completeVideoCheck,
   createUser,
-  createVideoCaption,
   dateIsValid,
   deleteVideoComment,
   expectAccountFollows,
@@ -17,7 +16,6 @@ import {
   getVideoCommentThreads,
   getVideosList,
   getVideoThreadComments,
-  listVideoCaptions,
   rateVideo,
   ServerInfo,
   setAccessTokensToServers,
@@ -26,7 +24,7 @@ import {
   userLogin,
   waitJobs
 } from '@shared/extra-utils'
-import { Video, VideoCaption, VideoComment, VideoCommentThreadTree, VideoPrivacy } from '@shared/models'
+import { Video, VideoComment, VideoCommentThreadTree, VideoPrivacy } from '@shared/models'
 
 const expect = chai.expect
 
@@ -385,9 +383,7 @@ describe('Test follows', function () {
         }
 
         {
-          await createVideoCaption({
-            url: servers[2].url,
-            accessToken: servers[2].accessToken,
+          await servers[2].captionsCommand.createVideoCaption({
             language: 'ar',
             videoId: video4.id,
             fixture: 'subtitle-good2.vtt'
@@ -543,11 +539,11 @@ describe('Test follows', function () {
     })
 
     it('Should have propagated captions', async function () {
-      const res = await listVideoCaptions(servers[0].url, video4.id)
-      expect(res.body.total).to.equal(1)
-      expect(res.body.data).to.have.lengthOf(1)
+      const body = await servers[0].captionsCommand.listVideoCaptions({ videoId: video4.id })
+      expect(body.total).to.equal(1)
+      expect(body.data).to.have.lengthOf(1)
 
-      const caption1: VideoCaption = res.body.data[0]
+      const caption1 = body.data[0]
       expect(caption1.language.id).to.equal('ar')
       expect(caption1.language.label).to.equal('Arabic')
       expect(caption1.captionPath).to.match(new RegExp('^/lazy-static/video-captions/.+-ar.vtt$'))

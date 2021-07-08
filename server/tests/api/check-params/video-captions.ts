@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-import { VideoCreateResult } from '@shared/models'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '@shared/core-utils'
 import {
   buildAbsoluteFixturePath,
   cleanupTests,
@@ -15,8 +14,8 @@ import {
   setAccessTokensToServers,
   uploadVideo,
   userLogin
-} from '../../../../shared/extra-utils'
-import { createVideoCaption } from '../../../../shared/extra-utils/videos/video-captions'
+} from '@shared/extra-utils'
+import { VideoCreateResult } from '@shared/models'
 
 describe('Test video captions API validator', function () {
   const path = '/api/v1/videos/'
@@ -159,9 +158,7 @@ describe('Test video captions API validator', function () {
     // })
 
     it('Should succeed with a valid captionfile extension and octet-stream mime type', async function () {
-      await createVideoCaption({
-        url: server.url,
-        accessToken: server.accessToken,
+      await server.captionsCommand.createVideoCaption({
         language: 'zh',
         videoId: video.uuid,
         fixture: 'subtitle-good.srt',

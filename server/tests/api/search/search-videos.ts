@@ -4,7 +4,6 @@ import 'mocha'
 import * as chai from 'chai'
 import {
   cleanupTests,
-  createVideoCaption,
   flushAndRunServer,
   immutableAssign,
   SearchCommand,
@@ -54,18 +53,14 @@ describe('Test videos search', function () {
         const videoId = res.body.video.id
         videoUUID = res.body.video.uuid
 
-        await createVideoCaption({
-          url: server.url,
-          accessToken: server.accessToken,
+        await server.captionsCommand.createVideoCaption({
           language: 'en',
           videoId,
           fixture: 'subtitle-good2.vtt',
           mimeType: 'application/octet-stream'
         })
 
-        await createVideoCaption({
-          url: server.url,
-          accessToken: server.accessToken,
+        await server.captionsCommand.createVideoCaption({
           language: 'aa',
           videoId,
           fixture: 'subtitle-good2.vtt',
