@@ -18,7 +18,7 @@ import { makeGetRequest } from '../requests/requests'
 import { SearchCommand } from '../search'
 import { SocketIOCommand } from '../socket'
 import { AccountsCommand, BlocklistCommand, SubscriptionsCommand } from '../users'
-import { LiveCommand, ServicesCommand, BlacklistCommand, CaptionsCommand } from '../videos'
+import { BlacklistCommand, CaptionsCommand, ChangeOwnershipCommand, LiveCommand, ServicesCommand } from '../videos'
 import { ConfigCommand } from './config-command'
 import { ContactFormCommand } from './contact-form-command'
 import { DebugCommand } from './debug-command'
@@ -104,6 +104,7 @@ interface ServerInfo {
   servicesCommand?: ServicesCommand
   blacklistCommand?: BlacklistCommand
   captionsCommand?: CaptionsCommand
+  changeOwnershipCommand?: ChangeOwnershipCommand
 }
 
 function parallelTests () {
@@ -333,6 +334,7 @@ async function runServer (server: ServerInfo, configOverrideArg?: any, args = []
       server.servicesCommand = new ServicesCommand(server)
       server.blacklistCommand = new BlacklistCommand(server)
       server.captionsCommand = new CaptionsCommand(server)
+      server.changeOwnershipCommand = new ChangeOwnershipCommand(server)
 
       res(server)
     })
