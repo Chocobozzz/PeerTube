@@ -6,7 +6,6 @@ import { Video, VideoPlaylistPrivacy } from '@shared/models'
 import {
   addVideoInPlaylist,
   createVideoPlaylist,
-  getOEmbed,
   getVideosList,
   ServerInfo,
   setAccessTokensToServers,
@@ -70,7 +69,7 @@ describe('Test services', function () {
     for (const basePath of [ '/videos/watch/', '/w/' ]) {
       const oembedUrl = 'http://localhost:' + server.port + basePath + video.uuid
 
-      const res = await getOEmbed(server.url, oembedUrl)
+      const res = await server.servicesCommand.getOEmbed({ oembedUrl })
       const expectedHtml = '<iframe width="560" height="315" sandbox="allow-same-origin allow-scripts" ' +
         `title="${video.name}" src="http://localhost:${server.port}/videos/embed/${video.uuid}" ` +
         'frameborder="0" allowfullscreen></iframe>'
@@ -91,7 +90,7 @@ describe('Test services', function () {
     for (const basePath of [ '/videos/watch/playlist/', '/w/p/' ]) {
       const oembedUrl = 'http://localhost:' + server.port + basePath + playlistUUID
 
-      const res = await getOEmbed(server.url, oembedUrl)
+      const res = await server.servicesCommand.getOEmbed({ oembedUrl })
       const expectedHtml = '<iframe width="560" height="315" sandbox="allow-same-origin allow-scripts" ' +
         `title="${playlistDisplayName}" src="http://localhost:${server.port}/video-playlists/embed/${playlistUUID}" ` +
         'frameborder="0" allowfullscreen></iframe>'
@@ -114,7 +113,7 @@ describe('Test services', function () {
       const maxHeight = 50
       const maxWidth = 50
 
-      const res = await getOEmbed(server.url, oembedUrl, format, maxHeight, maxWidth)
+      const res = await server.servicesCommand.getOEmbed({ oembedUrl, format, maxHeight, maxWidth })
       const expectedHtml = '<iframe width="50" height="50" sandbox="allow-same-origin allow-scripts" ' +
         `title="${video.name}" src="http://localhost:${server.port}/videos/embed/${video.uuid}" ` +
         'frameborder="0" allowfullscreen></iframe>'

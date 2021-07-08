@@ -1,6 +1,6 @@
 export * from './live-command'
 export * from './live'
-export * from './services'
+export * from './services-command'
 export * from './video-blacklist'
 export * from './video-captions'
 export * from './video-change-ownership'
