@@ -3,13 +3,12 @@
 import 'mocha'
 import { expect } from 'chai'
 import { HttpStatusCode, randomInt } from '@shared/core-utils'
-import { getGoodVideoUrl, getMagnetURI, getMyVideoImports, importVideo } from '@shared/extra-utils/videos/video-imports'
-import { MyUser, VideoImport, VideoImportState, VideoPrivacy } from '@shared/models'
+import { MyUser, VideoImportState, VideoPrivacy } from '@shared/models'
 import {
   cleanupTests,
   flushAndRunServer,
   getMyUserInformation,
-  immutableAssign,
+  ImportsCommand,
   registerUser,
   ServerInfo,
   setAccessTokensToServers,
@@ -83,16 +82,15 @@ describe('Test upload quota', function () {
         channelId: server.videoChannel.id,
         privacy: VideoPrivacy.PUBLIC
       }
-      await importVideo(server.url, server.accessToken, immutableAssign(baseAttributes, { targetUrl: getGoodVideoUrl() }))
-      await importVideo(server.url, server.accessToken, immutableAssign(baseAttributes, { magnetUri: getMagnetURI() }))
-      await importVideo(server.url, server.accessToken, immutableAssign(baseAttributes, { torrentfile: 'video-720p.torrent' as any }))
+      await server.importsCommand.importVideo({ attributes: { ...baseAttributes, targetUrl: ImportsCommand.getGoodVideoUrl() } })
+      await server.importsCommand.importVideo({ attributes: { ...baseAttributes, magnetUri: ImportsCommand.getMagnetURI() } })
+      await server.importsCommand.importVideo({ attributes: { ...baseAttributes, torrentfile: 'video-720p.torrent' as any } })
 
       await waitJobs([ server ])
 
-      const res = await getMyVideoImports(server.url, server.accessToken)
+      const { total, data: videoImports } = await server.importsCommand.getMyVideoImports()
+      expect(total).to.equal(3)
 
-      expect(res.body.total).to.equal(3)
-      const videoImports: VideoImport[] = res.body.data
       expect(videoImports).to.have.lengthOf(3)
 
       for (const videoImport of videoImports) {

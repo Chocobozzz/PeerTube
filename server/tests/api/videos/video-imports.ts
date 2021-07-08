@@ -3,6 +3,7 @@
 import 'mocha'
 import * as chai from 'chai'
 import {
+  areHttpImportTestsDisabled,
   cleanupTests,
   doubleFollow,
   flushAndRunMultipleServers,
@@ -11,20 +12,14 @@ import {
   getVideo,
   getVideosList,
   immutableAssign,
+  ImportsCommand,
   ServerInfo,
   setAccessTokensToServers,
-  testCaptionFile
-} from '../../../../shared/extra-utils'
-import { areHttpImportTestsDisabled, testImage } from '../../../../shared/extra-utils/miscs/miscs'
-import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
-import {
-  getMagnetURI,
-  getMyVideoImports,
-  getYoutubeHDRVideoUrl,
-  getYoutubeVideoUrl,
-  importVideo
-} from '../../../../shared/extra-utils/videos/video-imports'
-import { VideoDetails, VideoImport, VideoPrivacy, VideoResolution } from '../../../../shared/models/videos'
+  testCaptionFile,
+  testImage,
+  waitJobs
+} from '@shared/extra-utils'
+import { VideoDetails, VideoPrivacy, VideoResolution } from '@shared/models'
 
 const expect = chai.expect
 
@@ -124,17 +119,17 @@ describe('Test video imports', function () {
     }
 
     {
-      const attributes = immutableAssign(baseAttributes, { targetUrl: getYoutubeVideoUrl() })
-      const res = await importVideo(servers[0].url, servers[0].accessToken, attributes)
-      expect(res.body.video.name).to.equal('small video - youtube')
+      const attributes = immutableAssign(baseAttributes, { targetUrl: ImportsCommand.getYoutubeVideoUrl() })
+      const { video } = await servers[0].importsCommand.importVideo({ attributes })
+      expect(video.name).to.equal('small video - youtube')
 
-      expect(res.body.video.thumbnailPath).to.match(new RegExp(`^/static/thumbnails/.+.jpg$`))
-      expect(res.body.video.previewPath).to.match(new RegExp(`^/lazy-static/previews/.+.jpg$`))
+      expect(video.thumbnailPath).to.match(new RegExp(`^/static/thumbnails/.+.jpg$`))
+      expect(video.previewPath).to.match(new RegExp(`^/lazy-static/previews/.+.jpg$`))
 
-      await testImage(servers[0].url, 'video_import_thumbnail', res.body.video.thumbnailPath)
-      await testImage(servers[0].url, 'video_import_preview', res.body.video.previewPath)
+      await testImage(servers[0].url, 'video_import_thumbnail', video.thumbnailPath)
+      await testImage(servers[0].url, 'video_import_preview', video.previewPath)
 
-      const bodyCaptions = await servers[0].captionsCommand.listVideoCaptions({ videoId: res.body.video.id })
+      const bodyCaptions = await servers[0].captionsCommand.listVideoCaptions({ videoId: video.id })
       const videoCaptions = bodyCaptions.data
       expect(videoCaptions).to.have.lengthOf(2)
 
@@ -175,12 +170,12 @@ Ajouter un sous-titre est vraiment facile`)
 
     {
       const attributes = immutableAssign(baseAttributes, {
-        magnetUri: getMagnetURI(),
+        magnetUri: ImportsCommand.getMagnetURI(),
         description: 'this is a super torrent description',
         tags: [ 'tag_torrent1', 'tag_torrent2' ]
       })
-      const res = await importVideo(servers[0].url, servers[0].accessToken, attributes)
-      expect(res.body.video.name).to.equal('super peertube2 video')
+      const { video } = await servers[0].importsCommand.importVideo({ attributes })
+      expect(video.name).to.equal('super peertube2 video')
     }
 
     {
@@ -189,8 +184,8 @@ Ajouter un sous-titre est vraiment facile`)
         description: 'this is a super torrent description',
         tags: [ 'tag_torrent1', 'tag_torrent2' ]
       })
-      const res = await importVideo(servers[0].url, servers[0].accessToken, attributes)
-      expect(res.body.video.name).to.equal('你好 世界 720p.mp4')
+      const { video } = await servers[0].importsCommand.importVideo({ attributes })
+      expect(video.name).to.equal('你好 世界 720p.mp4')
     }
   })
 
@@ -207,19 +202,18 @@ Ajouter un sous-titre est vraiment facile`)
   })
 
   it('Should list the videos to import in my imports on server 1', async function () {
-    const res = await getMyVideoImports(servers[0].url, servers[0].accessToken, '-createdAt')
+    const { total, data: videoImports } = await servers[0].importsCommand.getMyVideoImports({ sort: '-createdAt' })
+    expect(total).to.equal(3)
 
-    expect(res.body.total).to.equal(3)
-    const videoImports: VideoImport[] = res.body.data
     expect(videoImports).to.have.lengthOf(3)
 
-    expect(videoImports[2].targetUrl).to.equal(getYoutubeVideoUrl())
+    expect(videoImports[2].targetUrl).to.equal(ImportsCommand.getYoutubeVideoUrl())
     expect(videoImports[2].magnetUri).to.be.null
     expect(videoImports[2].torrentName).to.be.null
     expect(videoImports[2].video.name).to.equal('small video - youtube')
 
     expect(videoImports[1].targetUrl).to.be.null
-    expect(videoImports[1].magnetUri).to.equal(getMagnetURI())
+    expect(videoImports[1].magnetUri).to.equal(ImportsCommand.getMagnetURI())
     expect(videoImports[1].torrentName).to.be.null
     expect(videoImports[1].video.name).to.equal('super peertube2 video')
 
@@ -248,7 +242,7 @@ Ajouter un sous-titre est vraiment facile`)
     this.timeout(60_000)
 
     const attributes = {
-      targetUrl: getYoutubeVideoUrl(),
+      targetUrl: ImportsCommand.getYoutubeVideoUrl(),
       channelId: channelIdServer2,
       privacy: VideoPrivacy.PUBLIC,
       category: 10,
@@ -258,8 +252,8 @@ Ajouter un sous-titre est vraiment facile`)
       description: 'my super description',
       tags: [ 'supertag1', 'supertag2' ]
     }
-    const res = await importVideo(servers[1].url, servers[1].accessToken, attributes)
-    expect(res.body.video.name).to.equal('my super name')
+    const { video } = await servers[1].importsCommand.importVideo({ attributes })
+    expect(video.name).to.equal('my super name')
   })
 
   it('Should have the videos listed on the two instances', async function () {
@@ -284,12 +278,12 @@ Ajouter un sous-titre est vraiment facile`)
 
     const attributes = {
       name: 'transcoded video',
-      magnetUri: getMagnetURI(),
+      magnetUri: ImportsCommand.getMagnetURI(),
       channelId: channelIdServer2,
       privacy: VideoPrivacy.PUBLIC
     }
-    const res = await importVideo(servers[1].url, servers[1].accessToken, attributes)
-    const videoUUID = res.body.video.uuid
+    const { video } = await servers[1].importsCommand.importVideo({ attributes })
+    const videoUUID = video.uuid
 
     await waitJobs(servers)
 
@@ -335,12 +329,12 @@ Ajouter un sous-titre est vraiment facile`)
 
     const attributes = {
       name: 'hdr video',
-      targetUrl: getYoutubeHDRVideoUrl(),
+      targetUrl: ImportsCommand.getYoutubeHDRVideoUrl(),
       channelId: channelIdServer1,
       privacy: VideoPrivacy.PUBLIC
     }
-    const res1 = await importVideo(servers[0].url, servers[0].accessToken, attributes)
-    const videoUUID = res1.body.video.uuid
+    const { video: videoImported } = await servers[0].importsCommand.importVideo({ attributes })
+    const videoUUID = videoImported.uuid
 
     await waitJobs(servers)
 

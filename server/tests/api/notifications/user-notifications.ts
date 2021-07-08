@@ -11,6 +11,7 @@ import {
   checkVideoIsPublished,
   cleanupTests,
   getLastNotification,
+  ImportsCommand,
   MockSmtpServer,
   prepareNotificationsTest,
   ServerInfo,
@@ -21,7 +22,6 @@ import {
   wait,
   waitJobs
 } from '@shared/extra-utils'
-import { getBadVideoUrl, getGoodVideoUrl, importVideo } from '@shared/extra-utils/videos/video-imports'
 import { UserNotification, UserNotificationType, VideoPrivacy } from '@shared/models'
 
 const expect = chai.expect
@@ -209,14 +209,13 @@ describe('Test user notifications', function () {
         name,
         channelId,
         privacy: VideoPrivacy.PUBLIC,
-        targetUrl: getGoodVideoUrl()
+        targetUrl: ImportsCommand.getGoodVideoUrl()
       }
-      const res = await importVideo(servers[0].url, servers[0].accessToken, attributes)
-      const uuid = res.body.video.uuid
+      const { video } = await servers[0].importsCommand.importVideo({ attributes })
 
       await waitJobs(servers)
 
-      await checkNewVideoFromSubscription(baseParams, name, uuid, 'presence')
+      await checkNewVideoFromSubscription(baseParams, name, video.uuid, 'presence')
     })
   })
 
@@ -280,14 +279,13 @@ describe('Test user notifications', function () {
         name,
         channelId,
         privacy: VideoPrivacy.PUBLIC,
-        targetUrl: getGoodVideoUrl(),
+        targetUrl: ImportsCommand.getGoodVideoUrl(),
         waitTranscoding: true
       }
-      const res = await importVideo(servers[1].url, servers[1].accessToken, attributes)
-      const uuid = res.body.video.uuid
+      const { video } = await servers[1].importsCommand.importVideo({ attributes })
 
       await waitJobs(servers)
-      await checkVideoIsPublished(baseParams, name, uuid, 'presence')
+      await checkVideoIsPublished(baseParams, name, video.uuid, 'presence')
     })
 
     it('Should send a notification when the scheduled update has been proceeded', async function () {
@@ -349,13 +347,12 @@ describe('Test user notifications', function () {
         name,
         channelId,
         privacy: VideoPrivacy.PRIVATE,
-        targetUrl: getBadVideoUrl()
+        targetUrl: ImportsCommand.getBadVideoUrl()
       }
-      const res = await importVideo(servers[0].url, servers[0].accessToken, attributes)
-      const uuid = res.body.video.uuid
+      const { video } = await servers[0].importsCommand.importVideo({ attributes })
 
       await waitJobs(servers)
-      await checkMyVideoImportIsFinished(baseParams, name, uuid, getBadVideoUrl(), false, 'presence')
+      await checkMyVideoImportIsFinished(baseParams, name, video.uuid, ImportsCommand.getBadVideoUrl(), false, 'presence')
     })
 
     it('Should send a notification when the video import succeeded', async function () {
@@ -367,13 +364,12 @@ describe('Test user notifications', function () {
         name,
         channelId,
         privacy: VideoPrivacy.PRIVATE,
-        targetUrl: getGoodVideoUrl()
+        targetUrl: ImportsCommand.getGoodVideoUrl()
       }
-      const res = await importVideo(servers[0].url, servers[0].accessToken, attributes)
-      const uuid = res.body.video.uuid
+      const { video } = await servers[0].importsCommand.importVideo({ attributes })
 
       await waitJobs(servers)
-      await checkMyVideoImportIsFinished(baseParams, name, uuid, getGoodVideoUrl(), true, 'presence')
+      await checkMyVideoImportIsFinished(baseParams, name, video.uuid, ImportsCommand.getGoodVideoUrl(), true, 'presence')
     })
   })
 

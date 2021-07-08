@@ -13,6 +13,7 @@ import {
   flushAndRunServer,
   getMyUserInformation,
   immutableAssign,
+  ImportsCommand,
   makeGetRequest,
   makePostBodyRequest,
   makeUploadRequest,
@@ -20,7 +21,6 @@ import {
   setAccessTokensToServers,
   userLogin
 } from '@shared/extra-utils'
-import { getGoodVideoUrl, getMagnetURI } from '@shared/extra-utils/videos/video-imports'
 import { VideoPrivacy } from '@shared/models'
 
 describe('Test video imports API validator', function () {
@@ -74,7 +74,7 @@ describe('Test video imports API validator', function () {
 
     before(function () {
       baseCorrectParams = {
-        targetUrl: getGoodVideoUrl(),
+        targetUrl: ImportsCommand.getGoodVideoUrl(),
         name: 'my super name',
         category: 5,
         licence: 1,
@@ -301,7 +301,7 @@ describe('Test video imports API validator', function () {
       })
 
       let fields = omit(baseCorrectParams, 'targetUrl')
-      fields = immutableAssign(fields, { magnetUri: getMagnetURI() })
+      fields = immutableAssign(fields, { magnetUri: ImportsCommand.getMagnetURI() })
 
       await makePostBodyRequest({
         url: server.url,

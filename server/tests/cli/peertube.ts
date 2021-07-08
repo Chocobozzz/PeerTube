@@ -15,6 +15,7 @@ import {
   getLocalIdByUUID,
   getVideo,
   getVideosList,
+  ImportsCommand,
   removeVideo,
   ServerInfo,
   setAccessTokensToServers,
@@ -23,7 +24,6 @@ import {
   userLogin,
   waitJobs
 } from '../../../shared/extra-utils'
-import { getYoutubeVideoUrl } from '../../../shared/extra-utils/videos/video-imports'
 
 describe('Test CLI wrapper', function () {
   let server: ServerInfo
@@ -122,7 +122,7 @@ describe('Test CLI wrapper', function () {
 
       this.timeout(60000)
 
-      const params = `--target-url ${getYoutubeVideoUrl()} --channel-name user_channel`
+      const params = `--target-url ${ImportsCommand.getYoutubeVideoUrl()} --channel-name user_channel`
       await cliCommand.execWithEnv(`${cmd} import ${params}`)
     })
 
@@ -155,7 +155,8 @@ describe('Test CLI wrapper', function () {
 
       this.timeout(60000)
 
-      const params = `--target-url ${getYoutubeVideoUrl()} --channel-name user_channel --video-name toto --nsfw --support support`
+      const params = `--target-url ${ImportsCommand.getYoutubeVideoUrl()} ` +
+                     `--channel-name user_channel --video-name toto --nsfw --support support`
       await cliCommand.execWithEnv(`${cmd} import ${params}`)
 
       await waitJobs([ server ])
