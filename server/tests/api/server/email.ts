@@ -4,14 +4,12 @@ import 'mocha'
 import * as chai from 'chai'
 import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import {
-  addVideoToBlacklist,
   askResetPassword,
   askSendVerifyEmail,
   blockUser,
   cleanupTests,
   createUser,
   flushAndRunServer,
-  removeVideoFromBlacklist,
   resetPassword,
   ServerInfo,
   setAccessTokensToServers,
@@ -248,7 +246,7 @@ describe('Test emails', function () {
       this.timeout(10000)
 
       const reason = 'my super reason'
-      await addVideoToBlacklist(server.url, server.accessToken, videoUserUUID, reason)
+      await server.blacklistCommand.add({ videoId: videoUserUUID, reason })
 
       await waitJobs(server)
       expect(emails).to.have.lengthOf(6)
@@ -266,7 +264,7 @@ describe('Test emails', function () {
     it('Should send the notification email', async function () {
       this.timeout(10000)
 
-      await removeVideoFromBlacklist(server.url, server.accessToken, videoUserUUID)
+      await server.blacklistCommand.remove({ videoId: videoUserUUID })
 
       await waitJobs(server)
       expect(emails).to.have.lengthOf(7)

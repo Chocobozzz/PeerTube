@@ -6,7 +6,6 @@ import { FfmpegCommand } from 'fluent-ffmpeg'
 import { LiveVideoCreate, VideoDetails, VideoPrivacy, VideoState } from '@shared/models'
 import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import {
-  addVideoToBlacklist,
   checkLiveCleanup,
   cleanupTests,
   ConfigCommand,
@@ -172,7 +171,7 @@ describe('Save replay setting', function () {
       await checkVideosExist(liveVideoUUID, true, HttpStatusCode.OK_200)
 
       await Promise.all([
-        addVideoToBlacklist(servers[0].url, servers[0].accessToken, liveVideoUUID, 'bad live', true),
+        servers[0].blacklistCommand.add({ videoId: liveVideoUUID, reason: 'bad live', unfederate: true }),
         testFfmpegStreamError(ffmpegCommand, true)
       ])
 
@@ -280,7 +279,7 @@ describe('Save replay setting', function () {
       await checkVideosExist(liveVideoUUID, true, HttpStatusCode.OK_200)
 
       await Promise.all([
-        addVideoToBlacklist(servers[0].url, servers[0].accessToken, liveVideoUUID, 'bad live', true),
+        servers[0].blacklistCommand.add({ videoId: liveVideoUUID, reason: 'bad live', unfederate: true }),
         testFfmpegStreamError(ffmpegCommand, true)
       ])
 
