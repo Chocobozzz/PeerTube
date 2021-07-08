@@ -2,11 +2,6 @@ name: Test Suite
 
 on:
   push:
-    branches:
-      - develop
-      - master
-      - ci
-      - next
   pull_request:
     types: [synchronize, opened]
   schedule:
