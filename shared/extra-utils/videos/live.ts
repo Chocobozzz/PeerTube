@@ -72,7 +72,7 @@ async function stopFfmpeg (command: ffmpeg.FfmpegCommand) {
 
 async function waitUntilLivePublishedOnAllServers (servers: ServerInfo[], videoId: string) {
   for (const server of servers) {
-    await server.liveCommand.waitUntilLivePublished({ videoId })
+    await server.liveCommand.waitUntilPublished({ videoId })
   }
 }
 

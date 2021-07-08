@@ -32,7 +32,7 @@ describe('Permanent live', function () {
       permanentLive
     }
 
-    const { uuid } = await servers[0].liveCommand.createLive({ fields: attributes })
+    const { uuid } = await servers[0].liveCommand.create({ fields: attributes })
     return uuid
   }
 
@@ -76,14 +76,14 @@ describe('Permanent live', function () {
     const videoUUID = await createLiveWrapper(false)
 
     {
-      const live = await servers[0].liveCommand.getLive({ videoId: videoUUID })
+      const live = await servers[0].liveCommand.get({ videoId: videoUUID })
       expect(live.permanentLive).to.be.false
     }
 
-    await servers[0].liveCommand.updateLive({ videoId: videoUUID, fields: { permanentLive: true } })
+    await servers[0].liveCommand.update({ videoId: videoUUID, fields: { permanentLive: true } })
 
     {
-      const live = await servers[0].liveCommand.getLive({ videoId: videoUUID })
+      const live = await servers[0].liveCommand.get({ videoId: videoUUID })
       expect(live.permanentLive).to.be.true
     }
   })
@@ -93,7 +93,7 @@ describe('Permanent live', function () {
 
     videoUUID = await createLiveWrapper(true)
 
-    const live = await servers[0].liveCommand.getLive({ videoId: videoUUID })
+    const live = await servers[0].liveCommand.get({ videoId: videoUUID })
     expect(live.permanentLive).to.be.true
 
     await waitJobs(servers)
@@ -105,13 +105,13 @@ describe('Permanent live', function () {
     const ffmpegCommand = await servers[0].liveCommand.sendRTMPStreamInVideo({ videoId: videoUUID })
 
     for (const server of servers) {
-      await server.liveCommand.waitUntilLivePublished({ videoId: videoUUID })
+      await server.liveCommand.waitUntilPublished({ videoId: videoUUID })
     }
 
     await checkVideoState(videoUUID, VideoState.PUBLISHED)
 
     await stopFfmpeg(ffmpegCommand)
-    await servers[0].liveCommand.waitUntilLiveWaiting({ videoId: videoUUID })
+    await servers[0].liveCommand.waitUntilWaiting({ videoId: videoUUID })
 
     await waitJobs(servers)
   })
@@ -156,12 +156,12 @@ describe('Permanent live', function () {
     const ffmpegCommand = await servers[0].liveCommand.sendRTMPStreamInVideo({ videoId: videoUUID })
 
     for (const server of servers) {
-      await server.liveCommand.waitUntilLivePublished({ videoId: videoUUID })
+      await server.liveCommand.waitUntilPublished({ videoId: videoUUID })
     }
 
     await checkVideoState(videoUUID, VideoState.PUBLISHED)
 
-    const count = await servers[0].liveCommand.getPlaylistsCount({ videoUUID })
+    const count = await servers[0].liveCommand.countPlaylists({ videoUUID })
     // master playlist and 720p playlist
     expect(count).to.equal(2)
 

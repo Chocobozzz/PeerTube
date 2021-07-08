@@ -111,7 +111,7 @@ describe('Test video change ownership - nominal', function () {
 
     {
       const attributes = { name: 'live', channelId: firstUserChannelId, privacy: VideoPrivacy.PUBLIC }
-      const video = await servers[0].liveCommand.createLive({ token: firstUserAccessToken, fields: attributes })
+      const video = await servers[0].liveCommand.create({ token: firstUserAccessToken, fields: attributes })
 
       liveId = video.id
     }

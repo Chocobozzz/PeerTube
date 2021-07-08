@@ -502,10 +502,10 @@ describe('Test videos search', function () {
       const liveCommand = server.liveCommand
 
       const liveAttributes = { name: 'live', privacy: VideoPrivacy.PUBLIC, channelId: server.videoChannel.id }
-      const live = await liveCommand.createLive({ fields: liveAttributes })
+      const live = await liveCommand.create({ fields: liveAttributes })
 
       const ffmpegCommand = await liveCommand.sendRTMPStreamInVideo({ videoId: live.id })
-      await liveCommand.waitUntilLivePublished({ videoId: live.id })
+      await liveCommand.waitUntilPublished({ videoId: live.id })
 
       const body = await command.advancedVideoSearch({ search: { isLive: true } })
 

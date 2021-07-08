@@ -26,7 +26,7 @@ async function createLiveWrapper (server: ServerInfo) {
     privacy: VideoPrivacy.PUBLIC
   }
 
-  const { uuid } = await server.liveCommand.createLive({ fields: liveAttributes })
+  const { uuid } = await server.liveCommand.create({ fields: liveAttributes })
 
   return uuid
 }
@@ -170,7 +170,7 @@ describe('Test transcoding plugins', function () {
       const liveVideoId = await createLiveWrapper(server)
 
       await server.liveCommand.sendRTMPStreamInVideo({ videoId: liveVideoId, fixtureName: 'video_short2.webm' })
-      await server.liveCommand.waitUntilLivePublished({ videoId: liveVideoId })
+      await server.liveCommand.waitUntilPublished({ videoId: liveVideoId })
       await waitJobs([ server ])
 
       await checkLiveFPS(liveVideoId, 'above', 20)
@@ -184,7 +184,7 @@ describe('Test transcoding plugins', function () {
       const liveVideoId = await createLiveWrapper(server)
 
       await server.liveCommand.sendRTMPStreamInVideo({ videoId: liveVideoId, fixtureName: 'video_short2.webm' })
-      await server.liveCommand.waitUntilLivePublished({ videoId: liveVideoId })
+      await server.liveCommand.waitUntilPublished({ videoId: liveVideoId })
       await waitJobs([ server ])
 
       await checkLiveFPS(liveVideoId, 'below', 12)
@@ -198,7 +198,7 @@ describe('Test transcoding plugins', function () {
       const liveVideoId = await createLiveWrapper(server)
 
       await server.liveCommand.sendRTMPStreamInVideo({ videoId: liveVideoId, fixtureName: 'video_short2.webm' })
-      await server.liveCommand.waitUntilLivePublished({ videoId: liveVideoId })
+      await server.liveCommand.waitUntilPublished({ videoId: liveVideoId })
       await waitJobs([ server ])
 
       await checkLiveFPS(liveVideoId, 'below', 6)
@@ -261,7 +261,7 @@ describe('Test transcoding plugins', function () {
       const liveVideoId = await createLiveWrapper(server)
 
       await server.liveCommand.sendRTMPStreamInVideo({ videoId: liveVideoId, fixtureName: 'video_short2.webm' })
-      await server.liveCommand.waitUntilLivePublished({ videoId: liveVideoId })
+      await server.liveCommand.waitUntilPublished({ videoId: liveVideoId })
       await waitJobs([ server ])
 
       const playlistUrl = `${server.url}/static/streaming-playlists/hls/${liveVideoId}/0.m3u8`

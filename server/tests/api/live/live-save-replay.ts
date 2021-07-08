@@ -47,7 +47,7 @@ describe('Save replay setting', function () {
       saveReplay
     }
 
-    const { uuid } = await servers[0].liveCommand.createLive({ fields: attributes })
+    const { uuid } = await servers[0].liveCommand.create({ fields: attributes })
     return uuid
   }
 
@@ -74,13 +74,13 @@ describe('Save replay setting', function () {
 
   async function waitUntilLivePublishedOnAllServers (videoId: string) {
     for (const server of servers) {
-      await server.liveCommand.waitUntilLivePublished({ videoId })
+      await server.liveCommand.waitUntilPublished({ videoId })
     }
   }
 
   async function waitUntilLiveSavedOnAllServers (videoId: string) {
     for (const server of servers) {
-      await server.liveCommand.waitUntilLiveSaved({ videoId })
+      await server.liveCommand.waitUntilSaved({ videoId })
     }
   }
 
@@ -147,7 +147,7 @@ describe('Save replay setting', function () {
       await stopFfmpeg(ffmpegCommand)
 
       for (const server of servers) {
-        await server.liveCommand.waitUntilLiveEnded({ videoId: liveVideoUUID })
+        await server.liveCommand.waitUntilEnded({ videoId: liveVideoUUID })
       }
       await waitJobs(servers)
 

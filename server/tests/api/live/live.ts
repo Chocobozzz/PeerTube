@@ -96,7 +96,7 @@ describe('Test live', function () {
         thumbnailfile: 'video_short1.webm.jpg'
       }
 
-      const live = await commands[0].createLive({ fields: attributes })
+      const live = await commands[0].create({ fields: attributes })
       liveVideoUUID = live.uuid
 
       await waitJobs(servers)
@@ -127,7 +127,7 @@ describe('Test live', function () {
         await testImage(server.url, 'video_short1-preview.webm', video.previewPath)
         await testImage(server.url, 'video_short1.webm', video.thumbnailPath)
 
-        const live = await server.liveCommand.getLive({ videoId: liveVideoUUID })
+        const live = await server.liveCommand.get({ videoId: liveVideoUUID })
 
         if (server.url === servers[0].url) {
           expect(live.rtmpUrl).to.equal('rtmp://' + server.hostname + ':' + servers[0].rtmpPort + '/live')
@@ -151,7 +151,7 @@ describe('Test live', function () {
         nsfw: true
       }
 
-      const live = await commands[0].createLive({ fields: attributes })
+      const live = await commands[0].create({ fields: attributes })
       const videoId = live.uuid
 
       await waitJobs(servers)
@@ -178,19 +178,19 @@ describe('Test live', function () {
     })
 
     it('Should not be able to update a live of another server', async function () {
-      await commands[1].updateLive({ videoId: liveVideoUUID, fields: { saveReplay: false }, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+      await commands[1].update({ videoId: liveVideoUUID, fields: { saveReplay: false }, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
     })
 
     it('Should update the live', async function () {
       this.timeout(10000)
 
-      await commands[0].updateLive({ videoId: liveVideoUUID, fields: { saveReplay: false } })
+      await commands[0].update({ videoId: liveVideoUUID, fields: { saveReplay: false } })
       await waitJobs(servers)
     })
 
     it('Have the live updated', async function () {
       for (const server of servers) {
-        const live = await server.liveCommand.getLive({ videoId: liveVideoUUID })
+        const live = await server.liveCommand.get({ videoId: liveVideoUUID })
 
         if (server.url === servers[0].url) {
           expect(live.rtmpUrl).to.equal('rtmp://' + server.hostname + ':' + servers[0].rtmpPort + '/live')
@@ -214,7 +214,7 @@ describe('Test live', function () {
     it('Should have the live deleted', async function () {
       for (const server of servers) {
         await getVideo(server.url, liveVideoUUID, HttpStatusCode.NOT_FOUND_404)
-        await server.liveCommand.getLive({ videoId: liveVideoUUID, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+        await server.liveCommand.get({ videoId: liveVideoUUID, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
       }
     })
   })
@@ -230,7 +230,7 @@ describe('Test live', function () {
       vodVideoId = (await uploadVideoAndGetId({ server: servers[0], videoName: 'vod video' })).uuid
 
       const liveOptions = { name: 'live', privacy: VideoPrivacy.PUBLIC, channelId: servers[0].videoChannel.id }
-      const live = await commands[0].createLive({ fields: liveOptions })
+      const live = await commands[0].create({ fields: liveOptions })
       liveVideoId = live.uuid
 
       ffmpegCommand = await servers[0].liveCommand.sendRTMPStreamInVideo({ videoId: liveVideoId })
@@ -297,9 +297,9 @@ describe('Test live', function () {
         saveReplay: false
       }
 
-      const { uuid } = await commands[0].createLive({ fields: liveAttributes })
+      const { uuid } = await commands[0].create({ fields: liveAttributes })
 
-      const live = await commands[0].getLive({ videoId: uuid })
+      const live = await commands[0].get({ videoId: uuid })
       const resVideo = await getVideo(servers[0].url, uuid)
 
       return Object.assign(resVideo.body as VideoDetails, live)
@@ -376,7 +376,7 @@ describe('Test live', function () {
         saveReplay
       }
 
-      const { uuid } = await commands[0].createLive({ fields: liveAttributes })
+      const { uuid } = await commands[0].create({ fields: liveAttributes })
       return uuid
     }
 
@@ -403,7 +403,7 @@ describe('Test live', function () {
         for (let i = 0; i < resolutions.length; i++) {
           const segmentNum = 3
           const segmentName = `${i}-00000${segmentNum}.ts`
-          await commands[0].waitUntilLiveSegmentGeneration({ videoUUID: video.uuid, resolution: i, segment: segmentNum })
+          await commands[0].waitUntilSegmentGeneration({ videoUUID: video.uuid, resolution: i, segment: segmentNum })
 
           const res = await getPlaylist(`${servers[0].url}/static/streaming-playlists/hls/${video.uuid}/${i}.m3u8`)
           const subPlaylist = res.text
@@ -488,7 +488,7 @@ describe('Test live', function () {
       await testVideoResolutions(liveVideoId, resolutions)
 
       await stopFfmpeg(ffmpegCommand)
-      await commands[0].waitUntilLiveEnded({ videoId: liveVideoId })
+      await commands[0].waitUntilEnded({ videoId: liveVideoId })
 
       await waitJobs(servers)
 
@@ -559,7 +559,7 @@ describe('Test live', function () {
         saveReplay
       }
 
-      const { uuid } = await commands[0].createLive({ fields: liveAttributes })
+      const { uuid } = await commands[0].create({ fields: liveAttributes })
       return uuid
     }
 
@@ -575,14 +575,14 @@ describe('Test live', function () {
       ])
 
       await Promise.all([
-        commands[0].waitUntilLivePublished({ videoId: liveVideoId }),
-        commands[0].waitUntilLivePublished({ videoId: liveVideoReplayId })
+        commands[0].waitUntilPublished({ videoId: liveVideoId }),
+        commands[0].waitUntilPublished({ videoId: liveVideoReplayId })
       ])
 
-      await commands[0].waitUntilLiveSegmentGeneration({ videoUUID: liveVideoId, resolution: 0, segment: 2 })
-      await commands[0].waitUntilLiveSegmentGeneration({ videoUUID: liveVideoReplayId, resolution: 0, segment: 2 })
+      await commands[0].waitUntilSegmentGeneration({ videoUUID: liveVideoId, resolution: 0, segment: 2 })
+      await commands[0].waitUntilSegmentGeneration({ videoUUID: liveVideoReplayId, resolution: 0, segment: 2 })
 
-      await killallServers([ servers[0] ])
+      killallServers([ servers[0] ])
       await reRunServer(servers[0])
 
       await wait(5000)
@@ -591,13 +591,13 @@ describe('Test live', function () {
     it('Should cleanup lives', async function () {
       this.timeout(60000)
 
-      await commands[0].waitUntilLiveEnded({ videoId: liveVideoId })
+      await commands[0].waitUntilEnded({ videoId: liveVideoId })
     })
 
     it('Should save a live replay', async function () {
       this.timeout(120000)
 
-      await commands[0].waitUntilLivePublished({ videoId: liveVideoReplayId })
+      await commands[0].waitUntilPublished({ videoId: liveVideoReplayId })
     })
   })
 

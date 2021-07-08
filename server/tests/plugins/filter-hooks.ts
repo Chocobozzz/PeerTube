@@ -155,7 +155,7 @@ describe('Test plugin filter hooks', function () {
       channelId: servers[0].videoChannel.id
     }
 
-    await servers[0].liveCommand.createLive({ fields: attributes, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+    await servers[0].liveCommand.create({ fields: attributes, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
   })
 
   it('Should run filter:api.video.pre-import-url.accept.result', async function () {

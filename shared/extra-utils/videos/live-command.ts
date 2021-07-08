@@ -14,7 +14,7 @@ import { getVideoWithToken } from './videos'
 
 export class LiveCommand extends AbstractCommand {
 
-  getLive (options: OverrideCommandOptions & {
+  get (options: OverrideCommandOptions & {
     videoId: number | string
   }) {
     const path = '/api/v1/videos/live'
@@ -27,7 +27,7 @@ export class LiveCommand extends AbstractCommand {
     })
   }
 
-  updateLive (options: OverrideCommandOptions & {
+  update (options: OverrideCommandOptions & {
     videoId: number | string
     fields: LiveVideoUpdate
   }) {
@@ -43,7 +43,7 @@ export class LiveCommand extends AbstractCommand {
     })
   }
 
-  async createLive (options: OverrideCommandOptions & {
+  async create (options: OverrideCommandOptions & {
     fields: LiveVideoCreate
   }) {
     const { fields } = options
@@ -70,12 +70,12 @@ export class LiveCommand extends AbstractCommand {
     fixtureName?: string
   }) {
     const { videoId, fixtureName } = options
-    const videoLive = await this.getLive({ videoId })
+    const videoLive = await this.get({ videoId })
 
     return sendRTMPStream(videoLive.rtmpUrl, videoLive.streamKey, fixtureName)
   }
 
-  async runAndTestFfmpegStreamError (options: OverrideCommandOptions & {
+  async runAndTestStreamError (options: OverrideCommandOptions & {
     videoId: number | string
     shouldHaveError: boolean
   }) {
@@ -84,28 +84,28 @@ export class LiveCommand extends AbstractCommand {
     return testFfmpegStreamError(command, options.shouldHaveError)
   }
 
-  waitUntilLivePublished (options: OverrideCommandOptions & {
+  waitUntilPublished (options: OverrideCommandOptions & {
     videoId: number | string
   }) {
     const { videoId } = options
-    return this.waitUntilLiveState({ videoId, state: VideoState.PUBLISHED })
+    return this.waitUntilState({ videoId, state: VideoState.PUBLISHED })
   }
 
-  waitUntilLiveWaiting (options: OverrideCommandOptions & {
+  waitUntilWaiting (options: OverrideCommandOptions & {
     videoId: number | string
   }) {
     const { videoId } = options
-    return this.waitUntilLiveState({ videoId, state: VideoState.WAITING_FOR_LIVE })
+    return this.waitUntilState({ videoId, state: VideoState.WAITING_FOR_LIVE })
   }
 
-  waitUntilLiveEnded (options: OverrideCommandOptions & {
+  waitUntilEnded (options: OverrideCommandOptions & {
     videoId: number | string
   }) {
     const { videoId } = options
-    return this.waitUntilLiveState({ videoId, state: VideoState.LIVE_ENDED })
+    return this.waitUntilState({ videoId, state: VideoState.LIVE_ENDED })
   }
 
-  waitUntilLiveSegmentGeneration (options: OverrideCommandOptions & {
+  waitUntilSegmentGeneration (options: OverrideCommandOptions & {
     videoUUID: string
     resolution: number
     segment: number
@@ -116,7 +116,7 @@ export class LiveCommand extends AbstractCommand {
     return waitUntilLog(this.server, `${videoUUID}/${segmentName}`, 2, false)
   }
 
-  async waitUntilLiveSaved (options: OverrideCommandOptions & {
+  async waitUntilSaved (options: OverrideCommandOptions & {
     videoId: number | string
   }) {
     let video: VideoDetails
@@ -129,7 +129,7 @@ export class LiveCommand extends AbstractCommand {
     } while (video.isLive === true && video.state.id !== VideoState.PUBLISHED)
   }
 
-  async getPlaylistsCount (options: OverrideCommandOptions & {
+  async countPlaylists (options: OverrideCommandOptions & {
     videoUUID: string
   }) {
     const basePath = buildServerDirectory(this.server, 'streaming-playlists')
@@ -140,7 +140,7 @@ export class LiveCommand extends AbstractCommand {
     return files.filter(f => f.endsWith('.m3u8')).length
   }
 
-  private async waitUntilLiveState (options: OverrideCommandOptions & {
+  private async waitUntilState (options: OverrideCommandOptions & {
     videoId: number | string
     state: VideoState
   }) {

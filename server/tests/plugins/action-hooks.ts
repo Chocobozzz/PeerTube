@@ -95,7 +95,7 @@ describe('Test plugin action hooks', function () {
         channelId: servers[0].videoChannel.id
       }
 
-      await servers[0].liveCommand.createLive({ fields: attributes })
+      await servers[0].liveCommand.create({ fields: attributes })
 
       await checkHook('action:api.live-video.created')
     })
