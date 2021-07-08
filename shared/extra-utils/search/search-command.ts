@@ -25,16 +25,15 @@ export class SearchCommand extends AbstractCommand {
   advancedChannelSearch (options: OverrideCommandOptions & {
     search: VideoChannelsSearchQuery
   }) {
-    const { search, token } = options
+    const { search } = options
     const path = '/api/v1/search/video-channels'
 
     return this.getRequestBody<ResultList<VideoChannel>>({
       ...options,
 
-      token: token || null,
-
       path,
       query: search,
+      implicitToken: false,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
   }
@@ -52,16 +51,15 @@ export class SearchCommand extends AbstractCommand {
   advancedPlaylistSearch (options: OverrideCommandOptions & {
     search: VideoPlaylistsSearchQuery
   }) {
-    const { search, token } = options
+    const { search } = options
     const path = '/api/v1/search/video-playlists'
 
     return this.getRequestBody<ResultList<VideoPlaylist>>({
       ...options,
 
-      token: token || null,
-
       path,
       query: search,
+      implicitToken: false,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
   }
@@ -85,16 +83,15 @@ export class SearchCommand extends AbstractCommand {
   advancedVideoSearch (options: OverrideCommandOptions & {
     search: VideosSearchQuery
   }) {
-    const { search, token } = options
+    const { search } = options
     const path = '/api/v1/search/videos'
 
     return this.getRequestBody<ResultList<Video>>({
       ...options,
 
-      token: token || null,
-
       path,
       query: search,
+      implicitToken: false,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
   }

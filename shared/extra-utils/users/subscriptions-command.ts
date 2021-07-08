@@ -14,6 +14,7 @@ export class SubscriptionsCommand extends AbstractCommand {
 
       path,
       fields: { uri: options.targetUri },
+      implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
     })
   }
@@ -33,6 +34,7 @@ export class SubscriptionsCommand extends AbstractCommand {
         sort,
         search
       },
+      implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
   }
@@ -48,6 +50,7 @@ export class SubscriptionsCommand extends AbstractCommand {
 
       path,
       query: { sort },
+      implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
   }
@@ -61,6 +64,7 @@ export class SubscriptionsCommand extends AbstractCommand {
       ...options,
 
       path,
+      implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
   }
@@ -74,6 +78,7 @@ export class SubscriptionsCommand extends AbstractCommand {
       ...options,
 
       path,
+      implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
     })
   }
@@ -88,6 +93,7 @@ export class SubscriptionsCommand extends AbstractCommand {
 
       path,
       query: { 'uris[]': options.uris },
+      implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
   }

@@ -23,8 +23,8 @@ export class ContactFormCommand extends AbstractCommand {
       ...options,
 
       path,
-      token: null,
       fields: body,
+      implicitToken: false,
       defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
     })
   }

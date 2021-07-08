@@ -9,7 +9,9 @@ export class CustomPagesCommand extends AbstractCommand {
 
     return this.getRequestBody<CustomPage>({
       ...options,
+
       path,
+      implicitToken: false,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
   }
@@ -22,8 +24,10 @@ export class CustomPagesCommand extends AbstractCommand {
 
     return this.putBodyRequest({
       ...options,
+
       path,
       fields: { content },
+      implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
     })
   }

@@ -56,6 +56,7 @@ export class BlocklistCommand extends AbstractCommand {
         accountName: account,
         host: server
       },
+      implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
     })
   }
@@ -78,6 +79,7 @@ export class BlocklistCommand extends AbstractCommand {
         accountName: account,
         host: server
       },
+      implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
     })
   }
@@ -98,6 +100,7 @@ export class BlocklistCommand extends AbstractCommand {
       ...options,
 
       path,
+      implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
     })
   }
@@ -116,6 +119,7 @@ export class BlocklistCommand extends AbstractCommand {
       ...options,
 
       path,
+      implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
     })
   }
@@ -128,6 +132,7 @@ export class BlocklistCommand extends AbstractCommand {
 
       path,
       query: { start, count, sort },
+      implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
   }

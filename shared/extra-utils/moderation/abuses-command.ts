@@ -60,6 +60,7 @@ export class AbusesCommand extends AbstractCommand {
 
       path,
       fields: body,
+      implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     }))
   }
@@ -106,6 +107,7 @@ export class AbusesCommand extends AbstractCommand {
 
       path,
       query,
+      implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
   }
@@ -138,6 +140,7 @@ export class AbusesCommand extends AbstractCommand {
 
       path,
       query,
+      implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
   }
@@ -154,6 +157,7 @@ export class AbusesCommand extends AbstractCommand {
 
       path,
       fields: body,
+      implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
     })
   }
@@ -164,7 +168,13 @@ export class AbusesCommand extends AbstractCommand {
     const { abuseId } = options
     const path = '/api/v1/abuses/' + abuseId
 
-    return this.deleteRequest({ ...options, path, defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204 })
+    return this.deleteRequest({
+      ...options,
+
+      path,
+      implicitToken: true,
+      defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
+    })
   }
 
   listMessages (options: OverrideCommandOptions & {
@@ -173,7 +183,13 @@ export class AbusesCommand extends AbstractCommand {
     const { abuseId } = options
     const path = '/api/v1/abuses/' + abuseId + '/messages'
 
-    return this.getRequestBody<ResultList<AbuseMessage>>({ ...options, path, defaultExpectedStatus: HttpStatusCode.OK_200 })
+    return this.getRequestBody<ResultList<AbuseMessage>>({
+      ...options,
+
+      path,
+      implicitToken: true,
+      defaultExpectedStatus: HttpStatusCode.OK_200
+    })
   }
 
   deleteMessage (options: OverrideCommandOptions & {
@@ -183,7 +199,13 @@ export class AbusesCommand extends AbstractCommand {
     const { abuseId, messageId } = options
     const path = '/api/v1/abuses/' + abuseId + '/messages/' + messageId
 
-    return this.deleteRequest({ ...options, path, defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204 })
+    return this.deleteRequest({
+      ...options,
+
+      path,
+      implicitToken: true,
+      defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
+    })
   }
 
   addMessage (options: OverrideCommandOptions & {
@@ -198,6 +220,7 @@ export class AbusesCommand extends AbstractCommand {
 
       path,
       fields: { message },
+      implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
   }

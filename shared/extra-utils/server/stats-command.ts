@@ -19,6 +19,7 @@ export class StatsCommand extends AbstractCommand {
 
       path,
       query,
+      implicitToken: false,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
   }

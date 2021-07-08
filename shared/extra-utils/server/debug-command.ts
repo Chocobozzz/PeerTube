@@ -11,6 +11,7 @@ export class DebugCommand extends AbstractCommand {
       ...options,
 
       path,
+      implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
   }
@@ -26,6 +27,7 @@ export class DebugCommand extends AbstractCommand {
 
       path,
       fields: body,
+      implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
     })
   }

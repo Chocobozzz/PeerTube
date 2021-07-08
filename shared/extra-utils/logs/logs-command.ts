@@ -17,6 +17,7 @@ export class LogsCommand extends AbstractCommand {
 
       path,
       query: { startDate, endDate, level },
+      implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
   }
@@ -34,6 +35,7 @@ export class LogsCommand extends AbstractCommand {
 
       path,
       query: { startDate, endDate },
+      implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
   }
