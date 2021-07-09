@@ -16,7 +16,6 @@ import {
   setAccessTokensToServers,
   setDefaultVideoChannel,
   updateMyUser,
-  updateVideoChannel,
   uploadVideo,
   waitJobs
 } from '../../shared/extra-utils'
@@ -63,7 +62,10 @@ describe('Test a client controllers', function () {
 
     await setDefaultVideoChannel(servers)
 
-    await updateVideoChannel(servers[0].url, servers[0].accessToken, servers[0].videoChannel.name, { description: channelDescription })
+    await servers[0].channelsCommand.update({
+      channelName: servers[0].videoChannel.name,
+      attributes: { description: channelDescription }
+    })
 
     // Video
 

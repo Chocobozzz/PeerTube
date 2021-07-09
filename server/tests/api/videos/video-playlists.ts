@@ -4,11 +4,9 @@ import 'mocha'
 import * as chai from 'chai'
 import { HttpStatusCode } from '@shared/core-utils'
 import {
-  addVideoChannel,
   checkPlaylistFilesWereRemoved,
   cleanupTests,
   createUser,
-  deleteVideoChannel,
   doubleFollow,
   flushAndRunMultipleServers,
   generateUserAccessToken,
@@ -1096,20 +1094,19 @@ describe('Test video playlists', function () {
     it('Should delete a channel and put the associated playlist in private mode', async function () {
       this.timeout(30000)
 
-      const res = await addVideoChannel(servers[0].url, servers[0].accessToken, { name: 'super_channel', displayName: 'super channel' })
-      const videoChannelId = res.body.videoChannel.id
+      const channel = await servers[0].channelsCommand.create({ attributes: { name: 'super_channel', displayName: 'super channel' } })
 
       const playlistCreated = await commands[0].create({
         attributes: {
           displayName: 'channel playlist',
           privacy: VideoPlaylistPrivacy.PUBLIC,
-          videoChannelId
+          videoChannelId: channel.id
         }
       })
 
       await waitJobs(servers)
 
-      await deleteVideoChannel(servers[0].url, servers[0].accessToken, 'super_channel')
+      await servers[0].channelsCommand.delete({ channelName: 'super_channel' })
 
       await waitJobs(servers)
 

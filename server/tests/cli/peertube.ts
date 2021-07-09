@@ -4,7 +4,6 @@ import 'mocha'
 import { expect } from 'chai'
 import { Video, VideoDetails } from '../../../shared'
 import {
-  addVideoChannel,
   areHttpImportTestsDisabled,
   buildAbsoluteFixturePath,
   cleanupTests,
@@ -44,8 +43,8 @@ describe('Test CLI wrapper', function () {
     userAccessToken = await userLogin(server, { username: 'user_1', password: 'super_password' })
 
     {
-      const args = { name: 'user_channel', displayName: 'User channel', support: 'super support text' }
-      await addVideoChannel(server.url, userAccessToken, args)
+      const attributes = { name: 'user_channel', displayName: 'User channel', support: 'super support text' }
+      await server.channelsCommand.create({ token: userAccessToken, attributes })
     }
 
     cliCommand = server.cliCommand

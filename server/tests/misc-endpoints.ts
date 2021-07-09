@@ -2,8 +2,8 @@
 
 import 'mocha'
 import * as chai from 'chai'
+import { HttpStatusCode } from '@shared/core-utils'
 import {
-  addVideoChannel,
   cleanupTests,
   createUser,
   flushAndRunServer,
@@ -13,7 +13,6 @@ import {
   uploadVideo
 } from '../../shared/extra-utils'
 import { VideoPrivacy } from '../../shared/models/videos'
-import { HttpStatusCode } from '@shared/core-utils'
 
 const expect = chai.expect
 
@@ -171,8 +170,8 @@ describe('Test misc endpoints', function () {
       await uploadVideo(server.url, server.accessToken, { name: 'video 2', nsfw: false })
       await uploadVideo(server.url, server.accessToken, { name: 'video 3', privacy: VideoPrivacy.PRIVATE })
 
-      await addVideoChannel(server.url, server.accessToken, { name: 'channel1', displayName: 'channel 1' })
-      await addVideoChannel(server.url, server.accessToken, { name: 'channel2', displayName: 'channel 2' })
+      await server.channelsCommand.create({ attributes: { name: 'channel1', displayName: 'channel 1' } })
+      await server.channelsCommand.create({ attributes: { name: 'channel2', displayName: 'channel 2' } })
 
       await createUser({ url: server.url, accessToken: server.accessToken, username: 'user1', password: 'password' })
       await createUser({ url: server.url, accessToken: server.accessToken, username: 'user2', password: 'password' })

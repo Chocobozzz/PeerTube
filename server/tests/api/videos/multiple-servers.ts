@@ -5,7 +5,6 @@ import * as chai from 'chai'
 import * as request from 'supertest'
 import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import {
-  addVideoChannel,
   buildAbsoluteFixturePath,
   checkTmpIsEmpty,
   checkVideoFilesWereRemoved,
@@ -17,7 +16,6 @@ import {
   flushAndRunMultipleServers,
   getLocalVideos,
   getVideo,
-  getVideoChannelsList,
   getVideosList,
   rateVideo,
   removeVideo,
@@ -64,9 +62,9 @@ describe('Test multiple servers', function () {
         displayName: 'my channel',
         description: 'super channel'
       }
-      await addVideoChannel(servers[0].url, servers[0].accessToken, videoChannel)
-      const channelRes = await getVideoChannelsList(servers[0].url, 0, 1)
-      videoChannelId = channelRes.body.data[0].id
+      await servers[0].channelsCommand.create({ attributes: videoChannel })
+      const { data } = await servers[0].channelsCommand.list({ start: 0, count: 1 })
+      videoChannelId = data[0].id
     }
 
     // Server 1 and server 2 follow each other

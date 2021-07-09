@@ -18,7 +18,6 @@ import {
   getUserInformation,
   getUsersList,
   getUsersListPaginationAndSort,
-  getVideoChannel,
   getVideosList,
   killallServers,
   login,
@@ -864,9 +863,9 @@ describe('Test users', function () {
     })
 
     it('Should have created the channel', async function () {
-      const res = await getVideoChannel(server.url, 'my_user_15_channel')
+      const { displayName } = await server.channelsCommand.get({ channelName: 'my_user_15_channel' })
 
-      expect(res.body.displayName).to.equal('my channel rocks')
+      expect(displayName).to.equal('my channel rocks')
     })
 
     it('Should remove me', async function () {

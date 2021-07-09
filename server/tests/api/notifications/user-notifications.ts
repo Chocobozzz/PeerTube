@@ -17,7 +17,6 @@ import {
   ServerInfo,
   updateMyUser,
   updateVideo,
-  updateVideoChannel,
   uploadRandomVideoOnServers,
   wait,
   waitJobs
@@ -404,7 +403,11 @@ describe('Test user notifications', function () {
         displayName: 'super root 2 name'
       })
 
-      await updateVideoChannel(servers[0].url, userAccessToken, 'user_1_channel', { displayName: myChannelName })
+      await servers[0].channelsCommand.update({
+        token: userAccessToken,
+        channelName: 'user_1_channel',
+        attributes: { displayName: myChannelName }
+      })
     })
 
     it('Should notify when a local channel is following one of our channel', async function () {

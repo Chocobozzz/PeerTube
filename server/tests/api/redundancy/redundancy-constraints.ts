@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
+import { expect } from 'chai'
 import {
   cleanupTests,
   flushAndRunServer,
@@ -14,8 +15,6 @@ import {
   waitUntilLog
 } from '@shared/extra-utils'
 import { VideoPrivacy } from '@shared/models'
-
-const expect = chai.expect
 
 describe('Test redundancy constraints', function () {
   let remoteServer: ServerInfo

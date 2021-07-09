@@ -1,4 +1,6 @@
+import { isAbsolute, join } from 'path'
 import { HttpStatusCode } from '@shared/core-utils'
+import { root } from '../miscs'
 import {
   makeDeleteRequest,
   makeGetRequest,
@@ -143,6 +145,25 @@ abstract class AbstractCommand {
       method: 'PUT',
       fields,
       attaches
+    })
+  }
+
+  protected updateImageRequest (options: InternalCommonCommandOptions & {
+    fixture: string
+    fieldname: string
+  }) {
+    let filePath = ''
+    if (isAbsolute(options.fixture)) {
+      filePath = options.fixture
+    } else {
+      filePath = join(root(), 'server', 'tests', 'fixtures', options.fixture)
+    }
+
+    return this.postUploadRequest({
+      ...options,
+
+      fields: {},
+      attaches: { [options.fieldname]: filePath }
     })
   }
 
