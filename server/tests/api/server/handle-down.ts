@@ -4,16 +4,13 @@ import 'mocha'
 import * as chai from 'chai'
 import { HttpStatusCode } from '@shared/core-utils'
 import {
-  addVideoCommentReply,
-  addVideoCommentThread,
   cleanupTests,
   closeAllSequelize,
+  CommentsCommand,
   completeVideoCheck,
   flushAndRunMultipleServers,
   getVideo,
-  getVideoCommentThreads,
   getVideosList,
-  getVideoThreadComments,
   immutableAssign,
   killallServers,
   reRunServer,
@@ -26,7 +23,7 @@ import {
   wait,
   waitJobs
 } from '@shared/extra-utils'
-import { JobState, Video, VideoCommentThreadTree, VideoPrivacy } from '@shared/models'
+import { JobState, Video, VideoPrivacy } from '@shared/models'
 
 const expect = chai.expect
 
@@ -62,10 +59,13 @@ describe('Test handle downs', function () {
   let checkAttributes: any
   let unlistedCheckAttributes: any
 
+  let commentCommands: CommentsCommand[]
+
   before(async function () {
     this.timeout(30000)
 
     servers = await flushAndRunMultipleServers(3)
+    commentCommands = servers.map(s => s.commentsCommand)
 
     checkAttributes = {
       name: 'my super name for server 1',
@@ -154,15 +154,13 @@ describe('Test handle downs', function () {
     // Add comments to video 2
     {
       const text = 'thread 1'
-      let resComment = await addVideoCommentThread(servers[0].url, servers[0].accessToken, missedVideo2.uuid, text)
-      let comment = resComment.body.comment
+      let comment = await commentCommands[0].createThread({ videoId: missedVideo2.uuid, text })
       threadIdServer1 = comment.id
 
-      resComment = await addVideoCommentReply(servers[0].url, servers[0].accessToken, missedVideo2.uuid, comment.id, 'comment 1-1')
-      comment = resComment.body.comment
+      comment = await commentCommands[0].addReply({ videoId: missedVideo2.uuid, toCommentId: comment.id, text: 'comment 1-1' })
 
-      resComment = await addVideoCommentReply(servers[0].url, servers[0].accessToken, missedVideo2.uuid, comment.id, 'comment 1-2')
-      commentIdServer1 = resComment.body.comment.id
+      const created = await commentCommands[0].addReply({ videoId: missedVideo2.uuid, toCommentId: comment.id, text: 'comment 1-2' })
+      commentIdServer1 = created.id
     }
 
     await waitJobs(servers[0])
@@ -235,7 +233,7 @@ describe('Test handle downs', function () {
   it('Should send comments on a video to server 3, and automatically fetch the video', async function () {
     this.timeout(25000)
 
-    await addVideoCommentReply(servers[0].url, servers[0].accessToken, missedVideo2.uuid, commentIdServer1, 'comment 1-3')
+    await commentCommands[0].addReply({ videoId: missedVideo2.uuid, toCommentId: commentIdServer1, text: 'comment 1-3' })
 
     await waitJobs(servers)
 
@@ -243,15 +241,13 @@ describe('Test handle downs', function () {
     expect(resVideo.body).not.to.be.undefined
 
     {
-      let resComment = await getVideoCommentThreads(servers[2].url, missedVideo2.uuid, 0, 5)
-      expect(resComment.body.data).to.be.an('array')
-      expect(resComment.body.data).to.have.lengthOf(1)
+      const { data } = await servers[2].commentsCommand.listThreads({ videoId: missedVideo2.uuid })
+      expect(data).to.be.an('array')
+      expect(data).to.have.lengthOf(1)
 
-      threadIdServer2 = resComment.body.data[0].id
+      threadIdServer2 = data[0].id
 
-      resComment = await getVideoThreadComments(servers[2].url, missedVideo2.uuid, threadIdServer2)
-
-      const tree: VideoCommentThreadTree = resComment.body
+      const tree = await servers[2].commentsCommand.getThread({ videoId: missedVideo2.uuid, threadId: threadIdServer2 })
       expect(tree.comment.text).equal('thread 1')
       expect(tree.children).to.have.lengthOf(1)
 
@@ -274,33 +270,30 @@ describe('Test handle downs', function () {
   it('Should correctly reply to the comment', async function () {
     this.timeout(15000)
 
-    await addVideoCommentReply(servers[2].url, servers[2].accessToken, missedVideo2.uuid, commentIdServer2, 'comment 1-4')
+    await servers[2].commentsCommand.addReply({ videoId: missedVideo2.uuid, toCommentId: commentIdServer2, text: 'comment 1-4' })
 
     await waitJobs(servers)
 
-    {
-      const resComment = await getVideoThreadComments(servers[0].url, missedVideo2.uuid, threadIdServer1)
+    const tree = await commentCommands[0].getThread({ videoId: missedVideo2.uuid, threadId: threadIdServer1 })
 
-      const tree: VideoCommentThreadTree = resComment.body
-      expect(tree.comment.text).equal('thread 1')
-      expect(tree.children).to.have.lengthOf(1)
+    expect(tree.comment.text).equal('thread 1')
+    expect(tree.children).to.have.lengthOf(1)
 
-      const firstChild = tree.children[0]
-      expect(firstChild.comment.text).to.equal('comment 1-1')
-      expect(firstChild.children).to.have.lengthOf(1)
+    const firstChild = tree.children[0]
+    expect(firstChild.comment.text).to.equal('comment 1-1')
+    expect(firstChild.children).to.have.lengthOf(1)
 
-      const childOfFirstChild = firstChild.children[0]
-      expect(childOfFirstChild.comment.text).to.equal('comment 1-2')
-      expect(childOfFirstChild.children).to.have.lengthOf(1)
+    const childOfFirstChild = firstChild.children[0]
+    expect(childOfFirstChild.comment.text).to.equal('comment 1-2')
+    expect(childOfFirstChild.children).to.have.lengthOf(1)
 
-      const childOfChildFirstChild = childOfFirstChild.children[0]
-      expect(childOfChildFirstChild.comment.text).to.equal('comment 1-3')
-      expect(childOfChildFirstChild.children).to.have.lengthOf(1)
+    const childOfChildFirstChild = childOfFirstChild.children[0]
+    expect(childOfChildFirstChild.comment.text).to.equal('comment 1-3')
+    expect(childOfChildFirstChild.children).to.have.lengthOf(1)
 
-      const childOfChildOfChildOfFirstChild = childOfChildFirstChild.children[0]
-      expect(childOfChildOfChildOfFirstChild.comment.text).to.equal('comment 1-4')
-      expect(childOfChildOfChildOfFirstChild.children).to.have.lengthOf(0)
-    }
+    const childOfChildOfChildOfFirstChild = childOfChildFirstChild.children[0]
+    expect(childOfChildOfChildOfFirstChild.comment.text).to.equal('comment 1-4')
+    expect(childOfChildOfChildOfFirstChild.children).to.have.lengthOf(0)
   })
 
   it('Should upload many videos on server 1', async function () {

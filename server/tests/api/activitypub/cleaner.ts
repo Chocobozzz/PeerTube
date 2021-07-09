@@ -7,16 +7,19 @@ import {
   closeAllSequelize,
   deleteAll,
   doubleFollow,
+  flushAndRunMultipleServers,
   getCount,
+  getVideo,
+  rateVideo,
   selectQuery,
+  ServerInfo,
+  setAccessTokensToServers,
   setVideoField,
   updateQuery,
-  wait
-} from '../../../../shared/extra-utils'
-import { flushAndRunMultipleServers, ServerInfo, setAccessTokensToServers } from '../../../../shared/extra-utils/index'
-import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
-import { addVideoCommentThread, getVideoCommentThreads } from '../../../../shared/extra-utils/videos/video-comments'
-import { getVideo, rateVideo, uploadVideoAndGetId } from '../../../../shared/extra-utils/videos/videos'
+  uploadVideoAndGetId,
+  wait,
+  waitJobs
+} from '@shared/extra-utils'
 
 const expect = chai.expect
 
@@ -63,7 +66,7 @@ describe('Test AP cleaner', function () {
     for (const server of servers) {
       for (const uuid of videoUUIDs) {
         await rateVideo(server.url, server.accessToken, uuid, 'like')
-        await addVideoCommentThread(server.url, server.accessToken, uuid, 'comment')
+        await server.commentsCommand.createThread({ videoId: uuid, text: 'comment' })
       }
     }
 
@@ -172,8 +175,8 @@ describe('Test AP cleaner', function () {
     this.timeout(20000)
 
     {
-      const res = await getVideoCommentThreads(servers[0].url, videoUUID1, 0, 5)
-      expect(res.body.total).to.equal(3)
+      const { total } = await servers[0].commentsCommand.listThreads({ videoId: videoUUID1 })
+      expect(total).to.equal(3)
     }
 
     await deleteAll(servers[2].internalServerNumber, 'videoComment')
@@ -182,8 +185,8 @@ describe('Test AP cleaner', function () {
     await waitJobs(servers)
 
     {
-      const res = await getVideoCommentThreads(servers[0].url, videoUUID1, 0, 5)
-      expect(res.body.total).to.equal(2)
+      const { total } = await servers[0].commentsCommand.listThreads({ videoId: videoUUID1 })
+      expect(total).to.equal(2)
     }
   })
 

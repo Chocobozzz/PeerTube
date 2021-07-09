@@ -3,11 +3,8 @@
 import 'mocha'
 import { ServerHookName, VideoPlaylistPrivacy, VideoPrivacy } from '@shared/models'
 import {
-  addVideoCommentReply,
-  addVideoCommentThread,
   blockUser,
   createUser,
-  deleteVideoComment,
   PluginsCommand,
   registerUser,
   removeUser,
@@ -101,20 +98,20 @@ describe('Test plugin action hooks', function () {
 
   describe('Comments hooks', function () {
     it('Should run action:api.video-thread.created', async function () {
-      const res = await addVideoCommentThread(servers[0].url, servers[0].accessToken, videoUUID, 'thread')
-      threadId = res.body.comment.id
+      const created = await servers[0].commentsCommand.createThread({ videoId: videoUUID, text: 'thread' })
+      threadId = created.id
 
       await checkHook('action:api.video-thread.created')
     })
 
     it('Should run action:api.video-comment-reply.created', async function () {
-      await addVideoCommentReply(servers[0].url, servers[0].accessToken, videoUUID, threadId, 'reply')
+      await servers[0].commentsCommand.addReply({ videoId: videoUUID, toCommentId: threadId, text: 'reply' })
 
       await checkHook('action:api.video-comment-reply.created')
     })
 
     it('Should run action:api.video-comment.deleted', async function () {
-      await deleteVideoComment(servers[0].url, servers[0].accessToken, videoUUID, threadId)
+      await servers[0].commentsCommand.delete({ videoId: videoUUID, commentId: threadId })
 
       await checkHook('action:api.video-comment.deleted')
     })

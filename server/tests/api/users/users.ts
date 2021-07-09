@@ -4,7 +4,6 @@ import 'mocha'
 import * as chai from 'chai'
 import { HttpStatusCode } from '@shared/core-utils'
 import {
-  addVideoCommentThread,
   blockUser,
   cleanupTests,
   closeAllSequelize,
@@ -983,7 +982,7 @@ describe('Test users', function () {
 
     it('Should report correct video comments for user', async function () {
       const text = 'super comment'
-      await addVideoCommentThread(server.url, user17AccessToken, videoId, text)
+      await server.commentsCommand.createThread({ token: user17AccessToken, videoId, text })
 
       const res = await getUserInformation(server.url, server.accessToken, user17Id, true)
       const user: User = res.body

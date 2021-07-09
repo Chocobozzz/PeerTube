@@ -3,14 +3,10 @@
 import 'mocha'
 import * as chai from 'chai'
 import {
-  addVideoCommentReply,
-  addVideoCommentThread,
   checkCommentMention,
   CheckerBaseParams,
   checkNewCommentOnMyVideo,
   cleanupTests,
-  getVideoCommentThreads,
-  getVideoThreadComments,
   MockSmtpServer,
   prepareNotificationsTest,
   ServerInfo,
@@ -18,13 +14,13 @@ import {
   uploadVideo,
   waitJobs
 } from '@shared/extra-utils'
-import { UserNotification, VideoCommentThreadTree } from '@shared/models'
+import { UserNotification } from '@shared/models'
 
 const expect = chai.expect
 
 describe('Test comments notifications', function () {
   let servers: ServerInfo[] = []
-  let userAccessToken: string
+  let userToken: string
   let userNotifications: UserNotification[] = []
   let emails: object[] = []
 
@@ -38,7 +34,7 @@ describe('Test comments notifications', function () {
 
     const res = await prepareNotificationsTest(2)
     emails = res.emails
-    userAccessToken = res.userAccessToken
+    userToken = res.userAccessToken
     servers = res.servers
     userNotifications = res.userNotifications
   })
@@ -51,7 +47,7 @@ describe('Test comments notifications', function () {
         server: servers[0],
         emails,
         socketNotifications: userNotifications,
-        token: userAccessToken
+        token: userToken
       }
     })
 
@@ -61,8 +57,8 @@ describe('Test comments notifications', function () {
       const resVideo = await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'super video' })
       const uuid = resVideo.body.video.uuid
 
-      const resComment = await addVideoCommentThread(servers[0].url, servers[0].accessToken, uuid, 'comment')
-      const commentId = resComment.body.comment.id
+      const created = await servers[0].commentsCommand.createThread({ videoId: uuid, text: 'comment' })
+      const commentId = created.id
 
       await waitJobs(servers)
       await checkNewCommentOnMyVideo(baseParams, uuid, commentId, commentId, 'absence')
@@ -71,11 +67,11 @@ describe('Test comments notifications', function () {
     it('Should not send a new comment notification if I comment my own video', async function () {
       this.timeout(20000)
 
-      const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name: 'super video' })
+      const resVideo = await uploadVideo(servers[0].url, userToken, { name: 'super video' })
       const uuid = resVideo.body.video.uuid
 
-      const resComment = await addVideoCommentThread(servers[0].url, userAccessToken, uuid, 'comment')
-      const commentId = resComment.body.comment.id
+      const created = await servers[0].commentsCommand.createThread({ token: userToken, videoId: uuid, text: 'comment' })
+      const commentId = created.id
 
       await waitJobs(servers)
       await checkNewCommentOnMyVideo(baseParams, uuid, commentId, commentId, 'absence')
@@ -84,28 +80,28 @@ describe('Test comments notifications', function () {
     it('Should not send a new comment notification if the account is muted', async function () {
       this.timeout(20000)
 
-      await servers[0].blocklistCommand.addToMyBlocklist({ token: userAccessToken, account: 'root' })
+      await servers[0].blocklistCommand.addToMyBlocklist({ token: userToken, account: 'root' })
 
-      const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name: 'super video' })
+      const resVideo = await uploadVideo(servers[0].url, userToken, { name: 'super video' })
       const uuid = resVideo.body.video.uuid
 
-      const resComment = await addVideoCommentThread(servers[0].url, servers[0].accessToken, uuid, 'comment')
-      const commentId = resComment.body.comment.id
+      const created = await servers[0].commentsCommand.createThread({ videoId: uuid, text: 'comment' })
+      const commentId = created.id
 
       await waitJobs(servers)
       await checkNewCommentOnMyVideo(baseParams, uuid, commentId, commentId, 'absence')
 
-      await servers[0].blocklistCommand.removeFromMyBlocklist({ token: userAccessToken, account: 'root' })
+      await servers[0].blocklistCommand.removeFromMyBlocklist({ token: userToken, account: 'root' })
     })
 
     it('Should send a new comment notification after a local comment on my video', async function () {
       this.timeout(20000)
 
-      const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name: 'super video' })
+      const resVideo = await uploadVideo(servers[0].url, userToken, { name: 'super video' })
       const uuid = resVideo.body.video.uuid
 
-      const resComment = await addVideoCommentThread(servers[0].url, servers[0].accessToken, uuid, 'comment')
-      const commentId = resComment.body.comment.id
+      const created = await servers[0].commentsCommand.createThread({ videoId: uuid, text: 'comment' })
+      const commentId = created.id
 
       await waitJobs(servers)
       await checkNewCommentOnMyVideo(baseParams, uuid, commentId, commentId, 'presence')
@@ -114,33 +110,31 @@ describe('Test comments notifications', function () {
     it('Should send a new comment notification after a remote comment on my video', async function () {
       this.timeout(20000)
 
-      const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name: 'super video' })
+      const resVideo = await uploadVideo(servers[0].url, userToken, { name: 'super video' })
       const uuid = resVideo.body.video.uuid
 
       await waitJobs(servers)
 
-      await addVideoCommentThread(servers[1].url, servers[1].accessToken, uuid, 'comment')
+      await servers[1].commentsCommand.createThread({ videoId: uuid, text: 'comment' })
 
       await waitJobs(servers)
 
-      const resComment = await getVideoCommentThreads(servers[0].url, uuid, 0, 5)
-      expect(resComment.body.data).to.have.lengthOf(1)
-      const commentId = resComment.body.data[0].id
+      const { data } = await servers[0].commentsCommand.listThreads({ videoId: uuid })
+      expect(data).to.have.lengthOf(1)
 
+      const commentId = data[0].id
       await checkNewCommentOnMyVideo(baseParams, uuid, commentId, commentId, 'presence')
     })
 
     it('Should send a new comment notification after a local reply on my video', async function () {
       this.timeout(20000)
 
-      const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name: 'super video' })
+      const resVideo = await uploadVideo(servers[0].url, userToken, { name: 'super video' })
       const uuid = resVideo.body.video.uuid
 
-      const resThread = await addVideoCommentThread(servers[0].url, servers[0].accessToken, uuid, 'comment')
-      const threadId = resThread.body.comment.id
+      const { id: threadId } = await servers[0].commentsCommand.createThread({ videoId: uuid, text: 'comment' })
 
-      const resComment = await addVideoCommentReply(servers[0].url, servers[0].accessToken, uuid, threadId, 'reply')
-      const commentId = resComment.body.comment.id
+      const { id: commentId } = await servers[0].commentsCommand.addReply({ videoId: uuid, toCommentId: threadId, text: 'reply' })
 
       await waitJobs(servers)
       await checkNewCommentOnMyVideo(baseParams, uuid, commentId, threadId, 'presence')
@@ -149,24 +143,23 @@ describe('Test comments notifications', function () {
     it('Should send a new comment notification after a remote reply on my video', async function () {
       this.timeout(20000)
 
-      const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name: 'super video' })
+      const resVideo = await uploadVideo(servers[0].url, userToken, { name: 'super video' })
       const uuid = resVideo.body.video.uuid
       await waitJobs(servers)
 
       {
-        const resThread = await addVideoCommentThread(servers[1].url, servers[1].accessToken, uuid, 'comment')
-        const threadId = resThread.body.comment.id
-        await addVideoCommentReply(servers[1].url, servers[1].accessToken, uuid, threadId, 'reply')
+        const created = await servers[1].commentsCommand.createThread({ videoId: uuid, text: 'comment' })
+        const threadId = created.id
+        await servers[1].commentsCommand.addReply({ videoId: uuid, toCommentId: threadId, text: 'reply' })
       }
 
       await waitJobs(servers)
 
-      const resThread = await getVideoCommentThreads(servers[0].url, uuid, 0, 5)
-      expect(resThread.body.data).to.have.lengthOf(1)
-      const threadId = resThread.body.data[0].id
+      const { data } = await servers[0].commentsCommand.listThreads({ videoId: uuid })
+      expect(data).to.have.lengthOf(1)
 
-      const resComments = await getVideoThreadComments(servers[0].url, uuid, threadId)
-      const tree = resComments.body as VideoCommentThreadTree
+      const threadId = data[0].id
+      const tree = await servers[0].commentsCommand.getThread({ videoId: uuid, threadId })
 
       expect(tree.children).to.have.lengthOf(1)
       const commentId = tree.children[0].comment.id
@@ -177,10 +170,10 @@ describe('Test comments notifications', function () {
     it('Should convert markdown in comment to html', async function () {
       this.timeout(20000)
 
-      const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name: 'cool video' })
+      const resVideo = await uploadVideo(servers[0].url, userToken, { name: 'cool video' })
       const uuid = resVideo.body.video.uuid
 
-      await addVideoCommentThread(servers[0].url, servers[0].accessToken, uuid, commentText)
+      await servers[0].commentsCommand.createThread({ videoId: uuid, text: commentText })
 
       await waitJobs(servers)
 
@@ -197,7 +190,7 @@ describe('Test comments notifications', function () {
         server: servers[0],
         emails,
         socketNotifications: userNotifications,
-        token: userAccessToken
+        token: userToken
       }
 
       await updateMyUser({
@@ -216,11 +209,10 @@ describe('Test comments notifications', function () {
     it('Should not send a new mention comment notification if I mention the video owner', async function () {
       this.timeout(10000)
 
-      const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name: 'super video' })
+      const resVideo = await uploadVideo(servers[0].url, userToken, { name: 'super video' })
       const uuid = resVideo.body.video.uuid
 
-      const resComment = await addVideoCommentThread(servers[0].url, servers[0].accessToken, uuid, '@user_1 hello')
-      const commentId = resComment.body.comment.id
+      const { id: commentId } = await servers[0].commentsCommand.createThread({ videoId: uuid, text: '@user_1 hello' })
 
       await waitJobs(servers)
       await checkCommentMention(baseParams, uuid, commentId, commentId, 'super root name', 'absence')
@@ -232,8 +224,7 @@ describe('Test comments notifications', function () {
       const resVideo = await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'super video' })
       const uuid = resVideo.body.video.uuid
 
-      const resComment = await addVideoCommentThread(servers[0].url, userAccessToken, uuid, '@user_1 hello')
-      const commentId = resComment.body.comment.id
+      const { id: commentId } = await servers[0].commentsCommand.createThread({ token: userToken, videoId: uuid, text: '@user_1 hello' })
 
       await waitJobs(servers)
       await checkCommentMention(baseParams, uuid, commentId, commentId, 'super root name', 'absence')
@@ -242,18 +233,17 @@ describe('Test comments notifications', function () {
     it('Should not send a new mention notification if the account is muted', async function () {
       this.timeout(10000)
 
-      await servers[0].blocklistCommand.addToMyBlocklist({ token: userAccessToken, account: 'root' })
+      await servers[0].blocklistCommand.addToMyBlocklist({ token: userToken, account: 'root' })
 
       const resVideo = await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'super video' })
       const uuid = resVideo.body.video.uuid
 
-      const resComment = await addVideoCommentThread(servers[0].url, servers[0].accessToken, uuid, '@user_1 hello')
-      const commentId = resComment.body.comment.id
+      const { id: commentId } = await servers[0].commentsCommand.createThread({ videoId: uuid, text: '@user_1 hello' })
 
       await waitJobs(servers)
       await checkCommentMention(baseParams, uuid, commentId, commentId, 'super root name', 'absence')
 
-      await servers[0].blocklistCommand.removeFromMyBlocklist({ token: userAccessToken, account: 'root' })
+      await servers[0].blocklistCommand.removeFromMyBlocklist({ token: userToken, account: 'root' })
     })
 
     it('Should not send a new mention notification if the remote account mention a local account', async function () {
@@ -263,8 +253,7 @@ describe('Test comments notifications', function () {
       const uuid = resVideo.body.video.uuid
 
       await waitJobs(servers)
-      const resThread = await addVideoCommentThread(servers[1].url, servers[1].accessToken, uuid, '@user_1 hello')
-      const threadId = resThread.body.comment.id
+      const { id: threadId } = await servers[1].commentsCommand.createThread({ videoId: uuid, text: '@user_1 hello' })
 
       await waitJobs(servers)
       await checkCommentMention(baseParams, uuid, threadId, threadId, 'super root 2 name', 'absence')
@@ -276,14 +265,12 @@ describe('Test comments notifications', function () {
       const resVideo = await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'super video' })
       const uuid = resVideo.body.video.uuid
 
-      const resThread = await addVideoCommentThread(servers[0].url, servers[0].accessToken, uuid, '@user_1 hello 1')
-      const threadId = resThread.body.comment.id
+      const { id: threadId } = await servers[0].commentsCommand.createThread({ videoId: uuid, text: '@user_1 hellotext:  1' })
 
       await waitJobs(servers)
       await checkCommentMention(baseParams, uuid, threadId, threadId, 'super root name', 'presence')
 
-      const resComment = await addVideoCommentReply(servers[0].url, servers[0].accessToken, uuid, threadId, 'hello 2 @user_1')
-      const commentId = resComment.body.comment.id
+      const { id: commentId } = await servers[0].commentsCommand.addReply({ videoId: uuid, toCommentId: threadId, text: 'hello 2 @user_1' })
 
       await waitJobs(servers)
       await checkCommentMention(baseParams, uuid, commentId, threadId, 'super root name', 'presence')
@@ -298,23 +285,22 @@ describe('Test comments notifications', function () {
       await waitJobs(servers)
 
       const text1 = `hello @user_1@localhost:${servers[0].port} 1`
-      const resThread = await addVideoCommentThread(servers[1].url, servers[1].accessToken, uuid, text1)
-      const server2ThreadId = resThread.body.comment.id
+      const { id: server2ThreadId } = await servers[1].commentsCommand.createThread({ videoId: uuid, text: text1 })
 
       await waitJobs(servers)
 
-      const resThread2 = await getVideoCommentThreads(servers[0].url, uuid, 0, 5)
-      expect(resThread2.body.data).to.have.lengthOf(1)
-      const server1ThreadId = resThread2.body.data[0].id
+      const { data } = await servers[0].commentsCommand.listThreads({ videoId: uuid })
+      expect(data).to.have.lengthOf(1)
+
+      const server1ThreadId = data[0].id
       await checkCommentMention(baseParams, uuid, server1ThreadId, server1ThreadId, 'super root 2 name', 'presence')
 
       const text2 = `@user_1@localhost:${servers[0].port} hello 2 @root@localhost:${servers[0].port}`
-      await addVideoCommentReply(servers[1].url, servers[1].accessToken, uuid, server2ThreadId, text2)
+      await servers[1].commentsCommand.addReply({ videoId: uuid, toCommentId: server2ThreadId, text: text2 })
 
       await waitJobs(servers)
 
-      const resComments = await getVideoThreadComments(servers[0].url, uuid, server1ThreadId)
-      const tree = resComments.body as VideoCommentThreadTree
+      const tree = await servers[0].commentsCommand.getThread({ videoId: uuid, threadId: server1ThreadId })
 
       expect(tree.children).to.have.lengthOf(1)
       const commentId = tree.children[0].comment.id
@@ -328,10 +314,9 @@ describe('Test comments notifications', function () {
       const resVideo = await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'super video' })
       const uuid = resVideo.body.video.uuid
 
-      const resThread = await addVideoCommentThread(servers[0].url, servers[0].accessToken, uuid, '@user_1 hello 1')
-      const threadId = resThread.body.comment.id
+      const { id: threadId } = await servers[0].commentsCommand.createThread({ videoId: uuid, text: '@user_1 hello 1' })
 
-      await addVideoCommentReply(servers[0].url, servers[0].accessToken, uuid, threadId, '@user_1 ' + commentText)
+      await servers[0].commentsCommand.addReply({ videoId: uuid, toCommentId: threadId, text: '@user_1 ' + commentText })
 
       await waitJobs(servers)
 

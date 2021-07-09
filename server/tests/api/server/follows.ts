@@ -3,19 +3,14 @@
 import 'mocha'
 import * as chai from 'chai'
 import {
-  addVideoCommentReply,
-  addVideoCommentThread,
   cleanupTests,
   completeVideoCheck,
   createUser,
   dateIsValid,
-  deleteVideoComment,
   expectAccountFollows,
   flushAndRunMultipleServers,
   FollowsCommand,
-  getVideoCommentThreads,
   getVideosList,
-  getVideoThreadComments,
   rateVideo,
   ServerInfo,
   setAccessTokensToServers,
@@ -24,7 +19,7 @@ import {
   userLogin,
   waitJobs
 } from '@shared/extra-utils'
-import { Video, VideoComment, VideoCommentThreadTree, VideoPrivacy } from '@shared/models'
+import { Video, VideoPrivacy } from '@shared/models'
 
 const expect = chai.expect
 
@@ -348,37 +343,35 @@ describe('Test follows', function () {
         {
           {
             const text = 'my super first comment'
-            const res = await addVideoCommentThread(servers[2].url, servers[2].accessToken, video4.id, text)
-            const threadId = res.body.comment.id
+            const created = await servers[2].commentsCommand.createThread({ videoId: video4.id, text })
+            const threadId = created.id
 
             const text1 = 'my super answer to thread 1'
-            const childCommentRes = await addVideoCommentReply(servers[2].url, servers[2].accessToken, video4.id, threadId, text1)
-            const childCommentId = childCommentRes.body.comment.id
+            const childComment = await servers[2].commentsCommand.addReply({ videoId: video4.id, toCommentId: threadId, text: text1 })
 
             const text2 = 'my super answer to answer of thread 1'
-            await addVideoCommentReply(servers[2].url, servers[2].accessToken, video4.id, childCommentId, text2)
+            await servers[2].commentsCommand.addReply({ videoId: video4.id, toCommentId: childComment.id, text: text2 })
 
             const text3 = 'my second answer to thread 1'
-            await addVideoCommentReply(servers[2].url, servers[2].accessToken, video4.id, threadId, text3)
+            await servers[2].commentsCommand.addReply({ videoId: video4.id, toCommentId: threadId, text: text3 })
           }
 
           {
             const text = 'will be deleted'
-            const res = await addVideoCommentThread(servers[2].url, servers[2].accessToken, video4.id, text)
-            const threadId = res.body.comment.id
+            const created = await servers[2].commentsCommand.createThread({ videoId: video4.id, text })
+            const threadId = created.id
 
             const text1 = 'answer to deleted'
-            await addVideoCommentReply(servers[2].url, servers[2].accessToken, video4.id, threadId, text1)
+            await servers[2].commentsCommand.addReply({ videoId: video4.id, toCommentId: threadId, text: text1 })
 
             const text2 = 'will also be deleted'
-            const childCommentRes = await addVideoCommentReply(servers[2].url, servers[2].accessToken, video4.id, threadId, text2)
-            const childCommentId = childCommentRes.body.comment.id
+            const childComment = await servers[2].commentsCommand.addReply({ videoId: video4.id, toCommentId: threadId, text: text2 })
 
             const text3 = 'my second answer to deleted'
-            await addVideoCommentReply(servers[2].url, servers[2].accessToken, video4.id, childCommentId, text3)
+            await servers[2].commentsCommand.addReply({ videoId: video4.id, toCommentId: childComment.id, text: text3 })
 
-            await deleteVideoComment(servers[2].url, servers[2].accessToken, video4.id, threadId)
-            await deleteVideoComment(servers[2].url, servers[2].accessToken, video4.id, childCommentId)
+            await servers[2].commentsCommand.delete({ videoId: video4.id, commentId: threadId })
+            await servers[2].commentsCommand.delete({ videoId: video4.id, commentId: childComment.id })
           }
         }
 
@@ -462,14 +455,14 @@ describe('Test follows', function () {
     })
 
     it('Should have propagated comments', async function () {
-      const res1 = await getVideoCommentThreads(servers[0].url, video4.id, 0, 5, 'createdAt')
+      const { total, data } = await servers[0].commentsCommand.listThreads({ videoId: video4.id, sort: 'createdAt' })
 
-      expect(res1.body.total).to.equal(2)
-      expect(res1.body.data).to.be.an('array')
-      expect(res1.body.data).to.have.lengthOf(2)
+      expect(total).to.equal(2)
+      expect(data).to.be.an('array')
+      expect(data).to.have.lengthOf(2)
 
       {
-        const comment: VideoComment = res1.body.data[0]
+        const comment = data[0]
         expect(comment.inReplyToCommentId).to.be.null
         expect(comment.text).equal('my super first comment')
         expect(comment.videoId).to.equal(video4.id)
@@ -482,9 +475,7 @@ describe('Test follows', function () {
 
         const threadId = comment.threadId
 
-        const res2 = await getVideoThreadComments(servers[0].url, video4.id, threadId)
-
-        const tree: VideoCommentThreadTree = res2.body
+        const tree = await servers[0].commentsCommand.getThread({ videoId: video4.id, threadId })
         expect(tree.comment.text).equal('my super first comment')
         expect(tree.children).to.have.lengthOf(2)
 
@@ -502,7 +493,7 @@ describe('Test follows', function () {
       }
 
       {
-        const deletedComment: VideoComment = res1.body.data[1]
+        const deletedComment = data[1]
         expect(deletedComment).to.not.be.undefined
         expect(deletedComment.isDeleted).to.be.true
         expect(deletedComment.deletedAt).to.not.be.null
@@ -512,9 +503,7 @@ describe('Test follows', function () {
         expect(deletedComment.totalReplies).to.equal(2)
         expect(dateIsValid(deletedComment.deletedAt as string)).to.be.true
 
-        const res2 = await getVideoThreadComments(servers[0].url, video4.id, deletedComment.threadId)
-
-        const tree: VideoCommentThreadTree = res2.body
+        const tree = await servers[0].commentsCommand.getThread({ videoId: video4.id, threadId: deletedComment.threadId })
         const [ commentRoot, deletedChildRoot ] = tree.children
 
         expect(deletedChildRoot).to.not.be.undefined

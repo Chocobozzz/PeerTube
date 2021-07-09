@@ -4,8 +4,6 @@ import 'mocha'
 import * as chai from 'chai'
 import { HttpStatusCode } from '@shared/core-utils'
 import {
-  addVideoCommentReply,
-  addVideoCommentThread,
   cleanupTests,
   doubleFollow,
   flushAndRunMultipleServers,
@@ -13,10 +11,8 @@ import {
   getMyVideos,
   getVideo,
   getVideoChannelVideos,
-  getVideoCommentThreads,
   getVideosList,
   getVideosListPagination,
-  getVideoThreadComments,
   getVideoWithToken,
   ImportsCommand,
   makeRawRequest,
@@ -31,7 +27,7 @@ import {
   waitJobs,
   waitUntilLog
 } from '@shared/extra-utils'
-import { VideoCommentThreadTree, VideoDetails, VideoImportState, VideoPlaylist, VideoPlaylistPrivacy, VideoPrivacy } from '@shared/models'
+import { VideoDetails, VideoImportState, VideoPlaylist, VideoPlaylistPrivacy, VideoPrivacy } from '@shared/models'
 
 const expect = chai.expect
 
@@ -226,44 +222,50 @@ describe('Test plugin filter hooks', function () {
   })
 
   it('Should run filter:api.video-thread.create.accept.result', async function () {
-    await addVideoCommentThread(servers[0].url, servers[0].accessToken, videoUUID, 'comment with bad word', HttpStatusCode.FORBIDDEN_403)
+    await servers[0].commentsCommand.createThread({
+      videoId: videoUUID,
+      text: 'comment with bad word',
+      expectedStatus: HttpStatusCode.FORBIDDEN_403
+    })
   })
 
   it('Should run filter:api.video-comment-reply.create.accept.result', async function () {
-    const res = await addVideoCommentThread(servers[0].url, servers[0].accessToken, videoUUID, 'thread')
-    threadId = res.body.comment.id
+    const created = await servers[0].commentsCommand.createThread({ videoId: videoUUID, text: 'thread' })
+    threadId = created.id
 
-    await addVideoCommentReply(
-      servers[0].url,
-      servers[0].accessToken,
-      videoUUID,
-      threadId,
-      'comment with bad word',
-      HttpStatusCode.FORBIDDEN_403
-    )
-    await addVideoCommentReply(servers[0].url, servers[0].accessToken, videoUUID, threadId, 'comment with good word', HttpStatusCode.OK_200)
+    await servers[0].commentsCommand.addReply({
+      videoId: videoUUID,
+      toCommentId: threadId,
+      text: 'comment with bad word',
+      expectedStatus: HttpStatusCode.FORBIDDEN_403
+    })
+    await servers[0].commentsCommand.addReply({
+      videoId: videoUUID,
+      toCommentId: threadId,
+      text: 'comment with good word',
+      expectedStatus: HttpStatusCode.OK_200
+    })
   })
 
   it('Should run filter:api.video-threads.list.params', async function () {
-    const res = await getVideoCommentThreads(servers[0].url, videoUUID, 0, 0)
+    const { data } = await servers[0].commentsCommand.listThreads({ videoId: videoUUID, start: 0, count: 0 })
 
     // our plugin do +1 to the count parameter
-    expect(res.body.data).to.have.lengthOf(1)
+    expect(data).to.have.lengthOf(1)
   })
 
   it('Should run filter:api.video-threads.list.result', async function () {
-    const res = await getVideoCommentThreads(servers[0].url, videoUUID, 0, 0)
+    const { total } = await servers[0].commentsCommand.listThreads({ videoId: videoUUID, start: 0, count: 0 })
 
     // Plugin do +1 to the total result
-    expect(res.body.total).to.equal(2)
+    expect(total).to.equal(2)
   })
 
   it('Should run filter:api.video-thread-comments.list.params')
 
   it('Should run filter:api.video-thread-comments.list.result', async function () {
-    const res = await getVideoThreadComments(servers[0].url, videoUUID, threadId)
+    const thread = await servers[0].commentsCommand.getThread({ videoId: videoUUID, threadId })
 
-    const thread = res.body as VideoCommentThreadTree
     expect(thread.comment.text.endsWith(' <3')).to.be.true
   })
 

@@ -27,7 +27,7 @@ export class StreamingPlaylistsCommand extends AbstractCommand {
       url: options.url,
       range: options.range,
       implicitToken: false,
-      defaultExpectedStatus: HttpStatusCode.OK_200,
+      defaultExpectedStatus: HttpStatusCode.OK_200
     }))
   }
 
