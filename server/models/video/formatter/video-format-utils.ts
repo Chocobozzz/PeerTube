@@ -212,7 +212,7 @@ function videoFilesModelToFormattedJSON (
       return {
         resolution: {
           id: videoFile.resolution,
-          label: videoFile.resolution + 'p'
+          label: videoFile.resolution === 0 ? 'Audio' : `${videoFile.resolution}p`
         },
 
         magnetUri: includeMagnet && videoFile.hasTorrent()
