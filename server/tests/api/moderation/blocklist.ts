@@ -9,7 +9,6 @@ import {
   createUser,
   doubleFollow,
   flushAndRunMultipleServers,
-  getUserNotifications,
   getVideosList,
   getVideosListWithToken,
   ServerInfo,
@@ -18,7 +17,7 @@ import {
   userLogin,
   waitJobs
 } from '@shared/extra-utils'
-import { UserNotification, UserNotificationType, Video } from '@shared/models'
+import { UserNotificationType, Video } from '@shared/models'
 
 const expect = chai.expect
 
@@ -59,9 +58,8 @@ async function checkCommentNotification (
 
   await waitJobs([ mainServer, comment.server ])
 
-  const res = await getUserNotifications(mainServer.url, mainServer.accessToken, 0, 30)
-  const commentNotifications = (res.body.data as UserNotification[])
-                                  .filter(n => n.comment && n.comment.video.uuid === comment.videoUUID && n.createdAt >= createdAt)
+  const { data } = await mainServer.notificationsCommand.list({ start: 0, count: 30 })
+  const commentNotifications = data.filter(n => n.comment && n.comment.video.uuid === comment.videoUUID && n.createdAt >= createdAt)
 
   if (check === 'presence') expect(commentNotifications).to.have.lengthOf(1)
   else expect(commentNotifications).to.have.lengthOf(0)
@@ -710,12 +708,10 @@ describe('Test blocklist', function () {
 
           await waitJobs(servers)
 
-          const res = await getUserNotifications(servers[0].url, servers[0].accessToken, 0, 30)
-          const commentNotifications = (res.body.data as UserNotification[])
-                                          .filter(n => {
-                                            return n.type === UserNotificationType.NEW_INSTANCE_FOLLOWER &&
-                                            n.createdAt >= now.toISOString()
-                                          })
+          const { data } = await servers[0].notificationsCommand.list({ start: 0, count: 30 })
+          const commentNotifications = data.filter(n => {
+            return n.type === UserNotificationType.NEW_INSTANCE_FOLLOWER && n.createdAt >= now.toISOString()
+          })
 
           expect(commentNotifications).to.have.lengthOf(0)
         }
@@ -773,12 +769,10 @@ describe('Test blocklist', function () {
 
           await waitJobs(servers)
 
-          const res = await getUserNotifications(servers[0].url, servers[0].accessToken, 0, 30)
-          const commentNotifications = (res.body.data as UserNotification[])
-                                          .filter(n => {
-                                            return n.type === UserNotificationType.NEW_INSTANCE_FOLLOWER &&
-                                            n.createdAt >= now.toISOString()
-                                          })
+          const { data } = await servers[0].notificationsCommand.list({ start: 0, count: 30 })
+          const commentNotifications = data.filter(n => {
+            return n.type === UserNotificationType.NEW_INSTANCE_FOLLOWER && n.createdAt >= now.toISOString()
+          })
 
           expect(commentNotifications).to.have.lengthOf(1)
         }

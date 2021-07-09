@@ -146,13 +146,12 @@ describe('Test plugins', function () {
     }
 
     {
-      const body = await command.list({
+      const { data } = await command.list({
         count: 2,
         start: 0,
         sort: 'name'
       })
 
-      const data = body
       expect(data[0].name).to.equal('background-red')
       expect(data[1].name).to.equal('hello-world')
     }

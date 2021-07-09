@@ -11,13 +11,14 @@ import { CLICommand } from '../cli'
 import { CustomPagesCommand } from '../custom-pages'
 import { FeedCommand } from '../feeds'
 import { LogsCommand } from '../logs'
+import { SQLCommand } from '../miscs'
 import { buildServerDirectory, getFileSize, isGithubCI, root, wait } from '../miscs/miscs'
 import { AbusesCommand } from '../moderation'
 import { OverviewsCommand } from '../overviews'
 import { makeGetRequest } from '../requests/requests'
 import { SearchCommand } from '../search'
 import { SocketIOCommand } from '../socket'
-import { AccountsCommand, BlocklistCommand, SubscriptionsCommand } from '../users'
+import { AccountsCommand, BlocklistCommand, NotificationsCommand, SubscriptionsCommand } from '../users'
 import {
   BlacklistCommand,
   CaptionsCommand,
@@ -30,7 +31,6 @@ import {
   ServicesCommand,
   StreamingPlaylistsCommand
 } from '../videos'
-import { SQLCommand } from '../miscs'
 import { CommentsCommand } from '../videos/comments-command'
 import { ConfigCommand } from './config-command'
 import { ContactFormCommand } from './contact-form-command'
@@ -125,6 +125,7 @@ interface ServerInfo {
   channelsCommand?: ChannelsCommand
   commentsCommand?: CommentsCommand
   sqlCommand?: SQLCommand
+  notificationsCommand?: NotificationsCommand
 }
 
 function parallelTests () {
@@ -370,6 +371,7 @@ function assignCommands (server: ServerInfo) {
   server.channelsCommand = new ChannelsCommand(server)
   server.commentsCommand = new CommentsCommand(server)
   server.sqlCommand = new SQLCommand(server)
+  server.notificationsCommand = new NotificationsCommand(server)
 }
 
 async function reRunServer (server: ServerInfo, configOverride?: any) {

@@ -21,7 +21,7 @@ export class StreamingPlaylistsCommand extends AbstractCommand {
     url: string
     range?: string
   }) {
-    return unwrapText(this.getRawRequest({
+    return unwrapBody<Buffer>(this.getRawRequest({
       ...options,
 
       url: options.url,
