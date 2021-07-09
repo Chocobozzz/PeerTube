@@ -15,7 +15,6 @@ import {
   doubleFollow,
   flushAndRunMultipleServers,
   getMyVideosWithFilter,
-  getPlaylist,
   getVideo,
   getVideosList,
   getVideosWithFilters,
@@ -397,20 +396,27 @@ describe('Test live', function () {
         // Only finite files are displayed
         expect(hlsPlaylist.files).to.have.lengthOf(0)
 
-        await checkResolutionsInMasterPlaylist(hlsPlaylist.playlistUrl, resolutions)
+        await checkResolutionsInMasterPlaylist({ server, playlistUrl: hlsPlaylist.playlistUrl, resolutions })
 
         for (let i = 0; i < resolutions.length; i++) {
           const segmentNum = 3
           const segmentName = `${i}-00000${segmentNum}.ts`
           await commands[0].waitUntilSegmentGeneration({ videoUUID: video.uuid, resolution: i, segment: segmentNum })
 
-          const res = await getPlaylist(`${servers[0].url}/static/streaming-playlists/hls/${video.uuid}/${i}.m3u8`)
-          const subPlaylist = res.text
+          const subPlaylist = await servers[0].streamingPlaylistsCommand.get({
+            url: `${servers[0].url}/static/streaming-playlists/hls/${video.uuid}/${i}.m3u8`
+          })
 
           expect(subPlaylist).to.contain(segmentName)
 
           const baseUrlAndPath = servers[0].url + '/static/streaming-playlists/hls'
-          await checkLiveSegmentHash(baseUrlAndPath, video.uuid, segmentName, hlsPlaylist)
+          await checkLiveSegmentHash({
+            server,
+            baseUrlSegment: baseUrlAndPath,
+            videoUUID: video.uuid,
+            segmentName,
+            hlsPlaylist
+          })
         }
       }
     }

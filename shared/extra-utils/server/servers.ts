@@ -26,7 +26,8 @@ import {
   ImportsCommand,
   LiveCommand,
   PlaylistsCommand,
-  ServicesCommand
+  ServicesCommand,
+  StreamingPlaylistsCommand
 } from '../videos'
 import { ConfigCommand } from './config-command'
 import { ContactFormCommand } from './contact-form-command'
@@ -117,6 +118,7 @@ interface ServerInfo {
   playlistsCommand?: PlaylistsCommand
   historyCommand?: HistoryCommand
   importsCommand?: ImportsCommand
+  streamingPlaylistsCommand?: StreamingPlaylistsCommand
 }
 
 function parallelTests () {
@@ -350,6 +352,7 @@ async function runServer (server: ServerInfo, configOverrideArg?: any, args = []
       server.playlistsCommand = new PlaylistsCommand(server)
       server.historyCommand = new HistoryCommand(server)
       server.importsCommand = new ImportsCommand(server)
+      server.streamingPlaylistsCommand = new StreamingPlaylistsCommand(server)
 
       res(server)
     })

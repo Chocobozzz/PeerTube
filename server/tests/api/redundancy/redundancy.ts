@@ -203,7 +203,7 @@ async function check1PlaylistRedundancies (videoUUID?: string) {
   const hlsPlaylist = (res.body as VideoDetails).streamingPlaylists[0]
 
   for (const resolution of [ 240, 360, 480, 720 ]) {
-    await checkSegmentHash(baseUrlPlaylist, baseUrlSegment, videoUUID, resolution, hlsPlaylist)
+    await checkSegmentHash({ server: servers[1], baseUrlPlaylist, baseUrlSegment, videoUUID, resolution, hlsPlaylist })
   }
 
   const directories = [

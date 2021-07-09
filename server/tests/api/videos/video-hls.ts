@@ -12,7 +12,6 @@ import {
   cleanupTests,
   doubleFollow,
   flushAndRunMultipleServers,
-  getPlaylist,
   getVideo,
   makeRawRequest,
   removeVideo,
@@ -67,10 +66,9 @@ async function checkHlsPlaylist (servers: ServerInfo[], videoUUID: string, hlsOn
     }
 
     {
-      await checkResolutionsInMasterPlaylist(hlsPlaylist.playlistUrl, resolutions)
+      await checkResolutionsInMasterPlaylist({ server, playlistUrl: hlsPlaylist.playlistUrl, resolutions })
 
-      const res = await getPlaylist(hlsPlaylist.playlistUrl)
-      const masterPlaylist = res.text
+      const masterPlaylist = await server.streamingPlaylistsCommand.get({ url: hlsPlaylist.playlistUrl })
 
       for (const resolution of resolutions) {
         expect(masterPlaylist).to.contain(`${resolution}.m3u8`)
@@ -80,9 +78,10 @@ async function checkHlsPlaylist (servers: ServerInfo[], videoUUID: string, hlsOn
 
     {
       for (const resolution of resolutions) {
-        const res = await getPlaylist(`${baseUrl}/static/streaming-playlists/hls/${videoUUID}/${resolution}.m3u8`)
+        const subPlaylist = await server.streamingPlaylistsCommand.get({
+          url: `${baseUrl}/static/streaming-playlists/hls/${videoUUID}/${resolution}.m3u8`
+        })
 
-        const subPlaylist = res.text
         expect(subPlaylist).to.contain(`${videoUUID}-${resolution}-fragmented.mp4`)
       }
     }
@@ -91,7 +90,14 @@ async function checkHlsPlaylist (servers: ServerInfo[], videoUUID: string, hlsOn
       const baseUrlAndPath = baseUrl + '/static/streaming-playlists/hls'
 
       for (const resolution of resolutions) {
-        await checkSegmentHash(baseUrlAndPath, baseUrlAndPath, videoUUID, resolution, hlsPlaylist)
+        await checkSegmentHash({
+          server,
+          baseUrlPlaylist: baseUrlAndPath,
+          baseUrlSegment: baseUrlAndPath,
+          videoUUID,
+          resolution,
+          hlsPlaylist
+        })
       }
     }
   }
