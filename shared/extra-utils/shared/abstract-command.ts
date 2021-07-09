@@ -78,7 +78,7 @@ abstract class AbstractCommand {
   }
 
   protected getRequest (options: InternalGetCommandOptions) {
-    const { redirects, query, contentType, accept } = options
+    const { redirects, query, contentType, accept, range } = options
 
     return makeGetRequest({
       ...this.buildCommonRequestOptions(options),
@@ -86,6 +86,7 @@ abstract class AbstractCommand {
       redirects,
       query,
       contentType,
+      range,
       accept
     })
   }
@@ -168,10 +169,10 @@ abstract class AbstractCommand {
   }
 
   private buildCommonRequestOptions (options: InternalCommonCommandOptions) {
-    const { path } = options
+    const { url, path } = options
 
     return {
-      url: this.server.url,
+      url: url ?? this.server.url,
       path,
 
       token: this.buildCommonRequestToken(options),

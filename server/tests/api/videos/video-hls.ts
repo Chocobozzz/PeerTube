@@ -109,6 +109,7 @@ describe('Test HLS videos', function () {
   let videoAudioUUID = ''
 
   function runTestSuite (hlsOnly: boolean) {
+
     it('Should upload a video and transcode it to HLS', async function () {
       this.timeout(120000)
 

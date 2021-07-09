@@ -10,7 +10,6 @@ import {
   checkNewVideoFromSubscription,
   checkVideoIsPublished,
   cleanupTests,
-  getLastNotification,
   ImportsCommand,
   MockSmtpServer,
   prepareNotificationsTest,
@@ -64,7 +63,7 @@ describe('Test user notifications', function () {
 
       await uploadRandomVideoOnServers(servers, 1)
 
-      const notification = await getLastNotification(servers[0].url, userAccessToken)
+      const notification = await servers[0].notificationsCommand.getLastest({ token: userAccessToken })
       expect(notification).to.be.undefined
 
       expect(emails).to.have.lengthOf(0)
@@ -245,7 +244,7 @@ describe('Test user notifications', function () {
       await uploadRandomVideoOnServers(servers, 2, { waitTranscoding: false })
       await waitJobs(servers)
 
-      const notification = await getLastNotification(servers[0].url, userAccessToken)
+      const notification = await servers[0].notificationsCommand.getLastest({ token: userAccessToken })
       if (notification) {
         expect(notification.type).to.not.equal(UserNotificationType.MY_VIDEO_PUBLISHED)
       }

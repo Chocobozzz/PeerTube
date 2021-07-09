@@ -69,7 +69,7 @@ describe('Test contact form API validators', function () {
   })
 
   it('Should accept a contact form with the correct parameters', async function () {
-    await command.send({ ...defaultBody })
+    await command.send(defaultBody)
   })
 
   after(async function () {

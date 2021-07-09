@@ -3,86 +3,32 @@
 import { expect } from 'chai'
 import { inspect } from 'util'
 import { AbuseState, PluginType } from '@shared/models'
-import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 import { UserNotification, UserNotificationSetting, UserNotificationSettingValue, UserNotificationType } from '../../models/users'
 import { MockSmtpServer } from '../mock-servers/mock-email'
-import { makeGetRequest, makePostBodyRequest, makePutBodyRequest } from '../requests/requests'
 import { doubleFollow } from '../server/follows'
 import { flushAndRunMultipleServers, ServerInfo } from '../server/servers'
 import { setAccessTokensToServers, userLogin } from './login'
 import { createUser, getMyUserInformation } from './users'
 
-function updateMyNotificationSettings (
-  url: string,
-  token: string,
-  settings: UserNotificationSetting,
-  statusCodeExpected = HttpStatusCode.NO_CONTENT_204
-) {
-  const path = '/api/v1/users/me/notification-settings'
-
-  return makePutBodyRequest({
-    url,
-    path,
-    token,
-    fields: settings,
-    statusCodeExpected
-  })
-}
-
-async function getUserNotifications (
-  url: string,
-  token: string,
-  start: number,
-  count: number,
-  unread?: boolean,
-  sort = '-createdAt',
-  statusCodeExpected = HttpStatusCode.OK_200
-) {
-  const path = '/api/v1/users/me/notifications'
-
-  return makeGetRequest({
-    url,
-    path,
-    token,
-    query: {
-      start,
-      count,
-      sort,
-      unread
-    },
-    statusCodeExpected
-  })
-}
-
-function markAsReadNotifications (url: string, token: string, ids: number[], statusCodeExpected = HttpStatusCode.NO_CONTENT_204) {
-  const path = '/api/v1/users/me/notifications/read'
-
-  return makePostBodyRequest({
-    url,
-    path,
-    token,
-    fields: { ids },
-    statusCodeExpected
-  })
-}
-
-function markAsReadAllNotifications (url: string, token: string, statusCodeExpected = HttpStatusCode.NO_CONTENT_204) {
-  const path = '/api/v1/users/me/notifications/read-all'
-
-  return makePostBodyRequest({
-    url,
-    path,
-    token,
-    statusCodeExpected
-  })
-}
-
-async function getLastNotification (serverUrl: string, accessToken: string) {
-  const res = await getUserNotifications(serverUrl, accessToken, 0, 1, undefined, '-createdAt')
-
-  if (res.body.total === 0) return undefined
-
-  return res.body.data[0] as UserNotification
+function getAllNotificationsSettings (): UserNotificationSetting {
+  return {
+    newVideoFromSubscription: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
+    newCommentOnMyVideo: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
+    abuseAsModerator: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
+    videoAutoBlacklistAsModerator: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
+    blacklistOnMyVideo: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
+    myVideoImportFinished: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
+    myVideoPublished: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
+    commentMention: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
+    newFollow: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
+    newUserRegistration: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
+    newInstanceFollower: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
+    abuseNewMessage: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
+    abuseStateChange: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
+    autoInstanceFollowing: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
+    newPeerTubeVersion: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
+    newPluginVersion: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL
+  }
 }
 
 type CheckerBaseParams = {
@@ -104,7 +50,7 @@ async function checkNotification (
   const check = base.check || { web: true, mail: true }
 
   if (check.web) {
-    const notification = await getLastNotification(base.server.url, base.token)
+    const notification = await base.server.notificationsCommand.getLastest({ token: base.token })
 
     if (notification || checkType !== 'absence') {
       notificationChecker(notification, checkType)
@@ -680,27 +626,6 @@ async function checkNewPluginVersion (base: CheckerBaseParams, pluginType: Plugi
   await checkNotification(base, notificationChecker, emailNotificationFinder, type)
 }
 
-function getAllNotificationsSettings (): UserNotificationSetting {
-  return {
-    newVideoFromSubscription: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
-    newCommentOnMyVideo: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
-    abuseAsModerator: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
-    videoAutoBlacklistAsModerator: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
-    blacklistOnMyVideo: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
-    myVideoImportFinished: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
-    myVideoPublished: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
-    commentMention: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
-    newFollow: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
-    newUserRegistration: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
-    newInstanceFollower: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
-    abuseNewMessage: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
-    abuseStateChange: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
-    autoInstanceFollowing: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
-    newPeerTubeVersion: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
-    newPluginVersion: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL
-  }
-}
-
 async function prepareNotificationsTest (serversCount = 3, overrideConfigArg: any = {}) {
   const userNotifications: UserNotification[] = []
   const adminNotifications: UserNotification[] = []
@@ -739,11 +664,11 @@ async function prepareNotificationsTest (serversCount = 3, overrideConfigArg: an
   })
   const userAccessToken = await userLogin(servers[0], user)
 
-  await updateMyNotificationSettings(servers[0].url, userAccessToken, getAllNotificationsSettings())
-  await updateMyNotificationSettings(servers[0].url, servers[0].accessToken, getAllNotificationsSettings())
+  await servers[0].notificationsCommand.updateMySettings({ token: userAccessToken, settings: getAllNotificationsSettings() })
+  await servers[0].notificationsCommand.updateMySettings({ settings: getAllNotificationsSettings() })
 
   if (serversCount > 1) {
-    await updateMyNotificationSettings(servers[1].url, servers[1].accessToken, getAllNotificationsSettings())
+    await servers[1].notificationsCommand.updateMySettings({ settings: getAllNotificationsSettings() })
   }
 
   {
@@ -777,11 +702,11 @@ async function prepareNotificationsTest (serversCount = 3, overrideConfigArg: an
 // ---------------------------------------------------------------------------
 
 export {
+  getAllNotificationsSettings,
+
   CheckerBaseParams,
   CheckerType,
-  getAllNotificationsSettings,
   checkNotification,
-  markAsReadAllNotifications,
   checkMyVideoImportIsFinished,
   checkUserRegistered,
   checkAutoInstanceFollowing,
@@ -791,14 +716,10 @@ export {
   checkNewCommentOnMyVideo,
   checkNewBlacklistOnMyVideo,
   checkCommentMention,
-  updateMyNotificationSettings,
   checkNewVideoAbuseForModerators,
   checkVideoAutoBlacklistForModerators,
   checkNewAbuseMessage,
   checkAbuseStateChange,
-  getUserNotifications,
-  markAsReadNotifications,
-  getLastNotification,
   checkNewInstanceFollower,
   prepareNotificationsTest,
   checkNewCommentAbuseForModerators,

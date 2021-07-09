@@ -7,27 +7,22 @@ import {
   createUser,
   doubleFollow,
   flushAndRunMultipleServers,
-  getUserNotifications,
-  markAsReadAllNotifications,
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo,
   userLogin,
   waitJobs
 } from '@shared/extra-utils'
-import { UserNotification, UserNotificationType } from '@shared/models'
+import { UserNotificationType } from '@shared/models'
 
 const expect = chai.expect
 
-async function checkNotifications (url: string, token: string, expected: UserNotificationType[]) {
-  const res = await getUserNotifications(url, token, 0, 10, true)
-
-  const notifications: UserNotification[] = res.body.data
-
-  expect(notifications).to.have.lengthOf(expected.length)
+async function checkNotifications (server: ServerInfo, token: string, expected: UserNotificationType[]) {
+  const { data } = await server.notificationsCommand.list({ token, start: 0, count: 10, unread: true })
+  expect(data).to.have.lengthOf(expected.length)
 
   for (const type of expected) {
-    expect(notifications.find(n => n.type === type)).to.exist
+    expect(data.find(n => n.type === type)).to.exist
   }
 }
 
@@ -47,8 +42,8 @@ describe('Test blocklist', function () {
 
     await waitJobs(servers)
 
-    await markAsReadAllNotifications(servers[0].url, userToken1)
-    await markAsReadAllNotifications(servers[0].url, userToken2)
+    await servers[0].notificationsCommand.markAsReadAll({ token: userToken1 })
+    await servers[0].notificationsCommand.markAsReadAll({ token: userToken2 })
 
     {
       const res = await uploadVideo(servers[0].url, userToken1, { name: 'video' })
@@ -122,7 +117,7 @@ describe('Test blocklist', function () {
 
     it('Should have appropriate notifications', async function () {
       const notifs = [ UserNotificationType.NEW_COMMENT_ON_MY_VIDEO, UserNotificationType.NEW_FOLLOW ]
-      await checkNotifications(servers[0].url, userToken1, notifs)
+      await checkNotifications(servers[0], userToken1, notifs)
     })
 
     it('Should block an account', async function () {
@@ -133,13 +128,13 @@ describe('Test blocklist', function () {
     })
 
     it('Should not have notifications from this account', async function () {
-      await checkNotifications(servers[0].url, userToken1, [])
+      await checkNotifications(servers[0], userToken1, [])
     })
 
     it('Should have notifications of this account on user 2', async function () {
       const notifs = [ UserNotificationType.COMMENT_MENTION, UserNotificationType.NEW_FOLLOW ]
 
-      await checkNotifications(servers[0].url, userToken2, notifs)
+      await checkNotifications(servers[0], userToken2, notifs)
 
       await servers[0].blocklistCommand.removeFromMyBlocklist({ token: userToken1, account: 'user3@' + servers[1].host })
     })
@@ -155,7 +150,7 @@ describe('Test blocklist', function () {
 
     it('Should have appropriate notifications', async function () {
       const notifs = [ UserNotificationType.NEW_COMMENT_ON_MY_VIDEO, UserNotificationType.NEW_FOLLOW ]
-      await checkNotifications(servers[0].url, userToken1, notifs)
+      await checkNotifications(servers[0], userToken1, notifs)
     })
 
     it('Should block an account', async function () {
@@ -166,13 +161,13 @@ describe('Test blocklist', function () {
     })
 
     it('Should not have notifications from this account', async function () {
-      await checkNotifications(servers[0].url, userToken1, [])
+      await checkNotifications(servers[0], userToken1, [])
     })
 
     it('Should have notifications of this account on user 2', async function () {
       const notifs = [ UserNotificationType.COMMENT_MENTION, UserNotificationType.NEW_FOLLOW ]
 
-      await checkNotifications(servers[0].url, userToken2, notifs)
+      await checkNotifications(servers[0], userToken2, notifs)
 
       await servers[0].blocklistCommand.removeFromMyBlocklist({ token: userToken1, server: servers[1].host })
     })
@@ -189,12 +184,12 @@ describe('Test blocklist', function () {
     it('Should have appropriate notifications', async function () {
       {
         const notifs = [ UserNotificationType.NEW_COMMENT_ON_MY_VIDEO, UserNotificationType.NEW_FOLLOW ]
-        await checkNotifications(servers[0].url, userToken1, notifs)
+        await checkNotifications(servers[0], userToken1, notifs)
       }
 
       {
         const notifs = [ UserNotificationType.COMMENT_MENTION, UserNotificationType.NEW_FOLLOW ]
-        await checkNotifications(servers[0].url, userToken2, notifs)
+        await checkNotifications(servers[0], userToken2, notifs)
       }
     })
 
@@ -206,8 +201,8 @@ describe('Test blocklist', function () {
     })
 
     it('Should not have notifications from this account', async function () {
-      await checkNotifications(servers[0].url, userToken1, [])
-      await checkNotifications(servers[0].url, userToken2, [])
+      await checkNotifications(servers[0], userToken1, [])
+      await checkNotifications(servers[0], userToken2, [])
 
       await servers[0].blocklistCommand.removeFromServerBlocklist({ account: 'user3@' + servers[1].host })
     })
@@ -224,12 +219,12 @@ describe('Test blocklist', function () {
     it('Should have appropriate notifications', async function () {
       {
         const notifs = [ UserNotificationType.NEW_COMMENT_ON_MY_VIDEO, UserNotificationType.NEW_FOLLOW ]
-        await checkNotifications(servers[0].url, userToken1, notifs)
+        await checkNotifications(servers[0], userToken1, notifs)
       }
 
       {
         const notifs = [ UserNotificationType.COMMENT_MENTION, UserNotificationType.NEW_FOLLOW ]
-        await checkNotifications(servers[0].url, userToken2, notifs)
+        await checkNotifications(servers[0], userToken2, notifs)
       }
     })
 
@@ -241,8 +236,8 @@ describe('Test blocklist', function () {
     })
 
     it('Should not have notifications from this account', async function () {
-      await checkNotifications(servers[0].url, userToken1, [])
-      await checkNotifications(servers[0].url, userToken2, [])
+      await checkNotifications(servers[0], userToken1, [])
+      await checkNotifications(servers[0], userToken2, [])
     })
   })
 

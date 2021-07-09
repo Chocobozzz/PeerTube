@@ -278,7 +278,7 @@ describe('Test video comments API validator', function () {
       let commentToDelete: number
 
       {
-        const created = await server.commentsCommand.createThread({ videoId: video.uuid, text: 'hello' })
+        const created = await server.commentsCommand.createThread({ videoId: video.uuid, token: userAccessToken, text: 'hello' })
         commentToDelete = created.id
       }
 
