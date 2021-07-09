@@ -41,25 +41,25 @@ import { RedundancyCommand } from './redundancy-command'
 import { StatsCommand } from './stats-command'
 
 interface ServerInfo {
-  app: ChildProcess
+  app?: ChildProcess
 
   url: string
-  host: string
-  hostname: string
-  port: number
+  host?: string
+  hostname?: string
+  port?: number
 
-  rtmpPort: number
+  rtmpPort?: number
 
-  parallel: boolean
+  parallel?: boolean
   internalServerNumber: number
-  serverNumber: number
+  serverNumber?: number
 
-  client: {
-    id: string
-    secret: string
+  client?: {
+    id?: string
+    secret?: string
   }
 
-  user: {
+  user?: {
     username: string
     password: string
     email?: string
@@ -328,41 +328,45 @@ async function runServer (server: ServerInfo, configOverrideArg?: any, args = []
         } catch { /* empty */ }
       })
 
-      server.bulkCommand = new BulkCommand(server)
-      server.cliCommand = new CLICommand(server)
-      server.customPageCommand = new CustomPagesCommand(server)
-      server.feedCommand = new FeedCommand(server)
-      server.logsCommand = new LogsCommand(server)
-      server.abusesCommand = new AbusesCommand(server)
-      server.overviewsCommand = new OverviewsCommand(server)
-      server.searchCommand = new SearchCommand(server)
-      server.contactFormCommand = new ContactFormCommand(server)
-      server.debugCommand = new DebugCommand(server)
-      server.followsCommand = new FollowsCommand(server)
-      server.jobsCommand = new JobsCommand(server)
-      server.pluginsCommand = new PluginsCommand(server)
-      server.redundancyCommand = new RedundancyCommand(server)
-      server.statsCommand = new StatsCommand(server)
-      server.configCommand = new ConfigCommand(server)
-      server.socketIOCommand = new SocketIOCommand(server)
-      server.accountsCommand = new AccountsCommand(server)
-      server.blocklistCommand = new BlocklistCommand(server)
-      server.subscriptionsCommand = new SubscriptionsCommand(server)
-      server.liveCommand = new LiveCommand(server)
-      server.servicesCommand = new ServicesCommand(server)
-      server.blacklistCommand = new BlacklistCommand(server)
-      server.captionsCommand = new CaptionsCommand(server)
-      server.changeOwnershipCommand = new ChangeOwnershipCommand(server)
-      server.playlistsCommand = new PlaylistsCommand(server)
-      server.historyCommand = new HistoryCommand(server)
-      server.importsCommand = new ImportsCommand(server)
-      server.streamingPlaylistsCommand = new StreamingPlaylistsCommand(server)
-      server.channelsCommand = new ChannelsCommand(server)
-      server.commentsCommand = new CommentsCommand(server)
+      assignCommands(server)
 
       res(server)
     })
   })
+}
+
+function assignCommands (server: ServerInfo) {
+  server.bulkCommand = new BulkCommand(server)
+  server.cliCommand = new CLICommand(server)
+  server.customPageCommand = new CustomPagesCommand(server)
+  server.feedCommand = new FeedCommand(server)
+  server.logsCommand = new LogsCommand(server)
+  server.abusesCommand = new AbusesCommand(server)
+  server.overviewsCommand = new OverviewsCommand(server)
+  server.searchCommand = new SearchCommand(server)
+  server.contactFormCommand = new ContactFormCommand(server)
+  server.debugCommand = new DebugCommand(server)
+  server.followsCommand = new FollowsCommand(server)
+  server.jobsCommand = new JobsCommand(server)
+  server.pluginsCommand = new PluginsCommand(server)
+  server.redundancyCommand = new RedundancyCommand(server)
+  server.statsCommand = new StatsCommand(server)
+  server.configCommand = new ConfigCommand(server)
+  server.socketIOCommand = new SocketIOCommand(server)
+  server.accountsCommand = new AccountsCommand(server)
+  server.blocklistCommand = new BlocklistCommand(server)
+  server.subscriptionsCommand = new SubscriptionsCommand(server)
+  server.liveCommand = new LiveCommand(server)
+  server.servicesCommand = new ServicesCommand(server)
+  server.blacklistCommand = new BlacklistCommand(server)
+  server.captionsCommand = new CaptionsCommand(server)
+  server.changeOwnershipCommand = new ChangeOwnershipCommand(server)
+  server.playlistsCommand = new PlaylistsCommand(server)
+  server.historyCommand = new HistoryCommand(server)
+  server.importsCommand = new ImportsCommand(server)
+  server.streamingPlaylistsCommand = new StreamingPlaylistsCommand(server)
+  server.channelsCommand = new ChannelsCommand(server)
+  server.commentsCommand = new CommentsCommand(server)
 }
 
 async function reRunServer (server: ServerInfo, configOverride?: any) {
@@ -475,5 +479,6 @@ export {
   flushAndRunServer,
   killallServers,
   reRunServer,
+  assignCommands,
   waitUntilLog
 }

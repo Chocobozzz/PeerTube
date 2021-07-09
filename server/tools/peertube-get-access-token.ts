@@ -2,7 +2,7 @@ import { registerTSPaths } from '../helpers/register-ts-paths'
 registerTSPaths()
 
 import { program } from 'commander'
-import { getClient, Server, serverLogin } from '../../shared/extra-utils'
+import { getAccessToken } from '../../shared/extra-utils'
 
 program
   .option('-u, --url <url>', 'Server url')
@@ -24,22 +24,7 @@ if (
   process.exit(-1)
 }
 
-getClient(options.url)
-  .then(res => {
-    const server = {
-      url: options.url,
-      user: {
-        username: options.username,
-        password: options.password
-      },
-      client: {
-        id: res.body.client_id,
-        secret: res.body.client_secret
-      }
-    } as Server
-
-    return serverLogin(server)
-  })
+getAccessToken(options.url, options.username, options.password)
   .then(accessToken => {
     console.log(accessToken)
     process.exit(0)

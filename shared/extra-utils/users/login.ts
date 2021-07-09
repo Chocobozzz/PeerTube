@@ -4,9 +4,9 @@ import { ServerInfo } from '../server/servers'
 import { getClient } from '../server/clients'
 import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
-type Client = { id: string, secret: string }
+type Client = { id?: string, secret?: string }
 type User = { username: string, password: string }
-type Server = { url: string, client: Client, user: User }
+type Server = { url?: string, client?: Client, user?: User }
 
 function login (url: string, client: Client, user: User, expectedStatus = HttpStatusCode.OK_200) {
   const path = '/api/v1/users/token'

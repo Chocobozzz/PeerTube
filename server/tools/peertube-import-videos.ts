@@ -8,17 +8,19 @@ import { truncate } from 'lodash'
 import { join } from 'path'
 import * as prompt from 'prompt'
 import { promisify } from 'util'
-import { advancedVideosSearch, getClient, getVideoCategories, login, uploadVideo } from '../../shared/extra-utils/index'
+import { YoutubeDL } from '@server/helpers/youtube-dl'
+import { getVideoCategories, uploadVideo } from '../../shared/extra-utils/index'
 import { sha256 } from '../helpers/core-utils'
 import { doRequestAndSaveToFile } from '../helpers/requests'
 import { CONSTRAINTS_FIELDS } from '../initializers/constants'
-import { buildCommonVideoOptions, buildVideoAttributesFromCommander, getLogger, getServerCredentials } from './cli'
-import { YoutubeDL } from '@server/helpers/youtube-dl'
-
-type UserInfo = {
-  username: string
-  password: string
-}
+import {
+  buildCommonVideoOptions,
+  buildServer,
+  buildVideoAttributesFromCommander,
+  getAccessTokenOrDie,
+  getLogger,
+  getServerCredentials
+} from './cli'
 
 const processOptions = {
   maxBuffer: Infinity
@@ -62,17 +64,13 @@ getServerCredentials(command)
     url = normalizeTargetUrl(url)
     options.targetUrl = normalizeTargetUrl(options.targetUrl)
 
-    const user = { username, password }
-
-    run(url, user)
+    run(url, username, password)
       .catch(err => exitError(err))
   })
   .catch(err => console.error(err))
 
-async function run (url: string, user: UserInfo) {
-  if (!user.password) {
-    user.password = await promptPassword()
-  }
+async function run (url: string, username: string, password: string) {
+  if (!password) password = await promptPassword()
 
   const youtubeDLBinary = await YoutubeDL.safeGetYoutubeDL()
 
@@ -111,7 +109,8 @@ async function run (url: string, user: UserInfo) {
       await processVideo({
         cwd: options.tmpdir,
         url,
-        user,
+        username,
+        password,
         youtubeInfo: info
       })
     } catch (err) {
@@ -119,17 +118,18 @@ async function run (url: string, user: UserInfo) {
     }
   }
 
-  log.info('Video/s for user %s imported: %s', user.username, options.targetUrl)
+  log.info('Video/s for user %s imported: %s', username, options.targetUrl)
   process.exit(0)
 }
 
 async function processVideo (parameters: {
   cwd: string
   url: string
-  user: { username: string, password: string }
+  username: string
+  password: string
   youtubeInfo: any
 }) {
-  const { youtubeInfo, cwd, url, user } = parameters
+  const { youtubeInfo, cwd, url, username, password } = parameters
   const youtubeDL = new YoutubeDL('', [])
 
   log.debug('Fetching object.', youtubeInfo)
@@ -138,22 +138,29 @@ async function processVideo (parameters: {
   log.debug('Fetched object.', videoInfo)
 
   const originallyPublishedAt = youtubeDL.buildOriginallyPublishedAt(videoInfo)
+
   if (options.since && originallyPublishedAt && originallyPublishedAt.getTime() < options.since.getTime()) {
-    log.info('Video "%s" has been published before "%s", don\'t upload it.\n',
-      videoInfo.title, formatDate(options.since))
-    return
-  }
-  if (options.until && originallyPublishedAt && originallyPublishedAt.getTime() > options.until.getTime()) {
-    log.info('Video "%s" has been published after "%s", don\'t upload it.\n',
-      videoInfo.title, formatDate(options.until))
+    log.info('Video "%s" has been published before "%s", don\'t upload it.\n', videoInfo.title, formatDate(options.since))
     return
   }
 
-  const result = await advancedVideosSearch(url, { search: videoInfo.title, sort: '-match', searchTarget: 'local' })
+  if (options.until && originallyPublishedAt && originallyPublishedAt.getTime() > options.until.getTime()) {
+    log.info('Video "%s" has been published after "%s", don\'t upload it.\n', videoInfo.title, formatDate(options.until))
+    return
+  }
+
+  const server = buildServer(url)
+  const { data } = await server.searchCommand.advancedVideoSearch({
+    search: {
+      search: videoInfo.title,
+      sort: '-match',
+      searchTarget: 'local'
+    }
+  })
 
   log.info('############################################################\n')
 
-  if (result.body.data.find(v => v.name === videoInfo.title)) {
+  if (data.find(v => v.name === videoInfo.title)) {
     log.info('Video "%s" already exists, don\'t reupload it.\n', videoInfo.title)
     return
   }
@@ -172,7 +179,8 @@ async function processVideo (parameters: {
       youtubeDL,
       cwd,
       url,
-      user,
+      username,
+      password,
       videoInfo: normalizeObject(videoInfo),
       videoPath: path
     })
@@ -187,9 +195,10 @@ async function uploadVideoOnPeerTube (parameters: {
   videoPath: string
   cwd: string
   url: string
-  user: { username: string, password: string }
+  username: string
+  password: string
 }) {
-  const { youtubeDL, videoInfo, videoPath, cwd, url, user } = parameters
+  const { youtubeDL, videoInfo, videoPath, cwd, url, username, password } = parameters
 
   const category = await getCategory(videoInfo.categories, url)
   const licence = getLicence(videoInfo.license)
@@ -223,7 +232,10 @@ async function uploadVideoOnPeerTube (parameters: {
     tags
   }
 
-  const videoAttributes = await buildVideoAttributesFromCommander(url, program, defaultAttributes)
+  let accessToken = await getAccessTokenOrDie(url, username, password)
+  const server = buildServer(url, accessToken)
+
+  const videoAttributes = await buildVideoAttributesFromCommander(server, program, defaultAttributes)
 
   Object.assign(videoAttributes, {
     originallyPublishedAt: originallyPublishedAt ? originallyPublishedAt.toISOString() : null,
@@ -234,15 +246,13 @@ async function uploadVideoOnPeerTube (parameters: {
 
   log.info('\nUploading on PeerTube video "%s".', videoAttributes.name)
 
-  let accessToken = await getAccessTokenOrDie(url, user)
-
   try {
     await uploadVideo(url, accessToken, videoAttributes)
   } catch (err) {
     if (err.message.indexOf('401') !== -1) {
       log.info('Got 401 Unauthorized, token may have expired, renewing token and retry.')
 
-      accessToken = await getAccessTokenOrDie(url, user)
+      accessToken = await getAccessTokenOrDie(url, username, password)
 
       await uploadVideo(url, accessToken, videoAttributes)
     } else {
@@ -360,21 +370,6 @@ async function promptPassword () {
       return res(result.password)
     })
   })
-}
-
-async function getAccessTokenOrDie (url: string, user: UserInfo) {
-  const resClient = await getClient(url)
-  const client = {
-    id: resClient.body.client_id,
-    secret: resClient.body.client_secret
-  }
-
-  try {
-    const res = await login(url, client, user)
-    return res.body.access_token
-  } catch (err) {
-    exitError('Cannot authenticate. Please check your username/password.')
-  }
 }
 
 function parseDate (dateAsStr: string): Date {
