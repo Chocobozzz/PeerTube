@@ -61,8 +61,7 @@ describe('Test tracker', function () {
     const errCb = () => done(new Error('Tracker is enabled'))
 
     killallServers([ server ])
-
-    reRunServer(server, { tracker: { enabled: false } })
+      .then(() => reRunServer(server, { tracker: { enabled: false } }))
       .then(() => {
         const webtorrent = new WebTorrent()
 
@@ -86,8 +85,7 @@ describe('Test tracker', function () {
     this.timeout(20000)
 
     killallServers([ server ])
-
-    reRunServer(server)
+      .then(() => reRunServer(server))
       .then(() => {
         const webtorrent = new WebTorrent()
 

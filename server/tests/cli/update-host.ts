@@ -61,7 +61,7 @@ describe('Test update host scripts', function () {
   it('Should run update host', async function () {
     this.timeout(30000)
 
-    killallServers([ server ])
+    await killallServers([ server ])
     // Run server with standard configuration
     await reRunServer(server)
 

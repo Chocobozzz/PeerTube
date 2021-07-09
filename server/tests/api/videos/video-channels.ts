@@ -9,7 +9,6 @@ import {
   createUser,
   doubleFollow,
   flushAndRunMultipleServers,
-  getActorImage,
   getVideo,
   getVideoChannelVideos,
   setDefaultVideoChannel,
@@ -268,7 +267,7 @@ describe('Test video channels', function () {
       await testImage(server.url, 'avatar-resized', avatarPaths[server.port], '.png')
       await testFileExistsOrNot(server, 'avatars', basename(avatarPaths[server.port]), true)
 
-      const row = await getActorImage(server.internalServerNumber, basename(avatarPaths[server.port]))
+      const row = await server.sqlCommand.getActorImage(basename(avatarPaths[server.port]))
       expect(row.height).to.equal(ACTOR_IMAGES_SIZE.AVATARS.height)
       expect(row.width).to.equal(ACTOR_IMAGES_SIZE.AVATARS.width)
     }
@@ -294,7 +293,7 @@ describe('Test video channels', function () {
       await testImage(server.url, 'banner-resized', bannerPaths[server.port])
       await testFileExistsOrNot(server, 'avatars', basename(bannerPaths[server.port]), true)
 
-      const row = await getActorImage(server.internalServerNumber, basename(bannerPaths[server.port]))
+      const row = await server.sqlCommand.getActorImage(basename(bannerPaths[server.port]))
       expect(row.height).to.equal(ACTOR_IMAGES_SIZE.BANNERS.height)
       expect(row.width).to.equal(ACTOR_IMAGES_SIZE.BANNERS.width)
     }

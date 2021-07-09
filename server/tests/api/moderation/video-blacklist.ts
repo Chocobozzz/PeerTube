@@ -342,7 +342,7 @@ describe('Test video blacklist', function () {
     before(async function () {
       this.timeout(20000)
 
-      killallServers([ servers[0] ])
+      await killallServers([ servers[0] ])
 
       const config = {
         auto_blacklist: {

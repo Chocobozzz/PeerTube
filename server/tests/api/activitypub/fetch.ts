@@ -1,23 +1,19 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-
+import * as chai from 'chai'
 import {
   cleanupTests,
-  closeAllSequelize,
   createUser,
   doubleFollow,
   flushAndRunMultipleServers,
   getVideosListSort,
   ServerInfo,
   setAccessTokensToServers,
-  setActorField,
-  setVideoField,
   uploadVideo,
   userLogin,
   waitJobs
 } from '../../../../shared/extra-utils'
-import * as chai from 'chai'
 import { Video } from '../../../../shared/models/videos'
 
 const expect = chai.expect
@@ -50,12 +46,12 @@ describe('Test ActivityPub fetcher', function () {
     {
       const to = 'http://localhost:' + servers[0].port + '/accounts/user1'
       const value = 'http://localhost:' + servers[1].port + '/accounts/user1'
-      await setActorField(servers[0].internalServerNumber, to, 'url', value)
+      await servers[0].sqlCommand.setActorField(to, 'url', value)
     }
 
     {
       const value = 'http://localhost:' + servers[2].port + '/videos/watch/' + badVideoUUID
-      await setVideoField(servers[0].internalServerNumber, badVideoUUID, 'url', value)
+      await servers[0].sqlCommand.setVideoField(badVideoUUID, 'url', value)
     }
   })
 
@@ -88,7 +84,5 @@ describe('Test ActivityPub fetcher', function () {
     this.timeout(20000)
 
     await cleanupTests(servers)
-
-    await closeAllSequelize(servers)
   })
 })

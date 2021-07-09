@@ -1,11 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
 import 'mocha'
+import * as chai from 'chai'
 import {
   cleanupTests,
-  closeAllSequelize,
-  countVideoViewsOf,
   doubleFollow,
   flushAndRunMultipleServers,
   killallServers,
@@ -50,7 +48,7 @@ describe('Test video views cleaner', function () {
   it('Should not clean old video views', async function () {
     this.timeout(50000)
 
-    killallServers([ servers[0] ])
+    await killallServers([ servers[0] ])
 
     await reRunServer(servers[0], { views: { videos: { remote: { max_age: '10 days' } } } })
 
@@ -60,14 +58,14 @@ describe('Test video views cleaner', function () {
 
     {
       for (const server of servers) {
-        const total = await countVideoViewsOf(server.internalServerNumber, videoIdServer1)
+        const total = await server.sqlCommand.countVideoViewsOf(videoIdServer1)
         expect(total).to.equal(2, 'Server ' + server.serverNumber + ' does not have the correct amount of views')
       }
     }
 
     {
       for (const server of servers) {
-        const total = await countVideoViewsOf(server.internalServerNumber, videoIdServer2)
+        const total = await server.sqlCommand.countVideoViewsOf(videoIdServer2)
         expect(total).to.equal(2, 'Server ' + server.serverNumber + ' does not have the correct amount of views')
       }
     }
@@ -76,7 +74,7 @@ describe('Test video views cleaner', function () {
   it('Should clean old video views', async function () {
     this.timeout(50000)
 
-    killallServers([ servers[0] ])
+    await killallServers([ servers[0] ])
 
     await reRunServer(servers[0], { views: { videos: { remote: { max_age: '5 seconds' } } } })
 
@@ -86,23 +84,21 @@ describe('Test video views cleaner', function () {
 
     {
       for (const server of servers) {
-        const total = await countVideoViewsOf(server.internalServerNumber, videoIdServer1)
+        const total = await server.sqlCommand.countVideoViewsOf(videoIdServer1)
         expect(total).to.equal(2)
       }
     }
 
     {
-      const totalServer1 = await countVideoViewsOf(servers[0].internalServerNumber, videoIdServer2)
+      const totalServer1 = await servers[0].sqlCommand.countVideoViewsOf(videoIdServer2)
       expect(totalServer1).to.equal(0)
 
-      const totalServer2 = await countVideoViewsOf(servers[1].internalServerNumber, videoIdServer2)
+      const totalServer2 = await servers[1].sqlCommand.countVideoViewsOf(videoIdServer2)
       expect(totalServer2).to.equal(2)
     }
   })
 
   after(async function () {
-    await closeAllSequelize(servers)
-
     await cleanupTests(servers)
   })
 })

@@ -164,7 +164,7 @@ describe('Official plugin auto-block videos', function () {
 
     await check(servers[0], video.uuid, true)
 
-    killallServers([ servers[0] ])
+    await killallServers([ servers[0] ])
     await reRunServer(servers[0])
     await wait(2000)
 

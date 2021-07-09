@@ -151,7 +151,7 @@ describe('Official plugin auto-mute', function () {
       expect(res.body.total).to.equal(2)
     }
 
-    killallServers([ servers[0] ])
+    await killallServers([ servers[0] ])
     await reRunServer(servers[0])
     await wait(2000)
 

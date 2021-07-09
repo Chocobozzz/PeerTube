@@ -204,7 +204,7 @@ describe('Test videos history', function () {
   it('Should not clean old history', async function () {
     this.timeout(50000)
 
-    killallServers([ server ])
+    await killallServers([ server ])
 
     await reRunServer(server, { history: { videos: { max_age: '10 days' } } })
 
@@ -219,7 +219,7 @@ describe('Test videos history', function () {
   it('Should clean old history', async function () {
     this.timeout(50000)
 
-    killallServers([ server ])
+    await killallServers([ server ])
 
     await reRunServer(server, { history: { videos: { max_age: '5 seconds' } } })
 

@@ -113,7 +113,7 @@ describe('Test logs', function () {
     it('Should not log ping requests', async function () {
       this.timeout(30000)
 
-      killallServers([ server ])
+      await killallServers([ server ])
 
       await reRunServer(server, { log: { log_ping_requests: false } })
 

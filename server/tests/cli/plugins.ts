@@ -39,7 +39,7 @@ describe('Test plugin scripts', function () {
   it('Should have the theme and the plugin registered when we restart peertube', async function () {
     this.timeout(30000)
 
-    killallServers([ server ])
+    await killallServers([ server ])
     await reRunServer(server)
 
     const config = await server.configCommand.getConfig()
@@ -62,7 +62,7 @@ describe('Test plugin scripts', function () {
   it('Should have removed the plugin on another peertube restart', async function () {
     this.timeout(30000)
 
-    killallServers([ server ])
+    await killallServers([ server ])
     await reRunServer(server)
 
     const config = await server.configCommand.getConfig()

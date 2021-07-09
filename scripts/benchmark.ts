@@ -15,7 +15,7 @@ const outfile = process.argv[2]
 run()
   .catch(err => console.error(err))
   .finally(() => {
-    if (server) killallServers([ server ])
+    if (server) return killallServers([ server ])
   })
 
 function buildAuthorizationHeader () {

@@ -36,7 +36,7 @@ describe('Test contact form API validators', function () {
   it('Should not accept a contact form if it is disabled in the configuration', async function () {
     this.timeout(10000)
 
-    killallServers([ server ])
+    await killallServers([ server ])
 
     // Contact form is disabled
     await reRunServer(server, { smtp: { hostname: 'localhost', port: emailPort }, contact_form: { enabled: false } })
@@ -46,7 +46,7 @@ describe('Test contact form API validators', function () {
   it('Should not accept a contact form if from email is invalid', async function () {
     this.timeout(10000)
 
-    killallServers([ server ])
+    await killallServers([ server ])
 
     // Email & contact form enabled
     await reRunServer(server, { smtp: { hostname: 'localhost', port: emailPort } })
