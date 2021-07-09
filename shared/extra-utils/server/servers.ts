@@ -30,6 +30,7 @@ import {
   ServicesCommand,
   StreamingPlaylistsCommand
 } from '../videos'
+import { SQLCommand } from '../miscs'
 import { CommentsCommand } from '../videos/comments-command'
 import { ConfigCommand } from './config-command'
 import { ContactFormCommand } from './contact-form-command'
@@ -123,6 +124,7 @@ interface ServerInfo {
   streamingPlaylistsCommand?: StreamingPlaylistsCommand
   channelsCommand?: ChannelsCommand
   commentsCommand?: CommentsCommand
+  sqlCommand?: SQLCommand
 }
 
 function parallelTests () {
@@ -367,6 +369,7 @@ function assignCommands (server: ServerInfo) {
   server.streamingPlaylistsCommand = new StreamingPlaylistsCommand(server)
   server.channelsCommand = new ChannelsCommand(server)
   server.commentsCommand = new CommentsCommand(server)
+  server.sqlCommand = new SQLCommand(server)
 }
 
 async function reRunServer (server: ServerInfo, configOverride?: any) {
@@ -398,17 +401,20 @@ async function checkDirectoryIsEmpty (server: ServerInfo, directory: string, exc
   expect(filtered).to.have.lengthOf(0)
 }
 
-function killallServers (servers: ServerInfo[]) {
+async function killallServers (servers: ServerInfo[]) {
   for (const server of servers) {
     if (!server.app) continue
 
+    await server.sqlCommand.cleanup()
+
     process.kill(-server.app.pid)
+
     server.app = null
   }
 }
 
 async function cleanupTests (servers: ServerInfo[]) {
-  killallServers(servers)
+  await killallServers(servers)
 
   if (isGithubCI()) {
     await ensureDir('artifacts')

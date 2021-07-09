@@ -11,8 +11,6 @@ import {
   MockSmtpServer,
   prepareNotificationsTest,
   ServerInfo,
-  setPluginLatestVersion,
-  setPluginVersion,
   wait
 } from '@shared/extra-utils'
 import { PluginType, UserNotification, UserNotificationType } from '@shared/models'
@@ -120,8 +118,8 @@ describe('Test admin notifications', function () {
     it('Should send a notification to admins on new plugin version', async function () {
       this.timeout(30000)
 
-      await setPluginVersion(server.internalServerNumber, 'hello-world', '0.0.1')
-      await setPluginLatestVersion(server.internalServerNumber, 'hello-world', '0.0.1')
+      await server.sqlCommand.setPluginVersion('hello-world', '0.0.1')
+      await server.sqlCommand.setPluginLatestVersion('hello-world', '0.0.1')
       await wait(6000)
 
       await checkNewPluginVersion(baseParams, PluginType.PLUGIN, 'hello-world', 'presence')
@@ -142,8 +140,8 @@ describe('Test admin notifications', function () {
     it('Should send a new notification after a new plugin release', async function () {
       this.timeout(30000)
 
-      await setPluginVersion(server.internalServerNumber, 'hello-world', '0.0.1')
-      await setPluginLatestVersion(server.internalServerNumber, 'hello-world', '0.0.1')
+      await server.sqlCommand.setPluginVersion('hello-world', '0.0.1')
+      await server.sqlCommand.setPluginLatestVersion('hello-world', '0.0.1')
       await wait(6000)
 
       expect(adminNotifications.filter(n => n.type === UserNotificationType.NEW_PEERTUBE_VERSION)).to.have.lengthOf(2)

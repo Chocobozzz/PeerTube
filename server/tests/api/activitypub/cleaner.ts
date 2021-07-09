@@ -4,18 +4,12 @@ import 'mocha'
 import * as chai from 'chai'
 import {
   cleanupTests,
-  closeAllSequelize,
-  deleteAll,
   doubleFollow,
   flushAndRunMultipleServers,
-  getCount,
   getVideo,
   rateVideo,
-  selectQuery,
   ServerInfo,
   setAccessTokensToServers,
-  setVideoField,
-  updateQuery,
   uploadVideoAndGetId,
   wait,
   waitJobs
@@ -86,9 +80,9 @@ describe('Test AP cleaner', function () {
   it('Should destroy server 3 internal likes and correctly clean them', async function () {
     this.timeout(20000)
 
-    await deleteAll(servers[2].internalServerNumber, 'accountVideoRate')
+    await servers[2].sqlCommand.deleteAll('accountVideoRate')
     for (const uuid of videoUUIDs) {
-      await setVideoField(servers[2].internalServerNumber, uuid, 'likes', '0')
+      await servers[2].sqlCommand.setVideoField(uuid, 'likes', '0')
     }
 
     await wait(5000)
@@ -132,10 +126,10 @@ describe('Test AP cleaner', function () {
   it('Should destroy server 3 internal dislikes and correctly clean them', async function () {
     this.timeout(20000)
 
-    await deleteAll(servers[2].internalServerNumber, 'accountVideoRate')
+    await servers[2].sqlCommand.deleteAll('accountVideoRate')
 
     for (const uuid of videoUUIDs) {
-      await setVideoField(servers[2].internalServerNumber, uuid, 'dislikes', '0')
+      await servers[2].sqlCommand.setVideoField(uuid, 'dislikes', '0')
     }
 
     await wait(5000)
@@ -159,15 +153,15 @@ describe('Test AP cleaner', function () {
   it('Should destroy server 3 internal shares and correctly clean them', async function () {
     this.timeout(20000)
 
-    const preCount = await getCount(servers[0].internalServerNumber, 'videoShare')
+    const preCount = await servers[0].sqlCommand.getCount('videoShare')
     expect(preCount).to.equal(6)
 
-    await deleteAll(servers[2].internalServerNumber, 'videoShare')
+    await servers[2].sqlCommand.deleteAll('videoShare')
     await wait(5000)
     await waitJobs(servers)
 
     // Still 6 because we don't have remote shares on local videos
-    const postCount = await getCount(servers[0].internalServerNumber, 'videoShare')
+    const postCount = await servers[0].sqlCommand.getCount('videoShare')
     expect(postCount).to.equal(6)
   })
 
@@ -179,7 +173,7 @@ describe('Test AP cleaner', function () {
       expect(total).to.equal(3)
     }
 
-    await deleteAll(servers[2].internalServerNumber, 'videoComment')
+    await servers[2].sqlCommand.deleteAll('videoComment')
 
     await wait(5000)
     await waitJobs(servers)
@@ -196,7 +190,7 @@ describe('Test AP cleaner', function () {
     async function check (like: string, ofServerUrl: string, urlSuffix: string, remote: 'true' | 'false') {
       const query = `SELECT "videoId", "accountVideoRate".url FROM "accountVideoRate" ` +
         `INNER JOIN video ON "accountVideoRate"."videoId" = video.id AND remote IS ${remote} WHERE "accountVideoRate"."url" LIKE '${like}'`
-      const res = await selectQuery(servers[0].internalServerNumber, query)
+      const res = await servers[0].sqlCommand.selectQuery(query)
 
       for (const rate of res) {
         const matcher = new RegExp(`^${ofServerUrl}/accounts/root/dislikes/\\d+${urlSuffix}$`)
@@ -225,7 +219,7 @@ describe('Test AP cleaner', function () {
 
     {
       const query = `UPDATE "accountVideoRate" SET url = url || 'stan'`
-      await updateQuery(servers[1].internalServerNumber, query)
+      await servers[1].sqlCommand.updateQuery(query)
 
       await wait(5000)
       await waitJobs(servers)
@@ -242,7 +236,7 @@ describe('Test AP cleaner', function () {
       const query = `SELECT "videoId", "videoComment".url, uuid as "videoUUID" FROM "videoComment" ` +
         `INNER JOIN video ON "videoComment"."videoId" = video.id AND remote IS ${remote} WHERE "videoComment"."url" LIKE '${like}'`
 
-      const res = await selectQuery(servers[0].internalServerNumber, query)
+      const res = await servers[0].sqlCommand.selectQuery(query)
 
       for (const comment of res) {
         const matcher = new RegExp(`${ofServerUrl}/videos/watch/${comment.videoUUID}/comments/\\d+${urlSuffix}`)
@@ -268,7 +262,7 @@ describe('Test AP cleaner', function () {
 
     {
       const query = `UPDATE "videoComment" SET url = url || 'kyle'`
-      await updateQuery(servers[1].internalServerNumber, query)
+      await servers[1].sqlCommand.updateQuery(query)
 
       await wait(5000)
       await waitJobs(servers)
@@ -280,7 +274,5 @@ describe('Test AP cleaner', function () {
 
   after(async function () {
     await cleanupTests(servers)
-
-    await closeAllSequelize(servers)
   })
 })

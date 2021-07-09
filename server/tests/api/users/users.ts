@@ -6,7 +6,6 @@ import { HttpStatusCode } from '@shared/core-utils'
 import {
   blockUser,
   cleanupTests,
-  closeAllSequelize,
   createUser,
   deleteMe,
   flushAndRunServer,
@@ -30,7 +29,6 @@ import {
   reRunServer,
   ServerInfo,
   setAccessTokensToServers,
-  setTokenField,
   testImage,
   unblockUser,
   updateMyAvatar,
@@ -264,10 +262,10 @@ describe('Test users', function () {
     it('Should have an expired access token', async function () {
       this.timeout(15000)
 
-      await setTokenField(server.internalServerNumber, server.accessToken, 'accessTokenExpiresAt', new Date().toISOString())
-      await setTokenField(server.internalServerNumber, server.accessToken, 'refreshTokenExpiresAt', new Date().toISOString())
+      await server.sqlCommand.setTokenField(server.accessToken, 'accessTokenExpiresAt', new Date().toISOString())
+      await server.sqlCommand.setTokenField(server.accessToken, 'refreshTokenExpiresAt', new Date().toISOString())
 
-      killallServers([ server ])
+      await killallServers([ server ])
       await reRunServer(server)
 
       await getMyUserInformation(server.url, server.accessToken, 401)
@@ -281,9 +279,9 @@ describe('Test users', function () {
       this.timeout(15000)
 
       const futureDate = new Date(new Date().getTime() + 1000 * 60).toISOString()
-      await setTokenField(server.internalServerNumber, server.accessToken, 'refreshTokenExpiresAt', futureDate)
+      await server.sqlCommand.setTokenField(server.accessToken, 'refreshTokenExpiresAt', futureDate)
 
-      killallServers([ server ])
+      await killallServers([ server ])
       await reRunServer(server)
 
       const res = await refreshToken(server, server.refreshToken)
@@ -1013,7 +1011,6 @@ describe('Test users', function () {
   })
 
   after(async function () {
-    await closeAllSequelize([ server ])
     await cleanupTests([ server ])
   })
 })

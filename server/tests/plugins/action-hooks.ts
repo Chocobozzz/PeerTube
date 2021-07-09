@@ -44,7 +44,7 @@ describe('Test plugin action hooks', function () {
 
     await servers[0].pluginsCommand.install({ path: PluginsCommand.getPluginTestPath() })
 
-    killallServers([ servers[0] ])
+    await killallServers([ servers[0] ])
 
     await reRunServer(servers[0], {
       live: {

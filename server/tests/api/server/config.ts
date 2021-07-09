@@ -456,7 +456,7 @@ describe('Test config', function () {
   it('Should have the configuration updated after a restart', async function () {
     this.timeout(10000)
 
-    killallServers([ server ])
+    await killallServers([ server ])
 
     await reRunServer(server)
 
@@ -507,7 +507,7 @@ describe('Test config', function () {
       expect(res.headers['x-frame-options']).to.exist
     }
 
-    killallServers([ server ])
+    await killallServers([ server ])
 
     const config = {
       security: {

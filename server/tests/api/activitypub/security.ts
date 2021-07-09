@@ -7,12 +7,10 @@ import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-c
 import {
   buildAbsoluteFixturePath,
   cleanupTests,
-  closeAllSequelize,
   flushAndRunMultipleServers,
   killallServers,
   reRunServer,
   ServerInfo,
-  setActorField,
   wait
 } from '../../../../shared/extra-utils'
 import { makeFollowRequest, makePOSTAPRequest } from '../../../../shared/extra-utils/requests/activitypub'
@@ -26,8 +24,8 @@ function setKeysOfServer (onServer: ServerInfo, ofServer: ServerInfo, publicKey:
   const url = 'http://localhost:' + ofServer.port + '/accounts/peertube'
 
   return Promise.all([
-    setActorField(onServer.internalServerNumber, url, 'publicKey', publicKey),
-    setActorField(onServer.internalServerNumber, url, 'privateKey', privateKey)
+    onServer.sqlCommand.setActorField(url, 'publicKey', publicKey),
+    onServer.sqlCommand.setActorField(url, 'privateKey', privateKey)
   ])
 }
 
@@ -35,8 +33,8 @@ function setUpdatedAtOfServer (onServer: ServerInfo, ofServer: ServerInfo, updat
   const url = 'http://localhost:' + ofServer.port + '/accounts/peertube'
 
   return Promise.all([
-    setActorField(onServer.internalServerNumber, url, 'createdAt', updatedAt),
-    setActorField(onServer.internalServerNumber, url, 'updatedAt', updatedAt)
+    onServer.sqlCommand.setActorField(url, 'createdAt', updatedAt),
+    onServer.sqlCommand.setActorField(url, 'updatedAt', updatedAt)
   ])
 }
 
@@ -173,7 +171,7 @@ describe('Test ActivityPub security', function () {
       await setUpdatedAtOfServer(servers[0], servers[1], '2015-07-17 22:00:00+00')
 
       // Invalid peertube actor cache
-      killallServers([ servers[1] ])
+      await killallServers([ servers[1] ])
       await reRunServer(servers[1])
 
       const body = activityPubContextify(getAnnounceWithoutContext(servers[1]))
@@ -294,7 +292,5 @@ describe('Test ActivityPub security', function () {
     this.timeout(10000)
 
     await cleanupTests(servers)
-
-    await closeAllSequelize(servers)
   })
 })

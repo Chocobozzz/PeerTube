@@ -1,6 +1,6 @@
 import { isAbsolute, join } from 'path'
 import { HttpStatusCode } from '@shared/core-utils'
-import { root } from '../miscs'
+import { root } from '../miscs/miscs'
 import {
   makeDeleteRequest,
   makeGetRequest,

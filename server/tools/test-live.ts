@@ -40,7 +40,7 @@ async function run () {
 
   const cleanup = () => {
     console.log('Killing server')
-    killallServers([ server ])
+    await killallServers([ server ])
   }
 
   process.on('exit', cleanup)

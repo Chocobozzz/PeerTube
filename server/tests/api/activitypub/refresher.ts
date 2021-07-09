@@ -4,7 +4,6 @@ import 'mocha'
 import { HttpStatusCode } from '@shared/core-utils'
 import {
   cleanupTests,
-  closeAllSequelize,
   doubleFollow,
   flushAndRunMultipleServers,
   generateUserAccessToken,
@@ -13,10 +12,7 @@ import {
   reRunServer,
   ServerInfo,
   setAccessTokensToServers,
-  setActorField,
   setDefaultVideoChannel,
-  setPlaylistField,
-  setVideoField,
   uploadVideo,
   uploadVideoAndGetId,
   wait,
@@ -78,7 +74,7 @@ describe('Test AP refresher', function () {
       await wait(10000)
 
       // Change UUID so the remote server returns a 404
-      await setVideoField(servers[1].internalServerNumber, videoUUID1, 'uuid', '304afe4f-39f9-4d49-8ed7-ac57b86b174f')
+      await servers[1].sqlCommand.setVideoField(videoUUID1, 'uuid', '304afe4f-39f9-4d49-8ed7-ac57b86b174f')
 
       await getVideo(servers[0].url, videoUUID1)
       await getVideo(servers[0].url, videoUUID2)
@@ -92,9 +88,9 @@ describe('Test AP refresher', function () {
     it('Should not update a remote video if the remote instance is down', async function () {
       this.timeout(70000)
 
-      killallServers([ servers[1] ])
+      await killallServers([ servers[1] ])
 
-      await setVideoField(servers[1].internalServerNumber, videoUUID3, 'uuid', '304afe4f-39f9-4d49-8ed7-ac57b86b174e')
+      await servers[1].sqlCommand.setVideoField(videoUUID3, 'uuid', '304afe4f-39f9-4d49-8ed7-ac57b86b174e')
 
       // Video will need a refresh
       await wait(10000)
@@ -120,7 +116,7 @@ describe('Test AP refresher', function () {
 
       // Change actor name so the remote server returns a 404
       const to = 'http://localhost:' + servers[1].port + '/accounts/user2'
-      await setActorField(servers[1].internalServerNumber, to, 'preferredUsername', 'toto')
+      await servers[1].sqlCommand.setActorField(to, 'preferredUsername', 'toto')
 
       await command.get({ accountName: 'user1@localhost:' + servers[1].port })
       await command.get({ accountName: 'user2@localhost:' + servers[1].port })
@@ -140,7 +136,7 @@ describe('Test AP refresher', function () {
       await wait(10000)
 
       // Change UUID so the remote server returns a 404
-      await setPlaylistField(servers[1].internalServerNumber, playlistUUID2, 'uuid', '304afe4f-39f9-4d49-8ed7-ac57b86b178e')
+      await servers[1].sqlCommand.setPlaylistField(playlistUUID2, 'uuid', '304afe4f-39f9-4d49-8ed7-ac57b86b178e')
 
       await servers[0].playlistsCommand.get({ playlistId: playlistUUID1 })
       await servers[0].playlistsCommand.get({ playlistId: playlistUUID2 })
@@ -156,7 +152,5 @@ describe('Test AP refresher', function () {
     this.timeout(10000)
 
     await cleanupTests(servers)
-
-    await closeAllSequelize(servers)
   })
 })

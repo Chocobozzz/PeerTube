@@ -121,7 +121,7 @@ describe('Test redundancy constraints', function () {
         }
       }
     }
-    await killallServers([ localServer ])
+    await await killallServers([ localServer ])
     await reRunServer(localServer, config)
 
     await uploadWrapper('video 2 server 2')
@@ -150,7 +150,7 @@ describe('Test redundancy constraints', function () {
         }
       }
     }
-    killallServers([ localServer ])
+    await killallServers([ localServer ])
     await reRunServer(localServer, config)
 
     await uploadWrapper('video 3 server 2')

@@ -5,7 +5,6 @@ import * as chai from 'chai'
 import { HttpStatusCode } from '@shared/core-utils'
 import {
   cleanupTests,
-  closeAllSequelize,
   CommentsCommand,
   completeVideoCheck,
   flushAndRunMultipleServers,
@@ -16,7 +15,6 @@ import {
   reRunServer,
   ServerInfo,
   setAccessTokensToServers,
-  setActorFollowScores,
   updateVideo,
   uploadVideo,
   uploadVideoAndGetId,
@@ -129,7 +127,7 @@ describe('Test handle downs', function () {
     }
 
     // Kill server 2
-    killallServers([ servers[1] ])
+    await killallServers([ servers[1] ])
 
     // Remove server 2 follower
     for (let i = 0; i < 10; i++) {
@@ -139,7 +137,7 @@ describe('Test handle downs', function () {
     await waitJobs([ servers[0], servers[2] ])
 
     // Kill server 3
-    killallServers([ servers[2] ])
+    await killallServers([ servers[2] ])
 
     const resLastVideo1 = await uploadVideo(servers[0].url, servers[0].accessToken, videoAttributes)
     missedVideo1 = resLastVideo1.body.video
@@ -311,7 +309,7 @@ describe('Test handle downs', function () {
     }
 
     await waitJobs(servers)
-    await setActorFollowScores(servers[1].internalServerNumber, 20)
+    await servers[1].sqlCommand.setActorFollowScores(20)
 
     // Wait video expiration
     await wait(11000)
@@ -325,7 +323,7 @@ describe('Test handle downs', function () {
   it('Should remove followings that are down', async function () {
     this.timeout(120000)
 
-    killallServers([ servers[0] ])
+    await killallServers([ servers[0] ])
 
     // Wait video expiration
     await wait(11000)
@@ -344,8 +342,6 @@ describe('Test handle downs', function () {
   })
 
   after(async function () {
-    await closeAllSequelize([ servers[1] ])
-
     await cleanupTests(servers)
   })
 })

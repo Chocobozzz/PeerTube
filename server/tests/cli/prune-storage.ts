@@ -110,7 +110,7 @@ describe('Test prune storage scripts', function () {
     await wait(1000)
 
     await waitJobs(servers)
-    killallServers(servers)
+    await killallServers(servers)
 
     await wait(1000)
   })

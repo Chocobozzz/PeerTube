@@ -587,7 +587,7 @@ describe('Test live', function () {
       await commands[0].waitUntilSegmentGeneration({ videoUUID: liveVideoId, resolution: 0, segment: 2 })
       await commands[0].waitUntilSegmentGeneration({ videoUUID: liveVideoReplayId, resolution: 0, segment: 2 })
 
-      killallServers([ servers[0] ])
+      await killallServers([ servers[0] ])
       await reRunServer(servers[0])
 
       await wait(5000)

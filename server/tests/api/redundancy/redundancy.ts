@@ -634,7 +634,7 @@ describe('Test videos redundancy', function () {
     it('Should stop server 1 and expire video redundancy', async function () {
       this.timeout(80000)
 
-      killallServers([ servers[0] ])
+      await killallServers([ servers[0] ])
 
       await wait(15000)
 
@@ -703,7 +703,7 @@ describe('Test videos redundancy', function () {
 
       await waitJobs(servers)
 
-      killallServers([ servers[0] ])
+      await killallServers([ servers[0] ])
       await reRunServer(servers[0], {
         redundancy: {
           videos: {

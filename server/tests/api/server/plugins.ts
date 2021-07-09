@@ -5,7 +5,6 @@ import * as chai from 'chai'
 import { HttpStatusCode } from '@shared/core-utils'
 import {
   cleanupTests,
-  closeAllSequelize,
   flushAndRunServer,
   getMyUserInformation,
   killallServers,
@@ -13,7 +12,6 @@ import {
   reRunServer,
   ServerInfo,
   setAccessTokensToServers,
-  setPluginVersion,
   testHelloWorldRegisteredSettings,
   updateMyUser,
   wait,
@@ -244,7 +242,7 @@ describe('Test plugins', function () {
     await wait(6000)
 
     // Fake update our plugin version
-    await setPluginVersion(server.internalServerNumber, 'hello-world', '0.0.1')
+    await server.sqlCommand.setPluginVersion('hello-world', '0.0.1')
 
     // Fake update package.json
     const packageJSON = await command.getPackageJSON('peertube-plugin-hello-world')
@@ -254,7 +252,7 @@ describe('Test plugins', function () {
     await command.updatePackageJSON('peertube-plugin-hello-world', packageJSON)
 
     // Restart the server to take into account this change
-    killallServers([ server ])
+    await killallServers([ server ])
     await reRunServer(server)
 
     {
@@ -335,14 +333,13 @@ describe('Test plugins', function () {
 
     await check()
 
-    killallServers([ server ])
+    await killallServers([ server ])
     await reRunServer(server)
 
     await check()
   })
 
   after(async function () {
-    await closeAllSequelize([ server ])
     await cleanupTests([ server ])
   })
 })

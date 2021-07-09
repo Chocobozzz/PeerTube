@@ -54,7 +54,7 @@ describe('Test instance homepage actions', function () {
   it('Should have the same homepage after a restart', async function () {
     this.timeout(30000)
 
-    killallServers([ server ])
+    await killallServers([ server ])
 
     await reRunServer(server)
 
