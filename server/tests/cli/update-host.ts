@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
+import { expect } from 'chai'
 import {
   cleanupTests,
   createUser,
@@ -17,8 +18,6 @@ import {
   waitJobs
 } from '@shared/extra-utils'
 import { VideoDetails } from '@shared/models'
-
-const expect = chai.expect
 
 describe('Test update host scripts', function () {
   let server: ServerInfo

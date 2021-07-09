@@ -6,7 +6,7 @@ import { access, constants } from 'fs-extra'
 import { isAbsolute } from 'path'
 import { getAccessToken } from '../../shared/extra-utils'
 import { uploadVideo } from '../../shared/extra-utils/'
-import { buildCommonVideoOptions, buildVideoAttributesFromCommander, getServerCredentials } from './cli'
+import { buildCommonVideoOptions, buildServer, buildVideoAttributesFromCommander, getServerCredentials } from './cli'
 
 let command = program
   .name('upload')
@@ -46,13 +46,14 @@ getServerCredentials(command)
   .catch(err => console.error(err))
 
 async function run (url: string, username: string, password: string) {
-  const accessToken = await getAccessToken(url, username, password)
+  const token = await getAccessToken(url, username, password)
+  const server = buildServer(url, token)
 
   await access(options.file, constants.F_OK)
 
   console.log('Uploading %s video...', options.videoName)
 
-  const videoAttributes = await buildVideoAttributesFromCommander(url, program)
+  const videoAttributes = await buildVideoAttributesFromCommander(server, program)
 
   Object.assign(videoAttributes, {
     fixture: options.file,
@@ -61,7 +62,7 @@ async function run (url: string, username: string, password: string) {
   })
 
   try {
-    await uploadVideo(url, accessToken, videoAttributes)
+    await uploadVideo(url, token, videoAttributes)
     console.log(`Video ${options.videoName} uploaded.`)
     process.exit(0)
   } catch (err) {

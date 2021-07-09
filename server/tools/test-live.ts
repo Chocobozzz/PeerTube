@@ -1,26 +1,23 @@
-import { registerTSPaths } from '../helpers/register-ts-paths'
-registerTSPaths()
-
-import { LiveVideo, LiveVideoCreate, VideoPrivacy } from '@shared/models'
 import { program } from 'commander'
+import { LiveVideoCreate, VideoPrivacy } from '@shared/models'
 import {
-  createLive,
   flushAndRunServer,
-  getLive,
   killallServers,
   sendRTMPStream,
   ServerInfo,
   setAccessTokensToServers,
-  setDefaultVideoChannel,
-  updateCustomSubConfig
+  setDefaultVideoChannel
 } from '../../shared/extra-utils'
+import { registerTSPaths } from '../helpers/register-ts-paths'
+
+registerTSPaths()
 
 type CommandType = 'live-mux' | 'live-transcoding'
 
 registerTSPaths()
 
 const command = program
-  .name('test')
+  .name('test-live')
   .option('-t, --type <type>', 'live-muxing|live-transcoding')
   .parse(process.argv)
 
@@ -63,11 +60,9 @@ async function run () {
 
   console.log('Creating live.')
 
-  const res = await createLive(server.url, server.accessToken, attributes)
-  const liveVideoUUID = res.body.video.uuid
+  const { uuid: liveVideoUUID } = await server.liveCommand.create({ fields: attributes })
 
-  const resLive = await getLive(server.url, server.accessToken, liveVideoUUID)
-  const live: LiveVideo = resLive.body
+  const live = await server.liveCommand.get({ videoId: liveVideoUUID })
 
   console.log('Sending RTMP stream.')
 
@@ -87,18 +82,20 @@ async function run () {
 // ----------------------------------------------------------------------------
 
 async function buildConfig (server: ServerInfo, commandType: CommandType) {
-  await updateCustomSubConfig(server.url, server.accessToken, {
-    instance: {
-      customizations: {
-        javascript: '',
-        css: ''
-      }
-    },
-    live: {
-      enabled: true,
-      allowReplay: true,
-      transcoding: {
-        enabled: commandType === 'live-transcoding'
+  await server.configCommand.updateCustomSubConfig({
+    newConfig: {
+      instance: {
+        customizations: {
+          javascript: '',
+          css: ''
+        }
+      },
+      live: {
+        enabled: true,
+        allowReplay: true,
+        transcoding: {
+          enabled: commandType === 'live-transcoding'
+        }
       }
     }
   })

@@ -12,6 +12,7 @@ import {
   doubleFollow,
   flushAndRunServer,
   getLocalIdByUUID,
+  getMyUserInformation,
   getVideo,
   getVideosList,
   ImportsCommand,
@@ -51,6 +52,14 @@ describe('Test CLI wrapper', function () {
   })
 
   describe('Authentication and instance selection', function () {
+
+    it('Should get an access token', async function () {
+      const stdout = await cliCommand.execWithEnv(`${cmd} token --url ${server.url} --username user_1 --password super_password`)
+      const token = stdout.trim()
+
+      const res = await getMyUserInformation(server.url, token)
+      expect(res.body.username).to.equal('user_1')
+    })
 
     it('Should display no selected instance', async function () {
       this.timeout(60000)

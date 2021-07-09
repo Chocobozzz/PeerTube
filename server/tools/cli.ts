@@ -1,14 +1,14 @@
+import { Command } from 'commander'
 import { Netrc } from 'netrc-parser'
-import { getAppNumber, isTestInstance } from '../helpers/core-utils'
 import { join } from 'path'
-import { root } from '../../shared/extra-utils/miscs/miscs'
-import { getVideoChannel } from '../../shared/extra-utils/videos/video-channels'
-import { VideoChannel, VideoPrivacy } from '../../shared/models/videos'
 import { createLogger, format, transports } from 'winston'
+import { assignCommands, ServerInfo } from '@shared/extra-utils'
+import { getAccessToken } from '@shared/extra-utils/users/login'
 import { getMyUserInformation } from '@shared/extra-utils/users/users'
 import { User, UserRole } from '@shared/models'
-import { getAccessToken } from '@shared/extra-utils/users/login'
-import { Command } from 'commander'
+import { root } from '../../shared/extra-utils/miscs/miscs'
+import { VideoPrivacy } from '../../shared/models/videos'
+import { getAppNumber, isTestInstance } from '../helpers/core-utils'
 
 let configName = 'PeerTube/CLI'
 if (isTestInstance()) configName += `-${getAppNumber()}`
@@ -28,6 +28,10 @@ async function getAdminTokenOrDie (url: string, username: string, password: stri
   }
 
   return accessToken
+}
+
+async function getAccessTokenOrDie (url: string, username: string, password: string) {
+  return getAccessToken(url, username, password)
 }
 
 interface Settings {
@@ -128,7 +132,7 @@ function buildCommonVideoOptions (command: Command) {
     .option('-v, --verbose <verbose>', 'Verbosity, from 0/\'error\' to 4/\'debug\'', 'info')
 }
 
-async function buildVideoAttributesFromCommander (url: string, command: Command, defaultAttributes: any = {}) {
+async function buildVideoAttributesFromCommander (server: ServerInfo, command: Command, defaultAttributes: any = {}) {
   const options = command.opts()
 
   const defaultBooleanAttributes = {
@@ -164,8 +168,7 @@ async function buildVideoAttributesFromCommander (url: string, command: Command,
   Object.assign(videoAttributes, booleanAttributes)
 
   if (options.channelName) {
-    const res = await getVideoChannel(url, options.channelName)
-    const videoChannel: VideoChannel = res.body
+    const videoChannel = await server.channelsCommand.get({ channelName: options.channelName })
 
     Object.assign(videoAttributes, { channelId: videoChannel.id })
 
@@ -182,6 +185,13 @@ function getServerCredentials (program: Command) {
                 .then(([ settings, netrc ]) => {
                   return getRemoteObjectOrDie(program, settings, netrc)
                 })
+}
+
+function buildServer (url: string, accessToken?: string): ServerInfo {
+  const server = { url, accessToken, internalServerNumber: undefined }
+  assignCommands(server)
+
+  return server
 }
 
 function getLogger (logLevel = 'info') {
@@ -230,5 +240,7 @@ export {
   buildCommonVideoOptions,
   buildVideoAttributesFromCommander,
 
-  getAdminTokenOrDie
+  getAdminTokenOrDie,
+  getAccessTokenOrDie,
+  buildServer
 }
