@@ -16,6 +16,9 @@ export interface OverrideCommandOptions {
 }
 
 interface InternalCommonCommandOptions extends OverrideCommandOptions {
+  // Default to server.url
+  url?: string
+
   path: string
   // If we automatically send the server token if the token is not provided
   implicitToken: boolean
@@ -27,6 +30,7 @@ interface InternalGetCommandOptions extends InternalCommonCommandOptions {
   contentType?: string
   accept?: string
   redirects?: number
+  range?: string
 }
 
 abstract class AbstractCommand {
@@ -53,6 +57,22 @@ abstract class AbstractCommand {
 
   protected getRequestText (options: InternalGetCommandOptions) {
     return unwrapText(this.getRequest(options))
+  }
+
+  protected getRawRequest (options: Omit<InternalGetCommandOptions, 'path'>) {
+    const { url, range } = options
+    const { host, protocol, pathname } = new URL(url)
+
+    return this.getRequest({
+      ...options,
+
+      token: this.buildCommonRequestToken(options),
+      defaultExpectedStatus: this.buildStatusCodeExpected(options),
+
+      url: `${protocol}//${host}`,
+      path: pathname,
+      range
+    })
   }
 
   protected getRequest (options: InternalGetCommandOptions) {
@@ -127,20 +147,31 @@ abstract class AbstractCommand {
   }
 
   private buildCommonRequestOptions (options: InternalCommonCommandOptions) {
-    const { token, expectedStatus, defaultExpectedStatus, path } = options
-
-    const fallbackToken = options.implicitToken
-      ? this.server.accessToken
-      : undefined
+    const { path } = options
 
     return {
       url: this.server.url,
       path,
 
-      token: token !== undefined ? token : fallbackToken,
-
-      statusCodeExpected: expectedStatus ?? this.expectedStatus ?? defaultExpectedStatus
+      token: this.buildCommonRequestToken(options),
+      statusCodeExpected: this.buildStatusCodeExpected(options)
     }
+  }
+
+  private buildCommonRequestToken (options: Pick<InternalCommonCommandOptions, 'token' | 'implicitToken'>) {
+    const { token } = options
+
+    const fallbackToken = options.implicitToken
+      ? this.server.accessToken
+      : undefined
+
+    return token !== undefined ? token : fallbackToken
+  }
+
+  private buildStatusCodeExpected (options: Pick<InternalCommonCommandOptions, 'expectedStatus' | 'defaultExpectedStatus'>) {
+    const { expectedStatus, defaultExpectedStatus } = options
+
+    return expectedStatus ?? this.expectedStatus ?? defaultExpectedStatus
   }
 }
 
