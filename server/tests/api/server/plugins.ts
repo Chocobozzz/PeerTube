@@ -37,6 +37,8 @@ describe('Test plugins', function () {
     }
     server = await flushAndRunServer(1, configOverride)
     await setAccessTokensToServers([ server ])
+
+    command = server.pluginsCommand
   })
 
   it('Should list and search available plugins and themes', async function () {

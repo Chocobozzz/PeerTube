@@ -3,19 +3,15 @@
 import 'mocha'
 import * as chai from 'chai'
 import {
-  addVideoChannel,
   cleanupTests,
   createUser,
-  deleteVideoChannel,
   flushAndRunMultipleServers,
-  getVideoChannelsList,
   getVideoChannelVideos,
   SearchCommand,
   ServerInfo,
   setAccessTokensToServers,
   updateMyUser,
   updateVideo,
-  updateVideoChannel,
   uploadVideo,
   userLogin,
   wait,
@@ -45,7 +41,7 @@ describe('Test ActivityPub video channels search', function () {
         name: 'channel1_server1',
         displayName: 'Channel 1 server 1'
       }
-      await addVideoChannel(servers[0].url, servers[0].accessToken, channel)
+      await servers[0].channelsCommand.create({ attributes: channel })
     }
 
     {
@@ -57,8 +53,8 @@ describe('Test ActivityPub video channels search', function () {
         name: 'channel1_server2',
         displayName: 'Channel 1 server 2'
       }
-      const resChannel = await addVideoChannel(servers[1].url, userServer2Token, channel)
-      channelIdServer2 = resChannel.body.videoChannel.id
+      const created = await servers[1].channelsCommand.create({ token: userServer2Token, attributes: channel })
+      channelIdServer2 = created.id
 
       const res = await uploadVideo(servers[1].url, userServer2Token, { name: 'video 1 server 2', channelId: channelIdServer2 })
       videoServer2UUID = res.body.video.uuid
@@ -143,12 +139,12 @@ describe('Test ActivityPub video channels search', function () {
   })
 
   it('Should not list this remote video channel', async function () {
-    const res = await getVideoChannelsList(servers[0].url, 0, 5)
-    expect(res.body.total).to.equal(3)
-    expect(res.body.data).to.have.lengthOf(3)
-    expect(res.body.data[0].name).to.equal('channel1_server1')
-    expect(res.body.data[1].name).to.equal('user1_server1_channel')
-    expect(res.body.data[2].name).to.equal('root_channel')
+    const body = await servers[0].channelsCommand.list()
+    expect(body.total).to.equal(3)
+    expect(body.data).to.have.lengthOf(3)
+    expect(body.data[0].name).to.equal('channel1_server1')
+    expect(body.data[1].name).to.equal('user1_server1_channel')
+    expect(body.data[2].name).to.equal('root_channel')
   })
 
   it('Should list video channel videos of server 2 without token', async function () {
@@ -171,7 +167,11 @@ describe('Test ActivityPub video channels search', function () {
   it('Should update video channel of server 2, and refresh it on server 1', async function () {
     this.timeout(60000)
 
-    await updateVideoChannel(servers[1].url, userServer2Token, 'channel1_server2', { displayName: 'channel updated' })
+    await servers[1].channelsCommand.update({
+      token: userServer2Token,
+      channelName: 'channel1_server2',
+      attributes: { displayName: 'channel updated' }
+    })
     await updateMyUser({ url: servers[1].url, accessToken: userServer2Token, displayName: 'user updated' })
 
     await waitJobs(servers)
@@ -217,7 +217,7 @@ describe('Test ActivityPub video channels search', function () {
   it('Should delete video channel of server 2, and delete it on server 1', async function () {
     this.timeout(60000)
 
-    await deleteVideoChannel(servers[1].url, userServer2Token, 'channel1_server2')
+    await servers[1].channelsCommand.delete({ token: userServer2Token, channelName: 'channel1_server2' })
 
     await waitJobs(servers)
     // Expire video

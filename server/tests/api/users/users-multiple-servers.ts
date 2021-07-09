@@ -12,7 +12,6 @@ import {
   flushAndRunMultipleServers,
   getAccountVideos,
   getMyUserInformation,
-  getVideoChannelsList,
   removeUser,
   ServerInfo,
   setAccessTokensToServers,
@@ -23,7 +22,7 @@ import {
   userLogin,
   waitJobs
 } from '@shared/extra-utils'
-import { User, VideoChannel } from '@shared/models'
+import { User } from '@shared/models'
 
 const expect = chai.expect
 
@@ -199,10 +198,8 @@ describe('Test users with multiple servers', function () {
       const accountDeleted = body.data.find(a => a.name === 'user1' && a.host === 'localhost:' + servers[0].port)
       expect(accountDeleted).not.to.be.undefined
 
-      const resVideoChannels = await getVideoChannelsList(server.url, 0, 10)
-      const videoChannelDeleted = resVideoChannels.body.data.find(a => {
-        return a.displayName === 'Main user1 channel' && a.host === 'localhost:' + servers[0].port
-      }) as VideoChannel
+      const { data } = await server.channelsCommand.list()
+      const videoChannelDeleted = data.find(a => a.displayName === 'Main user1 channel' && a.host === 'localhost:' + servers[0].port)
       expect(videoChannelDeleted).not.to.be.undefined
     }
 
@@ -216,10 +213,8 @@ describe('Test users with multiple servers', function () {
       const accountDeleted = body.data.find(a => a.name === 'user1' && a.host === 'localhost:' + servers[0].port)
       expect(accountDeleted).to.be.undefined
 
-      const resVideoChannels = await getVideoChannelsList(server.url, 0, 10)
-      const videoChannelDeleted = resVideoChannels.body.data.find(a => {
-        return a.name === 'Main user1 channel' && a.host === 'localhost:' + servers[0].port
-      }) as VideoChannel
+      const { data } = await server.channelsCommand.list()
+      const videoChannelDeleted = data.find(a => a.name === 'Main user1 channel' && a.host === 'localhost:' + servers[0].port)
       expect(videoChannelDeleted).to.be.undefined
     }
   })

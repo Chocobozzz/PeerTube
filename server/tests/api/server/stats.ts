@@ -3,7 +3,6 @@
 import 'mocha'
 import * as chai from 'chai'
 import {
-  addVideoChannel,
   addVideoCommentThread,
   cleanupTests,
   createUser,
@@ -143,12 +142,12 @@ describe('Test stats (excluding redundancy)', function () {
     }
 
     {
-      const channelAttributes = {
+      const attributes = {
         name: 'stats_channel',
         displayName: 'My stats channel'
       }
-      const resChannel = await addVideoChannel(server.url, server.accessToken, channelAttributes)
-      channelId = resChannel.body.videoChannel.id
+      const created = await server.channelsCommand.create({ attributes })
+      channelId = created.id
 
       const data = await server.statsCommand.get()
 

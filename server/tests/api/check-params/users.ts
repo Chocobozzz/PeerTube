@@ -5,7 +5,6 @@ import { omit } from 'lodash'
 import { User, UserRole, VideoCreateResult } from '../../../../shared'
 import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import {
-  addVideoChannel,
   blockUser,
   buildAbsoluteFixturePath,
   cleanupTests,
@@ -1041,8 +1040,8 @@ describe('Test users API validators', function () {
     })
 
     it('Should fail with an existing channel', async function () {
-      const videoChannelAttributesArg = { name: 'existing_channel', displayName: 'hello', description: 'super description' }
-      await addVideoChannel(server.url, server.accessToken, videoChannelAttributesArg)
+      const attributes = { name: 'existing_channel', displayName: 'hello', description: 'super description' }
+      await server.channelsCommand.create({ attributes })
 
       const fields = immutableAssign(baseCorrectParams, { channel: { name: 'existing_channel', displayName: 'toto' } })
 

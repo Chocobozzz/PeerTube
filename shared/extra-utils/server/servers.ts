@@ -22,6 +22,7 @@ import {
   BlacklistCommand,
   CaptionsCommand,
   ChangeOwnershipCommand,
+  ChannelsCommand,
   HistoryCommand,
   ImportsCommand,
   LiveCommand,
@@ -119,6 +120,7 @@ interface ServerInfo {
   historyCommand?: HistoryCommand
   importsCommand?: ImportsCommand
   streamingPlaylistsCommand?: StreamingPlaylistsCommand
+  channelsCommand?: ChannelsCommand
 }
 
 function parallelTests () {
@@ -353,6 +355,7 @@ async function runServer (server: ServerInfo, configOverrideArg?: any, args = []
       server.historyCommand = new HistoryCommand(server)
       server.importsCommand = new ImportsCommand(server)
       server.streamingPlaylistsCommand = new StreamingPlaylistsCommand(server)
+      server.channelsCommand = new ChannelsCommand(server)
 
       res(server)
     })

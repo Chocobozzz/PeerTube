@@ -2,15 +2,7 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import {
-  addVideoChannel,
-  cleanupTests,
-  createUser,
-  flushAndRunServer,
-  SearchCommand,
-  ServerInfo,
-  setAccessTokensToServers
-} from '@shared/extra-utils'
+import { cleanupTests, createUser, flushAndRunServer, SearchCommand, ServerInfo, setAccessTokensToServers } from '@shared/extra-utils'
 import { VideoChannel } from '@shared/models'
 
 const expect = chai.expect
@@ -32,7 +24,7 @@ describe('Test channels search', function () {
         name: 'squall_channel',
         displayName: 'Squall channel'
       }
-      await addVideoChannel(server.url, server.accessToken, channel)
+      await server.channelsCommand.create({ attributes: channel })
     }
 
     command = server.searchCommand

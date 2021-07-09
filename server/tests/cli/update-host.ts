@@ -2,13 +2,11 @@
 
 import 'mocha'
 import {
-  addVideoChannel,
   addVideoCommentThread,
   cleanupTests,
   createUser,
   flushAndRunServer,
   getVideo,
-  getVideoChannelsList,
   getVideosList,
   killallServers,
   makeActivityPubGetRequest,
@@ -53,7 +51,7 @@ describe('Test update host scripts', function () {
       displayName: 'second video channel',
       description: 'super video channel description'
     }
-    await addVideoChannel(server.url, server.accessToken, videoChannel)
+    await server.channelsCommand.create({ attributes: videoChannel })
 
     // Create comments
     const text = 'my super first comment'
@@ -91,10 +89,10 @@ describe('Test update host scripts', function () {
   })
 
   it('Should have updated video channels url', async function () {
-    const res = await getVideoChannelsList(server.url, 0, 5, '-name')
-    expect(res.body.total).to.equal(3)
+    const { data, total } = await server.channelsCommand.list({ sort: '-name' })
+    expect(total).to.equal(3)
 
-    for (const channel of res.body.data) {
+    for (const channel of data) {
       const { body } = await makeActivityPubGetRequest(server.url, '/video-channels/' + channel.name)
 
       expect(body.id).to.equal('http://localhost:9002/video-channels/' + channel.name)

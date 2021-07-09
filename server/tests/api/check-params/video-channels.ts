@@ -6,11 +6,10 @@ import { omit } from 'lodash'
 import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import {
   buildAbsoluteFixturePath,
+  ChannelsCommand,
   cleanupTests,
   createUser,
-  deleteVideoChannel,
   flushAndRunServer,
-  getAccountVideoChannelsList,
   immutableAssign,
   makeGetRequest,
   makePostBodyRequest,
@@ -33,6 +32,7 @@ describe('Test video channels API validator', function () {
   const videoChannelPath = '/api/v1/video-channels'
   let server: ServerInfo
   let accessTokenUser: string
+  let command: ChannelsCommand
 
   // ---------------------------------------------------------------
 
@@ -52,6 +52,8 @@ describe('Test video channels API validator', function () {
       await createUser({ url: server.url, accessToken: server.accessToken, username: user.username, password: user.password })
       accessTokenUser = await userLogin(server, user)
     }
+
+    command = server.channelsCommand
   })
 
   describe('When listing a video channels', function () {
@@ -84,7 +86,7 @@ describe('Test video channels API validator', function () {
     })
 
     it('Should fail with a unknown account', async function () {
-      await getAccountVideoChannelsList({ url: server.url, accountName: 'unknown', specialStatus: HttpStatusCode.NOT_FOUND_404 })
+      await server.channelsCommand.listByAccount({ accountName: 'unknown', expectedStatus: HttpStatusCode.NOT_FOUND_404 })
     })
 
     it('Should succeed with the correct parameters', async function () {
@@ -327,23 +329,23 @@ describe('Test video channels API validator', function () {
 
   describe('When deleting a video channel', function () {
     it('Should fail with a non authenticated user', async function () {
-      await deleteVideoChannel(server.url, 'coucou', 'super_channel', HttpStatusCode.UNAUTHORIZED_401)
+      await command.delete({ token: 'coucou', channelName: 'super_channel', expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
     it('Should fail with another authenticated user', async function () {
-      await deleteVideoChannel(server.url, accessTokenUser, 'super_channel', HttpStatusCode.FORBIDDEN_403)
+      await command.delete({ token: accessTokenUser, channelName: 'super_channel', expectedStatus: HttpStatusCode.FORBIDDEN_403 })
     })
 
     it('Should fail with an unknown video channel id', async function () {
-      await deleteVideoChannel(server.url, server.accessToken, 'super_channel2', HttpStatusCode.NOT_FOUND_404)
+      await command.delete({ channelName: 'super_channel2', expectedStatus: HttpStatusCode.NOT_FOUND_404 })
     })
 
     it('Should succeed with the correct parameters', async function () {
-      await deleteVideoChannel(server.url, server.accessToken, 'super_channel')
+      await command.delete({ channelName: 'super_channel' })
     })
 
     it('Should fail to delete the last user video channel', async function () {
-      await deleteVideoChannel(server.url, server.accessToken, 'root_channel', HttpStatusCode.CONFLICT_409)
+      await command.delete({ channelName: 'root_channel', expectedStatus: HttpStatusCode.CONFLICT_409 })
     })
   })
 

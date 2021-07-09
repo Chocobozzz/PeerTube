@@ -3,7 +3,6 @@
 import 'mocha'
 import * as chai from 'chai'
 import {
-  addVideoChannel,
   cleanupTests,
   flushAndRunMultipleServers,
   getVideosList,
@@ -123,8 +122,8 @@ describe('Test ActivityPub videos search', function () {
       name: 'super_channel',
       displayName: 'super channel'
     }
-    const resChannel = await addVideoChannel(servers[1].url, servers[1].accessToken, channelAttributes)
-    const videoChannelId = resChannel.body.videoChannel.id
+    const created = await servers[1].channelsCommand.create({ attributes: channelAttributes })
+    const videoChannelId = created.id
 
     const attributes = {
       name: 'updated',
