@@ -3,7 +3,6 @@
 import 'mocha'
 import { buildUUID } from '@server/helpers/uuid'
 import {
-  addVideoCommentThread,
   checkAbuseStateChange,
   checkAutoInstanceFollowing,
   CheckerBaseParams,
@@ -20,7 +19,6 @@ import {
   cleanupTests,
   createUser,
   generateUserAccessToken,
-  getVideoCommentThreads,
   getVideoIdFromUUID,
   immutableAssign,
   MockInstancesIndex,
@@ -101,8 +99,11 @@ describe('Test moderation notifications', function () {
       const name = 'video for abuse ' + buildUUID()
       const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name })
       const video = resVideo.body.video
-      const resComment = await addVideoCommentThread(servers[0].url, userAccessToken, video.id, 'comment abuse ' + buildUUID())
-      const comment = resComment.body.comment
+      const comment = await servers[0].commentsCommand.createThread({
+        token: userAccessToken,
+        videoId: video.id,
+        text: 'comment abuse ' + buildUUID()
+      })
 
       await waitJobs(servers)
 
@@ -118,12 +119,17 @@ describe('Test moderation notifications', function () {
       const name = 'video for abuse ' + buildUUID()
       const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name })
       const video = resVideo.body.video
-      await addVideoCommentThread(servers[0].url, userAccessToken, video.id, 'comment abuse ' + buildUUID())
+
+      await servers[0].commentsCommand.createThread({
+        token: userAccessToken,
+        videoId: video.id,
+        text: 'comment abuse ' + buildUUID()
+      })
 
       await waitJobs(servers)
 
-      const resComments = await getVideoCommentThreads(servers[1].url, video.uuid, 0, 5)
-      const commentId = resComments.body.data[0].id
+      const { data } = await servers[1].commentsCommand.listThreads({ videoId: video.uuid })
+      const commentId = data[0].id
       await servers[1].abusesCommand.report({ commentId, reason: 'super reason' })
 
       await waitJobs(servers)

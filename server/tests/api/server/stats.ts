@@ -3,7 +3,6 @@
 import 'mocha'
 import * as chai from 'chai'
 import {
-  addVideoCommentThread,
   cleanupTests,
   createUser,
   doubleFollow,
@@ -42,7 +41,7 @@ describe('Test stats (excluding redundancy)', function () {
     const resVideo = await uploadVideo(servers[0].url, servers[0].accessToken, { fixture: 'video_short.webm' })
     const videoUUID = resVideo.body.video.uuid
 
-    await addVideoCommentThread(servers[0].url, servers[0].accessToken, videoUUID, 'comment')
+    await servers[0].commentsCommand.createThread({ videoId: videoUUID, text: 'comment' })
 
     await viewVideo(servers[0].url, videoUUID)
 

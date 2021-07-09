@@ -1,19 +1,10 @@
-import { registerTSPaths } from '../server/helpers/register-ts-paths'
-registerTSPaths()
-
 import * as autocannon from 'autocannon'
-import {
-  addVideoCommentReply,
-  addVideoCommentThread,
-  flushAndRunServer,
-  getVideosList,
-  killallServers,
-  ServerInfo,
-  setAccessTokensToServers,
-  uploadVideo
-} from '@shared/extra-utils'
-import { Video, VideoPrivacy } from '@shared/models'
 import { writeJson } from 'fs-extra'
+import { flushAndRunServer, getVideosList, killallServers, ServerInfo, setAccessTokensToServers, uploadVideo } from '@shared/extra-utils'
+import { Video, VideoPrivacy } from '@shared/models'
+import { registerTSPaths } from '../server/helpers/register-ts-paths'
+
+registerTSPaths()
 
 let server: ServerInfo
 let video: Video
@@ -228,18 +219,17 @@ async function prepare () {
 
   for (let i = 0; i < 10; i++) {
     const text = 'my super first comment'
-    const res = await addVideoCommentThread(server.url, server.accessToken, video.id, text)
-    threadId = res.body.comment.id
+    const created = await server.commentsCommand.createThread({ videoId: video.id, text })
+    threadId = created.id
 
     const text1 = 'my super answer to thread 1'
-    const childCommentRes = await addVideoCommentReply(server.url, server.accessToken, video.id, threadId, text1)
-    const childCommentId = childCommentRes.body.comment.id
+    const child = await server.commentsCommand.addReply({ videoId: video.id, toCommentId: threadId, text: text1 })
 
     const text2 = 'my super answer to answer of thread 1'
-    await addVideoCommentReply(server.url, server.accessToken, video.id, childCommentId, text2)
+    await server.commentsCommand.addReply({ videoId: video.id, toCommentId: child.id, text: text2 })
 
     const text3 = 'my second answer to thread 1'
-    await addVideoCommentReply(server.url, server.accessToken, video.id, threadId, text3)
+    await server.commentsCommand.addReply({ videoId: video.id, toCommentId: threadId, text: text3 })
   }
 
   for (const caption of [ 'ar', 'fr', 'en', 'zh' ]) {

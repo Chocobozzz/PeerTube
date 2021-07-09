@@ -2,16 +2,13 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { Video, VideoComment } from '@shared/models'
+import { Video } from '@shared/models'
 import {
-  addVideoCommentReply,
-  addVideoCommentThread,
   BulkCommand,
   cleanupTests,
   createUser,
   doubleFollow,
   flushAndRunMultipleServers,
-  getVideoCommentThreads,
   getVideosList,
   ServerInfo,
   setAccessTokensToServers,
@@ -26,9 +23,9 @@ describe('Test bulk actions', function () {
   const commentsUser3: { videoId: number, commentId: number }[] = []
 
   let servers: ServerInfo[] = []
-  let user1AccessToken: string
-  let user2AccessToken: string
-  let user3AccessToken: string
+  let user1Token: string
+  let user2Token: string
+  let user3Token: string
 
   let bulkCommand: BulkCommand
 
@@ -44,21 +41,21 @@ describe('Test bulk actions', function () {
       const user = { username: 'user1', password: 'password' }
       await createUser({ url: servers[0].url, accessToken: servers[0].accessToken, username: user.username, password: user.password })
 
-      user1AccessToken = await userLogin(servers[0], user)
+      user1Token = await userLogin(servers[0], user)
     }
 
     {
       const user = { username: 'user2', password: 'password' }
       await createUser({ url: servers[0].url, accessToken: servers[0].accessToken, username: user.username, password: user.password })
 
-      user2AccessToken = await userLogin(servers[0], user)
+      user2Token = await userLogin(servers[0], user)
     }
 
     {
       const user = { username: 'user3', password: 'password' }
       await createUser({ url: servers[1].url, accessToken: servers[1].accessToken, username: user.username, password: user.password })
 
-      user3AccessToken = await userLogin(servers[1], user)
+      user3Token = await userLogin(servers[1], user)
     }
 
     await doubleFollow(servers[0], servers[1])
@@ -74,9 +71,8 @@ describe('Test bulk actions', function () {
 
         // Server 1 should not have these comments anymore
         for (const video of videos) {
-          const resThreads = await getVideoCommentThreads(servers[0].url, video.id, 0, 10)
-          const comments = resThreads.body.data as VideoComment[]
-          const comment = comments.find(c => c.text === 'comment by user 3')
+          const { data } = await servers[0].commentsCommand.listThreads({ videoId: video.id })
+          const comment = data.find(c => c.text === 'comment by user 3')
 
           expect(comment).to.not.exist
         }
@@ -88,9 +84,8 @@ describe('Test bulk actions', function () {
 
         // Server 1 should not have these comments on videos of server 1
         for (const video of videos) {
-          const resThreads = await getVideoCommentThreads(servers[1].url, video.id, 0, 10)
-          const comments = resThreads.body.data as VideoComment[]
-          const comment = comments.find(c => c.text === 'comment by user 3')
+          const { data } = await servers[1].commentsCommand.listThreads({ videoId: video.id })
+          const comment = data.find(c => c.text === 'comment by user 3')
 
           if (video.account.host === 'localhost:' + servers[0].port) {
             expect(comment).to.not.exist
@@ -106,7 +101,7 @@ describe('Test bulk actions', function () {
 
       await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'video 1 server 1' })
       await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'video 2 server 1' })
-      await uploadVideo(servers[0].url, user1AccessToken, { name: 'video 3 server 1' })
+      await uploadVideo(servers[0].url, user1Token, { name: 'video 3 server 1' })
 
       await uploadVideo(servers[1].url, servers[1].accessToken, { name: 'video 1 server 2' })
 
@@ -115,19 +110,20 @@ describe('Test bulk actions', function () {
       {
         const res = await getVideosList(servers[0].url)
         for (const video of res.body.data) {
-          await addVideoCommentThread(servers[0].url, servers[0].accessToken, video.id, 'comment by root server 1')
-          await addVideoCommentThread(servers[0].url, user1AccessToken, video.id, 'comment by user 1')
-          await addVideoCommentThread(servers[0].url, user2AccessToken, video.id, 'comment by user 2')
+          await servers[0].commentsCommand.createThread({ videoId: video.id, text: 'comment by root server 1' })
+          await servers[0].commentsCommand.createThread({ token: user1Token, videoId: video.id, text: 'comment by user 1' })
+          await servers[0].commentsCommand.createThread({ token: user2Token, videoId: video.id, text: 'comment by user 2' })
         }
       }
 
       {
         const res = await getVideosList(servers[1].url)
-        for (const video of res.body.data) {
-          await addVideoCommentThread(servers[1].url, servers[1].accessToken, video.id, 'comment by root server 2')
 
-          const res = await addVideoCommentThread(servers[1].url, user3AccessToken, video.id, 'comment by user 3')
-          commentsUser3.push({ videoId: video.id, commentId: res.body.comment.id })
+        for (const video of res.body.data) {
+          await servers[1].commentsCommand.createThread({ videoId: video.id, text: 'comment by root server 2' })
+
+          const comment = await servers[1].commentsCommand.createThread({ token: user3Token, videoId: video.id, text: 'comment by user 3' })
+          commentsUser3.push({ videoId: video.id, commentId: comment.id })
         }
       }
 
@@ -138,7 +134,7 @@ describe('Test bulk actions', function () {
       this.timeout(60000)
 
       await bulkCommand.removeCommentsOf({
-        token: user1AccessToken,
+        token: user1Token,
         attributes: {
           accountName: 'user2',
           scope: 'my-videos'
@@ -151,15 +147,11 @@ describe('Test bulk actions', function () {
         const res = await getVideosList(server.url)
 
         for (const video of res.body.data) {
-          const resThreads = await getVideoCommentThreads(server.url, video.id, 0, 10)
-          const comments = resThreads.body.data as VideoComment[]
-          const comment = comments.find(c => c.text === 'comment by user 2')
+          const { data } = await server.commentsCommand.listThreads({ videoId: video.id })
+          const comment = data.find(c => c.text === 'comment by user 2')
 
-          if (video.name === 'video 3 server 1') {
-            expect(comment).to.not.exist
-          } else {
-            expect(comment).to.exist
-          }
+          if (video.name === 'video 3 server 1') expect(comment).to.not.exist
+          else expect(comment).to.exist
         }
       }
     })
@@ -183,7 +175,12 @@ describe('Test bulk actions', function () {
       this.timeout(60000)
 
       for (const obj of commentsUser3) {
-        await addVideoCommentReply(servers[1].url, user3AccessToken, obj.videoId, obj.commentId, 'comment by user 3 bis')
+        await servers[1].commentsCommand.addReply({
+          token: user3Token,
+          videoId: obj.videoId,
+          toCommentId: obj.commentId,
+          text: 'comment by user 3 bis'
+        })
       }
 
       await waitJobs(servers)

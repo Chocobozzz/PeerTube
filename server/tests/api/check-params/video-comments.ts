@@ -2,9 +2,11 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { VideoCreateResult } from '@shared/models'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '@shared/core-utils'
 import {
+  checkBadCountPagination,
+  checkBadSortPagination,
+  checkBadStartPagination,
   cleanupTests,
   createUser,
   flushAndRunServer,
@@ -15,13 +17,8 @@ import {
   setAccessTokensToServers,
   uploadVideo,
   userLogin
-} from '../../../../shared/extra-utils'
-import {
-  checkBadCountPagination,
-  checkBadSortPagination,
-  checkBadStartPagination
-} from '../../../../shared/extra-utils/requests/check-api-params'
-import { addVideoCommentThread } from '../../../../shared/extra-utils/videos/video-comments'
+} from '@shared/extra-utils'
+import { VideoCreateResult } from '@shared/models'
 
 const expect = chai.expect
 
@@ -50,8 +47,8 @@ describe('Test video comments API validator', function () {
     }
 
     {
-      const res = await addVideoCommentThread(server.url, server.accessToken, video.uuid, 'coucou')
-      commentId = res.body.comment.id
+      const created = await server.commentsCommand.createThread({ videoId: video.uuid, text: 'coucou' })
+      commentId = created.id
       pathComment = '/api/v1/videos/' + video.uuid + '/comments/' + commentId
     }
 
@@ -281,8 +278,8 @@ describe('Test video comments API validator', function () {
       let commentToDelete: number
 
       {
-        const res = await addVideoCommentThread(server.url, userAccessToken, video.uuid, 'hello')
-        commentToDelete = res.body.comment.id
+        const created = await server.commentsCommand.createThread({ videoId: video.uuid, text: 'hello' })
+        commentToDelete = created.id
       }
 
       const path = '/api/v1/videos/' + video.uuid + '/comments/' + commentToDelete
@@ -301,8 +298,8 @@ describe('Test video comments API validator', function () {
       }
 
       {
-        const res = await addVideoCommentThread(server.url, server.accessToken, anotherVideoUUID, 'hello')
-        commentToDelete = res.body.comment.id
+        const created = await server.commentsCommand.createThread({ videoId: anotherVideoUUID, text: 'hello' })
+        commentToDelete = created.id
       }
 
       const path = '/api/v1/videos/' + anotherVideoUUID + '/comments/' + commentToDelete

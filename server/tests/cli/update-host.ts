@@ -2,7 +2,6 @@
 
 import 'mocha'
 import {
-  addVideoCommentThread,
   cleanupTests,
   createUser,
   flushAndRunServer,
@@ -55,7 +54,7 @@ describe('Test update host scripts', function () {
 
     // Create comments
     const text = 'my super first comment'
-    await addVideoCommentThread(server.url, server.accessToken, video1UUID, text)
+    await server.commentsCommand.createThread({ videoId: video1UUID, text })
 
     await waitJobs(server)
   })

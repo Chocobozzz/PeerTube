@@ -5,7 +5,6 @@ import * as chai from 'chai'
 import * as xmlParser from 'fast-xml-parser'
 import { HttpStatusCode } from '@shared/core-utils'
 import {
-  addVideoCommentThread,
   cleanupTests,
   createUser,
   doubleFollow,
@@ -90,8 +89,8 @@ describe('Test syndication feeds', () => {
       const res = await uploadVideo(servers[0].url, servers[0].accessToken, videoAttributes)
       const videoId = res.body.video.id
 
-      await addVideoCommentThread(servers[0].url, servers[0].accessToken, videoId, 'super comment 1')
-      await addVideoCommentThread(servers[0].url, servers[0].accessToken, videoId, 'super comment 2')
+      await servers[0].commentsCommand.createThread({ videoId, text: 'super comment 1' })
+      await servers[0].commentsCommand.createThread({ videoId, text: 'super comment 2' })
     }
 
     {
@@ -99,7 +98,7 @@ describe('Test syndication feeds', () => {
       const res = await uploadVideo(servers[0].url, servers[0].accessToken, videoAttributes)
       const videoId = res.body.video.id
 
-      await addVideoCommentThread(servers[0].url, servers[0].accessToken, videoId, 'comment on unlisted video')
+      await servers[0].commentsCommand.createThread({ videoId, text: 'comment on unlisted video' })
     }
 
     await waitJobs(servers)
@@ -277,7 +276,7 @@ describe('Test syndication feeds', () => {
       {
         const videoUUID = (await uploadVideoAndGetId({ server: servers[1], videoName: 'server 2' })).uuid
         await waitJobs(servers)
-        await addVideoCommentThread(servers[0].url, servers[0].accessToken, videoUUID, 'super comment')
+        await servers[0].commentsCommand.createThread({ videoId: videoUUID, text: 'super comment' })
         await waitJobs(servers)
 
         const json = await servers[1].feedCommand.getJSON({ feed: 'video-comments', query: { version: 3 } })

@@ -2,37 +2,32 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { VideoComment, VideoCommentAdmin, VideoCommentThreadTree } from '@shared/models'
-import { cleanupTests, testImage } from '../../../../shared/extra-utils'
 import {
+  cleanupTests,
+  CommentsCommand,
   createUser,
   dateIsValid,
   flushAndRunServer,
   getAccessToken,
   ServerInfo,
   setAccessTokensToServers,
+  testImage,
   updateMyAvatar,
   uploadVideo
-} from '../../../../shared/extra-utils/index'
-import {
-  addVideoCommentReply,
-  addVideoCommentThread,
-  deleteVideoComment,
-  getAdminVideoComments,
-  getVideoCommentThreads,
-  getVideoThreadComments
-} from '../../../../shared/extra-utils/videos/video-comments'
+} from '@shared/extra-utils'
 
 const expect = chai.expect
 
 describe('Test video comments', function () {
   let server: ServerInfo
-  let videoId
-  let videoUUID
-  let threadId
+  let videoId: number
+  let videoUUID: string
+  let threadId: number
   let replyToDeleteId: number
 
   let userAccessTokenServer1: string
+
+  let command: CommentsCommand
 
   before(async function () {
     this.timeout(30000)
@@ -58,24 +53,25 @@ describe('Test video comments', function () {
       password: 'password'
     })
     userAccessTokenServer1 = await getAccessToken(server.url, 'user1', 'password')
+
+    command = server.commentsCommand
   })
 
   describe('User comments', function () {
 
     it('Should not have threads on this video', async function () {
-      const res = await getVideoCommentThreads(server.url, videoUUID, 0, 5)
+      const body = await command.listThreads({ videoId: videoUUID })
 
-      expect(res.body.total).to.equal(0)
-      expect(res.body.totalNotDeletedComments).to.equal(0)
-      expect(res.body.data).to.be.an('array')
-      expect(res.body.data).to.have.lengthOf(0)
+      expect(body.total).to.equal(0)
+      expect(body.totalNotDeletedComments).to.equal(0)
+      expect(body.data).to.be.an('array')
+      expect(body.data).to.have.lengthOf(0)
     })
 
     it('Should create a thread in this video', async function () {
       const text = 'my super first comment'
 
-      const res = await addVideoCommentThread(server.url, server.accessToken, videoUUID, text)
-      const comment = res.body.comment
+      const comment = await command.createThread({ videoId: videoUUID, text })
 
       expect(comment.inReplyToCommentId).to.be.null
       expect(comment.text).equal('my super first comment')
@@ -91,14 +87,14 @@ describe('Test video comments', function () {
     })
 
     it('Should list threads of this video', async function () {
-      const res = await getVideoCommentThreads(server.url, videoUUID, 0, 5)
+      const body = await command.listThreads({ videoId: videoUUID })
 
-      expect(res.body.total).to.equal(1)
-      expect(res.body.totalNotDeletedComments).to.equal(1)
-      expect(res.body.data).to.be.an('array')
-      expect(res.body.data).to.have.lengthOf(1)
+      expect(body.total).to.equal(1)
+      expect(body.totalNotDeletedComments).to.equal(1)
+      expect(body.data).to.be.an('array')
+      expect(body.data).to.have.lengthOf(1)
 
-      const comment: VideoComment = res.body.data[0]
+      const comment = body.data[0]
       expect(comment.inReplyToCommentId).to.be.null
       expect(comment.text).equal('my super first comment')
       expect(comment.videoId).to.equal(videoId)
@@ -117,9 +113,9 @@ describe('Test video comments', function () {
     })
 
     it('Should get all the thread created', async function () {
-      const res = await getVideoThreadComments(server.url, videoUUID, threadId)
+      const body = await command.getThread({ videoId: videoUUID, threadId })
 
-      const rootComment = res.body.comment
+      const rootComment = body.comment
       expect(rootComment.inReplyToCommentId).to.be.null
       expect(rootComment.text).equal('my super first comment')
       expect(rootComment.videoId).to.equal(videoId)
@@ -129,20 +125,19 @@ describe('Test video comments', function () {
 
     it('Should create multiple replies in this thread', async function () {
       const text1 = 'my super answer to thread 1'
-      const childCommentRes = await addVideoCommentReply(server.url, server.accessToken, videoId, threadId, text1)
-      const childCommentId = childCommentRes.body.comment.id
+      const created = await command.addReply({ videoId, toCommentId: threadId, text: text1 })
+      const childCommentId = created.id
 
       const text2 = 'my super answer to answer of thread 1'
-      await addVideoCommentReply(server.url, server.accessToken, videoId, childCommentId, text2)
+      await command.addReply({ videoId, toCommentId: childCommentId, text: text2 })
 
       const text3 = 'my second answer to thread 1'
-      await addVideoCommentReply(server.url, server.accessToken, videoId, threadId, text3)
+      await command.addReply({ videoId, toCommentId: threadId, text: text3 })
     })
 
     it('Should get correctly the replies', async function () {
-      const res = await getVideoThreadComments(server.url, videoUUID, threadId)
+      const tree = await command.getThread({ videoId: videoUUID, threadId })
 
-      const tree: VideoCommentThreadTree = res.body
       expect(tree.comment.text).equal('my super first comment')
       expect(tree.children).to.have.lengthOf(2)
 
@@ -163,42 +158,41 @@ describe('Test video comments', function () {
 
     it('Should create other threads', async function () {
       const text1 = 'super thread 2'
-      await addVideoCommentThread(server.url, server.accessToken, videoUUID, text1)
+      await command.createThread({ videoId: videoUUID, text: text1 })
 
       const text2 = 'super thread 3'
-      await addVideoCommentThread(server.url, server.accessToken, videoUUID, text2)
+      await command.createThread({ videoId: videoUUID, text: text2 })
     })
 
     it('Should list the threads', async function () {
-      const res = await getVideoCommentThreads(server.url, videoUUID, 0, 5, 'createdAt')
+      const body = await command.listThreads({ videoId: videoUUID, sort: 'createdAt' })
 
-      expect(res.body.total).to.equal(3)
-      expect(res.body.totalNotDeletedComments).to.equal(6)
-      expect(res.body.data).to.be.an('array')
-      expect(res.body.data).to.have.lengthOf(3)
+      expect(body.total).to.equal(3)
+      expect(body.totalNotDeletedComments).to.equal(6)
+      expect(body.data).to.be.an('array')
+      expect(body.data).to.have.lengthOf(3)
 
-      expect(res.body.data[0].text).to.equal('my super first comment')
-      expect(res.body.data[0].totalReplies).to.equal(3)
-      expect(res.body.data[1].text).to.equal('super thread 2')
-      expect(res.body.data[1].totalReplies).to.equal(0)
-      expect(res.body.data[2].text).to.equal('super thread 3')
-      expect(res.body.data[2].totalReplies).to.equal(0)
+      expect(body.data[0].text).to.equal('my super first comment')
+      expect(body.data[0].totalReplies).to.equal(3)
+      expect(body.data[1].text).to.equal('super thread 2')
+      expect(body.data[1].totalReplies).to.equal(0)
+      expect(body.data[2].text).to.equal('super thread 3')
+      expect(body.data[2].totalReplies).to.equal(0)
     })
 
     it('Should delete a reply', async function () {
-      await deleteVideoComment(server.url, server.accessToken, videoId, replyToDeleteId)
+      await command.delete({ videoId, commentId: replyToDeleteId })
 
       {
-        const res = await getVideoCommentThreads(server.url, videoUUID, 0, 5, 'createdAt')
+        const body = await command.listThreads({ videoId: videoUUID, sort: 'createdAt' })
 
-        expect(res.body.total).to.equal(3)
-        expect(res.body.totalNotDeletedComments).to.equal(5)
+        expect(body.total).to.equal(3)
+        expect(body.totalNotDeletedComments).to.equal(5)
       }
 
       {
-        const res = await getVideoThreadComments(server.url, videoUUID, threadId)
+        const tree = await command.getThread({ videoId: videoUUID, threadId })
 
-        const tree: VideoCommentThreadTree = res.body
         expect(tree.comment.text).equal('my super first comment')
         expect(tree.children).to.have.lengthOf(2)
 
@@ -220,99 +214,88 @@ describe('Test video comments', function () {
     })
 
     it('Should delete a complete thread', async function () {
-      await deleteVideoComment(server.url, server.accessToken, videoId, threadId)
+      await command.delete({ videoId, commentId: threadId })
 
-      const res = await getVideoCommentThreads(server.url, videoUUID, 0, 5, 'createdAt')
-      expect(res.body.total).to.equal(3)
-      expect(res.body.data).to.be.an('array')
-      expect(res.body.data).to.have.lengthOf(3)
+      const body = await command.listThreads({ videoId: videoUUID, sort: 'createdAt' })
+      expect(body.total).to.equal(3)
+      expect(body.data).to.be.an('array')
+      expect(body.data).to.have.lengthOf(3)
 
-      expect(res.body.data[0].text).to.equal('')
-      expect(res.body.data[0].isDeleted).to.be.true
-      expect(res.body.data[0].deletedAt).to.not.be.null
-      expect(res.body.data[0].account).to.be.null
-      expect(res.body.data[0].totalReplies).to.equal(2)
-      expect(res.body.data[1].text).to.equal('super thread 2')
-      expect(res.body.data[1].totalReplies).to.equal(0)
-      expect(res.body.data[2].text).to.equal('super thread 3')
-      expect(res.body.data[2].totalReplies).to.equal(0)
+      expect(body.data[0].text).to.equal('')
+      expect(body.data[0].isDeleted).to.be.true
+      expect(body.data[0].deletedAt).to.not.be.null
+      expect(body.data[0].account).to.be.null
+      expect(body.data[0].totalReplies).to.equal(2)
+      expect(body.data[1].text).to.equal('super thread 2')
+      expect(body.data[1].totalReplies).to.equal(0)
+      expect(body.data[2].text).to.equal('super thread 3')
+      expect(body.data[2].totalReplies).to.equal(0)
     })
 
     it('Should count replies from the video author correctly', async function () {
-      const text = 'my super first comment'
-      await addVideoCommentThread(server.url, server.accessToken, videoUUID, text)
-      let res = await getVideoCommentThreads(server.url, videoUUID, 0, 5)
-      const comment: VideoComment = res.body.data[0]
-      const threadId2 = comment.threadId
+      await command.createThread({ videoId: videoUUID, text: 'my super first comment' })
+
+      const { data } = await command.listThreads({ videoId: videoUUID })
+      const threadId2 = data[0].threadId
 
       const text2 = 'a first answer to thread 4 by a third party'
-      await addVideoCommentReply(server.url, userAccessTokenServer1, videoId, threadId2, text2)
+      await command.addReply({ token: userAccessTokenServer1, videoId, toCommentId: threadId2, text: text2 })
 
       const text3 = 'my second answer to thread 4'
-      await addVideoCommentReply(server.url, server.accessToken, videoId, threadId2, text3)
+      await command.addReply({ videoId, toCommentId: threadId2, text: text3 })
 
-      res = await getVideoThreadComments(server.url, videoUUID, threadId2)
-      const tree: VideoCommentThreadTree = res.body
+      const tree = await command.getThread({ videoId: videoUUID, threadId: threadId2 })
       expect(tree.comment.totalReplies).to.equal(tree.comment.totalRepliesFromVideoAuthor + 1)
     })
   })
 
   describe('All instance comments', function () {
-    async function getComments (options: any = {}) {
-      const res = await getAdminVideoComments(Object.assign({
-        url: server.url,
-        token: server.accessToken,
-        start: 0,
-        count: 10
-      }, options))
-
-      return { comments: res.body.data as VideoCommentAdmin[], total: res.body.total as number }
-    }
 
     it('Should list instance comments as admin', async function () {
-      const { comments } = await getComments({ start: 0, count: 1 })
+      const { data } = await command.listForAdmin({ start: 0, count: 1 })
 
-      expect(comments[0].text).to.equal('my second answer to thread 4')
+      expect(data[0].text).to.equal('my second answer to thread 4')
     })
 
     it('Should filter instance comments by isLocal', async function () {
-      const { total, comments } = await getComments({ isLocal: false })
+      const { total, data } = await command.listForAdmin({ isLocal: false })
 
-      expect(comments).to.have.lengthOf(0)
+      expect(data).to.have.lengthOf(0)
       expect(total).to.equal(0)
     })
 
     it('Should search instance comments by account', async function () {
-      const { total, comments } = await getComments({ searchAccount: 'user' })
+      const { total, data } = await command.listForAdmin({ searchAccount: 'user' })
 
-      expect(comments).to.have.lengthOf(1)
+      expect(data).to.have.lengthOf(1)
       expect(total).to.equal(1)
 
-      expect(comments[0].text).to.equal('a first answer to thread 4 by a third party')
+      expect(data[0].text).to.equal('a first answer to thread 4 by a third party')
     })
 
     it('Should search instance comments by video', async function () {
       {
-        const { total, comments } = await getComments({ searchVideo: 'video' })
+        const { total, data } = await command.listForAdmin({ searchVideo: 'video' })
 
-        expect(comments).to.have.lengthOf(7)
+        expect(data).to.have.lengthOf(7)
         expect(total).to.equal(7)
       }
 
       {
-        const { total, comments } = await getComments({ searchVideo: 'hello' })
+        const { total, data } = await command.listForAdmin({ searchVideo: 'hello' })
 
-        expect(comments).to.have.lengthOf(0)
+        expect(data).to.have.lengthOf(0)
         expect(total).to.equal(0)
       }
     })
 
     it('Should search instance comments', async function () {
-      const { total, comments } = await getComments({ search: 'super thread 3' })
+      const { total, data } = await command.listForAdmin({ search: 'super thread 3' })
 
-      expect(comments).to.have.lengthOf(1)
       expect(total).to.equal(1)
-      expect(comments[0].text).to.equal('super thread 3')
+
+      expect(data).to.have.lengthOf(1)
+      expect(data[0].text).to.equal('super thread 3')
     })
   })
 

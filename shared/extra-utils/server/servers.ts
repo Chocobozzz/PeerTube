@@ -30,6 +30,7 @@ import {
   ServicesCommand,
   StreamingPlaylistsCommand
 } from '../videos'
+import { CommentsCommand } from '../videos/comments-command'
 import { ConfigCommand } from './config-command'
 import { ContactFormCommand } from './contact-form-command'
 import { DebugCommand } from './debug-command'
@@ -121,6 +122,7 @@ interface ServerInfo {
   importsCommand?: ImportsCommand
   streamingPlaylistsCommand?: StreamingPlaylistsCommand
   channelsCommand?: ChannelsCommand
+  commentsCommand?: CommentsCommand
 }
 
 function parallelTests () {
@@ -356,6 +358,7 @@ async function runServer (server: ServerInfo, configOverrideArg?: any, args = []
       server.importsCommand = new ImportsCommand(server)
       server.streamingPlaylistsCommand = new StreamingPlaylistsCommand(server)
       server.channelsCommand = new ChannelsCommand(server)
+      server.commentsCommand = new CommentsCommand(server)
 
       res(server)
     })

@@ -3,7 +3,6 @@
 import 'mocha'
 import * as chai from 'chai'
 import {
-  addVideoCommentThread,
   cleanupTests,
   createUser,
   doubleFollow,
@@ -59,7 +58,11 @@ describe('Test blocklist', function () {
     }
 
     {
-      await addVideoCommentThread(servers[1].url, remoteUserToken, videoUUID, '@user2@' + servers[0].host + ' hello')
+      await servers[1].commentsCommand.createThread({
+        token: remoteUserToken,
+        videoId: videoUUID,
+        text: '@user2@' + servers[0].host + ' hello'
+      })
     }
 
     {

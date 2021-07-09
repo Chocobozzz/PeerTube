@@ -4,14 +4,11 @@ import 'mocha'
 import * as chai from 'chai'
 import {
   AbusesCommand,
-  addVideoCommentThread,
   cleanupTests,
   createUser,
-  deleteVideoComment,
   doubleFollow,
   flushAndRunMultipleServers,
   generateUserAccessToken,
-  getVideoCommentThreads,
   getVideoIdFromUUID,
   getVideosList,
   removeUser,
@@ -23,7 +20,7 @@ import {
   userLogin,
   waitJobs
 } from '@shared/extra-utils'
-import { AbuseMessage, AbusePredefinedReasonsString, AbuseState, AdminAbuse, UserAbuse, VideoComment } from '@shared/models'
+import { AbuseMessage, AbusePredefinedReasonsString, AbuseState, AdminAbuse, UserAbuse } from '@shared/models'
 
 const expect = chai.expect
 
@@ -399,14 +396,14 @@ describe('Test abuses', function () {
 
   describe('Comment abuses', function () {
 
-    async function getComment (url: string, videoIdArg: number | string) {
+    async function getComment (server: ServerInfo, videoIdArg: number | string) {
       const videoId = typeof videoIdArg === 'string'
-        ? await getVideoIdFromUUID(url, videoIdArg)
+        ? await getVideoIdFromUUID(server.url, videoIdArg)
         : videoIdArg
 
-      const res = await getVideoCommentThreads(url, videoId, 0, 5)
+      const { data } = await server.commentsCommand.listThreads({ videoId })
 
-      return res.body.data[0] as VideoComment
+      return data[0]
     }
 
     before(async function () {
@@ -415,8 +412,8 @@ describe('Test abuses', function () {
       servers[0].video = await uploadVideoAndGetId({ server: servers[0], videoName: 'server 1' })
       servers[1].video = await uploadVideoAndGetId({ server: servers[1], videoName: 'server 2' })
 
-      await addVideoCommentThread(servers[0].url, servers[0].accessToken, servers[0].video.id, 'comment server 1')
-      await addVideoCommentThread(servers[1].url, servers[1].accessToken, servers[1].video.id, 'comment server 2')
+      await servers[0].commentsCommand.createThread({ videoId: servers[0].video.id, text: 'comment server 1' })
+      await servers[1].commentsCommand.createThread({ videoId: servers[1].video.id, text: 'comment server 2' })
 
       await waitJobs(servers)
     })
@@ -424,7 +421,7 @@ describe('Test abuses', function () {
     it('Should report abuse on a comment', async function () {
       this.timeout(15000)
 
-      const comment = await getComment(servers[0].url, servers[0].video.id)
+      const comment = await getComment(servers[0], servers[0].video.id)
 
       const reason = 'it is a bad comment'
       await commands[0].report({ commentId: comment.id, reason })
@@ -434,7 +431,7 @@ describe('Test abuses', function () {
 
     it('Should have 1 comment abuse on server 1 and 0 on server 2', async function () {
       {
-        const comment = await getComment(servers[0].url, servers[0].video.id)
+        const comment = await getComment(servers[0], servers[0].video.id)
         const body = await commands[0].getAdminList({ filter: 'comment' })
 
         expect(body.total).to.equal(1)
@@ -469,7 +466,7 @@ describe('Test abuses', function () {
     it('Should report abuse on a remote comment', async function () {
       this.timeout(10000)
 
-      const comment = await getComment(servers[0].url, servers[1].video.uuid)
+      const comment = await getComment(servers[0], servers[1].video.uuid)
 
       const reason = 'it is a really bad comment'
       await commands[0].report({ commentId: comment.id, reason })
@@ -478,7 +475,7 @@ describe('Test abuses', function () {
     })
 
     it('Should have 2 comment abuses on server 1 and 1 on server 2', async function () {
-      const commentServer2 = await getComment(servers[0].url, servers[1].video.id)
+      const commentServer2 = await getComment(servers[0], servers[1].video.id)
 
       {
         const body = await commands[0].getAdminList({ filter: 'comment' })
@@ -537,9 +534,9 @@ describe('Test abuses', function () {
     it('Should keep the comment abuse when deleting the comment', async function () {
       this.timeout(10000)
 
-      const commentServer2 = await getComment(servers[0].url, servers[1].video.id)
+      const commentServer2 = await getComment(servers[0], servers[1].video.id)
 
-      await deleteVideoComment(servers[0].url, servers[0].accessToken, servers[1].video.uuid, commentServer2.id)
+      await servers[0].commentsCommand.delete({ videoId: servers[1].video.uuid, commentId: commentServer2.id })
 
       await waitJobs(servers)
 
