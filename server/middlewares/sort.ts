@@ -8,6 +8,8 @@ const setDefaultVideoRedundanciesSort = setDefaultSortFactory('name')
 
 const setDefaultSearchSort = setDefaultSortFactory('-match')
 
+const setDefaultSearchVideoSort = setDefaultSortFactory('-views')
+
 function setBlacklistSort (req: express.Request, res: express.Response, next: express.NextFunction) {
   const newSort: SortType = { sortModel: undefined, sortValue: '' }
 
@@ -34,6 +36,7 @@ function setBlacklistSort (req: express.Request, res: express.Response, next: ex
 export {
   setDefaultSort,
   setDefaultSearchSort,
+  setDefaultSearchVideoSort,
   setDefaultVideosSort,
   setDefaultVideoRedundanciesSort,
   setBlacklistSort

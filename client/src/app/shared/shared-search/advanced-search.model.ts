@@ -73,7 +73,7 @@ export class AdvancedSearch {
     if (isNaN(this.durationMin)) this.durationMin = undefined
     if (isNaN(this.durationMax)) this.durationMax = undefined
 
-    this.sort = options.sort || '-match'
+    this.sort = options.sort || '-views'
   }
 
   containsValues () {

@@ -19,7 +19,7 @@ import {
   optionalAuthenticate,
   paginationValidator,
   setDefaultPagination,
-  setDefaultSearchSort,
+  setDefaultSearchVideoSort,
   videosSearchSortValidator,
   videosSearchValidator
 } from '../../../middlewares'
@@ -33,7 +33,7 @@ searchVideosRouter.get('/videos',
   paginationValidator,
   setDefaultPagination,
   videosSearchSortValidator,
-  setDefaultSearchSort,
+  setDefaultSearchVideoSort,
   optionalAuthenticate,
   commonVideosFiltersValidator,
   videosSearchValidator,
