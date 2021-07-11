@@ -8120,7 +8120,7 @@
       </trans-unit>
       <trans-unit id="6470888608149621404" datatype="html">
         <source>ON <x id="PH" equiv-text="config.instance.name"/></source>
-        <target state="translated">TRÊN <x id="PH" equiv-text="config.instance.name"/></target>
+        <target state="translated"><x id="PH" equiv-text="config.instance.name"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/menu/menu.service.ts</context>
           <context context-type="linenumber">150</context>
@@ -9625,7 +9625,7 @@
       </trans-unit>
       <trans-unit id="81452583525574033">
         <source>Mute this account by your instance</source>
-        <target>Tắt tiếng tài khoản này trên đơn vị của bạn</target>
+        <target>Ẩn tài khoản này trên máy chủ của bạn</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">329</context></context-group>
       </trans-unit>
       <trans-unit id="2077144178298031252" datatype="html">
@@ -9635,7 +9635,7 @@
       </trans-unit>
       <trans-unit id="884942914962310163">
         <source>Unmute this account by your instance</source>
-        <target>Ngừng tắt tiếng tài khoản này trên đơn vị của bạn</target>
+        <target>Bỏ ẩn tài khoản này trên máy chủ của bạn</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">335</context></context-group>
       </trans-unit>
       <trans-unit id="7675070596643104983" datatype="html">
@@ -9645,7 +9645,7 @@
       </trans-unit>
       <trans-unit id="3191211873505538654">
         <source>Mute the instance by your instance</source>
-        <target>Tắt tiếng đơn vị này trên đơn vị của bạn</target>
+        <target>Ẩn máy chủ này trên máy chủ của bạn</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">347</context></context-group>
       </trans-unit>
       <trans-unit id="525915681688649453" datatype="html">
@@ -9655,7 +9655,7 @@
       </trans-unit>
       <trans-unit id="5325628963747139770">
         <source>Unmute the instance by your instance</source>
-        <target>Ngừng tắt tiếng đơn vị này trên đơn vị của bạn</target>
+        <target>Bỏ ẩn máy chủ này trên máy chủ của bạn</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">353</context></context-group>
       </trans-unit>
       <trans-unit id="758471033841077314" datatype="html">
