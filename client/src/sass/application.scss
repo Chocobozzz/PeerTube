@@ -5,13 +5,15 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
 
 @use '_fonts';
 
-@use './bootstrap';
-@use './primeng-custom';
-@use './ng-select';
-
 @use './classes';
 
 @use './custom-markup';
+
+@use './ng-select';
+
+// Needs an import because we extends glyphicon icons in primeng
+@import './bootstrap';
+@import './primeng-custom';
 
 [hidden] {
   display: none !important;
