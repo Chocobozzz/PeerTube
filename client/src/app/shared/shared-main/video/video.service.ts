@@ -378,8 +378,8 @@ export class VideoService implements VideosProvider {
                )
   }
 
-  explainedPrivacyLabels (privacies: VideoConstant<VideoPrivacy>[], defaultPrivacyId = VideoPrivacy.PUBLIC) {
-    const base = [
+  explainedPrivacyLabels (serverPrivacies: VideoConstant<VideoPrivacy>[], defaultPrivacyId = VideoPrivacy.PUBLIC) {
+    const descriptions = [
       {
         id: VideoPrivacy.PRIVATE,
         description: $localize`Only I can see this video`
@@ -398,13 +398,9 @@ export class VideoService implements VideosProvider {
       }
     ]
 
-    const videoPrivacies = base
-      .filter(o => !!privacies.find(p => p.id === o.id)) // filter down to privacies that where in the input
-      .map(o => ({ ...privacies[o.id - 1], ...o })) // merge the input privacies that contain a label, and extend them with a description
-
     return {
-      defaultPrivacyId: videoPrivacies.find(p => p.id === defaultPrivacyId)?.id || videoPrivacies[0].id,
-      videoPrivacies
+      defaultPrivacyId: serverPrivacies.find(p => p.id === defaultPrivacyId)?.id || serverPrivacies[0].id,
+      videoPrivacies: serverPrivacies.map(p => ({ ...p, description: descriptions.find(p => p.id).description }))
     }
   }
 
