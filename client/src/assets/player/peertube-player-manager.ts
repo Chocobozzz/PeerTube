@@ -401,8 +401,7 @@ export class PeertubePlayerManager {
       videoFiles: webtorrentOptions.videoFiles.length !== 0
         ? webtorrentOptions.videoFiles
         // The WebTorrent plugin won't be able to play these files, but it will fallback to HTTP mode
-        : p2pMediaLoaderOptions.videoFiles,
-      fallbackVideoFiles: p2pMediaLoaderOptions.videoFiles,
+        : p2pMediaLoaderOptions?.videoFiles || [],
       startTime: commonOptions.startTime
     }
 
