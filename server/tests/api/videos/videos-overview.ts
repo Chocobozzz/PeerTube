@@ -61,7 +61,7 @@ describe('Test a videos overview', function () {
   })
 
   it('Should upload another video and include all videos in the overview', async function () {
-    this.timeout(15000)
+    this.timeout(30000)
 
     for (let i = 1; i < 6; i++) {
       await uploadVideo(server.url, server.accessToken, {
