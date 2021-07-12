@@ -15,7 +15,7 @@
 - [ ] 👍 yes, I added tests to the test suite
 - [ ] 💭 no, because this PR is a draft and still needs work
 - [ ] 🙅 no, because this PR does not update server code
-- [ ] 🙋 no, because I need help <!-- Detail how we can help you >
+- [ ] 🙋 no, because I need help <!-- Detail how we can help you -->
 
 ## Screenshots
 
