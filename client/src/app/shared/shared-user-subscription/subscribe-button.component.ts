@@ -164,6 +164,10 @@ export class SubscribeButtonComponent implements OnInit, OnChanges {
     return accumulator
   }
 
+  isSubscribedToAll () {
+    return Array.from(this.subscribed.values()).every(v => v === true)
+  }
+
   private getChannelHandler (videoChannel: VideoChannel) {
     return videoChannel.name + '@' + videoChannel.host
   }

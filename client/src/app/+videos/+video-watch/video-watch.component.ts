@@ -696,7 +696,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     if (this.isUserLoggedIn()) {
       this.hotkeys = this.hotkeys.concat([
         new Hotkey('shift+s', () => {
-          this.subscribeButton.subscribed ? this.subscribeButton.unsubscribe() : this.subscribeButton.subscribe()
+          this.subscribeButton.isSubscribedToAll()
+            ? this.subscribeButton.unsubscribe()
+            : this.subscribeButton.subscribe()
+
           return false
         }, undefined, $localize`Subscribe to the account`)
       ])
