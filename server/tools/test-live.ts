@@ -38,7 +38,7 @@ async function run () {
 
   const server = await flushAndRunServer(1, {}, [], { hideLogs: false, execArgv: [ '--inspect' ] })
 
-  const cleanup =  async () => {
+  const cleanup = async () => {
     console.log('Killing server')
     await killallServers([ server ])
   }

@@ -90,7 +90,7 @@ export class SearchCommand extends AbstractCommand {
       ...options,
 
       path,
-      query: { sort: '-publishedAt', ...search },
+      query: search,
       implicitToken: false,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
