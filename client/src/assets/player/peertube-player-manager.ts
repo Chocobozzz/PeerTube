@@ -388,6 +388,7 @@ export class PeertubePlayerManager {
   private static addWebTorrentOptions (plugins: VideoJSPluginOptions, options: PeertubePlayerManagerOptions) {
     const commonOptions = options.common
     const webtorrentOptions = options.webtorrent
+    const p2pMediaLoaderOptions = options.p2pMediaLoader
 
     const autoplay = this.getAutoPlayValue(commonOptions.autoplay) === 'play'
       ? true
@@ -397,7 +398,11 @@ export class PeertubePlayerManager {
       autoplay,
       videoDuration: commonOptions.videoDuration,
       playerElement: commonOptions.playerElement,
-      videoFiles: webtorrentOptions.videoFiles,
+      videoFiles: webtorrentOptions.videoFiles.length !== 0
+        ? webtorrentOptions.videoFiles
+        // The WebTorrent plugin won't be able to play these files, but it will fallback to HTTP mode
+        : p2pMediaLoaderOptions.videoFiles,
+      fallbackVideoFiles: p2pMediaLoaderOptions.videoFiles,
       startTime: commonOptions.startTime
     }
 
