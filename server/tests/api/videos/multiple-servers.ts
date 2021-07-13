@@ -582,6 +582,7 @@ describe('Test multiple servers', function () {
 
       await waitJobs(servers)
       await wait(5000)
+      await waitJobs(servers)
 
       let baseVideos = null
       for (const server of servers) {
