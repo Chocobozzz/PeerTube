@@ -43,7 +43,7 @@ describe('Test video NSFW policy', function () {
     if (token) {
       promises = [
         getVideosListWithToken(server.url, token, query).then(res => res.body),
-        server.searchCommand.advancedVideoSearch({ token, search: { search: 'n', ...query } }),
+        server.searchCommand.advancedVideoSearch({ token, search: { search: 'n', sort: '-publishedAt', ...query } }),
         getAccountVideos(server.url, token, accountName, 0, 5, undefined, query).then(res => res.body),
         getVideoChannelVideos(server.url, token, videoChannelName, 0, 5, undefined, query).then(res => res.body)
       ]
@@ -60,7 +60,7 @@ describe('Test video NSFW policy', function () {
 
     promises = [
       getVideosList(server.url).then(res => res.body),
-      server.searchCommand.searchVideos({ search: 'n' }),
+      server.searchCommand.searchVideos({ search: 'n', sort: '-publishedAt' }),
       getAccountVideos(server.url, undefined, accountName, 0, 5).then(res => res.body),
       getVideoChannelVideos(server.url, undefined, videoChannelName, 0, 5).then(res => res.body)
     ]
