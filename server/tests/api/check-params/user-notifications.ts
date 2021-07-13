@@ -2,25 +2,21 @@
 
 import 'mocha'
 import { io } from 'socket.io-client'
-
+import { HttpStatusCode } from '@shared/core-utils'
 import {
+  checkBadCountPagination,
+  checkBadSortPagination,
+  checkBadStartPagination,
   cleanupTests,
   flushAndRunServer,
-  immutableAssign,
   makeGetRequest,
   makePostBodyRequest,
   makePutBodyRequest,
   ServerInfo,
   setAccessTokensToServers,
   wait
-} from '../../../../shared/extra-utils'
-import {
-  checkBadCountPagination,
-  checkBadSortPagination,
-  checkBadStartPagination
-} from '../../../../shared/extra-utils/requests/check-api-params'
-import { UserNotificationSetting, UserNotificationSettingValue } from '../../../../shared/models/users'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+} from '@shared/extra-utils'
+import { UserNotificationSetting, UserNotificationSettingValue } from '@shared/models'
 
 describe('Test user notifications API validators', function () {
   let server: ServerInfo
@@ -193,7 +189,7 @@ describe('Test user notifications API validators', function () {
 
     it('Should fail with incorrect field values', async function () {
       {
-        const fields = immutableAssign(correctFields, { newCommentOnMyVideo: 15 })
+        const fields = { ...correctFields, newCommentOnMyVideo: 15 }
 
         await makePutBodyRequest({
           url: server.url,
@@ -205,7 +201,7 @@ describe('Test user notifications API validators', function () {
       }
 
       {
-        const fields = immutableAssign(correctFields, { newCommentOnMyVideo: 'toto' })
+        const fields = { ...correctFields, newCommentOnMyVideo: 'toto' }
 
         await makePutBodyRequest({
           url: server.url,

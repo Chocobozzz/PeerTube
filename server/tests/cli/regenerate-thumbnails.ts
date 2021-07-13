@@ -4,7 +4,6 @@ import { writeFile } from 'fs-extra'
 import { basename, join } from 'path'
 import { Video, VideoDetails } from '@shared/models'
 import {
-  buildServerDirectory,
   cleanupTests,
   doubleFollow,
   flushAndRunMultipleServers,
@@ -50,7 +49,7 @@ describe('Test regenerate thumbnails script', function () {
       const videoUUID1 = (await uploadVideoAndGetId({ server: servers[0], videoName: 'video 1' })).uuid
       video1 = await (getVideo(servers[0].url, videoUUID1).then(res => res.body))
 
-      thumbnail1Path = join(buildServerDirectory(servers[0], 'thumbnails'), basename(video1.thumbnailPath))
+      thumbnail1Path = join(servers[0].serversCommand.buildDirectory('thumbnails'), basename(video1.thumbnailPath))
 
       const videoUUID2 = (await uploadVideoAndGetId({ server: servers[0], videoName: 'video 2' })).uuid
       video2 = await (getVideo(servers[0].url, videoUUID2).then(res => res.body))
@@ -62,7 +61,7 @@ describe('Test regenerate thumbnails script', function () {
 
       remoteVideo = await (getVideo(servers[0].url, videoUUID).then(res => res.body))
 
-      thumbnailRemotePath = join(buildServerDirectory(servers[0], 'thumbnails'), basename(remoteVideo.thumbnailPath))
+      thumbnailRemotePath = join(servers[0].serversCommand.buildDirectory('thumbnails'), basename(remoteVideo.thumbnailPath))
     }
 
     await writeFile(thumbnail1Path, '')

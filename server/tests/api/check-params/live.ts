@@ -10,7 +10,6 @@ import {
   createUser,
   flushAndRunServer,
   getMyUserInformation,
-  immutableAssign,
   LiveCommand,
   makePostBodyRequest,
   makeUploadRequest,
@@ -97,37 +96,37 @@ describe('Test video lives API validator', function () {
     })
 
     it('Should fail with a long name', async function () {
-      const fields = immutableAssign(baseCorrectParams, { name: 'super'.repeat(65) })
+      const fields = { ...baseCorrectParams, name: 'super'.repeat(65) }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should fail with a bad category', async function () {
-      const fields = immutableAssign(baseCorrectParams, { category: 125 })
+      const fields = { ...baseCorrectParams, category: 125 }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should fail with a bad licence', async function () {
-      const fields = immutableAssign(baseCorrectParams, { licence: 125 })
+      const fields = { ...baseCorrectParams, licence: 125 }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should fail with a bad language', async function () {
-      const fields = immutableAssign(baseCorrectParams, { language: 'a'.repeat(15) })
+      const fields = { ...baseCorrectParams, language: 'a'.repeat(15) }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should fail with a long description', async function () {
-      const fields = immutableAssign(baseCorrectParams, { description: 'super'.repeat(2500) })
+      const fields = { ...baseCorrectParams, description: 'super'.repeat(2500) }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should fail with a long support text', async function () {
-      const fields = immutableAssign(baseCorrectParams, { support: 'super'.repeat(201) })
+      const fields = { ...baseCorrectParams, support: 'super'.repeat(201) }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
@@ -139,7 +138,7 @@ describe('Test video lives API validator', function () {
     })
 
     it('Should fail with a bad channel', async function () {
-      const fields = immutableAssign(baseCorrectParams, { channelId: 545454 })
+      const fields = { ...baseCorrectParams, channelId: 545454 }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
@@ -155,25 +154,25 @@ describe('Test video lives API validator', function () {
       const res = await getMyUserInformation(server.url, accessTokenUser)
       const customChannelId = res.body.videoChannels[0].id
 
-      const fields = immutableAssign(baseCorrectParams, { channelId: customChannelId })
+      const fields = { ...baseCorrectParams, channelId: customChannelId }
 
       await makePostBodyRequest({ url: server.url, path, token: userAccessToken, fields })
     })
 
     it('Should fail with too many tags', async function () {
-      const fields = immutableAssign(baseCorrectParams, { tags: [ 'tag1', 'tag2', 'tag3', 'tag4', 'tag5', 'tag6' ] })
+      const fields = { ...baseCorrectParams, tags: [ 'tag1', 'tag2', 'tag3', 'tag4', 'tag5', 'tag6' ] }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should fail with a tag length too low', async function () {
-      const fields = immutableAssign(baseCorrectParams, { tags: [ 'tag1', 't' ] })
+      const fields = { ...baseCorrectParams, tags: [ 'tag1', 't' ] }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should fail with a tag length too big', async function () {
-      const fields = immutableAssign(baseCorrectParams, { tags: [ 'tag1', 'my_super_tag_too_long_long_long_long_long_long' ] })
+      const fields = { ...baseCorrectParams, tags: [ 'tag1', 'my_super_tag_too_long_long_long_long_long_long' ] }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
@@ -215,7 +214,7 @@ describe('Test video lives API validator', function () {
     })
 
     it('Should fail with save replay and permanent live set to true', async function () {
-      const fields = immutableAssign(baseCorrectParams, { saveReplay: true, permanentLive: true })
+      const fields = { ...baseCorrectParams, saveReplay: true, permanentLive: true }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
@@ -253,7 +252,7 @@ describe('Test video lives API validator', function () {
     })
 
     it('Should forbid to save replay if not enabled by the admin', async function () {
-      const fields = immutableAssign(baseCorrectParams, { saveReplay: true })
+      const fields = { ...baseCorrectParams, saveReplay: true }
 
       await server.configCommand.updateCustomSubConfig({
         newConfig: {
@@ -274,7 +273,7 @@ describe('Test video lives API validator', function () {
     })
 
     it('Should allow to save replay if enabled by the admin', async function () {
-      const fields = immutableAssign(baseCorrectParams, { saveReplay: true })
+      const fields = { ...baseCorrectParams, saveReplay: true }
 
       await server.configCommand.updateCustomSubConfig({
         newConfig: {

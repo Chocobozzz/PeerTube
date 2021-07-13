@@ -12,8 +12,7 @@ import {
   setAccessTokensToServers,
   uploadVideo,
   uploadVideoAndGetId,
-  waitJobs,
-  waitUntilLog
+  waitJobs
 } from '@shared/extra-utils'
 import { VideoPrivacy, VideoRedundanciesTarget } from '@shared/models'
 
@@ -91,7 +90,7 @@ describe('Test manage videos redundancy', function () {
     this.timeout(120000)
 
     await waitJobs(servers)
-    await waitUntilLog(servers[0], 'Duplicated ', 10)
+    await servers[0].serversCommand.waitUntilLog('Duplicated ', 10)
     await waitJobs(servers)
 
     const body = await commands[1].listVideos({ target: 'remote-videos' })
@@ -214,7 +213,7 @@ describe('Test manage videos redundancy', function () {
     await commands[0].addVideo({ videoId })
 
     await waitJobs(servers)
-    await waitUntilLog(servers[0], 'Duplicated ', 15)
+    await servers[0].serversCommand.waitUntilLog('Duplicated ', 15)
     await waitJobs(servers)
 
     {

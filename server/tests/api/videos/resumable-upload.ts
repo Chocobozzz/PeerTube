@@ -7,7 +7,6 @@ import { join } from 'path'
 import { HttpStatusCode } from '@shared/core-utils'
 import {
   buildAbsoluteFixturePath,
-  buildServerDirectory,
   cleanupTests,
   flushAndRunServer,
   getMyUserInformation,
@@ -82,7 +81,7 @@ describe('Test resumable upload', function () {
     const uploadId = uploadIdArg.replace(/^upload_id=/, '')
 
     const subPath = join('tmp', 'resumable-uploads', uploadId)
-    const filePath = buildServerDirectory(server, subPath)
+    const filePath = server.serversCommand.buildDirectory(subPath)
     const exists = await pathExists(filePath)
 
     if (expectedSize === null) {
@@ -97,7 +96,7 @@ describe('Test resumable upload', function () {
 
   async function countResumableUploads () {
     const subPath = join('tmp', 'resumable-uploads')
-    const filePath = buildServerDirectory(server, subPath)
+    const filePath = server.serversCommand.buildDirectory(subPath)
 
     const files = await readdir(filePath)
     return files.length

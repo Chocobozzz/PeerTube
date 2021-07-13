@@ -9,7 +9,6 @@ import {
   cleanupTests,
   createUser,
   flushAndRunServer,
-  immutableAssign,
   makeGetRequest,
   makePostBodyRequest,
   makePutBodyRequest,
@@ -200,7 +199,7 @@ describe('Test server plugins API validators', function () {
     })
 
     it('Should fail with an invalid plugin type', async function () {
-      const query = immutableAssign(baseQuery, { pluginType: 5 })
+      const query = { ...baseQuery, pluginType: 5 }
 
       await makeGetRequest({
         url: server.url,
@@ -211,7 +210,7 @@ describe('Test server plugins API validators', function () {
     })
 
     it('Should fail with an invalid current peertube engine', async function () {
-      const query = immutableAssign(baseQuery, { currentPeerTubeEngine: '1.0' })
+      const query = { ...baseQuery, currentPeerTubeEngine: '1.0' }
 
       await makeGetRequest({
         url: server.url,
@@ -271,7 +270,7 @@ describe('Test server plugins API validators', function () {
     })
 
     it('Should fail with an invalid plugin type', async function () {
-      const query = immutableAssign(baseQuery, { pluginType: 5 })
+      const query = { ...baseQuery, pluginType: 5 }
 
       await makeGetRequest({
         url: server.url,

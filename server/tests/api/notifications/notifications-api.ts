@@ -8,7 +8,6 @@ import {
   cleanupTests,
   getAllNotificationsSettings,
   getMyUserInformation,
-  immutableAssign,
   MockSmtpServer,
   prepareNotificationsTest,
   ServerInfo,
@@ -118,7 +117,7 @@ describe('Test notifications API', function () {
       const { name, uuid } = await uploadRandomVideo(server)
 
       const check = { web: true, mail: true }
-      await checkNewVideoFromSubscription(immutableAssign(baseParams, { check }), name, uuid, 'absence')
+      await checkNewVideoFromSubscription({ ...baseParams, ...check }, name, uuid, 'absence')
     })
 
     it('Should only have web notifications', async function () {
@@ -139,12 +138,12 @@ describe('Test notifications API', function () {
 
       {
         const check = { mail: true, web: false }
-        await checkNewVideoFromSubscription(immutableAssign(baseParams, { check }), name, uuid, 'absence')
+        await checkNewVideoFromSubscription({ ...baseParams, ...check }, name, uuid, 'absence')
       }
 
       {
         const check = { mail: false, web: true }
-        await checkNewVideoFromSubscription(immutableAssign(baseParams, { check }), name, uuid, 'presence')
+        await checkNewVideoFromSubscription({ ...baseParams, ...check }, name, uuid, 'presence')
       }
     })
 
@@ -166,12 +165,12 @@ describe('Test notifications API', function () {
 
       {
         const check = { mail: false, web: true }
-        await checkNewVideoFromSubscription(immutableAssign(baseParams, { check }), name, uuid, 'absence')
+        await checkNewVideoFromSubscription({ ...baseParams, ...check }, name, uuid, 'absence')
       }
 
       {
         const check = { mail: true, web: false }
-        await checkNewVideoFromSubscription(immutableAssign(baseParams, { check }), name, uuid, 'presence')
+        await checkNewVideoFromSubscription({ ...baseParams, ...check }, name, uuid, 'presence')
       }
     })
 

@@ -2,16 +2,8 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import {
-  cleanupTests,
-  flushAndRunServer,
-  immutableAssign,
-  SearchCommand,
-  ServerInfo,
-  setAccessTokensToServers,
-  uploadVideo
-} from '@shared/extra-utils'
-import { VideoPlaylistPrivacy, VideoPlaylistType, VideosSearchQuery } from '@shared/models'
+import { cleanupTests, flushAndRunServer, SearchCommand, ServerInfo, setAccessTokensToServers, uploadVideo } from '@shared/extra-utils'
+import { BooleanBothQuery, VideoPlaylistPrivacy, VideoPlaylistType, VideosSearchQuery } from '@shared/models'
 
 const expect = chai.expect
 
@@ -174,32 +166,32 @@ describe('Test videos search', function () {
       }
 
       {
-        const search = immutableAssign(baseSearch, { startDate: '2018-10-01T10:54:46.396Z' })
+        const search = { ...baseSearch, startDate: '2018-10-01T10:54:46.396Z' }
         await check(search, false)
       }
 
       {
-        const search = immutableAssign(baseSearch, { tagsAllOf: [ 'toto', 'framasoft' ] })
+        const search = { ...baseSearch, tagsAllOf: [ 'toto', 'framasoft' ] }
         await check(search, false)
       }
 
       {
-        const search = immutableAssign(baseSearch, { durationMin: 2000 })
+        const search = { ...baseSearch, durationMin: 2000 }
         await check(search, false)
       }
 
       {
-        const search = immutableAssign(baseSearch, { nsfw: 'true' })
+        const search = { ...baseSearch, nsfw: 'true' as BooleanBothQuery }
         await check(search, false)
       }
 
       {
-        const search = immutableAssign(baseSearch, { nsfw: 'false' })
+        const search = { ...baseSearch, nsfw: 'false' as BooleanBothQuery }
         await check(search, true)
       }
 
       {
-        const search = immutableAssign(baseSearch, { nsfw: 'both' })
+        const search = { ...baseSearch, nsfw: 'both' as BooleanBothQuery }
         await check(search, true)
       }
     })

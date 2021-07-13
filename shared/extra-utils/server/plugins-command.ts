@@ -15,7 +15,6 @@ import {
   RegisteredServerSettings,
   ResultList
 } from '@shared/models'
-import { buildServerDirectory } from '../miscs'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
 
 export class PluginsCommand extends AbstractCommand {
@@ -252,6 +251,6 @@ export class PluginsCommand extends AbstractCommand {
   }
 
   private getPackageJSONPath (npmName: string) {
-    return buildServerDirectory(this.server, join('plugins', 'node_modules', npmName, 'package.json'))
+    return this.server.serversCommand.buildDirectory(join('plugins', 'node_modules', npmName, 'package.json'))
   }
 }

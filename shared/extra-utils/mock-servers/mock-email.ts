@@ -1,6 +1,6 @@
 import { ChildProcess } from 'child_process'
-import { randomInt } from '../../core-utils/miscs/miscs'
-import { parallelTests } from '../server/servers'
+import { randomInt } from '@shared/core-utils'
+import { parallelTests } from '../miscs'
 
 const MailDev = require('maildev')
 

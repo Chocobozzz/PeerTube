@@ -227,7 +227,7 @@ describe('Test users with multiple servers', function () {
 
   it('Should not have video files', async () => {
     for (const server of servers) {
-      await checkVideoFilesWereRemoved(videoUUID, server.internalServerNumber)
+      await checkVideoFilesWereRemoved(videoUUID, server)
     }
   })
 

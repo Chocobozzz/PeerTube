@@ -1,3 +1,5 @@
-export * from './miscs'
+export * from './checks'
+export * from './generate'
 export * from './sql-command'
-export * from './stubs'
+export * from './tests'
+export * from './webtorrent'

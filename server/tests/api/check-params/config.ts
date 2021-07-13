@@ -1,22 +1,20 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { omit } from 'lodash'
 import 'mocha'
-import { CustomConfig } from '../../../../shared/models/server/custom-config.model'
-
+import { omit } from 'lodash'
+import { HttpStatusCode } from '@shared/core-utils'
 import {
   cleanupTests,
   createUser,
   flushAndRunServer,
-  immutableAssign,
   makeDeleteRequest,
   makeGetRequest,
   makePutBodyRequest,
   ServerInfo,
   setAccessTokensToServers,
   userLogin
-} from '../../../../shared/extra-utils'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+} from '@shared/extra-utils'
+import { CustomConfig } from '@shared/models'
 
 describe('Test config API validators', function () {
   const path = '/api/v1/config/custom'
@@ -265,11 +263,13 @@ describe('Test config API validators', function () {
     })
 
     it('Should fail with a bad default NSFW policy', async function () {
-      const newUpdateParams = immutableAssign(updateParams, {
+      const newUpdateParams = {
+        ...updateParams,
+
         instance: {
           defaultNSFWPolicy: 'hello'
         }
-      })
+      }
 
       await makePutBodyRequest({
         url: server.url,
@@ -282,13 +282,15 @@ describe('Test config API validators', function () {
 
     it('Should fail if email disabled and signup requires email verification', async function () {
       // opposite scenario - success when enable enabled - covered via tests/api/users/user-verification.ts
-      const newUpdateParams = immutableAssign(updateParams, {
+      const newUpdateParams = {
+        ...updateParams,
+
         signup: {
           enabled: true,
           limit: 5,
           requiresEmailVerification: true
         }
-      })
+      }
 
       await makePutBodyRequest({
         url: server.url,
@@ -300,7 +302,9 @@ describe('Test config API validators', function () {
     })
 
     it('Should fail with a disabled webtorrent & hls transcoding', async function () {
-      const newUpdateParams = immutableAssign(updateParams, {
+      const newUpdateParams = {
+        ...updateParams,
+
         transcoding: {
           hls: {
             enabled: false
@@ -309,7 +313,7 @@ describe('Test config API validators', function () {
             enabled: false
           }
         }
-      })
+      }
 
       await makePutBodyRequest({
         url: server.url,

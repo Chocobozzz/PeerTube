@@ -7,7 +7,6 @@ import { join } from 'path'
 import { buildUUID } from '@server/helpers/uuid'
 import { HttpStatusCode } from '@shared/core-utils'
 import {
-  buildServerDirectory,
   cleanupTests,
   CLICommand,
   doubleFollow,
@@ -26,14 +25,14 @@ import { VideoPlaylistPrivacy } from '@shared/models'
 
 const expect = chai.expect
 
-async function countFiles (internalServerNumber: number, directory: string) {
-  const files = await readdir(buildServerDirectory({ internalServerNumber }, directory))
+async function countFiles (server: ServerInfo, directory: string) {
+  const files = await readdir(server.serversCommand.buildDirectory(directory))
 
   return files.length
 }
 
-async function assertNotExists (internalServerNumber: number, directory: string, substring: string) {
-  const files = await readdir(buildServerDirectory({ internalServerNumber }, directory))
+async function assertNotExists (server: ServerInfo, directory: string, substring: string) {
+  const files = await readdir(server.serversCommand.buildDirectory(directory))
 
   for (const f of files) {
     expect(f).to.not.contain(substring)
@@ -42,19 +41,19 @@ async function assertNotExists (internalServerNumber: number, directory: string,
 
 async function assertCountAreOkay (servers: ServerInfo[]) {
   for (const server of servers) {
-    const videosCount = await countFiles(server.internalServerNumber, 'videos')
+    const videosCount = await countFiles(server, 'videos')
     expect(videosCount).to.equal(8)
 
-    const torrentsCount = await countFiles(server.internalServerNumber, 'torrents')
+    const torrentsCount = await countFiles(server, 'torrents')
     expect(torrentsCount).to.equal(16)
 
-    const previewsCount = await countFiles(server.internalServerNumber, 'previews')
+    const previewsCount = await countFiles(server, 'previews')
     expect(previewsCount).to.equal(2)
 
-    const thumbnailsCount = await countFiles(server.internalServerNumber, 'thumbnails')
+    const thumbnailsCount = await countFiles(server, 'thumbnails')
     expect(thumbnailsCount).to.equal(6)
 
-    const avatarsCount = await countFiles(server.internalServerNumber, 'avatars')
+    const avatarsCount = await countFiles(server, 'avatars')
     expect(avatarsCount).to.equal(2)
   }
 }
@@ -122,7 +121,7 @@ describe('Test prune storage scripts', function () {
   it('Should create some dirty files', async function () {
     for (let i = 0; i < 2; i++) {
       {
-        const base = buildServerDirectory(servers[0], 'videos')
+        const base = servers[0].serversCommand.buildDirectory('videos')
 
         const n1 = buildUUID() + '.mp4'
         const n2 = buildUUID() + '.webm'
@@ -134,7 +133,7 @@ describe('Test prune storage scripts', function () {
       }
 
       {
-        const base = buildServerDirectory(servers[0], 'torrents')
+        const base = servers[0].serversCommand.buildDirectory('torrents')
 
         const n1 = buildUUID() + '-240.torrent'
         const n2 = buildUUID() + '-480.torrent'
@@ -146,7 +145,7 @@ describe('Test prune storage scripts', function () {
       }
 
       {
-        const base = buildServerDirectory(servers[0], 'thumbnails')
+        const base = servers[0].serversCommand.buildDirectory('thumbnails')
 
         const n1 = buildUUID() + '.jpg'
         const n2 = buildUUID() + '.jpg'
@@ -158,7 +157,7 @@ describe('Test prune storage scripts', function () {
       }
 
       {
-        const base = buildServerDirectory(servers[0], 'previews')
+        const base = servers[0].serversCommand.buildDirectory('previews')
 
         const n1 = buildUUID() + '.jpg'
         const n2 = buildUUID() + '.jpg'
@@ -170,7 +169,7 @@ describe('Test prune storage scripts', function () {
       }
 
       {
-        const base = buildServerDirectory(servers[0], 'avatars')
+        const base = servers[0].serversCommand.buildDirectory('avatars')
 
         const n1 = buildUUID() + '.png'
         const n2 = buildUUID() + '.jpg'
@@ -195,7 +194,7 @@ describe('Test prune storage scripts', function () {
 
     for (const directory of Object.keys(badNames)) {
       for (const name of badNames[directory]) {
-        await assertNotExists(servers[0].internalServerNumber, directory, name)
+        await assertNotExists(servers[0], directory, name)
       }
     }
   })

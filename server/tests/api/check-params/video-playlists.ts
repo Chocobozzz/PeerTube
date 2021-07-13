@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
+import { HttpStatusCode } from '@shared/core-utils'
 import {
   VideoPlaylistCreate,
   VideoPlaylistCreateResult,
@@ -10,7 +11,6 @@ import {
   VideoPlaylistReorder,
   VideoPlaylistType
 } from '@shared/models'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import {
   checkBadCountPagination,
   checkBadSortPagination,
@@ -18,7 +18,6 @@ import {
   cleanupTests,
   flushAndRunServer,
   generateUserAccessToken,
-  immutableAssign,
   makeGetRequest,
   PlaylistsCommand,
   ServerInfo,
@@ -214,7 +213,7 @@ describe('Test video playlists API validator', function () {
       }
     }
     const getUpdate = (params: any, playlistId: number | string) => {
-      return immutableAssign(params, { playlistId: playlistId })
+      return { ...params, playlistId: playlistId }
     }
 
     it('Should fail with an unauthenticated user', async function () {

@@ -15,7 +15,6 @@ import {
   getMyUserVideoRating,
   getUserScopedTokens,
   getUsersList,
-  immutableAssign,
   killallServers,
   makeGetRequest,
   makePostBodyRequest,
@@ -181,25 +180,25 @@ describe('Test users API validators', function () {
     }
 
     it('Should fail with a too small username', async function () {
-      const fields = immutableAssign(baseCorrectParams, { username: '' })
+      const fields = { ...baseCorrectParams, username: '' }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should fail with a too long username', async function () {
-      const fields = immutableAssign(baseCorrectParams, { username: 'super'.repeat(50) })
+      const fields = { ...baseCorrectParams, username: 'super'.repeat(50) }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should fail with a not lowercase username', async function () {
-      const fields = immutableAssign(baseCorrectParams, { username: 'Toto' })
+      const fields = { ...baseCorrectParams, username: 'Toto' }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should fail with an incorrect username', async function () {
-      const fields = immutableAssign(baseCorrectParams, { username: 'my username' })
+      const fields = { ...baseCorrectParams, username: 'my username' }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
@@ -211,25 +210,25 @@ describe('Test users API validators', function () {
     })
 
     it('Should fail with an invalid email', async function () {
-      const fields = immutableAssign(baseCorrectParams, { email: 'test_example.com' })
+      const fields = { ...baseCorrectParams, email: 'test_example.com' }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should fail with a too small password', async function () {
-      const fields = immutableAssign(baseCorrectParams, { password: 'bla' })
+      const fields = { ...baseCorrectParams, password: 'bla' }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should fail with a too long password', async function () {
-      const fields = immutableAssign(baseCorrectParams, { password: 'super'.repeat(61) })
+      const fields = { ...baseCorrectParams, password: 'super'.repeat(61) }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should fail with empty password and no smtp configured', async function () {
-      const fields = immutableAssign(baseCorrectParams, { password: '' })
+      const fields = { ...baseCorrectParams, password: '' }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
@@ -239,19 +238,23 @@ describe('Test users API validators', function () {
 
       await killallServers([ server ])
 
-      const config = immutableAssign(overrideConfig, {
+      const config = {
+        ...overrideConfig,
+
         smtp: {
           hostname: 'localhost',
           port: emailPort
         }
-      })
+      }
       await reRunServer(server, config)
 
-      const fields = immutableAssign(baseCorrectParams, {
+      const fields = {
+        ...baseCorrectParams,
+
         password: '',
         username: 'create_password',
         email: 'create_password@example.com'
-      })
+      }
 
       await makePostBodyRequest({
         url: server.url,
@@ -263,7 +266,7 @@ describe('Test users API validators', function () {
     })
 
     it('Should fail with invalid admin flags', async function () {
-      const fields = immutableAssign(baseCorrectParams, { adminFlags: 'toto' })
+      const fields = { ...baseCorrectParams, adminFlags: 'toto' }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
@@ -279,7 +282,7 @@ describe('Test users API validators', function () {
     })
 
     it('Should fail if we add a user with the same username', async function () {
-      const fields = immutableAssign(baseCorrectParams, { username: 'user1' })
+      const fields = { ...baseCorrectParams, username: 'user1' }
 
       await makePostBodyRequest({
         url: server.url,
@@ -291,7 +294,7 @@ describe('Test users API validators', function () {
     })
 
     it('Should fail if we add a user with the same email', async function () {
-      const fields = immutableAssign(baseCorrectParams, { email: 'user1@example.com' })
+      const fields = { ...baseCorrectParams, email: 'user1@example.com' }
 
       await makePostBodyRequest({
         url: server.url,
@@ -315,13 +318,13 @@ describe('Test users API validators', function () {
     })
 
     it('Should fail with an invalid videoQuota', async function () {
-      const fields = immutableAssign(baseCorrectParams, { videoQuota: -5 })
+      const fields = { ...baseCorrectParams, videoQuota: -5 }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should fail with an invalid videoQuotaDaily', async function () {
-      const fields = immutableAssign(baseCorrectParams, { videoQuotaDaily: -7 })
+      const fields = { ...baseCorrectParams, videoQuotaDaily: -7 }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
@@ -333,13 +336,13 @@ describe('Test users API validators', function () {
     })
 
     it('Should fail with an invalid user role', async function () {
-      const fields = immutableAssign(baseCorrectParams, { role: 88989 })
+      const fields = { ...baseCorrectParams, role: 88989 }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should fail with a "peertube" username', async function () {
-      const fields = immutableAssign(baseCorrectParams, { username: 'peertube' })
+      const fields = { ...baseCorrectParams, username: 'peertube' }
 
       await makePostBodyRequest({
         url: server.url,
@@ -352,7 +355,7 @@ describe('Test users API validators', function () {
 
     it('Should fail to create a moderator or an admin with a moderator', async function () {
       for (const role of [ UserRole.MODERATOR, UserRole.ADMINISTRATOR ]) {
-        const fields = immutableAssign(baseCorrectParams, { role })
+        const fields = { ...baseCorrectParams, role }
 
         await makePostBodyRequest({
           url: server.url,
@@ -365,7 +368,7 @@ describe('Test users API validators', function () {
     })
 
     it('Should succeed to create a user with a moderator', async function () {
-      const fields = immutableAssign(baseCorrectParams, { username: 'a4656', email: 'a4656@example.com', role: UserRole.USER })
+      const fields = { ...baseCorrectParams, username: 'a4656', email: 'a4656@example.com', role: UserRole.USER }
 
       await makePostBodyRequest({
         url: server.url,
@@ -937,19 +940,19 @@ describe('Test users API validators', function () {
     }
 
     it('Should fail with a too small username', async function () {
-      const fields = immutableAssign(baseCorrectParams, { username: '' })
+      const fields = { ...baseCorrectParams, username: '' }
 
       await makePostBodyRequest({ url: server.url, path: registrationPath, token: server.accessToken, fields })
     })
 
     it('Should fail with a too long username', async function () {
-      const fields = immutableAssign(baseCorrectParams, { username: 'super'.repeat(50) })
+      const fields = { ...baseCorrectParams, username: 'super'.repeat(50) }
 
       await makePostBodyRequest({ url: server.url, path: registrationPath, token: server.accessToken, fields })
     })
 
     it('Should fail with an incorrect username', async function () {
-      const fields = immutableAssign(baseCorrectParams, { username: 'my username' })
+      const fields = { ...baseCorrectParams, username: 'my username' }
 
       await makePostBodyRequest({ url: server.url, path: registrationPath, token: server.accessToken, fields })
     })
@@ -961,25 +964,25 @@ describe('Test users API validators', function () {
     })
 
     it('Should fail with an invalid email', async function () {
-      const fields = immutableAssign(baseCorrectParams, { email: 'test_example.com' })
+      const fields = { ...baseCorrectParams, email: 'test_example.com' }
 
       await makePostBodyRequest({ url: server.url, path: registrationPath, token: server.accessToken, fields })
     })
 
     it('Should fail with a too small password', async function () {
-      const fields = immutableAssign(baseCorrectParams, { password: 'bla' })
+      const fields = { ...baseCorrectParams, password: 'bla' }
 
       await makePostBodyRequest({ url: server.url, path: registrationPath, token: server.accessToken, fields })
     })
 
     it('Should fail with a too long password', async function () {
-      const fields = immutableAssign(baseCorrectParams, { password: 'super'.repeat(61) })
+      const fields = { ...baseCorrectParams, password: 'super'.repeat(61) }
 
       await makePostBodyRequest({ url: server.url, path: registrationPath, token: server.accessToken, fields })
     })
 
     it('Should fail if we register a user with the same username', async function () {
-      const fields = immutableAssign(baseCorrectParams, { username: 'root' })
+      const fields = { ...baseCorrectParams, username: 'root' }
 
       await makePostBodyRequest({
         url: server.url,
@@ -991,7 +994,7 @@ describe('Test users API validators', function () {
     })
 
     it('Should fail with a "peertube" username', async function () {
-      const fields = immutableAssign(baseCorrectParams, { username: 'peertube' })
+      const fields = { ...baseCorrectParams, username: 'peertube' }
 
       await makePostBodyRequest({
         url: server.url,
@@ -1003,7 +1006,7 @@ describe('Test users API validators', function () {
     })
 
     it('Should fail if we register a user with the same email', async function () {
-      const fields = immutableAssign(baseCorrectParams, { email: 'admin' + server.internalServerNumber + '@example.com' })
+      const fields = { ...baseCorrectParams, email: 'admin' + server.internalServerNumber + '@example.com' }
 
       await makePostBodyRequest({
         url: server.url,
@@ -1015,26 +1018,26 @@ describe('Test users API validators', function () {
     })
 
     it('Should fail with a bad display name', async function () {
-      const fields = immutableAssign(baseCorrectParams, { displayName: 'a'.repeat(150) })
+      const fields = { ...baseCorrectParams, displayName: 'a'.repeat(150) }
 
       await makePostBodyRequest({ url: server.url, path: registrationPath, token: server.accessToken, fields })
     })
 
     it('Should fail with a bad channel name', async function () {
-      const fields = immutableAssign(baseCorrectParams, { channel: { name: '[]azf', displayName: 'toto' } })
+      const fields = { ...baseCorrectParams, channel: { name: '[]azf', displayName: 'toto' } }
 
       await makePostBodyRequest({ url: server.url, path: registrationPath, token: server.accessToken, fields })
     })
 
     it('Should fail with a bad channel display name', async function () {
-      const fields = immutableAssign(baseCorrectParams, { channel: { name: 'toto', displayName: '' } })
+      const fields = { ...baseCorrectParams, channel: { name: 'toto', displayName: '' } }
 
       await makePostBodyRequest({ url: server.url, path: registrationPath, token: server.accessToken, fields })
     })
 
     it('Should fail with a channel name that is the same as username', async function () {
       const source = { username: 'super_user', channel: { name: 'super_user', displayName: 'display name' } }
-      const fields = immutableAssign(baseCorrectParams, source)
+      const fields = { ...baseCorrectParams, ...source }
 
       await makePostBodyRequest({ url: server.url, path: registrationPath, token: server.accessToken, fields })
     })
@@ -1043,7 +1046,7 @@ describe('Test users API validators', function () {
       const attributes = { name: 'existing_channel', displayName: 'hello', description: 'super description' }
       await server.channelsCommand.create({ attributes })
 
-      const fields = immutableAssign(baseCorrectParams, { channel: { name: 'existing_channel', displayName: 'toto' } })
+      const fields = { ...baseCorrectParams, channel: { name: 'existing_channel', displayName: 'toto' } }
 
       await makePostBodyRequest({
         url: server.url,
@@ -1055,7 +1058,7 @@ describe('Test users API validators', function () {
     })
 
     it('Should succeed with the correct params', async function () {
-      const fields = immutableAssign(baseCorrectParams, { channel: { name: 'super_channel', displayName: 'toto' } })
+      const fields = { ...baseCorrectParams, channel: { name: 'super_channel', displayName: 'toto' } }
 
       await makePostBodyRequest({
         url: server.url,

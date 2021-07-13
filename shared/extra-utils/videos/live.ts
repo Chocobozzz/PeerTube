@@ -4,7 +4,7 @@ import { expect } from 'chai'
 import * as ffmpeg from 'fluent-ffmpeg'
 import { pathExists, readdir } from 'fs-extra'
 import { join } from 'path'
-import { buildAbsoluteFixturePath, buildServerDirectory, wait } from '../miscs/miscs'
+import { buildAbsoluteFixturePath, wait } from '../miscs'
 import { ServerInfo } from '../server/servers'
 
 function sendRTMPStream (rtmpBaseUrl: string, streamKey: string, fixtureName = 'video_short.mp4') {
@@ -77,7 +77,7 @@ async function waitUntilLivePublishedOnAllServers (servers: ServerInfo[], videoI
 }
 
 async function checkLiveCleanup (server: ServerInfo, videoUUID: string, resolutions: number[] = []) {
-  const basePath = buildServerDirectory(server, 'streaming-playlists')
+  const basePath = server.serversCommand.buildDirectory('streaming-playlists')
   const hlsPath = join(basePath, 'hls', videoUUID)
 
   if (resolutions.length === 0) {

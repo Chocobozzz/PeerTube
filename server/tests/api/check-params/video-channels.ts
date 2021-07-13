@@ -3,14 +3,16 @@
 import 'mocha'
 import * as chai from 'chai'
 import { omit } from 'lodash'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '@shared/core-utils'
 import {
   buildAbsoluteFixturePath,
   ChannelsCommand,
+  checkBadCountPagination,
+  checkBadSortPagination,
+  checkBadStartPagination,
   cleanupTests,
   createUser,
   flushAndRunServer,
-  immutableAssign,
   makeGetRequest,
   makePostBodyRequest,
   makePutBodyRequest,
@@ -18,13 +20,8 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   userLogin
-} from '../../../../shared/extra-utils'
-import {
-  checkBadCountPagination,
-  checkBadSortPagination,
-  checkBadStartPagination
-} from '../../../../shared/extra-utils/requests/check-api-params'
-import { VideoChannelUpdate } from '../../../../shared/models/videos'
+} from '@shared/extra-utils'
+import { VideoChannelUpdate } from '@shared/models'
 
 const expect = chai.expect
 
@@ -127,7 +124,7 @@ describe('Test video channels API validator', function () {
     })
 
     it('Should fail with a bad name', async function () {
-      const fields = immutableAssign(baseCorrectParams, { name: 'super name' })
+      const fields = { ...baseCorrectParams, name: 'super name' }
       await makePostBodyRequest({ url: server.url, path: videoChannelPath, token: server.accessToken, fields })
     })
 
@@ -137,17 +134,17 @@ describe('Test video channels API validator', function () {
     })
 
     it('Should fail with a long name', async function () {
-      const fields = immutableAssign(baseCorrectParams, { displayName: 'super'.repeat(25) })
+      const fields = { ...baseCorrectParams, displayName: 'super'.repeat(25) }
       await makePostBodyRequest({ url: server.url, path: videoChannelPath, token: server.accessToken, fields })
     })
 
     it('Should fail with a long description', async function () {
-      const fields = immutableAssign(baseCorrectParams, { description: 'super'.repeat(201) })
+      const fields = { ...baseCorrectParams, description: 'super'.repeat(201) }
       await makePostBodyRequest({ url: server.url, path: videoChannelPath, token: server.accessToken, fields })
     })
 
     it('Should fail with a long support text', async function () {
-      const fields = immutableAssign(baseCorrectParams, { support: 'super'.repeat(201) })
+      const fields = { ...baseCorrectParams, support: 'super'.repeat(201) }
       await makePostBodyRequest({ url: server.url, path: videoChannelPath, token: server.accessToken, fields })
     })
 
@@ -206,22 +203,22 @@ describe('Test video channels API validator', function () {
     })
 
     it('Should fail with a long name', async function () {
-      const fields = immutableAssign(baseCorrectParams, { displayName: 'super'.repeat(25) })
+      const fields = { ...baseCorrectParams, displayName: 'super'.repeat(25) }
       await makePutBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should fail with a long description', async function () {
-      const fields = immutableAssign(baseCorrectParams, { description: 'super'.repeat(201) })
+      const fields = { ...baseCorrectParams, description: 'super'.repeat(201) }
       await makePutBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should fail with a long support text', async function () {
-      const fields = immutableAssign(baseCorrectParams, { support: 'super'.repeat(201) })
+      const fields = { ...baseCorrectParams, support: 'super'.repeat(201) }
       await makePutBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should fail with a bad bulkVideosSupportUpdate field', async function () {
-      const fields = immutableAssign(baseCorrectParams, { bulkVideosSupportUpdate: 'super' })
+      const fields = { ...baseCorrectParams, bulkVideosSupportUpdate: 'super' }
       await makePutBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 

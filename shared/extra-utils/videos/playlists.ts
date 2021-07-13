@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import { readdir } from 'fs-extra'
 import { join } from 'path'
-import { root } from '../'
+import { root } from '../miscs'
 
 async function checkPlaylistFilesWereRemoved (
   playlistUUID: string,

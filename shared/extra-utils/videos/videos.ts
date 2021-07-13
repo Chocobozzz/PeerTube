@@ -13,15 +13,7 @@ import { HttpStatusCode } from '@shared/core-utils'
 import { BooleanBothQuery, VideosCommonQuery } from '@shared/models'
 import { loadLanguages, VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_PRIVACIES } from '../../../server/initializers/constants'
 import { VideoDetails, VideoPrivacy } from '../../models/videos'
-import {
-  buildAbsoluteFixturePath,
-  buildServerDirectory,
-  dateIsValid,
-  immutableAssign,
-  testImage,
-  wait,
-  webtorrentAdd
-} from '../miscs/miscs'
+import { buildAbsoluteFixturePath, dateIsValid, testImage, wait, webtorrentAdd } from '../miscs'
 import { makeGetRequest, makePutBodyRequest, makeRawRequest, makeUploadRequest } from '../requests/requests'
 import { waitJobs } from '../server/jobs'
 import { ServerInfo } from '../server/servers'
@@ -165,7 +157,7 @@ function getVideosListWithToken (url: string, token: string, query: { nsfw?: Boo
   return request(url)
     .get(path)
     .set('Authorization', 'Bearer ' + token)
-    .query(immutableAssign(query, { sort: 'name' }))
+    .query({ sort: 'name', ...query })
     .set('Accept', 'application/json')
     .expect(HttpStatusCode.OK_200)
     .expect('Content-Type', /json/)
@@ -228,11 +220,7 @@ function getAccountVideos (
   return makeGetRequest({
     url,
     path,
-    query: immutableAssign(query, {
-      start,
-      count,
-      sort
-    }),
+    query: { ...query, start, count, sort },
     token: accessToken,
     statusCodeExpected: HttpStatusCode.OK_200
   })
@@ -252,11 +240,7 @@ function getVideoChannelVideos (
   return makeGetRequest({
     url,
     path,
-    query: immutableAssign(query, {
-      start,
-      count,
-      sort
-    }),
+    query: { ...query, start, count, sort },
     token: accessToken,
     statusCodeExpected: HttpStatusCode.OK_200
   })
@@ -320,7 +304,7 @@ async function removeAllVideos (server: ServerInfo) {
 
 async function checkVideoFilesWereRemoved (
   videoUUID: string,
-  serverNumber: number,
+  server: ServerInfo,
   directories = [
     'redundancy',
     'videos',
@@ -333,7 +317,7 @@ async function checkVideoFilesWereRemoved (
   ]
 ) {
   for (const directory of directories) {
-    const directoryPath = buildServerDirectory({ internalServerNumber: serverNumber }, directory)
+    const directoryPath = server.serversCommand.buildDirectory(directory)
 
     const directoryExists = await pathExists(directoryPath)
     if (directoryExists === false) continue
@@ -607,7 +591,7 @@ function rateVideo (url: string, accessToken: string, id: number | string, ratin
 function parseTorrentVideo (server: ServerInfo, videoUUID: string, resolution: number) {
   return new Promise<any>((res, rej) => {
     const torrentName = videoUUID + '-' + resolution + '.torrent'
-    const torrentPath = buildServerDirectory(server, join('torrents', torrentName))
+    const torrentPath = server.serversCommand.buildDirectory(join('torrents', torrentName))
 
     readFile(torrentPath, (err, data) => {
       if (err) return rej(err)

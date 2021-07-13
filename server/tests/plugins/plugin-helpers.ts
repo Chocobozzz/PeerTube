@@ -17,8 +17,7 @@ import {
   setAccessTokensToServers,
   uploadVideoAndGetId,
   viewVideo,
-  waitJobs,
-  waitUntilLog
+  waitJobs
 } from '@shared/extra-utils'
 
 function postCommand (server: ServerInfo, command: string, bodyArg?: object) {
@@ -50,22 +49,22 @@ describe('Test plugin helpers', function () {
   describe('Logger', function () {
 
     it('Should have logged things', async function () {
-      await waitUntilLog(servers[0], 'localhost:' + servers[0].port + ' peertube-plugin-test-four', 1, false)
-      await waitUntilLog(servers[0], 'Hello world from plugin four', 1)
+      await servers[0].serversCommand.waitUntilLog('localhost:' + servers[0].port + ' peertube-plugin-test-four', 1, false)
+      await servers[0].serversCommand.waitUntilLog('Hello world from plugin four', 1)
     })
   })
 
   describe('Database', function () {
 
     it('Should have made a query', async function () {
-      await waitUntilLog(servers[0], `root email is admin${servers[0].internalServerNumber}@example.com`)
+      await servers[0].serversCommand.waitUntilLog(`root email is admin${servers[0].internalServerNumber}@example.com`)
     })
   })
 
   describe('Config', function () {
 
     it('Should have the correct webserver url', async function () {
-      await waitUntilLog(servers[0], `server url is http://localhost:${servers[0].port}`)
+      await servers[0].serversCommand.waitUntilLog(`server url is http://localhost:${servers[0].port}`)
     })
 
     it('Should have the correct config', async function () {
@@ -83,7 +82,7 @@ describe('Test plugin helpers', function () {
   describe('Server', function () {
 
     it('Should get the server actor', async function () {
-      await waitUntilLog(servers[0], 'server actor name is peertube')
+      await servers[0].serversCommand.waitUntilLog('server actor name is peertube')
     })
   })
 
@@ -248,7 +247,7 @@ describe('Test plugin helpers', function () {
       // Should delete the video
       await viewVideo(servers[0].url, videoUUID)
 
-      await waitUntilLog(servers[0], 'Video deleted by plugin four.')
+      await servers[0].serversCommand.waitUntilLog('Video deleted by plugin four.')
 
       try {
         // Should throw because the video should have been deleted
@@ -258,11 +257,11 @@ describe('Test plugin helpers', function () {
         if (err.message.includes('exists')) throw err
       }
 
-      await checkVideoFilesWereRemoved(videoUUID, servers[0].internalServerNumber)
+      await checkVideoFilesWereRemoved(videoUUID, servers[0])
     })
 
     it('Should have fetched the video by URL', async function () {
-      await waitUntilLog(servers[0], `video from DB uuid is ${videoUUID}`)
+      await servers[0].serversCommand.waitUntilLog(`video from DB uuid is ${videoUUID}`)
     })
   })
 

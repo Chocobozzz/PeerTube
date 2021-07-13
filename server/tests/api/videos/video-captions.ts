@@ -182,7 +182,7 @@ describe('Test video captions', function () {
   it('Should remove the video, and thus all video captions', async function () {
     await removeVideo(servers[0].url, servers[0].accessToken, videoUUID)
 
-    await checkVideoFilesWereRemoved(videoUUID, 1)
+    await checkVideoFilesWereRemoved(videoUUID, servers[0])
   })
 
   after(async function () {

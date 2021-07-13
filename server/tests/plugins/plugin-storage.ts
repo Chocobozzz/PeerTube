@@ -5,16 +5,7 @@ import { expect } from 'chai'
 import { pathExists, readdir, readFile } from 'fs-extra'
 import { join } from 'path'
 import { HttpStatusCode } from '@shared/core-utils'
-import {
-  buildServerDirectory,
-  cleanupTests,
-  flushAndRunServer,
-  makeGetRequest,
-  PluginsCommand,
-  ServerInfo,
-  setAccessTokensToServers,
-  waitUntilLog
-} from '@shared/extra-utils'
+import { cleanupTests, flushAndRunServer, makeGetRequest, PluginsCommand, ServerInfo, setAccessTokensToServers } from '@shared/extra-utils'
 
 describe('Test plugin storage', function () {
   let server: ServerInfo
@@ -31,7 +22,7 @@ describe('Test plugin storage', function () {
   describe('DB storage', function () {
 
     it('Should correctly store a subkey', async function () {
-      await waitUntilLog(server, 'superkey stored value is toto')
+      await server.serversCommand.waitUntilLog('superkey stored value is toto')
     })
   })
 
@@ -47,12 +38,12 @@ describe('Test plugin storage', function () {
     }
 
     before(function () {
-      dataPath = buildServerDirectory(server, 'plugins/data')
+      dataPath = server.serversCommand.buildDirectory('plugins/data')
       pluginDataPath = join(dataPath, 'peertube-plugin-test-six')
     })
 
     it('Should have created the directory on install', async function () {
-      const dataPath = buildServerDirectory(server, 'plugins/data')
+      const dataPath = server.serversCommand.buildDirectory('plugins/data')
       const pluginDataPath = join(dataPath, 'peertube-plugin-test-six')
 
       expect(await pathExists(dataPath)).to.be.true
