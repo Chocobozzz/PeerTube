@@ -17,7 +17,6 @@ import {
   setAccessTokensToServers,
   uploadVideo,
   uploadVideoAndGetId,
-  userLogin,
   waitJobs
 } from '@shared/extra-utils'
 import { User, VideoPrivacy } from '@shared/models'
@@ -64,7 +63,7 @@ describe('Test syndication feeds', () => {
     {
       const attr = { username: 'john', password: 'password' }
       await createUser({ url: servers[0].url, accessToken: servers[0].accessToken, username: attr.username, password: attr.password })
-      userAccessToken = await userLogin(servers[0], attr)
+      userAccessToken = await servers[0].loginCommand.getAccessToken(attr)
 
       const res = await getMyUserInformation(servers[0].url, userAccessToken)
       const user: User = res.body
@@ -301,7 +300,7 @@ describe('Test syndication feeds', () => {
     it('Should list no videos for a user with no videos and no subscriptions', async function () {
       const attr = { username: 'feeduser', password: 'password' }
       await createUser({ url: servers[0].url, accessToken: servers[0].accessToken, username: attr.username, password: attr.password })
-      const feeduserAccessToken = await userLogin(servers[0], attr)
+      const feeduserAccessToken = await servers[0].loginCommand.getAccessToken(attr)
 
       {
         const res = await getMyUserInformation(servers[0].url, feeduserAccessToken)

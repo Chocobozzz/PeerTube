@@ -11,7 +11,6 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo,
-  userLogin,
   waitJobs
 } from '../../../../shared/extra-utils'
 import { Video } from '../../../../shared/models/videos'
@@ -36,7 +35,7 @@ describe('Test ActivityPub fetcher', function () {
       await createUser({ url: server.url, accessToken: server.accessToken, username: user.username, password: user.password })
     }
 
-    const userAccessToken = await userLogin(servers[0], user)
+    const userAccessToken = await servers[0].loginCommand.getAccessToken(user)
 
     await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'video root' })
     const res = await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'bad video root' })

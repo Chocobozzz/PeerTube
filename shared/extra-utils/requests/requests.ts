@@ -27,6 +27,7 @@ function makeGetRequest (options: {
   range?: string
   redirects?: number
   accept?: string
+  host?: string
 }) {
   if (!options.statusCodeExpected) options.statusCodeExpected = HttpStatusCode.BAD_REQUEST_400
   if (options.contentType === undefined) options.contentType = 'application/json'
@@ -38,6 +39,7 @@ function makeGetRequest (options: {
   if (options.query) req.query(options.query)
   if (options.range) req.set('Range', options.range)
   if (options.accept) req.set('Accept', options.accept)
+  if (options.host) req.set('Host', options.host)
   if (options.redirects) req.redirects(options.redirects)
 
   return req.expect(options.statusCodeExpected)
@@ -113,6 +115,7 @@ function makePostBodyRequest (options: {
   path: string
   token?: string
   fields?: { [ fieldName: string ]: any }
+  type?: string
   statusCodeExpected?: HttpStatusCode
 }) {
   if (!options.fields) options.fields = {}
@@ -123,6 +126,7 @@ function makePostBodyRequest (options: {
                 .set('Accept', 'application/json')
 
   if (options.token) req.set('Authorization', 'Bearer ' + options.token)
+  if (options.type) req.type(options.type)
 
   return req.send(options.fields)
             .expect(options.statusCodeExpected)

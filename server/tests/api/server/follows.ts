@@ -16,7 +16,6 @@ import {
   setAccessTokensToServers,
   testCaptionFile,
   uploadVideo,
-  userLogin,
   waitJobs
 } from '@shared/extra-utils'
 import { Video, VideoPrivacy } from '@shared/models'
@@ -330,7 +329,7 @@ describe('Test follows', function () {
       {
         const user = { username: 'captain', password: 'password' }
         await createUser({ url: servers[2].url, accessToken: servers[2].accessToken, username: user.username, password: user.password })
-        const userAccessToken = await userLogin(servers[2], user)
+        const userAccessToken = await servers[2].loginCommand.getAccessToken(user)
 
         const resVideos = await getVideosList(servers[2].url)
         video4 = resVideos.body.data.find(v => v.name === 'server3-4')

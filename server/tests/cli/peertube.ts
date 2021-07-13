@@ -21,7 +21,6 @@ import {
   setAccessTokensToServers,
   testHelloWorldRegisteredSettings,
   uploadVideoAndGetId,
-  userLogin,
   waitJobs
 } from '../../../shared/extra-utils'
 
@@ -41,7 +40,7 @@ describe('Test CLI wrapper', function () {
 
     await createUser({ url: server.url, accessToken: server.accessToken, username: 'user_1', password: 'super_password' })
 
-    userAccessToken = await userLogin(server, { username: 'user_1', password: 'super_password' })
+    userAccessToken = await server.loginCommand.getAccessToken({ username: 'user_1', password: 'super_password' })
 
     {
       const attributes = { name: 'user_channel', displayName: 'User channel', support: 'super support text' }

@@ -1,14 +1,5 @@
 import 'mocha'
-import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
-import {
-  cleanupTests,
-  CLICommand,
-  createUser,
-  flushAndRunServer,
-  login,
-  ServerInfo,
-  setAccessTokensToServers
-} from '../../../shared/extra-utils'
+import { cleanupTests, CLICommand, createUser, flushAndRunServer, ServerInfo, setAccessTokensToServers } from '../../../shared/extra-utils'
 
 describe('Test reset password scripts', function () {
   let server: ServerInfo
@@ -27,7 +18,7 @@ describe('Test reset password scripts', function () {
     const env = server.cliCommand.getEnv()
     await CLICommand.exec(`echo coucou | ${env} npm run reset-password -- -u user_1`)
 
-    await login(server.url, server.client, { username: 'user_1', password: 'coucou' }, HttpStatusCode.OK_200)
+    await server.loginCommand.login({ user: { username: 'user_1', password: 'coucou' } })
   })
 
   after(async function () {

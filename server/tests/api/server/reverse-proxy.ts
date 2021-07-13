@@ -1,12 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
-import { cleanupTests, getVideo, registerUser, uploadVideo, userLogin, viewVideo, wait } from '../../../../shared/extra-utils'
-import { flushAndRunServer, setAccessTokensToServers } from '../../../../shared/extra-utils/index'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
-
-const expect = chai.expect
+import { expect } from 'chai'
+import { HttpStatusCode } from '@shared/core-utils'
+import {
+  cleanupTests,
+  flushAndRunServer,
+  getVideo,
+  registerUser,
+  setAccessTokensToServers,
+  uploadVideo,
+  viewVideo,
+  wait
+} from '@shared/extra-utils'
 
 describe('Test application behind a reverse proxy', function () {
   let server = null
@@ -97,10 +102,10 @@ describe('Test application behind a reverse proxy', function () {
     const user = { username: 'root', password: 'fail' }
 
     for (let i = 0; i < 19; i++) {
-      await userLogin(server, user, HttpStatusCode.BAD_REQUEST_400)
+      await server.loginCommand.getAccessToken(user, HttpStatusCode.BAD_REQUEST_400)
     }
 
-    await userLogin(server, user, HttpStatusCode.TOO_MANY_REQUESTS_429)
+    await server.loginCommand.getAccessToken(user, HttpStatusCode.TOO_MANY_REQUESTS_429)
   })
 
   it('Should rate limit signup', async function () {

@@ -27,8 +27,7 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   unblockUser,
-  uploadVideo,
-  userLogin
+  uploadVideo
 } from '../../../../shared/extra-utils'
 import { MockSmtpServer } from '../../../../shared/extra-utils/mock-servers/mock-email'
 import {
@@ -87,7 +86,7 @@ describe('Test users API validators', function () {
         password: user.password,
         videoQuota: videoQuota
       })
-      userAccessToken = await userLogin(server, user)
+      userAccessToken = await server.loginCommand.getAccessToken(user)
     }
 
     {
@@ -104,7 +103,7 @@ describe('Test users API validators', function () {
         role: UserRole.MODERATOR
       })
 
-      moderatorAccessToken = await userLogin(server, moderator)
+      moderatorAccessToken = await server.loginCommand.getAccessToken(moderator)
     }
 
     {
@@ -394,7 +393,7 @@ describe('Test users API validators', function () {
         username: 'user1',
         password: 'my super password'
       }
-      userAccessToken = await userLogin(server, user)
+      userAccessToken = await server.loginCommand.getAccessToken(user)
 
       const fields = {
         username: 'user3',

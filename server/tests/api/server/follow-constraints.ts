@@ -15,8 +15,7 @@ import {
   getVideoWithToken,
   ServerInfo,
   setAccessTokensToServers,
-  uploadVideo,
-  userLogin
+  uploadVideo
 } from '../../../../shared/extra-utils'
 
 const expect = chai.expect
@@ -49,7 +48,7 @@ describe('Test follow constraints', function () {
       password: 'super_password'
     }
     await createUser({ url: servers[0].url, accessToken: servers[0].accessToken, username: user.username, password: user.password })
-    userAccessToken = await userLogin(servers[0], user)
+    userAccessToken = await servers[0].loginCommand.getAccessToken(user)
 
     await doubleFollow(servers[0], servers[1])
   })

@@ -2,23 +2,24 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
-import { Video, VideoCreateResult } from '@shared/models'
+import { HttpStatusCode } from '@shared/core-utils'
 import {
   cleanupTests,
+  createUser,
+  doubleFollow,
   flushAndRunServer,
+  getMyVideos,
+  getVideo,
   getVideosList,
   getVideosListWithToken,
+  getVideoWithToken,
   ServerInfo,
   setAccessTokensToServers,
-  uploadVideo
-} from '../../../../shared/extra-utils/index'
-import { doubleFollow } from '../../../../shared/extra-utils/server/follows'
-import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
-import { userLogin } from '../../../../shared/extra-utils/users/login'
-import { createUser } from '../../../../shared/extra-utils/users/users'
-import { getMyVideos, getVideo, getVideoWithToken, updateVideo } from '../../../../shared/extra-utils/videos/videos'
-import { VideoPrivacy } from '../../../../shared/models/videos/video-privacy.enum'
+  updateVideo,
+  uploadVideo,
+  waitJobs
+} from '@shared/extra-utils'
+import { Video, VideoCreateResult, VideoPrivacy } from '@shared/models'
 
 const expect = chai.expect
 
@@ -126,7 +127,7 @@ describe('Test video privacy', function () {
       }
       await createUser({ url: servers[0].url, accessToken: servers[0].accessToken, username: user.username, password: user.password })
 
-      anotherUserToken = await userLogin(servers[0], user)
+      anotherUserToken = await servers[0].loginCommand.getAccessToken(user)
       await getVideoWithToken(servers[0].url, anotherUserToken, privateVideoUUID, HttpStatusCode.FORBIDDEN_403)
     })
 

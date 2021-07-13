@@ -7,7 +7,6 @@ import { UserRegister } from '../../models/users/user-register.model'
 import { UserRole } from '../../models/users/user-role'
 import { makeGetRequest, makePostBodyRequest, makePutBodyRequest, updateImageRequest } from '../requests/requests'
 import { ServerInfo } from '../server/servers'
-import { userLogin } from './login'
 
 function createUser (parameters: {
   url: string
@@ -55,7 +54,7 @@ async function generateUser (server: ServerInfo, username: string) {
   const password = 'my super password'
   const resCreate = await createUser({ url: server.url, accessToken: server.accessToken, username: username, password: password })
 
-  const token = await userLogin(server, { username, password })
+  const token = await server.loginCommand.getAccessToken({ username, password })
 
   const resMe = await getMyUserInformation(server.url, token)
 
@@ -70,7 +69,7 @@ async function generateUserAccessToken (server: ServerInfo, username: string) {
   const password = 'my super password'
   await createUser({ url: server.url, accessToken: server.accessToken, username: username, password: password })
 
-  return userLogin(server, { username, password })
+  return server.loginCommand.getAccessToken({ username, password })
 }
 
 function registerUser (url: string, username: string, password: string, specialStatus = HttpStatusCode.NO_CONTENT_204) {

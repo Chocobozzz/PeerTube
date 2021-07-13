@@ -15,8 +15,7 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   updateMyUser,
-  uploadVideo,
-  userLogin
+  uploadVideo
 } from '@shared/extra-utils'
 import { BooleanBothQuery, CustomConfig, ResultList, User, Video, VideosOverview } from '@shared/models'
 
@@ -151,7 +150,7 @@ describe('Test video NSFW policy', function () {
       const password = 'my super password'
       await createUser({ url: server.url, accessToken: server.accessToken, username: username, password: password })
 
-      userAccessToken = await userLogin(server, { username, password })
+      userAccessToken = await server.loginCommand.getAccessToken({ username, password })
 
       const res = await getMyUserInformation(server.url, userAccessToken)
       const user = res.body

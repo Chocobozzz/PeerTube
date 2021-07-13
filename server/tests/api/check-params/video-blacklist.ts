@@ -19,7 +19,6 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo,
-  userLogin,
   waitJobs
 } from '@shared/extra-utils'
 import { VideoBlacklistType, VideoDetails } from '@shared/models'
@@ -46,14 +45,14 @@ describe('Test video blacklist API validators', function () {
       const username = 'user1'
       const password = 'my super password'
       await createUser({ url: servers[0].url, accessToken: servers[0].accessToken, username: username, password: password })
-      userAccessToken1 = await userLogin(servers[0], { username, password })
+      userAccessToken1 = await servers[0].loginCommand.getAccessToken({ username, password })
     }
 
     {
       const username = 'user2'
       const password = 'my super password'
       await createUser({ url: servers[0].url, accessToken: servers[0].accessToken, username: username, password: password })
-      userAccessToken2 = await userLogin(servers[0], { username, password })
+      userAccessToken2 = await servers[0].loginCommand.getAccessToken({ username, password })
     }
 
     {

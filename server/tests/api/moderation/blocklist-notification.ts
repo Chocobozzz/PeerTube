@@ -10,7 +10,6 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo,
-  userLogin,
   waitJobs
 } from '@shared/extra-utils'
 import { UserNotificationType } from '@shared/models'
@@ -86,7 +85,7 @@ describe('Test blocklist', function () {
         videoQuotaDaily: -1
       })
 
-      userToken1 = await userLogin(servers[0], user)
+      userToken1 = await servers[0].loginCommand.getAccessToken(user)
       await uploadVideo(servers[0].url, userToken1, { name: 'video user 1' })
     }
 
@@ -94,14 +93,14 @@ describe('Test blocklist', function () {
       const user = { username: 'user2', password: 'password' }
       await createUser({ url: servers[0].url, accessToken: servers[0].accessToken, username: user.username, password: user.password })
 
-      userToken2 = await userLogin(servers[0], user)
+      userToken2 = await servers[0].loginCommand.getAccessToken(user)
     }
 
     {
       const user = { username: 'user3', password: 'password' }
       await createUser({ url: servers[1].url, accessToken: servers[1].accessToken, username: user.username, password: user.password })
 
-      remoteUserToken = await userLogin(servers[1], user)
+      remoteUserToken = await servers[1].loginCommand.getAccessToken(user)
     }
 
     await doubleFollow(servers[0], servers[1])

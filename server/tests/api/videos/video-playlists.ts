@@ -10,7 +10,6 @@ import {
   doubleFollow,
   flushAndRunMultipleServers,
   generateUserAccessToken,
-  getAccessToken,
   getMyUserInformation,
   PlaylistsCommand,
   removeUser,
@@ -21,7 +20,6 @@ import {
   updateVideo,
   uploadVideo,
   uploadVideoAndGetId,
-  userLogin,
   wait,
   waitJobs
 } from '@shared/extra-utils'
@@ -122,7 +120,7 @@ describe('Test video playlists', function () {
         username: 'user1',
         password: 'password'
       })
-      userTokenServer1 = await getAccessToken(servers[0].url, 'user1', 'password')
+      userTokenServer1 = await servers[0].loginCommand.getAccessToken('user1', 'password')
     }
 
     await waitJobs(servers)
@@ -1129,7 +1127,7 @@ describe('Test video playlists', function () {
       })
 
       const userId = res.body.user.id
-      const userAccessToken = await userLogin(servers[0], user)
+      const userAccessToken = await servers[0].loginCommand.getAccessToken(user)
 
       const resChannel = await getMyUserInformation(servers[0].url, userAccessToken)
       const userChannel = (resChannel.body as User).videoChannels[0]

@@ -19,7 +19,6 @@ import {
   setAccessTokensToServers,
   updateVideo,
   uploadVideo,
-  userLogin,
   waitJobs
 } from '@shared/extra-utils'
 import { User, UserAdminFlag, UserRole, VideoBlacklist, VideoBlacklistType } from '@shared/models'
@@ -366,7 +365,7 @@ describe('Test video blacklist', function () {
           role: UserRole.USER
         })
 
-        userWithoutFlag = await userLogin(servers[0], user)
+        userWithoutFlag = await servers[0].loginCommand.getAccessToken(user)
 
         const res = await getMyUserInformation(servers[0].url, userWithoutFlag)
         const body: User = res.body
@@ -384,7 +383,7 @@ describe('Test video blacklist', function () {
           role: UserRole.USER
         })
 
-        userWithFlag = await userLogin(servers[0], user)
+        userWithFlag = await servers[0].loginCommand.getAccessToken(user)
       }
 
       await waitJobs(servers)

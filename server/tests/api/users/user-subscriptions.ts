@@ -13,7 +13,6 @@ import {
   SubscriptionsCommand,
   updateVideo,
   uploadVideo,
-  userLogin,
   waitJobs
 } from '@shared/extra-utils'
 
@@ -42,7 +41,7 @@ describe('Test users subscriptions', function () {
         const user = { username: 'user' + server.serverNumber, password: 'password' }
         await createUser({ url: server.url, accessToken: server.accessToken, username: user.username, password: user.password })
 
-        const accessToken = await userLogin(server, user)
+        const accessToken = await server.loginCommand.getAccessToken(user)
         users.push({ accessToken })
 
         const videoName1 = 'video 1-' + server.serverNumber

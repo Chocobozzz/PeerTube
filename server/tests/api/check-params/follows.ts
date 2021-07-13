@@ -9,8 +9,7 @@ import {
   makeDeleteRequest, makeGetRequest,
   makePostBodyRequest,
   ServerInfo,
-  setAccessTokensToServers,
-  userLogin
+  setAccessTokensToServers
 } from '../../../../shared/extra-utils'
 import {
   checkBadCountPagination,
@@ -42,7 +41,7 @@ describe('Test server follows API validators', function () {
       }
 
       await createUser({ url: server.url, accessToken: server.accessToken, username: user.username, password: user.password })
-      userAccessToken = await userLogin(server, user)
+      userAccessToken = await server.loginCommand.getAccessToken(user)
     })
 
     describe('When adding follows', function () {

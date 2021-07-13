@@ -22,8 +22,7 @@ import {
   removeVideo,
   root,
   ServerInfo,
-  setAccessTokensToServers,
-  userLogin
+  setAccessTokensToServers
 } from '../../../../shared/extra-utils'
 import {
   checkBadCountPagination,
@@ -55,7 +54,7 @@ describe('Test videos API validator', function () {
     const username = 'user1'
     const password = 'my super password'
     await createUser({ url: server.url, accessToken: server.accessToken, username: username, password: password })
-    userAccessToken = await userLogin(server, { username, password })
+    userAccessToken = await server.loginCommand.getAccessToken({ username, password })
 
     {
       const res = await getMyUserInformation(server.url, server.accessToken)
@@ -286,7 +285,7 @@ describe('Test videos API validator', function () {
         }
         await createUser({ url: server.url, accessToken: server.accessToken, username: user.username, password: user.password })
 
-        const accessTokenUser = await userLogin(server, user)
+        const accessTokenUser = await server.loginCommand.getAccessToken(user)
         const res = await getMyUserInformation(server.url, accessTokenUser)
         const customChannelId = res.body.videoChannels[0].id
 

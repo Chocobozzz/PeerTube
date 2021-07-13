@@ -2,19 +2,16 @@
 
 import 'mocha'
 import { expect } from 'chai'
+import { HttpStatusCode } from '@shared/core-utils'
 import {
   cleanupTests,
   flushAndRunServer,
   getMyUserInformation,
   getUsersList,
-  login,
-  logout,
   PluginsCommand,
-  refreshToken,
   ServerInfo,
   setAccessTokensToServers,
   updateMyUser,
-  userLogin,
   wait
 } from '@shared/extra-utils'
 import { User, UserRole } from '@shared/models'
@@ -52,11 +49,11 @@ describe('Test id and pass auth plugins', function () {
   })
 
   it('Should not login', async function () {
-    await userLogin(server, { username: 'toto', password: 'password' }, 400)
+    await server.loginCommand.login({ user: { username: 'toto', password: 'password' }, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
   })
 
   it('Should login Spyro, create the user and use the token', async function () {
-    const accessToken = await userLogin(server, { username: 'spyro', password: 'spyro password' })
+    const accessToken = await server.loginCommand.getAccessToken({ username: 'spyro', password: 'spyro password' })
 
     const res = await getMyUserInformation(server.url, accessToken)
 
@@ -68,9 +65,9 @@ describe('Test id and pass auth plugins', function () {
 
   it('Should login Crash, create the user and use the token', async function () {
     {
-      const res = await login(server.url, server.client, { username: 'crash', password: 'crash password' })
-      crashAccessToken = res.body.access_token
-      crashRefreshToken = res.body.refresh_token
+      const body = await server.loginCommand.login({ user: { username: 'crash', password: 'crash password' } })
+      crashAccessToken = body.access_token
+      crashRefreshToken = body.refresh_token
     }
 
     {
@@ -85,9 +82,9 @@ describe('Test id and pass auth plugins', function () {
 
   it('Should login the first Laguna, create the user and use the token', async function () {
     {
-      const res = await login(server.url, server.client, { username: 'laguna', password: 'laguna password' })
-      lagunaAccessToken = res.body.access_token
-      lagunaRefreshToken = res.body.refresh_token
+      const body = await server.loginCommand.login({ user: { username: 'laguna', password: 'laguna password' } })
+      lagunaAccessToken = body.access_token
+      lagunaRefreshToken = body.refresh_token
     }
 
     {
@@ -102,7 +99,7 @@ describe('Test id and pass auth plugins', function () {
 
   it('Should refresh crash token, but not laguna token', async function () {
     {
-      const resRefresh = await refreshToken(server, crashRefreshToken)
+      const resRefresh = await server.loginCommand.refreshToken({ refreshToken: crashRefreshToken })
       crashAccessToken = resRefresh.body.access_token
       crashRefreshToken = resRefresh.body.refresh_token
 
@@ -112,7 +109,7 @@ describe('Test id and pass auth plugins', function () {
     }
 
     {
-      await refreshToken(server, lagunaRefreshToken, 400)
+      await server.loginCommand.refreshToken({ refreshToken: lagunaRefreshToken, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     }
   })
 
@@ -132,7 +129,7 @@ describe('Test id and pass auth plugins', function () {
   })
 
   it('Should logout Crash', async function () {
-    await logout(server.url, crashAccessToken)
+    await server.loginCommand.logout({ token: crashAccessToken })
   })
 
   it('Should have logged out Crash', async function () {
@@ -142,7 +139,7 @@ describe('Test id and pass auth plugins', function () {
   })
 
   it('Should login Crash and keep the old existing profile', async function () {
-    crashAccessToken = await userLogin(server, { username: 'crash', password: 'crash password' })
+    crashAccessToken = await server.loginCommand.getAccessToken({ username: 'crash', password: 'crash password' })
 
     const res = await getMyUserInformation(server.url, crashAccessToken)
 
@@ -162,16 +159,18 @@ describe('Test id and pass auth plugins', function () {
   })
 
   it('Should reject an invalid username, email, role or display name', async function () {
-    await userLogin(server, { username: 'ward', password: 'ward password' }, 400)
+    const command = server.loginCommand
+
+    await command.login({ user: { username: 'ward', password: 'ward password' }, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     await server.serversCommand.waitUntilLog('valid username')
 
-    await userLogin(server, { username: 'kiros', password: 'kiros password' }, 400)
+    await command.login({ user: { username: 'kiros', password: 'kiros password' }, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     await server.serversCommand.waitUntilLog('valid display name')
 
-    await userLogin(server, { username: 'raine', password: 'raine password' }, 400)
+    await command.login({ user: { username: 'raine', password: 'raine password' }, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     await server.serversCommand.waitUntilLog('valid role')
 
-    await userLogin(server, { username: 'ellone', password: 'elonne password' }, 400)
+    await command.login({ user: { username: 'ellone', password: 'elonne password' }, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     await server.serversCommand.waitUntilLog('valid email')
   })
 
@@ -181,8 +180,9 @@ describe('Test id and pass auth plugins', function () {
       settings: { disableSpyro: true }
     })
 
-    await userLogin(server, { username: 'spyro', password: 'spyro password' }, 400)
-    await userLogin(server, { username: 'spyro', password: 'fake' }, 400)
+    const command = server.loginCommand
+    await command.login({ user: { username: 'spyro', password: 'spyro password' }, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    await command.login({ user: { username: 'spyro', password: 'fake' }, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
   })
 
   it('Should have disabled this auth', async function () {
@@ -198,7 +198,10 @@ describe('Test id and pass auth plugins', function () {
   it('Should uninstall the plugin one and do not login existing Crash', async function () {
     await server.pluginsCommand.uninstall({ npmName: 'peertube-plugin-test-id-pass-auth-one' })
 
-    await userLogin(server, { username: 'crash', password: 'crash password' }, 400)
+    await server.loginCommand.login({
+      user: { username: 'crash', password: 'crash password' },
+      expectedStatus: HttpStatusCode.BAD_REQUEST_400
+    })
   })
 
   it('Should display the correct configuration', async function () {

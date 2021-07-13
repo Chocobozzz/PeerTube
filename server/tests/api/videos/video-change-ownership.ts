@@ -16,8 +16,7 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   setDefaultVideoChannel,
-  uploadVideo,
-  userLogin
+  uploadVideo
 } from '../../../../shared/extra-utils'
 import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 import { User } from '../../../../shared/models/users'
@@ -82,8 +81,8 @@ describe('Test video change ownership - nominal', function () {
       videoQuota: videoQuota
     })
 
-    firstUserToken = await userLogin(servers[0], firstUser)
-    secondUserToken = await userLogin(servers[0], secondUser)
+    firstUserToken = await servers[0].loginCommand.getAccessToken(firstUser)
+    secondUserToken = await servers[0].loginCommand.getAccessToken(secondUser)
 
     {
       const res = await getMyUserInformation(servers[0].url, firstUserToken)
@@ -323,8 +322,8 @@ describe('Test video change ownership - quota too small', function () {
       videoQuota: limitedVideoQuota
     })
 
-    firstUserToken = await userLogin(server, firstUser)
-    secondUserToken = await userLogin(server, secondUser)
+    firstUserToken = await server.loginCommand.getAccessToken(firstUser)
+    secondUserToken = await server.loginCommand.getAccessToken(secondUser)
 
     // Upload some videos on the server
     const video1Attributes = {
