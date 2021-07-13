@@ -62,7 +62,7 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, AfterView
 
     const video: LiveVideoCreate = {
       name,
-      privacy: VideoPrivacy.PRIVATE,
+      privacy: this.highestPrivacy,
       nsfw: this.serverConfig.instance.isNSFW,
       waitTranscoding: true,
       commentsEnabled: true,

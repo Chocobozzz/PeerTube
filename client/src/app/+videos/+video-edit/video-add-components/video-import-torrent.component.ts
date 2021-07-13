@@ -79,7 +79,7 @@ export class VideoImportTorrentComponent extends VideoSend implements OnInit, Af
     this.isImportingVideo = true
 
     const videoUpdate: VideoUpdate = {
-      privacy: VideoPrivacy.PRIVATE,
+      privacy: this.highestPrivacy,
       waitTranscoding: false,
       commentsEnabled: true,
       downloadEnabled: true,

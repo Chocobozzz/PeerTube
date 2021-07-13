@@ -404,6 +404,18 @@ export class VideoService implements VideosProvider {
     }
   }
 
+  getHighestAvailablePrivacy (serverPrivacies: VideoConstant<VideoPrivacy>[]) {
+    const order = [ VideoPrivacy.PRIVATE, VideoPrivacy.INTERNAL, VideoPrivacy.UNLISTED, VideoPrivacy.PUBLIC ]
+
+    for (const privacy of order) {
+      if (serverPrivacies.find(p => p.id === privacy)) {
+        return privacy
+      }
+    }
+
+    throw new Error('No highest privacy available')
+  }
+
   nsfwPolicyToParam (nsfwPolicy: NSFWPolicyType) {
     return nsfwPolicy === 'do_not_list'
       ? 'false'

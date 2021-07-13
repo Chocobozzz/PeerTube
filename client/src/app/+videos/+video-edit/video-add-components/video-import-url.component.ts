@@ -66,7 +66,7 @@ export class VideoImportUrlComponent extends VideoSend implements OnInit, AfterV
     this.isImportingVideo = true
 
     const videoUpdate: VideoUpdate = {
-      privacy: VideoPrivacy.PRIVATE,
+      privacy: this.highestPrivacy,
       waitTranscoding: false,
       commentsEnabled: true,
       downloadEnabled: true,

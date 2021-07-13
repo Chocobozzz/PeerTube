@@ -265,7 +265,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
       downloadEnabled: true,
       channelId: this.firstStepChannelId,
       nsfw: this.serverConfig.instance.isNSFW,
-      privacy: VideoPrivacy.PRIVATE.toString(),
+      privacy: this.highestPrivacy.toString(),
       filename: file.name,
       previewfile: previewfile as any
     }

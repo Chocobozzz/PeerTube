@@ -185,6 +185,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
     this.serverService.getVideoPrivacies()
       .subscribe(privacies => {
         this.videoPrivacies = this.videoService.explainedPrivacyLabels(privacies).videoPrivacies
+
         if (this.schedulePublicationPossible) {
           this.videoPrivacies.push({
             id: this.SPECIAL_SCHEDULED_PRIVACY,

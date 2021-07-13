@@ -15,8 +15,8 @@ export abstract class VideoSend extends FormReactive implements OnInit {
   videoPrivacies: VideoConstant<VideoPrivacy>[] = []
   videoCaptions: VideoCaptionEdit[] = []
 
-  firstStepPrivacyId = 0
-  firstStepChannelId = 0
+  firstStepPrivacyId: VideoPrivacy
+  firstStepChannelId: number
 
   abstract firstStepDone: EventEmitter<string>
   abstract firstStepError: EventEmitter<void>
@@ -24,10 +24,14 @@ export abstract class VideoSend extends FormReactive implements OnInit {
   protected loadingBar: LoadingBarService
   protected notifier: Notifier
   protected authService: AuthService
+
   protected serverService: ServerService
   protected videoService: VideoService
   protected videoCaptionService: VideoCaptionService
+
   protected serverConfig: HTMLServerConfig
+
+  protected highestPrivacy: VideoPrivacy
 
   abstract canDeactivate (): CanComponentDeactivateResult
 
@@ -49,6 +53,8 @@ export abstract class VideoSend extends FormReactive implements OnInit {
 
             this.videoPrivacies = videoPrivacies
             this.firstStepPrivacyId = defaultPrivacyId
+
+            this.highestPrivacy = this.videoService.getHighestAvailablePrivacy(privacies)
           })
   }
 
