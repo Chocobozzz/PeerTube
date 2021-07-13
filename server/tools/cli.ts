@@ -3,12 +3,10 @@ import { Netrc } from 'netrc-parser'
 import { join } from 'path'
 import { createLogger, format, transports } from 'winston'
 import { assignCommands, ServerInfo } from '@shared/extra-utils'
-import { getAccessToken } from '@shared/extra-utils/users/login'
 import { getMyUserInformation } from '@shared/extra-utils/users/users'
 import { User, UserRole } from '@shared/models'
-import { root } from '../../shared/extra-utils/miscs/miscs'
 import { VideoPrivacy } from '../../shared/models/videos'
-import { getAppNumber, isTestInstance } from '../helpers/core-utils'
+import { getAppNumber, isTestInstance, root } from '../helpers/core-utils'
 
 let configName = 'PeerTube/CLI'
 if (isTestInstance()) configName += `-${getAppNumber()}`
@@ -17,9 +15,9 @@ const config = require('application-config')(configName)
 
 const version = require('../../../package.json').version
 
-async function getAdminTokenOrDie (url: string, username: string, password: string) {
-  const accessToken = await getAccessToken(url, username, password)
-  const resMe = await getMyUserInformation(url, accessToken)
+async function getAdminTokenOrDie (server: ServerInfo, username: string, password: string) {
+  const accessToken = await server.loginCommand.getAccessToken(username, password)
+  const resMe = await getMyUserInformation(server.url, accessToken)
   const me: User = resMe.body
 
   if (me.role !== UserRole.ADMINISTRATOR) {
@@ -28,10 +26,6 @@ async function getAdminTokenOrDie (url: string, username: string, password: stri
   }
 
   return accessToken
-}
-
-async function getAccessTokenOrDie (url: string, username: string, password: string) {
-  return getAccessToken(url, username, password)
 }
 
 interface Settings {
@@ -187,11 +181,20 @@ function getServerCredentials (program: Command) {
                 })
 }
 
-function buildServer (url: string, accessToken?: string): ServerInfo {
-  const server = { url, accessToken, internalServerNumber: undefined }
+function buildServer (url: string): ServerInfo {
+  const server = { url, internalServerNumber: undefined }
   assignCommands(server)
 
   return server
+}
+
+async function assignToken (server: ServerInfo, username: string, password: string) {
+  const bodyClient = await server.loginCommand.getClient()
+  const client = { id: bodyClient.client_id, secret: bodyClient.client_secret }
+
+  const body = await server.loginCommand.login({ client, user: { username, password } })
+
+  server.accessToken = body.access_token
 }
 
 function getLogger (logLevel = 'info') {
@@ -241,6 +244,6 @@ export {
   buildVideoAttributesFromCommander,
 
   getAdminTokenOrDie,
-  getAccessTokenOrDie,
-  buildServer
+  buildServer,
+  assignToken
 }

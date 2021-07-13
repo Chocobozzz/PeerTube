@@ -5,9 +5,8 @@ registerTSPaths()
 
 import { OptionValues, program } from 'commander'
 import * as prompt from 'prompt'
-import { getNetrc, getSettings, writeSettings } from './cli'
+import { assignToken, buildServer, getNetrc, getSettings, writeSettings } from './cli'
 import { isUserUsernameValid } from '../helpers/custom-validators/users'
-import { getAccessToken } from '../../shared/extra-utils'
 import * as CliTable3 from 'cli-table3'
 
 async function delInstance (url: string) {
@@ -97,7 +96,8 @@ program
         // @see https://github.com/Chocobozzz/PeerTube/issues/3520
         result.url = stripExtraneousFromPeerTubeUrl(result.url)
 
-        await getAccessToken(result.url, result.username, result.password)
+        const server = buildServer(result.url)
+        await assignToken(server, result.username, result.password)
       } catch (err) {
         console.error(err.message)
         process.exit(-1)

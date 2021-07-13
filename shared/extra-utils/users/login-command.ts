@@ -1,4 +1,3 @@
-import { PeerTubeRequestError } from '@server/helpers/requests'
 import { HttpStatusCode } from '@shared/core-utils'
 import { PeerTubeProblemDocument } from '@shared/models'
 import { unwrapBody } from '../requests'
@@ -34,8 +33,8 @@ export class LoginCommand extends AbstractCommand {
     }))
   }
 
-  getAccessToken (user?: { username: string, password: string }): Promise<string>
-  getAccessToken (username: string, password: string): Promise<string>
+  getAccessToken (arg1?: { username: string, password: string }): Promise<string>
+  getAccessToken (arg1: string, password: string): Promise<string>
   async getAccessToken (arg1?: { username: string, password: string } | string, password?: string) {
     let user: { username: string, password: string }
 
@@ -48,7 +47,7 @@ export class LoginCommand extends AbstractCommand {
 
       return body.access_token
     } catch (err) {
-      throw new Error('Cannot authenticate. Please check your username/password.')
+      throw new Error(`Cannot authenticate. Please check your username/password. (${err})`)
     }
   }
 
