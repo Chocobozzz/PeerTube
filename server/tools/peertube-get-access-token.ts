@@ -2,7 +2,7 @@ import { registerTSPaths } from '../helpers/register-ts-paths'
 registerTSPaths()
 
 import { program } from 'commander'
-import { getAccessToken } from '../../shared/extra-utils'
+import { assignToken, buildServer } from './cli'
 
 program
   .option('-u, --url <url>', 'Server url')
@@ -24,9 +24,11 @@ if (
   process.exit(-1)
 }
 
-getAccessToken(options.url, options.username, options.password)
-  .then(accessToken => {
-    console.log(accessToken)
+const server = buildServer(options.url)
+
+assignToken(server, options.username, options.password)
+  .then(() => {
+    console.log(server.accessToken)
     process.exit(0)
   })
   .catch(err => {

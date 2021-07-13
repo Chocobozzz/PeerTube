@@ -14,10 +14,10 @@ import { sha256 } from '../helpers/core-utils'
 import { doRequestAndSaveToFile } from '../helpers/requests'
 import { CONSTRAINTS_FIELDS } from '../initializers/constants'
 import {
+  assignToken,
   buildCommonVideoOptions,
   buildServer,
   buildVideoAttributesFromCommander,
-  getAccessTokenOrDie,
   getLogger,
   getServerCredentials
 } from './cli'
@@ -232,8 +232,8 @@ async function uploadVideoOnPeerTube (parameters: {
     tags
   }
 
-  let accessToken = await getAccessTokenOrDie(url, username, password)
-  const server = buildServer(url, accessToken)
+  const server = buildServer(url)
+  await assignToken(server, username, password)
 
   const videoAttributes = await buildVideoAttributesFromCommander(server, program, defaultAttributes)
 
@@ -247,14 +247,14 @@ async function uploadVideoOnPeerTube (parameters: {
   log.info('\nUploading on PeerTube video "%s".', videoAttributes.name)
 
   try {
-    await uploadVideo(url, accessToken, videoAttributes)
+    await uploadVideo(url, server.accessToken, videoAttributes)
   } catch (err) {
     if (err.message.indexOf('401') !== -1) {
       log.info('Got 401 Unauthorized, token may have expired, renewing token and retry.')
 
-      accessToken = await getAccessTokenOrDie(url, username, password)
+      server.accessToken = await server.loginCommand.getAccessToken(username, password)
 
-      await uploadVideo(url, accessToken, videoAttributes)
+      await uploadVideo(url, server.accessToken, videoAttributes)
     } else {
       exitError(err.message)
     }

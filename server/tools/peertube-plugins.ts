@@ -4,7 +4,7 @@ import { registerTSPaths } from '../helpers/register-ts-paths'
 registerTSPaths()
 
 import { program, Command, OptionValues } from 'commander'
-import { buildServer, getAdminTokenOrDie, getServerCredentials } from './cli'
+import { assignToken, buildServer, getServerCredentials } from './cli'
 import { PluginType } from '../../shared/models'
 import { isAbsolute } from 'path'
 import * as CliTable3 from 'cli-table3'
@@ -62,8 +62,8 @@ program.parse(process.argv)
 
 async function pluginsListCLI (command: Command, options: OptionValues) {
   const { url, username, password } = await getServerCredentials(command)
-  const token = await getAdminTokenOrDie(url, username, password)
-  const server = buildServer(url, token)
+  const server = buildServer(url)
+  await assignToken(server, username, password)
 
   let pluginType: PluginType
   if (options.onlyThemes) pluginType = PluginType.THEME
@@ -105,8 +105,8 @@ async function installPluginCLI (command: Command, options: OptionValues) {
   }
 
   const { url, username, password } = await getServerCredentials(command)
-  const token = await getAdminTokenOrDie(url, username, password)
-  const server = buildServer(url, token)
+  const server = buildServer(url)
+  await assignToken(server, username, password)
 
   try {
     await server.pluginsCommand.install({ npmName: options.npmName, path: options.path })
@@ -132,8 +132,8 @@ async function updatePluginCLI (command: Command, options: OptionValues) {
   }
 
   const { url, username, password } = await getServerCredentials(command)
-  const token = await getAdminTokenOrDie(url, username, password)
-  const server = buildServer(url, token)
+  const server = buildServer(url)
+  await assignToken(server, username, password)
 
   try {
     await server.pluginsCommand.update({ npmName: options.npmName, path: options.path })
@@ -154,8 +154,8 @@ async function uninstallPluginCLI (command: Command, options: OptionValues) {
   }
 
   const { url, username, password } = await getServerCredentials(command)
-  const token = await getAdminTokenOrDie(url, username, password)
-  const server = buildServer(url, token)
+  const server = buildServer(url)
+  await assignToken(server, username, password)
 
   try {
     await server.pluginsCommand.uninstall({ npmName: options.npmName })

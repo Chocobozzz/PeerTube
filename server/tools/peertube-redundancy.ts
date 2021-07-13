@@ -8,7 +8,7 @@ import { URL } from 'url'
 import validator from 'validator'
 import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 import { VideoRedundanciesTarget } from '@shared/models'
-import { buildServer, getAdminTokenOrDie, getServerCredentials } from './cli'
+import { assignToken, buildServer, getServerCredentials } from './cli'
 
 import bytes = require('bytes')
 
@@ -60,8 +60,8 @@ program.parse(process.argv)
 
 async function listRedundanciesCLI (target: VideoRedundanciesTarget) {
   const { url, username, password } = await getServerCredentials(program)
-  const token = await getAdminTokenOrDie(url, username, password)
-  const server = buildServer(url, token)
+  const server = buildServer(url)
+  await assignToken(server, username, password)
 
   const { data } = await server.redundancyCommand.listVideos({ start: 0, count: 100, sort: 'name', target })
 
@@ -104,8 +104,8 @@ async function listRedundanciesCLI (target: VideoRedundanciesTarget) {
 
 async function addRedundancyCLI (options: { video: number }, command: Command) {
   const { url, username, password } = await getServerCredentials(command)
-  const token = await getAdminTokenOrDie(url, username, password)
-  const server = buildServer(url, token)
+  const server = buildServer(url)
+  await assignToken(server, username, password)
 
   if (!options.video || validator.isInt('' + options.video) === false) {
     console.error('You need to specify the video id to duplicate and it should be a number.\n')
@@ -134,8 +134,8 @@ async function addRedundancyCLI (options: { video: number }, command: Command) {
 
 async function removeRedundancyCLI (options: { video: number }, command: Command) {
   const { url, username, password } = await getServerCredentials(command)
-  const token = await getAdminTokenOrDie(url, username, password)
-  const server = buildServer(url, token)
+  const server = buildServer(url)
+  await assignToken(server, username, password)
 
   if (!options.video || validator.isInt('' + options.video) === false) {
     console.error('You need to specify the video id to remove from your redundancies.\n')
