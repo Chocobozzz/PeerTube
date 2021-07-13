@@ -14,8 +14,7 @@ import {
   setAccessTokensToServers,
   testHelloWorldRegisteredSettings,
   updateMyUser,
-  wait,
-  waitUntilLog
+  wait
 } from '@shared/extra-utils'
 import { PluginType, User } from '@shared/models'
 
@@ -194,7 +193,7 @@ describe('Test plugins', function () {
   it('Should have watched settings changes', async function () {
     this.timeout(10000)
 
-    await waitUntilLog(server, 'Settings changed!')
+    await server.serversCommand.waitUntilLog('Settings changed!')
   })
 
   it('Should get a plugin and a theme', async function () {

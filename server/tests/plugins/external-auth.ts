@@ -17,8 +17,7 @@ import {
   setAccessTokensToServers,
   updateMyUser,
   userLogin,
-  wait,
-  waitUntilLog
+  wait
 } from '@shared/extra-utils'
 import { User, UserRole } from '@shared/models'
 
@@ -127,7 +126,7 @@ describe('Test external auth plugins', function () {
 
     await loginUsingExternalToken(server, 'cyan', externalAuthToken, HttpStatusCode.BAD_REQUEST_400)
 
-    await waitUntilLog(server, 'expired external auth token', 2)
+    await server.serversCommand.waitUntilLog('expired external auth token', 2)
   })
 
   it('Should auto login Cyan, create the user and use the token', async function () {
@@ -217,7 +216,7 @@ describe('Test external auth plugins', function () {
   })
 
   it('Should have logged out Cyan', async function () {
-    await waitUntilLog(server, 'On logout cyan')
+    await server.serversCommand.waitUntilLog('On logout cyan')
 
     await getMyUserInformation(server.url, cyanAccessToken, HttpStatusCode.UNAUTHORIZED_401)
   })

@@ -7,7 +7,6 @@ import {
   flushAndRunServer,
   killallServers,
   LogsCommand,
-  makePingRequest,
   reRunServer,
   ServerInfo,
   setAccessTokensToServers,
@@ -102,7 +101,7 @@ describe('Test logs', function () {
 
       const now = new Date()
 
-      await makePingRequest(server)
+      await server.serversCommand.ping()
 
       const body = await logsCommand.getLogs({ startDate: now, level: 'info' })
       const logsString = JSON.stringify(body)
@@ -119,7 +118,7 @@ describe('Test logs', function () {
 
       const now = new Date()
 
-      await makePingRequest(server)
+      await server.serversCommand.ping()
 
       const body = await logsCommand.getLogs({ startDate: now, level: 'info' })
       const logsString = JSON.stringify(body)

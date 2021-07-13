@@ -1,6 +1,6 @@
 
 import { JobState } from '../../models'
-import { wait } from '../miscs/miscs'
+import { wait } from '../miscs'
 import { ServerInfo } from './servers'
 
 async function waitJobs (serversArg: ServerInfo[] | ServerInfo) {

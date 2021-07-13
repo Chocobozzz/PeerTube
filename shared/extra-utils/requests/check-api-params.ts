@@ -1,13 +1,12 @@
+import { HttpStatusCode } from '@shared/core-utils'
 import { makeGetRequest } from './requests'
-import { immutableAssign } from '../miscs/miscs'
-import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 function checkBadStartPagination (url: string, path: string, token?: string, query = {}) {
   return makeGetRequest({
     url,
     path,
     token,
-    query: immutableAssign(query, { start: 'hello' }),
+    query: { ...query, start: 'hello' },
     statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
   })
 }
@@ -17,7 +16,7 @@ async function checkBadCountPagination (url: string, path: string, token?: strin
     url,
     path,
     token,
-    query: immutableAssign(query, { count: 'hello' }),
+    query: { ...query, count: 'hello' },
     statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
   })
 
@@ -25,7 +24,7 @@ async function checkBadCountPagination (url: string, path: string, token?: strin
     url,
     path,
     token,
-    query: immutableAssign(query, { count: 2000 }),
+    query: { ...query, count: 2000 },
     statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
   })
 }
@@ -35,7 +34,7 @@ function checkBadSortPagination (url: string, path: string, token?: string, quer
     url,
     path,
     token,
-    query: immutableAssign(query, { sort: 'hello' }),
+    query: { ...query, sort: 'hello' },
     statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
   })
 }

@@ -24,8 +24,7 @@ import {
   updateVideo,
   uploadVideo,
   uploadVideoAndGetId,
-  waitJobs,
-  waitUntilLog
+  waitJobs
 } from '@shared/extra-utils'
 import { VideoDetails, VideoImportState, VideoPlaylist, VideoPlaylistPrivacy, VideoPrivacy } from '@shared/models'
 
@@ -475,8 +474,8 @@ describe('Test plugin filter hooks', function () {
         }
       })
 
-      await waitUntilLog(servers[0], 'Run hook filter:api.search.videos.local.list.params', 1)
-      await waitUntilLog(servers[0], 'Run hook filter:api.search.videos.local.list.result', 1)
+      await servers[0].serversCommand.waitUntilLog('Run hook filter:api.search.videos.local.list.params', 1)
+      await servers[0].serversCommand.waitUntilLog('Run hook filter:api.search.videos.local.list.result', 1)
     })
 
     it('Should run filter:api.search.videos.index.list.{params,result}', async function () {
@@ -487,10 +486,10 @@ describe('Test plugin filter hooks', function () {
         }
       })
 
-      await waitUntilLog(servers[0], 'Run hook filter:api.search.videos.local.list.params', 1)
-      await waitUntilLog(servers[0], 'Run hook filter:api.search.videos.local.list.result', 1)
-      await waitUntilLog(servers[0], 'Run hook filter:api.search.videos.index.list.params', 1)
-      await waitUntilLog(servers[0], 'Run hook filter:api.search.videos.index.list.result', 1)
+      await servers[0].serversCommand.waitUntilLog('Run hook filter:api.search.videos.local.list.params', 1)
+      await servers[0].serversCommand.waitUntilLog('Run hook filter:api.search.videos.local.list.result', 1)
+      await servers[0].serversCommand.waitUntilLog('Run hook filter:api.search.videos.index.list.params', 1)
+      await servers[0].serversCommand.waitUntilLog('Run hook filter:api.search.videos.index.list.result', 1)
     })
 
     it('Should run filter:api.search.video-channels.local.list.{params,result}', async function () {
@@ -500,8 +499,8 @@ describe('Test plugin filter hooks', function () {
         }
       })
 
-      await waitUntilLog(servers[0], 'Run hook filter:api.search.video-channels.local.list.params', 1)
-      await waitUntilLog(servers[0], 'Run hook filter:api.search.video-channels.local.list.result', 1)
+      await servers[0].serversCommand.waitUntilLog('Run hook filter:api.search.video-channels.local.list.params', 1)
+      await servers[0].serversCommand.waitUntilLog('Run hook filter:api.search.video-channels.local.list.result', 1)
     })
 
     it('Should run filter:api.search.video-channels.index.list.{params,result}', async function () {
@@ -512,10 +511,10 @@ describe('Test plugin filter hooks', function () {
         }
       })
 
-      await waitUntilLog(servers[0], 'Run hook filter:api.search.video-channels.local.list.params', 1)
-      await waitUntilLog(servers[0], 'Run hook filter:api.search.video-channels.local.list.result', 1)
-      await waitUntilLog(servers[0], 'Run hook filter:api.search.video-channels.index.list.params', 1)
-      await waitUntilLog(servers[0], 'Run hook filter:api.search.video-channels.index.list.result', 1)
+      await servers[0].serversCommand.waitUntilLog('Run hook filter:api.search.video-channels.local.list.params', 1)
+      await servers[0].serversCommand.waitUntilLog('Run hook filter:api.search.video-channels.local.list.result', 1)
+      await servers[0].serversCommand.waitUntilLog('Run hook filter:api.search.video-channels.index.list.params', 1)
+      await servers[0].serversCommand.waitUntilLog('Run hook filter:api.search.video-channels.index.list.result', 1)
     })
 
     it('Should run filter:api.search.video-playlists.local.list.{params,result}', async function () {
@@ -525,8 +524,8 @@ describe('Test plugin filter hooks', function () {
         }
       })
 
-      await waitUntilLog(servers[0], 'Run hook filter:api.search.video-playlists.local.list.params', 1)
-      await waitUntilLog(servers[0], 'Run hook filter:api.search.video-playlists.local.list.result', 1)
+      await servers[0].serversCommand.waitUntilLog('Run hook filter:api.search.video-playlists.local.list.params', 1)
+      await servers[0].serversCommand.waitUntilLog('Run hook filter:api.search.video-playlists.local.list.result', 1)
     })
 
     it('Should run filter:api.search.video-playlists.index.list.{params,result}', async function () {
@@ -537,10 +536,10 @@ describe('Test plugin filter hooks', function () {
         }
       })
 
-      await waitUntilLog(servers[0], 'Run hook filter:api.search.video-playlists.local.list.params', 1)
-      await waitUntilLog(servers[0], 'Run hook filter:api.search.video-playlists.local.list.result', 1)
-      await waitUntilLog(servers[0], 'Run hook filter:api.search.video-playlists.index.list.params', 1)
-      await waitUntilLog(servers[0], 'Run hook filter:api.search.video-playlists.index.list.result', 1)
+      await servers[0].serversCommand.waitUntilLog('Run hook filter:api.search.video-playlists.local.list.params', 1)
+      await servers[0].serversCommand.waitUntilLog('Run hook filter:api.search.video-playlists.local.list.result', 1)
+      await servers[0].serversCommand.waitUntilLog('Run hook filter:api.search.video-playlists.index.list.params', 1)
+      await servers[0].serversCommand.waitUntilLog('Run hook filter:api.search.video-playlists.index.list.result', 1)
     })
   })
 

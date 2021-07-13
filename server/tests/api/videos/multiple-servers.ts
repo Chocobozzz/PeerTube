@@ -689,8 +689,8 @@ describe('Test multiple servers', function () {
 
     it('Should not have files of videos 3 and 3-2 on each server', async function () {
       for (const server of servers) {
-        await checkVideoFilesWereRemoved(toRemove[0].uuid, server.internalServerNumber)
-        await checkVideoFilesWereRemoved(toRemove[1].uuid, server.internalServerNumber)
+        await checkVideoFilesWereRemoved(toRemove[0].uuid, server)
+        await checkVideoFilesWereRemoved(toRemove[1].uuid, server)
       }
     })
 

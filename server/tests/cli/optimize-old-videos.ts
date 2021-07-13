@@ -4,7 +4,6 @@ import 'mocha'
 import * as chai from 'chai'
 import { join } from 'path'
 import {
-  buildServerDirectory,
   cleanupTests,
   doubleFollow,
   flushAndRunMultipleServers,
@@ -96,7 +95,7 @@ describe('Test optimize old videos', function () {
 
         expect(file.size).to.be.below(8000000)
 
-        const path = buildServerDirectory(servers[0], join('videos', video.uuid + '-' + file.resolution.id + '.mp4'))
+        const path = servers[0].serversCommand.buildDirectory(join('videos', video.uuid + '-' + file.resolution.id + '.mp4'))
         const bitrate = await getVideoFileBitrate(path)
         const fps = await getVideoFileFPS(path)
         const resolution = await getVideoFileResolution(path)

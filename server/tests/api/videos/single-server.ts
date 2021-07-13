@@ -230,7 +230,7 @@ describe('Test a single server', function () {
     it('Should remove the video', async function () {
       await removeVideo(server.url, server.accessToken, videoId)
 
-      await checkVideoFilesWereRemoved(videoUUID, 1)
+      await checkVideoFilesWereRemoved(videoUUID, server)
     })
 
     it('Should not have videos', async function () {

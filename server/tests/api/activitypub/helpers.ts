@@ -2,11 +2,10 @@
 
 import 'mocha'
 import { expect } from 'chai'
-import { buildRequestStub } from '../../../../shared/extra-utils/miscs/stubs'
-import { isHTTPSignatureVerified, isJsonLDSignatureVerified, parseHTTPSignature } from '../../../helpers/peertube-crypto'
 import { cloneDeep } from 'lodash'
+import { buildAbsoluteFixturePath, buildRequestStub } from '@shared/extra-utils'
 import { buildSignedActivity } from '../../../helpers/activitypub'
-import { buildAbsoluteFixturePath } from '@shared/extra-utils'
+import { isHTTPSignatureVerified, isJsonLDSignatureVerified, parseHTTPSignature } from '../../../helpers/peertube-crypto'
 
 describe('Test activity pub helpers', function () {
   describe('When checking the Linked Signature', function () {

@@ -5,7 +5,6 @@ import { expect } from 'chai'
 import { join } from 'path'
 import { getAudioStream, getVideoFileFPS, getVideoStreamFromFile } from '@server/helpers/ffprobe-utils'
 import {
-  buildServerDirectory,
   cleanupTests,
   flushAndRunServer,
   getVideo,
@@ -247,7 +246,7 @@ describe('Test transcoding plugins', function () {
       const videoUUID = (await uploadVideoAndGetId({ server, videoName: 'video', fixture: 'video_short_240p.mp4' })).uuid
       await waitJobs([ server ])
 
-      const path = buildServerDirectory(server, join('videos', videoUUID + '-240.mp4'))
+      const path = server.serversCommand.buildDirectory(join('videos', videoUUID + '-240.mp4'))
       const audioProbe = await getAudioStream(path)
       expect(audioProbe.audioStream.codec_name).to.equal('opus')
 

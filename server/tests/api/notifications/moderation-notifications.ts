@@ -20,7 +20,6 @@ import {
   createUser,
   generateUserAccessToken,
   getVideoIdFromUUID,
-  immutableAssign,
   MockInstancesIndex,
   MockSmtpServer,
   prepareNotificationsTest,
@@ -347,7 +346,7 @@ describe('Test moderation notifications', function () {
       await checkUserRegistered(baseParams, 'user_45', 'presence')
 
       const userOverride = { socketNotifications: userNotifications, token: userAccessToken, check: { web: true, mail: false } }
-      await checkUserRegistered(immutableAssign(baseParams, userOverride), 'user_45', 'absence')
+      await checkUserRegistered({ ...baseParams, ...userOverride }, 'user_45', 'absence')
     })
   })
 
@@ -389,7 +388,7 @@ describe('Test moderation notifications', function () {
       await checkNewInstanceFollower(baseParams, 'localhost:' + servers[2].port, 'presence')
 
       const userOverride = { socketNotifications: userNotifications, token: userAccessToken, check: { web: true, mail: false } }
-      await checkNewInstanceFollower(immutableAssign(baseParams, userOverride), 'localhost:' + servers[2].port, 'absence')
+      await checkNewInstanceFollower({ ...baseParams, ...userOverride }, 'localhost:' + servers[2].port, 'absence')
     })
 
     it('Should send a notification on auto follow back', async function () {
@@ -416,7 +415,7 @@ describe('Test moderation notifications', function () {
       await checkAutoInstanceFollowing(baseParams, followerHost, followingHost, 'presence')
 
       const userOverride = { socketNotifications: userNotifications, token: userAccessToken, check: { web: true, mail: false } }
-      await checkAutoInstanceFollowing(immutableAssign(baseParams, userOverride), followerHost, followingHost, 'absence')
+      await checkAutoInstanceFollowing({ ...baseParams, ...userOverride }, followerHost, followingHost, 'absence')
 
       config.followings.instance.autoFollowBack.enabled = false
       await servers[0].configCommand.updateCustomSubConfig({ newConfig: config })
@@ -476,7 +475,9 @@ describe('Test moderation notifications', function () {
 
       currentCustomConfig = await servers[0].configCommand.getCustomConfig()
 
-      const autoBlacklistTestsCustomConfig = immutableAssign(currentCustomConfig, {
+      const autoBlacklistTestsCustomConfig = {
+        ...currentCustomConfig,
+
         autoBlacklist: {
           videos: {
             ofUsers: {
@@ -484,7 +485,7 @@ describe('Test moderation notifications', function () {
             }
           }
         }
-      })
+      }
 
       // enable transcoding otherwise own publish notification after transcoding not expected
       autoBlacklistTestsCustomConfig.transcoding.enabled = true

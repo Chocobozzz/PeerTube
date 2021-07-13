@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/no-floating-promises */
 
-import { expect } from 'chai'
-import { ChildProcess, exec, fork } from 'child_process'
-import { copy, ensureDir, pathExists, readdir, readFile, remove } from 'fs-extra'
+import { ChildProcess, fork } from 'child_process'
+import { copy, ensureDir } from 'fs-extra'
 import { join } from 'path'
+import { root } from '@server/helpers/core-utils'
 import { randomInt } from '../../core-utils/miscs/miscs'
 import { VideoChannel } from '../../models/videos'
 import { BulkCommand } from '../bulk'
@@ -11,11 +11,9 @@ import { CLICommand } from '../cli'
 import { CustomPagesCommand } from '../custom-pages'
 import { FeedCommand } from '../feeds'
 import { LogsCommand } from '../logs'
-import { SQLCommand } from '../miscs'
-import { buildServerDirectory, getFileSize, isGithubCI, root, wait } from '../miscs/miscs'
+import { isGithubCI, parallelTests, SQLCommand } from '../miscs'
 import { AbusesCommand } from '../moderation'
 import { OverviewsCommand } from '../overviews'
-import { makeGetRequest } from '../requests/requests'
 import { SearchCommand } from '../search'
 import { SocketIOCommand } from '../socket'
 import { AccountsCommand, BlocklistCommand, NotificationsCommand, SubscriptionsCommand } from '../users'
@@ -39,6 +37,7 @@ import { FollowsCommand } from './follows-command'
 import { JobsCommand } from './jobs-command'
 import { PluginsCommand } from './plugins-command'
 import { RedundancyCommand } from './redundancy-command'
+import { ServersCommand } from './servers-command'
 import { StatsCommand } from './stats-command'
 
 interface ServerInfo {
@@ -126,10 +125,7 @@ interface ServerInfo {
   commentsCommand?: CommentsCommand
   sqlCommand?: SQLCommand
   notificationsCommand?: NotificationsCommand
-}
-
-function parallelTests () {
-  return process.env.MOCHA_PARALLEL === 'true'
+  serversCommand?: ServersCommand
 }
 
 function flushAndRunMultipleServers (totalServers: number, configOverride?: Object) {
@@ -148,18 +144,6 @@ function flushAndRunMultipleServers (totalServers: number, configOverride?: Obje
     for (let j = 1; j <= totalServers; j++) {
       flushAndRunServer(j, configOverride).then(app => anotherServerDone(j, app))
     }
-  })
-}
-
-function flushTests (serverNumber?: number) {
-  return new Promise<void>((res, rej) => {
-    const suffix = serverNumber ? ` -- ${serverNumber}` : ''
-
-    return exec('npm run clean:server:test' + suffix, (err, _stdout, stderr) => {
-      if (err || stderr) return rej(err || new Error(stderr))
-
-      return res()
-    })
   })
 }
 
@@ -189,7 +173,7 @@ async function flushAndRunServer (serverNumber: number, configOverride?: Object,
   const rtmpPort = parallel ? randomRTMP() : 1936
   const port = 9000 + internalServerNumber
 
-  await flushTests(internalServerNumber)
+  await ServersCommand.flushTests(internalServerNumber)
 
   const server: ServerInfo = {
     app: null,
@@ -372,6 +356,7 @@ function assignCommands (server: ServerInfo) {
   server.commentsCommand = new CommentsCommand(server)
   server.sqlCommand = new SQLCommand(server)
   server.notificationsCommand = new NotificationsCommand(server)
+  server.serversCommand = new ServersCommand(server)
 }
 
 async function reRunServer (server: ServerInfo, configOverride?: any) {
@@ -379,28 +364,6 @@ async function reRunServer (server: ServerInfo, configOverride?: any) {
   server.app = newServer.app
 
   return server
-}
-
-async function checkTmpIsEmpty (server: ServerInfo) {
-  await checkDirectoryIsEmpty(server, 'tmp', [ 'plugins-global.css', 'hls', 'resumable-uploads' ])
-
-  if (await pathExists(join('test' + server.internalServerNumber, 'tmp', 'hls'))) {
-    await checkDirectoryIsEmpty(server, 'tmp/hls')
-  }
-}
-
-async function checkDirectoryIsEmpty (server: ServerInfo, directory: string, exceptions: string[] = []) {
-  const testDirectory = 'test' + server.internalServerNumber
-
-  const directoryPath = join(root(), testDirectory, directory)
-
-  const directoryExists = await pathExists(directoryPath)
-  expect(directoryExists).to.be.true
-
-  const files = await readdir(directoryPath)
-  const filtered = files.filter(f => exceptions.includes(f) === false)
-
-  expect(filtered).to.have.lengthOf(0)
 }
 
 async function killallServers (servers: ServerInfo[]) {
@@ -422,71 +385,22 @@ async function cleanupTests (servers: ServerInfo[]) {
     await ensureDir('artifacts')
   }
 
-  const p: Promise<any>[] = []
+  let p: Promise<any>[] = []
   for (const server of servers) {
-    if (isGithubCI()) {
-      const origin = await buildServerDirectory(server, 'logs/peertube.log')
-      const destname = `peertube-${server.internalServerNumber}.log`
-      console.log('Saving logs %s.', destname)
-
-      await copy(origin, join('artifacts', destname))
-    }
-
-    if (server.parallel) {
-      p.push(flushTests(server.internalServerNumber))
-    }
-
-    if (server.customConfigFile) {
-      p.push(remove(server.customConfigFile))
-    }
+    p = p.concat(server.serversCommand.cleanupTests())
   }
 
   return Promise.all(p)
 }
 
-async function waitUntilLog (server: ServerInfo, str: string, count = 1, strictCount = true) {
-  const logfile = buildServerDirectory(server, 'logs/peertube.log')
-
-  while (true) {
-    const buf = await readFile(logfile)
-
-    const matches = buf.toString().match(new RegExp(str, 'g'))
-    if (matches && matches.length === count) return
-    if (matches && strictCount === false && matches.length >= count) return
-
-    await wait(1000)
-  }
-}
-
-async function getServerFileSize (server: ServerInfo, subPath: string) {
-  const path = buildServerDirectory(server, subPath)
-
-  return getFileSize(path)
-}
-
-function makePingRequest (server: ServerInfo) {
-  return makeGetRequest({
-    url: server.url,
-    path: '/api/v1/ping',
-    statusCodeExpected: 200
-  })
-}
-
 // ---------------------------------------------------------------------------
 
 export {
-  checkDirectoryIsEmpty,
-  checkTmpIsEmpty,
-  getServerFileSize,
   ServerInfo,
-  parallelTests,
   cleanupTests,
   flushAndRunMultipleServers,
-  flushTests,
-  makePingRequest,
   flushAndRunServer,
   killallServers,
   reRunServer,
-  assignCommands,
-  waitUntilLog
+  assignCommands
 }

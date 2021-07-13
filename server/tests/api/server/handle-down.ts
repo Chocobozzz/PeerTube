@@ -10,7 +10,6 @@ import {
   flushAndRunMultipleServers,
   getVideo,
   getVideosList,
-  immutableAssign,
   killallServers,
   reRunServer,
   ServerInfo,
@@ -50,9 +49,7 @@ describe('Test handle downs', function () {
     fixture: 'video_short1.webm'
   }
 
-  const unlistedVideoAttributes = immutableAssign(videoAttributes, {
-    privacy: VideoPrivacy.UNLISTED
-  })
+  const unlistedVideoAttributes = { ...videoAttributes, privacy: VideoPrivacy.UNLISTED }
 
   let checkAttributes: any
   let unlistedCheckAttributes: any
@@ -97,9 +94,7 @@ describe('Test handle downs', function () {
         }
       ]
     }
-    unlistedCheckAttributes = immutableAssign(checkAttributes, {
-      privacy: VideoPrivacy.UNLISTED
-    })
+    unlistedCheckAttributes = { ...checkAttributes, privacy: VideoPrivacy.UNLISTED }
 
     // Get the access tokens
     await setAccessTokensToServers(servers)

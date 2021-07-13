@@ -11,7 +11,6 @@ import {
   getMyVideos,
   getVideo,
   getVideosList,
-  immutableAssign,
   ImportsCommand,
   ServerInfo,
   setAccessTokensToServers,
@@ -119,7 +118,7 @@ describe('Test video imports', function () {
     }
 
     {
-      const attributes = immutableAssign(baseAttributes, { targetUrl: ImportsCommand.getYoutubeVideoUrl() })
+      const attributes = { ...baseAttributes, targetUrl: ImportsCommand.getYoutubeVideoUrl() }
       const { video } = await servers[0].importsCommand.importVideo({ attributes })
       expect(video.name).to.equal('small video - youtube')
 
@@ -169,21 +168,23 @@ Ajouter un sous-titre est vraiment facile`)
     }
 
     {
-      const attributes = immutableAssign(baseAttributes, {
+      const attributes = {
+        ...baseAttributes,
         magnetUri: ImportsCommand.getMagnetURI(),
         description: 'this is a super torrent description',
         tags: [ 'tag_torrent1', 'tag_torrent2' ]
-      })
+      }
       const { video } = await servers[0].importsCommand.importVideo({ attributes })
       expect(video.name).to.equal('super peertube2 video')
     }
 
     {
-      const attributes = immutableAssign(baseAttributes, {
+      const attributes = {
+        ...baseAttributes,
         torrentfile: 'video-720p.torrent' as any,
         description: 'this is a super torrent description',
         tags: [ 'tag_torrent1', 'tag_torrent2' ]
-      })
+      }
       const { video } = await servers[0].importsCommand.importVideo({ attributes })
       expect(video.name).to.equal('你好 世界 720p.mp4')
     }

@@ -1,5 +1,5 @@
 import { QueryTypes, Sequelize } from 'sequelize'
-import { AbstractCommand } from '../shared'
+import { AbstractCommand } from '../shared/abstract-command'
 
 export class SQLCommand extends AbstractCommand {
   private sequelize: Sequelize

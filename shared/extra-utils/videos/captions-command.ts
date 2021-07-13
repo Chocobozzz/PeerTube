@@ -1,6 +1,6 @@
+import { HttpStatusCode } from '@shared/core-utils'
 import { ResultList, VideoCaption } from '@shared/models'
-import { HttpStatusCode } from '../../core-utils/miscs/http-error-codes'
-import { buildAbsoluteFixturePath } from '../miscs/miscs'
+import { buildAbsoluteFixturePath } from '../miscs'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
 
 export class CaptionsCommand extends AbstractCommand {

@@ -5,9 +5,8 @@ import { omit } from 'lodash'
 import { join } from 'path'
 import { LiveVideo, LiveVideoCreate, LiveVideoUpdate, VideoCreateResult, VideoDetails, VideoState } from '@shared/models'
 import { HttpStatusCode } from '../../core-utils/miscs/http-error-codes'
-import { buildServerDirectory, wait } from '../miscs/miscs'
+import { wait } from '../miscs'
 import { unwrapBody } from '../requests'
-import { waitUntilLog } from '../server/servers'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
 import { sendRTMPStream, testFfmpegStreamError } from './live'
 import { getVideoWithToken } from './videos'
@@ -116,7 +115,7 @@ export class LiveCommand extends AbstractCommand {
     const { resolution, segment, videoUUID } = options
     const segmentName = `${resolution}-00000${segment}.ts`
 
-    return waitUntilLog(this.server, `${videoUUID}/${segmentName}`, 2, false)
+    return this.server.serversCommand.waitUntilLog(`${videoUUID}/${segmentName}`, 2, false)
   }
 
   async waitUntilSaved (options: OverrideCommandOptions & {
@@ -135,7 +134,7 @@ export class LiveCommand extends AbstractCommand {
   async countPlaylists (options: OverrideCommandOptions & {
     videoUUID: string
   }) {
-    const basePath = buildServerDirectory(this.server, 'streaming-playlists')
+    const basePath = this.server.serversCommand.buildDirectory('streaming-playlists')
     const hlsPath = join(basePath, 'hls', options.videoUUID)
 
     const files = await readdir(hlsPath)

@@ -7,7 +7,6 @@ import { ffprobePromise, getVideoStreamFromFile } from '@server/helpers/ffprobe-
 import { LiveVideo, LiveVideoCreate, Video, VideoDetails, VideoPrivacy, VideoState, VideoStreamingPlaylistType } from '@shared/models'
 import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import {
-  buildServerDirectory,
   checkLiveCleanup,
   checkLiveSegmentHash,
   checkResolutionsInMasterPlaylist,
@@ -532,7 +531,7 @@ describe('Test live', function () {
           }
 
           const filename = `${video.uuid}-${resolution}-fragmented.mp4`
-          const segmentPath = buildServerDirectory(servers[0], join('streaming-playlists', 'hls', video.uuid, filename))
+          const segmentPath = servers[0].serversCommand.buildDirectory(join('streaming-playlists', 'hls', video.uuid, filename))
 
           const probe = await ffprobePromise(segmentPath)
           const videoStream = await getVideoStreamFromFile(segmentPath, probe)

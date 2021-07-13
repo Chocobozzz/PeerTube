@@ -11,8 +11,7 @@ import {
   setAccessTokensToServers,
   updateVideo,
   uploadVideo,
-  waitJobs,
-  waitUntilLog
+  waitJobs
 } from '@shared/extra-utils'
 import { VideoPrivacy } from '@shared/models'
 
@@ -97,7 +96,7 @@ describe('Test redundancy constraints', function () {
     this.timeout(120000)
 
     await waitJobs(servers)
-    await waitUntilLog(remoteServer, 'Duplicated ', 5)
+    await remoteServer.serversCommand.waitUntilLog('Duplicated ', 5)
     await waitJobs(servers)
 
     {
@@ -126,7 +125,7 @@ describe('Test redundancy constraints', function () {
 
     await uploadWrapper('video 2 server 2')
 
-    await waitUntilLog(remoteServer, 'Duplicated ', 10)
+    await remoteServer.serversCommand.waitUntilLog('Duplicated ', 10)
     await waitJobs(servers)
 
     {
@@ -155,7 +154,7 @@ describe('Test redundancy constraints', function () {
 
     await uploadWrapper('video 3 server 2')
 
-    await waitUntilLog(remoteServer, 'Duplicated ', 15)
+    await remoteServer.serversCommand.waitUntilLog('Duplicated ', 15)
     await waitJobs(servers)
 
     {
@@ -176,7 +175,7 @@ describe('Test redundancy constraints', function () {
     await waitJobs(servers)
 
     await uploadWrapper('video 4 server 2')
-    await waitUntilLog(remoteServer, 'Duplicated ', 20)
+    await remoteServer.serversCommand.waitUntilLog('Duplicated ', 20)
     await waitJobs(servers)
 
     {

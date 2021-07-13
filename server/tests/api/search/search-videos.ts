@@ -5,7 +5,6 @@ import * as chai from 'chai'
 import {
   cleanupTests,
   flushAndRunServer,
-  immutableAssign,
   SearchCommand,
   ServerInfo,
   setAccessTokensToServers,
@@ -44,11 +43,11 @@ describe('Test videos search', function () {
       }
       await uploadVideo(server.url, server.accessToken, attributes1)
 
-      const attributes2 = immutableAssign(attributes1, { name: attributes1.name + ' - 2', fixture: 'video_short.mp4' })
+      const attributes2 = { ...attributes1, name: attributes1.name + ' - 2', fixture: 'video_short.mp4' }
       await uploadVideo(server.url, server.accessToken, attributes2)
 
       {
-        const attributes3 = immutableAssign(attributes1, { name: attributes1.name + ' - 3', language: undefined })
+        const attributes3 = { ...attributes1, name: attributes1.name + ' - 3', language: undefined }
         const res = await uploadVideo(server.url, server.accessToken, attributes3)
         const videoId = res.body.video.id
         videoUUID = res.body.video.uuid
@@ -68,26 +67,23 @@ describe('Test videos search', function () {
         })
       }
 
-      const attributes4 = immutableAssign(attributes1, { name: attributes1.name + ' - 4', language: 'pl', nsfw: true })
+      const attributes4 = { ...attributes1, name: attributes1.name + ' - 4', language: 'pl', nsfw: true }
       await uploadVideo(server.url, server.accessToken, attributes4)
 
       await wait(1000)
 
       startDate = new Date().toISOString()
 
-      const attributes5 = immutableAssign(attributes1, { name: attributes1.name + ' - 5', licence: 2, language: undefined })
+      const attributes5 = { ...attributes1, name: attributes1.name + ' - 5', licence: 2, language: undefined }
       await uploadVideo(server.url, server.accessToken, attributes5)
 
-      const attributes6 = immutableAssign(attributes1, { name: attributes1.name + ' - 6', tags: [ 't1', 't2' ] })
+      const attributes6 = { ...attributes1, name: attributes1.name + ' - 6', tags: [ 't1', 't2' ] }
       await uploadVideo(server.url, server.accessToken, attributes6)
 
-      const attributes7 = immutableAssign(attributes1, {
-        name: attributes1.name + ' - 7',
-        originallyPublishedAt: '2019-02-12T09:58:08.286Z'
-      })
+      const attributes7 = { ...attributes1, name: attributes1.name + ' - 7', originallyPublishedAt: '2019-02-12T09:58:08.286Z' }
       await uploadVideo(server.url, server.accessToken, attributes7)
 
-      const attributes8 = immutableAssign(attributes1, { name: attributes1.name + ' - 8', licence: 4 })
+      const attributes8 = { ...attributes1, name: attributes1.name + ' - 8', licence: 4 }
       await uploadVideo(server.url, server.accessToken, attributes8)
     }
 
@@ -101,7 +97,7 @@ describe('Test videos search', function () {
       }
       await uploadVideo(server.url, server.accessToken, attributes)
 
-      await uploadVideo(server.url, server.accessToken, immutableAssign(attributes, { name: attributes.name + ' duplicate' }))
+      await uploadVideo(server.url, server.accessToken, { ...attributes, name: attributes.name + ' duplicate' })
     }
 
     {
@@ -122,10 +118,10 @@ describe('Test videos search', function () {
         category: 1
       }
       await uploadVideo(server.url, server.accessToken, attributes1)
-      await uploadVideo(server.url, server.accessToken, immutableAssign(attributes1, { category: 2 }))
+      await uploadVideo(server.url, server.accessToken, { ...attributes1, category: 2 })
 
-      await uploadVideo(server.url, server.accessToken, immutableAssign(attributes1, { tags: [ 'cccc', 'dddd' ] }))
-      await uploadVideo(server.url, server.accessToken, immutableAssign(attributes1, { tags: [ 'eeee', 'ffff' ] }))
+      await uploadVideo(server.url, server.accessToken, { ...attributes1, tags: [ 'cccc', 'dddd' ] })
+      await uploadVideo(server.url, server.accessToken, { ...attributes1, tags: [ 'eeee', 'ffff' ] })
     }
 
     {
@@ -134,7 +130,7 @@ describe('Test videos search', function () {
         category: 1
       }
       await uploadVideo(server.url, server.accessToken, attributes1)
-      await uploadVideo(server.url, server.accessToken, immutableAssign(attributes1, { category: 2 }))
+      await uploadVideo(server.url, server.accessToken, { ...attributes1, category: 2 })
     }
 
     command = server.searchCommand
@@ -414,7 +410,7 @@ describe('Test videos search', function () {
     }
 
     {
-      const query = immutableAssign(baseQuery, { originallyPublishedStartDate: '2019-02-11T09:58:08.286Z' })
+      const query = { ...baseQuery, originallyPublishedStartDate: '2019-02-11T09:58:08.286Z' }
       const body = await command.advancedVideoSearch({ search: query })
 
       expect(body.total).to.equal(1)
@@ -422,7 +418,7 @@ describe('Test videos search', function () {
     }
 
     {
-      const query = immutableAssign(baseQuery, { originallyPublishedEndDate: '2019-03-11T09:58:08.286Z' })
+      const query = { ...baseQuery, originallyPublishedEndDate: '2019-03-11T09:58:08.286Z' }
       const body = await command.advancedVideoSearch({ search: query })
 
       expect(body.total).to.equal(1)
@@ -430,34 +426,36 @@ describe('Test videos search', function () {
     }
 
     {
-      const query = immutableAssign(baseQuery, { originallyPublishedEndDate: '2019-01-11T09:58:08.286Z' })
+      const query = { ...baseQuery, originallyPublishedEndDate: '2019-01-11T09:58:08.286Z' }
       const body = await command.advancedVideoSearch({ search: query })
 
       expect(body.total).to.equal(0)
     }
 
     {
-      const query = immutableAssign(baseQuery, { originallyPublishedStartDate: '2019-03-11T09:58:08.286Z' })
+      const query = { ...baseQuery, originallyPublishedStartDate: '2019-03-11T09:58:08.286Z' }
       const body = await command.advancedVideoSearch({ search: query })
 
       expect(body.total).to.equal(0)
     }
 
     {
-      const query = immutableAssign(baseQuery, {
+      const query = {
+        ...baseQuery,
         originallyPublishedStartDate: '2019-01-11T09:58:08.286Z',
         originallyPublishedEndDate: '2019-01-10T09:58:08.286Z'
-      })
+      }
       const body = await command.advancedVideoSearch({ search: query })
 
       expect(body.total).to.equal(0)
     }
 
     {
-      const query = immutableAssign(baseQuery, {
+      const query = {
+        ...baseQuery,
         originallyPublishedStartDate: '2019-01-11T09:58:08.286Z',
         originallyPublishedEndDate: '2019-04-11T09:58:08.286Z'
-      })
+      }
       const body = await command.advancedVideoSearch({ search: query })
 
       expect(body.total).to.equal(1)

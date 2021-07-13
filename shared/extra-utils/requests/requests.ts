@@ -4,8 +4,8 @@ import { isAbsolute, join } from 'path'
 import { decode } from 'querystring'
 import * as request from 'supertest'
 import { URL } from 'url'
-import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
-import { buildAbsoluteFixturePath, root } from '../miscs/miscs'
+import { HttpStatusCode } from '@shared/core-utils'
+import { buildAbsoluteFixturePath, root } from '../miscs/tests'
 
 function get4KFileUrl () {
   return 'https://download.cpy.re/peertube/4k_file.txt'

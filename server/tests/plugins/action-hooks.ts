@@ -22,8 +22,7 @@ import {
   flushAndRunMultipleServers,
   killallServers,
   reRunServer,
-  ServerInfo,
-  waitUntilLog
+  ServerInfo
 } from '../../../shared/extra-utils/server/servers'
 
 describe('Test plugin action hooks', function () {
@@ -32,7 +31,7 @@ describe('Test plugin action hooks', function () {
   let threadId: number
 
   function checkHook (hook: ServerHookName) {
-    return waitUntilLog(servers[0], 'Run hook ' + hook)
+    return servers[0].serversCommand.waitUntilLog('Run hook ' + hook)
   }
 
   before(async function () {

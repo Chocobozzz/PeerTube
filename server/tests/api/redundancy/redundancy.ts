@@ -14,7 +14,6 @@ import {
   flushAndRunMultipleServers,
   getVideo,
   getVideoWithToken,
-  immutableAssign,
   killallServers,
   makeGetRequest,
   removeVideo,
@@ -26,8 +25,7 @@ import {
   uploadVideo,
   viewVideo,
   wait,
-  waitJobs,
-  waitUntilLog
+  waitJobs
 } from '@shared/extra-utils'
 import { VideoDetails, VideoPrivacy, VideoRedundancyStrategy, VideoRedundancyStrategyWithManual } from '@shared/models'
 
@@ -53,11 +51,13 @@ async function flushAndRunServers (strategy: VideoRedundancyStrategy | null, add
 
   if (strategy !== null) {
     strategies.push(
-      immutableAssign({
+      {
         min_lifetime: '1 hour',
         strategy: strategy,
-        size: '400KB'
-      }, additionalParams)
+        size: '400KB',
+
+        ...additionalParams
+      }
     )
   }
 
@@ -316,7 +316,7 @@ describe('Test videos redundancy', function () {
       this.timeout(80000)
 
       await waitJobs(servers)
-      await waitUntilLog(servers[0], 'Duplicated ', 5)
+      await servers[0].serversCommand.waitUntilLog('Duplicated ', 5)
       await waitJobs(servers)
 
       await check2Webseeds()
@@ -335,7 +335,7 @@ describe('Test videos redundancy', function () {
       await check1WebSeed()
       await check0PlaylistRedundancies()
 
-      await checkVideoFilesWereRemoved(video1Server2UUID, servers[0].internalServerNumber, [ 'videos', join('playlists', 'hls') ])
+      await checkVideoFilesWereRemoved(video1Server2UUID, servers[0], [ 'videos', join('playlists', 'hls') ])
     })
 
     after(async function () {
@@ -366,7 +366,7 @@ describe('Test videos redundancy', function () {
       this.timeout(80000)
 
       await waitJobs(servers)
-      await waitUntilLog(servers[0], 'Duplicated ', 5)
+      await servers[0].serversCommand.waitUntilLog('Duplicated ', 5)
       await waitJobs(servers)
 
       await check2Webseeds()
@@ -385,7 +385,7 @@ describe('Test videos redundancy', function () {
       await check1WebSeed()
       await check0PlaylistRedundancies()
 
-      await checkVideoFilesWereRemoved(video1Server2UUID, servers[0].internalServerNumber, [ 'videos' ])
+      await checkVideoFilesWereRemoved(video1Server2UUID, servers[0], [ 'videos' ])
     })
 
     after(async function () {
@@ -438,7 +438,7 @@ describe('Test videos redundancy', function () {
       this.timeout(80000)
 
       await waitJobs(servers)
-      await waitUntilLog(servers[0], 'Duplicated ', 5)
+      await servers[0].serversCommand.waitUntilLog('Duplicated ', 5)
       await waitJobs(servers)
 
       await check2Webseeds()
@@ -454,7 +454,7 @@ describe('Test videos redundancy', function () {
       await waitJobs(servers)
 
       for (const server of servers) {
-        await checkVideoFilesWereRemoved(video1Server2UUID, server.internalServerNumber)
+        await checkVideoFilesWereRemoved(video1Server2UUID, server)
       }
     })
 
@@ -502,7 +502,7 @@ describe('Test videos redundancy', function () {
       await waitJobs(servers)
 
       await waitJobs(servers)
-      await waitUntilLog(servers[0], 'Duplicated ', 1)
+      await servers[0].serversCommand.waitUntilLog('Duplicated ', 1)
       await waitJobs(servers)
 
       await check1PlaylistRedundancies()
@@ -517,7 +517,7 @@ describe('Test videos redundancy', function () {
       await waitJobs(servers)
 
       for (const server of servers) {
-        await checkVideoFilesWereRemoved(video1Server2UUID, server.internalServerNumber)
+        await checkVideoFilesWereRemoved(video1Server2UUID, server)
       }
     })
 
@@ -547,7 +547,7 @@ describe('Test videos redundancy', function () {
       this.timeout(80000)
 
       await waitJobs(servers)
-      await waitUntilLog(servers[0], 'Duplicated ', 5)
+      await servers[0].serversCommand.waitUntilLog('Duplicated ', 5)
       await waitJobs(servers)
 
       await check2Webseeds()
@@ -575,7 +575,7 @@ describe('Test videos redundancy', function () {
       await check1WebSeed()
       await check0PlaylistRedundancies()
 
-      await checkVideoFilesWereRemoved(video1Server2UUID, servers[0].serverNumber, [ 'videos' ])
+      await checkVideoFilesWereRemoved(video1Server2UUID, servers[0], [ 'videos' ])
     })
 
     after(async function () {
@@ -658,7 +658,7 @@ describe('Test videos redundancy', function () {
       await enableRedundancyOnServer1()
 
       await waitJobs(servers)
-      await waitUntilLog(servers[0], 'Duplicated ', 5)
+      await servers[0].serversCommand.waitUntilLog('Duplicated ', 5)
       await waitJobs(servers)
 
       await check2Webseeds(video1Server2UUID)
@@ -715,7 +715,7 @@ describe('Test videos redundancy', function () {
 
       await waitJobs(servers)
 
-      await checkVideoFilesWereRemoved(video1Server2UUID, servers[0].internalServerNumber, [ join('redundancy', 'hls') ])
+      await checkVideoFilesWereRemoved(video1Server2UUID, servers[0], [ join('redundancy', 'hls') ])
     })
 
     after(async function () {

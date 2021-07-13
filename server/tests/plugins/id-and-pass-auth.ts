@@ -15,8 +15,7 @@ import {
   setAccessTokensToServers,
   updateMyUser,
   userLogin,
-  wait,
-  waitUntilLog
+  wait
 } from '@shared/extra-utils'
 import { User, UserRole } from '@shared/models'
 
@@ -137,7 +136,7 @@ describe('Test id and pass auth plugins', function () {
   })
 
   it('Should have logged out Crash', async function () {
-    await waitUntilLog(server, 'On logout for auth 1 - 2')
+    await server.serversCommand.waitUntilLog('On logout for auth 1 - 2')
 
     await getMyUserInformation(server.url, crashAccessToken, 401)
   })
@@ -164,16 +163,16 @@ describe('Test id and pass auth plugins', function () {
 
   it('Should reject an invalid username, email, role or display name', async function () {
     await userLogin(server, { username: 'ward', password: 'ward password' }, 400)
-    await waitUntilLog(server, 'valid username')
+    await server.serversCommand.waitUntilLog('valid username')
 
     await userLogin(server, { username: 'kiros', password: 'kiros password' }, 400)
-    await waitUntilLog(server, 'valid display name')
+    await server.serversCommand.waitUntilLog('valid display name')
 
     await userLogin(server, { username: 'raine', password: 'raine password' }, 400)
-    await waitUntilLog(server, 'valid role')
+    await server.serversCommand.waitUntilLog('valid role')
 
     await userLogin(server, { username: 'ellone', password: 'elonne password' }, 400)
-    await waitUntilLog(server, 'valid email')
+    await server.serversCommand.waitUntilLog('valid email')
   })
 
   it('Should unregister spyro-auth and do not login existing Spyro', async function () {

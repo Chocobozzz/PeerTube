@@ -8,7 +8,6 @@ import {
   checkBadStartPagination,
   cleanupTests,
   flushAndRunServer,
-  immutableAssign,
   makeGetRequest,
   ServerInfo,
   setAccessTokensToServers
@@ -63,78 +62,78 @@ describe('Test videos API validator', function () {
     })
 
     it('Should fail with an invalid category', async function () {
-      const customQuery1 = immutableAssign(query, { categoryOneOf: [ 'aa', 'b' ] })
+      const customQuery1 = { ...query, categoryOneOf: [ 'aa', 'b' ] }
       await makeGetRequest({ url: server.url, path, query: customQuery1, statusCodeExpected: HttpStatusCode.BAD_REQUEST_400 })
 
-      const customQuery2 = immutableAssign(query, { categoryOneOf: 'a' })
+      const customQuery2 = { ...query, categoryOneOf: 'a' }
       await makeGetRequest({ url: server.url, path, query: customQuery2, statusCodeExpected: HttpStatusCode.BAD_REQUEST_400 })
     })
 
     it('Should succeed with a valid category', async function () {
-      const customQuery1 = immutableAssign(query, { categoryOneOf: [ 1, 7 ] })
+      const customQuery1 = { ...query, categoryOneOf: [ 1, 7 ] }
       await makeGetRequest({ url: server.url, path, query: customQuery1, statusCodeExpected: HttpStatusCode.OK_200 })
 
-      const customQuery2 = immutableAssign(query, { categoryOneOf: 1 })
+      const customQuery2 = { ...query, categoryOneOf: 1 }
       await makeGetRequest({ url: server.url, path, query: customQuery2, statusCodeExpected: HttpStatusCode.OK_200 })
     })
 
     it('Should fail with an invalid licence', async function () {
-      const customQuery1 = immutableAssign(query, { licenceOneOf: [ 'aa', 'b' ] })
+      const customQuery1 = { ...query, licenceOneOf: [ 'aa', 'b' ] }
       await makeGetRequest({ url: server.url, path, query: customQuery1, statusCodeExpected: HttpStatusCode.BAD_REQUEST_400 })
 
-      const customQuery2 = immutableAssign(query, { licenceOneOf: 'a' })
+      const customQuery2 = { ...query, licenceOneOf: 'a' }
       await makeGetRequest({ url: server.url, path, query: customQuery2, statusCodeExpected: HttpStatusCode.BAD_REQUEST_400 })
     })
 
     it('Should succeed with a valid licence', async function () {
-      const customQuery1 = immutableAssign(query, { licenceOneOf: [ 1, 2 ] })
+      const customQuery1 = { ...query, licenceOneOf: [ 1, 2 ] }
       await makeGetRequest({ url: server.url, path, query: customQuery1, statusCodeExpected: HttpStatusCode.OK_200 })
 
-      const customQuery2 = immutableAssign(query, { licenceOneOf: 1 })
+      const customQuery2 = { ...query, licenceOneOf: 1 }
       await makeGetRequest({ url: server.url, path, query: customQuery2, statusCodeExpected: HttpStatusCode.OK_200 })
     })
 
     it('Should succeed with a valid language', async function () {
-      const customQuery1 = immutableAssign(query, { languageOneOf: [ 'fr', 'en' ] })
+      const customQuery1 = { ...query, languageOneOf: [ 'fr', 'en' ] }
       await makeGetRequest({ url: server.url, path, query: customQuery1, statusCodeExpected: HttpStatusCode.OK_200 })
 
-      const customQuery2 = immutableAssign(query, { languageOneOf: 'fr' })
+      const customQuery2 = { ...query, languageOneOf: 'fr' }
       await makeGetRequest({ url: server.url, path, query: customQuery2, statusCodeExpected: HttpStatusCode.OK_200 })
     })
 
     it('Should succeed with valid tags', async function () {
-      const customQuery1 = immutableAssign(query, { tagsOneOf: [ 'tag1', 'tag2' ] })
+      const customQuery1 = { ...query, tagsOneOf: [ 'tag1', 'tag2' ] }
       await makeGetRequest({ url: server.url, path, query: customQuery1, statusCodeExpected: HttpStatusCode.OK_200 })
 
-      const customQuery2 = immutableAssign(query, { tagsOneOf: 'tag1' })
+      const customQuery2 = { ...query, tagsOneOf: 'tag1' }
       await makeGetRequest({ url: server.url, path, query: customQuery2, statusCodeExpected: HttpStatusCode.OK_200 })
 
-      const customQuery3 = immutableAssign(query, { tagsAllOf: [ 'tag1', 'tag2' ] })
+      const customQuery3 = { ...query, tagsAllOf: [ 'tag1', 'tag2' ] }
       await makeGetRequest({ url: server.url, path, query: customQuery3, statusCodeExpected: HttpStatusCode.OK_200 })
 
-      const customQuery4 = immutableAssign(query, { tagsAllOf: 'tag1' })
+      const customQuery4 = { ...query, tagsAllOf: 'tag1' }
       await makeGetRequest({ url: server.url, path, query: customQuery4, statusCodeExpected: HttpStatusCode.OK_200 })
     })
 
     it('Should fail with invalid durations', async function () {
-      const customQuery1 = immutableAssign(query, { durationMin: 'hello' })
+      const customQuery1 = { ...query, durationMin: 'hello' }
       await makeGetRequest({ url: server.url, path, query: customQuery1, statusCodeExpected: HttpStatusCode.BAD_REQUEST_400 })
 
-      const customQuery2 = immutableAssign(query, { durationMax: 'hello' })
+      const customQuery2 = { ...query, durationMax: 'hello' }
       await makeGetRequest({ url: server.url, path, query: customQuery2, statusCodeExpected: HttpStatusCode.BAD_REQUEST_400 })
     })
 
     it('Should fail with invalid dates', async function () {
-      const customQuery1 = immutableAssign(query, { startDate: 'hello' })
+      const customQuery1 = { ...query, startDate: 'hello' }
       await makeGetRequest({ url: server.url, path, query: customQuery1, statusCodeExpected: HttpStatusCode.BAD_REQUEST_400 })
 
-      const customQuery2 = immutableAssign(query, { endDate: 'hello' })
+      const customQuery2 = { ...query, endDate: 'hello' }
       await makeGetRequest({ url: server.url, path, query: customQuery2, statusCodeExpected: HttpStatusCode.BAD_REQUEST_400 })
 
-      const customQuery3 = immutableAssign(query, { originallyPublishedStartDate: 'hello' })
+      const customQuery3 = { ...query, originallyPublishedStartDate: 'hello' }
       await makeGetRequest({ url: server.url, path, query: customQuery3, statusCodeExpected: HttpStatusCode.BAD_REQUEST_400 })
 
-      const customQuery4 = immutableAssign(query, { originallyPublishedEndDate: 'hello' })
+      const customQuery4 = { ...query, originallyPublishedEndDate: 'hello' }
       await makeGetRequest({ url: server.url, path, query: customQuery4, statusCodeExpected: HttpStatusCode.BAD_REQUEST_400 })
     })
   })
@@ -201,41 +200,41 @@ describe('Test videos API validator', function () {
 
       for (const path of paths) {
         {
-          const customQuery = immutableAssign(query, { searchTarget: 'hello' })
+          const customQuery = { ...query, searchTarget: 'hello' }
           await makeGetRequest({ url: server.url, path, query: customQuery, statusCodeExpected: HttpStatusCode.BAD_REQUEST_400 })
         }
 
         {
-          const customQuery = immutableAssign(query, { searchTarget: undefined })
+          const customQuery = { ...query, searchTarget: undefined }
           await makeGetRequest({ url: server.url, path, query: customQuery, statusCodeExpected: HttpStatusCode.OK_200 })
         }
 
         {
-          const customQuery = immutableAssign(query, { searchTarget: 'local' })
+          const customQuery = { ...query, searchTarget: 'local' }
           await makeGetRequest({ url: server.url, path, query: customQuery, statusCodeExpected: HttpStatusCode.OK_200 })
         }
 
         {
-          const customQuery = immutableAssign(query, { searchTarget: 'search-index' })
+          const customQuery = { ...query, searchTarget: 'search-index' }
           await makeGetRequest({ url: server.url, path, query: customQuery, statusCodeExpected: HttpStatusCode.BAD_REQUEST_400 })
         }
 
         await updateSearchIndex(server, true, true)
 
         {
-          const customQuery = immutableAssign(query, { searchTarget: 'local' })
+          const customQuery = { ...query, searchTarget: 'local' }
           await makeGetRequest({ url: server.url, path, query: customQuery, statusCodeExpected: HttpStatusCode.BAD_REQUEST_400 })
         }
 
         {
-          const customQuery = immutableAssign(query, { searchTarget: 'search-index' })
+          const customQuery = { ...query, searchTarget: 'search-index' }
           await makeGetRequest({ url: server.url, path, query: customQuery, statusCodeExpected: HttpStatusCode.OK_200 })
         }
 
         await updateSearchIndex(server, true, false)
 
         {
-          const customQuery = immutableAssign(query, { searchTarget: 'local' })
+          const customQuery = { ...query, searchTarget: 'local' }
           await makeGetRequest({ url: server.url, path, query: customQuery, statusCodeExpected: HttpStatusCode.OK_200 })
         }
 
