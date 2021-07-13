@@ -13,7 +13,6 @@ import {
   updateMyUser,
   updateVideo,
   uploadVideo,
-  userLogin,
   wait,
   waitJobs
 } from '@shared/extra-utils'
@@ -47,7 +46,7 @@ describe('Test ActivityPub video channels search', function () {
     {
       const user = { username: 'user1_server2', password: 'password' }
       await createUser({ url: servers[1].url, accessToken: servers[1].accessToken, username: user.username, password: user.password })
-      userServer2Token = await userLogin(servers[1], user)
+      userServer2Token = await servers[1].loginCommand.getAccessToken(user)
 
       const channel = {
         name: 'channel1_server2',

@@ -15,7 +15,6 @@ import {
   setAccessTokensToServers,
   unblockUser,
   uploadVideo,
-  userLogin,
   verifyEmail
 } from '../../../../shared/extra-utils'
 import { MockSmtpServer } from '../../../../shared/extra-utils/mock-servers/mock-email'
@@ -62,7 +61,7 @@ describe('Test emails', function () {
       const res = await createUser({ url: server.url, accessToken: server.accessToken, username: user.username, password: user.password })
       userId = res.body.user.id
 
-      userAccessToken = await userLogin(server, user)
+      userAccessToken = await server.loginCommand.getAccessToken(user)
     }
 
     {
@@ -128,7 +127,7 @@ describe('Test emails', function () {
     it('Should login with this new password', async function () {
       user.password = 'super_password2'
 
-      await userLogin(server, user)
+      await server.loginCommand.getAccessToken(user)
     })
   })
 
@@ -175,7 +174,7 @@ describe('Test emails', function () {
     })
 
     it('Should login with this new password', async function () {
-      await userLogin(server, {
+      await server.loginCommand.getAccessToken({
         username: 'create_password',
         password: 'newly_created_password'
       })

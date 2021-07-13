@@ -2,7 +2,6 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { Video } from '@shared/models'
 import {
   BulkCommand,
   cleanupTests,
@@ -13,9 +12,9 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo,
-  userLogin,
   waitJobs
-} from '../../../../shared/extra-utils/index'
+} from '@shared/extra-utils'
+import { Video } from '@shared/models'
 
 const expect = chai.expect
 
@@ -41,21 +40,21 @@ describe('Test bulk actions', function () {
       const user = { username: 'user1', password: 'password' }
       await createUser({ url: servers[0].url, accessToken: servers[0].accessToken, username: user.username, password: user.password })
 
-      user1Token = await userLogin(servers[0], user)
+      user1Token = await servers[0].loginCommand.getAccessToken(user)
     }
 
     {
       const user = { username: 'user2', password: 'password' }
       await createUser({ url: servers[0].url, accessToken: servers[0].accessToken, username: user.username, password: user.password })
 
-      user2Token = await userLogin(servers[0], user)
+      user2Token = await servers[0].loginCommand.getAccessToken(user)
     }
 
     {
       const user = { username: 'user3', password: 'password' }
       await createUser({ url: servers[1].url, accessToken: servers[1].accessToken, username: user.username, password: user.password })
 
-      user3Token = await userLogin(servers[1], user)
+      user3Token = await servers[1].loginCommand.getAccessToken(user)
     }
 
     await doubleFollow(servers[0], servers[1])

@@ -2,23 +2,21 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '@shared/core-utils'
 import {
   cleanupTests,
   flushAndRunServer,
   getMyUserInformation,
   getUserInformation,
-  login,
+  MockSmtpServer,
   registerUser,
   ServerInfo,
+  setAccessTokensToServers,
   updateMyUser,
-  userLogin,
-  verifyEmail
-} from '../../../../shared/extra-utils'
-import { MockSmtpServer } from '../../../../shared/extra-utils/mock-servers/mock-email'
-import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
-import { setAccessTokensToServers } from '../../../../shared/extra-utils/users/login'
-import { User } from '../../../../shared/models/users'
+  verifyEmail,
+  waitJobs
+} from '@shared/extra-utils'
+import { User } from '@shared/models'
 
 const expect = chai.expect
 
@@ -91,15 +89,15 @@ describe('Test users account verification', function () {
   })
 
   it('Should not allow login for user with unverified email', async function () {
-    const resLogin = await login(server.url, server.client, user1, HttpStatusCode.BAD_REQUEST_400)
-    expect(resLogin.body.detail).to.contain('User email is not verified.')
+    const { detail } = await server.loginCommand.login({ user: user1, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    expect(detail).to.contain('User email is not verified.')
   })
 
   it('Should verify the user via email and allow login', async function () {
     await verifyEmail(server.url, userId, verificationString)
 
-    const res = await login(server.url, server.client, user1)
-    userAccessToken = res.body.access_token
+    const body = await server.loginCommand.login({ user: user1 })
+    userAccessToken = body.access_token
 
     const resUserVerified = await getUserInformation(server.url, server.accessToken, userId)
     expect(resUserVerified.body.emailVerified).to.be.true
@@ -164,7 +162,7 @@ describe('Test users account verification', function () {
     await waitJobs(server)
     expect(emails).to.have.lengthOf(expectedEmailsLength)
 
-    const accessToken = await userLogin(server, user2)
+    const accessToken = await server.loginCommand.getAccessToken(user2)
 
     const resMyUserInfo = await getMyUserInformation(server.url, accessToken)
     expect(resMyUserInfo.body.emailVerified).to.be.null
@@ -181,7 +179,7 @@ describe('Test users account verification', function () {
       }
     })
 
-    await userLogin(server, user2)
+    await server.loginCommand.getAccessToken(user2)
   })
 
   after(async function () {

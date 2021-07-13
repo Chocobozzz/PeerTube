@@ -15,8 +15,7 @@ import {
   makePostBodyRequest,
   ServerInfo,
   setAccessTokensToServers,
-  uploadVideo,
-  userLogin
+  uploadVideo
 } from '@shared/extra-utils'
 import { VideoCreateResult } from '@shared/models'
 
@@ -55,13 +54,13 @@ describe('Test video comments API validator', function () {
     {
       const user = { username: 'user1', password: 'my super password' }
       await createUser({ url: server.url, accessToken: server.accessToken, username: user.username, password: user.password })
-      userAccessToken = await userLogin(server, user)
+      userAccessToken = await server.loginCommand.getAccessToken(user)
     }
 
     {
       const user = { username: 'user2', password: 'my super password' }
       await createUser({ url: server.url, accessToken: server.accessToken, username: user.username, password: user.password })
-      userAccessToken2 = await userLogin(server, user)
+      userAccessToken2 = await server.loginCommand.getAccessToken(user)
     }
   })
 

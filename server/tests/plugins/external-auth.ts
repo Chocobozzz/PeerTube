@@ -9,14 +9,10 @@ import {
   decodeQueryString,
   flushAndRunServer,
   getMyUserInformation,
-  loginUsingExternalToken,
-  logout,
   PluginsCommand,
-  refreshToken,
   ServerInfo,
   setAccessTokensToServers,
   updateMyUser,
-  userLogin,
   wait
 } from '@shared/extra-utils'
 import { User, UserRole } from '@shared/models'
@@ -43,12 +39,11 @@ async function loginExternal (options: {
   const location = res.header.location
   const { externalAuthToken } = decodeQueryString(location)
 
-  const resLogin = await loginUsingExternalToken(
-    options.server,
-    options.username,
-    externalAuthToken as string,
-    options.statusCodeExpectedStep2
-  )
+  const resLogin = await options.server.loginCommand.loginUsingExternalToken({
+    username: options.username,
+    externalAuthToken: externalAuthToken as string,
+    expectedStatus: options.statusCodeExpectedStep2
+  })
 
   return resLogin.body
 }
@@ -110,13 +105,17 @@ describe('Test external auth plugins', function () {
   })
 
   it('Should reject auto external login with a missing or invalid token', async function () {
-    await loginUsingExternalToken(server, 'cyan', '', HttpStatusCode.BAD_REQUEST_400)
-    await loginUsingExternalToken(server, 'cyan', 'blabla', HttpStatusCode.BAD_REQUEST_400)
+    const command = server.loginCommand
+
+    await command.loginUsingExternalToken({ username: 'cyan', externalAuthToken: '', expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    await command.loginUsingExternalToken({ username: 'cyan', externalAuthToken: 'blabla', expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
   })
 
   it('Should reject auto external login with a missing or invalid username', async function () {
-    await loginUsingExternalToken(server, '', externalAuthToken, HttpStatusCode.BAD_REQUEST_400)
-    await loginUsingExternalToken(server, '', externalAuthToken, HttpStatusCode.BAD_REQUEST_400)
+    const command = server.loginCommand
+
+    await command.loginUsingExternalToken({ username: '', externalAuthToken, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    await command.loginUsingExternalToken({ username: '', externalAuthToken, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
   })
 
   it('Should reject auto external login with an expired token', async function () {
@@ -124,7 +123,11 @@ describe('Test external auth plugins', function () {
 
     await wait(5000)
 
-    await loginUsingExternalToken(server, 'cyan', externalAuthToken, HttpStatusCode.BAD_REQUEST_400)
+    await server.loginCommand.loginUsingExternalToken({
+      username: 'cyan',
+      externalAuthToken,
+      expectedStatus: HttpStatusCode.BAD_REQUEST_400
+    })
 
     await server.serversCommand.waitUntilLog('expired external auth token', 2)
   })
@@ -182,7 +185,7 @@ describe('Test external auth plugins', function () {
 
   it('Should refresh Cyan token, but not Kefka token', async function () {
     {
-      const resRefresh = await refreshToken(server, cyanRefreshToken)
+      const resRefresh = await server.loginCommand.refreshToken({ refreshToken: cyanRefreshToken })
       cyanAccessToken = resRefresh.body.access_token
       cyanRefreshToken = resRefresh.body.refresh_token
 
@@ -192,7 +195,7 @@ describe('Test external auth plugins', function () {
     }
 
     {
-      await refreshToken(server, kefkaRefreshToken, HttpStatusCode.BAD_REQUEST_400)
+      await server.loginCommand.refreshToken({ refreshToken: kefkaRefreshToken, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     }
   })
 
@@ -212,7 +215,7 @@ describe('Test external auth plugins', function () {
   })
 
   it('Should logout Cyan', async function () {
-    await logout(server.url, cyanAccessToken)
+    await server.loginCommand.logout({ token: cyanAccessToken })
   })
 
   it('Should have logged out Cyan', async function () {
@@ -269,7 +272,7 @@ describe('Test external auth plugins', function () {
       settings: { disableKefka: true }
     })
 
-    await userLogin(server, { username: 'kefka', password: 'fake' }, HttpStatusCode.BAD_REQUEST_400)
+    await server.loginCommand.login({ user: { username: 'kefka', password: 'fake' }, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
 
     await loginExternal({
       server,
@@ -307,9 +310,9 @@ describe('Test external auth plugins', function () {
       statusCodeExpected: HttpStatusCode.NOT_FOUND_404
     })
 
-    await userLogin(server, { username: 'cyan', password: null }, HttpStatusCode.BAD_REQUEST_400)
-    await userLogin(server, { username: 'cyan', password: '' }, HttpStatusCode.BAD_REQUEST_400)
-    await userLogin(server, { username: 'cyan', password: 'fake' }, HttpStatusCode.BAD_REQUEST_400)
+    await server.loginCommand.login({ user: { username: 'cyan', password: null }, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    await server.loginCommand.login({ user: { username: 'cyan', password: '' }, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    await server.loginCommand.login({ user: { username: 'cyan', password: 'fake' }, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
   })
 
   it('Should not login kefka with another plugin', async function () {
@@ -369,9 +372,8 @@ describe('Test external auth plugins', function () {
       username: 'cid'
     })
 
-    const resLogout = await logout(server.url, resLogin.access_token)
-
-    expect(resLogout.body.redirectUrl).to.equal('https://example.com/redirectUrl')
+    const { redirectUrl } = await server.loginCommand.logout({ token: resLogin.access_token })
+    expect(redirectUrl).to.equal('https://example.com/redirectUrl')
   })
 
   it('Should call the plugin\'s onLogout method with the request', async function () {
@@ -382,8 +384,7 @@ describe('Test external auth plugins', function () {
       username: 'cid'
     })
 
-    const resLogout = await logout(server.url, resLogin.access_token)
-
-    expect(resLogout.body.redirectUrl).to.equal('https://example.com/redirectUrl?access_token=' + resLogin.access_token)
+    const { redirectUrl } = await server.loginCommand.logout({ token: resLogin.access_token })
+    expect(redirectUrl).to.equal('https://example.com/redirectUrl?access_token=' + resLogin.access_token)
   })
 })

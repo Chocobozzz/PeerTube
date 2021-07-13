@@ -18,7 +18,6 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo,
-  userLogin,
   waitJobs
 } from '@shared/extra-utils'
 import { AbuseCreate, AbuseState } from '@shared/models'
@@ -47,7 +46,7 @@ describe('Test abuses API validators', function () {
     const username = 'user1'
     const password = 'my super password'
     await createUser({ url: server.url, accessToken: server.accessToken, username: username, password: password })
-    userToken = await userLogin(server, { username, password })
+    userToken = await server.loginCommand.getAccessToken({ username, password })
 
     userToken2 = await generateUserAccessToken(server, 'user_2')
 

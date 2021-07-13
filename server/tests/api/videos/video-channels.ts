@@ -16,7 +16,6 @@ import {
   testImage,
   updateVideo,
   uploadVideo,
-  userLogin,
   wait
 } from '../../../../shared/extra-utils'
 import { getMyUserInformation, ServerInfo, setAccessTokensToServers, viewVideo } from '../../../../shared/extra-utils/index'
@@ -391,7 +390,7 @@ describe('Test video channels', function () {
 
     {
       await createUser({ url: servers[0].url, accessToken: servers[0].accessToken, username: 'toto', password: 'password' })
-      const accessToken = await userLogin(servers[0], { username: 'toto', password: 'password' })
+      const accessToken = await servers[0].loginCommand.getAccessToken({ username: 'toto', password: 'password' })
 
       const res = await getMyUserInformation(servers[0].url, accessToken)
       const videoChannel = res.body.videoChannels[0]

@@ -19,7 +19,6 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   uploadVideoAndGetId,
-  userLogin,
   waitJobs
 } from '../../../../shared/extra-utils'
 
@@ -45,7 +44,7 @@ describe('Test server redundancy API validators', function () {
     }
 
     await createUser({ url: servers[0].url, accessToken: servers[0].accessToken, username: user.username, password: user.password })
-    userAccessToken = await userLogin(servers[0], user)
+    userAccessToken = await servers[0].loginCommand.getAccessToken(user)
 
     videoIdLocal = (await uploadVideoAndGetId({ server: servers[0], videoName: 'video' })).id
 

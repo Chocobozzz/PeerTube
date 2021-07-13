@@ -14,7 +14,6 @@ import {
   updateUser,
   updateVideo,
   uploadVideo,
-  userLogin,
   viewVideo
 } from '../../../shared/extra-utils'
 import {
@@ -138,7 +137,7 @@ describe('Test plugin action hooks', function () {
     })
 
     it('Should run action:api.user.oauth2-got-token', async function () {
-      await userLogin(servers[0], { username: 'created_user', password: 'super_password' })
+      await servers[0].loginCommand.getAccessToken('created_user', 'super_password')
 
       await checkHook('action:api.user.oauth2-got-token')
     })

@@ -7,8 +7,7 @@ import {
   createUser,
   flushAndRunServer,
   ServerInfo,
-  setAccessTokensToServers,
-  userLogin
+  setAccessTokensToServers
 } from '../../../../shared/extra-utils'
 import { makeGetRequest, makePutBodyRequest } from '../../../../shared/extra-utils/requests/requests'
 
@@ -29,7 +28,7 @@ describe('Test custom pages validators', function () {
     const user = { username: 'user1', password: 'password' }
     await createUser({ url: server.url, accessToken: server.accessToken, username: user.username, password: user.password })
 
-    userAccessToken = await userLogin(server, user)
+    userAccessToken = await server.loginCommand.getAccessToken(user)
   })
 
   describe('When updating instance homepage', function () {

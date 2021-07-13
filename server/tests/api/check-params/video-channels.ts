@@ -18,8 +18,7 @@ import {
   makePutBodyRequest,
   makeUploadRequest,
   ServerInfo,
-  setAccessTokensToServers,
-  userLogin
+  setAccessTokensToServers
 } from '@shared/extra-utils'
 import { VideoChannelUpdate } from '@shared/models'
 
@@ -47,7 +46,7 @@ describe('Test video channels API validator', function () {
 
     {
       await createUser({ url: server.url, accessToken: server.accessToken, username: user.username, password: user.password })
-      accessTokenUser = await userLogin(server, user)
+      accessTokenUser = await server.loginCommand.getAccessToken(user)
     }
 
     command = server.channelsCommand

@@ -8,7 +8,6 @@ import {
   createUser,
   dateIsValid,
   flushAndRunServer,
-  getAccessToken,
   ServerInfo,
   setAccessTokensToServers,
   testImage,
@@ -52,7 +51,7 @@ describe('Test video comments', function () {
       username: 'user1',
       password: 'password'
     })
-    userAccessTokenServer1 = await getAccessToken(server.url, 'user1', 'password')
+    userAccessTokenServer1 = await server.loginCommand.getAccessToken('user1', 'password')
 
     command = server.commentsCommand
   })

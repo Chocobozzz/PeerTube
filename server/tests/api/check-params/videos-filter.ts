@@ -8,8 +8,7 @@ import {
   makeGetRequest,
   ServerInfo,
   setAccessTokensToServers,
-  setDefaultVideoChannel,
-  userLogin
+  setDefaultVideoChannel
 } from '../../../../shared/extra-utils'
 import { UserRole } from '../../../../shared/models/users'
 import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
@@ -52,7 +51,7 @@ describe('Test video filters validators', function () {
 
     const user = { username: 'user1', password: 'my super password' }
     await createUser({ url: server.url, accessToken: server.accessToken, username: user.username, password: user.password })
-    userAccessToken = await userLogin(server, user)
+    userAccessToken = await server.loginCommand.getAccessToken(user)
 
     const moderator = { username: 'moderator', password: 'my super password' }
     await createUser(
@@ -66,7 +65,7 @@ describe('Test video filters validators', function () {
         role: UserRole.MODERATOR
       }
     )
-    moderatorAccessToken = await userLogin(server, moderator)
+    moderatorAccessToken = await server.loginCommand.getAccessToken(moderator)
   })
 
   describe('When setting a video filter', function () {

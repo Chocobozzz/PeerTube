@@ -7,7 +7,7 @@ import { UserNotification, UserNotificationSetting, UserNotificationSettingValue
 import { MockSmtpServer } from '../mock-servers/mock-email'
 import { doubleFollow } from '../server/follows'
 import { flushAndRunMultipleServers, ServerInfo } from '../server/servers'
-import { setAccessTokensToServers, userLogin } from './login'
+import { setAccessTokensToServers } from './login'
 import { createUser, getMyUserInformation } from './users'
 
 function getAllNotificationsSettings (): UserNotificationSetting {
@@ -662,7 +662,7 @@ async function prepareNotificationsTest (serversCount = 3, overrideConfigArg: an
     password: user.password,
     videoQuota: 10 * 1000 * 1000
   })
-  const userAccessToken = await userLogin(servers[0], user)
+  const userAccessToken = await servers[0].loginCommand.getAccessToken(user)
 
   await servers[0].notificationsCommand.updateMySettings({ token: userAccessToken, settings: getAllNotificationsSettings() })
   await servers[0].notificationsCommand.updateMySettings({ settings: getAllNotificationsSettings() })

@@ -16,7 +16,6 @@ import {
   setAccessTokensToServers,
   updateMyUser,
   uploadVideo,
-  userLogin,
   wait
 } from '@shared/extra-utils'
 import { Video, VideoDetails } from '@shared/models'
@@ -61,7 +60,7 @@ describe('Test videos history', function () {
       password: 'super password'
     }
     await createUser({ url: server.url, accessToken: server.accessToken, username: user.username, password: user.password })
-    userAccessToken = await userLogin(server, user)
+    userAccessToken = await server.loginCommand.getAccessToken(user)
   })
 
   it('Should get videos, without watching history', async function () {

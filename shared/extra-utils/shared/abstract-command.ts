@@ -33,6 +33,7 @@ interface InternalGetCommandOptions extends InternalCommonCommandOptions {
   accept?: string
   redirects?: number
   range?: string
+  host?: string
 }
 
 abstract class AbstractCommand {
@@ -78,7 +79,7 @@ abstract class AbstractCommand {
   }
 
   protected getRequest (options: InternalGetCommandOptions) {
-    const { redirects, query, contentType, accept, range } = options
+    const { redirects, query, contentType, accept, range, host } = options
 
     return makeGetRequest({
       ...this.buildCommonRequestOptions(options),
@@ -87,6 +88,7 @@ abstract class AbstractCommand {
       query,
       contentType,
       range,
+      host,
       accept
     })
   }
@@ -109,13 +111,15 @@ abstract class AbstractCommand {
 
   protected postBodyRequest (options: InternalCommonCommandOptions & {
     fields?: { [ fieldName: string ]: any }
+    type?: string
   }) {
-    const { fields } = options
+    const { type, fields } = options
 
     return makePostBodyRequest({
       ...this.buildCommonRequestOptions(options),
 
-      fields
+      fields,
+      type
     })
   }
 

@@ -6,8 +6,7 @@ import {
   createUser,
   flushAndRunServer,
   ServerInfo,
-  setAccessTokensToServers,
-  userLogin
+  setAccessTokensToServers
 } from '../../../../shared/extra-utils'
 import { makePostBodyRequest } from '../../../../shared/extra-utils/requests/requests'
 import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
@@ -27,7 +26,7 @@ describe('Test bulk API validators', function () {
     const user = { username: 'user1', password: 'password' }
     await createUser({ url: server.url, accessToken: server.accessToken, username: user.username, password: user.password })
 
-    userAccessToken = await userLogin(server, user)
+    userAccessToken = await server.loginCommand.getAccessToken(user)
   })
 
   describe('When removing comments of', function () {

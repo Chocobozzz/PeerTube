@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
 import 'mocha'
+import * as chai from 'chai'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import {
   cleanupTests,
   createUser,
@@ -10,12 +11,10 @@ import {
   makeGetRequest,
   ServerInfo,
   setAccessTokensToServers,
-  uploadVideo,
-  userLogin
+  uploadVideo
 } from '../../../../shared/extra-utils'
-import { Video, VideoPrivacy } from '../../../../shared/models/videos'
 import { UserRole } from '../../../../shared/models/users'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { Video, VideoPrivacy } from '../../../../shared/models/videos'
 
 const expect = chai.expect
 
@@ -72,7 +71,7 @@ describe('Test videos filter', function () {
           role: UserRole.MODERATOR
         }
       )
-      server['moderatorAccessToken'] = await userLogin(server, moderator)
+      server['moderatorAccessToken'] = await server.loginCommand.getAccessToken(moderator)
 
       await uploadVideo(server.url, server.accessToken, { name: 'public ' + server.serverNumber })
 

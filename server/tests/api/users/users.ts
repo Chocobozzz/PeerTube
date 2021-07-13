@@ -18,11 +18,8 @@ import {
   getUsersListPaginationAndSort,
   getVideosList,
   killallServers,
-  login,
-  logout,
   makePutBodyRequest,
   rateVideo,
-  refreshToken,
   registerUserWithChannel,
   removeUser,
   removeVideo,
@@ -35,7 +32,6 @@ import {
   updateMyUser,
   updateUser,
   uploadVideo,
-  userLogin,
   waitJobs
 } from '@shared/extra-utils'
 import { AbuseState, MyUser, OAuth2ErrorCode, User, UserAdminFlag, UserRole, Video, VideoPlaylistType } from '@shared/models'
@@ -78,22 +74,22 @@ describe('Test users', function () {
 
     it('Should not login with an invalid client id', async function () {
       const client = { id: 'client', secret: server.client.secret }
-      const res = await login(server.url, client, server.user, HttpStatusCode.BAD_REQUEST_400)
+      const body = await server.loginCommand.login({ client, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
 
-      expect(res.body.code).to.equal(OAuth2ErrorCode.INVALID_CLIENT)
-      expect(res.body.error).to.contain('client is invalid')
-      expect(res.body.type.startsWith('https://')).to.be.true
-      expect(res.body.type).to.contain(OAuth2ErrorCode.INVALID_CLIENT)
+      expect(body.code).to.equal(OAuth2ErrorCode.INVALID_CLIENT)
+      expect(body.error).to.contain('client is invalid')
+      expect(body.type.startsWith('https://')).to.be.true
+      expect(body.type).to.contain(OAuth2ErrorCode.INVALID_CLIENT)
     })
 
     it('Should not login with an invalid client secret', async function () {
       const client = { id: server.client.id, secret: 'coucou' }
-      const res = await login(server.url, client, server.user, HttpStatusCode.BAD_REQUEST_400)
+      const body = await server.loginCommand.login({ client, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
 
-      expect(res.body.code).to.equal(OAuth2ErrorCode.INVALID_CLIENT)
-      expect(res.body.error).to.contain('client is invalid')
-      expect(res.body.type.startsWith('https://')).to.be.true
-      expect(res.body.type).to.contain(OAuth2ErrorCode.INVALID_CLIENT)
+      expect(body.code).to.equal(OAuth2ErrorCode.INVALID_CLIENT)
+      expect(body.error).to.contain('client is invalid')
+      expect(body.type.startsWith('https://')).to.be.true
+      expect(body.type).to.contain(OAuth2ErrorCode.INVALID_CLIENT)
     })
   })
 
@@ -101,22 +97,22 @@ describe('Test users', function () {
 
     it('Should not login with an invalid username', async function () {
       const user = { username: 'captain crochet', password: server.user.password }
-      const res = await login(server.url, server.client, user, HttpStatusCode.BAD_REQUEST_400)
+      const body = await server.loginCommand.login({ user, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
 
-      expect(res.body.code).to.equal(OAuth2ErrorCode.INVALID_GRANT)
-      expect(res.body.error).to.contain('credentials are invalid')
-      expect(res.body.type.startsWith('https://')).to.be.true
-      expect(res.body.type).to.contain(OAuth2ErrorCode.INVALID_GRANT)
+      expect(body.code).to.equal(OAuth2ErrorCode.INVALID_GRANT)
+      expect(body.error).to.contain('credentials are invalid')
+      expect(body.type.startsWith('https://')).to.be.true
+      expect(body.type).to.contain(OAuth2ErrorCode.INVALID_GRANT)
     })
 
     it('Should not login with an invalid password', async function () {
       const user = { username: server.user.username, password: 'mew_three' }
-      const res = await login(server.url, server.client, user, HttpStatusCode.BAD_REQUEST_400)
+      const body = await server.loginCommand.login({ user, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
 
-      expect(res.body.code).to.equal(OAuth2ErrorCode.INVALID_GRANT)
-      expect(res.body.error).to.contain('credentials are invalid')
-      expect(res.body.type.startsWith('https://')).to.be.true
-      expect(res.body.type).to.contain(OAuth2ErrorCode.INVALID_GRANT)
+      expect(body.code).to.equal(OAuth2ErrorCode.INVALID_GRANT)
+      expect(body.error).to.contain('credentials are invalid')
+      expect(body.type.startsWith('https://')).to.be.true
+      expect(body.type).to.contain(OAuth2ErrorCode.INVALID_GRANT)
     })
 
     it('Should not be able to upload a video', async function () {
@@ -139,20 +135,20 @@ describe('Test users', function () {
     it('Should not be able to unfollow')
 
     it('Should be able to login', async function () {
-      const res = await login(server.url, server.client, server.user, HttpStatusCode.OK_200)
+      const body = await server.loginCommand.login({ expectedStatus: HttpStatusCode.OK_200 })
 
-      accessToken = res.body.access_token
+      accessToken = body.access_token
     })
 
     it('Should be able to login with an insensitive username', async function () {
       const user = { username: 'RoOt', password: server.user.password }
-      await login(server.url, server.client, user, HttpStatusCode.OK_200)
+      await server.loginCommand.login({ user, expectedStatus: HttpStatusCode.OK_200 })
 
       const user2 = { username: 'rOoT', password: server.user.password }
-      await login(server.url, server.client, user2, HttpStatusCode.OK_200)
+      await server.loginCommand.login({ user: user2, expectedStatus: HttpStatusCode.OK_200 })
 
       const user3 = { username: 'ROOt', password: server.user.password }
-      await login(server.url, server.client, user3, HttpStatusCode.OK_200)
+      await server.loginCommand.login({ user: user3, expectedStatus: HttpStatusCode.OK_200 })
     })
   })
 
@@ -222,7 +218,7 @@ describe('Test users', function () {
 
   describe('Logout', function () {
     it('Should logout (revoke token)', async function () {
-      await logout(server.url, server.accessToken)
+      await server.loginCommand.logout({ token: server.accessToken })
     })
 
     it('Should not be able to get the user information', async function () {
@@ -250,9 +246,9 @@ describe('Test users', function () {
     })
 
     it('Should be able to login again', async function () {
-      const res = await login(server.url, server.client, server.user)
-      server.accessToken = res.body.access_token
-      server.refreshToken = res.body.refresh_token
+      const body = await server.loginCommand.login()
+      server.accessToken = body.access_token
+      server.refreshToken = body.refresh_token
     })
 
     it('Should be able to get my user information again', async function () {
@@ -268,11 +264,11 @@ describe('Test users', function () {
       await killallServers([ server ])
       await reRunServer(server)
 
-      await getMyUserInformation(server.url, server.accessToken, 401)
+      await getMyUserInformation(server.url, server.accessToken, HttpStatusCode.UNAUTHORIZED_401)
     })
 
     it('Should not be able to refresh an access token with an expired refresh token', async function () {
-      await refreshToken(server, server.refreshToken, 400)
+      await server.loginCommand.refreshToken({ refreshToken: server.refreshToken, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     })
 
     it('Should refresh the token', async function () {
@@ -284,7 +280,7 @@ describe('Test users', function () {
       await killallServers([ server ])
       await reRunServer(server)
 
-      const res = await refreshToken(server, server.refreshToken)
+      const res = await server.loginCommand.refreshToken({ refreshToken: server.refreshToken })
       server.accessToken = res.body.access_token
       server.refreshToken = res.body.refresh_token
     })
@@ -308,7 +304,7 @@ describe('Test users', function () {
     })
 
     it('Should be able to login with this user', async function () {
-      accessTokenUser = await userLogin(server, user)
+      accessTokenUser = await server.loginCommand.getAccessToken(user)
     })
 
     it('Should be able to get user information', async function () {
@@ -562,6 +558,7 @@ describe('Test users', function () {
   })
 
   describe('Update my account', function () {
+
     it('Should update my password', async function () {
       await updateMyUser({
         url: server.url,
@@ -571,7 +568,7 @@ describe('Test users', function () {
       })
       user.password = 'new password'
 
-      await userLogin(server, user, HttpStatusCode.OK_200)
+      await server.loginCommand.login({ user })
     })
 
     it('Should be able to change the NSFW display attribute', async function () {
@@ -781,7 +778,7 @@ describe('Test users', function () {
     it('Should have removed the user token', async function () {
       await getMyUserVideoQuotaUsed(server.url, accessTokenUser, HttpStatusCode.UNAUTHORIZED_401)
 
-      accessTokenUser = await userLogin(server, user)
+      accessTokenUser = await server.loginCommand.getAccessToken(user)
     })
 
     it('Should be able to update another user password', async function () {
@@ -794,10 +791,10 @@ describe('Test users', function () {
 
       await getMyUserVideoQuotaUsed(server.url, accessTokenUser, HttpStatusCode.UNAUTHORIZED_401)
 
-      await userLogin(server, user, HttpStatusCode.BAD_REQUEST_400)
+      await server.loginCommand.login({ user, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
 
       user.password = 'password updated'
-      accessTokenUser = await userLogin(server, user)
+      accessTokenUser = await server.loginCommand.getAccessToken(user)
     })
   })
 
@@ -813,7 +810,7 @@ describe('Test users', function () {
     })
 
     it('Should not be able to login with this user', async function () {
-      await userLogin(server, user, HttpStatusCode.BAD_REQUEST_400)
+      await server.loginCommand.login({ user, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     })
 
     it('Should not have videos of this user', async function () {
@@ -842,7 +839,7 @@ describe('Test users', function () {
         password: 'my super password'
       }
 
-      user15AccessToken = await userLogin(server, user15)
+      user15AccessToken = await server.loginCommand.getAccessToken(user15)
     })
 
     it('Should have the correct display name', async function () {
@@ -897,13 +894,13 @@ describe('Test users', function () {
       })
       user16Id = resUser.body.user.id
 
-      user16AccessToken = await userLogin(server, user16)
+      user16AccessToken = await server.loginCommand.getAccessToken(user16)
 
       await getMyUserInformation(server.url, user16AccessToken, HttpStatusCode.OK_200)
       await blockUser(server.url, user16Id, server.accessToken)
 
       await getMyUserInformation(server.url, user16AccessToken, HttpStatusCode.UNAUTHORIZED_401)
-      await userLogin(server, user16, HttpStatusCode.BAD_REQUEST_400)
+      await server.loginCommand.login({ user: user16, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     })
 
     it('Should search user by banned status', async function () {
@@ -930,7 +927,7 @@ describe('Test users', function () {
 
     it('Should unblock a user', async function () {
       await unblockUser(server.url, user16Id, server.accessToken)
-      user16AccessToken = await userLogin(server, user16)
+      user16AccessToken = await server.loginCommand.getAccessToken(user16)
       await getMyUserInformation(server.url, user16AccessToken, HttpStatusCode.OK_200)
     })
   })
@@ -952,7 +949,7 @@ describe('Test users', function () {
       })
 
       user17Id = resUser.body.user.id
-      user17AccessToken = await userLogin(server, user17)
+      user17AccessToken = await server.loginCommand.getAccessToken(user17)
 
       const res = await getUserInformation(server.url, server.accessToken, user17Id, true)
       const user: User = res.body

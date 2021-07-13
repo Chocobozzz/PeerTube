@@ -17,7 +17,6 @@ import {
   setAccessTokensToServers,
   uploadVideo,
   uploadVideoAndGetId,
-  userLogin,
   waitJobs
 } from '@shared/extra-utils'
 import { AbuseMessage, AbusePredefinedReasonsString, AbuseState, AdminAbuse, UserAbuse } from '@shared/models'
@@ -280,7 +279,7 @@ describe('Test abuses', function () {
       // register a second user to have two reporters/reportees
       const user = { username: 'user2', password: 'password' }
       await createUser({ url: servers[0].url, accessToken: servers[0].accessToken, ...user })
-      const userAccessToken = await userLogin(servers[0], user)
+      const userAccessToken = await servers[0].loginCommand.getAccessToken(user)
 
       // upload a third video via this user
       const video3Attributes = {

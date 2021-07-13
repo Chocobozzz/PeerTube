@@ -13,8 +13,7 @@ import {
   makePostBodyRequest,
   makePutBodyRequest,
   ServerInfo,
-  setAccessTokensToServers,
-  userLogin
+  setAccessTokensToServers
 } from '@shared/extra-utils'
 import { PeerTubePlugin, PluginType } from '@shared/models'
 
@@ -45,7 +44,7 @@ describe('Test server plugins API validators', function () {
     }
 
     await createUser({ url: server.url, accessToken: server.accessToken, username: user.username, password: user.password })
-    userAccessToken = await userLogin(server, user)
+    userAccessToken = await server.loginCommand.getAccessToken(user)
 
     {
       const res = await server.pluginsCommand.install({ npmName: npmPlugin })

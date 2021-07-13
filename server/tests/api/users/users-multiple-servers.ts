@@ -19,7 +19,6 @@ import {
   updateMyAvatar,
   updateMyUser,
   uploadVideo,
-  userLogin,
   waitJobs
 } from '@shared/extra-utils'
 import { User } from '@shared/models'
@@ -64,7 +63,7 @@ describe('Test users with multiple servers', function () {
         password: user.password
       })
       userId = res.body.user.id
-      userAccessToken = await userLogin(servers[0], user)
+      userAccessToken = await servers[0].loginCommand.getAccessToken(user)
     }
 
     {

@@ -11,8 +11,7 @@ import {
   makeGetRequest,
   makePostBodyRequest,
   ServerInfo,
-  setAccessTokensToServers,
-  userLogin
+  setAccessTokensToServers
 } from '../../../../shared/extra-utils'
 import {
   checkBadCountPagination,
@@ -37,7 +36,7 @@ describe('Test blocklist API validators', function () {
     const user = { username: 'user1', password: 'password' }
     await createUser({ url: server.url, accessToken: server.accessToken, username: user.username, password: user.password })
 
-    userAccessToken = await userLogin(server, user)
+    userAccessToken = await server.loginCommand.getAccessToken(user)
 
     await doubleFollow(servers[0], servers[1])
   })

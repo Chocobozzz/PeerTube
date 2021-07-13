@@ -10,7 +10,6 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo,
-  userLogin,
   viewVideo,
   wait,
   waitJobs
@@ -119,7 +118,7 @@ describe('Test stats (excluding redundancy)', function () {
     }
 
     {
-      await userLogin(server, user)
+      await server.loginCommand.getAccessToken(user)
 
       const data = await server.statsCommand.get()
 

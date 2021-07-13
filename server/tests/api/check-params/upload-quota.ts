@@ -15,7 +15,6 @@ import {
   setDefaultVideoChannel,
   updateUser,
   uploadVideo,
-  userLogin,
   waitJobs
 } from '../../../../shared/extra-utils'
 
@@ -50,7 +49,7 @@ describe('Test upload quota', function () {
 
       const user = { username: 'registered' + randomInt(1, 1500), password: 'password' }
       await registerUser(server.url, user.username, user.password)
-      const userAccessToken = await userLogin(server, user)
+      const userAccessToken = await server.loginCommand.getAccessToken(user)
 
       const videoAttributes = { fixture: 'video_short2.webm' }
       for (let i = 0; i < 5; i++) {
@@ -65,7 +64,7 @@ describe('Test upload quota', function () {
 
       const user = { username: 'registered' + randomInt(1, 1500), password: 'password' }
       await registerUser(server.url, user.username, user.password)
-      const userAccessToken = await userLogin(server, user)
+      const userAccessToken = await server.loginCommand.getAccessToken(user)
 
       const videoAttributes = { fixture: 'video_short2.webm' }
       for (let i = 0; i < 5; i++) {
