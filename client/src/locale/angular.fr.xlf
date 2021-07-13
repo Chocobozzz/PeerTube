@@ -1092,7 +1092,7 @@
       </trans-unit>
       <trans-unit id="3326446048041727269" datatype="html">
         <source>Display/Video settings updated.</source>
-        <target>Mise à jour des paramètres d'affichage et de vidéo.</target>
+        <target>Paramètres d'affichage et de vidéo mis à jour.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.ts</context>
           <context context-type="linenumber">140</context>
@@ -1300,7 +1300,7 @@
       </trans-unit>
       <trans-unit id="7565716024468232322" datatype="html">
         <source>Links</source>
-        <target>Les liens</target>
+        <target>Liens</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/misc/help.component.ts</context>
           <context context-type="linenumber">82</context>
@@ -1324,7 +1324,7 @@
       </trans-unit>
       <trans-unit id="414887388288176527" datatype="html">
         <source>Images</source>
-        <target>Les images</target>
+        <target>Images</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/misc/help.component.ts</context>
           <context context-type="linenumber">85</context>
@@ -12323,7 +12323,7 @@
       </trans-unit>
       <trans-unit id="8756167649220050929" datatype="html">
         <source>Lists</source>
-        <target state="translated">Les listes</target>
+        <target state="translated">Listes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">20</context>
