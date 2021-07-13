@@ -30,7 +30,7 @@ describe('Test jobs', function () {
   })
 
   it('Should create some jobs', async function () {
-    this.timeout(60000)
+    this.timeout(120000)
 
     await uploadVideo(servers[1].url, servers[1].accessToken, { name: 'video1' })
     await uploadVideo(servers[1].url, servers[1].accessToken, { name: 'video2' })

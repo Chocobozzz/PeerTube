@@ -10,7 +10,6 @@ import {
   checkVideoFilesWereRemoved,
   cleanupTests,
   completeVideoCheck,
-  createUser,
   dateIsValid,
   doubleFollow,
   flushAndRunMultipleServers,
@@ -153,7 +152,7 @@ describe('Test multiple servers', function () {
         username: 'user1',
         password: 'super_password'
       }
-      await createUser({ url: servers[1].url, accessToken: servers[1].accessToken, username: user.username, password: user.password })
+      await servers[1].usersCommand.create({ username: user.username, password: user.password })
       const userAccessToken = await servers[1].loginCommand.getAccessToken(user)
 
       const videoAttributes = {

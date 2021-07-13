@@ -8,10 +8,8 @@ import {
   checkBadSortPagination,
   checkBadStartPagination,
   cleanupTests,
-  createUser,
   doubleFollow,
   flushAndRunServer,
-  generateUserAccessToken,
   getVideoIdFromUUID,
   makeGetRequest,
   makePostBodyRequest,
@@ -45,10 +43,10 @@ describe('Test abuses API validators', function () {
 
     const username = 'user1'
     const password = 'my super password'
-    await createUser({ url: server.url, accessToken: server.accessToken, username: username, password: password })
+    await server.usersCommand.create({ username: username, password: password })
     userToken = await server.loginCommand.getAccessToken({ username, password })
 
-    userToken2 = await generateUserAccessToken(server, 'user_2')
+    userToken2 = await server.usersCommand.generateUserAndToken('user_2')
 
     const res = await uploadVideo(server.url, server.accessToken, {})
     server.video = res.body.video

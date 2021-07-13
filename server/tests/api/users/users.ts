@@ -4,37 +4,22 @@ import 'mocha'
 import * as chai from 'chai'
 import { HttpStatusCode } from '@shared/core-utils'
 import {
-  blockUser,
   cleanupTests,
-  createUser,
-  deleteMe,
   flushAndRunServer,
-  getMyUserInformation,
-  getMyUserVideoQuotaUsed,
-  getMyUserVideoRating,
   getMyVideos,
-  getUserInformation,
-  getUsersList,
-  getUsersListPaginationAndSort,
   getVideosList,
   killallServers,
   makePutBodyRequest,
   rateVideo,
-  registerUserWithChannel,
-  removeUser,
   removeVideo,
   reRunServer,
   ServerInfo,
   setAccessTokensToServers,
   testImage,
-  unblockUser,
-  updateMyAvatar,
-  updateMyUser,
-  updateUser,
   uploadVideo,
   waitJobs
 } from '@shared/extra-utils'
-import { AbuseState, MyUser, OAuth2ErrorCode, User, UserAdminFlag, UserRole, Video, VideoPlaylistType } from '@shared/models'
+import { AbuseState, OAuth2ErrorCode, UserAdminFlag, UserRole, Video, VideoPlaylistType } from '@shared/models'
 
 const expect = chai.expect
 
@@ -174,8 +159,7 @@ describe('Test users', function () {
 
     it('Should retrieve a video rating', async function () {
       await rateVideo(server.url, accessToken, videoId, 'like')
-      const res = await getMyUserVideoRating(server.url, accessToken, videoId)
-      const rating = res.body
+      const rating = await server.usersCommand.getMyRating({ token: accessToken, videoId })
 
       expect(rating.videoId).to.equal(videoId)
       expect(rating.rating).to.equal('like')
@@ -222,7 +206,7 @@ describe('Test users', function () {
     })
 
     it('Should not be able to get the user information', async function () {
-      await getMyUserInformation(server.url, server.accessToken, HttpStatusCode.UNAUTHORIZED_401)
+      await server.usersCommand.getMyInfo({ expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
     it('Should not be able to upload a video', async function () {
@@ -252,7 +236,7 @@ describe('Test users', function () {
     })
 
     it('Should be able to get my user information again', async function () {
-      await getMyUserInformation(server.url, server.accessToken)
+      await server.usersCommand.getMyInfo()
     })
 
     it('Should have an expired access token', async function () {
@@ -264,7 +248,7 @@ describe('Test users', function () {
       await killallServers([ server ])
       await reRunServer(server)
 
-      await getMyUserInformation(server.url, server.accessToken, HttpStatusCode.UNAUTHORIZED_401)
+      await server.usersCommand.getMyInfo({ expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
     it('Should not be able to refresh an access token with an expired refresh token', async function () {
@@ -286,21 +270,14 @@ describe('Test users', function () {
     })
 
     it('Should be able to get my user information again', async function () {
-      await getMyUserInformation(server.url, server.accessToken)
+      await server.usersCommand.getMyInfo()
     })
   })
 
   describe('Creating a user', function () {
 
     it('Should be able to create a new user', async function () {
-      await createUser({
-        url: server.url,
-        accessToken: accessToken,
-        username: user.username,
-        password: user.password,
-        videoQuota: 2 * 1024 * 1024,
-        adminFlags: UserAdminFlag.BYPASS_VIDEO_AUTO_BLACKLIST
-      })
+      await server.usersCommand.create({ ...user, videoQuota: 2 * 1024 * 1024, adminFlags: UserAdminFlag.BYPASS_VIDEO_AUTO_BLACKLIST })
     })
 
     it('Should be able to login with this user', async function () {
@@ -308,11 +285,9 @@ describe('Test users', function () {
     })
 
     it('Should be able to get user information', async function () {
-      const res1 = await getMyUserInformation(server.url, accessTokenUser)
-      const userMe: MyUser = res1.body
+      const userMe = await server.usersCommand.getMyInfo({ token: accessTokenUser })
 
-      const res2 = await getUserInformation(server.url, server.accessToken, userMe.id, true)
-      const userGet: User = res2.body
+      const userGet = await server.usersCommand.get({ userId: userMe.id, withStats: true })
 
       for (const user of [ userMe, userGet ]) {
         expect(user.username).to.equal('user_1')
@@ -356,15 +331,11 @@ describe('Test users', function () {
     })
 
     it('Should have video quota updated', async function () {
-      const res = await getMyUserVideoQuotaUsed(server.url, accessTokenUser)
-      const data = res.body
+      const quota = await server.usersCommand.getMyQuotaUsed({ token: accessTokenUser })
+      expect(quota.videoQuotaUsed).to.equal(218910)
 
-      expect(data.videoQuotaUsed).to.equal(218910)
-
-      const resUsers = await getUsersList(server.url, server.accessToken)
-
-      const users: User[] = resUsers.body.data
-      const tmpUser = users.find(u => u.username === user.username)
+      const { data } = await server.usersCommand.list()
+      const tmpUser = data.find(u => u.username === user.username)
       expect(tmpUser.videoQuotaUsed).to.equal(218910)
     })
 
@@ -421,9 +392,7 @@ describe('Test users', function () {
       }
 
       {
-        const res = await getMyUserVideoQuotaUsed(server.url, accessTokenUser)
-        const data = res.body
-
+        const data = await server.usersCommand.getMyQuotaUsed({ token: accessTokenUser })
         expect(data.videoQuotaUsed).to.be.greaterThan(220000)
       }
     })
@@ -432,21 +401,18 @@ describe('Test users', function () {
   describe('Users listing', function () {
 
     it('Should list all the users', async function () {
-      const res = await getUsersList(server.url, server.accessToken)
-      const result = res.body
-      const total = result.total
-      const users = result.data
+      const { data, total } = await server.usersCommand.list()
 
       expect(total).to.equal(2)
-      expect(users).to.be.an('array')
-      expect(users.length).to.equal(2)
+      expect(data).to.be.an('array')
+      expect(data.length).to.equal(2)
 
-      const user = users[0]
+      const user = data[0]
       expect(user.username).to.equal('user_1')
       expect(user.email).to.equal('user_1@example.com')
       expect(user.nsfwPolicy).to.equal('display')
 
-      const rootUser = users[1]
+      const rootUser = data[1]
       expect(rootUser.username).to.equal('root')
       expect(rootUser.email).to.equal('admin' + server.internalServerNumber + '@example.com')
       expect(user.nsfwPolicy).to.equal('display')
@@ -458,16 +424,12 @@ describe('Test users', function () {
     })
 
     it('Should list only the first user by username asc', async function () {
-      const res = await getUsersListPaginationAndSort(server.url, server.accessToken, 0, 1, 'username')
-
-      const result = res.body
-      const total = result.total
-      const users = result.data
+      const { total, data } = await server.usersCommand.list({ start: 0, count: 1, sort: 'username' })
 
       expect(total).to.equal(2)
-      expect(users.length).to.equal(1)
+      expect(data.length).to.equal(1)
 
-      const user = users[0]
+      const user = data[0]
       expect(user.username).to.equal('root')
       expect(user.email).to.equal('admin' + server.internalServerNumber + '@example.com')
       expect(user.roleLabel).to.equal('Administrator')
@@ -475,84 +437,66 @@ describe('Test users', function () {
     })
 
     it('Should list only the first user by username desc', async function () {
-      const res = await getUsersListPaginationAndSort(server.url, server.accessToken, 0, 1, '-username')
-      const result = res.body
-      const total = result.total
-      const users = result.data
+      const { total, data } = await server.usersCommand.list({ start: 0, count: 1, sort: '-username' })
 
       expect(total).to.equal(2)
-      expect(users.length).to.equal(1)
+      expect(data.length).to.equal(1)
 
-      const user = users[0]
+      const user = data[0]
       expect(user.username).to.equal('user_1')
       expect(user.email).to.equal('user_1@example.com')
       expect(user.nsfwPolicy).to.equal('display')
     })
 
     it('Should list only the second user by createdAt desc', async function () {
-      const res = await getUsersListPaginationAndSort(server.url, server.accessToken, 0, 1, '-createdAt')
-      const result = res.body
-      const total = result.total
-      const users = result.data
-
+      const { data, total } = await server.usersCommand.list({ start: 0, count: 1, sort: '-createdAt' })
       expect(total).to.equal(2)
-      expect(users.length).to.equal(1)
 
-      const user = users[0]
+      expect(data.length).to.equal(1)
+
+      const user = data[0]
       expect(user.username).to.equal('user_1')
       expect(user.email).to.equal('user_1@example.com')
       expect(user.nsfwPolicy).to.equal('display')
     })
 
     it('Should list all the users by createdAt asc', async function () {
-      const res = await getUsersListPaginationAndSort(server.url, server.accessToken, 0, 2, 'createdAt')
-      const result = res.body
-      const total = result.total
-      const users = result.data
+      const { data, total } = await server.usersCommand.list({ start: 0, count: 2, sort: 'createdAt' })
 
       expect(total).to.equal(2)
-      expect(users.length).to.equal(2)
+      expect(data.length).to.equal(2)
 
-      expect(users[0].username).to.equal('root')
-      expect(users[0].email).to.equal('admin' + server.internalServerNumber + '@example.com')
-      expect(users[0].nsfwPolicy).to.equal('display')
+      expect(data[0].username).to.equal('root')
+      expect(data[0].email).to.equal('admin' + server.internalServerNumber + '@example.com')
+      expect(data[0].nsfwPolicy).to.equal('display')
 
-      expect(users[1].username).to.equal('user_1')
-      expect(users[1].email).to.equal('user_1@example.com')
-      expect(users[1].nsfwPolicy).to.equal('display')
+      expect(data[1].username).to.equal('user_1')
+      expect(data[1].email).to.equal('user_1@example.com')
+      expect(data[1].nsfwPolicy).to.equal('display')
     })
 
     it('Should search user by username', async function () {
-      const res = await getUsersListPaginationAndSort(server.url, server.accessToken, 0, 2, 'createdAt', 'oot')
-      const users = res.body.data as User[]
-
-      expect(res.body.total).to.equal(1)
-      expect(users.length).to.equal(1)
-
-      expect(users[0].username).to.equal('root')
+      const { data, total } = await server.usersCommand.list({ start: 0, count: 2, sort: 'createdAt', search: 'oot' })
+      expect(total).to.equal(1)
+      expect(data.length).to.equal(1)
+      expect(data[0].username).to.equal('root')
     })
 
     it('Should search user by email', async function () {
       {
-        const res = await getUsersListPaginationAndSort(server.url, server.accessToken, 0, 2, 'createdAt', 'r_1@exam')
-        const users = res.body.data as User[]
-
-        expect(res.body.total).to.equal(1)
-        expect(users.length).to.equal(1)
-
-        expect(users[0].username).to.equal('user_1')
-        expect(users[0].email).to.equal('user_1@example.com')
+        const { total, data } = await server.usersCommand.list({ start: 0, count: 2, sort: 'createdAt', search: 'r_1@exam' })
+        expect(total).to.equal(1)
+        expect(data.length).to.equal(1)
+        expect(data[0].username).to.equal('user_1')
+        expect(data[0].email).to.equal('user_1@example.com')
       }
 
       {
-        const res = await getUsersListPaginationAndSort(server.url, server.accessToken, 0, 2, 'createdAt', 'example')
-        const users = res.body.data as User[]
-
-        expect(res.body.total).to.equal(2)
-        expect(users.length).to.equal(2)
-
-        expect(users[0].username).to.equal('root')
-        expect(users[1].username).to.equal('user_1')
+        const { total, data } = await server.usersCommand.list({ start: 0, count: 2, sort: 'createdAt', search: 'example' })
+        expect(total).to.equal(2)
+        expect(data.length).to.equal(2)
+        expect(data[0].username).to.equal('root')
+        expect(data[1].username).to.equal('user_1')
       }
     })
   })
@@ -560,9 +504,8 @@ describe('Test users', function () {
   describe('Update my account', function () {
 
     it('Should update my password', async function () {
-      await updateMyUser({
-        url: server.url,
-        accessToken: accessTokenUser,
+      await server.usersCommand.updateMe({
+        token: accessTokenUser,
         currentPassword: 'super password',
         password: 'new password'
       })
@@ -572,15 +515,12 @@ describe('Test users', function () {
     })
 
     it('Should be able to change the NSFW display attribute', async function () {
-      await updateMyUser({
-        url: server.url,
-        accessToken: accessTokenUser,
+      await server.usersCommand.updateMe({
+        token: accessTokenUser,
         nsfwPolicy: 'do_not_list'
       })
 
-      const res = await getMyUserInformation(server.url, accessTokenUser)
-      const user = res.body
-
+      const user = await server.usersCommand.getMyInfo({ token: accessTokenUser })
       expect(user.username).to.equal('user_1')
       expect(user.email).to.equal('user_1@example.com')
       expect(user.nsfwPolicy).to.equal('do_not_list')
@@ -591,42 +531,33 @@ describe('Test users', function () {
     })
 
     it('Should be able to change the autoPlayVideo attribute', async function () {
-      await updateMyUser({
-        url: server.url,
-        accessToken: accessTokenUser,
+      await server.usersCommand.updateMe({
+        token: accessTokenUser,
         autoPlayVideo: false
       })
 
-      const res = await getMyUserInformation(server.url, accessTokenUser)
-      const user = res.body
-
+      const user = await server.usersCommand.getMyInfo({ token: accessTokenUser })
       expect(user.autoPlayVideo).to.be.false
     })
 
     it('Should be able to change the autoPlayNextVideo attribute', async function () {
-      await updateMyUser({
-        url: server.url,
-        accessToken: accessTokenUser,
+      await server.usersCommand.updateMe({
+        token: accessTokenUser,
         autoPlayNextVideo: true
       })
 
-      const res = await getMyUserInformation(server.url, accessTokenUser)
-      const user = res.body
-
+      const user = await server.usersCommand.getMyInfo({ token: accessTokenUser })
       expect(user.autoPlayNextVideo).to.be.true
     })
 
     it('Should be able to change the email attribute', async function () {
-      await updateMyUser({
-        url: server.url,
-        accessToken: accessTokenUser,
+      await server.usersCommand.updateMe({
+        token: accessTokenUser,
         currentPassword: 'new password',
         email: 'updated@example.com'
       })
 
-      const res = await getMyUserInformation(server.url, accessTokenUser)
-      const user = res.body
-
+      const user = await server.usersCommand.getMyInfo({ token: accessTokenUser })
       expect(user.username).to.equal('user_1')
       expect(user.email).to.equal('updated@example.com')
       expect(user.nsfwPolicy).to.equal('do_not_list')
@@ -639,15 +570,9 @@ describe('Test users', function () {
     it('Should be able to update my avatar with a gif', async function () {
       const fixture = 'avatar.gif'
 
-      await updateMyAvatar({
-        url: server.url,
-        accessToken: accessTokenUser,
-        fixture
-      })
+      await server.usersCommand.updateMyAvatar({ token: accessTokenUser, fixture })
 
-      const res = await getMyUserInformation(server.url, accessTokenUser)
-      const user = res.body
-
+      const user = await server.usersCommand.getMyInfo({ token: accessTokenUser })
       await testImage(server.url, 'avatar-resized', user.account.avatar.path, '.gif')
     })
 
@@ -655,29 +580,17 @@ describe('Test users', function () {
       for (const extension of [ '.png', '.gif' ]) {
         const fixture = 'avatar' + extension
 
-        await updateMyAvatar({
-          url: server.url,
-          accessToken: accessTokenUser,
-          fixture
-        })
+        await server.usersCommand.updateMyAvatar({ token: accessTokenUser, fixture })
 
-        const res = await getMyUserInformation(server.url, accessTokenUser)
-        const user = res.body
-
+        const user = await server.usersCommand.getMyInfo({ token: accessTokenUser })
         await testImage(server.url, 'avatar-resized', user.account.avatar.path, extension)
       }
     })
 
     it('Should be able to update my display name', async function () {
-      await updateMyUser({
-        url: server.url,
-        accessToken: accessTokenUser,
-        displayName: 'new display name'
-      })
+      await server.usersCommand.updateMe({ token: accessTokenUser, displayName: 'new display name' })
 
-      const res = await getMyUserInformation(server.url, accessTokenUser)
-      const user = res.body
-
+      const user = await server.usersCommand.getMyInfo({ token: accessTokenUser })
       expect(user.username).to.equal('user_1')
       expect(user.email).to.equal('updated@example.com')
       expect(user.nsfwPolicy).to.equal('do_not_list')
@@ -688,15 +601,9 @@ describe('Test users', function () {
     })
 
     it('Should be able to update my description', async function () {
-      await updateMyUser({
-        url: server.url,
-        accessToken: accessTokenUser,
-        description: 'my super description updated'
-      })
+      await server.usersCommand.updateMe({ token: accessTokenUser, description: 'my super description updated' })
 
-      const res = await getMyUserInformation(server.url, accessTokenUser)
-      const user: User = res.body
-
+      const user = await server.usersCommand.getMyInfo({ token: accessTokenUser })
       expect(user.username).to.equal('user_1')
       expect(user.email).to.equal('updated@example.com')
       expect(user.nsfwPolicy).to.equal('do_not_list')
@@ -710,30 +617,21 @@ describe('Test users', function () {
 
     it('Should be able to update my theme', async function () {
       for (const theme of [ 'background-red', 'default', 'instance-default' ]) {
-        await updateMyUser({
-          url: server.url,
-          accessToken: accessTokenUser,
-          theme
-        })
+        await server.usersCommand.updateMe({ token: accessTokenUser, theme })
 
-        const res = await getMyUserInformation(server.url, accessTokenUser)
-        const body: User = res.body
-
-        expect(body.theme).to.equal(theme)
+        const user = await server.usersCommand.getMyInfo({ token: accessTokenUser })
+        expect(user.theme).to.equal(theme)
       }
     })
 
     it('Should be able to update my modal preferences', async function () {
-      await updateMyUser({
-        url: server.url,
-        accessToken: accessTokenUser,
+      await server.usersCommand.updateMe({
+        token: accessTokenUser,
         noInstanceConfigWarningModal: true,
         noWelcomeModal: true
       })
 
-      const res = await getMyUserInformation(server.url, accessTokenUser)
-      const user: User = res.body
-
+      const user = await server.usersCommand.getMyInfo({ token: accessTokenUser })
       expect(user.noWelcomeModal).to.be.true
       expect(user.noInstanceConfigWarningModal).to.be.true
     })
@@ -741,10 +639,9 @@ describe('Test users', function () {
 
   describe('Updating another user', function () {
     it('Should be able to update another user', async function () {
-      await updateUser({
-        url: server.url,
+      await server.usersCommand.update({
         userId,
-        accessToken,
+        token: accessToken,
         email: 'updated2@example.com',
         emailVerified: true,
         videoQuota: 42,
@@ -753,8 +650,7 @@ describe('Test users', function () {
         pluginAuth: 'toto'
       })
 
-      const res = await getUserInformation(server.url, accessToken, userId)
-      const user = res.body as User
+      const user = await server.usersCommand.get({ token: accessToken, userId })
 
       expect(user.username).to.equal('user_1')
       expect(user.email).to.equal('updated2@example.com')
@@ -768,28 +664,22 @@ describe('Test users', function () {
     })
 
     it('Should reset the auth plugin', async function () {
-      await updateUser({ url: server.url, userId, accessToken, pluginAuth: null })
+      await server.usersCommand.update({ userId, token: accessToken, pluginAuth: null })
 
-      const res = await getUserInformation(server.url, accessToken, userId)
-      const user = res.body as User
+      const user = await server.usersCommand.get({ token: accessToken, userId })
       expect(user.pluginAuth).to.be.null
     })
 
     it('Should have removed the user token', async function () {
-      await getMyUserVideoQuotaUsed(server.url, accessTokenUser, HttpStatusCode.UNAUTHORIZED_401)
+      await server.usersCommand.getMyQuotaUsed({ token: accessTokenUser, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
 
       accessTokenUser = await server.loginCommand.getAccessToken(user)
     })
 
     it('Should be able to update another user password', async function () {
-      await updateUser({
-        url: server.url,
-        userId,
-        accessToken,
-        password: 'password updated'
-      })
+      await server.usersCommand.update({ userId, token: accessToken, password: 'password updated' })
 
-      await getMyUserVideoQuotaUsed(server.url, accessTokenUser, HttpStatusCode.UNAUTHORIZED_401)
+      await server.usersCommand.getMyQuotaUsed({ token: accessTokenUser, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
 
       await server.loginCommand.login({ user, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
 
@@ -806,7 +696,7 @@ describe('Test users', function () {
 
   describe('Remove a user', function () {
     it('Should be able to remove this user', async function () {
-      await removeUser(server.url, userId, accessToken)
+      await server.usersCommand.remove({ userId, token: accessToken })
     })
 
     it('Should not be able to login with this user', async function () {
@@ -830,7 +720,7 @@ describe('Test users', function () {
       const user = { displayName: 'super user 15', username: 'user_15', password: 'my super password' }
       const channel = { name: 'my_user_15_channel', displayName: 'my channel rocks' }
 
-      await registerUserWithChannel({ url: server.url, user, channel })
+      await server.usersCommand.register({ ...user, channel })
     })
 
     it('Should be able to login with this registered user', async function () {
@@ -843,16 +733,12 @@ describe('Test users', function () {
     })
 
     it('Should have the correct display name', async function () {
-      const res = await getMyUserInformation(server.url, user15AccessToken)
-      const user: User = res.body
-
+      const user = await server.usersCommand.getMyInfo({ token: user15AccessToken })
       expect(user.account.displayName).to.equal('super user 15')
     })
 
     it('Should have the correct video quota', async function () {
-      const res = await getMyUserInformation(server.url, user15AccessToken)
-      const user = res.body
-
+      const user = await server.usersCommand.getMyInfo({ token: user15AccessToken })
       expect(user.videoQuota).to.equal(5 * 1024 * 1024)
     })
 
@@ -864,15 +750,15 @@ describe('Test users', function () {
 
     it('Should remove me', async function () {
       {
-        const res = await getUsersList(server.url, server.accessToken)
-        expect(res.body.data.find(u => u.username === 'user_15')).to.not.be.undefined
+        const { data } = await server.usersCommand.list()
+        expect(data.find(u => u.username === 'user_15')).to.not.be.undefined
       }
 
-      await deleteMe(server.url, user15AccessToken)
+      await server.usersCommand.deleteMe({ token: user15AccessToken })
 
       {
-        const res = await getUsersList(server.url, server.accessToken)
-        expect(res.body.data.find(u => u.username === 'user_15')).to.be.undefined
+        const { data } = await server.usersCommand.list()
+        expect(data.find(u => u.username === 'user_15')).to.be.undefined
       }
     })
   })
@@ -886,49 +772,40 @@ describe('Test users', function () {
     }
 
     it('Should block a user', async function () {
-      const resUser = await createUser({
-        url: server.url,
-        accessToken: server.accessToken,
-        username: user16.username,
-        password: user16.password
-      })
-      user16Id = resUser.body.user.id
+      const user = await server.usersCommand.create({ ...user16 })
+      user16Id = user.id
 
       user16AccessToken = await server.loginCommand.getAccessToken(user16)
 
-      await getMyUserInformation(server.url, user16AccessToken, HttpStatusCode.OK_200)
-      await blockUser(server.url, user16Id, server.accessToken)
+      await server.usersCommand.getMyInfo({ token: user16AccessToken, expectedStatus: HttpStatusCode.OK_200 })
+      await server.usersCommand.banUser({ userId: user16Id })
 
-      await getMyUserInformation(server.url, user16AccessToken, HttpStatusCode.UNAUTHORIZED_401)
+      await server.usersCommand.getMyInfo({ token: user16AccessToken, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
       await server.loginCommand.login({ user: user16, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     })
 
     it('Should search user by banned status', async function () {
       {
-        const res = await getUsersListPaginationAndSort(server.url, server.accessToken, 0, 2, 'createdAt', undefined, true)
-        const users = res.body.data as User[]
+        const { data, total } = await server.usersCommand.list({ start: 0, count: 2, sort: 'createdAt', blocked: true })
+        expect(total).to.equal(1)
+        expect(data.length).to.equal(1)
 
-        expect(res.body.total).to.equal(1)
-        expect(users.length).to.equal(1)
-
-        expect(users[0].username).to.equal(user16.username)
+        expect(data[0].username).to.equal(user16.username)
       }
 
       {
-        const res = await getUsersListPaginationAndSort(server.url, server.accessToken, 0, 2, 'createdAt', undefined, false)
-        const users = res.body.data as User[]
+        const { data, total } = await server.usersCommand.list({ start: 0, count: 2, sort: 'createdAt', blocked: false })
+        expect(total).to.equal(1)
+        expect(data.length).to.equal(1)
 
-        expect(res.body.total).to.equal(1)
-        expect(users.length).to.equal(1)
-
-        expect(users[0].username).to.not.equal(user16.username)
+        expect(data[0].username).to.not.equal(user16.username)
       }
     })
 
     it('Should unblock a user', async function () {
-      await unblockUser(server.url, user16Id, server.accessToken)
+      await server.usersCommand.unbanUser({ userId: user16Id })
       user16AccessToken = await server.loginCommand.getAccessToken(user16)
-      await getMyUserInformation(server.url, user16AccessToken, HttpStatusCode.OK_200)
+      await server.usersCommand.getMyInfo({ token: user16AccessToken, expectedStatus: HttpStatusCode.OK_200 })
     })
   })
 
@@ -941,19 +818,12 @@ describe('Test users', function () {
         username: 'user_17',
         password: 'my super password'
       }
-      const resUser = await createUser({
-        url: server.url,
-        accessToken: server.accessToken,
-        username: user17.username,
-        password: user17.password
-      })
+      const created = await server.usersCommand.create({ ...user17 })
 
-      user17Id = resUser.body.user.id
+      user17Id = created.id
       user17AccessToken = await server.loginCommand.getAccessToken(user17)
 
-      const res = await getUserInformation(server.url, server.accessToken, user17Id, true)
-      const user: User = res.body
-
+      const user = await server.usersCommand.get({ userId: user17Id, withStats: true })
       expect(user.videosCount).to.equal(0)
       expect(user.videoCommentsCount).to.equal(0)
       expect(user.abusesCount).to.equal(0)
@@ -969,9 +839,7 @@ describe('Test users', function () {
       const res1 = await getVideosList(server.url)
       videoId = res1.body.data.find(video => video.name === videoAttributes.name).id
 
-      const res2 = await getUserInformation(server.url, server.accessToken, user17Id, true)
-      const user: User = res2.body
-
+      const user = await server.usersCommand.get({ userId: user17Id, withStats: true })
       expect(user.videosCount).to.equal(1)
     })
 
@@ -979,9 +847,7 @@ describe('Test users', function () {
       const text = 'super comment'
       await server.commentsCommand.createThread({ token: user17AccessToken, videoId, text })
 
-      const res = await getUserInformation(server.url, server.accessToken, user17Id, true)
-      const user: User = res.body
-
+      const user = await server.usersCommand.get({ userId: user17Id, withStats: true })
       expect(user.videoCommentsCount).to.equal(1)
     })
 
@@ -992,17 +858,13 @@ describe('Test users', function () {
       const body1 = await server.abusesCommand.getAdminList()
       const abuseId = body1.data[0].id
 
-      const res2 = await getUserInformation(server.url, server.accessToken, user17Id, true)
-      const user2: User = res2.body
-
+      const user2 = await server.usersCommand.get({ userId: user17Id, withStats: true })
       expect(user2.abusesCount).to.equal(1) // number of incriminations
       expect(user2.abusesCreatedCount).to.equal(1) // number of reports created
 
       await server.abusesCommand.update({ abuseId, body: { state: AbuseState.ACCEPTED } })
 
-      const res3 = await getUserInformation(server.url, server.accessToken, user17Id, true)
-      const user3: User = res3.body
-
+      const user3 = await server.usersCommand.get({ userId: user17Id, withStats: true })
       expect(user3.abusesAcceptedCount).to.equal(1) // number of reports created accepted
     })
   })

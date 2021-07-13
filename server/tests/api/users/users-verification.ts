@@ -3,20 +3,7 @@
 import 'mocha'
 import * as chai from 'chai'
 import { HttpStatusCode } from '@shared/core-utils'
-import {
-  cleanupTests,
-  flushAndRunServer,
-  getMyUserInformation,
-  getUserInformation,
-  MockSmtpServer,
-  registerUser,
-  ServerInfo,
-  setAccessTokensToServers,
-  updateMyUser,
-  verifyEmail,
-  waitJobs
-} from '@shared/extra-utils'
-import { User } from '@shared/models'
+import { cleanupTests, flushAndRunServer, MockSmtpServer, ServerInfo, setAccessTokensToServers, waitJobs } from '@shared/extra-utils'
 
 const expect = chai.expect
 
@@ -65,7 +52,7 @@ describe('Test users account verification', function () {
       }
     })
 
-    await registerUser(server.url, user1.username, user1.password)
+    await server.usersCommand.register(user1)
 
     await waitJobs(server)
     expectedEmailsLength++
@@ -84,8 +71,8 @@ describe('Test users account verification', function () {
 
     userId = parseInt(userIdMatches[1], 10)
 
-    const resUserInfo = await getUserInformation(server.url, server.accessToken, userId)
-    expect(resUserInfo.body.emailVerified).to.be.false
+    const body = await server.usersCommand.get({ userId })
+    expect(body.emailVerified).to.be.false
   })
 
   it('Should not allow login for user with unverified email', async function () {
@@ -94,13 +81,13 @@ describe('Test users account verification', function () {
   })
 
   it('Should verify the user via email and allow login', async function () {
-    await verifyEmail(server.url, userId, verificationString)
+    await server.usersCommand.verifyEmail({ userId, verificationString })
 
     const body = await server.loginCommand.login({ user: user1 })
     userAccessToken = body.access_token
 
-    const resUserVerified = await getUserInformation(server.url, server.accessToken, userId)
-    expect(resUserVerified.body.emailVerified).to.be.true
+    const user = await server.usersCommand.get({ userId })
+    expect(user.emailVerified).to.be.true
   })
 
   it('Should be able to change the user email', async function () {
@@ -109,9 +96,8 @@ describe('Test users account verification', function () {
     let updateVerificationString: string
 
     {
-      await updateMyUser({
-        url: server.url,
-        accessToken: userAccessToken,
+      await server.usersCommand.updateMe({
+        token: userAccessToken,
         email: 'updated@example.com',
         currentPassword: user1.password
       })
@@ -127,19 +113,15 @@ describe('Test users account verification', function () {
     }
 
     {
-      const res = await getMyUserInformation(server.url, userAccessToken)
-      const me: User = res.body
-
+      const me = await server.usersCommand.getMyInfo({ token: userAccessToken })
       expect(me.email).to.equal('user_1@example.com')
       expect(me.pendingEmail).to.equal('updated@example.com')
     }
 
     {
-      await verifyEmail(server.url, userId, updateVerificationString, true)
+      await server.usersCommand.verifyEmail({ userId, verificationString: updateVerificationString, isPendingEmail: true })
 
-      const res = await getMyUserInformation(server.url, userAccessToken)
-      const me: User = res.body
-
+      const me = await server.usersCommand.getMyInfo({ token: userAccessToken })
       expect(me.email).to.equal('updated@example.com')
       expect(me.pendingEmail).to.be.null
     }
@@ -157,15 +139,15 @@ describe('Test users account verification', function () {
       }
     })
 
-    await registerUser(server.url, user2.username, user2.password)
+    await server.usersCommand.register(user2)
 
     await waitJobs(server)
     expect(emails).to.have.lengthOf(expectedEmailsLength)
 
     const accessToken = await server.loginCommand.getAccessToken(user2)
 
-    const resMyUserInfo = await getMyUserInformation(server.url, accessToken)
-    expect(resMyUserInfo.body.emailVerified).to.be.null
+    const user = await server.usersCommand.getMyInfo({ token: accessToken })
+    expect(user.emailVerified).to.be.null
   })
 
   it('Should allow login for user with unverified email when setting later enabled', async function () {

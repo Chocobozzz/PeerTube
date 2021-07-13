@@ -5,7 +5,6 @@ import * as chai from 'chai'
 import { HttpStatusCode } from '@shared/core-utils'
 import {
   cleanupTests,
-  createUser,
   flushAndRunServer,
   getVideosListWithToken,
   getVideoWithToken,
@@ -14,7 +13,6 @@ import {
   reRunServer,
   ServerInfo,
   setAccessTokensToServers,
-  updateMyUser,
   uploadVideo,
   wait
 } from '@shared/extra-utils'
@@ -59,7 +57,7 @@ describe('Test videos history', function () {
       username: 'user_1',
       password: 'super password'
     }
-    await createUser({ url: server.url, accessToken: server.accessToken, username: user.username, password: user.password })
+    await server.usersCommand.create({ username: user.username, password: user.password })
     userAccessToken = await server.loginCommand.getAccessToken(user)
   })
 
@@ -174,9 +172,7 @@ describe('Test videos history', function () {
   })
 
   it('Should disable videos history', async function () {
-    await updateMyUser({
-      url: server.url,
-      accessToken: server.accessToken,
+    await server.usersCommand.updateMe({
       videosHistoryEnabled: false
     })
 
@@ -184,9 +180,7 @@ describe('Test videos history', function () {
   })
 
   it('Should re-enable videos history', async function () {
-    await updateMyUser({
-      url: server.url,
-      accessToken: server.accessToken,
+    await server.usersCommand.updateMe({
       videosHistoryEnabled: true
     })
 

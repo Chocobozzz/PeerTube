@@ -8,7 +8,6 @@ import { MockSmtpServer } from '../mock-servers/mock-email'
 import { doubleFollow } from '../server/follows'
 import { flushAndRunMultipleServers, ServerInfo } from '../server/servers'
 import { setAccessTokensToServers } from './login'
-import { createUser, getMyUserInformation } from './users'
 
 function getAllNotificationsSettings (): UserNotificationSetting {
   return {
@@ -651,17 +650,8 @@ async function prepareNotificationsTest (serversCount = 3, overrideConfigArg: an
     await doubleFollow(servers[0], servers[1])
   }
 
-  const user = {
-    username: 'user_1',
-    password: 'super password'
-  }
-  await createUser({
-    url: servers[0].url,
-    accessToken: servers[0].accessToken,
-    username: user.username,
-    password: user.password,
-    videoQuota: 10 * 1000 * 1000
-  })
+  const user = { username: 'user_1', password: 'super password' }
+  await servers[0].usersCommand.create({ ...user, videoQuota: 10 * 1000 * 1000 })
   const userAccessToken = await servers[0].loginCommand.getAccessToken(user)
 
   await servers[0].notificationsCommand.updateMySettings({ token: userAccessToken, settings: getAllNotificationsSettings() })
@@ -685,8 +675,8 @@ async function prepareNotificationsTest (serversCount = 3, overrideConfigArg: an
     socket.on('new-notification', n => adminNotificationsServer2.push(n))
   }
 
-  const resChannel = await getMyUserInformation(servers[0].url, servers[0].accessToken)
-  const channelId = resChannel.body.videoChannels[0].id
+  const { videoChannels } = await servers[0].usersCommand.getMyInfo()
+  const channelId = videoChannels[0].id
 
   return {
     userNotifications,

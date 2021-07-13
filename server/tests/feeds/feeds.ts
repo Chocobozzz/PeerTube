@@ -6,21 +6,16 @@ import * as xmlParser from 'fast-xml-parser'
 import { HttpStatusCode } from '@shared/core-utils'
 import {
   cleanupTests,
-  createUser,
   doubleFollow,
   flushAndRunMultipleServers,
   flushAndRunServer,
-  getMyUserInformation,
-  getUserScopedTokens,
-  renewUserScopedTokens,
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo,
   uploadVideoAndGetId,
   waitJobs
 } from '@shared/extra-utils'
-import { User, VideoPrivacy } from '@shared/models'
-import { ScopedToken } from '@shared/models/users/user-scoped-token'
+import { VideoPrivacy } from '@shared/models'
 
 chai.use(require('chai-xml'))
 chai.use(require('chai-json-schema'))
@@ -54,24 +49,21 @@ describe('Test syndication feeds', () => {
     await doubleFollow(servers[0], servers[1])
 
     {
-      const res = await getMyUserInformation(servers[0].url, servers[0].accessToken)
-      const user: User = res.body
+      const user = await servers[0].usersCommand.getMyInfo()
       rootAccountId = user.account.id
       rootChannelId = user.videoChannels[0].id
     }
 
     {
       const attr = { username: 'john', password: 'password' }
-      await createUser({ url: servers[0].url, accessToken: servers[0].accessToken, username: attr.username, password: attr.password })
+      await servers[0].usersCommand.create({ username: attr.username, password: attr.password })
       userAccessToken = await servers[0].loginCommand.getAccessToken(attr)
 
-      const res = await getMyUserInformation(servers[0].url, userAccessToken)
-      const user: User = res.body
+      const user = await servers[0].usersCommand.getMyInfo({ token: userAccessToken })
       userAccountId = user.account.id
       userChannelId = user.videoChannels[0].id
 
-      const res2 = await getUserScopedTokens(servers[0].url, userAccessToken)
-      const token: ScopedToken = res2.body
+      const token = await servers[0].usersCommand.getMyScopedTokens({ token: userAccessToken })
       userFeedToken = token.feedToken
     }
 
@@ -299,18 +291,16 @@ describe('Test syndication feeds', () => {
 
     it('Should list no videos for a user with no videos and no subscriptions', async function () {
       const attr = { username: 'feeduser', password: 'password' }
-      await createUser({ url: servers[0].url, accessToken: servers[0].accessToken, username: attr.username, password: attr.password })
+      await servers[0].usersCommand.create({ username: attr.username, password: attr.password })
       const feeduserAccessToken = await servers[0].loginCommand.getAccessToken(attr)
 
       {
-        const res = await getMyUserInformation(servers[0].url, feeduserAccessToken)
-        const user: User = res.body
+        const user = await servers[0].usersCommand.getMyInfo({ token: feeduserAccessToken })
         feeduserAccountId = user.account.id
       }
 
       {
-        const res = await getUserScopedTokens(servers[0].url, feeduserAccessToken)
-        const token: ScopedToken = res.body
+        const token = await servers[0].usersCommand.getMyScopedTokens({ token: feeduserAccessToken })
         feeduserFeedToken = token.feedToken
       }
 
@@ -381,15 +371,14 @@ describe('Test syndication feeds', () => {
     })
 
     it('Should renew the token, and so have an invalid old token', async function () {
-      await renewUserScopedTokens(servers[0].url, userAccessToken)
+      await servers[0].usersCommand.renewMyScopedTokens({ token: userAccessToken })
 
       const query = { accountId: userAccountId, token: userFeedToken, version: 3 }
       await servers[0].feedCommand.getJSON({ feed: 'subscriptions', query, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
     })
 
     it('Should succeed with the new token', async function () {
-      const res2 = await getUserScopedTokens(servers[0].url, userAccessToken)
-      const token: ScopedToken = res2.body
+      const token = await servers[0].usersCommand.getMyScopedTokens({ token: userAccessToken })
       userFeedToken = token.feedToken
 
       const query = { accountId: userAccountId, token: userFeedToken, version: 4 }

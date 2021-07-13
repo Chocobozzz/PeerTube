@@ -8,7 +8,6 @@ import {
   checkBadSortPagination,
   checkBadStartPagination,
   cleanupTests,
-  createUser,
   flushAndRunServer,
   makeDeleteRequest,
   makeGetRequest,
@@ -53,13 +52,13 @@ describe('Test video comments API validator', function () {
 
     {
       const user = { username: 'user1', password: 'my super password' }
-      await createUser({ url: server.url, accessToken: server.accessToken, username: user.username, password: user.password })
+      await server.usersCommand.create({ username: user.username, password: user.password })
       userAccessToken = await server.loginCommand.getAccessToken(user)
     }
 
     {
       const user = { username: 'user2', password: 'my super password' }
-      await createUser({ url: server.url, accessToken: server.accessToken, username: user.username, password: user.password })
+      await server.usersCommand.create({ username: user.username, password: user.password })
       userAccessToken2 = await server.loginCommand.getAccessToken(user)
     }
   })

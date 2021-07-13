@@ -10,7 +10,6 @@ import {
   MockSmtpServer,
   prepareNotificationsTest,
   ServerInfo,
-  updateMyUser,
   uploadVideo,
   waitJobs
 } from '@shared/extra-utils'
@@ -193,17 +192,8 @@ describe('Test comments notifications', function () {
         token: userToken
       }
 
-      await updateMyUser({
-        url: servers[0].url,
-        accessToken: servers[0].accessToken,
-        displayName: 'super root name'
-      })
-
-      await updateMyUser({
-        url: servers[1].url,
-        accessToken: servers[1].accessToken,
-        displayName: 'super root 2 name'
-      })
+      await servers[0].usersCommand.updateMe({ displayName: 'super root name' })
+      await servers[1].usersCommand.updateMe({ displayName: 'super root 2 name' })
     })
 
     it('Should not send a new mention comment notification if I mention the video owner', async function () {

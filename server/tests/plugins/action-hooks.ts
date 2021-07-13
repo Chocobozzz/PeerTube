@@ -1,28 +1,20 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-import { ServerHookName, VideoPlaylistPrivacy, VideoPrivacy } from '@shared/models'
-import {
-  blockUser,
-  createUser,
-  PluginsCommand,
-  registerUser,
-  removeUser,
-  setAccessTokensToServers,
-  setDefaultVideoChannel,
-  unblockUser,
-  updateUser,
-  updateVideo,
-  uploadVideo,
-  viewVideo
-} from '../../../shared/extra-utils'
 import {
   cleanupTests,
   flushAndRunMultipleServers,
   killallServers,
+  PluginsCommand,
   reRunServer,
-  ServerInfo
-} from '../../../shared/extra-utils/server/servers'
+  ServerInfo,
+  setAccessTokensToServers,
+  setDefaultVideoChannel,
+  updateVideo,
+  uploadVideo,
+  viewVideo
+} from '@shared/extra-utils'
+import { ServerHookName, VideoPlaylistPrivacy, VideoPrivacy } from '@shared/models'
 
 describe('Test plugin action hooks', function () {
   let servers: ServerInfo[]
@@ -119,19 +111,14 @@ describe('Test plugin action hooks', function () {
     let userId: number
 
     it('Should run action:api.user.registered', async function () {
-      await registerUser(servers[0].url, 'registered_user', 'super_password')
+      await servers[0].usersCommand.register({ username: 'registered_user' })
 
       await checkHook('action:api.user.registered')
     })
 
     it('Should run action:api.user.created', async function () {
-      const res = await createUser({
-        url: servers[0].url,
-        accessToken: servers[0].accessToken,
-        username: 'created_user',
-        password: 'super_password'
-      })
-      userId = res.body.user.id
+      const user = await servers[0].usersCommand.create({ username: 'created_user' })
+      userId = user.id
 
       await checkHook('action:api.user.created')
     })
@@ -143,25 +130,25 @@ describe('Test plugin action hooks', function () {
     })
 
     it('Should run action:api.user.blocked', async function () {
-      await blockUser(servers[0].url, userId, servers[0].accessToken)
+      await servers[0].usersCommand.banUser({ userId })
 
       await checkHook('action:api.user.blocked')
     })
 
     it('Should run action:api.user.unblocked', async function () {
-      await unblockUser(servers[0].url, userId, servers[0].accessToken)
+      await servers[0].usersCommand.unbanUser({ userId })
 
       await checkHook('action:api.user.unblocked')
     })
 
     it('Should run action:api.user.updated', async function () {
-      await updateUser({ url: servers[0].url, accessToken: servers[0].accessToken, userId, videoQuota: 50 })
+      await servers[0].usersCommand.update({ userId, videoQuota: 50 })
 
       await checkHook('action:api.user.updated')
     })
 
     it('Should run action:api.user.deleted', async function () {
-      await removeUser(servers[0].url, userId, servers[0].accessToken)
+      await servers[0].usersCommand.remove({ userId })
 
       await checkHook('action:api.user.deleted')
     })

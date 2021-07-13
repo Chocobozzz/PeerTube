@@ -5,7 +5,6 @@ import { omit } from 'lodash'
 import { HttpStatusCode } from '@shared/core-utils'
 import {
   cleanupTests,
-  createUser,
   flushAndRunServer,
   makeDeleteRequest,
   makeGetRequest,
@@ -206,7 +205,7 @@ describe('Test config API validators', function () {
       username: 'user1',
       password: 'password'
     }
-    await createUser({ url: server.url, accessToken: server.accessToken, username: user.username, password: user.password })
+    await server.usersCommand.create({ username: user.username, password: user.password })
     userAccessToken = await server.loginCommand.getAccessToken(user)
   })
 

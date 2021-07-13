@@ -14,7 +14,6 @@ import {
   MockSmtpServer,
   prepareNotificationsTest,
   ServerInfo,
-  updateMyUser,
   updateVideo,
   uploadRandomVideoOnServers,
   wait,
@@ -384,23 +383,14 @@ describe('Test user notifications', function () {
         token: userAccessToken
       }
 
-      await updateMyUser({
-        url: servers[0].url,
-        accessToken: servers[0].accessToken,
-        displayName: 'super root name'
-      })
+      await servers[0].usersCommand.updateMe({ displayName: 'super root name' })
 
-      await updateMyUser({
-        url: servers[0].url,
-        accessToken: userAccessToken,
+      await servers[0].usersCommand.updateMe({
+        token: userAccessToken,
         displayName: myUserName
       })
 
-      await updateMyUser({
-        url: servers[1].url,
-        accessToken: servers[1].accessToken,
-        displayName: 'super root 2 name'
-      })
+      await servers[1].usersCommand.updateMe({ displayName: 'super root 2 name' })
 
       await servers[0].channelsCommand.update({
         token: userAccessToken,

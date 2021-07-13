@@ -3,18 +3,8 @@
 import 'mocha'
 import { expect } from 'chai'
 import { HttpStatusCode } from '@shared/core-utils'
-import {
-  cleanupTests,
-  flushAndRunServer,
-  getMyUserInformation,
-  getUsersList,
-  PluginsCommand,
-  ServerInfo,
-  setAccessTokensToServers,
-  updateMyUser,
-  wait
-} from '@shared/extra-utils'
-import { User, UserRole } from '@shared/models'
+import { cleanupTests, flushAndRunServer, PluginsCommand, ServerInfo, setAccessTokensToServers, wait } from '@shared/extra-utils'
+import { UserRole } from '@shared/models'
 
 describe('Test id and pass auth plugins', function () {
   let server: ServerInfo
@@ -55,9 +45,8 @@ describe('Test id and pass auth plugins', function () {
   it('Should login Spyro, create the user and use the token', async function () {
     const accessToken = await server.loginCommand.getAccessToken({ username: 'spyro', password: 'spyro password' })
 
-    const res = await getMyUserInformation(server.url, accessToken)
+    const body = await server.usersCommand.getMyInfo({ token: accessToken })
 
-    const body: User = res.body
     expect(body.username).to.equal('spyro')
     expect(body.account.displayName).to.equal('Spyro the Dragon')
     expect(body.role).to.equal(UserRole.USER)
@@ -71,9 +60,8 @@ describe('Test id and pass auth plugins', function () {
     }
 
     {
-      const res = await getMyUserInformation(server.url, crashAccessToken)
+      const body = await server.usersCommand.getMyInfo({ token: crashAccessToken })
 
-      const body: User = res.body
       expect(body.username).to.equal('crash')
       expect(body.account.displayName).to.equal('Crash Bandicoot')
       expect(body.role).to.equal(UserRole.MODERATOR)
@@ -88,9 +76,8 @@ describe('Test id and pass auth plugins', function () {
     }
 
     {
-      const res = await getMyUserInformation(server.url, lagunaAccessToken)
+      const body = await server.usersCommand.getMyInfo({ token: lagunaAccessToken })
 
-      const body: User = res.body
       expect(body.username).to.equal('laguna')
       expect(body.account.displayName).to.equal('laguna')
       expect(body.role).to.equal(UserRole.USER)
@@ -103,9 +90,8 @@ describe('Test id and pass auth plugins', function () {
       crashAccessToken = resRefresh.body.access_token
       crashRefreshToken = resRefresh.body.refresh_token
 
-      const res = await getMyUserInformation(server.url, crashAccessToken)
-      const user: User = res.body
-      expect(user.username).to.equal('crash')
+      const body = await server.usersCommand.getMyInfo({ token: crashAccessToken })
+      expect(body.username).to.equal('crash')
     }
 
     {
@@ -114,16 +100,14 @@ describe('Test id and pass auth plugins', function () {
   })
 
   it('Should update Crash profile', async function () {
-    await updateMyUser({
-      url: server.url,
-      accessToken: crashAccessToken,
+    await server.usersCommand.updateMe({
+      token: crashAccessToken,
       displayName: 'Beautiful Crash',
       description: 'Mutant eastern barred bandicoot'
     })
 
-    const res = await getMyUserInformation(server.url, crashAccessToken)
+    const body = await server.usersCommand.getMyInfo({ token: crashAccessToken })
 
-    const body: User = res.body
     expect(body.account.displayName).to.equal('Beautiful Crash')
     expect(body.account.description).to.equal('Mutant eastern barred bandicoot')
   })
@@ -135,15 +119,14 @@ describe('Test id and pass auth plugins', function () {
   it('Should have logged out Crash', async function () {
     await server.serversCommand.waitUntilLog('On logout for auth 1 - 2')
 
-    await getMyUserInformation(server.url, crashAccessToken, 401)
+    await server.usersCommand.getMyInfo({ token: crashAccessToken, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
   })
 
   it('Should login Crash and keep the old existing profile', async function () {
     crashAccessToken = await server.loginCommand.getAccessToken({ username: 'crash', password: 'crash password' })
 
-    const res = await getMyUserInformation(server.url, crashAccessToken)
+    const body = await server.usersCommand.getMyInfo({ token: crashAccessToken })
 
-    const body: User = res.body
     expect(body.username).to.equal('crash')
     expect(body.account.displayName).to.equal('Beautiful Crash')
     expect(body.account.description).to.equal('Mutant eastern barred bandicoot')
@@ -155,7 +138,7 @@ describe('Test id and pass auth plugins', function () {
 
     await wait(5000)
 
-    await getMyUserInformation(server.url, lagunaAccessToken, 401)
+    await server.usersCommand.getMyInfo({ token: lagunaAccessToken, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
   })
 
   it('Should reject an invalid username, email, role or display name', async function () {
@@ -215,13 +198,11 @@ describe('Test id and pass auth plugins', function () {
   })
 
   it('Should display plugin auth information in users list', async function () {
-    const res = await getUsersList(server.url, server.accessToken)
+    const { data } = await server.usersCommand.list()
 
-    const users: User[] = res.body.data
-
-    const root = users.find(u => u.username === 'root')
-    const crash = users.find(u => u.username === 'crash')
-    const laguna = users.find(u => u.username === 'laguna')
+    const root = data.find(u => u.username === 'root')
+    const crash = data.find(u => u.username === 'crash')
+    const laguna = data.find(u => u.username === 'laguna')
 
     expect(root.pluginAuth).to.be.null
     expect(crash.pluginAuth).to.equal('peertube-plugin-test-id-pass-auth-one')

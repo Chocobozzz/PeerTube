@@ -9,15 +9,13 @@ import {
   buildAbsoluteFixturePath,
   cleanupTests,
   flushAndRunServer,
-  getMyUserInformation,
   prepareResumableUpload,
   sendResumableChunks,
   ServerInfo,
   setAccessTokensToServers,
-  setDefaultVideoChannel,
-  updateUser
+  setDefaultVideoChannel
 } from '@shared/extra-utils'
-import { MyUser, VideoPrivacy } from '@shared/models'
+import { VideoPrivacy } from '@shared/models'
 
 const expect = chai.expect
 
@@ -109,15 +107,10 @@ describe('Test resumable upload', function () {
     await setAccessTokensToServers([ server ])
     await setDefaultVideoChannel([ server ])
 
-    const res = await getMyUserInformation(server.url, server.accessToken)
-    rootId = (res.body as MyUser).id
+    const body = await server.usersCommand.getMyInfo()
+    rootId = body.id
 
-    await updateUser({
-      url: server.url,
-      userId: rootId,
-      accessToken: server.accessToken,
-      videoQuota: 10_000_000
-    })
+    await server.usersCommand.update({ userId: rootId, videoQuota: 10_000_000 })
   })
 
   describe('Directory cleaning', function () {

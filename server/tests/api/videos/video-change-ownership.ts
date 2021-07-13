@@ -6,11 +6,9 @@ import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-c
 import {
   ChangeOwnershipCommand,
   cleanupTests,
-  createUser,
   doubleFollow,
   flushAndRunMultipleServers,
   flushAndRunServer,
-  getMyUserInformation,
   getVideo,
   getVideosList,
   ServerInfo,
@@ -19,21 +17,15 @@ import {
   uploadVideo
 } from '../../../../shared/extra-utils'
 import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
-import { User } from '../../../../shared/models/users'
 import { VideoDetails, VideoPrivacy } from '../../../../shared/models/videos'
 
 const expect = chai.expect
 
 describe('Test video change ownership - nominal', function () {
   let servers: ServerInfo[] = []
-  const firstUser = {
-    username: 'first',
-    password: 'My great password'
-  }
-  const secondUser = {
-    username: 'second',
-    password: 'My other password'
-  }
+
+  const firstUser = 'first'
+  const secondUser = 'second'
 
   let firstUserToken = ''
   let firstUserChannelId: number
@@ -65,35 +57,17 @@ describe('Test video change ownership - nominal', function () {
       }
     })
 
-    const videoQuota = 42000000
-    await createUser({
-      url: servers[0].url,
-      accessToken: servers[0].accessToken,
-      username: firstUser.username,
-      password: firstUser.password,
-      videoQuota: videoQuota
-    })
-    await createUser({
-      url: servers[0].url,
-      accessToken: servers[0].accessToken,
-      username: secondUser.username,
-      password: secondUser.password,
-      videoQuota: videoQuota
-    })
-
-    firstUserToken = await servers[0].loginCommand.getAccessToken(firstUser)
-    secondUserToken = await servers[0].loginCommand.getAccessToken(secondUser)
+    firstUserToken = await servers[0].usersCommand.generateUserAndToken(firstUser)
+    secondUserToken = await servers[0].usersCommand.generateUserAndToken(secondUser)
 
     {
-      const res = await getMyUserInformation(servers[0].url, firstUserToken)
-      const firstUserInformation: User = res.body
-      firstUserChannelId = firstUserInformation.videoChannels[0].id
+      const { videoChannels } = await servers[0].usersCommand.getMyInfo({ token: firstUserToken })
+      firstUserChannelId = videoChannels[0].id
     }
 
     {
-      const res = await getMyUserInformation(servers[0].url, secondUserToken)
-      const secondUserInformation: User = res.body
-      secondUserChannelId = secondUserInformation.videoChannels[0].id
+      const { videoChannels } = await servers[0].usersCommand.getMyInfo({ token: secondUserToken })
+      secondUserChannelId = videoChannels[0].id
     }
 
     {
@@ -140,7 +114,7 @@ describe('Test video change ownership - nominal', function () {
   it('Should send a request to change ownership of a video', async function () {
     this.timeout(15000)
 
-    await command.create({ token: firstUserToken, videoId: servers[0].video.id, username: secondUser.username })
+    await command.create({ token: firstUserToken, videoId: servers[0].video.id, username: secondUser })
   })
 
   it('Should only return a request to change ownership for the second user', async function () {
@@ -166,7 +140,7 @@ describe('Test video change ownership - nominal', function () {
   it('Should accept the same change ownership request without crashing', async function () {
     this.timeout(10000)
 
-    await command.create({ token: firstUserToken, videoId: servers[0].video.id, username: secondUser.username })
+    await command.create({ token: firstUserToken, videoId: servers[0].video.id, username: secondUser })
   })
 
   it('Should not create multiple change ownership requests while one is waiting', async function () {
@@ -194,7 +168,7 @@ describe('Test video change ownership - nominal', function () {
   it('Should send a new request to change ownership of a video', async function () {
     this.timeout(15000)
 
-    await command.create({ token: firstUserToken, videoId: servers[0].video.id, username: secondUser.username })
+    await command.create({ token: firstUserToken, videoId: servers[0].video.id, username: secondUser })
   })
 
   it('Should return two requests to change ownership for the second user', async function () {
@@ -251,7 +225,7 @@ describe('Test video change ownership - nominal', function () {
   it('Should send a request to change ownership of a live', async function () {
     this.timeout(15000)
 
-    await command.create({ token: firstUserToken, videoId: liveId, username: secondUser.username })
+    await command.create({ token: firstUserToken, videoId: liveId, username: secondUser })
 
     const body = await command.list({ token: secondUserToken })
 
@@ -286,14 +260,9 @@ describe('Test video change ownership - nominal', function () {
 
 describe('Test video change ownership - quota too small', function () {
   let server: ServerInfo
-  const firstUser = {
-    username: 'first',
-    password: 'My great password'
-  }
-  const secondUser = {
-    username: 'second',
-    password: 'My other password'
-  }
+  const firstUser = 'first'
+  const secondUser = 'second'
+
   let firstUserToken = ''
   let secondUserToken = ''
   let lastRequestId: number
@@ -305,24 +274,9 @@ describe('Test video change ownership - quota too small', function () {
     server = await flushAndRunServer(1)
     await setAccessTokensToServers([ server ])
 
-    const videoQuota = 42000000
-    const limitedVideoQuota = 10
-    await createUser({
-      url: server.url,
-      accessToken: server.accessToken,
-      username: firstUser.username,
-      password: firstUser.password,
-      videoQuota: videoQuota
-    })
-    await createUser({
-      url: server.url,
-      accessToken: server.accessToken,
-      username: secondUser.username,
-      password: secondUser.password,
-      videoQuota: limitedVideoQuota
-    })
+    await server.usersCommand.create({ username: secondUser, videoQuota: 10 })
 
-    firstUserToken = await server.loginCommand.getAccessToken(firstUser)
+    firstUserToken = await server.usersCommand.generateUserAndToken(firstUser)
     secondUserToken = await server.loginCommand.getAccessToken(secondUser)
 
     // Upload some videos on the server
@@ -345,7 +299,7 @@ describe('Test video change ownership - quota too small', function () {
   it('Should send a request to change ownership of a video', async function () {
     this.timeout(15000)
 
-    await server.changeOwnershipCommand.create({ token: firstUserToken, videoId: server.video.id, username: secondUser.username })
+    await server.changeOwnershipCommand.create({ token: firstUserToken, videoId: server.video.id, username: secondUser })
   })
 
   it('Should only return a request to change ownership for the second user', async function () {
@@ -371,9 +325,8 @@ describe('Test video change ownership - quota too small', function () {
   it('Should not be possible to accept the change of ownership from second user because of exceeded quota', async function () {
     this.timeout(10000)
 
-    const secondUserInformationResponse = await getMyUserInformation(server.url, secondUserToken)
-    const secondUserInformation: User = secondUserInformationResponse.body
-    const channelId = secondUserInformation.videoChannels[0].id
+    const { videoChannels } = await server.usersCommand.getMyInfo({ token: secondUserToken })
+    const channelId = videoChannels[0].id
 
     await server.changeOwnershipCommand.accept({
       token: secondUserToken,

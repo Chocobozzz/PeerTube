@@ -6,21 +6,22 @@ import { basename } from 'path'
 import { ACTOR_IMAGES_SIZE } from '@server/initializers/constants'
 import {
   cleanupTests,
-  createUser,
   doubleFollow,
   flushAndRunMultipleServers,
   getVideo,
   getVideoChannelVideos,
+  ServerInfo,
+  setAccessTokensToServers,
   setDefaultVideoChannel,
   testFileExistsOrNot,
   testImage,
   updateVideo,
   uploadVideo,
-  wait
-} from '../../../../shared/extra-utils'
-import { getMyUserInformation, ServerInfo, setAccessTokensToServers, viewVideo } from '../../../../shared/extra-utils/index'
-import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
-import { User, Video, VideoChannel, VideoDetails } from '../../../../shared/index'
+  viewVideo,
+  wait,
+  waitJobs
+} from '@shared/extra-utils'
+import { User, Video, VideoChannel, VideoDetails } from '@shared/models'
 
 const expect = chai.expect
 
@@ -85,8 +86,7 @@ describe('Test video channels', function () {
   })
 
   it('Should have two video channels when getting my information', async () => {
-    const res = await getMyUserInformation(servers[0].url, servers[0].accessToken)
-    userInfo = res.body
+    userInfo = await servers[0].usersCommand.getMyInfo()
 
     expect(userInfo.videoChannels).to.be.an('array')
     expect(userInfo.videoChannels).to.have.lengthOf(2)
@@ -389,11 +389,11 @@ describe('Test video channels', function () {
     }
 
     {
-      await createUser({ url: servers[0].url, accessToken: servers[0].accessToken, username: 'toto', password: 'password' })
+      await servers[0].usersCommand.create({ username: 'toto', password: 'password' })
       const accessToken = await servers[0].loginCommand.getAccessToken({ username: 'toto', password: 'password' })
 
-      const res = await getMyUserInformation(servers[0].url, accessToken)
-      const videoChannel = res.body.videoChannels[0]
+      const { videoChannels } = await servers[0].usersCommand.getMyInfo({ token: accessToken })
+      const videoChannel = videoChannels[0]
       expect(videoChannel.name).to.match(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/)
     }
   })

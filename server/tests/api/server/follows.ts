@@ -5,7 +5,6 @@ import * as chai from 'chai'
 import {
   cleanupTests,
   completeVideoCheck,
-  createUser,
   dateIsValid,
   expectAccountFollows,
   flushAndRunMultipleServers,
@@ -327,9 +326,7 @@ describe('Test follows', function () {
       await uploadVideo(servers[2].url, servers[2].accessToken, { name: 'server3-6' })
 
       {
-        const user = { username: 'captain', password: 'password' }
-        await createUser({ url: servers[2].url, accessToken: servers[2].accessToken, username: user.username, password: user.password })
-        const userAccessToken = await servers[2].loginCommand.getAccessToken(user)
+        const userAccessToken = await servers[2].usersCommand.generateUserAndToken('captain')
 
         const resVideos = await getVideosList(servers[2].url)
         video4 = resVideos.body.data.find(v => v.name === 'server3-4')

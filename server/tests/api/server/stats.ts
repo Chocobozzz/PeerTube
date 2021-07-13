@@ -4,7 +4,6 @@ import 'mocha'
 import * as chai from 'chai'
 import {
   cleanupTests,
-  createUser,
   doubleFollow,
   flushAndRunMultipleServers,
   ServerInfo,
@@ -35,7 +34,7 @@ describe('Test stats (excluding redundancy)', function () {
 
     await doubleFollow(servers[0], servers[1])
 
-    await createUser({ url: servers[0].url, accessToken: servers[0].accessToken, username: user.username, password: user.password })
+    await servers[0].usersCommand.create({ username: user.username, password: user.password })
 
     const resVideo = await uploadVideo(servers[0].url, servers[0].accessToken, { fixture: 'video_short.webm' })
     const videoUUID = resVideo.body.video.uuid

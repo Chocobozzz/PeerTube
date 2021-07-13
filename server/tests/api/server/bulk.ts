@@ -5,7 +5,6 @@ import * as chai from 'chai'
 import {
   BulkCommand,
   cleanupTests,
-  createUser,
   doubleFollow,
   flushAndRunMultipleServers,
   getVideosList,
@@ -38,21 +37,21 @@ describe('Test bulk actions', function () {
 
     {
       const user = { username: 'user1', password: 'password' }
-      await createUser({ url: servers[0].url, accessToken: servers[0].accessToken, username: user.username, password: user.password })
+      await servers[0].usersCommand.create({ username: user.username, password: user.password })
 
       user1Token = await servers[0].loginCommand.getAccessToken(user)
     }
 
     {
       const user = { username: 'user2', password: 'password' }
-      await createUser({ url: servers[0].url, accessToken: servers[0].accessToken, username: user.username, password: user.password })
+      await servers[0].usersCommand.create({ username: user.username, password: user.password })
 
       user2Token = await servers[0].loginCommand.getAccessToken(user)
     }
 
     {
       const user = { username: 'user3', password: 'password' }
-      await createUser({ url: servers[1].url, accessToken: servers[1].accessToken, username: user.username, password: user.password })
+      await servers[1].usersCommand.create({ username: user.username, password: user.password })
 
       user3Token = await servers[1].loginCommand.getAccessToken(user)
     }

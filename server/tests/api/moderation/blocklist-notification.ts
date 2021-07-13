@@ -4,7 +4,6 @@ import 'mocha'
 import * as chai from 'chai'
 import {
   cleanupTests,
-  createUser,
   doubleFollow,
   flushAndRunMultipleServers,
   ServerInfo,
@@ -76,9 +75,7 @@ describe('Test blocklist', function () {
 
     {
       const user = { username: 'user1', password: 'password' }
-      await createUser({
-        url: servers[0].url,
-        accessToken: servers[0].accessToken,
+      await servers[0].usersCommand.create({
         username: user.username,
         password: user.password,
         videoQuota: -1,
@@ -91,14 +88,14 @@ describe('Test blocklist', function () {
 
     {
       const user = { username: 'user2', password: 'password' }
-      await createUser({ url: servers[0].url, accessToken: servers[0].accessToken, username: user.username, password: user.password })
+      await servers[0].usersCommand.create({ username: user.username, password: user.password })
 
       userToken2 = await servers[0].loginCommand.getAccessToken(user)
     }
 
     {
       const user = { username: 'user3', password: 'password' }
-      await createUser({ url: servers[1].url, accessToken: servers[1].accessToken, username: user.username, password: user.password })
+      await servers[1].usersCommand.create({ username: user.username, password: user.password })
 
       remoteUserToken = await servers[1].loginCommand.getAccessToken(user)
     }

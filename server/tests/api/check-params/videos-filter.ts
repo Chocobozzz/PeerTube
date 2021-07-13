@@ -3,7 +3,6 @@
 import 'mocha'
 import {
   cleanupTests,
-  createUser,
   flushAndRunServer,
   makeGetRequest,
   ServerInfo,
@@ -50,21 +49,12 @@ describe('Test video filters validators', function () {
     await setDefaultVideoChannel([ server ])
 
     const user = { username: 'user1', password: 'my super password' }
-    await createUser({ url: server.url, accessToken: server.accessToken, username: user.username, password: user.password })
+    await server.usersCommand.create({ username: user.username, password: user.password })
     userAccessToken = await server.loginCommand.getAccessToken(user)
 
     const moderator = { username: 'moderator', password: 'my super password' }
-    await createUser(
-      {
-        url: server.url,
-        accessToken: server.accessToken,
-        username: moderator.username,
-        password: moderator.password,
-        videoQuota: undefined,
-        videoQuotaDaily: undefined,
-        role: UserRole.MODERATOR
-      }
-    )
+    await server.usersCommand.create({ username: moderator.username, password: moderator.password, role: UserRole.MODERATOR })
+
     moderatorAccessToken = await server.loginCommand.getAccessToken(moderator)
   })
 

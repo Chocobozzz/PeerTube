@@ -4,7 +4,6 @@ import 'mocha'
 
 import {
   cleanupTests,
-  createUser,
   flushAndRunServer,
   makeDeleteRequest, makeGetRequest,
   makePostBodyRequest,
@@ -40,7 +39,7 @@ describe('Test server follows API validators', function () {
         password: 'password'
       }
 
-      await createUser({ url: server.url, accessToken: server.accessToken, username: user.username, password: user.password })
+      await server.usersCommand.create({ username: user.username, password: user.password })
       userAccessToken = await server.loginCommand.getAccessToken(user)
     })
 

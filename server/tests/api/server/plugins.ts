@@ -6,17 +6,15 @@ import { HttpStatusCode } from '@shared/core-utils'
 import {
   cleanupTests,
   flushAndRunServer,
-  getMyUserInformation,
   killallServers,
   PluginsCommand,
   reRunServer,
   ServerInfo,
   setAccessTokensToServers,
   testHelloWorldRegisteredSettings,
-  updateMyUser,
   wait
 } from '@shared/extra-utils'
-import { PluginType, User } from '@shared/models'
+import { PluginType } from '@shared/models'
 
 const expect = chai.expect
 
@@ -120,14 +118,10 @@ describe('Test plugins', function () {
   })
 
   it('Should update my default theme', async function () {
-    await updateMyUser({
-      url: server.url,
-      accessToken: server.accessToken,
-      theme: 'background-red'
-    })
+    await server.usersCommand.updateMe({ theme: 'background-red' })
 
-    const res = await getMyUserInformation(server.url, server.accessToken)
-    expect((res.body as User).theme).to.equal('background-red')
+    const user = await server.usersCommand.getMyInfo()
+    expect(user.theme).to.equal('background-red')
   })
 
   it('Should list plugins and themes', async function () {
@@ -311,8 +305,8 @@ describe('Test plugins', function () {
   })
 
   it('Should have updated the user theme', async function () {
-    const res = await getMyUserInformation(server.url, server.accessToken)
-    expect((res.body as User).theme).to.equal('instance-default')
+    const user = await server.usersCommand.getMyInfo()
+    expect(user.theme).to.equal('instance-default')
   })
 
   it('Should not install a broken plugin', async function () {

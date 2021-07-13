@@ -4,7 +4,6 @@ import 'mocha'
 
 import {
   cleanupTests,
-  createUser,
   doubleFollow,
   flushAndRunMultipleServers,
   makeDeleteRequest,
@@ -34,7 +33,7 @@ describe('Test blocklist API validators', function () {
     server = servers[0]
 
     const user = { username: 'user1', password: 'password' }
-    await createUser({ url: server.url, accessToken: server.accessToken, username: user.username, password: user.password })
+    await server.usersCommand.create({ username: user.username, password: user.password })
 
     userAccessToken = await server.loginCommand.getAccessToken(user)
 

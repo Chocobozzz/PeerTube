@@ -5,7 +5,6 @@ import * as chai from 'chai'
 import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import {
   cleanupTests,
-  createUser,
   doubleFollow,
   flushAndRunMultipleServers,
   makeGetRequest,
@@ -60,17 +59,7 @@ describe('Test videos filter', function () {
 
     for (const server of servers) {
       const moderator = { username: 'moderator', password: 'my super password' }
-      await createUser(
-        {
-          url: server.url,
-          accessToken: server.accessToken,
-          username: moderator.username,
-          password: moderator.password,
-          videoQuota: undefined,
-          videoQuotaDaily: undefined,
-          role: UserRole.MODERATOR
-        }
-      )
+      await server.usersCommand.create({ username: moderator.username, password: moderator.password, role: UserRole.MODERATOR })
       server['moderatorAccessToken'] = await server.loginCommand.getAccessToken(moderator)
 
       await uploadVideo(server.url, server.accessToken, { name: 'public ' + server.serverNumber })

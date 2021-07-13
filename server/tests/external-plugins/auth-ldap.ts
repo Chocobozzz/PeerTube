@@ -3,9 +3,7 @@
 import 'mocha'
 import { expect } from 'chai'
 import { HttpStatusCode } from '@shared/core-utils'
-import { User } from '@shared/models/users/user.model'
-import { blockUser, getMyUserInformation, setAccessTokensToServers, unblockUser, uploadVideo } from '../../../shared/extra-utils'
-import { cleanupTests, flushAndRunServer, ServerInfo } from '../../../shared/extra-utils/server/servers'
+import { cleanupTests, flushAndRunServer, ServerInfo, setAccessTokensToServers, uploadVideo } from '@shared/extra-utils'
 
 describe('Official plugin auth-ldap', function () {
   let server: ServerInfo
@@ -71,9 +69,7 @@ describe('Official plugin auth-ldap', function () {
   })
 
   it('Should login get my profile', async function () {
-    const res = await getMyUserInformation(server.url, accessToken)
-    const body: User = res.body
-
+    const body = await server.usersCommand.getMyInfo({ token: accessToken })
     expect(body.username).to.equal('fry')
     expect(body.email).to.equal('fry@planetexpress.com')
 
@@ -85,7 +81,7 @@ describe('Official plugin auth-ldap', function () {
   })
 
   it('Should not be able to login if the user is banned', async function () {
-    await blockUser(server.url, userId, server.accessToken)
+    await server.usersCommand.banUser({ userId })
 
     await server.loginCommand.login({
       user: { username: 'fry@planetexpress.com', password: 'fry' },
@@ -94,7 +90,7 @@ describe('Official plugin auth-ldap', function () {
   })
 
   it('Should be able to login if the user is unbanned', async function () {
-    await unblockUser(server.url, userId, server.accessToken)
+    await server.usersCommand.unbanUser({ userId })
 
     await server.loginCommand.login({ user: { username: 'fry@planetexpress.com', password: 'fry' } })
   })

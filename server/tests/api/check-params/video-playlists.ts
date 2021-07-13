@@ -17,7 +17,6 @@ import {
   checkBadStartPagination,
   cleanupTests,
   flushAndRunServer,
-  generateUserAccessToken,
   makeGetRequest,
   PlaylistsCommand,
   ServerInfo,
@@ -49,7 +48,7 @@ describe('Test video playlists API validator', function () {
     await setAccessTokensToServers([ server ])
     await setDefaultVideoChannel([ server ])
 
-    userAccessToken = await generateUserAccessToken(server, 'user1')
+    userAccessToken = await server.usersCommand.generateUserAndToken('user1')
     videoId = (await uploadVideoAndGetId({ server, videoName: 'video 1' })).id
 
     command = server.playlistsCommand
