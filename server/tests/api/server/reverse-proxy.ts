@@ -6,7 +6,7 @@ import {
   cleanupTests,
   flushAndRunServer,
   getVideo,
-  registerUser,
+  ServerInfo,
   setAccessTokensToServers,
   uploadVideo,
   viewVideo,
@@ -14,8 +14,8 @@ import {
 } from '@shared/extra-utils'
 
 describe('Test application behind a reverse proxy', function () {
-  let server = null
-  let videoId
+  let server: ServerInfo
+  let videoId: number
 
   before(async function () {
     this.timeout(30000)
@@ -102,22 +102,22 @@ describe('Test application behind a reverse proxy', function () {
     const user = { username: 'root', password: 'fail' }
 
     for (let i = 0; i < 19; i++) {
-      await server.loginCommand.getAccessToken(user, HttpStatusCode.BAD_REQUEST_400)
+      await server.loginCommand.login({ user, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     }
 
-    await server.loginCommand.getAccessToken(user, HttpStatusCode.TOO_MANY_REQUESTS_429)
+    await server.loginCommand.login({ user, expectedStatus: HttpStatusCode.TOO_MANY_REQUESTS_429 })
   })
 
   it('Should rate limit signup', async function () {
     for (let i = 0; i < 10; i++) {
       try {
-        await registerUser(server.url, 'test' + i, 'password')
+        await server.usersCommand.register({ username: 'test' + i })
       } catch {
         // empty
       }
     }
 
-    await registerUser(server.url, 'test42', 'password', HttpStatusCode.TOO_MANY_REQUESTS_429)
+    await server.usersCommand.register({ username: 'test42', expectedStatus: HttpStatusCode.TOO_MANY_REQUESTS_429 })
   })
 
   it('Should not rate limit failed signup', async function () {
@@ -126,10 +126,10 @@ describe('Test application behind a reverse proxy', function () {
     await wait(7000)
 
     for (let i = 0; i < 3; i++) {
-      await registerUser(server.url, 'test' + i, 'password', HttpStatusCode.CONFLICT_409)
+      await server.usersCommand.register({ username: 'test' + i, expectedStatus: HttpStatusCode.CONFLICT_409 })
     }
 
-    await registerUser(server.url, 'test43', 'password', HttpStatusCode.NO_CONTENT_204)
+    await server.usersCommand.register({ username: 'test43', expectedStatus: HttpStatusCode.NO_CONTENT_204 })
 
   })
 

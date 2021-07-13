@@ -2,14 +2,11 @@
 
 import 'mocha'
 import { omit } from 'lodash'
-import { VideoCreateResult, VideoPrivacy } from '@shared/models'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '@shared/core-utils'
 import {
   buildAbsoluteFixturePath,
   cleanupTests,
-  createUser,
   flushAndRunServer,
-  getMyUserInformation,
   LiveCommand,
   makePostBodyRequest,
   makeUploadRequest,
@@ -18,7 +15,8 @@ import {
   setAccessTokensToServers,
   stopFfmpeg,
   uploadVideoAndGetId
-} from '../../../../shared/extra-utils'
+} from '@shared/extra-utils'
+import { VideoCreateResult, VideoPrivacy } from '@shared/models'
 
 describe('Test video lives API validator', function () {
   const path = '/api/v1/videos/live'
@@ -51,12 +49,12 @@ describe('Test video lives API validator', function () {
 
     const username = 'user1'
     const password = 'my super password'
-    await createUser({ url: server.url, accessToken: server.accessToken, username: username, password: password })
+    await server.usersCommand.create({ username: username, password: password })
     userAccessToken = await server.loginCommand.getAccessToken({ username, password })
 
     {
-      const res = await getMyUserInformation(server.url, server.accessToken)
-      channelId = res.body.videoChannels[0].id
+      const { videoChannels } = await server.usersCommand.getMyInfo()
+      channelId = videoChannels[0].id
     }
 
     {
@@ -147,11 +145,11 @@ describe('Test video lives API validator', function () {
         username: 'fake',
         password: 'fake_password'
       }
-      await createUser({ url: server.url, accessToken: server.accessToken, username: user.username, password: user.password })
+      await server.usersCommand.create({ username: user.username, password: user.password })
 
       const accessTokenUser = await server.loginCommand.getAccessToken(user)
-      const res = await getMyUserInformation(server.url, accessTokenUser)
-      const customChannelId = res.body.videoChannels[0].id
+      const { videoChannels } = await server.usersCommand.getMyInfo({ token: accessTokenUser })
+      const customChannelId = videoChannels[0].id
 
       const fields = { ...baseCorrectParams, channelId: customChannelId }
 

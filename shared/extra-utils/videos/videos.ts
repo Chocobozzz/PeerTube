@@ -17,7 +17,7 @@ import { buildAbsoluteFixturePath, dateIsValid, testImage, wait, webtorrentAdd }
 import { makeGetRequest, makePutBodyRequest, makeRawRequest, makeUploadRequest } from '../requests/requests'
 import { waitJobs } from '../server/jobs'
 import { ServerInfo } from '../server/servers'
-import { getMyUserInformation } from '../users/users'
+import { xxxgetMyUserInformation } from '../users'
 
 loadLanguages()
 
@@ -339,7 +339,7 @@ async function uploadVideo (
   let defaultChannelId = '1'
 
   try {
-    const res = await getMyUserInformation(url, accessToken)
+    const res = await xxxgetMyUserInformation(url, accessToken)
     defaultChannelId = res.body.videoChannels[0].id
   } catch (e) { /* empty */ }
 

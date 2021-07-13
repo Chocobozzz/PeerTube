@@ -15,7 +15,6 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   setDefaultVideoChannel,
-  updateMyUser,
   uploadVideo,
   waitJobs
 } from '../../shared/extra-utils'
@@ -96,7 +95,7 @@ describe('Test a client controllers', function () {
 
     // Account
 
-    await updateMyUser({ url: servers[0].url, accessToken: servers[0].accessToken, description: 'my account description' })
+    await servers[0].usersCommand.updateMe({ description: 'my account description' })
 
     account = await servers[0].accountsCommand.get({ accountName: `${servers[0].user.username}@${servers[0].host}` })
 

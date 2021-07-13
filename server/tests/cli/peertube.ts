@@ -8,11 +8,9 @@ import {
   buildAbsoluteFixturePath,
   cleanupTests,
   CLICommand,
-  createUser,
   doubleFollow,
   flushAndRunServer,
   getLocalIdByUUID,
-  getMyUserInformation,
   getVideo,
   getVideosList,
   ImportsCommand,
@@ -38,7 +36,7 @@ describe('Test CLI wrapper', function () {
     server = await flushAndRunServer(1)
     await setAccessTokensToServers([ server ])
 
-    await createUser({ url: server.url, accessToken: server.accessToken, username: 'user_1', password: 'super_password' })
+    await server.usersCommand.create({ username: 'user_1', password: 'super_password' })
 
     userAccessToken = await server.loginCommand.getAccessToken({ username: 'user_1', password: 'super_password' })
 
@@ -56,8 +54,8 @@ describe('Test CLI wrapper', function () {
       const stdout = await cliCommand.execWithEnv(`${cmd} token --url ${server.url} --username user_1 --password super_password`)
       const token = stdout.trim()
 
-      const res = await getMyUserInformation(server.url, token)
-      expect(res.body.username).to.equal('user_1')
+      const body = await server.usersCommand.getMyInfo({ token })
+      expect(body.username).to.equal('user_1')
     })
 
     it('Should display no selected instance', async function () {

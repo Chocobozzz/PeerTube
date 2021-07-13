@@ -2,7 +2,7 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { cleanupTests, createUser, flushAndRunServer, SearchCommand, ServerInfo, setAccessTokensToServers } from '@shared/extra-utils'
+import { cleanupTests, flushAndRunServer, SearchCommand, ServerInfo, setAccessTokensToServers } from '@shared/extra-utils'
 import { VideoChannel } from '@shared/models'
 
 const expect = chai.expect
@@ -19,7 +19,7 @@ describe('Test channels search', function () {
     await setAccessTokensToServers([ server ])
 
     {
-      await createUser({ url: server.url, accessToken: server.accessToken, username: 'user1', password: 'password' })
+      await server.usersCommand.create({ username: 'user1', password: 'password' })
       const channel = {
         name: 'squall_channel',
         displayName: 'Squall channel'

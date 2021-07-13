@@ -5,13 +5,11 @@ import * as chai from 'chai'
 import {
   cleanupTests,
   CommentsCommand,
-  createUser,
   dateIsValid,
   flushAndRunServer,
   ServerInfo,
   setAccessTokensToServers,
   testImage,
-  updateMyAvatar,
   uploadVideo
 } from '@shared/extra-utils'
 
@@ -39,19 +37,9 @@ describe('Test video comments', function () {
     videoUUID = res.body.video.uuid
     videoId = res.body.video.id
 
-    await updateMyAvatar({
-      url: server.url,
-      accessToken: server.accessToken,
-      fixture: 'avatar.png'
-    })
+    await server.usersCommand.updateMyAvatar({ fixture: 'avatar.png' })
 
-    await createUser({
-      url: server.url,
-      accessToken: server.accessToken,
-      username: 'user1',
-      password: 'password'
-    })
-    userAccessTokenServer1 = await server.loginCommand.getAccessToken('user1', 'password')
+    userAccessTokenServer1 = await server.usersCommand.generateUserAndToken('user1')
 
     command = server.commentsCommand
   })

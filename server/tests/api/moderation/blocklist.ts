@@ -6,7 +6,6 @@ import {
   BlocklistCommand,
   cleanupTests,
   CommentsCommand,
-  createUser,
   doubleFollow,
   flushAndRunMultipleServers,
   getVideosList,
@@ -91,7 +90,7 @@ describe('Test blocklist', function () {
 
     {
       const user = { username: 'user1', password: 'password' }
-      await createUser({ url: servers[0].url, accessToken: servers[0].accessToken, username: user.username, password: user.password })
+      await servers[0].usersCommand.create({ username: user.username, password: user.password })
 
       userToken1 = await servers[0].loginCommand.getAccessToken(user)
       await uploadVideo(servers[0].url, userToken1, { name: 'video user 1' })
@@ -99,14 +98,14 @@ describe('Test blocklist', function () {
 
     {
       const user = { username: 'moderator', password: 'password' }
-      await createUser({ url: servers[0].url, accessToken: servers[0].accessToken, username: user.username, password: user.password })
+      await servers[0].usersCommand.create({ username: user.username, password: user.password })
 
       userModeratorToken = await servers[0].loginCommand.getAccessToken(user)
     }
 
     {
       const user = { username: 'user2', password: 'password' }
-      await createUser({ url: servers[1].url, accessToken: servers[1].accessToken, username: user.username, password: user.password })
+      await servers[1].usersCommand.create({ username: user.username, password: user.password })
 
       userToken2 = await servers[1].loginCommand.getAccessToken(user)
       await uploadVideo(servers[1].url, userToken2, { name: 'video user 2' })

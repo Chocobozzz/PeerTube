@@ -7,14 +7,13 @@ import {
   checkNewVideoFromSubscription,
   cleanupTests,
   getAllNotificationsSettings,
-  getMyUserInformation,
   MockSmtpServer,
   prepareNotificationsTest,
   ServerInfo,
   uploadRandomVideo,
   waitJobs
 } from '@shared/extra-utils'
-import { User, UserNotification, UserNotificationSettingValue } from '@shared/models'
+import { UserNotification, UserNotificationSettingValue } from '@shared/models'
 
 const expect = chai.expect
 
@@ -109,15 +108,14 @@ describe('Test notifications API', function () {
       })
 
       {
-        const res = await getMyUserInformation(server.url, userToken)
-        const info = res.body as User
+        const info = await server.usersCommand.getMyInfo({ token: userToken })
         expect(info.notificationSettings.newVideoFromSubscription).to.equal(UserNotificationSettingValue.NONE)
       }
 
       const { name, uuid } = await uploadRandomVideo(server)
 
       const check = { web: true, mail: true }
-      await checkNewVideoFromSubscription({ ...baseParams, ...check }, name, uuid, 'absence')
+      await checkNewVideoFromSubscription({ ...baseParams, check }, name, uuid, 'absence')
     })
 
     it('Should only have web notifications', async function () {
@@ -129,8 +127,7 @@ describe('Test notifications API', function () {
       })
 
       {
-        const res = await getMyUserInformation(server.url, userToken)
-        const info = res.body as User
+        const info = await server.usersCommand.getMyInfo({ token: userToken })
         expect(info.notificationSettings.newVideoFromSubscription).to.equal(UserNotificationSettingValue.WEB)
       }
 
@@ -138,12 +135,12 @@ describe('Test notifications API', function () {
 
       {
         const check = { mail: true, web: false }
-        await checkNewVideoFromSubscription({ ...baseParams, ...check }, name, uuid, 'absence')
+        await checkNewVideoFromSubscription({ ...baseParams, check }, name, uuid, 'absence')
       }
 
       {
         const check = { mail: false, web: true }
-        await checkNewVideoFromSubscription({ ...baseParams, ...check }, name, uuid, 'presence')
+        await checkNewVideoFromSubscription({ ...baseParams, check }, name, uuid, 'presence')
       }
     })
 
@@ -156,8 +153,7 @@ describe('Test notifications API', function () {
       })
 
       {
-        const res = await getMyUserInformation(server.url, userToken)
-        const info = res.body as User
+        const info = await server.usersCommand.getMyInfo({ token: userToken })
         expect(info.notificationSettings.newVideoFromSubscription).to.equal(UserNotificationSettingValue.EMAIL)
       }
 
@@ -165,12 +161,12 @@ describe('Test notifications API', function () {
 
       {
         const check = { mail: false, web: true }
-        await checkNewVideoFromSubscription({ ...baseParams, ...check }, name, uuid, 'absence')
+        await checkNewVideoFromSubscription({ ...baseParams, check }, name, uuid, 'absence')
       }
 
       {
         const check = { mail: true, web: false }
-        await checkNewVideoFromSubscription({ ...baseParams, ...check }, name, uuid, 'presence')
+        await checkNewVideoFromSubscription({ ...baseParams, check }, name, uuid, 'presence')
       }
     })
 
@@ -186,8 +182,7 @@ describe('Test notifications API', function () {
       })
 
       {
-        const res = await getMyUserInformation(server.url, userToken)
-        const info = res.body as User
+        const info = await server.usersCommand.getMyInfo({ token: userToken })
         expect(info.notificationSettings.newVideoFromSubscription).to.equal(
           UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL
         )

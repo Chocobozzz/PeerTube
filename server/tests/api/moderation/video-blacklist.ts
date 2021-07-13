@@ -6,10 +6,8 @@ import { orderBy } from 'lodash'
 import {
   BlacklistCommand,
   cleanupTests,
-  createUser,
   doubleFollow,
   flushAndRunMultipleServers,
-  getMyUserInformation,
   getMyVideos,
   getVideosList,
   ImportsCommand,
@@ -21,7 +19,7 @@ import {
   uploadVideo,
   waitJobs
 } from '@shared/extra-utils'
-import { User, UserAdminFlag, UserRole, VideoBlacklist, VideoBlacklistType } from '@shared/models'
+import { UserAdminFlag, UserRole, VideoBlacklist, VideoBlacklistType } from '@shared/models'
 
 const expect = chai.expect
 
@@ -356,9 +354,7 @@ describe('Test video blacklist', function () {
 
       {
         const user = { username: 'user_without_flag', password: 'password' }
-        await createUser({
-          url: servers[0].url,
-          accessToken: servers[0].accessToken,
+        await servers[0].usersCommand.create({
           username: user.username,
           adminFlags: UserAdminFlag.NONE,
           password: user.password,
@@ -367,16 +363,13 @@ describe('Test video blacklist', function () {
 
         userWithoutFlag = await servers[0].loginCommand.getAccessToken(user)
 
-        const res = await getMyUserInformation(servers[0].url, userWithoutFlag)
-        const body: User = res.body
-        channelOfUserWithoutFlag = body.videoChannels[0].id
+        const { videoChannels } = await servers[0].usersCommand.getMyInfo({ token: userWithoutFlag })
+        channelOfUserWithoutFlag = videoChannels[0].id
       }
 
       {
         const user = { username: 'user_with_flag', password: 'password' }
-        await createUser({
-          url: servers[0].url,
-          accessToken: servers[0].accessToken,
+        await servers[0].usersCommand.create({
           username: user.username,
           adminFlags: UserAdminFlag.BYPASS_VIDEO_AUTO_BLACKLIST,
           password: user.password,

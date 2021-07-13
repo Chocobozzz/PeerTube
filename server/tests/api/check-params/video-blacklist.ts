@@ -9,7 +9,6 @@ import {
   checkBadSortPagination,
   checkBadStartPagination,
   cleanupTests,
-  createUser,
   doubleFollow,
   flushAndRunMultipleServers,
   getVideo,
@@ -44,14 +43,14 @@ describe('Test video blacklist API validators', function () {
     {
       const username = 'user1'
       const password = 'my super password'
-      await createUser({ url: servers[0].url, accessToken: servers[0].accessToken, username: username, password: password })
+      await servers[0].usersCommand.create({ username: username, password: password })
       userAccessToken1 = await servers[0].loginCommand.getAccessToken({ username, password })
     }
 
     {
       const username = 'user2'
       const password = 'my super password'
-      await createUser({ url: servers[0].url, accessToken: servers[0].accessToken, username: username, password: password })
+      await servers[0].usersCommand.create({ username: username, password: password })
       userAccessToken2 = await servers[0].loginCommand.getAccessToken({ username, password })
     }
 

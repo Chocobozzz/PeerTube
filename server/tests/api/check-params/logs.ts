@@ -4,7 +4,6 @@ import 'mocha'
 
 import {
   cleanupTests,
-  createUser,
   flushAndRunServer,
   ServerInfo,
   setAccessTokensToServers
@@ -30,7 +29,7 @@ describe('Test logs API validators', function () {
       username: 'user1',
       password: 'my super password'
     }
-    await createUser({ url: server.url, accessToken: server.accessToken, username: user.username, password: user.password })
+    await server.usersCommand.create({ username: user.username, password: user.password })
     userAccessToken = await server.loginCommand.getAccessToken(user)
   })
 

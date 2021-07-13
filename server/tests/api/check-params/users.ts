@@ -2,32 +2,22 @@
 
 import 'mocha'
 import { omit } from 'lodash'
-import { User, UserRole, VideoCreateResult } from '../../../../shared'
+import { UserRole, VideoCreateResult } from '../../../../shared'
 import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import {
-  blockUser,
   buildAbsoluteFixturePath,
   cleanupTests,
-  createUser,
-  deleteMe,
   flushAndRunServer,
-  getMyUserInformation,
-  getMyUserVideoRating,
-  getUserScopedTokens,
-  getUsersList,
   killallServers,
   makeGetRequest,
   makePostBodyRequest,
   makePutBodyRequest,
   makeUploadRequest,
-  registerUser,
-  removeUser,
-  renewUserScopedTokens,
   reRunServer,
   ServerInfo,
   setAccessTokensToServers,
-  unblockUser,
-  uploadVideo
+  uploadVideo,
+  UsersCommand
 } from '../../../../shared/extra-utils'
 import { MockSmtpServer } from '../../../../shared/extra-utils/mock-servers/mock-email'
 import {
@@ -45,8 +35,8 @@ describe('Test users API validators', function () {
   let video: VideoCreateResult
   let server: ServerInfo
   let serverWithRegistrationDisabled: ServerInfo
-  let userAccessToken = ''
-  let moderatorAccessToken = ''
+  let userToken = ''
+  let moderatorToken = ''
   let emailPort: number
   let overrideConfig: Object
 
@@ -73,52 +63,20 @@ describe('Test users API validators', function () {
     }
 
     {
-      const user = {
-        username: 'user1',
-        password: 'my super password'
-      }
-
-      const videoQuota = 42000000
-      await createUser({
-        url: server.url,
-        accessToken: server.accessToken,
-        username: user.username,
-        password: user.password,
-        videoQuota: videoQuota
-      })
-      userAccessToken = await server.loginCommand.getAccessToken(user)
+      const user = { username: 'user1' }
+      await server.usersCommand.create({ ...user })
+      userToken = await server.loginCommand.getAccessToken(user)
     }
 
     {
-      const moderator = {
-        username: 'moderator1',
-        password: 'super password'
-      }
-
-      await createUser({
-        url: server.url,
-        accessToken: server.accessToken,
-        username: moderator.username,
-        password: moderator.password,
-        role: UserRole.MODERATOR
-      })
-
-      moderatorAccessToken = await server.loginCommand.getAccessToken(moderator)
+      const moderator = { username: 'moderator1' }
+      await server.usersCommand.create({ ...moderator, role: UserRole.MODERATOR })
+      moderatorToken = await server.loginCommand.getAccessToken(moderator)
     }
 
     {
-      const moderator = {
-        username: 'moderator2',
-        password: 'super password'
-      }
-
-      await createUser({
-        url: server.url,
-        accessToken: server.accessToken,
-        username: moderator.username,
-        password: moderator.password,
-        role: UserRole.MODERATOR
-      })
+      const moderator = { username: 'moderator2' }
+      await server.usersCommand.create({ ...moderator, role: UserRole.MODERATOR })
     }
 
     {
@@ -127,12 +85,10 @@ describe('Test users API validators', function () {
     }
 
     {
-      const res = await getUsersList(server.url, server.accessToken)
-      const users: User[] = res.body.data
-
-      userId = users.find(u => u.username === 'user1').id
-      rootId = users.find(u => u.username === 'root').id
-      moderatorId = users.find(u => u.username === 'moderator2').id
+      const { data } = await server.usersCommand.list()
+      userId = data.find(u => u.username === 'user1').id
+      rootId = data.find(u => u.username === 'root').id
+      moderatorId = data.find(u => u.username === 'moderator2').id
     }
   })
 
@@ -161,7 +117,7 @@ describe('Test users API validators', function () {
       await makeGetRequest({
         url: server.url,
         path,
-        token: userAccessToken,
+        token: userToken,
         statusCodeExpected: HttpStatusCode.FORBIDDEN_403
       })
     })
@@ -359,7 +315,7 @@ describe('Test users API validators', function () {
         await makePostBodyRequest({
           url: server.url,
           path,
-          token: moderatorAccessToken,
+          token: moderatorToken,
           fields,
           statusCodeExpected: HttpStatusCode.FORBIDDEN_403
         })
@@ -372,7 +328,7 @@ describe('Test users API validators', function () {
       await makePostBodyRequest({
         url: server.url,
         path,
-        token: moderatorAccessToken,
+        token: moderatorToken,
         fields,
         statusCodeExpected: HttpStatusCode.OK_200
       })
@@ -389,11 +345,8 @@ describe('Test users API validators', function () {
     })
 
     it('Should fail with a non admin user', async function () {
-      const user = {
-        username: 'user1',
-        password: 'my super password'
-      }
-      userAccessToken = await server.loginCommand.getAccessToken(user)
+      const user = { username: 'user1' }
+      userToken = await server.loginCommand.getAccessToken(user)
 
       const fields = {
         username: 'user3',
@@ -401,11 +354,12 @@ describe('Test users API validators', function () {
         password: 'my super password',
         videoQuota: 42000000
       }
-      await makePostBodyRequest({ url: server.url, path, token: userAccessToken, fields, statusCodeExpected: HttpStatusCode.FORBIDDEN_403 })
+      await makePostBodyRequest({ url: server.url, path, token: userToken, fields, statusCodeExpected: HttpStatusCode.FORBIDDEN_403 })
     })
   })
 
   describe('When updating my account', function () {
+
     it('Should fail with an invalid email attribute', async function () {
       const fields = {
         email: 'blabla'
@@ -416,29 +370,29 @@ describe('Test users API validators', function () {
 
     it('Should fail with a too small password', async function () {
       const fields = {
-        currentPassword: 'my super password',
+        currentPassword: 'password',
         password: 'bla'
       }
 
-      await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields })
+      await makePutBodyRequest({ url: server.url, path: path + 'me', token: userToken, fields })
     })
 
     it('Should fail with a too long password', async function () {
       const fields = {
-        currentPassword: 'my super password',
+        currentPassword: 'password',
         password: 'super'.repeat(61)
       }
 
-      await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields })
+      await makePutBodyRequest({ url: server.url, path: path + 'me', token: userToken, fields })
     })
 
     it('Should fail without the current password', async function () {
       const fields = {
-        currentPassword: 'my super password',
+        currentPassword: 'password',
         password: 'super'.repeat(61)
       }
 
-      await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields })
+      await makePutBodyRequest({ url: server.url, path: path + 'me', token: userToken, fields })
     })
 
     it('Should fail with an invalid current password', async function () {
@@ -450,7 +404,7 @@ describe('Test users API validators', function () {
       await makePutBodyRequest({
         url: server.url,
         path: path + 'me',
-        token: userAccessToken,
+        token: userToken,
         fields,
         statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
       })
@@ -461,7 +415,7 @@ describe('Test users API validators', function () {
         nsfwPolicy: 'hello'
       }
 
-      await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields })
+      await makePutBodyRequest({ url: server.url, path: path + 'me', token: userToken, fields })
     })
 
     it('Should fail with an invalid autoPlayVideo attribute', async function () {
@@ -469,7 +423,7 @@ describe('Test users API validators', function () {
         autoPlayVideo: -1
       }
 
-      await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields })
+      await makePutBodyRequest({ url: server.url, path: path + 'me', token: userToken, fields })
     })
 
     it('Should fail with an invalid autoPlayNextVideo attribute', async function () {
@@ -477,7 +431,7 @@ describe('Test users API validators', function () {
         autoPlayNextVideo: -1
       }
 
-      await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields })
+      await makePutBodyRequest({ url: server.url, path: path + 'me', token: userToken, fields })
     })
 
     it('Should fail with an invalid videosHistoryEnabled attribute', async function () {
@@ -485,12 +439,12 @@ describe('Test users API validators', function () {
         videosHistoryEnabled: -1
       }
 
-      await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields })
+      await makePutBodyRequest({ url: server.url, path: path + 'me', token: userToken, fields })
     })
 
     it('Should fail with an non authenticated user', async function () {
       const fields = {
-        currentPassword: 'my super password',
+        currentPassword: 'password',
         password: 'my super password'
       }
 
@@ -508,7 +462,7 @@ describe('Test users API validators', function () {
         description: 'super'.repeat(201)
       }
 
-      await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields })
+      await makePutBodyRequest({ url: server.url, path: path + 'me', token: userToken, fields })
     })
 
     it('Should fail with an invalid videoLanguages attribute', async function () {
@@ -517,7 +471,7 @@ describe('Test users API validators', function () {
           videoLanguages: 'toto'
         }
 
-        await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields })
+        await makePutBodyRequest({ url: server.url, path: path + 'me', token: userToken, fields })
       }
 
       {
@@ -530,18 +484,18 @@ describe('Test users API validators', function () {
           videoLanguages: languages
         }
 
-        await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields })
+        await makePutBodyRequest({ url: server.url, path: path + 'me', token: userToken, fields })
       }
     })
 
     it('Should fail with an invalid theme', async function () {
       const fields = { theme: 'invalid' }
-      await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields })
+      await makePutBodyRequest({ url: server.url, path: path + 'me', token: userToken, fields })
     })
 
     it('Should fail with an unknown theme', async function () {
       const fields = { theme: 'peertube-theme-unknown' }
-      await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields })
+      await makePutBodyRequest({ url: server.url, path: path + 'me', token: userToken, fields })
     })
 
     it('Should fail with an invalid noInstanceConfigWarningModal attribute', async function () {
@@ -549,7 +503,7 @@ describe('Test users API validators', function () {
         noInstanceConfigWarningModal: -1
       }
 
-      await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields })
+      await makePutBodyRequest({ url: server.url, path: path + 'me', token: userToken, fields })
     })
 
     it('Should fail with an invalid noWelcomeModal attribute', async function () {
@@ -557,12 +511,12 @@ describe('Test users API validators', function () {
         noWelcomeModal: -1
       }
 
-      await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields })
+      await makePutBodyRequest({ url: server.url, path: path + 'me', token: userToken, fields })
     })
 
     it('Should succeed to change password with the correct params', async function () {
       const fields = {
-        currentPassword: 'my super password',
+        currentPassword: 'password',
         password: 'my super password',
         nsfwPolicy: 'blur',
         autoPlayVideo: false,
@@ -575,7 +529,7 @@ describe('Test users API validators', function () {
       await makePutBodyRequest({
         url: server.url,
         path: path + 'me',
-        token: userAccessToken,
+        token: userToken,
         fields,
         statusCodeExpected: HttpStatusCode.NO_CONTENT_204
       })
@@ -590,7 +544,7 @@ describe('Test users API validators', function () {
       await makePutBodyRequest({
         url: server.url,
         path: path + 'me',
-        token: userAccessToken,
+        token: userToken,
         fields,
         statusCodeExpected: HttpStatusCode.NO_CONTENT_204
       })
@@ -647,28 +601,28 @@ describe('Test users API validators', function () {
   describe('When managing my scoped tokens', function () {
 
     it('Should fail to get my scoped tokens with an non authenticated user', async function () {
-      await getUserScopedTokens(server.url, null, HttpStatusCode.UNAUTHORIZED_401)
+      await server.usersCommand.getMyScopedTokens({ token: null, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
     it('Should fail to get my scoped tokens with a bad token', async function () {
-      await getUserScopedTokens(server.url, 'bad', HttpStatusCode.UNAUTHORIZED_401)
+      await server.usersCommand.getMyScopedTokens({ token: 'bad', expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
 
     })
 
     it('Should succeed to get my scoped tokens', async function () {
-      await getUserScopedTokens(server.url, server.accessToken)
+      await server.usersCommand.getMyScopedTokens()
     })
 
     it('Should fail to renew my scoped tokens with an non authenticated user', async function () {
-      await renewUserScopedTokens(server.url, null, HttpStatusCode.UNAUTHORIZED_401)
+      await server.usersCommand.renewMyScopedTokens({ token: null, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
     it('Should fail to renew my scoped tokens with a bad token', async function () {
-      await renewUserScopedTokens(server.url, 'bad', HttpStatusCode.UNAUTHORIZED_401)
+      await server.usersCommand.renewMyScopedTokens({ token: 'bad', expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
     it('Should succeed to renew my scoped tokens', async function () {
-      await renewUserScopedTokens(server.url, server.accessToken)
+      await server.usersCommand.renewMyScopedTokens()
     })
   })
 
@@ -684,7 +638,7 @@ describe('Test users API validators', function () {
     })
 
     it('Should fail with a non admin user', async function () {
-      await makeGetRequest({ url: server.url, path, token: userAccessToken, statusCodeExpected: HttpStatusCode.FORBIDDEN_403 })
+      await makeGetRequest({ url: server.url, path, token: userToken, statusCodeExpected: HttpStatusCode.FORBIDDEN_403 })
     })
 
     it('Should succeed with the correct params', async function () {
@@ -728,7 +682,7 @@ describe('Test users API validators', function () {
 
     it('Should fail with a too small password', async function () {
       const fields = {
-        currentPassword: 'my super password',
+        currentPassword: 'password',
         password: 'bla'
       }
 
@@ -737,7 +691,7 @@ describe('Test users API validators', function () {
 
     it('Should fail with a too long password', async function () {
       const fields = {
-        currentPassword: 'my super password',
+        currentPassword: 'password',
         password: 'super'.repeat(61)
       }
 
@@ -780,7 +734,7 @@ describe('Test users API validators', function () {
       await makePutBodyRequest({
         url: server.url,
         path: path + moderatorId,
-        token: moderatorAccessToken,
+        token: moderatorToken,
         fields,
         statusCodeExpected: HttpStatusCode.FORBIDDEN_403
       })
@@ -794,7 +748,7 @@ describe('Test users API validators', function () {
       await makePutBodyRequest({
         url: server.url,
         path: path + userId,
-        token: moderatorAccessToken,
+        token: moderatorToken,
         fields,
         statusCodeExpected: HttpStatusCode.NO_CONTENT_204
       })
@@ -820,31 +774,37 @@ describe('Test users API validators', function () {
 
   describe('When getting my information', function () {
     it('Should fail with a non authenticated user', async function () {
-      await getMyUserInformation(server.url, 'fake_token', HttpStatusCode.UNAUTHORIZED_401)
+      await server.usersCommand.getMyInfo({ token: 'fake_token', expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
     it('Should success with the correct parameters', async function () {
-      await getMyUserInformation(server.url, userAccessToken)
+      await server.usersCommand.getMyInfo({ token: userToken })
     })
   })
 
   describe('When getting my video rating', function () {
+    let command: UsersCommand
+
+    before(function () {
+      command = server.usersCommand
+    })
+
     it('Should fail with a non authenticated user', async function () {
-      await getMyUserVideoRating(server.url, 'fake_token', video.id, HttpStatusCode.UNAUTHORIZED_401)
+      await command.getMyRating({ token: 'fake_token', videoId: video.id, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
     it('Should fail with an incorrect video uuid', async function () {
-      await getMyUserVideoRating(server.url, server.accessToken, 'blabla', HttpStatusCode.BAD_REQUEST_400)
+      await command.getMyRating({ videoId: 'blabla', expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     })
 
     it('Should fail with an unknown video', async function () {
-      await getMyUserVideoRating(server.url, server.accessToken, '4da6fde3-88f7-4d16-b119-108df5630b06', HttpStatusCode.NOT_FOUND_404)
+      await command.getMyRating({ videoId: '4da6fde3-88f7-4d16-b119-108df5630b06', expectedStatus: HttpStatusCode.NOT_FOUND_404 })
     })
 
     it('Should succeed with the correct parameters', async function () {
-      await getMyUserVideoRating(server.url, server.accessToken, video.id)
-      await getMyUserVideoRating(server.url, server.accessToken, video.uuid)
-      await getMyUserVideoRating(server.url, server.accessToken, video.shortUUID)
+      await command.getMyRating({ videoId: video.id })
+      await command.getMyRating({ videoId: video.uuid })
+      await command.getMyRating({ videoId: video.shortUUID })
     })
   })
 
@@ -852,15 +812,15 @@ describe('Test users API validators', function () {
     const path = '/api/v1/accounts/user1/ratings'
 
     it('Should fail with a bad start pagination', async function () {
-      await checkBadStartPagination(server.url, path, userAccessToken)
+      await checkBadStartPagination(server.url, path, userToken)
     })
 
     it('Should fail with a bad count pagination', async function () {
-      await checkBadCountPagination(server.url, path, userAccessToken)
+      await checkBadCountPagination(server.url, path, userToken)
     })
 
     it('Should fail with an incorrect sort', async function () {
-      await checkBadSortPagination(server.url, path, userAccessToken)
+      await checkBadSortPagination(server.url, path, userToken)
     })
 
     it('Should fail with a unauthenticated user', async function () {
@@ -875,57 +835,70 @@ describe('Test users API validators', function () {
       await makeGetRequest({
         url: server.url,
         path,
-        token: userAccessToken,
+        token: userToken,
         query: { rating: 'toto ' },
         statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
       })
     })
 
     it('Should succeed with the correct params', async function () {
-      await makeGetRequest({ url: server.url, path, token: userAccessToken, statusCodeExpected: HttpStatusCode.OK_200 })
+      await makeGetRequest({ url: server.url, path, token: userToken, statusCodeExpected: HttpStatusCode.OK_200 })
     })
   })
 
   describe('When blocking/unblocking/removing user', function () {
+
     it('Should fail with an incorrect id', async function () {
-      await removeUser(server.url, 'blabla', server.accessToken, HttpStatusCode.BAD_REQUEST_400)
-      await blockUser(server.url, 'blabla', server.accessToken, HttpStatusCode.BAD_REQUEST_400)
-      await unblockUser(server.url, 'blabla', server.accessToken, HttpStatusCode.BAD_REQUEST_400)
+      const options = { userId: 'blabla' as any, expectedStatus: HttpStatusCode.BAD_REQUEST_400 }
+
+      await server.usersCommand.remove(options)
+      await server.usersCommand.banUser({ userId: 'blabla' as any, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+      await server.usersCommand.unbanUser({ userId: 'blabla' as any, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     })
 
     it('Should fail with the root user', async function () {
-      await removeUser(server.url, rootId, server.accessToken, HttpStatusCode.BAD_REQUEST_400)
-      await blockUser(server.url, rootId, server.accessToken, HttpStatusCode.BAD_REQUEST_400)
-      await unblockUser(server.url, rootId, server.accessToken, HttpStatusCode.BAD_REQUEST_400)
+      const options = { userId: rootId, expectedStatus: HttpStatusCode.BAD_REQUEST_400 }
+
+      await server.usersCommand.remove(options)
+      await server.usersCommand.banUser(options)
+      await server.usersCommand.unbanUser(options)
     })
 
     it('Should return 404 with a non existing id', async function () {
-      await removeUser(server.url, 4545454, server.accessToken, HttpStatusCode.NOT_FOUND_404)
-      await blockUser(server.url, 4545454, server.accessToken, HttpStatusCode.NOT_FOUND_404)
-      await unblockUser(server.url, 4545454, server.accessToken, HttpStatusCode.NOT_FOUND_404)
+      const options = { userId: 4545454, expectedStatus: HttpStatusCode.NOT_FOUND_404 }
+
+      await server.usersCommand.remove(options)
+      await server.usersCommand.banUser(options)
+      await server.usersCommand.unbanUser(options)
     })
 
     it('Should fail with a non admin user', async function () {
-      await removeUser(server.url, userId, userAccessToken, HttpStatusCode.FORBIDDEN_403)
-      await blockUser(server.url, userId, userAccessToken, HttpStatusCode.FORBIDDEN_403)
-      await unblockUser(server.url, userId, userAccessToken, HttpStatusCode.FORBIDDEN_403)
+      const options = { userId, token: userToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 }
+
+      await server.usersCommand.remove(options)
+      await server.usersCommand.banUser(options)
+      await server.usersCommand.unbanUser(options)
     })
 
     it('Should fail on a moderator with a moderator', async function () {
-      await removeUser(server.url, moderatorId, moderatorAccessToken, HttpStatusCode.FORBIDDEN_403)
-      await blockUser(server.url, moderatorId, moderatorAccessToken, HttpStatusCode.FORBIDDEN_403)
-      await unblockUser(server.url, moderatorId, moderatorAccessToken, HttpStatusCode.FORBIDDEN_403)
+      const options = { userId: moderatorId, token: moderatorToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 }
+
+      await server.usersCommand.remove(options)
+      await server.usersCommand.banUser(options)
+      await server.usersCommand.unbanUser(options)
     })
 
     it('Should succeed on a user with a moderator', async function () {
-      await blockUser(server.url, userId, moderatorAccessToken)
-      await unblockUser(server.url, userId, moderatorAccessToken)
+      const options = { userId, token: moderatorToken }
+
+      await server.usersCommand.banUser(options)
+      await server.usersCommand.unbanUser(options)
     })
   })
 
   describe('When deleting our account', function () {
     it('Should fail with with the root account', async function () {
-      await deleteMe(server.url, server.accessToken, HttpStatusCode.BAD_REQUEST_400)
+      await server.usersCommand.deleteMe({ expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     })
   })
 
@@ -1087,7 +1060,7 @@ describe('Test users API validators', function () {
 
   describe('When registering multiple users on a server with users limit', function () {
     it('Should fail when after 3 registrations', async function () {
-      await registerUser(server.url, 'user42', 'super password', HttpStatusCode.FORBIDDEN_403)
+      await server.usersCommand.register({ username: 'user42', expectedStatus: HttpStatusCode.FORBIDDEN_403 })
     })
   })
 

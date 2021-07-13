@@ -6,7 +6,6 @@ import { HttpStatusCode } from '@shared/core-utils'
 import { PeerTubeProblemDocument, ServerErrorCode } from '@shared/models'
 import {
   cleanupTests,
-  createUser,
   doubleFollow,
   flushAndRunMultipleServers,
   getAccountVideos,
@@ -47,7 +46,7 @@ describe('Test follow constraints', function () {
       username: 'user1',
       password: 'super_password'
     }
-    await createUser({ url: servers[0].url, accessToken: servers[0].accessToken, username: user.username, password: user.password })
+    await servers[0].usersCommand.create({ username: user.username, password: user.password })
     userAccessToken = await servers[0].loginCommand.getAccessToken(user)
 
     await doubleFollow(servers[0], servers[1])

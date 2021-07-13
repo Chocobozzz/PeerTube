@@ -4,7 +4,6 @@ import 'mocha'
 import * as chai from 'chai'
 import {
   cleanupTests,
-  createUser,
   doubleFollow,
   flushAndRunMultipleServers,
   getVideosList,
@@ -39,7 +38,7 @@ describe('Test users subscriptions', function () {
     {
       for (const server of servers) {
         const user = { username: 'user' + server.serverNumber, password: 'password' }
-        await createUser({ url: server.url, accessToken: server.accessToken, username: user.username, password: user.password })
+        await server.usersCommand.create({ username: user.username, password: user.password })
 
         const accessToken = await server.loginCommand.getAccessToken(user)
         users.push({ accessToken })

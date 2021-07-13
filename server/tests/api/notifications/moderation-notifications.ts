@@ -17,13 +17,10 @@ import {
   checkVideoAutoBlacklistForModerators,
   checkVideoIsPublished,
   cleanupTests,
-  createUser,
-  generateUserAccessToken,
   getVideoIdFromUUID,
   MockInstancesIndex,
   MockSmtpServer,
   prepareNotificationsTest,
-  registerUser,
   ServerInfo,
   uploadVideo,
   wait,
@@ -139,8 +136,8 @@ describe('Test moderation notifications', function () {
       this.timeout(20000)
 
       const username = 'user' + new Date().getTime()
-      const resUser = await createUser({ url: servers[0].url, accessToken: servers[0].accessToken, username, password: 'donald' })
-      const accountId = resUser.body.user.account.id
+      const { account } = await servers[0].usersCommand.create({ username, password: 'donald' })
+      const accountId = account.id
 
       await servers[0].abusesCommand.report({ accountId, reason: 'super reason' })
 
@@ -152,7 +149,7 @@ describe('Test moderation notifications', function () {
       this.timeout(20000)
 
       const username = 'user' + new Date().getTime()
-      const tmpToken = await generateUserAccessToken(servers[0], username)
+      const tmpToken = await servers[0].usersCommand.generateUserAndToken(username)
       await uploadVideo(servers[0].url, tmpToken, { name: 'super video' })
 
       await waitJobs(servers)
@@ -339,7 +336,7 @@ describe('Test moderation notifications', function () {
     it('Should send a notification only to moderators when a user registers on the instance', async function () {
       this.timeout(10000)
 
-      await registerUser(servers[0].url, 'user_45', 'password')
+      await servers[0].usersCommand.register({ username: 'user_45' })
 
       await waitJobs(servers)
 

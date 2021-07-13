@@ -8,7 +8,6 @@ import {
   checkBadSortPagination,
   checkBadStartPagination,
   cleanupTests,
-  createUser,
   doubleFollow,
   flushAndRunMultipleServers,
   getVideo,
@@ -43,7 +42,7 @@ describe('Test server redundancy API validators', function () {
       password: 'password'
     }
 
-    await createUser({ url: servers[0].url, accessToken: servers[0].accessToken, username: user.username, password: user.password })
+    await servers[0].usersCommand.create({ username: user.username, password: user.password })
     userAccessToken = await servers[0].loginCommand.getAccessToken(user)
 
     videoIdLocal = (await uploadVideoAndGetId({ server: servers[0], videoName: 'video' })).id

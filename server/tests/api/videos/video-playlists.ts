@@ -6,13 +6,9 @@ import { HttpStatusCode } from '@shared/core-utils'
 import {
   checkPlaylistFilesWereRemoved,
   cleanupTests,
-  createUser,
   doubleFollow,
   flushAndRunMultipleServers,
-  generateUserAccessToken,
-  getMyUserInformation,
   PlaylistsCommand,
-  removeUser,
   ServerInfo,
   setAccessTokensToServers,
   setDefaultVideoChannel,
@@ -24,7 +20,6 @@ import {
   waitJobs
 } from '@shared/extra-utils'
 import {
-  User,
   VideoPlaylist,
   VideoPlaylistCreateResult,
   VideoPlaylistElementType,
@@ -113,15 +108,7 @@ describe('Test video playlists', function () {
 
     nsfwVideoServer1 = (await uploadVideoAndGetId({ server: servers[0], videoName: 'NSFW video', nsfw: true })).id
 
-    {
-      await createUser({
-        url: servers[0].url,
-        accessToken: servers[0].accessToken,
-        username: 'user1',
-        password: 'password'
-      })
-      userTokenServer1 = await servers[0].loginCommand.getAccessToken('user1', 'password')
-    }
+    userTokenServer1 = await servers[0].usersCommand.generateUserAndToken('user1')
 
     await waitJobs(servers)
   })
@@ -165,7 +152,7 @@ describe('Test video playlists', function () {
     })
 
     it('Should get private playlist for a classic user', async function () {
-      const token = await generateUserAccessToken(servers[0], 'toto')
+      const token = await servers[0].usersCommand.generateUserAndToken('toto')
 
       const body = await commands[0].listByAccount({ token, handle: 'toto' })
 
@@ -1118,19 +1105,10 @@ describe('Test video playlists', function () {
     it('Should delete an account and delete its playlists', async function () {
       this.timeout(30000)
 
-      const user = { username: 'user_1', password: 'password' }
-      const res = await createUser({
-        url: servers[0].url,
-        accessToken: servers[0].accessToken,
-        username: user.username,
-        password: user.password
-      })
+      const { userId, token } = await servers[0].usersCommand.generate('user_1')
 
-      const userId = res.body.user.id
-      const userAccessToken = await servers[0].loginCommand.getAccessToken(user)
-
-      const resChannel = await getMyUserInformation(servers[0].url, userAccessToken)
-      const userChannel = (resChannel.body as User).videoChannels[0]
+      const { videoChannels } = await servers[0].usersCommand.getMyInfo({ token })
+      const userChannel = videoChannels[0]
 
       await commands[0].create({
         attributes: {
@@ -1152,7 +1130,7 @@ describe('Test video playlists', function () {
         }
       }
 
-      await removeUser(servers[0].url, userId, servers[0].accessToken)
+      await servers[0].usersCommand.remove({ userId })
       await waitJobs(servers)
 
       {

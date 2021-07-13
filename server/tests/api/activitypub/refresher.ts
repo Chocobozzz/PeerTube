@@ -6,7 +6,6 @@ import {
   cleanupTests,
   doubleFollow,
   flushAndRunMultipleServers,
-  generateUserAccessToken,
   getVideo,
   killallServers,
   reRunServer,
@@ -44,10 +43,10 @@ describe('Test AP refresher', function () {
     }
 
     {
-      const a1 = await generateUserAccessToken(servers[1], 'user1')
+      const a1 = await servers[1].usersCommand.generateUserAndToken('user1')
       await uploadVideo(servers[1].url, a1, { name: 'video4' })
 
-      const a2 = await generateUserAccessToken(servers[1], 'user2')
+      const a2 = await servers[1].usersCommand.generateUserAndToken('user2')
       await uploadVideo(servers[1].url, a2, { name: 'video5' })
     }
 

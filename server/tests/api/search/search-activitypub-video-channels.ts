@@ -4,13 +4,11 @@ import 'mocha'
 import * as chai from 'chai'
 import {
   cleanupTests,
-  createUser,
   flushAndRunMultipleServers,
   getVideoChannelVideos,
   SearchCommand,
   ServerInfo,
   setAccessTokensToServers,
-  updateMyUser,
   updateVideo,
   uploadVideo,
   wait,
@@ -35,7 +33,7 @@ describe('Test ActivityPub video channels search', function () {
     await setAccessTokensToServers(servers)
 
     {
-      await createUser({ url: servers[0].url, accessToken: servers[0].accessToken, username: 'user1_server1', password: 'password' })
+      await servers[0].usersCommand.create({ username: 'user1_server1', password: 'password' })
       const channel = {
         name: 'channel1_server1',
         displayName: 'Channel 1 server 1'
@@ -45,7 +43,7 @@ describe('Test ActivityPub video channels search', function () {
 
     {
       const user = { username: 'user1_server2', password: 'password' }
-      await createUser({ url: servers[1].url, accessToken: servers[1].accessToken, username: user.username, password: user.password })
+      await servers[1].usersCommand.create({ username: user.username, password: user.password })
       userServer2Token = await servers[1].loginCommand.getAccessToken(user)
 
       const channel = {
@@ -171,7 +169,7 @@ describe('Test ActivityPub video channels search', function () {
       channelName: 'channel1_server2',
       attributes: { displayName: 'channel updated' }
     })
-    await updateMyUser({ url: servers[1].url, accessToken: userServer2Token, displayName: 'user updated' })
+    await servers[1].usersCommand.updateMe({ token: userServer2Token, displayName: 'user updated' })
 
     await waitJobs(servers)
     // Expire video channel

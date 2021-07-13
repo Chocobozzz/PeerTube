@@ -4,7 +4,7 @@ import { tokensRouter } from '@server/controllers/api/users/token'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { OAuthTokenModel } from '@server/models/oauth/oauth-token'
 import { MUser, MUserAccountDefault } from '@server/types/models'
-import { UserCreate, UserRight, UserRole, UserUpdate } from '../../../../shared'
+import { UserCreate, UserCreateResult, UserRight, UserRole, UserUpdate } from '../../../../shared'
 import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import { UserAdminFlag } from '../../../../shared/models/users/user-flag.model'
 import { UserRegister } from '../../../../shared/models/users/user-register.model'
@@ -220,7 +220,7 @@ async function createUser (req: express.Request, res: express.Response) {
       account: {
         id: account.id
       }
-    }
+    } as UserCreateResult
   })
 }
 

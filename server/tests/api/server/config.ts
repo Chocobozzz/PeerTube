@@ -9,7 +9,6 @@ import {
   killallServers,
   makeGetRequest,
   parallelTests,
-  registerUser,
   reRunServer,
   ServerInfo,
   setAccessTokensToServers,
@@ -225,9 +224,9 @@ describe('Test config', function () {
     this.timeout(5000)
 
     await Promise.all([
-      registerUser(server.url, 'user1', 'super password'),
-      registerUser(server.url, 'user2', 'super password'),
-      registerUser(server.url, 'user3', 'super password')
+      server.usersCommand.register({ username: 'user1' }),
+      server.usersCommand.register({ username: 'user2' }),
+      server.usersCommand.register({ username: 'user3' })
     ])
 
     const data = await server.configCommand.getConfig()

@@ -3,8 +3,7 @@ import { Netrc } from 'netrc-parser'
 import { join } from 'path'
 import { createLogger, format, transports } from 'winston'
 import { assignCommands, ServerInfo } from '@shared/extra-utils'
-import { getMyUserInformation } from '@shared/extra-utils/users/users'
-import { User, UserRole } from '@shared/models'
+import { UserRole } from '@shared/models'
 import { VideoPrivacy } from '../../shared/models/videos'
 import { getAppNumber, isTestInstance, root } from '../helpers/core-utils'
 
@@ -16,16 +15,15 @@ const config = require('application-config')(configName)
 const version = require('../../../package.json').version
 
 async function getAdminTokenOrDie (server: ServerInfo, username: string, password: string) {
-  const accessToken = await server.loginCommand.getAccessToken(username, password)
-  const resMe = await getMyUserInformation(server.url, accessToken)
-  const me: User = resMe.body
+  const token = await server.loginCommand.getAccessToken(username, password)
+  const me = await server.usersCommand.getMyUserInformation({ token })
 
   if (me.role !== UserRole.ADMINISTRATOR) {
     console.error('You must be an administrator.')
     process.exit(-1)
   }
 
-  return accessToken
+  return token
 }
 
 interface Settings {

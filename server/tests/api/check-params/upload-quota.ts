@@ -3,17 +3,14 @@
 import 'mocha'
 import { expect } from 'chai'
 import { HttpStatusCode, randomInt } from '@shared/core-utils'
-import { MyUser, VideoImportState, VideoPrivacy } from '@shared/models'
+import { VideoImportState, VideoPrivacy } from '@shared/models'
 import {
   cleanupTests,
   flushAndRunServer,
-  getMyUserInformation,
   ImportsCommand,
-  registerUser,
   ServerInfo,
   setAccessTokensToServers,
   setDefaultVideoChannel,
-  updateUser,
   uploadVideo,
   waitJobs
 } from '../../../../shared/extra-utils'
@@ -31,15 +28,10 @@ describe('Test upload quota', function () {
     await setAccessTokensToServers([ server ])
     await setDefaultVideoChannel([ server ])
 
-    const res = await getMyUserInformation(server.url, server.accessToken)
-    rootId = (res.body as MyUser).id
+    const user = await server.usersCommand.getMyInfo()
+    rootId = user.id
 
-    await updateUser({
-      url: server.url,
-      userId: rootId,
-      accessToken: server.accessToken,
-      videoQuota: 42
-    })
+    await server.usersCommand.update({ userId: rootId, videoQuota: 42 })
   })
 
   describe('When having a video quota', function () {
@@ -48,7 +40,7 @@ describe('Test upload quota', function () {
       this.timeout(30000)
 
       const user = { username: 'registered' + randomInt(1, 1500), password: 'password' }
-      await registerUser(server.url, user.username, user.password)
+      await server.usersCommand.register(user)
       const userAccessToken = await server.loginCommand.getAccessToken(user)
 
       const videoAttributes = { fixture: 'video_short2.webm' }
@@ -63,7 +55,7 @@ describe('Test upload quota', function () {
       this.timeout(30000)
 
       const user = { username: 'registered' + randomInt(1, 1500), password: 'password' }
-      await registerUser(server.url, user.username, user.password)
+      await server.usersCommand.register(user)
       const userAccessToken = await server.loginCommand.getAccessToken(user)
 
       const videoAttributes = { fixture: 'video_short2.webm' }
@@ -103,12 +95,7 @@ describe('Test upload quota', function () {
   describe('When having a daily video quota', function () {
 
     it('Should fail with a user having too many videos daily', async function () {
-      await updateUser({
-        url: server.url,
-        userId: rootId,
-        accessToken: server.accessToken,
-        videoQuotaDaily: 42
-      })
+      await server.usersCommand.update({ userId: rootId, videoQuotaDaily: 42 })
 
       await uploadVideo(server.url, server.accessToken, {}, HttpStatusCode.PAYLOAD_TOO_LARGE_413, 'legacy')
       await uploadVideo(server.url, server.accessToken, {}, HttpStatusCode.PAYLOAD_TOO_LARGE_413, 'resumable')
@@ -117,10 +104,8 @@ describe('Test upload quota', function () {
 
   describe('When having an absolute and daily video quota', function () {
     it('Should fail if exceeding total quota', async function () {
-      await updateUser({
-        url: server.url,
+      await server.usersCommand.update({
         userId: rootId,
-        accessToken: server.accessToken,
         videoQuota: 42,
         videoQuotaDaily: 1024 * 1024 * 1024
       })
@@ -130,10 +115,8 @@ describe('Test upload quota', function () {
     })
 
     it('Should fail if exceeding daily quota', async function () {
-      await updateUser({
-        url: server.url,
+      await server.usersCommand.update({
         userId: rootId,
-        accessToken: server.accessToken,
         videoQuota: 1024 * 1024 * 1024,
         videoQuotaDaily: 42
       })

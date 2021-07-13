@@ -5,13 +5,10 @@ import * as chai from 'chai'
 import {
   AbusesCommand,
   cleanupTests,
-  createUser,
   doubleFollow,
   flushAndRunMultipleServers,
-  generateUserAccessToken,
   getVideoIdFromUUID,
   getVideosList,
-  removeUser,
   removeVideo,
   ServerInfo,
   setAccessTokensToServers,
@@ -278,7 +275,7 @@ describe('Test abuses', function () {
 
       // register a second user to have two reporters/reportees
       const user = { username: 'user2', password: 'password' }
-      await createUser({ url: servers[0].url, accessToken: servers[0].accessToken, ...user })
+      await servers[0].usersCommand.create({ ...user })
       const userAccessToken = await servers[0].loginCommand.getAccessToken(user)
 
       // upload a third video via this user
@@ -604,9 +601,9 @@ describe('Test abuses', function () {
     before(async function () {
       this.timeout(50000)
 
-      await createUser({ url: servers[0].url, accessToken: servers[0].accessToken, username: 'user_1', password: 'donald' })
+      await servers[0].usersCommand.create({ username: 'user_1', password: 'donald' })
 
-      const token = await generateUserAccessToken(servers[1], 'user_2')
+      const token = await servers[1].usersCommand.generateUserAndToken('user_2')
       await uploadVideo(servers[1].url, token, { name: 'super video' })
 
       await waitJobs(servers)
@@ -708,7 +705,7 @@ describe('Test abuses', function () {
       this.timeout(10000)
 
       const account = await getAccountFromServer(servers[1], 'user_2', servers[1])
-      await removeUser(servers[1].url, account.userId, servers[1].accessToken)
+      await servers[1].usersCommand.remove({ userId: account.userId })
 
       await waitJobs(servers)
 
@@ -765,7 +762,7 @@ describe('Test abuses', function () {
     let userAccessToken: string
 
     before(async function () {
-      userAccessToken = await generateUserAccessToken(servers[0], 'user_42')
+      userAccessToken = await servers[0].usersCommand.generateUserAndToken('user_42')
 
       await commands[0].report({ token: userAccessToken, videoId: servers[0].video.id, reason: 'user reason 1' })
 
@@ -836,7 +833,7 @@ describe('Test abuses', function () {
     let abuseMessageModerationId: number
 
     before(async function () {
-      userToken = await generateUserAccessToken(servers[0], 'user_43')
+      userToken = await servers[0].usersCommand.generateUserAndToken('user_43')
 
       const body = await commands[0].report({ token: userToken, videoId: servers[0].video.id, reason: 'user 43 reason 1' })
       abuseId = body.abuse.id

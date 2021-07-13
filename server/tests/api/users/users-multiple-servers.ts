@@ -7,17 +7,12 @@ import {
   checkTmpIsEmpty,
   checkVideoFilesWereRemoved,
   cleanupTests,
-  createUser,
   doubleFollow,
   flushAndRunMultipleServers,
   getAccountVideos,
-  getMyUserInformation,
-  removeUser,
   ServerInfo,
   setAccessTokensToServers,
   testImage,
-  updateMyAvatar,
-  updateMyUser,
   uploadVideo,
   waitJobs
 } from '@shared/extra-utils'
@@ -56,13 +51,8 @@ describe('Test users with multiple servers', function () {
         username: 'user1',
         password: 'password'
       }
-      const res = await createUser({
-        url: servers[0].url,
-        accessToken: servers[0].accessToken,
-        username: user.username,
-        password: user.password
-      })
-      userId = res.body.user.id
+      const created = await servers[0].usersCommand.create(user)
+      userId = created.id
       userAccessToken = await servers[0].loginCommand.getAccessToken(user)
     }
 
@@ -77,15 +67,9 @@ describe('Test users with multiple servers', function () {
   it('Should be able to update my display name', async function () {
     this.timeout(10000)
 
-    await updateMyUser({
-      url: servers[0].url,
-      accessToken: servers[0].accessToken,
-      displayName: 'my super display name'
-    })
+    await servers[0].usersCommand.updateMe({ displayName: 'my super display name' })
 
-    const res = await getMyUserInformation(servers[0].url, servers[0].accessToken)
-    user = res.body
-
+    user = await servers[0].usersCommand.getMyInfo()
     expect(user.account.displayName).to.equal('my super display name')
 
     await waitJobs(servers)
@@ -94,14 +78,9 @@ describe('Test users with multiple servers', function () {
   it('Should be able to update my description', async function () {
     this.timeout(10_000)
 
-    await updateMyUser({
-      url: servers[0].url,
-      accessToken: servers[0].accessToken,
-      description: 'my super description updated'
-    })
+    await servers[0].usersCommand.updateMe({ description: 'my super description updated' })
 
-    const res = await getMyUserInformation(servers[0].url, servers[0].accessToken)
-    user = res.body
+    user = await servers[0].usersCommand.getMyInfo()
     expect(user.account.displayName).to.equal('my super display name')
     expect(user.account.description).to.equal('my super description updated')
 
@@ -113,15 +92,9 @@ describe('Test users with multiple servers', function () {
 
     const fixture = 'avatar2.png'
 
-    await updateMyAvatar({
-      url: servers[0].url,
-      accessToken: servers[0].accessToken,
-      fixture
-    })
+    await servers[0].usersCommand.updateMyAvatar({ fixture })
 
-    const res = await getMyUserInformation(servers[0].url, servers[0].accessToken)
-    user = res.body
-
+    user = await servers[0].usersCommand.getMyInfo()
     userAvatarFilename = user.account.avatar.path
 
     await testImage(servers[0].url, 'avatar2-resized', userAvatarFilename, '.png')
@@ -202,7 +175,7 @@ describe('Test users with multiple servers', function () {
       expect(videoChannelDeleted).not.to.be.undefined
     }
 
-    await removeUser(servers[0].url, userId, servers[0].accessToken)
+    await servers[0].usersCommand.remove({ userId })
 
     await waitJobs(servers)
 

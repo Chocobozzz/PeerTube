@@ -7,7 +7,7 @@ export class LoginCommand extends AbstractCommand {
 
   login (options: OverrideCommandOptions & {
     client?: { id?: string, secret?: string }
-    user?: { username: string, password: string }
+    user?: { username: string, password?: string }
   } = {}) {
     const { client = this.server.client, user = this.server.user } = options
     const path = '/api/v1/users/token'
@@ -16,7 +16,7 @@ export class LoginCommand extends AbstractCommand {
       client_id: client.id,
       client_secret: client.secret,
       username: user.username,
-      password: user.password,
+      password: user.password ?? 'password',
       response_type: 'code',
       grant_type: 'password',
       scope: 'upload'
@@ -33,10 +33,10 @@ export class LoginCommand extends AbstractCommand {
     }))
   }
 
-  getAccessToken (arg1?: { username: string, password: string }): Promise<string>
-  getAccessToken (arg1: string, password: string): Promise<string>
-  async getAccessToken (arg1?: { username: string, password: string } | string, password?: string) {
-    let user: { username: string, password: string }
+  getAccessToken (arg1?: { username: string, password?: string }): Promise<string>
+  getAccessToken (arg1: string, password?: string): Promise<string>
+  async getAccessToken (arg1?: { username: string, password?: string } | string, password?: string) {
+    let user: { username: string, password?: string }
 
     if (!arg1) user = this.server.user
     else if (typeof arg1 === 'object') user = arg1

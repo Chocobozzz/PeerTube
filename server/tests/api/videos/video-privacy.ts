@@ -5,7 +5,6 @@ import * as chai from 'chai'
 import { HttpStatusCode } from '@shared/core-utils'
 import {
   cleanupTests,
-  createUser,
   doubleFollow,
   flushAndRunServer,
   getMyVideos,
@@ -125,7 +124,7 @@ describe('Test video privacy', function () {
         username: 'hello',
         password: 'super password'
       }
-      await createUser({ url: servers[0].url, accessToken: servers[0].accessToken, username: user.username, password: user.password })
+      await servers[0].usersCommand.create({ username: user.username, password: user.password })
 
       anotherUserToken = await servers[0].loginCommand.getAccessToken(user)
       await getVideoWithToken(servers[0].url, anotherUserToken, privateVideoUUID, HttpStatusCode.FORBIDDEN_403)

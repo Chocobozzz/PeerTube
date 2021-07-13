@@ -2,15 +2,7 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import {
-  cleanupTests,
-  flushAndRunServer,
-  generateUserAccessToken,
-  ServerInfo,
-  setAccessTokensToServers,
-  uploadVideo,
-  wait
-} from '@shared/extra-utils'
+import { cleanupTests, flushAndRunServer, ServerInfo, setAccessTokensToServers, uploadVideo, wait } from '@shared/extra-utils'
 import { VideosOverview } from '@shared/models'
 
 const expect = chai.expect
@@ -112,7 +104,7 @@ describe('Test a videos overview', function () {
   })
 
   it('Should hide muted accounts', async function () {
-    const token = await generateUserAccessToken(server, 'choco')
+    const token = await server.usersCommand.generateUserAndToken('choco')
 
     await server.blocklistCommand.addToMyBlocklist({ token, account: 'root@' + server.host })
 

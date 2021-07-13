@@ -2,23 +2,16 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '@shared/core-utils'
 import {
-  askResetPassword,
-  askSendVerifyEmail,
-  blockUser,
   cleanupTests,
-  createUser,
   flushAndRunServer,
-  resetPassword,
+  MockSmtpServer,
   ServerInfo,
   setAccessTokensToServers,
-  unblockUser,
   uploadVideo,
-  verifyEmail
-} from '../../../../shared/extra-utils'
-import { MockSmtpServer } from '../../../../shared/extra-utils/mock-servers/mock-email'
-import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
+  waitJobs
+} from '@shared/extra-utils'
 
 const expect = chai.expect
 
@@ -58,8 +51,8 @@ describe('Test emails', function () {
     await setAccessTokensToServers([ server ])
 
     {
-      const res = await createUser({ url: server.url, accessToken: server.accessToken, username: user.username, password: user.password })
-      userId = res.body.user.id
+      const created = await server.usersCommand.create({ username: user.username, password: user.password })
+      userId = created.id
 
       userAccessToken = await server.loginCommand.getAccessToken(user)
     }
@@ -87,7 +80,7 @@ describe('Test emails', function () {
     it('Should ask to reset the password', async function () {
       this.timeout(10000)
 
-      await askResetPassword(server.url, 'user_1@example.com')
+      await server.usersCommand.askResetPassword({ email: 'user_1@example.com' })
 
       await waitJobs(server)
       expect(emails).to.have.lengthOf(1)
@@ -113,15 +106,25 @@ describe('Test emails', function () {
     })
 
     it('Should not reset the password with an invalid verification string', async function () {
-      await resetPassword(server.url, userId, verificationString + 'b', 'super_password2', HttpStatusCode.FORBIDDEN_403)
+      await server.usersCommand.resetPassword({
+        userId,
+        verificationString: verificationString + 'b',
+        password: 'super_password2',
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
     })
 
     it('Should reset the password', async function () {
-      await resetPassword(server.url, userId, verificationString, 'super_password2')
+      await server.usersCommand.resetPassword({ userId, verificationString, password: 'super_password2' })
     })
 
     it('Should not reset the password with the same verification string', async function () {
-      await resetPassword(server.url, userId, verificationString, 'super_password3', HttpStatusCode.FORBIDDEN_403)
+      await server.usersCommand.resetPassword({
+        userId,
+        verificationString,
+        password: 'super_password3',
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
     })
 
     it('Should login with this new password', async function () {
@@ -132,15 +135,11 @@ describe('Test emails', function () {
   })
 
   describe('When creating a user without password', function () {
+
     it('Should send a create password email', async function () {
       this.timeout(10000)
 
-      await createUser({
-        url: server.url,
-        accessToken: server.accessToken,
-        username: 'create_password',
-        password: ''
-      })
+      await server.usersCommand.create({ username: 'create_password', password: '' })
 
       await waitJobs(server)
       expect(emails).to.have.lengthOf(2)
@@ -166,11 +165,20 @@ describe('Test emails', function () {
     })
 
     it('Should not reset the password with an invalid verification string', async function () {
-      await resetPassword(server.url, userId2, verificationString2 + 'c', 'newly_created_password', HttpStatusCode.FORBIDDEN_403)
+      await server.usersCommand.resetPassword({
+        userId: userId2,
+        verificationString: verificationString2 + 'c',
+        password: 'newly_created_password',
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
     })
 
     it('Should reset the password', async function () {
-      await resetPassword(server.url, userId2, verificationString2, 'newly_created_password')
+      await server.usersCommand.resetPassword({
+        userId: userId2,
+        verificationString: verificationString2,
+        password: 'newly_created_password'
+      })
     })
 
     it('Should login with this new password', async function () {
@@ -207,7 +215,7 @@ describe('Test emails', function () {
       this.timeout(10000)
 
       const reason = 'my super bad reason'
-      await blockUser(server.url, userId, server.accessToken, HttpStatusCode.NO_CONTENT_204, reason)
+      await server.usersCommand.banUser({ userId, reason })
 
       await waitJobs(server)
       expect(emails).to.have.lengthOf(4)
@@ -225,7 +233,7 @@ describe('Test emails', function () {
     it('Should send the notification email when unblocking a user', async function () {
       this.timeout(10000)
 
-      await unblockUser(server.url, userId, server.accessToken, HttpStatusCode.NO_CONTENT_204)
+      await server.usersCommand.unbanUser({ userId })
 
       await waitJobs(server)
       expect(emails).to.have.lengthOf(5)
@@ -288,7 +296,7 @@ describe('Test emails', function () {
     it('Should ask to send the verification email', async function () {
       this.timeout(10000)
 
-      await askSendVerifyEmail(server.url, 'user_1@example.com')
+      await server.usersCommand.askSendVerifyEmail({ email: 'user_1@example.com' })
 
       await waitJobs(server)
       expect(emails).to.have.lengthOf(8)
@@ -314,11 +322,16 @@ describe('Test emails', function () {
     })
 
     it('Should not verify the email with an invalid verification string', async function () {
-      await verifyEmail(server.url, userId, verificationString + 'b', false, HttpStatusCode.FORBIDDEN_403)
+      await server.usersCommand.verifyEmail({
+        userId,
+        verificationString: verificationString + 'b',
+        isPendingEmail: false,
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
     })
 
     it('Should verify the email', async function () {
-      await verifyEmail(server.url, userId, verificationString)
+      await server.usersCommand.verifyEmail({ userId, verificationString })
     })
   })
 

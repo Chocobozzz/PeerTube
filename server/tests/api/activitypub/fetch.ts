@@ -4,7 +4,6 @@ import 'mocha'
 import * as chai from 'chai'
 import {
   cleanupTests,
-  createUser,
   doubleFollow,
   flushAndRunMultipleServers,
   getVideosListSort,
@@ -32,7 +31,7 @@ describe('Test ActivityPub fetcher', function () {
 
     const user = { username: 'user1', password: 'password' }
     for (const server of servers) {
-      await createUser({ url: server.url, accessToken: server.accessToken, username: user.username, password: user.password })
+      await server.usersCommand.create({ username: user.username, password: user.password })
     }
 
     const userAccessToken = await servers[0].loginCommand.getAccessToken(user)

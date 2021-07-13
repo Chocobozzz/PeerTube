@@ -16,7 +16,6 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   setDefaultVideoChannel,
-  updateMyAvatar,
   uploadVideo,
   wait,
   waitJobs
@@ -73,7 +72,7 @@ describe('Test prune storage scripts', function () {
       await uploadVideo(server.url, server.accessToken, { name: 'video 1' })
       await uploadVideo(server.url, server.accessToken, { name: 'video 2' })
 
-      await updateMyAvatar({ url: server.url, accessToken: server.accessToken, fixture: 'avatar.png' })
+      await server.usersCommand.updateMyAvatar({ fixture: 'avatar.png' })
 
       await server.playlistsCommand.create({
         attributes: {

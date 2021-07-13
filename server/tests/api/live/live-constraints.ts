@@ -9,12 +9,10 @@ import {
   ConfigCommand,
   doubleFollow,
   flushAndRunMultipleServers,
-  generateUser,
   getVideo,
   ServerInfo,
   setAccessTokensToServers,
   setDefaultVideoChannel,
-  updateUser,
   wait,
   waitJobs
 } from '../../../../shared/extra-utils'
@@ -58,9 +56,7 @@ describe('Test live constraints', function () {
   }
 
   function updateQuota (options: { total: number, daily: number }) {
-    return updateUser({
-      url: servers[0].url,
-      accessToken: servers[0].accessToken,
+    return servers[0].usersCommand.update({
       userId,
       videoQuota: options.total,
       videoQuotaDaily: options.daily
@@ -89,7 +85,7 @@ describe('Test live constraints', function () {
     })
 
     {
-      const res = await generateUser(servers[0], 'user1')
+      const res = await servers[0].usersCommand.generate('user1')
       userId = res.userId
       userChannelId = res.userChannelId
       userAccessToken = res.token

@@ -17,7 +17,6 @@ import {
   ImportsCommand,
   makeRawRequest,
   PluginsCommand,
-  registerUser,
   ServerInfo,
   setAccessTokensToServers,
   setDefaultVideoChannel,
@@ -335,11 +334,15 @@ describe('Test plugin filter hooks', function () {
     })
 
     it('Should allow a signup', async function () {
-      await registerUser(servers[0].url, 'john', 'password')
+      await servers[0].usersCommand.register({ username: 'john', password: 'password' })
     })
 
     it('Should not allow a signup', async function () {
-      const res = await registerUser(servers[0].url, 'jma', 'password', HttpStatusCode.FORBIDDEN_403)
+      const res = await servers[0].usersCommand.register({
+        username: 'jma',
+        password: 'password',
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
 
       expect(res.body.error).to.equal('No jma')
     })

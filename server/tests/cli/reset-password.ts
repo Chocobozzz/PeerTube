@@ -1,5 +1,5 @@
 import 'mocha'
-import { cleanupTests, CLICommand, createUser, flushAndRunServer, ServerInfo, setAccessTokensToServers } from '../../../shared/extra-utils'
+import { cleanupTests, CLICommand, flushAndRunServer, ServerInfo, setAccessTokensToServers } from '../../../shared/extra-utils'
 
 describe('Test reset password scripts', function () {
   let server: ServerInfo
@@ -9,7 +9,7 @@ describe('Test reset password scripts', function () {
     server = await flushAndRunServer(1)
     await setAccessTokensToServers([ server ])
 
-    await createUser({ url: server.url, accessToken: server.accessToken, username: 'user_1', password: 'super password' })
+    await server.usersCommand.create({ username: 'user_1', password: 'super password' })
   })
 
   it('Should change the user password from CLI', async function () {

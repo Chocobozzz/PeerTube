@@ -16,7 +16,7 @@ import { AbusesCommand } from '../moderation'
 import { OverviewsCommand } from '../overviews'
 import { SearchCommand } from '../search'
 import { SocketIOCommand } from '../socket'
-import { AccountsCommand, BlocklistCommand, LoginCommand, NotificationsCommand, SubscriptionsCommand } from '../users'
+import { AccountsCommand, BlocklistCommand, LoginCommand, NotificationsCommand, SubscriptionsCommand, UsersCommand } from '../users'
 import {
   BlacklistCommand,
   CaptionsCommand,
@@ -127,6 +127,7 @@ interface ServerInfo {
   notificationsCommand?: NotificationsCommand
   serversCommand?: ServersCommand
   loginCommand?: LoginCommand
+  usersCommand?: UsersCommand
 }
 
 function flushAndRunMultipleServers (totalServers: number, configOverride?: Object) {
@@ -359,6 +360,7 @@ function assignCommands (server: ServerInfo) {
   server.notificationsCommand = new NotificationsCommand(server)
   server.serversCommand = new ServersCommand(server)
   server.loginCommand = new LoginCommand(server)
+  server.usersCommand = new UsersCommand(server)
 }
 
 async function reRunServer (server: ServerInfo, configOverride?: any) {

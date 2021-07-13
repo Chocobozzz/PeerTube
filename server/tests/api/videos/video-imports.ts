@@ -7,7 +7,6 @@ import {
   cleanupTests,
   doubleFollow,
   flushAndRunMultipleServers,
-  getMyUserInformation,
   getMyVideos,
   getVideo,
   getVideosList,
@@ -97,13 +96,13 @@ describe('Test video imports', function () {
     await setAccessTokensToServers(servers)
 
     {
-      const res = await getMyUserInformation(servers[0].url, servers[0].accessToken)
-      channelIdServer1 = res.body.videoChannels[0].id
+      const { videoChannels } = await servers[0].usersCommand.getMyInfo()
+      channelIdServer1 = videoChannels[0].id
     }
 
     {
-      const res = await getMyUserInformation(servers[1].url, servers[1].accessToken)
-      channelIdServer2 = res.body.videoChannels[0].id
+      const { videoChannels } = await servers[1].usersCommand.getMyInfo()
+      channelIdServer2 = videoChannels[0].id
     }
 
     await doubleFollow(servers[0], servers[1])
