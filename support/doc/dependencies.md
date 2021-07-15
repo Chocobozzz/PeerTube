@@ -101,7 +101,7 @@ sudo -H -u peertube CC=/opt/rh/devtoolset-7/root/usr/bin/gcc CXX=/opt/rh/devtool
 6. Initialize the PostgreSQL database:
 
 ```
-sudo postgresql-setup initdb --auth-host=md5
+sudo PGSETUP_INITDB_OPTIONS='--auth-host=md5' postgresql-setup --initdb --unit postgresql
 ```
 
 Now that dependencies are installed, before running PeerTube you should enable and start PostgreSQL and Redis:
@@ -141,7 +141,7 @@ sudo ln -s /usr/bin/python3 /usr/bin/python
 6. Initialize the PostgreSQL database:
 
 ```
-sudo postgresql-setup initdb --auth-host=md5
+sudo PGSETUP_INITDB_OPTIONS='--auth-host=md5' postgresql-setup --initdb --unit postgresql
 ```
 
 Now that dependencies are installed, before running PeerTube you should enable and start PostgreSQL and Redis:
@@ -208,7 +208,7 @@ _from [PostgreSQL documentation](https://www.postgresql.org/download/linux/redha
 
 ```
 # PostgreSQL
-sudo postgresql-setup initdb --auth-host=md5
+sudo PGSETUP_INITDB_OPTIONS='--auth-host=md5' postgresql-setup --initdb --unit postgresql
 sudo systemctl enable postgresql.service
 sudo systemctl start postgresql.service
 # Nginx
