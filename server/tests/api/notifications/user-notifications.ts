@@ -14,7 +14,6 @@ import {
   MockSmtpServer,
   prepareNotificationsTest,
   ServerInfo,
-  updateVideo,
   uploadRandomVideoOnServers,
   wait,
   waitJobs
@@ -99,7 +98,7 @@ describe('Test user notifications', function () {
         privacy: VideoPrivacy.PRIVATE,
         scheduleUpdate: {
           updateAt: updateAt.toISOString(),
-          privacy: VideoPrivacy.PUBLIC
+          privacy: VideoPrivacy.PUBLIC as VideoPrivacy.PUBLIC
         }
       }
       const { name, uuid } = await uploadRandomVideoOnServers(servers, 1, data)
@@ -118,7 +117,7 @@ describe('Test user notifications', function () {
         privacy: VideoPrivacy.PRIVATE,
         scheduleUpdate: {
           updateAt: updateAt.toISOString(),
-          privacy: VideoPrivacy.PUBLIC
+          privacy: VideoPrivacy.PUBLIC as VideoPrivacy.PUBLIC
         }
       }
       const { name, uuid } = await uploadRandomVideoOnServers(servers, 2, data)
@@ -137,7 +136,7 @@ describe('Test user notifications', function () {
         privacy: VideoPrivacy.PRIVATE,
         scheduleUpdate: {
           updateAt: updateAt.toISOString(),
-          privacy: VideoPrivacy.PUBLIC
+          privacy: VideoPrivacy.PUBLIC as VideoPrivacy.PUBLIC
         }
       }
       const { name, uuid } = await uploadRandomVideoOnServers(servers, 1, data)
@@ -154,7 +153,7 @@ describe('Test user notifications', function () {
 
       await checkNewVideoFromSubscription(baseParams, name, uuid, 'absence')
 
-      await updateVideo(servers[0].url, servers[0].accessToken, uuid, { privacy: VideoPrivacy.PUBLIC })
+      await servers[0].videosCommand.update({ id: uuid, attributes: { privacy: VideoPrivacy.PUBLIC } })
 
       await waitJobs(servers)
       await checkNewVideoFromSubscription(baseParams, name, uuid, 'presence')
@@ -168,7 +167,7 @@ describe('Test user notifications', function () {
 
       await checkNewVideoFromSubscription(baseParams, name, uuid, 'absence')
 
-      await updateVideo(servers[1].url, servers[1].accessToken, uuid, { privacy: VideoPrivacy.PUBLIC })
+      await servers[1].videosCommand.update({ id: uuid, attributes: { privacy: VideoPrivacy.PUBLIC } })
 
       await waitJobs(servers)
       await checkNewVideoFromSubscription(baseParams, name, uuid, 'presence')
@@ -180,7 +179,7 @@ describe('Test user notifications', function () {
       const data = { privacy: VideoPrivacy.PRIVATE }
       const { name, uuid } = await uploadRandomVideoOnServers(servers, 1, data)
 
-      await updateVideo(servers[0].url, servers[0].accessToken, uuid, { privacy: VideoPrivacy.UNLISTED })
+      await servers[0].videosCommand.update({ id: uuid, attributes: { privacy: VideoPrivacy.UNLISTED } })
 
       await checkNewVideoFromSubscription(baseParams, name, uuid, 'absence')
     })
@@ -191,7 +190,7 @@ describe('Test user notifications', function () {
       const data = { privacy: VideoPrivacy.PRIVATE }
       const { name, uuid } = await uploadRandomVideoOnServers(servers, 2, data)
 
-      await updateVideo(servers[1].url, servers[1].accessToken, uuid, { privacy: VideoPrivacy.UNLISTED })
+      await servers[1].videosCommand.update({ id: uuid, attributes: { privacy: VideoPrivacy.UNLISTED } })
 
       await waitJobs(servers)
       await checkNewVideoFromSubscription(baseParams, name, uuid, 'absence')
@@ -295,7 +294,7 @@ describe('Test user notifications', function () {
         privacy: VideoPrivacy.PRIVATE,
         scheduleUpdate: {
           updateAt: updateAt.toISOString(),
-          privacy: VideoPrivacy.PUBLIC
+          privacy: VideoPrivacy.PUBLIC as VideoPrivacy.PUBLIC
         }
       }
       const { name, uuid } = await uploadRandomVideoOnServers(servers, 2, data)
@@ -313,7 +312,7 @@ describe('Test user notifications', function () {
         privacy: VideoPrivacy.PRIVATE,
         scheduleUpdate: {
           updateAt: updateAt.toISOString(),
-          privacy: VideoPrivacy.PUBLIC
+          privacy: VideoPrivacy.PUBLIC as VideoPrivacy.PUBLIC
         }
       }
       const { name, uuid } = await uploadRandomVideoOnServers(servers, 2, data)

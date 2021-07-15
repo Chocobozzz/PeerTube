@@ -10,12 +10,10 @@ import {
   cleanupTests,
   doubleFollow,
   flushAndRunServer,
-  getVideoIdFromUUID,
   makeGetRequest,
   makePostBodyRequest,
   ServerInfo,
   setAccessTokensToServers,
-  uploadVideo,
   waitJobs
 } from '@shared/extra-utils'
 import { AbuseCreate, AbuseState } from '@shared/models'
@@ -41,15 +39,10 @@ describe('Test abuses API validators', function () {
 
     await setAccessTokensToServers([ server ])
 
-    const username = 'user1'
-    const password = 'my super password'
-    await server.usersCommand.create({ username: username, password: password })
-    userToken = await server.loginCommand.getAccessToken({ username, password })
-
+    userToken = await server.usersCommand.generateUserAndToken('user_1')
     userToken2 = await server.usersCommand.generateUserAndToken('user_2')
 
-    const res = await uploadVideo(server.url, server.accessToken, {})
-    server.video = res.body.video
+    server.video = await server.videosCommand.upload()
 
     command = server.abusesCommand
   })
@@ -421,7 +414,7 @@ describe('Test abuses API validators', function () {
 
       await doubleFollow(anotherServer, server)
 
-      const server2VideoId = await getVideoIdFromUUID(anotherServer.url, server.video.uuid)
+      const server2VideoId = await anotherServer.videosCommand.getId({ uuid: server.video.uuid })
       await anotherServer.abusesCommand.report({ reason: 'remote server', videoId: server2VideoId })
 
       await waitJobs([ server, anotherServer ])

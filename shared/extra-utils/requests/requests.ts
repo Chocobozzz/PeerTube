@@ -67,11 +67,17 @@ function makeUploadRequest (options: {
   method?: 'POST' | 'PUT'
   path: string
   token?: string
+
   fields: { [ fieldName: string ]: any }
   attaches?: { [ attachName: string ]: any | any[] }
+
+  headers?: { [ name: string ]: string }
+
   statusCodeExpected?: HttpStatusCode
 }) {
-  if (!options.statusCodeExpected) options.statusCodeExpected = HttpStatusCode.BAD_REQUEST_400
+  if (options.statusCodeExpected === undefined) {
+    options.statusCodeExpected = HttpStatusCode.BAD_REQUEST_400
+  }
 
   let req: request.Test
   if (options.method === 'PUT') {
@@ -83,6 +89,10 @@ function makeUploadRequest (options: {
   req.set('Accept', 'application/json')
 
   if (options.token) req.set('Authorization', 'Bearer ' + options.token)
+
+  Object.keys(options.headers || {}).forEach(name => {
+    req.set(name, options.headers[name])
+  })
 
   Object.keys(options.fields).forEach(field => {
     const value = options.fields[field]
@@ -107,7 +117,11 @@ function makeUploadRequest (options: {
     }
   })
 
-  return req.expect(options.statusCodeExpected)
+  if (options.statusCodeExpected) {
+    req.expect(options.statusCodeExpected)
+  }
+
+  return req
 }
 
 function makePostBodyRequest (options: {
@@ -115,7 +129,9 @@ function makePostBodyRequest (options: {
   path: string
   token?: string
   fields?: { [ fieldName: string ]: any }
+  headers?: { [ name: string ]: string }
   type?: string
+  xForwardedFor?: string
   statusCodeExpected?: HttpStatusCode
 }) {
   if (!options.fields) options.fields = {}
@@ -126,7 +142,12 @@ function makePostBodyRequest (options: {
                 .set('Accept', 'application/json')
 
   if (options.token) req.set('Authorization', 'Bearer ' + options.token)
+  if (options.xForwardedFor) req.set('X-Forwarded-For', options.xForwardedFor)
   if (options.type) req.type(options.type)
+
+  Object.keys(options.headers || {}).forEach(name => {
+    req.set(name, options.headers[name])
+  })
 
   return req.send(options.fields)
             .expect(options.statusCodeExpected)

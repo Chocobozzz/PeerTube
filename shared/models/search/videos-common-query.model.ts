@@ -21,6 +21,8 @@ export interface VideosCommonQuery {
   tagsAllOf?: string[]
 
   filter?: VideoFilter
+
+  skipCount?: boolean
 }
 
 export interface VideosWithSearchCommonQuery extends VideosCommonQuery {

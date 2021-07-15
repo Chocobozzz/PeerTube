@@ -9,8 +9,6 @@ import {
   reRunServer,
   ServerInfo,
   setAccessTokensToServers,
-  updateVideo,
-  uploadVideo,
   waitJobs
 } from '@shared/extra-utils'
 import { VideoPrivacy } from '@shared/models'
@@ -38,11 +36,11 @@ describe('Test redundancy constraints', function () {
 
   async function uploadWrapper (videoName: string) {
     // Wait for transcoding
-    const res = await uploadVideo(localServer.url, localServer.accessToken, { name: 'to transcode', privacy: VideoPrivacy.PRIVATE })
+    const { id } = await localServer.videosCommand.upload({ attributes: { name: 'to transcode', privacy: VideoPrivacy.PRIVATE } })
     await waitJobs([ localServer ])
 
     // Update video to schedule a federation
-    await updateVideo(localServer.url, localServer.accessToken, res.body.video.id, { name: videoName, privacy: VideoPrivacy.PUBLIC })
+    await localServer.videosCommand.update({ id, attributes: { name: videoName, privacy: VideoPrivacy.PUBLIC } })
   }
 
   async function getTotalRedundanciesLocalServer () {
@@ -80,7 +78,7 @@ describe('Test redundancy constraints', function () {
     // Get the access tokens
     await setAccessTokensToServers(servers)
 
-    await uploadVideo(localServer.url, localServer.accessToken, { name: 'video 1 server 2' })
+    await localServer.videosCommand.upload({ attributes: { name: 'video 1 server 2' } })
 
     await waitJobs(servers)
 

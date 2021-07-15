@@ -2,8 +2,7 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { VideoPlaylistPrivacy } from '@shared/models'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '@shared/core-utils'
 import {
   cleanupTests,
   doubleFollow,
@@ -11,9 +10,9 @@ import {
   makeActivityPubGetRequest,
   ServerInfo,
   setAccessTokensToServers,
-  setDefaultVideoChannel,
-  uploadVideoAndGetId
-} from '../../../../shared/extra-utils'
+  setDefaultVideoChannel
+} from '@shared/extra-utils'
+import { VideoPlaylistPrivacy } from '@shared/models'
 
 const expect = chai.expect
 
@@ -69,7 +68,7 @@ describe('Test activitypub', function () {
     await setDefaultVideoChannel(servers)
 
     {
-      video = await uploadVideoAndGetId({ server: servers[0], videoName: 'video' })
+      video = await await servers[0].videosCommand.quickUpload({ name: 'video' })
     }
 
     {

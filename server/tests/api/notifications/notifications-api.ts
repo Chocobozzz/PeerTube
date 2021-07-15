@@ -10,7 +10,6 @@ import {
   MockSmtpServer,
   prepareNotificationsTest,
   ServerInfo,
-  uploadRandomVideo,
   waitJobs
 } from '@shared/extra-utils'
 import { UserNotification, UserNotificationSettingValue } from '@shared/models'
@@ -35,7 +34,7 @@ describe('Test notifications API', function () {
     await server.subscriptionsCommand.add({ token: userToken, targetUri: 'root_channel@localhost:' + server.port })
 
     for (let i = 0; i < 10; i++) {
-      await uploadRandomVideo(server, false)
+      await server.videosCommand.randomUpload({ wait: false })
     }
 
     await waitJobs([ server ])
@@ -112,7 +111,7 @@ describe('Test notifications API', function () {
         expect(info.notificationSettings.newVideoFromSubscription).to.equal(UserNotificationSettingValue.NONE)
       }
 
-      const { name, uuid } = await uploadRandomVideo(server)
+      const { name, uuid } = await server.videosCommand.randomUpload()
 
       const check = { web: true, mail: true }
       await checkNewVideoFromSubscription({ ...baseParams, check }, name, uuid, 'absence')
@@ -131,7 +130,7 @@ describe('Test notifications API', function () {
         expect(info.notificationSettings.newVideoFromSubscription).to.equal(UserNotificationSettingValue.WEB)
       }
 
-      const { name, uuid } = await uploadRandomVideo(server)
+      const { name, uuid } = await server.videosCommand.randomUpload()
 
       {
         const check = { mail: true, web: false }
@@ -157,7 +156,7 @@ describe('Test notifications API', function () {
         expect(info.notificationSettings.newVideoFromSubscription).to.equal(UserNotificationSettingValue.EMAIL)
       }
 
-      const { name, uuid } = await uploadRandomVideo(server)
+      const { name, uuid } = await server.videosCommand.randomUpload()
 
       {
         const check = { mail: false, web: true }
@@ -188,7 +187,7 @@ describe('Test notifications API', function () {
         )
       }
 
-      const { name, uuid } = await uploadRandomVideo(server)
+      const { name, uuid } = await server.videosCommand.randomUpload()
 
       await checkNewVideoFromSubscription(baseParams, name, uuid, 'presence')
     })

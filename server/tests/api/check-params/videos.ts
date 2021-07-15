@@ -4,30 +4,23 @@ import 'mocha'
 import * as chai from 'chai'
 import { omit } from 'lodash'
 import { join } from 'path'
-import { randomInt } from '@shared/core-utils'
-import { PeerTubeProblemDocument, VideoCreateResult } from '@shared/models'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode, randomInt } from '@shared/core-utils'
 import {
+  checkBadCountPagination,
+  checkBadSortPagination,
+  checkBadStartPagination,
   checkUploadVideoParam,
   cleanupTests,
   flushAndRunServer,
-  getVideo,
-  getVideosList,
   makeDeleteRequest,
   makeGetRequest,
   makePutBodyRequest,
   makeUploadRequest,
-  removeVideo,
   root,
   ServerInfo,
   setAccessTokensToServers
-} from '../../../../shared/extra-utils'
-import {
-  checkBadCountPagination,
-  checkBadSortPagination,
-  checkBadStartPagination
-} from '../../../../shared/extra-utils/requests/check-api-params'
-import { VideoPrivacy } from '../../../../shared/models/videos/video-privacy.enum'
+} from '@shared/extra-utils'
+import { PeerTubeProblemDocument, VideoCreateResult, VideoPrivacy } from '@shared/models'
 
 const expect = chai.expect
 
@@ -210,70 +203,70 @@ describe('Test videos API validator', function () {
       it('Should fail with nothing', async function () {
         const fields = {}
         const attaches = {}
-        await checkUploadVideoParam(server.url, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.BAD_REQUEST_400, mode)
+        await checkUploadVideoParam(server, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.BAD_REQUEST_400, mode)
       })
 
       it('Should fail without name', async function () {
         const fields = omit(baseCorrectParams, 'name')
         const attaches = baseCorrectAttaches
 
-        await checkUploadVideoParam(server.url, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.BAD_REQUEST_400, mode)
+        await checkUploadVideoParam(server, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.BAD_REQUEST_400, mode)
       })
 
       it('Should fail with a long name', async function () {
         const fields = { ...baseCorrectParams, name: 'super'.repeat(65) }
         const attaches = baseCorrectAttaches
 
-        await checkUploadVideoParam(server.url, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.BAD_REQUEST_400, mode)
+        await checkUploadVideoParam(server, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.BAD_REQUEST_400, mode)
       })
 
       it('Should fail with a bad category', async function () {
         const fields = { ...baseCorrectParams, category: 125 }
         const attaches = baseCorrectAttaches
 
-        await checkUploadVideoParam(server.url, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.BAD_REQUEST_400, mode)
+        await checkUploadVideoParam(server, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.BAD_REQUEST_400, mode)
       })
 
       it('Should fail with a bad licence', async function () {
         const fields = { ...baseCorrectParams, licence: 125 }
         const attaches = baseCorrectAttaches
 
-        await checkUploadVideoParam(server.url, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.BAD_REQUEST_400, mode)
+        await checkUploadVideoParam(server, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.BAD_REQUEST_400, mode)
       })
 
       it('Should fail with a bad language', async function () {
         const fields = { ...baseCorrectParams, language: 'a'.repeat(15) }
         const attaches = baseCorrectAttaches
 
-        await checkUploadVideoParam(server.url, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.BAD_REQUEST_400, mode)
+        await checkUploadVideoParam(server, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.BAD_REQUEST_400, mode)
       })
 
       it('Should fail with a long description', async function () {
         const fields = { ...baseCorrectParams, description: 'super'.repeat(2500) }
         const attaches = baseCorrectAttaches
 
-        await checkUploadVideoParam(server.url, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.BAD_REQUEST_400, mode)
+        await checkUploadVideoParam(server, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.BAD_REQUEST_400, mode)
       })
 
       it('Should fail with a long support text', async function () {
         const fields = { ...baseCorrectParams, support: 'super'.repeat(201) }
         const attaches = baseCorrectAttaches
 
-        await checkUploadVideoParam(server.url, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.BAD_REQUEST_400, mode)
+        await checkUploadVideoParam(server, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.BAD_REQUEST_400, mode)
       })
 
       it('Should fail without a channel', async function () {
         const fields = omit(baseCorrectParams, 'channelId')
         const attaches = baseCorrectAttaches
 
-        await checkUploadVideoParam(server.url, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.BAD_REQUEST_400, mode)
+        await checkUploadVideoParam(server, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.BAD_REQUEST_400, mode)
       })
 
       it('Should fail with a bad channel', async function () {
         const fields = { ...baseCorrectParams, channelId: 545454 }
         const attaches = baseCorrectAttaches
 
-        await checkUploadVideoParam(server.url, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.BAD_REQUEST_400, mode)
+        await checkUploadVideoParam(server, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.BAD_REQUEST_400, mode)
       })
 
       it('Should fail with another user channel', async function () {
@@ -290,35 +283,35 @@ describe('Test videos API validator', function () {
         const fields = { ...baseCorrectParams, channelId: customChannelId }
         const attaches = baseCorrectAttaches
 
-        await checkUploadVideoParam(server.url, userAccessToken, { ...fields, ...attaches }, HttpStatusCode.BAD_REQUEST_400, mode)
+        await checkUploadVideoParam(server, userAccessToken, { ...fields, ...attaches }, HttpStatusCode.BAD_REQUEST_400, mode)
       })
 
       it('Should fail with too many tags', async function () {
         const fields = { ...baseCorrectParams, tags: [ 'tag1', 'tag2', 'tag3', 'tag4', 'tag5', 'tag6' ] }
         const attaches = baseCorrectAttaches
 
-        await checkUploadVideoParam(server.url, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.BAD_REQUEST_400, mode)
+        await checkUploadVideoParam(server, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.BAD_REQUEST_400, mode)
       })
 
       it('Should fail with a tag length too low', async function () {
         const fields = { ...baseCorrectParams, tags: [ 'tag1', 't' ] }
         const attaches = baseCorrectAttaches
 
-        await checkUploadVideoParam(server.url, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.BAD_REQUEST_400, mode)
+        await checkUploadVideoParam(server, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.BAD_REQUEST_400, mode)
       })
 
       it('Should fail with a tag length too big', async function () {
         const fields = { ...baseCorrectParams, tags: [ 'tag1', 'my_super_tag_too_long_long_long_long_long_long' ] }
         const attaches = baseCorrectAttaches
 
-        await checkUploadVideoParam(server.url, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.BAD_REQUEST_400, mode)
+        await checkUploadVideoParam(server, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.BAD_REQUEST_400, mode)
       })
 
       it('Should fail with a bad schedule update (miss updateAt)', async function () {
         const fields = { ...baseCorrectParams, scheduleUpdate: { privacy: VideoPrivacy.PUBLIC } }
         const attaches = baseCorrectAttaches
 
-        await checkUploadVideoParam(server.url, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.BAD_REQUEST_400, mode)
+        await checkUploadVideoParam(server, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.BAD_REQUEST_400, mode)
       })
 
       it('Should fail with a bad schedule update (wrong updateAt)', async function () {
@@ -332,20 +325,20 @@ describe('Test videos API validator', function () {
         }
         const attaches = baseCorrectAttaches
 
-        await checkUploadVideoParam(server.url, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.BAD_REQUEST_400, mode)
+        await checkUploadVideoParam(server, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.BAD_REQUEST_400, mode)
       })
 
       it('Should fail with a bad originally published at attribute', async function () {
         const fields = { ...baseCorrectParams, originallyPublishedAt: 'toto' }
         const attaches = baseCorrectAttaches
 
-        await checkUploadVideoParam(server.url, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.BAD_REQUEST_400, mode)
+        await checkUploadVideoParam(server, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.BAD_REQUEST_400, mode)
       })
 
       it('Should fail without an input file', async function () {
         const fields = baseCorrectParams
         const attaches = {}
-        await checkUploadVideoParam(server.url, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.BAD_REQUEST_400, mode)
+        await checkUploadVideoParam(server, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.BAD_REQUEST_400, mode)
       })
 
       it('Should fail with an incorrect input file', async function () {
@@ -353,7 +346,7 @@ describe('Test videos API validator', function () {
         let attaches = { fixture: join(root(), 'server', 'tests', 'fixtures', 'video_short_fake.webm') }
 
         await checkUploadVideoParam(
-          server.url,
+          server,
           server.accessToken,
           { ...fields, ...attaches },
           HttpStatusCode.UNPROCESSABLE_ENTITY_422,
@@ -362,7 +355,7 @@ describe('Test videos API validator', function () {
 
         attaches = { fixture: join(root(), 'server', 'tests', 'fixtures', 'video_short.mkv') }
         await checkUploadVideoParam(
-          server.url,
+          server,
           server.accessToken,
           { ...fields, ...attaches },
           HttpStatusCode.UNSUPPORTED_MEDIA_TYPE_415,
@@ -377,7 +370,7 @@ describe('Test videos API validator', function () {
           fixture: join(root(), 'server', 'tests', 'fixtures', 'video_short.mp4')
         }
 
-        await checkUploadVideoParam(server.url, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.BAD_REQUEST_400, mode)
+        await checkUploadVideoParam(server, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.BAD_REQUEST_400, mode)
       })
 
       it('Should fail with a big thumbnail file', async function () {
@@ -387,7 +380,7 @@ describe('Test videos API validator', function () {
           fixture: join(root(), 'server', 'tests', 'fixtures', 'video_short.mp4')
         }
 
-        await checkUploadVideoParam(server.url, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.BAD_REQUEST_400, mode)
+        await checkUploadVideoParam(server, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.BAD_REQUEST_400, mode)
       })
 
       it('Should fail with an incorrect preview file', async function () {
@@ -397,7 +390,7 @@ describe('Test videos API validator', function () {
           fixture: join(root(), 'server', 'tests', 'fixtures', 'video_short.mp4')
         }
 
-        await checkUploadVideoParam(server.url, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.BAD_REQUEST_400, mode)
+        await checkUploadVideoParam(server, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.BAD_REQUEST_400, mode)
       })
 
       it('Should fail with a big preview file', async function () {
@@ -407,7 +400,7 @@ describe('Test videos API validator', function () {
           fixture: join(root(), 'server', 'tests', 'fixtures', 'video_short.mp4')
         }
 
-        await checkUploadVideoParam(server.url, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.BAD_REQUEST_400, mode)
+        await checkUploadVideoParam(server, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.BAD_REQUEST_400, mode)
       })
 
       it('Should report the appropriate error', async function () {
@@ -415,9 +408,9 @@ describe('Test videos API validator', function () {
         const attaches = baseCorrectAttaches
 
         const attributes = { ...fields, ...attaches }
-        const res = await checkUploadVideoParam(server.url, server.accessToken, attributes, HttpStatusCode.BAD_REQUEST_400, mode)
+        const body = await checkUploadVideoParam(server, server.accessToken, attributes, HttpStatusCode.BAD_REQUEST_400, mode)
 
-        const error = res.body as PeerTubeProblemDocument
+        const error = body as unknown as PeerTubeProblemDocument
 
         if (mode === 'legacy') {
           expect(error.docs).to.equal('https://docs.joinpeertube.org/api-rest-reference.html#operation/uploadLegacy')
@@ -442,7 +435,7 @@ describe('Test videos API validator', function () {
 
         {
           const attaches = baseCorrectAttaches
-          await checkUploadVideoParam(server.url, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.OK_200, mode)
+          await checkUploadVideoParam(server, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.OK_200, mode)
         }
 
         {
@@ -452,7 +445,7 @@ describe('Test videos API validator', function () {
             videofile: join(root(), 'server', 'tests', 'fixtures', 'video_short.mp4')
           }
 
-          await checkUploadVideoParam(server.url, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.OK_200, mode)
+          await checkUploadVideoParam(server, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.OK_200, mode)
         }
 
         {
@@ -462,7 +455,7 @@ describe('Test videos API validator', function () {
             videofile: join(root(), 'server', 'tests', 'fixtures', 'video_short.ogv')
           }
 
-          await checkUploadVideoParam(server.url, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.OK_200, mode)
+          await checkUploadVideoParam(server, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.OK_200, mode)
         }
       })
     }
@@ -491,8 +484,8 @@ describe('Test videos API validator', function () {
     }
 
     before(async function () {
-      const res = await getVideosList(server.url)
-      video = res.body.data[0]
+      const { data } = await server.videosCommand.list()
+      video = data[0]
     })
 
     it('Should fail with nothing', async function () {
@@ -717,16 +710,16 @@ describe('Test videos API validator', function () {
     })
 
     it('Should fail without a correct uuid', async function () {
-      await getVideo(server.url, 'coucou', HttpStatusCode.BAD_REQUEST_400)
+      await server.videosCommand.get({ id: 'coucou', expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     })
 
     it('Should return 404 with an incorrect video', async function () {
-      await getVideo(server.url, '4da6fde3-88f7-4d16-b119-108df5630b06', HttpStatusCode.NOT_FOUND_404)
+      await server.videosCommand.get({ id: '4da6fde3-88f7-4d16-b119-108df5630b06', expectedStatus: HttpStatusCode.NOT_FOUND_404 })
     })
 
     it('Shoud report the appropriate error', async function () {
-      const res = await getVideo(server.url, 'hi', HttpStatusCode.BAD_REQUEST_400)
-      const error = res.body as PeerTubeProblemDocument
+      const body = await server.videosCommand.get({ id: 'hi', expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+      const error = body as unknown as PeerTubeProblemDocument
 
       expect(error.docs).to.equal('https://docs.joinpeertube.org/api-rest-reference.html#operation/getVideo')
 
@@ -741,16 +734,16 @@ describe('Test videos API validator', function () {
     })
 
     it('Should succeed with the correct parameters', async function () {
-      await getVideo(server.url, video.shortUUID)
+      await server.videosCommand.get({ id: video.shortUUID })
     })
   })
 
   describe('When rating a video', function () {
-    let videoId
+    let videoId: number
 
     before(async function () {
-      const res = await getVideosList(server.url)
-      videoId = res.body.data[0].id
+      const { data } = await server.videosCommand.list()
+      videoId = data[0].id
     })
 
     it('Should fail without a valid uuid', async function () {
@@ -804,22 +797,22 @@ describe('Test videos API validator', function () {
     })
 
     it('Should fail without a correct uuid', async function () {
-      await removeVideo(server.url, server.accessToken, 'hello', HttpStatusCode.BAD_REQUEST_400)
+      await server.videosCommand.remove({ id: 'hello', expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     })
 
     it('Should fail with a video which does not exist', async function () {
-      await removeVideo(server.url, server.accessToken, '4da6fde3-88f7-4d16-b119-108df5630b06', HttpStatusCode.NOT_FOUND_404)
+      await server.videosCommand.remove({ id: '4da6fde3-88f7-4d16-b119-108df5630b06', expectedStatus: HttpStatusCode.NOT_FOUND_404 })
     })
 
     it('Should fail with a video of another user without the appropriate right', async function () {
-      await removeVideo(server.url, userAccessToken, video.uuid, HttpStatusCode.FORBIDDEN_403)
+      await server.videosCommand.remove({ token: userAccessToken, id: video.uuid, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
     })
 
     it('Should fail with a video of another server')
 
     it('Shoud report the appropriate error', async function () {
-      const res = await removeVideo(server.url, server.accessToken, 'hello', HttpStatusCode.BAD_REQUEST_400)
-      const error = res.body as PeerTubeProblemDocument
+      const body = await server.videosCommand.remove({ id: 'hello', expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+      const error = body as unknown as PeerTubeProblemDocument
 
       expect(error.docs).to.equal('https://docs.joinpeertube.org/api-rest-reference.html#operation/delVideo')
 
@@ -834,7 +827,7 @@ describe('Test videos API validator', function () {
     })
 
     it('Should succeed with the correct parameters', async function () {
-      await removeVideo(server.url, server.accessToken, video.uuid)
+      await server.videosCommand.remove({ id: video.uuid })
     })
   })
 

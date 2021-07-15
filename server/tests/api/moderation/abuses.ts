@@ -7,13 +7,8 @@ import {
   cleanupTests,
   doubleFollow,
   flushAndRunMultipleServers,
-  getVideoIdFromUUID,
-  getVideosList,
-  removeVideo,
   ServerInfo,
   setAccessTokensToServers,
-  uploadVideo,
-  uploadVideoAndGetId,
   waitJobs
 } from '@shared/extra-utils'
 import { AbuseMessage, AbusePredefinedReasonsString, AbuseState, AdminAbuse, UserAbuse } from '@shared/models'
@@ -47,28 +42,30 @@ describe('Test abuses', function () {
       this.timeout(50000)
 
       // Upload some videos on each servers
-      const video1Attributes = {
-        name: 'my super name for server 1',
-        description: 'my super description for server 1'
+      {
+        const attributes = {
+          name: 'my super name for server 1',
+          description: 'my super description for server 1'
+        }
+        await servers[0].videosCommand.upload({ attributes })
       }
-      await uploadVideo(servers[0].url, servers[0].accessToken, video1Attributes)
 
-      const video2Attributes = {
-        name: 'my super name for server 2',
-        description: 'my super description for server 2'
+      {
+        const attributes = {
+          name: 'my super name for server 2',
+          description: 'my super description for server 2'
+        }
+        await servers[1].videosCommand.upload({ attributes })
       }
-      await uploadVideo(servers[1].url, servers[1].accessToken, video2Attributes)
 
       // Wait videos propagation, server 2 has transcoding enabled
       await waitJobs(servers)
 
-      const res = await getVideosList(servers[0].url)
-      const videos = res.body.data
+      const { data } = await servers[0].videosCommand.list()
+      expect(data.length).to.equal(2)
 
-      expect(videos.length).to.equal(2)
-
-      servers[0].video = videos.find(video => video.name === 'my super name for server 1')
-      servers[1].video = videos.find(video => video.name === 'my super name for server 2')
+      servers[0].video = data.find(video => video.name === 'my super name for server 1')
+      servers[1].video = data.find(video => video.name === 'my super name for server 2')
     })
 
     it('Should not have abuses', async function () {
@@ -130,7 +127,7 @@ describe('Test abuses', function () {
       this.timeout(10000)
 
       const reason = 'my super bad reason 2'
-      const videoId = await getVideoIdFromUUID(servers[0].url, servers[1].video.uuid)
+      const videoId = await servers[0].videosCommand.getId({ uuid: servers[1].video.uuid })
       await commands[0].report({ videoId, reason })
 
       // We wait requests propagation
@@ -203,7 +200,7 @@ describe('Test abuses', function () {
       this.timeout(10000)
 
       {
-        const videoId = await getVideoIdFromUUID(servers[1].url, servers[0].video.uuid)
+        const videoId = await servers[1].videosCommand.getId({ uuid: servers[0].video.uuid })
         await commands[1].report({ videoId, reason: 'will mute this' })
         await waitJobs(servers)
 
@@ -255,7 +252,7 @@ describe('Test abuses', function () {
     it('Should keep the video abuse when deleting the video', async function () {
       this.timeout(10000)
 
-      await removeVideo(servers[1].url, servers[1].accessToken, abuseServer2.video.uuid)
+      await servers[1].videosCommand.remove({ id: abuseServer2.video.uuid })
 
       await waitJobs(servers)
 
@@ -279,12 +276,12 @@ describe('Test abuses', function () {
       const userAccessToken = await servers[0].loginCommand.getAccessToken(user)
 
       // upload a third video via this user
-      const video3Attributes = {
+      const attributes = {
         name: 'my second super name for server 1',
         description: 'my second super description for server 1'
       }
-      const resUpload = await uploadVideo(servers[0].url, userAccessToken, video3Attributes)
-      const video3Id = resUpload.body.video.id
+      const { id } = await servers[0].videosCommand.upload({ token: userAccessToken, attributes })
+      const video3Id = id
 
       // resume with the test
       const reason3 = 'my super bad reason 3'
@@ -394,7 +391,7 @@ describe('Test abuses', function () {
 
     async function getComment (server: ServerInfo, videoIdArg: number | string) {
       const videoId = typeof videoIdArg === 'string'
-        ? await getVideoIdFromUUID(server.url, videoIdArg)
+        ? await server.videosCommand.getId({ uuid: videoIdArg })
         : videoIdArg
 
       const { data } = await server.commentsCommand.listThreads({ videoId })
@@ -405,8 +402,8 @@ describe('Test abuses', function () {
     before(async function () {
       this.timeout(50000)
 
-      servers[0].video = await uploadVideoAndGetId({ server: servers[0], videoName: 'server 1' })
-      servers[1].video = await uploadVideoAndGetId({ server: servers[1], videoName: 'server 2' })
+      servers[0].video = await await servers[0].videosCommand.quickUpload({ name: 'server 1' })
+      servers[1].video = await await servers[1].videosCommand.quickUpload({ name: 'server 2' })
 
       await servers[0].commentsCommand.createThread({ videoId: servers[0].video.id, text: 'comment server 1' })
       await servers[1].commentsCommand.createThread({ videoId: servers[1].video.id, text: 'comment server 2' })
@@ -604,7 +601,7 @@ describe('Test abuses', function () {
       await servers[0].usersCommand.create({ username: 'user_1', password: 'donald' })
 
       const token = await servers[1].usersCommand.generateUserAndToken('user_2')
-      await uploadVideo(servers[1].url, token, { name: 'super video' })
+      await servers[1].videosCommand.upload({ token, attributes: { name: 'super video' } })
 
       await waitJobs(servers)
     })
@@ -766,7 +763,7 @@ describe('Test abuses', function () {
 
       await commands[0].report({ token: userAccessToken, videoId: servers[0].video.id, reason: 'user reason 1' })
 
-      const videoId = await getVideoIdFromUUID(servers[0].url, servers[1].video.uuid)
+      const videoId = await servers[0].videosCommand.getId({ uuid: servers[1].video.uuid })
       await commands[0].report({ token: userAccessToken, videoId, reason: 'user reason 2' })
     })
 

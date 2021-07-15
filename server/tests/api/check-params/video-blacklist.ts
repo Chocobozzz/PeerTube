@@ -11,20 +11,17 @@ import {
   cleanupTests,
   doubleFollow,
   flushAndRunMultipleServers,
-  getVideo,
-  getVideoWithToken,
   makePostBodyRequest,
   makePutBodyRequest,
   ServerInfo,
   setAccessTokensToServers,
-  uploadVideo,
   waitJobs
 } from '@shared/extra-utils'
-import { VideoBlacklistType, VideoDetails } from '@shared/models'
+import { VideoBlacklistType } from '@shared/models'
 
 describe('Test video blacklist API validators', function () {
   let servers: ServerInfo[]
-  let notBlacklistedVideoId: number
+  let notBlacklistedVideoId: string
   let remoteVideoUUID: string
   let userAccessToken1 = ''
   let userAccessToken2 = ''
@@ -55,18 +52,17 @@ describe('Test video blacklist API validators', function () {
     }
 
     {
-      const res = await uploadVideo(servers[0].url, userAccessToken1, {})
-      servers[0].video = res.body.video
+      servers[0].video = await servers[0].videosCommand.upload({ token: userAccessToken1 })
     }
 
     {
-      const res = await uploadVideo(servers[0].url, servers[0].accessToken, {})
-      notBlacklistedVideoId = res.body.video.uuid
+      const { uuid } = await servers[0].videosCommand.upload()
+      notBlacklistedVideoId = uuid
     }
 
     {
-      const res = await uploadVideo(servers[1].url, servers[1].accessToken, {})
-      remoteVideoUUID = res.body.video.uuid
+      const { uuid } = await servers[1].videosCommand.upload()
+      remoteVideoUUID = uuid
     }
 
     await waitJobs(servers)
@@ -204,17 +200,19 @@ describe('Test video blacklist API validators', function () {
   describe('When getting blacklisted video', function () {
 
     it('Should fail with a non authenticated user', async function () {
-      await getVideo(servers[0].url, servers[0].video.uuid, HttpStatusCode.UNAUTHORIZED_401)
+      await servers[0].videosCommand.get({ id: servers[0].video.uuid, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
     it('Should fail with another user', async function () {
-      await getVideoWithToken(servers[0].url, userAccessToken2, servers[0].video.uuid, HttpStatusCode.FORBIDDEN_403)
+      await servers[0].videosCommand.getWithToken({
+        token: userAccessToken2,
+        id: servers[0].video.uuid,
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
     })
 
     it('Should succeed with the owner authenticated user', async function () {
-      const res = await getVideoWithToken(servers[0].url, userAccessToken1, servers[0].video.uuid, HttpStatusCode.OK_200)
-      const video: VideoDetails = res.body
-
+      const video = await servers[0].videosCommand.getWithToken({ token: userAccessToken1, id: servers[0].video.uuid })
       expect(video.blacklisted).to.be.true
     })
 
@@ -222,9 +220,7 @@ describe('Test video blacklist API validators', function () {
       const video = servers[0].video
 
       for (const id of [ video.id, video.uuid, video.shortUUID ]) {
-        const res = await getVideoWithToken(servers[0].url, servers[0].accessToken, id, HttpStatusCode.OK_200)
-        const video: VideoDetails = res.body
-
+        const video = await servers[0].videosCommand.getWithToken({ id, expectedStatus: HttpStatusCode.OK_200 })
         expect(video.blacklisted).to.be.true
       }
     })

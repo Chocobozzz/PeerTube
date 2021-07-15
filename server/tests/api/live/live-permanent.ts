@@ -2,13 +2,12 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { LiveVideoCreate, VideoDetails, VideoPrivacy, VideoState } from '@shared/models'
+import { LiveVideoCreate, VideoPrivacy, VideoState } from '@shared/models'
 import {
   cleanupTests,
   ConfigCommand,
   doubleFollow,
   flushAndRunMultipleServers,
-  getVideo,
   ServerInfo,
   setAccessTokensToServers,
   setDefaultVideoChannel,
@@ -38,8 +37,8 @@ describe('Permanent live', function () {
 
   async function checkVideoState (videoId: string, state: VideoState) {
     for (const server of servers) {
-      const res = await getVideo(server.url, videoId)
-      expect((res.body as VideoDetails).state.id).to.equal(state)
+      const video = await server.videosCommand.get({ id: videoId })
+      expect(video.state.id).to.equal(state)
     }
   }
 
@@ -123,9 +122,7 @@ describe('Permanent live', function () {
     await waitJobs(servers)
 
     for (const server of servers) {
-      const res = await getVideo(server.url, videoUUID)
-
-      const videoDetails = res.body as VideoDetails
+      const videoDetails = await server.videosCommand.get({ id: videoUUID })
       expect(videoDetails.streamingPlaylists).to.have.lengthOf(1)
     }
   })

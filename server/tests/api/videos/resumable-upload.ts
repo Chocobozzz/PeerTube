@@ -9,8 +9,6 @@ import {
   buildAbsoluteFixturePath,
   cleanupTests,
   flushAndRunServer,
-  prepareResumableUpload,
-  sendResumableChunks,
   ServerInfo,
   setAccessTokensToServers,
   setDefaultVideoChannel
@@ -45,7 +43,7 @@ describe('Test resumable upload', function () {
 
     const mimetype = 'video/mp4'
 
-    const res = await prepareResumableUpload({ url: server.url, token: server.accessToken, attributes, size, mimetype })
+    const res = await server.videosCommand.prepareResumableUpload({ attributes, size, mimetype })
 
     return res.header['location'].split('?')[1]
   }
@@ -63,15 +61,13 @@ describe('Test resumable upload', function () {
     const size = await buildSize(defaultFixture, options.size)
     const absoluteFilePath = buildAbsoluteFixturePath(defaultFixture)
 
-    return sendResumableChunks({
-      url: server.url,
-      token: server.accessToken,
+    return server.videosCommand.sendResumableChunks({
       pathUploadId,
       videoFilePath: absoluteFilePath,
       size,
       contentLength,
       contentRangeBuilder,
-      specialStatus: expectedStatus
+      expectedStatus
     })
   }
 

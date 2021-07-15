@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
+import { HttpStatusCode } from '@shared/core-utils'
 import {
   checkBadCountPagination,
   checkBadStartPagination,
@@ -10,10 +11,8 @@ import {
   makePostBodyRequest,
   makePutBodyRequest,
   ServerInfo,
-  setAccessTokensToServers,
-  uploadVideo
-} from '../../../../shared/extra-utils'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+  setAccessTokensToServers
+} from '@shared/extra-utils'
 
 describe('Test videos history API validator', function () {
   const myHistoryPath = '/api/v1/users/me/history/videos'
@@ -30,10 +29,8 @@ describe('Test videos history API validator', function () {
 
     await setAccessTokensToServers([ server ])
 
-    const res = await uploadVideo(server.url, server.accessToken, {})
-    const videoUUID = res.body.video.uuid
-
-    watchingPath = '/api/v1/videos/' + videoUUID + '/watching'
+    const { uuid } = await server.videosCommand.upload()
+    watchingPath = '/api/v1/videos/' + uuid + '/watching'
   })
 
   describe('When notifying a user is watching a video', function () {

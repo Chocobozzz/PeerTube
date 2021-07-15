@@ -13,17 +13,9 @@ import {
   dateIsValid,
   doubleFollow,
   flushAndRunMultipleServers,
-  getLocalVideos,
-  getVideo,
-  getVideosList,
-  rateVideo,
-  removeVideo,
   ServerInfo,
   setAccessTokensToServers,
   testImage,
-  updateVideo,
-  uploadVideo,
-  viewVideo,
   wait,
   waitJobs,
   webtorrentAdd
@@ -67,10 +59,9 @@ describe('Test multiple servers', function () {
 
   it('Should not have videos for all servers', async function () {
     for (const server of servers) {
-      const res = await getVideosList(server.url)
-      const videos = res.body.data
-      expect(videos).to.be.an('array')
-      expect(videos.length).to.equal(0)
+      const { data } = await server.videosCommand.list()
+      expect(data).to.be.an('array')
+      expect(data.length).to.equal(0)
     }
   })
 
@@ -78,7 +69,7 @@ describe('Test multiple servers', function () {
     it('Should upload the video on server 1 and propagate on each server', async function () {
       this.timeout(25000)
 
-      const videoAttributes = {
+      const attributes = {
         name: 'my super name for server 1',
         category: 5,
         licence: 4,
@@ -91,7 +82,7 @@ describe('Test multiple servers', function () {
         channelId: videoChannelId,
         fixture: 'video_short1.webm'
       }
-      await uploadVideo(servers[0].url, servers[0].accessToken, videoAttributes)
+      await servers[0].videosCommand.upload({ attributes })
 
       await waitJobs(servers)
 
@@ -134,14 +125,13 @@ describe('Test multiple servers', function () {
           ]
         }
 
-        const res = await getVideosList(server.url)
-        const videos = res.body.data
-        expect(videos).to.be.an('array')
-        expect(videos.length).to.equal(1)
-        const video = videos[0]
+        const { data } = await server.videosCommand.list()
+        expect(data).to.be.an('array')
+        expect(data.length).to.equal(1)
+        const video = data[0]
 
-        await completeVideoCheck(server.url, video, checkAttributes)
-        publishedAt = video.publishedAt
+        await completeVideoCheck(server, video, checkAttributes)
+        publishedAt = video.publishedAt as string
       }
     })
 
@@ -155,7 +145,7 @@ describe('Test multiple servers', function () {
       await servers[1].usersCommand.create({ username: user.username, password: user.password })
       const userAccessToken = await servers[1].loginCommand.getAccessToken(user)
 
-      const videoAttributes = {
+      const attributes = {
         name: 'my super name for server 2',
         category: 4,
         licence: 3,
@@ -168,7 +158,7 @@ describe('Test multiple servers', function () {
         thumbnailfile: 'thumbnail.jpg',
         previewfile: 'preview.jpg'
       }
-      await uploadVideo(servers[1].url, userAccessToken, videoAttributes, HttpStatusCode.OK_200, 'resumable')
+      await servers[1].videosCommand.upload({ token: userAccessToken, attributes, mode: 'resumable' })
 
       // Transcoding
       await waitJobs(servers)
@@ -223,65 +213,67 @@ describe('Test multiple servers', function () {
           previewfile: 'preview'
         }
 
-        const res = await getVideosList(server.url)
-        const videos = res.body.data
-        expect(videos).to.be.an('array')
-        expect(videos.length).to.equal(2)
-        const video = videos[1]
+        const { data } = await server.videosCommand.list()
+        expect(data).to.be.an('array')
+        expect(data.length).to.equal(2)
+        const video = data[1]
 
-        await completeVideoCheck(server.url, video, checkAttributes)
+        await completeVideoCheck(server, video, checkAttributes)
       }
     })
 
     it('Should upload two videos on server 3 and propagate on each server', async function () {
       this.timeout(45000)
 
-      const videoAttributes1 = {
-        name: 'my super name for server 3',
-        category: 6,
-        licence: 5,
-        language: 'de',
-        nsfw: true,
-        description: 'my super description for server 3',
-        support: 'my super support text for server 3',
-        tags: [ 'tag1p3' ],
-        fixture: 'video_short3.webm'
+      {
+        const attributes = {
+          name: 'my super name for server 3',
+          category: 6,
+          licence: 5,
+          language: 'de',
+          nsfw: true,
+          description: 'my super description for server 3',
+          support: 'my super support text for server 3',
+          tags: [ 'tag1p3' ],
+          fixture: 'video_short3.webm'
+        }
+        await servers[2].videosCommand.upload({ attributes })
       }
-      await uploadVideo(servers[2].url, servers[2].accessToken, videoAttributes1)
 
-      const videoAttributes2 = {
-        name: 'my super name for server 3-2',
-        category: 7,
-        licence: 6,
-        language: 'ko',
-        nsfw: false,
-        description: 'my super description for server 3-2',
-        support: 'my super support text for server 3-2',
-        tags: [ 'tag2p3', 'tag3p3', 'tag4p3' ],
-        fixture: 'video_short.webm'
+      {
+        const attributes = {
+          name: 'my super name for server 3-2',
+          category: 7,
+          licence: 6,
+          language: 'ko',
+          nsfw: false,
+          description: 'my super description for server 3-2',
+          support: 'my super support text for server 3-2',
+          tags: [ 'tag2p3', 'tag3p3', 'tag4p3' ],
+          fixture: 'video_short.webm'
+        }
+        await servers[2].videosCommand.upload({ attributes })
       }
-      await uploadVideo(servers[2].url, servers[2].accessToken, videoAttributes2)
 
       await waitJobs(servers)
 
       // All servers should have this video
       for (const server of servers) {
         const isLocal = server.url === 'http://localhost:' + servers[2].port
-        const res = await getVideosList(server.url)
+        const { data } = await server.videosCommand.list()
 
-        const videos = res.body.data
-        expect(videos).to.be.an('array')
-        expect(videos.length).to.equal(4)
+        expect(data).to.be.an('array')
+        expect(data.length).to.equal(4)
 
         // We not sure about the order of the two last uploads
         let video1 = null
         let video2 = null
-        if (videos[2].name === 'my super name for server 3') {
-          video1 = videos[2]
-          video2 = videos[3]
+        if (data[2].name === 'my super name for server 3') {
+          video1 = data[2]
+          video2 = data[3]
         } else {
-          video1 = videos[3]
-          video2 = videos[2]
+          video1 = data[3]
+          video2 = data[2]
         }
 
         const checkAttributesVideo1 = {
@@ -316,7 +308,7 @@ describe('Test multiple servers', function () {
             }
           ]
         }
-        await completeVideoCheck(server.url, video1, checkAttributesVideo1)
+        await completeVideoCheck(server, video1, checkAttributesVideo1)
 
         const checkAttributesVideo2 = {
           name: 'my super name for server 3-2',
@@ -350,38 +342,38 @@ describe('Test multiple servers', function () {
             }
           ]
         }
-        await completeVideoCheck(server.url, video2, checkAttributesVideo2)
+        await completeVideoCheck(server, video2, checkAttributesVideo2)
       }
     })
   })
 
   describe('It should list local videos', function () {
     it('Should list only local videos on server 1', async function () {
-      const { body } = await getLocalVideos(servers[0].url)
+      const { data, total } = await servers[0].videosCommand.list({ filter: 'local' })
 
-      expect(body.total).to.equal(1)
-      expect(body.data).to.be.an('array')
-      expect(body.data.length).to.equal(1)
-      expect(body.data[0].name).to.equal('my super name for server 1')
+      expect(total).to.equal(1)
+      expect(data).to.be.an('array')
+      expect(data.length).to.equal(1)
+      expect(data[0].name).to.equal('my super name for server 1')
     })
 
     it('Should list only local videos on server 2', async function () {
-      const { body } = await getLocalVideos(servers[1].url)
+      const { data, total } = await servers[1].videosCommand.list({ filter: 'local' })
 
-      expect(body.total).to.equal(1)
-      expect(body.data).to.be.an('array')
-      expect(body.data.length).to.equal(1)
-      expect(body.data[0].name).to.equal('my super name for server 2')
+      expect(total).to.equal(1)
+      expect(data).to.be.an('array')
+      expect(data.length).to.equal(1)
+      expect(data[0].name).to.equal('my super name for server 2')
     })
 
     it('Should list only local videos on server 3', async function () {
-      const { body } = await getLocalVideos(servers[2].url)
+      const { data, total } = await servers[2].videosCommand.list({ filter: 'local' })
 
-      expect(body.total).to.equal(2)
-      expect(body.data).to.be.an('array')
-      expect(body.data.length).to.equal(2)
-      expect(body.data[0].name).to.equal('my super name for server 3')
-      expect(body.data[1].name).to.equal('my super name for server 3-2')
+      expect(total).to.equal(2)
+      expect(data).to.be.an('array')
+      expect(data.length).to.equal(2)
+      expect(data[0].name).to.equal('my super name for server 3')
+      expect(data[1].name).to.equal('my super name for server 3-2')
     })
   })
 
@@ -389,15 +381,13 @@ describe('Test multiple servers', function () {
     it('Should add the file 1 by asking server 3', async function () {
       this.timeout(10000)
 
-      const res = await getVideosList(servers[2].url)
+      const { data } = await servers[2].videosCommand.list()
 
-      const video = res.body.data[0]
-      toRemove.push(res.body.data[2])
-      toRemove.push(res.body.data[3])
+      const video = data[0]
+      toRemove.push(data[2])
+      toRemove.push(data[3])
 
-      const res2 = await getVideo(servers[2].url, video.id)
-      const videoDetails = res2.body
-
+      const videoDetails = await servers[2].videosCommand.get({ id: video.id })
       const torrent = await webtorrentAdd(videoDetails.files[0].magnetUri, true)
       expect(torrent.files).to.be.an('array')
       expect(torrent.files.length).to.equal(1)
@@ -407,11 +397,10 @@ describe('Test multiple servers', function () {
     it('Should add the file 2 by asking server 1', async function () {
       this.timeout(10000)
 
-      const res = await getVideosList(servers[0].url)
+      const { data } = await servers[0].videosCommand.list()
 
-      const video = res.body.data[1]
-      const res2 = await getVideo(servers[0].url, video.id)
-      const videoDetails = res2.body
+      const video = data[1]
+      const videoDetails = await servers[0].videosCommand.get({ id: video.id })
 
       const torrent = await webtorrentAdd(videoDetails.files[0].magnetUri, true)
       expect(torrent.files).to.be.an('array')
@@ -422,11 +411,10 @@ describe('Test multiple servers', function () {
     it('Should add the file 3 by asking server 2', async function () {
       this.timeout(10000)
 
-      const res = await getVideosList(servers[1].url)
+      const { data } = await servers[1].videosCommand.list()
 
-      const video = res.body.data[2]
-      const res2 = await getVideo(servers[1].url, video.id)
-      const videoDetails = res2.body
+      const video = data[2]
+      const videoDetails = await servers[1].videosCommand.get({ id: video.id })
 
       const torrent = await webtorrentAdd(videoDetails.files[0].magnetUri, true)
       expect(torrent.files).to.be.an('array')
@@ -437,11 +425,10 @@ describe('Test multiple servers', function () {
     it('Should add the file 3-2 by asking server 1', async function () {
       this.timeout(10000)
 
-      const res = await getVideosList(servers[0].url)
+      const { data } = await servers[0].videosCommand.list()
 
-      const video = res.body.data[3]
-      const res2 = await getVideo(servers[0].url, video.id)
-      const videoDetails = res2.body
+      const video = data[3]
+      const videoDetails = await servers[0].videosCommand.get({ id: video.id })
 
       const torrent = await webtorrentAdd(videoDetails.files[0].magnetUri)
       expect(torrent.files).to.be.an('array')
@@ -452,11 +439,10 @@ describe('Test multiple servers', function () {
     it('Should add the file 2 in 360p by asking server 1', async function () {
       this.timeout(10000)
 
-      const res = await getVideosList(servers[0].url)
+      const { data } = await servers[0].videosCommand.list()
 
-      const video = res.body.data.find(v => v.name === 'my super name for server 2')
-      const res2 = await getVideo(servers[0].url, video.id)
-      const videoDetails = res2.body
+      const video = data.find(v => v.name === 'my super name for server 2')
+      const videoDetails = await servers[0].videosCommand.get({ id: video.id })
 
       const file = videoDetails.files.find(f => f.resolution.id === 360)
       expect(file).not.to.be.undefined
@@ -475,30 +461,36 @@ describe('Test multiple servers', function () {
     let remoteVideosServer3 = []
 
     before(async function () {
-      const res1 = await getVideosList(servers[0].url)
-      remoteVideosServer1 = res1.body.data.filter(video => video.isLocal === false).map(video => video.uuid)
+      {
+        const { data } = await servers[0].videosCommand.list()
+        remoteVideosServer1 = data.filter(video => video.isLocal === false).map(video => video.uuid)
+      }
 
-      const res2 = await getVideosList(servers[1].url)
-      remoteVideosServer2 = res2.body.data.filter(video => video.isLocal === false).map(video => video.uuid)
+      {
+        const { data } = await servers[1].videosCommand.list()
+        remoteVideosServer2 = data.filter(video => video.isLocal === false).map(video => video.uuid)
+      }
 
-      const res3 = await getVideosList(servers[2].url)
-      localVideosServer3 = res3.body.data.filter(video => video.isLocal === true).map(video => video.uuid)
-      remoteVideosServer3 = res3.body.data.filter(video => video.isLocal === false).map(video => video.uuid)
+      {
+        const { data } = await servers[2].videosCommand.list()
+        localVideosServer3 = data.filter(video => video.isLocal === true).map(video => video.uuid)
+        remoteVideosServer3 = data.filter(video => video.isLocal === false).map(video => video.uuid)
+      }
     })
 
     it('Should view multiple videos on owned servers', async function () {
       this.timeout(30000)
 
-      await viewVideo(servers[2].url, localVideosServer3[0])
+      await servers[2].videosCommand.view({ id: localVideosServer3[0] })
       await wait(1000)
 
-      await viewVideo(servers[2].url, localVideosServer3[0])
-      await viewVideo(servers[2].url, localVideosServer3[1])
+      await servers[2].videosCommand.view({ id: localVideosServer3[0] })
+      await servers[2].videosCommand.view({ id: localVideosServer3[1] })
 
       await wait(1000)
 
-      await viewVideo(servers[2].url, localVideosServer3[0])
-      await viewVideo(servers[2].url, localVideosServer3[0])
+      await servers[2].videosCommand.view({ id: localVideosServer3[0] })
+      await servers[2].videosCommand.view({ id: localVideosServer3[0] })
 
       await waitJobs(servers)
 
@@ -508,11 +500,10 @@ describe('Test multiple servers', function () {
       await waitJobs(servers)
 
       for (const server of servers) {
-        const res = await getVideosList(server.url)
+        const { data } = await server.videosCommand.list()
 
-        const videos = res.body.data
-        const video0 = videos.find(v => v.uuid === localVideosServer3[0])
-        const video1 = videos.find(v => v.uuid === localVideosServer3[1])
+        const video0 = data.find(v => v.uuid === localVideosServer3[0])
+        const video1 = data.find(v => v.uuid === localVideosServer3[1])
 
         expect(video0.views).to.equal(3)
         expect(video1.views).to.equal(1)
@@ -523,16 +514,16 @@ describe('Test multiple servers', function () {
       this.timeout(45000)
 
       const tasks: Promise<any>[] = []
-      tasks.push(viewVideo(servers[0].url, remoteVideosServer1[0]))
-      tasks.push(viewVideo(servers[1].url, remoteVideosServer2[0]))
-      tasks.push(viewVideo(servers[1].url, remoteVideosServer2[0]))
-      tasks.push(viewVideo(servers[2].url, remoteVideosServer3[0]))
-      tasks.push(viewVideo(servers[2].url, remoteVideosServer3[1]))
-      tasks.push(viewVideo(servers[2].url, remoteVideosServer3[1]))
-      tasks.push(viewVideo(servers[2].url, remoteVideosServer3[1]))
-      tasks.push(viewVideo(servers[2].url, localVideosServer3[1]))
-      tasks.push(viewVideo(servers[2].url, localVideosServer3[1]))
-      tasks.push(viewVideo(servers[2].url, localVideosServer3[1]))
+      tasks.push(servers[0].videosCommand.view({ id: remoteVideosServer1[0] }))
+      tasks.push(servers[1].videosCommand.view({ id: remoteVideosServer2[0] }))
+      tasks.push(servers[1].videosCommand.view({ id: remoteVideosServer2[0] }))
+      tasks.push(servers[2].videosCommand.view({ id: remoteVideosServer3[0] }))
+      tasks.push(servers[2].videosCommand.view({ id: remoteVideosServer3[1] }))
+      tasks.push(servers[2].videosCommand.view({ id: remoteVideosServer3[1] }))
+      tasks.push(servers[2].videosCommand.view({ id: remoteVideosServer3[1] }))
+      tasks.push(servers[2].videosCommand.view({ id: localVideosServer3[1] }))
+      tasks.push(servers[2].videosCommand.view({ id: localVideosServer3[1] }))
+      tasks.push(servers[2].videosCommand.view({ id: localVideosServer3[1] }))
 
       await Promise.all(tasks)
 
@@ -546,18 +537,16 @@ describe('Test multiple servers', function () {
       let baseVideos = null
 
       for (const server of servers) {
-        const res = await getVideosList(server.url)
-
-        const videos = res.body.data
+        const { data } = await server.videosCommand.list()
 
         // Initialize base videos for future comparisons
         if (baseVideos === null) {
-          baseVideos = videos
+          baseVideos = data
           continue
         }
 
         for (const baseVideo of baseVideos) {
-          const sameVideo = videos.find(video => video.name === baseVideo.name)
+          const sameVideo = data.find(video => video.name === baseVideo.name)
           expect(baseVideo.views).to.equal(sameVideo.views)
         }
       }
@@ -566,17 +555,17 @@ describe('Test multiple servers', function () {
     it('Should like and dislikes videos on different services', async function () {
       this.timeout(50000)
 
-      await rateVideo(servers[0].url, servers[0].accessToken, remoteVideosServer1[0], 'like')
+      await servers[0].videosCommand.rate({ id: remoteVideosServer1[0], rating: 'like' })
       await wait(500)
-      await rateVideo(servers[0].url, servers[0].accessToken, remoteVideosServer1[0], 'dislike')
+      await servers[0].videosCommand.rate({ id: remoteVideosServer1[0], rating: 'dislike' })
       await wait(500)
-      await rateVideo(servers[0].url, servers[0].accessToken, remoteVideosServer1[0], 'like')
-      await rateVideo(servers[2].url, servers[2].accessToken, localVideosServer3[1], 'like')
+      await servers[0].videosCommand.rate({ id: remoteVideosServer1[0], rating: 'like' })
+      await servers[2].videosCommand.rate({ id: localVideosServer3[1], rating: 'like' })
       await wait(500)
-      await rateVideo(servers[2].url, servers[2].accessToken, localVideosServer3[1], 'dislike')
-      await rateVideo(servers[2].url, servers[2].accessToken, remoteVideosServer3[1], 'dislike')
+      await servers[2].videosCommand.rate({ id: localVideosServer3[1], rating: 'dislike' })
+      await servers[2].videosCommand.rate({ id: remoteVideosServer3[1], rating: 'dislike' })
       await wait(500)
-      await rateVideo(servers[2].url, servers[2].accessToken, remoteVideosServer3[0], 'like')
+      await servers[2].videosCommand.rate({ id: remoteVideosServer3[0], rating: 'like' })
 
       await waitJobs(servers)
       await wait(5000)
@@ -584,18 +573,16 @@ describe('Test multiple servers', function () {
 
       let baseVideos = null
       for (const server of servers) {
-        const res = await getVideosList(server.url)
-
-        const videos = res.body.data
+        const { data } = await server.videosCommand.list()
 
         // Initialize base videos for future comparisons
         if (baseVideos === null) {
-          baseVideos = videos
+          baseVideos = data
           continue
         }
 
         for (const baseVideo of baseVideos) {
-          const sameVideo = videos.find(video => video.name === baseVideo.name)
+          const sameVideo = data.find(video => video.name === baseVideo.name)
           expect(baseVideo.likes).to.equal(sameVideo.likes)
           expect(baseVideo.dislikes).to.equal(sameVideo.dislikes)
         }
@@ -621,7 +608,7 @@ describe('Test multiple servers', function () {
         previewfile: 'preview.jpg'
       }
 
-      await updateVideo(servers[2].url, servers[2].accessToken, toRemove[0].id, attributes)
+      await servers[2].videosCommand.update({ id: toRemove[0].id, attributes })
 
       await waitJobs(servers)
     })
@@ -630,10 +617,9 @@ describe('Test multiple servers', function () {
       this.timeout(10000)
 
       for (const server of servers) {
-        const res = await getVideosList(server.url)
+        const { data } = await server.videosCommand.list()
 
-        const videos = res.body.data
-        const videoUpdated = videos.find(video => video.name === 'my super video updated')
+        const videoUpdated = data.find(video => video.name === 'my super video updated')
         expect(!!videoUpdated).to.be.true
 
         const isLocal = server.url === 'http://localhost:' + servers[2].port
@@ -672,15 +658,15 @@ describe('Test multiple servers', function () {
           thumbnailfile: 'thumbnail',
           previewfile: 'preview'
         }
-        await completeVideoCheck(server.url, videoUpdated, checkAttributes)
+        await completeVideoCheck(server, videoUpdated, checkAttributes)
       }
     })
 
     it('Should remove the videos 3 and 3-2 by asking server 3', async function () {
       this.timeout(10000)
 
-      await removeVideo(servers[2].url, servers[2].accessToken, toRemove[0].id)
-      await removeVideo(servers[2].url, servers[2].accessToken, toRemove[1].id)
+      await servers[2].videosCommand.remove({ id: toRemove[0].id })
+      await servers[2].videosCommand.remove({ id: toRemove[1].id })
 
       await waitJobs(servers)
     })
@@ -694,27 +680,24 @@ describe('Test multiple servers', function () {
 
     it('Should have videos 1 and 3 on each server', async function () {
       for (const server of servers) {
-        const res = await getVideosList(server.url)
+        const { data } = await server.videosCommand.list()
 
-        const videos = res.body.data
-        expect(videos).to.be.an('array')
-        expect(videos.length).to.equal(2)
-        expect(videos[0].name).not.to.equal(videos[1].name)
-        expect(videos[0].name).not.to.equal(toRemove[0].name)
-        expect(videos[1].name).not.to.equal(toRemove[0].name)
-        expect(videos[0].name).not.to.equal(toRemove[1].name)
-        expect(videos[1].name).not.to.equal(toRemove[1].name)
+        expect(data).to.be.an('array')
+        expect(data.length).to.equal(2)
+        expect(data[0].name).not.to.equal(data[1].name)
+        expect(data[0].name).not.to.equal(toRemove[0].name)
+        expect(data[1].name).not.to.equal(toRemove[0].name)
+        expect(data[0].name).not.to.equal(toRemove[1].name)
+        expect(data[1].name).not.to.equal(toRemove[1].name)
 
-        videoUUID = videos.find(video => video.name === 'my super name for server 1').uuid
+        videoUUID = data.find(video => video.name === 'my super name for server 1').uuid
       }
     })
 
     it('Should get the same video by UUID on each server', async function () {
       let baseVideo = null
       for (const server of servers) {
-        const res = await getVideo(server.url, videoUUID)
-
-        const video = res.body
+        const video = await server.videosCommand.get({ id: videoUUID })
 
         if (baseVideo === null) {
           baseVideo = video
@@ -737,8 +720,7 @@ describe('Test multiple servers', function () {
 
     it('Should get the preview from each server', async function () {
       for (const server of servers) {
-        const res = await getVideo(server.url, videoUUID)
-        const video = res.body
+        const video = await server.videosCommand.get({ id: videoUUID })
 
         await testImage(server.url, 'video_short1-preview.webm', video.previewPath)
       }
@@ -975,14 +957,14 @@ describe('Test multiple servers', function () {
         downloadEnabled: false
       }
 
-      await updateVideo(servers[0].url, servers[0].accessToken, videoUUID, attributes)
+      await servers[0].videosCommand.update({ id: videoUUID, attributes })
 
       await waitJobs(servers)
 
       for (const server of servers) {
-        const res = await getVideo(server.url, videoUUID)
-        expect(res.body.commentsEnabled).to.be.false
-        expect(res.body.downloadEnabled).to.be.false
+        const video = await server.videosCommand.get({ id: videoUUID })
+        expect(video.commentsEnabled).to.be.false
+        expect(video.downloadEnabled).to.be.false
 
         const text = 'my super forbidden comment'
         await server.commentsCommand.createThread({ videoId: videoUUID, text, expectedStatus: HttpStatusCode.CONFLICT_409 })
@@ -1010,8 +992,8 @@ describe('Test multiple servers', function () {
       await waitJobs(servers)
 
       for (const server of servers) {
-        const res = await getVideosList(server.url)
-        const video = res.body.data.find(v => v.name === 'minimum parameters')
+        const { data } = await server.videosCommand.list()
+        const video = data.find(v => v.name === 'minimum parameters')
 
         const isLocal = server.url === 'http://localhost:' + servers[1].port
         const checkAttributes = {
@@ -1058,7 +1040,7 @@ describe('Test multiple servers', function () {
             }
           ]
         }
-        await completeVideoCheck(server.url, video, checkAttributes)
+        await completeVideoCheck(server, video, checkAttributes)
       }
     })
   })

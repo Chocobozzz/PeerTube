@@ -2,19 +2,7 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import {
-  cleanupTests,
-  flushAndRunMultipleServers,
-  getVideo,
-  getVideoDescription,
-  getVideosList,
-  ServerInfo,
-  setAccessTokensToServers,
-  updateVideo,
-  uploadVideo
-} from '../../../../shared/extra-utils/index'
-import { doubleFollow } from '../../../../shared/extra-utils/server/follows'
-import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
+import { cleanupTests, doubleFollow, flushAndRunMultipleServers, ServerInfo, setAccessTokensToServers, waitJobs } from '@shared/extra-utils'
 
 const expect = chai.expect
 
@@ -43,20 +31,19 @@ describe('Test video description', function () {
     const attributes = {
       description: longDescription
     }
-    await uploadVideo(servers[0].url, servers[0].accessToken, attributes)
+    await servers[0].videosCommand.upload({ attributes })
 
     await waitJobs(servers)
 
-    const res = await getVideosList(servers[0].url)
+    const { data } = await servers[0].videosCommand.list()
 
-    videoId = res.body.data[0].id
-    videoUUID = res.body.data[0].uuid
+    videoId = data[0].id
+    videoUUID = data[0].uuid
   })
 
   it('Should have a truncated description on each server', async function () {
     for (const server of servers) {
-      const res = await getVideo(server.url, videoUUID)
-      const video = res.body
+      const video = await server.videosCommand.get({ id: videoUUID })
 
       // 30 characters * 6 -> 240 characters
       const truncatedDescription = 'my super description for server 1'.repeat(7) +
@@ -68,11 +55,10 @@ describe('Test video description', function () {
 
   it('Should fetch long description on each server', async function () {
     for (const server of servers) {
-      const res = await getVideo(server.url, videoUUID)
-      const video = res.body
+      const video = await server.videosCommand.get({ id: videoUUID })
 
-      const res2 = await getVideoDescription(server.url, video.descriptionPath)
-      expect(res2.body.description).to.equal(longDescription)
+      const { description } = await server.videosCommand.getDescription({ descriptionPath: video.descriptionPath })
+      expect(description).to.equal(longDescription)
     }
   })
 
@@ -82,20 +68,19 @@ describe('Test video description', function () {
     const attributes = {
       description: 'short description'
     }
-    await updateVideo(servers[0].url, servers[0].accessToken, videoId, attributes)
+    await servers[0].videosCommand.update({ id: videoId, attributes })
 
     await waitJobs(servers)
   })
 
   it('Should have a small description on each server', async function () {
     for (const server of servers) {
-      const res = await getVideo(server.url, videoUUID)
-      const video = res.body
+      const video = await server.videosCommand.get({ id: videoUUID })
 
       expect(video.description).to.equal('short description')
 
-      const res2 = await getVideoDescription(server.url, video.descriptionPath)
-      expect(res2.body.description).to.equal('short description')
+      const { description } = await server.videosCommand.getDescription({ descriptionPath: video.descriptionPath })
+      expect(description).to.equal('short description')
     }
   })
 

@@ -1,6 +1,6 @@
 import * as autocannon from 'autocannon'
 import { writeJson } from 'fs-extra'
-import { flushAndRunServer, getVideosList, killallServers, ServerInfo, setAccessTokensToServers, uploadVideo } from '@shared/extra-utils'
+import { flushAndRunServer, killallServers, ServerInfo, setAccessTokensToServers } from '@shared/extra-utils'
 import { Video, VideoPrivacy } from '@shared/models'
 import { registerTSPaths } from '../server/helpers/register-ts-paths'
 
@@ -197,7 +197,7 @@ async function prepare () {
   })
   await setAccessTokensToServers([ server ])
 
-  const videoAttributes = {
+  const attributes = {
     name: 'my super video',
     category: 2,
     nsfw: true,
@@ -210,12 +210,11 @@ async function prepare () {
   }
 
   for (let i = 0; i < 10; i++) {
-    Object.assign(videoAttributes, { name: 'my super video ' + i })
-    await uploadVideo(server.url, server.accessToken, videoAttributes)
+    await server.videosCommand.upload({ attributes: { ...attributes, name: 'my super video ' + i } })
   }
 
-  const resVideos = await getVideosList(server.url)
-  video = resVideos.body.data.find(v => v.name === 'my super video 1')
+  const { data } = await server.videosCommand.list()
+  video = data.find(v => v.name === 'my super video 1')
 
   for (let i = 0; i < 10; i++) {
     const text = 'my super first comment'

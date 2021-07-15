@@ -2,20 +2,11 @@
 
 import { expect } from 'chai'
 import { HttpStatusCode } from '@shared/core-utils'
-import {
-  cleanupTests,
-  flushAndRunServer,
-  getVideo,
-  ServerInfo,
-  setAccessTokensToServers,
-  uploadVideo,
-  viewVideo,
-  wait
-} from '@shared/extra-utils'
+import { cleanupTests, flushAndRunServer, ServerInfo, setAccessTokensToServers, wait } from '@shared/extra-utils'
 
 describe('Test application behind a reverse proxy', function () {
   let server: ServerInfo
-  let videoId: number
+  let videoId: string
 
   before(async function () {
     this.timeout(30000)
@@ -42,60 +33,60 @@ describe('Test application behind a reverse proxy', function () {
     server = await flushAndRunServer(1, config)
     await setAccessTokensToServers([ server ])
 
-    const { body } = await uploadVideo(server.url, server.accessToken, {})
-    videoId = body.video.uuid
+    const { uuid } = await server.videosCommand.upload()
+    videoId = uuid
   })
 
   it('Should view a video only once with the same IP by default', async function () {
     this.timeout(20000)
 
-    await viewVideo(server.url, videoId)
-    await viewVideo(server.url, videoId)
+    await server.videosCommand.view({ id: videoId })
+    await server.videosCommand.view({ id: videoId })
 
     // Wait the repeatable job
     await wait(8000)
 
-    const { body } = await getVideo(server.url, videoId)
-    expect(body.views).to.equal(1)
+    const video = await server.videosCommand.get({ id: videoId })
+    expect(video.views).to.equal(1)
   })
 
   it('Should view a video 2 times with the X-Forwarded-For header set', async function () {
     this.timeout(20000)
 
-    await viewVideo(server.url, videoId, HttpStatusCode.NO_CONTENT_204, '0.0.0.1,127.0.0.1')
-    await viewVideo(server.url, videoId, HttpStatusCode.NO_CONTENT_204, '0.0.0.2,127.0.0.1')
+    await server.videosCommand.view({ id: videoId, xForwardedFor: '0.0.0.1,127.0.0.1' })
+    await server.videosCommand.view({ id: videoId, xForwardedFor: '0.0.0.2,127.0.0.1' })
 
     // Wait the repeatable job
     await wait(8000)
 
-    const { body } = await getVideo(server.url, videoId)
-    expect(body.views).to.equal(3)
+    const video = await server.videosCommand.get({ id: videoId })
+    expect(video.views).to.equal(3)
   })
 
   it('Should view a video only once with the same client IP in the X-Forwarded-For header', async function () {
     this.timeout(20000)
 
-    await viewVideo(server.url, videoId, HttpStatusCode.NO_CONTENT_204, '0.0.0.4,0.0.0.3,::ffff:127.0.0.1')
-    await viewVideo(server.url, videoId, HttpStatusCode.NO_CONTENT_204, '0.0.0.5,0.0.0.3,127.0.0.1')
+    await server.videosCommand.view({ id: videoId, xForwardedFor: '0.0.0.4,0.0.0.3,::ffff:127.0.0.1' })
+    await server.videosCommand.view({ id: videoId, xForwardedFor: '0.0.0.5,0.0.0.3,127.0.0.1' })
 
     // Wait the repeatable job
     await wait(8000)
 
-    const { body } = await getVideo(server.url, videoId)
-    expect(body.views).to.equal(4)
+    const video = await server.videosCommand.get({ id: videoId })
+    expect(video.views).to.equal(4)
   })
 
   it('Should view a video two times with a different client IP in the X-Forwarded-For header', async function () {
     this.timeout(20000)
 
-    await viewVideo(server.url, videoId, HttpStatusCode.NO_CONTENT_204, '0.0.0.8,0.0.0.6,127.0.0.1')
-    await viewVideo(server.url, videoId, HttpStatusCode.NO_CONTENT_204, '0.0.0.8,0.0.0.7,127.0.0.1')
+    await server.videosCommand.view({ id: videoId, xForwardedFor: '0.0.0.8,0.0.0.6,127.0.0.1' })
+    await server.videosCommand.view({ id: videoId, xForwardedFor: '0.0.0.8,0.0.0.7,127.0.0.1' })
 
     // Wait the repeatable job
     await wait(8000)
 
-    const { body } = await getVideo(server.url, videoId)
-    expect(body.views).to.equal(6)
+    const video = await server.videosCommand.get({ id: videoId })
+    expect(video.views).to.equal(6)
   })
 
   it('Should rate limit logins', async function () {
@@ -140,13 +131,13 @@ describe('Test application behind a reverse proxy', function () {
 
     for (let i = 0; i < 100; i++) {
       try {
-        await getVideo(server.url, videoId)
+        await server.videosCommand.get({ id: videoId })
       } catch {
         // don't care if it fails
       }
     }
 
-    await getVideo(server.url, videoId, HttpStatusCode.TOO_MANY_REQUESTS_429)
+    await server.videosCommand.get({ id: videoId, expectedStatus: HttpStatusCode.TOO_MANY_REQUESTS_429 })
   })
 
   after(async function () {

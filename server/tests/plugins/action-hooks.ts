@@ -9,10 +9,7 @@ import {
   reRunServer,
   ServerInfo,
   setAccessTokensToServers,
-  setDefaultVideoChannel,
-  updateVideo,
-  uploadVideo,
-  viewVideo
+  setDefaultVideoChannel
 } from '@shared/extra-utils'
 import { ServerHookName, VideoPlaylistPrivacy, VideoPrivacy } from '@shared/models'
 
@@ -52,20 +49,20 @@ describe('Test plugin action hooks', function () {
   describe('Videos hooks', function () {
 
     it('Should run action:api.video.uploaded', async function () {
-      const res = await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'video' })
-      videoUUID = res.body.video.uuid
+      const { uuid } = await servers[0].videosCommand.upload({ attributes: { name: 'video' } })
+      videoUUID = uuid
 
       await checkHook('action:api.video.uploaded')
     })
 
     it('Should run action:api.video.updated', async function () {
-      await updateVideo(servers[0].url, servers[0].accessToken, videoUUID, { name: 'video updated' })
+      await servers[0].videosCommand.update({ id: videoUUID, attributes: { name: 'video updated' } })
 
       await checkHook('action:api.video.updated')
     })
 
     it('Should run action:api.video.viewed', async function () {
-      await viewVideo(servers[0].url, videoUUID)
+      await servers[0].videosCommand.view({ id: videoUUID })
 
       await checkHook('action:api.video.viewed')
     })
@@ -170,8 +167,8 @@ describe('Test plugin action hooks', function () {
       }
 
       {
-        const res = await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'my super name' })
-        videoId = res.body.video.id
+        const { id } = await servers[0].videosCommand.upload({ attributes: { name: 'my super name' } })
+        videoId = id
       }
     })
 

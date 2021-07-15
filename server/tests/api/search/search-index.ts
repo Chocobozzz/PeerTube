@@ -2,7 +2,7 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { cleanupTests, flushAndRunServer, SearchCommand, ServerInfo, setAccessTokensToServers, uploadVideo } from '@shared/extra-utils'
+import { cleanupTests, flushAndRunServer, SearchCommand, ServerInfo, setAccessTokensToServers } from '@shared/extra-utils'
 import { BooleanBothQuery, VideoPlaylistPrivacy, VideoPlaylistType, VideosSearchQuery } from '@shared/models'
 
 const expect = chai.expect
@@ -20,7 +20,7 @@ describe('Test videos search', function () {
 
     await setAccessTokensToServers([ server ])
 
-    await uploadVideo(server.url, server.accessToken, { name: localVideoName })
+    await server.videosCommand.upload({ attributes: { name: localVideoName } })
 
     command = server.searchCommand
   })

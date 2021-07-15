@@ -8,28 +8,23 @@ import {
   CommentsCommand,
   doubleFollow,
   flushAndRunMultipleServers,
-  getVideosList,
-  getVideosListWithToken,
   ServerInfo,
   setAccessTokensToServers,
-  uploadVideo,
   waitJobs
 } from '@shared/extra-utils'
-import { UserNotificationType, Video } from '@shared/models'
+import { UserNotificationType } from '@shared/models'
 
 const expect = chai.expect
 
 async function checkAllVideos (server: ServerInfo, token: string) {
   {
-    const res = await getVideosListWithToken(server.url, token)
-
-    expect(res.body.data).to.have.lengthOf(5)
+    const { data } = await server.videosCommand.listWithToken({ token })
+    expect(data).to.have.lengthOf(5)
   }
 
   {
-    const res = await getVideosList(server.url)
-
-    expect(res.body.data).to.have.lengthOf(5)
+    const { data } = await server.videosCommand.list()
+    expect(data).to.have.lengthOf(5)
   }
 }
 
@@ -93,7 +88,7 @@ describe('Test blocklist', function () {
       await servers[0].usersCommand.create({ username: user.username, password: user.password })
 
       userToken1 = await servers[0].loginCommand.getAccessToken(user)
-      await uploadVideo(servers[0].url, userToken1, { name: 'video user 1' })
+      await servers[0].videosCommand.upload({ token: userToken1, attributes: { name: 'video user 1' } })
     }
 
     {
@@ -108,22 +103,22 @@ describe('Test blocklist', function () {
       await servers[1].usersCommand.create({ username: user.username, password: user.password })
 
       userToken2 = await servers[1].loginCommand.getAccessToken(user)
-      await uploadVideo(servers[1].url, userToken2, { name: 'video user 2' })
+      await servers[1].videosCommand.upload({ token: userToken2, attributes: { name: 'video user 2' } })
     }
 
     {
-      const res = await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'video server 1' })
-      videoUUID1 = res.body.video.uuid
+      const { uuid } = await servers[0].videosCommand.upload({ attributes: { name: 'video server 1' } })
+      videoUUID1 = uuid
     }
 
     {
-      const res = await uploadVideo(servers[1].url, servers[1].accessToken, { name: 'video server 2' })
-      videoUUID2 = res.body.video.uuid
+      const { uuid } = await servers[1].videosCommand.upload({ attributes: { name: 'video server 2' } })
+      videoUUID2 = uuid
     }
 
     {
-      const res = await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'video 2 server 1' })
-      videoUUID3 = res.body.video.uuid
+      const { uuid } = await servers[0].videosCommand.upload({ attributes: { name: 'video 2 server 1' } })
+      videoUUID3 = uuid
     }
 
     await doubleFollow(servers[0], servers[1])
@@ -164,12 +159,11 @@ describe('Test blocklist', function () {
       })
 
       it('Should hide its videos', async function () {
-        const res = await getVideosListWithToken(servers[0].url, servers[0].accessToken)
+        const { data } = await servers[0].videosCommand.listWithToken()
 
-        const videos: Video[] = res.body.data
-        expect(videos).to.have.lengthOf(4)
+        expect(data).to.have.lengthOf(4)
 
-        const v = videos.find(v => v.name === 'video user 2')
+        const v = data.find(v => v.name === 'video user 2')
         expect(v).to.be.undefined
       })
 
@@ -178,12 +172,11 @@ describe('Test blocklist', function () {
       })
 
       it('Should hide its videos', async function () {
-        const res = await getVideosListWithToken(servers[0].url, servers[0].accessToken)
+        const { data } = await servers[0].videosCommand.listWithToken()
 
-        const videos: Video[] = res.body.data
-        expect(videos).to.have.lengthOf(3)
+        expect(data).to.have.lengthOf(3)
 
-        const v = videos.find(v => v.name === 'video user 1')
+        const v = data.find(v => v.name === 'video user 1')
         expect(v).to.be.undefined
       })
 
@@ -313,12 +306,10 @@ describe('Test blocklist', function () {
       })
 
       it('Should display its videos', async function () {
-        const res = await getVideosListWithToken(servers[0].url, servers[0].accessToken)
+        const { data } = await servers[0].videosCommand.listWithToken()
+        expect(data).to.have.lengthOf(4)
 
-        const videos: Video[] = res.body.data
-        expect(videos).to.have.lengthOf(4)
-
-        const v = videos.find(v => v.name === 'video user 2')
+        const v = data.find(v => v.name === 'video user 2')
         expect(v).not.to.be.undefined
       })
 
@@ -387,13 +378,12 @@ describe('Test blocklist', function () {
       })
 
       it('Should hide its videos', async function () {
-        const res = await getVideosListWithToken(servers[0].url, servers[0].accessToken)
+        const { data } = await servers[0].videosCommand.listWithToken()
 
-        const videos: Video[] = res.body.data
-        expect(videos).to.have.lengthOf(3)
+        expect(data).to.have.lengthOf(3)
 
-        const v1 = videos.find(v => v.name === 'video user 2')
-        const v2 = videos.find(v => v.name === 'video server 2')
+        const v1 = data.find(v => v.name === 'video user 2')
+        const v2 = data.find(v => v.name === 'video server 2')
 
         expect(v1).to.be.undefined
         expect(v2).to.be.undefined
@@ -498,12 +488,11 @@ describe('Test blocklist', function () {
 
       it('Should hide its videos', async function () {
         for (const token of [ userModeratorToken, servers[0].accessToken ]) {
-          const res = await getVideosListWithToken(servers[0].url, token)
+          const { data } = await servers[0].videosCommand.listWithToken({ token })
 
-          const videos: Video[] = res.body.data
-          expect(videos).to.have.lengthOf(4)
+          expect(data).to.have.lengthOf(4)
 
-          const v = videos.find(v => v.name === 'video user 2')
+          const v = data.find(v => v.name === 'video user 2')
           expect(v).to.be.undefined
         }
       })
@@ -514,12 +503,11 @@ describe('Test blocklist', function () {
 
       it('Should hide its videos', async function () {
         for (const token of [ userModeratorToken, servers[0].accessToken ]) {
-          const res = await getVideosListWithToken(servers[0].url, token)
+          const { data } = await servers[0].videosCommand.listWithToken({ token })
 
-          const videos: Video[] = res.body.data
-          expect(videos).to.have.lengthOf(3)
+          expect(data).to.have.lengthOf(3)
 
-          const v = videos.find(v => v.name === 'video user 1')
+          const v = data.find(v => v.name === 'video user 1')
           expect(v).to.be.undefined
         }
       })
@@ -593,12 +581,10 @@ describe('Test blocklist', function () {
 
       it('Should display its videos', async function () {
         for (const token of [ userModeratorToken, servers[0].accessToken ]) {
-          const res = await getVideosListWithToken(servers[0].url, token)
+          const { data } = await servers[0].videosCommand.listWithToken({ token })
+          expect(data).to.have.lengthOf(4)
 
-          const videos: Video[] = res.body.data
-          expect(videos).to.have.lengthOf(4)
-
-          const v = videos.find(v => v.name === 'video user 2')
+          const v = data.find(v => v.name === 'video user 2')
           expect(v).not.to.be.undefined
         }
       })
@@ -652,15 +638,17 @@ describe('Test blocklist', function () {
 
       it('Should hide its videos', async function () {
         for (const token of [ userModeratorToken, servers[0].accessToken ]) {
-          const res1 = await getVideosList(servers[0].url)
-          const res2 = await getVideosListWithToken(servers[0].url, token)
+          const requests = [
+            servers[0].videosCommand.list(),
+            servers[0].videosCommand.listWithToken({ token })
+          ]
 
-          for (const res of [ res1, res2 ]) {
-            const videos: Video[] = res.body.data
-            expect(videos).to.have.lengthOf(3)
+          for (const req of requests) {
+            const { data } = await req
+            expect(data).to.have.lengthOf(3)
 
-            const v1 = videos.find(v => v.name === 'video user 2')
-            const v2 = videos.find(v => v.name === 'video server 2')
+            const v1 = data.find(v => v.name === 'video user 2')
+            const v2 = data.find(v => v.name === 'video server 2')
 
             expect(v1).to.be.undefined
             expect(v2).to.be.undefined

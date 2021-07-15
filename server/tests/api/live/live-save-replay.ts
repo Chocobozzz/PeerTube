@@ -3,26 +3,22 @@
 import 'mocha'
 import * as chai from 'chai'
 import { FfmpegCommand } from 'fluent-ffmpeg'
-import { LiveVideoCreate, VideoDetails, VideoPrivacy, VideoState } from '@shared/models'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '@shared/core-utils'
 import {
   checkLiveCleanup,
   cleanupTests,
   ConfigCommand,
   doubleFollow,
   flushAndRunMultipleServers,
-  getVideo,
-  getVideosList,
-  removeVideo,
   ServerInfo,
   setAccessTokensToServers,
   setDefaultVideoChannel,
   stopFfmpeg,
   testFfmpegStreamError,
-  updateVideo,
   wait,
   waitJobs
-} from '../../../../shared/extra-utils'
+} from '@shared/extra-utils'
+import { LiveVideoCreate, VideoPrivacy, VideoState } from '@shared/models'
 
 const expect = chai.expect
 
@@ -34,7 +30,7 @@ describe('Save replay setting', function () {
   async function createLiveWrapper (saveReplay: boolean) {
     if (liveVideoUUID) {
       try {
-        await removeVideo(servers[0].url, servers[0].accessToken, liveVideoUUID)
+        await servers[0].videosCommand.remove({ id: liveVideoUUID })
         await waitJobs(servers)
       } catch {}
     }
@@ -50,24 +46,24 @@ describe('Save replay setting', function () {
     return uuid
   }
 
-  async function checkVideosExist (videoId: string, existsInList: boolean, getStatus?: number) {
+  async function checkVideosExist (videoId: string, existsInList: boolean, expectedStatus?: number) {
     for (const server of servers) {
       const length = existsInList ? 1 : 0
 
-      const resVideos = await getVideosList(server.url)
-      expect(resVideos.body.data).to.have.lengthOf(length)
-      expect(resVideos.body.total).to.equal(length)
+      const { data, total } = await server.videosCommand.list()
+      expect(data).to.have.lengthOf(length)
+      expect(total).to.equal(length)
 
-      if (getStatus) {
-        await getVideo(server.url, videoId, getStatus)
+      if (expectedStatus) {
+        await server.videosCommand.get({ id: videoId, expectedStatus })
       }
     }
   }
 
   async function checkVideoState (videoId: string, state: VideoState) {
     for (const server of servers) {
-      const res = await getVideo(server.url, videoId)
-      expect((res.body as VideoDetails).state.id).to.equal(state)
+      const video = await server.videosCommand.get({ id: videoId })
+      expect(video.state.id).to.equal(state)
     }
   }
 
@@ -179,8 +175,8 @@ describe('Save replay setting', function () {
 
       await checkVideosExist(liveVideoUUID, false)
 
-      await getVideo(servers[0].url, liveVideoUUID, HttpStatusCode.UNAUTHORIZED_401)
-      await getVideo(servers[1].url, liveVideoUUID, HttpStatusCode.NOT_FOUND_404)
+      await servers[0].videosCommand.get({ id: liveVideoUUID, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
+      await servers[1].videosCommand.get({ id: liveVideoUUID, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
 
       await wait(5000)
       await waitJobs(servers)
@@ -201,7 +197,7 @@ describe('Save replay setting', function () {
 
       await Promise.all([
         testFfmpegStreamError(ffmpegCommand, true),
-        removeVideo(servers[0].url, servers[0].accessToken, liveVideoUUID)
+        servers[0].videosCommand.remove({ id: liveVideoUUID })
       ])
 
       await wait(5000)
@@ -253,13 +249,13 @@ describe('Save replay setting', function () {
     it('Should update the saved live and correctly federate the updated attributes', async function () {
       this.timeout(30000)
 
-      await updateVideo(servers[0].url, servers[0].accessToken, liveVideoUUID, { name: 'video updated' })
+      await servers[0].videosCommand.update({ id: liveVideoUUID, attributes: { name: 'video updated' } })
       await waitJobs(servers)
 
       for (const server of servers) {
-        const res = await getVideo(server.url, liveVideoUUID)
-        expect(res.body.name).to.equal('video updated')
-        expect(res.body.isLive).to.be.false
+        const video = await server.videosCommand.get({ id: liveVideoUUID })
+        expect(video.name).to.equal('video updated')
+        expect(video.isLive).to.be.false
       }
     })
 
@@ -287,8 +283,8 @@ describe('Save replay setting', function () {
 
       await checkVideosExist(liveVideoUUID, false)
 
-      await getVideo(servers[0].url, liveVideoUUID, HttpStatusCode.UNAUTHORIZED_401)
-      await getVideo(servers[1].url, liveVideoUUID, HttpStatusCode.NOT_FOUND_404)
+      await servers[0].videosCommand.get({ id: liveVideoUUID, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
+      await servers[1].videosCommand.get({ id: liveVideoUUID, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
 
       await wait(5000)
       await waitJobs(servers)
@@ -307,7 +303,7 @@ describe('Save replay setting', function () {
       await checkVideosExist(liveVideoUUID, true, HttpStatusCode.OK_200)
 
       await Promise.all([
-        removeVideo(servers[0].url, servers[0].accessToken, liveVideoUUID),
+        servers[0].videosCommand.remove({ id: liveVideoUUID }),
         testFfmpegStreamError(ffmpegCommand, true)
       ])
 

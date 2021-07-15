@@ -17,12 +17,10 @@ import {
   checkVideoAutoBlacklistForModerators,
   checkVideoIsPublished,
   cleanupTests,
-  getVideoIdFromUUID,
   MockInstancesIndex,
   MockSmtpServer,
   prepareNotificationsTest,
   ServerInfo,
-  uploadVideo,
   wait,
   waitJobs
 } from '@shared/extra-utils'
@@ -64,8 +62,7 @@ describe('Test moderation notifications', function () {
       this.timeout(20000)
 
       const name = 'video for abuse ' + buildUUID()
-      const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name })
-      const video = resVideo.body.video
+      const video = await servers[0].videosCommand.upload({ token: userAccessToken, attributes: { name } })
 
       await servers[0].abusesCommand.report({ videoId: video.id, reason: 'super reason' })
 
@@ -77,12 +74,11 @@ describe('Test moderation notifications', function () {
       this.timeout(20000)
 
       const name = 'video for abuse ' + buildUUID()
-      const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name })
-      const video = resVideo.body.video
+      const video = await servers[0].videosCommand.upload({ token: userAccessToken, attributes: { name } })
 
       await waitJobs(servers)
 
-      const videoId = await getVideoIdFromUUID(servers[1].url, video.uuid)
+      const videoId = await servers[1].videosCommand.getId({ uuid: video.uuid })
       await servers[1].abusesCommand.report({ videoId, reason: 'super reason' })
 
       await waitJobs(servers)
@@ -93,8 +89,7 @@ describe('Test moderation notifications', function () {
       this.timeout(20000)
 
       const name = 'video for abuse ' + buildUUID()
-      const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name })
-      const video = resVideo.body.video
+      const video = await servers[0].videosCommand.upload({ token: userAccessToken, attributes: { name } })
       const comment = await servers[0].commentsCommand.createThread({
         token: userAccessToken,
         videoId: video.id,
@@ -113,8 +108,7 @@ describe('Test moderation notifications', function () {
       this.timeout(20000)
 
       const name = 'video for abuse ' + buildUUID()
-      const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name })
-      const video = resVideo.body.video
+      const video = await servers[0].videosCommand.upload({ token: userAccessToken, attributes: { name } })
 
       await servers[0].commentsCommand.createThread({
         token: userAccessToken,
@@ -150,7 +144,7 @@ describe('Test moderation notifications', function () {
 
       const username = 'user' + new Date().getTime()
       const tmpToken = await servers[0].usersCommand.generateUserAndToken(username)
-      await uploadVideo(servers[0].url, tmpToken, { name: 'super video' })
+      await servers[0].videosCommand.upload({ token: tmpToken, attributes: { name: 'super video' } })
 
       await waitJobs(servers)
 
@@ -175,8 +169,7 @@ describe('Test moderation notifications', function () {
       }
 
       const name = 'abuse ' + buildUUID()
-      const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name })
-      const video = resVideo.body.video
+      const video = await servers[0].videosCommand.upload({ token: userAccessToken, attributes: { name } })
 
       const body = await servers[0].abusesCommand.report({ token: userAccessToken, videoId: video.id, reason: 'super reason' })
       abuseId = body.abuse.id
@@ -223,8 +216,7 @@ describe('Test moderation notifications', function () {
       }
 
       const name = 'abuse ' + buildUUID()
-      const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name })
-      const video = resVideo.body.video
+      const video = await servers[0].videosCommand.upload({ token: userAccessToken, attributes: { name } })
 
       {
         const body = await servers[0].abusesCommand.report({ token: userAccessToken, videoId: video.id, reason: 'super reason' })
@@ -294,8 +286,7 @@ describe('Test moderation notifications', function () {
       this.timeout(10000)
 
       const name = 'video for abuse ' + buildUUID()
-      const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name })
-      const uuid = resVideo.body.video.uuid
+      const { uuid } = await servers[0].videosCommand.upload({ token: userAccessToken, attributes: { name } })
 
       await servers[0].blacklistCommand.add({ videoId: uuid })
 
@@ -307,8 +298,7 @@ describe('Test moderation notifications', function () {
       this.timeout(10000)
 
       const name = 'video for abuse ' + buildUUID()
-      const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name })
-      const uuid = resVideo.body.video.uuid
+      const { uuid } = await servers[0].videosCommand.upload({ token: userAccessToken, attributes: { name } })
 
       await servers[0].blacklistCommand.add({ videoId: uuid })
 
@@ -497,8 +487,8 @@ describe('Test moderation notifications', function () {
       this.timeout(40000)
 
       videoName = 'video with auto-blacklist ' + buildUUID()
-      const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name: videoName })
-      videoUUID = resVideo.body.video.uuid
+      const { uuid } = await servers[0].videosCommand.upload({ token: userAccessToken, attributes: { name: videoName } })
+      videoUUID = uuid
 
       await waitJobs(servers)
       await checkVideoAutoBlacklistForModerators(adminBaseParamsServer1, videoUUID, videoName, 'presence')
@@ -544,17 +534,16 @@ describe('Test moderation notifications', function () {
 
       const name = 'video with auto-blacklist and future schedule ' + buildUUID()
 
-      const data = {
+      const attributes = {
         name,
         privacy: VideoPrivacy.PRIVATE,
         scheduleUpdate: {
           updateAt: updateAt.toISOString(),
-          privacy: VideoPrivacy.PUBLIC
+          privacy: VideoPrivacy.PUBLIC as VideoPrivacy.PUBLIC
         }
       }
 
-      const resVideo = await uploadVideo(servers[0].url, userAccessToken, data)
-      const uuid = resVideo.body.video.uuid
+      const { uuid } = await servers[0].videosCommand.upload({ token: userAccessToken, attributes })
 
       await servers[0].blacklistCommand.remove({ videoId: uuid })
 
@@ -577,17 +566,16 @@ describe('Test moderation notifications', function () {
 
       const name = 'video with schedule done and still auto-blacklisted ' + buildUUID()
 
-      const data = {
+      const attributes = {
         name,
         privacy: VideoPrivacy.PRIVATE,
         scheduleUpdate: {
           updateAt: updateAt.toISOString(),
-          privacy: VideoPrivacy.PUBLIC
+          privacy: VideoPrivacy.PUBLIC as VideoPrivacy.PUBLIC
         }
       }
 
-      const resVideo = await uploadVideo(servers[0].url, userAccessToken, data)
-      const uuid = resVideo.body.video.uuid
+      const { uuid } = await servers[0].videosCommand.upload({ token: userAccessToken, attributes })
 
       await wait(6000)
       await checkVideoIsPublished(userBaseParams, name, uuid, 'absence')
@@ -601,8 +589,7 @@ describe('Test moderation notifications', function () {
       const name = 'video without auto-blacklist ' + buildUUID()
 
       // admin with blacklist right will not be auto-blacklisted
-      const resVideo = await uploadVideo(servers[0].url, servers[0].accessToken, { name })
-      const uuid = resVideo.body.video.uuid
+      const { uuid } = await servers[0].videosCommand.upload({ attributes: { name } })
 
       await waitJobs(servers)
       await checkVideoAutoBlacklistForModerators(adminBaseParamsServer1, uuid, name, 'absence')

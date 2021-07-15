@@ -11,8 +11,6 @@ import {
   flushAndRunServer,
   ServerInfo,
   setAccessTokensToServers,
-  uploadVideo,
-  uploadVideoAndGetId,
   waitJobs
 } from '@shared/extra-utils'
 import { VideoPrivacy } from '@shared/models'
@@ -68,28 +66,26 @@ describe('Test syndication feeds', () => {
     }
 
     {
-      await uploadVideo(servers[0].url, userAccessToken, { name: 'user video' })
+      await servers[0].videosCommand.upload({ token: userAccessToken, attributes: { name: 'user video' } })
     }
 
     {
-      const videoAttributes = {
+      const attributes = {
         name: 'my super name for server 1',
         description: 'my super description for server 1',
         fixture: 'video_short.webm'
       }
-      const res = await uploadVideo(servers[0].url, servers[0].accessToken, videoAttributes)
-      const videoId = res.body.video.id
+      const { id } = await servers[0].videosCommand.upload({ attributes })
 
-      await servers[0].commentsCommand.createThread({ videoId, text: 'super comment 1' })
-      await servers[0].commentsCommand.createThread({ videoId, text: 'super comment 2' })
+      await servers[0].commentsCommand.createThread({ videoId: id, text: 'super comment 1' })
+      await servers[0].commentsCommand.createThread({ videoId: id, text: 'super comment 2' })
     }
 
     {
-      const videoAttributes = { name: 'unlisted video', privacy: VideoPrivacy.UNLISTED }
-      const res = await uploadVideo(servers[0].url, servers[0].accessToken, videoAttributes)
-      const videoId = res.body.video.id
+      const attributes = { name: 'unlisted video', privacy: VideoPrivacy.UNLISTED }
+      const { id } = await servers[0].videosCommand.upload({ attributes })
 
-      await servers[0].commentsCommand.createThread({ videoId, text: 'comment on unlisted video' })
+      await servers[0].commentsCommand.createThread({ videoId: id, text: 'comment on unlisted video' })
     }
 
     await waitJobs(servers)
@@ -218,7 +214,7 @@ describe('Test syndication feeds', () => {
     it('Should correctly have videos feed with HLS only', async function () {
       this.timeout(120000)
 
-      await uploadVideo(serverHLSOnly.url, serverHLSOnly.accessToken, { name: 'hls only video' })
+      await serverHLSOnly.videosCommand.upload({ attributes: { name: 'hls only video' } })
 
       await waitJobs([ serverHLSOnly ])
 
@@ -265,7 +261,7 @@ describe('Test syndication feeds', () => {
       await servers[1].blocklistCommand.removeFromServerBlocklist({ account: remoteHandle })
 
       {
-        const videoUUID = (await uploadVideoAndGetId({ server: servers[1], videoName: 'server 2' })).uuid
+        const videoUUID = (await servers[1].videosCommand.quickUpload({ name: 'server 2' })).uuid
         await waitJobs(servers)
         await servers[0].commentsCommand.createThread({ videoId: videoUUID, text: 'super comment' })
         await waitJobs(servers)

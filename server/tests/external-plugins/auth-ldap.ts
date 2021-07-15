@@ -3,7 +3,7 @@
 import 'mocha'
 import { expect } from 'chai'
 import { HttpStatusCode } from '@shared/core-utils'
-import { cleanupTests, flushAndRunServer, ServerInfo, setAccessTokensToServers, uploadVideo } from '@shared/extra-utils'
+import { cleanupTests, flushAndRunServer, ServerInfo, setAccessTokensToServers } from '@shared/extra-utils'
 
 describe('Official plugin auth-ldap', function () {
   let server: ServerInfo
@@ -77,7 +77,7 @@ describe('Official plugin auth-ldap', function () {
   })
 
   it('Should upload a video', async function () {
-    await uploadVideo(server.url, accessToken, { name: 'my super video' })
+    await server.videosCommand.upload({ token: accessToken, attributes: { name: 'my super video' } })
   })
 
   it('Should not be able to login if the user is banned', async function () {

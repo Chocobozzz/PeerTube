@@ -8,20 +8,15 @@ import {
   cleanupTests,
   doubleFollow,
   flushAndRunMultipleServers,
-  getVideo,
-  getVideoChannelVideos,
   ServerInfo,
   setAccessTokensToServers,
   setDefaultVideoChannel,
   testFileExistsOrNot,
   testImage,
-  updateVideo,
-  uploadVideo,
-  viewVideo,
   wait,
   waitJobs
 } from '@shared/extra-utils'
-import { User, Video, VideoChannel, VideoDetails } from '@shared/models'
+import { User, VideoChannel } from '@shared/models'
 
 const expect = chai.expect
 
@@ -77,9 +72,9 @@ describe('Test video channels', function () {
 
     // The channel is 1 is propagated to servers 2
     {
-      const videoAttributesArg = { name: 'my video name', channelId: secondVideoChannelId, support: 'video support field' }
-      const res = await uploadVideo(servers[0].url, servers[0].accessToken, videoAttributesArg)
-      videoUUID = res.body.video.uuid
+      const attributes = { name: 'my video name', channelId: secondVideoChannelId, support: 'video support field' }
+      const { uuid } = await servers[0].videosCommand.upload({ attributes })
+      videoUUID = uuid
     }
 
     await waitJobs(servers)
@@ -219,9 +214,7 @@ describe('Test video channels', function () {
 
   it('Should not have updated the video support field', async function () {
     for (const server of servers) {
-      const res = await getVideo(server.url, videoUUID)
-      const video: VideoDetails = res.body
-
+      const video = await server.videosCommand.get({ id: videoUUID })
       expect(video.support).to.equal('video support field')
     }
   })
@@ -239,9 +232,7 @@ describe('Test video channels', function () {
     await waitJobs(servers)
 
     for (const server of servers) {
-      const res = await getVideo(server.url, videoUUID)
-      const video: VideoDetails = res.body
-
+      const video = await server.videosCommand.get({ id: videoUUID })
       expect(video.support).to.equal(videoChannelAttributes.support)
     }
   })
@@ -333,18 +324,19 @@ describe('Test video channels', function () {
 
     for (const server of servers) {
       const channelURI = 'second_video_channel@localhost:' + servers[0].port
-      const res1 = await getVideoChannelVideos(server.url, server.accessToken, channelURI, 0, 5)
-      expect(res1.body.total).to.equal(1)
-      expect(res1.body.data).to.be.an('array')
-      expect(res1.body.data).to.have.lengthOf(1)
-      expect(res1.body.data[0].name).to.equal('my video name')
+      const { total, data } = await server.videosCommand.listByChannel({ videoChannelName: channelURI })
+
+      expect(total).to.equal(1)
+      expect(data).to.be.an('array')
+      expect(data).to.have.lengthOf(1)
+      expect(data[0].name).to.equal('my video name')
     }
   })
 
   it('Should change the video channel of a video', async function () {
     this.timeout(10000)
 
-    await updateVideo(servers[0].url, servers[0].accessToken, videoUUID, { channelId: servers[0].videoChannel.id })
+    await servers[0].videosCommand.update({ id: videoUUID, attributes: { channelId: servers[0].videoChannel.id } })
 
     await waitJobs(servers)
   })
@@ -353,18 +345,21 @@ describe('Test video channels', function () {
     this.timeout(10000)
 
     for (const server of servers) {
-      const secondChannelURI = 'second_video_channel@localhost:' + servers[0].port
-      const res1 = await getVideoChannelVideos(server.url, server.accessToken, secondChannelURI, 0, 5)
-      expect(res1.body.total).to.equal(0)
+      {
+        const secondChannelURI = 'second_video_channel@localhost:' + servers[0].port
+        const { total } = await server.videosCommand.listByChannel({ videoChannelName: secondChannelURI })
+        expect(total).to.equal(0)
+      }
 
-      const channelURI = 'root_channel@localhost:' + servers[0].port
-      const res2 = await getVideoChannelVideos(server.url, server.accessToken, channelURI, 0, 5)
-      expect(res2.body.total).to.equal(1)
+      {
+        const channelURI = 'root_channel@localhost:' + servers[0].port
+        const { total, data } = await server.videosCommand.listByChannel({ videoChannelName: channelURI })
+        expect(total).to.equal(1)
 
-      const videos: Video[] = res2.body.data
-      expect(videos).to.be.an('array')
-      expect(videos).to.have.lengthOf(1)
-      expect(videos[0].name).to.equal('my video name')
+        expect(data).to.be.an('array')
+        expect(data).to.have.lengthOf(1)
+        expect(data[0].name).to.equal('my video name')
+      }
     }
   })
 
@@ -417,8 +412,8 @@ describe('Test video channels', function () {
 
     {
       // video has been posted on channel servers[0].videoChannel.id since last update
-      await viewVideo(servers[0].url, videoUUID, 204, '0.0.0.1,127.0.0.1')
-      await viewVideo(servers[0].url, videoUUID, 204, '0.0.0.2,127.0.0.1')
+      await servers[0].videosCommand.view({ id: videoUUID, xForwardedFor: '0.0.0.1,127.0.0.1' })
+      await servers[0].videosCommand.view({ id: videoUUID, xForwardedFor: '0.0.0.2,127.0.0.1' })
 
       // Wait the repeatable job
       await wait(8000)
@@ -460,7 +455,7 @@ describe('Test video channels', function () {
   it('Should list channels by updatedAt desc if a video has been uploaded', async function () {
     this.timeout(30000)
 
-    await uploadVideo(servers[0].url, servers[0].accessToken, { channelId: totoChannel })
+    await servers[0].videosCommand.upload({ attributes: { channelId: totoChannel } })
     await waitJobs(servers)
 
     for (const server of servers) {
@@ -470,7 +465,7 @@ describe('Test video channels', function () {
       expect(data[1].name).to.equal('root_channel')
     }
 
-    await uploadVideo(servers[0].url, servers[0].accessToken, { channelId: servers[0].videoChannel.id })
+    await servers[0].videosCommand.upload({ attributes: { channelId: servers[0].videoChannel.id } })
     await waitJobs(servers)
 
     for (const server of servers) {

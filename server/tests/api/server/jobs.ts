@@ -9,7 +9,6 @@ import {
   flushAndRunMultipleServers,
   ServerInfo,
   setAccessTokensToServers,
-  uploadVideo,
   waitJobs
 } from '@shared/extra-utils'
 
@@ -32,8 +31,8 @@ describe('Test jobs', function () {
   it('Should create some jobs', async function () {
     this.timeout(120000)
 
-    await uploadVideo(servers[1].url, servers[1].accessToken, { name: 'video1' })
-    await uploadVideo(servers[1].url, servers[1].accessToken, { name: 'video2' })
+    await servers[1].videosCommand.upload({ attributes: { name: 'video1' } })
+    await servers[1].videosCommand.upload({ attributes: { name: 'video2' } })
 
     await waitJobs(servers)
   })

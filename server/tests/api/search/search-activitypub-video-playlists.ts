@@ -9,7 +9,6 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   setDefaultVideoChannel,
-  uploadVideoAndGetId,
   wait,
   waitJobs
 } from '@shared/extra-utils'
@@ -34,8 +33,8 @@ describe('Test ActivityPub playlists search', function () {
     await setDefaultVideoChannel(servers)
 
     {
-      const video1 = (await uploadVideoAndGetId({ server: servers[0], videoName: 'video 1' })).uuid
-      const video2 = (await uploadVideoAndGetId({ server: servers[0], videoName: 'video 2' })).uuid
+      const video1 = (await servers[0].videosCommand.quickUpload({ name: 'video 1' })).uuid
+      const video2 = (await servers[0].videosCommand.quickUpload({ name: 'video 2' })).uuid
 
       const attributes = {
         displayName: 'playlist 1 on server 1',
@@ -51,8 +50,8 @@ describe('Test ActivityPub playlists search', function () {
     }
 
     {
-      const videoId = (await uploadVideoAndGetId({ server: servers[1], videoName: 'video 1' })).uuid
-      video2Server2 = (await uploadVideoAndGetId({ server: servers[1], videoName: 'video 2' })).uuid
+      const videoId = (await servers[1].videosCommand.quickUpload({ name: 'video 1' })).uuid
+      video2Server2 = (await servers[1].videosCommand.quickUpload({ name: 'video 2' })).uuid
 
       const attributes = {
         displayName: 'playlist 1 on server 2',

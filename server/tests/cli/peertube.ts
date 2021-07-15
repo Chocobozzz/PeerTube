@@ -2,7 +2,6 @@
 
 import 'mocha'
 import { expect } from 'chai'
-import { Video, VideoDetails } from '../../../shared'
 import {
   areHttpImportTestsDisabled,
   buildAbsoluteFixturePath,
@@ -10,15 +9,10 @@ import {
   CLICommand,
   doubleFollow,
   flushAndRunServer,
-  getLocalIdByUUID,
-  getVideo,
-  getVideosList,
   ImportsCommand,
-  removeVideo,
   ServerInfo,
   setAccessTokensToServers,
   testHelloWorldRegisteredSettings,
-  uploadVideoAndGetId,
   waitJobs
 } from '../../../shared/extra-utils'
 
@@ -109,14 +103,10 @@ describe('Test CLI wrapper', function () {
     })
 
     it('Should have the video uploaded', async function () {
-      const res = await getVideosList(server.url)
+      const { total, data } = await server.videosCommand.list()
+      expect(total).to.equal(1)
 
-      expect(res.body.total).to.equal(1)
-
-      const videos: Video[] = res.body.data
-
-      const video: VideoDetails = (await getVideo(server.url, videos[0].uuid)).body
-
+      const video = await server.videosCommand.get({ id: data[0].uuid })
       expect(video.name).to.equal('test upload')
       expect(video.support).to.equal('support_text')
       expect(video.channel.name).to.equal('user_channel')
@@ -138,21 +128,19 @@ describe('Test CLI wrapper', function () {
 
       await waitJobs([ server ])
 
-      const res = await getVideosList(server.url)
+      const { total, data } = await server.videosCommand.list()
+      expect(total).to.equal(2)
 
-      expect(res.body.total).to.equal(2)
-
-      const videos: Video[] = res.body.data
-      const video = videos.find(v => v.name === 'small video - youtube')
+      const video = data.find(v => v.name === 'small video - youtube')
       expect(video).to.not.be.undefined
 
-      const videoDetails: VideoDetails = (await getVideo(server.url, video.id)).body
+      const videoDetails = await server.videosCommand.get({ id: video.id })
       expect(videoDetails.channel.name).to.equal('user_channel')
       expect(videoDetails.support).to.equal('super support text')
       expect(videoDetails.nsfw).to.be.false
 
       // So we can reimport it
-      await removeVideo(server.url, userAccessToken, video.id)
+      await server.videosCommand.remove({ token: userAccessToken, id: video.id })
     })
 
     it('Should import and override some imported attributes', async function () {
@@ -167,14 +155,13 @@ describe('Test CLI wrapper', function () {
       await waitJobs([ server ])
 
       {
-        const res = await getVideosList(server.url)
-        expect(res.body.total).to.equal(2)
+        const { total, data } = await server.videosCommand.list()
+        expect(total).to.equal(2)
 
-        const videos: Video[] = res.body.data
-        const video = videos.find(v => v.name === 'toto')
+        const video = data.find(v => v.name === 'toto')
         expect(video).to.not.be.undefined
 
-        const videoDetails: VideoDetails = (await getVideo(server.url, video.id)).body
+        const videoDetails = await server.videosCommand.get({ id: video.id })
         expect(videoDetails.channel.name).to.equal('user_channel')
         expect(videoDetails.support).to.equal('support')
         expect(videoDetails.nsfw).to.be.true
@@ -238,10 +225,10 @@ describe('Test CLI wrapper', function () {
       servers = [ server, anotherServer ]
       await waitJobs(servers)
 
-      const uuid = (await uploadVideoAndGetId({ server: anotherServer, videoName: 'super video' })).uuid
+      const { uuid } = await anotherServer.videosCommand.quickUpload({ name: 'super video' })
       await waitJobs(servers)
 
-      video1Server2 = await getLocalIdByUUID(server.url, uuid)
+      video1Server2 = await server.videosCommand.getId({ uuid })
     })
 
     it('Should add a redundancy', async function () {

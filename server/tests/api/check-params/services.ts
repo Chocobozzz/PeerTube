@@ -1,17 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-import { VideoPlaylistPrivacy } from '@shared/models'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '@shared/core-utils'
 import {
   cleanupTests,
   flushAndRunServer,
   makeGetRequest,
   ServerInfo,
   setAccessTokensToServers,
-  setDefaultVideoChannel,
-  uploadVideo
-} from '../../../../shared/extra-utils'
+  setDefaultVideoChannel
+} from '@shared/extra-utils'
+import { VideoPlaylistPrivacy } from '@shared/models'
 
 describe('Test services API validators', function () {
   let server: ServerInfo
@@ -26,10 +25,7 @@ describe('Test services API validators', function () {
     await setAccessTokensToServers([ server ])
     await setDefaultVideoChannel([ server ])
 
-    {
-      const res = await uploadVideo(server.url, server.accessToken, { name: 'my super name' })
-      server.video = res.body.video
-    }
+    server.video = await server.videosCommand.upload({ attributes: { name: 'my super name' } })
 
     {
       const created = await server.playlistsCommand.create({

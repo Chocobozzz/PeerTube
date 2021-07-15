@@ -2,27 +2,23 @@
 
 import 'mocha'
 import { expect } from 'chai'
-import { Video } from '@shared/models'
-import {
-  doubleFollow,
-  getVideosList,
-  MockBlocklist,
-  setAccessTokensToServers,
-  uploadVideoAndGetId,
-  wait
-} from '../../../shared/extra-utils'
 import {
   cleanupTests,
+  doubleFollow,
   flushAndRunMultipleServers,
   killallServers,
+  MockBlocklist,
   reRunServer,
-  ServerInfo
-} from '../../../shared/extra-utils/server/servers'
+  ServerInfo,
+  setAccessTokensToServers,
+  wait
+} from '@shared/extra-utils'
+import { Video } from '@shared/models'
 
 async function check (server: ServerInfo, videoUUID: string, exists = true) {
-  const res = await getVideosList(server.url)
+  const { data } = await server.videosCommand.list()
 
-  const video = res.body.data.find(v => v.uuid === videoUUID)
+  const video = data.find(v => v.uuid === videoUUID)
 
   if (exists) expect(video).to.not.be.undefined
   else expect(video).to.be.undefined
@@ -48,19 +44,19 @@ describe('Official plugin auto-block videos', function () {
     blocklistServer = new MockBlocklist()
     port = await blocklistServer.initialize()
 
-    await uploadVideoAndGetId({ server: servers[0], videoName: 'video server 1' })
-    await uploadVideoAndGetId({ server: servers[1], videoName: 'video server 2' })
-    await uploadVideoAndGetId({ server: servers[1], videoName: 'video 2 server 2' })
-    await uploadVideoAndGetId({ server: servers[1], videoName: 'video 3 server 2' })
+    await await servers[0].videosCommand.quickUpload({ name: 'video server 1' })
+    await await servers[1].videosCommand.quickUpload({ name: 'video server 2' })
+    await await servers[1].videosCommand.quickUpload({ name: 'video 2 server 2' })
+    await await servers[1].videosCommand.quickUpload({ name: 'video 3 server 2' })
 
     {
-      const res = await getVideosList(servers[0].url)
-      server1Videos = res.body.data.map(v => Object.assign(v, { url: servers[0].url + '/videos/watch/' + v.uuid }))
+      const { data } = await servers[0].videosCommand.list()
+      server1Videos = data.map(v => Object.assign(v, { url: servers[0].url + '/videos/watch/' + v.uuid }))
     }
 
     {
-      const res = await getVideosList(servers[1].url)
-      server2Videos = res.body.data.map(v => Object.assign(v, { url: servers[1].url + '/videos/watch/' + v.uuid }))
+      const { data } = await servers[1].videosCommand.list()
+      server2Videos = data.map(v => Object.assign(v, { url: servers[1].url + '/videos/watch/' + v.uuid }))
     }
 
     await doubleFollow(servers[0], servers[1])

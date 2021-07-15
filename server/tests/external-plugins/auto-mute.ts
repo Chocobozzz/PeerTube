@@ -7,14 +7,12 @@ import {
   cleanupTests,
   doubleFollow,
   flushAndRunMultipleServers,
-  getVideosList,
   killallServers,
   makeGetRequest,
   MockBlocklist,
   reRunServer,
   ServerInfo,
   setAccessTokensToServers,
-  uploadVideoAndGetId,
   wait
 } from '@shared/extra-utils'
 
@@ -37,8 +35,8 @@ describe('Official plugin auto-mute', function () {
     blocklistServer = new MockBlocklist()
     port = await blocklistServer.initialize()
 
-    await uploadVideoAndGetId({ server: servers[0], videoName: 'video server 1' })
-    await uploadVideoAndGetId({ server: servers[1], videoName: 'video server 2' })
+    await await servers[0].videosCommand.quickUpload({ name: 'video server 1' })
+    await await servers[1].videosCommand.quickUpload({ name: 'video server 2' })
 
     await doubleFollow(servers[0], servers[1])
   })
@@ -66,8 +64,8 @@ describe('Official plugin auto-mute', function () {
 
     await wait(2000)
 
-    const res = await getVideosList(servers[0].url)
-    expect(res.body.total).to.equal(1)
+    const { total } = await servers[0].videosCommand.list()
+    expect(total).to.equal(1)
   })
 
   it('Should remove a server blocklist', async function () {
@@ -84,8 +82,8 @@ describe('Official plugin auto-mute', function () {
 
     await wait(2000)
 
-    const res = await getVideosList(servers[0].url)
-    expect(res.body.total).to.equal(2)
+    const { total } = await servers[0].videosCommand.list()
+    expect(total).to.equal(2)
   })
 
   it('Should add an account blocklist', async function () {
@@ -101,8 +99,8 @@ describe('Official plugin auto-mute', function () {
 
     await wait(2000)
 
-    const res = await getVideosList(servers[0].url)
-    expect(res.body.total).to.equal(1)
+    const { total } = await servers[0].videosCommand.list()
+    expect(total).to.equal(1)
   })
 
   it('Should remove an account blocklist', async function () {
@@ -119,8 +117,8 @@ describe('Official plugin auto-mute', function () {
 
     await wait(2000)
 
-    const res = await getVideosList(servers[0].url)
-    expect(res.body.total).to.equal(2)
+    const { total } = await servers[0].videosCommand.list()
+    expect(total).to.equal(2)
   })
 
   it('Should auto mute an account, manually unmute it and do not remute it automatically', async function () {
@@ -140,15 +138,15 @@ describe('Official plugin auto-mute', function () {
     await wait(2000)
 
     {
-      const res = await getVideosList(servers[0].url)
-      expect(res.body.total).to.equal(1)
+      const { total } = await servers[0].videosCommand.list()
+      expect(total).to.equal(1)
     }
 
     await servers[0].blocklistCommand.removeFromServerBlocklist({ account })
 
     {
-      const res = await getVideosList(servers[0].url)
-      expect(res.body.total).to.equal(2)
+      const { total } = await servers[0].videosCommand.list()
+      expect(total).to.equal(2)
     }
 
     await killallServers([ servers[0] ])
@@ -156,8 +154,8 @@ describe('Official plugin auto-mute', function () {
     await wait(2000)
 
     {
-      const res = await getVideosList(servers[0].url)
-      expect(res.body.total).to.equal(2)
+      const { total } = await servers[0].videosCommand.list()
+      expect(total).to.equal(2)
     }
   })
 
@@ -215,8 +213,8 @@ describe('Official plugin auto-mute', function () {
     await wait(2000)
 
     for (const server of servers) {
-      const res = await getVideosList(server.url)
-      expect(res.body.total).to.equal(1)
+      const { total } = await server.videosCommand.list()
+      expect(total).to.equal(1)
     }
   })
 

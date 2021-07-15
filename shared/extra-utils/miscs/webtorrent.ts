@@ -1,4 +1,8 @@
+import { readFile } from 'fs-extra'
+import * as parseTorrent from 'parse-torrent'
+import { join } from 'path'
 import * as WebTorrent from 'webtorrent'
+import { ServerInfo } from '../server'
 
 let webtorrent: WebTorrent.Instance
 
@@ -11,6 +15,16 @@ function webtorrentAdd (torrent: string, refreshWebTorrent = false) {
   return new Promise<WebTorrent.Torrent>(res => webtorrent.add(torrent, res))
 }
 
+async function parseTorrentVideo (server: ServerInfo, videoUUID: string, resolution: number) {
+  const torrentName = videoUUID + '-' + resolution + '.torrent'
+  const torrentPath = server.serversCommand.buildDirectory(join('torrents', torrentName))
+
+  const data = await readFile(torrentPath)
+
+  return parseTorrent(data)
+}
+
 export {
-  webtorrentAdd
+  webtorrentAdd,
+  parseTorrentVideo
 }

@@ -2,10 +2,12 @@
 
 import 'mocha'
 import { omit } from 'lodash'
-import { UserRole, VideoCreateResult } from '../../../../shared'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '@shared/core-utils'
 import {
   buildAbsoluteFixturePath,
+  checkBadCountPagination,
+  checkBadSortPagination,
+  checkBadStartPagination,
   cleanupTests,
   flushAndRunServer,
   killallServers,
@@ -13,19 +15,13 @@ import {
   makePostBodyRequest,
   makePutBodyRequest,
   makeUploadRequest,
+  MockSmtpServer,
   reRunServer,
   ServerInfo,
   setAccessTokensToServers,
-  uploadVideo,
   UsersCommand
-} from '../../../../shared/extra-utils'
-import { MockSmtpServer } from '../../../../shared/extra-utils/mock-servers/mock-email'
-import {
-  checkBadCountPagination,
-  checkBadSortPagination,
-  checkBadStartPagination
-} from '../../../../shared/extra-utils/requests/check-api-params'
-import { UserAdminFlag } from '../../../../shared/models/users/user-flag.model'
+} from '@shared/extra-utils'
+import { UserAdminFlag, UserRole, VideoCreateResult } from '@shared/models'
 
 describe('Test users API validators', function () {
   const path = '/api/v1/users/'
@@ -80,8 +76,7 @@ describe('Test users API validators', function () {
     }
 
     {
-      const res = await uploadVideo(server.url, server.accessToken, {})
-      video = res.body.video
+      video = await server.videosCommand.upload()
     }
 
     {

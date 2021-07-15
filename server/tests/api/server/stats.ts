@@ -8,8 +8,6 @@ import {
   flushAndRunMultipleServers,
   ServerInfo,
   setAccessTokensToServers,
-  uploadVideo,
-  viewVideo,
   wait,
   waitJobs
 } from '@shared/extra-utils'
@@ -36,12 +34,11 @@ describe('Test stats (excluding redundancy)', function () {
 
     await servers[0].usersCommand.create({ username: user.username, password: user.password })
 
-    const resVideo = await uploadVideo(servers[0].url, servers[0].accessToken, { fixture: 'video_short.webm' })
-    const videoUUID = resVideo.body.video.uuid
+    const { uuid } = await servers[0].videosCommand.upload({ attributes: { fixture: 'video_short.webm' } })
 
-    await servers[0].commentsCommand.createThread({ videoId: videoUUID, text: 'comment' })
+    await servers[0].commentsCommand.createThread({ videoId: uuid, text: 'comment' })
 
-    await viewVideo(servers[0].url, videoUUID)
+    await servers[0].videosCommand.view({ id: uuid })
 
     // Wait the video views repeatable job
     await wait(8000)
@@ -154,7 +151,7 @@ describe('Test stats (excluding redundancy)', function () {
     }
 
     {
-      await uploadVideo(server.url, server.accessToken, { fixture: 'video_short.webm', channelId })
+      await server.videosCommand.upload({ attributes: { fixture: 'video_short.webm', channelId } })
 
       const data = await server.statsCommand.get()
 
@@ -213,7 +210,7 @@ describe('Test stats (excluding redundancy)', function () {
       }
     })
 
-    await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'video', fixture: 'video_short.webm' })
+    await servers[0].videosCommand.upload({ attributes: { name: 'video', fixture: 'video_short.webm' } })
 
     await waitJobs(servers)
 
@@ -243,7 +240,7 @@ describe('Test stats (excluding redundancy)', function () {
     const first = await servers[1].statsCommand.get()
 
     for (let i = 0; i < 10; i++) {
-      await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'video' })
+      await servers[0].videosCommand.upload({ attributes: { name: 'video' } })
     }
 
     await waitJobs(servers)

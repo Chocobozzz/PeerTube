@@ -2,15 +2,8 @@
 
 import 'mocha'
 import * as chai from 'chai'
+import { cleanupTests, flushAndRunServer, ServerInfo, setAccessTokensToServers, setDefaultVideoChannel } from '@shared/extra-utils'
 import { Video, VideoPlaylistPrivacy } from '@shared/models'
-import {
-  getVideosList,
-  ServerInfo,
-  setAccessTokensToServers,
-  setDefaultVideoChannel,
-  uploadVideo
-} from '../../../../shared/extra-utils'
-import { cleanupTests, flushAndRunServer } from '../../../../shared/extra-utils/server/servers'
 
 const expect = chai.expect
 
@@ -29,13 +22,11 @@ describe('Test services', function () {
     await setDefaultVideoChannel([ server ])
 
     {
-      const videoAttributes = {
-        name: 'my super name'
-      }
-      await uploadVideo(server.url, server.accessToken, videoAttributes)
+      const attributes = { name: 'my super name' }
+      await server.videosCommand.upload({ attributes })
 
-      const res = await getVideosList(server.url)
-      video = res.body.data[0]
+      const { data } = await server.videosCommand.list()
+      video = data[0]
     }
 
     {

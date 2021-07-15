@@ -7,13 +7,10 @@ import {
   cleanupTests,
   doubleFollow,
   flushAndRunMultipleServers,
-  getVideosList,
   ServerInfo,
   setAccessTokensToServers,
-  uploadVideo,
   waitJobs
 } from '@shared/extra-utils'
-import { Video } from '@shared/models'
 
 const expect = chai.expect
 
@@ -64,11 +61,10 @@ describe('Test bulk actions', function () {
   describe('Bulk remove comments', function () {
     async function checkInstanceCommentsRemoved () {
       {
-        const res = await getVideosList(servers[0].url)
-        const videos = res.body.data as Video[]
+        const { data } = await servers[0].videosCommand.list()
 
         // Server 1 should not have these comments anymore
-        for (const video of videos) {
+        for (const video of data) {
           const { data } = await servers[0].commentsCommand.listThreads({ videoId: video.id })
           const comment = data.find(c => c.text === 'comment by user 3')
 
@@ -77,11 +73,10 @@ describe('Test bulk actions', function () {
       }
 
       {
-        const res = await getVideosList(servers[1].url)
-        const videos = res.body.data as Video[]
+        const { data } = await servers[1].videosCommand.list()
 
         // Server 1 should not have these comments on videos of server 1
-        for (const video of videos) {
+        for (const video of data) {
           const { data } = await servers[1].commentsCommand.listThreads({ videoId: video.id })
           const comment = data.find(c => c.text === 'comment by user 3')
 
@@ -97,17 +92,17 @@ describe('Test bulk actions', function () {
     before(async function () {
       this.timeout(120000)
 
-      await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'video 1 server 1' })
-      await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'video 2 server 1' })
-      await uploadVideo(servers[0].url, user1Token, { name: 'video 3 server 1' })
+      await servers[0].videosCommand.upload({ attributes: { name: 'video 1 server 1' } })
+      await servers[0].videosCommand.upload({ attributes: { name: 'video 2 server 1' } })
+      await servers[0].videosCommand.upload({ token: user1Token, attributes: { name: 'video 3 server 1' } })
 
-      await uploadVideo(servers[1].url, servers[1].accessToken, { name: 'video 1 server 2' })
+      await servers[1].videosCommand.upload({ attributes: { name: 'video 1 server 2' } })
 
       await waitJobs(servers)
 
       {
-        const res = await getVideosList(servers[0].url)
-        for (const video of res.body.data) {
+        const { data } = await servers[0].videosCommand.list()
+        for (const video of data) {
           await servers[0].commentsCommand.createThread({ videoId: video.id, text: 'comment by root server 1' })
           await servers[0].commentsCommand.createThread({ token: user1Token, videoId: video.id, text: 'comment by user 1' })
           await servers[0].commentsCommand.createThread({ token: user2Token, videoId: video.id, text: 'comment by user 2' })
@@ -115,9 +110,9 @@ describe('Test bulk actions', function () {
       }
 
       {
-        const res = await getVideosList(servers[1].url)
+        const { data } = await servers[1].videosCommand.list()
 
-        for (const video of res.body.data) {
+        for (const video of data) {
           await servers[1].commentsCommand.createThread({ videoId: video.id, text: 'comment by root server 2' })
 
           const comment = await servers[1].commentsCommand.createThread({ token: user3Token, videoId: video.id, text: 'comment by user 3' })
@@ -142,9 +137,9 @@ describe('Test bulk actions', function () {
       await waitJobs(servers)
 
       for (const server of servers) {
-        const res = await getVideosList(server.url)
+        const { data } = await server.videosCommand.list()
 
-        for (const video of res.body.data) {
+        for (const video of data) {
           const { data } = await server.commentsCommand.listThreads({ videoId: video.id })
           const comment = data.find(c => c.text === 'comment by user 2')
 

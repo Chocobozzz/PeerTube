@@ -4,17 +4,7 @@ import 'mocha'
 import * as chai from 'chai'
 import { join } from 'path'
 import { getAudioStream, getVideoStreamSize } from '@server/helpers/ffprobe-utils'
-import {
-  cleanupTests,
-  doubleFollow,
-  flushAndRunMultipleServers,
-  getVideo,
-  ServerInfo,
-  setAccessTokensToServers,
-  uploadVideo,
-  waitJobs
-} from '../../../../shared/extra-utils'
-import { VideoDetails } from '../../../../shared/models/videos'
+import { cleanupTests, doubleFollow, flushAndRunMultipleServers, ServerInfo, setAccessTokensToServers, waitJobs } from '@shared/extra-utils'
 
 const expect = chai.expect
 
@@ -58,15 +48,13 @@ describe('Test audio only video transcoding', function () {
   it('Should upload a video and transcode it', async function () {
     this.timeout(120000)
 
-    const resUpload = await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'audio only' })
-    videoUUID = resUpload.body.video.uuid
+    const { uuid } = await servers[0].videosCommand.upload({ attributes: { name: 'audio only' } })
+    videoUUID = uuid
 
     await waitJobs(servers)
 
     for (const server of servers) {
-      const res = await getVideo(server.url, videoUUID)
-      const video: VideoDetails = res.body
-
+      const video = await server.videosCommand.get({ id: videoUUID })
       expect(video.streamingPlaylists).to.have.lengthOf(1)
 
       for (const files of [ video.files, video.streamingPlaylists[0].files ]) {

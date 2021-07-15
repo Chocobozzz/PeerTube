@@ -16,7 +16,6 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   setDefaultVideoChannel,
-  uploadVideo,
   wait,
   waitJobs
 } from '@shared/extra-utils'
@@ -69,8 +68,8 @@ describe('Test prune storage scripts', function () {
     await setDefaultVideoChannel(servers)
 
     for (const server of servers) {
-      await uploadVideo(server.url, server.accessToken, { name: 'video 1' })
-      await uploadVideo(server.url, server.accessToken, { name: 'video 2' })
+      await server.videosCommand.upload({ attributes: { name: 'video 1' } })
+      await server.videosCommand.upload({ attributes: { name: 'video 2' } })
 
       await server.usersCommand.updateMyAvatar({ fixture: 'avatar.png' })
 

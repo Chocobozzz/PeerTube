@@ -13,8 +13,7 @@ import {
   makeGetRequest,
   makePostBodyRequest,
   ServerInfo,
-  setAccessTokensToServers,
-  uploadVideo
+  setAccessTokensToServers
 } from '@shared/extra-utils'
 import { VideoCreateResult } from '@shared/models'
 
@@ -39,8 +38,7 @@ describe('Test video comments API validator', function () {
     await setAccessTokensToServers([ server ])
 
     {
-      const res = await uploadVideo(server.url, server.accessToken, {})
-      video = res.body.video
+      const video = await server.videosCommand.upload({ attributes: {} })
       pathThread = '/api/v1/videos/' + video.uuid + '/comment-threads'
     }
 
@@ -291,8 +289,8 @@ describe('Test video comments API validator', function () {
       let anotherVideoUUID: string
 
       {
-        const res = await uploadVideo(server.url, userAccessToken, { name: 'video' })
-        anotherVideoUUID = res.body.video.uuid
+        const { uuid } = await server.videosCommand.upload({ token: userAccessToken, attributes: { name: 'video' } })
+        anotherVideoUUID = uuid
       }
 
       {
@@ -318,8 +316,7 @@ describe('Test video comments API validator', function () {
 
   describe('When a video has comments disabled', function () {
     before(async function () {
-      const res = await uploadVideo(server.url, server.accessToken, { commentsEnabled: false })
-      video = res.body.video
+      video = await server.videosCommand.upload({ attributes: { commentsEnabled: false } })
       pathThread = '/api/v1/videos/' + video.uuid + '/comment-threads'
     })
 

@@ -2,15 +2,7 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import {
-  cleanupTests,
-  doubleFollow,
-  flushAndRunMultipleServers,
-  ServerInfo,
-  setAccessTokensToServers,
-  uploadVideo,
-  waitJobs
-} from '@shared/extra-utils'
+import { cleanupTests, doubleFollow, flushAndRunMultipleServers, ServerInfo, setAccessTokensToServers, waitJobs } from '@shared/extra-utils'
 import { UserNotificationType } from '@shared/models'
 
 const expect = chai.expect
@@ -44,8 +36,8 @@ describe('Test blocklist', function () {
     await servers[0].notificationsCommand.markAsReadAll({ token: userToken2 })
 
     {
-      const res = await uploadVideo(servers[0].url, userToken1, { name: 'video' })
-      videoUUID = res.body.video.uuid
+      const { uuid } = await servers[0].videosCommand.upload({ token: userToken1, attributes: { name: 'video' } })
+      videoUUID = uuid
 
       await waitJobs(servers)
     }
@@ -83,7 +75,7 @@ describe('Test blocklist', function () {
       })
 
       userToken1 = await servers[0].loginCommand.getAccessToken(user)
-      await uploadVideo(servers[0].url, userToken1, { name: 'video user 1' })
+      await servers[0].videosCommand.upload({ token: userToken1, attributes: { name: 'video user 1' } })
     }
 
     {

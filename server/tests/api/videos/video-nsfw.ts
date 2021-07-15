@@ -2,18 +2,7 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import {
-  cleanupTests,
-  flushAndRunServer,
-  getAccountVideos,
-  getMyVideos,
-  getVideoChannelVideos,
-  getVideosList,
-  getVideosListWithToken,
-  ServerInfo,
-  setAccessTokensToServers,
-  uploadVideo
-} from '@shared/extra-utils'
+import { cleanupTests, flushAndRunServer, ServerInfo, setAccessTokensToServers } from '@shared/extra-utils'
 import { BooleanBothQuery, CustomConfig, ResultList, Video, VideosOverview } from '@shared/models'
 
 const expect = chai.expect
@@ -37,10 +26,10 @@ describe('Test video NSFW policy', function () {
 
     if (token) {
       promises = [
-        getVideosListWithToken(server.url, token, query).then(res => res.body),
         server.searchCommand.advancedVideoSearch({ token, search: { search: 'n', sort: '-publishedAt', ...query } }),
-        getAccountVideos(server.url, token, accountName, 0, 5, undefined, query).then(res => res.body),
-        getVideoChannelVideos(server.url, token, videoChannelName, 0, 5, undefined, query).then(res => res.body)
+        server.videosCommand.listWithToken({ token, ...query }),
+        server.videosCommand.listByAccount({ token, accountName, ...query }),
+        server.videosCommand.listByChannel({ token, videoChannelName, ...query })
       ]
 
       // Overviews do not support video filters
@@ -54,10 +43,10 @@ describe('Test video NSFW policy', function () {
     }
 
     promises = [
-      getVideosList(server.url).then(res => res.body),
       server.searchCommand.searchVideos({ search: 'n', sort: '-publishedAt' }),
-      getAccountVideos(server.url, undefined, accountName, 0, 5).then(res => res.body),
-      getVideoChannelVideos(server.url, undefined, videoChannelName, 0, 5).then(res => res.body)
+      server.videosCommand.list(),
+      server.videosCommand.listByAccount({ accountName }),
+      server.videosCommand.listByChannel({ videoChannelName })
     ]
 
     // Overviews do not support video filters
@@ -79,12 +68,12 @@ describe('Test video NSFW policy', function () {
 
     {
       const attributes = { name: 'nsfw', nsfw: true, category: 1 }
-      await uploadVideo(server.url, server.accessToken, attributes)
+      await server.videosCommand.upload({ attributes })
     }
 
     {
       const attributes = { name: 'normal', nsfw: false, category: 1 }
-      await uploadVideo(server.url, server.accessToken, attributes)
+      await server.videosCommand.upload({ attributes })
     }
 
     customConfig = await server.configCommand.getCustomConfig()
@@ -192,13 +181,12 @@ describe('Test video NSFW policy', function () {
     })
 
     it('Should be able to see my NSFW videos even with do_not_list user NSFW policy', async function () {
-      const res = await getMyVideos(server.url, server.accessToken, 0, 5)
-      expect(res.body.total).to.equal(2)
+      const { total, data } = await server.videosCommand.listMyVideos()
+      expect(total).to.equal(2)
 
-      const videos = res.body.data
-      expect(videos).to.have.lengthOf(2)
-      expect(videos[0].name).to.equal('normal')
-      expect(videos[1].name).to.equal('nsfw')
+      expect(data).to.have.lengthOf(2)
+      expect(data[0].name).to.equal('normal')
+      expect(data[1].name).to.equal('nsfw')
     })
 
     it('Should display NSFW videos when the nsfw param === true', async function () {

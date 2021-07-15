@@ -9,7 +9,6 @@ import { join } from 'path'
 import * as prompt from 'prompt'
 import { promisify } from 'util'
 import { YoutubeDL } from '@server/helpers/youtube-dl'
-import { getVideoCategories, uploadVideo } from '../../shared/extra-utils/index'
 import { sha256 } from '../helpers/core-utils'
 import { doRequestAndSaveToFile } from '../helpers/requests'
 import { CONSTRAINTS_FIELDS } from '../initializers/constants'
@@ -21,6 +20,7 @@ import {
   getLogger,
   getServerCredentials
 } from './cli'
+import { ServerInfo } from '@shared/extra-utils'
 
 const processOptions = {
   maxBuffer: Infinity
@@ -200,7 +200,10 @@ async function uploadVideoOnPeerTube (parameters: {
 }) {
   const { youtubeDL, videoInfo, videoPath, cwd, url, username, password } = parameters
 
-  const category = await getCategory(videoInfo.categories, url)
+  const server = buildServer(url)
+  await assignToken(server, username, password)
+
+  const category = await getCategory(server, videoInfo.categories)
   const licence = getLicence(videoInfo.license)
   let tags = []
   if (Array.isArray(videoInfo.tags)) {
@@ -232,29 +235,28 @@ async function uploadVideoOnPeerTube (parameters: {
     tags
   }
 
-  const server = buildServer(url)
-  await assignToken(server, username, password)
+  const baseAttributes = await buildVideoAttributesFromCommander(server, program, defaultAttributes)
 
-  const videoAttributes = await buildVideoAttributesFromCommander(server, program, defaultAttributes)
+  const attributes = {
+    ...baseAttributes,
 
-  Object.assign(videoAttributes, {
     originallyPublishedAt: originallyPublishedAt ? originallyPublishedAt.toISOString() : null,
     thumbnailfile,
     previewfile: thumbnailfile,
     fixture: videoPath
-  })
+  }
 
-  log.info('\nUploading on PeerTube video "%s".', videoAttributes.name)
+  log.info('\nUploading on PeerTube video "%s".', attributes.name)
 
   try {
-    await uploadVideo(url, server.accessToken, videoAttributes)
+    await server.videosCommand.upload({ attributes })
   } catch (err) {
     if (err.message.indexOf('401') !== -1) {
       log.info('Got 401 Unauthorized, token may have expired, renewing token and retry.')
 
       server.accessToken = await server.loginCommand.getAccessToken(username, password)
 
-      await uploadVideo(url, server.accessToken, videoAttributes)
+      await server.videosCommand.upload({ attributes })
     } else {
       exitError(err.message)
     }
@@ -263,20 +265,19 @@ async function uploadVideoOnPeerTube (parameters: {
   await remove(videoPath)
   if (thumbnailfile) await remove(thumbnailfile)
 
-  log.warn('Uploaded video "%s"!\n', videoAttributes.name)
+  log.warn('Uploaded video "%s"!\n', attributes.name)
 }
 
 /* ---------------------------------------------------------- */
 
-async function getCategory (categories: string[], url: string) {
+async function getCategory (server: ServerInfo, categories: string[]) {
   if (!categories) return undefined
 
   const categoryString = categories[0]
 
   if (categoryString === 'News & Politics') return 11
 
-  const res = await getVideoCategories(url)
-  const categoriesServer = res.body
+  const categoriesServer = await server.videosCommand.getCategories()
 
   for (const key of Object.keys(categoriesServer)) {
     const categoryServer = categoriesServer[key]

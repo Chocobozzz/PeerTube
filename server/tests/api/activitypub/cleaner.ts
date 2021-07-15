@@ -6,11 +6,8 @@ import {
   cleanupTests,
   doubleFollow,
   flushAndRunMultipleServers,
-  getVideo,
-  rateVideo,
   ServerInfo,
   setAccessTokensToServers,
-  uploadVideoAndGetId,
   wait,
   waitJobs
 } from '@shared/extra-utils'
@@ -49,9 +46,9 @@ describe('Test AP cleaner', function () {
     // Create 1 comment per video
     // Update 1 remote URL and 1 local URL on
 
-    videoUUID1 = (await uploadVideoAndGetId({ server: servers[0], videoName: 'server 1' })).uuid
-    videoUUID2 = (await uploadVideoAndGetId({ server: servers[1], videoName: 'server 2' })).uuid
-    videoUUID3 = (await uploadVideoAndGetId({ server: servers[2], videoName: 'server 3' })).uuid
+    videoUUID1 = (await servers[0].videosCommand.quickUpload({ name: 'server 1' })).uuid
+    videoUUID2 = (await servers[1].videosCommand.quickUpload({ name: 'server 2' })).uuid
+    videoUUID3 = (await servers[2].videosCommand.quickUpload({ name: 'server 3' })).uuid
 
     videoUUIDs = [ videoUUID1, videoUUID2, videoUUID3 ]
 
@@ -59,7 +56,7 @@ describe('Test AP cleaner', function () {
 
     for (const server of servers) {
       for (const uuid of videoUUIDs) {
-        await rateVideo(server.url, server.accessToken, uuid, 'like')
+        await server.videosCommand.rate({ id: uuid, rating: 'like' })
         await server.commentsCommand.createThread({ videoId: uuid, text: 'comment' })
       }
     }
@@ -70,9 +67,10 @@ describe('Test AP cleaner', function () {
   it('Should have the correct likes', async function () {
     for (const server of servers) {
       for (const uuid of videoUUIDs) {
-        const res = await getVideo(server.url, uuid)
-        expect(res.body.likes).to.equal(3)
-        expect(res.body.dislikes).to.equal(0)
+        const video = await server.videosCommand.get({ id: uuid })
+
+        expect(video.likes).to.equal(3)
+        expect(video.dislikes).to.equal(0)
       }
     }
   })
@@ -90,16 +88,16 @@ describe('Test AP cleaner', function () {
 
     // Updated rates of my video
     {
-      const res = await getVideo(servers[0].url, videoUUID1)
-      expect(res.body.likes).to.equal(2)
-      expect(res.body.dislikes).to.equal(0)
+      const video = await servers[0].videosCommand.get({ id: videoUUID1 })
+      expect(video.likes).to.equal(2)
+      expect(video.dislikes).to.equal(0)
     }
 
     // Did not update rates of a remote video
     {
-      const res = await getVideo(servers[0].url, videoUUID2)
-      expect(res.body.likes).to.equal(3)
-      expect(res.body.dislikes).to.equal(0)
+      const video = await servers[0].videosCommand.get({ id: videoUUID2 })
+      expect(video.likes).to.equal(3)
+      expect(video.dislikes).to.equal(0)
     }
   })
 
@@ -108,7 +106,7 @@ describe('Test AP cleaner', function () {
 
     for (const server of servers) {
       for (const uuid of videoUUIDs) {
-        await rateVideo(server.url, server.accessToken, uuid, 'dislike')
+        await server.videosCommand.rate({ id: uuid, rating: 'dislike' })
       }
     }
 
@@ -116,9 +114,9 @@ describe('Test AP cleaner', function () {
 
     for (const server of servers) {
       for (const uuid of videoUUIDs) {
-        const res = await getVideo(server.url, uuid)
-        expect(res.body.likes).to.equal(0)
-        expect(res.body.dislikes).to.equal(3)
+        const video = await server.videosCommand.get({ id: uuid })
+        expect(video.likes).to.equal(0)
+        expect(video.dislikes).to.equal(3)
       }
     }
   })
@@ -137,16 +135,16 @@ describe('Test AP cleaner', function () {
 
     // Updated rates of my video
     {
-      const res = await getVideo(servers[0].url, videoUUID1)
-      expect(res.body.likes).to.equal(0)
-      expect(res.body.dislikes).to.equal(2)
+      const video = await servers[0].videosCommand.get({ id: videoUUID1 })
+      expect(video.likes).to.equal(0)
+      expect(video.dislikes).to.equal(2)
     }
 
     // Did not update rates of a remote video
     {
-      const res = await getVideo(servers[0].url, videoUUID2)
-      expect(res.body.likes).to.equal(0)
-      expect(res.body.dislikes).to.equal(3)
+      const video = await servers[0].videosCommand.get({ id: videoUUID2 })
+      expect(video.likes).to.equal(0)
+      expect(video.dislikes).to.equal(3)
     }
   })
 

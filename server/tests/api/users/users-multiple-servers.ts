@@ -9,11 +9,9 @@ import {
   cleanupTests,
   doubleFollow,
   flushAndRunMultipleServers,
-  getAccountVideos,
   ServerInfo,
   setAccessTokensToServers,
   testImage,
-  uploadVideo,
   waitJobs
 } from '@shared/extra-utils'
 import { User } from '@shared/models'
@@ -44,7 +42,7 @@ describe('Test users with multiple servers', function () {
     await doubleFollow(servers[1], servers[2])
 
     // The root user of server 1 is propagated to servers 2 and 3
-    await uploadVideo(servers[0].url, servers[0].accessToken, {})
+    await servers[0].videosCommand.upload()
 
     {
       const user = {
@@ -57,8 +55,8 @@ describe('Test users with multiple servers', function () {
     }
 
     {
-      const resVideo = await uploadVideo(servers[0].url, userAccessToken, {})
-      videoUUID = resVideo.body.video.uuid
+      const { uuid } = await servers[0].videosCommand.upload({ token: userAccessToken })
+      videoUUID = uuid
     }
 
     await waitJobs(servers)
@@ -133,31 +131,29 @@ describe('Test users with multiple servers', function () {
 
   it('Should list account videos', async function () {
     for (const server of servers) {
-      const res = await getAccountVideos(server.url, server.accessToken, 'user1@localhost:' + servers[0].port, 0, 5)
+      const { total, data } = await server.videosCommand.listByAccount({ accountName: 'user1@localhost:' + servers[0].port })
 
-      expect(res.body.total).to.equal(1)
-      expect(res.body.data).to.be.an('array')
-      expect(res.body.data).to.have.lengthOf(1)
-      expect(res.body.data[0].uuid).to.equal(videoUUID)
+      expect(total).to.equal(1)
+      expect(data).to.be.an('array')
+      expect(data).to.have.lengthOf(1)
+      expect(data[0].uuid).to.equal(videoUUID)
     }
   })
 
   it('Should search through account videos', async function () {
     this.timeout(10_000)
 
-    const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name: 'Kami no chikara' })
+    const created = await servers[0].videosCommand.upload({ token: userAccessToken, attributes: { name: 'Kami no chikara' } })
 
     await waitJobs(servers)
 
     for (const server of servers) {
-      const res = await getAccountVideos(server.url, server.accessToken, 'user1@localhost:' + servers[0].port, 0, 5, undefined, {
-        search: 'Kami'
-      })
+      const { total, data } = await server.videosCommand.listByAccount({ accountName: 'user1@localhost:' + servers[0].port, search: 'Kami' })
 
-      expect(res.body.total).to.equal(1)
-      expect(res.body.data).to.be.an('array')
-      expect(res.body.data).to.have.lengthOf(1)
-      expect(res.body.data[0].uuid).to.equal(resVideo.body.video.uuid)
+      expect(total).to.equal(1)
+      expect(data).to.be.an('array')
+      expect(data).to.have.lengthOf(1)
+      expect(data[0].uuid).to.equal(created.uuid)
     }
   })
 

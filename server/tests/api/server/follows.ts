@@ -9,12 +9,9 @@ import {
   expectAccountFollows,
   flushAndRunMultipleServers,
   FollowsCommand,
-  getVideosList,
-  rateVideo,
   ServerInfo,
   setAccessTokensToServers,
   testCaptionFile,
-  uploadVideo,
   waitJobs
 } from '@shared/extra-utils'
 import { Video, VideoPrivacy } from '@shared/models'
@@ -287,22 +284,28 @@ describe('Test follows', function () {
   it('Should upload a video on server 2 and 3 and propagate only the video of server 2', async function () {
     this.timeout(60000)
 
-    await uploadVideo(servers[1].url, servers[1].accessToken, { name: 'server2' })
-    await uploadVideo(servers[2].url, servers[2].accessToken, { name: 'server3' })
+    await servers[1].videosCommand.upload({ attributes: { name: 'server2' } })
+    await servers[2].videosCommand.upload({ attributes: { name: 'server3' } })
 
     await waitJobs(servers)
 
-    let res = await getVideosList(servers[0].url)
-    expect(res.body.total).to.equal(1)
-    expect(res.body.data[0].name).to.equal('server2')
+    {
+      const { total, data } = await servers[0].videosCommand.list()
+      expect(total).to.equal(1)
+      expect(data[0].name).to.equal('server2')
+    }
 
-    res = await getVideosList(servers[1].url)
-    expect(res.body.total).to.equal(1)
-    expect(res.body.data[0].name).to.equal('server2')
+    {
+      const { total, data } = await servers[1].videosCommand.list()
+      expect(total).to.equal(1)
+      expect(data[0].name).to.equal('server2')
+    }
 
-    res = await getVideosList(servers[2].url)
-    expect(res.body.total).to.equal(1)
-    expect(res.body.data[0].name).to.equal('server3')
+    {
+      const { total, data } = await servers[2].videosCommand.list()
+      expect(total).to.equal(1)
+      expect(data[0].name).to.equal('server3')
+    }
   })
 
   describe('Should propagate data on a new following', function () {
@@ -319,21 +322,21 @@ describe('Test follows', function () {
         tags: [ 'tag1', 'tag2', 'tag3' ]
       }
 
-      await uploadVideo(servers[2].url, servers[2].accessToken, { name: 'server3-2' })
-      await uploadVideo(servers[2].url, servers[2].accessToken, { name: 'server3-3' })
-      await uploadVideo(servers[2].url, servers[2].accessToken, video4Attributes)
-      await uploadVideo(servers[2].url, servers[2].accessToken, { name: 'server3-5' })
-      await uploadVideo(servers[2].url, servers[2].accessToken, { name: 'server3-6' })
+      await servers[2].videosCommand.upload({ attributes: { name: 'server3-2' } })
+      await servers[2].videosCommand.upload({ attributes: { name: 'server3-3' } })
+      await servers[2].videosCommand.upload({ attributes: video4Attributes })
+      await servers[2].videosCommand.upload({ attributes: { name: 'server3-5' } })
+      await servers[2].videosCommand.upload({ attributes: { name: 'server3-6' } })
 
       {
         const userAccessToken = await servers[2].usersCommand.generateUserAndToken('captain')
 
-        const resVideos = await getVideosList(servers[2].url)
-        video4 = resVideos.body.data.find(v => v.name === 'server3-4')
+        const { data } = await servers[2].videosCommand.list()
+        video4 = data.find(v => v.name === 'server3-4')
 
         {
-          await rateVideo(servers[2].url, servers[2].accessToken, video4.id, 'like')
-          await rateVideo(servers[2].url, userAccessToken, video4.id, 'dislike')
+          await servers[2].videosCommand.rate({ id: video4.id, rating: 'like' })
+          await servers[2].videosCommand.rate({ token: userAccessToken, id: video4.id, rating: 'dislike' })
         }
 
         {
@@ -401,12 +404,12 @@ describe('Test follows', function () {
     })
 
     it('Should have propagated videos', async function () {
-      const res = await getVideosList(servers[0].url)
-      expect(res.body.total).to.equal(7)
+      const { total, data } = await servers[0].videosCommand.list()
+      expect(total).to.equal(7)
 
-      const video2 = res.body.data.find(v => v.name === 'server3-2')
-      video4 = res.body.data.find(v => v.name === 'server3-4')
-      const video6 = res.body.data.find(v => v.name === 'server3-6')
+      const video2 = data.find(v => v.name === 'server3-2')
+      video4 = data.find(v => v.name === 'server3-4')
+      const video6 = data.find(v => v.name === 'server3-6')
 
       expect(video2).to.not.be.undefined
       expect(video4).to.not.be.undefined
@@ -447,7 +450,7 @@ describe('Test follows', function () {
           }
         ]
       }
-      await completeVideoCheck(servers[0].url, video4, checkAttributes)
+      await completeVideoCheck(servers[0], video4, checkAttributes)
     })
 
     it('Should have propagated comments', async function () {
@@ -542,8 +545,8 @@ describe('Test follows', function () {
 
       await waitJobs(servers)
 
-      const res = await getVideosList(servers[0].url)
-      expect(res.body.total).to.equal(1)
+      const { total } = await servers[0].videosCommand.list()
+      expect(total).to.equal(1)
     })
 
   })

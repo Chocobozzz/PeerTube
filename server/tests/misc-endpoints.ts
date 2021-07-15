@@ -3,15 +3,8 @@
 import 'mocha'
 import * as chai from 'chai'
 import { HttpStatusCode } from '@shared/core-utils'
-import {
-  cleanupTests,
-  flushAndRunServer,
-  makeGetRequest,
-  ServerInfo,
-  setAccessTokensToServers,
-  uploadVideo
-} from '../../shared/extra-utils'
-import { VideoPrivacy } from '../../shared/models/videos'
+import { cleanupTests, flushAndRunServer, makeGetRequest, ServerInfo, setAccessTokensToServers } from '@shared/extra-utils'
+import { VideoPrivacy } from '@shared/models'
 
 const expect = chai.expect
 
@@ -165,9 +158,9 @@ describe('Test misc endpoints', function () {
     it('Should add videos, channel and accounts and get sitemap', async function () {
       this.timeout(35000)
 
-      await uploadVideo(server.url, server.accessToken, { name: 'video 1', nsfw: false })
-      await uploadVideo(server.url, server.accessToken, { name: 'video 2', nsfw: false })
-      await uploadVideo(server.url, server.accessToken, { name: 'video 3', privacy: VideoPrivacy.PRIVATE })
+      await server.videosCommand.upload({ attributes: { name: 'video 1', nsfw: false } })
+      await server.videosCommand.upload({ attributes: { name: 'video 2', nsfw: false } })
+      await server.videosCommand.upload({ attributes: { name: 'video 3', privacy: VideoPrivacy.PRIVATE } })
 
       await server.channelsCommand.create({ attributes: { name: 'channel1', displayName: 'channel 1' } })
       await server.channelsCommand.create({ attributes: { name: 'channel2', displayName: 'channel 2' } })

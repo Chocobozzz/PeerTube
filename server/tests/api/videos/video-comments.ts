@@ -9,8 +9,7 @@ import {
   flushAndRunServer,
   ServerInfo,
   setAccessTokensToServers,
-  testImage,
-  uploadVideo
+  testImage
 } from '@shared/extra-utils'
 
 const expect = chai.expect
@@ -33,9 +32,9 @@ describe('Test video comments', function () {
 
     await setAccessTokensToServers([ server ])
 
-    const res = await uploadVideo(server.url, server.accessToken, {})
-    videoUUID = res.body.video.uuid
-    videoId = res.body.video.id
+    const { id, uuid } = await server.videosCommand.upload()
+    videoUUID = uuid
+    videoId = id
 
     await server.usersCommand.updateMyAvatar({ fixture: 'avatar.png' })
 

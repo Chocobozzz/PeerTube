@@ -6,14 +6,11 @@ import {
   cleanupTests,
   doubleFollow,
   flushAndRunMultipleServers,
-  getVideo,
   killallServers,
   reRunServer,
   ServerInfo,
   setAccessTokensToServers,
   setDefaultVideoChannel,
-  uploadVideo,
-  uploadVideoAndGetId,
   wait,
   waitJobs
 } from '@shared/extra-utils'
@@ -37,17 +34,17 @@ describe('Test AP refresher', function () {
     await setDefaultVideoChannel(servers)
 
     {
-      videoUUID1 = (await uploadVideoAndGetId({ server: servers[1], videoName: 'video1' })).uuid
-      videoUUID2 = (await uploadVideoAndGetId({ server: servers[1], videoName: 'video2' })).uuid
-      videoUUID3 = (await uploadVideoAndGetId({ server: servers[1], videoName: 'video3' })).uuid
+      videoUUID1 = (await servers[1].videosCommand.quickUpload({ name: 'video1' })).uuid
+      videoUUID2 = (await servers[1].videosCommand.quickUpload({ name: 'video2' })).uuid
+      videoUUID3 = (await servers[1].videosCommand.quickUpload({ name: 'video3' })).uuid
     }
 
     {
-      const a1 = await servers[1].usersCommand.generateUserAndToken('user1')
-      await uploadVideo(servers[1].url, a1, { name: 'video4' })
+      const token1 = await servers[1].usersCommand.generateUserAndToken('user1')
+      await servers[1].videosCommand.upload({ token: token1, attributes: { name: 'video4' } })
 
-      const a2 = await servers[1].usersCommand.generateUserAndToken('user2')
-      await uploadVideo(servers[1].url, a2, { name: 'video5' })
+      const token2 = await servers[1].usersCommand.generateUserAndToken('user2')
+      await servers[1].videosCommand.upload({ token: token2, attributes: { name: 'video5' } })
     }
 
     {
@@ -75,13 +72,13 @@ describe('Test AP refresher', function () {
       // Change UUID so the remote server returns a 404
       await servers[1].sqlCommand.setVideoField(videoUUID1, 'uuid', '304afe4f-39f9-4d49-8ed7-ac57b86b174f')
 
-      await getVideo(servers[0].url, videoUUID1)
-      await getVideo(servers[0].url, videoUUID2)
+      await servers[0].videosCommand.get({ id: videoUUID1 })
+      await servers[0].videosCommand.get({ id: videoUUID2 })
 
       await waitJobs(servers)
 
-      await getVideo(servers[0].url, videoUUID1, HttpStatusCode.NOT_FOUND_404)
-      await getVideo(servers[0].url, videoUUID2, HttpStatusCode.OK_200)
+      await servers[0].videosCommand.get({ id: videoUUID1, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+      await servers[0].videosCommand.get({ id: videoUUID2 })
     })
 
     it('Should not update a remote video if the remote instance is down', async function () {
@@ -94,13 +91,13 @@ describe('Test AP refresher', function () {
       // Video will need a refresh
       await wait(10000)
 
-      await getVideo(servers[0].url, videoUUID3)
+      await servers[0].videosCommand.get({ id: videoUUID3 })
       // The refresh should fail
       await waitJobs([ servers[0] ])
 
       await reRunServer(servers[1])
 
-      await getVideo(servers[0].url, videoUUID3, HttpStatusCode.OK_200)
+      await servers[0].videosCommand.get({ id: videoUUID3 })
     })
   })
 

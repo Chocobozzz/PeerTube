@@ -12,22 +12,16 @@ import {
   cleanupTests,
   doubleFollow,
   flushAndRunMultipleServers,
-  getVideo,
-  getVideoWithToken,
   killallServers,
   makeGetRequest,
-  removeVideo,
   reRunServer,
   root,
   ServerInfo,
   setAccessTokensToServers,
-  updateVideo,
-  uploadVideo,
-  viewVideo,
   wait,
   waitJobs
 } from '@shared/extra-utils'
-import { VideoDetails, VideoPrivacy, VideoRedundancyStrategy, VideoRedundancyStrategyWithManual } from '@shared/models'
+import { VideoPrivacy, VideoRedundancyStrategy, VideoRedundancyStrategyWithManual } from '@shared/models'
 
 const expect = chai.expect
 
@@ -84,11 +78,11 @@ async function flushAndRunServers (strategy: VideoRedundancyStrategy | null, add
   await setAccessTokensToServers(servers)
 
   {
-    const res = await uploadVideo(servers[1].url, servers[1].accessToken, { name: 'video 1 server 2' })
-    video1Server2UUID = res.body.video.uuid
-    video1Server2Id = res.body.video.id
+    const { uuid, id } = await servers[1].videosCommand.upload({ attributes: { name: 'video 1 server 2' } })
+    video1Server2UUID = uuid
+    video1Server2Id = id
 
-    await viewVideo(servers[1].url, video1Server2UUID)
+    await servers[1].videosCommand.view({ id: video1Server2UUID })
   }
 
   await waitJobs(servers)
@@ -112,9 +106,8 @@ async function check1WebSeed (videoUUID?: string) {
 
   for (const server of servers) {
     // With token to avoid issues with video follow constraints
-    const res = await getVideoWithToken(server.url, server.accessToken, videoUUID)
+    const video = await server.videosCommand.getWithToken({ id: videoUUID })
 
-    const video: VideoDetails = res.body
     for (const f of video.files) {
       checkMagnetWebseeds(f, webseeds, server)
     }
@@ -130,9 +123,7 @@ async function check2Webseeds (videoUUID?: string) {
   ]
 
   for (const server of servers) {
-    const res = await getVideo(server.url, videoUUID)
-
-    const video: VideoDetails = res.body
+    const video = await server.videosCommand.get({ id: videoUUID })
 
     for (const file of video.files) {
       checkMagnetWebseeds(file, webseeds, server)
@@ -172,8 +163,7 @@ async function check0PlaylistRedundancies (videoUUID?: string) {
 
   for (const server of servers) {
     // With token to avoid issues with video follow constraints
-    const res = await getVideoWithToken(server.url, server.accessToken, videoUUID)
-    const video: VideoDetails = res.body
+    const video = await server.videosCommand.getWithToken({ id: videoUUID })
 
     expect(video.streamingPlaylists).to.be.an('array')
     expect(video.streamingPlaylists).to.have.lengthOf(1)
@@ -185,8 +175,7 @@ async function check1PlaylistRedundancies (videoUUID?: string) {
   if (!videoUUID) videoUUID = video1Server2UUID
 
   for (const server of servers) {
-    const res = await getVideo(server.url, videoUUID)
-    const video: VideoDetails = res.body
+    const video = await server.videosCommand.get({ id: videoUUID })
 
     expect(video.streamingPlaylists).to.have.lengthOf(1)
     expect(video.streamingPlaylists[0].redundancies).to.have.lengthOf(1)
@@ -199,8 +188,8 @@ async function check1PlaylistRedundancies (videoUUID?: string) {
   const baseUrlPlaylist = servers[1].url + '/static/streaming-playlists/hls'
   const baseUrlSegment = servers[0].url + '/static/redundancy/hls'
 
-  const res = await getVideo(servers[0].url, videoUUID)
-  const hlsPlaylist = (res.body as VideoDetails).streamingPlaylists[0]
+  const video = await servers[0].videosCommand.get({ id: videoUUID })
+  const hlsPlaylist = video.streamingPlaylists[0]
 
   for (const resolution of [ 240, 360, 480, 720 ]) {
     await checkSegmentHash({ server: servers[1], baseUrlPlaylist, baseUrlSegment, videoUUID, resolution, hlsPlaylist })
@@ -427,8 +416,8 @@ describe('Test videos redundancy', function () {
     it('Should view 2 times the first video to have > min_views config', async function () {
       this.timeout(80000)
 
-      await viewVideo(servers[0].url, video1Server2UUID)
-      await viewVideo(servers[2].url, video1Server2UUID)
+      await servers[0].videosCommand.view({ id: video1Server2UUID })
+      await servers[2].videosCommand.view({ id: video1Server2UUID })
 
       await wait(10000)
       await waitJobs(servers)
@@ -449,7 +438,7 @@ describe('Test videos redundancy', function () {
     it('Should remove the video and the redundancy files', async function () {
       this.timeout(20000)
 
-      await removeVideo(servers[1].url, servers[1].accessToken, video1Server2UUID)
+      await servers[1].videosCommand.remove({ id: video1Server2UUID })
 
       await waitJobs(servers)
 
@@ -495,8 +484,8 @@ describe('Test videos redundancy', function () {
     it('Should have 1 redundancy on the first video', async function () {
       this.timeout(160000)
 
-      await viewVideo(servers[0].url, video1Server2UUID)
-      await viewVideo(servers[2].url, video1Server2UUID)
+      await servers[0].videosCommand.view({ id: video1Server2UUID })
+      await servers[2].videosCommand.view({ id: video1Server2UUID })
 
       await wait(10000)
       await waitJobs(servers)
@@ -512,7 +501,7 @@ describe('Test videos redundancy', function () {
     it('Should remove the video and the redundancy files', async function () {
       this.timeout(20000)
 
-      await removeVideo(servers[1].url, servers[1].accessToken, video1Server2UUID)
+      await servers[1].videosCommand.remove({ id: video1Server2UUID })
 
       await waitJobs(servers)
 
@@ -588,8 +577,7 @@ describe('Test videos redundancy', function () {
 
     async function checkContains (servers: ServerInfo[], str: string) {
       for (const server of servers) {
-        const res = await getVideo(server.url, video1Server2UUID)
-        const video: VideoDetails = res.body
+        const video = await server.videosCommand.get({ id: video1Server2UUID })
 
         for (const f of video.files) {
           expect(f.magnetUri).to.contain(str)
@@ -599,8 +587,7 @@ describe('Test videos redundancy', function () {
 
     async function checkNotContains (servers: ServerInfo[], str: string) {
       for (const server of servers) {
-        const res = await getVideo(server.url, video1Server2UUID)
-        const video: VideoDetails = res.body
+        const video = await server.videosCommand.get({ id: video1Server2UUID })
 
         for (const f of video.files) {
           expect(f.magnetUri).to.not.contain(str)
@@ -665,13 +652,13 @@ describe('Test videos redundancy', function () {
       await check1PlaylistRedundancies(video1Server2UUID)
       await checkStatsWith1Redundancy(strategy)
 
-      const res = await uploadVideo(servers[1].url, servers[1].accessToken, { name: 'video 2 server 2', privacy: VideoPrivacy.PRIVATE })
-      video2Server2UUID = res.body.video.uuid
+      const { uuid } = await servers[1].videosCommand.upload({ attributes: { name: 'video 2 server 2', privacy: VideoPrivacy.PRIVATE } })
+      video2Server2UUID = uuid
 
       // Wait transcoding before federation
       await waitJobs(servers)
 
-      await updateVideo(servers[1].url, servers[1].accessToken, video2Server2UUID, { privacy: VideoPrivacy.PUBLIC })
+      await servers[1].videosCommand.update({ id: video2Server2UUID, attributes: { privacy: VideoPrivacy.PUBLIC } })
     })
 
     it('Should cache video 2 webseeds on the first video', async function () {

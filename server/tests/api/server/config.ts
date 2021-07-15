@@ -11,8 +11,7 @@ import {
   parallelTests,
   reRunServer,
   ServerInfo,
-  setAccessTokensToServers,
-  uploadVideo
+  setAccessTokensToServers
 } from '@shared/extra-utils'
 import { CustomConfig } from '@shared/models'
 
@@ -242,8 +241,8 @@ describe('Test config', function () {
     expect(data.video.file.extensions).to.contain('.webm')
     expect(data.video.file.extensions).to.contain('.ogv')
 
-    await uploadVideo(server.url, server.accessToken, { fixture: 'video_short.mkv' }, HttpStatusCode.UNSUPPORTED_MEDIA_TYPE_415)
-    await uploadVideo(server.url, server.accessToken, { fixture: 'sample.ogg' }, HttpStatusCode.UNSUPPORTED_MEDIA_TYPE_415)
+    await server.videosCommand.upload({ attributes: { fixture: 'video_short.mkv' }, expectedStatus: HttpStatusCode.UNSUPPORTED_MEDIA_TYPE_415 })
+    await server.videosCommand.upload({ attributes: { fixture: 'sample.ogg' }, expectedStatus: HttpStatusCode.UNSUPPORTED_MEDIA_TYPE_415 })
 
     expect(data.contactForm.enabled).to.be.true
   })
@@ -448,8 +447,8 @@ describe('Test config', function () {
     expect(data.video.file.extensions).to.contain('.ogg')
     expect(data.video.file.extensions).to.contain('.flac')
 
-    await uploadVideo(server.url, server.accessToken, { fixture: 'video_short.mkv' }, HttpStatusCode.OK_200)
-    await uploadVideo(server.url, server.accessToken, { fixture: 'sample.ogg' }, HttpStatusCode.OK_200)
+    await server.videosCommand.upload({ attributes: { fixture: 'video_short.mkv' }, expectedStatus: HttpStatusCode.OK_200 })
+    await server.videosCommand.upload({ attributes: { fixture: 'sample.ogg' }, expectedStatus: HttpStatusCode.OK_200 })
   })
 
   it('Should have the configuration updated after a restart', async function () {

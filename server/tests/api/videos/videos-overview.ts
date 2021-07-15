@@ -2,7 +2,7 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { cleanupTests, flushAndRunServer, ServerInfo, setAccessTokensToServers, uploadVideo, wait } from '@shared/extra-utils'
+import { cleanupTests, flushAndRunServer, ServerInfo, setAccessTokensToServers, wait } from '@shared/extra-utils'
 import { VideosOverview } from '@shared/models'
 
 const expect = chai.expect
@@ -35,10 +35,12 @@ describe('Test a videos overview', function () {
 
     await wait(3000)
 
-    await uploadVideo(server.url, server.accessToken, {
-      name: 'video 0',
-      category: 3,
-      tags: [ 'coucou1', 'coucou2' ]
+    await server.videosCommand.upload({
+      attributes: {
+        name: 'video 0',
+        category: 3,
+        tags: [ 'coucou1', 'coucou2' ]
+      }
     })
 
     const body = await server.overviewsCommand.getVideos({ page: 1 })
@@ -51,10 +53,12 @@ describe('Test a videos overview', function () {
 
     {
       for (let i = 1; i < 6; i++) {
-        await uploadVideo(server.url, server.accessToken, {
-          name: 'video ' + i,
-          category: 3,
-          tags: [ 'coucou1', 'coucou2' ]
+        await server.videosCommand.upload({
+          attributes: {
+            name: 'video ' + i,
+            category: 3,
+            tags: [ 'coucou1', 'coucou2' ]
+          }
         })
       }
 

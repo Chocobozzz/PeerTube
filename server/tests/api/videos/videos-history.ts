@@ -6,17 +6,14 @@ import { HttpStatusCode } from '@shared/core-utils'
 import {
   cleanupTests,
   flushAndRunServer,
-  getVideosListWithToken,
-  getVideoWithToken,
   HistoryCommand,
   killallServers,
   reRunServer,
   ServerInfo,
   setAccessTokensToServers,
-  uploadVideo,
   wait
 } from '@shared/extra-utils'
-import { Video, VideoDetails } from '@shared/models'
+import { Video } from '@shared/models'
 
 const expect = chai.expect
 
@@ -39,18 +36,18 @@ describe('Test videos history', function () {
     command = server.historyCommand
 
     {
-      const res = await uploadVideo(server.url, server.accessToken, { name: 'video 1' })
-      video1UUID = res.body.video.uuid
+      const { uuid } = await server.videosCommand.upload({ attributes: { name: 'video 1' } })
+      video1UUID = uuid
     }
 
     {
-      const res = await uploadVideo(server.url, server.accessToken, { name: 'video 2' })
-      video2UUID = res.body.video.uuid
+      const { uuid } = await server.videosCommand.upload({ attributes: { name: 'video 2' } })
+      video2UUID = uuid
     }
 
     {
-      const res = await uploadVideo(server.url, server.accessToken, { name: 'video 3' })
-      video3UUID = res.body.video.uuid
+      const { uuid } = await server.videosCommand.upload({ attributes: { name: 'video 3' } })
+      video3UUID = uuid
     }
 
     const user = {
@@ -62,12 +59,10 @@ describe('Test videos history', function () {
   })
 
   it('Should get videos, without watching history', async function () {
-    const res = await getVideosListWithToken(server.url, server.accessToken)
-    const videos: Video[] = res.body.data
+    const { data } = await server.videosCommand.listWithToken()
 
-    for (const video of videos) {
-      const resDetail = await getVideoWithToken(server.url, server.accessToken, video.id)
-      const videoDetails: VideoDetails = resDetail.body
+    for (const video of data) {
+      const videoDetails = await server.videosCommand.getWithToken({ id: video.id })
 
       expect(video.userHistory).to.be.undefined
       expect(videoDetails.userHistory).to.be.undefined
@@ -83,8 +78,8 @@ describe('Test videos history', function () {
     const videosOfVideos: Video[][] = []
 
     {
-      const res = await getVideosListWithToken(server.url, server.accessToken)
-      videosOfVideos.push(res.body.data)
+      const { data } = await server.videosCommand.listWithToken()
+      videosOfVideos.push(data)
     }
 
     {
@@ -107,24 +102,21 @@ describe('Test videos history', function () {
     }
 
     {
-      const resDetail = await getVideoWithToken(server.url, server.accessToken, video1UUID)
-      const videoDetails: VideoDetails = resDetail.body
+      const videoDetails = await server.videosCommand.getWithToken({ id: video1UUID })
 
       expect(videoDetails.userHistory).to.not.be.undefined
       expect(videoDetails.userHistory.currentTime).to.equal(3)
     }
 
     {
-      const resDetail = await getVideoWithToken(server.url, server.accessToken, video2UUID)
-      const videoDetails: VideoDetails = resDetail.body
+      const videoDetails = await server.videosCommand.getWithToken({ id: video2UUID })
 
       expect(videoDetails.userHistory).to.not.be.undefined
       expect(videoDetails.userHistory.currentTime).to.equal(8)
     }
 
     {
-      const resDetail = await getVideoWithToken(server.url, server.accessToken, video3UUID)
-      const videoDetails: VideoDetails = resDetail.body
+      const videoDetails = await server.videosCommand.getWithToken({ id: video3UUID })
 
       expect(videoDetails.userHistory).to.be.undefined
     }
