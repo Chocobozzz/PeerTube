@@ -1,21 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-import * as chai from 'chai'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { expect } from 'chai'
+import { HttpStatusCode } from '@shared/core-utils'
 import {
   cleanupTests,
   doubleFollow,
   flushAndRunMultipleServers,
   makeGetRequest,
   ServerInfo,
-  setAccessTokensToServers,
-  uploadVideo
-} from '../../../../shared/extra-utils'
-import { UserRole } from '../../../../shared/models/users'
-import { Video, VideoPrivacy } from '../../../../shared/models/videos'
-
-const expect = chai.expect
+  setAccessTokensToServers
+} from '@shared/extra-utils'
+import { UserRole, Video, VideoPrivacy } from '@shared/models'
 
 async function getVideosNames (server: ServerInfo, token: string, filter: string, statusCodeExpected = HttpStatusCode.OK_200) {
   const paths = [
@@ -62,16 +58,16 @@ describe('Test videos filter', function () {
       await server.usersCommand.create({ username: moderator.username, password: moderator.password, role: UserRole.MODERATOR })
       server['moderatorAccessToken'] = await server.loginCommand.getAccessToken(moderator)
 
-      await uploadVideo(server.url, server.accessToken, { name: 'public ' + server.serverNumber })
+      await server.videosCommand.upload({ attributes: { name: 'public ' + server.serverNumber } })
 
       {
         const attributes = { name: 'unlisted ' + server.serverNumber, privacy: VideoPrivacy.UNLISTED }
-        await uploadVideo(server.url, server.accessToken, attributes)
+        await server.videosCommand.upload({ attributes })
       }
 
       {
         const attributes = { name: 'private ' + server.serverNumber, privacy: VideoPrivacy.PRIVATE }
-        await uploadVideo(server.url, server.accessToken, attributes)
+        await server.videosCommand.upload({ attributes })
       }
     }
 

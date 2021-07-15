@@ -13,8 +13,7 @@ import {
   sendRTMPStream,
   ServerInfo,
   setAccessTokensToServers,
-  stopFfmpeg,
-  uploadVideoAndGetId
+  stopFfmpeg
 } from '@shared/extra-utils'
 import { VideoCreateResult, VideoPrivacy } from '@shared/models'
 
@@ -58,7 +57,7 @@ describe('Test video lives API validator', function () {
     }
 
     {
-      videoIdNotLive = (await uploadVideoAndGetId({ server, videoName: 'not live' })).id
+      videoIdNotLive = (await server.videosCommand.quickUpload({ name: 'not live' })).id
     }
 
     command = server.liveCommand

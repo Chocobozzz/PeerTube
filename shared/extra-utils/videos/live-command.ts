@@ -9,7 +9,6 @@ import { wait } from '../miscs'
 import { unwrapBody } from '../requests'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
 import { sendRTMPStream, testFfmpegStreamError } from './live'
-import { getVideoWithToken } from './videos'
 
 export class LiveCommand extends AbstractCommand {
 
@@ -124,8 +123,7 @@ export class LiveCommand extends AbstractCommand {
     let video: VideoDetails
 
     do {
-      const res = await getVideoWithToken(this.server.url, options.token ?? this.server.accessToken, options.videoId)
-      video = res.body
+      video = await this.server.videosCommand.getWithToken({ token: options.token, id: options.videoId })
 
       await wait(500)
     } while (video.isLive === true && video.state.id !== VideoState.PUBLISHED)
@@ -149,8 +147,7 @@ export class LiveCommand extends AbstractCommand {
     let video: VideoDetails
 
     do {
-      const res = await getVideoWithToken(this.server.url, options.token ?? this.server.accessToken, options.videoId)
-      video = res.body
+      video = await this.server.videosCommand.getWithToken({ token: options.token, id: options.videoId })
 
       await wait(500)
     } while (video.state.id !== options.state)

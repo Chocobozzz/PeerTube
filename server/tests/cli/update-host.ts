@@ -5,18 +5,14 @@ import { expect } from 'chai'
 import {
   cleanupTests,
   flushAndRunServer,
-  getVideo,
-  getVideosList,
   killallServers,
   makeActivityPubGetRequest,
   parseTorrentVideo,
   reRunServer,
   ServerInfo,
   setAccessTokensToServers,
-  uploadVideo,
   waitJobs
 } from '@shared/extra-utils'
-import { VideoDetails } from '@shared/models'
 
 describe('Test update host scripts', function () {
   let server: ServerInfo
@@ -34,10 +30,8 @@ describe('Test update host scripts', function () {
     await setAccessTokensToServers([ server ])
 
     // Upload two videos for our needs
-    const videoAttributes = {}
-    const resVideo1 = await uploadVideo(server.url, server.accessToken, videoAttributes)
-    const video1UUID = resVideo1.body.video.uuid
-    await uploadVideo(server.url, server.accessToken, videoAttributes)
+    const { uuid: video1UUID } = await server.videosCommand.upload()
+    await server.videosCommand.upload()
 
     // Create a user
     await server.usersCommand.create({ username: 'toto', password: 'coucou' })
@@ -68,16 +62,15 @@ describe('Test update host scripts', function () {
   })
 
   it('Should have updated videos url', async function () {
-    const res = await getVideosList(server.url)
-    expect(res.body.total).to.equal(2)
+    const { total, data } = await server.videosCommand.list()
+    expect(total).to.equal(2)
 
-    for (const video of res.body.data) {
+    for (const video of data) {
       const { body } = await makeActivityPubGetRequest(server.url, '/videos/watch/' + video.uuid)
 
       expect(body.id).to.equal('http://localhost:9002/videos/watch/' + video.uuid)
 
-      const res = await getVideo(server.url, video.uuid)
-      const videoDetails: VideoDetails = res.body
+      const videoDetails = await server.videosCommand.get({ id: video.uuid })
 
       expect(videoDetails.trackerUrls[0]).to.include(server.host)
       expect(videoDetails.streamingPlaylists[0].playlistUrl).to.include(server.host)
@@ -111,13 +104,11 @@ describe('Test update host scripts', function () {
   it('Should have updated torrent hosts', async function () {
     this.timeout(30000)
 
-    const res = await getVideosList(server.url)
-    const videos = res.body.data
-    expect(videos).to.have.lengthOf(2)
+    const { data } = await server.videosCommand.list()
+    expect(data).to.have.lengthOf(2)
 
-    for (const video of videos) {
-      const res2 = await getVideo(server.url, video.id)
-      const videoDetails: VideoDetails = res2.body
+    for (const video of data) {
+      const videoDetails = await server.videosCommand.get({ id: video.id })
 
       expect(videoDetails.files).to.have.lengthOf(4)
 

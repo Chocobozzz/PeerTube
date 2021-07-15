@@ -1,23 +1,22 @@
 import { omit, pick } from 'lodash'
+import { HttpStatusCode } from '@shared/core-utils'
 import {
   BooleanBothQuery,
   ResultList,
   VideoExistInPlaylist,
   VideoPlaylist,
+  VideoPlaylistCreate,
   VideoPlaylistCreateResult,
   VideoPlaylistElement,
+  VideoPlaylistElementCreate,
   VideoPlaylistElementCreateResult,
-  VideoPlaylistReorder
+  VideoPlaylistElementUpdate,
+  VideoPlaylistReorder,
+  VideoPlaylistType,
+  VideoPlaylistUpdate
 } from '@shared/models'
-import { HttpStatusCode } from '../../core-utils/miscs/http-error-codes'
-import { VideoPlaylistCreate } from '../../models/videos/playlist/video-playlist-create.model'
-import { VideoPlaylistElementCreate } from '../../models/videos/playlist/video-playlist-element-create.model'
-import { VideoPlaylistElementUpdate } from '../../models/videos/playlist/video-playlist-element-update.model'
-import { VideoPlaylistType } from '../../models/videos/playlist/video-playlist-type.model'
-import { VideoPlaylistUpdate } from '../../models/videos/playlist/video-playlist-update.model'
 import { unwrapBody } from '../requests'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
-import { videoUUIDToId } from './videos'
 
 export class PlaylistsCommand extends AbstractCommand {
 
@@ -185,7 +184,7 @@ export class PlaylistsCommand extends AbstractCommand {
     const attributes = {
       ...options.attributes,
 
-      videoId: await videoUUIDToId(this.server.url, options.attributes.videoId)
+      videoId: await this.server.videosCommand.getId({ ...options, uuid: options.attributes.videoId })
     }
 
     const path = '/api/v1/video-playlists/' + options.playlistId + '/videos'

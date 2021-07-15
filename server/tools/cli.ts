@@ -16,7 +16,7 @@ const version = require('../../../package.json').version
 
 async function getAdminTokenOrDie (server: ServerInfo, username: string, password: string) {
   const token = await server.loginCommand.getAccessToken(username, password)
-  const me = await server.usersCommand.getMyUserInformation({ token })
+  const me = await server.usersCommand.getMyInfo({ token })
 
   if (me.role !== UserRole.ADMINISTRATOR) {
     console.error('You must be an administrator.')

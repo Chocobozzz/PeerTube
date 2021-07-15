@@ -2,22 +2,19 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '@shared/core-utils'
 import {
   ChangeOwnershipCommand,
   cleanupTests,
   doubleFollow,
   flushAndRunMultipleServers,
   flushAndRunServer,
-  getVideo,
-  getVideosList,
   ServerInfo,
   setAccessTokensToServers,
   setDefaultVideoChannel,
-  uploadVideo
-} from '../../../../shared/extra-utils'
-import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
-import { VideoDetails, VideoPrivacy } from '../../../../shared/models/videos'
+  waitJobs
+} from '@shared/extra-utils'
+import { VideoPrivacy } from '@shared/models'
 
 const expect = chai.expect
 
@@ -71,14 +68,13 @@ describe('Test video change ownership - nominal', function () {
     }
 
     {
-      const videoAttributes = {
+      const attributes = {
         name: 'my super name',
         description: 'my super description'
       }
-      const res = await uploadVideo(servers[0].url, firstUserToken, videoAttributes)
+      const { id } = await servers[0].videosCommand.upload({ token: firstUserToken, attributes })
 
-      const resVideo = await getVideo(servers[0].url, res.body.video.id)
-      servers[0].video = resVideo.body
+      servers[0].video = await servers[0].videosCommand.get({ id })
     }
 
     {
@@ -212,9 +208,7 @@ describe('Test video change ownership - nominal', function () {
 
   it('Should have the channel of the video updated', async function () {
     for (const server of servers) {
-      const res = await getVideo(server.url, servers[0].video.uuid)
-
-      const video: VideoDetails = res.body
+      const video = await server.videosCommand.get({ id: servers[0].video.uuid })
 
       expect(video.name).to.equal('my super name')
       expect(video.channel.displayName).to.equal('Main second channel')
@@ -243,9 +237,7 @@ describe('Test video change ownership - nominal', function () {
     await waitJobs(servers)
 
     for (const server of servers) {
-      const res = await getVideo(server.url, servers[0].video.uuid)
-
-      const video: VideoDetails = res.body
+      const video = await server.videosCommand.get({ id: servers[0].video.uuid })
 
       expect(video.name).to.equal('my super name')
       expect(video.channel.displayName).to.equal('Main second channel')
@@ -280,20 +272,18 @@ describe('Test video change ownership - quota too small', function () {
     secondUserToken = await server.loginCommand.getAccessToken(secondUser)
 
     // Upload some videos on the server
-    const video1Attributes = {
+    const attributes = {
       name: 'my super name',
       description: 'my super description'
     }
-    await uploadVideo(server.url, firstUserToken, video1Attributes)
+    await server.videosCommand.upload({ token: firstUserToken, attributes })
 
     await waitJobs(server)
 
-    const res = await getVideosList(server.url)
-    const videos = res.body.data
+    const { data } = await server.videosCommand.list()
+    expect(data.length).to.equal(1)
 
-    expect(videos.length).to.equal(1)
-
-    server.video = videos.find(video => video.name === 'my super name')
+    server.video = data.find(video => video.name === 'my super name')
   })
 
   it('Should send a request to change ownership of a video', async function () {

@@ -2,17 +2,7 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import {
-  cleanupTests,
-  doubleFollow,
-  flushAndRunMultipleServers,
-  getVideosListSort,
-  ServerInfo,
-  setAccessTokensToServers,
-  uploadVideo,
-  waitJobs
-} from '../../../../shared/extra-utils'
-import { Video } from '../../../../shared/models/videos'
+import { cleanupTests, doubleFollow, flushAndRunMultipleServers, ServerInfo, setAccessTokensToServers, waitJobs } from '@shared/extra-utils'
 
 const expect = chai.expect
 
@@ -36,10 +26,9 @@ describe('Test ActivityPub fetcher', function () {
 
     const userAccessToken = await servers[0].loginCommand.getAccessToken(user)
 
-    await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'video root' })
-    const res = await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'bad video root' })
-    const badVideoUUID = res.body.video.uuid
-    await uploadVideo(servers[0].url, userAccessToken, { name: 'video user' })
+    await servers[0].videosCommand.upload({ attributes: { name: 'video root' } })
+    const { uuid } = await servers[0].videosCommand.upload({ attributes: { name: 'bad video root' } })
+    await servers[0].videosCommand.upload({ token: userAccessToken, attributes: { name: 'video user' } })
 
     {
       const to = 'http://localhost:' + servers[0].port + '/accounts/user1'
@@ -48,8 +37,8 @@ describe('Test ActivityPub fetcher', function () {
     }
 
     {
-      const value = 'http://localhost:' + servers[2].port + '/videos/watch/' + badVideoUUID
-      await servers[0].sqlCommand.setVideoField(badVideoUUID, 'url', value)
+      const value = 'http://localhost:' + servers[2].port + '/videos/watch/' + uuid
+      await servers[0].sqlCommand.setVideoField(uuid, 'url', value)
     }
   })
 
@@ -60,20 +49,18 @@ describe('Test ActivityPub fetcher', function () {
     await waitJobs(servers)
 
     {
-      const res = await getVideosListSort(servers[0].url, 'createdAt')
-      expect(res.body.total).to.equal(3)
+      const { total, data } = await servers[0].videosCommand.list({ sort: 'createdAt' })
 
-      const data: Video[] = res.body.data
+      expect(total).to.equal(3)
       expect(data[0].name).to.equal('video root')
       expect(data[1].name).to.equal('bad video root')
       expect(data[2].name).to.equal('video user')
     }
 
     {
-      const res = await getVideosListSort(servers[1].url, 'createdAt')
-      expect(res.body.total).to.equal(1)
+      const { total, data } = await servers[1].videosCommand.list({ sort: 'createdAt' })
 
-      const data: Video[] = res.body.data
+      expect(total).to.equal(1)
       expect(data[0].name).to.equal('video root')
     }
   })

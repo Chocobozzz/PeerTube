@@ -5,12 +5,9 @@ import * as chai from 'chai'
 import {
   cleanupTests,
   flushAndRunMultipleServers,
-  getVideoChannelVideos,
   SearchCommand,
   ServerInfo,
   setAccessTokensToServers,
-  updateVideo,
-  uploadVideo,
   wait,
   waitJobs
 } from '@shared/extra-utils'
@@ -53,8 +50,9 @@ describe('Test ActivityPub video channels search', function () {
       const created = await servers[1].channelsCommand.create({ token: userServer2Token, attributes: channel })
       channelIdServer2 = created.id
 
-      const res = await uploadVideo(servers[1].url, userServer2Token, { name: 'video 1 server 2', channelId: channelIdServer2 })
-      videoServer2UUID = res.body.video.uuid
+      const attributes = { name: 'video 1 server 2', channelId: channelIdServer2 }
+      const { uuid } = await servers[1].videosCommand.upload({ token: userServer2Token, attributes })
+      videoServer2UUID = uuid
     }
 
     await waitJobs(servers)
@@ -149,16 +147,21 @@ describe('Test ActivityPub video channels search', function () {
 
     await waitJobs(servers)
 
-    const res = await getVideoChannelVideos(servers[0].url, null, 'channel1_server2@localhost:' + servers[1].port, 0, 5)
-    expect(res.body.total).to.equal(0)
-    expect(res.body.data).to.have.lengthOf(0)
+    const { total, data } = await servers[0].videosCommand.listByChannel({
+      token: null,
+      videoChannelName: 'channel1_server2@localhost:' + servers[1].port
+    })
+    expect(total).to.equal(0)
+    expect(data).to.have.lengthOf(0)
   })
 
   it('Should list video channel videos of server 2 with token', async function () {
-    const res = await getVideoChannelVideos(servers[0].url, servers[0].accessToken, 'channel1_server2@localhost:' + servers[1].port, 0, 5)
+    const { total, data } = await servers[0].videosCommand.listByChannel({
+      videoChannelName: 'channel1_server2@localhost:' + servers[1].port
+    })
 
-    expect(res.body.total).to.equal(1)
-    expect(res.body.data[0].name).to.equal('video 1 server 2')
+    expect(total).to.equal(1)
+    expect(data[0].name).to.equal('video 1 server 2')
   })
 
   it('Should update video channel of server 2, and refresh it on server 1', async function () {
@@ -190,8 +193,8 @@ describe('Test ActivityPub video channels search', function () {
   it('Should update and add a video on server 2, and update it on server 1 after a search', async function () {
     this.timeout(60000)
 
-    await updateVideo(servers[1].url, userServer2Token, videoServer2UUID, { name: 'video 1 updated' })
-    await uploadVideo(servers[1].url, userServer2Token, { name: 'video 2 server 2', channelId: channelIdServer2 })
+    await servers[1].videosCommand.update({ token: userServer2Token, id: videoServer2UUID, attributes: { name: 'video 1 updated' } })
+    await servers[1].videosCommand.upload({ token: userServer2Token, attributes: { name: 'video 2 server 2', channelId: channelIdServer2 } })
 
     await waitJobs(servers)
 
@@ -204,11 +207,11 @@ describe('Test ActivityPub video channels search', function () {
     await waitJobs(servers)
 
     const videoChannelName = 'channel1_server2@localhost:' + servers[1].port
-    const res = await getVideoChannelVideos(servers[0].url, servers[0].accessToken, videoChannelName, 0, 5, '-createdAt')
+    const { total, data } = await servers[0].videosCommand.listByChannel({ videoChannelName, sort: '-createdAt' })
 
-    expect(res.body.total).to.equal(2)
-    expect(res.body.data[0].name).to.equal('video 2 server 2')
-    expect(res.body.data[1].name).to.equal('video 1 updated')
+    expect(total).to.equal(2)
+    expect(data[0].name).to.equal('video 2 server 2')
+    expect(data[1].name).to.equal('video 1 updated')
   })
 
   it('Should delete video channel of server 2, and delete it on server 1', async function () {

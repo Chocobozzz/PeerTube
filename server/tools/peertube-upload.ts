@@ -4,7 +4,6 @@ registerTSPaths()
 import { program } from 'commander'
 import { access, constants } from 'fs-extra'
 import { isAbsolute } from 'path'
-import { uploadVideo } from '../../shared/extra-utils/'
 import { assignToken, buildCommonVideoOptions, buildServer, buildVideoAttributesFromCommander, getServerCredentials } from './cli'
 
 let command = program
@@ -52,16 +51,18 @@ async function run (url: string, username: string, password: string) {
 
   console.log('Uploading %s video...', options.videoName)
 
-  const videoAttributes = await buildVideoAttributesFromCommander(server, program)
+  const baseAttributes = await buildVideoAttributesFromCommander(server, program)
 
-  Object.assign(videoAttributes, {
+  const attributes = {
+    ...baseAttributes,
+
     fixture: options.file,
     thumbnailfile: options.thumbnail,
     previewfile: options.preview
-  })
+  }
 
   try {
-    await uploadVideo(url, server.accessToken, videoAttributes)
+    await server.videosCommand.upload({ attributes })
     console.log(`Video ${options.videoName} uploaded.`)
     process.exit(0)
   } catch (err) {

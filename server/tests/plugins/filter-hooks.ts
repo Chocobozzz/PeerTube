@@ -7,22 +7,12 @@ import {
   cleanupTests,
   doubleFollow,
   flushAndRunMultipleServers,
-  getAccountVideos,
-  getMyVideos,
-  getVideo,
-  getVideoChannelVideos,
-  getVideosList,
-  getVideosListPagination,
-  getVideoWithToken,
   ImportsCommand,
   makeRawRequest,
   PluginsCommand,
   ServerInfo,
   setAccessTokensToServers,
   setDefaultVideoChannel,
-  updateVideo,
-  uploadVideo,
-  uploadVideoAndGetId,
   waitJobs
 } from '@shared/extra-utils'
 import { VideoDetails, VideoImportState, VideoPlaylist, VideoPlaylistPrivacy, VideoPrivacy } from '@shared/models'
@@ -46,11 +36,11 @@ describe('Test plugin filter hooks', function () {
     await servers[0].pluginsCommand.install({ path: PluginsCommand.getPluginTestPath('-filter-translations') })
 
     for (let i = 0; i < 10; i++) {
-      await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'default video ' + i })
+      await servers[0].videosCommand.upload({ attributes: { name: 'default video ' + i } })
     }
 
-    const res = await getVideosList(servers[0].url)
-    videoUUID = res.body.data[0].uuid
+    const { data } = await servers[0].videosCommand.list()
+    videoUUID = data[0].uuid
 
     await servers[0].configCommand.updateCustomSubConfig({
       newConfig: {
@@ -67,69 +57,68 @@ describe('Test plugin filter hooks', function () {
   })
 
   it('Should run filter:api.videos.list.params', async function () {
-    const res = await getVideosListPagination(servers[0].url, 0, 2)
+    const { data } = await servers[0].videosCommand.list({ start: 0, count: 2 })
 
     // 2 plugins do +1 to the count parameter
-    expect(res.body.data).to.have.lengthOf(4)
+    expect(data).to.have.lengthOf(4)
   })
 
   it('Should run filter:api.videos.list.result', async function () {
-    const res = await getVideosListPagination(servers[0].url, 0, 0)
+    const { total } = await servers[0].videosCommand.list({ start: 0, count: 0 })
 
     // Plugin do +1 to the total result
-    expect(res.body.total).to.equal(11)
+    expect(total).to.equal(11)
   })
 
   it('Should run filter:api.accounts.videos.list.params', async function () {
-    const res = await getAccountVideos(servers[0].url, servers[0].accessToken, 'root', 0, 2)
+    const { data } = await servers[0].videosCommand.listByAccount({ accountName: 'root', start: 0, count: 2 })
 
     // 1 plugin do +1 to the count parameter
-    expect(res.body.data).to.have.lengthOf(3)
+    expect(data).to.have.lengthOf(3)
   })
 
   it('Should run filter:api.accounts.videos.list.result', async function () {
-    const res = await getAccountVideos(servers[0].url, servers[0].accessToken, 'root', 0, 2)
+    const { total } = await servers[0].videosCommand.listByAccount({ accountName: 'root', start: 0, count: 2 })
 
     // Plugin do +2 to the total result
-    expect(res.body.total).to.equal(12)
+    expect(total).to.equal(12)
   })
 
   it('Should run filter:api.video-channels.videos.list.params', async function () {
-    const res = await getVideoChannelVideos(servers[0].url, servers[0].accessToken, 'root_channel', 0, 2)
+    const { data } = await servers[0].videosCommand.listByChannel({ videoChannelName: 'root_channel', start: 0, count: 2 })
 
     // 1 plugin do +3 to the count parameter
-    expect(res.body.data).to.have.lengthOf(5)
+    expect(data).to.have.lengthOf(5)
   })
 
   it('Should run filter:api.video-channels.videos.list.result', async function () {
-    const res = await getVideoChannelVideos(servers[0].url, servers[0].accessToken, 'root_channel', 0, 2)
+    const { total } = await servers[0].videosCommand.listByChannel({ videoChannelName: 'root_channel', start: 0, count: 2 })
 
     // Plugin do +3 to the total result
-    expect(res.body.total).to.equal(13)
+    expect(total).to.equal(13)
   })
 
   it('Should run filter:api.user.me.videos.list.params', async function () {
-    const res = await getMyVideos(servers[0].url, servers[0].accessToken, 0, 2)
+    const { data } = await servers[0].videosCommand.listMyVideos({ start: 0, count: 2 })
 
     // 1 plugin do +4 to the count parameter
-    expect(res.body.data).to.have.lengthOf(6)
+    expect(data).to.have.lengthOf(6)
   })
 
   it('Should run filter:api.user.me.videos.list.result', async function () {
-    const res = await getMyVideos(servers[0].url, servers[0].accessToken, 0, 2)
+    const { total } = await servers[0].videosCommand.listMyVideos({ start: 0, count: 2 })
 
     // Plugin do +4 to the total result
-    expect(res.body.total).to.equal(14)
+    expect(total).to.equal(14)
   })
 
   it('Should run filter:api.video.get.result', async function () {
-    const res = await getVideo(servers[0].url, videoUUID)
-
-    expect(res.body.name).to.contain('<3')
+    const video = await servers[0].videosCommand.get({ id: videoUUID })
+    expect(video.name).to.contain('<3')
   })
 
   it('Should run filter:api.video.upload.accept.result', async function () {
-    await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'video with bad word' }, HttpStatusCode.FORBIDDEN_403)
+    await servers[0].videosCommand.upload({ attributes: { name: 'video with bad word' }, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
   })
 
   it('Should run filter:api.live-video.create.accept.result', async function () {
@@ -270,14 +259,13 @@ describe('Test plugin filter hooks', function () {
   describe('Should run filter:video.auto-blacklist.result', function () {
 
     async function checkIsBlacklisted (id: number | string, value: boolean) {
-      const res = await getVideoWithToken(servers[0].url, servers[0].accessToken, id)
-      const video: VideoDetails = res.body
+      const video = await servers[0].videosCommand.getWithToken({ id })
       expect(video.blacklisted).to.equal(value)
     }
 
     it('Should blacklist on upload', async function () {
-      const res = await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'video please blacklist me' })
-      await checkIsBlacklisted(res.body.video.uuid, true)
+      const { uuid } = await servers[0].videosCommand.upload({ attributes: { name: 'video please blacklist me' } })
+      await checkIsBlacklisted(uuid, true)
     })
 
     it('Should blacklist on import', async function () {
@@ -293,36 +281,34 @@ describe('Test plugin filter hooks', function () {
     })
 
     it('Should blacklist on update', async function () {
-      const res = await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'video' })
-      const videoId = res.body.video.uuid
-      await checkIsBlacklisted(videoId, false)
+      const { uuid } = await servers[0].videosCommand.upload({ attributes: { name: 'video' } })
+      await checkIsBlacklisted(uuid, false)
 
-      await updateVideo(servers[0].url, servers[0].accessToken, videoId, { name: 'please blacklist me' })
-      await checkIsBlacklisted(videoId, true)
+      await servers[0].videosCommand.update({ id: uuid, attributes: { name: 'please blacklist me' } })
+      await checkIsBlacklisted(uuid, true)
     })
 
     it('Should blacklist on remote upload', async function () {
       this.timeout(120000)
 
-      const res = await uploadVideo(servers[1].url, servers[1].accessToken, { name: 'remote please blacklist me' })
+      const { uuid } = await servers[1].videosCommand.upload({ attributes: { name: 'remote please blacklist me' } })
       await waitJobs(servers)
 
-      await checkIsBlacklisted(res.body.video.uuid, true)
+      await checkIsBlacklisted(uuid, true)
     })
 
     it('Should blacklist on remote update', async function () {
       this.timeout(120000)
 
-      const res = await uploadVideo(servers[1].url, servers[1].accessToken, { name: 'video' })
+      const { uuid } = await servers[1].videosCommand.upload({ attributes: { name: 'video' } })
       await waitJobs(servers)
 
-      const videoId = res.body.video.uuid
-      await checkIsBlacklisted(videoId, false)
+      await checkIsBlacklisted(uuid, false)
 
-      await updateVideo(servers[1].url, servers[1].accessToken, videoId, { name: 'please blacklist me' })
+      await servers[1].videosCommand.update({ id: uuid, attributes: { name: 'please blacklist me' } })
       await waitJobs(servers)
 
-      await checkIsBlacklisted(videoId, true)
+      await checkIsBlacklisted(uuid, true)
     })
   })
 
@@ -370,15 +356,14 @@ describe('Test plugin filter hooks', function () {
       const uuids: string[] = []
 
       for (const name of [ 'bad torrent', 'bad file', 'bad playlist file' ]) {
-        const uuid = (await uploadVideoAndGetId({ server: servers[0], videoName: name })).uuid
+        const uuid = (await servers[0].videosCommand.quickUpload({ name: name })).uuid
         uuids.push(uuid)
       }
 
       await waitJobs(servers)
 
       for (const uuid of uuids) {
-        const res = await getVideo(servers[0].url, uuid)
-        downloadVideos.push(res.body)
+        downloadVideos.push(await servers[0].videosCommand.get({ id: uuid }))
       }
     })
 
@@ -428,9 +413,8 @@ describe('Test plugin filter hooks', function () {
 
       for (const name of [ 'bad embed', 'good embed' ]) {
         {
-          const uuid = (await uploadVideoAndGetId({ server: servers[0], videoName: name })).uuid
-          const res = await getVideo(servers[0].url, uuid)
-          embedVideos.push(res.body)
+          const uuid = (await servers[0].videosCommand.quickUpload({ name: name })).uuid
+          embedVideos.push(await servers[0].videosCommand.get({ id: uuid }))
         }
 
         {

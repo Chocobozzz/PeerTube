@@ -7,11 +7,9 @@ import {
   cleanupTests,
   doubleFollow,
   flushAndRunMultipleServers,
-  removeVideo,
   ServerInfo,
   setAccessTokensToServers,
   testCaptionFile,
-  uploadVideo,
   wait,
   waitJobs
 } from '@shared/extra-utils'
@@ -34,8 +32,8 @@ describe('Test video captions', function () {
 
     await waitJobs(servers)
 
-    const res = await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'my video name' })
-    videoUUID = res.body.video.uuid
+    const { uuid } = await servers[0].videosCommand.upload({ attributes: { name: 'my video name' } })
+    videoUUID = uuid
 
     await waitJobs(servers)
   })
@@ -180,7 +178,7 @@ describe('Test video captions', function () {
   })
 
   it('Should remove the video, and thus all video captions', async function () {
-    await removeVideo(servers[0].url, servers[0].accessToken, videoUUID)
+    await servers[0].videosCommand.remove({ id: videoUUID })
 
     await checkVideoFilesWereRemoved(videoUUID, servers[0])
   })

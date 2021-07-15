@@ -6,12 +6,9 @@ import {
   cleanupTests,
   doubleFollow,
   flushAndRunMultipleServers,
-  getLocalIdByUUID,
   RedundancyCommand,
   ServerInfo,
   setAccessTokensToServers,
-  uploadVideo,
-  uploadVideoAndGetId,
   waitJobs
 } from '@shared/extra-utils'
 import { VideoPrivacy, VideoRedundanciesTarget } from '@shared/models'
@@ -59,13 +56,13 @@ describe('Test manage videos redundancy', function () {
     commands = servers.map(s => s.redundancyCommand)
 
     {
-      const res = await uploadVideo(servers[1].url, servers[1].accessToken, { name: 'video 1 server 2' })
-      video1Server2UUID = res.body.video.uuid
+      const { uuid } = await servers[1].videosCommand.upload({ attributes: { name: 'video 1 server 2' } })
+      video1Server2UUID = uuid
     }
 
     {
-      const res = await uploadVideo(servers[1].url, servers[1].accessToken, { name: 'video 2 server 2' })
-      video2Server2UUID = res.body.video.uuid
+      const { uuid } = await servers[1].videosCommand.upload({ attributes: { name: 'video 2 server 2' } })
+      video2Server2UUID = uuid
     }
 
     await waitJobs(servers)
@@ -206,9 +203,9 @@ describe('Test manage videos redundancy', function () {
   it('Should manually add a redundancy and list it', async function () {
     this.timeout(120000)
 
-    const uuid = (await uploadVideoAndGetId({ server: servers[1], videoName: 'video 3 server 2', privacy: VideoPrivacy.UNLISTED })).uuid
+    const uuid = (await servers[1].videosCommand.quickUpload({ name: 'video 3 server 2', privacy: VideoPrivacy.UNLISTED })).uuid
     await waitJobs(servers)
-    const videoId = await getLocalIdByUUID(servers[0].url, uuid)
+    const videoId = await servers[0].videosCommand.getId({ uuid })
 
     await commands[0].addVideo({ videoId })
 

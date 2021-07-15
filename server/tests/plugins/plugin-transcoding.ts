@@ -7,16 +7,14 @@ import { getAudioStream, getVideoFileFPS, getVideoStreamFromFile } from '@server
 import {
   cleanupTests,
   flushAndRunServer,
-  getVideo,
   PluginsCommand,
   ServerInfo,
   setAccessTokensToServers,
   setDefaultVideoChannel,
   testFfmpegStreamError,
-  uploadVideoAndGetId,
   waitJobs
 } from '@shared/extra-utils'
-import { VideoDetails, VideoPrivacy } from '@shared/models'
+import { VideoPrivacy } from '@shared/models'
 
 async function createLiveWrapper (server: ServerInfo) {
   const liveAttributes = {
@@ -81,8 +79,7 @@ describe('Test transcoding plugins', function () {
   describe('When using a plugin adding profiles to existing encoders', function () {
 
     async function checkVideoFPS (uuid: string, type: 'above' | 'below', fps: number) {
-      const res = await getVideo(server.url, uuid)
-      const video = res.body as VideoDetails
+      const video = await server.videosCommand.get({ id: uuid })
       const files = video.files.concat(...video.streamingPlaylists.map(p => p.files))
 
       for (const file of files) {
@@ -119,7 +116,7 @@ describe('Test transcoding plugins', function () {
     it('Should not use the plugin profile if not chosen by the admin', async function () {
       this.timeout(240000)
 
-      const videoUUID = (await uploadVideoAndGetId({ server, videoName: 'video' })).uuid
+      const videoUUID = (await server.videosCommand.quickUpload({ name: 'video' })).uuid
       await waitJobs([ server ])
 
       await checkVideoFPS(videoUUID, 'above', 20)
@@ -130,7 +127,7 @@ describe('Test transcoding plugins', function () {
 
       await updateConf(server, 'low-vod', 'default')
 
-      const videoUUID = (await uploadVideoAndGetId({ server, videoName: 'video' })).uuid
+      const videoUUID = (await server.videosCommand.quickUpload({ name: 'video' })).uuid
       await waitJobs([ server ])
 
       await checkVideoFPS(videoUUID, 'below', 12)
@@ -141,7 +138,7 @@ describe('Test transcoding plugins', function () {
 
       await updateConf(server, 'input-options-vod', 'default')
 
-      const videoUUID = (await uploadVideoAndGetId({ server, videoName: 'video' })).uuid
+      const videoUUID = (await server.videosCommand.quickUpload({ name: 'video' })).uuid
       await waitJobs([ server ])
 
       await checkVideoFPS(videoUUID, 'below', 6)
@@ -152,13 +149,11 @@ describe('Test transcoding plugins', function () {
 
       await updateConf(server, 'bad-scale-vod', 'default')
 
-      const videoUUID = (await uploadVideoAndGetId({ server, videoName: 'video' })).uuid
+      const videoUUID = (await server.videosCommand.quickUpload({ name: 'video' })).uuid
       await waitJobs([ server ])
 
       // Transcoding failed
-      const res = await getVideo(server.url, videoUUID)
-      const video: VideoDetails = res.body
-
+      const video = await server.videosCommand.get({ id: videoUUID })
       expect(video.files).to.have.lengthOf(1)
       expect(video.streamingPlaylists).to.have.lengthOf(0)
     })
@@ -224,7 +219,7 @@ describe('Test transcoding plugins', function () {
       expect(config.transcoding.availableProfiles).to.deep.equal([ 'default' ])
       expect(config.live.transcoding.availableProfiles).to.deep.equal([ 'default' ])
 
-      const videoUUID = (await uploadVideoAndGetId({ server, videoName: 'video' })).uuid
+      const videoUUID = (await server.videosCommand.quickUpload({ name: 'video' })).uuid
       await waitJobs([ server ])
 
       await checkVideoFPS(videoUUID, 'above', 20)
@@ -243,7 +238,7 @@ describe('Test transcoding plugins', function () {
     it('Should use the new vod encoders', async function () {
       this.timeout(240000)
 
-      const videoUUID = (await uploadVideoAndGetId({ server, videoName: 'video', fixture: 'video_short_240p.mp4' })).uuid
+      const videoUUID = (await server.videosCommand.quickUpload({ name: 'video', fixture: 'video_short_240p.mp4' })).uuid
       await waitJobs([ server ])
 
       const path = server.serversCommand.buildDirectory(join('videos', videoUUID + '-240.mp4'))

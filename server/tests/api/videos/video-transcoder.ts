@@ -2,11 +2,9 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { FfprobeData } from 'fluent-ffmpeg'
 import { omit } from 'lodash'
 import { join } from 'path'
-import { VIDEO_TRANSCODING_FPS } from '../../../../server/initializers/constants'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '@shared/core-utils'
 import {
   buildAbsoluteFixturePath,
   cleanupTests,
@@ -14,19 +12,14 @@ import {
   flushAndRunMultipleServers,
   generateHighBitrateVideo,
   generateVideoWithFramerate,
-  getMyVideos,
-  getVideo,
-  getVideoFileMetadataUrl,
-  getVideosList,
   makeGetRequest,
   ServerInfo,
   setAccessTokensToServers,
-  uploadVideo,
-  uploadVideoAndGetId,
   waitJobs,
   webtorrentAdd
-} from '../../../../shared/extra-utils'
-import { getMaxBitrate, VideoDetails, VideoResolution, VideoState } from '../../../../shared/models/videos'
+} from '@shared/extra-utils'
+import { getMaxBitrate, VideoResolution, VideoState } from '@shared/models'
+import { VIDEO_TRANSCODING_FPS } from '../../../../server/initializers/constants'
 import {
   canDoQuickTranscode,
   getAudioStream,
@@ -84,21 +77,20 @@ describe('Test video transcoding', function () {
     it('Should not transcode video on server 1', async function () {
       this.timeout(60_000)
 
-      const videoAttributes = {
+      const attributes = {
         name: 'my super name for server 1',
         description: 'my super description for server 1',
         fixture: 'video_short.webm'
       }
-      await uploadVideo(servers[0].url, servers[0].accessToken, videoAttributes)
+      await servers[0].videosCommand.upload({ attributes })
 
       await waitJobs(servers)
 
       for (const server of servers) {
-        const res = await getVideosList(server.url)
-        const video = res.body.data[0]
+        const { data } = await server.videosCommand.list()
+        const video = data[0]
 
-        const res2 = await getVideo(server.url, video.id)
-        const videoDetails = res2.body
+        const videoDetails = await server.videosCommand.get({ id: video.id })
         expect(videoDetails.files).to.have.lengthOf(1)
 
         const magnetUri = videoDetails.files[0].magnetUri
@@ -114,21 +106,20 @@ describe('Test video transcoding', function () {
     it('Should transcode video on server 2', async function () {
       this.timeout(120_000)
 
-      const videoAttributes = {
+      const attributes = {
         name: 'my super name for server 2',
         description: 'my super description for server 2',
         fixture: 'video_short.webm'
       }
-      await uploadVideo(servers[1].url, servers[1].accessToken, videoAttributes)
+      await servers[1].videosCommand.upload({ attributes })
 
       await waitJobs(servers)
 
       for (const server of servers) {
-        const res = await getVideosList(server.url)
+        const { data } = await server.videosCommand.list()
 
-        const video = res.body.data.find(v => v.name === videoAttributes.name)
-        const res2 = await getVideo(server.url, video.id)
-        const videoDetails = res2.body
+        const video = data.find(v => v.name === attributes.name)
+        const videoDetails = await server.videosCommand.get({ id: video.id })
 
         expect(videoDetails.files).to.have.lengthOf(4)
 
@@ -147,47 +138,50 @@ describe('Test video transcoding', function () {
 
       {
         // Upload the video, but wait transcoding
-        const videoAttributes = {
+        const attributes = {
           name: 'waiting video',
           fixture: 'video_short1.webm',
           waitTranscoding: true
         }
-        const resVideo = await uploadVideo(servers[1].url, servers[1].accessToken, videoAttributes)
-        const videoId = resVideo.body.video.uuid
+        const { uuid } = await servers[1].videosCommand.upload({ attributes })
+        const videoId = uuid
 
         // Should be in transcode state
-        const { body } = await getVideo(servers[1].url, videoId)
+        const body = await servers[1].videosCommand.get({ id: videoId })
         expect(body.name).to.equal('waiting video')
         expect(body.state.id).to.equal(VideoState.TO_TRANSCODE)
         expect(body.state.label).to.equal('To transcode')
         expect(body.waitTranscoding).to.be.true
 
-        // Should have my video
-        const resMyVideos = await getMyVideos(servers[1].url, servers[1].accessToken, 0, 10)
-        const videoToFindInMine = resMyVideos.body.data.find(v => v.name === videoAttributes.name)
-        expect(videoToFindInMine).not.to.be.undefined
-        expect(videoToFindInMine.state.id).to.equal(VideoState.TO_TRANSCODE)
-        expect(videoToFindInMine.state.label).to.equal('To transcode')
-        expect(videoToFindInMine.waitTranscoding).to.be.true
+        {
+          // Should have my video
+          const { data } = await servers[1].videosCommand.listMyVideos()
+          const videoToFindInMine = data.find(v => v.name === attributes.name)
+          expect(videoToFindInMine).not.to.be.undefined
+          expect(videoToFindInMine.state.id).to.equal(VideoState.TO_TRANSCODE)
+          expect(videoToFindInMine.state.label).to.equal('To transcode')
+          expect(videoToFindInMine.waitTranscoding).to.be.true
+        }
 
-        // Should not list this video
-        const resVideos = await getVideosList(servers[1].url)
-        const videoToFindInList = resVideos.body.data.find(v => v.name === videoAttributes.name)
-        expect(videoToFindInList).to.be.undefined
+        {
+          // Should not list this video
+          const { data } = await servers[1].videosCommand.list()
+          const videoToFindInList = data.find(v => v.name === attributes.name)
+          expect(videoToFindInList).to.be.undefined
+        }
 
         // Server 1 should not have the video yet
-        await getVideo(servers[0].url, videoId, HttpStatusCode.NOT_FOUND_404)
+        await servers[0].videosCommand.get({ id: videoId, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
       }
 
       await waitJobs(servers)
 
       for (const server of servers) {
-        const res = await getVideosList(server.url)
-        const videoToFind = res.body.data.find(v => v.name === 'waiting video')
+        const { data } = await server.videosCommand.list()
+        const videoToFind = data.find(v => v.name === 'waiting video')
         expect(videoToFind).not.to.be.undefined
 
-        const res2 = await getVideo(server.url, videoToFind.id)
-        const videoDetails: VideoDetails = res2.body
+        const videoDetails = await server.videosCommand.get({ id: videoToFind.id })
 
         expect(videoDetails.state.id).to.equal(VideoState.PUBLISHED)
         expect(videoDetails.state.label).to.equal('Published')
@@ -208,22 +202,20 @@ describe('Test video transcoding', function () {
       }
 
       for (const fixture of [ 'video_short.mkv', 'video_short.avi' ]) {
-        const videoAttributes = {
+        const attributes = {
           name: fixture,
           fixture
         }
 
-        await uploadVideo(servers[1].url, servers[1].accessToken, videoAttributes)
+        await servers[1].videosCommand.upload({ attributes })
 
         await waitJobs(servers)
 
         for (const server of servers) {
-          const res = await getVideosList(server.url)
+          const { data } = await server.videosCommand.list()
 
-          const video = res.body.data.find(v => v.name === videoAttributes.name)
-          const res2 = await getVideo(server.url, video.id)
-          const videoDetails = res2.body
-
+          const video = data.find(v => v.name === attributes.name)
+          const videoDetails = await server.videosCommand.get({ id: video.id })
           expect(videoDetails.files).to.have.lengthOf(4)
 
           const magnetUri = videoDetails.files[0].magnetUri
@@ -235,22 +227,20 @@ describe('Test video transcoding', function () {
     it('Should transcode a 4k video', async function () {
       this.timeout(200_000)
 
-      const videoAttributes = {
+      const attributes = {
         name: '4k video',
         fixture: 'video_short_4k.mp4'
       }
 
-      const resUpload = await uploadVideo(servers[1].url, servers[1].accessToken, videoAttributes)
-      video4k = resUpload.body.video.uuid
+      const { uuid } = await servers[1].videosCommand.upload({ attributes })
+      video4k = uuid
 
       await waitJobs(servers)
 
       const resolutions = [ 240, 360, 480, 720, 1080, 1440, 2160 ]
 
       for (const server of servers) {
-        const res = await getVideo(server.url, video4k)
-        const videoDetails: VideoDetails = res.body
-
+        const videoDetails = await server.videosCommand.get({ id: video4k })
         expect(videoDetails.files).to.have.lengthOf(resolutions.length)
 
         for (const r of resolutions) {
@@ -266,20 +256,19 @@ describe('Test video transcoding', function () {
     it('Should transcode high bit rate mp3 to proper bit rate', async function () {
       this.timeout(60_000)
 
-      const videoAttributes = {
+      const attributes = {
         name: 'mp3_256k',
         fixture: 'video_short_mp3_256k.mp4'
       }
-      await uploadVideo(servers[1].url, servers[1].accessToken, videoAttributes)
+      await servers[1].videosCommand.upload({ attributes })
 
       await waitJobs(servers)
 
       for (const server of servers) {
-        const res = await getVideosList(server.url)
+        const { data } = await server.videosCommand.list()
 
-        const video = res.body.data.find(v => v.name === videoAttributes.name)
-        const res2 = await getVideo(server.url, video.id)
-        const videoDetails: VideoDetails = res2.body
+        const video = data.find(v => v.name === attributes.name)
+        const videoDetails = await server.videosCommand.get({ id: video.id })
 
         expect(videoDetails.files).to.have.lengthOf(4)
 
@@ -298,20 +287,19 @@ describe('Test video transcoding', function () {
     it('Should transcode video with no audio and have no audio itself', async function () {
       this.timeout(60_000)
 
-      const videoAttributes = {
+      const attributes = {
         name: 'no_audio',
         fixture: 'video_short_no_audio.mp4'
       }
-      await uploadVideo(servers[1].url, servers[1].accessToken, videoAttributes)
+      await servers[1].videosCommand.upload({ attributes })
 
       await waitJobs(servers)
 
       for (const server of servers) {
-        const res = await getVideosList(server.url)
+        const { data } = await server.videosCommand.list()
 
-        const video = res.body.data.find(v => v.name === videoAttributes.name)
-        const res2 = await getVideo(server.url, video.id)
-        const videoDetails: VideoDetails = res2.body
+        const video = data.find(v => v.name === attributes.name)
+        const videoDetails = await server.videosCommand.get({ id: video.id })
 
         expect(videoDetails.files).to.have.lengthOf(4)
         const path = servers[1].serversCommand.buildDirectory(join('videos', video.uuid + '-240.mp4'))
@@ -323,24 +311,23 @@ describe('Test video transcoding', function () {
     it('Should leave the audio untouched, but properly transcode the video', async function () {
       this.timeout(60_000)
 
-      const videoAttributes = {
+      const attributes = {
         name: 'untouched_audio',
         fixture: 'video_short.mp4'
       }
-      await uploadVideo(servers[1].url, servers[1].accessToken, videoAttributes)
+      await servers[1].videosCommand.upload({ attributes })
 
       await waitJobs(servers)
 
       for (const server of servers) {
-        const res = await getVideosList(server.url)
+        const { data } = await server.videosCommand.list()
 
-        const video = res.body.data.find(v => v.name === videoAttributes.name)
-        const res2 = await getVideo(server.url, video.id)
-        const videoDetails: VideoDetails = res2.body
+        const video = data.find(v => v.name === attributes.name)
+        const videoDetails = await server.videosCommand.get({ id: video.id })
 
         expect(videoDetails.files).to.have.lengthOf(4)
 
-        const fixturePath = buildAbsoluteFixturePath(videoAttributes.fixture)
+        const fixturePath = buildAbsoluteFixturePath(attributes.fixture)
         const fixtureVideoProbe = await getAudioStream(fixturePath)
         const path = servers[1].serversCommand.buildDirectory(join('videos', video.uuid + '-240.mp4'))
 
@@ -384,17 +371,16 @@ describe('Test video transcoding', function () {
       it('Should merge an audio file with the preview file', async function () {
         this.timeout(60_000)
 
-        const videoAttributesArg = { name: 'audio_with_preview', previewfile: 'preview.jpg', fixture: 'sample.ogg' }
-        await uploadVideo(servers[1].url, servers[1].accessToken, videoAttributesArg, HttpStatusCode.OK_200, mode)
+        const attributes = { name: 'audio_with_preview', previewfile: 'preview.jpg', fixture: 'sample.ogg' }
+        await servers[1].videosCommand.upload({ attributes, mode })
 
         await waitJobs(servers)
 
         for (const server of servers) {
-          const res = await getVideosList(server.url)
+          const { data } = await server.videosCommand.list()
 
-          const video = res.body.data.find(v => v.name === 'audio_with_preview')
-          const res2 = await getVideo(server.url, video.id)
-          const videoDetails: VideoDetails = res2.body
+          const video = data.find(v => v.name === 'audio_with_preview')
+          const videoDetails = await server.videosCommand.get({ id: video.id })
 
           expect(videoDetails.files).to.have.lengthOf(1)
 
@@ -409,17 +395,16 @@ describe('Test video transcoding', function () {
       it('Should upload an audio file and choose a default background image', async function () {
         this.timeout(60_000)
 
-        const videoAttributesArg = { name: 'audio_without_preview', fixture: 'sample.ogg' }
-        await uploadVideo(servers[1].url, servers[1].accessToken, videoAttributesArg, HttpStatusCode.OK_200, mode)
+        const attributes = { name: 'audio_without_preview', fixture: 'sample.ogg' }
+        await servers[1].videosCommand.upload({ attributes, mode })
 
         await waitJobs(servers)
 
         for (const server of servers) {
-          const res = await getVideosList(server.url)
+          const { data } = await server.videosCommand.list()
 
-          const video = res.body.data.find(v => v.name === 'audio_without_preview')
-          const res2 = await getVideo(server.url, video.id)
-          const videoDetails = res2.body
+          const video = data.find(v => v.name === 'audio_without_preview')
+          const videoDetails = await server.videosCommand.get({ id: video.id })
 
           expect(videoDetails.files).to.have.lengthOf(1)
 
@@ -448,14 +433,13 @@ describe('Test video transcoding', function () {
           }
         })
 
-        const videoAttributesArg = { name: 'audio_with_preview', previewfile: 'preview.jpg', fixture: 'sample.ogg' }
-        const resVideo = await uploadVideo(servers[1].url, servers[1].accessToken, videoAttributesArg, HttpStatusCode.OK_200, mode)
+        const attributes = { name: 'audio_with_preview', previewfile: 'preview.jpg', fixture: 'sample.ogg' }
+        const { id } = await servers[1].videosCommand.upload({ attributes, mode })
 
         await waitJobs(servers)
 
         for (const server of servers) {
-          const res2 = await getVideo(server.url, resVideo.body.video.id)
-          const videoDetails: VideoDetails = res2.body
+          const videoDetails = await server.videosCommand.get({ id })
 
           for (const files of [ videoDetails.files, videoDetails.streamingPlaylists[0].files ]) {
             expect(files).to.have.lengthOf(2)
@@ -481,21 +465,20 @@ describe('Test video transcoding', function () {
     it('Should transcode a 60 FPS video', async function () {
       this.timeout(60_000)
 
-      const videoAttributes = {
+      const attributes = {
         name: 'my super 30fps name for server 2',
         description: 'my super 30fps description for server 2',
         fixture: '60fps_720p_small.mp4'
       }
-      await uploadVideo(servers[1].url, servers[1].accessToken, videoAttributes)
+      await servers[1].videosCommand.upload({ attributes })
 
       await waitJobs(servers)
 
       for (const server of servers) {
-        const res = await getVideosList(server.url)
+        const { data } = await server.videosCommand.list()
 
-        const video = res.body.data.find(v => v.name === videoAttributes.name)
-        const res2 = await getVideo(server.url, video.id)
-        const videoDetails: VideoDetails = res2.body
+        const video = data.find(v => v.name === attributes.name)
+        const videoDetails = await server.videosCommand.get({ id: video.id })
 
         expect(videoDetails.files).to.have.lengthOf(4)
         expect(videoDetails.files[0].fps).to.be.above(58).and.below(62)
@@ -529,20 +512,20 @@ describe('Test video transcoding', function () {
         expect(fps).to.be.equal(59)
       }
 
-      const videoAttributes = {
+      const attributes = {
         name: '59fps video',
         description: '59fps video',
         fixture: tempFixturePath
       }
 
-      await uploadVideo(servers[1].url, servers[1].accessToken, videoAttributes)
+      await servers[1].videosCommand.upload({ attributes })
 
       await waitJobs(servers)
 
       for (const server of servers) {
-        const res = await getVideosList(server.url)
+        const { data } = await server.videosCommand.list()
 
-        const video = res.body.data.find(v => v.name === videoAttributes.name)
+        const video = data.find(v => v.name === attributes.name)
 
         {
           const path = servers[1].serversCommand.buildDirectory(join('videos', video.uuid + '-240.mp4'))
@@ -572,20 +555,20 @@ describe('Test video transcoding', function () {
         expect(bitrate).to.be.above(getMaxBitrate(VideoResolution.H_1080P, 25, VIDEO_TRANSCODING_FPS))
       }
 
-      const videoAttributes = {
+      const attributes = {
         name: 'high bitrate video',
         description: 'high bitrate video',
         fixture: tempFixturePath
       }
 
-      await uploadVideo(servers[1].url, servers[1].accessToken, videoAttributes)
+      await servers[1].videosCommand.upload({ attributes })
 
       await waitJobs(servers)
 
       for (const server of servers) {
-        const res = await getVideosList(server.url)
+        const { data } = await server.videosCommand.list()
 
-        const video = res.body.data.find(v => v.name === videoAttributes.name)
+        const video = data.find(v => v.name === attributes.name)
 
         for (const resolution of [ '240', '360', '480', '720', '1080' ]) {
           const path = servers[1].serversCommand.buildDirectory(join('videos', video.uuid + '-' + resolution + '.mp4'))
@@ -621,19 +604,18 @@ describe('Test video transcoding', function () {
       }
       await servers[1].configCommand.updateCustomSubConfig({ newConfig })
 
-      const videoAttributes = {
+      const attributes = {
         name: 'low bitrate',
         fixture: 'low-bitrate.mp4'
       }
 
-      const resUpload = await uploadVideo(servers[1].url, servers[1].accessToken, videoAttributes)
-      const videoUUID = resUpload.body.video.uuid
+      const { uuid } = await servers[1].videosCommand.upload({ attributes })
 
       await waitJobs(servers)
 
       const resolutions = [ 240, 360, 480, 720, 1080 ]
       for (const r of resolutions) {
-        const path = `videos/${videoUUID}-${r}.mp4`
+        const path = `videos/${uuid}-${r}.mp4`
         const size = await servers[1].serversCommand.getServerFileSize(path)
         expect(size, `${path} not below ${60_000}`).to.be.below(60_000)
       }
@@ -645,7 +627,7 @@ describe('Test video transcoding', function () {
     it('Should provide valid ffprobe data', async function () {
       this.timeout(160_000)
 
-      const videoUUID = (await uploadVideoAndGetId({ server: servers[1], videoName: 'ffprobe data' })).uuid
+      const videoUUID = (await servers[1].videosCommand.quickUpload({ name: 'ffprobe data' })).uuid
       await waitJobs(servers)
 
       {
@@ -679,8 +661,7 @@ describe('Test video transcoding', function () {
       }
 
       for (const server of servers) {
-        const res2 = await getVideo(server.url, videoUUID)
-        const videoDetails: VideoDetails = res2.body
+        const videoDetails = await server.videosCommand.get({ id: videoUUID })
 
         const videoFiles = videoDetails.files
                                       .concat(videoDetails.streamingPlaylists[0].files)
@@ -692,8 +673,7 @@ describe('Test video transcoding', function () {
           expect(file.metadataUrl).to.contain(servers[1].url)
           expect(file.metadataUrl).to.contain(videoUUID)
 
-          const res3 = await getVideoFileMetadataUrl(file.metadataUrl)
-          const metadata: FfprobeData = res3.body
+          const metadata = await server.videosCommand.getFileMetadata({ url: file.metadataUrl })
           expect(metadata).to.have.nested.property('format.size')
         }
       }

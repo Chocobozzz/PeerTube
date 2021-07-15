@@ -10,8 +10,7 @@ import {
   makeGetRequest,
   makeUploadRequest,
   ServerInfo,
-  setAccessTokensToServers,
-  uploadVideo
+  setAccessTokensToServers
 } from '@shared/extra-utils'
 import { VideoCreateResult } from '@shared/models'
 
@@ -31,10 +30,7 @@ describe('Test video captions API validator', function () {
 
     await setAccessTokensToServers([ server ])
 
-    {
-      const res = await uploadVideo(server.url, server.accessToken, {})
-      video = res.body.video
-    }
+    video = await server.videosCommand.upload()
 
     {
       const user = {

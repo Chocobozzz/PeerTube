@@ -6,17 +6,12 @@ import { HttpStatusCode } from '@shared/core-utils'
 import {
   cleanupTests,
   flushAndRunServer,
-  getMyVideos,
-  getVideosList,
   killallServers,
   makePutBodyRequest,
-  rateVideo,
-  removeVideo,
   reRunServer,
   ServerInfo,
   setAccessTokensToServers,
   testImage,
-  uploadVideo,
   waitJobs
 } from '@shared/extra-utils'
 import { AbuseState, OAuth2ErrorCode, UserAdminFlag, UserRole, Video, VideoPlaylistType } from '@shared/models'
@@ -25,8 +20,8 @@ const expect = chai.expect
 
 describe('Test users', function () {
   let server: ServerInfo
-  let accessToken: string
-  let accessTokenUser: string
+  let token: string
+  let userToken: string
   let videoId: number
   let userId: number
   const user = {
@@ -101,18 +96,17 @@ describe('Test users', function () {
     })
 
     it('Should not be able to upload a video', async function () {
-      accessToken = 'my_super_token'
+      token = 'my_super_token'
 
-      const videoAttributes = {}
-      await uploadVideo(server.url, accessToken, videoAttributes, HttpStatusCode.UNAUTHORIZED_401)
+      await server.videosCommand.upload({ token, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
     it('Should not be able to follow', async function () {
-      accessToken = 'my_super_token'
+      token = 'my_super_token'
 
       await server.followsCommand.follow({
         targets: [ 'http://example.com' ],
-        token: accessToken,
+        token,
         expectedStatus: HttpStatusCode.UNAUTHORIZED_401
       })
     })
@@ -122,7 +116,7 @@ describe('Test users', function () {
     it('Should be able to login', async function () {
       const body = await server.loginCommand.login({ expectedStatus: HttpStatusCode.OK_200 })
 
-      accessToken = body.access_token
+      token = body.access_token
     })
 
     it('Should be able to login with an insensitive username', async function () {
@@ -140,33 +134,31 @@ describe('Test users', function () {
   describe('Upload', function () {
 
     it('Should upload the video with the correct token', async function () {
-      const videoAttributes = {}
-      await uploadVideo(server.url, accessToken, videoAttributes)
-      const res = await getVideosList(server.url)
-      const video = res.body.data[0]
+      await server.videosCommand.upload({ token })
+      const { data } = await server.videosCommand.list()
+      const video = data[0]
 
       expect(video.account.name).to.equal('root')
       videoId = video.id
     })
 
     it('Should upload the video again with the correct token', async function () {
-      const videoAttributes = {}
-      await uploadVideo(server.url, accessToken, videoAttributes)
+      await server.videosCommand.upload({ token })
     })
   })
 
   describe('Ratings', function () {
 
     it('Should retrieve a video rating', async function () {
-      await rateVideo(server.url, accessToken, videoId, 'like')
-      const rating = await server.usersCommand.getMyRating({ token: accessToken, videoId })
+      await server.videosCommand.rate({ id: videoId, rating: 'like' })
+      const rating = await server.usersCommand.getMyRating({ token, videoId })
 
       expect(rating.videoId).to.equal(videoId)
       expect(rating.rating).to.equal('like')
     })
 
     it('Should retrieve ratings list', async function () {
-      await rateVideo(server.url, accessToken, videoId, 'like')
+      await server.videosCommand.rate({ id: videoId, rating: 'like' })
 
       const body = await server.accountsCommand.listRatings({ accountName: server.user.username })
 
@@ -190,13 +182,13 @@ describe('Test users', function () {
 
   describe('Remove video', function () {
     it('Should not be able to remove the video with an incorrect token', async function () {
-      await removeVideo(server.url, 'bad_token', videoId, HttpStatusCode.UNAUTHORIZED_401)
+      await server.videosCommand.remove({ token: 'bad_token', id: videoId, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
     it('Should not be able to remove the video with the token of another account')
 
     it('Should be able to remove the video with the correct token', async function () {
-      await removeVideo(server.url, accessToken, videoId)
+      await server.videosCommand.remove({ token, id: videoId })
     })
   })
 
@@ -210,7 +202,7 @@ describe('Test users', function () {
     })
 
     it('Should not be able to upload a video', async function () {
-      await uploadVideo(server.url, server.accessToken, { name: 'video' }, HttpStatusCode.UNAUTHORIZED_401)
+      await server.videosCommand.upload({ attributes: { name: 'video' }, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
     it('Should not be able to rate a video', async function () {
@@ -281,11 +273,11 @@ describe('Test users', function () {
     })
 
     it('Should be able to login with this user', async function () {
-      accessTokenUser = await server.loginCommand.getAccessToken(user)
+      userToken = await server.loginCommand.getAccessToken(user)
     })
 
     it('Should be able to get user information', async function () {
-      const userMe = await server.usersCommand.getMyInfo({ token: accessTokenUser })
+      const userMe = await server.usersCommand.getMyInfo({ token: userToken })
 
       const userGet = await server.usersCommand.get({ userId: userMe.id, withStats: true })
 
@@ -323,15 +315,15 @@ describe('Test users', function () {
     it('Should be able to upload a video with this user', async function () {
       this.timeout(10000)
 
-      const videoAttributes = {
+      const attributes = {
         name: 'super user video',
         fixture: 'video_short.webm'
       }
-      await uploadVideo(server.url, accessTokenUser, videoAttributes)
+      await server.videosCommand.upload({ token: userToken, attributes })
     })
 
     it('Should have video quota updated', async function () {
-      const quota = await server.usersCommand.getMyQuotaUsed({ token: accessTokenUser })
+      const quota = await server.usersCommand.getMyQuotaUsed({ token: userToken })
       expect(quota.videoQuotaUsed).to.equal(218910)
 
       const { data } = await server.usersCommand.list()
@@ -340,13 +332,11 @@ describe('Test users', function () {
     })
 
     it('Should be able to list my videos', async function () {
-      const res = await getMyVideos(server.url, accessTokenUser, 0, 5)
-      expect(res.body.total).to.equal(1)
+      const { total, data } = await server.videosCommand.listMyVideos({ token: userToken })
+      expect(total).to.equal(1)
+      expect(data).to.have.lengthOf(1)
 
-      const videos = res.body.data
-      expect(videos).to.have.lengthOf(1)
-
-      const video: Video = videos[0]
+      const video: Video = data[0]
       expect(video.name).to.equal('super user video')
       expect(video.thumbnailPath).to.not.be.null
       expect(video.previewPath).to.not.be.null
@@ -354,19 +344,15 @@ describe('Test users', function () {
 
     it('Should be able to search in my videos', async function () {
       {
-        const res = await getMyVideos(server.url, accessTokenUser, 0, 5, '-createdAt', 'user video')
-        expect(res.body.total).to.equal(1)
-
-        const videos = res.body.data
-        expect(videos).to.have.lengthOf(1)
+        const { total, data } = await server.videosCommand.listMyVideos({ token: userToken, sort: '-createdAt', search: 'user video' })
+        expect(total).to.equal(1)
+        expect(data).to.have.lengthOf(1)
       }
 
       {
-        const res = await getMyVideos(server.url, accessTokenUser, 0, 5, '-createdAt', 'toto')
-        expect(res.body.total).to.equal(0)
-
-        const videos = res.body.data
-        expect(videos).to.have.lengthOf(0)
+        const { total, data } = await server.videosCommand.listMyVideos({ token: userToken, sort: '-createdAt', search: 'toto' })
+        expect(total).to.equal(0)
+        expect(data).to.have.lengthOf(0)
       }
     })
 
@@ -382,17 +368,17 @@ describe('Test users', function () {
       }
 
       {
-        const videoAttributes = {
+        const attributes = {
           name: 'super user video 2',
           fixture: 'video_short.webm'
         }
-        await uploadVideo(server.url, accessTokenUser, videoAttributes)
+        await server.videosCommand.upload({ token: userToken, attributes })
 
         await waitJobs([ server ])
       }
 
       {
-        const data = await server.usersCommand.getMyQuotaUsed({ token: accessTokenUser })
+        const data = await server.usersCommand.getMyQuotaUsed({ token: userToken })
         expect(data.videoQuotaUsed).to.be.greaterThan(220000)
       }
     })
@@ -505,7 +491,7 @@ describe('Test users', function () {
 
     it('Should update my password', async function () {
       await server.usersCommand.updateMe({
-        token: accessTokenUser,
+        token: userToken,
         currentPassword: 'super password',
         password: 'new password'
       })
@@ -516,11 +502,11 @@ describe('Test users', function () {
 
     it('Should be able to change the NSFW display attribute', async function () {
       await server.usersCommand.updateMe({
-        token: accessTokenUser,
+        token: userToken,
         nsfwPolicy: 'do_not_list'
       })
 
-      const user = await server.usersCommand.getMyInfo({ token: accessTokenUser })
+      const user = await server.usersCommand.getMyInfo({ token: userToken })
       expect(user.username).to.equal('user_1')
       expect(user.email).to.equal('user_1@example.com')
       expect(user.nsfwPolicy).to.equal('do_not_list')
@@ -532,32 +518,32 @@ describe('Test users', function () {
 
     it('Should be able to change the autoPlayVideo attribute', async function () {
       await server.usersCommand.updateMe({
-        token: accessTokenUser,
+        token: userToken,
         autoPlayVideo: false
       })
 
-      const user = await server.usersCommand.getMyInfo({ token: accessTokenUser })
+      const user = await server.usersCommand.getMyInfo({ token: userToken })
       expect(user.autoPlayVideo).to.be.false
     })
 
     it('Should be able to change the autoPlayNextVideo attribute', async function () {
       await server.usersCommand.updateMe({
-        token: accessTokenUser,
+        token: userToken,
         autoPlayNextVideo: true
       })
 
-      const user = await server.usersCommand.getMyInfo({ token: accessTokenUser })
+      const user = await server.usersCommand.getMyInfo({ token: userToken })
       expect(user.autoPlayNextVideo).to.be.true
     })
 
     it('Should be able to change the email attribute', async function () {
       await server.usersCommand.updateMe({
-        token: accessTokenUser,
+        token: userToken,
         currentPassword: 'new password',
         email: 'updated@example.com'
       })
 
-      const user = await server.usersCommand.getMyInfo({ token: accessTokenUser })
+      const user = await server.usersCommand.getMyInfo({ token: userToken })
       expect(user.username).to.equal('user_1')
       expect(user.email).to.equal('updated@example.com')
       expect(user.nsfwPolicy).to.equal('do_not_list')
@@ -570,9 +556,9 @@ describe('Test users', function () {
     it('Should be able to update my avatar with a gif', async function () {
       const fixture = 'avatar.gif'
 
-      await server.usersCommand.updateMyAvatar({ token: accessTokenUser, fixture })
+      await server.usersCommand.updateMyAvatar({ token: userToken, fixture })
 
-      const user = await server.usersCommand.getMyInfo({ token: accessTokenUser })
+      const user = await server.usersCommand.getMyInfo({ token: userToken })
       await testImage(server.url, 'avatar-resized', user.account.avatar.path, '.gif')
     })
 
@@ -580,17 +566,17 @@ describe('Test users', function () {
       for (const extension of [ '.png', '.gif' ]) {
         const fixture = 'avatar' + extension
 
-        await server.usersCommand.updateMyAvatar({ token: accessTokenUser, fixture })
+        await server.usersCommand.updateMyAvatar({ token: userToken, fixture })
 
-        const user = await server.usersCommand.getMyInfo({ token: accessTokenUser })
+        const user = await server.usersCommand.getMyInfo({ token: userToken })
         await testImage(server.url, 'avatar-resized', user.account.avatar.path, extension)
       }
     })
 
     it('Should be able to update my display name', async function () {
-      await server.usersCommand.updateMe({ token: accessTokenUser, displayName: 'new display name' })
+      await server.usersCommand.updateMe({ token: userToken, displayName: 'new display name' })
 
-      const user = await server.usersCommand.getMyInfo({ token: accessTokenUser })
+      const user = await server.usersCommand.getMyInfo({ token: userToken })
       expect(user.username).to.equal('user_1')
       expect(user.email).to.equal('updated@example.com')
       expect(user.nsfwPolicy).to.equal('do_not_list')
@@ -601,9 +587,9 @@ describe('Test users', function () {
     })
 
     it('Should be able to update my description', async function () {
-      await server.usersCommand.updateMe({ token: accessTokenUser, description: 'my super description updated' })
+      await server.usersCommand.updateMe({ token: userToken, description: 'my super description updated' })
 
-      const user = await server.usersCommand.getMyInfo({ token: accessTokenUser })
+      const user = await server.usersCommand.getMyInfo({ token: userToken })
       expect(user.username).to.equal('user_1')
       expect(user.email).to.equal('updated@example.com')
       expect(user.nsfwPolicy).to.equal('do_not_list')
@@ -617,21 +603,21 @@ describe('Test users', function () {
 
     it('Should be able to update my theme', async function () {
       for (const theme of [ 'background-red', 'default', 'instance-default' ]) {
-        await server.usersCommand.updateMe({ token: accessTokenUser, theme })
+        await server.usersCommand.updateMe({ token: userToken, theme })
 
-        const user = await server.usersCommand.getMyInfo({ token: accessTokenUser })
+        const user = await server.usersCommand.getMyInfo({ token: userToken })
         expect(user.theme).to.equal(theme)
       }
     })
 
     it('Should be able to update my modal preferences', async function () {
       await server.usersCommand.updateMe({
-        token: accessTokenUser,
+        token: userToken,
         noInstanceConfigWarningModal: true,
         noWelcomeModal: true
       })
 
-      const user = await server.usersCommand.getMyInfo({ token: accessTokenUser })
+      const user = await server.usersCommand.getMyInfo({ token: userToken })
       expect(user.noWelcomeModal).to.be.true
       expect(user.noInstanceConfigWarningModal).to.be.true
     })
@@ -641,7 +627,7 @@ describe('Test users', function () {
     it('Should be able to update another user', async function () {
       await server.usersCommand.update({
         userId,
-        token: accessToken,
+        token,
         email: 'updated2@example.com',
         emailVerified: true,
         videoQuota: 42,
@@ -650,7 +636,7 @@ describe('Test users', function () {
         pluginAuth: 'toto'
       })
 
-      const user = await server.usersCommand.get({ token: accessToken, userId })
+      const user = await server.usersCommand.get({ token, userId })
 
       expect(user.username).to.equal('user_1')
       expect(user.email).to.equal('updated2@example.com')
@@ -664,39 +650,39 @@ describe('Test users', function () {
     })
 
     it('Should reset the auth plugin', async function () {
-      await server.usersCommand.update({ userId, token: accessToken, pluginAuth: null })
+      await server.usersCommand.update({ userId, token, pluginAuth: null })
 
-      const user = await server.usersCommand.get({ token: accessToken, userId })
+      const user = await server.usersCommand.get({ token, userId })
       expect(user.pluginAuth).to.be.null
     })
 
     it('Should have removed the user token', async function () {
-      await server.usersCommand.getMyQuotaUsed({ token: accessTokenUser, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
+      await server.usersCommand.getMyQuotaUsed({ token: userToken, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
 
-      accessTokenUser = await server.loginCommand.getAccessToken(user)
+      userToken = await server.loginCommand.getAccessToken(user)
     })
 
     it('Should be able to update another user password', async function () {
-      await server.usersCommand.update({ userId, token: accessToken, password: 'password updated' })
+      await server.usersCommand.update({ userId, token, password: 'password updated' })
 
-      await server.usersCommand.getMyQuotaUsed({ token: accessTokenUser, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
+      await server.usersCommand.getMyQuotaUsed({ token: userToken, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
 
       await server.loginCommand.login({ user, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
 
       user.password = 'password updated'
-      accessTokenUser = await server.loginCommand.getAccessToken(user)
+      userToken = await server.loginCommand.getAccessToken(user)
     })
   })
 
   describe('Video blacklists', function () {
     it('Should be able to list video blacklist by a moderator', async function () {
-      await server.blacklistCommand.list({ token: accessTokenUser })
+      await server.blacklistCommand.list({ token: userToken })
     })
   })
 
   describe('Remove a user', function () {
     it('Should be able to remove this user', async function () {
-      await server.usersCommand.remove({ userId, token: accessToken })
+      await server.usersCommand.remove({ userId, token })
     })
 
     it('Should not be able to login with this user', async function () {
@@ -704,11 +690,10 @@ describe('Test users', function () {
     })
 
     it('Should not have videos of this user', async function () {
-      const res = await getVideosList(server.url)
+      const { data, total } = await server.videosCommand.list()
+      expect(total).to.equal(1)
 
-      expect(res.body.total).to.equal(1)
-
-      const video = res.body.data[0]
+      const video = data[0]
       expect(video.account.name).to.equal('root')
     })
   })
@@ -832,12 +817,11 @@ describe('Test users', function () {
     })
 
     it('Should report correct videos count', async function () {
-      const videoAttributes = {
-        name: 'video to test user stats'
-      }
-      await uploadVideo(server.url, user17AccessToken, videoAttributes)
-      const res1 = await getVideosList(server.url)
-      videoId = res1.body.data.find(video => video.name === videoAttributes.name).id
+      const attributes = { name: 'video to test user stats' }
+      await server.videosCommand.upload({ token: user17AccessToken, attributes })
+
+      const { data } = await server.videosCommand.list()
+      videoId = data.find(video => video.name === attributes.name).id
 
       const user = await server.usersCommand.get({ userId: user17Id, withStats: true })
       expect(user.videosCount).to.equal(1)

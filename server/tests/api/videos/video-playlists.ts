@@ -13,9 +13,6 @@ import {
   setAccessTokensToServers,
   setDefaultVideoChannel,
   testImage,
-  updateVideo,
-  uploadVideo,
-  uploadVideoAndGetId,
   wait,
   waitJobs
 } from '@shared/extra-utils'
@@ -99,14 +96,14 @@ describe('Test video playlists', function () {
       for (const server of servers) {
         for (let i = 0; i < 7; i++) {
           const name = `video ${i} server ${server.serverNumber}`
-          const resVideo = await uploadVideo(server.url, server.accessToken, { name, nsfw: false })
+          const video = await server.videosCommand.upload({ attributes: { name, nsfw: false } })
 
-          server.videos.push(resVideo.body.video)
+          server.videos.push(video)
         }
       }
     }
 
-    nsfwVideoServer1 = (await uploadVideoAndGetId({ server: servers[0], videoName: 'NSFW video', nsfw: true })).id
+    nsfwVideoServer1 = (await servers[0].videosCommand.quickUpload({ name: 'NSFW video', nsfw: true })).id
 
     userTokenServer1 = await servers[0].usersCommand.generateUserAndToken('user1')
 
@@ -620,9 +617,9 @@ describe('Test video playlists', function () {
         return commands[0].addElement({ token: userTokenServer1, playlistId: playlistServer1Id2, attributes })
       }
 
-      video1 = (await uploadVideoAndGetId({ server: servers[0], videoName: 'video 89', token: userTokenServer1 })).uuid
-      video2 = (await uploadVideoAndGetId({ server: servers[1], videoName: 'video 90' })).uuid
-      video3 = (await uploadVideoAndGetId({ server: servers[0], videoName: 'video 91', nsfw: true })).uuid
+      video1 = (await servers[0].videosCommand.quickUpload({ name: 'video 89', token: userTokenServer1 })).uuid
+      video2 = (await servers[1].videosCommand.quickUpload({ name: 'video 90' })).uuid
+      video3 = (await servers[0].videosCommand.quickUpload({ name: 'video 91', nsfw: true })).uuid
 
       await waitJobs(servers)
 
@@ -640,7 +637,7 @@ describe('Test video playlists', function () {
       const position = 1
 
       {
-        await updateVideo(servers[0].url, servers[0].accessToken, video1, { privacy: VideoPrivacy.PRIVATE })
+        await servers[0].videosCommand.update({ id: video1, attributes: { privacy: VideoPrivacy.PRIVATE } })
         await waitJobs(servers)
 
         await checkPlaylistElementType(groupUser1, playlistServer1UUID2, VideoPlaylistElementType.REGULAR, position, name, 3)
@@ -650,7 +647,7 @@ describe('Test video playlists', function () {
       }
 
       {
-        await updateVideo(servers[0].url, servers[0].accessToken, video1, { privacy: VideoPrivacy.PUBLIC })
+        await servers[0].videosCommand.update({ id: video1, attributes: { privacy: VideoPrivacy.PUBLIC } })
         await waitJobs(servers)
 
         await checkPlaylistElementType(groupUser1, playlistServer1UUID2, VideoPlaylistElementType.REGULAR, position, name, 3)

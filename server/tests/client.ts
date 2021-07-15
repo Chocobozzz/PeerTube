@@ -9,13 +9,11 @@ import {
   cleanupTests,
   doubleFollow,
   flushAndRunMultipleServers,
-  getVideosList,
   makeGetRequest,
   makeHTMLRequest,
   ServerInfo,
   setAccessTokensToServers,
   setDefaultVideoChannel,
-  uploadVideo,
   waitJobs
 } from '../../shared/extra-utils'
 
@@ -68,36 +66,41 @@ describe('Test a client controllers', function () {
 
     // Video
 
-    const videoAttributes = { name: videoName, description: videoDescription }
-    await uploadVideo(servers[0].url, servers[0].accessToken, videoAttributes)
+    {
+      const attributes = { name: videoName, description: videoDescription }
+      await servers[0].videosCommand.upload({ attributes })
 
-    const resVideosRequest = await getVideosList(servers[0].url)
-    const videos = resVideosRequest.body.data
-    expect(videos.length).to.equal(1)
+      const { data } = await servers[0].videosCommand.list()
+      expect(data.length).to.equal(1)
 
-    const video = videos[0]
-    servers[0].video = video
-    videoIds = [ video.id, video.uuid, video.shortUUID ]
+      const video = data[0]
+      servers[0].video = video
+      videoIds = [ video.id, video.uuid, video.shortUUID ]
+    }
 
     // Playlist
 
-    const attributes = {
-      displayName: playlistName,
-      description: playlistDescription,
-      privacy: VideoPlaylistPrivacy.PUBLIC,
-      videoChannelId: servers[0].videoChannel.id
+    {
+      const attributes = {
+        displayName: playlistName,
+        description: playlistDescription,
+        privacy: VideoPlaylistPrivacy.PUBLIC,
+        videoChannelId: servers[0].videoChannel.id
+      }
+
+      playlist = await servers[0].playlistsCommand.create({ attributes })
+      playlistIds = [ playlist.id, playlist.shortUUID, playlist.uuid ]
+
+      await servers[0].playlistsCommand.addElement({ playlistId: playlist.shortUUID, attributes: { videoId: servers[0].video.id } })
     }
-
-    playlist = await servers[0].playlistsCommand.create({ attributes })
-    playlistIds = [ playlist.id, playlist.shortUUID, playlist.uuid ]
-
-    await servers[0].playlistsCommand.addElement({ playlistId: playlist.shortUUID, attributes: { videoId: video.id } })
 
     // Account
 
-    await servers[0].usersCommand.updateMe({ description: 'my account description' })
+    {
+      await servers[0].usersCommand.updateMe({ description: 'my account description' })
 
-    account = await servers[0].accountsCommand.get({ accountName: `${servers[0].user.username}@${servers[0].host}` })
+      account = await servers[0].accountsCommand.get({ accountName: `${servers[0].user.username}@${servers[0].host}` })
+    }
 
     await waitJobs(servers)
   })

@@ -3,15 +3,6 @@
 import 'mocha'
 import { HttpStatusCode } from '@shared/core-utils'
 import {
-  VideoPlaylistCreate,
-  VideoPlaylistCreateResult,
-  VideoPlaylistElementCreate,
-  VideoPlaylistElementUpdate,
-  VideoPlaylistPrivacy,
-  VideoPlaylistReorder,
-  VideoPlaylistType
-} from '@shared/models'
-import {
   checkBadCountPagination,
   checkBadSortPagination,
   checkBadStartPagination,
@@ -21,9 +12,17 @@ import {
   PlaylistsCommand,
   ServerInfo,
   setAccessTokensToServers,
-  setDefaultVideoChannel,
-  uploadVideoAndGetId
-} from '../../../../shared/extra-utils'
+  setDefaultVideoChannel
+} from '@shared/extra-utils'
+import {
+  VideoPlaylistCreate,
+  VideoPlaylistCreateResult,
+  VideoPlaylistElementCreate,
+  VideoPlaylistElementUpdate,
+  VideoPlaylistPrivacy,
+  VideoPlaylistReorder,
+  VideoPlaylistType
+} from '@shared/models'
 
 describe('Test video playlists API validator', function () {
   let server: ServerInfo
@@ -49,7 +48,7 @@ describe('Test video playlists API validator', function () {
     await setDefaultVideoChannel([ server ])
 
     userAccessToken = await server.usersCommand.generateUserAndToken('user1')
-    videoId = (await uploadVideoAndGetId({ server, videoName: 'video 1' })).id
+    videoId = (await server.videosCommand.quickUpload({ name: 'video 1' })).id
 
     command = server.playlistsCommand
 
@@ -486,8 +485,8 @@ describe('Test video playlists API validator', function () {
     }
 
     before(async function () {
-      videoId3 = (await uploadVideoAndGetId({ server, videoName: 'video 3' })).id
-      videoId4 = (await uploadVideoAndGetId({ server, videoName: 'video 4' })).id
+      videoId3 = (await server.videosCommand.quickUpload({ name: 'video 3' })).id
+      videoId4 = (await server.videosCommand.quickUpload({ name: 'video 4' })).id
 
       for (const id of [ videoId3, videoId4 ]) {
         await command.addElement({ playlistId: playlist.shortUUID, attributes: { videoId: id } })

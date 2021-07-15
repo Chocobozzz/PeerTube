@@ -10,14 +10,12 @@ import {
   cleanupTests,
   doubleFollow,
   flushAndRunMultipleServers,
-  getVideo,
   makeDeleteRequest,
   makeGetRequest,
   makePostBodyRequest,
   makePutBodyRequest,
   ServerInfo,
   setAccessTokensToServers,
-  uploadVideoAndGetId,
   waitJobs
 } from '../../../../shared/extra-utils'
 
@@ -45,14 +43,13 @@ describe('Test server redundancy API validators', function () {
     await servers[0].usersCommand.create({ username: user.username, password: user.password })
     userAccessToken = await servers[0].loginCommand.getAccessToken(user)
 
-    videoIdLocal = (await uploadVideoAndGetId({ server: servers[0], videoName: 'video' })).id
+    videoIdLocal = (await servers[0].videosCommand.quickUpload({ name: 'video' })).id
 
-    const remoteUUID = (await uploadVideoAndGetId({ server: servers[1], videoName: 'video' })).uuid
+    const remoteUUID = (await servers[1].videosCommand.quickUpload({ name: 'video' })).uuid
 
     await waitJobs(servers)
 
-    const resVideo = await getVideo(servers[0].url, remoteUUID)
-    videoRemote = resVideo.body
+    videoRemote = await servers[0].videosCommand.get({ id: remoteUUID })
   })
 
   describe('When listing redundancies', function () {

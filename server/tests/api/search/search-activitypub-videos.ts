@@ -5,17 +5,13 @@ import * as chai from 'chai'
 import {
   cleanupTests,
   flushAndRunMultipleServers,
-  getVideosList,
-  removeVideo,
   SearchCommand,
   ServerInfo,
   setAccessTokensToServers,
-  updateVideo,
-  uploadVideo,
-  wait
-} from '../../../../shared/extra-utils'
-import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
-import { VideoPrivacy } from '../../../../shared/models/videos'
+  wait,
+  waitJobs
+} from '@shared/extra-utils'
+import { VideoPrivacy } from '@shared/models'
 
 const expect = chai.expect
 
@@ -34,13 +30,13 @@ describe('Test ActivityPub videos search', function () {
     await setAccessTokensToServers(servers)
 
     {
-      const res = await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'video 1 on server 1' })
-      videoServer1UUID = res.body.video.uuid
+      const { uuid } = await servers[0].videosCommand.upload({ attributes: { name: 'video 1 on server 1' } })
+      videoServer1UUID = uuid
     }
 
     {
-      const res = await uploadVideo(servers[1].url, servers[1].accessToken, { name: 'video 1 on server 2' })
-      videoServer2UUID = res.body.video.uuid
+      const { uuid } = await servers[1].videosCommand.upload({ attributes: { name: 'video 1 on server 2' } })
+      videoServer2UUID = uuid
     }
 
     await waitJobs(servers)
@@ -109,10 +105,10 @@ describe('Test ActivityPub videos search', function () {
   })
 
   it('Should not list this remote video', async function () {
-    const res = await getVideosList(servers[0].url)
-    expect(res.body.total).to.equal(1)
-    expect(res.body.data).to.have.lengthOf(1)
-    expect(res.body.data[0].name).to.equal('video 1 on server 1')
+    const { total, data } = await servers[0].videosCommand.list()
+    expect(total).to.equal(1)
+    expect(data).to.have.lengthOf(1)
+    expect(data[0].name).to.equal('video 1 on server 1')
   })
 
   it('Should update video of server 2, and refresh it on server 1', async function () {
@@ -131,7 +127,7 @@ describe('Test ActivityPub videos search', function () {
       privacy: VideoPrivacy.UNLISTED,
       channelId: videoChannelId
     }
-    await updateVideo(servers[1].url, servers[1].accessToken, videoServer2UUID, attributes)
+    await servers[1].videosCommand.update({ id: videoServer2UUID, attributes })
 
     await waitJobs(servers)
     // Expire video
@@ -157,7 +153,7 @@ describe('Test ActivityPub videos search', function () {
   it('Should delete video of server 2, and delete it on server 1', async function () {
     this.timeout(120000)
 
-    await removeVideo(servers[1].url, servers[1].accessToken, videoServer2UUID)
+    await servers[1].videosCommand.remove({ id: videoServer2UUID })
 
     await waitJobs(servers)
     // Expire video

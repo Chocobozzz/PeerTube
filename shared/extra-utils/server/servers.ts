@@ -27,7 +27,8 @@ import {
   LiveCommand,
   PlaylistsCommand,
   ServicesCommand,
-  StreamingPlaylistsCommand
+  StreamingPlaylistsCommand,
+  VideosCommand
 } from '../videos'
 import { CommentsCommand } from '../videos/comments-command'
 import { ConfigCommand } from './config-command'
@@ -128,6 +129,7 @@ interface ServerInfo {
   serversCommand?: ServersCommand
   loginCommand?: LoginCommand
   usersCommand?: UsersCommand
+  videosCommand?: VideosCommand
 }
 
 function flushAndRunMultipleServers (totalServers: number, configOverride?: Object) {
@@ -361,6 +363,7 @@ function assignCommands (server: ServerInfo) {
   server.serversCommand = new ServersCommand(server)
   server.loginCommand = new LoginCommand(server)
   server.usersCommand = new UsersCommand(server)
+  server.videosCommand = new VideosCommand(server)
 }
 
 async function reRunServer (server: ServerInfo, configOverride?: any) {

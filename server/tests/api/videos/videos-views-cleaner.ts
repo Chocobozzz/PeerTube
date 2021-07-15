@@ -10,8 +10,6 @@ import {
   reRunServer,
   ServerInfo,
   setAccessTokensToServers,
-  uploadVideoAndGetId,
-  viewVideo,
   wait,
   waitJobs
 } from '../../../../shared/extra-utils'
@@ -32,15 +30,15 @@ describe('Test video views cleaner', function () {
 
     await doubleFollow(servers[0], servers[1])
 
-    videoIdServer1 = (await uploadVideoAndGetId({ server: servers[0], videoName: 'video server 1' })).uuid
-    videoIdServer2 = (await uploadVideoAndGetId({ server: servers[1], videoName: 'video server 2' })).uuid
+    videoIdServer1 = (await servers[0].videosCommand.quickUpload({ name: 'video server 1' })).uuid
+    videoIdServer2 = (await servers[1].videosCommand.quickUpload({ name: 'video server 2' })).uuid
 
     await waitJobs(servers)
 
-    await viewVideo(servers[0].url, videoIdServer1)
-    await viewVideo(servers[1].url, videoIdServer1)
-    await viewVideo(servers[0].url, videoIdServer2)
-    await viewVideo(servers[1].url, videoIdServer2)
+    await servers[0].videosCommand.view({ id: videoIdServer1 })
+    await servers[1].videosCommand.view({ id: videoIdServer1 })
+    await servers[0].videosCommand.view({ id: videoIdServer2 })
+    await servers[1].videosCommand.view({ id: videoIdServer2 })
 
     await waitJobs(servers)
   })

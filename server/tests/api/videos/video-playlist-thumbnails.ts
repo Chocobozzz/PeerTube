@@ -10,7 +10,6 @@ import {
   setAccessTokensToServers,
   setDefaultVideoChannel,
   testImage,
-  uploadVideoAndGetId,
   waitJobs
 } from '../../../../shared/extra-utils'
 import { VideoPlaylistPrivacy } from '../../../../shared/models/videos/playlist/video-playlist-privacy.model'
@@ -55,8 +54,8 @@ describe('Playlist thumbnail', function () {
     // Server 1 and server 2 follow each other
     await doubleFollow(servers[0], servers[1])
 
-    video1 = (await uploadVideoAndGetId({ server: servers[0], videoName: 'video 1' })).id
-    video2 = (await uploadVideoAndGetId({ server: servers[0], videoName: 'video 2' })).id
+    video1 = (await servers[0].videosCommand.quickUpload({ name: 'video 1' })).id
+    video2 = (await servers[0].videosCommand.quickUpload({ name: 'video 2' })).id
 
     await waitJobs(servers)
   })

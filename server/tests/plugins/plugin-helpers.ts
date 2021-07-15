@@ -8,15 +8,11 @@ import {
   cleanupTests,
   doubleFollow,
   flushAndRunMultipleServers,
-  getVideo,
-  getVideosList,
   makeGetRequest,
   makePostBodyRequest,
   PluginsCommand,
   ServerInfo,
   setAccessTokensToServers,
-  uploadVideoAndGetId,
-  viewVideo,
   waitJobs
 } from '@shared/extra-utils'
 
@@ -144,59 +140,54 @@ describe('Test plugin helpers', function () {
       this.timeout(60000)
 
       {
-        const res = await uploadVideoAndGetId({ server: servers[0], videoName: 'video server 1' })
+        const res = await await servers[0].videosCommand.quickUpload({ name: 'video server 1' })
         videoUUIDServer1 = res.uuid
       }
 
       {
-        await uploadVideoAndGetId({ server: servers[1], videoName: 'video server 2' })
+        await await servers[1].videosCommand.quickUpload({ name: 'video server 2' })
       }
 
       await waitJobs(servers)
 
-      const res = await getVideosList(servers[0].url)
-      const videos = res.body.data
+      const { data } = await servers[0].videosCommand.list()
 
-      expect(videos).to.have.lengthOf(2)
+      expect(data).to.have.lengthOf(2)
     })
 
     it('Should mute server 2', async function () {
       this.timeout(10000)
       await postCommand(servers[0], 'blockServer', { hostToBlock: `localhost:${servers[1].port}` })
 
-      const res = await getVideosList(servers[0].url)
-      const videos = res.body.data
+      const { data } = await servers[0].videosCommand.list()
 
-      expect(videos).to.have.lengthOf(1)
-      expect(videos[0].name).to.equal('video server 1')
+      expect(data).to.have.lengthOf(1)
+      expect(data[0].name).to.equal('video server 1')
     })
 
     it('Should unmute server 2', async function () {
       await postCommand(servers[0], 'unblockServer', { hostToUnblock: `localhost:${servers[1].port}` })
 
-      const res = await getVideosList(servers[0].url)
-      const videos = res.body.data
+      const { data } = await servers[0].videosCommand.list()
 
-      expect(videos).to.have.lengthOf(2)
+      expect(data).to.have.lengthOf(2)
     })
 
     it('Should mute account of server 2', async function () {
       await postCommand(servers[0], 'blockAccount', { handleToBlock: `root@localhost:${servers[1].port}` })
 
-      const res = await getVideosList(servers[0].url)
-      const videos = res.body.data
+      const { data } = await servers[0].videosCommand.list()
 
-      expect(videos).to.have.lengthOf(1)
-      expect(videos[0].name).to.equal('video server 1')
+      expect(data).to.have.lengthOf(1)
+      expect(data[0].name).to.equal('video server 1')
     })
 
     it('Should unmute account of server 2', async function () {
       await postCommand(servers[0], 'unblockAccount', { handleToUnblock: `root@localhost:${servers[1].port}` })
 
-      const res = await getVideosList(servers[0].url)
-      const videos = res.body.data
+      const { data } = await servers[0].videosCommand.list()
 
-      expect(videos).to.have.lengthOf(2)
+      expect(data).to.have.lengthOf(2)
     })
 
     it('Should blacklist video', async function () {
@@ -207,11 +198,10 @@ describe('Test plugin helpers', function () {
       await waitJobs(servers)
 
       for (const server of servers) {
-        const res = await getVideosList(server.url)
-        const videos = res.body.data
+        const { data } = await server.videosCommand.list()
 
-        expect(videos).to.have.lengthOf(1)
-        expect(videos[0].name).to.equal('video server 2')
+        expect(data).to.have.lengthOf(1)
+        expect(data[0].name).to.equal('video server 2')
       }
     })
 
@@ -223,10 +213,9 @@ describe('Test plugin helpers', function () {
       await waitJobs(servers)
 
       for (const server of servers) {
-        const res = await getVideosList(server.url)
-        const videos = res.body.data
+        const { data } = await server.videosCommand.list()
 
-        expect(videos).to.have.lengthOf(2)
+        expect(data).to.have.lengthOf(2)
       }
     })
   })
@@ -235,7 +224,7 @@ describe('Test plugin helpers', function () {
     let videoUUID: string
 
     before(async () => {
-      const res = await uploadVideoAndGetId({ server: servers[0], videoName: 'video1' })
+      const res = await await servers[0].videosCommand.quickUpload({ name: 'video1' })
       videoUUID = res.uuid
     })
 
@@ -243,15 +232,15 @@ describe('Test plugin helpers', function () {
       this.timeout(40000)
 
       // Should not throw -> video exists
-      await getVideo(servers[0].url, videoUUID)
+      await servers[0].videosCommand.get({ id: videoUUID })
       // Should delete the video
-      await viewVideo(servers[0].url, videoUUID)
+      await servers[0].videosCommand.view({ id: videoUUID })
 
       await servers[0].serversCommand.waitUntilLog('Video deleted by plugin four.')
 
       try {
         // Should throw because the video should have been deleted
-        await getVideo(servers[0].url, videoUUID)
+        await servers[0].videosCommand.get({ id: videoUUID })
         throw new Error('Video exists')
       } catch (err) {
         if (err.message.includes('exists')) throw err

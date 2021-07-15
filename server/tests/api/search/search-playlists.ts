@@ -2,16 +2,15 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { VideoPlaylistPrivacy } from '@shared/models'
 import {
   cleanupTests,
   flushAndRunServer,
   SearchCommand,
   ServerInfo,
   setAccessTokensToServers,
-  setDefaultVideoChannel,
-  uploadVideoAndGetId
-} from '../../../../shared/extra-utils'
+  setDefaultVideoChannel
+} from '@shared/extra-utils'
+import { VideoPlaylistPrivacy } from '@shared/models'
 
 const expect = chai.expect
 
@@ -27,7 +26,7 @@ describe('Test playlists search', function () {
     await setAccessTokensToServers([ server ])
     await setDefaultVideoChannel([ server ])
 
-    const videoId = (await uploadVideoAndGetId({ server: server, videoName: 'video' })).uuid
+    const videoId = (await server.videosCommand.quickUpload({ name: 'video' })).uuid
 
     {
       const attributes = {

@@ -3,17 +3,15 @@
 import 'mocha'
 import * as chai from 'chai'
 import { FfmpegCommand } from 'fluent-ffmpeg'
-import { VideoDetails, VideoPrivacy } from '@shared/models'
+import { VideoPrivacy } from '@shared/models'
 import {
   cleanupTests,
   doubleFollow,
   flushAndRunMultipleServers,
-  getVideo,
   ServerInfo,
   setAccessTokensToServers,
   setDefaultVideoChannel,
   stopFfmpeg,
-  viewVideo,
   wait,
   waitJobs,
   waitUntilLivePublishedOnAllServers
@@ -55,9 +53,7 @@ describe('Test live', function () {
 
     async function countViews (expected: number) {
       for (const server of servers) {
-        const res = await getVideo(server.url, liveVideoId)
-        const video: VideoDetails = res.body
-
+        const video = await server.videosCommand.get({ id: liveVideoId })
         expect(video.views).to.equal(expected)
       }
     }
@@ -86,8 +82,8 @@ describe('Test live', function () {
     it('Should view a live twice and display 1 view', async function () {
       this.timeout(30000)
 
-      await viewVideo(servers[0].url, liveVideoId)
-      await viewVideo(servers[0].url, liveVideoId)
+      await servers[0].videosCommand.view({ id: liveVideoId })
+      await servers[0].videosCommand.view({ id: liveVideoId })
 
       await wait(7000)
 
@@ -108,9 +104,9 @@ describe('Test live', function () {
     it('Should view a live on a remote and on local and display 2 views', async function () {
       this.timeout(30000)
 
-      await viewVideo(servers[0].url, liveVideoId)
-      await viewVideo(servers[1].url, liveVideoId)
-      await viewVideo(servers[1].url, liveVideoId)
+      await servers[0].videosCommand.view({ id: liveVideoId })
+      await servers[1].videosCommand.view({ id: liveVideoId })
+      await servers[1].videosCommand.view({ id: liveVideoId })
 
       await wait(7000)
       await waitJobs(servers)

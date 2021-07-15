@@ -3,15 +3,7 @@
 import 'mocha'
 import * as chai from 'chai'
 import { HttpStatusCode } from '@shared/core-utils'
-import {
-  cleanupTests,
-  flushAndRunServer,
-  MockSmtpServer,
-  ServerInfo,
-  setAccessTokensToServers,
-  uploadVideo,
-  waitJobs
-} from '@shared/extra-utils'
+import { cleanupTests, flushAndRunServer, MockSmtpServer, ServerInfo, setAccessTokensToServers, waitJobs } from '@shared/extra-utils'
 
 const expect = chai.expect
 
@@ -58,20 +50,18 @@ describe('Test emails', function () {
     }
 
     {
-      const attributes = {
-        name: 'my super user video'
-      }
-      const res = await uploadVideo(server.url, userAccessToken, attributes)
-      videoUserUUID = res.body.video.uuid
+      const attributes = { name: 'my super user video' }
+      const { uuid } = await server.videosCommand.upload({ token: userAccessToken, attributes })
+      videoUserUUID = uuid
     }
 
     {
       const attributes = {
         name: 'my super name'
       }
-      const res = await uploadVideo(server.url, server.accessToken, attributes)
-      videoUUID = res.body.video.uuid
-      videoId = res.body.video.id
+      const { uuid, id } = await server.videosCommand.upload({ attributes })
+      videoUUID = uuid
+      videoId = id
     }
   })
 

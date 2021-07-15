@@ -6,12 +6,9 @@ import {
   cleanupTests,
   doubleFollow,
   flushAndRunMultipleServers,
-  getVideosList,
   ServerInfo,
   setAccessTokensToServers,
   SubscriptionsCommand,
-  updateVideo,
-  uploadVideo,
   waitJobs
 } from '@shared/extra-utils'
 
@@ -44,10 +41,10 @@ describe('Test users subscriptions', function () {
         users.push({ accessToken })
 
         const videoName1 = 'video 1-' + server.serverNumber
-        await uploadVideo(server.url, accessToken, { name: videoName1 })
+        await server.videosCommand.upload({ token: accessToken, attributes: { name: videoName1 } })
 
         const videoName2 = 'video 2-' + server.serverNumber
-        await uploadVideo(server.url, accessToken, { name: videoName2 })
+        await server.videosCommand.upload({ token: accessToken, attributes: { name: videoName2 } })
       }
     }
 
@@ -57,9 +54,9 @@ describe('Test users subscriptions', function () {
   })
 
   it('Should display videos of server 2 on server 1', async function () {
-    const res = await getVideosList(servers[0].url)
+    const { total } = await servers[0].videosCommand.list()
 
-    expect(res.body.total).to.equal(4)
+    expect(total).to.equal(4)
   })
 
   it('User of server 1 should follow user of server 3 and root of server 1', async function () {
@@ -70,17 +67,17 @@ describe('Test users subscriptions', function () {
 
     await waitJobs(servers)
 
-    const res = await uploadVideo(servers[2].url, users[2].accessToken, { name: 'video server 3 added after follow' })
-    video3UUID = res.body.video.uuid
+    const { uuid } = await servers[2].videosCommand.upload({ attributes: { name: 'video server 3 added after follow' } })
+    video3UUID = uuid
 
     await waitJobs(servers)
   })
 
   it('Should not display videos of server 3 on server 1', async function () {
-    const res = await getVideosList(servers[0].url)
+    const { total, data } = await servers[0].videosCommand.list()
+    expect(total).to.equal(4)
 
-    expect(res.body.total).to.equal(4)
-    for (const video of res.body.data) {
+    for (const video of data) {
       expect(video.name).to.not.contain('1-3')
       expect(video.name).to.not.contain('2-3')
       expect(video.name).to.not.contain('video server 3 added after follow')
@@ -186,7 +183,7 @@ describe('Test users subscriptions', function () {
     this.timeout(60000)
 
     const videoName = 'video server 1 added after follow'
-    await uploadVideo(servers[0].url, servers[0].accessToken, { name: videoName })
+    await servers[0].videosCommand.upload({ attributes: { name: videoName } })
 
     await waitJobs(servers)
 
@@ -212,10 +209,10 @@ describe('Test users subscriptions', function () {
     }
 
     {
-      const res = await getVideosList(servers[0].url)
+      const { data, total } = await servers[0].videosCommand.list()
+      expect(total).to.equal(5)
 
-      expect(res.body.total).to.equal(5)
-      for (const video of res.body.data) {
+      for (const video of data) {
         expect(video.name).to.not.contain('1-3')
         expect(video.name).to.not.contain('2-3')
         expect(video.name).to.not.contain('video server 3 added after follow')
@@ -230,13 +227,12 @@ describe('Test users subscriptions', function () {
 
     await waitJobs(servers)
 
-    const res = await getVideosList(servers[0].url)
-
-    expect(res.body.total).to.equal(8)
+    const { data, total } = await servers[0].videosCommand.list()
+    expect(total).to.equal(8)
 
     const names = [ '1-3', '2-3', 'video server 3 added after follow' ]
     for (const name of names) {
-      const video = res.body.data.find(v => v.name.indexOf(name) === -1)
+      const video = data.find(v => v.name.includes(name))
       expect(video).to.not.be.undefined
     }
   })
@@ -248,10 +244,10 @@ describe('Test users subscriptions', function () {
 
     await waitJobs(servers)
 
-    const res = await getVideosList(servers[0].url)
+    const { total, data } = await servers[0].videosCommand.list()
+    expect(total).to.equal(5)
 
-    expect(res.body.total).to.equal(5)
-    for (const video of res.body.data) {
+    for (const video of data) {
       expect(video.name).to.not.contain('1-3')
       expect(video.name).to.not.contain('2-3')
       expect(video.name).to.not.contain('video server 3 added after follow')
@@ -284,7 +280,7 @@ describe('Test users subscriptions', function () {
   it('Should update a video of server 3 and see the updated video on server 1', async function () {
     this.timeout(30000)
 
-    await updateVideo(servers[2].url, users[2].accessToken, video3UUID, { name: 'video server 3 added after follow updated' })
+    await servers[2].videosCommand.update({ id: video3UUID, attributes: { name: 'video server 3 added after follow updated' } })
 
     await waitJobs(servers)
 
@@ -329,10 +325,10 @@ describe('Test users subscriptions', function () {
   })
 
   it('Should correctly display public videos on server 1', async function () {
-    const res = await getVideosList(servers[0].url)
+    const { total, data } = await servers[0].videosCommand.list()
+    expect(total).to.equal(5)
 
-    expect(res.body.total).to.equal(5)
-    for (const video of res.body.data) {
+    for (const video of data) {
       expect(video.name).to.not.contain('1-3')
       expect(video.name).to.not.contain('2-3')
       expect(video.name).to.not.contain('video server 3 added after follow updated')
@@ -360,10 +356,10 @@ describe('Test users subscriptions', function () {
     }
 
     {
-      const res = await getVideosList(servers[0].url)
+      const { total, data } = await servers[0].videosCommand.list()
+      expect(total).to.equal(5)
 
-      expect(res.body.total).to.equal(5)
-      for (const video of res.body.data) {
+      for (const video of data) {
         expect(video.name).to.not.contain('1-3')
         expect(video.name).to.not.contain('2-3')
         expect(video.name).to.not.contain('video server 3 added after follow updated')

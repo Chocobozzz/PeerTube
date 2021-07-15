@@ -1,5 +1,4 @@
 import { isAbsolute, join } from 'path'
-import { HttpStatusCode } from '@shared/core-utils'
 import { root } from '../miscs/tests'
 import {
   makeDeleteRequest,
@@ -38,20 +37,10 @@ interface InternalGetCommandOptions extends InternalCommonCommandOptions {
 
 abstract class AbstractCommand {
 
-  private expectedStatus: HttpStatusCode
-
   constructor (
     protected server: ServerInfo
   ) {
 
-  }
-
-  setServer (server: ServerInfo) {
-    this.server = server
-  }
-
-  setExpectedStatus (status: HttpStatusCode) {
-    this.expectedStatus = status
   }
 
   protected getRequestBody <T> (options: InternalGetCommandOptions) {
@@ -111,43 +100,51 @@ abstract class AbstractCommand {
 
   protected postBodyRequest (options: InternalCommonCommandOptions & {
     fields?: { [ fieldName: string ]: any }
+    headers?: { [ name: string ]: string }
     type?: string
+    xForwardedFor?: string
   }) {
-    const { type, fields } = options
+    const { type, fields, xForwardedFor, headers } = options
 
     return makePostBodyRequest({
       ...this.buildCommonRequestOptions(options),
 
       fields,
-      type
+      xForwardedFor,
+      type,
+      headers
     })
   }
 
   protected postUploadRequest (options: InternalCommonCommandOptions & {
     fields?: { [ fieldName: string ]: any }
-    attaches?: any
+    attaches?: { [ fieldName: string ]: any }
+    headers?: { [ name: string ]: string }
   }) {
-    const { fields, attaches } = options
+    const { fields, attaches, headers } = options
 
     return makeUploadRequest({
       ...this.buildCommonRequestOptions(options),
 
       method: 'POST',
       fields,
-      attaches
+      attaches,
+      headers
     })
   }
 
   protected putUploadRequest (options: InternalCommonCommandOptions & {
     fields?: { [ fieldName: string ]: any }
-    attaches?: any
+    attaches?: { [ fieldName: string ]: any }
+    headers?: { [ name: string ]: string }
   }) {
-    const { fields, attaches } = options
+    const { fields, attaches, headers } = options
 
     return makeUploadRequest({
       ...this.buildCommonRequestOptions(options),
 
       method: 'PUT',
+      headers,
       fields,
       attaches
     })
@@ -172,7 +169,7 @@ abstract class AbstractCommand {
     })
   }
 
-  private buildCommonRequestOptions (options: InternalCommonCommandOptions) {
+  protected buildCommonRequestOptions (options: InternalCommonCommandOptions) {
     const { url, path } = options
 
     return {
@@ -184,7 +181,7 @@ abstract class AbstractCommand {
     }
   }
 
-  private buildCommonRequestToken (options: Pick<InternalCommonCommandOptions, 'token' | 'implicitToken'>) {
+  protected buildCommonRequestToken (options: Pick<InternalCommonCommandOptions, 'token' | 'implicitToken'>) {
     const { token } = options
 
     const fallbackToken = options.implicitToken
@@ -194,10 +191,10 @@ abstract class AbstractCommand {
     return token !== undefined ? token : fallbackToken
   }
 
-  private buildStatusCodeExpected (options: Pick<InternalCommonCommandOptions, 'expectedStatus' | 'defaultExpectedStatus'>) {
+  protected buildStatusCodeExpected (options: Pick<InternalCommonCommandOptions, 'expectedStatus' | 'defaultExpectedStatus'>) {
     const { expectedStatus, defaultExpectedStatus } = options
 
-    return expectedStatus ?? this.expectedStatus ?? defaultExpectedStatus
+    return expectedStatus !== undefined ? expectedStatus : defaultExpectedStatus
   }
 }
 

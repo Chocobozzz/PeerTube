@@ -6,14 +6,10 @@ import {
   cleanupTests,
   doubleFollow,
   flushAndRunMultipleServers,
-  getVideo,
-  getVideosList,
   ServerInfo,
   setAccessTokensToServers,
-  uploadVideo
+  waitJobs
 } from '../../../shared/extra-utils'
-import { waitJobs } from '../../../shared/extra-utils/server/jobs'
-import { VideoDetails } from '../../../shared/models/videos'
 
 const expect = chai.expect
 
@@ -51,8 +47,8 @@ describe('Test create transcoding jobs', function () {
     await doubleFollow(servers[0], servers[1])
 
     for (let i = 1; i <= 5; i++) {
-      const res = await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'video' + i })
-      videosUUID.push(res.body.video.uuid)
+      const { uuid } = await servers[0].videosCommand.upload({ attributes: { name: 'video' + i } })
+      videosUUID.push(uuid)
     }
 
     await waitJobs(servers)
@@ -62,13 +58,11 @@ describe('Test create transcoding jobs', function () {
     this.timeout(30000)
 
     for (const server of servers) {
-      const res = await getVideosList(server.url)
-      const videos = res.body.data
-      expect(videos).to.have.lengthOf(videosUUID.length)
+      const { data } = await server.videosCommand.list()
+      expect(data).to.have.lengthOf(videosUUID.length)
 
-      for (const video of videos) {
-        const res2 = await getVideo(server.url, video.uuid)
-        const videoDetail: VideoDetails = res2.body
+      for (const video of data) {
+        const videoDetail = await server.videosCommand.get({ id: video.uuid })
         expect(videoDetail.files).to.have.lengthOf(1)
         expect(videoDetail.streamingPlaylists).to.have.lengthOf(0)
       }
@@ -82,14 +76,12 @@ describe('Test create transcoding jobs', function () {
     await waitJobs(servers)
 
     for (const server of servers) {
-      const res = await getVideosList(server.url)
-      const videos = res.body.data
+      const { data } = await server.videosCommand.list()
 
       let infoHashes: { [id: number]: string }
 
-      for (const video of videos) {
-        const res2 = await getVideo(server.url, video.uuid)
-        const videoDetail: VideoDetails = res2.body
+      for (const video of data) {
+        const videoDetail = await server.videosCommand.get({ id: video.uuid })
 
         if (video.uuid === videosUUID[1]) {
           expect(videoDetail.files).to.have.lengthOf(4)
@@ -123,18 +115,16 @@ describe('Test create transcoding jobs', function () {
     await waitJobs(servers)
 
     for (const server of servers) {
-      const res = await getVideosList(server.url)
-      const videos = res.body.data
-      expect(videos).to.have.lengthOf(videosUUID.length)
+      const { data } = await server.videosCommand.list()
+      expect(data).to.have.lengthOf(videosUUID.length)
 
-      const res2 = await getVideo(server.url, videosUUID[0])
-      const videoDetail: VideoDetails = res2.body
+      const videoDetails = await server.videosCommand.get({ id: videosUUID[0] })
 
-      expect(videoDetail.files).to.have.lengthOf(2)
-      expect(videoDetail.files[0].resolution.id).to.equal(720)
-      expect(videoDetail.files[1].resolution.id).to.equal(480)
+      expect(videoDetails.files).to.have.lengthOf(2)
+      expect(videoDetails.files[0].resolution.id).to.equal(720)
+      expect(videoDetails.files[1].resolution.id).to.equal(480)
 
-      expect(videoDetail.streamingPlaylists).to.have.lengthOf(0)
+      expect(videoDetails.streamingPlaylists).to.have.lengthOf(0)
     }
   })
 
@@ -146,13 +136,12 @@ describe('Test create transcoding jobs', function () {
     await waitJobs(servers)
 
     for (const server of servers) {
-      const res = await getVideo(server.url, videosUUID[2])
-      const videoDetail: VideoDetails = res.body
+      const videoDetails = await server.videosCommand.get({ id: videosUUID[2] })
 
-      expect(videoDetail.files).to.have.lengthOf(1)
-      expect(videoDetail.streamingPlaylists).to.have.lengthOf(1)
+      expect(videoDetails.files).to.have.lengthOf(1)
+      expect(videoDetails.streamingPlaylists).to.have.lengthOf(1)
 
-      const files = videoDetail.streamingPlaylists[0].files
+      const files = videoDetails.streamingPlaylists[0].files
       expect(files).to.have.lengthOf(1)
       expect(files[0].resolution.id).to.equal(480)
     }
@@ -166,10 +155,9 @@ describe('Test create transcoding jobs', function () {
     await waitJobs(servers)
 
     for (const server of servers) {
-      const res = await getVideo(server.url, videosUUID[2])
-      const videoDetail: VideoDetails = res.body
+      const videoDetails = await server.videosCommand.get({ id: videosUUID[2] })
 
-      const files = videoDetail.streamingPlaylists[0].files
+      const files = videoDetails.streamingPlaylists[0].files
       expect(files).to.have.lengthOf(1)
       expect(files[0].resolution.id).to.equal(480)
     }
@@ -183,13 +171,12 @@ describe('Test create transcoding jobs', function () {
     await waitJobs(servers)
 
     for (const server of servers) {
-      const res = await getVideo(server.url, videosUUID[3])
-      const videoDetail: VideoDetails = res.body
+      const videoDetails = await server.videosCommand.get({ id: videosUUID[3] })
 
-      expect(videoDetail.files).to.have.lengthOf(1)
-      expect(videoDetail.streamingPlaylists).to.have.lengthOf(1)
+      expect(videoDetails.files).to.have.lengthOf(1)
+      expect(videoDetails.streamingPlaylists).to.have.lengthOf(1)
 
-      const files = videoDetail.streamingPlaylists[0].files
+      const files = videoDetails.streamingPlaylists[0].files
       expect(files).to.have.lengthOf(4)
     }
   })
@@ -205,12 +192,11 @@ describe('Test create transcoding jobs', function () {
     await waitJobs(servers)
 
     for (const server of servers) {
-      const res = await getVideo(server.url, videosUUID[4])
-      const videoDetail: VideoDetails = res.body
+      const videoDetails = await server.videosCommand.get({ id: videosUUID[4] })
 
-      expect(videoDetail.files).to.have.lengthOf(4)
-      expect(videoDetail.streamingPlaylists).to.have.lengthOf(1)
-      expect(videoDetail.streamingPlaylists[0].files).to.have.lengthOf(4)
+      expect(videoDetails.files).to.have.lengthOf(4)
+      expect(videoDetails.streamingPlaylists).to.have.lengthOf(1)
+      expect(videoDetails.streamingPlaylists[0].files).to.have.lengthOf(4)
     }
   })
 

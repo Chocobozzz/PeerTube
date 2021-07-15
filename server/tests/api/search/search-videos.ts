@@ -10,7 +10,6 @@ import {
   setAccessTokensToServers,
   setDefaultVideoChannel,
   stopFfmpeg,
-  uploadVideo,
   wait
 } from '@shared/extra-utils'
 import { VideoPrivacy } from '@shared/models'
@@ -41,50 +40,49 @@ describe('Test videos search', function () {
         nsfw: false,
         language: 'fr'
       }
-      await uploadVideo(server.url, server.accessToken, attributes1)
+      await server.videosCommand.upload({ attributes: attributes1 })
 
       const attributes2 = { ...attributes1, name: attributes1.name + ' - 2', fixture: 'video_short.mp4' }
-      await uploadVideo(server.url, server.accessToken, attributes2)
+      await server.videosCommand.upload({ attributes: attributes2 })
 
       {
         const attributes3 = { ...attributes1, name: attributes1.name + ' - 3', language: undefined }
-        const res = await uploadVideo(server.url, server.accessToken, attributes3)
-        const videoId = res.body.video.id
-        videoUUID = res.body.video.uuid
+        const { id, uuid } = await server.videosCommand.upload({ attributes: attributes3 })
+        videoUUID = uuid
 
         await server.captionsCommand.createVideoCaption({
           language: 'en',
-          videoId,
+          videoId: id,
           fixture: 'subtitle-good2.vtt',
           mimeType: 'application/octet-stream'
         })
 
         await server.captionsCommand.createVideoCaption({
           language: 'aa',
-          videoId,
+          videoId: id,
           fixture: 'subtitle-good2.vtt',
           mimeType: 'application/octet-stream'
         })
       }
 
       const attributes4 = { ...attributes1, name: attributes1.name + ' - 4', language: 'pl', nsfw: true }
-      await uploadVideo(server.url, server.accessToken, attributes4)
+      await server.videosCommand.upload({ attributes: attributes4 })
 
       await wait(1000)
 
       startDate = new Date().toISOString()
 
       const attributes5 = { ...attributes1, name: attributes1.name + ' - 5', licence: 2, language: undefined }
-      await uploadVideo(server.url, server.accessToken, attributes5)
+      await server.videosCommand.upload({ attributes: attributes5 })
 
       const attributes6 = { ...attributes1, name: attributes1.name + ' - 6', tags: [ 't1', 't2' ] }
-      await uploadVideo(server.url, server.accessToken, attributes6)
+      await server.videosCommand.upload({ attributes: attributes6 })
 
       const attributes7 = { ...attributes1, name: attributes1.name + ' - 7', originallyPublishedAt: '2019-02-12T09:58:08.286Z' }
-      await uploadVideo(server.url, server.accessToken, attributes7)
+      await server.videosCommand.upload({ attributes: attributes7 })
 
       const attributes8 = { ...attributes1, name: attributes1.name + ' - 8', licence: 4 }
-      await uploadVideo(server.url, server.accessToken, attributes8)
+      await server.videosCommand.upload({ attributes: attributes8 })
     }
 
     {
@@ -95,9 +93,9 @@ describe('Test videos search', function () {
         licence: 2,
         language: 'en'
       }
-      await uploadVideo(server.url, server.accessToken, attributes)
+      await server.videosCommand.upload({ attributes: attributes })
 
-      await uploadVideo(server.url, server.accessToken, { ...attributes, name: attributes.name + ' duplicate' })
+      await server.videosCommand.upload({ attributes: { ...attributes, name: attributes.name + ' duplicate' } })
     }
 
     {
@@ -108,7 +106,7 @@ describe('Test videos search', function () {
         licence: 3,
         language: 'pl'
       }
-      await uploadVideo(server.url, server.accessToken, attributes)
+      await server.videosCommand.upload({ attributes: attributes })
     }
 
     {
@@ -117,11 +115,11 @@ describe('Test videos search', function () {
         tags: [ 'aaaa', 'bbbb', 'cccc' ],
         category: 1
       }
-      await uploadVideo(server.url, server.accessToken, attributes1)
-      await uploadVideo(server.url, server.accessToken, { ...attributes1, category: 2 })
+      await server.videosCommand.upload({ attributes: attributes1 })
+      await server.videosCommand.upload({ attributes: { ...attributes1, category: 2 } })
 
-      await uploadVideo(server.url, server.accessToken, { ...attributes1, tags: [ 'cccc', 'dddd' ] })
-      await uploadVideo(server.url, server.accessToken, { ...attributes1, tags: [ 'eeee', 'ffff' ] })
+      await server.videosCommand.upload({ attributes: { ...attributes1, tags: [ 'cccc', 'dddd' ] } })
+      await server.videosCommand.upload({ attributes: { ...attributes1, tags: [ 'eeee', 'ffff' ] } })
     }
 
     {
@@ -129,8 +127,8 @@ describe('Test videos search', function () {
         name: 'aaaa 2',
         category: 1
       }
-      await uploadVideo(server.url, server.accessToken, attributes1)
-      await uploadVideo(server.url, server.accessToken, { ...attributes1, category: 2 })
+      await server.videosCommand.upload({ attributes: attributes1 })
+      await server.videosCommand.upload({ attributes: { ...attributes1, category: 2 } })
     }
 
     command = server.searchCommand

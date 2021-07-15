@@ -10,7 +10,6 @@ import {
   MockSmtpServer,
   prepareNotificationsTest,
   ServerInfo,
-  uploadVideo,
   waitJobs
 } from '@shared/extra-utils'
 import { UserNotification } from '@shared/models'
@@ -53,8 +52,7 @@ describe('Test comments notifications', function () {
     it('Should not send a new comment notification after a comment on another video', async function () {
       this.timeout(20000)
 
-      const resVideo = await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'super video' })
-      const uuid = resVideo.body.video.uuid
+      const { uuid } = await servers[0].videosCommand.upload({ attributes: { name: 'super video' } })
 
       const created = await servers[0].commentsCommand.createThread({ videoId: uuid, text: 'comment' })
       const commentId = created.id
@@ -66,8 +64,7 @@ describe('Test comments notifications', function () {
     it('Should not send a new comment notification if I comment my own video', async function () {
       this.timeout(20000)
 
-      const resVideo = await uploadVideo(servers[0].url, userToken, { name: 'super video' })
-      const uuid = resVideo.body.video.uuid
+      const { uuid } = await servers[0].videosCommand.upload({ token: userToken, attributes: { name: 'super video' } })
 
       const created = await servers[0].commentsCommand.createThread({ token: userToken, videoId: uuid, text: 'comment' })
       const commentId = created.id
@@ -81,8 +78,7 @@ describe('Test comments notifications', function () {
 
       await servers[0].blocklistCommand.addToMyBlocklist({ token: userToken, account: 'root' })
 
-      const resVideo = await uploadVideo(servers[0].url, userToken, { name: 'super video' })
-      const uuid = resVideo.body.video.uuid
+      const { uuid } = await servers[0].videosCommand.upload({ token: userToken, attributes: { name: 'super video' } })
 
       const created = await servers[0].commentsCommand.createThread({ videoId: uuid, text: 'comment' })
       const commentId = created.id
@@ -96,8 +92,7 @@ describe('Test comments notifications', function () {
     it('Should send a new comment notification after a local comment on my video', async function () {
       this.timeout(20000)
 
-      const resVideo = await uploadVideo(servers[0].url, userToken, { name: 'super video' })
-      const uuid = resVideo.body.video.uuid
+      const { uuid } = await servers[0].videosCommand.upload({ token: userToken, attributes: { name: 'super video' } })
 
       const created = await servers[0].commentsCommand.createThread({ videoId: uuid, text: 'comment' })
       const commentId = created.id
@@ -109,8 +104,7 @@ describe('Test comments notifications', function () {
     it('Should send a new comment notification after a remote comment on my video', async function () {
       this.timeout(20000)
 
-      const resVideo = await uploadVideo(servers[0].url, userToken, { name: 'super video' })
-      const uuid = resVideo.body.video.uuid
+      const { uuid } = await servers[0].videosCommand.upload({ token: userToken, attributes: { name: 'super video' } })
 
       await waitJobs(servers)
 
@@ -128,8 +122,7 @@ describe('Test comments notifications', function () {
     it('Should send a new comment notification after a local reply on my video', async function () {
       this.timeout(20000)
 
-      const resVideo = await uploadVideo(servers[0].url, userToken, { name: 'super video' })
-      const uuid = resVideo.body.video.uuid
+      const { uuid } = await servers[0].videosCommand.upload({ token: userToken, attributes: { name: 'super video' } })
 
       const { id: threadId } = await servers[0].commentsCommand.createThread({ videoId: uuid, text: 'comment' })
 
@@ -142,8 +135,7 @@ describe('Test comments notifications', function () {
     it('Should send a new comment notification after a remote reply on my video', async function () {
       this.timeout(20000)
 
-      const resVideo = await uploadVideo(servers[0].url, userToken, { name: 'super video' })
-      const uuid = resVideo.body.video.uuid
+      const { uuid } = await servers[0].videosCommand.upload({ token: userToken, attributes: { name: 'super video' } })
       await waitJobs(servers)
 
       {
@@ -169,8 +161,7 @@ describe('Test comments notifications', function () {
     it('Should convert markdown in comment to html', async function () {
       this.timeout(20000)
 
-      const resVideo = await uploadVideo(servers[0].url, userToken, { name: 'cool video' })
-      const uuid = resVideo.body.video.uuid
+      const { uuid } = await servers[0].videosCommand.upload({ token: userToken, attributes: { name: 'cool video' } })
 
       await servers[0].commentsCommand.createThread({ videoId: uuid, text: commentText })
 
@@ -199,8 +190,7 @@ describe('Test comments notifications', function () {
     it('Should not send a new mention comment notification if I mention the video owner', async function () {
       this.timeout(10000)
 
-      const resVideo = await uploadVideo(servers[0].url, userToken, { name: 'super video' })
-      const uuid = resVideo.body.video.uuid
+      const { uuid } = await servers[0].videosCommand.upload({ token: userToken, attributes: { name: 'super video' } })
 
       const { id: commentId } = await servers[0].commentsCommand.createThread({ videoId: uuid, text: '@user_1 hello' })
 
@@ -211,8 +201,7 @@ describe('Test comments notifications', function () {
     it('Should not send a new mention comment notification if I mention myself', async function () {
       this.timeout(10000)
 
-      const resVideo = await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'super video' })
-      const uuid = resVideo.body.video.uuid
+      const { uuid } = await servers[0].videosCommand.upload({ attributes: { name: 'super video' } })
 
       const { id: commentId } = await servers[0].commentsCommand.createThread({ token: userToken, videoId: uuid, text: '@user_1 hello' })
 
@@ -225,8 +214,7 @@ describe('Test comments notifications', function () {
 
       await servers[0].blocklistCommand.addToMyBlocklist({ token: userToken, account: 'root' })
 
-      const resVideo = await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'super video' })
-      const uuid = resVideo.body.video.uuid
+      const { uuid } = await servers[0].videosCommand.upload({ attributes: { name: 'super video' } })
 
       const { id: commentId } = await servers[0].commentsCommand.createThread({ videoId: uuid, text: '@user_1 hello' })
 
@@ -239,8 +227,7 @@ describe('Test comments notifications', function () {
     it('Should not send a new mention notification if the remote account mention a local account', async function () {
       this.timeout(20000)
 
-      const resVideo = await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'super video' })
-      const uuid = resVideo.body.video.uuid
+      const { uuid } = await servers[0].videosCommand.upload({ attributes: { name: 'super video' } })
 
       await waitJobs(servers)
       const { id: threadId } = await servers[1].commentsCommand.createThread({ videoId: uuid, text: '@user_1 hello' })
@@ -252,8 +239,7 @@ describe('Test comments notifications', function () {
     it('Should send a new mention notification after local comments', async function () {
       this.timeout(10000)
 
-      const resVideo = await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'super video' })
-      const uuid = resVideo.body.video.uuid
+      const { uuid } = await servers[0].videosCommand.upload({ attributes: { name: 'super video' } })
 
       const { id: threadId } = await servers[0].commentsCommand.createThread({ videoId: uuid, text: '@user_1 hellotext:  1' })
 
@@ -269,8 +255,7 @@ describe('Test comments notifications', function () {
     it('Should send a new mention notification after remote comments', async function () {
       this.timeout(20000)
 
-      const resVideo = await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'super video' })
-      const uuid = resVideo.body.video.uuid
+      const { uuid } = await servers[0].videosCommand.upload({ attributes: { name: 'super video' } })
 
       await waitJobs(servers)
 
@@ -301,8 +286,7 @@ describe('Test comments notifications', function () {
     it('Should convert markdown in comment to html', async function () {
       this.timeout(10000)
 
-      const resVideo = await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'super video' })
-      const uuid = resVideo.body.video.uuid
+      const { uuid } = await servers[0].videosCommand.upload({ attributes: { name: 'super video' } })
 
       const { id: threadId } = await servers[0].commentsCommand.createThread({ videoId: uuid, text: '@user_1 hello 1' })
 

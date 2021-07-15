@@ -8,16 +8,12 @@ import {
   doubleFollow,
   flushAndRunMultipleServers,
   generateHighBitrateVideo,
-  getVideo,
-  getVideosList,
   ServerInfo,
   setAccessTokensToServers,
-  uploadVideo,
-  viewVideo,
-  wait
-} from '../../../shared/extra-utils'
-import { waitJobs } from '../../../shared/extra-utils/server/jobs'
-import { getMaxBitrate, Video, VideoDetails, VideoResolution } from '../../../shared/models/videos'
+  wait,
+  waitJobs
+} from '@shared/extra-utils'
+import { getMaxBitrate, VideoResolution } from '@shared/models'
 import { getVideoFileBitrate, getVideoFileFPS, getVideoFileResolution } from '../../helpers/ffprobe-utils'
 import { VIDEO_TRANSCODING_FPS } from '../../initializers/constants'
 
@@ -45,8 +41,8 @@ describe('Test optimize old videos', function () {
     }
 
     // Upload two videos for our needs
-    await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'video1', fixture: tempFixturePath })
-    await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'video2', fixture: tempFixturePath })
+    await servers[0].videosCommand.upload({ attributes: { name: 'video1', fixture: tempFixturePath } })
+    await servers[0].videosCommand.upload({ attributes: { name: 'video2', fixture: tempFixturePath } })
 
     await waitJobs(servers)
   })
@@ -55,14 +51,12 @@ describe('Test optimize old videos', function () {
     this.timeout(30000)
 
     for (const server of servers) {
-      const res = await getVideosList(server.url)
-      const videos = res.body.data
-      expect(videos).to.have.lengthOf(2)
+      const { data } = await server.videosCommand.list()
+      expect(data).to.have.lengthOf(2)
 
-      for (const video of videos) {
-        const res2 = await getVideo(server.url, video.uuid)
-        const videoDetail: VideoDetails = res2.body
-        expect(videoDetail.files).to.have.lengthOf(1)
+      for (const video of data) {
+        const videoDetails = await server.videosCommand.get({ id: video.uuid })
+        expect(videoDetails.files).to.have.lengthOf(1)
       }
     }
   })
@@ -74,24 +68,21 @@ describe('Test optimize old videos', function () {
     await waitJobs(servers)
 
     for (const server of servers) {
-      const res = await getVideosList(server.url)
-      const videos: Video[] = res.body.data
+      const { data } = await server.videosCommand.list()
+      expect(data).to.have.lengthOf(2)
 
-      expect(videos).to.have.lengthOf(2)
-
-      for (const video of videos) {
-        await viewVideo(server.url, video.uuid)
+      for (const video of data) {
+        await server.videosCommand.view({ id: video.uuid })
 
         // Refresh video
         await waitJobs(servers)
         await wait(5000)
         await waitJobs(servers)
 
-        const res2 = await getVideo(server.url, video.uuid)
-        const videosDetails: VideoDetails = res2.body
+        const videoDetails = await server.videosCommand.get({ id: video.uuid })
 
-        expect(videosDetails.files).to.have.lengthOf(1)
-        const file = videosDetails.files[0]
+        expect(videoDetails.files).to.have.lengthOf(1)
+        const file = videoDetails.files[0]
 
         expect(file.size).to.be.below(8000000)
 

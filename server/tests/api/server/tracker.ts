@@ -1,19 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await,@typescript-eslint/no-floating-promises */
 
-import * as magnetUtil from 'magnet-uri'
 import 'mocha'
-import {
-  cleanupTests,
-  flushAndRunServer,
-  getVideo,
-  killallServers,
-  reRunServer,
-  ServerInfo,
-  uploadVideo
-} from '../../../../shared/extra-utils'
-import { setAccessTokensToServers } from '../../../../shared/extra-utils/index'
-import { VideoDetails } from '../../../../shared/models/videos'
+import * as magnetUtil from 'magnet-uri'
 import * as WebTorrent from 'webtorrent'
+import { cleanupTests, flushAndRunServer, killallServers, reRunServer, ServerInfo, setAccessTokensToServers } from '@shared/extra-utils'
 
 describe('Test tracker', function () {
   let server: ServerInfo
@@ -26,11 +16,8 @@ describe('Test tracker', function () {
     await setAccessTokensToServers([ server ])
 
     {
-      const res = await uploadVideo(server.url, server.accessToken, {})
-      const videoUUID = res.body.video.uuid
-
-      const resGet = await getVideo(server.url, videoUUID)
-      const video: VideoDetails = resGet.body
+      const { uuid } = await server.videosCommand.upload()
+      const video = await server.videosCommand.get({ id: uuid })
       goodMagnet = video.files[0].magnetUri
 
       const parsed = magnetUtil.decode(goodMagnet)

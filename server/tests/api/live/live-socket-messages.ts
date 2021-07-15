@@ -7,12 +7,10 @@ import {
   cleanupTests,
   doubleFollow,
   flushAndRunMultipleServers,
-  getVideoIdFromUUID,
   ServerInfo,
   setAccessTokensToServers,
   setDefaultVideoChannel,
   stopFfmpeg,
-  viewVideo,
   wait,
   waitJobs,
   waitUntilLivePublishedOnAllServers
@@ -71,7 +69,7 @@ describe('Test live', function () {
       await waitJobs(servers)
 
       {
-        const videoId = await getVideoIdFromUUID(servers[0].url, liveVideoUUID)
+        const videoId = await servers[0].videosCommand.getId({ uuid: liveVideoUUID })
 
         const localSocket = servers[0].socketIOCommand.getLiveNotificationSocket()
         localSocket.on('state-change', data => localStateChanges.push(data.state))
@@ -79,7 +77,7 @@ describe('Test live', function () {
       }
 
       {
-        const videoId = await getVideoIdFromUUID(servers[1].url, liveVideoUUID)
+        const videoId = await servers[1].videosCommand.getId({ uuid: liveVideoUUID })
 
         const remoteSocket = servers[1].socketIOCommand.getLiveNotificationSocket()
         remoteSocket.on('state-change', data => remoteStateChanges.push(data.state))
@@ -119,7 +117,7 @@ describe('Test live', function () {
       await waitJobs(servers)
 
       {
-        const videoId = await getVideoIdFromUUID(servers[0].url, liveVideoUUID)
+        const videoId = await servers[0].videosCommand.getId({ uuid: liveVideoUUID })
 
         const localSocket = servers[0].socketIOCommand.getLiveNotificationSocket()
         localSocket.on('views-change', data => { localLastVideoViews = data.views })
@@ -127,7 +125,7 @@ describe('Test live', function () {
       }
 
       {
-        const videoId = await getVideoIdFromUUID(servers[1].url, liveVideoUUID)
+        const videoId = await servers[1].videosCommand.getId({ uuid: liveVideoUUID })
 
         const remoteSocket = servers[1].socketIOCommand.getLiveNotificationSocket()
         remoteSocket.on('views-change', data => { remoteLastVideoViews = data.views })
@@ -142,8 +140,8 @@ describe('Test live', function () {
       expect(localLastVideoViews).to.equal(0)
       expect(remoteLastVideoViews).to.equal(0)
 
-      await viewVideo(servers[0].url, liveVideoUUID)
-      await viewVideo(servers[1].url, liveVideoUUID)
+      await servers[0].videosCommand.view({ id: liveVideoUUID })
+      await servers[1].videosCommand.view({ id: liveVideoUUID })
 
       await waitJobs(servers)
       await wait(5000)
@@ -163,7 +161,7 @@ describe('Test live', function () {
       const liveVideoUUID = await createLiveWrapper()
       await waitJobs(servers)
 
-      const videoId = await getVideoIdFromUUID(servers[0].url, liveVideoUUID)
+      const videoId = await servers[0].videosCommand.getId({ uuid: liveVideoUUID })
 
       const socket = servers[0].socketIOCommand.getLiveNotificationSocket()
       socket.on('state-change', data => stateChanges.push(data.state))

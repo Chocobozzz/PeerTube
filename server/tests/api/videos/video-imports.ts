@@ -7,9 +7,6 @@ import {
   cleanupTests,
   doubleFollow,
   flushAndRunMultipleServers,
-  getMyVideos,
-  getVideo,
-  getVideosList,
   ImportsCommand,
   ServerInfo,
   setAccessTokensToServers,
@@ -17,7 +14,7 @@ import {
   testImage,
   waitJobs
 } from '@shared/extra-utils'
-import { VideoDetails, VideoPrivacy, VideoResolution } from '@shared/models'
+import { VideoPrivacy, VideoResolution } from '@shared/models'
 
 const expect = chai.expect
 
@@ -29,8 +26,7 @@ describe('Test video imports', function () {
   if (areHttpImportTestsDisabled()) return
 
   async function checkVideosServer1 (server: ServerInfo, idHttp: string, idMagnet: string, idTorrent: string) {
-    const resHttp = await getVideo(server.url, idHttp)
-    const videoHttp: VideoDetails = resHttp.body
+    const videoHttp = await server.videosCommand.get({ id: idHttp })
 
     expect(videoHttp.name).to.equal('small video - youtube')
     // FIXME: youtube-dl seems broken
@@ -47,10 +43,8 @@ describe('Test video imports', function () {
     expect(originallyPublishedAt.getMonth()).to.equal(0)
     expect(originallyPublishedAt.getFullYear()).to.equal(2019)
 
-    const resMagnet = await getVideo(server.url, idMagnet)
-    const videoMagnet: VideoDetails = resMagnet.body
-    const resTorrent = await getVideo(server.url, idTorrent)
-    const videoTorrent: VideoDetails = resTorrent.body
+    const videoMagnet = await server.videosCommand.get({ id: idMagnet })
+    const videoTorrent = await server.videosCommand.get({ id: idTorrent })
 
     for (const video of [ videoMagnet, videoTorrent ]) {
       expect(video.category.label).to.equal('Misc')
@@ -70,8 +64,7 @@ describe('Test video imports', function () {
   }
 
   async function checkVideoServer2 (server: ServerInfo, id: number | string) {
-    const res = await getVideo(server.url, id)
-    const video: VideoDetails = res.body
+    const video = await server.videosCommand.get({ id })
 
     expect(video.name).to.equal('my super name')
     expect(video.category.label).to.equal('Entertainment')
@@ -190,15 +183,14 @@ Ajouter un sous-titre est vraiment facile`)
   })
 
   it('Should list the videos to import in my videos on server 1', async function () {
-    const res = await getMyVideos(servers[0].url, servers[0].accessToken, 0, 5, 'createdAt')
+    const { total, data } = await servers[0].videosCommand.listMyVideos({ sort: 'createdAt' })
 
-    expect(res.body.total).to.equal(3)
+    expect(total).to.equal(3)
 
-    const videos = res.body.data
-    expect(videos).to.have.lengthOf(3)
-    expect(videos[0].name).to.equal('small video - youtube')
-    expect(videos[1].name).to.equal('super peertube2 video')
-    expect(videos[2].name).to.equal('你好 世界 720p.mp4')
+    expect(data).to.have.lengthOf(3)
+    expect(data[0].name).to.equal('small video - youtube')
+    expect(data[1].name).to.equal('super peertube2 video')
+    expect(data[2].name).to.equal('你好 世界 720p.mp4')
   })
 
   it('Should list the videos to import in my imports on server 1', async function () {
@@ -229,11 +221,11 @@ Ajouter un sous-titre est vraiment facile`)
     await waitJobs(servers)
 
     for (const server of servers) {
-      const res = await getVideosList(server.url)
-      expect(res.body.total).to.equal(3)
-      expect(res.body.data).to.have.lengthOf(3)
+      const { total, data } = await server.videosCommand.list()
+      expect(total).to.equal(3)
+      expect(data).to.have.lengthOf(3)
 
-      const [ videoHttp, videoMagnet, videoTorrent ] = res.body.data
+      const [ videoHttp, videoMagnet, videoTorrent ] = data
       await checkVideosServer1(server, videoHttp.uuid, videoMagnet.uuid, videoTorrent.uuid)
     }
   })
@@ -262,13 +254,13 @@ Ajouter un sous-titre est vraiment facile`)
     await waitJobs(servers)
 
     for (const server of servers) {
-      const res = await getVideosList(server.url)
-      expect(res.body.total).to.equal(4)
-      expect(res.body.data).to.have.lengthOf(4)
+      const { total, data } = await server.videosCommand.list()
+      expect(total).to.equal(4)
+      expect(data).to.have.lengthOf(4)
 
-      await checkVideoServer2(server, res.body.data[0].uuid)
+      await checkVideoServer2(server, data[0].uuid)
 
-      const [ , videoHttp, videoMagnet, videoTorrent ] = res.body.data
+      const [ , videoHttp, videoMagnet, videoTorrent ] = data
       await checkVideosServer1(server, videoHttp.uuid, videoMagnet.uuid, videoTorrent.uuid)
     }
   })
@@ -288,8 +280,7 @@ Ajouter un sous-titre est vraiment facile`)
     await waitJobs(servers)
 
     for (const server of servers) {
-      const res = await getVideo(server.url, videoUUID)
-      const video: VideoDetails = res.body
+      const video = await server.videosCommand.get({ id: videoUUID })
 
       expect(video.name).to.equal('transcoded video')
       expect(video.files).to.have.lengthOf(4)
@@ -339,8 +330,7 @@ Ajouter un sous-titre est vraiment facile`)
     await waitJobs(servers)
 
     // test resolution
-    const res2 = await getVideo(servers[0].url, videoUUID)
-    const video: VideoDetails = res2.body
+    const video = await servers[0].videosCommand.get({ id: videoUUID })
     expect(video.name).to.equal('hdr video')
     const maxResolution = Math.max.apply(Math, video.files.map(function (o) { return o.resolution.id }))
     expect(maxResolution, 'expected max resolution not met').to.equals(VideoResolution.H_1080P)

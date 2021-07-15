@@ -2,14 +2,13 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { VideoDetails, VideoPrivacy } from '@shared/models'
+import { VideoPrivacy } from '@shared/models'
 import {
   checkLiveCleanup,
   cleanupTests,
   ConfigCommand,
   doubleFollow,
   flushAndRunMultipleServers,
-  getVideo,
   ServerInfo,
   setAccessTokensToServers,
   setDefaultVideoChannel,
@@ -39,9 +38,7 @@ describe('Test live constraints', function () {
 
   async function checkSaveReplay (videoId: string, resolutions = [ 720 ]) {
     for (const server of servers) {
-      const res = await getVideo(server.url, videoId)
-
-      const video: VideoDetails = res.body
+      const video = await server.videosCommand.get({ id: videoId })
       expect(video.isLive).to.be.false
       expect(video.duration).to.be.greaterThan(0)
     }

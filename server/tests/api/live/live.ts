@@ -4,8 +4,7 @@ import 'mocha'
 import * as chai from 'chai'
 import { join } from 'path'
 import { ffprobePromise, getVideoStreamFromFile } from '@server/helpers/ffprobe-utils'
-import { LiveVideo, LiveVideoCreate, Video, VideoDetails, VideoPrivacy, VideoState, VideoStreamingPlaylistType } from '@shared/models'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '@shared/core-utils'
 import {
   checkLiveCleanup,
   checkLiveSegmentHash,
@@ -13,14 +12,9 @@ import {
   cleanupTests,
   doubleFollow,
   flushAndRunMultipleServers,
-  getMyVideosWithFilter,
-  getVideo,
-  getVideosList,
-  getVideosWithFilters,
   killallServers,
   LiveCommand,
   makeRawRequest,
-  removeVideo,
   reRunServer,
   sendRTMPStream,
   ServerInfo,
@@ -29,11 +23,11 @@ import {
   stopFfmpeg,
   testFfmpegStreamError,
   testImage,
-  uploadVideoAndGetId,
   wait,
   waitJobs,
   waitUntilLivePublishedOnAllServers
-} from '../../../../shared/extra-utils'
+} from '@shared/extra-utils'
+import { LiveVideo, LiveVideoCreate, VideoDetails, VideoPrivacy, VideoState, VideoStreamingPlaylistType } from '@shared/models'
 
 const expect = chai.expect
 
@@ -99,8 +93,7 @@ describe('Test live', function () {
       await waitJobs(servers)
 
       for (const server of servers) {
-        const resVideo = await getVideo(server.url, liveVideoUUID)
-        const video: VideoDetails = resVideo.body
+        const video = await server.videosCommand.get({ id: liveVideoUUID })
 
         expect(video.category.id).to.equal(1)
         expect(video.licence.id).to.equal(2)
@@ -154,9 +147,7 @@ describe('Test live', function () {
       await waitJobs(servers)
 
       for (const server of servers) {
-        const resVideo = await getVideo(server.url, videoId)
-        const video: VideoDetails = resVideo.body
-
+        const video = await server.videosCommand.get({ id: videoId })
         expect(video.privacy.id).to.equal(VideoPrivacy.UNLISTED)
         expect(video.nsfw).to.be.true
 
@@ -167,10 +158,10 @@ describe('Test live', function () {
 
     it('Should not have the live listed since nobody streams into', async function () {
       for (const server of servers) {
-        const res = await getVideosList(server.url)
+        const { total, data } = await server.videosCommand.list()
 
-        expect(res.body.total).to.equal(0)
-        expect(res.body.data).to.have.lengthOf(0)
+        expect(total).to.equal(0)
+        expect(data).to.have.lengthOf(0)
       }
     })
 
@@ -204,13 +195,13 @@ describe('Test live', function () {
     it('Delete the live', async function () {
       this.timeout(10000)
 
-      await removeVideo(servers[0].url, servers[0].accessToken, liveVideoUUID)
+      await servers[0].videosCommand.remove({ id: liveVideoUUID })
       await waitJobs(servers)
     })
 
     it('Should have the live deleted', async function () {
       for (const server of servers) {
-        await getVideo(server.url, liveVideoUUID, HttpStatusCode.NOT_FOUND_404)
+        await server.videosCommand.get({ id: liveVideoUUID, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
         await server.liveCommand.get({ videoId: liveVideoUUID, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
       }
     })
@@ -224,7 +215,7 @@ describe('Test live', function () {
     before(async function () {
       this.timeout(120000)
 
-      vodVideoId = (await uploadVideoAndGetId({ server: servers[0], videoName: 'vod video' })).uuid
+      vodVideoId = (await servers[0].videosCommand.quickUpload({ name: 'vod video' })).uuid
 
       const liveOptions = { name: 'live', privacy: VideoPrivacy.PUBLIC, channelId: servers[0].videoChannel.id }
       const live = await commands[0].create({ fields: liveOptions })
@@ -236,19 +227,19 @@ describe('Test live', function () {
     })
 
     it('Should only display lives', async function () {
-      const res = await getVideosWithFilters(servers[0].url, { isLive: true })
+      const { data, total } = await servers[0].videosCommand.list({ isLive: true })
 
-      expect(res.body.total).to.equal(1)
-      expect(res.body.data).to.have.lengthOf(1)
-      expect(res.body.data[0].name).to.equal('live')
+      expect(total).to.equal(1)
+      expect(data).to.have.lengthOf(1)
+      expect(data[0].name).to.equal('live')
     })
 
     it('Should not display lives', async function () {
-      const res = await getVideosWithFilters(servers[0].url, { isLive: false })
+      const { data, total } = await servers[0].videosCommand.list({ isLive: false })
 
-      expect(res.body.total).to.equal(1)
-      expect(res.body.data).to.have.lengthOf(1)
-      expect(res.body.data[0].name).to.equal('vod video')
+      expect(total).to.equal(1)
+      expect(data).to.have.lengthOf(1)
+      expect(data[0].name).to.equal('vod video')
     })
 
     it('Should display my lives', async function () {
@@ -257,24 +248,22 @@ describe('Test live', function () {
       await stopFfmpeg(ffmpegCommand)
       await waitJobs(servers)
 
-      const res = await getMyVideosWithFilter(servers[0].url, servers[0].accessToken, { isLive: true })
-      const videos = res.body.data as Video[]
+      const { data } = await servers[0].videosCommand.listMyVideos({ isLive: true })
 
-      const result = videos.every(v => v.isLive)
+      const result = data.every(v => v.isLive)
       expect(result).to.be.true
     })
 
     it('Should not display my lives', async function () {
-      const res = await getMyVideosWithFilter(servers[0].url, servers[0].accessToken, { isLive: false })
-      const videos = res.body.data as Video[]
+      const { data } = await servers[0].videosCommand.listMyVideos({ isLive: false })
 
-      const result = videos.every(v => !v.isLive)
+      const result = data.every(v => !v.isLive)
       expect(result).to.be.true
     })
 
     after(async function () {
-      await removeVideo(servers[0].url, servers[0].accessToken, vodVideoId)
-      await removeVideo(servers[0].url, servers[0].accessToken, liveVideoId)
+      await servers[0].videosCommand.remove({ id: vodVideoId })
+      await servers[0].videosCommand.remove({ id: liveVideoId })
     })
   })
 
@@ -297,9 +286,9 @@ describe('Test live', function () {
       const { uuid } = await commands[0].create({ fields: liveAttributes })
 
       const live = await commands[0].get({ videoId: uuid })
-      const resVideo = await getVideo(servers[0].url, uuid)
+      const video = await servers[0].videosCommand.get({ id: uuid })
 
-      return Object.assign(resVideo.body as VideoDetails, live)
+      return Object.assign(video, live)
     }
 
     it('Should not allow a stream without the appropriate path', async function () {
@@ -327,13 +316,12 @@ describe('Test live', function () {
 
     it('Should list this live now someone stream into it', async function () {
       for (const server of servers) {
-        const res = await getVideosList(server.url)
+        const { total, data } = await server.videosCommand.list()
 
-        expect(res.body.total).to.equal(1)
-        expect(res.body.data).to.have.lengthOf(1)
+        expect(total).to.equal(1)
+        expect(data).to.have.lengthOf(1)
 
-        const video: Video = res.body.data[0]
-
+        const video = data[0]
         expect(video.name).to.equal('user live')
         expect(video.isLive).to.be.true
       }
@@ -355,7 +343,7 @@ describe('Test live', function () {
 
       liveVideo = await createLiveWrapper()
 
-      await removeVideo(servers[0].url, servers[0].accessToken, liveVideo.uuid)
+      await servers[0].videosCommand.remove({ id: liveVideo.uuid })
 
       const command = sendRTMPStream(rtmpUrl + '/live', liveVideo.streamKey)
       await testFfmpegStreamError(command, true)
@@ -379,13 +367,10 @@ describe('Test live', function () {
 
     async function testVideoResolutions (liveVideoId: string, resolutions: number[]) {
       for (const server of servers) {
-        const resList = await getVideosList(server.url)
-        const videos: Video[] = resList.body.data
+        const { data } = await server.videosCommand.list()
+        expect(data.find(v => v.uuid === liveVideoId)).to.exist
 
-        expect(videos.find(v => v.uuid === liveVideoId)).to.exist
-
-        const resVideo = await getVideo(server.url, liveVideoId)
-        const video: VideoDetails = resVideo.body
+        const video = await server.videosCommand.get({ id: liveVideoId })
 
         expect(video.streamingPlaylists).to.have.lengthOf(1)
 
@@ -505,8 +490,7 @@ describe('Test live', function () {
       }
 
       for (const server of servers) {
-        const resVideo = await getVideo(server.url, liveVideoId)
-        const video: VideoDetails = resVideo.body
+        const video = await server.videosCommand.get({ id: liveVideoId })
 
         expect(video.state.id).to.equal(VideoState.PUBLISHED)
         expect(video.duration).to.be.greaterThan(1)

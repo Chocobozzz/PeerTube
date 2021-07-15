@@ -2,19 +2,8 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { VideoFile } from '@shared/models/videos/video-file.model'
-import {
-  cleanupTests,
-  doubleFollow,
-  flushAndRunMultipleServers,
-  getVideo,
-  getVideosList,
-  ServerInfo,
-  setAccessTokensToServers,
-  uploadVideo
-} from '../../../shared/extra-utils'
-import { waitJobs } from '../../../shared/extra-utils/server/jobs'
-import { VideoDetails } from '../../../shared/models/videos'
+import { cleanupTests, doubleFollow, flushAndRunMultipleServers, ServerInfo, setAccessTokensToServers, waitJobs } from '@shared/extra-utils'
+import { VideoFile } from '@shared/models'
 
 const expect = chai.expect
 
@@ -45,10 +34,15 @@ describe('Test create import video jobs', function () {
     await doubleFollow(servers[0], servers[1])
 
     // Upload two videos for our needs
-    const res1 = await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'video1' })
-    video1UUID = res1.body.video.uuid
-    const res2 = await uploadVideo(servers[1].url, servers[1].accessToken, { name: 'video2' })
-    video2UUID = res2.body.video.uuid
+    {
+      const { uuid } = await servers[0].videosCommand.upload({ attributes: { name: 'video1' } })
+      video1UUID = uuid
+    }
+
+    {
+      const { uuid } = await servers[1].videosCommand.upload({ attributes: { name: 'video2' } })
+      video2UUID = uuid
+    }
 
     // Transcoding
     await waitJobs(servers)
@@ -61,14 +55,14 @@ describe('Test create import video jobs', function () {
     await waitJobs(servers)
 
     for (const server of servers) {
-      const { data: videos } = (await getVideosList(server.url)).body
+      const { data: videos } = await server.videosCommand.list()
       expect(videos).to.have.lengthOf(2)
 
       const video = videos.find(({ uuid }) => uuid === video1UUID)
-      const videoDetail: VideoDetails = (await getVideo(server.url, video.uuid)).body
+      const videoDetails = await server.videosCommand.get({ id: video.uuid })
 
-      expect(videoDetail.files).to.have.lengthOf(2)
-      const [ originalVideo, transcodedVideo ] = videoDetail.files
+      expect(videoDetails.files).to.have.lengthOf(2)
+      const [ originalVideo, transcodedVideo ] = videoDetails.files
       assertVideoProperties(originalVideo, 720, 'webm', 218910)
       assertVideoProperties(transcodedVideo, 480, 'webm', 69217)
     }
@@ -81,14 +75,14 @@ describe('Test create import video jobs', function () {
     await waitJobs(servers)
 
     for (const server of servers) {
-      const { data: videos } = (await getVideosList(server.url)).body
+      const { data: videos } = await server.videosCommand.list()
       expect(videos).to.have.lengthOf(2)
 
       const video = videos.find(({ uuid }) => uuid === video2UUID)
-      const videoDetail: VideoDetails = (await getVideo(server.url, video.uuid)).body
+      const videoDetails = await server.videosCommand.get({ id: video.uuid })
 
-      expect(videoDetail.files).to.have.lengthOf(4)
-      const [ originalVideo, transcodedVideo420, transcodedVideo320, transcodedVideo240 ] = videoDetail.files
+      expect(videoDetails.files).to.have.lengthOf(4)
+      const [ originalVideo, transcodedVideo420, transcodedVideo320, transcodedVideo240 ] = videoDetails.files
       assertVideoProperties(originalVideo, 720, 'ogv', 140849)
       assertVideoProperties(transcodedVideo420, 480, 'mp4')
       assertVideoProperties(transcodedVideo320, 360, 'mp4')
@@ -103,14 +97,14 @@ describe('Test create import video jobs', function () {
     await waitJobs(servers)
 
     for (const server of servers) {
-      const { data: videos } = (await getVideosList(server.url)).body
+      const { data: videos } = await server.videosCommand.list()
       expect(videos).to.have.lengthOf(2)
 
       const video = videos.find(({ uuid }) => uuid === video1UUID)
-      const videoDetail: VideoDetails = (await getVideo(server.url, video.uuid)).body
+      const videoDetails = await server.videosCommand.get({ id: video.uuid })
 
-      expect(videoDetail.files).to.have.lengthOf(2)
-      const [ video720, video480 ] = videoDetail.files
+      expect(videoDetails.files).to.have.lengthOf(2)
+      const [ video720, video480 ] = videoDetails.files
       assertVideoProperties(video720, 720, 'webm', 942961)
       assertVideoProperties(video480, 480, 'webm', 69217)
     }

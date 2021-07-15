@@ -2,29 +2,30 @@ import 'mocha'
 import { expect } from 'chai'
 import { writeFile } from 'fs-extra'
 import { basename, join } from 'path'
-import { Video, VideoDetails } from '@shared/models'
+import { HttpStatusCode } from '@shared/core-utils'
+import { Video } from '@shared/models'
 import {
   cleanupTests,
   doubleFollow,
   flushAndRunMultipleServers,
-  getVideo,
   makeRawRequest,
   ServerInfo,
   setAccessTokensToServers,
-  uploadVideoAndGetId,
   waitJobs
 } from '../../../shared/extra-utils'
-import { HttpStatusCode } from '@shared/core-utils'
 
 async function testThumbnail (server: ServerInfo, videoId: number | string) {
-  const res = await getVideo(server.url, videoId)
-  const video: VideoDetails = res.body
+  const video = await server.videosCommand.get({ id: videoId })
 
-  const res1 = await makeRawRequest(join(server.url, video.thumbnailPath), HttpStatusCode.OK_200)
-  expect(res1.body).to.not.have.lengthOf(0)
+  const requests = [
+    makeRawRequest(join(server.url, video.thumbnailPath), HttpStatusCode.OK_200),
+    makeRawRequest(join(server.url, video.thumbnailPath), HttpStatusCode.OK_200)
+  ]
 
-  const res2 = await makeRawRequest(join(server.url, video.thumbnailPath), HttpStatusCode.OK_200)
-  expect(res2.body).to.not.have.lengthOf(0)
+  for (const req of requests) {
+    const res = await req
+    expect(res.body).to.not.have.lengthOf(0)
+  }
 }
 
 describe('Test regenerate thumbnails script', function () {
@@ -46,20 +47,20 @@ describe('Test regenerate thumbnails script', function () {
     await doubleFollow(servers[0], servers[1])
 
     {
-      const videoUUID1 = (await uploadVideoAndGetId({ server: servers[0], videoName: 'video 1' })).uuid
-      video1 = await (getVideo(servers[0].url, videoUUID1).then(res => res.body))
+      const videoUUID1 = (await servers[0].videosCommand.quickUpload({ name: 'video 1' })).uuid
+      video1 = await servers[0].videosCommand.get({ id: videoUUID1 })
 
       thumbnail1Path = join(servers[0].serversCommand.buildDirectory('thumbnails'), basename(video1.thumbnailPath))
 
-      const videoUUID2 = (await uploadVideoAndGetId({ server: servers[0], videoName: 'video 2' })).uuid
-      video2 = await (getVideo(servers[0].url, videoUUID2).then(res => res.body))
+      const videoUUID2 = (await servers[0].videosCommand.quickUpload({ name: 'video 2' })).uuid
+      video2 = await servers[0].videosCommand.get({ id: videoUUID2 })
     }
 
     {
-      const videoUUID = (await uploadVideoAndGetId({ server: servers[1], videoName: 'video 3' })).uuid
+      const videoUUID = (await servers[1].videosCommand.quickUpload({ name: 'video 3' })).uuid
       await waitJobs(servers)
 
-      remoteVideo = await (getVideo(servers[0].url, videoUUID).then(res => res.body))
+      remoteVideo = await servers[0].videosCommand.get({ id: videoUUID })
 
       thumbnailRemotePath = join(servers[0].serversCommand.buildDirectory('thumbnails'), basename(remoteVideo.thumbnailPath))
     }

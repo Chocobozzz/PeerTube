@@ -3,7 +3,7 @@
 import 'mocha'
 import * as chai from 'chai'
 import { join } from 'path'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '@shared/core-utils'
 import {
   checkDirectoryIsEmpty,
   checkResolutionsInMasterPlaylist,
@@ -12,26 +12,20 @@ import {
   cleanupTests,
   doubleFollow,
   flushAndRunMultipleServers,
-  getVideo,
   makeRawRequest,
-  removeVideo,
   ServerInfo,
   setAccessTokensToServers,
-  updateVideo,
-  uploadVideo,
   waitJobs,
   webtorrentAdd
-} from '../../../../shared/extra-utils'
-import { VideoDetails } from '../../../../shared/models/videos'
-import { VideoStreamingPlaylistType } from '../../../../shared/models/videos/video-streaming-playlist.type'
+} from '@shared/extra-utils'
+import { VideoStreamingPlaylistType } from '@shared/models'
 import { DEFAULT_AUDIO_RESOLUTION } from '../../../initializers/constants'
 
 const expect = chai.expect
 
 async function checkHlsPlaylist (servers: ServerInfo[], videoUUID: string, hlsOnly: boolean, resolutions = [ 240, 360, 480, 720 ]) {
   for (const server of servers) {
-    const resVideoDetails = await getVideo(server.url, videoUUID)
-    const videoDetails: VideoDetails = resVideoDetails.body
+    const videoDetails = await server.videosCommand.get({ id: videoUUID })
     const baseUrl = `http://${videoDetails.account.host}`
 
     expect(videoDetails.streamingPlaylists).to.have.lengthOf(1)
@@ -113,8 +107,8 @@ describe('Test HLS videos', function () {
     it('Should upload a video and transcode it to HLS', async function () {
       this.timeout(120000)
 
-      const res = await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'video 1', fixture: 'video_short.webm' })
-      videoUUID = res.body.video.uuid
+      const { uuid } = await servers[0].videosCommand.upload({ attributes: { name: 'video 1', fixture: 'video_short.webm' } })
+      videoUUID = uuid
 
       await waitJobs(servers)
 
@@ -124,8 +118,8 @@ describe('Test HLS videos', function () {
     it('Should upload an audio file and transcode it to HLS', async function () {
       this.timeout(120000)
 
-      const res = await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'video audio', fixture: 'sample.ogg' })
-      videoAudioUUID = res.body.video.uuid
+      const { uuid } = await servers[0].videosCommand.upload({ attributes: { name: 'video audio', fixture: 'sample.ogg' } })
+      videoAudioUUID = uuid
 
       await waitJobs(servers)
 
@@ -135,7 +129,7 @@ describe('Test HLS videos', function () {
     it('Should update the video', async function () {
       this.timeout(10000)
 
-      await updateVideo(servers[0].url, servers[0].accessToken, videoUUID, { name: 'video 1 updated' })
+      await servers[0].videosCommand.update({ id: videoUUID, attributes: { name: 'video 1 updated' } })
 
       await waitJobs(servers)
 
@@ -145,14 +139,14 @@ describe('Test HLS videos', function () {
     it('Should delete videos', async function () {
       this.timeout(10000)
 
-      await removeVideo(servers[0].url, servers[0].accessToken, videoUUID)
-      await removeVideo(servers[0].url, servers[0].accessToken, videoAudioUUID)
+      await servers[0].videosCommand.remove({ id: videoUUID })
+      await servers[0].videosCommand.remove({ id: videoAudioUUID })
 
       await waitJobs(servers)
 
       for (const server of servers) {
-        await getVideo(server.url, videoUUID, HttpStatusCode.NOT_FOUND_404)
-        await getVideo(server.url, videoAudioUUID, HttpStatusCode.NOT_FOUND_404)
+        await server.videosCommand.get({ id: videoUUID, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+        await server.videosCommand.get({ id: videoAudioUUID, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
       }
     })
 
