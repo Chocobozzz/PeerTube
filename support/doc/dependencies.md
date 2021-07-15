@@ -101,7 +101,7 @@ sudo -H -u peertube CC=/opt/rh/devtoolset-7/root/usr/bin/gcc CXX=/opt/rh/devtool
 6. Initialize the PostgreSQL database:
 
 ```
-sudo postgresql-setup initdb
+sudo postgresql-setup initdb --auth-host=md5
 ```
 
 Now that dependencies are installed, before running PeerTube you should enable and start PostgreSQL and Redis:
@@ -141,7 +141,7 @@ sudo ln -s /usr/bin/python3 /usr/bin/python
 6. Initialize the PostgreSQL database:
 
 ```
-sudo postgresql-setup initdb
+sudo postgresql-setup initdb --auth-host=md5
 ```
 
 Now that dependencies are installed, before running PeerTube you should enable and start PostgreSQL and Redis:
@@ -188,7 +188,7 @@ This is necessary because `ffmpeg` is not in the Fedora repos.
 7. Run:
 
 ```
-sudo dnf install nginx ffmpeg postgresql-server postgresql-contrib openssl gcc-c++ make redis git vim oidentd
+sudo dnf install nginx ffmpeg postgresql-server postgresql-contrib openssl gcc-c++ make redis git vim
 ffmpeg -version # Should be >= 4.1
 g++ -v # Should be >= 5.x
 ```
@@ -208,7 +208,7 @@ _from [PostgreSQL documentation](https://www.postgresql.org/download/linux/redha
 
 ```
 # PostgreSQL
-sudo postgresql-setup initdb
+sudo postgresql-setup initdb --auth-host=md5
 sudo systemctl enable postgresql.service
 sudo systemctl start postgresql.service
 # Nginx
@@ -217,9 +217,6 @@ sudo systemctl start nginx.service
 # Redis
 sudo systemctl enable redis.service
 sudo systemctl start redis.service
-# oidentd
-sudo systemctl enable oidentd.service
-sudo systemctl start oidentd.service
 ```
 
 10. Firewall
