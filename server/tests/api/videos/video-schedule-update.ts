@@ -49,25 +49,25 @@ describe('Test video update scheduler', function () {
       }
     }
 
-    await servers[0].videosCommand.upload({ attributes })
+    await servers[0].videos.upload({ attributes })
 
     await waitJobs(servers)
   })
 
   it('Should not list the video (in privacy mode)', async function () {
     for (const server of servers) {
-      const { total } = await server.videosCommand.list()
+      const { total } = await server.videos.list()
 
       expect(total).to.equal(0)
     }
   })
 
   it('Should have my scheduled video in my account videos', async function () {
-    const { total, data } = await servers[0].videosCommand.listMyVideos()
+    const { total, data } = await servers[0].videos.listMyVideos()
     expect(total).to.equal(1)
 
     const videoFromList = data[0]
-    const videoFromGet = await servers[0].videosCommand.getWithToken({ id: videoFromList.uuid })
+    const videoFromGet = await servers[0].videos.getWithToken({ id: videoFromList.uuid })
 
     for (const video of [ videoFromList, videoFromGet ]) {
       expect(video.name).to.equal('video 1')
@@ -84,7 +84,7 @@ describe('Test video update scheduler', function () {
     await waitJobs(servers)
 
     for (const server of servers) {
-      const { total, data } = await server.videosCommand.list()
+      const { total, data } = await server.videos.list()
 
       expect(total).to.equal(1)
       expect(data[0].name).to.equal('video 1')
@@ -99,7 +99,7 @@ describe('Test video update scheduler', function () {
       privacy: VideoPrivacy.PRIVATE
     }
 
-    const { uuid } = await servers[0].videosCommand.upload({ attributes })
+    const { uuid } = await servers[0].videos.upload({ attributes })
     video2UUID = uuid
 
     await waitJobs(servers)
@@ -116,20 +116,20 @@ describe('Test video update scheduler', function () {
       }
     }
 
-    await servers[0].videosCommand.update({ id: video2UUID, attributes })
+    await servers[0].videos.update({ id: video2UUID, attributes })
     await waitJobs(servers)
   })
 
   it('Should not display the updated video', async function () {
     for (const server of servers) {
-      const { total } = await server.videosCommand.list()
+      const { total } = await server.videos.list()
 
       expect(total).to.equal(1)
     }
   })
 
   it('Should have my scheduled updated video in my account videos', async function () {
-    const { total, data } = await servers[0].videosCommand.listMyVideos()
+    const { total, data } = await servers[0].videos.listMyVideos()
     expect(total).to.equal(2)
 
     const video = data.find(v => v.uuid === video2UUID)
@@ -149,7 +149,7 @@ describe('Test video update scheduler', function () {
     await waitJobs(servers)
 
     for (const server of servers) {
-      const { total, data } = await server.videosCommand.list()
+      const { total, data } = await server.videos.list()
       expect(total).to.equal(2)
 
       const video = data.find(v => v.uuid === video2UUID)

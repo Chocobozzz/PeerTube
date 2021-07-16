@@ -38,8 +38,8 @@ describe('Test user subscriptions API validators', function () {
       username: 'user1',
       password: 'my super password'
     }
-    await server.usersCommand.create({ username: user.username, password: user.password })
-    userAccessToken = await server.loginCommand.getAccessToken(user)
+    await server.users.create({ username: user.username, password: user.password })
+    userAccessToken = await server.login.getAccessToken(user)
   })
 
   describe('When listing my subscriptions', function () {

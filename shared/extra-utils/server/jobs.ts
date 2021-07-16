@@ -23,7 +23,7 @@ async function waitJobs (serversArg: ServerInfo[] | ServerInfo) {
     // Check if each server has pending request
     for (const server of servers) {
       for (const state of states) {
-        const p = server.jobsCommand.getJobsList({
+        const p = server.jobs.getJobsList({
           state,
           start: 0,
           count: 10,
@@ -39,7 +39,7 @@ async function waitJobs (serversArg: ServerInfo[] | ServerInfo) {
         tasks.push(p)
       }
 
-      const p = server.debugCommand.getDebug()
+      const p = server.debug.getDebug()
         .then(obj => {
           if (obj.activityPubMessagesWaiting !== 0) {
             pendingRequests = true

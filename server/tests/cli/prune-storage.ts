@@ -24,13 +24,13 @@ import { VideoPlaylistPrivacy } from '@shared/models'
 const expect = chai.expect
 
 async function countFiles (server: ServerInfo, directory: string) {
-  const files = await readdir(server.serversCommand.buildDirectory(directory))
+  const files = await readdir(server.servers.buildDirectory(directory))
 
   return files.length
 }
 
 async function assertNotExists (server: ServerInfo, directory: string, substring: string) {
-  const files = await readdir(server.serversCommand.buildDirectory(directory))
+  const files = await readdir(server.servers.buildDirectory(directory))
 
   for (const f of files) {
     expect(f).to.not.contain(substring)
@@ -68,16 +68,16 @@ describe('Test prune storage scripts', function () {
     await setDefaultVideoChannel(servers)
 
     for (const server of servers) {
-      await server.videosCommand.upload({ attributes: { name: 'video 1' } })
-      await server.videosCommand.upload({ attributes: { name: 'video 2' } })
+      await server.videos.upload({ attributes: { name: 'video 1' } })
+      await server.videos.upload({ attributes: { name: 'video 2' } })
 
-      await server.usersCommand.updateMyAvatar({ fixture: 'avatar.png' })
+      await server.users.updateMyAvatar({ fixture: 'avatar.png' })
 
-      await server.playlistsCommand.create({
+      await server.playlists.create({
         attributes: {
           displayName: 'playlist',
           privacy: VideoPlaylistPrivacy.PUBLIC,
-          videoChannelId: server.videoChannel.id,
+          videoChannelId: server.store.channel.id,
           thumbnailfile: 'thumbnail.jpg'
         }
       })
@@ -87,7 +87,7 @@ describe('Test prune storage scripts', function () {
 
     // Lazy load the remote avatar
     {
-      const account = await servers[0].accountsCommand.get({ accountName: 'root@localhost:' + servers[1].port })
+      const account = await servers[0].accounts.get({ accountName: 'root@localhost:' + servers[1].port })
       await makeGetRequest({
         url: servers[0].url,
         path: account.avatar.path,
@@ -96,7 +96,7 @@ describe('Test prune storage scripts', function () {
     }
 
     {
-      const account = await servers[1].accountsCommand.get({ accountName: 'root@localhost:' + servers[0].port })
+      const account = await servers[1].accounts.get({ accountName: 'root@localhost:' + servers[0].port })
       await makeGetRequest({
         url: servers[1].url,
         path: account.avatar.path,
@@ -119,7 +119,7 @@ describe('Test prune storage scripts', function () {
   it('Should create some dirty files', async function () {
     for (let i = 0; i < 2; i++) {
       {
-        const base = servers[0].serversCommand.buildDirectory('videos')
+        const base = servers[0].servers.buildDirectory('videos')
 
         const n1 = buildUUID() + '.mp4'
         const n2 = buildUUID() + '.webm'
@@ -131,7 +131,7 @@ describe('Test prune storage scripts', function () {
       }
 
       {
-        const base = servers[0].serversCommand.buildDirectory('torrents')
+        const base = servers[0].servers.buildDirectory('torrents')
 
         const n1 = buildUUID() + '-240.torrent'
         const n2 = buildUUID() + '-480.torrent'
@@ -143,7 +143,7 @@ describe('Test prune storage scripts', function () {
       }
 
       {
-        const base = servers[0].serversCommand.buildDirectory('thumbnails')
+        const base = servers[0].servers.buildDirectory('thumbnails')
 
         const n1 = buildUUID() + '.jpg'
         const n2 = buildUUID() + '.jpg'
@@ -155,7 +155,7 @@ describe('Test prune storage scripts', function () {
       }
 
       {
-        const base = servers[0].serversCommand.buildDirectory('previews')
+        const base = servers[0].servers.buildDirectory('previews')
 
         const n1 = buildUUID() + '.jpg'
         const n2 = buildUUID() + '.jpg'
@@ -167,7 +167,7 @@ describe('Test prune storage scripts', function () {
       }
 
       {
-        const base = servers[0].serversCommand.buildDirectory('avatars')
+        const base = servers[0].servers.buildDirectory('avatars')
 
         const n1 = buildUUID() + '.png'
         const n2 = buildUUID() + '.jpg'
@@ -183,7 +183,7 @@ describe('Test prune storage scripts', function () {
   it('Should run prune storage', async function () {
     this.timeout(30000)
 
-    const env = servers[0].cliCommand.getEnv()
+    const env = servers[0].cli.getEnv()
     await CLICommand.exec(`echo y | ${env} npm run prune-storage`)
   })
 

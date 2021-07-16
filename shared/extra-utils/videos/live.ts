@@ -72,12 +72,12 @@ async function stopFfmpeg (command: ffmpeg.FfmpegCommand) {
 
 async function waitUntilLivePublishedOnAllServers (servers: ServerInfo[], videoId: string) {
   for (const server of servers) {
-    await server.liveCommand.waitUntilPublished({ videoId })
+    await server.live.waitUntilPublished({ videoId })
   }
 }
 
 async function checkLiveCleanup (server: ServerInfo, videoUUID: string, resolutions: number[] = []) {
-  const basePath = server.serversCommand.buildDirectory('streaming-playlists')
+  const basePath = server.servers.buildDirectory('streaming-playlists')
   const hlsPath = join(basePath, 'hls', videoUUID)
 
   if (resolutions.length === 0) {

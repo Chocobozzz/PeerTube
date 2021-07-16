@@ -32,15 +32,15 @@ describe('Test video comments', function () {
 
     await setAccessTokensToServers([ server ])
 
-    const { id, uuid } = await server.videosCommand.upload()
+    const { id, uuid } = await server.videos.upload()
     videoUUID = uuid
     videoId = id
 
-    await server.usersCommand.updateMyAvatar({ fixture: 'avatar.png' })
+    await server.users.updateMyAvatar({ fixture: 'avatar.png' })
 
-    userAccessTokenServer1 = await server.usersCommand.generateUserAndToken('user1')
+    userAccessTokenServer1 = await server.users.generateUserAndToken('user1')
 
-    command = server.commentsCommand
+    command = server.comments
   })
 
   describe('User comments', function () {

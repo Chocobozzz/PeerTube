@@ -63,7 +63,7 @@ async function listRedundanciesCLI (target: VideoRedundanciesTarget) {
   const server = buildServer(url)
   await assignToken(server, username, password)
 
-  const { data } = await server.redundancyCommand.listVideos({ start: 0, count: 100, sort: 'name', target })
+  const { data } = await server.redundancy.listVideos({ start: 0, count: 100, sort: 'name', target })
 
   const table = new CliTable3({
     head: [ 'video id', 'video name', 'video url', 'files', 'playlists', 'by instances', 'total size' ]
@@ -114,7 +114,7 @@ async function addRedundancyCLI (options: { video: number }, command: Command) {
   }
 
   try {
-    await server.redundancyCommand.addVideo({ videoId: options.video })
+    await server.redundancy.addVideo({ videoId: options.video })
 
     console.log('Video will be duplicated by your instance!')
 
@@ -145,11 +145,11 @@ async function removeRedundancyCLI (options: { video: number }, command: Command
 
   const videoId = parseInt(options.video + '', 10)
 
-  const myVideoRedundancies = await server.redundancyCommand.listVideos({ target: 'my-videos' })
+  const myVideoRedundancies = await server.redundancy.listVideos({ target: 'my-videos' })
   let videoRedundancy = myVideoRedundancies.data.find(r => videoId === r.id)
 
   if (!videoRedundancy) {
-    const remoteVideoRedundancies = await server.redundancyCommand.listVideos({ target: 'remote-videos' })
+    const remoteVideoRedundancies = await server.redundancy.listVideos({ target: 'remote-videos' })
     videoRedundancy = remoteVideoRedundancies.data.find(r => videoId === r.id)
   }
 
@@ -164,7 +164,7 @@ async function removeRedundancyCLI (options: { video: number }, command: Command
                                .map(r => r.id)
 
     for (const id of ids) {
-      await server.redundancyCommand.removeVideo({ redundancyId: id })
+      await server.redundancy.removeVideo({ redundancyId: id })
     }
 
     console.log('Video redundancy removed!')

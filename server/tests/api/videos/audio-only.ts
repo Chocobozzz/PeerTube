@@ -48,13 +48,13 @@ describe('Test audio only video transcoding', function () {
   it('Should upload a video and transcode it', async function () {
     this.timeout(120000)
 
-    const { uuid } = await servers[0].videosCommand.upload({ attributes: { name: 'audio only' } })
+    const { uuid } = await servers[0].videos.upload({ attributes: { name: 'audio only' } })
     videoUUID = uuid
 
     await waitJobs(servers)
 
     for (const server of servers) {
-      const video = await server.videosCommand.get({ id: videoUUID })
+      const video = await server.videos.get({ id: videoUUID })
       expect(video.streamingPlaylists).to.have.lengthOf(1)
 
       for (const files of [ video.files, video.streamingPlaylists[0].files ]) {
@@ -68,8 +68,8 @@ describe('Test audio only video transcoding', function () {
 
   it('0p transcoded video should not have video', async function () {
     const paths = [
-      servers[0].serversCommand.buildDirectory(join('videos', videoUUID + '-0.mp4')),
-      servers[0].serversCommand.buildDirectory(join('streaming-playlists', 'hls', videoUUID, videoUUID + '-0-fragmented.mp4'))
+      servers[0].servers.buildDirectory(join('videos', videoUUID + '-0.mp4')),
+      servers[0].servers.buildDirectory(join('streaming-playlists', 'hls', videoUUID, videoUUID + '-0-fragmented.mp4'))
     ]
 
     for (const path of paths) {

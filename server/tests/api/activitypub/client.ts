@@ -68,12 +68,12 @@ describe('Test activitypub', function () {
     await setDefaultVideoChannel(servers)
 
     {
-      video = await await servers[0].videosCommand.quickUpload({ name: 'video' })
+      video = await await servers[0].videos.quickUpload({ name: 'video' })
     }
 
     {
-      const attributes = { displayName: 'playlist', privacy: VideoPlaylistPrivacy.PUBLIC, videoChannelId: servers[0].videoChannel.id }
-      playlist = await servers[0].playlistsCommand.create({ attributes })
+      const attributes = { displayName: 'playlist', privacy: VideoPlaylistPrivacy.PUBLIC, videoChannelId: servers[0].store.channel.id }
+      playlist = await servers[0].playlists.create({ attributes })
     }
 
     await doubleFollow(servers[0], servers[1])

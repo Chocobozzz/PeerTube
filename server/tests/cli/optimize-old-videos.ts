@@ -41,8 +41,8 @@ describe('Test optimize old videos', function () {
     }
 
     // Upload two videos for our needs
-    await servers[0].videosCommand.upload({ attributes: { name: 'video1', fixture: tempFixturePath } })
-    await servers[0].videosCommand.upload({ attributes: { name: 'video2', fixture: tempFixturePath } })
+    await servers[0].videos.upload({ attributes: { name: 'video1', fixture: tempFixturePath } })
+    await servers[0].videos.upload({ attributes: { name: 'video2', fixture: tempFixturePath } })
 
     await waitJobs(servers)
   })
@@ -51,11 +51,11 @@ describe('Test optimize old videos', function () {
     this.timeout(30000)
 
     for (const server of servers) {
-      const { data } = await server.videosCommand.list()
+      const { data } = await server.videos.list()
       expect(data).to.have.lengthOf(2)
 
       for (const video of data) {
-        const videoDetails = await server.videosCommand.get({ id: video.uuid })
+        const videoDetails = await server.videos.get({ id: video.uuid })
         expect(videoDetails.files).to.have.lengthOf(1)
       }
     }
@@ -64,29 +64,29 @@ describe('Test optimize old videos', function () {
   it('Should run optimize script', async function () {
     this.timeout(200000)
 
-    await servers[0].cliCommand.execWithEnv('npm run optimize-old-videos')
+    await servers[0].cli.execWithEnv('npm run optimize-old-videos')
     await waitJobs(servers)
 
     for (const server of servers) {
-      const { data } = await server.videosCommand.list()
+      const { data } = await server.videos.list()
       expect(data).to.have.lengthOf(2)
 
       for (const video of data) {
-        await server.videosCommand.view({ id: video.uuid })
+        await server.videos.view({ id: video.uuid })
 
         // Refresh video
         await waitJobs(servers)
         await wait(5000)
         await waitJobs(servers)
 
-        const videoDetails = await server.videosCommand.get({ id: video.uuid })
+        const videoDetails = await server.videos.get({ id: video.uuid })
 
         expect(videoDetails.files).to.have.lengthOf(1)
         const file = videoDetails.files[0]
 
         expect(file.size).to.be.below(8000000)
 
-        const path = servers[0].serversCommand.buildDirectory(join('videos', video.uuid + '-' + file.resolution.id + '.mp4'))
+        const path = servers[0].servers.buildDirectory(join('videos', video.uuid + '-' + file.resolution.id + '.mp4'))
         const bitrate = await getVideoFileBitrate(path)
         const fps = await getVideoFileFPS(path)
         const resolution = await getVideoFileResolution(path)

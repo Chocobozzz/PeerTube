@@ -52,28 +52,28 @@ describe('Test video privacy', function () {
 
       for (const privacy of [ VideoPrivacy.PRIVATE, VideoPrivacy.INTERNAL ]) {
         const attributes = { privacy }
-        await servers[0].videosCommand.upload({ attributes })
+        await servers[0].videos.upload({ attributes })
       }
 
       await waitJobs(servers)
     })
 
     it('Should not have these private and internal videos on server 2', async function () {
-      const { total, data } = await servers[1].videosCommand.list()
+      const { total, data } = await servers[1].videos.list()
 
       expect(total).to.equal(0)
       expect(data).to.have.lengthOf(0)
     })
 
     it('Should not list the private and internal videos for an unauthenticated user on server 1', async function () {
-      const { total, data } = await servers[0].videosCommand.list()
+      const { total, data } = await servers[0].videos.list()
 
       expect(total).to.equal(0)
       expect(data).to.have.lengthOf(0)
     })
 
     it('Should not list the private video and list the internal video for an authenticated user on server 1', async function () {
-      const { total, data } = await servers[0].videosCommand.listWithToken()
+      const { total, data } = await servers[0].videos.listWithToken()
 
       expect(total).to.equal(1)
       expect(data).to.have.lengthOf(1)
@@ -82,7 +82,7 @@ describe('Test video privacy', function () {
     })
 
     it('Should list my (private and internal) videos', async function () {
-      const { total, data } = await servers[0].videosCommand.listMyVideos()
+      const { total, data } = await servers[0].videos.listMyVideos()
 
       expect(total).to.equal(2)
       expect(data).to.have.lengthOf(2)
@@ -97,8 +97,8 @@ describe('Test video privacy', function () {
     })
 
     it('Should not be able to watch the private/internal video with non authenticated user', async function () {
-      await servers[0].videosCommand.get({ id: privateVideoUUID, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
-      await servers[0].videosCommand.get({ id: internalVideoUUID, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
+      await servers[0].videos.get({ id: privateVideoUUID, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
+      await servers[0].videos.get({ id: internalVideoUUID, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
     it('Should not be able to watch the private video with another user', async function () {
@@ -108,11 +108,11 @@ describe('Test video privacy', function () {
         username: 'hello',
         password: 'super password'
       }
-      await servers[0].usersCommand.create({ username: user.username, password: user.password })
+      await servers[0].users.create({ username: user.username, password: user.password })
 
-      anotherUserToken = await servers[0].loginCommand.getAccessToken(user)
+      anotherUserToken = await servers[0].login.getAccessToken(user)
 
-      await servers[0].videosCommand.getWithToken({
+      await servers[0].videos.getWithToken({
         token: anotherUserToken,
         id: privateVideoUUID,
         expectedStatus: HttpStatusCode.FORBIDDEN_403
@@ -120,11 +120,11 @@ describe('Test video privacy', function () {
     })
 
     it('Should be able to watch the internal video with another user', async function () {
-      await servers[0].videosCommand.getWithToken({ token: anotherUserToken, id: internalVideoUUID })
+      await servers[0].videos.getWithToken({ token: anotherUserToken, id: internalVideoUUID })
     })
 
     it('Should be able to watch the private video with the correct user', async function () {
-      await servers[0].videosCommand.getWithToken({ id: privateVideoUUID })
+      await servers[0].videos.getWithToken({ id: privateVideoUUID })
     })
   })
 
@@ -137,7 +137,7 @@ describe('Test video privacy', function () {
         name: 'unlisted video',
         privacy: VideoPrivacy.UNLISTED
       }
-      await servers[1].videosCommand.upload({ attributes })
+      await servers[1].videos.upload({ attributes })
 
       // Server 2 has transcoding enabled
       await waitJobs(servers)
@@ -145,7 +145,7 @@ describe('Test video privacy', function () {
 
     it('Should not have this unlisted video listed on server 1 and 2', async function () {
       for (const server of servers) {
-        const { total, data } = await server.videosCommand.list()
+        const { total, data } = await server.videos.list()
 
         expect(total).to.equal(0)
         expect(data).to.have.lengthOf(0)
@@ -153,7 +153,7 @@ describe('Test video privacy', function () {
     })
 
     it('Should list my (unlisted) videos', async function () {
-      const { total, data } = await servers[1].videosCommand.listMyVideos()
+      const { total, data } = await servers[1].videos.listMyVideos()
 
       expect(total).to.equal(1)
       expect(data).to.have.lengthOf(1)
@@ -162,13 +162,13 @@ describe('Test video privacy', function () {
     })
 
     it('Should not be able to get this unlisted video using its id', async function () {
-      await servers[1].videosCommand.get({ id: unlistedVideo.id, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+      await servers[1].videos.get({ id: unlistedVideo.id, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     })
 
     it('Should be able to get this unlisted video using its uuid/shortUUID', async function () {
       for (const server of servers) {
         for (const id of [ unlistedVideo.uuid, unlistedVideo.shortUUID ]) {
-          const video = await server.videosCommand.get({ id })
+          const video = await server.videos.get({ id })
 
           expect(video.name).to.equal('unlisted video')
         }
@@ -182,13 +182,13 @@ describe('Test video privacy', function () {
         name: 'unlisted video',
         privacy: VideoPrivacy.UNLISTED
       }
-      await servers[0].videosCommand.upload({ attributes })
+      await servers[0].videos.upload({ attributes })
 
       await waitJobs(servers)
     })
 
     it('Should list my new unlisted video', async function () {
-      const { total, data } = await servers[0].videosCommand.listMyVideos()
+      const { total, data } = await servers[0].videos.listMyVideos()
 
       expect(total).to.equal(3)
       expect(data).to.have.lengthOf(3)
@@ -197,13 +197,13 @@ describe('Test video privacy', function () {
     })
 
     it('Should be able to get non-federated unlisted video from origin', async function () {
-      const video = await servers[0].videosCommand.get({ id: nonFederatedUnlistedVideoUUID })
+      const video = await servers[0].videos.get({ id: nonFederatedUnlistedVideoUUID })
 
       expect(video.name).to.equal('unlisted video')
     })
 
     it('Should not be able to get non-federated unlisted video from federated server', async function () {
-      await servers[1].videosCommand.get({ id: nonFederatedUnlistedVideoUUID, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+      await servers[1].videos.get({ id: nonFederatedUnlistedVideoUUID, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
     })
   })
 
@@ -220,7 +220,7 @@ describe('Test video privacy', function () {
           privacy: VideoPrivacy.PUBLIC
         }
 
-        await servers[0].videosCommand.update({ id: privateVideoId, attributes })
+        await servers[0].videos.update({ id: privateVideoId, attributes })
       }
 
       {
@@ -228,7 +228,7 @@ describe('Test video privacy', function () {
           name: 'internal video becomes public',
           privacy: VideoPrivacy.PUBLIC
         }
-        await servers[0].videosCommand.update({ id: internalVideoId, attributes })
+        await servers[0].videos.update({ id: internalVideoId, attributes })
       }
 
       await waitJobs(servers)
@@ -236,7 +236,7 @@ describe('Test video privacy', function () {
 
     it('Should have this new public video listed on server 1 and 2', async function () {
       for (const server of servers) {
-        const { total, data } = await server.videosCommand.list()
+        const { total, data } = await server.videos.list()
         expect(total).to.equal(2)
         expect(data).to.have.lengthOf(2)
 
@@ -258,20 +258,20 @@ describe('Test video privacy', function () {
     it('Should set these videos as private and internal', async function () {
       this.timeout(10000)
 
-      await servers[0].videosCommand.update({ id: internalVideoId, attributes: { privacy: VideoPrivacy.PRIVATE } })
-      await servers[0].videosCommand.update({ id: privateVideoId, attributes: { privacy: VideoPrivacy.INTERNAL } })
+      await servers[0].videos.update({ id: internalVideoId, attributes: { privacy: VideoPrivacy.PRIVATE } })
+      await servers[0].videos.update({ id: privateVideoId, attributes: { privacy: VideoPrivacy.INTERNAL } })
 
       await waitJobs(servers)
 
       for (const server of servers) {
-        const { total, data } = await server.videosCommand.list()
+        const { total, data } = await server.videos.list()
 
         expect(total).to.equal(0)
         expect(data).to.have.lengthOf(0)
       }
 
       {
-        const { total, data } = await servers[0].videosCommand.listMyVideos()
+        const { total, data } = await servers[0].videos.listMyVideos()
         expect(total).to.equal(3)
         expect(data).to.have.lengthOf(3)
 

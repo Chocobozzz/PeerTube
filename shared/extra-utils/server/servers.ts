@@ -53,83 +53,81 @@ interface ServerInfo {
 
   parallel?: boolean
   internalServerNumber: number
+
   serverNumber?: number
-
-  client?: {
-    id?: string
-    secret?: string
-  }
-
-  user?: {
-    username: string
-    password: string
-    email?: string
-  }
-
   customConfigFile?: string
+
+  store?: {
+    client?: {
+      id?: string
+      secret?: string
+    }
+
+    user?: {
+      username: string
+      password: string
+      email?: string
+    }
+
+    channel?: VideoChannel
+
+    video?: {
+      id: number
+      uuid: string
+      shortUUID: string
+      name?: string
+      url?: string
+
+      account?: {
+        name: string
+      }
+
+      embedPath?: string
+    }
+
+    videos?: { id: number, uuid: string }[]
+  }
 
   accessToken?: string
   refreshToken?: string
-  videoChannel?: VideoChannel
 
-  video?: {
-    id: number
-    uuid: string
-    shortUUID: string
-    name?: string
-    url?: string
-
-    account?: {
-      name: string
-    }
-
-    embedPath?: string
-  }
-
-  remoteVideo?: {
-    id: number
-    uuid: string
-  }
-
-  videos?: { id: number, uuid: string }[]
-
-  bulkCommand?: BulkCommand
-  cliCommand?: CLICommand
-  customPageCommand?: CustomPagesCommand
-  feedCommand?: FeedCommand
-  logsCommand?: LogsCommand
-  abusesCommand?: AbusesCommand
-  overviewsCommand?: OverviewsCommand
-  searchCommand?: SearchCommand
-  contactFormCommand?: ContactFormCommand
-  debugCommand?: DebugCommand
-  followsCommand?: FollowsCommand
-  jobsCommand?: JobsCommand
-  pluginsCommand?: PluginsCommand
-  redundancyCommand?: RedundancyCommand
-  statsCommand?: StatsCommand
-  configCommand?: ConfigCommand
-  socketIOCommand?: SocketIOCommand
-  accountsCommand?: AccountsCommand
-  blocklistCommand?: BlocklistCommand
-  subscriptionsCommand?: SubscriptionsCommand
-  liveCommand?: LiveCommand
-  servicesCommand?: ServicesCommand
-  blacklistCommand?: BlacklistCommand
-  captionsCommand?: CaptionsCommand
-  changeOwnershipCommand?: ChangeOwnershipCommand
-  playlistsCommand?: PlaylistsCommand
-  historyCommand?: HistoryCommand
-  importsCommand?: ImportsCommand
-  streamingPlaylistsCommand?: StreamingPlaylistsCommand
-  channelsCommand?: ChannelsCommand
-  commentsCommand?: CommentsCommand
-  sqlCommand?: SQLCommand
-  notificationsCommand?: NotificationsCommand
-  serversCommand?: ServersCommand
-  loginCommand?: LoginCommand
-  usersCommand?: UsersCommand
-  videosCommand?: VideosCommand
+  bulk?: BulkCommand
+  cli?: CLICommand
+  customPage?: CustomPagesCommand
+  feed?: FeedCommand
+  logs?: LogsCommand
+  abuses?: AbusesCommand
+  overviews?: OverviewsCommand
+  search?: SearchCommand
+  contactForm?: ContactFormCommand
+  debug?: DebugCommand
+  follows?: FollowsCommand
+  jobs?: JobsCommand
+  plugins?: PluginsCommand
+  redundancy?: RedundancyCommand
+  stats?: StatsCommand
+  config?: ConfigCommand
+  socketIO?: SocketIOCommand
+  accounts?: AccountsCommand
+  blocklist?: BlocklistCommand
+  subscriptions?: SubscriptionsCommand
+  live?: LiveCommand
+  services?: ServicesCommand
+  blacklist?: BlacklistCommand
+  captions?: CaptionsCommand
+  changeOwnership?: ChangeOwnershipCommand
+  playlists?: PlaylistsCommand
+  history?: HistoryCommand
+  imports?: ImportsCommand
+  streamingPlaylists?: StreamingPlaylistsCommand
+  channels?: ChannelsCommand
+  comments?: CommentsCommand
+  sql?: SQLCommand
+  notifications?: NotificationsCommand
+  servers?: ServersCommand
+  login?: LoginCommand
+  users?: UsersCommand
+  videos?: VideosCommand
 }
 
 function flushAndRunMultipleServers (totalServers: number, configOverride?: Object) {
@@ -189,13 +187,15 @@ async function flushAndRunServer (serverNumber: number, configOverride?: Object,
     url: `http://localhost:${port}`,
     host: `localhost:${port}`,
     hostname: 'localhost',
-    client: {
-      id: null,
-      secret: null
-    },
-    user: {
-      username: null,
-      password: null
+    store: {
+      client: {
+        id: null,
+        secret: null
+      },
+      user: {
+        username: null,
+        password: null
+      }
     }
   }
 
@@ -291,10 +291,10 @@ async function runServer (server: ServerInfo, configOverrideArg?: any, args = []
         const regexp = regexps[key]
         const matches = data.toString().match(regexp)
         if (matches !== null) {
-          if (key === 'client_id') server.client.id = matches[1]
-          else if (key === 'client_secret') server.client.secret = matches[1]
-          else if (key === 'user_username') server.user.username = matches[1]
-          else if (key === 'user_password') server.user.password = matches[1]
+          if (key === 'client_id') server.store.client.id = matches[1]
+          else if (key === 'client_secret') server.store.client.secret = matches[1]
+          else if (key === 'user_username') server.store.user.username = matches[1]
+          else if (key === 'user_password') server.store.user.password = matches[1]
         }
       }
 
@@ -327,43 +327,43 @@ async function runServer (server: ServerInfo, configOverrideArg?: any, args = []
 }
 
 function assignCommands (server: ServerInfo) {
-  server.bulkCommand = new BulkCommand(server)
-  server.cliCommand = new CLICommand(server)
-  server.customPageCommand = new CustomPagesCommand(server)
-  server.feedCommand = new FeedCommand(server)
-  server.logsCommand = new LogsCommand(server)
-  server.abusesCommand = new AbusesCommand(server)
-  server.overviewsCommand = new OverviewsCommand(server)
-  server.searchCommand = new SearchCommand(server)
-  server.contactFormCommand = new ContactFormCommand(server)
-  server.debugCommand = new DebugCommand(server)
-  server.followsCommand = new FollowsCommand(server)
-  server.jobsCommand = new JobsCommand(server)
-  server.pluginsCommand = new PluginsCommand(server)
-  server.redundancyCommand = new RedundancyCommand(server)
-  server.statsCommand = new StatsCommand(server)
-  server.configCommand = new ConfigCommand(server)
-  server.socketIOCommand = new SocketIOCommand(server)
-  server.accountsCommand = new AccountsCommand(server)
-  server.blocklistCommand = new BlocklistCommand(server)
-  server.subscriptionsCommand = new SubscriptionsCommand(server)
-  server.liveCommand = new LiveCommand(server)
-  server.servicesCommand = new ServicesCommand(server)
-  server.blacklistCommand = new BlacklistCommand(server)
-  server.captionsCommand = new CaptionsCommand(server)
-  server.changeOwnershipCommand = new ChangeOwnershipCommand(server)
-  server.playlistsCommand = new PlaylistsCommand(server)
-  server.historyCommand = new HistoryCommand(server)
-  server.importsCommand = new ImportsCommand(server)
-  server.streamingPlaylistsCommand = new StreamingPlaylistsCommand(server)
-  server.channelsCommand = new ChannelsCommand(server)
-  server.commentsCommand = new CommentsCommand(server)
-  server.sqlCommand = new SQLCommand(server)
-  server.notificationsCommand = new NotificationsCommand(server)
-  server.serversCommand = new ServersCommand(server)
-  server.loginCommand = new LoginCommand(server)
-  server.usersCommand = new UsersCommand(server)
-  server.videosCommand = new VideosCommand(server)
+  server.bulk = new BulkCommand(server)
+  server.cli = new CLICommand(server)
+  server.customPage = new CustomPagesCommand(server)
+  server.feed = new FeedCommand(server)
+  server.logs = new LogsCommand(server)
+  server.abuses = new AbusesCommand(server)
+  server.overviews = new OverviewsCommand(server)
+  server.search = new SearchCommand(server)
+  server.contactForm = new ContactFormCommand(server)
+  server.debug = new DebugCommand(server)
+  server.follows = new FollowsCommand(server)
+  server.jobs = new JobsCommand(server)
+  server.plugins = new PluginsCommand(server)
+  server.redundancy = new RedundancyCommand(server)
+  server.stats = new StatsCommand(server)
+  server.config = new ConfigCommand(server)
+  server.socketIO = new SocketIOCommand(server)
+  server.accounts = new AccountsCommand(server)
+  server.blocklist = new BlocklistCommand(server)
+  server.subscriptions = new SubscriptionsCommand(server)
+  server.live = new LiveCommand(server)
+  server.services = new ServicesCommand(server)
+  server.blacklist = new BlacklistCommand(server)
+  server.captions = new CaptionsCommand(server)
+  server.changeOwnership = new ChangeOwnershipCommand(server)
+  server.playlists = new PlaylistsCommand(server)
+  server.history = new HistoryCommand(server)
+  server.imports = new ImportsCommand(server)
+  server.streamingPlaylists = new StreamingPlaylistsCommand(server)
+  server.channels = new ChannelsCommand(server)
+  server.comments = new CommentsCommand(server)
+  server.sql = new SQLCommand(server)
+  server.notifications = new NotificationsCommand(server)
+  server.servers = new ServersCommand(server)
+  server.login = new LoginCommand(server)
+  server.users = new UsersCommand(server)
+  server.videos = new VideosCommand(server)
 }
 
 async function reRunServer (server: ServerInfo, configOverride?: any) {
@@ -377,7 +377,7 @@ async function killallServers (servers: ServerInfo[]) {
   for (const server of servers) {
     if (!server.app) continue
 
-    await server.sqlCommand.cleanup()
+    await server.sql.cleanup()
 
     process.kill(-server.app.pid)
 
@@ -394,7 +394,7 @@ async function cleanupTests (servers: ServerInfo[]) {
 
   let p: Promise<any>[] = []
   for (const server of servers) {
-    p = p.concat(server.serversCommand.cleanupTests())
+    p = p.concat(server.servers.cleanupTests())
   }
 
   return Promise.all(p)

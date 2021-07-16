@@ -47,26 +47,26 @@ describe('Test syndication feeds', () => {
     await doubleFollow(servers[0], servers[1])
 
     {
-      const user = await servers[0].usersCommand.getMyInfo()
+      const user = await servers[0].users.getMyInfo()
       rootAccountId = user.account.id
       rootChannelId = user.videoChannels[0].id
     }
 
     {
       const attr = { username: 'john', password: 'password' }
-      await servers[0].usersCommand.create({ username: attr.username, password: attr.password })
-      userAccessToken = await servers[0].loginCommand.getAccessToken(attr)
+      await servers[0].users.create({ username: attr.username, password: attr.password })
+      userAccessToken = await servers[0].login.getAccessToken(attr)
 
-      const user = await servers[0].usersCommand.getMyInfo({ token: userAccessToken })
+      const user = await servers[0].users.getMyInfo({ token: userAccessToken })
       userAccountId = user.account.id
       userChannelId = user.videoChannels[0].id
 
-      const token = await servers[0].usersCommand.getMyScopedTokens({ token: userAccessToken })
+      const token = await servers[0].users.getMyScopedTokens({ token: userAccessToken })
       userFeedToken = token.feedToken
     }
 
     {
-      await servers[0].videosCommand.upload({ token: userAccessToken, attributes: { name: 'user video' } })
+      await servers[0].videos.upload({ token: userAccessToken, attributes: { name: 'user video' } })
     }
 
     {
@@ -75,17 +75,17 @@ describe('Test syndication feeds', () => {
         description: 'my super description for server 1',
         fixture: 'video_short.webm'
       }
-      const { id } = await servers[0].videosCommand.upload({ attributes })
+      const { id } = await servers[0].videos.upload({ attributes })
 
-      await servers[0].commentsCommand.createThread({ videoId: id, text: 'super comment 1' })
-      await servers[0].commentsCommand.createThread({ videoId: id, text: 'super comment 2' })
+      await servers[0].comments.createThread({ videoId: id, text: 'super comment 1' })
+      await servers[0].comments.createThread({ videoId: id, text: 'super comment 2' })
     }
 
     {
       const attributes = { name: 'unlisted video', privacy: VideoPrivacy.UNLISTED }
-      const { id } = await servers[0].videosCommand.upload({ attributes })
+      const { id } = await servers[0].videos.upload({ attributes })
 
-      await servers[0].commentsCommand.createThread({ videoId: id, text: 'comment on unlisted video' })
+      await servers[0].comments.createThread({ videoId: id, text: 'comment on unlisted video' })
     }
 
     await waitJobs(servers)
@@ -95,17 +95,17 @@ describe('Test syndication feeds', () => {
 
     it('Should be well formed XML (covers RSS 2.0 and ATOM 1.0 endpoints)', async function () {
       for (const feed of [ 'video-comments' as 'video-comments', 'videos' as 'videos' ]) {
-        const rss = await servers[0].feedCommand.getXML({ feed })
+        const rss = await servers[0].feed.getXML({ feed })
         expect(rss).xml.to.be.valid()
 
-        const atom = await servers[0].feedCommand.getXML({ feed, format: 'atom' })
+        const atom = await servers[0].feed.getXML({ feed, format: 'atom' })
         expect(atom).xml.to.be.valid()
       }
     })
 
     it('Should be well formed JSON (covers JSON feed 1.0 endpoint)', async function () {
       for (const feed of [ 'video-comments' as 'video-comments', 'videos' as 'videos' ]) {
-        const jsonText = await servers[0].feedCommand.getJSON({ feed })
+        const jsonText = await servers[0].feed.getJSON({ feed })
         expect(JSON.parse(jsonText)).to.be.jsonSchema({ type: 'object' })
       }
     })
@@ -115,7 +115,7 @@ describe('Test syndication feeds', () => {
 
     it('Should contain a valid enclosure (covers RSS 2.0 endpoint)', async function () {
       for (const server of servers) {
-        const rss = await server.feedCommand.getXML({ feed: 'videos' })
+        const rss = await server.feed.getXML({ feed: 'videos' })
         expect(xmlParser.validate(rss)).to.be.true
 
         const xmlDoc = xmlParser.parse(rss, { parseAttributeValue: true, ignoreAttributes: false })
@@ -130,7 +130,7 @@ describe('Test syndication feeds', () => {
 
     it('Should contain a valid \'attachments\' object (covers JSON feed 1.0 endpoint)', async function () {
       for (const server of servers) {
-        const json = await server.feedCommand.getJSON({ feed: 'videos' })
+        const json = await server.feed.getJSON({ feed: 'videos' })
         const jsonObj = JSON.parse(json)
         expect(jsonObj.items.length).to.be.equal(2)
         expect(jsonObj.items[0].attachments).to.exist
@@ -143,7 +143,7 @@ describe('Test syndication feeds', () => {
 
     it('Should filter by account', async function () {
       {
-        const json = await servers[0].feedCommand.getJSON({ feed: 'videos', query: { accountId: rootAccountId } })
+        const json = await servers[0].feed.getJSON({ feed: 'videos', query: { accountId: rootAccountId } })
         const jsonObj = JSON.parse(json)
         expect(jsonObj.items.length).to.be.equal(1)
         expect(jsonObj.items[0].title).to.equal('my super name for server 1')
@@ -151,7 +151,7 @@ describe('Test syndication feeds', () => {
       }
 
       {
-        const json = await servers[0].feedCommand.getJSON({ feed: 'videos', query: { accountId: userAccountId } })
+        const json = await servers[0].feed.getJSON({ feed: 'videos', query: { accountId: userAccountId } })
         const jsonObj = JSON.parse(json)
         expect(jsonObj.items.length).to.be.equal(1)
         expect(jsonObj.items[0].title).to.equal('user video')
@@ -160,14 +160,14 @@ describe('Test syndication feeds', () => {
 
       for (const server of servers) {
         {
-          const json = await server.feedCommand.getJSON({ feed: 'videos', query: { accountName: 'root@localhost:' + servers[0].port } })
+          const json = await server.feed.getJSON({ feed: 'videos', query: { accountName: 'root@localhost:' + servers[0].port } })
           const jsonObj = JSON.parse(json)
           expect(jsonObj.items.length).to.be.equal(1)
           expect(jsonObj.items[0].title).to.equal('my super name for server 1')
         }
 
         {
-          const json = await server.feedCommand.getJSON({ feed: 'videos', query: { accountName: 'john@localhost:' + servers[0].port } })
+          const json = await server.feed.getJSON({ feed: 'videos', query: { accountName: 'john@localhost:' + servers[0].port } })
           const jsonObj = JSON.parse(json)
           expect(jsonObj.items.length).to.be.equal(1)
           expect(jsonObj.items[0].title).to.equal('user video')
@@ -177,7 +177,7 @@ describe('Test syndication feeds', () => {
 
     it('Should filter by video channel', async function () {
       {
-        const json = await servers[0].feedCommand.getJSON({ feed: 'videos', query: { videoChannelId: rootChannelId } })
+        const json = await servers[0].feed.getJSON({ feed: 'videos', query: { videoChannelId: rootChannelId } })
         const jsonObj = JSON.parse(json)
         expect(jsonObj.items.length).to.be.equal(1)
         expect(jsonObj.items[0].title).to.equal('my super name for server 1')
@@ -185,7 +185,7 @@ describe('Test syndication feeds', () => {
       }
 
       {
-        const json = await servers[0].feedCommand.getJSON({ feed: 'videos', query: { videoChannelId: userChannelId } })
+        const json = await servers[0].feed.getJSON({ feed: 'videos', query: { videoChannelId: userChannelId } })
         const jsonObj = JSON.parse(json)
         expect(jsonObj.items.length).to.be.equal(1)
         expect(jsonObj.items[0].title).to.equal('user video')
@@ -195,7 +195,7 @@ describe('Test syndication feeds', () => {
       for (const server of servers) {
         {
           const query = { videoChannelName: 'root_channel@localhost:' + servers[0].port }
-          const json = await server.feedCommand.getJSON({ feed: 'videos', query })
+          const json = await server.feed.getJSON({ feed: 'videos', query })
           const jsonObj = JSON.parse(json)
           expect(jsonObj.items.length).to.be.equal(1)
           expect(jsonObj.items[0].title).to.equal('my super name for server 1')
@@ -203,7 +203,7 @@ describe('Test syndication feeds', () => {
 
         {
           const query = { videoChannelName: 'john_channel@localhost:' + servers[0].port }
-          const json = await server.feedCommand.getJSON({ feed: 'videos', query })
+          const json = await server.feed.getJSON({ feed: 'videos', query })
           const jsonObj = JSON.parse(json)
           expect(jsonObj.items.length).to.be.equal(1)
           expect(jsonObj.items[0].title).to.equal('user video')
@@ -214,11 +214,11 @@ describe('Test syndication feeds', () => {
     it('Should correctly have videos feed with HLS only', async function () {
       this.timeout(120000)
 
-      await serverHLSOnly.videosCommand.upload({ attributes: { name: 'hls only video' } })
+      await serverHLSOnly.videos.upload({ attributes: { name: 'hls only video' } })
 
       await waitJobs([ serverHLSOnly ])
 
-      const json = await serverHLSOnly.feedCommand.getJSON({ feed: 'videos' })
+      const json = await serverHLSOnly.feed.getJSON({ feed: 'videos' })
       const jsonObj = JSON.parse(json)
       expect(jsonObj.items.length).to.be.equal(1)
       expect(jsonObj.items[0].attachments).to.exist
@@ -236,7 +236,7 @@ describe('Test syndication feeds', () => {
 
     it('Should contain valid comments (covers JSON feed 1.0 endpoint) and not from unlisted videos', async function () {
       for (const server of servers) {
-        const json = await server.feedCommand.getJSON({ feed: 'video-comments' })
+        const json = await server.feed.getJSON({ feed: 'video-comments' })
 
         const jsonObj = JSON.parse(json)
         expect(jsonObj.items.length).to.be.equal(2)
@@ -250,31 +250,31 @@ describe('Test syndication feeds', () => {
 
       const remoteHandle = 'root@localhost:' + servers[0].port
 
-      await servers[1].blocklistCommand.addToServerBlocklist({ account: remoteHandle })
+      await servers[1].blocklist.addToServerBlocklist({ account: remoteHandle })
 
       {
-        const json = await servers[1].feedCommand.getJSON({ feed: 'video-comments', query: { version: 2 } })
+        const json = await servers[1].feed.getJSON({ feed: 'video-comments', query: { version: 2 } })
         const jsonObj = JSON.parse(json)
         expect(jsonObj.items.length).to.be.equal(0)
       }
 
-      await servers[1].blocklistCommand.removeFromServerBlocklist({ account: remoteHandle })
+      await servers[1].blocklist.removeFromServerBlocklist({ account: remoteHandle })
 
       {
-        const videoUUID = (await servers[1].videosCommand.quickUpload({ name: 'server 2' })).uuid
+        const videoUUID = (await servers[1].videos.quickUpload({ name: 'server 2' })).uuid
         await waitJobs(servers)
-        await servers[0].commentsCommand.createThread({ videoId: videoUUID, text: 'super comment' })
+        await servers[0].comments.createThread({ videoId: videoUUID, text: 'super comment' })
         await waitJobs(servers)
 
-        const json = await servers[1].feedCommand.getJSON({ feed: 'video-comments', query: { version: 3 } })
+        const json = await servers[1].feed.getJSON({ feed: 'video-comments', query: { version: 3 } })
         const jsonObj = JSON.parse(json)
         expect(jsonObj.items.length).to.be.equal(3)
       }
 
-      await servers[1].blocklistCommand.addToMyBlocklist({ account: remoteHandle })
+      await servers[1].blocklist.addToMyBlocklist({ account: remoteHandle })
 
       {
-        const json = await servers[1].feedCommand.getJSON({ feed: 'video-comments', query: { version: 4 } })
+        const json = await servers[1].feed.getJSON({ feed: 'video-comments', query: { version: 4 } })
         const jsonObj = JSON.parse(json)
         expect(jsonObj.items.length).to.be.equal(2)
       }
@@ -287,25 +287,25 @@ describe('Test syndication feeds', () => {
 
     it('Should list no videos for a user with no videos and no subscriptions', async function () {
       const attr = { username: 'feeduser', password: 'password' }
-      await servers[0].usersCommand.create({ username: attr.username, password: attr.password })
-      const feeduserAccessToken = await servers[0].loginCommand.getAccessToken(attr)
+      await servers[0].users.create({ username: attr.username, password: attr.password })
+      const feeduserAccessToken = await servers[0].login.getAccessToken(attr)
 
       {
-        const user = await servers[0].usersCommand.getMyInfo({ token: feeduserAccessToken })
+        const user = await servers[0].users.getMyInfo({ token: feeduserAccessToken })
         feeduserAccountId = user.account.id
       }
 
       {
-        const token = await servers[0].usersCommand.getMyScopedTokens({ token: feeduserAccessToken })
+        const token = await servers[0].users.getMyScopedTokens({ token: feeduserAccessToken })
         feeduserFeedToken = token.feedToken
       }
 
       {
-        const body = await servers[0].subscriptionsCommand.listVideos({ token: feeduserAccessToken })
+        const body = await servers[0].subscriptions.listVideos({ token: feeduserAccessToken })
         expect(body.total).to.equal(0)
 
         const query = { accountId: feeduserAccountId, token: feeduserFeedToken }
-        const json = await servers[0].feedCommand.getJSON({ feed: 'subscriptions', query })
+        const json = await servers[0].feed.getJSON({ feed: 'subscriptions', query })
         const jsonObj = JSON.parse(json)
         expect(jsonObj.items.length).to.be.equal(0) // no subscription, it should not list the instance's videos but list 0 videos
       }
@@ -313,20 +313,20 @@ describe('Test syndication feeds', () => {
 
     it('Should fail with an invalid token', async function () {
       const query = { accountId: feeduserAccountId, token: 'toto' }
-      await servers[0].feedCommand.getJSON({ feed: 'subscriptions', query, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+      await servers[0].feed.getJSON({ feed: 'subscriptions', query, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
     })
 
     it('Should fail with a token of another user', async function () {
       const query = { accountId: feeduserAccountId, token: userFeedToken }
-      await servers[0].feedCommand.getJSON({ feed: 'subscriptions', query, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+      await servers[0].feed.getJSON({ feed: 'subscriptions', query, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
     })
 
     it('Should list no videos for a user with videos but no subscriptions', async function () {
-      const body = await servers[0].subscriptionsCommand.listVideos({ token: userAccessToken })
+      const body = await servers[0].subscriptions.listVideos({ token: userAccessToken })
       expect(body.total).to.equal(0)
 
       const query = { accountId: userAccountId, token: userFeedToken }
-      const json = await servers[0].feedCommand.getJSON({ feed: 'subscriptions', query })
+      const json = await servers[0].feed.getJSON({ feed: 'subscriptions', query })
       const jsonObj = JSON.parse(json)
       expect(jsonObj.items.length).to.be.equal(0) // no subscription, it should not list the instance's videos but list 0 videos
     })
@@ -334,16 +334,16 @@ describe('Test syndication feeds', () => {
     it('Should list self videos for a user with a subscription to themselves', async function () {
       this.timeout(30000)
 
-      await servers[0].subscriptionsCommand.add({ token: userAccessToken, targetUri: 'john_channel@localhost:' + servers[0].port })
+      await servers[0].subscriptions.add({ token: userAccessToken, targetUri: 'john_channel@localhost:' + servers[0].port })
       await waitJobs(servers)
 
       {
-        const body = await servers[0].subscriptionsCommand.listVideos({ token: userAccessToken })
+        const body = await servers[0].subscriptions.listVideos({ token: userAccessToken })
         expect(body.total).to.equal(1)
         expect(body.data[0].name).to.equal('user video')
 
         const query = { accountId: userAccountId, token: userFeedToken, version: 1 }
-        const json = await servers[0].feedCommand.getJSON({ feed: 'subscriptions', query })
+        const json = await servers[0].feed.getJSON({ feed: 'subscriptions', query })
         const jsonObj = JSON.parse(json)
         expect(jsonObj.items.length).to.be.equal(1) // subscribed to self, it should not list the instance's videos but list john's
       }
@@ -352,33 +352,33 @@ describe('Test syndication feeds', () => {
     it('Should list videos of a user\'s subscription', async function () {
       this.timeout(30000)
 
-      await servers[0].subscriptionsCommand.add({ token: userAccessToken, targetUri: 'root_channel@localhost:' + servers[0].port })
+      await servers[0].subscriptions.add({ token: userAccessToken, targetUri: 'root_channel@localhost:' + servers[0].port })
       await waitJobs(servers)
 
       {
-        const body = await servers[0].subscriptionsCommand.listVideos({ token: userAccessToken })
+        const body = await servers[0].subscriptions.listVideos({ token: userAccessToken })
         expect(body.total).to.equal(2, "there should be 2 videos part of the subscription")
 
         const query = { accountId: userAccountId, token: userFeedToken, version: 2 }
-        const json = await servers[0].feedCommand.getJSON({ feed: 'subscriptions', query })
+        const json = await servers[0].feed.getJSON({ feed: 'subscriptions', query })
         const jsonObj = JSON.parse(json)
         expect(jsonObj.items.length).to.be.equal(2) // subscribed to root, it should not list the instance's videos but list root/john's
       }
     })
 
     it('Should renew the token, and so have an invalid old token', async function () {
-      await servers[0].usersCommand.renewMyScopedTokens({ token: userAccessToken })
+      await servers[0].users.renewMyScopedTokens({ token: userAccessToken })
 
       const query = { accountId: userAccountId, token: userFeedToken, version: 3 }
-      await servers[0].feedCommand.getJSON({ feed: 'subscriptions', query, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+      await servers[0].feed.getJSON({ feed: 'subscriptions', query, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
     })
 
     it('Should succeed with the new token', async function () {
-      const token = await servers[0].usersCommand.getMyScopedTokens({ token: userAccessToken })
+      const token = await servers[0].users.getMyScopedTokens({ token: userAccessToken })
       userFeedToken = token.feedToken
 
       const query = { accountId: userAccountId, token: userFeedToken, version: 4 }
-      await servers[0].feedCommand.getJSON({ feed: 'subscriptions', query })
+      await servers[0].feed.getJSON({ feed: 'subscriptions', query })
     })
 
   })

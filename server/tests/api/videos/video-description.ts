@@ -31,11 +31,11 @@ describe('Test video description', function () {
     const attributes = {
       description: longDescription
     }
-    await servers[0].videosCommand.upload({ attributes })
+    await servers[0].videos.upload({ attributes })
 
     await waitJobs(servers)
 
-    const { data } = await servers[0].videosCommand.list()
+    const { data } = await servers[0].videos.list()
 
     videoId = data[0].id
     videoUUID = data[0].uuid
@@ -43,7 +43,7 @@ describe('Test video description', function () {
 
   it('Should have a truncated description on each server', async function () {
     for (const server of servers) {
-      const video = await server.videosCommand.get({ id: videoUUID })
+      const video = await server.videos.get({ id: videoUUID })
 
       // 30 characters * 6 -> 240 characters
       const truncatedDescription = 'my super description for server 1'.repeat(7) +
@@ -55,9 +55,9 @@ describe('Test video description', function () {
 
   it('Should fetch long description on each server', async function () {
     for (const server of servers) {
-      const video = await server.videosCommand.get({ id: videoUUID })
+      const video = await server.videos.get({ id: videoUUID })
 
-      const { description } = await server.videosCommand.getDescription({ descriptionPath: video.descriptionPath })
+      const { description } = await server.videos.getDescription({ descriptionPath: video.descriptionPath })
       expect(description).to.equal(longDescription)
     }
   })
@@ -68,18 +68,18 @@ describe('Test video description', function () {
     const attributes = {
       description: 'short description'
     }
-    await servers[0].videosCommand.update({ id: videoId, attributes })
+    await servers[0].videos.update({ id: videoId, attributes })
 
     await waitJobs(servers)
   })
 
   it('Should have a small description on each server', async function () {
     for (const server of servers) {
-      const video = await server.videosCommand.get({ id: videoUUID })
+      const video = await server.videos.get({ id: videoUUID })
 
       expect(video.description).to.equal('short description')
 
-      const { description } = await server.videosCommand.getDescription({ descriptionPath: video.descriptionPath })
+      const { description } = await server.videos.getDescription({ descriptionPath: video.descriptionPath })
       expect(description).to.equal('short description')
     }
   })

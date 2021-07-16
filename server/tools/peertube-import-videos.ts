@@ -150,7 +150,7 @@ async function processVideo (parameters: {
   }
 
   const server = buildServer(url)
-  const { data } = await server.searchCommand.advancedVideoSearch({
+  const { data } = await server.search.advancedVideoSearch({
     search: {
       search: videoInfo.title,
       sort: '-match',
@@ -249,14 +249,14 @@ async function uploadVideoOnPeerTube (parameters: {
   log.info('\nUploading on PeerTube video "%s".', attributes.name)
 
   try {
-    await server.videosCommand.upload({ attributes })
+    await server.videos.upload({ attributes })
   } catch (err) {
     if (err.message.indexOf('401') !== -1) {
       log.info('Got 401 Unauthorized, token may have expired, renewing token and retry.')
 
-      server.accessToken = await server.loginCommand.getAccessToken(username, password)
+      server.accessToken = await server.login.getAccessToken(username, password)
 
-      await server.videosCommand.upload({ attributes })
+      await server.videos.upload({ attributes })
     } else {
       exitError(err.message)
     }
@@ -277,7 +277,7 @@ async function getCategory (server: ServerInfo, categories: string[]) {
 
   if (categoryString === 'News & Politics') return 11
 
-  const categoriesServer = await server.videosCommand.getCategories()
+  const categoriesServer = await server.videos.getCategories()
 
   for (const key of Object.keys(categoriesServer)) {
     const categoryServer = categoriesServer[key]

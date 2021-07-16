@@ -27,7 +27,7 @@ describe('Test contact form', function () {
     server = await flushAndRunServer(1, overrideConfig)
     await setAccessTokensToServers([ server ])
 
-    command = server.contactFormCommand
+    command = server.contactForm
   })
 
   it('Should send a contact form', async function () {

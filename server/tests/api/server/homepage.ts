@@ -16,7 +16,7 @@ import {
 const expect = chai.expect
 
 async function getHomepageState (server: ServerInfo) {
-  const config = await server.configCommand.getConfig()
+  const config = await server.config.getConfig()
 
   return config.homepage.enabled
 }
@@ -31,7 +31,7 @@ describe('Test instance homepage actions', function () {
     server = await flushAndRunServer(1)
     await setAccessTokensToServers([ server ])
 
-    command = server.customPageCommand
+    command = server.customPage
   })
 
   it('Should not have a homepage', async function () {

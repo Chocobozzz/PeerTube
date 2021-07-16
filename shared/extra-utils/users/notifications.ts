@@ -49,7 +49,7 @@ async function checkNotification (
   const check = base.check || { web: true, mail: true }
 
   if (check.web) {
-    const notification = await base.server.notificationsCommand.getLastest({ token: base.token })
+    const notification = await base.server.notifications.getLastest({ token: base.token })
 
     if (notification || checkType !== 'absence') {
       notificationChecker(notification, checkType)
@@ -651,31 +651,31 @@ async function prepareNotificationsTest (serversCount = 3, overrideConfigArg: an
   }
 
   const user = { username: 'user_1', password: 'super password' }
-  await servers[0].usersCommand.create({ ...user, videoQuota: 10 * 1000 * 1000 })
-  const userAccessToken = await servers[0].loginCommand.getAccessToken(user)
+  await servers[0].users.create({ ...user, videoQuota: 10 * 1000 * 1000 })
+  const userAccessToken = await servers[0].login.getAccessToken(user)
 
-  await servers[0].notificationsCommand.updateMySettings({ token: userAccessToken, settings: getAllNotificationsSettings() })
-  await servers[0].notificationsCommand.updateMySettings({ settings: getAllNotificationsSettings() })
+  await servers[0].notifications.updateMySettings({ token: userAccessToken, settings: getAllNotificationsSettings() })
+  await servers[0].notifications.updateMySettings({ settings: getAllNotificationsSettings() })
 
   if (serversCount > 1) {
-    await servers[1].notificationsCommand.updateMySettings({ settings: getAllNotificationsSettings() })
+    await servers[1].notifications.updateMySettings({ settings: getAllNotificationsSettings() })
   }
 
   {
-    const socket = servers[0].socketIOCommand.getUserNotificationSocket({ token: userAccessToken })
+    const socket = servers[0].socketIO.getUserNotificationSocket({ token: userAccessToken })
     socket.on('new-notification', n => userNotifications.push(n))
   }
   {
-    const socket = servers[0].socketIOCommand.getUserNotificationSocket()
+    const socket = servers[0].socketIO.getUserNotificationSocket()
     socket.on('new-notification', n => adminNotifications.push(n))
   }
 
   if (serversCount > 1) {
-    const socket = servers[1].socketIOCommand.getUserNotificationSocket()
+    const socket = servers[1].socketIO.getUserNotificationSocket()
     socket.on('new-notification', n => adminNotificationsServer2.push(n))
   }
 
-  const { videoChannels } = await servers[0].usersCommand.getMyInfo()
+  const { videoChannels } = await servers[0].users.getMyInfo()
   const channelId = videoChannels[0].id
 
   return {

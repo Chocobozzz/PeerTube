@@ -29,20 +29,20 @@ describe('Official plugin auto-mute', function () {
     await setAccessTokensToServers(servers)
 
     for (const server of servers) {
-      await server.pluginsCommand.install({ npmName: 'peertube-plugin-auto-mute' })
+      await server.plugins.install({ npmName: 'peertube-plugin-auto-mute' })
     }
 
     blocklistServer = new MockBlocklist()
     port = await blocklistServer.initialize()
 
-    await await servers[0].videosCommand.quickUpload({ name: 'video server 1' })
-    await await servers[1].videosCommand.quickUpload({ name: 'video server 2' })
+    await await servers[0].videos.quickUpload({ name: 'video server 1' })
+    await await servers[1].videos.quickUpload({ name: 'video server 2' })
 
     await doubleFollow(servers[0], servers[1])
   })
 
   it('Should update plugin settings', async function () {
-    await servers[0].pluginsCommand.updateSettings({
+    await servers[0].plugins.updateSettings({
       npmName: 'peertube-plugin-auto-mute',
       settings: {
         'blocklist-urls': `http://localhost:${port}/blocklist`,
@@ -64,7 +64,7 @@ describe('Official plugin auto-mute', function () {
 
     await wait(2000)
 
-    const { total } = await servers[0].videosCommand.list()
+    const { total } = await servers[0].videos.list()
     expect(total).to.equal(1)
   })
 
@@ -82,7 +82,7 @@ describe('Official plugin auto-mute', function () {
 
     await wait(2000)
 
-    const { total } = await servers[0].videosCommand.list()
+    const { total } = await servers[0].videos.list()
     expect(total).to.equal(2)
   })
 
@@ -99,7 +99,7 @@ describe('Official plugin auto-mute', function () {
 
     await wait(2000)
 
-    const { total } = await servers[0].videosCommand.list()
+    const { total } = await servers[0].videos.list()
     expect(total).to.equal(1)
   })
 
@@ -117,7 +117,7 @@ describe('Official plugin auto-mute', function () {
 
     await wait(2000)
 
-    const { total } = await servers[0].videosCommand.list()
+    const { total } = await servers[0].videos.list()
     expect(total).to.equal(2)
   })
 
@@ -138,14 +138,14 @@ describe('Official plugin auto-mute', function () {
     await wait(2000)
 
     {
-      const { total } = await servers[0].videosCommand.list()
+      const { total } = await servers[0].videos.list()
       expect(total).to.equal(1)
     }
 
-    await servers[0].blocklistCommand.removeFromServerBlocklist({ account })
+    await servers[0].blocklist.removeFromServerBlocklist({ account })
 
     {
-      const { total } = await servers[0].videosCommand.list()
+      const { total } = await servers[0].videos.list()
       expect(total).to.equal(2)
     }
 
@@ -154,7 +154,7 @@ describe('Official plugin auto-mute', function () {
     await wait(2000)
 
     {
-      const { total } = await servers[0].videosCommand.list()
+      const { total } = await servers[0].videos.list()
       expect(total).to.equal(2)
     }
   })
@@ -168,7 +168,7 @@ describe('Official plugin auto-mute', function () {
   })
 
   it('Should enable auto mute list', async function () {
-    await servers[0].pluginsCommand.updateSettings({
+    await servers[0].plugins.updateSettings({
       npmName: 'peertube-plugin-auto-mute',
       settings: {
         'blocklist-urls': '',
@@ -187,7 +187,7 @@ describe('Official plugin auto-mute', function () {
   it('Should mute an account on server 1, and server 2 auto mutes it', async function () {
     this.timeout(20000)
 
-    await servers[1].pluginsCommand.updateSettings({
+    await servers[1].plugins.updateSettings({
       npmName: 'peertube-plugin-auto-mute',
       settings: {
         'blocklist-urls': 'http://localhost:' + servers[0].port + autoMuteListPath,
@@ -196,8 +196,8 @@ describe('Official plugin auto-mute', function () {
       }
     })
 
-    await servers[0].blocklistCommand.addToServerBlocklist({ account: 'root@localhost:' + servers[1].port })
-    await servers[0].blocklistCommand.addToMyBlocklist({ server: 'localhost:' + servers[1].port })
+    await servers[0].blocklist.addToServerBlocklist({ account: 'root@localhost:' + servers[1].port })
+    await servers[0].blocklist.addToMyBlocklist({ server: 'localhost:' + servers[1].port })
 
     const res = await makeGetRequest({
       url: servers[0].url,
@@ -213,7 +213,7 @@ describe('Official plugin auto-mute', function () {
     await wait(2000)
 
     for (const server of servers) {
-      const { total } = await server.videosCommand.list()
+      const { total } = await server.videos.list()
       expect(total).to.equal(1)
     }
   })

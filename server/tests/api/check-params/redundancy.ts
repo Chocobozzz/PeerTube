@@ -40,16 +40,16 @@ describe('Test server redundancy API validators', function () {
       password: 'password'
     }
 
-    await servers[0].usersCommand.create({ username: user.username, password: user.password })
-    userAccessToken = await servers[0].loginCommand.getAccessToken(user)
+    await servers[0].users.create({ username: user.username, password: user.password })
+    userAccessToken = await servers[0].login.getAccessToken(user)
 
-    videoIdLocal = (await servers[0].videosCommand.quickUpload({ name: 'video' })).id
+    videoIdLocal = (await servers[0].videos.quickUpload({ name: 'video' })).id
 
-    const remoteUUID = (await servers[1].videosCommand.quickUpload({ name: 'video' })).uuid
+    const remoteUUID = (await servers[1].videos.quickUpload({ name: 'video' })).uuid
 
     await waitJobs(servers)
 
-    videoRemote = await servers[0].videosCommand.get({ id: remoteUUID })
+    videoRemote = await servers[0].videos.get({ id: remoteUUID })
   })
 
   describe('When listing redundancies', function () {

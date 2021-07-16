@@ -69,7 +69,7 @@ async function pluginsListCLI (command: Command, options: OptionValues) {
   if (options.onlyThemes) pluginType = PluginType.THEME
   if (options.onlyPlugins) pluginType = PluginType.PLUGIN
 
-  const { data } = await server.pluginsCommand.list({ start: 0, count: 100, sort: 'name', pluginType })
+  const { data } = await server.plugins.list({ start: 0, count: 100, sort: 'name', pluginType })
 
   const table = new CliTable3({
     head: [ 'name', 'version', 'homepage' ],
@@ -109,7 +109,7 @@ async function installPluginCLI (command: Command, options: OptionValues) {
   await assignToken(server, username, password)
 
   try {
-    await server.pluginsCommand.install({ npmName: options.npmName, path: options.path })
+    await server.plugins.install({ npmName: options.npmName, path: options.path })
   } catch (err) {
     console.error('Cannot install plugin.', err)
     process.exit(-1)
@@ -136,7 +136,7 @@ async function updatePluginCLI (command: Command, options: OptionValues) {
   await assignToken(server, username, password)
 
   try {
-    await server.pluginsCommand.update({ npmName: options.npmName, path: options.path })
+    await server.plugins.update({ npmName: options.npmName, path: options.path })
   } catch (err) {
     console.error('Cannot update plugin.', err)
     process.exit(-1)
@@ -158,7 +158,7 @@ async function uninstallPluginCLI (command: Command, options: OptionValues) {
   await assignToken(server, username, password)
 
   try {
-    await server.pluginsCommand.uninstall({ npmName: options.npmName })
+    await server.plugins.uninstall({ npmName: options.npmName })
   } catch (err) {
     console.error('Cannot uninstall plugin.', err)
     process.exit(-1)

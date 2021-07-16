@@ -62,7 +62,7 @@ async function run (url: string, username: string, password: string) {
   }
 
   try {
-    await server.videosCommand.upload({ attributes })
+    await server.videos.upload({ attributes })
     console.log(`Video ${options.videoName} uploaded.`)
     process.exit(0)
   } catch (err) {

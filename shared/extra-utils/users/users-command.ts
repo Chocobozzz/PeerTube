@@ -194,7 +194,7 @@ export class UsersCommand extends AbstractCommand {
     const password = 'password'
     const user = await this.create({ username, password })
 
-    const token = await this.server.loginCommand.getAccessToken({ username, password })
+    const token = await this.server.login.getAccessToken({ username, password })
 
     const me = await this.getMyInfo({ token })
 
@@ -209,7 +209,7 @@ export class UsersCommand extends AbstractCommand {
     const password = 'password'
     await this.create({ username, password })
 
-    return this.server.loginCommand.getAccessToken({ username, password })
+    return this.server.login.getAccessToken({ username, password })
   }
 
   register (options: OverrideCommandOptions & {

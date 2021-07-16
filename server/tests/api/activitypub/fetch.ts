@@ -21,24 +21,24 @@ describe('Test ActivityPub fetcher', function () {
 
     const user = { username: 'user1', password: 'password' }
     for (const server of servers) {
-      await server.usersCommand.create({ username: user.username, password: user.password })
+      await server.users.create({ username: user.username, password: user.password })
     }
 
-    const userAccessToken = await servers[0].loginCommand.getAccessToken(user)
+    const userAccessToken = await servers[0].login.getAccessToken(user)
 
-    await servers[0].videosCommand.upload({ attributes: { name: 'video root' } })
-    const { uuid } = await servers[0].videosCommand.upload({ attributes: { name: 'bad video root' } })
-    await servers[0].videosCommand.upload({ token: userAccessToken, attributes: { name: 'video user' } })
+    await servers[0].videos.upload({ attributes: { name: 'video root' } })
+    const { uuid } = await servers[0].videos.upload({ attributes: { name: 'bad video root' } })
+    await servers[0].videos.upload({ token: userAccessToken, attributes: { name: 'video user' } })
 
     {
       const to = 'http://localhost:' + servers[0].port + '/accounts/user1'
       const value = 'http://localhost:' + servers[1].port + '/accounts/user1'
-      await servers[0].sqlCommand.setActorField(to, 'url', value)
+      await servers[0].sql.setActorField(to, 'url', value)
     }
 
     {
       const value = 'http://localhost:' + servers[2].port + '/videos/watch/' + uuid
-      await servers[0].sqlCommand.setVideoField(uuid, 'url', value)
+      await servers[0].sql.setVideoField(uuid, 'url', value)
     }
   })
 
@@ -49,7 +49,7 @@ describe('Test ActivityPub fetcher', function () {
     await waitJobs(servers)
 
     {
-      const { total, data } = await servers[0].videosCommand.list({ sort: 'createdAt' })
+      const { total, data } = await servers[0].videos.list({ sort: 'createdAt' })
 
       expect(total).to.equal(3)
       expect(data[0].name).to.equal('video root')
@@ -58,7 +58,7 @@ describe('Test ActivityPub fetcher', function () {
     }
 
     {
-      const { total, data } = await servers[1].videosCommand.list({ sort: 'createdAt' })
+      const { total, data } = await servers[1].videos.list({ sort: 'createdAt' })
 
       expect(total).to.equal(1)
       expect(data[0].name).to.equal('video root')

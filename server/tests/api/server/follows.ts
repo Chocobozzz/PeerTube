@@ -26,7 +26,7 @@ describe('Test follows', function () {
     this.timeout(30000)
 
     servers = await flushAndRunMultipleServers(3)
-    followsCommands = servers.map(s => s.followsCommand)
+    followsCommands = servers.map(s => s.follows)
 
     // Get the access tokens
     await setAccessTokensToServers(servers)
@@ -34,7 +34,7 @@ describe('Test follows', function () {
 
   it('Should not have followers', async function () {
     for (const server of servers) {
-      const body = await server.followsCommand.getFollowers({ start: 0, count: 5, sort: 'createdAt' })
+      const body = await server.follows.getFollowers({ start: 0, count: 5, sort: 'createdAt' })
       expect(body.total).to.equal(0)
 
       const follows = body.data
@@ -45,7 +45,7 @@ describe('Test follows', function () {
 
   it('Should not have following', async function () {
     for (const server of servers) {
-      const body = await server.followsCommand.getFollowings({ start: 0, count: 5, sort: 'createdAt' })
+      const body = await server.follows.getFollowings({ start: 0, count: 5, sort: 'createdAt' })
       expect(body.total).to.equal(0)
 
       const follows = body.data
@@ -141,7 +141,7 @@ describe('Test follows', function () {
 
   it('Should have 0 followings on server 2 and 3', async function () {
     for (const server of [ servers[1], servers[2] ]) {
-      const body = await server.followsCommand.getFollowings({ start: 0, count: 5, sort: 'createdAt' })
+      const body = await server.follows.getFollowings({ start: 0, count: 5, sort: 'createdAt' })
       expect(body.total).to.equal(0)
 
       const follows = body.data
@@ -152,7 +152,7 @@ describe('Test follows', function () {
 
   it('Should have 1 followers on server 2 and 3', async function () {
     for (const server of [ servers[1], servers[2] ]) {
-      const body = await server.followsCommand.getFollowers({ start: 0, count: 1, sort: 'createdAt' })
+      const body = await server.follows.getFollowers({ start: 0, count: 1, sort: 'createdAt' })
       expect(body.total).to.equal(1)
 
       const follows = body.data
@@ -284,25 +284,25 @@ describe('Test follows', function () {
   it('Should upload a video on server 2 and 3 and propagate only the video of server 2', async function () {
     this.timeout(60000)
 
-    await servers[1].videosCommand.upload({ attributes: { name: 'server2' } })
-    await servers[2].videosCommand.upload({ attributes: { name: 'server3' } })
+    await servers[1].videos.upload({ attributes: { name: 'server2' } })
+    await servers[2].videos.upload({ attributes: { name: 'server3' } })
 
     await waitJobs(servers)
 
     {
-      const { total, data } = await servers[0].videosCommand.list()
+      const { total, data } = await servers[0].videos.list()
       expect(total).to.equal(1)
       expect(data[0].name).to.equal('server2')
     }
 
     {
-      const { total, data } = await servers[1].videosCommand.list()
+      const { total, data } = await servers[1].videos.list()
       expect(total).to.equal(1)
       expect(data[0].name).to.equal('server2')
     }
 
     {
-      const { total, data } = await servers[2].videosCommand.list()
+      const { total, data } = await servers[2].videos.list()
       expect(total).to.equal(1)
       expect(data[0].name).to.equal('server3')
     }
@@ -322,60 +322,60 @@ describe('Test follows', function () {
         tags: [ 'tag1', 'tag2', 'tag3' ]
       }
 
-      await servers[2].videosCommand.upload({ attributes: { name: 'server3-2' } })
-      await servers[2].videosCommand.upload({ attributes: { name: 'server3-3' } })
-      await servers[2].videosCommand.upload({ attributes: video4Attributes })
-      await servers[2].videosCommand.upload({ attributes: { name: 'server3-5' } })
-      await servers[2].videosCommand.upload({ attributes: { name: 'server3-6' } })
+      await servers[2].videos.upload({ attributes: { name: 'server3-2' } })
+      await servers[2].videos.upload({ attributes: { name: 'server3-3' } })
+      await servers[2].videos.upload({ attributes: video4Attributes })
+      await servers[2].videos.upload({ attributes: { name: 'server3-5' } })
+      await servers[2].videos.upload({ attributes: { name: 'server3-6' } })
 
       {
-        const userAccessToken = await servers[2].usersCommand.generateUserAndToken('captain')
+        const userAccessToken = await servers[2].users.generateUserAndToken('captain')
 
-        const { data } = await servers[2].videosCommand.list()
+        const { data } = await servers[2].videos.list()
         video4 = data.find(v => v.name === 'server3-4')
 
         {
-          await servers[2].videosCommand.rate({ id: video4.id, rating: 'like' })
-          await servers[2].videosCommand.rate({ token: userAccessToken, id: video4.id, rating: 'dislike' })
+          await servers[2].videos.rate({ id: video4.id, rating: 'like' })
+          await servers[2].videos.rate({ token: userAccessToken, id: video4.id, rating: 'dislike' })
         }
 
         {
           {
             const text = 'my super first comment'
-            const created = await servers[2].commentsCommand.createThread({ videoId: video4.id, text })
+            const created = await servers[2].comments.createThread({ videoId: video4.id, text })
             const threadId = created.id
 
             const text1 = 'my super answer to thread 1'
-            const childComment = await servers[2].commentsCommand.addReply({ videoId: video4.id, toCommentId: threadId, text: text1 })
+            const childComment = await servers[2].comments.addReply({ videoId: video4.id, toCommentId: threadId, text: text1 })
 
             const text2 = 'my super answer to answer of thread 1'
-            await servers[2].commentsCommand.addReply({ videoId: video4.id, toCommentId: childComment.id, text: text2 })
+            await servers[2].comments.addReply({ videoId: video4.id, toCommentId: childComment.id, text: text2 })
 
             const text3 = 'my second answer to thread 1'
-            await servers[2].commentsCommand.addReply({ videoId: video4.id, toCommentId: threadId, text: text3 })
+            await servers[2].comments.addReply({ videoId: video4.id, toCommentId: threadId, text: text3 })
           }
 
           {
             const text = 'will be deleted'
-            const created = await servers[2].commentsCommand.createThread({ videoId: video4.id, text })
+            const created = await servers[2].comments.createThread({ videoId: video4.id, text })
             const threadId = created.id
 
             const text1 = 'answer to deleted'
-            await servers[2].commentsCommand.addReply({ videoId: video4.id, toCommentId: threadId, text: text1 })
+            await servers[2].comments.addReply({ videoId: video4.id, toCommentId: threadId, text: text1 })
 
             const text2 = 'will also be deleted'
-            const childComment = await servers[2].commentsCommand.addReply({ videoId: video4.id, toCommentId: threadId, text: text2 })
+            const childComment = await servers[2].comments.addReply({ videoId: video4.id, toCommentId: threadId, text: text2 })
 
             const text3 = 'my second answer to deleted'
-            await servers[2].commentsCommand.addReply({ videoId: video4.id, toCommentId: childComment.id, text: text3 })
+            await servers[2].comments.addReply({ videoId: video4.id, toCommentId: childComment.id, text: text3 })
 
-            await servers[2].commentsCommand.delete({ videoId: video4.id, commentId: threadId })
-            await servers[2].commentsCommand.delete({ videoId: video4.id, commentId: childComment.id })
+            await servers[2].comments.delete({ videoId: video4.id, commentId: threadId })
+            await servers[2].comments.delete({ videoId: video4.id, commentId: childComment.id })
           }
         }
 
         {
-          await servers[2].captionsCommand.createVideoCaption({
+          await servers[2].captions.createVideoCaption({
             language: 'ar',
             videoId: video4.id,
             fixture: 'subtitle-good2.vtt'
@@ -404,7 +404,7 @@ describe('Test follows', function () {
     })
 
     it('Should have propagated videos', async function () {
-      const { total, data } = await servers[0].videosCommand.list()
+      const { total, data } = await servers[0].videos.list()
       expect(total).to.equal(7)
 
       const video2 = data.find(v => v.name === 'server3-2')
@@ -454,7 +454,7 @@ describe('Test follows', function () {
     })
 
     it('Should have propagated comments', async function () {
-      const { total, data } = await servers[0].commentsCommand.listThreads({ videoId: video4.id, sort: 'createdAt' })
+      const { total, data } = await servers[0].comments.listThreads({ videoId: video4.id, sort: 'createdAt' })
 
       expect(total).to.equal(2)
       expect(data).to.be.an('array')
@@ -474,7 +474,7 @@ describe('Test follows', function () {
 
         const threadId = comment.threadId
 
-        const tree = await servers[0].commentsCommand.getThread({ videoId: video4.id, threadId })
+        const tree = await servers[0].comments.getThread({ videoId: video4.id, threadId })
         expect(tree.comment.text).equal('my super first comment')
         expect(tree.children).to.have.lengthOf(2)
 
@@ -502,7 +502,7 @@ describe('Test follows', function () {
         expect(deletedComment.totalReplies).to.equal(2)
         expect(dateIsValid(deletedComment.deletedAt as string)).to.be.true
 
-        const tree = await servers[0].commentsCommand.getThread({ videoId: video4.id, threadId: deletedComment.threadId })
+        const tree = await servers[0].comments.getThread({ videoId: video4.id, threadId: deletedComment.threadId })
         const [ commentRoot, deletedChildRoot ] = tree.children
 
         expect(deletedChildRoot).to.not.be.undefined
@@ -527,7 +527,7 @@ describe('Test follows', function () {
     })
 
     it('Should have propagated captions', async function () {
-      const body = await servers[0].captionsCommand.listVideoCaptions({ videoId: video4.id })
+      const body = await servers[0].captions.listVideoCaptions({ videoId: video4.id })
       expect(body.total).to.equal(1)
       expect(body.data).to.have.lengthOf(1)
 
@@ -545,7 +545,7 @@ describe('Test follows', function () {
 
       await waitJobs(servers)
 
-      const { total } = await servers[0].videosCommand.list()
+      const { total } = await servers[0].videos.list()
       expect(total).to.equal(1)
     })
 

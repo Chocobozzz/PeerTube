@@ -16,7 +16,7 @@ import {
 import { Video } from '@shared/models'
 
 async function check (server: ServerInfo, videoUUID: string, exists = true) {
-  const { data } = await server.videosCommand.list()
+  const { data } = await server.videos.list()
 
   const video = data.find(v => v.uuid === videoUUID)
 
@@ -38,24 +38,24 @@ describe('Official plugin auto-block videos', function () {
     await setAccessTokensToServers(servers)
 
     for (const server of servers) {
-      await server.pluginsCommand.install({ npmName: 'peertube-plugin-auto-block-videos' })
+      await server.plugins.install({ npmName: 'peertube-plugin-auto-block-videos' })
     }
 
     blocklistServer = new MockBlocklist()
     port = await blocklistServer.initialize()
 
-    await await servers[0].videosCommand.quickUpload({ name: 'video server 1' })
-    await await servers[1].videosCommand.quickUpload({ name: 'video server 2' })
-    await await servers[1].videosCommand.quickUpload({ name: 'video 2 server 2' })
-    await await servers[1].videosCommand.quickUpload({ name: 'video 3 server 2' })
+    await await servers[0].videos.quickUpload({ name: 'video server 1' })
+    await await servers[1].videos.quickUpload({ name: 'video server 2' })
+    await await servers[1].videos.quickUpload({ name: 'video 2 server 2' })
+    await await servers[1].videos.quickUpload({ name: 'video 3 server 2' })
 
     {
-      const { data } = await servers[0].videosCommand.list()
+      const { data } = await servers[0].videos.list()
       server1Videos = data.map(v => Object.assign(v, { url: servers[0].url + '/videos/watch/' + v.uuid }))
     }
 
     {
-      const { data } = await servers[1].videosCommand.list()
+      const { data } = await servers[1].videos.list()
       server2Videos = data.map(v => Object.assign(v, { url: servers[1].url + '/videos/watch/' + v.uuid }))
     }
 
@@ -63,7 +63,7 @@ describe('Official plugin auto-block videos', function () {
   })
 
   it('Should update plugin settings', async function () {
-    await servers[0].pluginsCommand.updateSettings({
+    await servers[0].plugins.updateSettings({
       npmName: 'peertube-plugin-auto-block-videos',
       settings: {
         'blocklist-urls': `http://localhost:${port}/blocklist`,
@@ -91,7 +91,7 @@ describe('Official plugin auto-block videos', function () {
   })
 
   it('Should have video in blacklists', async function () {
-    const body = await servers[0].blacklistCommand.list()
+    const body = await servers[0].blacklist.list()
 
     const videoBlacklists = body.data
     expect(videoBlacklists).to.have.lengthOf(1)
@@ -156,7 +156,7 @@ describe('Official plugin auto-block videos', function () {
 
     await check(servers[0], video.uuid, false)
 
-    await servers[0].blacklistCommand.remove({ videoId: video.uuid })
+    await servers[0].blacklist.remove({ videoId: video.uuid })
 
     await check(servers[0], video.uuid, true)
 

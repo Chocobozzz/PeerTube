@@ -53,15 +53,15 @@ describe('Test manage videos redundancy', function () {
     // Get the access tokens
     await setAccessTokensToServers(servers)
 
-    commands = servers.map(s => s.redundancyCommand)
+    commands = servers.map(s => s.redundancy)
 
     {
-      const { uuid } = await servers[1].videosCommand.upload({ attributes: { name: 'video 1 server 2' } })
+      const { uuid } = await servers[1].videos.upload({ attributes: { name: 'video 1 server 2' } })
       video1Server2UUID = uuid
     }
 
     {
-      const { uuid } = await servers[1].videosCommand.upload({ attributes: { name: 'video 2 server 2' } })
+      const { uuid } = await servers[1].videos.upload({ attributes: { name: 'video 2 server 2' } })
       video2Server2UUID = uuid
     }
 
@@ -87,7 +87,7 @@ describe('Test manage videos redundancy', function () {
     this.timeout(120000)
 
     await waitJobs(servers)
-    await servers[0].serversCommand.waitUntilLog('Duplicated ', 10)
+    await servers[0].servers.waitUntilLog('Duplicated ', 10)
     await waitJobs(servers)
 
     const body = await commands[1].listVideos({ target: 'remote-videos' })
@@ -203,14 +203,14 @@ describe('Test manage videos redundancy', function () {
   it('Should manually add a redundancy and list it', async function () {
     this.timeout(120000)
 
-    const uuid = (await servers[1].videosCommand.quickUpload({ name: 'video 3 server 2', privacy: VideoPrivacy.UNLISTED })).uuid
+    const uuid = (await servers[1].videos.quickUpload({ name: 'video 3 server 2', privacy: VideoPrivacy.UNLISTED })).uuid
     await waitJobs(servers)
-    const videoId = await servers[0].videosCommand.getId({ uuid })
+    const videoId = await servers[0].videos.getId({ uuid })
 
     await commands[0].addVideo({ videoId })
 
     await waitJobs(servers)
-    await servers[0].serversCommand.waitUntilLog('Duplicated ', 15)
+    await servers[0].servers.waitUntilLog('Duplicated ', 15)
     await waitJobs(servers)
 
     {

@@ -35,7 +35,7 @@ describe('Test video lives API validator', function () {
 
     await setAccessTokensToServers([ server ])
 
-    await server.configCommand.updateCustomSubConfig({
+    await server.config.updateCustomSubConfig({
       newConfig: {
         live: {
           enabled: true,
@@ -48,19 +48,19 @@ describe('Test video lives API validator', function () {
 
     const username = 'user1'
     const password = 'my super password'
-    await server.usersCommand.create({ username: username, password: password })
-    userAccessToken = await server.loginCommand.getAccessToken({ username, password })
+    await server.users.create({ username: username, password: password })
+    userAccessToken = await server.login.getAccessToken({ username, password })
 
     {
-      const { videoChannels } = await server.usersCommand.getMyInfo()
+      const { videoChannels } = await server.users.getMyInfo()
       channelId = videoChannels[0].id
     }
 
     {
-      videoIdNotLive = (await server.videosCommand.quickUpload({ name: 'not live' })).id
+      videoIdNotLive = (await server.videos.quickUpload({ name: 'not live' })).id
     }
 
-    command = server.liveCommand
+    command = server.live
   })
 
   describe('When creating a live', function () {
@@ -144,10 +144,10 @@ describe('Test video lives API validator', function () {
         username: 'fake',
         password: 'fake_password'
       }
-      await server.usersCommand.create({ username: user.username, password: user.password })
+      await server.users.create({ username: user.username, password: user.password })
 
-      const accessTokenUser = await server.loginCommand.getAccessToken(user)
-      const { videoChannels } = await server.usersCommand.getMyInfo({ token: accessTokenUser })
+      const accessTokenUser = await server.login.getAccessToken(user)
+      const { videoChannels } = await server.users.getMyInfo({ token: accessTokenUser })
       const customChannelId = videoChannels[0].id
 
       const fields = { ...baseCorrectParams, channelId: customChannelId }
@@ -230,7 +230,7 @@ describe('Test video lives API validator', function () {
     })
 
     it('Should forbid if live is disabled', async function () {
-      await server.configCommand.updateCustomSubConfig({
+      await server.config.updateCustomSubConfig({
         newConfig: {
           live: {
             enabled: false
@@ -250,7 +250,7 @@ describe('Test video lives API validator', function () {
     it('Should forbid to save replay if not enabled by the admin', async function () {
       const fields = { ...baseCorrectParams, saveReplay: true }
 
-      await server.configCommand.updateCustomSubConfig({
+      await server.config.updateCustomSubConfig({
         newConfig: {
           live: {
             enabled: true,
@@ -271,7 +271,7 @@ describe('Test video lives API validator', function () {
     it('Should allow to save replay if enabled by the admin', async function () {
       const fields = { ...baseCorrectParams, saveReplay: true }
 
-      await server.configCommand.updateCustomSubConfig({
+      await server.config.updateCustomSubConfig({
         newConfig: {
           live: {
             enabled: true,
@@ -290,7 +290,7 @@ describe('Test video lives API validator', function () {
     })
 
     it('Should not allow live if max instance lives is reached', async function () {
-      await server.configCommand.updateCustomSubConfig({
+      await server.config.updateCustomSubConfig({
         newConfig: {
           live: {
             enabled: true,
@@ -309,7 +309,7 @@ describe('Test video lives API validator', function () {
     })
 
     it('Should not allow live if max user lives is reached', async function () {
-      await server.configCommand.updateCustomSubConfig({
+      await server.config.updateCustomSubConfig({
         newConfig: {
           live: {
             enabled: true,
@@ -401,7 +401,7 @@ describe('Test video lives API validator', function () {
     })
 
     it('Should fail to update replay status if replay is not allowed on the instance', async function () {
-      await server.configCommand.updateCustomSubConfig({
+      await server.config.updateCustomSubConfig({
         newConfig: {
           live: {
             enabled: true,

@@ -31,7 +31,7 @@ describe('Test live', function () {
     await setAccessTokensToServers(servers)
     await setDefaultVideoChannel(servers)
 
-    await servers[0].configCommand.updateCustomSubConfig({
+    await servers[0].config.updateCustomSubConfig({
       newConfig: {
         live: {
           enabled: true,
@@ -53,7 +53,7 @@ describe('Test live', function () {
 
     async function countViews (expected: number) {
       for (const server of servers) {
-        const video = await server.videosCommand.get({ id: liveVideoId })
+        const video = await server.videos.get({ id: liveVideoId })
         expect(video.views).to.equal(expected)
       }
     }
@@ -63,14 +63,14 @@ describe('Test live', function () {
 
       const liveAttributes = {
         name: 'live video',
-        channelId: servers[0].videoChannel.id,
+        channelId: servers[0].store.channel.id,
         privacy: VideoPrivacy.PUBLIC
       }
 
-      const live = await servers[0].liveCommand.create({ fields: liveAttributes })
+      const live = await servers[0].live.create({ fields: liveAttributes })
       liveVideoId = live.uuid
 
-      command = await servers[0].liveCommand.sendRTMPStreamInVideo({ videoId: liveVideoId })
+      command = await servers[0].live.sendRTMPStreamInVideo({ videoId: liveVideoId })
       await waitUntilLivePublishedOnAllServers(servers, liveVideoId)
       await waitJobs(servers)
     })
@@ -82,8 +82,8 @@ describe('Test live', function () {
     it('Should view a live twice and display 1 view', async function () {
       this.timeout(30000)
 
-      await servers[0].videosCommand.view({ id: liveVideoId })
-      await servers[0].videosCommand.view({ id: liveVideoId })
+      await servers[0].videos.view({ id: liveVideoId })
+      await servers[0].videos.view({ id: liveVideoId })
 
       await wait(7000)
 
@@ -104,9 +104,9 @@ describe('Test live', function () {
     it('Should view a live on a remote and on local and display 2 views', async function () {
       this.timeout(30000)
 
-      await servers[0].videosCommand.view({ id: liveVideoId })
-      await servers[1].videosCommand.view({ id: liveVideoId })
-      await servers[1].videosCommand.view({ id: liveVideoId })
+      await servers[0].videos.view({ id: liveVideoId })
+      await servers[1].videos.view({ id: liveVideoId })
+      await servers[1].videos.view({ id: liveVideoId })
 
       await wait(7000)
       await waitJobs(servers)

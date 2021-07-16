@@ -15,7 +15,7 @@ import {
 } from '../../../shared/extra-utils'
 
 async function testThumbnail (server: ServerInfo, videoId: number | string) {
-  const video = await server.videosCommand.get({ id: videoId })
+  const video = await server.videos.get({ id: videoId })
 
   const requests = [
     makeRawRequest(join(server.url, video.thumbnailPath), HttpStatusCode.OK_200),
@@ -47,22 +47,22 @@ describe('Test regenerate thumbnails script', function () {
     await doubleFollow(servers[0], servers[1])
 
     {
-      const videoUUID1 = (await servers[0].videosCommand.quickUpload({ name: 'video 1' })).uuid
-      video1 = await servers[0].videosCommand.get({ id: videoUUID1 })
+      const videoUUID1 = (await servers[0].videos.quickUpload({ name: 'video 1' })).uuid
+      video1 = await servers[0].videos.get({ id: videoUUID1 })
 
-      thumbnail1Path = join(servers[0].serversCommand.buildDirectory('thumbnails'), basename(video1.thumbnailPath))
+      thumbnail1Path = join(servers[0].servers.buildDirectory('thumbnails'), basename(video1.thumbnailPath))
 
-      const videoUUID2 = (await servers[0].videosCommand.quickUpload({ name: 'video 2' })).uuid
-      video2 = await servers[0].videosCommand.get({ id: videoUUID2 })
+      const videoUUID2 = (await servers[0].videos.quickUpload({ name: 'video 2' })).uuid
+      video2 = await servers[0].videos.get({ id: videoUUID2 })
     }
 
     {
-      const videoUUID = (await servers[1].videosCommand.quickUpload({ name: 'video 3' })).uuid
+      const videoUUID = (await servers[1].videos.quickUpload({ name: 'video 3' })).uuid
       await waitJobs(servers)
 
-      remoteVideo = await servers[0].videosCommand.get({ id: videoUUID })
+      remoteVideo = await servers[0].videos.get({ id: videoUUID })
 
-      thumbnailRemotePath = join(servers[0].serversCommand.buildDirectory('thumbnails'), basename(remoteVideo.thumbnailPath))
+      thumbnailRemotePath = join(servers[0].servers.buildDirectory('thumbnails'), basename(remoteVideo.thumbnailPath))
     }
 
     await writeFile(thumbnail1Path, '')
@@ -89,7 +89,7 @@ describe('Test regenerate thumbnails script', function () {
   it('Should regenerate local thumbnails from the CLI', async function () {
     this.timeout(15000)
 
-    await servers[0].cliCommand.execWithEnv(`npm run regenerate-thumbnails`)
+    await servers[0].cli.execWithEnv(`npm run regenerate-thumbnails`)
   })
 
   it('Should have generated new thumbnail files', async function () {

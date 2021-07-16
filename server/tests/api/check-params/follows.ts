@@ -39,8 +39,8 @@ describe('Test server follows API validators', function () {
         password: 'password'
       }
 
-      await server.usersCommand.create({ username: user.username, password: user.password })
-      userAccessToken = await server.loginCommand.getAccessToken(user)
+      await server.users.create({ username: user.username, password: user.password })
+      userAccessToken = await server.login.getAccessToken(user)
     })
 
     describe('When adding follows', function () {

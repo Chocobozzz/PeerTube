@@ -33,20 +33,20 @@ describe('Test videos history', function () {
 
     await setAccessTokensToServers([ server ])
 
-    command = server.historyCommand
+    command = server.history
 
     {
-      const { uuid } = await server.videosCommand.upload({ attributes: { name: 'video 1' } })
+      const { uuid } = await server.videos.upload({ attributes: { name: 'video 1' } })
       video1UUID = uuid
     }
 
     {
-      const { uuid } = await server.videosCommand.upload({ attributes: { name: 'video 2' } })
+      const { uuid } = await server.videos.upload({ attributes: { name: 'video 2' } })
       video2UUID = uuid
     }
 
     {
-      const { uuid } = await server.videosCommand.upload({ attributes: { name: 'video 3' } })
+      const { uuid } = await server.videos.upload({ attributes: { name: 'video 3' } })
       video3UUID = uuid
     }
 
@@ -54,15 +54,15 @@ describe('Test videos history', function () {
       username: 'user_1',
       password: 'super password'
     }
-    await server.usersCommand.create({ username: user.username, password: user.password })
-    userAccessToken = await server.loginCommand.getAccessToken(user)
+    await server.users.create({ username: user.username, password: user.password })
+    userAccessToken = await server.login.getAccessToken(user)
   })
 
   it('Should get videos, without watching history', async function () {
-    const { data } = await server.videosCommand.listWithToken()
+    const { data } = await server.videos.listWithToken()
 
     for (const video of data) {
-      const videoDetails = await server.videosCommand.getWithToken({ id: video.id })
+      const videoDetails = await server.videos.getWithToken({ id: video.id })
 
       expect(video.userHistory).to.be.undefined
       expect(videoDetails.userHistory).to.be.undefined
@@ -78,12 +78,12 @@ describe('Test videos history', function () {
     const videosOfVideos: Video[][] = []
 
     {
-      const { data } = await server.videosCommand.listWithToken()
+      const { data } = await server.videos.listWithToken()
       videosOfVideos.push(data)
     }
 
     {
-      const body = await server.searchCommand.searchVideos({ token: server.accessToken, search: 'video' })
+      const body = await server.search.searchVideos({ token: server.accessToken, search: 'video' })
       videosOfVideos.push(body.data)
     }
 
@@ -102,21 +102,21 @@ describe('Test videos history', function () {
     }
 
     {
-      const videoDetails = await server.videosCommand.getWithToken({ id: video1UUID })
+      const videoDetails = await server.videos.getWithToken({ id: video1UUID })
 
       expect(videoDetails.userHistory).to.not.be.undefined
       expect(videoDetails.userHistory.currentTime).to.equal(3)
     }
 
     {
-      const videoDetails = await server.videosCommand.getWithToken({ id: video2UUID })
+      const videoDetails = await server.videos.getWithToken({ id: video2UUID })
 
       expect(videoDetails.userHistory).to.not.be.undefined
       expect(videoDetails.userHistory.currentTime).to.equal(8)
     }
 
     {
-      const videoDetails = await server.videosCommand.getWithToken({ id: video3UUID })
+      const videoDetails = await server.videos.getWithToken({ id: video3UUID })
 
       expect(videoDetails.userHistory).to.be.undefined
     }
@@ -164,7 +164,7 @@ describe('Test videos history', function () {
   })
 
   it('Should disable videos history', async function () {
-    await server.usersCommand.updateMe({
+    await server.users.updateMe({
       videosHistoryEnabled: false
     })
 
@@ -172,7 +172,7 @@ describe('Test videos history', function () {
   })
 
   it('Should re-enable videos history', async function () {
-    await server.usersCommand.updateMe({
+    await server.users.updateMe({
       videosHistoryEnabled: true
     })
 

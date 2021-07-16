@@ -33,9 +33,9 @@ describe('Test blocklist API validators', function () {
     server = servers[0]
 
     const user = { username: 'user1', password: 'password' }
-    await server.usersCommand.create({ username: user.username, password: user.password })
+    await server.users.create({ username: user.username, password: user.password })
 
-    userAccessToken = await server.loginCommand.getAccessToken(user)
+    userAccessToken = await server.login.getAccessToken(user)
 
     await doubleFollow(servers[0], servers[1])
   })

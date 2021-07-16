@@ -27,13 +27,13 @@ describe('Test plugin scripts', function () {
 
     const packagePath = PluginsCommand.getPluginTestPath()
 
-    await server.cliCommand.execWithEnv(`npm run plugin:install -- --plugin-path ${packagePath}`)
+    await server.cli.execWithEnv(`npm run plugin:install -- --plugin-path ${packagePath}`)
   })
 
   it('Should install a theme from stateless CLI', async function () {
     this.timeout(60000)
 
-    await server.cliCommand.execWithEnv(`npm run plugin:install -- --npm-name peertube-theme-background-red`)
+    await server.cli.execWithEnv(`npm run plugin:install -- --npm-name peertube-theme-background-red`)
   })
 
   it('Should have the theme and the plugin registered when we restart peertube', async function () {
@@ -42,7 +42,7 @@ describe('Test plugin scripts', function () {
     await killallServers([ server ])
     await reRunServer(server)
 
-    const config = await server.configCommand.getConfig()
+    const config = await server.config.getConfig()
 
     const plugin = config.plugin.registered
                          .find(p => p.name === 'test')
@@ -56,7 +56,7 @@ describe('Test plugin scripts', function () {
   it('Should uninstall a plugin from stateless CLI', async function () {
     this.timeout(60000)
 
-    await server.cliCommand.execWithEnv(`npm run plugin:uninstall -- --npm-name peertube-plugin-test`)
+    await server.cli.execWithEnv(`npm run plugin:uninstall -- --npm-name peertube-plugin-test`)
   })
 
   it('Should have removed the plugin on another peertube restart', async function () {
@@ -65,7 +65,7 @@ describe('Test plugin scripts', function () {
     await killallServers([ server ])
     await reRunServer(server)
 
-    const config = await server.configCommand.getConfig()
+    const config = await server.config.getConfig()
 
     const plugin = config.plugin.registered
                          .find(p => p.name === 'test')

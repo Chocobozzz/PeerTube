@@ -25,7 +25,7 @@ describe('Test logs', function () {
     server = await flushAndRunServer(1)
     await setAccessTokensToServers([ server ])
 
-    logsCommand = server.logsCommand
+    logsCommand = server.logs
   })
 
   describe('With the standard log file', function () {
@@ -33,12 +33,12 @@ describe('Test logs', function () {
     it('Should get logs with a start date', async function () {
       this.timeout(20000)
 
-      await server.videosCommand.upload({ attributes: { name: 'video 1' } })
+      await server.videos.upload({ attributes: { name: 'video 1' } })
       await waitJobs([ server ])
 
       const now = new Date()
 
-      await server.videosCommand.upload({ attributes: { name: 'video 2' } })
+      await server.videos.upload({ attributes: { name: 'video 2' } })
       await waitJobs([ server ])
 
       const body = await logsCommand.getLogs({ startDate: now })
@@ -51,17 +51,17 @@ describe('Test logs', function () {
     it('Should get logs with an end date', async function () {
       this.timeout(30000)
 
-      await server.videosCommand.upload({ attributes: { name: 'video 3' } })
+      await server.videos.upload({ attributes: { name: 'video 3' } })
       await waitJobs([ server ])
 
       const now1 = new Date()
 
-      await server.videosCommand.upload({ attributes: { name: 'video 4' } })
+      await server.videos.upload({ attributes: { name: 'video 4' } })
       await waitJobs([ server ])
 
       const now2 = new Date()
 
-      await server.videosCommand.upload({ attributes: { name: 'video 5' } })
+      await server.videos.upload({ attributes: { name: 'video 5' } })
       await waitJobs([ server ])
 
       const body = await logsCommand.getLogs({ startDate: now1, endDate: now2 })
@@ -77,7 +77,7 @@ describe('Test logs', function () {
 
       const now = new Date()
 
-      await server.videosCommand.upload({ attributes: { name: 'video 6' } })
+      await server.videos.upload({ attributes: { name: 'video 6' } })
       await waitJobs([ server ])
 
       {
@@ -100,7 +100,7 @@ describe('Test logs', function () {
 
       const now = new Date()
 
-      await server.serversCommand.ping()
+      await server.servers.ping()
 
       const body = await logsCommand.getLogs({ startDate: now, level: 'info' })
       const logsString = JSON.stringify(body)
@@ -117,7 +117,7 @@ describe('Test logs', function () {
 
       const now = new Date()
 
-      await server.serversCommand.ping()
+      await server.servers.ping()
 
       const body = await logsCommand.getLogs({ startDate: now, level: 'info' })
       const logsString = JSON.stringify(body)
@@ -130,12 +130,12 @@ describe('Test logs', function () {
     it('Should get logs with a start date', async function () {
       this.timeout(20000)
 
-      await server.videosCommand.upload({ attributes: { name: 'video 7' } })
+      await server.videos.upload({ attributes: { name: 'video 7' } })
       await waitJobs([ server ])
 
       const now = new Date()
 
-      await server.videosCommand.upload({ attributes: { name: 'video 8' } })
+      await server.videos.upload({ attributes: { name: 'video 8' } })
       await waitJobs([ server ])
 
       const body = await logsCommand.getAuditLogs({ startDate: now })
@@ -156,17 +156,17 @@ describe('Test logs', function () {
     it('Should get logs with an end date', async function () {
       this.timeout(30000)
 
-      await server.videosCommand.upload({ attributes: { name: 'video 9' } })
+      await server.videos.upload({ attributes: { name: 'video 9' } })
       await waitJobs([ server ])
 
       const now1 = new Date()
 
-      await server.videosCommand.upload({ attributes: { name: 'video 10' } })
+      await server.videos.upload({ attributes: { name: 'video 10' } })
       await waitJobs([ server ])
 
       const now2 = new Date()
 
-      await server.videosCommand.upload({ attributes: { name: 'video 11' } })
+      await server.videos.upload({ attributes: { name: 'video 11' } })
       await waitJobs([ server ])
 
       const body = await logsCommand.getAuditLogs({ startDate: now1, endDate: now2 })

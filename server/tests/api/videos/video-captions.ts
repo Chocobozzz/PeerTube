@@ -32,7 +32,7 @@ describe('Test video captions', function () {
 
     await waitJobs(servers)
 
-    const { uuid } = await servers[0].videosCommand.upload({ attributes: { name: 'my video name' } })
+    const { uuid } = await servers[0].videos.upload({ attributes: { name: 'my video name' } })
     videoUUID = uuid
 
     await waitJobs(servers)
@@ -40,7 +40,7 @@ describe('Test video captions', function () {
 
   it('Should list the captions and return an empty list', async function () {
     for (const server of servers) {
-      const body = await server.captionsCommand.listVideoCaptions({ videoId: videoUUID })
+      const body = await server.captions.listVideoCaptions({ videoId: videoUUID })
       expect(body.total).to.equal(0)
       expect(body.data).to.have.lengthOf(0)
     }
@@ -49,13 +49,13 @@ describe('Test video captions', function () {
   it('Should create two new captions', async function () {
     this.timeout(30000)
 
-    await servers[0].captionsCommand.createVideoCaption({
+    await servers[0].captions.createVideoCaption({
       language: 'ar',
       videoId: videoUUID,
       fixture: 'subtitle-good1.vtt'
     })
 
-    await servers[0].captionsCommand.createVideoCaption({
+    await servers[0].captions.createVideoCaption({
       language: 'zh',
       videoId: videoUUID,
       fixture: 'subtitle-good2.vtt',
@@ -67,7 +67,7 @@ describe('Test video captions', function () {
 
   it('Should list these uploaded captions', async function () {
     for (const server of servers) {
-      const body = await server.captionsCommand.listVideoCaptions({ videoId: videoUUID })
+      const body = await server.captions.listVideoCaptions({ videoId: videoUUID })
       expect(body.total).to.equal(2)
       expect(body.data).to.have.lengthOf(2)
 
@@ -88,7 +88,7 @@ describe('Test video captions', function () {
   it('Should replace an existing caption', async function () {
     this.timeout(30000)
 
-    await servers[0].captionsCommand.createVideoCaption({
+    await servers[0].captions.createVideoCaption({
       language: 'ar',
       videoId: videoUUID,
       fixture: 'subtitle-good2.vtt'
@@ -99,7 +99,7 @@ describe('Test video captions', function () {
 
   it('Should have this caption updated', async function () {
     for (const server of servers) {
-      const body = await server.captionsCommand.listVideoCaptions({ videoId: videoUUID })
+      const body = await server.captions.listVideoCaptions({ videoId: videoUUID })
       expect(body.total).to.equal(2)
       expect(body.data).to.have.lengthOf(2)
 
@@ -114,7 +114,7 @@ describe('Test video captions', function () {
   it('Should replace an existing caption with a srt file and convert it', async function () {
     this.timeout(30000)
 
-    await servers[0].captionsCommand.createVideoCaption({
+    await servers[0].captions.createVideoCaption({
       language: 'ar',
       videoId: videoUUID,
       fixture: 'subtitle-good.srt'
@@ -128,7 +128,7 @@ describe('Test video captions', function () {
 
   it('Should have this caption updated and converted', async function () {
     for (const server of servers) {
-      const body = await server.captionsCommand.listVideoCaptions({ videoId: videoUUID })
+      const body = await server.captions.listVideoCaptions({ videoId: videoUUID })
       expect(body.total).to.equal(2)
       expect(body.data).to.have.lengthOf(2)
 
@@ -157,14 +157,14 @@ describe('Test video captions', function () {
   it('Should remove one caption', async function () {
     this.timeout(30000)
 
-    await servers[0].captionsCommand.deleteVideoCaption({ videoId: videoUUID, language: 'ar' })
+    await servers[0].captions.deleteVideoCaption({ videoId: videoUUID, language: 'ar' })
 
     await waitJobs(servers)
   })
 
   it('Should only list the caption that was not deleted', async function () {
     for (const server of servers) {
-      const body = await server.captionsCommand.listVideoCaptions({ videoId: videoUUID })
+      const body = await server.captions.listVideoCaptions({ videoId: videoUUID })
       expect(body.total).to.equal(1)
       expect(body.data).to.have.lengthOf(1)
 
@@ -178,7 +178,7 @@ describe('Test video captions', function () {
   })
 
   it('Should remove the video, and thus all video captions', async function () {
-    await servers[0].videosCommand.remove({ id: videoUUID })
+    await servers[0].videos.remove({ id: videoUUID })
 
     await checkVideoFilesWereRemoved(videoUUID, servers[0])
   })

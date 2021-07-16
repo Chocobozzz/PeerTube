@@ -26,7 +26,7 @@ describe('Test contact form API validators', function () {
 
     // Email is disabled
     server = await flushAndRunServer(1)
-    command = server.contactFormCommand
+    command = server.contactForm
   })
 
   it('Should not accept a contact form if emails are disabled', async function () {

@@ -20,9 +20,9 @@ describe('Test videos search', function () {
 
     await setAccessTokensToServers([ server ])
 
-    await server.videosCommand.upload({ attributes: { name: localVideoName } })
+    await server.videos.upload({ attributes: { name: localVideoName } })
 
-    command = server.searchCommand
+    command = server.search
   })
 
   describe('Default search', async function () {
@@ -30,7 +30,7 @@ describe('Test videos search', function () {
     it('Should make a local videos search by default', async function () {
       this.timeout(10000)
 
-      await server.configCommand.updateCustomSubConfig({
+      await server.config.updateCustomSubConfig({
         newConfig: {
           search: {
             searchIndex: {
@@ -57,7 +57,7 @@ describe('Test videos search', function () {
     })
 
     it('Should make an index videos search by default', async function () {
-      await server.configCommand.updateCustomSubConfig({
+      await server.config.updateCustomSubConfig({
         newConfig: {
           search: {
             searchIndex: {
@@ -79,7 +79,7 @@ describe('Test videos search', function () {
     })
 
     it('Should make an index videos search if local search is disabled', async function () {
-      await server.configCommand.updateCustomSubConfig({
+      await server.config.updateCustomSubConfig({
         newConfig: {
           search: {
             searchIndex: {
@@ -213,7 +213,7 @@ describe('Test videos search', function () {
       let nsfwUUID: string
 
       {
-        await server.configCommand.updateCustomSubConfig({
+        await server.config.updateCustomSubConfig({
           newConfig: {
             instance: { defaultNSFWPolicy: 'display' }
           }
@@ -229,7 +229,7 @@ describe('Test videos search', function () {
       }
 
       {
-        await server.configCommand.updateCustomSubConfig({
+        await server.config.updateCustomSubConfig({
           newConfig: {
             instance: { defaultNSFWPolicy: 'do_not_list' }
           }

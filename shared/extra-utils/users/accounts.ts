@@ -14,7 +14,7 @@ async function expectAccountFollows (options: {
 }) {
   const { server, handle, followers, following } = options
 
-  const body = await server.accountsCommand.list()
+  const body = await server.accounts.list()
   const account = body.data.find(a => a.name + '@' + a.host === handle)
 
   const message = `${handle} on ${server.url}`

@@ -14,7 +14,7 @@ import {
 } from '@shared/extra-utils'
 
 function updateSearchIndex (server: ServerInfo, enabled: boolean, disableLocalSearch = false) {
-  return server.configCommand.updateCustomSubConfig({
+  return server.config.updateCustomSubConfig({
     newConfig: {
       search: {
         searchIndex: {

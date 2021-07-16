@@ -251,6 +251,6 @@ export class PluginsCommand extends AbstractCommand {
   }
 
   private getPackageJSONPath (npmName: string) {
-    return this.server.serversCommand.buildDirectory(join('plugins', 'node_modules', npmName, 'package.json'))
+    return this.server.servers.buildDirectory(join('plugins', 'node_modules', npmName, 'package.json'))
   }
 }

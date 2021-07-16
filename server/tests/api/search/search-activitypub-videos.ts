@@ -30,18 +30,18 @@ describe('Test ActivityPub videos search', function () {
     await setAccessTokensToServers(servers)
 
     {
-      const { uuid } = await servers[0].videosCommand.upload({ attributes: { name: 'video 1 on server 1' } })
+      const { uuid } = await servers[0].videos.upload({ attributes: { name: 'video 1 on server 1' } })
       videoServer1UUID = uuid
     }
 
     {
-      const { uuid } = await servers[1].videosCommand.upload({ attributes: { name: 'video 1 on server 2' } })
+      const { uuid } = await servers[1].videos.upload({ attributes: { name: 'video 1 on server 2' } })
       videoServer2UUID = uuid
     }
 
     await waitJobs(servers)
 
-    command = servers[0].searchCommand
+    command = servers[0].search
   })
 
   it('Should not find a remote video', async function () {
@@ -105,7 +105,7 @@ describe('Test ActivityPub videos search', function () {
   })
 
   it('Should not list this remote video', async function () {
-    const { total, data } = await servers[0].videosCommand.list()
+    const { total, data } = await servers[0].videos.list()
     expect(total).to.equal(1)
     expect(data).to.have.lengthOf(1)
     expect(data[0].name).to.equal('video 1 on server 1')
@@ -118,7 +118,7 @@ describe('Test ActivityPub videos search', function () {
       name: 'super_channel',
       displayName: 'super channel'
     }
-    const created = await servers[1].channelsCommand.create({ attributes: channelAttributes })
+    const created = await servers[1].channels.create({ attributes: channelAttributes })
     const videoChannelId = created.id
 
     const attributes = {
@@ -127,7 +127,7 @@ describe('Test ActivityPub videos search', function () {
       privacy: VideoPrivacy.UNLISTED,
       channelId: videoChannelId
     }
-    await servers[1].videosCommand.update({ id: videoServer2UUID, attributes })
+    await servers[1].videos.update({ id: videoServer2UUID, attributes })
 
     await waitJobs(servers)
     // Expire video
@@ -153,7 +153,7 @@ describe('Test ActivityPub videos search', function () {
   it('Should delete video of server 2, and delete it on server 1', async function () {
     this.timeout(120000)
 
-    await servers[1].videosCommand.remove({ id: videoServer2UUID })
+    await servers[1].videos.remove({ id: videoServer2UUID })
 
     await waitJobs(servers)
     // Expire video

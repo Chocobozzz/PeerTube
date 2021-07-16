@@ -32,23 +32,23 @@ describe('Test stats (excluding redundancy)', function () {
 
     await doubleFollow(servers[0], servers[1])
 
-    await servers[0].usersCommand.create({ username: user.username, password: user.password })
+    await servers[0].users.create({ username: user.username, password: user.password })
 
-    const { uuid } = await servers[0].videosCommand.upload({ attributes: { fixture: 'video_short.webm' } })
+    const { uuid } = await servers[0].videos.upload({ attributes: { fixture: 'video_short.webm' } })
 
-    await servers[0].commentsCommand.createThread({ videoId: uuid, text: 'comment' })
+    await servers[0].comments.createThread({ videoId: uuid, text: 'comment' })
 
-    await servers[0].videosCommand.view({ id: uuid })
+    await servers[0].videos.view({ id: uuid })
 
     // Wait the video views repeatable job
     await wait(8000)
 
-    await servers[2].followsCommand.follow({ targets: [ servers[0].url ] })
+    await servers[2].follows.follow({ targets: [ servers[0].url ] })
     await waitJobs(servers)
   })
 
   it('Should have the correct stats on instance 1', async function () {
-    const data = await servers[0].statsCommand.get()
+    const data = await servers[0].stats.get()
 
     expect(data.totalLocalVideoComments).to.equal(1)
     expect(data.totalLocalVideos).to.equal(1)
@@ -63,7 +63,7 @@ describe('Test stats (excluding redundancy)', function () {
   })
 
   it('Should have the correct stats on instance 2', async function () {
-    const data = await servers[1].statsCommand.get()
+    const data = await servers[1].stats.get()
 
     expect(data.totalLocalVideoComments).to.equal(0)
     expect(data.totalLocalVideos).to.equal(0)
@@ -78,7 +78,7 @@ describe('Test stats (excluding redundancy)', function () {
   })
 
   it('Should have the correct stats on instance 3', async function () {
-    const data = await servers[2].statsCommand.get()
+    const data = await servers[2].stats.get()
 
     expect(data.totalLocalVideoComments).to.equal(0)
     expect(data.totalLocalVideos).to.equal(0)
@@ -94,10 +94,10 @@ describe('Test stats (excluding redundancy)', function () {
   it('Should have the correct total videos stats after an unfollow', async function () {
     this.timeout(15000)
 
-    await servers[2].followsCommand.unfollow({ target: servers[0] })
+    await servers[2].follows.unfollow({ target: servers[0] })
     await waitJobs(servers)
 
-    const data = await servers[2].statsCommand.get()
+    const data = await servers[2].stats.get()
 
     expect(data.totalVideos).to.equal(0)
   })
@@ -106,7 +106,7 @@ describe('Test stats (excluding redundancy)', function () {
     const server = servers[0]
 
     {
-      const data = await server.statsCommand.get()
+      const data = await server.stats.get()
 
       expect(data.totalDailyActiveUsers).to.equal(1)
       expect(data.totalWeeklyActiveUsers).to.equal(1)
@@ -114,9 +114,9 @@ describe('Test stats (excluding redundancy)', function () {
     }
 
     {
-      await server.loginCommand.getAccessToken(user)
+      await server.login.getAccessToken(user)
 
-      const data = await server.statsCommand.get()
+      const data = await server.stats.get()
 
       expect(data.totalDailyActiveUsers).to.equal(2)
       expect(data.totalWeeklyActiveUsers).to.equal(2)
@@ -128,7 +128,7 @@ describe('Test stats (excluding redundancy)', function () {
     const server = servers[0]
 
     {
-      const data = await server.statsCommand.get()
+      const data = await server.stats.get()
 
       expect(data.totalLocalDailyActiveVideoChannels).to.equal(1)
       expect(data.totalLocalWeeklyActiveVideoChannels).to.equal(1)
@@ -140,10 +140,10 @@ describe('Test stats (excluding redundancy)', function () {
         name: 'stats_channel',
         displayName: 'My stats channel'
       }
-      const created = await server.channelsCommand.create({ attributes })
+      const created = await server.channels.create({ attributes })
       channelId = created.id
 
-      const data = await server.statsCommand.get()
+      const data = await server.stats.get()
 
       expect(data.totalLocalDailyActiveVideoChannels).to.equal(1)
       expect(data.totalLocalWeeklyActiveVideoChannels).to.equal(1)
@@ -151,9 +151,9 @@ describe('Test stats (excluding redundancy)', function () {
     }
 
     {
-      await server.videosCommand.upload({ attributes: { fixture: 'video_short.webm', channelId } })
+      await server.videos.upload({ attributes: { fixture: 'video_short.webm', channelId } })
 
-      const data = await server.statsCommand.get()
+      const data = await server.stats.get()
 
       expect(data.totalLocalDailyActiveVideoChannels).to.equal(2)
       expect(data.totalLocalWeeklyActiveVideoChannels).to.equal(2)
@@ -165,12 +165,12 @@ describe('Test stats (excluding redundancy)', function () {
     const server = servers[0]
 
     {
-      const data = await server.statsCommand.get()
+      const data = await server.stats.get()
       expect(data.totalLocalPlaylists).to.equal(0)
     }
 
     {
-      await server.playlistsCommand.create({
+      await server.playlists.create({
         attributes: {
           displayName: 'playlist for count',
           privacy: VideoPlaylistPrivacy.PUBLIC,
@@ -178,7 +178,7 @@ describe('Test stats (excluding redundancy)', function () {
         }
       })
 
-      const data = await server.statsCommand.get()
+      const data = await server.stats.get()
       expect(data.totalLocalPlaylists).to.equal(1)
     }
   })
@@ -186,7 +186,7 @@ describe('Test stats (excluding redundancy)', function () {
   it('Should correctly count video file sizes if transcoding is enabled', async function () {
     this.timeout(60000)
 
-    await servers[0].configCommand.updateCustomSubConfig({
+    await servers[0].config.updateCustomSubConfig({
       newConfig: {
         transcoding: {
           enabled: true,
@@ -210,17 +210,17 @@ describe('Test stats (excluding redundancy)', function () {
       }
     })
 
-    await servers[0].videosCommand.upload({ attributes: { name: 'video', fixture: 'video_short.webm' } })
+    await servers[0].videos.upload({ attributes: { name: 'video', fixture: 'video_short.webm' } })
 
     await waitJobs(servers)
 
     {
-      const data = await servers[1].statsCommand.get()
+      const data = await servers[1].stats.get()
       expect(data.totalLocalVideoFilesSize).to.equal(0)
     }
 
     {
-      const data = await servers[0].statsCommand.get()
+      const data = await servers[0].stats.get()
       expect(data.totalLocalVideoFilesSize).to.be.greaterThan(500000)
       expect(data.totalLocalVideoFilesSize).to.be.lessThan(600000)
     }
@@ -229,7 +229,7 @@ describe('Test stats (excluding redundancy)', function () {
   it('Should have the correct AP stats', async function () {
     this.timeout(60000)
 
-    await servers[0].configCommand.updateCustomSubConfig({
+    await servers[0].config.updateCustomSubConfig({
       newConfig: {
         transcoding: {
           enabled: false
@@ -237,17 +237,17 @@ describe('Test stats (excluding redundancy)', function () {
       }
     })
 
-    const first = await servers[1].statsCommand.get()
+    const first = await servers[1].stats.get()
 
     for (let i = 0; i < 10; i++) {
-      await servers[0].videosCommand.upload({ attributes: { name: 'video' } })
+      await servers[0].videos.upload({ attributes: { name: 'video' } })
     }
 
     await waitJobs(servers)
 
     await wait(6000)
 
-    const second = await servers[1].statsCommand.get()
+    const second = await servers[1].stats.get()
     expect(second.totalActivityPubMessagesProcessed).to.be.greaterThan(first.totalActivityPubMessagesProcessed)
 
     const apTypes: ActivityType[] = [
@@ -269,7 +269,7 @@ describe('Test stats (excluding redundancy)', function () {
 
     await wait(6000)
 
-    const third = await servers[1].statsCommand.get()
+    const third = await servers[1].stats.get()
     expect(third.totalActivityPubMessagesWaiting).to.equal(0)
     expect(third.activityPubMessagesProcessedPerSecond).to.be.lessThan(second.activityPubMessagesProcessedPerSecond)
   })

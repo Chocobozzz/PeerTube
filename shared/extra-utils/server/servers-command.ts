@@ -37,7 +37,7 @@ export class ServersCommand extends AbstractCommand {
     if (isGithubCI()) {
       await ensureDir('artifacts')
 
-      const origin = this.server.serversCommand.buildDirectory('logs/peertube.log')
+      const origin = this.server.servers.buildDirectory('logs/peertube.log')
       const destname = `peertube-${this.server.internalServerNumber}.log`
       console.log('Saving logs %s.', destname)
 
@@ -56,7 +56,7 @@ export class ServersCommand extends AbstractCommand {
   }
 
   async waitUntilLog (str: string, count = 1, strictCount = true) {
-    const logfile = this.server.serversCommand.buildDirectory('logs/peertube.log')
+    const logfile = this.server.servers.buildDirectory('logs/peertube.log')
 
     while (true) {
       const buf = await readFile(logfile)
@@ -74,7 +74,7 @@ export class ServersCommand extends AbstractCommand {
   }
 
   async getServerFileSize (subPath: string) {
-    const path = this.server.serversCommand.buildDirectory(subPath)
+    const path = this.server.servers.buildDirectory(subPath)
 
     return getFileSize(path)
   }

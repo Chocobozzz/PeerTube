@@ -59,8 +59,8 @@ describe('Test a client controllers', function () {
 
     await setDefaultVideoChannel(servers)
 
-    await servers[0].channelsCommand.update({
-      channelName: servers[0].videoChannel.name,
+    await servers[0].channels.update({
+      channelName: servers[0].store.channel.name,
       attributes: { description: channelDescription }
     })
 
@@ -68,13 +68,13 @@ describe('Test a client controllers', function () {
 
     {
       const attributes = { name: videoName, description: videoDescription }
-      await servers[0].videosCommand.upload({ attributes })
+      await servers[0].videos.upload({ attributes })
 
-      const { data } = await servers[0].videosCommand.list()
+      const { data } = await servers[0].videos.list()
       expect(data.length).to.equal(1)
 
       const video = data[0]
-      servers[0].video = video
+      servers[0].store.video = video
       videoIds = [ video.id, video.uuid, video.shortUUID ]
     }
 
@@ -85,21 +85,21 @@ describe('Test a client controllers', function () {
         displayName: playlistName,
         description: playlistDescription,
         privacy: VideoPlaylistPrivacy.PUBLIC,
-        videoChannelId: servers[0].videoChannel.id
+        videoChannelId: servers[0].store.channel.id
       }
 
-      playlist = await servers[0].playlistsCommand.create({ attributes })
+      playlist = await servers[0].playlists.create({ attributes })
       playlistIds = [ playlist.id, playlist.shortUUID, playlist.uuid ]
 
-      await servers[0].playlistsCommand.addElement({ playlistId: playlist.shortUUID, attributes: { videoId: servers[0].video.id } })
+      await servers[0].playlists.addElement({ playlistId: playlist.shortUUID, attributes: { videoId: servers[0].store.video.id } })
     }
 
     // Account
 
     {
-      await servers[0].usersCommand.updateMe({ description: 'my account description' })
+      await servers[0].users.updateMe({ description: 'my account description' })
 
-      account = await servers[0].accountsCommand.get({ accountName: `${servers[0].user.username}@${servers[0].host}` })
+      account = await servers[0].accounts.get({ accountName: `${servers[0].store.user.username}@${servers[0].host}` })
     }
 
     await waitJobs(servers)
@@ -120,8 +120,8 @@ describe('Test a client controllers', function () {
           const port = servers[0].port
 
           const expectedLink = '<link rel="alternate" type="application/json+oembed" href="http://localhost:' + port + '/services/oembed?' +
-            `url=http%3A%2F%2Flocalhost%3A${port}%2Fw%2F${servers[0].video.uuid}" ` +
-            `title="${servers[0].video.name}" />`
+            `url=http%3A%2F%2Flocalhost%3A${port}%2Fw%2F${servers[0].store.video.uuid}" ` +
+            `title="${servers[0].store.video.name}" />`
 
           expect(res.text).to.contain(expectedLink)
         }
@@ -159,17 +159,17 @@ describe('Test a client controllers', function () {
       expect(text).to.contain(`<meta property="og:title" content="${account.displayName}" />`)
       expect(text).to.contain(`<meta property="og:description" content="${account.description}" />`)
       expect(text).to.contain('<meta property="og:type" content="website" />')
-      expect(text).to.contain(`<meta property="og:url" content="${servers[0].url}/accounts/${servers[0].user.username}" />`)
+      expect(text).to.contain(`<meta property="og:url" content="${servers[0].url}/accounts/${servers[0].store.user.username}" />`)
     }
 
     async function channelPageTest (path: string) {
       const res = await makeGetRequest({ url: servers[0].url, path, accept: 'text/html', statusCodeExpected: HttpStatusCode.OK_200 })
       const text = res.text
 
-      expect(text).to.contain(`<meta property="og:title" content="${servers[0].videoChannel.displayName}" />`)
+      expect(text).to.contain(`<meta property="og:title" content="${servers[0].store.channel.displayName}" />`)
       expect(text).to.contain(`<meta property="og:description" content="${channelDescription}" />`)
       expect(text).to.contain('<meta property="og:type" content="website" />')
-      expect(text).to.contain(`<meta property="og:url" content="${servers[0].url}/video-channels/${servers[0].videoChannel.name}" />`)
+      expect(text).to.contain(`<meta property="og:url" content="${servers[0].url}/video-channels/${servers[0].store.channel.name}" />`)
     }
 
     async function watchVideoPageTest (path: string) {
@@ -179,7 +179,7 @@ describe('Test a client controllers', function () {
       expect(text).to.contain(`<meta property="og:title" content="${videoName}" />`)
       expect(text).to.contain(`<meta property="og:description" content="${videoDescriptionPlainText}" />`)
       expect(text).to.contain('<meta property="og:type" content="video" />')
-      expect(text).to.contain(`<meta property="og:url" content="${servers[0].url}/w/${servers[0].video.uuid}" />`)
+      expect(text).to.contain(`<meta property="og:url" content="${servers[0].url}/w/${servers[0].store.video.uuid}" />`)
     }
 
     async function watchPlaylistPageTest (path: string) {
@@ -193,15 +193,15 @@ describe('Test a client controllers', function () {
     }
 
     it('Should have valid Open Graph tags on the account page', async function () {
-      await accountPageTest('/accounts/' + servers[0].user.username)
-      await accountPageTest('/a/' + servers[0].user.username)
-      await accountPageTest('/@' + servers[0].user.username)
+      await accountPageTest('/accounts/' + servers[0].store.user.username)
+      await accountPageTest('/a/' + servers[0].store.user.username)
+      await accountPageTest('/@' + servers[0].store.user.username)
     })
 
     it('Should have valid Open Graph tags on the channel page', async function () {
-      await channelPageTest('/video-channels/' + servers[0].videoChannel.name)
-      await channelPageTest('/c/' + servers[0].videoChannel.name)
-      await channelPageTest('/@' + servers[0].videoChannel.name)
+      await channelPageTest('/video-channels/' + servers[0].store.channel.name)
+      await channelPageTest('/c/' + servers[0].store.channel.name)
+      await channelPageTest('/@' + servers[0].store.channel.name)
     })
 
     it('Should have valid Open Graph tags on the watch page', async function () {
@@ -241,7 +241,7 @@ describe('Test a client controllers', function () {
 
         expect(text).to.contain('<meta property="twitter:card" content="summary" />')
         expect(text).to.contain('<meta property="twitter:site" content="@Chocobozzz" />')
-        expect(text).to.contain(`<meta property="twitter:title" content="${servers[0].videoChannel.displayName}" />`)
+        expect(text).to.contain(`<meta property="twitter:title" content="${servers[0].store.channel.displayName}" />`)
         expect(text).to.contain(`<meta property="twitter:description" content="${channelDescription}" />`)
       }
 
@@ -288,22 +288,22 @@ describe('Test a client controllers', function () {
       })
 
       it('Should have valid twitter card on the channel page', async function () {
-        await channelPageTest('/video-channels/' + servers[0].videoChannel.name)
-        await channelPageTest('/c/' + servers[0].videoChannel.name)
-        await channelPageTest('/@' + servers[0].videoChannel.name)
+        await channelPageTest('/video-channels/' + servers[0].store.channel.name)
+        await channelPageTest('/c/' + servers[0].store.channel.name)
+        await channelPageTest('/@' + servers[0].store.channel.name)
       })
     })
 
     describe('Whitelisted', function () {
 
       before(async function () {
-        const config = await servers[0].configCommand.getCustomConfig()
+        const config = await servers[0].config.getCustomConfig()
         config.services.twitter = {
           username: '@Kuja',
           whitelisted: true
         }
 
-        await servers[0].configCommand.updateCustomConfig({ newCustomConfig: config })
+        await servers[0].config.updateCustomConfig({ newCustomConfig: config })
       })
 
       async function accountPageTest (path: string) {
@@ -361,9 +361,9 @@ describe('Test a client controllers', function () {
       })
 
       it('Should have valid twitter card on the channel page', async function () {
-        await channelPageTest('/video-channels/' + servers[0].videoChannel.name)
-        await channelPageTest('/c/' + servers[0].videoChannel.name)
-        await channelPageTest('/@' + servers[0].videoChannel.name)
+        await channelPageTest('/video-channels/' + servers[0].store.channel.name)
+        await channelPageTest('/c/' + servers[0].store.channel.name)
+        await channelPageTest('/@' + servers[0].store.channel.name)
       })
     })
   })
@@ -371,7 +371,7 @@ describe('Test a client controllers', function () {
   describe('Index HTML', function () {
 
     it('Should have valid index html tags (title, description...)', async function () {
-      const config = await servers[0].configCommand.getConfig()
+      const config = await servers[0].config.getConfig()
       const res = await makeHTMLRequest(servers[0].url, '/videos/trending')
 
       const description = 'PeerTube, an ActivityPub-federated video streaming platform using P2P directly in your web browser.'
@@ -379,7 +379,7 @@ describe('Test a client controllers', function () {
     })
 
     it('Should update the customized configuration and have the correct index html tags', async function () {
-      await servers[0].configCommand.updateCustomSubConfig({
+      await servers[0].config.updateCustomSubConfig({
         newConfig: {
           instance: {
             name: 'PeerTube updated',
@@ -396,14 +396,14 @@ describe('Test a client controllers', function () {
         }
       })
 
-      const config = await servers[0].configCommand.getConfig()
+      const config = await servers[0].config.getConfig()
       const res = await makeHTMLRequest(servers[0].url, '/videos/trending')
 
       checkIndexTags(res.text, 'PeerTube updated', 'my short description', 'body { background-color: red; }', config)
     })
 
     it('Should have valid index html updated tags (title, description...)', async function () {
-      const config = await servers[0].configCommand.getConfig()
+      const config = await servers[0].config.getConfig()
       const res = await makeHTMLRequest(servers[0].url, '/videos/trending')
 
       checkIndexTags(res.text, 'PeerTube updated', 'my short description', 'body { background-color: red; }', config)
@@ -413,7 +413,7 @@ describe('Test a client controllers', function () {
       for (const basePath of watchVideoBasePaths) {
         for (const id of videoIds) {
           const res = await makeHTMLRequest(servers[1].url, basePath + id)
-          expect(res.text).to.contain(`<link rel="canonical" href="${servers[0].url}/videos/watch/${servers[0].video.uuid}" />`)
+          expect(res.text).to.contain(`<link rel="canonical" href="${servers[0].url}/videos/watch/${servers[0].store.video.uuid}" />`)
         }
       }
     })
@@ -451,8 +451,8 @@ describe('Test a client controllers', function () {
   describe('Embed HTML', function () {
 
     it('Should have the correct embed html tags', async function () {
-      const config = await servers[0].configCommand.getConfig()
-      const res = await makeHTMLRequest(servers[0].url, servers[0].video.embedPath)
+      const config = await servers[0].config.getConfig()
+      const res = await makeHTMLRequest(servers[0].url, servers[0].store.video.embedPath)
 
       checkIndexTags(res.text, 'PeerTube updated', 'my short description', 'body { background-color: red; }', config)
     })

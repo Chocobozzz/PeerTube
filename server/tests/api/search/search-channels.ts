@@ -19,15 +19,15 @@ describe('Test channels search', function () {
     await setAccessTokensToServers([ server ])
 
     {
-      await server.usersCommand.create({ username: 'user1', password: 'password' })
+      await server.users.create({ username: 'user1', password: 'password' })
       const channel = {
         name: 'squall_channel',
         displayName: 'Squall channel'
       }
-      await server.channelsCommand.create({ attributes: channel })
+      await server.channels.create({ attributes: channel })
     }
 
-    command = server.searchCommand
+    command = server.search
   })
 
   it('Should make a simple search and not have results', async function () {

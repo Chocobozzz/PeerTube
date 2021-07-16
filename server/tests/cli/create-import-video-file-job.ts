@@ -35,12 +35,12 @@ describe('Test create import video jobs', function () {
 
     // Upload two videos for our needs
     {
-      const { uuid } = await servers[0].videosCommand.upload({ attributes: { name: 'video1' } })
+      const { uuid } = await servers[0].videos.upload({ attributes: { name: 'video1' } })
       video1UUID = uuid
     }
 
     {
-      const { uuid } = await servers[1].videosCommand.upload({ attributes: { name: 'video2' } })
+      const { uuid } = await servers[1].videos.upload({ attributes: { name: 'video2' } })
       video2UUID = uuid
     }
 
@@ -50,16 +50,16 @@ describe('Test create import video jobs', function () {
 
   it('Should run a import job on video 1 with a lower resolution', async function () {
     const command = `npm run create-import-video-file-job -- -v ${video1UUID} -i server/tests/fixtures/video_short-480.webm`
-    await servers[0].cliCommand.execWithEnv(command)
+    await servers[0].cli.execWithEnv(command)
 
     await waitJobs(servers)
 
     for (const server of servers) {
-      const { data: videos } = await server.videosCommand.list()
+      const { data: videos } = await server.videos.list()
       expect(videos).to.have.lengthOf(2)
 
       const video = videos.find(({ uuid }) => uuid === video1UUID)
-      const videoDetails = await server.videosCommand.get({ id: video.uuid })
+      const videoDetails = await server.videos.get({ id: video.uuid })
 
       expect(videoDetails.files).to.have.lengthOf(2)
       const [ originalVideo, transcodedVideo ] = videoDetails.files
@@ -70,16 +70,16 @@ describe('Test create import video jobs', function () {
 
   it('Should run a import job on video 2 with the same resolution and a different extension', async function () {
     const command = `npm run create-import-video-file-job -- -v ${video2UUID} -i server/tests/fixtures/video_short.ogv`
-    await servers[1].cliCommand.execWithEnv(command)
+    await servers[1].cli.execWithEnv(command)
 
     await waitJobs(servers)
 
     for (const server of servers) {
-      const { data: videos } = await server.videosCommand.list()
+      const { data: videos } = await server.videos.list()
       expect(videos).to.have.lengthOf(2)
 
       const video = videos.find(({ uuid }) => uuid === video2UUID)
-      const videoDetails = await server.videosCommand.get({ id: video.uuid })
+      const videoDetails = await server.videos.get({ id: video.uuid })
 
       expect(videoDetails.files).to.have.lengthOf(4)
       const [ originalVideo, transcodedVideo420, transcodedVideo320, transcodedVideo240 ] = videoDetails.files
@@ -92,16 +92,16 @@ describe('Test create import video jobs', function () {
 
   it('Should run a import job on video 2 with the same resolution and the same extension', async function () {
     const command = `npm run create-import-video-file-job -- -v ${video1UUID} -i server/tests/fixtures/video_short2.webm`
-    await servers[0].cliCommand.execWithEnv(command)
+    await servers[0].cli.execWithEnv(command)
 
     await waitJobs(servers)
 
     for (const server of servers) {
-      const { data: videos } = await server.videosCommand.list()
+      const { data: videos } = await server.videos.list()
       expect(videos).to.have.lengthOf(2)
 
       const video = videos.find(({ uuid }) => uuid === video1UUID)
-      const videoDetails = await server.videosCommand.get({ id: video.uuid })
+      const videoDetails = await server.videos.get({ id: video.uuid })
 
       expect(videoDetails.files).to.have.lengthOf(2)
       const [ video720, video480 ] = videoDetails.files

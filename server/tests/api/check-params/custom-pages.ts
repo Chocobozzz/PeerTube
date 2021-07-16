@@ -25,9 +25,9 @@ describe('Test custom pages validators', function () {
     await setAccessTokensToServers([ server ])
 
     const user = { username: 'user1', password: 'password' }
-    await server.usersCommand.create({ username: user.username, password: user.password })
+    await server.users.create({ username: user.username, password: user.password })
 
-    userAccessToken = await server.loginCommand.getAccessToken(user)
+    userAccessToken = await server.login.getAccessToken(user)
   })
 
   describe('When updating instance homepage', function () {

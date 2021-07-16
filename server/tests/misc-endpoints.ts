@@ -158,15 +158,15 @@ describe('Test misc endpoints', function () {
     it('Should add videos, channel and accounts and get sitemap', async function () {
       this.timeout(35000)
 
-      await server.videosCommand.upload({ attributes: { name: 'video 1', nsfw: false } })
-      await server.videosCommand.upload({ attributes: { name: 'video 2', nsfw: false } })
-      await server.videosCommand.upload({ attributes: { name: 'video 3', privacy: VideoPrivacy.PRIVATE } })
+      await server.videos.upload({ attributes: { name: 'video 1', nsfw: false } })
+      await server.videos.upload({ attributes: { name: 'video 2', nsfw: false } })
+      await server.videos.upload({ attributes: { name: 'video 3', privacy: VideoPrivacy.PRIVATE } })
 
-      await server.channelsCommand.create({ attributes: { name: 'channel1', displayName: 'channel 1' } })
-      await server.channelsCommand.create({ attributes: { name: 'channel2', displayName: 'channel 2' } })
+      await server.channels.create({ attributes: { name: 'channel1', displayName: 'channel 1' } })
+      await server.channels.create({ attributes: { name: 'channel2', displayName: 'channel 2' } })
 
-      await server.usersCommand.create({ username: 'user1', password: 'password' })
-      await server.usersCommand.create({ username: 'user2', password: 'password' })
+      await server.users.create({ username: 'user1', password: 'password' })
+      await server.users.create({ username: 'user2', password: 'password' })
 
       const res = await makeGetRequest({
         url: server.url,
