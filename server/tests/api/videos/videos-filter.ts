@@ -6,14 +6,14 @@ import { HttpStatusCode } from '@shared/core-utils'
 import {
   cleanupTests,
   doubleFollow,
-  flushAndRunMultipleServers,
+  createMultipleServers,
   makeGetRequest,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers
 } from '@shared/extra-utils'
 import { UserRole, Video, VideoPrivacy } from '@shared/models'
 
-async function getVideosNames (server: ServerInfo, token: string, filter: string, statusCodeExpected = HttpStatusCode.OK_200) {
+async function getVideosNames (server: PeerTubeServer, token: string, filter: string, statusCodeExpected = HttpStatusCode.OK_200) {
   const paths = [
     '/api/v1/video-channels/root_channel/videos',
     '/api/v1/accounts/root/videos',
@@ -42,14 +42,14 @@ async function getVideosNames (server: ServerInfo, token: string, filter: string
 }
 
 describe('Test videos filter', function () {
-  let servers: ServerInfo[]
+  let servers: PeerTubeServer[]
 
   // ---------------------------------------------------------------
 
   before(async function () {
     this.timeout(160000)
 
-    servers = await flushAndRunMultipleServers(2)
+    servers = await createMultipleServers(2)
 
     await setAccessTokensToServers(servers)
 

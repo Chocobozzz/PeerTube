@@ -2,7 +2,7 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { cleanupTests, flushAndRunServer, ServerInfo, setAccessTokensToServers } from '@shared/extra-utils'
+import { cleanupTests, createSingleServer, PeerTubeServer, setAccessTokensToServers } from '@shared/extra-utils'
 import { BooleanBothQuery, CustomConfig, ResultList, Video, VideosOverview } from '@shared/models'
 
 const expect = chai.expect
@@ -13,7 +13,7 @@ function createOverviewRes (overview: VideosOverview) {
 }
 
 describe('Test video NSFW policy', function () {
-  let server: ServerInfo
+  let server: PeerTubeServer
   let userAccessToken: string
   let customConfig: CustomConfig
 
@@ -61,7 +61,7 @@ describe('Test video NSFW policy', function () {
 
   before(async function () {
     this.timeout(50000)
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
 
     // Get the access tokens
     await setAccessTokensToServers([ server ])

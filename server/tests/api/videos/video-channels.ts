@@ -7,8 +7,8 @@ import { ACTOR_IMAGES_SIZE } from '@server/initializers/constants'
 import {
   cleanupTests,
   doubleFollow,
-  flushAndRunMultipleServers,
-  ServerInfo,
+  createMultipleServers,
+  PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel,
   testFileExistsOrNot,
@@ -20,14 +20,14 @@ import { User, VideoChannel } from '@shared/models'
 
 const expect = chai.expect
 
-async function findChannel (server: ServerInfo, channelId: number) {
+async function findChannel (server: PeerTubeServer, channelId: number) {
   const body = await server.channels.list({ sort: '-name' })
 
   return body.data.find(c => c.id === channelId)
 }
 
 describe('Test video channels', function () {
-  let servers: ServerInfo[]
+  let servers: PeerTubeServer[]
   let userInfo: User
   let secondVideoChannelId: number
   let totoChannel: number
@@ -40,7 +40,7 @@ describe('Test video channels', function () {
   before(async function () {
     this.timeout(60000)
 
-    servers = await flushAndRunMultipleServers(2)
+    servers = await createMultipleServers(2)
 
     await setAccessTokensToServers(servers)
     await setDefaultVideoChannel(servers)

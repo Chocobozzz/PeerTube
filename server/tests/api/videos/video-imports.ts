@@ -6,9 +6,9 @@ import {
   areHttpImportTestsDisabled,
   cleanupTests,
   doubleFollow,
-  flushAndRunMultipleServers,
+  createMultipleServers,
   ImportsCommand,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers,
   testCaptionFile,
   testImage,
@@ -19,13 +19,13 @@ import { VideoPrivacy, VideoResolution } from '@shared/models'
 const expect = chai.expect
 
 describe('Test video imports', function () {
-  let servers: ServerInfo[] = []
+  let servers: PeerTubeServer[] = []
   let channelIdServer1: number
   let channelIdServer2: number
 
   if (areHttpImportTestsDisabled()) return
 
-  async function checkVideosServer1 (server: ServerInfo, idHttp: string, idMagnet: string, idTorrent: string) {
+  async function checkVideosServer1 (server: PeerTubeServer, idHttp: string, idMagnet: string, idTorrent: string) {
     const videoHttp = await server.videos.get({ id: idHttp })
 
     expect(videoHttp.name).to.equal('small video - youtube')
@@ -63,7 +63,7 @@ describe('Test video imports', function () {
     expect(bodyCaptions.total).to.equal(2)
   }
 
-  async function checkVideoServer2 (server: ServerInfo, id: number | string) {
+  async function checkVideoServer2 (server: PeerTubeServer, id: number | string) {
     const video = await server.videos.get({ id })
 
     expect(video.name).to.equal('my super name')
@@ -84,7 +84,7 @@ describe('Test video imports', function () {
     this.timeout(30_000)
 
     // Run servers
-    servers = await flushAndRunMultipleServers(2)
+    servers = await createMultipleServers(2)
 
     await setAccessTokensToServers(servers)
 

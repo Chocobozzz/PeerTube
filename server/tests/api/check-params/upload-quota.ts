@@ -5,9 +5,9 @@ import { expect } from 'chai'
 import { HttpStatusCode, randomInt } from '@shared/core-utils'
 import {
   cleanupTests,
-  flushAndRunServer,
+  createSingleServer,
   ImportsCommand,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel,
   VideosCommand,
@@ -16,7 +16,7 @@ import {
 import { VideoImportState, VideoPrivacy } from '@shared/models'
 
 describe('Test upload quota', function () {
-  let server: ServerInfo
+  let server: PeerTubeServer
   let rootId: number
   let command: VideosCommand
 
@@ -25,7 +25,7 @@ describe('Test upload quota', function () {
   before(async function () {
     this.timeout(30000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
     await setAccessTokensToServers([ server ])
     await setDefaultVideoChannel([ server ])
 

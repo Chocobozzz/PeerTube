@@ -6,9 +6,9 @@ import { HttpStatusCode } from '@shared/core-utils'
 import {
   cleanupTests,
   doubleFollow,
-  flushAndRunMultipleServers,
+  createMultipleServers,
   makeActivityPubGetRequest,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel
 } from '@shared/extra-utils'
@@ -17,7 +17,7 @@ import { VideoPlaylistPrivacy } from '@shared/models'
 const expect = chai.expect
 
 describe('Test activitypub', function () {
-  let servers: ServerInfo[] = []
+  let servers: PeerTubeServer[] = []
   let video: { id: number, uuid: string, shortUUID: string }
   let playlist: { id: number, uuid: string, shortUUID: string }
 
@@ -62,7 +62,7 @@ describe('Test activitypub', function () {
   before(async function () {
     this.timeout(30000)
 
-    servers = await flushAndRunMultipleServers(2)
+    servers = await createMultipleServers(2)
 
     await setAccessTokensToServers(servers)
     await setDefaultVideoChannel(servers)

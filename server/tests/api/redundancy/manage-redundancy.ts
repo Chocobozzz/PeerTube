@@ -5,9 +5,9 @@ import * as chai from 'chai'
 import {
   cleanupTests,
   doubleFollow,
-  flushAndRunMultipleServers,
+  createMultipleServers,
   RedundancyCommand,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers,
   waitJobs
 } from '@shared/extra-utils'
@@ -18,7 +18,7 @@ const expect = chai.expect
 describe('Test manage videos redundancy', function () {
   const targets: VideoRedundanciesTarget[] = [ 'my-videos', 'remote-videos' ]
 
-  let servers: ServerInfo[]
+  let servers: PeerTubeServer[]
   let video1Server2UUID: string
   let video2Server2UUID: string
   let redundanciesToRemove: number[] = []
@@ -48,7 +48,7 @@ describe('Test manage videos redundancy', function () {
         }
       }
     }
-    servers = await flushAndRunMultipleServers(3, config)
+    servers = await createMultipleServers(3, config)
 
     // Get the access tokens
     await setAccessTokensToServers(servers)

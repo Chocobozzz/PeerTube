@@ -9,11 +9,11 @@ import {
   buildAbsoluteFixturePath,
   cleanupTests,
   doubleFollow,
-  flushAndRunMultipleServers,
+  createMultipleServers,
   generateHighBitrateVideo,
   generateVideoWithFramerate,
   makeGetRequest,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers,
   waitJobs,
   webtorrentAdd
@@ -31,7 +31,7 @@ import {
 
 const expect = chai.expect
 
-function updateConfigForTranscoding (server: ServerInfo) {
+function updateConfigForTranscoding (server: PeerTubeServer) {
   return server.config.updateCustomSubConfig({
     newConfig: {
       transcoding: {
@@ -56,14 +56,14 @@ function updateConfigForTranscoding (server: ServerInfo) {
 }
 
 describe('Test video transcoding', function () {
-  let servers: ServerInfo[] = []
+  let servers: PeerTubeServer[] = []
   let video4k: string
 
   before(async function () {
     this.timeout(30_000)
 
     // Run servers
-    servers = await flushAndRunMultipleServers(2)
+    servers = await createMultipleServers(2)
 
     await setAccessTokensToServers(servers)
 

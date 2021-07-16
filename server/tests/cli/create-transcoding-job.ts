@@ -5,8 +5,8 @@ import * as chai from 'chai'
 import {
   cleanupTests,
   doubleFollow,
-  flushAndRunMultipleServers,
-  ServerInfo,
+  createMultipleServers,
+  PeerTubeServer,
   setAccessTokensToServers,
   waitJobs
 } from '../../../shared/extra-utils'
@@ -14,7 +14,7 @@ import {
 const expect = chai.expect
 
 describe('Test create transcoding jobs', function () {
-  let servers: ServerInfo[] = []
+  let servers: PeerTubeServer[] = []
   const videosUUID: string[] = []
 
   const config = {
@@ -39,7 +39,7 @@ describe('Test create transcoding jobs', function () {
     this.timeout(60000)
 
     // Run server 2 to have transcoding enabled
-    servers = await flushAndRunMultipleServers(2)
+    servers = await createMultipleServers(2)
     await setAccessTokensToServers(servers)
 
     await servers[0].config.updateCustomSubConfig({ newConfig: config })

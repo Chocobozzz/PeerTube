@@ -37,7 +37,7 @@ export class ServersCommand extends AbstractCommand {
     if (isGithubCI()) {
       await ensureDir('artifacts')
 
-      const origin = this.server.servers.buildDirectory('logs/peertube.log')
+      const origin = this.buildDirectory('logs/peertube.log')
       const destname = `peertube-${this.server.internalServerNumber}.log`
       console.log('Saving logs %s.', destname)
 

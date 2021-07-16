@@ -3,15 +3,15 @@
 import 'mocha'
 import {
   cleanupTests,
-  flushAndRunServer,
-  ServerInfo,
+  createSingleServer,
+  PeerTubeServer,
   setAccessTokensToServers
 } from '../../../../shared/extra-utils'
 import { makePostBodyRequest } from '../../../../shared/extra-utils/requests/requests'
 import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 describe('Test bulk API validators', function () {
-  let server: ServerInfo
+  let server: PeerTubeServer
   let userAccessToken: string
 
   // ---------------------------------------------------------------
@@ -19,7 +19,7 @@ describe('Test bulk API validators', function () {
   before(async function () {
     this.timeout(120000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
     await setAccessTokensToServers([ server ])
 
     const user = { username: 'user1', password: 'password' }

@@ -6,8 +6,8 @@ import {
   checkVideoFilesWereRemoved,
   cleanupTests,
   completeVideoCheck,
-  flushAndRunServer,
-  ServerInfo,
+  createSingleServer,
+  PeerTubeServer,
   setAccessTokensToServers,
   testImage,
   wait
@@ -19,7 +19,7 @@ const expect = chai.expect
 describe('Test a single server', function () {
 
   function runSuite (mode: 'legacy' | 'resumable') {
-    let server: ServerInfo = null
+    let server: PeerTubeServer = null
     let videoId: number | string
     let videoId2: string
     let videoUUID = ''
@@ -94,7 +94,7 @@ describe('Test a single server', function () {
     before(async function () {
       this.timeout(30000)
 
-      server = await flushAndRunServer(1)
+      server = await createSingleServer(1)
 
       await setAccessTokensToServers([ server ])
     })

@@ -5,8 +5,9 @@ import { inspect } from 'util'
 import { AbuseState, PluginType } from '@shared/models'
 import { UserNotification, UserNotificationSetting, UserNotificationSettingValue, UserNotificationType } from '../../models/users'
 import { MockSmtpServer } from '../mock-servers/mock-email'
+import { PeerTubeServer } from '../server'
 import { doubleFollow } from '../server/follows'
-import { flushAndRunMultipleServers, ServerInfo } from '../server/servers'
+import { createMultipleServers } from '../server/servers'
 import { setAccessTokensToServers } from './login'
 
 function getAllNotificationsSettings (): UserNotificationSetting {
@@ -31,7 +32,7 @@ function getAllNotificationsSettings (): UserNotificationSetting {
 }
 
 type CheckerBaseParams = {
-  server: ServerInfo
+  server: PeerTubeServer
   emails: any[]
   socketNotifications: UserNotification[]
   token: string
@@ -642,7 +643,7 @@ async function prepareNotificationsTest (serversCount = 3, overrideConfigArg: an
       limit: 20
     }
   }
-  const servers = await flushAndRunMultipleServers(serversCount, Object.assign(overrideConfig, overrideConfigArg))
+  const servers = await createMultipleServers(serversCount, Object.assign(overrideConfig, overrideConfigArg))
 
   await setAccessTokensToServers(servers)
 

@@ -2,10 +2,10 @@
 
 import { expect } from 'chai'
 import { HttpStatusCode } from '@shared/core-utils'
-import { cleanupTests, flushAndRunServer, ServerInfo, setAccessTokensToServers, wait } from '@shared/extra-utils'
+import { cleanupTests, createSingleServer, PeerTubeServer, setAccessTokensToServers, wait } from '@shared/extra-utils'
 
 describe('Test application behind a reverse proxy', function () {
-  let server: ServerInfo
+  let server: PeerTubeServer
   let videoId: string
 
   before(async function () {
@@ -30,7 +30,7 @@ describe('Test application behind a reverse proxy', function () {
       }
     }
 
-    server = await flushAndRunServer(1, config)
+    server = await createSingleServer(1, config)
     await setAccessTokensToServers([ server ])
 
     const { uuid } = await server.videos.upload()

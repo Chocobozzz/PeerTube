@@ -6,29 +6,28 @@ import { HttpStatusCode } from '@shared/core-utils'
 import {
   cleanupTests,
   CustomPagesCommand,
-  flushAndRunServer,
+  createSingleServer,
   killallServers,
-  reRunServer,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers
 } from '../../../../shared/extra-utils/index'
 
 const expect = chai.expect
 
-async function getHomepageState (server: ServerInfo) {
+async function getHomepageState (server: PeerTubeServer) {
   const config = await server.config.getConfig()
 
   return config.homepage.enabled
 }
 
 describe('Test instance homepage actions', function () {
-  let server: ServerInfo
+  let server: PeerTubeServer
   let command: CustomPagesCommand
 
   before(async function () {
     this.timeout(30000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
     await setAccessTokensToServers([ server ])
 
     command = server.customPage
@@ -56,7 +55,7 @@ describe('Test instance homepage actions', function () {
 
     await killallServers([ server ])
 
-    await reRunServer(server)
+    await server.run()
 
     const page = await command.getInstanceHomepage()
     expect(page.content).to.equal('<picsou-magazine></picsou-magazine>')

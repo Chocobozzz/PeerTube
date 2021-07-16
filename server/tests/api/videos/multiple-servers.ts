@@ -12,8 +12,8 @@ import {
   completeVideoCheck,
   dateIsValid,
   doubleFollow,
-  flushAndRunMultipleServers,
-  ServerInfo,
+  createMultipleServers,
+  PeerTubeServer,
   setAccessTokensToServers,
   testImage,
   wait,
@@ -25,7 +25,7 @@ import { VideoCommentThreadTree, VideoPrivacy } from '@shared/models'
 const expect = chai.expect
 
 describe('Test multiple servers', function () {
-  let servers: ServerInfo[] = []
+  let servers: PeerTubeServer[] = []
   const toRemove = []
   let videoUUID = ''
   let videoChannelId: number
@@ -33,7 +33,7 @@ describe('Test multiple servers', function () {
   before(async function () {
     this.timeout(120000)
 
-    servers = await flushAndRunMultipleServers(3)
+    servers = await createMultipleServers(3)
 
     // Get the access tokens
     await setAccessTokensToServers(servers)

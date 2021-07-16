@@ -6,11 +6,11 @@ import {
   checkBadCountPagination,
   checkBadStartPagination,
   cleanupTests,
-  flushAndRunServer,
+  createSingleServer,
   makeGetRequest,
   makePostBodyRequest,
   makePutBodyRequest,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers
 } from '@shared/extra-utils'
 
@@ -18,14 +18,14 @@ describe('Test videos history API validator', function () {
   const myHistoryPath = '/api/v1/users/me/history/videos'
   const myHistoryRemove = myHistoryPath + '/remove'
   let watchingPath: string
-  let server: ServerInfo
+  let server: PeerTubeServer
 
   // ---------------------------------------------------------------
 
   before(async function () {
     this.timeout(30000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
 
     await setAccessTokensToServers([ server ])
 

@@ -3,18 +3,17 @@
 import 'mocha'
 import {
   cleanupTests,
-  flushAndRunMultipleServers,
+  createMultipleServers,
   killallServers,
+  PeerTubeServer,
   PluginsCommand,
-  reRunServer,
-  ServerInfo,
   setAccessTokensToServers,
   setDefaultVideoChannel
 } from '@shared/extra-utils'
 import { ServerHookName, VideoPlaylistPrivacy, VideoPrivacy } from '@shared/models'
 
 describe('Test plugin action hooks', function () {
-  let servers: ServerInfo[]
+  let servers: PeerTubeServer[]
   let videoUUID: string
   let threadId: number
 
@@ -25,7 +24,7 @@ describe('Test plugin action hooks', function () {
   before(async function () {
     this.timeout(30000)
 
-    servers = await flushAndRunMultipleServers(2)
+    servers = await createMultipleServers(2)
     await setAccessTokensToServers(servers)
     await setDefaultVideoChannel(servers)
 
@@ -33,7 +32,7 @@ describe('Test plugin action hooks', function () {
 
     await killallServers([ servers[0] ])
 
-    await reRunServer(servers[0], {
+    await servers[0].run({
       live: {
         enabled: true
       }

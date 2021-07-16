@@ -8,11 +8,11 @@ import {
   checkBadSortPagination,
   checkBadStartPagination,
   cleanupTests,
-  flushAndRunServer,
+  createSingleServer,
   makeDeleteRequest,
   makeGetRequest,
   makePostBodyRequest,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers
 } from '@shared/extra-utils'
 import { VideoCreateResult } from '@shared/models'
@@ -22,7 +22,7 @@ const expect = chai.expect
 describe('Test video comments API validator', function () {
   let pathThread: string
   let pathComment: string
-  let server: ServerInfo
+  let server: PeerTubeServer
   let video: VideoCreateResult
   let userAccessToken: string
   let userAccessToken2: string
@@ -33,7 +33,7 @@ describe('Test video comments API validator', function () {
   before(async function () {
     this.timeout(30000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
 
     await setAccessTokensToServers([ server ])
 

@@ -4,10 +4,10 @@ import { expect } from 'chai'
 import { pathExists, readdir } from 'fs-extra'
 import { join } from 'path'
 import { root } from '@server/helpers/core-utils'
-import { ServerInfo } from '../server'
+import { PeerTubeServer } from '../server'
 
 async function expectAccountFollows (options: {
-  server: ServerInfo
+  server: PeerTubeServer
   handle: string
   followers: number
   following: number

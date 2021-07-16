@@ -13,7 +13,7 @@ import {
   ImportsCommand,
   MockSmtpServer,
   prepareNotificationsTest,
-  ServerInfo,
+  PeerTubeServer,
   uploadRandomVideoOnServers,
   wait,
   waitJobs
@@ -23,7 +23,7 @@ import { UserNotification, UserNotificationType, VideoPrivacy } from '@shared/mo
 const expect = chai.expect
 
 describe('Test user notifications', function () {
-  let servers: ServerInfo[] = []
+  let servers: PeerTubeServer[] = []
   let userAccessToken: string
   let userNotifications: UserNotification[] = []
   let adminNotifications: UserNotification[] = []

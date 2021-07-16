@@ -20,14 +20,14 @@ import {
   MockInstancesIndex,
   MockSmtpServer,
   prepareNotificationsTest,
-  ServerInfo,
+  PeerTubeServer,
   wait,
   waitJobs
 } from '@shared/extra-utils'
 import { AbuseState, CustomConfig, UserNotification, VideoPrivacy } from '@shared/models'
 
 describe('Test moderation notifications', function () {
-  let servers: ServerInfo[] = []
+  let servers: PeerTubeServer[] = []
   let userAccessToken: string
   let userNotifications: UserNotification[] = []
   let adminNotifications: UserNotification[] = []

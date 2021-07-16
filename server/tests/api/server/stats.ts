@@ -5,8 +5,8 @@ import * as chai from 'chai'
 import {
   cleanupTests,
   doubleFollow,
-  flushAndRunMultipleServers,
-  ServerInfo,
+  createMultipleServers,
+  PeerTubeServer,
   setAccessTokensToServers,
   wait,
   waitJobs
@@ -16,7 +16,7 @@ import { ActivityType, VideoPlaylistPrivacy } from '@shared/models'
 const expect = chai.expect
 
 describe('Test stats (excluding redundancy)', function () {
-  let servers: ServerInfo[] = []
+  let servers: PeerTubeServer[] = []
   let channelId
   const user = {
     username: 'user1',
@@ -26,7 +26,7 @@ describe('Test stats (excluding redundancy)', function () {
   before(async function () {
     this.timeout(60000)
 
-    servers = await flushAndRunMultipleServers(3)
+    servers = await createMultipleServers(3)
 
     await setAccessTokensToServers(servers)
 

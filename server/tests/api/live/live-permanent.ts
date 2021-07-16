@@ -7,8 +7,8 @@ import {
   cleanupTests,
   ConfigCommand,
   doubleFollow,
-  flushAndRunMultipleServers,
-  ServerInfo,
+  createMultipleServers,
+  PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel,
   stopFfmpeg,
@@ -19,7 +19,7 @@ import {
 const expect = chai.expect
 
 describe('Permanent live', function () {
-  let servers: ServerInfo[] = []
+  let servers: PeerTubeServer[] = []
   let videoUUID: string
 
   async function createLiveWrapper (permanentLive: boolean) {
@@ -45,7 +45,7 @@ describe('Permanent live', function () {
   before(async function () {
     this.timeout(120000)
 
-    servers = await flushAndRunMultipleServers(2)
+    servers = await createMultipleServers(2)
 
     // Get the access tokens
     await setAccessTokensToServers(servers)

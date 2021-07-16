@@ -3,18 +3,18 @@
 import 'mocha'
 import * as chai from 'chai'
 import { HttpStatusCode } from '@shared/core-utils'
-import { cleanupTests, flushAndRunServer, makeGetRequest, ServerInfo, setAccessTokensToServers } from '@shared/extra-utils'
+import { cleanupTests, createSingleServer, makeGetRequest, PeerTubeServer, setAccessTokensToServers } from '@shared/extra-utils'
 import { VideoPrivacy } from '@shared/models'
 
 const expect = chai.expect
 
 describe('Test misc endpoints', function () {
-  let server: ServerInfo
+  let server: PeerTubeServer
 
   before(async function () {
     this.timeout(120000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
     await setAccessTokensToServers([ server ])
   })
 

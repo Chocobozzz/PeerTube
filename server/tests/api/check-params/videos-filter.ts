@@ -3,16 +3,16 @@
 import 'mocha'
 import {
   cleanupTests,
-  flushAndRunServer,
+  createSingleServer,
   makeGetRequest,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel
 } from '../../../../shared/extra-utils'
 import { UserRole } from '../../../../shared/models/users'
 import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
-async function testEndpoints (server: ServerInfo, token: string, filter: string, statusCodeExpected: HttpStatusCode) {
+async function testEndpoints (server: PeerTubeServer, token: string, filter: string, statusCodeExpected: HttpStatusCode) {
   const paths = [
     '/api/v1/video-channels/root_channel/videos',
     '/api/v1/accounts/root/videos',
@@ -34,7 +34,7 @@ async function testEndpoints (server: ServerInfo, token: string, filter: string,
 }
 
 describe('Test video filters validators', function () {
-  let server: ServerInfo
+  let server: PeerTubeServer
   let userAccessToken: string
   let moderatorAccessToken: string
 
@@ -43,7 +43,7 @@ describe('Test video filters validators', function () {
   before(async function () {
     this.timeout(30000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
 
     await setAccessTokensToServers([ server ])
     await setDefaultVideoChannel([ server ])

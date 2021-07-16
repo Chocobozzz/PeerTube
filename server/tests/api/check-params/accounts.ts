@@ -7,20 +7,20 @@ import {
   checkBadSortPagination,
   checkBadStartPagination,
   cleanupTests,
-  flushAndRunServer,
-  ServerInfo
+  createSingleServer,
+  PeerTubeServer
 } from '@shared/extra-utils'
 
 describe('Test accounts API validators', function () {
   const path = '/api/v1/accounts/'
-  let server: ServerInfo
+  let server: PeerTubeServer
 
   // ---------------------------------------------------------------
 
   before(async function () {
     this.timeout(30000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
   })
 
   describe('When listing accounts', function () {

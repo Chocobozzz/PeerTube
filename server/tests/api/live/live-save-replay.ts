@@ -9,8 +9,8 @@ import {
   cleanupTests,
   ConfigCommand,
   doubleFollow,
-  flushAndRunMultipleServers,
-  ServerInfo,
+  createMultipleServers,
+  PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel,
   stopFfmpeg,
@@ -23,7 +23,7 @@ import { LiveVideoCreate, VideoPrivacy, VideoState } from '@shared/models'
 const expect = chai.expect
 
 describe('Save replay setting', function () {
-  let servers: ServerInfo[] = []
+  let servers: PeerTubeServer[] = []
   let liveVideoUUID: string
   let ffmpegCommand: FfmpegCommand
 
@@ -82,7 +82,7 @@ describe('Save replay setting', function () {
   before(async function () {
     this.timeout(120000)
 
-    servers = await flushAndRunMultipleServers(2)
+    servers = await createMultipleServers(2)
 
     // Get the access tokens
     await setAccessTokensToServers(servers)

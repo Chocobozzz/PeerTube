@@ -3,16 +3,16 @@
 import 'mocha'
 import * as magnetUtil from 'magnet-uri'
 import * as WebTorrent from 'webtorrent'
-import { cleanupTests, flushAndRunServer, killallServers, reRunServer, ServerInfo, setAccessTokensToServers } from '@shared/extra-utils'
+import { cleanupTests, createSingleServer, killallServers, PeerTubeServer, setAccessTokensToServers } from '@shared/extra-utils'
 
 describe('Test tracker', function () {
-  let server: ServerInfo
+  let server: PeerTubeServer
   let badMagnet: string
   let goodMagnet: string
 
   before(async function () {
     this.timeout(60000)
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
     await setAccessTokensToServers([ server ])
 
     {
@@ -48,7 +48,7 @@ describe('Test tracker', function () {
     const errCb = () => done(new Error('Tracker is enabled'))
 
     killallServers([ server ])
-      .then(() => reRunServer(server, { tracker: { enabled: false } }))
+      .then(() => server.run({ tracker: { enabled: false } }))
       .then(() => {
         const webtorrent = new WebTorrent()
 
@@ -72,7 +72,7 @@ describe('Test tracker', function () {
     this.timeout(20000)
 
     killallServers([ server ])
-      .then(() => reRunServer(server))
+      .then(() => server.run())
       .then(() => {
         const webtorrent = new WebTorrent()
 

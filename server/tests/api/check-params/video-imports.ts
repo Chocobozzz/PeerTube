@@ -9,19 +9,19 @@ import {
   checkBadSortPagination,
   checkBadStartPagination,
   cleanupTests,
-  flushAndRunServer,
+  createSingleServer,
   ImportsCommand,
   makeGetRequest,
   makePostBodyRequest,
   makeUploadRequest,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers
 } from '@shared/extra-utils'
 import { VideoPrivacy } from '@shared/models'
 
 describe('Test video imports API validator', function () {
   const path = '/api/v1/videos/imports'
-  let server: ServerInfo
+  let server: PeerTubeServer
   let userAccessToken = ''
   let channelId: number
 
@@ -30,7 +30,7 @@ describe('Test video imports API validator', function () {
   before(async function () {
     this.timeout(30000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
 
     await setAccessTokensToServers([ server ])
 

@@ -3,18 +3,18 @@
 import 'mocha'
 import * as chai from 'chai'
 import { HttpStatusCode } from '@shared/core-utils'
-import { cleanupTests, flushAndRunServer, PluginsCommand, ServerInfo, setAccessTokensToServers } from '@shared/extra-utils'
+import { cleanupTests, createSingleServer, PluginsCommand, PeerTubeServer, setAccessTokensToServers } from '@shared/extra-utils'
 import { VideoPlaylistPrivacy } from '@shared/models'
 
 const expect = chai.expect
 
 describe('Test plugin altering video constants', function () {
-  let server: ServerInfo
+  let server: PeerTubeServer
 
   before(async function () {
     this.timeout(30000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
     await setAccessTokensToServers([ server ])
 
     await server.plugins.install({ path: PluginsCommand.getPluginTestPath('-video-constants') })

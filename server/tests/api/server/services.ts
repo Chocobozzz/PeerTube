@@ -2,13 +2,13 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { cleanupTests, flushAndRunServer, ServerInfo, setAccessTokensToServers, setDefaultVideoChannel } from '@shared/extra-utils'
+import { cleanupTests, createSingleServer, PeerTubeServer, setAccessTokensToServers, setDefaultVideoChannel } from '@shared/extra-utils'
 import { Video, VideoPlaylistPrivacy } from '@shared/models'
 
 const expect = chai.expect
 
 describe('Test services', function () {
-  let server: ServerInfo = null
+  let server: PeerTubeServer = null
   let playlistUUID: string
   let playlistDisplayName: string
   let video: Video
@@ -16,7 +16,7 @@ describe('Test services', function () {
   before(async function () {
     this.timeout(30000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
 
     await setAccessTokensToServers([ server ])
     await setDefaultVideoChannel([ server ])

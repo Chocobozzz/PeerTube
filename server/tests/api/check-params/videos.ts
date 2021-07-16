@@ -11,13 +11,13 @@ import {
   checkBadStartPagination,
   checkUploadVideoParam,
   cleanupTests,
-  flushAndRunServer,
+  createSingleServer,
   makeDeleteRequest,
   makeGetRequest,
   makePutBodyRequest,
   makeUploadRequest,
   root,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers
 } from '@shared/extra-utils'
 import { PeerTubeProblemDocument, VideoCreateResult, VideoPrivacy } from '@shared/models'
@@ -26,7 +26,7 @@ const expect = chai.expect
 
 describe('Test videos API validator', function () {
   const path = '/api/v1/videos/'
-  let server: ServerInfo
+  let server: PeerTubeServer
   let userAccessToken = ''
   let accountName: string
   let channelId: number
@@ -38,7 +38,7 @@ describe('Test videos API validator', function () {
   before(async function () {
     this.timeout(30000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
 
     await setAccessTokensToServers([ server ])
 

@@ -9,7 +9,7 @@ import {
   getAllNotificationsSettings,
   MockSmtpServer,
   prepareNotificationsTest,
-  ServerInfo,
+  PeerTubeServer,
   waitJobs
 } from '@shared/extra-utils'
 import { UserNotification, UserNotificationSettingValue } from '@shared/models'
@@ -17,7 +17,7 @@ import { UserNotification, UserNotificationSettingValue } from '@shared/models'
 const expect = chai.expect
 
 describe('Test notifications API', function () {
-  let server: ServerInfo
+  let server: PeerTubeServer
   let userNotifications: UserNotification[] = []
   let userToken: string
   let emails: object[] = []

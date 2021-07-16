@@ -4,9 +4,9 @@ import 'mocha'
 import * as chai from 'chai'
 import {
   cleanupTests,
-  flushAndRunMultipleServers,
+  createMultipleServers,
   MockInstancesIndex,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers,
   wait,
   waitJobs
@@ -14,7 +14,7 @@ import {
 
 const expect = chai.expect
 
-async function checkFollow (follower: ServerInfo, following: ServerInfo, exists: boolean) {
+async function checkFollow (follower: PeerTubeServer, following: PeerTubeServer, exists: boolean) {
   {
     const body = await following.follows.getFollowers({ start: 0, count: 5, sort: '-createdAt' })
     const follow = body.data.find(f => f.follower.host === follower.host && f.state === 'accepted')
@@ -32,13 +32,13 @@ async function checkFollow (follower: ServerInfo, following: ServerInfo, exists:
   }
 }
 
-async function server1Follows2 (servers: ServerInfo[]) {
+async function server1Follows2 (servers: PeerTubeServer[]) {
   await servers[0].follows.follow({ targets: [ servers[1].host ] })
 
   await waitJobs(servers)
 }
 
-async function resetFollows (servers: ServerInfo[]) {
+async function resetFollows (servers: PeerTubeServer[]) {
   try {
     await servers[0].follows.unfollow({ target: servers[1] })
     await servers[1].follows.unfollow({ target: servers[0] })
@@ -52,12 +52,12 @@ async function resetFollows (servers: ServerInfo[]) {
 }
 
 describe('Test auto follows', function () {
-  let servers: ServerInfo[] = []
+  let servers: PeerTubeServer[] = []
 
   before(async function () {
     this.timeout(30000)
 
-    servers = await flushAndRunMultipleServers(3)
+    servers = await createMultipleServers(3)
 
     // Get the access tokens
     await setAccessTokensToServers(servers)

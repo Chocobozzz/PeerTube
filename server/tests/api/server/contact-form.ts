@@ -3,13 +3,21 @@
 import 'mocha'
 import * as chai from 'chai'
 import { HttpStatusCode } from '@shared/core-utils'
-import { cleanupTests, flushAndRunServer, MockSmtpServer, ServerInfo, setAccessTokensToServers, wait, waitJobs } from '@shared/extra-utils'
-import { ContactFormCommand } from '@shared/extra-utils/server'
+import {
+  cleanupTests,
+  ContactFormCommand,
+  createSingleServer,
+  MockSmtpServer,
+  PeerTubeServer,
+  setAccessTokensToServers,
+  wait,
+  waitJobs
+} from '@shared/extra-utils'
 
 const expect = chai.expect
 
 describe('Test contact form', function () {
-  let server: ServerInfo
+  let server: PeerTubeServer
   const emails: object[] = []
   let command: ContactFormCommand
 
@@ -24,7 +32,7 @@ describe('Test contact form', function () {
         port
       }
     }
-    server = await flushAndRunServer(1, overrideConfig)
+    server = await createSingleServer(1, overrideConfig)
     await setAccessTokensToServers([ server ])
 
     command = server.contactForm

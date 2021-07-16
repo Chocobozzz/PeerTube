@@ -6,9 +6,9 @@ import { join } from 'path'
 import { getAudioStream, getVideoFileFPS, getVideoStreamFromFile } from '@server/helpers/ffprobe-utils'
 import {
   cleanupTests,
-  flushAndRunServer,
+  createSingleServer,
   PluginsCommand,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel,
   testFfmpegStreamError,
@@ -16,7 +16,7 @@ import {
 } from '@shared/extra-utils'
 import { VideoPrivacy } from '@shared/models'
 
-async function createLiveWrapper (server: ServerInfo) {
+async function createLiveWrapper (server: PeerTubeServer) {
   const liveAttributes = {
     name: 'live video',
     channelId: server.store.channel.id,
@@ -28,7 +28,7 @@ async function createLiveWrapper (server: ServerInfo) {
   return uuid
 }
 
-function updateConf (server: ServerInfo, vodProfile: string, liveProfile: string) {
+function updateConf (server: PeerTubeServer, vodProfile: string, liveProfile: string) {
   return server.config.updateCustomSubConfig({
     newConfig: {
       transcoding: {
@@ -64,12 +64,12 @@ function updateConf (server: ServerInfo, vodProfile: string, liveProfile: string
 }
 
 describe('Test transcoding plugins', function () {
-  let server: ServerInfo
+  let server: PeerTubeServer
 
   before(async function () {
     this.timeout(60000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
     await setAccessTokensToServers([ server ])
     await setDefaultVideoChannel([ server ])
 

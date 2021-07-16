@@ -5,8 +5,8 @@ import * as chai from 'chai'
 import {
   cleanupTests,
   doubleFollow,
-  flushAndRunMultipleServers,
-  ServerInfo,
+  createMultipleServers,
+  PeerTubeServer,
   setAccessTokensToServers,
   SubscriptionsCommand,
   waitJobs
@@ -15,7 +15,7 @@ import {
 const expect = chai.expect
 
 describe('Test users subscriptions', function () {
-  let servers: ServerInfo[] = []
+  let servers: PeerTubeServer[] = []
   const users: { accessToken: string }[] = []
   let video3UUID: string
 
@@ -24,7 +24,7 @@ describe('Test users subscriptions', function () {
   before(async function () {
     this.timeout(120000)
 
-    servers = await flushAndRunMultipleServers(3)
+    servers = await createMultipleServers(3)
 
     // Get the access tokens
     await setAccessTokensToServers(servers)

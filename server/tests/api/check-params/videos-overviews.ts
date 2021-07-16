@@ -1,17 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-import { cleanupTests, flushAndRunServer, ServerInfo } from '@shared/extra-utils'
+import { cleanupTests, createSingleServer, PeerTubeServer } from '@shared/extra-utils'
 
 describe('Test videos overview', function () {
-  let server: ServerInfo
+  let server: PeerTubeServer
 
   // ---------------------------------------------------------------
 
   before(async function () {
     this.timeout(30000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
   })
 
   describe('When getting videos overview', function () {

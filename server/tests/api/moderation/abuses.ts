@@ -6,8 +6,8 @@ import {
   AbusesCommand,
   cleanupTests,
   doubleFollow,
-  flushAndRunMultipleServers,
-  ServerInfo,
+  createMultipleServers,
+  PeerTubeServer,
   setAccessTokensToServers,
   waitJobs
 } from '@shared/extra-utils'
@@ -16,7 +16,7 @@ import { AbuseMessage, AbusePredefinedReasonsString, AbuseState, AdminAbuse, Use
 const expect = chai.expect
 
 describe('Test abuses', function () {
-  let servers: ServerInfo[] = []
+  let servers: PeerTubeServer[] = []
   let abuseServer1: AdminAbuse
   let abuseServer2: AdminAbuse
   let commands: AbusesCommand[]
@@ -25,7 +25,7 @@ describe('Test abuses', function () {
     this.timeout(50000)
 
     // Run servers
-    servers = await flushAndRunMultipleServers(2)
+    servers = await createMultipleServers(2)
 
     // Get the access tokens
     await setAccessTokensToServers(servers)
@@ -389,7 +389,7 @@ describe('Test abuses', function () {
 
   describe('Comment abuses', function () {
 
-    async function getComment (server: ServerInfo, videoIdArg: number | string) {
+    async function getComment (server: PeerTubeServer, videoIdArg: number | string) {
       const videoId = typeof videoIdArg === 'string'
         ? await server.videos.getId({ uuid: videoIdArg })
         : videoIdArg
@@ -591,7 +591,7 @@ describe('Test abuses', function () {
 
   describe('Account abuses', function () {
 
-    function getAccountFromServer (server: ServerInfo, targetName: string, targetServer: ServerInfo) {
+    function getAccountFromServer (server: PeerTubeServer, targetName: string, targetServer: PeerTubeServer) {
       return server.accounts.get({ accountName: targetName + '@' + targetServer.host })
     }
 

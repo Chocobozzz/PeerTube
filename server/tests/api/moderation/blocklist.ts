@@ -7,8 +7,8 @@ import {
   cleanupTests,
   CommentsCommand,
   doubleFollow,
-  flushAndRunMultipleServers,
-  ServerInfo,
+  createMultipleServers,
+  PeerTubeServer,
   setAccessTokensToServers,
   waitJobs
 } from '@shared/extra-utils'
@@ -16,7 +16,7 @@ import { UserNotificationType } from '@shared/models'
 
 const expect = chai.expect
 
-async function checkAllVideos (server: ServerInfo, token: string) {
+async function checkAllVideos (server: PeerTubeServer, token: string) {
   {
     const { data } = await server.videos.listWithToken({ token })
     expect(data).to.have.lengthOf(5)
@@ -28,7 +28,7 @@ async function checkAllVideos (server: ServerInfo, token: string) {
   }
 }
 
-async function checkAllComments (server: ServerInfo, token: string, videoUUID: string) {
+async function checkAllComments (server: PeerTubeServer, token: string, videoUUID: string) {
   const { data } = await server.comments.listThreads({ videoId: videoUUID, start: 0, count: 25, sort: '-createdAt', token })
 
   const threads = data.filter(t => t.isDeleted === false)
@@ -41,8 +41,8 @@ async function checkAllComments (server: ServerInfo, token: string, videoUUID: s
 }
 
 async function checkCommentNotification (
-  mainServer: ServerInfo,
-  comment: { server: ServerInfo, token: string, videoUUID: string, text: string },
+  mainServer: PeerTubeServer,
+  comment: { server: PeerTubeServer, token: string, videoUUID: string, text: string },
   check: 'presence' | 'absence'
 ) {
   const command = comment.server.comments
@@ -63,7 +63,7 @@ async function checkCommentNotification (
 }
 
 describe('Test blocklist', function () {
-  let servers: ServerInfo[]
+  let servers: PeerTubeServer[]
   let videoUUID1: string
   let videoUUID2: string
   let videoUUID3: string
@@ -77,7 +77,7 @@ describe('Test blocklist', function () {
   before(async function () {
     this.timeout(120000)
 
-    servers = await flushAndRunMultipleServers(3)
+    servers = await createMultipleServers(3)
     await setAccessTokensToServers(servers)
 
     command = servers[0].blocklist

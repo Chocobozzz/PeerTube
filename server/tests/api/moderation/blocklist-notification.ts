@@ -2,12 +2,12 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { cleanupTests, doubleFollow, flushAndRunMultipleServers, ServerInfo, setAccessTokensToServers, waitJobs } from '@shared/extra-utils'
+import { cleanupTests, doubleFollow, createMultipleServers, PeerTubeServer, setAccessTokensToServers, waitJobs } from '@shared/extra-utils'
 import { UserNotificationType } from '@shared/models'
 
 const expect = chai.expect
 
-async function checkNotifications (server: ServerInfo, token: string, expected: UserNotificationType[]) {
+async function checkNotifications (server: PeerTubeServer, token: string, expected: UserNotificationType[]) {
   const { data } = await server.notifications.list({ token, start: 0, count: 10, unread: true })
   expect(data).to.have.lengthOf(expected.length)
 
@@ -17,7 +17,7 @@ async function checkNotifications (server: ServerInfo, token: string, expected: 
 }
 
 describe('Test blocklist', function () {
-  let servers: ServerInfo[]
+  let servers: PeerTubeServer[]
   let videoUUID: string
 
   let userToken1: string
@@ -62,7 +62,7 @@ describe('Test blocklist', function () {
   before(async function () {
     this.timeout(60000)
 
-    servers = await flushAndRunMultipleServers(2)
+    servers = await createMultipleServers(2)
     await setAccessTokensToServers(servers)
 
     {

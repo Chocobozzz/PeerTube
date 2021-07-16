@@ -10,13 +10,13 @@ import {
   MockJoinPeerTubeVersions,
   MockSmtpServer,
   prepareNotificationsTest,
-  ServerInfo,
+  PeerTubeServer,
   wait
 } from '@shared/extra-utils'
 import { PluginType, UserNotification, UserNotificationType } from '@shared/models'
 
 describe('Test admin notifications', function () {
-  let server: ServerInfo
+  let server: PeerTubeServer
   let userNotifications: UserNotification[] = []
   let adminNotifications: UserNotification[] = []
   let emails: object[] = []

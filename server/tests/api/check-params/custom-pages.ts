@@ -4,8 +4,8 @@ import 'mocha'
 import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import {
   cleanupTests,
-  flushAndRunServer,
-  ServerInfo,
+  createSingleServer,
+  PeerTubeServer,
   setAccessTokensToServers
 } from '../../../../shared/extra-utils'
 import { makeGetRequest, makePutBodyRequest } from '../../../../shared/extra-utils/requests/requests'
@@ -13,7 +13,7 @@ import { makeGetRequest, makePutBodyRequest } from '../../../../shared/extra-uti
 describe('Test custom pages validators', function () {
   const path = '/api/v1/custom-pages/homepage/instance'
 
-  let server: ServerInfo
+  let server: PeerTubeServer
   let userAccessToken: string
 
   // ---------------------------------------------------------------
@@ -21,7 +21,7 @@ describe('Test custom pages validators', function () {
   before(async function () {
     this.timeout(120000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
     await setAccessTokensToServers([ server ])
 
     const user = { username: 'user1', password: 'password' }

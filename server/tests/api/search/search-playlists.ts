@@ -4,9 +4,9 @@ import 'mocha'
 import * as chai from 'chai'
 import {
   cleanupTests,
-  flushAndRunServer,
+  createSingleServer,
   SearchCommand,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel
 } from '@shared/extra-utils'
@@ -15,13 +15,13 @@ import { VideoPlaylistPrivacy } from '@shared/models'
 const expect = chai.expect
 
 describe('Test playlists search', function () {
-  let server: ServerInfo = null
+  let server: PeerTubeServer = null
   let command: SearchCommand
 
   before(async function () {
     this.timeout(30000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
 
     await setAccessTokensToServers([ server ])
     await setDefaultVideoChannel([ server ])

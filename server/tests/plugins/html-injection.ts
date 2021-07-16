@@ -4,23 +4,23 @@ import 'mocha'
 import * as chai from 'chai'
 import {
   cleanupTests,
-  flushAndRunServer,
+  createSingleServer,
   makeHTMLRequest,
   PluginsCommand,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers
 } from '../../../shared/extra-utils'
 
 const expect = chai.expect
 
 describe('Test plugins HTML injection', function () {
-  let server: ServerInfo = null
+  let server: PeerTubeServer = null
   let command: PluginsCommand
 
   before(async function () {
     this.timeout(30000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
     await setAccessTokensToServers([ server ])
 
     command = server.plugins

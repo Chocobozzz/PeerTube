@@ -4,21 +4,20 @@ import 'mocha'
 import { expect } from 'chai'
 import {
   cleanupTests,
-  flushAndRunServer,
+  createSingleServer,
   killallServers,
   PluginsCommand,
-  reRunServer,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers
 } from '../../../shared/extra-utils'
 
 describe('Test plugin scripts', function () {
-  let server: ServerInfo
+  let server: PeerTubeServer
 
   before(async function () {
     this.timeout(30000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
     await setAccessTokensToServers([ server ])
   })
 
@@ -40,7 +39,7 @@ describe('Test plugin scripts', function () {
     this.timeout(30000)
 
     await killallServers([ server ])
-    await reRunServer(server)
+    await server.run()
 
     const config = await server.config.getConfig()
 
@@ -63,7 +62,7 @@ describe('Test plugin scripts', function () {
     this.timeout(30000)
 
     await killallServers([ server ])
-    await reRunServer(server)
+    await server.run()
 
     const config = await server.config.getConfig()
 

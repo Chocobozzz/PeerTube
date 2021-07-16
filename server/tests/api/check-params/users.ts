@@ -9,15 +9,14 @@ import {
   checkBadSortPagination,
   checkBadStartPagination,
   cleanupTests,
-  flushAndRunServer,
+  createSingleServer,
   killallServers,
   makeGetRequest,
   makePostBodyRequest,
   makePutBodyRequest,
   makeUploadRequest,
   MockSmtpServer,
-  reRunServer,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers,
   UsersCommand
 } from '@shared/extra-utils'
@@ -29,8 +28,8 @@ describe('Test users API validators', function () {
   let rootId: number
   let moderatorId: number
   let video: VideoCreateResult
-  let server: ServerInfo
-  let serverWithRegistrationDisabled: ServerInfo
+  let server: PeerTubeServer
+  let serverWithRegistrationDisabled: PeerTubeServer
   let userToken = ''
   let moderatorToken = ''
   let emailPort: number
@@ -48,8 +47,8 @@ describe('Test users API validators', function () {
 
     {
       const res = await Promise.all([
-        flushAndRunServer(1, overrideConfig),
-        flushAndRunServer(2)
+        createSingleServer(1, overrideConfig),
+        createSingleServer(2)
       ])
 
       server = res[0]
@@ -196,7 +195,7 @@ describe('Test users API validators', function () {
           port: emailPort
         }
       }
-      await reRunServer(server, config)
+      await server.run(config)
 
       const fields = {
         ...baseCorrectParams,

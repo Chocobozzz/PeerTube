@@ -8,25 +8,25 @@ import {
   checkBadSortPagination,
   checkBadStartPagination,
   cleanupTests,
-  flushAndRunServer,
+  createSingleServer,
   makeGetRequest,
   makePostBodyRequest,
   makePutBodyRequest,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers,
   wait
 } from '@shared/extra-utils'
 import { UserNotificationSetting, UserNotificationSettingValue } from '@shared/models'
 
 describe('Test user notifications API validators', function () {
-  let server: ServerInfo
+  let server: PeerTubeServer
 
   // ---------------------------------------------------------------
 
   before(async function () {
     this.timeout(30000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
 
     await setAccessTokensToServers([ server ])
   })

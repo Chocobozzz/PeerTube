@@ -6,11 +6,11 @@ import { HttpStatusCode } from '@shared/core-utils'
 import {
   cleanupTests,
   doubleFollow,
-  flushAndRunMultipleServers,
+  createMultipleServers,
   ImportsCommand,
   makeRawRequest,
   PluginsCommand,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel,
   waitJobs
@@ -20,14 +20,14 @@ import { VideoDetails, VideoImportState, VideoPlaylist, VideoPlaylistPrivacy, Vi
 const expect = chai.expect
 
 describe('Test plugin filter hooks', function () {
-  let servers: ServerInfo[]
+  let servers: PeerTubeServer[]
   let videoUUID: string
   let threadId: number
 
   before(async function () {
     this.timeout(60000)
 
-    servers = await flushAndRunMultipleServers(2)
+    servers = await createMultipleServers(2)
     await setAccessTokensToServers(servers)
     await setDefaultVideoChannel(servers)
     await doubleFollow(servers[0], servers[1])

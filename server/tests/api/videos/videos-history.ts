@@ -5,11 +5,10 @@ import * as chai from 'chai'
 import { HttpStatusCode } from '@shared/core-utils'
 import {
   cleanupTests,
-  flushAndRunServer,
+  createSingleServer,
   HistoryCommand,
   killallServers,
-  reRunServer,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers,
   wait
 } from '@shared/extra-utils'
@@ -18,7 +17,7 @@ import { Video } from '@shared/models'
 const expect = chai.expect
 
 describe('Test videos history', function () {
-  let server: ServerInfo = null
+  let server: PeerTubeServer = null
   let video1UUID: string
   let video2UUID: string
   let video3UUID: string
@@ -29,7 +28,7 @@ describe('Test videos history', function () {
   before(async function () {
     this.timeout(30000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
 
     await setAccessTokensToServers([ server ])
 
@@ -191,7 +190,7 @@ describe('Test videos history', function () {
 
     await killallServers([ server ])
 
-    await reRunServer(server, { history: { videos: { max_age: '10 days' } } })
+    await server.run({ history: { videos: { max_age: '10 days' } } })
 
     await wait(6000)
 
@@ -206,7 +205,7 @@ describe('Test videos history', function () {
 
     await killallServers([ server ])
 
-    await reRunServer(server, { history: { videos: { max_age: '5 seconds' } } })
+    await server.run({ history: { videos: { max_age: '5 seconds' } } })
 
     await wait(6000)
 

@@ -11,12 +11,11 @@ import {
   checkVideoFilesWereRemoved,
   cleanupTests,
   doubleFollow,
-  flushAndRunMultipleServers,
+  createMultipleServers,
   killallServers,
   makeGetRequest,
-  reRunServer,
   root,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers,
   wait,
   waitJobs
@@ -25,11 +24,11 @@ import { VideoPrivacy, VideoRedundancyStrategy, VideoRedundancyStrategyWithManua
 
 const expect = chai.expect
 
-let servers: ServerInfo[] = []
+let servers: PeerTubeServer[] = []
 let video1Server2UUID: string
 let video1Server2Id: number
 
-function checkMagnetWebseeds (file: { magnetUri: string, resolution: { id: number } }, baseWebseeds: string[], server: ServerInfo) {
+function checkMagnetWebseeds (file: { magnetUri: string, resolution: { id: number } }, baseWebseeds: string[], server: PeerTubeServer) {
   const parsed = magnetUtil.decode(file.magnetUri)
 
   for (const ws of baseWebseeds) {
@@ -40,7 +39,7 @@ function checkMagnetWebseeds (file: { magnetUri: string, resolution: { id: numbe
   expect(parsed.urlList).to.have.lengthOf(baseWebseeds.length)
 }
 
-async function flushAndRunServers (strategy: VideoRedundancyStrategy | null, additionalParams: any = {}, withWebtorrent = true) {
+async function createSingleServers (strategy: VideoRedundancyStrategy | null, additionalParams: any = {}, withWebtorrent = true) {
   const strategies: any[] = []
 
   if (strategy !== null) {
@@ -72,7 +71,7 @@ async function flushAndRunServers (strategy: VideoRedundancyStrategy | null, add
     }
   }
 
-  servers = await flushAndRunMultipleServers(3, config)
+  servers = await createMultipleServers(3, config)
 
   // Get the access tokens
   await setAccessTokensToServers(servers)
@@ -288,7 +287,7 @@ describe('Test videos redundancy', function () {
     before(function () {
       this.timeout(120000)
 
-      return flushAndRunServers(strategy)
+      return createSingleServers(strategy)
     })
 
     it('Should have 1 webseed on the first video', async function () {
@@ -338,7 +337,7 @@ describe('Test videos redundancy', function () {
     before(function () {
       this.timeout(120000)
 
-      return flushAndRunServers(strategy)
+      return createSingleServers(strategy)
     })
 
     it('Should have 1 webseed on the first video', async function () {
@@ -388,7 +387,7 @@ describe('Test videos redundancy', function () {
     before(function () {
       this.timeout(120000)
 
-      return flushAndRunServers(strategy, { min_views: 3 })
+      return createSingleServers(strategy, { min_views: 3 })
     })
 
     it('Should have 1 webseed on the first video', async function () {
@@ -458,7 +457,7 @@ describe('Test videos redundancy', function () {
     before(async function () {
       this.timeout(120000)
 
-      await flushAndRunServers(strategy, { min_views: 3 }, false)
+      await createSingleServers(strategy, { min_views: 3 }, false)
     })
 
     it('Should have 0 playlist redundancy on the first video', async function () {
@@ -519,7 +518,7 @@ describe('Test videos redundancy', function () {
     before(function () {
       this.timeout(120000)
 
-      return flushAndRunServers(null)
+      return createSingleServers(null)
     })
 
     it('Should have 1 webseed on the first video', async function () {
@@ -575,7 +574,7 @@ describe('Test videos redundancy', function () {
   describe('Test expiration', function () {
     const strategy = 'recently-added'
 
-    async function checkContains (servers: ServerInfo[], str: string) {
+    async function checkContains (servers: PeerTubeServer[], str: string) {
       for (const server of servers) {
         const video = await server.videos.get({ id: video1Server2UUID })
 
@@ -585,7 +584,7 @@ describe('Test videos redundancy', function () {
       }
     }
 
-    async function checkNotContains (servers: ServerInfo[], str: string) {
+    async function checkNotContains (servers: PeerTubeServer[], str: string) {
       for (const server of servers) {
         const video = await server.videos.get({ id: video1Server2UUID })
 
@@ -598,7 +597,7 @@ describe('Test videos redundancy', function () {
     before(async function () {
       this.timeout(120000)
 
-      await flushAndRunServers(strategy, { min_lifetime: '7 seconds', min_views: 0 })
+      await createSingleServers(strategy, { min_lifetime: '7 seconds', min_views: 0 })
 
       await enableRedundancyOnServer1()
     })
@@ -640,7 +639,7 @@ describe('Test videos redundancy', function () {
     before(async function () {
       this.timeout(120000)
 
-      await flushAndRunServers(strategy, { min_lifetime: '7 seconds', min_views: 0 })
+      await createSingleServers(strategy, { min_lifetime: '7 seconds', min_views: 0 })
 
       await enableRedundancyOnServer1()
 
@@ -691,7 +690,7 @@ describe('Test videos redundancy', function () {
       await waitJobs(servers)
 
       await killallServers([ servers[0] ])
-      await reRunServer(servers[0], {
+      await servers[0].run({
         redundancy: {
           videos: {
             check_interval: '1 second',

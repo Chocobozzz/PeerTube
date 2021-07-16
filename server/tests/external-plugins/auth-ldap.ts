@@ -3,17 +3,17 @@
 import 'mocha'
 import { expect } from 'chai'
 import { HttpStatusCode } from '@shared/core-utils'
-import { cleanupTests, flushAndRunServer, ServerInfo, setAccessTokensToServers } from '@shared/extra-utils'
+import { cleanupTests, createSingleServer, PeerTubeServer, setAccessTokensToServers } from '@shared/extra-utils'
 
 describe('Official plugin auth-ldap', function () {
-  let server: ServerInfo
+  let server: PeerTubeServer
   let accessToken: string
   let userId: number
 
   before(async function () {
     this.timeout(30000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
     await setAccessTokensToServers([ server ])
 
     await server.plugins.install({ npmName: 'peertube-plugin-auth-ldap' })

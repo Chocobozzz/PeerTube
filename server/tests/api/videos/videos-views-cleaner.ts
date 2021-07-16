@@ -5,10 +5,9 @@ import * as chai from 'chai'
 import {
   cleanupTests,
   doubleFollow,
-  flushAndRunMultipleServers,
+  createMultipleServers,
   killallServers,
-  reRunServer,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers,
   wait,
   waitJobs
@@ -17,7 +16,7 @@ import {
 const expect = chai.expect
 
 describe('Test video views cleaner', function () {
-  let servers: ServerInfo[]
+  let servers: PeerTubeServer[]
 
   let videoIdServer1: string
   let videoIdServer2: string
@@ -25,7 +24,7 @@ describe('Test video views cleaner', function () {
   before(async function () {
     this.timeout(120000)
 
-    servers = await flushAndRunMultipleServers(2)
+    servers = await createMultipleServers(2)
     await setAccessTokensToServers(servers)
 
     await doubleFollow(servers[0], servers[1])
@@ -48,7 +47,7 @@ describe('Test video views cleaner', function () {
 
     await killallServers([ servers[0] ])
 
-    await reRunServer(servers[0], { views: { videos: { remote: { max_age: '10 days' } } } })
+    await servers[0].run({ views: { videos: { remote: { max_age: '10 days' } } } })
 
     await wait(6000)
 
@@ -74,7 +73,7 @@ describe('Test video views cleaner', function () {
 
     await killallServers([ servers[0] ])
 
-    await reRunServer(servers[0], { views: { videos: { remote: { max_age: '5 seconds' } } } })
+    await servers[0].run({ views: { videos: { remote: { max_age: '5 seconds' } } } })
 
     await wait(6000)
 

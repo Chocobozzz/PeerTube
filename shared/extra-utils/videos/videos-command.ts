@@ -22,7 +22,7 @@ import {
 } from '@shared/models'
 import { buildAbsoluteFixturePath, wait } from '../miscs'
 import { unwrapBody } from '../requests'
-import { ServerInfo, waitJobs } from '../server'
+import { PeerTubeServer, waitJobs } from '../server'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
 
 export type VideoEdit = Partial<Omit<VideoCreate, 'thumbnailfile' | 'previewfile'>> & {
@@ -33,7 +33,7 @@ export type VideoEdit = Partial<Omit<VideoCreate, 'thumbnailfile' | 'previewfile
 
 export class VideosCommand extends AbstractCommand {
 
-  constructor (server: ServerInfo) {
+  constructor (server: PeerTubeServer) {
     super(server)
 
     loadLanguages()

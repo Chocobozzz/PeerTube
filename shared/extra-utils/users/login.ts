@@ -1,6 +1,6 @@
-import { ServerInfo } from '../server/servers'
+import { PeerTubeServer } from '../server/server'
 
-function setAccessTokensToServers (servers: ServerInfo[]) {
+function setAccessTokensToServers (servers: PeerTubeServer[]) {
   const tasks: Promise<any>[] = []
 
   for (const server of servers) {

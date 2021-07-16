@@ -6,8 +6,8 @@ import {
   cleanupTests,
   CommentsCommand,
   dateIsValid,
-  flushAndRunServer,
-  ServerInfo,
+  createSingleServer,
+  PeerTubeServer,
   setAccessTokensToServers,
   testImage
 } from '@shared/extra-utils'
@@ -15,7 +15,7 @@ import {
 const expect = chai.expect
 
 describe('Test video comments', function () {
-  let server: ServerInfo
+  let server: PeerTubeServer
   let videoId: number
   let videoUUID: string
   let threadId: number
@@ -28,7 +28,7 @@ describe('Test video comments', function () {
   before(async function () {
     this.timeout(30000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
 
     await setAccessTokensToServers([ server ])
 

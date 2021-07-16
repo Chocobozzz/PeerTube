@@ -6,9 +6,9 @@ import { join } from 'path'
 import {
   cleanupTests,
   doubleFollow,
-  flushAndRunMultipleServers,
+  createMultipleServers,
   generateHighBitrateVideo,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers,
   wait,
   waitJobs
@@ -20,13 +20,13 @@ import { VIDEO_TRANSCODING_FPS } from '../../initializers/constants'
 const expect = chai.expect
 
 describe('Test optimize old videos', function () {
-  let servers: ServerInfo[] = []
+  let servers: PeerTubeServer[] = []
 
   before(async function () {
     this.timeout(200000)
 
     // Run server 2 to have transcoding enabled
-    servers = await flushAndRunMultipleServers(2)
+    servers = await createMultipleServers(2)
     await setAccessTokensToServers(servers)
 
     await doubleFollow(servers[0], servers[1])

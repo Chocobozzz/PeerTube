@@ -2,10 +2,10 @@ import { expect } from 'chai'
 import { sha256 } from '@server/helpers/core-utils'
 import { HttpStatusCode } from '@shared/core-utils'
 import { VideoStreamingPlaylist } from '@shared/models'
-import { ServerInfo } from '../server'
+import { PeerTubeServer } from '../server'
 
 async function checkSegmentHash (options: {
-  server: ServerInfo
+  server: PeerTubeServer
   baseUrlPlaylist: string
   baseUrlSegment: string
   videoUUID: string
@@ -36,7 +36,7 @@ async function checkSegmentHash (options: {
 }
 
 async function checkLiveSegmentHash (options: {
-  server: ServerInfo
+  server: PeerTubeServer
   baseUrlSegment: string
   videoUUID: string
   segmentName: string
@@ -52,7 +52,7 @@ async function checkLiveSegmentHash (options: {
 }
 
 async function checkResolutionsInMasterPlaylist (options: {
-  server: ServerInfo
+  server: PeerTubeServer
   playlistUrl: string
   resolutions: number[]
 }) {

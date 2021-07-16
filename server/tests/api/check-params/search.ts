@@ -7,13 +7,13 @@ import {
   checkBadSortPagination,
   checkBadStartPagination,
   cleanupTests,
-  flushAndRunServer,
+  createSingleServer,
   makeGetRequest,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers
 } from '@shared/extra-utils'
 
-function updateSearchIndex (server: ServerInfo, enabled: boolean, disableLocalSearch = false) {
+function updateSearchIndex (server: PeerTubeServer, enabled: boolean, disableLocalSearch = false) {
   return server.config.updateCustomSubConfig({
     newConfig: {
       search: {
@@ -27,14 +27,14 @@ function updateSearchIndex (server: ServerInfo, enabled: boolean, disableLocalSe
 }
 
 describe('Test videos API validator', function () {
-  let server: ServerInfo
+  let server: PeerTubeServer
 
   // ---------------------------------------------------------------
 
   before(async function () {
     this.timeout(30000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
     await setAccessTokensToServers([ server ])
   })
 

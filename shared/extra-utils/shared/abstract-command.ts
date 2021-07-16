@@ -9,7 +9,7 @@ import {
   unwrapBody,
   unwrapText
 } from '../requests/requests'
-import { ServerInfo } from '../server/servers'
+import { PeerTubeServer } from '../server/server'
 
 export interface OverrideCommandOptions {
   token?: string
@@ -38,7 +38,7 @@ interface InternalGetCommandOptions extends InternalCommonCommandOptions {
 abstract class AbstractCommand {
 
   constructor (
-    protected server: ServerInfo
+    protected server: PeerTubeServer
   ) {
 
   }

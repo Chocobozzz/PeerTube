@@ -4,9 +4,9 @@ import 'mocha'
 import * as chai from 'chai'
 import {
   cleanupTests,
-  flushAndRunMultipleServers,
+  createMultipleServers,
   SearchCommand,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers,
   wait,
   waitJobs
@@ -16,7 +16,7 @@ import { VideoPrivacy } from '@shared/models'
 const expect = chai.expect
 
 describe('Test ActivityPub videos search', function () {
-  let servers: ServerInfo[]
+  let servers: PeerTubeServer[]
   let videoServer1UUID: string
   let videoServer2UUID: string
 
@@ -25,7 +25,7 @@ describe('Test ActivityPub videos search', function () {
   before(async function () {
     this.timeout(120000)
 
-    servers = await flushAndRunMultipleServers(2)
+    servers = await createMultipleServers(2)
 
     await setAccessTokensToServers(servers)
 

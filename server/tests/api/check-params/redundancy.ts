@@ -9,18 +9,18 @@ import {
   checkBadStartPagination,
   cleanupTests,
   doubleFollow,
-  flushAndRunMultipleServers,
+  createMultipleServers,
   makeDeleteRequest,
   makeGetRequest,
   makePostBodyRequest,
   makePutBodyRequest,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers,
   waitJobs
 } from '../../../../shared/extra-utils'
 
 describe('Test server redundancy API validators', function () {
-  let servers: ServerInfo[]
+  let servers: PeerTubeServer[]
   let userAccessToken = null
   let videoIdLocal: number
   let videoRemote: VideoCreateResult
@@ -30,7 +30,7 @@ describe('Test server redundancy API validators', function () {
   before(async function () {
     this.timeout(80000)
 
-    servers = await flushAndRunMultipleServers(2)
+    servers = await createMultipleServers(2)
 
     await setAccessTokensToServers(servers)
     await doubleFollow(servers[0], servers[1])

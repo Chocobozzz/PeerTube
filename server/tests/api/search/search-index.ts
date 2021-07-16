@@ -2,7 +2,7 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { cleanupTests, flushAndRunServer, SearchCommand, ServerInfo, setAccessTokensToServers } from '@shared/extra-utils'
+import { cleanupTests, createSingleServer, SearchCommand, PeerTubeServer, setAccessTokensToServers } from '@shared/extra-utils'
 import { BooleanBothQuery, VideoPlaylistPrivacy, VideoPlaylistType, VideosSearchQuery } from '@shared/models'
 
 const expect = chai.expect
@@ -10,13 +10,13 @@ const expect = chai.expect
 describe('Test videos search', function () {
   const localVideoName = 'local video' + new Date().toISOString()
 
-  let server: ServerInfo = null
+  let server: PeerTubeServer = null
   let command: SearchCommand
 
   before(async function () {
     this.timeout(30000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
 
     await setAccessTokensToServers([ server ])
 

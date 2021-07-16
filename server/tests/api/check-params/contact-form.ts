@@ -2,11 +2,11 @@
 
 import 'mocha'
 import { HttpStatusCode } from '@shared/core-utils'
-import { cleanupTests, flushAndRunServer, killallServers, MockSmtpServer, reRunServer, ServerInfo } from '@shared/extra-utils'
+import { cleanupTests, createSingleServer, killallServers, MockSmtpServer, PeerTubeServer } from '@shared/extra-utils'
 import { ContactFormCommand } from '@shared/extra-utils/server'
 
 describe('Test contact form API validators', function () {
-  let server: ServerInfo
+  let server: PeerTubeServer
   const emails: object[] = []
   const defaultBody = {
     fromName: 'super name',
@@ -25,7 +25,7 @@ describe('Test contact form API validators', function () {
     emailPort = await MockSmtpServer.Instance.collectEmails(emails)
 
     // Email is disabled
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
     command = server.contactForm
   })
 
@@ -39,7 +39,7 @@ describe('Test contact form API validators', function () {
     await killallServers([ server ])
 
     // Contact form is disabled
-    await reRunServer(server, { smtp: { hostname: 'localhost', port: emailPort }, contact_form: { enabled: false } })
+    await server.run({ smtp: { hostname: 'localhost', port: emailPort }, contact_form: { enabled: false } })
     await command.send({ ...defaultBody, expectedStatus: HttpStatusCode.CONFLICT_409 })
   })
 
@@ -49,7 +49,7 @@ describe('Test contact form API validators', function () {
     await killallServers([ server ])
 
     // Email & contact form enabled
-    await reRunServer(server, { smtp: { hostname: 'localhost', port: emailPort } })
+    await server.run({ smtp: { hostname: 'localhost', port: emailPort } })
 
     await command.send({ ...defaultBody, fromEmail: 'badEmail', expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     await command.send({ ...defaultBody, fromEmail: 'badEmail@', expectedStatus: HttpStatusCode.BAD_REQUEST_400 })

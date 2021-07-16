@@ -9,10 +9,10 @@ import {
   checkBadStartPagination,
   cleanupTests,
   doubleFollow,
-  flushAndRunServer,
+  createSingleServer,
   makeGetRequest,
   makePostBodyRequest,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers,
   waitJobs
 } from '@shared/extra-utils'
@@ -21,7 +21,7 @@ import { AbuseCreate, AbuseState } from '@shared/models'
 describe('Test abuses API validators', function () {
   const basePath = '/api/v1/abuses/'
 
-  let server: ServerInfo
+  let server: PeerTubeServer
 
   let userToken = ''
   let userToken2 = ''
@@ -35,7 +35,7 @@ describe('Test abuses API validators', function () {
   before(async function () {
     this.timeout(30000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
 
     await setAccessTokensToServers([ server ])
 
@@ -404,12 +404,12 @@ describe('Test abuses API validators', function () {
 
   describe('When trying to manage messages of a remote abuse', function () {
     let remoteAbuseId: number
-    let anotherServer: ServerInfo
+    let anotherServer: PeerTubeServer
 
     before(async function () {
       this.timeout(50000)
 
-      anotherServer = await flushAndRunServer(2)
+      anotherServer = await createSingleServer(2)
       await setAccessTokensToServers([ anotherServer ])
 
       await doubleFollow(anotherServer, server)

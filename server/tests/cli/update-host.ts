@@ -4,18 +4,17 @@ import 'mocha'
 import { expect } from 'chai'
 import {
   cleanupTests,
-  flushAndRunServer,
+  createSingleServer,
   killallServers,
   makeActivityPubGetRequest,
   parseTorrentVideo,
-  reRunServer,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers,
   waitJobs
 } from '@shared/extra-utils'
 
 describe('Test update host scripts', function () {
-  let server: ServerInfo
+  let server: PeerTubeServer
 
   before(async function () {
     this.timeout(60000)
@@ -26,7 +25,7 @@ describe('Test update host scripts', function () {
       }
     }
     // Run server 2 to have transcoding enabled
-    server = await flushAndRunServer(2, overrideConfig)
+    server = await createSingleServer(2, overrideConfig)
     await setAccessTokensToServers([ server ])
 
     // Upload two videos for our needs
@@ -56,7 +55,7 @@ describe('Test update host scripts', function () {
 
     await killallServers([ server ])
     // Run server with standard configuration
-    await reRunServer(server)
+    await server.run()
 
     await server.cli.execWithEnv(`npm run update-host`)
   })

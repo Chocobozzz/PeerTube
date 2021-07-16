@@ -1,12 +1,12 @@
 import * as autocannon from 'autocannon'
 import { writeJson } from 'fs-extra'
-import { flushAndRunServer, killallServers, ServerInfo, setAccessTokensToServers } from '@shared/extra-utils'
+import { createSingleServer, killallServers, PeerTubeServer, setAccessTokensToServers } from '@shared/extra-utils'
 import { Video, VideoPrivacy } from '@shared/models'
 import { registerTSPaths } from '../server/helpers/register-ts-paths'
 
 registerTSPaths()
 
-let server: ServerInfo
+let server: PeerTubeServer
 let video: Video
 let threadId: number
 
@@ -188,7 +188,7 @@ function runBenchmark (options: {
 }
 
 async function prepare () {
-  server = await flushAndRunServer(1, {
+  server = await createSingleServer(1, {
     rates_limit: {
       api: {
         max: 5_000_000

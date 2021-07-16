@@ -8,10 +8,10 @@ import { Account, HTMLServerConfig, ServerConfig, VideoPlaylistCreateResult, Vid
 import {
   cleanupTests,
   doubleFollow,
-  flushAndRunMultipleServers,
+  createMultipleServers,
   makeGetRequest,
   makeHTMLRequest,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel,
   waitJobs
@@ -29,7 +29,7 @@ function checkIndexTags (html: string, title: string, description: string, css: 
 }
 
 describe('Test a client controllers', function () {
-  let servers: ServerInfo[] = []
+  let servers: PeerTubeServer[] = []
   let account: Account
 
   const videoName = 'my super name for server 1'
@@ -51,7 +51,7 @@ describe('Test a client controllers', function () {
   before(async function () {
     this.timeout(120000)
 
-    servers = await flushAndRunMultipleServers(2)
+    servers = await createMultipleServers(2)
 
     await setAccessTokensToServers(servers)
 

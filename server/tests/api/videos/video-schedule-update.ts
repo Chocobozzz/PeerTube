@@ -5,8 +5,8 @@ import * as chai from 'chai'
 import {
   cleanupTests,
   doubleFollow,
-  flushAndRunMultipleServers,
-  ServerInfo,
+  createMultipleServers,
+  PeerTubeServer,
   setAccessTokensToServers,
   wait,
   waitJobs
@@ -23,14 +23,14 @@ function in10Seconds () {
 }
 
 describe('Test video update scheduler', function () {
-  let servers: ServerInfo[] = []
+  let servers: PeerTubeServer[] = []
   let video2UUID: string
 
   before(async function () {
     this.timeout(30000)
 
     // Run servers
-    servers = await flushAndRunMultipleServers(2)
+    servers = await createMultipleServers(2)
 
     await setAccessTokensToServers(servers)
 

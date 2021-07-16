@@ -8,8 +8,8 @@ import {
   cleanupTests,
   ConfigCommand,
   doubleFollow,
-  flushAndRunMultipleServers,
-  ServerInfo,
+  createMultipleServers,
+  PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel,
   wait,
@@ -19,7 +19,7 @@ import {
 const expect = chai.expect
 
 describe('Test live constraints', function () {
-  let servers: ServerInfo[] = []
+  let servers: PeerTubeServer[] = []
   let userId: number
   let userAccessToken: string
   let userChannelId: number
@@ -63,7 +63,7 @@ describe('Test live constraints', function () {
   before(async function () {
     this.timeout(120000)
 
-    servers = await flushAndRunMultipleServers(2)
+    servers = await createMultipleServers(2)
 
     // Get the access tokens
     await setAccessTokensToServers(servers)

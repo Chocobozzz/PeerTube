@@ -5,19 +5,18 @@ import * as chai from 'chai'
 import { HttpStatusCode } from '@shared/core-utils'
 import {
   cleanupTests,
-  flushAndRunServer,
+  createSingleServer,
   killallServers,
   makeGetRequest,
   parallelTests,
-  reRunServer,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers
 } from '@shared/extra-utils'
 import { CustomConfig } from '@shared/models'
 
 const expect = chai.expect
 
-function checkInitialConfig (server: ServerInfo, data: CustomConfig) {
+function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
   expect(data.instance.name).to.equal('PeerTube')
   expect(data.instance.shortDescription).to.equal(
     'PeerTube, an ActivityPub-federated video streaming platform using P2P directly in your web browser.'
@@ -204,12 +203,12 @@ function checkUpdatedConfig (data: CustomConfig) {
 }
 
 describe('Test config', function () {
-  let server: ServerInfo = null
+  let server: PeerTubeServer = null
 
   before(async function () {
     this.timeout(30000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
     await setAccessTokensToServers([ server ])
   })
 
@@ -456,7 +455,7 @@ describe('Test config', function () {
 
     await killallServers([ server ])
 
-    await reRunServer(server)
+    await server.run()
 
     const data = await server.config.getCustomConfig()
 
@@ -512,7 +511,7 @@ describe('Test config', function () {
         frameguard: { enabled: false }
       }
     }
-    server = await reRunServer(server, config)
+    await server.run(config)
 
     {
       const res = await makeGetRequest({
