@@ -5,14 +5,14 @@ import { logger } from '@server/helpers/logger'
 import { doJSONRequest } from '@server/helpers/requests'
 import { getFormattedObjects } from '@server/helpers/utils'
 import { CONFIG } from '@server/initializers/config'
+import { WEBSERVER } from '@server/initializers/constants'
 import { getOrCreateAPVideoPlaylist } from '@server/lib/activitypub/playlists/get'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { buildMutedForSearchIndex, isSearchIndexSearch, isURISearch } from '@server/lib/search'
 import { getServerActor } from '@server/models/application/application'
 import { VideoPlaylistModel } from '@server/models/video/video-playlist'
 import { MVideoPlaylistFullSummary } from '@server/types/models'
-import { HttpStatusCode } from '@shared/models'
-import { ResultList, VideoPlaylist, VideoPlaylistsSearchQuery } from '@shared/models'
+import { HttpStatusCode, ResultList, VideoPlaylist, VideoPlaylistsSearchQuery } from '@shared/models'
 import {
   asyncMiddleware,
   openapiOperationDoc,
@@ -23,7 +23,6 @@ import {
   videoPlaylistsListSearchValidator,
   videoPlaylistsSearchSortValidator
 } from '../../../middlewares'
-import { WEBSERVER } from '@server/initializers/constants'
 
 const searchPlaylistsRouter = express.Router()
 

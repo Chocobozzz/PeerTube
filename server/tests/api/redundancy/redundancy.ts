@@ -5,22 +5,21 @@ import * as chai from 'chai'
 import { readdir } from 'fs-extra'
 import * as magnetUtil from 'magnet-uri'
 import { join } from 'path'
-import { HttpStatusCode } from '@shared/models'
 import {
   checkSegmentHash,
   checkVideoFilesWereRemoved,
   cleanupTests,
-  doubleFollow,
   createMultipleServers,
+  doubleFollow,
   killallServers,
   makeGetRequest,
-  root,
   PeerTubeServer,
+  root,
   setAccessTokensToServers,
   wait,
   waitJobs
 } from '@shared/extra-utils'
-import { VideoPrivacy, VideoRedundancyStrategy, VideoRedundancyStrategyWithManual } from '@shared/models'
+import { HttpStatusCode, VideoPrivacy, VideoRedundancyStrategy, VideoRedundancyStrategyWithManual } from '@shared/models'
 
 const expect = chai.expect
 

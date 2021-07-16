@@ -6,8 +6,8 @@ import {
   cleanupTests,
   createSingleServer,
   makeHTMLRequest,
-  PluginsCommand,
   PeerTubeServer,
+  PluginsCommand,
   setAccessTokensToServers
 } from '../../../shared/extra-utils'
 

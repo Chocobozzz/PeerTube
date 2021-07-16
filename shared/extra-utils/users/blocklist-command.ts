@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { HttpStatusCode } from '@shared/models'
-import { AccountBlock, ResultList, ServerBlock } from '@shared/models'
+import { AccountBlock, HttpStatusCode, ResultList, ServerBlock } from '@shared/models'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
 
 type ListBlocklistOptions = OverrideCommandOptions & {

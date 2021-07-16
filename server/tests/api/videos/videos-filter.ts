@@ -2,16 +2,15 @@
 
 import 'mocha'
 import { expect } from 'chai'
-import { HttpStatusCode } from '@shared/models'
 import {
   cleanupTests,
-  doubleFollow,
   createMultipleServers,
+  doubleFollow,
   makeGetRequest,
   PeerTubeServer,
   setAccessTokensToServers
 } from '@shared/extra-utils'
-import { UserRole, Video, VideoPrivacy } from '@shared/models'
+import { HttpStatusCode, UserRole, Video, VideoPrivacy } from '@shared/models'
 
 async function getVideosNames (server: PeerTubeServer, token: string, filter: string, expectedStatus = HttpStatusCode.OK_200) {
   const paths = [

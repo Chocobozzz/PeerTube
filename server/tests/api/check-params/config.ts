@@ -2,7 +2,6 @@
 
 import 'mocha'
 import { omit } from 'lodash'
-import { HttpStatusCode } from '@shared/models'
 import {
   cleanupTests,
   createSingleServer,
@@ -12,7 +11,7 @@ import {
   PeerTubeServer,
   setAccessTokensToServers
 } from '@shared/extra-utils'
-import { CustomConfig } from '@shared/models'
+import { CustomConfig, HttpStatusCode } from '@shared/models'
 
 describe('Test config API validators', function () {
   const path = '/api/v1/config/custom'

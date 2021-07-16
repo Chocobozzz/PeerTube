@@ -1,5 +1,4 @@
-import { HttpStatusCode } from '@shared/models'
-import { VideosOverview } from '@shared/models'
+import { HttpStatusCode, VideosOverview } from '@shared/models'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
 
 export class OverviewsCommand extends AbstractCommand {

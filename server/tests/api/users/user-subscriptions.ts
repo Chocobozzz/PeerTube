@@ -4,8 +4,8 @@ import 'mocha'
 import * as chai from 'chai'
 import {
   cleanupTests,
-  doubleFollow,
   createMultipleServers,
+  doubleFollow,
   PeerTubeServer,
   setAccessTokensToServers,
   SubscriptionsCommand,
@@ -67,7 +67,8 @@ describe('Test users subscriptions', function () {
 
     await waitJobs(servers)
 
-    const { uuid } = await servers[2].videos.upload({ attributes: { name: 'video server 3 added after follow' } })
+    const attributes = { name: 'video server 3 added after follow' }
+    const { uuid } = await servers[2].videos.upload({ token: users[2].accessToken, attributes })
     video3UUID = uuid
 
     await waitJobs(servers)

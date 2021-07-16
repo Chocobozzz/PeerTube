@@ -120,7 +120,7 @@ describe('Test plugin action hooks', function () {
     })
 
     it('Should run action:api.user.oauth2-got-token', async function () {
-      await servers[0].login.getAccessToken('created_user', 'super_password')
+      await servers[0].login.login({ user: { username: 'created_user' } })
 
       await checkHook('action:api.user.oauth2-got-token')
     })

@@ -4,7 +4,7 @@ import 'mocha'
 import * as chai from 'chai'
 import { join } from 'path'
 import { getAudioStream, getVideoStreamSize } from '@server/helpers/ffprobe-utils'
-import { cleanupTests, doubleFollow, createMultipleServers, PeerTubeServer, setAccessTokensToServers, waitJobs } from '@shared/extra-utils'
+import { cleanupTests, createMultipleServers, doubleFollow, PeerTubeServer, setAccessTokensToServers, waitJobs } from '@shared/extra-utils'
 
 const expect = chai.expect
 

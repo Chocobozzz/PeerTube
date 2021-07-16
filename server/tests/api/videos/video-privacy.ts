@@ -2,9 +2,8 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { HttpStatusCode } from '@shared/models'
-import { cleanupTests, doubleFollow, createSingleServer, PeerTubeServer, setAccessTokensToServers, waitJobs } from '@shared/extra-utils'
-import { VideoCreateResult, VideoPrivacy } from '@shared/models'
+import { cleanupTests, createSingleServer, doubleFollow, PeerTubeServer, setAccessTokensToServers, waitJobs } from '@shared/extra-utils'
+import { HttpStatusCode, VideoCreateResult, VideoPrivacy } from '@shared/models'
 
 const expect = chai.expect
 
@@ -162,7 +161,7 @@ describe('Test video privacy', function () {
     })
 
     it('Should not be able to get this unlisted video using its id', async function () {
-      await servers[1].videos.get({ id: unlistedVideo.id, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+      await servers[1].videos.get({ id: unlistedVideo.id, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
     })
 
     it('Should be able to get this unlisted video using its uuid/shortUUID', async function () {

@@ -2,7 +2,6 @@
 
 import 'mocha'
 import { omit } from 'lodash'
-import { HttpStatusCode } from '@shared/models'
 import {
   buildAbsoluteFixturePath,
   checkBadCountPagination,
@@ -17,7 +16,7 @@ import {
   PeerTubeServer,
   setAccessTokensToServers
 } from '@shared/extra-utils'
-import { VideoPrivacy } from '@shared/models'
+import { HttpStatusCode, VideoPrivacy } from '@shared/models'
 
 describe('Test video imports API validator', function () {
   const path = '/api/v1/videos/imports'

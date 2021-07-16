@@ -1,6 +1,6 @@
 import { omit, pick } from 'lodash'
-import { HttpStatusCode } from '@shared/models'
 import {
+  HttpStatusCode,
   MyUser,
   ResultList,
   User,

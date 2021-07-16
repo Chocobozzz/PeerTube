@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-import { HttpStatusCode } from '@shared/models'
 import {
   checkBadCountPagination,
   checkBadSortPagination,
@@ -12,6 +11,7 @@ import {
   PeerTubeServer,
   setAccessTokensToServers
 } from '@shared/extra-utils'
+import { HttpStatusCode } from '@shared/models'
 
 function updateSearchIndex (server: PeerTubeServer, enabled: boolean, disableLocalSearch = false) {
   return server.config.updateCustomSubConfig({

@@ -4,8 +4,8 @@ import 'mocha'
 import * as chai from 'chai'
 import {
   cleanupTests,
-  doubleFollow,
   createMultipleServers,
+  doubleFollow,
   killallServers,
   PeerTubeServer,
   setAccessTokensToServers,

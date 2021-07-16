@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-import { HttpStatusCode } from '@shared/models'
 import {
   checkBadCountPagination,
   checkBadSortPagination,
@@ -10,6 +9,7 @@ import {
   createSingleServer,
   PeerTubeServer
 } from '@shared/extra-utils'
+import { HttpStatusCode } from '@shared/models'
 
 describe('Test accounts API validators', function () {
   const path = '/api/v1/accounts/'

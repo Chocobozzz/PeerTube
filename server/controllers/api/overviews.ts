@@ -1,12 +1,12 @@
 import * as express from 'express'
-import { buildNSFWFilter } from '../../helpers/express-utils'
-import { VideoModel } from '../../models/video/video'
-import { asyncMiddleware, optionalAuthenticate, videosOverviewValidator } from '../../middlewares'
-import { TagModel } from '../../models/video/tag'
-import { CategoryOverview, ChannelOverview, TagOverview, VideosOverview } from '../../../shared/models/overviews'
-import { MEMOIZE_TTL, OVERVIEWS } from '../../initializers/constants'
 import * as memoizee from 'memoizee'
 import { logger } from '@server/helpers/logger'
+import { CategoryOverview, ChannelOverview, TagOverview, VideosOverview } from '../../../shared/models/overviews'
+import { buildNSFWFilter } from '../../helpers/express-utils'
+import { MEMOIZE_TTL, OVERVIEWS } from '../../initializers/constants'
+import { asyncMiddleware, optionalAuthenticate, videosOverviewValidator } from '../../middlewares'
+import { TagModel } from '../../models/video/tag'
+import { VideoModel } from '../../models/video/video'
 
 const overviewsRouter = express.Router()
 

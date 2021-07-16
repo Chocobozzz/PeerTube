@@ -6,8 +6,8 @@ import { basename } from 'path'
 import { ACTOR_IMAGES_SIZE } from '@server/initializers/constants'
 import {
   cleanupTests,
-  doubleFollow,
   createMultipleServers,
+  doubleFollow,
   PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel,

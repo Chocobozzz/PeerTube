@@ -1,6 +1,6 @@
 import { merge } from 'lodash'
 import { DeepPartial } from '@shared/core-utils'
-import { About, ServerConfig, HttpStatusCode } from '@shared/models'
+import { About, HttpStatusCode, ServerConfig } from '@shared/models'
 import { CustomConfig } from '../../models/server/custom-config.model'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
 

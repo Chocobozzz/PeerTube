@@ -7,12 +7,12 @@ import {
   AbuseUpdate,
   AbuseVideoIs,
   AdminAbuse,
+  HttpStatusCode,
   ResultList,
   UserAbuse
 } from '@shared/models'
-import { HttpStatusCode } from '@shared/models'
-import { AbstractCommand, OverrideCommandOptions } from '../shared'
 import { unwrapBody } from '../requests/requests'
+import { AbstractCommand, OverrideCommandOptions } from '../shared'
 
 export class AbusesCommand extends AbstractCommand {
 

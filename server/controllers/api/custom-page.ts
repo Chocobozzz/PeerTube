@@ -1,8 +1,7 @@
 import * as express from 'express'
 import { ServerConfigManager } from '@server/lib/server-config-manager'
 import { ActorCustomPageModel } from '@server/models/account/actor-custom-page'
-import { HttpStatusCode } from '@shared/models'
-import { UserRight } from '@shared/models'
+import { HttpStatusCode, UserRight } from '@shared/models'
 import { asyncMiddleware, authenticate, ensureUserHasRight } from '../../middlewares'
 
 const customPageRouter = express.Router()

@@ -1,5 +1,4 @@
-import { ResultList } from '@shared/models'
-import { HttpStatusCode } from '@shared/models'
+import { HttpStatusCode, ResultList } from '@shared/models'
 import { UserNotification, UserNotificationSetting } from '../../models/users'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
 

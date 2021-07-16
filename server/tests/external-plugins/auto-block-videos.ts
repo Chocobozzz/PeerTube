@@ -4,8 +4,8 @@ import 'mocha'
 import { expect } from 'chai'
 import {
   cleanupTests,
-  doubleFollow,
   createMultipleServers,
+  doubleFollow,
   killallServers,
   MockBlocklist,
   PeerTubeServer,

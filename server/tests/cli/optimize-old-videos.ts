@@ -5,8 +5,8 @@ import * as chai from 'chai'
 import { join } from 'path'
 import {
   cleanupTests,
-  doubleFollow,
   createMultipleServers,
+  doubleFollow,
   generateHighBitrateVideo,
   PeerTubeServer,
   setAccessTokensToServers,

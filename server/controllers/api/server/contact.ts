@@ -1,9 +1,9 @@
 import * as express from 'express'
-import { asyncMiddleware, contactAdministratorValidator } from '../../../middlewares'
-import { Redis } from '../../../lib/redis'
-import { Emailer } from '../../../lib/emailer'
-import { ContactForm } from '../../../../shared/models/server'
 import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
+import { ContactForm } from '../../../../shared/models/server'
+import { Emailer } from '../../../lib/emailer'
+import { Redis } from '../../../lib/redis'
+import { asyncMiddleware, contactAdministratorValidator } from '../../../middlewares'
 
 const contactRouter = express.Router()
 

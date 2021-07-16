@@ -1,7 +1,7 @@
+import * as ffmpeg from 'fluent-ffmpeg'
 import { ensureDir, pathExists } from 'fs-extra'
 import { dirname } from 'path'
 import { buildAbsoluteFixturePath } from './tests'
-import * as ffmpeg from 'fluent-ffmpeg'
 
 async function generateHighBitrateVideo () {
   const tempFixturePath = buildAbsoluteFixturePath('video_high_bitrate_1080p.mp4', true)

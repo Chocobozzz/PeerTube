@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-import { HttpStatusCode } from '@shared/models'
 import {
   checkBadCountPagination,
   checkBadSortPagination,
@@ -14,7 +13,7 @@ import {
   PeerTubeServer,
   setAccessTokensToServers
 } from '@shared/extra-utils'
-import { PeerTubePlugin, PluginType } from '@shared/models'
+import { HttpStatusCode, PeerTubePlugin, PluginType } from '@shared/models'
 
 describe('Test server plugins API validators', function () {
   let server: PeerTubeServer

@@ -1,4 +1,7 @@
 import * as express from 'express'
+import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
+import { getFormattedObjects } from '../../../helpers/utils'
+import { sequelizeTypescript } from '../../../initializers/database'
 import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
@@ -8,10 +11,7 @@ import {
   userHistoryListValidator,
   userHistoryRemoveValidator
 } from '../../../middlewares'
-import { getFormattedObjects } from '../../../helpers/utils'
 import { UserVideoHistoryModel } from '../../../models/user/user-video-history'
-import { sequelizeTypescript } from '../../../initializers/database'
-import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
 
 const myVideosHistoryRouter = express.Router()
 

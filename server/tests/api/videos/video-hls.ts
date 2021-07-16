@@ -3,22 +3,21 @@
 import 'mocha'
 import * as chai from 'chai'
 import { join } from 'path'
-import { HttpStatusCode } from '@shared/models'
 import {
   checkDirectoryIsEmpty,
   checkResolutionsInMasterPlaylist,
   checkSegmentHash,
   checkTmpIsEmpty,
   cleanupTests,
-  doubleFollow,
   createMultipleServers,
+  doubleFollow,
   makeRawRequest,
   PeerTubeServer,
   setAccessTokensToServers,
   waitJobs,
   webtorrentAdd
 } from '@shared/extra-utils'
-import { VideoStreamingPlaylistType } from '@shared/models'
+import { HttpStatusCode, VideoStreamingPlaylistType } from '@shared/models'
 import { DEFAULT_AUDIO_RESOLUTION } from '../../../initializers/constants'
 
 const expect = chai.expect

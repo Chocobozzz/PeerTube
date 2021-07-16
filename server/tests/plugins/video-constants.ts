@@ -2,9 +2,8 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { HttpStatusCode } from '@shared/models'
-import { cleanupTests, createSingleServer, PluginsCommand, PeerTubeServer, setAccessTokensToServers } from '@shared/extra-utils'
-import { VideoPlaylistPrivacy } from '@shared/models'
+import { cleanupTests, createSingleServer, PeerTubeServer, PluginsCommand, setAccessTokensToServers } from '@shared/extra-utils'
+import { HttpStatusCode, VideoPlaylistPrivacy } from '@shared/models'
 
 const expect = chai.expect
 

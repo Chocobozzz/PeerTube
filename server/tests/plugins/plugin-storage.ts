@@ -4,7 +4,6 @@ import 'mocha'
 import { expect } from 'chai'
 import { pathExists, readdir, readFile } from 'fs-extra'
 import { join } from 'path'
-import { HttpStatusCode } from '@shared/models'
 import {
   cleanupTests,
   createSingleServer,
@@ -13,6 +12,7 @@ import {
   PluginsCommand,
   setAccessTokensToServers
 } from '@shared/extra-utils'
+import { HttpStatusCode } from '@shared/models'
 
 describe('Test plugin storage', function () {
   let server: PeerTubeServer

@@ -5,8 +5,8 @@ import * as chai from 'chai'
 import { HttpStatusCode } from '@shared/models'
 import {
   cleanupTests,
-  CustomPagesCommand,
   createSingleServer,
+  CustomPagesCommand,
   killallServers,
   PeerTubeServer,
   setAccessTokensToServers

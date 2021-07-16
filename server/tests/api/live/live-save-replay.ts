@@ -3,13 +3,12 @@
 import 'mocha'
 import * as chai from 'chai'
 import { FfmpegCommand } from 'fluent-ffmpeg'
-import { HttpStatusCode } from '@shared/models'
 import {
   checkLiveCleanup,
   cleanupTests,
   ConfigCommand,
-  doubleFollow,
   createMultipleServers,
+  doubleFollow,
   PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel,
@@ -18,7 +17,7 @@ import {
   wait,
   waitJobs
 } from '@shared/extra-utils'
-import { LiveVideoCreate, VideoPrivacy, VideoState } from '@shared/models'
+import { HttpStatusCode, LiveVideoCreate, VideoPrivacy, VideoState } from '@shared/models'
 
 const expect = chai.expect
 

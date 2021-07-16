@@ -6,8 +6,8 @@ import { FfmpegCommand } from 'fluent-ffmpeg'
 import { VideoPrivacy } from '@shared/models'
 import {
   cleanupTests,
-  doubleFollow,
   createMultipleServers,
+  doubleFollow,
   PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel,

@@ -5,8 +5,7 @@ import { VideosTorrentCache } from '@server/lib/files-cache/videos-torrent-cache
 import { Hooks } from '@server/lib/plugins/hooks'
 import { getVideoFilePath } from '@server/lib/video-paths'
 import { MStreamingPlaylist, MVideo, MVideoFile, MVideoFullLight } from '@server/types/models'
-import { HttpStatusCode } from '@shared/models'
-import { VideoStreamingPlaylistType } from '@shared/models'
+import { HttpStatusCode, VideoStreamingPlaylistType } from '@shared/models'
 import { STATIC_DOWNLOAD_PATHS } from '../initializers/constants'
 import { asyncMiddleware, videosDownloadValidator } from '../middlewares'
 

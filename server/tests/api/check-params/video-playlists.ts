@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-import { HttpStatusCode } from '@shared/models'
 import {
   checkBadCountPagination,
   checkBadSortPagination,
@@ -9,12 +8,13 @@ import {
   cleanupTests,
   createSingleServer,
   makeGetRequest,
-  PlaylistsCommand,
   PeerTubeServer,
+  PlaylistsCommand,
   setAccessTokensToServers,
   setDefaultVideoChannel
 } from '@shared/extra-utils'
 import {
+  HttpStatusCode,
   VideoPlaylistCreate,
   VideoPlaylistCreateResult,
   VideoPlaylistElementCreate,

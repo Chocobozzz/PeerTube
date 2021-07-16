@@ -1,5 +1,4 @@
-import { ResultList } from '@shared/models'
-import { HttpStatusCode } from '@shared/models'
+import { HttpStatusCode, ResultList } from '@shared/models'
 import { Account } from '../../models/actors'
 import { AccountVideoRate, VideoRateType } from '../../models/videos'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'

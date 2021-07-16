@@ -1,5 +1,4 @@
-import { HttpStatusCode } from '@shared/models'
-import { ResultList, Video } from '@shared/models'
+import { HttpStatusCode, ResultList, Video } from '@shared/models'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
 
 export class HistoryCommand extends AbstractCommand {

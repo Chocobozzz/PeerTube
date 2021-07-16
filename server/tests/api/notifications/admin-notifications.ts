@@ -9,8 +9,8 @@ import {
   cleanupTests,
   MockJoinPeerTubeVersions,
   MockSmtpServer,
-  prepareNotificationsTest,
   PeerTubeServer,
+  prepareNotificationsTest,
   wait
 } from '@shared/extra-utils'
 import { PluginType, UserNotification, UserNotificationType } from '@shared/models'

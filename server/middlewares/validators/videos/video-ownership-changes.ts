@@ -6,8 +6,14 @@ import { logger } from '@server/helpers/logger'
 import { isAbleToUploadVideo } from '@server/lib/user'
 import { AccountModel } from '@server/models/account/account'
 import { MVideoWithAllFiles } from '@server/types/models'
-import { HttpStatusCode } from '@shared/models'
-import { ServerErrorCode, UserRight, VideoChangeOwnershipAccept, VideoChangeOwnershipStatus, VideoState } from '@shared/models'
+import {
+  HttpStatusCode,
+  ServerErrorCode,
+  UserRight,
+  VideoChangeOwnershipAccept,
+  VideoChangeOwnershipStatus,
+  VideoState
+} from '@shared/models'
 import {
   areValidationErrors,
   checkUserCanManageVideo,

@@ -2,14 +2,7 @@
 
 import 'mocha'
 import { expect } from 'chai'
-import {
-  cleanupTests,
-  createSingleServer,
-  killallServers,
-  PeerTubeServer,
-  setAccessTokensToServers,
-  waitJobs
-} from '@shared/extra-utils'
+import { cleanupTests, createSingleServer, killallServers, PeerTubeServer, setAccessTokensToServers, waitJobs } from '@shared/extra-utils'
 import { VideoPrivacy } from '@shared/models'
 
 describe('Test redundancy constraints', function () {

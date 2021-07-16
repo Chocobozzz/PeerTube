@@ -5,8 +5,8 @@ import * as chai from 'chai'
 import { VideoPrivacy, VideoState } from '@shared/models'
 import {
   cleanupTests,
-  doubleFollow,
   createMultipleServers,
+  doubleFollow,
   PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel,

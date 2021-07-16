@@ -3,17 +3,16 @@
 import 'mocha'
 import * as chai from 'chai'
 import * as xmlParser from 'fast-xml-parser'
-import { HttpStatusCode } from '@shared/models'
 import {
   cleanupTests,
-  doubleFollow,
   createMultipleServers,
   createSingleServer,
+  doubleFollow,
   PeerTubeServer,
   setAccessTokensToServers,
   waitJobs
 } from '@shared/extra-utils'
-import { VideoPrivacy } from '@shared/models'
+import { HttpStatusCode, VideoPrivacy } from '@shared/models'
 
 chai.use(require('chai-xml'))
 chai.use(require('chai-json-schema'))

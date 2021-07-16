@@ -7,8 +7,8 @@ import { getAudioStream, getVideoFileFPS, getVideoStreamFromFile } from '@server
 import {
   cleanupTests,
   createSingleServer,
-  PluginsCommand,
   PeerTubeServer,
+  PluginsCommand,
   setAccessTokensToServers,
   setDefaultVideoChannel,
   testFfmpegStreamError,

@@ -1,6 +1,5 @@
 import { pick } from 'lodash'
-import { ActivityPubActorType, ActorFollow, FollowState, ResultList } from '@shared/models'
-import { HttpStatusCode } from '@shared/models'
+import { ActivityPubActorType, ActorFollow, FollowState, HttpStatusCode, ResultList } from '@shared/models'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
 import { PeerTubeServer } from './server'
 

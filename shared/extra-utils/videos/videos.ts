@@ -202,7 +202,7 @@ async function uploadRandomVideoOnServers (
   additionalParams?: VideoEdit & { prefixName?: string }
 ) {
   const server = servers.find(s => s.serverNumber === serverNumber)
-  const res = await server.videos.randomUpload({ wait: false, ...additionalParams })
+  const res = await server.videos.randomUpload({ wait: false, additionalParams })
 
   await waitJobs(servers)
 

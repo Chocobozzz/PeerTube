@@ -1,5 +1,4 @@
-import { HttpStatusCode } from '@shared/models'
-import { PeerTubeProblemDocument } from '@shared/models'
+import { HttpStatusCode, PeerTubeProblemDocument } from '@shared/models'
 import { unwrapBody } from '../requests'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
 

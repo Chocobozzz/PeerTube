@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-import { HttpStatusCode } from '@shared/models'
 import { cleanupTests, createSingleServer, killallServers, MockSmtpServer, PeerTubeServer } from '@shared/extra-utils'
 import { ContactFormCommand } from '@shared/extra-utils/server'
+import { HttpStatusCode } from '@shared/models'
 
 describe('Test contact form API validators', function () {
   let server: PeerTubeServer

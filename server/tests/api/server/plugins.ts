@@ -2,18 +2,17 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { HttpStatusCode } from '@shared/models'
 import {
   cleanupTests,
   createSingleServer,
   killallServers,
-  PluginsCommand,
   PeerTubeServer,
+  PluginsCommand,
   setAccessTokensToServers,
   testHelloWorldRegisteredSettings,
   wait
 } from '@shared/extra-utils'
-import { PluginType } from '@shared/models'
+import { HttpStatusCode, PluginType } from '@shared/models'
 
 const expect = chai.expect
 

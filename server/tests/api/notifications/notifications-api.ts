@@ -8,8 +8,8 @@ import {
   cleanupTests,
   getAllNotificationsSettings,
   MockSmtpServer,
-  prepareNotificationsTest,
   PeerTubeServer,
+  prepareNotificationsTest,
   waitJobs
 } from '@shared/extra-utils'
 import { UserNotification, UserNotificationSettingValue } from '@shared/models'

@@ -3,16 +3,15 @@
 import 'mocha'
 import * as chai from 'chai'
 import * as request from 'supertest'
-import { HttpStatusCode } from '@shared/models'
 import {
   buildAbsoluteFixturePath,
   checkTmpIsEmpty,
   checkVideoFilesWereRemoved,
   cleanupTests,
   completeVideoCheck,
+  createMultipleServers,
   dateIsValid,
   doubleFollow,
-  createMultipleServers,
   PeerTubeServer,
   setAccessTokensToServers,
   testImage,
@@ -20,7 +19,7 @@ import {
   waitJobs,
   webtorrentAdd
 } from '@shared/extra-utils'
-import { VideoCommentThreadTree, VideoPrivacy } from '@shared/models'
+import { HttpStatusCode, VideoCommentThreadTree, VideoPrivacy } from '@shared/models'
 
 const expect = chai.expect
 

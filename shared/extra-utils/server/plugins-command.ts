@@ -3,8 +3,8 @@
 import { readJSON, writeJSON } from 'fs-extra'
 import { join } from 'path'
 import { root } from '@server/helpers/core-utils'
-import { HttpStatusCode } from '@shared/models'
 import {
+  HttpStatusCode,
   PeerTubePlugin,
   PeerTubePluginIndex,
   PeertubePluginIndexList,

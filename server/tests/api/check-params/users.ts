@@ -2,7 +2,6 @@
 
 import 'mocha'
 import { omit } from 'lodash'
-import { HttpStatusCode } from '@shared/models'
 import {
   buildAbsoluteFixturePath,
   checkBadCountPagination,
@@ -20,7 +19,7 @@ import {
   setAccessTokensToServers,
   UsersCommand
 } from '@shared/extra-utils'
-import { UserAdminFlag, UserRole, VideoCreateResult } from '@shared/models'
+import { HttpStatusCode, UserAdminFlag, UserRole, VideoCreateResult } from '@shared/models'
 
 describe('Test users API validators', function () {
   const path = '/api/v1/users/'

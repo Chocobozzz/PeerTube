@@ -3,12 +3,11 @@
 import 'mocha'
 import * as chai from 'chai'
 import { omit } from 'lodash'
-import { HttpStatusCode } from '@shared/models'
-import { Account, HTMLServerConfig, ServerConfig, VideoPlaylistCreateResult, VideoPlaylistPrivacy } from '@shared/models'
+import { Account, HTMLServerConfig, HttpStatusCode, ServerConfig, VideoPlaylistCreateResult, VideoPlaylistPrivacy } from '@shared/models'
 import {
   cleanupTests,
-  doubleFollow,
   createMultipleServers,
+  doubleFollow,
   makeGetRequest,
   makeHTMLRequest,
   PeerTubeServer,

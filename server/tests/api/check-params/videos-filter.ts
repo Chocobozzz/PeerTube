@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-import { HttpStatusCode } from '@shared/models'
 import {
   cleanupTests,
   createSingleServer,
@@ -10,7 +9,7 @@ import {
   setAccessTokensToServers,
   setDefaultVideoChannel
 } from '@shared/extra-utils'
-import { UserRole } from '@shared/models'
+import { HttpStatusCode, UserRole } from '@shared/models'
 
 async function testEndpoints (server: PeerTubeServer, token: string, filter: string, expectedStatus: HttpStatusCode) {
   const paths = [
