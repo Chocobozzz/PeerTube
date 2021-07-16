@@ -1,6 +1,6 @@
 import * as express from 'express'
 import * as multer from 'multer'
-import { HttpStatusCode } from '../../shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '../../shared/models/http/http-error-codes'
 import { CONFIG } from '../initializers/config'
 import { REMOTE_SCHEME } from '../initializers/constants'
 import { getLowercaseExtension } from './core-utils'

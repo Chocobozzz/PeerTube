@@ -1,8 +1,9 @@
 import 'multer'
 import * as express from 'express'
 import { logger } from '@server/helpers/logger'
-import { UserNotificationModel } from '@server/models/user/user-notification'
 import { getServerActor } from '@server/models/application/application'
+import { UserNotificationModel } from '@server/models/user/user-notification'
+import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
 import { UserRight } from '../../../../shared/models/users'
 import { getFormattedObjects } from '../../../helpers/utils'
 import { addAccountInBlocklist, addServerInBlocklist, removeAccountFromBlocklist, removeServerFromBlocklist } from '../../../lib/blocklist'
@@ -25,7 +26,6 @@ import {
 } from '../../../middlewares/validators'
 import { AccountBlocklistModel } from '../../../models/account/account-blocklist'
 import { ServerBlocklistModel } from '../../../models/server/server-blocklist'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const serverBlocklistRouter = express.Router()
 

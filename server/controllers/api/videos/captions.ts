@@ -1,6 +1,6 @@
 import * as express from 'express'
 import { MVideoCaption } from '@server/types/models'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
 import { moveAndProcessCaptionFile } from '../../../helpers/captions-utils'
 import { createReqFiles } from '../../../helpers/express-utils'
 import { logger } from '../../../helpers/logger'

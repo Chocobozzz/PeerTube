@@ -131,7 +131,7 @@ describe('Test users with multiple servers', function () {
 
   it('Should list account videos', async function () {
     for (const server of servers) {
-      const { total, data } = await server.videos.listByAccount({ accountName: 'user1@localhost:' + servers[0].port })
+      const { total, data } = await server.videos.listByAccount({ handle: 'user1@localhost:' + servers[0].port })
 
       expect(total).to.equal(1)
       expect(data).to.be.an('array')
@@ -148,7 +148,7 @@ describe('Test users with multiple servers', function () {
     await waitJobs(servers)
 
     for (const server of servers) {
-      const { total, data } = await server.videos.listByAccount({ accountName: 'user1@localhost:' + servers[0].port, search: 'Kami' })
+      const { total, data } = await server.videos.listByAccount({ handle: 'user1@localhost:' + servers[0].port, search: 'Kami' })
 
       expect(total).to.equal(1)
       expect(data).to.be.an('array')

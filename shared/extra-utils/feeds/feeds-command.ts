@@ -1,5 +1,5 @@
 
-import { HttpStatusCode } from '../../core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '@shared/models'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
 
 type FeedType = 'videos' | 'video-comments' | 'subscriptions'

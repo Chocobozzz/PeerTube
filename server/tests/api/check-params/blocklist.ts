@@ -1,23 +1,20 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-
 import {
+  checkBadCountPagination,
+  checkBadSortPagination,
+  checkBadStartPagination,
   cleanupTests,
-  doubleFollow,
   createMultipleServers,
+  doubleFollow,
   makeDeleteRequest,
   makeGetRequest,
   makePostBodyRequest,
   PeerTubeServer,
   setAccessTokensToServers
-} from '../../../../shared/extra-utils'
-import {
-  checkBadCountPagination,
-  checkBadSortPagination,
-  checkBadStartPagination
-} from '../../../../shared/extra-utils/requests/check-api-params'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+} from '@shared/extra-utils'
+import { HttpStatusCode } from '@shared/models'
 
 describe('Test blocklist API validators', function () {
   let servers: PeerTubeServer[]
@@ -52,7 +49,7 @@ describe('Test blocklist API validators', function () {
           await makeGetRequest({
             url: server.url,
             path,
-            statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+            expectedStatus: HttpStatusCode.UNAUTHORIZED_401
           })
         })
 
@@ -75,7 +72,7 @@ describe('Test blocklist API validators', function () {
             url: server.url,
             path,
             fields: { accountName: 'user1' },
-            statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+            expectedStatus: HttpStatusCode.UNAUTHORIZED_401
           })
         })
 
@@ -85,7 +82,7 @@ describe('Test blocklist API validators', function () {
             token: server.accessToken,
             path,
             fields: { accountName: 'user2' },
-            statusCodeExpected: HttpStatusCode.NOT_FOUND_404
+            expectedStatus: HttpStatusCode.NOT_FOUND_404
           })
         })
 
@@ -95,7 +92,7 @@ describe('Test blocklist API validators', function () {
             token: server.accessToken,
             path,
             fields: { accountName: 'root' },
-            statusCodeExpected: HttpStatusCode.CONFLICT_409
+            expectedStatus: HttpStatusCode.CONFLICT_409
           })
         })
 
@@ -105,7 +102,7 @@ describe('Test blocklist API validators', function () {
             token: server.accessToken,
             path,
             fields: { accountName: 'user1' },
-            statusCodeExpected: HttpStatusCode.NO_CONTENT_204
+            expectedStatus: HttpStatusCode.NO_CONTENT_204
           })
         })
       })
@@ -115,7 +112,7 @@ describe('Test blocklist API validators', function () {
           await makeDeleteRequest({
             url: server.url,
             path: path + '/user1',
-            statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+            expectedStatus: HttpStatusCode.UNAUTHORIZED_401
           })
         })
 
@@ -124,7 +121,7 @@ describe('Test blocklist API validators', function () {
             url: server.url,
             path: path + '/user2',
             token: server.accessToken,
-            statusCodeExpected: HttpStatusCode.NOT_FOUND_404
+            expectedStatus: HttpStatusCode.NOT_FOUND_404
           })
         })
 
@@ -133,7 +130,7 @@ describe('Test blocklist API validators', function () {
             url: server.url,
             path: path + '/user1',
             token: server.accessToken,
-            statusCodeExpected: HttpStatusCode.NO_CONTENT_204
+            expectedStatus: HttpStatusCode.NO_CONTENT_204
           })
         })
       })
@@ -147,7 +144,7 @@ describe('Test blocklist API validators', function () {
           await makeGetRequest({
             url: server.url,
             path,
-            statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+            expectedStatus: HttpStatusCode.UNAUTHORIZED_401
           })
         })
 
@@ -170,7 +167,7 @@ describe('Test blocklist API validators', function () {
             url: server.url,
             path,
             fields: { host: 'localhost:9002' },
-            statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+            expectedStatus: HttpStatusCode.UNAUTHORIZED_401
           })
         })
 
@@ -180,7 +177,7 @@ describe('Test blocklist API validators', function () {
             token: server.accessToken,
             path,
             fields: { host: 'localhost:9003' },
-            statusCodeExpected: HttpStatusCode.NO_CONTENT_204
+            expectedStatus: HttpStatusCode.NO_CONTENT_204
           })
         })
 
@@ -190,7 +187,7 @@ describe('Test blocklist API validators', function () {
             token: server.accessToken,
             path,
             fields: { host: 'localhost:' + server.port },
-            statusCodeExpected: HttpStatusCode.CONFLICT_409
+            expectedStatus: HttpStatusCode.CONFLICT_409
           })
         })
 
@@ -200,7 +197,7 @@ describe('Test blocklist API validators', function () {
             token: server.accessToken,
             path,
             fields: { host: 'localhost:' + servers[1].port },
-            statusCodeExpected: HttpStatusCode.NO_CONTENT_204
+            expectedStatus: HttpStatusCode.NO_CONTENT_204
           })
         })
       })
@@ -210,7 +207,7 @@ describe('Test blocklist API validators', function () {
           await makeDeleteRequest({
             url: server.url,
             path: path + '/localhost:' + servers[1].port,
-            statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+            expectedStatus: HttpStatusCode.UNAUTHORIZED_401
           })
         })
 
@@ -219,7 +216,7 @@ describe('Test blocklist API validators', function () {
             url: server.url,
             path: path + '/localhost:9004',
             token: server.accessToken,
-            statusCodeExpected: HttpStatusCode.NOT_FOUND_404
+            expectedStatus: HttpStatusCode.NOT_FOUND_404
           })
         })
 
@@ -228,7 +225,7 @@ describe('Test blocklist API validators', function () {
             url: server.url,
             path: path + '/localhost:' + servers[1].port,
             token: server.accessToken,
-            statusCodeExpected: HttpStatusCode.NO_CONTENT_204
+            expectedStatus: HttpStatusCode.NO_CONTENT_204
           })
         })
       })
@@ -245,7 +242,7 @@ describe('Test blocklist API validators', function () {
           await makeGetRequest({
             url: server.url,
             path,
-            statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+            expectedStatus: HttpStatusCode.UNAUTHORIZED_401
           })
         })
 
@@ -254,7 +251,7 @@ describe('Test blocklist API validators', function () {
             url: server.url,
             token: userAccessToken,
             path,
-            statusCodeExpected: HttpStatusCode.FORBIDDEN_403
+            expectedStatus: HttpStatusCode.FORBIDDEN_403
           })
         })
 
@@ -277,7 +274,7 @@ describe('Test blocklist API validators', function () {
             url: server.url,
             path,
             fields: { accountName: 'user1' },
-            statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+            expectedStatus: HttpStatusCode.UNAUTHORIZED_401
           })
         })
 
@@ -287,7 +284,7 @@ describe('Test blocklist API validators', function () {
             token: userAccessToken,
             path,
             fields: { accountName: 'user1' },
-            statusCodeExpected: HttpStatusCode.FORBIDDEN_403
+            expectedStatus: HttpStatusCode.FORBIDDEN_403
           })
         })
 
@@ -297,7 +294,7 @@ describe('Test blocklist API validators', function () {
             token: server.accessToken,
             path,
             fields: { accountName: 'user2' },
-            statusCodeExpected: HttpStatusCode.NOT_FOUND_404
+            expectedStatus: HttpStatusCode.NOT_FOUND_404
           })
         })
 
@@ -307,7 +304,7 @@ describe('Test blocklist API validators', function () {
             token: server.accessToken,
             path,
             fields: { accountName: 'root' },
-            statusCodeExpected: HttpStatusCode.CONFLICT_409
+            expectedStatus: HttpStatusCode.CONFLICT_409
           })
         })
 
@@ -317,7 +314,7 @@ describe('Test blocklist API validators', function () {
             token: server.accessToken,
             path,
             fields: { accountName: 'user1' },
-            statusCodeExpected: HttpStatusCode.NO_CONTENT_204
+            expectedStatus: HttpStatusCode.NO_CONTENT_204
           })
         })
       })
@@ -327,7 +324,7 @@ describe('Test blocklist API validators', function () {
           await makeDeleteRequest({
             url: server.url,
             path: path + '/user1',
-            statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+            expectedStatus: HttpStatusCode.UNAUTHORIZED_401
           })
         })
 
@@ -336,7 +333,7 @@ describe('Test blocklist API validators', function () {
             url: server.url,
             path: path + '/user1',
             token: userAccessToken,
-            statusCodeExpected: HttpStatusCode.FORBIDDEN_403
+            expectedStatus: HttpStatusCode.FORBIDDEN_403
           })
         })
 
@@ -345,7 +342,7 @@ describe('Test blocklist API validators', function () {
             url: server.url,
             path: path + '/user2',
             token: server.accessToken,
-            statusCodeExpected: HttpStatusCode.NOT_FOUND_404
+            expectedStatus: HttpStatusCode.NOT_FOUND_404
           })
         })
 
@@ -354,7 +351,7 @@ describe('Test blocklist API validators', function () {
             url: server.url,
             path: path + '/user1',
             token: server.accessToken,
-            statusCodeExpected: HttpStatusCode.NO_CONTENT_204
+            expectedStatus: HttpStatusCode.NO_CONTENT_204
           })
         })
       })
@@ -368,7 +365,7 @@ describe('Test blocklist API validators', function () {
           await makeGetRequest({
             url: server.url,
             path,
-            statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+            expectedStatus: HttpStatusCode.UNAUTHORIZED_401
           })
         })
 
@@ -377,7 +374,7 @@ describe('Test blocklist API validators', function () {
             url: server.url,
             token: userAccessToken,
             path,
-            statusCodeExpected: HttpStatusCode.FORBIDDEN_403
+            expectedStatus: HttpStatusCode.FORBIDDEN_403
           })
         })
 
@@ -400,7 +397,7 @@ describe('Test blocklist API validators', function () {
             url: server.url,
             path,
             fields: { host: 'localhost:' + servers[1].port },
-            statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+            expectedStatus: HttpStatusCode.UNAUTHORIZED_401
           })
         })
 
@@ -410,7 +407,7 @@ describe('Test blocklist API validators', function () {
             token: userAccessToken,
             path,
             fields: { host: 'localhost:' + servers[1].port },
-            statusCodeExpected: HttpStatusCode.FORBIDDEN_403
+            expectedStatus: HttpStatusCode.FORBIDDEN_403
           })
         })
 
@@ -420,7 +417,7 @@ describe('Test blocklist API validators', function () {
             token: server.accessToken,
             path,
             fields: { host: 'localhost:9003' },
-            statusCodeExpected: HttpStatusCode.NO_CONTENT_204
+            expectedStatus: HttpStatusCode.NO_CONTENT_204
           })
         })
 
@@ -430,7 +427,7 @@ describe('Test blocklist API validators', function () {
             token: server.accessToken,
             path,
             fields: { host: 'localhost:' + server.port },
-            statusCodeExpected: HttpStatusCode.CONFLICT_409
+            expectedStatus: HttpStatusCode.CONFLICT_409
           })
         })
 
@@ -440,7 +437,7 @@ describe('Test blocklist API validators', function () {
             token: server.accessToken,
             path,
             fields: { host: 'localhost:' + servers[1].port },
-            statusCodeExpected: HttpStatusCode.NO_CONTENT_204
+            expectedStatus: HttpStatusCode.NO_CONTENT_204
           })
         })
       })
@@ -450,7 +447,7 @@ describe('Test blocklist API validators', function () {
           await makeDeleteRequest({
             url: server.url,
             path: path + '/localhost:' + servers[1].port,
-            statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+            expectedStatus: HttpStatusCode.UNAUTHORIZED_401
           })
         })
 
@@ -459,7 +456,7 @@ describe('Test blocklist API validators', function () {
             url: server.url,
             path: path + '/localhost:' + servers[1].port,
             token: userAccessToken,
-            statusCodeExpected: HttpStatusCode.FORBIDDEN_403
+            expectedStatus: HttpStatusCode.FORBIDDEN_403
           })
         })
 
@@ -468,7 +465,7 @@ describe('Test blocklist API validators', function () {
             url: server.url,
             path: path + '/localhost:9004',
             token: server.accessToken,
-            statusCodeExpected: HttpStatusCode.NOT_FOUND_404
+            expectedStatus: HttpStatusCode.NOT_FOUND_404
           })
         })
 
@@ -477,7 +474,7 @@ describe('Test blocklist API validators', function () {
             url: server.url,
             path: path + '/localhost:' + servers[1].port,
             token: server.accessToken,
-            statusCodeExpected: HttpStatusCode.NO_CONTENT_204
+            expectedStatus: HttpStatusCode.NO_CONTENT_204
           })
         })
       })

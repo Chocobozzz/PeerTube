@@ -3,7 +3,7 @@
 import 'mocha'
 import * as chai from 'chai'
 import * as request from 'supertest'
-import { HttpStatusCode } from '@shared/core-utils'
+import { HttpStatusCode } from '@shared/models'
 import {
   buildAbsoluteFixturePath,
   checkTmpIsEmpty,

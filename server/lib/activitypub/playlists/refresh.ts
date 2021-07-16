@@ -2,7 +2,7 @@ import { logger, loggerTagsFactory } from '@server/helpers/logger'
 import { PeerTubeRequestError } from '@server/helpers/requests'
 import { JobQueue } from '@server/lib/job-queue'
 import { MVideoPlaylist, MVideoPlaylistOwner } from '@server/types/models'
-import { HttpStatusCode } from '@shared/core-utils'
+import { HttpStatusCode } from '@shared/models'
 import { createOrUpdateVideoPlaylist } from './create-update'
 import { fetchRemoteVideoPlaylist } from './shared'
 

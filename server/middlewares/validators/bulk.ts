@@ -1,7 +1,7 @@
 import * as express from 'express'
 import { body } from 'express-validator'
 import { isBulkRemoveCommentsOfScopeValid } from '@server/helpers/custom-validators/bulk'
-import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '@shared/models'
 import { UserRight } from '@shared/models'
 import { BulkRemoveCommentsOfBody } from '@shared/models/bulk/bulk-remove-comments-of-body.model'
 import { logger } from '../../helpers/logger'

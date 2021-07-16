@@ -11,7 +11,7 @@ import { buildMutedForSearchIndex, isSearchIndexSearch, isURISearch } from '@ser
 import { getServerActor } from '@server/models/application/application'
 import { VideoPlaylistModel } from '@server/models/video/video-playlist'
 import { MVideoPlaylistFullSummary } from '@server/types/models'
-import { HttpStatusCode } from '@shared/core-utils'
+import { HttpStatusCode } from '@shared/models'
 import { ResultList, VideoPlaylist, VideoPlaylistsSearchQuery } from '@shared/models'
 import {
   asyncMiddleware,

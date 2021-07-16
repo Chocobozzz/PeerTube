@@ -2,7 +2,7 @@
 
 import 'mocha'
 import { expect } from 'chai'
-import { HttpStatusCode } from '@shared/core-utils'
+import { HttpStatusCode } from '@shared/models'
 import {
   cleanupTests,
   createSingleServer,
@@ -30,7 +30,7 @@ describe('Test plugins module unloading', function () {
     const res = await makeGetRequest({
       url: server.url,
       path: requestPath,
-      statusCodeExpected: HttpStatusCode.OK_200
+      expectedStatus: HttpStatusCode.OK_200
     })
 
     expect(res.body.message).to.match(/^\d+$/)
@@ -41,7 +41,7 @@ describe('Test plugins module unloading', function () {
     const res = await makeGetRequest({
       url: server.url,
       path: requestPath,
-      statusCodeExpected: HttpStatusCode.OK_200
+      expectedStatus: HttpStatusCode.OK_200
     })
 
     expect(res.body.message).to.be.equal(value)
@@ -53,7 +53,7 @@ describe('Test plugins module unloading', function () {
     await makeGetRequest({
       url: server.url,
       path: requestPath,
-      statusCodeExpected: HttpStatusCode.NOT_FOUND_404
+      expectedStatus: HttpStatusCode.NOT_FOUND_404
     })
   })
 
@@ -63,7 +63,7 @@ describe('Test plugins module unloading', function () {
     const res = await makeGetRequest({
       url: server.url,
       path: requestPath,
-      statusCodeExpected: HttpStatusCode.OK_200
+      expectedStatus: HttpStatusCode.OK_200
     })
 
     expect(res.body.message).to.match(/^\d+$/)

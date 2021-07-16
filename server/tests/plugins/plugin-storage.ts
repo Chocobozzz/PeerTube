@@ -4,7 +4,7 @@ import 'mocha'
 import { expect } from 'chai'
 import { pathExists, readdir, readFile } from 'fs-extra'
 import { join } from 'path'
-import { HttpStatusCode } from '@shared/core-utils'
+import { HttpStatusCode } from '@shared/models'
 import {
   cleanupTests,
   createSingleServer,
@@ -63,7 +63,7 @@ describe('Test plugin storage', function () {
         url: server.url,
         token: server.accessToken,
         path: '/plugins/test-six/router/create-file',
-        statusCodeExpected: HttpStatusCode.OK_200
+        expectedStatus: HttpStatusCode.OK_200
       })
 
       const content = await getFileContent()

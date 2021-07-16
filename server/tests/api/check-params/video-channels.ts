@@ -3,7 +3,7 @@
 import 'mocha'
 import * as chai from 'chai'
 import { omit } from 'lodash'
-import { HttpStatusCode } from '@shared/core-utils'
+import { HttpStatusCode } from '@shared/models'
 import {
   buildAbsoluteFixturePath,
   ChannelsCommand,
@@ -88,7 +88,7 @@ describe('Test video channels API validator', function () {
       await makeGetRequest({
         url: server.url,
         path: accountChannelPath,
-        statusCodeExpected: HttpStatusCode.OK_200
+        expectedStatus: HttpStatusCode.OK_200
       })
     })
   })
@@ -107,7 +107,7 @@ describe('Test video channels API validator', function () {
         path: videoChannelPath,
         token: 'none',
         fields: baseCorrectParams,
-        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
       })
     })
 
@@ -152,7 +152,7 @@ describe('Test video channels API validator', function () {
         path: videoChannelPath,
         token: server.accessToken,
         fields: baseCorrectParams,
-        statusCodeExpected: HttpStatusCode.OK_200
+        expectedStatus: HttpStatusCode.OK_200
       })
     })
 
@@ -162,7 +162,7 @@ describe('Test video channels API validator', function () {
         path: videoChannelPath,
         token: server.accessToken,
         fields: baseCorrectParams,
-        statusCodeExpected: HttpStatusCode.CONFLICT_409
+        expectedStatus: HttpStatusCode.CONFLICT_409
       })
     })
   })
@@ -186,7 +186,7 @@ describe('Test video channels API validator', function () {
         path,
         token: 'hi',
         fields: baseCorrectParams,
-        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
       })
     })
 
@@ -196,7 +196,7 @@ describe('Test video channels API validator', function () {
         path,
         token: accessTokenUser,
         fields: baseCorrectParams,
-        statusCodeExpected: HttpStatusCode.FORBIDDEN_403
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
       })
     })
 
@@ -226,7 +226,7 @@ describe('Test video channels API validator', function () {
         path,
         token: server.accessToken,
         fields: baseCorrectParams,
-        statusCodeExpected: HttpStatusCode.NO_CONTENT_204
+        expectedStatus: HttpStatusCode.NO_CONTENT_204
       })
     })
   })
@@ -271,7 +271,7 @@ describe('Test video channels API validator', function () {
           path: `${path}/${type}/pick`,
           fields,
           attaches,
-          statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+          expectedStatus: HttpStatusCode.UNAUTHORIZED_401
         })
       }
     })
@@ -288,7 +288,7 @@ describe('Test video channels API validator', function () {
           token: server.accessToken,
           fields,
           attaches,
-          statusCodeExpected: HttpStatusCode.OK_200
+          expectedStatus: HttpStatusCode.OK_200
         })
       }
     })
@@ -299,7 +299,7 @@ describe('Test video channels API validator', function () {
       const res = await makeGetRequest({
         url: server.url,
         path: videoChannelPath,
-        statusCodeExpected: HttpStatusCode.OK_200
+        expectedStatus: HttpStatusCode.OK_200
       })
 
       expect(res.body.data).to.be.an('array')
@@ -309,7 +309,7 @@ describe('Test video channels API validator', function () {
       await makeGetRequest({
         url: server.url,
         path: videoChannelPath + '/super_channel2',
-        statusCodeExpected: HttpStatusCode.NOT_FOUND_404
+        expectedStatus: HttpStatusCode.NOT_FOUND_404
       })
     })
 
@@ -317,7 +317,7 @@ describe('Test video channels API validator', function () {
       await makeGetRequest({
         url: server.url,
         path: videoChannelPath + '/super_channel',
-        statusCodeExpected: HttpStatusCode.OK_200
+        expectedStatus: HttpStatusCode.OK_200
       })
     })
   })

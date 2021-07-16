@@ -8,7 +8,7 @@ import {
   videoWatchingValidator
 } from '../../../middlewares'
 import { UserVideoHistoryModel } from '../../../models/user/user-video-history'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
 
 const watchingRouter = express.Router()
 

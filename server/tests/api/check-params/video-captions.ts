@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-import { HttpStatusCode } from '@shared/core-utils'
+import { HttpStatusCode } from '@shared/models'
 import {
   buildAbsoluteFixturePath,
   cleanupTests,
@@ -67,7 +67,7 @@ describe('Test video captions API validator', function () {
         token: server.accessToken,
         fields,
         attaches,
-        statusCodeExpected: 404
+        expectedStatus: 404
       })
     })
 
@@ -103,7 +103,7 @@ describe('Test video captions API validator', function () {
         path: captionPath,
         fields,
         attaches,
-        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
       })
     })
 
@@ -116,7 +116,7 @@ describe('Test video captions API validator', function () {
         token: 'blabla',
         fields,
         attaches,
-        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
       })
     })
 
@@ -134,7 +134,7 @@ describe('Test video captions API validator', function () {
     //     token: server.accessToken,
     //     fields,
     //     attaches,
-    //     statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
+    //     expectedStatus: HttpStatusCode.BAD_REQUEST_400
     //   })
     // })
 
@@ -147,7 +147,7 @@ describe('Test video captions API validator', function () {
     //     videoId: video.uuid,
     //     fixture: 'subtitle-bad.txt',
     //     mimeType: 'application/octet-stream',
-    //     statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
+    //     expectedStatus: HttpStatusCode.BAD_REQUEST_400
     //   })
     // })
 
@@ -174,7 +174,7 @@ describe('Test video captions API validator', function () {
     //     token: server.accessToken,
     //     fields,
     //     attaches,
-    //     statusCodeExpected: HttpStatusCode.INTERNAL_SERVER_ERROR_500
+    //     expectedStatus: HttpStatusCode.INTERNAL_SERVER_ERROR_500
     //   })
     // })
 
@@ -187,7 +187,7 @@ describe('Test video captions API validator', function () {
         token: server.accessToken,
         fields,
         attaches,
-        statusCodeExpected: HttpStatusCode.NO_CONTENT_204
+        expectedStatus: HttpStatusCode.NO_CONTENT_204
       })
     })
   })
@@ -201,12 +201,12 @@ describe('Test video captions API validator', function () {
       await makeGetRequest({
         url: server.url,
         path: path + '4da6fde3-88f7-4d16-b119-108df5630b06/captions',
-        statusCodeExpected: HttpStatusCode.NOT_FOUND_404
+        expectedStatus: HttpStatusCode.NOT_FOUND_404
       })
     })
 
     it('Should success with the correct parameters', async function () {
-      await makeGetRequest({ url: server.url, path: path + video.shortUUID + '/captions', statusCodeExpected: HttpStatusCode.OK_200 })
+      await makeGetRequest({ url: server.url, path: path + video.shortUUID + '/captions', expectedStatus: HttpStatusCode.OK_200 })
     })
   })
 
@@ -224,7 +224,7 @@ describe('Test video captions API validator', function () {
         url: server.url,
         path: path + '4da6fde3-88f7-4d16-b119-108df5630b06/captions/fr',
         token: server.accessToken,
-        statusCodeExpected: HttpStatusCode.NOT_FOUND_404
+        expectedStatus: HttpStatusCode.NOT_FOUND_404
       })
     })
 
@@ -248,12 +248,12 @@ describe('Test video captions API validator', function () {
 
     it('Should fail without access token', async function () {
       const captionPath = path + video.shortUUID + '/captions/fr'
-      await makeDeleteRequest({ url: server.url, path: captionPath, statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401 })
+      await makeDeleteRequest({ url: server.url, path: captionPath, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
     it('Should fail with a bad access token', async function () {
       const captionPath = path + video.shortUUID + '/captions/fr'
-      await makeDeleteRequest({ url: server.url, path: captionPath, token: 'coucou', statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401 })
+      await makeDeleteRequest({ url: server.url, path: captionPath, token: 'coucou', expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
     it('Should fail with another user', async function () {
@@ -262,7 +262,7 @@ describe('Test video captions API validator', function () {
         url: server.url,
         path: captionPath,
         token: userAccessToken,
-        statusCodeExpected: HttpStatusCode.FORBIDDEN_403
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
       })
     })
 
@@ -272,7 +272,7 @@ describe('Test video captions API validator', function () {
         url: server.url,
         path: captionPath,
         token: server.accessToken,
-        statusCodeExpected: HttpStatusCode.NO_CONTENT_204
+        expectedStatus: HttpStatusCode.NO_CONTENT_204
       })
     })
   })

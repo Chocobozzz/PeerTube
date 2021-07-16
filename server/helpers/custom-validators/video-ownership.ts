@@ -1,7 +1,7 @@
 import { Response } from 'express'
 import { MUserId } from '@server/types/models'
 import { MVideoChangeOwnershipFull } from '@server/types/models/video/video-change-ownership'
-import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '../../../shared/models/http/http-error-codes'
 
 function checkUserCanTerminateOwnershipChange (user: MUserId, videoChangeOwnership: MVideoChangeOwnershipFull, res: Response) {
   if (videoChangeOwnership.NextOwner.userId === user.id) {

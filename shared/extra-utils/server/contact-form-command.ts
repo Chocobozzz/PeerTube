@@ -1,4 +1,4 @@
-import { HttpStatusCode } from '../../core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '@shared/models'
 import { ContactForm } from '../../models/server'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
 

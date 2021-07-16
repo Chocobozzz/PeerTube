@@ -1,4 +1,4 @@
-import { HttpStatusCode } from '../../core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '@shared/models'
 import { LogLevel } from '../../models/server/log-level.type'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
 

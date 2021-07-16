@@ -2,7 +2,7 @@
 
 import 'mocha'
 import { expect } from 'chai'
-import { HttpStatusCode } from '@shared/core-utils'
+import { HttpStatusCode } from '@shared/models'
 import {
   BlacklistCommand,
   checkBadCountPagination,
@@ -88,7 +88,7 @@ describe('Test video blacklist API validators', function () {
     it('Should fail with a non authenticated user', async function () {
       const path = basePath + servers[0].store.video + '/blacklist'
       const fields = {}
-      await makePostBodyRequest({ url: servers[0].url, path, token: 'hello', fields, statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401 })
+      await makePostBodyRequest({ url: servers[0].url, path, token: 'hello', fields, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
     it('Should fail with a non admin user', async function () {
@@ -99,7 +99,7 @@ describe('Test video blacklist API validators', function () {
         path,
         token: userAccessToken2,
         fields,
-        statusCodeExpected: HttpStatusCode.FORBIDDEN_403
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
       })
     })
 
@@ -119,7 +119,7 @@ describe('Test video blacklist API validators', function () {
         path,
         token: servers[0].accessToken,
         fields,
-        statusCodeExpected: HttpStatusCode.CONFLICT_409
+        expectedStatus: HttpStatusCode.CONFLICT_409
       })
     })
 
@@ -132,7 +132,7 @@ describe('Test video blacklist API validators', function () {
         path,
         token: servers[0].accessToken,
         fields,
-        statusCodeExpected: HttpStatusCode.NO_CONTENT_204
+        expectedStatus: HttpStatusCode.NO_CONTENT_204
       })
     })
   })
@@ -154,14 +154,14 @@ describe('Test video blacklist API validators', function () {
         path,
         token: servers[0].accessToken,
         fields,
-        statusCodeExpected: HttpStatusCode.NOT_FOUND_404
+        expectedStatus: HttpStatusCode.NOT_FOUND_404
       })
     })
 
     it('Should fail with a non authenticated user', async function () {
       const path = basePath + servers[0].store.video + '/blacklist'
       const fields = {}
-      await makePutBodyRequest({ url: servers[0].url, path, token: 'hello', fields, statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401 })
+      await makePutBodyRequest({ url: servers[0].url, path, token: 'hello', fields, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
     it('Should fail with a non admin user', async function () {
@@ -172,7 +172,7 @@ describe('Test video blacklist API validators', function () {
         path,
         token: userAccessToken2,
         fields,
-        statusCodeExpected: HttpStatusCode.FORBIDDEN_403
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
       })
     })
 
@@ -192,7 +192,7 @@ describe('Test video blacklist API validators', function () {
         path,
         token: servers[0].accessToken,
         fields,
-        statusCodeExpected: HttpStatusCode.NO_CONTENT_204
+        expectedStatus: HttpStatusCode.NO_CONTENT_204
       })
     })
   })

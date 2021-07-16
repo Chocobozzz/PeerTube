@@ -2,7 +2,7 @@
 
 import 'mocha'
 import { expect } from 'chai'
-import { HttpStatusCode } from '@shared/core-utils'
+import { HttpStatusCode } from '@shared/models'
 import {
   cleanupTests,
   doubleFollow,
@@ -34,8 +34,8 @@ describe('Official plugin auto-mute', function () {
     blocklistServer = new MockBlocklist()
     port = await blocklistServer.initialize()
 
-    await await servers[0].videos.quickUpload({ name: 'video server 1' })
-    await await servers[1].videos.quickUpload({ name: 'video server 2' })
+    await servers[0].videos.quickUpload({ name: 'video server 1' })
+    await servers[1].videos.quickUpload({ name: 'video server 2' })
 
     await doubleFollow(servers[0], servers[1])
   })
@@ -162,7 +162,7 @@ describe('Official plugin auto-mute', function () {
     await makeGetRequest({
       url: servers[0].url,
       path: '/plugins/auto-mute/router/api/v1/mute-list',
-      statusCodeExpected: HttpStatusCode.FORBIDDEN_403
+      expectedStatus: HttpStatusCode.FORBIDDEN_403
     })
   })
 
@@ -179,7 +179,7 @@ describe('Official plugin auto-mute', function () {
     await makeGetRequest({
       url: servers[0].url,
       path: '/plugins/auto-mute/router/api/v1/mute-list',
-      statusCodeExpected: HttpStatusCode.OK_200
+      expectedStatus: HttpStatusCode.OK_200
     })
   })
 
@@ -201,7 +201,7 @@ describe('Official plugin auto-mute', function () {
     const res = await makeGetRequest({
       url: servers[0].url,
       path: '/plugins/auto-mute/router/api/v1/mute-list',
-      statusCodeExpected: HttpStatusCode.OK_200
+      expectedStatus: HttpStatusCode.OK_200
     })
 
     const data = res.body.data

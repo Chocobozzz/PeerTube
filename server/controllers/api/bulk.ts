@@ -4,7 +4,7 @@ import { bulkRemoveCommentsOfValidator } from '@server/middlewares/validators/bu
 import { VideoCommentModel } from '@server/models/video/video-comment'
 import { removeComment } from '@server/lib/video-comment'
 import { BulkRemoveCommentsOfBody } from '@shared/models/bulk/bulk-remove-comments-of-body.model'
-import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '@shared/models'
 
 const bulkRouter = express.Router()
 

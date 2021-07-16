@@ -4,7 +4,7 @@ import 'mocha'
 import * as chai from 'chai'
 import { omit } from 'lodash'
 import { join } from 'path'
-import { HttpStatusCode, randomInt } from '@shared/core-utils'
+import { randomInt } from '@shared/core-utils'
 import {
   checkBadCountPagination,
   checkBadSortPagination,
@@ -16,11 +16,11 @@ import {
   makeGetRequest,
   makePutBodyRequest,
   makeUploadRequest,
-  root,
   PeerTubeServer,
+  root,
   setAccessTokensToServers
 } from '@shared/extra-utils'
-import { PeerTubeProblemDocument, VideoCreateResult, VideoPrivacy } from '@shared/models'
+import { HttpStatusCode, PeerTubeProblemDocument, VideoCreateResult, VideoPrivacy } from '@shared/models'
 
 const expect = chai.expect
 
@@ -69,11 +69,11 @@ describe('Test videos API validator', function () {
     })
 
     it('Should fail with a bad skipVideos query', async function () {
-      await makeGetRequest({ url: server.url, path, statusCodeExpected: HttpStatusCode.OK_200, query: { skipCount: 'toto' } })
+      await makeGetRequest({ url: server.url, path, expectedStatus: HttpStatusCode.OK_200, query: { skipCount: 'toto' } })
     })
 
     it('Should success with the correct parameters', async function () {
-      await makeGetRequest({ url: server.url, path, statusCodeExpected: HttpStatusCode.OK_200, query: { skipCount: false } })
+      await makeGetRequest({ url: server.url, path, expectedStatus: HttpStatusCode.OK_200, query: { skipCount: false } })
     })
   })
 
@@ -83,7 +83,7 @@ describe('Test videos API validator', function () {
       await makeGetRequest({
         url: server.url,
         path: join(path, 'search'),
-        statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
       })
     })
 
@@ -100,7 +100,7 @@ describe('Test videos API validator', function () {
     })
 
     it('Should success with the correct parameters', async function () {
-      await makeGetRequest({ url: server.url, path, statusCodeExpected: HttpStatusCode.OK_200 })
+      await makeGetRequest({ url: server.url, path, expectedStatus: HttpStatusCode.OK_200 })
     })
   })
 
@@ -120,7 +120,7 @@ describe('Test videos API validator', function () {
     })
 
     it('Should success with the correct parameters', async function () {
-      await makeGetRequest({ url: server.url, token: server.accessToken, path, statusCodeExpected: HttpStatusCode.OK_200 })
+      await makeGetRequest({ url: server.url, token: server.accessToken, path, expectedStatus: HttpStatusCode.OK_200 })
     })
   })
 
@@ -144,7 +144,7 @@ describe('Test videos API validator', function () {
     })
 
     it('Should success with the correct parameters', async function () {
-      await makeGetRequest({ url: server.url, path, statusCodeExpected: HttpStatusCode.OK_200 })
+      await makeGetRequest({ url: server.url, path, expectedStatus: HttpStatusCode.OK_200 })
     })
   })
 
@@ -168,7 +168,7 @@ describe('Test videos API validator', function () {
     })
 
     it('Should success with the correct parameters', async function () {
-      await makeGetRequest({ url: server.url, path, statusCodeExpected: HttpStatusCode.OK_200 })
+      await makeGetRequest({ url: server.url, path, expectedStatus: HttpStatusCode.OK_200 })
     })
   })
 
@@ -506,7 +506,7 @@ describe('Test videos API validator', function () {
         path: path + '4da6fde3-88f7-4d16-b119-108df5630b06',
         token: server.accessToken,
         fields,
-        statusCodeExpected: HttpStatusCode.NOT_FOUND_404
+        expectedStatus: HttpStatusCode.NOT_FOUND_404
       })
     })
 
@@ -660,7 +660,7 @@ describe('Test videos API validator', function () {
         path: path + video.shortUUID,
         token: userAccessToken,
         fields,
-        statusCodeExpected: HttpStatusCode.FORBIDDEN_403
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
       })
     })
 
@@ -692,7 +692,7 @@ describe('Test videos API validator', function () {
         path: path + video.shortUUID,
         token: server.accessToken,
         fields,
-        statusCodeExpected: HttpStatusCode.NO_CONTENT_204
+        expectedStatus: HttpStatusCode.NO_CONTENT_204
       })
     })
   })
@@ -702,7 +702,7 @@ describe('Test videos API validator', function () {
       const res = await makeGetRequest({
         url: server.url,
         path,
-        statusCodeExpected: HttpStatusCode.OK_200
+        expectedStatus: HttpStatusCode.OK_200
       })
 
       expect(res.body.data).to.be.an('array')
@@ -762,7 +762,7 @@ describe('Test videos API validator', function () {
         path: path + '4da6fde3-88f7-4d16-b119-108df5630b06/rate',
         token: server.accessToken,
         fields,
-        statusCodeExpected: HttpStatusCode.NOT_FOUND_404
+        expectedStatus: HttpStatusCode.NOT_FOUND_404
       })
     })
 
@@ -782,7 +782,7 @@ describe('Test videos API validator', function () {
         path: path + videoId + '/rate',
         token: server.accessToken,
         fields,
-        statusCodeExpected: HttpStatusCode.NO_CONTENT_204
+        expectedStatus: HttpStatusCode.NO_CONTENT_204
       })
     })
   })
@@ -792,7 +792,7 @@ describe('Test videos API validator', function () {
       await makeDeleteRequest({
         url: server.url,
         path,
-        statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
       })
     })
 
@@ -812,7 +812,7 @@ describe('Test videos API validator', function () {
 
     it('Shoud report the appropriate error', async function () {
       const body = await server.videos.remove({ id: 'hello', expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
-      const error = body as unknown as PeerTubeProblemDocument
+      const error = body as PeerTubeProblemDocument
 
       expect(error.docs).to.equal('https://docs.joinpeertube.org/api-rest-reference.html#operation/delVideo')
 

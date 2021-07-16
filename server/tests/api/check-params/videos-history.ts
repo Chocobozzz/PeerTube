@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-import { HttpStatusCode } from '@shared/core-utils'
+import { HttpStatusCode } from '@shared/models'
 import {
   checkBadCountPagination,
   checkBadStartPagination,
@@ -37,7 +37,7 @@ describe('Test videos history API validator', function () {
 
     it('Should fail with an unauthenticated user', async function () {
       const fields = { currentTime: 5 }
-      await makePutBodyRequest({ url: server.url, path: watchingPath, fields, statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401 })
+      await makePutBodyRequest({ url: server.url, path: watchingPath, fields, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
     it('Should fail with an incorrect video id', async function () {
@@ -48,7 +48,7 @@ describe('Test videos history API validator', function () {
         path,
         fields,
         token: server.accessToken,
-        statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
       })
     })
 
@@ -61,7 +61,7 @@ describe('Test videos history API validator', function () {
         path,
         fields,
         token: server.accessToken,
-        statusCodeExpected: HttpStatusCode.NOT_FOUND_404
+        expectedStatus: HttpStatusCode.NOT_FOUND_404
       })
     })
 
@@ -72,7 +72,7 @@ describe('Test videos history API validator', function () {
         path: watchingPath,
         fields,
         token: server.accessToken,
-        statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
       })
     })
 
@@ -84,7 +84,7 @@ describe('Test videos history API validator', function () {
         path: watchingPath,
         fields,
         token: server.accessToken,
-        statusCodeExpected: HttpStatusCode.NO_CONTENT_204
+        expectedStatus: HttpStatusCode.NO_CONTENT_204
       })
     })
   })
@@ -99,17 +99,17 @@ describe('Test videos history API validator', function () {
     })
 
     it('Should fail with an unauthenticated user', async function () {
-      await makeGetRequest({ url: server.url, path: myHistoryPath, statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401 })
+      await makeGetRequest({ url: server.url, path: myHistoryPath, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
     it('Should succeed with the correct params', async function () {
-      await makeGetRequest({ url: server.url, token: server.accessToken, path: myHistoryPath, statusCodeExpected: HttpStatusCode.OK_200 })
+      await makeGetRequest({ url: server.url, token: server.accessToken, path: myHistoryPath, expectedStatus: HttpStatusCode.OK_200 })
     })
   })
 
   describe('When removing user videos history', function () {
     it('Should fail with an unauthenticated user', async function () {
-      await makePostBodyRequest({ url: server.url, path: myHistoryPath + '/remove', statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401 })
+      await makePostBodyRequest({ url: server.url, path: myHistoryPath + '/remove', expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
     it('Should fail with a bad beforeDate parameter', async function () {
@@ -119,7 +119,7 @@ describe('Test videos history API validator', function () {
         token: server.accessToken,
         path: myHistoryRemove,
         fields: body,
-        statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
       })
     })
 
@@ -130,7 +130,7 @@ describe('Test videos history API validator', function () {
         token: server.accessToken,
         path: myHistoryRemove,
         fields: body,
-        statusCodeExpected: HttpStatusCode.NO_CONTENT_204
+        expectedStatus: HttpStatusCode.NO_CONTENT_204
       })
     })
 
@@ -139,7 +139,7 @@ describe('Test videos history API validator', function () {
         url: server.url,
         token: server.accessToken,
         path: myHistoryRemove,
-        statusCodeExpected: HttpStatusCode.NO_CONTENT_204
+        expectedStatus: HttpStatusCode.NO_CONTENT_204
       })
     })
   })

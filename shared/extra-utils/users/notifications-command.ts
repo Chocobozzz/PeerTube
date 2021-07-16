@@ -1,5 +1,5 @@
 import { ResultList } from '@shared/models'
-import { HttpStatusCode } from '../../core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '@shared/models'
 import { UserNotification, UserNotificationSetting } from '../../models/users'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
 

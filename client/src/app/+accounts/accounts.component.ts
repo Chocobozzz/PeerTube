@@ -13,8 +13,7 @@ import {
   VideoService
 } from '@app/shared/shared-main'
 import { AccountReportComponent } from '@app/shared/shared-moderation'
-import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
-import { User, UserRight } from '@shared/models'
+import { HttpStatusCode, User, UserRight } from '@shared/models'
 import { AccountSearchComponent } from './account-search/account-search.component'
 
 @Component({

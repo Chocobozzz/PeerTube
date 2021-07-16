@@ -5,7 +5,7 @@ import * as chai from 'chai'
 import { readdir } from 'fs-extra'
 import * as magnetUtil from 'magnet-uri'
 import { join } from 'path'
-import { HttpStatusCode } from '@shared/core-utils'
+import { HttpStatusCode } from '@shared/models'
 import {
   checkSegmentHash,
   checkVideoFilesWereRemoved,
@@ -129,13 +129,13 @@ async function check2Webseeds (videoUUID?: string) {
 
       await makeGetRequest({
         url: servers[0].url,
-        statusCodeExpected: HttpStatusCode.OK_200,
+        expectedStatus: HttpStatusCode.OK_200,
         path: '/static/redundancy/' + `${videoUUID}-${file.resolution.id}.mp4`,
         contentType: null
       })
       await makeGetRequest({
         url: servers[1].url,
-        statusCodeExpected: HttpStatusCode.OK_200,
+        expectedStatus: HttpStatusCode.OK_200,
         path: `/static/webseed/${videoUUID}-${file.resolution.id}.mp4`,
         contentType: null
       })

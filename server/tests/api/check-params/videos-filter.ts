@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
+import { HttpStatusCode } from '@shared/models'
 import {
   cleanupTests,
   createSingleServer,
@@ -8,11 +9,10 @@ import {
   PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel
-} from '../../../../shared/extra-utils'
-import { UserRole } from '../../../../shared/models/users'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+} from '@shared/extra-utils'
+import { UserRole } from '@shared/models'
 
-async function testEndpoints (server: PeerTubeServer, token: string, filter: string, statusCodeExpected: HttpStatusCode) {
+async function testEndpoints (server: PeerTubeServer, token: string, filter: string, expectedStatus: HttpStatusCode) {
   const paths = [
     '/api/v1/video-channels/root_channel/videos',
     '/api/v1/accounts/root/videos',
@@ -28,7 +28,7 @@ async function testEndpoints (server: PeerTubeServer, token: string, filter: str
       query: {
         filter
       },
-      statusCodeExpected
+      expectedStatus
     })
   }
 }
@@ -89,7 +89,7 @@ describe('Test video filters validators', function () {
         await makeGetRequest({
           url: server.url,
           path: '/feeds/videos.json',
-          statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401,
+          expectedStatus: HttpStatusCode.UNAUTHORIZED_401,
           query: {
             filter
           }
@@ -101,7 +101,7 @@ describe('Test video filters validators', function () {
       await makeGetRequest({
         url: server.url,
         path: '/feeds/videos.json',
-        statusCodeExpected: HttpStatusCode.OK_200,
+        expectedStatus: HttpStatusCode.OK_200,
         query: {
           filter: 'local'
         }

@@ -2,7 +2,7 @@
 
 import 'mocha'
 import { io } from 'socket.io-client'
-import { HttpStatusCode } from '@shared/core-utils'
+import { HttpStatusCode } from '@shared/models'
 import {
   checkBadCountPagination,
   checkBadSortPagination,
@@ -54,7 +54,7 @@ describe('Test user notifications API validators', function () {
           unread: 'toto'
         },
         token: server.accessToken,
-        statusCodeExpected: HttpStatusCode.OK_200
+        expectedStatus: HttpStatusCode.OK_200
       })
     })
 
@@ -62,7 +62,7 @@ describe('Test user notifications API validators', function () {
       await makeGetRequest({
         url: server.url,
         path,
-        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
       })
     })
 
@@ -71,7 +71,7 @@ describe('Test user notifications API validators', function () {
         url: server.url,
         path,
         token: server.accessToken,
-        statusCodeExpected: HttpStatusCode.OK_200
+        expectedStatus: HttpStatusCode.OK_200
       })
     })
   })
@@ -87,7 +87,7 @@ describe('Test user notifications API validators', function () {
           ids: [ 'hello' ]
         },
         token: server.accessToken,
-        statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
       })
 
       await makePostBodyRequest({
@@ -97,7 +97,7 @@ describe('Test user notifications API validators', function () {
           ids: [ ]
         },
         token: server.accessToken,
-        statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
       })
 
       await makePostBodyRequest({
@@ -107,7 +107,7 @@ describe('Test user notifications API validators', function () {
           ids: 5
         },
         token: server.accessToken,
-        statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
       })
     })
 
@@ -118,7 +118,7 @@ describe('Test user notifications API validators', function () {
         fields: {
           ids: [ 5 ]
         },
-        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
       })
     })
 
@@ -130,7 +130,7 @@ describe('Test user notifications API validators', function () {
           ids: [ 5 ]
         },
         token: server.accessToken,
-        statusCodeExpected: HttpStatusCode.NO_CONTENT_204
+        expectedStatus: HttpStatusCode.NO_CONTENT_204
       })
     })
   })
@@ -142,7 +142,7 @@ describe('Test user notifications API validators', function () {
       await makePostBodyRequest({
         url: server.url,
         path,
-        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
       })
     })
 
@@ -151,7 +151,7 @@ describe('Test user notifications API validators', function () {
         url: server.url,
         path,
         token: server.accessToken,
-        statusCodeExpected: HttpStatusCode.NO_CONTENT_204
+        expectedStatus: HttpStatusCode.NO_CONTENT_204
       })
     })
   })
@@ -183,7 +183,7 @@ describe('Test user notifications API validators', function () {
         path,
         token: server.accessToken,
         fields: { newVideoFromSubscription: UserNotificationSettingValue.WEB },
-        statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
       })
     })
 
@@ -196,7 +196,7 @@ describe('Test user notifications API validators', function () {
           path,
           token: server.accessToken,
           fields,
-          statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
+          expectedStatus: HttpStatusCode.BAD_REQUEST_400
         })
       }
 
@@ -208,7 +208,7 @@ describe('Test user notifications API validators', function () {
           path,
           fields,
           token: server.accessToken,
-          statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
+          expectedStatus: HttpStatusCode.BAD_REQUEST_400
         })
       }
     })
@@ -218,7 +218,7 @@ describe('Test user notifications API validators', function () {
         url: server.url,
         path,
         fields: correctFields,
-        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
       })
     })
 
@@ -228,7 +228,7 @@ describe('Test user notifications API validators', function () {
         path,
         token: server.accessToken,
         fields: correctFields,
-        statusCodeExpected: HttpStatusCode.NO_CONTENT_204
+        expectedStatus: HttpStatusCode.NO_CONTENT_204
       })
     })
   })

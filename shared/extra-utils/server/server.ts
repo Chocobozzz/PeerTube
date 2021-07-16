@@ -254,7 +254,7 @@ export class PeerTubeServer {
 
         process.on('exit', () => {
           try {
-            process.kill(self.server.app.pid)
+            process.kill(self.app.pid)
           } catch { /* empty */ }
         })
 

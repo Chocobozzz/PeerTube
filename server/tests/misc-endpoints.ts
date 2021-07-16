@@ -2,7 +2,7 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { HttpStatusCode } from '@shared/core-utils'
+import { HttpStatusCode } from '@shared/models'
 import { cleanupTests, createSingleServer, makeGetRequest, PeerTubeServer, setAccessTokensToServers } from '@shared/extra-utils'
 import { VideoPrivacy } from '@shared/models'
 
@@ -24,7 +24,7 @@ describe('Test misc endpoints', function () {
       const res = await makeGetRequest({
         url: server.url,
         path: '/.well-known/security.txt',
-        statusCodeExpected: HttpStatusCode.OK_200
+        expectedStatus: HttpStatusCode.OK_200
       })
 
       expect(res.text).to.contain('security issue')
@@ -34,7 +34,7 @@ describe('Test misc endpoints', function () {
       const res = await makeGetRequest({
         url: server.url,
         path: '/.well-known/nodeinfo',
-        statusCodeExpected: HttpStatusCode.OK_200
+        expectedStatus: HttpStatusCode.OK_200
       })
 
       expect(res.body.links).to.be.an('array')
@@ -46,7 +46,7 @@ describe('Test misc endpoints', function () {
       const res = await makeGetRequest({
         url: server.url,
         path: '/.well-known/dnt-policy.txt',
-        statusCodeExpected: HttpStatusCode.OK_200
+        expectedStatus: HttpStatusCode.OK_200
       })
 
       expect(res.text).to.contain('http://www.w3.org/TR/tracking-dnt')
@@ -56,7 +56,7 @@ describe('Test misc endpoints', function () {
       const res = await makeGetRequest({
         url: server.url,
         path: '/.well-known/dnt',
-        statusCodeExpected: HttpStatusCode.OK_200
+        expectedStatus: HttpStatusCode.OK_200
       })
 
       expect(res.body.tracking).to.equal('N')
@@ -66,7 +66,7 @@ describe('Test misc endpoints', function () {
       const res = await makeGetRequest({
         url: server.url,
         path: '/.well-known/change-password',
-        statusCodeExpected: HttpStatusCode.FOUND_302
+        expectedStatus: HttpStatusCode.FOUND_302
       })
 
       expect(res.header.location).to.equal('/my-account/settings')
@@ -79,7 +79,7 @@ describe('Test misc endpoints', function () {
       const res = await makeGetRequest({
         url: server.url,
         path: '/.well-known/webfinger?resource=' + resource,
-        statusCodeExpected: HttpStatusCode.OK_200
+        expectedStatus: HttpStatusCode.OK_200
       })
 
       const data = res.body
@@ -104,7 +104,7 @@ describe('Test misc endpoints', function () {
       const res = await makeGetRequest({
         url: server.url,
         path: '/robots.txt',
-        statusCodeExpected: HttpStatusCode.OK_200
+        expectedStatus: HttpStatusCode.OK_200
       })
 
       expect(res.text).to.contain('User-agent')
@@ -114,7 +114,7 @@ describe('Test misc endpoints', function () {
       await makeGetRequest({
         url: server.url,
         path: '/security.txt',
-        statusCodeExpected: HttpStatusCode.MOVED_PERMANENTLY_301
+        expectedStatus: HttpStatusCode.MOVED_PERMANENTLY_301
       })
     })
 
@@ -122,7 +122,7 @@ describe('Test misc endpoints', function () {
       const res = await makeGetRequest({
         url: server.url,
         path: '/nodeinfo/2.0.json',
-        statusCodeExpected: HttpStatusCode.OK_200
+        expectedStatus: HttpStatusCode.OK_200
       })
 
       expect(res.body.software.name).to.equal('peertube')
@@ -137,7 +137,7 @@ describe('Test misc endpoints', function () {
       const res = await makeGetRequest({
         url: server.url,
         path: '/sitemap.xml',
-        statusCodeExpected: HttpStatusCode.OK_200
+        expectedStatus: HttpStatusCode.OK_200
       })
 
       expect(res.text).to.contain('xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"')
@@ -148,7 +148,7 @@ describe('Test misc endpoints', function () {
       const res = await makeGetRequest({
         url: server.url,
         path: '/sitemap.xml',
-        statusCodeExpected: HttpStatusCode.OK_200
+        expectedStatus: HttpStatusCode.OK_200
       })
 
       expect(res.text).to.contain('xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"')
@@ -171,7 +171,7 @@ describe('Test misc endpoints', function () {
       const res = await makeGetRequest({
         url: server.url,
         path: '/sitemap.xml?t=1', // avoid using cache
-        statusCodeExpected: HttpStatusCode.OK_200
+        expectedStatus: HttpStatusCode.OK_200
       })
 
       expect(res.text).to.contain('xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"')

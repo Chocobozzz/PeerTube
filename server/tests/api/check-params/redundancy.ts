@@ -1,15 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-import { VideoCreateResult } from '@shared/models'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import {
   checkBadCountPagination,
   checkBadSortPagination,
   checkBadStartPagination,
   cleanupTests,
-  doubleFollow,
   createMultipleServers,
+  doubleFollow,
   makeDeleteRequest,
   makeGetRequest,
   makePostBodyRequest,
@@ -17,7 +15,8 @@ import {
   PeerTubeServer,
   setAccessTokensToServers,
   waitJobs
-} from '../../../../shared/extra-utils'
+} from '@shared/extra-utils'
+import { HttpStatusCode, VideoCreateResult } from '@shared/models'
 
 describe('Test server redundancy API validators', function () {
   let servers: PeerTubeServer[]
@@ -64,11 +63,11 @@ describe('Test server redundancy API validators', function () {
     })
 
     it('Should fail with an invalid token', async function () {
-      await makeGetRequest({ url, path, token: 'fake_token', statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401 })
+      await makeGetRequest({ url, path, token: 'fake_token', expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
     it('Should fail if the user is not an administrator', async function () {
-      await makeGetRequest({ url, path, token: userAccessToken, statusCodeExpected: HttpStatusCode.FORBIDDEN_403 })
+      await makeGetRequest({ url, path, token: userAccessToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
     })
 
     it('Should fail with a bad start pagination', async function () {
@@ -92,7 +91,7 @@ describe('Test server redundancy API validators', function () {
     })
 
     it('Should succeed with the correct params', async function () {
-      await makeGetRequest({ url, path, token, query: { target: 'my-videos' }, statusCodeExpected: HttpStatusCode.OK_200 })
+      await makeGetRequest({ url, path, token, query: { target: 'my-videos' }, expectedStatus: HttpStatusCode.OK_200 })
     })
   })
 
@@ -108,11 +107,11 @@ describe('Test server redundancy API validators', function () {
     })
 
     it('Should fail with an invalid token', async function () {
-      await makePostBodyRequest({ url, path, token: 'fake_token', statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401 })
+      await makePostBodyRequest({ url, path, token: 'fake_token', expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
     it('Should fail if the user is not an administrator', async function () {
-      await makePostBodyRequest({ url, path, token: userAccessToken, statusCodeExpected: HttpStatusCode.FORBIDDEN_403 })
+      await makePostBodyRequest({ url, path, token: userAccessToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
     })
 
     it('Should fail without a video id', async function () {
@@ -124,7 +123,7 @@ describe('Test server redundancy API validators', function () {
     })
 
     it('Should fail with a not found video id', async function () {
-      await makePostBodyRequest({ url, path, token, fields: { videoId: 6565 }, statusCodeExpected: HttpStatusCode.NOT_FOUND_404 })
+      await makePostBodyRequest({ url, path, token, fields: { videoId: 6565 }, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
     })
 
     it('Should fail with a local a video id', async function () {
@@ -137,7 +136,7 @@ describe('Test server redundancy API validators', function () {
         path,
         token,
         fields: { videoId: videoRemote.shortUUID },
-        statusCodeExpected: HttpStatusCode.NO_CONTENT_204
+        expectedStatus: HttpStatusCode.NO_CONTENT_204
       })
     })
 
@@ -151,7 +150,7 @@ describe('Test server redundancy API validators', function () {
         path,
         token,
         fields: { videoId: videoRemote.uuid },
-        statusCodeExpected: HttpStatusCode.CONFLICT_409
+        expectedStatus: HttpStatusCode.CONFLICT_409
       })
     })
   })
@@ -168,11 +167,11 @@ describe('Test server redundancy API validators', function () {
     })
 
     it('Should fail with an invalid token', async function () {
-      await makeDeleteRequest({ url, path: path + '1', token: 'fake_token', statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401 })
+      await makeDeleteRequest({ url, path: path + '1', token: 'fake_token', expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
     it('Should fail if the user is not an administrator', async function () {
-      await makeDeleteRequest({ url, path: path + '1', token: userAccessToken, statusCodeExpected: HttpStatusCode.FORBIDDEN_403 })
+      await makeDeleteRequest({ url, path: path + '1', token: userAccessToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
     })
 
     it('Should fail with an incorrect video id', async function () {
@@ -180,7 +179,7 @@ describe('Test server redundancy API validators', function () {
     })
 
     it('Should fail with a not found video redundancy', async function () {
-      await makeDeleteRequest({ url, path: path + '454545', token, statusCodeExpected: HttpStatusCode.NOT_FOUND_404 })
+      await makeDeleteRequest({ url, path: path + '454545', token, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
     })
   })
 
@@ -193,7 +192,7 @@ describe('Test server redundancy API validators', function () {
         path: path + '/localhost:' + servers[1].port,
         fields: { redundancyAllowed: true },
         token: 'fake_token',
-        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
       })
     })
 
@@ -203,7 +202,7 @@ describe('Test server redundancy API validators', function () {
         path: path + '/localhost:' + servers[1].port,
         fields: { redundancyAllowed: true },
         token: userAccessToken,
-        statusCodeExpected: HttpStatusCode.FORBIDDEN_403
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
       })
     })
 
@@ -213,7 +212,7 @@ describe('Test server redundancy API validators', function () {
         path: path + '/example.com',
         fields: { redundancyAllowed: true },
         token: servers[0].accessToken,
-        statusCodeExpected: HttpStatusCode.NOT_FOUND_404
+        expectedStatus: HttpStatusCode.NOT_FOUND_404
       })
     })
 
@@ -223,7 +222,7 @@ describe('Test server redundancy API validators', function () {
         path: path + '/localhost:' + servers[1].port,
         fields: { blabla: true },
         token: servers[0].accessToken,
-        statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
       })
     })
 
@@ -233,7 +232,7 @@ describe('Test server redundancy API validators', function () {
         path: path + '/localhost:' + servers[1].port,
         fields: { redundancyAllowed: true },
         token: servers[0].accessToken,
-        statusCodeExpected: HttpStatusCode.NO_CONTENT_204
+        expectedStatus: HttpStatusCode.NO_CONTENT_204
       })
     })
   })

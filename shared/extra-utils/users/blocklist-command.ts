@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { HttpStatusCode } from '@shared/core-utils'
+import { HttpStatusCode } from '@shared/models'
 import { AccountBlock, ResultList, ServerBlock } from '@shared/models'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
 

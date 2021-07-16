@@ -1,5 +1,4 @@
-
-import { HttpStatusCode } from '../../core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '@shared/models'
 import { unwrapBody, unwrapText } from '../requests'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
 

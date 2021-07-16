@@ -2,7 +2,7 @@
 
 import 'mocha'
 import { omit } from 'lodash'
-import { HttpStatusCode } from '@shared/core-utils'
+import { HttpStatusCode } from '@shared/models'
 import {
   cleanupTests,
   createSingleServer,
@@ -214,7 +214,7 @@ describe('Test config API validators', function () {
       await makeGetRequest({
         url: server.url,
         path,
-        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
       })
     })
 
@@ -223,7 +223,7 @@ describe('Test config API validators', function () {
         url: server.url,
         path,
         token: userAccessToken,
-        statusCodeExpected: HttpStatusCode.FORBIDDEN_403
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
       })
     })
   })
@@ -234,7 +234,7 @@ describe('Test config API validators', function () {
         url: server.url,
         path,
         fields: updateParams,
-        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
       })
     })
 
@@ -244,7 +244,7 @@ describe('Test config API validators', function () {
         path,
         fields: updateParams,
         token: userAccessToken,
-        statusCodeExpected: HttpStatusCode.FORBIDDEN_403
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
       })
     })
 
@@ -256,7 +256,7 @@ describe('Test config API validators', function () {
         path,
         fields: newUpdateParams,
         token: server.accessToken,
-        statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
       })
     })
 
@@ -274,7 +274,7 @@ describe('Test config API validators', function () {
         path,
         fields: newUpdateParams,
         token: server.accessToken,
-        statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
       })
     })
 
@@ -295,7 +295,7 @@ describe('Test config API validators', function () {
         path,
         fields: newUpdateParams,
         token: server.accessToken,
-        statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
       })
     })
 
@@ -318,7 +318,7 @@ describe('Test config API validators', function () {
         path,
         fields: newUpdateParams,
         token: server.accessToken,
-        statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
       })
     })
 
@@ -328,7 +328,7 @@ describe('Test config API validators', function () {
         path,
         fields: updateParams,
         token: server.accessToken,
-        statusCodeExpected: HttpStatusCode.OK_200
+        expectedStatus: HttpStatusCode.OK_200
       })
     })
   })
@@ -338,7 +338,7 @@ describe('Test config API validators', function () {
       await makeDeleteRequest({
         url: server.url,
         path,
-        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
       })
     })
 
@@ -347,7 +347,7 @@ describe('Test config API validators', function () {
         url: server.url,
         path,
         token: userAccessToken,
-        statusCodeExpected: HttpStatusCode.FORBIDDEN_403
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
       })
     })
   })

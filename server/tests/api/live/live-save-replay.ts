@@ -3,7 +3,7 @@
 import 'mocha'
 import * as chai from 'chai'
 import { FfmpegCommand } from 'fluent-ffmpeg'
-import { HttpStatusCode } from '@shared/core-utils'
+import { HttpStatusCode } from '@shared/models'
 import {
   checkLiveCleanup,
   cleanupTests,

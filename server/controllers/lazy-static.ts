@@ -1,7 +1,7 @@
 import * as cors from 'cors'
 import * as express from 'express'
 import { VideosTorrentCache } from '@server/lib/files-cache/videos-torrent-cache'
-import { HttpStatusCode } from '../../shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '../../shared/models/http/http-error-codes'
 import { logger } from '../helpers/logger'
 import { LAZY_STATIC_PATHS, STATIC_MAX_AGE } from '../initializers/constants'
 import { VideosCaptionCache, VideosPreviewCache } from '../lib/files-cache'

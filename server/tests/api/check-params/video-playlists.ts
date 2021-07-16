@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-import { HttpStatusCode } from '@shared/core-utils'
+import { HttpStatusCode } from '@shared/models'
 import {
   checkBadCountPagination,
   checkBadSortPagination,
@@ -119,7 +119,7 @@ describe('Test video playlists API validator', function () {
       await makeGetRequest({
         url: server.url,
         path: accountPath,
-        statusCodeExpected: HttpStatusCode.NOT_FOUND_404,
+        expectedStatus: HttpStatusCode.NOT_FOUND_404,
         token: server.accessToken
       })
     })
@@ -130,18 +130,18 @@ describe('Test video playlists API validator', function () {
       await makeGetRequest({
         url: server.url,
         path: accountPath,
-        statusCodeExpected: HttpStatusCode.NOT_FOUND_404,
+        expectedStatus: HttpStatusCode.NOT_FOUND_404,
         token: server.accessToken
       })
     })
 
     it('Should success with the correct parameters', async function () {
-      await makeGetRequest({ url: server.url, path: globalPath, statusCodeExpected: HttpStatusCode.OK_200, token: server.accessToken })
-      await makeGetRequest({ url: server.url, path: accountPath, statusCodeExpected: HttpStatusCode.OK_200, token: server.accessToken })
+      await makeGetRequest({ url: server.url, path: globalPath, expectedStatus: HttpStatusCode.OK_200, token: server.accessToken })
+      await makeGetRequest({ url: server.url, path: accountPath, expectedStatus: HttpStatusCode.OK_200, token: server.accessToken })
       await makeGetRequest({
         url: server.url,
         path: videoChannelPath,
-        statusCodeExpected: HttpStatusCode.OK_200,
+        expectedStatus: HttpStatusCode.OK_200,
         token: server.accessToken
       })
     })
@@ -159,7 +159,7 @@ describe('Test video playlists API validator', function () {
     })
 
     it('Should success with the correct parameters', async function () {
-      await makeGetRequest({ url: server.url, path: path + playlist.shortUUID + '/videos', statusCodeExpected: HttpStatusCode.OK_200 })
+      await makeGetRequest({ url: server.url, path: path + playlist.shortUUID + '/videos', expectedStatus: HttpStatusCode.OK_200 })
     })
   })
 
@@ -580,7 +580,7 @@ describe('Test video playlists API validator', function () {
         url: server.url,
         path,
         query: { videoIds: [ 1, 2 ] },
-        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
       })
     })
 
@@ -613,7 +613,7 @@ describe('Test video playlists API validator', function () {
         token: server.accessToken,
         path,
         query: { videoIds: [ 1, 2 ] },
-        statusCodeExpected: HttpStatusCode.OK_200
+        expectedStatus: HttpStatusCode.OK_200
       })
     })
   })

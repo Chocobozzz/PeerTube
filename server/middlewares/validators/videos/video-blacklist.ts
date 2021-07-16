@@ -1,6 +1,6 @@
 import * as express from 'express'
 import { body, query } from 'express-validator'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
 import { isBooleanValid, toBooleanOrNull, toIntOrNull } from '../../../helpers/custom-validators/misc'
 import { isVideoBlacklistReasonValid, isVideoBlacklistTypeValid } from '../../../helpers/custom-validators/video-blacklist'
 import { logger } from '../../../helpers/logger'

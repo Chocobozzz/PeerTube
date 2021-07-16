@@ -1,6 +1,6 @@
 
+import { HttpStatusCode } from '@shared/models'
 import { ResultList } from '@shared/models'
-import { HttpStatusCode } from '../../core-utils/miscs/http-error-codes'
 import { VideoImport, VideoImportCreate } from '../../models/videos'
 import { unwrapBody } from '../requests'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'

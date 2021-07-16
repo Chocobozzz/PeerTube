@@ -1,5 +1,10 @@
 import * as express from 'express'
+import { JobQueue } from '@server/lib/job-queue'
+import { VideoRedundancyModel } from '@server/models/redundancy/video-redundancy'
+import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
 import { UserRight } from '../../../../shared/models/users'
+import { logger } from '../../../helpers/logger'
+import { removeRedundanciesOfServer, removeVideoRedundancy } from '../../../lib/redundancy'
 import {
   asyncMiddleware,
   authenticate,
@@ -10,16 +15,11 @@ import {
   videoRedundanciesSortValidator
 } from '../../../middlewares'
 import {
-  listVideoRedundanciesValidator,
-  updateServerRedundancyValidator,
   addVideoRedundancyValidator,
-  removeVideoRedundancyValidator
+  listVideoRedundanciesValidator,
+  removeVideoRedundancyValidator,
+  updateServerRedundancyValidator
 } from '../../../middlewares/validators/redundancy'
-import { removeRedundanciesOfServer, removeVideoRedundancy } from '../../../lib/redundancy'
-import { logger } from '../../../helpers/logger'
-import { VideoRedundancyModel } from '@server/models/redundancy/video-redundancy'
-import { JobQueue } from '@server/lib/job-queue'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const serverRedundancyRouter = express.Router()
 

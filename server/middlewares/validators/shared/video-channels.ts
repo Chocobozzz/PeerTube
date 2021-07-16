@@ -1,7 +1,7 @@
 import * as express from 'express'
 import { VideoChannelModel } from '@server/models/video/video-channel'
 import { MChannelBannerAccountDefault } from '@server/types/models'
-import { HttpStatusCode } from '@shared/core-utils'
+import { HttpStatusCode } from '@shared/models'
 
 async function doesLocalVideoChannelNameExist (name: string, res: express.Response) {
   const videoChannel = await VideoChannelModel.loadLocalByNameAndPopulateAccount(name)

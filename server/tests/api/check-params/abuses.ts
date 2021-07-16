@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-import { HttpStatusCode } from '@shared/core-utils'
+import { HttpStatusCode } from '@shared/models'
 import {
   AbusesCommand,
   checkBadCountPagination,
@@ -66,7 +66,7 @@ describe('Test abuses API validators', function () {
       await makeGetRequest({
         url: server.url,
         path,
-        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
       })
     })
 
@@ -75,7 +75,7 @@ describe('Test abuses API validators', function () {
         url: server.url,
         path,
         token: userToken,
-        statusCodeExpected: HttpStatusCode.FORBIDDEN_403
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
       })
     })
 
@@ -110,7 +110,7 @@ describe('Test abuses API validators', function () {
         videoIs: 'deleted'
       }
 
-      await makeGetRequest({ url: server.url, path, token: server.accessToken, query, statusCodeExpected: HttpStatusCode.OK_200 })
+      await makeGetRequest({ url: server.url, path, token: server.accessToken, query, expectedStatus: HttpStatusCode.OK_200 })
     })
   })
 
@@ -133,7 +133,7 @@ describe('Test abuses API validators', function () {
       await makeGetRequest({
         url: server.url,
         path,
-        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
       })
     })
 
@@ -152,7 +152,7 @@ describe('Test abuses API validators', function () {
         state: 2
       }
 
-      await makeGetRequest({ url: server.url, path, token: userToken, query, statusCodeExpected: HttpStatusCode.OK_200 })
+      await makeGetRequest({ url: server.url, path, token: userToken, query, expectedStatus: HttpStatusCode.OK_200 })
     })
   })
 
@@ -176,7 +176,7 @@ describe('Test abuses API validators', function () {
         path,
         token: userToken,
         fields,
-        statusCodeExpected: HttpStatusCode.NOT_FOUND_404
+        expectedStatus: HttpStatusCode.NOT_FOUND_404
       })
     })
 
@@ -192,7 +192,7 @@ describe('Test abuses API validators', function () {
         path,
         token: userToken,
         fields,
-        statusCodeExpected: HttpStatusCode.NOT_FOUND_404
+        expectedStatus: HttpStatusCode.NOT_FOUND_404
       })
     })
 
@@ -208,7 +208,7 @@ describe('Test abuses API validators', function () {
         path,
         token: userToken,
         fields,
-        statusCodeExpected: HttpStatusCode.NOT_FOUND_404
+        expectedStatus: HttpStatusCode.NOT_FOUND_404
       })
     })
 
@@ -219,14 +219,14 @@ describe('Test abuses API validators', function () {
         path,
         token: userToken,
         fields,
-        statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
       })
     })
 
     it('Should fail with a non authenticated user', async function () {
       const fields = { video: { id: server.store.video.id }, reason: 'my super reason' }
 
-      await makePostBodyRequest({ url: server.url, path, token: 'hello', fields, statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401 })
+      await makePostBodyRequest({ url: server.url, path, token: 'hello', fields, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
     it('Should fail with a reason too short', async function () {
@@ -249,7 +249,7 @@ describe('Test abuses API validators', function () {
         path,
         token: userToken,
         fields,
-        statusCodeExpected: HttpStatusCode.OK_200
+        expectedStatus: HttpStatusCode.OK_200
       })
       abuseId = res.body.abuse.id
     })
@@ -283,7 +283,7 @@ describe('Test abuses API validators', function () {
         predefinedReasons: [ 'serverRules' ]
       }
 
-      await makePostBodyRequest({ url: server.url, path, token: userToken, fields, statusCodeExpected: HttpStatusCode.OK_200 })
+      await makePostBodyRequest({ url: server.url, path, token: userToken, fields, expectedStatus: HttpStatusCode.OK_200 })
     })
   })
 

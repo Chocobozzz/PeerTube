@@ -19,8 +19,10 @@ describe('Test video NSFW policy', function () {
 
   async function getVideosFunctions (token?: string, query: { nsfw?: BooleanBothQuery } = {}) {
     const user = await server.users.getMyInfo()
-    const videoChannelName = user.videoChannels[0].name
+
+    const channelName = user.videoChannels[0].name
     const accountName = user.account.name + '@' + user.account.host
+
     const hasQuery = Object.keys(query).length !== 0
     let promises: Promise<ResultList<Video>>[]
 
@@ -28,8 +30,8 @@ describe('Test video NSFW policy', function () {
       promises = [
         server.search.advancedVideoSearch({ token, search: { search: 'n', sort: '-publishedAt', ...query } }),
         server.videos.listWithToken({ token, ...query }),
-        server.videos.listByAccount({ token, accountName, ...query }),
-        server.videos.listByChannel({ token, videoChannelName, ...query })
+        server.videos.listByAccount({ token, handle: channelName, ...query }),
+        server.videos.listByChannel({ token, handle: accountName, ...query })
       ]
 
       // Overviews do not support video filters
@@ -45,8 +47,8 @@ describe('Test video NSFW policy', function () {
     promises = [
       server.search.searchVideos({ search: 'n', sort: '-publishedAt' }),
       server.videos.list(),
-      server.videos.listByAccount({ accountName }),
-      server.videos.listByChannel({ videoChannelName })
+      server.videos.listByAccount({ handle: channelName }),
+      server.videos.listByChannel({ handle: accountName })
     ]
 
     // Overviews do not support video filters

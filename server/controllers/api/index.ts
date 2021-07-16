@@ -1,7 +1,7 @@
 import * as cors from 'cors'
 import * as express from 'express'
 import * as RateLimit from 'express-rate-limit'
-import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '../../../shared/models'
 import { badRequest } from '../../helpers/express-utils'
 import { CONFIG } from '../../initializers/config'
 import { abuseRouter } from './abuse'

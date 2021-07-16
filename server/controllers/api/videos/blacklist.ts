@@ -19,7 +19,7 @@ import {
   videosBlacklistUpdateValidator
 } from '../../../middlewares'
 import { VideoBlacklistModel } from '../../../models/video/video-blacklist'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
 
 const blacklistRouter = express.Router()
 

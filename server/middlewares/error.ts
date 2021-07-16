@@ -1,6 +1,6 @@
 import * as express from 'express'
 import { ProblemDocument, ProblemDocumentExtension } from 'http-problem-details'
-import { HttpStatusCode } from '@shared/core-utils'
+import { HttpStatusCode } from '@shared/models'
 
 function apiFailMiddleware (req: express.Request, res: express.Response, next: express.NextFunction) {
   res.fail = options => {

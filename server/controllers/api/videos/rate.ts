@@ -7,7 +7,7 @@ import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate, videoUp
 import { AccountModel } from '../../../models/account/account'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
 import { sequelizeTypescript } from '../../../initializers/database'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
 
 const rateVideoRouter = express.Router()
 

@@ -1,4 +1,4 @@
-import { HttpStatusCode } from '@shared/core-utils'
+import { HttpStatusCode } from '@shared/models'
 import { PeerTubeProblemDocument } from '@shared/models'
 import { unwrapBody } from '../requests'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
@@ -26,7 +26,7 @@ export class LoginCommand extends AbstractCommand {
       ...options,
 
       path,
-      type: 'form',
+      requestType: 'form',
       fields: body,
       implicitToken: false,
       defaultExpectedStatus: HttpStatusCode.OK_200
@@ -72,7 +72,7 @@ export class LoginCommand extends AbstractCommand {
       ...options,
 
       path,
-      type: 'form',
+      requestType: 'form',
       fields: body,
       implicitToken: false,
       defaultExpectedStatus: HttpStatusCode.OK_200
@@ -88,7 +88,7 @@ export class LoginCommand extends AbstractCommand {
       ...options,
 
       path,
-      type: 'form',
+      requestType: 'form',
       implicitToken: false,
       defaultExpectedStatus: HttpStatusCode.OK_200
     }))
@@ -111,7 +111,7 @@ export class LoginCommand extends AbstractCommand {
       ...options,
 
       path,
-      type: 'form',
+      requestType: 'form',
       fields: body,
       implicitToken: false,
       defaultExpectedStatus: HttpStatusCode.OK_200

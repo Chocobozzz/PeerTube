@@ -12,7 +12,7 @@ import { AP_CLEANER_CONCURRENCY } from '@server/initializers/constants'
 import { VideoModel } from '@server/models/video/video'
 import { VideoCommentModel } from '@server/models/video/video-comment'
 import { VideoShareModel } from '@server/models/video/video-share'
-import { HttpStatusCode } from '@shared/core-utils'
+import { HttpStatusCode } from '@shared/models'
 import { logger } from '../../../helpers/logger'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
 

@@ -1,6 +1,6 @@
 import * as express from 'express'
 import { OAuthClientLocal } from '../../../shared'
-import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '../../../shared/models/http/http-error-codes'
 import { logger } from '../../helpers/logger'
 import { CONFIG } from '../../initializers/config'
 import { asyncMiddleware, openapiOperationDoc } from '../../middlewares'

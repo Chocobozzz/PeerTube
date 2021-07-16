@@ -1,6 +1,6 @@
 import * as express from 'express'
 import { query } from 'express-validator'
-import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '../../../shared/models/http/http-error-codes'
 import { isWebfingerLocalResourceValid } from '../../helpers/custom-validators/webfinger'
 import { getHostWithPort } from '../../helpers/express-utils'
 import { logger } from '../../helpers/logger'

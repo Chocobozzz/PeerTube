@@ -5,7 +5,7 @@ import * as chai from 'chai'
 import { createFile, readdir } from 'fs-extra'
 import { join } from 'path'
 import { buildUUID } from '@server/helpers/uuid'
-import { HttpStatusCode } from '@shared/core-utils'
+import { HttpStatusCode } from '@shared/models'
 import {
   cleanupTests,
   CLICommand,
@@ -91,7 +91,7 @@ describe('Test prune storage scripts', function () {
       await makeGetRequest({
         url: servers[0].url,
         path: account.avatar.path,
-        statusCodeExpected: HttpStatusCode.OK_200
+        expectedStatus: HttpStatusCode.OK_200
       })
     }
 
@@ -100,7 +100,7 @@ describe('Test prune storage scripts', function () {
       await makeGetRequest({
         url: servers[1].url,
         path: account.avatar.path,
-        statusCodeExpected: HttpStatusCode.OK_200
+        expectedStatus: HttpStatusCode.OK_200
       })
     }
 

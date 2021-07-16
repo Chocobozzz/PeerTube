@@ -11,8 +11,7 @@ import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
 import { InstanceService } from '@app/shared/shared-instance'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
-import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
-import { HTMLServerConfig } from '@shared/models'
+import { HTMLServerConfig, HttpStatusCode } from '@shared/models'
 
 type Prefill = {
   subject?: string

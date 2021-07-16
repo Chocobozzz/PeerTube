@@ -3,7 +3,7 @@
 import 'mocha'
 import * as chai from 'chai'
 import { omit } from 'lodash'
-import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '@shared/models'
 import { Account, HTMLServerConfig, ServerConfig, VideoPlaylistCreateResult, VideoPlaylistPrivacy } from '@shared/models'
 import {
   cleanupTests,
@@ -114,7 +114,7 @@ describe('Test a client controllers', function () {
             url: servers[0].url,
             path: basePath + id,
             accept: 'text/html',
-            statusCodeExpected: HttpStatusCode.OK_200
+            expectedStatus: HttpStatusCode.OK_200
           })
 
           const port = servers[0].port
@@ -135,7 +135,7 @@ describe('Test a client controllers', function () {
             url: servers[0].url,
             path: basePath + id,
             accept: 'text/html',
-            statusCodeExpected: HttpStatusCode.OK_200
+            expectedStatus: HttpStatusCode.OK_200
           })
 
           const port = servers[0].port
@@ -153,7 +153,7 @@ describe('Test a client controllers', function () {
   describe('Open Graph', function () {
 
     async function accountPageTest (path: string) {
-      const res = await makeGetRequest({ url: servers[0].url, path, accept: 'text/html', statusCodeExpected: HttpStatusCode.OK_200 })
+      const res = await makeGetRequest({ url: servers[0].url, path, accept: 'text/html', expectedStatus: HttpStatusCode.OK_200 })
       const text = res.text
 
       expect(text).to.contain(`<meta property="og:title" content="${account.displayName}" />`)
@@ -163,7 +163,7 @@ describe('Test a client controllers', function () {
     }
 
     async function channelPageTest (path: string) {
-      const res = await makeGetRequest({ url: servers[0].url, path, accept: 'text/html', statusCodeExpected: HttpStatusCode.OK_200 })
+      const res = await makeGetRequest({ url: servers[0].url, path, accept: 'text/html', expectedStatus: HttpStatusCode.OK_200 })
       const text = res.text
 
       expect(text).to.contain(`<meta property="og:title" content="${servers[0].store.channel.displayName}" />`)
@@ -173,7 +173,7 @@ describe('Test a client controllers', function () {
     }
 
     async function watchVideoPageTest (path: string) {
-      const res = await makeGetRequest({ url: servers[0].url, path, accept: 'text/html', statusCodeExpected: HttpStatusCode.OK_200 })
+      const res = await makeGetRequest({ url: servers[0].url, path, accept: 'text/html', expectedStatus: HttpStatusCode.OK_200 })
       const text = res.text
 
       expect(text).to.contain(`<meta property="og:title" content="${videoName}" />`)
@@ -183,7 +183,7 @@ describe('Test a client controllers', function () {
     }
 
     async function watchPlaylistPageTest (path: string) {
-      const res = await makeGetRequest({ url: servers[0].url, path, accept: 'text/html', statusCodeExpected: HttpStatusCode.OK_200 })
+      const res = await makeGetRequest({ url: servers[0].url, path, accept: 'text/html', expectedStatus: HttpStatusCode.OK_200 })
       const text = res.text
 
       expect(text).to.contain(`<meta property="og:title" content="${playlistName}" />`)
@@ -226,7 +226,7 @@ describe('Test a client controllers', function () {
     describe('Not whitelisted', function () {
 
       async function accountPageTest (path: string) {
-        const res = await makeGetRequest({ url: servers[0].url, path, accept: 'text/html', statusCodeExpected: HttpStatusCode.OK_200 })
+        const res = await makeGetRequest({ url: servers[0].url, path, accept: 'text/html', expectedStatus: HttpStatusCode.OK_200 })
         const text = res.text
 
         expect(text).to.contain('<meta property="twitter:card" content="summary" />')
@@ -236,7 +236,7 @@ describe('Test a client controllers', function () {
       }
 
       async function channelPageTest (path: string) {
-        const res = await makeGetRequest({ url: servers[0].url, path, accept: 'text/html', statusCodeExpected: HttpStatusCode.OK_200 })
+        const res = await makeGetRequest({ url: servers[0].url, path, accept: 'text/html', expectedStatus: HttpStatusCode.OK_200 })
         const text = res.text
 
         expect(text).to.contain('<meta property="twitter:card" content="summary" />')
@@ -246,7 +246,7 @@ describe('Test a client controllers', function () {
       }
 
       async function watchVideoPageTest (path: string) {
-        const res = await makeGetRequest({ url: servers[0].url, path, accept: 'text/html', statusCodeExpected: HttpStatusCode.OK_200 })
+        const res = await makeGetRequest({ url: servers[0].url, path, accept: 'text/html', expectedStatus: HttpStatusCode.OK_200 })
         const text = res.text
 
         expect(text).to.contain('<meta property="twitter:card" content="summary_large_image" />')
@@ -256,7 +256,7 @@ describe('Test a client controllers', function () {
       }
 
       async function watchPlaylistPageTest (path: string) {
-        const res = await makeGetRequest({ url: servers[0].url, path, accept: 'text/html', statusCodeExpected: HttpStatusCode.OK_200 })
+        const res = await makeGetRequest({ url: servers[0].url, path, accept: 'text/html', expectedStatus: HttpStatusCode.OK_200 })
         const text = res.text
 
         expect(text).to.contain('<meta property="twitter:card" content="summary" />')
@@ -307,7 +307,7 @@ describe('Test a client controllers', function () {
       })
 
       async function accountPageTest (path: string) {
-        const res = await makeGetRequest({ url: servers[0].url, path, accept: 'text/html', statusCodeExpected: HttpStatusCode.OK_200 })
+        const res = await makeGetRequest({ url: servers[0].url, path, accept: 'text/html', expectedStatus: HttpStatusCode.OK_200 })
         const text = res.text
 
         expect(text).to.contain('<meta property="twitter:card" content="summary" />')
@@ -315,7 +315,7 @@ describe('Test a client controllers', function () {
       }
 
       async function channelPageTest (path: string) {
-        const res = await makeGetRequest({ url: servers[0].url, path, accept: 'text/html', statusCodeExpected: HttpStatusCode.OK_200 })
+        const res = await makeGetRequest({ url: servers[0].url, path, accept: 'text/html', expectedStatus: HttpStatusCode.OK_200 })
         const text = res.text
 
         expect(text).to.contain('<meta property="twitter:card" content="summary" />')
@@ -323,7 +323,7 @@ describe('Test a client controllers', function () {
       }
 
       async function watchVideoPageTest (path: string) {
-        const res = await makeGetRequest({ url: servers[0].url, path, accept: 'text/html', statusCodeExpected: HttpStatusCode.OK_200 })
+        const res = await makeGetRequest({ url: servers[0].url, path, accept: 'text/html', expectedStatus: HttpStatusCode.OK_200 })
         const text = res.text
 
         expect(text).to.contain('<meta property="twitter:card" content="player" />')
@@ -331,7 +331,7 @@ describe('Test a client controllers', function () {
       }
 
       async function watchPlaylistPageTest (path: string) {
-        const res = await makeGetRequest({ url: servers[0].url, path, accept: 'text/html', statusCodeExpected: HttpStatusCode.OK_200 })
+        const res = await makeGetRequest({ url: servers[0].url, path, accept: 'text/html', expectedStatus: HttpStatusCode.OK_200 })
         const text = res.text
 
         expect(text).to.contain('<meta property="twitter:card" content="player" />')

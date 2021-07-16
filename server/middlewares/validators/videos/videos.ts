@@ -6,7 +6,7 @@ import { getServerActor } from '@server/models/application/application'
 import { ExpressPromiseHandler } from '@server/types/express'
 import { MUserAccountId, MVideoFullLight } from '@server/types/models'
 import { ServerErrorCode, UserRight, VideoPrivacy } from '../../../../shared'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
 import {
   exists,
   isBooleanValid,

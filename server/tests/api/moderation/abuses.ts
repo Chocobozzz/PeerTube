@@ -5,8 +5,8 @@ import * as chai from 'chai'
 import {
   AbusesCommand,
   cleanupTests,
-  doubleFollow,
   createMultipleServers,
+  doubleFollow,
   PeerTubeServer,
   setAccessTokensToServers,
   waitJobs
@@ -65,7 +65,7 @@ describe('Test abuses', function () {
       expect(data.length).to.equal(2)
 
       servers[0].store.video = data.find(video => video.name === 'my super name for server 1')
-      servers[1].store.video =  data.find(video => video.name === 'my super name for server 2')
+      servers[1].store.video = data.find(video => video.name === 'my super name for server 2')
     })
 
     it('Should not have abuses', async function () {
@@ -402,8 +402,8 @@ describe('Test abuses', function () {
     before(async function () {
       this.timeout(50000)
 
-      servers[0].store.video = await await servers[0].videos.quickUpload({ name: 'server 1' })
-      servers[1].store.video =  await await servers[1].videos.quickUpload({ name: 'server 2' })
+      servers[0].store.video = await servers[0].videos.quickUpload({ name: 'server 1' })
+      servers[1].store.video = await servers[1].videos.quickUpload({ name: 'server 2' })
 
       await servers[0].comments.createThread({ videoId: servers[0].store.video.id, text: 'comment server 1' })
       await servers[1].comments.createThread({ videoId: servers[1].store.video.id, text: 'comment server 2' })

@@ -2,7 +2,7 @@
 
 import 'mocha'
 import { expect } from 'chai'
-import { HttpStatusCode } from '@shared/core-utils'
+import { HttpStatusCode } from '@shared/models'
 import {
   cleanupTests,
   decodeQueryString,
@@ -20,15 +20,15 @@ async function loginExternal (options: {
   authName: string
   username: string
   query?: any
-  statusCodeExpected?: HttpStatusCode
-  statusCodeExpectedStep2?: HttpStatusCode
+  expectedStatus?: HttpStatusCode
+  expectedStatusStep2?: HttpStatusCode
 }) {
   const res = await options.server.plugins.getExternalAuth({
     npmName: options.npmName,
     npmVersion: '0.0.1',
     authName: options.authName,
     query: options.query,
-    expectedStatus: options.statusCodeExpected || HttpStatusCode.FOUND_302
+    expectedStatus: options.expectedStatus || HttpStatusCode.FOUND_302
   })
 
   if (res.status !== HttpStatusCode.FOUND_302) return
@@ -39,7 +39,7 @@ async function loginExternal (options: {
   const resLogin = await options.server.login.loginUsingExternalToken({
     username: options.username,
     externalAuthToken: externalAuthToken as string,
-    expectedStatus: options.statusCodeExpectedStep2
+    expectedStatus: options.expectedStatusStep2
   })
 
   return resLogin.body
@@ -268,7 +268,7 @@ describe('Test external auth plugins', function () {
         username: 'kefka'
       },
       username: 'kefka',
-      statusCodeExpected: HttpStatusCode.NOT_FOUND_404
+      expectedStatus: HttpStatusCode.NOT_FOUND_404
     })
   })
 
@@ -293,7 +293,7 @@ describe('Test external auth plugins', function () {
         username: 'cyan'
       },
       username: 'cyan',
-      statusCodeExpected: HttpStatusCode.NOT_FOUND_404
+      expectedStatus: HttpStatusCode.NOT_FOUND_404
     })
 
     await server.login.login({ user: { username: 'cyan', password: null }, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
@@ -307,7 +307,7 @@ describe('Test external auth plugins', function () {
       npmName: 'test-external-auth-two',
       authName: 'external-auth-4',
       username: 'kefka2',
-      statusCodeExpectedStep2: HttpStatusCode.BAD_REQUEST_400
+      expectedStatusStep2: HttpStatusCode.BAD_REQUEST_400
     })
 
     await loginExternal({
@@ -315,7 +315,7 @@ describe('Test external auth plugins', function () {
       npmName: 'test-external-auth-two',
       authName: 'external-auth-4',
       username: 'kefka',
-      statusCodeExpectedStep2: HttpStatusCode.BAD_REQUEST_400
+      expectedStatusStep2: HttpStatusCode.BAD_REQUEST_400
     })
   })
 
@@ -327,7 +327,7 @@ describe('Test external auth plugins', function () {
       npmName: 'test-external-auth-two',
       authName: 'external-auth-6',
       username: 'existing_user',
-      statusCodeExpectedStep2: HttpStatusCode.BAD_REQUEST_400
+      expectedStatusStep2: HttpStatusCode.BAD_REQUEST_400
     })
   })
 

@@ -3,7 +3,7 @@
 import 'mocha'
 import * as chai from 'chai'
 import { join } from 'path'
-import { HttpStatusCode } from '@shared/core-utils'
+import { HttpStatusCode } from '@shared/models'
 import {
   checkDirectoryIsEmpty,
   checkResolutionsInMasterPlaylist,

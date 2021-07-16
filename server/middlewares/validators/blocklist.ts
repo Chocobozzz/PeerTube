@@ -1,7 +1,7 @@
 import * as express from 'express'
 import { body, param } from 'express-validator'
 import { getServerActor } from '@server/models/application/application'
-import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '../../../shared/models/http/http-error-codes'
 import { isHostValid } from '../../helpers/custom-validators/servers'
 import { logger } from '../../helpers/logger'
 import { WEBSERVER } from '../../initializers/constants'

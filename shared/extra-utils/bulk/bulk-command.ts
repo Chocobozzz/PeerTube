@@ -1,6 +1,4 @@
-
-import { BulkRemoveCommentsOfBody } from '@shared/models/bulk/bulk-remove-comments-of-body.model'
-import { HttpStatusCode } from '../../core-utils/miscs/http-error-codes'
+import { BulkRemoveCommentsOfBody, HttpStatusCode } from '@shared/models'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
 
 export class BulkCommand extends AbstractCommand {

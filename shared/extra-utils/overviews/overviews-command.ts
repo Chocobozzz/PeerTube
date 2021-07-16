@@ -1,4 +1,4 @@
-import { HttpStatusCode } from '@shared/core-utils'
+import { HttpStatusCode } from '@shared/models'
 import { VideosOverview } from '@shared/models'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
 

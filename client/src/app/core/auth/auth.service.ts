@@ -6,12 +6,11 @@ import { Injectable } from '@angular/core'
 import { Router } from '@angular/router'
 import { Notifier } from '@app/core/notification/notifier.service'
 import { objectToUrlEncoded, peertubeLocalStorage } from '@root-helpers/index'
-import { MyUser as UserServerModel, OAuthClientLocal, User, UserLogin, UserRefreshToken } from '@shared/models'
+import { HttpStatusCode, MyUser as UserServerModel, OAuthClientLocal, User, UserLogin, UserRefreshToken } from '@shared/models'
 import { environment } from '../../../environments/environment'
 import { RestExtractor } from '../rest/rest-extractor.service'
 import { AuthStatus } from './auth-status.model'
 import { AuthUser } from './auth-user.model'
-import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 
 interface UserLoginWithUsername extends UserLogin {
   access_token: string

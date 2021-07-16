@@ -1,9 +1,9 @@
 import './embed.scss'
 import videojs from 'video.js'
 import { peertubeTranslate } from '../../../../shared/core-utils/i18n'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import {
   HTMLServerConfig,
+  HttpStatusCode,
   OAuth2ErrorCode,
   ResultList,
   UserRefreshToken,

@@ -11,7 +11,7 @@ import { videoLiveAddValidator, videoLiveGetValidator, videoLiveUpdateValidator 
 import { VideoLiveModel } from '@server/models/video/video-live'
 import { MVideoDetails, MVideoFullLight } from '@server/types/models'
 import { LiveVideoCreate, LiveVideoUpdate, VideoState } from '../../../../shared'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
 import { logger } from '../../../helpers/logger'
 import { sequelizeTypescript } from '../../../initializers/database'
 import { updateVideoMiniatureFromExisting } from '../../../lib/thumbnail'
