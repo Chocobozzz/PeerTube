@@ -2,21 +2,24 @@
 
 import * as chai from 'chai'
 import 'mocha'
-import { cleanupTests, flushAndRunServer, ServerInfo } from '../../../shared/extra-utils/server/servers'
+import {cleanupTests, flushAndRunServer, ServerInfo} from '../../../shared/extra-utils/server/servers'
 import {
   createVideoPlaylist,
   getPluginTestPath,
   getVideo,
   getVideoCategories,
   getVideoLanguages,
-  getVideoLicences, getVideoPlaylistPrivacies, getVideoPrivacies,
+  getVideoLicences,
+  getVideoPlaylistPrivacies,
+  getVideoPrivacies,
   installPlugin,
+  makeGetRequest,
   setAccessTokensToServers,
   uninstallPlugin,
   uploadVideo
 } from '../../../shared/extra-utils'
-import { VideoDetails, VideoPlaylistPrivacy } from '../../../shared/models/videos'
-import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
+import {VideoDetails, VideoPlaylistPrivacy} from '../../../shared/models/videos'
+import {HttpStatusCode} from '../../../shared/core-utils/miscs/http-error-codes'
 
 const expect = chai.expect
 
@@ -171,6 +174,38 @@ describe('Test plugin altering video constants', function () {
       expect(playlistPrivacies[2]).to.exist
       expect(playlistPrivacies[3]).to.exist
     }
+  })
+
+  it('Should be able to reset categories', async function () {
+    await installPlugin({
+      url: server.url,
+      accessToken: server.accessToken,
+      path: getPluginTestPath('-video-constants')
+    })
+
+    let { body: categories } = await getVideoCategories(server.url)
+
+    expect(categories[1]).to.not.exist
+    expect(categories[2]).to.not.exist
+
+    expect(categories[42]).to.exist
+    expect(categories[43]).to.exist
+
+    await makeGetRequest({
+      url: server.url,
+      token: server.accessToken,
+      path: '/plugins/test-video-constants/router/reset-categories',
+      statusCodeExpected: HttpStatusCode.NO_CONTENT_204
+    })
+
+    const { body } = await getVideoCategories(server.url)
+    categories = body
+
+    expect(categories[1]).to.exist
+    expect(categories[2]).to.exist
+
+    expect(categories[42]).to.not.exist
+    expect(categories[43]).to.not.exist
   })
 
   after(async function () {
