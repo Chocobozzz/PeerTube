@@ -7,9 +7,9 @@ import {
   checkPlaylistFilesWereRemoved,
   cleanupTests,
   doubleFollow,
-  flushAndRunMultipleServers,
+  createMultipleServers,
   PlaylistsCommand,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel,
   testImage,
@@ -28,7 +28,7 @@ import {
 const expect = chai.expect
 
 async function checkPlaylistElementType (
-  servers: ServerInfo[],
+  servers: PeerTubeServer[],
   playlistId: string,
   type: VideoPlaylistElementType,
   position: number,
@@ -52,7 +52,7 @@ async function checkPlaylistElementType (
 }
 
 describe('Test video playlists', function () {
-  let servers: ServerInfo[] = []
+  let servers: PeerTubeServer[] = []
 
   let playlistServer2Id1: number
   let playlistServer2Id2: number
@@ -75,7 +75,7 @@ describe('Test video playlists', function () {
   before(async function () {
     this.timeout(120000)
 
-    servers = await flushAndRunMultipleServers(3, { transcoding: { enabled: false } })
+    servers = await createMultipleServers(3, { transcoding: { enabled: false } })
 
     // Get the access tokens
     await setAccessTokensToServers(servers)
@@ -584,10 +584,10 @@ describe('Test video playlists', function () {
   })
 
   describe('Element type', function () {
-    let groupUser1: ServerInfo[]
-    let groupWithoutToken1: ServerInfo[]
-    let group1: ServerInfo[]
-    let group2: ServerInfo[]
+    let groupUser1: PeerTubeServer[]
+    let groupWithoutToken1: PeerTubeServer[]
+    let group1: PeerTubeServer[]
+    let group2: PeerTubeServer[]
 
     let video1: string
     let video2: string

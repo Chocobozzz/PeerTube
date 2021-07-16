@@ -7,14 +7,14 @@ import { Video } from '@shared/models'
 import {
   cleanupTests,
   doubleFollow,
-  flushAndRunMultipleServers,
+  createMultipleServers,
   makeRawRequest,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers,
   waitJobs
 } from '../../../shared/extra-utils'
 
-async function testThumbnail (server: ServerInfo, videoId: number | string) {
+async function testThumbnail (server: PeerTubeServer, videoId: number | string) {
   const video = await server.videos.get({ id: videoId })
 
   const requests = [
@@ -29,7 +29,7 @@ async function testThumbnail (server: ServerInfo, videoId: number | string) {
 }
 
 describe('Test regenerate thumbnails script', function () {
-  let servers: ServerInfo[]
+  let servers: PeerTubeServer[]
 
   let video1: Video
   let video2: Video
@@ -41,7 +41,7 @@ describe('Test regenerate thumbnails script', function () {
   before(async function () {
     this.timeout(60000)
 
-    servers = await flushAndRunMultipleServers(2)
+    servers = await createMultipleServers(2)
     await setAccessTokensToServers(servers)
 
     await doubleFollow(servers[0], servers[1])

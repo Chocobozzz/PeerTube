@@ -5,11 +5,10 @@ import * as chai from 'chai'
 import { HttpStatusCode } from '@shared/core-utils'
 import {
   cleanupTests,
-  flushAndRunServer,
+  createSingleServer,
   killallServers,
   makePutBodyRequest,
-  reRunServer,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers,
   testImage,
   waitJobs
@@ -19,7 +18,7 @@ import { AbuseState, OAuth2ErrorCode, UserAdminFlag, UserRole, Video, VideoPlayl
 const expect = chai.expect
 
 describe('Test users', function () {
-  let server: ServerInfo
+  let server: PeerTubeServer
   let token: string
   let userToken: string
   let videoId: number
@@ -32,7 +31,7 @@ describe('Test users', function () {
   before(async function () {
     this.timeout(30000)
 
-    server = await flushAndRunServer(1, {
+    server = await createSingleServer(1, {
       rates_limit: {
         login: {
           max: 30
@@ -238,7 +237,7 @@ describe('Test users', function () {
       await server.sql.setTokenField(server.accessToken, 'refreshTokenExpiresAt', new Date().toISOString())
 
       await killallServers([ server ])
-      await reRunServer(server)
+      await server.run()
 
       await server.users.getMyInfo({ expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
@@ -254,7 +253,7 @@ describe('Test users', function () {
       await server.sql.setTokenField(server.accessToken, 'refreshTokenExpiresAt', futureDate)
 
       await killallServers([ server ])
-      await reRunServer(server)
+      await server.run()
 
       const res = await server.login.refreshToken({ refreshToken: server.refreshToken })
       server.accessToken = res.body.access_token

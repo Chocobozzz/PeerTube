@@ -11,12 +11,12 @@ import {
   checkBadSortPagination,
   checkBadStartPagination,
   cleanupTests,
-  flushAndRunServer,
+  createSingleServer,
   makeGetRequest,
   makePostBodyRequest,
   makePutBodyRequest,
   makeUploadRequest,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers
 } from '@shared/extra-utils'
 import { VideoChannelUpdate } from '@shared/models'
@@ -25,7 +25,7 @@ const expect = chai.expect
 
 describe('Test video channels API validator', function () {
   const videoChannelPath = '/api/v1/video-channels'
-  let server: ServerInfo
+  let server: PeerTubeServer
   let accessTokenUser: string
   let command: ChannelsCommand
 
@@ -34,7 +34,7 @@ describe('Test video channels API validator', function () {
   before(async function () {
     this.timeout(30000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
 
     await setAccessTokensToServers([ server ])
 

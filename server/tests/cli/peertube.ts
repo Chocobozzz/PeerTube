@@ -8,16 +8,16 @@ import {
   cleanupTests,
   CLICommand,
   doubleFollow,
-  flushAndRunServer,
+  createSingleServer,
   ImportsCommand,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers,
   testHelloWorldRegisteredSettings,
   waitJobs
 } from '../../../shared/extra-utils'
 
 describe('Test CLI wrapper', function () {
-  let server: ServerInfo
+  let server: PeerTubeServer
   let userAccessToken: string
 
   let cliCommand: CLICommand
@@ -27,7 +27,7 @@ describe('Test CLI wrapper', function () {
   before(async function () {
     this.timeout(30000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
     await setAccessTokensToServers([ server ])
 
     await server.users.create({ username: 'user_1', password: 'super_password' })
@@ -210,14 +210,14 @@ describe('Test CLI wrapper', function () {
   })
 
   describe('Manage video redundancies', function () {
-    let anotherServer: ServerInfo
+    let anotherServer: PeerTubeServer
     let video1Server2: number
-    let servers: ServerInfo[]
+    let servers: PeerTubeServer[]
 
     before(async function () {
       this.timeout(120000)
 
-      anotherServer = await flushAndRunServer(2)
+      anotherServer = await createSingleServer(2)
       await setAccessTokensToServers([ anotherServer ])
 
       await doubleFollow(server, anotherServer)

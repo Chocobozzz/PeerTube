@@ -5,8 +5,8 @@ import * as chai from 'chai'
 import {
   cleanupTests,
   doubleFollow,
-  flushAndRunMultipleServers,
-  ServerInfo,
+  createMultipleServers,
+  PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel,
   testImage,
@@ -17,7 +17,7 @@ import { VideoPlaylistPrivacy } from '../../../../shared/models/videos/playlist/
 const expect = chai.expect
 
 describe('Playlist thumbnail', function () {
-  let servers: ServerInfo[] = []
+  let servers: PeerTubeServer[] = []
 
   let playlistWithoutThumbnailId: number
   let playlistWithThumbnailId: number
@@ -30,13 +30,13 @@ describe('Playlist thumbnail', function () {
   let video1: number
   let video2: number
 
-  async function getPlaylistWithoutThumbnail (server: ServerInfo) {
+  async function getPlaylistWithoutThumbnail (server: PeerTubeServer) {
     const body = await server.playlists.list({ start: 0, count: 10 })
 
     return body.data.find(p => p.displayName === 'playlist without thumbnail')
   }
 
-  async function getPlaylistWithThumbnail (server: ServerInfo) {
+  async function getPlaylistWithThumbnail (server: PeerTubeServer) {
     const body = await server.playlists.list({ start: 0, count: 10 })
 
     return body.data.find(p => p.displayName === 'playlist with thumbnail')
@@ -45,7 +45,7 @@ describe('Playlist thumbnail', function () {
   before(async function () {
     this.timeout(120000)
 
-    servers = await flushAndRunMultipleServers(2, { transcoding: { enabled: false } })
+    servers = await createMultipleServers(2, { transcoding: { enabled: false } })
 
     // Get the access tokens
     await setAccessTokensToServers(servers)

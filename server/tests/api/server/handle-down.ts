@@ -7,10 +7,9 @@ import {
   cleanupTests,
   CommentsCommand,
   completeVideoCheck,
-  flushAndRunMultipleServers,
+  createMultipleServers,
   killallServers,
-  reRunServer,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers,
   wait,
   waitJobs
@@ -20,7 +19,7 @@ import { JobState, VideoCreateResult, VideoPrivacy } from '@shared/models'
 const expect = chai.expect
 
 describe('Test handle downs', function () {
-  let servers: ServerInfo[] = []
+  let servers: PeerTubeServer[] = []
   let threadIdServer1: number
   let threadIdServer2: number
   let commentIdServer1: number
@@ -54,7 +53,7 @@ describe('Test handle downs', function () {
   before(async function () {
     this.timeout(30000)
 
-    servers = await flushAndRunMultipleServers(3)
+    servers = await createMultipleServers(3)
     commentCommands = servers.map(s => s.comments)
 
     checkAttributes = {
@@ -176,8 +175,8 @@ describe('Test handle downs', function () {
   it('Should re-follow server 1', async function () {
     this.timeout(35000)
 
-    await reRunServer(servers[1])
-    await reRunServer(servers[2])
+    await servers[1].run()
+    await servers[2].run()
 
     await servers[1].follows.unfollow({ target: servers[0] })
     await waitJobs(servers)

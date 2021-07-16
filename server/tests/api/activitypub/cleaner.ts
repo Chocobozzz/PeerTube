@@ -5,8 +5,8 @@ import * as chai from 'chai'
 import {
   cleanupTests,
   doubleFollow,
-  flushAndRunMultipleServers,
-  ServerInfo,
+  createMultipleServers,
+  PeerTubeServer,
   setAccessTokensToServers,
   wait,
   waitJobs
@@ -15,7 +15,7 @@ import {
 const expect = chai.expect
 
 describe('Test AP cleaner', function () {
-  let servers: ServerInfo[] = []
+  let servers: PeerTubeServer[] = []
   let videoUUID1: string
   let videoUUID2: string
   let videoUUID3: string
@@ -30,7 +30,7 @@ describe('Test AP cleaner', function () {
         videos: { cleanup_remote_interactions: true }
       }
     }
-    servers = await flushAndRunMultipleServers(3, config)
+    servers = await createMultipleServers(3, config)
 
     // Get the access tokens
     await setAccessTokensToServers(servers)

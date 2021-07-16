@@ -6,12 +6,12 @@ import { HttpStatusCode } from '@shared/core-utils'
 import {
   buildAbsoluteFixturePath,
   cleanupTests,
-  flushAndRunServer,
+  createSingleServer,
   LiveCommand,
   makePostBodyRequest,
   makeUploadRequest,
   sendRTMPStream,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers,
   stopFfmpeg
 } from '@shared/extra-utils'
@@ -19,7 +19,7 @@ import { VideoCreateResult, VideoPrivacy } from '@shared/models'
 
 describe('Test video lives API validator', function () {
   const path = '/api/v1/videos/live'
-  let server: ServerInfo
+  let server: PeerTubeServer
   let userAccessToken = ''
   let channelId: number
   let video: VideoCreateResult
@@ -31,7 +31,7 @@ describe('Test video lives API validator', function () {
   before(async function () {
     this.timeout(30000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
 
     await setAccessTokensToServers([ server ])
 

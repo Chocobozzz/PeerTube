@@ -7,9 +7,9 @@ import {
   completeVideoCheck,
   dateIsValid,
   expectAccountFollows,
-  flushAndRunMultipleServers,
+  createMultipleServers,
   FollowsCommand,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers,
   testCaptionFile,
   waitJobs
@@ -19,13 +19,13 @@ import { Video, VideoPrivacy } from '@shared/models'
 const expect = chai.expect
 
 describe('Test follows', function () {
-  let servers: ServerInfo[] = []
+  let servers: PeerTubeServer[] = []
   let followsCommands: FollowsCommand[]
 
   before(async function () {
     this.timeout(30000)
 
-    servers = await flushAndRunMultipleServers(3)
+    servers = await createMultipleServers(3)
     followsCommands = servers.map(s => s.follows)
 
     // Get the access tokens

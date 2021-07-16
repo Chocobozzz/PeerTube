@@ -2,7 +2,7 @@ import { Command } from 'commander'
 import { Netrc } from 'netrc-parser'
 import { join } from 'path'
 import { createLogger, format, transports } from 'winston'
-import { assignCommands, ServerInfo } from '@shared/extra-utils'
+import { PeerTubeServer } from '@shared/extra-utils'
 import { UserRole } from '@shared/models'
 import { VideoPrivacy } from '../../shared/models/videos'
 import { getAppNumber, isTestInstance, root } from '../helpers/core-utils'
@@ -14,7 +14,7 @@ const config = require('application-config')(configName)
 
 const version = require('../../../package.json').version
 
-async function getAdminTokenOrDie (server: ServerInfo, username: string, password: string) {
+async function getAdminTokenOrDie (server: PeerTubeServer, username: string, password: string) {
   const token = await server.login.getAccessToken(username, password)
   const me = await server.users.getMyInfo({ token })
 
@@ -124,7 +124,7 @@ function buildCommonVideoOptions (command: Command) {
     .option('-v, --verbose <verbose>', 'Verbosity, from 0/\'error\' to 4/\'debug\'', 'info')
 }
 
-async function buildVideoAttributesFromCommander (server: ServerInfo, command: Command, defaultAttributes: any = {}) {
+async function buildVideoAttributesFromCommander (server: PeerTubeServer, command: Command, defaultAttributes: any = {}) {
   const options = command.opts()
 
   const defaultBooleanAttributes = {
@@ -179,14 +179,11 @@ function getServerCredentials (program: Command) {
                 })
 }
 
-function buildServer (url: string): ServerInfo {
-  const server = { url, internalServerNumber: undefined }
-  assignCommands(server)
-
-  return server
+function buildServer (url: string) {
+  return new PeerTubeServer({ url })
 }
 
-async function assignToken (server: ServerInfo, username: string, password: string) {
+async function assignToken (server: PeerTubeServer, username: string, password: string) {
   const bodyClient = await server.login.getClient()
   const client = { id: bodyClient.client_id, secret: bodyClient.client_secret }
 

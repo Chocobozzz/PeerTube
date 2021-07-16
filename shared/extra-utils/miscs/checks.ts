@@ -6,7 +6,7 @@ import { join } from 'path'
 import { root } from '@server/helpers/core-utils'
 import { HttpStatusCode } from '@shared/core-utils'
 import { makeGetRequest } from '../requests'
-import { ServerInfo } from '../server'
+import { PeerTubeServer } from '../server'
 
 // Default interval -> 5 minutes
 function dateIsValid (dateString: string, interval = 300000) {
@@ -33,7 +33,7 @@ async function testImage (url: string, imageName: string, imagePath: string, ext
   expect(data.length).to.be.below(maxLength, 'the generated image is way larger than the recorded fixture')
 }
 
-async function testFileExistsOrNot (server: ServerInfo, directory: string, filePath: string, exist: boolean) {
+async function testFileExistsOrNot (server: PeerTubeServer, directory: string, filePath: string, exist: boolean) {
   const base = server.servers.buildDirectory(directory)
 
   expect(await pathExists(join(base, filePath))).to.equal(exist)

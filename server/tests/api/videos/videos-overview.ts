@@ -2,13 +2,13 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { cleanupTests, flushAndRunServer, ServerInfo, setAccessTokensToServers, wait } from '@shared/extra-utils'
+import { cleanupTests, createSingleServer, PeerTubeServer, setAccessTokensToServers, wait } from '@shared/extra-utils'
 import { VideosOverview } from '@shared/models'
 
 const expect = chai.expect
 
 describe('Test a videos overview', function () {
-  let server: ServerInfo = null
+  let server: PeerTubeServer = null
 
   function testOverviewCount (overview: VideosOverview, expected: number) {
     expect(overview.tags).to.have.lengthOf(expected)
@@ -19,7 +19,7 @@ describe('Test a videos overview', function () {
   before(async function () {
     this.timeout(30000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
 
     await setAccessTokensToServers([ server ])
   })

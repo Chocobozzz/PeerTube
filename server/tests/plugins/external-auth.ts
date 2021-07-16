@@ -6,16 +6,16 @@ import { HttpStatusCode } from '@shared/core-utils'
 import {
   cleanupTests,
   decodeQueryString,
-  flushAndRunServer,
+  createSingleServer,
   PluginsCommand,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers,
   wait
 } from '@shared/extra-utils'
 import { UserRole } from '@shared/models'
 
 async function loginExternal (options: {
-  server: ServerInfo
+  server: PeerTubeServer
   npmName: string
   authName: string
   username: string
@@ -46,7 +46,7 @@ async function loginExternal (options: {
 }
 
 describe('Test external auth plugins', function () {
-  let server: ServerInfo
+  let server: PeerTubeServer
 
   let cyanAccessToken: string
   let cyanRefreshToken: string
@@ -59,7 +59,7 @@ describe('Test external auth plugins', function () {
   before(async function () {
     this.timeout(30000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
     await setAccessTokensToServers([ server ])
 
     for (const suffix of [ 'one', 'two', 'three' ]) {

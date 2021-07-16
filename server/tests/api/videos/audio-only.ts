@@ -4,12 +4,12 @@ import 'mocha'
 import * as chai from 'chai'
 import { join } from 'path'
 import { getAudioStream, getVideoStreamSize } from '@server/helpers/ffprobe-utils'
-import { cleanupTests, doubleFollow, flushAndRunMultipleServers, ServerInfo, setAccessTokensToServers, waitJobs } from '@shared/extra-utils'
+import { cleanupTests, doubleFollow, createMultipleServers, PeerTubeServer, setAccessTokensToServers, waitJobs } from '@shared/extra-utils'
 
 const expect = chai.expect
 
 describe('Test audio only video transcoding', function () {
-  let servers: ServerInfo[] = []
+  let servers: PeerTubeServer[] = []
   let videoUUID: string
 
   before(async function () {
@@ -36,7 +36,7 @@ describe('Test audio only video transcoding', function () {
         }
       }
     }
-    servers = await flushAndRunMultipleServers(2, configOverride)
+    servers = await createMultipleServers(2, configOverride)
 
     // Get the access tokens
     await setAccessTokensToServers(servers)

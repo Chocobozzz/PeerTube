@@ -1,10 +1,10 @@
 import { program } from 'commander'
 import { LiveVideoCreate, VideoPrivacy } from '@shared/models'
 import {
-  flushAndRunServer,
+  createSingleServer,
   killallServers,
   sendRTMPStream,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel
 } from '../../shared/extra-utils'
@@ -36,7 +36,7 @@ async function run () {
 
   console.log('Starting server.')
 
-  const server = await flushAndRunServer(1, {}, [], { hideLogs: false, execArgv: [ '--inspect' ] })
+  const server = await createSingleServer(1, {}, [], { hideLogs: false, execArgv: [ '--inspect' ] })
 
   const cleanup = async () => {
     console.log('Killing server')
@@ -81,7 +81,7 @@ async function run () {
 
 // ----------------------------------------------------------------------------
 
-async function buildConfig (server: ServerInfo, commandType: CommandType) {
+async function buildConfig (server: PeerTubeServer, commandType: CommandType) {
   await server.config.updateCustomSubConfig({
     newConfig: {
       instance: {

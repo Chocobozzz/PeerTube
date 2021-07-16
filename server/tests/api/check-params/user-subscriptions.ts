@@ -4,11 +4,11 @@ import 'mocha'
 
 import {
   cleanupTests,
-  flushAndRunServer,
+  createSingleServer,
   makeDeleteRequest,
   makeGetRequest,
   makePostBodyRequest,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers
 } from '../../../../shared/extra-utils'
 
@@ -22,7 +22,7 @@ import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-c
 
 describe('Test user subscriptions API validators', function () {
   const path = '/api/v1/users/me/subscriptions'
-  let server: ServerInfo
+  let server: PeerTubeServer
   let userAccessToken = ''
 
   // ---------------------------------------------------------------
@@ -30,7 +30,7 @@ describe('Test user subscriptions API validators', function () {
   before(async function () {
     this.timeout(30000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
 
     await setAccessTokensToServers([ server ])
 

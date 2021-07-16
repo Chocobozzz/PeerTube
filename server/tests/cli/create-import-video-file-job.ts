@@ -2,7 +2,7 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { cleanupTests, doubleFollow, flushAndRunMultipleServers, ServerInfo, setAccessTokensToServers, waitJobs } from '@shared/extra-utils'
+import { cleanupTests, doubleFollow, createMultipleServers, PeerTubeServer, setAccessTokensToServers, waitJobs } from '@shared/extra-utils'
 import { VideoFile } from '@shared/models'
 
 const expect = chai.expect
@@ -20,7 +20,7 @@ function assertVideoProperties (video: VideoFile, resolution: number, extname: s
 describe('Test create import video jobs', function () {
   this.timeout(60000)
 
-  let servers: ServerInfo[] = []
+  let servers: PeerTubeServer[] = []
   let video1UUID: string
   let video2UUID: string
 
@@ -28,7 +28,7 @@ describe('Test create import video jobs', function () {
     this.timeout(90000)
 
     // Run server 2 to have transcoding enabled
-    servers = await flushAndRunMultipleServers(2)
+    servers = await createMultipleServers(2)
     await setAccessTokensToServers(servers)
 
     await doubleFollow(servers[0], servers[1])

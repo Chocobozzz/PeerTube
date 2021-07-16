@@ -10,10 +10,10 @@ import {
   cleanupTests,
   CLICommand,
   doubleFollow,
-  flushAndRunMultipleServers,
+  createMultipleServers,
   killallServers,
   makeGetRequest,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel,
   wait,
@@ -23,13 +23,13 @@ import { VideoPlaylistPrivacy } from '@shared/models'
 
 const expect = chai.expect
 
-async function countFiles (server: ServerInfo, directory: string) {
+async function countFiles (server: PeerTubeServer, directory: string) {
   const files = await readdir(server.servers.buildDirectory(directory))
 
   return files.length
 }
 
-async function assertNotExists (server: ServerInfo, directory: string, substring: string) {
+async function assertNotExists (server: PeerTubeServer, directory: string, substring: string) {
   const files = await readdir(server.servers.buildDirectory(directory))
 
   for (const f of files) {
@@ -37,7 +37,7 @@ async function assertNotExists (server: ServerInfo, directory: string, substring
   }
 }
 
-async function assertCountAreOkay (servers: ServerInfo[]) {
+async function assertCountAreOkay (servers: PeerTubeServer[]) {
   for (const server of servers) {
     const videosCount = await countFiles(server, 'videos')
     expect(videosCount).to.equal(8)
@@ -57,13 +57,13 @@ async function assertCountAreOkay (servers: ServerInfo[]) {
 }
 
 describe('Test prune storage scripts', function () {
-  let servers: ServerInfo[]
+  let servers: PeerTubeServer[]
   const badNames: { [directory: string]: string[] } = {}
 
   before(async function () {
     this.timeout(120000)
 
-    servers = await flushAndRunMultipleServers(2, { transcoding: { enabled: true } })
+    servers = await createMultipleServers(2, { transcoding: { enabled: true } })
     await setAccessTokensToServers(servers)
     await setDefaultVideoChannel(servers)
 

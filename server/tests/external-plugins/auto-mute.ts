@@ -6,26 +6,25 @@ import { HttpStatusCode } from '@shared/core-utils'
 import {
   cleanupTests,
   doubleFollow,
-  flushAndRunMultipleServers,
+  createMultipleServers,
   killallServers,
   makeGetRequest,
   MockBlocklist,
-  reRunServer,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers,
   wait
 } from '@shared/extra-utils'
 
 describe('Official plugin auto-mute', function () {
   const autoMuteListPath = '/plugins/auto-mute/router/api/v1/mute-list'
-  let servers: ServerInfo[]
+  let servers: PeerTubeServer[]
   let blocklistServer: MockBlocklist
   let port: number
 
   before(async function () {
     this.timeout(30000)
 
-    servers = await flushAndRunMultipleServers(2)
+    servers = await createMultipleServers(2)
     await setAccessTokensToServers(servers)
 
     for (const server of servers) {
@@ -150,7 +149,7 @@ describe('Official plugin auto-mute', function () {
     }
 
     await killallServers([ servers[0] ])
-    await reRunServer(servers[0])
+    await servers[0].run()
     await wait(2000)
 
     {

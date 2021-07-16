@@ -7,17 +7,17 @@ import {
   checkBadSortPagination,
   checkBadStartPagination,
   cleanupTests,
-  flushAndRunServer,
+  createSingleServer,
   makeGetRequest,
   makePostBodyRequest,
   makePutBodyRequest,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers
 } from '@shared/extra-utils'
 import { PeerTubePlugin, PluginType } from '@shared/models'
 
 describe('Test server plugins API validators', function () {
-  let server: ServerInfo
+  let server: PeerTubeServer
   let userAccessToken = null
 
   const npmPlugin = 'peertube-plugin-hello-world'
@@ -33,7 +33,7 @@ describe('Test server plugins API validators', function () {
   before(async function () {
     this.timeout(30000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
 
     await setAccessTokensToServers([ server ])
 

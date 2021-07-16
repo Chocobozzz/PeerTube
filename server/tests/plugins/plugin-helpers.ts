@@ -7,16 +7,16 @@ import {
   checkVideoFilesWereRemoved,
   cleanupTests,
   doubleFollow,
-  flushAndRunMultipleServers,
+  createMultipleServers,
   makeGetRequest,
   makePostBodyRequest,
   PluginsCommand,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers,
   waitJobs
 } from '@shared/extra-utils'
 
-function postCommand (server: ServerInfo, command: string, bodyArg?: object) {
+function postCommand (server: PeerTubeServer, command: string, bodyArg?: object) {
   const body = { command }
   if (bodyArg) Object.assign(body, bodyArg)
 
@@ -29,12 +29,12 @@ function postCommand (server: ServerInfo, command: string, bodyArg?: object) {
 }
 
 describe('Test plugin helpers', function () {
-  let servers: ServerInfo[]
+  let servers: PeerTubeServer[]
 
   before(async function () {
     this.timeout(60000)
 
-    servers = await flushAndRunMultipleServers(2)
+    servers = await createMultipleServers(2)
     await setAccessTokensToServers(servers)
 
     await doubleFollow(servers[0], servers[1])

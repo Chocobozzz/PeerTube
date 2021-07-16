@@ -5,11 +5,11 @@ import { HttpStatusCode } from '@shared/core-utils'
 import {
   buildAbsoluteFixturePath,
   cleanupTests,
-  flushAndRunServer,
+  createSingleServer,
   makeDeleteRequest,
   makeGetRequest,
   makeUploadRequest,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers
 } from '@shared/extra-utils'
 import { VideoCreateResult } from '@shared/models'
@@ -17,7 +17,7 @@ import { VideoCreateResult } from '@shared/models'
 describe('Test video captions API validator', function () {
   const path = '/api/v1/videos/'
 
-  let server: ServerInfo
+  let server: PeerTubeServer
   let userAccessToken: string
   let video: VideoCreateResult
 
@@ -26,7 +26,7 @@ describe('Test video captions API validator', function () {
   before(async function () {
     this.timeout(30000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
 
     await setAccessTokensToServers([ server ])
 

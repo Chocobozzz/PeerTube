@@ -4,11 +4,10 @@ import 'mocha'
 import * as chai from 'chai'
 import {
   cleanupTests,
-  flushAndRunServer,
+  createSingleServer,
   killallServers,
   LogsCommand,
-  reRunServer,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers,
   waitJobs
 } from '@shared/extra-utils'
@@ -16,13 +15,13 @@ import {
 const expect = chai.expect
 
 describe('Test logs', function () {
-  let server: ServerInfo
+  let server: PeerTubeServer
   let logsCommand: LogsCommand
 
   before(async function () {
     this.timeout(30000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
     await setAccessTokensToServers([ server ])
 
     logsCommand = server.logs
@@ -113,7 +112,7 @@ describe('Test logs', function () {
 
       await killallServers([ server ])
 
-      await reRunServer(server, { log: { log_ping_requests: false } })
+      await server.run({ log: { log_ping_requests: false } })
 
       const now = new Date()
 

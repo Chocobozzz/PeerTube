@@ -4,9 +4,9 @@ import { expect } from 'chai'
 import { pathExists, readdir } from 'fs-extra'
 import { join } from 'path'
 import { root } from '@server/helpers/core-utils'
-import { ServerInfo } from './servers'
+import { PeerTubeServer } from './server'
 
-async function checkTmpIsEmpty (server: ServerInfo) {
+async function checkTmpIsEmpty (server: PeerTubeServer) {
   await checkDirectoryIsEmpty(server, 'tmp', [ 'plugins-global.css', 'hls', 'resumable-uploads' ])
 
   if (await pathExists(join('test' + server.internalServerNumber, 'tmp', 'hls'))) {
@@ -14,7 +14,7 @@ async function checkTmpIsEmpty (server: ServerInfo) {
   }
 }
 
-async function checkDirectoryIsEmpty (server: ServerInfo, directory: string, exceptions: string[] = []) {
+async function checkDirectoryIsEmpty (server: PeerTubeServer, directory: string, exceptions: string[] = []) {
   const testDirectory = 'test' + server.internalServerNumber
 
   const directoryPath = join(root(), testDirectory, directory)

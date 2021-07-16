@@ -11,9 +11,9 @@ import {
   checkTmpIsEmpty,
   cleanupTests,
   doubleFollow,
-  flushAndRunMultipleServers,
+  createMultipleServers,
   makeRawRequest,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers,
   waitJobs,
   webtorrentAdd
@@ -23,7 +23,7 @@ import { DEFAULT_AUDIO_RESOLUTION } from '../../../initializers/constants'
 
 const expect = chai.expect
 
-async function checkHlsPlaylist (servers: ServerInfo[], videoUUID: string, hlsOnly: boolean, resolutions = [ 240, 360, 480, 720 ]) {
+async function checkHlsPlaylist (servers: PeerTubeServer[], videoUUID: string, hlsOnly: boolean, resolutions = [ 240, 360, 480, 720 ]) {
   for (const server of servers) {
     const videoDetails = await server.videos.get({ id: videoUUID })
     const baseUrl = `http://${videoDetails.account.host}`
@@ -98,7 +98,7 @@ async function checkHlsPlaylist (servers: ServerInfo[], videoUUID: string, hlsOn
 }
 
 describe('Test HLS videos', function () {
-  let servers: ServerInfo[] = []
+  let servers: PeerTubeServer[] = []
   let videoUUID = ''
   let videoAudioUUID = ''
 
@@ -176,7 +176,7 @@ describe('Test HLS videos', function () {
         }
       }
     }
-    servers = await flushAndRunMultipleServers(2, configOverride)
+    servers = await createMultipleServers(2, configOverride)
 
     // Get the access tokens
     await setAccessTokensToServers(servers)

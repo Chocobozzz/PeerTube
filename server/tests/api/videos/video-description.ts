@@ -2,12 +2,12 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { cleanupTests, doubleFollow, flushAndRunMultipleServers, ServerInfo, setAccessTokensToServers, waitJobs } from '@shared/extra-utils'
+import { cleanupTests, doubleFollow, createMultipleServers, PeerTubeServer, setAccessTokensToServers, waitJobs } from '@shared/extra-utils'
 
 const expect = chai.expect
 
 describe('Test video description', function () {
-  let servers: ServerInfo[] = []
+  let servers: PeerTubeServer[] = []
   let videoUUID = ''
   let videoId: number
   const longDescription = 'my super description for server 1'.repeat(50)
@@ -16,7 +16,7 @@ describe('Test video description', function () {
     this.timeout(40000)
 
     // Run servers
-    servers = await flushAndRunMultipleServers(2)
+    servers = await createMultipleServers(2)
 
     // Get the access tokens
     await setAccessTokensToServers(servers)

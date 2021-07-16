@@ -6,8 +6,8 @@ import {
   checkVideoFilesWereRemoved,
   cleanupTests,
   doubleFollow,
-  flushAndRunMultipleServers,
-  ServerInfo,
+  createMultipleServers,
+  PeerTubeServer,
   setAccessTokensToServers,
   testCaptionFile,
   wait,
@@ -19,13 +19,13 @@ const expect = chai.expect
 describe('Test video captions', function () {
   const uuidRegex = '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}'
 
-  let servers: ServerInfo[]
+  let servers: PeerTubeServer[]
   let videoUUID: string
 
   before(async function () {
     this.timeout(60000)
 
-    servers = await flushAndRunMultipleServers(2)
+    servers = await createMultipleServers(2)
 
     await setAccessTokensToServers(servers)
     await doubleFollow(servers[0], servers[1])

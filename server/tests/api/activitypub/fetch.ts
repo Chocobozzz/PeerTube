@@ -2,19 +2,19 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { cleanupTests, doubleFollow, flushAndRunMultipleServers, ServerInfo, setAccessTokensToServers, waitJobs } from '@shared/extra-utils'
+import { cleanupTests, doubleFollow, createMultipleServers, PeerTubeServer, setAccessTokensToServers, waitJobs } from '@shared/extra-utils'
 
 const expect = chai.expect
 
 describe('Test ActivityPub fetcher', function () {
-  let servers: ServerInfo[]
+  let servers: PeerTubeServer[]
 
   // ---------------------------------------------------------------
 
   before(async function () {
     this.timeout(60000)
 
-    servers = await flushAndRunMultipleServers(3)
+    servers = await createMultipleServers(3)
 
     // Get the access tokens
     await setAccessTokensToServers(servers)

@@ -4,10 +4,10 @@ import 'mocha'
 
 import {
   cleanupTests,
-  flushAndRunServer,
+  createSingleServer,
   makeDeleteRequest, makeGetRequest,
   makePostBodyRequest,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers
 } from '../../../../shared/extra-utils'
 import {
@@ -18,14 +18,14 @@ import {
 import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 describe('Test server follows API validators', function () {
-  let server: ServerInfo
+  let server: PeerTubeServer
 
   // ---------------------------------------------------------------
 
   before(async function () {
     this.timeout(30000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
 
     await setAccessTokensToServers([ server ])
   })

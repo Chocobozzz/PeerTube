@@ -5,18 +5,18 @@ import { omit } from 'lodash'
 import { HttpStatusCode } from '@shared/core-utils'
 import {
   cleanupTests,
-  flushAndRunServer,
+  createSingleServer,
   makeDeleteRequest,
   makeGetRequest,
   makePutBodyRequest,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers
 } from '@shared/extra-utils'
 import { CustomConfig } from '@shared/models'
 
 describe('Test config API validators', function () {
   const path = '/api/v1/config/custom'
-  let server: ServerInfo
+  let server: PeerTubeServer
   let userAccessToken: string
   const updateParams: CustomConfig = {
     instance: {
@@ -197,7 +197,7 @@ describe('Test config API validators', function () {
   before(async function () {
     this.timeout(30000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
 
     await setAccessTokensToServers([ server ])
 

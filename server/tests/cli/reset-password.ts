@@ -1,12 +1,12 @@
 import 'mocha'
-import { cleanupTests, CLICommand, flushAndRunServer, ServerInfo, setAccessTokensToServers } from '../../../shared/extra-utils'
+import { cleanupTests, CLICommand, createSingleServer, PeerTubeServer, setAccessTokensToServers } from '../../../shared/extra-utils'
 
 describe('Test reset password scripts', function () {
-  let server: ServerInfo
+  let server: PeerTubeServer
 
   before(async function () {
     this.timeout(30000)
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
     await setAccessTokensToServers([ server ])
 
     await server.users.create({ username: 'user_1', password: 'super password' })

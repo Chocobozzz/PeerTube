@@ -4,16 +4,16 @@ import 'mocha'
 import { HttpStatusCode } from '@shared/core-utils'
 import {
   cleanupTests,
-  flushAndRunServer,
+  createSingleServer,
   makeGetRequest,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel
 } from '@shared/extra-utils'
 import { VideoPlaylistPrivacy } from '@shared/models'
 
 describe('Test services API validators', function () {
-  let server: ServerInfo
+  let server: PeerTubeServer
   let playlistUUID: string
 
   // ---------------------------------------------------------------
@@ -21,7 +21,7 @@ describe('Test services API validators', function () {
   before(async function () {
     this.timeout(60000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
     await setAccessTokensToServers([ server ])
     await setDefaultVideoChannel([ server ])
 
@@ -120,7 +120,7 @@ describe('Test services API validators', function () {
   })
 })
 
-function checkParamEmbed (server: ServerInfo, embedUrl: string, statusCodeExpected = HttpStatusCode.BAD_REQUEST_400, query = {}) {
+function checkParamEmbed (server: PeerTubeServer, embedUrl: string, statusCodeExpected = HttpStatusCode.BAD_REQUEST_400, query = {}) {
   const path = '/services/oembed'
 
   return makeGetRequest({

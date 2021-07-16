@@ -9,12 +9,12 @@ import { VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_PRIVACIES } fr
 import { dateIsValid, testImage, webtorrentAdd } from '../miscs'
 import { makeRawRequest } from '../requests/requests'
 import { waitJobs } from '../server'
-import { ServerInfo } from '../server/servers'
+import { PeerTubeServer } from '../server/server'
 import { VideoEdit } from './videos-command'
 
 async function checkVideoFilesWereRemoved (
   videoUUID: string,
-  server: ServerInfo,
+  server: PeerTubeServer,
   directories = [
     'redundancy',
     'videos',
@@ -40,7 +40,7 @@ async function checkVideoFilesWereRemoved (
 }
 
 function checkUploadVideoParam (
-  server: ServerInfo,
+  server: PeerTubeServer,
   token: string,
   attributes: Partial<VideoEdit>,
   expectedStatus = HttpStatusCode.OK_200,
@@ -52,7 +52,7 @@ function checkUploadVideoParam (
 }
 
 async function completeVideoCheck (
-  server: ServerInfo,
+  server: PeerTubeServer,
   video: any,
   attributes: {
     name: string
@@ -197,7 +197,7 @@ async function completeVideoCheck (
 
 // serverNumber starts from 1
 async function uploadRandomVideoOnServers (
-  servers: ServerInfo[],
+  servers: PeerTubeServer[],
   serverNumber: number,
   additionalParams?: VideoEdit & { prefixName?: string }
 ) {

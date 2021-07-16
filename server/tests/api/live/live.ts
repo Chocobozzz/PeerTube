@@ -11,13 +11,12 @@ import {
   checkResolutionsInMasterPlaylist,
   cleanupTests,
   doubleFollow,
-  flushAndRunMultipleServers,
+  createMultipleServers,
   killallServers,
   LiveCommand,
   makeRawRequest,
-  reRunServer,
   sendRTMPStream,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel,
   stopFfmpeg,
@@ -32,13 +31,13 @@ import { LiveVideo, LiveVideoCreate, VideoDetails, VideoPrivacy, VideoState, Vid
 const expect = chai.expect
 
 describe('Test live', function () {
-  let servers: ServerInfo[] = []
+  let servers: PeerTubeServer[] = []
   let commands: LiveCommand[]
 
   before(async function () {
     this.timeout(120000)
 
-    servers = await flushAndRunMultipleServers(2)
+    servers = await createMultipleServers(2)
 
     // Get the access tokens
     await setAccessTokensToServers(servers)
@@ -571,7 +570,7 @@ describe('Test live', function () {
       await commands[0].waitUntilSegmentGeneration({ videoUUID: liveVideoReplayId, resolution: 0, segment: 2 })
 
       await killallServers([ servers[0] ])
-      await reRunServer(servers[0])
+      await servers[0].run()
 
       await wait(5000)
     })

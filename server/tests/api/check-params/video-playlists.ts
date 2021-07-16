@@ -7,10 +7,10 @@ import {
   checkBadSortPagination,
   checkBadStartPagination,
   cleanupTests,
-  flushAndRunServer,
+  createSingleServer,
   makeGetRequest,
   PlaylistsCommand,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel
 } from '@shared/extra-utils'
@@ -25,7 +25,7 @@ import {
 } from '@shared/models'
 
 describe('Test video playlists API validator', function () {
-  let server: ServerInfo
+  let server: PeerTubeServer
   let userAccessToken: string
 
   let playlist: VideoPlaylistCreateResult
@@ -42,7 +42,7 @@ describe('Test video playlists API validator', function () {
   before(async function () {
     this.timeout(30000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
 
     await setAccessTokensToServers([ server ])
     await setDefaultVideoChannel([ server ])

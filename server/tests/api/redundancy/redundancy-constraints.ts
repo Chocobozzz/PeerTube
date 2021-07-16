@@ -4,19 +4,18 @@ import 'mocha'
 import { expect } from 'chai'
 import {
   cleanupTests,
-  flushAndRunServer,
+  createSingleServer,
   killallServers,
-  reRunServer,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers,
   waitJobs
 } from '@shared/extra-utils'
 import { VideoPrivacy } from '@shared/models'
 
 describe('Test redundancy constraints', function () {
-  let remoteServer: ServerInfo
-  let localServer: ServerInfo
-  let servers: ServerInfo[]
+  let remoteServer: PeerTubeServer
+  let localServer: PeerTubeServer
+  let servers: PeerTubeServer[]
 
   const remoteServerConfig = {
     redundancy: {
@@ -59,7 +58,7 @@ describe('Test redundancy constraints', function () {
     this.timeout(120000)
 
     {
-      remoteServer = await flushAndRunServer(1, remoteServerConfig)
+      remoteServer = await createSingleServer(1, remoteServerConfig)
     }
 
     {
@@ -70,7 +69,7 @@ describe('Test redundancy constraints', function () {
           }
         }
       }
-      localServer = await flushAndRunServer(2, config)
+      localServer = await createSingleServer(2, config)
     }
 
     servers = [ remoteServer, localServer ]
@@ -119,7 +118,7 @@ describe('Test redundancy constraints', function () {
       }
     }
     await await killallServers([ localServer ])
-    await reRunServer(localServer, config)
+    await localServer.run(config)
 
     await uploadWrapper('video 2 server 2')
 
@@ -148,7 +147,7 @@ describe('Test redundancy constraints', function () {
       }
     }
     await killallServers([ localServer ])
-    await reRunServer(localServer, config)
+    await localServer.run(config)
 
     await uploadWrapper('video 3 server 2')
 

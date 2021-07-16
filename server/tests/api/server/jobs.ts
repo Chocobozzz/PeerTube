@@ -6,8 +6,8 @@ import {
   cleanupTests,
   dateIsValid,
   doubleFollow,
-  flushAndRunMultipleServers,
-  ServerInfo,
+  createMultipleServers,
+  PeerTubeServer,
   setAccessTokensToServers,
   waitJobs
 } from '@shared/extra-utils'
@@ -15,12 +15,12 @@ import {
 const expect = chai.expect
 
 describe('Test jobs', function () {
-  let servers: ServerInfo[]
+  let servers: PeerTubeServer[]
 
   before(async function () {
     this.timeout(30000)
 
-    servers = await flushAndRunMultipleServers(2)
+    servers = await createMultipleServers(2)
 
     await setAccessTokensToServers(servers)
 

@@ -7,11 +7,10 @@ import {
   BlacklistCommand,
   cleanupTests,
   doubleFollow,
-  flushAndRunMultipleServers,
+  createMultipleServers,
   ImportsCommand,
   killallServers,
-  reRunServer,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers,
   waitJobs
 } from '@shared/extra-utils'
@@ -20,11 +19,11 @@ import { UserAdminFlag, UserRole, VideoBlacklist, VideoBlacklistType } from '@sh
 const expect = chai.expect
 
 describe('Test video blacklist', function () {
-  let servers: ServerInfo[] = []
+  let servers: PeerTubeServer[] = []
   let videoId: number
   let command: BlacklistCommand
 
-  async function blacklistVideosOnServer (server: ServerInfo) {
+  async function blacklistVideosOnServer (server: PeerTubeServer) {
     const { data } = await server.videos.list()
 
     for (const video of data) {
@@ -36,7 +35,7 @@ describe('Test video blacklist', function () {
     this.timeout(50000)
 
     // Run servers
-    servers = await flushAndRunMultipleServers(2)
+    servers = await createMultipleServers(2)
 
     // Get the access tokens
     await setAccessTokensToServers(servers)
@@ -344,7 +343,7 @@ describe('Test video blacklist', function () {
           }
         }
       }
-      await reRunServer(servers[0], config)
+      await servers[0].run(config)
 
       {
         const user = { username: 'user_without_flag', password: 'password' }

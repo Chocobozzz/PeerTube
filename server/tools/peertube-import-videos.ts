@@ -20,7 +20,7 @@ import {
   getLogger,
   getServerCredentials
 } from './cli'
-import { ServerInfo } from '@shared/extra-utils'
+import { PeerTubeServer } from '@shared/extra-utils'
 
 const processOptions = {
   maxBuffer: Infinity
@@ -270,7 +270,7 @@ async function uploadVideoOnPeerTube (parameters: {
 
 /* ---------------------------------------------------------- */
 
-async function getCategory (server: ServerInfo, categories: string[]) {
+async function getCategory (server: PeerTubeServer, categories: string[]) {
   if (!categories) return undefined
 
   const categoryString = categories[0]

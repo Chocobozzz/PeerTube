@@ -7,9 +7,9 @@ import { HttpStatusCode } from '@shared/core-utils'
 import {
   cleanupTests,
   doubleFollow,
-  flushAndRunMultipleServers,
-  flushAndRunServer,
-  ServerInfo,
+  createMultipleServers,
+  createSingleServer,
+  PeerTubeServer,
   setAccessTokensToServers,
   waitJobs
 } from '@shared/extra-utils'
@@ -21,8 +21,8 @@ chai.config.includeStack = true
 const expect = chai.expect
 
 describe('Test syndication feeds', () => {
-  let servers: ServerInfo[] = []
-  let serverHLSOnly: ServerInfo
+  let servers: PeerTubeServer[] = []
+  let serverHLSOnly: PeerTubeServer
   let userAccessToken: string
   let rootAccountId: number
   let rootChannelId: number
@@ -34,8 +34,8 @@ describe('Test syndication feeds', () => {
     this.timeout(120000)
 
     // Run servers
-    servers = await flushAndRunMultipleServers(2)
-    serverHLSOnly = await flushAndRunServer(3, {
+    servers = await createMultipleServers(2)
+    serverHLSOnly = await createSingleServer(3, {
       transcoding: {
         enabled: true,
         webtorrent: { enabled: false },

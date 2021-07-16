@@ -5,10 +5,9 @@ import { HttpStatusCode } from '@shared/core-utils'
 import {
   cleanupTests,
   doubleFollow,
-  flushAndRunMultipleServers,
+  createMultipleServers,
   killallServers,
-  reRunServer,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel,
   wait,
@@ -17,7 +16,7 @@ import {
 import { VideoPlaylistPrivacy } from '@shared/models'
 
 describe('Test AP refresher', function () {
-  let servers: ServerInfo[] = []
+  let servers: PeerTubeServer[] = []
   let videoUUID1: string
   let videoUUID2: string
   let videoUUID3: string
@@ -27,7 +26,7 @@ describe('Test AP refresher', function () {
   before(async function () {
     this.timeout(60000)
 
-    servers = await flushAndRunMultipleServers(2, { transcoding: { enabled: false } })
+    servers = await createMultipleServers(2, { transcoding: { enabled: false } })
 
     // Get the access tokens
     await setAccessTokensToServers(servers)
@@ -95,7 +94,7 @@ describe('Test AP refresher', function () {
       // The refresh should fail
       await waitJobs([ servers[0] ])
 
-      await reRunServer(servers[1])
+      await servers[1].run()
 
       await servers[0].videos.get({ id: videoUUID3 })
     })

@@ -4,8 +4,8 @@ import 'mocha'
 
 import {
   cleanupTests,
-  flushAndRunServer,
-  ServerInfo,
+  createSingleServer,
+  PeerTubeServer,
   setAccessTokensToServers
 } from '../../../../shared/extra-utils'
 import {
@@ -18,7 +18,7 @@ import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-c
 
 describe('Test jobs API validators', function () {
   const path = '/api/v1/jobs/failed'
-  let server: ServerInfo
+  let server: PeerTubeServer
   let userAccessToken = ''
 
   // ---------------------------------------------------------------
@@ -26,7 +26,7 @@ describe('Test jobs API validators', function () {
   before(async function () {
     this.timeout(120000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
 
     await setAccessTokensToServers([ server ])
 

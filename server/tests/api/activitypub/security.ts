@@ -7,10 +7,9 @@ import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-c
 import {
   buildAbsoluteFixturePath,
   cleanupTests,
-  flushAndRunMultipleServers,
+  createMultipleServers,
   killallServers,
-  reRunServer,
-  ServerInfo,
+  PeerTubeServer,
   wait
 } from '../../../../shared/extra-utils'
 import { makeFollowRequest, makePOSTAPRequest } from '../../../../shared/extra-utils/requests/activitypub'
@@ -20,7 +19,7 @@ import { buildGlobalHeaders } from '../../../lib/job-queue/handlers/utils/activi
 
 const expect = chai.expect
 
-function setKeysOfServer (onServer: ServerInfo, ofServer: ServerInfo, publicKey: string, privateKey: string) {
+function setKeysOfServer (onServer: PeerTubeServer, ofServer: PeerTubeServer, publicKey: string, privateKey: string) {
   const url = 'http://localhost:' + ofServer.port + '/accounts/peertube'
 
   return Promise.all([
@@ -29,7 +28,7 @@ function setKeysOfServer (onServer: ServerInfo, ofServer: ServerInfo, publicKey:
   ])
 }
 
-function setUpdatedAtOfServer (onServer: ServerInfo, ofServer: ServerInfo, updatedAt: string) {
+function setUpdatedAtOfServer (onServer: PeerTubeServer, ofServer: PeerTubeServer, updatedAt: string) {
   const url = 'http://localhost:' + ofServer.port + '/accounts/peertube'
 
   return Promise.all([
@@ -38,7 +37,7 @@ function setUpdatedAtOfServer (onServer: ServerInfo, ofServer: ServerInfo, updat
   ])
 }
 
-function getAnnounceWithoutContext (server: ServerInfo) {
+function getAnnounceWithoutContext (server: PeerTubeServer) {
   const json = require(buildAbsoluteFixturePath('./ap-json/peertube/announce-without-context.json'))
   const result: typeof json = {}
 
@@ -54,7 +53,7 @@ function getAnnounceWithoutContext (server: ServerInfo) {
 }
 
 describe('Test ActivityPub security', function () {
-  let servers: ServerInfo[]
+  let servers: PeerTubeServer[]
   let url: string
 
   const keys = require(buildAbsoluteFixturePath('./ap-json/peertube/keys.json'))
@@ -72,7 +71,7 @@ describe('Test ActivityPub security', function () {
   before(async function () {
     this.timeout(60000)
 
-    servers = await flushAndRunMultipleServers(3)
+    servers = await createMultipleServers(3)
 
     url = servers[0].url + '/inbox'
 
@@ -172,7 +171,7 @@ describe('Test ActivityPub security', function () {
 
       // Invalid peertube actor cache
       await killallServers([ servers[1] ])
-      await reRunServer(servers[1])
+      await servers[1].run()
 
       const body = activityPubContextify(getAnnounceWithoutContext(servers[1]))
       const headers = buildGlobalHeaders(body)

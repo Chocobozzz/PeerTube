@@ -4,16 +4,16 @@ import 'mocha'
 import * as chai from 'chai'
 import {
   cleanupTests,
-  flushAndRunMultipleServers,
+  createMultipleServers,
   FollowsCommand,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers,
   waitJobs
 } from '@shared/extra-utils'
 
 const expect = chai.expect
 
-async function checkServer1And2HasFollowers (servers: ServerInfo[], state = 'accepted') {
+async function checkServer1And2HasFollowers (servers: PeerTubeServer[], state = 'accepted') {
   const fns = [
     servers[0].follows.getFollowings.bind(servers[0].follows),
     servers[1].follows.getFollowers.bind(servers[1].follows)
@@ -30,7 +30,7 @@ async function checkServer1And2HasFollowers (servers: ServerInfo[], state = 'acc
   }
 }
 
-async function checkNoFollowers (servers: ServerInfo[]) {
+async function checkNoFollowers (servers: PeerTubeServer[]) {
   const fns = [
     servers[0].follows.getFollowings.bind(servers[0].follows),
     servers[1].follows.getFollowers.bind(servers[1].follows)
@@ -43,13 +43,13 @@ async function checkNoFollowers (servers: ServerInfo[]) {
 }
 
 describe('Test follows moderation', function () {
-  let servers: ServerInfo[] = []
+  let servers: PeerTubeServer[] = []
   let commands: FollowsCommand[]
 
   before(async function () {
     this.timeout(30000)
 
-    servers = await flushAndRunMultipleServers(3)
+    servers = await createMultipleServers(3)
 
     // Get the access tokens
     await setAccessTokensToServers(servers)

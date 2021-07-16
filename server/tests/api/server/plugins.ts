@@ -5,11 +5,10 @@ import * as chai from 'chai'
 import { HttpStatusCode } from '@shared/core-utils'
 import {
   cleanupTests,
-  flushAndRunServer,
+  createSingleServer,
   killallServers,
   PluginsCommand,
-  reRunServer,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers,
   testHelloWorldRegisteredSettings,
   wait
@@ -19,7 +18,7 @@ import { PluginType } from '@shared/models'
 const expect = chai.expect
 
 describe('Test plugins', function () {
-  let server: ServerInfo = null
+  let server: PeerTubeServer = null
   let command: PluginsCommand
 
   before(async function () {
@@ -30,7 +29,7 @@ describe('Test plugins', function () {
         index: { check_latest_versions_interval: '5 seconds' }
       }
     }
-    server = await flushAndRunServer(1, configOverride)
+    server = await createSingleServer(1, configOverride)
     await setAccessTokensToServers([ server ])
 
     command = server.plugins
@@ -245,7 +244,7 @@ describe('Test plugins', function () {
 
     // Restart the server to take into account this change
     await killallServers([ server ])
-    await reRunServer(server)
+    await server.run()
 
     {
       const body = await command.list({ pluginType: PluginType.PLUGIN })
@@ -326,7 +325,7 @@ describe('Test plugins', function () {
     await check()
 
     await killallServers([ server ])
-    await reRunServer(server)
+    await server.run()
 
     await check()
   })

@@ -5,15 +5,22 @@ import { expect } from 'chai'
 import { pathExists, readdir, readFile } from 'fs-extra'
 import { join } from 'path'
 import { HttpStatusCode } from '@shared/core-utils'
-import { cleanupTests, flushAndRunServer, makeGetRequest, PluginsCommand, ServerInfo, setAccessTokensToServers } from '@shared/extra-utils'
+import {
+  cleanupTests,
+  createSingleServer,
+  makeGetRequest,
+  PeerTubeServer,
+  PluginsCommand,
+  setAccessTokensToServers
+} from '@shared/extra-utils'
 
 describe('Test plugin storage', function () {
-  let server: ServerInfo
+  let server: PeerTubeServer
 
   before(async function () {
     this.timeout(30000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
     await setAccessTokensToServers([ server ])
 
     await server.plugins.install({ path: PluginsCommand.getPluginTestPath('-six') })

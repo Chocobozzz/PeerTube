@@ -5,11 +5,11 @@ import 'mocha'
 import {
   cleanupTests,
   doubleFollow,
-  flushAndRunMultipleServers,
+  createMultipleServers,
   makeDeleteRequest,
   makeGetRequest,
   makePostBodyRequest,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers
 } from '../../../../shared/extra-utils'
 import {
@@ -20,14 +20,14 @@ import {
 import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 describe('Test blocklist API validators', function () {
-  let servers: ServerInfo[]
-  let server: ServerInfo
+  let servers: PeerTubeServer[]
+  let server: PeerTubeServer
   let userAccessToken: string
 
   before(async function () {
     this.timeout(60000)
 
-    servers = await flushAndRunMultipleServers(2)
+    servers = await createMultipleServers(2)
     await setAccessTokensToServers(servers)
 
     server = servers[0]

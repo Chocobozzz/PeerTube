@@ -2,7 +2,7 @@ import { pick } from 'lodash'
 import { ActivityPubActorType, ActorFollow, FollowState, ResultList } from '@shared/models'
 import { HttpStatusCode } from '../../core-utils/miscs/http-error-codes'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
-import { ServerInfo } from './servers'
+import { PeerTubeServer } from './server'
 
 export class FollowsCommand extends AbstractCommand {
 
@@ -70,7 +70,7 @@ export class FollowsCommand extends AbstractCommand {
   }
 
   async unfollow (options: OverrideCommandOptions & {
-    target: ServerInfo
+    target: PeerTubeServer
   }) {
     const path = '/api/v1/server/following/' + options.target.host
 
@@ -112,7 +112,7 @@ export class FollowsCommand extends AbstractCommand {
   }
 
   removeFollower (options: OverrideCommandOptions & {
-    follower: ServerInfo
+    follower: PeerTubeServer
   }) {
     const path = '/api/v1/server/followers/peertube@' + options.follower.host
 

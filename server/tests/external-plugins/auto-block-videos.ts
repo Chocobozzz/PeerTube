@@ -5,17 +5,16 @@ import { expect } from 'chai'
 import {
   cleanupTests,
   doubleFollow,
-  flushAndRunMultipleServers,
+  createMultipleServers,
   killallServers,
   MockBlocklist,
-  reRunServer,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers,
   wait
 } from '@shared/extra-utils'
 import { Video } from '@shared/models'
 
-async function check (server: ServerInfo, videoUUID: string, exists = true) {
+async function check (server: PeerTubeServer, videoUUID: string, exists = true) {
   const { data } = await server.videos.list()
 
   const video = data.find(v => v.uuid === videoUUID)
@@ -25,7 +24,7 @@ async function check (server: ServerInfo, videoUUID: string, exists = true) {
 }
 
 describe('Official plugin auto-block videos', function () {
-  let servers: ServerInfo[]
+  let servers: PeerTubeServer[]
   let blocklistServer: MockBlocklist
   let server1Videos: Video[] = []
   let server2Videos: Video[] = []
@@ -34,7 +33,7 @@ describe('Official plugin auto-block videos', function () {
   before(async function () {
     this.timeout(60000)
 
-    servers = await flushAndRunMultipleServers(2)
+    servers = await createMultipleServers(2)
     await setAccessTokensToServers(servers)
 
     for (const server of servers) {
@@ -161,7 +160,7 @@ describe('Official plugin auto-block videos', function () {
     await check(servers[0], video.uuid, true)
 
     await killallServers([ servers[0] ])
-    await reRunServer(servers[0])
+    await servers[0].run()
     await wait(2000)
 
     await check(servers[0], video.uuid, true)

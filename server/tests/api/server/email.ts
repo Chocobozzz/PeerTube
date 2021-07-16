@@ -3,12 +3,12 @@
 import 'mocha'
 import * as chai from 'chai'
 import { HttpStatusCode } from '@shared/core-utils'
-import { cleanupTests, flushAndRunServer, MockSmtpServer, ServerInfo, setAccessTokensToServers, waitJobs } from '@shared/extra-utils'
+import { cleanupTests, createSingleServer, MockSmtpServer, PeerTubeServer, setAccessTokensToServers, waitJobs } from '@shared/extra-utils'
 
 const expect = chai.expect
 
 describe('Test emails', function () {
-  let server: ServerInfo
+  let server: PeerTubeServer
   let userId: number
   let userId2: number
   let userAccessToken: string
@@ -39,7 +39,7 @@ describe('Test emails', function () {
         port: emailPort
       }
     }
-    server = await flushAndRunServer(1, overrideConfig)
+    server = await createSingleServer(1, overrideConfig)
     await setAccessTokensToServers([ server ])
 
     {

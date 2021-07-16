@@ -3,13 +3,13 @@
 import 'mocha'
 import * as chai from 'chai'
 import { HttpStatusCode } from '@shared/core-utils'
-import { cleanupTests, doubleFollow, flushAndRunMultipleServers, ServerInfo, setAccessTokensToServers } from '@shared/extra-utils'
+import { cleanupTests, doubleFollow, createMultipleServers, PeerTubeServer, setAccessTokensToServers } from '@shared/extra-utils'
 import { PeerTubeProblemDocument, ServerErrorCode } from '@shared/models'
 
 const expect = chai.expect
 
 describe('Test follow constraints', function () {
-  let servers: ServerInfo[] = []
+  let servers: PeerTubeServer[] = []
   let video1UUID: string
   let video2UUID: string
   let userToken: string
@@ -17,7 +17,7 @@ describe('Test follow constraints', function () {
   before(async function () {
     this.timeout(90000)
 
-    servers = await flushAndRunMultipleServers(2)
+    servers = await createMultipleServers(2)
 
     // Get the access tokens
     await setAccessTokensToServers(servers)

@@ -10,17 +10,17 @@ import {
   checkBadStartPagination,
   cleanupTests,
   doubleFollow,
-  flushAndRunMultipleServers,
+  createMultipleServers,
   makePostBodyRequest,
   makePutBodyRequest,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers,
   waitJobs
 } from '@shared/extra-utils'
 import { VideoBlacklistType } from '@shared/models'
 
 describe('Test video blacklist API validators', function () {
-  let servers: ServerInfo[]
+  let servers: PeerTubeServer[]
   let notBlacklistedVideoId: string
   let remoteVideoUUID: string
   let userAccessToken1 = ''
@@ -32,7 +32,7 @@ describe('Test video blacklist API validators', function () {
   before(async function () {
     this.timeout(120000)
 
-    servers = await flushAndRunMultipleServers(2)
+    servers = await createMultipleServers(2)
 
     await setAccessTokensToServers(servers)
     await doubleFollow(servers[0], servers[1])

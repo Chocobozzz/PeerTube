@@ -3,12 +3,12 @@
 import 'mocha'
 import * as chai from 'chai'
 import { HttpStatusCode } from '@shared/core-utils'
-import { cleanupTests, flushAndRunServer, MockSmtpServer, ServerInfo, setAccessTokensToServers, waitJobs } from '@shared/extra-utils'
+import { cleanupTests, createSingleServer, MockSmtpServer, PeerTubeServer, setAccessTokensToServers, waitJobs } from '@shared/extra-utils'
 
 const expect = chai.expect
 
 describe('Test users account verification', function () {
-  let server: ServerInfo
+  let server: PeerTubeServer
   let userId: number
   let userAccessToken: string
   let verificationString: string
@@ -34,7 +34,7 @@ describe('Test users account verification', function () {
         port
       }
     }
-    server = await flushAndRunServer(1, overrideConfig)
+    server = await createSingleServer(1, overrideConfig)
 
     await setAccessTokensToServers([ server ])
   })

@@ -7,9 +7,9 @@ import {
   ChangeOwnershipCommand,
   cleanupTests,
   doubleFollow,
-  flushAndRunMultipleServers,
-  flushAndRunServer,
-  ServerInfo,
+  createMultipleServers,
+  createSingleServer,
+  PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel,
   waitJobs
@@ -19,7 +19,7 @@ import { VideoPrivacy } from '@shared/models'
 const expect = chai.expect
 
 describe('Test video change ownership - nominal', function () {
-  let servers: ServerInfo[] = []
+  let servers: PeerTubeServer[] = []
 
   const firstUser = 'first'
   const secondUser = 'second'
@@ -39,7 +39,7 @@ describe('Test video change ownership - nominal', function () {
   before(async function () {
     this.timeout(50000)
 
-    servers = await flushAndRunMultipleServers(2)
+    servers = await createMultipleServers(2)
     await setAccessTokensToServers(servers)
     await setDefaultVideoChannel(servers)
 
@@ -251,7 +251,7 @@ describe('Test video change ownership - nominal', function () {
 })
 
 describe('Test video change ownership - quota too small', function () {
-  let server: ServerInfo
+  let server: PeerTubeServer
   const firstUser = 'first'
   const secondUser = 'second'
 
@@ -263,7 +263,7 @@ describe('Test video change ownership - quota too small', function () {
     this.timeout(50000)
 
     // Run one server
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
     await setAccessTokensToServers([ server ])
 
     await server.users.create({ username: secondUser, videoQuota: 10 })

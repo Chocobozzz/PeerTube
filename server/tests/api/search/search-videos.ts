@@ -4,9 +4,9 @@ import 'mocha'
 import * as chai from 'chai'
 import {
   cleanupTests,
-  flushAndRunServer,
+  createSingleServer,
   SearchCommand,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel,
   stopFfmpeg,
@@ -17,7 +17,7 @@ import { VideoPrivacy } from '@shared/models'
 const expect = chai.expect
 
 describe('Test videos search', function () {
-  let server: ServerInfo = null
+  let server: PeerTubeServer = null
   let startDate: string
   let videoUUID: string
 
@@ -26,7 +26,7 @@ describe('Test videos search', function () {
   before(async function () {
     this.timeout(60000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
 
     await setAccessTokensToServers([ server ])
     await setDefaultVideoChannel([ server ])

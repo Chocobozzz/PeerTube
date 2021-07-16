@@ -5,16 +5,16 @@ import { expect } from 'chai'
 import { HttpStatusCode } from '@shared/core-utils'
 import {
   cleanupTests,
-  flushAndRunServer,
+  createSingleServer,
   makeGetRequest,
   makePostBodyRequest,
   PluginsCommand,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers
 } from '@shared/extra-utils'
 
 describe('Test plugin helpers', function () {
-  let server: ServerInfo
+  let server: PeerTubeServer
   const basePaths = [
     '/plugins/test-five/router/',
     '/plugins/test-five/0.0.1/router/'
@@ -23,7 +23,7 @@ describe('Test plugin helpers', function () {
   before(async function () {
     this.timeout(30000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
     await setAccessTokensToServers([ server ])
 
     await server.plugins.install({ path: PluginsCommand.getPluginTestPath('-five') })

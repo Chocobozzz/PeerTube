@@ -5,7 +5,7 @@ import * as ffmpeg from 'fluent-ffmpeg'
 import { pathExists, readdir } from 'fs-extra'
 import { join } from 'path'
 import { buildAbsoluteFixturePath, wait } from '../miscs'
-import { ServerInfo } from '../server/servers'
+import { PeerTubeServer } from '../server/server'
 
 function sendRTMPStream (rtmpBaseUrl: string, streamKey: string, fixtureName = 'video_short.mp4') {
   const fixture = buildAbsoluteFixturePath(fixtureName)
@@ -70,13 +70,13 @@ async function stopFfmpeg (command: ffmpeg.FfmpegCommand) {
   await wait(500)
 }
 
-async function waitUntilLivePublishedOnAllServers (servers: ServerInfo[], videoId: string) {
+async function waitUntilLivePublishedOnAllServers (servers: PeerTubeServer[], videoId: string) {
   for (const server of servers) {
     await server.live.waitUntilPublished({ videoId })
   }
 }
 
-async function checkLiveCleanup (server: ServerInfo, videoUUID: string, resolutions: number[] = []) {
+async function checkLiveCleanup (server: PeerTubeServer, videoUUID: string, resolutions: number[] = []) {
   const basePath = server.servers.buildDirectory('streaming-playlists')
   const hlsPath = join(basePath, 'hls', videoUUID)
 

@@ -3,13 +3,13 @@
 import 'mocha'
 import * as chai from 'chai'
 import { HttpStatusCode } from '@shared/core-utils'
-import { cleanupTests, doubleFollow, flushAndRunServer, ServerInfo, setAccessTokensToServers, waitJobs } from '@shared/extra-utils'
+import { cleanupTests, doubleFollow, createSingleServer, PeerTubeServer, setAccessTokensToServers, waitJobs } from '@shared/extra-utils'
 import { VideoCreateResult, VideoPrivacy } from '@shared/models'
 
 const expect = chai.expect
 
 describe('Test video privacy', function () {
-  const servers: ServerInfo[] = []
+  const servers: PeerTubeServer[] = []
   let anotherUserToken: string
 
   let privateVideoId: number
@@ -35,8 +35,8 @@ describe('Test video privacy', function () {
     this.timeout(50000)
 
     // Run servers
-    servers.push(await flushAndRunServer(1, dontFederateUnlistedConfig))
-    servers.push(await flushAndRunServer(2))
+    servers.push(await createSingleServer(1, dontFederateUnlistedConfig))
+    servers.push(await createSingleServer(2))
 
     // Get the access tokens
     await setAccessTokensToServers(servers)

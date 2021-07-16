@@ -3,11 +3,11 @@
 import 'mocha'
 import { expect } from 'chai'
 import { HttpStatusCode } from '@shared/core-utils'
-import { cleanupTests, flushAndRunServer, PluginsCommand, ServerInfo, setAccessTokensToServers, wait } from '@shared/extra-utils'
+import { cleanupTests, createSingleServer, PluginsCommand, PeerTubeServer, setAccessTokensToServers, wait } from '@shared/extra-utils'
 import { UserRole } from '@shared/models'
 
 describe('Test id and pass auth plugins', function () {
-  let server: ServerInfo
+  let server: PeerTubeServer
 
   let crashAccessToken: string
   let crashRefreshToken: string
@@ -18,7 +18,7 @@ describe('Test id and pass auth plugins', function () {
   before(async function () {
     this.timeout(30000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
     await setAccessTokensToServers([ server ])
 
     for (const suffix of [ 'one', 'two', 'three' ]) {

@@ -6,8 +6,8 @@ import {
   BulkCommand,
   cleanupTests,
   doubleFollow,
-  flushAndRunMultipleServers,
-  ServerInfo,
+  createMultipleServers,
+  PeerTubeServer,
   setAccessTokensToServers,
   waitJobs
 } from '@shared/extra-utils'
@@ -17,7 +17,7 @@ const expect = chai.expect
 describe('Test bulk actions', function () {
   const commentsUser3: { videoId: number, commentId: number }[] = []
 
-  let servers: ServerInfo[] = []
+  let servers: PeerTubeServer[] = []
   let user1Token: string
   let user2Token: string
   let user3Token: string
@@ -27,7 +27,7 @@ describe('Test bulk actions', function () {
   before(async function () {
     this.timeout(30000)
 
-    servers = await flushAndRunMultipleServers(2)
+    servers = await createMultipleServers(2)
 
     // Get the access tokens
     await setAccessTokensToServers(servers)

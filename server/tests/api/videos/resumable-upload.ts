@@ -8,8 +8,8 @@ import { HttpStatusCode } from '@shared/core-utils'
 import {
   buildAbsoluteFixturePath,
   cleanupTests,
-  flushAndRunServer,
-  ServerInfo,
+  createSingleServer,
+  PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel
 } from '@shared/extra-utils'
@@ -21,7 +21,7 @@ const expect = chai.expect
 
 describe('Test resumable upload', function () {
   const defaultFixture = 'video_short.mp4'
-  let server: ServerInfo
+  let server: PeerTubeServer
   let rootId: number
 
   async function buildSize (fixture: string, size?: number) {
@@ -99,7 +99,7 @@ describe('Test resumable upload', function () {
   before(async function () {
     this.timeout(30000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
     await setAccessTokensToServers([ server ])
     await setDefaultVideoChannel([ server ])
 
