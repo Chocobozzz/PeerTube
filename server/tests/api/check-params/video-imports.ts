@@ -10,7 +10,7 @@ import {
   checkBadStartPagination,
   cleanupTests,
   createSingleServer,
-  ImportsCommand,
+  FIXTURE_URLS,
   makeGetRequest,
   makePostBodyRequest,
   makeUploadRequest,
@@ -70,7 +70,7 @@ describe('Test video imports API validator', function () {
 
     before(function () {
       baseCorrectParams = {
-        targetUrl: ImportsCommand.getGoodVideoUrl(),
+        targetUrl: FIXTURE_URLS.goodVideo,
         name: 'my super name',
         category: 5,
         licence: 1,
@@ -297,7 +297,7 @@ describe('Test video imports API validator', function () {
       })
 
       let fields = omit(baseCorrectParams, 'targetUrl')
-      fields = { ...fields, magnetUri: ImportsCommand.getMagnetURI() }
+      fields = { ...fields, magnetUri: FIXTURE_URLS.magnet }
 
       await makePostBodyRequest({
         url: server.url,

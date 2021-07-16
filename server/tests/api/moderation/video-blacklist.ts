@@ -6,9 +6,9 @@ import { orderBy } from 'lodash'
 import {
   BlacklistCommand,
   cleanupTests,
-  doubleFollow,
   createMultipleServers,
-  ImportsCommand,
+  doubleFollow,
+  FIXTURE_URLS,
   killallServers,
   PeerTubeServer,
   setAccessTokensToServers,
@@ -387,7 +387,7 @@ describe('Test video blacklist', function () {
       this.timeout(15000)
 
       const attributes = {
-        targetUrl: ImportsCommand.getGoodVideoUrl(),
+        targetUrl: FIXTURE_URLS.goodVideo,
         name: 'URL import',
         channelId: channelOfUserWithoutFlag
       }
@@ -400,7 +400,7 @@ describe('Test video blacklist', function () {
 
     it('Should auto blacklist a video on torrent import', async function () {
       const attributes = {
-        magnetUri: ImportsCommand.getMagnetURI(),
+        magnetUri: FIXTURE_URLS.magnet,
         name: 'Torrent import',
         channelId: channelOfUserWithoutFlag
       }

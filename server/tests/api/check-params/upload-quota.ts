@@ -6,7 +6,7 @@ import { HttpStatusCode, randomInt } from '@shared/core-utils'
 import {
   cleanupTests,
   createSingleServer,
-  ImportsCommand,
+  FIXTURE_URLS,
   PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel,
@@ -76,8 +76,8 @@ describe('Test upload quota', function () {
         channelId: server.store.channel.id,
         privacy: VideoPrivacy.PUBLIC
       }
-      await server.imports.importVideo({ attributes: { ...baseAttributes, targetUrl: ImportsCommand.getGoodVideoUrl() } })
-      await server.imports.importVideo({ attributes: { ...baseAttributes, magnetUri: ImportsCommand.getMagnetURI() } })
+      await server.imports.importVideo({ attributes: { ...baseAttributes, targetUrl: FIXTURE_URLS.goodVideo } })
+      await server.imports.importVideo({ attributes: { ...baseAttributes, magnetUri: FIXTURE_URLS.magnet } })
       await server.imports.importVideo({ attributes: { ...baseAttributes, torrentfile: 'video-720p.torrent' as any } })
 
       await waitJobs([ server ])

@@ -5,9 +5,9 @@ import * as chai from 'chai'
 import {
   areHttpImportTestsDisabled,
   cleanupTests,
-  doubleFollow,
   createMultipleServers,
-  ImportsCommand,
+  doubleFollow,
+  FIXTURE_URLS,
   PeerTubeServer,
   setAccessTokensToServers,
   testCaptionFile,
@@ -110,7 +110,7 @@ describe('Test video imports', function () {
     }
 
     {
-      const attributes = { ...baseAttributes, targetUrl: ImportsCommand.getYoutubeVideoUrl() }
+      const attributes = { ...baseAttributes, targetUrl: FIXTURE_URLS.youtube }
       const { video } = await servers[0].imports.importVideo({ attributes })
       expect(video.name).to.equal('small video - youtube')
 
@@ -162,7 +162,7 @@ Ajouter un sous-titre est vraiment facile`)
     {
       const attributes = {
         ...baseAttributes,
-        magnetUri: ImportsCommand.getMagnetURI(),
+        magnetUri: FIXTURE_URLS.magnet,
         description: 'this is a super torrent description',
         tags: [ 'tag_torrent1', 'tag_torrent2' ]
       }
@@ -199,13 +199,13 @@ Ajouter un sous-titre est vraiment facile`)
 
     expect(videoImports).to.have.lengthOf(3)
 
-    expect(videoImports[2].targetUrl).to.equal(ImportsCommand.getYoutubeVideoUrl())
+    expect(videoImports[2].targetUrl).to.equal(FIXTURE_URLS.youtube)
     expect(videoImports[2].magnetUri).to.be.null
     expect(videoImports[2].torrentName).to.be.null
     expect(videoImports[2].video.name).to.equal('small video - youtube')
 
     expect(videoImports[1].targetUrl).to.be.null
-    expect(videoImports[1].magnetUri).to.equal(ImportsCommand.getMagnetURI())
+    expect(videoImports[1].magnetUri).to.equal(FIXTURE_URLS.magnet)
     expect(videoImports[1].torrentName).to.be.null
     expect(videoImports[1].video.name).to.equal('super peertube2 video')
 
@@ -234,7 +234,7 @@ Ajouter un sous-titre est vraiment facile`)
     this.timeout(60_000)
 
     const attributes = {
-      targetUrl: ImportsCommand.getYoutubeVideoUrl(),
+      targetUrl: FIXTURE_URLS.youtube,
       channelId: channelIdServer2,
       privacy: VideoPrivacy.PUBLIC,
       category: 10,
@@ -270,7 +270,7 @@ Ajouter un sous-titre est vraiment facile`)
 
     const attributes = {
       name: 'transcoded video',
-      magnetUri: ImportsCommand.getMagnetURI(),
+      magnetUri: FIXTURE_URLS.magnet,
       channelId: channelIdServer2,
       privacy: VideoPrivacy.PUBLIC
     }
@@ -320,7 +320,7 @@ Ajouter un sous-titre est vraiment facile`)
 
     const attributes = {
       name: 'hdr video',
-      targetUrl: ImportsCommand.getYoutubeHDRVideoUrl(),
+      targetUrl: FIXTURE_URLS.youtubeHDR,
       channelId: channelIdServer1,
       privacy: VideoPrivacy.PUBLIC
     }
