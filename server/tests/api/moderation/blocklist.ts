@@ -6,8 +6,8 @@ import {
   BlocklistCommand,
   cleanupTests,
   CommentsCommand,
-  doubleFollow,
   createMultipleServers,
+  doubleFollow,
   PeerTubeServer,
   setAccessTokensToServers,
   waitJobs

@@ -6,8 +6,8 @@ import { LiveVideoCreate, VideoPrivacy, VideoState } from '@shared/models'
 import {
   cleanupTests,
   ConfigCommand,
-  doubleFollow,
   createMultipleServers,
+  doubleFollow,
   PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel,

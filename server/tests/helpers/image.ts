@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
+import { expect } from 'chai'
 import { readFile, remove } from 'fs-extra'
 import { join } from 'path'
 import { processImage } from '../../../server/helpers/image-utils'
 import { buildAbsoluteFixturePath, root } from '../../../shared/extra-utils'
-import { expect } from 'chai'
 
 async function checkBuffers (path1: string, path2: string, equals: boolean) {
   const [ buf1, buf2 ] = await Promise.all([

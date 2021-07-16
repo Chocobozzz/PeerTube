@@ -1,5 +1,4 @@
-import { ServerStats } from '@shared/models'
-import { HttpStatusCode } from '@shared/models'
+import { HttpStatusCode, ServerStats } from '@shared/models'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
 
 export class StatsCommand extends AbstractCommand {

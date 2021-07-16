@@ -1,6 +1,5 @@
 
-import { ResultList, VideoChangeOwnership } from '@shared/models'
-import { HttpStatusCode } from '@shared/models'
+import { HttpStatusCode, ResultList, VideoChangeOwnership } from '@shared/models'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
 
 export class ChangeOwnershipCommand extends AbstractCommand {

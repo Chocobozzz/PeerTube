@@ -1,6 +1,5 @@
 
-import { HttpStatusCode } from '@shared/models'
-import { ResultList } from '@shared/models'
+import { HttpStatusCode, ResultList } from '@shared/models'
 import { VideoImport, VideoImportCreate } from '../../models/videos'
 import { unwrapBody } from '../requests'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'

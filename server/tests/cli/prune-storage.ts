@@ -5,12 +5,11 @@ import * as chai from 'chai'
 import { createFile, readdir } from 'fs-extra'
 import { join } from 'path'
 import { buildUUID } from '@server/helpers/uuid'
-import { HttpStatusCode } from '@shared/models'
 import {
   cleanupTests,
   CLICommand,
-  doubleFollow,
   createMultipleServers,
+  doubleFollow,
   killallServers,
   makeGetRequest,
   PeerTubeServer,
@@ -19,7 +18,7 @@ import {
   wait,
   waitJobs
 } from '@shared/extra-utils'
-import { VideoPlaylistPrivacy } from '@shared/models'
+import { HttpStatusCode, VideoPlaylistPrivacy } from '@shared/models'
 
 const expect = chai.expect
 

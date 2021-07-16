@@ -2,7 +2,6 @@
 
 import 'mocha'
 import { omit } from 'lodash'
-import { HttpStatusCode } from '@shared/models'
 import {
   buildAbsoluteFixturePath,
   cleanupTests,
@@ -10,12 +9,12 @@ import {
   LiveCommand,
   makePostBodyRequest,
   makeUploadRequest,
-  sendRTMPStream,
   PeerTubeServer,
+  sendRTMPStream,
   setAccessTokensToServers,
   stopFfmpeg
 } from '@shared/extra-utils'
-import { VideoCreateResult, VideoPrivacy } from '@shared/models'
+import { HttpStatusCode, VideoCreateResult, VideoPrivacy } from '@shared/models'
 
 describe('Test video lives API validator', function () {
   const path = '/api/v1/videos/live'

@@ -4,7 +4,6 @@ import 'mocha'
 import * as chai from 'chai'
 import { pathExists, readdir, stat } from 'fs-extra'
 import { join } from 'path'
-import { HttpStatusCode } from '@shared/models'
 import {
   buildAbsoluteFixturePath,
   cleanupTests,
@@ -13,7 +12,7 @@ import {
   setAccessTokensToServers,
   setDefaultVideoChannel
 } from '@shared/extra-utils'
-import { VideoPrivacy } from '@shared/models'
+import { HttpStatusCode, VideoPrivacy } from '@shared/models'
 
 const expect = chai.expect
 

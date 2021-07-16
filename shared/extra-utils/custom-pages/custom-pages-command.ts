@@ -1,5 +1,4 @@
-import { CustomPage } from '@shared/models'
-import { HttpStatusCode } from '@shared/models'
+import { CustomPage, HttpStatusCode } from '@shared/models'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
 
 export class CustomPagesCommand extends AbstractCommand {

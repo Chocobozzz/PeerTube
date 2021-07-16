@@ -12,8 +12,7 @@ import {
   MVideoImmutable,
   MVideoThumbnail
 } from '@server/types/models'
-import { HttpStatusCode } from '@shared/models'
-import { UserRight } from '@shared/models'
+import { HttpStatusCode, UserRight } from '@shared/models'
 
 async function doesVideoExist (id: number | string, res: Response, fetchType: VideoLoadType = 'all') {
   const userId = res.locals.oauth ? res.locals.oauth.token.User.id : undefined

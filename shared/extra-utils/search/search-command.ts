@@ -1,4 +1,5 @@
 import {
+  HttpStatusCode,
   ResultList,
   Video,
   VideoChannel,
@@ -7,7 +8,6 @@ import {
   VideoPlaylistsSearchQuery,
   VideosSearchQuery
 } from '@shared/models'
-import { HttpStatusCode } from '@shared/models'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
 
 export class SearchCommand extends AbstractCommand {

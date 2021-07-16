@@ -5,8 +5,8 @@ import * as chai from 'chai'
 import {
   cleanupTests,
   CommentsCommand,
-  dateIsValid,
   createSingleServer,
+  dateIsValid,
   PeerTubeServer,
   setAccessTokensToServers,
   testImage

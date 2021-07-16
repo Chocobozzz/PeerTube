@@ -1,6 +1,6 @@
 import * as express from 'express'
-import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
 import { ResultList, ThreadsResultList, UserRight, VideoCommentCreate } from '../../../../shared/models'
+import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
 import { VideoCommentThreads } from '../../../../shared/models/videos/comment/video-comment.model'
 import { auditLoggerFactory, CommentAuditView, getAuditIdFromRes } from '../../../helpers/audit-logger'
 import { getFormattedObjects } from '../../../helpers/utils'

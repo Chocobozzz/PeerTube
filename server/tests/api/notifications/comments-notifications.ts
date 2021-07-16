@@ -8,8 +8,8 @@ import {
   checkNewCommentOnMyVideo,
   cleanupTests,
   MockSmtpServer,
-  prepareNotificationsTest,
   PeerTubeServer,
+  prepareNotificationsTest,
   waitJobs
 } from '@shared/extra-utils'
 import { UserNotification } from '@shared/models'

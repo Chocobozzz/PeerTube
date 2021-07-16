@@ -2,7 +2,6 @@
 
 import 'mocha'
 import { io } from 'socket.io-client'
-import { HttpStatusCode } from '@shared/models'
 import {
   checkBadCountPagination,
   checkBadSortPagination,
@@ -16,7 +15,7 @@ import {
   setAccessTokensToServers,
   wait
 } from '@shared/extra-utils'
-import { UserNotificationSetting, UserNotificationSettingValue } from '@shared/models'
+import { HttpStatusCode, UserNotificationSetting, UserNotificationSettingValue } from '@shared/models'
 
 describe('Test user notifications API validators', function () {
   let server: PeerTubeServer

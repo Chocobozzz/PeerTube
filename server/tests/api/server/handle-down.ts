@@ -2,7 +2,6 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { HttpStatusCode } from '@shared/models'
 import {
   cleanupTests,
   CommentsCommand,
@@ -14,7 +13,7 @@ import {
   wait,
   waitJobs
 } from '@shared/extra-utils'
-import { JobState, VideoCreateResult, VideoPrivacy } from '@shared/models'
+import { HttpStatusCode, JobState, VideoCreateResult, VideoPrivacy } from '@shared/models'
 
 const expect = chai.expect
 

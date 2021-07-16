@@ -7,8 +7,8 @@ import { omit, pick } from 'lodash'
 import validator from 'validator'
 import { buildUUID } from '@server/helpers/uuid'
 import { loadLanguages } from '@server/initializers/constants'
-import { HttpStatusCode } from '@shared/models'
 import {
+  HttpStatusCode,
   ResultList,
   UserVideoRateType,
   Video,
@@ -332,7 +332,7 @@ export class VideosCommand extends AbstractCommand {
     attributes?: VideoEdit
     mode?: 'legacy' | 'resumable' // default legacy
   } = {}) {
-    const { mode = 'legacy', expectedStatus } = options
+    const { mode = 'legacy' } = options
     let defaultChannelId = 1
 
     try {
@@ -360,22 +360,23 @@ export class VideosCommand extends AbstractCommand {
       ...options.attributes
     }
 
-    const res = mode === 'legacy'
+    const created = mode === 'legacy'
       ? await this.buildLegacyUpload({ ...options, attributes })
       : await this.buildResumeUpload({ ...options, attributes })
 
     // Wait torrent generation
+    const expectedStatus = this.buildExpectedStatus({ ...options, defaultExpectedStatus: HttpStatusCode.OK_200 })
     if (expectedStatus === HttpStatusCode.OK_200) {
       let video: VideoDetails
 
       do {
-        video = await this.getWithToken({ ...options, id: video.uuid })
+        video = await this.getWithToken({ ...options, id: created.uuid })
 
         await wait(50)
       } while (!video.files[0].torrentUrl)
     }
 
-    return res
+    return created
   }
 
   async buildLegacyUpload (options: OverrideCommandOptions & {
@@ -535,13 +536,13 @@ export class VideosCommand extends AbstractCommand {
 
   async randomUpload (options: OverrideCommandOptions & {
     wait?: boolean // default true
-    additionalParams?: VideoEdit & { prefixName: string }
+    additionalParams?: VideoEdit & { prefixName?: string }
   } = {}) {
     const { wait = true, additionalParams } = options
     const prefixName = additionalParams?.prefixName || ''
     const name = prefixName + buildUUID()
 
-    const attributes = { name, additionalParams }
+    const attributes = { name, ...additionalParams }
 
     const result = await this.upload({ ...options, attributes })
 

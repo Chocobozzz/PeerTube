@@ -19,8 +19,8 @@ import {
   cleanupTests,
   MockInstancesIndex,
   MockSmtpServer,
-  prepareNotificationsTest,
   PeerTubeServer,
+  prepareNotificationsTest,
   wait,
   waitJobs
 } from '@shared/extra-utils'

@@ -2,9 +2,8 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { HttpStatusCode } from '@shared/models'
-import { cleanupTests, doubleFollow, createMultipleServers, PeerTubeServer, setAccessTokensToServers } from '@shared/extra-utils'
-import { PeerTubeProblemDocument, ServerErrorCode } from '@shared/models'
+import { cleanupTests, createMultipleServers, doubleFollow, PeerTubeServer, setAccessTokensToServers } from '@shared/extra-utils'
+import { HttpStatusCode, PeerTubeProblemDocument, ServerErrorCode } from '@shared/models'
 
 const expect = chai.expect
 
@@ -157,7 +156,7 @@ describe('Test follow constraints', function () {
 
       it('Should list local account videos', async function () {
         const { total, data } = await servers[0].videos.listByAccount({
-          token: undefined,
+          token: null,
           handle: 'root@localhost:' + servers[0].port
         })
 
@@ -167,7 +166,7 @@ describe('Test follow constraints', function () {
 
       it('Should not list remote account videos', async function () {
         const { total, data } = await servers[0].videos.listByAccount({
-          token: undefined,
+          token: null,
           handle: 'root@localhost:' + servers[1].port
         })
 
@@ -177,7 +176,7 @@ describe('Test follow constraints', function () {
 
       it('Should list local channel videos', async function () {
         const handle = 'root_channel@localhost:' + servers[0].port
-        const { total, data } = await servers[0].videos.listByChannel({ token: undefined, handle })
+        const { total, data } = await servers[0].videos.listByChannel({ token: null, handle })
 
         expect(total).to.equal(1)
         expect(data).to.have.lengthOf(1)
@@ -185,7 +184,7 @@ describe('Test follow constraints', function () {
 
       it('Should not list remote channel videos', async function () {
         const handle = 'root_channel@localhost:' + servers[1].port
-        const { total, data } = await servers[0].videos.listByChannel({ token: undefined, handle })
+        const { total, data } = await servers[0].videos.listByChannel({ token: null, handle })
 
         expect(total).to.equal(0)
         expect(data).to.have.lengthOf(0)

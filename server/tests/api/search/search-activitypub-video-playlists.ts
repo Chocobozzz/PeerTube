@@ -5,8 +5,8 @@ import * as chai from 'chai'
 import {
   cleanupTests,
   createMultipleServers,
-  SearchCommand,
   PeerTubeServer,
+  SearchCommand,
   setAccessTokensToServers,
   setDefaultVideoChannel,
   wait,

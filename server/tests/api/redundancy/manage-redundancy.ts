@@ -4,10 +4,10 @@ import 'mocha'
 import * as chai from 'chai'
 import {
   cleanupTests,
-  doubleFollow,
   createMultipleServers,
-  RedundancyCommand,
+  doubleFollow,
   PeerTubeServer,
+  RedundancyCommand,
   setAccessTokensToServers,
   waitJobs
 } from '@shared/extra-utils'

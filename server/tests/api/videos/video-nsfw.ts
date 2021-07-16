@@ -30,8 +30,8 @@ describe('Test video NSFW policy', function () {
       promises = [
         server.search.advancedVideoSearch({ token, search: { search: 'n', sort: '-publishedAt', ...query } }),
         server.videos.listWithToken({ token, ...query }),
-        server.videos.listByAccount({ token, handle: channelName, ...query }),
-        server.videos.listByChannel({ token, handle: accountName, ...query })
+        server.videos.listByAccount({ token, handle: accountName, ...query }),
+        server.videos.listByChannel({ token, handle: channelName, ...query })
       ]
 
       // Overviews do not support video filters
@@ -47,8 +47,8 @@ describe('Test video NSFW policy', function () {
     promises = [
       server.search.searchVideos({ search: 'n', sort: '-publishedAt' }),
       server.videos.list(),
-      server.videos.listByAccount({ handle: channelName }),
-      server.videos.listByChannel({ handle: accountName })
+      server.videos.listByAccount({ token: null, handle: accountName }),
+      server.videos.listByChannel({ token: null, handle: channelName })
     ]
 
     // Overviews do not support video filters
@@ -82,6 +82,7 @@ describe('Test video NSFW policy', function () {
   })
 
   describe('Instance default NSFW policy', function () {
+
     it('Should display NSFW videos with display default NSFW policy', async function () {
       const serverConfig = await server.config.getConfig()
       expect(serverConfig.instance.defaultNSFWPolicy).to.equal('display')

@@ -1,13 +1,13 @@
 import * as express from 'express'
 import { UserVideoRateUpdate } from '../../../../shared'
+import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
 import { logger } from '../../../helpers/logger'
 import { VIDEO_RATE_TYPES } from '../../../initializers/constants'
+import { sequelizeTypescript } from '../../../initializers/database'
 import { getLocalRateUrl, sendVideoRateChange } from '../../../lib/activitypub/video-rates'
 import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate, videoUpdateRateValidator } from '../../../middlewares'
 import { AccountModel } from '../../../models/account/account'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
-import { sequelizeTypescript } from '../../../initializers/database'
-import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
 
 const rateVideoRouter = express.Router()
 

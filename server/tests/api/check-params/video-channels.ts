@@ -3,7 +3,6 @@
 import 'mocha'
 import * as chai from 'chai'
 import { omit } from 'lodash'
-import { HttpStatusCode } from '@shared/models'
 import {
   buildAbsoluteFixturePath,
   ChannelsCommand,
@@ -19,7 +18,7 @@ import {
   PeerTubeServer,
   setAccessTokensToServers
 } from '@shared/extra-utils'
-import { VideoChannelUpdate } from '@shared/models'
+import { HttpStatusCode, VideoChannelUpdate } from '@shared/models'
 
 const expect = chai.expect
 

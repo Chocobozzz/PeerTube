@@ -2,7 +2,6 @@
 
 import 'mocha'
 import { expect } from 'chai'
-import { HttpStatusCode } from '@shared/models'
 import {
   cleanupTests,
   createSingleServer,
@@ -11,6 +10,7 @@ import {
   PluginsCommand,
   setAccessTokensToServers
 } from '@shared/extra-utils'
+import { HttpStatusCode } from '@shared/models'
 
 describe('Test plugins module unloading', function () {
   let server: PeerTubeServer = null

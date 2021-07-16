@@ -4,12 +4,11 @@ import 'mocha'
 import * as chai from 'chai'
 import { omit } from 'lodash'
 import { join } from 'path'
-import { HttpStatusCode } from '@shared/models'
 import {
   buildAbsoluteFixturePath,
   cleanupTests,
-  doubleFollow,
   createMultipleServers,
+  doubleFollow,
   generateHighBitrateVideo,
   generateVideoWithFramerate,
   makeGetRequest,
@@ -18,7 +17,7 @@ import {
   waitJobs,
   webtorrentAdd
 } from '@shared/extra-utils'
-import { getMaxBitrate, VideoResolution, VideoState } from '@shared/models'
+import { getMaxBitrate, HttpStatusCode, VideoResolution, VideoState } from '@shared/models'
 import { VIDEO_TRANSCODING_FPS } from '../../../../server/initializers/constants'
 import {
   canDoQuickTranscode,

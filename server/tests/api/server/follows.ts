@@ -5,9 +5,9 @@ import * as chai from 'chai'
 import {
   cleanupTests,
   completeVideoCheck,
+  createMultipleServers,
   dateIsValid,
   expectAccountFollows,
-  createMultipleServers,
   FollowsCommand,
   PeerTubeServer,
   setAccessTokensToServers,

@@ -2,14 +2,13 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { HttpStatusCode } from '@shared/models'
 import {
   checkPlaylistFilesWereRemoved,
   cleanupTests,
-  doubleFollow,
   createMultipleServers,
-  PlaylistsCommand,
+  doubleFollow,
   PeerTubeServer,
+  PlaylistsCommand,
   setAccessTokensToServers,
   setDefaultVideoChannel,
   testImage,
@@ -17,6 +16,7 @@ import {
   waitJobs
 } from '@shared/extra-utils'
 import {
+  HttpStatusCode,
   VideoPlaylist,
   VideoPlaylistCreateResult,
   VideoPlaylistElementType,

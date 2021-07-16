@@ -2,19 +2,19 @@
 
 import 'mocha'
 import { expect } from 'chai'
-import { HttpStatusCode } from '@shared/models'
 import {
   checkVideoFilesWereRemoved,
   cleanupTests,
-  doubleFollow,
   createMultipleServers,
+  doubleFollow,
   makeGetRequest,
   makePostBodyRequest,
-  PluginsCommand,
   PeerTubeServer,
+  PluginsCommand,
   setAccessTokensToServers,
   waitJobs
 } from '@shared/extra-utils'
+import { HttpStatusCode } from '@shared/models'
 
 function postCommand (server: PeerTubeServer, command: string, bodyArg?: object) {
   const body = { command }

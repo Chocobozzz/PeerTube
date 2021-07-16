@@ -2,6 +2,7 @@ import 'multer'
 import * as express from 'express'
 import { auditLoggerFactory, getAuditIdFromRes, UserAuditView } from '@server/helpers/audit-logger'
 import { Hooks } from '@server/lib/plugins/hooks'
+import { AttributesOnly } from '@shared/core-utils'
 import { ActorImageType, UserUpdateMe, UserVideoRate as FormattedUserVideoRate } from '../../../../shared'
 import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
 import { UserVideoQuota } from '../../../../shared/models/users/user-video-quota.model'
@@ -31,7 +32,6 @@ import { AccountVideoRateModel } from '../../../models/account/account-video-rat
 import { UserModel } from '../../../models/user/user'
 import { VideoModel } from '../../../models/video/video'
 import { VideoImportModel } from '../../../models/video/video-import'
-import { AttributesOnly } from '@shared/core-utils'
 
 const auditLogger = auditLoggerFactory('users')
 
