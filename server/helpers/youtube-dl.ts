@@ -42,7 +42,7 @@ class YoutubeDL {
 
   getYoutubeDLInfo (opts?: string[]): Promise<YoutubeDLInfo> {
     return new Promise<YoutubeDLInfo>((res, rej) => {
-      let args = opts || [ '-j', '--flat-playlist' ]
+      let args = opts || []
 
       if (CONFIG.IMPORT.VIDEOS.HTTP.FORCE_IPV4) {
         args.push('--force-ipv4')
