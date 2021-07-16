@@ -219,6 +219,8 @@ export class PeerTubeServer {
     }
 
     return new Promise<void>(res => {
+      const self = this
+
       this.app = fork(join(root(), 'dist', 'server.js'), args, forkOptions)
       this.app.stdout.on('data', function onStdout (data) {
         let dontContinue = false
@@ -228,10 +230,10 @@ export class PeerTubeServer {
           const regexp = regexps[key]
           const matches = data.toString().match(regexp)
           if (matches !== null) {
-            if (key === 'client_id') this.store.client.id = matches[1]
-            else if (key === 'client_secret') this.store.client.secret = matches[1]
-            else if (key === 'user_username') this.store.user.username = matches[1]
-            else if (key === 'user_password') this.store.user.password = matches[1]
+            if (key === 'client_id') self.store.client.id = matches[1]
+            else if (key === 'client_secret') self.store.client.secret = matches[1]
+            else if (key === 'user_username') self.store.user.username = matches[1]
+            else if (key === 'user_password') self.store.user.password = matches[1]
           }
         }
 
@@ -247,12 +249,12 @@ export class PeerTubeServer {
         if (options.hideLogs === false) {
           console.log(data.toString())
         } else {
-          this.app.stdout.removeListener('data', onStdout)
+          self.app.stdout.removeListener('data', onStdout)
         }
 
         process.on('exit', () => {
           try {
-            process.kill(this.server.app.pid)
+            process.kill(self.server.app.pid)
           } catch { /* empty */ }
         })
 

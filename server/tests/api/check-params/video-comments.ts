@@ -38,7 +38,7 @@ describe('Test video comments API validator', function () {
     await setAccessTokensToServers([ server ])
 
     {
-      const video = await server.videos.upload({ attributes: {} })
+      video = await server.videos.upload({ attributes: {} })
       pathThread = '/api/v1/videos/' + video.uuid + '/comment-threads'
     }
 
