@@ -2,7 +2,7 @@
 
 import 'mocha'
 import { expect } from 'chai'
-import { HttpStatusCode, randomInt } from '@shared/core-utils'
+import { randomInt } from '@shared/core-utils'
 import {
   cleanupTests,
   createSingleServer,
@@ -13,7 +13,7 @@ import {
   VideosCommand,
   waitJobs
 } from '@shared/extra-utils'
-import { VideoImportState, VideoPrivacy } from '@shared/models'
+import { HttpStatusCode, VideoImportState, VideoPrivacy } from '@shared/models'
 
 describe('Test upload quota', function () {
   let server: PeerTubeServer

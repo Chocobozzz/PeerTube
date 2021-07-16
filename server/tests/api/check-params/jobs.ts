@@ -1,20 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-
-import {
-  cleanupTests,
-  createSingleServer,
-  PeerTubeServer,
-  setAccessTokensToServers
-} from '../../../../shared/extra-utils'
 import {
   checkBadCountPagination,
   checkBadSortPagination,
-  checkBadStartPagination
-} from '../../../../shared/extra-utils/requests/check-api-params'
-import { makeGetRequest } from '../../../../shared/extra-utils/requests/requests'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+  checkBadStartPagination,
+  cleanupTests,
+  createSingleServer,
+  makeGetRequest,
+  PeerTubeServer,
+  setAccessTokensToServers
+} from '@shared/extra-utils'
+import { HttpStatusCode } from '@shared/models'
 
 describe('Test jobs API validators', function () {
   const path = '/api/v1/jobs/failed'
@@ -75,7 +72,7 @@ describe('Test jobs API validators', function () {
       await makeGetRequest({
         url: server.url,
         path,
-        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
       })
     })
 
@@ -84,7 +81,7 @@ describe('Test jobs API validators', function () {
         url: server.url,
         path,
         token: userAccessToken,
-        statusCodeExpected: HttpStatusCode.FORBIDDEN_403
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
       })
     })
 

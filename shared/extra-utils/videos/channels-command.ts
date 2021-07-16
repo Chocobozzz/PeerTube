@@ -1,6 +1,6 @@
 import { pick } from 'lodash'
 import { ResultList, VideoChannel, VideoChannelCreateResult } from '@shared/models'
-import { HttpStatusCode } from '../../core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '@shared/models'
 import { VideoChannelCreate } from '../../models/videos/channel/video-channel-create.model'
 import { VideoChannelUpdate } from '../../models/videos/channel/video-channel-update.model'
 import { unwrapBody } from '../requests'

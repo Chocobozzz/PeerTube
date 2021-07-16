@@ -2,7 +2,7 @@
 
 import 'mocha'
 import { omit } from 'lodash'
-import { HttpStatusCode } from '@shared/core-utils'
+import { HttpStatusCode } from '@shared/models'
 import {
   buildAbsoluteFixturePath,
   cleanupTests,
@@ -223,7 +223,7 @@ describe('Test video lives API validator', function () {
         path,
         token: server.accessToken,
         fields: baseCorrectParams,
-        statusCodeExpected: HttpStatusCode.OK_200
+        expectedStatus: HttpStatusCode.OK_200
       })
 
       video = res.body.video
@@ -243,7 +243,7 @@ describe('Test video lives API validator', function () {
         path,
         token: server.accessToken,
         fields: baseCorrectParams,
-        statusCodeExpected: HttpStatusCode.FORBIDDEN_403
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
       })
     })
 
@@ -264,7 +264,7 @@ describe('Test video lives API validator', function () {
         path,
         token: server.accessToken,
         fields,
-        statusCodeExpected: HttpStatusCode.FORBIDDEN_403
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
       })
     })
 
@@ -285,7 +285,7 @@ describe('Test video lives API validator', function () {
         path,
         token: server.accessToken,
         fields,
-        statusCodeExpected: HttpStatusCode.OK_200
+        expectedStatus: HttpStatusCode.OK_200
       })
     })
 
@@ -304,7 +304,7 @@ describe('Test video lives API validator', function () {
         path,
         token: server.accessToken,
         fields: baseCorrectParams,
-        statusCodeExpected: HttpStatusCode.FORBIDDEN_403
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
       })
     })
 
@@ -324,7 +324,7 @@ describe('Test video lives API validator', function () {
         path,
         token: server.accessToken,
         fields: baseCorrectParams,
-        statusCodeExpected: HttpStatusCode.FORBIDDEN_403
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
       })
     })
   })

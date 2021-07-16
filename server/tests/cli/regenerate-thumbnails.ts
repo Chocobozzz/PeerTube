@@ -2,7 +2,7 @@ import 'mocha'
 import { expect } from 'chai'
 import { writeFile } from 'fs-extra'
 import { basename, join } from 'path'
-import { HttpStatusCode } from '@shared/core-utils'
+import { HttpStatusCode } from '@shared/models'
 import { Video } from '@shared/models'
 import {
   cleanupTests,

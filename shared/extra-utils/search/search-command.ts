@@ -7,7 +7,7 @@ import {
   VideoPlaylistsSearchQuery,
   VideosSearchQuery
 } from '@shared/models'
-import { HttpStatusCode } from '../../core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '@shared/models'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
 
 export class SearchCommand extends AbstractCommand {

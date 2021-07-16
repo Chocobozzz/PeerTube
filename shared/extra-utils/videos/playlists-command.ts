@@ -1,5 +1,5 @@
 import { omit, pick } from 'lodash'
-import { HttpStatusCode } from '@shared/core-utils'
+import { HttpStatusCode } from '@shared/models'
 import {
   BooleanBothQuery,
   ResultList,

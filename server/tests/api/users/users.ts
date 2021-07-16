@@ -2,7 +2,7 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { HttpStatusCode } from '@shared/core-utils'
+import { HttpStatusCode } from '@shared/models'
 import {
   cleanupTests,
   createSingleServer,
@@ -215,7 +215,7 @@ describe('Test users', function () {
         path: path + videoId,
         token: 'wrong token',
         fields: data,
-        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
       }
       await makePutBodyRequest(options)
     })

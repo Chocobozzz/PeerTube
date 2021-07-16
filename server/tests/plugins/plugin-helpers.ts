@@ -2,7 +2,7 @@
 
 import 'mocha'
 import { expect } from 'chai'
-import { HttpStatusCode } from '@shared/core-utils'
+import { HttpStatusCode } from '@shared/models'
 import {
   checkVideoFilesWereRemoved,
   cleanupTests,
@@ -24,7 +24,7 @@ function postCommand (server: PeerTubeServer, command: string, bodyArg?: object)
     url: server.url,
     path: '/plugins/test-four/router/commander',
     fields: body,
-    statusCodeExpected: HttpStatusCode.NO_CONTENT_204
+    expectedStatus: HttpStatusCode.NO_CONTENT_204
   })
 }
 
@@ -67,7 +67,7 @@ describe('Test plugin helpers', function () {
       const res = await makeGetRequest({
         url: servers[0].url,
         path: '/plugins/test-four/router/server-config',
-        statusCodeExpected: HttpStatusCode.OK_200
+        expectedStatus: HttpStatusCode.OK_200
       })
 
       expect(res.body.serverConfig).to.exist
@@ -88,7 +88,7 @@ describe('Test plugin helpers', function () {
       const res = await makeGetRequest({
         url: servers[0].url,
         path: '/plugins/test-four/router/static-route',
-        statusCodeExpected: HttpStatusCode.OK_200
+        expectedStatus: HttpStatusCode.OK_200
       })
 
       expect(res.body.staticRoute).to.equal('/plugins/test-four/0.0.1/static/')
@@ -100,7 +100,7 @@ describe('Test plugin helpers', function () {
       const res = await makeGetRequest({
         url: servers[0].url,
         path: baseRouter + 'router-route',
-        statusCodeExpected: HttpStatusCode.OK_200
+        expectedStatus: HttpStatusCode.OK_200
       })
 
       expect(res.body.routerRoute).to.equal(baseRouter)
@@ -113,7 +113,7 @@ describe('Test plugin helpers', function () {
       await makeGetRequest({
         url: servers[0].url,
         path: '/plugins/test-four/router/user',
-        statusCodeExpected: HttpStatusCode.NOT_FOUND_404
+        expectedStatus: HttpStatusCode.NOT_FOUND_404
       })
     })
 
@@ -122,7 +122,7 @@ describe('Test plugin helpers', function () {
         url: servers[0].url,
         token: servers[0].accessToken,
         path: '/plugins/test-four/router/user',
-        statusCodeExpected: HttpStatusCode.OK_200
+        expectedStatus: HttpStatusCode.OK_200
       })
 
       expect(res.body.username).to.equal('root')
@@ -140,12 +140,12 @@ describe('Test plugin helpers', function () {
       this.timeout(60000)
 
       {
-        const res = await await servers[0].videos.quickUpload({ name: 'video server 1' })
+        const res = await servers[0].videos.quickUpload({ name: 'video server 1' })
         videoUUIDServer1 = res.uuid
       }
 
       {
-        await await servers[1].videos.quickUpload({ name: 'video server 2' })
+        await servers[1].videos.quickUpload({ name: 'video server 2' })
       }
 
       await waitJobs(servers)
@@ -224,7 +224,7 @@ describe('Test plugin helpers', function () {
     let videoUUID: string
 
     before(async () => {
-      const res = await await servers[0].videos.quickUpload({ name: 'video1' })
+      const res = await servers[0].videos.quickUpload({ name: 'video1' })
       videoUUID = res.uuid
     })
 

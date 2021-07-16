@@ -324,7 +324,7 @@ describe('Test video channels', function () {
 
     for (const server of servers) {
       const channelURI = 'second_video_channel@localhost:' + servers[0].port
-      const { total, data } = await server.videos.listByChannel({ videoChannelName: channelURI })
+      const { total, data } = await server.videos.listByChannel({ handle: channelURI })
 
       expect(total).to.equal(1)
       expect(data).to.be.an('array')
@@ -347,13 +347,13 @@ describe('Test video channels', function () {
     for (const server of servers) {
       {
         const secondChannelURI = 'second_video_channel@localhost:' + servers[0].port
-        const { total } = await server.videos.listByChannel({ videoChannelName: secondChannelURI })
+        const { total } = await server.videos.listByChannel({ handle: secondChannelURI })
         expect(total).to.equal(0)
       }
 
       {
         const channelURI = 'root_channel@localhost:' + servers[0].port
-        const { total, data } = await server.videos.listByChannel({ videoChannelName: channelURI })
+        const { total, data } = await server.videos.listByChannel({ handle: channelURI })
         expect(total).to.equal(1)
 
         expect(data).to.be.an('array')

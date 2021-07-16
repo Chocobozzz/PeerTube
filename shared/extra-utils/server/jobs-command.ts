@@ -1,5 +1,5 @@
 import { pick } from 'lodash'
-import { HttpStatusCode } from '../../core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '@shared/models'
 import { Job, JobState, JobType, ResultList } from '../../models'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
 

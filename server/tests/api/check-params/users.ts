@@ -2,7 +2,7 @@
 
 import 'mocha'
 import { omit } from 'lodash'
-import { HttpStatusCode } from '@shared/core-utils'
+import { HttpStatusCode } from '@shared/models'
 import {
   buildAbsoluteFixturePath,
   checkBadCountPagination,
@@ -103,7 +103,7 @@ describe('Test users API validators', function () {
       await makeGetRequest({
         url: server.url,
         path,
-        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
       })
     })
 
@@ -112,7 +112,7 @@ describe('Test users API validators', function () {
         url: server.url,
         path,
         token: userToken,
-        statusCodeExpected: HttpStatusCode.FORBIDDEN_403
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
       })
     })
   })
@@ -210,7 +210,7 @@ describe('Test users API validators', function () {
         path: path,
         token: server.accessToken,
         fields,
-        statusCodeExpected: HttpStatusCode.OK_200
+        expectedStatus: HttpStatusCode.OK_200
       })
     })
 
@@ -226,7 +226,7 @@ describe('Test users API validators', function () {
         path,
         token: 'super token',
         fields: baseCorrectParams,
-        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
       })
     })
 
@@ -238,7 +238,7 @@ describe('Test users API validators', function () {
         path,
         token: server.accessToken,
         fields,
-        statusCodeExpected: HttpStatusCode.CONFLICT_409
+        expectedStatus: HttpStatusCode.CONFLICT_409
       })
     })
 
@@ -250,7 +250,7 @@ describe('Test users API validators', function () {
         path,
         token: server.accessToken,
         fields,
-        statusCodeExpected: HttpStatusCode.CONFLICT_409
+        expectedStatus: HttpStatusCode.CONFLICT_409
       })
     })
 
@@ -298,7 +298,7 @@ describe('Test users API validators', function () {
         path,
         token: server.accessToken,
         fields,
-        statusCodeExpected: HttpStatusCode.CONFLICT_409
+        expectedStatus: HttpStatusCode.CONFLICT_409
       })
     })
 
@@ -311,7 +311,7 @@ describe('Test users API validators', function () {
           path,
           token: moderatorToken,
           fields,
-          statusCodeExpected: HttpStatusCode.FORBIDDEN_403
+          expectedStatus: HttpStatusCode.FORBIDDEN_403
         })
       }
     })
@@ -324,7 +324,7 @@ describe('Test users API validators', function () {
         path,
         token: moderatorToken,
         fields,
-        statusCodeExpected: HttpStatusCode.OK_200
+        expectedStatus: HttpStatusCode.OK_200
       })
     })
 
@@ -334,7 +334,7 @@ describe('Test users API validators', function () {
         path,
         token: server.accessToken,
         fields: baseCorrectParams,
-        statusCodeExpected: HttpStatusCode.OK_200
+        expectedStatus: HttpStatusCode.OK_200
       })
     })
 
@@ -348,7 +348,7 @@ describe('Test users API validators', function () {
         password: 'my super password',
         videoQuota: 42000000
       }
-      await makePostBodyRequest({ url: server.url, path, token: userToken, fields, statusCodeExpected: HttpStatusCode.FORBIDDEN_403 })
+      await makePostBodyRequest({ url: server.url, path, token: userToken, fields, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
     })
   })
 
@@ -400,7 +400,7 @@ describe('Test users API validators', function () {
         path: path + 'me',
         token: userToken,
         fields,
-        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
       })
     })
 
@@ -447,7 +447,7 @@ describe('Test users API validators', function () {
         path: path + 'me',
         token: 'super token',
         fields,
-        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
       })
     })
 
@@ -525,7 +525,7 @@ describe('Test users API validators', function () {
         path: path + 'me',
         token: userToken,
         fields,
-        statusCodeExpected: HttpStatusCode.NO_CONTENT_204
+        expectedStatus: HttpStatusCode.NO_CONTENT_204
       })
     })
 
@@ -540,7 +540,7 @@ describe('Test users API validators', function () {
         path: path + 'me',
         token: userToken,
         fields,
-        statusCodeExpected: HttpStatusCode.NO_CONTENT_204
+        expectedStatus: HttpStatusCode.NO_CONTENT_204
       })
     })
   })
@@ -572,7 +572,7 @@ describe('Test users API validators', function () {
         path: path + '/me/avatar/pick',
         fields,
         attaches,
-        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
       })
     })
 
@@ -587,7 +587,7 @@ describe('Test users API validators', function () {
         token: server.accessToken,
         fields,
         attaches,
-        statusCodeExpected: HttpStatusCode.OK_200
+        expectedStatus: HttpStatusCode.OK_200
       })
     })
   })
@@ -627,16 +627,16 @@ describe('Test users API validators', function () {
         url: server.url,
         path: path + userId,
         token: 'super token',
-        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
       })
     })
 
     it('Should fail with a non admin user', async function () {
-      await makeGetRequest({ url: server.url, path, token: userToken, statusCodeExpected: HttpStatusCode.FORBIDDEN_403 })
+      await makeGetRequest({ url: server.url, path, token: userToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
     })
 
     it('Should succeed with the correct params', async function () {
-      await makeGetRequest({ url: server.url, path: path + userId, token: server.accessToken, statusCodeExpected: HttpStatusCode.OK_200 })
+      await makeGetRequest({ url: server.url, path: path + userId, token: server.accessToken, expectedStatus: HttpStatusCode.OK_200 })
     })
   })
 
@@ -702,7 +702,7 @@ describe('Test users API validators', function () {
         path: path + userId,
         token: 'super token',
         fields,
-        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
       })
     })
 
@@ -730,7 +730,7 @@ describe('Test users API validators', function () {
         path: path + moderatorId,
         token: moderatorToken,
         fields,
-        statusCodeExpected: HttpStatusCode.FORBIDDEN_403
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
       })
     })
 
@@ -744,7 +744,7 @@ describe('Test users API validators', function () {
         path: path + userId,
         token: moderatorToken,
         fields,
-        statusCodeExpected: HttpStatusCode.NO_CONTENT_204
+        expectedStatus: HttpStatusCode.NO_CONTENT_204
       })
     })
 
@@ -761,7 +761,7 @@ describe('Test users API validators', function () {
         path: path + userId,
         token: server.accessToken,
         fields,
-        statusCodeExpected: HttpStatusCode.NO_CONTENT_204
+        expectedStatus: HttpStatusCode.NO_CONTENT_204
       })
     })
   })
@@ -818,11 +818,11 @@ describe('Test users API validators', function () {
     })
 
     it('Should fail with a unauthenticated user', async function () {
-      await makeGetRequest({ url: server.url, path, statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401 })
+      await makeGetRequest({ url: server.url, path, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
     it('Should fail with a another user', async function () {
-      await makeGetRequest({ url: server.url, path, token: server.accessToken, statusCodeExpected: HttpStatusCode.FORBIDDEN_403 })
+      await makeGetRequest({ url: server.url, path, token: server.accessToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
     })
 
     it('Should fail with a bad type', async function () {
@@ -831,12 +831,12 @@ describe('Test users API validators', function () {
         path,
         token: userToken,
         query: { rating: 'toto ' },
-        statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
       })
     })
 
     it('Should succeed with the correct params', async function () {
-      await makeGetRequest({ url: server.url, path, token: userToken, statusCodeExpected: HttpStatusCode.OK_200 })
+      await makeGetRequest({ url: server.url, path, token: userToken, expectedStatus: HttpStatusCode.OK_200 })
     })
   })
 
@@ -955,7 +955,7 @@ describe('Test users API validators', function () {
         path: registrationPath,
         token: server.accessToken,
         fields,
-        statusCodeExpected: HttpStatusCode.CONFLICT_409
+        expectedStatus: HttpStatusCode.CONFLICT_409
       })
     })
 
@@ -967,7 +967,7 @@ describe('Test users API validators', function () {
         path: registrationPath,
         token: server.accessToken,
         fields,
-        statusCodeExpected: HttpStatusCode.CONFLICT_409
+        expectedStatus: HttpStatusCode.CONFLICT_409
       })
     })
 
@@ -979,7 +979,7 @@ describe('Test users API validators', function () {
         path: registrationPath,
         token: server.accessToken,
         fields,
-        statusCodeExpected: HttpStatusCode.CONFLICT_409
+        expectedStatus: HttpStatusCode.CONFLICT_409
       })
     })
 
@@ -1019,7 +1019,7 @@ describe('Test users API validators', function () {
         path: registrationPath,
         token: server.accessToken,
         fields,
-        statusCodeExpected: HttpStatusCode.CONFLICT_409
+        expectedStatus: HttpStatusCode.CONFLICT_409
       })
     })
 
@@ -1031,7 +1031,7 @@ describe('Test users API validators', function () {
         path: registrationPath,
         token: server.accessToken,
         fields: fields,
-        statusCodeExpected: HttpStatusCode.NO_CONTENT_204
+        expectedStatus: HttpStatusCode.NO_CONTENT_204
       })
     })
 
@@ -1047,7 +1047,7 @@ describe('Test users API validators', function () {
         path: registrationPath,
         token: serverWithRegistrationDisabled.accessToken,
         fields,
-        statusCodeExpected: HttpStatusCode.FORBIDDEN_403
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
       })
     })
   })
@@ -1081,7 +1081,7 @@ describe('Test users API validators', function () {
         path,
         token: server.accessToken,
         fields,
-        statusCodeExpected: HttpStatusCode.NO_CONTENT_204
+        expectedStatus: HttpStatusCode.NO_CONTENT_204
       })
     })
   })
@@ -1109,7 +1109,7 @@ describe('Test users API validators', function () {
         path,
         token: server.accessToken,
         fields,
-        statusCodeExpected: HttpStatusCode.NO_CONTENT_204
+        expectedStatus: HttpStatusCode.NO_CONTENT_204
       })
     })
   })

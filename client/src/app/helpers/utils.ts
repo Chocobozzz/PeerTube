@@ -3,7 +3,7 @@ import { SelectChannelItem } from 'src/types/select-options-item.model'
 import { DatePipe } from '@angular/common'
 import { HttpErrorResponse } from '@angular/common/http'
 import { Notifier } from '@app/core'
-import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '@shared/models'
 import { environment } from '../../environments/environment'
 import { AuthService } from '../core/auth'
 

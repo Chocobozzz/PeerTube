@@ -43,10 +43,10 @@ describe('Official plugin auto-block videos', function () {
     blocklistServer = new MockBlocklist()
     port = await blocklistServer.initialize()
 
-    await await servers[0].videos.quickUpload({ name: 'video server 1' })
-    await await servers[1].videos.quickUpload({ name: 'video server 2' })
-    await await servers[1].videos.quickUpload({ name: 'video 2 server 2' })
-    await await servers[1].videos.quickUpload({ name: 'video 3 server 2' })
+    await servers[0].videos.quickUpload({ name: 'video server 1' })
+    await servers[1].videos.quickUpload({ name: 'video server 2' })
+    await servers[1].videos.quickUpload({ name: 'video 2 server 2' })
+    await servers[1].videos.quickUpload({ name: 'video 3 server 2' })
 
     {
       const { data } = await servers[0].videos.list()

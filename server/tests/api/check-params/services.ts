@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-import { HttpStatusCode } from '@shared/core-utils'
+import { HttpStatusCode } from '@shared/models'
 import {
   cleanupTests,
   createSingleServer,
@@ -120,13 +120,13 @@ describe('Test services API validators', function () {
   })
 })
 
-function checkParamEmbed (server: PeerTubeServer, embedUrl: string, statusCodeExpected = HttpStatusCode.BAD_REQUEST_400, query = {}) {
+function checkParamEmbed (server: PeerTubeServer, embedUrl: string, expectedStatus = HttpStatusCode.BAD_REQUEST_400, query = {}) {
   const path = '/services/oembed'
 
   return makeGetRequest({
     url: server.url,
     path,
     query: Object.assign(query, { url: embedUrl }),
-    statusCodeExpected
+    expectedStatus
   })
 }

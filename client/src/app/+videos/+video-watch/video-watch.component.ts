@@ -21,8 +21,15 @@ import { isXPercentInViewport, scrollToTop } from '@app/helpers'
 import { Video, VideoCaptionService, VideoDetails, VideoService } from '@app/shared/shared-main'
 import { SubscribeButtonComponent } from '@app/shared/shared-user-subscription'
 import { VideoPlaylist, VideoPlaylistService } from '@app/shared/shared-video-playlist'
-import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
-import { HTMLServerConfig, PeerTubeProblemDocument, ServerErrorCode, VideoCaption, VideoPrivacy, VideoState } from '@shared/models'
+import {
+  HTMLServerConfig,
+  HttpStatusCode,
+  PeerTubeProblemDocument,
+  ServerErrorCode,
+  VideoCaption,
+  VideoPrivacy,
+  VideoState
+} from '@shared/models'
 import { cleanupVideoWatch, getStoredTheater, getStoredVideoWatchHistory } from '../../../assets/player/peertube-player-local-storage'
 import {
   CustomizationOptions,

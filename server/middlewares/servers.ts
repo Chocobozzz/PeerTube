@@ -1,6 +1,6 @@
 import * as express from 'express'
 import { getHostWithPort } from '../helpers/express-utils'
-import { HttpStatusCode } from '../../shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '../../shared/models/http/http-error-codes'
 
 function setBodyHostsPort (req: express.Request, res: express.Response, next: express.NextFunction) {
   if (!req.body.hosts) return next()

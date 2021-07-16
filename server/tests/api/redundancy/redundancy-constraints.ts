@@ -117,7 +117,7 @@ describe('Test redundancy constraints', function () {
         }
       }
     }
-    await await killallServers([ localServer ])
+    await killallServers([ localServer ])
     await localServer.run(config)
 
     await uploadWrapper('video 2 server 2')

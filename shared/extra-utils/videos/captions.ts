@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import * as request from 'supertest'
-import { HttpStatusCode } from '../../core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '@shared/models'
 
 async function testCaptionFile (url: string, captionPath: string, containsString: string) {
   const res = await request(url)

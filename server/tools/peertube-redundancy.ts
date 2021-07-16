@@ -6,7 +6,7 @@ import { Command, program } from 'commander'
 import { uniq } from 'lodash'
 import { URL } from 'url'
 import validator from 'validator'
-import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '@shared/models'
 import { VideoRedundanciesTarget } from '@shared/models'
 import { assignToken, buildServer, getServerCredentials } from './cli'
 

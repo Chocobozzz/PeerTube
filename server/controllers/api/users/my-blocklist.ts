@@ -22,7 +22,7 @@ import { addAccountInBlocklist, addServerInBlocklist, removeAccountFromBlocklist
 import { ServerBlocklistModel } from '../../../models/server/server-blocklist'
 import { UserNotificationModel } from '@server/models/user/user-notification'
 import { logger } from '@server/helpers/logger'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
 
 const myBlocklistRouter = express.Router()
 

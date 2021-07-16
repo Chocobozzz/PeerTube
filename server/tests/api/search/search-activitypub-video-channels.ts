@@ -149,7 +149,7 @@ describe('Test ActivityPub video channels search', function () {
 
     const { total, data } = await servers[0].videos.listByChannel({
       token: null,
-      videoChannelName: 'channel1_server2@localhost:' + servers[1].port
+      handle: 'channel1_server2@localhost:' + servers[1].port
     })
     expect(total).to.equal(0)
     expect(data).to.have.lengthOf(0)
@@ -157,7 +157,7 @@ describe('Test ActivityPub video channels search', function () {
 
   it('Should list video channel videos of server 2 with token', async function () {
     const { total, data } = await servers[0].videos.listByChannel({
-      videoChannelName: 'channel1_server2@localhost:' + servers[1].port
+      handle: 'channel1_server2@localhost:' + servers[1].port
     })
 
     expect(total).to.equal(1)
@@ -206,8 +206,8 @@ describe('Test ActivityPub video channels search', function () {
 
     await waitJobs(servers)
 
-    const videoChannelName = 'channel1_server2@localhost:' + servers[1].port
-    const { total, data } = await servers[0].videos.listByChannel({ videoChannelName, sort: '-createdAt' })
+    const handle = 'channel1_server2@localhost:' + servers[1].port
+    const { total, data } = await servers[0].videos.listByChannel({ handle, sort: '-createdAt' })
 
     expect(total).to.equal(2)
     expect(data[0].name).to.equal('video 2 server 2')

@@ -1,4 +1,4 @@
-import { HttpStatusCode } from '@shared/core-utils'
+import { HttpStatusCode } from '@shared/models'
 import { ResultList, VideoCaption } from '@shared/models'
 import { buildAbsoluteFixturePath } from '../miscs'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'

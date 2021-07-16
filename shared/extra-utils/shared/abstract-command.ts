@@ -24,15 +24,20 @@ interface InternalCommonCommandOptions extends OverrideCommandOptions {
   // If we automatically send the server token if the token is not provided
   implicitToken: boolean
   defaultExpectedStatus: number
-}
 
-interface InternalGetCommandOptions extends InternalCommonCommandOptions {
-  query?: { [ id: string ]: any }
+  // Common optional request parameters
   contentType?: string
   accept?: string
   redirects?: number
   range?: string
   host?: string
+  headers?: { [ name: string ]: string }
+  requestType?: string
+  xForwardedFor?: string
+}
+
+interface InternalGetCommandOptions extends InternalCommonCommandOptions {
+  query?: { [ id: string ]: any }
 }
 
 abstract class AbstractCommand {
@@ -59,7 +64,7 @@ abstract class AbstractCommand {
       ...options,
 
       token: this.buildCommonRequestToken(options),
-      defaultExpectedStatus: this.buildStatusCodeExpected(options),
+      defaultExpectedStatus: this.buildExpectedStatus(options),
 
       url: `${protocol}//${host}`,
       path: pathname,
@@ -68,17 +73,12 @@ abstract class AbstractCommand {
   }
 
   protected getRequest (options: InternalGetCommandOptions) {
-    const { redirects, query, contentType, accept, range, host } = options
+    const { query } = options
 
     return makeGetRequest({
       ...this.buildCommonRequestOptions(options),
 
-      redirects,
-      query,
-      contentType,
-      range,
-      host,
-      accept
+      query
     })
   }
 
@@ -100,51 +100,41 @@ abstract class AbstractCommand {
 
   protected postBodyRequest (options: InternalCommonCommandOptions & {
     fields?: { [ fieldName: string ]: any }
-    headers?: { [ name: string ]: string }
-    type?: string
-    xForwardedFor?: string
   }) {
-    const { type, fields, xForwardedFor, headers } = options
+    const { fields } = options
 
     return makePostBodyRequest({
       ...this.buildCommonRequestOptions(options),
 
-      fields,
-      xForwardedFor,
-      type,
-      headers
+      fields
     })
   }
 
   protected postUploadRequest (options: InternalCommonCommandOptions & {
     fields?: { [ fieldName: string ]: any }
     attaches?: { [ fieldName: string ]: any }
-    headers?: { [ name: string ]: string }
   }) {
-    const { fields, attaches, headers } = options
+    const { fields, attaches } = options
 
     return makeUploadRequest({
       ...this.buildCommonRequestOptions(options),
 
       method: 'POST',
       fields,
-      attaches,
-      headers
+      attaches
     })
   }
 
   protected putUploadRequest (options: InternalCommonCommandOptions & {
     fields?: { [ fieldName: string ]: any }
     attaches?: { [ fieldName: string ]: any }
-    headers?: { [ name: string ]: string }
   }) {
-    const { fields, attaches, headers } = options
+    const { fields, attaches } = options
 
     return makeUploadRequest({
       ...this.buildCommonRequestOptions(options),
 
       method: 'PUT',
-      headers,
       fields,
       attaches
     })
@@ -154,12 +144,9 @@ abstract class AbstractCommand {
     fixture: string
     fieldname: string
   }) {
-    let filePath = ''
-    if (isAbsolute(options.fixture)) {
-      filePath = options.fixture
-    } else {
-      filePath = join(root(), 'server', 'tests', 'fixtures', options.fixture)
-    }
+    const filePath = isAbsolute(options.fixture)
+      ? options.fixture
+      : join(root(), 'server', 'tests', 'fixtures', options.fixture)
 
     return this.postUploadRequest({
       ...options,
@@ -170,14 +157,23 @@ abstract class AbstractCommand {
   }
 
   protected buildCommonRequestOptions (options: InternalCommonCommandOptions) {
-    const { url, path } = options
+    const { url, path, redirects, contentType, accept, range, host, headers, requestType, xForwardedFor } = options
 
     return {
       url: url ?? this.server.url,
       path,
 
       token: this.buildCommonRequestToken(options),
-      statusCodeExpected: this.buildStatusCodeExpected(options)
+      expectedStatus: this.buildExpectedStatus(options),
+
+      redirects,
+      contentType,
+      range,
+      host,
+      accept,
+      headers,
+      type: requestType,
+      xForwardedFor
     }
   }
 
@@ -191,7 +187,7 @@ abstract class AbstractCommand {
     return token !== undefined ? token : fallbackToken
   }
 
-  protected buildStatusCodeExpected (options: Pick<InternalCommonCommandOptions, 'expectedStatus' | 'defaultExpectedStatus'>) {
+  protected buildExpectedStatus (options: Pick<InternalCommonCommandOptions, 'expectedStatus' | 'defaultExpectedStatus'>) {
     const { expectedStatus, defaultExpectedStatus } = options
 
     return expectedStatus !== undefined ? expectedStatus : defaultExpectedStatus

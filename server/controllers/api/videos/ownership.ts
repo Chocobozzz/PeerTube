@@ -19,7 +19,7 @@ import { changeVideoChannelShare } from '../../../lib/activitypub/share'
 import { sendUpdateVideo } from '../../../lib/activitypub/send'
 import { VideoModel } from '../../../models/video/video'
 import { MVideoFullLight } from '@server/types/models'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
 
 const ownershipVideoRouter = express.Router()
 

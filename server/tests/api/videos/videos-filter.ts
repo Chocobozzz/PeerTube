@@ -2,7 +2,7 @@
 
 import 'mocha'
 import { expect } from 'chai'
-import { HttpStatusCode } from '@shared/core-utils'
+import { HttpStatusCode } from '@shared/models'
 import {
   cleanupTests,
   doubleFollow,
@@ -13,7 +13,7 @@ import {
 } from '@shared/extra-utils'
 import { UserRole, Video, VideoPrivacy } from '@shared/models'
 
-async function getVideosNames (server: PeerTubeServer, token: string, filter: string, statusCodeExpected = HttpStatusCode.OK_200) {
+async function getVideosNames (server: PeerTubeServer, token: string, filter: string, expectedStatus = HttpStatusCode.OK_200) {
   const paths = [
     '/api/v1/video-channels/root_channel/videos',
     '/api/v1/accounts/root/videos',
@@ -32,7 +32,7 @@ async function getVideosNames (server: PeerTubeServer, token: string, filter: st
         sort: 'createdAt',
         filter
       },
-      statusCodeExpected
+      expectedStatus
     })
 
     videosResults.push(res.body.data.map(v => v.name))

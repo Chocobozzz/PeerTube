@@ -2,7 +2,7 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { HttpStatusCode } from '@shared/core-utils'
+import { HttpStatusCode } from '@shared/models'
 import {
   cleanupTests,
   createMultipleServers,
@@ -71,28 +71,28 @@ describe('Test plugin filter hooks', function () {
   })
 
   it('Should run filter:api.accounts.videos.list.params', async function () {
-    const { data } = await servers[0].videos.listByAccount({ accountName: 'root', start: 0, count: 2 })
+    const { data } = await servers[0].videos.listByAccount({ handle: 'root', start: 0, count: 2 })
 
     // 1 plugin do +1 to the count parameter
     expect(data).to.have.lengthOf(3)
   })
 
   it('Should run filter:api.accounts.videos.list.result', async function () {
-    const { total } = await servers[0].videos.listByAccount({ accountName: 'root', start: 0, count: 2 })
+    const { total } = await servers[0].videos.listByAccount({ handle: 'root', start: 0, count: 2 })
 
     // Plugin do +2 to the total result
     expect(total).to.equal(12)
   })
 
   it('Should run filter:api.video-channels.videos.list.params', async function () {
-    const { data } = await servers[0].videos.listByChannel({ videoChannelName: 'root_channel', start: 0, count: 2 })
+    const { data } = await servers[0].videos.listByChannel({ handle: 'root_channel', start: 0, count: 2 })
 
     // 1 plugin do +3 to the count parameter
     expect(data).to.have.lengthOf(5)
   })
 
   it('Should run filter:api.video-channels.videos.list.result', async function () {
-    const { total } = await servers[0].videos.listByChannel({ videoChannelName: 'root_channel', start: 0, count: 2 })
+    const { total } = await servers[0].videos.listByChannel({ handle: 'root_channel', start: 0, count: 2 })
 
     // Plugin do +3 to the total result
     expect(total).to.equal(13)

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-import { HttpStatusCode } from '@shared/core-utils'
+import { HttpStatusCode } from '@shared/models'
 import {
   checkBadCountPagination,
   checkBadSortPagination,
@@ -70,7 +70,7 @@ describe('Test server plugins API validators', function () {
       ]
 
       for (const p of paths) {
-        await makeGetRequest({ url: server.url, path: p, statusCodeExpected: HttpStatusCode.NOT_FOUND_404 })
+        await makeGetRequest({ url: server.url, path: p, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
       }
     })
 
@@ -78,7 +78,7 @@ describe('Test server plugins API validators', function () {
       await makeGetRequest({
         url: server.url,
         path: '/themes/' + pluginName + '/' + npmVersion + '/static/images/chocobo.png',
-        statusCodeExpected: HttpStatusCode.NOT_FOUND_404
+        expectedStatus: HttpStatusCode.NOT_FOUND_404
       })
     })
 
@@ -93,7 +93,7 @@ describe('Test server plugins API validators', function () {
       ]
 
       for (const p of paths) {
-        await makeGetRequest({ url: server.url, path: p, statusCodeExpected: HttpStatusCode.BAD_REQUEST_400 })
+        await makeGetRequest({ url: server.url, path: p, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
       }
     })
 
@@ -107,14 +107,14 @@ describe('Test server plugins API validators', function () {
       ]
 
       for (const p of paths) {
-        await makeGetRequest({ url: server.url, path: p, statusCodeExpected: HttpStatusCode.BAD_REQUEST_400 })
+        await makeGetRequest({ url: server.url, path: p, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
       }
     })
 
     it('Should fail with an unknown auth name', async function () {
       const path = '/plugins/' + pluginName + '/' + npmVersion + '/auth/bad-auth'
 
-      await makeGetRequest({ url: server.url, path, statusCodeExpected: HttpStatusCode.NOT_FOUND_404 })
+      await makeGetRequest({ url: server.url, path, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
     })
 
     it('Should fail with an unknown static file', async function () {
@@ -126,7 +126,7 @@ describe('Test server plugins API validators', function () {
       ]
 
       for (const p of paths) {
-        await makeGetRequest({ url: server.url, path: p, statusCodeExpected: HttpStatusCode.NOT_FOUND_404 })
+        await makeGetRequest({ url: server.url, path: p, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
       }
     })
 
@@ -134,7 +134,7 @@ describe('Test server plugins API validators', function () {
       await makeGetRequest({
         url: server.url,
         path: '/themes/' + themeName + '/' + themeVersion + '/css/assets/fake.css',
-        statusCodeExpected: HttpStatusCode.NOT_FOUND_404
+        expectedStatus: HttpStatusCode.NOT_FOUND_404
       })
     })
 
@@ -148,11 +148,11 @@ describe('Test server plugins API validators', function () {
       ]
 
       for (const p of paths) {
-        await makeGetRequest({ url: server.url, path: p, statusCodeExpected: HttpStatusCode.OK_200 })
+        await makeGetRequest({ url: server.url, path: p, expectedStatus: HttpStatusCode.OK_200 })
       }
 
       const authPath = '/plugins/' + pluginName + '/' + npmVersion + '/auth/fake-auth'
-      await makeGetRequest({ url: server.url, path: authPath, statusCodeExpected: HttpStatusCode.FOUND_302 })
+      await makeGetRequest({ url: server.url, path: authPath, expectedStatus: HttpStatusCode.FOUND_302 })
     })
   })
 
@@ -170,7 +170,7 @@ describe('Test server plugins API validators', function () {
         path,
         token: 'fake_token',
         query: baseQuery,
-        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
       })
     })
 
@@ -180,7 +180,7 @@ describe('Test server plugins API validators', function () {
         path,
         token: userAccessToken,
         query: baseQuery,
-        statusCodeExpected: HttpStatusCode.FORBIDDEN_403
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
       })
     })
 
@@ -224,7 +224,7 @@ describe('Test server plugins API validators', function () {
         path,
         token: server.accessToken,
         query: baseQuery,
-        statusCodeExpected: HttpStatusCode.OK_200
+        expectedStatus: HttpStatusCode.OK_200
       })
     })
   })
@@ -241,7 +241,7 @@ describe('Test server plugins API validators', function () {
         path,
         token: 'fake_token',
         query: baseQuery,
-        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
       })
     })
 
@@ -251,7 +251,7 @@ describe('Test server plugins API validators', function () {
         path,
         token: userAccessToken,
         query: baseQuery,
-        statusCodeExpected: HttpStatusCode.FORBIDDEN_403
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
       })
     })
 
@@ -284,7 +284,7 @@ describe('Test server plugins API validators', function () {
         path,
         token: server.accessToken,
         query: baseQuery,
-        statusCodeExpected: HttpStatusCode.OK_200
+        expectedStatus: HttpStatusCode.OK_200
       })
     })
   })
@@ -298,7 +298,7 @@ describe('Test server plugins API validators', function () {
           url: server.url,
           path: path + suffix,
           token: 'fake_token',
-          statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+          expectedStatus: HttpStatusCode.UNAUTHORIZED_401
         })
       }
     })
@@ -309,7 +309,7 @@ describe('Test server plugins API validators', function () {
           url: server.url,
           path: path + suffix,
           token: userAccessToken,
-          statusCodeExpected: HttpStatusCode.FORBIDDEN_403
+          expectedStatus: HttpStatusCode.FORBIDDEN_403
         })
       }
     })
@@ -320,7 +320,7 @@ describe('Test server plugins API validators', function () {
           url: server.url,
           path: path + suffix,
           token: server.accessToken,
-          statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
+          expectedStatus: HttpStatusCode.BAD_REQUEST_400
         })
       }
 
@@ -329,7 +329,7 @@ describe('Test server plugins API validators', function () {
           url: server.url,
           path: path + suffix,
           token: server.accessToken,
-          statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
+          expectedStatus: HttpStatusCode.BAD_REQUEST_400
         })
       }
     })
@@ -340,7 +340,7 @@ describe('Test server plugins API validators', function () {
           url: server.url,
           path: path + suffix,
           token: server.accessToken,
-          statusCodeExpected: HttpStatusCode.NOT_FOUND_404
+          expectedStatus: HttpStatusCode.NOT_FOUND_404
         })
       }
     })
@@ -351,7 +351,7 @@ describe('Test server plugins API validators', function () {
           url: server.url,
           path: path + suffix,
           token: server.accessToken,
-          statusCodeExpected: HttpStatusCode.OK_200
+          expectedStatus: HttpStatusCode.OK_200
         })
       }
     })
@@ -367,7 +367,7 @@ describe('Test server plugins API validators', function () {
         path: path + npmPlugin + '/settings',
         fields: { settings },
         token: 'fake_token',
-        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
       })
     })
 
@@ -377,7 +377,7 @@ describe('Test server plugins API validators', function () {
         path: path + npmPlugin + '/settings',
         fields: { settings },
         token: userAccessToken,
-        statusCodeExpected: HttpStatusCode.FORBIDDEN_403
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
       })
     })
 
@@ -387,7 +387,7 @@ describe('Test server plugins API validators', function () {
         path: path + 'toto/settings',
         fields: { settings },
         token: server.accessToken,
-        statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
       })
 
       await makePutBodyRequest({
@@ -395,7 +395,7 @@ describe('Test server plugins API validators', function () {
         path: path + 'peertube-plugin-TOTO/settings',
         fields: { settings },
         token: server.accessToken,
-        statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
       })
     })
 
@@ -405,7 +405,7 @@ describe('Test server plugins API validators', function () {
         path: path + 'peertube-plugin-toto/settings',
         fields: { settings },
         token: server.accessToken,
-        statusCodeExpected: HttpStatusCode.NOT_FOUND_404
+        expectedStatus: HttpStatusCode.NOT_FOUND_404
       })
     })
 
@@ -415,7 +415,7 @@ describe('Test server plugins API validators', function () {
         path: path + npmPlugin + '/settings',
         fields: { settings },
         token: server.accessToken,
-        statusCodeExpected: HttpStatusCode.NO_CONTENT_204
+        expectedStatus: HttpStatusCode.NO_CONTENT_204
       })
     })
   })
@@ -430,7 +430,7 @@ describe('Test server plugins API validators', function () {
           path: path + suffix,
           fields: { npmName: npmPlugin },
           token: 'fake_token',
-          statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+          expectedStatus: HttpStatusCode.UNAUTHORIZED_401
         })
       }
     })
@@ -442,7 +442,7 @@ describe('Test server plugins API validators', function () {
           path: path + suffix,
           fields: { npmName: npmPlugin },
           token: userAccessToken,
-          statusCodeExpected: HttpStatusCode.FORBIDDEN_403
+          expectedStatus: HttpStatusCode.FORBIDDEN_403
         })
       }
     })
@@ -454,7 +454,7 @@ describe('Test server plugins API validators', function () {
           path: path + suffix,
           fields: { npmName: 'toto' },
           token: server.accessToken,
-          statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
+          expectedStatus: HttpStatusCode.BAD_REQUEST_400
         })
       }
 
@@ -464,7 +464,7 @@ describe('Test server plugins API validators', function () {
           path: path + suffix,
           fields: { npmName: 'peertube-plugin-TOTO' },
           token: server.accessToken,
-          statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
+          expectedStatus: HttpStatusCode.BAD_REQUEST_400
         })
       }
     })
@@ -484,7 +484,7 @@ describe('Test server plugins API validators', function () {
           path: path + obj.suffix,
           fields: { npmName: npmPlugin },
           token: server.accessToken,
-          statusCodeExpected: obj.status
+          expectedStatus: obj.status
         })
       }
     })

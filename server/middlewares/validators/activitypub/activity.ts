@@ -2,7 +2,7 @@ import * as express from 'express'
 import { isRootActivityValid } from '../../../helpers/custom-validators/activitypub/activity'
 import { logger } from '../../../helpers/logger'
 import { getServerActor } from '@server/models/application/application'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
 
 async function activityPubValidator (req: express.Request, res: express.Response, next: express.NextFunction) {
   logger.debug('Checking activity pub parameters')

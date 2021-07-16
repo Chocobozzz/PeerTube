@@ -1,6 +1,6 @@
 import { Redis } from '../lib/redis'
 import * as apicache from 'apicache'
-import { HttpStatusCode } from '../../shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '../../shared/models/http/http-error-codes'
 
 // Ensure Redis is initialized
 Redis.Instance.init()

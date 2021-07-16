@@ -4,7 +4,7 @@ import { expect } from 'chai'
 import { pathExists, readFile } from 'fs-extra'
 import { join } from 'path'
 import { root } from '@server/helpers/core-utils'
-import { HttpStatusCode } from '@shared/core-utils'
+import { HttpStatusCode } from '@shared/models'
 import { makeGetRequest } from '../requests'
 import { PeerTubeServer } from '../server'
 
@@ -20,7 +20,7 @@ async function testImage (url: string, imageName: string, imagePath: string, ext
   const res = await makeGetRequest({
     url,
     path: imagePath,
-    statusCodeExpected: HttpStatusCode.OK_200
+    expectedStatus: HttpStatusCode.OK_200
   })
 
   const body = res.body

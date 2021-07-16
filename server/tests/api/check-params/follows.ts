@@ -1,21 +1,19 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-
-import {
-  cleanupTests,
-  createSingleServer,
-  makeDeleteRequest, makeGetRequest,
-  makePostBodyRequest,
-  PeerTubeServer,
-  setAccessTokensToServers
-} from '../../../../shared/extra-utils'
 import {
   checkBadCountPagination,
   checkBadSortPagination,
-  checkBadStartPagination
-} from '../../../../shared/extra-utils/requests/check-api-params'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+  checkBadStartPagination,
+  cleanupTests,
+  createSingleServer,
+  makeDeleteRequest,
+  makeGetRequest,
+  makePostBodyRequest,
+  PeerTubeServer,
+  setAccessTokensToServers
+} from '@shared/extra-utils'
+import { HttpStatusCode } from '@shared/models'
 
 describe('Test server follows API validators', function () {
   let server: PeerTubeServer
@@ -51,7 +49,7 @@ describe('Test server follows API validators', function () {
           url: server.url,
           path,
           token: server.accessToken,
-          statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
+          expectedStatus: HttpStatusCode.BAD_REQUEST_400
         })
       })
 
@@ -61,7 +59,7 @@ describe('Test server follows API validators', function () {
           path,
           token: server.accessToken,
           fields: { hosts: 'localhost:9002' },
-          statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
+          expectedStatus: HttpStatusCode.BAD_REQUEST_400
         })
       })
 
@@ -71,7 +69,7 @@ describe('Test server follows API validators', function () {
           path,
           fields: { hosts: [ 'localhost:9002', 'localhost:coucou' ] },
           token: server.accessToken,
-          statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
+          expectedStatus: HttpStatusCode.BAD_REQUEST_400
         })
       })
 
@@ -81,7 +79,7 @@ describe('Test server follows API validators', function () {
           path,
           fields: { hosts: [ 'localhost:9002', 'http://localhost:9003' ] },
           token: server.accessToken,
-          statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
+          expectedStatus: HttpStatusCode.BAD_REQUEST_400
         })
       })
 
@@ -91,7 +89,7 @@ describe('Test server follows API validators', function () {
           path,
           fields: { urls: [ 'localhost:9002', 'localhost:9002' ] },
           token: server.accessToken,
-          statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
+          expectedStatus: HttpStatusCode.BAD_REQUEST_400
         })
       })
 
@@ -101,7 +99,7 @@ describe('Test server follows API validators', function () {
           path,
           fields: { hosts: [ 'localhost:9002' ] },
           token: 'fake_token',
-          statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+          expectedStatus: HttpStatusCode.UNAUTHORIZED_401
         })
       })
 
@@ -111,7 +109,7 @@ describe('Test server follows API validators', function () {
           path,
           fields: { hosts: [ 'localhost:9002' ] },
           token: userAccessToken,
-          statusCodeExpected: HttpStatusCode.FORBIDDEN_403
+          expectedStatus: HttpStatusCode.FORBIDDEN_403
         })
       })
     })
@@ -155,7 +153,7 @@ describe('Test server follows API validators', function () {
         await makeGetRequest({
           url: server.url,
           path,
-          statusCodeExpected: HttpStatusCode.OK_200,
+          expectedStatus: HttpStatusCode.OK_200,
           query: {
             state: 'accepted',
             actorType: 'Application'
@@ -204,7 +202,7 @@ describe('Test server follows API validators', function () {
         await makeGetRequest({
           url: server.url,
           path,
-          statusCodeExpected: HttpStatusCode.OK_200,
+          expectedStatus: HttpStatusCode.OK_200,
           query: {
             state: 'accepted'
           }
@@ -220,7 +218,7 @@ describe('Test server follows API validators', function () {
           url: server.url,
           path: path + '/toto@localhost:9002',
           token: 'fake_token',
-          statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+          expectedStatus: HttpStatusCode.UNAUTHORIZED_401
         })
       })
 
@@ -229,7 +227,7 @@ describe('Test server follows API validators', function () {
           url: server.url,
           path: path + '/toto@localhost:9002',
           token: userAccessToken,
-          statusCodeExpected: HttpStatusCode.FORBIDDEN_403
+          expectedStatus: HttpStatusCode.FORBIDDEN_403
         })
       })
 
@@ -238,7 +236,7 @@ describe('Test server follows API validators', function () {
           url: server.url,
           path: path + '/toto',
           token: server.accessToken,
-          statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
+          expectedStatus: HttpStatusCode.BAD_REQUEST_400
         })
       })
 
@@ -247,7 +245,7 @@ describe('Test server follows API validators', function () {
           url: server.url,
           path: path + '/toto@localhost:9003',
           token: server.accessToken,
-          statusCodeExpected: HttpStatusCode.NOT_FOUND_404
+          expectedStatus: HttpStatusCode.NOT_FOUND_404
         })
       })
     })
@@ -260,7 +258,7 @@ describe('Test server follows API validators', function () {
           url: server.url,
           path: path + '/toto@localhost:9002/accept',
           token: 'fake_token',
-          statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+          expectedStatus: HttpStatusCode.UNAUTHORIZED_401
         })
       })
 
@@ -269,7 +267,7 @@ describe('Test server follows API validators', function () {
           url: server.url,
           path: path + '/toto@localhost:9002/accept',
           token: userAccessToken,
-          statusCodeExpected: HttpStatusCode.FORBIDDEN_403
+          expectedStatus: HttpStatusCode.FORBIDDEN_403
         })
       })
 
@@ -278,7 +276,7 @@ describe('Test server follows API validators', function () {
           url: server.url,
           path: path + '/toto/accept',
           token: server.accessToken,
-          statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
+          expectedStatus: HttpStatusCode.BAD_REQUEST_400
         })
       })
 
@@ -287,7 +285,7 @@ describe('Test server follows API validators', function () {
           url: server.url,
           path: path + '/toto@localhost:9003/accept',
           token: server.accessToken,
-          statusCodeExpected: HttpStatusCode.NOT_FOUND_404
+          expectedStatus: HttpStatusCode.NOT_FOUND_404
         })
       })
     })
@@ -300,7 +298,7 @@ describe('Test server follows API validators', function () {
           url: server.url,
           path: path + '/toto@localhost:9002/reject',
           token: 'fake_token',
-          statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+          expectedStatus: HttpStatusCode.UNAUTHORIZED_401
         })
       })
 
@@ -309,7 +307,7 @@ describe('Test server follows API validators', function () {
           url: server.url,
           path: path + '/toto@localhost:9002/reject',
           token: userAccessToken,
-          statusCodeExpected: HttpStatusCode.FORBIDDEN_403
+          expectedStatus: HttpStatusCode.FORBIDDEN_403
         })
       })
 
@@ -318,7 +316,7 @@ describe('Test server follows API validators', function () {
           url: server.url,
           path: path + '/toto/reject',
           token: server.accessToken,
-          statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
+          expectedStatus: HttpStatusCode.BAD_REQUEST_400
         })
       })
 
@@ -327,7 +325,7 @@ describe('Test server follows API validators', function () {
           url: server.url,
           path: path + '/toto@localhost:9003/reject',
           token: server.accessToken,
-          statusCodeExpected: HttpStatusCode.NOT_FOUND_404
+          expectedStatus: HttpStatusCode.NOT_FOUND_404
         })
       })
     })
@@ -340,7 +338,7 @@ describe('Test server follows API validators', function () {
           url: server.url,
           path: path + '/localhost:9002',
           token: 'fake_token',
-          statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+          expectedStatus: HttpStatusCode.UNAUTHORIZED_401
         })
       })
 
@@ -349,7 +347,7 @@ describe('Test server follows API validators', function () {
           url: server.url,
           path: path + '/localhost:9002',
           token: userAccessToken,
-          statusCodeExpected: HttpStatusCode.FORBIDDEN_403
+          expectedStatus: HttpStatusCode.FORBIDDEN_403
         })
       })
 
@@ -358,7 +356,7 @@ describe('Test server follows API validators', function () {
           url: server.url,
           path: path + '/example.com',
           token: server.accessToken,
-          statusCodeExpected: HttpStatusCode.NOT_FOUND_404
+          expectedStatus: HttpStatusCode.NOT_FOUND_404
         })
       })
     })

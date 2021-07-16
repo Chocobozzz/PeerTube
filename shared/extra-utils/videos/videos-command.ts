@@ -7,7 +7,7 @@ import { omit, pick } from 'lodash'
 import validator from 'validator'
 import { buildUUID } from '@server/helpers/uuid'
 import { loadLanguages } from '@server/initializers/constants'
-import { HttpStatusCode } from '@shared/core-utils'
+import { HttpStatusCode } from '@shared/models'
 import {
   ResultList,
   UserVideoRateType,
@@ -234,10 +234,10 @@ export class VideosCommand extends AbstractCommand {
   }
 
   listByAccount (options: OverrideCommandOptions & VideosWithSearchCommonQuery & {
-    accountName: string
+    handle: string
   }) {
-    const { accountName, search } = options
-    const path = '/api/v1/accounts/' + accountName + '/videos'
+    const { handle, search } = options
+    const path = '/api/v1/accounts/' + handle + '/videos'
 
     return this.getRequestBody<ResultList<Video>>({
       ...options,
@@ -250,10 +250,10 @@ export class VideosCommand extends AbstractCommand {
   }
 
   listByChannel (options: OverrideCommandOptions & VideosWithSearchCommonQuery & {
-    videoChannelName: string
+    handle: string
   }) {
-    const { videoChannelName } = options
-    const path = '/api/v1/video-channels/' + videoChannelName + '/videos'
+    const { handle } = options
+    const path = '/api/v1/video-channels/' + handle + '/videos'
 
     return this.getRequestBody<ResultList<Video>>({
       ...options,
@@ -309,13 +309,13 @@ export class VideosCommand extends AbstractCommand {
   }) {
     const path = '/api/v1/videos/' + options.id
 
-    return this.deleteRequest({
+    return unwrapBody(this.deleteRequest({
       ...options,
 
       path,
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
-    })
+    }))
   }
 
   async removeAll () {
@@ -396,7 +396,7 @@ export class VideosCommand extends AbstractCommand {
 
   async buildResumeUpload (options: OverrideCommandOptions & {
     attributes: VideoEdit
-  }) {
+  }): Promise<VideoCreateResult> {
     const { attributes, expectedStatus } = options
 
     let size = 0
@@ -414,7 +414,8 @@ export class VideosCommand extends AbstractCommand {
       }
     }
 
-    const initializeSessionRes = await this.prepareResumableUpload({ ...options, attributes, size, mimetype })
+    // Do not check status automatically, we'll check it manually
+    const initializeSessionRes = await this.prepareResumableUpload({ ...options, expectedStatus: null, attributes, size, mimetype })
     const initStatus = initializeSessionRes.status
 
     if (videoFilePath && initStatus === HttpStatusCode.CREATED_201) {
@@ -425,7 +426,7 @@ export class VideosCommand extends AbstractCommand {
 
       const result = await this.sendResumableChunks({ ...options, pathUploadId, videoFilePath, size })
 
-      return result.body.video
+      return result.body?.video || result.body as any
     }
 
     const expectedInitStatus = expectedStatus === HttpStatusCode.OK_200
@@ -434,7 +435,7 @@ export class VideosCommand extends AbstractCommand {
 
     expect(initStatus).to.equal(expectedInitStatus)
 
-    return initializeSessionRes.body.video as VideoCreateResult
+    return initializeSessionRes.body.video || initializeSessionRes.body
   }
 
   async prepareResumableUpload (options: OverrideCommandOptions & {
@@ -455,7 +456,10 @@ export class VideosCommand extends AbstractCommand {
         'X-Upload-Content-Length': size.toString()
       },
       fields: { filename: attributes.fixture, ...this.buildUploadFields(options.attributes) },
+      // Fixture will be sent later
+      attaches: this.buildUploadAttaches(omit(options.attributes, 'fixture')),
       implicitToken: true,
+
       defaultExpectedStatus: null
     })
   }
@@ -539,9 +543,9 @@ export class VideosCommand extends AbstractCommand {
 
     const attributes = { name, additionalParams }
 
-    if (wait) await waitJobs([ this.server ])
-
     const result = await this.upload({ ...options, attributes })
+
+    if (wait) await waitJobs([ this.server ])
 
     return { ...result, name }
   }
@@ -566,7 +570,7 @@ export class VideosCommand extends AbstractCommand {
   }
 
   private buildUploadFields (attributes: VideoEdit) {
-    return omit(attributes, [ 'thumbnailfile', 'previewfile' ])
+    return omit(attributes, [ 'fixture', 'thumbnailfile', 'previewfile' ])
   }
 
   private buildUploadAttaches (attributes: VideoEdit) {

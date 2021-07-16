@@ -4,7 +4,7 @@ import 'mocha'
 import * as chai from 'chai'
 import { join } from 'path'
 import { ffprobePromise, getVideoStreamFromFile } from '@server/helpers/ffprobe-utils'
-import { HttpStatusCode } from '@shared/core-utils'
+import { HttpStatusCode } from '@shared/models'
 import {
   checkLiveCleanup,
   checkLiveSegmentHash,

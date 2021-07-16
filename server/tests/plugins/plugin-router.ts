@@ -2,7 +2,7 @@
 
 import 'mocha'
 import { expect } from 'chai'
-import { HttpStatusCode } from '@shared/core-utils'
+import { HttpStatusCode } from '@shared/models'
 import {
   cleanupTests,
   createSingleServer,
@@ -34,7 +34,7 @@ describe('Test plugin helpers', function () {
       const res = await makeGetRequest({
         url: server.url,
         path: path + 'ping',
-        statusCodeExpected: HttpStatusCode.OK_200
+        expectedStatus: HttpStatusCode.OK_200
       })
 
       expect(res.body.message).to.equal('pong')
@@ -47,7 +47,7 @@ describe('Test plugin helpers', function () {
         url: server.url,
         path: path + 'is-authenticated',
         token: server.accessToken,
-        statusCodeExpected: 200
+        expectedStatus: 200
       })
 
       expect(res.body.isAuthenticated).to.equal(true)
@@ -55,7 +55,7 @@ describe('Test plugin helpers', function () {
       const secRes = await makeGetRequest({
         url: server.url,
         path: path + 'is-authenticated',
-        statusCodeExpected: 200
+        expectedStatus: 200
       })
 
       expect(secRes.body.isAuthenticated).to.equal(false)
@@ -74,7 +74,7 @@ describe('Test plugin helpers', function () {
         url: server.url,
         path: path + 'form/post/mirror',
         fields: body,
-        statusCodeExpected: HttpStatusCode.OK_200
+        expectedStatus: HttpStatusCode.OK_200
       })
 
       expect(res.body).to.deep.equal(body)
@@ -88,14 +88,14 @@ describe('Test plugin helpers', function () {
       await makeGetRequest({
         url: server.url,
         path: path + 'ping',
-        statusCodeExpected: HttpStatusCode.NOT_FOUND_404
+        expectedStatus: HttpStatusCode.NOT_FOUND_404
       })
 
       await makePostBodyRequest({
         url: server.url,
         path: path + 'ping',
         fields: {},
-        statusCodeExpected: HttpStatusCode.NOT_FOUND_404
+        expectedStatus: HttpStatusCode.NOT_FOUND_404
       })
     }
   })

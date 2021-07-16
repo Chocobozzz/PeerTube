@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import { sha256 } from '@server/helpers/core-utils'
-import { HttpStatusCode } from '@shared/core-utils'
+import { HttpStatusCode } from '@shared/models'
 import { VideoStreamingPlaylist } from '@shared/models'
 import { PeerTubeServer } from '../server'
 

@@ -2,7 +2,7 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { HttpStatusCode } from '@shared/core-utils'
+import { HttpStatusCode } from '@shared/models'
 import { cleanupTests, doubleFollow, createSingleServer, PeerTubeServer, setAccessTokensToServers, waitJobs } from '@shared/extra-utils'
 import { VideoCreateResult, VideoPrivacy } from '@shared/models'
 

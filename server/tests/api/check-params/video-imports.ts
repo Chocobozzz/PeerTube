@@ -2,7 +2,7 @@
 
 import 'mocha'
 import { omit } from 'lodash'
-import { HttpStatusCode } from '@shared/core-utils'
+import { HttpStatusCode } from '@shared/models'
 import {
   buildAbsoluteFixturePath,
   checkBadCountPagination,
@@ -61,7 +61,7 @@ describe('Test video imports API validator', function () {
     })
 
     it('Should success with the correct parameters', async function () {
-      await makeGetRequest({ url: server.url, path: myPath, statusCodeExpected: HttpStatusCode.OK_200, token: server.accessToken })
+      await makeGetRequest({ url: server.url, path: myPath, expectedStatus: HttpStatusCode.OK_200, token: server.accessToken })
     })
   })
 
@@ -99,7 +99,7 @@ describe('Test video imports API validator', function () {
         path,
         token: server.accessToken,
         fields,
-        statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
       })
     })
 
@@ -251,7 +251,7 @@ describe('Test video imports API validator', function () {
         path,
         token: server.accessToken,
         fields: baseCorrectParams,
-        statusCodeExpected: HttpStatusCode.OK_200
+        expectedStatus: HttpStatusCode.OK_200
       })
     })
 
@@ -276,7 +276,7 @@ describe('Test video imports API validator', function () {
         path,
         token: server.accessToken,
         fields: baseCorrectParams,
-        statusCodeExpected: HttpStatusCode.CONFLICT_409
+        expectedStatus: HttpStatusCode.CONFLICT_409
       })
     })
 
@@ -304,7 +304,7 @@ describe('Test video imports API validator', function () {
         path,
         token: server.accessToken,
         fields,
-        statusCodeExpected: HttpStatusCode.CONFLICT_409
+        expectedStatus: HttpStatusCode.CONFLICT_409
       })
 
       fields = omit(fields, 'magnetUri')
@@ -318,7 +318,7 @@ describe('Test video imports API validator', function () {
         token: server.accessToken,
         fields,
         attaches,
-        statusCodeExpected: HttpStatusCode.CONFLICT_409
+        expectedStatus: HttpStatusCode.CONFLICT_409
       })
     })
   })

@@ -2,20 +2,13 @@
 
 import 'mocha'
 import * as chai from 'chai'
+import { activityPubContextify, buildSignedActivity } from '@server/helpers/activitypub'
 import { buildDigest } from '@server/helpers/peertube-crypto'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
-import {
-  buildAbsoluteFixturePath,
-  cleanupTests,
-  createMultipleServers,
-  killallServers,
-  PeerTubeServer,
-  wait
-} from '../../../../shared/extra-utils'
-import { makeFollowRequest, makePOSTAPRequest } from '../../../../shared/extra-utils/requests/activitypub'
-import { activityPubContextify, buildSignedActivity } from '../../../helpers/activitypub'
-import { HTTP_SIGNATURE } from '../../../initializers/constants'
-import { buildGlobalHeaders } from '../../../lib/job-queue/handlers/utils/activitypub-http-utils'
+import { HTTP_SIGNATURE } from '@server/initializers/constants'
+import { buildGlobalHeaders } from '@server/lib/job-queue/handlers/utils/activitypub-http-utils'
+import { buildAbsoluteFixturePath, cleanupTests, createMultipleServers, killallServers, PeerTubeServer, wait } from '@shared/extra-utils'
+import { makeFollowRequest, makePOSTAPRequest } from '@shared/extra-utils/requests/activitypub'
+import { HttpStatusCode } from '@shared/models'
 
 const expect = chai.expect
 

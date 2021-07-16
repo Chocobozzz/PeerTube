@@ -2,7 +2,7 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { HttpStatusCode } from '@shared/core-utils'
+import { HttpStatusCode } from '@shared/models'
 import {
   cleanupTests,
   createSingleServer,
@@ -498,7 +498,7 @@ describe('Test config', function () {
       const res = await makeGetRequest({
         url: server.url,
         path: '/api/v1/config',
-        statusCodeExpected: 200
+        expectedStatus: 200
       })
 
       expect(res.headers['x-frame-options']).to.exist
@@ -517,7 +517,7 @@ describe('Test config', function () {
       const res = await makeGetRequest({
         url: server.url,
         path: '/api/v1/config',
-        statusCodeExpected: 200
+        expectedStatus: 200
       })
 
       expect(res.headers['x-frame-options']).to.not.exist

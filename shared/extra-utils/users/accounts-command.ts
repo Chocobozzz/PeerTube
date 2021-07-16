@@ -1,5 +1,5 @@
 import { ResultList } from '@shared/models'
-import { HttpStatusCode } from '../../core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '@shared/models'
 import { Account } from '../../models/actors'
 import { AccountVideoRate, VideoRateType } from '../../models/videos'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
