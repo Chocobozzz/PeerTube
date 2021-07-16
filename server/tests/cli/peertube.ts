@@ -7,9 +7,9 @@ import {
   buildAbsoluteFixturePath,
   cleanupTests,
   CLICommand,
-  doubleFollow,
   createSingleServer,
-  ImportsCommand,
+  doubleFollow,
+  FIXTURE_URLS,
   PeerTubeServer,
   setAccessTokensToServers,
   testHelloWorldRegisteredSettings,
@@ -117,7 +117,7 @@ describe('Test CLI wrapper', function () {
 
       this.timeout(60000)
 
-      const params = `--target-url ${ImportsCommand.getYoutubeVideoUrl()} --channel-name user_channel`
+      const params = `--target-url ${FIXTURE_URLS.youtube} --channel-name user_channel`
       await cliCommand.execWithEnv(`${cmd} import ${params}`)
     })
 
@@ -148,7 +148,7 @@ describe('Test CLI wrapper', function () {
 
       this.timeout(60000)
 
-      const params = `--target-url ${ImportsCommand.getYoutubeVideoUrl()} ` +
+      const params = `--target-url ${FIXTURE_URLS.youtube} ` +
                      `--channel-name user_channel --video-name toto --nsfw --support support`
       await cliCommand.execWithEnv(`${cmd} import ${params}`)
 

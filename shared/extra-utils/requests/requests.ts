@@ -7,10 +7,6 @@ import { URL } from 'url'
 import { HttpStatusCode } from '@shared/core-utils'
 import { buildAbsoluteFixturePath, root } from '../miscs/tests'
 
-function get4KFileUrl () {
-  return 'https://download.cpy.re/peertube/4k_file.txt'
-}
-
 function makeRawRequest (url: string, statusCodeExpected?: HttpStatusCode, range?: string) {
   const { host, protocol, pathname } = new URL(url)
 
@@ -227,7 +223,6 @@ function unwrapText (test: request.Test): Promise<string> {
 // ---------------------------------------------------------------------------
 
 export {
-  get4KFileUrl,
   makeHTMLRequest,
   makeGetRequest,
   decodeQueryString,

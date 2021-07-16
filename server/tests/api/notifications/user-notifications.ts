@@ -10,10 +10,10 @@ import {
   checkNewVideoFromSubscription,
   checkVideoIsPublished,
   cleanupTests,
-  ImportsCommand,
+  FIXTURE_URLS,
   MockSmtpServer,
-  prepareNotificationsTest,
   PeerTubeServer,
+  prepareNotificationsTest,
   uploadRandomVideoOnServers,
   wait,
   waitJobs
@@ -205,7 +205,7 @@ describe('Test user notifications', function () {
         name,
         channelId,
         privacy: VideoPrivacy.PUBLIC,
-        targetUrl: ImportsCommand.getGoodVideoUrl()
+        targetUrl: FIXTURE_URLS.goodVideo
       }
       const { video } = await servers[0].imports.importVideo({ attributes })
 
@@ -275,7 +275,7 @@ describe('Test user notifications', function () {
         name,
         channelId,
         privacy: VideoPrivacy.PUBLIC,
-        targetUrl: ImportsCommand.getGoodVideoUrl(),
+        targetUrl: FIXTURE_URLS.goodVideo,
         waitTranscoding: true
       }
       const { video } = await servers[1].imports.importVideo({ attributes })
@@ -343,12 +343,12 @@ describe('Test user notifications', function () {
         name,
         channelId,
         privacy: VideoPrivacy.PRIVATE,
-        targetUrl: ImportsCommand.getBadVideoUrl()
+        targetUrl: FIXTURE_URLS.badVideo
       }
       const { video } = await servers[0].imports.importVideo({ attributes })
 
       await waitJobs(servers)
-      await checkMyVideoImportIsFinished(baseParams, name, video.uuid, ImportsCommand.getBadVideoUrl(), false, 'presence')
+      await checkMyVideoImportIsFinished(baseParams, name, video.uuid, FIXTURE_URLS.badVideo, false, 'presence')
     })
 
     it('Should send a notification when the video import succeeded', async function () {
@@ -360,12 +360,12 @@ describe('Test user notifications', function () {
         name,
         channelId,
         privacy: VideoPrivacy.PRIVATE,
-        targetUrl: ImportsCommand.getGoodVideoUrl()
+        targetUrl: FIXTURE_URLS.goodVideo
       }
       const { video } = await servers[0].imports.importVideo({ attributes })
 
       await waitJobs(servers)
-      await checkMyVideoImportIsFinished(baseParams, name, video.uuid, ImportsCommand.getGoodVideoUrl(), true, 'presence')
+      await checkMyVideoImportIsFinished(baseParams, name, video.uuid, FIXTURE_URLS.goodVideo, true, 'presence')
     })
   })
 

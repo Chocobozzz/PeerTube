@@ -5,12 +5,12 @@ import * as chai from 'chai'
 import { HttpStatusCode } from '@shared/core-utils'
 import {
   cleanupTests,
-  doubleFollow,
   createMultipleServers,
-  ImportsCommand,
+  doubleFollow,
+  FIXTURE_URLS,
   makeRawRequest,
-  PluginsCommand,
   PeerTubeServer,
+  PluginsCommand,
   setAccessTokensToServers,
   setDefaultVideoChannel,
   waitJobs
@@ -136,7 +136,7 @@ describe('Test plugin filter hooks', function () {
       name: 'normal title',
       privacy: VideoPrivacy.PUBLIC,
       channelId: servers[0].store.channel.id,
-      targetUrl: ImportsCommand.getGoodVideoUrl() + 'bad'
+      targetUrl: FIXTURE_URLS.goodVideo + 'bad'
     }
     await servers[0].imports.importVideo({ attributes, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
   })
@@ -161,7 +161,7 @@ describe('Test plugin filter hooks', function () {
         name: 'title with bad word',
         privacy: VideoPrivacy.PUBLIC,
         channelId: servers[0].store.channel.id,
-        targetUrl: ImportsCommand.getGoodVideoUrl()
+        targetUrl: FIXTURE_URLS.goodVideo
       }
       const body = await servers[0].imports.importVideo({ attributes })
       videoImportId = body.id
@@ -273,7 +273,7 @@ describe('Test plugin filter hooks', function () {
 
       const attributes = {
         name: 'video please blacklist me',
-        targetUrl: ImportsCommand.getGoodVideoUrl(),
+        targetUrl: FIXTURE_URLS.goodVideo,
         channelId: servers[0].store.channel.id
       }
       const body = await servers[0].imports.importVideo({ attributes })
