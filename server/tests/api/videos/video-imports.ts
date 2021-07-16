@@ -26,7 +26,7 @@ describe('Test video imports', function () {
   if (areHttpImportTestsDisabled()) return
 
   async function checkVideosServer1 (server: ServerInfo, idHttp: string, idMagnet: string, idTorrent: string) {
-    const videoHttp = await server.videosCommand.get({ id: idHttp })
+    const videoHttp = await server.videos.get({ id: idHttp })
 
     expect(videoHttp.name).to.equal('small video - youtube')
     // FIXME: youtube-dl seems broken
@@ -43,8 +43,8 @@ describe('Test video imports', function () {
     expect(originallyPublishedAt.getMonth()).to.equal(0)
     expect(originallyPublishedAt.getFullYear()).to.equal(2019)
 
-    const videoMagnet = await server.videosCommand.get({ id: idMagnet })
-    const videoTorrent = await server.videosCommand.get({ id: idTorrent })
+    const videoMagnet = await server.videos.get({ id: idMagnet })
+    const videoTorrent = await server.videos.get({ id: idTorrent })
 
     for (const video of [ videoMagnet, videoTorrent ]) {
       expect(video.category.label).to.equal('Misc')
@@ -59,12 +59,12 @@ describe('Test video imports', function () {
     expect(videoTorrent.name).to.contain('你好 世界 720p.mp4')
     expect(videoMagnet.name).to.contain('super peertube2 video')
 
-    const bodyCaptions = await server.captionsCommand.listVideoCaptions({ videoId: idHttp })
+    const bodyCaptions = await server.captions.listVideoCaptions({ videoId: idHttp })
     expect(bodyCaptions.total).to.equal(2)
   }
 
   async function checkVideoServer2 (server: ServerInfo, id: number | string) {
-    const video = await server.videosCommand.get({ id })
+    const video = await server.videos.get({ id })
 
     expect(video.name).to.equal('my super name')
     expect(video.category.label).to.equal('Entertainment')
@@ -76,7 +76,7 @@ describe('Test video imports', function () {
 
     expect(video.files).to.have.lengthOf(1)
 
-    const bodyCaptions = await server.captionsCommand.listVideoCaptions({ videoId: id })
+    const bodyCaptions = await server.captions.listVideoCaptions({ videoId: id })
     expect(bodyCaptions.total).to.equal(2)
   }
 
@@ -89,12 +89,12 @@ describe('Test video imports', function () {
     await setAccessTokensToServers(servers)
 
     {
-      const { videoChannels } = await servers[0].usersCommand.getMyInfo()
+      const { videoChannels } = await servers[0].users.getMyInfo()
       channelIdServer1 = videoChannels[0].id
     }
 
     {
-      const { videoChannels } = await servers[1].usersCommand.getMyInfo()
+      const { videoChannels } = await servers[1].users.getMyInfo()
       channelIdServer2 = videoChannels[0].id
     }
 
@@ -111,7 +111,7 @@ describe('Test video imports', function () {
 
     {
       const attributes = { ...baseAttributes, targetUrl: ImportsCommand.getYoutubeVideoUrl() }
-      const { video } = await servers[0].importsCommand.importVideo({ attributes })
+      const { video } = await servers[0].imports.importVideo({ attributes })
       expect(video.name).to.equal('small video - youtube')
 
       expect(video.thumbnailPath).to.match(new RegExp(`^/static/thumbnails/.+.jpg$`))
@@ -120,7 +120,7 @@ describe('Test video imports', function () {
       await testImage(servers[0].url, 'video_import_thumbnail', video.thumbnailPath)
       await testImage(servers[0].url, 'video_import_preview', video.previewPath)
 
-      const bodyCaptions = await servers[0].captionsCommand.listVideoCaptions({ videoId: video.id })
+      const bodyCaptions = await servers[0].captions.listVideoCaptions({ videoId: video.id })
       const videoCaptions = bodyCaptions.data
       expect(videoCaptions).to.have.lengthOf(2)
 
@@ -166,7 +166,7 @@ Ajouter un sous-titre est vraiment facile`)
         description: 'this is a super torrent description',
         tags: [ 'tag_torrent1', 'tag_torrent2' ]
       }
-      const { video } = await servers[0].importsCommand.importVideo({ attributes })
+      const { video } = await servers[0].imports.importVideo({ attributes })
       expect(video.name).to.equal('super peertube2 video')
     }
 
@@ -177,13 +177,13 @@ Ajouter un sous-titre est vraiment facile`)
         description: 'this is a super torrent description',
         tags: [ 'tag_torrent1', 'tag_torrent2' ]
       }
-      const { video } = await servers[0].importsCommand.importVideo({ attributes })
+      const { video } = await servers[0].imports.importVideo({ attributes })
       expect(video.name).to.equal('你好 世界 720p.mp4')
     }
   })
 
   it('Should list the videos to import in my videos on server 1', async function () {
-    const { total, data } = await servers[0].videosCommand.listMyVideos({ sort: 'createdAt' })
+    const { total, data } = await servers[0].videos.listMyVideos({ sort: 'createdAt' })
 
     expect(total).to.equal(3)
 
@@ -194,7 +194,7 @@ Ajouter un sous-titre est vraiment facile`)
   })
 
   it('Should list the videos to import in my imports on server 1', async function () {
-    const { total, data: videoImports } = await servers[0].importsCommand.getMyVideoImports({ sort: '-createdAt' })
+    const { total, data: videoImports } = await servers[0].imports.getMyVideoImports({ sort: '-createdAt' })
     expect(total).to.equal(3)
 
     expect(videoImports).to.have.lengthOf(3)
@@ -221,7 +221,7 @@ Ajouter un sous-titre est vraiment facile`)
     await waitJobs(servers)
 
     for (const server of servers) {
-      const { total, data } = await server.videosCommand.list()
+      const { total, data } = await server.videos.list()
       expect(total).to.equal(3)
       expect(data).to.have.lengthOf(3)
 
@@ -244,7 +244,7 @@ Ajouter un sous-titre est vraiment facile`)
       description: 'my super description',
       tags: [ 'supertag1', 'supertag2' ]
     }
-    const { video } = await servers[1].importsCommand.importVideo({ attributes })
+    const { video } = await servers[1].imports.importVideo({ attributes })
     expect(video.name).to.equal('my super name')
   })
 
@@ -254,7 +254,7 @@ Ajouter un sous-titre est vraiment facile`)
     await waitJobs(servers)
 
     for (const server of servers) {
-      const { total, data } = await server.videosCommand.list()
+      const { total, data } = await server.videos.list()
       expect(total).to.equal(4)
       expect(data).to.have.lengthOf(4)
 
@@ -274,13 +274,13 @@ Ajouter un sous-titre est vraiment facile`)
       channelId: channelIdServer2,
       privacy: VideoPrivacy.PUBLIC
     }
-    const { video } = await servers[1].importsCommand.importVideo({ attributes })
+    const { video } = await servers[1].imports.importVideo({ attributes })
     const videoUUID = video.uuid
 
     await waitJobs(servers)
 
     for (const server of servers) {
-      const video = await server.videosCommand.get({ id: videoUUID })
+      const video = await server.videos.get({ id: videoUUID })
 
       expect(video.name).to.equal('transcoded video')
       expect(video.files).to.have.lengthOf(4)
@@ -316,7 +316,7 @@ Ajouter un sous-titre est vraiment facile`)
         }
       }
     }
-    await servers[0].configCommand.updateCustomSubConfig({ newConfig: config })
+    await servers[0].config.updateCustomSubConfig({ newConfig: config })
 
     const attributes = {
       name: 'hdr video',
@@ -324,13 +324,13 @@ Ajouter un sous-titre est vraiment facile`)
       channelId: channelIdServer1,
       privacy: VideoPrivacy.PUBLIC
     }
-    const { video: videoImported } = await servers[0].importsCommand.importVideo({ attributes })
+    const { video: videoImported } = await servers[0].imports.importVideo({ attributes })
     const videoUUID = videoImported.uuid
 
     await waitJobs(servers)
 
     // test resolution
-    const video = await servers[0].videosCommand.get({ id: videoUUID })
+    const video = await servers[0].videos.get({ id: videoUUID })
     expect(video.name).to.equal('hdr video')
     const maxResolution = Math.max.apply(Math, video.files.map(function (o) { return o.resolution.id }))
     expect(maxResolution, 'expected max resolution not met').to.equals(VideoResolution.H_1080P)

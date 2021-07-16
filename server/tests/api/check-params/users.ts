@@ -60,27 +60,27 @@ describe('Test users API validators', function () {
 
     {
       const user = { username: 'user1' }
-      await server.usersCommand.create({ ...user })
-      userToken = await server.loginCommand.getAccessToken(user)
+      await server.users.create({ ...user })
+      userToken = await server.login.getAccessToken(user)
     }
 
     {
       const moderator = { username: 'moderator1' }
-      await server.usersCommand.create({ ...moderator, role: UserRole.MODERATOR })
-      moderatorToken = await server.loginCommand.getAccessToken(moderator)
+      await server.users.create({ ...moderator, role: UserRole.MODERATOR })
+      moderatorToken = await server.login.getAccessToken(moderator)
     }
 
     {
       const moderator = { username: 'moderator2' }
-      await server.usersCommand.create({ ...moderator, role: UserRole.MODERATOR })
+      await server.users.create({ ...moderator, role: UserRole.MODERATOR })
     }
 
     {
-      video = await server.videosCommand.upload()
+      video = await server.videos.upload()
     }
 
     {
-      const { data } = await server.usersCommand.list()
+      const { data } = await server.users.list()
       userId = data.find(u => u.username === 'user1').id
       rootId = data.find(u => u.username === 'root').id
       moderatorId = data.find(u => u.username === 'moderator2').id
@@ -341,7 +341,7 @@ describe('Test users API validators', function () {
 
     it('Should fail with a non admin user', async function () {
       const user = { username: 'user1' }
-      userToken = await server.loginCommand.getAccessToken(user)
+      userToken = await server.login.getAccessToken(user)
 
       const fields = {
         username: 'user3',
@@ -596,28 +596,28 @@ describe('Test users API validators', function () {
   describe('When managing my scoped tokens', function () {
 
     it('Should fail to get my scoped tokens with an non authenticated user', async function () {
-      await server.usersCommand.getMyScopedTokens({ token: null, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
+      await server.users.getMyScopedTokens({ token: null, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
     it('Should fail to get my scoped tokens with a bad token', async function () {
-      await server.usersCommand.getMyScopedTokens({ token: 'bad', expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
+      await server.users.getMyScopedTokens({ token: 'bad', expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
 
     })
 
     it('Should succeed to get my scoped tokens', async function () {
-      await server.usersCommand.getMyScopedTokens()
+      await server.users.getMyScopedTokens()
     })
 
     it('Should fail to renew my scoped tokens with an non authenticated user', async function () {
-      await server.usersCommand.renewMyScopedTokens({ token: null, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
+      await server.users.renewMyScopedTokens({ token: null, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
     it('Should fail to renew my scoped tokens with a bad token', async function () {
-      await server.usersCommand.renewMyScopedTokens({ token: 'bad', expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
+      await server.users.renewMyScopedTokens({ token: 'bad', expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
     it('Should succeed to renew my scoped tokens', async function () {
-      await server.usersCommand.renewMyScopedTokens()
+      await server.users.renewMyScopedTokens()
     })
   })
 
@@ -769,11 +769,11 @@ describe('Test users API validators', function () {
 
   describe('When getting my information', function () {
     it('Should fail with a non authenticated user', async function () {
-      await server.usersCommand.getMyInfo({ token: 'fake_token', expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
+      await server.users.getMyInfo({ token: 'fake_token', expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
     it('Should success with the correct parameters', async function () {
-      await server.usersCommand.getMyInfo({ token: userToken })
+      await server.users.getMyInfo({ token: userToken })
     })
   })
 
@@ -781,7 +781,7 @@ describe('Test users API validators', function () {
     let command: UsersCommand
 
     before(function () {
-      command = server.usersCommand
+      command = server.users
     })
 
     it('Should fail with a non authenticated user', async function () {
@@ -846,54 +846,54 @@ describe('Test users API validators', function () {
     it('Should fail with an incorrect id', async function () {
       const options = { userId: 'blabla' as any, expectedStatus: HttpStatusCode.BAD_REQUEST_400 }
 
-      await server.usersCommand.remove(options)
-      await server.usersCommand.banUser({ userId: 'blabla' as any, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
-      await server.usersCommand.unbanUser({ userId: 'blabla' as any, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+      await server.users.remove(options)
+      await server.users.banUser({ userId: 'blabla' as any, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+      await server.users.unbanUser({ userId: 'blabla' as any, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     })
 
     it('Should fail with the root user', async function () {
       const options = { userId: rootId, expectedStatus: HttpStatusCode.BAD_REQUEST_400 }
 
-      await server.usersCommand.remove(options)
-      await server.usersCommand.banUser(options)
-      await server.usersCommand.unbanUser(options)
+      await server.users.remove(options)
+      await server.users.banUser(options)
+      await server.users.unbanUser(options)
     })
 
     it('Should return 404 with a non existing id', async function () {
       const options = { userId: 4545454, expectedStatus: HttpStatusCode.NOT_FOUND_404 }
 
-      await server.usersCommand.remove(options)
-      await server.usersCommand.banUser(options)
-      await server.usersCommand.unbanUser(options)
+      await server.users.remove(options)
+      await server.users.banUser(options)
+      await server.users.unbanUser(options)
     })
 
     it('Should fail with a non admin user', async function () {
       const options = { userId, token: userToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 }
 
-      await server.usersCommand.remove(options)
-      await server.usersCommand.banUser(options)
-      await server.usersCommand.unbanUser(options)
+      await server.users.remove(options)
+      await server.users.banUser(options)
+      await server.users.unbanUser(options)
     })
 
     it('Should fail on a moderator with a moderator', async function () {
       const options = { userId: moderatorId, token: moderatorToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 }
 
-      await server.usersCommand.remove(options)
-      await server.usersCommand.banUser(options)
-      await server.usersCommand.unbanUser(options)
+      await server.users.remove(options)
+      await server.users.banUser(options)
+      await server.users.unbanUser(options)
     })
 
     it('Should succeed on a user with a moderator', async function () {
       const options = { userId, token: moderatorToken }
 
-      await server.usersCommand.banUser(options)
-      await server.usersCommand.unbanUser(options)
+      await server.users.banUser(options)
+      await server.users.unbanUser(options)
     })
   })
 
   describe('When deleting our account', function () {
     it('Should fail with with the root account', async function () {
-      await server.usersCommand.deleteMe({ expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+      await server.users.deleteMe({ expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     })
   })
 
@@ -1011,7 +1011,7 @@ describe('Test users API validators', function () {
 
     it('Should fail with an existing channel', async function () {
       const attributes = { name: 'existing_channel', displayName: 'hello', description: 'super description' }
-      await server.channelsCommand.create({ attributes })
+      await server.channels.create({ attributes })
 
       const fields = { ...baseCorrectParams, channel: { name: 'existing_channel', displayName: 'toto' } }
 
@@ -1055,7 +1055,7 @@ describe('Test users API validators', function () {
 
   describe('When registering multiple users on a server with users limit', function () {
     it('Should fail when after 3 registrations', async function () {
-      await server.usersCommand.register({ username: 'user42', expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+      await server.users.register({ username: 'user42', expectedStatus: HttpStatusCode.FORBIDDEN_403 })
     })
   })
 

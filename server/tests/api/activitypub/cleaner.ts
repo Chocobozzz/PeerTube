@@ -46,9 +46,9 @@ describe('Test AP cleaner', function () {
     // Create 1 comment per video
     // Update 1 remote URL and 1 local URL on
 
-    videoUUID1 = (await servers[0].videosCommand.quickUpload({ name: 'server 1' })).uuid
-    videoUUID2 = (await servers[1].videosCommand.quickUpload({ name: 'server 2' })).uuid
-    videoUUID3 = (await servers[2].videosCommand.quickUpload({ name: 'server 3' })).uuid
+    videoUUID1 = (await servers[0].videos.quickUpload({ name: 'server 1' })).uuid
+    videoUUID2 = (await servers[1].videos.quickUpload({ name: 'server 2' })).uuid
+    videoUUID3 = (await servers[2].videos.quickUpload({ name: 'server 3' })).uuid
 
     videoUUIDs = [ videoUUID1, videoUUID2, videoUUID3 ]
 
@@ -56,8 +56,8 @@ describe('Test AP cleaner', function () {
 
     for (const server of servers) {
       for (const uuid of videoUUIDs) {
-        await server.videosCommand.rate({ id: uuid, rating: 'like' })
-        await server.commentsCommand.createThread({ videoId: uuid, text: 'comment' })
+        await server.videos.rate({ id: uuid, rating: 'like' })
+        await server.comments.createThread({ videoId: uuid, text: 'comment' })
       }
     }
 
@@ -67,7 +67,7 @@ describe('Test AP cleaner', function () {
   it('Should have the correct likes', async function () {
     for (const server of servers) {
       for (const uuid of videoUUIDs) {
-        const video = await server.videosCommand.get({ id: uuid })
+        const video = await server.videos.get({ id: uuid })
 
         expect(video.likes).to.equal(3)
         expect(video.dislikes).to.equal(0)
@@ -78,9 +78,9 @@ describe('Test AP cleaner', function () {
   it('Should destroy server 3 internal likes and correctly clean them', async function () {
     this.timeout(20000)
 
-    await servers[2].sqlCommand.deleteAll('accountVideoRate')
+    await servers[2].sql.deleteAll('accountVideoRate')
     for (const uuid of videoUUIDs) {
-      await servers[2].sqlCommand.setVideoField(uuid, 'likes', '0')
+      await servers[2].sql.setVideoField(uuid, 'likes', '0')
     }
 
     await wait(5000)
@@ -88,14 +88,14 @@ describe('Test AP cleaner', function () {
 
     // Updated rates of my video
     {
-      const video = await servers[0].videosCommand.get({ id: videoUUID1 })
+      const video = await servers[0].videos.get({ id: videoUUID1 })
       expect(video.likes).to.equal(2)
       expect(video.dislikes).to.equal(0)
     }
 
     // Did not update rates of a remote video
     {
-      const video = await servers[0].videosCommand.get({ id: videoUUID2 })
+      const video = await servers[0].videos.get({ id: videoUUID2 })
       expect(video.likes).to.equal(3)
       expect(video.dislikes).to.equal(0)
     }
@@ -106,7 +106,7 @@ describe('Test AP cleaner', function () {
 
     for (const server of servers) {
       for (const uuid of videoUUIDs) {
-        await server.videosCommand.rate({ id: uuid, rating: 'dislike' })
+        await server.videos.rate({ id: uuid, rating: 'dislike' })
       }
     }
 
@@ -114,7 +114,7 @@ describe('Test AP cleaner', function () {
 
     for (const server of servers) {
       for (const uuid of videoUUIDs) {
-        const video = await server.videosCommand.get({ id: uuid })
+        const video = await server.videos.get({ id: uuid })
         expect(video.likes).to.equal(0)
         expect(video.dislikes).to.equal(3)
       }
@@ -124,10 +124,10 @@ describe('Test AP cleaner', function () {
   it('Should destroy server 3 internal dislikes and correctly clean them', async function () {
     this.timeout(20000)
 
-    await servers[2].sqlCommand.deleteAll('accountVideoRate')
+    await servers[2].sql.deleteAll('accountVideoRate')
 
     for (const uuid of videoUUIDs) {
-      await servers[2].sqlCommand.setVideoField(uuid, 'dislikes', '0')
+      await servers[2].sql.setVideoField(uuid, 'dislikes', '0')
     }
 
     await wait(5000)
@@ -135,14 +135,14 @@ describe('Test AP cleaner', function () {
 
     // Updated rates of my video
     {
-      const video = await servers[0].videosCommand.get({ id: videoUUID1 })
+      const video = await servers[0].videos.get({ id: videoUUID1 })
       expect(video.likes).to.equal(0)
       expect(video.dislikes).to.equal(2)
     }
 
     // Did not update rates of a remote video
     {
-      const video = await servers[0].videosCommand.get({ id: videoUUID2 })
+      const video = await servers[0].videos.get({ id: videoUUID2 })
       expect(video.likes).to.equal(0)
       expect(video.dislikes).to.equal(3)
     }
@@ -151,15 +151,15 @@ describe('Test AP cleaner', function () {
   it('Should destroy server 3 internal shares and correctly clean them', async function () {
     this.timeout(20000)
 
-    const preCount = await servers[0].sqlCommand.getCount('videoShare')
+    const preCount = await servers[0].sql.getCount('videoShare')
     expect(preCount).to.equal(6)
 
-    await servers[2].sqlCommand.deleteAll('videoShare')
+    await servers[2].sql.deleteAll('videoShare')
     await wait(5000)
     await waitJobs(servers)
 
     // Still 6 because we don't have remote shares on local videos
-    const postCount = await servers[0].sqlCommand.getCount('videoShare')
+    const postCount = await servers[0].sql.getCount('videoShare')
     expect(postCount).to.equal(6)
   })
 
@@ -167,17 +167,17 @@ describe('Test AP cleaner', function () {
     this.timeout(20000)
 
     {
-      const { total } = await servers[0].commentsCommand.listThreads({ videoId: videoUUID1 })
+      const { total } = await servers[0].comments.listThreads({ videoId: videoUUID1 })
       expect(total).to.equal(3)
     }
 
-    await servers[2].sqlCommand.deleteAll('videoComment')
+    await servers[2].sql.deleteAll('videoComment')
 
     await wait(5000)
     await waitJobs(servers)
 
     {
-      const { total } = await servers[0].commentsCommand.listThreads({ videoId: videoUUID1 })
+      const { total } = await servers[0].comments.listThreads({ videoId: videoUUID1 })
       expect(total).to.equal(2)
     }
   })
@@ -188,7 +188,7 @@ describe('Test AP cleaner', function () {
     async function check (like: string, ofServerUrl: string, urlSuffix: string, remote: 'true' | 'false') {
       const query = `SELECT "videoId", "accountVideoRate".url FROM "accountVideoRate" ` +
         `INNER JOIN video ON "accountVideoRate"."videoId" = video.id AND remote IS ${remote} WHERE "accountVideoRate"."url" LIKE '${like}'`
-      const res = await servers[0].sqlCommand.selectQuery(query)
+      const res = await servers[0].sql.selectQuery(query)
 
       for (const rate of res) {
         const matcher = new RegExp(`^${ofServerUrl}/accounts/root/dislikes/\\d+${urlSuffix}$`)
@@ -217,7 +217,7 @@ describe('Test AP cleaner', function () {
 
     {
       const query = `UPDATE "accountVideoRate" SET url = url || 'stan'`
-      await servers[1].sqlCommand.updateQuery(query)
+      await servers[1].sql.updateQuery(query)
 
       await wait(5000)
       await waitJobs(servers)
@@ -234,7 +234,7 @@ describe('Test AP cleaner', function () {
       const query = `SELECT "videoId", "videoComment".url, uuid as "videoUUID" FROM "videoComment" ` +
         `INNER JOIN video ON "videoComment"."videoId" = video.id AND remote IS ${remote} WHERE "videoComment"."url" LIKE '${like}'`
 
-      const res = await servers[0].sqlCommand.selectQuery(query)
+      const res = await servers[0].sql.selectQuery(query)
 
       for (const comment of res) {
         const matcher = new RegExp(`${ofServerUrl}/videos/watch/${comment.videoUUID}/comments/\\d+${urlSuffix}`)
@@ -260,7 +260,7 @@ describe('Test AP cleaner', function () {
 
     {
       const query = `UPDATE "videoComment" SET url = url || 'kyle'`
-      await servers[1].sqlCommand.updateQuery(query)
+      await servers[1].sql.updateQuery(query)
 
       await wait(5000)
       await waitJobs(servers)

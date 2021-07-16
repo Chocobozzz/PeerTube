@@ -25,14 +25,14 @@ describe('Test services API validators', function () {
     await setAccessTokensToServers([ server ])
     await setDefaultVideoChannel([ server ])
 
-    server.video = await server.videosCommand.upload({ attributes: { name: 'my super name' } })
+    server.store.video = await server.videos.upload({ attributes: { name: 'my super name' } })
 
     {
-      const created = await server.playlistsCommand.create({
+      const created = await server.playlists.create({
         attributes: {
           displayName: 'super playlist',
           privacy: VideoPlaylistPrivacy.PUBLIC,
-          videoChannelId: server.videoChannel.id
+          videoChannelId: server.store.channel.id
         }
       })
 
@@ -48,7 +48,7 @@ describe('Test services API validators', function () {
     })
 
     it('Should fail with an invalid host', async function () {
-      const embedUrl = 'http://hello.com/videos/watch/' + server.video.uuid
+      const embedUrl = 'http://hello.com/videos/watch/' + server.store.video.uuid
       await checkParamEmbed(server, embedUrl)
     })
 
@@ -63,37 +63,37 @@ describe('Test services API validators', function () {
     })
 
     it('Should fail with an invalid path', async function () {
-      const embedUrl = `http://localhost:${server.port}/videos/watchs/${server.video.uuid}`
+      const embedUrl = `http://localhost:${server.port}/videos/watchs/${server.store.video.uuid}`
 
       await checkParamEmbed(server, embedUrl)
     })
 
     it('Should fail with an invalid max height', async function () {
-      const embedUrl = `http://localhost:${server.port}/videos/watch/${server.video.uuid}`
+      const embedUrl = `http://localhost:${server.port}/videos/watch/${server.store.video.uuid}`
 
       await checkParamEmbed(server, embedUrl, HttpStatusCode.BAD_REQUEST_400, { maxheight: 'hello' })
     })
 
     it('Should fail with an invalid max width', async function () {
-      const embedUrl = `http://localhost:${server.port}/videos/watch/${server.video.uuid}`
+      const embedUrl = `http://localhost:${server.port}/videos/watch/${server.store.video.uuid}`
 
       await checkParamEmbed(server, embedUrl, HttpStatusCode.BAD_REQUEST_400, { maxwidth: 'hello' })
     })
 
     it('Should fail with an invalid format', async function () {
-      const embedUrl = `http://localhost:${server.port}/videos/watch/${server.video.uuid}`
+      const embedUrl = `http://localhost:${server.port}/videos/watch/${server.store.video.uuid}`
 
       await checkParamEmbed(server, embedUrl, HttpStatusCode.BAD_REQUEST_400, { format: 'blabla' })
     })
 
     it('Should fail with a non supported format', async function () {
-      const embedUrl = `http://localhost:${server.port}/videos/watch/${server.video.uuid}`
+      const embedUrl = `http://localhost:${server.port}/videos/watch/${server.store.video.uuid}`
 
       await checkParamEmbed(server, embedUrl, HttpStatusCode.NOT_IMPLEMENTED_501, { format: 'xml' })
     })
 
     it('Should succeed with the correct params with a video', async function () {
-      const embedUrl = `http://localhost:${server.port}/videos/watch/${server.video.uuid}`
+      const embedUrl = `http://localhost:${server.port}/videos/watch/${server.store.video.uuid}`
       const query = {
         format: 'json',
         maxheight: 400,

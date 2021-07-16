@@ -30,15 +30,15 @@ describe('Test video captions API validator', function () {
 
     await setAccessTokensToServers([ server ])
 
-    video = await server.videosCommand.upload()
+    video = await server.videos.upload()
 
     {
       const user = {
         username: 'user1',
         password: 'my super password'
       }
-      await server.usersCommand.create({ username: user.username, password: user.password })
-      userAccessToken = await server.loginCommand.getAccessToken(user)
+      await server.users.create({ username: user.username, password: user.password })
+      userAccessToken = await server.login.getAccessToken(user)
     }
   })
 
@@ -152,7 +152,7 @@ describe('Test video captions API validator', function () {
     // })
 
     it('Should succeed with a valid captionfile extension and octet-stream mime type', async function () {
-      await server.captionsCommand.createVideoCaption({
+      await server.captions.createVideoCaption({
         language: 'zh',
         videoId: video.uuid,
         fixture: 'subtitle-good.srt',

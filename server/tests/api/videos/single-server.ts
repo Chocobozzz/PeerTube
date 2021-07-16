@@ -100,35 +100,35 @@ describe('Test a single server', function () {
     })
 
     it('Should list video categories', async function () {
-      const categories = await server.videosCommand.getCategories()
+      const categories = await server.videos.getCategories()
       expect(Object.keys(categories)).to.have.length.above(10)
 
       expect(categories[11]).to.equal('News & Politics')
     })
 
     it('Should list video licences', async function () {
-      const licences = await server.videosCommand.getLicences()
+      const licences = await server.videos.getLicences()
       expect(Object.keys(licences)).to.have.length.above(5)
 
       expect(licences[3]).to.equal('Attribution - No Derivatives')
     })
 
     it('Should list video languages', async function () {
-      const languages = await server.videosCommand.getLanguages()
+      const languages = await server.videos.getLanguages()
       expect(Object.keys(languages)).to.have.length.above(5)
 
       expect(languages['ru']).to.equal('Russian')
     })
 
     it('Should list video privacies', async function () {
-      const privacies = await server.videosCommand.getPrivacies()
+      const privacies = await server.videos.getPrivacies()
       expect(Object.keys(privacies)).to.have.length.at.least(3)
 
       expect(privacies[3]).to.equal('Private')
     })
 
     it('Should not have videos', async function () {
-      const { data, total } = await server.videosCommand.list()
+      const { data, total } = await server.videos.list()
 
       expect(total).to.equal(0)
       expect(data).to.be.an('array')
@@ -145,7 +145,7 @@ describe('Test a single server', function () {
         licence: 6,
         tags: [ 'tag1', 'tag2', 'tag3' ]
       }
-      const video = await server.videosCommand.upload({ attributes, mode })
+      const video = await server.videos.upload({ attributes, mode })
       expect(video).to.not.be.undefined
       expect(video.id).to.equal(1)
       expect(video.uuid).to.have.length.above(5)
@@ -157,7 +157,7 @@ describe('Test a single server', function () {
     it('Should get and seed the uploaded video', async function () {
       this.timeout(5000)
 
-      const { data, total } = await server.videosCommand.list()
+      const { data, total } = await server.videos.list()
 
       expect(total).to.equal(1)
       expect(data).to.be.an('array')
@@ -170,42 +170,42 @@ describe('Test a single server', function () {
     it('Should get the video by UUID', async function () {
       this.timeout(5000)
 
-      const video = await server.videosCommand.get({ id: videoUUID })
+      const video = await server.videos.get({ id: videoUUID })
       await completeVideoCheck(server, video, getCheckAttributes())
     })
 
     it('Should have the views updated', async function () {
       this.timeout(20000)
 
-      await server.videosCommand.view({ id: videoId })
-      await server.videosCommand.view({ id: videoId })
-      await server.videosCommand.view({ id: videoId })
+      await server.videos.view({ id: videoId })
+      await server.videos.view({ id: videoId })
+      await server.videos.view({ id: videoId })
 
       await wait(1500)
 
-      await server.videosCommand.view({ id: videoId })
-      await server.videosCommand.view({ id: videoId })
+      await server.videos.view({ id: videoId })
+      await server.videos.view({ id: videoId })
 
       await wait(1500)
 
-      await server.videosCommand.view({ id: videoId })
-      await server.videosCommand.view({ id: videoId })
+      await server.videos.view({ id: videoId })
+      await server.videos.view({ id: videoId })
 
       // Wait the repeatable job
       await wait(8000)
 
-      const video = await server.videosCommand.get({ id: videoId })
+      const video = await server.videos.get({ id: videoId })
       expect(video.views).to.equal(3)
     })
 
     it('Should remove the video', async function () {
-      await server.videosCommand.remove({ id: videoId })
+      await server.videos.remove({ id: videoId })
 
       await checkVideoFilesWereRemoved(videoUUID, server)
     })
 
     it('Should not have videos', async function () {
-      const { total, data } = await server.videosCommand.list()
+      const { total, data } = await server.videos.list()
 
       expect(total).to.equal(0)
       expect(data).to.be.an('array')
@@ -232,12 +232,12 @@ describe('Test a single server', function () {
           fixture: video
         }
 
-        await server.videosCommand.upload({ attributes, mode })
+        await server.videos.upload({ attributes, mode })
       }
     })
 
     it('Should have the correct durations', async function () {
-      const { total, data } = await server.videosCommand.list()
+      const { total, data } = await server.videos.list()
 
       expect(total).to.equal(6)
       expect(data).to.be.an('array')
@@ -255,7 +255,7 @@ describe('Test a single server', function () {
     })
 
     it('Should have the correct thumbnails', async function () {
-      const { data } = await server.videosCommand.list()
+      const { data } = await server.videos.list()
 
       // For the next test
       videosListBase = data
@@ -267,7 +267,7 @@ describe('Test a single server', function () {
     })
 
     it('Should list only the two first videos', async function () {
-      const { total, data } = await server.videosCommand.list({ start: 0, count: 2, sort: 'name' })
+      const { total, data } = await server.videos.list({ start: 0, count: 2, sort: 'name' })
 
       expect(total).to.equal(6)
       expect(data.length).to.equal(2)
@@ -276,7 +276,7 @@ describe('Test a single server', function () {
     })
 
     it('Should list only the next three videos', async function () {
-      const { total, data } = await server.videosCommand.list({ start: 2, count: 3, sort: 'name' })
+      const { total, data } = await server.videos.list({ start: 2, count: 3, sort: 'name' })
 
       expect(total).to.equal(6)
       expect(data.length).to.equal(3)
@@ -286,7 +286,7 @@ describe('Test a single server', function () {
     })
 
     it('Should list the last video', async function () {
-      const { total, data } = await server.videosCommand.list({ start: 5, count: 6, sort: 'name' })
+      const { total, data } = await server.videos.list({ start: 5, count: 6, sort: 'name' })
 
       expect(total).to.equal(6)
       expect(data.length).to.equal(1)
@@ -294,7 +294,7 @@ describe('Test a single server', function () {
     })
 
     it('Should not have the total field', async function () {
-      const { total, data } = await server.videosCommand.list({ start: 5, count: 6, sort: 'name', skipCount: true })
+      const { total, data } = await server.videos.list({ start: 5, count: 6, sort: 'name', skipCount: true })
 
       expect(total).to.not.exist
       expect(data.length).to.equal(1)
@@ -302,7 +302,7 @@ describe('Test a single server', function () {
     })
 
     it('Should list and sort by name in descending order', async function () {
-      const { total, data } = await server.videosCommand.list({ sort: '-name' })
+      const { total, data } = await server.videos.list({ sort: '-name' })
 
       expect(total).to.equal(6)
       expect(data.length).to.equal(6)
@@ -318,21 +318,21 @@ describe('Test a single server', function () {
     })
 
     it('Should list and sort by trending in descending order', async function () {
-      const { total, data } = await server.videosCommand.list({ start: 0, count: 2, sort: '-trending' })
+      const { total, data } = await server.videos.list({ start: 0, count: 2, sort: '-trending' })
 
       expect(total).to.equal(6)
       expect(data.length).to.equal(2)
     })
 
     it('Should list and sort by hotness in descending order', async function () {
-      const { total, data } = await server.videosCommand.list({ start: 0, count: 2, sort: '-hot' })
+      const { total, data } = await server.videos.list({ start: 0, count: 2, sort: '-hot' })
 
       expect(total).to.equal(6)
       expect(data.length).to.equal(2)
     })
 
     it('Should list and sort by best in descending order', async function () {
-      const { total, data } = await server.videosCommand.list({ start: 0, count: 2, sort: '-best' })
+      const { total, data } = await server.videos.list({ start: 0, count: 2, sort: '-best' })
 
       expect(total).to.equal(6)
       expect(data.length).to.equal(2)
@@ -350,18 +350,18 @@ describe('Test a single server', function () {
         downloadEnabled: false,
         tags: [ 'tagup1', 'tagup2' ]
       }
-      await server.videosCommand.update({ id: videoId, attributes })
+      await server.videos.update({ id: videoId, attributes })
     })
 
     it('Should filter by tags and category', async function () {
       {
-        const { data, total } = await server.videosCommand.list({ tagsAllOf: [ 'tagup1', 'tagup2' ], categoryOneOf: [ 4 ] })
+        const { data, total } = await server.videos.list({ tagsAllOf: [ 'tagup1', 'tagup2' ], categoryOneOf: [ 4 ] })
         expect(total).to.equal(1)
         expect(data[0].name).to.equal('my super video updated')
       }
 
       {
-        const { total } = await server.videosCommand.list({ tagsAllOf: [ 'tagup1', 'tagup2' ], categoryOneOf: [ 3 ] })
+        const { total } = await server.videos.list({ tagsAllOf: [ 'tagup1', 'tagup2' ], categoryOneOf: [ 3 ] })
         expect(total).to.equal(0)
       }
     })
@@ -369,7 +369,7 @@ describe('Test a single server', function () {
     it('Should have the video updated', async function () {
       this.timeout(60000)
 
-      const video = await server.videosCommand.get({ id: videoId })
+      const video = await server.videos.get({ id: videoId })
 
       await completeVideoCheck(server, video, updateCheckAttributes())
     })
@@ -378,9 +378,9 @@ describe('Test a single server', function () {
       const attributes = {
         tags: [ 'supertag', 'tag1', 'tag2' ]
       }
-      await server.videosCommand.update({ id: videoId, attributes })
+      await server.videos.update({ id: videoId, attributes })
 
-      const video = await server.videosCommand.get({ id: videoId })
+      const video = await server.videos.get({ id: videoId })
 
       await completeVideoCheck(server, video, Object.assign(updateCheckAttributes(), attributes))
     })
@@ -389,27 +389,27 @@ describe('Test a single server', function () {
       const attributes = {
         description: 'hello everybody'
       }
-      await server.videosCommand.update({ id: videoId, attributes })
+      await server.videos.update({ id: videoId, attributes })
 
-      const video = await server.videosCommand.get({ id: videoId })
+      const video = await server.videos.get({ id: videoId })
 
       const expectedAttributes = Object.assign(updateCheckAttributes(), { tags: [ 'supertag', 'tag1', 'tag2' ] }, attributes)
       await completeVideoCheck(server, video, expectedAttributes)
     })
 
     it('Should like a video', async function () {
-      await server.videosCommand.rate({ id: videoId, rating: 'like' })
+      await server.videos.rate({ id: videoId, rating: 'like' })
 
-      const video = await server.videosCommand.get({ id: videoId })
+      const video = await server.videos.get({ id: videoId })
 
       expect(video.likes).to.equal(1)
       expect(video.dislikes).to.equal(0)
     })
 
     it('Should dislike the same video', async function () {
-      await server.videosCommand.rate({ id: videoId, rating: 'dislike' })
+      await server.videos.rate({ id: videoId, rating: 'dislike' })
 
-      const video = await server.videosCommand.get({ id: videoId })
+      const video = await server.videos.get({ id: videoId })
 
       expect(video.likes).to.equal(0)
       expect(video.dislikes).to.equal(1)
@@ -419,9 +419,9 @@ describe('Test a single server', function () {
       {
         const now = new Date()
         const attributes = { originallyPublishedAt: now.toISOString() }
-        await server.videosCommand.update({ id: videoId, attributes })
+        await server.videos.update({ id: videoId, attributes })
 
-        const { data } = await server.videosCommand.list({ sort: '-originallyPublishedAt' })
+        const { data } = await server.videos.list({ sort: '-originallyPublishedAt' })
         const names = data.map(v => v.name)
 
         expect(names[0]).to.equal('my super video updated')
@@ -435,9 +435,9 @@ describe('Test a single server', function () {
       {
         const now = new Date()
         const attributes = { originallyPublishedAt: now.toISOString() }
-        await server.videosCommand.update({ id: videoId2, attributes })
+        await server.videos.update({ id: videoId2, attributes })
 
-        const { data } = await server.videosCommand.list({ sort: '-originallyPublishedAt' })
+        const { data } = await server.videos.list({ sort: '-originallyPublishedAt' })
         const names = data.map(v => v.name)
 
         expect(names[0]).to.equal('video_short1.webm name')

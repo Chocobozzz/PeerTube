@@ -29,7 +29,7 @@ describe('Test videos history API validator', function () {
 
     await setAccessTokensToServers([ server ])
 
-    const { uuid } = await server.videosCommand.upload()
+    const { uuid } = await server.videos.upload()
     watchingPath = '/api/v1/videos/' + uuid + '/watching'
   })
 

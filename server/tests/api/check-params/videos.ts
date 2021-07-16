@@ -44,11 +44,11 @@ describe('Test videos API validator', function () {
 
     const username = 'user1'
     const password = 'my super password'
-    await server.usersCommand.create({ username: username, password: password })
-    userAccessToken = await server.loginCommand.getAccessToken({ username, password })
+    await server.users.create({ username: username, password: password })
+    userAccessToken = await server.login.getAccessToken({ username, password })
 
     {
-      const body = await server.usersCommand.getMyInfo()
+      const body = await server.users.getMyInfo()
       channelId = body.videoChannels[0].id
       channelName = body.videoChannels[0].name
       accountName = body.account.name + '@' + body.account.host
@@ -274,10 +274,10 @@ describe('Test videos API validator', function () {
           username: 'fake' + randomInt(0, 1500),
           password: 'fake_password'
         }
-        await server.usersCommand.create({ username: user.username, password: user.password })
+        await server.users.create({ username: user.username, password: user.password })
 
-        const accessTokenUser = await server.loginCommand.getAccessToken(user)
-        const { videoChannels } = await server.usersCommand.getMyInfo({ token: accessTokenUser })
+        const accessTokenUser = await server.login.getAccessToken(user)
+        const { videoChannels } = await server.users.getMyInfo({ token: accessTokenUser })
         const customChannelId = videoChannels[0].id
 
         const fields = { ...baseCorrectParams, channelId: customChannelId }
@@ -484,7 +484,7 @@ describe('Test videos API validator', function () {
     }
 
     before(async function () {
-      const { data } = await server.videosCommand.list()
+      const { data } = await server.videos.list()
       video = data[0]
     })
 
@@ -710,15 +710,15 @@ describe('Test videos API validator', function () {
     })
 
     it('Should fail without a correct uuid', async function () {
-      await server.videosCommand.get({ id: 'coucou', expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+      await server.videos.get({ id: 'coucou', expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     })
 
     it('Should return 404 with an incorrect video', async function () {
-      await server.videosCommand.get({ id: '4da6fde3-88f7-4d16-b119-108df5630b06', expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+      await server.videos.get({ id: '4da6fde3-88f7-4d16-b119-108df5630b06', expectedStatus: HttpStatusCode.NOT_FOUND_404 })
     })
 
     it('Shoud report the appropriate error', async function () {
-      const body = await server.videosCommand.get({ id: 'hi', expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+      const body = await server.videos.get({ id: 'hi', expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
       const error = body as unknown as PeerTubeProblemDocument
 
       expect(error.docs).to.equal('https://docs.joinpeertube.org/api-rest-reference.html#operation/getVideo')
@@ -734,7 +734,7 @@ describe('Test videos API validator', function () {
     })
 
     it('Should succeed with the correct parameters', async function () {
-      await server.videosCommand.get({ id: video.shortUUID })
+      await server.videos.get({ id: video.shortUUID })
     })
   })
 
@@ -742,7 +742,7 @@ describe('Test videos API validator', function () {
     let videoId: number
 
     before(async function () {
-      const { data } = await server.videosCommand.list()
+      const { data } = await server.videos.list()
       videoId = data[0].id
     })
 
@@ -797,21 +797,21 @@ describe('Test videos API validator', function () {
     })
 
     it('Should fail without a correct uuid', async function () {
-      await server.videosCommand.remove({ id: 'hello', expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+      await server.videos.remove({ id: 'hello', expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     })
 
     it('Should fail with a video which does not exist', async function () {
-      await server.videosCommand.remove({ id: '4da6fde3-88f7-4d16-b119-108df5630b06', expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+      await server.videos.remove({ id: '4da6fde3-88f7-4d16-b119-108df5630b06', expectedStatus: HttpStatusCode.NOT_FOUND_404 })
     })
 
     it('Should fail with a video of another user without the appropriate right', async function () {
-      await server.videosCommand.remove({ token: userAccessToken, id: video.uuid, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+      await server.videos.remove({ token: userAccessToken, id: video.uuid, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
     })
 
     it('Should fail with a video of another server')
 
     it('Shoud report the appropriate error', async function () {
-      const body = await server.videosCommand.remove({ id: 'hello', expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+      const body = await server.videos.remove({ id: 'hello', expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
       const error = body as unknown as PeerTubeProblemDocument
 
       expect(error.docs).to.equal('https://docs.joinpeertube.org/api-rest-reference.html#operation/delVideo')
@@ -827,7 +827,7 @@ describe('Test videos API validator', function () {
     })
 
     it('Should succeed with the correct parameters', async function () {
-      await server.videosCommand.remove({ id: video.uuid })
+      await server.videos.remove({ id: video.uuid })
     })
   })
 

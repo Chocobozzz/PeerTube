@@ -16,8 +16,8 @@ describe('Test tracker', function () {
     await setAccessTokensToServers([ server ])
 
     {
-      const { uuid } = await server.videosCommand.upload()
-      const video = await server.videosCommand.get({ id: uuid })
+      const { uuid } = await server.videos.upload()
+      const video = await server.videos.get({ id: uuid })
       goodMagnet = video.files[0].magnetUri
 
       const parsed = magnetUtil.decode(goodMagnet)

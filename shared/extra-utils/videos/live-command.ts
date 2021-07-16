@@ -114,7 +114,7 @@ export class LiveCommand extends AbstractCommand {
     const { resolution, segment, videoUUID } = options
     const segmentName = `${resolution}-00000${segment}.ts`
 
-    return this.server.serversCommand.waitUntilLog(`${videoUUID}/${segmentName}`, 2, false)
+    return this.server.servers.waitUntilLog(`${videoUUID}/${segmentName}`, 2, false)
   }
 
   async waitUntilSaved (options: OverrideCommandOptions & {
@@ -123,7 +123,7 @@ export class LiveCommand extends AbstractCommand {
     let video: VideoDetails
 
     do {
-      video = await this.server.videosCommand.getWithToken({ token: options.token, id: options.videoId })
+      video = await this.server.videos.getWithToken({ token: options.token, id: options.videoId })
 
       await wait(500)
     } while (video.isLive === true && video.state.id !== VideoState.PUBLISHED)
@@ -132,7 +132,7 @@ export class LiveCommand extends AbstractCommand {
   async countPlaylists (options: OverrideCommandOptions & {
     videoUUID: string
   }) {
-    const basePath = this.server.serversCommand.buildDirectory('streaming-playlists')
+    const basePath = this.server.servers.buildDirectory('streaming-playlists')
     const hlsPath = join(basePath, 'hls', options.videoUUID)
 
     const files = await readdir(hlsPath)
@@ -147,7 +147,7 @@ export class LiveCommand extends AbstractCommand {
     let video: VideoDetails
 
     do {
-      video = await this.server.videosCommand.getWithToken({ token: options.token, id: options.videoId })
+      video = await this.server.videos.getWithToken({ token: options.token, id: options.videoId })
 
       await wait(500)
     } while (video.state.id !== options.state)

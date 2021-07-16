@@ -210,29 +210,29 @@ async function prepare () {
   }
 
   for (let i = 0; i < 10; i++) {
-    await server.videosCommand.upload({ attributes: { ...attributes, name: 'my super video ' + i } })
+    await server.videos.upload({ attributes: { ...attributes, name: 'my super video ' + i } })
   }
 
-  const { data } = await server.videosCommand.list()
+  const { data } = await server.videos.list()
   video = data.find(v => v.name === 'my super video 1')
 
   for (let i = 0; i < 10; i++) {
     const text = 'my super first comment'
-    const created = await server.commentsCommand.createThread({ videoId: video.id, text })
+    const created = await server.comments.createThread({ videoId: video.id, text })
     threadId = created.id
 
     const text1 = 'my super answer to thread 1'
-    const child = await server.commentsCommand.addReply({ videoId: video.id, toCommentId: threadId, text: text1 })
+    const child = await server.comments.addReply({ videoId: video.id, toCommentId: threadId, text: text1 })
 
     const text2 = 'my super answer to answer of thread 1'
-    await server.commentsCommand.addReply({ videoId: video.id, toCommentId: child.id, text: text2 })
+    await server.comments.addReply({ videoId: video.id, toCommentId: child.id, text: text2 })
 
     const text3 = 'my second answer to thread 1'
-    await server.commentsCommand.addReply({ videoId: video.id, toCommentId: threadId, text: text3 })
+    await server.comments.addReply({ videoId: video.id, toCommentId: threadId, text: text3 })
   }
 
   for (const caption of [ 'ar', 'fr', 'en', 'zh' ]) {
-    await server.captionsCommand.createVideoCaption({
+    await server.captions.createVideoCaption({
       language: caption,
       videoId: video.id,
       fixture: 'subtitle-good2.vtt'

@@ -33,7 +33,7 @@ describe('Test abuses', function () {
     // Server 1 and server 2 follow each other
     await doubleFollow(servers[0], servers[1])
 
-    commands = servers.map(s => s.abusesCommand)
+    commands = servers.map(s => s.abuses)
   })
 
   describe('Video abuses', function () {
@@ -47,7 +47,7 @@ describe('Test abuses', function () {
           name: 'my super name for server 1',
           description: 'my super description for server 1'
         }
-        await servers[0].videosCommand.upload({ attributes })
+        await servers[0].videos.upload({ attributes })
       }
 
       {
@@ -55,17 +55,17 @@ describe('Test abuses', function () {
           name: 'my super name for server 2',
           description: 'my super description for server 2'
         }
-        await servers[1].videosCommand.upload({ attributes })
+        await servers[1].videos.upload({ attributes })
       }
 
       // Wait videos propagation, server 2 has transcoding enabled
       await waitJobs(servers)
 
-      const { data } = await servers[0].videosCommand.list()
+      const { data } = await servers[0].videos.list()
       expect(data.length).to.equal(2)
 
-      servers[0].video = data.find(video => video.name === 'my super name for server 1')
-      servers[1].video = data.find(video => video.name === 'my super name for server 2')
+      servers[0].store.video = data.find(video => video.name === 'my super name for server 1')
+      servers[1].store.video =  data.find(video => video.name === 'my super name for server 2')
     })
 
     it('Should not have abuses', async function () {
@@ -80,7 +80,7 @@ describe('Test abuses', function () {
       this.timeout(15000)
 
       const reason = 'my super bad reason'
-      await commands[0].report({ videoId: servers[0].video.id, reason })
+      await commands[0].report({ videoId: servers[0].store.video.id, reason })
 
       // We wait requests propagation, even if the server 1 is not supposed to make a request to server 2
       await waitJobs(servers)
@@ -100,7 +100,7 @@ describe('Test abuses', function () {
         expect(abuse.reporterAccount.name).to.equal('root')
         expect(abuse.reporterAccount.host).to.equal(servers[0].host)
 
-        expect(abuse.video.id).to.equal(servers[0].video.id)
+        expect(abuse.video.id).to.equal(servers[0].store.video.id)
         expect(abuse.video.channel).to.exist
 
         expect(abuse.comment).to.be.null
@@ -127,7 +127,7 @@ describe('Test abuses', function () {
       this.timeout(10000)
 
       const reason = 'my super bad reason 2'
-      const videoId = await servers[0].videosCommand.getId({ uuid: servers[1].video.uuid })
+      const videoId = await servers[0].videos.getId({ uuid: servers[1].store.video.uuid })
       await commands[0].report({ videoId, reason })
 
       // We wait requests propagation
@@ -146,7 +146,7 @@ describe('Test abuses', function () {
         expect(abuse1.reporterAccount.name).to.equal('root')
         expect(abuse1.reporterAccount.host).to.equal(servers[0].host)
 
-        expect(abuse1.video.id).to.equal(servers[0].video.id)
+        expect(abuse1.video.id).to.equal(servers[0].store.video.id)
         expect(abuse1.video.countReports).to.equal(1)
         expect(abuse1.video.nthReport).to.equal(1)
 
@@ -165,7 +165,7 @@ describe('Test abuses', function () {
         expect(abuse2.reporterAccount.name).to.equal('root')
         expect(abuse2.reporterAccount.host).to.equal(servers[0].host)
 
-        expect(abuse2.video.id).to.equal(servers[1].video.id)
+        expect(abuse2.video.id).to.equal(servers[1].store.video.id)
 
         expect(abuse2.comment).to.be.null
 
@@ -200,7 +200,7 @@ describe('Test abuses', function () {
       this.timeout(10000)
 
       {
-        const videoId = await servers[1].videosCommand.getId({ uuid: servers[0].video.uuid })
+        const videoId = await servers[1].videos.getId({ uuid: servers[0].store.video.uuid })
         await commands[1].report({ videoId, reason: 'will mute this' })
         await waitJobs(servers)
 
@@ -211,7 +211,7 @@ describe('Test abuses', function () {
       const accountToBlock = 'root@' + servers[1].host
 
       {
-        await servers[0].blocklistCommand.addToServerBlocklist({ account: accountToBlock })
+        await servers[0].blocklist.addToServerBlocklist({ account: accountToBlock })
 
         const body = await commands[0].getAdminList()
         expect(body.total).to.equal(2)
@@ -221,7 +221,7 @@ describe('Test abuses', function () {
       }
 
       {
-        await servers[0].blocklistCommand.removeFromServerBlocklist({ account: accountToBlock })
+        await servers[0].blocklist.removeFromServerBlocklist({ account: accountToBlock })
 
         const body = await commands[0].getAdminList()
         expect(body.total).to.equal(3)
@@ -232,7 +232,7 @@ describe('Test abuses', function () {
       const serverToBlock = servers[1].host
 
       {
-        await servers[0].blocklistCommand.addToServerBlocklist({ server: serverToBlock })
+        await servers[0].blocklist.addToServerBlocklist({ server: serverToBlock })
 
         const body = await commands[0].getAdminList()
         expect(body.total).to.equal(2)
@@ -242,7 +242,7 @@ describe('Test abuses', function () {
       }
 
       {
-        await servers[0].blocklistCommand.removeFromServerBlocklist({ server: serverToBlock })
+        await servers[0].blocklist.removeFromServerBlocklist({ server: serverToBlock })
 
         const body = await commands[0].getAdminList()
         expect(body.total).to.equal(3)
@@ -252,7 +252,7 @@ describe('Test abuses', function () {
     it('Should keep the video abuse when deleting the video', async function () {
       this.timeout(10000)
 
-      await servers[1].videosCommand.remove({ id: abuseServer2.video.uuid })
+      await servers[1].videos.remove({ id: abuseServer2.video.uuid })
 
       await waitJobs(servers)
 
@@ -272,15 +272,15 @@ describe('Test abuses', function () {
 
       // register a second user to have two reporters/reportees
       const user = { username: 'user2', password: 'password' }
-      await servers[0].usersCommand.create({ ...user })
-      const userAccessToken = await servers[0].loginCommand.getAccessToken(user)
+      await servers[0].users.create({ ...user })
+      const userAccessToken = await servers[0].login.getAccessToken(user)
 
       // upload a third video via this user
       const attributes = {
         name: 'my second super name for server 1',
         description: 'my second super description for server 1'
       }
-      const { id } = await servers[0].videosCommand.upload({ token: userAccessToken, attributes })
+      const { id } = await servers[0].videos.upload({ token: userAccessToken, attributes })
       const video3Id = id
 
       // resume with the test
@@ -288,7 +288,7 @@ describe('Test abuses', function () {
       await commands[0].report({ videoId: video3Id, reason: reason3 })
 
       const reason4 = 'my super bad reason 4'
-      await commands[0].report({ token: userAccessToken, videoId: servers[0].video.id, reason: reason4 })
+      await commands[0].report({ token: userAccessToken, videoId: servers[0].store.video.id, reason: reason4 })
 
       {
         const body = await commands[0].getAdminList()
@@ -301,7 +301,7 @@ describe('Test abuses', function () {
         expect(abuseVideo3.countReportsForReportee).to.equal(1, "wrong reports count for reporter on video 3 abuse")
         expect(abuseVideo3.countReportsForReporter).to.equal(3, "wrong reports count for reportee on video 3 abuse")
 
-        const abuseServer1 = abuses.find(a => a.video.id === servers[0].video.id)
+        const abuseServer1 = abuses.find(a => a.video.id === servers[0].store.video.id)
         expect(abuseServer1.countReportsForReportee).to.equal(3, "wrong reports count for reporter on video 1 abuse")
       }
     })
@@ -312,7 +312,7 @@ describe('Test abuses', function () {
       const reason5 = 'my super bad reason 5'
       const predefinedReasons5: AbusePredefinedReasonsString[] = [ 'violentOrRepulsive', 'captions' ]
       const createRes = await commands[0].report({
-        videoId: servers[0].video.id,
+        videoId: servers[0].store.video.id,
         reason: reason5,
         predefinedReasons: predefinedReasons5,
         startAt: 1,
@@ -391,10 +391,10 @@ describe('Test abuses', function () {
 
     async function getComment (server: ServerInfo, videoIdArg: number | string) {
       const videoId = typeof videoIdArg === 'string'
-        ? await server.videosCommand.getId({ uuid: videoIdArg })
+        ? await server.videos.getId({ uuid: videoIdArg })
         : videoIdArg
 
-      const { data } = await server.commentsCommand.listThreads({ videoId })
+      const { data } = await server.comments.listThreads({ videoId })
 
       return data[0]
     }
@@ -402,11 +402,11 @@ describe('Test abuses', function () {
     before(async function () {
       this.timeout(50000)
 
-      servers[0].video = await await servers[0].videosCommand.quickUpload({ name: 'server 1' })
-      servers[1].video = await await servers[1].videosCommand.quickUpload({ name: 'server 2' })
+      servers[0].store.video = await await servers[0].videos.quickUpload({ name: 'server 1' })
+      servers[1].store.video =  await await servers[1].videos.quickUpload({ name: 'server 2' })
 
-      await servers[0].commentsCommand.createThread({ videoId: servers[0].video.id, text: 'comment server 1' })
-      await servers[1].commentsCommand.createThread({ videoId: servers[1].video.id, text: 'comment server 2' })
+      await servers[0].comments.createThread({ videoId: servers[0].store.video.id, text: 'comment server 1' })
+      await servers[1].comments.createThread({ videoId: servers[1].store.video.id, text: 'comment server 2' })
 
       await waitJobs(servers)
     })
@@ -414,7 +414,7 @@ describe('Test abuses', function () {
     it('Should report abuse on a comment', async function () {
       this.timeout(15000)
 
-      const comment = await getComment(servers[0], servers[0].video.id)
+      const comment = await getComment(servers[0], servers[0].store.video.id)
 
       const reason = 'it is a bad comment'
       await commands[0].report({ commentId: comment.id, reason })
@@ -424,7 +424,7 @@ describe('Test abuses', function () {
 
     it('Should have 1 comment abuse on server 1 and 0 on server 2', async function () {
       {
-        const comment = await getComment(servers[0], servers[0].video.id)
+        const comment = await getComment(servers[0], servers[0].store.video.id)
         const body = await commands[0].getAdminList({ filter: 'comment' })
 
         expect(body.total).to.equal(1)
@@ -442,8 +442,8 @@ describe('Test abuses', function () {
         expect(abuse.comment.id).to.equal(comment.id)
         expect(abuse.comment.text).to.equal(comment.text)
         expect(abuse.comment.video.name).to.equal('server 1')
-        expect(abuse.comment.video.id).to.equal(servers[0].video.id)
-        expect(abuse.comment.video.uuid).to.equal(servers[0].video.uuid)
+        expect(abuse.comment.video.id).to.equal(servers[0].store.video.id)
+        expect(abuse.comment.video.uuid).to.equal(servers[0].store.video.uuid)
 
         expect(abuse.countReportsForReporter).to.equal(5)
         expect(abuse.countReportsForReportee).to.equal(5)
@@ -459,7 +459,7 @@ describe('Test abuses', function () {
     it('Should report abuse on a remote comment', async function () {
       this.timeout(10000)
 
-      const comment = await getComment(servers[0], servers[1].video.uuid)
+      const comment = await getComment(servers[0], servers[1].store.video.uuid)
 
       const reason = 'it is a really bad comment'
       await commands[0].report({ commentId: comment.id, reason })
@@ -468,7 +468,7 @@ describe('Test abuses', function () {
     })
 
     it('Should have 2 comment abuses on server 1 and 1 on server 2', async function () {
-      const commentServer2 = await getComment(servers[0], servers[1].video.id)
+      const commentServer2 = await getComment(servers[0], servers[1].store.video.id)
 
       {
         const body = await commands[0].getAdminList({ filter: 'comment' })
@@ -493,7 +493,7 @@ describe('Test abuses', function () {
         expect(abuse2.comment.id).to.equal(commentServer2.id)
         expect(abuse2.comment.text).to.equal(commentServer2.text)
         expect(abuse2.comment.video.name).to.equal('server 2')
-        expect(abuse2.comment.video.uuid).to.equal(servers[1].video.uuid)
+        expect(abuse2.comment.video.uuid).to.equal(servers[1].store.video.uuid)
 
         expect(abuse2.state.id).to.equal(AbuseState.PENDING)
         expect(abuse2.state.label).to.equal('Pending')
@@ -527,9 +527,9 @@ describe('Test abuses', function () {
     it('Should keep the comment abuse when deleting the comment', async function () {
       this.timeout(10000)
 
-      const commentServer2 = await getComment(servers[0], servers[1].video.id)
+      const commentServer2 = await getComment(servers[0], servers[1].store.video.id)
 
-      await servers[0].commentsCommand.delete({ videoId: servers[1].video.uuid, commentId: commentServer2.id })
+      await servers[0].comments.delete({ videoId: servers[1].store.video.uuid, commentId: commentServer2.id })
 
       await waitJobs(servers)
 
@@ -592,16 +592,16 @@ describe('Test abuses', function () {
   describe('Account abuses', function () {
 
     function getAccountFromServer (server: ServerInfo, targetName: string, targetServer: ServerInfo) {
-      return server.accountsCommand.get({ accountName: targetName + '@' + targetServer.host })
+      return server.accounts.get({ accountName: targetName + '@' + targetServer.host })
     }
 
     before(async function () {
       this.timeout(50000)
 
-      await servers[0].usersCommand.create({ username: 'user_1', password: 'donald' })
+      await servers[0].users.create({ username: 'user_1', password: 'donald' })
 
-      const token = await servers[1].usersCommand.generateUserAndToken('user_2')
-      await servers[1].videosCommand.upload({ token, attributes: { name: 'super video' } })
+      const token = await servers[1].users.generateUserAndToken('user_2')
+      await servers[1].videos.upload({ token, attributes: { name: 'super video' } })
 
       await waitJobs(servers)
     })
@@ -702,7 +702,7 @@ describe('Test abuses', function () {
       this.timeout(10000)
 
       const account = await getAccountFromServer(servers[1], 'user_2', servers[1])
-      await servers[1].usersCommand.remove({ userId: account.userId })
+      await servers[1].users.remove({ userId: account.userId })
 
       await waitJobs(servers)
 
@@ -759,11 +759,11 @@ describe('Test abuses', function () {
     let userAccessToken: string
 
     before(async function () {
-      userAccessToken = await servers[0].usersCommand.generateUserAndToken('user_42')
+      userAccessToken = await servers[0].users.generateUserAndToken('user_42')
 
-      await commands[0].report({ token: userAccessToken, videoId: servers[0].video.id, reason: 'user reason 1' })
+      await commands[0].report({ token: userAccessToken, videoId: servers[0].store.video.id, reason: 'user reason 1' })
 
-      const videoId = await servers[0].videosCommand.getId({ uuid: servers[1].video.uuid })
+      const videoId = await servers[0].videos.getId({ uuid: servers[1].store.video.uuid })
       await commands[0].report({ token: userAccessToken, videoId, reason: 'user reason 2' })
     })
 
@@ -830,9 +830,9 @@ describe('Test abuses', function () {
     let abuseMessageModerationId: number
 
     before(async function () {
-      userToken = await servers[0].usersCommand.generateUserAndToken('user_43')
+      userToken = await servers[0].users.generateUserAndToken('user_43')
 
-      const body = await commands[0].report({ token: userToken, videoId: servers[0].video.id, reason: 'user 43 reason 1' })
+      const body = await commands[0].report({ token: userToken, videoId: servers[0].store.video.id, reason: 'user 43 reason 1' })
       abuseId = body.abuse.id
     })
 

@@ -55,19 +55,19 @@ describe('Test videos filter', function () {
 
     for (const server of servers) {
       const moderator = { username: 'moderator', password: 'my super password' }
-      await server.usersCommand.create({ username: moderator.username, password: moderator.password, role: UserRole.MODERATOR })
-      server['moderatorAccessToken'] = await server.loginCommand.getAccessToken(moderator)
+      await server.users.create({ username: moderator.username, password: moderator.password, role: UserRole.MODERATOR })
+      server['moderatorAccessToken'] = await server.login.getAccessToken(moderator)
 
-      await server.videosCommand.upload({ attributes: { name: 'public ' + server.serverNumber } })
+      await server.videos.upload({ attributes: { name: 'public ' + server.serverNumber } })
 
       {
         const attributes = { name: 'unlisted ' + server.serverNumber, privacy: VideoPrivacy.UNLISTED }
-        await server.videosCommand.upload({ attributes })
+        await server.videos.upload({ attributes })
       }
 
       {
         const attributes = { name: 'private ' + server.serverNumber, privacy: VideoPrivacy.PRIVATE }
-        await server.videosCommand.upload({ attributes })
+        await server.videos.upload({ attributes })
       }
     }
 

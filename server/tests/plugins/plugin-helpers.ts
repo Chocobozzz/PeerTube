@@ -39,28 +39,28 @@ describe('Test plugin helpers', function () {
 
     await doubleFollow(servers[0], servers[1])
 
-    await servers[0].pluginsCommand.install({ path: PluginsCommand.getPluginTestPath('-four') })
+    await servers[0].plugins.install({ path: PluginsCommand.getPluginTestPath('-four') })
   })
 
   describe('Logger', function () {
 
     it('Should have logged things', async function () {
-      await servers[0].serversCommand.waitUntilLog('localhost:' + servers[0].port + ' peertube-plugin-test-four', 1, false)
-      await servers[0].serversCommand.waitUntilLog('Hello world from plugin four', 1)
+      await servers[0].servers.waitUntilLog('localhost:' + servers[0].port + ' peertube-plugin-test-four', 1, false)
+      await servers[0].servers.waitUntilLog('Hello world from plugin four', 1)
     })
   })
 
   describe('Database', function () {
 
     it('Should have made a query', async function () {
-      await servers[0].serversCommand.waitUntilLog(`root email is admin${servers[0].internalServerNumber}@example.com`)
+      await servers[0].servers.waitUntilLog(`root email is admin${servers[0].internalServerNumber}@example.com`)
     })
   })
 
   describe('Config', function () {
 
     it('Should have the correct webserver url', async function () {
-      await servers[0].serversCommand.waitUntilLog(`server url is http://localhost:${servers[0].port}`)
+      await servers[0].servers.waitUntilLog(`server url is http://localhost:${servers[0].port}`)
     })
 
     it('Should have the correct config', async function () {
@@ -78,7 +78,7 @@ describe('Test plugin helpers', function () {
   describe('Server', function () {
 
     it('Should get the server actor', async function () {
-      await servers[0].serversCommand.waitUntilLog('server actor name is peertube')
+      await servers[0].servers.waitUntilLog('server actor name is peertube')
     })
   })
 
@@ -140,17 +140,17 @@ describe('Test plugin helpers', function () {
       this.timeout(60000)
 
       {
-        const res = await await servers[0].videosCommand.quickUpload({ name: 'video server 1' })
+        const res = await await servers[0].videos.quickUpload({ name: 'video server 1' })
         videoUUIDServer1 = res.uuid
       }
 
       {
-        await await servers[1].videosCommand.quickUpload({ name: 'video server 2' })
+        await await servers[1].videos.quickUpload({ name: 'video server 2' })
       }
 
       await waitJobs(servers)
 
-      const { data } = await servers[0].videosCommand.list()
+      const { data } = await servers[0].videos.list()
 
       expect(data).to.have.lengthOf(2)
     })
@@ -159,7 +159,7 @@ describe('Test plugin helpers', function () {
       this.timeout(10000)
       await postCommand(servers[0], 'blockServer', { hostToBlock: `localhost:${servers[1].port}` })
 
-      const { data } = await servers[0].videosCommand.list()
+      const { data } = await servers[0].videos.list()
 
       expect(data).to.have.lengthOf(1)
       expect(data[0].name).to.equal('video server 1')
@@ -168,7 +168,7 @@ describe('Test plugin helpers', function () {
     it('Should unmute server 2', async function () {
       await postCommand(servers[0], 'unblockServer', { hostToUnblock: `localhost:${servers[1].port}` })
 
-      const { data } = await servers[0].videosCommand.list()
+      const { data } = await servers[0].videos.list()
 
       expect(data).to.have.lengthOf(2)
     })
@@ -176,7 +176,7 @@ describe('Test plugin helpers', function () {
     it('Should mute account of server 2', async function () {
       await postCommand(servers[0], 'blockAccount', { handleToBlock: `root@localhost:${servers[1].port}` })
 
-      const { data } = await servers[0].videosCommand.list()
+      const { data } = await servers[0].videos.list()
 
       expect(data).to.have.lengthOf(1)
       expect(data[0].name).to.equal('video server 1')
@@ -185,7 +185,7 @@ describe('Test plugin helpers', function () {
     it('Should unmute account of server 2', async function () {
       await postCommand(servers[0], 'unblockAccount', { handleToUnblock: `root@localhost:${servers[1].port}` })
 
-      const { data } = await servers[0].videosCommand.list()
+      const { data } = await servers[0].videos.list()
 
       expect(data).to.have.lengthOf(2)
     })
@@ -198,7 +198,7 @@ describe('Test plugin helpers', function () {
       await waitJobs(servers)
 
       for (const server of servers) {
-        const { data } = await server.videosCommand.list()
+        const { data } = await server.videos.list()
 
         expect(data).to.have.lengthOf(1)
         expect(data[0].name).to.equal('video server 2')
@@ -213,7 +213,7 @@ describe('Test plugin helpers', function () {
       await waitJobs(servers)
 
       for (const server of servers) {
-        const { data } = await server.videosCommand.list()
+        const { data } = await server.videos.list()
 
         expect(data).to.have.lengthOf(2)
       }
@@ -224,7 +224,7 @@ describe('Test plugin helpers', function () {
     let videoUUID: string
 
     before(async () => {
-      const res = await await servers[0].videosCommand.quickUpload({ name: 'video1' })
+      const res = await await servers[0].videos.quickUpload({ name: 'video1' })
       videoUUID = res.uuid
     })
 
@@ -232,15 +232,15 @@ describe('Test plugin helpers', function () {
       this.timeout(40000)
 
       // Should not throw -> video exists
-      await servers[0].videosCommand.get({ id: videoUUID })
+      await servers[0].videos.get({ id: videoUUID })
       // Should delete the video
-      await servers[0].videosCommand.view({ id: videoUUID })
+      await servers[0].videos.view({ id: videoUUID })
 
-      await servers[0].serversCommand.waitUntilLog('Video deleted by plugin four.')
+      await servers[0].servers.waitUntilLog('Video deleted by plugin four.')
 
       try {
         // Should throw because the video should have been deleted
-        await servers[0].videosCommand.get({ id: videoUUID })
+        await servers[0].videos.get({ id: videoUUID })
         throw new Error('Video exists')
       } catch (err) {
         if (err.message.includes('exists')) throw err
@@ -250,7 +250,7 @@ describe('Test plugin helpers', function () {
     })
 
     it('Should have fetched the video by URL', async function () {
-      await servers[0].serversCommand.waitUntilLog(`video from DB uuid is ${videoUUID}`)
+      await servers[0].servers.waitUntilLog(`video from DB uuid is ${videoUUID}`)
     })
   })
 

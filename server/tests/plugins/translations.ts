@@ -17,7 +17,7 @@ describe('Test plugin translations', function () {
     server = await flushAndRunServer(1)
     await setAccessTokensToServers([ server ])
 
-    command = server.pluginsCommand
+    command = server.plugins
 
     await command.install({ path: PluginsCommand.getPluginTestPath() })
     await command.install({ path: PluginsCommand.getPluginTestPath('-filter-translations') })

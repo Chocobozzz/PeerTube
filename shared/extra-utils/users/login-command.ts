@@ -9,7 +9,7 @@ export class LoginCommand extends AbstractCommand {
     client?: { id?: string, secret?: string }
     user?: { username: string, password?: string }
   } = {}) {
-    const { client = this.server.client, user = this.server.user } = options
+    const { client = this.server.store.client, user = this.server.store.user } = options
     const path = '/api/v1/users/token'
 
     const body = {
@@ -38,7 +38,7 @@ export class LoginCommand extends AbstractCommand {
   async getAccessToken (arg1?: { username: string, password?: string } | string, password?: string) {
     let user: { username: string, password?: string }
 
-    if (!arg1) user = this.server.user
+    if (!arg1) user = this.server.store.user
     else if (typeof arg1 === 'object') user = arg1
     else user = { username: arg1, password }
 
@@ -59,8 +59,8 @@ export class LoginCommand extends AbstractCommand {
     const path = '/api/v1/users/token'
 
     const body = {
-      client_id: this.server.client.id,
-      client_secret: this.server.client.secret,
+      client_id: this.server.store.client.id,
+      client_secret: this.server.store.client.secret,
       username: username,
       response_type: 'code',
       grant_type: 'password',
@@ -100,8 +100,8 @@ export class LoginCommand extends AbstractCommand {
     const path = '/api/v1/users/token'
 
     const body = {
-      client_id: this.server.client.id,
-      client_secret: this.server.client.secret,
+      client_id: this.server.store.client.id,
+      client_secret: this.server.store.client.secret,
       refresh_token: options.refreshToken,
       response_type: 'code',
       grant_type: 'refresh_token'

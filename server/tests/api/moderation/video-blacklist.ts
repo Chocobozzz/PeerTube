@@ -25,10 +25,10 @@ describe('Test video blacklist', function () {
   let command: BlacklistCommand
 
   async function blacklistVideosOnServer (server: ServerInfo) {
-    const { data } = await server.videosCommand.list()
+    const { data } = await server.videos.list()
 
     for (const video of data) {
-      await server.blacklistCommand.add({ videoId: video.id, reason: 'super reason' })
+      await server.blacklist.add({ videoId: video.id, reason: 'super reason' })
     }
   }
 
@@ -45,13 +45,13 @@ describe('Test video blacklist', function () {
     await doubleFollow(servers[0], servers[1])
 
     // Upload 2 videos on server 2
-    await servers[1].videosCommand.upload({ attributes: { name: 'My 1st video', description: 'A video on server 2' } })
-    await servers[1].videosCommand.upload({ attributes: { name: 'My 2nd video', description: 'A video on server 2' } })
+    await servers[1].videos.upload({ attributes: { name: 'My 1st video', description: 'A video on server 2' } })
+    await servers[1].videos.upload({ attributes: { name: 'My 2nd video', description: 'A video on server 2' } })
 
     // Wait videos propagation, server 2 has transcoding enabled
     await waitJobs(servers)
 
-    command = servers[0].blacklistCommand
+    command = servers[0].blacklist
 
     // Blacklist the two videos on server 1
     await blacklistVideosOnServer(servers[0])
@@ -61,7 +61,7 @@ describe('Test video blacklist', function () {
 
     it('Should not have the video blacklisted in videos list/search on server 1', async function () {
       {
-        const { total, data } = await servers[0].videosCommand.list()
+        const { total, data } = await servers[0].videos.list()
 
         expect(total).to.equal(0)
         expect(data).to.be.an('array')
@@ -69,7 +69,7 @@ describe('Test video blacklist', function () {
       }
 
       {
-        const body = await servers[0].searchCommand.searchVideos({ search: 'video' })
+        const body = await servers[0].search.searchVideos({ search: 'video' })
 
         expect(body.total).to.equal(0)
         expect(body.data).to.be.an('array')
@@ -79,7 +79,7 @@ describe('Test video blacklist', function () {
 
     it('Should have the blacklisted video in videos list/search on server 2', async function () {
       {
-        const { total, data } = await servers[1].videosCommand.list()
+        const { total, data } = await servers[1].videos.list()
 
         expect(total).to.equal(2)
         expect(data).to.be.an('array')
@@ -87,7 +87,7 @@ describe('Test video blacklist', function () {
       }
 
       {
-        const body = await servers[1].searchCommand.searchVideos({ search: 'video' })
+        const body = await servers[1].search.searchVideos({ search: 'video' })
 
         expect(body.total).to.equal(2)
         expect(body.data).to.be.an('array')
@@ -181,7 +181,7 @@ describe('Test video blacklist', function () {
     it('Should display blacklisted videos', async function () {
       await blacklistVideosOnServer(servers[1])
 
-      const { total, data } = await servers[1].videosCommand.listMyVideos()
+      const { total, data } = await servers[1].videos.listMyVideos()
 
       expect(total).to.equal(2)
       expect(data).to.have.lengthOf(2)
@@ -198,7 +198,7 @@ describe('Test video blacklist', function () {
     let blacklist = []
 
     it('Should not have any video in videos list on server 1', async function () {
-      const { total, data } = await servers[0].videosCommand.list()
+      const { total, data } = await servers[0].videos.list()
       expect(total).to.equal(0)
       expect(data).to.be.an('array')
       expect(data.length).to.equal(0)
@@ -215,7 +215,7 @@ describe('Test video blacklist', function () {
     })
 
     it('Should have the ex-blacklisted video in videos list on server 1', async function () {
-      const { total, data } = await servers[0].videosCommand.list()
+      const { total, data } = await servers[0].videos.list()
       expect(total).to.equal(1)
 
       expect(data).to.be.an('array')
@@ -244,11 +244,11 @@ describe('Test video blacklist', function () {
       this.timeout(10000)
 
       {
-        const { uuid } = await servers[0].videosCommand.upload({ attributes: { name: 'Video 3' } })
+        const { uuid } = await servers[0].videos.upload({ attributes: { name: 'Video 3' } })
         video3UUID = uuid
       }
       {
-        const { uuid } = await servers[0].videosCommand.upload({ attributes: { name: 'Video 4' } })
+        const { uuid } = await servers[0].videos.upload({ attributes: { name: 'Video 4' } })
         video4UUID = uuid
       }
 
@@ -263,12 +263,12 @@ describe('Test video blacklist', function () {
       await waitJobs(servers)
 
       {
-        const { data } = await servers[0].videosCommand.list()
+        const { data } = await servers[0].videos.list()
         expect(data.find(v => v.uuid === video3UUID)).to.be.undefined
       }
 
       {
-        const { data } = await servers[1].videosCommand.list()
+        const { data } = await servers[1].videos.list()
         expect(data.find(v => v.uuid === video3UUID)).to.not.be.undefined
       }
     })
@@ -281,7 +281,7 @@ describe('Test video blacklist', function () {
       await waitJobs(servers)
 
       for (const server of servers) {
-        const { data } = await server.videosCommand.list()
+        const { data } = await server.videos.list()
         expect(data.find(v => v.uuid === video4UUID)).to.be.undefined
       }
     })
@@ -289,12 +289,12 @@ describe('Test video blacklist', function () {
     it('Should have the video unfederated even after an Update AP message', async function () {
       this.timeout(10000)
 
-      await servers[0].videosCommand.update({ id: video4UUID, attributes: { description: 'super description' } })
+      await servers[0].videos.update({ id: video4UUID, attributes: { description: 'super description' } })
 
       await waitJobs(servers)
 
       for (const server of servers) {
-        const { data } = await server.videosCommand.list()
+        const { data } = await server.videos.list()
         expect(data.find(v => v.uuid === video4UUID)).to.be.undefined
       }
     })
@@ -318,7 +318,7 @@ describe('Test video blacklist', function () {
       await waitJobs(servers)
 
       for (const server of servers) {
-        const { data } = await server.videosCommand.list()
+        const { data } = await server.videos.list()
         expect(data.find(v => v.uuid === video4UUID)).to.not.be.undefined
       }
     })
@@ -348,36 +348,36 @@ describe('Test video blacklist', function () {
 
       {
         const user = { username: 'user_without_flag', password: 'password' }
-        await servers[0].usersCommand.create({
+        await servers[0].users.create({
           username: user.username,
           adminFlags: UserAdminFlag.NONE,
           password: user.password,
           role: UserRole.USER
         })
 
-        userWithoutFlag = await servers[0].loginCommand.getAccessToken(user)
+        userWithoutFlag = await servers[0].login.getAccessToken(user)
 
-        const { videoChannels } = await servers[0].usersCommand.getMyInfo({ token: userWithoutFlag })
+        const { videoChannels } = await servers[0].users.getMyInfo({ token: userWithoutFlag })
         channelOfUserWithoutFlag = videoChannels[0].id
       }
 
       {
         const user = { username: 'user_with_flag', password: 'password' }
-        await servers[0].usersCommand.create({
+        await servers[0].users.create({
           username: user.username,
           adminFlags: UserAdminFlag.BYPASS_VIDEO_AUTO_BLACKLIST,
           password: user.password,
           role: UserRole.USER
         })
 
-        userWithFlag = await servers[0].loginCommand.getAccessToken(user)
+        userWithFlag = await servers[0].login.getAccessToken(user)
       }
 
       await waitJobs(servers)
     })
 
     it('Should auto blacklist a video on upload', async function () {
-      await servers[0].videosCommand.upload({ token: userWithoutFlag, attributes: { name: 'blacklisted' } })
+      await servers[0].videos.upload({ token: userWithoutFlag, attributes: { name: 'blacklisted' } })
 
       const body = await command.list({ type: VideoBlacklistType.AUTO_BEFORE_PUBLISHED })
       expect(body.total).to.equal(1)
@@ -392,7 +392,7 @@ describe('Test video blacklist', function () {
         name: 'URL import',
         channelId: channelOfUserWithoutFlag
       }
-      await servers[0].importsCommand.importVideo({ token: userWithoutFlag, attributes })
+      await servers[0].imports.importVideo({ token: userWithoutFlag, attributes })
 
       const body = await command.list({ sort: 'createdAt', type: VideoBlacklistType.AUTO_BEFORE_PUBLISHED })
       expect(body.total).to.equal(2)
@@ -405,7 +405,7 @@ describe('Test video blacklist', function () {
         name: 'Torrent import',
         channelId: channelOfUserWithoutFlag
       }
-      await servers[0].importsCommand.importVideo({ token: userWithoutFlag, attributes })
+      await servers[0].imports.importVideo({ token: userWithoutFlag, attributes })
 
       const body = await command.list({ sort: 'createdAt', type: VideoBlacklistType.AUTO_BEFORE_PUBLISHED })
       expect(body.total).to.equal(3)
@@ -413,7 +413,7 @@ describe('Test video blacklist', function () {
     })
 
     it('Should not auto blacklist a video on upload if the user has the bypass blacklist flag', async function () {
-      await servers[0].videosCommand.upload({ token: userWithFlag, attributes: { name: 'not blacklisted' } })
+      await servers[0].videos.upload({ token: userWithFlag, attributes: { name: 'not blacklisted' } })
 
       const body = await command.list({ type: VideoBlacklistType.AUTO_BEFORE_PUBLISHED })
       expect(body.total).to.equal(3)

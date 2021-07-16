@@ -25,7 +25,7 @@ const expect = chai.expect
 
 async function checkHlsPlaylist (servers: ServerInfo[], videoUUID: string, hlsOnly: boolean, resolutions = [ 240, 360, 480, 720 ]) {
   for (const server of servers) {
-    const videoDetails = await server.videosCommand.get({ id: videoUUID })
+    const videoDetails = await server.videos.get({ id: videoUUID })
     const baseUrl = `http://${videoDetails.account.host}`
 
     expect(videoDetails.streamingPlaylists).to.have.lengthOf(1)
@@ -62,7 +62,7 @@ async function checkHlsPlaylist (servers: ServerInfo[], videoUUID: string, hlsOn
     {
       await checkResolutionsInMasterPlaylist({ server, playlistUrl: hlsPlaylist.playlistUrl, resolutions })
 
-      const masterPlaylist = await server.streamingPlaylistsCommand.get({ url: hlsPlaylist.playlistUrl })
+      const masterPlaylist = await server.streamingPlaylists.get({ url: hlsPlaylist.playlistUrl })
 
       for (const resolution of resolutions) {
         expect(masterPlaylist).to.contain(`${resolution}.m3u8`)
@@ -72,7 +72,7 @@ async function checkHlsPlaylist (servers: ServerInfo[], videoUUID: string, hlsOn
 
     {
       for (const resolution of resolutions) {
-        const subPlaylist = await server.streamingPlaylistsCommand.get({
+        const subPlaylist = await server.streamingPlaylists.get({
           url: `${baseUrl}/static/streaming-playlists/hls/${videoUUID}/${resolution}.m3u8`
         })
 
@@ -107,7 +107,7 @@ describe('Test HLS videos', function () {
     it('Should upload a video and transcode it to HLS', async function () {
       this.timeout(120000)
 
-      const { uuid } = await servers[0].videosCommand.upload({ attributes: { name: 'video 1', fixture: 'video_short.webm' } })
+      const { uuid } = await servers[0].videos.upload({ attributes: { name: 'video 1', fixture: 'video_short.webm' } })
       videoUUID = uuid
 
       await waitJobs(servers)
@@ -118,7 +118,7 @@ describe('Test HLS videos', function () {
     it('Should upload an audio file and transcode it to HLS', async function () {
       this.timeout(120000)
 
-      const { uuid } = await servers[0].videosCommand.upload({ attributes: { name: 'video audio', fixture: 'sample.ogg' } })
+      const { uuid } = await servers[0].videos.upload({ attributes: { name: 'video audio', fixture: 'sample.ogg' } })
       videoAudioUUID = uuid
 
       await waitJobs(servers)
@@ -129,7 +129,7 @@ describe('Test HLS videos', function () {
     it('Should update the video', async function () {
       this.timeout(10000)
 
-      await servers[0].videosCommand.update({ id: videoUUID, attributes: { name: 'video 1 updated' } })
+      await servers[0].videos.update({ id: videoUUID, attributes: { name: 'video 1 updated' } })
 
       await waitJobs(servers)
 
@@ -139,14 +139,14 @@ describe('Test HLS videos', function () {
     it('Should delete videos', async function () {
       this.timeout(10000)
 
-      await servers[0].videosCommand.remove({ id: videoUUID })
-      await servers[0].videosCommand.remove({ id: videoAudioUUID })
+      await servers[0].videos.remove({ id: videoUUID })
+      await servers[0].videos.remove({ id: videoAudioUUID })
 
       await waitJobs(servers)
 
       for (const server of servers) {
-        await server.videosCommand.get({ id: videoUUID, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
-        await server.videosCommand.get({ id: videoAudioUUID, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+        await server.videos.get({ id: videoUUID, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+        await server.videos.get({ id: videoAudioUUID, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
       }
     })
 
@@ -192,7 +192,7 @@ describe('Test HLS videos', function () {
   describe('With only HLS enabled', function () {
 
     before(async function () {
-      await servers[0].configCommand.updateCustomSubConfig({
+      await servers[0].config.updateCustomSubConfig({
         newConfig: {
           transcoding: {
             enabled: true,

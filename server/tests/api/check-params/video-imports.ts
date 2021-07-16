@@ -36,11 +36,11 @@ describe('Test video imports API validator', function () {
 
     const username = 'user1'
     const password = 'my super password'
-    await server.usersCommand.create({ username: username, password: password })
-    userAccessToken = await server.loginCommand.getAccessToken({ username, password })
+    await server.users.create({ username: username, password: password })
+    userAccessToken = await server.login.getAccessToken({ username, password })
 
     {
-      const { videoChannels } = await server.usersCommand.getMyInfo()
+      const { videoChannels } = await server.users.getMyInfo()
       channelId = videoChannels[0].id
     }
   })
@@ -162,10 +162,10 @@ describe('Test video imports API validator', function () {
         username: 'fake',
         password: 'fake_password'
       }
-      await server.usersCommand.create({ username: user.username, password: user.password })
+      await server.users.create({ username: user.username, password: user.password })
 
-      const accessTokenUser = await server.loginCommand.getAccessToken(user)
-      const { videoChannels } = await server.usersCommand.getMyInfo({ token: accessTokenUser })
+      const accessTokenUser = await server.login.getAccessToken(user)
+      const { videoChannels } = await server.users.getMyInfo({ token: accessTokenUser })
       const customChannelId = videoChannels[0].id
 
       const fields = { ...baseCorrectParams, channelId: customChannelId }
@@ -256,7 +256,7 @@ describe('Test video imports API validator', function () {
     })
 
     it('Should forbid to import http videos', async function () {
-      await server.configCommand.updateCustomSubConfig({
+      await server.config.updateCustomSubConfig({
         newConfig: {
           import: {
             videos: {
@@ -281,7 +281,7 @@ describe('Test video imports API validator', function () {
     })
 
     it('Should forbid to import torrent videos', async function () {
-      await server.configCommand.updateCustomSubConfig({
+      await server.config.updateCustomSubConfig({
         newConfig: {
           import: {
             videos: {

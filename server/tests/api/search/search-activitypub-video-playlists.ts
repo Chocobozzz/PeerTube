@@ -33,40 +33,40 @@ describe('Test ActivityPub playlists search', function () {
     await setDefaultVideoChannel(servers)
 
     {
-      const video1 = (await servers[0].videosCommand.quickUpload({ name: 'video 1' })).uuid
-      const video2 = (await servers[0].videosCommand.quickUpload({ name: 'video 2' })).uuid
+      const video1 = (await servers[0].videos.quickUpload({ name: 'video 1' })).uuid
+      const video2 = (await servers[0].videos.quickUpload({ name: 'video 2' })).uuid
 
       const attributes = {
         displayName: 'playlist 1 on server 1',
         privacy: VideoPlaylistPrivacy.PUBLIC,
-        videoChannelId: servers[0].videoChannel.id
+        videoChannelId: servers[0].store.channel.id
       }
-      const created = await servers[0].playlistsCommand.create({ attributes })
+      const created = await servers[0].playlists.create({ attributes })
       playlistServer1UUID = created.uuid
 
       for (const videoId of [ video1, video2 ]) {
-        await servers[0].playlistsCommand.addElement({ playlistId: playlistServer1UUID, attributes: { videoId } })
+        await servers[0].playlists.addElement({ playlistId: playlistServer1UUID, attributes: { videoId } })
       }
     }
 
     {
-      const videoId = (await servers[1].videosCommand.quickUpload({ name: 'video 1' })).uuid
-      video2Server2 = (await servers[1].videosCommand.quickUpload({ name: 'video 2' })).uuid
+      const videoId = (await servers[1].videos.quickUpload({ name: 'video 1' })).uuid
+      video2Server2 = (await servers[1].videos.quickUpload({ name: 'video 2' })).uuid
 
       const attributes = {
         displayName: 'playlist 1 on server 2',
         privacy: VideoPlaylistPrivacy.PUBLIC,
-        videoChannelId: servers[1].videoChannel.id
+        videoChannelId: servers[1].store.channel.id
       }
-      const created = await servers[1].playlistsCommand.create({ attributes })
+      const created = await servers[1].playlists.create({ attributes })
       playlistServer2UUID = created.uuid
 
-      await servers[1].playlistsCommand.addElement({ playlistId: playlistServer2UUID, attributes: { videoId } })
+      await servers[1].playlists.addElement({ playlistId: playlistServer2UUID, attributes: { videoId } })
     }
 
     await waitJobs(servers)
 
-    command = servers[0].searchCommand
+    command = servers[0].search
   })
 
   it('Should not find a remote playlist', async function () {
@@ -139,7 +139,7 @@ describe('Test ActivityPub playlists search', function () {
   })
 
   it('Should not list this remote playlist', async function () {
-    const body = await servers[0].playlistsCommand.list({ start: 0, count: 10 })
+    const body = await servers[0].playlists.list({ start: 0, count: 10 })
     expect(body.total).to.equal(1)
     expect(body.data).to.have.lengthOf(1)
     expect(body.data[0].displayName).to.equal('playlist 1 on server 1')
@@ -148,7 +148,7 @@ describe('Test ActivityPub playlists search', function () {
   it('Should update the playlist of server 2, and refresh it on server 1', async function () {
     this.timeout(60000)
 
-    await servers[1].playlistsCommand.addElement({ playlistId: playlistServer2UUID, attributes: { videoId: video2Server2 } })
+    await servers[1].playlists.addElement({ playlistId: playlistServer2UUID, attributes: { videoId: video2Server2 } })
 
     await waitJobs(servers)
     // Expire playlist
@@ -172,7 +172,7 @@ describe('Test ActivityPub playlists search', function () {
   it('Should delete playlist of server 2, and delete it on server 1', async function () {
     this.timeout(60000)
 
-    await servers[1].playlistsCommand.delete({ playlistId: playlistServer2UUID })
+    await servers[1].playlists.delete({ playlistId: playlistServer2UUID })
 
     await waitJobs(servers)
     // Expiration

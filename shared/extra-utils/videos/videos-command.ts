@@ -336,7 +336,7 @@ export class VideosCommand extends AbstractCommand {
     let defaultChannelId = 1
 
     try {
-      const { videoChannels } = await this.server.usersCommand.getMyInfo({ token: options.token })
+      const { videoChannels } = await this.server.users.getMyInfo({ token: options.token })
       defaultChannelId = videoChannels[0].id
     } catch (e) { /* empty */ }
 

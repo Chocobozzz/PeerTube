@@ -15,8 +15,8 @@ const config = require('application-config')(configName)
 const version = require('../../../package.json').version
 
 async function getAdminTokenOrDie (server: ServerInfo, username: string, password: string) {
-  const token = await server.loginCommand.getAccessToken(username, password)
-  const me = await server.usersCommand.getMyInfo({ token })
+  const token = await server.login.getAccessToken(username, password)
+  const me = await server.users.getMyInfo({ token })
 
   if (me.role !== UserRole.ADMINISTRATOR) {
     console.error('You must be an administrator.')
@@ -160,7 +160,7 @@ async function buildVideoAttributesFromCommander (server: ServerInfo, command: C
   Object.assign(videoAttributes, booleanAttributes)
 
   if (options.channelName) {
-    const videoChannel = await server.channelsCommand.get({ channelName: options.channelName })
+    const videoChannel = await server.channels.get({ channelName: options.channelName })
 
     Object.assign(videoAttributes, { channelId: videoChannel.id })
 
@@ -187,10 +187,10 @@ function buildServer (url: string): ServerInfo {
 }
 
 async function assignToken (server: ServerInfo, username: string, password: string) {
-  const bodyClient = await server.loginCommand.getClient()
+  const bodyClient = await server.login.getClient()
   const client = { id: bodyClient.client_id, secret: bodyClient.client_secret }
 
-  const body = await server.loginCommand.login({ client, user: { username, password } })
+  const body = await server.login.login({ client, user: { username, password } })
 
   server.accessToken = body.access_token
 }

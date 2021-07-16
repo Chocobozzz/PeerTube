@@ -214,7 +214,7 @@ describe('Test config', function () {
   })
 
   it('Should have a correct config on a server with registration enabled', async function () {
-    const data = await server.configCommand.getConfig()
+    const data = await server.config.getConfig()
 
     expect(data.signup.allowed).to.be.true
   })
@@ -223,32 +223,32 @@ describe('Test config', function () {
     this.timeout(5000)
 
     await Promise.all([
-      server.usersCommand.register({ username: 'user1' }),
-      server.usersCommand.register({ username: 'user2' }),
-      server.usersCommand.register({ username: 'user3' })
+      server.users.register({ username: 'user1' }),
+      server.users.register({ username: 'user2' }),
+      server.users.register({ username: 'user3' })
     ])
 
-    const data = await server.configCommand.getConfig()
+    const data = await server.config.getConfig()
 
     expect(data.signup.allowed).to.be.false
   })
 
   it('Should have the correct video allowed extensions', async function () {
-    const data = await server.configCommand.getConfig()
+    const data = await server.config.getConfig()
 
     expect(data.video.file.extensions).to.have.lengthOf(3)
     expect(data.video.file.extensions).to.contain('.mp4')
     expect(data.video.file.extensions).to.contain('.webm')
     expect(data.video.file.extensions).to.contain('.ogv')
 
-    await server.videosCommand.upload({ attributes: { fixture: 'video_short.mkv' }, expectedStatus: HttpStatusCode.UNSUPPORTED_MEDIA_TYPE_415 })
-    await server.videosCommand.upload({ attributes: { fixture: 'sample.ogg' }, expectedStatus: HttpStatusCode.UNSUPPORTED_MEDIA_TYPE_415 })
+    await server.videos.upload({ attributes: { fixture: 'video_short.mkv' }, expectedStatus: HttpStatusCode.UNSUPPORTED_MEDIA_TYPE_415 })
+    await server.videos.upload({ attributes: { fixture: 'sample.ogg' }, expectedStatus: HttpStatusCode.UNSUPPORTED_MEDIA_TYPE_415 })
 
     expect(data.contactForm.enabled).to.be.true
   })
 
   it('Should get the customized configuration', async function () {
-    const data = await server.configCommand.getCustomConfig()
+    const data = await server.config.getCustomConfig()
 
     checkInitialConfig(server, data)
   })
@@ -425,16 +425,16 @@ describe('Test config', function () {
         }
       }
     }
-    await server.configCommand.updateCustomConfig({ newCustomConfig })
+    await server.config.updateCustomConfig({ newCustomConfig })
 
-    const data = await server.configCommand.getCustomConfig()
+    const data = await server.config.getCustomConfig()
     checkUpdatedConfig(data)
   })
 
   it('Should have the correct updated video allowed extensions', async function () {
     this.timeout(10000)
 
-    const data = await server.configCommand.getConfig()
+    const data = await server.config.getConfig()
 
     expect(data.video.file.extensions).to.have.length.above(4)
     expect(data.video.file.extensions).to.contain('.mp4')
@@ -447,8 +447,8 @@ describe('Test config', function () {
     expect(data.video.file.extensions).to.contain('.ogg')
     expect(data.video.file.extensions).to.contain('.flac')
 
-    await server.videosCommand.upload({ attributes: { fixture: 'video_short.mkv' }, expectedStatus: HttpStatusCode.OK_200 })
-    await server.videosCommand.upload({ attributes: { fixture: 'sample.ogg' }, expectedStatus: HttpStatusCode.OK_200 })
+    await server.videos.upload({ attributes: { fixture: 'video_short.mkv' }, expectedStatus: HttpStatusCode.OK_200 })
+    await server.videos.upload({ attributes: { fixture: 'sample.ogg' }, expectedStatus: HttpStatusCode.OK_200 })
   })
 
   it('Should have the configuration updated after a restart', async function () {
@@ -458,13 +458,13 @@ describe('Test config', function () {
 
     await reRunServer(server)
 
-    const data = await server.configCommand.getCustomConfig()
+    const data = await server.config.getCustomConfig()
 
     checkUpdatedConfig(data)
   })
 
   it('Should fetch the about information', async function () {
-    const data = await server.configCommand.getAbout()
+    const data = await server.config.getAbout()
 
     expect(data.instance.name).to.equal('PeerTube updated')
     expect(data.instance.shortDescription).to.equal('my short description')
@@ -486,9 +486,9 @@ describe('Test config', function () {
   it('Should remove the custom configuration', async function () {
     this.timeout(10000)
 
-    await server.configCommand.deleteCustomConfig()
+    await server.config.deleteCustomConfig()
 
-    const data = await server.configCommand.getCustomConfig()
+    const data = await server.config.getCustomConfig()
     checkInitialConfig(server, data)
   })
 

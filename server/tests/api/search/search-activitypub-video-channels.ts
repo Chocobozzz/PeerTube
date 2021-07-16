@@ -30,34 +30,34 @@ describe('Test ActivityPub video channels search', function () {
     await setAccessTokensToServers(servers)
 
     {
-      await servers[0].usersCommand.create({ username: 'user1_server1', password: 'password' })
+      await servers[0].users.create({ username: 'user1_server1', password: 'password' })
       const channel = {
         name: 'channel1_server1',
         displayName: 'Channel 1 server 1'
       }
-      await servers[0].channelsCommand.create({ attributes: channel })
+      await servers[0].channels.create({ attributes: channel })
     }
 
     {
       const user = { username: 'user1_server2', password: 'password' }
-      await servers[1].usersCommand.create({ username: user.username, password: user.password })
-      userServer2Token = await servers[1].loginCommand.getAccessToken(user)
+      await servers[1].users.create({ username: user.username, password: user.password })
+      userServer2Token = await servers[1].login.getAccessToken(user)
 
       const channel = {
         name: 'channel1_server2',
         displayName: 'Channel 1 server 2'
       }
-      const created = await servers[1].channelsCommand.create({ token: userServer2Token, attributes: channel })
+      const created = await servers[1].channels.create({ token: userServer2Token, attributes: channel })
       channelIdServer2 = created.id
 
       const attributes = { name: 'video 1 server 2', channelId: channelIdServer2 }
-      const { uuid } = await servers[1].videosCommand.upload({ token: userServer2Token, attributes })
+      const { uuid } = await servers[1].videos.upload({ token: userServer2Token, attributes })
       videoServer2UUID = uuid
     }
 
     await waitJobs(servers)
 
-    command = servers[0].searchCommand
+    command = servers[0].search
   })
 
   it('Should not find a remote video channel', async function () {
@@ -134,7 +134,7 @@ describe('Test ActivityPub video channels search', function () {
   })
 
   it('Should not list this remote video channel', async function () {
-    const body = await servers[0].channelsCommand.list()
+    const body = await servers[0].channels.list()
     expect(body.total).to.equal(3)
     expect(body.data).to.have.lengthOf(3)
     expect(body.data[0].name).to.equal('channel1_server1')
@@ -147,7 +147,7 @@ describe('Test ActivityPub video channels search', function () {
 
     await waitJobs(servers)
 
-    const { total, data } = await servers[0].videosCommand.listByChannel({
+    const { total, data } = await servers[0].videos.listByChannel({
       token: null,
       videoChannelName: 'channel1_server2@localhost:' + servers[1].port
     })
@@ -156,7 +156,7 @@ describe('Test ActivityPub video channels search', function () {
   })
 
   it('Should list video channel videos of server 2 with token', async function () {
-    const { total, data } = await servers[0].videosCommand.listByChannel({
+    const { total, data } = await servers[0].videos.listByChannel({
       videoChannelName: 'channel1_server2@localhost:' + servers[1].port
     })
 
@@ -167,12 +167,12 @@ describe('Test ActivityPub video channels search', function () {
   it('Should update video channel of server 2, and refresh it on server 1', async function () {
     this.timeout(60000)
 
-    await servers[1].channelsCommand.update({
+    await servers[1].channels.update({
       token: userServer2Token,
       channelName: 'channel1_server2',
       attributes: { displayName: 'channel updated' }
     })
-    await servers[1].usersCommand.updateMe({ token: userServer2Token, displayName: 'user updated' })
+    await servers[1].users.updateMe({ token: userServer2Token, displayName: 'user updated' })
 
     await waitJobs(servers)
     // Expire video channel
@@ -193,8 +193,8 @@ describe('Test ActivityPub video channels search', function () {
   it('Should update and add a video on server 2, and update it on server 1 after a search', async function () {
     this.timeout(60000)
 
-    await servers[1].videosCommand.update({ token: userServer2Token, id: videoServer2UUID, attributes: { name: 'video 1 updated' } })
-    await servers[1].videosCommand.upload({ token: userServer2Token, attributes: { name: 'video 2 server 2', channelId: channelIdServer2 } })
+    await servers[1].videos.update({ token: userServer2Token, id: videoServer2UUID, attributes: { name: 'video 1 updated' } })
+    await servers[1].videos.upload({ token: userServer2Token, attributes: { name: 'video 2 server 2', channelId: channelIdServer2 } })
 
     await waitJobs(servers)
 
@@ -207,7 +207,7 @@ describe('Test ActivityPub video channels search', function () {
     await waitJobs(servers)
 
     const videoChannelName = 'channel1_server2@localhost:' + servers[1].port
-    const { total, data } = await servers[0].videosCommand.listByChannel({ videoChannelName, sort: '-createdAt' })
+    const { total, data } = await servers[0].videos.listByChannel({ videoChannelName, sort: '-createdAt' })
 
     expect(total).to.equal(2)
     expect(data[0].name).to.equal('video 2 server 2')
@@ -217,7 +217,7 @@ describe('Test ActivityPub video channels search', function () {
   it('Should delete video channel of server 2, and delete it on server 1', async function () {
     this.timeout(60000)
 
-    await servers[1].channelsCommand.delete({ token: userServer2Token, channelName: 'channel1_server2' })
+    await servers[1].channels.delete({ token: userServer2Token, channelName: 'channel1_server2' })
 
     await waitJobs(servers)
     // Expire video

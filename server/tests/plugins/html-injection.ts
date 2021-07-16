@@ -23,7 +23,7 @@ describe('Test plugins HTML injection', function () {
     server = await flushAndRunServer(1)
     await setAccessTokensToServers([ server ])
 
-    command = server.pluginsCommand
+    command = server.plugins
   })
 
   it('Should not inject global css file in HTML', async function () {

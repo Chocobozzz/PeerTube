@@ -13,7 +13,7 @@ async function checkSegmentHash (options: {
   hlsPlaylist: VideoStreamingPlaylist
 }) {
   const { server, baseUrlPlaylist, baseUrlSegment, videoUUID, resolution, hlsPlaylist } = options
-  const command = server.streamingPlaylistsCommand
+  const command = server.streamingPlaylists
 
   const playlist = await command.get({ url: `${baseUrlPlaylist}/${videoUUID}/${resolution}.m3u8` })
 
@@ -43,7 +43,7 @@ async function checkLiveSegmentHash (options: {
   hlsPlaylist: VideoStreamingPlaylist
 }) {
   const { server, baseUrlSegment, videoUUID, segmentName, hlsPlaylist } = options
-  const command = server.streamingPlaylistsCommand
+  const command = server.streamingPlaylists
 
   const segmentBody = await command.getSegment({ url: `${baseUrlSegment}/${videoUUID}/${segmentName}` })
   const shaBody = await command.getSegmentSha256({ url: hlsPlaylist.segmentsSha256Url })
@@ -58,7 +58,7 @@ async function checkResolutionsInMasterPlaylist (options: {
 }) {
   const { server, playlistUrl, resolutions } = options
 
-  const masterPlaylist = await server.streamingPlaylistsCommand.get({ url: playlistUrl })
+  const masterPlaylist = await server.streamingPlaylists.get({ url: playlistUrl })
 
   for (const resolution of resolutions) {
     const reg = new RegExp(

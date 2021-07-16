@@ -29,12 +29,12 @@ describe('Test upload quota', function () {
     await setAccessTokensToServers([ server ])
     await setDefaultVideoChannel([ server ])
 
-    const user = await server.usersCommand.getMyInfo()
+    const user = await server.users.getMyInfo()
     rootId = user.id
 
-    await server.usersCommand.update({ userId: rootId, videoQuota: 42 })
+    await server.users.update({ userId: rootId, videoQuota: 42 })
 
-    command = server.videosCommand
+    command = server.videos
   })
 
   describe('When having a video quota', function () {
@@ -43,8 +43,8 @@ describe('Test upload quota', function () {
       this.timeout(30000)
 
       const user = { username: 'registered' + randomInt(1, 1500), password: 'password' }
-      await server.usersCommand.register(user)
-      const userToken = await server.loginCommand.getAccessToken(user)
+      await server.users.register(user)
+      const userToken = await server.login.getAccessToken(user)
 
       const attributes = { fixture: 'video_short2.webm' }
       for (let i = 0; i < 5; i++) {
@@ -58,8 +58,8 @@ describe('Test upload quota', function () {
       this.timeout(30000)
 
       const user = { username: 'registered' + randomInt(1, 1500), password: 'password' }
-      await server.usersCommand.register(user)
-      const userToken = await server.loginCommand.getAccessToken(user)
+      await server.users.register(user)
+      const userToken = await server.login.getAccessToken(user)
 
       const attributes = { fixture: 'video_short2.webm' }
       for (let i = 0; i < 5; i++) {
@@ -73,16 +73,16 @@ describe('Test upload quota', function () {
       this.timeout(120000)
 
       const baseAttributes = {
-        channelId: server.videoChannel.id,
+        channelId: server.store.channel.id,
         privacy: VideoPrivacy.PUBLIC
       }
-      await server.importsCommand.importVideo({ attributes: { ...baseAttributes, targetUrl: ImportsCommand.getGoodVideoUrl() } })
-      await server.importsCommand.importVideo({ attributes: { ...baseAttributes, magnetUri: ImportsCommand.getMagnetURI() } })
-      await server.importsCommand.importVideo({ attributes: { ...baseAttributes, torrentfile: 'video-720p.torrent' as any } })
+      await server.imports.importVideo({ attributes: { ...baseAttributes, targetUrl: ImportsCommand.getGoodVideoUrl() } })
+      await server.imports.importVideo({ attributes: { ...baseAttributes, magnetUri: ImportsCommand.getMagnetURI() } })
+      await server.imports.importVideo({ attributes: { ...baseAttributes, torrentfile: 'video-720p.torrent' as any } })
 
       await waitJobs([ server ])
 
-      const { total, data: videoImports } = await server.importsCommand.getMyVideoImports()
+      const { total, data: videoImports } = await server.imports.getMyVideoImports()
       expect(total).to.equal(3)
 
       expect(videoImports).to.have.lengthOf(3)
@@ -98,7 +98,7 @@ describe('Test upload quota', function () {
   describe('When having a daily video quota', function () {
 
     it('Should fail with a user having too many videos daily', async function () {
-      await server.usersCommand.update({ userId: rootId, videoQuotaDaily: 42 })
+      await server.users.update({ userId: rootId, videoQuotaDaily: 42 })
 
       await command.upload({ expectedStatus: HttpStatusCode.PAYLOAD_TOO_LARGE_413, mode: 'legacy' })
       await command.upload({ expectedStatus: HttpStatusCode.PAYLOAD_TOO_LARGE_413, mode: 'resumable' })
@@ -107,7 +107,7 @@ describe('Test upload quota', function () {
 
   describe('When having an absolute and daily video quota', function () {
     it('Should fail if exceeding total quota', async function () {
-      await server.usersCommand.update({
+      await server.users.update({
         userId: rootId,
         videoQuota: 42,
         videoQuotaDaily: 1024 * 1024 * 1024
@@ -118,7 +118,7 @@ describe('Test upload quota', function () {
     })
 
     it('Should fail if exceeding daily quota', async function () {
-      await server.usersCommand.update({
+      await server.users.update({
         userId: rootId,
         videoQuota: 1024 * 1024 * 1024,
         videoQuotaDaily: 42

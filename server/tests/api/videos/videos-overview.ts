@@ -25,7 +25,7 @@ describe('Test a videos overview', function () {
   })
 
   it('Should send empty overview', async function () {
-    const body = await server.overviewsCommand.getVideos({ page: 1 })
+    const body = await server.overviews.getVideos({ page: 1 })
 
     testOverviewCount(body, 0)
   })
@@ -35,7 +35,7 @@ describe('Test a videos overview', function () {
 
     await wait(3000)
 
-    await server.videosCommand.upload({
+    await server.videos.upload({
       attributes: {
         name: 'video 0',
         category: 3,
@@ -43,7 +43,7 @@ describe('Test a videos overview', function () {
       }
     })
 
-    const body = await server.overviewsCommand.getVideos({ page: 1 })
+    const body = await server.overviews.getVideos({ page: 1 })
 
     testOverviewCount(body, 0)
   })
@@ -53,7 +53,7 @@ describe('Test a videos overview', function () {
 
     {
       for (let i = 1; i < 6; i++) {
-        await server.videosCommand.upload({
+        await server.videos.upload({
           attributes: {
             name: 'video ' + i,
             category: 3,
@@ -66,13 +66,13 @@ describe('Test a videos overview', function () {
     }
 
     {
-      const body = await server.overviewsCommand.getVideos({ page: 1 })
+      const body = await server.overviews.getVideos({ page: 1 })
 
       testOverviewCount(body, 1)
     }
 
     {
-      const overview = await server.overviewsCommand.getVideos({ page: 2 })
+      const overview = await server.overviews.getVideos({ page: 2 })
 
       expect(overview.tags).to.have.lengthOf(1)
       expect(overview.categories).to.have.lengthOf(0)
@@ -81,8 +81,8 @@ describe('Test a videos overview', function () {
   })
 
   it('Should have the correct overview', async function () {
-    const overview1 = await server.overviewsCommand.getVideos({ page: 1 })
-    const overview2 = await server.overviewsCommand.getVideos({ page: 2 })
+    const overview1 = await server.overviews.getVideos({ page: 1 })
+    const overview2 = await server.overviews.getVideos({ page: 2 })
 
     for (const arr of [ overview1.tags, overview1.categories, overview1.channels, overview2.tags ]) {
       expect(arr).to.have.lengthOf(1)
@@ -108,18 +108,18 @@ describe('Test a videos overview', function () {
   })
 
   it('Should hide muted accounts', async function () {
-    const token = await server.usersCommand.generateUserAndToken('choco')
+    const token = await server.users.generateUserAndToken('choco')
 
-    await server.blocklistCommand.addToMyBlocklist({ token, account: 'root@' + server.host })
+    await server.blocklist.addToMyBlocklist({ token, account: 'root@' + server.host })
 
     {
-      const body = await server.overviewsCommand.getVideos({ page: 1 })
+      const body = await server.overviews.getVideos({ page: 1 })
 
       testOverviewCount(body, 1)
     }
 
     {
-      const body = await server.overviewsCommand.getVideos({ page: 1, token })
+      const body = await server.overviews.getVideos({ page: 1, token })
 
       testOverviewCount(body, 0)
     }

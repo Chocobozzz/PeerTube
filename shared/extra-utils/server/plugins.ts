@@ -4,7 +4,7 @@ import { expect } from 'chai'
 import { ServerInfo } from '../server/servers'
 
 async function testHelloWorldRegisteredSettings (server: ServerInfo) {
-  const body = await server.pluginsCommand.getRegisteredSettings({ npmName: 'peertube-plugin-hello-world' })
+  const body = await server.plugins.getRegisteredSettings({ npmName: 'peertube-plugin-hello-world' })
 
   const registeredSettings = body.registeredSettings
   expect(registeredSettings).to.have.length.at.least(1)

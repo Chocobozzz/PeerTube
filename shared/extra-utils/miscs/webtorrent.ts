@@ -17,7 +17,7 @@ function webtorrentAdd (torrent: string, refreshWebTorrent = false) {
 
 async function parseTorrentVideo (server: ServerInfo, videoUUID: string, resolution: number) {
   const torrentName = videoUUID + '-' + resolution + '.torrent'
-  const torrentPath = server.serversCommand.buildDirectory(join('torrents', torrentName))
+  const torrentPath = server.servers.buildDirectory(join('torrents', torrentName))
 
   const data = await readFile(torrentPath)
 

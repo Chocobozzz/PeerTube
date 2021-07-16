@@ -31,21 +31,21 @@ describe('Test jobs', function () {
   it('Should create some jobs', async function () {
     this.timeout(120000)
 
-    await servers[1].videosCommand.upload({ attributes: { name: 'video1' } })
-    await servers[1].videosCommand.upload({ attributes: { name: 'video2' } })
+    await servers[1].videos.upload({ attributes: { name: 'video1' } })
+    await servers[1].videos.upload({ attributes: { name: 'video2' } })
 
     await waitJobs(servers)
   })
 
   it('Should list jobs', async function () {
-    const body = await servers[1].jobsCommand.getJobsList({ state: 'completed' })
+    const body = await servers[1].jobs.getJobsList({ state: 'completed' })
     expect(body.total).to.be.above(2)
     expect(body.data).to.have.length.above(2)
   })
 
   it('Should list jobs with sort, pagination and job type', async function () {
     {
-      const body = await servers[1].jobsCommand.getJobsList({
+      const body = await servers[1].jobs.getJobsList({
         state: 'completed',
         start: 1,
         count: 2,
@@ -66,7 +66,7 @@ describe('Test jobs', function () {
     }
 
     {
-      const body = await servers[1].jobsCommand.getJobsList({
+      const body = await servers[1].jobs.getJobsList({
         state: 'completed',
         start: 0,
         count: 100,
@@ -82,7 +82,7 @@ describe('Test jobs', function () {
   })
 
   it('Should list all jobs', async function () {
-    const body = await servers[1].jobsCommand.getJobsList()
+    const body = await servers[1].jobs.getJobsList()
     expect(body.total).to.be.above(2)
 
     const jobs = body.data

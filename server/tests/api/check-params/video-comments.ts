@@ -38,26 +38,26 @@ describe('Test video comments API validator', function () {
     await setAccessTokensToServers([ server ])
 
     {
-      const video = await server.videosCommand.upload({ attributes: {} })
+      const video = await server.videos.upload({ attributes: {} })
       pathThread = '/api/v1/videos/' + video.uuid + '/comment-threads'
     }
 
     {
-      const created = await server.commentsCommand.createThread({ videoId: video.uuid, text: 'coucou' })
+      const created = await server.comments.createThread({ videoId: video.uuid, text: 'coucou' })
       commentId = created.id
       pathComment = '/api/v1/videos/' + video.uuid + '/comments/' + commentId
     }
 
     {
       const user = { username: 'user1', password: 'my super password' }
-      await server.usersCommand.create({ username: user.username, password: user.password })
-      userAccessToken = await server.loginCommand.getAccessToken(user)
+      await server.users.create({ username: user.username, password: user.password })
+      userAccessToken = await server.login.getAccessToken(user)
     }
 
     {
       const user = { username: 'user2', password: 'my super password' }
-      await server.usersCommand.create({ username: user.username, password: user.password })
-      userAccessToken2 = await server.loginCommand.getAccessToken(user)
+      await server.users.create({ username: user.username, password: user.password })
+      userAccessToken2 = await server.login.getAccessToken(user)
     }
   })
 
@@ -274,7 +274,7 @@ describe('Test video comments API validator', function () {
       let commentToDelete: number
 
       {
-        const created = await server.commentsCommand.createThread({ videoId: video.uuid, token: userAccessToken, text: 'hello' })
+        const created = await server.comments.createThread({ videoId: video.uuid, token: userAccessToken, text: 'hello' })
         commentToDelete = created.id
       }
 
@@ -289,12 +289,12 @@ describe('Test video comments API validator', function () {
       let anotherVideoUUID: string
 
       {
-        const { uuid } = await server.videosCommand.upload({ token: userAccessToken, attributes: { name: 'video' } })
+        const { uuid } = await server.videos.upload({ token: userAccessToken, attributes: { name: 'video' } })
         anotherVideoUUID = uuid
       }
 
       {
-        const created = await server.commentsCommand.createThread({ videoId: anotherVideoUUID, text: 'hello' })
+        const created = await server.comments.createThread({ videoId: anotherVideoUUID, text: 'hello' })
         commentToDelete = created.id
       }
 
@@ -316,7 +316,7 @@ describe('Test video comments API validator', function () {
 
   describe('When a video has comments disabled', function () {
     before(async function () {
-      video = await server.videosCommand.upload({ attributes: { commentsEnabled: false } })
+      video = await server.videos.upload({ attributes: { commentsEnabled: false } })
       pathThread = '/api/v1/videos/' + video.uuid + '/comment-threads'
     })
 

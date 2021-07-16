@@ -34,7 +34,7 @@ async function testImage (url: string, imageName: string, imagePath: string, ext
 }
 
 async function testFileExistsOrNot (server: ServerInfo, directory: string, filePath: string, exist: boolean) {
-  const base = server.serversCommand.buildDirectory(directory)
+  const base = server.servers.buildDirectory(directory)
 
   expect(await pathExists(join(base, filePath))).to.equal(exist)
 }

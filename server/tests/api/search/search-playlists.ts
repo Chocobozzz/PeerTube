@@ -26,40 +26,40 @@ describe('Test playlists search', function () {
     await setAccessTokensToServers([ server ])
     await setDefaultVideoChannel([ server ])
 
-    const videoId = (await server.videosCommand.quickUpload({ name: 'video' })).uuid
+    const videoId = (await server.videos.quickUpload({ name: 'video' })).uuid
 
     {
       const attributes = {
         displayName: 'Dr. Kenzo Tenma hospital videos',
         privacy: VideoPlaylistPrivacy.PUBLIC,
-        videoChannelId: server.videoChannel.id
+        videoChannelId: server.store.channel.id
       }
-      const created = await server.playlistsCommand.create({ attributes })
+      const created = await server.playlists.create({ attributes })
 
-      await server.playlistsCommand.addElement({ playlistId: created.id, attributes: { videoId } })
+      await server.playlists.addElement({ playlistId: created.id, attributes: { videoId } })
     }
 
     {
       const attributes = {
         displayName: 'Johan & Anna Libert musics',
         privacy: VideoPlaylistPrivacy.PUBLIC,
-        videoChannelId: server.videoChannel.id
+        videoChannelId: server.store.channel.id
       }
-      const created = await server.playlistsCommand.create({ attributes })
+      const created = await server.playlists.create({ attributes })
 
-      await server.playlistsCommand.addElement({ playlistId: created.id, attributes: { videoId } })
+      await server.playlists.addElement({ playlistId: created.id, attributes: { videoId } })
     }
 
     {
       const attributes = {
         displayName: 'Inspector Lunge playlist',
         privacy: VideoPlaylistPrivacy.PUBLIC,
-        videoChannelId: server.videoChannel.id
+        videoChannelId: server.store.channel.id
       }
-      await server.playlistsCommand.create({ attributes })
+      await server.playlists.create({ attributes })
     }
 
-    command = server.searchCommand
+    command = server.search
   })
 
   it('Should make a simple search and not have results', async function () {

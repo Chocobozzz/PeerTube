@@ -36,14 +36,14 @@ describe('Test resumable upload', function () {
 
     const attributes = {
       name: 'video',
-      channelId: server.videoChannel.id,
+      channelId: server.store.channel.id,
       privacy: VideoPrivacy.PUBLIC,
       fixture: defaultFixture
     }
 
     const mimetype = 'video/mp4'
 
-    const res = await server.videosCommand.prepareResumableUpload({ attributes, size, mimetype })
+    const res = await server.videos.prepareResumableUpload({ attributes, size, mimetype })
 
     return res.header['location'].split('?')[1]
   }
@@ -61,7 +61,7 @@ describe('Test resumable upload', function () {
     const size = await buildSize(defaultFixture, options.size)
     const absoluteFilePath = buildAbsoluteFixturePath(defaultFixture)
 
-    return server.videosCommand.sendResumableChunks({
+    return server.videos.sendResumableChunks({
       pathUploadId,
       videoFilePath: absoluteFilePath,
       size,
@@ -75,7 +75,7 @@ describe('Test resumable upload', function () {
     const uploadId = uploadIdArg.replace(/^upload_id=/, '')
 
     const subPath = join('tmp', 'resumable-uploads', uploadId)
-    const filePath = server.serversCommand.buildDirectory(subPath)
+    const filePath = server.servers.buildDirectory(subPath)
     const exists = await pathExists(filePath)
 
     if (expectedSize === null) {
@@ -90,7 +90,7 @@ describe('Test resumable upload', function () {
 
   async function countResumableUploads () {
     const subPath = join('tmp', 'resumable-uploads')
-    const filePath = server.serversCommand.buildDirectory(subPath)
+    const filePath = server.servers.buildDirectory(subPath)
 
     const files = await readdir(filePath)
     return files.length
@@ -103,10 +103,10 @@ describe('Test resumable upload', function () {
     await setAccessTokensToServers([ server ])
     await setDefaultVideoChannel([ server ])
 
-    const body = await server.usersCommand.getMyInfo()
+    const body = await server.users.getMyInfo()
     rootId = body.id
 
-    await server.usersCommand.update({ userId: rootId, videoQuota: 10_000_000 })
+    await server.users.update({ userId: rootId, videoQuota: 10_000_000 })
   })
 
   describe('Directory cleaning', function () {
@@ -125,13 +125,13 @@ describe('Test resumable upload', function () {
     })
 
     it('Should not delete recent uploads', async function () {
-      await server.debugCommand.sendCommand({ body: { command: 'remove-dandling-resumable-uploads' } })
+      await server.debug.sendCommand({ body: { command: 'remove-dandling-resumable-uploads' } })
 
       expect(await countResumableUploads()).to.equal(2)
     })
 
     it('Should delete old uploads', async function () {
-      await server.debugCommand.sendCommand({ body: { command: 'remove-dandling-resumable-uploads' } })
+      await server.debug.sendCommand({ body: { command: 'remove-dandling-resumable-uploads' } })
 
       expect(await countResumableUploads()).to.equal(0)
     })

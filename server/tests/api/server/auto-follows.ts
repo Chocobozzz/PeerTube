@@ -16,7 +16,7 @@ const expect = chai.expect
 
 async function checkFollow (follower: ServerInfo, following: ServerInfo, exists: boolean) {
   {
-    const body = await following.followsCommand.getFollowers({ start: 0, count: 5, sort: '-createdAt' })
+    const body = await following.follows.getFollowers({ start: 0, count: 5, sort: '-createdAt' })
     const follow = body.data.find(f => f.follower.host === follower.host && f.state === 'accepted')
 
     if (exists === true) expect(follow).to.exist
@@ -24,7 +24,7 @@ async function checkFollow (follower: ServerInfo, following: ServerInfo, exists:
   }
 
   {
-    const body = await follower.followsCommand.getFollowings({ start: 0, count: 5, sort: '-createdAt' })
+    const body = await follower.follows.getFollowings({ start: 0, count: 5, sort: '-createdAt' })
     const follow = body.data.find(f => f.following.host === following.host && f.state === 'accepted')
 
     if (exists === true) expect(follow).to.exist
@@ -33,15 +33,15 @@ async function checkFollow (follower: ServerInfo, following: ServerInfo, exists:
 }
 
 async function server1Follows2 (servers: ServerInfo[]) {
-  await servers[0].followsCommand.follow({ targets: [ servers[1].host ] })
+  await servers[0].follows.follow({ targets: [ servers[1].host ] })
 
   await waitJobs(servers)
 }
 
 async function resetFollows (servers: ServerInfo[]) {
   try {
-    await servers[0].followsCommand.unfollow({ target: servers[1] })
-    await servers[1].followsCommand.unfollow({ target: servers[0] })
+    await servers[0].follows.unfollow({ target: servers[1] })
+    await servers[1].follows.unfollow({ target: servers[0] })
   } catch { /* empty */
   }
 
@@ -86,7 +86,7 @@ describe('Test auto follows', function () {
           }
         }
       }
-      await servers[1].configCommand.updateCustomSubConfig({ newConfig: config })
+      await servers[1].config.updateCustomSubConfig({ newConfig: config })
 
       await server1Follows2(servers)
 
@@ -111,14 +111,14 @@ describe('Test auto follows', function () {
           }
         }
       }
-      await servers[1].configCommand.updateCustomSubConfig({ newConfig: config })
+      await servers[1].config.updateCustomSubConfig({ newConfig: config })
 
       await server1Follows2(servers)
 
       await checkFollow(servers[0], servers[1], false)
       await checkFollow(servers[1], servers[0], false)
 
-      await servers[1].followsCommand.acceptFollower({ follower: 'peertube@' + servers[0].host })
+      await servers[1].follows.acceptFollower({ follower: 'peertube@' + servers[0].host })
       await waitJobs(servers)
 
       await checkFollow(servers[0], servers[1], true)
@@ -128,7 +128,7 @@ describe('Test auto follows', function () {
 
       config.followings.instance.autoFollowBack.enabled = false
       config.followers.instance.manualApproval = false
-      await servers[1].configCommand.updateCustomSubConfig({ newConfig: config })
+      await servers[1].config.updateCustomSubConfig({ newConfig: config })
     })
   })
 
@@ -165,7 +165,7 @@ describe('Test auto follows', function () {
           }
         }
       }
-      await servers[0].configCommand.updateCustomSubConfig({ newConfig: config })
+      await servers[0].config.updateCustomSubConfig({ newConfig: config })
 
       await wait(5000)
       await waitJobs(servers)

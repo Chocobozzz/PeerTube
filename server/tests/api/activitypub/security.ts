@@ -24,8 +24,8 @@ function setKeysOfServer (onServer: ServerInfo, ofServer: ServerInfo, publicKey:
   const url = 'http://localhost:' + ofServer.port + '/accounts/peertube'
 
   return Promise.all([
-    onServer.sqlCommand.setActorField(url, 'publicKey', publicKey),
-    onServer.sqlCommand.setActorField(url, 'privateKey', privateKey)
+    onServer.sql.setActorField(url, 'publicKey', publicKey),
+    onServer.sql.setActorField(url, 'privateKey', privateKey)
   ])
 }
 
@@ -33,8 +33,8 @@ function setUpdatedAtOfServer (onServer: ServerInfo, ofServer: ServerInfo, updat
   const url = 'http://localhost:' + ofServer.port + '/accounts/peertube'
 
   return Promise.all([
-    onServer.sqlCommand.setActorField(url, 'createdAt', updatedAt),
-    onServer.sqlCommand.setActorField(url, 'updatedAt', updatedAt)
+    onServer.sql.setActorField(url, 'createdAt', updatedAt),
+    onServer.sql.setActorField(url, 'updatedAt', updatedAt)
   ])
 }
 

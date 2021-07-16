@@ -16,7 +16,7 @@ describe('Test plugins module unloading', function () {
     server = await flushAndRunServer(1)
     await setAccessTokensToServers([ server ])
 
-    await server.pluginsCommand.install({ path: PluginsCommand.getPluginTestPath('-unloading') })
+    await server.plugins.install({ path: PluginsCommand.getPluginTestPath('-unloading') })
   })
 
   it('Should return a numeric value', async function () {
@@ -41,7 +41,7 @@ describe('Test plugins module unloading', function () {
   })
 
   it('Should uninstall the plugin and free the route', async function () {
-    await server.pluginsCommand.uninstall({ npmName: 'peertube-plugin-test-unloading' })
+    await server.plugins.uninstall({ npmName: 'peertube-plugin-test-unloading' })
 
     await makeGetRequest({
       url: server.url,
@@ -51,7 +51,7 @@ describe('Test plugins module unloading', function () {
   })
 
   it('Should return a different numeric value', async function () {
-    await server.pluginsCommand.install({ path: PluginsCommand.getPluginTestPath('-unloading') })
+    await server.plugins.install({ path: PluginsCommand.getPluginTestPath('-unloading') })
 
     const res = await makeGetRequest({
       url: server.url,

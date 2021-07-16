@@ -47,10 +47,10 @@ describe('Test video playlists API validator', function () {
     await setAccessTokensToServers([ server ])
     await setDefaultVideoChannel([ server ])
 
-    userAccessToken = await server.usersCommand.generateUserAndToken('user1')
-    videoId = (await server.videosCommand.quickUpload({ name: 'video 1' })).id
+    userAccessToken = await server.users.generateUserAndToken('user1')
+    videoId = (await server.videos.quickUpload({ name: 'video 1' })).id
 
-    command = server.playlistsCommand
+    command = server.playlists
 
     {
       const { data } = await command.listByAccount({
@@ -68,7 +68,7 @@ describe('Test video playlists API validator', function () {
         attributes: {
           displayName: 'super playlist',
           privacy: VideoPlaylistPrivacy.PUBLIC,
-          videoChannelId: server.videoChannel.id
+          videoChannelId: server.store.channel.id
         }
       })
     }
@@ -176,7 +176,7 @@ describe('Test video playlists API validator', function () {
       const playlist = await command.create({
         attributes: {
           displayName: 'super playlist',
-          videoChannelId: server.videoChannel.id,
+          videoChannelId: server.store.channel.id,
           privacy: VideoPlaylistPrivacy.UNLISTED
         }
       })
@@ -200,7 +200,7 @@ describe('Test video playlists API validator', function () {
           displayName: 'display name',
           privacy: VideoPlaylistPrivacy.UNLISTED,
           thumbnailfile: 'thumbnail.jpg',
-          videoChannelId: server.videoChannel.id,
+          videoChannelId: server.store.channel.id,
 
           ...attributes
         },
@@ -485,8 +485,8 @@ describe('Test video playlists API validator', function () {
     }
 
     before(async function () {
-      videoId3 = (await server.videosCommand.quickUpload({ name: 'video 3' })).id
-      videoId4 = (await server.videosCommand.quickUpload({ name: 'video 4' })).id
+      videoId3 = (await server.videos.quickUpload({ name: 'video 3' })).id
+      videoId4 = (await server.videos.quickUpload({ name: 'video 4' })).id
 
       for (const id of [ videoId3, videoId4 ]) {
         await command.addElement({ playlistId: playlist.shortUUID, attributes: { videoId: id } })

@@ -16,15 +16,15 @@ describe('Official plugin auth-ldap', function () {
     server = await flushAndRunServer(1)
     await setAccessTokensToServers([ server ])
 
-    await server.pluginsCommand.install({ npmName: 'peertube-plugin-auth-ldap' })
+    await server.plugins.install({ npmName: 'peertube-plugin-auth-ldap' })
   })
 
   it('Should not login with without LDAP settings', async function () {
-    await server.loginCommand.login({ user: { username: 'fry', password: 'fry' }, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    await server.login.login({ user: { username: 'fry', password: 'fry' }, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
   })
 
   it('Should not login with bad LDAP settings', async function () {
-    await server.pluginsCommand.updateSettings({
+    await server.plugins.updateSettings({
       npmName: 'peertube-plugin-auth-ldap',
       settings: {
         'bind-credentials': 'GoodNewsEveryone',
@@ -38,11 +38,11 @@ describe('Official plugin auth-ldap', function () {
       }
     })
 
-    await server.loginCommand.login({ user: { username: 'fry', password: 'fry' }, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    await server.login.login({ user: { username: 'fry', password: 'fry' }, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
   })
 
   it('Should not login with good LDAP settings but wrong username/password', async function () {
-    await server.pluginsCommand.updateSettings({
+    await server.plugins.updateSettings({
       npmName: 'peertube-plugin-auth-ldap',
       settings: {
         'bind-credentials': 'GoodNewsEveryone',
@@ -56,20 +56,20 @@ describe('Official plugin auth-ldap', function () {
       }
     })
 
-    await server.loginCommand.login({ user: { username: 'fry', password: 'bad password' }, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
-    await server.loginCommand.login({ user: { username: 'fryr', password: 'fry' }, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    await server.login.login({ user: { username: 'fry', password: 'bad password' }, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    await server.login.login({ user: { username: 'fryr', password: 'fry' }, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
   })
 
   it('Should login with the appropriate username/password', async function () {
-    accessToken = await server.loginCommand.getAccessToken({ username: 'fry', password: 'fry' })
+    accessToken = await server.login.getAccessToken({ username: 'fry', password: 'fry' })
   })
 
   it('Should login with the appropriate email/password', async function () {
-    accessToken = await server.loginCommand.getAccessToken({ username: 'fry@planetexpress.com', password: 'fry' })
+    accessToken = await server.login.getAccessToken({ username: 'fry@planetexpress.com', password: 'fry' })
   })
 
   it('Should login get my profile', async function () {
-    const body = await server.usersCommand.getMyInfo({ token: accessToken })
+    const body = await server.users.getMyInfo({ token: accessToken })
     expect(body.username).to.equal('fry')
     expect(body.email).to.equal('fry@planetexpress.com')
 
@@ -77,28 +77,28 @@ describe('Official plugin auth-ldap', function () {
   })
 
   it('Should upload a video', async function () {
-    await server.videosCommand.upload({ token: accessToken, attributes: { name: 'my super video' } })
+    await server.videos.upload({ token: accessToken, attributes: { name: 'my super video' } })
   })
 
   it('Should not be able to login if the user is banned', async function () {
-    await server.usersCommand.banUser({ userId })
+    await server.users.banUser({ userId })
 
-    await server.loginCommand.login({
+    await server.login.login({
       user: { username: 'fry@planetexpress.com', password: 'fry' },
       expectedStatus: HttpStatusCode.BAD_REQUEST_400
     })
   })
 
   it('Should be able to login if the user is unbanned', async function () {
-    await server.usersCommand.unbanUser({ userId })
+    await server.users.unbanUser({ userId })
 
-    await server.loginCommand.login({ user: { username: 'fry@planetexpress.com', password: 'fry' } })
+    await server.login.login({ user: { username: 'fry@planetexpress.com', password: 'fry' } })
   })
 
   it('Should not login if the plugin is uninstalled', async function () {
-    await server.pluginsCommand.uninstall({ npmName: 'peertube-plugin-auth-ldap' })
+    await server.plugins.uninstall({ npmName: 'peertube-plugin-auth-ldap' })
 
-    await server.loginCommand.login({
+    await server.login.login({
       user: { username: 'fry@planetexpress.com', password: 'fry' },
       expectedStatus: HttpStatusCode.BAD_REQUEST_400
     })

@@ -40,24 +40,24 @@ describe('Test videos search', function () {
         nsfw: false,
         language: 'fr'
       }
-      await server.videosCommand.upload({ attributes: attributes1 })
+      await server.videos.upload({ attributes: attributes1 })
 
       const attributes2 = { ...attributes1, name: attributes1.name + ' - 2', fixture: 'video_short.mp4' }
-      await server.videosCommand.upload({ attributes: attributes2 })
+      await server.videos.upload({ attributes: attributes2 })
 
       {
         const attributes3 = { ...attributes1, name: attributes1.name + ' - 3', language: undefined }
-        const { id, uuid } = await server.videosCommand.upload({ attributes: attributes3 })
+        const { id, uuid } = await server.videos.upload({ attributes: attributes3 })
         videoUUID = uuid
 
-        await server.captionsCommand.createVideoCaption({
+        await server.captions.createVideoCaption({
           language: 'en',
           videoId: id,
           fixture: 'subtitle-good2.vtt',
           mimeType: 'application/octet-stream'
         })
 
-        await server.captionsCommand.createVideoCaption({
+        await server.captions.createVideoCaption({
           language: 'aa',
           videoId: id,
           fixture: 'subtitle-good2.vtt',
@@ -66,23 +66,23 @@ describe('Test videos search', function () {
       }
 
       const attributes4 = { ...attributes1, name: attributes1.name + ' - 4', language: 'pl', nsfw: true }
-      await server.videosCommand.upload({ attributes: attributes4 })
+      await server.videos.upload({ attributes: attributes4 })
 
       await wait(1000)
 
       startDate = new Date().toISOString()
 
       const attributes5 = { ...attributes1, name: attributes1.name + ' - 5', licence: 2, language: undefined }
-      await server.videosCommand.upload({ attributes: attributes5 })
+      await server.videos.upload({ attributes: attributes5 })
 
       const attributes6 = { ...attributes1, name: attributes1.name + ' - 6', tags: [ 't1', 't2' ] }
-      await server.videosCommand.upload({ attributes: attributes6 })
+      await server.videos.upload({ attributes: attributes6 })
 
       const attributes7 = { ...attributes1, name: attributes1.name + ' - 7', originallyPublishedAt: '2019-02-12T09:58:08.286Z' }
-      await server.videosCommand.upload({ attributes: attributes7 })
+      await server.videos.upload({ attributes: attributes7 })
 
       const attributes8 = { ...attributes1, name: attributes1.name + ' - 8', licence: 4 }
-      await server.videosCommand.upload({ attributes: attributes8 })
+      await server.videos.upload({ attributes: attributes8 })
     }
 
     {
@@ -93,9 +93,9 @@ describe('Test videos search', function () {
         licence: 2,
         language: 'en'
       }
-      await server.videosCommand.upload({ attributes: attributes })
+      await server.videos.upload({ attributes: attributes })
 
-      await server.videosCommand.upload({ attributes: { ...attributes, name: attributes.name + ' duplicate' } })
+      await server.videos.upload({ attributes: { ...attributes, name: attributes.name + ' duplicate' } })
     }
 
     {
@@ -106,7 +106,7 @@ describe('Test videos search', function () {
         licence: 3,
         language: 'pl'
       }
-      await server.videosCommand.upload({ attributes: attributes })
+      await server.videos.upload({ attributes: attributes })
     }
 
     {
@@ -115,11 +115,11 @@ describe('Test videos search', function () {
         tags: [ 'aaaa', 'bbbb', 'cccc' ],
         category: 1
       }
-      await server.videosCommand.upload({ attributes: attributes1 })
-      await server.videosCommand.upload({ attributes: { ...attributes1, category: 2 } })
+      await server.videos.upload({ attributes: attributes1 })
+      await server.videos.upload({ attributes: { ...attributes1, category: 2 } })
 
-      await server.videosCommand.upload({ attributes: { ...attributes1, tags: [ 'cccc', 'dddd' ] } })
-      await server.videosCommand.upload({ attributes: { ...attributes1, tags: [ 'eeee', 'ffff' ] } })
+      await server.videos.upload({ attributes: { ...attributes1, tags: [ 'cccc', 'dddd' ] } })
+      await server.videos.upload({ attributes: { ...attributes1, tags: [ 'eeee', 'ffff' ] } })
     }
 
     {
@@ -127,11 +127,11 @@ describe('Test videos search', function () {
         name: 'aaaa 2',
         category: 1
       }
-      await server.videosCommand.upload({ attributes: attributes1 })
-      await server.videosCommand.upload({ attributes: { ...attributes1, category: 2 } })
+      await server.videos.upload({ attributes: attributes1 })
+      await server.videos.upload({ attributes: { ...attributes1, category: 2 } })
     }
 
-    command = server.searchCommand
+    command = server.search
   })
 
   it('Should make a simple search and not have results', async function () {
@@ -479,7 +479,7 @@ describe('Test videos search', function () {
         },
         live: { enabled: true }
       }
-      await server.configCommand.updateCustomSubConfig({ newConfig })
+      await server.config.updateCustomSubConfig({ newConfig })
     }
 
     {
@@ -490,9 +490,9 @@ describe('Test videos search', function () {
     }
 
     {
-      const liveCommand = server.liveCommand
+      const liveCommand = server.live
 
-      const liveAttributes = { name: 'live', privacy: VideoPrivacy.PUBLIC, channelId: server.videoChannel.id }
+      const liveAttributes = { name: 'live', privacy: VideoPrivacy.PUBLIC, channelId: server.store.channel.id }
       const live = await liveCommand.create({ fields: liveAttributes })
 
       const ffmpegCommand = await liveCommand.sendRTMPStreamInVideo({ videoId: live.id })

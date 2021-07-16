@@ -16,13 +16,13 @@ describe('Test plugin storage', function () {
     server = await flushAndRunServer(1)
     await setAccessTokensToServers([ server ])
 
-    await server.pluginsCommand.install({ path: PluginsCommand.getPluginTestPath('-six') })
+    await server.plugins.install({ path: PluginsCommand.getPluginTestPath('-six') })
   })
 
   describe('DB storage', function () {
 
     it('Should correctly store a subkey', async function () {
-      await server.serversCommand.waitUntilLog('superkey stored value is toto')
+      await server.servers.waitUntilLog('superkey stored value is toto')
     })
   })
 
@@ -38,12 +38,12 @@ describe('Test plugin storage', function () {
     }
 
     before(function () {
-      dataPath = server.serversCommand.buildDirectory('plugins/data')
+      dataPath = server.servers.buildDirectory('plugins/data')
       pluginDataPath = join(dataPath, 'peertube-plugin-test-six')
     })
 
     it('Should have created the directory on install', async function () {
-      const dataPath = server.serversCommand.buildDirectory('plugins/data')
+      const dataPath = server.servers.buildDirectory('plugins/data')
       const pluginDataPath = join(dataPath, 'peertube-plugin-test-six')
 
       expect(await pathExists(dataPath)).to.be.true
@@ -64,14 +64,14 @@ describe('Test plugin storage', function () {
     })
 
     it('Should still have the file after an uninstallation', async function () {
-      await server.pluginsCommand.uninstall({ npmName: 'peertube-plugin-test-six' })
+      await server.plugins.uninstall({ npmName: 'peertube-plugin-test-six' })
 
       const content = await getFileContent()
       expect(content).to.equal('Prince Ali')
     })
 
     it('Should still have the file after the reinstallation', async function () {
-      await server.pluginsCommand.install({ path: PluginsCommand.getPluginTestPath('-six') })
+      await server.plugins.install({ path: PluginsCommand.getPluginTestPath('-six') })
 
       const content = await getFileContent()
       expect(content).to.equal('Prince Ali')

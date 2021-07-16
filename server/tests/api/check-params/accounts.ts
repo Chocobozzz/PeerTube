@@ -40,7 +40,7 @@ describe('Test accounts API validators', function () {
   describe('When getting an account', function () {
 
     it('Should return 404 with a non existing name', async function () {
-      await server.accountsCommand.get({ accountName: 'arfaze', expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+      await server.accounts.get({ accountName: 'arfaze', expectedStatus: HttpStatusCode.NOT_FOUND_404 })
     })
   })
 

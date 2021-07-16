@@ -42,7 +42,7 @@ describe('Test users account verification', function () {
   it('Should register user and send verification email if verification required', async function () {
     this.timeout(30000)
 
-    await server.configCommand.updateCustomSubConfig({
+    await server.config.updateCustomSubConfig({
       newConfig: {
         signup: {
           enabled: true,
@@ -52,7 +52,7 @@ describe('Test users account verification', function () {
       }
     })
 
-    await server.usersCommand.register(user1)
+    await server.users.register(user1)
 
     await waitJobs(server)
     expectedEmailsLength++
@@ -71,22 +71,22 @@ describe('Test users account verification', function () {
 
     userId = parseInt(userIdMatches[1], 10)
 
-    const body = await server.usersCommand.get({ userId })
+    const body = await server.users.get({ userId })
     expect(body.emailVerified).to.be.false
   })
 
   it('Should not allow login for user with unverified email', async function () {
-    const { detail } = await server.loginCommand.login({ user: user1, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    const { detail } = await server.login.login({ user: user1, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     expect(detail).to.contain('User email is not verified.')
   })
 
   it('Should verify the user via email and allow login', async function () {
-    await server.usersCommand.verifyEmail({ userId, verificationString })
+    await server.users.verifyEmail({ userId, verificationString })
 
-    const body = await server.loginCommand.login({ user: user1 })
+    const body = await server.login.login({ user: user1 })
     userAccessToken = body.access_token
 
-    const user = await server.usersCommand.get({ userId })
+    const user = await server.users.get({ userId })
     expect(user.emailVerified).to.be.true
   })
 
@@ -96,7 +96,7 @@ describe('Test users account verification', function () {
     let updateVerificationString: string
 
     {
-      await server.usersCommand.updateMe({
+      await server.users.updateMe({
         token: userAccessToken,
         email: 'updated@example.com',
         currentPassword: user1.password
@@ -113,15 +113,15 @@ describe('Test users account verification', function () {
     }
 
     {
-      const me = await server.usersCommand.getMyInfo({ token: userAccessToken })
+      const me = await server.users.getMyInfo({ token: userAccessToken })
       expect(me.email).to.equal('user_1@example.com')
       expect(me.pendingEmail).to.equal('updated@example.com')
     }
 
     {
-      await server.usersCommand.verifyEmail({ userId, verificationString: updateVerificationString, isPendingEmail: true })
+      await server.users.verifyEmail({ userId, verificationString: updateVerificationString, isPendingEmail: true })
 
-      const me = await server.usersCommand.getMyInfo({ token: userAccessToken })
+      const me = await server.users.getMyInfo({ token: userAccessToken })
       expect(me.email).to.equal('updated@example.com')
       expect(me.pendingEmail).to.be.null
     }
@@ -129,7 +129,7 @@ describe('Test users account verification', function () {
 
   it('Should register user not requiring email verification if setting not enabled', async function () {
     this.timeout(5000)
-    await server.configCommand.updateCustomSubConfig({
+    await server.config.updateCustomSubConfig({
       newConfig: {
         signup: {
           enabled: true,
@@ -139,19 +139,19 @@ describe('Test users account verification', function () {
       }
     })
 
-    await server.usersCommand.register(user2)
+    await server.users.register(user2)
 
     await waitJobs(server)
     expect(emails).to.have.lengthOf(expectedEmailsLength)
 
-    const accessToken = await server.loginCommand.getAccessToken(user2)
+    const accessToken = await server.login.getAccessToken(user2)
 
-    const user = await server.usersCommand.getMyInfo({ token: accessToken })
+    const user = await server.users.getMyInfo({ token: accessToken })
     expect(user.emailVerified).to.be.null
   })
 
   it('Should allow login for user with unverified email when setting later enabled', async function () {
-    await server.configCommand.updateCustomSubConfig({
+    await server.config.updateCustomSubConfig({
       newConfig: {
         signup: {
           enabled: true,
@@ -161,7 +161,7 @@ describe('Test users account verification', function () {
       }
     })
 
-    await server.loginCommand.getAccessToken(user2)
+    await server.login.getAccessToken(user2)
   })
 
   after(async function () {

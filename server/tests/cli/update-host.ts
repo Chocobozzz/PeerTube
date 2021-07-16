@@ -30,11 +30,11 @@ describe('Test update host scripts', function () {
     await setAccessTokensToServers([ server ])
 
     // Upload two videos for our needs
-    const { uuid: video1UUID } = await server.videosCommand.upload()
-    await server.videosCommand.upload()
+    const { uuid: video1UUID } = await server.videos.upload()
+    await server.videos.upload()
 
     // Create a user
-    await server.usersCommand.create({ username: 'toto', password: 'coucou' })
+    await server.users.create({ username: 'toto', password: 'coucou' })
 
     // Create channel
     const videoChannel = {
@@ -42,11 +42,11 @@ describe('Test update host scripts', function () {
       displayName: 'second video channel',
       description: 'super video channel description'
     }
-    await server.channelsCommand.create({ attributes: videoChannel })
+    await server.channels.create({ attributes: videoChannel })
 
     // Create comments
     const text = 'my super first comment'
-    await server.commentsCommand.createThread({ videoId: video1UUID, text })
+    await server.comments.createThread({ videoId: video1UUID, text })
 
     await waitJobs(server)
   })
@@ -58,11 +58,11 @@ describe('Test update host scripts', function () {
     // Run server with standard configuration
     await reRunServer(server)
 
-    await server.cliCommand.execWithEnv(`npm run update-host`)
+    await server.cli.execWithEnv(`npm run update-host`)
   })
 
   it('Should have updated videos url', async function () {
-    const { total, data } = await server.videosCommand.list()
+    const { total, data } = await server.videos.list()
     expect(total).to.equal(2)
 
     for (const video of data) {
@@ -70,7 +70,7 @@ describe('Test update host scripts', function () {
 
       expect(body.id).to.equal('http://localhost:9002/videos/watch/' + video.uuid)
 
-      const videoDetails = await server.videosCommand.get({ id: video.uuid })
+      const videoDetails = await server.videos.get({ id: video.uuid })
 
       expect(videoDetails.trackerUrls[0]).to.include(server.host)
       expect(videoDetails.streamingPlaylists[0].playlistUrl).to.include(server.host)
@@ -79,7 +79,7 @@ describe('Test update host scripts', function () {
   })
 
   it('Should have updated video channels url', async function () {
-    const { data, total } = await server.channelsCommand.list({ sort: '-name' })
+    const { data, total } = await server.channels.list({ sort: '-name' })
     expect(total).to.equal(3)
 
     for (const channel of data) {
@@ -90,7 +90,7 @@ describe('Test update host scripts', function () {
   })
 
   it('Should have updated accounts url', async function () {
-    const body = await server.accountsCommand.list()
+    const body = await server.accounts.list()
     expect(body.total).to.equal(3)
 
     for (const account of body.data) {
@@ -104,11 +104,11 @@ describe('Test update host scripts', function () {
   it('Should have updated torrent hosts', async function () {
     this.timeout(30000)
 
-    const { data } = await server.videosCommand.list()
+    const { data } = await server.videos.list()
     expect(data).to.have.lengthOf(2)
 
     for (const video of data) {
-      const videoDetails = await server.videosCommand.get({ id: video.id })
+      const videoDetails = await server.videos.get({ id: video.id })
 
       expect(videoDetails.files).to.have.lengthOf(4)
 

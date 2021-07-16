@@ -184,7 +184,7 @@ export class PlaylistsCommand extends AbstractCommand {
     const attributes = {
       ...options.attributes,
 
-      videoId: await this.server.videosCommand.getId({ ...options, uuid: options.attributes.videoId })
+      videoId: await this.server.videos.getId({ ...options, uuid: options.attributes.videoId })
     }
 
     const path = '/api/v1/video-playlists/' + options.playlistId + '/videos'

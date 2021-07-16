@@ -19,7 +19,7 @@ describe('Test plugin action hooks', function () {
   let threadId: number
 
   function checkHook (hook: ServerHookName) {
-    return servers[0].serversCommand.waitUntilLog('Run hook ' + hook)
+    return servers[0].servers.waitUntilLog('Run hook ' + hook)
   }
 
   before(async function () {
@@ -29,7 +29,7 @@ describe('Test plugin action hooks', function () {
     await setAccessTokensToServers(servers)
     await setDefaultVideoChannel(servers)
 
-    await servers[0].pluginsCommand.install({ path: PluginsCommand.getPluginTestPath() })
+    await servers[0].plugins.install({ path: PluginsCommand.getPluginTestPath() })
 
     await killallServers([ servers[0] ])
 
@@ -49,20 +49,20 @@ describe('Test plugin action hooks', function () {
   describe('Videos hooks', function () {
 
     it('Should run action:api.video.uploaded', async function () {
-      const { uuid } = await servers[0].videosCommand.upload({ attributes: { name: 'video' } })
+      const { uuid } = await servers[0].videos.upload({ attributes: { name: 'video' } })
       videoUUID = uuid
 
       await checkHook('action:api.video.uploaded')
     })
 
     it('Should run action:api.video.updated', async function () {
-      await servers[0].videosCommand.update({ id: videoUUID, attributes: { name: 'video updated' } })
+      await servers[0].videos.update({ id: videoUUID, attributes: { name: 'video updated' } })
 
       await checkHook('action:api.video.updated')
     })
 
     it('Should run action:api.video.viewed', async function () {
-      await servers[0].videosCommand.view({ id: videoUUID })
+      await servers[0].videos.view({ id: videoUUID })
 
       await checkHook('action:api.video.viewed')
     })
@@ -74,10 +74,10 @@ describe('Test plugin action hooks', function () {
       const attributes = {
         name: 'live',
         privacy: VideoPrivacy.PUBLIC,
-        channelId: servers[0].videoChannel.id
+        channelId: servers[0].store.channel.id
       }
 
-      await servers[0].liveCommand.create({ fields: attributes })
+      await servers[0].live.create({ fields: attributes })
 
       await checkHook('action:api.live-video.created')
     })
@@ -85,20 +85,20 @@ describe('Test plugin action hooks', function () {
 
   describe('Comments hooks', function () {
     it('Should run action:api.video-thread.created', async function () {
-      const created = await servers[0].commentsCommand.createThread({ videoId: videoUUID, text: 'thread' })
+      const created = await servers[0].comments.createThread({ videoId: videoUUID, text: 'thread' })
       threadId = created.id
 
       await checkHook('action:api.video-thread.created')
     })
 
     it('Should run action:api.video-comment-reply.created', async function () {
-      await servers[0].commentsCommand.addReply({ videoId: videoUUID, toCommentId: threadId, text: 'reply' })
+      await servers[0].comments.addReply({ videoId: videoUUID, toCommentId: threadId, text: 'reply' })
 
       await checkHook('action:api.video-comment-reply.created')
     })
 
     it('Should run action:api.video-comment.deleted', async function () {
-      await servers[0].commentsCommand.delete({ videoId: videoUUID, commentId: threadId })
+      await servers[0].comments.delete({ videoId: videoUUID, commentId: threadId })
 
       await checkHook('action:api.video-comment.deleted')
     })
@@ -108,44 +108,44 @@ describe('Test plugin action hooks', function () {
     let userId: number
 
     it('Should run action:api.user.registered', async function () {
-      await servers[0].usersCommand.register({ username: 'registered_user' })
+      await servers[0].users.register({ username: 'registered_user' })
 
       await checkHook('action:api.user.registered')
     })
 
     it('Should run action:api.user.created', async function () {
-      const user = await servers[0].usersCommand.create({ username: 'created_user' })
+      const user = await servers[0].users.create({ username: 'created_user' })
       userId = user.id
 
       await checkHook('action:api.user.created')
     })
 
     it('Should run action:api.user.oauth2-got-token', async function () {
-      await servers[0].loginCommand.getAccessToken('created_user', 'super_password')
+      await servers[0].login.getAccessToken('created_user', 'super_password')
 
       await checkHook('action:api.user.oauth2-got-token')
     })
 
     it('Should run action:api.user.blocked', async function () {
-      await servers[0].usersCommand.banUser({ userId })
+      await servers[0].users.banUser({ userId })
 
       await checkHook('action:api.user.blocked')
     })
 
     it('Should run action:api.user.unblocked', async function () {
-      await servers[0].usersCommand.unbanUser({ userId })
+      await servers[0].users.unbanUser({ userId })
 
       await checkHook('action:api.user.unblocked')
     })
 
     it('Should run action:api.user.updated', async function () {
-      await servers[0].usersCommand.update({ userId, videoQuota: 50 })
+      await servers[0].users.update({ userId, videoQuota: 50 })
 
       await checkHook('action:api.user.updated')
     })
 
     it('Should run action:api.user.deleted', async function () {
-      await servers[0].usersCommand.remove({ userId })
+      await servers[0].users.remove({ userId })
 
       await checkHook('action:api.user.deleted')
     })
@@ -157,7 +157,7 @@ describe('Test plugin action hooks', function () {
 
     before(async function () {
       {
-        const { id } = await servers[0].playlistsCommand.create({
+        const { id } = await servers[0].playlists.create({
           attributes: {
             displayName: 'My playlist',
             privacy: VideoPlaylistPrivacy.PRIVATE
@@ -167,13 +167,13 @@ describe('Test plugin action hooks', function () {
       }
 
       {
-        const { id } = await servers[0].videosCommand.upload({ attributes: { name: 'my super name' } })
+        const { id } = await servers[0].videos.upload({ attributes: { name: 'my super name' } })
         videoId = id
       }
     })
 
     it('Should run action:api.video-playlist-element.created', async function () {
-      await servers[0].playlistsCommand.addElement({ playlistId, attributes: { videoId } })
+      await servers[0].playlists.addElement({ playlistId, attributes: { videoId } })
 
       await checkHook('action:api.video-playlist-element.created')
     })

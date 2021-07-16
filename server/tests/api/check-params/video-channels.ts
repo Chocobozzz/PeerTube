@@ -44,11 +44,11 @@ describe('Test video channels API validator', function () {
     }
 
     {
-      await server.usersCommand.create({ username: user.username, password: user.password })
-      accessTokenUser = await server.loginCommand.getAccessToken(user)
+      await server.users.create({ username: user.username, password: user.password })
+      accessTokenUser = await server.login.getAccessToken(user)
     }
 
-    command = server.channelsCommand
+    command = server.channels
   })
 
   describe('When listing a video channels', function () {
@@ -81,7 +81,7 @@ describe('Test video channels API validator', function () {
     })
 
     it('Should fail with a unknown account', async function () {
-      await server.channelsCommand.listByAccount({ accountName: 'unknown', expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+      await server.channels.listByAccount({ accountName: 'unknown', expectedStatus: HttpStatusCode.NOT_FOUND_404 })
     })
 
     it('Should succeed with the correct parameters', async function () {

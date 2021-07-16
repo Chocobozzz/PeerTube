@@ -30,16 +30,16 @@ describe('Test CLI wrapper', function () {
     server = await flushAndRunServer(1)
     await setAccessTokensToServers([ server ])
 
-    await server.usersCommand.create({ username: 'user_1', password: 'super_password' })
+    await server.users.create({ username: 'user_1', password: 'super_password' })
 
-    userAccessToken = await server.loginCommand.getAccessToken({ username: 'user_1', password: 'super_password' })
+    userAccessToken = await server.login.getAccessToken({ username: 'user_1', password: 'super_password' })
 
     {
       const attributes = { name: 'user_channel', displayName: 'User channel', support: 'super support text' }
-      await server.channelsCommand.create({ token: userAccessToken, attributes })
+      await server.channels.create({ token: userAccessToken, attributes })
     }
 
-    cliCommand = server.cliCommand
+    cliCommand = server.cli
   })
 
   describe('Authentication and instance selection', function () {
@@ -48,7 +48,7 @@ describe('Test CLI wrapper', function () {
       const stdout = await cliCommand.execWithEnv(`${cmd} token --url ${server.url} --username user_1 --password super_password`)
       const token = stdout.trim()
 
-      const body = await server.usersCommand.getMyInfo({ token })
+      const body = await server.users.getMyInfo({ token })
       expect(body.username).to.equal('user_1')
     })
 
@@ -103,10 +103,10 @@ describe('Test CLI wrapper', function () {
     })
 
     it('Should have the video uploaded', async function () {
-      const { total, data } = await server.videosCommand.list()
+      const { total, data } = await server.videos.list()
       expect(total).to.equal(1)
 
-      const video = await server.videosCommand.get({ id: data[0].uuid })
+      const video = await server.videos.get({ id: data[0].uuid })
       expect(video.name).to.equal('test upload')
       expect(video.support).to.equal('support_text')
       expect(video.channel.name).to.equal('user_channel')
@@ -128,19 +128,19 @@ describe('Test CLI wrapper', function () {
 
       await waitJobs([ server ])
 
-      const { total, data } = await server.videosCommand.list()
+      const { total, data } = await server.videos.list()
       expect(total).to.equal(2)
 
       const video = data.find(v => v.name === 'small video - youtube')
       expect(video).to.not.be.undefined
 
-      const videoDetails = await server.videosCommand.get({ id: video.id })
+      const videoDetails = await server.videos.get({ id: video.id })
       expect(videoDetails.channel.name).to.equal('user_channel')
       expect(videoDetails.support).to.equal('super support text')
       expect(videoDetails.nsfw).to.be.false
 
       // So we can reimport it
-      await server.videosCommand.remove({ token: userAccessToken, id: video.id })
+      await server.videos.remove({ token: userAccessToken, id: video.id })
     })
 
     it('Should import and override some imported attributes', async function () {
@@ -155,13 +155,13 @@ describe('Test CLI wrapper', function () {
       await waitJobs([ server ])
 
       {
-        const { total, data } = await server.videosCommand.list()
+        const { total, data } = await server.videos.list()
         expect(total).to.equal(2)
 
         const video = data.find(v => v.name === 'toto')
         expect(video).to.not.be.undefined
 
-        const videoDetails = await server.videosCommand.get({ id: video.id })
+        const videoDetails = await server.videos.get({ id: video.id })
         expect(videoDetails.channel.name).to.equal('user_channel')
         expect(videoDetails.support).to.equal('support')
         expect(videoDetails.nsfw).to.be.true
@@ -225,10 +225,10 @@ describe('Test CLI wrapper', function () {
       servers = [ server, anotherServer ]
       await waitJobs(servers)
 
-      const { uuid } = await anotherServer.videosCommand.quickUpload({ name: 'super video' })
+      const { uuid } = await anotherServer.videos.quickUpload({ name: 'super video' })
       await waitJobs(servers)
 
-      video1Server2 = await server.videosCommand.getId({ uuid })
+      video1Server2 = await server.videos.getId({ uuid })
     })
 
     it('Should add a redundancy', async function () {

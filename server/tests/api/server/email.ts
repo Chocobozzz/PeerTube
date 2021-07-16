@@ -43,15 +43,15 @@ describe('Test emails', function () {
     await setAccessTokensToServers([ server ])
 
     {
-      const created = await server.usersCommand.create({ username: user.username, password: user.password })
+      const created = await server.users.create({ username: user.username, password: user.password })
       userId = created.id
 
-      userAccessToken = await server.loginCommand.getAccessToken(user)
+      userAccessToken = await server.login.getAccessToken(user)
     }
 
     {
       const attributes = { name: 'my super user video' }
-      const { uuid } = await server.videosCommand.upload({ token: userAccessToken, attributes })
+      const { uuid } = await server.videos.upload({ token: userAccessToken, attributes })
       videoUserUUID = uuid
     }
 
@@ -59,7 +59,7 @@ describe('Test emails', function () {
       const attributes = {
         name: 'my super name'
       }
-      const { uuid, id } = await server.videosCommand.upload({ attributes })
+      const { uuid, id } = await server.videos.upload({ attributes })
       videoUUID = uuid
       videoId = id
     }
@@ -70,7 +70,7 @@ describe('Test emails', function () {
     it('Should ask to reset the password', async function () {
       this.timeout(10000)
 
-      await server.usersCommand.askResetPassword({ email: 'user_1@example.com' })
+      await server.users.askResetPassword({ email: 'user_1@example.com' })
 
       await waitJobs(server)
       expect(emails).to.have.lengthOf(1)
@@ -96,7 +96,7 @@ describe('Test emails', function () {
     })
 
     it('Should not reset the password with an invalid verification string', async function () {
-      await server.usersCommand.resetPassword({
+      await server.users.resetPassword({
         userId,
         verificationString: verificationString + 'b',
         password: 'super_password2',
@@ -105,11 +105,11 @@ describe('Test emails', function () {
     })
 
     it('Should reset the password', async function () {
-      await server.usersCommand.resetPassword({ userId, verificationString, password: 'super_password2' })
+      await server.users.resetPassword({ userId, verificationString, password: 'super_password2' })
     })
 
     it('Should not reset the password with the same verification string', async function () {
-      await server.usersCommand.resetPassword({
+      await server.users.resetPassword({
         userId,
         verificationString,
         password: 'super_password3',
@@ -120,7 +120,7 @@ describe('Test emails', function () {
     it('Should login with this new password', async function () {
       user.password = 'super_password2'
 
-      await server.loginCommand.getAccessToken(user)
+      await server.login.getAccessToken(user)
     })
   })
 
@@ -129,7 +129,7 @@ describe('Test emails', function () {
     it('Should send a create password email', async function () {
       this.timeout(10000)
 
-      await server.usersCommand.create({ username: 'create_password', password: '' })
+      await server.users.create({ username: 'create_password', password: '' })
 
       await waitJobs(server)
       expect(emails).to.have.lengthOf(2)
@@ -155,7 +155,7 @@ describe('Test emails', function () {
     })
 
     it('Should not reset the password with an invalid verification string', async function () {
-      await server.usersCommand.resetPassword({
+      await server.users.resetPassword({
         userId: userId2,
         verificationString: verificationString2 + 'c',
         password: 'newly_created_password',
@@ -164,7 +164,7 @@ describe('Test emails', function () {
     })
 
     it('Should reset the password', async function () {
-      await server.usersCommand.resetPassword({
+      await server.users.resetPassword({
         userId: userId2,
         verificationString: verificationString2,
         password: 'newly_created_password'
@@ -172,7 +172,7 @@ describe('Test emails', function () {
     })
 
     it('Should login with this new password', async function () {
-      await server.loginCommand.getAccessToken({
+      await server.login.getAccessToken({
         username: 'create_password',
         password: 'newly_created_password'
       })
@@ -184,7 +184,7 @@ describe('Test emails', function () {
       this.timeout(10000)
 
       const reason = 'my super bad reason'
-      await server.abusesCommand.report({ videoId, reason })
+      await server.abuses.report({ videoId, reason })
 
       await waitJobs(server)
       expect(emails).to.have.lengthOf(3)
@@ -205,7 +205,7 @@ describe('Test emails', function () {
       this.timeout(10000)
 
       const reason = 'my super bad reason'
-      await server.usersCommand.banUser({ userId, reason })
+      await server.users.banUser({ userId, reason })
 
       await waitJobs(server)
       expect(emails).to.have.lengthOf(4)
@@ -223,7 +223,7 @@ describe('Test emails', function () {
     it('Should send the notification email when unblocking a user', async function () {
       this.timeout(10000)
 
-      await server.usersCommand.unbanUser({ userId })
+      await server.users.unbanUser({ userId })
 
       await waitJobs(server)
       expect(emails).to.have.lengthOf(5)
@@ -243,7 +243,7 @@ describe('Test emails', function () {
       this.timeout(10000)
 
       const reason = 'my super reason'
-      await server.blacklistCommand.add({ videoId: videoUserUUID, reason })
+      await server.blacklist.add({ videoId: videoUserUUID, reason })
 
       await waitJobs(server)
       expect(emails).to.have.lengthOf(6)
@@ -261,7 +261,7 @@ describe('Test emails', function () {
     it('Should send the notification email', async function () {
       this.timeout(10000)
 
-      await server.blacklistCommand.remove({ videoId: videoUserUUID })
+      await server.blacklist.remove({ videoId: videoUserUUID })
 
       await waitJobs(server)
       expect(emails).to.have.lengthOf(7)
@@ -286,7 +286,7 @@ describe('Test emails', function () {
     it('Should ask to send the verification email', async function () {
       this.timeout(10000)
 
-      await server.usersCommand.askSendVerifyEmail({ email: 'user_1@example.com' })
+      await server.users.askSendVerifyEmail({ email: 'user_1@example.com' })
 
       await waitJobs(server)
       expect(emails).to.have.lengthOf(8)
@@ -312,7 +312,7 @@ describe('Test emails', function () {
     })
 
     it('Should not verify the email with an invalid verification string', async function () {
-      await server.usersCommand.verifyEmail({
+      await server.users.verifyEmail({
         userId,
         verificationString: verificationString + 'b',
         isPendingEmail: false,
@@ -321,7 +321,7 @@ describe('Test emails', function () {
     })
 
     it('Should verify the email', async function () {
-      await server.usersCommand.verifyEmail({ userId, verificationString })
+      await server.users.verifyEmail({ userId, verificationString })
     })
   })
 

@@ -15,8 +15,8 @@ const expect = chai.expect
 
 async function checkServer1And2HasFollowers (servers: ServerInfo[], state = 'accepted') {
   const fns = [
-    servers[0].followsCommand.getFollowings.bind(servers[0].followsCommand),
-    servers[1].followsCommand.getFollowers.bind(servers[1].followsCommand)
+    servers[0].follows.getFollowings.bind(servers[0].follows),
+    servers[1].follows.getFollowers.bind(servers[1].follows)
   ]
 
   for (const fn of fns) {
@@ -32,8 +32,8 @@ async function checkServer1And2HasFollowers (servers: ServerInfo[], state = 'acc
 
 async function checkNoFollowers (servers: ServerInfo[]) {
   const fns = [
-    servers[0].followsCommand.getFollowings.bind(servers[0].followsCommand),
-    servers[1].followsCommand.getFollowers.bind(servers[1].followsCommand)
+    servers[0].follows.getFollowings.bind(servers[0].follows),
+    servers[1].follows.getFollowers.bind(servers[1].follows)
   ]
 
   for (const fn of fns) {
@@ -54,7 +54,7 @@ describe('Test follows moderation', function () {
     // Get the access tokens
     await setAccessTokensToServers(servers)
 
-    commands = servers.map(s => s.followsCommand)
+    commands = servers.map(s => s.follows)
   })
 
   it('Should have server 1 following server 2', async function () {
@@ -93,7 +93,7 @@ describe('Test follows moderation', function () {
       }
     }
 
-    await servers[1].configCommand.updateCustomSubConfig({ newConfig: subConfig })
+    await servers[1].config.updateCustomSubConfig({ newConfig: subConfig })
 
     await commands[0].follow({ targets: [ servers[1].url ] })
     await waitJobs(servers)
@@ -113,7 +113,7 @@ describe('Test follows moderation', function () {
       }
     }
 
-    await servers[1].configCommand.updateCustomSubConfig({ newConfig: subConfig })
+    await servers[1].config.updateCustomSubConfig({ newConfig: subConfig })
 
     await commands[0].follow({ targets: [ servers[1].url ] })
     await waitJobs(servers)
@@ -136,8 +136,8 @@ describe('Test follows moderation', function () {
       }
     }
 
-    await servers[1].configCommand.updateCustomSubConfig({ newConfig: subConfig })
-    await servers[2].configCommand.updateCustomSubConfig({ newConfig: subConfig })
+    await servers[1].config.updateCustomSubConfig({ newConfig: subConfig })
+    await servers[2].config.updateCustomSubConfig({ newConfig: subConfig })
 
     await commands[0].follow({ targets: [ servers[1].url ] })
     await waitJobs(servers)

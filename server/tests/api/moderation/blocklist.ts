@@ -18,24 +18,24 @@ const expect = chai.expect
 
 async function checkAllVideos (server: ServerInfo, token: string) {
   {
-    const { data } = await server.videosCommand.listWithToken({ token })
+    const { data } = await server.videos.listWithToken({ token })
     expect(data).to.have.lengthOf(5)
   }
 
   {
-    const { data } = await server.videosCommand.list()
+    const { data } = await server.videos.list()
     expect(data).to.have.lengthOf(5)
   }
 }
 
 async function checkAllComments (server: ServerInfo, token: string, videoUUID: string) {
-  const { data } = await server.commentsCommand.listThreads({ videoId: videoUUID, start: 0, count: 25, sort: '-createdAt', token })
+  const { data } = await server.comments.listThreads({ videoId: videoUUID, start: 0, count: 25, sort: '-createdAt', token })
 
   const threads = data.filter(t => t.isDeleted === false)
   expect(threads).to.have.lengthOf(2)
 
   for (const thread of threads) {
-    const tree = await server.commentsCommand.getThread({ videoId: videoUUID, threadId: thread.id, token })
+    const tree = await server.comments.getThread({ videoId: videoUUID, threadId: thread.id, token })
     expect(tree.children).to.have.lengthOf(1)
   }
 }
@@ -45,13 +45,13 @@ async function checkCommentNotification (
   comment: { server: ServerInfo, token: string, videoUUID: string, text: string },
   check: 'presence' | 'absence'
 ) {
-  const command = comment.server.commentsCommand
+  const command = comment.server.comments
 
   const { threadId, createdAt } = await command.createThread({ token: comment.token, videoId: comment.videoUUID, text: comment.text })
 
   await waitJobs([ mainServer, comment.server ])
 
-  const { data } = await mainServer.notificationsCommand.list({ start: 0, count: 30 })
+  const { data } = await mainServer.notifications.list({ start: 0, count: 30 })
   const commentNotifications = data.filter(n => n.comment && n.comment.video.uuid === comment.videoUUID && n.createdAt >= createdAt)
 
   if (check === 'presence') expect(commentNotifications).to.have.lengthOf(1)
@@ -80,44 +80,44 @@ describe('Test blocklist', function () {
     servers = await flushAndRunMultipleServers(3)
     await setAccessTokensToServers(servers)
 
-    command = servers[0].blocklistCommand
-    commentsCommand = servers.map(s => s.commentsCommand)
+    command = servers[0].blocklist
+    commentsCommand = servers.map(s => s.comments)
 
     {
       const user = { username: 'user1', password: 'password' }
-      await servers[0].usersCommand.create({ username: user.username, password: user.password })
+      await servers[0].users.create({ username: user.username, password: user.password })
 
-      userToken1 = await servers[0].loginCommand.getAccessToken(user)
-      await servers[0].videosCommand.upload({ token: userToken1, attributes: { name: 'video user 1' } })
+      userToken1 = await servers[0].login.getAccessToken(user)
+      await servers[0].videos.upload({ token: userToken1, attributes: { name: 'video user 1' } })
     }
 
     {
       const user = { username: 'moderator', password: 'password' }
-      await servers[0].usersCommand.create({ username: user.username, password: user.password })
+      await servers[0].users.create({ username: user.username, password: user.password })
 
-      userModeratorToken = await servers[0].loginCommand.getAccessToken(user)
+      userModeratorToken = await servers[0].login.getAccessToken(user)
     }
 
     {
       const user = { username: 'user2', password: 'password' }
-      await servers[1].usersCommand.create({ username: user.username, password: user.password })
+      await servers[1].users.create({ username: user.username, password: user.password })
 
-      userToken2 = await servers[1].loginCommand.getAccessToken(user)
-      await servers[1].videosCommand.upload({ token: userToken2, attributes: { name: 'video user 2' } })
+      userToken2 = await servers[1].login.getAccessToken(user)
+      await servers[1].videos.upload({ token: userToken2, attributes: { name: 'video user 2' } })
     }
 
     {
-      const { uuid } = await servers[0].videosCommand.upload({ attributes: { name: 'video server 1' } })
+      const { uuid } = await servers[0].videos.upload({ attributes: { name: 'video server 1' } })
       videoUUID1 = uuid
     }
 
     {
-      const { uuid } = await servers[1].videosCommand.upload({ attributes: { name: 'video server 2' } })
+      const { uuid } = await servers[1].videos.upload({ attributes: { name: 'video server 2' } })
       videoUUID2 = uuid
     }
 
     {
-      const { uuid } = await servers[0].videosCommand.upload({ attributes: { name: 'video 2 server 1' } })
+      const { uuid } = await servers[0].videos.upload({ attributes: { name: 'video 2 server 1' } })
       videoUUID3 = uuid
     }
 
@@ -159,7 +159,7 @@ describe('Test blocklist', function () {
       })
 
       it('Should hide its videos', async function () {
-        const { data } = await servers[0].videosCommand.listWithToken()
+        const { data } = await servers[0].videos.listWithToken()
 
         expect(data).to.have.lengthOf(4)
 
@@ -172,7 +172,7 @@ describe('Test blocklist', function () {
       })
 
       it('Should hide its videos', async function () {
-        const { data } = await servers[0].videosCommand.listWithToken()
+        const { data } = await servers[0].videos.listWithToken()
 
         expect(data).to.have.lengthOf(3)
 
@@ -289,12 +289,12 @@ describe('Test blocklist', function () {
 
         // Server 1 and 3 should only have uploader comments
         for (const server of [ servers[0], servers[2] ]) {
-          const { data } = await server.commentsCommand.listThreads({ videoId: videoUUID3, count: 25, sort: '-createdAt' })
+          const { data } = await server.comments.listThreads({ videoId: videoUUID3, count: 25, sort: '-createdAt' })
 
           expect(data).to.have.lengthOf(1)
           expect(data[0].text).to.equal('uploader')
 
-          const tree = await server.commentsCommand.getThread({ videoId: videoUUID3, threadId: data[0].id })
+          const tree = await server.comments.getThread({ videoId: videoUUID3, threadId: data[0].id })
 
           if (server.serverNumber === 1) expect(tree.children).to.have.lengthOf(0)
           else expect(tree.children).to.have.lengthOf(1)
@@ -306,7 +306,7 @@ describe('Test blocklist', function () {
       })
 
       it('Should display its videos', async function () {
-        const { data } = await servers[0].videosCommand.listWithToken()
+        const { data } = await servers[0].videos.listWithToken()
         expect(data).to.have.lengthOf(4)
 
         const v = data.find(v => v.name === 'video user 2')
@@ -315,7 +315,7 @@ describe('Test blocklist', function () {
 
       it('Should display its comments on my video', async function () {
         for (const server of servers) {
-          const { data } = await server.commentsCommand.listThreads({ videoId: videoUUID3, count: 25, sort: '-createdAt' })
+          const { data } = await server.comments.listThreads({ videoId: videoUUID3, count: 25, sort: '-createdAt' })
 
           // Server 3 should not have 2 comment threads, because server 1 did not forward the server 2 comment
           if (server.serverNumber === 3) {
@@ -327,7 +327,7 @@ describe('Test blocklist', function () {
           expect(data[0].text).to.equal('uploader')
           expect(data[1].text).to.equal('comment user 2')
 
-          const tree = await server.commentsCommand.getThread({ videoId: videoUUID3, threadId: data[0].id })
+          const tree = await server.comments.getThread({ videoId: videoUUID3, threadId: data[0].id })
           expect(tree.children).to.have.lengthOf(1)
           expect(tree.children[0].comment.text).to.equal('reply by user 2')
           expect(tree.children[0].children).to.have.lengthOf(1)
@@ -378,7 +378,7 @@ describe('Test blocklist', function () {
       })
 
       it('Should hide its videos', async function () {
-        const { data } = await servers[0].videosCommand.listWithToken()
+        const { data } = await servers[0].videos.listWithToken()
 
         expect(data).to.have.lengthOf(3)
 
@@ -488,7 +488,7 @@ describe('Test blocklist', function () {
 
       it('Should hide its videos', async function () {
         for (const token of [ userModeratorToken, servers[0].accessToken ]) {
-          const { data } = await servers[0].videosCommand.listWithToken({ token })
+          const { data } = await servers[0].videos.listWithToken({ token })
 
           expect(data).to.have.lengthOf(4)
 
@@ -503,7 +503,7 @@ describe('Test blocklist', function () {
 
       it('Should hide its videos', async function () {
         for (const token of [ userModeratorToken, servers[0].accessToken ]) {
-          const { data } = await servers[0].videosCommand.listWithToken({ token })
+          const { data } = await servers[0].videos.listWithToken({ token })
 
           expect(data).to.have.lengthOf(3)
 
@@ -581,7 +581,7 @@ describe('Test blocklist', function () {
 
       it('Should display its videos', async function () {
         for (const token of [ userModeratorToken, servers[0].accessToken ]) {
-          const { data } = await servers[0].videosCommand.listWithToken({ token })
+          const { data } = await servers[0].videos.listWithToken({ token })
           expect(data).to.have.lengthOf(4)
 
           const v = data.find(v => v.name === 'video user 2')
@@ -639,8 +639,8 @@ describe('Test blocklist', function () {
       it('Should hide its videos', async function () {
         for (const token of [ userModeratorToken, servers[0].accessToken ]) {
           const requests = [
-            servers[0].videosCommand.list(),
-            servers[0].videosCommand.listWithToken({ token })
+            servers[0].videos.list(),
+            servers[0].videos.listWithToken({ token })
           ]
 
           for (const req of requests) {
@@ -688,13 +688,13 @@ describe('Test blocklist', function () {
 
         {
           const now = new Date()
-          await servers[1].followsCommand.unfollow({ target: servers[0] })
+          await servers[1].follows.unfollow({ target: servers[0] })
           await waitJobs(servers)
-          await servers[1].followsCommand.follow({ targets: [ servers[0].host ] })
+          await servers[1].follows.follow({ targets: [ servers[0].host ] })
 
           await waitJobs(servers)
 
-          const { data } = await servers[0].notificationsCommand.list({ start: 0, count: 30 })
+          const { data } = await servers[0].notifications.list({ start: 0, count: 30 })
           const commentNotifications = data.filter(n => {
             return n.type === UserNotificationType.NEW_INSTANCE_FOLLOWER && n.createdAt >= now.toISOString()
           })
@@ -749,13 +749,13 @@ describe('Test blocklist', function () {
 
         {
           const now = new Date()
-          await servers[1].followsCommand.unfollow({ target: servers[0] })
+          await servers[1].follows.unfollow({ target: servers[0] })
           await waitJobs(servers)
-          await servers[1].followsCommand.follow({ targets: [ servers[0].host ] })
+          await servers[1].follows.follow({ targets: [ servers[0].host ] })
 
           await waitJobs(servers)
 
-          const { data } = await servers[0].notificationsCommand.list({ start: 0, count: 30 })
+          const { data } = await servers[0].notifications.list({ start: 0, count: 30 })
           const commentNotifications = data.filter(n => {
             return n.type === UserNotificationType.NEW_INSTANCE_FOLLOWER && n.createdAt >= now.toISOString()
           })

@@ -42,17 +42,17 @@ describe('Test server plugins API validators', function () {
       password: 'password'
     }
 
-    await server.usersCommand.create({ username: user.username, password: user.password })
-    userAccessToken = await server.loginCommand.getAccessToken(user)
+    await server.users.create({ username: user.username, password: user.password })
+    userAccessToken = await server.login.getAccessToken(user)
 
     {
-      const res = await server.pluginsCommand.install({ npmName: npmPlugin })
+      const res = await server.plugins.install({ npmName: npmPlugin })
       const plugin = res.body as PeerTubePlugin
       npmVersion = plugin.version
     }
 
     {
-      const res = await server.pluginsCommand.install({ npmName: themePlugin })
+      const res = await server.plugins.install({ npmName: themePlugin })
       const plugin = res.body as PeerTubePlugin
       themeVersion = plugin.version
     }

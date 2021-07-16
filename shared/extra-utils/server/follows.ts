@@ -3,8 +3,8 @@ import { ServerInfo } from './servers'
 
 async function doubleFollow (server1: ServerInfo, server2: ServerInfo) {
   await Promise.all([
-    server1.followsCommand.follow({ targets: [ server2.url ] }),
-    server2.followsCommand.follow({ targets: [ server1.url ] })
+    server1.follows.follow({ targets: [ server2.url ] }),
+    server2.follows.follow({ targets: [ server1.url ] })
   ])
 
   // Wait request propagation

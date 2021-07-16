@@ -33,7 +33,7 @@ describe('Test plugins', function () {
     server = await flushAndRunServer(1, configOverride)
     await setAccessTokensToServers([ server ])
 
-    command = server.pluginsCommand
+    command = server.plugins
   })
 
   it('Should list and search available plugins and themes', async function () {
@@ -97,7 +97,7 @@ describe('Test plugins', function () {
   })
 
   it('Should have the plugin loaded in the configuration', async function () {
-    const config = await server.configCommand.getConfig()
+    const config = await server.config.getConfig()
 
     const theme = config.theme.registered.find(r => r.name === 'background-red')
     expect(theme).to.not.be.undefined
@@ -107,20 +107,20 @@ describe('Test plugins', function () {
   })
 
   it('Should update the default theme in the configuration', async function () {
-    await server.configCommand.updateCustomSubConfig({
+    await server.config.updateCustomSubConfig({
       newConfig: {
         theme: { default: 'background-red' }
       }
     })
 
-    const config = await server.configCommand.getConfig()
+    const config = await server.config.getConfig()
     expect(config.theme.default).to.equal('background-red')
   })
 
   it('Should update my default theme', async function () {
-    await server.usersCommand.updateMe({ theme: 'background-red' })
+    await server.users.updateMe({ theme: 'background-red' })
 
-    const user = await server.usersCommand.getMyInfo()
+    const user = await server.users.getMyInfo()
     expect(user.theme).to.equal('background-red')
   })
 
@@ -187,7 +187,7 @@ describe('Test plugins', function () {
   it('Should have watched settings changes', async function () {
     this.timeout(10000)
 
-    await server.serversCommand.waitUntilLog('Settings changed!')
+    await server.servers.waitUntilLog('Settings changed!')
   })
 
   it('Should get a plugin and a theme', async function () {
@@ -234,7 +234,7 @@ describe('Test plugins', function () {
     await wait(6000)
 
     // Fake update our plugin version
-    await server.sqlCommand.setPluginVersion('hello-world', '0.0.1')
+    await server.sql.setPluginVersion('hello-world', '0.0.1')
 
     // Fake update package.json
     const packageJSON = await command.getPackageJSON('peertube-plugin-hello-world')
@@ -293,7 +293,7 @@ describe('Test plugins', function () {
   })
 
   it('Should have updated the configuration', async function () {
-    const config = await server.configCommand.getConfig()
+    const config = await server.config.getConfig()
 
     expect(config.theme.default).to.equal('default')
 
@@ -305,7 +305,7 @@ describe('Test plugins', function () {
   })
 
   it('Should have updated the user theme', async function () {
-    const user = await server.usersCommand.getMyInfo()
+    const user = await server.users.getMyInfo()
     expect(user.theme).to.equal('instance-default')
   })
 

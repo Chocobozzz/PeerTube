@@ -61,7 +61,7 @@ describe('Test user notifications', function () {
 
       await uploadRandomVideoOnServers(servers, 1)
 
-      const notification = await servers[0].notificationsCommand.getLastest({ token: userAccessToken })
+      const notification = await servers[0].notifications.getLastest({ token: userAccessToken })
       expect(notification).to.be.undefined
 
       expect(emails).to.have.lengthOf(0)
@@ -71,7 +71,7 @@ describe('Test user notifications', function () {
     it('Should send a new video notification if the user follows the local video publisher', async function () {
       this.timeout(15000)
 
-      await servers[0].subscriptionsCommand.add({ token: userAccessToken, targetUri: 'root_channel@localhost:' + servers[0].port })
+      await servers[0].subscriptions.add({ token: userAccessToken, targetUri: 'root_channel@localhost:' + servers[0].port })
       await waitJobs(servers)
 
       const { name, uuid } = await uploadRandomVideoOnServers(servers, 1)
@@ -81,7 +81,7 @@ describe('Test user notifications', function () {
     it('Should send a new video notification from a remote account', async function () {
       this.timeout(150000) // Server 2 has transcoding enabled
 
-      await servers[0].subscriptionsCommand.add({ token: userAccessToken, targetUri: 'root_channel@localhost:' + servers[1].port })
+      await servers[0].subscriptions.add({ token: userAccessToken, targetUri: 'root_channel@localhost:' + servers[1].port })
       await waitJobs(servers)
 
       const { name, uuid } = await uploadRandomVideoOnServers(servers, 2)
@@ -153,7 +153,7 @@ describe('Test user notifications', function () {
 
       await checkNewVideoFromSubscription(baseParams, name, uuid, 'absence')
 
-      await servers[0].videosCommand.update({ id: uuid, attributes: { privacy: VideoPrivacy.PUBLIC } })
+      await servers[0].videos.update({ id: uuid, attributes: { privacy: VideoPrivacy.PUBLIC } })
 
       await waitJobs(servers)
       await checkNewVideoFromSubscription(baseParams, name, uuid, 'presence')
@@ -167,7 +167,7 @@ describe('Test user notifications', function () {
 
       await checkNewVideoFromSubscription(baseParams, name, uuid, 'absence')
 
-      await servers[1].videosCommand.update({ id: uuid, attributes: { privacy: VideoPrivacy.PUBLIC } })
+      await servers[1].videos.update({ id: uuid, attributes: { privacy: VideoPrivacy.PUBLIC } })
 
       await waitJobs(servers)
       await checkNewVideoFromSubscription(baseParams, name, uuid, 'presence')
@@ -179,7 +179,7 @@ describe('Test user notifications', function () {
       const data = { privacy: VideoPrivacy.PRIVATE }
       const { name, uuid } = await uploadRandomVideoOnServers(servers, 1, data)
 
-      await servers[0].videosCommand.update({ id: uuid, attributes: { privacy: VideoPrivacy.UNLISTED } })
+      await servers[0].videos.update({ id: uuid, attributes: { privacy: VideoPrivacy.UNLISTED } })
 
       await checkNewVideoFromSubscription(baseParams, name, uuid, 'absence')
     })
@@ -190,7 +190,7 @@ describe('Test user notifications', function () {
       const data = { privacy: VideoPrivacy.PRIVATE }
       const { name, uuid } = await uploadRandomVideoOnServers(servers, 2, data)
 
-      await servers[1].videosCommand.update({ id: uuid, attributes: { privacy: VideoPrivacy.UNLISTED } })
+      await servers[1].videos.update({ id: uuid, attributes: { privacy: VideoPrivacy.UNLISTED } })
 
       await waitJobs(servers)
       await checkNewVideoFromSubscription(baseParams, name, uuid, 'absence')
@@ -207,7 +207,7 @@ describe('Test user notifications', function () {
         privacy: VideoPrivacy.PUBLIC,
         targetUrl: ImportsCommand.getGoodVideoUrl()
       }
-      const { video } = await servers[0].importsCommand.importVideo({ attributes })
+      const { video } = await servers[0].imports.importVideo({ attributes })
 
       await waitJobs(servers)
 
@@ -242,7 +242,7 @@ describe('Test user notifications', function () {
       await uploadRandomVideoOnServers(servers, 2, { waitTranscoding: false })
       await waitJobs(servers)
 
-      const notification = await servers[0].notificationsCommand.getLastest({ token: userAccessToken })
+      const notification = await servers[0].notifications.getLastest({ token: userAccessToken })
       if (notification) {
         expect(notification.type).to.not.equal(UserNotificationType.MY_VIDEO_PUBLISHED)
       }
@@ -278,7 +278,7 @@ describe('Test user notifications', function () {
         targetUrl: ImportsCommand.getGoodVideoUrl(),
         waitTranscoding: true
       }
-      const { video } = await servers[1].importsCommand.importVideo({ attributes })
+      const { video } = await servers[1].imports.importVideo({ attributes })
 
       await waitJobs(servers)
       await checkVideoIsPublished(baseParams, name, video.uuid, 'presence')
@@ -345,7 +345,7 @@ describe('Test user notifications', function () {
         privacy: VideoPrivacy.PRIVATE,
         targetUrl: ImportsCommand.getBadVideoUrl()
       }
-      const { video } = await servers[0].importsCommand.importVideo({ attributes })
+      const { video } = await servers[0].imports.importVideo({ attributes })
 
       await waitJobs(servers)
       await checkMyVideoImportIsFinished(baseParams, name, video.uuid, ImportsCommand.getBadVideoUrl(), false, 'presence')
@@ -362,7 +362,7 @@ describe('Test user notifications', function () {
         privacy: VideoPrivacy.PRIVATE,
         targetUrl: ImportsCommand.getGoodVideoUrl()
       }
-      const { video } = await servers[0].importsCommand.importVideo({ attributes })
+      const { video } = await servers[0].imports.importVideo({ attributes })
 
       await waitJobs(servers)
       await checkMyVideoImportIsFinished(baseParams, name, video.uuid, ImportsCommand.getGoodVideoUrl(), true, 'presence')
@@ -382,16 +382,16 @@ describe('Test user notifications', function () {
         token: userAccessToken
       }
 
-      await servers[0].usersCommand.updateMe({ displayName: 'super root name' })
+      await servers[0].users.updateMe({ displayName: 'super root name' })
 
-      await servers[0].usersCommand.updateMe({
+      await servers[0].users.updateMe({
         token: userAccessToken,
         displayName: myUserName
       })
 
-      await servers[1].usersCommand.updateMe({ displayName: 'super root 2 name' })
+      await servers[1].users.updateMe({ displayName: 'super root 2 name' })
 
-      await servers[0].channelsCommand.update({
+      await servers[0].channels.update({
         token: userAccessToken,
         channelName: 'user_1_channel',
         attributes: { displayName: myChannelName }
@@ -401,23 +401,23 @@ describe('Test user notifications', function () {
     it('Should notify when a local channel is following one of our channel', async function () {
       this.timeout(50000)
 
-      await servers[0].subscriptionsCommand.add({ targetUri: 'user_1_channel@localhost:' + servers[0].port })
+      await servers[0].subscriptions.add({ targetUri: 'user_1_channel@localhost:' + servers[0].port })
       await waitJobs(servers)
 
       await checkNewActorFollow(baseParams, 'channel', 'root', 'super root name', myChannelName, 'presence')
 
-      await servers[0].subscriptionsCommand.remove({ uri: 'user_1_channel@localhost:' + servers[0].port })
+      await servers[0].subscriptions.remove({ uri: 'user_1_channel@localhost:' + servers[0].port })
     })
 
     it('Should notify when a remote channel is following one of our channel', async function () {
       this.timeout(50000)
 
-      await servers[1].subscriptionsCommand.add({ targetUri: 'user_1_channel@localhost:' + servers[0].port })
+      await servers[1].subscriptions.add({ targetUri: 'user_1_channel@localhost:' + servers[0].port })
       await waitJobs(servers)
 
       await checkNewActorFollow(baseParams, 'channel', 'root', 'super root 2 name', myChannelName, 'presence')
 
-      await servers[1].subscriptionsCommand.remove({ uri: 'user_1_channel@localhost:' + servers[0].port })
+      await servers[1].subscriptions.remove({ uri: 'user_1_channel@localhost:' + servers[0].port })
     })
 
     // PeerTube does not support accout -> account follows

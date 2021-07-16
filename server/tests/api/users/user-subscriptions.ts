@@ -35,26 +35,26 @@ describe('Test users subscriptions', function () {
     {
       for (const server of servers) {
         const user = { username: 'user' + server.serverNumber, password: 'password' }
-        await server.usersCommand.create({ username: user.username, password: user.password })
+        await server.users.create({ username: user.username, password: user.password })
 
-        const accessToken = await server.loginCommand.getAccessToken(user)
+        const accessToken = await server.login.getAccessToken(user)
         users.push({ accessToken })
 
         const videoName1 = 'video 1-' + server.serverNumber
-        await server.videosCommand.upload({ token: accessToken, attributes: { name: videoName1 } })
+        await server.videos.upload({ token: accessToken, attributes: { name: videoName1 } })
 
         const videoName2 = 'video 2-' + server.serverNumber
-        await server.videosCommand.upload({ token: accessToken, attributes: { name: videoName2 } })
+        await server.videos.upload({ token: accessToken, attributes: { name: videoName2 } })
       }
     }
 
     await waitJobs(servers)
 
-    command = servers[0].subscriptionsCommand
+    command = servers[0].subscriptions
   })
 
   it('Should display videos of server 2 on server 1', async function () {
-    const { total } = await servers[0].videosCommand.list()
+    const { total } = await servers[0].videos.list()
 
     expect(total).to.equal(4)
   })
@@ -67,14 +67,14 @@ describe('Test users subscriptions', function () {
 
     await waitJobs(servers)
 
-    const { uuid } = await servers[2].videosCommand.upload({ attributes: { name: 'video server 3 added after follow' } })
+    const { uuid } = await servers[2].videos.upload({ attributes: { name: 'video server 3 added after follow' } })
     video3UUID = uuid
 
     await waitJobs(servers)
   })
 
   it('Should not display videos of server 3 on server 1', async function () {
-    const { total, data } = await servers[0].videosCommand.list()
+    const { total, data } = await servers[0].videos.list()
     expect(total).to.equal(4)
 
     for (const video of data) {
@@ -183,7 +183,7 @@ describe('Test users subscriptions', function () {
     this.timeout(60000)
 
     const videoName = 'video server 1 added after follow'
-    await servers[0].videosCommand.upload({ attributes: { name: videoName } })
+    await servers[0].videos.upload({ attributes: { name: videoName } })
 
     await waitJobs(servers)
 
@@ -209,7 +209,7 @@ describe('Test users subscriptions', function () {
     }
 
     {
-      const { data, total } = await servers[0].videosCommand.list()
+      const { data, total } = await servers[0].videos.list()
       expect(total).to.equal(5)
 
       for (const video of data) {
@@ -223,11 +223,11 @@ describe('Test users subscriptions', function () {
   it('Should have server 1 follow server 3 and display server 3 videos', async function () {
     this.timeout(60000)
 
-    await servers[0].followsCommand.follow({ targets: [ servers[2].url ] })
+    await servers[0].follows.follow({ targets: [ servers[2].url ] })
 
     await waitJobs(servers)
 
-    const { data, total } = await servers[0].videosCommand.list()
+    const { data, total } = await servers[0].videos.list()
     expect(total).to.equal(8)
 
     const names = [ '1-3', '2-3', 'video server 3 added after follow' ]
@@ -240,11 +240,11 @@ describe('Test users subscriptions', function () {
   it('Should remove follow server 1 -> server 3 and hide server 3 videos', async function () {
     this.timeout(60000)
 
-    await servers[0].followsCommand.unfollow({ target: servers[2] })
+    await servers[0].follows.unfollow({ target: servers[2] })
 
     await waitJobs(servers)
 
-    const { total, data } = await servers[0].videosCommand.list()
+    const { total, data } = await servers[0].videos.list()
     expect(total).to.equal(5)
 
     for (const video of data) {
@@ -280,7 +280,7 @@ describe('Test users subscriptions', function () {
   it('Should update a video of server 3 and see the updated video on server 1', async function () {
     this.timeout(30000)
 
-    await servers[2].videosCommand.update({ id: video3UUID, attributes: { name: 'video server 3 added after follow updated' } })
+    await servers[2].videos.update({ id: video3UUID, attributes: { name: 'video server 3 added after follow updated' } })
 
     await waitJobs(servers)
 
@@ -325,7 +325,7 @@ describe('Test users subscriptions', function () {
   })
 
   it('Should correctly display public videos on server 1', async function () {
-    const { total, data } = await servers[0].videosCommand.list()
+    const { total, data } = await servers[0].videos.list()
     expect(total).to.equal(5)
 
     for (const video of data) {
@@ -356,7 +356,7 @@ describe('Test users subscriptions', function () {
     }
 
     {
-      const { total, data } = await servers[0].videosCommand.list()
+      const { total, data } = await servers[0].videos.list()
       expect(total).to.equal(5)
 
       for (const video of data) {

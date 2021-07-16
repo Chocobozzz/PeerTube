@@ -9,16 +9,16 @@ describe('Test reset password scripts', function () {
     server = await flushAndRunServer(1)
     await setAccessTokensToServers([ server ])
 
-    await server.usersCommand.create({ username: 'user_1', password: 'super password' })
+    await server.users.create({ username: 'user_1', password: 'super password' })
   })
 
   it('Should change the user password from CLI', async function () {
     this.timeout(60000)
 
-    const env = server.cliCommand.getEnv()
+    const env = server.cli.getEnv()
     await CLICommand.exec(`echo coucou | ${env} npm run reset-password -- -u user_1`)
 
-    await server.loginCommand.login({ user: { username: 'user_1', password: 'coucou' } })
+    await server.login.login({ user: { username: 'user_1', password: 'coucou' } })
   })
 
   after(async function () {

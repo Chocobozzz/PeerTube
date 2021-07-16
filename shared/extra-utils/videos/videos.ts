@@ -27,7 +27,7 @@ async function checkVideoFilesWereRemoved (
   ]
 ) {
   for (const directory of directories) {
-    const directoryPath = server.serversCommand.buildDirectory(directory)
+    const directoryPath = server.servers.buildDirectory(directory)
 
     const directoryExists = await pathExists(directoryPath)
     if (directoryExists === false) continue
@@ -47,8 +47,8 @@ function checkUploadVideoParam (
   mode: 'legacy' | 'resumable' = 'legacy'
 ) {
   return mode === 'legacy'
-    ? server.videosCommand.buildLegacyUpload({ token, attributes, expectedStatus })
-    : server.videosCommand.buildResumeUpload({ token, attributes, expectedStatus })
+    ? server.videos.buildLegacyUpload({ token, attributes, expectedStatus })
+    : server.videos.buildResumeUpload({ token, attributes, expectedStatus })
 }
 
 async function completeVideoCheck (
@@ -131,7 +131,7 @@ async function completeVideoCheck (
     expect(video.originallyPublishedAt).to.be.null
   }
 
-  const videoDetails = await server.videosCommand.get({ id: video.uuid })
+  const videoDetails = await server.videos.get({ id: video.uuid })
 
   expect(videoDetails.files).to.have.lengthOf(attributes.files.length)
   expect(videoDetails.tags).to.deep.equal(attributes.tags)
@@ -202,7 +202,7 @@ async function uploadRandomVideoOnServers (
   additionalParams?: VideoEdit & { prefixName?: string }
 ) {
   const server = servers.find(s => s.serverNumber === serverNumber)
-  const res = await server.videosCommand.randomUpload({ wait: false, ...additionalParams })
+  const res = await server.videos.randomUpload({ wait: false, ...additionalParams })
 
   await waitJobs(servers)
 

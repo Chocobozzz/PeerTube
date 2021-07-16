@@ -49,13 +49,13 @@ describe('Test video filters validators', function () {
     await setDefaultVideoChannel([ server ])
 
     const user = { username: 'user1', password: 'my super password' }
-    await server.usersCommand.create({ username: user.username, password: user.password })
-    userAccessToken = await server.loginCommand.getAccessToken(user)
+    await server.users.create({ username: user.username, password: user.password })
+    userAccessToken = await server.login.getAccessToken(user)
 
     const moderator = { username: 'moderator', password: 'my super password' }
-    await server.usersCommand.create({ username: moderator.username, password: moderator.password, role: UserRole.MODERATOR })
+    await server.users.create({ username: moderator.username, password: moderator.password, role: UserRole.MODERATOR })
 
-    moderatorAccessToken = await server.loginCommand.getAccessToken(moderator)
+    moderatorAccessToken = await server.login.getAccessToken(moderator)
   })
 
   describe('When setting a video filter', function () {

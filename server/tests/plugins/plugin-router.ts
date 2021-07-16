@@ -26,7 +26,7 @@ describe('Test plugin helpers', function () {
     server = await flushAndRunServer(1)
     await setAccessTokensToServers([ server ])
 
-    await server.pluginsCommand.install({ path: PluginsCommand.getPluginTestPath('-five') })
+    await server.plugins.install({ path: PluginsCommand.getPluginTestPath('-five') })
   })
 
   it('Should answer "pong"', async function () {
@@ -82,7 +82,7 @@ describe('Test plugin helpers', function () {
   })
 
   it('Should remove the plugin and remove the routes', async function () {
-    await server.pluginsCommand.uninstall({ npmName: 'peertube-plugin-test-five' })
+    await server.plugins.uninstall({ npmName: 'peertube-plugin-test-five' })
 
     for (const path of basePaths) {
       await makeGetRequest({

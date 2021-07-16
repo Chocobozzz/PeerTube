@@ -42,20 +42,20 @@ describe('Test users with multiple servers', function () {
     await doubleFollow(servers[1], servers[2])
 
     // The root user of server 1 is propagated to servers 2 and 3
-    await servers[0].videosCommand.upload()
+    await servers[0].videos.upload()
 
     {
       const user = {
         username: 'user1',
         password: 'password'
       }
-      const created = await servers[0].usersCommand.create(user)
+      const created = await servers[0].users.create(user)
       userId = created.id
-      userAccessToken = await servers[0].loginCommand.getAccessToken(user)
+      userAccessToken = await servers[0].login.getAccessToken(user)
     }
 
     {
-      const { uuid } = await servers[0].videosCommand.upload({ token: userAccessToken })
+      const { uuid } = await servers[0].videos.upload({ token: userAccessToken })
       videoUUID = uuid
     }
 
@@ -65,9 +65,9 @@ describe('Test users with multiple servers', function () {
   it('Should be able to update my display name', async function () {
     this.timeout(10000)
 
-    await servers[0].usersCommand.updateMe({ displayName: 'my super display name' })
+    await servers[0].users.updateMe({ displayName: 'my super display name' })
 
-    user = await servers[0].usersCommand.getMyInfo()
+    user = await servers[0].users.getMyInfo()
     expect(user.account.displayName).to.equal('my super display name')
 
     await waitJobs(servers)
@@ -76,9 +76,9 @@ describe('Test users with multiple servers', function () {
   it('Should be able to update my description', async function () {
     this.timeout(10_000)
 
-    await servers[0].usersCommand.updateMe({ description: 'my super description updated' })
+    await servers[0].users.updateMe({ description: 'my super description updated' })
 
-    user = await servers[0].usersCommand.getMyInfo()
+    user = await servers[0].users.getMyInfo()
     expect(user.account.displayName).to.equal('my super display name')
     expect(user.account.description).to.equal('my super description updated')
 
@@ -90,9 +90,9 @@ describe('Test users with multiple servers', function () {
 
     const fixture = 'avatar2.png'
 
-    await servers[0].usersCommand.updateMyAvatar({ fixture })
+    await servers[0].users.updateMyAvatar({ fixture })
 
-    user = await servers[0].usersCommand.getMyInfo()
+    user = await servers[0].users.getMyInfo()
     userAvatarFilename = user.account.avatar.path
 
     await testImage(servers[0].url, 'avatar2-resized', userAvatarFilename, '.png')
@@ -104,12 +104,12 @@ describe('Test users with multiple servers', function () {
     let createdAt: string | Date
 
     for (const server of servers) {
-      const body = await server.accountsCommand.list({ sort: '-createdAt' })
+      const body = await server.accounts.list({ sort: '-createdAt' })
 
       const resList = body.data.find(a => a.name === 'root' && a.host === 'localhost:' + servers[0].port)
       expect(resList).not.to.be.undefined
 
-      const account = await server.accountsCommand.get({ accountName: resList.name + '@' + resList.host })
+      const account = await server.accounts.get({ accountName: resList.name + '@' + resList.host })
 
       if (!createdAt) createdAt = account.createdAt
 
@@ -131,7 +131,7 @@ describe('Test users with multiple servers', function () {
 
   it('Should list account videos', async function () {
     for (const server of servers) {
-      const { total, data } = await server.videosCommand.listByAccount({ accountName: 'user1@localhost:' + servers[0].port })
+      const { total, data } = await server.videos.listByAccount({ accountName: 'user1@localhost:' + servers[0].port })
 
       expect(total).to.equal(1)
       expect(data).to.be.an('array')
@@ -143,12 +143,12 @@ describe('Test users with multiple servers', function () {
   it('Should search through account videos', async function () {
     this.timeout(10_000)
 
-    const created = await servers[0].videosCommand.upload({ token: userAccessToken, attributes: { name: 'Kami no chikara' } })
+    const created = await servers[0].videos.upload({ token: userAccessToken, attributes: { name: 'Kami no chikara' } })
 
     await waitJobs(servers)
 
     for (const server of servers) {
-      const { total, data } = await server.videosCommand.listByAccount({ accountName: 'user1@localhost:' + servers[0].port, search: 'Kami' })
+      const { total, data } = await server.videos.listByAccount({ accountName: 'user1@localhost:' + servers[0].port, search: 'Kami' })
 
       expect(total).to.equal(1)
       expect(data).to.be.an('array')
@@ -161,27 +161,27 @@ describe('Test users with multiple servers', function () {
     this.timeout(10_000)
 
     for (const server of servers) {
-      const body = await server.accountsCommand.list({ sort: '-createdAt' })
+      const body = await server.accounts.list({ sort: '-createdAt' })
 
       const accountDeleted = body.data.find(a => a.name === 'user1' && a.host === 'localhost:' + servers[0].port)
       expect(accountDeleted).not.to.be.undefined
 
-      const { data } = await server.channelsCommand.list()
+      const { data } = await server.channels.list()
       const videoChannelDeleted = data.find(a => a.displayName === 'Main user1 channel' && a.host === 'localhost:' + servers[0].port)
       expect(videoChannelDeleted).not.to.be.undefined
     }
 
-    await servers[0].usersCommand.remove({ userId })
+    await servers[0].users.remove({ userId })
 
     await waitJobs(servers)
 
     for (const server of servers) {
-      const body = await server.accountsCommand.list({ sort: '-createdAt' })
+      const body = await server.accounts.list({ sort: '-createdAt' })
 
       const accountDeleted = body.data.find(a => a.name === 'user1' && a.host === 'localhost:' + servers[0].port)
       expect(accountDeleted).to.be.undefined
 
-      const { data } = await server.channelsCommand.list()
+      const { data } = await server.channels.list()
       const videoChannelDeleted = data.find(a => a.name === 'Main user1 channel' && a.host === 'localhost:' + servers[0].port)
       expect(videoChannelDeleted).to.be.undefined
     }

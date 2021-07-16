@@ -58,8 +58,8 @@ describe('Test admin notifications', function () {
       token: server.accessToken
     }
 
-    await server.pluginsCommand.install({ npmName: 'peertube-plugin-hello-world' })
-    await server.pluginsCommand.install({ npmName: 'peertube-theme-background-red' })
+    await server.plugins.install({ npmName: 'peertube-plugin-hello-world' })
+    await server.plugins.install({ npmName: 'peertube-theme-background-red' })
   })
 
   describe('Latest PeerTube version notification', function () {
@@ -118,8 +118,8 @@ describe('Test admin notifications', function () {
     it('Should send a notification to admins on new plugin version', async function () {
       this.timeout(30000)
 
-      await server.sqlCommand.setPluginVersion('hello-world', '0.0.1')
-      await server.sqlCommand.setPluginLatestVersion('hello-world', '0.0.1')
+      await server.sql.setPluginVersion('hello-world', '0.0.1')
+      await server.sql.setPluginLatestVersion('hello-world', '0.0.1')
       await wait(6000)
 
       await checkNewPluginVersion(baseParams, PluginType.PLUGIN, 'hello-world', 'presence')
@@ -140,8 +140,8 @@ describe('Test admin notifications', function () {
     it('Should send a new notification after a new plugin release', async function () {
       this.timeout(30000)
 
-      await server.sqlCommand.setPluginVersion('hello-world', '0.0.1')
-      await server.sqlCommand.setPluginLatestVersion('hello-world', '0.0.1')
+      await server.sql.setPluginVersion('hello-world', '0.0.1')
+      await server.sql.setPluginLatestVersion('hello-world', '0.0.1')
       await wait(6000)
 
       expect(adminNotifications.filter(n => n.type === UserNotificationType.NEW_PEERTUBE_VERSION)).to.have.lengthOf(2)

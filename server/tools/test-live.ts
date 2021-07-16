@@ -54,15 +54,15 @@ async function run () {
   const attributes: LiveVideoCreate = {
     name: 'live',
     saveReplay: true,
-    channelId: server.videoChannel.id,
+    channelId: server.store.channel.id,
     privacy: VideoPrivacy.PUBLIC
   }
 
   console.log('Creating live.')
 
-  const { uuid: liveVideoUUID } = await server.liveCommand.create({ fields: attributes })
+  const { uuid: liveVideoUUID } = await server.live.create({ fields: attributes })
 
-  const live = await server.liveCommand.get({ videoId: liveVideoUUID })
+  const live = await server.live.get({ videoId: liveVideoUUID })
 
   console.log('Sending RTMP stream.')
 
@@ -82,7 +82,7 @@ async function run () {
 // ----------------------------------------------------------------------------
 
 async function buildConfig (server: ServerInfo, commandType: CommandType) {
-  await server.configCommand.updateCustomSubConfig({
+  await server.config.updateCustomSubConfig({
     newConfig: {
       instance: {
         customizations: {
