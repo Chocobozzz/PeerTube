@@ -171,10 +171,6 @@ export class VideoStreamingPlaylistModel extends Model<Partial<AttributesOnly<Vi
     return join(STATIC_PATHS.STREAMING_PLAYLISTS.HLS, videoUUID, VideoStreamingPlaylistModel.getMasterHlsPlaylistFilename())
   }
 
-  static getHlsPlaylistStaticPath (videoUUID: string, resolution: number) {
-    return join(STATIC_PATHS.STREAMING_PLAYLISTS.HLS, videoUUID, VideoStreamingPlaylistModel.getHlsPlaylistFilename(resolution))
-  }
-
   static getHlsSha256SegmentsStaticPath (videoUUID: string, isLive: boolean) {
     if (isLive) return join('/live', 'segments-sha256', videoUUID)
 

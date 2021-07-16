@@ -124,7 +124,7 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
       extname: fileExt,
       resolution: videoFileResolution,
       size: stats.size,
-      filename: generateVideoFilename(videoImport.Video, false, videoFileResolution, fileExt),
+      filename: generateVideoFilename(false, videoFileResolution, fileExt),
       fps,
       videoId: videoImport.videoId
     }

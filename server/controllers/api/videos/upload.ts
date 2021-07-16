@@ -240,7 +240,7 @@ async function buildNewFile (video: MVideo, videoPhysicalFile: express.VideoUplo
     videoFile.resolution = (await getVideoFileResolution(videoPhysicalFile.path)).videoFileResolution
   }
 
-  videoFile.filename = generateVideoFilename(video, false, videoFile.resolution, videoFile.extname)
+  videoFile.filename = generateVideoFilename(false, videoFile.resolution, videoFile.extname)
 
   return videoFile
 }

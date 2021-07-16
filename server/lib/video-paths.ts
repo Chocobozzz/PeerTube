@@ -1,4 +1,5 @@
 import { join } from 'path'
+import { uuid as uuidv4 } from 'uuidv4'
 import { extractVideo } from '@server/helpers/video'
 import { CONFIG } from '@server/initializers/config'
 import { HLS_REDUNDANCY_DIRECTORY, HLS_STREAMING_PLAYLIST_DIRECTORY, STATIC_PATHS, WEBSERVER } from '@server/initializers/constants'
@@ -6,12 +7,8 @@ import { isStreamingPlaylist, MStreamingPlaylist, MStreamingPlaylistVideo, MVide
 
 // ################## Video file name ##################
 
-function generateVideoFilename (videoOrPlaylist: MVideo | MStreamingPlaylistVideo, isHls: boolean, resolution: number, extname: string) {
-  const video = extractVideo(videoOrPlaylist)
-
-  // FIXME: use a generated uuid instead, that will break compatibility with PeerTube < 3.1
-  // const uuid = uuidv4()
-  const uuid = video.uuid
+function generateVideoFilename (isHls: boolean, resolution: number, extname: string) {
+  const uuid = uuidv4()
 
   if (isHls) {
     return generateVideoStreamingPlaylistName(uuid, resolution)
