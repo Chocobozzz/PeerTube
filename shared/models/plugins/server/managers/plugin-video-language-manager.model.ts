@@ -1,5 +1,13 @@
-export interface PluginVideoLanguageManager {
+import { ConstantManager } from '@shared/models/plugins/server/plugin-constant-manager.model'
+
+export interface PluginVideoLanguageManager extends ConstantManager<string> {
+  /**
+   * @deprecated use `addConstant` instead
+   */
   addLanguage: (languageKey: string, languageLabel: string) => boolean
 
+  /**
+   * @deprecated use `deleteConstant` instead
+   */
   deleteLanguage: (languageKey: string) => boolean
 }
