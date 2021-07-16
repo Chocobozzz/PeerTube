@@ -443,7 +443,7 @@
       </trans-unit>
       <trans-unit id="8343217707114977013" datatype="html">
         <source>The contact form is not enabled on this instance.</source>
-        <target state="new">The contact form is not enabled on this instance.</target>
+        <target state="translated">El formulari de contacte no està habilitat en aquesta instància.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/contact-admin-modal.component.html</context>
           <context context-type="linenumber">56</context>
@@ -610,13 +610,13 @@
       </trans-unit>
       <trans-unit id="1649035832083209812" datatype="html">
         <source>Best</source>
-        <target state="new">Best</target>
+        <target state="translated">El Millor</target>
         <note priority="1" from="description">A variant of Trending videos based on the number of recent interactions, minus user history</note>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/video-list/trending/video-trending-header.component.ts</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="3594371452042277118" datatype="html">
         <source>Videos with the most interactions for recent videos, minus user history</source>
-        <target state="new">Videos with the most interactions for recent videos, minus user history</target>
+        <target state="translated">Vídeos amb més interaccions per a vídeos recents, menys l'historial d'usuari.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/video-list/trending/video-trending-header.component.ts</context><context context-type="linenumber">44</context></context-group>
       </trans-unit>
       <trans-unit id="7022070615528435141">
@@ -649,7 +649,7 @@
       </trans-unit>
       <trans-unit id="158575725114802951" datatype="html">
         <source>Only live videos</source>
-        <target state="new">Only live videos</target>
+        <target state="translated">Només vídeos en directe</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context>
           <context context-type="linenumber">53</context>
@@ -763,7 +763,7 @@
       </trans-unit>
       <trans-unit id="6462281745850371027" datatype="html">
         <source>You can subscribe to the channel via any ActivityPub-capable fediverse instance (PeerTube, Mastodon or Pleroma for example).</source>
-        <target state="new"> You can subscribe to the channel via any ActivityPub-capable fediverse instance (PeerTube, Mastodon or Pleroma for example). </target>
+        <target state="translated">Pots subscriure't al canal amb qualsevol instància de fediverse compatible amb ActivityPub (PeerTube, Mastodon o Pleroma, per exemple).</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/remote-subscribe.component.html</context>
           <context context-type="linenumber">18,19</context>
@@ -771,7 +771,7 @@
       </trans-unit>
       <trans-unit id="20374890400263257" datatype="html">
         <source>You can interact with this via any ActivityPub-capable fediverse instance (PeerTube, Mastodon or Pleroma for example).</source>
-        <target state="new"> You can interact with this via any ActivityPub-capable fediverse instance (PeerTube, Mastodon or Pleroma for example). </target>
+        <target state="translated">Pots interactuar amb açó mitjançant qualsevol instància de fediverse compatible amb ActivityPub (PeerTube, Mastodon o Pleroma, per exemple).</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/remote-subscribe.component.html</context>
           <context context-type="linenumber">26,27</context>
@@ -951,7 +951,7 @@
       </trans-unit>
       <trans-unit id="4499233456830047129" datatype="html">
         <source>The server encountered an error</source>
-        <target state="new">The server encountered an error</target>
+        <target state="translated">El servidor ha trobat un error</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils.ts</context>
           <context context-type="linenumber">193</context>
@@ -3593,7 +3593,7 @@
       </trans-unit>
       <trans-unit id="8461609631969932886" datatype="html">
         <source>Hide</source>
-        <target state="new">Hide</target>
+        <target state="translated">Amagar</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context><context context-type="linenumber">115</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-password.component.html</context><context context-type="linenumber">11</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">16</context></context-group>
