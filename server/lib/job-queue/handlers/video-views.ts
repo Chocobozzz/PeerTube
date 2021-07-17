@@ -2,18 +2,21 @@ import { Redis } from '../../redis'
 import { logger } from '../../../helpers/logger'
 import { VideoModel } from '../../../models/video/video'
 import { VideoViewModel } from '../../../models/video/video-view'
-import { isTestInstance } from '../../../helpers/core-utils'
 import { federateVideoIfNeeded } from '../../activitypub/videos'
 
 async function processVideosViews () {
   const lastHour = new Date()
+  lastHour.setHours(lastHour.getHours() - 1)
+  await Promise.all([
+    new Date(),
+    lastHour
+  ].map(processVideosViewsForHour))
+}
 
-  // In test mode, we run this function multiple times per hour, so we don't want the values of the previous hour
-  if (!isTestInstance()) lastHour.setHours(lastHour.getHours() - 1)
-
-  const hour = lastHour.getHours()
-  const startDate = lastHour.setMinutes(0, 0, 0)
-  const endDate = lastHour.setMinutes(59, 59, 999)
+async function processVideosViewsForHour (date) {
+  const hour = date.getHours()
+  const startDate = date.setMinutes(0, 0, 0)
+  const endDate = date.setMinutes(59, 59, 999)
 
   const videoIds = await Redis.Instance.getVideosIdViewed(hour)
   if (videoIds.length === 0) return
@@ -26,8 +29,6 @@ async function processVideosViews () {
       await Redis.Instance.deleteVideoViews(videoId, hour)
 
       if (views) {
-        logger.debug('Adding %d views to video %d in hour %d.', views, videoId, hour)
-
         try {
           const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(videoId)
           if (!video) {
@@ -35,12 +36,33 @@ async function processVideosViews () {
             continue
           }
 
-          await VideoViewModel.create({
-            startDate: new Date(startDate),
-            endDate: new Date(endDate),
-            views,
-            videoId
+          const videoView = await VideoViewModel.findOne({
+            where: {
+              startDate: new Date(startDate),
+              endDate: new Date(endDate),
+              videoId
+            }
           })
+
+          if (videoView) {
+            logger.debug('Incrementing with %d views to video %d in hour %d.', views, videoId, hour)
+
+            await VideoViewModel.increment('views', {
+              by: views,
+              where: {
+                id: videoView.id
+              }
+            })
+          } else {
+            logger.debug('Adding %d views to video %d in hour %d.', views, videoId, hour)
+
+            await VideoViewModel.create({
+              startDate: new Date(startDate),
+              endDate: new Date(endDate),
+              views,
+              videoId
+            })
+          }
 
           if (video.isOwned()) {
             // If this is a remote video, the origin instance will send us an update

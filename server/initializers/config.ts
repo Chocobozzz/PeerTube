@@ -153,7 +153,8 @@ const CONFIG = {
     VIDEOS: {
       REMOTE: {
         MAX_AGE: parseDurationToMs(config.get('views.videos.remote.max_age'))
-      }
+      },
+      UPDATE_INTERVAL: config.get<string>('views.videos.update_interval')
     }
   },
   PLUGINS: {
