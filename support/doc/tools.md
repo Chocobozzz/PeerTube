@@ -22,6 +22,7 @@
   - [optimize-old-videos.js](#optimize-old-videosjs)
   - [update-host.js](#update-hostjs)
   - [reset-password.js](#reset-passwordjs)
+  - [transfer-channel.js](#transfer-channeljs)
   - [plugin install/uninstall](#plugin-installuninstall)
   - [REPL (Read Eval Print Loop)](#repl-read-eval-print-loop)
     - [.help](#help)
@@ -393,6 +394,19 @@ $ cd /var/www/peertube-docker
 $ docker-compose exec -u peertube peertube npm run reset-password -- -u target_username
 ```
 
+### transfer-channel.js
+
+To transfer a video channel from a user's account to another, run:
+
+```bash
+$ # Basic installation
+$ cd /var/www/peertube/peertube-latest
+$ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run transfer-channel -- channel_actor_username --from=account_username --to=account_username
+
+$ # Docker installation
+$ cd /var/www/peertube-docker
+$ docker-compose exec -u peertube peertube npm run transfer-channel -- channel_actor_username --from=account_username --to=account_username
+```
 
 ### plugin install/uninstall
 
