@@ -166,11 +166,7 @@
       </trans-unit>
       <trans-unit id="3371351937331192777" datatype="html">
         <source>User <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> registered on your instance </source>
-        <target state="translated">ผู้ใช้ 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>
-          <x id="INTERPOLATION" equiv-text="{{ notification.account.name }}"/>
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> ได้ลงทะเบียนบนเว็บไซต์ของคุณแล้ว 
-        </target>
+        <target state="translated">ผู้ใช้ <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/> <x id="INTERPOLATION" equiv-text="{{ notification.account.name }}"/> <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> ได้ลงทะเบียนบนเซิร์ฟเวอร์ของคุณแล้ว </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">140</context></context-group>
       </trans-unit>
       <trans-unit id="4404295482394146814" datatype="html">
@@ -197,13 +193,7 @@
       </trans-unit>
       <trans-unit id="5354239156470982824" datatype="html">
         <source>Your instance has <x id="START_LINK"/>a new follower<x id="CLOSE_LINK"/> (<x id="INTERPOLATION"/>) <x id="START_TAG_NG_CONTAINER"/> awaiting your approval<x id="CLOSE_TAG_NG_CONTAINER"/></source>
-        <target state="translated">เว็บไซต์ของคุณมี
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>ผู้ติดตามใหม่
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> (
-          <x id="INTERPOLATION" equiv-text="{{ notification.actorFollow?.follower.host }}"/>) 
-          <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/>ที่กำลังรอการอนุญาต
-          <x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>
-        </target>
+        <target state="translated">เซิร์ฟเวอร์ของคุณมี <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>ผู้ติดตามใหม่ <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> ( <x id="INTERPOLATION" equiv-text="{{ notification.actorFollow?.follower.host }}"/>) <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/>ที่กำลังรอการอนุญาต <x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">181</context></context-group>
       </trans-unit>
       <trans-unit id="325842756252267394" datatype="html">
@@ -504,7 +494,7 @@
       </trans-unit>
       <trans-unit id="4710350176324657996" datatype="html">
         <source>This will ask remote instances to delete it</source>
-        <target state="translated">การดำเนินการนี้จะขอให้เว็บไซต์อื่นลบเนื้อหานี้</target>
+        <target state="translated">การดำเนินการนี้จะขอให้เซิร์ฟเวอร์อื่นลบเนื้อหานี้</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="1974768985735973432" datatype="html">
@@ -759,12 +749,12 @@
       </trans-unit>
       <trans-unit id="6691897331062834756" datatype="html">
         <source>Subscribe with an account on this instance</source>
-        <target state="translated">ติดตามด้วยบัญชีบนเว็บไซต์นี้</target>
+        <target state="translated">ติดตามด้วยบัญชีบนเซิร์ฟเวอร์นี้</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">57</context></context-group>
       </trans-unit>
       <trans-unit id="1740917574463702967">
         <source>Subscribe with your local account</source>
-        <target>ติดตามด้วยบัญชีของเว็บไซต์นี้</target>
+        <target>ติดตามด้วยบัญชีของเซิร์ฟเวอร์นี้</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">58</context></context-group>
       </trans-unit>
       <trans-unit id="1096694538966074574" datatype="html">
@@ -866,7 +856,7 @@
       </trans-unit>
       <trans-unit id="7864066132065250510" datatype="html">
         <source><x id="INTERPOLATION"/> per user / <x id="INTERPOLATION_1"/> per instance </source>
-        <target state="translated"><x id="INTERPOLATION"/> ต่อผู้ใช้ / <x id="INTERPOLATION_1"/> ต่อเว็บไซต์ </target>
+        <target state="translated"><x id="INTERPOLATION"/> ต่อผู้ใช้ / <x id="INTERPOLATION_1"/> ต่อเซิร์ฟเวอร์ </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">86</context></context-group>
       </trans-unit>
       <trans-unit id="486979448055158839" datatype="html">
@@ -930,12 +920,12 @@
       </trans-unit>
       <trans-unit id="4603134051700562542" datatype="html">
         <source>Loading instance statistics...</source>
-        <target state="translated">กำลังโหลดสถิติเว็บไซต์...</target>
+        <target state="translated">กำลังโหลดสถิติเซิร์ฟเวอร์...</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-statistics.component.html</context><context context-type="linenumber">1</context></context-group>
       </trans-unit>
       <trans-unit id="2906587845957718064">
         <source>Local</source>
-        <target>เว็บไซต์นี้</target>
+        <target>เซิร์ฟเวอร์นี้</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-statistics.component.html</context><context context-type="linenumber">4</context></context-group>
       </trans-unit>
       <trans-unit id="1670306451865226564" datatype="html">
@@ -1116,7 +1106,7 @@
       </trans-unit>
       <trans-unit id="7252854992688790751" datatype="html">
         <source>This instance allows registration. However, be careful to check the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;terms-anchor&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot; fragment=&quot;terms&quot;&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> before creating an account. You may also search for another instance to match your exact needs at: <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="START_LINK_2" equiv-text="&lt;a class=&quot;alert-link&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="translated">เว็บไซต์นี้เปิดให้ลงทะเบียนผู้ใช้ใหม่ อย่างไรก็ตาม โปรดตรวจสอบ<x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;terms-anchor&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>เงื่อนไข<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot; fragment=&quot;terms&quot;&gt;"/>เงื่อนไข<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>อย่างระมัดระวังก่อนการสร้างบัญชี คุณสามารถหาเว็บไซต์อื่นที่ตรงกับความต้องการของคุณโดยเฉพาะได้ที่: <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="START_LINK_2" equiv-text="&lt;a class=&quot;alert-link&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> </target>
+        <target state="translated">เซิร์ฟเวอร์นี้เปิดให้ลงทะเบียนผู้ใช้ใหม่ อย่างไรก็ตาม โปรดตรวจสอบ<x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;terms-anchor&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>เงื่อนไข<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot; fragment=&quot;terms&quot;&gt;"/>เงื่อนไข<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>อย่างระมัดระวังก่อนการสร้างบัญชี คุณสามารถหาเซิร์ฟเวอร์อื่นที่ตรงกับความต้องการของคุณโดยเฉพาะได้ที่: <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="START_LINK_2" equiv-text="&lt;a class=&quot;alert-link&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">60,62</context>
@@ -1124,7 +1114,7 @@
       </trans-unit>
       <trans-unit id="7215649348148521605" datatype="html">
         <source>Currently this instance doesn't allow for user registration, you may check the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more details or find an instance that gives you the possibility to sign up for an account and upload your videos there. Find yours among multiple instances at: <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt; "/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;alert-link&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="translated">ณ ตอนนี้ เว็บไซต์นี้ไม่เปิดให้ลงทะเบียนผู้ใช้ใหม่ คุณสามารถตรวจสอบ<x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>เงื่อนไข<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>เพื่อดูข้อมูลเพิ่มเติมหรือหาเว็บไซต์อื่นที่ให้คุณสร้างบัญชีและอัปโหลดวิดีโอได้ หาเว็บไซต์ที่เหมาะกับคุณได้ที่: <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt; "/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;alert-link&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> </target>
+        <target state="translated">ณ ตอนนี้ เซิร์ฟเวอร์นี้ไม่เปิดให้ลงทะเบียนผู้ใช้ใหม่ คุณสามารถตรวจสอบ<x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>เงื่อนไข<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>เพื่อดูข้อมูลเพิ่มเติมหรือหาเซิร์ฟเวอร์อื่นที่ให้คุณสร้างบัญชีและอัปโหลดวิดีโอได้ หาเว็บไซต์ที่เหมาะกับคุณได้ที่: <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt; "/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;alert-link&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">65,67</context>
@@ -1231,7 +1221,7 @@
       </trans-unit>
       <trans-unit id="4319634264526091601" datatype="html">
         <source>on this instance</source>
-        <target state="translated">บนเว็บไซต์นี้</target>
+        <target state="translated">บนเซิร์ฟเวอร์นี้</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search.component.html</context><context context-type="linenumber">7</context></context-group>
       </trans-unit>
       <trans-unit id="761579517995454927" datatype="html">
@@ -1806,12 +1796,12 @@
       </trans-unit>
       <trans-unit id="3290262698447971494" datatype="html">
         <source>You are not authorized here.</source>
-        <target state="new">You are not authorized here.</target>
+        <target state="translated">คุณไม่ได้รับอนุญาตในหน้านี้</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="6209939621665316894" datatype="html">
         <source>You might need to check your account is allowed by the video or instance owner.</source>
-        <target state="new">You might need to check your account is allowed by the video or instance owner.</target>
+        <target state="translated">คุณอาจต้องตรวจสอบว่าบัญชีของคุณได้รับอนุญาตโดยเจ้าของวิดีโอหรือเซิร์ฟเวอร์หรือไม่</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context>
           <context context-type="linenumber">30</context>
@@ -1819,7 +1809,7 @@
       </trans-unit>
       <trans-unit id="3543381263966122204" datatype="html">
         <source>You might need to check your account is allowed by the resource or instance owner.</source>
-        <target state="new">You might need to check your account is allowed by the resource or instance owner.</target>
+        <target state="translated">คุณอาจต้องตรวจสอบว่าบัญชีของคุณได้รับอนุญาตโดยเจ้าของเนื้อหาหรือเซิร์ฟเวอร์หรือไม่</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context>
           <context context-type="linenumber">31</context>
@@ -1872,12 +1862,12 @@
       </trans-unit>
       <trans-unit id="3416071273413341159" datatype="html">
         <source>any instance</source>
-        <target state="translated">ทุกเว็บไซต์</target>
+        <target state="translated">ทุกเซิร์ฟเวอร์</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">42</context></context-group>
       </trans-unit>
       <trans-unit id="1764675694412365696" datatype="html">
         <source>only followed instances</source>
-        <target state="translated">เฉพาะเว็บไซต์ที่ติดตาม</target>
+        <target state="translated">เฉพาะเซิร์ฟเวอร์ที่ติดตาม</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">43</context></context-group>
       </trans-unit>
       <trans-unit id="6462732349450217281" datatype="html">
@@ -1903,7 +1893,7 @@
       </trans-unit>
       <trans-unit id="2468689683507870964" datatype="html">
         <source>In this instance's network</source>
-        <target state="translated">ในเครือข่ายของเว็บไซต์นี้</target>
+        <target state="translated">ในเครือข่ายของเซิร์ฟเวอร์นี้</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/suggestion.component.html</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="4494942989613184609" datatype="html">
@@ -2598,7 +2588,7 @@
       </trans-unit>
       <trans-unit id="2587226585711833549" datatype="html">
         <source>Read instance rules for help</source>
-        <target state="translated">อ่านกฎของเว็บไซต์สำหรับความช่วยเหลือ</target>
+        <target state="translated">อ่านกฎของเซิร์ฟเวอร์สำหรับความช่วยเหลือ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.html</context><context context-type="linenumber">4</context></context-group>
       </trans-unit>
       <trans-unit id="3455474330346212563" datatype="html">
@@ -2632,7 +2622,7 @@
       </trans-unit>
       <trans-unit id="7860848084471862305" datatype="html">
         <source>Cannot create live because this instance have too many created lives</source>
-        <target state="translated">ไม่สามารถสร้างวิดีโอสด เนื่องจากเว็บไซต์นี้ได้สร้างวิดีโอสดมากเกินไป</target>
+        <target state="translated">ไม่สามารถสร้างวิดีโอสด เนื่องจากเซิร์ฟเวอร์นี้ได้สร้างวิดีโอสดมากเกินไป</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">96</context></context-group>
       </trans-unit>
       <trans-unit id="1278564497286613571" datatype="html">
@@ -2657,13 +2647,7 @@
       </trans-unit>
       <trans-unit id="2993949426196989262" datatype="html">
         <source>We recommend you to not use the <x id="START_TAG_STRONG"/>root<x id="CLOSE_TAG_STRONG"/> user to publish your videos, since it's the super-admin account of your instance. <x id="LINE_BREAK"/> Instead, <x id="START_LINK"/>create a dedicated account<x id="CLOSE_LINK"/> to upload your videos. </source>
-        <target state="translated">เราไม่แนะนำให้คุณใช้ผู้ใช้ 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>root
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> เพื่อเผยแพร่วิดีโอ เนื่องจากเป็นบัญชีผู้ดูแลระบบสูงสุดของระบบของคุณ 
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> คุณควร
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>สร้างบัญชีแยก
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>เพื่ออัปโหลดวิดีโอ 
-        </target>
+        <target state="translated">เราไม่แนะนำให้คุณใช้ผู้ใช้ <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>root <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> เพื่อเผยแพร่วิดีโอ เนื่องจากเป็นบัญชีผู้ดูแลระบบสูงสุดของเซิร์ฟเวอร์ของคุณ <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> คุณควร <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>สร้างบัญชีแยก <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>เพื่ออัปโหลดวิดีโอ </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="293476877021544115" datatype="html">
@@ -4101,7 +4085,7 @@
       </trans-unit>
       <trans-unit id="2381859602529023966" datatype="html">
         <source>Instance</source>
-        <target state="translated">เว็บไซต์</target>
+        <target state="translated">เซิร์ฟเวอร์</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about.component.html</context><context context-type="linenumber">5</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">184</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.html</context><context context-type="linenumber">31</context></context-group>
@@ -4502,7 +4486,7 @@
       </trans-unit>
       <trans-unit id="7396175500300709096" datatype="html">
         <source>INSTANCE</source>
-        <target state="new">INSTANCE</target>
+        <target state="translated">เซิร์ฟเวอร์</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context><context context-type="linenumber">7</context></context-group>
       </trans-unit>
       <trans-unit id="8953033926734869941">
@@ -5573,7 +5557,7 @@ color: red;
       </trans-unit>
       <trans-unit id="1534085756270333258" datatype="html">
         <source>In Recently added, Trending, Local, Most liked and Search pages</source>
-        <target state="translated">ในหน้าเพิ่งเผยแพร่ มาแรง เว็บไซต์นี้ ชอบมากที่สุด และหน้าค้นหา</target>
+        <target state="translated">ในหน้าเพิ่งเผยแพร่ มาแรง เซิร์ฟเวอร์นี้ ชอบมากที่สุด และหน้าค้นหา</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="2658703380934466003" datatype="html">
@@ -5609,7 +5593,7 @@ color: red;
       </trans-unit>
       <trans-unit id="4541462271161741535" datatype="html">
         <source>instance default</source>
-        <target state="translated">ค่าเริ่มต้นของเว็บไซต์</target>
+        <target state="translated">ค่าเริ่มต้นของเซิร์ฟเวอร์</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.html</context><context context-type="linenumber">8</context></context-group>
       </trans-unit>
       <trans-unit id="5192951216991773088" datatype="html">
@@ -6045,7 +6029,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8610022770999239699" datatype="html">
         <source>This instance does not require email verification.</source>
-        <target state="translated">เว็บไซต์นี้ไม่ต้องยืนยันอีเมล</target>
+        <target state="translated">เซิร์ฟเวอร์นี้ไม่ต้องยืนยันอีเมล</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-ask-send-email/verify-account-ask-send-email.component.html</context><context context-type="linenumber">20</context></context-group>
       </trans-unit>
       <trans-unit id="248731258067914565" datatype="html">
@@ -6065,17 +6049,17 @@ color: red;
       </trans-unit>
       <trans-unit id="4572885137800697555" datatype="html">
         <source>Instance muted</source>
-        <target state="translated">ปิดเสียงเว็บไซต์แล้ว</target>
+        <target state="translated">ปิดเสียงเซิร์ฟเวอร์แล้ว</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.html</context><context context-type="linenumber">23</context></context-group>
       </trans-unit>
       <trans-unit id="302022805144581075" datatype="html">
         <source>Muted by your instance</source>
-        <target state="translated">ถูกปิดเสียงโดยเว็บไซต์ของคุณ</target>
+        <target state="translated">ถูกปิดเสียงโดยเซิร์ฟเวอร์ของคุณ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.html</context><context context-type="linenumber">24</context></context-group>
       </trans-unit>
       <trans-unit id="6860866645734090311" datatype="html">
         <source>Instance muted by your instance</source>
-        <target state="translated">เว็บไซต์นี้ถูกปิดเสียงโดยเว็บไซต์ของคุณ</target>
+        <target state="translated">เซิร์ฟเวอร์นี้ถูกปิดเสียงโดยเซิร์ฟเวอร์ของคุณ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.html</context><context context-type="linenumber">25</context></context-group>
       </trans-unit>
       <trans-unit id="8661266239199665830" datatype="html">
@@ -6294,7 +6278,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="19872047295276660" datatype="html">
         <source>This instance is dedicated to sensitive/NSFW content.</source>
-        <target state="translated">เว็บไซต์นี้เผยแพร่เนื้อหาที่ไม่เหมาะสมโดยเฉพาะ</target>
+        <target state="translated">เซิร์ฟเวอร์นี้เผยแพร่เนื้อหาที่ไม่เหมาะสมโดยเฉพาะ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context><context context-type="linenumber">19</context></context-group>
       </trans-unit>
       <trans-unit id="1970848297295860531" datatype="html">
@@ -6311,17 +6295,17 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="4722135551130122302" datatype="html">
         <source>Why we created this instance</source>
-        <target state="translated">ทำไมเราถึงสร้างเว็บไซต์นี้</target>
+        <target state="translated">ทำไมเราถึงสร้างเซิร์ฟเวอร์นี้</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context><context context-type="linenumber">58</context></context-group>
       </trans-unit>
       <trans-unit id="6434467346812189214" datatype="html">
         <source>How long we plan to maintain this instance</source>
-        <target state="translated">เรามีแผนที่จะดูแลเว็บไซต์นี้นานเท่าใด</target>
+        <target state="translated">เรามีแผนที่จะดูแลเซิร์ฟเวอร์นี้นานเท่าใด</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context><context context-type="linenumber">72</context></context-group>
       </trans-unit>
       <trans-unit id="8765504394950427814" datatype="html">
         <source>How we will pay for keeping our instance running</source>
-        <target state="new">How we will pay for keeping our instance running</target>
+        <target state="translated">เราจะจ่ายเงินเพื่อให้เซิร์ฟเวอร์นี้ทำงานอยู่อย่างไร</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">86</context>
@@ -6354,7 +6338,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="8495040351808033345" datatype="html">
         <source>Features found on this instance</source>
-        <target state="translated">คุณสมบัติที่สามารถใช้งานได้ในเว็บไซต์นี้</target>
+        <target state="translated">คุณสมบัติที่สามารถใช้งานได้ในเซิร์ฟเวอร์นี้</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">4</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-about-accordion.component.html</context><context context-type="linenumber">6</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-about-accordion.component.html</context><context context-type="linenumber">6</context></context-group>
@@ -6570,7 +6554,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="3857357852909495917" datatype="html">
         <source>This instance does not have instances followers.</source>
-        <target state="translated">เว็บไซต์นี้ไม่มีเว็บไซต์อื่นติดตาม</target>
+        <target state="translated">เซิร์ฟเวอร์นี้ไม่มีเซิร์ฟเวอร์อื่นติดตาม</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context><context context-type="linenumber">6</context></context-group>
       </trans-unit>
       <trans-unit id="8438752523256358076" datatype="html">
@@ -6587,12 +6571,12 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="7128556172318221342" datatype="html">
         <source>This instance is not following any other.</source>
-        <target state="new">This instance is not following any other.</target>
+        <target state="translated">เซิร์ฟเวอร์นี้ไม่ได้ติดตามเซิร์ฟเวอร์อื่น</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context><context context-type="linenumber">18</context></context-group>
       </trans-unit>
       <trans-unit id="4195286790385468087" datatype="html">
         <source>About this instance</source>
-        <target state="translated">เกี่ยวกับเว็บไซต์นี้</target>
+        <target state="translated">เกี่ยวกับเซิร์ฟเวอร์นี้</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-routing.module.ts</context><context context-type="linenumber">25</context></context-group>
       </trans-unit>
       <trans-unit id="8773846522957677259" datatype="html">
@@ -6602,7 +6586,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="1812900507515561988" datatype="html">
         <source>About this instance's network</source>
-        <target state="translated">เกี่ยวกับเครือข่ายของเว็บไซต์นี้</target>
+        <target state="translated">เกี่ยวกับเครือข่ายของเซิร์ฟเวอร์นี้</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-routing.module.ts</context><context context-type="linenumber">59</context></context-group>
       </trans-unit>
       <trans-unit id="892073694820881630" datatype="html">
@@ -6650,12 +6634,12 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="1445137115016841401" datatype="html">
         <source>How long do we plan to maintain this instance?</source>
-        <target state="translated">เรามีแผนที่จะดูแลเว็บไซต์นี้นานเท่าใด</target>
+        <target state="translated">เรามีแผนที่จะดูแลเซิร์ฟเวอร์นี้นานเท่าใด</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-about-accordion.component.html</context><context context-type="linenumber">24</context></context-group>
       </trans-unit>
       <trans-unit id="2975856643479054118" datatype="html">
         <source>How will we finance this instance?</source>
-        <target state="translated">เราใช้แหล่งเงินใดในการจ่ายค่าใช้จ่ายของเว็บไซต์นี้</target>
+        <target state="translated">เราใช้แหล่งเงินใดในการจ่ายค่าใช้จ่ายของเซิร์ฟเวอร์นี้</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-about-accordion.component.html</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="2573967459337636542" datatype="html">
@@ -6706,7 +6690,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="7981235640417633362" datatype="html">
         <source>The channel name is a unique identifier of your channel on this and all the other instances. It's as unique as an email address, which makes it easy for other people to interact with it.</source>
-        <target state="translated">ชื่อช่องเป็นตัวระบุตัวตนของช่องของคุณบนเว็บไซต์นี้และเว็บไซต์อื่น ๆ ชื่อช่องมีความเป็นเอกลักษณ์เหมือนที่อยู่อีเมล ซึ่งทำให้คนอื่นสามารถโต้ตอบกับช่องได้ง่าย</target>
+        <target state="translated">ชื่อช่องเป็นตัวระบุตัวตนของช่องของคุณบนเซิร์ฟเวอร์นี้และเซิร์ฟเวอร์อื่น ๆ ชื่อช่องมีความเป็นเอกลักษณ์เหมือนที่อยู่อีเมล ซึ่งทำให้คนอื่นสามารถโต้ตอบกับช่องได้ง่าย</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register-step-channel.component.html</context><context context-type="linenumber">43</context></context-group>
       </trans-unit>
       <trans-unit id="5203776997447520497" datatype="html">
@@ -6716,7 +6700,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="7440807341905682986" datatype="html">
         <source>I am at least <x id="INTERPOLATION" equiv-text="{{ minimumAge }}"/> years old and agree to the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;terms-anchor&quot; (click)=&quot;onTermsClick($event)&quot; href='#'&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;hasCodeOfConduct&quot;&gt;"/> and to the <x id="START_LINK_1" equiv-text="&lt;a (click)=&quot;onCodeOfConductClick($event)&quot; href='#'&gt;"/>Code of Conduct<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/> of this instance </source>
-        <target state="translated">ฉันมีอายุอย่างน้อย <x id="INTERPOLATION" equiv-text="{{ minimumAge }}"/> ปี และยอมรับ<x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;terms-anchor&quot; (click)=&quot;onTermsClick($event)&quot; href='#'&gt;"/>เงื่อนไข<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;hasCodeOfConduct&quot;&gt;"/>และ<x id="START_LINK_1" equiv-text="&lt;a (click)=&quot;onCodeOfConductClick($event)&quot; href='#'&gt;"/>หลักปฏิบัติ<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/>ของเว็บไซต์นี้ </target>
+        <target state="translated">ฉันมีอายุอย่างน้อย <x id="INTERPOLATION" equiv-text="{{ minimumAge }}"/> ปี และยอมรับ<x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;terms-anchor&quot; (click)=&quot;onTermsClick($event)&quot; href='#'&gt;"/>เงื่อนไข<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;hasCodeOfConduct&quot;&gt;"/>และ<x id="START_LINK_1" equiv-text="&lt;a (click)=&quot;onCodeOfConductClick($event)&quot; href='#'&gt;"/>หลักปฏิบัติ<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/>ของเซิร์ฟเวอร์นี้ </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register-step-terms.component.html</context>
           <context context-type="linenumber">5,10</context>
@@ -6724,12 +6708,12 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="7326471570669373149" datatype="html">
         <source>The username is a unique identifier of your account on this and all the other instances. It's as unique as an email address, which makes it easy for other people to interact with it.</source>
-        <target state="translated">ชื่อผู้ใช้เป็นตัวระบุตัวตนของบัญชีของคุณบนเว็บไซต์นี้และเว็บไซต์อื่น ๆ ชื่อผู้ใช้มีความเป็นเอกลักษณ์เหมือนที่อยู่อีเมล ซึ่งทำให้คนอื่นสามารถโต้ตอบกับคุณได้ง่าย</target>
+        <target state="translated">ชื่อผู้ใช้เป็นตัวระบุตัวตนของบัญชีของคุณบนเซิร์ฟเวอร์นี้และเซิร์ฟเวอร์อื่น ๆ ชื่อผู้ใช้มีความเป็นเอกลักษณ์เหมือนที่อยู่อีเมล ซึ่งทำให้คนอื่นสามารถโต้ตอบกับคุณได้ง่าย</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register-step-user.component.html</context><context context-type="linenumber">36</context></context-group>
       </trans-unit>
       <trans-unit id="198278273748445199" datatype="html">
         <source>Video uploads are disabled on this instance, hence your account won't be able to upload videos.</source>
-        <target state="new"> Video uploads are disabled on this instance, hence your account won't be able to upload videos. </target>
+        <target state="translated">การอัปโหลดวิดีโอถูกปิดบนเซิร์ฟเวอร์นี้ บัญชีของคุณจึงไม่สามารถอัปโหลดวิดีโอ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register-step-user.component.html</context>
           <context context-type="linenumber">4,5</context>
@@ -6995,7 +6979,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="6920964195632624609" datatype="html">
         <source>INSTANCE HOMEPAGE</source>
-        <target state="new">INSTANCE HOMEPAGE</target>
+        <target state="translated">หน้าหลักเซิร์ฟเวอร์</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-homepage.component.html</context>
           <context context-type="linenumber">7</context>
@@ -7919,9 +7903,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="7246356397085094208" datatype="html">
         <source>Instance <x id="PH"/> unmuted.</source>
-        <target state="translated">เลิกปิดเสียงเว็บไซต์ 
-          <x id="PH"/> แล้ว
-        </target>
+        <target state="translated">เลิกปิดเสียงเซิร์ฟเวอร์ <x id="PH"/> แล้ว</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.ts</context><context context-type="linenumber">45</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">157</context></context-group>
       </trans-unit>
@@ -8066,7 +8048,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="3268838889659873892" datatype="html">
         <source>A new user registered on your instance</source>
-        <target state="translated">มีผู้ใช้ใหม่ลงทะเบียนบนเว็บไซต์ของคุณ</target>
+        <target state="translated">มีผู้ใช้ใหม่ลงทะเบียนบนเซิร์ฟเวอร์ของคุณ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">39</context></context-group>
       </trans-unit>
       <trans-unit id="7373104725413001009" datatype="html">
@@ -8081,7 +8063,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="2018794201569157817" datatype="html">
         <source>Your instance has a new follower</source>
-        <target state="translated">เว็บไซต์ของคุณมีผู้ติดตามใหม่</target>
+        <target state="translated">เซิร์ฟเวอร์ของคุณมีผู้ติดตามใหม่</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">42</context></context-group>
       </trans-unit>
       <trans-unit id="773085434165307906" datatype="html">
@@ -8178,7 +8160,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="8723777130353305761" datatype="html">
         <source>This name already exists on this instance.</source>
-        <target state="translated">ชื่อนี้มีอยู่ในเว็บไซต์นี้แล้ว</target>
+        <target state="translated">ชื่อนี้มีอยู่ในเซิร์ฟเวอร์นี้แล้ว</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channel-create.component.ts</context><context context-type="linenumber">73</context></context-group>
       </trans-unit>
       <trans-unit id="7589345916094713536" datatype="html">
@@ -8507,7 +8489,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="2887122197778293919" datatype="html">
         <source>Go to the local videos page</source>
-        <target state="translated">ไปที่หน้าวิดีโอในเว็บไซต์นี้</target>
+        <target state="translated">ไปที่หน้าวิดีโอในเซิร์ฟเวอร์นี้</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.ts</context><context context-type="linenumber">325</context></context-group>
       </trans-unit>
       <trans-unit id="8009065619559214982" datatype="html">
@@ -8870,7 +8852,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="7784486624424057376" datatype="html">
         <source>Instance name is required.</source>
-        <target state="translated">ต้องใส่ชื่อของเว็บไซต์</target>
+        <target state="translated">ต้องใส่ชื่อของเซิร์ฟเวอร์</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">7</context></context-group>
       </trans-unit>
       <trans-unit id="3281212084219111058" datatype="html">
@@ -9203,7 +9185,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="1814372869868173571" datatype="html">
         <source>You must agree with the instance terms in order to register on it.</source>
-        <target state="translated">คุณต้องยอมรับข้อกำหนดของเว็บไซต์เพื่อลงทะเบียน</target>
+        <target state="translated">คุณต้องยอมรับข้อกำหนดของเซิร์ฟเวอร์เพื่อลงทะเบียน</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">133</context></context-group>
       </trans-unit>
       <trans-unit id="7803960725351649605" datatype="html">
@@ -9313,7 +9295,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="3954099618513992825" datatype="html">
         <source>You can only transfer ownership to a local account</source>
-        <target state="translated">คุณสามารถโอนเจ้าของได้เฉพาะบัญชีที่อยู่ในเว็บไซต์นี้เท่านั้น</target>
+        <target state="translated">คุณสามารถโอนเจ้าของได้เฉพาะบัญชีที่อยู่ในเซิร์ฟเวอร์นี้เท่านั้น</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-ownership-change-validators.ts</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="4444753420973870540" datatype="html">
@@ -9789,7 +9771,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="2830831449226931729" datatype="html">
         <source>Instance languages</source>
-        <target state="translated">ภาษาเว็บไซต์</target>
+        <target state="translated">ภาษาของเซิร์ฟเวอร์</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context><context context-type="linenumber">179</context></context-group>
       </trans-unit>
       <trans-unit id="40119547597591062" datatype="html">
@@ -10646,7 +10628,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="1425933035739773115" datatype="html">
         <source>Only users of this instance can see this video</source>
-        <target state="translated">เฉพาะผู้ใช้ของเว็บไซต์นี้ที่จะเห็นวิดีโอนี้</target>
+        <target state="translated">เฉพาะผู้ใช้ของเซิร์ฟเวอร์นี้ที่จะเห็นวิดีโอนี้</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context><context context-type="linenumber">397</context></context-group>
       </trans-unit>
       <trans-unit id="8312101634344200207" datatype="html">
@@ -10907,12 +10889,12 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="961774488937452220" datatype="html">
         <source>This video is not available on this instance. Do you want to be redirected on the origin instance: &lt;a href="<x id="PH"/>"&gt;<x id="PH_1"/>&lt;/a&gt;?</source>
-        <target state="new">This video is not available on this instance. Do you want to be redirected on the origin instance: &lt;a href="<x id="PH"/>"&gt;<x id="PH_1"/>&lt;/a&gt;?</target>
+        <target state="translated">วิดีโอนี้ไม่สามารถรับชมบนเซิร์ฟเวอร์นี้ คุณต้องการเปลี่ยนเส้นทางไปยังเซิร์ฟเวอร์ต้นทางหรือไม่?: &lt;a href="<x id="PH"/>"&gt;<x id="PH_1"/>&lt;/a&gt;</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">288</context></context-group>
       </trans-unit>
       <trans-unit id="5761611056224181752" datatype="html">
         <source>Redirection</source>
-        <target state="new">Redirection</target>
+        <target state="translated">การเปลี่ยนเส้นทาง</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">289</context></context-group>
       </trans-unit>
       <trans-unit id="8858527736400081688" datatype="html">
@@ -11053,7 +11035,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="8681933925782924101" datatype="html">
         <source>Local videos</source>
-        <target state="translated">วิดีโอในเว็บไซต์นี้</target>
+        <target state="translated">วิดีโอในเซิร์ฟเวอร์นี้</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/video-list/video-local.component.ts</context><context context-type="linenumber">37</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/videos-routing.module.ts</context><context context-type="linenumber">70</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/menu/menu.service.ts</context><context context-type="linenumber">142</context></context-group>
