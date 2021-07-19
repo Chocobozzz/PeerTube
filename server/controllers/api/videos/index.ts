@@ -1,5 +1,6 @@
 import * as express from 'express'
 import toInt from 'validator/lib/toInt'
+import { sha1 } from '@server/helpers/core-utils'
 import { doJSONRequest } from '@server/helpers/requests'
 import { LiveManager } from '@server/lib/live'
 import { openapiOperationDoc } from '@server/middlewares/doc'
@@ -148,7 +149,20 @@ async function getVideo (_req: express.Request, res: express.Response) {
     JobQueue.Instance.createJob({ type: 'activitypub-refresher', payload: { type: 'video', url: video.url } })
   }
 
-  return res.json(video.toFormattedDetailsJSON())
+  const videoJson = video.toFormattedDetailsJSON()
+
+  return res.json({
+    ...videoJson,
+    streamingPlaylists: videoJson.streamingPlaylists.map(sp => {
+      const hash = sha1(sp.files.map(f => f.fileUrl).join(''))
+
+      return {
+        ...sp,
+        playlistUrl: `${sp.playlistUrl}?hash=${hash}`,
+        segmentsSha256Url: `${sp.segmentsSha256Url}?hash=${hash}`
+      }
+    })
+  })
 }
 
 async function viewVideo (req: express.Request, res: express.Response) {

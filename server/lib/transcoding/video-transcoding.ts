@@ -16,6 +16,7 @@ import { VideoStreamingPlaylistModel } from '../../models/video/video-streaming-
 import { updateMasterHLSPlaylist, updateSha256VODSegments } from '../hls'
 import { generateVideoFilename, generateVideoStreamingPlaylistName, getVideoFilePath } from '../video-paths'
 import { VideoTranscodingProfilesManager } from './video-transcoding-profiles'
+import { uuid as uuidv4 } from 'uuidv4'
 
 /**
  *
@@ -60,7 +61,7 @@ async function optimizeOriginalVideofile (video: MVideoFullLight, inputVideoFile
 
     // Important to do this before getVideoFilename() to take in account the new filename
     inputVideoFile.extname = newExtname
-    inputVideoFile.filename = generateVideoFilename(video, false, resolution, newExtname)
+    inputVideoFile.filename = generateVideoFilename(false, resolution, newExtname)
 
     const videoOutputPath = getVideoFilePath(video, inputVideoFile)
 
@@ -86,7 +87,7 @@ async function transcodeNewWebTorrentResolution (video: MVideoFullLight, resolut
   const newVideoFile = new VideoFileModel({
     resolution,
     extname,
-    filename: generateVideoFilename(video, false, resolution, extname),
+    filename: generateVideoFilename(false, resolution, extname),
     size: 0,
     videoId: video.id
   })
@@ -169,7 +170,7 @@ async function mergeAudioVideofile (video: MVideoFullLight, resolution: VideoRes
 
   // Important to do this before getVideoFilename() to take in account the new file extension
   inputVideoFile.extname = newExtname
-  inputVideoFile.filename = generateVideoFilename(video, false, inputVideoFile.resolution, newExtname)
+  inputVideoFile.filename = generateVideoFilename(false, inputVideoFile.resolution, newExtname)
 
   const videoOutputPath = getVideoFilePath(video, inputVideoFile)
   // ffmpeg generated a new video file, so update the video duration
@@ -271,7 +272,8 @@ async function generateHlsPlaylistCommon (options: {
   const videoTranscodedBasePath = join(transcodeDirectory, type)
   await ensureDir(videoTranscodedBasePath)
 
-  const videoFilename = generateVideoStreamingPlaylistName(video.uuid, resolution)
+  const uuid = uuidv4()
+  const videoFilename = generateVideoStreamingPlaylistName(uuid, resolution)
   const playlistFilename = VideoStreamingPlaylistModel.getHlsPlaylistFilename(resolution)
   const playlistFileTranscodePath = join(videoTranscodedBasePath, playlistFilename)
 
@@ -319,7 +321,7 @@ async function generateHlsPlaylistCommon (options: {
     resolution,
     extname,
     size: 0,
-    filename: generateVideoFilename(video, true, resolution, extname),
+    filename: videoFilename,
     fps: -1,
     videoStreamingPlaylistId: videoStreamingPlaylist.id
   })
@@ -337,7 +339,6 @@ async function generateHlsPlaylistCommon (options: {
   await move(join(videoTranscodedBasePath, videoFilename), videoFilePath, { overwrite: true })
 
   const stats = await stat(videoFilePath)
-
   newVideoFile.size = stats.size
   newVideoFile.fps = await getVideoFileFPS(videoFilePath)
   newVideoFile.metadata = await getMetadataFromFile(videoFilePath)

@@ -2,7 +2,7 @@ import { close, ensureDir, move, open, outputJSON, pathExists, read, readFile, r
 import { flatten, uniq } from 'lodash'
 import { basename, dirname, join } from 'path'
 import { MVideoWithFile } from '@server/types/models'
-import { sha256 } from '../helpers/core-utils'
+import { sha1, sha256 } from '../helpers/core-utils'
 import { getAudioStreamCodec, getVideoStreamCodec, getVideoStreamSize } from '../helpers/ffprobe-utils'
 import { logger } from '../helpers/logger'
 import { doRequest, doRequestAndSaveToFile } from '../helpers/requests'
@@ -58,7 +58,7 @@ async function updateMasterHLSPlaylist (video: MVideoWithFile) {
     line += `,CODECS="${codecs.filter(c => !!c).join(',')}"`
 
     masterPlaylists.push(line)
-    masterPlaylists.push(VideoStreamingPlaylistModel.getHlsPlaylistFilename(file.resolution))
+    masterPlaylists.push(`${VideoStreamingPlaylistModel.getHlsPlaylistFilename(file.resolution)}?hash=${sha1(file.filename)}`)
   }
 
   await writeFile(masterPlaylistPath, masterPlaylists.join('\n') + '\n')

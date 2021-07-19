@@ -72,7 +72,7 @@ async function updateVideoFile (video: MVideoFullLight, inputFilePath: string) {
   const newVideoFile = new VideoFileModel({
     resolution: videoFileResolution,
     extname: fileExt,
-    filename: generateVideoFilename(video, false, videoFileResolution, fileExt),
+    filename: generateVideoFilename(false, videoFileResolution, fileExt),
     size,
     fps,
     videoId: video.id
