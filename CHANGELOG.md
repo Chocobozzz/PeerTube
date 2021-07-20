@@ -1,6 +1,6 @@
 # Changelog
 
-## v3.3.0-rc.1
+## v3.3.0
 
 ### IMPORTANT NOTES
 
@@ -78,6 +78,11 @@
  * Correctly handle broken plugin install
  * Fix channel deletion when it has videos
  * Force TLS for webfinger in production
+ * Correctly support `wav` mimetype
+ * Fix default video privacy when plugins deleted private video privacy
+ * Fix subscribe hotkey
+ * Fix HTTP fallback with a video that does not have webtorrent files
+ * Fill video information when importing a peertube video
 
 
 ## v3.2.1
