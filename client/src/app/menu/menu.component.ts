@@ -122,6 +122,9 @@ export class MenuComponent implements OnInit {
           .subscribe(() => this.buildUserLanguages())
       })
 
+    this.serverService.getConfig()
+      .subscribe(config => this.serverConfig = config)
+
     this.modalService.openQuickSettingsSubject
       .subscribe(() => this.openQuickSettings())
   }
