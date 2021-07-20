@@ -141,6 +141,10 @@ The link will expire within 1 hour.`
     this.accordion = instanceAboutAccordion.accordion
   }
 
+  hasUsernameUppercase () {
+    return this.form.value['username'].match(/[A-Z]/)
+  }
+
   private loadExternalAuthToken (username: string, token: string) {
     this.isAuthenticatedWithExternalAuth = true
 

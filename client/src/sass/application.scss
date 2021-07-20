@@ -123,10 +123,14 @@ code {
   vertical-align: middle;
 }
 
-.form-error {
+.form-error,
+.form-warning {
   display: block;
-  color: $red;
   margin-top: 5px;
+}
+
+.form-error {
+  color: $red;
 }
 
 .input-error,
