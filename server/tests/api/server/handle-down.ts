@@ -97,8 +97,8 @@ describe('Test handle downs', function () {
     this.timeout(240000)
 
     // Server 2 and 3 follow server 1
-    await servers[1].follows.follow({ targets: [ servers[0].url ] })
-    await servers[2].follows.follow({ targets: [ servers[0].url ] })
+    await servers[1].follows.follow({ hosts: [ servers[0].url ] })
+    await servers[2].follows.follow({ hosts: [ servers[0].url ] })
 
     await waitJobs(servers)
 
@@ -180,7 +180,7 @@ describe('Test handle downs', function () {
     await servers[1].follows.unfollow({ target: servers[0] })
     await waitJobs(servers)
 
-    await servers[1].follows.follow({ targets: [ servers[0].url ] })
+    await servers[1].follows.follow({ hosts: [ servers[0].url ] })
 
     await waitJobs(servers)
 

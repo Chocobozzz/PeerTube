@@ -267,6 +267,16 @@ export class VideosCommand extends AbstractCommand {
 
   // ---------------------------------------------------------------------------
 
+  async find (options: OverrideCommandOptions & {
+    name: string
+  }) {
+    const { data } = await this.list(options)
+
+    return data.find(v => v.name === options.name)
+  }
+
+  // ---------------------------------------------------------------------------
+
   update (options: OverrideCommandOptions & {
     id: number | string
     attributes?: VideoEdit

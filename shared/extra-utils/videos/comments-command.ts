@@ -5,6 +5,10 @@ import { AbstractCommand, OverrideCommandOptions } from '../shared'
 
 export class CommentsCommand extends AbstractCommand {
 
+  private lastVideoId: number | string
+  private lastThreadId: number
+  private lastReplyId: number
+
   listForAdmin (options: OverrideCommandOptions & {
     start?: number
     count?: number
@@ -80,6 +84,9 @@ export class CommentsCommand extends AbstractCommand {
       defaultExpectedStatus: HttpStatusCode.OK_200
     }))
 
+    this.lastThreadId = body.comment.id
+    this.lastVideoId = videoId
+
     return body.comment
   }
 
@@ -100,7 +107,21 @@ export class CommentsCommand extends AbstractCommand {
       defaultExpectedStatus: HttpStatusCode.OK_200
     }))
 
+    this.lastReplyId = body.comment.id
+
     return body.comment
+  }
+
+  async addReplyToLastReply (options: OverrideCommandOptions & {
+    text: string
+  }) {
+    return this.addReply({ ...options, videoId: this.lastVideoId, toCommentId: this.lastReplyId })
+  }
+
+  async addReplyToLastThread (options: OverrideCommandOptions & {
+    text: string
+  }) {
+    return this.addReply({ ...options, videoId: this.lastVideoId, toCommentId: this.lastThreadId })
   }
 
   async findCommentId (options: OverrideCommandOptions & {

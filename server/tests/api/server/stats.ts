@@ -43,7 +43,7 @@ describe('Test stats (excluding redundancy)', function () {
     // Wait the video views repeatable job
     await wait(8000)
 
-    await servers[2].follows.follow({ targets: [ servers[0].url ] })
+    await servers[2].follows.follow({ hosts: [ servers[0].url ] })
     await waitJobs(servers)
   })
 

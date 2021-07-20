@@ -3,8 +3,8 @@ import { PeerTubeServer } from './server'
 
 async function doubleFollow (server1: PeerTubeServer, server2: PeerTubeServer) {
   await Promise.all([
-    server1.follows.follow({ targets: [ server2.url ] }),
-    server2.follows.follow({ targets: [ server1.url ] })
+    server1.follows.follow({ hosts: [ server2.url ] }),
+    server2.follows.follow({ hosts: [ server1.url ] })
   ])
 
   // Wait request propagation

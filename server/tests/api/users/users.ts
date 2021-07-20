@@ -103,7 +103,7 @@ describe('Test users', function () {
       token = 'my_super_token'
 
       await server.follows.follow({
-        targets: [ 'http://example.com' ],
+        hosts: [ 'http://example.com' ],
         token,
         expectedStatus: HttpStatusCode.UNAUTHORIZED_401
       })

@@ -29,6 +29,7 @@ import {
   removeFollowingValidator
 } from '../../../middlewares/validators'
 import { ActorFollowModel } from '../../../models/actor/actor-follow'
+import { ServerFollowCreate } from '@shared/models'
 
 const serverFollowsRouter = express.Router()
 serverFollowsRouter.get('/following',
@@ -45,10 +46,10 @@ serverFollowsRouter.post('/following',
   ensureUserHasRight(UserRight.MANAGE_SERVER_FOLLOW),
   followValidator,
   setBodyHostsPort,
-  asyncMiddleware(followInstance)
+  asyncMiddleware(addFollow)
 )
 
-serverFollowsRouter.delete('/following/:host',
+serverFollowsRouter.delete('/following/:hostOrHandle',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_SERVER_FOLLOW),
   asyncMiddleware(removeFollowingValidator),
@@ -125,14 +126,26 @@ async function listFollowers (req: express.Request, res: express.Response) {
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
-async function followInstance (req: express.Request, res: express.Response) {
-  const hosts = req.body.hosts as string[]
+async function addFollow (req: express.Request, res: express.Response) {
+  const { hosts, handles } = req.body as ServerFollowCreate
   const follower = await getServerActor()
 
   for (const host of hosts) {
     const payload = {
       host,
       name: SERVER_ACTOR_NAME,
+      followerActorId: follower.id
+    }
+
+    JobQueue.Instance.createJob({ type: 'activitypub-follow', payload })
+  }
+
+  for (const handle of handles) {
+    const [ name, host ] = handle.split('@')
+
+    const payload = {
+      host,
+      name,
       followerActorId: follower.id
     }
 

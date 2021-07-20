@@ -1,5 +1,5 @@
 import { pick } from 'lodash'
-import { ActivityPubActorType, ActorFollow, FollowState, HttpStatusCode, ResultList } from '@shared/models'
+import { ActivityPubActorType, ActorFollow, FollowState, HttpStatusCode, ResultList, ServerFollowCreate } from '@shared/models'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
 import { PeerTubeServer } from './server'
 
@@ -29,13 +29,13 @@ export class FollowsCommand extends AbstractCommand {
   }
 
   getFollowings (options: OverrideCommandOptions & {
-    start: number
-    count: number
-    sort: string
+    start?: number
+    count?: number
+    sort?: string
     search?: string
     actorType?: ActivityPubActorType
     state?: FollowState
-  }) {
+  } = {}) {
     const path = '/api/v1/server/following'
 
     const toPick = [ 'start', 'count', 'sort', 'search', 'state', 'actorType' ]
@@ -52,26 +52,41 @@ export class FollowsCommand extends AbstractCommand {
   }
 
   follow (options: OverrideCommandOptions & {
-    targets: string[]
+    hosts?: string[]
+    handles?: string[]
   }) {
     const path = '/api/v1/server/following'
 
-    const hosts = options.targets.map(f => f.replace(/^http:\/\//, ''))
+    const fields: ServerFollowCreate = {}
+
+    if (options.hosts) {
+      fields.hosts = options.hosts.map(f => f.replace(/^http:\/\//, ''))
+    }
+
+    if (options.handles) {
+      fields.handles = options.handles
+    }
 
     return this.postBodyRequest({
       ...options,
 
       path,
-      fields: { hosts },
+      fields,
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
     })
   }
 
   async unfollow (options: OverrideCommandOptions & {
-    target: PeerTubeServer
+    target: PeerTubeServer | string
   }) {
-    const path = '/api/v1/server/following/' + options.target.host
+    const { target } = options
+
+    const handle = typeof target === 'string'
+      ? target
+      : target.host
+
+    const path = '/api/v1/server/following/' + handle
 
     return this.deleteRequest({
       ...options,

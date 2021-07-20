@@ -1,3 +1,4 @@
+import { retryTransactionWrapper } from '@server/helpers/database-utils'
 import * as Bluebird from 'bluebird'
 import { URL } from 'url'
 import { ActivityPubOrderedCollection } from '../../../shared/models/activitypub'
@@ -51,7 +52,7 @@ async function crawlCollectionPage <T> (argUrl: string, handler: HandlerFunction
     }
   }
 
-  if (cleaner) await cleaner(startDate)
+  if (cleaner) await retryTransactionWrapper(cleaner, startDate)
 }
 
 export {

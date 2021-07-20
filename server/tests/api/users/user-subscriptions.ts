@@ -224,7 +224,7 @@ describe('Test users subscriptions', function () {
   it('Should have server 1 follow server 3 and display server 3 videos', async function () {
     this.timeout(60000)
 
-    await servers[0].follows.follow({ targets: [ servers[2].url ] })
+    await servers[0].follows.follow({ hosts: [ servers[2].url ] })
 
     await waitJobs(servers)
 

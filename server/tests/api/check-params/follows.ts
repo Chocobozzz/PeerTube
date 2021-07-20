@@ -32,19 +32,13 @@ describe('Test server follows API validators', function () {
     let userAccessToken = null
 
     before(async function () {
-      const user = {
-        username: 'user1',
-        password: 'password'
-      }
-
-      await server.users.create({ username: user.username, password: user.password })
-      userAccessToken = await server.login.getAccessToken(user)
+      userAccessToken = await server.users.generateUserAndToken('user1')
     })
 
     describe('When adding follows', function () {
       const path = '/api/v1/server/following'
 
-      it('Should fail without hosts', async function () {
+      it('Should fail with nothing', async function () {
         await makePostBodyRequest({
           url: server.url,
           path,
@@ -53,17 +47,7 @@ describe('Test server follows API validators', function () {
         })
       })
 
-      it('Should fail if hosts is not an array', async function () {
-        await makePostBodyRequest({
-          url: server.url,
-          path,
-          token: server.accessToken,
-          fields: { hosts: 'localhost:9002' },
-          expectedStatus: HttpStatusCode.BAD_REQUEST_400
-        })
-      })
-
-      it('Should fail if the array is not composed by hosts', async function () {
+      it('Should fail if hosts is not composed by hosts', async function () {
         await makePostBodyRequest({
           url: server.url,
           path,
@@ -73,7 +57,7 @@ describe('Test server follows API validators', function () {
         })
       })
 
-      it('Should fail if the array is composed with http schemes', async function () {
+      it('Should fail if hosts is composed with http schemes', async function () {
         await makePostBodyRequest({
           url: server.url,
           path,
@@ -88,6 +72,26 @@ describe('Test server follows API validators', function () {
           url: server.url,
           path,
           fields: { urls: [ 'localhost:9002', 'localhost:9002' ] },
+          token: server.accessToken,
+          expectedStatus: HttpStatusCode.BAD_REQUEST_400
+        })
+      })
+
+      it('Should fail if handles is not composed by handles', async function () {
+        await makePostBodyRequest({
+          url: server.url,
+          path,
+          fields: { handles: [ 'hello@example.com', 'localhost:9001' ] },
+          token: server.accessToken,
+          expectedStatus: HttpStatusCode.BAD_REQUEST_400
+        })
+      })
+
+      it('Should fail if handles are not unique', async function () {
+        await makePostBodyRequest({
+          url: server.url,
+          path,
+          fields: { urls: [ 'hello@example.com', 'hello@example.com' ] },
           token: server.accessToken,
           expectedStatus: HttpStatusCode.BAD_REQUEST_400
         })

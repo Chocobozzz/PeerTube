@@ -690,7 +690,7 @@ describe('Test blocklist', function () {
           const now = new Date()
           await servers[1].follows.unfollow({ target: servers[0] })
           await waitJobs(servers)
-          await servers[1].follows.follow({ targets: [ servers[0].host ] })
+          await servers[1].follows.follow({ hosts: [ servers[0].host ] })
 
           await waitJobs(servers)
 
@@ -751,7 +751,7 @@ describe('Test blocklist', function () {
           const now = new Date()
           await servers[1].follows.unfollow({ target: servers[0] })
           await waitJobs(servers)
-          await servers[1].follows.follow({ targets: [ servers[0].host ] })
+          await servers[1].follows.follow({ hosts: [ servers[0].host ] })
 
           await waitJobs(servers)
 

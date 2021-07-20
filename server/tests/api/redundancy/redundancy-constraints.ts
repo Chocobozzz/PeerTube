@@ -75,7 +75,7 @@ describe('Test redundancy constraints', function () {
     await waitJobs(servers)
 
     // Server 1 and server 2 follow each other
-    await remoteServer.follows.follow({ targets: [ localServer.url ] })
+    await remoteServer.follows.follow({ hosts: [ localServer.url ] })
     await waitJobs(servers)
     await remoteServer.redundancy.updateRedundancy({ host: localServer.host, redundancyAllowed: true })
 
@@ -161,7 +161,7 @@ describe('Test redundancy constraints', function () {
   it('Should have redundancy on server 1 and on server 2 with followings filter now server 2 follows server 1', async function () {
     this.timeout(120000)
 
-    await localServer.follows.follow({ targets: [ remoteServer.url ] })
+    await localServer.follows.follow({ hosts: [ remoteServer.url ] })
     await waitJobs(servers)
 
     await uploadWrapper('video 4 server 2')

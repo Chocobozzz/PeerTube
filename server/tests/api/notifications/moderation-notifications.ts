@@ -368,7 +368,7 @@ describe('Test moderation notifications', function () {
     it('Should send a notification only to admin when there is a new instance follower', async function () {
       this.timeout(20000)
 
-      await servers[2].follows.follow({ targets: [ servers[0].url ] })
+      await servers[2].follows.follow({ hosts: [ servers[0].url ] })
 
       await waitJobs(servers)
 
@@ -393,7 +393,7 @@ describe('Test moderation notifications', function () {
       }
       await servers[0].config.updateCustomSubConfig({ newConfig: config })
 
-      await servers[2].follows.follow({ targets: [ servers[0].url ] })
+      await servers[2].follows.follow({ hosts: [ servers[0].url ] })
 
       await waitJobs(servers)
 

@@ -25,7 +25,7 @@ export const FollowsRoutes: Routes = [
         component: FollowingListComponent,
         data: {
           meta: {
-            title: $localize`Following list`
+            title: $localize`Following`
           }
         }
       },
@@ -34,7 +34,7 @@ export const FollowsRoutes: Routes = [
         component: FollowersListComponent,
         data: {
           meta: {
-            title: $localize`Followers list`
+            title: $localize`Followers`
           }
         }
       },

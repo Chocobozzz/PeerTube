@@ -1,5 +1,4 @@
 export * from './form-validator.model'
-export * from './host'
 
 // Don't re export const variables because webpack 4 cannot do tree shaking with them
 // export * from './abuse-validators'

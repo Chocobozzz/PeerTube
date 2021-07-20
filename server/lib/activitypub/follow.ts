@@ -31,6 +31,21 @@ async function autoFollowBackIfNeeded (actorFollow: MActorFollowActors, transact
   }
 }
 
+// If we only have an host, use a default account handle
+function getRemoteNameAndHost (handleOrHost: string) {
+  let name = SERVER_ACTOR_NAME
+  let host = handleOrHost
+
+  const splitted = handleOrHost.split('@')
+  if (splitted.length === 2) {
+    name = splitted[0]
+    host = splitted[1]
+  }
+
+  return { name, host }
+}
+
 export {
-  autoFollowBackIfNeeded
+  autoFollowBackIfNeeded,
+  getRemoteNameAndHost
 }

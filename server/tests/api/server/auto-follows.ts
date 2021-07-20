@@ -33,7 +33,7 @@ async function checkFollow (follower: PeerTubeServer, following: PeerTubeServer,
 }
 
 async function server1Follows2 (servers: PeerTubeServer[]) {
-  await servers[0].follows.follow({ targets: [ servers[1].host ] })
+  await servers[0].follows.follow({ hosts: [ servers[1].host ] })
 
   await waitJobs(servers)
 }

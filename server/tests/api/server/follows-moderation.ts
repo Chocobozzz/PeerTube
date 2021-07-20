@@ -60,7 +60,7 @@ describe('Test follows moderation', function () {
   it('Should have server 1 following server 2', async function () {
     this.timeout(30000)
 
-    await commands[0].follow({ targets: [ servers[1].url ] })
+    await commands[0].follow({ hosts: [ servers[1].url ] })
 
     await waitJobs(servers)
   })
@@ -95,7 +95,7 @@ describe('Test follows moderation', function () {
 
     await servers[1].config.updateCustomSubConfig({ newConfig: subConfig })
 
-    await commands[0].follow({ targets: [ servers[1].url ] })
+    await commands[0].follow({ hosts: [ servers[1].url ] })
     await waitJobs(servers)
 
     await checkNoFollowers(servers)
@@ -115,7 +115,7 @@ describe('Test follows moderation', function () {
 
     await servers[1].config.updateCustomSubConfig({ newConfig: subConfig })
 
-    await commands[0].follow({ targets: [ servers[1].url ] })
+    await commands[0].follow({ hosts: [ servers[1].url ] })
     await waitJobs(servers)
 
     await checkServer1And2HasFollowers(servers)
@@ -139,7 +139,7 @@ describe('Test follows moderation', function () {
     await servers[1].config.updateCustomSubConfig({ newConfig: subConfig })
     await servers[2].config.updateCustomSubConfig({ newConfig: subConfig })
 
-    await commands[0].follow({ targets: [ servers[1].url ] })
+    await commands[0].follow({ hosts: [ servers[1].url ] })
     await waitJobs(servers)
 
     await checkServer1And2HasFollowers(servers, 'pending')
@@ -157,7 +157,7 @@ describe('Test follows moderation', function () {
   it('Should reject another follower', async function () {
     this.timeout(20000)
 
-    await commands[0].follow({ targets: [ servers[2].url ] })
+    await commands[0].follow({ hosts: [ servers[2].url ] })
     await waitJobs(servers)
 
     {
