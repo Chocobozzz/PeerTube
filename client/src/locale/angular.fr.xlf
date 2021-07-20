@@ -1092,7 +1092,7 @@
       </trans-unit>
       <trans-unit id="3326446048041727269" datatype="html">
         <source>Display/Video settings updated.</source>
-        <target>Mise à jour des paramètres d'affichage et de vidéo.</target>
+        <target>Paramètres d'affichage et de vidéo mis à jour.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.ts</context>
           <context context-type="linenumber">140</context>
@@ -1300,7 +1300,7 @@
       </trans-unit>
       <trans-unit id="7565716024468232322" datatype="html">
         <source>Links</source>
-        <target>Les liens</target>
+        <target>Liens</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/misc/help.component.ts</context>
           <context context-type="linenumber">82</context>
@@ -1324,7 +1324,7 @@
       </trans-unit>
       <trans-unit id="414887388288176527" datatype="html">
         <source>Images</source>
-        <target>Les images</target>
+        <target>Images</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/misc/help.component.ts</context>
           <context context-type="linenumber">85</context>
@@ -1476,7 +1476,7 @@
       </trans-unit>
       <trans-unit id="ngb.carousel.slide-number" datatype="html">
         <source>Slide <x id="INTERPOLATION" equiv-text="ate _pauseOnHov"/> of <x id="INTERPOLATION_1" equiv-text="ect(false);   p"/> </source>
-        <target state="translated">Diapositive <x id="INTERPOLATION" equiv-text="ate _pauseOnHov"/> sur <x id="INTERPOLATION_1" equiv-text="ect(false);   p"/> </target>
+        <target state="translated">Diapositive <x id="INTERPOLATION" equiv-text="ate _pauseOnHov"/> sur <x id="INTERPOLATION_1" equiv-text="ect(false); p"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/src/carousel/carousel.ts</context>
           <context context-type="linenumber">114,118</context>
@@ -5266,7 +5266,7 @@
       </trans-unit>
       <trans-unit id="4561174610228620528" datatype="html">
         <source>Select the next owner</source>
-        <target state="translated">Sélectionner la·e prochain·e propriétaire</target>
+        <target state="translated">Sélectionner le prochain propriétaire</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/modals/video-change-ownership.component.html</context>
           <context context-type="linenumber">10</context>
@@ -6142,7 +6142,7 @@
       </trans-unit>
       <trans-unit id="5325873477837320044" datatype="html">
         <source>You cannot delete root.</source>
-        <target state="translated">Vous ne pouvez pas supprimer l'utilisateur·rice root.</target>
+        <target state="translated">Vous ne pouvez pas supprimer l'utilisateur root.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">86</context>
@@ -6262,7 +6262,7 @@
       </trans-unit>
       <trans-unit id="8173437618471379044" datatype="html">
         <source>Are you sure you want to remove all the comments of this account?</source>
-        <target state="translated">Êtes-vous certain·e de vouloir supprimer tous les commentaires de ce compte ?</target>
+        <target state="translated">Êtes-vous certain de vouloir supprimer tous les commentaires de ce compte ?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">228</context>
@@ -6286,7 +6286,7 @@
       </trans-unit>
       <trans-unit id="7187838764371214919" datatype="html">
         <source>Edit user</source>
-        <target state="translated">Modifier l’utilisateur·ice</target>
+        <target state="translated">Modifier l’utilisateur</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">263</context>
@@ -6302,7 +6302,7 @@
       </trans-unit>
       <trans-unit id="7913022656086109932" datatype="html">
         <source>Delete user</source>
-        <target state="translated">Supprimer l’utilisateur·ice</target>
+        <target state="translated">Supprimer l’utilisateur</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">268</context>
@@ -6346,7 +6346,7 @@
       </trans-unit>
       <trans-unit id="7577876364431026966" datatype="html">
         <source>Unban user</source>
-        <target state="translated">Lever l'interdiction pour l’utilisateur·ice</target>
+        <target state="translated">Lever l'interdiction pour l’utilisateur</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">279</context>
@@ -6630,7 +6630,7 @@
       </trans-unit>
       <trans-unit id="3622946684246476652" datatype="html">
         <source>Do you really want to delete this video?</source>
-        <target state="translated">Êtes-vous bien sûr·e de vouloir supprimer cette vidéo ?</target>
+        <target state="translated">Êtes-vous bien sûr de vouloir supprimer cette vidéo ?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">203</context>
@@ -7366,7 +7366,7 @@
       </trans-unit>
       <trans-unit id="7908493851025027368" datatype="html">
         <source>A banned user will no longer be able to login.</source>
-        <target state="translated">Un·e utilisateur·rice banni·e ne sera plus capable de se connecter.</target>
+        <target state="translated">Un utilisateur banni ne sera plus capable de se connecter.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-ban-modal.component.html</context>
           <context context-type="linenumber">21,22</context>
@@ -7374,7 +7374,7 @@
       </trans-unit>
       <trans-unit id="3616223838716839702" datatype="html">
         <source>Ban this user</source>
-        <target state="translated">Bannir cet·te utilisateur·rice</target>
+        <target state="translated">Bannir cet utilisateur</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-ban-modal.component.html</context>
           <context context-type="linenumber">31</context>
@@ -7594,7 +7594,7 @@
       </trans-unit>
       <trans-unit id="3868123820758341861" datatype="html">
         <source>Username is required.</source>
-        <target state="translated">Le nom d'utilisateur·rice est requis.</target>
+        <target state="translated">Le nom d'utilisateur est requis.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">12</context>
@@ -9206,7 +9206,7 @@
       </trans-unit>
       <trans-unit id="7373104725413001009" datatype="html">
         <source>You or your channel(s) has a new follower</source>
-        <target state="translated">Vous ou votre chaîne avez/a un·e nouvel·le abonné·e</target>
+        <target state="translated">Vous ou votre chaîne avez un nouvel abonné</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">40</context>
@@ -9222,7 +9222,7 @@
       </trans-unit>
       <trans-unit id="2018794201569157817" datatype="html">
         <source>Your instance has a new follower</source>
-        <target state="translated">Votre instance a un·e nouvel·le abonné·e</target>
+        <target state="translated">Votre instance a un nouvel abonné</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">42</context>
@@ -10507,7 +10507,7 @@
       </trans-unit>
       <trans-unit id="2355066641781598196" datatype="html">
         <source>Follow request(s) sent!</source>
-        <target state="translated">Requête·s envoyée·s !</target>
+        <target state="translated">Requête(s) envoyée(s) !</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.ts</context>
           <context context-type="linenumber">47</context>
@@ -11815,7 +11815,7 @@
       </trans-unit>
       <trans-unit id="8858527736400081688" datatype="html">
         <source>This video contains mature or explicit content. Are you sure you want to watch it?</source>
-        <target state="translated">Cette vidéo contient du contenu sensible. Êtes-vous sûr·e de vouloir la regarder ?</target>
+        <target state="translated">Cette vidéo contient du contenu sensible. Êtes-vous sûr de vouloir la regarder ?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">547</context>
@@ -12323,7 +12323,7 @@
       </trans-unit>
       <trans-unit id="8756167649220050929" datatype="html">
         <source>Lists</source>
-        <target state="translated">Les listes</target>
+        <target state="translated">Listes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">20</context>
@@ -12751,7 +12751,7 @@
       </trans-unit>
       <trans-unit id="5699822024600815733" datatype="html">
         <source>But associated data (tags, description...) will be lost, are you sure you want to leave this page?</source>
-        <target state="translated">Les données associées (étiquettes, description, etc.) seront par contre perdues ; êtes-vous sûr·e de vouloir quitter cette page ?</target>
+        <target state="translated">Les données associées (étiquettes, description, etc.) seront par contre perdues ; êtes-vous sûr de vouloir quitter cette page ?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context>
           <context context-type="linenumber">93</context>
@@ -12759,7 +12759,7 @@
       </trans-unit>
       <trans-unit id="1219739004043110649" datatype="html">
         <source>Your video is not uploaded yet, are you sure you want to leave this page?</source>
-        <target state="translated">Votre vidéo n'est pas encore téléversé ; êtes-vous sûr·e de vouloir quitter cette page ?</target>
+        <target state="translated">Votre vidéo n'est pas encore téléversée ; êtes-vous sûr de vouloir quitter cette page ?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context>
           <context context-type="linenumber">95</context>
@@ -15374,7 +15374,7 @@
       </trans-unit>
       <trans-unit id="3620117223790525725" datatype="html">
         <source>Do you really want to delete this follower?</source>
-        <target state="translated">Souhaitez-vous vraiment supprimer cet·te abonné·e ?</target>
+        <target state="translated">Souhaitez-vous vraiment supprimer cet abonné ?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">73</context>
@@ -15406,7 +15406,7 @@
       </trans-unit>
       <trans-unit id="2265605798180116441" datatype="html">
         <source>Follower handle</source>
-        <target state="translated">Identifiant d'abonné·e</target>
+        <target state="translated">Identifiant d'abonné</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context>
           <context context-type="linenumber">28</context>
@@ -15430,7 +15430,7 @@
       </trans-unit>
       <trans-unit id="6961112234462008319" datatype="html">
         <source>No follower found matching current filters.</source>
-        <target state="translated">Aucun·e abonné·e n'a pu être trouvé·e avec les filtres actuels.</target>
+        <target state="translated">Aucun abonné n'a pu être trouvé avec les filtres actuels.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context>
           <context context-type="linenumber">68</context>
@@ -15438,7 +15438,7 @@
       </trans-unit>
       <trans-unit id="2117404838551056159" datatype="html">
         <source>Your instance doesn't have any follower.</source>
-        <target state="translated">Votre instance n'a aucun·e abonné·e.</target>
+        <target state="translated">Votre instance n'a aucun abonné.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context>
           <context context-type="linenumber">69</context>
@@ -15686,7 +15686,7 @@
       </trans-unit>
       <trans-unit id="1349763489797682899" datatype="html">
         <source>Update user</source>
-        <target state="translated">Mettre à jour l'utilisateur·rice</target>
+        <target state="translated">Mettre à jour l'utilisateur</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-update.component.ts</context>
           <context context-type="linenumber">102</context>
@@ -15710,7 +15710,7 @@
       </trans-unit>
       <trans-unit id="149953821752893163" datatype="html">
         <source>Update user password</source>
-        <target state="translated">Mettre à jour le mot de passe utilisateur·rice</target>
+        <target state="translated">Mettre à jour le mot de passe utilisateur</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-password.component.ts</context>
           <context context-type="linenumber">52</context>
@@ -15750,7 +15750,7 @@
       </trans-unit>
       <trans-unit id="4086135983283545219" datatype="html">
         <source>If you remove these users, you will not be able to create others with the same username!</source>
-        <target state="translated">Si vous supprimez ces utilisateur·rices, vous ne pourrez plus en créer de nouveau avec le même nom !</target>
+        <target state="translated">Si vous supprimez ces utilisateurs, vous ne pourrez plus en créer de nouveaux avec les mêmes noms !</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">193</context>
@@ -15830,7 +15830,7 @@
       </trans-unit>
       <trans-unit id="3254358851993549668" datatype="html">
         <source>User's email must be verified to login</source>
-        <target state="translated">L'adresse de courriel de l'utilisateur·rice doit être vérifiée afin de se connecter</target>
+        <target state="translated">L'adresse de courriel de l'utilisateur doit être vérifiée afin de se connecter</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">130</context>
@@ -15842,7 +15842,7 @@
       </trans-unit>
       <trans-unit id="3939342579126794385" datatype="html">
         <source>User's email is verified / User can login without email verification</source>
-        <target state="translated">L'adresse de courriel de l'utilisateur·rice est vérifié / L'utilisateur·rice peut se connecter sans vérification par courriel</target>
+        <target state="translated">L'adresse de courriel de l'utilisateur est vérifié / L'utilisateur peut se connecter sans vérification par courriel</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">134</context>
