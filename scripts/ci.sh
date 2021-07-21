@@ -47,11 +47,12 @@ if [ "$1" = "client" ]; then
 
     feedsFiles=$(findTestFiles ./dist/server/tests/feeds)
     helperFiles=$(findTestFiles ./dist/server/tests/helpers)
+    libFiles=$(findTestFiles ./dist/server/tests/lib)
     miscFiles="./dist/server/tests/client.js ./dist/server/tests/misc-endpoints.js"
     # Not in plugin task, it needs an index.html
     pluginFiles="./dist/server/tests/plugins/html-injection.js"
 
-    MOCHA_PARALLEL=true runTest "$1" 2 $feedsFiles $helperFiles $miscFiles $pluginFiles
+    MOCHA_PARALLEL=true runTest "$1" 2 $feedsFiles $helperFiles $miscFiles $pluginFiles $libFiles
 elif [ "$1" = "cli-plugin" ]; then
     npm run build:server
     npm run setup:cli
