@@ -151,7 +151,7 @@ describe('Test video captions API validator', function () {
     // })
 
     it('Should succeed with a valid captionfile extension and octet-stream mime type', async function () {
-      await server.captions.createVideoCaption({
+      await server.captions.add({
         language: 'zh',
         videoId: video.uuid,
         fixture: 'subtitle-good.srt',

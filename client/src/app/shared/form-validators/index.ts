@@ -1,6 +1,6 @@
 export * from './form-validator.model'
 
-// Don't re export const variables because webpack 4 cannot do tree shaking with them
+// Don't re export const variables because webpack cannot do tree shaking with them
 // export * from './abuse-validators'
 // export * from './batch-domains-validators'
 // export * from './custom-config-validators'

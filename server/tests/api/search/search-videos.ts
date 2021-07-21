@@ -50,14 +50,14 @@ describe('Test videos search', function () {
         const { id, uuid } = await server.videos.upload({ attributes: attributes3 })
         videoUUID = uuid
 
-        await server.captions.createVideoCaption({
+        await server.captions.add({
           language: 'en',
           videoId: id,
           fixture: 'subtitle-good2.vtt',
           mimeType: 'application/octet-stream'
         })
 
-        await server.captions.createVideoCaption({
+        await server.captions.add({
           language: 'aa',
           videoId: id,
           fixture: 'subtitle-good2.vtt',

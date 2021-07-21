@@ -416,7 +416,7 @@ describe('Test follows', function () {
         await servers[2].comments.delete({ videoId: video4.id, commentId: replyId })
       }
 
-      await servers[2].captions.createVideoCaption({
+      await servers[2].captions.add({
         language: 'ar',
         videoId: video4.id,
         fixture: 'subtitle-good2.vtt'
@@ -569,7 +569,7 @@ describe('Test follows', function () {
     })
 
     it('Should have propagated captions', async function () {
-      const body = await servers[0].captions.listVideoCaptions({ videoId: video4.id })
+      const body = await servers[0].captions.list({ videoId: video4.id })
       expect(body.total).to.equal(1)
       expect(body.data).to.have.lengthOf(1)
 

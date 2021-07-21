@@ -84,7 +84,7 @@ export class CommentsCommand extends AbstractCommand {
       defaultExpectedStatus: HttpStatusCode.OK_200
     }))
 
-    this.lastThreadId = body.comment.id
+    this.lastThreadId = body.comment?.id
     this.lastVideoId = videoId
 
     return body.comment
@@ -107,7 +107,7 @@ export class CommentsCommand extends AbstractCommand {
       defaultExpectedStatus: HttpStatusCode.OK_200
     }))
 
-    this.lastReplyId = body.comment.id
+    this.lastReplyId = body.comment?.id
 
     return body.comment
   }

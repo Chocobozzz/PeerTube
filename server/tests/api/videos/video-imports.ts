@@ -59,7 +59,7 @@ describe('Test video imports', function () {
     expect(videoTorrent.name).to.contain('你好 世界 720p.mp4')
     expect(videoMagnet.name).to.contain('super peertube2 video')
 
-    const bodyCaptions = await server.captions.listVideoCaptions({ videoId: idHttp })
+    const bodyCaptions = await server.captions.list({ videoId: idHttp })
     expect(bodyCaptions.total).to.equal(2)
   }
 
@@ -76,7 +76,7 @@ describe('Test video imports', function () {
 
     expect(video.files).to.have.lengthOf(1)
 
-    const bodyCaptions = await server.captions.listVideoCaptions({ videoId: id })
+    const bodyCaptions = await server.captions.list({ videoId: id })
     expect(bodyCaptions.total).to.equal(2)
   }
 
@@ -120,7 +120,7 @@ describe('Test video imports', function () {
       await testImage(servers[0].url, 'video_import_thumbnail', video.thumbnailPath)
       await testImage(servers[0].url, 'video_import_preview', video.previewPath)
 
-      const bodyCaptions = await servers[0].captions.listVideoCaptions({ videoId: video.id })
+      const bodyCaptions = await servers[0].captions.list({ videoId: video.id })
       const videoCaptions = bodyCaptions.data
       expect(videoCaptions).to.have.lengthOf(2)
 

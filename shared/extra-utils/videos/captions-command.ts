@@ -4,7 +4,7 @@ import { AbstractCommand, OverrideCommandOptions } from '../shared'
 
 export class CaptionsCommand extends AbstractCommand {
 
-  createVideoCaption (options: OverrideCommandOptions & {
+  add (options: OverrideCommandOptions & {
     videoId: string | number
     language: string
     fixture: string
@@ -32,7 +32,7 @@ export class CaptionsCommand extends AbstractCommand {
     })
   }
 
-  listVideoCaptions (options: OverrideCommandOptions & {
+  list (options: OverrideCommandOptions & {
     videoId: string | number
   }) {
     const { videoId } = options
@@ -47,7 +47,7 @@ export class CaptionsCommand extends AbstractCommand {
     })
   }
 
-  deleteVideoCaption (options: OverrideCommandOptions & {
+  delete (options: OverrideCommandOptions & {
     videoId: string | number
     language: string
   }) {

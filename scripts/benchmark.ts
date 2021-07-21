@@ -232,7 +232,7 @@ async function prepare () {
   }
 
   for (const caption of [ 'ar', 'fr', 'en', 'zh' ]) {
-    await server.captions.createVideoCaption({
+    await server.captions.add({
       language: caption,
       videoId: video.id,
       fixture: 'subtitle-good2.vtt'
