@@ -108,18 +108,18 @@ export class UserListComponent extends RestTable implements OnInit {
     ]
 
     this.columns = [
-      { id: 'username', label: 'Username' },
-      { id: 'email', label: 'Email' },
-      { id: 'quota', label: 'Video quota' },
-      { id: 'role', label: 'Role' },
-      { id: 'createdAt', label: 'Created' }
+      { id: 'username', label: $localize`Username` },
+      { id: 'email', label: $localize`Email` },
+      { id: 'quota', label: $localize`Video quota` },
+      { id: 'role', label: $localize`Role` },
+      { id: 'createdAt', label: $localize`Created` }
     ]
 
     this.selectedColumns = this.columns.map(c => c.id)
 
-    this.columns.push({ id: 'quotaDaily', label: 'Daily quota' })
-    this.columns.push({ id: 'pluginAuth', label: 'Auth plugin' })
-    this.columns.push({ id: 'lastLoginDate', label: 'Last login' })
+    this.columns.push({ id: 'quotaDaily', label: $localize`Daily quota` })
+    this.columns.push({ id: 'pluginAuth', label: $localize`Auth plugin` })
+    this.columns.push({ id: 'lastLoginDate', label: $localize`Last login` })
   }
 
   getIdentifier () {

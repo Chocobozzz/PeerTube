@@ -101,7 +101,7 @@ export class MenuService {
 
     return {
       key: 'in-my-library',
-      title: 'In my library',
+      title: $localize`In my library`,
       links
     }
   }
