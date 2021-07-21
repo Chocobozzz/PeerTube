@@ -25,6 +25,13 @@
   }
 }
 
+// Avoid higher z-index when overlay on touchscreens
+:host-context(.menu-open) {
+  .privacy-concerns {
+    z-index: z(overlay) - 1;
+  }
+}
+
 // Or if we are in the small view
 @media screen and (max-width: $small-view) {
   .privacy-concerns {
