@@ -59,7 +59,8 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
 }
 
 /* rules for dropdowns excepts when in button group, to avoid impacting the dropdown-toggle */
-.dropdown {
+.dropdown,
+.dropup {
   z-index: z(dropdown) !important;
 }
 
