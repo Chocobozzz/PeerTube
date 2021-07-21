@@ -305,13 +305,19 @@ async function startApplication () {
   updateStreamingPlaylistsInfohashesIfNeeded()
     .catch(err => logger.error('Cannot update streaming playlist infohashes.', { err }))
 
-  if (cliOptions.plugins) await PluginManager.Instance.registerPluginsAndThemes()
-
   LiveManager.Instance.init()
   if (CONFIG.LIVE.ENABLED) LiveManager.Instance.run()
 
   // Make server listening
-  server.listen(port, hostname, () => {
+  server.listen(port, hostname, async () => {
+    if (cliOptions.plugins) {
+      try {
+        await PluginManager.Instance.registerPluginsAndThemes()
+      } catch (err) {
+        logger.error('Cannot register plugins and themes.', { err })
+      }
+    }
+
     logger.info('HTTP server listening on %s:%d', hostname, port)
     logger.info('Web server: %s', WEBSERVER.URL)
 
