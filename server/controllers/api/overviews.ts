@@ -109,7 +109,7 @@ async function getVideos (
   res: express.Response,
   where: { videoChannelId?: number, tagsOneOf?: string[], categoryOneOf?: number[] }
 ) {
-  let query = Object.assign({
+  const query = await Hooks.wrapObject({
     start: 0,
     count: 12,
     sort: '-createdAt',
@@ -117,10 +117,10 @@ async function getVideos (
     nsfw: buildNSFWFilter(res),
     user: res.locals.oauth ? res.locals.oauth.token.User : undefined,
     withFiles: false,
-    countVideos: false
-  }, where)
+    countVideos: false,
 
-  query = await Hooks.wrapObject(query, 'filter:api.overviews.videos.list.params')
+    ...where
+  }, 'filter:api.overviews.videos.list.params')
 
   const { data } = await Hooks.wrapPromiseFun(
     VideoModel.listForApi,

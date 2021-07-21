@@ -255,6 +255,14 @@ describe('Test plugin filter hooks', function () {
     expect(thread.comment.text.endsWith(' <3')).to.be.true
   })
 
+  it('Should run filter:api.overviews.videos.list.{params,result}', async function () {
+    await servers[0].overviews.getVideos({ page: 1 })
+
+    // 3 because we get 3 samples per page
+    await servers[0].servers.waitUntilLog('Run hook filter:api.overviews.videos.list.params', 3)
+    await servers[0].servers.waitUntilLog('Run hook filter:api.overviews.videos.list.result', 3)
+  })
+
   describe('Should run filter:video.auto-blacklist.result', function () {
 
     async function checkIsBlacklisted (id: number | string, value: boolean) {
