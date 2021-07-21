@@ -65,7 +65,7 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
 
 .list-overflow-menu,
 .parent-entry {
-  z-index: z(header) - 1 !important;
+  z-index: z(menu) - 1 !important;
 }
 
 .btn-group,
