@@ -1,8 +1,12 @@
 import { VideoPlaylistPrivacy } from '../../../videos/playlist/video-playlist-privacy.model'
+import { ConstantManager } from '@shared/models/plugins/server/plugin-constant-manager.model'
 
-export interface PluginPlaylistPrivacyManager {
-  // PUBLIC = 1,
-  // UNLISTED = 2,
-  // PRIVATE = 3
+export interface PluginPlaylistPrivacyManager extends ConstantManager<VideoPlaylistPrivacy> {
+  /**
+   * PUBLIC = 1,
+   * UNLISTED = 2,
+   * PRIVATE = 3
+   * @deprecated use `deleteConstant` instead
+   */
   deletePlaylistPrivacy: (privacyKey: VideoPlaylistPrivacy) => boolean
 }
