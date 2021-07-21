@@ -2,36 +2,27 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { advancedVideoChannelSearch, searchVideoChannel } from '@shared/extra-utils/search/video-channels'
-import { Video, VideoChannel, VideoPlaylist, VideoPlaylistPrivacy, VideoPlaylistType, VideosSearchQuery } from '@shared/models'
-import {
-  advancedVideoPlaylistSearch,
-  advancedVideosSearch,
-  cleanupTests,
-  flushAndRunServer,
-  immutableAssign,
-  searchVideo,
-  searchVideoPlaylists,
-  ServerInfo,
-  setAccessTokensToServers,
-  updateCustomSubConfig,
-  uploadVideo
-} from '../../../../shared/extra-utils'
+import { cleanupTests, createSingleServer, PeerTubeServer, SearchCommand, setAccessTokensToServers } from '@shared/extra-utils'
+import { BooleanBothQuery, VideoPlaylistPrivacy, VideoPlaylistType, VideosSearchQuery } from '@shared/models'
 
 const expect = chai.expect
 
 describe('Test videos search', function () {
-  let server: ServerInfo = null
   const localVideoName = 'local video' + new Date().toISOString()
+
+  let server: PeerTubeServer = null
+  let command: SearchCommand
 
   before(async function () {
     this.timeout(30000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
 
     await setAccessTokensToServers([ server ])
 
-    await uploadVideo(server.url, server.accessToken, { name: localVideoName })
+    await server.videos.upload({ attributes: { name: localVideoName } })
+
+    command = server.search
   })
 
   describe('Default search', async function () {
@@ -39,101 +30,107 @@ describe('Test videos search', function () {
     it('Should make a local videos search by default', async function () {
       this.timeout(10000)
 
-      await updateCustomSubConfig(server.url, server.accessToken, {
-        search: {
-          searchIndex: {
-            enabled: true,
-            isDefaultSearch: false,
-            disableLocalSearch: false
+      await server.config.updateCustomSubConfig({
+        newConfig: {
+          search: {
+            searchIndex: {
+              enabled: true,
+              isDefaultSearch: false,
+              disableLocalSearch: false
+            }
           }
         }
       })
 
-      const res = await searchVideo(server.url, 'local video')
+      const body = await command.searchVideos({ search: 'local video' })
 
-      expect(res.body.total).to.equal(1)
-      expect(res.body.data[0].name).to.equal(localVideoName)
+      expect(body.total).to.equal(1)
+      expect(body.data[0].name).to.equal(localVideoName)
     })
 
     it('Should make a local channels search by default', async function () {
-      const res = await searchVideoChannel(server.url, 'root')
+      const body = await command.searchChannels({ search: 'root' })
 
-      expect(res.body.total).to.equal(1)
-      expect(res.body.data[0].name).to.equal('root_channel')
-      expect(res.body.data[0].host).to.equal('localhost:' + server.port)
+      expect(body.total).to.equal(1)
+      expect(body.data[0].name).to.equal('root_channel')
+      expect(body.data[0].host).to.equal('localhost:' + server.port)
     })
 
     it('Should make an index videos search by default', async function () {
-      await updateCustomSubConfig(server.url, server.accessToken, {
-        search: {
-          searchIndex: {
-            enabled: true,
-            isDefaultSearch: true,
-            disableLocalSearch: false
+      await server.config.updateCustomSubConfig({
+        newConfig: {
+          search: {
+            searchIndex: {
+              enabled: true,
+              isDefaultSearch: true,
+              disableLocalSearch: false
+            }
           }
         }
       })
 
-      const res = await searchVideo(server.url, 'local video')
-      expect(res.body.total).to.be.greaterThan(2)
+      const body = await command.searchVideos({ search: 'local video' })
+      expect(body.total).to.be.greaterThan(2)
     })
 
     it('Should make an index channels search by default', async function () {
-      const res = await searchVideoChannel(server.url, 'root')
-      expect(res.body.total).to.be.greaterThan(2)
+      const body = await command.searchChannels({ search: 'root' })
+      expect(body.total).to.be.greaterThan(2)
     })
 
     it('Should make an index videos search if local search is disabled', async function () {
-      await updateCustomSubConfig(server.url, server.accessToken, {
-        search: {
-          searchIndex: {
-            enabled: true,
-            isDefaultSearch: false,
-            disableLocalSearch: true
+      await server.config.updateCustomSubConfig({
+        newConfig: {
+          search: {
+            searchIndex: {
+              enabled: true,
+              isDefaultSearch: false,
+              disableLocalSearch: true
+            }
           }
         }
       })
 
-      const res = await searchVideo(server.url, 'local video')
-      expect(res.body.total).to.be.greaterThan(2)
+      const body = await command.searchVideos({ search: 'local video' })
+      expect(body.total).to.be.greaterThan(2)
     })
 
     it('Should make an index channels search if local search is disabled', async function () {
-      const res = await searchVideoChannel(server.url, 'root')
-      expect(res.body.total).to.be.greaterThan(2)
+      const body = await command.searchChannels({ search: 'root' })
+      expect(body.total).to.be.greaterThan(2)
     })
   })
 
   describe('Videos search', async function () {
 
     it('Should make a simple search and not have results', async function () {
-      const res = await searchVideo(server.url, 'djidane'.repeat(50))
+      const body = await command.searchVideos({ search: 'djidane'.repeat(50) })
 
-      expect(res.body.total).to.equal(0)
-      expect(res.body.data).to.have.lengthOf(0)
+      expect(body.total).to.equal(0)
+      expect(body.data).to.have.lengthOf(0)
     })
 
     it('Should make a simple search and have results', async function () {
-      const res = await searchVideo(server.url, 'What is PeerTube')
+      const body = await command.searchVideos({ search: 'What is PeerTube' })
 
-      expect(res.body.total).to.be.greaterThan(1)
+      expect(body.total).to.be.greaterThan(1)
     })
 
     it('Should make a complex search', async function () {
 
       async function check (search: VideosSearchQuery, exists = true) {
-        const res = await advancedVideosSearch(server.url, search)
+        const body = await command.advancedVideoSearch({ search })
 
         if (exists === false) {
-          expect(res.body.total).to.equal(0)
-          expect(res.body.data).to.have.lengthOf(0)
+          expect(body.total).to.equal(0)
+          expect(body.data).to.have.lengthOf(0)
           return
         }
 
-        expect(res.body.total).to.equal(1)
-        expect(res.body.data).to.have.lengthOf(1)
+        expect(body.total).to.equal(1)
+        expect(body.data).to.have.lengthOf(1)
 
-        const video: Video = res.body.data[0]
+        const video = body.data[0]
 
         expect(video.name).to.equal('What is PeerTube?')
         expect(video.category.label).to.equal('Science & Technology')
@@ -169,32 +166,32 @@ describe('Test videos search', function () {
       }
 
       {
-        const search = immutableAssign(baseSearch, { startDate: '2018-10-01T10:54:46.396Z' })
+        const search = { ...baseSearch, startDate: '2018-10-01T10:54:46.396Z' }
         await check(search, false)
       }
 
       {
-        const search = immutableAssign(baseSearch, { tagsAllOf: [ 'toto', 'framasoft' ] })
+        const search = { ...baseSearch, tagsAllOf: [ 'toto', 'framasoft' ] }
         await check(search, false)
       }
 
       {
-        const search = immutableAssign(baseSearch, { durationMin: 2000 })
+        const search = { ...baseSearch, durationMin: 2000 }
         await check(search, false)
       }
 
       {
-        const search = immutableAssign(baseSearch, { nsfw: 'true' })
+        const search = { ...baseSearch, nsfw: 'true' as BooleanBothQuery }
         await check(search, false)
       }
 
       {
-        const search = immutableAssign(baseSearch, { nsfw: 'false' })
+        const search = { ...baseSearch, nsfw: 'false' as BooleanBothQuery }
         await check(search, true)
       }
 
       {
-        const search = immutableAssign(baseSearch, { nsfw: 'both' })
+        const search = { ...baseSearch, nsfw: 'both' as BooleanBothQuery }
         await check(search, true)
       }
     })
@@ -206,37 +203,44 @@ describe('Test videos search', function () {
         count: 5
       }
 
-      const res = await advancedVideosSearch(server.url, search)
+      const body = await command.advancedVideoSearch({ search })
 
-      expect(res.body.total).to.be.greaterThan(5)
-      expect(res.body.data).to.have.lengthOf(5)
+      expect(body.total).to.be.greaterThan(5)
+      expect(body.data).to.have.lengthOf(5)
     })
 
     it('Should use the nsfw instance policy as default', async function () {
       let nsfwUUID: string
 
       {
-        await updateCustomSubConfig(server.url, server.accessToken, { instance: { defaultNSFWPolicy: 'display' } })
+        await server.config.updateCustomSubConfig({
+          newConfig: {
+            instance: { defaultNSFWPolicy: 'display' }
+          }
+        })
 
-        const res = await searchVideo(server.url, 'NSFW search index', '-match')
-        const video = res.body.data[0] as Video
+        const body = await command.searchVideos({ search: 'NSFW search index', sort: '-match' })
+        expect(body.data).to.have.length.greaterThan(0)
 
-        expect(res.body.data).to.have.length.greaterThan(0)
+        const video = body.data[0]
         expect(video.nsfw).to.be.true
 
         nsfwUUID = video.uuid
       }
 
       {
-        await updateCustomSubConfig(server.url, server.accessToken, { instance: { defaultNSFWPolicy: 'do_not_list' } })
+        await server.config.updateCustomSubConfig({
+          newConfig: {
+            instance: { defaultNSFWPolicy: 'do_not_list' }
+          }
+        })
 
-        const res = await searchVideo(server.url, 'NSFW search index', '-match')
+        const body = await command.searchVideos({ search: 'NSFW search index', sort: '-match' })
 
         try {
-          expect(res.body.data).to.have.lengthOf(0)
-        } catch (err) {
-          //
-          const video = res.body.data[0] as Video
+          expect(body.data).to.have.lengthOf(0)
+        } catch {
+          const video = body.data[0]
 
           expect(video.uuid).not.equal(nsfwUUID)
         }
@@ -247,19 +251,19 @@ describe('Test videos search', function () {
   describe('Channels search', async function () {
 
     it('Should make a simple search and not have results', async function () {
-      const res = await searchVideoChannel(server.url, 'a'.repeat(500))
+      const body = await command.searchChannels({ search: 'a'.repeat(500) })
 
-      expect(res.body.total).to.equal(0)
-      expect(res.body.data).to.have.lengthOf(0)
+      expect(body.total).to.equal(0)
+      expect(body.data).to.have.lengthOf(0)
     })
 
     it('Should make a search and have results', async function () {
-      const res = await advancedVideoChannelSearch(server.url, { search: 'Framasoft', sort: 'createdAt' })
+      const body = await command.advancedChannelSearch({ search: { search: 'Framasoft', sort: 'createdAt' } })
 
-      expect(res.body.total).to.be.greaterThan(0)
-      expect(res.body.data).to.have.length.greaterThan(0)
+      expect(body.total).to.be.greaterThan(0)
+      expect(body.data).to.have.length.greaterThan(0)
 
-      const videoChannel: VideoChannel = res.body.data[0]
+      const videoChannel = body.data[0]
       expect(videoChannel.url).to.equal('https://framatube.org/video-channels/bf54d359-cfad-4935-9d45-9d6be93f63e8')
       expect(videoChannel.host).to.equal('framatube.org')
       expect(videoChannel.avatar).to.exist
@@ -272,29 +276,29 @@ describe('Test videos search', function () {
     })
 
     it('Should have a correct pagination', async function () {
-      const res = await advancedVideoChannelSearch(server.url, { search: 'root', start: 0, count: 2 })
+      const body = await command.advancedChannelSearch({ search: { search: 'root', start: 0, count: 2 } })
 
-      expect(res.body.total).to.be.greaterThan(2)
-      expect(res.body.data).to.have.lengthOf(2)
+      expect(body.total).to.be.greaterThan(2)
+      expect(body.data).to.have.lengthOf(2)
     })
   })
 
   describe('Playlists search', async function () {
 
     it('Should make a simple search and not have results', async function () {
-      const res = await searchVideoPlaylists(server.url, 'a'.repeat(500))
+      const body = await command.searchPlaylists({ search: 'a'.repeat(500) })
 
-      expect(res.body.total).to.equal(0)
-      expect(res.body.data).to.have.lengthOf(0)
+      expect(body.total).to.equal(0)
+      expect(body.data).to.have.lengthOf(0)
     })
 
     it('Should make a search and have results', async function () {
-      const res = await advancedVideoPlaylistSearch(server.url, { search: 'E2E playlist', sort: '-match' })
+      const body = await command.advancedPlaylistSearch({ search: { search: 'E2E playlist', sort: '-match' } })
 
-      expect(res.body.total).to.be.greaterThan(0)
-      expect(res.body.data).to.have.length.greaterThan(0)
+      expect(body.total).to.be.greaterThan(0)
+      expect(body.data).to.have.length.greaterThan(0)
 
-      const videoPlaylist: VideoPlaylist = res.body.data[0]
+      const videoPlaylist = body.data[0]
 
       expect(videoPlaylist.url).to.equal('https://peertube2.cpy.re/videos/watch/playlist/73804a40-da9a-40c2-b1eb-2c6d9eec8f0a')
       expect(videoPlaylist.thumbnailUrl).to.exist
@@ -322,10 +326,10 @@ describe('Test videos search', function () {
     })
 
     it('Should have a correct pagination', async function () {
-      const res = await advancedVideoChannelSearch(server.url, { search: 'root', start: 0, count: 2 })
+      const body = await command.advancedChannelSearch({ search: { search: 'root', start: 0, count: 2 } })
 
-      expect(res.body.total).to.be.greaterThan(2)
-      expect(res.body.data).to.have.lengthOf(2)
+      expect(body.total).to.be.greaterThan(2)
+      expect(body.data).to.have.lengthOf(2)
     })
   })
 

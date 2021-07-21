@@ -9,31 +9,22 @@ import {
   checkSegmentHash,
   checkTmpIsEmpty,
   cleanupTests,
+  createMultipleServers,
   doubleFollow,
-  flushAndRunMultipleServers,
-  getPlaylist,
-  getVideo,
   makeRawRequest,
-  removeVideo,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers,
-  updateCustomSubConfig,
-  updateVideo,
-  uploadVideo,
   waitJobs,
   webtorrentAdd
-} from '../../../../shared/extra-utils'
-import { VideoDetails } from '../../../../shared/models/videos'
-import { VideoStreamingPlaylistType } from '../../../../shared/models/videos/video-streaming-playlist.type'
+} from '@shared/extra-utils'
+import { HttpStatusCode, VideoStreamingPlaylistType } from '@shared/models'
 import { DEFAULT_AUDIO_RESOLUTION } from '../../../initializers/constants'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const expect = chai.expect
 
-async function checkHlsPlaylist (servers: ServerInfo[], videoUUID: string, hlsOnly: boolean, resolutions = [ 240, 360, 480, 720 ]) {
+async function checkHlsPlaylist (servers: PeerTubeServer[], videoUUID: string, hlsOnly: boolean, resolutions = [ 240, 360, 480, 720 ]) {
   for (const server of servers) {
-    const resVideoDetails = await getVideo(server.url, videoUUID)
-    const videoDetails: VideoDetails = resVideoDetails.body
+    const videoDetails = await server.videos.get({ id: videoUUID })
     const baseUrl = `http://${videoDetails.account.host}`
 
     expect(videoDetails.streamingPlaylists).to.have.lengthOf(1)
@@ -68,10 +59,9 @@ async function checkHlsPlaylist (servers: ServerInfo[], videoUUID: string, hlsOn
     }
 
     {
-      await checkResolutionsInMasterPlaylist(hlsPlaylist.playlistUrl, resolutions)
+      await checkResolutionsInMasterPlaylist({ server, playlistUrl: hlsPlaylist.playlistUrl, resolutions })
 
-      const res = await getPlaylist(hlsPlaylist.playlistUrl)
-      const masterPlaylist = res.text
+      const masterPlaylist = await server.streamingPlaylists.get({ url: hlsPlaylist.playlistUrl })
 
       for (const resolution of resolutions) {
         expect(masterPlaylist).to.contain(`${resolution}.m3u8`)
@@ -81,9 +71,10 @@ async function checkHlsPlaylist (servers: ServerInfo[], videoUUID: string, hlsOn
 
     {
       for (const resolution of resolutions) {
-        const res = await getPlaylist(`${baseUrl}/static/streaming-playlists/hls/${videoUUID}/${resolution}.m3u8`)
+        const subPlaylist = await server.streamingPlaylists.get({
+          url: `${baseUrl}/static/streaming-playlists/hls/${videoUUID}/${resolution}.m3u8`
+        })
 
-        const subPlaylist = res.text
         expect(subPlaylist).to.contain(`${videoUUID}-${resolution}-fragmented.mp4`)
       }
     }
@@ -92,23 +83,31 @@ async function checkHlsPlaylist (servers: ServerInfo[], videoUUID: string, hlsOn
       const baseUrlAndPath = baseUrl + '/static/streaming-playlists/hls'
 
       for (const resolution of resolutions) {
-        await checkSegmentHash(baseUrlAndPath, baseUrlAndPath, videoUUID, resolution, hlsPlaylist)
+        await checkSegmentHash({
+          server,
+          baseUrlPlaylist: baseUrlAndPath,
+          baseUrlSegment: baseUrlAndPath,
+          videoUUID,
+          resolution,
+          hlsPlaylist
+        })
       }
     }
   }
 }
 
 describe('Test HLS videos', function () {
-  let servers: ServerInfo[] = []
+  let servers: PeerTubeServer[] = []
   let videoUUID = ''
   let videoAudioUUID = ''
 
   function runTestSuite (hlsOnly: boolean) {
+
     it('Should upload a video and transcode it to HLS', async function () {
       this.timeout(120000)
 
-      const res = await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'video 1', fixture: 'video_short.webm' })
-      videoUUID = res.body.video.uuid
+      const { uuid } = await servers[0].videos.upload({ attributes: { name: 'video 1', fixture: 'video_short.webm' } })
+      videoUUID = uuid
 
       await waitJobs(servers)
 
@@ -118,8 +117,8 @@ describe('Test HLS videos', function () {
     it('Should upload an audio file and transcode it to HLS', async function () {
       this.timeout(120000)
 
-      const res = await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'video audio', fixture: 'sample.ogg' })
-      videoAudioUUID = res.body.video.uuid
+      const { uuid } = await servers[0].videos.upload({ attributes: { name: 'video audio', fixture: 'sample.ogg' } })
+      videoAudioUUID = uuid
 
       await waitJobs(servers)
 
@@ -129,7 +128,7 @@ describe('Test HLS videos', function () {
     it('Should update the video', async function () {
       this.timeout(10000)
 
-      await updateVideo(servers[0].url, servers[0].accessToken, videoUUID, { name: 'video 1 updated' })
+      await servers[0].videos.update({ id: videoUUID, attributes: { name: 'video 1 updated' } })
 
       await waitJobs(servers)
 
@@ -139,14 +138,14 @@ describe('Test HLS videos', function () {
     it('Should delete videos', async function () {
       this.timeout(10000)
 
-      await removeVideo(servers[0].url, servers[0].accessToken, videoUUID)
-      await removeVideo(servers[0].url, servers[0].accessToken, videoAudioUUID)
+      await servers[0].videos.remove({ id: videoUUID })
+      await servers[0].videos.remove({ id: videoAudioUUID })
 
       await waitJobs(servers)
 
       for (const server of servers) {
-        await getVideo(server.url, videoUUID, HttpStatusCode.NOT_FOUND_404)
-        await getVideo(server.url, videoAudioUUID, HttpStatusCode.NOT_FOUND_404)
+        await server.videos.get({ id: videoUUID, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+        await server.videos.get({ id: videoAudioUUID, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
       }
     })
 
@@ -176,7 +175,7 @@ describe('Test HLS videos', function () {
         }
       }
     }
-    servers = await flushAndRunMultipleServers(2, configOverride)
+    servers = await createMultipleServers(2, configOverride)
 
     // Get the access tokens
     await setAccessTokensToServers(servers)
@@ -192,24 +191,26 @@ describe('Test HLS videos', function () {
   describe('With only HLS enabled', function () {
 
     before(async function () {
-      await updateCustomSubConfig(servers[0].url, servers[0].accessToken, {
-        transcoding: {
-          enabled: true,
-          allowAudioFiles: true,
-          resolutions: {
-            '240p': true,
-            '360p': true,
-            '480p': true,
-            '720p': true,
-            '1080p': true,
-            '1440p': true,
-            '2160p': true
-          },
-          hls: {
-            enabled: true
-          },
-          webtorrent: {
-            enabled: false
+      await servers[0].config.updateCustomSubConfig({
+        newConfig: {
+          transcoding: {
+            enabled: true,
+            allowAudioFiles: true,
+            resolutions: {
+              '240p': true,
+              '360p': true,
+              '480p': true,
+              '720p': true,
+              '1080p': true,
+              '1440p': true,
+              '2160p': true
+            },
+            hls: {
+              enabled: true
+            },
+            webtorrent: {
+              enabled: false
+            }
           }
         }
       })

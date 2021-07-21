@@ -1,117 +1,96 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
 import 'mocha'
-import { cleanupTests, getVideosList, ServerInfo, setAccessTokensToServers, uploadVideo } from '../../../../shared/extra-utils/index'
-import { userLogin } from '../../../../shared/extra-utils/users/login'
-import { createUser } from '../../../../shared/extra-utils/users/users'
-import { getMyVideos } from '../../../../shared/extra-utils/videos/videos'
-import {
-  flushAndRunServer,
-  getAccountVideos,
-  getConfig,
-  getCustomConfig,
-  getMyUserInformation,
-  getVideoChannelVideos,
-  getVideosListWithToken,
-  searchVideo,
-  searchVideoWithToken,
-  updateCustomConfig,
-  updateMyUser
-} from '../../../../shared/extra-utils'
-import { ServerConfig, VideosOverview } from '../../../../shared/models'
-import { CustomConfig } from '../../../../shared/models/server/custom-config.model'
-import { User } from '../../../../shared/models/users'
-import { getVideosOverview, getVideosOverviewWithToken } from '@shared/extra-utils/overviews/overviews'
+import * as chai from 'chai'
+import { cleanupTests, createSingleServer, PeerTubeServer, setAccessTokensToServers } from '@shared/extra-utils'
+import { BooleanBothQuery, CustomConfig, ResultList, Video, VideosOverview } from '@shared/models'
 
 const expect = chai.expect
 
-function createOverviewRes (res: any) {
-  const overview = res.body as VideosOverview
-
+function createOverviewRes (overview: VideosOverview) {
   const videos = overview.categories[0].videos
-  return { body: { data: videos, total: videos.length } }
+  return { data: videos, total: videos.length }
 }
 
 describe('Test video NSFW policy', function () {
-  let server: ServerInfo
+  let server: PeerTubeServer
   let userAccessToken: string
   let customConfig: CustomConfig
 
-  function getVideosFunctions (token?: string, query = {}) {
-    return getMyUserInformation(server.url, server.accessToken)
-      .then(res => {
-        const user: User = res.body
-        const videoChannelName = user.videoChannels[0].name
-        const accountName = user.account.name + '@' + user.account.host
-        const hasQuery = Object.keys(query).length !== 0
-        let promises: Promise<any>[]
+  async function getVideosFunctions (token?: string, query: { nsfw?: BooleanBothQuery } = {}) {
+    const user = await server.users.getMyInfo()
 
-        if (token) {
-          promises = [
-            getVideosListWithToken(server.url, token, query),
-            searchVideoWithToken(server.url, 'n', token, query),
-            getAccountVideos(server.url, token, accountName, 0, 5, undefined, query),
-            getVideoChannelVideos(server.url, token, videoChannelName, 0, 5, undefined, query)
-          ]
+    const channelName = user.videoChannels[0].name
+    const accountName = user.account.name + '@' + user.account.host
 
-          // Overviews do not support video filters
-          if (!hasQuery) {
-            promises.push(getVideosOverviewWithToken(server.url, 1, token).then(res => createOverviewRes(res)))
-          }
+    const hasQuery = Object.keys(query).length !== 0
+    let promises: Promise<ResultList<Video>>[]
 
-          return Promise.all(promises)
-        }
+    if (token) {
+      promises = [
+        server.search.advancedVideoSearch({ token, search: { search: 'n', sort: '-publishedAt', ...query } }),
+        server.videos.listWithToken({ token, ...query }),
+        server.videos.listByAccount({ token, handle: accountName, ...query }),
+        server.videos.listByChannel({ token, handle: channelName, ...query })
+      ]
 
-        promises = [
-          getVideosList(server.url),
-          searchVideo(server.url, 'n'),
-          getAccountVideos(server.url, undefined, accountName, 0, 5),
-          getVideoChannelVideos(server.url, undefined, videoChannelName, 0, 5)
-        ]
+      // Overviews do not support video filters
+      if (!hasQuery) {
+        const p = server.overviews.getVideos({ page: 1, token })
+                                         .then(res => createOverviewRes(res))
+        promises.push(p)
+      }
 
-        // Overviews do not support video filters
-        if (!hasQuery) {
-          promises.push(getVideosOverview(server.url, 1).then(res => createOverviewRes(res)))
-        }
+      return Promise.all(promises)
+    }
 
-        return Promise.all(promises)
-      })
+    promises = [
+      server.search.searchVideos({ search: 'n', sort: '-publishedAt' }),
+      server.videos.list(),
+      server.videos.listByAccount({ token: null, handle: accountName }),
+      server.videos.listByChannel({ token: null, handle: channelName })
+    ]
+
+    // Overviews do not support video filters
+    if (!hasQuery) {
+      const p = server.overviews.getVideos({ page: 1 })
+                                       .then(res => createOverviewRes(res))
+      promises.push(p)
+    }
+
+    return Promise.all(promises)
   }
 
   before(async function () {
     this.timeout(50000)
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
 
     // Get the access tokens
     await setAccessTokensToServers([ server ])
 
     {
       const attributes = { name: 'nsfw', nsfw: true, category: 1 }
-      await uploadVideo(server.url, server.accessToken, attributes)
+      await server.videos.upload({ attributes })
     }
 
     {
       const attributes = { name: 'normal', nsfw: false, category: 1 }
-      await uploadVideo(server.url, server.accessToken, attributes)
+      await server.videos.upload({ attributes })
     }
 
-    {
-      const res = await getCustomConfig(server.url, server.accessToken)
-      customConfig = res.body
-    }
+    customConfig = await server.config.getCustomConfig()
   })
 
   describe('Instance default NSFW policy', function () {
+
     it('Should display NSFW videos with display default NSFW policy', async function () {
-      const resConfig = await getConfig(server.url)
-      const serverConfig: ServerConfig = resConfig.body
+      const serverConfig = await server.config.getConfig()
       expect(serverConfig.instance.defaultNSFWPolicy).to.equal('display')
 
-      for (const res of await getVideosFunctions()) {
-        expect(res.body.total).to.equal(2)
+      for (const body of await getVideosFunctions()) {
+        expect(body.total).to.equal(2)
 
-        const videos = res.body.data
+        const videos = body.data
         expect(videos).to.have.lengthOf(2)
         expect(videos[0].name).to.equal('normal')
         expect(videos[1].name).to.equal('nsfw')
@@ -120,16 +99,15 @@ describe('Test video NSFW policy', function () {
 
     it('Should not display NSFW videos with do_not_list default NSFW policy', async function () {
       customConfig.instance.defaultNSFWPolicy = 'do_not_list'
-      await updateCustomConfig(server.url, server.accessToken, customConfig)
+      await server.config.updateCustomConfig({ newCustomConfig: customConfig })
 
-      const resConfig = await getConfig(server.url)
-      const serverConfig: ServerConfig = resConfig.body
+      const serverConfig = await server.config.getConfig()
       expect(serverConfig.instance.defaultNSFWPolicy).to.equal('do_not_list')
 
-      for (const res of await getVideosFunctions()) {
-        expect(res.body.total).to.equal(1)
+      for (const body of await getVideosFunctions()) {
+        expect(body.total).to.equal(1)
 
-        const videos = res.body.data
+        const videos = body.data
         expect(videos).to.have.lengthOf(1)
         expect(videos[0].name).to.equal('normal')
       }
@@ -137,16 +115,15 @@ describe('Test video NSFW policy', function () {
 
     it('Should display NSFW videos with blur default NSFW policy', async function () {
       customConfig.instance.defaultNSFWPolicy = 'blur'
-      await updateCustomConfig(server.url, server.accessToken, customConfig)
+      await server.config.updateCustomConfig({ newCustomConfig: customConfig })
 
-      const resConfig = await getConfig(server.url)
-      const serverConfig: ServerConfig = resConfig.body
+      const serverConfig = await server.config.getConfig()
       expect(serverConfig.instance.defaultNSFWPolicy).to.equal('blur')
 
-      for (const res of await getVideosFunctions()) {
-        expect(res.body.total).to.equal(2)
+      for (const body of await getVideosFunctions()) {
+        expect(body.total).to.equal(2)
 
-        const videos = res.body.data
+        const videos = body.data
         expect(videos).to.have.lengthOf(2)
         expect(videos[0].name).to.equal('normal')
         expect(videos[1].name).to.equal('nsfw')
@@ -159,24 +136,22 @@ describe('Test video NSFW policy', function () {
     it('Should create a user having the default nsfw policy', async function () {
       const username = 'user1'
       const password = 'my super password'
-      await createUser({ url: server.url, accessToken: server.accessToken, username: username, password: password })
+      await server.users.create({ username: username, password: password })
 
-      userAccessToken = await userLogin(server, { username, password })
+      userAccessToken = await server.login.getAccessToken({ username, password })
 
-      const res = await getMyUserInformation(server.url, userAccessToken)
-      const user = res.body
-
+      const user = await server.users.getMyInfo({ token: userAccessToken })
       expect(user.nsfwPolicy).to.equal('blur')
     })
 
     it('Should display NSFW videos with blur user NSFW policy', async function () {
       customConfig.instance.defaultNSFWPolicy = 'do_not_list'
-      await updateCustomConfig(server.url, server.accessToken, customConfig)
+      await server.config.updateCustomConfig({ newCustomConfig: customConfig })
 
-      for (const res of await getVideosFunctions(userAccessToken)) {
-        expect(res.body.total).to.equal(2)
+      for (const body of await getVideosFunctions(userAccessToken)) {
+        expect(body.total).to.equal(2)
 
-        const videos = res.body.data
+        const videos = body.data
         expect(videos).to.have.lengthOf(2)
         expect(videos[0].name).to.equal('normal')
         expect(videos[1].name).to.equal('nsfw')
@@ -184,16 +159,12 @@ describe('Test video NSFW policy', function () {
     })
 
     it('Should display NSFW videos with display user NSFW policy', async function () {
-      await updateMyUser({
-        url: server.url,
-        accessToken: server.accessToken,
-        nsfwPolicy: 'display'
-      })
+      await server.users.updateMe({ nsfwPolicy: 'display' })
 
-      for (const res of await getVideosFunctions(server.accessToken)) {
-        expect(res.body.total).to.equal(2)
+      for (const body of await getVideosFunctions(server.accessToken)) {
+        expect(body.total).to.equal(2)
 
-        const videos = res.body.data
+        const videos = body.data
         expect(videos).to.have.lengthOf(2)
         expect(videos[0].name).to.equal('normal')
         expect(videos[1].name).to.equal('nsfw')
@@ -201,56 +172,51 @@ describe('Test video NSFW policy', function () {
     })
 
     it('Should not display NSFW videos with do_not_list user NSFW policy', async function () {
-      await updateMyUser({
-        url: server.url,
-        accessToken: server.accessToken,
-        nsfwPolicy: 'do_not_list'
-      })
+      await server.users.updateMe({ nsfwPolicy: 'do_not_list' })
 
-      for (const res of await getVideosFunctions(server.accessToken)) {
-        expect(res.body.total).to.equal(1)
+      for (const body of await getVideosFunctions(server.accessToken)) {
+        expect(body.total).to.equal(1)
 
-        const videos = res.body.data
+        const videos = body.data
         expect(videos).to.have.lengthOf(1)
         expect(videos[0].name).to.equal('normal')
       }
     })
 
     it('Should be able to see my NSFW videos even with do_not_list user NSFW policy', async function () {
-      const res = await getMyVideos(server.url, server.accessToken, 0, 5)
-      expect(res.body.total).to.equal(2)
+      const { total, data } = await server.videos.listMyVideos()
+      expect(total).to.equal(2)
 
-      const videos = res.body.data
-      expect(videos).to.have.lengthOf(2)
-      expect(videos[0].name).to.equal('normal')
-      expect(videos[1].name).to.equal('nsfw')
+      expect(data).to.have.lengthOf(2)
+      expect(data[0].name).to.equal('normal')
+      expect(data[1].name).to.equal('nsfw')
     })
 
     it('Should display NSFW videos when the nsfw param === true', async function () {
-      for (const res of await getVideosFunctions(server.accessToken, { nsfw: true })) {
-        expect(res.body.total).to.equal(1)
+      for (const body of await getVideosFunctions(server.accessToken, { nsfw: 'true' })) {
+        expect(body.total).to.equal(1)
 
-        const videos = res.body.data
+        const videos = body.data
         expect(videos).to.have.lengthOf(1)
         expect(videos[0].name).to.equal('nsfw')
       }
     })
 
     it('Should hide NSFW videos when the nsfw param === true', async function () {
-      for (const res of await getVideosFunctions(server.accessToken, { nsfw: false })) {
-        expect(res.body.total).to.equal(1)
+      for (const body of await getVideosFunctions(server.accessToken, { nsfw: 'false' })) {
+        expect(body.total).to.equal(1)
 
-        const videos = res.body.data
+        const videos = body.data
         expect(videos).to.have.lengthOf(1)
         expect(videos[0].name).to.equal('normal')
       }
     })
 
     it('Should display both videos when the nsfw param === both', async function () {
-      for (const res of await getVideosFunctions(server.accessToken, { nsfw: 'both' })) {
-        expect(res.body.total).to.equal(2)
+      for (const body of await getVideosFunctions(server.accessToken, { nsfw: 'both' })) {
+        expect(body.total).to.equal(2)
 
-        const videos = res.body.data
+        const videos = body.data
         expect(videos).to.have.lengthOf(2)
         expect(videos[0].name).to.equal('normal')
         expect(videos[1].name).to.equal('nsfw')

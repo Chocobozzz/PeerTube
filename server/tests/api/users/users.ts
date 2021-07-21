@@ -2,63 +2,24 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { AbuseState, AbuseUpdate, MyUser, User, UserRole, Video, VideoPlaylistType } from '@shared/models'
-import { CustomConfig, OAuth2ErrorCode } from '@shared/models/server'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import {
-  addVideoCommentThread,
-  blockUser,
   cleanupTests,
-  closeAllSequelize,
-  createUser,
-  deleteMe,
-  flushAndRunServer,
-  getAccountRatings,
-  getAdminAbusesList,
-  getBlacklistedVideosList,
-  getCustomConfig,
-  getMyUserInformation,
-  getMyUserVideoQuotaUsed,
-  getMyUserVideoRating,
-  getUserInformation,
-  getUsersList,
-  getUsersListPaginationAndSort,
-  getVideoChannel,
-  getVideosList,
-  installPlugin,
+  createSingleServer,
   killallServers,
-  login,
   makePutBodyRequest,
-  rateVideo,
-  registerUserWithChannel,
-  removeUser,
-  removeVideo,
-  reportAbuse,
-  reRunServer,
-  ServerInfo,
-  setTokenField,
+  PeerTubeServer,
+  setAccessTokensToServers,
   testImage,
-  unblockUser,
-  updateAbuse,
-  updateCustomSubConfig,
-  updateMyAvatar,
-  updateMyUser,
-  updateUser,
-  uploadVideo,
-  userLogin,
   waitJobs
-} from '../../../../shared/extra-utils'
-import { follow } from '../../../../shared/extra-utils/server/follows'
-import { logout, refreshToken, setAccessTokensToServers } from '../../../../shared/extra-utils/users/login'
-import { getMyVideos } from '../../../../shared/extra-utils/videos/videos'
-import { UserAdminFlag } from '../../../../shared/models/users/user-flag.model'
+} from '@shared/extra-utils'
+import { AbuseState, HttpStatusCode, OAuth2ErrorCode, UserAdminFlag, UserRole, Video, VideoPlaylistType } from '@shared/models'
 
 const expect = chai.expect
 
 describe('Test users', function () {
-  let server: ServerInfo
-  let accessToken: string
-  let accessTokenUser: string
+  let server: PeerTubeServer
+  let token: string
+  let userToken: string
   let videoId: number
   let userId: number
   const user = {
@@ -69,7 +30,7 @@ describe('Test users', function () {
   before(async function () {
     this.timeout(30000)
 
-    server = await flushAndRunServer(1, {
+    server = await createSingleServer(1, {
       rates_limit: {
         login: {
           max: 30
@@ -79,7 +40,7 @@ describe('Test users', function () {
 
     await setAccessTokensToServers([ server ])
 
-    await installPlugin({ url: server.url, accessToken: server.accessToken, npmName: 'peertube-theme-background-red' })
+    await server.plugins.install({ npmName: 'peertube-theme-background-red' })
   })
 
   describe('OAuth client', function () {
@@ -90,158 +51,156 @@ describe('Test users', function () {
     it('Should remove the last client')
 
     it('Should not login with an invalid client id', async function () {
-      const client = { id: 'client', secret: server.client.secret }
-      const res = await login(server.url, client, server.user, HttpStatusCode.BAD_REQUEST_400)
+      const client = { id: 'client', secret: server.store.client.secret }
+      const body = await server.login.login({ client, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
 
-      expect(res.body.code).to.equal(OAuth2ErrorCode.INVALID_CLIENT)
-      expect(res.body.error).to.contain('client is invalid')
-      expect(res.body.type.startsWith('https://')).to.be.true
-      expect(res.body.type).to.contain(OAuth2ErrorCode.INVALID_CLIENT)
+      expect(body.code).to.equal(OAuth2ErrorCode.INVALID_CLIENT)
+      expect(body.error).to.contain('client is invalid')
+      expect(body.type.startsWith('https://')).to.be.true
+      expect(body.type).to.contain(OAuth2ErrorCode.INVALID_CLIENT)
     })
 
     it('Should not login with an invalid client secret', async function () {
-      const client = { id: server.client.id, secret: 'coucou' }
-      const res = await login(server.url, client, server.user, HttpStatusCode.BAD_REQUEST_400)
+      const client = { id: server.store.client.id, secret: 'coucou' }
+      const body = await server.login.login({ client, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
 
-      expect(res.body.code).to.equal(OAuth2ErrorCode.INVALID_CLIENT)
-      expect(res.body.error).to.contain('client is invalid')
-      expect(res.body.type.startsWith('https://')).to.be.true
-      expect(res.body.type).to.contain(OAuth2ErrorCode.INVALID_CLIENT)
+      expect(body.code).to.equal(OAuth2ErrorCode.INVALID_CLIENT)
+      expect(body.error).to.contain('client is invalid')
+      expect(body.type.startsWith('https://')).to.be.true
+      expect(body.type).to.contain(OAuth2ErrorCode.INVALID_CLIENT)
     })
   })
 
   describe('Login', function () {
 
     it('Should not login with an invalid username', async function () {
-      const user = { username: 'captain crochet', password: server.user.password }
-      const res = await login(server.url, server.client, user, HttpStatusCode.BAD_REQUEST_400)
+      const user = { username: 'captain crochet', password: server.store.user.password }
+      const body = await server.login.login({ user, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
 
-      expect(res.body.code).to.equal(OAuth2ErrorCode.INVALID_GRANT)
-      expect(res.body.error).to.contain('credentials are invalid')
-      expect(res.body.type.startsWith('https://')).to.be.true
-      expect(res.body.type).to.contain(OAuth2ErrorCode.INVALID_GRANT)
+      expect(body.code).to.equal(OAuth2ErrorCode.INVALID_GRANT)
+      expect(body.error).to.contain('credentials are invalid')
+      expect(body.type.startsWith('https://')).to.be.true
+      expect(body.type).to.contain(OAuth2ErrorCode.INVALID_GRANT)
     })
 
     it('Should not login with an invalid password', async function () {
-      const user = { username: server.user.username, password: 'mew_three' }
-      const res = await login(server.url, server.client, user, HttpStatusCode.BAD_REQUEST_400)
+      const user = { username: server.store.user.username, password: 'mew_three' }
+      const body = await server.login.login({ user, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
 
-      expect(res.body.code).to.equal(OAuth2ErrorCode.INVALID_GRANT)
-      expect(res.body.error).to.contain('credentials are invalid')
-      expect(res.body.type.startsWith('https://')).to.be.true
-      expect(res.body.type).to.contain(OAuth2ErrorCode.INVALID_GRANT)
+      expect(body.code).to.equal(OAuth2ErrorCode.INVALID_GRANT)
+      expect(body.error).to.contain('credentials are invalid')
+      expect(body.type.startsWith('https://')).to.be.true
+      expect(body.type).to.contain(OAuth2ErrorCode.INVALID_GRANT)
     })
 
     it('Should not be able to upload a video', async function () {
-      accessToken = 'my_super_token'
+      token = 'my_super_token'
 
-      const videoAttributes = {}
-      await uploadVideo(server.url, accessToken, videoAttributes, HttpStatusCode.UNAUTHORIZED_401)
+      await server.videos.upload({ token, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
     it('Should not be able to follow', async function () {
-      accessToken = 'my_super_token'
-      await follow(server.url, [ 'http://example.com' ], accessToken, HttpStatusCode.UNAUTHORIZED_401)
+      token = 'my_super_token'
+
+      await server.follows.follow({
+        hosts: [ 'http://example.com' ],
+        token,
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
+      })
     })
 
     it('Should not be able to unfollow')
 
     it('Should be able to login', async function () {
-      const res = await login(server.url, server.client, server.user, HttpStatusCode.OK_200)
+      const body = await server.login.login({ expectedStatus: HttpStatusCode.OK_200 })
 
-      accessToken = res.body.access_token
+      token = body.access_token
     })
 
     it('Should be able to login with an insensitive username', async function () {
-      const user = { username: 'RoOt', password: server.user.password }
-      await login(server.url, server.client, user, HttpStatusCode.OK_200)
+      const user = { username: 'RoOt', password: server.store.user.password }
+      await server.login.login({ user, expectedStatus: HttpStatusCode.OK_200 })
 
-      const user2 = { username: 'rOoT', password: server.user.password }
-      await login(server.url, server.client, user2, HttpStatusCode.OK_200)
+      const user2 = { username: 'rOoT', password: server.store.user.password }
+      await server.login.login({ user: user2, expectedStatus: HttpStatusCode.OK_200 })
 
-      const user3 = { username: 'ROOt', password: server.user.password }
-      await login(server.url, server.client, user3, HttpStatusCode.OK_200)
+      const user3 = { username: 'ROOt', password: server.store.user.password }
+      await server.login.login({ user: user3, expectedStatus: HttpStatusCode.OK_200 })
     })
   })
 
   describe('Upload', function () {
 
     it('Should upload the video with the correct token', async function () {
-      const videoAttributes = {}
-      await uploadVideo(server.url, accessToken, videoAttributes)
-      const res = await getVideosList(server.url)
-      const video = res.body.data[0]
+      await server.videos.upload({ token })
+      const { data } = await server.videos.list()
+      const video = data[0]
 
       expect(video.account.name).to.equal('root')
       videoId = video.id
     })
 
     it('Should upload the video again with the correct token', async function () {
-      const videoAttributes = {}
-      await uploadVideo(server.url, accessToken, videoAttributes)
+      await server.videos.upload({ token })
     })
   })
 
   describe('Ratings', function () {
 
     it('Should retrieve a video rating', async function () {
-      await rateVideo(server.url, accessToken, videoId, 'like')
-      const res = await getMyUserVideoRating(server.url, accessToken, videoId)
-      const rating = res.body
+      await server.videos.rate({ id: videoId, rating: 'like' })
+      const rating = await server.users.getMyRating({ token, videoId })
 
       expect(rating.videoId).to.equal(videoId)
       expect(rating.rating).to.equal('like')
     })
 
     it('Should retrieve ratings list', async function () {
-      await rateVideo(server.url, accessToken, videoId, 'like')
+      await server.videos.rate({ id: videoId, rating: 'like' })
 
-      const res = await getAccountRatings(server.url, server.user.username, server.accessToken, null, HttpStatusCode.OK_200)
-      const ratings = res.body
+      const body = await server.accounts.listRatings({ accountName: server.store.user.username })
 
-      expect(ratings.total).to.equal(1)
-      expect(ratings.data[0].video.id).to.equal(videoId)
-      expect(ratings.data[0].rating).to.equal('like')
+      expect(body.total).to.equal(1)
+      expect(body.data[0].video.id).to.equal(videoId)
+      expect(body.data[0].rating).to.equal('like')
     })
 
     it('Should retrieve ratings list by rating type', async function () {
       {
-        const res = await getAccountRatings(server.url, server.user.username, server.accessToken, 'like')
-        const ratings = res.body
-        expect(ratings.data.length).to.equal(1)
+        const body = await server.accounts.listRatings({ accountName: server.store.user.username, rating: 'like' })
+        expect(body.data.length).to.equal(1)
       }
 
       {
-        const res = await getAccountRatings(server.url, server.user.username, server.accessToken, 'dislike')
-        const ratings = res.body
-        expect(ratings.data.length).to.equal(0)
+        const body = await server.accounts.listRatings({ accountName: server.store.user.username, rating: 'dislike' })
+        expect(body.data.length).to.equal(0)
       }
     })
   })
 
   describe('Remove video', function () {
     it('Should not be able to remove the video with an incorrect token', async function () {
-      await removeVideo(server.url, 'bad_token', videoId, HttpStatusCode.UNAUTHORIZED_401)
+      await server.videos.remove({ token: 'bad_token', id: videoId, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
     it('Should not be able to remove the video with the token of another account')
 
     it('Should be able to remove the video with the correct token', async function () {
-      await removeVideo(server.url, accessToken, videoId)
+      await server.videos.remove({ token, id: videoId })
     })
   })
 
   describe('Logout', function () {
     it('Should logout (revoke token)', async function () {
-      await logout(server.url, server.accessToken)
+      await server.login.logout({ token: server.accessToken })
     })
 
     it('Should not be able to get the user information', async function () {
-      await getMyUserInformation(server.url, server.accessToken, HttpStatusCode.UNAUTHORIZED_401)
+      await server.users.getMyInfo({ expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
     it('Should not be able to upload a video', async function () {
-      await uploadVideo(server.url, server.accessToken, { name: 'video' }, HttpStatusCode.UNAUTHORIZED_401)
+      await server.videos.upload({ attributes: { name: 'video' }, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
     it('Should not be able to rate a video', async function () {
@@ -255,79 +214,70 @@ describe('Test users', function () {
         path: path + videoId,
         token: 'wrong token',
         fields: data,
-        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
       }
       await makePutBodyRequest(options)
     })
 
     it('Should be able to login again', async function () {
-      const res = await login(server.url, server.client, server.user)
-      server.accessToken = res.body.access_token
-      server.refreshToken = res.body.refresh_token
+      const body = await server.login.login()
+      server.accessToken = body.access_token
+      server.refreshToken = body.refresh_token
     })
 
     it('Should be able to get my user information again', async function () {
-      await getMyUserInformation(server.url, server.accessToken)
+      await server.users.getMyInfo()
     })
 
     it('Should have an expired access token', async function () {
       this.timeout(15000)
 
-      await setTokenField(server.internalServerNumber, server.accessToken, 'accessTokenExpiresAt', new Date().toISOString())
-      await setTokenField(server.internalServerNumber, server.accessToken, 'refreshTokenExpiresAt', new Date().toISOString())
+      await server.sql.setTokenField(server.accessToken, 'accessTokenExpiresAt', new Date().toISOString())
+      await server.sql.setTokenField(server.accessToken, 'refreshTokenExpiresAt', new Date().toISOString())
 
-      killallServers([ server ])
-      await reRunServer(server)
+      await killallServers([ server ])
+      await server.run()
 
-      await getMyUserInformation(server.url, server.accessToken, 401)
+      await server.users.getMyInfo({ expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
     it('Should not be able to refresh an access token with an expired refresh token', async function () {
-      await refreshToken(server, server.refreshToken, 400)
+      await server.login.refreshToken({ refreshToken: server.refreshToken, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     })
 
     it('Should refresh the token', async function () {
       this.timeout(15000)
 
       const futureDate = new Date(new Date().getTime() + 1000 * 60).toISOString()
-      await setTokenField(server.internalServerNumber, server.accessToken, 'refreshTokenExpiresAt', futureDate)
+      await server.sql.setTokenField(server.accessToken, 'refreshTokenExpiresAt', futureDate)
 
-      killallServers([ server ])
-      await reRunServer(server)
+      await killallServers([ server ])
+      await server.run()
 
-      const res = await refreshToken(server, server.refreshToken)
+      const res = await server.login.refreshToken({ refreshToken: server.refreshToken })
       server.accessToken = res.body.access_token
       server.refreshToken = res.body.refresh_token
     })
 
     it('Should be able to get my user information again', async function () {
-      await getMyUserInformation(server.url, server.accessToken)
+      await server.users.getMyInfo()
     })
   })
 
   describe('Creating a user', function () {
 
     it('Should be able to create a new user', async function () {
-      await createUser({
-        url: server.url,
-        accessToken: accessToken,
-        username: user.username,
-        password: user.password,
-        videoQuota: 2 * 1024 * 1024,
-        adminFlags: UserAdminFlag.BYPASS_VIDEO_AUTO_BLACKLIST
-      })
+      await server.users.create({ ...user, videoQuota: 2 * 1024 * 1024, adminFlags: UserAdminFlag.BYPASS_VIDEO_AUTO_BLACKLIST })
     })
 
     it('Should be able to login with this user', async function () {
-      accessTokenUser = await userLogin(server, user)
+      userToken = await server.login.getAccessToken(user)
     })
 
     it('Should be able to get user information', async function () {
-      const res1 = await getMyUserInformation(server.url, accessTokenUser)
-      const userMe: MyUser = res1.body
+      const userMe = await server.users.getMyInfo({ token: userToken })
 
-      const res2 = await getUserInformation(server.url, server.accessToken, userMe.id, true)
-      const userGet: User = res2.body
+      const userGet = await server.users.get({ userId: userMe.id, withStats: true })
 
       for (const user of [ userMe, userGet ]) {
         expect(user.username).to.equal('user_1')
@@ -363,34 +313,28 @@ describe('Test users', function () {
     it('Should be able to upload a video with this user', async function () {
       this.timeout(10000)
 
-      const videoAttributes = {
+      const attributes = {
         name: 'super user video',
         fixture: 'video_short.webm'
       }
-      await uploadVideo(server.url, accessTokenUser, videoAttributes)
+      await server.videos.upload({ token: userToken, attributes })
     })
 
     it('Should have video quota updated', async function () {
-      const res = await getMyUserVideoQuotaUsed(server.url, accessTokenUser)
-      const data = res.body
+      const quota = await server.users.getMyQuotaUsed({ token: userToken })
+      expect(quota.videoQuotaUsed).to.equal(218910)
 
-      expect(data.videoQuotaUsed).to.equal(218910)
-
-      const resUsers = await getUsersList(server.url, server.accessToken)
-
-      const users: User[] = resUsers.body.data
-      const tmpUser = users.find(u => u.username === user.username)
+      const { data } = await server.users.list()
+      const tmpUser = data.find(u => u.username === user.username)
       expect(tmpUser.videoQuotaUsed).to.equal(218910)
     })
 
     it('Should be able to list my videos', async function () {
-      const res = await getMyVideos(server.url, accessTokenUser, 0, 5)
-      expect(res.body.total).to.equal(1)
+      const { total, data } = await server.videos.listMyVideos({ token: userToken })
+      expect(total).to.equal(1)
+      expect(data).to.have.lengthOf(1)
 
-      const videos = res.body.data
-      expect(videos).to.have.lengthOf(1)
-
-      const video: Video = videos[0]
+      const video: Video = data[0]
       expect(video.name).to.equal('super user video')
       expect(video.thumbnailPath).to.not.be.null
       expect(video.previewPath).to.not.be.null
@@ -398,19 +342,15 @@ describe('Test users', function () {
 
     it('Should be able to search in my videos', async function () {
       {
-        const res = await getMyVideos(server.url, accessTokenUser, 0, 5, '-createdAt', 'user video')
-        expect(res.body.total).to.equal(1)
-
-        const videos = res.body.data
-        expect(videos).to.have.lengthOf(1)
+        const { total, data } = await server.videos.listMyVideos({ token: userToken, sort: '-createdAt', search: 'user video' })
+        expect(total).to.equal(1)
+        expect(data).to.have.lengthOf(1)
       }
 
       {
-        const res = await getMyVideos(server.url, accessTokenUser, 0, 5, '-createdAt', 'toto')
-        expect(res.body.total).to.equal(0)
-
-        const videos = res.body.data
-        expect(videos).to.have.lengthOf(0)
+        const { total, data } = await server.videos.listMyVideos({ token: userToken, sort: '-createdAt', search: 'toto' })
+        expect(total).to.equal(0)
+        expect(data).to.have.lengthOf(0)
       }
     })
 
@@ -418,28 +358,25 @@ describe('Test users', function () {
       this.timeout(60000)
 
       {
-        const res = await getCustomConfig(server.url, server.accessToken)
-        const config = res.body as CustomConfig
+        const config = await server.config.getCustomConfig()
         config.transcoding.webtorrent.enabled = false
         config.transcoding.hls.enabled = true
         config.transcoding.enabled = true
-        await updateCustomSubConfig(server.url, server.accessToken, config)
+        await server.config.updateCustomSubConfig({ newConfig: config })
       }
 
       {
-        const videoAttributes = {
+        const attributes = {
           name: 'super user video 2',
           fixture: 'video_short.webm'
         }
-        await uploadVideo(server.url, accessTokenUser, videoAttributes)
+        await server.videos.upload({ token: userToken, attributes })
 
         await waitJobs([ server ])
       }
 
       {
-        const res = await getMyUserVideoQuotaUsed(server.url, accessTokenUser)
-        const data = res.body
-
+        const data = await server.users.getMyQuotaUsed({ token: userToken })
         expect(data.videoQuotaUsed).to.be.greaterThan(220000)
       }
     })
@@ -448,21 +385,18 @@ describe('Test users', function () {
   describe('Users listing', function () {
 
     it('Should list all the users', async function () {
-      const res = await getUsersList(server.url, server.accessToken)
-      const result = res.body
-      const total = result.total
-      const users = result.data
+      const { data, total } = await server.users.list()
 
       expect(total).to.equal(2)
-      expect(users).to.be.an('array')
-      expect(users.length).to.equal(2)
+      expect(data).to.be.an('array')
+      expect(data.length).to.equal(2)
 
-      const user = users[0]
+      const user = data[0]
       expect(user.username).to.equal('user_1')
       expect(user.email).to.equal('user_1@example.com')
       expect(user.nsfwPolicy).to.equal('display')
 
-      const rootUser = users[1]
+      const rootUser = data[1]
       expect(rootUser.username).to.equal('root')
       expect(rootUser.email).to.equal('admin' + server.internalServerNumber + '@example.com')
       expect(user.nsfwPolicy).to.equal('display')
@@ -474,16 +408,12 @@ describe('Test users', function () {
     })
 
     it('Should list only the first user by username asc', async function () {
-      const res = await getUsersListPaginationAndSort(server.url, server.accessToken, 0, 1, 'username')
-
-      const result = res.body
-      const total = result.total
-      const users = result.data
+      const { total, data } = await server.users.list({ start: 0, count: 1, sort: 'username' })
 
       expect(total).to.equal(2)
-      expect(users.length).to.equal(1)
+      expect(data.length).to.equal(1)
 
-      const user = users[0]
+      const user = data[0]
       expect(user.username).to.equal('root')
       expect(user.email).to.equal('admin' + server.internalServerNumber + '@example.com')
       expect(user.roleLabel).to.equal('Administrator')
@@ -491,111 +421,90 @@ describe('Test users', function () {
     })
 
     it('Should list only the first user by username desc', async function () {
-      const res = await getUsersListPaginationAndSort(server.url, server.accessToken, 0, 1, '-username')
-      const result = res.body
-      const total = result.total
-      const users = result.data
+      const { total, data } = await server.users.list({ start: 0, count: 1, sort: '-username' })
 
       expect(total).to.equal(2)
-      expect(users.length).to.equal(1)
+      expect(data.length).to.equal(1)
 
-      const user = users[0]
+      const user = data[0]
       expect(user.username).to.equal('user_1')
       expect(user.email).to.equal('user_1@example.com')
       expect(user.nsfwPolicy).to.equal('display')
     })
 
     it('Should list only the second user by createdAt desc', async function () {
-      const res = await getUsersListPaginationAndSort(server.url, server.accessToken, 0, 1, '-createdAt')
-      const result = res.body
-      const total = result.total
-      const users = result.data
-
+      const { data, total } = await server.users.list({ start: 0, count: 1, sort: '-createdAt' })
       expect(total).to.equal(2)
-      expect(users.length).to.equal(1)
 
-      const user = users[0]
+      expect(data.length).to.equal(1)
+
+      const user = data[0]
       expect(user.username).to.equal('user_1')
       expect(user.email).to.equal('user_1@example.com')
       expect(user.nsfwPolicy).to.equal('display')
     })
 
     it('Should list all the users by createdAt asc', async function () {
-      const res = await getUsersListPaginationAndSort(server.url, server.accessToken, 0, 2, 'createdAt')
-      const result = res.body
-      const total = result.total
-      const users = result.data
+      const { data, total } = await server.users.list({ start: 0, count: 2, sort: 'createdAt' })
 
       expect(total).to.equal(2)
-      expect(users.length).to.equal(2)
+      expect(data.length).to.equal(2)
 
-      expect(users[0].username).to.equal('root')
-      expect(users[0].email).to.equal('admin' + server.internalServerNumber + '@example.com')
-      expect(users[0].nsfwPolicy).to.equal('display')
+      expect(data[0].username).to.equal('root')
+      expect(data[0].email).to.equal('admin' + server.internalServerNumber + '@example.com')
+      expect(data[0].nsfwPolicy).to.equal('display')
 
-      expect(users[1].username).to.equal('user_1')
-      expect(users[1].email).to.equal('user_1@example.com')
-      expect(users[1].nsfwPolicy).to.equal('display')
+      expect(data[1].username).to.equal('user_1')
+      expect(data[1].email).to.equal('user_1@example.com')
+      expect(data[1].nsfwPolicy).to.equal('display')
     })
 
     it('Should search user by username', async function () {
-      const res = await getUsersListPaginationAndSort(server.url, server.accessToken, 0, 2, 'createdAt', 'oot')
-      const users = res.body.data as User[]
-
-      expect(res.body.total).to.equal(1)
-      expect(users.length).to.equal(1)
-
-      expect(users[0].username).to.equal('root')
+      const { data, total } = await server.users.list({ start: 0, count: 2, sort: 'createdAt', search: 'oot' })
+      expect(total).to.equal(1)
+      expect(data.length).to.equal(1)
+      expect(data[0].username).to.equal('root')
     })
 
     it('Should search user by email', async function () {
       {
-        const res = await getUsersListPaginationAndSort(server.url, server.accessToken, 0, 2, 'createdAt', 'r_1@exam')
-        const users = res.body.data as User[]
-
-        expect(res.body.total).to.equal(1)
-        expect(users.length).to.equal(1)
-
-        expect(users[0].username).to.equal('user_1')
-        expect(users[0].email).to.equal('user_1@example.com')
+        const { total, data } = await server.users.list({ start: 0, count: 2, sort: 'createdAt', search: 'r_1@exam' })
+        expect(total).to.equal(1)
+        expect(data.length).to.equal(1)
+        expect(data[0].username).to.equal('user_1')
+        expect(data[0].email).to.equal('user_1@example.com')
       }
 
       {
-        const res = await getUsersListPaginationAndSort(server.url, server.accessToken, 0, 2, 'createdAt', 'example')
-        const users = res.body.data as User[]
-
-        expect(res.body.total).to.equal(2)
-        expect(users.length).to.equal(2)
-
-        expect(users[0].username).to.equal('root')
-        expect(users[1].username).to.equal('user_1')
+        const { total, data } = await server.users.list({ start: 0, count: 2, sort: 'createdAt', search: 'example' })
+        expect(total).to.equal(2)
+        expect(data.length).to.equal(2)
+        expect(data[0].username).to.equal('root')
+        expect(data[1].username).to.equal('user_1')
       }
     })
   })
 
   describe('Update my account', function () {
+
     it('Should update my password', async function () {
-      await updateMyUser({
-        url: server.url,
-        accessToken: accessTokenUser,
+      await server.users.updateMe({
+        token: userToken,
         currentPassword: 'super password',
         password: 'new password'
       })
       user.password = 'new password'
 
-      await userLogin(server, user, HttpStatusCode.OK_200)
+      await server.login.login({ user })
     })
 
     it('Should be able to change the NSFW display attribute', async function () {
-      await updateMyUser({
-        url: server.url,
-        accessToken: accessTokenUser,
+      await server.users.updateMe({
+        token: userToken,
         nsfwPolicy: 'do_not_list'
       })
 
-      const res = await getMyUserInformation(server.url, accessTokenUser)
-      const user = res.body
-
+      const user = await server.users.getMyInfo({ token: userToken })
       expect(user.username).to.equal('user_1')
       expect(user.email).to.equal('user_1@example.com')
       expect(user.nsfwPolicy).to.equal('do_not_list')
@@ -606,42 +515,33 @@ describe('Test users', function () {
     })
 
     it('Should be able to change the autoPlayVideo attribute', async function () {
-      await updateMyUser({
-        url: server.url,
-        accessToken: accessTokenUser,
+      await server.users.updateMe({
+        token: userToken,
         autoPlayVideo: false
       })
 
-      const res = await getMyUserInformation(server.url, accessTokenUser)
-      const user = res.body
-
+      const user = await server.users.getMyInfo({ token: userToken })
       expect(user.autoPlayVideo).to.be.false
     })
 
     it('Should be able to change the autoPlayNextVideo attribute', async function () {
-      await updateMyUser({
-        url: server.url,
-        accessToken: accessTokenUser,
+      await server.users.updateMe({
+        token: userToken,
         autoPlayNextVideo: true
       })
 
-      const res = await getMyUserInformation(server.url, accessTokenUser)
-      const user = res.body
-
+      const user = await server.users.getMyInfo({ token: userToken })
       expect(user.autoPlayNextVideo).to.be.true
     })
 
     it('Should be able to change the email attribute', async function () {
-      await updateMyUser({
-        url: server.url,
-        accessToken: accessTokenUser,
+      await server.users.updateMe({
+        token: userToken,
         currentPassword: 'new password',
         email: 'updated@example.com'
       })
 
-      const res = await getMyUserInformation(server.url, accessTokenUser)
-      const user = res.body
-
+      const user = await server.users.getMyInfo({ token: userToken })
       expect(user.username).to.equal('user_1')
       expect(user.email).to.equal('updated@example.com')
       expect(user.nsfwPolicy).to.equal('do_not_list')
@@ -654,15 +554,9 @@ describe('Test users', function () {
     it('Should be able to update my avatar with a gif', async function () {
       const fixture = 'avatar.gif'
 
-      await updateMyAvatar({
-        url: server.url,
-        accessToken: accessTokenUser,
-        fixture
-      })
+      await server.users.updateMyAvatar({ token: userToken, fixture })
 
-      const res = await getMyUserInformation(server.url, accessTokenUser)
-      const user = res.body
-
+      const user = await server.users.getMyInfo({ token: userToken })
       await testImage(server.url, 'avatar-resized', user.account.avatar.path, '.gif')
     })
 
@@ -670,29 +564,17 @@ describe('Test users', function () {
       for (const extension of [ '.png', '.gif' ]) {
         const fixture = 'avatar' + extension
 
-        await updateMyAvatar({
-          url: server.url,
-          accessToken: accessTokenUser,
-          fixture
-        })
+        await server.users.updateMyAvatar({ token: userToken, fixture })
 
-        const res = await getMyUserInformation(server.url, accessTokenUser)
-        const user = res.body
-
+        const user = await server.users.getMyInfo({ token: userToken })
         await testImage(server.url, 'avatar-resized', user.account.avatar.path, extension)
       }
     })
 
     it('Should be able to update my display name', async function () {
-      await updateMyUser({
-        url: server.url,
-        accessToken: accessTokenUser,
-        displayName: 'new display name'
-      })
+      await server.users.updateMe({ token: userToken, displayName: 'new display name' })
 
-      const res = await getMyUserInformation(server.url, accessTokenUser)
-      const user = res.body
-
+      const user = await server.users.getMyInfo({ token: userToken })
       expect(user.username).to.equal('user_1')
       expect(user.email).to.equal('updated@example.com')
       expect(user.nsfwPolicy).to.equal('do_not_list')
@@ -703,15 +585,9 @@ describe('Test users', function () {
     })
 
     it('Should be able to update my description', async function () {
-      await updateMyUser({
-        url: server.url,
-        accessToken: accessTokenUser,
-        description: 'my super description updated'
-      })
+      await server.users.updateMe({ token: userToken, description: 'my super description updated' })
 
-      const res = await getMyUserInformation(server.url, accessTokenUser)
-      const user: User = res.body
-
+      const user = await server.users.getMyInfo({ token: userToken })
       expect(user.username).to.equal('user_1')
       expect(user.email).to.equal('updated@example.com')
       expect(user.nsfwPolicy).to.equal('do_not_list')
@@ -725,30 +601,21 @@ describe('Test users', function () {
 
     it('Should be able to update my theme', async function () {
       for (const theme of [ 'background-red', 'default', 'instance-default' ]) {
-        await updateMyUser({
-          url: server.url,
-          accessToken: accessTokenUser,
-          theme
-        })
+        await server.users.updateMe({ token: userToken, theme })
 
-        const res = await getMyUserInformation(server.url, accessTokenUser)
-        const body: User = res.body
-
-        expect(body.theme).to.equal(theme)
+        const user = await server.users.getMyInfo({ token: userToken })
+        expect(user.theme).to.equal(theme)
       }
     })
 
     it('Should be able to update my modal preferences', async function () {
-      await updateMyUser({
-        url: server.url,
-        accessToken: accessTokenUser,
+      await server.users.updateMe({
+        token: userToken,
         noInstanceConfigWarningModal: true,
         noWelcomeModal: true
       })
 
-      const res = await getMyUserInformation(server.url, accessTokenUser)
-      const user: User = res.body
-
+      const user = await server.users.getMyInfo({ token: userToken })
       expect(user.noWelcomeModal).to.be.true
       expect(user.noInstanceConfigWarningModal).to.be.true
     })
@@ -756,10 +623,9 @@ describe('Test users', function () {
 
   describe('Updating another user', function () {
     it('Should be able to update another user', async function () {
-      await updateUser({
-        url: server.url,
+      await server.users.update({
         userId,
-        accessToken,
+        token,
         email: 'updated2@example.com',
         emailVerified: true,
         videoQuota: 42,
@@ -768,8 +634,7 @@ describe('Test users', function () {
         pluginAuth: 'toto'
       })
 
-      const res = await getUserInformation(server.url, accessToken, userId)
-      const user = res.body as User
+      const user = await server.users.get({ token, userId })
 
       expect(user.username).to.equal('user_1')
       expect(user.email).to.equal('updated2@example.com')
@@ -783,57 +648,50 @@ describe('Test users', function () {
     })
 
     it('Should reset the auth plugin', async function () {
-      await updateUser({ url: server.url, userId, accessToken, pluginAuth: null })
+      await server.users.update({ userId, token, pluginAuth: null })
 
-      const res = await getUserInformation(server.url, accessToken, userId)
-      const user = res.body as User
+      const user = await server.users.get({ token, userId })
       expect(user.pluginAuth).to.be.null
     })
 
     it('Should have removed the user token', async function () {
-      await getMyUserVideoQuotaUsed(server.url, accessTokenUser, HttpStatusCode.UNAUTHORIZED_401)
+      await server.users.getMyQuotaUsed({ token: userToken, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
 
-      accessTokenUser = await userLogin(server, user)
+      userToken = await server.login.getAccessToken(user)
     })
 
     it('Should be able to update another user password', async function () {
-      await updateUser({
-        url: server.url,
-        userId,
-        accessToken,
-        password: 'password updated'
-      })
+      await server.users.update({ userId, token, password: 'password updated' })
 
-      await getMyUserVideoQuotaUsed(server.url, accessTokenUser, HttpStatusCode.UNAUTHORIZED_401)
+      await server.users.getMyQuotaUsed({ token: userToken, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
 
-      await userLogin(server, user, HttpStatusCode.BAD_REQUEST_400)
+      await server.login.login({ user, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
 
       user.password = 'password updated'
-      accessTokenUser = await userLogin(server, user)
+      userToken = await server.login.getAccessToken(user)
     })
   })
 
   describe('Video blacklists', function () {
     it('Should be able to list video blacklist by a moderator', async function () {
-      await getBlacklistedVideosList({ url: server.url, token: accessTokenUser })
+      await server.blacklist.list({ token: userToken })
     })
   })
 
   describe('Remove a user', function () {
     it('Should be able to remove this user', async function () {
-      await removeUser(server.url, userId, accessToken)
+      await server.users.remove({ userId, token })
     })
 
     it('Should not be able to login with this user', async function () {
-      await userLogin(server, user, HttpStatusCode.BAD_REQUEST_400)
+      await server.login.login({ user, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     })
 
     it('Should not have videos of this user', async function () {
-      const res = await getVideosList(server.url)
+      const { data, total } = await server.videos.list()
+      expect(total).to.equal(1)
 
-      expect(res.body.total).to.equal(1)
-
-      const video = res.body.data[0]
+      const video = data[0]
       expect(video.account.name).to.equal('root')
     })
   })
@@ -845,7 +703,7 @@ describe('Test users', function () {
       const user = { displayName: 'super user 15', username: 'user_15', password: 'my super password' }
       const channel = { name: 'my_user_15_channel', displayName: 'my channel rocks' }
 
-      await registerUserWithChannel({ url: server.url, user, channel })
+      await server.users.register({ ...user, channel })
     })
 
     it('Should be able to login with this registered user', async function () {
@@ -854,40 +712,36 @@ describe('Test users', function () {
         password: 'my super password'
       }
 
-      user15AccessToken = await userLogin(server, user15)
+      user15AccessToken = await server.login.getAccessToken(user15)
     })
 
     it('Should have the correct display name', async function () {
-      const res = await getMyUserInformation(server.url, user15AccessToken)
-      const user: User = res.body
-
+      const user = await server.users.getMyInfo({ token: user15AccessToken })
       expect(user.account.displayName).to.equal('super user 15')
     })
 
     it('Should have the correct video quota', async function () {
-      const res = await getMyUserInformation(server.url, user15AccessToken)
-      const user = res.body
-
+      const user = await server.users.getMyInfo({ token: user15AccessToken })
       expect(user.videoQuota).to.equal(5 * 1024 * 1024)
     })
 
     it('Should have created the channel', async function () {
-      const res = await getVideoChannel(server.url, 'my_user_15_channel')
+      const { displayName } = await server.channels.get({ channelName: 'my_user_15_channel' })
 
-      expect(res.body.displayName).to.equal('my channel rocks')
+      expect(displayName).to.equal('my channel rocks')
     })
 
     it('Should remove me', async function () {
       {
-        const res = await getUsersList(server.url, server.accessToken)
-        expect(res.body.data.find(u => u.username === 'user_15')).to.not.be.undefined
+        const { data } = await server.users.list()
+        expect(data.find(u => u.username === 'user_15')).to.not.be.undefined
       }
 
-      await deleteMe(server.url, user15AccessToken)
+      await server.users.deleteMe({ token: user15AccessToken })
 
       {
-        const res = await getUsersList(server.url, server.accessToken)
-        expect(res.body.data.find(u => u.username === 'user_15')).to.be.undefined
+        const { data } = await server.users.list()
+        expect(data.find(u => u.username === 'user_15')).to.be.undefined
       }
     })
   })
@@ -901,49 +755,40 @@ describe('Test users', function () {
     }
 
     it('Should block a user', async function () {
-      const resUser = await createUser({
-        url: server.url,
-        accessToken: server.accessToken,
-        username: user16.username,
-        password: user16.password
-      })
-      user16Id = resUser.body.user.id
+      const user = await server.users.create({ ...user16 })
+      user16Id = user.id
 
-      user16AccessToken = await userLogin(server, user16)
+      user16AccessToken = await server.login.getAccessToken(user16)
 
-      await getMyUserInformation(server.url, user16AccessToken, HttpStatusCode.OK_200)
-      await blockUser(server.url, user16Id, server.accessToken)
+      await server.users.getMyInfo({ token: user16AccessToken, expectedStatus: HttpStatusCode.OK_200 })
+      await server.users.banUser({ userId: user16Id })
 
-      await getMyUserInformation(server.url, user16AccessToken, HttpStatusCode.UNAUTHORIZED_401)
-      await userLogin(server, user16, HttpStatusCode.BAD_REQUEST_400)
+      await server.users.getMyInfo({ token: user16AccessToken, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
+      await server.login.login({ user: user16, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     })
 
     it('Should search user by banned status', async function () {
       {
-        const res = await getUsersListPaginationAndSort(server.url, server.accessToken, 0, 2, 'createdAt', undefined, true)
-        const users = res.body.data as User[]
+        const { data, total } = await server.users.list({ start: 0, count: 2, sort: 'createdAt', blocked: true })
+        expect(total).to.equal(1)
+        expect(data.length).to.equal(1)
 
-        expect(res.body.total).to.equal(1)
-        expect(users.length).to.equal(1)
-
-        expect(users[0].username).to.equal(user16.username)
+        expect(data[0].username).to.equal(user16.username)
       }
 
       {
-        const res = await getUsersListPaginationAndSort(server.url, server.accessToken, 0, 2, 'createdAt', undefined, false)
-        const users = res.body.data as User[]
+        const { data, total } = await server.users.list({ start: 0, count: 2, sort: 'createdAt', blocked: false })
+        expect(total).to.equal(1)
+        expect(data.length).to.equal(1)
 
-        expect(res.body.total).to.equal(1)
-        expect(users.length).to.equal(1)
-
-        expect(users[0].username).to.not.equal(user16.username)
+        expect(data[0].username).to.not.equal(user16.username)
       }
     })
 
     it('Should unblock a user', async function () {
-      await unblockUser(server.url, user16Id, server.accessToken)
-      user16AccessToken = await userLogin(server, user16)
-      await getMyUserInformation(server.url, user16AccessToken, HttpStatusCode.OK_200)
+      await server.users.unbanUser({ userId: user16Id })
+      user16AccessToken = await server.login.getAccessToken(user16)
+      await server.users.getMyInfo({ token: user16AccessToken, expectedStatus: HttpStatusCode.OK_200 })
     })
   })
 
@@ -956,19 +801,12 @@ describe('Test users', function () {
         username: 'user_17',
         password: 'my super password'
       }
-      const resUser = await createUser({
-        url: server.url,
-        accessToken: server.accessToken,
-        username: user17.username,
-        password: user17.password
-      })
+      const created = await server.users.create({ ...user17 })
 
-      user17Id = resUser.body.user.id
-      user17AccessToken = await userLogin(server, user17)
+      user17Id = created.id
+      user17AccessToken = await server.login.getAccessToken(user17)
 
-      const res = await getUserInformation(server.url, server.accessToken, user17Id, true)
-      const user: User = res.body
-
+      const user = await server.users.get({ userId: user17Id, withStats: true })
       expect(user.videosCount).to.equal(0)
       expect(user.videoCommentsCount).to.equal(0)
       expect(user.abusesCount).to.equal(0)
@@ -977,54 +815,43 @@ describe('Test users', function () {
     })
 
     it('Should report correct videos count', async function () {
-      const videoAttributes = {
-        name: 'video to test user stats'
-      }
-      await uploadVideo(server.url, user17AccessToken, videoAttributes)
-      const res1 = await getVideosList(server.url)
-      videoId = res1.body.data.find(video => video.name === videoAttributes.name).id
+      const attributes = { name: 'video to test user stats' }
+      await server.videos.upload({ token: user17AccessToken, attributes })
 
-      const res2 = await getUserInformation(server.url, server.accessToken, user17Id, true)
-      const user: User = res2.body
+      const { data } = await server.videos.list()
+      videoId = data.find(video => video.name === attributes.name).id
 
+      const user = await server.users.get({ userId: user17Id, withStats: true })
       expect(user.videosCount).to.equal(1)
     })
 
     it('Should report correct video comments for user', async function () {
       const text = 'super comment'
-      await addVideoCommentThread(server.url, user17AccessToken, videoId, text)
+      await server.comments.createThread({ token: user17AccessToken, videoId, text })
 
-      const res = await getUserInformation(server.url, server.accessToken, user17Id, true)
-      const user: User = res.body
-
+      const user = await server.users.get({ userId: user17Id, withStats: true })
       expect(user.videoCommentsCount).to.equal(1)
     })
 
     it('Should report correct abuses counts', async function () {
       const reason = 'my super bad reason'
-      await reportAbuse({ url: server.url, token: user17AccessToken, videoId, reason })
+      await server.abuses.report({ token: user17AccessToken, videoId, reason })
 
-      const res1 = await getAdminAbusesList({ url: server.url, token: server.accessToken })
-      const abuseId = res1.body.data[0].id
+      const body1 = await server.abuses.getAdminList()
+      const abuseId = body1.data[0].id
 
-      const res2 = await getUserInformation(server.url, server.accessToken, user17Id, true)
-      const user2: User = res2.body
-
+      const user2 = await server.users.get({ userId: user17Id, withStats: true })
       expect(user2.abusesCount).to.equal(1) // number of incriminations
       expect(user2.abusesCreatedCount).to.equal(1) // number of reports created
 
-      const body: AbuseUpdate = { state: AbuseState.ACCEPTED }
-      await updateAbuse(server.url, server.accessToken, abuseId, body)
+      await server.abuses.update({ abuseId, body: { state: AbuseState.ACCEPTED } })
 
-      const res3 = await getUserInformation(server.url, server.accessToken, user17Id, true)
-      const user3: User = res3.body
-
+      const user3 = await server.users.get({ userId: user17Id, withStats: true })
       expect(user3.abusesAcceptedCount).to.equal(1) // number of reports created accepted
     })
   })
 
   after(async function () {
-    await closeAllSequelize([ server ])
     await cleanupTests([ server ])
   })
 })

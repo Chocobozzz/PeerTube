@@ -1,32 +1,25 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
 import 'mocha'
-import { Account } from '../../../../shared/models/actors'
+import * as chai from 'chai'
 import {
+  checkActorFilesWereRemoved,
   checkTmpIsEmpty,
   checkVideoFilesWereRemoved,
   cleanupTests,
-  createUser,
+  createMultipleServers,
   doubleFollow,
-  flushAndRunMultipleServers,
-  getAccountVideos,
-  getVideoChannelsList,
-  removeUser,
-  updateMyUser,
-  userLogin
-} from '../../../../shared/extra-utils'
-import { getMyUserInformation, ServerInfo, testImage, updateMyAvatar, uploadVideo } from '../../../../shared/extra-utils/index'
-import { checkActorFilesWereRemoved, getAccount, getAccountsList } from '../../../../shared/extra-utils/users/accounts'
-import { setAccessTokensToServers } from '../../../../shared/extra-utils/users/login'
-import { User } from '../../../../shared/models/users'
-import { VideoChannel } from '../../../../shared/models/videos'
-import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
+  PeerTubeServer,
+  setAccessTokensToServers,
+  testImage,
+  waitJobs
+} from '@shared/extra-utils'
+import { User } from '@shared/models'
 
 const expect = chai.expect
 
 describe('Test users with multiple servers', function () {
-  let servers: ServerInfo[] = []
+  let servers: PeerTubeServer[] = []
   let user: User
   let userId: number
   let videoUUID: string
@@ -36,7 +29,7 @@ describe('Test users with multiple servers', function () {
   before(async function () {
     this.timeout(120_000)
 
-    servers = await flushAndRunMultipleServers(3)
+    servers = await createMultipleServers(3)
 
     // Get the access tokens
     await setAccessTokensToServers(servers)
@@ -49,26 +42,21 @@ describe('Test users with multiple servers', function () {
     await doubleFollow(servers[1], servers[2])
 
     // The root user of server 1 is propagated to servers 2 and 3
-    await uploadVideo(servers[0].url, servers[0].accessToken, {})
+    await servers[0].videos.upload()
 
     {
       const user = {
         username: 'user1',
         password: 'password'
       }
-      const res = await createUser({
-        url: servers[0].url,
-        accessToken: servers[0].accessToken,
-        username: user.username,
-        password: user.password
-      })
-      userId = res.body.user.id
-      userAccessToken = await userLogin(servers[0], user)
+      const created = await servers[0].users.create(user)
+      userId = created.id
+      userAccessToken = await servers[0].login.getAccessToken(user)
     }
 
     {
-      const resVideo = await uploadVideo(servers[0].url, userAccessToken, {})
-      videoUUID = resVideo.body.video.uuid
+      const { uuid } = await servers[0].videos.upload({ token: userAccessToken })
+      videoUUID = uuid
     }
 
     await waitJobs(servers)
@@ -77,15 +65,9 @@ describe('Test users with multiple servers', function () {
   it('Should be able to update my display name', async function () {
     this.timeout(10000)
 
-    await updateMyUser({
-      url: servers[0].url,
-      accessToken: servers[0].accessToken,
-      displayName: 'my super display name'
-    })
+    await servers[0].users.updateMe({ displayName: 'my super display name' })
 
-    const res = await getMyUserInformation(servers[0].url, servers[0].accessToken)
-    user = res.body
-
+    user = await servers[0].users.getMyInfo()
     expect(user.account.displayName).to.equal('my super display name')
 
     await waitJobs(servers)
@@ -94,14 +76,9 @@ describe('Test users with multiple servers', function () {
   it('Should be able to update my description', async function () {
     this.timeout(10_000)
 
-    await updateMyUser({
-      url: servers[0].url,
-      accessToken: servers[0].accessToken,
-      description: 'my super description updated'
-    })
+    await servers[0].users.updateMe({ description: 'my super description updated' })
 
-    const res = await getMyUserInformation(servers[0].url, servers[0].accessToken)
-    user = res.body
+    user = await servers[0].users.getMyInfo()
     expect(user.account.displayName).to.equal('my super display name')
     expect(user.account.description).to.equal('my super description updated')
 
@@ -113,15 +90,9 @@ describe('Test users with multiple servers', function () {
 
     const fixture = 'avatar2.png'
 
-    await updateMyAvatar({
-      url: servers[0].url,
-      accessToken: servers[0].accessToken,
-      fixture
-    })
+    await servers[0].users.updateMyAvatar({ fixture })
 
-    const res = await getMyUserInformation(servers[0].url, servers[0].accessToken)
-    user = res.body
-
+    user = await servers[0].users.getMyInfo()
     userAvatarFilename = user.account.avatar.path
 
     await testImage(servers[0].url, 'avatar2-resized', userAvatarFilename, '.png')
@@ -133,13 +104,12 @@ describe('Test users with multiple servers', function () {
     let createdAt: string | Date
 
     for (const server of servers) {
-      const resAccounts = await getAccountsList(server.url, '-createdAt')
+      const body = await server.accounts.list({ sort: '-createdAt' })
 
-      const resList = resAccounts.body.data.find(a => a.name === 'root' && a.host === 'localhost:' + servers[0].port) as Account
+      const resList = body.data.find(a => a.name === 'root' && a.host === 'localhost:' + servers[0].port)
       expect(resList).not.to.be.undefined
 
-      const resAccount = await getAccount(server.url, resList.name + '@' + resList.host)
-      const account = resAccount.body as Account
+      const account = await server.accounts.get({ accountName: resList.name + '@' + resList.host })
 
       if (!createdAt) createdAt = account.createdAt
 
@@ -161,31 +131,29 @@ describe('Test users with multiple servers', function () {
 
   it('Should list account videos', async function () {
     for (const server of servers) {
-      const res = await getAccountVideos(server.url, server.accessToken, 'user1@localhost:' + servers[0].port, 0, 5)
+      const { total, data } = await server.videos.listByAccount({ handle: 'user1@localhost:' + servers[0].port })
 
-      expect(res.body.total).to.equal(1)
-      expect(res.body.data).to.be.an('array')
-      expect(res.body.data).to.have.lengthOf(1)
-      expect(res.body.data[0].uuid).to.equal(videoUUID)
+      expect(total).to.equal(1)
+      expect(data).to.be.an('array')
+      expect(data).to.have.lengthOf(1)
+      expect(data[0].uuid).to.equal(videoUUID)
     }
   })
 
   it('Should search through account videos', async function () {
     this.timeout(10_000)
 
-    const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name: 'Kami no chikara' })
+    const created = await servers[0].videos.upload({ token: userAccessToken, attributes: { name: 'Kami no chikara' } })
 
     await waitJobs(servers)
 
     for (const server of servers) {
-      const res = await getAccountVideos(server.url, server.accessToken, 'user1@localhost:' + servers[0].port, 0, 5, undefined, {
-        search: 'Kami'
-      })
+      const { total, data } = await server.videos.listByAccount({ handle: 'user1@localhost:' + servers[0].port, search: 'Kami' })
 
-      expect(res.body.total).to.equal(1)
-      expect(res.body.data).to.be.an('array')
-      expect(res.body.data).to.have.lengthOf(1)
-      expect(res.body.data[0].uuid).to.equal(resVideo.body.video.uuid)
+      expect(total).to.equal(1)
+      expect(data).to.be.an('array')
+      expect(data).to.have.lengthOf(1)
+      expect(data[0].uuid).to.equal(created.uuid)
     }
   })
 
@@ -193,32 +161,28 @@ describe('Test users with multiple servers', function () {
     this.timeout(10_000)
 
     for (const server of servers) {
-      const resAccounts = await getAccountsList(server.url, '-createdAt')
+      const body = await server.accounts.list({ sort: '-createdAt' })
 
-      const accountDeleted = resAccounts.body.data.find(a => a.name === 'user1' && a.host === 'localhost:' + servers[0].port) as Account
+      const accountDeleted = body.data.find(a => a.name === 'user1' && a.host === 'localhost:' + servers[0].port)
       expect(accountDeleted).not.to.be.undefined
 
-      const resVideoChannels = await getVideoChannelsList(server.url, 0, 10)
-      const videoChannelDeleted = resVideoChannels.body.data.find(a => {
-        return a.displayName === 'Main user1 channel' && a.host === 'localhost:' + servers[0].port
-      }) as VideoChannel
+      const { data } = await server.channels.list()
+      const videoChannelDeleted = data.find(a => a.displayName === 'Main user1 channel' && a.host === 'localhost:' + servers[0].port)
       expect(videoChannelDeleted).not.to.be.undefined
     }
 
-    await removeUser(servers[0].url, userId, servers[0].accessToken)
+    await servers[0].users.remove({ userId })
 
     await waitJobs(servers)
 
     for (const server of servers) {
-      const resAccounts = await getAccountsList(server.url, '-createdAt')
+      const body = await server.accounts.list({ sort: '-createdAt' })
 
-      const accountDeleted = resAccounts.body.data.find(a => a.name === 'user1' && a.host === 'localhost:' + servers[0].port) as Account
+      const accountDeleted = body.data.find(a => a.name === 'user1' && a.host === 'localhost:' + servers[0].port)
       expect(accountDeleted).to.be.undefined
 
-      const resVideoChannels = await getVideoChannelsList(server.url, 0, 10)
-      const videoChannelDeleted = resVideoChannels.body.data.find(a => {
-        return a.name === 'Main user1 channel' && a.host === 'localhost:' + servers[0].port
-      }) as VideoChannel
+      const { data } = await server.channels.list()
+      const videoChannelDeleted = data.find(a => a.name === 'Main user1 channel' && a.host === 'localhost:' + servers[0].port)
       expect(videoChannelDeleted).to.be.undefined
     }
   })
@@ -231,7 +195,7 @@ describe('Test users with multiple servers', function () {
 
   it('Should not have video files', async () => {
     for (const server of servers) {
-      await checkVideoFilesWereRemoved(videoUUID, server.internalServerNumber)
+      await checkVideoFilesWereRemoved(videoUUID, server)
     }
   })
 

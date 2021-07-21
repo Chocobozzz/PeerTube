@@ -1,6 +1,7 @@
 import * as express from 'express'
 import { blacklistVideo, unblacklistVideo } from '@server/lib/video-blacklist'
 import { UserRight, VideoBlacklistCreate } from '../../../../shared'
+import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
 import { logger } from '../../../helpers/logger'
 import { getFormattedObjects } from '../../../helpers/utils'
 import { sequelizeTypescript } from '../../../initializers/database'
@@ -19,7 +20,6 @@ import {
   videosBlacklistUpdateValidator
 } from '../../../middlewares'
 import { VideoBlacklistModel } from '../../../models/video/video-blacklist'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const blacklistRouter = express.Router()
 

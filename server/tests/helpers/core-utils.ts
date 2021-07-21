@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
 import 'mocha'
+import * as chai from 'chai'
 import { snakeCase } from 'lodash'
-import { objectConverter, parseBytes } from '../../helpers/core-utils'
 import validator from 'validator'
+import { objectConverter, parseBytes } from '../../helpers/core-utils'
 
 const expect = chai.expect
 

@@ -1,7 +1,7 @@
 import 'multer'
 import * as express from 'express'
 import { UserNotificationModel } from '@server/models/user/user-notification'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
 import { UserNotificationSetting } from '../../../../shared/models/users'
 import { getFormattedObjects } from '../../../helpers/utils'
 import {

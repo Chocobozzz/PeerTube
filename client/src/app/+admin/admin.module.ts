@@ -25,7 +25,7 @@ import {
   EditVODTranscodingComponent
 } from './config'
 import { ConfigService } from './config/shared/config.service'
-import { FollowersListComponent, FollowsComponent, VideoRedundanciesListComponent } from './follows'
+import { FollowersListComponent, FollowModalComponent, FollowsComponent, VideoRedundanciesListComponent } from './follows'
 import { FollowingListComponent } from './follows/following-list/following-list.component'
 import { RedundancyCheckboxComponent } from './follows/shared/redundancy-checkbox.component'
 import { VideoRedundancyInformationComponent } from './follows/video-redundancies-list/video-redundancy-information.component'
@@ -68,6 +68,7 @@ import { UserCreateComponent, UserListComponent, UserPasswordComponent, UsersCom
     FollowsComponent,
     FollowersListComponent,
     FollowingListComponent,
+    FollowModalComponent,
     RedundancyCheckboxComponent,
     VideoRedundanciesListComponent,
     VideoRedundancyInformationComponent,

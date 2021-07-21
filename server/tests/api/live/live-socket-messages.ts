@@ -2,47 +2,42 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { getLiveNotificationSocket } from '@shared/extra-utils/socket/socket-io'
 import { VideoPrivacy, VideoState } from '@shared/models'
 import {
   cleanupTests,
-  createLive,
+  createMultipleServers,
   doubleFollow,
-  flushAndRunMultipleServers,
-  getVideoIdFromUUID,
-  sendRTMPStreamInVideo,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel,
   stopFfmpeg,
-  updateCustomSubConfig,
-  viewVideo,
   wait,
   waitJobs,
-  waitUntilLiveEnded,
   waitUntilLivePublishedOnAllServers
 } from '../../../../shared/extra-utils'
 
 const expect = chai.expect
 
 describe('Test live', function () {
-  let servers: ServerInfo[] = []
+  let servers: PeerTubeServer[] = []
 
   before(async function () {
     this.timeout(120000)
 
-    servers = await flushAndRunMultipleServers(2)
+    servers = await createMultipleServers(2)
 
     // Get the access tokens
     await setAccessTokensToServers(servers)
     await setDefaultVideoChannel(servers)
 
-    await updateCustomSubConfig(servers[0].url, servers[0].accessToken, {
-      live: {
-        enabled: true,
-        allowReplay: true,
-        transcoding: {
-          enabled: false
+    await servers[0].config.updateCustomSubConfig({
+      newConfig: {
+        live: {
+          enabled: true,
+          allowReplay: true,
+          transcoding: {
+            enabled: false
+          }
         }
       }
     })
@@ -56,12 +51,12 @@ describe('Test live', function () {
     async function createLiveWrapper () {
       const liveAttributes = {
         name: 'live video',
-        channelId: servers[0].videoChannel.id,
+        channelId: servers[0].store.channel.id,
         privacy: VideoPrivacy.PUBLIC
       }
 
-      const res = await createLive(servers[0].url, servers[0].accessToken, liveAttributes)
-      return res.body.video.uuid
+      const { uuid } = await servers[0].live.create({ fields: liveAttributes })
+      return uuid
     }
 
     it('Should correctly send a message when the live starts and ends', async function () {
@@ -74,22 +69,22 @@ describe('Test live', function () {
       await waitJobs(servers)
 
       {
-        const videoId = await getVideoIdFromUUID(servers[0].url, liveVideoUUID)
+        const videoId = await servers[0].videos.getId({ uuid: liveVideoUUID })
 
-        const localSocket = getLiveNotificationSocket(servers[0].url)
+        const localSocket = servers[0].socketIO.getLiveNotificationSocket()
         localSocket.on('state-change', data => localStateChanges.push(data.state))
         localSocket.emit('subscribe', { videoId })
       }
 
       {
-        const videoId = await getVideoIdFromUUID(servers[1].url, liveVideoUUID)
+        const videoId = await servers[1].videos.getId({ uuid: liveVideoUUID })
 
-        const remoteSocket = getLiveNotificationSocket(servers[1].url)
+        const remoteSocket = servers[1].socketIO.getLiveNotificationSocket()
         remoteSocket.on('state-change', data => remoteStateChanges.push(data.state))
         remoteSocket.emit('subscribe', { videoId })
       }
 
-      const command = await sendRTMPStreamInVideo(servers[0].url, servers[0].accessToken, liveVideoUUID)
+      const ffmpegCommand = await servers[0].live.sendRTMPStreamInVideo({ videoId: liveVideoUUID })
 
       await waitUntilLivePublishedOnAllServers(servers, liveVideoUUID)
       await waitJobs(servers)
@@ -99,10 +94,10 @@ describe('Test live', function () {
         expect(stateChanges[stateChanges.length - 1]).to.equal(VideoState.PUBLISHED)
       }
 
-      await stopFfmpeg(command)
+      await stopFfmpeg(ffmpegCommand)
 
       for (const server of servers) {
-        await waitUntilLiveEnded(server.url, server.accessToken, liveVideoUUID)
+        await server.live.waitUntilEnded({ videoId: liveVideoUUID })
       }
       await waitJobs(servers)
 
@@ -122,22 +117,22 @@ describe('Test live', function () {
       await waitJobs(servers)
 
       {
-        const videoId = await getVideoIdFromUUID(servers[0].url, liveVideoUUID)
+        const videoId = await servers[0].videos.getId({ uuid: liveVideoUUID })
 
-        const localSocket = getLiveNotificationSocket(servers[0].url)
+        const localSocket = servers[0].socketIO.getLiveNotificationSocket()
         localSocket.on('views-change', data => { localLastVideoViews = data.views })
         localSocket.emit('subscribe', { videoId })
       }
 
       {
-        const videoId = await getVideoIdFromUUID(servers[1].url, liveVideoUUID)
+        const videoId = await servers[1].videos.getId({ uuid: liveVideoUUID })
 
-        const remoteSocket = getLiveNotificationSocket(servers[1].url)
+        const remoteSocket = servers[1].socketIO.getLiveNotificationSocket()
         remoteSocket.on('views-change', data => { remoteLastVideoViews = data.views })
         remoteSocket.emit('subscribe', { videoId })
       }
 
-      const command = await sendRTMPStreamInVideo(servers[0].url, servers[0].accessToken, liveVideoUUID)
+      const ffmpegCommand = await servers[0].live.sendRTMPStreamInVideo({ videoId: liveVideoUUID })
 
       await waitUntilLivePublishedOnAllServers(servers, liveVideoUUID)
       await waitJobs(servers)
@@ -145,8 +140,8 @@ describe('Test live', function () {
       expect(localLastVideoViews).to.equal(0)
       expect(remoteLastVideoViews).to.equal(0)
 
-      await viewVideo(servers[0].url, liveVideoUUID)
-      await viewVideo(servers[1].url, liveVideoUUID)
+      await servers[0].videos.view({ id: liveVideoUUID })
+      await servers[1].videos.view({ id: liveVideoUUID })
 
       await waitJobs(servers)
       await wait(5000)
@@ -155,7 +150,7 @@ describe('Test live', function () {
       expect(localLastVideoViews).to.equal(2)
       expect(remoteLastVideoViews).to.equal(2)
 
-      await stopFfmpeg(command)
+      await stopFfmpeg(ffmpegCommand)
     })
 
     it('Should not receive a notification after unsubscribe', async function () {
@@ -166,13 +161,13 @@ describe('Test live', function () {
       const liveVideoUUID = await createLiveWrapper()
       await waitJobs(servers)
 
-      const videoId = await getVideoIdFromUUID(servers[0].url, liveVideoUUID)
+      const videoId = await servers[0].videos.getId({ uuid: liveVideoUUID })
 
-      const socket = getLiveNotificationSocket(servers[0].url)
+      const socket = servers[0].socketIO.getLiveNotificationSocket()
       socket.on('state-change', data => stateChanges.push(data.state))
       socket.emit('subscribe', { videoId })
 
-      const command = await sendRTMPStreamInVideo(servers[0].url, servers[0].accessToken, liveVideoUUID)
+      const command = await servers[0].live.sendRTMPStreamInVideo({ videoId: liveVideoUUID })
 
       await waitUntilLivePublishedOnAllServers(servers, liveVideoUUID)
       await waitJobs(servers)

@@ -1,25 +1,22 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
+import { expect } from 'chai'
 import {
   checkVideoFilesWereRemoved,
+  cleanupTests,
+  createMultipleServers,
   doubleFollow,
-  getPluginTestPath,
-  getVideo,
-  installPlugin,
+  makeGetRequest,
   makePostBodyRequest,
+  PeerTubeServer,
+  PluginsCommand,
   setAccessTokensToServers,
-  uploadVideoAndGetId,
-  viewVideo,
-  getVideosList,
-  waitJobs,
-  makeGetRequest
-} from '../../../shared/extra-utils'
-import { cleanupTests, flushAndRunMultipleServers, ServerInfo, waitUntilLog } from '../../../shared/extra-utils/server/servers'
-import { expect } from 'chai'
-import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
+  waitJobs
+} from '@shared/extra-utils'
+import { HttpStatusCode } from '@shared/models'
 
-function postCommand (server: ServerInfo, command: string, bodyArg?: object) {
+function postCommand (server: PeerTubeServer, command: string, bodyArg?: object) {
   const body = { command }
   if (bodyArg) Object.assign(body, bodyArg)
 
@@ -27,54 +24,50 @@ function postCommand (server: ServerInfo, command: string, bodyArg?: object) {
     url: server.url,
     path: '/plugins/test-four/router/commander',
     fields: body,
-    statusCodeExpected: HttpStatusCode.NO_CONTENT_204
+    expectedStatus: HttpStatusCode.NO_CONTENT_204
   })
 }
 
 describe('Test plugin helpers', function () {
-  let servers: ServerInfo[]
+  let servers: PeerTubeServer[]
 
   before(async function () {
     this.timeout(60000)
 
-    servers = await flushAndRunMultipleServers(2)
+    servers = await createMultipleServers(2)
     await setAccessTokensToServers(servers)
 
     await doubleFollow(servers[0], servers[1])
 
-    await installPlugin({
-      url: servers[0].url,
-      accessToken: servers[0].accessToken,
-      path: getPluginTestPath('-four')
-    })
+    await servers[0].plugins.install({ path: PluginsCommand.getPluginTestPath('-four') })
   })
 
   describe('Logger', function () {
 
     it('Should have logged things', async function () {
-      await waitUntilLog(servers[0], 'localhost:' + servers[0].port + ' peertube-plugin-test-four', 1, false)
-      await waitUntilLog(servers[0], 'Hello world from plugin four', 1)
+      await servers[0].servers.waitUntilLog('localhost:' + servers[0].port + ' peertube-plugin-test-four', 1, false)
+      await servers[0].servers.waitUntilLog('Hello world from plugin four', 1)
     })
   })
 
   describe('Database', function () {
 
     it('Should have made a query', async function () {
-      await waitUntilLog(servers[0], `root email is admin${servers[0].internalServerNumber}@example.com`)
+      await servers[0].servers.waitUntilLog(`root email is admin${servers[0].internalServerNumber}@example.com`)
     })
   })
 
   describe('Config', function () {
 
     it('Should have the correct webserver url', async function () {
-      await waitUntilLog(servers[0], `server url is http://localhost:${servers[0].port}`)
+      await servers[0].servers.waitUntilLog(`server url is http://localhost:${servers[0].port}`)
     })
 
     it('Should have the correct config', async function () {
       const res = await makeGetRequest({
         url: servers[0].url,
         path: '/plugins/test-four/router/server-config',
-        statusCodeExpected: HttpStatusCode.OK_200
+        expectedStatus: HttpStatusCode.OK_200
       })
 
       expect(res.body.serverConfig).to.exist
@@ -85,7 +78,7 @@ describe('Test plugin helpers', function () {
   describe('Server', function () {
 
     it('Should get the server actor', async function () {
-      await waitUntilLog(servers[0], 'server actor name is peertube')
+      await servers[0].servers.waitUntilLog('server actor name is peertube')
     })
   })
 
@@ -95,7 +88,7 @@ describe('Test plugin helpers', function () {
       const res = await makeGetRequest({
         url: servers[0].url,
         path: '/plugins/test-four/router/static-route',
-        statusCodeExpected: HttpStatusCode.OK_200
+        expectedStatus: HttpStatusCode.OK_200
       })
 
       expect(res.body.staticRoute).to.equal('/plugins/test-four/0.0.1/static/')
@@ -107,7 +100,7 @@ describe('Test plugin helpers', function () {
       const res = await makeGetRequest({
         url: servers[0].url,
         path: baseRouter + 'router-route',
-        statusCodeExpected: HttpStatusCode.OK_200
+        expectedStatus: HttpStatusCode.OK_200
       })
 
       expect(res.body.routerRoute).to.equal(baseRouter)
@@ -120,7 +113,7 @@ describe('Test plugin helpers', function () {
       await makeGetRequest({
         url: servers[0].url,
         path: '/plugins/test-four/router/user',
-        statusCodeExpected: HttpStatusCode.NOT_FOUND_404
+        expectedStatus: HttpStatusCode.NOT_FOUND_404
       })
     })
 
@@ -129,7 +122,7 @@ describe('Test plugin helpers', function () {
         url: servers[0].url,
         token: servers[0].accessToken,
         path: '/plugins/test-four/router/user',
-        statusCodeExpected: HttpStatusCode.OK_200
+        expectedStatus: HttpStatusCode.OK_200
       })
 
       expect(res.body.username).to.equal('root')
@@ -147,59 +140,54 @@ describe('Test plugin helpers', function () {
       this.timeout(60000)
 
       {
-        const res = await uploadVideoAndGetId({ server: servers[0], videoName: 'video server 1' })
+        const res = await servers[0].videos.quickUpload({ name: 'video server 1' })
         videoUUIDServer1 = res.uuid
       }
 
       {
-        await uploadVideoAndGetId({ server: servers[1], videoName: 'video server 2' })
+        await servers[1].videos.quickUpload({ name: 'video server 2' })
       }
 
       await waitJobs(servers)
 
-      const res = await getVideosList(servers[0].url)
-      const videos = res.body.data
+      const { data } = await servers[0].videos.list()
 
-      expect(videos).to.have.lengthOf(2)
+      expect(data).to.have.lengthOf(2)
     })
 
     it('Should mute server 2', async function () {
       this.timeout(10000)
       await postCommand(servers[0], 'blockServer', { hostToBlock: `localhost:${servers[1].port}` })
 
-      const res = await getVideosList(servers[0].url)
-      const videos = res.body.data
+      const { data } = await servers[0].videos.list()
 
-      expect(videos).to.have.lengthOf(1)
-      expect(videos[0].name).to.equal('video server 1')
+      expect(data).to.have.lengthOf(1)
+      expect(data[0].name).to.equal('video server 1')
     })
 
     it('Should unmute server 2', async function () {
       await postCommand(servers[0], 'unblockServer', { hostToUnblock: `localhost:${servers[1].port}` })
 
-      const res = await getVideosList(servers[0].url)
-      const videos = res.body.data
+      const { data } = await servers[0].videos.list()
 
-      expect(videos).to.have.lengthOf(2)
+      expect(data).to.have.lengthOf(2)
     })
 
     it('Should mute account of server 2', async function () {
       await postCommand(servers[0], 'blockAccount', { handleToBlock: `root@localhost:${servers[1].port}` })
 
-      const res = await getVideosList(servers[0].url)
-      const videos = res.body.data
+      const { data } = await servers[0].videos.list()
 
-      expect(videos).to.have.lengthOf(1)
-      expect(videos[0].name).to.equal('video server 1')
+      expect(data).to.have.lengthOf(1)
+      expect(data[0].name).to.equal('video server 1')
     })
 
     it('Should unmute account of server 2', async function () {
       await postCommand(servers[0], 'unblockAccount', { handleToUnblock: `root@localhost:${servers[1].port}` })
 
-      const res = await getVideosList(servers[0].url)
-      const videos = res.body.data
+      const { data } = await servers[0].videos.list()
 
-      expect(videos).to.have.lengthOf(2)
+      expect(data).to.have.lengthOf(2)
     })
 
     it('Should blacklist video', async function () {
@@ -210,11 +198,10 @@ describe('Test plugin helpers', function () {
       await waitJobs(servers)
 
       for (const server of servers) {
-        const res = await getVideosList(server.url)
-        const videos = res.body.data
+        const { data } = await server.videos.list()
 
-        expect(videos).to.have.lengthOf(1)
-        expect(videos[0].name).to.equal('video server 2')
+        expect(data).to.have.lengthOf(1)
+        expect(data[0].name).to.equal('video server 2')
       }
     })
 
@@ -226,10 +213,9 @@ describe('Test plugin helpers', function () {
       await waitJobs(servers)
 
       for (const server of servers) {
-        const res = await getVideosList(server.url)
-        const videos = res.body.data
+        const { data } = await server.videos.list()
 
-        expect(videos).to.have.lengthOf(2)
+        expect(data).to.have.lengthOf(2)
       }
     })
   })
@@ -238,7 +224,7 @@ describe('Test plugin helpers', function () {
     let videoUUID: string
 
     before(async () => {
-      const res = await uploadVideoAndGetId({ server: servers[0], videoName: 'video1' })
+      const res = await servers[0].videos.quickUpload({ name: 'video1' })
       videoUUID = res.uuid
     })
 
@@ -246,25 +232,25 @@ describe('Test plugin helpers', function () {
       this.timeout(40000)
 
       // Should not throw -> video exists
-      await getVideo(servers[0].url, videoUUID)
+      await servers[0].videos.get({ id: videoUUID })
       // Should delete the video
-      await viewVideo(servers[0].url, videoUUID)
+      await servers[0].videos.view({ id: videoUUID })
 
-      await waitUntilLog(servers[0], 'Video deleted by plugin four.')
+      await servers[0].servers.waitUntilLog('Video deleted by plugin four.')
 
       try {
         // Should throw because the video should have been deleted
-        await getVideo(servers[0].url, videoUUID)
+        await servers[0].videos.get({ id: videoUUID })
         throw new Error('Video exists')
       } catch (err) {
         if (err.message.includes('exists')) throw err
       }
 
-      await checkVideoFilesWereRemoved(videoUUID, servers[0].internalServerNumber)
+      await checkVideoFilesWereRemoved(videoUUID, servers[0])
     })
 
     it('Should have fetched the video by URL', async function () {
-      await waitUntilLog(servers[0], `video from DB uuid is ${videoUUID}`)
+      await servers[0].servers.waitUntilLog(`video from DB uuid is ${videoUUID}`)
     })
   })
 

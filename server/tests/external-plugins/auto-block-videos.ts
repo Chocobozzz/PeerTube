@@ -2,41 +2,29 @@
 
 import 'mocha'
 import { expect } from 'chai'
-import { Video, VideoBlacklist } from '@shared/models'
-import {
-  doubleFollow,
-  getBlacklistedVideosList,
-  getVideosList,
-  installPlugin,
-  MockBlocklist,
-  removeVideoFromBlacklist,
-  setAccessTokensToServers,
-  updatePluginSettings,
-  uploadVideoAndGetId,
-  wait
-} from '../../../shared/extra-utils'
 import {
   cleanupTests,
-  flushAndRunMultipleServers,
+  createMultipleServers,
+  doubleFollow,
   killallServers,
-  reRunServer,
-  ServerInfo
-} from '../../../shared/extra-utils/server/servers'
+  MockBlocklist,
+  PeerTubeServer,
+  setAccessTokensToServers,
+  wait
+} from '@shared/extra-utils'
+import { Video } from '@shared/models'
 
-async function check (server: ServerInfo, videoUUID: string, exists = true) {
-  const res = await getVideosList(server.url)
+async function check (server: PeerTubeServer, videoUUID: string, exists = true) {
+  const { data } = await server.videos.list()
 
-  const video = res.body.data.find(v => v.uuid === videoUUID)
+  const video = data.find(v => v.uuid === videoUUID)
 
-  if (exists) {
-    expect(video).to.not.be.undefined
-  } else {
-    expect(video).to.be.undefined
-  }
+  if (exists) expect(video).to.not.be.undefined
+  else expect(video).to.be.undefined
 }
 
 describe('Official plugin auto-block videos', function () {
-  let servers: ServerInfo[]
+  let servers: PeerTubeServer[]
   let blocklistServer: MockBlocklist
   let server1Videos: Video[] = []
   let server2Videos: Video[] = []
@@ -45,42 +33,36 @@ describe('Official plugin auto-block videos', function () {
   before(async function () {
     this.timeout(60000)
 
-    servers = await flushAndRunMultipleServers(2)
+    servers = await createMultipleServers(2)
     await setAccessTokensToServers(servers)
 
     for (const server of servers) {
-      await installPlugin({
-        url: server.url,
-        accessToken: server.accessToken,
-        npmName: 'peertube-plugin-auto-block-videos'
-      })
+      await server.plugins.install({ npmName: 'peertube-plugin-auto-block-videos' })
     }
 
     blocklistServer = new MockBlocklist()
     port = await blocklistServer.initialize()
 
-    await uploadVideoAndGetId({ server: servers[0], videoName: 'video server 1' })
-    await uploadVideoAndGetId({ server: servers[1], videoName: 'video server 2' })
-    await uploadVideoAndGetId({ server: servers[1], videoName: 'video 2 server 2' })
-    await uploadVideoAndGetId({ server: servers[1], videoName: 'video 3 server 2' })
+    await servers[0].videos.quickUpload({ name: 'video server 1' })
+    await servers[1].videos.quickUpload({ name: 'video server 2' })
+    await servers[1].videos.quickUpload({ name: 'video 2 server 2' })
+    await servers[1].videos.quickUpload({ name: 'video 3 server 2' })
 
     {
-      const res = await getVideosList(servers[0].url)
-      server1Videos = res.body.data.map(v => Object.assign(v, { url: servers[0].url + '/videos/watch/' + v.uuid }))
+      const { data } = await servers[0].videos.list()
+      server1Videos = data.map(v => Object.assign(v, { url: servers[0].url + '/videos/watch/' + v.uuid }))
     }
 
     {
-      const res = await getVideosList(servers[1].url)
-      server2Videos = res.body.data.map(v => Object.assign(v, { url: servers[1].url + '/videos/watch/' + v.uuid }))
+      const { data } = await servers[1].videos.list()
+      server2Videos = data.map(v => Object.assign(v, { url: servers[1].url + '/videos/watch/' + v.uuid }))
     }
 
     await doubleFollow(servers[0], servers[1])
   })
 
   it('Should update plugin settings', async function () {
-    await updatePluginSettings({
-      url: servers[0].url,
-      accessToken: servers[0].accessToken,
+    await servers[0].plugins.updateSettings({
       npmName: 'peertube-plugin-auto-block-videos',
       settings: {
         'blocklist-urls': `http://localhost:${port}/blocklist`,
@@ -108,10 +90,9 @@ describe('Official plugin auto-block videos', function () {
   })
 
   it('Should have video in blacklists', async function () {
-    const res = await getBlacklistedVideosList({ url: servers[0].url, token: servers[0].accessToken })
+    const body = await servers[0].blacklist.list()
 
-    const videoBlacklists = res.body.data as VideoBlacklist[]
-
+    const videoBlacklists = body.data
     expect(videoBlacklists).to.have.lengthOf(1)
     expect(videoBlacklists[0].reason).to.contains('Automatically blocked from auto block plugin')
     expect(videoBlacklists[0].video.name).to.equal(server2Videos[0].name)
@@ -174,12 +155,12 @@ describe('Official plugin auto-block videos', function () {
 
     await check(servers[0], video.uuid, false)
 
-    await removeVideoFromBlacklist(servers[0].url, servers[0].accessToken, video.uuid)
+    await servers[0].blacklist.remove({ videoId: video.uuid })
 
     await check(servers[0], video.uuid, true)
 
-    killallServers([ servers[0] ])
-    await reRunServer(servers[0])
+    await killallServers([ servers[0] ])
+    await servers[0].run()
     await wait(2000)
 
     await check(servers[0], video.uuid, true)

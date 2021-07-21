@@ -2,33 +2,26 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { VideoCreateResult } from '@shared/models'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
-import {
-  cleanupTests,
-  createUser,
-  flushAndRunServer,
-  makeDeleteRequest,
-  makeGetRequest,
-  makePostBodyRequest,
-  ServerInfo,
-  setAccessTokensToServers,
-  uploadVideo,
-  userLogin
-} from '../../../../shared/extra-utils'
 import {
   checkBadCountPagination,
   checkBadSortPagination,
-  checkBadStartPagination
-} from '../../../../shared/extra-utils/requests/check-api-params'
-import { addVideoCommentThread } from '../../../../shared/extra-utils/videos/video-comments'
+  checkBadStartPagination,
+  cleanupTests,
+  createSingleServer,
+  makeDeleteRequest,
+  makeGetRequest,
+  makePostBodyRequest,
+  PeerTubeServer,
+  setAccessTokensToServers
+} from '@shared/extra-utils'
+import { HttpStatusCode, VideoCreateResult } from '@shared/models'
 
 const expect = chai.expect
 
 describe('Test video comments API validator', function () {
   let pathThread: string
   let pathComment: string
-  let server: ServerInfo
+  let server: PeerTubeServer
   let video: VideoCreateResult
   let userAccessToken: string
   let userAccessToken2: string
@@ -39,32 +32,31 @@ describe('Test video comments API validator', function () {
   before(async function () {
     this.timeout(30000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
 
     await setAccessTokensToServers([ server ])
 
     {
-      const res = await uploadVideo(server.url, server.accessToken, {})
-      video = res.body.video
+      video = await server.videos.upload({ attributes: {} })
       pathThread = '/api/v1/videos/' + video.uuid + '/comment-threads'
     }
 
     {
-      const res = await addVideoCommentThread(server.url, server.accessToken, video.uuid, 'coucou')
-      commentId = res.body.comment.id
+      const created = await server.comments.createThread({ videoId: video.uuid, text: 'coucou' })
+      commentId = created.id
       pathComment = '/api/v1/videos/' + video.uuid + '/comments/' + commentId
     }
 
     {
       const user = { username: 'user1', password: 'my super password' }
-      await createUser({ url: server.url, accessToken: server.accessToken, username: user.username, password: user.password })
-      userAccessToken = await userLogin(server, user)
+      await server.users.create({ username: user.username, password: user.password })
+      userAccessToken = await server.login.getAccessToken(user)
     }
 
     {
       const user = { username: 'user2', password: 'my super password' }
-      await createUser({ url: server.url, accessToken: server.accessToken, username: user.username, password: user.password })
-      userAccessToken2 = await userLogin(server, user)
+      await server.users.create({ username: user.username, password: user.password })
+      userAccessToken2 = await server.login.getAccessToken(user)
     }
   })
 
@@ -85,7 +77,7 @@ describe('Test video comments API validator', function () {
       await makeGetRequest({
         url: server.url,
         path: '/api/v1/videos/ba708d62-e3d7-45d9-9d73-41b9097cc02d/comment-threads',
-        statusCodeExpected: HttpStatusCode.NOT_FOUND_404
+        expectedStatus: HttpStatusCode.NOT_FOUND_404
       })
     })
   })
@@ -95,7 +87,7 @@ describe('Test video comments API validator', function () {
       await makeGetRequest({
         url: server.url,
         path: '/api/v1/videos/ba708d62-e3d7-45d9-9d73-41b9097cc02d/comment-threads/' + commentId,
-        statusCodeExpected: HttpStatusCode.NOT_FOUND_404
+        expectedStatus: HttpStatusCode.NOT_FOUND_404
       })
     })
 
@@ -103,7 +95,7 @@ describe('Test video comments API validator', function () {
       await makeGetRequest({
         url: server.url,
         path: '/api/v1/videos/' + video.shortUUID + '/comment-threads/156',
-        statusCodeExpected: HttpStatusCode.NOT_FOUND_404
+        expectedStatus: HttpStatusCode.NOT_FOUND_404
       })
     })
 
@@ -111,7 +103,7 @@ describe('Test video comments API validator', function () {
       await makeGetRequest({
         url: server.url,
         path: '/api/v1/videos/' + video.shortUUID + '/comment-threads/' + commentId,
-        statusCodeExpected: HttpStatusCode.OK_200
+        expectedStatus: HttpStatusCode.OK_200
       })
     })
   })
@@ -127,7 +119,7 @@ describe('Test video comments API validator', function () {
         path: pathThread,
         token: 'none',
         fields,
-        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
       })
     })
 
@@ -160,7 +152,7 @@ describe('Test video comments API validator', function () {
         path,
         token: server.accessToken,
         fields,
-        statusCodeExpected: HttpStatusCode.NOT_FOUND_404
+        expectedStatus: HttpStatusCode.NOT_FOUND_404
       })
     })
 
@@ -173,7 +165,7 @@ describe('Test video comments API validator', function () {
         path: pathThread,
         token: server.accessToken,
         fields,
-        statusCodeExpected: HttpStatusCode.OK_200
+        expectedStatus: HttpStatusCode.OK_200
       })
     })
   })
@@ -188,7 +180,7 @@ describe('Test video comments API validator', function () {
         path: pathComment,
         token: 'none',
         fields,
-        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
       })
     })
 
@@ -221,7 +213,7 @@ describe('Test video comments API validator', function () {
         path,
         token: server.accessToken,
         fields,
-        statusCodeExpected: HttpStatusCode.NOT_FOUND_404
+        expectedStatus: HttpStatusCode.NOT_FOUND_404
       })
     })
 
@@ -235,7 +227,7 @@ describe('Test video comments API validator', function () {
         path,
         token: server.accessToken,
         fields,
-        statusCodeExpected: HttpStatusCode.NOT_FOUND_404
+        expectedStatus: HttpStatusCode.NOT_FOUND_404
       })
     })
 
@@ -248,14 +240,14 @@ describe('Test video comments API validator', function () {
         path: pathComment,
         token: server.accessToken,
         fields,
-        statusCodeExpected: HttpStatusCode.OK_200
+        expectedStatus: HttpStatusCode.OK_200
       })
     })
   })
 
   describe('When removing video comments', function () {
     it('Should fail with a non authenticated user', async function () {
-      await makeDeleteRequest({ url: server.url, path: pathComment, token: 'none', statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401 })
+      await makeDeleteRequest({ url: server.url, path: pathComment, token: 'none', expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
     it('Should fail with another user', async function () {
@@ -263,32 +255,32 @@ describe('Test video comments API validator', function () {
         url: server.url,
         path: pathComment,
         token: userAccessToken,
-        statusCodeExpected: HttpStatusCode.FORBIDDEN_403
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
       })
     })
 
     it('Should fail with an incorrect video', async function () {
       const path = '/api/v1/videos/ba708d62-e3d7-45d9-9d73-41b9097cc02d/comments/' + commentId
-      await makeDeleteRequest({ url: server.url, path, token: server.accessToken, statusCodeExpected: HttpStatusCode.NOT_FOUND_404 })
+      await makeDeleteRequest({ url: server.url, path, token: server.accessToken, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
     })
 
     it('Should fail with an incorrect comment', async function () {
       const path = '/api/v1/videos/' + video.uuid + '/comments/124'
-      await makeDeleteRequest({ url: server.url, path, token: server.accessToken, statusCodeExpected: HttpStatusCode.NOT_FOUND_404 })
+      await makeDeleteRequest({ url: server.url, path, token: server.accessToken, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
     })
 
     it('Should succeed with the same user', async function () {
       let commentToDelete: number
 
       {
-        const res = await addVideoCommentThread(server.url, userAccessToken, video.uuid, 'hello')
-        commentToDelete = res.body.comment.id
+        const created = await server.comments.createThread({ videoId: video.uuid, token: userAccessToken, text: 'hello' })
+        commentToDelete = created.id
       }
 
       const path = '/api/v1/videos/' + video.uuid + '/comments/' + commentToDelete
 
-      await makeDeleteRequest({ url: server.url, path, token: userAccessToken2, statusCodeExpected: HttpStatusCode.FORBIDDEN_403 })
-      await makeDeleteRequest({ url: server.url, path, token: userAccessToken, statusCodeExpected: HttpStatusCode.NO_CONTENT_204 })
+      await makeDeleteRequest({ url: server.url, path, token: userAccessToken2, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+      await makeDeleteRequest({ url: server.url, path, token: userAccessToken, expectedStatus: HttpStatusCode.NO_CONTENT_204 })
     })
 
     it('Should succeed with the owner of the video', async function () {
@@ -296,19 +288,19 @@ describe('Test video comments API validator', function () {
       let anotherVideoUUID: string
 
       {
-        const res = await uploadVideo(server.url, userAccessToken, { name: 'video' })
-        anotherVideoUUID = res.body.video.uuid
+        const { uuid } = await server.videos.upload({ token: userAccessToken, attributes: { name: 'video' } })
+        anotherVideoUUID = uuid
       }
 
       {
-        const res = await addVideoCommentThread(server.url, server.accessToken, anotherVideoUUID, 'hello')
-        commentToDelete = res.body.comment.id
+        const created = await server.comments.createThread({ videoId: anotherVideoUUID, text: 'hello' })
+        commentToDelete = created.id
       }
 
       const path = '/api/v1/videos/' + anotherVideoUUID + '/comments/' + commentToDelete
 
-      await makeDeleteRequest({ url: server.url, path, token: userAccessToken2, statusCodeExpected: HttpStatusCode.FORBIDDEN_403 })
-      await makeDeleteRequest({ url: server.url, path, token: userAccessToken, statusCodeExpected: HttpStatusCode.NO_CONTENT_204 })
+      await makeDeleteRequest({ url: server.url, path, token: userAccessToken2, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+      await makeDeleteRequest({ url: server.url, path, token: userAccessToken, expectedStatus: HttpStatusCode.NO_CONTENT_204 })
     })
 
     it('Should succeed with the correct parameters', async function () {
@@ -316,15 +308,14 @@ describe('Test video comments API validator', function () {
         url: server.url,
         path: pathComment,
         token: server.accessToken,
-        statusCodeExpected: HttpStatusCode.NO_CONTENT_204
+        expectedStatus: HttpStatusCode.NO_CONTENT_204
       })
     })
   })
 
   describe('When a video has comments disabled', function () {
     before(async function () {
-      const res = await uploadVideo(server.url, server.accessToken, { commentsEnabled: false })
-      video = res.body.video
+      video = await server.videos.upload({ attributes: { commentsEnabled: false } })
       pathThread = '/api/v1/videos/' + video.uuid + '/comment-threads'
     })
 
@@ -332,7 +323,7 @@ describe('Test video comments API validator', function () {
       const res = await makeGetRequest({
         url: server.url,
         path: pathThread,
-        statusCodeExpected: HttpStatusCode.OK_200
+        expectedStatus: HttpStatusCode.OK_200
       })
       expect(res.body.total).to.equal(0)
       expect(res.body.data).to.have.lengthOf(0)
@@ -349,7 +340,7 @@ describe('Test video comments API validator', function () {
         path: pathThread,
         token: server.accessToken,
         fields,
-        statusCodeExpected: HttpStatusCode.CONFLICT_409
+        expectedStatus: HttpStatusCode.CONFLICT_409
       })
     })
 
@@ -375,7 +366,7 @@ describe('Test video comments API validator', function () {
       await makeGetRequest({
         url: server.url,
         path,
-        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
       })
     })
 
@@ -384,7 +375,7 @@ describe('Test video comments API validator', function () {
         url: server.url,
         path,
         token: userAccessToken,
-        statusCodeExpected: HttpStatusCode.FORBIDDEN_403
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
       })
     })
 
@@ -399,7 +390,7 @@ describe('Test video comments API validator', function () {
           searchAccount: 'toto',
           searchVideo: 'toto'
         },
-        statusCodeExpected: HttpStatusCode.OK_200
+        expectedStatus: HttpStatusCode.OK_200
       })
     })
   })

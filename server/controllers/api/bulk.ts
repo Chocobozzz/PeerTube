@@ -1,10 +1,10 @@
 import * as express from 'express'
-import { asyncMiddleware, authenticate } from '../../middlewares'
+import { removeComment } from '@server/lib/video-comment'
 import { bulkRemoveCommentsOfValidator } from '@server/middlewares/validators/bulk'
 import { VideoCommentModel } from '@server/models/video/video-comment'
-import { removeComment } from '@server/lib/video-comment'
+import { HttpStatusCode } from '@shared/models'
 import { BulkRemoveCommentsOfBody } from '@shared/models/bulk/bulk-remove-comments-of-body.model'
-import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
+import { asyncMiddleware, authenticate } from '../../middlewares'
 
 const bulkRouter = express.Router()
 

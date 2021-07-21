@@ -4,13 +4,14 @@ import { ConfirmService, Notifier, RestPagination, RestTable } from '@app/core'
 import { InstanceFollowService } from '@app/shared/shared-instance'
 import { BatchDomainsModalComponent } from '@app/shared/shared-moderation'
 import { ActorFollow } from '@shared/models'
+import { FollowModalComponent } from './follow-modal.component'
 
 @Component({
   templateUrl: './following-list.component.html',
   styleUrls: [ '../follows.component.scss', './following-list.component.scss' ]
 })
 export class FollowingListComponent extends RestTable implements OnInit {
-  @ViewChild('batchDomainsModal') batchDomainsModal: BatchDomainsModalComponent
+  @ViewChild('followModal') followModal: FollowModalComponent
 
   following: ActorFollow[] = []
   totalRecords = 0
@@ -33,23 +34,12 @@ export class FollowingListComponent extends RestTable implements OnInit {
     return 'FollowingListComponent'
   }
 
-  addDomainsToFollow () {
-    this.batchDomainsModal.openModal()
+  openFollowModal () {
+    this.followModal.openModal()
   }
 
-  httpEnabled () {
-    return window.location.protocol === 'https:'
-  }
-
-  async addFollowing (hosts: string[]) {
-    this.followService.follow(hosts).subscribe(
-      () => {
-        this.notifier.success($localize`Follow request(s) sent!`)
-        this.reloadData()
-      },
-
-      err => this.notifier.error(err.message)
-    )
+  isInstanceFollowing (follow: ActorFollow) {
+    return follow.following.name === 'peertube'
   }
 
   async removeFollowing (follow: ActorFollow) {

@@ -304,16 +304,16 @@ export class VideosIdListQueryBuilder extends AbstractVideosQueryBuilder {
   private whereFollowerActorId (followerActorId: number, includeLocalVideos: boolean) {
     let query =
     '(' +
-    '  EXISTS (' +
+    '  EXISTS (' + // Videos shared by actors we follow
     '    SELECT 1 FROM "videoShare" ' +
     '    INNER JOIN "actorFollow" "actorFollowShare" ON "actorFollowShare"."targetActorId" = "videoShare"."actorId" ' +
     '    AND "actorFollowShare"."actorId" = :followerActorId AND "actorFollowShare"."state" = \'accepted\' ' +
     '    WHERE "videoShare"."videoId" = "video"."id"' +
     '  )' +
     '  OR' +
-    '  EXISTS (' +
+    '  EXISTS (' + // Videos published by accounts we follow
     '    SELECT 1 from "actorFollow" ' +
-    '    WHERE "actorFollow"."targetActorId" = "videoChannel"."actorId" AND "actorFollow"."actorId" = :followerActorId ' +
+    '    WHERE "actorFollow"."targetActorId" = "account"."actorId" AND "actorFollow"."actorId" = :followerActorId ' +
     '    AND "actorFollow"."state" = \'accepted\'' +
     '  )'
 

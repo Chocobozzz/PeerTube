@@ -1,18 +1,20 @@
 import * as express from 'express'
 import { body, param, query } from 'express-validator'
-import { isFollowStateValid } from '@server/helpers/custom-validators/follows'
+import { isEachUniqueHandleValid, isFollowStateValid, isRemoteHandleValid } from '@server/helpers/custom-validators/follows'
 import { loadActorUrlOrGetFromWebfinger } from '@server/lib/activitypub/actors'
+import { getRemoteNameAndHost } from '@server/lib/activitypub/follow'
 import { getServerActor } from '@server/models/application/application'
 import { MActorFollowActorsDefault } from '@server/types/models'
-import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '../../../shared/models/http/http-error-codes'
 import { isTestInstance } from '../../helpers/core-utils'
 import { isActorTypeValid, isValidActorHandle } from '../../helpers/custom-validators/activitypub/actor'
 import { isEachUniqueHostValid, isHostValid } from '../../helpers/custom-validators/servers'
 import { logger } from '../../helpers/logger'
-import { SERVER_ACTOR_NAME, WEBSERVER } from '../../initializers/constants'
+import { WEBSERVER } from '../../initializers/constants'
 import { ActorModel } from '../../models/actor/actor'
 import { ActorFollowModel } from '../../models/actor/actor-follow'
 import { areValidationErrors } from './shared'
+import { ServerFollowCreate } from '@shared/models'
 
 const listFollowsValidator = [
   query('state')
@@ -30,29 +32,46 @@ const listFollowsValidator = [
 ]
 
 const followValidator = [
-  body('hosts').custom(isEachUniqueHostValid).withMessage('Should have an array of unique hosts'),
+  body('hosts')
+    .toArray()
+    .custom(isEachUniqueHostValid).withMessage('Should have an array of unique hosts'),
+
+  body('handles')
+    .toArray()
+    .custom(isEachUniqueHandleValid).withMessage('Should have an array of handles'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    // Force https if the administrator wants to make friends
+    // Force https if the administrator wants to follow remote actors
     if (isTestInstance() === false && WEBSERVER.SCHEME === 'http') {
       return res
         .status(HttpStatusCode.INTERNAL_SERVER_ERROR_500)
         .json({
           error: 'Cannot follow on a non HTTPS web server.'
         })
-        .end()
     }
 
     logger.debug('Checking follow parameters', { parameters: req.body })
 
     if (areValidationErrors(req, res)) return
 
+    const body: ServerFollowCreate = req.body
+    if (body.hosts.length === 0 && body.handles.length === 0) {
+
+      return res
+        .status(HttpStatusCode.BAD_REQUEST_400)
+        .json({
+          error: 'You must provide at least one handle or one host.'
+        })
+    }
+
     return next()
   }
 ]
 
 const removeFollowingValidator = [
-  param('host').custom(isHostValid).withMessage('Should have a valid host'),
+  param('hostOrHandle')
+    .custom(value => isHostValid(value) || isRemoteHandleValid(value))
+    .withMessage('Should have a valid host/handle'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking unfollowing parameters', { parameters: req.params })
@@ -60,12 +79,14 @@ const removeFollowingValidator = [
     if (areValidationErrors(req, res)) return
 
     const serverActor = await getServerActor()
-    const follow = await ActorFollowModel.loadByActorAndTargetNameAndHostForAPI(serverActor.id, SERVER_ACTOR_NAME, req.params.host)
+
+    const { name, host } = getRemoteNameAndHost(req.params.hostOrHandle)
+    const follow = await ActorFollowModel.loadByActorAndTargetNameAndHostForAPI(serverActor.id, name, host)
 
     if (!follow) {
       return res.fail({
         status: HttpStatusCode.NOT_FOUND_404,
-        message: `Following ${req.params.host} not found.`
+        message: `Follow ${req.params.hostOrHandle} not found.`
       })
     }
 

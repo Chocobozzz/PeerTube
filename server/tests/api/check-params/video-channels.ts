@@ -3,43 +3,37 @@
 import 'mocha'
 import * as chai from 'chai'
 import { omit } from 'lodash'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import {
   buildAbsoluteFixturePath,
+  ChannelsCommand,
+  checkBadCountPagination,
+  checkBadSortPagination,
+  checkBadStartPagination,
   cleanupTests,
-  createUser,
-  deleteVideoChannel,
-  flushAndRunServer,
-  getAccountVideoChannelsList,
-  immutableAssign,
+  createSingleServer,
   makeGetRequest,
   makePostBodyRequest,
   makePutBodyRequest,
   makeUploadRequest,
-  ServerInfo,
-  setAccessTokensToServers,
-  userLogin
-} from '../../../../shared/extra-utils'
-import {
-  checkBadCountPagination,
-  checkBadSortPagination,
-  checkBadStartPagination
-} from '../../../../shared/extra-utils/requests/check-api-params'
-import { VideoChannelUpdate } from '../../../../shared/models/videos'
+  PeerTubeServer,
+  setAccessTokensToServers
+} from '@shared/extra-utils'
+import { HttpStatusCode, VideoChannelUpdate } from '@shared/models'
 
 const expect = chai.expect
 
 describe('Test video channels API validator', function () {
   const videoChannelPath = '/api/v1/video-channels'
-  let server: ServerInfo
+  let server: PeerTubeServer
   let accessTokenUser: string
+  let command: ChannelsCommand
 
   // ---------------------------------------------------------------
 
   before(async function () {
     this.timeout(30000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
 
     await setAccessTokensToServers([ server ])
 
@@ -49,9 +43,11 @@ describe('Test video channels API validator', function () {
     }
 
     {
-      await createUser({ url: server.url, accessToken: server.accessToken, username: user.username, password: user.password })
-      accessTokenUser = await userLogin(server, user)
+      await server.users.create({ username: user.username, password: user.password })
+      accessTokenUser = await server.login.getAccessToken(user)
     }
+
+    command = server.channels
   })
 
   describe('When listing a video channels', function () {
@@ -84,14 +80,14 @@ describe('Test video channels API validator', function () {
     })
 
     it('Should fail with a unknown account', async function () {
-      await getAccountVideoChannelsList({ url: server.url, accountName: 'unknown', specialStatus: HttpStatusCode.NOT_FOUND_404 })
+      await server.channels.listByAccount({ accountName: 'unknown', expectedStatus: HttpStatusCode.NOT_FOUND_404 })
     })
 
     it('Should succeed with the correct parameters', async function () {
       await makeGetRequest({
         url: server.url,
         path: accountChannelPath,
-        statusCodeExpected: HttpStatusCode.OK_200
+        expectedStatus: HttpStatusCode.OK_200
       })
     })
   })
@@ -110,7 +106,7 @@ describe('Test video channels API validator', function () {
         path: videoChannelPath,
         token: 'none',
         fields: baseCorrectParams,
-        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
       })
     })
 
@@ -125,7 +121,7 @@ describe('Test video channels API validator', function () {
     })
 
     it('Should fail with a bad name', async function () {
-      const fields = immutableAssign(baseCorrectParams, { name: 'super name' })
+      const fields = { ...baseCorrectParams, name: 'super name' }
       await makePostBodyRequest({ url: server.url, path: videoChannelPath, token: server.accessToken, fields })
     })
 
@@ -135,17 +131,17 @@ describe('Test video channels API validator', function () {
     })
 
     it('Should fail with a long name', async function () {
-      const fields = immutableAssign(baseCorrectParams, { displayName: 'super'.repeat(25) })
+      const fields = { ...baseCorrectParams, displayName: 'super'.repeat(25) }
       await makePostBodyRequest({ url: server.url, path: videoChannelPath, token: server.accessToken, fields })
     })
 
     it('Should fail with a long description', async function () {
-      const fields = immutableAssign(baseCorrectParams, { description: 'super'.repeat(201) })
+      const fields = { ...baseCorrectParams, description: 'super'.repeat(201) }
       await makePostBodyRequest({ url: server.url, path: videoChannelPath, token: server.accessToken, fields })
     })
 
     it('Should fail with a long support text', async function () {
-      const fields = immutableAssign(baseCorrectParams, { support: 'super'.repeat(201) })
+      const fields = { ...baseCorrectParams, support: 'super'.repeat(201) }
       await makePostBodyRequest({ url: server.url, path: videoChannelPath, token: server.accessToken, fields })
     })
 
@@ -155,7 +151,7 @@ describe('Test video channels API validator', function () {
         path: videoChannelPath,
         token: server.accessToken,
         fields: baseCorrectParams,
-        statusCodeExpected: HttpStatusCode.OK_200
+        expectedStatus: HttpStatusCode.OK_200
       })
     })
 
@@ -165,7 +161,7 @@ describe('Test video channels API validator', function () {
         path: videoChannelPath,
         token: server.accessToken,
         fields: baseCorrectParams,
-        statusCodeExpected: HttpStatusCode.CONFLICT_409
+        expectedStatus: HttpStatusCode.CONFLICT_409
       })
     })
   })
@@ -189,7 +185,7 @@ describe('Test video channels API validator', function () {
         path,
         token: 'hi',
         fields: baseCorrectParams,
-        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
       })
     })
 
@@ -199,27 +195,27 @@ describe('Test video channels API validator', function () {
         path,
         token: accessTokenUser,
         fields: baseCorrectParams,
-        statusCodeExpected: HttpStatusCode.FORBIDDEN_403
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
       })
     })
 
     it('Should fail with a long name', async function () {
-      const fields = immutableAssign(baseCorrectParams, { displayName: 'super'.repeat(25) })
+      const fields = { ...baseCorrectParams, displayName: 'super'.repeat(25) }
       await makePutBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should fail with a long description', async function () {
-      const fields = immutableAssign(baseCorrectParams, { description: 'super'.repeat(201) })
+      const fields = { ...baseCorrectParams, description: 'super'.repeat(201) }
       await makePutBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should fail with a long support text', async function () {
-      const fields = immutableAssign(baseCorrectParams, { support: 'super'.repeat(201) })
+      const fields = { ...baseCorrectParams, support: 'super'.repeat(201) }
       await makePutBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should fail with a bad bulkVideosSupportUpdate field', async function () {
-      const fields = immutableAssign(baseCorrectParams, { bulkVideosSupportUpdate: 'super' })
+      const fields = { ...baseCorrectParams, bulkVideosSupportUpdate: 'super' }
       await makePutBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
@@ -229,7 +225,7 @@ describe('Test video channels API validator', function () {
         path,
         token: server.accessToken,
         fields: baseCorrectParams,
-        statusCodeExpected: HttpStatusCode.NO_CONTENT_204
+        expectedStatus: HttpStatusCode.NO_CONTENT_204
       })
     })
   })
@@ -274,7 +270,7 @@ describe('Test video channels API validator', function () {
           path: `${path}/${type}/pick`,
           fields,
           attaches,
-          statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+          expectedStatus: HttpStatusCode.UNAUTHORIZED_401
         })
       }
     })
@@ -291,7 +287,7 @@ describe('Test video channels API validator', function () {
           token: server.accessToken,
           fields,
           attaches,
-          statusCodeExpected: HttpStatusCode.OK_200
+          expectedStatus: HttpStatusCode.OK_200
         })
       }
     })
@@ -302,7 +298,7 @@ describe('Test video channels API validator', function () {
       const res = await makeGetRequest({
         url: server.url,
         path: videoChannelPath,
-        statusCodeExpected: HttpStatusCode.OK_200
+        expectedStatus: HttpStatusCode.OK_200
       })
 
       expect(res.body.data).to.be.an('array')
@@ -312,7 +308,7 @@ describe('Test video channels API validator', function () {
       await makeGetRequest({
         url: server.url,
         path: videoChannelPath + '/super_channel2',
-        statusCodeExpected: HttpStatusCode.NOT_FOUND_404
+        expectedStatus: HttpStatusCode.NOT_FOUND_404
       })
     })
 
@@ -320,30 +316,30 @@ describe('Test video channels API validator', function () {
       await makeGetRequest({
         url: server.url,
         path: videoChannelPath + '/super_channel',
-        statusCodeExpected: HttpStatusCode.OK_200
+        expectedStatus: HttpStatusCode.OK_200
       })
     })
   })
 
   describe('When deleting a video channel', function () {
     it('Should fail with a non authenticated user', async function () {
-      await deleteVideoChannel(server.url, 'coucou', 'super_channel', HttpStatusCode.UNAUTHORIZED_401)
+      await command.delete({ token: 'coucou', channelName: 'super_channel', expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
     it('Should fail with another authenticated user', async function () {
-      await deleteVideoChannel(server.url, accessTokenUser, 'super_channel', HttpStatusCode.FORBIDDEN_403)
+      await command.delete({ token: accessTokenUser, channelName: 'super_channel', expectedStatus: HttpStatusCode.FORBIDDEN_403 })
     })
 
     it('Should fail with an unknown video channel id', async function () {
-      await deleteVideoChannel(server.url, server.accessToken, 'super_channel2', HttpStatusCode.NOT_FOUND_404)
+      await command.delete({ channelName: 'super_channel2', expectedStatus: HttpStatusCode.NOT_FOUND_404 })
     })
 
     it('Should succeed with the correct parameters', async function () {
-      await deleteVideoChannel(server.url, server.accessToken, 'super_channel')
+      await command.delete({ channelName: 'super_channel' })
     })
 
     it('Should fail to delete the last user video channel', async function () {
-      await deleteVideoChannel(server.url, server.accessToken, 'root_channel', HttpStatusCode.CONFLICT_409)
+      await command.delete({ channelName: 'root_channel', expectedStatus: HttpStatusCode.CONFLICT_409 })
     })
   })
 

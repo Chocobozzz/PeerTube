@@ -1,3 +1,5 @@
+import { of } from 'rxjs'
+import { switchMap } from 'rxjs/operators'
 import { Component, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
 import { AuthService, Notifier } from '@app/core'
@@ -9,11 +11,8 @@ import {
 } from '@app/shared/form-validators/video-channel-validators'
 import { FormValidatorService } from '@app/shared/shared-forms'
 import { VideoChannel, VideoChannelService } from '@app/shared/shared-main'
-import { VideoChannelCreate } from '@shared/models'
-import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode, VideoChannelCreate } from '@shared/models'
 import { MyVideoChannelEdit } from './my-video-channel-edit'
-import { switchMap } from 'rxjs/operators'
-import { of } from 'rxjs'
 
 @Component({
   templateUrl: './my-video-channel-edit.component.html',

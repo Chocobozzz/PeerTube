@@ -28,6 +28,10 @@
             <div *ngIf="formErrors.username" class="form-error">
               {{ formErrors.username }}
             </div>
+
+            <div *ngIf="hasUsernameUppercase()" i18n class="form-warning">
+              ⚠️ Most email addresses do not include capital letters.
+            </div>
           </div>
 
           <div class="form-group">

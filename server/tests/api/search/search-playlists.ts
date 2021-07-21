@@ -2,82 +2,71 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { VideoPlaylist, VideoPlaylistPrivacy } from '@shared/models'
 import {
-  addVideoInPlaylist,
-  advancedVideoPlaylistSearch,
   cleanupTests,
-  createVideoPlaylist,
-  flushAndRunServer,
-  searchVideoPlaylists,
-  ServerInfo,
+  createSingleServer,
+  PeerTubeServer,
+  SearchCommand,
   setAccessTokensToServers,
-  setDefaultVideoChannel,
-  uploadVideoAndGetId
-} from '../../../../shared/extra-utils'
+  setDefaultVideoChannel
+} from '@shared/extra-utils'
+import { VideoPlaylistPrivacy } from '@shared/models'
 
 const expect = chai.expect
 
 describe('Test playlists search', function () {
-  let server: ServerInfo = null
+  let server: PeerTubeServer = null
+  let command: SearchCommand
 
   before(async function () {
     this.timeout(30000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
 
     await setAccessTokensToServers([ server ])
     await setDefaultVideoChannel([ server ])
 
-    const videoId = (await uploadVideoAndGetId({ server: server, videoName: 'video' })).uuid
+    const videoId = (await server.videos.quickUpload({ name: 'video' })).uuid
 
     {
       const attributes = {
         displayName: 'Dr. Kenzo Tenma hospital videos',
         privacy: VideoPlaylistPrivacy.PUBLIC,
-        videoChannelId: server.videoChannel.id
+        videoChannelId: server.store.channel.id
       }
-      const res = await createVideoPlaylist({ url: server.url, token: server.accessToken, playlistAttrs: attributes })
+      const created = await server.playlists.create({ attributes })
 
-      await addVideoInPlaylist({
-        url: server.url,
-        token: server.accessToken,
-        playlistId: res.body.videoPlaylist.id,
-        elementAttrs: { videoId }
-      })
+      await server.playlists.addElement({ playlistId: created.id, attributes: { videoId } })
     }
 
     {
       const attributes = {
         displayName: 'Johan & Anna Libert musics',
         privacy: VideoPlaylistPrivacy.PUBLIC,
-        videoChannelId: server.videoChannel.id
+        videoChannelId: server.store.channel.id
       }
-      const res = await createVideoPlaylist({ url: server.url, token: server.accessToken, playlistAttrs: attributes })
+      const created = await server.playlists.create({ attributes })
 
-      await addVideoInPlaylist({
-        url: server.url,
-        token: server.accessToken,
-        playlistId: res.body.videoPlaylist.id,
-        elementAttrs: { videoId }
-      })
+      await server.playlists.addElement({ playlistId: created.id, attributes: { videoId } })
     }
 
     {
       const attributes = {
         displayName: 'Inspector Lunge playlist',
         privacy: VideoPlaylistPrivacy.PUBLIC,
-        videoChannelId: server.videoChannel.id
+        videoChannelId: server.store.channel.id
       }
-      await createVideoPlaylist({ url: server.url, token: server.accessToken, playlistAttrs: attributes })
+      await server.playlists.create({ attributes })
     }
+
+    command = server.search
   })
 
   it('Should make a simple search and not have results', async function () {
-    const res = await searchVideoPlaylists(server.url, 'abc')
+    const body = await command.searchPlaylists({ search: 'abc' })
 
-    expect(res.body.total).to.equal(0)
-    expect(res.body.data).to.have.lengthOf(0)
+    expect(body.total).to.equal(0)
+    expect(body.data).to.have.lengthOf(0)
   })
 
   it('Should make a search and have results', async function () {
@@ -87,11 +76,11 @@ describe('Test playlists search', function () {
         start: 0,
         count: 1
       }
-      const res = await advancedVideoPlaylistSearch(server.url, search)
-      expect(res.body.total).to.equal(1)
-      expect(res.body.data).to.have.lengthOf(1)
+      const body = await command.advancedPlaylistSearch({ search })
+      expect(body.total).to.equal(1)
+      expect(body.data).to.have.lengthOf(1)
 
-      const playlist: VideoPlaylist = res.body.data[0]
+      const playlist = body.data[0]
       expect(playlist.displayName).to.equal('Dr. Kenzo Tenma hospital videos')
       expect(playlist.url).to.equal(server.url + '/video-playlists/' + playlist.uuid)
     }
@@ -102,11 +91,11 @@ describe('Test playlists search', function () {
         start: 0,
         count: 1
       }
-      const res = await advancedVideoPlaylistSearch(server.url, search)
-      expect(res.body.total).to.equal(1)
-      expect(res.body.data).to.have.lengthOf(1)
+      const body = await command.advancedPlaylistSearch({ search })
+      expect(body.total).to.equal(1)
+      expect(body.data).to.have.lengthOf(1)
 
-      const playlist: VideoPlaylist = res.body.data[0]
+      const playlist = body.data[0]
       expect(playlist.displayName).to.equal('Johan & Anna Libert musics')
     }
   })
@@ -117,9 +106,9 @@ describe('Test playlists search', function () {
       start: 0,
       count: 1
     }
-    const res = await advancedVideoPlaylistSearch(server.url, search)
-    expect(res.body.total).to.equal(0)
-    expect(res.body.data).to.have.lengthOf(0)
+    const body = await command.advancedPlaylistSearch({ search })
+    expect(body.total).to.equal(0)
+    expect(body.data).to.have.lengthOf(0)
   })
 
   after(async function () {

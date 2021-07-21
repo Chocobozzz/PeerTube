@@ -23,8 +23,8 @@ import {
   updatePluginSettingsValidator
 } from '@server/middlewares/validators/plugins'
 import { PluginModel } from '@server/models/server/plugin'
-import { HttpStatusCode } from '@shared/core-utils'
 import {
+  HttpStatusCode,
   InstallOrUpdatePlugin,
   ManagePlugin,
   PeertubePluginIndexList,

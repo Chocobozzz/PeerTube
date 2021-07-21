@@ -2,31 +2,24 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { VideoDetails, VideoPrivacy } from '@shared/models'
+import { VideoPrivacy } from '@shared/models'
 import {
   checkLiveCleanup,
   cleanupTests,
-  createLive,
+  ConfigCommand,
+  createMultipleServers,
   doubleFollow,
-  flushAndRunMultipleServers,
-  generateUser,
-  getCustomConfigResolutions,
-  getVideo,
-  runAndTestFfmpegStreamError,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel,
-  updateCustomSubConfig,
-  updateUser,
   wait,
-  waitJobs,
-  waitUntilLivePublished
+  waitJobs
 } from '../../../../shared/extra-utils'
 
 const expect = chai.expect
 
 describe('Test live constraints', function () {
-  let servers: ServerInfo[] = []
+  let servers: PeerTubeServer[] = []
   let userId: number
   let userAccessToken: string
   let userChannelId: number
@@ -39,15 +32,13 @@ describe('Test live constraints', function () {
       saveReplay
     }
 
-    const res = await createLive(servers[0].url, userAccessToken, liveAttributes)
-    return res.body.video.uuid as string
+    const { uuid } = await servers[0].live.create({ token: userAccessToken, fields: liveAttributes })
+    return uuid
   }
 
   async function checkSaveReplay (videoId: string, resolutions = [ 720 ]) {
     for (const server of servers) {
-      const res = await getVideo(server.url, videoId)
-
-      const video: VideoDetails = res.body
+      const video = await server.videos.get({ id: videoId })
       expect(video.isLive).to.be.false
       expect(video.duration).to.be.greaterThan(0)
     }
@@ -57,14 +48,12 @@ describe('Test live constraints', function () {
 
   async function waitUntilLivePublishedOnAllServers (videoId: string) {
     for (const server of servers) {
-      await waitUntilLivePublished(server.url, server.accessToken, videoId)
+      await server.live.waitUntilPublished({ videoId })
     }
   }
 
   function updateQuota (options: { total: number, daily: number }) {
-    return updateUser({
-      url: servers[0].url,
-      accessToken: servers[0].accessToken,
+    return servers[0].users.update({
       userId,
       videoQuota: options.total,
       videoQuotaDaily: options.daily
@@ -74,24 +63,26 @@ describe('Test live constraints', function () {
   before(async function () {
     this.timeout(120000)
 
-    servers = await flushAndRunMultipleServers(2)
+    servers = await createMultipleServers(2)
 
     // Get the access tokens
     await setAccessTokensToServers(servers)
     await setDefaultVideoChannel(servers)
 
-    await updateCustomSubConfig(servers[0].url, servers[0].accessToken, {
-      live: {
-        enabled: true,
-        allowReplay: true,
-        transcoding: {
-          enabled: false
+    await servers[0].config.updateCustomSubConfig({
+      newConfig: {
+        live: {
+          enabled: true,
+          allowReplay: true,
+          transcoding: {
+            enabled: false
+          }
         }
       }
     })
 
     {
-      const res = await generateUser(servers[0], 'user1')
+      const res = await servers[0].users.generate('user1')
       userId = res.userId
       userChannelId = res.userChannelId
       userAccessToken = res.token
@@ -107,7 +98,7 @@ describe('Test live constraints', function () {
     this.timeout(60000)
 
     const userVideoLiveoId = await createLiveWrapper(false)
-    await runAndTestFfmpegStreamError(servers[0].url, userAccessToken, userVideoLiveoId, false)
+    await servers[0].live.runAndTestStreamError({ token: userAccessToken, videoId: userVideoLiveoId, shouldHaveError: false })
   })
 
   it('Should have size limit depending on user global quota if save replay is enabled', async function () {
@@ -117,7 +108,7 @@ describe('Test live constraints', function () {
     await wait(5000)
 
     const userVideoLiveoId = await createLiveWrapper(true)
-    await runAndTestFfmpegStreamError(servers[0].url, userAccessToken, userVideoLiveoId, true)
+    await servers[0].live.runAndTestStreamError({ token: userAccessToken, videoId: userVideoLiveoId, shouldHaveError: true })
 
     await waitUntilLivePublishedOnAllServers(userVideoLiveoId)
     await waitJobs(servers)
@@ -134,7 +125,7 @@ describe('Test live constraints', function () {
     await updateQuota({ total: -1, daily: 1 })
 
     const userVideoLiveoId = await createLiveWrapper(true)
-    await runAndTestFfmpegStreamError(servers[0].url, userAccessToken, userVideoLiveoId, true)
+    await servers[0].live.runAndTestStreamError({ token: userAccessToken, videoId: userVideoLiveoId, shouldHaveError: true })
 
     await waitUntilLivePublishedOnAllServers(userVideoLiveoId)
     await waitJobs(servers)
@@ -151,26 +142,28 @@ describe('Test live constraints', function () {
     await updateQuota({ total: 10 * 1000 * 1000, daily: -1 })
 
     const userVideoLiveoId = await createLiveWrapper(true)
-    await runAndTestFfmpegStreamError(servers[0].url, userAccessToken, userVideoLiveoId, false)
+    await servers[0].live.runAndTestStreamError({ token: userAccessToken, videoId: userVideoLiveoId, shouldHaveError: false })
   })
 
   it('Should have max duration limit', async function () {
     this.timeout(60000)
 
-    await updateCustomSubConfig(servers[0].url, servers[0].accessToken, {
-      live: {
-        enabled: true,
-        allowReplay: true,
-        maxDuration: 1,
-        transcoding: {
+    await servers[0].config.updateCustomSubConfig({
+      newConfig: {
+        live: {
           enabled: true,
-          resolutions: getCustomConfigResolutions(true)
+          allowReplay: true,
+          maxDuration: 1,
+          transcoding: {
+            enabled: true,
+            resolutions: ConfigCommand.getCustomConfigResolutions(true)
+          }
         }
       }
     })
 
     const userVideoLiveoId = await createLiveWrapper(true)
-    await runAndTestFfmpegStreamError(servers[0].url, userAccessToken, userVideoLiveoId, true)
+    await servers[0].live.runAndTestStreamError({ token: userAccessToken, videoId: userVideoLiveoId, shouldHaveError: true })
 
     await waitUntilLivePublishedOnAllServers(userVideoLiveoId)
     await waitJobs(servers)

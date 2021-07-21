@@ -4,7 +4,7 @@ import { ActorFollowScoreCache } from '@server/lib/files-cache'
 import { VideoLoadByUrlType } from '@server/lib/model-loaders'
 import { VideoModel } from '@server/models/video/video'
 import { MVideoAccountLightBlacklistAllFiles, MVideoThumbnail } from '@server/types/models'
-import { HttpStatusCode } from '@shared/core-utils'
+import { HttpStatusCode } from '@shared/models'
 import { fetchRemoteVideo, SyncParam, syncVideoExternalAttributes } from './shared'
 import { APVideoUpdater } from './updater'
 

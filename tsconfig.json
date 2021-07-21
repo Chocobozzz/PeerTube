@@ -8,6 +8,7 @@
     "emitDecoratorMetadata": true,
     "importHelpers": true,
     "removeComments": true,
+    "strictBindCallApply": true,
     "outDir": "./dist",
     "lib": [
       "dom",

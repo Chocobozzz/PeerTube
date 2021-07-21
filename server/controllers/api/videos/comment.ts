@@ -1,7 +1,7 @@
 import * as express from 'express'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
-import { ResultList, ThreadsResultList, UserRight } from '../../../../shared/models'
-import { VideoCommentCreate } from '../../../../shared/models/videos/comment/video-comment.model'
+import { ResultList, ThreadsResultList, UserRight, VideoCommentCreate } from '../../../../shared/models'
+import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
+import { VideoCommentThreads } from '../../../../shared/models/videos/comment/video-comment.model'
 import { auditLoggerFactory, CommentAuditView, getAuditIdFromRes } from '../../../helpers/audit-logger'
 import { getFormattedObjects } from '../../../helpers/utils'
 import { sequelizeTypescript } from '../../../initializers/database'
@@ -136,7 +136,7 @@ async function listVideoThreads (req: express.Request, res: express.Response) {
   return res.json({
     ...getFormattedObjects(resultList.data, resultList.total),
     totalNotDeletedComments: resultList.totalNotDeletedComments
-  })
+  } as VideoCommentThreads)
 }
 
 async function listVideoThreadComments (req: express.Request, res: express.Response) {

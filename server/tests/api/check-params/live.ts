@@ -2,69 +2,64 @@
 
 import 'mocha'
 import { omit } from 'lodash'
-import { LiveVideo, VideoCreateResult, VideoPrivacy } from '@shared/models'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import {
   buildAbsoluteFixturePath,
   cleanupTests,
-  createUser,
-  flushAndRunServer,
-  getLive,
-  getMyUserInformation,
-  immutableAssign,
+  createSingleServer,
+  LiveCommand,
   makePostBodyRequest,
   makeUploadRequest,
-  runAndTestFfmpegStreamError,
+  PeerTubeServer,
   sendRTMPStream,
-  ServerInfo,
   setAccessTokensToServers,
-  stopFfmpeg,
-  updateCustomSubConfig,
-  updateLive,
-  uploadVideoAndGetId,
-  userLogin,
-  waitUntilLivePublished
-} from '../../../../shared/extra-utils'
+  stopFfmpeg
+} from '@shared/extra-utils'
+import { HttpStatusCode, VideoCreateResult, VideoPrivacy } from '@shared/models'
 
 describe('Test video lives API validator', function () {
   const path = '/api/v1/videos/live'
-  let server: ServerInfo
+  let server: PeerTubeServer
   let userAccessToken = ''
   let channelId: number
   let video: VideoCreateResult
   let videoIdNotLive: number
+  let command: LiveCommand
 
   // ---------------------------------------------------------------
 
   before(async function () {
     this.timeout(30000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
 
     await setAccessTokensToServers([ server ])
 
-    await updateCustomSubConfig(server.url, server.accessToken, {
-      live: {
-        enabled: true,
-        maxInstanceLives: 20,
-        maxUserLives: 20,
-        allowReplay: true
+    await server.config.updateCustomSubConfig({
+      newConfig: {
+        live: {
+          enabled: true,
+          maxInstanceLives: 20,
+          maxUserLives: 20,
+          allowReplay: true
+        }
       }
     })
 
     const username = 'user1'
     const password = 'my super password'
-    await createUser({ url: server.url, accessToken: server.accessToken, username: username, password: password })
-    userAccessToken = await userLogin(server, { username, password })
+    await server.users.create({ username: username, password: password })
+    userAccessToken = await server.login.getAccessToken({ username, password })
 
     {
-      const res = await getMyUserInformation(server.url, server.accessToken)
-      channelId = res.body.videoChannels[0].id
+      const { videoChannels } = await server.users.getMyInfo()
+      channelId = videoChannels[0].id
     }
 
     {
-      videoIdNotLive = (await uploadVideoAndGetId({ server, videoName: 'not live' })).id
+      videoIdNotLive = (await server.videos.quickUpload({ name: 'not live' })).id
     }
+
+    command = server.live
   })
 
   describe('When creating a live', function () {
@@ -96,37 +91,37 @@ describe('Test video lives API validator', function () {
     })
 
     it('Should fail with a long name', async function () {
-      const fields = immutableAssign(baseCorrectParams, { name: 'super'.repeat(65) })
+      const fields = { ...baseCorrectParams, name: 'super'.repeat(65) }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should fail with a bad category', async function () {
-      const fields = immutableAssign(baseCorrectParams, { category: 125 })
+      const fields = { ...baseCorrectParams, category: 125 }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should fail with a bad licence', async function () {
-      const fields = immutableAssign(baseCorrectParams, { licence: 125 })
+      const fields = { ...baseCorrectParams, licence: 125 }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should fail with a bad language', async function () {
-      const fields = immutableAssign(baseCorrectParams, { language: 'a'.repeat(15) })
+      const fields = { ...baseCorrectParams, language: 'a'.repeat(15) }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should fail with a long description', async function () {
-      const fields = immutableAssign(baseCorrectParams, { description: 'super'.repeat(2500) })
+      const fields = { ...baseCorrectParams, description: 'super'.repeat(2500) }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should fail with a long support text', async function () {
-      const fields = immutableAssign(baseCorrectParams, { support: 'super'.repeat(201) })
+      const fields = { ...baseCorrectParams, support: 'super'.repeat(201) }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
@@ -138,7 +133,7 @@ describe('Test video lives API validator', function () {
     })
 
     it('Should fail with a bad channel', async function () {
-      const fields = immutableAssign(baseCorrectParams, { channelId: 545454 })
+      const fields = { ...baseCorrectParams, channelId: 545454 }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
@@ -148,31 +143,31 @@ describe('Test video lives API validator', function () {
         username: 'fake',
         password: 'fake_password'
       }
-      await createUser({ url: server.url, accessToken: server.accessToken, username: user.username, password: user.password })
+      await server.users.create({ username: user.username, password: user.password })
 
-      const accessTokenUser = await userLogin(server, user)
-      const res = await getMyUserInformation(server.url, accessTokenUser)
-      const customChannelId = res.body.videoChannels[0].id
+      const accessTokenUser = await server.login.getAccessToken(user)
+      const { videoChannels } = await server.users.getMyInfo({ token: accessTokenUser })
+      const customChannelId = videoChannels[0].id
 
-      const fields = immutableAssign(baseCorrectParams, { channelId: customChannelId })
+      const fields = { ...baseCorrectParams, channelId: customChannelId }
 
       await makePostBodyRequest({ url: server.url, path, token: userAccessToken, fields })
     })
 
     it('Should fail with too many tags', async function () {
-      const fields = immutableAssign(baseCorrectParams, { tags: [ 'tag1', 'tag2', 'tag3', 'tag4', 'tag5', 'tag6' ] })
+      const fields = { ...baseCorrectParams, tags: [ 'tag1', 'tag2', 'tag3', 'tag4', 'tag5', 'tag6' ] }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should fail with a tag length too low', async function () {
-      const fields = immutableAssign(baseCorrectParams, { tags: [ 'tag1', 't' ] })
+      const fields = { ...baseCorrectParams, tags: [ 'tag1', 't' ] }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should fail with a tag length too big', async function () {
-      const fields = immutableAssign(baseCorrectParams, { tags: [ 'tag1', 'my_super_tag_too_long_long_long_long_long_long' ] })
+      const fields = { ...baseCorrectParams, tags: [ 'tag1', 'my_super_tag_too_long_long_long_long_long_long' ] }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
@@ -214,7 +209,7 @@ describe('Test video lives API validator', function () {
     })
 
     it('Should fail with save replay and permanent live set to true', async function () {
-      const fields = immutableAssign(baseCorrectParams, { saveReplay: true, permanentLive: true })
+      const fields = { ...baseCorrectParams, saveReplay: true, permanentLive: true }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
@@ -227,16 +222,18 @@ describe('Test video lives API validator', function () {
         path,
         token: server.accessToken,
         fields: baseCorrectParams,
-        statusCodeExpected: HttpStatusCode.OK_200
+        expectedStatus: HttpStatusCode.OK_200
       })
 
       video = res.body.video
     })
 
     it('Should forbid if live is disabled', async function () {
-      await updateCustomSubConfig(server.url, server.accessToken, {
-        live: {
-          enabled: false
+      await server.config.updateCustomSubConfig({
+        newConfig: {
+          live: {
+            enabled: false
+          }
         }
       })
 
@@ -245,17 +242,19 @@ describe('Test video lives API validator', function () {
         path,
         token: server.accessToken,
         fields: baseCorrectParams,
-        statusCodeExpected: HttpStatusCode.FORBIDDEN_403
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
       })
     })
 
     it('Should forbid to save replay if not enabled by the admin', async function () {
-      const fields = immutableAssign(baseCorrectParams, { saveReplay: true })
+      const fields = { ...baseCorrectParams, saveReplay: true }
 
-      await updateCustomSubConfig(server.url, server.accessToken, {
-        live: {
-          enabled: true,
-          allowReplay: false
+      await server.config.updateCustomSubConfig({
+        newConfig: {
+          live: {
+            enabled: true,
+            allowReplay: false
+          }
         }
       })
 
@@ -264,17 +263,19 @@ describe('Test video lives API validator', function () {
         path,
         token: server.accessToken,
         fields,
-        statusCodeExpected: HttpStatusCode.FORBIDDEN_403
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
       })
     })
 
     it('Should allow to save replay if enabled by the admin', async function () {
-      const fields = immutableAssign(baseCorrectParams, { saveReplay: true })
+      const fields = { ...baseCorrectParams, saveReplay: true }
 
-      await updateCustomSubConfig(server.url, server.accessToken, {
-        live: {
-          enabled: true,
-          allowReplay: true
+      await server.config.updateCustomSubConfig({
+        newConfig: {
+          live: {
+            enabled: true,
+            allowReplay: true
+          }
         }
       })
 
@@ -283,15 +284,17 @@ describe('Test video lives API validator', function () {
         path,
         token: server.accessToken,
         fields,
-        statusCodeExpected: HttpStatusCode.OK_200
+        expectedStatus: HttpStatusCode.OK_200
       })
     })
 
     it('Should not allow live if max instance lives is reached', async function () {
-      await updateCustomSubConfig(server.url, server.accessToken, {
-        live: {
-          enabled: true,
-          maxInstanceLives: 1
+      await server.config.updateCustomSubConfig({
+        newConfig: {
+          live: {
+            enabled: true,
+            maxInstanceLives: 1
+          }
         }
       })
 
@@ -300,16 +303,18 @@ describe('Test video lives API validator', function () {
         path,
         token: server.accessToken,
         fields: baseCorrectParams,
-        statusCodeExpected: HttpStatusCode.FORBIDDEN_403
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
       })
     })
 
     it('Should not allow live if max user lives is reached', async function () {
-      await updateCustomSubConfig(server.url, server.accessToken, {
-        live: {
-          enabled: true,
-          maxInstanceLives: 20,
-          maxUserLives: 1
+      await server.config.updateCustomSubConfig({
+        newConfig: {
+          live: {
+            enabled: true,
+            maxInstanceLives: 20,
+            maxUserLives: 1
+          }
         }
       })
 
@@ -318,7 +323,7 @@ describe('Test video lives API validator', function () {
         path,
         token: server.accessToken,
         fields: baseCorrectParams,
-        statusCodeExpected: HttpStatusCode.FORBIDDEN_403
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
       })
     })
   })
@@ -326,110 +331,112 @@ describe('Test video lives API validator', function () {
   describe('When getting live information', function () {
 
     it('Should fail without access token', async function () {
-      await getLive(server.url, '', video.id, HttpStatusCode.UNAUTHORIZED_401)
+      await command.get({ token: '', videoId: video.id, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
     it('Should fail with a bad access token', async function () {
-      await getLive(server.url, 'toto', video.id, HttpStatusCode.UNAUTHORIZED_401)
+      await command.get({ token: 'toto', videoId: video.id, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
     it('Should fail with access token of another user', async function () {
-      await getLive(server.url, userAccessToken, video.id, HttpStatusCode.FORBIDDEN_403)
+      await command.get({ token: userAccessToken, videoId: video.id, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
     })
 
     it('Should fail with a bad video id', async function () {
-      await getLive(server.url, server.accessToken, 'toto', HttpStatusCode.BAD_REQUEST_400)
+      await command.get({ videoId: 'toto', expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     })
 
     it('Should fail with an unknown video id', async function () {
-      await getLive(server.url, server.accessToken, 454555, HttpStatusCode.NOT_FOUND_404)
+      await command.get({ videoId: 454555, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
     })
 
     it('Should fail with a non live video', async function () {
-      await getLive(server.url, server.accessToken, videoIdNotLive, HttpStatusCode.NOT_FOUND_404)
+      await command.get({ videoId: videoIdNotLive, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
     })
 
     it('Should succeed with the correct params', async function () {
-      await getLive(server.url, server.accessToken, video.id)
-      await getLive(server.url, server.accessToken, video.shortUUID)
+      await command.get({ videoId: video.id })
+      await command.get({ videoId: video.uuid })
+      await command.get({ videoId: video.shortUUID })
     })
   })
 
   describe('When updating live information', async function () {
 
     it('Should fail without access token', async function () {
-      await updateLive(server.url, '', video.id, {}, HttpStatusCode.UNAUTHORIZED_401)
+      await command.update({ token: '', videoId: video.id, fields: {}, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
     it('Should fail with a bad access token', async function () {
-      await updateLive(server.url, 'toto', video.id, {}, HttpStatusCode.UNAUTHORIZED_401)
+      await command.update({ token: 'toto', videoId: video.id, fields: {}, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
     it('Should fail with access token of another user', async function () {
-      await updateLive(server.url, userAccessToken, video.id, {}, HttpStatusCode.FORBIDDEN_403)
+      await command.update({ token: userAccessToken, videoId: video.id, fields: {}, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
     })
 
     it('Should fail with a bad video id', async function () {
-      await updateLive(server.url, server.accessToken, 'toto', {}, HttpStatusCode.BAD_REQUEST_400)
+      await command.update({ videoId: 'toto', fields: {}, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     })
 
     it('Should fail with an unknown video id', async function () {
-      await updateLive(server.url, server.accessToken, 454555, {}, HttpStatusCode.NOT_FOUND_404)
+      await command.update({ videoId: 454555, fields: {}, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
     })
 
     it('Should fail with a non live video', async function () {
-      await updateLive(server.url, server.accessToken, videoIdNotLive, {}, HttpStatusCode.NOT_FOUND_404)
+      await command.update({ videoId: videoIdNotLive, fields: {}, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
     })
 
     it('Should fail with save replay and permanent live set to true', async function () {
       const fields = { saveReplay: true, permanentLive: true }
 
-      await updateLive(server.url, server.accessToken, video.id, fields, HttpStatusCode.BAD_REQUEST_400)
+      await command.update({ videoId: video.id, fields, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     })
 
     it('Should succeed with the correct params', async function () {
-      await updateLive(server.url, server.accessToken, video.id, { saveReplay: false })
-      await updateLive(server.url, server.accessToken, video.shortUUID, { saveReplay: false })
+      await command.update({ videoId: video.id, fields: { saveReplay: false } })
+      await command.update({ videoId: video.uuid, fields: { saveReplay: false } })
+      await command.update({ videoId: video.shortUUID, fields: { saveReplay: false } })
     })
 
     it('Should fail to update replay status if replay is not allowed on the instance', async function () {
-      await updateCustomSubConfig(server.url, server.accessToken, {
-        live: {
-          enabled: true,
-          allowReplay: false
+      await server.config.updateCustomSubConfig({
+        newConfig: {
+          live: {
+            enabled: true,
+            allowReplay: false
+          }
         }
       })
 
-      await updateLive(server.url, server.accessToken, video.id, { saveReplay: true }, HttpStatusCode.FORBIDDEN_403)
+      await command.update({ videoId: video.id, fields: { saveReplay: true }, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
     })
 
     it('Should fail to update a live if it has already started', async function () {
       this.timeout(40000)
 
-      const resLive = await getLive(server.url, server.accessToken, video.id)
-      const live: LiveVideo = resLive.body
+      const live = await command.get({ videoId: video.id })
 
-      const command = sendRTMPStream(live.rtmpUrl, live.streamKey)
+      const ffmpegCommand = sendRTMPStream(live.rtmpUrl, live.streamKey)
 
-      await waitUntilLivePublished(server.url, server.accessToken, video.id)
-      await updateLive(server.url, server.accessToken, video.id, {}, HttpStatusCode.BAD_REQUEST_400)
+      await command.waitUntilPublished({ videoId: video.id })
+      await command.update({ videoId: video.id, fields: {}, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
 
-      await stopFfmpeg(command)
+      await stopFfmpeg(ffmpegCommand)
     })
 
     it('Should fail to stream twice in the save live', async function () {
       this.timeout(40000)
 
-      const resLive = await getLive(server.url, server.accessToken, video.id)
-      const live: LiveVideo = resLive.body
+      const live = await command.get({ videoId: video.id })
 
-      const command = sendRTMPStream(live.rtmpUrl, live.streamKey)
+      const ffmpegCommand = sendRTMPStream(live.rtmpUrl, live.streamKey)
 
-      await waitUntilLivePublished(server.url, server.accessToken, video.id)
+      await command.waitUntilPublished({ videoId: video.id })
 
-      await runAndTestFfmpegStreamError(server.url, server.accessToken, video.id, true)
+      await command.runAndTestStreamError({ videoId: video.id, shouldHaveError: true })
 
-      await stopFfmpeg(command)
+      await stopFfmpeg(ffmpegCommand)
     })
   })
 

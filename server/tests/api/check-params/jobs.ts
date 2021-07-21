@@ -1,26 +1,21 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-
-import {
-  cleanupTests,
-  createUser,
-  flushAndRunServer,
-  ServerInfo,
-  setAccessTokensToServers,
-  userLogin
-} from '../../../../shared/extra-utils'
 import {
   checkBadCountPagination,
   checkBadSortPagination,
-  checkBadStartPagination
-} from '../../../../shared/extra-utils/requests/check-api-params'
-import { makeGetRequest } from '../../../../shared/extra-utils/requests/requests'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+  checkBadStartPagination,
+  cleanupTests,
+  createSingleServer,
+  makeGetRequest,
+  PeerTubeServer,
+  setAccessTokensToServers
+} from '@shared/extra-utils'
+import { HttpStatusCode } from '@shared/models'
 
 describe('Test jobs API validators', function () {
   const path = '/api/v1/jobs/failed'
-  let server: ServerInfo
+  let server: PeerTubeServer
   let userAccessToken = ''
 
   // ---------------------------------------------------------------
@@ -28,7 +23,7 @@ describe('Test jobs API validators', function () {
   before(async function () {
     this.timeout(120000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
 
     await setAccessTokensToServers([ server ])
 
@@ -36,8 +31,8 @@ describe('Test jobs API validators', function () {
       username: 'user1',
       password: 'my super password'
     }
-    await createUser({ url: server.url, accessToken: server.accessToken, username: user.username, password: user.password })
-    userAccessToken = await userLogin(server, user)
+    await server.users.create({ username: user.username, password: user.password })
+    userAccessToken = await server.login.getAccessToken(user)
   })
 
   describe('When listing jobs', function () {
@@ -77,7 +72,7 @@ describe('Test jobs API validators', function () {
       await makeGetRequest({
         url: server.url,
         path,
-        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
       })
     })
 
@@ -86,7 +81,7 @@ describe('Test jobs API validators', function () {
         url: server.url,
         path,
         token: userAccessToken,
-        statusCodeExpected: HttpStatusCode.FORBIDDEN_403
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
       })
     })
 

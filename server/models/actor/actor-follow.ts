@@ -324,13 +324,13 @@ export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowMo
 
     const followWhere = state ? { state } : {}
     const followingWhere: WhereOptions = {}
-    const followingServerWhere: WhereOptions = {}
 
     if (search) {
-      Object.assign(followingServerWhere, {
-        host: {
-          [Op.iLike]: '%' + search + '%'
-        }
+      Object.assign(followWhere, {
+        [Op.or]: [
+          searchAttribute(options.search, '$ActorFollowing.preferredUsername$'),
+          searchAttribute(options.search, '$ActorFollowing.Server.host$')
+        ]
       })
     }
 
@@ -361,8 +361,7 @@ export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowMo
           include: [
             {
               model: ServerModel,
-              required: true,
-              where: followingServerWhere
+              required: true
             }
           ]
         }
@@ -391,13 +390,13 @@ export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowMo
 
     const followWhere = state ? { state } : {}
     const followerWhere: WhereOptions = {}
-    const followerServerWhere: WhereOptions = {}
 
     if (search) {
-      Object.assign(followerServerWhere, {
-        host: {
-          [Op.iLike]: '%' + search + '%'
-        }
+      Object.assign(followWhere, {
+        [Op.or]: [
+          searchAttribute(search, '$ActorFollower.preferredUsername$'),
+          searchAttribute(search, '$ActorFollower.Server.host$')
+        ]
       })
     }
 
@@ -420,8 +419,7 @@ export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowMo
           include: [
             {
               model: ServerModel,
-              required: true,
-              where: followerServerWhere
+              required: true
             }
           ]
         },

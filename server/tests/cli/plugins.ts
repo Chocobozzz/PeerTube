@@ -1,55 +1,47 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
+import { expect } from 'chai'
 import {
   cleanupTests,
-  execCLI,
-  flushAndRunServer,
-  getConfig,
-  getEnvCli,
-  getPluginTestPath,
+  createSingleServer,
   killallServers,
-  reRunServer,
-  ServerInfo,
+  PeerTubeServer,
+  PluginsCommand,
   setAccessTokensToServers
 } from '../../../shared/extra-utils'
-import { ServerConfig } from '../../../shared/models/server'
-import { expect } from 'chai'
 
 describe('Test plugin scripts', function () {
-  let server: ServerInfo
+  let server: PeerTubeServer
 
   before(async function () {
     this.timeout(30000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
     await setAccessTokensToServers([ server ])
   })
 
   it('Should install a plugin from stateless CLI', async function () {
     this.timeout(60000)
 
-    const packagePath = getPluginTestPath()
+    const packagePath = PluginsCommand.getPluginTestPath()
 
-    const env = getEnvCli(server)
-    await execCLI(`${env} npm run plugin:install -- --plugin-path ${packagePath}`)
+    await server.cli.execWithEnv(`npm run plugin:install -- --plugin-path ${packagePath}`)
   })
 
   it('Should install a theme from stateless CLI', async function () {
     this.timeout(60000)
 
-    const env = getEnvCli(server)
-    await execCLI(`${env} npm run plugin:install -- --npm-name peertube-theme-background-red`)
+    await server.cli.execWithEnv(`npm run plugin:install -- --npm-name peertube-theme-background-red`)
   })
 
   it('Should have the theme and the plugin registered when we restart peertube', async function () {
     this.timeout(30000)
 
-    killallServers([ server ])
-    await reRunServer(server)
+    await killallServers([ server ])
+    await server.run()
 
-    const res = await getConfig(server.url)
-    const config: ServerConfig = res.body
+    const config = await server.config.getConfig()
 
     const plugin = config.plugin.registered
                          .find(p => p.name === 'test')
@@ -63,18 +55,16 @@ describe('Test plugin scripts', function () {
   it('Should uninstall a plugin from stateless CLI', async function () {
     this.timeout(60000)
 
-    const env = getEnvCli(server)
-    await execCLI(`${env} npm run plugin:uninstall -- --npm-name peertube-plugin-test`)
+    await server.cli.execWithEnv(`npm run plugin:uninstall -- --npm-name peertube-plugin-test`)
   })
 
   it('Should have removed the plugin on another peertube restart', async function () {
     this.timeout(30000)
 
-    killallServers([ server ])
-    await reRunServer(server)
+    await killallServers([ server ])
+    await server.run()
 
-    const res = await getConfig(server.url)
-    const config: ServerConfig = res.body
+    const config = await server.config.getConfig()
 
     const plugin = config.plugin.registered
                          .find(p => p.name === 'test')

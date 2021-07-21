@@ -1,21 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
 import 'mocha'
+import * as chai from 'chai'
 import {
-  addVideoInPlaylist,
   cleanupTests,
-  createVideoPlaylist,
+  createMultipleServers,
   doubleFollow,
-  flushAndRunMultipleServers,
-  getVideoPlaylistsList,
-  removeVideoFromPlaylist,
-  reorderVideosPlaylist,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel,
   testImage,
-  uploadVideoAndGetId,
   waitJobs
 } from '../../../../shared/extra-utils'
 import { VideoPlaylistPrivacy } from '../../../../shared/models/videos/playlist/video-playlist-privacy.model'
@@ -23,10 +17,10 @@ import { VideoPlaylistPrivacy } from '../../../../shared/models/videos/playlist/
 const expect = chai.expect
 
 describe('Playlist thumbnail', function () {
-  let servers: ServerInfo[] = []
+  let servers: PeerTubeServer[] = []
 
-  let playlistWithoutThumbnail: number
-  let playlistWithThumbnail: number
+  let playlistWithoutThumbnailId: number
+  let playlistWithThumbnailId: number
 
   let withThumbnailE1: number
   let withThumbnailE2: number
@@ -36,22 +30,22 @@ describe('Playlist thumbnail', function () {
   let video1: number
   let video2: number
 
-  async function getPlaylistWithoutThumbnail (server: ServerInfo) {
-    const res = await getVideoPlaylistsList(server.url, 0, 10)
+  async function getPlaylistWithoutThumbnail (server: PeerTubeServer) {
+    const body = await server.playlists.list({ start: 0, count: 10 })
 
-    return res.body.data.find(p => p.displayName === 'playlist without thumbnail')
+    return body.data.find(p => p.displayName === 'playlist without thumbnail')
   }
 
-  async function getPlaylistWithThumbnail (server: ServerInfo) {
-    const res = await getVideoPlaylistsList(server.url, 0, 10)
+  async function getPlaylistWithThumbnail (server: PeerTubeServer) {
+    const body = await server.playlists.list({ start: 0, count: 10 })
 
-    return res.body.data.find(p => p.displayName === 'playlist with thumbnail')
+    return body.data.find(p => p.displayName === 'playlist with thumbnail')
   }
 
   before(async function () {
     this.timeout(120000)
 
-    servers = await flushAndRunMultipleServers(2, { transcoding: { enabled: false } })
+    servers = await createMultipleServers(2, { transcoding: { enabled: false } })
 
     // Get the access tokens
     await setAccessTokensToServers(servers)
@@ -60,8 +54,8 @@ describe('Playlist thumbnail', function () {
     // Server 1 and server 2 follow each other
     await doubleFollow(servers[0], servers[1])
 
-    video1 = (await uploadVideoAndGetId({ server: servers[0], videoName: 'video 1' })).id
-    video2 = (await uploadVideoAndGetId({ server: servers[0], videoName: 'video 2' })).id
+    video1 = (await servers[0].videos.quickUpload({ name: 'video 1' })).id
+    video2 = (await servers[0].videos.quickUpload({ name: 'video 2' })).id
 
     await waitJobs(servers)
   })
@@ -69,24 +63,20 @@ describe('Playlist thumbnail', function () {
   it('Should automatically update the thumbnail when adding an element', async function () {
     this.timeout(30000)
 
-    const res = await createVideoPlaylist({
-      url: servers[1].url,
-      token: servers[1].accessToken,
-      playlistAttrs: {
+    const created = await servers[1].playlists.create({
+      attributes: {
         displayName: 'playlist without thumbnail',
         privacy: VideoPlaylistPrivacy.PUBLIC,
-        videoChannelId: servers[1].videoChannel.id
+        videoChannelId: servers[1].store.channel.id
       }
     })
-    playlistWithoutThumbnail = res.body.videoPlaylist.id
+    playlistWithoutThumbnailId = created.id
 
-    const res2 = await addVideoInPlaylist({
-      url: servers[1].url,
-      token: servers[1].accessToken,
-      playlistId: playlistWithoutThumbnail,
-      elementAttrs: { videoId: video1 }
+    const added = await servers[1].playlists.addElement({
+      playlistId: playlistWithoutThumbnailId,
+      attributes: { videoId: video1 }
     })
-    withoutThumbnailE1 = res2.body.videoPlaylistElement.id
+    withoutThumbnailE1 = added.id
 
     await waitJobs(servers)
 
@@ -99,25 +89,21 @@ describe('Playlist thumbnail', function () {
   it('Should not update the thumbnail if we explicitly uploaded a thumbnail', async function () {
     this.timeout(30000)
 
-    const res = await createVideoPlaylist({
-      url: servers[1].url,
-      token: servers[1].accessToken,
-      playlistAttrs: {
+    const created = await servers[1].playlists.create({
+      attributes: {
         displayName: 'playlist with thumbnail',
         privacy: VideoPlaylistPrivacy.PUBLIC,
-        videoChannelId: servers[1].videoChannel.id,
+        videoChannelId: servers[1].store.channel.id,
         thumbnailfile: 'thumbnail.jpg'
       }
     })
-    playlistWithThumbnail = res.body.videoPlaylist.id
+    playlistWithThumbnailId = created.id
 
-    const res2 = await addVideoInPlaylist({
-      url: servers[1].url,
-      token: servers[1].accessToken,
-      playlistId: playlistWithThumbnail,
-      elementAttrs: { videoId: video1 }
+    const added = await servers[1].playlists.addElement({
+      playlistId: playlistWithThumbnailId,
+      attributes: { videoId: video1 }
     })
-    withThumbnailE1 = res2.body.videoPlaylistElement.id
+    withThumbnailE1 = added.id
 
     await waitJobs(servers)
 
@@ -130,19 +116,15 @@ describe('Playlist thumbnail', function () {
   it('Should automatically update the thumbnail when moving the first element', async function () {
     this.timeout(30000)
 
-    const res = await addVideoInPlaylist({
-      url: servers[1].url,
-      token: servers[1].accessToken,
-      playlistId: playlistWithoutThumbnail,
-      elementAttrs: { videoId: video2 }
+    const added = await servers[1].playlists.addElement({
+      playlistId: playlistWithoutThumbnailId,
+      attributes: { videoId: video2 }
     })
-    withoutThumbnailE2 = res.body.videoPlaylistElement.id
+    withoutThumbnailE2 = added.id
 
-    await reorderVideosPlaylist({
-      url: servers[1].url,
-      token: servers[1].accessToken,
-      playlistId: playlistWithoutThumbnail,
-      elementAttrs: {
+    await servers[1].playlists.reorderElements({
+      playlistId: playlistWithoutThumbnailId,
+      attributes: {
         startPosition: 1,
         insertAfterPosition: 2
       }
@@ -159,19 +141,15 @@ describe('Playlist thumbnail', function () {
   it('Should not update the thumbnail when moving the first element if we explicitly uploaded a thumbnail', async function () {
     this.timeout(30000)
 
-    const res = await addVideoInPlaylist({
-      url: servers[1].url,
-      token: servers[1].accessToken,
-      playlistId: playlistWithThumbnail,
-      elementAttrs: { videoId: video2 }
+    const added = await servers[1].playlists.addElement({
+      playlistId: playlistWithThumbnailId,
+      attributes: { videoId: video2 }
     })
-    withThumbnailE2 = res.body.videoPlaylistElement.id
+    withThumbnailE2 = added.id
 
-    await reorderVideosPlaylist({
-      url: servers[1].url,
-      token: servers[1].accessToken,
-      playlistId: playlistWithThumbnail,
-      elementAttrs: {
+    await servers[1].playlists.reorderElements({
+      playlistId: playlistWithThumbnailId,
+      attributes: {
         startPosition: 1,
         insertAfterPosition: 2
       }
@@ -188,11 +166,9 @@ describe('Playlist thumbnail', function () {
   it('Should automatically update the thumbnail when deleting the first element', async function () {
     this.timeout(30000)
 
-    await removeVideoFromPlaylist({
-      url: servers[1].url,
-      token: servers[1].accessToken,
-      playlistId: playlistWithoutThumbnail,
-      playlistElementId: withoutThumbnailE1
+    await servers[1].playlists.removeElement({
+      playlistId: playlistWithoutThumbnailId,
+      elementId: withoutThumbnailE1
     })
 
     await waitJobs(servers)
@@ -206,11 +182,9 @@ describe('Playlist thumbnail', function () {
   it('Should not update the thumbnail when deleting the first element if we explicitly uploaded a thumbnail', async function () {
     this.timeout(30000)
 
-    await removeVideoFromPlaylist({
-      url: servers[1].url,
-      token: servers[1].accessToken,
-      playlistId: playlistWithThumbnail,
-      playlistElementId: withThumbnailE1
+    await servers[1].playlists.removeElement({
+      playlistId: playlistWithThumbnailId,
+      elementId: withThumbnailE1
     })
 
     await waitJobs(servers)
@@ -224,11 +198,9 @@ describe('Playlist thumbnail', function () {
   it('Should the thumbnail when we delete the last element', async function () {
     this.timeout(30000)
 
-    await removeVideoFromPlaylist({
-      url: servers[1].url,
-      token: servers[1].accessToken,
-      playlistId: playlistWithoutThumbnail,
-      playlistElementId: withoutThumbnailE2
+    await servers[1].playlists.removeElement({
+      playlistId: playlistWithoutThumbnailId,
+      elementId: withoutThumbnailE2
     })
 
     await waitJobs(servers)
@@ -242,11 +214,9 @@ describe('Playlist thumbnail', function () {
   it('Should not update the thumbnail when we delete the last element if we explicitly uploaded a thumbnail', async function () {
     this.timeout(30000)
 
-    await removeVideoFromPlaylist({
-      url: servers[1].url,
-      token: servers[1].accessToken,
-      playlistId: playlistWithThumbnail,
-      playlistElementId: withThumbnailE2
+    await servers[1].playlists.removeElement({
+      playlistId: playlistWithThumbnailId,
+      elementId: withThumbnailE2
     })
 
     await waitJobs(servers)

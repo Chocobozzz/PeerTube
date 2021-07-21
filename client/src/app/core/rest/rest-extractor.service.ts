@@ -2,8 +2,7 @@ import { throwError as observableThrowError } from 'rxjs'
 import { Injectable } from '@angular/core'
 import { Router } from '@angular/router'
 import { dateToHuman } from '@app/helpers'
-import { ResultList } from '@shared/models'
-import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode, ResultList } from '@shared/models'
 
 @Injectable()
 export class RestExtractor {

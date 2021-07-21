@@ -2,21 +2,21 @@
 
 import 'mocha'
 import { expect } from 'chai'
-import { MockJoinPeerTubeVersions } from '@shared/extra-utils/mock-servers/joinpeertube-versions'
-import { PluginType } from '@shared/models'
-import { cleanupTests, installPlugin, setPluginLatestVersion, setPluginVersion, wait } from '../../../../shared/extra-utils'
-import { ServerInfo } from '../../../../shared/extra-utils/index'
-import { MockSmtpServer } from '../../../../shared/extra-utils/miscs/email'
 import {
   CheckerBaseParams,
   checkNewPeerTubeVersion,
   checkNewPluginVersion,
-  prepareNotificationsTest
-} from '../../../../shared/extra-utils/users/user-notifications'
-import { UserNotification, UserNotificationType } from '../../../../shared/models/users'
+  cleanupTests,
+  MockJoinPeerTubeVersions,
+  MockSmtpServer,
+  PeerTubeServer,
+  prepareNotificationsTest,
+  wait
+} from '@shared/extra-utils'
+import { PluginType, UserNotification, UserNotificationType } from '@shared/models'
 
 describe('Test admin notifications', function () {
-  let server: ServerInfo
+  let server: PeerTubeServer
   let userNotifications: UserNotification[] = []
   let adminNotifications: UserNotification[] = []
   let emails: object[] = []
@@ -58,17 +58,8 @@ describe('Test admin notifications', function () {
       token: server.accessToken
     }
 
-    await installPlugin({
-      url: server.url,
-      accessToken: server.accessToken,
-      npmName: 'peertube-plugin-hello-world'
-    })
-
-    await installPlugin({
-      url: server.url,
-      accessToken: server.accessToken,
-      npmName: 'peertube-theme-background-red'
-    })
+    await server.plugins.install({ npmName: 'peertube-plugin-hello-world' })
+    await server.plugins.install({ npmName: 'peertube-theme-background-red' })
   })
 
   describe('Latest PeerTube version notification', function () {
@@ -127,8 +118,8 @@ describe('Test admin notifications', function () {
     it('Should send a notification to admins on new plugin version', async function () {
       this.timeout(30000)
 
-      await setPluginVersion(server.internalServerNumber, 'hello-world', '0.0.1')
-      await setPluginLatestVersion(server.internalServerNumber, 'hello-world', '0.0.1')
+      await server.sql.setPluginVersion('hello-world', '0.0.1')
+      await server.sql.setPluginLatestVersion('hello-world', '0.0.1')
       await wait(6000)
 
       await checkNewPluginVersion(baseParams, PluginType.PLUGIN, 'hello-world', 'presence')
@@ -149,8 +140,8 @@ describe('Test admin notifications', function () {
     it('Should send a new notification after a new plugin release', async function () {
       this.timeout(30000)
 
-      await setPluginVersion(server.internalServerNumber, 'hello-world', '0.0.1')
-      await setPluginLatestVersion(server.internalServerNumber, 'hello-world', '0.0.1')
+      await server.sql.setPluginVersion('hello-world', '0.0.1')
+      await server.sql.setPluginLatestVersion('hello-world', '0.0.1')
       await wait(6000)
 
       expect(adminNotifications.filter(n => n.type === UserNotificationType.NEW_PEERTUBE_VERSION)).to.have.lengthOf(2)

@@ -2,36 +2,33 @@ import 'mocha'
 import { expect } from 'chai'
 import { writeFile } from 'fs-extra'
 import { basename, join } from 'path'
-import { Video, VideoDetails } from '@shared/models'
+import { HttpStatusCode, Video } from '@shared/models'
 import {
-  buildServerDirectory,
   cleanupTests,
+  createMultipleServers,
   doubleFollow,
-  execCLI,
-  flushAndRunMultipleServers,
-  getEnvCli,
-  getVideo,
   makeRawRequest,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers,
-  uploadVideoAndGetId,
   waitJobs
 } from '../../../shared/extra-utils'
-import { HttpStatusCode } from '@shared/core-utils'
 
-async function testThumbnail (server: ServerInfo, videoId: number | string) {
-  const res = await getVideo(server.url, videoId)
-  const video: VideoDetails = res.body
+async function testThumbnail (server: PeerTubeServer, videoId: number | string) {
+  const video = await server.videos.get({ id: videoId })
 
-  const res1 = await makeRawRequest(join(server.url, video.thumbnailPath), HttpStatusCode.OK_200)
-  expect(res1.body).to.not.have.lengthOf(0)
+  const requests = [
+    makeRawRequest(join(server.url, video.thumbnailPath), HttpStatusCode.OK_200),
+    makeRawRequest(join(server.url, video.thumbnailPath), HttpStatusCode.OK_200)
+  ]
 
-  const res2 = await makeRawRequest(join(server.url, video.thumbnailPath), HttpStatusCode.OK_200)
-  expect(res2.body).to.not.have.lengthOf(0)
+  for (const req of requests) {
+    const res = await req
+    expect(res.body).to.not.have.lengthOf(0)
+  }
 }
 
 describe('Test regenerate thumbnails script', function () {
-  let servers: ServerInfo[]
+  let servers: PeerTubeServer[]
 
   let video1: Video
   let video2: Video
@@ -43,28 +40,28 @@ describe('Test regenerate thumbnails script', function () {
   before(async function () {
     this.timeout(60000)
 
-    servers = await flushAndRunMultipleServers(2)
+    servers = await createMultipleServers(2)
     await setAccessTokensToServers(servers)
 
     await doubleFollow(servers[0], servers[1])
 
     {
-      const videoUUID1 = (await uploadVideoAndGetId({ server: servers[0], videoName: 'video 1' })).uuid
-      video1 = await (getVideo(servers[0].url, videoUUID1).then(res => res.body))
+      const videoUUID1 = (await servers[0].videos.quickUpload({ name: 'video 1' })).uuid
+      video1 = await servers[0].videos.get({ id: videoUUID1 })
 
-      thumbnail1Path = join(buildServerDirectory(servers[0], 'thumbnails'), basename(video1.thumbnailPath))
+      thumbnail1Path = join(servers[0].servers.buildDirectory('thumbnails'), basename(video1.thumbnailPath))
 
-      const videoUUID2 = (await uploadVideoAndGetId({ server: servers[0], videoName: 'video 2' })).uuid
-      video2 = await (getVideo(servers[0].url, videoUUID2).then(res => res.body))
+      const videoUUID2 = (await servers[0].videos.quickUpload({ name: 'video 2' })).uuid
+      video2 = await servers[0].videos.get({ id: videoUUID2 })
     }
 
     {
-      const videoUUID = (await uploadVideoAndGetId({ server: servers[1], videoName: 'video 3' })).uuid
+      const videoUUID = (await servers[1].videos.quickUpload({ name: 'video 3' })).uuid
       await waitJobs(servers)
 
-      remoteVideo = await (getVideo(servers[0].url, videoUUID).then(res => res.body))
+      remoteVideo = await servers[0].videos.get({ id: videoUUID })
 
-      thumbnailRemotePath = join(buildServerDirectory(servers[0], 'thumbnails'), basename(remoteVideo.thumbnailPath))
+      thumbnailRemotePath = join(servers[0].servers.buildDirectory('thumbnails'), basename(remoteVideo.thumbnailPath))
     }
 
     await writeFile(thumbnail1Path, '')
@@ -91,8 +88,7 @@ describe('Test regenerate thumbnails script', function () {
   it('Should regenerate local thumbnails from the CLI', async function () {
     this.timeout(15000)
 
-    const env = getEnvCli(servers[0])
-    await execCLI(`${env} npm run regenerate-thumbnails`)
+    await servers[0].cli.execWithEnv(`npm run regenerate-thumbnails`)
   })
 
   it('Should have generated new thumbnail files', async function () {

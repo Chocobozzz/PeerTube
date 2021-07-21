@@ -26,12 +26,12 @@ export class AdminComponent implements OnInit {
       label: $localize`Federation`,
       children: [
         {
-          label: $localize`Instances you follow`,
+          label: $localize`Following`,
           routerLink: '/admin/follows/following-list',
           iconName: 'following'
         },
         {
-          label: $localize`Instances following you`,
+          label: $localize`Followers`,
           routerLink: '/admin/follows/followers-list',
           iconName: 'follower'
         },

@@ -2,32 +2,13 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import {
-  addVideoToBlacklist,
-  askResetPassword,
-  askSendVerifyEmail,
-  blockUser,
-  cleanupTests,
-  createUser,
-  flushAndRunServer,
-  removeVideoFromBlacklist,
-  reportAbuse,
-  resetPassword,
-  ServerInfo,
-  setAccessTokensToServers,
-  unblockUser,
-  uploadVideo,
-  userLogin,
-  verifyEmail
-} from '../../../../shared/extra-utils'
-import { MockSmtpServer } from '../../../../shared/extra-utils/miscs/email'
-import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { cleanupTests, createSingleServer, MockSmtpServer, PeerTubeServer, setAccessTokensToServers, waitJobs } from '@shared/extra-utils'
+import { HttpStatusCode } from '@shared/models'
 
 const expect = chai.expect
 
 describe('Test emails', function () {
-  let server: ServerInfo
+  let server: PeerTubeServer
   let userId: number
   let userId2: number
   let userAccessToken: string
@@ -58,31 +39,29 @@ describe('Test emails', function () {
         port: emailPort
       }
     }
-    server = await flushAndRunServer(1, overrideConfig)
+    server = await createSingleServer(1, overrideConfig)
     await setAccessTokensToServers([ server ])
 
     {
-      const res = await createUser({ url: server.url, accessToken: server.accessToken, username: user.username, password: user.password })
-      userId = res.body.user.id
+      const created = await server.users.create({ username: user.username, password: user.password })
+      userId = created.id
 
-      userAccessToken = await userLogin(server, user)
+      userAccessToken = await server.login.getAccessToken(user)
     }
 
     {
-      const attributes = {
-        name: 'my super user video'
-      }
-      const res = await uploadVideo(server.url, userAccessToken, attributes)
-      videoUserUUID = res.body.video.uuid
+      const attributes = { name: 'my super user video' }
+      const { uuid } = await server.videos.upload({ token: userAccessToken, attributes })
+      videoUserUUID = uuid
     }
 
     {
       const attributes = {
         name: 'my super name'
       }
-      const res = await uploadVideo(server.url, server.accessToken, attributes)
-      videoUUID = res.body.video.uuid
-      videoId = res.body.video.id
+      const { uuid, id } = await server.videos.upload({ attributes })
+      videoUUID = uuid
+      videoId = id
     }
   })
 
@@ -91,7 +70,7 @@ describe('Test emails', function () {
     it('Should ask to reset the password', async function () {
       this.timeout(10000)
 
-      await askResetPassword(server.url, 'user_1@example.com')
+      await server.users.askResetPassword({ email: 'user_1@example.com' })
 
       await waitJobs(server)
       expect(emails).to.have.lengthOf(1)
@@ -117,34 +96,40 @@ describe('Test emails', function () {
     })
 
     it('Should not reset the password with an invalid verification string', async function () {
-      await resetPassword(server.url, userId, verificationString + 'b', 'super_password2', HttpStatusCode.FORBIDDEN_403)
+      await server.users.resetPassword({
+        userId,
+        verificationString: verificationString + 'b',
+        password: 'super_password2',
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
     })
 
     it('Should reset the password', async function () {
-      await resetPassword(server.url, userId, verificationString, 'super_password2')
+      await server.users.resetPassword({ userId, verificationString, password: 'super_password2' })
     })
 
     it('Should not reset the password with the same verification string', async function () {
-      await resetPassword(server.url, userId, verificationString, 'super_password3', HttpStatusCode.FORBIDDEN_403)
+      await server.users.resetPassword({
+        userId,
+        verificationString,
+        password: 'super_password3',
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
     })
 
     it('Should login with this new password', async function () {
       user.password = 'super_password2'
 
-      await userLogin(server, user)
+      await server.login.getAccessToken(user)
     })
   })
 
   describe('When creating a user without password', function () {
+
     it('Should send a create password email', async function () {
       this.timeout(10000)
 
-      await createUser({
-        url: server.url,
-        accessToken: server.accessToken,
-        username: 'create_password',
-        password: ''
-      })
+      await server.users.create({ username: 'create_password', password: '' })
 
       await waitJobs(server)
       expect(emails).to.have.lengthOf(2)
@@ -170,15 +155,24 @@ describe('Test emails', function () {
     })
 
     it('Should not reset the password with an invalid verification string', async function () {
-      await resetPassword(server.url, userId2, verificationString2 + 'c', 'newly_created_password', HttpStatusCode.FORBIDDEN_403)
+      await server.users.resetPassword({
+        userId: userId2,
+        verificationString: verificationString2 + 'c',
+        password: 'newly_created_password',
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
     })
 
     it('Should reset the password', async function () {
-      await resetPassword(server.url, userId2, verificationString2, 'newly_created_password')
+      await server.users.resetPassword({
+        userId: userId2,
+        verificationString: verificationString2,
+        password: 'newly_created_password'
+      })
     })
 
     it('Should login with this new password', async function () {
-      await userLogin(server, {
+      await server.login.getAccessToken({
         username: 'create_password',
         password: 'newly_created_password'
       })
@@ -190,7 +184,7 @@ describe('Test emails', function () {
       this.timeout(10000)
 
       const reason = 'my super bad reason'
-      await reportAbuse({ url: server.url, token: server.accessToken, videoId, reason })
+      await server.abuses.report({ videoId, reason })
 
       await waitJobs(server)
       expect(emails).to.have.lengthOf(3)
@@ -211,7 +205,7 @@ describe('Test emails', function () {
       this.timeout(10000)
 
       const reason = 'my super bad reason'
-      await blockUser(server.url, userId, server.accessToken, HttpStatusCode.NO_CONTENT_204, reason)
+      await server.users.banUser({ userId, reason })
 
       await waitJobs(server)
       expect(emails).to.have.lengthOf(4)
@@ -229,7 +223,7 @@ describe('Test emails', function () {
     it('Should send the notification email when unblocking a user', async function () {
       this.timeout(10000)
 
-      await unblockUser(server.url, userId, server.accessToken, HttpStatusCode.NO_CONTENT_204)
+      await server.users.unbanUser({ userId })
 
       await waitJobs(server)
       expect(emails).to.have.lengthOf(5)
@@ -249,7 +243,7 @@ describe('Test emails', function () {
       this.timeout(10000)
 
       const reason = 'my super reason'
-      await addVideoToBlacklist(server.url, server.accessToken, videoUserUUID, reason)
+      await server.blacklist.add({ videoId: videoUserUUID, reason })
 
       await waitJobs(server)
       expect(emails).to.have.lengthOf(6)
@@ -267,7 +261,7 @@ describe('Test emails', function () {
     it('Should send the notification email', async function () {
       this.timeout(10000)
 
-      await removeVideoFromBlacklist(server.url, server.accessToken, videoUserUUID)
+      await server.blacklist.remove({ videoId: videoUserUUID })
 
       await waitJobs(server)
       expect(emails).to.have.lengthOf(7)
@@ -292,7 +286,7 @@ describe('Test emails', function () {
     it('Should ask to send the verification email', async function () {
       this.timeout(10000)
 
-      await askSendVerifyEmail(server.url, 'user_1@example.com')
+      await server.users.askSendVerifyEmail({ email: 'user_1@example.com' })
 
       await waitJobs(server)
       expect(emails).to.have.lengthOf(8)
@@ -318,11 +312,16 @@ describe('Test emails', function () {
     })
 
     it('Should not verify the email with an invalid verification string', async function () {
-      await verifyEmail(server.url, userId, verificationString + 'b', false, HttpStatusCode.FORBIDDEN_403)
+      await server.users.verifyEmail({
+        userId,
+        verificationString: verificationString + 'b',
+        isPendingEmail: false,
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
     })
 
     it('Should verify the email', async function () {
-      await verifyEmail(server.url, userId, verificationString)
+      await server.users.verifyEmail({ userId, verificationString })
     })
   })
 

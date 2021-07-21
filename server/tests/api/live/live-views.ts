@@ -3,20 +3,15 @@
 import 'mocha'
 import * as chai from 'chai'
 import { FfmpegCommand } from 'fluent-ffmpeg'
-import { VideoDetails, VideoPrivacy } from '@shared/models'
+import { VideoPrivacy } from '@shared/models'
 import {
   cleanupTests,
-  createLive,
+  createMultipleServers,
   doubleFollow,
-  flushAndRunMultipleServers,
-  getVideo,
-  sendRTMPStreamInVideo,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel,
   stopFfmpeg,
-  updateCustomSubConfig,
-  viewVideo,
   wait,
   waitJobs,
   waitUntilLivePublishedOnAllServers
@@ -25,23 +20,25 @@ import {
 const expect = chai.expect
 
 describe('Test live', function () {
-  let servers: ServerInfo[] = []
+  let servers: PeerTubeServer[] = []
 
   before(async function () {
     this.timeout(120000)
 
-    servers = await flushAndRunMultipleServers(2)
+    servers = await createMultipleServers(2)
 
     // Get the access tokens
     await setAccessTokensToServers(servers)
     await setDefaultVideoChannel(servers)
 
-    await updateCustomSubConfig(servers[0].url, servers[0].accessToken, {
-      live: {
-        enabled: true,
-        allowReplay: true,
-        transcoding: {
-          enabled: false
+    await servers[0].config.updateCustomSubConfig({
+      newConfig: {
+        live: {
+          enabled: true,
+          allowReplay: true,
+          transcoding: {
+            enabled: false
+          }
         }
       }
     })
@@ -56,9 +53,7 @@ describe('Test live', function () {
 
     async function countViews (expected: number) {
       for (const server of servers) {
-        const res = await getVideo(server.url, liveVideoId)
-        const video: VideoDetails = res.body
-
+        const video = await server.videos.get({ id: liveVideoId })
         expect(video.views).to.equal(expected)
       }
     }
@@ -68,14 +63,14 @@ describe('Test live', function () {
 
       const liveAttributes = {
         name: 'live video',
-        channelId: servers[0].videoChannel.id,
+        channelId: servers[0].store.channel.id,
         privacy: VideoPrivacy.PUBLIC
       }
 
-      const res = await createLive(servers[0].url, servers[0].accessToken, liveAttributes)
-      liveVideoId = res.body.video.uuid
+      const live = await servers[0].live.create({ fields: liveAttributes })
+      liveVideoId = live.uuid
 
-      command = await sendRTMPStreamInVideo(servers[0].url, servers[0].accessToken, liveVideoId)
+      command = await servers[0].live.sendRTMPStreamInVideo({ videoId: liveVideoId })
       await waitUntilLivePublishedOnAllServers(servers, liveVideoId)
       await waitJobs(servers)
     })
@@ -87,8 +82,8 @@ describe('Test live', function () {
     it('Should view a live twice and display 1 view', async function () {
       this.timeout(30000)
 
-      await viewVideo(servers[0].url, liveVideoId)
-      await viewVideo(servers[0].url, liveVideoId)
+      await servers[0].videos.view({ id: liveVideoId })
+      await servers[0].videos.view({ id: liveVideoId })
 
       await wait(7000)
 
@@ -109,9 +104,9 @@ describe('Test live', function () {
     it('Should view a live on a remote and on local and display 2 views', async function () {
       this.timeout(30000)
 
-      await viewVideo(servers[0].url, liveVideoId)
-      await viewVideo(servers[1].url, liveVideoId)
-      await viewVideo(servers[1].url, liveVideoId)
+      await servers[0].videos.view({ id: liveVideoId })
+      await servers[1].videos.view({ id: liveVideoId })
+      await servers[1].videos.view({ id: liveVideoId })
 
       await wait(7000)
       await waitJobs(servers)

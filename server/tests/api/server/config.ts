@@ -2,31 +2,20 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { About } from '../../../../shared/models/server/about.model'
-import { CustomConfig } from '../../../../shared/models/server/custom-config.model'
 import {
   cleanupTests,
-  deleteCustomConfig,
-  flushAndRunServer,
-  getAbout,
-  getConfig,
-  getCustomConfig,
+  createSingleServer,
   killallServers,
   makeGetRequest,
   parallelTests,
-  registerUser,
-  reRunServer,
-  ServerInfo,
-  setAccessTokensToServers,
-  updateCustomConfig,
-  uploadVideo
-} from '../../../../shared/extra-utils'
-import { ServerConfig } from '../../../../shared/models'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+  PeerTubeServer,
+  setAccessTokensToServers
+} from '@shared/extra-utils'
+import { CustomConfig, HttpStatusCode } from '@shared/models'
 
 const expect = chai.expect
 
-function checkInitialConfig (server: ServerInfo, data: CustomConfig) {
+function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
   expect(data.instance.name).to.equal('PeerTube')
   expect(data.instance.shortDescription).to.equal(
     'PeerTube, an ActivityPub-federated video streaming platform using P2P directly in your web browser.'
@@ -213,18 +202,17 @@ function checkUpdatedConfig (data: CustomConfig) {
 }
 
 describe('Test config', function () {
-  let server = null
+  let server: PeerTubeServer = null
 
   before(async function () {
     this.timeout(30000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
     await setAccessTokensToServers([ server ])
   })
 
   it('Should have a correct config on a server with registration enabled', async function () {
-    const res = await getConfig(server.url)
-    const data: ServerConfig = res.body
+    const data = await server.config.getConfig()
 
     expect(data.signup.allowed).to.be.true
   })
@@ -233,35 +221,32 @@ describe('Test config', function () {
     this.timeout(5000)
 
     await Promise.all([
-      registerUser(server.url, 'user1', 'super password'),
-      registerUser(server.url, 'user2', 'super password'),
-      registerUser(server.url, 'user3', 'super password')
+      server.users.register({ username: 'user1' }),
+      server.users.register({ username: 'user2' }),
+      server.users.register({ username: 'user3' })
     ])
 
-    const res = await getConfig(server.url)
-    const data: ServerConfig = res.body
+    const data = await server.config.getConfig()
 
     expect(data.signup.allowed).to.be.false
   })
 
   it('Should have the correct video allowed extensions', async function () {
-    const res = await getConfig(server.url)
-    const data: ServerConfig = res.body
+    const data = await server.config.getConfig()
 
     expect(data.video.file.extensions).to.have.lengthOf(3)
     expect(data.video.file.extensions).to.contain('.mp4')
     expect(data.video.file.extensions).to.contain('.webm')
     expect(data.video.file.extensions).to.contain('.ogv')
 
-    await uploadVideo(server.url, server.accessToken, { fixture: 'video_short.mkv' }, HttpStatusCode.UNSUPPORTED_MEDIA_TYPE_415)
-    await uploadVideo(server.url, server.accessToken, { fixture: 'sample.ogg' }, HttpStatusCode.UNSUPPORTED_MEDIA_TYPE_415)
+    await server.videos.upload({ attributes: { fixture: 'video_short.mkv' }, expectedStatus: HttpStatusCode.UNSUPPORTED_MEDIA_TYPE_415 })
+    await server.videos.upload({ attributes: { fixture: 'sample.ogg' }, expectedStatus: HttpStatusCode.UNSUPPORTED_MEDIA_TYPE_415 })
 
     expect(data.contactForm.enabled).to.be.true
   })
 
   it('Should get the customized configuration', async function () {
-    const res = await getCustomConfig(server.url, server.accessToken)
-    const data = res.body as CustomConfig
+    const data = await server.config.getCustomConfig()
 
     checkInitialConfig(server, data)
   })
@@ -438,19 +423,16 @@ describe('Test config', function () {
         }
       }
     }
-    await updateCustomConfig(server.url, server.accessToken, newCustomConfig)
+    await server.config.updateCustomConfig({ newCustomConfig })
 
-    const res = await getCustomConfig(server.url, server.accessToken)
-    const data = res.body
-
+    const data = await server.config.getCustomConfig()
     checkUpdatedConfig(data)
   })
 
   it('Should have the correct updated video allowed extensions', async function () {
     this.timeout(10000)
 
-    const res = await getConfig(server.url)
-    const data: ServerConfig = res.body
+    const data = await server.config.getConfig()
 
     expect(data.video.file.extensions).to.have.length.above(4)
     expect(data.video.file.extensions).to.contain('.mp4')
@@ -463,26 +445,24 @@ describe('Test config', function () {
     expect(data.video.file.extensions).to.contain('.ogg')
     expect(data.video.file.extensions).to.contain('.flac')
 
-    await uploadVideo(server.url, server.accessToken, { fixture: 'video_short.mkv' }, HttpStatusCode.OK_200)
-    await uploadVideo(server.url, server.accessToken, { fixture: 'sample.ogg' }, HttpStatusCode.OK_200)
+    await server.videos.upload({ attributes: { fixture: 'video_short.mkv' }, expectedStatus: HttpStatusCode.OK_200 })
+    await server.videos.upload({ attributes: { fixture: 'sample.ogg' }, expectedStatus: HttpStatusCode.OK_200 })
   })
 
   it('Should have the configuration updated after a restart', async function () {
     this.timeout(10000)
 
-    killallServers([ server ])
+    await killallServers([ server ])
 
-    await reRunServer(server)
+    await server.run()
 
-    const res = await getCustomConfig(server.url, server.accessToken)
-    const data = res.body
+    const data = await server.config.getCustomConfig()
 
     checkUpdatedConfig(data)
   })
 
   it('Should fetch the about information', async function () {
-    const res = await getAbout(server.url)
-    const data: About = res.body
+    const data = await server.config.getAbout()
 
     expect(data.instance.name).to.equal('PeerTube updated')
     expect(data.instance.shortDescription).to.equal('my short description')
@@ -504,11 +484,9 @@ describe('Test config', function () {
   it('Should remove the custom configuration', async function () {
     this.timeout(10000)
 
-    await deleteCustomConfig(server.url, server.accessToken)
+    await server.config.deleteCustomConfig()
 
-    const res = await getCustomConfig(server.url, server.accessToken)
-    const data = res.body
-
+    const data = await server.config.getCustomConfig()
     checkInitialConfig(server, data)
   })
 
@@ -519,26 +497,26 @@ describe('Test config', function () {
       const res = await makeGetRequest({
         url: server.url,
         path: '/api/v1/config',
-        statusCodeExpected: 200
+        expectedStatus: 200
       })
 
       expect(res.headers['x-frame-options']).to.exist
     }
 
-    killallServers([ server ])
+    await killallServers([ server ])
 
     const config = {
       security: {
         frameguard: { enabled: false }
       }
     }
-    server = await reRunServer(server, config)
+    await server.run(config)
 
     {
       const res = await makeGetRequest({
         url: server.url,
         path: '/api/v1/config',
-        statusCodeExpected: 200
+        expectedStatus: 200
       })
 
       expect(res.headers['x-frame-options']).to.not.exist
