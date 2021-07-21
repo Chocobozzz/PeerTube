@@ -159,8 +159,8 @@ $variables: (
 
 $zindex: (
   miniature       :    10,
-  privacymsg      :    20,
   sub-menu        : 12500,
+  overlay         : 12550,
   menu            : 12600,
   search-typeahead: 12650,
   popover         : 13000,
@@ -169,6 +169,7 @@ $zindex: (
   modal           : 16000,
   dropdown        : 17000,
   help-popover    : 17000,
+  privacymsg      : 17500,
   header          : 17500,
   notification    : 18000,
   hotkeys         : 19000
