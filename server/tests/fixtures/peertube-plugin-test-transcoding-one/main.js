@@ -18,12 +18,12 @@ async function register ({ transcodingManager }) {
       const builder = (options) => {
         return {
           outputOptions: [
-            '-r:' + options.streamNum + ' 5'
+            '-r:' + options.streamNum + ' 50'
           ]
         }
       }
 
-      transcodingManager.addLiveProfile('libx264', 'low-live', builder)
+      transcodingManager.addLiveProfile('libx264', 'high-live', builder)
     }
   }
 
@@ -45,7 +45,7 @@ async function register ({ transcodingManager }) {
       const builder = () => {
         return {
           inputOptions: [
-            '-r 5'
+            '-r 50'
           ]
         }
       }
@@ -81,7 +81,6 @@ async function register ({ transcodingManager }) {
     }
   }
 }
-
 
 async function unregister () {
   return

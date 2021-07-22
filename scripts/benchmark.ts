@@ -1,10 +1,10 @@
+import { registerTSPaths } from '../server/helpers/register-ts-paths'
+registerTSPaths()
+
 import * as autocannon from 'autocannon'
 import { writeJson } from 'fs-extra'
 import { createSingleServer, killallServers, PeerTubeServer, setAccessTokensToServers } from '@shared/extra-utils'
 import { Video, VideoPrivacy } from '@shared/models'
-import { registerTSPaths } from '../server/helpers/register-ts-paths'
-
-registerTSPaths()
 
 let server: PeerTubeServer
 let video: Video

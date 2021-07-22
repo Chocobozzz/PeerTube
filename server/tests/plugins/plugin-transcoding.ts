@@ -110,119 +110,125 @@ describe('Test transcoding plugins', function () {
       const config = await server.config.getConfig()
 
       expect(config.transcoding.availableProfiles).to.have.members([ 'default', 'low-vod', 'input-options-vod', 'bad-scale-vod' ])
-      expect(config.live.transcoding.availableProfiles).to.have.members([ 'default', 'low-live', 'input-options-live', 'bad-scale-live' ])
+      expect(config.live.transcoding.availableProfiles).to.have.members([ 'default', 'high-live', 'input-options-live', 'bad-scale-live' ])
     })
 
-    it('Should not use the plugin profile if not chosen by the admin', async function () {
-      this.timeout(240000)
+    describe('VOD', function () {
 
-      const videoUUID = (await server.videos.quickUpload({ name: 'video' })).uuid
-      await waitJobs([ server ])
+      it('Should not use the plugin profile if not chosen by the admin', async function () {
+        this.timeout(240000)
 
-      await checkVideoFPS(videoUUID, 'above', 20)
+        const videoUUID = (await server.videos.quickUpload({ name: 'video' })).uuid
+        await waitJobs([ server ])
+
+        await checkVideoFPS(videoUUID, 'above', 20)
+      })
+
+      it('Should use the vod profile', async function () {
+        this.timeout(240000)
+
+        await updateConf(server, 'low-vod', 'default')
+
+        const videoUUID = (await server.videos.quickUpload({ name: 'video' })).uuid
+        await waitJobs([ server ])
+
+        await checkVideoFPS(videoUUID, 'below', 12)
+      })
+
+      it('Should apply input options in vod profile', async function () {
+        this.timeout(240000)
+
+        await updateConf(server, 'input-options-vod', 'default')
+
+        const videoUUID = (await server.videos.quickUpload({ name: 'video' })).uuid
+        await waitJobs([ server ])
+
+        await checkVideoFPS(videoUUID, 'below', 6)
+      })
+
+      it('Should apply the scale filter in vod profile', async function () {
+        this.timeout(240000)
+
+        await updateConf(server, 'bad-scale-vod', 'default')
+
+        const videoUUID = (await server.videos.quickUpload({ name: 'video' })).uuid
+        await waitJobs([ server ])
+
+        // Transcoding failed
+        const video = await server.videos.get({ id: videoUUID })
+        expect(video.files).to.have.lengthOf(1)
+        expect(video.streamingPlaylists).to.have.lengthOf(0)
+      })
     })
 
-    it('Should use the vod profile', async function () {
-      this.timeout(240000)
+    describe('Live', function () {
 
-      await updateConf(server, 'low-vod', 'default')
+      it('Should not use the plugin profile if not chosen by the admin', async function () {
+        this.timeout(240000)
 
-      const videoUUID = (await server.videos.quickUpload({ name: 'video' })).uuid
-      await waitJobs([ server ])
+        const liveVideoId = await createLiveWrapper(server)
 
-      await checkVideoFPS(videoUUID, 'below', 12)
-    })
+        await server.live.sendRTMPStreamInVideo({ videoId: liveVideoId, fixtureName: 'video_very_short_240p.mp4' })
+        await server.live.waitUntilPublished({ videoId: liveVideoId })
+        await waitJobs([ server ])
 
-    it('Should apply input options in vod profile', async function () {
-      this.timeout(240000)
+        await checkLiveFPS(liveVideoId, 'above', 20)
+      })
 
-      await updateConf(server, 'input-options-vod', 'default')
+      it('Should use the live profile', async function () {
+        this.timeout(240000)
 
-      const videoUUID = (await server.videos.quickUpload({ name: 'video' })).uuid
-      await waitJobs([ server ])
+        await updateConf(server, 'low-vod', 'high-live')
 
-      await checkVideoFPS(videoUUID, 'below', 6)
-    })
+        const liveVideoId = await createLiveWrapper(server)
 
-    it('Should apply the scale filter in vod profile', async function () {
-      this.timeout(240000)
+        await server.live.sendRTMPStreamInVideo({ videoId: liveVideoId, fixtureName: 'video_very_short_240p.mp4' })
+        await server.live.waitUntilPublished({ videoId: liveVideoId })
+        await waitJobs([ server ])
 
-      await updateConf(server, 'bad-scale-vod', 'default')
+        await checkLiveFPS(liveVideoId, 'above', 45)
+      })
 
-      const videoUUID = (await server.videos.quickUpload({ name: 'video' })).uuid
-      await waitJobs([ server ])
+      it('Should apply the input options on live profile', async function () {
+        this.timeout(240000)
 
-      // Transcoding failed
-      const video = await server.videos.get({ id: videoUUID })
-      expect(video.files).to.have.lengthOf(1)
-      expect(video.streamingPlaylists).to.have.lengthOf(0)
-    })
+        await updateConf(server, 'low-vod', 'input-options-live')
 
-    it('Should not use the plugin profile if not chosen by the admin', async function () {
-      this.timeout(240000)
+        const liveVideoId = await createLiveWrapper(server)
 
-      const liveVideoId = await createLiveWrapper(server)
+        await server.live.sendRTMPStreamInVideo({ videoId: liveVideoId, fixtureName: 'video_very_short_240p.mp4' })
+        await server.live.waitUntilPublished({ videoId: liveVideoId })
+        await waitJobs([ server ])
 
-      await server.live.sendRTMPStreamInVideo({ videoId: liveVideoId, fixtureName: 'video_short2.webm' })
-      await server.live.waitUntilPublished({ videoId: liveVideoId })
-      await waitJobs([ server ])
+        await checkLiveFPS(liveVideoId, 'above', 45)
+      })
 
-      await checkLiveFPS(liveVideoId, 'above', 20)
-    })
+      it('Should apply the scale filter name on live profile', async function () {
+        this.timeout(240000)
 
-    it('Should use the live profile', async function () {
-      this.timeout(240000)
+        await updateConf(server, 'low-vod', 'bad-scale-live')
 
-      await updateConf(server, 'low-vod', 'low-live')
+        const liveVideoId = await createLiveWrapper(server)
 
-      const liveVideoId = await createLiveWrapper(server)
+        const command = await server.live.sendRTMPStreamInVideo({ videoId: liveVideoId, fixtureName: 'video_very_short_240p.mp4' })
+        await testFfmpegStreamError(command, true)
+      })
 
-      await server.live.sendRTMPStreamInVideo({ videoId: liveVideoId, fixtureName: 'video_short2.webm' })
-      await server.live.waitUntilPublished({ videoId: liveVideoId })
-      await waitJobs([ server ])
+      it('Should default to the default profile if the specified profile does not exist', async function () {
+        this.timeout(240000)
 
-      await checkLiveFPS(liveVideoId, 'below', 12)
-    })
+        await server.plugins.uninstall({ npmName: 'peertube-plugin-test-transcoding-one' })
 
-    it('Should apply the input options on live profile', async function () {
-      this.timeout(240000)
+        const config = await server.config.getConfig()
 
-      await updateConf(server, 'low-vod', 'input-options-live')
+        expect(config.transcoding.availableProfiles).to.deep.equal([ 'default' ])
+        expect(config.live.transcoding.availableProfiles).to.deep.equal([ 'default' ])
 
-      const liveVideoId = await createLiveWrapper(server)
+        const videoUUID = (await server.videos.quickUpload({ name: 'video', fixture: 'video_very_short_240p.mp4' })).uuid
+        await waitJobs([ server ])
 
-      await server.live.sendRTMPStreamInVideo({ videoId: liveVideoId, fixtureName: 'video_short2.webm' })
-      await server.live.waitUntilPublished({ videoId: liveVideoId })
-      await waitJobs([ server ])
-
-      await checkLiveFPS(liveVideoId, 'below', 6)
-    })
-
-    it('Should apply the scale filter name on live profile', async function () {
-      this.timeout(240000)
-
-      await updateConf(server, 'low-vod', 'bad-scale-live')
-
-      const liveVideoId = await createLiveWrapper(server)
-
-      const command = await server.live.sendRTMPStreamInVideo({ videoId: liveVideoId, fixtureName: 'video_short2.webm' })
-      await testFfmpegStreamError(command, true)
-    })
-
-    it('Should default to the default profile if the specified profile does not exist', async function () {
-      this.timeout(240000)
-
-      await server.plugins.uninstall({ npmName: 'peertube-plugin-test-transcoding-one' })
-
-      const config = await server.config.getConfig()
-
-      expect(config.transcoding.availableProfiles).to.deep.equal([ 'default' ])
-      expect(config.live.transcoding.availableProfiles).to.deep.equal([ 'default' ])
-
-      const videoUUID = (await server.videos.quickUpload({ name: 'video' })).uuid
-      await waitJobs([ server ])
-
-      await checkVideoFPS(videoUUID, 'above', 20)
+        await checkVideoFPS(videoUUID, 'above', 20)
+      })
     })
 
   })
@@ -238,7 +244,7 @@ describe('Test transcoding plugins', function () {
     it('Should use the new vod encoders', async function () {
       this.timeout(240000)
 
-      const videoUUID = (await server.videos.quickUpload({ name: 'video', fixture: 'video_short_240p.mp4' })).uuid
+      const videoUUID = (await server.videos.quickUpload({ name: 'video', fixture: 'video_very_short_240p.mp4' })).uuid
       await waitJobs([ server ])
 
       const path = server.servers.buildDirectory(join('videos', videoUUID + '-240.mp4'))
