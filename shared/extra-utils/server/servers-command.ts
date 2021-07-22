@@ -3,8 +3,7 @@ import { copy, ensureDir, readFile, remove } from 'fs-extra'
 import { join } from 'path'
 import { root } from '@server/helpers/core-utils'
 import { HttpStatusCode } from '@shared/models'
-import { getFileSize } from '@uploadx/core'
-import { isGithubCI, wait } from '../miscs'
+import { getFileSize, isGithubCI, wait } from '../miscs'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
 
 export class ServersCommand extends AbstractCommand {

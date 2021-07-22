@@ -19,9 +19,9 @@ import { LiveSegmentShaStore } from './live-segment-sha-store'
 import { cleanupLive } from './live-utils'
 import { MuxingSession } from './shared'
 
-const NodeRtmpSession = require('node-media-server/node_rtmp_session')
-const context = require('node-media-server/node_core_ctx')
-const nodeMediaServerLogger = require('node-media-server/node_core_logger')
+const NodeRtmpSession = require('node-media-server/src/node_rtmp_session')
+const context = require('node-media-server/src/node_core_ctx')
+const nodeMediaServerLogger = require('node-media-server/src/node_core_logger')
 
 // Disable node media server logs
 nodeMediaServerLogger.setLogType(0)
