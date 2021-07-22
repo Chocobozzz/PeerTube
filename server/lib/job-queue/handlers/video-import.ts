@@ -8,7 +8,7 @@ import { Hooks } from '@server/lib/plugins/hooks'
 import { ServerConfigManager } from '@server/lib/server-config-manager'
 import { isAbleToUploadVideo } from '@server/lib/user'
 import { addOptimizeOrMergeAudioJob } from '@server/lib/video'
-import { generateVideoFilename, getVideoFilePath } from '@server/lib/video-paths'
+import { generateWebTorrentVideoFilename, getVideoFilePath } from '@server/lib/video-paths'
 import { ThumbnailModel } from '@server/models/video/thumbnail'
 import { MVideoImportDefault, MVideoImportDefaultFiles, MVideoImportVideo } from '@server/types/models/video/video-import'
 import {
@@ -124,7 +124,7 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
       extname: fileExt,
       resolution: videoFileResolution,
       size: stats.size,
-      filename: generateVideoFilename(videoImport.Video, false, videoFileResolution, fileExt),
+      filename: generateWebTorrentVideoFilename(videoFileResolution, fileExt),
       fps,
       videoId: videoImport.videoId
     }

@@ -3,29 +3,20 @@ import { extractVideo } from '@server/helpers/video'
 import { CONFIG } from '@server/initializers/config'
 import { HLS_REDUNDANCY_DIRECTORY, HLS_STREAMING_PLAYLIST_DIRECTORY, STATIC_PATHS, WEBSERVER } from '@server/initializers/constants'
 import { isStreamingPlaylist, MStreamingPlaylist, MStreamingPlaylistVideo, MVideo, MVideoFile, MVideoUUID } from '@server/types/models'
+import { buildUUID } from '@server/helpers/uuid'
 
 // ################## Video file name ##################
 
-function generateVideoFilename (videoOrPlaylist: MVideo | MStreamingPlaylistVideo, isHls: boolean, resolution: number, extname: string) {
-  const video = extractVideo(videoOrPlaylist)
+function generateWebTorrentVideoFilename (resolution: number, extname: string) {
+  const uuid = buildUUID()
 
-  // FIXME: use a generated uuid instead, that will break compatibility with PeerTube < 3.1
-  // const uuid = uuidv4()
-  const uuid = video.uuid
-
-  if (isHls) {
-    return generateVideoStreamingPlaylistName(uuid, resolution)
-  }
-
-  return generateWebTorrentVideoName(uuid, resolution, extname)
-}
-
-function generateVideoStreamingPlaylistName (uuid: string, resolution: number) {
-  return `${uuid}-${resolution}-fragmented.mp4`
-}
-
-function generateWebTorrentVideoName (uuid: string, resolution: number, extname: string) {
   return uuid + '-' + resolution + extname
+}
+
+function generateHLSVideoFilename (resolution: number) {
+  const uuid = buildUUID()
+
+  return `${uuid}-${resolution}-fragmented.mp4`
 }
 
 function getVideoFilePath (videoOrPlaylist: MVideo | MStreamingPlaylistVideo, videoFile: MVideoFile, isRedundancy = false) {
@@ -66,12 +57,8 @@ function getHLSDirectory (video: MVideoUUID, isRedundancy = false) {
 // ################## Torrents ##################
 
 function generateTorrentFileName (videoOrPlaylist: MVideo | MStreamingPlaylistVideo, resolution: number) {
-  const video = extractVideo(videoOrPlaylist)
   const extension = '.torrent'
-
-  // FIXME: use a generated uuid instead, that will break compatibility with PeerTube < 3.1
-  // const uuid = uuidv4()
-  const uuid = video.uuid
+  const uuid = buildUUID()
 
   if (isStreamingPlaylist(videoOrPlaylist)) {
     return `${uuid}-${resolution}-${videoOrPlaylist.getStringType()}${extension}`
@@ -95,9 +82,9 @@ function getLocalVideoFileMetadataUrl (video: MVideoUUID, videoFile: MVideoFile)
 // ---------------------------------------------------------------------------
 
 export {
-  generateVideoStreamingPlaylistName,
-  generateWebTorrentVideoName,
-  generateVideoFilename,
+  generateHLSVideoFilename,
+  generateWebTorrentVideoFilename,
+
   getVideoFilePath,
 
   generateTorrentFileName,

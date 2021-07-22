@@ -10,18 +10,21 @@ import {
   createMultipleServers,
   doubleFollow,
   PeerTubeServer,
+  saveVideoInServers,
   setAccessTokensToServers,
   testImage,
   waitJobs
 } from '@shared/extra-utils'
-import { User } from '@shared/models'
+import { MyUser } from '@shared/models'
 
 const expect = chai.expect
 
 describe('Test users with multiple servers', function () {
   let servers: PeerTubeServer[] = []
-  let user: User
+
+  let user: MyUser
   let userId: number
+
   let videoUUID: string
   let userAccessToken: string
   let userAvatarFilename: string
@@ -45,18 +48,17 @@ describe('Test users with multiple servers', function () {
     await servers[0].videos.upload()
 
     {
-      const user = {
-        username: 'user1',
-        password: 'password'
-      }
-      const created = await servers[0].users.create(user)
+      const username = 'user1'
+      const created = await servers[0].users.create({ username })
       userId = created.id
-      userAccessToken = await servers[0].login.getAccessToken(user)
+      userAccessToken = await servers[0].login.getAccessToken(username)
     }
 
     {
       const { uuid } = await servers[0].videos.upload({ token: userAccessToken })
       videoUUID = uuid
+
+      await saveVideoInServers(servers, videoUUID)
     }
 
     await waitJobs(servers)
@@ -195,7 +197,7 @@ describe('Test users with multiple servers', function () {
 
   it('Should not have video files', async () => {
     for (const server of servers) {
-      await checkVideoFilesWereRemoved(videoUUID, server)
+      await checkVideoFilesWereRemoved({ server, video: server.store.videoDetails })
     }
   })
 

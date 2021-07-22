@@ -2,7 +2,6 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { join } from 'path'
 import { getAudioStream, getVideoStreamSize } from '@server/helpers/ffprobe-utils'
 import { cleanupTests, createMultipleServers, doubleFollow, PeerTubeServer, setAccessTokensToServers, waitJobs } from '@shared/extra-utils'
 
@@ -11,6 +10,8 @@ const expect = chai.expect
 describe('Test audio only video transcoding', function () {
   let servers: PeerTubeServer[] = []
   let videoUUID: string
+  let webtorrentAudioFileUrl: string
+  let fragmentedAudioFileUrl: string
 
   before(async function () {
     this.timeout(120000)
@@ -63,13 +64,18 @@ describe('Test audio only video transcoding', function () {
         expect(files[1].resolution.id).to.equal(240)
         expect(files[2].resolution.id).to.equal(0)
       }
+
+      if (server.serverNumber === 1) {
+        webtorrentAudioFileUrl = video.files[2].fileUrl
+        fragmentedAudioFileUrl = video.streamingPlaylists[0].files[2].fileUrl
+      }
     }
   })
 
   it('0p transcoded video should not have video', async function () {
     const paths = [
-      servers[0].servers.buildDirectory(join('videos', videoUUID + '-0.mp4')),
-      servers[0].servers.buildDirectory(join('streaming-playlists', 'hls', videoUUID, videoUUID + '-0-fragmented.mp4'))
+      servers[0].servers.buildWebTorrentFilePath(webtorrentAudioFileUrl),
+      servers[0].servers.buildFragmentedFilePath(videoUUID, fragmentedAudioFileUrl)
     ]
 
     for (const path of paths) {

@@ -99,8 +99,8 @@ describe('Test resumable upload', function () {
     this.timeout(30000)
 
     server = await createSingleServer(1)
-    await setAccessTokensToServers([server])
-    await setDefaultVideoChannel([server])
+    await setAccessTokensToServers([ server ])
+    await setDefaultVideoChannel([ server ])
 
     const body = await server.users.getMyInfo()
     rootId = body.id
@@ -170,13 +170,13 @@ describe('Test resumable upload', function () {
 
       const size = 1000
 
-      const contentRangeBuilder = start => `bytes ${start}-${start + size - 1}/${size}`
+      const contentRangeBuilder = (start: number) => `bytes ${start}-${start + size - 1}/${size}`
       await sendChunks({ pathUploadId: uploadId, expectedStatus: HttpStatusCode.CONFLICT_409, contentRangeBuilder, contentLength: size })
       await checkFileSize(uploadId, 0)
     })
   })
 
   after(async function () {
-    await cleanupTests([server])
+    await cleanupTests([ server ])
   })
 })

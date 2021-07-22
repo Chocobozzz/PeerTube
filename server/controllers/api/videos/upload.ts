@@ -6,7 +6,7 @@ import { uuidToShort } from '@server/helpers/uuid'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
 import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url'
 import { addOptimizeOrMergeAudioJob, buildLocalVideoFromReq, buildVideoThumbnailsFromReq, setVideoTags } from '@server/lib/video'
-import { generateVideoFilename, getVideoFilePath } from '@server/lib/video-paths'
+import { generateWebTorrentVideoFilename, getVideoFilePath } from '@server/lib/video-paths'
 import { openapiOperationDoc } from '@server/middlewares/doc'
 import { MVideo, MVideoFile, MVideoFullLight } from '@server/types/models'
 import { uploadx } from '@uploadx/core'
@@ -240,7 +240,7 @@ async function buildNewFile (video: MVideo, videoPhysicalFile: express.VideoUplo
     videoFile.resolution = (await getVideoFileResolution(videoPhysicalFile.path)).videoFileResolution
   }
 
-  videoFile.filename = generateVideoFilename(video, false, videoFile.resolution, videoFile.extname)
+  videoFile.filename = generateWebTorrentVideoFilename(videoFile.resolution, videoFile.extname)
 
   return videoFile
 }

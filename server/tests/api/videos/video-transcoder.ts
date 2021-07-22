@@ -3,7 +3,6 @@
 import 'mocha'
 import * as chai from 'chai'
 import { omit } from 'lodash'
-import { join } from 'path'
 import {
   buildAbsoluteFixturePath,
   cleanupTests,
@@ -11,6 +10,7 @@ import {
   doubleFollow,
   generateHighBitrateVideo,
   generateVideoWithFramerate,
+  getFileSize,
   makeGetRequest,
   PeerTubeServer,
   setAccessTokensToServers,
@@ -271,7 +271,8 @@ describe('Test video transcoding', function () {
 
         expect(videoDetails.files).to.have.lengthOf(4)
 
-        const path = servers[1].servers.buildDirectory(join('videos', video.uuid + '-240.mp4'))
+        const file = videoDetails.files.find(f => f.resolution.id === 240)
+        const path = servers[1].servers.buildWebTorrentFilePath(file.fileUrl)
         const probe = await getAudioStream(path)
 
         if (probe.audioStream) {
@@ -300,8 +301,9 @@ describe('Test video transcoding', function () {
         const video = data.find(v => v.name === attributes.name)
         const videoDetails = await server.videos.get({ id: video.id })
 
-        expect(videoDetails.files).to.have.lengthOf(4)
-        const path = servers[1].servers.buildDirectory(join('videos', video.uuid + '-240.mp4'))
+        const file = videoDetails.files.find(f => f.resolution.id === 240)
+        const path = servers[1].servers.buildWebTorrentFilePath(file.fileUrl)
+
         const probe = await getAudioStream(path)
         expect(probe).to.not.have.property('audioStream')
       }
@@ -328,7 +330,9 @@ describe('Test video transcoding', function () {
 
         const fixturePath = buildAbsoluteFixturePath(attributes.fixture)
         const fixtureVideoProbe = await getAudioStream(fixturePath)
-        const path = servers[1].servers.buildDirectory(join('videos', video.uuid + '-240.mp4'))
+
+        const file = videoDetails.files.find(f => f.resolution.id === 240)
+        const path = servers[1].servers.buildWebTorrentFilePath(file.fileUrl)
 
         const videoProbe = await getAudioStream(path)
 
@@ -485,14 +489,16 @@ describe('Test video transcoding', function () {
         expect(videoDetails.files[2].fps).to.be.below(31)
         expect(videoDetails.files[3].fps).to.be.below(31)
 
-        for (const resolution of [ '240', '360', '480' ]) {
-          const path = servers[1].servers.buildDirectory(join('videos', video.uuid + '-' + resolution + '.mp4'))
+        for (const resolution of [ 240, 360, 480 ]) {
+          const file = videoDetails.files.find(f => f.resolution.id === resolution)
+          const path = servers[1].servers.buildWebTorrentFilePath(file.fileUrl)
           const fps = await getVideoFileFPS(path)
 
           expect(fps).to.be.below(31)
         }
 
-        const path = servers[1].servers.buildDirectory(join('videos', video.uuid + '-720.mp4'))
+        const file = videoDetails.files.find(f => f.resolution.id === 720)
+        const path = servers[1].servers.buildWebTorrentFilePath(file.fileUrl)
         const fps = await getVideoFileFPS(path)
 
         expect(fps).to.be.above(58).and.below(62)
@@ -524,16 +530,19 @@ describe('Test video transcoding', function () {
       for (const server of servers) {
         const { data } = await server.videos.list()
 
-        const video = data.find(v => v.name === attributes.name)
+        const { id } = data.find(v => v.name === attributes.name)
+        const video = await server.videos.get({ id })
 
         {
-          const path = servers[1].servers.buildDirectory(join('videos', video.uuid + '-240.mp4'))
+          const file = video.files.find(f => f.resolution.id === 240)
+          const path = servers[1].servers.buildWebTorrentFilePath(file.fileUrl)
           const fps = await getVideoFileFPS(path)
           expect(fps).to.be.equal(25)
         }
 
         {
-          const path = servers[1].servers.buildDirectory(join('videos', video.uuid + '-720.mp4'))
+          const file = video.files.find(f => f.resolution.id === 720)
+          const path = servers[1].servers.buildWebTorrentFilePath(file.fileUrl)
           const fps = await getVideoFileFPS(path)
           expect(fps).to.be.equal(59)
         }
@@ -542,6 +551,7 @@ describe('Test video transcoding', function () {
   })
 
   describe('Bitrate control', function () {
+
     it('Should respect maximum bitrate values', async function () {
       this.timeout(160_000)
 
@@ -567,17 +577,19 @@ describe('Test video transcoding', function () {
       for (const server of servers) {
         const { data } = await server.videos.list()
 
-        const video = data.find(v => v.name === attributes.name)
+        const { id } = data.find(v => v.name === attributes.name)
+        const video = await server.videos.get({ id })
 
-        for (const resolution of [ '240', '360', '480', '720', '1080' ]) {
-          const path = servers[1].servers.buildDirectory(join('videos', video.uuid + '-' + resolution + '.mp4'))
+        for (const resolution of [ 240, 360, 480, 720, 1080 ]) {
+          const file = video.files.find(f => f.resolution.id === resolution)
+          const path = servers[1].servers.buildWebTorrentFilePath(file.fileUrl)
 
           const bitrate = await getVideoFileBitrate(path)
           const fps = await getVideoFileFPS(path)
-          const resolution2 = await getVideoFileResolution(path)
+          const { videoFileResolution } = await getVideoFileResolution(path)
 
-          expect(resolution2.videoFileResolution.toString()).to.equal(resolution)
-          expect(bitrate).to.be.below(getMaxBitrate(resolution2.videoFileResolution, fps, VIDEO_TRANSCODING_FPS))
+          expect(videoFileResolution).to.equal(resolution)
+          expect(bitrate).to.be.below(getMaxBitrate(videoFileResolution, fps, VIDEO_TRANSCODING_FPS))
         }
       }
     })
@@ -608,14 +620,18 @@ describe('Test video transcoding', function () {
         fixture: 'low-bitrate.mp4'
       }
 
-      const { uuid } = await servers[1].videos.upload({ attributes })
+      const { id } = await servers[1].videos.upload({ attributes })
 
       await waitJobs(servers)
 
+      const video = await servers[1].videos.get({ id })
+
       const resolutions = [ 240, 360, 480, 720, 1080 ]
       for (const r of resolutions) {
-        const path = `videos/${uuid}-${r}.mp4`
-        const size = await servers[1].servers.getServerFileSize(path)
+        const file = video.files.find(f => f.resolution.id === r)
+
+        const path = servers[1].servers.buildWebTorrentFilePath(file.fileUrl)
+        const size = await getFileSize(path)
         expect(size, `${path} not below ${60_000}`).to.be.below(60_000)
       }
     })
@@ -630,7 +646,9 @@ describe('Test video transcoding', function () {
       await waitJobs(servers)
 
       {
-        const path = servers[1].servers.buildDirectory(join('videos', videoUUID + '-240.mp4'))
+        const video = await servers[1].videos.get({ id: videoUUID })
+        const file = video.files.find(f => f.resolution.id === 240)
+        const path = servers[1].servers.buildWebTorrentFilePath(file.fileUrl)
         const metadata = await getMetadataFromFile(path)
 
         // expected format properties

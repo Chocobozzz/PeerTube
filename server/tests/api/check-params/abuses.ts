@@ -41,7 +41,7 @@ describe('Test abuses API validators', function () {
     userToken = await server.users.generateUserAndToken('user_1')
     userToken2 = await server.users.generateUserAndToken('user_2')
 
-    server.store.video = await server.videos.upload()
+    server.store.videoCreated = await server.videos.upload()
 
     command = server.abuses
   })
@@ -223,25 +223,25 @@ describe('Test abuses API validators', function () {
     })
 
     it('Should fail with a non authenticated user', async function () {
-      const fields = { video: { id: server.store.video.id }, reason: 'my super reason' }
+      const fields = { video: { id: server.store.videoCreated.id }, reason: 'my super reason' }
 
       await makePostBodyRequest({ url: server.url, path, token: 'hello', fields, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
     it('Should fail with a reason too short', async function () {
-      const fields = { video: { id: server.store.video.id }, reason: 'h' }
+      const fields = { video: { id: server.store.videoCreated.id }, reason: 'h' }
 
       await makePostBodyRequest({ url: server.url, path, token: userToken, fields })
     })
 
     it('Should fail with a too big reason', async function () {
-      const fields = { video: { id: server.store.video.id }, reason: 'super'.repeat(605) }
+      const fields = { video: { id: server.store.videoCreated.id }, reason: 'super'.repeat(605) }
 
       await makePostBodyRequest({ url: server.url, path, token: userToken, fields })
     })
 
     it('Should succeed with the correct parameters (basic)', async function () {
-      const fields: AbuseCreate = { video: { id: server.store.video.shortUUID }, reason: 'my super reason' }
+      const fields: AbuseCreate = { video: { id: server.store.videoCreated.shortUUID }, reason: 'my super reason' }
 
       const res = await makePostBodyRequest({
         url: server.url,
@@ -254,19 +254,19 @@ describe('Test abuses API validators', function () {
     })
 
     it('Should fail with a wrong predefined reason', async function () {
-      const fields = { video: { id: server.store.video.id }, reason: 'my super reason', predefinedReasons: [ 'wrongPredefinedReason' ] }
+      const fields = { video: server.store.videoCreated, reason: 'my super reason', predefinedReasons: [ 'wrongPredefinedReason' ] }
 
       await makePostBodyRequest({ url: server.url, path, token: userToken, fields })
     })
 
     it('Should fail with negative timestamps', async function () {
-      const fields = { video: { id: server.store.video.id, startAt: -1 }, reason: 'my super reason' }
+      const fields = { video: { id: server.store.videoCreated.id, startAt: -1 }, reason: 'my super reason' }
 
       await makePostBodyRequest({ url: server.url, path, token: userToken, fields })
     })
 
     it('Should fail mith misordered startAt/endAt', async function () {
-      const fields = { video: { id: server.store.video.id, startAt: 5, endAt: 1 }, reason: 'my super reason' }
+      const fields = { video: { id: server.store.videoCreated.id, startAt: 5, endAt: 1 }, reason: 'my super reason' }
 
       await makePostBodyRequest({ url: server.url, path, token: userToken, fields })
     })
@@ -274,7 +274,7 @@ describe('Test abuses API validators', function () {
     it('Should succeed with the corret parameters (advanced)', async function () {
       const fields: AbuseCreate = {
         video: {
-          id: server.store.video.id,
+          id: server.store.videoCreated.id,
           startAt: 1,
           endAt: 5
         },
@@ -413,7 +413,7 @@ describe('Test abuses API validators', function () {
 
       await doubleFollow(anotherServer, server)
 
-      const server2VideoId = await anotherServer.videos.getId({ uuid: server.store.video.uuid })
+      const server2VideoId = await anotherServer.videos.getId({ uuid: server.store.videoCreated.uuid })
       await anotherServer.abuses.report({ reason: 'remote server', videoId: server2VideoId })
 
       await waitJobs([ server, anotherServer ])
