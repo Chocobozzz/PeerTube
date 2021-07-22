@@ -36,7 +36,7 @@ async function run () {
 
   console.log('Starting server.')
 
-  const server = await createSingleServer(1, {}, [], { hideLogs: false, execArgv: [ '--inspect' ] })
+  const server = await createSingleServer(1, {}, { hideLogs: false, nodeArgs: [ '--inspect' ] })
 
   const cleanup = async () => {
     console.log('Killing server')

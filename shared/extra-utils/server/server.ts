@@ -41,7 +41,8 @@ import { StatsCommand } from './stats-command'
 
 export type RunServerOptions = {
   hideLogs?: boolean
-  execArgv?: string[]
+  nodeArgs?: string[]
+  peertubeArgs?: string[]
 }
 
 export class PeerTubeServer {
@@ -176,13 +177,13 @@ export class PeerTubeServer {
     this.port = parseInt(parsed.port)
   }
 
-  async flushAndRun (configOverride?: Object, args = [], options: RunServerOptions = {}) {
+  async flushAndRun (configOverride?: Object, options: RunServerOptions = {}) {
     await ServersCommand.flushTests(this.internalServerNumber)
 
-    return this.run(configOverride, args, options)
+    return this.run(configOverride, options)
   }
 
-  async run (configOverrideArg?: any, args = [], options: RunServerOptions = {}) {
+  async run (configOverrideArg?: any, options: RunServerOptions = {}) {
     // These actions are async so we need to be sure that they have both been done
     const serverRunString = {
       'HTTP server listening': false
@@ -215,13 +216,13 @@ export class PeerTubeServer {
       silent: true,
       env,
       detached: true,
-      execArgv: options.execArgv || []
+      execArgv: options.nodeArgs || []
     }
 
     return new Promise<void>(res => {
       const self = this
 
-      this.app = fork(join(root(), 'dist', 'server.js'), args, forkOptions)
+      this.app = fork(join(root(), 'dist', 'server.js'), options.peertubeArgs || [], forkOptions)
       this.app.stdout.on('data', function onStdout (data) {
         let dontContinue = false
 

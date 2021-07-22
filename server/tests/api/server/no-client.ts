@@ -9,7 +9,7 @@ describe('Start and stop server without web client routes', function () {
   before(async function () {
     this.timeout(30000)
 
-    server = await createSingleServer(1, {}, [ '--no-client' ])
+    server = await createSingleServer(1, {}, { peertubeArgs: [ '--no-client' ] })
   })
 
   it('Should fail getting the client', function () {
