@@ -1,4 +1,5 @@
 
+import { OutgoingHttpHeaders } from 'http'
 import { RegisterServerAuthExternalOptions } from '@server/types'
 import {
   MAbuseMessage,
@@ -40,6 +41,7 @@ import {
   MVideoShareActor,
   MVideoThumbnail
 } from '../../types/models'
+import { Writable } from 'stream'
 
 declare module 'express' {
   export interface Request {
@@ -98,6 +100,15 @@ declare module 'express' {
     }) => void
 
     locals: {
+      apicache: {
+        content: string | Buffer
+        write: Writable['write']
+        writeHead: Response['writeHead']
+        end: Response['end']
+        cacheable: boolean
+        headers: OutgoingHttpHeaders
+      }
+
       docUrl?: string
 
       videoAPI?: MVideoFormattableDetails

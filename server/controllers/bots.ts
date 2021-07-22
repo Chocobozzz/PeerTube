@@ -5,7 +5,7 @@ import { SitemapStream, streamToPromise } from 'sitemap'
 import { VideoModel } from '../models/video/video'
 import { VideoChannelModel } from '../models/video/video-channel'
 import { AccountModel } from '../models/account/account'
-import { cacheRoute } from '../middlewares/cache'
+import { cacheRoute } from '../middlewares/cache/cache'
 import { buildNSFWFilter } from '../helpers/express-utils'
 import { truncate } from 'lodash'
 
@@ -14,7 +14,7 @@ const botsRouter = express.Router()
 // Special route that add OpenGraph and oEmbed tags
 // Do not use a template engine for a so little thing
 botsRouter.use('/sitemap.xml',
-  asyncMiddleware(cacheRoute()(ROUTE_CACHE_LIFETIME.SITEMAP)),
+  cacheRoute(ROUTE_CACHE_LIFETIME.SITEMAP),
   asyncMiddleware(getSitemap)
 )
 

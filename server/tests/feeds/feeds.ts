@@ -8,6 +8,7 @@ import {
   createMultipleServers,
   createSingleServer,
   doubleFollow,
+  makeGetRequest,
   PeerTubeServer,
   setAccessTokensToServers,
   waitJobs
@@ -52,9 +53,7 @@ describe('Test syndication feeds', () => {
     }
 
     {
-      const attr = { username: 'john', password: 'password' }
-      await servers[0].users.create({ username: attr.username, password: attr.password })
-      userAccessToken = await servers[0].login.getAccessToken(attr)
+      userAccessToken = await servers[0].users.generateUserAndToken('john')
 
       const user = await servers[0].users.getMyInfo({ token: userAccessToken })
       userAccountId = user.account.id
@@ -107,6 +106,41 @@ describe('Test syndication feeds', () => {
         const jsonText = await servers[0].feed.getJSON({ feed })
         expect(JSON.parse(jsonText)).to.be.jsonSchema({ type: 'object' })
       }
+    })
+
+    it('Should serve the endpoint with a classic request', async function () {
+      await makeGetRequest({
+        url: servers[0].url,
+        path: '/feeds/videos.xml',
+        accept: 'application/xml',
+        expectedStatus: HttpStatusCode.OK_200
+      })
+    })
+
+    it('Should serve the endpoint as a cached request', async function () {
+      const res = await makeGetRequest({
+        url: servers[0].url,
+        path: '/feeds/videos.xml',
+        accept: 'application/xml',
+        expectedStatus: HttpStatusCode.OK_200
+      })
+
+      expect(res.headers['x-api-cache-cached']).to.equal('true')
+    })
+
+    it('Should not serve the endpoint as a cached request', async function () {
+      const res = await makeGetRequest({
+        url: servers[0].url,
+        path: '/feeds/videos.xml?v=186',
+        accept: 'application/xml',
+        expectedStatus: HttpStatusCode.OK_200
+      })
+
+      expect(res.headers['x-api-cache-cached']).to.not.exist
+    })
+
+    it('Should refuse to serve the endpoint without accept header', async function () {
+      await makeGetRequest({ url: servers[0].url, path: '/feeds/videos.xml', expectedStatus: HttpStatusCode.NOT_ACCEPTABLE_406 })
     })
   })
 

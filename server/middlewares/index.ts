@@ -1,4 +1,5 @@
 export * from './validators'
+export * from './cache'
 export * from './activitypub'
 export * from './async'
 export * from './auth'
