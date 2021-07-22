@@ -3,7 +3,7 @@ import { copy } from 'fs-extra'
 import { join } from 'path'
 import { root } from '@server/helpers/core-utils'
 import { randomInt } from '../../core-utils/miscs/miscs'
-import { VideoChannel } from '../../models/videos'
+import { Video, VideoChannel, VideoCreateResult, VideoDetails } from '../../models/videos'
 import { BulkCommand } from '../bulk'
 import { CLICommand } from '../cli'
 import { CustomPagesCommand } from '../custom-pages'
@@ -75,19 +75,9 @@ export class PeerTubeServer {
 
     channel?: VideoChannel
 
-    video?: {
-      id: number
-      uuid: string
-      shortUUID: string
-      name?: string
-      url?: string
-
-      account?: {
-        name: string
-      }
-
-      embedPath?: string
-    }
+    video?: Video
+    videoCreated?: VideoCreateResult
+    videoDetails?: VideoDetails
 
     videos?: { id: number, uuid: string }[]
   }

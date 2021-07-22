@@ -178,9 +178,12 @@ describe('Test video captions', function () {
   })
 
   it('Should remove the video, and thus all video captions', async function () {
+    const video = await servers[0].videos.get({ id: videoUUID })
+    const { data: captions } = await servers[0].captions.list({ videoId: videoUUID })
+
     await servers[0].videos.remove({ id: videoUUID })
 
-    await checkVideoFilesWereRemoved(videoUUID, servers[0])
+    await checkVideoFilesWereRemoved({ server: servers[0], video, captions })
   })
 
   after(async function () {

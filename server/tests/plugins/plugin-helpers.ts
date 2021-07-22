@@ -232,7 +232,7 @@ describe('Test plugin helpers', function () {
       this.timeout(40000)
 
       // Should not throw -> video exists
-      await servers[0].videos.get({ id: videoUUID })
+      const video = await servers[0].videos.get({ id: videoUUID })
       // Should delete the video
       await servers[0].videos.view({ id: videoUUID })
 
@@ -246,7 +246,7 @@ describe('Test plugin helpers', function () {
         if (err.message.includes('exists')) throw err
       }
 
-      await checkVideoFilesWereRemoved(videoUUID, servers[0])
+      await checkVideoFilesWereRemoved({ server: servers[0], video })
     })
 
     it('Should have fetched the video by URL', async function () {

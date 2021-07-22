@@ -13,6 +13,7 @@ import {
   dateIsValid,
   doubleFollow,
   PeerTubeServer,
+  saveVideoInServers,
   setAccessTokensToServers,
   testImage,
   wait,
@@ -661,19 +662,19 @@ describe('Test multiple servers', function () {
       }
     })
 
-    it('Should remove the videos 3 and 3-2 by asking server 3', async function () {
-      this.timeout(10000)
+    it('Should remove the videos 3 and 3-2 by asking server 3 and correctly delete files', async function () {
+      this.timeout(30000)
 
-      await servers[2].videos.remove({ id: toRemove[0].id })
-      await servers[2].videos.remove({ id: toRemove[1].id })
+      for (const id of [ toRemove[0].id, toRemove[1].id ]) {
+        await saveVideoInServers(servers, id)
 
-      await waitJobs(servers)
-    })
+        await servers[2].videos.remove({ id })
 
-    it('Should not have files of videos 3 and 3-2 on each server', async function () {
-      for (const server of servers) {
-        await checkVideoFilesWereRemoved(toRemove[0].uuid, server)
-        await checkVideoFilesWereRemoved(toRemove[1].uuid, server)
+        await waitJobs(servers)
+
+        for (const server of servers) {
+          await checkVideoFilesWereRemoved({ server, video: server.store.videoDetails })
+        }
       }
     })
 

@@ -1,6 +1,7 @@
 import { exec } from 'child_process'
 import { copy, ensureDir, readFile, remove } from 'fs-extra'
 import { join } from 'path'
+import { basename } from 'path/posix'
 import { root } from '@server/helpers/core-utils'
 import { HttpStatusCode } from '@shared/models'
 import { getFileSize, isGithubCI, wait } from '../miscs'
@@ -70,6 +71,14 @@ export class ServersCommand extends AbstractCommand {
 
   buildDirectory (directory: string) {
     return join(root(), 'test' + this.server.internalServerNumber, directory)
+  }
+
+  buildWebTorrentFilePath (fileUrl: string) {
+    return this.buildDirectory(join('videos', basename(fileUrl)))
+  }
+
+  buildFragmentedFilePath (videoUUID: string, fileUrl: string) {
+    return this.buildDirectory(join('streaming-playlists', 'hls', videoUUID, basename(fileUrl)))
   }
 
   async getServerFileSize (subPath: string) {

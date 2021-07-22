@@ -2,9 +2,10 @@
 
 import { expect } from 'chai'
 import { pathExists, readdir } from 'fs-extra'
-import { join } from 'path'
+import { basename, join } from 'path'
 import { getLowercaseExtension } from '@server/helpers/core-utils'
-import { HttpStatusCode } from '@shared/models'
+import { uuidRegex } from '@shared/core-utils'
+import { HttpStatusCode, VideoCaption, VideoDetails } from '@shared/models'
 import { VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_PRIVACIES } from '../../../server/initializers/constants'
 import { dateIsValid, testImage, webtorrentAdd } from '../miscs'
 import { makeRawRequest } from '../requests/requests'
@@ -12,30 +13,63 @@ import { waitJobs } from '../server'
 import { PeerTubeServer } from '../server/server'
 import { VideoEdit } from './videos-command'
 
-async function checkVideoFilesWereRemoved (
-  videoUUID: string,
-  server: PeerTubeServer,
-  directories = [
-    'redundancy',
-    'videos',
-    'thumbnails',
-    'torrents',
-    'previews',
-    'captions',
-    join('playlists', 'hls'),
-    join('redundancy', 'hls')
-  ]
-) {
-  for (const directory of directories) {
+async function checkVideoFilesWereRemoved (options: {
+  server: PeerTubeServer
+  video: VideoDetails
+  captions?: VideoCaption[]
+  onlyVideoFiles?: boolean // default false
+}) {
+  const { video, server, captions = [], onlyVideoFiles = false } = options
+
+  const webtorrentFiles = video.files || []
+  const hlsFiles = video.streamingPlaylists[0]?.files || []
+
+  const thumbnailName = basename(video.thumbnailPath)
+  const previewName = basename(video.previewPath)
+
+  const torrentNames = webtorrentFiles.concat(hlsFiles).map(f => basename(f.torrentUrl))
+
+  const captionNames = captions.map(c => basename(c.captionPath))
+
+  const webtorrentFilenames = webtorrentFiles.map(f => basename(f.fileUrl))
+  const hlsFilenames = hlsFiles.map(f => basename(f.fileUrl))
+
+  let directories: { [ directory: string ]: string[] } = {
+    videos: webtorrentFilenames,
+    redundancy: webtorrentFilenames,
+    [join('playlists', 'hls')]: hlsFilenames,
+    [join('redundancy', 'hls')]: hlsFilenames
+  }
+
+  if (onlyVideoFiles !== true) {
+    directories = {
+      ...directories,
+
+      thumbnails: [ thumbnailName ],
+      previews: [ previewName ],
+      torrents: torrentNames,
+      captions: captionNames
+    }
+  }
+
+  for (const directory of Object.keys(directories)) {
     const directoryPath = server.servers.buildDirectory(directory)
 
     const directoryExists = await pathExists(directoryPath)
     if (directoryExists === false) continue
 
-    const files = await readdir(directoryPath)
-    for (const file of files) {
-      expect(file, `File ${file} should not exist in ${directoryPath}`).to.not.contain(videoUUID)
+    const existingFiles = await readdir(directoryPath)
+    for (const existingFile of existingFiles) {
+      for (const shouldNotExist of directories[directory]) {
+        expect(existingFile, `File ${existingFile} should not exist in ${directoryPath}`).to.not.contain(shouldNotExist)
+      }
     }
+  }
+}
+
+async function saveVideoInServers (servers: PeerTubeServer[], uuid: string) {
+  for (const server of servers) {
+    server.store.videoDetails = await server.videos.get({ id: uuid })
   }
 }
 
@@ -156,18 +190,16 @@ async function completeVideoCheck (
 
     expect(file.magnetUri).to.have.lengthOf.above(2)
 
-    expect(file.torrentDownloadUrl).to.equal(`http://${host}/download/torrents/${videoDetails.uuid}-${file.resolution.id}.torrent`)
-    expect(file.torrentUrl).to.equal(`http://${host}/lazy-static/torrents/${videoDetails.uuid}-${file.resolution.id}.torrent`)
+    expect(file.torrentDownloadUrl).to.match(new RegExp(`http://${host}/download/torrents/${uuidRegex}-${file.resolution.id}.torrent`))
+    expect(file.torrentUrl).to.match(new RegExp(`http://${host}/lazy-static/torrents/${uuidRegex}-${file.resolution.id}.torrent`))
 
-    expect(file.fileUrl).to.equal(`http://${originHost}/static/webseed/${videoDetails.uuid}-${file.resolution.id}${extension}`)
-    expect(file.fileDownloadUrl).to.equal(`http://${originHost}/download/videos/${videoDetails.uuid}-${file.resolution.id}${extension}`)
+    expect(file.fileUrl).to.match(new RegExp(`http://${originHost}/static/webseed/${uuidRegex}-${file.resolution.id}${extension}`))
+    expect(file.fileDownloadUrl).to.match(new RegExp(`http://${originHost}/download/videos/${uuidRegex}-${file.resolution.id}${extension}`))
 
     await Promise.all([
       makeRawRequest(file.torrentUrl, 200),
       makeRawRequest(file.torrentDownloadUrl, 200),
-      makeRawRequest(file.metadataUrl, 200),
-      // Backward compatibility
-      makeRawRequest(`http://${originHost}/static/torrents/${videoDetails.uuid}-${file.resolution.id}.torrent`, 200)
+      makeRawRequest(file.metadataUrl, 200)
     ])
 
     expect(file.resolution.id).to.equal(attributeFile.resolution)
@@ -215,5 +247,6 @@ export {
   checkUploadVideoParam,
   completeVideoCheck,
   uploadRandomVideoOnServers,
-  checkVideoFilesWereRemoved
+  checkVideoFilesWereRemoved,
+  saveVideoInServers
 }

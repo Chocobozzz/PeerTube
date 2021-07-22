@@ -19,6 +19,8 @@ import {
 } from '@shared/extra-utils'
 import { HttpStatusCode, VideoStreamingPlaylistType } from '@shared/models'
 import { DEFAULT_AUDIO_RESOLUTION } from '../../../initializers/constants'
+import { uuidRegex } from '@shared/core-utils'
+import { basename } from 'path/posix'
 
 const expect = chai.expect
 
@@ -38,14 +40,17 @@ async function checkHlsPlaylist (servers: PeerTubeServer[], videoUUID: string, h
     if (hlsOnly) expect(videoDetails.files).to.have.lengthOf(0)
     else expect(videoDetails.files).to.have.lengthOf(resolutions.length)
 
+    // Check JSON files
     for (const resolution of resolutions) {
       const file = hlsFiles.find(f => f.resolution.id === resolution)
       expect(file).to.not.be.undefined
 
       expect(file.magnetUri).to.have.lengthOf.above(2)
-      expect(file.torrentUrl).to.equal(`http://${server.host}/lazy-static/torrents/${videoDetails.uuid}-${file.resolution.id}-hls.torrent`)
-      expect(file.fileUrl).to.equal(
-        `${baseUrl}/static/streaming-playlists/hls/${videoDetails.uuid}/${videoDetails.uuid}-${file.resolution.id}-fragmented.mp4`
+      expect(file.torrentUrl).to.match(
+        new RegExp(`http://${server.host}/lazy-static/torrents/${uuidRegex}-${file.resolution.id}-hls.torrent`)
+      )
+      expect(file.fileUrl).to.match(
+        new RegExp(`${baseUrl}/static/streaming-playlists/hls/${videoDetails.uuid}/${uuidRegex}-${file.resolution.id}-fragmented.mp4`)
       )
       expect(file.resolution.label).to.equal(resolution + 'p')
 
@@ -58,6 +63,7 @@ async function checkHlsPlaylist (servers: PeerTubeServer[], videoUUID: string, h
       expect(torrent.files[0].path).to.exist.and.to.not.equal('')
     }
 
+    // Check master playlist
     {
       await checkResolutionsInMasterPlaylist({ server, playlistUrl: hlsPlaylist.playlistUrl, resolutions })
 
@@ -69,13 +75,16 @@ async function checkHlsPlaylist (servers: PeerTubeServer[], videoUUID: string, h
       }
     }
 
+    // Check resolution playlists
     {
       for (const resolution of resolutions) {
         const subPlaylist = await server.streamingPlaylists.get({
           url: `${baseUrl}/static/streaming-playlists/hls/${videoUUID}/${resolution}.m3u8`
         })
 
-        expect(subPlaylist).to.contain(`${videoUUID}-${resolution}-fragmented.mp4`)
+        const file = hlsFiles.find(f => f.resolution.id === resolution)
+        expect(subPlaylist).to.match(new RegExp(`${uuidRegex}-${resolution}-fragmented.mp4`))
+        expect(subPlaylist).to.contain(basename(file.fileUrl))
       }
     }
 

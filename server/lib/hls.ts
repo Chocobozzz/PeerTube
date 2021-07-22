@@ -36,8 +36,10 @@ async function updateMasterHLSPlaylist (video: MVideoWithFile) {
   const streamingPlaylist = video.getHLSPlaylist()
 
   for (const file of streamingPlaylist.VideoFiles) {
+    const playlistFilename = VideoStreamingPlaylistModel.getHlsPlaylistFilename(file.resolution)
+
     // If we did not generated a playlist for this resolution, skip
-    const filePlaylistPath = join(directory, VideoStreamingPlaylistModel.getHlsPlaylistFilename(file.resolution))
+    const filePlaylistPath = join(directory, playlistFilename)
     if (await pathExists(filePlaylistPath) === false) continue
 
     const videoFilePath = getVideoFilePath(streamingPlaylist, file)
@@ -58,7 +60,7 @@ async function updateMasterHLSPlaylist (video: MVideoWithFile) {
     line += `,CODECS="${codecs.filter(c => !!c).join(',')}"`
 
     masterPlaylists.push(line)
-    masterPlaylists.push(VideoStreamingPlaylistModel.getHlsPlaylistFilename(file.resolution))
+    masterPlaylists.push(playlistFilename)
   }
 
   await writeFile(masterPlaylistPath, masterPlaylists.join('\n') + '\n')

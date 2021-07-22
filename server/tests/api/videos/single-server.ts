@@ -199,9 +199,10 @@ describe('Test a single server', function () {
     })
 
     it('Should remove the video', async function () {
+      const video = await server.videos.get({ id: videoId })
       await server.videos.remove({ id: videoId })
 
-      await checkVideoFilesWereRemoved(videoUUID, server)
+      await checkVideoFilesWereRemoved({ video, server })
     })
 
     it('Should not have videos', async function () {

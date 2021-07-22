@@ -2,7 +2,7 @@ import * as Bull from 'bull'
 import { copy, stat } from 'fs-extra'
 import { getLowercaseExtension } from '@server/helpers/core-utils'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
-import { generateVideoFilename, getVideoFilePath } from '@server/lib/video-paths'
+import { generateWebTorrentVideoFilename, getVideoFilePath } from '@server/lib/video-paths'
 import { UserModel } from '@server/models/user/user'
 import { MVideoFullLight } from '@server/types/models'
 import { VideoFileImportPayload } from '@shared/models'
@@ -72,7 +72,7 @@ async function updateVideoFile (video: MVideoFullLight, inputFilePath: string) {
   const newVideoFile = new VideoFileModel({
     resolution: videoFileResolution,
     extname: fileExt,
-    filename: generateVideoFilename(video, false, videoFileResolution, fileExt),
+    filename: generateWebTorrentVideoFilename(videoFileResolution, fileExt),
     size,
     fps,
     videoId: video.id

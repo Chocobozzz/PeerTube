@@ -51,7 +51,7 @@ describe('Test video blacklist API validators', function () {
     }
 
     {
-      servers[0].store.video = await servers[0].videos.upload({ token: userAccessToken1 })
+      servers[0].store.videoCreated = await servers[0].videos.upload({ token: userAccessToken1 })
     }
 
     {
@@ -73,7 +73,7 @@ describe('Test video blacklist API validators', function () {
     const basePath = '/api/v1/videos/'
 
     it('Should fail with nothing', async function () {
-      const path = basePath + servers[0].store.video + '/blacklist'
+      const path = basePath + servers[0].store.videoCreated + '/blacklist'
       const fields = {}
       await makePostBodyRequest({ url: servers[0].url, path, token: servers[0].accessToken, fields })
     })
@@ -85,13 +85,13 @@ describe('Test video blacklist API validators', function () {
     })
 
     it('Should fail with a non authenticated user', async function () {
-      const path = basePath + servers[0].store.video + '/blacklist'
+      const path = basePath + servers[0].store.videoCreated + '/blacklist'
       const fields = {}
       await makePostBodyRequest({ url: servers[0].url, path, token: 'hello', fields, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
     it('Should fail with a non admin user', async function () {
-      const path = basePath + servers[0].store.video + '/blacklist'
+      const path = basePath + servers[0].store.videoCreated + '/blacklist'
       const fields = {}
       await makePostBodyRequest({
         url: servers[0].url,
@@ -103,7 +103,7 @@ describe('Test video blacklist API validators', function () {
     })
 
     it('Should fail with an invalid reason', async function () {
-      const path = basePath + servers[0].store.video.uuid + '/blacklist'
+      const path = basePath + servers[0].store.videoCreated.uuid + '/blacklist'
       const fields = { reason: 'a'.repeat(305) }
 
       await makePostBodyRequest({ url: servers[0].url, path, token: servers[0].accessToken, fields })
@@ -123,7 +123,7 @@ describe('Test video blacklist API validators', function () {
     })
 
     it('Should succeed with the correct params', async function () {
-      const path = basePath + servers[0].store.video.uuid + '/blacklist'
+      const path = basePath + servers[0].store.videoCreated.uuid + '/blacklist'
       const fields = {}
 
       await makePostBodyRequest({
@@ -158,13 +158,13 @@ describe('Test video blacklist API validators', function () {
     })
 
     it('Should fail with a non authenticated user', async function () {
-      const path = basePath + servers[0].store.video + '/blacklist'
+      const path = basePath + servers[0].store.videoCreated + '/blacklist'
       const fields = {}
       await makePutBodyRequest({ url: servers[0].url, path, token: 'hello', fields, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
     it('Should fail with a non admin user', async function () {
-      const path = basePath + servers[0].store.video + '/blacklist'
+      const path = basePath + servers[0].store.videoCreated + '/blacklist'
       const fields = {}
       await makePutBodyRequest({
         url: servers[0].url,
@@ -176,14 +176,14 @@ describe('Test video blacklist API validators', function () {
     })
 
     it('Should fail with an invalid reason', async function () {
-      const path = basePath + servers[0].store.video.uuid + '/blacklist'
+      const path = basePath + servers[0].store.videoCreated.uuid + '/blacklist'
       const fields = { reason: 'a'.repeat(305) }
 
       await makePutBodyRequest({ url: servers[0].url, path, token: servers[0].accessToken, fields })
     })
 
     it('Should succeed with the correct params', async function () {
-      const path = basePath + servers[0].store.video.shortUUID + '/blacklist'
+      const path = basePath + servers[0].store.videoCreated.shortUUID + '/blacklist'
       const fields = { reason: 'hello' }
 
       await makePutBodyRequest({
@@ -199,24 +199,24 @@ describe('Test video blacklist API validators', function () {
   describe('When getting blacklisted video', function () {
 
     it('Should fail with a non authenticated user', async function () {
-      await servers[0].videos.get({ id: servers[0].store.video.uuid, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
+      await servers[0].videos.get({ id: servers[0].store.videoCreated.uuid, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
     it('Should fail with another user', async function () {
       await servers[0].videos.getWithToken({
         token: userAccessToken2,
-        id: servers[0].store.video.uuid,
+        id: servers[0].store.videoCreated.uuid,
         expectedStatus: HttpStatusCode.FORBIDDEN_403
       })
     })
 
     it('Should succeed with the owner authenticated user', async function () {
-      const video = await servers[0].videos.getWithToken({ token: userAccessToken1, id: servers[0].store.video.uuid })
+      const video = await servers[0].videos.getWithToken({ token: userAccessToken1, id: servers[0].store.videoCreated.uuid })
       expect(video.blacklisted).to.be.true
     })
 
     it('Should succeed with an admin', async function () {
-      const video = servers[0].store.video
+      const video = servers[0].store.videoCreated
 
       for (const id of [ video.id, video.uuid, video.shortUUID ]) {
         const video = await servers[0].videos.getWithToken({ id, expectedStatus: HttpStatusCode.OK_200 })
@@ -228,11 +228,19 @@ describe('Test video blacklist API validators', function () {
   describe('When removing a video in blacklist', function () {
 
     it('Should fail with a non authenticated user', async function () {
-      await command.remove({ token: 'fake token', videoId: servers[0].store.video.uuid, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
+      await command.remove({
+        token: 'fake token',
+        videoId: servers[0].store.videoCreated.uuid,
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
+      })
     })
 
     it('Should fail with a non admin user', async function () {
-      await command.remove({ token: userAccessToken2, videoId: servers[0].store.video.uuid, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+      await command.remove({
+        token: userAccessToken2,
+        videoId: servers[0].store.videoCreated.uuid,
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
     })
 
     it('Should fail with an incorrect id', async function () {
@@ -245,7 +253,7 @@ describe('Test video blacklist API validators', function () {
     })
 
     it('Should succeed with the correct params', async function () {
-      await command.remove({ videoId: servers[0].store.video.uuid, expectedStatus: HttpStatusCode.NO_CONTENT_204 })
+      await command.remove({ videoId: servers[0].store.videoCreated.uuid, expectedStatus: HttpStatusCode.NO_CONTENT_204 })
     })
   })
 
