@@ -114,8 +114,8 @@ my-notification {
         display: inherit !important;
       }
 
-      .dropdown-toggle:first-child {
-        @include padding-left(30px !important);
+      .dropdown-toggle {
+        max-width: 88% !important;
       }
     }
   }
