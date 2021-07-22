@@ -82,7 +82,7 @@ describe('Test audio only video transcoding', function () {
   it('0p transcoded video should not have video', async function () {
     const paths = [
       buildServerDirectory(servers[0], join('videos', videoUUID + '-0.mp4')),
-      buildServerDirectory(servers[0], join('streaming-playlists', 'hls', videoUUID, videoUUID + '-0-fragmented.mp4'))
+      buildServerDirectory(servers[0], join('streaming-playlists', 'hls', videoUUID), new RegExp('-0-fragmented.mp4$'))
     ]
 
     for (const path of paths) {

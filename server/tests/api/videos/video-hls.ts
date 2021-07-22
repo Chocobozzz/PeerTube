@@ -53,9 +53,9 @@ async function checkHlsPlaylist (servers: ServerInfo[], videoUUID: string, hlsOn
 
       expect(file.magnetUri).to.have.lengthOf.above(2)
       expect(file.torrentUrl).to.equal(`http://${server.host}/lazy-static/torrents/${videoDetails.uuid}-${file.resolution.id}-hls.torrent`)
-      expect(file.fileUrl).to.equal(
-        `${baseUrl}/static/streaming-playlists/hls/${videoDetails.uuid}/${videoDetails.uuid}-${file.resolution.id}-fragmented.mp4`
-      )
+      expect(file.fileUrl).to.match(new RegExp(
+        `${baseUrl}/static/streaming-playlists/hls/${videoDetails.uuid}/.*-${file.resolution.id}-fragmented.mp4`
+      ))
       expect(file.resolution.label).to.equal(resolution + 'p')
 
       await makeRawRequest(file.torrentUrl, HttpStatusCode.OK_200)
@@ -84,7 +84,7 @@ async function checkHlsPlaylist (servers: ServerInfo[], videoUUID: string, hlsOn
         const res = await getPlaylist(`${baseUrl}/static/streaming-playlists/hls/${videoUUID}/${resolution}.m3u8`)
 
         const subPlaylist = res.text
-        expect(subPlaylist).to.contain(`${videoUUID}-${resolution}-fragmented.mp4`)
+        expect(subPlaylist).to.contain(new RegExp(`-${resolution}-fragmented.mp4$`))
       }
     }
 

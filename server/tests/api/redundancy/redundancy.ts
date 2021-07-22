@@ -228,9 +228,9 @@ async function check1PlaylistRedundancies (videoUUID?: string) {
     expect(files).to.have.length.at.least(4)
 
     for (const resolution of [ 240, 360, 480, 720 ]) {
-      const filename = `${videoUUID}-${resolution}-fragmented.mp4`
+      const filename = new RegExp(`${resolution}-fragmented.mp4$`)
 
-      expect(files.find(f => f === filename)).to.not.be.undefined
+      expect(files.find(f => filename.test(f))).to.be.true
     }
   }
 }

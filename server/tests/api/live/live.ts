@@ -529,8 +529,8 @@ describe('Test live', function () {
             expect(file.fps).to.be.approximately(30, 2)
           }
 
-          const filename = `${video.uuid}-${resolution}-fragmented.mp4`
-          const segmentPath = buildServerDirectory(servers[0], join('streaming-playlists', 'hls', video.uuid, filename))
+          const filename = new RegExp(`${resolution}-fragmented.mp4$`)
+          const segmentPath = buildServerDirectory(servers[0], join('streaming-playlists', 'hls', video.uuid), filename)
 
           const probe = await ffprobePromise(segmentPath)
           const videoStream = await getVideoStreamFromFile(segmentPath, probe)

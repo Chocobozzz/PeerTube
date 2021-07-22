@@ -198,7 +198,7 @@ async function checkLiveCleanup (server: ServerInfo, videoUUID: string, resoluti
   expect(files).to.have.lengthOf(resolutions.length * 2 + 2)
 
   for (const resolution of resolutions) {
-    expect(files).to.contain(`${videoUUID}-${resolution}-fragmented.mp4`)
+    expect(files.filter(f => (new RegExp(`${resolution}-fragmented.mp4$`)).test(f)).length).to.equal(1)
     expect(files).to.contain(`${resolution}.m3u8`)
   }
 

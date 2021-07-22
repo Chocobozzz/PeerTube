@@ -2,7 +2,7 @@
 
 import * as chai from 'chai'
 import * as ffmpeg from 'fluent-ffmpeg'
-import { ensureDir, pathExists, readFile, stat } from 'fs-extra'
+import { ensureDir, pathExists, readFile, stat, readdirSync } from 'fs-extra'
 import { basename, dirname, isAbsolute, join, resolve } from 'path'
 import * as request from 'supertest'
 import * as WebTorrent from 'webtorrent'
@@ -45,8 +45,16 @@ function root () {
   return root
 }
 
-function buildServerDirectory (server: { internalServerNumber: number }, directory: string) {
-  return join(root(), 'test' + server.internalServerNumber, directory)
+function buildServerDirectory (server: { internalServerNumber: number }, directory: string, filenameRegexp?: RegExp) {
+  let fullPath = join(root(), 'test' + server.internalServerNumber, directory)
+
+  if (filenameRegexp) {
+    const foundFile = readdirSync(fullPath).find(f => filenameRegexp.test(f))
+
+    fullPath += `/${foundFile}`
+  }
+
+  return fullPath
 }
 
 async function testImage (url: string, imageName: string, imagePath: string, extension = '.jpg') {
