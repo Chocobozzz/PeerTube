@@ -92,12 +92,13 @@ export class VideoTables {
   }
 
   getStreamingPlaylistAttributes () {
-    let playlistKeys = [ 'id', 'playlistUrl', 'type' ]
+    let playlistKeys = [ 'id', 'playlistUrl', 'playlistFilename', 'type' ]
 
     if (this.mode === 'get') {
       playlistKeys = playlistKeys.concat([
         'p2pMediaLoaderInfohashes',
         'p2pMediaLoaderPeerVersion',
+        'segmentsSha256Filename',
         'segmentsSha256Url',
         'videoId',
         'createdAt',

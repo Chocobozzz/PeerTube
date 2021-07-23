@@ -36,7 +36,7 @@ async function assertNotExists (server: PeerTubeServer, directory: string, subst
   }
 }
 
-async function assertCountAreOkay (servers: PeerTubeServer[]) {
+async function assertCountAreOkay (servers: PeerTubeServer[], videoServer2UUID: string) {
   for (const server of servers) {
     const videosCount = await countFiles(server, 'videos')
     expect(videosCount).to.equal(8)
@@ -53,11 +53,20 @@ async function assertCountAreOkay (servers: PeerTubeServer[]) {
     const avatarsCount = await countFiles(server, 'avatars')
     expect(avatarsCount).to.equal(2)
   }
+
+  // When we'll prune HLS directories too
+  // const hlsRootCount = await countFiles(servers[1], 'streaming-playlists/hls/')
+  // expect(hlsRootCount).to.equal(2)
+
+  // const hlsCount = await countFiles(servers[1], 'streaming-playlists/hls/' + videoServer2UUID)
+  // expect(hlsCount).to.equal(10)
 }
 
 describe('Test prune storage scripts', function () {
   let servers: PeerTubeServer[]
   const badNames: { [directory: string]: string[] } = {}
+
+  let videoServer2UUID: string
 
   before(async function () {
     this.timeout(120000)
@@ -68,7 +77,9 @@ describe('Test prune storage scripts', function () {
 
     for (const server of servers) {
       await server.videos.upload({ attributes: { name: 'video 1' } })
-      await server.videos.upload({ attributes: { name: 'video 2' } })
+
+      const { uuid } = await server.videos.upload({ attributes: { name: 'video 2' } })
+      if (server.serverNumber === 2) videoServer2UUID = uuid
 
       await server.users.updateMyAvatar({ fixture: 'avatar.png' })
 
@@ -112,7 +123,7 @@ describe('Test prune storage scripts', function () {
   })
 
   it('Should have the files on the disk', async function () {
-    await assertCountAreOkay(servers)
+    await assertCountAreOkay(servers, videoServer2UUID)
   })
 
   it('Should create some dirty files', async function () {
@@ -176,6 +187,28 @@ describe('Test prune storage scripts', function () {
 
         badNames['avatars'] = [ n1, n2 ]
       }
+
+      // When we'll prune HLS directories too
+      // {
+      //   const directory = join('streaming-playlists', 'hls')
+      //   const base = servers[1].servers.buildDirectory(directory)
+
+      //   const n1 = buildUUID()
+      //   await createFile(join(base, n1))
+      //   badNames[directory] = [ n1 ]
+      // }
+
+      // {
+      //   const directory = join('streaming-playlists', 'hls', videoServer2UUID)
+      //   const base = servers[1].servers.buildDirectory(directory)
+      //   const n1 = buildUUID() + '-240-fragmented-.mp4'
+      //   const n2 = buildUUID() + '-master.m3u8'
+
+      //   await createFile(join(base, n1))
+      //   await createFile(join(base, n2))
+
+      //   badNames[directory] = [ n1, n2 ]
+      // }
     }
   })
 
@@ -187,7 +220,7 @@ describe('Test prune storage scripts', function () {
   })
 
   it('Should have removed files', async function () {
-    await assertCountAreOkay(servers)
+    await assertCountAreOkay(servers, videoServer2UUID)
 
     for (const directory of Object.keys(badNames)) {
       for (const name of badNames[directory]) {

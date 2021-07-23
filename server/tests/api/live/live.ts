@@ -2,10 +2,10 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { join } from 'path'
+import { basename, join } from 'path'
 import { ffprobePromise, getVideoStreamFromFile } from '@server/helpers/ffprobe-utils'
 import {
-  checkLiveCleanup,
+  checkLiveCleanupAfterSave,
   checkLiveSegmentHash,
   checkResolutionsInMasterPlaylist,
   cleanupTests,
@@ -506,6 +506,10 @@ describe('Test live', function () {
         await makeRawRequest(hlsPlaylist.playlistUrl, HttpStatusCode.OK_200)
         await makeRawRequest(hlsPlaylist.segmentsSha256Url, HttpStatusCode.OK_200)
 
+        // We should have generated random filenames
+        expect(basename(hlsPlaylist.playlistUrl)).to.not.equal('master.m3u8')
+        expect(basename(hlsPlaylist.segmentsSha256Url)).to.not.equal('segments-sha256.json')
+
         expect(hlsPlaylist.files).to.have.lengthOf(resolutions.length)
 
         for (const resolution of resolutions) {
@@ -520,7 +524,9 @@ describe('Test live', function () {
             expect(file.fps).to.be.approximately(30, 2)
           }
 
-          const filename = `${video.uuid}-${resolution}-fragmented.mp4`
+          const filename = basename(file.fileUrl)
+          expect(filename).to.not.contain(video.uuid)
+
           const segmentPath = servers[0].servers.buildDirectory(join('streaming-playlists', 'hls', video.uuid, filename))
 
           const probe = await ffprobePromise(segmentPath)
@@ -537,7 +543,7 @@ describe('Test live', function () {
     it('Should correctly have cleaned up the live files', async function () {
       this.timeout(30000)
 
-      await checkLiveCleanup(servers[0], liveVideoId, [ 240, 360, 720 ])
+      await checkLiveCleanupAfterSave(servers[0], liveVideoId, [ 240, 360, 720 ])
     })
   })
 

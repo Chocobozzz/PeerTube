@@ -7,10 +7,11 @@ import { logger } from '@server/helpers/logger'
 import { getExtFromMimetype } from '@server/helpers/video'
 import { ACTIVITY_PUB, MIMETYPES, P2P_MEDIA_LOADER_PEER_VERSION, PREVIEWS_SIZE, THUMBNAILS_SIZE } from '@server/initializers/constants'
 import { generateTorrentFileName } from '@server/lib/video-paths'
+import { VideoCaptionModel } from '@server/models/video/video-caption'
 import { VideoFileModel } from '@server/models/video/video-file'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist'
 import { FilteredModelAttributes } from '@server/types'
-import { MChannelId, MStreamingPlaylist, MStreamingPlaylistVideo, MVideo, MVideoFile, MVideoId } from '@server/types/models'
+import { isStreamingPlaylist, MChannelId, MStreamingPlaylistVideo, MVideo, MVideoFile, MVideoId } from '@server/types/models'
 import {
   ActivityHashTagObject,
   ActivityMagnetUrlObject,
@@ -23,7 +24,6 @@ import {
   VideoPrivacy,
   VideoStreamingPlaylistType
 } from '@shared/models'
-import { VideoCaptionModel } from '@server/models/video/video-caption'
 
 function getThumbnailFromIcons (videoObject: VideoObject) {
   let validIcons = videoObject.icon.filter(i => i.width > THUMBNAILS_SIZE.minWidth)
@@ -80,8 +80,8 @@ function getFileAttributesFromUrl (
 
     const extname = getExtFromMimetype(MIMETYPES.VIDEO.MIMETYPE_EXT, fileUrl.mediaType)
     const resolution = fileUrl.height
-    const videoId = (videoOrPlaylist as MStreamingPlaylist).playlistUrl ? null : videoOrPlaylist.id
-    const videoStreamingPlaylistId = (videoOrPlaylist as MStreamingPlaylist).playlistUrl ? videoOrPlaylist.id : null
+    const videoId = isStreamingPlaylist(videoOrPlaylist) ? null : videoOrPlaylist.id
+    const videoStreamingPlaylistId = isStreamingPlaylist(videoOrPlaylist) ? videoOrPlaylist.id : null
 
     const attribute = {
       extname,
@@ -130,8 +130,13 @@ function getStreamingPlaylistAttributesFromObject (video: MVideoId, videoObject:
 
     const attribute = {
       type: VideoStreamingPlaylistType.HLS,
+
+      playlistFilename: basename(playlistUrlObject.href),
       playlistUrl: playlistUrlObject.href,
+
+      segmentsSha256Filename: basename(segmentsSha256UrlObject.href),
       segmentsSha256Url: segmentsSha256UrlObject.href,
+
       p2pMediaLoaderInfohashes: VideoStreamingPlaylistModel.buildP2PMediaLoaderInfoHashes(playlistUrlObject.href, files),
       p2pMediaLoaderPeerVersion: P2P_MEDIA_LOADER_PEER_VERSION,
       videoId: video.id,

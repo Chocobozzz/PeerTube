@@ -209,10 +209,12 @@ async function addVideo (options: {
   })
 
   createTorrentFederate(video, videoFile)
+    .then(() => {
+      if (video.state !== VideoState.TO_TRANSCODE) return
 
-  if (video.state === VideoState.TO_TRANSCODE) {
-    await addOptimizeOrMergeAudioJob(videoCreated, videoFile, user)
-  }
+      return addOptimizeOrMergeAudioJob(videoCreated, videoFile, user)
+    })
+    .catch(err => logger.error('Cannot add optimize/merge audio job for %s.', videoCreated.uuid, { err, ...lTags(videoCreated.uuid) }))
 
   Hooks.runAction('action:api.video.uploaded', { video: videoCreated })
 
@@ -259,9 +261,9 @@ async function createTorrentAndSetInfoHashAsync (video: MVideo, fileArg: MVideoF
   return refreshedFile.save()
 }
 
-function createTorrentFederate (video: MVideoFullLight, videoFile: MVideoFile): void {
+function createTorrentFederate (video: MVideoFullLight, videoFile: MVideoFile) {
   // Create the torrent file in async way because it could be long
-  createTorrentAndSetInfoHashAsync(video, videoFile)
+  return createTorrentAndSetInfoHashAsync(video, videoFile)
     .catch(err => logger.error('Cannot create torrent file for video %s', video.url, { err, ...lTags(video.uuid) }))
     .then(() => VideoModel.loadAndPopulateAccountAndServerAndTags(video.id))
     .then(refreshedVideo => {

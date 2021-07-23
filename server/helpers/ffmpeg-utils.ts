@@ -212,14 +212,17 @@ async function transcode (options: TranscodeOptions) {
 
 async function getLiveTranscodingCommand (options: {
   rtmpUrl: string
+
   outPath: string
+  masterPlaylistName: string
+
   resolutions: number[]
   fps: number
 
   availableEncoders: AvailableEncoders
   profile: string
 }) {
-  const { rtmpUrl, outPath, resolutions, fps, availableEncoders, profile } = options
+  const { rtmpUrl, outPath, resolutions, fps, availableEncoders, profile, masterPlaylistName } = options
   const input = rtmpUrl
 
   const command = getFFmpeg(input, 'live')
@@ -301,14 +304,14 @@ async function getLiveTranscodingCommand (options: {
 
   command.complexFilter(complexFilter)
 
-  addDefaultLiveHLSParams(command, outPath)
+  addDefaultLiveHLSParams(command, outPath, masterPlaylistName)
 
   command.outputOption('-var_stream_map', varStreamMap.join(' '))
 
   return command
 }
 
-function getLiveMuxingCommand (rtmpUrl: string, outPath: string) {
+function getLiveMuxingCommand (rtmpUrl: string, outPath: string, masterPlaylistName: string) {
   const command = getFFmpeg(rtmpUrl, 'live')
 
   command.outputOption('-c:v copy')
@@ -316,7 +319,7 @@ function getLiveMuxingCommand (rtmpUrl: string, outPath: string) {
   command.outputOption('-map 0:a?')
   command.outputOption('-map 0:v?')
 
-  addDefaultLiveHLSParams(command, outPath)
+  addDefaultLiveHLSParams(command, outPath, masterPlaylistName)
 
   return command
 }
@@ -371,12 +374,12 @@ function addDefaultEncoderParams (options: {
   }
 }
 
-function addDefaultLiveHLSParams (command: ffmpeg.FfmpegCommand, outPath: string) {
+function addDefaultLiveHLSParams (command: ffmpeg.FfmpegCommand, outPath: string, masterPlaylistName: string) {
   command.outputOption('-hls_time ' + VIDEO_LIVE.SEGMENT_TIME_SECONDS)
   command.outputOption('-hls_list_size ' + VIDEO_LIVE.SEGMENTS_LIST_SIZE)
   command.outputOption('-hls_flags delete_segments+independent_segments')
   command.outputOption(`-hls_segment_filename ${join(outPath, '%v-%06d.ts')}`)
-  command.outputOption('-master_pl_name master.m3u8')
+  command.outputOption('-master_pl_name ' + masterPlaylistName)
   command.outputOption(`-f hls`)
 
   command.output(join(outPath, '%v.m3u8'))

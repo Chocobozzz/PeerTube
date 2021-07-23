@@ -2,7 +2,6 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { join } from 'path'
 import {
   cleanupTests,
   createMultipleServers,
@@ -86,7 +85,7 @@ describe('Test optimize old videos', function () {
 
         expect(file.size).to.be.below(8000000)
 
-        const path = servers[0].servers.buildDirectory(join('videos', video.uuid + '-' + file.resolution.id + '.mp4'))
+        const path = servers[0].servers.buildWebTorrentFilePath(file.fileUrl)
         const bitrate = await getVideoFileBitrate(path)
         const fps = await getVideoFileFPS(path)
         const resolution = await getVideoFileResolution(path)

@@ -16,7 +16,6 @@ import { VideoShareModel } from '../server/models/video/video-share'
 import { VideoCommentModel } from '../server/models/video/video-comment'
 import { AccountModel } from '../server/models/account/account'
 import { VideoChannelModel } from '../server/models/video/video-channel'
-import { VideoStreamingPlaylistModel } from '../server/models/video/video-streaming-playlist'
 import { initDatabaseModels } from '../server/initializers/database'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
 import { getServerActor } from '@server/models/application/application'
@@ -128,13 +127,17 @@ async function run () {
     for (const file of video.VideoFiles) {
       console.log('Updating torrent file %s of video %s.', file.resolution, video.uuid)
       await createTorrentAndSetInfoHash(video, file)
+
+      await file.save()
     }
 
-    for (const playlist of video.VideoStreamingPlaylists) {
-      playlist.playlistUrl = WEBSERVER.URL + VideoStreamingPlaylistModel.getHlsMasterPlaylistStaticPath(video.uuid)
-      playlist.segmentsSha256Url = WEBSERVER.URL + VideoStreamingPlaylistModel.getHlsSha256SegmentsStaticPath(video.uuid, video.isLive)
+    const playlist = video.getHLSPlaylist()
+    for (const file of (playlist?.VideoFiles || [])) {
+      console.log('Updating fragmented torrent file %s of video %s.', file.resolution, video.uuid)
 
-      await playlist.save()
+      await createTorrentAndSetInfoHash(video, file)
+
+      await file.save()
     }
   }
 }

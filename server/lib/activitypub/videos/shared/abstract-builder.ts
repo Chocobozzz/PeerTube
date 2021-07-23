@@ -1,6 +1,6 @@
 import { Transaction } from 'sequelize/types'
 import { checkUrlsSameHost } from '@server/helpers/activitypub'
-import { deleteNonExistingModels } from '@server/helpers/database-utils'
+import { deleteAllModels, filterNonExistingModels } from '@server/helpers/database-utils'
 import { logger, LoggerTagsFn } from '@server/helpers/logger'
 import { updatePlaceholderThumbnail, updateVideoMiniatureFromUrl } from '@server/lib/thumbnail'
 import { setVideoTags } from '@server/lib/video'
@@ -111,8 +111,7 @@ export abstract class APVideoAbstractBuilder {
     const newVideoFiles = videoFileAttributes.map(a => new VideoFileModel(a))
 
     // Remove video files that do not exist anymore
-    const destroyTasks = deleteNonExistingModels(video.VideoFiles || [], newVideoFiles, t)
-    await Promise.all(destroyTasks)
+    await deleteAllModels(filterNonExistingModels(video.VideoFiles || [], newVideoFiles), t)
 
     // Update or add other one
     const upsertTasks = newVideoFiles.map(f => VideoFileModel.customUpsert(f, 'video', t))
@@ -124,13 +123,11 @@ export abstract class APVideoAbstractBuilder {
     const newStreamingPlaylists = streamingPlaylistAttributes.map(a => new VideoStreamingPlaylistModel(a))
 
     // Remove video playlists that do not exist anymore
-    const destroyTasks = deleteNonExistingModels(video.VideoStreamingPlaylists || [], newStreamingPlaylists, t)
-    await Promise.all(destroyTasks)
+    await deleteAllModels(filterNonExistingModels(video.VideoStreamingPlaylists || [], newStreamingPlaylists), t)
 
     video.VideoStreamingPlaylists = []
 
     for (const playlistAttributes of streamingPlaylistAttributes) {
-
       const streamingPlaylistModel = await this.insertOrReplaceStreamingPlaylist(playlistAttributes, t)
       streamingPlaylistModel.Video = video
 
@@ -163,8 +160,7 @@ export abstract class APVideoAbstractBuilder {
 
     const newVideoFiles: MVideoFile[] = getFileAttributesFromUrl(playlistModel, tagObjects).map(a => new VideoFileModel(a))
 
-    const destroyTasks = deleteNonExistingModels(oldStreamingPlaylistFiles, newVideoFiles, t)
-    await Promise.all(destroyTasks)
+    await deleteAllModels(filterNonExistingModels(oldStreamingPlaylistFiles, newVideoFiles), t)
 
     // Update or add other one
     const upsertTasks = newVideoFiles.map(f => VideoFileModel.customUpsert(f, 'streaming-playlist', t))

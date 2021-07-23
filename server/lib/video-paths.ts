@@ -4,19 +4,16 @@ import { CONFIG } from '@server/initializers/config'
 import { HLS_REDUNDANCY_DIRECTORY, HLS_STREAMING_PLAYLIST_DIRECTORY, STATIC_PATHS, WEBSERVER } from '@server/initializers/constants'
 import { isStreamingPlaylist, MStreamingPlaylist, MStreamingPlaylistVideo, MVideo, MVideoFile, MVideoUUID } from '@server/types/models'
 import { buildUUID } from '@server/helpers/uuid'
+import { removeFragmentedMP4Ext } from '@shared/core-utils'
 
 // ################## Video file name ##################
 
 function generateWebTorrentVideoFilename (resolution: number, extname: string) {
-  const uuid = buildUUID()
-
-  return uuid + '-' + resolution + extname
+  return buildUUID() + '-' + resolution + extname
 }
 
 function generateHLSVideoFilename (resolution: number) {
-  const uuid = buildUUID()
-
-  return `${uuid}-${resolution}-fragmented.mp4`
+  return `${buildUUID()}-${resolution}-fragmented.mp4`
 }
 
 function getVideoFilePath (videoOrPlaylist: MVideo | MStreamingPlaylistVideo, videoFile: MVideoFile, isRedundancy = false) {
@@ -52,6 +49,23 @@ function getHLSDirectory (video: MVideoUUID, isRedundancy = false) {
     : HLS_STREAMING_PLAYLIST_DIRECTORY
 
   return join(baseDir, video.uuid)
+}
+
+function getHlsResolutionPlaylistFilename (videoFilename: string) {
+  // Video file name already contain resolution
+  return removeFragmentedMP4Ext(videoFilename) + '.m3u8'
+}
+
+function generateHLSMasterPlaylistFilename (isLive = false) {
+  if (isLive) return 'master.m3u8'
+
+  return buildUUID() + '-master.m3u8'
+}
+
+function generateHlsSha256SegmentsFilename (isLive = false) {
+  if (isLive) return 'segments-sha256.json'
+
+  return buildUUID() + '-segments-sha256.json'
 }
 
 // ################## Torrents ##################
@@ -91,6 +105,9 @@ export {
   getTorrentFilePath,
 
   getHLSDirectory,
+  generateHLSMasterPlaylistFilename,
+  generateHlsSha256SegmentsFilename,
+  getHlsResolutionPlaylistFilename,
 
   getLocalVideoFileMetadataUrl,
 

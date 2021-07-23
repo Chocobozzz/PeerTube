@@ -103,6 +103,11 @@ async function createTorrentAndSetInfoHash (
 
   await writeFile(torrentPath, torrent)
 
+  // Remove old torrent file if it existed
+  if (videoFile.hasTorrent()) {
+    await remove(join(CONFIG.STORAGE.TORRENTS_DIR, videoFile.torrentFilename))
+  }
+
   const parsedTorrent = parseTorrent(torrent)
   videoFile.infoHash = parsedTorrent.infoHash
   videoFile.torrentFilename = torrentFilename

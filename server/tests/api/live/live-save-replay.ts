@@ -4,7 +4,7 @@ import 'mocha'
 import * as chai from 'chai'
 import { FfmpegCommand } from 'fluent-ffmpeg'
 import {
-  checkLiveCleanup,
+  checkLiveCleanupAfterSave,
   cleanupTests,
   ConfigCommand,
   createMultipleServers,
@@ -150,7 +150,7 @@ describe('Save replay setting', function () {
       await checkVideoState(liveVideoUUID, VideoState.LIVE_ENDED)
 
       // No resolutions saved since we did not save replay
-      await checkLiveCleanup(servers[0], liveVideoUUID, [])
+      await checkLiveCleanupAfterSave(servers[0], liveVideoUUID, [])
     })
 
     it('Should correctly terminate the stream on blacklist and delete the live', async function () {
@@ -179,7 +179,7 @@ describe('Save replay setting', function () {
 
       await wait(5000)
       await waitJobs(servers)
-      await checkLiveCleanup(servers[0], liveVideoUUID, [])
+      await checkLiveCleanupAfterSave(servers[0], liveVideoUUID, [])
     })
 
     it('Should correctly terminate the stream on delete and delete the video', async function () {
@@ -203,7 +203,7 @@ describe('Save replay setting', function () {
       await waitJobs(servers)
 
       await checkVideosExist(liveVideoUUID, false, HttpStatusCode.NOT_FOUND_404)
-      await checkLiveCleanup(servers[0], liveVideoUUID, [])
+      await checkLiveCleanupAfterSave(servers[0], liveVideoUUID, [])
     })
   })
 
@@ -259,7 +259,7 @@ describe('Save replay setting', function () {
     })
 
     it('Should have cleaned up the live files', async function () {
-      await checkLiveCleanup(servers[0], liveVideoUUID, [ 720 ])
+      await checkLiveCleanupAfterSave(servers[0], liveVideoUUID, [ 720 ])
     })
 
     it('Should correctly terminate the stream on blacklist and blacklist the saved replay video', async function () {
@@ -287,7 +287,7 @@ describe('Save replay setting', function () {
 
       await wait(5000)
       await waitJobs(servers)
-      await checkLiveCleanup(servers[0], liveVideoUUID, [ 720 ])
+      await checkLiveCleanupAfterSave(servers[0], liveVideoUUID, [ 720 ])
     })
 
     it('Should correctly terminate the stream on delete and delete the video', async function () {
@@ -310,7 +310,7 @@ describe('Save replay setting', function () {
       await waitJobs(servers)
 
       await checkVideosExist(liveVideoUUID, false, HttpStatusCode.NOT_FOUND_404)
-      await checkLiveCleanup(servers[0], liveVideoUUID, [])
+      await checkLiveCleanupAfterSave(servers[0], liveVideoUUID, [])
     })
   })
 

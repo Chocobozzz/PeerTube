@@ -1,6 +1,7 @@
 import { expect } from 'chai'
 import { basename } from 'path'
 import { sha256 } from '@server/helpers/core-utils'
+import { removeFragmentedMP4Ext } from '@shared/core-utils'
 import { HttpStatusCode, VideoStreamingPlaylist } from '@shared/models'
 import { PeerTubeServer } from '../server'
 
@@ -15,10 +16,10 @@ async function checkSegmentHash (options: {
   const { server, baseUrlPlaylist, baseUrlSegment, videoUUID, resolution, hlsPlaylist } = options
   const command = server.streamingPlaylists
 
-  const playlist = await command.get({ url: `${baseUrlPlaylist}/${videoUUID}/${resolution}.m3u8` })
-
   const file = hlsPlaylist.files.find(f => f.resolution.id === resolution)
   const videoName = basename(file.fileUrl)
+
+  const playlist = await command.get({ url: `${baseUrlPlaylist}/${videoUUID}/${removeFragmentedMP4Ext(videoName)}.m3u8` })
 
   const matches = /#EXT-X-BYTERANGE:(\d+)@(\d+)/.exec(playlist)
 
