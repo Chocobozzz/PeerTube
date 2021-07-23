@@ -1,6 +1,6 @@
 import * as retry from 'async/retry'
 import * as Bluebird from 'bluebird'
-import { QueryTypes, Transaction } from 'sequelize'
+import { BindOrReplacements, QueryTypes, Transaction } from 'sequelize'
 import { Model } from 'sequelize-typescript'
 import { sequelizeTypescript } from '@server/initializers/database'
 import { logger } from './logger'
@@ -84,13 +84,15 @@ function resetSequelizeInstance (instance: Model<any>, savedFields: object) {
   })
 }
 
-function deleteNonExistingModels <T extends { hasSameUniqueKeysThan (other: T): boolean } & Pick<Model, 'destroy'>> (
+function filterNonExistingModels <T extends { hasSameUniqueKeysThan (other: T): boolean }> (
   fromDatabase: T[],
-  newModels: T[],
-  t: Transaction
+  newModels: T[]
 ) {
   return fromDatabase.filter(f => !newModels.find(newModel => newModel.hasSameUniqueKeysThan(f)))
-              .map(f => f.destroy({ transaction: t }))
+}
+
+function deleteAllModels <T extends Pick<Model, 'destroy'>> (models: T[], transaction: Transaction) {
+  return Promise.all(models.map(f => f.destroy({ transaction })))
 }
 
 // Sequelize always skip the update if we only update updatedAt field
@@ -121,13 +123,28 @@ function afterCommitIfTransaction (t: Transaction, fn: Function) {
 
 // ---------------------------------------------------------------------------
 
+function doesExist (query: string, bind?: BindOrReplacements) {
+  const options = {
+    type: QueryTypes.SELECT as QueryTypes.SELECT,
+    bind,
+    raw: true
+  }
+
+  return sequelizeTypescript.query(query, options)
+            .then(results => results.length === 1)
+}
+
+// ---------------------------------------------------------------------------
+
 export {
   resetSequelizeInstance,
   retryTransactionWrapper,
   transactionRetryer,
   updateInstanceWithAnother,
   afterCommitIfTransaction,
-  deleteNonExistingModels,
+  filterNonExistingModels,
+  deleteAllModels,
   setAsUpdated,
-  runInReadCommittedTransaction
+  runInReadCommittedTransaction,
+  doesExist
 }

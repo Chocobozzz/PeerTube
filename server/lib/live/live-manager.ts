@@ -4,16 +4,17 @@ import { isTestInstance } from '@server/helpers/core-utils'
 import { computeResolutionsToTranscode, getVideoFileFPS, getVideoFileResolution } from '@server/helpers/ffprobe-utils'
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
 import { CONFIG, registerConfigChangedHandler } from '@server/initializers/config'
-import { P2P_MEDIA_LOADER_PEER_VERSION, VIDEO_LIVE, VIEW_LIFETIME, WEBSERVER } from '@server/initializers/constants'
+import { P2P_MEDIA_LOADER_PEER_VERSION, VIDEO_LIVE, VIEW_LIFETIME } from '@server/initializers/constants'
 import { UserModel } from '@server/models/user/user'
 import { VideoModel } from '@server/models/video/video'
 import { VideoLiveModel } from '@server/models/video/video-live'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist'
-import { MStreamingPlaylist, MStreamingPlaylistVideo, MVideo, MVideoLiveVideo } from '@server/types/models'
+import { MStreamingPlaylistVideo, MVideo, MVideoLiveVideo } from '@server/types/models'
 import { VideoState, VideoStreamingPlaylistType } from '@shared/models'
 import { federateVideoIfNeeded } from '../activitypub/videos'
 import { JobQueue } from '../job-queue'
 import { PeerTubeSocket } from '../peertube-socket'
+import { generateHLSMasterPlaylistFilename, generateHlsSha256SegmentsFilename } from '../video-paths'
 import { LiveQuotaStore } from './live-quota-store'
 import { LiveSegmentShaStore } from './live-segment-sha-store'
 import { cleanupLive } from './live-utils'
@@ -392,19 +393,18 @@ class LiveManager {
     return resolutionsEnabled.concat([ originResolution ])
   }
 
-  private async createLivePlaylist (video: MVideo, allResolutions: number[]) {
-    const playlistUrl = WEBSERVER.URL + VideoStreamingPlaylistModel.getHlsMasterPlaylistStaticPath(video.uuid)
-    const [ videoStreamingPlaylist ] = await VideoStreamingPlaylistModel.upsert({
-      videoId: video.id,
-      playlistUrl,
-      segmentsSha256Url: WEBSERVER.URL + VideoStreamingPlaylistModel.getHlsSha256SegmentsStaticPath(video.uuid, video.isLive),
-      p2pMediaLoaderInfohashes: VideoStreamingPlaylistModel.buildP2PMediaLoaderInfoHashes(playlistUrl, allResolutions),
-      p2pMediaLoaderPeerVersion: P2P_MEDIA_LOADER_PEER_VERSION,
+  private async createLivePlaylist (video: MVideo, allResolutions: number[]): Promise<MStreamingPlaylistVideo> {
+    const playlist = await VideoStreamingPlaylistModel.loadOrGenerate(video)
 
-      type: VideoStreamingPlaylistType.HLS
-    }, { returning: true }) as [ MStreamingPlaylist, boolean ]
+    playlist.playlistFilename = generateHLSMasterPlaylistFilename(true)
+    playlist.segmentsSha256Filename = generateHlsSha256SegmentsFilename(true)
 
-    return Object.assign(videoStreamingPlaylist, { Video: video })
+    playlist.p2pMediaLoaderPeerVersion = P2P_MEDIA_LOADER_PEER_VERSION
+    playlist.type = VideoStreamingPlaylistType.HLS
+
+    playlist.assignP2PMediaLoaderInfoHashes(video, allResolutions)
+
+    return playlist.save()
   }
 
   static get Instance () {

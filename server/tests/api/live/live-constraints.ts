@@ -4,7 +4,7 @@ import 'mocha'
 import * as chai from 'chai'
 import { VideoPrivacy } from '@shared/models'
 import {
-  checkLiveCleanup,
+  checkLiveCleanupAfterSave,
   cleanupTests,
   ConfigCommand,
   createMultipleServers,
@@ -43,7 +43,7 @@ describe('Test live constraints', function () {
       expect(video.duration).to.be.greaterThan(0)
     }
 
-    await checkLiveCleanup(servers[0], videoId, resolutions)
+    await checkLiveCleanupAfterSave(servers[0], videoId, resolutions)
   }
 
   async function waitUntilLivePublishedOnAllServers (videoId: string) {

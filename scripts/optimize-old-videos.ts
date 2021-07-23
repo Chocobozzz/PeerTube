@@ -19,13 +19,13 @@ run()
     process.exit(-1)
   })
 
-let currentVideoId = null
-let currentFile = null
+let currentVideoId: string
+let currentFilePath: string
 
 process.on('SIGINT', async function () {
   console.log('Cleaning up temp files')
-  await remove(`${currentFile}_backup`)
-  await remove(`${dirname(currentFile)}/${currentVideoId}-transcoded.mp4`)
+  await remove(`${currentFilePath}_backup`)
+  await remove(`${dirname(currentFilePath)}/${currentVideoId}-transcoded.mp4`)
   process.exit(0)
 })
 
@@ -40,12 +40,12 @@ async function run () {
     currentVideoId = video.id
 
     for (const file of video.VideoFiles) {
-      currentFile = getVideoFilePath(video, file)
+      currentFilePath = getVideoFilePath(video, file)
 
       const [ videoBitrate, fps, resolution ] = await Promise.all([
-        getVideoFileBitrate(currentFile),
-        getVideoFileFPS(currentFile),
-        getVideoFileResolution(currentFile)
+        getVideoFileBitrate(currentFilePath),
+        getVideoFileFPS(currentFilePath),
+        getVideoFileResolution(currentFilePath)
       ])
 
       const maxBitrate = getMaxBitrate(resolution.videoFileResolution, fps, VIDEO_TRANSCODING_FPS)
@@ -53,25 +53,27 @@ async function run () {
       if (isMaxBitrateExceeded) {
         console.log(
           'Optimizing video file %s with bitrate %s kbps (max: %s kbps)',
-          basename(currentFile), videoBitrate / 1000, maxBitrate / 1000
+          basename(currentFilePath), videoBitrate / 1000, maxBitrate / 1000
         )
 
-        const backupFile = `${currentFile}_backup`
-        await copy(currentFile, backupFile)
+        const backupFile = `${currentFilePath}_backup`
+        await copy(currentFilePath, backupFile)
 
         await optimizeOriginalVideofile(video, file)
+        // Update file path, the video filename changed
+        currentFilePath = getVideoFilePath(video, file)
 
         const originalDuration = await getDurationFromVideoFile(backupFile)
-        const newDuration = await getDurationFromVideoFile(currentFile)
+        const newDuration = await getDurationFromVideoFile(currentFilePath)
 
         if (originalDuration === newDuration) {
-          console.log('Finished optimizing %s', basename(currentFile))
+          console.log('Finished optimizing %s', basename(currentFilePath))
           await remove(backupFile)
           continue
         }
 
-        console.log('Failed to optimize %s, restoring original', basename(currentFile))
-        await move(backupFile, currentFile, { overwrite: true })
+        console.log('Failed to optimize %s, restoring original', basename(currentFilePath))
+        await move(backupFile, currentFilePath, { overwrite: true })
         await createTorrentAndSetInfoHash(video, file)
         await file.save()
       }

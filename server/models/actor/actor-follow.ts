@@ -19,8 +19,8 @@ import {
   UpdatedAt
 } from 'sequelize-typescript'
 import { isActivityPubUrlValid } from '@server/helpers/custom-validators/activitypub/misc'
+import { doesExist } from '@server/helpers/database-utils'
 import { getServerActor } from '@server/models/application/application'
-import { VideoModel } from '@server/models/video/video'
 import {
   MActorFollowActorsDefault,
   MActorFollowActorsDefaultSubscription,
@@ -166,14 +166,8 @@ export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowMo
 
   static isFollowedBy (actorId: number, followerActorId: number) {
     const query = 'SELECT 1 FROM "actorFollow" WHERE "actorId" = $followerActorId AND "targetActorId" = $actorId LIMIT 1'
-    const options = {
-      type: QueryTypes.SELECT as QueryTypes.SELECT,
-      bind: { actorId, followerActorId },
-      raw: true
-    }
 
-    return VideoModel.sequelize.query(query, options)
-                     .then(results => results.length === 1)
+    return doesExist(query, { actorId, followerActorId })
   }
 
   static loadByActorAndTarget (actorId: number, targetActorId: number, t?: Transaction): Promise<MActorFollowActorsDefault> {

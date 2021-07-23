@@ -108,21 +108,22 @@ describe('Test update host scripts', function () {
 
     for (const video of data) {
       const videoDetails = await server.videos.get({ id: video.id })
+      const files = videoDetails.files.concat(videoDetails.streamingPlaylists[0].files)
 
-      expect(videoDetails.files).to.have.lengthOf(4)
+      expect(files).to.have.lengthOf(8)
 
-      for (const file of videoDetails.files) {
+      for (const file of files) {
         expect(file.magnetUri).to.contain('localhost%3A9002%2Ftracker%2Fsocket')
-        expect(file.magnetUri).to.contain('localhost%3A9002%2Fstatic%2Fwebseed%2F')
+        expect(file.magnetUri).to.contain('localhost%3A9002%2Fstatic%2F')
 
-        const torrent = await parseTorrentVideo(server, videoDetails.uuid, file.resolution.id)
+        const torrent = await parseTorrentVideo(server, file)
         const announceWS = torrent.announce.find(a => a === 'ws://localhost:9002/tracker/socket')
         expect(announceWS).to.not.be.undefined
 
         const announceHttp = torrent.announce.find(a => a === 'http://localhost:9002/tracker/announce')
         expect(announceHttp).to.not.be.undefined
 
-        expect(torrent.urlList[0]).to.contain('http://localhost:9002/static/webseed')
+        expect(torrent.urlList[0]).to.contain('http://localhost:9002/static/')
       }
     }
   })

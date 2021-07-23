@@ -5,7 +5,7 @@ import { sequelizeTypescript } from '@server/initializers/database'
 import { TagModel } from '@server/models/video/tag'
 import { VideoModel } from '@server/models/video/video'
 import { FilteredModelAttributes } from '@server/types'
-import { MThumbnail, MUserId, MVideo, MVideoFile, MVideoTag, MVideoThumbnail, MVideoUUID } from '@server/types/models'
+import { MThumbnail, MUserId, MVideoFile, MVideoTag, MVideoThumbnail, MVideoUUID } from '@server/types/models'
 import { ThumbnailType, VideoCreate, VideoPrivacy, VideoTranscodingPayload } from '@shared/models'
 import { federateVideoIfNeeded } from './activitypub/videos'
 import { JobQueue } from './job-queue/job-queue'
@@ -105,7 +105,7 @@ async function publishAndFederateIfNeeded (video: MVideoUUID, wasLive = false) {
   }
 }
 
-async function addOptimizeOrMergeAudioJob (video: MVideo, videoFile: MVideoFile, user: MUserId) {
+async function addOptimizeOrMergeAudioJob (video: MVideoUUID, videoFile: MVideoFile, user: MUserId) {
   let dataInput: VideoTranscodingPayload
 
   if (videoFile.isAudio()) {

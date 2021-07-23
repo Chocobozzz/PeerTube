@@ -7,12 +7,12 @@ import { buildConcatenatedName, cleanupLive, LiveSegmentShaStore } from '@server
 import { generateVideoMiniature } from '@server/lib/thumbnail'
 import { generateHlsPlaylistResolutionFromTS } from '@server/lib/transcoding/video-transcoding'
 import { publishAndFederateIfNeeded } from '@server/lib/video'
-import { getHLSDirectory } from '@server/lib/video-paths'
+import { generateHLSMasterPlaylistFilename, generateHlsSha256SegmentsFilename, getHLSDirectory } from '@server/lib/video-paths'
 import { VideoModel } from '@server/models/video/video'
 import { VideoFileModel } from '@server/models/video/video-file'
 import { VideoLiveModel } from '@server/models/video/video-live'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist'
-import { MVideo, MVideoLive } from '@server/types/models'
+import { MStreamingPlaylist, MVideo, MVideoLive } from '@server/types/models'
 import { ThumbnailType, VideoLiveEndingPayload, VideoState } from '@shared/models'
 import { logger } from '../../../helpers/logger'
 
@@ -43,7 +43,7 @@ async function processVideoLiveEnding (job: Bull.Job) {
     return cleanupLive(video, streamingPlaylist)
   }
 
-  return saveLive(video, live)
+  return saveLive(video, live, streamingPlaylist)
 }
 
 // ---------------------------------------------------------------------------
@@ -54,14 +54,14 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function saveLive (video: MVideo, live: MVideoLive) {
+async function saveLive (video: MVideo, live: MVideoLive, streamingPlaylist: MStreamingPlaylist) {
   const hlsDirectory = getHLSDirectory(video, false)
   const replayDirectory = join(hlsDirectory, VIDEO_LIVE.REPLAY_DIRECTORY)
 
   const rootFiles = await readdir(hlsDirectory)
 
   const playlistFiles = rootFiles.filter(file => {
-    return file.endsWith('.m3u8') && file !== 'master.m3u8'
+    return file.endsWith('.m3u8') && file !== streamingPlaylist.playlistFilename
   })
 
   await cleanupLiveFiles(hlsDirectory)
@@ -80,7 +80,12 @@ async function saveLive (video: MVideo, live: MVideoLive) {
 
   const hlsPlaylist = videoWithFiles.getHLSPlaylist()
   await VideoFileModel.removeHLSFilesOfVideoId(hlsPlaylist.id)
+
+  // Reset playlist
   hlsPlaylist.VideoFiles = []
+  hlsPlaylist.playlistFilename = generateHLSMasterPlaylistFilename()
+  hlsPlaylist.segmentsSha256Filename = generateHlsSha256SegmentsFilename()
+  await hlsPlaylist.save()
 
   let durationDone = false
 

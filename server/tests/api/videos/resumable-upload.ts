@@ -170,8 +170,13 @@ describe('Test resumable upload', function () {
 
       const size = 1000
 
+      // Content length check seems to have changed in v16
+      const expectedStatus = process.version.startsWith('v16')
+        ? HttpStatusCode.CONFLICT_409
+        : HttpStatusCode.BAD_REQUEST_400
+
       const contentRangeBuilder = (start: number) => `bytes ${start}-${start + size - 1}/${size}`
-      await sendChunks({ pathUploadId: uploadId, expectedStatus: HttpStatusCode.CONFLICT_409, contentRangeBuilder, contentLength: size })
+      await sendChunks({ pathUploadId: uploadId, expectedStatus, contentRangeBuilder, contentLength: size })
       await checkFileSize(uploadId, 0)
     })
   })

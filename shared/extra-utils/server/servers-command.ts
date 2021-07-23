@@ -1,7 +1,6 @@
 import { exec } from 'child_process'
 import { copy, ensureDir, readFile, remove } from 'fs-extra'
-import { join } from 'path'
-import { basename } from 'path/posix'
+import { basename, join } from 'path'
 import { root } from '@server/helpers/core-utils'
 import { HttpStatusCode } from '@shared/models'
 import { getFileSize, isGithubCI, wait } from '../miscs'

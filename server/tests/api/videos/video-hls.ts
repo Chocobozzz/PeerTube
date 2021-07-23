@@ -2,7 +2,8 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { join } from 'path'
+import { basename, join } from 'path'
+import { removeFragmentedMP4Ext, uuidRegex } from '@shared/core-utils'
 import {
   checkDirectoryIsEmpty,
   checkResolutionsInMasterPlaylist,
@@ -19,8 +20,6 @@ import {
 } from '@shared/extra-utils'
 import { HttpStatusCode, VideoStreamingPlaylistType } from '@shared/models'
 import { DEFAULT_AUDIO_RESOLUTION } from '../../../initializers/constants'
-import { uuidRegex } from '@shared/core-utils'
-import { basename } from 'path/posix'
 
 const expect = chai.expect
 
@@ -78,11 +77,13 @@ async function checkHlsPlaylist (servers: PeerTubeServer[], videoUUID: string, h
     // Check resolution playlists
     {
       for (const resolution of resolutions) {
+        const file = hlsFiles.find(f => f.resolution.id === resolution)
+        const playlistName = removeFragmentedMP4Ext(basename(file.fileUrl)) + '.m3u8'
+
         const subPlaylist = await server.streamingPlaylists.get({
-          url: `${baseUrl}/static/streaming-playlists/hls/${videoUUID}/${resolution}.m3u8`
+          url: `${baseUrl}/static/streaming-playlists/hls/${videoUUID}/${playlistName}`
         })
 
-        const file = hlsFiles.find(f => f.resolution.id === resolution)
         expect(subPlaylist).to.match(new RegExp(`${uuidRegex}-${resolution}-fragmented.mp4`))
         expect(subPlaylist).to.contain(basename(file.fileUrl))
       }

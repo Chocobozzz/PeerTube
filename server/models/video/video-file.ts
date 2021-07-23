@@ -1,7 +1,7 @@
 import { remove } from 'fs-extra'
 import * as memoizee from 'memoizee'
 import { join } from 'path'
-import { FindOptions, Op, QueryTypes, Transaction } from 'sequelize'
+import { FindOptions, Op, Transaction } from 'sequelize'
 import {
   AllowNull,
   BelongsTo,
@@ -21,6 +21,7 @@ import {
 import { Where } from 'sequelize/types/lib/utils'
 import validator from 'validator'
 import { buildRemoteVideoBaseUrl } from '@server/helpers/activitypub'
+import { doesExist } from '@server/helpers/database-utils'
 import { logger } from '@server/helpers/logger'
 import { extractVideo } from '@server/helpers/video'
 import { getTorrentFilePath } from '@server/lib/video-paths'
@@ -250,20 +251,41 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
 
   static doesInfohashExist (infoHash: string) {
     const query = 'SELECT 1 FROM "videoFile" WHERE "infoHash" = $infoHash LIMIT 1'
-    const options = {
-      type: QueryTypes.SELECT as QueryTypes.SELECT,
-      bind: { infoHash },
-      raw: true
-    }
 
-    return VideoModel.sequelize.query(query, options)
-              .then(results => results.length === 1)
+    return doesExist(query, { infoHash })
   }
 
   static async doesVideoExistForVideoFile (id: number, videoIdOrUUID: number | string) {
     const videoFile = await VideoFileModel.loadWithVideoOrPlaylist(id, videoIdOrUUID)
 
     return !!videoFile
+  }
+
+  static async doesOwnedTorrentFileExist (filename: string) {
+    const query = 'SELECT 1 FROM "videoFile" ' +
+                  'LEFT JOIN "video" "webtorrent" ON "webtorrent"."id" = "videoFile"."videoId" AND "webtorrent"."remote" IS FALSE ' +
+                  'LEFT JOIN "videoStreamingPlaylist" ON "videoStreamingPlaylist"."id" = "videoFile"."videoStreamingPlaylistId" ' +
+                  'LEFT JOIN "video" "hlsVideo" ON "hlsVideo"."id" = "videoStreamingPlaylist"."videoId" AND "hlsVideo"."remote" IS FALSE ' +
+                  'WHERE "torrentFilename" = $filename AND ("hlsVideo"."id" IS NOT NULL OR "webtorrent"."id" IS NOT NULL) LIMIT 1'
+
+    return doesExist(query, { filename })
+  }
+
+  static async doesOwnedWebTorrentVideoFileExist (filename: string) {
+    const query = 'SELECT 1 FROM "videoFile" INNER JOIN "video" ON "video"."id" = "videoFile"."videoId" AND "video"."remote" IS FALSE ' +
+                  'WHERE "filename" = $filename LIMIT 1'
+
+    return doesExist(query, { filename })
+  }
+
+  static loadByFilename (filename: string) {
+    const query = {
+      where: {
+        filename
+      }
+    }
+
+    return VideoFileModel.findOne(query)
   }
 
   static loadWithVideoOrPlaylistByTorrentFilename (filename: string) {
@@ -443,10 +465,9 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
   }
 
   getFileDownloadUrl (video: MVideoWithHost) {
-    const basePath = this.isHLS()
-      ? STATIC_DOWNLOAD_PATHS.HLS_VIDEOS
-      : STATIC_DOWNLOAD_PATHS.VIDEOS
-    const path = join(basePath, this.filename)
+    const path = this.isHLS()
+      ? join(STATIC_DOWNLOAD_PATHS.HLS_VIDEOS, `${video.uuid}-${this.resolution}-fragmented${this.extname}`)
+      : join(STATIC_DOWNLOAD_PATHS.VIDEOS, `${video.uuid}-${this.resolution}${this.extname}`)
 
     if (video.isOwned()) return WEBSERVER.URL + path
 

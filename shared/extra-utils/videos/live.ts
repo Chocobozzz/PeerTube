@@ -76,7 +76,7 @@ async function waitUntilLivePublishedOnAllServers (servers: PeerTubeServer[], vi
   }
 }
 
-async function checkLiveCleanup (server: PeerTubeServer, videoUUID: string, resolutions: number[] = []) {
+async function checkLiveCleanupAfterSave (server: PeerTubeServer, videoUUID: string, resolutions: number[] = []) {
   const basePath = server.servers.buildDirectory('streaming-playlists')
   const hlsPath = join(basePath, 'hls', videoUUID)
 
@@ -93,12 +93,18 @@ async function checkLiveCleanup (server: PeerTubeServer, videoUUID: string, reso
   expect(files).to.have.lengthOf(resolutions.length * 2 + 2)
 
   for (const resolution of resolutions) {
-    expect(files).to.contain(`${videoUUID}-${resolution}-fragmented.mp4`)
-    expect(files).to.contain(`${resolution}.m3u8`)
+    const fragmentedFile = files.find(f => f.endsWith(`-${resolution}-fragmented.mp4`))
+    expect(fragmentedFile).to.exist
+
+    const playlistFile = files.find(f => f.endsWith(`${resolution}.m3u8`))
+    expect(playlistFile).to.exist
   }
 
-  expect(files).to.contain('master.m3u8')
-  expect(files).to.contain('segments-sha256.json')
+  const masterPlaylistFile = files.find(f => f.endsWith('-master.m3u8'))
+  expect(masterPlaylistFile).to.exist
+
+  const shaFile = files.find(f => f.endsWith('-segments-sha256.json'))
+  expect(shaFile).to.exist
 }
 
 export {
@@ -107,5 +113,5 @@ export {
   testFfmpegStreamError,
   stopFfmpeg,
   waitUntilLivePublishedOnAllServers,
-  checkLiveCleanup
+  checkLiveCleanupAfterSave
 }

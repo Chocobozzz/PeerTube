@@ -182,8 +182,8 @@ function streamingPlaylistsModelToFormattedJSON (
       return {
         id: playlist.id,
         type: playlist.type,
-        playlistUrl: playlist.playlistUrl,
-        segmentsSha256Url: playlist.segmentsSha256Url,
+        playlistUrl: playlist.getMasterPlaylistUrl(video),
+        segmentsSha256Url: playlist.getSha256SegmentsUrl(video),
         redundancies,
         files
       }
@@ -331,7 +331,7 @@ function videoModelToActivityPubObject (video: MVideoAP): VideoObject {
       type: 'Link',
       name: 'sha256',
       mediaType: 'application/json' as 'application/json',
-      href: playlist.segmentsSha256Url
+      href: playlist.getSha256SegmentsUrl(video)
     })
 
     addVideoFilesInAPAcc(tag, video, playlist.VideoFiles || [])
@@ -339,7 +339,7 @@ function videoModelToActivityPubObject (video: MVideoAP): VideoObject {
     url.push({
       type: 'Link',
       mediaType: 'application/x-mpegURL' as 'application/x-mpegURL',
-      href: playlist.playlistUrl,
+      href: playlist.getMasterPlaylistUrl(video),
       tag
     })
   }

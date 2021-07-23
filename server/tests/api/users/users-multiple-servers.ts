@@ -58,10 +58,10 @@ describe('Test users with multiple servers', function () {
       const { uuid } = await servers[0].videos.upload({ token: userAccessToken })
       videoUUID = uuid
 
+      await waitJobs(servers)
+
       await saveVideoInServers(servers, videoUUID)
     }
-
-    await waitJobs(servers)
   })
 
   it('Should be able to update my display name', async function () {

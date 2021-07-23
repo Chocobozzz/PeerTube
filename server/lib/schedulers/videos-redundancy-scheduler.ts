@@ -267,7 +267,8 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
     logger.info('Duplicating %s streaming playlist in videos redundancy with "%s" strategy.', video.url, strategy)
 
     const destDirectory = join(HLS_REDUNDANCY_DIRECTORY, video.uuid)
-    await downloadPlaylistSegments(playlist.playlistUrl, destDirectory, VIDEO_IMPORT_TIMEOUT)
+    const masterPlaylistUrl = playlist.getMasterPlaylistUrl(video)
+    await downloadPlaylistSegments(masterPlaylistUrl, destDirectory, VIDEO_IMPORT_TIMEOUT)
 
     const createdModel: MVideoRedundancyStreamingPlaylistVideo = await VideoRedundancyModel.create({
       expiresOn,
@@ -282,7 +283,7 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
 
     await sendCreateCacheFile(serverActor, video, createdModel)
 
-    logger.info('Duplicated playlist %s -> %s.', playlist.playlistUrl, createdModel.url)
+    logger.info('Duplicated playlist %s -> %s.', masterPlaylistUrl, createdModel.url)
   }
 
   private async extendsExpirationOf (redundancy: MVideoRedundancyVideo, expiresAfterMs: number) {
@@ -330,7 +331,7 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
   private buildEntryLogId (object: MVideoRedundancyFileVideo | MVideoRedundancyStreamingPlaylistVideo) {
     if (isMVideoRedundancyFileVideo(object)) return `${object.VideoFile.Video.url}-${object.VideoFile.resolution}`
 
-    return `${object.VideoStreamingPlaylist.playlistUrl}`
+    return `${object.VideoStreamingPlaylist.getMasterPlaylistUrl(object.VideoStreamingPlaylist.Video)}`
   }
 
   private getTotalFileSizes (files: MVideoFile[], playlists: MStreamingPlaylistFiles[]) {

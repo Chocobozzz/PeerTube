@@ -39,5 +39,5 @@ export type MStreamingPlaylistRedundanciesOpt =
   PickWithOpt<VideoStreamingPlaylistModel, 'RedundancyVideos', MVideoRedundancyFileUrl[]>
 
 export function isStreamingPlaylist (value: MVideo | MStreamingPlaylistVideo): value is MStreamingPlaylistVideo {
-  return !!(value as MStreamingPlaylist).playlistUrl
+  return !!(value as MStreamingPlaylist).videoId
 }

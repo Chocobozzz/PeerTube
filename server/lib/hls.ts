@@ -1,7 +1,7 @@
 import { close, ensureDir, move, open, outputJSON, pathExists, read, readFile, remove, writeFile } from 'fs-extra'
 import { flatten, uniq } from 'lodash'
 import { basename, dirname, join } from 'path'
-import { MVideoWithFile } from '@server/types/models'
+import { MStreamingPlaylistFilesVideo, MVideoWithFile } from '@server/types/models'
 import { sha256 } from '../helpers/core-utils'
 import { getAudioStreamCodec, getVideoStreamCodec, getVideoStreamSize } from '../helpers/ffprobe-utils'
 import { logger } from '../helpers/logger'
@@ -12,7 +12,7 @@ import { HLS_STREAMING_PLAYLIST_DIRECTORY, P2P_MEDIA_LOADER_PEER_VERSION } from 
 import { sequelizeTypescript } from '../initializers/database'
 import { VideoFileModel } from '../models/video/video-file'
 import { VideoStreamingPlaylistModel } from '../models/video/video-streaming-playlist'
-import { getVideoFilePath } from './video-paths'
+import { getHlsResolutionPlaylistFilename, getVideoFilePath } from './video-paths'
 
 async function updateStreamingPlaylistsInfohashesIfNeeded () {
   const playlistsToUpdate = await VideoStreamingPlaylistModel.listByIncorrectPeerVersion()
@@ -22,27 +22,29 @@ async function updateStreamingPlaylistsInfohashesIfNeeded () {
     await sequelizeTypescript.transaction(async t => {
       const videoFiles = await VideoFileModel.listByStreamingPlaylist(playlist.id, t)
 
-      playlist.p2pMediaLoaderInfohashes = VideoStreamingPlaylistModel.buildP2PMediaLoaderInfoHashes(playlist.playlistUrl, videoFiles)
+      playlist.assignP2PMediaLoaderInfoHashes(playlist.Video, videoFiles)
       playlist.p2pMediaLoaderPeerVersion = P2P_MEDIA_LOADER_PEER_VERSION
+
       await playlist.save({ transaction: t })
     })
   }
 }
 
-async function updateMasterHLSPlaylist (video: MVideoWithFile) {
+async function updateMasterHLSPlaylist (video: MVideoWithFile, playlist: MStreamingPlaylistFilesVideo) {
   const directory = join(HLS_STREAMING_PLAYLIST_DIRECTORY, video.uuid)
-  const masterPlaylists: string[] = [ '#EXTM3U', '#EXT-X-VERSION:3' ]
-  const masterPlaylistPath = join(directory, VideoStreamingPlaylistModel.getMasterHlsPlaylistFilename())
-  const streamingPlaylist = video.getHLSPlaylist()
 
-  for (const file of streamingPlaylist.VideoFiles) {
-    const playlistFilename = VideoStreamingPlaylistModel.getHlsPlaylistFilename(file.resolution)
+  const masterPlaylists: string[] = [ '#EXTM3U', '#EXT-X-VERSION:3' ]
+
+  const masterPlaylistPath = join(directory, playlist.playlistFilename)
+
+  for (const file of playlist.VideoFiles) {
+    const playlistFilename = getHlsResolutionPlaylistFilename(file.filename)
 
     // If we did not generated a playlist for this resolution, skip
     const filePlaylistPath = join(directory, playlistFilename)
     if (await pathExists(filePlaylistPath) === false) continue
 
-    const videoFilePath = getVideoFilePath(streamingPlaylist, file)
+    const videoFilePath = getVideoFilePath(playlist, file)
 
     const size = await getVideoStreamSize(videoFilePath)
 
@@ -66,23 +68,22 @@ async function updateMasterHLSPlaylist (video: MVideoWithFile) {
   await writeFile(masterPlaylistPath, masterPlaylists.join('\n') + '\n')
 }
 
-async function updateSha256VODSegments (video: MVideoWithFile) {
+async function updateSha256VODSegments (video: MVideoWithFile, playlist: MStreamingPlaylistFilesVideo) {
   const json: { [filename: string]: { [range: string]: string } } = {}
 
   const playlistDirectory = join(HLS_STREAMING_PLAYLIST_DIRECTORY, video.uuid)
-  const hlsPlaylist = video.getHLSPlaylist()
 
   // For all the resolutions available for this video
-  for (const file of hlsPlaylist.VideoFiles) {
+  for (const file of playlist.VideoFiles) {
     const rangeHashes: { [range: string]: string } = {}
 
-    const videoPath = getVideoFilePath(hlsPlaylist, file)
-    const playlistPath = join(playlistDirectory, VideoStreamingPlaylistModel.getHlsPlaylistFilename(file.resolution))
+    const videoPath = getVideoFilePath(playlist, file)
+    const resolutionPlaylistPath = join(playlistDirectory, getHlsResolutionPlaylistFilename(file.filename))
 
     // Maybe the playlist is not generated for this resolution yet
-    if (!await pathExists(playlistPath)) continue
+    if (!await pathExists(resolutionPlaylistPath)) continue
 
-    const playlistContent = await readFile(playlistPath)
+    const playlistContent = await readFile(resolutionPlaylistPath)
     const ranges = getRangesFromPlaylist(playlistContent.toString())
 
     const fd = await open(videoPath, 'r')
@@ -98,7 +99,7 @@ async function updateSha256VODSegments (video: MVideoWithFile) {
     json[videoFilename] = rangeHashes
   }
 
-  const outputPath = join(playlistDirectory, VideoStreamingPlaylistModel.getHlsSha256SegmentsFilename())
+  const outputPath = join(playlistDirectory, playlist.segmentsSha256Filename)
   await outputJSON(outputPath, json)
 }
 

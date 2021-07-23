@@ -762,8 +762,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
 
       // Remove physical files and torrents
       instance.VideoFiles.forEach(file => {
-        tasks.push(instance.removeFile(file))
-        tasks.push(file.removeTorrent())
+        tasks.push(instance.removeFileAndTorrent(file))
       })
 
       // Remove playlists file
@@ -1670,10 +1669,13 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
                                        .concat(toAdd)
   }
 
-  removeFile (videoFile: MVideoFile, isRedundancy = false) {
+  removeFileAndTorrent (videoFile: MVideoFile, isRedundancy = false) {
     const filePath = getVideoFilePath(this, videoFile, isRedundancy)
-    return remove(filePath)
-      .catch(err => logger.warn('Cannot delete file %s.', filePath, { err }))
+
+    const promises: Promise<any>[] = [ remove(filePath) ]
+    if (!isRedundancy) promises.push(videoFile.removeTorrent())
+
+    return Promise.all(promises)
   }
 
   async removeStreamingPlaylistFiles (streamingPlaylist: MStreamingPlaylist, isRedundancy = false) {

@@ -2,7 +2,6 @@
 
 import 'mocha'
 import { expect } from 'chai'
-import { join } from 'path'
 import { getAudioStream, getVideoFileFPS, getVideoStreamFromFile } from '@server/helpers/ffprobe-utils'
 import {
   cleanupTests,
@@ -247,7 +246,9 @@ describe('Test transcoding plugins', function () {
       const videoUUID = (await server.videos.quickUpload({ name: 'video', fixture: 'video_very_short_240p.mp4' })).uuid
       await waitJobs([ server ])
 
-      const path = server.servers.buildDirectory(join('videos', videoUUID + '-240.mp4'))
+      const video = await server.videos.get({ id: videoUUID })
+
+      const path = server.servers.buildWebTorrentFilePath(video.files[0].fileUrl)
       const audioProbe = await getAudioStream(path)
       expect(audioProbe.audioStream.codec_name).to.equal('opus')
 

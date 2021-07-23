@@ -112,13 +112,16 @@ class MuxingSession extends EventEmitter {
     this.ffmpegCommand = CONFIG.LIVE.TRANSCODING.ENABLED
       ? await getLiveTranscodingCommand({
         rtmpUrl: this.rtmpUrl,
+
         outPath,
+        masterPlaylistName: this.streamingPlaylist.playlistFilename,
+
         resolutions: this.allResolutions,
         fps: this.fps,
         availableEncoders: VideoTranscodingProfilesManager.Instance.getAvailableEncoders(),
         profile: CONFIG.LIVE.TRANSCODING.PROFILE
       })
-      : getLiveMuxingCommand(this.rtmpUrl, outPath)
+      : getLiveMuxingCommand(this.rtmpUrl, outPath, this.streamingPlaylist.playlistFilename)
 
     logger.info('Running live muxing/transcoding for %s.', this.videoUUID, this.lTags)
 
@@ -182,7 +185,7 @@ class MuxingSession extends EventEmitter {
   }
 
   private watchMasterFile (outPath: string) {
-    this.masterWatcher = chokidar.watch(outPath + '/master.m3u8')
+    this.masterWatcher = chokidar.watch(outPath + '/' + this.streamingPlaylist.playlistFilename)
 
     this.masterWatcher.on('add', async () => {
       this.emit('master-playlist-created', { videoId: this.videoId })
