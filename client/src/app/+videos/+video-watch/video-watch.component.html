@@ -86,7 +86,7 @@
 
       </div>
 
-      <my-video-description [video]="video"></my-video-description>
+      <my-video-description [video]="video" (timestampClicked)="handleTimestampClicked($event)"></my-video-description>
 
       <my-video-attributes [video]="video"></my-video-attributes>
 
