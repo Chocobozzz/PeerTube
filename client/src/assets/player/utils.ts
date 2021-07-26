@@ -65,7 +65,7 @@ function buildVideoLink (options: {
 
   const url = baseUrl
     ? baseUrl
-    : window.location.origin + window.location.pathname.replace('/embed/', '/w/')
+    : window.location.origin + window.location.pathname.replace('/videos/embed/', '/w/')
 
   const params = generateParams(window.location.search)
 
