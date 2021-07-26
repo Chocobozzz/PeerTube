@@ -1,9 +1,7 @@
 import videojs from 'video.js'
 import * as WebTorrent from 'webtorrent'
-import { renderVideo } from './video-renderer'
-import { LoadedQualityData, PlayerNetworkInfo, WebtorrentPluginOptions } from '../peertube-videojs-typings'
-import { getRtcConfig, timeToInt, videoFileMaxByResolution, videoFileMinByResolution, isIOS, isSafari } from '../utils'
-import { PeertubeChunkStore } from './peertube-chunk-store'
+import { timeToInt } from '@shared/core-utils'
+import { VideoFile } from '@shared/models'
 import {
   getAverageBandwidthInStore,
   getStoredMute,
@@ -11,7 +9,10 @@ import {
   getStoredVolume,
   saveAverageBandwidth
 } from '../peertube-player-local-storage'
-import { VideoFile } from '@shared/models'
+import { LoadedQualityData, PlayerNetworkInfo, WebtorrentPluginOptions } from '../peertube-videojs-typings'
+import { getRtcConfig, isIOS, videoFileMaxByResolution, videoFileMinByResolution } from '../utils'
+import { PeertubeChunkStore } from './peertube-chunk-store'
+import { renderVideo } from './video-renderer'
 
 const CacheChunkStore = require('cache-chunk-store')
 

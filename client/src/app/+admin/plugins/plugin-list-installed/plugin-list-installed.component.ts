@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { PluginApiService } from '@app/+admin/plugins/shared/plugin-api.service'
 import { ComponentPagination, ConfirmService, hasMoreItems, Notifier } from '@app/core'
 import { PluginService } from '@app/core/plugins/plugin.service'
-import { compareSemVer } from '@shared/core-utils/miscs/miscs'
+import { compareSemVer } from '@shared/core-utils'
 import { PeerTubePlugin, PluginType } from '@shared/models'
 
 @Component({

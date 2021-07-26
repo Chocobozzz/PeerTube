@@ -2,6 +2,7 @@ import { AuthUser } from '@app/core'
 import { User } from '@app/core/users/user.model'
 import { durationToString, getAbsoluteAPIUrl, getAbsoluteEmbedUrl } from '@app/helpers'
 import { Actor } from '@app/shared/shared-main/account/actor.model'
+import { buildVideoWatchPath } from '@shared/core-utils'
 import { peertubeTranslate } from '@shared/core-utils/i18n'
 import {
   ActorImage,
@@ -92,7 +93,7 @@ export class Video implements VideoServerModel {
   pluginData?: any
 
   static buildWatchUrl (video: Partial<Pick<Video, 'uuid' | 'shortUUID'>>) {
-    return '/w/' + (video.shortUUID || video.uuid)
+    return buildVideoWatchPath({ shortUUID: video.shortUUID || video.uuid })
   }
 
   static buildUpdateUrl (video: Pick<Video, 'uuid'>) {

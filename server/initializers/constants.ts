@@ -2,7 +2,7 @@ import { CronRepeatOptions, EveryRepeatOptions } from 'bull'
 import { randomBytes } from 'crypto'
 import { invert } from 'lodash'
 import { join } from 'path'
-import { randomInt } from '../../shared/core-utils/miscs/miscs'
+import { randomInt } from '../../shared/core-utils/common/miscs'
 import {
   AbuseState,
   JobType,

@@ -2,14 +2,9 @@ import { Component, ElementRef, Input, ViewChild } from '@angular/core'
 import { VideoDetails } from '@app/shared/shared-main'
 import { VideoPlaylist } from '@app/shared/shared-video-playlist'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
+import { buildPlaylistLink, buildVideoLink, decoratePlaylistLink, decorateVideoLink } from '@shared/core-utils'
 import { VideoCaption } from '@shared/models'
-import {
-  buildPlaylistLink,
-  buildVideoLink,
-  buildVideoOrPlaylistEmbed,
-  decoratePlaylistLink,
-  decorateVideoLink
-} from '../../../assets/player/utils'
+import { buildVideoOrPlaylistEmbed } from '../../../assets/player/utils'
 
 type Customizations = {
   startAtCheckbox: boolean

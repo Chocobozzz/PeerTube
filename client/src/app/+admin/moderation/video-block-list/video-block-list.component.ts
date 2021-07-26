@@ -1,6 +1,6 @@
 import { SortMeta } from 'primeng/api'
 import { switchMap } from 'rxjs/operators'
-import { buildVideoEmbedLink, buildVideoOrPlaylistEmbed, decorateVideoLink } from 'src/assets/player/utils'
+import { buildVideoOrPlaylistEmbed } from 'src/assets/player/utils'
 import { environment } from 'src/environments/environment'
 import { Component, OnInit } from '@angular/core'
 import { DomSanitizer } from '@angular/platform-browser'
@@ -9,6 +9,7 @@ import { ConfirmService, MarkdownService, Notifier, RestPagination, RestTable, S
 import { AdvancedInputFilter } from '@app/shared/shared-forms'
 import { DropdownAction, Video, VideoService } from '@app/shared/shared-main'
 import { VideoBlockService } from '@app/shared/shared-moderation'
+import { buildVideoEmbedLink, decorateVideoLink } from '@shared/core-utils'
 import { VideoBlacklist, VideoBlacklistType } from '@shared/models'
 
 @Component({

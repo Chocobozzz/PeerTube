@@ -2,8 +2,8 @@ import * as Hlsjs from 'hls.js/dist/hls.light.js'
 import { Events, Segment } from 'p2p-media-loader-core'
 import { Engine, initHlsJsPlayer, initVideoJsContribHlsJsPlayer } from 'p2p-media-loader-hlsjs'
 import videojs from 'video.js'
+import { timeToInt } from '@shared/core-utils'
 import { P2PMediaLoaderPluginOptions, PlayerNetworkInfo } from '../peertube-videojs-typings'
-import { timeToInt } from '../utils'
 import { registerConfigPlugin, registerSourceHandler } from './hls-plugin'
 
 registerConfigPlugin(videojs)

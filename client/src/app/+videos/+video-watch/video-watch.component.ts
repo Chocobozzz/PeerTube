@@ -21,6 +21,7 @@ import { isXPercentInViewport, scrollToTop } from '@app/helpers'
 import { Video, VideoCaptionService, VideoDetails, VideoService } from '@app/shared/shared-main'
 import { SubscribeButtonComponent } from '@app/shared/shared-user-subscription'
 import { VideoPlaylist, VideoPlaylistService } from '@app/shared/shared-video-playlist'
+import { timeToInt } from '@shared/core-utils'
 import {
   HTMLServerConfig,
   HttpStatusCode,
@@ -39,7 +40,6 @@ import {
   PlayerMode,
   videojs
 } from '../../../assets/player/peertube-player-manager'
-import { timeToInt } from '../../../assets/player/utils'
 import { environment } from '../../../environments/environment'
 import { VideoWatchPlaylistComponent } from './shared'
 

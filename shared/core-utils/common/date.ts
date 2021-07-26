@@ -43,6 +43,49 @@ function isLastWeek (d: Date) {
   return getDaysDifferences(now, d) <= 7
 }
 
+function timeToInt (time: number | string) {
+  if (!time) return 0
+  if (typeof time === 'number') return time
+
+  const reg = /^((\d+)[h:])?((\d+)[m:])?((\d+)s?)?$/
+  const matches = time.match(reg)
+
+  if (!matches) return 0
+
+  const hours = parseInt(matches[2] || '0', 10)
+  const minutes = parseInt(matches[4] || '0', 10)
+  const seconds = parseInt(matches[6] || '0', 10)
+
+  return hours * 3600 + minutes * 60 + seconds
+}
+
+function secondsToTime (seconds: number, full = false, symbol?: string) {
+  let time = ''
+
+  if (seconds === 0 && !full) return '0s'
+
+  const hourSymbol = (symbol || 'h')
+  const minuteSymbol = (symbol || 'm')
+  const secondsSymbol = full ? '' : 's'
+
+  const hours = Math.floor(seconds / 3600)
+  if (hours >= 1) time = hours + hourSymbol
+  else if (full) time = '0' + hourSymbol
+
+  seconds %= 3600
+  const minutes = Math.floor(seconds / 60)
+  if (minutes >= 1 && minutes < 10 && full) time += '0' + minutes + minuteSymbol
+  else if (minutes >= 1) time += minutes + minuteSymbol
+  else if (full) time += '00' + minuteSymbol
+
+  seconds %= 60
+  if (seconds >= 1 && seconds < 10 && full) time += '0' + seconds + secondsSymbol
+  else if (seconds >= 1) time += seconds + secondsSymbol
+  else if (full) time += '00'
+
+  return time
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -51,7 +94,9 @@ export {
   isThisMonth,
   isToday,
   isLastMonth,
-  isLastWeek
+  isLastWeek,
+  timeToInt,
+  secondsToTime
 }
 
 // ---------------------------------------------------------------------------

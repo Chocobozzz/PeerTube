@@ -4,6 +4,7 @@ import { debounceTime, filter } from 'rxjs/operators'
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core'
 import { AuthService, DisableForReuseHook, Notifier } from '@app/core'
 import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
+import { secondsToTime } from '@shared/core-utils'
 import {
   Video,
   VideoExistInPlaylist,
@@ -12,7 +13,6 @@ import {
   VideoPlaylistElementUpdate,
   VideoPlaylistPrivacy
 } from '@shared/models'
-import { secondsToTime } from '../../../assets/player/utils'
 import { VIDEO_PLAYLIST_DISPLAY_NAME_VALIDATOR } from '../form-validators/video-playlist-validators'
 import { CachedPlaylist, VideoPlaylistService } from './video-playlist.service'
 

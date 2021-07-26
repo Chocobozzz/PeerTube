@@ -1,5 +1,5 @@
 // Thanks http://tostring.it/2014/06/23/advanced-logging-with-nodejs/
-import { mkdirpSync } from 'fs-extra'
+import { mkdirpSync, stat } from 'fs-extra'
 import { omit } from 'lodash'
 import * as path from 'path'
 import { format as sqlFormat } from 'sql-formatter'
@@ -158,6 +158,26 @@ function loggerTagsFactory (...defaultTags: string[]): LoggerTagsFn {
   }
 }
 
+async function mtimeSortFilesDesc (files: string[], basePath: string) {
+  const promises = []
+  const out: { file: string, mtime: number }[] = []
+
+  for (const file of files) {
+    const p = stat(basePath + '/' + file)
+      .then(stats => {
+        if (stats.isFile()) out.push({ file, mtime: stats.mtime.getTime() })
+      })
+
+    promises.push(p)
+  }
+
+  await Promise.all(promises)
+
+  out.sort((a, b) => b.mtime - a.mtime)
+
+  return out
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -168,6 +188,7 @@ export {
   labelFormatter,
   consoleLoggerFormat,
   jsonLoggerFormat,
+  mtimeSortFilesDesc,
   logger,
   loggerTagsFactory,
   bunyanLogger

@@ -24,7 +24,7 @@ import {
 } from '@app/core'
 import { DisableForReuseHook } from '@app/core/routing/disable-for-reuse-hook'
 import { GlobalIconName } from '@app/shared/shared-icons'
-import { isLastMonth, isLastWeek, isThisMonth, isToday, isYesterday } from '@shared/core-utils/miscs/date'
+import { isLastMonth, isLastWeek, isThisMonth, isToday, isYesterday } from '@shared/core-utils'
 import { HTMLServerConfig, UserRight, VideoFilter, VideoSortField } from '@shared/models'
 import { NSFWPolicyType } from '@shared/models/videos/nsfw-policy.type'
 import { Syndication, Video } from '../shared-main'

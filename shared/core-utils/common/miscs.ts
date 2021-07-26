@@ -20,14 +20,6 @@ function compareSemVer (a: string, b: string) {
   return segmentsA.length - segmentsB.length
 }
 
-function isPromise (value: any) {
-  return value && typeof value.then === 'function'
-}
-
-function isCatchable (value: any) {
-  return value && typeof value.catch === 'function'
-}
-
 function sortObjectComparator (key: string, order: 'asc' | 'desc') {
   return (a: any, b: any) => {
     if (a[key] < b[key]) {
@@ -45,7 +37,5 @@ function sortObjectComparator (key: string, order: 'asc' | 'desc') {
 export {
   randomInt,
   compareSemVer,
-  isPromise,
-  isCatchable,
   sortObjectComparator
 }

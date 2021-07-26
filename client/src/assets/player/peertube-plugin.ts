@@ -1,12 +1,6 @@
-import videojs from 'video.js'
 import './videojs-components/settings-menu-button'
-import {
-  PeerTubePluginOptions,
-  ResolutionUpdateData,
-  UserWatching,
-  VideoJSCaption
-} from './peertube-videojs-typings'
-import { isMobile, timeToInt } from './utils'
+import videojs from 'video.js'
+import { timeToInt } from '@shared/core-utils'
 import {
   getStoredLastSubtitle,
   getStoredMute,
@@ -16,6 +10,8 @@ import {
   saveVideoWatchHistory,
   saveVolumeInStore
 } from './peertube-player-local-storage'
+import { PeerTubePluginOptions, ResolutionUpdateData, UserWatching, VideoJSCaption } from './peertube-videojs-typings'
+import { isMobile } from './utils'
 
 const Plugin = videojs.getPlugin('plugin')
 

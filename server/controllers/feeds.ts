@@ -286,7 +286,7 @@ function addVideosToFeed (feed, videos: VideoModel[]) {
     feed.addItem({
       title: video.name,
       id: video.url,
-      link: WEBSERVER.URL + '/w/' + video.uuid,
+      link: WEBSERVER.URL + video.getWatchStaticPath(),
       description: video.getTruncatedDescription(),
       content: video.description,
       author: [

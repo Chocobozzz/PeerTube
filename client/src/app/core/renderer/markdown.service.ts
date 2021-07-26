@@ -1,6 +1,6 @@
 import * as MarkdownIt from 'markdown-it'
-import { buildVideoLink, decorateVideoLink } from 'src/assets/player/utils'
 import { Injectable } from '@angular/core'
+import { buildVideoLink, decorateVideoLink } from '@shared/core-utils'
 import {
   COMPLETE_RULES,
   ENHANCED_RULES,

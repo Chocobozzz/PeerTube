@@ -23,6 +23,7 @@ import './videojs-components/theater-button'
 import './playlist/playlist-plugin'
 import videojs from 'video.js'
 import { PluginsManager } from '@root-helpers/plugins-manager'
+import { buildVideoLink, decorateVideoLink } from '@shared/core-utils'
 import { isDefaultLocale } from '@shared/core-utils/i18n'
 import { VideoFile } from '@shared/models'
 import { copyToClipboard } from '../../root-helpers/utils'
@@ -40,7 +41,7 @@ import {
   VideoJSPluginOptions
 } from './peertube-videojs-typings'
 import { TranslationsManager } from './translations-manager'
-import { buildVideoLink, buildVideoOrPlaylistEmbed, decorateVideoLink, getRtcConfig, isIOS, isSafari } from './utils'
+import { buildVideoOrPlaylistEmbed, getRtcConfig, isIOS, isSafari } from './utils'
 
 // Change 'Playback Rate' to 'Speed' (smaller for our settings menu)
 (videojs.getComponent('PlaybackRateMenuButton') as any).prototype.controlText_ = 'Speed'

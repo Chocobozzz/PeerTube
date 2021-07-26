@@ -1,5 +1,6 @@
 import { getAbsoluteAPIUrl, getAbsoluteEmbedUrl } from '@app/helpers'
 import { Actor } from '@app/shared/shared-main'
+import { buildPlaylistWatchPath } from '@shared/core-utils'
 import { peertubeTranslate } from '@shared/core-utils/i18n'
 import {
   AccountSummary,
@@ -44,7 +45,7 @@ export class VideoPlaylist implements ServerVideoPlaylist {
   videoChannelBy?: string
 
   static buildWatchUrl (playlist: Pick<VideoPlaylist, 'uuid' | 'shortUUID'>) {
-    return '/w/p/' + (playlist.shortUUID || playlist.uuid)
+    return buildPlaylistWatchPath({ shortUUID: playlist.shortUUID || playlist.uuid })
   }
 
   constructor (hash: ServerVideoPlaylist, translations: {}) {

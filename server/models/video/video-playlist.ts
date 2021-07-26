@@ -20,7 +20,7 @@ import {
 import { setAsUpdated } from '@server/helpers/database-utils'
 import { buildUUID, uuidToShort } from '@server/helpers/uuid'
 import { MAccountId, MChannelId } from '@server/types/models'
-import { AttributesOnly } from '@shared/core-utils'
+import { AttributesOnly, buildPlaylistEmbedPath, buildPlaylistLink, buildPlaylistWatchPath } from '@shared/core-utils'
 import { ActivityIconObject } from '../../../shared/models/activitypub/objects'
 import { PlaylistObject } from '../../../shared/models/activitypub/objects/playlist-object'
 import { VideoPlaylistPrivacy } from '../../../shared/models/videos/playlist/video-playlist-privacy.model'
@@ -560,12 +560,12 @@ export class VideoPlaylistModel extends Model<Partial<AttributesOnly<VideoPlayli
     return join(STATIC_PATHS.THUMBNAILS, this.Thumbnail.filename)
   }
 
-  getWatchUrl () {
-    return WEBSERVER.URL + '/w/p/' + this.uuid
+  getWatchStaticPath () {
+    return buildPlaylistWatchPath({ shortUUID: uuidToShort(this.uuid) })
   }
 
   getEmbedStaticPath () {
-    return '/video-playlists/embed/' + this.uuid
+    return buildPlaylistEmbedPath(this)
   }
 
   static async getStats () {

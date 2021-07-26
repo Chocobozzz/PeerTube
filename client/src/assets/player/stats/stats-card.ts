@@ -1,6 +1,7 @@
 import videojs from 'video.js'
+import { secondsToTime } from '@shared/core-utils'
 import { PlayerNetworkInfo as EventPlayerNetworkInfo } from '../peertube-videojs-typings'
-import { bytes, secondsToTime } from '../utils'
+import { bytes } from '../utils'
 
 interface StatsCardOptions extends videojs.ComponentOptions {
   videoUUID: string

@@ -26,12 +26,13 @@ import {
 } from 'sequelize-typescript'
 import { setAsUpdated } from '@server/helpers/database-utils'
 import { buildNSFWFilter } from '@server/helpers/express-utils'
+import { shortToUUID } from '@server/helpers/uuid'
 import { getPrivaciesForFederation, isPrivacyForFederation, isStateForFederation } from '@server/helpers/video'
 import { LiveManager } from '@server/lib/live/live-manager'
 import { getHLSDirectory, getVideoFilePath } from '@server/lib/video-paths'
 import { getServerActor } from '@server/models/application/application'
 import { ModelCache } from '@server/models/model-cache'
-import { AttributesOnly } from '@shared/core-utils'
+import { AttributesOnly, buildVideoEmbedPath, buildVideoWatchPath } from '@shared/core-utils'
 import { VideoFile } from '@shared/models/videos/video-file.model'
 import { ResultList, UserRight, VideoPrivacy, VideoState } from '../../../shared'
 import { VideoObject } from '../../../shared/models/activitypub/objects'
@@ -1578,11 +1579,11 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
   }
 
   getWatchStaticPath () {
-    return '/w/' + this.uuid
+    return buildVideoWatchPath({ shortUUID: shortToUUID(this.uuid) })
   }
 
   getEmbedStaticPath () {
-    return '/videos/embed/' + this.uuid
+    return buildVideoEmbedPath(this)
   }
 
   getMiniatureStaticPath () {
