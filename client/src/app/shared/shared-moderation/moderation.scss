@@ -29,15 +29,6 @@
     height: 100% !important;
     left: 0;
   };
-
-  div {
-    @include miniature-thumbnail;
-
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    color: pvar(--inputPlaceholderColor);
-  }
 }
 
 .chip {

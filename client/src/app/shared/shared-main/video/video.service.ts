@@ -379,28 +379,24 @@ export class VideoService implements VideosProvider {
   }
 
   explainedPrivacyLabels (serverPrivacies: VideoConstant<VideoPrivacy>[], defaultPrivacyId = VideoPrivacy.PUBLIC) {
-    const descriptions = [
-      {
-        id: VideoPrivacy.PRIVATE,
-        description: $localize`Only I can see this video`
-      },
-      {
-        id: VideoPrivacy.UNLISTED,
-        description: $localize`Only shareable via a private link`
-      },
-      {
-        id: VideoPrivacy.PUBLIC,
-        description: $localize`Anyone can see this video`
-      },
-      {
-        id: VideoPrivacy.INTERNAL,
-        description: $localize`Only users of this instance can see this video`
+    const descriptions = {
+      [VideoPrivacy.PRIVATE]: $localize`Only I can see this video`,
+      [VideoPrivacy.UNLISTED]: $localize`Only shareable via a private link`,
+      [VideoPrivacy.PUBLIC]: $localize`Anyone can see this video`,
+      [VideoPrivacy.INTERNAL]: $localize`Only users of this instance can see this video`
+    }
+
+    const videoPrivacies = serverPrivacies.map(p => {
+      return {
+        ...p,
+
+        description: descriptions[p.id]
       }
-    ]
+    })
 
     return {
-      defaultPrivacyId: serverPrivacies.find(p => p.id === defaultPrivacyId)?.id || serverPrivacies[0].id,
-      videoPrivacies: serverPrivacies.map(p => ({ ...p, description: descriptions.find(p => p.id).description }))
+      videoPrivacies,
+      defaultPrivacyId: serverPrivacies.find(p => p.id === defaultPrivacyId)?.id || serverPrivacies[0].id
     }
   }
 
