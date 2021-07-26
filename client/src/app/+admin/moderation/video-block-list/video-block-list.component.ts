@@ -1,6 +1,6 @@
 import { SortMeta } from 'primeng/api'
 import { switchMap } from 'rxjs/operators'
-import { buildVideoLink, buildVideoOrPlaylistEmbed } from 'src/assets/player/utils'
+import { buildVideoEmbedLink, buildVideoOrPlaylistEmbed, decorateVideoLink } from 'src/assets/player/utils'
 import { environment } from 'src/environments/environment'
 import { Component, OnInit } from '@angular/core'
 import { DomSanitizer } from '@angular/platform-browser'
@@ -147,8 +147,9 @@ export class VideoBlockListComponent extends RestTable implements OnInit {
 
   getVideoEmbed (entry: VideoBlacklist) {
     return buildVideoOrPlaylistEmbed(
-      buildVideoLink({
-        baseUrl: `${environment.originServerUrl}/videos/embed/${entry.video.uuid}`,
+      decorateVideoLink({
+        url: buildVideoEmbedLink(entry.video, environment.originServerUrl),
+
         title: false,
         warningTitle: false
       }),

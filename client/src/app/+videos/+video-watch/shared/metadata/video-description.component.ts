@@ -80,6 +80,7 @@ export class VideoDescriptionComponent implements OnChanges {
 
   private async setVideoDescriptionHTML () {
     const html = await this.markdownService.textMarkdownToHTML(this.video.description)
-    this.videoHTMLDescription = this.markdownService.processVideoTimestamps(html)
+
+    this.videoHTMLDescription = this.markdownService.processVideoTimestamps(this.video.shortUUID, html)
   }
 }

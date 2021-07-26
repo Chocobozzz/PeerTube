@@ -33,13 +33,14 @@ import { getStoredP2PEnabled } from './peertube-player-local-storage'
 import {
   NextPreviousVideoButtonOptions,
   P2PMediaLoaderPluginOptions,
+  PeerTubeLinkButtonOptions,
   PlaylistPluginOptions,
   UserWatching,
   VideoJSCaption,
   VideoJSPluginOptions
 } from './peertube-videojs-typings'
 import { TranslationsManager } from './translations-manager'
-import { buildVideoLink, buildVideoOrPlaylistEmbed, getRtcConfig, isIOS, isSafari } from './utils'
+import { buildVideoLink, buildVideoOrPlaylistEmbed, decorateVideoLink, getRtcConfig, isIOS, isSafari } from './utils'
 
 // Change 'Playback Rate' to 'Speed' (smaller for our settings menu)
 (videojs.getComponent('PlaybackRateMenuButton') as any).prototype.controlText_ = 'Speed'
@@ -110,6 +111,7 @@ export interface CommonOptions extends CustomizationOptions {
   videoCaptions: VideoJSCaption[]
 
   videoUUID: string
+  videoShortUUID: string
 
   userWatching?: UserWatching
 
@@ -175,7 +177,13 @@ export class PeertubePlayerManager {
           PeertubePlayerManager.alreadyPlayed = true
         })
 
-        self.addContextMenu(mode, player, options.common.embedUrl, options.common.embedTitle)
+        self.addContextMenu({
+          mode,
+          player,
+          videoShortUUID: options.common.videoShortUUID,
+          videoEmbedUrl: options.common.embedUrl,
+          videoEmbedTitle: options.common.embedTitle
+        })
 
         player.bezels()
         player.stats({
@@ -218,7 +226,13 @@ export class PeertubePlayerManager {
     videojs(newVideoElement, videojsOptions, function (this: videojs.Player) {
       const player = this
 
-      self.addContextMenu(mode, player, options.common.embedUrl, options.common.embedTitle)
+      self.addContextMenu({
+        mode,
+        player,
+        videoShortUUID: options.common.videoShortUUID,
+        videoEmbedUrl: options.common.embedUrl,
+        videoEmbedTitle: options.common.embedTitle
+      })
 
       PeertubePlayerManager.onPlayerChange(player)
     })
@@ -295,6 +309,8 @@ export class PeertubePlayerManager {
 
       controlBar: {
         children: this.getControlBarChildren(mode, {
+          videoShortUUID: commonOptions.videoShortUUID,
+
           captions: commonOptions.captions,
           peertubeLink: commonOptions.peertubeLink,
           theaterButton: commonOptions.theaterButton,
@@ -409,6 +425,8 @@ export class PeertubePlayerManager {
   }
 
   private static getControlBarChildren (mode: PlayerMode, options: {
+    videoShortUUID: string
+
     peertubeLink: boolean
     theaterButton: boolean
     captions: boolean
@@ -497,7 +515,7 @@ export class PeertubePlayerManager {
 
     if (options.peertubeLink === true) {
       Object.assign(children, {
-        'peerTubeLinkButton': {}
+        'peerTubeLinkButton': { shortUUID: options.videoShortUUID } as PeerTubeLinkButtonOptions
       })
     }
 
@@ -514,7 +532,15 @@ export class PeertubePlayerManager {
     return children
   }
 
-  private static addContextMenu (mode: PlayerMode, player: videojs.Player, videoEmbedUrl: string, videoEmbedTitle: string) {
+  private static addContextMenu (options: {
+    mode: PlayerMode
+    player: videojs.Player
+    videoShortUUID: string
+    videoEmbedUrl: string
+    videoEmbedTitle: string
+  }) {
+    const { mode, player, videoEmbedTitle, videoEmbedUrl, videoShortUUID } = options
+
     const content = () => {
       const isLoopEnabled = player.options_['loop']
       const items = [
@@ -528,13 +554,15 @@ export class PeertubePlayerManager {
         {
           label: player.localize('Copy the video URL'),
           listener: function () {
-            copyToClipboard(buildVideoLink())
+            copyToClipboard(buildVideoLink({ shortUUID: videoShortUUID }))
           }
         },
         {
           label: player.localize('Copy the video URL at the current time'),
           listener: function (this: videojs.Player) {
-            copyToClipboard(buildVideoLink({ startTime: this.currentTime() }))
+            const url = buildVideoLink({ shortUUID: videoShortUUID })
+
+            copyToClipboard(decorateVideoLink({ url, startTime: this.currentTime() }))
           }
         },
         {

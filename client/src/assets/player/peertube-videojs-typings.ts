@@ -132,6 +132,10 @@ type NextPreviousVideoButtonOptions = {
   isDisabled: () => boolean
 }
 
+type PeerTubeLinkButtonOptions = {
+  shortUUID: string
+}
+
 type WebtorrentPluginOptions = {
   playerElement: HTMLVideoElement
 
@@ -225,5 +229,6 @@ export {
   VideoJSPluginOptions,
   LoadedQualityData,
   QualityLevelRepresentation,
+  PeerTubeLinkButtonOptions,
   QualityLevels
 }

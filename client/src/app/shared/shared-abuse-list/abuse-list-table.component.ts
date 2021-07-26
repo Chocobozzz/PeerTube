@@ -1,7 +1,7 @@
 import * as debug from 'debug'
 import truncate from 'lodash-es/truncate'
 import { SortMeta } from 'primeng/api'
-import { buildVideoLink, buildVideoOrPlaylistEmbed } from 'src/assets/player/utils'
+import { buildVideoEmbedLink, buildVideoOrPlaylistEmbed, decorateVideoLink } from 'src/assets/player/utils'
 import { environment } from 'src/environments/environment'
 import { Component, Input, OnInit, ViewChild } from '@angular/core'
 import { DomSanitizer } from '@angular/platform-browser'
@@ -129,8 +129,8 @@ export class AbuseListTableComponent extends RestTable implements OnInit {
 
   getVideoEmbed (abuse: AdminAbuse) {
     return buildVideoOrPlaylistEmbed(
-      buildVideoLink({
-        baseUrl: `${environment.originServerUrl}/videos/embed/${abuse.video.uuid}`,
+      decorateVideoLink({
+        url: buildVideoEmbedLink(abuse.video, environment.originServerUrl),
         title: false,
         warningTitle: false,
         startTime: abuse.video.startAt,

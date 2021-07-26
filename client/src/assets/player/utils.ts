@@ -1,4 +1,4 @@
-import { VideoFile } from '@shared/models'
+import { Video, VideoFile, VideoPlaylist } from '@shared/models'
 import { escapeHTML } from '@shared/core-utils/renderer'
 
 function toTitleCase (str: string) {
@@ -43,8 +43,24 @@ function isMobile () {
   return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
 }
 
-function buildVideoLink (options: {
-  baseUrl?: string
+function buildPlaylistLink (playlist: Pick<VideoPlaylist, 'shortUUID'>, base?: string) {
+  return (base ?? window.location.origin) + '/w/p/' + playlist.shortUUID
+}
+
+function buildVideoLink (video: Pick<Video, 'shortUUID'>, base?: string) {
+  return (base ?? window.location.origin) + '/w/' + video.shortUUID
+}
+
+function buildPlaylistEmbedLink (playlist: Pick<VideoPlaylist, 'uuid'>, base?: string) {
+  return (base ?? window.location.origin) + '/video-playlists/embed/' + playlist.uuid
+}
+
+function buildVideoEmbedLink (video: Pick<Video, 'uuid'>, base?: string) {
+  return (base ?? window.location.origin) + '/videos/embed/' + video.uuid
+}
+
+function decorateVideoLink (options: {
+  url: string
 
   startTime?: number
   stopTime?: number
@@ -60,12 +76,8 @@ function buildVideoLink (options: {
   warningTitle?: boolean
   controls?: boolean
   peertubeLink?: boolean
-} = {}) {
-  const { baseUrl } = options
-
-  const url = baseUrl
-    ? baseUrl
-    : window.location.origin + window.location.pathname.replace('/embed/', '/w/')
+}) {
+  const { url } = options
 
   const params = generateParams(window.location.search)
 
@@ -92,16 +104,12 @@ function buildVideoLink (options: {
   return buildUrl(url, params)
 }
 
-function buildPlaylistLink (options: {
-  baseUrl?: string
+function decoratePlaylistLink (options: {
+  url: string
 
   playlistPosition?: number
 }) {
-  const { baseUrl } = options
-
-  const url = baseUrl
-    ? baseUrl
-    : window.location.origin + window.location.pathname.replace('/video-playlists/embed/', '/w/p/')
+  const { url } = options
 
   const params = generateParams(window.location.search)
 
@@ -224,8 +232,14 @@ export {
   timeToInt,
   secondsToTime,
   isWebRTCDisabled,
+
   buildPlaylistLink,
   buildVideoLink,
+  decorateVideoLink,
+  decoratePlaylistLink,
+  buildPlaylistEmbedLink,
+  buildVideoEmbedLink,
+
   buildVideoOrPlaylistEmbed,
   videoFileMaxByResolution,
   videoFileMinByResolution,

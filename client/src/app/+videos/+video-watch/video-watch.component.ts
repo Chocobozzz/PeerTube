@@ -582,6 +582,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
         videoCaptions: playerCaptions,
 
+        videoShortUUID: video.shortUUID,
         videoUUID: video.uuid
       },
 

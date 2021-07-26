@@ -1,5 +1,5 @@
 import * as MarkdownIt from 'markdown-it'
-import { buildVideoLink } from 'src/assets/player/utils'
+import { buildVideoLink, decorateVideoLink } from 'src/assets/player/utils'
 import { Injectable } from '@angular/core'
 import {
   COMPLETE_RULES,
@@ -82,10 +82,14 @@ export class MarkdownService {
     return this.render({ name: 'customPageMarkdownIt', markdown, withEmoji: true, additionalAllowedTags })
   }
 
-  processVideoTimestamps (html: string) {
+  processVideoTimestamps (videoShortUUID: string, html: string) {
     return html.replace(/((\d{1,2}):)?(\d{1,2}):(\d{1,2})/g, function (str, _, h, m, s) {
       const t = (3600 * +(h || 0)) + (60 * +(m || 0)) + (+(s || 0))
-      const url = buildVideoLink({ startTime: t })
+
+      const url = decorateVideoLink({
+        url: buildVideoLink({ shortUUID: videoShortUUID }),
+        startTime: t
+      })
       return `<a class="video-timestamp" href="${url}">${str}</a>`
     })
   }
