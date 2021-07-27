@@ -119,7 +119,7 @@ describe('Test a client controllers', function () {
           const port = servers[0].port
 
           const expectedLink = '<link rel="alternate" type="application/json+oembed" href="http://localhost:' + port + '/services/oembed?' +
-            `url=http%3A%2F%2Flocalhost%3A${port}%2Fw%2F${servers[0].store.video.uuid}" ` +
+            `url=http%3A%2F%2Flocalhost%3A${port}%2Fw%2F${servers[0].store.video.shortUUID}" ` +
             `title="${servers[0].store.video.name}" />`
 
           expect(res.text).to.contain(expectedLink)
@@ -140,7 +140,7 @@ describe('Test a client controllers', function () {
           const port = servers[0].port
 
           const expectedLink = '<link rel="alternate" type="application/json+oembed" href="http://localhost:' + port + '/services/oembed?' +
-            `url=http%3A%2F%2Flocalhost%3A${port}%2Fw%2Fp%2F${playlist.uuid}" ` +
+            `url=http%3A%2F%2Flocalhost%3A${port}%2Fw%2Fp%2F${playlist.shortUUID}" ` +
             `title="${playlistName}" />`
 
           expect(res.text).to.contain(expectedLink)
@@ -178,7 +178,7 @@ describe('Test a client controllers', function () {
       expect(text).to.contain(`<meta property="og:title" content="${videoName}" />`)
       expect(text).to.contain(`<meta property="og:description" content="${videoDescriptionPlainText}" />`)
       expect(text).to.contain('<meta property="og:type" content="video" />')
-      expect(text).to.contain(`<meta property="og:url" content="${servers[0].url}/w/${servers[0].store.video.uuid}" />`)
+      expect(text).to.contain(`<meta property="og:url" content="${servers[0].url}/w/${servers[0].store.video.shortUUID}" />`)
     }
 
     async function watchPlaylistPageTest (path: string) {
@@ -188,7 +188,7 @@ describe('Test a client controllers', function () {
       expect(text).to.contain(`<meta property="og:title" content="${playlistName}" />`)
       expect(text).to.contain(`<meta property="og:description" content="${playlistDescription}" />`)
       expect(text).to.contain('<meta property="og:type" content="video" />')
-      expect(text).to.contain(`<meta property="og:url" content="${servers[0].url}/w/p/${playlist.uuid}" />`)
+      expect(text).to.contain(`<meta property="og:url" content="${servers[0].url}/w/p/${playlist.shortUUID}" />`)
     }
 
     it('Should have valid Open Graph tags on the account page', async function () {

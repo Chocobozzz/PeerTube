@@ -162,7 +162,7 @@ class ClientHtml {
     let customHtml = ClientHtml.addTitleTag(html, escapeHTML(videoPlaylist.name))
     customHtml = ClientHtml.addDescriptionTag(customHtml, mdToPlainText(videoPlaylist.description))
 
-    const url = videoPlaylist.getWatchStaticPath()
+    const url = WEBSERVER.URL + videoPlaylist.getWatchStaticPath()
     const originUrl = videoPlaylist.url
     const title = escapeHTML(videoPlaylist.name)
     const siteName = escapeHTML(CONFIG.INSTANCE.NAME)
