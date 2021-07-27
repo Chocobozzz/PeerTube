@@ -1141,7 +1141,7 @@
       </trans-unit>
       <trans-unit id="761579517995454927" datatype="html">
         <source>on the vidiverse</source>
-        <target state="translated">на видеовселенной</target>
+        <target state="translated">в сети</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search.component.html</context><context context-type="linenumber">8</context></context-group>
       </trans-unit>
       <trans-unit id="8434369348784683733" datatype="html">
@@ -1416,7 +1416,7 @@
       </trans-unit>
       <trans-unit id="3430483831942247060" datatype="html">
         <source>Help share videos</source>
-        <target state="translated">Помогите поделиться видео</target>
+        <target state="translated">Помочь поделиться видео</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">58</context></context-group>
       </trans-unit>
       <trans-unit id="7005745151564974365" datatype="html">
@@ -1802,7 +1802,7 @@
       </trans-unit>
       <trans-unit id="4540121094340493564" datatype="html">
         <source>Display only</source>
-        <target state="translated">Только отображение</target>
+        <target state="translated">Тип видеоконтента</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
           <context context-type="linenumber">21</context>
@@ -1924,7 +1924,7 @@
       </trans-unit>
       <trans-unit id="2489767671380266270" datatype="html">
         <source>Vidiverse</source>
-        <target state="translated">Видеовселенная</target>
+        <target state="translated">Сеть</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">189</context></context-group>
       </trans-unit>
       <trans-unit id="5478121364779850827" datatype="html">
