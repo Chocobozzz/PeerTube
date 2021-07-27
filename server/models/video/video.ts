@@ -26,7 +26,7 @@ import {
 } from 'sequelize-typescript'
 import { setAsUpdated } from '@server/helpers/database-utils'
 import { buildNSFWFilter } from '@server/helpers/express-utils'
-import { shortToUUID } from '@server/helpers/uuid'
+import { uuidToShort } from '@server/helpers/uuid'
 import { getPrivaciesForFederation, isPrivacyForFederation, isStateForFederation } from '@server/helpers/video'
 import { LiveManager } from '@server/lib/live/live-manager'
 import { getHLSDirectory, getVideoFilePath } from '@server/lib/video-paths'
@@ -1113,6 +1113,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
   static async searchAndPopulateAccountAndServer (options: {
     includeLocalVideos: boolean
     search?: string
+    host?: string
     start?: number
     count?: number
     sort?: string
@@ -1151,6 +1152,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
 
       user: options.user,
       filter: options.filter,
+      host: options.host,
 
       start: options.start,
       count: options.count,
@@ -1579,7 +1581,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
   }
 
   getWatchStaticPath () {
-    return buildVideoWatchPath({ shortUUID: shortToUUID(this.uuid) })
+    return buildVideoWatchPath({ shortUUID: uuidToShort(this.uuid) })
   }
 
   getEmbedStaticPath () {

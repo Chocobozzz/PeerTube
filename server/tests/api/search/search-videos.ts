@@ -5,6 +5,7 @@ import * as chai from 'chai'
 import {
   cleanupTests,
   createSingleServer,
+  doubleFollow,
   PeerTubeServer,
   SearchCommand,
   setAccessTokensToServers,
@@ -17,19 +18,21 @@ import { VideoPrivacy } from '@shared/models'
 const expect = chai.expect
 
 describe('Test videos search', function () {
-  let server: PeerTubeServer = null
+  let server: PeerTubeServer
+  let remoteServer: PeerTubeServer
   let startDate: string
   let videoUUID: string
 
   let command: SearchCommand
 
   before(async function () {
-    this.timeout(60000)
+    this.timeout(120000)
 
     server = await createSingleServer(1)
+    remoteServer = await createSingleServer(2)
 
-    await setAccessTokensToServers([ server ])
-    await setDefaultVideoChannel([ server ])
+    await setAccessTokensToServers([ server, remoteServer ])
+    await setDefaultVideoChannel([ server, remoteServer ])
 
     {
       const attributes1 = {
@@ -130,6 +133,13 @@ describe('Test videos search', function () {
       await server.videos.upload({ attributes: attributes1 })
       await server.videos.upload({ attributes: { ...attributes1, category: 2 } })
     }
+
+    {
+      await remoteServer.videos.upload({ attributes: { name: 'remote video 1' } })
+      await remoteServer.videos.upload({ attributes: { name: 'remote video 2' } })
+    }
+
+    await doubleFollow(server, remoteServer)
 
     command = server.search
   })
@@ -469,8 +479,30 @@ describe('Test videos search', function () {
     expect(body.data[0].name).to.equal('1111 2222 3333 - 3')
   })
 
+  it('Should search by host', async function () {
+    {
+      const body = await command.advancedVideoSearch({ search: { search: '6666 7777 8888', host: server.host } })
+      expect(body.total).to.equal(1)
+      expect(body.data[0].name).to.equal('6666 7777 8888')
+    }
+
+    {
+      const body = await command.advancedVideoSearch({ search: { search: '1111', host: 'example.com' } })
+      expect(body.total).to.equal(0)
+      expect(body.data).to.have.lengthOf(0)
+    }
+
+    {
+      const body = await command.advancedVideoSearch({ search: { search: 'remote', host: remoteServer.host } })
+      expect(body.total).to.equal(2)
+      expect(body.data).to.have.lengthOf(2)
+      expect(body.data[0].name).to.equal('remote video 1')
+      expect(body.data[1].name).to.equal('remote video 2')
+    }
+  })
+
   it('Should search by live', async function () {
-    this.timeout(30000)
+    this.timeout(60000)
 
     {
       const newConfig = {

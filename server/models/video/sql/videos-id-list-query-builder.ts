@@ -1,6 +1,7 @@
 import { Sequelize } from 'sequelize'
 import validator from 'validator'
 import { exists } from '@server/helpers/custom-validators/misc'
+import { WEBSERVER } from '@server/initializers/constants'
 import { buildDirectionAndField, createSafeIn } from '@server/models/utils'
 import { MUserAccountId, MUserId } from '@server/types/models'
 import { VideoFilter, VideoPrivacy, VideoState } from '@shared/models'
@@ -25,6 +26,7 @@ export type BuildVideosListQueryOptions = {
 
   nsfw?: boolean
   filter?: VideoFilter
+  host?: string
   isLive?: boolean
 
   categoryOneOf?: number[]
@@ -129,6 +131,10 @@ export class VideosIdListQueryBuilder extends AbstractVideosQueryBuilder {
 
     if (options.filter && (options.filter === 'local' || options.filter === 'all-local')) {
       this.whereOnlyLocal()
+    }
+
+    if (options.host) {
+      this.whereHost(options.host)
     }
 
     if (options.accountId) {
@@ -289,6 +295,19 @@ export class VideosIdListQueryBuilder extends AbstractVideosQueryBuilder {
 
   private whereOnlyLocal () {
     this.and.push('"video"."remote" IS FALSE')
+  }
+
+  private whereHost (host: string) {
+    // Local instance
+    if (host === WEBSERVER.HOST) {
+      this.and.push('"accountActor"."serverId" IS NULL')
+      return
+    }
+
+    this.joins.push('INNER JOIN "server" ON "server"."id" = "accountActor"."serverId"')
+
+    this.and.push('"server"."host" = :host')
+    this.replacements.host = host
   }
 
   private whereAccountId (accountId: number) {

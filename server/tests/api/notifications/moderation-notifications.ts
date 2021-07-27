@@ -67,7 +67,7 @@ describe('Test moderation notifications', function () {
       await servers[0].abuses.report({ videoId: video.id, reason: 'super reason' })
 
       await waitJobs(servers)
-      await checkNewVideoAbuseForModerators(baseParams, video.uuid, name, 'presence')
+      await checkNewVideoAbuseForModerators({ ...baseParams, shortUUID: video.shortUUID, videoName: name, checkType: 'presence' })
     })
 
     it('Should send a notification to moderators on remote video abuse', async function () {
@@ -82,7 +82,7 @@ describe('Test moderation notifications', function () {
       await servers[1].abuses.report({ videoId, reason: 'super reason' })
 
       await waitJobs(servers)
-      await checkNewVideoAbuseForModerators(baseParams, video.uuid, name, 'presence')
+      await checkNewVideoAbuseForModerators({ ...baseParams, shortUUID: video.shortUUID, videoName: name, checkType: 'presence' })
     })
 
     it('Should send a notification to moderators on local comment abuse', async function () {
@@ -101,7 +101,7 @@ describe('Test moderation notifications', function () {
       await servers[0].abuses.report({ commentId: comment.id, reason: 'super reason' })
 
       await waitJobs(servers)
-      await checkNewCommentAbuseForModerators(baseParams, video.uuid, name, 'presence')
+      await checkNewCommentAbuseForModerators({ ...baseParams, shortUUID: video.shortUUID, videoName: name, checkType: 'presence' })
     })
 
     it('Should send a notification to moderators on remote comment abuse', async function () {
@@ -123,7 +123,7 @@ describe('Test moderation notifications', function () {
       await servers[1].abuses.report({ commentId, reason: 'super reason' })
 
       await waitJobs(servers)
-      await checkNewCommentAbuseForModerators(baseParams, video.uuid, name, 'presence')
+      await checkNewCommentAbuseForModerators({ ...baseParams, shortUUID: video.shortUUID, videoName: name, checkType: 'presence' })
     })
 
     it('Should send a notification to moderators on local account abuse', async function () {
@@ -136,7 +136,7 @@ describe('Test moderation notifications', function () {
       await servers[0].abuses.report({ accountId, reason: 'super reason' })
 
       await waitJobs(servers)
-      await checkNewAccountAbuseForModerators(baseParams, username, 'presence')
+      await checkNewAccountAbuseForModerators({ ...baseParams, displayName: username, checkType: 'presence' })
     })
 
     it('Should send a notification to moderators on remote account abuse', async function () {
@@ -152,7 +152,7 @@ describe('Test moderation notifications', function () {
       await servers[1].abuses.report({ accountId: account.id, reason: 'super reason' })
 
       await waitJobs(servers)
-      await checkNewAccountAbuseForModerators(baseParams, username, 'presence')
+      await checkNewAccountAbuseForModerators({ ...baseParams, displayName: username, checkType: 'presence' })
     })
   })
 
@@ -181,7 +181,7 @@ describe('Test moderation notifications', function () {
       await servers[0].abuses.update({ abuseId, body: { state: AbuseState.ACCEPTED } })
       await waitJobs(servers)
 
-      await checkAbuseStateChange(baseParams, abuseId, AbuseState.ACCEPTED, 'presence')
+      await checkAbuseStateChange({ ...baseParams, abuseId, state: AbuseState.ACCEPTED, checkType: 'presence' })
     })
 
     it('Should send a notification to reporter if the abuse has been rejected', async function () {
@@ -190,7 +190,7 @@ describe('Test moderation notifications', function () {
       await servers[0].abuses.update({ abuseId, body: { state: AbuseState.REJECTED } })
       await waitJobs(servers)
 
-      await checkAbuseStateChange(baseParams, abuseId, AbuseState.REJECTED, 'presence')
+      await checkAbuseStateChange({ ...baseParams, abuseId, state: AbuseState.REJECTED, checkType: 'presence' })
     })
   })
 
@@ -236,7 +236,7 @@ describe('Test moderation notifications', function () {
       await servers[0].abuses.addMessage({ abuseId, message })
       await waitJobs(servers)
 
-      await checkNewAbuseMessage(baseParamsUser, abuseId, message, 'user_1@example.com', 'presence')
+      await checkNewAbuseMessage({ ...baseParamsUser, abuseId, message, toEmail: 'user_1@example.com', checkType: 'presence' })
     })
 
     it('Should not send a notification to the admin if sent by the admin', async function () {
@@ -246,7 +246,8 @@ describe('Test moderation notifications', function () {
       await servers[0].abuses.addMessage({ abuseId, message })
       await waitJobs(servers)
 
-      await checkNewAbuseMessage(baseParamsAdmin, abuseId, message, 'admin' + servers[0].internalServerNumber + '@example.com', 'absence')
+      const toEmail = 'admin' + servers[0].internalServerNumber + '@example.com'
+      await checkNewAbuseMessage({ ...baseParamsAdmin, abuseId, message, toEmail, checkType: 'absence' })
     })
 
     it('Should send a notification to moderators', async function () {
@@ -256,7 +257,8 @@ describe('Test moderation notifications', function () {
       await servers[0].abuses.addMessage({ token: userAccessToken, abuseId: abuseId2, message })
       await waitJobs(servers)
 
-      await checkNewAbuseMessage(baseParamsAdmin, abuseId2, message, 'admin' + servers[0].internalServerNumber + '@example.com', 'presence')
+      const toEmail = 'admin' + servers[0].internalServerNumber + '@example.com'
+      await checkNewAbuseMessage({ ...baseParamsAdmin, abuseId: abuseId2, message, toEmail, checkType: 'presence' })
     })
 
     it('Should not send a notification to reporter if sent by the reporter', async function () {
@@ -266,7 +268,8 @@ describe('Test moderation notifications', function () {
       await servers[0].abuses.addMessage({ token: userAccessToken, abuseId: abuseId2, message })
       await waitJobs(servers)
 
-      await checkNewAbuseMessage(baseParamsUser, abuseId2, message, 'user_1@example.com', 'absence')
+      const toEmail = 'user_1@example.com'
+      await checkNewAbuseMessage({ ...baseParamsUser, abuseId: abuseId2, message, toEmail, checkType: 'absence' })
     })
   })
 
@@ -286,19 +289,19 @@ describe('Test moderation notifications', function () {
       this.timeout(10000)
 
       const name = 'video for abuse ' + buildUUID()
-      const { uuid } = await servers[0].videos.upload({ token: userAccessToken, attributes: { name } })
+      const { uuid, shortUUID } = await servers[0].videos.upload({ token: userAccessToken, attributes: { name } })
 
       await servers[0].blacklist.add({ videoId: uuid })
 
       await waitJobs(servers)
-      await checkNewBlacklistOnMyVideo(baseParams, uuid, name, 'blacklist')
+      await checkNewBlacklistOnMyVideo({ ...baseParams, shortUUID, videoName: name, blacklistType: 'blacklist' })
     })
 
     it('Should send a notification to video owner on unblacklist', async function () {
       this.timeout(10000)
 
       const name = 'video for abuse ' + buildUUID()
-      const { uuid } = await servers[0].videos.upload({ token: userAccessToken, attributes: { name } })
+      const { uuid, shortUUID } = await servers[0].videos.upload({ token: userAccessToken, attributes: { name } })
 
       await servers[0].blacklist.add({ videoId: uuid })
 
@@ -307,7 +310,7 @@ describe('Test moderation notifications', function () {
       await waitJobs(servers)
 
       await wait(500)
-      await checkNewBlacklistOnMyVideo(baseParams, uuid, name, 'unblacklist')
+      await checkNewBlacklistOnMyVideo({ ...baseParams, shortUUID, videoName: name, blacklistType: 'unblacklist' })
     })
   })
 
@@ -330,10 +333,10 @@ describe('Test moderation notifications', function () {
 
       await waitJobs(servers)
 
-      await checkUserRegistered(baseParams, 'user_45', 'presence')
+      await checkUserRegistered({ ...baseParams, username: 'user_45', checkType: 'presence' })
 
       const userOverride = { socketNotifications: userNotifications, token: userAccessToken, check: { web: true, mail: false } }
-      await checkUserRegistered({ ...baseParams, ...userOverride }, 'user_45', 'absence')
+      await checkUserRegistered({ ...baseParams, ...userOverride, username: 'user_45', checkType: 'absence' })
     })
   })
 
@@ -372,10 +375,10 @@ describe('Test moderation notifications', function () {
 
       await waitJobs(servers)
 
-      await checkNewInstanceFollower(baseParams, 'localhost:' + servers[2].port, 'presence')
+      await checkNewInstanceFollower({ ...baseParams, followerHost: 'localhost:' + servers[2].port, checkType: 'presence' })
 
       const userOverride = { socketNotifications: userNotifications, token: userAccessToken, check: { web: true, mail: false } }
-      await checkNewInstanceFollower({ ...baseParams, ...userOverride }, 'localhost:' + servers[2].port, 'absence')
+      await checkNewInstanceFollower({ ...baseParams, ...userOverride, followerHost: 'localhost:' + servers[2].port, checkType: 'absence' })
     })
 
     it('Should send a notification on auto follow back', async function () {
@@ -399,10 +402,10 @@ describe('Test moderation notifications', function () {
 
       const followerHost = servers[0].host
       const followingHost = servers[2].host
-      await checkAutoInstanceFollowing(baseParams, followerHost, followingHost, 'presence')
+      await checkAutoInstanceFollowing({ ...baseParams, followerHost, followingHost, checkType: 'presence' })
 
       const userOverride = { socketNotifications: userNotifications, token: userAccessToken, check: { web: true, mail: false } }
-      await checkAutoInstanceFollowing({ ...baseParams, ...userOverride }, followerHost, followingHost, 'absence')
+      await checkAutoInstanceFollowing({ ...baseParams, ...userOverride, followerHost, followingHost, checkType: 'absence' })
 
       config.followings.instance.autoFollowBack.enabled = false
       await servers[0].config.updateCustomSubConfig({ newConfig: config })
@@ -421,7 +424,7 @@ describe('Test moderation notifications', function () {
 
       const followerHost = servers[0].host
       const followingHost = servers[1].host
-      await checkAutoInstanceFollowing(baseParams, followerHost, followingHost, 'presence')
+      await checkAutoInstanceFollowing({ ...baseParams, followerHost, followingHost, checkType: 'presence' })
 
       config.followings.instance.autoFollowIndex.enabled = false
       await servers[0].config.updateCustomSubConfig({ newConfig: config })
@@ -433,7 +436,8 @@ describe('Test moderation notifications', function () {
     let userBaseParams: CheckerBaseParams
     let adminBaseParamsServer1: CheckerBaseParams
     let adminBaseParamsServer2: CheckerBaseParams
-    let videoUUID: string
+    let uuid: string
+    let shortUUID: string
     let videoName: string
     let currentCustomConfig: CustomConfig
 
@@ -480,36 +484,36 @@ describe('Test moderation notifications', function () {
 
       await servers[0].subscriptions.add({ targetUri: 'user_1_channel@localhost:' + servers[0].port })
       await servers[1].subscriptions.add({ targetUri: 'user_1_channel@localhost:' + servers[0].port })
-
     })
 
     it('Should send notification to moderators on new video with auto-blacklist', async function () {
       this.timeout(40000)
 
       videoName = 'video with auto-blacklist ' + buildUUID()
-      const { uuid } = await servers[0].videos.upload({ token: userAccessToken, attributes: { name: videoName } })
-      videoUUID = uuid
+      const video = await servers[0].videos.upload({ token: userAccessToken, attributes: { name: videoName } })
+      shortUUID = video.shortUUID
+      uuid = video.uuid
 
       await waitJobs(servers)
-      await checkVideoAutoBlacklistForModerators(adminBaseParamsServer1, videoUUID, videoName, 'presence')
+      await checkVideoAutoBlacklistForModerators({ ...adminBaseParamsServer1, shortUUID, videoName, checkType: 'presence' })
     })
 
     it('Should not send video publish notification if auto-blacklisted', async function () {
-      await checkVideoIsPublished(userBaseParams, videoName, videoUUID, 'absence')
+      await checkVideoIsPublished({ ...userBaseParams, videoName, shortUUID, checkType: 'absence' })
     })
 
     it('Should not send a local user subscription notification if auto-blacklisted', async function () {
-      await checkNewVideoFromSubscription(adminBaseParamsServer1, videoName, videoUUID, 'absence')
+      await checkNewVideoFromSubscription({ ...adminBaseParamsServer1, videoName, shortUUID, checkType: 'absence' })
     })
 
     it('Should not send a remote user subscription notification if auto-blacklisted', async function () {
-      await checkNewVideoFromSubscription(adminBaseParamsServer2, videoName, videoUUID, 'absence')
+      await checkNewVideoFromSubscription({ ...adminBaseParamsServer2, videoName, shortUUID, checkType: 'absence' })
     })
 
     it('Should send video published and unblacklist after video unblacklisted', async function () {
       this.timeout(40000)
 
-      await servers[0].blacklist.remove({ videoId: videoUUID })
+      await servers[0].blacklist.remove({ videoId: uuid })
 
       await waitJobs(servers)
 
@@ -520,11 +524,11 @@ describe('Test moderation notifications', function () {
     })
 
     it('Should send a local user subscription notification after removed from blacklist', async function () {
-      await checkNewVideoFromSubscription(adminBaseParamsServer1, videoName, videoUUID, 'presence')
+      await checkNewVideoFromSubscription({ ...adminBaseParamsServer1, videoName, shortUUID, checkType: 'presence' })
     })
 
     it('Should send a remote user subscription notification after removed from blacklist', async function () {
-      await checkNewVideoFromSubscription(adminBaseParamsServer2, videoName, videoUUID, 'presence')
+      await checkNewVideoFromSubscription({ ...adminBaseParamsServer2, videoName, shortUUID, checkType: 'presence' })
     })
 
     it('Should send unblacklist but not published/subscription notes after unblacklisted if scheduled update pending', async function () {
@@ -543,19 +547,19 @@ describe('Test moderation notifications', function () {
         }
       }
 
-      const { uuid } = await servers[0].videos.upload({ token: userAccessToken, attributes })
+      const { shortUUID, uuid } = await servers[0].videos.upload({ token: userAccessToken, attributes })
 
       await servers[0].blacklist.remove({ videoId: uuid })
 
       await waitJobs(servers)
-      await checkNewBlacklistOnMyVideo(userBaseParams, uuid, name, 'unblacklist')
+      await checkNewBlacklistOnMyVideo({ ...userBaseParams, shortUUID, videoName: name, blacklistType: 'unblacklist' })
 
       // FIXME: Can't test absence as two notifications sent to same user and util only checks last one
       // One notification might be better anyways
       // await checkVideoIsPublished(userBaseParams, name, uuid, 'absence')
 
-      await checkNewVideoFromSubscription(adminBaseParamsServer1, name, uuid, 'absence')
-      await checkNewVideoFromSubscription(adminBaseParamsServer2, name, uuid, 'absence')
+      await checkNewVideoFromSubscription({ ...adminBaseParamsServer1, videoName: name, shortUUID, checkType: 'absence' })
+      await checkNewVideoFromSubscription({ ...adminBaseParamsServer2, videoName: name, shortUUID, checkType: 'absence' })
     })
 
     it('Should not send publish/subscription notifications after scheduled update if video still auto-blacklisted', async function () {
@@ -575,12 +579,12 @@ describe('Test moderation notifications', function () {
         }
       }
 
-      const { uuid } = await servers[0].videos.upload({ token: userAccessToken, attributes })
+      const { shortUUID } = await servers[0].videos.upload({ token: userAccessToken, attributes })
 
       await wait(6000)
-      await checkVideoIsPublished(userBaseParams, name, uuid, 'absence')
-      await checkNewVideoFromSubscription(adminBaseParamsServer1, name, uuid, 'absence')
-      await checkNewVideoFromSubscription(adminBaseParamsServer2, name, uuid, 'absence')
+      await checkVideoIsPublished({ ...userBaseParams, videoName: name, shortUUID, checkType: 'absence' })
+      await checkNewVideoFromSubscription({ ...adminBaseParamsServer1, videoName: name, shortUUID, checkType: 'absence' })
+      await checkNewVideoFromSubscription({ ...adminBaseParamsServer2, videoName: name, shortUUID, checkType: 'absence' })
     })
 
     it('Should not send a notification to moderators on new video without auto-blacklist', async function () {
@@ -589,10 +593,10 @@ describe('Test moderation notifications', function () {
       const name = 'video without auto-blacklist ' + buildUUID()
 
       // admin with blacklist right will not be auto-blacklisted
-      const { uuid } = await servers[0].videos.upload({ attributes: { name } })
+      const { shortUUID } = await servers[0].videos.upload({ attributes: { name } })
 
       await waitJobs(servers)
-      await checkVideoAutoBlacklistForModerators(adminBaseParamsServer1, uuid, name, 'absence')
+      await checkVideoAutoBlacklistForModerators({ ...adminBaseParamsServer1, shortUUID, videoName: name, checkType: 'absence' })
     })
 
     after(async () => {

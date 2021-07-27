@@ -1,12 +1,17 @@
 import * as express from 'express'
 import { query } from 'express-validator'
 import { isSearchTargetValid } from '@server/helpers/custom-validators/search'
+import { isHostValid } from '@server/helpers/custom-validators/servers'
 import { isDateValid } from '../../helpers/custom-validators/misc'
 import { logger } from '../../helpers/logger'
 import { areValidationErrors } from './shared'
 
 const videosSearchValidator = [
   query('search').optional().not().isEmpty().withMessage('Should have a valid search'),
+
+  query('host')
+    .optional()
+    .custom(isHostValid).withMessage('Should have a valid host'),
 
   query('startDate')
     .optional()

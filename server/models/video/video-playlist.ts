@@ -20,7 +20,7 @@ import {
 import { setAsUpdated } from '@server/helpers/database-utils'
 import { buildUUID, uuidToShort } from '@server/helpers/uuid'
 import { MAccountId, MChannelId } from '@server/types/models'
-import { AttributesOnly, buildPlaylistEmbedPath, buildPlaylistLink, buildPlaylistWatchPath } from '@shared/core-utils'
+import { AttributesOnly, buildPlaylistEmbedPath, buildPlaylistWatchPath } from '@shared/core-utils'
 import { ActivityIconObject } from '../../../shared/models/activitypub/objects'
 import { PlaylistObject } from '../../../shared/models/activitypub/objects/playlist-object'
 import { VideoPlaylistPrivacy } from '../../../shared/models/videos/playlist/video-playlist-privacy.model'

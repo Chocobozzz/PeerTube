@@ -70,7 +70,7 @@ describe('Test admin notifications', function () {
       joinPeerTubeServer.setLatestVersion('1.4.2')
 
       await wait(3000)
-      await checkNewPeerTubeVersion(baseParams, '1.4.2', 'absence')
+      await checkNewPeerTubeVersion({ ...baseParams, latestVersion: '1.4.2', checkType: 'absence' })
     })
 
     it('Should send a notification to admins on new plugin version', async function () {
@@ -79,7 +79,7 @@ describe('Test admin notifications', function () {
       joinPeerTubeServer.setLatestVersion('15.4.2')
 
       await wait(3000)
-      await checkNewPeerTubeVersion(baseParams, '15.4.2', 'presence')
+      await checkNewPeerTubeVersion({ ...baseParams, latestVersion: '15.4.2', checkType: 'presence' })
     })
 
     it('Should not send the same notification to admins', async function () {
@@ -101,7 +101,7 @@ describe('Test admin notifications', function () {
       joinPeerTubeServer.setLatestVersion('15.4.3')
 
       await wait(3000)
-      await checkNewPeerTubeVersion(baseParams, '15.4.3', 'presence')
+      await checkNewPeerTubeVersion({ ...baseParams, latestVersion: '15.4.3', checkType: 'presence' })
       expect(adminNotifications.filter(n => n.type === UserNotificationType.NEW_PEERTUBE_VERSION)).to.have.lengthOf(2)
     })
   })
@@ -112,7 +112,7 @@ describe('Test admin notifications', function () {
       this.timeout(30000)
 
       await wait(6000)
-      await checkNewPluginVersion(baseParams, PluginType.PLUGIN, 'hello-world', 'absence')
+      await checkNewPluginVersion({ ...baseParams, pluginType: PluginType.PLUGIN, pluginName: 'hello-world', checkType: 'absence' })
     })
 
     it('Should send a notification to admins on new plugin version', async function () {
@@ -122,7 +122,7 @@ describe('Test admin notifications', function () {
       await server.sql.setPluginLatestVersion('hello-world', '0.0.1')
       await wait(6000)
 
-      await checkNewPluginVersion(baseParams, PluginType.PLUGIN, 'hello-world', 'presence')
+      await checkNewPluginVersion({ ...baseParams, pluginType: PluginType.PLUGIN, pluginName: 'hello-world', checkType: 'presence' })
     })
 
     it('Should not send the same notification to admins', async function () {

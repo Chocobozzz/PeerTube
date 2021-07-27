@@ -111,10 +111,10 @@ describe('Test notifications API', function () {
         expect(info.notificationSettings.newVideoFromSubscription).to.equal(UserNotificationSettingValue.NONE)
       }
 
-      const { name, uuid } = await server.videos.randomUpload()
+      const { name, shortUUID } = await server.videos.randomUpload()
 
       const check = { web: true, mail: true }
-      await checkNewVideoFromSubscription({ ...baseParams, check }, name, uuid, 'absence')
+      await checkNewVideoFromSubscription({ ...baseParams, check, videoName: name, shortUUID, checkType: 'absence' })
     })
 
     it('Should only have web notifications', async function () {
@@ -130,16 +130,16 @@ describe('Test notifications API', function () {
         expect(info.notificationSettings.newVideoFromSubscription).to.equal(UserNotificationSettingValue.WEB)
       }
 
-      const { name, uuid } = await server.videos.randomUpload()
+      const { name, shortUUID } = await server.videos.randomUpload()
 
       {
         const check = { mail: true, web: false }
-        await checkNewVideoFromSubscription({ ...baseParams, check }, name, uuid, 'absence')
+        await checkNewVideoFromSubscription({ ...baseParams, check, videoName: name, shortUUID, checkType: 'absence' })
       }
 
       {
         const check = { mail: false, web: true }
-        await checkNewVideoFromSubscription({ ...baseParams, check }, name, uuid, 'presence')
+        await checkNewVideoFromSubscription({ ...baseParams, check, videoName: name, shortUUID, checkType: 'presence' })
       }
     })
 
@@ -156,16 +156,16 @@ describe('Test notifications API', function () {
         expect(info.notificationSettings.newVideoFromSubscription).to.equal(UserNotificationSettingValue.EMAIL)
       }
 
-      const { name, uuid } = await server.videos.randomUpload()
+      const { name, shortUUID } = await server.videos.randomUpload()
 
       {
         const check = { mail: false, web: true }
-        await checkNewVideoFromSubscription({ ...baseParams, check }, name, uuid, 'absence')
+        await checkNewVideoFromSubscription({ ...baseParams, check, videoName: name, shortUUID, checkType: 'absence' })
       }
 
       {
         const check = { mail: true, web: false }
-        await checkNewVideoFromSubscription({ ...baseParams, check }, name, uuid, 'presence')
+        await checkNewVideoFromSubscription({ ...baseParams, check, videoName: name, shortUUID, checkType: 'presence' })
       }
     })
 
@@ -187,9 +187,9 @@ describe('Test notifications API', function () {
         )
       }
 
-      const { name, uuid } = await server.videos.randomUpload()
+      const { name, shortUUID } = await server.videos.randomUpload()
 
-      await checkNewVideoFromSubscription(baseParams, name, uuid, 'presence')
+      await checkNewVideoFromSubscription({ ...baseParams, videoName: name, shortUUID, checkType: 'presence' })
     })
   })
 

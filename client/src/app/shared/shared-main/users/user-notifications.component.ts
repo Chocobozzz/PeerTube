@@ -1,7 +1,7 @@
 import { Subject } from 'rxjs'
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { ComponentPagination, hasMoreItems, Notifier } from '@app/core'
-import { UserNotificationType, AbuseState } from '@shared/models'
+import { AbuseState } from '@shared/models'
 import { UserNotification } from './user-notification.model'
 import { UserNotificationService } from './user-notification.service'
 

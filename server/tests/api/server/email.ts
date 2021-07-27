@@ -13,7 +13,7 @@ describe('Test emails', function () {
   let userId2: number
   let userAccessToken: string
 
-  let videoUUID: string
+  let videoShortUUID: string
   let videoId: number
 
   let videoUserUUID: string
@@ -59,8 +59,8 @@ describe('Test emails', function () {
       const attributes = {
         name: 'my super name'
       }
-      const { uuid, id } = await server.videos.upload({ attributes })
-      videoUUID = uuid
+      const { shortUUID, id } = await server.videos.upload({ attributes })
+      videoShortUUID = shortUUID
       videoId = id
     }
   })
@@ -180,6 +180,7 @@ describe('Test emails', function () {
   })
 
   describe('When creating an abuse', function () {
+
     it('Should send the notification email', async function () {
       this.timeout(10000)
 
@@ -195,7 +196,7 @@ describe('Test emails', function () {
       expect(email['from'][0]['address']).equal('test-admin@localhost')
       expect(email['to'][0]['address']).equal('admin' + server.internalServerNumber + '@example.com')
       expect(email['subject']).contains('abuse')
-      expect(email['text']).contains(videoUUID)
+      expect(email['text']).contains(videoShortUUID)
     })
   })
 
