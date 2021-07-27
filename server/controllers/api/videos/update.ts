@@ -60,9 +60,11 @@ export async function updateVideo (req: express.Request, res: express.Response) 
   const wasConfidentialVideo = videoInstance.isConfidential()
   const hadPrivacyForFederation = videoInstance.hasPrivacyForFederation()
 
+  // @ts-expect-error
+  const files: { [fieldname: string]: Express.Multer.File[] } = req.files
   const [ thumbnailModel, previewModel ] = await buildVideoThumbnailsFromReq({
     video: videoInstance,
-    files: req.files,
+    files,
     fallback: () => Promise.resolve(undefined),
     automaticallyGenerated: false
   })

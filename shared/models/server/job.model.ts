@@ -1,6 +1,7 @@
 import { ContextType } from '../activitypub/context'
 import { VideoResolution } from '../videos/video-resolution.enum'
 import { SendEmailOptions } from './emailer.model'
+import express = require('express')
 
 export type JobState = 'active' | 'completed' | 'failed' | 'waiting' | 'delayed' | 'paused'
 
@@ -14,6 +15,7 @@ export type JobType =
   | 'video-transcoding'
   | 'email'
   | 'video-import'
+  | 'video-process'
   | 'videos-views'
   | 'activitypub-refresher'
   | 'video-redundancy'
@@ -88,6 +90,14 @@ export type VideoImportTorrentPayload = {
   videoImportId: number
 }
 export type VideoImportPayload = VideoImportYoutubeDLPayload | VideoImportTorrentPayload
+
+export type VideoProcessPayload = {
+  previewFilePath: string
+  videoFilePath: string
+  videoId: number
+  videoPhysicalFile: express.VideoUploadFile
+  userId: number
+}
 
 export type VideoRedundancyPayload = {
   videoId: number

@@ -601,6 +601,7 @@ export async function isVideoAccepted (
   return true
 }
 
+// Remove!!!!
 async function addDurationToVideo (videoFile: { path: string, duration?: number }) {
   const duration: number = await getDurationFromVideoFile(videoFile.path)
 

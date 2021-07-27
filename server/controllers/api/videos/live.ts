@@ -98,6 +98,7 @@ async function addLiveVideo (req: express.Request, res: express.Response) {
 
   const [ thumbnailModel, previewModel ] = await buildVideoThumbnailsFromReq({
     video,
+    // @ts-expect-error
     files: req.files,
     fallback: type => {
       return updateVideoMiniatureFromExisting({

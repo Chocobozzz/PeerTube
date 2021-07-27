@@ -3,5 +3,6 @@ export const enum VideoState {
   TO_TRANSCODE = 2,
   TO_IMPORT = 3,
   WAITING_FOR_LIVE = 4,
-  LIVE_ENDED = 5
+  LIVE_ENDED = 5,
+  TO_PROCESS = 6
 }

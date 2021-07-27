@@ -34,6 +34,8 @@ import { processVideoImport } from './handlers/video-import'
 import { processVideoLiveEnding } from './handlers/video-live-ending'
 import { processVideoTranscoding } from './handlers/video-transcoding'
 import { processVideosViews } from './handlers/video-views'
+import { processVideoProcess } from './handlers/video-file-process'
+import { VideoProcessPayload } from '../../../shared/models/server/job.model'
 
 type CreateJobArgument =
   { type: 'activitypub-http-broadcast', payload: ActivitypubHttpBroadcastPayload } |
@@ -45,6 +47,7 @@ type CreateJobArgument =
   { type: 'video-transcoding', payload: VideoTranscodingPayload } |
   { type: 'email', payload: EmailPayload } |
   { type: 'video-import', payload: VideoImportPayload } |
+  { type: 'video-process', payload: VideoProcessPayload } |
   { type: 'activitypub-refresher', payload: RefreshPayload } |
   { type: 'videos-views', payload: {} } |
   { type: 'video-live-ending', payload: VideoLiveEndingPayload } |
@@ -62,6 +65,7 @@ const handlers: { [id in JobType]: (job: Bull.Job) => Promise<any> } = {
   'activitypub-http-fetcher': processActivityPubHttpFetcher,
   'activitypub-cleaner': processActivityPubCleaner,
   'activitypub-follow': processActivityPubFollow,
+  'video-process': processVideoProcess,
   'video-file-import': processVideoFileImport,
   'video-transcoding': processVideoTranscoding,
   'email': processEmail,
@@ -83,6 +87,7 @@ const jobTypes: JobType[] = [
   'video-transcoding',
   'video-file-import',
   'video-import',
+  'video-process',
   'videos-views',
   'activitypub-refresher',
   'video-redundancy',

@@ -147,7 +147,8 @@ const JOB_ATTEMPTS: { [id in JobType]: number } = {
   'videos-views': 1,
   'activitypub-refresher': 1,
   'video-redundancy': 1,
-  'video-live-ending': 1
+  'video-live-ending': 1,
+  'video-process': 1
 }
 // Excluded keys are jobs that can be configured by admins
 const JOB_CONCURRENCY: { [id in Exclude<JobType, 'video-transcoding' | 'video-import'>]: number } = {
@@ -162,7 +163,8 @@ const JOB_CONCURRENCY: { [id in Exclude<JobType, 'video-transcoding' | 'video-im
   'videos-views': 1,
   'activitypub-refresher': 1,
   'video-redundancy': 1,
-  'video-live-ending': 10
+  'video-live-ending': 10,
+  'video-process': 1
 }
 const JOB_TTL: { [id in JobType]: number } = {
   'activitypub-http-broadcast': 60000 * 10, // 10 minutes
@@ -178,7 +180,8 @@ const JOB_TTL: { [id in JobType]: number } = {
   'videos-views': undefined, // Unlimited
   'activitypub-refresher': 60000 * 10, // 10 minutes
   'video-redundancy': 1000 * 3600 * 3, // 3 hours
-  'video-live-ending': 1000 * 60 * 10 // 10 minutes
+  'video-live-ending': 1000 * 60 * 10, // 10 minutes
+  'video-process': 1000 * 3600 // 1 hour
 }
 const REPEAT_JOBS: { [ id: string ]: EveryRepeatOptions | CronRepeatOptions } = {
   'videos-views': {
@@ -412,7 +415,8 @@ const VIDEO_STATES: { [ id in VideoState ]: string } = {
   [VideoState.TO_TRANSCODE]: 'To transcode',
   [VideoState.TO_IMPORT]: 'To import',
   [VideoState.WAITING_FOR_LIVE]: 'Waiting for livestream',
-  [VideoState.LIVE_ENDED]: 'Livestream ended'
+  [VideoState.LIVE_ENDED]: 'Livestream ended',
+  [VideoState.TO_PROCESS]: 'To process'
 }
 
 const VIDEO_IMPORT_STATES: { [ id in VideoImportState ]: string } = {

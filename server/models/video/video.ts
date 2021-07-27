@@ -40,7 +40,6 @@ import { ThumbnailType } from '../../../shared/models/videos/thumbnail.type'
 import { VideoFilter } from '../../../shared/models/videos/video-query.type'
 import { VideoStreamingPlaylistType } from '../../../shared/models/videos/video-streaming-playlist.type'
 import { peertubeTruncate } from '../../helpers/core-utils'
-import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import { isBooleanValid } from '../../helpers/custom-validators/misc'
 import {
   isVideoDescriptionValid,
@@ -525,8 +524,8 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
   @Column
   isLive: boolean
 
-  @AllowNull(false)
-  @Is('VideoUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'url'))
+  @AllowNull(true)
+  // @Is('VideoUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'url'))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEOS.URL.max))
   url: string
 
