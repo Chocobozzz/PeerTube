@@ -89,7 +89,8 @@ async function searchVideoPlaylistsDB (query: VideoPlaylistsSearchQuery, res: ex
     start: query.start,
     count: query.count,
     sort: query.sort,
-    host: query.host
+    host: query.host,
+    uuids: query.uuids
   }, 'filter:api.search.video-playlists.local.list.params')
 
   const resultList = await Hooks.wrapPromiseFun(

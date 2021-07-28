@@ -59,6 +59,7 @@ type AvailableForListOptions = {
   actorId: number
   search?: string
   host?: string
+  names?: string[]
 }
 
 type AvailableWithStatsOptions = {
@@ -84,18 +85,20 @@ export type SummaryOptions = {
     // Only list local channels OR channels that are on an instance followed by actorId
     const inQueryInstanceFollow = buildServerIdsFollowedBy(options.actorId)
 
-    const whereActor = {
-      [Op.or]: [
-        {
-          serverId: null
-        },
-        {
-          serverId: {
-            [Op.in]: Sequelize.literal(inQueryInstanceFollow)
+    const whereActorAnd: WhereOptions[] = [
+      {
+        [Op.or]: [
+          {
+            serverId: null
+          },
+          {
+            serverId: {
+              [Op.in]: Sequelize.literal(inQueryInstanceFollow)
+            }
           }
-        }
-      ]
-    }
+        ]
+      }
+    ]
 
     let serverRequired = false
     let whereServer: WhereOptions
@@ -106,8 +109,16 @@ export type SummaryOptions = {
     }
 
     if (options.host === WEBSERVER.HOST) {
-      Object.assign(whereActor, {
-        [Op.and]: [ { serverId: null } ]
+      whereActorAnd.push({
+        serverId: null
+      })
+    }
+
+    if (options.names) {
+      whereActorAnd.push({
+        preferredUsername: {
+          [Op.in]: options.names
+        }
       })
     }
 
@@ -118,7 +129,9 @@ export type SummaryOptions = {
             exclude: unusedActorAttributesForAPI
           },
           model: ActorModel,
-          where: whereActor,
+          where: {
+            [Op.and]: whereActorAnd
+          },
           include: [
             {
               model: ServerModel,
@@ -454,26 +467,23 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
 
   static searchForApi (options: {
     actorId: number
-    search: string
+    search?: string
     start: number
     count: number
     sort: string
 
     host?: string
+    names?: string[]
   }) {
-    const attributesInclude = []
-    const escapedSearch = VideoChannelModel.sequelize.escape(options.search)
-    const escapedLikeSearch = VideoChannelModel.sequelize.escape('%' + options.search + '%')
-    attributesInclude.push(createSimilarityAttribute('VideoChannelModel.name', options.search))
+    let attributesInclude: any[] = [ literal('0 as similarity') ]
+    let where: WhereOptions
 
-    const query = {
-      attributes: {
-        include: attributesInclude
-      },
-      offset: options.start,
-      limit: options.count,
-      order: getSort(options.sort),
-      where: {
+    if (options.search) {
+      const escapedSearch = VideoChannelModel.sequelize.escape(options.search)
+      const escapedLikeSearch = VideoChannelModel.sequelize.escape('%' + options.search + '%')
+      attributesInclude = [ createSimilarityAttribute('VideoChannelModel.name', options.search) ]
+
+      where = {
         [Op.or]: [
           Sequelize.literal(
             'lower(immutable_unaccent("VideoChannelModel"."name")) % lower(immutable_unaccent(' + escapedSearch + '))'
@@ -485,9 +495,19 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
       }
     }
 
+    const query = {
+      attributes: {
+        include: attributesInclude
+      },
+      offset: options.start,
+      limit: options.count,
+      order: getSort(options.sort),
+      where
+    }
+
     return VideoChannelModel
       .scope({
-        method: [ ScopeNames.FOR_API, { actorId: options.actorId, host: options.host } as AvailableForListOptions ]
+        method: [ ScopeNames.FOR_API, { actorId: options.actorId, host: options.host, names: options.names } as AvailableForListOptions ]
       })
       .findAndCountAll(query)
       .then(({ rows, count }) => {

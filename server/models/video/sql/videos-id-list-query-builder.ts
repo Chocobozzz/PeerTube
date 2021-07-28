@@ -35,6 +35,8 @@ export type BuildVideosListQueryOptions = {
   tagsOneOf?: string[]
   tagsAllOf?: string[]
 
+  uuids?: string[]
+
   withFiles?: boolean
 
   accountId?: number
@@ -159,6 +161,10 @@ export class VideosIdListQueryBuilder extends AbstractVideosQueryBuilder {
 
     if (options.tagsAllOf) {
       this.whereTagsAllOf(options.tagsAllOf)
+    }
+
+    if (options.uuids) {
+      this.whereUUIDs(options.uuids)
     }
 
     if (options.nsfw === true) {
@@ -384,6 +390,10 @@ export class VideosIdListQueryBuilder extends AbstractVideosQueryBuilder {
       '  GROUP BY "videoTag"."videoId" HAVING COUNT(*) = ' + tagsAllOfLower.length +
       ')'
     )
+  }
+
+  private whereUUIDs (uuids: string[]) {
+    this.and.push('"video"."uuid" IN (' + createSafeIn(this.sequelize, uuids) + ')')
   }
 
   private whereCategoryOneOf (categoryOneOf: number[]) {

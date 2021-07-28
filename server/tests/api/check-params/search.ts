@@ -146,6 +146,16 @@ describe('Test videos API validator', function () {
       const customQuery = { ...query, host: 'example.com' }
       await makeGetRequest({ url: server.url, path, query: customQuery, expectedStatus: HttpStatusCode.OK_200 })
     })
+
+    it('Should fail with invalid uuids', async function () {
+      const customQuery = { ...query, uuids: [ '6565', 'dfd70b83-639f-4980-94af-304a56ab4b35' ] }
+      await makeGetRequest({ url: server.url, path, query: customQuery, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    })
+
+    it('Should succeed with valid uuids', async function () {
+      const customQuery = { ...query, uuids: [ 'dfd70b83-639f-4980-94af-304a56ab4b35' ] }
+      await makeGetRequest({ url: server.url, path, query: customQuery, expectedStatus: HttpStatusCode.OK_200 })
+    })
   })
 
   describe('When searching video playlists', function () {
@@ -170,6 +180,11 @@ describe('Test videos API validator', function () {
 
     it('Should fail with an invalid host', async function () {
       await makeGetRequest({ url: server.url, path, query: { ...query, host: '6565' }, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    })
+
+    it('Should fail with invalid uuids', async function () {
+      const customQuery = { ...query, uuids: [ '6565', 'dfd70b83-639f-4980-94af-304a56ab4b35' ] }
+      await makeGetRequest({ url: server.url, path, query: customQuery, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     })
 
     it('Should succeed with the correct parameters', async function () {

@@ -22,8 +22,12 @@ describe('Test channels search', function () {
   before(async function () {
     this.timeout(120000)
 
-    server = await createSingleServer(1)
-    remoteServer = await createSingleServer(2, { transcoding: { enabled: false } })
+    const servers = await Promise.all([
+      createSingleServer(1),
+      createSingleServer(2, { transcoding: { enabled: false } })
+    ])
+    server = servers[0]
+    remoteServer = servers[1]
 
     await setAccessTokensToServers([ server, remoteServer ])
 
@@ -111,6 +115,22 @@ describe('Test channels search', function () {
       const search = { search: 'Squall', host: 'example.com' }
 
       const body = await command.advancedChannelSearch({ search })
+      expect(body.total).to.equal(0)
+      expect(body.data).to.have.lengthOf(0)
+    }
+  })
+
+  it('Should filter by names', async function () {
+    {
+      const body = await command.advancedChannelSearch({ search: { names: [ 'squall_channel', 'zell_channel' ] } })
+      expect(body.total).to.equal(2)
+      expect(body.data).to.have.lengthOf(2)
+      expect(body.data[0].displayName).to.equal('Squall channel')
+      expect(body.data[1].displayName).to.equal('Zell channel')
+    }
+
+    {
+      const body = await command.advancedChannelSearch({ search: { names: [ 'chocobozzz_channel' ] } })
       expect(body.total).to.equal(0)
       expect(body.data).to.have.lengthOf(0)
     }

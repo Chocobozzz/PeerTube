@@ -19,12 +19,18 @@ describe('Test playlists search', function () {
   let server: PeerTubeServer
   let remoteServer: PeerTubeServer
   let command: SearchCommand
+  let playlistUUID: string
+  let playlistShortUUID: string
 
   before(async function () {
     this.timeout(120000)
 
-    server = await createSingleServer(1)
-    remoteServer = await createSingleServer(2, { transcoding: { enabled: false } })
+    const servers = await Promise.all([
+      createSingleServer(1),
+      createSingleServer(2, { transcoding: { enabled: false } })
+    ])
+    server = servers[0]
+    remoteServer = servers[1]
 
     await setAccessTokensToServers([ remoteServer, server ])
     await setDefaultVideoChannel([ remoteServer, server ])
@@ -38,6 +44,8 @@ describe('Test playlists search', function () {
         videoChannelId: server.store.channel.id
       }
       const created = await server.playlists.create({ attributes })
+      playlistUUID = created.uuid
+      playlistShortUUID = created.shortUUID
 
       await server.playlists.addElement({ playlistId: created.id, attributes: { videoId } })
     }
@@ -133,6 +141,22 @@ describe('Test playlists search', function () {
 
       const playlist = body.data[0]
       expect(playlist.displayName).to.equal('Johan & Anna Libert music videos')
+    }
+  })
+
+  it('Should filter by UUIDs', async function () {
+    for (const uuid of [ playlistUUID, playlistShortUUID ]) {
+      const body = await command.advancedPlaylistSearch({ search: { uuids: [ uuid ] } })
+
+      expect(body.total).to.equal(1)
+      expect(body.data[0].displayName).to.equal('Dr. Kenzo Tenma hospital videos')
+    }
+
+    {
+      const body = await command.advancedPlaylistSearch({ search: { uuids: [ 'dfd70b83-639f-4980-94af-304a56ab4b35' ] } })
+
+      expect(body.total).to.equal(0)
+      expect(body.data).to.have.lengthOf(0)
     }
   })
 

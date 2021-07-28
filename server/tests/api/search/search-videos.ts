@@ -22,14 +22,19 @@ describe('Test videos search', function () {
   let remoteServer: PeerTubeServer
   let startDate: string
   let videoUUID: string
+  let videoShortUUID: string
 
   let command: SearchCommand
 
   before(async function () {
     this.timeout(120000)
 
-    server = await createSingleServer(1)
-    remoteServer = await createSingleServer(2)
+    const servers = await Promise.all([
+      createSingleServer(1),
+      createSingleServer(2)
+    ])
+    server = servers[0]
+    remoteServer = servers[1]
 
     await setAccessTokensToServers([ server, remoteServer ])
     await setDefaultVideoChannel([ server, remoteServer ])
@@ -50,8 +55,9 @@ describe('Test videos search', function () {
 
       {
         const attributes3 = { ...attributes1, name: attributes1.name + ' - 3', language: undefined }
-        const { id, uuid } = await server.videos.upload({ attributes: attributes3 })
+        const { id, uuid, shortUUID } = await server.videos.upload({ attributes: attributes3 })
         videoUUID = uuid
+        videoShortUUID = shortUUID
 
         await server.captions.add({
           language: 'en',
@@ -477,6 +483,22 @@ describe('Test videos search', function () {
 
     expect(body.total).to.equal(1)
     expect(body.data[0].name).to.equal('1111 2222 3333 - 3')
+  })
+
+  it('Should filter by UUIDs', async function () {
+    for (const uuid of [ videoUUID, videoShortUUID ]) {
+      const body = await command.advancedVideoSearch({ search: { uuids: [ uuid ] } })
+
+      expect(body.total).to.equal(1)
+      expect(body.data[0].name).to.equal('1111 2222 3333 - 3')
+    }
+
+    {
+      const body = await command.advancedVideoSearch({ search: { uuids: [ 'dfd70b83-639f-4980-94af-304a56ab4b35' ] } })
+
+      expect(body.total).to.equal(0)
+      expect(body.data).to.have.lengthOf(0)
+    }
   })
 
   it('Should search by host', async function () {

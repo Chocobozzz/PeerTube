@@ -46,7 +46,7 @@ export { searchChannelsRouter }
 
 function searchVideoChannels (req: express.Request, res: express.Response) {
   const query: VideoChannelsSearchQuery = req.query
-  const search = query.search
+  let search = query.search || ''
 
   const parts = search.split('@')
 
@@ -57,7 +57,7 @@ function searchVideoChannels (req: express.Request, res: express.Response) {
   if (isURISearch(search) || isWebfingerSearch) return searchVideoChannelURI(search, isWebfingerSearch, res)
 
   // @username -> username to search in DB
-  if (query.search.startsWith('@')) query.search = query.search.replace(/^@/, '')
+  if (search.startsWith('@')) search = search.replace(/^@/, '')
 
   if (isSearchIndexSearch(query)) {
     return searchVideoChannelsIndex(query, res)
@@ -99,7 +99,8 @@ async function searchVideoChannelsDB (query: VideoChannelsSearchQuery, res: expr
     start: query.start,
     count: query.count,
     sort: query.sort,
-    host: query.host
+    host: query.host,
+    names: query.names
   }, 'filter:api.search.video-channels.local.list.params')
 
   const resultList = await Hooks.wrapPromiseFun(

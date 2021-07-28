@@ -83,6 +83,7 @@ type AvailableForListOptions = {
   listMyPlaylists?: boolean
   search?: string
   host?: string
+  uuids?: string[]
   withVideos?: boolean
 }
 
@@ -200,18 +201,26 @@ function getVideoLengthSelect () {
       })
     }
 
+    if (options.uuids) {
+      whereAnd.push({
+        uuid: {
+          [Op.in]: options.uuids
+        }
+      })
+    }
+
     if (options.withVideos === true) {
       whereAnd.push(
         literal(`(${getVideoLengthSelect()}) != 0`)
       )
     }
 
-    const attributesInclude = []
+    let attributesInclude: any[] = [ literal('0 as similarity') ]
 
     if (options.search) {
       const escapedSearch = VideoPlaylistModel.sequelize.escape(options.search)
       const escapedLikeSearch = VideoPlaylistModel.sequelize.escape('%' + options.search + '%')
-      attributesInclude.push(createSimilarityAttribute('VideoPlaylistModel.name', options.search))
+      attributesInclude = [ createSimilarityAttribute('VideoPlaylistModel.name', options.search) ]
 
       whereAnd.push({
         [Op.or]: [
@@ -359,6 +368,7 @@ export class VideoPlaylistModel extends Model<Partial<AttributesOnly<VideoPlayli
     listMyPlaylists?: boolean
     search?: string
     host?: string
+    uuids?: string[]
     withVideos?: boolean // false by default
   }) {
     const query = {
@@ -379,6 +389,7 @@ export class VideoPlaylistModel extends Model<Partial<AttributesOnly<VideoPlayli
             listMyPlaylists: options.listMyPlaylists,
             search: options.search,
             host: options.host,
+            uuids: options.uuids,
             withVideos: options.withVideos || false
           } as AvailableForListOptions
         ]
@@ -402,6 +413,7 @@ export class VideoPlaylistModel extends Model<Partial<AttributesOnly<VideoPlayli
     sort: string
     search?: string
     host?: string
+    uuids?: string[]
   }) {
     return VideoPlaylistModel.listForApi({
       ...options,

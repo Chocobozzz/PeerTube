@@ -39,6 +39,10 @@ function isUUIDValid (value: string) {
   return exists(value) && validator.isUUID('' + value, 4)
 }
 
+function areUUIDsValid (values: string[]) {
+  return isArray(values) && values.every(v => isUUIDValid(v))
+}
+
 function isIdOrUUIDValid (value: string) {
   return isIdValid(value) || isUUIDValid(value)
 }
@@ -132,6 +136,10 @@ function toCompleteUUID (value: string) {
   return value
 }
 
+function toCompleteUUIDs (values: string[]) {
+  return values.map(v => toCompleteUUID(v))
+}
+
 function toIntOrNull (value: string) {
   const v = toValueOrNull(value)
 
@@ -180,6 +188,7 @@ export {
   isIdValid,
   isSafePath,
   isUUIDValid,
+  toCompleteUUIDs,
   toCompleteUUID,
   isIdOrUUIDValid,
   isDateValid,
@@ -187,6 +196,7 @@ export {
   toBooleanOrNull,
   isBooleanValid,
   toIntOrNull,
+  areUUIDsValid,
   toArray,
   toIntArray,
   isFileFieldValid,

@@ -1132,6 +1132,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     durationMax?: number // seconds
     user?: MUserAccountId
     filter?: VideoFilter
+    uuids?: string[]
   }) {
     const serverActor = await getServerActor()
 
@@ -1166,6 +1167,8 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
 
       durationMin: options.durationMin,
       durationMax: options.durationMax,
+
+      uuids: options.uuids,
 
       search: options.search
     }
