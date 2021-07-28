@@ -151,6 +151,51 @@ sudo systemctl enable --now redis
 sudo systemctl enable --now postgresql
 ```
 
+## Rocky Linux 8.4  
+
+1. Pull the latest updates:  
+```
+sudo dnf update -y
+```
+
+2. Install NodeJS 12.x (why 12 and not 14? Not sure...):  
+```
+sudo dnf module install -y nodejs:12
+```
+
+3. Install yarn:  
+```
+sudo npm install --global yarn
+```
+
+4. Install or compile ffmpeg (if you want to compile... enjoy):  
+```
+sudo dnf install -y epel-release 
+sudo dnf --enablerepo=powertools install -y SDL2 SDL2-devel
+sudo dnf install -y --nogpgcheck https://download1.rpmfusion.org/free/el/rpmfusion-free-release-8.noarch.rpm https://download1.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-8.noarch.rpm
+sudo dnf install -y ffmpeg
+sudo dnf update -y
+```
+
+5. Install PostgreSQL and Python3 and other stuff:
+```
+sudo dnf install -y nginx postgresql postgresql-server postgresql-contrib openssl gcc-c++ make wget redis git python3
+sudo ln -s /usr/bin/python3 /usr/bin/python
+sudo PGSETUP_INITDB_OPTIONS='--auth-host=md5' postgresql-setup --initdb --unit postgresql
+sudo systemctl enable --now redis
+sudo systemctl enable --now postgresql
+```
+
+6. Configure the peertube user:
+```
+sudo useradd -m -d /var/www/peertube -s /bin/bash -p peertube peertube
+```
+
+7. Unknown missing steps:
+- Steps missing here... these were adapted from the CentOS 8 steps which abruptly ended.  
+- /var/www/peertube does not exist yet (expected? done in future steps? documentation?).  
+- Nothing about Certbot, NGINX, Firewall settings, and etc.  
+- Hopefully someone can suggest what is missing here with some hints so I can add it?  
 
 ## Fedora
 
