@@ -1,4 +1,4 @@
-import { ResultList } from '@shared/models/common'
+import { ResultList } from '../../common'
 import { Account } from '../../actors'
 
 export interface VideoComment {

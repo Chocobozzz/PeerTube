@@ -1,4 +1,4 @@
-import { ConstantManager } from '@shared/models/plugins/server/plugin-constant-manager.model'
+import { ConstantManager } from '../plugin-constant-manager.model'
 
 export interface PluginVideoLicenceManager extends ConstantManager<number> {
   /**
