@@ -3,7 +3,14 @@
 import 'mocha'
 import * as chai from 'chai'
 import { cleanupTests, createSingleServer, PeerTubeServer, SearchCommand, setAccessTokensToServers } from '@shared/extra-utils'
-import { BooleanBothQuery, VideoPlaylistPrivacy, VideoPlaylistType, VideosSearchQuery } from '@shared/models'
+import {
+  BooleanBothQuery,
+  VideoChannelsSearchQuery,
+  VideoPlaylistPrivacy,
+  VideoPlaylistsSearchQuery,
+  VideoPlaylistType,
+  VideosSearchQuery
+} from '@shared/models'
 
 const expect = chai.expect
 
@@ -194,6 +201,16 @@ describe('Test videos search', function () {
         const search = { ...baseSearch, nsfw: 'both' as BooleanBothQuery }
         await check(search, true)
       }
+
+      {
+        const search = { ...baseSearch, host: 'example.com' }
+        await check(search, false)
+      }
+
+      {
+        const search = { ...baseSearch, host: 'framatube.org' }
+        await check(search, true)
+      }
     })
 
     it('Should have a correct pagination', async function () {
@@ -258,21 +275,34 @@ describe('Test videos search', function () {
     })
 
     it('Should make a search and have results', async function () {
-      const body = await command.advancedChannelSearch({ search: { search: 'Framasoft', sort: 'createdAt' } })
 
-      expect(body.total).to.be.greaterThan(0)
-      expect(body.data).to.have.length.greaterThan(0)
+      async function check (search: VideoChannelsSearchQuery, exists = true) {
+        const body = await command.advancedChannelSearch({ search })
 
-      const videoChannel = body.data[0]
-      expect(videoChannel.url).to.equal('https://framatube.org/video-channels/bf54d359-cfad-4935-9d45-9d6be93f63e8')
-      expect(videoChannel.host).to.equal('framatube.org')
-      expect(videoChannel.avatar).to.exist
-      expect(videoChannel.displayName).to.exist
+        if (exists === false) {
+          expect(body.total).to.equal(0)
+          expect(body.data).to.have.lengthOf(0)
+          return
+        }
 
-      expect(videoChannel.ownerAccount.url).to.equal('https://framatube.org/accounts/framasoft')
-      expect(videoChannel.ownerAccount.name).to.equal('framasoft')
-      expect(videoChannel.ownerAccount.host).to.equal('framatube.org')
-      expect(videoChannel.ownerAccount.avatar).to.exist
+        expect(body.total).to.be.greaterThan(0)
+        expect(body.data).to.have.length.greaterThan(0)
+
+        const videoChannel = body.data[0]
+        expect(videoChannel.url).to.equal('https://framatube.org/video-channels/bf54d359-cfad-4935-9d45-9d6be93f63e8')
+        expect(videoChannel.host).to.equal('framatube.org')
+        expect(videoChannel.avatar).to.exist
+        expect(videoChannel.displayName).to.exist
+
+        expect(videoChannel.ownerAccount.url).to.equal('https://framatube.org/accounts/framasoft')
+        expect(videoChannel.ownerAccount.name).to.equal('framasoft')
+        expect(videoChannel.ownerAccount.host).to.equal('framatube.org')
+        expect(videoChannel.ownerAccount.avatar).to.exist
+      }
+
+      await check({ search: 'Framasoft', sort: 'createdAt' }, true)
+      await check({ search: 'Framasoft', host: 'example.com' }, false)
+      await check({ search: 'Framasoft', host: 'framatube.org' }, true)
     })
 
     it('Should have a correct pagination', async function () {
@@ -293,36 +323,49 @@ describe('Test videos search', function () {
     })
 
     it('Should make a search and have results', async function () {
-      const body = await command.advancedPlaylistSearch({ search: { search: 'E2E playlist', sort: '-match' } })
 
-      expect(body.total).to.be.greaterThan(0)
-      expect(body.data).to.have.length.greaterThan(0)
+      async function check (search: VideoPlaylistsSearchQuery, exists = true) {
+        const body = await command.advancedPlaylistSearch({ search })
 
-      const videoPlaylist = body.data[0]
+        if (exists === false) {
+          expect(body.total).to.equal(0)
+          expect(body.data).to.have.lengthOf(0)
+          return
+        }
 
-      expect(videoPlaylist.url).to.equal('https://peertube2.cpy.re/videos/watch/playlist/73804a40-da9a-40c2-b1eb-2c6d9eec8f0a')
-      expect(videoPlaylist.thumbnailUrl).to.exist
-      expect(videoPlaylist.embedUrl).to.equal('https://peertube2.cpy.re/video-playlists/embed/73804a40-da9a-40c2-b1eb-2c6d9eec8f0a')
+        expect(body.total).to.be.greaterThan(0)
+        expect(body.data).to.have.length.greaterThan(0)
 
-      expect(videoPlaylist.type.id).to.equal(VideoPlaylistType.REGULAR)
-      expect(videoPlaylist.privacy.id).to.equal(VideoPlaylistPrivacy.PUBLIC)
-      expect(videoPlaylist.videosLength).to.exist
+        const videoPlaylist = body.data[0]
 
-      expect(videoPlaylist.createdAt).to.exist
-      expect(videoPlaylist.updatedAt).to.exist
+        expect(videoPlaylist.url).to.equal('https://peertube2.cpy.re/videos/watch/playlist/73804a40-da9a-40c2-b1eb-2c6d9eec8f0a')
+        expect(videoPlaylist.thumbnailUrl).to.exist
+        expect(videoPlaylist.embedUrl).to.equal('https://peertube2.cpy.re/video-playlists/embed/73804a40-da9a-40c2-b1eb-2c6d9eec8f0a')
 
-      expect(videoPlaylist.uuid).to.equal('73804a40-da9a-40c2-b1eb-2c6d9eec8f0a')
-      expect(videoPlaylist.displayName).to.exist
+        expect(videoPlaylist.type.id).to.equal(VideoPlaylistType.REGULAR)
+        expect(videoPlaylist.privacy.id).to.equal(VideoPlaylistPrivacy.PUBLIC)
+        expect(videoPlaylist.videosLength).to.exist
 
-      expect(videoPlaylist.ownerAccount.url).to.equal('https://peertube2.cpy.re/accounts/chocobozzz')
-      expect(videoPlaylist.ownerAccount.name).to.equal('chocobozzz')
-      expect(videoPlaylist.ownerAccount.host).to.equal('peertube2.cpy.re')
-      expect(videoPlaylist.ownerAccount.avatar).to.exist
+        expect(videoPlaylist.createdAt).to.exist
+        expect(videoPlaylist.updatedAt).to.exist
 
-      expect(videoPlaylist.videoChannel.url).to.equal('https://peertube2.cpy.re/video-channels/chocobozzz_channel')
-      expect(videoPlaylist.videoChannel.name).to.equal('chocobozzz_channel')
-      expect(videoPlaylist.videoChannel.host).to.equal('peertube2.cpy.re')
-      expect(videoPlaylist.videoChannel.avatar).to.exist
+        expect(videoPlaylist.uuid).to.equal('73804a40-da9a-40c2-b1eb-2c6d9eec8f0a')
+        expect(videoPlaylist.displayName).to.exist
+
+        expect(videoPlaylist.ownerAccount.url).to.equal('https://peertube2.cpy.re/accounts/chocobozzz')
+        expect(videoPlaylist.ownerAccount.name).to.equal('chocobozzz')
+        expect(videoPlaylist.ownerAccount.host).to.equal('peertube2.cpy.re')
+        expect(videoPlaylist.ownerAccount.avatar).to.exist
+
+        expect(videoPlaylist.videoChannel.url).to.equal('https://peertube2.cpy.re/video-channels/chocobozzz_channel')
+        expect(videoPlaylist.videoChannel.name).to.equal('chocobozzz_channel')
+        expect(videoPlaylist.videoChannel.host).to.equal('peertube2.cpy.re')
+        expect(videoPlaylist.videoChannel.avatar).to.exist
+      }
+
+      await check({ search: 'E2E playlist', sort: '-match' }, true)
+      await check({ search: 'E2E playlist', host: 'example.com' }, false)
+      await check({ search: 'E2E playlist', host: 'peertube2.cpy.re' }, true)
     })
 
     it('Should have a correct pagination', async function () {

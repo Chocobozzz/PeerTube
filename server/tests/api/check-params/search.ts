@@ -57,7 +57,7 @@ describe('Test videos API validator', function () {
       await checkBadSortPagination(server.url, path, null, query)
     })
 
-    it('Should success with the correct parameters', async function () {
+    it('Should succeed with the correct parameters', async function () {
       await makeGetRequest({ url: server.url, path, query, expectedStatus: HttpStatusCode.OK_200 })
     })
 
@@ -136,13 +136,24 @@ describe('Test videos API validator', function () {
       const customQuery4 = { ...query, originallyPublishedEndDate: 'hello' }
       await makeGetRequest({ url: server.url, path, query: customQuery4, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     })
+
+    it('Should fail with an invalid host', async function () {
+      const customQuery = { ...query, host: '6565' }
+      await makeGetRequest({ url: server.url, path, query: customQuery, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    })
+
+    it('Should succeed with a host', async function () {
+      const customQuery = { ...query, host: 'example.com' }
+      await makeGetRequest({ url: server.url, path, query: customQuery, expectedStatus: HttpStatusCode.OK_200 })
+    })
   })
 
   describe('When searching video playlists', function () {
     const path = '/api/v1/search/video-playlists/'
 
     const query = {
-      search: 'coucou'
+      search: 'coucou',
+      host: 'example.com'
     }
 
     it('Should fail with a bad start pagination', async function () {
@@ -157,7 +168,11 @@ describe('Test videos API validator', function () {
       await checkBadSortPagination(server.url, path, null, query)
     })
 
-    it('Should success with the correct parameters', async function () {
+    it('Should fail with an invalid host', async function () {
+      await makeGetRequest({ url: server.url, path, query: { ...query, host: '6565' }, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    })
+
+    it('Should succeed with the correct parameters', async function () {
       await makeGetRequest({ url: server.url, path, query, expectedStatus: HttpStatusCode.OK_200 })
     })
   })
@@ -166,7 +181,8 @@ describe('Test videos API validator', function () {
     const path = '/api/v1/search/video-channels/'
 
     const query = {
-      search: 'coucou'
+      search: 'coucou',
+      host: 'example.com'
     }
 
     it('Should fail with a bad start pagination', async function () {
@@ -181,7 +197,11 @@ describe('Test videos API validator', function () {
       await checkBadSortPagination(server.url, path, null, query)
     })
 
-    it('Should success with the correct parameters', async function () {
+    it('Should fail with an invalid host', async function () {
+      await makeGetRequest({ url: server.url, path, query: { ...query, host: '6565' }, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    })
+
+    it('Should succeed with the correct parameters', async function () {
       await makeGetRequest({ url: server.url, path, query, expectedStatus: HttpStatusCode.OK_200 })
     })
   })
