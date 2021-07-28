@@ -43,7 +43,14 @@ const videosSearchValidator = [
 
 const videoChannelsListSearchValidator = [
   query('search').not().isEmpty().withMessage('Should have a valid search'),
-  query('searchTarget').optional().custom(isSearchTargetValid).withMessage('Should have a valid search target'),
+
+  query('host')
+    .optional()
+    .custom(isHostValid).withMessage('Should have a valid host'),
+
+  query('searchTarget')
+    .optional()
+    .custom(isSearchTargetValid).withMessage('Should have a valid search target'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking video channels search query', { parameters: req.query })
@@ -56,7 +63,14 @@ const videoChannelsListSearchValidator = [
 
 const videoPlaylistsListSearchValidator = [
   query('search').not().isEmpty().withMessage('Should have a valid search'),
-  query('searchTarget').optional().custom(isSearchTargetValid).withMessage('Should have a valid search target'),
+
+  query('host')
+    .optional()
+    .custom(isHostValid).withMessage('Should have a valid host'),
+
+  query('searchTarget')
+    .optional()
+    .custom(isSearchTargetValid).withMessage('Should have a valid search target'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking video playlists search query', { parameters: req.query })

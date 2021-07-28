@@ -19,7 +19,6 @@ import {
   UpdatedAt
 } from 'sequelize-typescript'
 import { isActivityPubUrlValid } from '@server/helpers/custom-validators/activitypub/misc'
-import { doesExist } from '@server/helpers/database-utils'
 import { getServerActor } from '@server/models/application/application'
 import {
   MActorFollowActorsDefault,
@@ -36,6 +35,7 @@ import { logger } from '../../helpers/logger'
 import { ACTOR_FOLLOW_SCORE, CONSTRAINTS_FIELDS, FOLLOW_STATES, SERVER_ACTOR_NAME } from '../../initializers/constants'
 import { AccountModel } from '../account/account'
 import { ServerModel } from '../server/server'
+import { doesExist } from '../shared/query'
 import { createSafeIn, getFollowsSort, getSort, searchAttribute, throwIfNotValid } from '../utils'
 import { VideoChannelModel } from '../video/video-channel'
 import { ActorModel, unusedActorAttributesForAPI } from './actor'

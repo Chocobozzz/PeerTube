@@ -6,4 +6,6 @@ export interface VideoPlaylistsSearchQuery extends SearchTargetQuery {
   start?: number
   count?: number
   sort?: string
+
+  host?: string
 }

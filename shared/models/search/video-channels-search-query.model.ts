@@ -6,4 +6,6 @@ export interface VideoChannelsSearchQuery extends SearchTargetQuery {
   start?: number
   count?: number
   sort?: string
+
+  host?: string
 }

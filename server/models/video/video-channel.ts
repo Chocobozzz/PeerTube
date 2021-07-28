@@ -1,4 +1,4 @@
-import { FindOptions, Includeable, literal, Op, QueryTypes, ScopeOptions, Transaction } from 'sequelize'
+import { FindOptions, Includeable, literal, Op, QueryTypes, ScopeOptions, Transaction, WhereOptions } from 'sequelize'
 import {
   AllowNull,
   BeforeDestroy,
@@ -17,7 +17,6 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { setAsUpdated } from '@server/helpers/database-utils'
 import { MAccountActor } from '@server/types/models'
 import { AttributesOnly } from '@shared/core-utils'
 import { ActivityPubActor } from '../../../shared/models/activitypub'
@@ -41,6 +40,7 @@ import { ActorModel, unusedActorAttributesForAPI } from '../actor/actor'
 import { ActorFollowModel } from '../actor/actor-follow'
 import { ActorImageModel } from '../actor/actor-image'
 import { ServerModel } from '../server/server'
+import { setAsUpdated } from '../shared'
 import { buildServerIdsFollowedBy, buildTrigramSearchIndex, createSimilarityAttribute, getSort, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 import { VideoPlaylistModel } from './video-playlist'
@@ -58,6 +58,7 @@ export enum ScopeNames {
 type AvailableForListOptions = {
   actorId: number
   search?: string
+  host?: string
 }
 
 type AvailableWithStatsOptions = {
@@ -83,6 +84,33 @@ export type SummaryOptions = {
     // Only list local channels OR channels that are on an instance followed by actorId
     const inQueryInstanceFollow = buildServerIdsFollowedBy(options.actorId)
 
+    const whereActor = {
+      [Op.or]: [
+        {
+          serverId: null
+        },
+        {
+          serverId: {
+            [Op.in]: Sequelize.literal(inQueryInstanceFollow)
+          }
+        }
+      ]
+    }
+
+    let serverRequired = false
+    let whereServer: WhereOptions
+
+    if (options.host && options.host !== WEBSERVER.HOST) {
+      serverRequired = true
+      whereServer = { host: options.host }
+    }
+
+    if (options.host === WEBSERVER.HOST) {
+      Object.assign(whereActor, {
+        [Op.and]: [ { serverId: null } ]
+      })
+    }
+
     return {
       include: [
         {
@@ -90,19 +118,18 @@ export type SummaryOptions = {
             exclude: unusedActorAttributesForAPI
           },
           model: ActorModel,
-          where: {
-            [Op.or]: [
-              {
-                serverId: null
-              },
-              {
-                serverId: {
-                  [Op.in]: Sequelize.literal(inQueryInstanceFollow)
-                }
-              }
-            ]
-          },
+          where: whereActor,
           include: [
+            {
+              model: ServerModel,
+              required: serverRequired,
+              where: whereServer
+            },
+            {
+              model: ActorImageModel,
+              as: 'Avatar',
+              required: false
+            },
             {
               model: ActorImageModel,
               as: 'Banner',
@@ -431,6 +458,8 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
     start: number
     count: number
     sort: string
+
+    host?: string
   }) {
     const attributesInclude = []
     const escapedSearch = VideoChannelModel.sequelize.escape(options.search)
@@ -458,7 +487,7 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
 
     return VideoChannelModel
       .scope({
-        method: [ ScopeNames.FOR_API, { actorId: options.actorId } as AvailableForListOptions ]
+        method: [ ScopeNames.FOR_API, { actorId: options.actorId, host: options.host } as AvailableForListOptions ]
       })
       .findAndCountAll(query)
       .then(({ rows, count }) => {

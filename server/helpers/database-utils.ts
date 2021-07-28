@@ -1,6 +1,6 @@
 import * as retry from 'async/retry'
 import * as Bluebird from 'bluebird'
-import { BindOrReplacements, QueryTypes, Transaction } from 'sequelize'
+import { Transaction } from 'sequelize'
 import { Model } from 'sequelize-typescript'
 import { sequelizeTypescript } from '@server/initializers/database'
 import { logger } from './logger'
@@ -95,18 +95,6 @@ function deleteAllModels <T extends Pick<Model, 'destroy'>> (models: T[], transa
   return Promise.all(models.map(f => f.destroy({ transaction })))
 }
 
-// Sequelize always skip the update if we only update updatedAt field
-function setAsUpdated (table: string, id: number, transaction?: Transaction) {
-  return sequelizeTypescript.query(
-    `UPDATE "${table}" SET "updatedAt" = :updatedAt WHERE id = :id`,
-    {
-      replacements: { table, id, updatedAt: new Date() },
-      type: QueryTypes.UPDATE,
-      transaction
-    }
-  )
-}
-
 // ---------------------------------------------------------------------------
 
 function runInReadCommittedTransaction <T> (fn: (t: Transaction) => Promise<T>) {
@@ -123,19 +111,6 @@ function afterCommitIfTransaction (t: Transaction, fn: Function) {
 
 // ---------------------------------------------------------------------------
 
-function doesExist (query: string, bind?: BindOrReplacements) {
-  const options = {
-    type: QueryTypes.SELECT as QueryTypes.SELECT,
-    bind,
-    raw: true
-  }
-
-  return sequelizeTypescript.query(query, options)
-            .then(results => results.length === 1)
-}
-
-// ---------------------------------------------------------------------------
-
 export {
   resetSequelizeInstance,
   retryTransactionWrapper,
@@ -144,7 +119,5 @@ export {
   afterCommitIfTransaction,
   filterNonExistingModels,
   deleteAllModels,
-  setAsUpdated,
-  runInReadCommittedTransaction,
-  doesExist
+  runInReadCommittedTransaction
 }

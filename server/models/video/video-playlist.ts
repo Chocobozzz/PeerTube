@@ -17,7 +17,6 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { setAsUpdated } from '@server/helpers/database-utils'
 import { buildUUID, uuidToShort } from '@server/helpers/uuid'
 import { MAccountId, MChannelId } from '@server/types/models'
 import { AttributesOnly, buildPlaylistEmbedPath, buildPlaylistWatchPath } from '@shared/core-utils'
@@ -53,6 +52,7 @@ import {
 } from '../../types/models/video/video-playlist'
 import { AccountModel, ScopeNames as AccountScopeNames, SummaryOptions } from '../account/account'
 import { ActorModel } from '../actor/actor'
+import { setAsUpdated } from '../shared'
 import {
   buildServerIdsFollowedBy,
   buildTrigramSearchIndex,
@@ -82,6 +82,7 @@ type AvailableForListOptions = {
   videoChannelId?: number
   listMyPlaylists?: boolean
   search?: string
+  host?: string
   withVideos?: boolean
 }
 
@@ -141,9 +142,19 @@ function getVideoLengthSelect () {
     ]
   },
   [ScopeNames.AVAILABLE_FOR_LIST]: (options: AvailableForListOptions) => {
+    const whereAnd: WhereOptions[] = []
+
+    const whereServer = options.host && options.host !== WEBSERVER.HOST
+      ? { host: options.host }
+      : undefined
+
     let whereActor: WhereOptions = {}
 
-    const whereAnd: WhereOptions[] = []
+    if (options.host === WEBSERVER.HOST) {
+      whereActor = {
+        [Op.and]: [ { serverId: null } ]
+      }
+    }
 
     if (options.listMyPlaylists !== true) {
       whereAnd.push({
@@ -168,9 +179,7 @@ function getVideoLengthSelect () {
         })
       }
 
-      whereActor = {
-        [Op.or]: whereActorOr
-      }
+      Object.assign(whereActor, { [Op.or]: whereActorOr })
     }
 
     if (options.accountId) {
@@ -228,7 +237,7 @@ function getVideoLengthSelect () {
       include: [
         {
           model: AccountModel.scope({
-            method: [ AccountScopeNames.SUMMARY, { whereActor } as SummaryOptions ]
+            method: [ AccountScopeNames.SUMMARY, { whereActor, whereServer } as SummaryOptions ]
           }),
           required: true
         },
@@ -349,6 +358,7 @@ export class VideoPlaylistModel extends Model<Partial<AttributesOnly<VideoPlayli
     videoChannelId?: number
     listMyPlaylists?: boolean
     search?: string
+    host?: string
     withVideos?: boolean // false by default
   }) {
     const query = {
@@ -368,6 +378,7 @@ export class VideoPlaylistModel extends Model<Partial<AttributesOnly<VideoPlayli
             videoChannelId: options.videoChannelId,
             listMyPlaylists: options.listMyPlaylists,
             search: options.search,
+            host: options.host,
             withVideos: options.withVideos || false
           } as AvailableForListOptions
         ]
@@ -390,6 +401,7 @@ export class VideoPlaylistModel extends Model<Partial<AttributesOnly<VideoPlayli
     count: number
     sort: string
     search?: string
+    host?: string
   }) {
     return VideoPlaylistModel.listForApi({
       ...options,

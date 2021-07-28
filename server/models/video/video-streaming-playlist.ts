@@ -2,7 +2,6 @@ import * as memoizee from 'memoizee'
 import { join } from 'path'
 import { Op } from 'sequelize'
 import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, HasMany, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
-import { doesExist } from '@server/helpers/database-utils'
 import { VideoFileModel } from '@server/models/video/video-file'
 import { MStreamingPlaylist, MVideo } from '@server/types/models'
 import { AttributesOnly } from '@shared/core-utils'
@@ -20,6 +19,7 @@ import {
   WEBSERVER
 } from '../../initializers/constants'
 import { VideoRedundancyModel } from '../redundancy/video-redundancy'
+import { doesExist } from '../shared'
 import { throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 
