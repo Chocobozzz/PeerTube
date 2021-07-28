@@ -21,7 +21,7 @@ describe('Test playlists search', function () {
   let command: SearchCommand
 
   before(async function () {
-    this.timeout(30000)
+    this.timeout(120000)
 
     server = await createSingleServer(1)
     remoteServer = await createSingleServer(2, { transcoding: { enabled: false } })
