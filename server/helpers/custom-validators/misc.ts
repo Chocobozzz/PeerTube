@@ -23,6 +23,10 @@ function isNotEmptyIntArray (value: any) {
   return Array.isArray(value) && value.every(v => validator.isInt('' + v)) && value.length !== 0
 }
 
+function isNotEmptyStringArray (value: any) {
+  return Array.isArray(value) && value.every(v => typeof v === 'string' && v.length !== 0) && value.length !== 0
+}
+
 function isArrayOf (value: any, validator: (value: any) => boolean) {
   return isArray(value) && value.every(v => validator(v))
 }
@@ -187,6 +191,7 @@ export {
   isIntOrNull,
   isIdValid,
   isSafePath,
+  isNotEmptyStringArray,
   isUUIDValid,
   toCompleteUUIDs,
   toCompleteUUID,

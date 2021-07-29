@@ -1,4 +1,4 @@
-import { pick } from 'lodash'
+import { pick } from '@shared/core-utils'
 import { HttpStatusCode, ResultList, VideoChannel, VideoChannelCreateResult } from '@shared/models'
 import { VideoChannelCreate } from '../../models/videos/channel/video-channel-create.model'
 import { VideoChannelUpdate } from '../../models/videos/channel/video-channel-update.model'

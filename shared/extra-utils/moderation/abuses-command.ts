@@ -1,4 +1,4 @@
-import { pick } from 'lodash'
+import { pick } from '@shared/core-utils'
 import {
   AbuseFilter,
   AbuseMessage,
@@ -81,7 +81,7 @@ export class AbusesCommand extends AbstractCommand {
     searchVideo?: string
     searchVideoChannel?: string
   } = {}) {
-    const toPick = [
+    const toPick: (keyof typeof options)[] = [
       'count',
       'filter',
       'id',
@@ -121,7 +121,7 @@ export class AbusesCommand extends AbstractCommand {
     search?: string
     state?: AbuseState
   }) {
-    const toPick = [
+    const toPick: (keyof typeof options)[] = [
       'id',
       'search',
       'state',

@@ -216,6 +216,10 @@ describe('Test videos API validator', function () {
       await makeGetRequest({ url: server.url, path, query: { ...query, host: '6565' }, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     })
 
+    it('Should fail with invalid handles', async function () {
+      await makeGetRequest({ url: server.url, path, query: { ...query, handles: [ '' ] }, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    })
+
     it('Should succeed with the correct parameters', async function () {
       await makeGetRequest({ url: server.url, path, query, expectedStatus: HttpStatusCode.OK_200 })
     })

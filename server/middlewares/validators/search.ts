@@ -2,7 +2,7 @@ import * as express from 'express'
 import { query } from 'express-validator'
 import { isSearchTargetValid } from '@server/helpers/custom-validators/search'
 import { isHostValid } from '@server/helpers/custom-validators/servers'
-import { areUUIDsValid, isDateValid, toCompleteUUIDs } from '../../helpers/custom-validators/misc'
+import { areUUIDsValid, isDateValid, isNotEmptyStringArray, toCompleteUUIDs } from '../../helpers/custom-validators/misc'
 import { logger } from '../../helpers/logger'
 import { areValidationErrors } from './shared'
 
@@ -64,9 +64,10 @@ const videoChannelsListSearchValidator = [
     .optional()
     .custom(isSearchTargetValid).withMessage('Should have a valid search target'),
 
-  query('names')
+  query('handles')
     .optional()
-    .toArray(),
+    .toArray()
+    .custom(isNotEmptyStringArray).withMessage('Should have valid handles'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking video channels search query', { parameters: req.query })

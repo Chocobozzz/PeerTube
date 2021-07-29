@@ -18,7 +18,7 @@ import {
   UpdatedAt
 } from 'sequelize-typescript'
 import { MAccountActor } from '@server/types/models'
-import { AttributesOnly } from '@shared/core-utils'
+import { AttributesOnly, pick } from '@shared/core-utils'
 import { ActivityPubActor } from '../../../shared/models/activitypub'
 import { VideoChannel, VideoChannelSummary } from '../../../shared/models/videos'
 import {
@@ -59,7 +59,7 @@ type AvailableForListOptions = {
   actorId: number
   search?: string
   host?: string
-  names?: string[]
+  handles?: string[]
 }
 
 type AvailableWithStatsOptions = {
@@ -114,15 +114,33 @@ export type SummaryOptions = {
       })
     }
 
-    if (options.names) {
-      whereActorAnd.push({
-        preferredUsername: {
-          [Op.in]: options.names
+    let rootWhere: WhereOptions
+    if (options.handles) {
+      const or: WhereOptions[] = []
+
+      for (const handle of options.handles || []) {
+        const [ preferredUsername, host ] = handle.split('@')
+
+        if (!host) {
+          or.push({
+            '$Actor.preferredUsername$': preferredUsername,
+            '$Actor.serverId$': null
+          })
+        } else {
+          or.push({
+            '$Actor.preferredUsername$': preferredUsername,
+            '$Actor.Server.host$': host
+          })
         }
-      })
+      }
+
+      rootWhere = {
+        [Op.or]: or
+      }
     }
 
     return {
+      where: rootWhere,
       include: [
         {
           attributes: {
@@ -473,7 +491,7 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
     sort: string
 
     host?: string
-    names?: string[]
+    handles?: string[]
   }) {
     let attributesInclude: any[] = [ literal('0 as similarity') ]
     let where: WhereOptions
@@ -507,7 +525,7 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
 
     return VideoChannelModel
       .scope({
-        method: [ ScopeNames.FOR_API, { actorId: options.actorId, host: options.host, names: options.names } as AvailableForListOptions ]
+        method: [ ScopeNames.FOR_API, pick(options, [ 'actorId', 'host', 'handles' ]) as AvailableForListOptions ]
       })
       .findAndCountAll(query)
       .then(({ rows, count }) => {

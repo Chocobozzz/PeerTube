@@ -1,4 +1,5 @@
-import { omit, pick } from 'lodash'
+import { omit } from 'lodash'
+import { pick } from '@shared/core-utils'
 import {
   HttpStatusCode,
   MyUser,

@@ -8,5 +8,5 @@ export interface VideoChannelsSearchQuery extends SearchTargetQuery {
   sort?: string
 
   host?: string
-  names?: string[]
+  handles?: string[]
 }

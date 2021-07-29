@@ -1,4 +1,4 @@
-import { pick } from 'lodash'
+import { pick } from '@shared/core-utils'
 import { ActivityPubActorType, ActorFollow, FollowState, HttpStatusCode, ResultList, ServerFollowCreate } from '@shared/models'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
 import { PeerTubeServer } from './server'
@@ -15,8 +15,7 @@ export class FollowsCommand extends AbstractCommand {
   }) {
     const path = '/api/v1/server/followers'
 
-    const toPick = [ 'start', 'count', 'sort', 'search', 'state', 'actorType' ]
-    const query = pick(options, toPick)
+    const query = pick(options, [ 'start', 'count', 'sort', 'search', 'state', 'actorType' ])
 
     return this.getRequestBody<ResultList<ActorFollow>>({
       ...options,
@@ -38,8 +37,7 @@ export class FollowsCommand extends AbstractCommand {
   } = {}) {
     const path = '/api/v1/server/following'
 
-    const toPick = [ 'start', 'count', 'sort', 'search', 'state', 'actorType' ]
-    const query = pick(options, toPick)
+    const query = pick(options, [ 'start', 'count', 'sort', 'search', 'state', 'actorType' ])
 
     return this.getRequestBody<ResultList<ActorFollow>>({
       ...options,

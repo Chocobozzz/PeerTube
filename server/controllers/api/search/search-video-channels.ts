@@ -100,7 +100,7 @@ async function searchVideoChannelsDB (query: VideoChannelsSearchQuery, res: expr
     count: query.count,
     sort: query.sort,
     host: query.host,
-    names: query.names
+    handles: query.handles
   }, 'filter:api.search.video-channels.local.list.params')
 
   const resultList = await Hooks.wrapPromiseFun(

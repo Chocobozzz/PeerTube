@@ -1,4 +1,4 @@
-import { pick } from 'lodash'
+import { pick } from '@shared/core-utils'
 import { HttpStatusCode } from '@shared/models'
 import { Job, JobState, JobType, ResultList } from '../../models'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'

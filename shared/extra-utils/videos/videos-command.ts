@@ -3,10 +3,11 @@
 import { expect } from 'chai'
 import { createReadStream, stat } from 'fs-extra'
 import got, { Response as GotResponse } from 'got'
-import { omit, pick } from 'lodash'
+import { omit } from 'lodash'
 import validator from 'validator'
 import { buildUUID } from '@server/helpers/uuid'
 import { loadLanguages } from '@server/initializers/constants'
+import { pick } from '@shared/core-utils'
 import {
   HttpStatusCode,
   ResultList,
