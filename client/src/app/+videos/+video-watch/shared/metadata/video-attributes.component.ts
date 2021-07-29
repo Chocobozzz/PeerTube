@@ -17,6 +17,10 @@ export class VideoAttributesComponent {
     return this.video.url
   }
 
+  getVideoHost () {
+    return this.video.channel.host
+  }
+
   getVideoTags () {
     if (!this.video || Array.isArray(this.video.tags) === false) return []
 

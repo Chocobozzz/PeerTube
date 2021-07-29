@@ -1,13 +1,13 @@
 @use '_variables' as *;
 @use '_mixins' as *;
 
-.video-attribute {
+.attribute {
   font-size: 13px;
   display: block;
   margin-bottom: 12px;
 }
 
-.video-attribute-label {
+.attribute-label {
   @include padding-right(5px);
 
   min-width: 142px;
@@ -16,7 +16,7 @@
   font-weight: $font-bold;
 }
 
-a.video-attribute-value {
+a.attribute-value {
   @include disable-default-a-behaviour;
   color: pvar(--mainForegroundColor);
 
@@ -25,16 +25,22 @@ a.video-attribute-value {
   }
 }
 
-.video-attribute-tags {
-  .video-attribute-value:not(:nth-child(2)) {
+.attribute-tags {
+  .attribute-value:not(:nth-child(2)) {
     &::before {
       content: ', ';
     }
   }
 }
 
+.glyphicon-new-window {
+  color: pvar(--inputPlaceholderColor);
+  margin-left: 5px;
+  font-size: 12px;
+}
+
 @media screen and (max-width: 1600px) {
-  .video-attributes .video-attribute {
+  .attributes .attribute {
     margin-bottom: 5px;
   }
 }
