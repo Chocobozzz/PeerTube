@@ -172,6 +172,6 @@ describe('Test playlists search', function () {
   })
 
   after(async function () {
-    await cleanupTests([ server ])
+    await cleanupTests([ server, remoteServer ])
   })
 })

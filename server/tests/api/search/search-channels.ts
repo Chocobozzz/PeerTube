@@ -144,6 +144,6 @@ describe('Test channels search', function () {
   })
 
   after(async function () {
-    await cleanupTests([ server ])
+    await cleanupTests([ server, remoteServer ])
   })
 })
