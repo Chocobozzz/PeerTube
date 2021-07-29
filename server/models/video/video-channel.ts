@@ -438,8 +438,28 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
     }
   }
 
-  static listForApi (parameters: {
-    actorId: number
+  static listLocalsForSitemap (sort: string): Promise<MChannelActor[]> {
+    const query = {
+      attributes: [ ],
+      offset: 0,
+      order: getSort(sort),
+      include: [
+        {
+          attributes: [ 'preferredUsername', 'serverId' ],
+          model: ActorModel.unscoped(),
+          where: {
+            serverId: null
+          }
+        }
+      ]
+    }
+
+    return VideoChannelModel
+      .unscoped()
+      .findAll(query)
+  }
+
+  static listForApi (parameters: Pick<AvailableForListOptions, 'actorId'> & {
     start: number
     count: number
     sort: string
@@ -462,36 +482,10 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
       })
   }
 
-  static listLocalsForSitemap (sort: string): Promise<MChannelActor[]> {
-    const query = {
-      attributes: [ ],
-      offset: 0,
-      order: getSort(sort),
-      include: [
-        {
-          attributes: [ 'preferredUsername', 'serverId' ],
-          model: ActorModel.unscoped(),
-          where: {
-            serverId: null
-          }
-        }
-      ]
-    }
-
-    return VideoChannelModel
-      .unscoped()
-      .findAll(query)
-  }
-
-  static searchForApi (options: {
-    actorId: number
-    search?: string
+  static searchForApi (options: Pick<AvailableForListOptions, 'actorId' | 'search' | 'host' | 'handles'> & {
     start: number
     count: number
     sort: string
-
-    host?: string
-    handles?: string[]
   }) {
     let attributesInclude: any[] = [ literal('0 as similarity') ]
     let where: WhereOptions

@@ -31,7 +31,7 @@ import { LiveManager } from '@server/lib/live/live-manager'
 import { getHLSDirectory, getVideoFilePath } from '@server/lib/video-paths'
 import { getServerActor } from '@server/models/application/application'
 import { ModelCache } from '@server/models/model-cache'
-import { AttributesOnly, buildVideoEmbedPath, buildVideoWatchPath } from '@shared/core-utils'
+import { AttributesOnly, buildVideoEmbedPath, buildVideoWatchPath, pick } from '@shared/core-utils'
 import { VideoFile } from '@shared/models/videos/video-file.model'
 import { ResultList, UserRight, VideoPrivacy, VideoState } from '../../../shared'
 import { VideoObject } from '../../../shared/models/activitypub/objects'
@@ -1083,41 +1083,44 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
       : serverActor.id
 
     const queryOptions = {
-      start: options.start,
-      count: options.count,
-      sort: options.sort,
+      ...pick(options, [
+        'start',
+        'count',
+        'sort',
+        'nsfw',
+        'isLive',
+        'categoryOneOf',
+        'licenceOneOf',
+        'languageOneOf',
+        'tagsOneOf',
+        'tagsAllOf',
+        'filter',
+        'withFiles',
+        'accountId',
+        'videoChannelId',
+        'videoPlaylistId',
+        'includeLocalVideos',
+        'user',
+        'historyOfUser',
+        'search'
+      ]),
+
       followerActorId,
       serverAccountId: serverActor.Account.id,
-      nsfw: options.nsfw,
-      isLive: options.isLive,
-      categoryOneOf: options.categoryOneOf,
-      licenceOneOf: options.licenceOneOf,
-      languageOneOf: options.languageOneOf,
-      tagsOneOf: options.tagsOneOf,
-      tagsAllOf: options.tagsAllOf,
-      filter: options.filter,
-      withFiles: options.withFiles,
-      accountId: options.accountId,
-      videoChannelId: options.videoChannelId,
-      videoPlaylistId: options.videoPlaylistId,
-      includeLocalVideos: options.includeLocalVideos,
-      user: options.user,
-      historyOfUser: options.historyOfUser,
       trendingDays,
-      trendingAlgorithm,
-      search: options.search
+      trendingAlgorithm
     }
 
     return VideoModel.getAvailableForApi(queryOptions, options.countVideos)
   }
 
   static async searchAndPopulateAccountAndServer (options: {
+    start: number
+    count: number
+    sort: string
     includeLocalVideos: boolean
     search?: string
     host?: string
-    start?: number
-    count?: number
-    sort?: string
     startDate?: string // ISO 8601
     endDate?: string // ISO 8601
     originallyPublishedStartDate?: string
@@ -1138,40 +1141,33 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     const serverActor = await getServerActor()
 
     const queryOptions = {
+      ...pick(options, [
+        'includeLocalVideos',
+        'nsfw',
+        'isLive',
+        'categoryOneOf',
+        'licenceOneOf',
+        'languageOneOf',
+        'tagsOneOf',
+        'tagsAllOf',
+        'user',
+        'filter',
+        'host',
+        'start',
+        'count',
+        'sort',
+        'startDate',
+        'endDate',
+        'originallyPublishedStartDate',
+        'originallyPublishedEndDate',
+        'durationMin',
+        'durationMax',
+        'uuids',
+        'search'
+      ]),
+
       followerActorId: serverActor.id,
-      serverAccountId: serverActor.Account.id,
-
-      includeLocalVideos: options.includeLocalVideos,
-      nsfw: options.nsfw,
-      isLive: options.isLive,
-
-      categoryOneOf: options.categoryOneOf,
-      licenceOneOf: options.licenceOneOf,
-      languageOneOf: options.languageOneOf,
-
-      tagsOneOf: options.tagsOneOf,
-      tagsAllOf: options.tagsAllOf,
-
-      user: options.user,
-      filter: options.filter,
-      host: options.host,
-
-      start: options.start,
-      count: options.count,
-      sort: options.sort,
-
-      startDate: options.startDate,
-      endDate: options.endDate,
-
-      originallyPublishedStartDate: options.originallyPublishedStartDate,
-      originallyPublishedEndDate: options.originallyPublishedEndDate,
-
-      durationMin: options.durationMin,
-      durationMax: options.durationMax,
-
-      uuids: options.uuids,
-
-      search: options.search
+      serverAccountId: serverActor.Account.id
     }
 
     return VideoModel.getAvailableForApi(queryOptions)

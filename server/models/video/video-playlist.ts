@@ -19,7 +19,7 @@ import {
 } from 'sequelize-typescript'
 import { buildUUID, uuidToShort } from '@server/helpers/uuid'
 import { MAccountId, MChannelId } from '@server/types/models'
-import { AttributesOnly, buildPlaylistEmbedPath, buildPlaylistWatchPath } from '@shared/core-utils'
+import { AttributesOnly, buildPlaylistEmbedPath, buildPlaylistWatchPath, pick } from '@shared/core-utils'
 import { ActivityIconObject } from '../../../shared/models/activitypub/objects'
 import { PlaylistObject } from '../../../shared/models/activitypub/objects/playlist-object'
 import { VideoPlaylistPrivacy } from '../../../shared/models/videos/playlist/video-playlist-privacy.model'
@@ -357,19 +357,10 @@ export class VideoPlaylistModel extends Model<Partial<AttributesOnly<VideoPlayli
   })
   Thumbnail: ThumbnailModel
 
-  static listForApi (options: {
-    followerActorId: number
+  static listForApi (options: AvailableForListOptions & {
     start: number
     count: number
     sort: string
-    type?: VideoPlaylistType
-    accountId?: number
-    videoChannelId?: number
-    listMyPlaylists?: boolean
-    search?: string
-    host?: string
-    uuids?: string[]
-    withVideos?: boolean // false by default
   }) {
     const query = {
       offset: options.start,
@@ -382,14 +373,8 @@ export class VideoPlaylistModel extends Model<Partial<AttributesOnly<VideoPlayli
         method: [
           ScopeNames.AVAILABLE_FOR_LIST,
           {
-            type: options.type,
-            followerActorId: options.followerActorId,
-            accountId: options.accountId,
-            videoChannelId: options.videoChannelId,
-            listMyPlaylists: options.listMyPlaylists,
-            search: options.search,
-            host: options.host,
-            uuids: options.uuids,
+            ...pick(options, [ 'type', 'followerActorId', 'accountId', 'videoChannelId', 'listMyPlaylists', 'search', 'host', 'uuids' ]),
+
             withVideos: options.withVideos || false
           } as AvailableForListOptions
         ]
@@ -406,17 +391,14 @@ export class VideoPlaylistModel extends Model<Partial<AttributesOnly<VideoPlayli
       })
   }
 
-  static searchForApi (options: {
-    followerActorId: number
+  static searchForApi (options: Pick<AvailableForListOptions, 'followerActorId' | 'search'| 'host'| 'uuids'> & {
     start: number
     count: number
     sort: string
-    search?: string
-    host?: string
-    uuids?: string[]
   }) {
     return VideoPlaylistModel.listForApi({
       ...options,
+
       type: VideoPlaylistType.REGULAR,
       listMyPlaylists: false,
       withVideos: true
