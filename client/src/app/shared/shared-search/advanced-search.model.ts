@@ -1,4 +1,11 @@
-import { BooleanBothQuery, BooleanQuery, SearchTargetType, VideosSearchQuery } from '@shared/models'
+import {
+  BooleanBothQuery,
+  BooleanQuery,
+  SearchTargetType,
+  VideoChannelsSearchQuery,
+  VideoPlaylistsSearchQuery,
+  VideosSearchQuery
+} from '@shared/models'
 
 export class AdvancedSearch {
   startDate: string // ISO 8601
@@ -23,6 +30,8 @@ export class AdvancedSearch {
 
   isLive: BooleanQuery
 
+  host: string
+
   sort: string
 
   searchTarget: SearchTargetType
@@ -44,6 +53,8 @@ export class AdvancedSearch {
     tagsAllOf?: any
 
     isLive?: BooleanQuery
+
+    host?: string
 
     durationMin?: string
     durationMax?: string
@@ -67,6 +78,8 @@ export class AdvancedSearch {
     this.tagsAllOf = this.intoArray(options.tagsAllOf)
     this.durationMin = parseInt(options.durationMin, 10)
     this.durationMax = parseInt(options.durationMax, 10)
+
+    this.host = options.host || undefined
 
     this.searchTarget = options.searchTarget || undefined
 
@@ -101,6 +114,7 @@ export class AdvancedSearch {
     this.durationMin = undefined
     this.durationMax = undefined
     this.isLive = undefined
+    this.host = undefined
 
     this.sort = '-match'
   }
@@ -120,12 +134,13 @@ export class AdvancedSearch {
       durationMin: this.durationMin,
       durationMax: this.durationMax,
       isLive: this.isLive,
+      host: this.host,
       sort: this.sort,
       searchTarget: this.searchTarget
     }
   }
 
-  toAPIObject (): VideosSearchQuery {
+  toVideosAPIObject (): VideosSearchQuery {
     let isLive: boolean
     if (this.isLive) isLive = this.isLive === 'true'
 
@@ -142,8 +157,23 @@ export class AdvancedSearch {
       tagsAllOf: this.tagsAllOf,
       durationMin: this.durationMin,
       durationMax: this.durationMax,
+      host: this.host,
       isLive,
       sort: this.sort,
+      searchTarget: this.searchTarget
+    }
+  }
+
+  toPlaylistAPIObject (): VideoPlaylistsSearchQuery {
+    return {
+      host: this.host,
+      searchTarget: this.searchTarget
+    }
+  }
+
+  toChannelAPIObject (): VideoChannelsSearchQuery {
+    return {
+      host: this.host,
       searchTarget: this.searchTarget
     }
   }

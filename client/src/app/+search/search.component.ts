@@ -4,6 +4,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, HooksService, MetaService, Notifier, ServerService, User, UserService } from '@app/core'
 import { immutableAssign } from '@app/helpers'
+import { validateHost } from '@app/shared/form-validators/host-validators'
 import { Video, VideoChannel } from '@app/shared/shared-main'
 import { AdvancedSearch, SearchService } from '@app/shared/shared-search'
 import { MiniatureDisplayOptions } from '@app/shared/shared-video-miniature'
@@ -16,6 +17,8 @@ import { HTMLServerConfig, SearchTargetType } from '@shared/models'
   templateUrl: './search.component.html'
 })
 export class SearchComponent implements OnInit, OnDestroy {
+  error: string
+
   results: (Video | VideoChannel)[] = []
 
   pagination = {
@@ -89,8 +92,10 @@ export class SearchComponent implements OnInit, OnDestroy {
           this.advancedSearch.searchTarget = this.getDefaultSearchTarget()
         }
 
-        // Don't hide filters if we have some of them AND the user just came on the webpage
-        this.isSearchFilterCollapsed = this.isInitialLoad === false || !this.advancedSearch.containsValues()
+        this.error = this.checkFieldsAndGetError()
+
+        // Don't hide filters if we have some of them AND the user just came on the webpage, or we have an error
+        this.isSearchFilterCollapsed = !this.error && (this.isInitialLoad === false || !this.advancedSearch.containsValues())
         this.isInitialLoad = false
 
         this.search()
@@ -126,6 +131,9 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   search () {
+    this.error = this.checkFieldsAndGetError()
+    if (this.error) return
+
     this.isSearching = true
 
     forkJoin([
@@ -280,7 +288,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     const params = {
       search: this.currentSearch,
       componentPagination: immutableAssign(this.pagination, { itemsPerPage: this.channelsPerPage }),
-      searchTarget: this.advancedSearch.searchTarget
+      advancedSearch: this.advancedSearch
     }
 
     return this.hooks.wrapObsFun(
@@ -298,7 +306,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     const params = {
       search: this.currentSearch,
       componentPagination: immutableAssign(this.pagination, { itemsPerPage: this.playlistsPerPage }),
-      searchTarget: this.advancedSearch.searchTarget
+      advancedSearch: this.advancedSearch
     }
 
     return this.hooks.wrapObsFun(
@@ -318,5 +326,13 @@ export class SearchComponent implements OnInit, OnDestroy {
     }
 
     return 'local'
+  }
+
+  private checkFieldsAndGetError () {
+    if (this.advancedSearch.host && !validateHost(this.advancedSearch.host)) {
+      return $localize`PeerTube instance host filter is invalid`
+    }
+
+    return undefined
   }
 }

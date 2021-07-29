@@ -108,14 +108,14 @@ export class SearchFiltersComponent implements OnInit {
     this.loadOriginallyPublishedAtYears()
   }
 
-  onInputUpdated () {
+  onDurationOrPublishedUpdated () {
     this.updateModelFromDurationRange()
     this.updateModelFromPublishedRange()
     this.updateModelFromOriginallyPublishedAtYears()
   }
 
   formUpdated () {
-    this.onInputUpdated()
+    this.onDurationOrPublishedUpdated()
     this.filtered.emit(this.advancedSearch)
   }
 
@@ -127,7 +127,7 @@ export class SearchFiltersComponent implements OnInit {
     this.durationRange = undefined
     this.publishedDateRange = undefined
 
-    this.onInputUpdated()
+    this.onDurationOrPublishedUpdated()
   }
 
   resetField (fieldName: string, value?: any) {
@@ -136,7 +136,7 @@ export class SearchFiltersComponent implements OnInit {
 
   resetLocalField (fieldName: string, value?: any) {
     this[fieldName] = value
-    this.onInputUpdated()
+    this.onDurationOrPublishedUpdated()
   }
 
   resetOriginalPublicationYears () {

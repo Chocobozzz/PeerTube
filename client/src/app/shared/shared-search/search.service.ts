@@ -7,7 +7,6 @@ import { Video, VideoChannel, VideoChannelService, VideoService } from '@app/sha
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 import {
   ResultList,
-  SearchTargetType,
   Video as VideoServerModel,
   VideoChannel as VideoChannelServerModel,
   VideoPlaylist as VideoPlaylistServerModel
@@ -33,8 +32,8 @@ export class SearchService {
   }
 
   searchVideos (parameters: {
-    search: string,
-    componentPagination?: ComponentPaginationLight,
+    search: string
+    componentPagination?: ComponentPaginationLight
     advancedSearch?: AdvancedSearch
   }): Observable<ResultList<Video>> {
     const { search, componentPagination, advancedSearch } = parameters
@@ -52,7 +51,7 @@ export class SearchService {
     if (search) params = params.append('search', search)
 
     if (advancedSearch) {
-      const advancedSearchObject = advancedSearch.toAPIObject()
+      const advancedSearchObject = advancedSearch.toVideosAPIObject()
       params = this.restService.addObjectParams(params, advancedSearchObject)
     }
 
@@ -65,11 +64,11 @@ export class SearchService {
   }
 
   searchVideoChannels (parameters: {
-    search: string,
-    searchTarget?: SearchTargetType,
+    search: string
+    advancedSearch?: AdvancedSearch
     componentPagination?: ComponentPaginationLight
   }): Observable<ResultList<VideoChannel>> {
-    const { search, componentPagination, searchTarget } = parameters
+    const { search, advancedSearch, componentPagination } = parameters
 
     const url = SearchService.BASE_SEARCH_URL + 'video-channels'
 
@@ -82,8 +81,9 @@ export class SearchService {
     params = this.restService.addRestGetParams(params, pagination)
     params = params.append('search', search)
 
-    if (searchTarget) {
-      params = params.append('searchTarget', searchTarget as string)
+    if (advancedSearch) {
+      const advancedSearchObject = advancedSearch.toChannelAPIObject()
+      params = this.restService.addObjectParams(params, advancedSearchObject)
     }
 
     return this.authHttp
@@ -95,11 +95,11 @@ export class SearchService {
   }
 
   searchVideoPlaylists (parameters: {
-    search: string,
-    searchTarget?: SearchTargetType,
+    search: string
+    advancedSearch?: AdvancedSearch
     componentPagination?: ComponentPaginationLight
   }): Observable<ResultList<VideoPlaylist>> {
-    const { search, componentPagination, searchTarget } = parameters
+    const { search, advancedSearch, componentPagination } = parameters
 
     const url = SearchService.BASE_SEARCH_URL + 'video-playlists'
 
@@ -112,8 +112,9 @@ export class SearchService {
     params = this.restService.addRestGetParams(params, pagination)
     params = params.append('search', search)
 
-    if (searchTarget) {
-      params = params.append('searchTarget', searchTarget as string)
+    if (advancedSearch) {
+      const advancedSearchObject = advancedSearch.toPlaylistAPIObject()
+      params = this.restService.addObjectParams(params, advancedSearchObject)
     }
 
     return this.authHttp
