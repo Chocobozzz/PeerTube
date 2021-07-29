@@ -205,7 +205,7 @@ function videoFilesModelToFormattedJSON (
     ? video.getTrackerUrls()
     : []
 
-  return [ ...videoFiles ]
+  return (videoFiles || [])
     .filter(f => !f.isLive())
     .sort(sortByResolutionDesc)
     .map(videoFile => {
@@ -240,7 +240,7 @@ function addVideoFilesInAPAcc (
 ) {
   const trackerUrls = video.getTrackerUrls()
 
-  const sortedFiles = [ ...files ]
+  const sortedFiles = (files || [])
     .filter(f => !f.isLive())
     .sort(sortByResolutionDesc)
 
