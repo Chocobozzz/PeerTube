@@ -110,6 +110,49 @@ describe('Test videos search', function () {
 
   describe('Videos search', async function () {
 
+    async function check (search: VideosSearchQuery, exists = true) {
+      const body = await command.advancedVideoSearch({ search })
+
+      if (exists === false) {
+        expect(body.total).to.equal(0)
+        expect(body.data).to.have.lengthOf(0)
+        return
+      }
+
+      expect(body.total).to.equal(1)
+      expect(body.data).to.have.lengthOf(1)
+
+      const video = body.data[0]
+
+      expect(video.name).to.equal('What is PeerTube?')
+      expect(video.category.label).to.equal('Science & Technology')
+      expect(video.licence.label).to.equal('Attribution - Share Alike')
+      expect(video.privacy.label).to.equal('Public')
+      expect(video.duration).to.equal(113)
+      expect(video.thumbnailUrl.startsWith('https://framatube.org/static/thumbnails')).to.be.true
+
+      expect(video.account.host).to.equal('framatube.org')
+      expect(video.account.name).to.equal('framasoft')
+      expect(video.account.url).to.equal('https://framatube.org/accounts/framasoft')
+      expect(video.account.avatar).to.exist
+
+      expect(video.channel.host).to.equal('framatube.org')
+      expect(video.channel.name).to.equal('bf54d359-cfad-4935-9d45-9d6be93f63e8')
+      expect(video.channel.url).to.equal('https://framatube.org/video-channels/bf54d359-cfad-4935-9d45-9d6be93f63e8')
+      expect(video.channel.avatar).to.exist
+    }
+
+    const baseSearch: VideosSearchQuery = {
+      search: 'what is peertube',
+      start: 0,
+      count: 2,
+      categoryOneOf: [ 15 ],
+      licenceOneOf: [ 2 ],
+      tagsAllOf: [ 'framasoft', 'peertube' ],
+      startDate: '2018-10-01T10:50:46.396Z',
+      endDate: '2018-10-01T10:55:46.396Z'
+    }
+
     it('Should make a simple search and not have results', async function () {
       const body = await command.searchVideos({ search: 'djidane'.repeat(50) })
 
@@ -123,70 +166,26 @@ describe('Test videos search', function () {
       expect(body.total).to.be.greaterThan(1)
     })
 
-    it('Should make a complex search', async function () {
+    it('Should make a simple search', async function () {
+      await check(baseSearch)
+    })
 
-      async function check (search: VideosSearchQuery, exists = true) {
-        const body = await command.advancedVideoSearch({ search })
+    it('Should search by start date', async function () {
+      const search = { ...baseSearch, startDate: '2018-10-01T10:54:46.396Z' }
+      await check(search, false)
+    })
 
-        if (exists === false) {
-          expect(body.total).to.equal(0)
-          expect(body.data).to.have.lengthOf(0)
-          return
-        }
+    it('Should search by tags', async function () {
+      const search = { ...baseSearch, tagsAllOf: [ 'toto', 'framasoft' ] }
+      await check(search, false)
+    })
 
-        expect(body.total).to.equal(1)
-        expect(body.data).to.have.lengthOf(1)
+    it('Should search by duration', async function () {
+      const search = { ...baseSearch, durationMin: 2000 }
+      await check(search, false)
+    })
 
-        const video = body.data[0]
-
-        expect(video.name).to.equal('What is PeerTube?')
-        expect(video.category.label).to.equal('Science & Technology')
-        expect(video.licence.label).to.equal('Attribution - Share Alike')
-        expect(video.privacy.label).to.equal('Public')
-        expect(video.duration).to.equal(113)
-        expect(video.thumbnailUrl.startsWith('https://framatube.org/static/thumbnails')).to.be.true
-
-        expect(video.account.host).to.equal('framatube.org')
-        expect(video.account.name).to.equal('framasoft')
-        expect(video.account.url).to.equal('https://framatube.org/accounts/framasoft')
-        expect(video.account.avatar).to.exist
-
-        expect(video.channel.host).to.equal('framatube.org')
-        expect(video.channel.name).to.equal('bf54d359-cfad-4935-9d45-9d6be93f63e8')
-        expect(video.channel.url).to.equal('https://framatube.org/video-channels/bf54d359-cfad-4935-9d45-9d6be93f63e8')
-        expect(video.channel.avatar).to.exist
-      }
-
-      const baseSearch: VideosSearchQuery = {
-        search: 'what is peertube',
-        start: 0,
-        count: 2,
-        categoryOneOf: [ 15 ],
-        licenceOneOf: [ 2 ],
-        tagsAllOf: [ 'framasoft', 'peertube' ],
-        startDate: '2018-10-01T10:50:46.396Z',
-        endDate: '2018-10-01T10:55:46.396Z'
-      }
-
-      {
-        await check(baseSearch)
-      }
-
-      {
-        const search = { ...baseSearch, startDate: '2018-10-01T10:54:46.396Z' }
-        await check(search, false)
-      }
-
-      {
-        const search = { ...baseSearch, tagsAllOf: [ 'toto', 'framasoft' ] }
-        await check(search, false)
-      }
-
-      {
-        const search = { ...baseSearch, durationMin: 2000 }
-        await check(search, false)
-      }
-
+    it('Should search by nsfw attribute', async function () {
       {
         const search = { ...baseSearch, nsfw: 'true' as BooleanBothQuery }
         await check(search, false)
@@ -201,7 +200,9 @@ describe('Test videos search', function () {
         const search = { ...baseSearch, nsfw: 'both' as BooleanBothQuery }
         await check(search, true)
       }
+    })
 
+    it('Should search by host', async function () {
       {
         const search = { ...baseSearch, host: 'example.com' }
         await check(search, false)
@@ -211,37 +212,37 @@ describe('Test videos search', function () {
         const search = { ...baseSearch, host: 'framatube.org' }
         await check(search, true)
       }
+    })
+
+    it('Should search by uuids', async function () {
+      const goodUUID = '9c9de5e8-0a1e-484a-b099-e80766180a6d'
+      const goodShortUUID = 'kkGMgK9ZtnKfYAgnEtQxbv'
+      const badUUID = 'c29c5b77-4a04-493d-96a9-2e9267e308f0'
+      const badShortUUID = 'rP5RgUeX9XwTSrspCdkDej'
 
       {
-        const goodUUID = '9c9de5e8-0a1e-484a-b099-e80766180a6d'
-        const goodShortUUID = 'kkGMgK9ZtnKfYAgnEtQxbv'
-        const badUUID = 'c29c5b77-4a04-493d-96a9-2e9267e308f0'
-        const badShortUUID = 'rP5RgUeX9XwTSrspCdkDej'
+        const uuidsMatrix = [
+          [ goodUUID ],
+          [ goodUUID, badShortUUID ],
+          [ badShortUUID, goodShortUUID ],
+          [ goodUUID, goodShortUUID ]
+        ]
 
-        {
-          const uuidsMatrix = [
-            [ goodUUID ],
-            [ goodUUID, badShortUUID ],
-            [ badShortUUID, goodShortUUID ],
-            [ goodUUID, goodShortUUID ]
-          ]
-
-          for (const uuids of uuidsMatrix) {
-            const search = { ...baseSearch, uuids }
-            await check(search, true)
-          }
+        for (const uuids of uuidsMatrix) {
+          const search = { ...baseSearch, uuids }
+          await check(search, true)
         }
+      }
 
-        {
-          const uuidsMatrix = [
-            [ badUUID ],
-            [ badShortUUID ]
-          ]
+      {
+        const uuidsMatrix = [
+          [ badUUID ],
+          [ badShortUUID ]
+        ]
 
-          for (const uuids of uuidsMatrix) {
-            const search = { ...baseSearch, uuids }
-            await check(search, false)
-          }
+        for (const uuids of uuidsMatrix) {
+          const search = { ...baseSearch, uuids }
+          await check(search, false)
         }
       }
     })
@@ -300,6 +301,30 @@ describe('Test videos search', function () {
 
   describe('Channels search', async function () {
 
+    async function check (search: VideoChannelsSearchQuery, exists = true) {
+      const body = await command.advancedChannelSearch({ search })
+
+      if (exists === false) {
+        expect(body.total).to.equal(0)
+        expect(body.data).to.have.lengthOf(0)
+        return
+      }
+
+      expect(body.total).to.be.greaterThan(0)
+      expect(body.data).to.have.length.greaterThan(0)
+
+      const videoChannel = body.data[0]
+      expect(videoChannel.url).to.equal('https://framatube.org/video-channels/bf54d359-cfad-4935-9d45-9d6be93f63e8')
+      expect(videoChannel.host).to.equal('framatube.org')
+      expect(videoChannel.avatar).to.exist
+      expect(videoChannel.displayName).to.exist
+
+      expect(videoChannel.ownerAccount.url).to.equal('https://framatube.org/accounts/framasoft')
+      expect(videoChannel.ownerAccount.name).to.equal('framasoft')
+      expect(videoChannel.ownerAccount.host).to.equal('framatube.org')
+      expect(videoChannel.ownerAccount.avatar).to.exist
+    }
+
     it('Should make a simple search and not have results', async function () {
       const body = await command.searchChannels({ search: 'a'.repeat(500) })
 
@@ -308,34 +333,18 @@ describe('Test videos search', function () {
     })
 
     it('Should make a search and have results', async function () {
-
-      async function check (search: VideoChannelsSearchQuery, exists = true) {
-        const body = await command.advancedChannelSearch({ search })
-
-        if (exists === false) {
-          expect(body.total).to.equal(0)
-          expect(body.data).to.have.lengthOf(0)
-          return
-        }
-
-        expect(body.total).to.be.greaterThan(0)
-        expect(body.data).to.have.length.greaterThan(0)
-
-        const videoChannel = body.data[0]
-        expect(videoChannel.url).to.equal('https://framatube.org/video-channels/bf54d359-cfad-4935-9d45-9d6be93f63e8')
-        expect(videoChannel.host).to.equal('framatube.org')
-        expect(videoChannel.avatar).to.exist
-        expect(videoChannel.displayName).to.exist
-
-        expect(videoChannel.ownerAccount.url).to.equal('https://framatube.org/accounts/framasoft')
-        expect(videoChannel.ownerAccount.name).to.equal('framasoft')
-        expect(videoChannel.ownerAccount.host).to.equal('framatube.org')
-        expect(videoChannel.ownerAccount.avatar).to.exist
-      }
-
       await check({ search: 'Framasoft', sort: 'createdAt' }, true)
+    })
+
+    it('Should make host search and have appropriate results', async function () {
       await check({ search: 'Framasoft', host: 'example.com' }, false)
       await check({ search: 'Framasoft', host: 'framatube.org' }, true)
+    })
+
+    it('Should make handles search and have appropriate results', async function () {
+      await check({ handles: [ 'bf54d359-cfad-4935-9d45-9d6be93f63e8@framatube.org' ] }, true)
+      await check({ handles: [ 'jeanine', 'bf54d359-cfad-4935-9d45-9d6be93f63e8@framatube.org' ] }, true)
+      await check({ handles: [ 'jeanine', 'chocobozzz_channel2@peertube2.cpy.re' ] }, false)
     })
 
     it('Should have a correct pagination', async function () {
