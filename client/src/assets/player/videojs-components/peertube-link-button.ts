@@ -8,6 +8,8 @@ class PeerTubeLinkButton extends Button {
 
   constructor (player: videojs.Player, options?: PeerTubeLinkButtonOptions) {
     super(player, options as any)
+
+    this.shortUUID = options.shortUUID
   }
 
   createEl () {
