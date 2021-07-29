@@ -2,6 +2,7 @@ import * as express from 'express'
 import { sanitizeUrl } from '@server/helpers/core-utils'
 import { isUserAbleToSearchRemoteURI } from '@server/helpers/express-utils'
 import { logger } from '@server/helpers/logger'
+import { pickSearchPlaylistQuery } from '@server/helpers/query'
 import { doJSONRequest } from '@server/helpers/requests'
 import { getFormattedObjects } from '@server/helpers/utils'
 import { CONFIG } from '@server/initializers/config'
@@ -12,7 +13,7 @@ import { buildMutedForSearchIndex, isSearchIndexSearch, isURISearch } from '@ser
 import { getServerActor } from '@server/models/application/application'
 import { VideoPlaylistModel } from '@server/models/video/video-playlist'
 import { MVideoPlaylistFullSummary } from '@server/types/models'
-import { HttpStatusCode, ResultList, VideoPlaylist, VideoPlaylistsSearchQuery } from '@shared/models'
+import { HttpStatusCode, ResultList, VideoPlaylist, VideoPlaylistsSearchQueryAfterSanitize } from '@shared/models'
 import {
   asyncMiddleware,
   openapiOperationDoc,
@@ -44,7 +45,7 @@ export { searchPlaylistsRouter }
 // ---------------------------------------------------------------------------
 
 function searchVideoPlaylists (req: express.Request, res: express.Response) {
-  const query: VideoPlaylistsSearchQuery = req.query
+  const query = pickSearchPlaylistQuery(req.query)
   const search = query.search
 
   if (isURISearch(search)) return searchVideoPlaylistsURI(search, res)
@@ -56,7 +57,7 @@ function searchVideoPlaylists (req: express.Request, res: express.Response) {
   return searchVideoPlaylistsDB(query, res)
 }
 
-async function searchVideoPlaylistsIndex (query: VideoPlaylistsSearchQuery, res: express.Response) {
+async function searchVideoPlaylistsIndex (query: VideoPlaylistsSearchQueryAfterSanitize, res: express.Response) {
   const result = await buildMutedForSearchIndex(res)
 
   const body = await Hooks.wrapObject(Object.assign(query, result), 'filter:api.search.video-playlists.index.list.params')
@@ -80,17 +81,13 @@ async function searchVideoPlaylistsIndex (query: VideoPlaylistsSearchQuery, res:
   }
 }
 
-async function searchVideoPlaylistsDB (query: VideoPlaylistsSearchQuery, res: express.Response) {
+async function searchVideoPlaylistsDB (query: VideoPlaylistsSearchQueryAfterSanitize, res: express.Response) {
   const serverActor = await getServerActor()
 
   const apiOptions = await Hooks.wrapObject({
-    followerActorId: serverActor.id,
-    search: query.search,
-    start: query.start,
-    count: query.count,
-    sort: query.sort,
-    host: query.host,
-    uuids: query.uuids
+    ...query,
+
+    followerActorId: serverActor.id
   }, 'filter:api.search.video-playlists.local.list.params')
 
   const resultList = await Hooks.wrapPromiseFun(

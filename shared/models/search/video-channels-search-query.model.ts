@@ -10,3 +10,9 @@ export interface VideoChannelsSearchQuery extends SearchTargetQuery {
   host?: string
   handles?: string[]
 }
+
+export interface VideoChannelsSearchQueryAfterSanitize extends VideoChannelsSearchQuery {
+  start: number
+  count: number
+  sort: string
+}

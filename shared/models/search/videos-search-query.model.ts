@@ -15,6 +15,12 @@ export interface VideosSearchQuery extends SearchTargetQuery, VideosCommonQuery 
   durationMin?: number // seconds
   durationMax?: number // seconds
 
-  // UUIDs or short
+  // UUIDs or short UUIDs
   uuids?: string[]
+}
+
+export interface VideosSearchQueryAfterSanitize extends VideosSearchQuery {
+  start: number
+  count: number
+  sort: string
 }

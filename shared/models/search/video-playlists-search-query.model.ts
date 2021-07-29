@@ -8,5 +8,13 @@ export interface VideoPlaylistsSearchQuery extends SearchTargetQuery {
   sort?: string
 
   host?: string
+
+  // UUIDs or short UUIDs
   uuids?: string[]
+}
+
+export interface VideoPlaylistsSearchQueryAfterSanitize extends VideoPlaylistsSearchQuery {
+  start: number
+  count: number
+  sort: string
 }

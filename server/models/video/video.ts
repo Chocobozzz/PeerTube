@@ -1070,7 +1070,8 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     const trendingDays = options.sort.endsWith('trending')
       ? CONFIG.TRENDING.VIDEOS.INTERVAL_DAYS
       : undefined
-    let trendingAlgorithm
+
+    let trendingAlgorithm: string
     if (options.sort.endsWith('hot')) trendingAlgorithm = 'hot'
     if (options.sort.endsWith('best')) trendingAlgorithm = 'best'
 

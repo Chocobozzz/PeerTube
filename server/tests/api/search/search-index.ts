@@ -211,6 +211,39 @@ describe('Test videos search', function () {
         const search = { ...baseSearch, host: 'framatube.org' }
         await check(search, true)
       }
+
+      {
+        const goodUUID = '9c9de5e8-0a1e-484a-b099-e80766180a6d'
+        const goodShortUUID = 'kkGMgK9ZtnKfYAgnEtQxbv'
+        const badUUID = 'c29c5b77-4a04-493d-96a9-2e9267e308f0'
+        const badShortUUID = 'rP5RgUeX9XwTSrspCdkDej'
+
+        {
+          const uuidsMatrix = [
+            [ goodUUID ],
+            [ goodUUID, badShortUUID ],
+            [ badShortUUID, goodShortUUID ],
+            [ goodUUID, goodShortUUID ]
+          ]
+
+          for (const uuids of uuidsMatrix) {
+            const search = { ...baseSearch, uuids }
+            await check(search, true)
+          }
+        }
+
+        {
+          const uuidsMatrix = [
+            [ badUUID ],
+            [ badShortUUID ]
+          ]
+
+          for (const uuids of uuidsMatrix) {
+            const search = { ...baseSearch, uuids }
+            await check(search, false)
+          }
+        }
+      }
     })
 
     it('Should have a correct pagination', async function () {
@@ -315,6 +348,45 @@ describe('Test videos search', function () {
 
   describe('Playlists search', async function () {
 
+    async function check (search: VideoPlaylistsSearchQuery, exists = true) {
+      const body = await command.advancedPlaylistSearch({ search })
+
+      if (exists === false) {
+        expect(body.total).to.equal(0)
+        expect(body.data).to.have.lengthOf(0)
+        return
+      }
+
+      expect(body.total).to.be.greaterThan(0)
+      expect(body.data).to.have.length.greaterThan(0)
+
+      const videoPlaylist = body.data[0]
+
+      expect(videoPlaylist.url).to.equal('https://peertube2.cpy.re/videos/watch/playlist/73804a40-da9a-40c2-b1eb-2c6d9eec8f0a')
+      expect(videoPlaylist.thumbnailUrl).to.exist
+      expect(videoPlaylist.embedUrl).to.equal('https://peertube2.cpy.re/video-playlists/embed/73804a40-da9a-40c2-b1eb-2c6d9eec8f0a')
+
+      expect(videoPlaylist.type.id).to.equal(VideoPlaylistType.REGULAR)
+      expect(videoPlaylist.privacy.id).to.equal(VideoPlaylistPrivacy.PUBLIC)
+      expect(videoPlaylist.videosLength).to.exist
+
+      expect(videoPlaylist.createdAt).to.exist
+      expect(videoPlaylist.updatedAt).to.exist
+
+      expect(videoPlaylist.uuid).to.equal('73804a40-da9a-40c2-b1eb-2c6d9eec8f0a')
+      expect(videoPlaylist.displayName).to.exist
+
+      expect(videoPlaylist.ownerAccount.url).to.equal('https://peertube2.cpy.re/accounts/chocobozzz')
+      expect(videoPlaylist.ownerAccount.name).to.equal('chocobozzz')
+      expect(videoPlaylist.ownerAccount.host).to.equal('peertube2.cpy.re')
+      expect(videoPlaylist.ownerAccount.avatar).to.exist
+
+      expect(videoPlaylist.videoChannel.url).to.equal('https://peertube2.cpy.re/video-channels/chocobozzz_channel')
+      expect(videoPlaylist.videoChannel.name).to.equal('chocobozzz_channel')
+      expect(videoPlaylist.videoChannel.host).to.equal('peertube2.cpy.re')
+      expect(videoPlaylist.videoChannel.avatar).to.exist
+    }
+
     it('Should make a simple search and not have results', async function () {
       const body = await command.searchPlaylists({ search: 'a'.repeat(500) })
 
@@ -323,49 +395,45 @@ describe('Test videos search', function () {
     })
 
     it('Should make a search and have results', async function () {
+      await check({ search: 'E2E playlist', sort: '-match' }, true)
+    })
 
-      async function check (search: VideoPlaylistsSearchQuery, exists = true) {
-        const body = await command.advancedPlaylistSearch({ search })
+    it('Should make host search and have appropriate results', async function () {
+      await check({ search: 'E2E playlist', host: 'example.com' }, false)
+      await check({ search: 'E2E playlist', host: 'peertube2.cpy.re', sort: '-match' }, true)
+    })
 
-        if (exists === false) {
-          expect(body.total).to.equal(0)
-          expect(body.data).to.have.lengthOf(0)
-          return
+    it('Should make a search by uuids and have appropriate results', async function () {
+      const goodUUID = '73804a40-da9a-40c2-b1eb-2c6d9eec8f0a'
+      const goodShortUUID = 'fgei1ws1oa6FCaJ2qZPG29'
+      const badUUID = 'c29c5b77-4a04-493d-96a9-2e9267e308f0'
+      const badShortUUID = 'rP5RgUeX9XwTSrspCdkDej'
+
+      {
+        const uuidsMatrix = [
+          [ goodUUID ],
+          [ goodUUID, badShortUUID ],
+          [ badShortUUID, goodShortUUID ],
+          [ goodUUID, goodShortUUID ]
+        ]
+
+        for (const uuids of uuidsMatrix) {
+          const search = { search: 'E2E playlist', sort: '-match', uuids }
+          await check(search, true)
         }
-
-        expect(body.total).to.be.greaterThan(0)
-        expect(body.data).to.have.length.greaterThan(0)
-
-        const videoPlaylist = body.data[0]
-
-        expect(videoPlaylist.url).to.equal('https://peertube2.cpy.re/videos/watch/playlist/73804a40-da9a-40c2-b1eb-2c6d9eec8f0a')
-        expect(videoPlaylist.thumbnailUrl).to.exist
-        expect(videoPlaylist.embedUrl).to.equal('https://peertube2.cpy.re/video-playlists/embed/73804a40-da9a-40c2-b1eb-2c6d9eec8f0a')
-
-        expect(videoPlaylist.type.id).to.equal(VideoPlaylistType.REGULAR)
-        expect(videoPlaylist.privacy.id).to.equal(VideoPlaylistPrivacy.PUBLIC)
-        expect(videoPlaylist.videosLength).to.exist
-
-        expect(videoPlaylist.createdAt).to.exist
-        expect(videoPlaylist.updatedAt).to.exist
-
-        expect(videoPlaylist.uuid).to.equal('73804a40-da9a-40c2-b1eb-2c6d9eec8f0a')
-        expect(videoPlaylist.displayName).to.exist
-
-        expect(videoPlaylist.ownerAccount.url).to.equal('https://peertube2.cpy.re/accounts/chocobozzz')
-        expect(videoPlaylist.ownerAccount.name).to.equal('chocobozzz')
-        expect(videoPlaylist.ownerAccount.host).to.equal('peertube2.cpy.re')
-        expect(videoPlaylist.ownerAccount.avatar).to.exist
-
-        expect(videoPlaylist.videoChannel.url).to.equal('https://peertube2.cpy.re/video-channels/chocobozzz_channel')
-        expect(videoPlaylist.videoChannel.name).to.equal('chocobozzz_channel')
-        expect(videoPlaylist.videoChannel.host).to.equal('peertube2.cpy.re')
-        expect(videoPlaylist.videoChannel.avatar).to.exist
       }
 
-      await check({ search: 'E2E playlist', sort: '-match' }, true)
-      await check({ search: 'E2E playlist', host: 'example.com' }, false)
-      await check({ search: 'E2E playlist', host: 'peertube2.cpy.re' }, true)
+      {
+        const uuidsMatrix = [
+          [ badUUID ],
+          [ badShortUUID ]
+        ]
+
+        for (const uuids of uuidsMatrix) {
+          const search = { search: 'E2E playlist', sort: '-match', uuids }
+          await check(search, false)
+        }
+      }
     })
 
     it('Should have a correct pagination', async function () {

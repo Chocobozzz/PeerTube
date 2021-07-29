@@ -1,5 +1,6 @@
 import * as express from 'express'
 import { sanitizeUrl } from '@server/helpers/core-utils'
+import { pickSearchChannelQuery } from '@server/helpers/query'
 import { doJSONRequest } from '@server/helpers/requests'
 import { CONFIG } from '@server/initializers/config'
 import { WEBSERVER } from '@server/initializers/constants'
@@ -7,7 +8,7 @@ import { Hooks } from '@server/lib/plugins/hooks'
 import { buildMutedForSearchIndex, isSearchIndexSearch, isURISearch } from '@server/lib/search'
 import { getServerActor } from '@server/models/application/application'
 import { HttpStatusCode, ResultList, VideoChannel } from '@shared/models'
-import { VideoChannelsSearchQuery } from '../../../../shared/models/search'
+import { VideoChannelsSearchQueryAfterSanitize } from '../../../../shared/models/search'
 import { isUserAbleToSearchRemoteURI } from '../../../helpers/express-utils'
 import { logger } from '../../../helpers/logger'
 import { getFormattedObjects } from '../../../helpers/utils'
@@ -45,7 +46,7 @@ export { searchChannelsRouter }
 // ---------------------------------------------------------------------------
 
 function searchVideoChannels (req: express.Request, res: express.Response) {
-  const query: VideoChannelsSearchQuery = req.query
+  const query = pickSearchChannelQuery(req.query)
   let search = query.search || ''
 
   const parts = search.split('@')
@@ -66,7 +67,7 @@ function searchVideoChannels (req: express.Request, res: express.Response) {
   return searchVideoChannelsDB(query, res)
 }
 
-async function searchVideoChannelsIndex (query: VideoChannelsSearchQuery, res: express.Response) {
+async function searchVideoChannelsIndex (query: VideoChannelsSearchQueryAfterSanitize, res: express.Response) {
   const result = await buildMutedForSearchIndex(res)
 
   const body = await Hooks.wrapObject(Object.assign(query, result), 'filter:api.search.video-channels.index.list.params')
@@ -90,17 +91,13 @@ async function searchVideoChannelsIndex (query: VideoChannelsSearchQuery, res: e
   }
 }
 
-async function searchVideoChannelsDB (query: VideoChannelsSearchQuery, res: express.Response) {
+async function searchVideoChannelsDB (query: VideoChannelsSearchQueryAfterSanitize, res: express.Response) {
   const serverActor = await getServerActor()
 
   const apiOptions = await Hooks.wrapObject({
-    actorId: serverActor.id,
-    search: query.search,
-    start: query.start,
-    count: query.count,
-    sort: query.sort,
-    host: query.host,
-    handles: query.handles
+    ...query,
+
+    actorId: serverActor.id
   }, 'filter:api.search.video-channels.local.list.params')
 
   const resultList = await Hooks.wrapPromiseFun(

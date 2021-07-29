@@ -25,6 +25,12 @@ export interface VideosCommonQuery {
   skipCount?: boolean
 }
 
+export interface VideosCommonQueryAfterSanitize extends VideosCommonQuery {
+  start: number
+  count: number
+  sort: string
+}
+
 export interface VideosWithSearchCommonQuery extends VideosCommonQuery {
   search?: string
 }

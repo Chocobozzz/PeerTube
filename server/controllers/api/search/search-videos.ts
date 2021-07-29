@@ -1,5 +1,6 @@
 import * as express from 'express'
 import { sanitizeUrl } from '@server/helpers/core-utils'
+import { pickSearchVideoQuery } from '@server/helpers/query'
 import { doJSONRequest } from '@server/helpers/requests'
 import { CONFIG } from '@server/initializers/config'
 import { WEBSERVER } from '@server/initializers/constants'
@@ -7,7 +8,7 @@ import { getOrCreateAPVideo } from '@server/lib/activitypub/videos'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { buildMutedForSearchIndex, isSearchIndexSearch, isURISearch } from '@server/lib/search'
 import { HttpStatusCode, ResultList, Video } from '@shared/models'
-import { VideosSearchQuery } from '../../../../shared/models/search'
+import { VideosSearchQueryAfterSanitize } from '../../../../shared/models/search'
 import { buildNSFWFilter, isUserAbleToSearchRemoteURI } from '../../../helpers/express-utils'
 import { logger } from '../../../helpers/logger'
 import { getFormattedObjects } from '../../../helpers/utils'
@@ -46,7 +47,7 @@ export { searchVideosRouter }
 // ---------------------------------------------------------------------------
 
 function searchVideos (req: express.Request, res: express.Response) {
-  const query: VideosSearchQuery = req.query
+  const query = pickSearchVideoQuery(req.query)
   const search = query.search
 
   if (isURISearch(search)) {
@@ -60,10 +61,10 @@ function searchVideos (req: express.Request, res: express.Response) {
   return searchVideosDB(query, res)
 }
 
-async function searchVideosIndex (query: VideosSearchQuery, res: express.Response) {
+async function searchVideosIndex (query: VideosSearchQueryAfterSanitize, res: express.Response) {
   const result = await buildMutedForSearchIndex(res)
 
-  let body: VideosSearchQuery = Object.assign(query, result)
+  let body = { ...query, ...result }
 
   // Use the default instance NSFW policy if not specified
   if (!body.nsfw) {
@@ -97,13 +98,18 @@ async function searchVideosIndex (query: VideosSearchQuery, res: express.Respons
   }
 }
 
-async function searchVideosDB (query: VideosSearchQuery, res: express.Response) {
-  const apiOptions = await Hooks.wrapObject(Object.assign(query, {
+async function searchVideosDB (query: VideosSearchQueryAfterSanitize, res: express.Response) {
+  const apiOptions = await Hooks.wrapObject({
+    ...query,
+
     includeLocalVideos: true,
-    nsfw: buildNSFWFilter(res, query.nsfw),
     filter: query.filter,
-    user: res.locals.oauth ? res.locals.oauth.token.User : undefined
-  }), 'filter:api.search.videos.local.list.params')
+
+    nsfw: buildNSFWFilter(res, query.nsfw),
+    user: res.locals.oauth
+      ? res.locals.oauth.token.User
+      : undefined
+  }, 'filter:api.search.videos.local.list.params')
 
   const resultList = await Hooks.wrapPromiseFun(
     VideoModel.searchAndPopulateAccountAndServer,
