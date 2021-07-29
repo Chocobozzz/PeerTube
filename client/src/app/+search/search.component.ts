@@ -1,4 +1,4 @@
-import { forkJoin, of, Subscription } from 'rxjs'
+import { forkJoin, Subscription } from 'rxjs'
 import { LinkType } from 'src/types/link.type'
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
@@ -19,7 +19,7 @@ import { HTMLServerConfig, SearchTargetType } from '@shared/models'
 export class SearchComponent implements OnInit, OnDestroy {
   error: string
 
-  results: (Video | VideoChannel)[] = []
+  results: (Video | VideoChannel | VideoPlaylist)[] = []
 
   pagination = {
     currentPage: 1,
@@ -283,8 +283,6 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   private getVideoChannelObs () {
-    if (!this.currentSearch) return of({ data: [], total: 0 })
-
     const params = {
       search: this.currentSearch,
       componentPagination: immutableAssign(this.pagination, { itemsPerPage: this.channelsPerPage }),
@@ -301,8 +299,6 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   private getVideoPlaylistObs () {
-    if (!this.currentSearch) return of({ data: [], total: 0 })
-
     const params = {
       search: this.currentSearch,
       componentPagination: immutableAssign(this.pagination, { itemsPerPage: this.playlistsPerPage }),
