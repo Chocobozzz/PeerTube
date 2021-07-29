@@ -703,6 +703,10 @@ async function runCommand (options: {
   const { command, silent = false, job } = options
 
   return new Promise<void>((res, rej) => {
+    let shellCommand: string
+
+    command.on('start', cmdline => { shellCommand = cmdline })
+
     command.on('error', (err, stdout, stderr) => {
       if (silent !== true) logger.error('Error in ffmpeg.', { stdout, stderr })
 
@@ -710,7 +714,7 @@ async function runCommand (options: {
     })
 
     command.on('end', (stdout, stderr) => {
-      logger.debug('FFmpeg command ended.', { stdout, stderr })
+      logger.debug('FFmpeg command ended.', { stdout, stderr, shellCommand })
 
       res()
     })
