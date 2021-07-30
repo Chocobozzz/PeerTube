@@ -180,6 +180,15 @@ function register (...) {
     type: 'input',
     // type: 'input' | 'input-checkbox' | 'input-password' | 'input-textarea' | 'markdown-text' | 'markdown-enhanced' | 'select' | 'html'
 
+    // If type: 'select', give the select available options
+    options: [
+      { label: 'Label 1', value: 'value1' },
+      { label: 'Label 2', value: 'value2' }
+    ],
+
+    // If type: 'html', set the HTML that will be injected in the page
+    html: '<strong class="...">Hello</strong><br /><br />'
+
     // Optional
     descriptionHTML: 'The purpose of this field is...',
 
@@ -196,7 +205,7 @@ function register (...) {
   result['admin-name]
 
   settingsManager.onSettingsChange(settings => {
-    settings['admin-name])
+    settings['admin-name']
   })
 }
 ```
@@ -237,12 +246,12 @@ function register ({
 You can add/delete video categories, licences or languages using the appropriate constant managers:
 
 ```js
-function register ({ 
-  videoLanguageManager, 
-  videoCategoryManager, 
-  videoLicenceManager, 
-  videoPrivacyManager, 
-  playlistPrivacyManager 
+function register ({
+  videoLanguageManager,
+  videoCategoryManager,
+  videoLicenceManager,
+  videoPrivacyManager,
+  playlistPrivacyManager
 }) {
   videoLanguageManager.addConstant('al_bhed', 'Al Bhed')
   videoLanguageManager.deleteConstant('fr')
