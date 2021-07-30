@@ -4,12 +4,9 @@ import { PeerTubeLinkButtonOptions } from '../peertube-videojs-typings'
 
 const Button = videojs.getComponent('Button')
 class PeerTubeLinkButton extends Button {
-  private shortUUID: string
 
   constructor (player: videojs.Player, options?: PeerTubeLinkButtonOptions) {
     super(player, options as any)
-
-    this.shortUUID = options.shortUUID
   }
 
   createEl () {
@@ -39,7 +36,7 @@ class PeerTubeLinkButton extends Button {
   }
 
   private buildLink () {
-    const url = buildVideoLink({ shortUUID: this.shortUUID })
+    const url = buildVideoLink({ shortUUID: (this.options_ as PeerTubeLinkButtonOptions).shortUUID })
 
     return decorateVideoLink({ url, startTime: this.player().currentTime() })
   }
