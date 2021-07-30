@@ -95,6 +95,14 @@ storage:
   # If not, peertube will fallback to the default fil
   client_overrides: 'storage/client-overrides/'
 
+s3:
+  enabled: false
+  endpoint: 's3.amazonaws.com' # Will always use https
+  videos_bucket: 'videos'
+  videos_prefix: '' # Allows setting all buckets to the same value but with a different prefix
+  streaming_playlists_bucket: 'streaming-playlists'
+  streaming_playlists_prefix: ''
+
 log:
   level: 'info' # 'debug' | 'info' | 'warn' | 'error'
   rotation:

@@ -24,7 +24,7 @@ import { CONFIG, registerConfigChangedHandler } from './config'
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 655
+const LAST_MIGRATION_VERSION = 660
 
 // ---------------------------------------------------------------------------
 
@@ -147,7 +147,8 @@ const JOB_ATTEMPTS: { [id in JobType]: number } = {
   'videos-views': 1,
   'activitypub-refresher': 1,
   'video-redundancy': 1,
-  'video-live-ending': 1
+  'video-live-ending': 1,
+  'move-to-object-storage': 3
 }
 // Excluded keys are jobs that can be configured by admins
 const JOB_CONCURRENCY: { [id in Exclude<JobType, 'video-transcoding' | 'video-import'>]: number } = {
@@ -162,7 +163,8 @@ const JOB_CONCURRENCY: { [id in Exclude<JobType, 'video-transcoding' | 'video-im
   'videos-views': 1,
   'activitypub-refresher': 1,
   'video-redundancy': 1,
-  'video-live-ending': 10
+  'video-live-ending': 10,
+  'move-to-object-storage': 10
 }
 const JOB_TTL: { [id in JobType]: number } = {
   'activitypub-http-broadcast': 60000 * 10, // 10 minutes
@@ -178,7 +180,8 @@ const JOB_TTL: { [id in JobType]: number } = {
   'videos-views': undefined, // Unlimited
   'activitypub-refresher': 60000 * 10, // 10 minutes
   'video-redundancy': 1000 * 3600 * 3, // 3 hours
-  'video-live-ending': 1000 * 60 * 10 // 10 minutes
+  'video-live-ending': 1000 * 60 * 10, // 10 minutes
+  'move-to-object-storage': 1000 * 60 * 20 // 20 minutes
 }
 const REPEAT_JOBS: { [ id: string ]: EveryRepeatOptions | CronRepeatOptions } = {
   'videos-views': {

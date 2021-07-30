@@ -78,7 +78,8 @@ import {
   MVideoThumbnail,
   MVideoThumbnailBlacklist,
   MVideoWithAllFiles,
-  MVideoWithFile
+  MVideoWithFile,
+  VideoStorageType
 } from '../../types/models'
 import { MThumbnail } from '../../types/models/video/thumbnail'
 import { MVideoFile, MVideoFileStreamingPlaylistVideo } from '../../types/models/video/video-file'
@@ -120,6 +121,7 @@ import { VideoShareModel } from './video-share'
 import { VideoStreamingPlaylistModel } from './video-streaming-playlist'
 import { VideoTagModel } from './video-tag'
 import { VideoViewModel } from './video-view'
+import { removeObject, removePrefix } from '@server/lib/object-storage'
 
 export enum ScopeNames {
   FOR_API = 'FOR_API',
@@ -564,6 +566,12 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
   @Default(null)
   @Column
   originallyPublishedAt: Date
+
+  @AllowNull(false)
+  @Default(0)
+  @IsInt
+  @Column
+  transcodeJobsRunning: number
 
   @ForeignKey(() => VideoChannelModel)
   @Column
@@ -1677,6 +1685,9 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
 
     const promises: Promise<any>[] = [ remove(filePath) ]
     if (!isRedundancy) promises.push(videoFile.removeTorrent())
+    if (videoFile.storage === VideoStorageType.OBJECT_STORAGE) {
+      promises.push(removeObject(videoFile.filename, CONFIG.S3.VIDEOS_BUCKETINFO))
+    }
 
     return Promise.all(promises)
   }
@@ -1685,6 +1696,9 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     const directoryPath = getHLSDirectory(this, isRedundancy)
 
     await remove(directoryPath)
+    if (streamingPlaylist.storage === VideoStorageType.OBJECT_STORAGE) {
+      await removePrefix(join(streamingPlaylist.getStringType(), this.uuid), CONFIG.S3.STREAMING_PLAYLISTS_BUCKETINFO)
+    }
 
     if (isRedundancy !== true) {
       const streamingPlaylistWithFiles = streamingPlaylist as MStreamingPlaylistFilesVideo

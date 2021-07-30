@@ -11,6 +11,7 @@ import { federateVideoIfNeeded } from './activitypub/videos'
 import { JobQueue } from './job-queue/job-queue'
 import { Notifier } from './notifier'
 import { updateVideoMiniatureFromExisting } from './thumbnail'
+import { CONFIG } from '@server/initializers/config'
 
 function buildLocalVideoFromReq (videoInfo: VideoCreate, channelId: number): FilteredModelAttributes<VideoModel> {
   return {
@@ -128,6 +129,15 @@ async function addOptimizeOrMergeAudioJob (video: MVideoUUID, videoFile: MVideoF
   }
 
   return JobQueue.Instance.createJobWithPromise({ type: 'video-transcoding', payload: dataInput }, jobOptions)
+}
+
+export function addMoveToObjectStorageJob (video: MVideoUUID) {
+  if (CONFIG.S3.ENABLED) {
+    const dataInput = {
+      videoUUID: video.uuid
+    }
+    return JobQueue.Instance.createJobWithPromise({ type: 'move-to-object-storage', payload: dataInput })
+  }
 }
 
 async function getTranscodingJobPriority (user: MUserId) {

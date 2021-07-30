@@ -11,6 +11,7 @@ import {
   EmailPayload,
   JobState,
   JobType,
+  MoveObjectStoragePayload,
   RefreshPayload,
   VideoFileImportPayload,
   VideoImportPayload,
@@ -34,6 +35,8 @@ import { processVideoImport } from './handlers/video-import'
 import { processVideoLiveEnding } from './handlers/video-live-ending'
 import { processVideoTranscoding } from './handlers/video-transcoding'
 import { processVideosViews } from './handlers/video-views'
+import { processMoveToObjectStorage } from './handlers/move-to-object-storage'
+import { VideoModel } from '@server/models/video/video'
 
 type CreateJobArgument =
   { type: 'activitypub-http-broadcast', payload: ActivitypubHttpBroadcastPayload } |
@@ -49,7 +52,8 @@ type CreateJobArgument =
   { type: 'videos-views', payload: {} } |
   { type: 'video-live-ending', payload: VideoLiveEndingPayload } |
   { type: 'actor-keys', payload: ActorKeysPayload } |
-  { type: 'video-redundancy', payload: VideoRedundancyPayload }
+  { type: 'video-redundancy', payload: VideoRedundancyPayload } |
+  { type: 'move-to-object-storage', payload: MoveObjectStoragePayload }
 
 type CreateJobOptions = {
   delay?: number
@@ -70,7 +74,8 @@ const handlers: { [id in JobType]: (job: Bull.Job) => Promise<any> } = {
   'activitypub-refresher': refreshAPObject,
   'video-live-ending': processVideoLiveEnding,
   'actor-keys': processActorKeys,
-  'video-redundancy': processVideoRedundancy
+  'video-redundancy': processVideoRedundancy,
+  'move-to-object-storage': processMoveToObjectStorage
 }
 
 const jobTypes: JobType[] = [
@@ -87,7 +92,8 @@ const jobTypes: JobType[] = [
   'activitypub-refresher',
   'video-redundancy',
   'actor-keys',
-  'video-live-ending'
+  'video-live-ending',
+  'move-to-object-storage'
 ]
 
 class JobQueue {
@@ -153,6 +159,12 @@ class JobQueue {
     if (queue === undefined) {
       logger.error('Unknown queue %s: cannot create job.', obj.type)
       return
+    }
+    if (obj.type === 'video-transcoding') {
+      // This value is decreased when the transcoding job is finished in ./handlers/video-transcoding.ts
+      // It's used by the move-to-object-storage job to detect when the last transcoding job is finished
+      VideoModel.increment('transcodeJobsRunning', { where: { uuid: obj.payload.videoUUID } })
+        .catch(err => logger.error('Cannot increase transcodeJobsRunning.', { err }))
     }
 
     const jobArgs: Bull.JobOptions = {

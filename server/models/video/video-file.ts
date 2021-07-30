@@ -24,7 +24,7 @@ import { buildRemoteVideoBaseUrl } from '@server/helpers/activitypub'
 import { logger } from '@server/helpers/logger'
 import { extractVideo } from '@server/helpers/video'
 import { getTorrentFilePath } from '@server/lib/video-paths'
-import { MStreamingPlaylistVideo, MVideo, MVideoWithHost } from '@server/types/models'
+import { MStreamingPlaylistVideo, MVideo, MVideoWithHost, VideoStorageType } from '@server/types/models'
 import { AttributesOnly } from '@shared/core-utils'
 import {
   isVideoFileExtnameValid,
@@ -213,6 +213,11 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
   @ForeignKey(() => VideoModel)
   @Column
   videoId: number
+
+  @AllowNull(false)
+  @Default(VideoStorageType.LOCAL)
+  @Column
+  storage: VideoStorageType
 
   @BelongsTo(() => VideoModel, {
     foreignKey: {
@@ -451,6 +456,9 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
   }
 
   getFileUrl (video: MVideo) {
+    if (this.storage === VideoStorageType.OBJECT_STORAGE) {
+      return this.fileUrl
+    }
     if (!this.Video) this.Video = video as VideoModel
 
     if (video.isOwned()) return WEBSERVER.URL + this.getFileStaticPath(video)
@@ -465,6 +473,9 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
   }
 
   getFileDownloadUrl (video: MVideoWithHost) {
+    if (this.storage === VideoStorageType.OBJECT_STORAGE) {
+      return this.fileUrl
+    }
     const path = this.isHLS()
       ? join(STATIC_DOWNLOAD_PATHS.HLS_VIDEOS, `${video.uuid}-${this.resolution}-fragmented${this.extname}`)
       : join(STATIC_DOWNLOAD_PATHS.VIDEOS, `${video.uuid}-${this.resolution}${this.extname}`)

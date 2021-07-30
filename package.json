@@ -73,6 +73,7 @@
     "swagger-cli": "swagger-cli"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.23.0",
     "@uploadx/core": "^4.4.0",
     "async": "^3.0.1",
     "async-lru": "^1.1.1",

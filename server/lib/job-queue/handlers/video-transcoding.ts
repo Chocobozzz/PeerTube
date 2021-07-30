@@ -1,6 +1,6 @@
 import * as Bull from 'bull'
 import { TranscodeOptionsType } from '@server/helpers/ffmpeg-utils'
-import { getTranscodingJobPriority, publishAndFederateIfNeeded } from '@server/lib/video'
+import { addMoveToObjectStorageJob, getTranscodingJobPriority, publishAndFederateIfNeeded } from '@server/lib/video'
 import { getVideoFilePath } from '@server/lib/video-paths'
 import { UserModel } from '@server/models/user/user'
 import { MUser, MUserId, MVideoFullLight, MVideoUUID, MVideoWithFile } from '@server/types/models'
@@ -46,17 +46,24 @@ async function processVideoTranscoding (job: Bull.Job) {
     return undefined
   }
 
-  const user = await UserModel.loadByChannelActorId(video.VideoChannel.actorId)
+  try {
 
-  const handler = handlers[payload.type]
+    const user = await UserModel.loadByChannelActorId(video.VideoChannel.actorId)
 
-  if (!handler) {
-    throw new Error('Cannot find transcoding handler for ' + payload.type)
+    const handler = handlers[payload.type]
+
+    if (!handler) {
+      throw new Error('Cannot find transcoding handler for ' + payload.type)
+    }
+
+    await handler(job, payload, video, user)
+
+    return video
+  } finally {
+    await video.decrement('transcodeJobsRunning')
+    // Create job to move the new files to object storage if enabled
+    await addMoveToObjectStorageJob(video)
   }
-
-  await handler(job, payload, video, user)
-
-  return video
 }
 
 // ---------------------------------------------------------------------------

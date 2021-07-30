@@ -73,6 +73,18 @@ const CONFIG = {
     PLUGINS_DIR: buildPath(config.get<string>('storage.plugins')),
     CLIENT_OVERRIDES_DIR: buildPath(config.get<string>('storage.client_overrides'))
   },
+  S3: {
+    ENABLED: config.get<boolean>('s3.enabled'),
+    ENDPOINT: config.get<string>('s3.endpoint'),
+    VIDEOS_BUCKETINFO: {
+      bucket: config.get<string>('s3.videos_bucket'),
+      prefix: config.get<string>('s3.videos_prefix')
+    },
+    STREAMING_PLAYLISTS_BUCKETINFO: {
+      bucket: config.get<string>('s3.streaming_playlists_bucket'),
+      prefix: config.get<string>('s3.streaming_playlists_prefix')
+    }
+  },
   WEBSERVER: {
     SCHEME: config.get<boolean>('webserver.https') === true ? 'https' : 'http',
     WS: config.get<boolean>('webserver.https') === true ? 'wss' : 'ws',

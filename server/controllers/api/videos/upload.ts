@@ -5,7 +5,12 @@ import { deleteResumableUploadMetaFile, getResumableUploadPath } from '@server/h
 import { uuidToShort } from '@server/helpers/uuid'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
 import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url'
-import { addOptimizeOrMergeAudioJob, buildLocalVideoFromReq, buildVideoThumbnailsFromReq, setVideoTags } from '@server/lib/video'
+import {
+  addOptimizeOrMergeAudioJob,
+  buildLocalVideoFromReq,
+  buildVideoThumbnailsFromReq,
+  setVideoTags
+} from '@server/lib/video'
 import { generateWebTorrentVideoFilename, getVideoFilePath } from '@server/lib/video-paths'
 import { openapiOperationDoc } from '@server/middlewares/doc'
 import { MVideo, MVideoFile, MVideoFullLight } from '@server/types/models'
