@@ -235,7 +235,7 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
       })
     })
 
-    Notifier.Instance.notifyOnFinishedVideoImport(videoImportUpdated, true)
+    Notifier.Instance.notifyOnFinishedVideoImport({ videoImport: videoImportUpdated, success: true })
 
     if (video.isBlacklisted()) {
       const videoBlacklist = Object.assign(video.VideoBlacklist, { Video: video })
@@ -263,7 +263,7 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
     }
     await videoImport.save()
 
-    Notifier.Instance.notifyOnFinishedVideoImport(videoImport, false)
+    Notifier.Instance.notifyOnFinishedVideoImport({ videoImport, success: false })
 
     throw err
   }

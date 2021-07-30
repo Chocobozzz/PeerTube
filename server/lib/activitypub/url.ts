@@ -1,5 +1,6 @@
 import { WEBSERVER } from '../../initializers/constants'
 import {
+  MAbuseFull,
   MAbuseId,
   MActor,
   MActorFollowActors,
@@ -112,6 +113,14 @@ function getUndoActivityPubUrl (originalUrl: string) {
   return originalUrl + '/undo'
 }
 
+// ---------------------------------------------------------------------------
+
+function getAbuseTargetUrl (abuse: MAbuseFull) {
+  return abuse.VideoAbuse?.Video?.url ||
+    abuse.VideoCommentAbuse?.VideoComment?.url ||
+    abuse.FlaggedAccount.Actor.url
+}
+
 export {
   getLocalVideoActivityPubUrl,
   getLocalVideoPlaylistActivityPubUrl,
@@ -135,5 +144,6 @@ export {
   getLocalVideoSharesActivityPubUrl,
   getLocalVideoCommentsActivityPubUrl,
   getLocalVideoLikesActivityPubUrl,
-  getLocalVideoDislikesActivityPubUrl
+  getLocalVideoDislikesActivityPubUrl,
+  getAbuseTargetUrl
 }
