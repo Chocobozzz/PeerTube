@@ -44,6 +44,8 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
   error: string
   enableRetryAfterError: boolean
 
+  schedulePublicationPossible = false
+
   // So that it can be accessed in the template
   protected readonly BASE_VIDEO_UPLOAD_URL = VideoService.BASE_VIDEO_URL + 'upload-resumable'
 
@@ -82,6 +84,46 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
 
   get videoExtensions () {
     return this.serverConfig.video.file.extensions.join(', ')
+  }
+
+  ngOnInit () {
+    super.ngOnInit()
+
+    this.userService.getMyVideoQuotaUsed()
+        .subscribe(data => {
+          this.userVideoQuotaUsed = data.videoQuotaUsed
+          this.userVideoQuotaUsedDaily = data.videoQuotaUsedDaily
+        })
+
+    this.resumableUploadService.events
+      .subscribe(state => this.onUploadVideoOngoing(state))
+
+    this.schedulePublicationPossible = this.videoPrivacies.some(p => p.id === VideoPrivacy.PRIVATE)
+  }
+
+  ngAfterViewInit () {
+    this.hooks.runAction('action:video-upload.init', 'video-edit')
+  }
+
+  ngOnDestroy () {
+    this.cancelUpload()
+  }
+
+  canDeactivate () {
+    let text = ''
+
+    if (this.videoUploaded === true) {
+      // FIXME: cannot concatenate strings using $localize
+      text = $localize`Your video was uploaded to your account and is private.` + ' ' +
+        $localize`But associated data (tags, description...) will be lost, are you sure you want to leave this page?`
+    } else {
+      text = $localize`Your video is not uploaded yet, are you sure you want to leave this page?`
+    }
+
+    return {
+      canDeactivate: !this.isUploadingVideo,
+      text
+    }
   }
 
   onUploadVideoOngoing (state: UploadState) {
@@ -129,44 +171,6 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
 
         this.videoUploadedIds = state?.response.video
         break
-    }
-  }
-
-  ngOnInit () {
-    super.ngOnInit()
-
-    this.userService.getMyVideoQuotaUsed()
-        .subscribe(data => {
-          this.userVideoQuotaUsed = data.videoQuotaUsed
-          this.userVideoQuotaUsedDaily = data.videoQuotaUsedDaily
-        })
-
-    this.resumableUploadService.events
-      .subscribe(state => this.onUploadVideoOngoing(state))
-  }
-
-  ngAfterViewInit () {
-    this.hooks.runAction('action:video-upload.init', 'video-edit')
-  }
-
-  ngOnDestroy () {
-    this.cancelUpload()
-  }
-
-  canDeactivate () {
-    let text = ''
-
-    if (this.videoUploaded === true) {
-      // FIXME: cannot concatenate strings using $localize
-      text = $localize`Your video was uploaded to your account and is private.` + ' ' +
-        $localize`But associated data (tags, description...) will be lost, are you sure you want to leave this page?`
-    } else {
-      text = $localize`Your video is not uploaded yet, are you sure you want to leave this page?`
-    }
-
-    return {
-      canDeactivate: !this.isUploadingVideo,
-      text
     }
   }
 
