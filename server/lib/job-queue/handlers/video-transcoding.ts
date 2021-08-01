@@ -96,10 +96,9 @@ async function handleNewWebTorrentResolutionJob (
 ) {
   const { videoFile } = await transcodeNewWebTorrentResolution(video, payload.resolution, payload.isPortraitMode || false, job)
 
-  // Create job to move the new files to object storage if enabled
-  await addMoveToObjectStorageJob(video, videoFile)
-
   await retryTransactionWrapper(onNewWebTorrentFileResolution, video, user, payload)
+
+  return { videoFile }
 }
 
 async function handleWebTorrentMergeAudioJob (job: Bull.Job, payload: MergeAudioTranscodingPayload, video: MVideoFullLight, user: MUserId) {
@@ -136,7 +135,10 @@ async function onHlsPlaylistGeneration (video: MVideoFullLight, user: MUser, pay
     await createLowerResolutionsJobs(video, user, payload.resolution, payload.isPortraitMode, 'hls')
   }
 
-  return publishAndFederateIfNeeded(video)
+  // Publishing will be done by mvoe-to-object-storage if enabled
+  if (!CONFIG.S3.ENABLED) {
+    await publishAndFederateIfNeeded(video)
+  }
 }
 
 async function onVideoFileOptimizer (
@@ -185,7 +187,10 @@ async function onNewWebTorrentFileResolution (
   user: MUserId,
   payload: NewResolutionTranscodingPayload | MergeAudioTranscodingPayload
 ) {
-  await publishAndFederateIfNeeded(video)
+  // Publishing will be done by mvoe-to-object-storage if enabled
+  if (!CONFIG.S3.ENABLED) {
+    await publishAndFederateIfNeeded(video)
+  }
 
   await createHlsJobIfEnabled(user, Object.assign({}, payload, { copyCodecs: true, isMaxQuality: false }))
 }

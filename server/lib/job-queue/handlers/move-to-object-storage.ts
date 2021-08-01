@@ -9,6 +9,7 @@ import { HLS_STREAMING_PLAYLIST_DIRECTORY } from '@server/initializers/constants
 import { getHlsResolutionPlaylistFilename } from '@server/lib/video-paths'
 import { MVideoWithAllFiles, VideoStorageType } from '@server/types/models'
 import { remove } from 'fs-extra'
+import { publishAndFederateIfNeeded } from '@server/lib/video'
 
 export async function processMoveToObjectStorage (job: Bull.Job) {
   const payload = job.data as MoveObjectStoragePayload
@@ -131,4 +132,5 @@ async function doAfterLastJob (video: MVideoWithAllFiles) {
   }
 
   await Promise.all(tasks)
+  await publishAndFederateIfNeeded(video)
 }
