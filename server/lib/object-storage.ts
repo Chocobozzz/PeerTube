@@ -3,7 +3,7 @@ import { DeleteObjectCommand, DeleteObjectsCommand, ListObjectsV2Command, PutObj
 import { CONFIG } from "@server/initializers/config"
 import { logger } from '@server/helpers/logger'
 
-type BucketInfo = {bucket: string, prefix?: string}
+type BucketInfo = {bucket: string, prefix?: string, url_template?: string}
 
 function getS3Client () {
   return new S3Client({ endpoint: `https://${CONFIG.S3.ENDPOINT}` })
@@ -62,4 +62,12 @@ export async function removePrefix (prefix: string, bucketInfo: BucketInfo) {
 
   // Repeat if not all objects could be listed at once (limit of 1000?)
   if (listedObjects.IsTruncated) await removePrefix(prefix, bucketInfo)
+}
+
+export function generateUrl (filename: string, bucketInfo: BucketInfo) {
+  if (!bucketInfo.url_template) {
+    return `https://${bucketInfo.bucket}.${CONFIG.S3.ENDPOINT}/${bucketInfo.prefix}${filename}`
+  }
+  const key = filename
+  return bucketInfo.url_template.replace('%path%', key)
 }

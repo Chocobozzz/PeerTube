@@ -4,7 +4,7 @@ import {
   MoveObjectStoragePayload, VideoState
 } from '../../../../shared'
 import { VideoModel } from '@server/models/video/video'
-import { storeObject } from '@server/lib/object-storage'
+import { generateUrl, storeObject } from '@server/lib/object-storage'
 import { CONFIG } from '@server/initializers/config'
 import { join } from 'path'
 import { HLS_STREAMING_PLAYLIST_DIRECTORY } from '@server/initializers/constants'
@@ -54,7 +54,7 @@ async function moveWebTorrentFiles (video: MVideoWithAllFiles) {
     )
 
     file.storage = VideoStorageType.OBJECT_STORAGE
-    file.fileUrl = `https://${CONFIG.S3.VIDEOS_BUCKETINFO.bucket}.${CONFIG.S3.ENDPOINT}/${CONFIG.S3.VIDEOS_BUCKETINFO.prefix}${filename}`
+    file.fileUrl = generateUrl(filename, CONFIG.S3.VIDEOS_BUCKETINFO)
     await file.save()
   }
 }
@@ -83,10 +83,8 @@ async function moveHLSFiles (video: MVideoWithAllFiles) {
       CONFIG.S3.STREAMING_PLAYLISTS_BUCKETINFO
     )
 
-    // eslint-disable-next-line max-len
-    playlist.playlistUrl = `https://${CONFIG.S3.STREAMING_PLAYLISTS_BUCKETINFO.bucket}.${CONFIG.S3.ENDPOINT}/${CONFIG.S3.STREAMING_PLAYLISTS_BUCKETINFO.prefix}${masterPlaylistFilename}`
-    // eslint-disable-next-line max-len
-    playlist.segmentsSha256Url = `https://${CONFIG.S3.STREAMING_PLAYLISTS_BUCKETINFO.bucket}.${CONFIG.S3.ENDPOINT}/${CONFIG.S3.STREAMING_PLAYLISTS_BUCKETINFO.prefix}${segmentsFileName}`
+    playlist.playlistUrl = generateUrl(masterPlaylistFilename, CONFIG.S3.STREAMING_PLAYLISTS_BUCKETINFO)
+    playlist.segmentsSha256Url = generateUrl(segmentsFileName, CONFIG.S3.STREAMING_PLAYLISTS_BUCKETINFO)
 
     for (const videoFile of playlist.VideoFiles) {
       const file = await videoFile.reload()
@@ -114,8 +112,7 @@ async function moveHLSFiles (video: MVideoWithAllFiles) {
 
       // Signals that the video file + playlist file were uploaded
       file.storage = VideoStorageType.OBJECT_STORAGE
-      // eslint-disable-next-line max-len
-      file.fileUrl = `https://${CONFIG.S3.STREAMING_PLAYLISTS_BUCKETINFO.bucket}.${CONFIG.S3.ENDPOINT}/${CONFIG.S3.STREAMING_PLAYLISTS_BUCKETINFO.prefix}${filename}`
+      file.fileUrl = generateUrl(filename, CONFIG.S3.STREAMING_PLAYLISTS_BUCKETINFO)
       await file.save()
     }
 

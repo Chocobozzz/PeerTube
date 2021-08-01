@@ -100,8 +100,17 @@ s3:
   endpoint: 's3.amazonaws.com' # Will always use https
   videos_bucket: 'videos'
   videos_prefix: '' # Allows setting all buckets to the same value but with a different prefix
+  # Optional, use to overide the default url generation that just gives the public url to s3
+  # Use the string %path% in place where the (full) path to the file should be. The path
+  # does not include the videos_prefix, so you should add it to your template if needed.
+  # For example:
+  #     https://my-videos-cache.example.com/cdn-cache/%path%?thing=true
+  # Would turn into:
+  #     https://my-videos-cache.example.com/cdn-cache/hls/9ffceb57-cbe3-41c5-80e4-dbb7e97c3958/b27d1892-9c5c-4bef-8bce-f68e54fb1208-240-fragmented.mp4?thing=true
+  videos_template: ''
   streaming_playlists_bucket: 'streaming-playlists'
   streaming_playlists_prefix: ''
+  streaming_playlists_template: ''
 
 log:
   level: 'info' # 'debug' | 'info' | 'warn' | 'error'
