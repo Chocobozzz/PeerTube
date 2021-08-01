@@ -68,6 +68,5 @@ export function generateUrl (filename: string, bucketInfo: BucketInfo) {
   if (!bucketInfo.url_template) {
     return `https://${bucketInfo.bucket}.${CONFIG.S3.ENDPOINT}/${bucketInfo.prefix}${filename}`
   }
-  const key = filename
-  return bucketInfo.url_template.replace('%path%', key)
+  return bucketInfo.url_template.replace('%path%', filename)
 }

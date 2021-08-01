@@ -84,7 +84,7 @@ const CONFIG = {
     STREAMING_PLAYLISTS_BUCKETINFO: {
       bucket: config.get<string>('s3.streaming_playlists_bucket'),
       prefix: config.get<string>('s3.streaming_playlists_prefix'),
-      url_template: config.get<string>('s3.streaming_playlists_template')
+      url_template: config.get<string>('s3.streaming_playlists_url_template')
     }
   },
   WEBSERVER: {

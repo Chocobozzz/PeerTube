@@ -161,10 +161,11 @@ class JobQueue {
       return
     }
     if (obj.type === 'video-transcoding') {
-      // This value is decreased when the transcoding job is finished in ./handlers/video-transcoding.ts
-      // It's used by the move-to-object-storage job to detect when the last transcoding job is finished
-      VideoModel.increment('transcodeJobsRunning', { where: { uuid: obj.payload.videoUUID } })
-        .catch(err => logger.error('Cannot increase transcodeJobsRunning.', { err }))
+      // This value is decreased when the move job is finished in ./handlers/move-to-object-storage.ts
+      // Because every transcode job starts a move job for the transcoded file, the value will only reach
+      // 0 again when all transcode jobs are finished and the last move job is running
+      VideoModel.increment('moveJobsRunning', { where: { uuid: obj.payload.videoUUID } })
+        .catch(err => logger.error('Cannot increase moveJobsRunning.', { err }))
     }
 
     const jobArgs: Bull.JobOptions = {

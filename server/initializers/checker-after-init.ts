@@ -153,6 +153,31 @@ function checkConfig () {
     }
   }
 
+  // Object storage
+  if (CONFIG.S3.ENABLED === true) {
+    if (CONFIG.TRANSCODING.WEBTORRENT.ENABLED && !CONFIG.S3.VIDEOS_BUCKETINFO.bucket) {
+      return 'videos_bucket should be set when object storage support is enabled.'
+    }
+    if (CONFIG.TRANSCODING.HLS.ENABLED && !CONFIG.S3.STREAMING_PLAYLISTS_BUCKETINFO.bucket) {
+      return 'streaming_playlists_bucket should be set when object storage support is enabled.'
+    }
+    if (CONFIG.S3.VIDEOS_BUCKETINFO.bucket === CONFIG.S3.STREAMING_PLAYLISTS_BUCKETINFO.bucket &&
+        CONFIG.S3.VIDEOS_BUCKETINFO.prefix === CONFIG.S3.STREAMING_PLAYLISTS_BUCKETINFO.prefix) {
+      if (CONFIG.S3.VIDEOS_BUCKETINFO.prefix === '') {
+        return 'Object storage bucket prefixes should be set when the same bucket is used for both types of video.'
+      } else {
+        return 'Object storage bucket prefixes should be set to different values when the same bucket is used for both types of video.'
+      }
+    }
+    if (
+      (CONFIG.S3.VIDEOS_BUCKETINFO.url_template !== '' &&
+        !CONFIG.S3.VIDEOS_BUCKETINFO.url_template.includes('%path%')) ||
+      (CONFIG.S3.STREAMING_PLAYLISTS_BUCKETINFO.url_template !== '' &&
+        !CONFIG.S3.STREAMING_PLAYLISTS_BUCKETINFO.url_template.includes('%path%'))) {
+      return 'Object storage url templates should include `%path%\' in place where the file path needs to be inserted.'
+    }
+  }
+
   return null
 }
 

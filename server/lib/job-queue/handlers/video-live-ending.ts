@@ -98,7 +98,7 @@ async function saveLive (video: MVideo, live: MVideoLive, streamingPlaylist: MSt
 
     const { resolution, isPortraitMode } = await getVideoFileResolution(concatenatedTsFilePath, probe)
 
-    const outputPath = await generateHlsPlaylistResolutionFromTS({
+    const { resolutionPlaylistPath: outputPath } = await generateHlsPlaylistResolutionFromTS({
       video: videoWithFiles,
       concatenatedTsFilePath,
       resolution,

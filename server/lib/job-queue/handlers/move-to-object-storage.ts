@@ -1,8 +1,6 @@
 import * as Bull from 'bull'
 import { logger } from '@server/helpers/logger'
-import {
-  MoveObjectStoragePayload, VideoState
-} from '../../../../shared'
+import { MoveObjectStoragePayload } from '../../../../shared'
 import { VideoModel } from '@server/models/video/video'
 import { generateUrl, storeObject } from '@server/lib/object-storage'
 import { CONFIG } from '@server/initializers/config'
@@ -10,6 +8,7 @@ import { join } from 'path'
 import { HLS_STREAMING_PLAYLIST_DIRECTORY } from '@server/initializers/constants'
 import { getHlsResolutionPlaylistFilename } from '@server/lib/video-paths'
 import { MVideoWithAllFiles, VideoStorageType } from '@server/types/models'
+import { remove } from 'fs-extra'
 
 export async function processMoveToObjectStorage (job: Bull.Job) {
   const payload = job.data as MoveObjectStoragePayload
@@ -22,30 +21,26 @@ export async function processMoveToObjectStorage (job: Bull.Job) {
     return undefined
   }
 
-  if (video.state === VideoState.TO_TRANSCODE) {
-    logger.info('Video needs to be transcoded still, exiting move job %d', job.id)
-    return undefined
+  if (CONFIG.TRANSCODING.WEBTORRENT.ENABLED && video.VideoFiles) {
+    await moveWebTorrentFiles(video, payload.videoFileId)
   }
 
-  if (video.transcodeJobsRunning > 0) {
-    logger.info('A transcode job for this video is running, exiting move job %d', job.id)
-    return undefined
+  if (CONFIG.TRANSCODING.HLS.ENABLED && video.VideoStreamingPlaylists) {
+    await moveHLSFiles(video, payload.videoFileId)
   }
 
-  if (video.VideoFiles) {
-    await moveWebTorrentFiles(video)
-  }
-
-  if (video.VideoStreamingPlaylists) {
-    await moveHLSFiles(video)
+  await video.decrement('moveJobsRunning')
+  if (video.moveJobsRunning === 0) {
+    await doAfterLastJob(video)
   }
 
   return payload.videoUUID
 }
 
-async function moveWebTorrentFiles (video: MVideoWithAllFiles) {
+async function moveWebTorrentFiles (video: MVideoWithAllFiles, videoFileId?: number) {
   for (const file of video.VideoFiles) {
     if (file.storage !== VideoStorageType.LOCAL) continue
+    if (videoFileId !== null && file.id !== videoFileId) continue
 
     const filename = file.filename
     await storeObject(
@@ -59,36 +54,13 @@ async function moveWebTorrentFiles (video: MVideoWithAllFiles) {
   }
 }
 
-async function moveHLSFiles (video: MVideoWithAllFiles) {
+async function moveHLSFiles (video: MVideoWithAllFiles, videoFileId: number) {
   for (const playlist of video.VideoStreamingPlaylists) {
     const baseHlsDirectory = join(HLS_STREAMING_PLAYLIST_DIRECTORY, video.uuid)
 
-    // Master playlist
-    const masterPlaylistFilename = join(playlist.getStringType(), video.uuid, playlist.playlistFilename)
-    await storeObject(
-      {
-        filename: masterPlaylistFilename,
-        path: join(baseHlsDirectory, playlist.playlistFilename)
-      },
-      CONFIG.S3.STREAMING_PLAYLISTS_BUCKETINFO
-    )
-
-    // Sha256 segments file
-    const segmentsFileName = join(playlist.getStringType(), video.uuid, playlist.segmentsSha256Filename)
-    await storeObject(
-      {
-        filename: segmentsFileName,
-        path: join(baseHlsDirectory, playlist.segmentsSha256Filename)
-      },
-      CONFIG.S3.STREAMING_PLAYLISTS_BUCKETINFO
-    )
-
-    playlist.playlistUrl = generateUrl(masterPlaylistFilename, CONFIG.S3.STREAMING_PLAYLISTS_BUCKETINFO)
-    playlist.segmentsSha256Url = generateUrl(segmentsFileName, CONFIG.S3.STREAMING_PLAYLISTS_BUCKETINFO)
-
-    for (const videoFile of playlist.VideoFiles) {
-      const file = await videoFile.reload()
+    for (const file of playlist.VideoFiles) {
       if (file.storage !== VideoStorageType.LOCAL) continue
+      if (videoFileId !== null && file.id !== videoFileId) continue
 
       // Resolution playlist
       const playlistFileName = getHlsResolutionPlaylistFilename(file.filename)
@@ -115,8 +87,48 @@ async function moveHLSFiles (video: MVideoWithAllFiles) {
       file.fileUrl = generateUrl(filename, CONFIG.S3.STREAMING_PLAYLISTS_BUCKETINFO)
       await file.save()
     }
+  }
+}
 
+async function doAfterLastJob (video: MVideoWithAllFiles) {
+  for (const playlist of video.VideoStreamingPlaylists) {
+    const baseHlsDirectory = join(HLS_STREAMING_PLAYLIST_DIRECTORY, video.uuid)
+    // Master playlist
+    const masterPlaylistFilename = join(playlist.getStringType(), video.uuid, playlist.playlistFilename)
+    await storeObject(
+      {
+        filename: masterPlaylistFilename,
+        path: join(baseHlsDirectory, playlist.playlistFilename)
+      },
+      CONFIG.S3.STREAMING_PLAYLISTS_BUCKETINFO
+    )
+
+    // Sha256 segments file
+    const segmentsFileName = join(playlist.getStringType(), video.uuid, playlist.segmentsSha256Filename)
+    await storeObject(
+      {
+        filename: segmentsFileName,
+        path: join(baseHlsDirectory, playlist.segmentsSha256Filename)
+      },
+      CONFIG.S3.STREAMING_PLAYLISTS_BUCKETINFO
+    )
+
+    playlist.playlistUrl = generateUrl(masterPlaylistFilename, CONFIG.S3.STREAMING_PLAYLISTS_BUCKETINFO)
+    playlist.segmentsSha256Url = generateUrl(segmentsFileName, CONFIG.S3.STREAMING_PLAYLISTS_BUCKETINFO)
     playlist.storage = VideoStorageType.OBJECT_STORAGE
     await playlist.save()
   }
+
+  // Remove files that were "moved"
+  const tasks: Promise<any>[] = []
+
+  for (const file of video.VideoFiles) {
+    tasks.push(remove(join(CONFIG.STORAGE.VIDEOS_DIR, file.filename)))
+  }
+
+  if (video.VideoStreamingPlaylists) {
+    tasks.push(remove(join(HLS_STREAMING_PLAYLIST_DIRECTORY, video.uuid)))
+  }
+
+  await Promise.all(tasks)
 }

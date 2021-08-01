@@ -46,24 +46,20 @@ async function processVideoTranscoding (job: Bull.Job) {
     return undefined
   }
 
-  try {
+  const user = await UserModel.loadByChannelActorId(video.VideoChannel.actorId)
 
-    const user = await UserModel.loadByChannelActorId(video.VideoChannel.actorId)
+  const handler = handlers[payload.type]
 
-    const handler = handlers[payload.type]
-
-    if (!handler) {
-      throw new Error('Cannot find transcoding handler for ' + payload.type)
-    }
-
-    await handler(job, payload, video, user)
-
-    return video
-  } finally {
-    await video.decrement('transcodeJobsRunning')
-    // Create job to move the new files to object storage if enabled
-    await addMoveToObjectStorageJob(video)
+  if (!handler) {
+    throw new Error('Cannot find transcoding handler for ' + payload.type)
   }
+
+  const { videoFile } = await handler(job, payload, video, user)
+
+  // Create job to move the new files to object storage if enabled
+  await addMoveToObjectStorageJob(video, videoFile)
+
+  return video
 }
 
 // ---------------------------------------------------------------------------
@@ -78,7 +74,7 @@ async function handleHLSJob (job: Bull.Job, payload: HLSTranscodingPayload, vide
   const videoOrStreamingPlaylist = videoFileInput.getVideoOrStreamingPlaylist()
   const videoInputPath = getVideoFilePath(videoOrStreamingPlaylist, videoFileInput)
 
-  await generateHlsPlaylistResolution({
+  const { videoFile } = await generateHlsPlaylistResolution({
     video,
     videoInputPath,
     resolution: payload.resolution,
@@ -88,6 +84,8 @@ async function handleHLSJob (job: Bull.Job, payload: HLSTranscodingPayload, vide
   })
 
   await retryTransactionWrapper(onHlsPlaylistGeneration, video, user, payload)
+
+  return { videoFile }
 }
 
 async function handleNewWebTorrentResolutionJob (
@@ -96,21 +94,28 @@ async function handleNewWebTorrentResolutionJob (
   video: MVideoFullLight,
   user: MUserId
 ) {
-  await transcodeNewWebTorrentResolution(video, payload.resolution, payload.isPortraitMode || false, job)
+  const { videoFile } = await transcodeNewWebTorrentResolution(video, payload.resolution, payload.isPortraitMode || false, job)
+
+  // Create job to move the new files to object storage if enabled
+  await addMoveToObjectStorageJob(video, videoFile)
 
   await retryTransactionWrapper(onNewWebTorrentFileResolution, video, user, payload)
 }
 
 async function handleWebTorrentMergeAudioJob (job: Bull.Job, payload: MergeAudioTranscodingPayload, video: MVideoFullLight, user: MUserId) {
-  await mergeAudioVideofile(video, payload.resolution, job)
+  const { videoFile } = await mergeAudioVideofile(video, payload.resolution, job)
 
   await retryTransactionWrapper(onVideoFileOptimizer, video, payload, 'video', user)
+
+  return { videoFile }
 }
 
 async function handleWebTorrentOptimizeJob (job: Bull.Job, payload: OptimizeTranscodingPayload, video: MVideoFullLight, user: MUserId) {
-  const transcodeType = await optimizeOriginalVideofile(video, video.getMaxQualityFile(), job)
+  const { transcodeType, videoFile } = await optimizeOriginalVideofile(video, video.getMaxQualityFile(), job)
 
   await retryTransactionWrapper(onVideoFileOptimizer, video, payload, transcodeType, user)
+
+  return { videoFile }
 }
 
 // ---------------------------------------------------------------------------

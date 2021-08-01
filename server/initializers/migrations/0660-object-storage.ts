@@ -7,7 +7,7 @@ async function up (utils: {
   db: any
 }): Promise<void> {
   {
-    await utils.queryInterface.addColumn('video', 'transcodeJobsRunning', { type: Sequelize.INTEGER, allowNull: false, defaultValue: 0 })
+    await utils.queryInterface.addColumn('video', 'moveJobsRunning', { type: Sequelize.INTEGER, allowNull: false, defaultValue: 0 })
   }
 
   {

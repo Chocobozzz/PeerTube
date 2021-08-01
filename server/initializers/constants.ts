@@ -164,7 +164,7 @@ const JOB_CONCURRENCY: { [id in Exclude<JobType, 'video-transcoding' | 'video-im
   'activitypub-refresher': 1,
   'video-redundancy': 1,
   'video-live-ending': 10,
-  'move-to-object-storage': 10
+  'move-to-object-storage': 1
 }
 const JOB_TTL: { [id in JobType]: number } = {
   'activitypub-http-broadcast': 60000 * 10, // 10 minutes

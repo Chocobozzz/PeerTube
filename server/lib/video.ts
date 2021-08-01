@@ -131,10 +131,11 @@ async function addOptimizeOrMergeAudioJob (video: MVideoUUID, videoFile: MVideoF
   return JobQueue.Instance.createJobWithPromise({ type: 'video-transcoding', payload: dataInput }, jobOptions)
 }
 
-export function addMoveToObjectStorageJob (video: MVideoUUID) {
+export function addMoveToObjectStorageJob (video: MVideoUUID, videoFile: MVideoFile) {
   if (CONFIG.S3.ENABLED) {
     const dataInput = {
-      videoUUID: video.uuid
+      videoUUID: video.uuid,
+      videoFileId: videoFile.id
     }
     return JobQueue.Instance.createJobWithPromise({ type: 'move-to-object-storage', payload: dataInput })
   }

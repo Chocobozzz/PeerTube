@@ -261,7 +261,7 @@ export class VideoTables {
       'channelId',
       'createdAt',
       'updatedAt',
-      'transcodeJobsRunning'
+      'moveJobsRunning'
     ]
   }
 }

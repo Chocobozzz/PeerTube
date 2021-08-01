@@ -140,4 +140,5 @@ export interface ActorKeysPayload {
 
 export interface MoveObjectStoragePayload {
   videoUUID: string
+  videoFileId?: number
 }

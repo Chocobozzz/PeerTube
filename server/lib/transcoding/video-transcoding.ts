@@ -71,9 +71,9 @@ async function optimizeOriginalVideofile (video: MVideoFullLight, inputVideoFile
 
     const videoOutputPath = getVideoFilePath(video, inputVideoFile)
 
-    await onWebTorrentVideoFileTranscoding(video, inputVideoFile, videoTranscodedPath, videoOutputPath)
+    const { videoFile } = await onWebTorrentVideoFileTranscoding(video, inputVideoFile, videoTranscodedPath, videoOutputPath)
 
-    return transcodeType
+    return { transcodeType, videoFile }
   } catch (err) {
     // Auto destruction...
     video.destroy().catch(err => logger.error('Cannot destruct video after transcoding failure.', { err }))
@@ -258,7 +258,7 @@ async function onWebTorrentVideoFileTranscoding (
   await VideoFileModel.customUpsert(videoFile, 'video', undefined)
   video.VideoFiles = await video.$get('VideoFiles')
 
-  return video
+  return { video, videoFile }
 }
 
 async function generateHlsPlaylistCommon (options: {
@@ -355,7 +355,7 @@ async function generateHlsPlaylistCommon (options: {
 
   await createTorrentAndSetInfoHash(playlist, newVideoFile)
 
-  await VideoFileModel.customUpsert(newVideoFile, 'streaming-playlist', undefined)
+  const savedVideoFile = await VideoFileModel.customUpsert(newVideoFile, 'streaming-playlist', undefined)
 
   const playlistWithFiles = playlist as MStreamingPlaylistFilesVideo
   playlistWithFiles.VideoFiles = await playlist.$get('VideoFiles')
@@ -368,5 +368,5 @@ async function generateHlsPlaylistCommon (options: {
   await updateMasterHLSPlaylist(video, playlistWithFiles)
   await updateSha256VODSegments(video, playlistWithFiles)
 
-  return resolutionPlaylistPath
+  return { resolutionPlaylistPath, videoFile: savedVideoFile }
 }

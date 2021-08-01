@@ -571,7 +571,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
   @Default(0)
   @IsInt
   @Column
-  transcodeJobsRunning: number
+  moveJobsRunning: number
 
   @ForeignKey(() => VideoChannelModel)
   @Column
@@ -1685,6 +1685,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
 
     const promises: Promise<any>[] = [ remove(filePath) ]
     if (!isRedundancy) promises.push(videoFile.removeTorrent())
+
     if (videoFile.storage === VideoStorageType.OBJECT_STORAGE) {
       promises.push(removeObject(videoFile.filename, CONFIG.S3.VIDEOS_BUCKETINFO))
     }
