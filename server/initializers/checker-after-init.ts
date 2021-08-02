@@ -169,13 +169,6 @@ function checkConfig () {
         return 'Object storage bucket prefixes should be set to different values when the same bucket is used for both types of video.'
       }
     }
-    if (
-      (CONFIG.S3.VIDEOS_BUCKETINFO.url_template !== '' &&
-        !CONFIG.S3.VIDEOS_BUCKETINFO.url_template.includes('%path%')) ||
-      (CONFIG.S3.STREAMING_PLAYLISTS_BUCKETINFO.url_template !== '' &&
-        !CONFIG.S3.STREAMING_PLAYLISTS_BUCKETINFO.url_template.includes('%path%'))) {
-      return 'Object storage url templates should include `%path%\' in place where the file path needs to be inserted.'
-    }
   }
 
   return null

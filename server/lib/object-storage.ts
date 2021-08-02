@@ -3,7 +3,7 @@ import { DeleteObjectCommand, DeleteObjectsCommand, ListObjectsV2Command, PutObj
 import { CONFIG } from "@server/initializers/config"
 import { logger } from '@server/helpers/logger'
 
-type BucketInfo = {bucket: string, prefix?: string, url_template?: string}
+type BucketInfo = {bucket: string, prefix?: string, base_url?: string}
 
 function getS3Client () {
   return new S3Client({ endpoint: `https://${CONFIG.S3.ENDPOINT}` })
@@ -65,8 +65,8 @@ export async function removePrefix (prefix: string, bucketInfo: BucketInfo) {
 }
 
 export function generateUrl (filename: string, bucketInfo: BucketInfo) {
-  if (!bucketInfo.url_template) {
+  if (!bucketInfo.base_url) {
     return `https://${bucketInfo.bucket}.${CONFIG.S3.ENDPOINT}/${bucketInfo.prefix}${filename}`
   }
-  return bucketInfo.url_template.replace('%path%', filename)
+  return bucketInfo.base_url + filename
 }

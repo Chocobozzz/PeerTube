@@ -102,18 +102,11 @@ s3:
   streaming_playlists_bucket: ''
   # Allows setting all buckets to the same value but with a different prefix
   streaming_playlists_prefix: ''
-  # Optional, use to overide the default url generation that just gives the public url to s3
-  # Use the string %path% in place where the (full) path to the file should be. The path
-  # does not include the streaming_playlists_prefix, so you should add it to your template if needed.
-  # For example:
-  #     https://my-videos-cache.example.com/cdn-cache/%path%?thing=true
-  # Would turn into:
-  #     https://my-videos-cache.example.com/cdn-cache/hls/9ffceb57-cbe3-41c5-80e4-dbb7e97c3958/b27d1892-9c5c-4bef-8bce-f68e54fb1208-240-fragmented.mp4?thing=true
-  streaming_playlists_url_template: ''
+  streaming_playlists_base_url: ''
   # Same settings but for webtorrent videos
   videos_bucket: ''
   videos_prefix: '' 
-  videos_url_template: ''
+  videos_url_base_url: ''
 
 log:
   level: 'info' # 'debug' | 'info' | 'warn' | 'error'

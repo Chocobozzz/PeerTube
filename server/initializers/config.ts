@@ -79,12 +79,12 @@ const CONFIG = {
     VIDEOS_BUCKETINFO: {
       bucket: config.get<string>('s3.videos_bucket'),
       prefix: config.get<string>('s3.videos_prefix'),
-      url_template: config.get<string>('s3.videos_url_template')
+      base_url: config.get<string>('s3.videos_base_url')
     },
     STREAMING_PLAYLISTS_BUCKETINFO: {
       bucket: config.get<string>('s3.streaming_playlists_bucket'),
       prefix: config.get<string>('s3.streaming_playlists_prefix'),
-      url_template: config.get<string>('s3.streaming_playlists_url_template')
+      base_url: config.get<string>('s3.streaming_playlists_base_url')
     }
   },
   WEBSERVER: {
