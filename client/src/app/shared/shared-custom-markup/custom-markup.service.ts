@@ -191,6 +191,8 @@ export class CustomMarkupService {
       accountHandle: data.accountHandle || undefined,
       channelHandle: data.channelHandle || undefined,
 
+      isLive: this.buildBoolean(data.isLive),
+
       filter: this.buildBoolean(data.onlyLocal) ? 'local' as VideoFilter : undefined
     }
 

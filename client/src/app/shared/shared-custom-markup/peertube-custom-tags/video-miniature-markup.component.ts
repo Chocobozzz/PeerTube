@@ -56,7 +56,7 @@ export class VideoMiniatureMarkupComponent implements CustomMarkupComponent, OnI
       .subscribe(
         video => this.video = video,
 
-        err => this.notifier.error('Error in video miniature component: ' + err.message)
+        err => this.notifier.error($localize`Error in video miniature component: ${err.message}`)
       )
   }
 }

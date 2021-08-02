@@ -50,7 +50,7 @@ export class ChannelMiniatureMarkupComponent implements CustomMarkupComponent, O
           this.video = data[0]
         },
 
-        err => this.notifier.error('Error in channel miniature component: ' + err.message)
+        err => this.notifier.error($localize`Error in channel miniature component: ${err.message}`)
       )
   }
 

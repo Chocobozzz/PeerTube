@@ -1,6 +1,6 @@
 import * as debug from 'debug'
-import { Observable, Subject } from 'rxjs'
-import { map } from 'rxjs/operators'
+import { Observable, Subject, throwError } from 'rxjs'
+import { first, map } from 'rxjs/operators'
 import { Injectable, NgZone } from '@angular/core'
 import { buildBulkObservable } from '@app/helpers'
 import { ResultList } from '@shared/models/common'
@@ -71,12 +71,17 @@ export class FindInBulkService {
     return new Observable<R>(obs => {
       observableObject.result
         .pipe(
+          first(),
           map(({ data }) => data),
           map(data => data.find(finder))
         )
         .subscribe(result => {
-          obs.next(result)
-          obs.complete()
+          if (!result) {
+            obs.error(new Error($localize`Element ${param} not found`))
+          } else {
+            obs.next(result)
+            obs.complete()
+          }
         })
 
       observableObject.notifier.next(param)

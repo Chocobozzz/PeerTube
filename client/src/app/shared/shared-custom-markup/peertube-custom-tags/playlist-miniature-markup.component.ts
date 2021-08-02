@@ -44,7 +44,7 @@ export class PlaylistMiniatureMarkupComponent implements CustomMarkupComponent, 
       .subscribe(
         playlist => this.playlist = playlist,
 
-        err => this.notifier.error('Error in playlist miniature component: ' + err.message)
+        err => this.notifier.error($localize`Error in playlist miniature component: ${err.message}`)
       )
   }
 }

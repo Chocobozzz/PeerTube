@@ -210,15 +210,16 @@ export class VideoService implements VideosProvider {
   }
 
   getVideos (parameters: {
-    videoPagination: ComponentPaginationLight,
-    sort: VideoSortField,
-    filter?: VideoFilter,
-    categoryOneOf?: number[],
-    languageOneOf?: string[],
-    skipCount?: boolean,
+    videoPagination: ComponentPaginationLight
+    sort: VideoSortField
+    filter?: VideoFilter
+    categoryOneOf?: number[]
+    languageOneOf?: string[]
+    isLive?: boolean
+    skipCount?: boolean
     nsfwPolicy?: NSFWPolicyType
   }): Observable<ResultList<Video>> {
-    const { videoPagination, sort, filter, categoryOneOf, languageOneOf, skipCount, nsfwPolicy } = parameters
+    const { videoPagination, sort, filter, categoryOneOf, languageOneOf, skipCount, nsfwPolicy, isLive } = parameters
 
     const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
 
@@ -228,21 +229,10 @@ export class VideoService implements VideosProvider {
     if (filter) params = params.set('filter', filter)
     if (skipCount) params = params.set('skipCount', skipCount + '')
 
-    if (nsfwPolicy) {
-      params = params.set('nsfw', this.nsfwPolicyToParam(nsfwPolicy))
-    }
-
-    if (languageOneOf) {
-      for (const l of languageOneOf) {
-        params = params.append('languageOneOf[]', l)
-      }
-    }
-
-    if (categoryOneOf) {
-      for (const c of categoryOneOf) {
-        params = params.append('categoryOneOf[]', c + '')
-      }
-    }
+    if (isLive) params = params.set('isLive', isLive)
+    if (nsfwPolicy) params = params.set('nsfw', this.nsfwPolicyToParam(nsfwPolicy))
+    if (languageOneOf) this.restService.addArrayParams(params, 'languageOneOf', languageOneOf)
+    if (categoryOneOf) this.restService.addArrayParams(params, 'categoryOneOf', categoryOneOf)
 
     return this.authHttp
                .get<ResultList<Video>>(VideoService.BASE_VIDEO_URL, { params })
