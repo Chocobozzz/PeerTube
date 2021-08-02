@@ -474,7 +474,9 @@ export class PeerTubeEmbed {
 
     const videoInfoPromise = videoResponse.json()
       .then((videoInfo: VideoDetails) => {
-        if (!alreadyHadPlayer) this.loadPlaceholder(videoInfo)
+        this.loadParams(videoInfo)
+
+        if (!alreadyHadPlayer && !this.autoplay) this.loadPlaceholder(videoInfo)
 
         return videoInfo
       })
@@ -492,8 +494,6 @@ export class PeerTubeEmbed {
 
     const PeertubePlayerManager = PeertubePlayerManagerModule.PeertubePlayerManager
     const videoCaptions = await this.buildCaptions(serverTranslations, captionsResponse)
-
-    this.loadParams(videoInfo)
 
     const playlistPlugin = this.currentPlaylistElement
       ? {
