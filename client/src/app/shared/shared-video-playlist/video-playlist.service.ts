@@ -1,11 +1,10 @@
 import * as debug from 'debug'
-import { uniq } from 'lodash-es'
-import { asyncScheduler, merge, Observable, of, ReplaySubject, Subject } from 'rxjs'
-import { bufferTime, catchError, filter, map, observeOn, share, switchMap, tap, distinctUntilChanged } from 'rxjs/operators'
+import { merge, Observable, of, ReplaySubject, Subject } from 'rxjs'
+import { catchError, filter, map, share, switchMap, tap } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable, NgZone } from '@angular/core'
 import { AuthUser, ComponentPaginationLight, RestExtractor, RestService, ServerService } from '@app/core'
-import { enterZone, leaveZone, objectToFormData } from '@app/helpers'
+import { buildBulkObservable, objectToFormData } from '@app/helpers'
 import { Account, AccountService, VideoChannel, VideoChannelService } from '@app/shared/shared-main'
 import {
   ResultList,
@@ -52,16 +51,12 @@ export class VideoPlaylistService {
     private ngZone: NgZone
   ) {
     this.videoExistsInPlaylistObservable = merge(
-      this.videoExistsInPlaylistNotifier.pipe(
-        distinctUntilChanged(),
-        // We leave Angular zone so Protractor does not get stuck
-        bufferTime(500, leaveZone(this.ngZone, asyncScheduler)),
-        filter(videoIds => videoIds.length !== 0),
-        map(videoIds => uniq(videoIds)),
-        observeOn(enterZone(this.ngZone, asyncScheduler)),
-        switchMap(videoIds => this.doVideosExistInPlaylist(videoIds)),
-        share()
-      ),
+      buildBulkObservable({
+        time: 500,
+        ngZone: this.ngZone,
+        bulkGet: this.doVideosExistInPlaylist.bind(this),
+        notifierObservable: this.videoExistsInPlaylistNotifier
+      }),
 
       this.videoExistsInPlaylistCacheSubject
     )

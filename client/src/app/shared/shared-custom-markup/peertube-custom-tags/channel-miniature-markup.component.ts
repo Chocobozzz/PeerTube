@@ -2,8 +2,9 @@ import { from } from 'rxjs'
 import { finalize, map, switchMap, tap } from 'rxjs/operators'
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { MarkdownService, Notifier, UserService } from '@app/core'
+import { FindInBulkService } from '@app/shared/shared-search'
 import { Video, VideoSortField } from '@shared/models/videos'
-import { VideoChannel, VideoChannelService, VideoService } from '../../shared-main'
+import { VideoChannel, VideoService } from '../../shared-main'
 import { CustomMarkupComponent } from './shared'
 
 /*
@@ -29,14 +30,14 @@ export class ChannelMiniatureMarkupComponent implements CustomMarkupComponent, O
 
   constructor (
     private markdown: MarkdownService,
-    private channelService: VideoChannelService,
+    private findInBulk: FindInBulkService,
     private videoService: VideoService,
     private userService: UserService,
     private notifier: Notifier
   ) { }
 
   ngOnInit () {
-    this.channelService.getVideoChannel(this.name)
+    this.findInBulk.getChannel(this.name)
       .pipe(
         tap(channel => this.channel = channel),
         switchMap(() => from(this.markdown.textMarkdownToHTML(this.channel.description))),

@@ -32,11 +32,12 @@ export class SearchService {
   }
 
   searchVideos (parameters: {
-    search: string
+    search?: string
     componentPagination?: ComponentPaginationLight
     advancedSearch?: AdvancedSearch
+    uuids?: string[]
   }): Observable<ResultList<Video>> {
-    const { search, componentPagination, advancedSearch } = parameters
+    const { search, uuids, componentPagination, advancedSearch } = parameters
 
     const url = SearchService.BASE_SEARCH_URL + 'videos'
     let pagination: RestPagination
@@ -49,6 +50,7 @@ export class SearchService {
     params = this.restService.addRestGetParams(params, pagination)
 
     if (search) params = params.append('search', search)
+    if (uuids) params = this.restService.addArrayParams(params, 'uuids', uuids)
 
     if (advancedSearch) {
       const advancedSearchObject = advancedSearch.toVideosAPIObject()
@@ -64,11 +66,12 @@ export class SearchService {
   }
 
   searchVideoChannels (parameters: {
-    search: string
+    search?: string
     advancedSearch?: AdvancedSearch
     componentPagination?: ComponentPaginationLight
+    handles?: string[]
   }): Observable<ResultList<VideoChannel>> {
-    const { search, advancedSearch, componentPagination } = parameters
+    const { search, advancedSearch, componentPagination, handles } = parameters
 
     const url = SearchService.BASE_SEARCH_URL + 'video-channels'
 
@@ -81,6 +84,7 @@ export class SearchService {
     params = this.restService.addRestGetParams(params, pagination)
 
     if (search) params = params.append('search', search)
+    if (handles) params = this.restService.addArrayParams(params, 'handles', handles)
 
     if (advancedSearch) {
       const advancedSearchObject = advancedSearch.toChannelAPIObject()
@@ -96,11 +100,12 @@ export class SearchService {
   }
 
   searchVideoPlaylists (parameters: {
-    search: string
+    search?: string
     advancedSearch?: AdvancedSearch
     componentPagination?: ComponentPaginationLight
+    uuids?: string[]
   }): Observable<ResultList<VideoPlaylist>> {
-    const { search, advancedSearch, componentPagination } = parameters
+    const { search, advancedSearch, componentPagination, uuids } = parameters
 
     const url = SearchService.BASE_SEARCH_URL + 'video-playlists'
 
@@ -113,6 +118,7 @@ export class SearchService {
     params = this.restService.addRestGetParams(params, pagination)
 
     if (search) params = params.append('search', search)
+    if (uuids) params = this.restService.addArrayParams(params, 'uuids', uuids)
 
     if (advancedSearch) {
       const advancedSearchObject = advancedSearch.toPlaylistAPIObject()

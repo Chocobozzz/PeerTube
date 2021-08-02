@@ -65,15 +65,15 @@ export class CustomMarkupService {
 
     for (const selector of Object.keys(this.htmlBuilders)) {
       rootElement.querySelectorAll(selector)
-      .forEach((e: HTMLElement) => {
-        try {
-          const element = this.execHTMLBuilder(selector, e)
-          // Insert as first child
-          e.insertBefore(element, e.firstChild)
-        } catch (err) {
-          console.error('Cannot inject component %s.', selector, err)
-        }
-      })
+        .forEach((e: HTMLElement) => {
+          try {
+            const element = this.execHTMLBuilder(selector, e)
+            // Insert as first child
+            e.insertBefore(element, e.firstChild)
+          } catch (err) {
+            console.error('Cannot inject component %s.', selector, err)
+          }
+        })
     }
 
     const loadedPromises: Promise<boolean>[] = []

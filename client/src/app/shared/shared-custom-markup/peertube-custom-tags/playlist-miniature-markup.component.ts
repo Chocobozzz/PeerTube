@@ -1,8 +1,9 @@
 import { finalize } from 'rxjs/operators'
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { Notifier } from '@app/core'
+import { FindInBulkService } from '@app/shared/shared-search'
 import { MiniatureDisplayOptions } from '../../shared-video-miniature'
-import { VideoPlaylist, VideoPlaylistService } from '../../shared-video-playlist'
+import { VideoPlaylist } from '../../shared-video-playlist'
 import { CustomMarkupComponent } from './shared'
 
 /*
@@ -33,12 +34,12 @@ export class PlaylistMiniatureMarkupComponent implements CustomMarkupComponent, 
   }
 
   constructor (
-    private playlistService: VideoPlaylistService,
+    private findInBulkService: FindInBulkService,
     private notifier: Notifier
   ) { }
 
   ngOnInit () {
-    this.playlistService.getVideoPlaylist(this.uuid)
+    this.findInBulkService.getPlaylist(this.uuid)
       .pipe(finalize(() => this.loaded.emit(true)))
       .subscribe(
         playlist => this.playlist = playlist,

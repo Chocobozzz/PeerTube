@@ -1,11 +1,10 @@
 import * as debug from 'debug'
-import { uniq } from 'lodash-es'
-import { asyncScheduler, merge, Observable, of, ReplaySubject, Subject } from 'rxjs'
-import { bufferTime, catchError, filter, map, observeOn, share, switchMap, tap } from 'rxjs/operators'
+import { merge, Observable, of, ReplaySubject, Subject } from 'rxjs'
+import { catchError, filter, map, switchMap, tap } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable, NgZone } from '@angular/core'
 import { ComponentPaginationLight, RestExtractor, RestService } from '@app/core'
-import { enterZone, leaveZone } from '@app/helpers'
+import { buildBulkObservable } from '@app/helpers'
 import { Video, VideoChannel, VideoChannelService, VideoService } from '@app/shared/shared-main'
 import { ResultList, VideoChannel as VideoChannelServer, VideoSortField } from '@shared/models'
 import { environment } from '../../../environments/environment'
@@ -35,15 +34,12 @@ export class UserSubscriptionService {
     private ngZone: NgZone
   ) {
     this.existsObservable = merge(
-      this.existsSubject.pipe(
-        // We leave Angular zone so Protractor does not get stuck
-        bufferTime(500, leaveZone(this.ngZone, asyncScheduler)),
-        filter(uris => uris.length !== 0),
-        map(uris => uniq(uris)),
-        observeOn(enterZone(this.ngZone, asyncScheduler)),
-        switchMap(uris => this.doSubscriptionsExist(uris)),
-        share()
-      ),
+      buildBulkObservable({
+        time: 500,
+        ngZone: this.ngZone,
+        notifierObservable: this.existsSubject,
+        bulkGet: this.doSubscriptionsExist.bind(this)
+      }),
 
       this.myAccountSubscriptionCacheSubject
     )
