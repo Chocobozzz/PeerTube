@@ -95,18 +95,21 @@ storage:
   # If not, peertube will fallback to the default fil
   client_overrides: 'storage/client-overrides/'
 
-s3:
+object_storage:
   enabled: false
   # Will always use https with default URL generation (see below)
   endpoint: 's3.amazonaws.com'
-  streaming_playlists_bucket: ''
-  # Allows setting all buckets to the same value but with a different prefix
-  streaming_playlists_prefix: ''
-  streaming_playlists_base_url: ''
+  streaming_playlists:
+    bucket_name: ''
+    # Allows setting all buckets to the same value but with a different prefix
+    prefix: ''
+    # Base url for object URL generation, path in bucket is appended to this url
+    base_url: ''
   # Same settings but for webtorrent videos
-  videos_bucket: ''
-  videos_prefix: '' 
-  videos_base_url: ''
+  videos:
+    bucket_name: ''
+    prefix: '' 
+    base_url: ''
 
 log:
   level: 'info' # 'debug' | 'info' | 'warn' | 'error'

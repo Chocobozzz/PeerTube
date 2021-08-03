@@ -136,7 +136,7 @@ async function onHlsPlaylistGeneration (video: MVideoFullLight, user: MUser, pay
   }
 
   // Publishing will be done by mvoe-to-object-storage if enabled
-  if (!CONFIG.S3.ENABLED) {
+  if (!CONFIG.OBJECT_STORAGE.ENABLED) {
     await publishAndFederateIfNeeded(video)
   }
 }
@@ -171,15 +171,18 @@ async function onVideoFileOptimizer (
 
   const hasNewResolutions = await createLowerResolutionsJobs(videoDatabase, user, resolution, isPortraitMode, 'webtorrent')
 
-  if (!hasHls && !hasNewResolutions) {
-    // No transcoding to do, it's now published
-    videoPublished = await videoDatabase.publishIfNeededAndSave(undefined)
+  // Publishing will be done after the move-to-object-storage-job if enabled
+  if (!CONFIG.OBJECT_STORAGE.ENABLED) {
+    if (!hasHls && !hasNewResolutions) {
+      // No transcoding to do, it's now published
+      videoPublished = await videoDatabase.publishIfNeededAndSave(undefined)
+    }
+
+    await federateVideoIfNeeded(videoDatabase, payload.isNewVideo)
+
+    if (payload.isNewVideo) Notifier.Instance.notifyOnNewVideoIfNeeded(videoDatabase)
+    if (videoPublished) Notifier.Instance.notifyOnVideoPublishedAfterTranscoding(videoDatabase)
   }
-
-  await federateVideoIfNeeded(videoDatabase, payload.isNewVideo)
-
-  if (payload.isNewVideo) Notifier.Instance.notifyOnNewVideoIfNeeded(videoDatabase)
-  if (videoPublished) Notifier.Instance.notifyOnVideoPublishedAfterTranscoding(videoDatabase)
 }
 
 async function onNewWebTorrentFileResolution (
@@ -188,7 +191,7 @@ async function onNewWebTorrentFileResolution (
   payload: NewResolutionTranscodingPayload | MergeAudioTranscodingPayload
 ) {
   // Publishing will be done by mvoe-to-object-storage if enabled
-  if (!CONFIG.S3.ENABLED) {
+  if (!CONFIG.OBJECT_STORAGE.ENABLED) {
     await publishAndFederateIfNeeded(video)
   }
 

@@ -73,18 +73,18 @@ const CONFIG = {
     PLUGINS_DIR: buildPath(config.get<string>('storage.plugins')),
     CLIENT_OVERRIDES_DIR: buildPath(config.get<string>('storage.client_overrides'))
   },
-  S3: {
-    ENABLED: config.get<boolean>('s3.enabled'),
-    ENDPOINT: config.get<string>('s3.endpoint'),
-    VIDEOS_BUCKETINFO: {
-      bucket: config.get<string>('s3.videos_bucket'),
-      prefix: config.get<string>('s3.videos_prefix'),
-      base_url: config.get<string>('s3.videos_base_url')
+  OBJECT_STORAGE: {
+    ENABLED: config.get<boolean>('object_storage.enabled'),
+    ENDPOINT: config.get<string>('object_storage.endpoint'),
+    VIDEOS: {
+      BUCKET_NAME: config.get<string>('object_storage.videos.bucket_name'),
+      PREFIX: config.get<string>('object_storage.videos.prefix'),
+      BASE_URL: config.get<string>('object_storage.videos.base_url')
     },
-    STREAMING_PLAYLISTS_BUCKETINFO: {
-      bucket: config.get<string>('s3.streaming_playlists_bucket'),
-      prefix: config.get<string>('s3.streaming_playlists_prefix'),
-      base_url: config.get<string>('s3.streaming_playlists_base_url')
+    STREAMING_PLAYLISTS: {
+      BUCKET_NAME: config.get<string>('object_storage.streaming_playlists.bucket_name'),
+      PREFIX: config.get<string>('object_storage.streaming_playlists.prefix'),
+      BASE_URL: config.get<string>('object_storage.streaming_playlists.base_url')
     }
   },
   WEBSERVER: {

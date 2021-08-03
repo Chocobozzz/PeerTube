@@ -36,7 +36,7 @@ import { processVideoLiveEnding } from './handlers/video-live-ending'
 import { processVideoTranscoding } from './handlers/video-transcoding'
 import { processVideosViews } from './handlers/video-views'
 import { processMoveToObjectStorage } from './handlers/move-to-object-storage'
-import { VideoModel } from '@server/models/video/video'
+import { VideoJobInfoModel } from '@server/models/video/video-job-info'
 
 type CreateJobArgument =
   { type: 'activitypub-http-broadcast', payload: ActivitypubHttpBroadcastPayload } |
@@ -164,8 +164,10 @@ class JobQueue {
       // This value is decreased when the move job is finished in ./handlers/move-to-object-storage.ts
       // Because every transcode job starts a move job for the transcoded file, the value will only reach
       // 0 again when all transcode jobs are finished and the last move job is running
-      VideoModel.increment('moveJobsRunning', { where: { uuid: obj.payload.videoUUID } })
-        .catch(err => logger.error('Cannot increase moveJobsRunning.', { err }))
+      // If object storage support is not enabled all the pendingMove values stay at the amount of transcode
+      // jobs that were started for that video.
+      VideoJobInfoModel.increaseOrCreatePendingMove(obj.payload.videoUUID)
+        .catch(err => logger.error('Cannot increase pendingMove.', { err }))
     }
 
     const jobArgs: Bull.JobOptions = {

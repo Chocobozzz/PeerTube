@@ -1,3 +1,4 @@
+import { VideoStorageType } from '@server/types/models'
 import * as Sequelize from 'sequelize'
 
 async function up (utils: {
@@ -7,7 +8,18 @@ async function up (utils: {
   db: any
 }): Promise<void> {
   {
-    await utils.queryInterface.addColumn('video', 'moveJobsRunning', { type: Sequelize.INTEGER, allowNull: false, defaultValue: 0 })
+    const query = `
+    CREATE TABLE IF NOT EXISTS "videoJobInfo" (
+      "id" serial,
+      "pendingMove" INTEGER NOT NULL,
+      "videoUUID" uuid UNIQUE NOT NULL REFERENCES "video" ("uuid") ON DELETE CASCADE ON UPDATE CASCADE,
+      "createdAt" timestamp WITH time zone NOT NULL,
+      "updatedAt" timestamp WITH time zone NOT NULL,
+      PRIMARY KEY ("id")
+    );
+    `
+
+    await utils.sequelize.query(query)
   }
 
   {
@@ -16,7 +28,7 @@ async function up (utils: {
 
   {
     await utils.sequelize.query(
-      `UPDATE "videoFile" SET "storage" = 'local'`
+      `UPDATE "videoFile" SET "storage" = ${VideoStorageType.LOCAL}`
     )
   }
 
@@ -26,7 +38,7 @@ async function up (utils: {
 
   {
     await utils.sequelize.query(
-      `UPDATE "videoStreamingPlaylist" SET "storage" = 'local'`
+      `UPDATE "videoStreamingPlaylist" SET "storage" = ${VideoStorageType.LOCAL}`
     )
   }
 }

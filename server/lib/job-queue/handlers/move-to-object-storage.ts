@@ -2,7 +2,7 @@ import * as Bull from 'bull'
 import { logger } from '@server/helpers/logger'
 import { MoveObjectStoragePayload } from '../../../../shared'
 import { VideoModel } from '@server/models/video/video'
-import { generateUrl, storeObject } from '@server/lib/object-storage'
+import { generateObjectStoreUrl, storeObject } from '@server/lib/object-storage'
 import { CONFIG } from '@server/initializers/config'
 import { join } from 'path'
 import { HLS_STREAMING_PLAYLIST_DIRECTORY } from '@server/initializers/constants'
@@ -10,6 +10,7 @@ import { getHlsResolutionPlaylistFilename } from '@server/lib/video-paths'
 import { MVideoWithAllFiles, VideoStorageType } from '@server/types/models'
 import { remove } from 'fs-extra'
 import { publishAndFederateIfNeeded } from '@server/lib/video'
+import { VideoJobInfoModel } from '@server/models/video/video-job-info'
 
 export async function processMoveToObjectStorage (job: Bull.Job) {
   const payload = job.data as MoveObjectStoragePayload
@@ -30,8 +31,9 @@ export async function processMoveToObjectStorage (job: Bull.Job) {
     await moveHLSFiles(video, payload.videoFileId)
   }
 
-  await video.decrement('moveJobsRunning')
-  if (video.moveJobsRunning === 0) {
+  const pendingMove = await VideoJobInfoModel.decreasePendingMove(video.uuid)
+  if (pendingMove === 0) {
+    logger.info("Running cleanup after moving files to object storage (video %s in job %d)", video.uuid, job.id)
     await doAfterLastJob(video)
   }
 
@@ -46,11 +48,11 @@ async function moveWebTorrentFiles (video: MVideoWithAllFiles, videoFileId?: num
     const filename = file.filename
     await storeObject(
       { filename, path: join(CONFIG.STORAGE.VIDEOS_DIR, file.filename) },
-      CONFIG.S3.VIDEOS_BUCKETINFO
+      CONFIG.OBJECT_STORAGE.VIDEOS
     )
 
     file.storage = VideoStorageType.OBJECT_STORAGE
-    file.fileUrl = generateUrl(filename, CONFIG.S3.VIDEOS_BUCKETINFO)
+    file.fileUrl = generateObjectStoreUrl(filename, CONFIG.OBJECT_STORAGE.VIDEOS)
     await file.save()
   }
 }
@@ -70,7 +72,7 @@ async function moveHLSFiles (video: MVideoWithAllFiles, videoFileId: number) {
           filename: join(playlist.getStringType(), video.uuid, playlistFileName),
           path: join(baseHlsDirectory, playlistFileName)
         },
-        CONFIG.S3.STREAMING_PLAYLISTS_BUCKETINFO
+        CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS
       )
 
       // Resolution fragmented file
@@ -80,12 +82,12 @@ async function moveHLSFiles (video: MVideoWithAllFiles, videoFileId: number) {
           filename,
           path: join(baseHlsDirectory, file.filename)
         },
-        CONFIG.S3.STREAMING_PLAYLISTS_BUCKETINFO
+        CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS
       )
 
       // Signals that the video file + playlist file were uploaded
       file.storage = VideoStorageType.OBJECT_STORAGE
-      file.fileUrl = generateUrl(filename, CONFIG.S3.STREAMING_PLAYLISTS_BUCKETINFO)
+      file.fileUrl = generateObjectStoreUrl(filename, CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS)
       await file.save()
     }
   }
@@ -101,7 +103,7 @@ async function doAfterLastJob (video: MVideoWithAllFiles) {
         filename: masterPlaylistFilename,
         path: join(baseHlsDirectory, playlist.playlistFilename)
       },
-      CONFIG.S3.STREAMING_PLAYLISTS_BUCKETINFO
+      CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS
     )
 
     // Sha256 segments file
@@ -111,11 +113,11 @@ async function doAfterLastJob (video: MVideoWithAllFiles) {
         filename: segmentsFileName,
         path: join(baseHlsDirectory, playlist.segmentsSha256Filename)
       },
-      CONFIG.S3.STREAMING_PLAYLISTS_BUCKETINFO
+      CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS
     )
 
-    playlist.playlistUrl = generateUrl(masterPlaylistFilename, CONFIG.S3.STREAMING_PLAYLISTS_BUCKETINFO)
-    playlist.segmentsSha256Url = generateUrl(segmentsFileName, CONFIG.S3.STREAMING_PLAYLISTS_BUCKETINFO)
+    playlist.playlistUrl = generateObjectStoreUrl(masterPlaylistFilename, CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS)
+    playlist.segmentsSha256Url = generateObjectStoreUrl(segmentsFileName, CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS)
     playlist.storage = VideoStorageType.OBJECT_STORAGE
     await playlist.save()
   }

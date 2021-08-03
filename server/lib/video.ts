@@ -132,7 +132,7 @@ async function addOptimizeOrMergeAudioJob (video: MVideoUUID, videoFile: MVideoF
 }
 
 export function addMoveToObjectStorageJob (video: MVideoUUID, videoFile: MVideoFile) {
-  if (CONFIG.S3.ENABLED) {
+  if (CONFIG.OBJECT_STORAGE.ENABLED) {
     const dataInput = {
       videoUUID: video.uuid,
       videoFileId: videoFile.id

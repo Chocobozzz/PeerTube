@@ -35,6 +35,7 @@ import { VideoRedundancyModel } from '../redundancy/video-redundancy'
 import { doesExist } from '../shared'
 import { throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
+import { CONFIG } from '@server/initializers/config'
 
 @Table({
   tableName: 'videoStreamingPlaylist',
@@ -204,6 +205,9 @@ export class VideoStreamingPlaylistModel extends Model<Partial<AttributesOnly<Vi
 
   getMasterPlaylistUrl (video: MVideo) {
     if (this.storage === VideoStorageType.OBJECT_STORAGE) {
+      if (CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.BASE_URL) {
+        return CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.BASE_URL + join(this.getStringType(), video.uuid, this.playlistFilename)
+      }
       return this.playlistUrl
     }
     if (video.isOwned()) return WEBSERVER.URL + this.getMasterPlaylistStaticPath(video.uuid)
@@ -213,6 +217,9 @@ export class VideoStreamingPlaylistModel extends Model<Partial<AttributesOnly<Vi
 
   getSha256SegmentsUrl (video: MVideo) {
     if (this.storage === VideoStorageType.OBJECT_STORAGE) {
+      if (CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.BASE_URL) {
+        return CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.BASE_URL + join(this.getStringType(), video.uuid, this.segmentsSha256Filename)
+      }
       return this.segmentsSha256Url
     }
     if (video.isOwned()) return WEBSERVER.URL + this.getSha256SegmentsStaticPath(video.uuid, video.isLive)

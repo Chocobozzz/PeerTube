@@ -48,6 +48,7 @@ import { doesExist } from '../shared'
 import { parseAggregateResult, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 import { VideoStreamingPlaylistModel } from './video-streaming-playlist'
+import { CONFIG } from '@server/initializers/config'
 
 export enum ScopeNames {
   WITH_VIDEO = 'WITH_VIDEO',
@@ -455,9 +456,19 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
     return !!this.videoStreamingPlaylistId
   }
 
+  generateObjectUrl (video: MVideo) {
+    if (!this.isHLS() && CONFIG.OBJECT_STORAGE.VIDEOS.BASE_URL) {
+      return CONFIG.OBJECT_STORAGE.VIDEOS.BASE_URL + this.filename
+    }
+    if (this.isHLS() && CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.BASE_URL) {
+      return CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.BASE_URL + this.filename
+    }
+    return this.fileUrl
+  }
+
   getFileUrl (video: MVideo) {
     if (this.storage === VideoStorageType.OBJECT_STORAGE) {
-      return this.fileUrl
+      return this.generateObjectUrl(video)
     }
     if (!this.Video) this.Video = video as VideoModel
 
@@ -474,7 +485,7 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
 
   getFileDownloadUrl (video: MVideoWithHost) {
     if (this.storage === VideoStorageType.OBJECT_STORAGE) {
-      return this.fileUrl
+      return this.generateObjectUrl(video)
     }
     const path = this.isHLS()
       ? join(STATIC_DOWNLOAD_PATHS.HLS_VIDEOS, `${video.uuid}-${this.resolution}-fragmented${this.extname}`)

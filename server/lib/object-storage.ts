@@ -1,20 +1,30 @@
-import * as fs from 'fs'
-import { DeleteObjectCommand, DeleteObjectsCommand, ListObjectsV2Command, PutObjectCommand, S3Client } from "@aws-sdk/client-s3"
+import {
+  DeleteObjectCommand,
+  DeleteObjectsCommand,
+  GetObjectCommand,
+  ListObjectsV2Command,
+  PutObjectCommand,
+  S3Client
+} from "@aws-sdk/client-s3"
 import { CONFIG } from "@server/initializers/config"
 import { logger } from '@server/helpers/logger'
+import { createReadStream, createWriteStream, ensureDir, ReadStream } from "fs-extra"
+import { Readable } from "stream"
+import { pipeline } from "stream/promises"
+import { dirname } from "path"
 
-type BucketInfo = {bucket: string, prefix?: string, base_url?: string}
+type BucketInfo = {BUCKET_NAME: string, PREFIX?: string, BASE_URL?: string}
 
 function getS3Client () {
-  return new S3Client({ endpoint: `https://${CONFIG.S3.ENDPOINT}` })
+  return new S3Client({ endpoint: `https://${CONFIG.OBJECT_STORAGE.ENDPOINT}` })
 }
 
-async function s3Put (options: {filename: string, content: string | fs.ReadStream, bucketInfo: BucketInfo}) {
+async function objectStoragePut (options: {filename: string, content: string | ReadStream, bucketInfo: BucketInfo}) {
   const { filename, content, bucketInfo } = options
-  const key = bucketInfo.prefix + filename
+  const key = bucketInfo.PREFIX + filename
   const s3Client = getS3Client()
   const command = new PutObjectCommand({
-    Bucket: bucketInfo.bucket,
+    Bucket: bucketInfo.BUCKET_NAME,
     Key: key,
     Body: content
   })
@@ -22,21 +32,21 @@ async function s3Put (options: {filename: string, content: string | fs.ReadStrea
 }
 
 export async function storeObject (file: {path: string, filename: string}, bucketInfo: BucketInfo) {
-  logger.debug('Uploading file to %s/%s%s', bucketInfo.bucket, bucketInfo.prefix, file.filename)
-  const fileStream = fs.createReadStream(file.path)
-  return await s3Put({ filename: file.filename, content: fileStream, bucketInfo })
+  logger.debug('Uploading file to %s/%s%s', bucketInfo.BUCKET_NAME, bucketInfo.PREFIX, file.filename)
+  const fileStream = createReadStream(file.path)
+  return await objectStoragePut({ filename: file.filename, content: fileStream, bucketInfo })
 }
 
 export async function writeObjectContents (file: {filename: string, content: string}, bucketInfo: BucketInfo) {
-  logger.debug('Writing object to %s/%s%s', bucketInfo.bucket, bucketInfo.prefix, file.filename)
-  return await s3Put({ filename: file.filename, content: file.content, bucketInfo })
+  logger.debug('Writing object to %s/%s%s', bucketInfo.BUCKET_NAME, bucketInfo.PREFIX, file.filename)
+  return await objectStoragePut({ filename: file.filename, content: file.content, bucketInfo })
 }
 
 export async function removeObject (filename: string, bucketInfo: BucketInfo) {
-  const key = bucketInfo.prefix + filename
+  const key = bucketInfo.PREFIX + filename
   const s3Client = getS3Client()
   const command = new DeleteObjectCommand({
-    Bucket: bucketInfo.bucket,
+    Bucket: bucketInfo.BUCKET_NAME,
     Key: key
   })
   return await s3Client.send(command)
@@ -45,13 +55,13 @@ export async function removeObject (filename: string, bucketInfo: BucketInfo) {
 export async function removePrefix (prefix: string, bucketInfo: BucketInfo) {
   const s3Client = getS3Client()
   const listCommand = new ListObjectsV2Command({
-    Bucket: bucketInfo.bucket,
-    Prefix: bucketInfo.prefix + prefix
+    Bucket: bucketInfo.BUCKET_NAME,
+    Prefix: bucketInfo.PREFIX + prefix
   })
 
   const listedObjects = await s3Client.send(listCommand)
   const deleteParams = {
-    Bucket: bucketInfo.bucket,
+    Bucket: bucketInfo.BUCKET_NAME,
     Delete: { Objects: [] }
   }
   for (const object of listedObjects.Contents) {
@@ -64,11 +74,8 @@ export async function removePrefix (prefix: string, bucketInfo: BucketInfo) {
   if (listedObjects.IsTruncated) await removePrefix(prefix, bucketInfo)
 }
 
-export function generateUrl (filename: string, bucketInfo: BucketInfo) {
-  if (!bucketInfo.base_url) {
-    return `https://${bucketInfo.bucket}.${CONFIG.S3.ENDPOINT}/${bucketInfo.prefix}${filename}`
-  }
-  return bucketInfo.base_url + filename
+export function generateObjectStoreUrl (filename: string, bucketInfo: BucketInfo) {
+  return `https://${bucketInfo.BUCKET_NAME}.${CONFIG.OBJECT_STORAGE.ENDPOINT}/${bucketInfo.PREFIX}${filename}`
 }
 
 export async function makeAvailable (options: { filename: string, at: string }, bucketInfo: BucketInfo) {

@@ -567,12 +567,6 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
   @Column
   originallyPublishedAt: Date
 
-  @AllowNull(false)
-  @Default(0)
-  @IsInt
-  @Column
-  moveJobsRunning: number
-
   @ForeignKey(() => VideoChannelModel)
   @Column
   channelId: number
@@ -1687,7 +1681,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     if (!isRedundancy) promises.push(videoFile.removeTorrent())
 
     if (videoFile.storage === VideoStorageType.OBJECT_STORAGE) {
-      promises.push(removeObject(videoFile.filename, CONFIG.S3.VIDEOS_BUCKETINFO))
+      promises.push(removeObject(videoFile.filename, CONFIG.OBJECT_STORAGE.VIDEOS))
     }
 
     return Promise.all(promises)
@@ -1698,7 +1692,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
 
     await remove(directoryPath)
     if (streamingPlaylist.storage === VideoStorageType.OBJECT_STORAGE) {
-      await removePrefix(join(streamingPlaylist.getStringType(), this.uuid), CONFIG.S3.STREAMING_PLAYLISTS_BUCKETINFO)
+      await removePrefix(join(streamingPlaylist.getStringType(), this.uuid), CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS)
     }
 
     if (isRedundancy !== true) {
