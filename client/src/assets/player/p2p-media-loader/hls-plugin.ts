@@ -264,20 +264,16 @@ class Html5Hlsjs {
     if (this.errorCounts[ data.type ]) this.errorCounts[ data.type ] += 1
     else this.errorCounts[ data.type ] = 1
 
-    if (!data.fatal) {
-      console.warn(error.message)
-      return
-    }
-
-    console.error(error.message)
+    if (data.fatal) console.warn(error.message)
+    else console.error(error.message, data)
 
     if (data.type === Hlsjs.ErrorTypes.NETWORK_ERROR) {
       error.code = 2
       this._handleNetworkError(error)
-    } else if (data.type === Hlsjs.ErrorTypes.MEDIA_ERROR && data.details !== 'manifestIncompatibleCodecsError') {
+    } else if (data.fatal && data.type === Hlsjs.ErrorTypes.MEDIA_ERROR && data.details !== 'manifestIncompatibleCodecsError') {
       error.code = 3
       this._handleMediaError(error)
-    } else {
+    } else if (data.fatal) {
       this.hls.destroy()
       console.info('bubbling error up to VIDEOJS')
       this.tech.error = () => error as any
@@ -286,12 +282,12 @@ class Html5Hlsjs {
   }
 
   private switchQuality (qualityId: number) {
-    this.hls.nextLevel = qualityId
+    this.hls.currentLevel = qualityId
   }
 
   private _levelLabel (level: Hlsjs.Level) {
     if (this.player.srOptions_.levelLabelHandler) {
-      return this.player.srOptions_.levelLabelHandler(level)
+      return this.player.srOptions_.levelLabelHandler(level as any)
     }
 
     if (level.height) return level.height + 'p'

@@ -1,5 +1,5 @@
 import { wait } from '@root-helpers/utils'
-import { Segment } from 'p2p-media-loader-core'
+import { Segment } from '@peertube/p2p-media-loader-core'
 import { basename } from 'path'
 
 type SegmentsJSON = { [filename: string]: string | { [byterange: string]: string } }
