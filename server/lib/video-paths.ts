@@ -6,7 +6,7 @@ import { isStreamingPlaylist, MStreamingPlaylist, MStreamingPlaylistVideo, MVide
 import { buildUUID } from '@server/helpers/uuid'
 import { removeFragmentedMP4Ext } from '@shared/core-utils'
 import { makeAvailable } from './object-storage'
-import { fileExistsSync } from 'tsconfig-paths/lib/filesystem'
+import { existsSync } from 'fs-extra'
 
 // ################## Video file name ##################
 
@@ -37,7 +37,7 @@ async function getVideoFilePathMakeAvailable (
   videoFile: MVideoFile
 ) {
   const path = getVideoFilePath(videoOrPlaylist, videoFile)
-  if (fileExistsSync(path)) {
+  if (existsSync(path)) {
     return path
   }
 
