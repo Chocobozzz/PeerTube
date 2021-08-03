@@ -5,6 +5,8 @@ import { HLS_REDUNDANCY_DIRECTORY, HLS_STREAMING_PLAYLIST_DIRECTORY, STATIC_PATH
 import { isStreamingPlaylist, MStreamingPlaylist, MStreamingPlaylistVideo, MVideo, MVideoFile, MVideoUUID } from '@server/types/models'
 import { buildUUID } from '@server/helpers/uuid'
 import { removeFragmentedMP4Ext } from '@shared/core-utils'
+import { makeAvailable } from './object-storage'
+import { fileExistsSync } from 'tsconfig-paths/lib/filesystem'
 
 // ################## Video file name ##################
 
@@ -28,6 +30,28 @@ function getVideoFilePath (videoOrPlaylist: MVideo | MStreamingPlaylistVideo, vi
     : CONFIG.STORAGE.VIDEOS_DIR
 
   return join(baseDir, videoFile.filename)
+}
+
+async function getVideoFilePathMakeAvailable (
+  videoOrPlaylist: MVideo | MStreamingPlaylistVideo,
+  videoFile: MVideoFile
+) {
+  const path = getVideoFilePath(videoOrPlaylist, videoFile)
+  if (fileExistsSync(path)) {
+    return path
+  }
+
+  if (videoFile.isHLS()) {
+    const video = extractVideo(videoOrPlaylist)
+    await makeAvailable(
+      { filename: join((videoOrPlaylist as MStreamingPlaylistVideo).getStringType(), video.uuid, videoFile.filename), at: path },
+      CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS
+    )
+    return path
+  }
+
+  await makeAvailable({ filename: videoFile.filename, at: path }, CONFIG.OBJECT_STORAGE.VIDEOS)
+  return path
 }
 
 // ################## Redundancy ##################
@@ -100,6 +124,7 @@ export {
   generateWebTorrentVideoFilename,
 
   getVideoFilePath,
+  getVideoFilePathMakeAvailable,
 
   generateTorrentFileName,
   getTorrentFilePath,

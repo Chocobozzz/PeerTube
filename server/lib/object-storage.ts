@@ -70,3 +70,17 @@ export function generateUrl (filename: string, bucketInfo: BucketInfo) {
   }
   return bucketInfo.base_url + filename
 }
+
+export async function makeAvailable (options: { filename: string, at: string }, bucketInfo: BucketInfo) {
+  await ensureDir(dirname(options.at))
+  const key = bucketInfo.PREFIX + options.filename
+  const s3Client = getS3Client()
+  const command = new GetObjectCommand({
+    Bucket: bucketInfo.BUCKET_NAME,
+    Key: key
+  })
+  const response = await s3Client.send(command)
+  const file = createWriteStream(options.at)
+  await pipeline(response.Body as Readable, file)
+  file.close()
+}

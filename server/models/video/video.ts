@@ -28,7 +28,7 @@ import { buildNSFWFilter } from '@server/helpers/express-utils'
 import { uuidToShort } from '@server/helpers/uuid'
 import { getPrivaciesForFederation, isPrivacyForFederation, isStateForFederation } from '@server/helpers/video'
 import { LiveManager } from '@server/lib/live/live-manager'
-import { getHLSDirectory, getVideoFilePath } from '@server/lib/video-paths'
+import { getHLSDirectory, getVideoFilePath, getVideoFilePathMakeAvailable } from '@server/lib/video-paths'
 import { getServerActor } from '@server/models/application/application'
 import { ModelCache } from '@server/models/model-cache'
 import { AttributesOnly, buildVideoEmbedPath, buildVideoWatchPath, pick } from '@shared/core-utils'
@@ -1646,10 +1646,10 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     return peertubeTruncate(this.description, { length: maxLength })
   }
 
-  getMaxQualityResolution () {
+  async getMaxQualityResolution () {
     const file = this.getMaxQualityFile()
     const videoOrPlaylist = file.getVideoOrStreamingPlaylist()
-    const originalFilePath = getVideoFilePath(videoOrPlaylist, file)
+    const originalFilePath = await getVideoFilePathMakeAvailable(videoOrPlaylist, file)
 
     return getVideoFileResolution(originalFilePath)
   }
