@@ -106,7 +106,7 @@ s3:
   # Same settings but for webtorrent videos
   videos_bucket: ''
   videos_prefix: '' 
-  videos_url_base_url: ''
+  videos_base_url: ''
 
 log:
   level: 'info' # 'debug' | 'info' | 'warn' | 'error'
