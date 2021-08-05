@@ -188,7 +188,7 @@ const videosAddResumableInitValidator = getCommonVideoEditAttributes().concat([
     // multer required unsetting the Content-Type, now we can set it for node-uploadx
     req.headers['content-type'] = 'application/json; charset=utf-8'
     // place previewfile in metadata so that uploadx saves it in .META
-    if (req.files['previewfile']) req.body.previewfile = req.files['previewfile']
+    if (req.files?.['previewfile']) req.body.previewfile = req.files['previewfile']
 
     return next()
   }
