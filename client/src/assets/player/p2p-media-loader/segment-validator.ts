@@ -85,7 +85,7 @@ async function sha256Hex (data?: ArrayBuffer) {
   }
 
   // Fallback for non HTTPS context
-  const shaModule = await import('sha.js')
+  const shaModule = (await import('sha.js') as any).default
   return new shaModule.sha256().update(Buffer.from(data)).digest('hex')
 }
 
