@@ -44,6 +44,8 @@ type Tags = {
   originUrl: string
   description: string
 
+  disallowIndexation?: boolean
+
   embed?: {
     url: string
     createdAt: string
@@ -285,7 +287,8 @@ class ClientHtml {
       image,
       ogType,
       twitterCard,
-      schemaType
+      schemaType,
+      disallowIndexation: !entity.Actor.isOwned()
     })
 
     return customHtml
@@ -488,7 +491,7 @@ class ClientHtml {
     const twitterCardMetaTags = this.generateTwitterCardMetaTags(tagsValues)
     const schemaTags = this.generateSchemaTags(tagsValues)
 
-    const { url, title, embed, originUrl } = tagsValues
+    const { url, title, embed, originUrl, disallowIndexation } = tagsValues
 
     const oembedLinkTags: { type: string, href: string, title: string }[] = []
 
@@ -535,6 +538,10 @@ class ClientHtml {
 
     // SEO, use origin URL
     tagsString += `<link rel="canonical" href="${originUrl}" />`
+
+    if (disallowIndexation) {
+      tagsString += `<meta name="robots" content="noindex" />`
+    }
 
     return htmlStringPage.replace(CUSTOM_HTML_TAG_COMMENTS.META_TAGS, tagsString)
   }
