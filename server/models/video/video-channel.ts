@@ -23,7 +23,7 @@ import { ActivityPubActor } from '../../../shared/models/activitypub'
 import { VideoChannel, VideoChannelSummary } from '../../../shared/models/videos'
 import {
   isVideoChannelDescriptionValid,
-  isVideoChannelNameValid,
+  isVideoChannelDisplayNameValid,
   isVideoChannelSupportValid
 } from '../../helpers/custom-validators/video-channels'
 import { CONSTRAINTS_FIELDS, WEBSERVER } from '../../initializers/constants'
@@ -308,7 +308,7 @@ export type SummaryOptions = {
 export class VideoChannelModel extends Model<Partial<AttributesOnly<VideoChannelModel>>> {
 
   @AllowNull(false)
-  @Is('VideoChannelName', value => throwIfNotValid(value, isVideoChannelNameValid, 'name'))
+  @Is('VideoChannelName', value => throwIfNotValid(value, isVideoChannelDisplayNameValid, 'name'))
   @Column
   name: string
 
