@@ -28,21 +28,10 @@ import { JobQueue } from '../job-queue'
 
 type HandlerFunction = (job: Bull.Job, payload: VideoTranscodingPayload, video: MVideoFullLight, user: MUser) => Promise<any>
 
-const handlers: { [ id: string ]: HandlerFunction } = {
-  // Deprecated, introduced in 3.1
-  'hls': handleHLSJob,
+const handlers: { [ id in VideoTranscodingPayload['type'] ]: HandlerFunction } = {
   'new-resolution-to-hls': handleHLSJob,
-
-  // Deprecated, introduced in 3.1
-  'new-resolution': handleNewWebTorrentResolutionJob,
   'new-resolution-to-webtorrent': handleNewWebTorrentResolutionJob,
-
-  // Deprecated, introduced in 3.1
-  'merge-audio': handleWebTorrentMergeAudioJob,
   'merge-audio-to-webtorrent': handleWebTorrentMergeAudioJob,
-
-  // Deprecated, introduced in 3.1
-  'optimize': handleWebTorrentOptimizeJob,
   'optimize-to-webtorrent': handleWebTorrentOptimizeJob
 }
 
