@@ -181,7 +181,7 @@ const JOB_TTL: { [id in JobType]: number } = {
   'activitypub-refresher': 60000 * 10, // 10 minutes
   'video-redundancy': 1000 * 3600 * 3, // 3 hours
   'video-live-ending': 1000 * 60 * 10, // 10 minutes
-  'move-to-object-storage': 1000 * 60 * 20 // 20 minutes
+  'move-to-object-storage': 1000 * 60 * 60 * 3 // 3 hours
 }
 const REPEAT_JOBS: { [ id: string ]: EveryRepeatOptions | CronRepeatOptions } = {
   'videos-views': {
