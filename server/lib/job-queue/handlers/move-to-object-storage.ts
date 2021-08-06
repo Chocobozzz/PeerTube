@@ -40,7 +40,7 @@ export async function processMoveToObjectStorage (job: Bull.Job) {
   return payload.videoUUID
 }
 
-async function moveWebTorrentFiles (video: MVideoWithAllFiles, videoFileId?: number) {
+export async function moveWebTorrentFiles (video: MVideoWithAllFiles, videoFileId?: number) {
   for (const file of video.VideoFiles) {
     if (file.storage !== VideoStorageType.LOCAL) continue
     if (videoFileId !== null && file.id !== videoFileId) continue

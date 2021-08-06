@@ -8,8 +8,9 @@ import { initDatabaseModels } from '../server/initializers/database'
 import { basename, dirname } from 'path'
 import { copy, move, remove } from 'fs-extra'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
-import { getVideoFilePath } from '@server/lib/video-paths'
 import { getMaxBitrate } from '@shared/core-utils'
+import { getVideoFilePath, getVideoFilePathMakeAvailable } from '@server/lib/video-paths'
+import { moveWebTorrentFiles } from '@server/lib/job-queue/handlers/move-to-object-storage'
 
 run()
   .then(() => process.exit(0))
@@ -39,7 +40,7 @@ async function run () {
     currentVideoId = video.id
 
     for (const file of video.VideoFiles) {
-      currentFilePath = getVideoFilePath(video, file)
+      currentFilePath = await getVideoFilePathMakeAvailable(video, file)
 
       const [ videoBitrate, fps, dataResolution ] = await Promise.all([
         getVideoFileBitrate(currentFilePath),
@@ -67,6 +68,7 @@ async function run () {
 
         if (originalDuration === newDuration) {
           console.log('Finished optimizing %s', basename(currentFilePath))
+          await moveWebTorrentFiles(video, file.id)
           await remove(backupFile)
           continue
         }
