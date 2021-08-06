@@ -66,7 +66,7 @@ async function run () {
 
   console.log('Sending RTMP stream.')
 
-  const ffmpegCommand = sendRTMPStream(live.rtmpUrl, live.streamKey)
+  const ffmpegCommand = sendRTMPStream({ rtmpBaseUrl: live.rtmpUrl, streamKey: live.streamKey })
 
   ffmpegCommand.on('error', err => {
     console.error(err)
