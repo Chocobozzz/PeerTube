@@ -3,7 +3,7 @@
 import 'mocha'
 import * as chai from 'chai'
 import { basename, join } from 'path'
-import { ffprobePromise, getVideoStreamFromFile } from '@server/helpers/ffprobe-utils'
+import { ffprobePromise, getVideoFileBitrate, getVideoStreamFromFile } from '@server/helpers/ffprobe-utils'
 import {
   checkLiveCleanupAfterSave,
   checkLiveSegmentHash,
@@ -302,21 +302,21 @@ describe('Test live', function () {
 
       liveVideo = await createLiveWrapper()
 
-      const command = sendRTMPStream(rtmpUrl + '/bad-live', liveVideo.streamKey)
+      const command = sendRTMPStream({ rtmpBaseUrl: rtmpUrl + '/bad-live', streamKey: liveVideo.streamKey })
       await testFfmpegStreamError(command, true)
     })
 
     it('Should not allow a stream without the appropriate stream key', async function () {
       this.timeout(60000)
 
-      const command = sendRTMPStream(rtmpUrl + '/live', 'bad-stream-key')
+      const command = sendRTMPStream({ rtmpBaseUrl: rtmpUrl + '/live', streamKey: 'bad-stream-key' })
       await testFfmpegStreamError(command, true)
     })
 
     it('Should succeed with the correct params', async function () {
       this.timeout(60000)
 
-      const command = sendRTMPStream(rtmpUrl + '/live', liveVideo.streamKey)
+      const command = sendRTMPStream({ rtmpBaseUrl: rtmpUrl + '/live', streamKey: liveVideo.streamKey })
       await testFfmpegStreamError(command, false)
     })
 
@@ -340,7 +340,7 @@ describe('Test live', function () {
 
       await servers[0].blacklist.add({ videoId: liveVideo.uuid })
 
-      const command = sendRTMPStream(rtmpUrl + '/live', liveVideo.streamKey)
+      const command = sendRTMPStream({ rtmpBaseUrl: rtmpUrl + '/live', streamKey: liveVideo.streamKey })
       await testFfmpegStreamError(command, true)
     })
 
@@ -351,7 +351,7 @@ describe('Test live', function () {
 
       await servers[0].videos.remove({ id: liveVideo.uuid })
 
-      const command = sendRTMPStream(rtmpUrl + '/live', liveVideo.streamKey)
+      const command = sendRTMPStream({ rtmpBaseUrl: rtmpUrl + '/live', streamKey: liveVideo.streamKey })
       await testFfmpegStreamError(command, true)
     })
   })
@@ -464,6 +464,34 @@ describe('Test live', function () {
       await waitJobs(servers)
 
       await testVideoResolutions(liveVideoId, resolutions)
+
+      await stopFfmpeg(ffmpegCommand)
+    })
+
+    it('Should correctly set the appropriate bitrate depending on the input', async function () {
+      this.timeout(120000)
+
+      liveVideoId = await createLiveWrapper(false)
+
+      const ffmpegCommand = await commands[0].sendRTMPStreamInVideo({
+        videoId: liveVideoId,
+        fixtureName: 'video_short.mp4',
+        copyCodecs: true
+      })
+      await waitUntilLivePublishedOnAllServers(servers, liveVideoId)
+      await waitJobs(servers)
+
+      const video = await servers[0].videos.get({ id: liveVideoId })
+
+      const masterPlaylist = video.streamingPlaylists[0].playlistUrl
+      const probe = await ffprobePromise(masterPlaylist)
+
+      const bitrates = probe.streams.map(s => parseInt(s.tags.variant_bitrate))
+      for (const bitrate of bitrates) {
+        expect(bitrate).to.exist
+        expect(isNaN(bitrate)).to.be.false
+        expect(bitrate).to.be.below(61_000_000) // video_short.mp4 bitrate
+      }
 
       await stopFfmpeg(ffmpegCommand)
     })

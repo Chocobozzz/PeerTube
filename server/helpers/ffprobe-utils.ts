@@ -175,10 +175,19 @@ async function getMetadataFromFile (path: string, existingProbe?: ffmpeg.Ffprobe
   return new VideoFileMetadata(metadata)
 }
 
-async function getVideoFileBitrate (path: string, existingProbe?: ffmpeg.FfprobeData) {
+async function getVideoFileBitrate (path: string, existingProbe?: ffmpeg.FfprobeData): Promise<number> {
   const metadata = await getMetadataFromFile(path, existingProbe)
 
-  return metadata.format.bit_rate as number
+  let bitrate = metadata.format.bit_rate as number
+  if (bitrate && !isNaN(bitrate)) return bitrate
+
+  const videoStream = await getVideoStreamFromFile(path, existingProbe)
+  if (!videoStream) return undefined
+
+  bitrate = videoStream?.bit_rate
+  if (bitrate && !isNaN(bitrate)) return bitrate
+
+  return undefined
 }
 
 async function getDurationFromVideoFile (path: string, existingProbe?: ffmpeg.FfprobeData) {

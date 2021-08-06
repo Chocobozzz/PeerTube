@@ -1,14 +1,7 @@
 import { logger } from '@server/helpers/logger'
 import { AvailableEncoders, EncoderOptionsBuilder, getTargetBitrate, VideoResolution } from '../../../shared/models/videos'
 import { buildStreamSuffix, resetSupportedEncoders } from '../../helpers/ffmpeg-utils'
-import {
-  canDoQuickAudioTranscode,
-  ffprobePromise,
-  getAudioStream,
-  getMaxAudioBitrate,
-  getVideoFileBitrate,
-  getVideoStreamFromFile
-} from '../../helpers/ffprobe-utils'
+import { canDoQuickAudioTranscode, ffprobePromise, getAudioStream, getMaxAudioBitrate } from '../../helpers/ffprobe-utils'
 import { VIDEO_TRANSCODING_FPS } from '../../initializers/constants'
 
 /**
@@ -22,8 +15,8 @@ import { VIDEO_TRANSCODING_FPS } from '../../initializers/constants'
 //  * https://slhck.info/video/2017/03/01/rate-control.html
 //  * https://trac.ffmpeg.org/wiki/Limiting%20the%20output%20bitrate
 
-const defaultX264VODOptionsBuilder: EncoderOptionsBuilder = async ({ input, resolution, fps }) => {
-  const targetBitrate = await buildTargetBitrate({ input, resolution, fps })
+const defaultX264VODOptionsBuilder: EncoderOptionsBuilder = async ({ inputBitrate, resolution, fps }) => {
+  const targetBitrate = buildTargetBitrate({ inputBitrate, resolution, fps })
   if (!targetBitrate) return { outputOptions: [ ] }
 
   return {
@@ -36,8 +29,8 @@ const defaultX264VODOptionsBuilder: EncoderOptionsBuilder = async ({ input, reso
   }
 }
 
-const defaultX264LiveOptionsBuilder: EncoderOptionsBuilder = async ({ resolution, fps, streamNum }) => {
-  const targetBitrate = getTargetBitrate(resolution, fps, VIDEO_TRANSCODING_FPS)
+const defaultX264LiveOptionsBuilder: EncoderOptionsBuilder = async ({ resolution, fps, inputBitrate, streamNum }) => {
+  const targetBitrate = buildTargetBitrate({ inputBitrate, resolution, fps })
 
   return {
     outputOptions: [
@@ -237,20 +230,16 @@ export {
 }
 
 // ---------------------------------------------------------------------------
-async function buildTargetBitrate (options: {
-  input: string
+
+function buildTargetBitrate (options: {
+  inputBitrate: number
   resolution: VideoResolution
   fps: number
 }) {
-  const { input, resolution, fps } = options
-  const probe = await ffprobePromise(input)
-
-  const videoStream = await getVideoStreamFromFile(input, probe)
-  if (!videoStream) return undefined
+  const { inputBitrate, resolution, fps } = options
 
   const targetBitrate = getTargetBitrate(resolution, fps, VIDEO_TRANSCODING_FPS)
+  if (!inputBitrate) return targetBitrate
 
-  // Don't transcode to an higher bitrate than the original file
-  const fileBitrate = await getVideoFileBitrate(input, probe)
-  return Math.min(targetBitrate, fileBitrate)
+  return Math.min(targetBitrate, inputBitrate)
 }

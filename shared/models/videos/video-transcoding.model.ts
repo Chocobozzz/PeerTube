@@ -5,6 +5,7 @@ import { VideoResolution } from './video-resolution.enum'
 export type EncoderOptionsBuilder = (params: {
   input: string
   resolution: VideoResolution
+  inputBitrate: number
   fps?: number
   streamNum?: number
 }) => Promise<EncoderOptions> | EncoderOptions

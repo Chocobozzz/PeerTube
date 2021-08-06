@@ -1,7 +1,13 @@
 
 import { createServer, Server } from 'net'
 import { isTestInstance } from '@server/helpers/core-utils'
-import { computeResolutionsToTranscode, getVideoFileFPS, getVideoFileResolution } from '@server/helpers/ffprobe-utils'
+import {
+  computeResolutionsToTranscode,
+  ffprobePromise,
+  getVideoFileBitrate,
+  getVideoFileFPS,
+  getVideoFileResolution
+} from '@server/helpers/ffprobe-utils'
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
 import { CONFIG, registerConfigChangedHandler } from '@server/initializers/config'
 import { P2P_MEDIA_LOADER_PEER_VERSION, VIDEO_LIVE, VIEW_LIFETIME } from '@server/initializers/constants'
@@ -193,10 +199,19 @@ class LiveManager {
 
     const rtmpUrl = 'rtmp://127.0.0.1:' + config.rtmp.port + streamPath
 
-    const [ { videoFileResolution }, fps ] = await Promise.all([
-      getVideoFileResolution(rtmpUrl),
-      getVideoFileFPS(rtmpUrl)
+    const now = Date.now()
+    const probe = await ffprobePromise(rtmpUrl)
+
+    const [ { videoFileResolution }, fps, bitrate ] = await Promise.all([
+      getVideoFileResolution(rtmpUrl, probe),
+      getVideoFileFPS(rtmpUrl, probe),
+      getVideoFileBitrate(rtmpUrl, probe)
     ])
+
+    logger.info(
+      '%s probing took %d ms (bitrate: %d, fps: %d, resolution: %d)',
+      rtmpUrl, Date.now() - now, bitrate, fps, videoFileResolution, lTags(sessionId, video.uuid)
+    )
 
     const allResolutions = this.buildAllResolutionsToTranscode(videoFileResolution)
 
@@ -213,6 +228,7 @@ class LiveManager {
       streamingPlaylist,
       rtmpUrl,
       fps,
+      bitrate,
       allResolutions
     })
   }
@@ -223,9 +239,10 @@ class LiveManager {
     streamingPlaylist: MStreamingPlaylistVideo
     rtmpUrl: string
     fps: number
+    bitrate: number
     allResolutions: number[]
   }) {
-    const { sessionId, videoLive, streamingPlaylist, allResolutions, fps, rtmpUrl } = options
+    const { sessionId, videoLive, streamingPlaylist, allResolutions, fps, bitrate, rtmpUrl } = options
     const videoUUID = videoLive.Video.uuid
     const localLTags = lTags(sessionId, videoUUID)
 
@@ -239,6 +256,7 @@ class LiveManager {
       videoLive,
       streamingPlaylist,
       rtmpUrl,
+      bitrate,
       fps,
       allResolutions
     })
