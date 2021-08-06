@@ -1,9 +1,7 @@
 import { registerTSPaths } from '../server/helpers/register-ts-paths'
 registerTSPaths()
 
-import { VIDEO_TRANSCODING_FPS } from '../server/initializers/constants'
 import { getDurationFromVideoFile, getVideoFileBitrate, getVideoFileFPS, getVideoFileResolution } from '../server/helpers/ffprobe-utils'
-import { getMaxBitrate } from '../shared/models/videos'
 import { VideoModel } from '../server/models/video/video'
 import { optimizeOriginalVideofile } from '../server/lib/transcoding/video-transcoding'
 import { initDatabaseModels } from '../server/initializers/database'
@@ -11,6 +9,7 @@ import { basename, dirname } from 'path'
 import { copy, move, remove } from 'fs-extra'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
 import { getVideoFilePath } from '@server/lib/video-paths'
+import { getMaxBitrate } from '@shared/core-utils'
 
 run()
   .then(() => process.exit(0))
@@ -42,13 +41,13 @@ async function run () {
     for (const file of video.VideoFiles) {
       currentFilePath = getVideoFilePath(video, file)
 
-      const [ videoBitrate, fps, resolution ] = await Promise.all([
+      const [ videoBitrate, fps, dataResolution ] = await Promise.all([
         getVideoFileBitrate(currentFilePath),
         getVideoFileFPS(currentFilePath),
         getVideoFileResolution(currentFilePath)
       ])
 
-      const maxBitrate = getMaxBitrate(resolution.videoFileResolution, fps, VIDEO_TRANSCODING_FPS)
+      const maxBitrate = getMaxBitrate({ ...dataResolution, fps })
       const isMaxBitrateExceeded = videoBitrate > maxBitrate
       if (isMaxBitrateExceeded) {
         console.log(

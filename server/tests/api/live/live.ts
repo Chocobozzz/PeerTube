@@ -3,7 +3,7 @@
 import 'mocha'
 import * as chai from 'chai'
 import { basename, join } from 'path'
-import { ffprobePromise, getVideoFileBitrate, getVideoStreamFromFile } from '@server/helpers/ffprobe-utils'
+import { ffprobePromise, getVideoStreamFromFile } from '@server/helpers/ffprobe-utils'
 import {
   checkLiveCleanupAfterSave,
   checkLiveSegmentHash,

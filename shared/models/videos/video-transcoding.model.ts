@@ -2,13 +2,23 @@ import { VideoResolution } from './video-resolution.enum'
 
 // Types used by plugins and ffmpeg-utils
 
-export type EncoderOptionsBuilder = (params: {
+export type EncoderOptionsBuilderParams = {
   input: string
+
   resolution: VideoResolution
-  inputBitrate: number
+
+  // Could be null for "merge audio" transcoding
   fps?: number
+
+  // Could be undefined if we could not get input bitrate (some RTMP streams for example)
+  inputBitrate: number
+  inputRatio: number
+
+  // For lives
   streamNum?: number
-}) => Promise<EncoderOptions> | EncoderOptions
+}
+
+export type EncoderOptionsBuilder = (params: EncoderOptionsBuilderParams) => Promise<EncoderOptions> | EncoderOptions
 
 export interface EncoderOptions {
   copy?: boolean // Copy stream? Default to false

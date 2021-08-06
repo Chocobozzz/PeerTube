@@ -202,7 +202,7 @@ class LiveManager {
     const now = Date.now()
     const probe = await ffprobePromise(rtmpUrl)
 
-    const [ { videoFileResolution }, fps, bitrate ] = await Promise.all([
+    const [ { resolution, ratio }, fps, bitrate ] = await Promise.all([
       getVideoFileResolution(rtmpUrl, probe),
       getVideoFileFPS(rtmpUrl, probe),
       getVideoFileBitrate(rtmpUrl, probe)
@@ -210,13 +210,13 @@ class LiveManager {
 
     logger.info(
       '%s probing took %d ms (bitrate: %d, fps: %d, resolution: %d)',
-      rtmpUrl, Date.now() - now, bitrate, fps, videoFileResolution, lTags(sessionId, video.uuid)
+      rtmpUrl, Date.now() - now, bitrate, fps, resolution, lTags(sessionId, video.uuid)
     )
 
-    const allResolutions = this.buildAllResolutionsToTranscode(videoFileResolution)
+    const allResolutions = this.buildAllResolutionsToTranscode(resolution)
 
     logger.info(
-      'Will mux/transcode live video of original resolution %d.', videoFileResolution,
+      'Will mux/transcode live video of original resolution %d.', resolution,
       { allResolutions, ...lTags(sessionId, video.uuid) }
     )
 
@@ -229,6 +229,7 @@ class LiveManager {
       rtmpUrl,
       fps,
       bitrate,
+      ratio,
       allResolutions
     })
   }
@@ -240,9 +241,10 @@ class LiveManager {
     rtmpUrl: string
     fps: number
     bitrate: number
+    ratio: number
     allResolutions: number[]
   }) {
-    const { sessionId, videoLive, streamingPlaylist, allResolutions, fps, bitrate, rtmpUrl } = options
+    const { sessionId, videoLive, streamingPlaylist, allResolutions, fps, bitrate, ratio, rtmpUrl } = options
     const videoUUID = videoLive.Video.uuid
     const localLTags = lTags(sessionId, videoUUID)
 
@@ -257,6 +259,7 @@ class LiveManager {
       streamingPlaylist,
       rtmpUrl,
       bitrate,
+      ratio,
       fps,
       allResolutions
     })

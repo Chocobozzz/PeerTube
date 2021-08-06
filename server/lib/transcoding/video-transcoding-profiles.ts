@@ -1,23 +1,24 @@
 import { logger } from '@server/helpers/logger'
-import { AvailableEncoders, EncoderOptionsBuilder, getTargetBitrate, VideoResolution } from '../../../shared/models/videos'
+import { getAverageBitrate } from '@shared/core-utils'
+import { AvailableEncoders, EncoderOptionsBuilder, EncoderOptionsBuilderParams } from '../../../shared/models/videos'
 import { buildStreamSuffix, resetSupportedEncoders } from '../../helpers/ffmpeg-utils'
 import { canDoQuickAudioTranscode, ffprobePromise, getAudioStream, getMaxAudioBitrate } from '../../helpers/ffprobe-utils'
-import { VIDEO_TRANSCODING_FPS } from '../../initializers/constants'
 
 /**
  *
  * Available encoders and profiles for the transcoding jobs
  * These functions are used by ffmpeg-utils that will get the encoders and options depending on the chosen profile
  *
+ * Resources:
+ *  * https://slhck.info/video/2017/03/01/rate-control.html
+ *  * https://trac.ffmpeg.org/wiki/Limiting%20the%20output%20bitrate
  */
 
-// Resources:
-//  * https://slhck.info/video/2017/03/01/rate-control.html
-//  * https://trac.ffmpeg.org/wiki/Limiting%20the%20output%20bitrate
+const defaultX264VODOptionsBuilder: EncoderOptionsBuilder = async (options: EncoderOptionsBuilderParams) => {
+  const { fps, inputRatio, inputBitrate } = options
+  if (!fps) return { outputOptions: [ ] }
 
-const defaultX264VODOptionsBuilder: EncoderOptionsBuilder = async ({ inputBitrate, resolution, fps }) => {
-  const targetBitrate = buildTargetBitrate({ inputBitrate, resolution, fps })
-  if (!targetBitrate) return { outputOptions: [ ] }
+  const targetBitrate = capBitrate(inputBitrate, getAverageBitrate({ ...options, fps, ratio: inputRatio }))
 
   return {
     outputOptions: [
@@ -29,8 +30,10 @@ const defaultX264VODOptionsBuilder: EncoderOptionsBuilder = async ({ inputBitrat
   }
 }
 
-const defaultX264LiveOptionsBuilder: EncoderOptionsBuilder = async ({ resolution, fps, inputBitrate, streamNum }) => {
-  const targetBitrate = buildTargetBitrate({ inputBitrate, resolution, fps })
+const defaultX264LiveOptionsBuilder: EncoderOptionsBuilder = async (options: EncoderOptionsBuilderParams) => {
+  const { streamNum, fps, inputBitrate, inputRatio } = options
+
+  const targetBitrate = capBitrate(inputBitrate, getAverageBitrate({ ...options, fps, ratio: inputRatio }))
 
   return {
     outputOptions: [
@@ -231,14 +234,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function buildTargetBitrate (options: {
-  inputBitrate: number
-  resolution: VideoResolution
-  fps: number
-}) {
-  const { inputBitrate, resolution, fps } = options
-
-  const targetBitrate = getTargetBitrate(resolution, fps, VIDEO_TRANSCODING_FPS)
+function capBitrate (inputBitrate: number, targetBitrate: number) {
   if (!inputBitrate) return targetBitrate
 
   return Math.min(targetBitrate, inputBitrate)

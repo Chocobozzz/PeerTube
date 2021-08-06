@@ -1,7 +1,19 @@
+import { expect } from 'chai'
 import * as ffmpeg from 'fluent-ffmpeg'
 import { ensureDir, pathExists } from 'fs-extra'
 import { dirname } from 'path'
+import { getVideoFileBitrate, getVideoFileFPS, getVideoFileResolution } from '@server/helpers/ffprobe-utils'
+import { getMaxBitrate } from '@shared/core-utils'
 import { buildAbsoluteFixturePath } from './tests'
+
+async function ensureHasTooBigBitrate (fixturePath: string) {
+  const bitrate = await getVideoFileBitrate(fixturePath)
+  const dataResolution = await getVideoFileResolution(fixturePath)
+  const fps = await getVideoFileFPS(fixturePath)
+
+  const maxBitrate = getMaxBitrate({ ...dataResolution, fps })
+  expect(bitrate).to.be.above(maxBitrate)
+}
 
 async function generateHighBitrateVideo () {
   const tempFixturePath = buildAbsoluteFixturePath('video_high_bitrate_1080p.mp4', true)
@@ -27,6 +39,8 @@ async function generateHighBitrateVideo () {
         .run()
     })
   }
+
+  await ensureHasTooBigBitrate(tempFixturePath)
 
   return tempFixturePath
 }

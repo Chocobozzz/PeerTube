@@ -54,8 +54,10 @@ class MuxingSession extends EventEmitter {
   private readonly streamingPlaylist: MStreamingPlaylistVideo
   private readonly rtmpUrl: string
   private readonly fps: number
-  private readonly bitrate: number
   private readonly allResolutions: number[]
+
+  private readonly bitrate: number
+  private readonly ratio: number
 
   private readonly videoId: number
   private readonly videoUUID: string
@@ -85,6 +87,7 @@ class MuxingSession extends EventEmitter {
     rtmpUrl: string
     fps: number
     bitrate: number
+    ratio: number
     allResolutions: number[]
   }) {
     super()
@@ -96,7 +99,10 @@ class MuxingSession extends EventEmitter {
     this.streamingPlaylist = options.streamingPlaylist
     this.rtmpUrl = options.rtmpUrl
     this.fps = options.fps
+
     this.bitrate = options.bitrate
+    this.ratio = options.bitrate
+
     this.allResolutions = options.allResolutions
 
     this.videoId = this.videoLive.Video.id
@@ -122,6 +128,7 @@ class MuxingSession extends EventEmitter {
         resolutions: this.allResolutions,
         fps: this.fps,
         bitrate: this.bitrate,
+        ratio: this.ratio,
 
         availableEncoders: VideoTranscodingProfilesManager.Instance.getAvailableEncoders(),
         profile: CONFIG.LIVE.TRANSCODING.PROFILE

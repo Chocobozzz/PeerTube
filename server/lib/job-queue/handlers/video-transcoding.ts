@@ -136,7 +136,7 @@ async function onVideoFileOptimizer (
   if (videoArg === undefined) return undefined
 
   // Outside the transaction (IO on disk)
-  const { videoFileResolution, isPortraitMode } = await videoArg.getMaxQualityResolution()
+  const { resolution, isPortraitMode } = await videoArg.getMaxQualityResolution()
 
   // Maybe the video changed in database, refresh it
   const videoDatabase = await VideoModel.loadAndPopulateAccountAndServerAndTags(videoArg.uuid)
@@ -155,7 +155,7 @@ async function onVideoFileOptimizer (
   })
   const hasHls = await createHlsJobIfEnabled(user, originalFileHLSPayload)
 
-  const hasNewResolutions = await createLowerResolutionsJobs(videoDatabase, user, videoFileResolution, isPortraitMode, 'webtorrent')
+  const hasNewResolutions = await createLowerResolutionsJobs(videoDatabase, user, resolution, isPortraitMode, 'webtorrent')
 
   if (!hasHls && !hasNewResolutions) {
     // No transcoding to do, it's now published

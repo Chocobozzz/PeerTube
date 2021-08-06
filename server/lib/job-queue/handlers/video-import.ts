@@ -114,7 +114,7 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
       throw new Error('The user video quota is exceeded with this video to import.')
     }
 
-    const { videoFileResolution } = await getVideoFileResolution(tempVideoPath)
+    const { resolution } = await getVideoFileResolution(tempVideoPath)
     const fps = await getVideoFileFPS(tempVideoPath)
     const duration = await getDurationFromVideoFile(tempVideoPath)
 
@@ -122,9 +122,9 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
     const fileExt = getLowercaseExtension(tempVideoPath)
     const videoFileData = {
       extname: fileExt,
-      resolution: videoFileResolution,
+      resolution,
       size: stats.size,
-      filename: generateWebTorrentVideoFilename(videoFileResolution, fileExt),
+      filename: generateWebTorrentVideoFilename(resolution, fileExt),
       fps,
       videoId: videoImport.videoId
     }
