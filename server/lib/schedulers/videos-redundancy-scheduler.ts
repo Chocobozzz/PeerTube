@@ -4,9 +4,7 @@ import { getServerActor } from '@server/models/application/application'
 import { TrackerModel } from '@server/models/server/tracker'
 import { VideoModel } from '@server/models/video/video'
 import {
-  MStreamingPlaylist,
   MStreamingPlaylistFiles,
-  MStreamingPlaylistVideo,
   MVideoAccountLight,
   MVideoFile,
   MVideoFileVideo,
@@ -249,7 +247,7 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
   private async createStreamingPlaylistRedundancy (
     redundancy: VideosRedundancyStrategy,
     video: MVideoAccountLight,
-    playlistArg: MStreamingPlaylist
+    playlistArg: MStreamingPlaylistFiles
   ) {
     let strategy = 'manual'
     let expiresOn: Date = null
@@ -259,16 +257,17 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
       expiresOn = this.buildNewExpiration(redundancy.minLifetime)
     }
 
-    const playlist = playlistArg as MStreamingPlaylistVideo
-    playlist.Video = video
-
+    const playlist = Object.assign(playlistArg, { Video: video })
     const serverActor = await getServerActor()
 
     logger.info('Duplicating %s streaming playlist in videos redundancy with "%s" strategy.', video.url, strategy)
 
     const destDirectory = join(HLS_REDUNDANCY_DIRECTORY, video.uuid)
     const masterPlaylistUrl = playlist.getMasterPlaylistUrl(video)
-    await downloadPlaylistSegments(masterPlaylistUrl, destDirectory, VIDEO_IMPORT_TIMEOUT)
+
+    const maxSizeKB = this.getTotalFileSizes([], [ playlist ]) / 1000
+    const toleranceKB = maxSizeKB + ((5 * maxSizeKB) / 100) // 5% more tolerance
+    await downloadPlaylistSegments(masterPlaylistUrl, destDirectory, VIDEO_IMPORT_TIMEOUT, toleranceKB)
 
     const createdModel: MVideoRedundancyStreamingPlaylistVideo = await VideoRedundancyModel.create({
       expiresOn,
@@ -334,7 +333,7 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
     return `${object.VideoStreamingPlaylist.getMasterPlaylistUrl(object.VideoStreamingPlaylist.Video)}`
   }
 
-  private getTotalFileSizes (files: MVideoFile[], playlists: MStreamingPlaylistFiles[]) {
+  private getTotalFileSizes (files: MVideoFile[], playlists: MStreamingPlaylistFiles[]): number {
     const fileReducer = (previous: number, current: MVideoFile) => previous + current.size
 
     let allFiles = files
