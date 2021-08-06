@@ -22,12 +22,12 @@ function sendRTMPStream (options: {
   command.inputOption('-re')
 
   if (copyCodecs) {
+    command.outputOption('-c copy')
+  } else {
     command.outputOption('-c:v libx264')
     command.outputOption('-g 50')
     command.outputOption('-keyint_min 2')
     command.outputOption('-r 60')
-  } else {
-    command.outputOption('-c copy')
   }
 
   command.outputOption('-f flv')
