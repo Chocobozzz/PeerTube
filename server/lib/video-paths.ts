@@ -6,7 +6,7 @@ import { isStreamingPlaylist, MStreamingPlaylist, MStreamingPlaylistVideo, MVide
 import { buildUUID } from '@server/helpers/uuid'
 import { removeFragmentedMP4Ext } from '@shared/core-utils'
 import { makeAvailable } from './object-storage'
-import { existsSync } from 'fs-extra'
+import { stat } from 'fs-extra'
 
 // ################## Video file name ##################
 
@@ -37,8 +37,11 @@ async function getVideoFilePathMakeAvailable (
   videoFile: MVideoFile
 ) {
   const path = getVideoFilePath(videoOrPlaylist, videoFile)
-  if (existsSync(path)) {
+  try {
+    await stat(path)
     return path
+  } catch {
+    // Continue if path not available
   }
 
   if (videoFile.isHLS()) {

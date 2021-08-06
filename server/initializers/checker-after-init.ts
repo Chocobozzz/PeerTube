@@ -155,10 +155,10 @@ function checkConfig () {
 
   // Object storage
   if (CONFIG.OBJECT_STORAGE.ENABLED === true) {
-    if (CONFIG.TRANSCODING.WEBTORRENT.ENABLED && !CONFIG.OBJECT_STORAGE.VIDEOS.BUCKET_NAME) {
+    if (!CONFIG.OBJECT_STORAGE.VIDEOS.BUCKET_NAME) {
       return 'videos_bucket should be set when object storage support is enabled.'
     }
-    if (CONFIG.TRANSCODING.HLS.ENABLED && !CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.BUCKET_NAME) {
+    if (!CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.BUCKET_NAME) {
       return 'streaming_playlists_bucket should be set when object storage support is enabled.'
     }
     if (CONFIG.OBJECT_STORAGE.VIDEOS.BUCKET_NAME === CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.BUCKET_NAME &&

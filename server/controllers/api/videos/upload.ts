@@ -6,7 +6,7 @@ import { uuidToShort } from '@server/helpers/uuid'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
 import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url'
 import {
-  addMoveToObjectStorageJob,
+  addMoveToObjectStorageJob as addMoveToObjectStorageJobIfNeeded,
   addOptimizeOrMergeAudioJob,
   buildLocalVideoFromReq,
   buildVideoThumbnailsFromReq,
@@ -219,7 +219,7 @@ async function addVideo (options: {
       if (video.state !== VideoState.TO_TRANSCODE) {
         // Video will be published before move is complete which may cause some video connections to drop
         // But it's recommended to enable transcoding anyway, so this is the tradeoff
-        addMoveToObjectStorageJob(video, videoFile)
+        addMoveToObjectStorageJobIfNeeded(video, videoFile)
         return
       }
 

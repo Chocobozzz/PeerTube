@@ -4,13 +4,12 @@ import {
   BelongsTo,
   Column,
   CreatedAt,
-  DataType,
   Default,
   ForeignKey,
   IsInt,
-  IsUUID,
   Model,
   Table,
+  Unique,
   UpdatedAt
 } from "sequelize-typescript"
 import { Op, QueryTypes } from "sequelize"
@@ -20,13 +19,12 @@ import { VideoModel } from "./video"
   tableName: 'videoJobInfo',
   indexes: [
     {
-      fields: [ 'videoUUID' ],
+      fields: [ 'videoId' ],
       where: {
-        videoUUID: {
+        videoId: {
           [Op.ne]: null
         }
-      },
-      unique: true
+      }
     }
   ]
 })
@@ -45,15 +43,14 @@ export class VideoJobInfoModel extends Model<Partial<AttributesOnly<VideoJobInfo
   pendingMove: number
 
   @ForeignKey(() => VideoModel)
-  @IsUUID(4)
-  @Column(DataType.UUID)
-  videoUUID: string
+  @Unique
+  @Column
+  videoId: number
 
   @BelongsTo(() => VideoModel, {
     foreignKey: {
       allowNull: false
     },
-    targetKey: 'uuid',
     onDelete: 'cascade'
   })
   Video: VideoModel
@@ -62,11 +59,19 @@ export class VideoJobInfoModel extends Model<Partial<AttributesOnly<VideoJobInfo
     const options = { type: QueryTypes.SELECT as QueryTypes.SELECT, bind: { videoUUID } }
 
     const [ { pendingMove } ] = await VideoJobInfoModel.sequelize.query<{pendingMove: number}>(`
-    INSERT INTO "videoJobInfo" ("videoUUID", "pendingMove", "createdAt", "updatedAt") 
-    VALUES ($videoUUID, 1, NOW(), NOW()) 
-    ON CONFLICT ("videoUUID") WHERE "videoUUID" = $videoUUID 
-    DO UPDATE SET "pendingMove" = "videoJobInfo"."pendingMove" + 1, "updatedAt" = NOW() 
-    RETURNING "pendingMove"
+    INSERT INTO "videoJobInfo" ("videoId", "pendingMove", "createdAt", "updatedAt")
+    SELECT
+      "video"."id" AS "videoId", 1, NOW(), NOW()
+    FROM
+      "video"
+    WHERE
+      "video"."uuid" = $videoUUID
+    ON CONFLICT ("videoId") DO UPDATE
+    SET
+      "pendingMove" = "videoJobInfo"."pendingMove" + 1,
+      "updatedAt" = NOW()
+    RETURNING
+      "pendingMove"
     `, options)
 
     return pendingMove
@@ -76,9 +81,16 @@ export class VideoJobInfoModel extends Model<Partial<AttributesOnly<VideoJobInfo
     const options = { type: QueryTypes.SELECT as QueryTypes.SELECT, bind: { videoUUID } }
 
     const [ { pendingMove } ] = await VideoJobInfoModel.sequelize.query<{pendingMove: number}>(`
-    UPDATE "videoJobInfo" SET "pendingMove" = "videoJobInfo"."pendingMove" - 1, "updatedAt" = NOW()
-    WHERE "videoUUID" = $videoUUID
-    RETURNING "pendingMove"
+    UPDATE
+      "videoJobInfo"
+    SET
+      "pendingMove" = "videoJobInfo"."pendingMove" - 1,
+      "updatedAt" = NOW()
+    FROM "video"
+    WHERE
+      "video"."id" = "videoJobInfo"."videoId" AND "video"."uuid" = $videoUUID
+    RETURNING
+      "pendingMove";
     `, options)
 
     return pendingMove

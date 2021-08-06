@@ -75,7 +75,9 @@ const CONFIG = {
   },
   OBJECT_STORAGE: {
     ENABLED: config.get<boolean>('object_storage.enabled'),
-    ENDPOINT: config.get<string>('object_storage.endpoint'),
+    ENDPOINT: new URL(/^https?:\/\//i.test(config.get<string>('object_storage.endpoint'))
+      ? config.get<string>('object_storage.endpoint')
+      : 'https://' + config.get<string>('object_storage.endpoint')),
     VIDEOS: {
       BUCKET_NAME: config.get<string>('object_storage.videos.bucket_name'),
       PREFIX: config.get<string>('object_storage.videos.prefix'),

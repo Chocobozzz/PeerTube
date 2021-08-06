@@ -23,7 +23,7 @@ export async function processMoveToObjectStorage (job: Bull.Job) {
     return undefined
   }
 
-  if (CONFIG.TRANSCODING.WEBTORRENT.ENABLED && video.VideoFiles) {
+  if (video.VideoFiles) {
     await moveWebTorrentFiles(video, payload.videoFileId)
   }
 
@@ -46,10 +46,8 @@ async function moveWebTorrentFiles (video: MVideoWithAllFiles, videoFileId?: num
     if (videoFileId !== null && file.id !== videoFileId) continue
 
     const filename = file.filename
-    await storeObject(
-      { filename, path: join(CONFIG.STORAGE.VIDEOS_DIR, file.filename) },
-      CONFIG.OBJECT_STORAGE.VIDEOS
-    )
+    const path = join(CONFIG.STORAGE.VIDEOS_DIR, file.filename)
+    await storeObject({ filename, path }, CONFIG.OBJECT_STORAGE.VIDEOS)
 
     file.storage = VideoStorageType.OBJECT_STORAGE
     file.fileUrl = generateObjectStoreUrl(filename, CONFIG.OBJECT_STORAGE.VIDEOS)
@@ -67,23 +65,19 @@ async function moveHLSFiles (video: MVideoWithAllFiles, videoFileId: number) {
 
       // Resolution playlist
       const playlistFileName = getHlsResolutionPlaylistFilename(file.filename)
+      const playlistPath = join(baseHlsDirectory, playlistFileName)
       await storeObject(
         {
           filename: join(playlist.getStringType(), video.uuid, playlistFileName),
-          path: join(baseHlsDirectory, playlistFileName)
+          path: playlistPath
         },
         CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS
       )
 
       // Resolution fragmented file
       const filename = join(playlist.getStringType(), video.uuid, file.filename)
-      await storeObject(
-        {
-          filename,
-          path: join(baseHlsDirectory, file.filename)
-        },
-        CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS
-      )
+      const path = join(baseHlsDirectory, file.filename)
+      await storeObject({ filename, path }, CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS)
 
       // Signals that the video file + playlist file were uploaded
       file.storage = VideoStorageType.OBJECT_STORAGE
@@ -122,17 +116,10 @@ async function doAfterLastJob (video: MVideoWithAllFiles) {
     await playlist.save()
   }
 
-  // Remove files that were "moved"
-  const tasks: Promise<any>[] = []
-
-  for (const file of video.VideoFiles) {
-    tasks.push(remove(join(CONFIG.STORAGE.VIDEOS_DIR, file.filename)))
-  }
-
+  // Remove empty hls video directory
   if (video.VideoStreamingPlaylists) {
-    tasks.push(remove(join(HLS_STREAMING_PLAYLIST_DIRECTORY, video.uuid)))
+    await remove(join(HLS_STREAMING_PLAYLIST_DIRECTORY, video.uuid))
   }
 
-  await Promise.all(tasks)
   await publishAndFederateIfNeeded(video)
 }

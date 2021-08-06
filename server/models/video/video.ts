@@ -122,6 +122,7 @@ import { VideoStreamingPlaylistModel } from './video-streaming-playlist'
 import { VideoTagModel } from './video-tag'
 import { VideoViewModel } from './video-view'
 import { removeObject, removePrefix } from '@server/lib/object-storage'
+import { VideoJobInfoModel } from './video-job-info'
 
 export enum ScopeNames {
   FOR_API = 'FOR_API',
@@ -733,6 +734,15 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     ['separate' as any]: true
   })
   VideoCaptions: VideoCaptionModel[]
+
+  @HasOne(() => VideoJobInfoModel, {
+    foreignKey: {
+      name: 'videoId',
+      allowNull: false
+    },
+    onDelete: 'cascade'
+  })
+  VideoJobInfo: VideoJobInfoModel
 
   @BeforeDestroy
   static async sendDelete (instance: MVideoAccountLight, options) {

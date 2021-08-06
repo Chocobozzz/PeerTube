@@ -9,6 +9,7 @@ import { computeResolutionsToTranscode } from '@server/helpers/ffprobe-utils'
 import { VideoTranscodingPayload } from '@shared/models'
 import { CONFIG } from '@server/initializers/config'
 import { isUUIDValid } from '@server/helpers/custom-validators/misc'
+import { addTranscodingJob } from '@server/lib/video'
 
 program
   .option('-v, --video [videoUUID]', 'Video UUID')
@@ -90,7 +91,7 @@ async function run () {
   await JobQueue.Instance.init()
 
   for (const d of dataInput) {
-    await JobQueue.Instance.createJobWithPromise({ type: 'video-transcoding', payload: d })
+    await addTranscodingJob(d, {})
     console.log('Transcoding job for video %s created.', video.uuid)
   }
 }

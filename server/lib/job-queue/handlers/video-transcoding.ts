@@ -1,6 +1,6 @@
 import * as Bull from 'bull'
 import { TranscodeOptionsType } from '@server/helpers/ffmpeg-utils'
-import { addMoveToObjectStorageJob, getTranscodingJobPriority, publishAndFederateIfNeeded } from '@server/lib/video'
+import { addMoveToObjectStorageJob, addTranscodingJob, getTranscodingJobPriority, publishAndFederateIfNeeded } from '@server/lib/video'
 import { getVideoFilePath } from '@server/lib/video-paths'
 import { UserModel } from '@server/models/user/user'
 import { MUser, MUserId, MVideoFullLight, MVideoUUID, MVideoWithFile } from '@server/types/models'
@@ -24,7 +24,6 @@ import {
   optimizeOriginalVideofile,
   transcodeNewWebTorrentResolution
 } from '../../transcoding/video-transcoding'
-import { JobQueue } from '../job-queue'
 
 type HandlerFunction = (job: Bull.Job, payload: VideoTranscodingPayload, video: MVideoFullLight, user: MUser) => Promise<any>
 
@@ -135,10 +134,10 @@ async function onHlsPlaylistGeneration (video: MVideoFullLight, user: MUser, pay
     await createLowerResolutionsJobs(video, user, payload.resolution, payload.isPortraitMode, 'hls')
   }
 
-  // Publishing will be done by mvoe-to-object-storage if enabled
-  if (!CONFIG.OBJECT_STORAGE.ENABLED) {
-    await publishAndFederateIfNeeded(video)
-  }
+  // Publishing will be done by move-to-object-storage if enabled
+  if (CONFIG.OBJECT_STORAGE.ENABLED) return
+
+  await publishAndFederateIfNeeded(video)
 }
 
 async function onVideoFileOptimizer (
@@ -229,7 +228,7 @@ async function createHlsJobIfEnabled (user: MUserId, payload: {
     isMaxQuality: payload.isMaxQuality
   }
 
-  JobQueue.Instance.createJob({ type: 'video-transcoding', payload: hlsTranscodingPayload }, jobOptions)
+  await addTranscodingJob(hlsTranscodingPayload, jobOptions)
 
   return true
 }
@@ -277,7 +276,7 @@ async function createLowerResolutionsJobs (
       priority: await getTranscodingJobPriority(user)
     }
 
-    JobQueue.Instance.createJob({ type: 'video-transcoding', payload: dataInput }, jobOptions)
+    await addTranscodingJob(dataInput, jobOptions)
   }
 
   if (resolutionCreated.length === 0) {

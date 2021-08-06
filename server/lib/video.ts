@@ -8,10 +8,11 @@ import { FilteredModelAttributes } from '@server/types'
 import { MThumbnail, MUserId, MVideoFile, MVideoTag, MVideoThumbnail, MVideoUUID } from '@server/types/models'
 import { ThumbnailType, VideoCreate, VideoPrivacy, VideoTranscodingPayload } from '@shared/models'
 import { federateVideoIfNeeded } from './activitypub/videos'
-import { JobQueue } from './job-queue/job-queue'
+import { CreateJobOptions, JobQueue } from './job-queue/job-queue'
 import { Notifier } from './notifier'
 import { updateVideoMiniatureFromExisting } from './thumbnail'
 import { CONFIG } from '@server/initializers/config'
+import { VideoJobInfoModel } from '@server/models/video/video-job-info'
 
 function buildLocalVideoFromReq (videoInfo: VideoCreate, channelId: number): FilteredModelAttributes<VideoModel> {
   return {
@@ -128,10 +129,21 @@ async function addOptimizeOrMergeAudioJob (video: MVideoUUID, videoFile: MVideoF
     priority: await getTranscodingJobPriority(user)
   }
 
-  return JobQueue.Instance.createJobWithPromise({ type: 'video-transcoding', payload: dataInput }, jobOptions)
+  return addTranscodingJob(dataInput, jobOptions)
 }
 
-export function addMoveToObjectStorageJob (video: MVideoUUID, videoFile: MVideoFile) {
+async function addTranscodingJob (payload: VideoTranscodingPayload, options: CreateJobOptions) {
+  // This value is decreased when the move job is finished in ./handlers/move-to-object-storage.ts
+  // Because every transcode job starts a move job for the transcoded file, the value will only reach
+  // 0 again when all transcode jobs are finished and the last move job is running
+  // If object storage support is not enabled all the pendingMove values stay at the amount of transcode
+  // jobs that were started for that video.
+  await VideoJobInfoModel.increaseOrCreatePendingMove(payload.videoUUID)
+
+  return JobQueue.Instance.createJobWithPromise({ type: 'video-transcoding', payload: payload }, options)
+}
+
+function addMoveToObjectStorageJob (video: MVideoUUID, videoFile: MVideoFile) {
   if (CONFIG.OBJECT_STORAGE.ENABLED) {
     const dataInput = {
       videoUUID: video.uuid,
@@ -158,5 +170,7 @@ export {
   buildVideoThumbnailsFromReq,
   setVideoTags,
   addOptimizeOrMergeAudioJob,
+  addTranscodingJob,
+  addMoveToObjectStorageJob,
   getTranscodingJobPriority
 }

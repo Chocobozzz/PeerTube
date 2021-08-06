@@ -12,17 +12,18 @@ import {
 } from "@aws-sdk/client-s3"
 import { CONFIG } from "@server/initializers/config"
 import { logger } from '@server/helpers/logger'
-import { createReadStream, createWriteStream, ensureDir, open, close, ReadStream, stat, Stats } from "fs-extra"
+import { createReadStream, createWriteStream, ensureDir, open, close, ReadStream, stat, Stats, remove } from "fs-extra"
 import { Readable } from "stream"
 import { dirname } from "path"
 import { min } from "lodash"
+import { pipelinePromise } from "@server/helpers/core-utils"
 
 type BucketInfo = {BUCKET_NAME: string, PREFIX?: string, BASE_URL?: string}
 const ONE_MIB = 1024 * 1024
 const MAX_PUT_SIZE = process.env.NODE_ENV.includes("test") ? 10 * ONE_MIB : 100 * ONE_MIB
 
 function getS3Client () {
-  return new S3Client({ endpoint: `https://${CONFIG.OBJECT_STORAGE.ENDPOINT}` })
+  return new S3Client({ endpoint: CONFIG.OBJECT_STORAGE.ENDPOINT.toString() })
 }
 
 function getPartSize (stats: Stats) {
@@ -45,7 +46,7 @@ async function objectStoragePut (options: {filename: string, content: string | R
     Key: key,
     Body: content
   })
-  return await s3Client.send(command)
+  return s3Client.send(command)
 }
 
 async function multiPartUpload (file: {filename: string, path: string}, stats: Stats, bucketInfo: BucketInfo) {
@@ -107,16 +108,19 @@ export async function storeObject (file: {path: string, filename: string}, bucke
   const stats = await stat(file.path)
   // If bigger than 100 MiB we do a multipart upload
   if (stats.size > MAX_PUT_SIZE) {
-    return await multiPartUpload(file, stats, bucketInfo)
+    await multiPartUpload(file, stats, bucketInfo)
+  } else {
+    const fileStream = createReadStream(file.path)
+    await objectStoragePut({ filename: file.filename, content: fileStream, bucketInfo })
   }
 
-  const fileStream = createReadStream(file.path)
-  return await objectStoragePut({ filename: file.filename, content: fileStream, bucketInfo })
+  logger.debug("Removing %s because it's now on object storage", file.path)
+  await remove(file.path)
 }
 
 export async function writeObjectContents (file: {filename: string, content: string}, bucketInfo: BucketInfo) {
   logger.debug('Writing object to %s/%s%s', bucketInfo.BUCKET_NAME, bucketInfo.PREFIX, file.filename)
-  return await objectStoragePut({ filename: file.filename, content: file.content, bucketInfo })
+  return objectStoragePut({ filename: file.filename, content: file.content, bucketInfo })
 }
 
 export async function removeObject (filename: string, bucketInfo: BucketInfo) {
@@ -126,7 +130,7 @@ export async function removeObject (filename: string, bucketInfo: BucketInfo) {
     Bucket: bucketInfo.BUCKET_NAME,
     Key: key
   })
-  return await s3Client.send(command)
+  return s3Client.send(command)
 }
 
 export async function removePrefix (prefix: string, bucketInfo: BucketInfo) {
@@ -152,7 +156,9 @@ export async function removePrefix (prefix: string, bucketInfo: BucketInfo) {
 }
 
 export function generateObjectStoreUrl (filename: string, bucketInfo: BucketInfo) {
-  return `https://${bucketInfo.BUCKET_NAME}.${CONFIG.OBJECT_STORAGE.ENDPOINT}/${bucketInfo.PREFIX}${filename}`
+  const endpoint = CONFIG.OBJECT_STORAGE.ENDPOINT
+  const port = endpoint.port ? `:${endpoint.port}` : ''
+  return `${endpoint.protocol}//${bucketInfo.BUCKET_NAME}.${endpoint.hostname}${port}/${bucketInfo.PREFIX}${filename}`
 }
 
 export async function makeAvailable (options: { filename: string, at: string }, bucketInfo: BucketInfo) {
@@ -165,10 +171,6 @@ export async function makeAvailable (options: { filename: string, at: string }, 
   })
   const response = await s3Client.send(command)
   const file = createWriteStream(options.at)
-  await new Promise((resolve, reject) => {
-    const pipe = (response.Body as Readable).pipe(file)
-    pipe.on('end', () => resolve(options.at))
-    pipe.on('error', reject)
-  })
+  await pipelinePromise(response.Body as Readable, file)
   file.close()
 }

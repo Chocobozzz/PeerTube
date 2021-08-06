@@ -12,7 +12,7 @@ async function up (utils: {
     CREATE TABLE IF NOT EXISTS "videoJobInfo" (
       "id" serial,
       "pendingMove" INTEGER NOT NULL,
-      "videoUUID" uuid UNIQUE NOT NULL REFERENCES "video" ("uuid") ON DELETE CASCADE ON UPDATE CASCADE,
+      "videoId" serial UNIQUE NOT NULL REFERENCES "video" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
       "createdAt" timestamp WITH time zone NOT NULL,
       "updatedAt" timestamp WITH time zone NOT NULL,
       PRIMARY KEY ("id")
@@ -23,23 +23,27 @@ async function up (utils: {
   }
 
   {
-    await utils.queryInterface.addColumn('videoFile', 'storage', { type: Sequelize.INTEGER, allowNull: false })
+    await utils.queryInterface.addColumn('videoFile', 'storage', { type: Sequelize.INTEGER, allowNull: true })
   }
-
   {
     await utils.sequelize.query(
       `UPDATE "videoFile" SET "storage" = ${VideoStorageType.LOCAL}`
     )
   }
-
   {
-    await utils.queryInterface.addColumn('videoStreamingPlaylist', 'storage', { type: Sequelize.INTEGER, allowNull: false })
+    await utils.queryInterface.changeColumn('videoFile', 'storage', { type: Sequelize.INTEGER, allowNull: false })
   }
 
+  {
+    await utils.queryInterface.addColumn('videoStreamingPlaylist', 'storage', { type: Sequelize.INTEGER, allowNull: true })
+  }
   {
     await utils.sequelize.query(
       `UPDATE "videoStreamingPlaylist" SET "storage" = ${VideoStorageType.LOCAL}`
     )
+  }
+  {
+    await utils.queryInterface.changeColumn('videoStreamingPlaylist', 'storage', { type: Sequelize.INTEGER, allowNull: false })
   }
 }
 
