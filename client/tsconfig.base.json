@@ -24,6 +24,7 @@
     ],
     "baseUrl": "./",
     "paths": {
+      "hls.js": [ "node_modules/hls.js/dist/hls.light" ],
       "video.js": [ "node_modules/video.js/core" ],
       "@app/*": [ "src/app/*" ],
       "@shared/models/*": [ "../shared/models/*" ],
@@ -35,7 +36,7 @@
       "http": [ "src/shims/http.ts" ],
       "https": [ "src/shims/https.ts" ],
       "path": [ "src/shims/path.ts" ],
-      "stream": [ "src/shims/noop.ts" ],
+      "stream": [ "src/shims/stream.ts" ],
       "crypto": [ "src/shims/noop.ts" ]
     }
   },

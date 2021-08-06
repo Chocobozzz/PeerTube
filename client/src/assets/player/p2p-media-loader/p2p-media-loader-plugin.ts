@@ -1,4 +1,4 @@
-import * as Hlsjs from 'hls.js/dist/hls.light.js'
+import Hlsjs from 'hls.js'
 import videojs from 'video.js'
 import { Events, Segment } from '@peertube/p2p-media-loader-core'
 import { Engine, initHlsJsPlayer, initVideoJsContribHlsJsPlayer } from '@peertube/p2p-media-loader-hlsjs'

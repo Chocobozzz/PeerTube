@@ -206,7 +206,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
     this.refreshingTokenObservable = this.http.post<UserRefreshToken>(AuthService.BASE_TOKEN_URL, body, { headers })
                                          .pipe(
                                            map(res => this.handleRefreshToken(res)),
-                                           tap(() => this.refreshingTokenObservable = null),
+                                           tap(() => { this.refreshingTokenObservable = null }),
                                            catchError(err => {
                                              this.refreshingTokenObservable = null
 
