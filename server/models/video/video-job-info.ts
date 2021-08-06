@@ -76,7 +76,8 @@ export class VideoJobInfoModel extends Model<Partial<AttributesOnly<VideoJobInfo
     const options = { type: QueryTypes.SELECT as QueryTypes.SELECT, bind: { videoUUID } }
 
     const [ { pendingMove } ] = await VideoJobInfoModel.sequelize.query<{pendingMove: number}>(`
-    UPDATE "videoJobInfo" SET "pendingMove" = "videoJobInfo"."pendingMove" - 1, "updatedAt" = NOW() 
+    UPDATE "videoJobInfo" SET "pendingMove" = "videoJobInfo"."pendingMove" - 1, "updatedAt" = NOW()
+    WHERE "videoUUID" = $videoUUID
     RETURNING "pendingMove"
     `, options)
 
