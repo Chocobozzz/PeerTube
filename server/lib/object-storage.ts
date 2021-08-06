@@ -148,6 +148,10 @@ export async function makeAvailable (options: { filename: string, at: string }, 
   })
   const response = await s3Client.send(command)
   const file = createWriteStream(options.at)
-  await pipeline(response.Body as Readable, file)
+  await new Promise((resolve, reject) => {
+    const pipe = (response.Body as Readable).pipe(file)
+    pipe.on('end', () => resolve(options.at))
+    pipe.on('error', reject)
+  })
   file.close()
 }
