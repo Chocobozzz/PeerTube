@@ -201,6 +201,199 @@ function checkUpdatedConfig (data: CustomConfig) {
   expect(data.broadcastMessage.dismissable).to.be.true
 }
 
+const newCustomConfig: CustomConfig = {
+  instance: {
+    name: 'PeerTube updated',
+    shortDescription: 'my short description',
+    description: 'my super description',
+    terms: 'my super terms',
+    codeOfConduct: 'my super coc',
+
+    creationReason: 'my super creation reason',
+    moderationInformation: 'my super moderation information',
+    administrator: 'Kuja',
+    maintenanceLifetime: 'forever',
+    businessModel: 'my super business model',
+    hardwareInformation: '2vCore 3GB RAM',
+
+    languages: [ 'en', 'es' ],
+    categories: [ 1, 2 ],
+
+    isNSFW: true,
+    defaultNSFWPolicy: 'blur' as 'blur',
+
+    defaultClientRoute: '/videos/recently-added',
+
+    customizations: {
+      javascript: 'alert("coucou")',
+      css: 'body { background-color: red; }'
+    }
+  },
+  theme: {
+    default: 'default'
+  },
+  services: {
+    twitter: {
+      username: '@Kuja',
+      whitelisted: true
+    }
+  },
+  cache: {
+    previews: {
+      size: 2
+    },
+    captions: {
+      size: 3
+    },
+    torrents: {
+      size: 4
+    }
+  },
+  signup: {
+    enabled: false,
+    limit: 5,
+    requiresEmailVerification: false,
+    minimumAge: 10
+  },
+  admin: {
+    email: 'superadmin1@example.com'
+  },
+  contactForm: {
+    enabled: false
+  },
+  user: {
+    videoQuota: 5242881,
+    videoQuotaDaily: 318742
+  },
+  transcoding: {
+    enabled: true,
+    allowAdditionalExtensions: true,
+    allowAudioFiles: true,
+    threads: 1,
+    concurrency: 3,
+    profile: 'vod_profile',
+    resolutions: {
+      '0p': false,
+      '240p': false,
+      '360p': true,
+      '480p': true,
+      '720p': false,
+      '1080p': false,
+      '1440p': false,
+      '2160p': false
+    },
+    webtorrent: {
+      enabled: true
+    },
+    hls: {
+      enabled: false
+    }
+  },
+  live: {
+    enabled: true,
+    allowReplay: true,
+    maxDuration: 5000,
+    maxInstanceLives: -1,
+    maxUserLives: 10,
+    transcoding: {
+      enabled: true,
+      threads: 4,
+      profile: 'live_profile',
+      resolutions: {
+        '240p': true,
+        '360p': true,
+        '480p': true,
+        '720p': true,
+        '1080p': true,
+        '1440p': true,
+        '2160p': true
+      }
+    }
+  },
+  import: {
+    videos: {
+      concurrency: 4,
+      http: {
+        enabled: false
+      },
+      torrent: {
+        enabled: false
+      }
+    }
+  },
+  trending: {
+    videos: {
+      algorithms: {
+        enabled: [ 'best', 'hot', 'most-viewed', 'most-liked' ],
+        default: 'hot'
+      }
+    }
+  },
+  autoBlacklist: {
+    videos: {
+      ofUsers: {
+        enabled: true
+      }
+    }
+  },
+  followers: {
+    instance: {
+      enabled: false,
+      manualApproval: true
+    }
+  },
+  followings: {
+    instance: {
+      autoFollowBack: {
+        enabled: true
+      },
+      autoFollowIndex: {
+        enabled: true,
+        indexUrl: 'https://updated.example.com'
+      }
+    }
+  },
+  broadcastMessage: {
+    enabled: true,
+    level: 'error',
+    message: 'super bad message',
+    dismissable: true
+  },
+  search: {
+    remoteUri: {
+      anonymous: true,
+      users: true
+    },
+    searchIndex: {
+      enabled: true,
+      url: 'https://search.joinpeertube.org',
+      disableLocalSearch: true,
+      isDefaultSearch: true
+    }
+  }
+}
+
+describe('Test static config', function () {
+  let server: PeerTubeServer = null
+
+  before(async function () {
+    this.timeout(30000)
+
+    server = await createSingleServer(1, { allow_webadmin_config: false })
+    await setAccessTokensToServers([ server ])
+  })
+
+  it('Should tell the client that edits are not allowed', async function () {
+    const data = await server.config.getConfig()
+
+    expect(data.allowEdits).to.be.false
+  })
+
+  it('Should error when client tries to update', async function () {
+    await server.config.updateCustomConfig({ newCustomConfig, expectedStatus: 405 })
+  })
+})
+
 describe('Test config', function () {
   let server: PeerTubeServer = null
 
@@ -252,177 +445,6 @@ describe('Test config', function () {
   })
 
   it('Should update the customized configuration', async function () {
-    const newCustomConfig: CustomConfig = {
-      instance: {
-        name: 'PeerTube updated',
-        shortDescription: 'my short description',
-        description: 'my super description',
-        terms: 'my super terms',
-        codeOfConduct: 'my super coc',
-
-        creationReason: 'my super creation reason',
-        moderationInformation: 'my super moderation information',
-        administrator: 'Kuja',
-        maintenanceLifetime: 'forever',
-        businessModel: 'my super business model',
-        hardwareInformation: '2vCore 3GB RAM',
-
-        languages: [ 'en', 'es' ],
-        categories: [ 1, 2 ],
-
-        isNSFW: true,
-        defaultNSFWPolicy: 'blur' as 'blur',
-
-        defaultClientRoute: '/videos/recently-added',
-
-        customizations: {
-          javascript: 'alert("coucou")',
-          css: 'body { background-color: red; }'
-        }
-      },
-      theme: {
-        default: 'default'
-      },
-      services: {
-        twitter: {
-          username: '@Kuja',
-          whitelisted: true
-        }
-      },
-      cache: {
-        previews: {
-          size: 2
-        },
-        captions: {
-          size: 3
-        },
-        torrents: {
-          size: 4
-        }
-      },
-      signup: {
-        enabled: false,
-        limit: 5,
-        requiresEmailVerification: false,
-        minimumAge: 10
-      },
-      admin: {
-        email: 'superadmin1@example.com'
-      },
-      contactForm: {
-        enabled: false
-      },
-      user: {
-        videoQuota: 5242881,
-        videoQuotaDaily: 318742
-      },
-      transcoding: {
-        enabled: true,
-        allowAdditionalExtensions: true,
-        allowAudioFiles: true,
-        threads: 1,
-        concurrency: 3,
-        profile: 'vod_profile',
-        resolutions: {
-          '0p': false,
-          '240p': false,
-          '360p': true,
-          '480p': true,
-          '720p': false,
-          '1080p': false,
-          '1440p': false,
-          '2160p': false
-        },
-        webtorrent: {
-          enabled: true
-        },
-        hls: {
-          enabled: false
-        }
-      },
-      live: {
-        enabled: true,
-        allowReplay: true,
-        maxDuration: 5000,
-        maxInstanceLives: -1,
-        maxUserLives: 10,
-        transcoding: {
-          enabled: true,
-          threads: 4,
-          profile: 'live_profile',
-          resolutions: {
-            '240p': true,
-            '360p': true,
-            '480p': true,
-            '720p': true,
-            '1080p': true,
-            '1440p': true,
-            '2160p': true
-          }
-        }
-      },
-      import: {
-        videos: {
-          concurrency: 4,
-          http: {
-            enabled: false
-          },
-          torrent: {
-            enabled: false
-          }
-        }
-      },
-      trending: {
-        videos: {
-          algorithms: {
-            enabled: [ 'best', 'hot', 'most-viewed', 'most-liked' ],
-            default: 'hot'
-          }
-        }
-      },
-      autoBlacklist: {
-        videos: {
-          ofUsers: {
-            enabled: true
-          }
-        }
-      },
-      followers: {
-        instance: {
-          enabled: false,
-          manualApproval: true
-        }
-      },
-      followings: {
-        instance: {
-          autoFollowBack: {
-            enabled: true
-          },
-          autoFollowIndex: {
-            enabled: true,
-            indexUrl: 'https://updated.example.com'
-          }
-        }
-      },
-      broadcastMessage: {
-        enabled: true,
-        level: 'error',
-        message: 'super bad message',
-        dismissable: true
-      },
-      search: {
-        remoteUri: {
-          anonymous: true,
-          users: true
-        },
-        searchIndex: {
-          enabled: true,
-          url: 'https://search.joinpeertube.org',
-          disableLocalSearch: true,
-          isDefaultSearch: true
-        }
-      }
-    }
     await server.config.updateCustomConfig({ newCustomConfig })
 
     const data = await server.config.getCustomConfig()

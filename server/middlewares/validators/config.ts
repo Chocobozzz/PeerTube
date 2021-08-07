@@ -1,13 +1,14 @@
 import * as express from 'express'
 import { body } from 'express-validator'
 import { isIntOrNull } from '@server/helpers/custom-validators/misc'
-import { isEmailEnabled } from '@server/initializers/config'
+import { CONFIG, isEmailEnabled } from '@server/initializers/config'
 import { CustomConfig } from '../../../shared/models/server/custom-config.model'
 import { isThemeNameValid } from '../../helpers/custom-validators/plugins'
 import { isUserNSFWPolicyValid, isUserVideoQuotaDailyValid, isUserVideoQuotaValid } from '../../helpers/custom-validators/users'
 import { logger } from '../../helpers/logger'
 import { isThemeRegistered } from '../../lib/plugins/theme-utils'
 import { areValidationErrors } from './shared'
+import { HttpStatusCode } from '@shared/models/http/http-error-codes'
 
 const customConfigUpdateValidator = [
   body('instance.name').exists().withMessage('Should have a valid instance name'),
@@ -104,10 +105,21 @@ const customConfigUpdateValidator = [
   }
 ]
 
+function ensureConfigIsEditable (req: express.Request, res: express.Response, next: express.NextFunction) {
+  if (!CONFIG.ALLOW_WEBADMIN_CONFIG) {
+    return res.fail({
+      status: HttpStatusCode.METHOD_NOT_ALLOWED_405,
+      message: 'Server configuration is static and cannot be edited'
+    })
+  }
+  return next()
+}
+
 // ---------------------------------------------------------------------------
 
 export {
-  customConfigUpdateValidator
+  customConfigUpdateValidator,
+  ensureConfigIsEditable
 }
 
 function checkInvalidConfigIfEmailDisabled (customConfig: CustomConfig, res: express.Response) {

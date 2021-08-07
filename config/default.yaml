@@ -1,5 +1,7 @@
 # /!\ YOU SHOULD NOT UPDATE THIS FILE, USE production.yaml instead /!\ #
 
+allow_webadmin_config: true
+
 listen:
   hostname: '127.0.0.1'
   port: 9000

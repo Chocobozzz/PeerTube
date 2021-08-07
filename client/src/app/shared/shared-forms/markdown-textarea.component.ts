@@ -45,6 +45,7 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
   previewHTML: SafeHtml | string = ''
 
   isMaximized = false
+  disabled = false
 
   maximizeInText = $localize`Maximize editor`
   maximizeOutText = $localize`Exit maximized editor`
@@ -106,6 +107,10 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
     } else {
       this.lockBodyScroll()
     }
+  }
+
+  setDisabledState(isDisabled: boolean) {
+    this.disabled = isDisabled
   }
 
   private lockBodyScroll () {

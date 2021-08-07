@@ -24,6 +24,8 @@ export class SelectCheckboxComponent implements OnInit, ControlValueAccessor {
   @Input() maxSelectedItems: number
   @Input() placeholder: string
 
+  disabled = false
+
   ngOnInit () {
     if (!this.placeholder) this.placeholder = $localize`Add a new option`
   }
@@ -60,6 +62,10 @@ export class SelectCheckboxComponent implements OnInit, ControlValueAccessor {
 
   onModelChange () {
     this.propagateChange(this.selectedItems)
+  }
+
+  setDisabledState(isDisabled: boolean) {
+    this.disabled = isDisabled
   }
 
   compareFn (item: SelectOptionsItem, selected: ItemSelectCheckboxValue) {

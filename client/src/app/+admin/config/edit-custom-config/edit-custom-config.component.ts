@@ -258,6 +258,9 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
 
     this.loadConfigAndUpdateForm()
     this.loadCategoriesAndLanguages()
+    if (!this.serverConfig.allowEdits) {
+      this.form.disable()
+    }
   }
 
   async formValidated () {

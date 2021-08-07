@@ -1,3 +1,7 @@
+allow_webadmin_config: 
+  __name: "PEERTUBE_ALLOW_WEBADMIN_CONFIG"
+  __format: "json"
+
 webserver:
   hostname: "PEERTUBE_WEBSERVER_HOSTNAME"
   port:

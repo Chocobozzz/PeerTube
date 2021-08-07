@@ -42,6 +42,7 @@ class ServerConfigManager {
     const defaultTheme = getThemeOrDefault(CONFIG.THEME.DEFAULT, DEFAULT_THEME_NAME)
 
     return {
+      allowEdits: CONFIG.ALLOW_WEBADMIN_CONFIG,
       instance: {
         name: CONFIG.INSTANCE.NAME,
         shortDescription: CONFIG.INSTANCE.SHORT_DESCRIPTION,
