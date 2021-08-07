@@ -47,13 +47,13 @@ async function run () {
   if (!video) throw new Error('Video not found.')
 
   const dataInput: VideoTranscodingPayload[] = []
-  const { videoFileResolution } = await video.getMaxQualityResolution()
+  const { resolution } = await video.getMaxQualityResolution()
 
   // Generate HLS files
   if (options.generateHls || CONFIG.TRANSCODING.WEBTORRENT.ENABLED === false) {
     const resolutionsEnabled = options.resolution
       ? [ options.resolution ]
-      : computeResolutionsToTranscode(videoFileResolution, 'vod').concat([ videoFileResolution ])
+      : computeResolutionsToTranscode(resolution, 'vod').concat([ resolution ])
 
     for (const resolution of resolutionsEnabled) {
       dataInput.push({

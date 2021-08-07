@@ -7,16 +7,29 @@ import { join } from 'path'
 import { buildAbsoluteFixturePath, wait } from '../miscs'
 import { PeerTubeServer } from '../server/server'
 
-function sendRTMPStream (rtmpBaseUrl: string, streamKey: string, fixtureName = 'video_short.mp4') {
+function sendRTMPStream (options: {
+  rtmpBaseUrl: string
+  streamKey: string
+  fixtureName?: string // default video_short.mp4
+  copyCodecs?: boolean // default false
+}) {
+  const { rtmpBaseUrl, streamKey, fixtureName = 'video_short.mp4', copyCodecs = false } = options
+
   const fixture = buildAbsoluteFixturePath(fixtureName)
 
   const command = ffmpeg(fixture)
   command.inputOption('-stream_loop -1')
   command.inputOption('-re')
-  command.outputOption('-c:v libx264')
-  command.outputOption('-g 50')
-  command.outputOption('-keyint_min 2')
-  command.outputOption('-r 60')
+
+  if (copyCodecs) {
+    command.outputOption('-c copy')
+  } else {
+    command.outputOption('-c:v libx264')
+    command.outputOption('-g 50')
+    command.outputOption('-keyint_min 2')
+    command.outputOption('-r 60')
+  }
+
   command.outputOption('-f flv')
 
   const rtmpUrl = rtmpBaseUrl + '/' + streamKey

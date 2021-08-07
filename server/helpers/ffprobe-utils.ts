@@ -1,5 +1,6 @@
 import * as ffmpeg from 'fluent-ffmpeg'
-import { getMaxBitrate, VideoFileMetadata, VideoResolution } from '../../shared/models/videos'
+import { getMaxBitrate } from '@shared/core-utils'
+import { VideoFileMetadata, VideoResolution, VideoTranscodingFPS } from '../../shared/models/videos'
 import { CONFIG } from '../initializers/config'
 import { VIDEO_TRANSCODING_FPS } from '../initializers/constants'
 import { logger } from './logger'
@@ -75,7 +76,7 @@ function getMaxAudioBitrate (type: 'aac' | 'mp3' | string, bitrate: number) {
   }
 }
 
-async function getVideoStreamSize (path: string, existingProbe?: ffmpeg.FfprobeData) {
+async function getVideoStreamSize (path: string, existingProbe?: ffmpeg.FfprobeData): Promise<{ width: number, height: number }> {
   const videoStream = await getVideoStreamFromFile(path, existingProbe)
 
   return videoStream === null
@@ -146,7 +147,10 @@ async function getVideoFileResolution (path: string, existingProbe?: ffmpeg.Ffpr
   const size = await getVideoStreamSize(path, existingProbe)
 
   return {
-    videoFileResolution: Math.min(size.height, size.width),
+    width: size.width,
+    height: size.height,
+    ratio: Math.max(size.height, size.width) / Math.min(size.height, size.width),
+    resolution: Math.min(size.height, size.width),
     isPortraitMode: size.height > size.width
   }
 }
@@ -175,10 +179,19 @@ async function getMetadataFromFile (path: string, existingProbe?: ffmpeg.Ffprobe
   return new VideoFileMetadata(metadata)
 }
 
-async function getVideoFileBitrate (path: string, existingProbe?: ffmpeg.FfprobeData) {
+async function getVideoFileBitrate (path: string, existingProbe?: ffmpeg.FfprobeData): Promise<number> {
   const metadata = await getMetadataFromFile(path, existingProbe)
 
-  return metadata.format.bit_rate as number
+  let bitrate = metadata.format.bit_rate as number
+  if (bitrate && !isNaN(bitrate)) return bitrate
+
+  const videoStream = await getVideoStreamFromFile(path, existingProbe)
+  if (!videoStream) return undefined
+
+  bitrate = videoStream?.bit_rate
+  if (bitrate && !isNaN(bitrate)) return bitrate
+
+  return undefined
 }
 
 async function getDurationFromVideoFile (path: string, existingProbe?: ffmpeg.FfprobeData) {
@@ -234,7 +247,7 @@ async function canDoQuickVideoTranscode (path: string, probe?: ffmpeg.FfprobeDat
   const videoStream = await getVideoStreamFromFile(path, probe)
   const fps = await getVideoFileFPS(path, probe)
   const bitRate = await getVideoFileBitrate(path, probe)
-  const resolution = await getVideoFileResolution(path, probe)
+  const resolutionData = await getVideoFileResolution(path, probe)
 
   // If ffprobe did not manage to guess the bitrate
   if (!bitRate) return false
@@ -244,7 +257,7 @@ async function canDoQuickVideoTranscode (path: string, probe?: ffmpeg.FfprobeDat
   if (videoStream['codec_name'] !== 'h264') return false
   if (videoStream['pix_fmt'] !== 'yuv420p') return false
   if (fps < VIDEO_TRANSCODING_FPS.MIN || fps > VIDEO_TRANSCODING_FPS.MAX) return false
-  if (bitRate > getMaxBitrate(resolution.videoFileResolution, fps, VIDEO_TRANSCODING_FPS)) return false
+  if (bitRate > getMaxBitrate({ ...resolutionData, fps })) return false
 
   return true
 }
@@ -269,7 +282,7 @@ async function canDoQuickAudioTranscode (path: string, probe?: ffmpeg.FfprobeDat
   return true
 }
 
-function getClosestFramerateStandard (fps: number, type: 'HD_STANDARD' | 'STANDARD'): number {
+function getClosestFramerateStandard <K extends keyof Pick<VideoTranscodingFPS, 'HD_STANDARD' | 'STANDARD'>> (fps: number, type: K) {
   return VIDEO_TRANSCODING_FPS[type].slice(0)
                                     .sort((a, b) => fps % a - fps % b)[0]
 }

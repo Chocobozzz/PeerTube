@@ -417,7 +417,7 @@ describe('Test video lives API validator', function () {
 
       const live = await command.get({ videoId: video.id })
 
-      const ffmpegCommand = sendRTMPStream(live.rtmpUrl, live.streamKey)
+      const ffmpegCommand = sendRTMPStream({ rtmpBaseUrl: live.rtmpUrl, streamKey: live.streamKey })
 
       await command.waitUntilPublished({ videoId: video.id })
       await command.update({ videoId: video.id, fields: {}, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
@@ -430,7 +430,7 @@ describe('Test video lives API validator', function () {
 
       const live = await command.get({ videoId: video.id })
 
-      const ffmpegCommand = sendRTMPStream(live.rtmpUrl, live.streamKey)
+      const ffmpegCommand = sendRTMPStream({ rtmpBaseUrl: live.rtmpUrl, streamKey: live.streamKey })
 
       await command.waitUntilPublished({ videoId: video.id })
 

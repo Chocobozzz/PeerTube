@@ -4,12 +4,12 @@ import { VIDEO_CHANNELS } from '@server/initializers/constants'
 import { MChannelAccountDefault, MUser } from '@server/types/models'
 import { UserRight } from '../../../../shared'
 import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
-import { isActorPreferredUsernameValid } from '../../../helpers/custom-validators/activitypub/actor'
 import { isBooleanValid, toBooleanOrNull } from '../../../helpers/custom-validators/misc'
 import {
   isVideoChannelDescriptionValid,
-  isVideoChannelNameValid,
-  isVideoChannelSupportValid
+  isVideoChannelDisplayNameValid,
+  isVideoChannelSupportValid,
+  isVideoChannelUsernameValid
 } from '../../../helpers/custom-validators/video-channels'
 import { logger } from '../../../helpers/logger'
 import { ActorModel } from '../../../models/actor/actor'
@@ -17,8 +17,8 @@ import { VideoChannelModel } from '../../../models/video/video-channel'
 import { areValidationErrors, doesLocalVideoChannelNameExist, doesVideoChannelNameWithHostExist } from '../shared'
 
 const videoChannelsAddValidator = [
-  body('name').custom(isActorPreferredUsernameValid).withMessage('Should have a valid channel name'),
-  body('displayName').custom(isVideoChannelNameValid).withMessage('Should have a valid display name'),
+  body('name').custom(isVideoChannelUsernameValid).withMessage('Should have a valid channel name'),
+  body('displayName').custom(isVideoChannelDisplayNameValid).withMessage('Should have a valid display name'),
   body('description').optional().custom(isVideoChannelDescriptionValid).withMessage('Should have a valid description'),
   body('support').optional().custom(isVideoChannelSupportValid).withMessage('Should have a valid support text'),
 
@@ -50,7 +50,7 @@ const videoChannelsUpdateValidator = [
   param('nameWithHost').exists().withMessage('Should have an video channel name with host'),
   body('displayName')
     .optional()
-    .custom(isVideoChannelNameValid).withMessage('Should have a valid display name'),
+    .custom(isVideoChannelDisplayNameValid).withMessage('Should have a valid display name'),
   body('description')
     .optional()
     .custom(isVideoChannelDescriptionValid).withMessage('Should have a valid description'),
@@ -117,7 +117,7 @@ const videoChannelsNameWithHostValidator = [
 ]
 
 const localVideoChannelValidator = [
-  param('name').custom(isVideoChannelNameValid).withMessage('Should have a valid video channel name'),
+  param('name').custom(isVideoChannelDisplayNameValid).withMessage('Should have a valid video channel name'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking localVideoChannelValidator parameters', { parameters: req.params })

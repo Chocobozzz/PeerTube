@@ -2,6 +2,7 @@
 
 import 'mocha'
 import * as chai from 'chai'
+import { getMaxBitrate } from '@shared/core-utils'
 import {
   cleanupTests,
   createMultipleServers,
@@ -12,9 +13,7 @@ import {
   wait,
   waitJobs
 } from '@shared/extra-utils'
-import { getMaxBitrate, VideoResolution } from '@shared/models'
 import { getVideoFileBitrate, getVideoFileFPS, getVideoFileResolution } from '../../helpers/ffprobe-utils'
-import { VIDEO_TRANSCODING_FPS } from '../../initializers/constants'
 
 const expect = chai.expect
 
@@ -30,14 +29,7 @@ describe('Test optimize old videos', function () {
 
     await doubleFollow(servers[0], servers[1])
 
-    let tempFixturePath: string
-
-    {
-      tempFixturePath = await generateHighBitrateVideo()
-
-      const bitrate = await getVideoFileBitrate(tempFixturePath)
-      expect(bitrate).to.be.above(getMaxBitrate(VideoResolution.H_1080P, 25, VIDEO_TRANSCODING_FPS))
-    }
+    const tempFixturePath = await generateHighBitrateVideo()
 
     // Upload two videos for our needs
     await servers[0].videos.upload({ attributes: { name: 'video1', fixture: tempFixturePath } })
@@ -88,10 +80,12 @@ describe('Test optimize old videos', function () {
         const path = servers[0].servers.buildWebTorrentFilePath(file.fileUrl)
         const bitrate = await getVideoFileBitrate(path)
         const fps = await getVideoFileFPS(path)
-        const resolution = await getVideoFileResolution(path)
+        const data = await getVideoFileResolution(path)
 
-        expect(resolution.videoFileResolution).to.equal(file.resolution.id)
-        expect(bitrate).to.be.below(getMaxBitrate(resolution.videoFileResolution, fps, VIDEO_TRANSCODING_FPS))
+        expect(data.resolution).to.equal(file.resolution.id)
+
+        const maxBitrate = getMaxBitrate({ ...data, fps })
+        expect(bitrate).to.be.below(maxBitrate)
       }
     }
   })

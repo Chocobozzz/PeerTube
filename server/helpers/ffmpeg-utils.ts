@@ -3,10 +3,18 @@ import * as ffmpeg from 'fluent-ffmpeg'
 import { readFile, remove, writeFile } from 'fs-extra'
 import { dirname, join } from 'path'
 import { FFMPEG_NICE, VIDEO_LIVE } from '@server/initializers/constants'
-import { AvailableEncoders, EncoderOptions, EncoderOptionsBuilder, EncoderProfile, VideoResolution } from '../../shared/models/videos'
+import { pick } from '@shared/core-utils'
+import {
+  AvailableEncoders,
+  EncoderOptions,
+  EncoderOptionsBuilder,
+  EncoderOptionsBuilderParams,
+  EncoderProfile,
+  VideoResolution
+} from '../../shared/models/videos'
 import { CONFIG } from '../initializers/config'
 import { execPromise, promisify0 } from './core-utils'
-import { computeFPS, getAudioStream, getVideoFileFPS } from './ffprobe-utils'
+import { computeFPS, ffprobePromise, getAudioStream, getVideoFileBitrate, getVideoFileFPS, getVideoFileResolution } from './ffprobe-utils'
 import { processImage } from './image-utils'
 import { logger } from './logger'
 
@@ -217,12 +225,16 @@ async function getLiveTranscodingCommand (options: {
   masterPlaylistName: string
 
   resolutions: number[]
+
+  // Input information
   fps: number
+  bitrate: number
+  ratio: number
 
   availableEncoders: AvailableEncoders
   profile: string
 }) {
-  const { rtmpUrl, outPath, resolutions, fps, availableEncoders, profile, masterPlaylistName } = options
+  const { rtmpUrl, outPath, resolutions, fps, bitrate, availableEncoders, profile, masterPlaylistName, ratio } = options
   const input = rtmpUrl
 
   const command = getFFmpeg(input, 'live')
@@ -252,15 +264,19 @@ async function getLiveTranscodingCommand (options: {
       availableEncoders,
       profile,
 
-      fps: resolutionFPS,
+      inputBitrate: bitrate,
+      inputRatio: ratio,
+
       resolution,
+      fps: resolutionFPS,
+
       streamNum: i,
       videoType: 'live' as 'live'
     }
 
     {
       const streamType: StreamType = 'video'
-      const builderResult = await getEncoderBuilderResult(Object.assign({}, baseEncoderBuilderParams, { streamType }))
+      const builderResult = await getEncoderBuilderResult({ ...baseEncoderBuilderParams, streamType })
       if (!builderResult) {
         throw new Error('No available live video encoder found')
       }
@@ -284,7 +300,7 @@ async function getLiveTranscodingCommand (options: {
 
     {
       const streamType: StreamType = 'audio'
-      const builderResult = await getEncoderBuilderResult(Object.assign({}, baseEncoderBuilderParams, { streamType }))
+      const builderResult = await getEncoderBuilderResult({ ...baseEncoderBuilderParams, streamType })
       if (!builderResult) {
         throw new Error('No available live audio encoder found')
       }
@@ -500,7 +516,7 @@ function getHLSVideoPath (options: HLSTranscodeOptions | HLSFromTSTranscodeOptio
 // Run encoder builder depending on available encoders
 // Try encoders by priority: if the encoder is available, run the chosen profile or fallback to the default one
 // If the default one does not exist, check the next encoder
-async function getEncoderBuilderResult (options: {
+async function getEncoderBuilderResult (options: EncoderOptionsBuilderParams & {
   streamType: 'video' | 'audio'
   input: string
 
@@ -508,12 +524,8 @@ async function getEncoderBuilderResult (options: {
   profile: string
 
   videoType: 'vod' | 'live'
-
-  resolution: number
-  fps?: number
-  streamNum?: number
 }) {
-  const { availableEncoders, input, profile, resolution, streamType, fps, streamNum, videoType } = options
+  const { availableEncoders, profile, streamType, videoType } = options
 
   const encodersToTry = availableEncoders.encodersToTry[videoType][streamType]
   const encoders = availableEncoders.available[videoType]
@@ -543,7 +555,7 @@ async function getEncoderBuilderResult (options: {
       }
     }
 
-    const result = await builder({ input, resolution, fps, streamNum })
+    const result = await builder(pick(options, [ 'input', 'resolution', 'inputBitrate', 'fps', 'inputRatio', 'streamNum' ]))
 
     return {
       result,
@@ -573,8 +585,12 @@ async function presetVideo (options: {
 
   addDefaultEncoderGlobalParams({ command })
 
+  const probe = await ffprobePromise(input)
+
   // Audio encoder
-  const parsedAudio = await getAudioStream(input)
+  const parsedAudio = await getAudioStream(input, probe)
+  const bitrate = await getVideoFileBitrate(input, probe)
+  const { ratio } = await getVideoFileResolution(input, probe)
 
   let streamsToProcess: StreamType[] = [ 'audio', 'video' ]
 
@@ -593,6 +609,8 @@ async function presetVideo (options: {
       availableEncoders,
       profile,
       fps,
+      inputBitrate: bitrate,
+      inputRatio: ratio,
       videoType: 'vod' as 'vod'
     })
 

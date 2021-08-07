@@ -28,21 +28,10 @@ import { JobQueue } from '../job-queue'
 
 type HandlerFunction = (job: Bull.Job, payload: VideoTranscodingPayload, video: MVideoFullLight, user: MUser) => Promise<any>
 
-const handlers: { [ id: string ]: HandlerFunction } = {
-  // Deprecated, introduced in 3.1
-  'hls': handleHLSJob,
+const handlers: { [ id in VideoTranscodingPayload['type'] ]: HandlerFunction } = {
   'new-resolution-to-hls': handleHLSJob,
-
-  // Deprecated, introduced in 3.1
-  'new-resolution': handleNewWebTorrentResolutionJob,
   'new-resolution-to-webtorrent': handleNewWebTorrentResolutionJob,
-
-  // Deprecated, introduced in 3.1
-  'merge-audio': handleWebTorrentMergeAudioJob,
   'merge-audio-to-webtorrent': handleWebTorrentMergeAudioJob,
-
-  // Deprecated, introduced in 3.1
-  'optimize': handleWebTorrentOptimizeJob,
   'optimize-to-webtorrent': handleWebTorrentOptimizeJob
 }
 
@@ -147,7 +136,7 @@ async function onVideoFileOptimizer (
   if (videoArg === undefined) return undefined
 
   // Outside the transaction (IO on disk)
-  const { videoFileResolution, isPortraitMode } = await videoArg.getMaxQualityResolution()
+  const { resolution, isPortraitMode } = await videoArg.getMaxQualityResolution()
 
   // Maybe the video changed in database, refresh it
   const videoDatabase = await VideoModel.loadAndPopulateAccountAndServerAndTags(videoArg.uuid)
@@ -166,7 +155,7 @@ async function onVideoFileOptimizer (
   })
   const hasHls = await createHlsJobIfEnabled(user, originalFileHLSPayload)
 
-  const hasNewResolutions = await createLowerResolutionsJobs(videoDatabase, user, videoFileResolution, isPortraitMode, 'webtorrent')
+  const hasNewResolutions = await createLowerResolutionsJobs(videoDatabase, user, resolution, isPortraitMode, 'webtorrent')
 
   if (!hasHls && !hasNewResolutions) {
     // No transcoding to do, it's now published

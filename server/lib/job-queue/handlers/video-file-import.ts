@@ -32,7 +32,7 @@ async function processVideoFileImport (job: Bull.Job) {
   const newResolutionPayload = {
     type: 'new-resolution-to-webtorrent' as 'new-resolution-to-webtorrent',
     videoUUID: video.uuid,
-    resolution: data.videoFileResolution,
+    resolution: data.resolution,
     isPortraitMode: data.isPortraitMode,
     copyCodecs: false,
     isNewVideo: false
@@ -51,13 +51,13 @@ export {
 // ---------------------------------------------------------------------------
 
 async function updateVideoFile (video: MVideoFullLight, inputFilePath: string) {
-  const { videoFileResolution } = await getVideoFileResolution(inputFilePath)
+  const { resolution } = await getVideoFileResolution(inputFilePath)
   const { size } = await stat(inputFilePath)
   const fps = await getVideoFileFPS(inputFilePath)
 
   const fileExt = getLowercaseExtension(inputFilePath)
 
-  const currentVideoFile = video.VideoFiles.find(videoFile => videoFile.resolution === videoFileResolution)
+  const currentVideoFile = video.VideoFiles.find(videoFile => videoFile.resolution === resolution)
 
   if (currentVideoFile) {
     // Remove old file and old torrent
@@ -69,9 +69,9 @@ async function updateVideoFile (video: MVideoFullLight, inputFilePath: string) {
   }
 
   const newVideoFile = new VideoFileModel({
-    resolution: videoFileResolution,
+    resolution,
     extname: fileExt,
-    filename: generateWebTorrentVideoFilename(videoFileResolution, fileExt),
+    filename: generateWebTorrentVideoFilename(resolution, fileExt),
     size,
     fps,
     videoId: video.id

@@ -3,6 +3,7 @@
 import 'mocha'
 import * as chai from 'chai'
 import { omit } from 'lodash'
+import { getMaxBitrate } from '@shared/core-utils'
 import {
   buildAbsoluteFixturePath,
   cleanupTests,
@@ -17,8 +18,7 @@ import {
   waitJobs,
   webtorrentAdd
 } from '@shared/extra-utils'
-import { getMaxBitrate, HttpStatusCode, VideoResolution, VideoState } from '@shared/models'
-import { VIDEO_TRANSCODING_FPS } from '../../../../server/initializers/constants'
+import { HttpStatusCode, VideoState } from '@shared/models'
 import {
   canDoQuickTranscode,
   getAudioStream,
@@ -190,15 +190,6 @@ describe('Test video transcoding', function () {
 
     it('Should accept and transcode additional extensions', async function () {
       this.timeout(300_000)
-
-      let tempFixturePath: string
-
-      {
-        tempFixturePath = await generateHighBitrateVideo()
-
-        const bitrate = await getVideoFileBitrate(tempFixturePath)
-        expect(bitrate).to.be.above(getMaxBitrate(VideoResolution.H_1080P, 25, VIDEO_TRANSCODING_FPS))
-      }
 
       for (const fixture of [ 'video_short.mkv', 'video_short.avi' ]) {
         const attributes = {
@@ -555,14 +546,7 @@ describe('Test video transcoding', function () {
     it('Should respect maximum bitrate values', async function () {
       this.timeout(160_000)
 
-      let tempFixturePath: string
-
-      {
-        tempFixturePath = await generateHighBitrateVideo()
-
-        const bitrate = await getVideoFileBitrate(tempFixturePath)
-        expect(bitrate).to.be.above(getMaxBitrate(VideoResolution.H_1080P, 25, VIDEO_TRANSCODING_FPS))
-      }
+      const tempFixturePath = await generateHighBitrateVideo()
 
       const attributes = {
         name: 'high bitrate video',
@@ -586,10 +570,12 @@ describe('Test video transcoding', function () {
 
           const bitrate = await getVideoFileBitrate(path)
           const fps = await getVideoFileFPS(path)
-          const { videoFileResolution } = await getVideoFileResolution(path)
+          const dataResolution = await getVideoFileResolution(path)
 
-          expect(videoFileResolution).to.equal(resolution)
-          expect(bitrate).to.be.below(getMaxBitrate(videoFileResolution, fps, VIDEO_TRANSCODING_FPS))
+          expect(resolution).to.equal(resolution)
+
+          const maxBitrate = getMaxBitrate({ ...dataResolution, fps })
+          expect(bitrate).to.be.below(maxBitrate)
         }
       }
     })

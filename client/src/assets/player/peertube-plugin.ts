@@ -228,6 +228,7 @@ class PeerTubePlugin extends Plugin {
       }
     }
 
+    console.log('Resolution changed.', data)
     this.trigger('resolutionChange', data)
   }
 

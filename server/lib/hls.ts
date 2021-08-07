@@ -1,4 +1,4 @@
-import { close, ensureDir, move, open, outputJSON, pathExists, read, readFile, remove, writeFile } from 'fs-extra'
+import { close, ensureDir, move, open, outputJSON, pathExists, read, readFile, remove, stat, writeFile } from 'fs-extra'
 import { flatten, uniq } from 'lodash'
 import { basename, dirname, join } from 'path'
 import { MStreamingPlaylistFilesVideo, MVideoWithFile } from '@server/types/models'
@@ -108,8 +108,9 @@ async function buildSha256Segment (segmentPath: string) {
   return sha256(buf)
 }
 
-function downloadPlaylistSegments (playlistUrl: string, destinationDir: string, timeout: number) {
+function downloadPlaylistSegments (playlistUrl: string, destinationDir: string, timeout: number, bodyKBLimit: number) {
   let timer
+  let remainingBodyKBLimit = bodyKBLimit
 
   logger.info('Importing HLS playlist %s', playlistUrl)
 
@@ -136,8 +137,12 @@ function downloadPlaylistSegments (playlistUrl: string, destinationDir: string, 
       for (const fileUrl of fileUrls) {
         const destPath = join(tmpDirectory, basename(fileUrl))
 
-        const bodyKBLimit = 10 * 1000 * 1000 // 10GB
-        await doRequestAndSaveToFile(fileUrl, destPath, { bodyKBLimit })
+        await doRequestAndSaveToFile(fileUrl, destPath, { bodyKBLimit: remainingBodyKBLimit })
+
+        const { size } = await stat(destPath)
+        remainingBodyKBLimit -= (size / 1000)
+
+        logger.debug('Downloaded HLS playlist file %s with %d kB remained limit.', fileUrl, Math.floor(remainingBodyKBLimit))
       }
 
       clearTimeout(timer)

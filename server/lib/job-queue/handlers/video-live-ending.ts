@@ -96,12 +96,12 @@ async function saveLive (video: MVideo, live: MVideoLive, streamingPlaylist: MSt
     const probe = await ffprobePromise(concatenatedTsFilePath)
     const { audioStream } = await getAudioStream(concatenatedTsFilePath, probe)
 
-    const { videoFileResolution, isPortraitMode } = await getVideoFileResolution(concatenatedTsFilePath, probe)
+    const { resolution, isPortraitMode } = await getVideoFileResolution(concatenatedTsFilePath, probe)
 
     const outputPath = await generateHlsPlaylistResolutionFromTS({
       video: videoWithFiles,
       concatenatedTsFilePath,
-      resolution: videoFileResolution,
+      resolution,
       isPortraitMode,
       isAAC: audioStream?.codec_name === 'aac'
     })

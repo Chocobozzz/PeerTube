@@ -239,7 +239,7 @@ async function buildNewFile (video: MVideo, videoPhysicalFile: express.VideoUplo
     videoFile.resolution = DEFAULT_AUDIO_RESOLUTION
   } else {
     videoFile.fps = await getVideoFileFPS(videoPhysicalFile.path)
-    videoFile.resolution = (await getVideoFileResolution(videoPhysicalFile.path)).videoFileResolution
+    videoFile.resolution = (await getVideoFileResolution(videoPhysicalFile.path)).resolution
   }
 
   videoFile.filename = generateWebTorrentVideoFilename(videoFile.resolution, videoFile.extname)

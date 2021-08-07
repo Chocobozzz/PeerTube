@@ -1,13 +1,11 @@
 import { Validators } from '@angular/forms'
 import { BuildFormValidator } from './form-validator.model'
+import { USER_USERNAME_VALIDATOR } from './user-validators'
 
 export const VIDEO_CHANNEL_NAME_VALIDATOR: BuildFormValidator = {
-  VALIDATORS: [
-    Validators.required,
-    Validators.minLength(1),
-    Validators.maxLength(50),
-    Validators.pattern(/^[a-z0-9][a-z0-9._]*$/)
-  ],
+  // Use the same constraints than user usernmae
+  VALIDATORS: USER_USERNAME_VALIDATOR.VALIDATORS,
+
   MESSAGES: {
     'required': $localize`Name is required.`,
     'minlength': $localize`Name must be at least 1 character long.`,
