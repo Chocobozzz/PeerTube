@@ -75,6 +75,7 @@ const CONFIG = {
   },
   OBJECT_STORAGE: {
     ENABLED: config.get<boolean>('object_storage.enabled'),
+    MAX_UPLOAD_PART: config.get<number>('object_storage.max_upload_part'),
     ENDPOINT: new URL(/^https?:\/\//i.test(config.get<string>('object_storage.endpoint'))
       ? config.get<string>('object_storage.endpoint')
       : 'https://' + config.get<string>('object_storage.endpoint')),

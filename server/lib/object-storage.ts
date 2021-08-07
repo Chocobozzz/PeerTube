@@ -20,7 +20,7 @@ import { pipelinePromise } from "@server/helpers/core-utils"
 
 type BucketInfo = {BUCKET_NAME: string, PREFIX?: string, BASE_URL?: string}
 const ONE_MIB = 1024 * 1024
-const MAX_PUT_SIZE = process.env.NODE_ENV.includes("test") ? 10 * ONE_MIB : 100 * ONE_MIB
+const MAX_PUT_SIZE = process.env.NODE_ENV.includes("test") ? 10 * ONE_MIB : CONFIG.OBJECT_STORAGE.MAX_UPLOAD_PART * ONE_MIB
 
 function getS3Client () {
   return new S3Client({ endpoint: CONFIG.OBJECT_STORAGE.ENDPOINT.toString() })
@@ -30,11 +30,7 @@ function getPartSize (stats: Stats) {
   if (process.env.NODE_ENV.includes("test")) {
     return 10 * ONE_MIB
   }
-  // Use parts of 1 GiB if the file is very large (it would take more than 1000 requests at 100 MiB per request)
-  if (stats.size / (100 * ONE_MIB) > 1000) {
-    return 1024 * ONE_MIB
-  }
-  return 100 * ONE_MIB
+  return MAX_PUT_SIZE
 }
 
 async function objectStoragePut (options: {filename: string, content: string | ReadStream, bucketInfo: BucketInfo}) {

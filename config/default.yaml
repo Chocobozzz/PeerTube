@@ -97,6 +97,8 @@ storage:
 
 object_storage:
   enabled: false
+  # Maximum amount of MiB to upload in one request to object storage
+  max_upload_part: 2048
   # Will always use https with default URL generation (see below)
   endpoint: 's3.amazonaws.com'
   streaming_playlists:
