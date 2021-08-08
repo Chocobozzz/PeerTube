@@ -1,7 +1,5 @@
 # /!\ YOU SHOULD NOT UPDATE THIS FILE, USE production.yaml instead /!\ #
 
-allow_webadmin_config: true
-
 listen:
   hostname: '127.0.0.1'
   port: 9000
@@ -211,6 +209,10 @@ peertube:
     enabled: true
     # You can use a custom URL if your want, that respect the format behind https://joinpeertube.org/api/v1/versions.json
     url: 'https://joinpeertube.org/api/v1/versions.json'
+
+webadmin:
+  configuration:
+    allow_edits: true
 
 cache:
   previews:

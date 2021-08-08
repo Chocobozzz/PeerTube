@@ -208,6 +208,11 @@ peertube:
     # You can use a custom URL if your want, that respect the format behind https://joinpeertube.org/api/v1/versions.json
     url: 'https://joinpeertube.org/api/v1/versions.json'
 
+webadmin:
+  configuration:
+    # Set to false if you want the config to be readonly
+    allow_edits: true
+
 ###############################################################################
 #
 # From this point, all the following keys can be overridden by the web interface

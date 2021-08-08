@@ -16,7 +16,6 @@ const configChangedHandlers: Function[] = []
 
 const CONFIG = {
   CUSTOM_FILE: getLocalConfigFilePath(),
-  ALLOW_WEBADMIN_CONFIG: config.get<boolean>('allow_webadmin_config'),
   LISTEN: {
     PORT: config.get<number>('listen.port'),
     HOSTNAME: config.get<string>('listen.hostname')
@@ -174,6 +173,11 @@ const CONFIG = {
     CHECK_LATEST_VERSION: {
       ENABLED: config.get<boolean>('peertube.check_latest_version.enabled'),
       URL: config.get<string>('peertube.check_latest_version.url')
+    }
+  },
+  WEBADMIN: {
+    CONFIGURATION: {
+      ALLOW_EDITS: config.get<boolean>('webadmin.configuration.allow_edits')
     }
   },
   ADMIN: {
@@ -426,7 +430,7 @@ function buildVideosRedundancy (objs: any[]): VideosRedundancyStrategy[] {
 
 export function reloadConfig () {
 
-  function getConfigDirectory () {
+  function getConfigDirectories () {
     if (process.env.NODE_CONFIG_DIR) {
       return process.env.NODE_CONFIG_DIR.split(":")
     }
@@ -435,7 +439,7 @@ export function reloadConfig () {
   }
 
   function purge () {
-    const directories = getConfigDirectory()
+    const directories = getConfigDirectories()
 
     for (const fileName in require.cache) {
       if (directories.some((dir) => fileName.includes(dir)) === false) {

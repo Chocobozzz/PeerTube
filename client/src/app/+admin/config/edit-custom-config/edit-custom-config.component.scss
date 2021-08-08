@@ -33,6 +33,11 @@ input[type=number] {
     top: 5px;
     right: 2.5rem;
   }
+
+  &>input[disabled] {
+    background-color: #f9f9f9;
+    pointer-events: none;
+  }
 }
 
 input[type=checkbox] {
@@ -92,6 +97,11 @@ textarea {
     pointer-events: none;
   }
 }
+
+input[disabled] {
+  opacity: 0.5;
+}
+
 
 .form-group-right {
   padding-top: 2px;

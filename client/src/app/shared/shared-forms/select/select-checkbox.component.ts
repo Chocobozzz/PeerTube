@@ -64,7 +64,7 @@ export class SelectCheckboxComponent implements OnInit, ControlValueAccessor {
     this.propagateChange(this.selectedItems)
   }
 
-  setDisabledState(isDisabled: boolean) {
+  setDisabledState (isDisabled: boolean) {
     this.disabled = isDisabled
   }
 

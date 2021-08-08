@@ -109,7 +109,7 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
     }
   }
 
-  setDisabledState(isDisabled: boolean) {
+  setDisabledState (isDisabled: boolean) {
     this.disabled = isDisabled
   }
 
