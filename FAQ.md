@@ -1,1 +1,1 @@
-Moved on https://joinpeertube.org/faq
+Moved to https://joinpeertube.org/faq
