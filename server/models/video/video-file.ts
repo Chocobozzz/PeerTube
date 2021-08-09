@@ -279,7 +279,7 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
 
   static async doesOwnedWebTorrentVideoFileExist (filename: string) {
     const query = 'SELECT 1 FROM "videoFile" INNER JOIN "video" ON "video"."id" = "videoFile"."videoId" AND "video"."remote" IS FALSE ' +
-                  'WHERE "filename" = $filename LIMIT 1'
+                  `WHERE "filename" = $filename AND "storage" = ${VideoStorageType.LOCAL} LIMIT 1`
 
     return doesExist(query, { filename })
   }
