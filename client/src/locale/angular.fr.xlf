@@ -8314,7 +8314,7 @@
       </trans-unit>
       <trans-unit id="6721822899525405039" datatype="html">
         <source>People can find you using @<x id="INTERPOLATION" equiv-text="sing @{{ user.usern"/>@<x id="INTERPOLATION_1" equiv-text="me }}@{{ instanceH"/> </source>
-        <target state="translated">People can find you using @<x id="INTERPOLATION" equiv-text="sing @{{ user.usern"/>@<x id="INTERPOLATION_1" equiv-text="me }}@{{ instanceH"/> </target>
+        <target state="translated">On peut vous trouver en utilisant @<x id="INTERPOLATION" equiv-text="sing @{{ user.usern"/>@<x id="INTERPOLATION_1" equiv-text="me }}@{{ instanceH"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-profile/my-account-profile.component.html</context>
           <context context-type="linenumber">11,13</context>
@@ -9110,7 +9110,7 @@
       </trans-unit>
       <trans-unit id="8553059323353586765" datatype="html">
         <source>Your current email is <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;email&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ user.email }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>. It is never shown to the public. </source>
-        <target state="translated">Your current email is <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;email&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ user.email }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>. It is never shown to the public. </target>
+        <target state="translated">Votre adresse courriel actuelle est <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;email&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ user.email }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>. Elle ne sera jamais visible publiquement. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.html</context>
           <context context-type="linenumber">5,7</context>
@@ -10563,7 +10563,7 @@
       </trans-unit>
       <trans-unit id="1268699198448750610" datatype="html">
         <source>Follow instances</source>
-        <target state="translated">Follow instances</target>
+        <target state="translated">Suivre des instances</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
           <context context-type="linenumber">17</context>
@@ -11003,7 +11003,7 @@
       </trans-unit>
       <trans-unit id="6314880288843792309" datatype="html">
         <source>The main threat to your privacy induced by BitTorrent lies in your IP address being stored in the instance's BitTorrent tracker as long as you download or watch the video.</source>
-        <target state="translated">The main threat to your privacy induced by BitTorrent lies in your IP address being stored in the instance's BitTorrent tracker as long as you download or watch the video.</target>
+        <target state="translated">La principale menace pour votre vie privée induite par BitTorrent réside dans le stockage de votre IP par l'instance du traqueur de BitTorrent tant que vous téléchargez ou regardez une vidéo.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">81,83</context>
