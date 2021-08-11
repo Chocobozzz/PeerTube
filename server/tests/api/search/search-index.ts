@@ -137,8 +137,8 @@ describe('Test videos search', function () {
       expect(video.account.avatar).to.exist
 
       expect(video.channel.host).to.equal('framatube.org')
-      expect(video.channel.name).to.equal('bf54d359-cfad-4935-9d45-9d6be93f63e8')
-      expect(video.channel.url).to.equal('https://framatube.org/video-channels/bf54d359-cfad-4935-9d45-9d6be93f63e8')
+      expect(video.channel.name).to.equal('joinpeertube')
+      expect(video.channel.url).to.equal('https://framatube.org/video-channels/joinpeertube')
       expect(video.channel.avatar).to.exist
     }
 
