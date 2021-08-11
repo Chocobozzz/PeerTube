@@ -64,7 +64,7 @@ for lang in ${API_LANGS//:/ } ; do
         -c "${lang_dir}/def.yaml" \
         -t "${lang_dir}" \
         -g "$lang" \
-        --skip-validate-spec
+        --skip-validate-spec \
         --git-host "${API_REPO_HOST}" \
         --git-user-id "${API_URL_USERNAME}" \
         --git-repo-id "${git_repo_id}" \
