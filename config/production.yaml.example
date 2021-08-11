@@ -90,7 +90,7 @@ storage:
   # Overridable client files : logo.svg, favicon.png and icons/*.png (PWA) in client/dist/assets/images
   # Could contain for example assets/images/favicon.png
   # If the file exists, peertube will serve it
-  # If not, peertube will fallback to the default fil
+  # If not, peertube will fallback to the default file
   client_overrides: '/var/www/peertube/storage/client-overrides/'
 
 log:
