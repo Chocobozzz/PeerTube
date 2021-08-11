@@ -146,7 +146,6 @@
     "youtube-dl": "^3.0.2"
   },
   "devDependencies": {
-    "@openapitools/openapi-generator-cli": "^2.1.4",
     "@types/async": "^3.0.0",
     "@types/async-lock": "^1.1.0",
     "@types/bcrypt": "^5.0.0",
