@@ -6,9 +6,10 @@ import { uuidToShort } from '@server/helpers/uuid'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
 import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url'
 import {
-  addMoveToObjectStorageJob as addMoveToObjectStorageJobIfNeeded,
+  addMoveToObjectStorageJob,
   addOptimizeOrMergeAudioJob,
   buildLocalVideoFromReq,
+  buildNextVideoState,
   buildVideoThumbnailsFromReq,
   setVideoTags
 } from '@server/lib/video'
@@ -145,10 +146,7 @@ async function addVideo (options: {
 
   const videoData = buildLocalVideoFromReq(videoInfo, videoChannel.id)
 
-  videoData.state = CONFIG.TRANSCODING.ENABLED
-    ? VideoState.TO_TRANSCODE
-    : VideoState.PUBLISHED
-
+  videoData.state = buildNextVideoState()
   videoData.duration = videoPhysicalFile.duration // duration was added by a previous middleware
 
   const video = new VideoModel(videoData) as MVideoFullLight
@@ -216,14 +214,13 @@ async function addVideo (options: {
 
   createTorrentFederate(video, videoFile)
     .then(() => {
-      if (video.state !== VideoState.TO_TRANSCODE) {
-        // Video will be published before move is complete which may cause some video connections to drop
-        // But it's recommended to enable transcoding anyway, so this is the tradeoff
-        addMoveToObjectStorageJobIfNeeded(video, videoFile)
-        return
+      if (video.state === VideoState.TO_MOVE_TO_EXTERNAL_STORAGE) {
+        return addMoveToObjectStorageJob(video)
       }
 
-      return addOptimizeOrMergeAudioJob(videoCreated, videoFile, user)
+      if (video.state === VideoState.TO_TRANSCODE) {
+        return addOptimizeOrMergeAudioJob(videoCreated, videoFile, user)
+      }
     })
     .catch(err => logger.error('Cannot add optimize/merge audio job for %s.', videoCreated.uuid, { err, ...lTags(videoCreated.uuid) }))
 

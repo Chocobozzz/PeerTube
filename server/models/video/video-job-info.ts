@@ -1,19 +1,7 @@
-import { AttributesOnly } from "@shared/core-utils"
-import {
-  AllowNull,
-  BelongsTo,
-  Column,
-  CreatedAt,
-  Default,
-  ForeignKey,
-  IsInt,
-  Model,
-  Table,
-  Unique,
-  UpdatedAt
-} from "sequelize-typescript"
-import { Op, QueryTypes } from "sequelize"
-import { VideoModel } from "./video"
+import { Op, QueryTypes, Transaction } from 'sequelize'
+import { AllowNull, BelongsTo, Column, CreatedAt, Default, ForeignKey, IsInt, Model, Table, Unique, UpdatedAt } from 'sequelize-typescript'
+import { AttributesOnly } from '@shared/core-utils'
+import { VideoModel } from './video'
 
 @Table({
   tableName: 'videoJobInfo',
@@ -42,6 +30,12 @@ export class VideoJobInfoModel extends Model<Partial<AttributesOnly<VideoJobInfo
   @Column
   pendingMove: number
 
+  @AllowNull(false)
+  @Default(0)
+  @IsInt
+  @Column
+  pendingTranscoding: number
+
   @ForeignKey(() => VideoModel)
   @Unique
   @Column
@@ -55,11 +49,19 @@ export class VideoJobInfoModel extends Model<Partial<AttributesOnly<VideoJobInfo
   })
   Video: VideoModel
 
-  static async increaseOrCreatePendingMove (videoUUID: string): Promise<number> {
+  static load (videoId: number, transaction: Transaction) {
+    const where = {
+      videoId
+    }
+
+    return VideoJobInfoModel.findOne({ where, transaction })
+  }
+
+  static async increaseOrCreate (videoUUID: string, column: 'pendingMove' | 'pendingTranscoding'): Promise<number> {
     const options = { type: QueryTypes.SELECT as QueryTypes.SELECT, bind: { videoUUID } }
 
-    const [ { pendingMove } ] = await VideoJobInfoModel.sequelize.query<{pendingMove: number}>(`
-    INSERT INTO "videoJobInfo" ("videoId", "pendingMove", "createdAt", "updatedAt")
+    const [ { pendingMove } ] = await VideoJobInfoModel.sequelize.query<{ pendingMove: number }>(`
+    INSERT INTO "videoJobInfo" ("videoId", "${column}", "createdAt", "updatedAt")
     SELECT
       "video"."id" AS "videoId", 1, NOW(), NOW()
     FROM
@@ -68,29 +70,29 @@ export class VideoJobInfoModel extends Model<Partial<AttributesOnly<VideoJobInfo
       "video"."uuid" = $videoUUID
     ON CONFLICT ("videoId") DO UPDATE
     SET
-      "pendingMove" = "videoJobInfo"."pendingMove" + 1,
+      "${column}" = "videoJobInfo"."${column}" + 1,
       "updatedAt" = NOW()
     RETURNING
-      "pendingMove"
+      "${column}"
     `, options)
 
     return pendingMove
   }
 
-  static async decreasePendingMove (videoUUID: string): Promise<number> {
+  static async decrease (videoUUID: string, column: 'pendingMove' | 'pendingTranscoding'): Promise<number> {
     const options = { type: QueryTypes.SELECT as QueryTypes.SELECT, bind: { videoUUID } }
 
-    const [ { pendingMove } ] = await VideoJobInfoModel.sequelize.query<{pendingMove: number}>(`
+    const [ { pendingMove } ] = await VideoJobInfoModel.sequelize.query<{ pendingMove: number }>(`
     UPDATE
       "videoJobInfo"
     SET
-      "pendingMove" = "videoJobInfo"."pendingMove" - 1,
+      "${column}" = "videoJobInfo"."${column}" - 1,
       "updatedAt" = NOW()
     FROM "video"
     WHERE
       "video"."id" = "videoJobInfo"."videoId" AND "video"."uuid" = $videoUUID
     RETURNING
-      "pendingMove";
+      "${column}";
     `, options)
 
     return pendingMove

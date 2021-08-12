@@ -16,6 +16,10 @@ function dateIsValid (dateString: string, interval = 300000) {
   return Math.abs(now.getTime() - dateToCheck.getTime()) <= interval
 }
 
+function expectStartWith (str: string, start: string) {
+  expect(str.startsWith(start), `${str} does not start with ${start}`).to.be.true
+}
+
 async function testImage (url: string, imageName: string, imagePath: string, extension = '.jpg') {
   const res = await makeGetRequest({
     url,
@@ -42,5 +46,6 @@ async function testFileExistsOrNot (server: PeerTubeServer, directory: string, f
 export {
   dateIsValid,
   testImage,
-  testFileExistsOrNot
+  testFileExistsOrNot,
+  expectStartWith
 }

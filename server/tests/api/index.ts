@@ -2,6 +2,7 @@
 import './activitypub'
 import './check-params'
 import './moderation'
+import './object-storage'
 import './notifications'
 import './redundancy'
 import './search'

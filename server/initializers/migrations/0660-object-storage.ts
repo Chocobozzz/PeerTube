@@ -1,5 +1,5 @@
-import { VideoStorageType } from '@server/types/models'
 import * as Sequelize from 'sequelize'
+import { VideoStorage } from '@shared/models'
 
 async function up (utils: {
   transaction: Sequelize.Transaction
@@ -12,6 +12,7 @@ async function up (utils: {
     CREATE TABLE IF NOT EXISTS "videoJobInfo" (
       "id" serial,
       "pendingMove" INTEGER NOT NULL,
+      "pendingTranscoding" INTEGER NOT NULL,
       "videoId" serial UNIQUE NOT NULL REFERENCES "video" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
       "createdAt" timestamp WITH time zone NOT NULL,
       "updatedAt" timestamp WITH time zone NOT NULL,
@@ -27,7 +28,7 @@ async function up (utils: {
   }
   {
     await utils.sequelize.query(
-      `UPDATE "videoFile" SET "storage" = ${VideoStorageType.LOCAL}`
+      `UPDATE "videoFile" SET "storage" = ${VideoStorage.LOCAL}`
     )
   }
   {
@@ -39,7 +40,7 @@ async function up (utils: {
   }
   {
     await utils.sequelize.query(
-      `UPDATE "videoStreamingPlaylist" SET "storage" = ${VideoStorageType.LOCAL}`
+      `UPDATE "videoStreamingPlaylist" SET "storage" = ${VideoStorage.LOCAL}`
     )
   }
   {

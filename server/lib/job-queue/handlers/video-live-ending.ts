@@ -6,7 +6,7 @@ import { VIDEO_LIVE } from '@server/initializers/constants'
 import { buildConcatenatedName, cleanupLive, LiveSegmentShaStore } from '@server/lib/live'
 import { generateVideoMiniature } from '@server/lib/thumbnail'
 import { generateHlsPlaylistResolutionFromTS } from '@server/lib/transcoding/video-transcoding'
-import { publishAndFederateIfNeeded } from '@server/lib/video'
+import { moveToNextState } from '@server/lib/video'
 import { generateHLSMasterPlaylistFilename, generateHlsSha256SegmentsFilename, getHLSDirectory } from '@server/lib/video-paths'
 import { VideoModel } from '@server/models/video/video'
 import { VideoFileModel } from '@server/models/video/video-file'
@@ -133,7 +133,7 @@ async function saveLive (video: MVideo, live: MVideoLive, streamingPlaylist: MSt
     })
   }
 
-  await publishAndFederateIfNeeded(videoWithFiles, true)
+  await moveToNextState(videoWithFiles, false)
 }
 
 async function cleanupLiveFiles (hlsDirectory: string) {

@@ -219,8 +219,3 @@ export type MVideoFormattableDetails =
   Use<'VideoStreamingPlaylists', MStreamingPlaylistRedundanciesOpt[]> &
   Use<'VideoFiles', MVideoFileRedundanciesOpt[]> &
   PickWithOpt<VideoModel, 'Trackers', MTrackerUrl[]>
-
-export enum VideoStorageType {
-  LOCAL,
-  OBJECT_STORAGE,
-}

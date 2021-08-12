@@ -15,9 +15,11 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
+import { getHLSPublicFileUrl } from '@server/lib/object-storage'
 import { VideoFileModel } from '@server/models/video/video-file'
-import { MStreamingPlaylist, MVideo, VideoStorageType } from '@server/types/models'
+import { MStreamingPlaylist, MVideo } from '@server/types/models'
 import { AttributesOnly } from '@shared/core-utils'
+import { VideoStorage } from '@shared/models'
 import { VideoStreamingPlaylistType } from '../../../shared/models/videos/video-streaming-playlist.type'
 import { sha1 } from '../../helpers/core-utils'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
@@ -35,7 +37,6 @@ import { VideoRedundancyModel } from '../redundancy/video-redundancy'
 import { doesExist } from '../shared'
 import { throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
-import { CONFIG } from '@server/initializers/config'
 
 @Table({
   tableName: 'videoStreamingPlaylist',
@@ -96,9 +97,9 @@ export class VideoStreamingPlaylistModel extends Model<Partial<AttributesOnly<Vi
   videoId: number
 
   @AllowNull(false)
-  @Default(VideoStorageType.LOCAL)
+  @Default(VideoStorage.LOCAL)
   @Column
-  storage: VideoStorageType
+  storage: VideoStorage
 
   @BelongsTo(() => VideoModel, {
     foreignKey: {
@@ -204,24 +205,20 @@ export class VideoStreamingPlaylistModel extends Model<Partial<AttributesOnly<Vi
   }
 
   getMasterPlaylistUrl (video: MVideo) {
-    if (this.storage === VideoStorageType.OBJECT_STORAGE) {
-      if (CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.BASE_URL) {
-        return CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.BASE_URL + join(this.getStringType(), video.uuid, this.playlistFilename)
-      }
-      return this.playlistUrl
+    if (this.storage === VideoStorage.OBJECT_STORAGE) {
+      return getHLSPublicFileUrl(this.playlistUrl)
     }
+
     if (video.isOwned()) return WEBSERVER.URL + this.getMasterPlaylistStaticPath(video.uuid)
 
     return this.playlistUrl
   }
 
   getSha256SegmentsUrl (video: MVideo) {
-    if (this.storage === VideoStorageType.OBJECT_STORAGE) {
-      if (CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.BASE_URL) {
-        return CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.BASE_URL + join(this.getStringType(), video.uuid, this.segmentsSha256Filename)
-      }
-      return this.segmentsSha256Url
+    if (this.storage === VideoStorage.OBJECT_STORAGE) {
+      return getHLSPublicFileUrl(this.segmentsSha256Url)
     }
+
     if (video.isOwned()) return WEBSERVER.URL + this.getSha256SegmentsStaticPath(video.uuid, video.isLive)
 
     return this.segmentsSha256Url

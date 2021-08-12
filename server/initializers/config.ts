@@ -75,10 +75,13 @@ const CONFIG = {
   },
   OBJECT_STORAGE: {
     ENABLED: config.get<boolean>('object_storage.enabled'),
-    MAX_UPLOAD_PART: config.get<number>('object_storage.max_upload_part'),
-    ENDPOINT: new URL(/^https?:\/\//i.test(config.get<string>('object_storage.endpoint'))
-      ? config.get<string>('object_storage.endpoint')
-      : 'https://' + config.get<string>('object_storage.endpoint')),
+    MAX_UPLOAD_PART: bytes.parse(config.get<string>('object_storage.max_upload_part')),
+    ENDPOINT: config.get<string>('object_storage.endpoint'),
+    REGION: config.get<string>('object_storage.region'),
+    CREDENTIALS: {
+      ACCESS_KEY_ID: config.get<string>('object_storage.credentials.access_key_id'),
+      SECRET_ACCESS_KEY: config.get<string>('object_storage.credentials.secret_access_key')
+    },
     VIDEOS: {
       BUCKET_NAME: config.get<string>('object_storage.videos.bucket_name'),
       PREFIX: config.get<string>('object_storage.videos.prefix'),

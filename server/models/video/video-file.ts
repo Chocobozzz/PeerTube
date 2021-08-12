@@ -23,9 +23,11 @@ import validator from 'validator'
 import { buildRemoteVideoBaseUrl } from '@server/helpers/activitypub'
 import { logger } from '@server/helpers/logger'
 import { extractVideo } from '@server/helpers/video'
+import { getHLSPublicFileUrl, getWebTorrentPublicFileUrl } from '@server/lib/object-storage'
 import { getTorrentFilePath } from '@server/lib/video-paths'
-import { MStreamingPlaylistVideo, MVideo, MVideoWithHost, VideoStorageType } from '@server/types/models'
+import { MStreamingPlaylistVideo, MVideo, MVideoWithHost } from '@server/types/models'
 import { AttributesOnly } from '@shared/core-utils'
+import { VideoStorage } from '@shared/models'
 import {
   isVideoFileExtnameValid,
   isVideoFileInfoHashValid,
@@ -48,7 +50,6 @@ import { doesExist } from '../shared'
 import { parseAggregateResult, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 import { VideoStreamingPlaylistModel } from './video-streaming-playlist'
-import { CONFIG } from '@server/initializers/config'
 
 export enum ScopeNames {
   WITH_VIDEO = 'WITH_VIDEO',
@@ -216,9 +217,9 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
   videoId: number
 
   @AllowNull(false)
-  @Default(VideoStorageType.LOCAL)
+  @Default(VideoStorage.LOCAL)
   @Column
-  storage: VideoStorageType
+  storage: VideoStorage
 
   @BelongsTo(() => VideoModel, {
     foreignKey: {
@@ -279,7 +280,7 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
 
   static async doesOwnedWebTorrentVideoFileExist (filename: string) {
     const query = 'SELECT 1 FROM "videoFile" INNER JOIN "video" ON "video"."id" = "videoFile"."videoId" AND "video"."remote" IS FALSE ' +
-                  `WHERE "filename" = $filename AND "storage" = ${VideoStorageType.LOCAL} LIMIT 1`
+                  `WHERE "filename" = $filename AND "storage" = ${VideoStorage.LOCAL} LIMIT 1`
 
     return doesExist(query, { filename })
   }
@@ -456,22 +457,20 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
     return !!this.videoStreamingPlaylistId
   }
 
-  generateObjectUrl (video: MVideo) {
-    if (!this.isHLS() && CONFIG.OBJECT_STORAGE.VIDEOS.BASE_URL) {
-      return CONFIG.OBJECT_STORAGE.VIDEOS.BASE_URL + this.filename
+  getObjectStorageUrl () {
+    if (this.isHLS()) {
+      return getHLSPublicFileUrl(this.fileUrl)
     }
-    if (this.isHLS() && CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.BASE_URL) {
-      return CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.BASE_URL + this.filename
-    }
-    return this.fileUrl
+
+    return getWebTorrentPublicFileUrl(this.fileUrl)
   }
 
   getFileUrl (video: MVideo) {
-    if (this.storage === VideoStorageType.OBJECT_STORAGE) {
-      return this.generateObjectUrl(video)
+    if (this.storage === VideoStorage.OBJECT_STORAGE) {
+      return this.getObjectStorageUrl()
     }
-    if (!this.Video) this.Video = video as VideoModel
 
+    if (!this.Video) this.Video = video as VideoModel
     if (video.isOwned()) return WEBSERVER.URL + this.getFileStaticPath(video)
 
     return this.fileUrl
@@ -484,9 +483,6 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
   }
 
   getFileDownloadUrl (video: MVideoWithHost) {
-    if (this.storage === VideoStorageType.OBJECT_STORAGE) {
-      return this.generateObjectUrl(video)
-    }
     const path = this.isHLS()
       ? join(STATIC_DOWNLOAD_PATHS.HLS_VIDEOS, `${video.uuid}-${this.resolution}-fragmented${this.extname}`)
       : join(STATIC_DOWNLOAD_PATHS.VIDEOS, `${video.uuid}-${this.resolution}${this.extname}`)

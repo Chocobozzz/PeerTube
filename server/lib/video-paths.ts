@@ -1,12 +1,12 @@
+import { stat } from 'fs-extra'
 import { join } from 'path'
+import { buildUUID } from '@server/helpers/uuid'
 import { extractVideo } from '@server/helpers/video'
 import { CONFIG } from '@server/initializers/config'
 import { HLS_REDUNDANCY_DIRECTORY, HLS_STREAMING_PLAYLIST_DIRECTORY, STATIC_PATHS, WEBSERVER } from '@server/initializers/constants'
 import { isStreamingPlaylist, MStreamingPlaylist, MStreamingPlaylistVideo, MVideo, MVideoFile, MVideoUUID } from '@server/types/models'
-import { buildUUID } from '@server/helpers/uuid'
 import { removeFragmentedMP4Ext } from '@shared/core-utils'
-import { makeAvailable } from './object-storage'
-import { stat } from 'fs-extra'
+import { makeAvailable } from './object-storage/shared/object-storage-helpers'
 
 // ################## Video file name ##################
 

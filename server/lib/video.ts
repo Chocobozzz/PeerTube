@@ -1,18 +1,19 @@
 import { UploadFiles } from 'express'
 import { Transaction } from 'sequelize/types'
+import { logger } from '@server/helpers/logger'
+import { CONFIG } from '@server/initializers/config'
 import { DEFAULT_AUDIO_RESOLUTION, JOB_PRIORITY } from '@server/initializers/constants'
 import { sequelizeTypescript } from '@server/initializers/database'
 import { TagModel } from '@server/models/video/tag'
 import { VideoModel } from '@server/models/video/video'
+import { VideoJobInfoModel } from '@server/models/video/video-job-info'
 import { FilteredModelAttributes } from '@server/types'
 import { MThumbnail, MUserId, MVideoFile, MVideoTag, MVideoThumbnail, MVideoUUID } from '@server/types/models'
-import { ThumbnailType, VideoCreate, VideoPrivacy, VideoTranscodingPayload } from '@shared/models'
+import { ThumbnailType, VideoCreate, VideoPrivacy, VideoState, VideoTranscodingPayload } from '@shared/models'
 import { federateVideoIfNeeded } from './activitypub/videos'
 import { CreateJobOptions, JobQueue } from './job-queue/job-queue'
 import { Notifier } from './notifier'
 import { updateVideoMiniatureFromExisting } from './thumbnail'
-import { CONFIG } from '@server/initializers/config'
-import { VideoJobInfoModel } from '@server/models/video/video-job-info'
 
 function buildLocalVideoFromReq (videoInfo: VideoCreate, channelId: number): FilteredModelAttributes<VideoModel> {
   return {
@@ -84,27 +85,53 @@ async function setVideoTags (options: {
   video.Tags = tagInstances
 }
 
-async function publishAndFederateIfNeeded (video: MVideoUUID, wasLive = false) {
-  const result = await sequelizeTypescript.transaction(async t => {
+function moveToNextState (video: MVideoUUID, isNewVideo = true) {
+  return sequelizeTypescript.transaction(async t => {
     // Maybe the video changed in database, refresh it
     const videoDatabase = await VideoModel.loadAndPopulateAccountAndServerAndTags(video.uuid, t)
     // Video does not exist anymore
     if (!videoDatabase) return undefined
 
-    // We transcoded the video file in another format, now we can publish it
-    const videoPublished = await videoDatabase.publishIfNeededAndSave(t)
+    const previousState = videoDatabase.state
 
-    // If the video was not published, we consider it is a new one for other instances
-    // Live videos are always federated, so it's not a new video
-    await federateVideoIfNeeded(videoDatabase, !wasLive && videoPublished, t)
+    // Already in its final state
+    if (previousState === VideoState.PUBLISHED) return
 
-    return { videoDatabase, videoPublished }
+    const newState = buildNextVideoState(previousState)
+
+    if (newState === VideoState.PUBLISHED) {
+      logger.info('Publishing video %s.', video.uuid, { tags: [ video.uuid ] })
+
+      await videoDatabase.setNewState(newState, t)
+
+      // If the video was not published, we consider it is a new one for other instances
+      // Live videos are always federated, so it's not a new video
+      await federateVideoIfNeeded(videoDatabase, isNewVideo, t)
+
+      Notifier.Instance.notifyOnNewVideoIfNeeded(videoDatabase)
+
+      if (previousState === VideoState.TO_TRANSCODE) {
+        Notifier.Instance.notifyOnVideoPublishedAfterTranscoding(videoDatabase)
+      }
+
+      return
+    }
+
+    if (newState === VideoState.TO_MOVE_TO_EXTERNAL_STORAGE) {
+      const videoJobInfo = await VideoJobInfoModel.load(videoDatabase.id, t)
+      const pendingTranscoding = videoJobInfo?.pendingTranscoding || 0
+
+      // We want to wait all transcoding jobs before moving the video on an external storage
+      if (pendingTranscoding !== 0) return
+
+      await videoDatabase.setNewState(newState, t)
+
+      logger.info('Creating external storage move job for video %s.', video.uuid, { tags: [ video.uuid ] })
+
+      addMoveToObjectStorageJob(video)
+        .catch(err => logger.error('Cannot add move to object storage job', { err }))
+    }
   })
-
-  if (result?.videoPublished) {
-    Notifier.Instance.notifyOnNewVideoIfNeeded(result.videoDatabase)
-    Notifier.Instance.notifyOnVideoPublishedAfterTranscoding(result.videoDatabase)
-  }
 }
 
 async function addOptimizeOrMergeAudioJob (video: MVideoUUID, videoFile: MVideoFile, user: MUserId) {
@@ -133,24 +160,16 @@ async function addOptimizeOrMergeAudioJob (video: MVideoUUID, videoFile: MVideoF
 }
 
 async function addTranscodingJob (payload: VideoTranscodingPayload, options: CreateJobOptions) {
-  // This value is decreased when the move job is finished in ./handlers/move-to-object-storage.ts
-  // Because every transcode job starts a move job for the transcoded file, the value will only reach
-  // 0 again when all transcode jobs are finished and the last move job is running
-  // If object storage support is not enabled all the pendingMove values stay at the amount of transcode
-  // jobs that were started for that video.
-  await VideoJobInfoModel.increaseOrCreatePendingMove(payload.videoUUID)
+  await VideoJobInfoModel.increaseOrCreate(payload.videoUUID, 'pendingTranscoding')
 
   return JobQueue.Instance.createJobWithPromise({ type: 'video-transcoding', payload: payload }, options)
 }
 
-function addMoveToObjectStorageJob (video: MVideoUUID, videoFile: MVideoFile) {
-  if (CONFIG.OBJECT_STORAGE.ENABLED) {
-    const dataInput = {
-      videoUUID: video.uuid,
-      videoFileId: videoFile.id
-    }
-    return JobQueue.Instance.createJobWithPromise({ type: 'move-to-object-storage', payload: dataInput })
-  }
+async function addMoveToObjectStorageJob (video: MVideoUUID) {
+  await VideoJobInfoModel.increaseOrCreate(video.uuid, 'pendingMove')
+
+  const dataInput = { videoUUID: video.uuid }
+  return JobQueue.Instance.createJobWithPromise({ type: 'move-to-object-storage', payload: dataInput })
 }
 
 async function getTranscodingJobPriority (user: MUserId) {
@@ -162,14 +181,38 @@ async function getTranscodingJobPriority (user: MUserId) {
   return JOB_PRIORITY.TRANSCODING + videoUploadedByUser
 }
 
+function buildNextVideoState (currentState?: VideoState) {
+  if (currentState === VideoState.PUBLISHED) {
+    throw new Error('Video is already in its final state')
+  }
+
+  if (
+    currentState !== VideoState.TO_TRANSCODE &&
+    currentState !== VideoState.TO_MOVE_TO_EXTERNAL_STORAGE &&
+    CONFIG.TRANSCODING.ENABLED
+  ) {
+    return VideoState.TO_TRANSCODE
+  }
+
+  if (
+    currentState !== VideoState.TO_MOVE_TO_EXTERNAL_STORAGE &&
+    CONFIG.OBJECT_STORAGE.ENABLED
+  ) {
+    return VideoState.TO_MOVE_TO_EXTERNAL_STORAGE
+  }
+
+  return VideoState.PUBLISHED
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   buildLocalVideoFromReq,
-  publishAndFederateIfNeeded,
   buildVideoThumbnailsFromReq,
   setVideoTags,
+  moveToNextState,
   addOptimizeOrMergeAudioJob,
+  buildNextVideoState,
   addTranscodingJob,
   addMoveToObjectStorageJob,
   getTranscodingJobPriority

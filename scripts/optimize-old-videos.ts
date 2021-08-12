@@ -1,16 +1,18 @@
-import { registerTSPaths } from '../server/helpers/register-ts-paths'
-registerTSPaths()
-
-import { getDurationFromVideoFile, getVideoFileBitrate, getVideoFileFPS, getVideoFileResolution } from '../server/helpers/ffprobe-utils'
-import { VideoModel } from '../server/models/video/video'
-import { optimizeOriginalVideofile } from '../server/lib/transcoding/video-transcoding'
-import { initDatabaseModels } from '../server/initializers/database'
-import { basename, dirname } from 'path'
 import { copy, move, remove } from 'fs-extra'
+import { basename, dirname } from 'path'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
-import { getMaxBitrate } from '@shared/core-utils'
+import { CONFIG } from '@server/initializers/config'
+import { processMoveToObjectStorage } from '@server/lib/job-queue/handlers/move-to-object-storage'
 import { getVideoFilePath, getVideoFilePathMakeAvailable } from '@server/lib/video-paths'
-import { moveWebTorrentFiles } from '@server/lib/job-queue/handlers/move-to-object-storage'
+import { getMaxBitrate } from '@shared/core-utils'
+import { MoveObjectStoragePayload } from '@shared/models'
+import { getDurationFromVideoFile, getVideoFileBitrate, getVideoFileFPS, getVideoFileResolution } from '../server/helpers/ffprobe-utils'
+import { registerTSPaths } from '../server/helpers/register-ts-paths'
+import { initDatabaseModels } from '../server/initializers/database'
+import { optimizeOriginalVideofile } from '../server/lib/transcoding/video-transcoding'
+import { VideoModel } from '../server/models/video/video'
+
+registerTSPaths()
 
 run()
   .then(() => process.exit(0))
@@ -68,7 +70,6 @@ async function run () {
 
         if (originalDuration === newDuration) {
           console.log('Finished optimizing %s', basename(currentFilePath))
-          await moveWebTorrentFiles(video, file.id)
           await remove(backupFile)
           continue
         }
@@ -78,6 +79,10 @@ async function run () {
         await createTorrentAndSetInfoHash(video, file)
         await file.save()
       }
+    }
+
+    if (CONFIG.OBJECT_STORAGE.ENABLED === true) {
+      await processMoveToObjectStorage({ data: { videoUUID: video.uuid } as MoveObjectStoragePayload } as any)
     }
   }
 

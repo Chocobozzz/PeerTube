@@ -97,20 +97,33 @@ storage:
 
 object_storage:
   enabled: false
-  # Maximum amount of MiB to upload in one request to object storage
-  max_upload_part: 2048
-  # Will always use https with default URL generation (see below)
+
+  # Without protocol, will default to HTTPS
   endpoint: 's3.amazonaws.com'
+
+  region: 'us-east-1'
+
+  credentials:
+    access_key_id: 'access-key'
+    secret_access_key: 'secret-access-key'
+
+  # Maximum amount to upload in one request to object storage
+  max_upload_part: 2MB
+
   streaming_playlists:
-    bucket_name: ''
+    bucket_name: 'streaming-playlists'
+
     # Allows setting all buckets to the same value but with a different prefix
-    prefix: ''
-    # Base url for object URL generation, path in bucket is appended to this url
-    base_url: ''
+    prefix: '' # Example: 'streaming-playlists:'
+
+    # Base url for object URL generation, scheme and host will be replaced by this URL
+    # Useful when you want to use a CDN/external proxy
+    base_url: '' # Example: 'https://mirror.example.com'
+
   # Same settings but for webtorrent videos
   videos:
-    bucket_name: ''
-    prefix: '' 
+    bucket_name: 'videos'
+    prefix: ''
     base_url: ''
 
 log:

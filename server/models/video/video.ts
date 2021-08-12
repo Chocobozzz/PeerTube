@@ -28,6 +28,7 @@ import { buildNSFWFilter } from '@server/helpers/express-utils'
 import { uuidToShort } from '@server/helpers/uuid'
 import { getPrivaciesForFederation, isPrivacyForFederation, isStateForFederation } from '@server/helpers/video'
 import { LiveManager } from '@server/lib/live/live-manager'
+import { removeHLSObjectStorage, removeWebTorrentObjectStorage } from '@server/lib/object-storage'
 import { getHLSDirectory, getVideoFilePath, getVideoFilePathMakeAvailable } from '@server/lib/video-paths'
 import { getServerActor } from '@server/models/application/application'
 import { ModelCache } from '@server/models/model-cache'
@@ -35,7 +36,7 @@ import { AttributesOnly, buildVideoEmbedPath, buildVideoWatchPath, pick } from '
 import { VideoFile } from '@shared/models/videos/video-file.model'
 import { ResultList, UserRight, VideoPrivacy, VideoState } from '../../../shared'
 import { VideoObject } from '../../../shared/models/activitypub/objects'
-import { Video, VideoDetails, VideoRateType } from '../../../shared/models/videos'
+import { Video, VideoDetails, VideoRateType, VideoStorage } from '../../../shared/models/videos'
 import { ThumbnailType } from '../../../shared/models/videos/thumbnail.type'
 import { VideoFilter } from '../../../shared/models/videos/video-query.type'
 import { VideoStreamingPlaylistType } from '../../../shared/models/videos/video-streaming-playlist.type'
@@ -78,8 +79,7 @@ import {
   MVideoThumbnail,
   MVideoThumbnailBlacklist,
   MVideoWithAllFiles,
-  MVideoWithFile,
-  VideoStorageType
+  MVideoWithFile
 } from '../../types/models'
 import { MThumbnail } from '../../types/models/video/thumbnail'
 import { MVideoFile, MVideoFileStreamingPlaylistVideo } from '../../types/models/video/video-file'
@@ -115,14 +115,13 @@ import { ScopeNames as VideoChannelScopeNames, SummaryOptions, VideoChannelModel
 import { VideoCommentModel } from './video-comment'
 import { VideoFileModel } from './video-file'
 import { VideoImportModel } from './video-import'
+import { VideoJobInfoModel } from './video-job-info'
 import { VideoLiveModel } from './video-live'
 import { VideoPlaylistElementModel } from './video-playlist-element'
 import { VideoShareModel } from './video-share'
 import { VideoStreamingPlaylistModel } from './video-streaming-playlist'
 import { VideoTagModel } from './video-tag'
 import { VideoViewModel } from './video-view'
-import { removeObject, removePrefix } from '@server/lib/object-storage'
-import { VideoJobInfoModel } from './video-job-info'
 
 export enum ScopeNames {
   FOR_API = 'FOR_API',
@@ -1690,8 +1689,8 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     const promises: Promise<any>[] = [ remove(filePath) ]
     if (!isRedundancy) promises.push(videoFile.removeTorrent())
 
-    if (videoFile.storage === VideoStorageType.OBJECT_STORAGE) {
-      promises.push(removeObject(videoFile.filename, CONFIG.OBJECT_STORAGE.VIDEOS))
+    if (videoFile.storage === VideoStorage.OBJECT_STORAGE) {
+      promises.push(removeWebTorrentObjectStorage(videoFile))
     }
 
     return Promise.all(promises)
@@ -1701,9 +1700,6 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     const directoryPath = getHLSDirectory(this, isRedundancy)
 
     await remove(directoryPath)
-    if (streamingPlaylist.storage === VideoStorageType.OBJECT_STORAGE) {
-      await removePrefix(join(streamingPlaylist.getStringType(), this.uuid), CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS)
-    }
 
     if (isRedundancy !== true) {
       const streamingPlaylistWithFiles = streamingPlaylist as MStreamingPlaylistFilesVideo
@@ -1717,6 +1713,10 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
       await Promise.all(
         streamingPlaylistWithFiles.VideoFiles.map(file => file.removeTorrent())
       )
+
+      if (streamingPlaylist.storage === VideoStorage.OBJECT_STORAGE) {
+        await removeHLSObjectStorage(streamingPlaylist, this)
+      }
     }
   }
 
@@ -1760,16 +1760,16 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
       this.privacy === VideoPrivacy.INTERNAL
   }
 
-  async publishIfNeededAndSave (t: Transaction) {
-    if (this.state !== VideoState.PUBLISHED) {
-      this.state = VideoState.PUBLISHED
-      this.publishedAt = new Date()
-      await this.save({ transaction: t })
+  async setNewState (newState: VideoState, transaction: Transaction) {
+    if (this.state === newState) throw new Error('Cannot use same state ' + newState)
 
-      return true
+    this.state = newState
+
+    if (this.state === VideoState.PUBLISHED) {
+      this.publishedAt = new Date()
     }
 
-    return false
+    await this.save({ transaction })
   }
 
   getBandwidthBits (videoFile: MVideoFile) {

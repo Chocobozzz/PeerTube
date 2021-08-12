@@ -5,7 +5,7 @@ import { VideosTorrentCache } from '@server/lib/files-cache/videos-torrent-cache
 import { Hooks } from '@server/lib/plugins/hooks'
 import { getVideoFilePath } from '@server/lib/video-paths'
 import { MStreamingPlaylist, MVideo, MVideoFile, MVideoFullLight } from '@server/types/models'
-import { HttpStatusCode, VideoStreamingPlaylistType } from '@shared/models'
+import { HttpStatusCode, VideoStorage, VideoStreamingPlaylistType } from '@shared/models'
 import { STATIC_DOWNLOAD_PATHS } from '../initializers/constants'
 import { asyncMiddleware, videosDownloadValidator } from '../middlewares'
 
@@ -81,6 +81,10 @@ async function downloadVideoFile (req: express.Request, res: express.Response) {
 
   if (!checkAllowResult(res, allowParameters, allowedResult)) return
 
+  if (videoFile.storage === VideoStorage.OBJECT_STORAGE) {
+    return res.redirect(videoFile.getObjectStorageUrl())
+  }
+
   return res.download(getVideoFilePath(video, videoFile), `${video.name}-${videoFile.resolution}p${videoFile.extname}`)
 }
 
@@ -106,6 +110,10 @@ async function downloadHLSVideoFile (req: express.Request, res: express.Response
   )
 
   if (!checkAllowResult(res, allowParameters, allowedResult)) return
+
+  if (videoFile.storage === VideoStorage.OBJECT_STORAGE) {
+    return res.redirect(videoFile.getObjectStorageUrl())
+  }
 
   const filename = `${video.name}-${videoFile.resolution}p-${streamingPlaylist.getStringType()}${videoFile.extname}`
   return res.download(getVideoFilePath(streamingPlaylist, videoFile), filename)

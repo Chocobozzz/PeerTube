@@ -89,9 +89,10 @@ elif [ "$1" = "api-4" ]; then
 
     moderationFiles=$(findTestFiles ./dist/server/tests/api/moderation)
     redundancyFiles=$(findTestFiles ./dist/server/tests/api/redundancy)
+    objectStorageFiles=$(findTestFiles ./dist/server/tests/api/object-storage)
     activitypubFiles=$(findTestFiles ./dist/server/tests/api/activitypub)
 
-    MOCHA_PARALLEL=true TS_NODE_FILES=true runTest "$1" 2 $moderationFiles $redundancyFiles $activitypubFiles
+    MOCHA_PARALLEL=true TS_NODE_FILES=true runTest "$1" 2 $moderationFiles $redundancyFiles $activitypubFiles $objectStorageFiles
 elif [ "$1" = "external-plugins" ]; then
     npm run build:server
 
