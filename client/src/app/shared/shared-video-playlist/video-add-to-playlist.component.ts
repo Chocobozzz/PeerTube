@@ -47,7 +47,7 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
   isNewPlaylistBlockOpened = false
 
   videoPlaylistSearch: string
-  videoPlaylistSearchChanged = new Subject<string>()
+  videoPlaylistSearchChanged = new Subject<void>()
 
   videoPlaylists: PlaylistSummary[] = []
 

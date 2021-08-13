@@ -109,7 +109,8 @@ function createWebsocketTrackerServer (app: express.Application) {
             return
           }
 
-          return wss.handleUpgrade(request, socket, head, ws => wss.emit('connection', ws, request))
+          // FIXME: typings
+          return wss.handleUpgrade(request, socket as any, head, ws => wss.emit('connection', ws, request))
         })
         .catch(err => logger.error('Cannot check if tracker block ip exists.', { err }))
     }

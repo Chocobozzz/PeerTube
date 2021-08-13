@@ -1,7 +1,7 @@
 // Thanks https://github.com/streamroot/videojs-hlsjs-plugin
 // We duplicated this plugin to choose the hls.js version we want, because streamroot only provide a bundled file
 
-import * as Hlsjs from 'hls.js/dist/hls.light.js'
+import Hlsjs, { ErrorData, HlsConfig, Level, ManifestLoadedData } from 'hls.js'
 import videojs from 'video.js'
 import { HlsjsConfigHandlerOptions, QualityLevelRepresentation, QualityLevels, VideoJSTechHLS } from '../peertube-videojs-typings'
 
@@ -10,10 +10,8 @@ type ErrorCounts = {
 }
 
 type Metadata = {
-  levels: Hlsjs.Level[]
+  levels: Level[]
 }
-
-type CustomAudioTrack = Hlsjs.HlsAudioTrack & { name?: string, lang?: string }
 
 const registerSourceHandler = function (vjs: typeof videojs) {
   if (!Hlsjs.isSupported()) {
@@ -93,8 +91,8 @@ class Html5Hlsjs {
   private readonly source: videojs.Tech.SourceObject
   private readonly vjs: typeof videojs
 
-  private hls: Hlsjs & { manualLevel?: number, audioTrack?: any, audioTracks?: CustomAudioTrack[] } // FIXME: typings
-  private hlsjsConfig: Partial<Hlsjs.Config & { cueHandler: any }> = null
+  private hls: Hlsjs
+  private hlsjsConfig: Partial<HlsConfig & { cueHandler: any }> = null
 
   private _duration: number = null
   private metadata: Metadata = null
@@ -255,7 +253,7 @@ class Html5Hlsjs {
     this.tech.trigger('error')
   }
 
-  private _onError (_event: any, data: Hlsjs.errorData) {
+  private _onError (_event: any, data: ErrorData) {
     const error: { message: string, code?: number } = {
       message: `HLS.js error: ${data.type} - fatal: ${data.fatal} - ${data.details}`
     }
@@ -285,7 +283,7 @@ class Html5Hlsjs {
     this.hls.currentLevel = qualityId
   }
 
-  private _levelLabel (level: Hlsjs.Level) {
+  private _levelLabel (level: Level) {
     if (this.player.srOptions_.levelLabelHandler) {
       return this.player.srOptions_.levelLabelHandler(level as any)
     }
@@ -523,7 +521,7 @@ class Html5Hlsjs {
     }
   }
 
-  private _onMetaData (_event: any, data: Hlsjs.manifestLoadedData) {
+  private _onMetaData (_event: any, data: ManifestLoadedData) {
     // This could arrive before 'loadedqualitydata' handlers is registered, remember it so we can raise it later
     this.metadata = data as any
     this._handleQualityLevels()
