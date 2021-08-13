@@ -9,11 +9,11 @@ import {
   addMoveToObjectStorageJob,
   addOptimizeOrMergeAudioJob,
   buildLocalVideoFromReq,
-  buildNextVideoState,
   buildVideoThumbnailsFromReq,
   setVideoTags
 } from '@server/lib/video'
 import { generateWebTorrentVideoFilename, getVideoFilePath } from '@server/lib/video-paths'
+import { buildNextVideoState } from '@server/lib/video-state'
 import { openapiOperationDoc } from '@server/middlewares/doc'
 import { MVideo, MVideoFile, MVideoFullLight } from '@server/types/models'
 import { uploadx } from '@uploadx/core'
