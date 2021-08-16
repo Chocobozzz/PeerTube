@@ -97,7 +97,7 @@ export class VideoStreamingPlaylistModel extends Model<Partial<AttributesOnly<Vi
   videoId: number
 
   @AllowNull(false)
-  @Default(VideoStorage.LOCAL)
+  @Default(VideoStorage.FILE_SYSTEM)
   @Column
   storage: VideoStorage
 

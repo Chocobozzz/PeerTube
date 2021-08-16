@@ -2,8 +2,19 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { cleanupTests, createMultipleServers, doubleFollow, PeerTubeServer, setAccessTokensToServers, waitJobs } from '@shared/extra-utils'
-import { VideoFile } from '@shared/models'
+import {
+  areObjectStorageTestsDisabled,
+  cleanupTests,
+  createMultipleServers,
+  doubleFollow,
+  expectStartWith,
+  makeRawRequest,
+  ObjectStorageCommand,
+  PeerTubeServer,
+  setAccessTokensToServers,
+  waitJobs
+} from '@shared/extra-utils'
+import { HttpStatusCode, VideoDetails, VideoFile } from '@shared/models'
 
 const expect = chai.expect
 
@@ -17,21 +28,34 @@ function assertVideoProperties (video: VideoFile, resolution: number, extname: s
   if (size) expect(video.size).to.equal(size)
 }
 
-describe('Test create import video jobs', function () {
-  this.timeout(60000)
+async function checkFiles (video: VideoDetails, objectStorage: boolean) {
+  for (const file of video.files) {
+    if (objectStorage) expectStartWith(file.fileUrl, ObjectStorageCommand.getWebTorrentBaseUrl())
 
-  let servers: PeerTubeServer[] = []
+    await makeRawRequest(file.fileUrl, HttpStatusCode.OK_200)
+  }
+}
+
+function runTests (objectStorage: boolean) {
   let video1UUID: string
   let video2UUID: string
+
+  let servers: PeerTubeServer[] = []
 
   before(async function () {
     this.timeout(90000)
 
+    const config = objectStorage
+      ? ObjectStorageCommand.getDefaultConfig()
+      : {}
+
     // Run server 2 to have transcoding enabled
-    servers = await createMultipleServers(2)
+    servers = await createMultipleServers(2, config)
     await setAccessTokensToServers(servers)
 
     await doubleFollow(servers[0], servers[1])
+
+    if (objectStorage) await ObjectStorageCommand.prepareDefaultBuckets()
 
     // Upload two videos for our needs
     {
@@ -44,7 +68,6 @@ describe('Test create import video jobs', function () {
       video2UUID = uuid
     }
 
-    // Transcoding
     await waitJobs(servers)
   })
 
@@ -65,6 +88,8 @@ describe('Test create import video jobs', function () {
       const [ originalVideo, transcodedVideo ] = videoDetails.files
       assertVideoProperties(originalVideo, 720, 'webm', 218910)
       assertVideoProperties(transcodedVideo, 480, 'webm', 69217)
+
+      await checkFiles(videoDetails, objectStorage)
     }
   })
 
@@ -87,6 +112,8 @@ describe('Test create import video jobs', function () {
       assertVideoProperties(transcodedVideo420, 480, 'mp4')
       assertVideoProperties(transcodedVideo320, 360, 'mp4')
       assertVideoProperties(transcodedVideo240, 240, 'mp4')
+
+      await checkFiles(videoDetails, objectStorage)
     }
   })
 
@@ -107,10 +134,25 @@ describe('Test create import video jobs', function () {
       const [ video720, video480 ] = videoDetails.files
       assertVideoProperties(video720, 720, 'webm', 942961)
       assertVideoProperties(video480, 480, 'webm', 69217)
+
+      await checkFiles(videoDetails, objectStorage)
     }
   })
 
   after(async function () {
     await cleanupTests(servers)
+  })
+}
+
+describe('Test create import video jobs', function () {
+
+  describe('On filesystem', function () {
+    runTests(false)
+  })
+
+  describe('On object storage', function () {
+    if (areObjectStorageTestsDisabled()) return
+
+    runTests(true)
   })
 })

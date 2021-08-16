@@ -1,5 +1,5 @@
 import { HttpStatusCode } from '@shared/models'
-import { unwrapBody, unwrapText } from '../requests'
+import { unwrapBody, unwrapTextOrDecode, unwrapBodyOrDecodeToJSON } from '../requests'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
 
 export class StreamingPlaylistsCommand extends AbstractCommand {
@@ -7,7 +7,7 @@ export class StreamingPlaylistsCommand extends AbstractCommand {
   get (options: OverrideCommandOptions & {
     url: string
   }) {
-    return unwrapText(this.getRawRequest({
+    return unwrapTextOrDecode(this.getRawRequest({
       ...options,
 
       url: options.url,
@@ -33,7 +33,7 @@ export class StreamingPlaylistsCommand extends AbstractCommand {
   getSegmentSha256 (options: OverrideCommandOptions & {
     url: string
   }) {
-    return unwrapBody<{ [ id: string ]: string }>(this.getRawRequest({
+    return unwrapBodyOrDecodeToJSON<{ [ id: string ]: string }>(this.getRawRequest({
       ...options,
 
       url: options.url,

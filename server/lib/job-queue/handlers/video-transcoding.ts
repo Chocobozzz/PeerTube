@@ -1,7 +1,7 @@
 import * as Bull from 'bull'
 import { TranscodeOptionsType } from '@server/helpers/ffmpeg-utils'
 import { addTranscodingJob, getTranscodingJobPriority } from '@server/lib/video'
-import { getVideoFilePath } from '@server/lib/video-paths'
+import { VideoPathManager } from '@server/lib/video-path-manager'
 import { moveToNextState } from '@server/lib/video-state'
 import { UserModel } from '@server/models/user/user'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info'
@@ -68,15 +68,16 @@ async function handleHLSJob (job: Bull.Job, payload: HLSTranscodingPayload, vide
     : video.getMaxQualityFile()
 
   const videoOrStreamingPlaylist = videoFileInput.getVideoOrStreamingPlaylist()
-  const videoInputPath = getVideoFilePath(videoOrStreamingPlaylist, videoFileInput)
 
-  await generateHlsPlaylistResolution({
-    video,
-    videoInputPath,
-    resolution: payload.resolution,
-    copyCodecs: payload.copyCodecs,
-    isPortraitMode: payload.isPortraitMode || false,
-    job
+  await VideoPathManager.Instance.makeAvailableVideoFile(videoOrStreamingPlaylist, videoFileInput, videoInputPath => {
+    return generateHlsPlaylistResolution({
+      video,
+      videoInputPath,
+      resolution: payload.resolution,
+      copyCodecs: payload.copyCodecs,
+      isPortraitMode: payload.isPortraitMode || false,
+      job
+    })
   })
 
   await retryTransactionWrapper(onHlsPlaylistGeneration, video, user, payload)
@@ -120,11 +121,18 @@ async function onHlsPlaylistGeneration (video: MVideoFullLight, user: MUser, pay
     video.VideoFiles = []
 
     // Create HLS new resolution jobs
-    await createLowerResolutionsJobs(video, user, payload.resolution, payload.isPortraitMode, 'hls')
+    await createLowerResolutionsJobs({
+      video,
+      user,
+      videoFileResolution: payload.resolution,
+      isPortraitMode: payload.isPortraitMode,
+      isNewVideo: payload.isNewVideo ?? true,
+      type: 'hls'
+    })
   }
 
-  await VideoJobInfoModel.decrease(video.uuid, 'pendingTranscoding')
-  await moveToNextState(video)
+  await VideoJobInfoModel.decrease(video.uuid, 'pendingTranscode')
+  await moveToNextState(video, payload.isNewVideo)
 }
 
 async function onVideoFileOptimizer (
@@ -154,12 +162,20 @@ async function onVideoFileOptimizer (
     isMaxQuality: true
   }
   const hasHls = await createHlsJobIfEnabled(user, originalFileHLSPayload)
-  const hasNewResolutions = await createLowerResolutionsJobs(videoDatabase, user, resolution, isPortraitMode, 'webtorrent')
-  await VideoJobInfoModel.decrease(videoDatabase.uuid, 'pendingTranscoding')
+  const hasNewResolutions = await createLowerResolutionsJobs({
+    video: videoDatabase,
+    user,
+    videoFileResolution: resolution,
+    isPortraitMode,
+    type: 'webtorrent',
+    isNewVideo: payload.isNewVideo ?? true
+  })
+
+  await VideoJobInfoModel.decrease(videoDatabase.uuid, 'pendingTranscode')
 
   // Move to next state if there are no other resolutions to generate
   if (!hasHls && !hasNewResolutions) {
-    await moveToNextState(videoDatabase)
+    await moveToNextState(videoDatabase, payload.isNewVideo)
   }
 }
 
@@ -169,19 +185,10 @@ async function onNewWebTorrentFileResolution (
   payload: NewResolutionTranscodingPayload | MergeAudioTranscodingPayload
 ) {
   await createHlsJobIfEnabled(user, { ...payload, copyCodecs: true, isMaxQuality: false })
-  await VideoJobInfoModel.decrease(video.uuid, 'pendingTranscoding')
+  await VideoJobInfoModel.decrease(video.uuid, 'pendingTranscode')
 
-  await moveToNextState(video)
+  await moveToNextState(video, payload.isNewVideo)
 }
-
-// ---------------------------------------------------------------------------
-
-export {
-  processVideoTranscoding,
-  onNewWebTorrentFileResolution
-}
-
-// ---------------------------------------------------------------------------
 
 async function createHlsJobIfEnabled (user: MUserId, payload: {
   videoUUID: string
@@ -189,8 +196,9 @@ async function createHlsJobIfEnabled (user: MUserId, payload: {
   isPortraitMode?: boolean
   copyCodecs: boolean
   isMaxQuality: boolean
+  isNewVideo?: boolean
 }) {
-  if (!payload || CONFIG.TRANSCODING.HLS.ENABLED !== true) return false
+  if (!payload || CONFIG.TRANSCODING.ENABLED !== true || CONFIG.TRANSCODING.HLS.ENABLED !== true) return false
 
   const jobOptions = {
     priority: await getTranscodingJobPriority(user)
@@ -202,7 +210,8 @@ async function createHlsJobIfEnabled (user: MUserId, payload: {
     resolution: payload.resolution,
     isPortraitMode: payload.isPortraitMode,
     copyCodecs: payload.copyCodecs,
-    isMaxQuality: payload.isMaxQuality
+    isMaxQuality: payload.isMaxQuality,
+    isNewVideo: payload.isNewVideo
   }
 
   await addTranscodingJob(hlsTranscodingPayload, jobOptions)
@@ -210,13 +219,26 @@ async function createHlsJobIfEnabled (user: MUserId, payload: {
   return true
 }
 
-async function createLowerResolutionsJobs (
-  video: MVideoFullLight,
-  user: MUserId,
-  videoFileResolution: number,
-  isPortraitMode: boolean,
+// ---------------------------------------------------------------------------
+
+export {
+  processVideoTranscoding,
+  createHlsJobIfEnabled,
+  onNewWebTorrentFileResolution
+}
+
+// ---------------------------------------------------------------------------
+
+async function createLowerResolutionsJobs (options: {
+  video: MVideoFullLight
+  user: MUserId
+  videoFileResolution: number
+  isPortraitMode: boolean
+  isNewVideo: boolean
   type: 'hls' | 'webtorrent'
-) {
+}) {
+  const { video, user, videoFileResolution, isPortraitMode, isNewVideo, type } = options
+
   // Create transcoding jobs if there are enabled resolutions
   const resolutionsEnabled = computeResolutionsToTranscode(videoFileResolution, 'vod')
   const resolutionCreated: number[] = []
@@ -230,7 +252,8 @@ async function createLowerResolutionsJobs (
         type: 'new-resolution-to-webtorrent',
         videoUUID: video.uuid,
         resolution,
-        isPortraitMode
+        isPortraitMode,
+        isNewVideo
       }
     }
 
@@ -241,7 +264,8 @@ async function createLowerResolutionsJobs (
         resolution,
         isPortraitMode,
         copyCodecs: false,
-        isMaxQuality: false
+        isMaxQuality: false,
+        isNewVideo
       }
     }
 

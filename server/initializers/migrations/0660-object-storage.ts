@@ -12,7 +12,7 @@ async function up (utils: {
     CREATE TABLE IF NOT EXISTS "videoJobInfo" (
       "id" serial,
       "pendingMove" INTEGER NOT NULL,
-      "pendingTranscoding" INTEGER NOT NULL,
+      "pendingTranscode" INTEGER NOT NULL,
       "videoId" serial UNIQUE NOT NULL REFERENCES "video" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
       "createdAt" timestamp WITH time zone NOT NULL,
       "updatedAt" timestamp WITH time zone NOT NULL,
@@ -28,7 +28,7 @@ async function up (utils: {
   }
   {
     await utils.sequelize.query(
-      `UPDATE "videoFile" SET "storage" = ${VideoStorage.LOCAL}`
+      `UPDATE "videoFile" SET "storage" = ${VideoStorage.FILE_SYSTEM}`
     )
   }
   {
@@ -40,7 +40,7 @@ async function up (utils: {
   }
   {
     await utils.sequelize.query(
-      `UPDATE "videoStreamingPlaylist" SET "storage" = ${VideoStorage.LOCAL}`
+      `UPDATE "videoStreamingPlaylist" SET "storage" = ${VideoStorage.FILE_SYSTEM}`
     )
   }
   {

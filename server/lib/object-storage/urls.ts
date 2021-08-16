@@ -1,5 +1,5 @@
 import { CONFIG } from '@server/initializers/config'
-import { BucketInfo, buildKey, endpointParsed } from './shared'
+import { BucketInfo, buildKey, getEndpointParsed } from './shared'
 
 function getPrivateUrl (config: BucketInfo, keyWithoutPrefix: string) {
   return getBaseUrl(config) + buildKey(keyWithoutPrefix, config)
@@ -31,7 +31,7 @@ export {
 function getBaseUrl (bucketInfo: BucketInfo, baseUrl?: string) {
   if (baseUrl) return baseUrl
 
-  return `${endpointParsed.protocol}//${bucketInfo.BUCKET_NAME}.${endpointParsed.host}/`
+  return `${getEndpointParsed().protocol}//${bucketInfo.BUCKET_NAME}.${getEndpointParsed().host}/`
 }
 
 const regex = new RegExp('https?://[^/]+')

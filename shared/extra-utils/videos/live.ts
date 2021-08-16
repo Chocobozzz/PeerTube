@@ -89,6 +89,12 @@ async function waitUntilLivePublishedOnAllServers (servers: PeerTubeServer[], vi
   }
 }
 
+async function waitUntilLiveSavedOnAllServers (servers: PeerTubeServer[], videoId: string) {
+  for (const server of servers) {
+    await server.live.waitUntilSaved({ videoId })
+  }
+}
+
 async function checkLiveCleanupAfterSave (server: PeerTubeServer, videoUUID: string, resolutions: number[] = []) {
   const basePath = server.servers.buildDirectory('streaming-playlists')
   const hlsPath = join(basePath, 'hls', videoUUID)
@@ -126,5 +132,6 @@ export {
   testFfmpegStreamError,
   stopFfmpeg,
   waitUntilLivePublishedOnAllServers,
+  waitUntilLiveSavedOnAllServers,
   checkLiveCleanupAfterSave
 }

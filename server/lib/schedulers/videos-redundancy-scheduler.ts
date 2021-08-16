@@ -24,7 +24,7 @@ import { getLocalVideoCacheFileActivityPubUrl, getLocalVideoCacheStreamingPlayli
 import { getOrCreateAPVideo } from '../activitypub/videos'
 import { downloadPlaylistSegments } from '../hls'
 import { removeVideoRedundancy } from '../redundancy'
-import { generateHLSRedundancyUrl, generateWebTorrentRedundancyUrl } from '../video-paths'
+import { generateHLSRedundancyUrl, generateWebTorrentRedundancyUrl } from '../video-urls'
 import { AbstractScheduler } from './abstract-scheduler'
 
 type CandidateToDuplicate = {

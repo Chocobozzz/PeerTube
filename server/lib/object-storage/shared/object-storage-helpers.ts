@@ -98,17 +98,24 @@ async function removePrefix (prefix: string, bucketInfo: BucketInfo) {
   if (listedObjects.IsTruncated) await removePrefix(prefix, bucketInfo)
 }
 
-async function makeAvailable (options: { filename: string, at: string }, bucketInfo: BucketInfo) {
-  await ensureDir(dirname(options.at))
+async function makeAvailable (options: {
+  key: string
+  destination: string
+  bucketInfo: BucketInfo
+}) {
+  const { key, destination, bucketInfo } = options
+
+  await ensureDir(dirname(options.destination))
 
   const command = new GetObjectCommand({
     Bucket: bucketInfo.BUCKET_NAME,
-    Key: buildKey(options.filename, bucketInfo)
+    Key: buildKey(key, bucketInfo)
   })
   const response = await getClient().send(command)
 
-  const file = createWriteStream(options.at)
+  const file = createWriteStream(destination)
   await pipelinePromise(response.Body as Readable, file)
+
   file.close()
 }
 
@@ -176,6 +183,7 @@ async function multiPartUpload (options: {
       partNumber, bucketInfo.PREFIX, objectStorageKey, bucketInfo.BUCKET_NAME, lTags()
     )
 
+    // FIXME: Remove when https://github.com/aws/aws-sdk-js-v3/pull/2637 is released
     // The s3 sdk needs to know the length of the http body beforehand, but doesn't support
     // streams with start and end set, so it just tries to stat the file in stream.path.
     // This fails for us because we only want to send part of the file. The stream type

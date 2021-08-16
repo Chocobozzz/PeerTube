@@ -11,9 +11,9 @@ import { CONFIG } from '@server/initializers/config'
 import { MEMOIZE_TTL, VIDEO_LIVE } from '@server/initializers/constants'
 import { VideoFileModel } from '@server/models/video/video-file'
 import { MStreamingPlaylistVideo, MUserId, MVideoLiveVideo } from '@server/types/models'
+import { getLiveDirectory } from '../../paths'
 import { VideoTranscodingProfilesManager } from '../../transcoding/video-transcoding-profiles'
 import { isAbleToUploadVideo } from '../../user'
-import { getHLSDirectory } from '../../video-paths'
 import { LiveQuotaStore } from '../live-quota-store'
 import { LiveSegmentShaStore } from '../live-segment-sha-store'
 import { buildConcatenatedName } from '../live-utils'
@@ -282,7 +282,7 @@ class MuxingSession extends EventEmitter {
   }
 
   private async prepareDirectories () {
-    const outPath = getHLSDirectory(this.videoLive.Video)
+    const outPath = getLiveDirectory(this.videoLive.Video)
     await ensureDir(outPath)
 
     const replayDirectory = join(outPath, VIDEO_LIVE.REPLAY_DIRECTORY)

@@ -121,6 +121,20 @@ function unwrapText (test: request.Test): Promise<string> {
   return test.then(res => res.text)
 }
 
+function unwrapBodyOrDecodeToJSON <T> (test: request.Test): Promise<T> {
+  return test.then(res => {
+    if (res.body instanceof Buffer) {
+      return JSON.parse(new TextDecoder().decode(res.body))
+    }
+
+    return res.body
+  })
+}
+
+function unwrapTextOrDecode (test: request.Test): Promise<string> {
+  return test.then(res => res.text || new TextDecoder().decode(res.body))
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -134,6 +148,8 @@ export {
   makeRawRequest,
   makeActivityPubGetRequest,
   unwrapBody,
+  unwrapTextOrDecode,
+  unwrapBodyOrDecodeToJSON,
   unwrapText
 }
 

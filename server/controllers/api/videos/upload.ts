@@ -1,10 +1,12 @@
 import * as express from 'express'
 import { move } from 'fs-extra'
+import { basename } from 'path'
 import { getLowercaseExtension } from '@server/helpers/core-utils'
 import { deleteResumableUploadMetaFile, getResumableUploadPath } from '@server/helpers/upload'
 import { uuidToShort } from '@server/helpers/uuid'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
 import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url'
+import { generateWebTorrentVideoFilename } from '@server/lib/paths'
 import {
   addMoveToObjectStorageJob,
   addOptimizeOrMergeAudioJob,
@@ -12,7 +14,7 @@ import {
   buildVideoThumbnailsFromReq,
   setVideoTags
 } from '@server/lib/video'
-import { generateWebTorrentVideoFilename, getVideoFilePath } from '@server/lib/video-paths'
+import { VideoPathManager } from '@server/lib/video-path-manager'
 import { buildNextVideoState } from '@server/lib/video-state'
 import { openapiOperationDoc } from '@server/middlewares/doc'
 import { MVideo, MVideoFile, MVideoFullLight } from '@server/types/models'
@@ -153,13 +155,13 @@ async function addVideo (options: {
   video.VideoChannel = videoChannel
   video.url = getLocalVideoActivityPubUrl(video) // We use the UUID, so set the URL after building the object
 
-  const videoFile = await buildNewFile(video, videoPhysicalFile)
+  const videoFile = await buildNewFile(videoPhysicalFile)
 
   // Move physical file
-  const destination = getVideoFilePath(video, videoFile)
+  const destination = VideoPathManager.Instance.getFSVideoFileOutputPath(video, videoFile)
   await move(videoPhysicalFile.path, destination)
   // This is important in case if there is another attempt in the retry process
-  videoPhysicalFile.filename = getVideoFilePath(video, videoFile)
+  videoPhysicalFile.filename = basename(destination)
   videoPhysicalFile.path = destination
 
   const [ thumbnailModel, previewModel ] = await buildVideoThumbnailsFromReq({
@@ -235,7 +237,7 @@ async function addVideo (options: {
   })
 }
 
-async function buildNewFile (video: MVideo, videoPhysicalFile: express.VideoUploadFile) {
+async function buildNewFile (videoPhysicalFile: express.VideoUploadFile) {
   const videoFile = new VideoFileModel({
     extname: getLowercaseExtension(videoPhysicalFile.filename),
     size: videoPhysicalFile.size,

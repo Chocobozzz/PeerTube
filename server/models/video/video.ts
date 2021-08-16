@@ -29,7 +29,8 @@ import { uuidToShort } from '@server/helpers/uuid'
 import { getPrivaciesForFederation, isPrivacyForFederation, isStateForFederation } from '@server/helpers/video'
 import { LiveManager } from '@server/lib/live/live-manager'
 import { removeHLSObjectStorage, removeWebTorrentObjectStorage } from '@server/lib/object-storage'
-import { getHLSDirectory, getVideoFilePath, getVideoFilePathMakeAvailable } from '@server/lib/video-paths'
+import { getHLSDirectory, getHLSRedundancyDirectory } from '@server/lib/paths'
+import { VideoPathManager } from '@server/lib/video-path-manager'
 import { getServerActor } from '@server/models/application/application'
 import { ModelCache } from '@server/models/model-cache'
 import { AttributesOnly, buildVideoEmbedPath, buildVideoWatchPath, pick } from '@shared/core-utils'
@@ -1649,12 +1650,13 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     return peertubeTruncate(this.description, { length: maxLength })
   }
 
-  async getMaxQualityResolution () {
+  getMaxQualityResolution () {
     const file = this.getMaxQualityFile()
     const videoOrPlaylist = file.getVideoOrStreamingPlaylist()
-    const originalFilePath = await getVideoFilePathMakeAvailable(videoOrPlaylist, file)
 
-    return getVideoFileResolution(originalFilePath)
+    return VideoPathManager.Instance.makeAvailableVideoFile(videoOrPlaylist, file, originalFilePath => {
+      return getVideoFileResolution(originalFilePath)
+    })
   }
 
   getDescriptionAPIPath () {
@@ -1684,7 +1686,9 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
   }
 
   removeFileAndTorrent (videoFile: MVideoFile, isRedundancy = false) {
-    const filePath = getVideoFilePath(this, videoFile, isRedundancy)
+    const filePath = isRedundancy
+      ? VideoPathManager.Instance.getFSRedundancyVideoFilePath(this, videoFile)
+      : VideoPathManager.Instance.getFSVideoFileOutputPath(this, videoFile)
 
     const promises: Promise<any>[] = [ remove(filePath) ]
     if (!isRedundancy) promises.push(videoFile.removeTorrent())
@@ -1697,7 +1701,9 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
   }
 
   async removeStreamingPlaylistFiles (streamingPlaylist: MStreamingPlaylist, isRedundancy = false) {
-    const directoryPath = getHLSDirectory(this, isRedundancy)
+    const directoryPath = isRedundancy
+      ? getHLSRedundancyDirectory(this)
+      : getHLSDirectory(this)
 
     await remove(directoryPath)
 

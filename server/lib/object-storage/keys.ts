@@ -1,12 +1,12 @@
 import { join } from 'path'
 import { MStreamingPlaylist, MVideoUUID } from '@server/types/models'
 
-function generateHLSObjectStorageKey (playlist: MStreamingPlaylist, video: MVideoUUID, filename?: string) {
-  const base = playlist.getStringType() + '_' + video.uuid
+function generateHLSObjectStorageKey (playlist: MStreamingPlaylist, video: MVideoUUID, filename: string) {
+  return join(generateHLSObjectBaseStorageKey(playlist, video), filename)
+}
 
-  if (!filename) return base
-
-  return join(base, filename)
+function generateHLSObjectBaseStorageKey (playlist: MStreamingPlaylist, video: MVideoUUID) {
+  return playlist.getStringType() + '_' + video.uuid
 }
 
 function generateWebTorrentObjectStorageKey (filename: string) {
@@ -15,5 +15,6 @@ function generateWebTorrentObjectStorageKey (filename: string) {
 
 export {
   generateHLSObjectStorageKey,
+  generateHLSObjectBaseStorageKey,
   generateWebTorrentObjectStorageKey
 }

@@ -24,7 +24,7 @@ import { buildRemoteVideoBaseUrl } from '@server/helpers/activitypub'
 import { logger } from '@server/helpers/logger'
 import { extractVideo } from '@server/helpers/video'
 import { getHLSPublicFileUrl, getWebTorrentPublicFileUrl } from '@server/lib/object-storage'
-import { getTorrentFilePath } from '@server/lib/video-paths'
+import { getFSTorrentFilePath } from '@server/lib/paths'
 import { MStreamingPlaylistVideo, MVideo, MVideoWithHost } from '@server/types/models'
 import { AttributesOnly } from '@shared/core-utils'
 import { VideoStorage } from '@shared/models'
@@ -217,7 +217,7 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
   videoId: number
 
   @AllowNull(false)
-  @Default(VideoStorage.LOCAL)
+  @Default(VideoStorage.FILE_SYSTEM)
   @Column
   storage: VideoStorage
 
@@ -280,7 +280,7 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
 
   static async doesOwnedWebTorrentVideoFileExist (filename: string) {
     const query = 'SELECT 1 FROM "videoFile" INNER JOIN "video" ON "video"."id" = "videoFile"."videoId" AND "video"."remote" IS FALSE ' +
-                  `WHERE "filename" = $filename AND "storage" = ${VideoStorage.LOCAL} LIMIT 1`
+                  `WHERE "filename" = $filename AND "storage" = ${VideoStorage.FILE_SYSTEM} LIMIT 1`
 
     return doesExist(query, { filename })
   }
@@ -521,7 +521,7 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
   removeTorrent () {
     if (!this.torrentFilename) return null
 
-    const torrentPath = getTorrentFilePath(this)
+    const torrentPath = getFSTorrentFilePath(this)
     return remove(torrentPath)
       .catch(err => logger.warn('Cannot delete torrent %s.', torrentPath, { err }))
   }

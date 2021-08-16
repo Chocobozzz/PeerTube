@@ -3,7 +3,7 @@ import { JobState } from '../../models'
 import { wait } from '../miscs'
 import { PeerTubeServer } from './server'
 
-async function waitJobs (serversArg: PeerTubeServer[] | PeerTubeServer) {
+async function waitJobs (serversArg: PeerTubeServer[] | PeerTubeServer, skipDelayed = false) {
   const pendingJobWait = process.env.NODE_PENDING_JOB_WAIT
     ? parseInt(process.env.NODE_PENDING_JOB_WAIT, 10)
     : 250
@@ -13,7 +13,9 @@ async function waitJobs (serversArg: PeerTubeServer[] | PeerTubeServer) {
   if (Array.isArray(serversArg) === false) servers = [ serversArg as PeerTubeServer ]
   else servers = serversArg as PeerTubeServer[]
 
-  const states: JobState[] = [ 'waiting', 'active', 'delayed' ]
+  const states: JobState[] = [ 'waiting', 'active' ]
+  if (!skipDelayed) states.push('delayed')
+
   const repeatableJobs = [ 'videos-views', 'activitypub-cleaner' ]
   let pendingRequests: boolean
 

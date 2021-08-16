@@ -6,7 +6,7 @@ import { isVideoFileInfoHashValid } from '@server/helpers/custom-validators/vide
 import { logger } from '@server/helpers/logger'
 import { getExtFromMimetype } from '@server/helpers/video'
 import { ACTIVITY_PUB, MIMETYPES, P2P_MEDIA_LOADER_PEER_VERSION, PREVIEWS_SIZE, THUMBNAILS_SIZE } from '@server/initializers/constants'
-import { generateTorrentFileName } from '@server/lib/video-paths'
+import { generateTorrentFileName } from '@server/lib/paths'
 import { VideoCaptionModel } from '@server/models/video/video-caption'
 import { VideoFileModel } from '@server/models/video/video-file'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist'

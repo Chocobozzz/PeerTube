@@ -6,7 +6,7 @@ import { VideoModel } from '../server/models/video/video'
 import { initDatabaseModels } from '../server/initializers/database'
 import { JobQueue } from '../server/lib/job-queue'
 import { computeResolutionsToTranscode } from '@server/helpers/ffprobe-utils'
-import { VideoTranscodingPayload } from '@shared/models'
+import { VideoState, VideoTranscodingPayload } from '@shared/models'
 import { CONFIG } from '@server/initializers/config'
 import { isUUIDValid } from '@server/helpers/custom-validators/misc'
 import { addTranscodingJob } from '@server/lib/video'
@@ -48,7 +48,7 @@ async function run () {
   if (!video) throw new Error('Video not found.')
 
   const dataInput: VideoTranscodingPayload[] = []
-  const { resolution } = await video.getMaxQualityResolution()
+  const resolution = video.getMaxQualityFile().resolution
 
   // Generate HLS files
   if (options.generateHls || CONFIG.TRANSCODING.WEBTORRENT.ENABLED === false) {
@@ -63,6 +63,7 @@ async function run () {
         resolution,
         isPortraitMode: false,
         copyCodecs: false,
+        isNewVideo: false,
         isMaxQuality: false
       })
     }
@@ -88,7 +89,10 @@ async function run () {
     }
   }
 
-  await JobQueue.Instance.init()
+  JobQueue.Instance.init()
+
+  video.state = VideoState.TO_TRANSCODE
+  await video.save()
 
   for (const d of dataInput) {
     await addTranscodingJob(d, {})

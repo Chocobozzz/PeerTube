@@ -4,13 +4,12 @@ import { join } from 'path'
 import { logger } from '@server/helpers/logger'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
 import { CONFIG } from '@server/initializers/config'
-import { HLS_STREAMING_PLAYLIST_DIRECTORY } from '@server/initializers/constants'
 import { storeHLSFile, storeWebTorrentFile } from '@server/lib/object-storage'
-import { getHLSDirectory, getHlsResolutionPlaylistFilename } from '@server/lib/video-paths'
+import { getHLSDirectory, getHlsResolutionPlaylistFilename } from '@server/lib/paths'
 import { moveToNextState } from '@server/lib/video-state'
 import { VideoModel } from '@server/models/video/video'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info'
-import { MVideoFile, MVideoWithAllFiles } from '@server/types/models'
+import { MStreamingPlaylistVideo, MVideo, MVideoFile, MVideoWithAllFiles } from '@server/types/models'
 import { MoveObjectStoragePayload, VideoStorage } from '../../../../shared'
 
 export async function processMoveToObjectStorage (job: Bull.Job) {
@@ -28,14 +27,14 @@ export async function processMoveToObjectStorage (job: Bull.Job) {
     await moveWebTorrentFiles(video)
   }
 
-  if (CONFIG.TRANSCODING.HLS.ENABLED && video.VideoStreamingPlaylists) {
+  if (video.VideoStreamingPlaylists) {
     await moveHLSFiles(video)
   }
 
   const pendingMove = await VideoJobInfoModel.decrease(video.uuid, 'pendingMove')
   if (pendingMove === 0) {
     logger.info('Running cleanup after moving files to object storage (video %s in job %d)', video.uuid, job.id)
-    await doAfterLastJob(video)
+    await doAfterLastJob(video, payload.isNewVideo)
   }
 
   return payload.videoUUID
@@ -45,12 +44,12 @@ export async function processMoveToObjectStorage (job: Bull.Job) {
 
 async function moveWebTorrentFiles (video: MVideoWithAllFiles) {
   for (const file of video.VideoFiles) {
-    if (file.storage !== VideoStorage.LOCAL) continue
+    if (file.storage !== VideoStorage.FILE_SYSTEM) continue
 
     const fileUrl = await storeWebTorrentFile(file.filename)
 
     const oldPath = join(CONFIG.STORAGE.VIDEOS_DIR, file.filename)
-    await onFileMoved({ video, file, fileUrl, oldPath })
+    await onFileMoved({ videoOrPlaylist: video, file, fileUrl, oldPath })
   }
 }
 
@@ -58,7 +57,7 @@ async function moveHLSFiles (video: MVideoWithAllFiles) {
   for (const playlist of video.VideoStreamingPlaylists) {
 
     for (const file of playlist.VideoFiles) {
-      if (file.storage !== VideoStorage.LOCAL) continue
+      if (file.storage !== VideoStorage.FILE_SYSTEM) continue
 
       // Resolution playlist
       const playlistFilename = getHlsResolutionPlaylistFilename(file.filename)
@@ -69,13 +68,15 @@ async function moveHLSFiles (video: MVideoWithAllFiles) {
 
       const oldPath = join(getHLSDirectory(video), file.filename)
 
-      await onFileMoved({ video, file, fileUrl, oldPath })
+      await onFileMoved({ videoOrPlaylist: Object.assign(playlist, { Video: video }), file, fileUrl, oldPath })
     }
   }
 }
 
-async function doAfterLastJob (video: MVideoWithAllFiles) {
+async function doAfterLastJob (video: MVideoWithAllFiles, isNewVideo: boolean) {
   for (const playlist of video.VideoStreamingPlaylists) {
+    if (playlist.storage === VideoStorage.OBJECT_STORAGE) continue
+
     // Master playlist
     playlist.playlistUrl = await storeHLSFile(playlist, video, playlist.playlistFilename)
     // Sha256 segments file
@@ -88,24 +89,24 @@ async function doAfterLastJob (video: MVideoWithAllFiles) {
 
   // Remove empty hls video directory
   if (video.VideoStreamingPlaylists) {
-    await remove(join(HLS_STREAMING_PLAYLIST_DIRECTORY, video.uuid))
+    await remove(getHLSDirectory(video))
   }
 
-  await moveToNextState(video)
+  await moveToNextState(video, isNewVideo)
 }
 
 async function onFileMoved (options: {
-  video: MVideoWithAllFiles
+  videoOrPlaylist: MVideo | MStreamingPlaylistVideo
   file: MVideoFile
   fileUrl: string
   oldPath: string
 }) {
-  const { video, file, fileUrl, oldPath } = options
+  const { videoOrPlaylist, file, fileUrl, oldPath } = options
 
   file.fileUrl = fileUrl
   file.storage = VideoStorage.OBJECT_STORAGE
 
-  await createTorrentAndSetInfoHash(video, file)
+  await createTorrentAndSetInfoHash(videoOrPlaylist, file)
   await file.save()
 
   logger.debug('Removing %s because it\'s now on object storage', oldPath)

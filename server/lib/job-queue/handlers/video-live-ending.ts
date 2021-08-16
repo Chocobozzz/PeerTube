@@ -4,9 +4,10 @@ import { join } from 'path'
 import { ffprobePromise, getAudioStream, getDurationFromVideoFile, getVideoFileResolution } from '@server/helpers/ffprobe-utils'
 import { VIDEO_LIVE } from '@server/initializers/constants'
 import { buildConcatenatedName, cleanupLive, LiveSegmentShaStore } from '@server/lib/live'
+import { generateHLSMasterPlaylistFilename, generateHlsSha256SegmentsFilename, getLiveDirectory } from '@server/lib/paths'
 import { generateVideoMiniature } from '@server/lib/thumbnail'
 import { generateHlsPlaylistResolutionFromTS } from '@server/lib/transcoding/video-transcoding'
-import { generateHLSMasterPlaylistFilename, generateHlsSha256SegmentsFilename, getHLSDirectory } from '@server/lib/video-paths'
+import { VideoPathManager } from '@server/lib/video-path-manager'
 import { moveToNextState } from '@server/lib/video-state'
 import { VideoModel } from '@server/models/video/video'
 import { VideoFileModel } from '@server/models/video/video-file'
@@ -55,16 +56,15 @@ export {
 // ---------------------------------------------------------------------------
 
 async function saveLive (video: MVideo, live: MVideoLive, streamingPlaylist: MStreamingPlaylist) {
-  const hlsDirectory = getHLSDirectory(video, false)
-  const replayDirectory = join(hlsDirectory, VIDEO_LIVE.REPLAY_DIRECTORY)
+  const replayDirectory = VideoPathManager.Instance.getFSHLSOutputPath(video, VIDEO_LIVE.REPLAY_DIRECTORY)
 
-  const rootFiles = await readdir(hlsDirectory)
+  const rootFiles = await readdir(getLiveDirectory(video))
 
   const playlistFiles = rootFiles.filter(file => {
     return file.endsWith('.m3u8') && file !== streamingPlaylist.playlistFilename
   })
 
-  await cleanupLiveFiles(hlsDirectory)
+  await cleanupTMPLiveFiles(getLiveDirectory(video))
 
   await live.destroy()
 
@@ -136,7 +136,7 @@ async function saveLive (video: MVideo, live: MVideoLive, streamingPlaylist: MSt
   await moveToNextState(videoWithFiles, false)
 }
 
-async function cleanupLiveFiles (hlsDirectory: string) {
+async function cleanupTMPLiveFiles (hlsDirectory: string) {
   if (!await pathExists(hlsDirectory)) return
 
   const files = await readdir(hlsDirectory)

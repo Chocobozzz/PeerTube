@@ -1,4 +1,4 @@
 export const enum VideoStorage {
-  LOCAL,
+  FILE_SYSTEM,
   OBJECT_STORAGE,
 }

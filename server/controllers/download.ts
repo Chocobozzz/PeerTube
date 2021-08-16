@@ -3,7 +3,7 @@ import * as express from 'express'
 import { logger } from '@server/helpers/logger'
 import { VideosTorrentCache } from '@server/lib/files-cache/videos-torrent-cache'
 import { Hooks } from '@server/lib/plugins/hooks'
-import { getVideoFilePath } from '@server/lib/video-paths'
+import { VideoPathManager } from '@server/lib/video-path-manager'
 import { MStreamingPlaylist, MVideo, MVideoFile, MVideoFullLight } from '@server/types/models'
 import { HttpStatusCode, VideoStorage, VideoStreamingPlaylistType } from '@shared/models'
 import { STATIC_DOWNLOAD_PATHS } from '../initializers/constants'
@@ -85,7 +85,11 @@ async function downloadVideoFile (req: express.Request, res: express.Response) {
     return res.redirect(videoFile.getObjectStorageUrl())
   }
 
-  return res.download(getVideoFilePath(video, videoFile), `${video.name}-${videoFile.resolution}p${videoFile.extname}`)
+  await VideoPathManager.Instance.makeAvailableVideoFile(video, videoFile, path => {
+    const filename = `${video.name}-${videoFile.resolution}p${videoFile.extname}`
+
+    return res.download(path, filename)
+  })
 }
 
 async function downloadHLSVideoFile (req: express.Request, res: express.Response) {
@@ -115,8 +119,11 @@ async function downloadHLSVideoFile (req: express.Request, res: express.Response
     return res.redirect(videoFile.getObjectStorageUrl())
   }
 
-  const filename = `${video.name}-${videoFile.resolution}p-${streamingPlaylist.getStringType()}${videoFile.extname}`
-  return res.download(getVideoFilePath(streamingPlaylist, videoFile), filename)
+  await VideoPathManager.Instance.makeAvailableVideoFile(streamingPlaylist, videoFile, path => {
+    const filename = `${video.name}-${videoFile.resolution}p-${streamingPlaylist.getStringType()}${videoFile.extname}`
+
+    return res.download(path, filename)
+  })
 }
 
 function getVideoFile (req: express.Request, files: MVideoFile[]) {

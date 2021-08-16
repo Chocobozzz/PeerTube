@@ -106,15 +106,15 @@ async function addOptimizeOrMergeAudioJob (video: MVideoUUID, videoFile: MVideoF
 }
 
 async function addTranscodingJob (payload: VideoTranscodingPayload, options: CreateJobOptions) {
-  await VideoJobInfoModel.increaseOrCreate(payload.videoUUID, 'pendingTranscoding')
+  await VideoJobInfoModel.increaseOrCreate(payload.videoUUID, 'pendingTranscode')
 
   return JobQueue.Instance.createJobWithPromise({ type: 'video-transcoding', payload: payload }, options)
 }
 
-async function addMoveToObjectStorageJob (video: MVideoUUID) {
+async function addMoveToObjectStorageJob (video: MVideoUUID, isNewVideo = true) {
   await VideoJobInfoModel.increaseOrCreate(video.uuid, 'pendingMove')
 
-  const dataInput = { videoUUID: video.uuid }
+  const dataInput = { videoUUID: video.uuid, isNewVideo }
   return JobQueue.Instance.createJobWithPromise({ type: 'move-to-object-storage', payload: dataInput })
 }
 

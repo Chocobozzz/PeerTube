@@ -34,7 +34,7 @@ export class VideoJobInfoModel extends Model<Partial<AttributesOnly<VideoJobInfo
   @Default(0)
   @IsInt
   @Column
-  pendingTranscoding: number
+  pendingTranscode: number
 
   @ForeignKey(() => VideoModel)
   @Unique
@@ -57,7 +57,7 @@ export class VideoJobInfoModel extends Model<Partial<AttributesOnly<VideoJobInfo
     return VideoJobInfoModel.findOne({ where, transaction })
   }
 
-  static async increaseOrCreate (videoUUID: string, column: 'pendingMove' | 'pendingTranscoding'): Promise<number> {
+  static async increaseOrCreate (videoUUID: string, column: 'pendingMove' | 'pendingTranscode'): Promise<number> {
     const options = { type: QueryTypes.SELECT as QueryTypes.SELECT, bind: { videoUUID } }
 
     const [ { pendingMove } ] = await VideoJobInfoModel.sequelize.query<{ pendingMove: number }>(`
@@ -79,7 +79,7 @@ export class VideoJobInfoModel extends Model<Partial<AttributesOnly<VideoJobInfo
     return pendingMove
   }
 
-  static async decrease (videoUUID: string, column: 'pendingMove' | 'pendingTranscoding'): Promise<number> {
+  static async decrease (videoUUID: string, column: 'pendingMove' | 'pendingTranscode'): Promise<number> {
     const options = { type: QueryTypes.SELECT as QueryTypes.SELECT, bind: { videoUUID } }
 
     const [ { pendingMove } ] = await VideoJobInfoModel.sequelize.query<{ pendingMove: number }>(`

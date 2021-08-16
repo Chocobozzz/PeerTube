@@ -4,11 +4,13 @@ import { getLowercaseExtension } from '@server/helpers/core-utils'
 import { retryTransactionWrapper } from '@server/helpers/database-utils'
 import { YoutubeDL } from '@server/helpers/youtube-dl'
 import { isPostImportVideoAccepted } from '@server/lib/moderation'
+import { generateWebTorrentVideoFilename } from '@server/lib/paths'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { ServerConfigManager } from '@server/lib/server-config-manager'
 import { isAbleToUploadVideo } from '@server/lib/user'
-import { addOptimizeOrMergeAudioJob } from '@server/lib/video'
-import { generateWebTorrentVideoFilename, getVideoFilePath } from '@server/lib/video-paths'
+import { addMoveToObjectStorageJob, addOptimizeOrMergeAudioJob } from '@server/lib/video'
+import { VideoPathManager } from '@server/lib/video-path-manager'
+import { buildNextVideoState } from '@server/lib/video-state'
 import { ThumbnailModel } from '@server/models/video/thumbnail'
 import { MVideoImportDefault, MVideoImportDefaultFiles, MVideoImportVideo } from '@server/types/models/video/video-import'
 import {
@@ -25,7 +27,6 @@ import { getDurationFromVideoFile, getVideoFileFPS, getVideoFileResolution } fro
 import { logger } from '../../../helpers/logger'
 import { getSecureTorrentName } from '../../../helpers/utils'
 import { createTorrentAndSetInfoHash, downloadWebTorrentVideo } from '../../../helpers/webtorrent'
-import { CONFIG } from '../../../initializers/config'
 import { VIDEO_IMPORT_TIMEOUT } from '../../../initializers/constants'
 import { sequelizeTypescript } from '../../../initializers/database'
 import { VideoModel } from '../../../models/video/video'
@@ -100,7 +101,6 @@ type ProcessFileOptions = {
 }
 async function processFile (downloader: () => Promise<string>, videoImport: MVideoImportDefault, options: ProcessFileOptions) {
   let tempVideoPath: string
-  let videoDestFile: string
   let videoFile: VideoFileModel
 
   try {
@@ -159,7 +159,7 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
     const videoImportWithFiles: MVideoImportDefaultFiles = Object.assign(videoImport, { Video: videoWithFiles })
 
     // Move file
-    videoDestFile = getVideoFilePath(videoImportWithFiles.Video, videoFile)
+    const videoDestFile = VideoPathManager.Instance.getFSVideoFileOutputPath(videoImportWithFiles.Video, videoFile)
     await move(tempVideoPath, videoDestFile)
     tempVideoPath = null // This path is not used anymore
 
@@ -204,7 +204,7 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
 
         // Update video DB object
         video.duration = duration
-        video.state = CONFIG.TRANSCODING.ENABLED ? VideoState.TO_TRANSCODE : VideoState.PUBLISHED
+        video.state = buildNextVideoState(video.state)
         await video.save({ transaction: t })
 
         if (thumbnailModel) await video.addAndSaveThumbnail(thumbnailModel, t)
@@ -243,6 +243,10 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
       Notifier.Instance.notifyOnVideoAutoBlacklist(videoBlacklist)
     } else {
       Notifier.Instance.notifyOnNewVideoIfNeeded(video)
+    }
+
+    if (video.state === VideoState.TO_MOVE_TO_EXTERNAL_STORAGE) {
+      return addMoveToObjectStorageJob(videoImportUpdated.Video)
     }
 
     // Create transcoding jobs?

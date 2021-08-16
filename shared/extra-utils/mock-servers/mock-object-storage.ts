@@ -3,8 +3,7 @@ import got, { RequestError } from 'got'
 import { Server } from 'http'
 import { pipeline } from 'stream'
 import { randomInt } from '@shared/core-utils'
-import { HttpStatusCode } from '@shared/models'
-import { makePostBodyRequest } from '../requests'
+import { ObjectStorageCommand } from '../server'
 
 export class MockObjectStorage {
   private server: Server
@@ -14,7 +13,7 @@ export class MockObjectStorage {
       const app = express()
 
       app.get('/:bucketName/:path(*)', (req: express.Request, res: express.Response, next: express.NextFunction) => {
-        const url = `http://${req.params.bucketName}.${this.getEndpointHost()}/${req.params.path}`
+        const url = `http://${req.params.bucketName}.${ObjectStorageCommand.getEndpointHost()}/${req.params.path}`
 
         if (process.env.DEBUG) {
           console.log('Receiving request on mocked server %s.', req.url)
@@ -34,41 +33,6 @@ export class MockObjectStorage {
 
       const port = 42301 + randomInt(1, 100)
       this.server = app.listen(port, () => res(port))
-    })
-  }
-
-  getCrendentialsConfig () {
-    return {
-      access_key_id: 'AKIAIOSFODNN7EXAMPLE',
-      secret_access_key: 'wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY'
-    }
-  }
-
-  getEndpointHost () {
-    return 'localhost:9444'
-  }
-
-  getRegion () {
-    return 'us-east-1'
-  }
-
-  async createBucket (name: string) {
-    await makePostBodyRequest({
-      url: this.getEndpointHost(),
-      path: '/ui/' + name + '?delete',
-      expectedStatus: HttpStatusCode.TEMPORARY_REDIRECT_307
-    })
-
-    await makePostBodyRequest({
-      url: this.getEndpointHost(),
-      path: '/ui/' + name + '?create',
-      expectedStatus: HttpStatusCode.TEMPORARY_REDIRECT_307
-    })
-
-    await makePostBodyRequest({
-      url: this.getEndpointHost(),
-      path: '/ui/' + name + '?make-public',
-      expectedStatus: HttpStatusCode.TEMPORARY_REDIRECT_307
     })
   }
 

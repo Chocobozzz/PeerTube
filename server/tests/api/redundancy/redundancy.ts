@@ -207,14 +207,14 @@ async function check1PlaylistRedundancies (videoUUID?: string) {
     expect(redundancy.baseUrl).to.equal(servers[0].url + '/static/redundancy/hls/' + videoUUID)
   }
 
-  const baseUrlPlaylist = servers[1].url + '/static/streaming-playlists/hls'
-  const baseUrlSegment = servers[0].url + '/static/redundancy/hls'
+  const baseUrlPlaylist = servers[1].url + '/static/streaming-playlists/hls/' + videoUUID
+  const baseUrlSegment = servers[0].url + '/static/redundancy/hls/' + videoUUID
 
   const video = await servers[0].videos.get({ id: videoUUID })
   const hlsPlaylist = video.streamingPlaylists[0]
 
   for (const resolution of [ 240, 360, 480, 720 ]) {
-    await checkSegmentHash({ server: servers[1], baseUrlPlaylist, baseUrlSegment, videoUUID, resolution, hlsPlaylist })
+    await checkSegmentHash({ server: servers[1], baseUrlPlaylist, baseUrlSegment, resolution, hlsPlaylist })
   }
 
   const { hlsFilenames } = await ensureSameFilenames(videoUUID)
