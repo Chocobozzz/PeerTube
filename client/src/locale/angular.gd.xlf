@@ -713,7 +713,7 @@
       </trans-unit>
       <trans-unit id="5975923297757530070" datatype="html">
         <source><x id="START_TAG_DIV"/>Default NSFW/sensitive videos policy<x id="CLOSE_TAG_DIV"/><x id="START_TAG_DIV_1"/>can be redefined by the users<x id="CLOSE_TAG_DIV"/></source>
-        <target state="translated"><x id="START_TAG_DIV"/>’S urrainn dhan luchd-cleachdaidh am <x id="CLOSE_TAG_DIV"/><x id="START_TAG_DIV_1"/>Poileasaidh tùsail air susbaint fhrionasach no do dh’inbhich a-mhàin atharrachadh<x id="CLOSE_TAG_DIV"/></target>
+        <target state="translated"><x id="START_TAG_DIV"/>’S urrainn dhan luchd-cleachdaidh am <x id="CLOSE_TAG_DIV"/><x id="START_TAG_DIV_1"/>Poileasaidh bunaiteach air susbaint fhrionasach no do dh’inbhich a-mhàin atharrachadh<x id="CLOSE_TAG_DIV"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="3386631781603205915" datatype="html">
@@ -2861,7 +2861,7 @@
       </trans-unit>
       <trans-unit id="6448160249466325288" datatype="html">
         <source>Most recent first (default)</source>
-        <target state="translated">As ùire (tùsail)</target>
+        <target state="translated">As ùire (bun-roghainn)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="5179007899354903649" datatype="html">
@@ -4274,7 +4274,7 @@
       </trans-unit>
       <trans-unit id="4620493570088713907" datatype="html">
         <source>Enabling it will allow other administrators to know that you are mainly federating sensitive content.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                 "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                 "/> Moreover, the NSFW checkbox on video upload will be automatically checked by default. </source>
-        <target state="translated">Ma chuireas tu seo an comas, innsidh e do rianairean eile gu bheil thu a’ co-nasgadh susbaint fhrionasach gu h-àraidh.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                 "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                 "/> A bharrachd air sin, nochdaidh cromag o thùs ann am bogsa na susbainte do dh’inbhich a-mhàin nuair a luchdaicheas cuideigin video suas. </target>
+        <target state="translated">Ma chuireas tu seo an comas, innsidh e do rianairean eile gu bheil thu a’ co-nasgadh susbaint fhrionasach gu h-àraidh.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                 "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                 "/> A bharrachd air sin, nochdaidh cromag a ghnàth ann am bogsa na susbainte do dh’inbhich a-mhàin nuair a luchdaicheas cuideigin video suas. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context><context context-type="linenumber">98</context></context-group>
       </trans-unit>
       <trans-unit id="7497677457560701935" datatype="html">
@@ -4408,7 +4408,7 @@
       </trans-unit>
       <trans-unit id="6855462350544488601" datatype="html">
         <source>default</source>
-        <target state="translated">tùsail</target>
+        <target state="translated">bunaiteach</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">18</context></context-group>
       </trans-unit>
       <trans-unit id="4096396973250090478" datatype="html">
@@ -4418,7 +4418,7 @@
       </trans-unit>
       <trans-unit id="2609416025385742456" datatype="html">
         <source>Default trending page</source>
-        <target state="translated">Duilleag thùsail an treandaidh</target>
+        <target state="translated">Duilleag bhunaiteach an treandaidh</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">43</context></context-group>
       </trans-unit>
       <trans-unit id="421622604352196374" datatype="html">
@@ -4577,7 +4577,7 @@
       </trans-unit>
       <trans-unit id="502260296951057925" datatype="html">
         <source>Default video quota per user</source>
-        <target state="translated">Cuota tùsail de videothan airson gach cleachdaiche</target>
+        <target state="translated">Cuota bunaiteach de videothan airson gach cleachdaiche</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">182</context></context-group>
       </trans-unit>
       <trans-unit id="7169210802367807492" datatype="html">
@@ -4592,7 +4592,7 @@
       </trans-unit>
       <trans-unit id="8509882464852636851" datatype="html">
         <source>Default daily upload limit per user</source>
-        <target state="translated">Crìoch thùsail air videothan a luchdaicheas cleachdaiche suas air an aon latha</target>
+        <target state="translated">Crìoch bhunaiteach air videothan a luchdaicheas cleachdaiche suas air an aon latha</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">196</context></context-group>
       </trans-unit>
       <trans-unit id="4719342289581047890" datatype="html">
@@ -4749,7 +4749,7 @@
       </trans-unit>
       <trans-unit id="3202133522706129143" datatype="html">
         <source>Provide the Twitter account representing your instance to improve link previews. If you don't have a Twitter account, just leave the default value.</source>
-        <target state="translated">Thoir seachad an cunntas Twitter a riochdaicheas an t-ionstans agad a thoirt piseach air ro-sheallaidhean nan ceanglaichean. Mur eil cunntas Twitter agad, fàg an luach tùsail mar a tha e.</target>
+        <target state="translated">Thoir seachad an cunntas Twitter a riochdaicheas an t-ionstans agad a thoirt piseach air ro-sheallaidhean nan ceanglaichean. Mur eil cunntas Twitter agad, fàg an luach bunaiteach mar a tha e.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">475</context></context-group>
       </trans-unit>
       <trans-unit id="4087837092261487511" datatype="html">
@@ -5238,7 +5238,7 @@
       </trans-unit>
       <trans-unit id="7377817702119089263" datatype="html">
         <source>Default policy on videos containing sensitive content</source>
-        <target state="translated">Poileasaidh tùsail air videothan sa bheil susbaint fhrionasach</target>
+        <target state="translated">Poileasaidh bunaiteach air videothan sa bheil susbaint fhrionasach</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">4</context></context-group>
       </trans-unit>
       <trans-unit id="7350483582490037954" datatype="html">
