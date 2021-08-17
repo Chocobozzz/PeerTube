@@ -14,7 +14,7 @@
   },
   "scripts": {
     "lint": "npm run lint-ts && npm run lint-scss",
-    "lint-ts": "tslint --project ./tsconfig.app.json -c ./tslint.json 'src/app/**/*.ts' 'src/standalone/**/*.ts'",
+    "lint-ts": "tslint --project ./tsconfig.json -c ./tslint.json 'src/app/**/*.ts' 'src/standalone/**/*.ts'",
     "lint-scss": "stylelint 'src/**/*.scss'",
     "webpack": "webpack",
     "tslint": "tslint",
