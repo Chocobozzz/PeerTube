@@ -105,21 +105,23 @@ module.exports = function () {
 
         {
           test: /\.html$/,
-          use: 'raw-loader',
           exclude: [
             helpers.root('src/index.html'),
             helpers.root('src/standalone/videos/embed.html'),
             helpers.root('src/standalone/videos/test-embed.html')
-          ]
+          ],
+          type: 'asset/source'
         },
 
         {
-          test: /\.(jpg|png|gif)$/,
-          use: 'url-loader'
+          test: /\.(jpg|png|gif|svg)$/,
+          type: 'asset'
         },
 
-        { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, use: 'url-loader?limit=10000&minetype=application/font-woff' },
-        { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, use: 'file-loader' }
+        {
+          test: /\.(ttf|eot|woff2?)$/,
+          type: 'asset'
+        }
       ]
 
     },
