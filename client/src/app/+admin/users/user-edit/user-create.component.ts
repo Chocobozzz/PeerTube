@@ -71,14 +71,15 @@ export class UserCreateComponent extends UserEdit implements OnInit {
     userCreate.videoQuota = parseInt(this.form.value['videoQuota'], 10)
     userCreate.videoQuotaDaily = parseInt(this.form.value['videoQuotaDaily'], 10)
 
-    this.userService.addUser(userCreate).subscribe(
-      () => {
-        this.notifier.success($localize`User ${userCreate.username} created.`)
-        this.router.navigate([ '/admin/users/list' ])
-      },
+    this.userService.addUser(userCreate)
+      .subscribe({
+        next: () => {
+          this.notifier.success($localize`User ${userCreate.username} created.`)
+          this.router.navigate([ '/admin/users/list' ])
+        },
 
-      err => this.error = err.message
-    )
+        error: err => this.error = err.message
+      })
   }
 
   isCreation () {

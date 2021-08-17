@@ -84,8 +84,8 @@ export class PluginSearchComponent implements OnInit {
     this.isSearching = true
 
     this.pluginApiService.searchAvailablePlugins(this.pluginType, this.pagination, this.sort, this.search)
-        .subscribe(
-          res => {
+        .subscribe({
+          next: res => {
             this.isSearching = false
 
             this.plugins = this.plugins.concat(res.data)
@@ -94,13 +94,13 @@ export class PluginSearchComponent implements OnInit {
             this.onDataSubject.next(res.data)
           },
 
-          err => {
+          error: err => {
             console.error(err)
 
             const message = $localize`The plugin index is not available. Please retry later.`
             this.notifier.error(message)
           }
-        )
+        })
   }
 
   onNearOfBottom () {
@@ -139,8 +139,8 @@ export class PluginSearchComponent implements OnInit {
     this.installing[plugin.npmName] = true
 
     this.pluginApiService.install(plugin.npmName)
-        .subscribe(
-          () => {
+        .subscribe({
+          next: () => {
             this.installing[plugin.npmName] = false
             this.pluginInstalled = true
 
@@ -149,7 +149,7 @@ export class PluginSearchComponent implements OnInit {
             plugin.installed = true
           },
 
-          err => this.notifier.error(err.message)
-        )
+          error: err => this.notifier.error(err.message)
+        })
   }
 }

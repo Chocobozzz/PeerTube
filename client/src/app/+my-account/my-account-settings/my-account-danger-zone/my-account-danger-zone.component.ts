@@ -27,15 +27,16 @@ export class MyAccountDangerZoneComponent {
     )
     if (res === false) return
 
-    this.userService.deleteMe().subscribe(
-      () => {
-        this.notifier.success($localize`Your account is deleted.`)
+    this.userService.deleteMe()
+      .subscribe({
+        next: () => {
+          this.notifier.success($localize`Your account is deleted.`)
 
-        this.authService.logout()
-        this.redirectService.redirectToHomepage()
-      },
+          this.authService.logout()
+          this.redirectService.redirectToHomepage()
+        },
 
-      err => this.notifier.error(err.message)
-    )
+        error: err => this.notifier.error(err.message)
+      })
   }
 }

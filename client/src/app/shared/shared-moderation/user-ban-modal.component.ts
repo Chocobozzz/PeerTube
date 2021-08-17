@@ -47,8 +47,8 @@ export class UserBanModalComponent extends FormReactive implements OnInit {
     const reason = this.form.value['reason'] || undefined
 
     this.userService.banUsers(this.usersToBan, reason)
-      .subscribe(
-        () => {
+      .subscribe({
+        next: () => {
           const message = Array.isArray(this.usersToBan)
             ? $localize`${this.usersToBan.length} users banned.`
             : $localize`User ${this.usersToBan.username} banned.`
@@ -59,8 +59,8 @@ export class UserBanModalComponent extends FormReactive implements OnInit {
           this.hide()
         },
 
-          err => this.notifier.error(err.message)
-      )
+        error: err => this.notifier.error(err.message)
+      })
   }
 
 }

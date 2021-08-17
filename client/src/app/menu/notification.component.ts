@@ -36,14 +36,14 @@ export class NotificationComponent implements OnInit, OnDestroy {
 
   ngOnInit () {
     this.userNotificationService.countUnreadNotifications()
-        .subscribe(
-          result => {
+        .subscribe({
+          next: result => {
             this.unreadNotifications = Math.min(result, 99) // Limit number to 99
             this.subscribeToNotifications()
           },
 
-          err => this.notifier.error(err.message)
-        )
+          error: err => this.notifier.error(err.message)
+        })
 
     this.routeSub = this.router.events
                         .pipe(filter(event => event instanceof NavigationEnd))

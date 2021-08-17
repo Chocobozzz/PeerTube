@@ -62,13 +62,13 @@ export class GenericAccountBlocklistComponent extends RestTable implements OnIni
         search: this.search
       })
 
-    return operation.subscribe(
-      resultList => {
+    return operation.subscribe({
+      next: resultList => {
         this.blockedAccounts = resultList.data
         this.totalRecords = resultList.total
       },
 
-      err => this.notifier.error(err.message)
-    )
+      error: err => this.notifier.error(err.message)
+    })
   }
 }

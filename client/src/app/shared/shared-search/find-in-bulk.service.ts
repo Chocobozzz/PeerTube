@@ -1,5 +1,5 @@
 import * as debug from 'debug'
-import { Observable, Subject, throwError } from 'rxjs'
+import { Observable, Subject } from 'rxjs'
 import { first, map } from 'rxjs/operators'
 import { Injectable, NgZone } from '@angular/core'
 import { buildBulkObservable } from '@app/helpers'

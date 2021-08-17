@@ -1,4 +1,5 @@
 import { mapValues, pick } from 'lodash-es'
+import { firstValueFrom } from 'rxjs'
 import { tap } from 'rxjs/operators'
 import { Component, ElementRef, Inject, LOCALE_ID, ViewChild } from '@angular/core'
 import { AuthService, HooksService, Notifier } from '@app/core'
@@ -265,6 +266,6 @@ export class VideoDownloadComponent {
     const observable = this.videoService.getVideoFileMetadata(file.metadataUrl)
       .pipe(tap(res => file.metadata = res))
 
-    return observable.toPromise()
+    return firstValueFrom(observable)
   }
 }

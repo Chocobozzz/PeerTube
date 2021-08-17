@@ -89,13 +89,13 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
 
   private savePreferencesImpl () {
     this.userNotificationService.updateNotificationSettings(this.user.notificationSettings)
-      .subscribe(
-        () => {
+      .subscribe({
+        next: () => {
           this.notifier.success($localize`Preferences saved`, undefined, 2000)
         },
 
-        err => this.notifier.error(err.message)
-      )
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   private loadNotificationSettings () {

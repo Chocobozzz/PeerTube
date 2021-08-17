@@ -38,8 +38,8 @@ export class VerifyAccountEmailComponent implements OnInit {
 
   verifyEmail () {
     this.userService.verifyEmail(this.userId, this.verificationString, this.isPendingEmail)
-      .subscribe(
-        () => {
+      .subscribe({
+        next: () => {
           if (this.authService.isLoggedIn()) {
             this.authService.refreshUserInformation()
           }
@@ -47,11 +47,11 @@ export class VerifyAccountEmailComponent implements OnInit {
           this.success = true
         },
 
-        err => {
+        error: err => {
           this.failed = true
 
           this.notifier.error(err.message)
         }
-      )
+      })
   }
 }

@@ -83,18 +83,18 @@ export class ContactAdminModalComponent extends FormReactive implements OnInit {
     const body = this.form.value[ 'body' ]
 
     this.instanceService.contactAdministrator(fromEmail, fromName, subject, body)
-        .subscribe(
-          () => {
+        .subscribe({
+          next: () => {
             this.notifier.success($localize`Your message has been sent.`)
             this.hide()
           },
 
-          err => {
+          error: err => {
             this.error = err.status === HttpStatusCode.FORBIDDEN_403
               ? $localize`You already sent this form recently`
               : err.message
           }
-        )
+        })
   }
 
   private prefillForm (prefill: Prefill) {

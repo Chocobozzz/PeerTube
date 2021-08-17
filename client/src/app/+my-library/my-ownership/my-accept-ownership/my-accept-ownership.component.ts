@@ -64,14 +64,14 @@ export class MyAcceptOwnershipComponent extends FormReactive implements OnInit {
     const videoChangeOwnership = this.videoChangeOwnership
     this.videoOwnershipService
       .acceptOwnership(videoChangeOwnership.id, { channelId: channel })
-      .subscribe(
-        () => {
+      .subscribe({
+        next: () => {
           this.notifier.success($localize`Ownership accepted`)
           if (this.accepted) this.accepted.emit()
           this.videoChangeOwnership = undefined
         },
 
-        err => this.notifier.error(err.message)
-      )
+        error: err => this.notifier.error(err.message)
+      })
   }
 }

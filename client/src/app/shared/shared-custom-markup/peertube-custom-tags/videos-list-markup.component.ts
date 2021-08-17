@@ -71,11 +71,11 @@ export class VideosListMarkupComponent implements CustomMarkupComponent, OnInit 
 
     return this.getVideosObservable()
       .pipe(finalize(() => this.loaded.emit(true)))
-      .subscribe(
-        ({ data }) => this.videos = data,
+      .subscribe({
+        next: ({ data }) => this.videos = data,
 
-        err => this.notifier.error($localize`Error in videos list component: ${err.message}`)
-      )
+        error: err => this.notifier.error($localize`Error in videos list component: ${err.message}`)
+      })
   }
 
   getVideosObservable () {

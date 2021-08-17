@@ -91,8 +91,8 @@ export class AboutFollowsComponent implements OnInit {
     const pagination = this.restService.componentPaginationToRestPagination(this.followersPagination)
 
     this.followService.getFollowers({ pagination: pagination, sort: this.sort, state: 'accepted' })
-        .subscribe(
-          resultList => {
+        .subscribe({
+          next: resultList => {
             if (reset) this.followers = []
 
             const newFollowers = resultList.data.map(r => r.follower.host)
@@ -101,16 +101,16 @@ export class AboutFollowsComponent implements OnInit {
             this.followersPagination.totalItems = resultList.total
           },
 
-          err => this.notifier.error(err.message)
-        )
+          error: err => this.notifier.error(err.message)
+        })
   }
 
   private loadMoreFollowings (reset = false) {
     const pagination = this.restService.componentPaginationToRestPagination(this.followingsPagination)
 
     this.followService.getFollowing({ pagination, sort: this.sort, state: 'accepted' })
-        .subscribe(
-          resultList => {
+        .subscribe({
+          next: resultList => {
             if (reset) this.followings = []
 
             const newFollowings = resultList.data.map(r => r.following.host)
@@ -119,8 +119,8 @@ export class AboutFollowsComponent implements OnInit {
             this.followingsPagination.totalItems = resultList.total
           },
 
-          err => this.notifier.error(err.message)
-        )
+          error: err => this.notifier.error(err.message)
+        })
   }
 
 }

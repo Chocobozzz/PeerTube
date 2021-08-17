@@ -80,8 +80,8 @@ export class AuthService {
     // Fetch the client_id/client_secret
     this.http.get<OAuthClientLocal>(AuthService.BASE_CLIENT_URL)
         .pipe(catchError(res => this.restExtractor.handleError(res)))
-        .subscribe(
-          res => {
+        .subscribe({
+          next: res => {
             this.clientId = res.client_id
             this.clientSecret = res.client_secret
 
@@ -91,18 +91,18 @@ export class AuthService {
             console.log('Client credentials loaded.')
           },
 
-          error => {
-            let errorMessage = error.message
+          error: err => {
+            let errorMessage = err.message
 
-            if (error.status === HttpStatusCode.FORBIDDEN_403) {
-              errorMessage = $localize`Cannot retrieve OAuth Client credentials: ${error.text}.
+            if (err.status === HttpStatusCode.FORBIDDEN_403) {
+              errorMessage = $localize`Cannot retrieve OAuth Client credentials: ${err.text}.
 Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.`
             }
 
             // We put a bigger timeout: this is an important message
             this.notifier.error(errorMessage, $localize`Error`, 7000)
           }
-        )
+        })
   }
 
   getRefreshToken () {
@@ -168,15 +168,15 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
     const headers = new HttpHeaders().set('Authorization', authHeaderValue)
 
     this.http.post<{ redirectUrl?: string }>(AuthService.BASE_REVOKE_TOKEN_URL, {}, { headers })
-    .subscribe(
-      res => {
-        if (res.redirectUrl) {
-          window.location.href = res.redirectUrl
-        }
-      },
+      .subscribe({
+        next: res => {
+          if (res.redirectUrl) {
+            window.location.href = res.redirectUrl
+          }
+        },
 
-      err => console.error(err)
-    )
+        error: err => console.error(err)
+      })
 
     this.user = null
 
@@ -215,9 +215,9 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
                                              this.logout()
                                              this.router.navigate([ '/login' ])
 
-                                             return observableThrowError({
+                                             return observableThrowError(() => ({
                                                error: $localize`You need to reconnect.`
-                                             })
+                                             }))
                                            }),
                                            share()
                                          )
@@ -234,14 +234,14 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
     }
 
     this.mergeUserInformation(obj)
-        .subscribe(
-          res => {
+        .subscribe({
+          next: res => {
             this.user.patch(res)
             this.user.save()
 
             this.userInformationLoaded.next(true)
           }
-        )
+        })
   }
 
   private mergeUserInformation (obj: UserLoginWithUsername): Observable<UserLoginWithUserInformation> {

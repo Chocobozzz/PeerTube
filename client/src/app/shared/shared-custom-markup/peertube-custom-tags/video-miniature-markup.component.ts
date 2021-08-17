@@ -53,10 +53,10 @@ export class VideoMiniatureMarkupComponent implements CustomMarkupComponent, OnI
 
     this.findInBulk.getVideo(this.uuid)
       .pipe(finalize(() => this.loaded.emit(true)))
-      .subscribe(
-        video => this.video = video,
+      .subscribe({
+        next: video => this.video = video,
 
-        err => this.notifier.error($localize`Error in video miniature component: ${err.message}`)
-      )
+        error: err => this.notifier.error($localize`Error in video miniature component: ${err.message}`)
+      })
   }
 }

@@ -37,10 +37,10 @@ export class WelcomeModalComponent {
     peertubeLocalStorage.setItem(this.LOCAL_STORAGE_KEYS.NO_WELCOME_MODAL, 'true')
 
     this.userService.updateMyProfile({ noWelcomeModal: true })
-      .subscribe(
-        () => console.log('We will not open the welcome modal again.'),
+      .subscribe({
+        next: () => console.log('We will not open the welcome modal again.'),
 
-        err => this.notifier.error(err.message)
-      )
+        error: err => this.notifier.error(err.message)
+      })
   }
 }

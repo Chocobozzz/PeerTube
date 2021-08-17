@@ -1,5 +1,5 @@
 import * as debug from 'debug'
-import { ReplaySubject } from 'rxjs'
+import { firstValueFrom, ReplaySubject } from 'rxjs'
 import { first, shareReplay } from 'rxjs/operators'
 import { RegisterClientHelpers } from 'src/types/register-client-option.model'
 import { getHookType, internalRunHook } from '@shared/core-utils/plugins/hooks'
@@ -102,9 +102,10 @@ class PluginsManager {
   ensurePluginsAreLoaded (scope: PluginClientScope) {
     this.loadPluginsByScope(scope)
 
-    return this.pluginsLoaded[scope].asObservable()
+    const obs = this.pluginsLoaded[scope].asObservable()
                .pipe(first(), shareReplay())
-               .toPromise()
+
+    return firstValueFrom(obs)
   }
 
   async reloadLoadedScopes () {

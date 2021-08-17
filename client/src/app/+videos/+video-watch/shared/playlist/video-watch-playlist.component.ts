@@ -1,4 +1,3 @@
-
 import { Component, EventEmitter, Input, Output } from '@angular/core'
 import { Router } from '@angular/router'
 import { AuthService, ComponentPagination, LocalStorageService, Notifier, SessionStorageService, UserService } from '@app/core'
@@ -196,12 +195,14 @@ export class VideoWatchPlaylistComponent {
         autoPlayNextVideoPlaylist: this.autoPlayNextVideoPlaylist
       }
 
-      this.userService.updateMyProfile(details).subscribe(
-        () => {
-          this.auth.refreshUserInformation()
-        },
-        err => this.notifier.error(err.message)
-      )
+      this.userService.updateMyProfile(details)
+        .subscribe({
+          next: () => {
+            this.auth.refreshUserInformation()
+          },
+
+          error: err => this.notifier.error(err.message)
+        })
     }
   }
 

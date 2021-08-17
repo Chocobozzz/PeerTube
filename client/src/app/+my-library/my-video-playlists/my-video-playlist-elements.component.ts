@@ -85,13 +85,13 @@ export class MyVideoPlaylistElementsComponent implements OnInit, OnDestroy {
     this.playlistElements.splice(newIndex, 0, element)
 
     this.videoPlaylistService.reorderPlaylist(this.playlist.id, oldPosition, insertAfter)
-      .subscribe(
-        () => {
+      .subscribe({
+        next: () => {
           this.reorderClientPositions()
         },
 
-        err => this.notifier.error(err.message)
-      )
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   onElementRemoved (element: VideoPlaylistElement) {
@@ -129,14 +129,14 @@ export class MyVideoPlaylistElementsComponent implements OnInit, OnDestroy {
     if (res === false) return
 
     this.videoPlaylistService.removeVideoPlaylist(videoPlaylist)
-      .subscribe(
-        () => {
+      .subscribe({
+        next: () => {
           this.router.navigate([ '/my-library', 'video-playlists' ])
           this.notifier.success($localize`Playlist ${videoPlaylist.displayName} deleted.`)
         },
 
-        error => this.notifier.error(error.message)
-      )
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   /**

@@ -107,8 +107,8 @@ export class MyHistoryComponent implements OnInit, DisableForReuseHook {
 
   onVideosHistoryChange () {
     this.userService.updateMyProfile({ videosHistoryEnabled: this.videosHistoryEnabled })
-      .subscribe(
-        () => {
+      .subscribe({
+        next: () => {
           const message = this.videosHistoryEnabled === true ?
             $localize`Videos history is enabled` :
             $localize`Videos history is disabled`
@@ -118,8 +118,8 @@ export class MyHistoryComponent implements OnInit, DisableForReuseHook {
           this.authService.refreshUserInformation()
         },
 
-        err => this.notifier.error(err.message)
-      )
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   async deleteHistory () {
@@ -130,14 +130,14 @@ export class MyHistoryComponent implements OnInit, DisableForReuseHook {
     if (res !== true) return
 
     this.userHistoryService.deleteUserVideosHistory()
-        .subscribe(
-          () => {
+        .subscribe({
+          next: () => {
             this.notifier.success($localize`Videos history deleted`)
 
             this.reloadData()
           },
 
-          err => this.notifier.error(err.message)
-        )
+          error: err => this.notifier.error(err.message)
+        })
   }
 }

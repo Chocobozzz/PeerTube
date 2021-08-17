@@ -90,16 +90,16 @@ export class VideoRateComponent implements OnInit, OnChanges, OnDestroy {
     if (this.isUserLoggedIn === false) return
 
     this.videoService.getUserVideoRating(this.video.id)
-        .subscribe(
-          ratingObject => {
+        .subscribe({
+          next: ratingObject => {
             if (!ratingObject) return
 
             this.userRating = ratingObject.rating
             this.userRatingLoaded.emit(this.userRating)
           },
 
-          err => this.notifier.error(err.message)
-        )
+          error: err => this.notifier.error(err.message)
+        })
   }
 
   private setRating (nextRating: UserVideoRateType) {
@@ -110,16 +110,16 @@ export class VideoRateComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     ratingMethods[nextRating].call(this.videoService, this.video.id)
-          .subscribe(
-            () => {
+          .subscribe({
+            next: () => {
               // Update the video like attribute
               this.updateVideoRating(this.userRating, nextRating)
               this.userRating = nextRating
               this.rateUpdated.emit(this.userRating)
             },
 
-            (err: { message: string }) => this.notifier.error(err.message)
-          )
+            error: err => this.notifier.error(err.message)
+          })
   }
 
   private updateVideoRating (oldRating: UserVideoRateType, newRating: UserVideoRateType) {

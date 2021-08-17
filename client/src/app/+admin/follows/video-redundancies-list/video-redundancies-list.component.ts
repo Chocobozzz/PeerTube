@@ -142,14 +142,14 @@ export class VideoRedundanciesListComponent extends RestTable implements OnInit 
     if (res === false) return
 
     this.redundancyService.removeVideoRedundancies(redundancy)
-      .subscribe(
-        () => {
+      .subscribe({
+        next: () => {
           this.notifier.success($localize`Video redundancies removed!`)
           this.reloadData()
         },
 
-        err => this.notifier.error(err.message)
-      )
+        error: err => this.notifier.error(err.message)
+      })
 
   }
 
@@ -161,14 +161,14 @@ export class VideoRedundanciesListComponent extends RestTable implements OnInit 
     }
 
     this.redundancyService.listVideoRedundancies(options)
-                      .subscribe(
-                        resultList => {
+                      .subscribe({
+                        next: resultList => {
                           this.videoRedundancies = resultList.data
                           this.totalRecords = resultList.total
                         },
 
-                        err => this.notifier.error(err.message)
-                      )
+                        error: err => this.notifier.error(err.message)
+                      })
   }
 
   private loadSelectLocalStorage () {

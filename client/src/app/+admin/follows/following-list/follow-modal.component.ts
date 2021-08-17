@@ -57,13 +57,14 @@ export class FollowModalComponent extends FormReactive implements OnInit {
   private async addFollowing () {
     const hostsOrHandles = splitAndGetNotEmpty(this.form.value['hostsOrHandles'])
 
-    this.followService.follow(hostsOrHandles).subscribe(
-      () => {
-        this.notifier.success($localize`Follow request(s) sent!`)
-        this.newFollow.emit()
-      },
+    this.followService.follow(hostsOrHandles)
+      .subscribe({
+        next: () => {
+          this.notifier.success($localize`Follow request(s) sent!`)
+          this.newFollow.emit()
+        },
 
-      err => this.notifier.error(err.message)
-    )
+        error: err => this.notifier.error(err.message)
+      })
   }
 }

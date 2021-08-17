@@ -71,14 +71,15 @@ export class MyVideoPlaylistCreateComponent extends MyVideoPlaylistEdit implemen
       thumbnailfile: body.thumbnailfile || null
     }
 
-    this.videoPlaylistService.createVideoPlaylist(videoPlaylistCreate).subscribe(
-      () => {
-        this.notifier.success($localize`Playlist ${videoPlaylistCreate.displayName} created.`)
-        this.router.navigate([ '/my-library', 'video-playlists' ])
-      },
+    this.videoPlaylistService.createVideoPlaylist(videoPlaylistCreate)
+      .subscribe({
+        next: () => {
+          this.notifier.success($localize`Playlist ${videoPlaylistCreate.displayName} created.`)
+          this.router.navigate([ '/my-library', 'video-playlists' ])
+        },
 
-      err => this.error = err.message
-    )
+        error: err => this.error = err.message
+      })
   }
 
   isCreation () {

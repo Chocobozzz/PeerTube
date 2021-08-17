@@ -50,10 +50,10 @@ export class InstanceConfigWarningModalComponent {
     peertubeLocalStorage.setItem(this.LOCAL_STORAGE_KEYS.NO_INSTANCE_CONFIG_WARNING_MODAL, 'true')
 
     this.userService.updateMyProfile({ noInstanceConfigWarningModal: true })
-        .subscribe(
-          () => console.log('We will not open the instance config warning modal again.'),
+        .subscribe({
+          next: () => console.log('We will not open the instance config warning modal again.'),
 
-          err => this.notifier.error(err.message)
-        )
+          error: err => this.notifier.error(err.message)
+        })
   }
 }

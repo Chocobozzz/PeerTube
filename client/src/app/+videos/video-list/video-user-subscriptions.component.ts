@@ -56,8 +56,8 @@ export class VideoUserSubscriptionsComponent extends AbstractVideoList implement
 
     this.authService.userInformationLoaded
       .pipe(switchMap(() => this.scopedTokensService.getScopedTokens()))
-      .subscribe(
-        tokens => {
+      .subscribe({
+        next: tokens => {
           const feeds = this.videoService.getVideoSubscriptionFeedUrls(user.account.id, tokens.feedToken)
           feedUrl = feedUrl + feeds.find(f => f.format === FeedFormat.RSS).url
 
@@ -74,10 +74,10 @@ export class VideoUserSubscriptionsComponent extends AbstractVideoList implement
           })
         },
 
-        err => {
+        error: err => {
           this.notifier.error(err.message)
         }
-      )
+      })
   }
 
   ngOnDestroy () {

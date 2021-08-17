@@ -50,13 +50,13 @@ export class PluginShowInstalledComponent extends FormReactive implements OnInit
     const settings = this.form.value
 
     this.pluginAPIService.updatePluginSettings(this.plugin.name, this.plugin.type, settings)
-        .subscribe(
-          () => {
+        .subscribe({
+          next: () => {
             this.notifier.success($localize`Settings updated.`)
           },
 
-          err => this.notifier.error(err.message)
-        )
+          error: err => this.notifier.error(err.message)
+        })
   }
 
   hasRegisteredSettings () {
@@ -83,8 +83,8 @@ export class PluginShowInstalledComponent extends FormReactive implements OnInit
           return this.pluginAPIService.getPluginRegisteredSettings(plugin.name, plugin.type)
             .pipe(map(data => ({ plugin, registeredSettings: data.registeredSettings })))
         }))
-        .subscribe(
-          async ({ plugin, registeredSettings }) => {
+        .subscribe({
+          next: async ({ plugin, registeredSettings }) => {
             this.plugin = plugin
 
             this.registeredSettings = await this.translateSettings(registeredSettings)
@@ -94,8 +94,8 @@ export class PluginShowInstalledComponent extends FormReactive implements OnInit
             this.buildSettingsForm()
           },
 
-          err => this.notifier.error(err.message)
-        )
+          error: err => this.notifier.error(err.message)
+        })
   }
 
   private buildSettingsForm () {

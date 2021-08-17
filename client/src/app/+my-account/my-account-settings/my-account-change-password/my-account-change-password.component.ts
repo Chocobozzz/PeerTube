@@ -43,22 +43,23 @@ export class MyAccountChangePasswordComponent extends FormReactive implements On
     const currentPassword = this.form.value[ 'current-password' ]
     const newPassword = this.form.value[ 'new-password' ]
 
-    this.userService.changePassword(currentPassword, newPassword).subscribe(
-      () => {
-        this.notifier.success($localize`Password updated.`)
+    this.userService.changePassword(currentPassword, newPassword)
+      .subscribe({
+        next: () => {
+          this.notifier.success($localize`Password updated.`)
 
-        this.form.reset()
-        this.error = null
-      },
+          this.form.reset()
+          this.error = null
+        },
 
-      err => {
-        if (err.status === 401) {
-          this.error = $localize`You current password is invalid.`
-          return
+        error: err => {
+          if (err.status === 401) {
+            this.error = $localize`You current password is invalid.`
+            return
+          }
+
+          this.error = err.message
         }
-
-        this.error = err.message
-      }
-    )
+      })
   }
 }

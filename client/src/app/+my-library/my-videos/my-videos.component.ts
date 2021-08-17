@@ -126,14 +126,14 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
 
     concat(...observables)
       .pipe(toArray())
-      .subscribe(
-        () => {
+      .subscribe({
+        next: () => {
           this.notifier.success($localize`${toDeleteVideosIds.length} videos deleted.`)
           this.selection = {}
         },
 
-        err => this.notifier.error(err.message)
-      )
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   async deleteVideo (video: Video) {
@@ -144,14 +144,14 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
     if (res === false) return
 
     this.videoService.removeVideo(video.id)
-        .subscribe(
-          () => {
+        .subscribe({
+          next: () => {
             this.notifier.success($localize`Video ${video.name} deleted.`)
             this.removeVideoFromArray(video.id)
           },
 
-          error => this.notifier.error(error.message)
-        )
+          error: err => this.notifier.error(err.message)
+        })
   }
 
   changeOwnership (video: Video) {

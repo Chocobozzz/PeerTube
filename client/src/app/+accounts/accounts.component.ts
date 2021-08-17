@@ -71,11 +71,11 @@ export class AccountsComponent implements OnInit, OnDestroy {
                             HttpStatusCode.NOT_FOUND_404
                           ]))
                         )
-                        .subscribe(
-                          videoChannels => this.videoChannels = videoChannels.data,
+                        .subscribe({
+                          next: videoChannels => this.videoChannels = videoChannels.data,
 
-                          err => this.notifier.error(err.message)
-                        )
+                          error: err => this.notifier.error(err.message)
+                        })
 
     this.links = [
       { label: $localize`CHANNELS`, routerLink: 'video-channels' },
@@ -174,11 +174,12 @@ export class AccountsComponent implements OnInit, OnDestroy {
 
     const user = this.authService.getUser()
     if (user.hasRight(UserRight.MANAGE_USERS)) {
-      this.userService.getUser(account.userId).subscribe(
-        accountUser => this.accountUser = accountUser,
+      this.userService.getUser(account.userId)
+        .subscribe({
+          next: accountUser => this.accountUser = accountUser,
 
-        err => this.notifier.error(err.message)
-      )
+          error: err => this.notifier.error(err.message)
+        })
     }
   }
 

@@ -198,15 +198,16 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
       privacy: VideoPlaylistPrivacy.PRIVATE
     }
 
-    this.videoPlaylistService.createVideoPlaylist(videoPlaylistCreate).subscribe(
-      () => {
-        this.isNewPlaylistBlockOpened = false
+    this.videoPlaylistService.createVideoPlaylist(videoPlaylistCreate)
+      .subscribe({
+        next: () => {
+          this.isNewPlaylistBlockOpened = false
 
-        this.cd.markForCheck()
-      },
+          this.cd.markForCheck()
+        },
 
-      err => this.notifier.error(err.message)
-    )
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   onVideoPlaylistSearchChanged () {
@@ -268,17 +269,15 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
     }
 
     this.videoPlaylistService.updateVideoOfPlaylist(playlist.id, element.playlistElementId, body, this.video.id)
-        .subscribe(
-          () => {
+        .subscribe({
+          next: () => {
             this.notifier.success($localize`Timestamps updated`)
           },
 
-          err => {
-            this.notifier.error(err.message)
-          },
+          error: err => this.notifier.error(err.message),
 
-          () => this.cd.markForCheck()
-        )
+          complete: () => this.cd.markForCheck()
+        })
   }
 
   private isOptionalRowDisplayed (playlist: PlaylistSummary) {
@@ -302,17 +301,15 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
 
   private removeVideoFromPlaylist (playlist: PlaylistSummary, elementId: number) {
     this.videoPlaylistService.removeVideoFromPlaylist(playlist.id, elementId, this.video.id)
-        .subscribe(
-          () => {
+        .subscribe({
+          next: () => {
             this.notifier.success($localize`Video removed from ${playlist.displayName}`)
           },
 
-          err => {
-            this.notifier.error(err.message)
-          },
+          error: err => this.notifier.error(err.message),
 
-          () => this.cd.markForCheck()
-        )
+          complete: () => this.cd.markForCheck()
+        })
   }
 
   private listenToVideoPlaylistChange () {
@@ -371,8 +368,8 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
     if (element.stopTimestamp && element.stopTimestamp !== this.video.duration) body.stopTimestamp = element.stopTimestamp
 
     this.videoPlaylistService.addVideoInPlaylist(playlist.id, body)
-      .subscribe(
-        res => {
+      .subscribe({
+        next: res => {
           const message = body.startTimestamp || body.stopTimestamp
             ? $localize`Video added in ${playlist.displayName} at timestamps ${this.formatTimestamp(element)}`
             : $localize`Video added in ${playlist.displayName}`
@@ -382,12 +379,10 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
           if (element) element.playlistElementId = res.videoPlaylistElement.id
         },
 
-        err => {
-          this.notifier.error(err.message)
-        },
+        error: err => this.notifier.error(err.message),
 
-        () => this.cd.markForCheck()
-      )
+        complete: () => this.cd.markForCheck()
+      })
   }
 
   private formatTimestamp (element: PlaylistElement) {

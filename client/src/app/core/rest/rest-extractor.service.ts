@@ -89,7 +89,7 @@ export class RestExtractor {
       errorObj.body = err.error
     }
 
-    return observableThrowError(errorObj)
+    return observableThrowError(() => errorObj)
   }
 
   redirectTo404IfNotFound (obj: { status: number }, type: 'video' | 'other', status = [ HttpStatusCode.NOT_FOUND_404 ]) {
@@ -98,6 +98,6 @@ export class RestExtractor {
       this.router.navigate([ '/404' ], { state: { type, obj }, skipLocationChange: true })
     }
 
-    return observableThrowError(obj)
+    return observableThrowError(() => obj)
   }
 }

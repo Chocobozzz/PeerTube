@@ -240,8 +240,8 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     this.isUpdatingVideo = true
 
     this.updateVideoAndCaptions(video)
-        .subscribe(
-          () => {
+        .subscribe({
+          next: () => {
             this.isUpdatingVideo = false
             this.isUploadingVideo = false
 
@@ -249,12 +249,12 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
             this.router.navigateByUrl(Video.buildWatchUrl(video))
           },
 
-          err => {
+          error: err => {
             this.error = err.message
             scrollToTop()
             console.error(err)
           }
-        )
+        })
   }
 
   private getInputVideoFile () {

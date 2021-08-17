@@ -18,14 +18,14 @@ export class RedundancyCheckboxComponent {
 
   updateRedundancyState () {
     this.redundancyService.updateRedundancy(this.host, this.redundancyAllowed)
-        .subscribe(
-          () => {
+        .subscribe({
+          next: () => {
             const stateLabel = this.redundancyAllowed ? $localize`enabled` : $localize`disabled`
 
             this.notifier.success($localize`Redundancy for ${this.host} is ${stateLabel}`)
           },
 
-          err => this.notifier.error(err.message)
-        )
+          error: err => this.notifier.error(err.message)
+        })
   }
 }

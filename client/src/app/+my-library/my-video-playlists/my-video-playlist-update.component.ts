@@ -64,16 +64,16 @@ export class MyVideoPlaylistUpdateComponent extends MyVideoPlaylistEdit implemen
                              ])
                            })
                          )
-                         .subscribe(
-                           ([ videoPlaylistToUpdate, videoPlaylistPrivacies]) => {
+                         .subscribe({
+                           next: ([ videoPlaylistToUpdate, videoPlaylistPrivacies]) => {
                              this.videoPlaylistToUpdate = videoPlaylistToUpdate
                              this.videoPlaylistPrivacies = videoPlaylistPrivacies
 
                              this.hydrateFormFromPlaylist()
                            },
 
-                           err => this.error = err.message
-                         )
+                           error: err => this.error = err.message
+                         })
   }
 
   ngOnDestroy () {
@@ -92,14 +92,15 @@ export class MyVideoPlaylistUpdateComponent extends MyVideoPlaylistEdit implemen
       thumbnailfile: body.thumbnailfile || undefined
     }
 
-    this.videoPlaylistService.updateVideoPlaylist(this.videoPlaylistToUpdate, videoPlaylistUpdate).subscribe(
-      () => {
-        this.notifier.success($localize`Playlist ${videoPlaylistUpdate.displayName} updated.`)
-        this.router.navigate([ '/my-library', 'video-playlists' ])
-      },
+    this.videoPlaylistService.updateVideoPlaylist(this.videoPlaylistToUpdate, videoPlaylistUpdate)
+      .subscribe({
+        next: () => {
+          this.notifier.success($localize`Playlist ${videoPlaylistUpdate.displayName} updated.`)
+          this.router.navigate([ '/my-library', 'video-playlists' ])
+        },
 
-      err => this.error = err.message
-    )
+        error: err => this.error = err.message
+      })
   }
 
   isCreation () {

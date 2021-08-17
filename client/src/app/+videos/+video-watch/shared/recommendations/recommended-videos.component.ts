@@ -84,12 +84,14 @@ export class RecommendedVideosComponent implements OnInit, OnChanges {
         autoPlayNextVideo: this.autoPlayNextVideo
       }
 
-      this.userService.updateMyProfile(details).subscribe(
-        () => {
-          this.authService.refreshUserInformation()
-        },
-        err => this.notifier.error(err.message)
-      )
+      this.userService.updateMyProfile(details)
+        .subscribe({
+          next: () => {
+            this.authService.refreshUserInformation()
+          },
+
+          error: err => this.notifier.error(err.message)
+        })
     }
   }
 }

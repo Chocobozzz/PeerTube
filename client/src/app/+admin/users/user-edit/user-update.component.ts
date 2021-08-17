@@ -59,11 +59,12 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
 
     this.paramsSub = this.route.params.subscribe(routeParams => {
       const userId = routeParams['id']
-      this.userService.getUser(userId, true).subscribe(
-        user => this.onUserFetched(user),
+      this.userService.getUser(userId, true)
+        .subscribe({
+          next: user => this.onUserFetched(user),
 
-        err => this.error = err.message
-      )
+          error: err => this.error = err.message
+        })
     })
   }
 
@@ -83,14 +84,15 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
 
     if (userUpdate.pluginAuth === 'null') userUpdate.pluginAuth = null
 
-    this.userService.updateUser(this.user.id, userUpdate).subscribe(
-      () => {
-        this.notifier.success($localize`User ${this.user.username} updated.`)
-        this.router.navigate([ '/admin/users/list' ])
-      },
+    this.userService.updateUser(this.user.id, userUpdate)
+      .subscribe({
+        next: () => {
+          this.notifier.success($localize`User ${this.user.username} updated.`)
+          this.router.navigate([ '/admin/users/list' ])
+        },
 
-      err => this.error = err.message
-    )
+        error: err => this.error = err.message
+      })
   }
 
   isCreation () {
@@ -106,13 +108,14 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
   }
 
   resetPassword () {
-    this.userService.askResetPassword(this.user.email).subscribe(
-      () => {
-        this.notifier.success($localize`An email asking for password reset has been sent to ${this.user.username}.`)
-      },
+    this.userService.askResetPassword(this.user.email)
+      .subscribe({
+        next: () => {
+          this.notifier.success($localize`An email asking for password reset has been sent to ${this.user.username}.`)
+        },
 
-      err => this.error = err.message
-    )
+        error: err => this.error = err.message
+      })
   }
 
   private onUserFetched (userJson: UserType) {

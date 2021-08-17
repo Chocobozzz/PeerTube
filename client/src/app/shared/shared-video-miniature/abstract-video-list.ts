@@ -204,28 +204,29 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, AfterConte
   }
 
   loadMoreVideos (reset = false) {
-    this.getVideosObservable(this.pagination.currentPage).subscribe(
-      ({ data }) => {
-        this.hasDoneFirstQuery = true
-        this.lastQueryLength = data.length
+    this.getVideosObservable(this.pagination.currentPage)
+      .subscribe({
+        next: ({ data }) => {
+          this.hasDoneFirstQuery = true
+          this.lastQueryLength = data.length
 
-        if (reset) this.videos = []
-        this.videos = this.videos.concat(data)
+          if (reset) this.videos = []
+          this.videos = this.videos.concat(data)
 
-        if (this.groupByDate) this.buildGroupedDateLabels()
+          if (this.groupByDate) this.buildGroupedDateLabels()
 
-        this.onMoreVideos()
+          this.onMoreVideos()
 
-        this.onDataSubject.next(data)
-      },
+          this.onDataSubject.next(data)
+        },
 
-      error => {
-        const message = $localize`Cannot load more videos. Try again later.`
+        error: err => {
+          const message = $localize`Cannot load more videos. Try again later.`
 
-        console.error(message, { error })
-        this.notifier.error(message)
-      }
-    )
+          console.error(message, { err })
+          this.notifier.error(message)
+        }
+      })
   }
 
   reloadVideos () {

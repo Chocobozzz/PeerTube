@@ -44,14 +44,14 @@ export class ChannelMiniatureMarkupComponent implements CustomMarkupComponent, O
         tap(html => this.descriptionHTML = html),
         switchMap(() => this.loadVideosObservable()),
         finalize(() => this.loaded.emit(true))
-      ).subscribe(
-        ({ total, data }) => {
+      ).subscribe({
+        next: ({ total, data }) => {
           this.totalVideos = total
           this.video = data[0]
         },
 
-        err => this.notifier.error($localize`Error in channel miniature component: ${err.message}`)
-      )
+        error: err => this.notifier.error($localize`Error in channel miniature component: ${err.message}`)
+      })
   }
 
   getVideoChannelLink () {

@@ -137,19 +137,19 @@ export class VideoCommentAddComponent extends FormReactive implements OnChanges,
       obs = this.addCommentThread(commentCreate)
     }
 
-    obs.subscribe(
-      comment => {
+    obs.subscribe({
+      next: comment => {
         this.addingComment = false
         this.commentCreated.emit(comment)
         this.form.reset()
       },
 
-      err => {
+      error: err => {
         this.addingComment = false
 
         this.notifier.error(err.text)
       }
-    )
+    })
   }
 
   isAddButtonDisplayed () {

@@ -107,17 +107,17 @@ export class LoginComponent extends FormReactive implements OnInit, AfterViewIni
     const { username, password } = this.form.value
 
     this.authService.login(username, password)
-      .subscribe(
-        () => this.redirectService.redirectToPreviousRoute(),
+      .subscribe({
+        next: () => this.redirectService.redirectToPreviousRoute(),
 
-        err => this.handleError(err)
-      )
+        error: err => this.handleError(err)
+      })
   }
 
   askResetPassword () {
     this.userService.askResetPassword(this.forgotPasswordEmail)
-      .subscribe(
-        () => {
+      .subscribe({
+        next: () => {
           const message = $localize`An email with the reset password instructions will be sent to ${this.forgotPasswordEmail}.
 The link will expire within 1 hour.`
 
@@ -125,8 +125,8 @@ The link will expire within 1 hour.`
           this.hideForgotPasswordModal()
         },
 
-        err => this.notifier.error(err.message)
-      )
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   openForgotPasswordModal () {
@@ -149,14 +149,14 @@ The link will expire within 1 hour.`
     this.isAuthenticatedWithExternalAuth = true
 
     this.authService.login(username, null, token)
-    .subscribe(
-      () => this.redirectService.redirectToPreviousRoute(),
+      .subscribe({
+        next: () => this.redirectService.redirectToPreviousRoute(),
 
-      err => {
-        this.handleError(err)
-        this.isAuthenticatedWithExternalAuth = false
-      }
-    )
+        error: err => {
+          this.handleError(err)
+          this.isAuthenticatedWithExternalAuth = false
+        }
+      })
   }
 
   private handleError (err: any) {

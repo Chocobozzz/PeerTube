@@ -65,18 +65,21 @@ export class UserInterfaceSettingsComponent extends FormReactive implements OnIn
     }
 
     if (this.authService.isLoggedIn()) {
-      this.userService.updateMyProfile(details).subscribe(
-        () => {
-          this.authService.refreshUserInformation()
+      this.userService.updateMyProfile(details)
+        .subscribe({
+          next: () => {
+            this.authService.refreshUserInformation()
 
-          if (this.notifyOnUpdate) this.notifier.success($localize`Interface settings updated.`)
-        },
+            if (this.notifyOnUpdate) this.notifier.success($localize`Interface settings updated.`)
+          },
 
-        err => this.notifier.error(err.message)
-      )
-    } else {
-      this.userService.updateMyAnonymousProfile(details)
-      if (this.notifyOnUpdate) this.notifier.success($localize`Interface settings updated.`)
+          error: err => this.notifier.error(err.message)
+        })
+
+      return
     }
+
+    this.userService.updateMyAnonymousProfile(details)
+    if (this.notifyOnUpdate) this.notifier.success($localize`Interface settings updated.`)
   }
 }

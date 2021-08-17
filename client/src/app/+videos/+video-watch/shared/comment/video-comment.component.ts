@@ -149,11 +149,11 @@ export class VideoCommentComponent implements OnInit, OnChanges {
     const user = this.authService.getUser()
     if (user.hasRight(UserRight.MANAGE_USERS)) {
       this.userService.getUserWithCache(account.userId)
-          .subscribe(
-            user => this.commentUser = user,
+          .subscribe({
+            next: user => this.commentUser = user,
 
-            err => this.notifier.error(err.message)
-          )
+            error: err => this.notifier.error(err.message)
+          })
     }
   }
 

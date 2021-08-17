@@ -48,11 +48,11 @@ export class VideoChangeOwnershipComponent extends FormReactive implements OnIni
   search (event: { query: string }) {
     const query = event.query
     this.userService.autocomplete(query)
-      .subscribe(
-        usernames => this.usernamePropositions = usernames,
+      .subscribe({
+        next: usernames => this.usernamePropositions = usernames,
 
-        err => this.notifier.error(err.message)
-      )
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   changeOwnership () {
@@ -60,10 +60,10 @@ export class VideoChangeOwnershipComponent extends FormReactive implements OnIni
 
     this.videoOwnershipService
       .changeOwnership(this.video.id, username)
-      .subscribe(
-        () => this.notifier.success($localize`Ownership change request sent.`),
+      .subscribe({
+        next: () => this.notifier.success($localize`Ownership change request sent.`),
 
-        err => this.notifier.error(err.message)
-      )
+        error: err => this.notifier.error(err.message)
+      })
   }
 }

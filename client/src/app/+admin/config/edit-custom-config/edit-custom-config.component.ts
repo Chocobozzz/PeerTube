@@ -267,8 +267,8 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
       this.configService.updateCustomConfig(omit(value, 'instanceCustomHomepage')),
       this.customPage.updateInstanceHomepage(value.instanceCustomHomepage.content)
     ])
-      .subscribe(
-        ([ resConfig ]) => {
+      .subscribe({
+        next: ([ resConfig ]) => {
           const instanceCustomHomepage = {
             content: value.instanceCustomHomepage.content
           }
@@ -284,8 +284,8 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
           this.notifier.success($localize`Configuration updated.`)
         },
 
-        err => this.notifier.error(err.message)
-      )
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   hasConsistentOptions () {
@@ -339,8 +339,8 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
     forkJoin([
       this.configService.getCustomConfig(),
       this.customPage.getInstanceHomepage()
-    ])
-      .subscribe(([ config, homepage ]) => {
+    ]).subscribe({
+      next: ([ config, homepage ]) => {
         this.customConfig = { ...config, instanceCustomHomepage: homepage }
 
         this.updateForm()
@@ -348,21 +348,21 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
         this.forceCheck()
       },
 
-      err => this.notifier.error(err.message)
-    )
+      error: err => this.notifier.error(err.message)
+    })
   }
 
   private loadCategoriesAndLanguages () {
     forkJoin([
       this.serverService.getVideoLanguages(),
       this.serverService.getVideoCategories()
-    ]).subscribe(
-      ([ languages, categories ]) => {
+    ]).subscribe({
+      next: ([ languages, categories ]) => {
         this.languageItems = languages.map(l => ({ label: l.label, id: l.id }))
         this.categoryItems = categories.map(l => ({ label: l.label, id: l.id + '' }))
       },
 
-      err => this.notifier.error(err.message)
-    )
+      error: err => this.notifier.error(err.message)
+    })
   }
 }

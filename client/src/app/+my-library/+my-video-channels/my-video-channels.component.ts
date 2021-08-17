@@ -54,14 +54,14 @@ channel with the same name (${videoChannel.name})!`,
     if (res === false) return
 
     this.videoChannelService.removeVideoChannel(videoChannel)
-      .subscribe(
-        () => {
+      .subscribe({
+        next: () => {
           this.loadVideoChannels()
           this.notifier.success($localize`Video channel ${videoChannel.displayName} deleted.`)
         },
 
-        error => this.notifier.error(error.message)
-      )
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   private loadVideoChannels () {

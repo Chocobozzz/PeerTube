@@ -1,4 +1,4 @@
-import { first } from 'rxjs/operators'
+import { firstValueFrom } from 'rxjs'
 import { ComponentRef, Injectable } from '@angular/core'
 import { MarkdownService } from '@app/core'
 import {
@@ -85,7 +85,7 @@ export class CustomMarkupService {
             const component = this.execAngularBuilder(selector, e)
 
             if (component.instance.loaded) {
-              const p = component.instance.loaded.pipe(first()).toPromise()
+              const p = firstValueFrom(component.instance.loaded)
               loadedPromises.push(p)
             }
 

@@ -122,8 +122,8 @@ export class RegisterComponent implements OnInit {
       'filter:api.signup.registration.create.params'
     )
 
-    this.userService.signup(body).subscribe(
-      () => {
+    this.userService.signup(body).subscribe({
+      next: () => {
         this.signupDone = true
 
         if (this.requiresEmailVerification) {
@@ -133,16 +133,16 @@ export class RegisterComponent implements OnInit {
 
         // Auto login
         this.authService.login(body.username, body.password)
-            .subscribe(
-              () => {
-                this.success = $localize`You are now logged in as ${body.username}!`
-              },
+          .subscribe({
+            next: () => {
+              this.success = $localize`You are now logged in as ${body.username}!`
+            },
 
-              err => this.error = err.message
-            )
+            error: err => this.error = err.message
+          })
       },
 
-      err => this.error = err.message
-    )
+      error: err => this.error = err.message
+    })
   }
 }

@@ -238,8 +238,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     )
 
     forkJoin([ videoObs, this.videoCaptionService.listCaptions(videoId)])
-      .subscribe(
-        ([ video, captionsResult ]) => {
+      .subscribe({
+        next: ([ video, captionsResult ]) => {
           const queryParams = this.route.snapshot.queryParams
 
           const urlOptions = {
@@ -260,23 +260,23 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
               .catch(err => this.handleGlobalError(err))
         },
 
-        err => this.handleRequestError(err)
-      )
+        error: err => this.handleRequestError(err)
+      })
   }
 
   private loadPlaylist (playlistId: string) {
     if (this.isSameElement(this.playlist, playlistId)) return
 
     this.playlistService.getVideoPlaylist(playlistId)
-      .subscribe(
-        playlist => {
+      .subscribe({
+        next: playlist => {
           this.playlist = playlist
 
           this.videoWatchPlaylist.loadPlaylistElements(playlist, !this.playlistPosition, this.playlistPosition)
         },
 
-        err => this.handleRequestError(err)
-      )
+        error: err => this.handleRequestError(err)
+      })
   }
 
   private isSameElement (element: VideoDetails | VideoPlaylist, newId: string) {

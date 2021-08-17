@@ -52,21 +52,22 @@ export class MyVideoChannelUpdateComponent extends MyVideoChannelEdit implements
     this.paramsSub = this.route.params.subscribe(routeParams => {
       const videoChannelId = routeParams['videoChannelId']
 
-      this.videoChannelService.getVideoChannel(videoChannelId).subscribe(
-        videoChannelToUpdate => {
-          this.videoChannel = videoChannelToUpdate
+      this.videoChannelService.getVideoChannel(videoChannelId)
+        .subscribe({
+          next: videoChannelToUpdate => {
+            this.videoChannel = videoChannelToUpdate
 
-          this.oldSupportField = videoChannelToUpdate.support
+            this.oldSupportField = videoChannelToUpdate.support
 
-          this.form.patchValue({
-            'display-name': videoChannelToUpdate.displayName,
-            description: videoChannelToUpdate.description,
-            support: videoChannelToUpdate.support
-          })
-        },
+            this.form.patchValue({
+              'display-name': videoChannelToUpdate.displayName,
+              description: videoChannelToUpdate.description,
+              support: videoChannelToUpdate.support
+            })
+          },
 
-        err => this.error = err.message
-      )
+          error: err => this.error = err.message
+        })
     })
   }
 
@@ -85,77 +86,78 @@ export class MyVideoChannelUpdateComponent extends MyVideoChannelEdit implements
       bulkVideosSupportUpdate: body.bulkVideosSupportUpdate || false
     }
 
-    this.videoChannelService.updateVideoChannel(this.videoChannel.name, videoChannelUpdate).subscribe(
-      () => {
-        this.authService.refreshUserInformation()
+    this.videoChannelService.updateVideoChannel(this.videoChannel.name, videoChannelUpdate)
+      .subscribe({
+        next: () => {
+          this.authService.refreshUserInformation()
 
-        this.notifier.success($localize`Video channel ${videoChannelUpdate.displayName} updated.`)
+          this.notifier.success($localize`Video channel ${videoChannelUpdate.displayName} updated.`)
 
-        this.router.navigate([ '/my-library', 'video-channels' ])
-      },
+          this.router.navigate([ '/my-library', 'video-channels' ])
+        },
 
-      err => this.error = err.message
-    )
+        error: err => this.error = err.message
+      })
   }
 
   onAvatarChange (formData: FormData) {
     this.videoChannelService.changeVideoChannelImage(this.videoChannel.name, formData, 'avatar')
-        .subscribe(
-          data => {
+        .subscribe({
+          next: data => {
             this.notifier.success($localize`Avatar changed.`)
 
             this.videoChannel.updateAvatar(data.avatar)
           },
 
-          (err: HttpErrorResponse) => genericUploadErrorHandler({
+          error: (err: HttpErrorResponse) => genericUploadErrorHandler({
             err,
             name: $localize`avatar`,
             notifier: this.notifier
           })
-        )
+        })
   }
 
   onAvatarDelete () {
     this.videoChannelService.deleteVideoChannelImage(this.videoChannel.name, 'avatar')
-                            .subscribe(
-                              data => {
+                            .subscribe({
+                              next: () => {
                                 this.notifier.success($localize`Avatar deleted.`)
 
                                 this.videoChannel.resetAvatar()
                               },
 
-                              err => this.notifier.error(err.message)
-                            )
+                              error: err => this.notifier.error(err.message)
+                            })
   }
 
   onBannerChange (formData: FormData) {
     this.videoChannelService.changeVideoChannelImage(this.videoChannel.name, formData, 'banner')
-        .subscribe(
-          data => {
+        .subscribe({
+          next: data => {
             this.notifier.success($localize`Banner changed.`)
 
             this.videoChannel.updateBanner(data.banner)
           },
 
-          (err: HttpErrorResponse) => genericUploadErrorHandler({
+          error: (err: HttpErrorResponse) => genericUploadErrorHandler({
             err,
             name: $localize`banner`,
             notifier: this.notifier
           })
-        )
+        })
   }
 
   onBannerDelete () {
     this.videoChannelService.deleteVideoChannelImage(this.videoChannel.name, 'banner')
-                            .subscribe(
-                              data => {
+                            .subscribe({
+                              next: () => {
                                 this.notifier.success($localize`Banner deleted.`)
 
                                 this.videoChannel.resetBanner()
                               },
 
-                              err => this.notifier.error(err.message)
-                            )
+                              error: err => this.notifier.error(err.message)
+                            })
   }
 
   get maxAvatarSize () {

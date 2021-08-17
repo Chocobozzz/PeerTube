@@ -42,14 +42,14 @@ export class ResetPasswordComponent extends FormReactive implements OnInit {
 
   resetPassword () {
     this.userService.resetPassword(this.userId, this.verificationString, this.form.value.password)
-      .subscribe(
-        () => {
+      .subscribe({
+        next: () => {
           this.notifier.success($localize`Your password has been successfully reset!`)
           this.router.navigate([ '/login' ])
         },
 
-        err => this.notifier.error(err.message)
-      )
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   isConfirmedPasswordValid () {

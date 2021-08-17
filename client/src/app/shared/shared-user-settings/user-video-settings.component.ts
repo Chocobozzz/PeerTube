@@ -162,15 +162,16 @@ export class UserVideoSettingsComponent extends FormReactive implements OnInit, 
   }
 
   private updateLoggedProfile (details: UserUpdateMe) {
-    this.userService.updateMyProfile(details).subscribe(
-      () => {
-        this.authService.refreshUserInformation()
+    this.userService.updateMyProfile(details)
+      .subscribe({
+        next: () => {
+          this.authService.refreshUserInformation()
 
-        if (this.notifyOnUpdate) this.notifier.success($localize`Video settings updated.`)
-      },
+          if (this.notifyOnUpdate) this.notifier.success($localize`Video settings updated.`)
+        },
 
-      err => this.notifier.error(err.message)
-    )
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   private updateAnonymousProfile (details: UserUpdateMe) {

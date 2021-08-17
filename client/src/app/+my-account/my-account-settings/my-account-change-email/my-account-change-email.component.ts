@@ -45,8 +45,8 @@ export class MyAccountChangeEmailComponent extends FormReactive implements OnIni
       this.serverService.getConfig(),
       this.userService.changeEmail(password, email)
     ]).pipe(tap(() => this.authService.refreshUserInformation()))
-      .subscribe(
-        ([ config ]) => {
+      .subscribe({
+        next: ([ config ]) => {
           this.form.reset()
 
           if (config.signup.requiresEmailVerification) {
@@ -56,7 +56,7 @@ export class MyAccountChangeEmailComponent extends FormReactive implements OnIni
           }
         },
 
-        err => {
+        error: err => {
           if (err.status === 401) {
             this.error = $localize`You current password is invalid.`
             return
@@ -64,6 +64,6 @@ export class MyAccountChangeEmailComponent extends FormReactive implements OnIni
 
           this.error = err.message
         }
-      )
+      })
   }
 }
