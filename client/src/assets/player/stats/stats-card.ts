@@ -39,10 +39,6 @@ class StatsCard extends Component {
   intervalMs = 300
   playerNetworkInfo: PlayerNetworkInfo = {}
 
-  constructor (player: videojs.Player, options: StatsCardOptions) {
-    super(player, options)
-  }
-
   createEl () {
     const container = super.createEl('div', {
       className: 'vjs-stats-content',
@@ -81,9 +77,8 @@ class StatsCard extends Component {
   }
 
   toggle () {
-    this.updateInterval
-      ? this.hide()
-      : this.show()
+    if (this.updateInterval) this.hide()
+    else this.show()
   }
 
   show () {

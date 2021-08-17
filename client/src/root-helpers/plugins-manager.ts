@@ -155,7 +155,7 @@ class PluginsManager {
     try {
       if (!isReload) this.loadedScopes.push(scope)
 
-      const toLoad = this.scopes[ scope ]
+      const toLoad = this.scopes[scope]
       if (!Array.isArray(toLoad)) {
         this.loadingScopes[scope] = false
         this.pluginsLoaded[scope].next(true)
@@ -168,11 +168,11 @@ class PluginsManager {
       for (const pluginInfo of toLoad) {
         const clientScript = pluginInfo.clientScript
 
-        if (this.loadedScripts[ clientScript.script ]) continue
+        if (this.loadedScripts[clientScript.script]) continue
 
         promises.push(this.loadPlugin(pluginInfo))
 
-        this.loadedScripts[ clientScript.script ] = true
+        this.loadedScripts[clientScript.script] = true
       }
 
       await Promise.all(promises)

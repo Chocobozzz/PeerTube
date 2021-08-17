@@ -44,7 +44,7 @@ export class VideoChannelsComponent implements OnInit, OnDestroy {
   ngOnInit () {
     this.routeSub = this.route.params
                         .pipe(
-                          map(params => params[ 'videoChannelName' ]),
+                          map(params => params['videoChannelName']),
                           distinctUntilChanged(),
                           switchMap(videoChannelName => this.videoChannelService.getVideoChannel(videoChannelName)),
                           catchError(err => this.restExtractor.redirectTo404IfNotFound(err, 'other', [
@@ -64,9 +64,9 @@ export class VideoChannelsComponent implements OnInit, OnDestroy {
 
     this.hotkeys = [
       new Hotkey('S', (event: KeyboardEvent): boolean => {
-        this.subscribeButton.subscribed ?
-          this.subscribeButton.unsubscribe() :
-          this.subscribeButton.subscribe()
+        if (this.subscribeButton.subscribed) this.subscribeButton.unsubscribe()
+        else this.subscribeButton.subscribe()
+
         return false
       }, undefined, $localize`Subscribe to the account`)
     ]

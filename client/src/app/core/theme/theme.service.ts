@@ -95,8 +95,8 @@ export class ThemeService {
   private loadTheme (name: string) {
     const links = document.getElementsByTagName('link')
     for (let i = 0; i < links.length; i++) {
-      const link = links[ i ]
-      if (link.getAttribute('rel').indexOf('style') !== -1 && link.getAttribute('title')) {
+      const link = links[i]
+      if (link.getAttribute('rel').includes('style') && link.getAttribute('title')) {
         link.disabled = link.getAttribute('title') !== name
       }
     }

@@ -9,7 +9,7 @@ import { VideoComment, VideoCommentService, VideoCommentThreadTree } from '@app/
 @Component({
   selector: 'my-video-comments',
   templateUrl: './video-comments.component.html',
-  styleUrls: ['./video-comments.component.scss']
+  styleUrls: [ './video-comments.component.scss' ]
 })
 export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('commentHighlightBlock') commentHighlightBlock: ElementRef
@@ -200,7 +200,11 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   async onWantedToRedraft (commentToRedraft: VideoComment) {
-    const confirm = await this.onWantedToDelete(commentToRedraft, $localize`Delete and re-draft`, $localize`Do you really want to delete and re-draft this comment?`)
+    const confirm = await this.onWantedToDelete(
+      commentToRedraft,
+      $localize`Delete and re-draft`,
+      $localize`Do you really want to delete and re-draft this comment?`
+    )
 
     if (confirm) {
       this.inReplyToCommentId = commentToRedraft.inReplyToCommentId

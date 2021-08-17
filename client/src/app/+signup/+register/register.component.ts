@@ -49,8 +49,7 @@ export class RegisterComponent implements OnInit {
     private authService: AuthService,
     private userService: UserService,
     private hooks: HooksService
-    ) {
-  }
+  ) { }
 
   get requiresEmailVerification () {
     return this.serverConfig.signup.requiresEmailVerification
@@ -138,11 +137,15 @@ export class RegisterComponent implements OnInit {
               this.success = $localize`You are now logged in as ${body.username}!`
             },
 
-            error: err => this.error = err.message
+            error: err => {
+              this.error = err.message
+            }
           })
       },
 
-      error: err => this.error = err.message
+      error: err => {
+        this.error = err.message
+      }
     })
   }
 }

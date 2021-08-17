@@ -7,7 +7,7 @@ import { About } from '@shared/models/server'
 @Component({
   selector: 'my-instance-about-accordion',
   templateUrl: './instance-about-accordion.component.html',
-  styleUrls: ['./instance-about-accordion.component.scss']
+  styleUrls: [ './instance-about-accordion.component.scss' ]
 })
 export class InstanceAboutAccordionComponent implements OnInit {
   @ViewChild('accordion', { static: true }) accordion: NgbAccordion

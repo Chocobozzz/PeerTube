@@ -66,7 +66,9 @@ export class MyVideoChannelUpdateComponent extends MyVideoChannelEdit implements
             })
           },
 
-          error: err => this.error = err.message
+          error: err => {
+            this.error = err.message
+          }
         })
     })
   }
@@ -96,7 +98,9 @@ export class MyVideoChannelUpdateComponent extends MyVideoChannelEdit implements
           this.router.navigate([ '/my-library', 'video-channels' ])
         },
 
-        error: err => this.error = err.message
+        error: err => {
+          this.error = err.message
+        }
       })
   }
 

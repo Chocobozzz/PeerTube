@@ -29,7 +29,7 @@ export class MyVideoPlaylistCreateComponent extends MyVideoPlaylistEdit implemen
     private router: Router,
     private videoPlaylistService: VideoPlaylistService,
     private serverService: ServerService
-    ) {
+  ) {
     super()
   }
 
@@ -78,7 +78,9 @@ export class MyVideoPlaylistCreateComponent extends MyVideoPlaylistEdit implemen
           this.router.navigate([ '/my-library', 'video-playlists' ])
         },
 
-        error: err => this.error = err.message
+        error: err => {
+          this.error = err.message
+        }
       })
   }
 

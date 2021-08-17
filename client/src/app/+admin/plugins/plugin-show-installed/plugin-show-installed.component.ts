@@ -103,8 +103,8 @@ export class PluginShowInstalledComponent extends FormReactive implements OnInit
     const settingsValues: any = {}
 
     for (const setting of this.registeredSettings) {
-      buildOptions[ setting.name ] = null
-      settingsValues[ setting.name ] = this.getSetting(setting.name)
+      buildOptions[setting.name] = null
+      settingsValues[setting.name] = this.getSetting(setting.name)
     }
 
     this.buildForm(buildOptions)
@@ -117,7 +117,7 @@ export class PluginShowInstalledComponent extends FormReactive implements OnInit
   private getSetting (name: string) {
     const settings = this.plugin.settings
 
-    if (settings && settings[name] !== undefined) return settings[name]
+    if (settings?.[name] !== undefined) return settings[name]
 
     const registered = this.registeredSettings.find(r => r.name === name)
 

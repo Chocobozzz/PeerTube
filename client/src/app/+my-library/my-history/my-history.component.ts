@@ -1,4 +1,3 @@
-import { Subject } from 'rxjs'
 import { tap } from 'rxjs/operators'
 import { Component, ComponentFactoryResolver, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
@@ -109,9 +108,9 @@ export class MyHistoryComponent implements OnInit, DisableForReuseHook {
     this.userService.updateMyProfile({ videosHistoryEnabled: this.videosHistoryEnabled })
       .subscribe({
         next: () => {
-          const message = this.videosHistoryEnabled === true ?
-            $localize`Videos history is enabled` :
-            $localize`Videos history is disabled`
+          const message = this.videosHistoryEnabled === true
+            ? $localize`Videos history is enabled`
+            : $localize`Videos history is disabled`
 
           this.notifier.success(message)
 

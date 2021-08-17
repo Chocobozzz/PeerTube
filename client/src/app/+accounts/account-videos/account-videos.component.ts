@@ -1,5 +1,5 @@
 import { forkJoin, Subscription } from 'rxjs'
-import { first, tap } from 'rxjs/operators'
+import { first } from 'rxjs/operators'
 import { Component, ComponentFactoryResolver, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, ConfirmService, LocalStorageService, Notifier, ScreenService, ServerService, UserService } from '@app/core'

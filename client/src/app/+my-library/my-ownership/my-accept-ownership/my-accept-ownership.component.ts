@@ -29,7 +29,7 @@ export class MyAcceptOwnershipComponent extends FormReactive implements OnInit {
     private notifier: Notifier,
     private authService: AuthService,
     private modalService: NgbModal
-    ) {
+  ) {
     super()
   }
 

@@ -128,7 +128,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
 
   onUploadVideoOngoing (state: UploadState) {
     switch (state.status) {
-      case 'error':
+      case 'error': {
         const error = state.response?.error || 'Unknow error'
 
         this.handleUploadError({
@@ -143,6 +143,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
           url: state.url
         })
         break
+      }
 
       case 'cancelled':
         this.isUploadingVideo = false
@@ -323,6 +324,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
       const videoQuotaUsedBytes = bytePipes.transform(this.userVideoQuotaUsed, 0)
       const videoQuotaBytes = bytePipes.transform(videoQuota, 0)
 
+      // eslint-disable-next-line max-len
       const msg = $localize`Your video quota is exceeded with this video (video size: ${videoSizeBytes}, used: ${videoQuotaUsedBytes}, quota: ${videoQuotaBytes})`
       this.notifier.error(msg)
 
@@ -341,6 +343,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
       const videoSizeBytes = bytePipes.transform(videofile.size, 0)
       const quotaUsedDailyBytes = bytePipes.transform(this.userVideoQuotaUsedDaily, 0)
       const quotaDailyBytes = bytePipes.transform(videoQuotaDaily, 0)
+      // eslint-disable-next-line max-len
       const msg = $localize`Your daily video quota is exceeded with this video (video size: ${videoSizeBytes}, used: ${quotaUsedDailyBytes}, quota: ${quotaDailyBytes})`
       this.notifier.error(msg)
 

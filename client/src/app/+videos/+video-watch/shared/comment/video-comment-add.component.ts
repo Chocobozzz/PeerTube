@@ -25,7 +25,7 @@ import { VideoCommentCreate } from '@shared/models'
 @Component({
   selector: 'my-video-comment-add',
   templateUrl: './video-comment-add.component.html',
-  styleUrls: ['./video-comment-add.component.scss']
+  styleUrls: [ './video-comment-add.component.scss' ]
 })
 export class VideoCommentAddComponent extends FormReactive implements OnChanges, OnInit {
   @Input() user: User
@@ -64,7 +64,7 @@ export class VideoCommentAddComponent extends FormReactive implements OnChanges,
     for (const emojiMarkupName in emojiMarkupObjectList) {
       if (emojiMarkupName) {
         const emoji = emojiMarkupObjectList[emojiMarkupName]
-        emojiMarkupArrayList.push([emoji, emojiMarkupName])
+        emojiMarkupArrayList.push([ emoji, emojiMarkupName ])
       }
     }
 
@@ -91,7 +91,7 @@ export class VideoCommentAddComponent extends FormReactive implements OnChanges,
     // Not initialized yet
     if (!this.form) return
 
-    if (changes.textValue && changes.textValue.currentValue && changes.textValue.currentValue !== changes.textValue.previousValue) {
+    if (changes.textValue?.currentValue && changes.textValue.currentValue !== changes.textValue.previousValue) {
       this.patchTextValue(changes.textValue.currentValue, true)
     }
   }

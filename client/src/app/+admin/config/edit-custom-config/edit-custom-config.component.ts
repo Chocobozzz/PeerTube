@@ -277,7 +277,9 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
 
           // Reload general configuration
           this.serverService.resetConfig()
-            .subscribe(config => this.serverConfig = config)
+            .subscribe(config => {
+              this.serverConfig = config
+            })
 
           this.updateForm()
 

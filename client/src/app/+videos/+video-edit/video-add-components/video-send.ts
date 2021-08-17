@@ -9,7 +9,7 @@ import { LoadingBarService } from '@ngx-loading-bar/core'
 import { HTMLServerConfig, VideoConstant, VideoPrivacy } from '@shared/models'
 
 @Directive()
-// tslint:disable-next-line: directive-class-suffix
+// eslint-disable-next-line @angular-eslint/directive-class-suffix
 export abstract class VideoSend extends FormReactive implements OnInit {
   userVideoChannels: SelectChannelItem[] = []
   videoPrivacies: VideoConstant<VideoPrivacy>[] = []

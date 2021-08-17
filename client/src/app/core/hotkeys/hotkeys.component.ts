@@ -3,8 +3,8 @@ import { Subscription } from 'rxjs'
 import { Component, Input, OnDestroy, OnInit } from '@angular/core'
 
 @Component({
-  selector : 'my-hotkeys-cheatsheet',
-  templateUrl : './hotkeys.component.html',
+  selector: 'my-hotkeys-cheatsheet',
+  templateUrl: './hotkeys.component.html',
   styleUrls: [ './hotkeys.component.scss' ]
 })
 export class CheatSheetComponent implements OnInit, OnDestroy {
@@ -16,7 +16,7 @@ export class CheatSheetComponent implements OnInit, OnDestroy {
 
   constructor (
     private hotkeysService: HotkeysService
-    ) {}
+  ) {}
 
   public ngOnInit (): void {
     this.subscription = this.hotkeysService.cheatSheetToggle.subscribe((isOpen) => {

@@ -33,7 +33,7 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
     private router: Router,
     private notifier: Notifier,
     private userService: UserService
-    ) {
+  ) {
     super()
 
     this.buildQuotaOptions()
@@ -63,7 +63,9 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
         .subscribe({
           next: user => this.onUserFetched(user),
 
-          error: err => this.error = err.message
+          error: err => {
+            this.error = err.message
+          }
         })
     })
   }
@@ -91,7 +93,9 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
           this.router.navigate([ '/admin/users/list' ])
         },
 
-        error: err => this.error = err.message
+        error: err => {
+          this.error = err.message
+        }
       })
   }
 
@@ -114,7 +118,9 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
           this.notifier.success($localize`An email asking for password reset has been sent to ${this.user.username}.`)
         },
 
-        error: err => this.error = err.message
+        error: err => {
+          this.error = err.message
+        }
       })
   }
 

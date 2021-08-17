@@ -4,7 +4,7 @@ import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild }
 import { ActivatedRoute, Router } from '@angular/router'
 
 @Component({
-  selector: 'simple-search-input',
+  selector: 'my-simple-search-input',
   templateUrl: './simple-search-input.component.html',
   styleUrls: [ './simple-search-input.component.scss' ]
 })

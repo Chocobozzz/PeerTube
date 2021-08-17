@@ -2,7 +2,6 @@ import { SortMeta } from 'primeng/api'
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { ConfirmService, Notifier, RestPagination, RestTable } from '@app/core'
 import { InstanceFollowService } from '@app/shared/shared-instance'
-import { BatchDomainsModalComponent } from '@app/shared/shared-moderation'
 import { ActorFollow } from '@shared/models'
 import { FollowModalComponent } from './follow-modal.component'
 
@@ -22,7 +21,7 @@ export class FollowingListComponent extends RestTable implements OnInit {
     private notifier: Notifier,
     private confirmService: ConfirmService,
     private followService: InstanceFollowService
-    ) {
+  ) {
     super()
   }
 

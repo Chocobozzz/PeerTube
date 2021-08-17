@@ -65,14 +65,16 @@ export class MyVideoPlaylistUpdateComponent extends MyVideoPlaylistEdit implemen
                            })
                          )
                          .subscribe({
-                           next: ([ videoPlaylistToUpdate, videoPlaylistPrivacies]) => {
+                           next: ([ videoPlaylistToUpdate, videoPlaylistPrivacies ]) => {
                              this.videoPlaylistToUpdate = videoPlaylistToUpdate
                              this.videoPlaylistPrivacies = videoPlaylistPrivacies
 
                              this.hydrateFormFromPlaylist()
                            },
 
-                           error: err => this.error = err.message
+                           error: err => {
+                             this.error = err.message
+                           }
                          })
   }
 
@@ -99,7 +101,9 @@ export class MyVideoPlaylistUpdateComponent extends MyVideoPlaylistEdit implemen
           this.router.navigate([ '/my-library', 'video-playlists' ])
         },
 
-        error: err => this.error = err.message
+        error: err => {
+          this.error = err.message
+        }
       })
   }
 

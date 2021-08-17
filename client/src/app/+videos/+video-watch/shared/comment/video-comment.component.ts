@@ -10,7 +10,7 @@ import { User, UserRight } from '@shared/models'
 @Component({
   selector: 'my-video-comment',
   templateUrl: './video-comment.component.html',
-  styleUrls: ['./video-comment.component.scss']
+  styleUrls: [ './video-comment.component.scss' ]
 })
 export class VideoCommentComponent implements OnInit, OnChanges {
   @ViewChild('commentReportModal') commentReportModal: CommentReportComponent

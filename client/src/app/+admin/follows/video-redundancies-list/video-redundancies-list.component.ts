@@ -21,7 +21,7 @@ export class VideoRedundanciesListComponent extends RestTable implements OnInit 
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
   displayType: VideoRedundanciesTarget = 'my-videos'
 
-  redundanciesGraphsData: { stats: VideosRedundancyStats, graphData: object, options: object }[] = []
+  redundanciesGraphsData: { stats: VideosRedundancyStats, graphData: any, options: any }[] = []
 
   noRedundancies = false
 
@@ -32,7 +32,7 @@ export class VideoRedundanciesListComponent extends RestTable implements OnInit 
     private confirmService: ConfirmService,
     private redundancyService: RedundancyService,
     private serverService: ServerService
-    ) {
+  ) {
     super()
 
     this.bytesPipe = new BytesPipe()

@@ -35,7 +35,7 @@ export class UserService {
     private restService: RestService,
     private localStorageService: LocalStorageService,
     private sessionStorageService: SessionStorageService
-    ) { }
+  ) { }
 
   changePassword (currentPassword: string, newPassword: string) {
     const url = UserService.BASE_USERS_URL + 'me'
@@ -266,7 +266,7 @@ export class UserService {
 
   getUserWithCache (userId: number) {
     if (!this.userCache[userId]) {
-      this.userCache[ userId ] = this.getUser(userId).pipe(shareReplay())
+      this.userCache[userId] = this.getUser(userId).pipe(shareReplay())
     }
 
     return this.userCache[userId]

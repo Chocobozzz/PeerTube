@@ -63,7 +63,7 @@ export class VideoTrendingComponent extends AbstractVideoList implements OnInit,
 
         if (oldSort !== this.sort) this.reloadVideos()
       }
-    )
+      )
   }
 
   ngOnDestroy () {
@@ -97,12 +97,12 @@ export class VideoTrendingComponent extends AbstractVideoList implements OnInit,
 
   getInjector () {
     return Injector.create({
-      providers: [{
+      providers: [ {
         provide: 'data',
         useValue: {
           model: this.defaultSort
         }
-      }]
+      } ]
     })
   }
 

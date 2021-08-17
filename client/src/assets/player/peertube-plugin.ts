@@ -211,7 +211,7 @@ class PeerTubePlugin extends Plugin {
     const body = new URLSearchParams()
     body.append('currentTime', currentTime.toString())
 
-    const headers = new Headers({ 'Authorization': authorizationHeader })
+    const headers = new Headers({ Authorization: authorizationHeader })
 
     return fetch(url, { method: 'PUT', body, headers })
   }

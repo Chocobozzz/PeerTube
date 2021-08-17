@@ -22,10 +22,10 @@ export class CustomModalComponent {
   ) { }
 
   show (input: {
-    title: string,
-    content: string,
-    close?: boolean,
-    cancel?: { value: string, action?: () => void },
+    title: string
+    content: string
+    close?: boolean
+    cancel?: { value: string, action?: () => void }
     confirm?: { value: string, action?: () => void }
   }) {
     if (this.modalRef instanceof NgbModalRef && this.modalService.hasOpenModals()) {

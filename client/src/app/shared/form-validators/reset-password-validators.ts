@@ -6,6 +6,6 @@ export const RESET_PASSWORD_CONFIRM_VALIDATOR: BuildFormValidator = {
     Validators.required
   ],
   MESSAGES: {
-    'required': $localize`Confirmation of the password is required.`
+    required: $localize`Confirmation of the password is required.`
   }
 }

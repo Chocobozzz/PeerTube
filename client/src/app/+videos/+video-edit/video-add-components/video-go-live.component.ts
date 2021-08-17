@@ -41,7 +41,7 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, AfterView
     private liveVideoService: LiveVideoService,
     private router: Router,
     private hooks: HooksService
-    ) {
+  ) {
     super()
   }
 

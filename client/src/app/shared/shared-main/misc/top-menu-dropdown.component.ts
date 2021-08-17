@@ -66,7 +66,7 @@ export class TopMenuDropdownComponent implements OnInit, OnDestroy {
       .subscribe(() => this.updateChildLabels(window.location.pathname))
 
     this.hasIcons = this.menuEntries.some(
-      e => e.children && e.children.some(c => !!c.iconName)
+      e => e.children?.some(c => !!c.iconName)
     )
   }
 

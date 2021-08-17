@@ -435,8 +435,6 @@ export class PeertubePlayerManager {
     const p2pMediaLoaderOptions = options.p2pMediaLoader
 
     const autoplay = this.getAutoPlayValue(commonOptions.autoplay) === 'play'
-      ? true
-      : false
 
     const webtorrent = {
       autoplay,
@@ -459,10 +457,10 @@ export class PeertubePlayerManager {
     theaterButton: boolean
     captions: boolean
 
-    nextVideo?: Function
+    nextVideo?: () => void
     hasNextVideo?: () => boolean
 
-    previousVideo?: Function
+    previousVideo?: () => void
     hasPreviousVideo?: () => boolean
   }) {
     const settingEntries = []
@@ -487,7 +485,7 @@ export class PeertubePlayerManager {
       }
 
       Object.assign(children, {
-        'previousVideoButton': buttonOptions
+        previousVideoButton: buttonOptions
       })
     }
 
@@ -505,35 +503,35 @@ export class PeertubePlayerManager {
       }
 
       Object.assign(children, {
-        'nextVideoButton': buttonOptions
+        nextVideoButton: buttonOptions
       })
     }
 
     Object.assign(children, {
-      'currentTimeDisplay': {},
-      'timeDivider': {},
-      'durationDisplay': {},
-      'liveDisplay': {},
+      currentTimeDisplay: {},
+      timeDivider: {},
+      durationDisplay: {},
+      liveDisplay: {},
 
-      'flexibleWidthSpacer': {},
-      'progressControl': {
+      flexibleWidthSpacer: {},
+      progressControl: {
         children: {
-          'seekBar': {
+          seekBar: {
             children: {
               [loadProgressBar]: {},
-              'mouseTimeDisplay': {},
-              'playProgressBar': {}
+              mouseTimeDisplay: {},
+              playProgressBar: {}
             }
           }
         }
       },
 
-      'p2PInfoButton': {},
+      p2PInfoButton: {},
 
-      'muteToggle': {},
-      'volumeControl': {},
+      muteToggle: {},
+      volumeControl: {},
 
-      'settingsButton': {
+      settingsButton: {
         setup: {
           maxHeightOffset: 40
         },
@@ -543,18 +541,18 @@ export class PeertubePlayerManager {
 
     if (options.peertubeLink === true) {
       Object.assign(children, {
-        'peerTubeLinkButton': { shortUUID: options.videoShortUUID } as PeerTubeLinkButtonOptions
+        peerTubeLinkButton: { shortUUID: options.videoShortUUID } as PeerTubeLinkButtonOptions
       })
     }
 
     if (options.theaterButton === true) {
       Object.assign(children, {
-        'theaterButton': {}
+        theaterButton: {}
       })
     }
 
     Object.assign(children, {
-      'fullscreenToggle': {}
+      fullscreenToggle: {}
     })
 
     return children

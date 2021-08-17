@@ -33,7 +33,7 @@ export class UserCreateComponent extends UserEdit implements OnInit {
     private router: Router,
     private notifier: Notifier,
     private userService: UserService
-    ) {
+  ) {
     super()
 
     this.buildQuotaOptions()
@@ -78,7 +78,9 @@ export class UserCreateComponent extends UserEdit implements OnInit {
           this.router.navigate([ '/admin/users/list' ])
         },
 
-        error: err => this.error = err.message
+        error: err => {
+          this.error = err.message
+        }
       })
   }
 

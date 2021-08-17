@@ -279,18 +279,18 @@ export class VideoPlaylistService {
   }
 
   listenToVideoPlaylistChange (videoId: number) {
-    if (this.videoExistsObservableCache[ videoId ]) {
-      return this.videoExistsObservableCache[ videoId ]
+    if (this.videoExistsObservableCache[videoId]) {
+      return this.videoExistsObservableCache[videoId]
     }
 
     const obs = this.videoExistsInPlaylistObservable
                     .pipe(
-                      map(existsResult => existsResult[ videoId ]),
+                      map(existsResult => existsResult[videoId]),
                       filter(r => !!r),
-                      tap(result => this.videoExistsCache[ videoId ] = result)
+                      tap(result => this.videoExistsCache[videoId] = result)
                     )
 
-    this.videoExistsObservableCache[ videoId ] = obs
+    this.videoExistsObservableCache[videoId] = obs
     return obs
   }
 

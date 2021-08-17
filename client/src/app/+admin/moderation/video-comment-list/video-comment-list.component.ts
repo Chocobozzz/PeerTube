@@ -44,11 +44,11 @@ export class VideoCommentListComponent extends RestTable implements OnInit {
 
   inputFilters: AdvancedInputFilter[] = [
     {
-      queryParams: { 'search': 'local:true' },
+      queryParams: { search: 'local:true' },
       label: $localize`Local comments`
     },
     {
-      queryParams: { 'search': 'local:false' },
+      queryParams: { search: 'local:false' },
       label: $localize`Remote comments`
     }
   ]
@@ -66,7 +66,7 @@ export class VideoCommentListComponent extends RestTable implements OnInit {
     private videoCommentService: VideoCommentService,
     private markdownRenderer: MarkdownService,
     private bulkService: BulkService
-    ) {
+  ) {
     super()
 
     this.videoCommentActions = [

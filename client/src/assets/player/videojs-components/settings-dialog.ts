@@ -12,8 +12,6 @@ class SettingsDialog extends Component {
   /**
    * Create the component's DOM element
    *
-   * @return {Element}
-   * @method createEl
    */
   createEl () {
     const uniqueId = this.id()
@@ -25,7 +23,7 @@ class SettingsDialog extends Component {
       innerHTML: '',
       tabIndex: -1
     }, {
-      'role': 'dialog',
+      role: 'dialog',
       'aria-labelledby': dialogLabelId,
       'aria-describedby': dialogDescriptionId
     })

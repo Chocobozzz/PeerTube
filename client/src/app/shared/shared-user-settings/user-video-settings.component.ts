@@ -80,7 +80,7 @@ export class UserVideoSettingsComponent extends FormReactive implements OnInit, 
   }
 
   updateDetails (onlyKeys?: string[]) {
-    const nsfwPolicy = this.form.value[ 'nsfwPolicy' ]
+    const nsfwPolicy = this.form.value['nsfwPolicy']
     const webTorrentEnabled = this.form.value['webTorrentEnabled']
     const autoPlayVideo = this.form.value['autoPlayVideo']
     const autoPlayNextVideo = this.form.value['autoPlayNextVideo']

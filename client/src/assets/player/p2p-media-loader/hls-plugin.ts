@@ -13,6 +13,8 @@ type Metadata = {
   levels: Level[]
 }
 
+type HookFn = (player: videojs.Player, hljs: Hlsjs) => void
+
 const registerSourceHandler = function (vjs: typeof videojs) {
   if (!Hlsjs.isSupported()) {
     console.warn('Hls.js is not supported in this browser!')
@@ -82,7 +84,7 @@ const registerConfigPlugin = function (vjs: typeof videojs) {
 }
 
 class Html5Hlsjs {
-  private static readonly hooks: { [id: string]: Function[] } = {}
+  private static readonly hooks: { [id: string]: HookFn[] } = {}
 
   private readonly videoElement: HTMLVideoElement
   private readonly errorCounts: ErrorCounts = {}
@@ -131,7 +133,8 @@ class Html5Hlsjs {
           errorTxt = 'You aborted the video playback'
           break
         case mediaError.MEDIA_ERR_DECODE:
-          errorTxt = 'The video playback was aborted due to a corruption problem or because the video used features your browser did not support'
+          errorTxt = 'The video playback was aborted due to a corruption problem or because the video used features ' +
+                     'your browser did not support'
           this._handleMediaError(mediaError)
           break
         case mediaError.MEDIA_ERR_NETWORK:
@@ -182,58 +185,57 @@ class Html5Hlsjs {
     this.hls.destroy()
   }
 
-  static addHook (type: string, callback: Function) {
-    Html5Hlsjs.hooks[ type ] = this.hooks[ type ] || []
-    Html5Hlsjs.hooks[ type ].push(callback)
+  static addHook (type: string, callback: HookFn) {
+    Html5Hlsjs.hooks[type] = this.hooks[type] || []
+    Html5Hlsjs.hooks[type].push(callback)
   }
 
-  static removeHook (type: string, callback: Function) {
-    if (Html5Hlsjs.hooks[ type ] === undefined) return false
+  static removeHook (type: string, callback: HookFn) {
+    if (Html5Hlsjs.hooks[type] === undefined) return false
 
-    const index = Html5Hlsjs.hooks[ type ].indexOf(callback)
+    const index = Html5Hlsjs.hooks[type].indexOf(callback)
     if (index === -1) return false
 
-    Html5Hlsjs.hooks[ type ].splice(index, 1)
+    Html5Hlsjs.hooks[type].splice(index, 1)
 
     return true
   }
 
   private _executeHooksFor (type: string) {
-    if (Html5Hlsjs.hooks[ type ] === undefined) {
+    if (Html5Hlsjs.hooks[type] === undefined) {
       return
     }
 
     // ES3 and IE < 9
-    for (let i = 0; i < Html5Hlsjs.hooks[ type ].length; i++) {
-      Html5Hlsjs.hooks[ type ][ i ](this.player, this.hls)
+    for (let i = 0; i < Html5Hlsjs.hooks[type].length; i++) {
+      Html5Hlsjs.hooks[type][i](this.player, this.hls)
     }
   }
 
   private _handleMediaError (error: any) {
-    if (this.errorCounts[ Hlsjs.ErrorTypes.MEDIA_ERROR ] === 1) {
+    if (this.errorCounts[Hlsjs.ErrorTypes.MEDIA_ERROR] === 1) {
       console.info('trying to recover media error')
       this.hls.recoverMediaError()
       return
     }
 
-    if (this.errorCounts[ Hlsjs.ErrorTypes.MEDIA_ERROR ] === 2) {
+    if (this.errorCounts[Hlsjs.ErrorTypes.MEDIA_ERROR] === 2) {
       console.info('2nd try to recover media error (by swapping audio codec')
       this.hls.swapAudioCodec()
       this.hls.recoverMediaError()
       return
     }
 
-    if (this.errorCounts[ Hlsjs.ErrorTypes.MEDIA_ERROR ] > 2) {
+    if (this.errorCounts[Hlsjs.ErrorTypes.MEDIA_ERROR] > 2) {
       console.info('bubbling media error up to VIDEOJS')
       this.hls.destroy()
       this.tech.error = () => error
       this.tech.trigger('error')
-      return
     }
   }
 
   private _handleNetworkError (error: any) {
-    if (this.errorCounts[ Hlsjs.ErrorTypes.NETWORK_ERROR] <= 5) {
+    if (this.errorCounts[Hlsjs.ErrorTypes.NETWORK_ERROR] <= 5) {
       console.info('trying to recover network error')
 
       // Wait 1 second and retry
@@ -241,7 +243,7 @@ class Html5Hlsjs {
 
       // Reset error count on success
       this.hls.once(Hlsjs.Events.FRAG_LOADED, () => {
-        this.errorCounts[ Hlsjs.ErrorTypes.NETWORK_ERROR] = 0
+        this.errorCounts[Hlsjs.ErrorTypes.NETWORK_ERROR] = 0
       })
 
       return
@@ -259,8 +261,8 @@ class Html5Hlsjs {
     }
 
     // increment/set error count
-    if (this.errorCounts[ data.type ]) this.errorCounts[ data.type ] += 1
-    else this.errorCounts[ data.type ] = 1
+    if (this.errorCounts[data.type]) this.errorCounts[data.type] += 1
+    else this.errorCounts[data.type] = 1
 
     if (data.fatal) console.warn(error.message)
     else console.error(error.message, data)
@@ -300,7 +302,7 @@ class Html5Hlsjs {
     let isAuto = true
 
     for (let i = 0; i < qualityLevels.length; i++) {
-      if (!qualityLevels[ i ]._enabled) {
+      if (!qualityLevels[i]._enabled) {
         isAuto = false
         break
       }
@@ -316,7 +318,7 @@ class Html5Hlsjs {
     let selectedTrack: number
 
     for (selectedTrack = qualityLevels.length - 1; selectedTrack >= 0; selectedTrack--) {
-      if (qualityLevels[ selectedTrack ]._enabled) {
+      if (qualityLevels[selectedTrack]._enabled) {
         break
       }
     }
@@ -327,11 +329,11 @@ class Html5Hlsjs {
   private _handleQualityLevels () {
     if (!this.metadata) return
 
-    const qualityLevels = this.player.qualityLevels && this.player.qualityLevels()
+    const qualityLevels = this.player.qualityLevels?.()
     if (!qualityLevels) return
 
     for (let i = 0; i < this.metadata.levels.length; i++) {
-      const details = this.metadata.levels[ i ]
+      const details = this.metadata.levels[i]
       const representation: QualityLevelRepresentation = {
         id: i,
         width: details.width,
@@ -345,11 +347,11 @@ class Html5Hlsjs {
       representation.enabled = function (this: QualityLevels, level: number, toggle?: boolean) {
         // Brightcove switcher works TextTracks-style (enable tracks that it wants to ABR on)
         if (typeof toggle === 'boolean') {
-          this[ level ]._enabled = toggle
+          this[level]._enabled = toggle
           self._relayQualityChange(this)
         }
 
-        return this[ level ]._enabled
+        return this[level]._enabled
       }
 
       qualityLevels.addQualityLevel(representation)
@@ -395,7 +397,7 @@ class Html5Hlsjs {
     const playerAudioTracks = this.tech.audioTracks()
     for (let j = 0; j < playerAudioTracks.length; j++) {
       // FIXME: typings
-      if ((playerAudioTracks[ j ] as any).enabled) {
+      if ((playerAudioTracks[j] as any).enabled) {
         this.hls.audioTrack = j
         break
       }
@@ -412,8 +414,8 @@ class Html5Hlsjs {
         playerAudioTracks.addTrack(new this.vjs.AudioTrack({
           id: i.toString(),
           kind: 'alternative',
-          label: hlsAudioTracks[ i ].name || hlsAudioTracks[ i ].lang,
-          language: hlsAudioTracks[ i ].lang,
+          label: hlsAudioTracks[i].name || hlsAudioTracks[i].lang,
+          language: hlsAudioTracks[i].lang,
           enabled: i === this.hls.audioTrack
         }))
       }
@@ -430,8 +432,8 @@ class Html5Hlsjs {
   }
 
   private _isSameTextTrack (track1: TextTrack, track2: TextTrack) {
-    return this._getTextTrackLabel(track1) === this._getTextTrackLabel(track2)
-      && track1.kind === track2.kind
+    return this._getTextTrackLabel(track1) === this._getTextTrackLabel(track2) &&
+           track1.kind === track2.kind
   }
 
   private _updateSelectedTextTrack () {
@@ -439,16 +441,16 @@ class Html5Hlsjs {
     let activeTrack: TextTrack = null
 
     for (let j = 0; j < playerTextTracks.length; j++) {
-      if (playerTextTracks[ j ].mode === 'showing') {
-        activeTrack = playerTextTracks[ j ]
+      if (playerTextTracks[j].mode === 'showing') {
+        activeTrack = playerTextTracks[j]
         break
       }
     }
 
     const hlsjsTracks = this.videoElement.textTracks
     for (let k = 0; k < hlsjsTracks.length; k++) {
-      if (hlsjsTracks[ k ].kind === 'subtitles' || hlsjsTracks[ k ].kind === 'captions') {
-        hlsjsTracks[ k ].mode = activeTrack && this._isSameTextTrack(hlsjsTracks[ k ], activeTrack)
+      if (hlsjsTracks[k].kind === 'subtitles' || hlsjsTracks[k].kind === 'captions') {
+        hlsjsTracks[k].mode = activeTrack && this._isSameTextTrack(hlsjsTracks[k], activeTrack)
           ? 'showing'
           : 'disabled'
       }
@@ -460,11 +462,11 @@ class Html5Hlsjs {
     this.videoElement.removeEventListener('play', this.handlers.play)
   }
 
-  private _oneLevelObjClone (obj: object) {
+  private _oneLevelObjClone (obj: { [ id: string ]: any }) {
     const result = {}
     const objKeys = Object.keys(obj)
     for (let i = 0; i < objKeys.length; i++) {
-      result[ objKeys[ i ] ] = obj[ objKeys[ i ] ]
+      result[objKeys[i]] = obj[objKeys[i]]
     }
 
     return result
@@ -475,8 +477,8 @@ class Html5Hlsjs {
 
     // Filter out tracks that is displayable (captions or subtitles)
     for (let idx = 0; idx < textTracks.length; idx++) {
-      if (textTracks[ idx ].kind === 'subtitles' || textTracks[ idx ].kind === 'captions') {
-        displayableTracks.push(textTracks[ idx ])
+      if (textTracks[idx].kind === 'subtitles' || textTracks[idx].kind === 'captions') {
+        displayableTracks.push(textTracks[idx])
       }
     }
 
@@ -493,14 +495,14 @@ class Html5Hlsjs {
       let isAdded = false
 
       for (let jdx = 0; jdx < playerTextTracks.length; jdx++) {
-        if (this._isSameTextTrack(displayableTracks[ idx ], playerTextTracks[ jdx ])) {
+        if (this._isSameTextTrack(displayableTracks[idx], playerTextTracks[jdx])) {
           isAdded = true
           break
         }
       }
 
       if (!isAdded) {
-        const hlsjsTextTrack = displayableTracks[ idx ]
+        const hlsjsTextTrack = displayableTracks[idx]
         this.player.addRemoteTextTrack({
           kind: hlsjsTextTrack.kind as videojs.TextTrack.Kind,
           label: this._getTextTrackLabel(hlsjsTextTrack),
@@ -536,12 +538,12 @@ class Html5Hlsjs {
         const VTTCue = (window as any).VTTCue || (window as any).TextTrackCue
 
         for (let r = 0; r < captionScreen.rows.length; r++) {
-          row = captionScreen.rows[ r ]
+          row = captionScreen.rows[r]
           text = ''
 
           if (!row.isEmpty()) {
             for (let c = 0; c < row.chars.length; c++) {
-              text += row.chars[ c ].ucharj
+              text += row.chars[c].ucharj
             }
 
             cue = new VTTCue(startTime, endTime, text.trim())
@@ -552,7 +554,7 @@ class Html5Hlsjs {
               const configKeys = Object.keys(captionConfig)
 
               for (let k = 0; k < configKeys.length; k++) {
-                cue[ configKeys[ k ] ] = captionConfig[ configKeys[ k ] ]
+                cue[configKeys[k]] = captionConfig[configKeys[k]]
               }
             }
             track.addCue(cue)
@@ -567,7 +569,7 @@ class Html5Hlsjs {
     const techOptions = this.tech.options_ as HlsjsConfigHandlerOptions
     const srOptions_ = this.player.srOptions_
 
-    const hlsjsConfigRef = srOptions_ && srOptions_.hlsjsConfig || techOptions.hlsjsConfig
+    const hlsjsConfigRef = srOptions_?.hlsjsConfig || techOptions.hlsjsConfig
     // Hls.js will write to the reference thus change the object for later streams
     this.hlsjsConfig = hlsjsConfigRef ? this._oneLevelObjClone(hlsjsConfigRef) : {}
 
@@ -575,7 +577,7 @@ class Html5Hlsjs {
       this.hlsjsConfig.autoStartLoad = false
     }
 
-    const captionConfig = srOptions_ && srOptions_.captionConfig || techOptions.captionConfig
+    const captionConfig = srOptions_?.captionConfig || techOptions.captionConfig
     if (captionConfig) {
       this.hlsjsConfig.cueHandler = this._createCueHandler(captionConfig)
     }

@@ -203,7 +203,9 @@
               ]
             },
             "ar-locale": {
-              "localize": ["ar"],
+              "localize": [
+                "ar"
+              ],
               "budgets": [
                 {
                   "type": "anyComponentStyle",
@@ -295,13 +297,11 @@
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@angular-eslint/builder:lint",
           "options": {
-            "tsConfig": [
-              "tsconfig.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
             ]
           }
         },
@@ -377,17 +377,6 @@
             "local": {
               "protractorConfig": "e2e/local-protractor.conf.js"
             }
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "e2e/tsconfig.e2e.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
           }
         }
       }

@@ -38,7 +38,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
     private loadingBar: LoadingBarService,
     private videoCaptionService: VideoCaptionService,
     private liveVideoService: LiveVideoService
-    ) {
+  ) {
     super()
   }
 
@@ -119,8 +119,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
   }
 
   update () {
-    if (this.checkForm() === false
-      || this.isUpdatingVideo === true) {
+    if (this.checkForm() === false || this.isUpdatingVideo === true) {
       return
     }
 

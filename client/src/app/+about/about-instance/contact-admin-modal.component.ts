@@ -77,10 +77,10 @@ export class ContactAdminModalComponent extends FormReactive implements OnInit {
   }
 
   sendForm () {
-    const fromName = this.form.value[ 'fromName' ]
-    const fromEmail = this.form.value[ 'fromEmail' ]
-    const subject = this.form.value[ 'subject' ]
-    const body = this.form.value[ 'body' ]
+    const fromName = this.form.value['fromName']
+    const fromEmail = this.form.value['fromEmail']
+    const subject = this.form.value['subject']
+    const body = this.form.value['body']
 
     this.instanceService.contactAdministrator(fromEmail, fromName, subject, body)
         .subscribe({

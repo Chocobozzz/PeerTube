@@ -23,7 +23,7 @@ export class VideoAlertComponent {
   }
 
   hasVideoScheduledPublication () {
-    return this.video && this.video.scheduledUpdate !== undefined
+    return this.video?.scheduledUpdate !== undefined
   }
 
   isWaitingForLive () {

@@ -46,7 +46,7 @@ export class LoginComponent extends FormReactive implements OnInit, AfterViewIni
     private redirectService: RedirectService,
     private notifier: Notifier,
     private hooks: HooksService
-    ) {
+  ) {
     super()
   }
 

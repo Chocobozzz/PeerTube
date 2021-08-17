@@ -6,7 +6,7 @@ import { BytesPipe } from '../angular'
 @Component({
   selector: 'my-user-quota',
   templateUrl: './user-quota.component.html',
-  styleUrls: ['./user-quota.component.scss']
+  styleUrls: [ './user-quota.component.scss' ]
 })
 
 export class UserQuotaComponent implements OnInit {

@@ -57,7 +57,7 @@ import 'core-js/es/object'
 /***************************************************************************************************
  * Zone JS is required by default for Angular itself.
  */
-// tslint:disable
+/* eslint-disable */
 import 'zone.js'  // Included with Angular CLI.
 
 /***************************************************************************************************

@@ -1,5 +1,5 @@
-import { Component } from '@angular/core'
 import { CdkStep, CdkStepper } from '@angular/cdk/stepper'
+import { Component } from '@angular/core'
 
 @Component({
   selector: 'my-custom-stepper',
@@ -14,13 +14,13 @@ export class CustomStepperComponent extends CdkStepper {
   }
 
   isCompleted (step: CdkStep) {
-    return step.stepControl && step.stepControl.dirty && step.stepControl.valid
+    return step.stepControl?.dirty && step.stepControl.valid
   }
 
   isAccessible (index: number) {
     const stepsCompletedMap = this.steps.map(step => this.isCompleted(step))
     return index === 0
       ? true
-      : stepsCompletedMap[ index - 1 ]
+      : stepsCompletedMap[index - 1]
   }
 }

@@ -1,10 +1,10 @@
 import { finalize } from 'rxjs/operators'
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { AuthService, Notifier } from '@app/core'
-import { Video, VideoService } from '../../shared-main'
+import { FindInBulkService } from '@app/shared/shared-search'
+import { Video } from '../../shared-main'
 import { MiniatureDisplayOptions } from '../../shared-video-miniature'
 import { CustomMarkupComponent } from './shared'
-import { FindInBulkService } from '@app/shared/shared-search'
 
 /*
  * Markup component that creates a video miniature only

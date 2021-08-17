@@ -1,10 +1,10 @@
 import { from, Subject, Subscription } from 'rxjs'
 import { concatMap, map, switchMap, tap } from 'rxjs/operators'
 import { Component, OnDestroy, OnInit } from '@angular/core'
-import { ComponentPagination, hasMoreItems, MarkdownService, ScreenService, User, UserService } from '@app/core'
+import { ComponentPagination, hasMoreItems, MarkdownService, User, UserService } from '@app/core'
 import { Account, AccountService, Video, VideoChannel, VideoChannelService, VideoService } from '@app/shared/shared-main'
-import { NSFWPolicyType, VideoSortField } from '@shared/models'
 import { MiniatureDisplayOptions } from '@app/shared/shared-video-miniature'
+import { NSFWPolicyType, VideoSortField } from '@shared/models'
 
 @Component({
   selector: 'my-account-video-channels',
@@ -87,7 +87,9 @@ export class AccountVideoChannelsComponent implements OnInit, OnDestroy {
 
     this.videoChannelService.listAccountVideoChannels(options)
       .pipe(
-        tap(res => this.channelPagination.totalItems = res.total),
+        tap(res => {
+          this.channelPagination.totalItems = res.total
+        }),
         switchMap(res => from(res.data)),
         concatMap(videoChannel => {
           const options = {
@@ -113,14 +115,14 @@ export class AccountVideoChannelsComponent implements OnInit, OnDestroy {
   }
 
   getVideosOf (videoChannel: VideoChannel) {
-    const obj = this.videos[ videoChannel.id ]
+    const obj = this.videos[videoChannel.id]
     if (!obj) return []
 
     return obj.videos
   }
 
   getTotalVideosOf (videoChannel: VideoChannel) {
-    const obj = this.videos[ videoChannel.id ]
+    const obj = this.videos[videoChannel.id]
     if (!obj) return undefined
 
     return obj.total

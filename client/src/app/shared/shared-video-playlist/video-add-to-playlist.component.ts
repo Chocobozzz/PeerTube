@@ -191,7 +191,7 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
   }
 
   createPlaylist () {
-    const displayName = this.form.value[ 'displayName' ]
+    const displayName = this.form.value['displayName']
 
     const videoPlaylistCreate: VideoPlaylistCreate = {
       displayName,

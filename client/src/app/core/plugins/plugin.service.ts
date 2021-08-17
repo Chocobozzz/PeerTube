@@ -188,7 +188,7 @@ export class PluginService implements ClientHook {
         if (!this.authService.isLoggedIn()) return undefined
 
         const value = this.authService.getRequestHeaderValue()
-        return { 'Authorization': value }
+        return { Authorization: value }
       },
 
       notifier: {
@@ -198,10 +198,10 @@ export class PluginService implements ClientHook {
       },
 
       showModal: (input: {
-        title: string,
-        content: string,
-        close?: boolean,
-        cancel?: { value: string, action?: () => void },
+        title: string
+        content: string
+        close?: boolean
+        cancel?: { value: string, action?: () => void }
         confirm?: { value: string, action?: () => void }
       }) => {
         this.zone.run(() => this.customModal.show(input))

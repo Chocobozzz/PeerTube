@@ -25,7 +25,7 @@ export class VideoChangeOwnershipComponent extends FormReactive implements OnIni
     private notifier: Notifier,
     private userService: UserService,
     private modalService: NgbModal
-    ) {
+  ) {
     super()
   }
 
@@ -49,7 +49,9 @@ export class VideoChangeOwnershipComponent extends FormReactive implements OnIni
     const query = event.query
     this.userService.autocomplete(query)
       .subscribe({
-        next: usernames => this.usernamePropositions = usernames,
+        next: usernames => {
+          this.usernamePropositions = usernames
+        },
 
         error: err => this.notifier.error(err.message)
       })

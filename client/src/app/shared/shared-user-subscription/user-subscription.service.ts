@@ -46,8 +46,8 @@ export class UserSubscriptionService {
   }
 
   getUserSubscriptionVideos (parameters: {
-    videoPagination: ComponentPaginationLight,
-    sort: VideoSortField,
+    videoPagination: ComponentPaginationLight
+    sort: VideoSortField
     skipCount?: boolean
   }): Observable<ResultList<Video>> {
     const { videoPagination, sort, skipCount } = parameters
@@ -131,16 +131,16 @@ export class UserSubscriptionService {
 
   listenToSubscriptionCacheChange (nameWithHost: string) {
     if (nameWithHost in this.myAccountSubscriptionCacheObservable) {
-      return this.myAccountSubscriptionCacheObservable[ nameWithHost ]
+      return this.myAccountSubscriptionCacheObservable[nameWithHost]
     }
 
     const obs = this.existsObservable
                     .pipe(
-                      filter(existsResult => existsResult[ nameWithHost ] !== undefined),
-                      map(existsResult => existsResult[ nameWithHost ])
+                      filter(existsResult => existsResult[nameWithHost] !== undefined),
+                      map(existsResult => existsResult[nameWithHost])
                     )
 
-    this.myAccountSubscriptionCacheObservable[ nameWithHost ] = obs
+    this.myAccountSubscriptionCacheObservable[nameWithHost] = obs
     return obs
   }
 
@@ -150,16 +150,16 @@ export class UserSubscriptionService {
     if (nameWithHost in this.myAccountSubscriptionCache) {
       logger('Found cache for %d.', nameWithHost)
 
-      return of(this.myAccountSubscriptionCache[ nameWithHost ])
+      return of(this.myAccountSubscriptionCache[nameWithHost])
     }
 
     this.existsSubject.next(nameWithHost)
 
     logger('Fetching from network for %d.', nameWithHost)
     return this.existsObservable.pipe(
-      filter(existsResult => existsResult[ nameWithHost ] !== undefined),
-      map(existsResult => existsResult[ nameWithHost ]),
-      tap(result => this.myAccountSubscriptionCache[ nameWithHost ] = result)
+      filter(existsResult => existsResult[nameWithHost] !== undefined),
+      map(existsResult => existsResult[nameWithHost]),
+      tap(result => this.myAccountSubscriptionCache[nameWithHost] = result)
     )
   }
 

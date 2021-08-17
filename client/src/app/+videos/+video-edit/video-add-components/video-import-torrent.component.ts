@@ -5,7 +5,7 @@ import { scrollToTop } from '@app/helpers'
 import { FormValidatorService } from '@app/shared/shared-forms'
 import { VideoCaptionService, VideoEdit, VideoImportService, VideoService } from '@app/shared/shared-main'
 import { LoadingBarService } from '@ngx-loading-bar/core'
-import { PeerTubeProblemDocument, ServerErrorCode, VideoPrivacy, VideoUpdate } from '@shared/models'
+import { PeerTubeProblemDocument, ServerErrorCode, VideoUpdate } from '@shared/models'
 import { hydrateFormFromVideo } from '../shared/video-edit-utils'
 import { VideoSend } from './video-send'
 
@@ -43,7 +43,7 @@ export class VideoImportTorrentComponent extends VideoSend implements OnInit, Af
     private router: Router,
     private videoImportService: VideoImportService,
     private hooks: HooksService
-    ) {
+  ) {
     super()
   }
 

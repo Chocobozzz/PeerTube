@@ -59,7 +59,7 @@ export class VideoImportUrlComponent extends VideoSend implements OnInit, AfterV
   }
 
   isTargetUrlValid () {
-    return this.targetUrl && this.targetUrl.match(/https?:\/\//)
+    return this.targetUrl?.match(/https?:\/\//)
   }
 
   importVideo () {

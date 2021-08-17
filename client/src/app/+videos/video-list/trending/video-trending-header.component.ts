@@ -15,7 +15,7 @@ interface VideoTrendingHeaderItem {
 }
 
 @Component({
-  selector: 'video-trending-title-page',
+  selector: 'my-video-trending-title-page',
   styleUrls: [ './video-trending-header.component.scss' ],
   templateUrl: './video-trending-header.component.html'
 })

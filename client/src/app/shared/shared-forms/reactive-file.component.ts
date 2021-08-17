@@ -43,7 +43,7 @@ export class ReactiveFileComponent implements OnInit, ControlValueAccessor {
   }
 
   fileChange (event: any) {
-    if (event.target.files && event.target.files.length) {
+    if (event.target.files?.length) {
       const [ file ] = event.target.files
 
       if (file.size > this.maxFileSize) {

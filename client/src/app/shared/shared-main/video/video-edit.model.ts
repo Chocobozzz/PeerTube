@@ -29,11 +29,11 @@ export class VideoEdit implements VideoUpdate {
 
   constructor (
     video?: Video & {
-      tags: string[],
-      commentsEnabled: boolean,
-      downloadEnabled: boolean,
-      support: string,
-      thumbnailUrl: string,
+      tags: string[]
+      commentsEnabled: boolean
+      downloadEnabled: boolean
+      support: string
+      thumbnailUrl: string
       previewUrl: string
     }) {
     if (video) {
@@ -64,7 +64,7 @@ export class VideoEdit implements VideoUpdate {
 
   patch (values: { [ id: string ]: any }) {
     Object.keys(values).forEach((key) => {
-      this[ key ] = values[ key ]
+      this[key] = values[key]
     })
 
     // If schedule publication, the video is private and will be changed to public privacy

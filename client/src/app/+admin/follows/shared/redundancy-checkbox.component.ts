@@ -14,7 +14,7 @@ export class RedundancyCheckboxComponent {
   constructor (
     private notifier: Notifier,
     private redundancyService: RedundancyService
-    ) { }
+  ) { }
 
   updateRedundancyState () {
     this.redundancyService.updateRedundancy(this.host, this.redundancyAllowed)

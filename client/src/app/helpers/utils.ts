@@ -10,7 +10,7 @@ import { AuthService } from '../core/auth'
 // Thanks: https://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
 function getParameterByName (name: string, url: string) {
   if (!url) url = window.location.href
-  name = name.replace(/[\[\]]/g, '\\$&')
+  name = name.replace(/[[\]]/g, '\\$&')
 
   const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)')
   const results = regex.exec(url)
@@ -110,10 +110,10 @@ function objectToFormData (obj: any, form?: FormData, namespace?: string) {
       continue
     }
 
-    if (obj[key] !== null && typeof obj[ key ] === 'object' && !(obj[ key ] instanceof File)) {
-      objectToFormData(obj[ key ], fd, formKey)
+    if (obj[key] !== null && typeof obj[key] === 'object' && !(obj[key] instanceof File)) {
+      objectToFormData(obj[key], fd, formKey)
     } else {
-      fd.append(formKey, obj[ key ])
+      fd.append(formKey, obj[key])
     }
   }
 
@@ -159,7 +159,7 @@ function scrollToTop (behavior: 'auto' | 'smooth' = 'auto') {
 function isInViewport (el: HTMLElement) {
   const bounding = el.getBoundingClientRect()
   return (
-      bounding.top >= 0 &&
+    bounding.top >= 0 &&
       bounding.left >= 0 &&
       bounding.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
       bounding.right <= (window.innerWidth || document.documentElement.clientWidth)

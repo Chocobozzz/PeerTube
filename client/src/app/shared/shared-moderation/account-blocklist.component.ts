@@ -1,14 +1,13 @@
 import { SortMeta } from 'primeng/api'
 import { Directive, OnInit } from '@angular/core'
 import { Notifier, RestPagination, RestTable } from '@app/core'
-import { Account } from '@app/shared/shared-main'
 import { AccountBlock } from './account-block.model'
 import { BlocklistComponentType, BlocklistService } from './blocklist.service'
 
 @Directive()
-// tslint:disable-next-line: directive-class-suffix
+// eslint-disable-next-line @angular-eslint/directive-class-suffix
 export class GenericAccountBlocklistComponent extends RestTable implements OnInit {
-  // @ts-ignore: "Abstract methods can only appear within an abstract class"
+  // @ts-expect-error: "Abstract methods can only appear within an abstract class"
   abstract mode: BlocklistComponentType
 
   blockedAccounts: AccountBlock[] = []
@@ -23,7 +22,7 @@ export class GenericAccountBlocklistComponent extends RestTable implements OnIni
     super()
   }
 
-  // @ts-ignore: "Abstract methods can only appear within an abstract class"
+  // @ts-expect-error: "Abstract methods can only appear within an abstract class"
   abstract getIdentifier (): string
 
   ngOnInit () {

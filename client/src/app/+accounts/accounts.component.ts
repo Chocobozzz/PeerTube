@@ -61,7 +61,7 @@ export class AccountsComponent implements OnInit, OnDestroy {
   ngOnInit () {
     this.routeSub = this.route.params
                         .pipe(
-                          map(params => params[ 'accountId' ]),
+                          map(params => params['accountId']),
                           distinctUntilChanged(),
                           switchMap(accountId => this.accountService.getAccount(accountId)),
                           tap(account => this.onAccount(account)),
@@ -72,7 +72,9 @@ export class AccountsComponent implements OnInit, OnDestroy {
                           ]))
                         )
                         .subscribe({
-                          next: videoChannels => this.videoChannels = videoChannels.data,
+                          next: videoChannels => {
+                            this.videoChannels = videoChannels.data
+                          },
 
                           error: err => this.notifier.error(err.message)
                         })
@@ -176,7 +178,9 @@ export class AccountsComponent implements OnInit, OnDestroy {
     if (user.hasRight(UserRight.MANAGE_USERS)) {
       this.userService.getUser(account.userId)
         .subscribe({
-          next: accountUser => this.accountUser = accountUser,
+          next: accountUser => {
+            this.accountUser = accountUser
+          },
 
           error: err => this.notifier.error(err.message)
         })
@@ -209,6 +213,8 @@ export class AccountsComponent implements OnInit, OnDestroy {
         itemsPerPage: 0
       },
       sort: '-publishedAt'
-    }).subscribe(res => this.accountVideosCount = res.total)
+    }).subscribe(res => {
+      this.accountVideosCount = res.total
+    })
   }
 }

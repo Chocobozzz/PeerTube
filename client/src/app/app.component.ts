@@ -243,7 +243,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     // Inject JS
     if (this.serverConfig.instance.customizations.javascript) {
       try {
-        // tslint:disable:no-eval
+        /* eslint-disable no-eval */
         eval(this.serverConfig.instance.customizations.javascript)
       } catch (err) {
         console.error('Cannot eval custom JavaScript.', err)
@@ -294,7 +294,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   private initHotkeys () {
     this.hotkeysService.add([
-      new Hotkey(['/', 's'], (event: KeyboardEvent): boolean => {
+      new Hotkey([ '/', 's' ], (event: KeyboardEvent): boolean => {
         document.getElementById('search-video').focus()
         return false
       }, undefined, $localize`Focus the search bar`),

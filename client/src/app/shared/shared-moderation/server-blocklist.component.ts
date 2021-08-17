@@ -6,11 +6,11 @@ import { ServerBlock } from '@shared/models'
 import { BlocklistComponentType, BlocklistService } from './blocklist.service'
 
 @Directive()
-// tslint:disable-next-line: directive-class-suffix
+// eslint-disable-next-line @angular-eslint/directive-class-suffix
 export class GenericServerBlocklistComponent extends RestTable implements OnInit {
   @ViewChild('batchDomainsModal') batchDomainsModal: BatchDomainsModalComponent
 
-  // @ts-ignore: "Abstract methods can only appear within an abstract class"
+  // @ts-expect-error: "Abstract methods can only appear within an abstract class"
   public abstract mode: BlocklistComponentType
 
   blockedServers: ServerBlock[] = []
@@ -25,7 +25,7 @@ export class GenericServerBlocklistComponent extends RestTable implements OnInit
     super()
   }
 
-  // @ts-ignore: "Abstract methods can only appear within an abstract class"
+  // @ts-expect-error: "Abstract methods can only appear within an abstract class"
   public abstract getIdentifier (): string
 
   ngOnInit () {
@@ -34,8 +34,8 @@ export class GenericServerBlocklistComponent extends RestTable implements OnInit
 
   unblockServer (serverBlock: ServerBlock) {
     const operation = (host: string) => this.mode === BlocklistComponentType.Account
-        ? this.blocklistService.unblockServerByUser(host)
-        : this.blocklistService.unblockServerByInstance(host)
+      ? this.blocklistService.unblockServerByUser(host)
+      : this.blocklistService.unblockServerByInstance(host)
     const host = serverBlock.blockedServer.host
 
     operation(host).subscribe(

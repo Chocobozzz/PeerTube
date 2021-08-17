@@ -5,7 +5,7 @@ import { HooksService } from '@app/core/plugins/hooks.service'
 import { immutableAssign } from '@app/helpers'
 import { VideoService } from '@app/shared/shared-main'
 import { AbstractVideoList } from '@app/shared/shared-video-miniature'
-import { UserRight, VideoFilter, VideoSortField } from '@shared/models'
+import { VideoFilter, VideoSortField } from '@shared/models'
 
 @Component({
   selector: 'my-videos-local',

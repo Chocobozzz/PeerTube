@@ -19,7 +19,7 @@ export class MyAccountSettingsComponent implements OnInit, AfterViewChecked {
     private userService: UserService,
     private authService: AuthService,
     private notifier: Notifier
-    ) {}
+  ) {}
 
   get userInformationLoaded () {
     return this.authService.userInformationLoaded

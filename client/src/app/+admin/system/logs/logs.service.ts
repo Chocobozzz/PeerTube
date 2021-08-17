@@ -18,9 +18,9 @@ export class LogsService {
   ) {}
 
   getLogs (options: {
-    isAuditLog: boolean,
-    startDate: string,
-    level?: LogLevel,
+    isAuditLog: boolean
+    startDate: string
+    level?: LogLevel
     endDate?: string
   }): Observable<any[]> {
     const { isAuditLog, startDate } = options

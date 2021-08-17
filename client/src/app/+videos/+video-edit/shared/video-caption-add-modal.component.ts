@@ -66,18 +66,18 @@ export class VideoCaptionAddModalComponent extends FormReactive implements OnIni
   isReplacingExistingCaption () {
     if (this.closingModal === true) return false
 
-    const languageId = this.form.value[ 'language' ]
+    const languageId = this.form.value['language']
 
-    return languageId && this.existingCaptions.indexOf(languageId) !== -1
+    return languageId && this.existingCaptions.includes(languageId)
   }
 
   async addCaption () {
-    const languageId = this.form.value[ 'language' ]
+    const languageId = this.form.value['language']
     const languageObject = this.videoCaptionLanguages.find(l => l.id === languageId)
 
     this.captionAdded.emit({
       language: languageObject,
-      captionfile: this.form.value[ 'captionfile' ]
+      captionfile: this.form.value['captionfile']
     })
 
     this.hide()

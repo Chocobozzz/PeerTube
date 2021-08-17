@@ -1,5 +1,5 @@
-import { ActivatedRouteSnapshot, DetachedRouteHandle, RouteReuseStrategy } from '@angular/router'
 import { Injectable } from '@angular/core'
+import { ActivatedRouteSnapshot, DetachedRouteHandle, RouteReuseStrategy } from '@angular/router'
 
 @Injectable()
 export class CustomReuseStrategy implements RouteReuseStrategy {
@@ -78,6 +78,6 @@ export class CustomReuseStrategy implements RouteReuseStrategy {
   }
 
   private isReuseEnabled (route: ActivatedRouteSnapshot) {
-    return route.data.reuse && route.data.reuse.enabled && route.queryParams[ 'a-state' ]
+    return route.data.reuse?.enabled && route.queryParams['a-state']
   }
 }

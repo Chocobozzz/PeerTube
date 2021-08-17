@@ -137,7 +137,7 @@ export class SubscribeButtonComponent implements OnInit, OnChanges {
           this.notifier.success(
             this.account
               ? $localize`Unsubscribed from all channels of ${this.account.nameWithHost}`
-              : $localize`Unsubscribed from ${this.videoChannels[ 0 ].nameWithHost}`,
+              : $localize`Unsubscribed from ${this.videoChannels[0].nameWithHost}`,
 
             $localize`Unsubscribed`
           )
@@ -157,7 +157,7 @@ export class SubscribeButtonComponent implements OnInit, OnChanges {
 
   subscribeStatus (subscribed: boolean) {
     const accumulator: string[] = []
-    for (const [key, value] of this.subscribed.entries()) {
+    for (const [ key, value ] of this.subscribed.entries()) {
       if (value === subscribed) accumulator.push(key)
     }
 

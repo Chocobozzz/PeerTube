@@ -51,7 +51,7 @@ export class ActorAvatarEditComponent implements OnInit {
   onAvatarChange (input: HTMLInputElement) {
     this.avatarfileInput = new ElementRef(input)
 
-    const avatarfile = this.avatarfileInput.nativeElement.files[ 0 ]
+    const avatarfile = this.avatarfileInput.nativeElement.files[0]
     if (avatarfile.size > this.maxAvatarSize) {
       this.notifier.error('Error', $localize`This image is too large.`)
       return

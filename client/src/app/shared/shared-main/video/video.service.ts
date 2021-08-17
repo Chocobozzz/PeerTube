@@ -30,10 +30,10 @@ import { Video } from './video.model'
 
 export interface VideosProvider {
   getVideos (parameters: {
-    videoPagination: ComponentPaginationLight,
-    sort: VideoSortField,
-    filter?: VideoFilter,
-    categoryOneOf?: number[],
+    videoPagination: ComponentPaginationLight
+    sort: VideoSortField
+    filter?: VideoFilter
+    categoryOneOf?: number[]
     languageOneOf?: string[]
     nsfwPolicy: NSFWPolicyType
   }): Observable<ResultList<Video>>
@@ -145,8 +145,8 @@ export class VideoService implements VideosProvider {
   }
 
   getAccountVideos (parameters: {
-    account: Pick<Account, 'nameWithHost'>,
-    videoPagination: ComponentPaginationLight,
+    account: Pick<Account, 'nameWithHost'>
+    videoPagination: ComponentPaginationLight
     sort: VideoSortField
     nsfwPolicy?: NSFWPolicyType
     videoFilter?: VideoFilter
@@ -180,9 +180,9 @@ export class VideoService implements VideosProvider {
   }
 
   getVideoChannelVideos (parameters: {
-    videoChannel: Pick<VideoChannel, 'nameWithHost'>,
-    videoPagination: ComponentPaginationLight,
-    sort: VideoSortField,
+    videoChannel: Pick<VideoChannel, 'nameWithHost'>
+    videoPagination: ComponentPaginationLight
+    sort: VideoSortField
     nsfwPolicy?: NSFWPolicyType
     videoFilter?: VideoFilter
   }): Observable<ResultList<Video>> {

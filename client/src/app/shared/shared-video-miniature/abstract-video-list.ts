@@ -42,7 +42,7 @@ enum GroupDate {
 }
 
 @Directive()
-// tslint:disable-next-line: directive-class-suffix
+// eslint-disable-next-line @angular-eslint/directive-class-suffix
 export abstract class AbstractVideoList implements OnInit, OnDestroy, AfterContentInit, DisableForReuseHook {
   @ViewChild('videoListHeader', { static: true, read: ViewContainerRef }) videoListHeader: ViewContainerRef
 
@@ -174,7 +174,7 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, AfterConte
   ngAfterContentInit () {
     if (this.videoListHeader) {
       // some components don't use the header: they use their own template, like my-history.component.html
-      this.setHeader.apply(this, [ this.HeaderComponent, this.headerComponentInjector ])
+      this.setHeader(this.HeaderComponent, this.headerComponentInjector)
     }
   }
 
@@ -278,7 +278,7 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, AfterConte
 
           if (currentGroupedDate !== period.value) {
             currentGroupedDate = period.value
-            this.groupedDates[ video.id ] = currentGroupedDate
+            this.groupedDates[video.id] = currentGroupedDate
           }
 
           break
@@ -302,13 +302,13 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, AfterConte
     i: Injector = this.headerComponentInjector
   ) {
     const injector = i || Injector.create({
-      providers: [{
+      providers: [ {
         provide: 'data',
         useValue: {
           titlePage: this.titlePage,
           titleTooltip: this.titleTooltip
         }
-      }]
+      } ]
     })
     const viewContainerRef = this.videoListHeader
     viewContainerRef.clear()
@@ -331,9 +331,9 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, AfterConte
   protected loadPageRouteParams (_queryParams: Params) { /* empty */ }
 
   protected loadRouteParams (queryParams: Params) {
-    this.sort = queryParams[ 'sort' ] as VideoSortField || this.defaultSort
-    this.categoryOneOf = queryParams[ 'categoryOneOf' ]
-    this.angularState = queryParams[ 'a-state' ]
+    this.sort = queryParams['sort'] as VideoSortField || this.defaultSort
+    this.categoryOneOf = queryParams['categoryOneOf']
+    this.angularState = queryParams['a-state']
 
     this.loadPageRouteParams(queryParams)
   }

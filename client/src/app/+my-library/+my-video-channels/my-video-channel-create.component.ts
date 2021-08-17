@@ -31,7 +31,7 @@ export class MyVideoChannelCreateComponent extends MyVideoChannelEdit implements
     private notifier: Notifier,
     private router: Router,
     private videoChannelService: VideoChannelService
-    ) {
+  ) {
     super()
   }
 
@@ -64,7 +64,7 @@ export class MyVideoChannelCreateComponent extends MyVideoChannelEdit implements
           this.authService.refreshUserInformation()
 
           this.notifier.success($localize`Video channel ${videoChannelCreate.displayName} created.`)
-          this.router.navigate(['/my-library', 'video-channels'])
+          this.router.navigate([ '/my-library', 'video-channels' ])
         },
 
         error: err => {

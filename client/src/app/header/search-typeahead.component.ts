@@ -199,7 +199,7 @@ export class SearchTypeaheadComponent implements OnInit, AfterViewChecked, OnDes
   }
 
   private loadUserLanguagesIfNeeded (queryParams: any) {
-    if (queryParams && queryParams.languageOneOf) return of(queryParams)
+    if (queryParams?.languageOneOf) return of(queryParams)
 
     return this.authService.userInformationLoaded
                .pipe(

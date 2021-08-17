@@ -20,7 +20,7 @@ export class VerifyAccountEmailComponent implements OnInit {
     private authService: AuthService,
     private notifier: Notifier,
     private route: ActivatedRoute
-    ) {
+  ) {
   }
 
   ngOnInit () {

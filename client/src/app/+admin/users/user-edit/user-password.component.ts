@@ -20,7 +20,7 @@ export class UserPasswordComponent extends FormReactive implements OnInit {
     protected formValidatorService: FormValidatorService,
     private notifier: Notifier,
     private userService: UserService
-    ) {
+  ) {
     super()
   }
 
@@ -39,7 +39,9 @@ export class UserPasswordComponent extends FormReactive implements OnInit {
       .subscribe({
         next: () => this.notifier.success($localize`Password changed for user ${this.username}.`),
 
-        error: err => this.error = err.message
+        error: err => {
+          this.error = err.message
+        }
       })
   }
 

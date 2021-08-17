@@ -57,7 +57,7 @@ export class MyVideoPlaylistElementsComponent implements OnInit, OnDestroy {
     ]
 
     this.paramsSub = this.route.params.subscribe(routeParams => {
-      this.videoPlaylistId = routeParams[ 'videoPlaylistId' ]
+      this.videoPlaylistId = routeParams['videoPlaylistId']
       this.loadElements()
 
       this.loadPlaylistInfo()
@@ -145,8 +145,6 @@ export class MyVideoPlaylistElementsComponent implements OnInit, OnDestroy {
    * we add a delay to prevent unwanted drag&drop.
    *
    * @see {@link https://github.com/Chocobozzz/PeerTube/issues/2078}
-   *
-   * @returns {null|number} Null for no delay, or a number in milliseconds.
    */
   getDragStartDelay (): null | number {
     if (this.screenService.isInTouchScreen()) {

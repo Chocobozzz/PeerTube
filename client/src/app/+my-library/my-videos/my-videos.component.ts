@@ -49,7 +49,7 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
 
   inputFilters: AdvancedInputFilter[] = [
     {
-      queryParams: { 'search': 'isLive:true' },
+      queryParams: { search: 'isLive:true' },
       label: $localize`Only live videos`
     }
   ]
@@ -107,7 +107,7 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
 
   async deleteSelectedVideos () {
     const toDeleteVideosIds = Object.keys(this.selection)
-                                    .filter(k => this.selection[ k ] === true)
+                                    .filter(k => this.selection[k] === true)
                                     .map(k => parseInt(k, 10))
 
     const res = await this.confirmService.confirm(

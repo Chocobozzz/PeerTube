@@ -5,7 +5,7 @@ import { Account } from '@app/shared/shared-main'
 // Don't use an abuse model because we need external services to compute some properties
 // And this model is only used in this component
 export type ProcessedAbuse = AdminAbuse & {
-  moderationCommentHtml?: string,
+  moderationCommentHtml?: string
   reasonHtml?: string
   embedHtml?: SafeHtml
   updatedAt?: Date

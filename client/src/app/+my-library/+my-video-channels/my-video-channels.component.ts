@@ -121,16 +121,16 @@ channel with the same name (${videoChannel.name})!`,
         display: false
       },
       scales: {
-        xAxes: [{
+        xAxes: [ {
           display: false
-        }],
-        yAxes: [{
+        } ],
+        yAxes: [ {
           display: false,
           ticks: {
             min: Math.max(0, this.videoChannelsMinimumDailyViews - (3 * this.videoChannelsMaximumDailyViews / 100)),
             max: Math.max(1, this.videoChannelsMaximumDailyViews)
           }
-        }]
+        } ]
       },
       layout: {
         padding: {

@@ -17,8 +17,8 @@ import { renderVideo } from './video-renderer'
 const CacheChunkStore = require('cache-chunk-store')
 
 type PlayOptions = {
-  forcePlay?: boolean,
-  seek?: number,
+  forcePlay?: boolean
+  seek?: number
   delay?: number
 }
 
@@ -126,8 +126,8 @@ class WebTorrentPlugin extends Plugin {
   updateVideoFile (
     videoFile?: VideoFile,
     options: {
-      forcePlay?: boolean,
-      seek?: number,
+      forcePlay?: boolean
+      seek?: number
       delay?: number
     } = {},
     done: () => void = () => { /* empty */ }
@@ -248,7 +248,7 @@ class WebTorrentPlugin extends Plugin {
     magnetOrTorrentUrl: string,
     previousVideoFile: VideoFile,
     options: PlayOptions,
-    done: Function
+    done: (err?: Error) => void
   ) {
     if (!magnetOrTorrentUrl) return this.fallbackToHttp(options, done)
 
@@ -272,7 +272,7 @@ class WebTorrentPlugin extends Plugin {
         this.stopTorrent(oldTorrent)
 
         // We use a fake renderer so we download correct pieces of the next file
-        if (options.delay) this.renderFileInFakeElement(torrent.files[ 0 ], options.delay)
+        if (options.delay) this.renderFileInFakeElement(torrent.files[0], options.delay)
       }
 
       // Render the video in a few seconds? (on resolution change for example, we wait some seconds of the new video resolution)
@@ -288,7 +288,7 @@ class WebTorrentPlugin extends Plugin {
         if (options.seek) this.player.currentTime(options.seek)
 
         const renderVideoOptions = { autoplay: false, controls: true }
-        renderVideo(torrent.files[ 0 ], this.playerElement, renderVideoOptions, (err, renderer) => {
+        renderVideo(torrent.files[0], this.playerElement, renderVideoOptions, (err, renderer) => {
           this.renderer = renderer
 
           if (err) return this.fallbackToHttp(options, done)
@@ -321,7 +321,7 @@ class WebTorrentPlugin extends Plugin {
       if (err.message.indexOf('incorrect info hash') !== -1) {
         console.error('Incorrect info hash detected, falling back to torrent file.')
         const newOptions = { forcePlay: true, seek: options.seek }
-        return this.addTorrent(this.torrent[ 'xs' ], previousVideoFile, newOptions, done)
+        return this.addTorrent(this.torrent['xs'], previousVideoFile, newOptions, done)
       }
 
       // Remote instance is down
@@ -340,7 +340,7 @@ class WebTorrentPlugin extends Plugin {
     if (playPromise !== undefined) {
       return playPromise.then(() => done())
                         .catch((err: Error) => {
-                          if (err.message.indexOf('The play() request was interrupted by a call to pause()') !== -1) {
+                          if (err.message.includes('The play() request was interrupted by a call to pause()')) {
                             return
                           }
 
@@ -479,7 +479,7 @@ class WebTorrentPlugin extends Plugin {
   }
 
   private isPlayerWaiting () {
-    return this.player && this.player.hasClass('vjs-waiting')
+    return this.player?.hasClass('vjs-waiting')
   }
 
   private runTorrentInfoScheduler () {
@@ -513,7 +513,7 @@ class WebTorrentPlugin extends Plugin {
     }, this.CONSTANTS.INFO_SCHEDULER)
   }
 
-  private fallbackToHttp (options: PlayOptions, done?: Function) {
+  private fallbackToHttp (options: PlayOptions, done?: (err?: Error) => void) {
     const paused = this.player.paused()
 
     this.disableAutoResolution(true)
@@ -565,7 +565,7 @@ class WebTorrentPlugin extends Plugin {
   private stopTorrent (torrent: WebTorrent.Torrent) {
     torrent.pause()
     // Pause does not remove actual peers (in particular the webseed peer)
-    torrent.removePeer(torrent[ 'ws' ])
+    torrent.removePeer(torrent['ws'])
   }
 
   private renderFileInFakeElement (file: WebTorrent.TorrentFile, delay: number) {

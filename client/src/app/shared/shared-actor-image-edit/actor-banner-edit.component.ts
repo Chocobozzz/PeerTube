@@ -40,14 +40,14 @@ export class ActorBannerEditComponent implements OnInit {
     this.maxBannerSize = config.banner.file.size.max
     this.bannerExtensions = config.banner.file.extensions.join(', ')
 
-    // tslint:disable:max-line-length
+    /* eslint-disable max-len */
     this.bannerFormat = $localize`ratio 6/1, recommended size: 1920x317, max size: ${getBytes(this.maxBannerSize)}, extensions: ${this.bannerExtensions}`
   }
 
   onBannerChange (input: HTMLInputElement) {
     this.bannerfileInput = new ElementRef(input)
 
-    const bannerfile = this.bannerfileInput.nativeElement.files[ 0 ]
+    const bannerfile = this.bannerfileInput.nativeElement.files[0]
     if (bannerfile.size > this.maxBannerSize) {
       this.notifier.error('Error', $localize`This image is too large.`)
       return

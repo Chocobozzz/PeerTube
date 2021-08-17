@@ -53,7 +53,8 @@
   ],
   "exclude": [
     "../node_modules",
-    "../server"
+    "../server",
+    "node_modules"
   ],
   "angularCompilerOptions": {
     "strictInjectionParameters": true,

@@ -36,6 +36,7 @@ export class MyAccountApplicationsComponent implements OnInit {
 
   async renewToken () {
     const res = await this.confirmService.confirm(
+      // eslint-disable-next-line max-len
       $localize`Renewing the token will disallow previously configured clients from retrieving the feed until they use the new token. Proceed?`,
       $localize`Renew token`
     )

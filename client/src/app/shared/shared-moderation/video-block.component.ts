@@ -51,8 +51,8 @@ export class VideoBlockComponent extends FormReactive implements OnInit {
   }
 
   block () {
-    const reason = this.form.value[ 'reason' ] || undefined
-    const unfederate = this.video.isLocal ? this.form.value[ 'unfederate' ] : undefined
+    const reason = this.form.value['reason'] || undefined
+    const unfederate = this.video.isLocal ? this.form.value['unfederate'] : undefined
 
     this.videoBlocklistService.blockVideo(this.video.id, reason, unfederate)
         .subscribe({

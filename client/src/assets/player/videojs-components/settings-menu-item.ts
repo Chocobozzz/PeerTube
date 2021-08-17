@@ -1,8 +1,8 @@
+import videojs from 'video.js'
 // Thanks to Yanko Shterev: https://github.com/yshterev/videojs-settings-menu
 import { toTitleCase } from '../utils'
-import videojs from 'video.js'
-import { SettingsButton } from './settings-menu-button'
 import { SettingsDialog } from './settings-dialog'
+import { SettingsButton } from './settings-menu-button'
 import { SettingsPanel } from './settings-panel'
 import { SettingsPanelChild } from './settings-panel-child'
 
@@ -57,7 +57,7 @@ class SettingsMenuItem extends MenuItem {
     const newOptions = Object.assign({}, options, { entry: options.menuButton, menuButton: this })
 
     this.subMenu = new SubMenuComponent(this.player(), newOptions) as any // FIXME: typings
-    const subMenuClass = this.subMenu.buildCSSClass().split(' ')[ 0 ]
+    const subMenuClass = this.subMenu.buildCSSClass().split(' ')[0]
     this.settingsSubMenuEl_.className += ' ' + subMenuClass
 
     this.eventHandlers()
@@ -104,7 +104,7 @@ class SettingsMenuItem extends MenuItem {
       target = event.currentTarget
     }
 
-    if (target && target.classList.contains('vjs-back-button')) {
+    if (target?.classList.contains('vjs-back-button')) {
       this.loadMainMenu()
       return
     }
@@ -121,8 +121,6 @@ class SettingsMenuItem extends MenuItem {
   /**
    * Create the component's DOM element
    *
-   * @return {Element}
-   * @method createEl
    */
   createEl () {
     const el = videojs.dom.createEl('li', {
@@ -198,14 +196,14 @@ class SettingsMenuItem extends MenuItem {
     const prefix = [ 'webkit', 'moz', 'MS', 'o', '' ]
 
     for (let p = 0; p < prefix.length; p++) {
-      if (!prefix[ p ]) {
+      if (!prefix[p]) {
         type = type.toLowerCase()
       }
 
       if (action === 'addEvent') {
-        element.addEventListener(prefix[ p ] + type, callback, false)
+        element.addEventListener(prefix[p] + type, callback, false)
       } else if (action === 'removeEvent') {
-        element.removeEventListener(prefix[ p ] + type, callback, false)
+        element.removeEventListener(prefix[p] + type, callback, false)
       }
     }
   }
@@ -292,7 +290,10 @@ class SettingsMenuItem extends MenuItem {
     // Thus we get the submenu value based on the labelEl of playbackRateMenuButton
     if (subMenu === 'PlaybackRateMenuButton') {
       const html = (this.subMenu as any).labelEl_.innerHTML
-      setTimeout(() => this.settingsSubMenuValueEl_.innerHTML = html, 250)
+
+      setTimeout(() => {
+        this.settingsSubMenuValueEl_.innerHTML = html
+      }, 250)
     } else {
       // Loop trough the submenu items to find the selected child
       for (const subMenuItem of this.subMenu.menu.children_) {

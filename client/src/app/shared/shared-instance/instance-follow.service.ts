@@ -19,10 +19,10 @@ export class InstanceFollowService {
   }
 
   getFollowing (options: {
-    pagination: RestPagination,
-    sort: SortMeta,
-    search?: string,
-    actorType?: ActivityPubActorType,
+    pagination: RestPagination
+    sort: SortMeta
+    search?: string
+    actorType?: ActivityPubActorType
     state?: FollowState
   }): Observable<ResultList<ActorFollow>> {
     const { pagination, sort, search, state, actorType } = options
@@ -42,10 +42,10 @@ export class InstanceFollowService {
   }
 
   getFollowers (options: {
-    pagination: RestPagination,
-    sort: SortMeta,
-    search?: string,
-    actorType?: ActivityPubActorType,
+    pagination: RestPagination
+    sort: SortMeta
+    search?: string
+    actorType?: ActivityPubActorType
     state?: FollowState
   }): Observable<ResultList<ActorFollow>> {
     const { pagination, sort, search, state, actorType } = options

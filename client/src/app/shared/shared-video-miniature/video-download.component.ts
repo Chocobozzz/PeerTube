@@ -210,10 +210,10 @@ export class VideoDownloadComponent {
 
   private getMetadataFormat (format: any) {
     const keyToTranslateFunction = {
-      'encoder': (value: string) => ({ label: $localize`Encoder`, value }),
-      'format_long_name': (value: string) => ({ label: $localize`Format name`, value }),
-      'size': (value: number) => ({ label: $localize`Size`, value: this.bytesPipe.transform(value, 2) }),
-      'bit_rate': (value: number) => ({
+      encoder: (value: string) => ({ label: $localize`Encoder`, value }),
+      format_long_name: (value: string) => ({ label: $localize`Format name`, value }),
+      size: (value: number) => ({ label: $localize`Size`, value: this.bytesPipe.transform(value, 2) }),
+      bit_rate: (value: number) => ({
         label: $localize`Bitrate`,
         value: `${this.numbersPipe.transform(value)}bps`
       })
@@ -234,9 +234,9 @@ export class VideoDownloadComponent {
     if (!stream) return undefined
 
     let keyToTranslateFunction = {
-      'codec_long_name': (value: string) => ({ label: $localize`Codec`, value }),
-      'profile': (value: string) => ({ label: $localize`Profile`, value }),
-      'bit_rate': (value: number) => ({
+      codec_long_name: (value: string) => ({ label: $localize`Codec`, value }),
+      profile: (value: string) => ({ label: $localize`Profile`, value }),
+      bit_rate: (value: number) => ({
         label: $localize`Bitrate`,
         value: `${this.numbersPipe.transform(value)}bps`
       })
@@ -244,15 +244,15 @@ export class VideoDownloadComponent {
 
     if (type === 'video') {
       keyToTranslateFunction = Object.assign(keyToTranslateFunction, {
-        'width': (value: number) => ({ label: $localize`Resolution`, value: `${value}x${stream.height}` }),
-        'display_aspect_ratio': (value: string) => ({ label: $localize`Aspect ratio`, value }),
-        'avg_frame_rate': (value: string) => ({ label: $localize`Average frame rate`, value }),
-        'pix_fmt': (value: string) => ({ label: $localize`Pixel format`, value })
+        width: (value: number) => ({ label: $localize`Resolution`, value: `${value}x${stream.height}` }),
+        display_aspect_ratio: (value: string) => ({ label: $localize`Aspect ratio`, value }),
+        avg_frame_rate: (value: string) => ({ label: $localize`Average frame rate`, value }),
+        pix_fmt: (value: string) => ({ label: $localize`Pixel format`, value })
       })
     } else {
       keyToTranslateFunction = Object.assign(keyToTranslateFunction, {
-        'sample_rate': (value: number) => ({ label: $localize`Sample rate`, value }),
-        'channel_layout': (value: number) => ({ label: $localize`Channel Layout`, value })
+        sample_rate: (value: number) => ({ label: $localize`Sample rate`, value }),
+        channel_layout: (value: number) => ({ label: $localize`Channel Layout`, value })
       })
     }
 

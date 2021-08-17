@@ -108,7 +108,7 @@ export class VideosSelectionComponent extends AbstractVideoList implements OnIni
   }
 
   isInSelectionMode () {
-    return Object.keys(this._selection).some(k => this._selection[ k ] === true)
+    return Object.keys(this._selection).some(k => this._selection[k] === true)
   }
 
   generateSyndicationList () {

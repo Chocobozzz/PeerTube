@@ -21,5 +21,5 @@ export type PeerTubeTextTrack = {
   id: string
   label: string
   src: string
-  mode: 'showing' | 'disabled'
+  mode: TextTrackMode
 }

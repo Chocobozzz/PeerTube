@@ -11,7 +11,7 @@ export abstract class GenericHeaderComponent {
 
 @Component({
   selector: 'my-video-list-header',
-  // tslint:disable-next-line:use-component-view-encapsulation
+  // eslint-disable-next-line @angular-eslint/use-component-view-encapsulation
   encapsulation: ViewEncapsulation.None,
   templateUrl: './video-list-header.component.html'
 })

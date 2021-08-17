@@ -21,7 +21,7 @@ export class ResetPasswordComponent extends FormReactive implements OnInit {
     private notifier: Notifier,
     private router: Router,
     private route: ActivatedRoute
-    ) {
+  ) {
     super()
   }
 
