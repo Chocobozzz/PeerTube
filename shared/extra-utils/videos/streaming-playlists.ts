@@ -9,17 +9,16 @@ async function checkSegmentHash (options: {
   server: PeerTubeServer
   baseUrlPlaylist: string
   baseUrlSegment: string
-  videoUUID: string
   resolution: number
   hlsPlaylist: VideoStreamingPlaylist
 }) {
-  const { server, baseUrlPlaylist, baseUrlSegment, videoUUID, resolution, hlsPlaylist } = options
+  const { server, baseUrlPlaylist, baseUrlSegment, resolution, hlsPlaylist } = options
   const command = server.streamingPlaylists
 
   const file = hlsPlaylist.files.find(f => f.resolution.id === resolution)
   const videoName = basename(file.fileUrl)
 
-  const playlist = await command.get({ url: `${baseUrlPlaylist}/${videoUUID}/${removeFragmentedMP4Ext(videoName)}.m3u8` })
+  const playlist = await command.get({ url: `${baseUrlPlaylist}/${removeFragmentedMP4Ext(videoName)}.m3u8` })
 
   const matches = /#EXT-X-BYTERANGE:(\d+)@(\d+)/.exec(playlist)
 
@@ -28,7 +27,7 @@ async function checkSegmentHash (options: {
   const range = `${offset}-${offset + length - 1}`
 
   const segmentBody = await command.getSegment({
-    url: `${baseUrlSegment}/${videoUUID}/${videoName}`,
+    url: `${baseUrlSegment}/${videoName}`,
     expectedStatus: HttpStatusCode.PARTIAL_CONTENT_206,
     range: `bytes=${range}`
   })

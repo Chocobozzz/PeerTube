@@ -73,6 +73,26 @@ const CONFIG = {
     PLUGINS_DIR: buildPath(config.get<string>('storage.plugins')),
     CLIENT_OVERRIDES_DIR: buildPath(config.get<string>('storage.client_overrides'))
   },
+  OBJECT_STORAGE: {
+    ENABLED: config.get<boolean>('object_storage.enabled'),
+    MAX_UPLOAD_PART: bytes.parse(config.get<string>('object_storage.max_upload_part')),
+    ENDPOINT: config.get<string>('object_storage.endpoint'),
+    REGION: config.get<string>('object_storage.region'),
+    CREDENTIALS: {
+      ACCESS_KEY_ID: config.get<string>('object_storage.credentials.access_key_id'),
+      SECRET_ACCESS_KEY: config.get<string>('object_storage.credentials.secret_access_key')
+    },
+    VIDEOS: {
+      BUCKET_NAME: config.get<string>('object_storage.videos.bucket_name'),
+      PREFIX: config.get<string>('object_storage.videos.prefix'),
+      BASE_URL: config.get<string>('object_storage.videos.base_url')
+    },
+    STREAMING_PLAYLISTS: {
+      BUCKET_NAME: config.get<string>('object_storage.streaming_playlists.bucket_name'),
+      PREFIX: config.get<string>('object_storage.streaming_playlists.prefix'),
+      BASE_URL: config.get<string>('object_storage.streaming_playlists.base_url')
+    }
+  },
   WEBSERVER: {
     SCHEME: config.get<boolean>('webserver.https') === true ? 'https' : 'http',
     WS: config.get<boolean>('webserver.https') === true ? 'wss' : 'ws',

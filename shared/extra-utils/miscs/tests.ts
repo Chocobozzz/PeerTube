@@ -28,7 +28,9 @@ const FIXTURE_URLS = {
 
   badVideo: 'https://download.cpy.re/peertube/bad_video.mp4',
   goodVideo: 'https://download.cpy.re/peertube/good_video.mp4',
-  video4K: 'https://download.cpy.re/peertube/4k_file.txt'
+  goodVideo720: 'https://download.cpy.re/peertube/good_video_720.mp4',
+
+  file4K: 'https://download.cpy.re/peertube/4k_file.txt'
 }
 
 function parallelTests () {
@@ -42,7 +44,15 @@ function isGithubCI () {
 function areHttpImportTestsDisabled () {
   const disabled = process.env.DISABLE_HTTP_IMPORT_TESTS === 'true'
 
-  if (disabled) console.log('Import tests are disabled')
+  if (disabled) console.log('DISABLE_HTTP_IMPORT_TESTS env set to "true" so import tests are disabled')
+
+  return disabled
+}
+
+function areObjectStorageTestsDisabled () {
+  const disabled = process.env.ENABLE_OBJECT_STORAGE_TESTS !== 'true'
+
+  if (disabled) console.log('ENABLE_OBJECT_STORAGE_TESTS env is not set to "true" so object storage tests are disabled')
 
   return disabled
 }
@@ -89,6 +99,7 @@ export {
   buildAbsoluteFixturePath,
   getFileSize,
   buildRequestStub,
+  areObjectStorageTestsDisabled,
   wait,
   root
 }

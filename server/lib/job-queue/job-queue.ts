@@ -11,6 +11,7 @@ import {
   EmailPayload,
   JobState,
   JobType,
+  MoveObjectStoragePayload,
   RefreshPayload,
   VideoFileImportPayload,
   VideoImportPayload,
@@ -34,6 +35,7 @@ import { processVideoImport } from './handlers/video-import'
 import { processVideoLiveEnding } from './handlers/video-live-ending'
 import { processVideoTranscoding } from './handlers/video-transcoding'
 import { processVideosViews } from './handlers/video-views'
+import { processMoveToObjectStorage } from './handlers/move-to-object-storage'
 
 type CreateJobArgument =
   { type: 'activitypub-http-broadcast', payload: ActivitypubHttpBroadcastPayload } |
@@ -49,9 +51,10 @@ type CreateJobArgument =
   { type: 'videos-views', payload: {} } |
   { type: 'video-live-ending', payload: VideoLiveEndingPayload } |
   { type: 'actor-keys', payload: ActorKeysPayload } |
-  { type: 'video-redundancy', payload: VideoRedundancyPayload }
+  { type: 'video-redundancy', payload: VideoRedundancyPayload } |
+  { type: 'move-to-object-storage', payload: MoveObjectStoragePayload }
 
-type CreateJobOptions = {
+export type CreateJobOptions = {
   delay?: number
   priority?: number
 }
@@ -70,7 +73,8 @@ const handlers: { [id in JobType]: (job: Bull.Job) => Promise<any> } = {
   'activitypub-refresher': refreshAPObject,
   'video-live-ending': processVideoLiveEnding,
   'actor-keys': processActorKeys,
-  'video-redundancy': processVideoRedundancy
+  'video-redundancy': processVideoRedundancy,
+  'move-to-object-storage': processMoveToObjectStorage
 }
 
 const jobTypes: JobType[] = [
@@ -87,7 +91,8 @@ const jobTypes: JobType[] = [
   'activitypub-refresher',
   'video-redundancy',
   'actor-keys',
-  'video-live-ending'
+  'video-live-ending',
+  'move-to-object-storage'
 ]
 
 class JobQueue {

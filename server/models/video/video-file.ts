@@ -23,9 +23,11 @@ import validator from 'validator'
 import { buildRemoteVideoBaseUrl } from '@server/helpers/activitypub'
 import { logger } from '@server/helpers/logger'
 import { extractVideo } from '@server/helpers/video'
-import { getTorrentFilePath } from '@server/lib/video-paths'
+import { getHLSPublicFileUrl, getWebTorrentPublicFileUrl } from '@server/lib/object-storage'
+import { getFSTorrentFilePath } from '@server/lib/paths'
 import { MStreamingPlaylistVideo, MVideo, MVideoWithHost } from '@server/types/models'
 import { AttributesOnly } from '@shared/core-utils'
+import { VideoStorage } from '@shared/models'
 import {
   isVideoFileExtnameValid,
   isVideoFileInfoHashValid,
@@ -214,6 +216,11 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
   @Column
   videoId: number
 
+  @AllowNull(false)
+  @Default(VideoStorage.FILE_SYSTEM)
+  @Column
+  storage: VideoStorage
+
   @BelongsTo(() => VideoModel, {
     foreignKey: {
       allowNull: true
@@ -273,7 +280,7 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
 
   static async doesOwnedWebTorrentVideoFileExist (filename: string) {
     const query = 'SELECT 1 FROM "videoFile" INNER JOIN "video" ON "video"."id" = "videoFile"."videoId" AND "video"."remote" IS FALSE ' +
-                  'WHERE "filename" = $filename LIMIT 1'
+                  `WHERE "filename" = $filename AND "storage" = ${VideoStorage.FILE_SYSTEM} LIMIT 1`
 
     return doesExist(query, { filename })
   }
@@ -450,9 +457,20 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
     return !!this.videoStreamingPlaylistId
   }
 
-  getFileUrl (video: MVideo) {
-    if (!this.Video) this.Video = video as VideoModel
+  getObjectStorageUrl () {
+    if (this.isHLS()) {
+      return getHLSPublicFileUrl(this.fileUrl)
+    }
 
+    return getWebTorrentPublicFileUrl(this.fileUrl)
+  }
+
+  getFileUrl (video: MVideo) {
+    if (this.storage === VideoStorage.OBJECT_STORAGE) {
+      return this.getObjectStorageUrl()
+    }
+
+    if (!this.Video) this.Video = video as VideoModel
     if (video.isOwned()) return WEBSERVER.URL + this.getFileStaticPath(video)
 
     return this.fileUrl
@@ -503,7 +521,7 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
   removeTorrent () {
     if (!this.torrentFilename) return null
 
-    const torrentPath = getTorrentFilePath(this)
+    const torrentPath = getFSTorrentFilePath(this)
     return remove(torrentPath)
       .catch(err => logger.warn('Cannot delete torrent %s.', torrentPath, { err }))
   }

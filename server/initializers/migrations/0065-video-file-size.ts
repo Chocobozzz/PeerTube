@@ -1,7 +1,4 @@
 import * as Sequelize from 'sequelize'
-import { stat } from 'fs-extra'
-import { VideoModel } from '../../models/video/video'
-import { getVideoFilePath } from '@server/lib/video-paths'
 
 function up (utils: {
   transaction: Sequelize.Transaction
@@ -9,30 +6,7 @@ function up (utils: {
   sequelize: Sequelize.Sequelize
   db: any
 }): Promise<void> {
-  return utils.db.Video.listOwnedAndPopulateAuthorAndTags()
-    .then((videos: VideoModel[]) => {
-      const tasks: Promise<any>[] = []
-
-      videos.forEach(video => {
-        video.VideoFiles.forEach(videoFile => {
-          const p = new Promise((res, rej) => {
-            stat(getVideoFilePath(video, videoFile), (err, stats) => {
-              if (err) return rej(err)
-
-              videoFile.size = stats.size
-              videoFile.save().then(res).catch(rej)
-            })
-          })
-
-          tasks.push(p)
-        })
-      })
-
-      return tasks
-    })
-    .then((tasks: Promise<any>[]) => {
-      return Promise.all(tasks)
-    })
+  throw new Error('Removed, please upgrade from a previous version first.')
 }
 
 function down (options) {

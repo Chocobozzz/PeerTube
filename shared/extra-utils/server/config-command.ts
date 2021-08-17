@@ -18,6 +18,70 @@ export class ConfigCommand extends AbstractCommand {
     }
   }
 
+  enableImports () {
+    return this.updateExistingSubConfig({
+      newConfig: {
+        import: {
+          videos: {
+            http: {
+              enabled: true
+            },
+
+            torrent: {
+              enabled: true
+            }
+          }
+        }
+      }
+    })
+  }
+
+  enableLive (options: {
+    allowReplay?: boolean
+    transcoding?: boolean
+  } = {}) {
+    return this.updateExistingSubConfig({
+      newConfig: {
+        live: {
+          enabled: true,
+          allowReplay: options.allowReplay ?? true,
+          transcoding: {
+            enabled: options.transcoding ?? true,
+            resolutions: ConfigCommand.getCustomConfigResolutions(true)
+          }
+        }
+      }
+    })
+  }
+
+  disableTranscoding () {
+    return this.updateExistingSubConfig({
+      newConfig: {
+        transcoding: {
+          enabled: false
+        }
+      }
+    })
+  }
+
+  enableTranscoding (webtorrent = true, hls = true) {
+    return this.updateExistingSubConfig({
+      newConfig: {
+        transcoding: {
+          enabled: true,
+          resolutions: ConfigCommand.getCustomConfigResolutions(true),
+
+          webtorrent: {
+            enabled: webtorrent
+          },
+          hls: {
+            enabled: hls
+          }
+        }
+      }
+    })
+  }
+
   getConfig (options: OverrideCommandOptions = {}) {
     const path = '/api/v1/config'
 
@@ -79,6 +143,14 @@ export class ConfigCommand extends AbstractCommand {
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
+  }
+
+  async updateExistingSubConfig (options: OverrideCommandOptions & {
+    newConfig: DeepPartial<CustomConfig>
+  }) {
+    const existing = await this.getCustomConfig(options)
+
+    return this.updateCustomConfig({ ...options, newCustomConfig: merge({}, existing, options.newConfig) })
   }
 
   updateCustomSubConfig (options: OverrideCommandOptions & {

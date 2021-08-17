@@ -6,7 +6,8 @@ import { dirname, join } from 'path'
 import * as WebTorrent from 'webtorrent'
 import { isArray } from '@server/helpers/custom-validators/misc'
 import { WEBSERVER } from '@server/initializers/constants'
-import { generateTorrentFileName, getVideoFilePath } from '@server/lib/video-paths'
+import { generateTorrentFileName } from '@server/lib/paths'
+import { VideoPathManager } from '@server/lib/video-path-manager'
 import { MVideo } from '@server/types/models/video/video'
 import { MVideoFile, MVideoFileRedundanciesOpt } from '@server/types/models/video/video-file'
 import { MStreamingPlaylistVideo } from '@server/types/models/video/video-streaming-playlist'
@@ -78,7 +79,7 @@ async function downloadWebTorrentVideo (target: { magnetUri: string, torrentName
   })
 }
 
-async function createTorrentAndSetInfoHash (
+function createTorrentAndSetInfoHash (
   videoOrPlaylist: MVideo | MStreamingPlaylistVideo,
   videoFile: MVideoFile
 ) {
@@ -95,22 +96,24 @@ async function createTorrentAndSetInfoHash (
     urlList: [ videoFile.getFileUrl(video) ]
   }
 
-  const torrent = await createTorrentPromise(getVideoFilePath(videoOrPlaylist, videoFile), options)
+  return VideoPathManager.Instance.makeAvailableVideoFile(videoOrPlaylist, videoFile, async videoPath => {
+    const torrent = await createTorrentPromise(videoPath, options)
 
-  const torrentFilename = generateTorrentFileName(videoOrPlaylist, videoFile.resolution)
-  const torrentPath = join(CONFIG.STORAGE.TORRENTS_DIR, torrentFilename)
-  logger.info('Creating torrent %s.', torrentPath)
+    const torrentFilename = generateTorrentFileName(videoOrPlaylist, videoFile.resolution)
+    const torrentPath = join(CONFIG.STORAGE.TORRENTS_DIR, torrentFilename)
+    logger.info('Creating torrent %s.', torrentPath)
 
-  await writeFile(torrentPath, torrent)
+    await writeFile(torrentPath, torrent)
 
-  // Remove old torrent file if it existed
-  if (videoFile.hasTorrent()) {
-    await remove(join(CONFIG.STORAGE.TORRENTS_DIR, videoFile.torrentFilename))
-  }
+    // Remove old torrent file if it existed
+    if (videoFile.hasTorrent()) {
+      await remove(join(CONFIG.STORAGE.TORRENTS_DIR, videoFile.torrentFilename))
+    }
 
-  const parsedTorrent = parseTorrent(torrent)
-  videoFile.infoHash = parsedTorrent.infoHash
-  videoFile.torrentFilename = torrentFilename
+    const parsedTorrent = parseTorrent(torrent)
+    videoFile.infoHash = parsedTorrent.infoHash
+    videoFile.torrentFilename = torrentFilename
+  })
 }
 
 function generateMagnetUri (

@@ -153,6 +153,29 @@ function checkConfig () {
     }
   }
 
+  // Object storage
+  if (CONFIG.OBJECT_STORAGE.ENABLED === true) {
+
+    if (!CONFIG.OBJECT_STORAGE.VIDEOS.BUCKET_NAME) {
+      return 'videos_bucket should be set when object storage support is enabled.'
+    }
+
+    if (!CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.BUCKET_NAME) {
+      return 'streaming_playlists_bucket should be set when object storage support is enabled.'
+    }
+
+    if (
+      CONFIG.OBJECT_STORAGE.VIDEOS.BUCKET_NAME === CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.BUCKET_NAME &&
+      CONFIG.OBJECT_STORAGE.VIDEOS.PREFIX === CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.PREFIX
+    ) {
+      if (CONFIG.OBJECT_STORAGE.VIDEOS.PREFIX === '') {
+        return 'Object storage bucket prefixes should be set when the same bucket is used for both types of video.'
+      } else {
+        return 'Object storage bucket prefixes should be set to different values when the same bucket is used for both types of video.'
+      }
+    }
+  }
+
   return null
 }
 

@@ -18,6 +18,10 @@ export class VideoAlertComponent {
     return this.video && this.video.state.id === VideoState.TO_IMPORT
   }
 
+  isVideoToMoveToExternalStorage () {
+    return this.video && this.video.state.id === VideoState.TO_MOVE_TO_EXTERNAL_STORAGE
+  }
+
   hasVideoScheduledPublication () {
     return this.video && this.video.scheduledUpdate !== undefined
   }

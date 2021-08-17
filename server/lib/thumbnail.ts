@@ -1,5 +1,4 @@
 import { join } from 'path'
-
 import { ThumbnailType } from '../../shared/models/videos/thumbnail.type'
 import { generateImageFromVideoFile } from '../helpers/ffmpeg-utils'
 import { generateImageFilename, processImage } from '../helpers/image-utils'
@@ -10,7 +9,7 @@ import { ThumbnailModel } from '../models/video/thumbnail'
 import { MVideoFile, MVideoThumbnail, MVideoUUID } from '../types/models'
 import { MThumbnail } from '../types/models/video/thumbnail'
 import { MVideoPlaylistThumbnail } from '../types/models/video/video-playlist'
-import { getVideoFilePath } from './video-paths'
+import { VideoPathManager } from './video-path-manager'
 
 type ImageSize = { height?: number, width?: number }
 
@@ -116,21 +115,22 @@ function generateVideoMiniature (options: {
 }) {
   const { video, videoFile, type } = options
 
-  const input = getVideoFilePath(video, videoFile)
+  return VideoPathManager.Instance.makeAvailableVideoFile(video, videoFile, input => {
+    const { filename, basePath, height, width, existingThumbnail, outputPath } = buildMetadataFromVideo(video, type)
 
-  const { filename, basePath, height, width, existingThumbnail, outputPath } = buildMetadataFromVideo(video, type)
-  const thumbnailCreator = videoFile.isAudio()
-    ? () => processImage(ASSETS_PATH.DEFAULT_AUDIO_BACKGROUND, outputPath, { width, height }, true)
-    : () => generateImageFromVideoFile(input, basePath, filename, { height, width })
+    const thumbnailCreator = videoFile.isAudio()
+      ? () => processImage(ASSETS_PATH.DEFAULT_AUDIO_BACKGROUND, outputPath, { width, height }, true)
+      : () => generateImageFromVideoFile(input, basePath, filename, { height, width })
 
-  return updateThumbnailFromFunction({
-    thumbnailCreator,
-    filename,
-    height,
-    width,
-    type,
-    automaticallyGenerated: true,
-    existingThumbnail
+    return updateThumbnailFromFunction({
+      thumbnailCreator,
+      filename,
+      height,
+      width,
+      type,
+      automaticallyGenerated: true,
+      existingThumbnail
+    })
   })
 }
 

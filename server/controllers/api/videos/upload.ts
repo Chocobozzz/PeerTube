@@ -1,12 +1,21 @@
 import * as express from 'express'
 import { move } from 'fs-extra'
+import { basename } from 'path'
 import { getLowercaseExtension } from '@server/helpers/core-utils'
 import { deleteResumableUploadMetaFile, getResumableUploadPath } from '@server/helpers/upload'
 import { uuidToShort } from '@server/helpers/uuid'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
 import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url'
-import { addOptimizeOrMergeAudioJob, buildLocalVideoFromReq, buildVideoThumbnailsFromReq, setVideoTags } from '@server/lib/video'
-import { generateWebTorrentVideoFilename, getVideoFilePath } from '@server/lib/video-paths'
+import { generateWebTorrentVideoFilename } from '@server/lib/paths'
+import {
+  addMoveToObjectStorageJob,
+  addOptimizeOrMergeAudioJob,
+  buildLocalVideoFromReq,
+  buildVideoThumbnailsFromReq,
+  setVideoTags
+} from '@server/lib/video'
+import { VideoPathManager } from '@server/lib/video-path-manager'
+import { buildNextVideoState } from '@server/lib/video-state'
 import { openapiOperationDoc } from '@server/middlewares/doc'
 import { MVideo, MVideoFile, MVideoFullLight } from '@server/types/models'
 import { uploadx } from '@uploadx/core'
@@ -139,23 +148,20 @@ async function addVideo (options: {
 
   const videoData = buildLocalVideoFromReq(videoInfo, videoChannel.id)
 
-  videoData.state = CONFIG.TRANSCODING.ENABLED
-    ? VideoState.TO_TRANSCODE
-    : VideoState.PUBLISHED
-
+  videoData.state = buildNextVideoState()
   videoData.duration = videoPhysicalFile.duration // duration was added by a previous middleware
 
   const video = new VideoModel(videoData) as MVideoFullLight
   video.VideoChannel = videoChannel
   video.url = getLocalVideoActivityPubUrl(video) // We use the UUID, so set the URL after building the object
 
-  const videoFile = await buildNewFile(video, videoPhysicalFile)
+  const videoFile = await buildNewFile(videoPhysicalFile)
 
   // Move physical file
-  const destination = getVideoFilePath(video, videoFile)
+  const destination = VideoPathManager.Instance.getFSVideoFileOutputPath(video, videoFile)
   await move(videoPhysicalFile.path, destination)
   // This is important in case if there is another attempt in the retry process
-  videoPhysicalFile.filename = getVideoFilePath(video, videoFile)
+  videoPhysicalFile.filename = basename(destination)
   videoPhysicalFile.path = destination
 
   const [ thumbnailModel, previewModel ] = await buildVideoThumbnailsFromReq({
@@ -210,9 +216,13 @@ async function addVideo (options: {
 
   createTorrentFederate(video, videoFile)
     .then(() => {
-      if (video.state !== VideoState.TO_TRANSCODE) return
+      if (video.state === VideoState.TO_MOVE_TO_EXTERNAL_STORAGE) {
+        return addMoveToObjectStorageJob(video)
+      }
 
-      return addOptimizeOrMergeAudioJob(videoCreated, videoFile, user)
+      if (video.state === VideoState.TO_TRANSCODE) {
+        return addOptimizeOrMergeAudioJob(videoCreated, videoFile, user)
+      }
     })
     .catch(err => logger.error('Cannot add optimize/merge audio job for %s.', videoCreated.uuid, { err, ...lTags(videoCreated.uuid) }))
 
@@ -227,7 +237,7 @@ async function addVideo (options: {
   })
 }
 
-async function buildNewFile (video: MVideo, videoPhysicalFile: express.VideoUploadFile) {
+async function buildNewFile (videoPhysicalFile: express.VideoUploadFile) {
   const videoFile = new VideoFileModel({
     extname: getLowercaseExtension(videoPhysicalFile.filename),
     size: videoPhysicalFile.size,
