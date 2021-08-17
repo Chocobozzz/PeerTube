@@ -52,8 +52,13 @@ function runTests (objectStorage: boolean) {
     if (objectStorage) await ObjectStorageCommand.prepareDefaultBuckets()
 
     for (let i = 1; i <= 5; i++) {
-      const { uuid } = await servers[0].videos.upload({ attributes: { name: 'video' + i } })
-      videosUUID.push(uuid)
+      const { uuid, shortUUID } = await servers[0].videos.upload({ attributes: { name: 'video' + i } })
+
+      if (i > 2) {
+        videosUUID.push(uuid)
+      } else {
+        videosUUID.push(shortUUID)
+      }
     }
 
     await waitJobs(servers)
@@ -88,7 +93,7 @@ function runTests (objectStorage: boolean) {
       for (const video of data) {
         const videoDetails = await server.videos.get({ id: video.uuid })
 
-        if (video.uuid === videosUUID[1]) {
+        if (video.shortUUID === videosUUID[1] || video.uuid === videosUUID[1]) {
           expect(videoDetails.files).to.have.lengthOf(4)
           expect(videoDetails.streamingPlaylists).to.have.lengthOf(0)
 

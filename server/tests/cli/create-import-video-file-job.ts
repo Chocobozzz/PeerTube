@@ -37,7 +37,7 @@ async function checkFiles (video: VideoDetails, objectStorage: boolean) {
 }
 
 function runTests (objectStorage: boolean) {
-  let video1UUID: string
+  let video1ShortId: string
   let video2UUID: string
 
   let servers: PeerTubeServer[] = []
@@ -59,8 +59,8 @@ function runTests (objectStorage: boolean) {
 
     // Upload two videos for our needs
     {
-      const { uuid } = await servers[0].videos.upload({ attributes: { name: 'video1' } })
-      video1UUID = uuid
+      const { shortUUID } = await servers[0].videos.upload({ attributes: { name: 'video1' } })
+      video1ShortId = shortUUID
     }
 
     {
@@ -72,7 +72,7 @@ function runTests (objectStorage: boolean) {
   })
 
   it('Should run a import job on video 1 with a lower resolution', async function () {
-    const command = `npm run create-import-video-file-job -- -v ${video1UUID} -i server/tests/fixtures/video_short-480.webm`
+    const command = `npm run create-import-video-file-job -- -v ${video1ShortId} -i server/tests/fixtures/video_short-480.webm`
     await servers[0].cli.execWithEnv(command)
 
     await waitJobs(servers)
@@ -81,8 +81,8 @@ function runTests (objectStorage: boolean) {
       const { data: videos } = await server.videos.list()
       expect(videos).to.have.lengthOf(2)
 
-      const video = videos.find(({ uuid }) => uuid === video1UUID)
-      const videoDetails = await server.videos.get({ id: video.uuid })
+      const video = videos.find(({ shortUUID }) => shortUUID === video1ShortId)
+      const videoDetails = await server.videos.get({ id: video.shortUUID })
 
       expect(videoDetails.files).to.have.lengthOf(2)
       const [ originalVideo, transcodedVideo ] = videoDetails.files
@@ -118,7 +118,7 @@ function runTests (objectStorage: boolean) {
   })
 
   it('Should run a import job on video 2 with the same resolution and the same extension', async function () {
-    const command = `npm run create-import-video-file-job -- -v ${video1UUID} -i server/tests/fixtures/video_short2.webm`
+    const command = `npm run create-import-video-file-job -- -v ${video1ShortId} -i server/tests/fixtures/video_short2.webm`
     await servers[0].cli.execWithEnv(command)
 
     await waitJobs(servers)
@@ -127,7 +127,7 @@ function runTests (objectStorage: boolean) {
       const { data: videos } = await server.videos.list()
       expect(videos).to.have.lengthOf(2)
 
-      const video = videos.find(({ uuid }) => uuid === video1UUID)
+      const video = videos.find(({ shortUUID }) => shortUUID === video1ShortId)
       const videoDetails = await server.videos.get({ id: video.uuid })
 
       expect(videoDetails.files).to.have.lengthOf(2)
