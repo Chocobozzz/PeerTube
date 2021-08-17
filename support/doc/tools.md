@@ -19,7 +19,6 @@
   - [create-transcoding-job.js](#create-transcoding-jobjs)
   - [create-import-video-file-job.js](#create-import-video-file-jobjs)
   - [prune-storage.js](#prune-storagejs)
-  - [optimize-old-videos.js](#optimize-old-videosjs)
   - [update-host.js](#update-hostjs)
   - [reset-password.js](#reset-passwordjs)
   - [plugin install/uninstall](#plugin-installuninstall)
@@ -342,23 +341,6 @@ Stop PeerTube and delete these files (a confirmation will be demanded first):
 ```bash
 $ cd /var/www/peertube/peertube-latest
 $ sudo systemctl stop peertube && sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run prune-storage
-```
-
-### optimize-old-videos.js
-
-Before version v1.0.0-beta.16, Peertube did not specify a bitrate for the
-transcoding of uploaded videos. This means that videos might be encoded into
-very large files that are too large for streaming. This script re-transcodes
-these videos so that they can be watched properly, even on slow connections.
-
-```bash
-$ # Basic installation
-$ cd /var/www/peertube/peertube-latest
-$ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run optimize-old-videos
-
-$ # Docker installation
-$ cd /var/www/peertube-docker
-$ docker-compose exec -u peertube peertube npm run optimize-old-videos
 ```
 
 

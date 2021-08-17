@@ -6,7 +6,7 @@ function generateHLSObjectStorageKey (playlist: MStreamingPlaylist, video: MVide
 }
 
 function generateHLSObjectBaseStorageKey (playlist: MStreamingPlaylist, video: MVideoUUID) {
-  return playlist.getStringType() + '_' + video.uuid
+  return join(playlist.getStringType(), video.uuid)
 }
 
 function generateWebTorrentObjectStorageKey (filename: string) {
