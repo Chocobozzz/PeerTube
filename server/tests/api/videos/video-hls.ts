@@ -101,7 +101,7 @@ async function checkHlsPlaylist (options: {
         const playlistName = removeFragmentedMP4Ext(basename(file.fileUrl)) + '.m3u8'
 
         const url = objectStorageBaseUrl
-          ? `${objectStorageBaseUrl}hls_${videoUUID}/${playlistName}`
+          ? `${objectStorageBaseUrl}hls/${videoUUID}/${playlistName}`
           : `${baseUrl}/static/streaming-playlists/hls/${videoUUID}/${playlistName}`
 
         const subPlaylist = await server.streamingPlaylists.get({ url })
@@ -113,7 +113,7 @@ async function checkHlsPlaylist (options: {
 
     {
       const baseUrlAndPath = objectStorageBaseUrl
-        ? objectStorageBaseUrl + 'hls_' + videoUUID
+        ? objectStorageBaseUrl + 'hls/' + videoUUID
         : baseUrl + '/static/streaming-playlists/hls/' + videoUUID
 
       for (const resolution of resolutions) {
@@ -165,7 +165,7 @@ describe('Test HLS videos', function () {
     })
 
     it('Should update the video', async function () {
-      this.timeout(10000)
+      this.timeout(30000)
 
       await servers[0].videos.update({ id: videoUUID, attributes: { name: 'video 1 updated' } })
 
