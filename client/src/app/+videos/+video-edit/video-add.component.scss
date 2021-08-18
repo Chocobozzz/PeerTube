@@ -11,7 +11,8 @@ $nav-link-height: 40px;
   width: 100%;
   text-align: center;
 
-  .about-link {
+  .about-link,
+  .contact-link {
     @include peertube-button-link;
     @include orange-button;
 

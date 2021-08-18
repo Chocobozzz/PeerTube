@@ -1,7 +1,8 @@
 <div *ngIf="user.isUploadDisabled()" class="no-upload">
   <div class="alert alert-warning">
     <div i18n>Sorry, the upload feature is disabled for your account. If you want to add videos, an admin must unlock your quota.</div>
-    <a i18n routerLink="/about/instance" class="about-link">Read instance rules for help</a>
+    <a i18n routerLink="/about/instance" *ngIf="!isContactFormEnabled" class="about-link">Read instance rules for help</a>
+    <a i18n routerLink="/about/contact" *ngIf="isContactFormEnabled" class="contact-link">Contact us</a>
   </div>
   <img src="/client/assets/images/mascot/defeated.svg" alt="defeated mascot">
 </div>

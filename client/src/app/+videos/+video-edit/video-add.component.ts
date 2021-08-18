@@ -35,6 +35,10 @@ export class VideoAddComponent implements OnInit, CanComponentDeactivate {
     private router: Router
   ) {}
 
+  get isContactFormEnabled () {
+    return this.serverConfig.email.enabled && this.serverConfig.contactForm.enabled
+  }
+
   get userInformationLoaded () {
     return this.auth.userInformationLoaded
   }
