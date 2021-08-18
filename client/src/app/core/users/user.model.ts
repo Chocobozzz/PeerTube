@@ -137,4 +137,15 @@ export class User implements UserServerModel {
   isAutoBlocked () {
     return this.role === UserRole.USER && this.adminFlags !== UserAdminFlag.BYPASS_VIDEO_AUTO_BLACKLIST
   }
+
+  hasNoQuotaLeft () {
+    // unlimited videoQuota
+    if (this.videoQuota === -1) return false
+
+    // no more videoQuota
+    if (!this.videoQuotaUsed) return true
+
+    // videoQuota left lower than 10%
+    return this.videoQuotaUsed > this.videoQuota * 0.9
+  }
 }
