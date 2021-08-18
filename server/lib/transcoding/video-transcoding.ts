@@ -8,7 +8,6 @@ import { VideoResolution, VideoStorage } from '../../../shared/models/videos'
 import { VideoStreamingPlaylistType } from '../../../shared/models/videos/video-streaming-playlist.type'
 import { transcode, TranscodeOptions, TranscodeOptionsType } from '../../helpers/ffmpeg-utils'
 import { canDoQuickTranscode, getDurationFromVideoFile, getMetadataFromFile, getVideoFileFPS } from '../../helpers/ffprobe-utils'
-import { logger } from '../../helpers/logger'
 import { CONFIG } from '../../initializers/config'
 import { P2P_MEDIA_LOADER_PEER_VERSION } from '../../initializers/constants'
 import { VideoFileModel } from '../../models/video/video-file'
@@ -62,25 +61,17 @@ function optimizeOriginalVideofile (video: MVideoFullLight, inputVideoFile: MVid
     // Could be very long!
     await transcode(transcodeOptions)
 
-    try {
-      await remove(videoInputPath)
+    // Important to do this before getVideoFilename() to take in account the new filename
+    inputVideoFile.extname = newExtname
+    inputVideoFile.filename = generateWebTorrentVideoFilename(resolution, newExtname)
+    inputVideoFile.storage = VideoStorage.FILE_SYSTEM
 
-      // Important to do this before getVideoFilename() to take in account the new filename
-      inputVideoFile.extname = newExtname
-      inputVideoFile.filename = generateWebTorrentVideoFilename(resolution, newExtname)
-      inputVideoFile.storage = VideoStorage.FILE_SYSTEM
+    const videoOutputPath = VideoPathManager.Instance.getFSVideoFileOutputPath(video, inputVideoFile)
 
-      const videoOutputPath = VideoPathManager.Instance.getFSVideoFileOutputPath(video, inputVideoFile)
+    const { videoFile } = await onWebTorrentVideoFileTranscoding(video, inputVideoFile, videoTranscodedPath, videoOutputPath)
+    await remove(videoInputPath)
 
-      const { videoFile } = await onWebTorrentVideoFileTranscoding(video, inputVideoFile, videoTranscodedPath, videoOutputPath)
-
-      return { transcodeType, videoFile }
-    } catch (err) {
-      // Auto destruction...
-      video.destroy().catch(err => logger.error('Cannot destruct video after transcoding failure.', { err }))
-
-      throw err
-    }
+    return { transcodeType, videoFile }
   })
 }
 
