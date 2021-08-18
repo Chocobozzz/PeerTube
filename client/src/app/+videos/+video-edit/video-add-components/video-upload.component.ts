@@ -7,7 +7,7 @@ import { genericUploadErrorHandler, scrollToTop } from '@app/helpers'
 import { FormValidatorService } from '@app/shared/shared-forms'
 import { BytesPipe, Video, VideoCaptionService, VideoEdit, VideoService } from '@app/shared/shared-main'
 import { LoadingBarService } from '@ngx-loading-bar/core'
-import { HttpStatusCode, VideoPrivacy } from '@shared/models'
+import { HttpStatusCode, VideoCreateResult, VideoPrivacy } from '@shared/models'
 import { UploaderXFormData } from './uploaderx-form-data'
 import { VideoSend } from './video-send'
 
@@ -33,9 +33,10 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
 
   videoUploaded = false
   videoUploadPercents = 0
-  videoUploadedIds = {
+  videoUploadedIds: VideoCreateResult = {
     id: 0,
-    uuid: ''
+    uuid: '',
+    shortUUID: ''
   }
   formData: FormData
 
@@ -237,6 +238,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     video.patch(this.form.value)
     video.id = this.videoUploadedIds.id
     video.uuid = this.videoUploadedIds.uuid
+    video.shortUUID = this.videoUploadedIds.shortUUID
 
     this.isUpdatingVideo = true
 

@@ -20,10 +20,12 @@ export class VideoEdit implements VideoUpdate {
   previewfile?: any
   thumbnailUrl: string
   previewUrl: string
-  uuid?: string
-  id?: number
   scheduleUpdate?: VideoScheduleUpdate
   originallyPublishedAt?: Date | string
+
+  id?: number
+  uuid?: string
+  shortUUID?: string
 
   pluginData?: any
 

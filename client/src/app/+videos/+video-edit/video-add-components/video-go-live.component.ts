@@ -26,8 +26,11 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, AfterView
   isInUpdateForm = false
 
   liveVideo: LiveVideo
+
   videoId: number
   videoUUID: string
+  videoShortUUID: string
+
   error: string
 
   constructor (
@@ -79,6 +82,7 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, AfterView
         next: res => {
           this.videoId = res.video.id
           this.videoUUID = res.video.uuid
+          this.videoShortUUID = res.video.shortUUID
           this.isInUpdateForm = true
 
           this.firstStepDone.emit(name)
@@ -113,6 +117,7 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, AfterView
     video.patch(this.form.value)
     video.id = this.videoId
     video.uuid = this.videoUUID
+    video.shortUUID = this.videoShortUUID
 
     const liveVideoUpdate: LiveVideoUpdate = {
       saveReplay: this.form.value.saveReplay,
