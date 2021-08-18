@@ -127,14 +127,10 @@ async function updateTorrentUrls (videoOrPlaylist: MVideo | MStreamingPlaylistVi
   const newTorrentFilename = generateTorrentFileName(videoOrPlaylist, videoFile.resolution)
   const newTorrentPath = join(CONFIG.STORAGE.TORRENTS_DIR, newTorrentFilename)
 
-  logger.info('Updating torrent URLs %s.', newTorrentPath)
+  logger.info('Updating torrent URLs %s -> %s.', oldTorrentPath, newTorrentPath)
 
   await writeFile(newTorrentPath, bencode.encode(decoded))
-
-  // Remove old torrent file if it existed
-  if (videoFile.hasTorrent()) {
-    await remove(join(CONFIG.STORAGE.TORRENTS_DIR, videoFile.torrentFilename))
-  }
+  await remove(join(CONFIG.STORAGE.TORRENTS_DIR, videoFile.torrentFilename))
 
   videoFile.torrentFilename = newTorrentFilename
 }
