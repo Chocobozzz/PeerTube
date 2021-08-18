@@ -42,10 +42,6 @@ export class ContactAdminModalComponent extends FormReactive implements OnInit {
     super()
   }
 
-  get instanceName () {
-    return this.serverConfig.instance.name
-  }
-
   ngOnInit () {
     this.serverConfig = this.serverService.getHTMLConfig()
 
