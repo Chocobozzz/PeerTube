@@ -69,6 +69,8 @@ else
     additionalParams=""
     if [ ! -z ${1+x} ] && [ "$1" == "--analyze-bundle" ]; then
         additionalParams="--namedChunks=true --outputHashing=none"
+
+        # For webpack
         export ANALYZE_BUNDLE=true
     fi
 
