@@ -77,6 +77,7 @@
     "async": "^3.0.1",
     "async-lru": "^1.1.1",
     "bcrypt": "5.0.1",
+    "bencode": "^2.0.2",
     "bittorrent-tracker": "^9.0.0",
     "bluebird": "^3.5.0",
     "bull": "^3.4.2",

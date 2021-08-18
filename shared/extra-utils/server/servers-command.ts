@@ -55,7 +55,7 @@ export class ServersCommand extends AbstractCommand {
   }
 
   async waitUntilLog (str: string, count = 1, strictCount = true) {
-    const logfile = this.server.servers.buildDirectory('logs/peertube.log')
+    const logfile = this.buildDirectory('logs/peertube.log')
 
     while (true) {
       const buf = await readFile(logfile)
@@ -78,6 +78,10 @@ export class ServersCommand extends AbstractCommand {
 
   buildFragmentedFilePath (videoUUID: string, fileUrl: string) {
     return this.buildDirectory(join('streaming-playlists', 'hls', videoUUID, basename(fileUrl)))
+  }
+
+  getLogContent () {
+    return readFile(this.buildDirectory('logs/peertube.log'))
   }
 
   async getServerFileSize (subPath: string) {

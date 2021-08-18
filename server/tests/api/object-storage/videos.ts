@@ -10,6 +10,7 @@ import {
   createMultipleServers,
   createSingleServer,
   doubleFollow,
+  expectLogDoesNotContain,
   expectStartWith,
   killallServers,
   makeRawRequest,
@@ -232,6 +233,12 @@ function runTestSuite (options: {
   it('Should have an empty tmp directory', async function () {
     for (const server of servers) {
       await checkTmpIsEmpty(server)
+    }
+  })
+
+  it('Should not have downloaded files from object storage', async function () {
+    for (const server of servers) {
+      await expectLogDoesNotContain(server, 'from object storage')
     }
   })
 

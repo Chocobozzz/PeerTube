@@ -2,7 +2,7 @@ import * as Bull from 'bull'
 import { remove } from 'fs-extra'
 import { join } from 'path'
 import { logger } from '@server/helpers/logger'
-import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
+import { updateTorrentUrls } from '@server/helpers/webtorrent'
 import { CONFIG } from '@server/initializers/config'
 import { storeHLSFile, storeWebTorrentFile } from '@server/lib/object-storage'
 import { getHLSDirectory, getHlsResolutionPlaylistFilename } from '@server/lib/paths'
@@ -106,7 +106,7 @@ async function onFileMoved (options: {
   file.fileUrl = fileUrl
   file.storage = VideoStorage.OBJECT_STORAGE
 
-  await createTorrentAndSetInfoHash(videoOrPlaylist, file)
+  await updateTorrentUrls(videoOrPlaylist, file)
   await file.save()
 
   logger.debug('Removing %s because it\'s now on object storage', oldPath)

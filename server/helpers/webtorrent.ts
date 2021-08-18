@@ -1,5 +1,6 @@
+import * as bencode from 'bencode'
 import * as createTorrent from 'create-torrent'
-import { createWriteStream, ensureDir, remove, writeFile } from 'fs-extra'
+import { createWriteStream, ensureDir, readFile, remove, writeFile } from 'fs-extra'
 import * as magnetUtil from 'magnet-uri'
 import * as parseTorrent from 'parse-torrent'
 import { dirname, join } from 'path'
@@ -79,41 +80,63 @@ async function downloadWebTorrentVideo (target: { magnetUri: string, torrentName
   })
 }
 
-function createTorrentAndSetInfoHash (
-  videoOrPlaylist: MVideo | MStreamingPlaylistVideo,
-  videoFile: MVideoFile
-) {
+function createTorrentAndSetInfoHash (videoOrPlaylist: MVideo | MStreamingPlaylistVideo, videoFile: MVideoFile) {
   const video = extractVideo(videoOrPlaylist)
 
   const options = {
     // Keep the extname, it's used by the client to stream the file inside a web browser
     name: `${video.name} ${videoFile.resolution}p${videoFile.extname}`,
     createdBy: 'PeerTube',
-    announceList: [
-      [ WEBSERVER.WS + '://' + WEBSERVER.HOSTNAME + ':' + WEBSERVER.PORT + '/tracker/socket' ],
-      [ WEBSERVER.URL + '/tracker/announce' ]
-    ],
-    urlList: [ videoFile.getFileUrl(video) ]
+    announceList: buildAnnounceList(),
+    urlList: buildUrlList(video, videoFile)
   }
 
   return VideoPathManager.Instance.makeAvailableVideoFile(videoOrPlaylist, videoFile, async videoPath => {
-    const torrent = await createTorrentPromise(videoPath, options)
+    const torrentContent = await createTorrentPromise(videoPath, options)
 
     const torrentFilename = generateTorrentFileName(videoOrPlaylist, videoFile.resolution)
     const torrentPath = join(CONFIG.STORAGE.TORRENTS_DIR, torrentFilename)
     logger.info('Creating torrent %s.', torrentPath)
 
-    await writeFile(torrentPath, torrent)
+    await writeFile(torrentPath, torrentContent)
 
     // Remove old torrent file if it existed
     if (videoFile.hasTorrent()) {
       await remove(join(CONFIG.STORAGE.TORRENTS_DIR, videoFile.torrentFilename))
     }
 
-    const parsedTorrent = parseTorrent(torrent)
+    const parsedTorrent = parseTorrent(torrentContent)
     videoFile.infoHash = parsedTorrent.infoHash
     videoFile.torrentFilename = torrentFilename
   })
+}
+
+async function updateTorrentUrls (videoOrPlaylist: MVideo | MStreamingPlaylistVideo, videoFile: MVideoFile) {
+  const video = extractVideo(videoOrPlaylist)
+
+  const oldTorrentPath = join(CONFIG.STORAGE.TORRENTS_DIR, videoFile.torrentFilename)
+
+  const torrentContent = await readFile(oldTorrentPath)
+  const decoded = bencode.decode(torrentContent)
+
+  decoded['announce-list'] = buildAnnounceList()
+  decoded.announce = decoded['announce-list'][0][0]
+
+  decoded['url-list'] = buildUrlList(video, videoFile)
+
+  const newTorrentFilename = generateTorrentFileName(videoOrPlaylist, videoFile.resolution)
+  const newTorrentPath = join(CONFIG.STORAGE.TORRENTS_DIR, newTorrentFilename)
+
+  logger.info('Updating torrent URLs %s.', newTorrentPath)
+
+  await writeFile(newTorrentPath, bencode.encode(decoded))
+
+  // Remove old torrent file if it existed
+  if (videoFile.hasTorrent()) {
+    await remove(join(CONFIG.STORAGE.TORRENTS_DIR, videoFile.torrentFilename))
+  }
+
+  videoFile.torrentFilename = newTorrentFilename
 }
 
 function generateMagnetUri (
@@ -143,6 +166,7 @@ function generateMagnetUri (
 
 export {
   createTorrentPromise,
+  updateTorrentUrls,
   createTorrentAndSetInfoHash,
   generateMagnetUri,
   downloadWebTorrentVideo
@@ -185,4 +209,15 @@ function deleteDownloadedFile (downloadedFile: { directoryPath: string, filepath
   logger.debug('Removing %s after webtorrent download.', toRemovePath)
   remove(toRemovePath)
     .catch(err => logger.error('Cannot remove torrent file %s in webtorrent download.', toRemovePath, { err }))
+}
+
+function buildAnnounceList () {
+  return [
+    [ WEBSERVER.WS + '://' + WEBSERVER.HOSTNAME + ':' + WEBSERVER.PORT + '/tracker/socket' ],
+    [ WEBSERVER.URL + '/tracker/announce' ]
+  ]
+}
+
+function buildUrlList (video: MVideo, videoFile: MVideoFile) {
+  return [ videoFile.getFileUrl(video) ]
 }

@@ -20,6 +20,12 @@ function expectStartWith (str: string, start: string) {
   expect(str.startsWith(start), `${str} does not start with ${start}`).to.be.true
 }
 
+async function expectLogDoesNotContain (server: PeerTubeServer, str: string) {
+  const content = await server.servers.getLogContent()
+
+  expect(content.toString()).to.not.contain(str)
+}
+
 async function testImage (url: string, imageName: string, imagePath: string, extension = '.jpg') {
   const res = await makeGetRequest({
     url,
@@ -46,6 +52,7 @@ async function testFileExistsOrNot (server: PeerTubeServer, directory: string, f
 export {
   dateIsValid,
   testImage,
+  expectLogDoesNotContain,
   testFileExistsOrNot,
   expectStartWith
 }
