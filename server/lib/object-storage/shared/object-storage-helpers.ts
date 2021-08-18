@@ -146,7 +146,8 @@ async function objectStoragePut (options: {
   const command = new PutObjectCommand({
     Bucket: bucketInfo.BUCKET_NAME,
     Key: buildKey(objectStorageKey, bucketInfo),
-    Body: content
+    Body: content,
+    ACL: 'public-read'
   })
 
   await getClient().send(command)
@@ -168,7 +169,8 @@ async function multiPartUpload (options: {
 
   const createMultipartCommand = new CreateMultipartUploadCommand({
     Bucket: bucketInfo.BUCKET_NAME,
-    Key: key
+    Key: key,
+    ACL: 'public-read'
   })
   const createResponse = await s3Client.send(createMultipartCommand)
 
