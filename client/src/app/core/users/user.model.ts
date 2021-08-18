@@ -133,4 +133,8 @@ export class User implements UserServerModel {
   isUploadDisabled () {
     return this.videoQuota === 0 || this.videoQuotaDaily === 0
   }
+
+  isAutoBlocked () {
+    return this.role === UserRole.USER && this.adminFlags !== UserAdminFlag.BYPASS_VIDEO_AUTO_BLACKLIST
+  }
 }

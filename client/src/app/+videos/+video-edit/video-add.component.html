@@ -1,10 +1,18 @@
-<div *ngIf="user.isUploadDisabled()" class="no-upload">
+<div *ngIf="user.isUploadDisabled()" class="upload-messages upload-disabled">
   <div class="alert alert-warning">
     <div i18n>Sorry, the upload feature is disabled for your account. If you want to add videos, an admin must unlock your quota.</div>
     <a i18n routerLink="/about/instance" *ngIf="!isContactFormEnabled" class="about-link">Read instance rules for help</a>
     <a i18n routerLink="/about/contact" *ngIf="isContactFormEnabled" class="contact-link">Contact us</a>
   </div>
   <img src="/client/assets/images/mascot/defeated.svg" alt="defeated mascot">
+</div>
+
+<div *ngIf="!user.isUploadDisabled() && user.isAutoBlocked()" class="upload-messages auto-blocked">
+  <div class="alert alert-warning">
+    <div i18n>Uploaded videos are reviewed before publishing for your account. If you want to add videos without moderation review, an admin must turn off your videos auto-block.</div>
+    <a i18n routerLink="/about/instance" *ngIf="!isContactFormEnabled" class="about-link">Read instance rules for help</a>
+    <a i18n routerLink="/about/contact" *ngIf="isContactFormEnabled" class="contact-link">Contact us</a>
+  </div>
 </div>
 
 <div *ngIf="!user.isUploadDisabled()" class="margin-content">
