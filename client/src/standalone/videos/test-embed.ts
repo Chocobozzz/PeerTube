@@ -8,7 +8,7 @@ window.addEventListener('load', async () => {
 
   const isPlaylist = window.location.pathname.startsWith('/video-playlists/')
 
-  const elementId = lastPart.indexOf('?') === -1 ? lastPart : lastPart.split('?')[0]
+  const elementId = !lastPart.includes('?') ? lastPart : lastPart.split('?')[0]
 
   const iframe = document.createElement('iframe')
   iframe.src = isPlaylist
