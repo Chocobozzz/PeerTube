@@ -1,10 +1,20 @@
 import { Hotkey, HotkeysService } from 'angular2-hotkeys'
-import { filter, map, pairwise, switchMap } from 'rxjs/operators'
-import { DOCUMENT, getLocaleDirection, PlatformLocation, ViewportScroller } from '@angular/common'
+import { filter, map, switchMap } from 'rxjs/operators'
+import { DOCUMENT, getLocaleDirection, PlatformLocation } from '@angular/common'
 import { AfterViewInit, Component, Inject, LOCALE_ID, OnInit, ViewChild } from '@angular/core'
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
-import { Event, GuardsCheckStart, NavigationEnd, RouteConfigLoadEnd, RouteConfigLoadStart, Router, Scroll } from '@angular/router'
-import { AuthService, MarkdownService, RedirectService, ScreenService, ServerService, ThemeService, User } from '@app/core'
+import { Event, GuardsCheckStart, RouteConfigLoadEnd, RouteConfigLoadStart, Router } from '@angular/router'
+import {
+  AuthService,
+  MarkdownService,
+  PeerTubeRouterService,
+  RedirectService,
+  ScreenService,
+  ScrollService,
+  ServerService,
+  ThemeService,
+  User
+} from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { PluginService } from '@app/core/plugins/plugin.service'
 import { CustomModalComponent } from '@app/modal/custom-modal.component'
@@ -39,10 +49,10 @@ export class AppComponent implements OnInit, AfterViewInit {
   constructor (
     @Inject(DOCUMENT) private document: Document,
     @Inject(LOCALE_ID) private localeId: string,
-    private viewportScroller: ViewportScroller,
     private router: Router,
     private authService: AuthService,
     private serverService: ServerService,
+    private peertubeRouter: PeerTubeRouterService,
     private pluginService: PluginService,
     private instanceService: InstanceService,
     private domSanitizer: DomSanitizer,
@@ -56,6 +66,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     private markdownService: MarkdownService,
     private ngbConfig: NgbConfig,
     private loadingBar: LoadingBarService,
+    private scrollService: ScrollService,
     public menu: MenuService
   ) {
     this.ngbConfig.animation = false
@@ -85,6 +96,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     }
 
     this.initRouteEvents()
+    this.scrollService.enableScrollRestoration()
 
     this.injectJS()
     this.injectCSS()
@@ -132,66 +144,10 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   private initRouteEvents () {
-    let resetScroll = true
     const eventsObs = this.router.events
 
-    const scrollEvent = eventsObs.pipe(filter((e: Event): e is Scroll => e instanceof Scroll))
-
-    // Handle anchors/restore position
-    scrollEvent.subscribe(e => {
-      // scrollToAnchor first to preserve anchor position when using history navigation
-      if (e.anchor) {
-        setTimeout(() => {
-          this.viewportScroller.scrollToAnchor(e.anchor)
-        })
-
-        return
-      }
-
-      if (e.position) {
-        return this.viewportScroller.scrollToPosition(e.position)
-      }
-
-      if (resetScroll) {
-        return this.viewportScroller.scrollToPosition([ 0, 0 ])
-      }
-    })
-
-    const navigationEndEvent = eventsObs.pipe(filter((e: Event): e is NavigationEnd => e instanceof NavigationEnd))
-
-    // When we add the a-state parameter, we don't want to alter the scroll
-    navigationEndEvent.pipe(pairwise())
-                      .subscribe(([ e1, e2 ]) => {
-                        try {
-                          resetScroll = false
-
-                          const previousUrl = new URL(window.location.origin + e1.urlAfterRedirects)
-                          const nextUrl = new URL(window.location.origin + e2.urlAfterRedirects)
-
-                          if (previousUrl.pathname !== nextUrl.pathname) {
-                            resetScroll = true
-                            return
-                          }
-
-                          const nextSearchParams = nextUrl.searchParams
-                          nextSearchParams.delete('a-state')
-
-                          const previousSearchParams = previousUrl.searchParams
-
-                          nextSearchParams.sort()
-                          previousSearchParams.sort()
-
-                          if (nextSearchParams.toString() !== previousSearchParams.toString()) {
-                            resetScroll = true
-                          }
-                        } catch (e) {
-                          console.error('Cannot parse URL to check next scroll.', e)
-                          resetScroll = true
-                        }
-                      })
-
     // Plugin hooks
-    navigationEndEvent.subscribe(e => {
+    this.peertubeRouter.getNavigationEndEvents().subscribe(e => {
       this.hooks.runAction('action:router.navigation-end', 'common', { path: e.url })
     })
 

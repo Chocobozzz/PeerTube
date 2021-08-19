@@ -1,11 +1,17 @@
 <div class="margin-content">
   <div class="videos-header">
-    <ng-template #videoListHeader></ng-template>
+    <h1 *ngIf="displayTitle" class="title" placement="bottom" [ngbTooltip]="titleTooltip" container="body">
+      {{ title }}
+    </h1>
+
+    <div *ngIf="syndicationItems" [ngClass]="{ 'no-title': !displayTitle }" class="title-subscription">
+      <ng-container i18n>Subscribe to RSS feed "{{ title }}"</ng-container>
+
+      <my-feed [syndicationItems]="syndicationItems"></my-feed>
+    </div>
 
     <div class="action-block">
-      <my-feed *ngIf="syndicationItems" [syndicationItems]="syndicationItems"></my-feed>
-
-      <ng-container *ngFor="let action of actions">
+      <ng-container *ngFor="let action of headerActions">
         <a *ngIf="action.routerLink" class="ml-2" [routerLink]="action.routerLink" routerLinkActive="active">
           <ng-container *ngTemplateOutlet="actionContent; context:{ $implicit: action }"></ng-container>
         </a>
@@ -24,27 +30,18 @@
         </ng-template>
       </ng-container>
     </div>
-
-    <div class="moderation-block" *ngIf="displayModerationBlock">
-      <div class="c-hand" ngbDropdown placement="bottom-right auto">
-        <my-global-icon iconName="cog" ngbDropdownToggle></my-global-icon>
-
-        <div role="menu" class="dropdown-menu" ngbDropdownMenu>
-          <div class="dropdown-item">
-            <my-peertube-checkbox
-              (change)="toggleModerationDisplay()"
-              inputName="display-unlisted-private" i18n-labelText labelText="Display all videos (private, unlisted or not yet published)"
-            ></my-peertube-checkbox>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
+
+  <my-video-filters-header
+    *ngIf="displayFilters" [displayModerationBlock]="displayModerationBlock"
+    [defaultSort]="defaultSort" [filters]="filters"
+    (filtersChanged)="onFiltersChanged(true)"
+  ></my-video-filters-header>
 
   <div class="no-results" i18n *ngIf="hasDoneFirstQuery && videos.length === 0">No results.</div>
   <div
-    myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [autoInit]="true" [dataObservable]="onDataSubject.asObservable()"
-    class="videos" [ngClass]="{ 'display-as-row': displayAsRow() }"
+    myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [dataObservable]="onDataSubject.asObservable()" [setAngularState]="true"
+    class="videos" [ngClass]="{ 'display-as-row': displayAsRow }"
   >
     <ng-container *ngFor="let video of videos; trackBy: videoById;">
       <h2 class="date-title" *ngIf="getCurrentGroupedDateLabel(video)">
@@ -53,7 +50,7 @@
 
       <div class="video-wrapper">
         <my-video-miniature
-          [video]="video" [user]="userMiniature" [displayAsRow]="displayAsRow()"
+          [video]="video" [user]="userMiniature" [displayAsRow]="displayAsRow"
           [displayVideoActions]="displayVideoActions" [displayOptions]="displayOptions"
           (videoBlocked)="removeVideoFromArray(video)" (videoRemoved)="removeVideoFromArray(video)"
         >

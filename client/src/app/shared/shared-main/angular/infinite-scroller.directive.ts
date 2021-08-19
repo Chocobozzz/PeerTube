@@ -1,15 +1,18 @@
 import { fromEvent, Observable, Subscription } from 'rxjs'
 import { distinctUntilChanged, filter, map, share, startWith, throttleTime } from 'rxjs/operators'
 import { AfterViewChecked, Directive, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core'
+import { PeerTubeRouterService, RouterSetting } from '@app/core'
 
 @Directive({
   selector: '[myInfiniteScroller]'
 })
 export class InfiniteScrollerDirective implements OnInit, OnDestroy, AfterViewChecked {
   @Input() percentLimit = 70
-  @Input() autoInit = false
   @Input() onItself = false
   @Input() dataObservable: Observable<any[]>
+
+  // Add angular state in query params to reuse the routed component
+  @Input() setAngularState: boolean
 
   @Output() nearOfBottom = new EventEmitter<void>()
 
@@ -20,7 +23,10 @@ export class InfiniteScrollerDirective implements OnInit, OnDestroy, AfterViewCh
 
   private checkScroll = false
 
-  constructor (private el: ElementRef) {
+  constructor (
+    private peertubeRouter: PeerTubeRouterService,
+    private el: ElementRef
+  ) {
     this.decimalLimit = this.percentLimit / 100
   }
 
@@ -36,7 +42,7 @@ export class InfiniteScrollerDirective implements OnInit, OnDestroy, AfterViewCh
   }
 
   ngOnInit () {
-    if (this.autoInit === true) return this.initialize()
+    this.initialize()
   }
 
   ngOnDestroy () {
@@ -67,7 +73,11 @@ export class InfiniteScrollerDirective implements OnInit, OnDestroy, AfterViewCh
         filter(({ current }) => this.isScrollingDown(current)),
         filter(({ current, maximumScroll }) => (current / maximumScroll) > this.decimalLimit)
       )
-      .subscribe(() => this.nearOfBottom.emit())
+      .subscribe(() => {
+        if (this.setAngularState) this.setScrollRouteParams()
+
+        this.nearOfBottom.emit()
+      })
 
     if (this.dataObservable) {
       this.dataObservable
@@ -95,5 +105,9 @@ export class InfiniteScrollerDirective implements OnInit, OnDestroy, AfterViewCh
 
     this.lastCurrentBottom = current
     return result
+  }
+
+  private setScrollRouteParams () {
+    this.peertubeRouter.addRouteSetting(RouterSetting.REUSE_COMPONENT)
   }
 }

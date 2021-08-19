@@ -12,7 +12,7 @@
   </a>
 </div>
 
-<div class="video-playlists" myInfiniteScroller [autoInit]="true" (nearOfBottom)="onNearOfBottom()" [dataObservable]="onDataSubject.asObservable()">
+<div class="video-playlists" myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [dataObservable]="onDataSubject.asObservable()">
   <div *ngFor="let playlist of videoPlaylists" class="video-playlist">
     <my-video-playlist-miniature
       [playlist]="playlist" [toManage]="true" [displayChannel]="true"

@@ -66,7 +66,7 @@
     </div>
   </div>
 
-  <div class="links">
+  <div class="links" [ngClass]="{ 'on-channel-page': isOnChannelPage() }">
     <ng-template #linkTemplate let-item="item">
       <a [routerLink]="item.routerLink" routerLinkActive="active" class="title-page">{{ item.label }}</a>
     </ng-template>
@@ -81,7 +81,7 @@
     ></my-simple-search-input>
   </div>
 
-  <router-outlet (activate)="onOutletLoaded($event)"></router-outlet>
+  <router-outlet></router-outlet>
 </div>
 
 <ng-container *ngIf="prependModerationActions">
