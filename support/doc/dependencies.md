@@ -269,14 +269,21 @@ sudo systemctl start redis.service
 
 By default, you cannot access your server via public IP. To do so, you must configure firewall:
 
+-  Ports used by peertube dev setup:
 ```
-# Ports used by peertube dev setup
 sudo firewall-cmd --permanent --zone=public --add-port=3000/tcp
 sudo firewall-cmd --permanent --zone=public --add-port=9000/tcp
-# Optional
+```
+- Optional
+
+```
 sudo firewall-cmd --permanent --zone=public --add-service=http
 sudo firewall-cmd --permanent --zone=public --add-service=https
-# Reload firewall
+```
+
+- Reload firewall
+
+```
 sudo firewall-cmd --reload
 ```
 
@@ -348,7 +355,7 @@ sudo systemctl enable --now redis
 sudo systemctl enable --now postgresql
 ```
 
-If you are continuing with the production guide, you also need to setup nginx, because nginx is packaged differently in the Red Hat family distributions:
+If you are running the production guide, you also need to slightly pre-configure nginx, because nginx is packaged differently in the Red Hat family distributions:
 
 8. Configure nginx
 
@@ -366,28 +373,31 @@ To add the 'peertube' user, you first have to create the 'www' folder and once t
 ```
 sudo mkdir /var/www
 
-# production guide
-# ----
 sudo useradd -m -d /var/www/peertube -s /bin/bash -p peertube peertube
 sudo passwd peertube
-# ----
 
 sudo chmod 755 /var/www/peertube/
-
 ```
 
 10. Firewall
 
 By default, you cannot access your server via public IP. To do so, you must configure firewall:
 
+-  Ports used by peertube dev setup:
 ```
-# Ports used by peertube dev setup
 sudo firewall-cmd --permanent --zone=public --add-port=3000/tcp
 sudo firewall-cmd --permanent --zone=public --add-port=9000/tcp
-# Optional
+```
+- Optional
+
+```
 sudo firewall-cmd --permanent --zone=public --add-service=http
 sudo firewall-cmd --permanent --zone=public --add-service=https
-# Reload firewall
+```
+
+- Reload firewall
+
+```
 sudo firewall-cmd --reload
 ```
 
