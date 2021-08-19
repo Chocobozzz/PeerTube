@@ -24,27 +24,25 @@ async function up (utils: {
   }
 
   {
-    await utils.queryInterface.addColumn('videoFile', 'storage', { type: Sequelize.INTEGER, allowNull: true })
-  }
-  {
-    await utils.sequelize.query(
-      `UPDATE "videoFile" SET "storage" = ${VideoStorage.FILE_SYSTEM}`
-    )
-  }
-  {
-    await utils.queryInterface.changeColumn('videoFile', 'storage', { type: Sequelize.INTEGER, allowNull: false })
+    await utils.queryInterface.addColumn('videoFile', 'storage', {
+      type: Sequelize.INTEGER,
+      allowNull: true,
+      defaultValue: VideoStorage.FILE_SYSTEM
+    })
+    await utils.queryInterface.changeColumn('videoFile', 'storage', { type: Sequelize.INTEGER, allowNull: false, defaultValue: null })
   }
 
   {
-    await utils.queryInterface.addColumn('videoStreamingPlaylist', 'storage', { type: Sequelize.INTEGER, allowNull: true })
-  }
-  {
-    await utils.sequelize.query(
-      `UPDATE "videoStreamingPlaylist" SET "storage" = ${VideoStorage.FILE_SYSTEM}`
-    )
-  }
-  {
-    await utils.queryInterface.changeColumn('videoStreamingPlaylist', 'storage', { type: Sequelize.INTEGER, allowNull: false })
+    await utils.queryInterface.addColumn('videoStreamingPlaylist', 'storage', {
+      type: Sequelize.INTEGER,
+      allowNull: true,
+      defaultValue: VideoStorage.FILE_SYSTEM
+    })
+    await utils.queryInterface.changeColumn('videoStreamingPlaylist', 'storage', {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      defaultValue: null
+    })
   }
 }
 
