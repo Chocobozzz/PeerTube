@@ -35,6 +35,9 @@ RUN chown -R peertube:peertube /data /config
 ENV NODE_ENV production
 ENV NODE_CONFIG_DIR /config
 
+ENV HTTP_PROXY=$HTTP_PROXY
+ENV HTTPS_PROXY=$HTTPS_PROXY
+
 VOLUME /data
 VOLUME /config
 
