@@ -16,12 +16,17 @@
 
 <ng-container *ngIf="!user.isUploadDisabled()">
   <div *ngIf="user.isAutoBlocked()" class="upload-message auto-blocked alert alert-warning">
-    <div i18n>Uploaded videos are reviewed before publishing for your account. If you want to add videos without moderation review, an admin must turn off your videos auto-block.</div>
+    <div i18n><strong>Uploaded videos are reviewed before publishing for your account</strong>. If you want to add videos without moderation review, an admin must turn off your videos auto-block.</div>
+    <ng-template [ngTemplateOutlet]="AlertButtons" *ngIf="!user.hasNoQuotaLeft() && !user.hasNoQuotaLeftDaily()"></ng-template>
+  </div>
+
+  <div *ngIf="user.hasNoQuotaLeft()" class="upload-message quota-daily-left alert alert-warning">
+    <div i18n><strong>Your daily video quota is insufficient</strong>. If you want to add more videos, you must wait for 24 hours or an admin must increase your quota.</div>
     <ng-template [ngTemplateOutlet]="AlertButtons" *ngIf="!user.hasNoQuotaLeft()"></ng-template>
   </div>
 
   <div *ngIf="user.hasNoQuotaLeft()" class="upload-message quota-left alert alert-warning">
-    <div i18n>If you want to add more videos, an admin must increase your quota.</div>
+    <div i18n><strong>Your video quota is insufficient</strong>. If you want to add more videos, an admin must increase your quota.</div>
     <ng-template [ngTemplateOutlet]="AlertButtons"></ng-template>
   </div>
 

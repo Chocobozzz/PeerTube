@@ -148,4 +148,15 @@ export class User implements UserServerModel {
     // videoQuota left lower than 10%
     return this.videoQuotaUsed > this.videoQuota * 0.9
   }
+
+  hasNoQuotaLeftDaily () {
+    // unlimited videoQuotaDaily
+    if (this.videoQuotaDaily === -1) return false
+
+    // no more videoQuotaDaily
+    if (!this.videoQuotaUsedDaily) return true
+
+    // videoQuotaDaily left lower than 10%
+    return this.videoQuotaUsedDaily > this.videoQuotaDaily * 0.9
+  }
 }
