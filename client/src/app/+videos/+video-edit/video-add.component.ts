@@ -27,9 +27,9 @@ export class VideoAddComponent implements OnInit, CanComponentDeactivate {
   activeNav: string
 
   uploadMessages: {
-    noQuota: string,
-    autoBlock: string,
-    quotaLeftDaily: string,
+    noQuota: string
+    autoBlock: string
+    quotaLeftDaily: string
     quotaLeft: string
   }
 
@@ -66,11 +66,20 @@ export class VideoAddComponent implements OnInit, CanComponentDeactivate {
   }
 
   private async buildUploadMessages () {
+    // eslint-disable-next-line max-len
+    const noQuota = $localize`Sorry, the upload feature is disabled for your account. If you want to add videos, an admin must unlock your quota.`
+    // eslint-disable-next-line max-len
+    const autoBlock = $localize`Uploaded videos are reviewed before publishing for your account. If you want to add videos without moderation review, an admin must turn off your videos auto-block.`
+    // eslint-disable-next-line max-len
+    const quotaLeftDaily = $localize`Your daily video quota is insufficient. If you want to add more videos, you must wait for 24 hours or an admin must increase your quota.`
+    // eslint-disable-next-line max-len
+    const quotaLeft = $localize`Your video quota is insufficient. If you want to add more videos, an admin must increase your quota.`
+
     const uploadMessages = {
-      noQuota: $localize`Sorry, the upload feature is disabled for your account. If you want to add videos, an admin must unlock your quota.`,
-      autoBlock: $localize`Uploaded videos are reviewed before publishing for your account. If you want to add videos without moderation review, an admin must turn off your videos auto-block.`,
-      quotaLeftDaily: $localize`Your daily video quota is insufficient. If you want to add more videos, you must wait for 24 hours or an admin must increase your quota.`,
-      quotaLeft: $localize`Your video quota is insufficient. If you want to add more videos, an admin must increase your quota.`
+      noQuota,
+      autoBlock,
+      quotaLeftDaily,
+      quotaLeft
     }
 
     this.uploadMessages = await this.hooks.wrapObject(uploadMessages, 'common', 'filter:upload-page.alert-messages.edit.result')
