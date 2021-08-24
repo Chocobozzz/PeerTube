@@ -1,26 +1,28 @@
-<ng-template [ngIf]="user.isUploadDisabled()">
+<ng-template #AlertButtons>
+  <a i18n routerLink="/about/instance" *ngIf="!isContactFormEnabled" class="about-link">Read instance rules for help</a>
+  <a i18n routerLink="/about/contact" *ngIf="isContactFormEnabled" class="contact-link">Contact us</a>
+</ng-template>
+
+<ng-container *ngIf="user.isUploadDisabled()">
   <div class="upload-message upload-disabled alert alert-warning">
     <div i18n>Sorry, the upload feature is disabled for your account. If you want to add videos, an admin must unlock your quota.</div>
-    <a i18n routerLink="/about/instance" *ngIf="!isContactFormEnabled" class="about-link">Read instance rules for help</a>
-    <a i18n routerLink="/about/contact" *ngIf="isContactFormEnabled" class="contact-link">Contact us</a>
+    <ng-template [ngTemplateOutlet]="AlertButtons"></ng-template>
   </div>
 
   <div class="upload-image">
     <img src="/client/assets/images/mascot/defeated.svg" alt="defeated mascot">
   </div>
-</ng-template>
+</ng-container>
 
-<ng-template [ngIf]="!user.isUploadDisabled()">
+<ng-container *ngIf="!user.isUploadDisabled()">
   <div *ngIf="user.isAutoBlocked()" class="upload-message auto-blocked alert alert-warning">
     <div i18n>Uploaded videos are reviewed before publishing for your account. If you want to add videos without moderation review, an admin must turn off your videos auto-block.</div>
-    <a i18n routerLink="/about/instance" *ngIf="!user.hasNoQuotaLeft() && !isContactFormEnabled" class="about-link">Read instance rules for help</a>
-    <a i18n routerLink="/about/contact" *ngIf="!user.hasNoQuotaLeft() && isContactFormEnabled" class="contact-link">Contact us</a>
+    <ng-template [ngTemplateOutlet]="AlertButtons" *ngIf="!user.hasNoQuotaLeft()"></ng-template>
   </div>
 
   <div *ngIf="user.hasNoQuotaLeft()" class="upload-message quota-left alert alert-warning">
     <div i18n>If you want to add more videos, an admin must increase your quota.</div>
-    <a i18n routerLink="/about/instance" *ngIf="!isContactFormEnabled" class="about-link">Read instance rules for help</a>
-    <a i18n routerLink="/about/contact" *ngIf="isContactFormEnabled" class="contact-link">Contact us</a>
+    <ng-template [ngTemplateOutlet]="AlertButtons"></ng-template>
   </div>
 
   <div *ngIf="isRootUser()" class="upload-message root-user alert alert-warning" i18n>
@@ -28,7 +30,7 @@
     <br />
     Instead, <a routerLink="/admin/users">create a dedicated account</a> to upload your videos.
   </div>
-</ng-template>
+</ng-container>
 
 <div *ngIf="!user.isUploadDisabled()" class="margin-content">
   <my-user-quota *ngIf="!isInSecondStep() || secondStepType === 'go-live'" [user]="user" [userInformationLoaded]="userInformationLoaded"></my-user-quota>
