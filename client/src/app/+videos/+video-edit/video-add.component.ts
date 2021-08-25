@@ -82,7 +82,7 @@ export class VideoAddComponent implements OnInit, CanComponentDeactivate {
       quotaLeft
     }
 
-    this.uploadMessages = await this.hooks.wrapObject(uploadMessages, 'common', 'filter:upload-page.alert-messages.edit.result')
+    this.uploadMessages = await this.hooks.wrapObject(uploadMessages, 'common', 'filter:upload.messages.create.result')
   }
 
   onNavChange (newActiveNav: string) {
