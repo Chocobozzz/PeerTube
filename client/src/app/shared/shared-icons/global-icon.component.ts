@@ -71,6 +71,7 @@ const icons = {
   columns: require('!!raw-loader?!../../../assets/images/feather/columns.svg').default,
   live: require('!!raw-loader?!../../../assets/images/feather/live.svg').default,
   repeat: require('!!raw-loader?!../../../assets/images/feather/repeat.svg').default,
+  'chevrons-up': require('!!raw-loader?!../../../assets/images/feather/chevrons-up.svg').default,
   'message-circle': require('!!raw-loader?!../../../assets/images/feather/message-circle.svg').default,
   codesandbox: require('!!raw-loader?!../../../assets/images/feather/codesandbox.svg').default,
   award: require('!!raw-loader?!../../../assets/images/feather/award.svg').default

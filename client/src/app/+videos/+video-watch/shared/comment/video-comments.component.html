@@ -27,13 +27,7 @@
 
     <div *ngIf="totalNotDeletedComments === 0 && comments.length === 0" i18n>No comments.</div>
 
-    <div
-      class="comment-threads"
-      myInfiniteScroller
-      [autoInit]="true"
-      (nearOfBottom)="onNearOfBottom()"
-      [dataObservable]="onDataSubject.asObservable()"
-    >
+    <div class="comment-threads" myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [dataObservable]="onDataSubject.asObservable()">
       <div>
         <div class="anchor" #commentHighlightBlock id="highlighted-comment"></div>
         <my-video-comment

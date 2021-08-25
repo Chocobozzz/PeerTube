@@ -39,7 +39,6 @@
   margin-top: 20px;
 
   .peertube-radio-container {
-    @include peertube-radio-container;
     @include margin-right(30px);
 
     display: inline-block;

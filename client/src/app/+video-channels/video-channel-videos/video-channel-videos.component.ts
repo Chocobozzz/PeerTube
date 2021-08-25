@@ -1,27 +1,21 @@
-import { forkJoin, Subscription } from 'rxjs'
+import { Subscription } from 'rxjs'
 import { first } from 'rxjs/operators'
-import { Component, ComponentFactoryResolver, OnDestroy, OnInit } from '@angular/core'
-import { ActivatedRoute, Router } from '@angular/router'
-import { AuthService, ConfirmService, LocalStorageService, Notifier, ScreenService, ServerService, UserService } from '@app/core'
-import { immutableAssign } from '@app/helpers'
+import { Component, OnDestroy, OnInit } from '@angular/core'
+import { ComponentPaginationLight, DisableForReuseHook, ScreenService } from '@app/core'
 import { VideoChannel, VideoChannelService, VideoService } from '@app/shared/shared-main'
-import { AbstractVideoList, MiniatureDisplayOptions } from '@app/shared/shared-video-miniature'
-import { VideoFilter } from '@shared/models'
+import { MiniatureDisplayOptions, VideoFilters } from '@app/shared/shared-video-miniature'
+import { VideoSortField } from '@shared/models/videos'
 
 @Component({
   selector: 'my-video-channel-videos',
-  templateUrl: '../../shared/shared-video-miniature/abstract-video-list.html',
-  styleUrls: [
-    '../../shared/shared-video-miniature/abstract-video-list.scss'
-  ]
+  templateUrl: './video-channel-videos.component.html'
 })
-export class VideoChannelVideosComponent extends AbstractVideoList implements OnInit, OnDestroy {
-  // No value because we don't want a page title
-  titlePage: string
-  loadOnInit = false
-  loadUserVideoPreferences = true
+export class VideoChannelVideosComponent implements OnInit, OnDestroy, DisableForReuseHook {
+  getVideosObservableFunction = this.getVideosObservable.bind(this)
+  getSyndicationItemsFunction = this.getSyndicationItems.bind(this)
 
-  filter: VideoFilter = null
+  title = $localize`Videos`
+  defaultSort = '-publishedAt' as VideoSortField
 
   displayOptions: MiniatureDisplayOptions = {
     date: true,
@@ -34,80 +28,55 @@ export class VideoChannelVideosComponent extends AbstractVideoList implements On
     blacklistInfo: false
   }
 
-  private videoChannel: VideoChannel
+  videoChannel: VideoChannel
+  disabled = false
+
   private videoChannelSub: Subscription
 
   constructor (
-    protected router: Router,
-    protected serverService: ServerService,
-    protected route: ActivatedRoute,
-    protected authService: AuthService,
-    protected userService: UserService,
-    protected notifier: Notifier,
-    protected confirmService: ConfirmService,
-    protected screenService: ScreenService,
-    protected storageService: LocalStorageService,
-    protected cfr: ComponentFactoryResolver,
+    private screenService: ScreenService,
     private videoChannelService: VideoChannelService,
     private videoService: VideoService
   ) {
-    super()
-
-    this.titlePage = $localize`Published videos`
-    this.displayOptions = {
-      ...this.displayOptions,
-      avatar: false
-    }
   }
 
   ngOnInit () {
-    super.ngOnInit()
-
-    this.enableAllFilterIfPossible()
-
     // Parent get the video channel for us
-    this.videoChannelSub = forkJoin([
-      this.videoChannelService.videoChannelLoaded.pipe(first()),
-      this.onUserLoadedSubject.pipe(first())
-    ]).subscribe(([ videoChannel ]) => {
-      this.videoChannel = videoChannel
-
-      this.reloadVideos()
-      this.generateSyndicationList()
-    })
+    this.videoChannelService.videoChannelLoaded.pipe(first())
+      .subscribe(videoChannel => {
+        this.videoChannel = videoChannel
+      })
   }
 
   ngOnDestroy () {
     if (this.videoChannelSub) this.videoChannelSub.unsubscribe()
-
-    super.ngOnDestroy()
   }
 
-  getVideosObservable (page: number) {
-    const newPagination = immutableAssign(this.pagination, { currentPage: page })
-    const options = {
+  getVideosObservable (pagination: ComponentPaginationLight, filters: VideoFilters) {
+    const params = {
+      ...filters.toVideosAPIObject(),
+
+      videoPagination: pagination,
       videoChannel: this.videoChannel,
-      videoPagination: newPagination,
-      sort: this.sort,
-      nsfwPolicy: this.nsfwPolicy,
-      videoFilter: this.filter
+      skipCount: true
     }
 
-    return this.videoService
-               .getVideoChannelVideos(options)
+    return this.videoService.getVideoChannelVideos(params)
   }
 
-  generateSyndicationList () {
-    this.syndicationItems = this.videoService.getVideoChannelFeedUrls(this.videoChannel.id)
-  }
-
-  toggleModerationDisplay () {
-    this.filter = this.buildLocalFilter(this.filter, null)
-
-    this.reloadVideos()
+  getSyndicationItems () {
+    return this.videoService.getVideoChannelFeedUrls(this.videoChannel.id)
   }
 
   displayAsRow () {
     return this.screenService.isInMobileView()
+  }
+
+  disableForReuse () {
+    this.disabled = true
+  }
+
+  enabledForReuse () {
+    this.disabled = false
   }
 }

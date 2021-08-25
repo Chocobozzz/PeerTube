@@ -54,6 +54,8 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
     }
   ]
 
+  disabled = false
+
   private search: string
 
   constructor (
@@ -89,11 +91,11 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
   }
 
   disableForReuse () {
-    this.videosSelection.disableForReuse()
+    this.disabled = true
   }
 
   enabledForReuse () {
-    this.videosSelection.enabledForReuse()
+    this.disabled = false
   }
 
   getVideosObservable (page: number) {

@@ -50,6 +50,8 @@ export class MyHistoryComponent implements OnInit, DisableForReuseHook {
   videos: Video[] = []
   search: string
 
+  disabled = false
+
   constructor (
     protected router: Router,
     protected serverService: ServerService,
@@ -74,11 +76,11 @@ export class MyHistoryComponent implements OnInit, DisableForReuseHook {
   }
 
   disableForReuse () {
-    this.videosSelection.disableForReuse()
+    this.disabled = true
   }
 
   enabledForReuse () {
-    this.videosSelection.enabledForReuse()
+    this.disabled = false
   }
 
   reloadData () {

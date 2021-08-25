@@ -177,6 +177,7 @@ routes.push({
   imports: [
     RouterModule.forRoot(routes, {
       useHash: Boolean(history.pushState) === false,
+      // Redefined in app component
       scrollPositionRestoration: 'disabled',
       preloadingStrategy: PreloadSelectedModulesList,
       anchorScrolling: 'disabled'
