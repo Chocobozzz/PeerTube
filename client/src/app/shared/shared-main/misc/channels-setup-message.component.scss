@@ -1,0 +1,32 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+.channels-setup-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  my-global-icon {
+    width: 32px;
+    align-self: flex-start;
+
+    ::ng-deep {
+      svg {
+        fill: #0c5460;
+      }
+    }
+
+    + div {
+      margin-left: 10px;
+      text-align: center;
+
+      a.channels-settings-link {
+        @include peertube-button-link;
+        @include grey-button;
+
+        height: fit-content;
+        margin-top: 10px;
+      }
+    }
+  }
+}

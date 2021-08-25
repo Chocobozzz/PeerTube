@@ -34,7 +34,13 @@ import { CustomPageService } from './custom-page'
 import { DateToggleComponent } from './date'
 import { FeedComponent } from './feeds'
 import { LoaderComponent, SmallLoaderComponent } from './loaders'
-import { HelpComponent, ListOverflowComponent, SimpleSearchInputComponent, TopMenuDropdownComponent } from './misc'
+import {
+  ChannelsSetupMessageComponent,
+  HelpComponent,
+  ListOverflowComponent,
+  SimpleSearchInputComponent,
+  TopMenuDropdownComponent
+} from './misc'
 import { PluginPlaceholderComponent } from './plugins'
 import { ActorRedirectGuard } from './router'
 import { UserHistoryService, UserNotificationsComponent, UserNotificationService, UserQuotaComponent } from './users'
@@ -91,6 +97,7 @@ import { VideoChannelService } from './video-channel'
     LoaderComponent,
     SmallLoaderComponent,
 
+    ChannelsSetupMessageComponent,
     HelpComponent,
     ListOverflowComponent,
     TopMenuDropdownComponent,
@@ -146,6 +153,7 @@ import { VideoChannelService } from './video-channel'
     LoaderComponent,
     SmallLoaderComponent,
 
+    ChannelsSetupMessageComponent,
     HelpComponent,
     ListOverflowComponent,
     TopMenuDropdownComponent,

@@ -4,6 +4,8 @@
   <span class="badge badge-secondary">{{ totalItems }}</span>
 </h1>
 
+<my-channels-setup-message [hideLink]="true"></my-channels-setup-message>
+
 <div class="video-channels-header d-flex justify-content-between">
   <my-advanced-input-filter (search)="onSearch($event)"></my-advanced-input-filter>
 
