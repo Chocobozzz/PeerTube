@@ -49,7 +49,7 @@ export class ModerationCommentModalComponent extends FormReactive implements OnI
     this.form.reset()
   }
 
-  async banUser () {
+  banUser () {
     const moderationComment: string = this.form.value['moderationComment']
 
     this.abuseService.updateAbuse(this.abuseToComment, { moderationComment })

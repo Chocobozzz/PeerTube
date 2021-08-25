@@ -71,7 +71,7 @@ export class VideoCaptionAddModalComponent extends FormReactive implements OnIni
     return languageId && this.existingCaptions.includes(languageId)
   }
 
-  async addCaption () {
+  addCaption () {
     const languageId = this.form.value['language']
     const languageObject = this.videoCaptionLanguages.find(l => l.id === languageId)
 

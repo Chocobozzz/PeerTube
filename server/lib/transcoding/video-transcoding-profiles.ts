@@ -14,7 +14,7 @@ import { canDoQuickAudioTranscode, ffprobePromise, getAudioStream, getMaxAudioBi
  *  * https://trac.ffmpeg.org/wiki/Limiting%20the%20output%20bitrate
  */
 
-const defaultX264VODOptionsBuilder: EncoderOptionsBuilder = async (options: EncoderOptionsBuilderParams) => {
+const defaultX264VODOptionsBuilder: EncoderOptionsBuilder = (options: EncoderOptionsBuilderParams) => {
   const { fps, inputRatio, inputBitrate } = options
   if (!fps) return { outputOptions: [ ] }
 
@@ -30,7 +30,7 @@ const defaultX264VODOptionsBuilder: EncoderOptionsBuilder = async (options: Enco
   }
 }
 
-const defaultX264LiveOptionsBuilder: EncoderOptionsBuilder = async (options: EncoderOptionsBuilderParams) => {
+const defaultX264LiveOptionsBuilder: EncoderOptionsBuilder = (options: EncoderOptionsBuilderParams) => {
   const { streamNum, fps, inputBitrate, inputRatio } = options
 
   const targetBitrate = capBitrate(inputBitrate, getAverageBitrate({ ...options, fps, ratio: inputRatio }))

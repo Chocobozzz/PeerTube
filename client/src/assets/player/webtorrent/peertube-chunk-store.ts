@@ -184,7 +184,7 @@ export class PeertubeChunkStore extends EventEmitter {
   private runCleaner () {
     this.checkExpiration()
 
-    this.cleanerInterval = setInterval(async () => {
+    this.cleanerInterval = setInterval(() => {
       this.checkExpiration()
     }, PeertubeChunkStore.CLEANER_INTERVAL_MS)
   }

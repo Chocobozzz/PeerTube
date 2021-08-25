@@ -43,7 +43,7 @@ export class UserBanModalComponent extends FormReactive implements OnInit {
     this.openedModal.close()
   }
 
-  async banUser () {
+  banUser () {
     const reason = this.form.value['reason'] || undefined
 
     this.userService.banUsers(this.usersToBan, reason)

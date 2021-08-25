@@ -206,7 +206,7 @@ export class UserListComponent extends RestTable implements OnInit {
       })
   }
 
-  async setEmailsAsVerified (users: User[]) {
+  setEmailsAsVerified (users: User[]) {
     this.userService.updateUsers(users, { emailVerified: true })
       .subscribe({
         next: () => {

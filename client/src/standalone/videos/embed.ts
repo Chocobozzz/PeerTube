@@ -589,7 +589,7 @@ export class PeerTubeEmbed {
 
     this.buildCSS()
 
-    await this.buildDock(videoInfo)
+    this.buildDock(videoInfo)
 
     this.initializeApi()
 
@@ -665,7 +665,7 @@ export class PeerTubeEmbed {
     }
   }
 
-  private async buildDock (videoInfo: VideoDetails) {
+  private buildDock (videoInfo: VideoDetails) {
     if (!this.controls) return
 
     // On webtorrent fallback, player may have been disposed

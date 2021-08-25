@@ -199,7 +199,7 @@ class MuxingSession extends EventEmitter {
   private watchMasterFile (outPath: string) {
     this.masterWatcher = chokidar.watch(outPath + '/' + this.streamingPlaylist.playlistFilename)
 
-    this.masterWatcher.on('add', async () => {
+    this.masterWatcher.on('add', () => {
       this.emit('master-playlist-created', { videoId: this.videoId })
 
       this.masterWatcher.close()

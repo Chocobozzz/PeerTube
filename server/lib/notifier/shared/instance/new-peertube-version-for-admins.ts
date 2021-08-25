@@ -41,7 +41,7 @@ export class NewPeerTubeVersionForAdmins extends AbstractNotification <NewPeerTu
     return notification
   }
 
-  async createEmail (to: string) {
+  createEmail (to: string) {
     return {
       to,
       template: 'peertube-version-new',

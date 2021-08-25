@@ -86,7 +86,7 @@ class StatsCard extends Component {
     this.updateInterval = setInterval(async () => {
       try {
         const options = this.mode === 'p2p-media-loader'
-          ? await this.buildHLSOptions()
+          ? this.buildHLSOptions()
           : await this.buildWebTorrentOptions() // Default
 
         this.list.innerHTML = this.getListTemplate(options)
@@ -102,7 +102,7 @@ class StatsCard extends Component {
     this.container.style.display = 'none'
   }
 
-  private async buildHLSOptions () {
+  private buildHLSOptions () {
     const p2pMediaLoader = this.player_.p2pMediaLoader()
     const level = p2pMediaLoader.getCurrentLevel()
 

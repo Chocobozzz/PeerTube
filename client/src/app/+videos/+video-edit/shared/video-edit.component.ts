@@ -231,7 +231,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
     this.sortVideoCaptions()
   }
 
-  async deleteCaption (caption: VideoCaptionEdit) {
+  deleteCaption (caption: VideoCaptionEdit) {
     // Caption recovers his former state
     if (caption.action && this.initialVideoCaptions.includes(caption.language.id)) {
       caption.action = undefined

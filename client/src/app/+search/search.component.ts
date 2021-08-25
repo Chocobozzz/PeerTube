@@ -75,7 +75,7 @@ export class SearchComponent implements OnInit, OnDestroy {
 
     this.subActivatedRoute = this.route.queryParams
       .subscribe({
-        next: async queryParams => {
+        next: queryParams => {
           const querySearch = queryParams['search']
           const searchTarget = queryParams['searchTarget']
 

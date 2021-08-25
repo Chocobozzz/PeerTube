@@ -102,7 +102,7 @@ videosRouter.get('/:id',
   optionalAuthenticate,
   asyncMiddleware(videosCustomGetValidator('for-api')),
   asyncMiddleware(checkVideoFollowConstraints),
-  asyncMiddleware(getVideo)
+  getVideo
 )
 videosRouter.post('/:id/views',
   openapiOperationDoc({ operationId: 'addView' }),
@@ -141,7 +141,7 @@ function listVideoPrivacies (_req: express.Request, res: express.Response) {
   res.json(VIDEO_PRIVACIES)
 }
 
-async function getVideo (_req: express.Request, res: express.Response) {
+function getVideo (_req: express.Request, res: express.Response) {
   const video = res.locals.videoAPI
 
   if (video.isOutdated()) {

@@ -474,7 +474,7 @@ async function buildHLSVODCommand (command: ffmpeg.FfmpegCommand, options: HLSTr
   return command
 }
 
-async function buildHLSVODFromTSCommand (command: ffmpeg.FfmpegCommand, options: HLSFromTSTranscodeOptions) {
+function buildHLSVODFromTSCommand (command: ffmpeg.FfmpegCommand, options: HLSFromTSTranscodeOptions) {
   const videoPath = getHLSVideoPath(options)
 
   command.outputOption('-c copy')

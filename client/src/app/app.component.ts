@@ -220,7 +220,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     }
   }
 
-  private async openModalsIfNeeded () {
+  private openModalsIfNeeded () {
     this.authService.userInformationLoaded
         .pipe(
           map(() => this.authService.getUser()),
@@ -232,7 +232,7 @@ export class AppComponent implements OnInit, AfterViewInit {
         ).subscribe(({ serverConfig, user }) => this._openAdminModalsIfNeeded(serverConfig, user))
   }
 
-  private async _openAdminModalsIfNeeded (serverConfig: ServerConfig, user: User) {
+  private _openAdminModalsIfNeeded (serverConfig: ServerConfig, user: User) {
     if (user.noWelcomeModal !== true) return this.welcomeModal.show()
 
     if (user.noInstanceConfigWarningModal === true || !serverConfig.signup.allowed) return

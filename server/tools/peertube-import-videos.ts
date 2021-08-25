@@ -407,7 +407,7 @@ function getYoutubeDLInfo (youtubeDL: any, url: string, args: string[]) {
   return new Promise<any>((res, rej) => {
     const options = [ '-j', '--flat-playlist', '--playlist-reverse', ...args ]
 
-    youtubeDL.getInfo(url, options, processOptions, async (err, info) => {
+    youtubeDL.getInfo(url, options, processOptions, (err, info) => {
       if (err) return rej(err)
 
       return res(info)

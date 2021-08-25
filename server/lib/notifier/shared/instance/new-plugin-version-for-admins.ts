@@ -37,7 +37,7 @@ export class NewPluginVersionForAdmins extends AbstractNotification <MPlugin> {
     return notification
   }
 
-  async createEmail (to: string) {
+  createEmail (to: string) {
     const pluginUrl = WEBSERVER.URL + '/admin/plugins/list-installed?pluginType=' + this.plugin.type
 
     return {

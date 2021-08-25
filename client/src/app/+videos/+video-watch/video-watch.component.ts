@@ -113,7 +113,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     return this.userService.getAnonymousUser()
   }
 
-  async ngOnInit () {
+  ngOnInit () {
     this.serverConfig = this.serverService.getHTMLConfig()
 
     PeertubePlayerManager.initState()
@@ -640,7 +640,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     }
 
     if (oldVideo && oldVideo.id !== newVideo.id) {
-      await this.peertubeSocket.unsubscribeLiveVideos(oldVideo.id)
+      this.peertubeSocket.unsubscribeLiveVideos(oldVideo.id)
     }
 
     if (!newVideo.isLive) return

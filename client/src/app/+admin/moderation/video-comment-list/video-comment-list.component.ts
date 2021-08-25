@@ -134,7 +134,7 @@ export class VideoCommentListComponent extends RestTable implements OnInit {
     })
   }
 
-  private async removeComments (comments: VideoCommentAdmin[]) {
+  private removeComments (comments: VideoCommentAdmin[]) {
     const commentArgs = comments.map(c => ({ videoId: c.video.id, commentId: c.id }))
 
     this.videoCommentService.deleteVideoComments(commentArgs)

@@ -54,7 +54,7 @@ export class FollowModalComponent extends FormReactive implements OnInit {
     return window.location.protocol === 'https:'
   }
 
-  private async addFollowing () {
+  private addFollowing () {
     const hostsOrHandles = splitAndGetNotEmpty(this.form.value['hostsOrHandles'])
 
     this.followService.follow(hostsOrHandles)

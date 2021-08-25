@@ -47,7 +47,7 @@ window.addEventListener('load', async () => {
   let playbackRates: number[] = []
   let currentRate = await player.getPlaybackRate()
 
-  const updateRates = async () => {
+  const updateRates = () => {
     const rateListEl = document.querySelector('#rate-list')
     rateListEl.innerHTML = ''
 

@@ -81,7 +81,7 @@ async function handleOAuthToken (req: express.Request, options: { refreshTokenAu
   })
 }
 
-async function handleOAuthAuthenticate (
+function handleOAuthAuthenticate (
   req: express.Request,
   res: express.Response,
   authenticateInQuery = false

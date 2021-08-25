@@ -260,7 +260,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
     this.loadCategoriesAndLanguages()
   }
 
-  async formValidated () {
+  formValidated () {
     const value: ComponentCustomConfig = this.form.getRawValue()
 
     forkJoin([

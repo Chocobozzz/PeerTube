@@ -35,7 +35,7 @@ export class AutoFollowForInstance extends AbstractNotification <MActorFollowFul
     return notification
   }
 
-  async createEmail (to: string) {
+  createEmail (to: string) {
     const instanceUrl = this.actorFollow.ActorFollowing.url
 
     return {

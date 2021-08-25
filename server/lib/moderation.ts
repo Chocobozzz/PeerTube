@@ -170,8 +170,8 @@ function createAccountAbuse (options: {
 }) {
   const { baseAbuse, accountInstance, transaction, reporterAccount } = options
 
-  const associateFun = async () => {
-    return { isOwned: accountInstance.isOwned() }
+  const associateFun = () => {
+    return Promise.resolve({ isOwned: accountInstance.isOwned() })
   }
 
   return createAbuse({

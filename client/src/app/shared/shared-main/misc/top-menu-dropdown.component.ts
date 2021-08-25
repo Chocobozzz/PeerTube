@@ -84,8 +84,9 @@ export class TopMenuDropdownComponent implements OnInit, OnDestroy {
 
     this.modalService.open(this.modal, {
       centered: true,
-      beforeDismiss: async () => {
+      beforeDismiss: () => {
         this.onModalDismiss()
+
         return true
       }
     })
