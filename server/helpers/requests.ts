@@ -1,21 +1,20 @@
 import { createWriteStream, remove } from 'fs-extra'
 import got, { CancelableRequest, Options as GotOptions, RequestError } from 'got'
+import { HttpProxyAgent, HttpsProxyAgent } from 'hpagent'
 import { join } from 'path'
 import { CONFIG } from '../initializers/config'
 import { ACTIVITY_PUB, PEERTUBE_VERSION, REQUEST_TIMEOUT, WEBSERVER } from '../initializers/constants'
 import { pipelinePromise } from './core-utils'
 import { processImage } from './image-utils'
 import { logger } from './logger'
-const { HttpsProxyAgent } = require("hpagent")
-const isProxyEnabled = require("./proxy")
+import { getProxy, isProxyEnabled } from './proxy'
 
+const httpSignature = require('http-signature')
 
 export interface PeerTubeRequestError extends Error {
   statusCode?: number
   responseBody?: any
 }
-
-const httpSignature = require('http-signature')
 
 type PeerTubeRequestOptions = {
   activityPub?: boolean
@@ -31,80 +30,81 @@ type PeerTubeRequestOptions = {
   jsonResponse?: boolean
 } & Pick<GotOptions, 'headers' | 'json' | 'method' | 'searchParams'>
 
-  const peertubeGot = got.extend({
-    agent: getAgentIfNeeded(),
-    headers: {
-      'user-agent': getUserAgent()
-    },
-  
-    handlers: [
-      (options, next) => {
-        const promiseOrStream = next(options) as CancelableRequest<any>
-        const bodyKBLimit = options.context?.bodyKBLimit as number
-        if (!bodyKBLimit) throw new Error('No KB limit for this request')
-  
-        const bodyLimit = bodyKBLimit * 1000
-  
-        /* eslint-disable @typescript-eslint/no-floating-promises */
-        promiseOrStream.on('downloadProgress', progress => {
-          if (progress.transferred > bodyLimit && progress.percent !== 1) {
-            const message = `Exceeded the download limit of ${bodyLimit} B`
-            logger.warn(message)
-  
-            // CancelableRequest
-            if (promiseOrStream.cancel) {
-              promiseOrStream.cancel()
-              return
-            }
-  
-            // Stream
-            (promiseOrStream as any).destroy()
+const peertubeGot = got.extend({
+  ...getAgent(),
+
+  headers: {
+    'user-agent': getUserAgent()
+  },
+
+  handlers: [
+    (options, next) => {
+      const promiseOrStream = next(options) as CancelableRequest<any>
+      const bodyKBLimit = options.context?.bodyKBLimit as number
+      if (!bodyKBLimit) throw new Error('No KB limit for this request')
+
+      const bodyLimit = bodyKBLimit * 1000
+
+      /* eslint-disable @typescript-eslint/no-floating-promises */
+      promiseOrStream.on('downloadProgress', progress => {
+        if (progress.transferred > bodyLimit && progress.percent !== 1) {
+          const message = `Exceeded the download limit of ${bodyLimit} B`
+          logger.warn(message)
+
+          // CancelableRequest
+          if (promiseOrStream.cancel) {
+            promiseOrStream.cancel()
+            return
           }
-        })
-  
-        return promiseOrStream
-      }
-    ],
-  
-    hooks: {
-      beforeRequest: [
-        options => {
-          const headers = options.headers || {}
-          headers['host'] = options.url.host
-        },
-  
-        options => {
-          const httpSignatureOptions = options.context?.httpSignature
-  
-          if (httpSignatureOptions) {
-            const method = options.method ?? 'GET'
-            const path = options.path ?? options.url.pathname
-  
-            if (!method || !path) {
-              throw new Error(`Cannot sign request without method (${method}) or path (${path}) ${options}`)
-            }
-  
-            httpSignature.signRequest({
-              getHeader: function (header) {
-                return options.headers[header]
-              },
-  
-              setHeader: function (header, value) {
-                options.headers[header] = value
-              },
-  
-              method,
-              path
-            }, httpSignatureOptions)
-          }
-        },
-  
-        (options: GotOptions) => {
-          options.timeout = REQUEST_TIMEOUT
+
+          // Stream
+          (promiseOrStream as any).destroy()
         }
-      ]
+      })
+
+      return promiseOrStream
     }
-  })
+  ],
+
+  hooks: {
+    beforeRequest: [
+      options => {
+        const headers = options.headers || {}
+        headers['host'] = options.url.host
+      },
+
+      options => {
+        const httpSignatureOptions = options.context?.httpSignature
+
+        if (httpSignatureOptions) {
+          const method = options.method ?? 'GET'
+          const path = options.path ?? options.url.pathname
+
+          if (!method || !path) {
+            throw new Error(`Cannot sign request without method (${method}) or path (${path}) ${options}`)
+          }
+
+          httpSignature.signRequest({
+            getHeader: function (header) {
+              return options.headers[header]
+            },
+
+            setHeader: function (header, value) {
+              options.headers[header] = value
+            },
+
+            method,
+            path
+          }, httpSignatureOptions)
+        }
+      },
+
+      (options: GotOptions) => {
+        options.timeout = REQUEST_TIMEOUT
+      }
+    ]
+  }
+})
 
 function doRequest (url: string, options: PeerTubeRequestOptions = {}) {
   const gotOptions = buildGotOptions(options)
@@ -157,22 +157,27 @@ async function downloadImage (url: string, destDir: string, destName: string, si
   }
 }
 
-function getAgentIfNeeded () {
-  if (!isProxyEnabled()) 
-  {
-    logger.debug("Without proxy")
-    return {}
+function getAgent () {
+  if (!isProxyEnabled()) return {}
+
+  const proxy = getProxy()
+
+  logger.info('Using proxy %s.', proxy)
+
+  const proxyAgentOptions = {
+    keepAlive: true,
+    keepAliveMsecs: 1000,
+    maxSockets: 256,
+    maxFreeSockets: 256,
+    scheduling: 'lifo' as 'lifo',
+    proxy
   }
-  
+
   return {
-      https: new HttpsProxyAgent({
-        keepAlive: true,
-        keepAliveMsecs: 1000,
-        maxSockets: 256,
-        maxFreeSockets: 256,
-        scheduling: "lifo",
-        proxy: isProxyEnabled()
-      })
+    agent: {
+      http: new HttpProxyAgent(proxyAgentOptions),
+      https: new HttpsProxyAgent(proxyAgentOptions)
+    }
   }
 }
 
