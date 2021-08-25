@@ -20,6 +20,7 @@ import { PluginService } from '@app/core/plugins/plugin.service'
 import { CustomModalComponent } from '@app/modal/custom-modal.component'
 import { InstanceConfigWarningModalComponent } from '@app/modal/instance-config-warning-modal.component'
 import { WelcomeModalComponent } from '@app/modal/welcome-modal.component'
+import { AccountSetupModalComponent } from '@app/modal/account-setup-modal.component'
 import { NgbConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { LoadingBarService } from '@ngx-loading-bar/core'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
@@ -37,6 +38,7 @@ import { InstanceService } from './shared/shared-instance'
 export class AppComponent implements OnInit, AfterViewInit {
   private static BROADCAST_MESSAGE_KEY = 'app-broadcast-message-dismissed'
 
+  @ViewChild('accountSetupModal') accountSetupModal: AccountSetupModalComponent
   @ViewChild('welcomeModal') welcomeModal: WelcomeModalComponent
   @ViewChild('instanceConfigWarningModal') instanceConfigWarningModal: InstanceConfigWarningModalComponent
   @ViewChild('customModal') customModal: CustomModalComponent
