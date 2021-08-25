@@ -51,10 +51,6 @@ services:
     networks:
       default:
         ipv4_address: 172.18.0.42
-    
-    environment: 
-      - HTTP_PROXY
-      - HTTPS_PROXY
 
     env_file:
       - .env

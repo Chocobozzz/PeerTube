@@ -7,7 +7,7 @@ import { pipelinePromise } from './core-utils'
 import { processImage } from './image-utils'
 import { logger } from './logger'
 const { HttpsProxyAgent } = require("hpagent")
-const proxy = require("../middlewares/proxy")
+const isProxyEnabled = require("./proxy")
 
 
 export interface PeerTubeRequestError extends Error {
@@ -31,96 +31,8 @@ type PeerTubeRequestOptions = {
   jsonResponse?: boolean
 } & Pick<GotOptions, 'headers' | 'json' | 'method' | 'searchParams'>
 
-
-let peertubeGot: Got
-if (proxy()) {
-  console.log('With Proxy Address')
-peertubeGot = got.extend({
-  agent: {
-    https: new HttpsProxyAgent({
-      keepAlive: true,
-      keepAliveMsecs: 1000,
-      maxSockets: 256,
-      maxFreeSockets: 256,
-      scheduling: "lifo",
-      proxy: proxy()
-    })
-  },
-  headers: {
-    'user-agent': getUserAgent()
-  },
-
-  handlers: [
-    (options, next) => {
-      const promiseOrStream = next(options) as CancelableRequest<any>
-      const bodyKBLimit = options.context?.bodyKBLimit as number
-      if (!bodyKBLimit) throw new Error('No KB limit for this request')
-
-      const bodyLimit = bodyKBLimit * 1000
-
-      /* eslint-disable @typescript-eslint/no-floating-promises */
-      promiseOrStream.on('downloadProgress', progress => {
-        if (progress.transferred > bodyLimit && progress.percent !== 1) {
-          const message = `Exceeded the download limit of ${bodyLimit} B`
-          logger.warn(message)
-
-          // CancelableRequest
-          if (promiseOrStream.cancel) {
-            promiseOrStream.cancel()
-            return
-          }
-
-          // Stream
-          (promiseOrStream as any).destroy()
-        }
-      })
-
-      return promiseOrStream
-    }
-  ],
-
-  hooks: {
-    beforeRequest: [
-      options => {
-        const headers = options.headers || {}
-        headers['host'] = options.url.host
-      },
-
-      options => {
-        const httpSignatureOptions = options.context?.httpSignature
-
-        if (httpSignatureOptions) {
-          const method = options.method ?? 'GET'
-          const path = options.path ?? options.url.pathname
-
-          if (!method || !path) {
-            throw new Error(`Cannot sign request without method (${method}) or path (${path}) ${options}`)
-          }
-
-          httpSignature.signRequest({
-            getHeader: function (header) {
-              return options.headers[header]
-            },
-
-            setHeader: function (header, value) {
-              options.headers[header] = value
-            },
-
-            method,
-            path
-          }, httpSignatureOptions)
-        }
-      },
-
-      (options: GotOptions) => {
-        options.timeout = REQUEST_TIMEOUT
-      }
-    ]
-  }
-})
-}else{
-    console.log('Without Proxy Address')
-  peertubeGot = got.extend({
+  const peertubeGot = got.extend({
+    agent: getAgentIfNeeded(),
     headers: {
       'user-agent': getUserAgent()
     },
@@ -193,7 +105,6 @@ peertubeGot = got.extend({
       ]
     }
   })
-}
 
 function doRequest (url: string, options: PeerTubeRequestOptions = {}) {
   const gotOptions = buildGotOptions(options)
@@ -243,6 +154,26 @@ async function downloadImage (url: string, destDir: string, destName: string, si
     await remove(tmpPath)
 
     throw err
+  }
+}
+
+function getAgentIfNeeded () {
+  if (!isProxyEnabled()) 
+  {
+    logger.debug("Without proxy")
+    return {}
+
+  }
+
+  return {
+      https: new HttpsProxyAgent({
+        keepAlive: true,
+        keepAliveMsecs: 1000,
+        maxSockets: 256,
+        maxFreeSockets: 256,
+        scheduling: "lifo",
+        proxy: isProxyEnabled()
+      })
   }
 }
 

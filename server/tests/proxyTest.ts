@@ -1,10 +1,10 @@
 const expect = require("chai").expect
 const assert = require("chai").assert
 const proxyTest = require("../middlewares/proxy")
-const envse = require("env-smart")
+
 // read environment variable
-const httpProxy = envse.load().HTTP_PROXY
-const httpsProxy = envse.load().HTTPS_PROXY
+const httpProxy = process.env.HTTP_PROXY
+const httpsProxy = process.env.HTTPS_PROXY
 describe("The Proxy function with HTTP_PROXY or HTTPS_PROXY", function () {
   if (proxyTest()) {
     if (typeof httpsProxy || typeof httpProxy !== "undefined") {
