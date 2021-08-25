@@ -1,5 +1,5 @@
 import { createWriteStream, remove } from 'fs-extra'
-import got, { CancelableRequest, Got, Options as GotOptions, RequestError } from 'got'
+import got, { CancelableRequest, Options as GotOptions, RequestError } from 'got'
 import { join } from 'path'
 import { CONFIG } from '../initializers/config'
 import { ACTIVITY_PUB, PEERTUBE_VERSION, REQUEST_TIMEOUT, WEBSERVER } from '../initializers/constants'
@@ -162,9 +162,8 @@ function getAgentIfNeeded () {
   {
     logger.debug("Without proxy")
     return {}
-
   }
-
+  
   return {
       https: new HttpsProxyAgent({
         keepAlive: true,

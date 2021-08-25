@@ -3,6 +3,7 @@ import { logger } from "./logger"
 // read environment variable
 const OS_HTTP_PROXY = process.env.HTTP_PROXY
 const OS_HTTPS_PROXY = process.env.HTTPS_PROXY
+
 function getProxy() {
   let proxyAddress
   /* istanbul ignore else */
