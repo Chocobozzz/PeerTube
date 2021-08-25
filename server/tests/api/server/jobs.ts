@@ -38,14 +38,14 @@ describe('Test jobs', function () {
   })
 
   it('Should list jobs', async function () {
-    const body = await servers[1].jobs.getJobsList({ state: 'completed' })
+    const body = await servers[1].jobs.list({ state: 'completed' })
     expect(body.total).to.be.above(2)
     expect(body.data).to.have.length.above(2)
   })
 
   it('Should list jobs with sort, pagination and job type', async function () {
     {
-      const body = await servers[1].jobs.getJobsList({
+      const body = await servers[1].jobs.list({
         state: 'completed',
         start: 1,
         count: 2,
@@ -66,7 +66,7 @@ describe('Test jobs', function () {
     }
 
     {
-      const body = await servers[1].jobs.getJobsList({
+      const body = await servers[1].jobs.list({
         state: 'completed',
         start: 0,
         count: 100,
@@ -82,7 +82,7 @@ describe('Test jobs', function () {
   })
 
   it('Should list all jobs', async function () {
-    const body = await servers[1].jobs.getJobsList()
+    const body = await servers[1].jobs.list()
     expect(body.total).to.be.above(2)
 
     const jobs = body.data

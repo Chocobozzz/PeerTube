@@ -693,7 +693,7 @@ describe('Test video transcoding', function () {
   describe('Transcoding job queue', function () {
 
     it('Should have the appropriate priorities for transcoding jobs', async function () {
-      const body = await servers[1].jobs.getJobsList({
+      const body = await servers[1].jobs.list({
         start: 0,
         count: 100,
         sort: '-createdAt',

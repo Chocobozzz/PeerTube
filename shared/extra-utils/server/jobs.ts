@@ -25,7 +25,7 @@ async function waitJobs (serversArg: PeerTubeServer[] | PeerTubeServer, skipDela
     // Check if each server has pending request
     for (const server of servers) {
       for (const state of states) {
-        const p = server.jobs.getJobsList({
+        const p = server.jobs.list({
           state,
           start: 0,
           count: 10,

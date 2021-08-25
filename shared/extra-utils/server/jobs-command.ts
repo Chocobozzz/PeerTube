@@ -8,14 +8,14 @@ export class JobsCommand extends AbstractCommand {
   async getLatest (options: OverrideCommandOptions & {
     jobType: JobType
   }) {
-    const { data } = await this.getJobsList({ ...options, start: 0, count: 1, sort: '-createdAt' })
+    const { data } = await this.list({ ...options, start: 0, count: 1, sort: '-createdAt' })
 
     if (data.length === 0) return undefined
 
     return data[0]
   }
 
-  getJobsList (options: OverrideCommandOptions & {
+  list (options: OverrideCommandOptions & {
     state?: JobState
     jobType?: JobType
     start?: number
