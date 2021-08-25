@@ -72,7 +72,7 @@ rm -f "peertube-${VERSION}.zip"
 rm -rf $PEERTUBE_PATH/peertube-latest
 ln -s "$PEERTUBE_PATH/versions/peertube-${VERSION}" $PEERTUBE_PATH/peertube-latest
 cd $PEERTUBE_PATH/peertube-latest
-yarn install --production --pure-lockfile
+NOCLIENT=1 yarn install --production --pure-lockfile
 cp $PEERTUBE_PATH/peertube-latest/config/default.yaml $PEERTUBE_PATH/config/default.yaml
 
 echo "Differences in configuration files..."
