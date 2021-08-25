@@ -958,7 +958,7 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
   }
 
   toMeFormattedJSON (this: MMyUserFormattable): MyUser {
-    const formatted = this.toFormattedJSON()
+    const formatted = this.toFormattedJSON({ withAdminFlags: true })
 
     const specialPlaylists = this.Account.VideoPlaylists
                                  .map(p => ({ id: p.id, name: p.name, type: p.type }))

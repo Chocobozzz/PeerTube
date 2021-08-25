@@ -1,18 +1,43 @@
-<div *ngIf="user.isUploadDisabled()" class="no-upload">
-  <div class="alert alert-warning">
-    <div i18n>Sorry, the upload feature is disabled for your account. If you want to add videos, an admin must unlock your quota.</div>
-    <a i18n routerLink="/about/instance" class="about-link">Read instance rules for help</a>
-  </div>
-  <img src="/client/assets/images/mascot/defeated.svg" alt="defeated mascot">
-</div>
+<ng-template #AlertButtons>
+  <a i18n routerLink="/about/instance" *ngIf="!isContactFormEnabled" class="about-link">Read instance rules for help</a>
+  <a i18n routerLink="/about/contact" *ngIf="isContactFormEnabled" class="contact-link">Contact us</a>
+</ng-template>
 
-<div *ngIf="!user.isUploadDisabled()" class="margin-content">
-  <div class="alert alert-warning" *ngIf="isRootUser()" i18n>
+<ng-container *ngIf="user.isUploadDisabled()">
+  <div class="upload-message upload-disabled alert alert-warning">
+    <div>{{ uploadMessages.noQuota }}</div>
+    <ng-template [ngTemplateOutlet]="AlertButtons"></ng-template>
+  </div>
+
+  <div class="upload-image">
+    <img src="/client/assets/images/mascot/defeated.svg" alt="defeated mascot">
+  </div>
+</ng-container>
+
+<ng-container *ngIf="!user.isUploadDisabled()">
+  <div *ngIf="user.isAutoBlocked()" class="upload-message auto-blocked alert alert-warning">
+    <div>{{ uploadMessages.autoBlock }}</div>
+    <ng-template [ngTemplateOutlet]="AlertButtons" *ngIf="!user.hasNoQuotaLeft() && !user.hasNoQuotaLeftDaily()"></ng-template>
+  </div>
+
+  <div *ngIf="user.hasNoQuotaLeft()" class="upload-message quota-daily-left alert alert-warning">
+    <div>{{ uploadMessages.quotaLeftDaily }}</div>
+    <ng-template [ngTemplateOutlet]="AlertButtons" *ngIf="!user.hasNoQuotaLeft()"></ng-template>
+  </div>
+
+  <div *ngIf="user.hasNoQuotaLeft()" class="upload-message quota-left alert alert-warning">
+    <div>{{ uploadMessages.quotaLeft }}</div>
+    <ng-template [ngTemplateOutlet]="AlertButtons"></ng-template>
+  </div>
+
+  <div *ngIf="isRootUser()" class="upload-message root-user alert alert-warning" i18n>
     We recommend you to not use the <strong>root</strong> user to publish your videos, since it's the super-admin account of your instance.
     <br />
     Instead, <a routerLink="/admin/users">create a dedicated account</a> to upload your videos.
   </div>
+</ng-container>
 
+<div *ngIf="!user.isUploadDisabled()" class="margin-content">
   <my-user-quota *ngIf="!isInSecondStep() || secondStepType === 'go-live'" [user]="user" [userInformationLoaded]="userInformationLoaded"></my-user-quota>
 
   <div class="title-page title-page-single" *ngIf="isInSecondStep()">

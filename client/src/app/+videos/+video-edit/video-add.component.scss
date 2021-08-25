@@ -6,18 +6,29 @@ $border-type: solid;
 $border-color: #EAEAEA;
 $nav-link-height: 40px;
 
-.no-upload {
-  height: 100%;
+.upload-message {
   width: 100%;
   text-align: center;
+  font-size: 15px;
+  margin-bottom: 0;
 
-  .about-link {
+  &:last-child {
+    margin-bottom: 1rem;
+  }
+
+  .about-link,
+  .contact-link {
     @include peertube-button-link;
     @include orange-button;
 
     height: fit-content;
     margin-top: 10px;
   }
+}
+
+.upload-image {
+  width: 100%;
+  text-align: center;
 
   img {
     margin-top: 10px;
@@ -36,10 +47,6 @@ $nav-link-height: 40px;
 
 .margin-content {
   padding-top: 20px;
-}
-
-.alert {
-  font-size: 15px;
 }
 
 ::ng-deep .video-add-nav {

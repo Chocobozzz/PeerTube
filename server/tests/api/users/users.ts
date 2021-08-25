@@ -290,7 +290,7 @@ describe('Test users', function () {
         expect(user.account.description).to.be.null
       }
 
-      expect(userMe.adminFlags).to.be.undefined
+      expect(userMe.adminFlags).to.equal(UserAdminFlag.BYPASS_VIDEO_AUTO_BLACKLIST)
       expect(userGet.adminFlags).to.equal(UserAdminFlag.BYPASS_VIDEO_AUTO_BLACKLIST)
 
       expect(userMe.specialPlaylists).to.have.lengthOf(1)
