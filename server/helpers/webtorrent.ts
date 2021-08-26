@@ -17,6 +17,7 @@ import { promisify2 } from './core-utils'
 import { logger } from './logger'
 import { generateVideoImportTmpPath } from './utils'
 import { extractVideo } from './video'
+import { pipeline } from 'stream'
 
 const createTorrentPromise = promisify2<string, any, any>(createTorrent)
 
@@ -49,6 +50,8 @@ async function downloadWebTorrentVideo (target: { magnetUri: string, torrentName
           .then(() => rej(new Error('Cannot import torrent ' + torrentId + ': there are multiple files in it')))
       }
 
+      logger.debug('Got torrent from webtorrent %s.', id, { infoHash: torrent.infoHash, files: torrent.files })
+
       file = torrent.files[0]
 
       // FIXME: avoid creating another stream when https://github.com/webtorrent/webtorrent/issues/1517 is fixed
@@ -61,7 +64,11 @@ async function downloadWebTorrentVideo (target: { magnetUri: string, torrentName
           .catch(err => logger.error('Cannot destroy webtorrent.', { err }))
       })
 
-      file.createReadStream().pipe(writeStream)
+      pipeline(
+        file.createReadStream(),
+        writeStream,
+        err => rej(err)
+      )
     })
 
     torrent.on('error', err => rej(err))
