@@ -67,7 +67,9 @@ async function downloadWebTorrentVideo (target: { magnetUri: string, torrentName
       pipeline(
         file.createReadStream(),
         writeStream,
-        err => rej(err)
+        err => {
+          if (err) rej(err)
+        }
       )
     })
 
