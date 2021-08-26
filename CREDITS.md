@@ -526,7 +526,7 @@
 # Icons
 
  * [Feather Icons](https://feathericons.com) (MIT)
- * `playlist add`, `history`, `subscriptions`, `miscellaneous-services.svg` by Material UI (Apache 2.0)
+ * `playlist add`, `history`, `subscriptions`, `miscellaneous-services.svg`, `tip` by Material UI (Apache 2.0)
  * `support` by Chocobozzz (CC-BY)
  * `language` by Aaron Jin (CC-BY)
  * `video-language` by Rigel Kent (CC-BY)
