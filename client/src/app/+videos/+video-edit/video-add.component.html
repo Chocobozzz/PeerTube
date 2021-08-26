@@ -17,15 +17,15 @@
 <ng-container *ngIf="!user.isUploadDisabled()">
   <div *ngIf="user.isAutoBlocked()" class="upload-message auto-blocked alert alert-warning">
     <div>{{ uploadMessages.autoBlock }}</div>
-    <ng-template [ngTemplateOutlet]="AlertButtons" *ngIf="!user.hasNoQuotaLeft() && !user.hasNoQuotaLeftDaily()"></ng-template>
+    <ng-template [ngTemplateOutlet]="AlertButtons" *ngIf="!hasNoQuotaLeft && !hasNoQuotaLeftDaily"></ng-template>
   </div>
 
-  <div *ngIf="user.hasNoQuotaLeft()" class="upload-message quota-daily-left alert alert-warning">
+  <div *ngIf="hasNoQuotaLeftDaily" class="upload-message quota-daily-left alert alert-warning">
     <div>{{ uploadMessages.quotaLeftDaily }}</div>
-    <ng-template [ngTemplateOutlet]="AlertButtons" *ngIf="!user.hasNoQuotaLeft()"></ng-template>
+    <ng-template [ngTemplateOutlet]="AlertButtons" *ngIf="!hasNoQuotaLeft"></ng-template>
   </div>
 
-  <div *ngIf="user.hasNoQuotaLeft()" class="upload-message quota-left alert alert-warning">
+  <div *ngIf="hasNoQuotaLeft" class="upload-message quota-left alert alert-warning">
     <div>{{ uploadMessages.quotaLeft }}</div>
     <ng-template [ngTemplateOutlet]="AlertButtons"></ng-template>
   </div>

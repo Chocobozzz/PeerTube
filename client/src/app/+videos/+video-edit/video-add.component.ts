@@ -1,6 +1,13 @@
 import { Component, HostListener, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { AuthService, AuthUser, CanComponentDeactivate, HooksService, ServerService } from '@app/core'
+import {
+  AuthService,
+  AuthUser,
+  CanComponentDeactivate,
+  HooksService,
+  ServerService,
+  UserService
+} from '@app/core'
 import { HTMLServerConfig } from '@shared/models'
 import { VideoEditType } from './shared/video-edit.type'
 import { VideoGoLiveComponent } from './video-add-components/video-go-live.component'
@@ -33,10 +40,14 @@ export class VideoAddComponent implements OnInit, CanComponentDeactivate {
     quotaLeft: string
   }
 
+  hasNoQuotaLeft = false
+  hasNoQuotaLeftDaily = false
+
   private serverConfig: HTMLServerConfig
 
   constructor (
     private auth: AuthService,
+    private userService: UserService,
     private hooks: HooksService,
     private serverService: ServerService,
     private route: ActivatedRoute,
@@ -56,13 +67,34 @@ export class VideoAddComponent implements OnInit, CanComponentDeactivate {
 
     this.serverConfig = this.serverService.getHTMLConfig()
 
-    this.user = this.auth.getUser()
-
     if (this.route.snapshot.fragment) {
       this.onNavChange(this.route.snapshot.fragment)
     }
 
     this.buildUploadMessages()
+
+    this.userService.getMyVideoQuotaUsed()
+      .subscribe(data => {
+        // videoQuota left lower than 10%
+        if (data.videoQuotaUsed > this.user.videoQuota * 0.9) {
+          this.hasNoQuotaLeft = true
+        }
+
+        // unlimited videoQuota
+        if (this.user.videoQuota === -1) {
+          this.hasNoQuotaLeft = false
+        }
+
+        // videoQuotaDaily left lower than 10%
+        if (data.videoQuotaUsedDaily > this.user.videoQuotaDaily * 0.9) {
+          this.hasNoQuotaLeftDaily = true
+        }
+
+        // unlimited videoQuotaDaily
+        if (this.user.videoQuotaDaily === -1) {
+          this.hasNoQuotaLeftDaily = false
+        }
+      })
   }
 
   private async buildUploadMessages () {
