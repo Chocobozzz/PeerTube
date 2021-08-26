@@ -106,9 +106,11 @@ async function updateRedundancy (req: express.Request, res: express.Response) {
 
   await server.save()
 
-  // Async, could be long
-  removeRedundanciesOfServer(server.id)
-    .catch(err => logger.error('Cannot remove redundancy of %s.', server.host, { err }))
+  if (server.redundancyAllowed !== true) {
+    // Async, could be long
+    removeRedundanciesOfServer(server.id)
+      .catch(err => logger.error('Cannot remove redundancy of %s.', server.host, { err }))
+  }
 
   return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }

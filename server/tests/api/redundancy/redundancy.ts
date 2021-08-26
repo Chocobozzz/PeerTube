@@ -49,7 +49,7 @@ async function checkMagnetWebseeds (file: VideoFile, baseWebseeds: string[], ser
   }
 }
 
-async function createSingleServers (strategy: VideoRedundancyStrategy | null, additionalParams: any = {}, withWebtorrent = true) {
+async function createServers (strategy: VideoRedundancyStrategy | null, additionalParams: any = {}, withWebtorrent = true) {
   const strategies: any[] = []
 
   if (strategy !== null) {
@@ -309,7 +309,7 @@ describe('Test videos redundancy', function () {
     before(function () {
       this.timeout(120000)
 
-      return createSingleServers(strategy)
+      return createServers(strategy)
     })
 
     it('Should have 1 webseed on the first video', async function () {
@@ -359,7 +359,7 @@ describe('Test videos redundancy', function () {
     before(function () {
       this.timeout(120000)
 
-      return createSingleServers(strategy)
+      return createServers(strategy)
     })
 
     it('Should have 1 webseed on the first video', async function () {
@@ -384,7 +384,20 @@ describe('Test videos redundancy', function () {
       await checkStatsWith1Redundancy(strategy)
     })
 
-    it('Should unfollow on server 1 and remove duplicated videos', async function () {
+    it('Should unfollow server 3 and keep duplicated videos', async function () {
+      this.timeout(80000)
+
+      await servers[0].follows.unfollow({ target: servers[2] })
+
+      await waitJobs(servers)
+      await wait(5000)
+
+      await check2Webseeds()
+      await check1PlaylistRedundancies()
+      await checkStatsWith1Redundancy(strategy)
+    })
+
+    it('Should unfollow server 2 and remove duplicated videos', async function () {
       this.timeout(80000)
 
       await servers[0].follows.unfollow({ target: servers[1] })
@@ -409,7 +422,7 @@ describe('Test videos redundancy', function () {
     before(function () {
       this.timeout(120000)
 
-      return createSingleServers(strategy, { min_views: 3 })
+      return createServers(strategy, { min_views: 3 })
     })
 
     it('Should have 1 webseed on the first video', async function () {
@@ -480,7 +493,7 @@ describe('Test videos redundancy', function () {
     before(async function () {
       this.timeout(120000)
 
-      await createSingleServers(strategy, { min_views: 3 }, false)
+      await createServers(strategy, { min_views: 3 }, false)
     })
 
     it('Should have 0 playlist redundancy on the first video', async function () {
@@ -542,7 +555,7 @@ describe('Test videos redundancy', function () {
     before(function () {
       this.timeout(120000)
 
-      return createSingleServers(null)
+      return createServers(null)
     })
 
     it('Should have 1 webseed on the first video', async function () {
@@ -621,7 +634,7 @@ describe('Test videos redundancy', function () {
     before(async function () {
       this.timeout(120000)
 
-      await createSingleServers(strategy, { min_lifetime: '7 seconds', min_views: 0 })
+      await createServers(strategy, { min_lifetime: '7 seconds', min_views: 0 })
 
       await enableRedundancyOnServer1()
     })
@@ -663,7 +676,7 @@ describe('Test videos redundancy', function () {
     before(async function () {
       this.timeout(120000)
 
-      await createSingleServers(strategy, { min_lifetime: '7 seconds', min_views: 0 })
+      await createServers(strategy, { min_lifetime: '7 seconds', min_views: 0 })
 
       await enableRedundancyOnServer1()
 

@@ -470,16 +470,34 @@ export class VideoRedundancyModel extends Model<Partial<AttributesOnly<VideoRedu
 
     const query = {
       where: {
-        actorId: actor.id
+        [Op.and]: [
+          {
+            actorId: actor.id
+          },
+          {
+            [Op.or]: [
+              {
+                '$VideoStreamingPlaylist.id$': {
+                  [Op.ne]: null
+                }
+              },
+              {
+                '$VideoFile.id$': {
+                  [Op.ne]: null
+                }
+              }
+            ]
+          }
+        ]
       },
       include: [
         {
-          model: VideoFileModel,
+          model: VideoFileModel.unscoped(),
           required: false,
           include: [ buildVideoInclude() ]
         },
         {
-          model: VideoStreamingPlaylistModel,
+          model: VideoStreamingPlaylistModel.unscoped(),
           required: false,
           include: [ buildVideoInclude() ]
         }
