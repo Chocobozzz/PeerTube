@@ -56,7 +56,7 @@ sudo systemctl start redis postgresql
 1. Run:
 
 ```
-sudo pacman -S nodejs-lts-dubnium yarn ffmpeg postgresql openssl redis git wget unzip python2 base-devel npm nginx
+sudo pacman -S nodejs-lts-fermium  yarn ffmpeg postgresql openssl redis git wget unzip python2 base-devel npm nginx
 ```
 
 Now that dependencies are installed, before running PeerTube you should start PostgreSQL and Redis:
@@ -152,26 +152,26 @@ sudo systemctl enable --now redis
 sudo systemctl enable --now postgresql
 ```
 
-## Rocky Linux 8.4  
+## Rocky Linux 8.4
 
-1. Pull the latest updates:  
+1. Pull the latest updates:
 ```
 sudo dnf update -y
 ```
 
-2. Install NodeJS 12.x (why 12 and not 14? Not sure...):  
+2. Install NodeJS 12.x (why 12 and not 14? Not sure...):
 ```
 sudo dnf module install -y nodejs:12
 ```
 
-3. Install yarn:  
+3. Install yarn:
 ```
 sudo npm install --global yarn
 ```
 
-4. Install or compile ffmpeg (if you want to compile... enjoy):  
+4. Install or compile ffmpeg (if you want to compile... enjoy):
 ```
-sudo dnf install -y epel-release 
+sudo dnf install -y epel-release
 sudo dnf --enablerepo=powertools install -y SDL2 SDL2-devel
 sudo dnf install -y --nogpgcheck https://download1.rpmfusion.org/free/el/rpmfusion-free-release-8.noarch.rpm https://download1.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-8.noarch.rpm
 sudo dnf install -y ffmpeg
@@ -193,10 +193,10 @@ sudo useradd -m -d /var/www/peertube -s /bin/bash -p peertube peertube
 ```
 
 7. Unknown missing steps:
-- Steps missing here... these were adapted from the CentOS 8 steps which abruptly ended.  
-- /var/www/peertube does not exist yet (expected? done in future steps? documentation?).  
-- Nothing about Certbot, NGINX, Firewall settings, and etc.  
-- Hopefully someone can suggest what is missing here with some hints so I can add it?  
+- Steps missing here... these were adapted from the CentOS 8 steps which abruptly ended.
+- /var/www/peertube does not exist yet (expected? done in future steps? documentation?).
+- Nothing about Certbot, NGINX, Firewall settings, and etc.
+- Hopefully someone can suggest what is missing here with some hints so I can add it?
 
 ## Fedora
 
@@ -472,7 +472,7 @@ sudo vim /etc/shells # Add in this file : /usr/local/bin/bash
 chsh -s /usr/local/bin/bash # To set the brew-installed bash as default bash
 ```
 
-In a new shell, type `bash --version` to assert your changes took effect and 
+In a new shell, type `bash --version` to assert your changes took effect and
 correctly modified your default bash version.
 
 2. Run the services:
