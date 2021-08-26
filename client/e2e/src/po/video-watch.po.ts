@@ -43,7 +43,7 @@ export class VideoWatchPage {
 
   async goOnAssociatedEmbed () {
     let url = await browser.getCurrentUrl()
-    url = url.replace('/w/', '/embed/')
+    url = url.replace('/w/', '/videos/embed/')
     url = url.replace(':3333', ':9001')
 
     return browser.get(url)
