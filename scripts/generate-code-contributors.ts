@@ -31,7 +31,7 @@ async function run () {
 
     console.log('\n\n# Icons\n')
     console.log(' * [Feather Icons](https://feathericons.com) (MIT)')
-    console.log(' * `playlist add`, `history`, `subscriptions`, `miscellaneous-services.svg` by Material UI (Apache 2.0)')
+    console.log(' * `playlist add`, `history`, `subscriptions`, `miscellaneous-services.svg`, `tip` by Material UI (Apache 2.0)')
     console.log(' * `support` by Chocobozzz (CC-BY)')
     console.log(' * `language` by Aaron Jin (CC-BY)')
     console.log(' * `video-language` by Rigel Kent (CC-BY)')

@@ -4,47 +4,52 @@
  * Rigel Kent
  * Filip Bengtsson
  * josé m
- * kimsible
- * Simon Brosdetzko
  * Александр
+ * Simon Brosdetzko
+ * kimsible
  * Berto Te
  * Jeff Huang
- * Clemens Schielicke
  * kontrollanten
  * Laurent Ettouati
- * Racida S
+ * Clemens Schielicke
  * Phongpanot
+ * Racida S
  * Marcin Mikołajczak
  * Kim
+ * GunChleoc
  * Tirifto
  * Vodoyo Kamal
+ * Kimsible
  * Felix Ableitner
+ * Frank Sträter
  * Gérald Niel
  * Duy
- * GunChleoc
  * Slimane Selyan AMIRI
  * Zet
- * Frank Sträter
- * x
- * Julien Maulny
- * Kimsible
  * Mark Van den Borre
+ * x
  * John Livingston
+ * Julien Maulny
+ * Hồ Nhất Duy
  * Jorropo
  * Josh Morel
  * BO41
  * Balázs Meskó
  * Eivind Ødegård
  * Francesc
- * mando laress
  * Quentin PAGÈS
+ * mando laress
+ * vachan
+ * Cedric F
+ * Marc Strange
  * Besnik Bleta
  * Ihor Hordiichuk
  * ButterflyOfFire
+ * Martin Hoefler
  * Xabi
  * buoyantair
  * Balázs Úr
- * Cedric F
+ * DignifiedSilence
  * Jan Keromnes
  * Luca Calcaterra
  * Attila F
@@ -67,11 +72,13 @@
  * Ewald Arnold
  * Florent F
  * Florian CUNY
+ * Manuel Viens
  * Nassim Bounouas
  * NorbiPeti
  * Rafael Fontenelle
  * Tzafrir Cohen
  * Viorel-Cătălin Răpițeanu
+ * owiox8+1viroxeaziaxw@sharklasers.com
  * Adrià Martín
  * Ahmed ABERWAG
  * Anne-Gaelle Moulun
@@ -120,28 +127,32 @@
  * Andréas Livet
  * Andrés Maldonado
  * Arco
+ * Asr128
  * Aurélien Bertron
  * Axel Viala
  * Daniele Garau
  * Dep Pranata
+ * Dirk Kelly
  * Ehsan Gholami
  * Eric Guichaoua
  * Girish Ramakrishnan
  * Hakim Oubouali
  * Hans Meiser
- * Hồ Nhất Duy
+ * I_Automne
  * Iñigo A
  * Jefferson Hernandez
  * Joan Montané
+ * Johan Fleury
  * Kiro
  * LecygneNoir
  * Leopere
  * Loukas Stamellos
  * Lukas Winkler
- * Manuel Viens
  * Manuela Silva
  * Mélanie Chauvel
+ * Pedro
  * Piotr Sikora
+ * Sergey Zigachev
  * Waazdakka
  * Yohan Boniface
  * am97
@@ -166,7 +177,6 @@
  * Boo Teille
  * Dashie
  * Diazepan Medina
- * Dirk Kelly
  * EndoGai
  * Florent Fayolle
  * Florian
@@ -184,10 +194,13 @@
  * Millicent Billette
  * Mondo Xíbaro
  * Moritz Warning
+ * Ms Kimsible
  * Nicolai Larsen
  * Nojus
  * Pierre Jaury
+ * Pierre-Jean
  * Quentin
+ * ROBERT MCDOWELL
  * Ronan
  * SerCom_KC
  * Stakovicz
@@ -198,11 +211,15 @@
  * ahmadsharifian
  * bopol
  * framail
+ * frankstrater
  * les
  * libertas
+ * lutangar
  * mater
  * merty
+ * plr20
  * qwerty
+ * spf
  * taziden
  * vancha march
  * victor héry
@@ -221,6 +238,7 @@
  * Alexander F. Rødseth
  * Ali Alim
  * Aman Sharma
+ * Andrews Góes Santos
  * Antoine Millet
  * Anton Latukha
  * Armando Lüscher
@@ -245,6 +263,7 @@
  * David Dobryakov
  * DeeJayBro
  * Dimitri DI GUSTO
+ * Dingzhong Chen
  * Edouard SCHWEISGUTH
  * Edwin Alberto Amado Baron
  * Emmanuel Pret
@@ -256,6 +275,7 @@
  * Florent
  * Gabriel Scherer
  * Glandos
+ * Grzesiek11
  * Guillaume Pérution-Kihli
  * Gérald CHATAGNON
  * Haelwenn (lanodan) Monnier
@@ -274,9 +294,9 @@
  * Janey Muñoz
  * Jarosław Maciejewski
  * Jeena
+ * Jelle Besseling
  * Jessica Fairchild
  * Jinn Koriech
- * Johan Fleury
  * Jonas Sulzer
  * Jorge Silva
  * Jos
@@ -305,6 +325,7 @@
  * Matthieu De Beule
  * Max Rosenfors
  * Michael Koppmann
+ * Michael Williams
  * Miguel Mayol Tur
  * Mike
  * MrGiga
@@ -322,7 +343,6 @@
  * Philip Durbin
  * Philipp Fischbeck
  * Philo van Kemenade
- * Pierre-Jean
  * Predatorix Phoenix
  * Quentin Dupont
  * Quentí
@@ -340,6 +360,7 @@
  * Simon Gilliot
  * Simounet
  * Stefan Schüller
+ * Steffen
  * Steffen Möller
  * Sumit Khanna
  * SupC
@@ -352,10 +373,12 @@
  * Timothée Grégoire
  * Tomás Sebastián Romero
  * TrashMacNugget
+ * Tsuki
  * Vagelis F
  * Vegard Fjeldberg
  * Vincent Stakenburg
  * WhiredPlanck
+ * WingsLikeEagles
  * Yann Sionneau
  * Yorwba
  * Yun
@@ -371,8 +394,11 @@
  * decentral1se
  * dingycle
  * eduard pintilie
+ * framabr
  * gillux
+ * jameskimmel
  * jomo
+ * lambdacastix
  * libertysoft3
  * lsde
  * ltsallas
@@ -386,10 +412,11 @@
  * norrist
  * osauzet
  * philippe lhardy
- * plr20
+ * pitchum
  * potedeo
+ * saleh oukiki
  * sanchis
- * spf
+ * smilekison
  * tilllt
  * tomamplius
  * tuxayo
