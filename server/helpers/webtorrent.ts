@@ -50,7 +50,7 @@ async function downloadWebTorrentVideo (target: { magnetUri: string, torrentName
           .then(() => rej(new Error('Cannot import torrent ' + torrentId + ': there are multiple files in it')))
       }
 
-      logger.debug('Got torrent from webtorrent %s.', id, { infoHash: torrent.infoHash, files: torrent.files })
+      logger.debug('Got torrent from webtorrent %s.', id, { infoHash: torrent.infoHash })
 
       file = torrent.files[0]
 
