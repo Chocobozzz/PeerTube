@@ -217,6 +217,8 @@ export class CustomMarkupService {
 
     root.classList.add('peertube-container', layoutClass)
 
+    root.style.justifyContent = data.justifyContent || 'space-between'
+
     if (data.width) {
       root.setAttribute('width', data.width)
     }
