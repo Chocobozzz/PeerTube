@@ -221,11 +221,17 @@ export class PeerTubeServer {
 
       this.app = fork(join(root(), 'dist', 'server.js'), options.peertubeArgs || [], forkOptions)
 
-      const onExit = function () {
-        return rej(new Error('Process exited'))
+      const onPeerTubeExit = () => rej(new Error('Process exited'))
+      const onParentExit = () => {
+        if (!this.app || !this.app.pid) return
+
+        try {
+          process.kill(self.app.pid)
+        } catch { /* empty */ }
       }
 
-      this.app.on('exit', onExit)
+      this.app.on('exit', onPeerTubeExit)
+      process.on('exit', onParentExit)
 
       this.app.stdout.on('data', function onStdout (data) {
         let dontContinue = false
@@ -254,15 +260,10 @@ export class PeerTubeServer {
         if (options.hideLogs === false) {
           console.log(data.toString())
         } else {
+          process.removeListener('exit', onParentExit)
           self.app.stdout.removeListener('data', onStdout)
-          self.app.removeListener('exit', onExit)
+          self.app.removeListener('exit', onPeerTubeExit)
         }
-
-        process.on('exit', () => {
-          try {
-            process.kill(self.app.pid)
-          } catch { /* empty */ }
-        })
 
         res()
       })
