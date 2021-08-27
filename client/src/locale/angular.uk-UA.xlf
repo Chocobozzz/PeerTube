@@ -6302,7 +6302,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8856905278208146821" datatype="html">
         <source><x id="ICU" equiv-text="{getTotalVideosOf(videoChannel), plural, =1 {1 videos} other {{{ getTotalVideosOf(videoChannel) }} videos}}"/> </source>
-        <target state="new"> <x id="ICU" equiv-text="{getTotalVideosOf(videoChannel), plural, =1 {1 videos} other {{{ getTotalVideosOf(videoChannel) }} videos}}"/> </target>
+        <target state="translated"><x id="ICU" equiv-text="{video.views, plural, =1 {1 перегляд} few {{{ video.views | myNumberFormatter }} перегляди}} many {{{ video.views | myNumberFormatter }} переглядів}} other {{{ video.views | myNumberFormatter }} переглядів}} "/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="4071627711041975501" datatype="html">
