@@ -45,11 +45,12 @@ export class AccountSetupModalComponent implements OnInit {
 
   ngOnInit () {
     this.serverConfig = this.serverService.getHTMLConfig()
-    this.user = this.authService.getUser()
 
     this.authService.userInformationLoaded
       .subscribe(
         () => {
+          this.user = this.authService.getUser()
+
           if (this.isUserRoot) return
           if (this.hasAccountAvatar && this.hasAccountDescription) return
           if (this.userService.hasSignupInThisSession()) return
