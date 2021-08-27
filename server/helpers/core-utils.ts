@@ -164,9 +164,10 @@ let rootPath: string
 function root () {
   if (rootPath) return rootPath
 
-  // We are in /helpers/utils.js
-  rootPath = join(__dirname, '..', '..')
+  rootPath = __dirname
 
+  if (basename(rootPath) === 'helpers') rootPath = resolve(rootPath, '..')
+  if (basename(rootPath) === 'server') rootPath = resolve(rootPath, '..')
   if (basename(rootPath) === 'dist') rootPath = resolve(rootPath, '..')
 
   return rootPath
