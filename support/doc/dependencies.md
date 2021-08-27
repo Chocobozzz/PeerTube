@@ -159,7 +159,7 @@ sudo systemctl enable --now postgresql
 sudo dnf update -y
 ```
 
-2. Install NodeJS 12.x (why 12 and not 14? Not sure...):
+2. Install NodeJS 12.x (or 14):
 ```
 sudo dnf module install -y nodejs:12
 ```
