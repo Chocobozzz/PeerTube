@@ -3,6 +3,7 @@ import { move, readFile } from 'fs-extra'
 import { decode } from 'magnet-uri'
 import parseTorrent, { Instance } from 'parse-torrent'
 import { join } from 'path'
+import { isVideoFileExtnameValid } from '@server/helpers/custom-validators/videos'
 import { ServerConfigManager } from '@server/lib/server-config-manager'
 import { setVideoTags } from '@server/lib/video'
 import { FilteredModelAttributes } from '@server/types'
@@ -185,11 +186,14 @@ async function addYoutubeDLImport (req: express.Request, res: express.Response) 
   // Get video subtitles
   await processYoutubeSubtitles(youtubeDL, targetUrl, video.id)
 
+  let fileExt = `.${youtubeDLInfo.ext}`
+  if (!isVideoFileExtnameValid(fileExt)) fileExt = '.mp4'
+
   // Create job to import the video
   const payload = {
     type: 'youtube-dl' as 'youtube-dl',
     videoImportId: videoImport.id,
-    fileExt: `.${youtubeDLInfo.ext || 'mp4'}`
+    fileExt
   }
   await JobQueue.Instance.createJobWithPromise({ type: 'video-import', payload })
 

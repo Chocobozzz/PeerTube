@@ -2,6 +2,9 @@ import { stat } from 'fs-extra'
 import { basename, isAbsolute, join, resolve } from 'path'
 
 const FIXTURE_URLS = {
+  peertube_long: 'https://peertube2.cpy.re/videos/watch/122d093a-1ede-43bd-bd34-59d2931ffc5e',
+  peertube_short: 'https://peertube2.cpy.re/w/3fbif9S3WmtTP8gGsC5HBd',
+
   youtube: 'https://www.youtube.com/watch?v=msX3jv1XdvM',
 
   /**
