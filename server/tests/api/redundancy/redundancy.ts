@@ -3,7 +3,7 @@
 import 'mocha'
 import * as chai from 'chai'
 import { readdir } from 'fs-extra'
-import * as magnetUtil from 'magnet-uri'
+import magnetUtil from 'magnet-uri'
 import { basename, join } from 'path'
 import {
   checkSegmentHash,

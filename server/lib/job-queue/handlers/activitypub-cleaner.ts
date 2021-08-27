@@ -1,5 +1,5 @@
-import * as Bluebird from 'bluebird'
-import * as Bull from 'bull'
+import { map } from 'bluebird'
+import { Job } from 'bull'
 import { checkUrlsSameHost } from '@server/helpers/activitypub'
 import {
   isAnnounceActivityValid,
@@ -18,14 +18,14 @@ import { AccountVideoRateModel } from '../../../models/account/account-video-rat
 
 // Job to clean remote interactions off local videos
 
-async function processActivityPubCleaner (_job: Bull.Job) {
+async function processActivityPubCleaner (_job: Job) {
   logger.info('Processing ActivityPub cleaner.')
 
   {
     const rateUrls = await AccountVideoRateModel.listRemoteRateUrlsOfLocalVideos()
     const { bodyValidator, deleter, updater } = rateOptionsFactory()
 
-    await Bluebird.map(rateUrls, async rateUrl => {
+    await map(rateUrls, async rateUrl => {
       try {
         const result = await updateObjectIfNeeded(rateUrl, bodyValidator, updater, deleter)
 
@@ -44,7 +44,7 @@ async function processActivityPubCleaner (_job: Bull.Job) {
     const shareUrls = await VideoShareModel.listRemoteShareUrlsOfLocalVideos()
     const { bodyValidator, deleter, updater } = shareOptionsFactory()
 
-    await Bluebird.map(shareUrls, async shareUrl => {
+    await map(shareUrls, async shareUrl => {
       try {
         await updateObjectIfNeeded(shareUrl, bodyValidator, updater, deleter)
       } catch (err) {
@@ -57,7 +57,7 @@ async function processActivityPubCleaner (_job: Bull.Job) {
     const commentUrls = await VideoCommentModel.listRemoteCommentUrlsOfLocalVideos()
     const { bodyValidator, deleter, updater } = commentOptionsFactory()
 
-    await Bluebird.map(commentUrls, async commentUrl => {
+    await map(commentUrls, async commentUrl => {
       try {
         await updateObjectIfNeeded(commentUrl, bodyValidator, updater, deleter)
       } catch (err) {

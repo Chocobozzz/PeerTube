@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { createReqFiles } from '@server/helpers/express-utils'
 import { buildUUID, uuidToShort } from '@server/helpers/uuid'
 import { CONFIG } from '@server/initializers/config'

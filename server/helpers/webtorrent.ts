@@ -1,10 +1,11 @@
-import * as bencode from 'bencode'
-import * as createTorrent from 'create-torrent'
+import { decode, encode } from 'bencode'
+import createTorrent from 'create-torrent'
 import { createWriteStream, ensureDir, readFile, remove, writeFile } from 'fs-extra'
-import * as magnetUtil from 'magnet-uri'
-import * as parseTorrent from 'parse-torrent'
+import magnetUtil from 'magnet-uri'
+import parseTorrent from 'parse-torrent'
 import { dirname, join } from 'path'
-import * as WebTorrent from 'webtorrent'
+import { pipeline } from 'stream'
+import WebTorrent, { Instance, TorrentFile } from 'webtorrent'
 import { isArray } from '@server/helpers/custom-validators/misc'
 import { WEBSERVER } from '@server/initializers/constants'
 import { generateTorrentFileName } from '@server/lib/paths'
@@ -17,7 +18,6 @@ import { promisify2 } from './core-utils'
 import { logger } from './logger'
 import { generateVideoImportTmpPath } from './utils'
 import { extractVideo } from './video'
-import { pipeline } from 'stream'
 
 const createTorrentPromise = promisify2<string, any, any>(createTorrent)
 
@@ -33,7 +33,7 @@ async function downloadWebTorrentVideo (target: { magnetUri: string, torrentName
 
   return new Promise<string>((res, rej) => {
     const webtorrent = new WebTorrent()
-    let file: WebTorrent.TorrentFile
+    let file: TorrentFile
 
     const torrentId = target.magnetUri || join(CONFIG.STORAGE.TORRENTS_DIR, target.torrentName)
 
@@ -126,7 +126,7 @@ async function updateTorrentUrls (videoOrPlaylist: MVideo | MStreamingPlaylistVi
   const oldTorrentPath = join(CONFIG.STORAGE.TORRENTS_DIR, videoFile.torrentFilename)
 
   const torrentContent = await readFile(oldTorrentPath)
-  const decoded = bencode.decode(torrentContent)
+  const decoded = decode(torrentContent)
 
   decoded['announce-list'] = buildAnnounceList()
   decoded.announce = decoded['announce-list'][0][0]
@@ -138,7 +138,7 @@ async function updateTorrentUrls (videoOrPlaylist: MVideo | MStreamingPlaylistVi
 
   logger.info('Updating torrent URLs %s -> %s.', oldTorrentPath, newTorrentPath)
 
-  await writeFile(newTorrentPath, bencode.encode(decoded))
+  await writeFile(newTorrentPath, encode(decoded))
   await remove(join(CONFIG.STORAGE.TORRENTS_DIR, videoFile.torrentFilename))
 
   videoFile.torrentFilename = newTorrentFilename
@@ -180,7 +180,7 @@ export {
 // ---------------------------------------------------------------------------
 
 function safeWebtorrentDestroy (
-  webtorrent: WebTorrent.Instance,
+  webtorrent: Instance,
   torrentId: string,
   downloadedFile?: { directoryPath: string, filepath: string },
   torrentName?: string

@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { logger } from '@server/helpers/logger'
 import { onExternalUserAuthenticated } from '@server/lib/auth/external-auth'
 import { VideoConstantManagerFactory } from '@server/lib/plugins/video-constant-manager-factory'

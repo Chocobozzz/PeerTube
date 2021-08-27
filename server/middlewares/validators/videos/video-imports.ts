@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { body } from 'express-validator'
 import { isPreImportVideoAccepted } from '@server/lib/moderation'
 import { Hooks } from '@server/lib/plugins/hooks'

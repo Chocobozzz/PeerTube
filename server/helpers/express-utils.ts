@@ -1,5 +1,5 @@
-import * as express from 'express'
-import * as multer from 'multer'
+import express from 'express'
+import multer, { diskStorage } from 'multer'
 import { HttpStatusCode } from '../../shared/models/http/http-error-codes'
 import { CONFIG } from '../initializers/config'
 import { REMOTE_SCHEME } from '../initializers/constants'
@@ -70,7 +70,7 @@ function createReqFiles (
   mimeTypes: { [id: string]: string | string[] },
   destinations: { [fieldName: string]: string }
 ) {
-  const storage = multer.diskStorage({
+  const storage = diskStorage({
     destination: (req, file, cb) => {
       cb(null, destinations[file.fieldname])
     },

@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { ResultList, ThreadsResultList, UserRight, VideoCommentCreate } from '../../../../shared/models'
 import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
 import { VideoCommentThreads } from '../../../../shared/models/videos/comment/video-comment.model'

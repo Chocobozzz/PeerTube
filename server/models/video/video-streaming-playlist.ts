@@ -1,4 +1,4 @@
-import * as memoizee from 'memoizee'
+import memoizee from 'memoizee'
 import { join } from 'path'
 import { Op } from 'sequelize'
 import {

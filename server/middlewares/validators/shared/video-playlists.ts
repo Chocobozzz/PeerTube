@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { VideoPlaylistModel } from '@server/models/video/video-playlist'
 import { MVideoPlaylist } from '@server/types/models'
 import { HttpStatusCode } from '@shared/models'

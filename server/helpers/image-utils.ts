@@ -1,5 +1,5 @@
 import { copy, readFile, remove, rename } from 'fs-extra'
-import * as Jimp from 'jimp'
+import Jimp, { read } from 'jimp'
 import { getLowercaseExtension } from './core-utils'
 import { convertWebPToJPG, processGIF } from './ffmpeg-utils'
 import { logger } from './logger'
@@ -47,7 +47,7 @@ async function jimpProcessor (path: string, destination: string, newSize: { widt
   const inputBuffer = await readFile(path)
 
   try {
-    jimpInstance = await Jimp.read(inputBuffer)
+    jimpInstance = await read(inputBuffer)
   } catch (err) {
     logger.debug('Cannot read %s with jimp. Try to convert the image using ffmpeg first.', path, { err })
 
@@ -55,7 +55,7 @@ async function jimpProcessor (path: string, destination: string, newSize: { widt
     await convertWebPToJPG(path, newName)
     await rename(newName, path)
 
-    jimpInstance = await Jimp.read(path)
+    jimpInstance = await read(path)
   }
 
   await remove(destination)

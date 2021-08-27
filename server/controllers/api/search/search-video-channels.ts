@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { sanitizeUrl } from '@server/helpers/core-utils'
 import { pickSearchChannelQuery } from '@server/helpers/query'
 import { doJSONRequest } from '@server/helpers/requests'

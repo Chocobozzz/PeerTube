@@ -7,13 +7,13 @@ if (isTestInstance()) {
 }
 
 // ----------- Node modules -----------
-import * as express from 'express'
-import * as morgan from 'morgan'
-import * as cors from 'cors'
-import * as cookieParser from 'cookie-parser'
-import * as helmet from 'helmet'
-import * as useragent from 'useragent'
-import * as anonymize from 'ip-anonymize'
+import express from 'express'
+import morgan, { token } from 'morgan'
+import cors from 'cors'
+import cookieParser from 'cookie-parser'
+import { frameguard } from 'helmet'
+import { parse } from 'useragent'
+import anonymize from 'ip-anonymize'
 import { program as cli } from 'commander'
 
 process.title = 'peertube'
@@ -61,7 +61,7 @@ if (CONFIG.CSP.ENABLED) {
 }
 
 if (CONFIG.SECURITY.FRAMEGUARD.ENABLED) {
-  app.use(helmet.frameguard({
+  app.use(frameguard({
     action: 'deny' // we only allow it for /videos/embed, see server/controllers/client.ts
   }))
 }
@@ -148,16 +148,16 @@ if (isTestInstance()) {
 }
 
 // For the logger
-morgan.token('remote-addr', (req: express.Request) => {
+token('remote-addr', (req: express.Request) => {
   if (CONFIG.LOG.ANONYMIZE_IP === true || req.get('DNT') === '1') {
     return anonymize(req.ip, 16, 16)
   }
 
   return req.ip
 })
-morgan.token('user-agent', (req: express.Request) => {
+token('user-agent', (req: express.Request) => {
   if (req.get('DNT') === '1') {
-    return useragent.parse(req.get('user-agent')).family
+    return parse(req.get('user-agent')).family
   }
 
   return req.get('user-agent')

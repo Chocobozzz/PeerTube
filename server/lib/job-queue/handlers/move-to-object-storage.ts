@@ -1,4 +1,4 @@
-import * as Bull from 'bull'
+import { Job } from 'bull'
 import { remove } from 'fs-extra'
 import { join } from 'path'
 import { logger } from '@server/helpers/logger'
@@ -12,7 +12,7 @@ import { VideoJobInfoModel } from '@server/models/video/video-job-info'
 import { MStreamingPlaylistVideo, MVideo, MVideoFile, MVideoWithAllFiles } from '@server/types/models'
 import { MoveObjectStoragePayload, VideoStorage } from '../../../../shared'
 
-export async function processMoveToObjectStorage (job: Bull.Job) {
+export async function processMoveToObjectStorage (job: Job) {
   const payload = job.data as MoveObjectStoragePayload
   logger.info('Moving video %s in job %d.', payload.videoUUID, job.id)
 

@@ -1,5 +1,5 @@
 import 'multer'
-import * as express from 'express'
+import express from 'express'
 import { auditLoggerFactory, getAuditIdFromRes, UserAuditView } from '@server/helpers/audit-logger'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { AttributesOnly } from '@shared/core-utils'

@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { Transaction } from 'sequelize/types'
 import { changeVideoChannelShare } from '@server/lib/activitypub/share'
 import { buildVideoThumbnailsFromReq, setVideoTags } from '@server/lib/video'

@@ -1,4 +1,4 @@
-import * as Bluebird from 'bluebird'
+import { map } from 'bluebird'
 import { checkUrlsSameHost } from '../../helpers/activitypub'
 import { sanitizeAndCheckVideoCommentObject } from '../../helpers/custom-validators/activitypub/video-comments'
 import { logger } from '../../helpers/logger'
@@ -18,7 +18,7 @@ type ResolveThreadParams = {
 type ResolveThreadResult = Promise<{ video: MVideoAccountLightBlacklistAllFiles, comment: MCommentOwnerVideo, commentCreated: boolean }>
 
 async function addVideoComments (commentUrls: string[]) {
-  return Bluebird.map(commentUrls, async commentUrl => {
+  return map(commentUrls, async commentUrl => {
     try {
       await resolveThread({ url: commentUrl, isVideo: false })
     } catch (err) {

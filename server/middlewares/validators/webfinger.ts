@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { query } from 'express-validator'
 import { HttpStatusCode } from '../../../shared/models/http/http-error-codes'
 import { isWebfingerLocalResourceValid } from '../../helpers/custom-validators/webfinger'

@@ -1,4 +1,4 @@
-import * as Bull from 'bull'
+import { Job } from 'bull'
 import { getLocalActorFollowActivityPubUrl } from '@server/lib/activitypub/url'
 import { ActivitypubFollowPayload } from '@shared/models'
 import { sanitizeHost } from '../../../helpers/core-utils'
@@ -13,7 +13,7 @@ import { getOrCreateAPActor, loadActorUrlOrGetFromWebfinger } from '../../activi
 import { sendFollow } from '../../activitypub/send'
 import { Notifier } from '../../notifier'
 
-async function processActivityPubFollow (job: Bull.Job) {
+async function processActivityPubFollow (job: Job) {
   const payload = job.data as ActivitypubFollowPayload
   const host = payload.host
 

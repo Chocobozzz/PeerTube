@@ -4,10 +4,11 @@ import { registerTSPaths } from '../helpers/register-ts-paths'
 registerTSPaths()
 
 import { OptionValues, program } from 'commander'
-import * as prompt from 'prompt'
 import { assignToken, buildServer, getNetrc, getSettings, writeSettings } from './cli'
 import { isUserUsernameValid } from '../helpers/custom-validators/users'
-import * as CliTable3 from 'cli-table3'
+import CliTable3 from 'cli-table3'
+
+import prompt = require('prompt')
 
 async function delInstance (url: string) {
   const [ settings, netrc ] = await Promise.all([ getSettings(), getNetrc() ])

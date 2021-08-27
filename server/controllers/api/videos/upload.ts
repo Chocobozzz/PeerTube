@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { move } from 'fs-extra'
 import { basename } from 'path'
 import { getLowercaseExtension } from '@server/helpers/core-utils'

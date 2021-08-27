@@ -1360,6 +1360,13 @@
   dependencies:
     "@types/node" "*"
 
+"@types/bencode@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@types/bencode/-/bencode-2.0.0.tgz#75161d132f15a912aa49ea0c861c53ddb8539a76"
+  integrity sha512-ntDggX576d+MULpy9ApOy3OI9GqO86H+T9zEwYk3fdVaLi85M/1l+GVR/UWfITg9czcOO2SxZJyzyTOrI8UsFA==
+  dependencies:
+    "@types/node" "*"
+
 "@types/bittorrent-protocol@*":
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/@types/bittorrent-protocol/-/bittorrent-protocol-3.1.1.tgz#76bfd5903d0f7c7b23289763f39aca9337b3b723"
@@ -1457,6 +1464,13 @@
   version "2.8.12"
   resolved "https://registry.yarnpkg.com/@types/cors/-/cors-2.8.12.tgz#6b2c510a7ad7039e98e7b8d3d6598f4359e5c080"
   integrity sha512-vt+kDhq/M2ayberEtJcIN/hxXy1Pk+59g2FV/ZQceeaTyCtCucjL2Q7FXlFjtWn4n15KCr1NE2lNNFhp0lEThw==
+
+"@types/create-torrent@^5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@types/create-torrent/-/create-torrent-5.0.0.tgz#bd3def0e133390049113c09b0c263a6d6cca2852"
+  integrity sha512-mZbaThIOP3NQru6/oi7I3hcWSu8/d0/4os13JVWGAU5hoAZIUc6MbeloHAX5nnnIZgn7YIp5PpNRf9Im/QvAvA==
+  dependencies:
+    "@types/node" "*"
 
 "@types/express-rate-limit@^5.0.0":
   version "5.1.3"

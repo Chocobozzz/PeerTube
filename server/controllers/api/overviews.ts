@@ -1,5 +1,5 @@
-import * as express from 'express'
-import * as memoizee from 'memoizee'
+import express from 'express'
+import memoizee from 'memoizee'
 import { logger } from '@server/helpers/logger'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { VideoModel } from '@server/models/video/video'

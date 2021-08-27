@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { body, param } from 'express-validator'
 import { UserRight } from '../../../../shared'
 import { isVideoCaptionFile, isVideoCaptionLanguageValid } from '../../../helpers/custom-validators/video-captions'

@@ -1,4 +1,4 @@
-import * as Bull from 'bull'
+import { Job } from 'bull'
 import { pathExists, readdir, remove } from 'fs-extra'
 import { join } from 'path'
 import { ffprobePromise, getAudioStream, getDurationFromVideoFile, getVideoFileResolution } from '@server/helpers/ffprobe-utils'
@@ -17,7 +17,7 @@ import { MStreamingPlaylist, MVideo, MVideoLive } from '@server/types/models'
 import { ThumbnailType, VideoLiveEndingPayload, VideoState } from '@shared/models'
 import { logger } from '../../../helpers/logger'
 
-async function processVideoLiveEnding (job: Bull.Job) {
+async function processVideoLiveEnding (job: Job) {
   const payload = job.data as VideoLiveEndingPayload
 
   function logError () {

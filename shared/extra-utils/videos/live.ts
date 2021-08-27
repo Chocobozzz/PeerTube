@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
-import * as ffmpeg from 'fluent-ffmpeg'
+import ffmpeg, { FfmpegCommand } from 'fluent-ffmpeg'
 import { pathExists, readdir } from 'fs-extra'
 import { join } from 'path'
 import { buildAbsoluteFixturePath, wait } from '../miscs'
@@ -50,7 +50,7 @@ function sendRTMPStream (options: {
   return command
 }
 
-function waitFfmpegUntilError (command: ffmpeg.FfmpegCommand, successAfterMS = 10000) {
+function waitFfmpegUntilError (command: FfmpegCommand, successAfterMS = 10000) {
   return new Promise<void>((res, rej) => {
     command.on('error', err => {
       return rej(err)
@@ -62,7 +62,7 @@ function waitFfmpegUntilError (command: ffmpeg.FfmpegCommand, successAfterMS = 1
   })
 }
 
-async function testFfmpegStreamError (command: ffmpeg.FfmpegCommand, shouldHaveError: boolean) {
+async function testFfmpegStreamError (command: FfmpegCommand, shouldHaveError: boolean) {
   let error: Error
 
   try {
@@ -77,7 +77,7 @@ async function testFfmpegStreamError (command: ffmpeg.FfmpegCommand, shouldHaveE
   if (!shouldHaveError && error) throw error
 }
 
-async function stopFfmpeg (command: ffmpeg.FfmpegCommand) {
+async function stopFfmpeg (command: FfmpegCommand) {
   command.kill('SIGINT')
 
   await wait(500)

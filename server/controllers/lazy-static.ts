@@ -1,5 +1,5 @@
-import * as cors from 'cors'
-import * as express from 'express'
+import cors from 'cors'
+import express from 'express'
 import { VideosTorrentCache } from '@server/lib/files-cache/videos-torrent-cache'
 import { HttpStatusCode } from '../../shared/models/http/http-error-codes'
 import { logger } from '../helpers/logger'

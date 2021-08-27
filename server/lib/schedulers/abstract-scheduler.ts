@@ -1,5 +1,5 @@
+import Bluebird from 'bluebird'
 import { logger } from '../../helpers/logger'
-import * as Bluebird from 'bluebird'
 
 export abstract class AbstractScheduler {
 

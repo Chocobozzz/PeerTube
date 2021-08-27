@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { pickCommonVideoQuery } from '@server/helpers/query'
 import { getServerActor } from '@server/models/application/application'
 import { buildNSFWFilter, getCountVideos, isUserAbleToSearchRemoteURI } from '../../helpers/express-utils'

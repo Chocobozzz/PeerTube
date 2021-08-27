@@ -1,6 +1,6 @@
 
 import { createServer, Server } from 'http'
-import * as proxy from 'proxy'
+import proxy from 'proxy'
 import { randomInt } from '@shared/core-utils'
 
 class MockProxy {

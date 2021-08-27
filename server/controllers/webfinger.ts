@@ -1,5 +1,5 @@
-import * as cors from 'cors'
-import * as express from 'express'
+import cors from 'cors'
+import express from 'express'
 import { WEBSERVER } from '@server/initializers/constants'
 import { asyncMiddleware } from '../middlewares'
 import { webfingerValidator } from '../middlewares/validators'

@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { query } from 'express-validator'
 import { join } from 'path'
 import { loadVideo } from '@server/lib/model-loaders'

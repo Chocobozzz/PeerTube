@@ -1,5 +1,5 @@
 import 'multer'
-import * as express from 'express'
+import express from 'express'
 import { logger } from '@server/helpers/logger'
 import { UserNotificationModel } from '@server/models/user/user-notification'
 import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'

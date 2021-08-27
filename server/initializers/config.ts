@@ -1,4 +1,4 @@
-import * as bytes from 'bytes'
+import bytes from 'bytes'
 import { IConfig } from 'config'
 import decache from 'decache'
 import { dirname, join } from 'path'

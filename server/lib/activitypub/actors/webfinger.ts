@@ -1,4 +1,4 @@
-import * as WebFinger from 'webfinger.js'
+import WebFinger from 'webfinger.js'
 import { isProdInstance } from '@server/helpers/core-utils'
 import { isActivityPubUrlValid } from '@server/helpers/custom-validators/activitypub/misc'
 import { REQUEST_TIMEOUT, WEBSERVER } from '@server/initializers/constants'

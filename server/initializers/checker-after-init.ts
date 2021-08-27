@@ -1,4 +1,4 @@
-import * as config from 'config'
+import { util, has, get } from 'config'
 import { uniq } from 'lodash'
 import { URL } from 'url'
 import { getFFmpegVersion } from '@server/helpers/ffmpeg-utils'
@@ -18,8 +18,8 @@ async function checkActivityPubUrls () {
 
   const parsed = new URL(actor.url)
   if (WEBSERVER.HOST !== parsed.host) {
-    const NODE_ENV = config.util.getEnv('NODE_ENV')
-    const NODE_CONFIG_DIR = config.util.getEnv('NODE_CONFIG_DIR')
+    const NODE_ENV = util.getEnv('NODE_ENV')
+    const NODE_CONFIG_DIR = util.getEnv('NODE_CONFIG_DIR')
 
     logger.warn(
       'It seems PeerTube was started (and created some data) with another domain name. ' +
@@ -36,7 +36,7 @@ async function checkActivityPubUrls () {
 function checkConfig () {
 
   // Moved configuration keys
-  if (config.has('services.csp-logger')) {
+  if (has('services.csp-logger')) {
     logger.warn('services.csp-logger configuration has been renamed to csp.report_uri. Please update your configuration file.')
   }
 
@@ -97,7 +97,7 @@ function checkConfig () {
 
   // Check storage directory locations
   if (isProdInstance()) {
-    const configStorage = config.get('storage')
+    const configStorage = get('storage')
     for (const key of Object.keys(configStorage)) {
       if (configStorage[key].startsWith('storage/')) {
         logger.warn(

@@ -1,7 +1,7 @@
-import * as bitTorrentTracker from 'bittorrent-tracker'
-import * as express from 'express'
-import * as http from 'http'
-import * as proxyAddr from 'proxy-addr'
+import { Server as TrackerServer } from 'bittorrent-tracker'
+import express from 'express'
+import { createServer } from 'http'
+import proxyAddr from 'proxy-addr'
 import { Server as WebSocketServer } from 'ws'
 import { Redis } from '@server/lib/redis'
 import { logger } from '../helpers/logger'
@@ -9,8 +9,6 @@ import { CONFIG } from '../initializers/config'
 import { TRACKER_RATE_LIMITS } from '../initializers/constants'
 import { VideoFileModel } from '../models/video/video-file'
 import { VideoStreamingPlaylistModel } from '../models/video/video-streaming-playlist'
-
-const TrackerServer = bitTorrentTracker.Server
 
 const trackerRouter = express.Router()
 
@@ -86,7 +84,7 @@ trackerRouter.get('/tracker/announce', (req, res) => onHttpRequest(req, res, { a
 trackerRouter.get('/tracker/scrape', (req, res) => onHttpRequest(req, res, { action: 'scrape' }))
 
 function createWebsocketTrackerServer (app: express.Application) {
-  const server = http.createServer(app)
+  const server = createServer(app)
   const wss = new WebSocketServer({ noServer: true })
 
   wss.on('connection', function (ws, req) {

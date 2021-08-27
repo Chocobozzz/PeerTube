@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { param, query, validationResult } from 'express-validator'
 import { isIdOrUUIDValid, toCompleteUUID } from '@server/helpers/custom-validators/misc'
 import { logger } from '../../../helpers/logger'

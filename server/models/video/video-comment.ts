@@ -585,7 +585,7 @@ export class VideoCommentModel extends Model<Partial<AttributesOnly<VideoComment
 
     if (accountId) {
       whereAnd.push({
-        [Op.eq]: accountId
+        accountId
       })
     }
 

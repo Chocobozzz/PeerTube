@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import toInt from 'validator/lib/toInt'
 import { pickCommonVideoQuery } from '@server/helpers/query'
 import { doJSONRequest } from '@server/helpers/requests'

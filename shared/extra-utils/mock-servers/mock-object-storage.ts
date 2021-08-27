@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import got, { RequestError } from 'got'
 import { Server } from 'http'
 import { pipeline } from 'stream'

@@ -1,4 +1,4 @@
-import * as Bull from 'bull'
+import { Job } from 'bull'
 import { TranscodeOptionsType } from '@server/helpers/ffmpeg-utils'
 import { addTranscodingJob, getTranscodingJobPriority } from '@server/lib/video'
 import { VideoPathManager } from '@server/lib/video-path-manager'
@@ -25,7 +25,7 @@ import {
   transcodeNewWebTorrentResolution
 } from '../../transcoding/video-transcoding'
 
-type HandlerFunction = (job: Bull.Job, payload: VideoTranscodingPayload, video: MVideoFullLight, user: MUser) => Promise<void>
+type HandlerFunction = (job: Job, payload: VideoTranscodingPayload, video: MVideoFullLight, user: MUser) => Promise<void>
 
 const handlers: { [ id in VideoTranscodingPayload['type'] ]: HandlerFunction } = {
   'new-resolution-to-hls': handleHLSJob,
@@ -36,7 +36,7 @@ const handlers: { [ id in VideoTranscodingPayload['type'] ]: HandlerFunction } =
 
 const lTags = loggerTagsFactory('transcoding')
 
-async function processVideoTranscoding (job: Bull.Job) {
+async function processVideoTranscoding (job: Job) {
   const payload = job.data as VideoTranscodingPayload
   logger.info('Processing transcoding job %d.', job.id, lTags(payload.videoUUID))
 
@@ -64,7 +64,7 @@ async function processVideoTranscoding (job: Bull.Job) {
 // Job handlers
 // ---------------------------------------------------------------------------
 
-async function handleHLSJob (job: Bull.Job, payload: HLSTranscodingPayload, video: MVideoFullLight, user: MUser) {
+async function handleHLSJob (job: Job, payload: HLSTranscodingPayload, video: MVideoFullLight, user: MUser) {
   logger.info('Handling HLS transcoding job for %s.', video.uuid, lTags(video.uuid))
 
   const videoFileInput = payload.copyCodecs
@@ -90,7 +90,7 @@ async function handleHLSJob (job: Bull.Job, payload: HLSTranscodingPayload, vide
 }
 
 async function handleNewWebTorrentResolutionJob (
-  job: Bull.Job,
+  job: Job,
   payload: NewResolutionTranscodingPayload,
   video: MVideoFullLight,
   user: MUserId
@@ -104,7 +104,7 @@ async function handleNewWebTorrentResolutionJob (
   await retryTransactionWrapper(onNewWebTorrentFileResolution, video, user, payload)
 }
 
-async function handleWebTorrentMergeAudioJob (job: Bull.Job, payload: MergeAudioTranscodingPayload, video: MVideoFullLight, user: MUserId) {
+async function handleWebTorrentMergeAudioJob (job: Job, payload: MergeAudioTranscodingPayload, video: MVideoFullLight, user: MUserId) {
   logger.info('Handling merge audio transcoding job for %s.', video.uuid, lTags(video.uuid))
 
   await mergeAudioVideofile(video, payload.resolution, job)
@@ -114,7 +114,7 @@ async function handleWebTorrentMergeAudioJob (job: Bull.Job, payload: MergeAudio
   await retryTransactionWrapper(onVideoFileOptimizer, video, payload, 'video', user)
 }
 
-async function handleWebTorrentOptimizeJob (job: Bull.Job, payload: OptimizeTranscodingPayload, video: MVideoFullLight, user: MUserId) {
+async function handleWebTorrentOptimizeJob (job: Job, payload: OptimizeTranscodingPayload, video: MVideoFullLight, user: MUserId) {
   logger.info('Handling optimize transcoding job for %s.', video.uuid, lTags(video.uuid))
 
   const { transcodeType } = await optimizeOriginalVideofile(video, video.getMaxQualityFile(), job)

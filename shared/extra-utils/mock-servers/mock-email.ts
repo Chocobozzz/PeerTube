@@ -1,8 +1,7 @@
 import { ChildProcess } from 'child_process'
+import MailDev from 'maildev'
 import { randomInt } from '@shared/core-utils'
 import { parallelTests } from '../miscs'
-
-const MailDev = require('maildev')
 
 class MockSmtpServer {
 

@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { removeComment } from '@server/lib/video-comment'
 import { bulkRemoveCommentsOfValidator } from '@server/middlewares/validators/bulk'
 import { VideoCommentModel } from '@server/models/video/video-comment'

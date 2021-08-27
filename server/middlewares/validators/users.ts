@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { body, param, query } from 'express-validator'
 import { omit } from 'lodash'
 import { Hooks } from '@server/lib/plugins/hooks'

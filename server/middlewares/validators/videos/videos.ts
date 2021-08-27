@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { body, header, param, query, ValidationChain } from 'express-validator'
 import { getResumableUploadPath } from '@server/helpers/upload'
 import { isAbleToUploadVideo } from '@server/lib/user'

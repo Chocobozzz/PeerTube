@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { readFile } from 'fs-extra'
 import { join } from 'path'
 import validator from 'validator'

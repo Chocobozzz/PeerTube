@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { body } from 'express-validator'
 import { isActorImageFile } from '@server/helpers/custom-validators/actor-images'
 import { cleanUpReqFiles } from '../../helpers/express-utils'

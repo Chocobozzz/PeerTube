@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { JobQueue } from '@server/lib/job-queue'
 import { VideoRedundancyModel } from '@server/models/redundancy/video-redundancy'
 import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'

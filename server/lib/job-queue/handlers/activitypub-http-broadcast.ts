@@ -1,5 +1,5 @@
-import * as Bluebird from 'bluebird'
-import * as Bull from 'bull'
+import { map } from 'bluebird'
+import { Job } from 'bull'
 import { ActivitypubHttpBroadcastPayload } from '@shared/models'
 import { logger } from '../../../helpers/logger'
 import { doRequest } from '../../../helpers/requests'
@@ -7,7 +7,7 @@ import { BROADCAST_CONCURRENCY } from '../../../initializers/constants'
 import { ActorFollowScoreCache } from '../../files-cache'
 import { buildGlobalHeaders, buildSignedRequestOptions, computeBody } from './utils/activitypub-http-utils'
 
-async function processActivityPubHttpBroadcast (job: Bull.Job) {
+async function processActivityPubHttpBroadcast (job: Job) {
   logger.info('Processing ActivityPub broadcast in job %d.', job.id)
 
   const payload = job.data as ActivitypubHttpBroadcastPayload
@@ -25,7 +25,7 @@ async function processActivityPubHttpBroadcast (job: Bull.Job) {
   const badUrls: string[] = []
   const goodUrls: string[] = []
 
-  await Bluebird.map(payload.uris, uri => {
+  await map(payload.uris, uri => {
     return doRequest(uri, options)
       .then(() => goodUrls.push(uri))
       .catch(() => badUrls.push(uri))

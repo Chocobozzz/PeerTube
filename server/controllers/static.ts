@@ -1,5 +1,5 @@
-import * as cors from 'cors'
-import * as express from 'express'
+import cors from 'cors'
+import express from 'express'
 import { join } from 'path'
 import { serveIndexHTML } from '@server/lib/client-html'
 import { ServerConfigManager } from '@server/lib/server-config-manager'

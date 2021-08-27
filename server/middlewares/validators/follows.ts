@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { body, param, query } from 'express-validator'
 import { isEachUniqueHandleValid, isFollowStateValid, isRemoteHandleValid } from '@server/helpers/custom-validators/follows'
 import { loadActorUrlOrGetFromWebfinger } from '@server/lib/activitypub/actors'

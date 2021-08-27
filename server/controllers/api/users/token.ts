@@ -1,5 +1,5 @@
-import * as express from 'express'
-import * as RateLimit from 'express-rate-limit'
+import express from 'express'
+import RateLimit from 'express-rate-limit'
 import { logger } from '@server/helpers/logger'
 import { buildUUID } from '@server/helpers/uuid'
 import { CONFIG } from '@server/initializers/config'

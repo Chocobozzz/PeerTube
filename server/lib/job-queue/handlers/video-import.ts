@@ -1,4 +1,4 @@
-import * as Bull from 'bull'
+import { Job } from 'bull'
 import { move, remove, stat } from 'fs-extra'
 import { getLowercaseExtension } from '@server/helpers/core-utils'
 import { retryTransactionWrapper } from '@server/helpers/database-utils'
@@ -37,7 +37,7 @@ import { federateVideoIfNeeded } from '../../activitypub/videos'
 import { Notifier } from '../../notifier'
 import { generateVideoMiniature } from '../../thumbnail'
 
-async function processVideoImport (job: Bull.Job) {
+async function processVideoImport (job: Job) {
   const payload = job.data as VideoImportPayload
 
   if (payload.type === 'youtube-dl') return processYoutubeDLImport(job, payload)
@@ -52,7 +52,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function processTorrentImport (job: Bull.Job, payload: VideoImportTorrentPayload) {
+async function processTorrentImport (job: Job, payload: VideoImportTorrentPayload) {
   logger.info('Processing torrent video import in job %d.', job.id)
 
   const videoImport = await getVideoImportOrDie(payload.videoImportId)
@@ -68,7 +68,7 @@ async function processTorrentImport (job: Bull.Job, payload: VideoImportTorrentP
   return processFile(() => downloadWebTorrentVideo(target, VIDEO_IMPORT_TIMEOUT), videoImport, options)
 }
 
-async function processYoutubeDLImport (job: Bull.Job, payload: VideoImportYoutubeDLPayload) {
+async function processYoutubeDLImport (job: Job, payload: VideoImportYoutubeDLPayload) {
   logger.info('Processing youtubeDL video import in job %d.', job.id)
 
   const videoImport = await getVideoImportOrDie(payload.videoImportId)

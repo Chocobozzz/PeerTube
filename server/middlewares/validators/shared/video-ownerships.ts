@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { VideoChangeOwnershipModel } from '@server/models/video/video-change-ownership'
 import { HttpStatusCode } from '@shared/models'
 

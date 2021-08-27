@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { param } from 'express-validator'
 import { isIdValid } from '@server/helpers/custom-validators/misc'
 import { checkUserCanTerminateOwnershipChange } from '@server/helpers/custom-validators/video-ownership'

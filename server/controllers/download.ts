@@ -1,5 +1,5 @@
-import * as cors from 'cors'
-import * as express from 'express'
+import cors from 'cors'
+import express from 'express'
 import { logger } from '@server/helpers/logger'
 import { VideosTorrentCache } from '@server/lib/files-cache/videos-torrent-cache'
 import { Hooks } from '@server/lib/plugins/hooks'

@@ -1,5 +1,5 @@
 import 'multer'
-import * as express from 'express'
+import express from 'express'
 import { pickCommonVideoQuery } from '@server/helpers/query'
 import { sendUndoFollow } from '@server/lib/activitypub/send'
 import { VideoChannelModel } from '@server/models/video/video-channel'

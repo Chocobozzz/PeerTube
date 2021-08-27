@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { pickCommonVideoQuery } from '@server/helpers/query'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { getServerActor } from '@server/models/application/application'

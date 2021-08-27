@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { body, param, query } from 'express-validator'
 import { VIDEO_CHANNELS } from '@server/initializers/constants'
 import { MChannelAccountDefault, MUser } from '@server/types/models'

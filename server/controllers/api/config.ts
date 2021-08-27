@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { remove, writeJSON } from 'fs-extra'
 import { snakeCase } from 'lodash'
 import validator from 'validator'

@@ -1,5 +1,5 @@
-import * as express from 'express'
-import * as Feed from 'pfeed'
+import express from 'express'
+import Feed from 'pfeed'
 import { getCategoryLabel } from '@server/models/video/formatter/video-format-utils'
 import { VideoFilter } from '../../shared/models/videos/video-query.type'
 import { buildNSFWFilter } from '../helpers/express-utils'

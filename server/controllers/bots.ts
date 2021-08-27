@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { truncate } from 'lodash'
 import { SitemapStream, streamToPromise } from 'sitemap'
 import { buildNSFWFilter } from '../helpers/express-utils'

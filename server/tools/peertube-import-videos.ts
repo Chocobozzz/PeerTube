@@ -6,7 +6,6 @@ import { accessSync, constants } from 'fs'
 import { remove } from 'fs-extra'
 import { truncate } from 'lodash'
 import { join } from 'path'
-import * as prompt from 'prompt'
 import { promisify } from 'util'
 import { YoutubeDL } from '@server/helpers/youtube-dl'
 import { sha256 } from '../helpers/core-utils'
@@ -21,6 +20,8 @@ import {
   getServerCredentials
 } from './cli'
 import { PeerTubeServer } from '@shared/extra-utils'
+
+import prompt = require('prompt')
 
 const processOptions = {
   maxBuffer: Infinity

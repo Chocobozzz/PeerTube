@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { InboxManager } from '@server/lib/activitypub/inbox-manager'
 import { Activity, ActivityPubCollection, ActivityPubOrderedCollection, RootActivity } from '../../../shared'
 import { HttpStatusCode } from '../../../shared/models/http/http-error-codes'

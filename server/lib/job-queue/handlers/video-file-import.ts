@@ -1,4 +1,4 @@
-import * as Bull from 'bull'
+import { Job } from 'bull'
 import { copy, stat } from 'fs-extra'
 import { getLowercaseExtension } from '@server/helpers/core-utils'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
@@ -16,7 +16,7 @@ import { VideoModel } from '../../../models/video/video'
 import { VideoFileModel } from '../../../models/video/video-file'
 import { createHlsJobIfEnabled } from './video-transcoding'
 
-async function processVideoFileImport (job: Bull.Job) {
+async function processVideoFileImport (job: Job) {
   const payload = job.data as VideoFileImportPayload
   logger.info('Processing video file import in job %d.', job.id)
 

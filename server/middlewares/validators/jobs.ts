@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { param, query } from 'express-validator'
 import { isValidJobState, isValidJobType } from '../../helpers/custom-validators/jobs'
 import { logger, loggerTagsFactory } from '../../helpers/logger'

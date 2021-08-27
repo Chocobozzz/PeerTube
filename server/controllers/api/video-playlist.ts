@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { join } from 'path'
 import { uuidToShort } from '@server/helpers/uuid'
 import { scheduleRefreshIfNeeded } from '@server/lib/activitypub/playlists'

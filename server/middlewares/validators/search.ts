@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { query } from 'express-validator'
 import { isSearchTargetValid } from '@server/helpers/custom-validators/search'
 import { isHostValid } from '@server/helpers/custom-validators/servers'

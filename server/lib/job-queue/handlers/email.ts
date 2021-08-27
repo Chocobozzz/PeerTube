@@ -1,9 +1,9 @@
-import * as Bull from 'bull'
+import { Job } from 'bull'
+import { EmailPayload } from '@shared/models'
 import { logger } from '../../../helpers/logger'
 import { Emailer } from '../../emailer'
-import { EmailPayload } from '@shared/models'
 
-async function processEmail (job: Bull.Job) {
+async function processEmail (job: Job) {
   const payload = job.data as EmailPayload
   logger.info('Processing email in job %d.', job.id)
 

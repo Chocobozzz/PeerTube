@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { VideoImportModel } from '@server/models/video/video-import'
 import { HttpStatusCode } from '@shared/models'
 

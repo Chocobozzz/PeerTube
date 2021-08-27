@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { MVideoFullLight } from '@server/types/models'
 import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
 import { VideoChangeOwnershipStatus, VideoState } from '../../../../shared/models/videos'

@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { VideoChannelModel } from '@server/models/video/video-channel'
 import { MChannelBannerAccountDefault } from '@server/types/models'
 import { HttpStatusCode } from '@shared/models'

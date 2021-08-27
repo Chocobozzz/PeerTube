@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { contactRouter } from './contact'
 import { debugRouter } from './debug'
 import { serverFollowsRouter } from './follows'

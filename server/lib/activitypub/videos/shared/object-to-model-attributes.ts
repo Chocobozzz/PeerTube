@@ -1,5 +1,5 @@
 import { maxBy, minBy } from 'lodash'
-import * as magnetUtil from 'magnet-uri'
+import magnetUtil from 'magnet-uri'
 import { basename } from 'path'
 import { isAPVideoFileUrlMetadataObject } from '@server/helpers/custom-validators/activitypub/videos'
 import { isVideoFileInfoHashValid } from '@server/helpers/custom-validators/videos'

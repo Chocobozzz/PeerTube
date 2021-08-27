@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { Socket } from 'socket.io'
 import { getAccessToken } from '@server/lib/auth/oauth-model'
 import { HttpStatusCode } from '../../shared/models/http/http-error-codes'

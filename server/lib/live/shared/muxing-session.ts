@@ -1,6 +1,6 @@
 
-import * as Bluebird from 'bluebird'
-import * as chokidar from 'chokidar'
+import { mapSeries } from 'bluebird'
+import { FSWatcher, watch } from 'chokidar'
 import { FfmpegCommand } from 'fluent-ffmpeg'
 import { appendFile, ensureDir, readFile, stat } from 'fs-extra'
 import { basename, join } from 'path'
@@ -67,8 +67,8 @@ class MuxingSession extends EventEmitter {
 
   private segmentsToProcessPerPlaylist: { [playlistId: string]: string[] } = {}
 
-  private tsWatcher: chokidar.FSWatcher
-  private masterWatcher: chokidar.FSWatcher
+  private tsWatcher: FSWatcher
+  private masterWatcher: FSWatcher
 
   private readonly isAbleToUploadVideoWithCache = memoizee((userId: number) => {
     return isAbleToUploadVideo(userId, 1000)
@@ -197,7 +197,7 @@ class MuxingSession extends EventEmitter {
   }
 
   private watchMasterFile (outPath: string) {
-    this.masterWatcher = chokidar.watch(outPath + '/' + this.streamingPlaylist.playlistFilename)
+    this.masterWatcher = watch(outPath + '/' + this.streamingPlaylist.playlistFilename)
 
     this.masterWatcher.on('add', () => {
       this.emit('master-playlist-created', { videoId: this.videoId })
@@ -210,7 +210,7 @@ class MuxingSession extends EventEmitter {
   private watchTSFiles (outPath: string) {
     const startStreamDateTime = new Date().getTime()
 
-    this.tsWatcher = chokidar.watch(outPath + '/*.ts')
+    this.tsWatcher = watch(outPath + '/*.ts')
 
     const playlistIdMatcher = /^([\d+])-/
 
@@ -306,7 +306,7 @@ class MuxingSession extends EventEmitter {
   }
 
   private processSegments (hlsVideoPath: string, segmentPaths: string[]) {
-    Bluebird.mapSeries(segmentPaths, async previousSegment => {
+    mapSeries(segmentPaths, async previousSegment => {
       // Add sha hash of previous segments, because ffmpeg should have finished generating them
       await LiveSegmentShaStore.Instance.addSegmentSha(this.videoUUID, previousSegment)
 

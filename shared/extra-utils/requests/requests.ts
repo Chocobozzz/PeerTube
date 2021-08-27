@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 
 import { decode } from 'querystring'
-import * as request from 'supertest'
+import request from 'supertest'
 import { URL } from 'url'
 import { HttpStatusCode } from '@shared/models'
 import { buildAbsoluteFixturePath } from '../miscs/tests'

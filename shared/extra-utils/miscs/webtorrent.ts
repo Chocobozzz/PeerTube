@@ -1,5 +1,5 @@
 import { readFile } from 'fs-extra'
-import * as parseTorrent from 'parse-torrent'
+import parseTorrent from 'parse-torrent'
 import { basename, join } from 'path'
 import * as WebTorrent from 'webtorrent'
 import { VideoFile } from '@shared/models'

@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { StatsManager } from '@server/lib/stat-manager'
 import { ROUTE_CACHE_LIFETIME } from '../../../initializers/constants'
 import { asyncMiddleware } from '../../../middlewares'

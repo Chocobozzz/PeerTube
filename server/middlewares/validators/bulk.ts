@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { body } from 'express-validator'
 import { isBulkRemoveCommentsOfScopeValid } from '@server/helpers/custom-validators/bulk'
 import { HttpStatusCode, UserRight } from '@shared/models'

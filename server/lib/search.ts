@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { CONFIG } from '@server/initializers/config'
 import { AccountBlocklistModel } from '@server/models/account/account-blocklist'
 import { getServerActor } from '@server/models/application/application'

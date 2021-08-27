@@ -9,6 +9,7 @@
     "importHelpers": true,
     "removeComments": true,
     "strictBindCallApply": true,
+    "esModuleInterop": true,
     "outDir": "./dist",
     "lib": [
       "dom",
