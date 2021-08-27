@@ -1,6 +1,6 @@
 import { SortMeta } from 'primeng/api'
 import { from, Observable, of } from 'rxjs'
-import { catchError, concatMap, filter, first, map, shareReplay, throttleTime, toArray } from 'rxjs/operators'
+import { catchError, concatMap, filter, first, map, shareReplay, tap, throttleTime, toArray } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { AuthService } from '@app/core/auth'
@@ -28,6 +28,8 @@ export class UserService {
 
   private userCache: { [ id: number ]: Observable<UserServerModel> } = {}
 
+  private signupInThisSession = false
+
   constructor (
     private authHttp: HttpClient,
     private authService: AuthService,
@@ -36,6 +38,10 @@ export class UserService {
     private localStorageService: LocalStorageService,
     private sessionStorageService: SessionStorageService
   ) { }
+
+  hasSignupInThisSession () {
+    return this.signupInThisSession
+  }
 
   changePassword (currentPassword: string, newPassword: string) {
     const url = UserService.BASE_USERS_URL + 'me'
@@ -153,6 +159,7 @@ export class UserService {
     return this.authHttp.post(UserService.BASE_USERS_URL + 'register', userCreate)
                .pipe(
                  map(this.restExtractor.extractDataBool),
+                 tap(() => this.signupInThisSession = true),
                  catchError(err => this.restExtractor.handleError(err))
                )
   }

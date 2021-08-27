@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core'
-import { AuthService, ServerService, User } from '@app/core'
+import { AuthService, ServerService, User, UserService } from '@app/core'
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { HTMLServerConfig } from '@shared/models'
 
@@ -17,6 +17,7 @@ export class AccountSetupModalComponent implements OnInit {
   private serverConfig: HTMLServerConfig
 
   constructor (
+    private userService: UserService,
     private authService: AuthService,
     private modalService: NgbModal,
     private serverService: ServerService
@@ -49,8 +50,9 @@ export class AccountSetupModalComponent implements OnInit {
     this.authService.userInformationLoaded
       .subscribe(
         () => {
-          if (this.isUserRoot) return false
-          if (this.hasAccountAvatar && this.hasAccountDescription) return false
+          if (this.isUserRoot) return
+          if (this.hasAccountAvatar && this.hasAccountDescription) return
+          if (this.userService.hasSignupInThisSession()) return
 
           this.show()
         }
@@ -58,7 +60,7 @@ export class AccountSetupModalComponent implements OnInit {
   }
 
   show () {
-    if (this.ref) return false
+    if (this.ref) return
 
     this.ref = this.modalService.open(this.modal, {
       centered: true,
