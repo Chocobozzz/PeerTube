@@ -134,5 +134,8 @@
     "webtorrent": "^1.3.8",
     "whatwg-fetch": "^3.0.0",
     "zone.js": "~0.11.4"
+  },
+  "dependencies": {
+    "webpack": "^5.51.1"
   }
 }
