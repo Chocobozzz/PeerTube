@@ -32,7 +32,7 @@
 
  * Remove `StandardOutput` and `StandardError` settings from systemd service template [#4300](https://github.com/Chocobozzz/PeerTube/pull/4300)
  * Use random UUIDs for video, torrent and streaming playlist files
-   * Torrent/video filename is regenerated when the file content changes: allows admins to use aggressive cachin
+   * Filename is regenerated when the file content changes: allows admins to use aggressive caching
 
 ### CLI tools
 
@@ -71,7 +71,7 @@
 
  * Fix PeerTube button link in embed
  * Don't remove existing redundancies on host redundancy update
- * Remove thumbnail flash for autoplay when autoplay is enabled in embed
+ * Remove thumbnail flash when autoplay is enabled in embed
  * Fetch data in bulk for the homepage, fixing API rate limit errors
  * Fix channel name validator consistency between client and server
  * Fix resumable upload without preview file in the body
@@ -79,6 +79,11 @@
  * Fix stats for nerd card label width
  * Fix stats for nerd card resolution
  * Fix uploading videos with empty tags in CLI tools
+ * Fix HLS player on non HTTPS instances
+ * Hide schedule privacy if private was removed by a plugin
+ * Fix moderation embeds
+ * Fix description timestamp click
+ * Fix privacy descriptions
 
 
 ## v3.3.0
