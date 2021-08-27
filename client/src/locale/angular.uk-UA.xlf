@@ -383,7 +383,7 @@
       </trans-unit>
       <trans-unit id="8343217707114977013" datatype="html">
         <source>The contact form is not enabled on this instance.</source>
-        <target state="translated">Контактна форма не ввімкнена у цьому інстансі.</target>
+        <target state="translated">Контактна форма не ввімкнена у цьому екземплярі.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/contact-admin-modal.component.html</context>
           <context context-type="linenumber">56</context>
@@ -728,7 +728,7 @@
       </trans-unit>
       <trans-unit id="8135461567542503937" datatype="html">
         <source>Transcode live video in multiple resolutions</source>
-        <target state="translated">Транскодувати потокове відео у декілька роздільних здатностях</target>
+        <target state="translated">Перекодувати потокове відео у кілька роздільних здатностей</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">78</context></context-group>
       </trans-unit>
       <trans-unit id="4990508956923223990" datatype="html">
@@ -738,7 +738,7 @@
       </trans-unit>
       <trans-unit id="7864066132065250510" datatype="html">
         <source><x id="INTERPOLATION"/> per user / <x id="INTERPOLATION_1"/> per instance </source>
-        <target state="translated"><x id="INTERPOLATION"/> на користувача / <x id="INTERPOLATION_1"/> на інстанс </target>
+        <target state="translated"><x id="INTERPOLATION"/> на користувача / <x id="INTERPOLATION_1"/> на екземпляр </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">86</context></context-group>
       </trans-unit>
       <trans-unit id="486979448055158839" datatype="html">
