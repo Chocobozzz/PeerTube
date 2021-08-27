@@ -51,6 +51,7 @@ export interface User {
 
   noInstanceConfigWarningModal: boolean
   noWelcomeModal: boolean
+  noAccountSetupWarningModal: boolean
 
   createdAt: Date
 

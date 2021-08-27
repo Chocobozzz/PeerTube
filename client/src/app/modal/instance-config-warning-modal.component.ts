@@ -1,9 +1,9 @@
 import { Location } from '@angular/common'
 import { Component, ElementRef, ViewChild } from '@angular/core'
-import { Notifier, UserService } from '@app/core'
+import { Notifier, User, UserService } from '@app/core'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
-import { About } from '@shared/models/server'
+import { About, ServerConfig } from '@shared/models/server'
 
 @Component({
   selector: 'my-instance-config-warning-modal',
@@ -27,10 +27,23 @@ export class InstanceConfigWarningModalComponent {
     private notifier: Notifier
   ) { }
 
-  show (about: About) {
-    const result = peertubeLocalStorage.getItem(this.LOCAL_STORAGE_KEYS.NO_INSTANCE_CONFIG_WARNING_MODAL)
-    if (result === 'true') return
+  shouldOpenByUser (user: User) {
+    if (user.noInstanceConfigWarningModal === true) return false
+    if (peertubeLocalStorage.getItem(this.LOCAL_STORAGE_KEYS.NO_INSTANCE_CONFIG_WARNING_MODAL) === 'true') return false
 
+    return true
+  }
+
+  shouldOpen (serverConfig: ServerConfig, about: About) {
+    if (!serverConfig.signup.allowed) return false
+
+    return serverConfig.instance.name.toLowerCase() === 'peertube' ||
+      !about.instance.terms ||
+      !about.instance.administrator ||
+      !about.instance.maintenanceLifetime
+  }
+
+  show (about: About) {
     if (this.location.path().startsWith('/admin/config/edit-custom')) return
 
     this.about = about

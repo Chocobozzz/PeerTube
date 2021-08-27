@@ -1,14 +1,14 @@
 import { Component, ElementRef, ViewChild } from '@angular/core'
-import { Notifier, UserService } from '@app/core'
+import { Notifier, User, UserService } from '@app/core'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 
 @Component({
-  selector: 'my-welcome-modal',
-  templateUrl: './welcome-modal.component.html',
-  styleUrls: [ './welcome-modal.component.scss' ]
+  selector: 'my-admin-welcome-modal',
+  templateUrl: './admin-welcome-modal.component.html',
+  styleUrls: [ './admin-welcome-modal.component.scss' ]
 })
-export class WelcomeModalComponent {
+export class AdminWelcomeModalComponent {
   @ViewChild('modal', { static: true }) modal: ElementRef
 
   private LOCAL_STORAGE_KEYS = {
@@ -21,10 +21,14 @@ export class WelcomeModalComponent {
     private notifier: Notifier
   ) { }
 
-  show () {
-    const result = peertubeLocalStorage.getItem(this.LOCAL_STORAGE_KEYS.NO_WELCOME_MODAL)
-    if (result === 'true') return
+  shouldOpen (user: User) {
+    if (user.noWelcomeModal === true) return false
+    if (peertubeLocalStorage.getItem(this.LOCAL_STORAGE_KEYS.NO_WELCOME_MODAL) === 'true') return false
 
+    return true
+  }
+
+  show () {
     this.modalService.open(this.modal, {
       centered: true,
       backdrop: 'static',

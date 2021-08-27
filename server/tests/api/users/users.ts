@@ -597,6 +597,7 @@ describe('Test users', function () {
       expect(user.account.description).to.equal('my super description updated')
       expect(user.noWelcomeModal).to.be.false
       expect(user.noInstanceConfigWarningModal).to.be.false
+      expect(user.noAccountSetupWarningModal).to.be.false
     })
 
     it('Should be able to update my theme', async function () {
@@ -612,12 +613,14 @@ describe('Test users', function () {
       await server.users.updateMe({
         token: userToken,
         noInstanceConfigWarningModal: true,
-        noWelcomeModal: true
+        noWelcomeModal: true,
+        noAccountSetupWarningModal: true
       })
 
       const user = await server.users.getMyInfo({ token: userToken })
       expect(user.noWelcomeModal).to.be.true
       expect(user.noInstanceConfigWarningModal).to.be.true
+      expect(user.noAccountSetupWarningModal).to.be.true
     })
   })
 

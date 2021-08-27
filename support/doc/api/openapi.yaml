@@ -6376,6 +6376,8 @@ components:
           format: date-time
         noInstanceConfigWarningModal:
           type: boolean
+        noAccountSetupWarningModal:
+          type: boolean
         noWelcomeModal:
           type: boolean
         nsfwPolicy:
@@ -6529,6 +6531,8 @@ components:
         theme:
           type: string
         noInstanceConfigWarningModal:
+          type: boolean
+        noAccountSetupWarningModal:
           type: boolean
         noWelcomeModal:
           type: boolean

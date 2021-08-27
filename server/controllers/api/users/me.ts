@@ -203,6 +203,7 @@ async function updateMe (req: express.Request, res: express.Response) {
     'videoLanguages',
     'theme',
     'noInstanceConfigWarningModal',
+    'noAccountSetupWarningModal',
     'noWelcomeModal'
   ]
 

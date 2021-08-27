@@ -1,5 +1,6 @@
 import { Hotkey, HotkeysService } from 'angular2-hotkeys'
-import { filter, map, switchMap } from 'rxjs/operators'
+import { forkJoin } from 'rxjs'
+import { filter, first, map } from 'rxjs/operators'
 import { DOCUMENT, getLocaleDirection, PlatformLocation } from '@angular/common'
 import { AfterViewInit, Component, Inject, LOCALE_ID, OnInit, ViewChild } from '@angular/core'
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
@@ -17,15 +18,15 @@ import {
 } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { PluginService } from '@app/core/plugins/plugin.service'
+import { AccountSetupWarningModalComponent } from '@app/modal/account-setup-warning-modal.component'
 import { CustomModalComponent } from '@app/modal/custom-modal.component'
 import { InstanceConfigWarningModalComponent } from '@app/modal/instance-config-warning-modal.component'
-import { WelcomeModalComponent } from '@app/modal/welcome-modal.component'
-import { AccountSetupModalComponent } from '@app/modal/account-setup-modal.component'
+import { AdminWelcomeModalComponent } from '@app/modal/admin-welcome-modal.component'
 import { NgbConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { LoadingBarService } from '@ngx-loading-bar/core'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 import { getShortLocale } from '@shared/core-utils/i18n'
-import { BroadcastMessageLevel, HTMLServerConfig, ServerConfig, UserRole } from '@shared/models'
+import { BroadcastMessageLevel, HTMLServerConfig, UserRole } from '@shared/models'
 import { MenuService } from './core/menu/menu.service'
 import { POP_STATE_MODAL_DISMISS } from './helpers'
 import { InstanceService } from './shared/shared-instance'
@@ -38,8 +39,8 @@ import { InstanceService } from './shared/shared-instance'
 export class AppComponent implements OnInit, AfterViewInit {
   private static BROADCAST_MESSAGE_KEY = 'app-broadcast-message-dismissed'
 
-  @ViewChild('accountSetupModal') accountSetupModal: AccountSetupModalComponent
-  @ViewChild('welcomeModal') welcomeModal: WelcomeModalComponent
+  @ViewChild('accountSetupWarningModal') accountSetupWarningModal: AccountSetupWarningModalComponent
+  @ViewChild('adminWelcomeModal') adminWelcomeModal: AdminWelcomeModalComponent
   @ViewChild('instanceConfigWarningModal') instanceConfigWarningModal: InstanceConfigWarningModalComponent
   @ViewChild('customModal') customModal: CustomModalComponent
 
@@ -221,33 +222,41 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   private openModalsIfNeeded () {
-    this.authService.userInformationLoaded
-        .pipe(
-          map(() => this.authService.getUser()),
-          filter(user => user.role === UserRole.ADMINISTRATOR),
-          switchMap(user => {
-            return this.serverService.getConfig()
-              .pipe(map(serverConfig => ({ serverConfig, user })))
-          })
-        ).subscribe(({ serverConfig, user }) => this._openAdminModalsIfNeeded(serverConfig, user))
+    const userSub = this.authService.userInformationLoaded
+        .pipe(map(() => this.authService.getUser()))
+
+    // Admin modal
+    userSub.pipe(
+      filter(user => user.role === UserRole.ADMINISTRATOR)
+    ).subscribe(user => this.openAdminModalsIfNeeded(user))
+
+    // Account modal
+    userSub.pipe(
+      filter(user => user.role !== UserRole.ADMINISTRATOR)
+    ).subscribe(user => this.openAccountModalsIfNeeded(user))
   }
 
-  private _openAdminModalsIfNeeded (serverConfig: ServerConfig, user: User) {
-    if (user.noWelcomeModal !== true) return this.welcomeModal.show()
+  private openAdminModalsIfNeeded (user: User) {
+    if (this.adminWelcomeModal.shouldOpen(user)) {
+      return this.adminWelcomeModal.show()
+    }
 
-    if (user.noInstanceConfigWarningModal === true || !serverConfig.signup.allowed) return
+    if (!this.instanceConfigWarningModal.shouldOpenByUser(user)) return
 
-    this.instanceService.getAbout()
-      .subscribe(about => {
-        if (
-          this.serverConfig.instance.name.toLowerCase() === 'peertube' ||
-          !about.instance.terms ||
-          !about.instance.administrator ||
-          !about.instance.maintenanceLifetime
-        ) {
-          this.instanceConfigWarningModal.show(about)
-        }
-      })
+    forkJoin([
+      this.serverService.getConfig().pipe(first()),
+      this.instanceService.getAbout().pipe(first())
+    ]).subscribe(([ config, about ]) => {
+      if (this.instanceConfigWarningModal.shouldOpen(config, about)) {
+        this.instanceConfigWarningModal.show(about)
+      }
+    })
+  }
+
+  private openAccountModalsIfNeeded (user: User) {
+    if (this.accountSetupWarningModal.shouldOpen(user)) {
+      this.accountSetupWarningModal.show(user)
+    }
   }
 
   private initHotkeys () {
