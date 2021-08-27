@@ -328,7 +328,7 @@
       </trans-unit>
       <trans-unit id="6995024616159044376" datatype="html">
         <source>Your video quota is exceeded with this video (video size: <x id="PH" equiv-text="videoSizeBytes"/>, used: <x id="PH_1" equiv-text="videoQuotaUsedBytes"/>, quota: <x id="PH_2" equiv-text="videoQuotaBytes"/>)</source>
-        <target state="new">Your video quota is exceeded with this video (video size: <x id="PH" equiv-text="videoSizeBytes"/>, used: <x id="PH_1" equiv-text="videoQuotaUsedBytes"/>, quota: <x id="PH_2" equiv-text="videoQuotaBytes"/>)</target>
+        <target state="translated">Ваша квота на відео була вичерпана (розмір відео: <x id="PH" equiv-text="videoSizeBytes"/>, використано: <x id="PH_1" equiv-text="videoQuotaUsedBytes"/>, квота: <x id="PH_2" equiv-text="videoQuotaBytes"/>)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">330</context></context-group>
       </trans-unit>
       <trans-unit id="7873395933409147217" datatype="html">
