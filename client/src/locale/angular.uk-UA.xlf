@@ -773,7 +773,7 @@
       </trans-unit>
       <trans-unit id="6276792241563504067" datatype="html">
         <source>You can import any torrent file that points to a media file. You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance.</source>
-        <target state="new"> You can import any torrent file that points to a media file. You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance. </target>
+        <target state="translated">Ви можете імпортувати будь-який torrent файл що вказує на медіафайл. Ви повинні бути впевнені що у вас є права на поширення вказаного контенту, інакше це може спричинити юридичні наслідки для вас і вашого інстансу.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-torrent.component.html</context><context context-type="linenumber">20</context></context-group>
       </trans-unit>
       <trans-unit id="5812787579835788700" datatype="html">
@@ -842,7 +842,7 @@
       </trans-unit>
       <trans-unit id="8726138323871139597" datatype="html">
         <source>Following</source>
-        <target state="new">Following</target>
+        <target state="translated">Підписки</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">29</context>
@@ -858,7 +858,7 @@
       </trans-unit>
       <trans-unit id="4914577418256256836" datatype="html">
         <source>Followers</source>
-        <target state="new">Followers</target>
+        <target state="translated">Підписники</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">34</context>
@@ -880,22 +880,22 @@
       </trans-unit>
       <trans-unit id="2605931708025789621" datatype="html">
         <source>The upload failed</source>
-        <target state="new">The upload failed</target>
+        <target state="translated">Завантаження не вдалося</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/helpers/utils/upload.ts</context><context context-type="linenumber">12</context></context-group>
       </trans-unit>
       <trans-unit id="1447760976255144968" datatype="html">
         <source>The connection was interrupted</source>
-        <target state="new">The connection was interrupted</target>
+        <target state="translated">Зв'язок перервався</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/helpers/utils/upload.ts</context><context context-type="linenumber">16</context></context-group>
       </trans-unit>
       <trans-unit id="4499233456830047129" datatype="html">
         <source>The server encountered an error</source>
-        <target state="new">The server encountered an error</target>
+        <target state="translated">На сервері виникла помилка</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/helpers/utils/upload.ts</context><context context-type="linenumber">19</context></context-group>
       </trans-unit>
       <trans-unit id="3334825601859787496" datatype="html">
         <source>Your <x id="PH" equiv-text="name"/> file couldn't be transferred before the set timeout (usually 10min)</source>
-        <target state="new">Your <x id="PH" equiv-text="name"/> file couldn't be transferred before the set timeout (usually 10min)</target>
+        <target state="translated">Ваш <x id="PH" equiv-text="name"/> файл не може бути переданий до встановленого таймауту (зазвичай 10 хвилин)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/helpers/utils/upload.ts</context><context context-type="linenumber">22</context></context-group>
       </trans-unit>
       <trans-unit id="8530934870279569179" datatype="html">
