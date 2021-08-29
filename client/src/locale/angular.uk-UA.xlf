@@ -900,7 +900,7 @@
       </trans-unit>
       <trans-unit id="8530934870279569179" datatype="html">
         <source>Your <x id="PH" equiv-text="name"/> file was too large (max. size: <x id="PH_1" equiv-text="maxFileSize"/>)</source>
-        <target state="new">Your <x id="PH" equiv-text="name"/> file was too large (max. size: <x id="PH_1" equiv-text="maxFileSize"/>)</target>
+        <target state="translated">Ваш <x id="PH" equiv-text="name"/> файл був занадто великим (Максимальний розмір:<x id="PH_1" equiv-text="maxFileSize"/>)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/helpers/utils/upload.ts</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="2392488717875840729" datatype="html">
@@ -959,7 +959,7 @@
       </trans-unit>
       <trans-unit id="2992313729068029516" datatype="html">
         <source>Block live "<x id="INTERPOLATION"/>"</source>
-        <target state="new">Block live "<x id="INTERPOLATION"/>"</target>
+        <target state="translated">Заблокувати етер "<x id="INTERPOLATION"/>"</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context><context context-type="linenumber">4</context></context-group>
       </trans-unit>
       <trans-unit id="7256462927215762997" datatype="html">
@@ -977,18 +977,18 @@
       </trans-unit>
       <trans-unit id="1191071088182425837" datatype="html">
         <source><x id="PH"/>h</source>
-        <target state="new"><x id="PH"/>h</target>
+        <target state="translated"><x id="PH"/>год</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/angular/duration-formatter.pipe.ts</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="8981309282078866700" datatype="html">
         <source><x id="PH"/>min</source>
-        <target state="new"><x id="PH"/>min</target>
+        <target state="translated"><x id="PH"/>хв</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/angular/duration-formatter.pipe.ts</context><context context-type="linenumber">16</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/angular/duration-formatter.pipe.ts</context><context context-type="linenumber">23</context></context-group>
       </trans-unit>
       <trans-unit id="350798057497677761" datatype="html">
         <source><x id="PH"/>sec</source>
-        <target state="new"><x id="PH"/>sec</target>
+        <target state="translated"><x id="PH"/>с</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/angular/duration-formatter.pipe.ts</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="1908285951500318953">
@@ -1009,12 +1009,12 @@
       </trans-unit>
       <trans-unit id="7252854992688790751" datatype="html">
         <source>This instance allows registration. However, be careful to check the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;terms-anchor&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot; fragment=&quot;terms&quot;&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> before creating an account. You may also search for another instance to match your exact needs at: <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="START_LINK_2" equiv-text="&lt;a class=&quot;alert-link&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="new"> This instance allows registration. However, be careful to check the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;terms-anchor&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot; fragment=&quot;terms&quot;&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> before creating an account. You may also search for another instance to match your exact needs at: <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="START_LINK_2" equiv-text="&lt;a class=&quot;alert-link&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target state="translated">Цей інстанс дозволяє реєстрацію. Однак будьте обережні, перевірте <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;terms-anchor&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>Умови<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot; fragment=&quot;terms&quot;&gt;"/>Умови<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> перед створенням облікового запису. Ви також можете знайти інший інстанс, який точно відповідає вашим потребам, на: <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="START_LINK_2" equiv-text="&lt;a class=&quot;alert-link&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">64</context></context-group>
       </trans-unit>
       <trans-unit id="7215649348148521605" datatype="html">
         <source>Currently this instance doesn't allow for user registration, you may check the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more details or find an instance that gives you the possibility to sign up for an account and upload your videos there. Find yours among multiple instances at: <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt; "/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;alert-link&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="new"> Currently this instance doesn't allow for user registration, you may check the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more details or find an instance that gives you the possibility to sign up for an account and upload your videos there. Find yours among multiple instances at: <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt; "/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;alert-link&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target state="translated">В даний час цей інстанс не дозволяє реєстрацію користувачів, перевірте <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>Умови<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> для отримання додаткової інформації, або знайдіть інстанс який дасть вам змогу зареєструвати обліковий запис та завантажувати свої відео. Знайдіть свій серед багатьох інстансів на: <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt; "/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;alert-link&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">69</context></context-group>
       </trans-unit>
       <trans-unit id="2392488717875840729">
@@ -1030,7 +1030,7 @@
       </trans-unit>
       <trans-unit id="1758058452376026925" datatype="html">
         <source>⚠️ Most email addresses do not include capital letters.</source>
-        <target state="new"> ⚠️ Most email addresses do not include capital letters. </target>
+        <target state="translated">⚠️ Більшість адрес електронної пошти не містять великих літер.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">33,34</context>
@@ -1055,12 +1055,12 @@
       </trans-unit>
       <trans-unit id="892063502898494584" datatype="html">
         <source>I forgot my password</source>
-        <target state="new">I forgot my password</target>
+        <target state="translated">Я забув мій пароль</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">51</context></context-group>
       </trans-unit>
       <trans-unit id="2101170466365500913" datatype="html">
         <source>Logging into an account lets you publish content</source>
-        <target state="new"> Logging into an account lets you publish content </target>
+        <target state="translated">Авторизація в обліковому запису дозволяє публікувати контент</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">60</context></context-group>
       </trans-unit>
       <trans-unit id="2454050363478003966" datatype="html">
@@ -1087,13 +1087,12 @@
       </trans-unit>
       <trans-unit id="3188014010833256853" datatype="html">
         <source>Enter your email address and we will send you a link to reset your password.</source>
-        <target state="new"> Enter your email address and we will send you a link to reset your password. </target>
+        <target state="translated">Введіть вашу електронну пошту і ми відправимо вам посилання на відновлення вашого паролю.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">107</context></context-group>
       </trans-unit>
       <trans-unit id="1190256911880544559" datatype="html">
         <source>An email with the reset password instructions will be sent to <x id="PH" equiv-text="this.forgotPasswordEmail"/>. The link will expire within 1 hour.</source>
-        <target state="new">An email with the reset password instructions will be sent to <x id="PH"/>.
-The link will expire within 1 hour.</target>
+        <target state="translated">Лист з інструкцією по скиданню пароля буде відправлено на <x id="PH" equiv-text="this.forgotPasswordEmail"/>. Посилання буде дійсне протягом 1 години.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">121</context></context-group>
       </trans-unit>
       <trans-unit id="4768749765465246664" datatype="html">
@@ -1116,7 +1115,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="7808756054397155068" datatype="html">
         <source>Reset</source>
-        <target state="new">Reset</target>
+        <target state="translated">Скинути</target>
         <note priority="1" from="description">Password reset button</note>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">126</context></context-group>
       </trans-unit>
@@ -1132,7 +1131,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="8434369348784683733" datatype="html">
         <source>for <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;search-value&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ currentSearch }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></source>
-        <target state="new">for <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;search-value&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ currentSearch }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></target>
+        <target state="translated">для <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;search-value&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ currentSearch }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search.component.html</context>
           <context context-type="linenumber">10</context>
@@ -1258,29 +1257,12 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="5083058563861587027" datatype="html">
         <source>Choosing your <x id="START_TAG_STRONG"/>instance name<x id="CLOSE_TAG_STRONG"/>, <x id="START_TAG_STRONG"/>setting up a description<x id="CLOSE_TAG_STRONG"/>, specifying <x id="START_TAG_STRONG"/>who you are<x id="CLOSE_TAG_STRONG"/>, why <x id="START_TAG_STRONG"/>you created your instance<x id="CLOSE_TAG_STRONG"/> and <x id="START_TAG_STRONG"/>how long<x id="CLOSE_TAG_STRONG"/> you plan to <x id="START_TAG_STRONG"/>maintain your it<x id="CLOSE_TAG_STRONG"/> is very important for visitors to understand on what type of instance they are. </source>
-        <target state="new">
-          Choosing your 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>instance name
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>setting up a description
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, specifying 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>who you are
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>,
-          why 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>you created your instance
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> and 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>how long
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> you plan to 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>maintain your it
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>
-          is very important for visitors to understand on what type of instance they are.
-        
-        </target>
+        <target state="needs-translation">Оберіть ваше <x id="START_TAG_STRONG"/>ім'я інстансу<x id="CLOSE_TAG_STRONG"/>, <x id="START_TAG_STRONG"/>створіть опис<x id="CLOSE_TAG_STRONG"/>, вказуючи <x id="START_TAG_STRONG"/>хто ви <x id="CLOSE_TAG_STRONG"/>, чому <x id="START_TAG_STRONG"/>ви створили цей інстанс <x id="CLOSE_TAG_STRONG"/> і <x id="START_TAG_STRONG"/>як довго<x id="CLOSE_TAG_STRONG"/>ви плануєте <x id="START_TAG_STRONG"/>підтримувати його <x id="CLOSE_TAG_STRONG"/> це дуже важливо відвідувачам для розуміння якого типу цей інстанс. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context><context context-type="linenumber">58</context></context-group>
       </trans-unit>
       <trans-unit id="5329436244765769292" datatype="html">
         <source>If you want to open registrations, please decide what <x id="START_TAG_STRONG"/>your moderation rules<x id="CLOSE_TAG_STRONG"/> and <x id="START_TAG_STRONG"/>instance terms of service<x id="CLOSE_TAG_STRONG"/> are, as well as specify the categories and languages and your moderators speak. This way, you will help users to register on <x id="START_TAG_STRONG"/>the appropriate<x id="CLOSE_TAG_STRONG"/> PeerTube instance. </source>
-        <target state="new"> If you want to open registrations, please decide what <x id="START_TAG_STRONG"/>your moderation rules<x id="CLOSE_TAG_STRONG"/> and <x id="START_TAG_STRONG"/>instance terms of service<x id="CLOSE_TAG_STRONG"/> are, as well as specify the categories and languages and your moderators speak. This way, you will help users to register on <x id="START_TAG_STRONG"/>the appropriate<x id="CLOSE_TAG_STRONG"/> PeerTube instance. </target>
+        <target state="translated">Якщо ви бажаєте відкрити реєстрацію, визначте якими будуть <x id="START_TAG_STRONG"/>ваші правила модерації <x id="CLOSE_TAG_STRONG"/> та <x id="START_TAG_STRONG"/> умови обслуговування інстансу <x id="CLOSE_TAG_STRONG"/>, також вкажіть категорії та мови якими послуговуються ваші модератори. Таким чином ви допоможете користувачам зареєструватися на <x id="START_TAG_STRONG"/>відповідному<x id="CLOSE_TAG_STRONG"/> інстансі PeerTube. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context><context context-type="linenumber">64</context></context-group>
       </trans-unit>
       <trans-unit id="5704345824323933019" datatype="html">
@@ -1291,7 +1273,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="7997432701743294657" datatype="html">
         <source>Set up</source>
-        <target state="new"> Set up </target>
+        <target state="translated">Налаштувати</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/account-setup-modal.component.html</context>
           <context context-type="linenumber">29,30</context>
