@@ -773,7 +773,7 @@
       </trans-unit>
       <trans-unit id="6276792241563504067" datatype="html">
         <source>You can import any torrent file that points to a media file. You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance.</source>
-        <target state="translated">Ви можете імпортувати будь-який torrent файл що вказує на медіафайл. Ви повинні бути впевнені що у вас є права на поширення вказаного контенту, інакше це може спричинити юридичні наслідки для вас і вашого інстансу.</target>
+        <target state="translated">Ви можете імпортувати будь-який torrent файл що вказує на медіафайл. Ви повинні бути впевнені що у вас є права на поширення вказаного контенту, інакше це може спричинити юридичні наслідки для вас і вашого сервера.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-torrent.component.html</context><context context-type="linenumber">20</context></context-group>
       </trans-unit>
       <trans-unit id="5812787579835788700" datatype="html">
@@ -1009,12 +1009,12 @@
       </trans-unit>
       <trans-unit id="7252854992688790751" datatype="html">
         <source>This instance allows registration. However, be careful to check the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;terms-anchor&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot; fragment=&quot;terms&quot;&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> before creating an account. You may also search for another instance to match your exact needs at: <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="START_LINK_2" equiv-text="&lt;a class=&quot;alert-link&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="translated">Цей інстанс дозволяє реєстрацію. Однак будьте обережні, перевірте <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;terms-anchor&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>Умови<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot; fragment=&quot;terms&quot;&gt;"/>Умови<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> перед створенням облікового запису. Ви також можете знайти інший інстанс, який точно відповідає вашим потребам, на: <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="START_LINK_2" equiv-text="&lt;a class=&quot;alert-link&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target state="translated">Цей сервер дозволяє реєстрацію. Однак будьте обережні, перевірте <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;terms-anchor&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>Умови<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot; fragment=&quot;terms&quot;&gt;"/>Умови<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> перед створенням облікового запису. Ви також можете знайти інший сервер, який точно відповідає вашим потребам, на: <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="START_LINK_2" equiv-text="&lt;a class=&quot;alert-link&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">64</context></context-group>
       </trans-unit>
       <trans-unit id="7215649348148521605" datatype="html">
         <source>Currently this instance doesn't allow for user registration, you may check the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more details or find an instance that gives you the possibility to sign up for an account and upload your videos there. Find yours among multiple instances at: <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt; "/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;alert-link&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="translated">В даний час цей інстанс не дозволяє реєстрацію користувачів, перевірте <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>Умови<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> для отримання додаткової інформації, або знайдіть інстанс який дасть вам змогу зареєструвати обліковий запис та завантажувати свої відео. Знайдіть свій серед багатьох інстансів на: <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt; "/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;alert-link&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target state="translated">У цей час цей сервер не дозволяє реєстрацію користувачів, перевірте <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>Умови<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> для отримання додаткової інформації, або знайдіть сервер який дасть вам змогу зареєструвати обліковий запис та вивантажувати свої відео. Знайдіть свій серед багатьох серверів на: <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt; "/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;alert-link&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">69</context></context-group>
       </trans-unit>
       <trans-unit id="2392488717875840729">
@@ -1055,12 +1055,12 @@
       </trans-unit>
       <trans-unit id="892063502898494584" datatype="html">
         <source>I forgot my password</source>
-        <target state="translated">Я забув мій пароль</target>
+        <target state="translated">Я забув свій пароль</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">51</context></context-group>
       </trans-unit>
       <trans-unit id="2101170466365500913" datatype="html">
         <source>Logging into an account lets you publish content</source>
-        <target state="translated">Авторизація в обліковому запису дозволяє публікувати контент</target>
+        <target state="translated">Вхід до облікового запису дозволяє публікувати контент</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">60</context></context-group>
       </trans-unit>
       <trans-unit id="2454050363478003966" datatype="html">
@@ -1087,12 +1087,12 @@
       </trans-unit>
       <trans-unit id="3188014010833256853" datatype="html">
         <source>Enter your email address and we will send you a link to reset your password.</source>
-        <target state="translated">Введіть вашу електронну пошту і ми відправимо вам посилання на відновлення вашого паролю.</target>
+        <target state="translated">Уведіть своє адресу е-пошти й ми надішлемо вам посилання для відновлення вашого пароля.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">107</context></context-group>
       </trans-unit>
       <trans-unit id="1190256911880544559" datatype="html">
         <source>An email with the reset password instructions will be sent to <x id="PH" equiv-text="this.forgotPasswordEmail"/>. The link will expire within 1 hour.</source>
-        <target state="translated">Лист з інструкцією по скиданню пароля буде відправлено на <x id="PH" equiv-text="this.forgotPasswordEmail"/>. Посилання буде дійсне протягом 1 години.</target>
+        <target state="translated">Лист з настановами щодо скидання пароля буде надіслано на <x id="PH" equiv-text="this.forgotPasswordEmail"/>. Посилання буде дійсне впродовж 1 години.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">121</context></context-group>
       </trans-unit>
       <trans-unit id="4768749765465246664" datatype="html">
@@ -1257,12 +1257,12 @@
       </trans-unit>
       <trans-unit id="5083058563861587027" datatype="html">
         <source>Choosing your <x id="START_TAG_STRONG"/>instance name<x id="CLOSE_TAG_STRONG"/>, <x id="START_TAG_STRONG"/>setting up a description<x id="CLOSE_TAG_STRONG"/>, specifying <x id="START_TAG_STRONG"/>who you are<x id="CLOSE_TAG_STRONG"/>, why <x id="START_TAG_STRONG"/>you created your instance<x id="CLOSE_TAG_STRONG"/> and <x id="START_TAG_STRONG"/>how long<x id="CLOSE_TAG_STRONG"/> you plan to <x id="START_TAG_STRONG"/>maintain your it<x id="CLOSE_TAG_STRONG"/> is very important for visitors to understand on what type of instance they are. </source>
-        <target state="needs-translation">Оберіть ваше <x id="START_TAG_STRONG"/>ім'я інстансу<x id="CLOSE_TAG_STRONG"/>, <x id="START_TAG_STRONG"/>створіть опис<x id="CLOSE_TAG_STRONG"/>, вказуючи <x id="START_TAG_STRONG"/>хто ви <x id="CLOSE_TAG_STRONG"/>, чому <x id="START_TAG_STRONG"/>ви створили цей інстанс <x id="CLOSE_TAG_STRONG"/> і <x id="START_TAG_STRONG"/>як довго<x id="CLOSE_TAG_STRONG"/>ви плануєте <x id="START_TAG_STRONG"/>підтримувати його <x id="CLOSE_TAG_STRONG"/> це дуже важливо відвідувачам для розуміння якого типу цей інстанс. </target>
+        <target state="translated">Оберіть <x id="START_TAG_STRONG"/>назву свого сервера<x id="CLOSE_TAG_STRONG"/>, <x id="START_TAG_STRONG"/>створіть опис<x id="CLOSE_TAG_STRONG"/>, вказавши <x id="START_TAG_STRONG"/>хто ви<x id="CLOSE_TAG_STRONG"/>, чому <x id="START_TAG_STRONG"/>ви створили цей сервер<x id="CLOSE_TAG_STRONG"/> та <x id="START_TAG_STRONG"/>як довго<x id="CLOSE_TAG_STRONG"/>ви плануєте <x id="START_TAG_STRONG"/>підтримувати його<x id="CLOSE_TAG_STRONG"/>, це дуже важливо відвідувачам для розуміння якого типу цей сервер. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context><context context-type="linenumber">58</context></context-group>
       </trans-unit>
       <trans-unit id="5329436244765769292" datatype="html">
         <source>If you want to open registrations, please decide what <x id="START_TAG_STRONG"/>your moderation rules<x id="CLOSE_TAG_STRONG"/> and <x id="START_TAG_STRONG"/>instance terms of service<x id="CLOSE_TAG_STRONG"/> are, as well as specify the categories and languages and your moderators speak. This way, you will help users to register on <x id="START_TAG_STRONG"/>the appropriate<x id="CLOSE_TAG_STRONG"/> PeerTube instance. </source>
-        <target state="translated">Якщо ви бажаєте відкрити реєстрацію, визначте якими будуть <x id="START_TAG_STRONG"/>ваші правила модерації <x id="CLOSE_TAG_STRONG"/> та <x id="START_TAG_STRONG"/> умови обслуговування інстансу <x id="CLOSE_TAG_STRONG"/>, також вкажіть категорії та мови якими послуговуються ваші модератори. Таким чином ви допоможете користувачам зареєструватися на <x id="START_TAG_STRONG"/>відповідному<x id="CLOSE_TAG_STRONG"/> інстансі PeerTube. </target>
+        <target state="translated">Якщо ви бажаєте відкрити реєстрацію, визначте якими будуть <x id="START_TAG_STRONG"/>ваші правила модерації<x id="CLOSE_TAG_STRONG"/> та <x id="START_TAG_STRONG"/> умови обслуговування сервера <x id="CLOSE_TAG_STRONG"/>, також укажіть категорії та мови якими послуговуються ваші модератори. Таким чином ви допоможете користувачам зареєструватися на <x id="START_TAG_STRONG"/>відповідному<x id="CLOSE_TAG_STRONG"/> сервері PeerTube. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context><context context-type="linenumber">64</context></context-group>
       </trans-unit>
       <trans-unit id="5704345824323933019" datatype="html">
@@ -1291,7 +1291,7 @@
       </trans-unit>
       <trans-unit id="8901933019590352016" datatype="html">
         <source>You enabled user registration on your instance but did not configure the following fields:</source>
-        <target state="new">You enabled user registration on your instance but did not configure the following fields:</target>
+        <target state="translated">Ви увімкнули реєстрацію користувачів на своєму сервері, але не налаштували такі поля:</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="8948444690892731948" datatype="html">
@@ -1316,7 +1316,7 @@
       </trans-unit>
       <trans-unit id="1909672990242291785" datatype="html">
         <source>How you plan to pay for keeping your instance running</source>
-        <target state="new">How you plan to pay for keeping your instance running</target>
+        <target state="translated">Як ви плануєте платити за продовження роботи вашого сервера</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">18</context>
@@ -1334,13 +1334,13 @@
       </trans-unit>
       <trans-unit id="4116024528500133384" datatype="html">
         <source>My settings</source>
-        <target state="new">My settings</target>
+        <target state="translated">Мої налаштування</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">119</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/quick-settings-modal.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="1420294365005204590" datatype="html">
         <source>These settings apply only to your session on this instance.</source>
-        <target state="new">These settings apply only to your session on this instance.</target>
+        <target state="translated">Ці налаштування застосовуються лише до вашого сеансу в цьому сервері.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/quick-settings-modal.component.html</context>
           <context context-type="linenumber">8</context>
@@ -1348,20 +1348,12 @@
       </trans-unit>
       <trans-unit id="5330788940795142335" datatype="html">
         <source>Please consider configuring these fields to help people to choose <x id="START_TAG_STRONG"/>the appropriate instance<x id="CLOSE_TAG_STRONG"/>. Without them, your instance may not be referenced on the <x id="START_LINK"/>JoinPeerTube website<x id="CLOSE_LINK"/>. </source>
-        <target state="new">
-      Please consider configuring these fields to help people to choose 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>the appropriate instance
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>.
-      Without them, your instance may not be referenced on the 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>JoinPeerTube website
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.
-    
-        </target>
+        <target state="translated">Налаштуйте ці поля, щоб допомогти людям обрати <x id="START_TAG_STRONG"/>відповідний сервер<x id="CLOSE_TAG_STRONG"/>. Без них посилання на ваш сервер не буде додано на <x id="START_LINK"/>вебсайт JoinPeerTube<x id="CLOSE_LINK"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">25</context></context-group>
       </trans-unit>
       <trans-unit id="2728623642717111613" datatype="html">
         <source>Don't show me this warning anymore</source>
-        <target state="new">Don't show me this warning anymore</target>
+        <target state="translated">Більше не показувати мені це попередження</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">33</context></context-group>
       </trans-unit>
       <trans-unit id="7819314041543176992" datatype="html">
@@ -1372,7 +1364,7 @@
       </trans-unit>
       <trans-unit id="4853631149357965563" datatype="html">
         <source>Update live settings</source>
-        <target state="new">Update live settings</target>
+        <target state="translated">Оновити налаштування трансляцій</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context><context context-type="linenumber">36</context></context-group>
       </trans-unit>
       <trans-unit id="6013345175862135505" datatype="html">
@@ -1423,7 +1415,7 @@
       </trans-unit>
       <trans-unit id="6307374733149824815" datatype="html">
         <source>powered by PeerTube - CopyLeft 2015-2021</source>
-        <target state="new">powered by PeerTube - CopyLeft 2015-2021</target>
+        <target state="translated">працює на PeerTube - CopyLeft 2015-2021</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">146</context></context-group>
       </trans-unit>
       <trans-unit id="7911416166208830577" datatype="html">
@@ -1484,7 +1476,7 @@
       </trans-unit>
       <trans-unit id="949618577357088829" datatype="html">
         <source>Create a new playlist</source>
-        <target state="new">Create a new playlist</target>
+        <target state="translated">Створити нову добірку</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-library-routing.module.ts</context><context context-type="linenumber">48</context></context-group>
       </trans-unit>
       <trans-unit id="2527931602940887636" datatype="html">
@@ -1504,7 +1496,7 @@
       </trans-unit>
       <trans-unit id="2689878465089314112" datatype="html">
         <source>Interface: <x id="INTERPOLATION" equiv-text="{{ currentInterfaceLanguage }}"/></source>
-        <target state="new">Interface: <x id="INTERPOLATION" equiv-text="{{ currentInterfaceLanguage }}"/></target>
+        <target state="translated">Інтерфейс: <x id="INTERPOLATION" equiv-text="{{ currentInterfaceLanguage }}"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">132</context></context-group>
       </trans-unit>
       <trans-unit id="1823843876735462104" datatype="html">
@@ -1536,50 +1528,50 @@
       </trans-unit>
       <trans-unit id="667372110624203230" datatype="html">
         <source>Import jobs concurrency</source>
-        <target state="new">Import jobs concurrency</target>
+        <target state="translated">Одночасне імпортування</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">225</context></context-group>
       </trans-unit>
       <trans-unit id="2184839376696112704" datatype="html">
         <source>allows to import multiple videos in parallel. ⚠️ Requires a PeerTube restart.</source>
-        <target state="new">allows to import multiple videos in parallel. ⚠️ Requires a PeerTube restart.</target>
+        <target state="translated">уможливлює імпорт кількох відео одночасно. ⚠️ Потрібен перезапуск PeerTube.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">226</context></context-group>
       </trans-unit>
       <trans-unit id="780513172839038392" datatype="html">
         <source>jobs in parallel</source>
-        <target state="new">jobs in parallel</target>
+        <target state="translated">паралельна робота</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">230</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">171</context></context-group>
       </trans-unit>
       <trans-unit id="5997625369044180192" datatype="html">
         <source>Allow import with HTTP URL (e.g. YouTube)</source>
-        <target state="new">Allow import with HTTP URL (e.g. YouTube)</target>
+        <target state="translated">Дозволити імпорт з URL-адреси HTTP (наприклад, YouTube)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">239</context></context-group>
       </trans-unit>
       <trans-unit id="7627544798203088407" datatype="html">
         <source>Discover</source>
-        <target state="new">Discover</target>
+        <target state="translated">Огляд</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/video-list/overview/video-overview.component.html</context><context context-type="linenumber">1</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/menu/menu.service.ts</context><context context-type="linenumber">125</context></context-group>
       </trans-unit>
       <trans-unit id="7844706011418789951" datatype="html">
         <source>Administration</source>
-        <target state="new">Administration</target>
+        <target state="translated">Адміністрація</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">93</context></context-group>
       </trans-unit>
       <trans-unit id="1726363342938046830" datatype="html">
         <source>About</source>
-        <target state="new">About</target>
+        <target state="translated">Про нас</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">124</context></context-group>
       </trans-unit>
       <trans-unit id="7922989125096435449" datatype="html">
         <source>Contact</source>
-        <target state="new">Contact</target>
+        <target state="translated">Контакти</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-routing.module.ts</context><context context-type="linenumber">36</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">136</context></context-group>
       </trans-unit>
       <trans-unit id="403762424689874454" datatype="html">
         <source>View your notifications</source>
-        <target state="new">View your notifications</target>
+        <target state="translated">Переглянути сповіщення</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/notification.component.html</context><context context-type="linenumber">3</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/notification.component.html</context><context context-type="linenumber">11</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/notification.component.html</context><context context-type="linenumber">11</context></context-group>
@@ -1594,24 +1586,24 @@
       </trans-unit>
       <trans-unit id="2333314224059826550" datatype="html">
         <source>Mark all as read</source>
-        <target state="new">Mark all as read</target>
+        <target state="translated">Позначити всі прочитаними</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/notification.component.html</context><context context-type="linenumber">27</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/notification.component.html</context><context context-type="linenumber">27</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-notifications/my-account-notifications.component.html</context><context context-type="linenumber">20</context></context-group>
       </trans-unit>
       <trans-unit id="8278995041812548563" datatype="html">
         <source>Update your notification preferences</source>
-        <target state="new">Update your notification preferences</target>
+        <target state="translated">Оновити налаштування сповіщень</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/notification.component.html</context><context context-type="linenumber">31</context></context-group>
       </trans-unit>
       <trans-unit id="5842982307680337701" datatype="html">
         <source>See all your notifications</source>
-        <target state="new">See all your notifications</target>
+        <target state="translated">Переглянути всі сповіщення</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/notification.component.html</context><context context-type="linenumber">49</context></context-group>
       </trans-unit>
       <trans-unit id="5108072242786374364" datatype="html">
         <source>Welcome to <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>, dear user!</source>
-        <target state="new">Welcome to <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>, dear user!</target>
+        <target state="translated">Вітаємо у <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>, любий користувачу!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/account-setup-modal.component.html</context>
           <context context-type="linenumber">3</context>
@@ -1619,7 +1611,7 @@
       </trans-unit>
       <trans-unit id="8821712929823045567" datatype="html">
         <source>It's time to set up your account profile!</source>
-        <target state="new">It's time to set up your account profile!</target>
+        <target state="translated">Саме час створити профіль свого облікового запису!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/account-setup-modal.component.html</context>
           <context context-type="linenumber">10</context>
@@ -1627,7 +1619,7 @@
       </trans-unit>
       <trans-unit id="7239874680342223476" datatype="html">
         <source>Help moderators and other users to know <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>who you are<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> by:</source>
-        <target state="new">Help moderators and other users to know <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>who you are<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> by:</target>
+        <target state="translated">Допоможіть модераторам та іншим користувачам дізнатися <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>хто ви<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> від:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/account-setup-modal.component.html</context>
           <context context-type="linenumber">12</context>
@@ -1635,7 +1627,7 @@
       </trans-unit>
       <trans-unit id="5856432243446401016" datatype="html">
         <source>Uploading an <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>avatar<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">Uploading an <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>avatar<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">Вивантаження <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>аватара<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/account-setup-modal.component.html</context>
           <context context-type="linenumber">15</context>
@@ -1643,7 +1635,7 @@
       </trans-unit>
       <trans-unit id="3221645359464920754" datatype="html">
         <source>Writing a <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>description<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">Writing a <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>description<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">Створення <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>опису<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/account-setup-modal.component.html</context>
           <context context-type="linenumber">16</context>
@@ -1651,12 +1643,12 @@
       </trans-unit>
       <trans-unit id="4424964105331349857" datatype="html">
         <source>I'm a teapot</source>
-        <target state="new">I'm a teapot</target>
+        <target state="translated">Я чайник</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.ts</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="1597262876035959248" datatype="html">
         <source>That's an error.</source>
-        <target state="new">That's an error.</target>
+        <target state="translated">Це помилка.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context>
           <context context-type="linenumber">4</context>
@@ -1664,7 +1656,7 @@
       </trans-unit>
       <trans-unit id="3343007694071351756" datatype="html">
         <source>We couldn't find any video tied to the URL <x id="INTERPOLATION" equiv-text="{{ pathname }}"/> you were looking for.</source>
-        <target state="new">We couldn't find any video tied to the URL <x id="INTERPOLATION" equiv-text="{{ pathname }}"/> you were looking for.</target>
+        <target state="translated">Не вдалося знайти жодного відео, пов’язаного з URL-адресою <x id="INTERPOLATION" equiv-text="{{ pathname }}"/>, який ви шукали.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context>
           <context context-type="linenumber">7</context>
@@ -1672,7 +1664,7 @@
       </trans-unit>
       <trans-unit id="7366678433039425999" datatype="html">
         <source>We couldn't find any resource tied to the URL <x id="INTERPOLATION" equiv-text="{{ pathname }}"/> you were looking for.</source>
-        <target state="new">We couldn't find any resource tied to the URL <x id="INTERPOLATION" equiv-text="{{ pathname }}"/> you were looking for.</target>
+        <target state="translated">Не вдалося знайти ресурс, пов'язаний з URL-адресою <x id="INTERPOLATION" equiv-text="{{ pathname }}"/>, яку ви шукали.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context>
           <context context-type="linenumber">8</context>
@@ -1680,18 +1672,18 @@
       </trans-unit>
       <trans-unit id="3522707340816553139" datatype="html">
         <source>Possible reasons:</source>
-        <target state="new">Possible reasons:</target>
+        <target state="translated">Можливі причини:</target>
         <note priority="1" from="description">Possible reasons preceding a list of reasons a `Not Found` error page may occur</note>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context><context context-type="linenumber">12</context></context-group>
       </trans-unit>
       <trans-unit id="6925335998927745197" datatype="html">
         <source>You may have used an outdated or broken link</source>
-        <target state="new">You may have used an outdated or broken link</target>
+        <target state="translated">Можливо, ви використовували застаріле або пошкоджене посилання</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="1171455174603388942" datatype="html">
         <source>The video may have been moved or deleted</source>
-        <target state="new">The video may have been moved or deleted</target>
+        <target state="translated">Можливо, відео було переміщено або видалено</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context>
           <context context-type="linenumber">17</context>
@@ -1699,7 +1691,7 @@
       </trans-unit>
       <trans-unit id="2213348264902218064" datatype="html">
         <source>The resource may have been moved or deleted</source>
-        <target state="new">The resource may have been moved or deleted</target>
+        <target state="translated">Можливо, ресурс було переміщено або видалено</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context>
           <context context-type="linenumber">18</context>
@@ -1707,17 +1699,17 @@
       </trans-unit>
       <trans-unit id="3209594685692897380" datatype="html">
         <source>You may have typed the address or URL incorrectly</source>
-        <target state="new">You may have typed the address or URL incorrectly</target>
+        <target state="translated">Можливо, ви неправильно ввели адресу або URL-адресу</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context><context context-type="linenumber">20</context></context-group>
       </trans-unit>
       <trans-unit id="3290262698447971494" datatype="html">
         <source>You are not authorized here.</source>
-        <target state="new">You are not authorized here.</target>
+        <target state="translated">Ви тут не авторизовані.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="6209939621665316894" datatype="html">
         <source>You might need to check your account is allowed by the video or instance owner.</source>
-        <target state="new">You might need to check your account is allowed by the video or instance owner.</target>
+        <target state="translated">Можливо, вам доведеться перевірити, чи дозволив власник відео чи сервера ваш обліковий запис.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context>
           <context context-type="linenumber">30</context>
@@ -1725,7 +1717,7 @@
       </trans-unit>
       <trans-unit id="3543381263966122204" datatype="html">
         <source>You might need to check your account is allowed by the resource or instance owner.</source>
-        <target state="new">You might need to check your account is allowed by the resource or instance owner.</target>
+        <target state="translated">Можливо, вам доведеться перевірити, чи дозволив власник ресурсу або сервера ваш обліковий запис.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context>
           <context context-type="linenumber">31</context>
@@ -1733,24 +1725,24 @@
       </trans-unit>
       <trans-unit id="7231414106228227962" datatype="html">
         <source>The requested entity body blends sweet bits with a mellow earthiness.</source>
-        <target state="new"> The requested entity body blends sweet bits with a mellow earthiness. </target>
+        <target state="translated">Запитане тіло сутності поєднує солодкі шматочки з м’якою землею.</target>
         <note priority="1" from="description">Description of a tea flavour, keeping the 'requested entity body' as a technical expression referring to a web request</note>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context><context context-type="linenumber">40</context></context-group>
       </trans-unit>
       <trans-unit id="2933819425721221134" datatype="html">
         <source>Sepia seems to like it.</source>
-        <target state="new">Sepia seems to like it.</target>
+        <target state="translated">Здається, сепія подобається.</target>
         <note priority="1" from="description">This is about Sepia's tea</note>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context><context context-type="linenumber">42</context></context-group>
       </trans-unit>
       <trans-unit id="2971365540217107489" datatype="html">
         <source>Media is too large for the server. Please contact you administrator if you want to increase the limit size.</source>
-        <target state="new">Media is too large for the server. Please contact you administrator if you want to increase the limit size.</target>
+        <target state="translated">Медіа завелике для сервера. Якщо ви хочете збільшити ліміт, зверніться до свого адміністратора.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/rest/rest-extractor.service.ts</context><context context-type="linenumber">65</context></context-group>
       </trans-unit>
       <trans-unit id="5131854469652959713" datatype="html">
         <source>GLOBAL SEARCH</source>
-        <target state="new">GLOBAL SEARCH</target>
+        <target state="translated">ГЛОБАЛЬНИЙ ПОШУК</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="1843010981261389722" datatype="html">
@@ -1760,12 +1752,12 @@
       </trans-unit>
       <trans-unit id="4070041848101291003" datatype="html">
         <source>Results will be augmented with those of a third-party index. Only data necessary to make the query will be sent.</source>
-        <target state="new">Results will be augmented with those of a third-party index. Only data necessary to make the query will be sent.</target>
+        <target state="translated">Результати будуть доповнені результатами стороннього індексу. Будуть надіслані лише дані, необхідні для здійснення запиту.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">32</context></context-group>
       </trans-unit>
       <trans-unit id="2807610143550376912" datatype="html">
         <source>Your query will be matched against video names or descriptions, channel names.</source>
-        <target state="new">Your query will be matched against video names or descriptions, channel names.</target>
+        <target state="translated">Ваш запит буде зіставлений з назвами або описами відео, назвами каналів.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">37</context>
@@ -1773,53 +1765,53 @@
       </trans-unit>
       <trans-unit id="3801957940570333397" datatype="html">
         <source>ADVANCED SEARCH</source>
-        <target state="new">ADVANCED SEARCH</target>
+        <target state="translated">РОЗШИРЕНИЙ ПОШУК</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">39</context></context-group>
       </trans-unit>
       <trans-unit id="3416071273413341159" datatype="html">
         <source>any instance</source>
-        <target state="new">any instance</target>
+        <target state="translated">будь-який сервер</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">42</context></context-group>
       </trans-unit>
       <trans-unit id="1764675694412365696" datatype="html">
         <source>only followed instances</source>
-        <target state="new">only followed instances</target>
+        <target state="translated">лише сервери, які відстежуються</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">43</context></context-group>
       </trans-unit>
       <trans-unit id="6462732349450217281" datatype="html">
         <source>Determines whether you can resolve any distant content, or if this instance only allows doing so for instances it follows.</source>
-        <target state="new">Determines whether you can resolve any distant content, or if this instance only allows doing so for instances it follows.</target>
+        <target state="translated">Визначає, чи можна розв'язати будь-який віддалений вміст, чи цей сервер дозволяє це робити лише для серверів, за якими він стежить.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="3710530516408401495" datatype="html">
         <source>will list the matching channel</source>
-        <target state="new">will list the matching channel</target>
+        <target state="translated">показуватиме відповідний канал</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">50</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">53</context></context-group>
       </trans-unit>
       <trans-unit id="6913541939335935215" datatype="html">
         <source>will list the matching video</source>
-        <target state="new">will list the matching video</target>
+        <target state="translated">показуватиме відповідне відео</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">56</context></context-group>
       </trans-unit>
       <trans-unit id="8854094932942190741" datatype="html">
         <source>Search...</source>
-        <target state="new">Search...</target>
+        <target state="translated">Пошук...</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context><context context-type="linenumber">6</context></context-group>
       </trans-unit>
       <trans-unit id="2468689683507870964" datatype="html">
         <source>In this instance's network</source>
-        <target state="new">In this instance's network</target>
+        <target state="translated">На цьому сервері</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/suggestion.component.html</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="4494942989613184609" datatype="html">
         <source>In the vidiverse</source>
-        <target state="new">In the vidiverse</target>
+        <target state="translated">У федеративній мережі</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/suggestion.component.html</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="5146398958364876914" datatype="html">
         <source>Sort</source>
-        <target state="new">Sort</target>
+        <target state="translated">Сортувати</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">7</context></context-group>
       </trans-unit>
       <trans-unit id="5478121364779850827" datatype="html">
@@ -1842,7 +1834,7 @@
       </trans-unit>
       <trans-unit id="4540121094340493564" datatype="html">
         <source>Display only</source>
-        <target state="new">Display only</target>
+        <target state="translated">Показувати лише</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
           <context context-type="linenumber">21</context>
@@ -1866,48 +1858,48 @@
       </trans-unit>
       <trans-unit id="7970752988844762769" datatype="html">
         <source>Published date</source>
-        <target state="new">Published date</target>
+        <target state="translated">Дата публікації</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">59</context></context-group>
       </trans-unit>
       <trans-unit id="5038188980760269298" datatype="html">
         <source>Original publication year</source>
-        <target state="new">Original publication year</target>
+        <target state="translated">Рік публікації</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">73</context></context-group>
       </trans-unit>
       <trans-unit id="2316758236788716819" datatype="html">
         <source>After...</source>
-        <target state="new">After...</target>
+        <target state="translated">Після...</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">85</context></context-group>
       </trans-unit>
       <trans-unit id="5418443214217152433" datatype="html">
         <source>Before...</source>
-        <target state="new">Before...</target>
+        <target state="translated">До...</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">95</context></context-group>
       </trans-unit>
       <trans-unit id="7410432243549869948" datatype="html">
         <source>Duration</source>
-        <target state="new">Duration</target>
+        <target state="translated">Тривалість</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">108</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/metadata/video-attributes.component.html</context><context context-type="linenumber">60</context></context-group>
       </trans-unit>
       <trans-unit id="3589238979642505685" datatype="html">
         <source>Display sensitive content</source>
-        <target state="new">Display sensitive content</target>
+        <target state="translated">Показувати делікатний вміст</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">40</context></context-group>
       </trans-unit>
       <trans-unit id="2807800733729323332" datatype="html">
         <source>Yes</source>
-        <target state="new">Yes</target>
+        <target state="translated">Так</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">48</context></context-group>
       </trans-unit>
       <trans-unit id="3542042671420335679" datatype="html">
         <source>No</source>
-        <target state="new">No</target>
+        <target state="translated">Ні</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">53</context></context-group>
       </trans-unit>
       <trans-unit id="1806667489382256324" datatype="html">
         <source>Category</source>
-        <target state="new">Category</target>
+        <target state="translated">Категорія</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">121</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">63</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/metadata/video-attributes.component.html</context><context context-type="linenumber">25</context></context-group>
@@ -1925,24 +1917,24 @@
       </trans-unit>
       <trans-unit id="2199290266269383925" datatype="html">
         <source>Display all categories</source>
-        <target state="new">Display all categories</target>
+        <target state="translated">Показати всі категорії</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">127</context></context-group>
       </trans-unit>
       <trans-unit id="9065795501872450602" datatype="html">
         <source>Licence</source>
-        <target state="new">Licence</target>
+        <target state="translated">Ліцензія</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">134</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">74</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/metadata/video-attributes.component.html</context><context context-type="linenumber">34</context></context-group>
       </trans-unit>
       <trans-unit id="4184995865179898060" datatype="html">
         <source>Display all licenses</source>
-        <target state="new">Display all licenses</target>
+        <target state="translated">Показати всі ліцензії</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">140</context></context-group>
       </trans-unit>
       <trans-unit id="2826581353496868063" datatype="html">
         <source>Language</source>
-        <target state="new">Language</target>
+        <target state="translated">Мова</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">147</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-caption-add-modal.component.html</context><context context-type="linenumber">10</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">94</context></context-group>
@@ -1950,22 +1942,22 @@
       </trans-unit>
       <trans-unit id="7904142744051432458" datatype="html">
         <source>Display all languages</source>
-        <target state="new">Display all languages</target>
+        <target state="translated">Показати всі мови</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">153</context></context-group>
       </trans-unit>
       <trans-unit id="2252476112877289102" datatype="html">
         <source>All of these tags</source>
-        <target state="new">All of these tags</target>
+        <target state="translated">Усі з цих міток</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">162</context></context-group>
       </trans-unit>
       <trans-unit id="4413784616961145955" datatype="html">
         <source>One of these tags</source>
-        <target state="new">One of these tags</target>
+        <target state="translated">Одну з цих міток</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">170</context></context-group>
       </trans-unit>
       <trans-unit id="5143793904897598509" datatype="html">
         <source>PeerTube instance host</source>
-        <target state="new">PeerTube instance host</target>
+        <target state="translated">Хост сервера PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
           <context context-type="linenumber">178</context>
@@ -1973,61 +1965,57 @@
       </trans-unit>
       <trans-unit id="283421392567624698" datatype="html">
         <source>Search target</source>
-        <target state="new">Search target</target>
+        <target state="translated">Мета пошуку</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">187</context></context-group>
       </trans-unit>
       <trans-unit id="2489767671380266270" datatype="html">
         <source>Vidiverse</source>
-        <target state="new">Vidiverse</target>
+        <target state="translated">Vidiverse</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">197</context></context-group>
       </trans-unit>
       <trans-unit id="5478121364779850827" datatype="html">
         <source>Reset</source>
-        <target state="new">
-      Reset
-    </target>
+        <target state="translated">Скинути</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">197</context></context-group>
       </trans-unit>
       <trans-unit id="8829497237648100098" datatype="html">
         <source>Filter</source>
-        <target state="new">Filter</target>
+        <target state="translated">Фільтр</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">208</context></context-group>
       </trans-unit>
       <trans-unit id="6479885129995567639" datatype="html">
         <source>Video channels</source>
-        <target state="new">Video channels</target>
+        <target state="translated">Відеоканали</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context><context context-type="linenumber">1</context></context-group>
       </trans-unit>
       <trans-unit id="1909308046360229945" datatype="html">
         <source>Add caption</source>
-        <target state="new">Add caption</target>
+        <target state="translated">Додати підпис</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-caption-add-modal.component.html</context><context context-type="linenumber">5</context></context-group>
       </trans-unit>
       <trans-unit id="753928283782809091" datatype="html">
         <source>Select the caption file</source>
-        <target state="new">Select the caption file</target>
+        <target state="translated">Вибрати файл підписів</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-caption-add-modal.component.html</context><context context-type="linenumber">24</context></context-group>
       </trans-unit>
       <trans-unit id="4616828176080418150" datatype="html">
         <source>This will replace an existing caption!</source>
-        <target state="new">
-        This will replace an existing caption!
-      </target>
+        <target state="translated">Це замінить наявний підпис!</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-caption-add-modal.component.html</context><context context-type="linenumber">31</context></context-group>
       </trans-unit>
       <trans-unit id="2752121353049766867" datatype="html">
         <source>Add this caption</source>
-        <target state="new">Add this caption</target>
+        <target state="translated">Додати цей підпис</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-caption-add-modal.component.html</context><context context-type="linenumber">42</context></context-group>
       </trans-unit>
       <trans-unit id="5701618810648052610" datatype="html">
         <source>Title</source>
-        <target state="new">Title</target>
+        <target state="translated">Заголовок</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="7886570921510760899" datatype="html">
         <source>Tags</source>
-        <target state="new">Tags</target>
+        <target state="translated">Мітки</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">19</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/metadata/video-attributes.component.html</context><context context-type="linenumber">52</context></context-group>
       </trans-unit>
@@ -8529,7 +8517,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="5851560788527570644" datatype="html">
         <source>Notifications</source>
-        <target state="new">Notifications</target>
+        <target state="translated">Сповіщення</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context><context context-type="linenumber">55</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-routing.module.ts</context><context context-type="linenumber">109</context></context-group>
       </trans-unit>
@@ -8924,7 +8912,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="2392481201920342009" datatype="html">
         <source>VOD videos</source>
-        <target state="new">VOD videos</target>
+        <target state="translated">Оброблені відео</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.ts</context>
           <context context-type="linenumber">60</context>
@@ -8932,7 +8920,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="2180217594100853008" datatype="html">
         <source>Live videos</source>
-        <target state="new">Live videos</target>
+        <target state="translated">Трансляції</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.ts</context>
           <context context-type="linenumber">64</context>
@@ -11294,7 +11282,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="186236568870281953" datatype="html">
         <source>History</source>
-        <target state="new">History</target>
+        <target state="translated">Історія</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-library.component.ts</context><context context-type="linenumber">71</context></context-group>
       </trans-unit>
       <trans-unit id="5237588857224999862" datatype="html">
