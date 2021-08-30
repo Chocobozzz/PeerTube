@@ -41,6 +41,7 @@ export class VideoEdit implements VideoUpdate {
     if (video) {
       this.id = video.id
       this.uuid = video.uuid
+      this.shortUUID = video.shortUUID
       this.category = video.category.id
       this.licence = video.licence.id
       this.language = video.language.id
