@@ -1,5 +1,5 @@
 import { Hotkey, HotkeysService } from 'angular2-hotkeys'
-import { forkJoin } from 'rxjs'
+import { forkJoin, delay } from 'rxjs'
 import { filter, first, map } from 'rxjs/operators'
 import { DOCUMENT, getLocaleDirection, PlatformLocation } from '@angular/common'
 import { AfterViewInit, Component, Inject, LOCALE_ID, OnInit, ViewChild } from '@angular/core'
@@ -223,7 +223,10 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   private openModalsIfNeeded () {
     const userSub = this.authService.userInformationLoaded
-        .pipe(map(() => this.authService.getUser()))
+        .pipe(
+          delay(0), // Wait for modals creations
+          map(() => this.authService.getUser())
+        )
 
     // Admin modal
     userSub.pipe(
