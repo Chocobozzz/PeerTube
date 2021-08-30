@@ -3,7 +3,6 @@ const path = require('path')
 
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
-const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin')
 const ProvidePlugin = require('webpack/lib/ProvidePlugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
@@ -162,20 +161,6 @@ module.exports = function () {
         chunksSortMode: 'auto',
         inject: 'body',
         chunks: [ 'test-embed' ]
-      }),
-
-      /**
-       * Plugin LoaderOptionsPlugin (experimental)
-       *
-       * See: https://gist.github.com/sokra/27b24881210b56bbaff7
-       */
-      new LoaderOptionsPlugin({
-        options: {
-          context: __dirname,
-          output: {
-            path: helpers.root('dist')
-          }
-        }
       })
     ],
 
