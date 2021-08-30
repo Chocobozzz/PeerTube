@@ -69,7 +69,7 @@ module.exports = function () {
             {
               loader: 'ts-loader',
               options: {
-                configFile: 'tsconfig.json'
+                configFile: helpers.root('tsconfig.json')
               }
             }
           ]
