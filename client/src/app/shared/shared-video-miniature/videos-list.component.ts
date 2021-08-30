@@ -59,6 +59,8 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() headerActions: HeaderAction[] = []
 
+  @Input() hideScopeFilter = false
+
   @Input() displayOptions: MiniatureDisplayOptions = {
     date: true,
     views: true,
@@ -109,7 +111,11 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnInit () {
-    this.filters = new VideoFilters(this.defaultSort, this.defaultScope)
+    const hiddenFilters = this.hideScopeFilter
+      ? [ 'scope' ]
+      : []
+
+    this.filters = new VideoFilters(this.defaultSort, this.defaultScope, hiddenFilters)
     this.filters.load({ ...this.route.snapshot.queryParams, scope: this.defaultScope })
 
     this.groupedDateLabels = {

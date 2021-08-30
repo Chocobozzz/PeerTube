@@ -38,9 +38,13 @@ export class VideoFilters {
   private onChangeCallbacks: Array<() => void> = []
   private oldFormObjectString: string
 
-  constructor (defaultSort: string, defaultScope: VideoFilterScope) {
+  private readonly hiddenFields: string[] = []
+
+  constructor (defaultSort: string, defaultScope: VideoFilterScope, hiddenFields: string[] = []) {
     this.setDefaultSort(defaultSort)
     this.setDefaultScope(defaultScope)
+
+    this.hiddenFields = hiddenFields
 
     this.reset()
   }
@@ -160,6 +164,9 @@ export class VideoFilters {
         label: $localize`VOD videos`
       })
     }
+
+    this.activeFilters = this.activeFilters
+                             .filter(a => this.hiddenFields.includes(a.key) === false)
   }
 
   getActiveFilters () {

@@ -24,6 +24,8 @@ export class VideoFiltersHeaderComponent implements OnInit, OnDestroy {
   @Input() defaultSort = '-publishedAt'
   @Input() nsfwPolicy: NSFWPolicyType
 
+  @Input() hideScope = false
+
   @Output() filtersChanged = new EventEmitter()
 
   areFiltersCollapsed = true

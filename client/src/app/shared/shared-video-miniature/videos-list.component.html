@@ -33,7 +33,7 @@
   </div>
 
   <my-video-filters-header
-    *ngIf="displayFilters" [displayModerationBlock]="displayModerationBlock"
+    *ngIf="displayFilters" [displayModerationBlock]="displayModerationBlock" [hideScope]="hideScopeFilter"
     [defaultSort]="defaultSort" [filters]="filters"
     (filtersChanged)="onFiltersChanged(true)"
   ></my-video-filters-header>

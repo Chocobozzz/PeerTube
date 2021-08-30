@@ -23,7 +23,7 @@ export class VideoUserSubscriptionsComponent implements DisableForReuseHook {
     {
       routerLink: '/my-library/subscriptions',
       label: $localize`Subscriptions`,
-      iconName: 'cog'
+      iconName: 'cog' as 'cog'
     }
   ]
 
