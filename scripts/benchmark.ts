@@ -1,7 +1,7 @@
 import { registerTSPaths } from '../server/helpers/register-ts-paths'
 registerTSPaths()
 
-import * as autocannon from 'autocannon'
+import autocannon, { printResult } from 'autocannon'
 import { writeJson } from 'fs-extra'
 import { createSingleServer, killallServers, PeerTubeServer, setAccessTokensToServers } from '@shared/extra-utils'
 import { Video, VideoPrivacy } from '@shared/models'
@@ -149,7 +149,7 @@ async function run () {
     Object.assign(testResult, { title: test.title, path: test.path })
     finalResult.push(testResult)
 
-    console.log(autocannon.printResult(testResult))
+    console.log(printResult(testResult))
   }
 
   if (outfile) await writeJson(outfile, finalResult)
