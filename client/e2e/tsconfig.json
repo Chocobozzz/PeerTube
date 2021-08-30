@@ -5,9 +5,14 @@
     "module": "commonjs",
     "target": "es5",
     "types": [
-      "jasmine",
-      "jasminewd2",
-      "node"
+      "node",
+      "webdriverio/async",
+      "@wdio/mocha-framework",
+      "expect-webdriverio"
     ]
-  }
+  },
+  "include": [
+    "src/**/*.ts",
+    "./*.ts"
+  ]
 }

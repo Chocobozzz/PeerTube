@@ -197,9 +197,6 @@ async function addVideo (options: {
       }, sequelizeOptions)
     }
 
-    // Channel has a new content, set as updated
-    await videoCreated.VideoChannel.setAsUpdated(t)
-
     await autoBlacklistVideoIfNeeded({
       video,
       user,
@@ -213,6 +210,9 @@ async function addVideo (options: {
 
     return { videoCreated }
   })
+
+  // Channel has a new content, set as updated
+  await videoCreated.VideoChannel.setAsUpdated()
 
   createTorrentFederate(video, videoFile)
     .then(() => {

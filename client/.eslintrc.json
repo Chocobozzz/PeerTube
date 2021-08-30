@@ -22,6 +22,8 @@
         "plugin:@angular-eslint/template/process-inline-templates"
       ],
       "rules": {
+        "jsdoc/newline-after-description": "off",
+        "jsdoc/check-alignment": "off",
         "lines-between-class-members": "off",
         "@typescript-eslint/lines-between-class-members": [ "off" ],
         "arrow-body-style": "off",
