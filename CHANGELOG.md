@@ -13,10 +13,10 @@
 
  * Server helpers
    * **Deprecate** `videoLanguageManager.addLanguage` and `videoLanguageManager.deleteLanguage`: use `videoLanguageManager.addConstant` and `videoLanguageManager.deleteConstant` instead
-   * **Deprecate** `videoCategoryManager.addLanguage` and `videoCategoryManager.deleteLanguage`: use `videoCategoryManager.addConstant` and `videoCategoryManager.deleteConstant` instead
-   * **Deprecate** `videoLicenceManager.addLanguage` and `videoLicenceManager.deleteLanguage`: use `videoLicenceManager.addConstant` and `videoLicenceManager.deleteConstant` instead
-   * **Deprecate** `videoPrivacyManager.deleteLanguage`: `videoPrivacyManager.deleteConstant` instead
-   * **Deprecate** `playlistPrivacyManager.deleteLanguage`: `playlistPrivacyManager.deleteConstant` instead
+   * **Deprecate** `videoCategoryManager.addCategory` and `videoCategoryManager.deleteCategory`: use `videoCategoryManager.addConstant` and `videoCategoryManager.deleteConstant` instead
+   * **Deprecate** `videoLicenceManager.addLicence` and `videoLicenceManager.deleteLicence`: use `videoLicenceManager.addConstant` and `videoLicenceManager.deleteConstant` instead
+   * **Deprecate** `videoPrivacyManager.deletePrivacy`: `videoPrivacyManager.deleteConstant` instead
+   * **Deprecate** `playlistPrivacyManager.deletePlaylistPrivacy`: `playlistPrivacyManager.deleteConstant` instead
    * Introduce `.getConstantValue()`, `.getConstants()` and `.resetConstants()` for `videoLanguageManager`, `videoCategoryManager`, `videoLicenceManager`, `videoPrivacyManager` and `playlistPrivacyManager`
  * Add server plugin hooks:
    * `filter:api.overviews.videos.list.params` and `filter:api.overviews.videos.list.result`
