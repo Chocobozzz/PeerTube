@@ -74,6 +74,23 @@ module.exports = function () {
             }
           ]
         },
+        {
+          test: /\.js$/,
+          use: [
+            {
+              loader: 'babel-loader',
+              options: {
+                presets: [
+                  [
+                    '@babel/preset-env', {
+                      targets: 'last 1 Chrome version, last 2 Edge major versions, Firefox ESR, Safari >= 11, ios_saf >= 11'
+                    }
+                  ]
+                ]
+              }
+            }
+          ]
+        },
 
         {
           test: /\.(sass|scss)$/,
