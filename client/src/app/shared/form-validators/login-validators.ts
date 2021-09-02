@@ -6,7 +6,7 @@ export const LOGIN_USERNAME_VALIDATOR: BuildFormValidator = {
     Validators.required
   ],
   MESSAGES: {
-    'required': $localize`Username is required.`
+    required: $localize`Username is required.`
   }
 }
 
@@ -15,6 +15,6 @@ export const LOGIN_PASSWORD_VALIDATOR: BuildFormValidator = {
     Validators.required
   ],
   MESSAGES: {
-    'required': $localize`Password is required.`
+    required: $localize`Password is required.`
   }
 }

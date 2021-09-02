@@ -1,10 +1,10 @@
 import { createReadStream, createWriteStream, move, remove } from 'fs-extra'
 import { join } from 'path'
-import * as srt2vtt from 'srt-to-vtt'
+import srt2vtt from 'srt-to-vtt'
+import { Transform } from 'stream'
 import { MVideoCaption } from '@server/types/models'
 import { CONFIG } from '../initializers/config'
 import { pipelinePromise } from './core-utils'
-import { Transform } from 'stream'
 
 async function moveAndProcessCaptionFile (physicalFile: { filename: string, path: string }, videoCaption: MVideoCaption) {
   const videoCaptionsDir = CONFIG.STORAGE.CAPTIONS_DIR

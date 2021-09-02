@@ -77,14 +77,14 @@ export class AccountReportComponent extends FormReactive implements OnInit {
       account: {
         id: this.account.id
       }
-    }).subscribe(
-      () => {
+    }).subscribe({
+      next: () => {
         this.notifier.success($localize`Account reported.`)
         this.hide()
       },
 
-      err => this.notifier.error(err.message)
-    )
+      error: err => this.notifier.error(err.message)
+    })
   }
 
   isRemote () {

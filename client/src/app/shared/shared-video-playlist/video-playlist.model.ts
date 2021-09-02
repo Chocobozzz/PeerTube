@@ -48,7 +48,7 @@ export class VideoPlaylist implements ServerVideoPlaylist {
     return buildPlaylistWatchPath({ shortUUID: playlist.shortUUID || playlist.uuid })
   }
 
-  constructor (hash: ServerVideoPlaylist, translations: {}) {
+  constructor (hash: ServerVideoPlaylist, translations: { [ id: string ]: string }) {
     const absoluteAPIUrl = getAbsoluteAPIUrl()
 
     this.id = hash.id

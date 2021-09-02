@@ -67,14 +67,14 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
     if (res === false) return
 
     this.userService.unbanUsers(user)
-        .subscribe(
-          () => {
+        .subscribe({
+          next: () => {
             this.notifier.success($localize`User ${user.username} unbanned.`)
             this.userChanged.emit()
           },
 
-          err => this.notifier.error(err.message)
-        )
+          error: err => this.notifier.error(err.message)
+        })
   }
 
   async removeUser (user: User) {
@@ -87,137 +87,139 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
     const res = await this.confirmService.confirm(message, $localize`Delete`)
     if (res === false) return
 
-    this.userService.removeUser(user).subscribe(
-      () => {
-        this.notifier.success($localize`User ${user.username} deleted.`)
-        this.userDeleted.emit()
-      },
+    this.userService.removeUser(user)
+      .subscribe({
+        next: () => {
+          this.notifier.success($localize`User ${user.username} deleted.`)
+          this.userDeleted.emit()
+        },
 
-      err => this.notifier.error(err.message)
-    )
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   setEmailAsVerified (user: User) {
-    this.userService.updateUser(user.id, { emailVerified: true }).subscribe(
-      () => {
-        this.notifier.success($localize`User ${user.username} email set as verified`)
-        this.userChanged.emit()
-      },
+    this.userService.updateUser(user.id, { emailVerified: true })
+      .subscribe({
+        next: () => {
+          this.notifier.success($localize`User ${user.username} email set as verified`)
+          this.userChanged.emit()
+        },
 
-      err => this.notifier.error(err.message)
-    )
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   blockAccountByUser (account: Account) {
     this.blocklistService.blockAccountByUser(account)
-        .subscribe(
-          () => {
+        .subscribe({
+          next: () => {
             this.notifier.success($localize`Account ${account.nameWithHost} muted.`)
 
             this.account.mutedByUser = true
             this.userChanged.emit()
           },
 
-          err => this.notifier.error(err.message)
-        )
+          error: err => this.notifier.error(err.message)
+        })
   }
 
   unblockAccountByUser (account: Account) {
     this.blocklistService.unblockAccountByUser(account)
-        .subscribe(
-          () => {
+        .subscribe({
+          next: () => {
             this.notifier.success($localize`Account ${account.nameWithHost} unmuted.`)
 
             this.account.mutedByUser = false
             this.userChanged.emit()
           },
 
-          err => this.notifier.error(err.message)
-        )
+          error: err => this.notifier.error(err.message)
+        })
   }
 
   blockServerByUser (host: string) {
     this.blocklistService.blockServerByUser(host)
-        .subscribe(
-          () => {
+        .subscribe({
+          next: () => {
             this.notifier.success($localize`Instance ${host} muted.`)
 
             this.account.mutedServerByUser = true
             this.userChanged.emit()
           },
 
-          err => this.notifier.error(err.message)
-        )
+          error: err => this.notifier.error(err.message)
+        })
   }
 
   unblockServerByUser (host: string) {
     this.blocklistService.unblockServerByUser(host)
-        .subscribe(
-          () => {
+        .subscribe({
+          next: () => {
             this.notifier.success($localize`Instance ${host} unmuted.`)
 
             this.account.mutedServerByUser = false
             this.userChanged.emit()
           },
 
-          err => this.notifier.error(err.message)
-        )
+          error: err => this.notifier.error(err.message)
+        })
   }
 
   blockAccountByInstance (account: Account) {
     this.blocklistService.blockAccountByInstance(account)
-        .subscribe(
-          () => {
+        .subscribe({
+          next: () => {
             this.notifier.success($localize`Account ${account.nameWithHost} muted by the instance.`)
 
             this.account.mutedByInstance = true
             this.userChanged.emit()
           },
 
-          err => this.notifier.error(err.message)
-        )
+          error: err => this.notifier.error(err.message)
+        })
   }
 
   unblockAccountByInstance (account: Account) {
     this.blocklistService.unblockAccountByInstance(account)
-        .subscribe(
-          () => {
+        .subscribe({
+          next: () => {
             this.notifier.success($localize`Account ${account.nameWithHost} unmuted by the instance.`)
 
             this.account.mutedByInstance = false
             this.userChanged.emit()
           },
 
-          err => this.notifier.error(err.message)
-        )
+          error: err => this.notifier.error(err.message)
+        })
   }
 
   blockServerByInstance (host: string) {
     this.blocklistService.blockServerByInstance(host)
-        .subscribe(
-          () => {
+        .subscribe({
+          next: () => {
             this.notifier.success($localize`Instance ${host} muted by the instance.`)
 
             this.account.mutedServerByInstance = true
             this.userChanged.emit()
           },
 
-          err => this.notifier.error(err.message)
-        )
+          error: err => this.notifier.error(err.message)
+        })
   }
 
   unblockServerByInstance (host: string) {
     this.blocklistService.unblockServerByInstance(host)
-        .subscribe(
-          () => {
+        .subscribe({
+          next: () => {
             this.notifier.success($localize`Instance ${host} unmuted by the instance.`)
 
             this.account.mutedServerByInstance = false
             this.userChanged.emit()
           },
 
-          err => this.notifier.error(err.message)
-        )
+          error: err => this.notifier.error(err.message)
+        })
   }
 
   async bulkRemoveCommentsOf (body: BulkRemoveCommentsOfBody) {
@@ -226,13 +228,13 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
     if (res === false) return
 
     this.bulkService.removeCommentsOf(body)
-        .subscribe(
-          () => {
+        .subscribe({
+          next: () => {
             this.notifier.success($localize`Will remove comments of this account (may take several minutes).`)
           },
 
-          err => this.notifier.error(err.message)
-        )
+          error: err => this.notifier.error(err.message)
+        })
   }
 
   getRouterUserEditLink (user: User) {

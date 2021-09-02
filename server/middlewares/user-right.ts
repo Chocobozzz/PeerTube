@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { UserRight } from '../../shared'
 import { HttpStatusCode } from '../../shared/models/http/http-error-codes'
 import { logger } from '../helpers/logger'

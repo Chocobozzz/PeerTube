@@ -1,3 +1,4 @@
+import { intoArray } from '@app/helpers'
 import {
   BooleanBothQuery,
   BooleanQuery,
@@ -74,8 +75,8 @@ export class AdvancedSearch {
     this.categoryOneOf = options.categoryOneOf || undefined
     this.licenceOneOf = options.licenceOneOf || undefined
     this.languageOneOf = options.languageOneOf || undefined
-    this.tagsOneOf = this.intoArray(options.tagsOneOf)
-    this.tagsAllOf = this.intoArray(options.tagsAllOf)
+    this.tagsOneOf = intoArray(options.tagsOneOf)
+    this.tagsAllOf = intoArray(options.tagsAllOf)
     this.durationMin = parseInt(options.durationMin, 10)
     this.durationMax = parseInt(options.durationMax, 10)
 
@@ -150,9 +151,9 @@ export class AdvancedSearch {
       originallyPublishedStartDate: this.originallyPublishedStartDate,
       originallyPublishedEndDate: this.originallyPublishedEndDate,
       nsfw: this.nsfw,
-      categoryOneOf: this.intoArray(this.categoryOneOf),
-      licenceOneOf: this.intoArray(this.licenceOneOf),
-      languageOneOf: this.intoArray(this.languageOneOf),
+      categoryOneOf: intoArray(this.categoryOneOf),
+      licenceOneOf: intoArray(this.licenceOneOf),
+      languageOneOf: intoArray(this.languageOneOf),
       tagsOneOf: this.tagsOneOf,
       tagsAllOf: this.tagsAllOf,
       durationMin: this.durationMin,
@@ -197,14 +198,5 @@ export class AdvancedSearch {
     if (Array.isArray(val) && val.length === 0) return false
 
     return true
-  }
-
-  private intoArray (value: any) {
-    if (!value) return undefined
-    if (Array.isArray(value)) return value
-
-    if (typeof value === 'string') return value.split(',')
-
-    return [ value ]
   }
 }

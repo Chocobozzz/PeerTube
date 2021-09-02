@@ -3,7 +3,6 @@ const path = require('path')
 
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
-const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin')
 const ProvidePlugin = require('webpack/lib/ProvidePlugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
@@ -27,6 +26,7 @@ module.exports = function () {
 
       alias: {
         'video.js$': path.resolve('node_modules/video.js/core.js'),
+        'hls.js$': path.resolve('node_modules/hls.js/dist/hls.light.js'),
         '@root-helpers': path.resolve('src/root-helpers'),
         '@shared/models': path.resolve('../shared/models'),
         '@shared/core-utils': path.resolve('../shared/core-utils')
@@ -37,7 +37,7 @@ module.exports = function () {
         http: [ path.resolve('src/shims/http.ts') ],
         https: [ path.resolve('src/shims/https.ts') ],
         path: [ path.resolve('src/shims/path.ts') ],
-        stream: [ path.resolve('src/shims/noop.ts') ],
+        stream: [ path.resolve('src/shims/stream.ts') ],
         crypto: [ path.resolve('src/shims/noop.ts') ]
       }
     },
@@ -69,7 +69,24 @@ module.exports = function () {
             {
               loader: 'ts-loader',
               options: {
-                configFile: 'tsconfig.base.json'
+                configFile: helpers.root('tsconfig.json')
+              }
+            }
+          ]
+        },
+        {
+          test: /\.js$/,
+          use: [
+            {
+              loader: 'babel-loader',
+              options: {
+                presets: [
+                  [
+                    '@babel/preset-env', {
+                      targets: 'last 1 Chrome version, last 2 Edge major versions, Firefox ESR, Safari >= 11, ios_saf >= 11'
+                    }
+                  ]
+                ]
               }
             }
           ]
@@ -104,21 +121,23 @@ module.exports = function () {
 
         {
           test: /\.html$/,
-          use: 'raw-loader',
           exclude: [
             helpers.root('src/index.html'),
             helpers.root('src/standalone/videos/embed.html'),
             helpers.root('src/standalone/videos/test-embed.html')
-          ]
+          ],
+          type: 'asset/source'
         },
 
         {
-          test: /\.(jpg|png|gif)$/,
-          use: 'url-loader'
+          test: /\.(jpg|png|gif|svg)$/,
+          type: 'asset'
         },
 
-        { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, use: 'url-loader?limit=10000&minetype=application/font-woff' },
-        { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, use: 'file-loader' }
+        {
+          test: /\.(ttf|eot|woff2?)$/,
+          type: 'asset'
+        }
       ]
 
     },
@@ -159,20 +178,6 @@ module.exports = function () {
         chunksSortMode: 'auto',
         inject: 'body',
         chunks: [ 'test-embed' ]
-      }),
-
-      /**
-       * Plugin LoaderOptionsPlugin (experimental)
-       *
-       * See: https://gist.github.com/sokra/27b24881210b56bbaff7
-       */
-      new LoaderOptionsPlugin({
-        options: {
-          context: __dirname,
-          output: {
-            path: helpers.root('dist')
-          }
-        }
       })
     ],
 

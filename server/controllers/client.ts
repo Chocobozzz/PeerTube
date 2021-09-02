@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { constants, promises as fs } from 'fs'
 import { readFile } from 'fs-extra'
 import { join } from 'path'

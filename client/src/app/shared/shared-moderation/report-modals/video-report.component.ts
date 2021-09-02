@@ -108,14 +108,14 @@ export class VideoReportComponent extends FormReactive implements OnInit {
         startAt: hasStart && startAt ? startAt : undefined,
         endAt: hasEnd && endAt ? endAt : undefined
       }
-    }).subscribe(
-      () => {
+    }).subscribe({
+      next: () => {
         this.notifier.success($localize`Video reported.`)
         this.hide()
       },
 
-      err => this.notifier.error(err.message)
-    )
+      error: err => this.notifier.error(err.message)
+    })
   }
 
   isRemote () {

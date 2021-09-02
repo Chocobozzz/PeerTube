@@ -38,11 +38,13 @@ import { PluginsCommand } from './plugins-command'
 import { RedundancyCommand } from './redundancy-command'
 import { ServersCommand } from './servers-command'
 import { StatsCommand } from './stats-command'
+import { ObjectStorageCommand } from './object-storage-command'
 
 export type RunServerOptions = {
   hideLogs?: boolean
   nodeArgs?: string[]
   peertubeArgs?: string[]
+  env?: { [ id: string ]: string }
 }
 
 export class PeerTubeServer {
@@ -121,6 +123,7 @@ export class PeerTubeServer {
   servers?: ServersCommand
   login?: LoginCommand
   users?: UsersCommand
+  objectStorage?: ObjectStorageCommand
   videos?: VideosCommand
 
   constructor (options: { serverNumber: number } | { url: string }) {
@@ -202,6 +205,10 @@ export class PeerTubeServer {
     env['NODE_APP_INSTANCE'] = this.internalServerNumber.toString()
     env['NODE_CONFIG'] = JSON.stringify(configOverride)
 
+    if (options.env) {
+      Object.assign(env, options.env)
+    }
+
     const forkOptions = {
       silent: true,
       env,
@@ -209,10 +216,23 @@ export class PeerTubeServer {
       execArgv: options.nodeArgs || []
     }
 
-    return new Promise<void>(res => {
+    return new Promise<void>((res, rej) => {
       const self = this
 
       this.app = fork(join(root(), 'dist', 'server.js'), options.peertubeArgs || [], forkOptions)
+
+      const onPeerTubeExit = () => rej(new Error('Process exited'))
+      const onParentExit = () => {
+        if (!this.app || !this.app.pid) return
+
+        try {
+          process.kill(self.app.pid)
+        } catch { /* empty */ }
+      }
+
+      this.app.on('exit', onPeerTubeExit)
+      process.on('exit', onParentExit)
+
       this.app.stdout.on('data', function onStdout (data) {
         let dontContinue = false
 
@@ -240,14 +260,10 @@ export class PeerTubeServer {
         if (options.hideLogs === false) {
           console.log(data.toString())
         } else {
+          process.removeListener('exit', onParentExit)
           self.app.stdout.removeListener('data', onStdout)
+          self.app.removeListener('exit', onPeerTubeExit)
         }
-
-        process.on('exit', () => {
-          try {
-            process.kill(self.app.pid)
-          } catch { /* empty */ }
-        })
 
         res()
       })
@@ -365,5 +381,6 @@ export class PeerTubeServer {
     this.login = new LoginCommand(this)
     this.users = new UsersCommand(this)
     this.videos = new VideosCommand(this)
+    this.objectStorage = new ObjectStorageCommand(this)
   }
 }

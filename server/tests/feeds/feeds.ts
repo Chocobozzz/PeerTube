@@ -2,7 +2,7 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import * as xmlParser from 'fast-xml-parser'
+import { parse, validate } from 'fast-xml-parser'
 import {
   cleanupTests,
   createMultipleServers,
@@ -149,9 +149,9 @@ describe('Test syndication feeds', () => {
     it('Should contain a valid enclosure (covers RSS 2.0 endpoint)', async function () {
       for (const server of servers) {
         const rss = await server.feed.getXML({ feed: 'videos' })
-        expect(xmlParser.validate(rss)).to.be.true
+        expect(validate(rss)).to.be.true
 
-        const xmlDoc = xmlParser.parse(rss, { parseAttributeValue: true, ignoreAttributes: false })
+        const xmlDoc = parse(rss, { parseAttributeValue: true, ignoreAttributes: false })
 
         const enclosure = xmlDoc.rss.channel.item[0].enclosure
         expect(enclosure).to.exist

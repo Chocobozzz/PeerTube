@@ -1,7 +1,7 @@
 import { registerTSPaths } from '../helpers/register-ts-paths'
 registerTSPaths()
 
-import * as CliTable3 from 'cli-table3'
+import CliTable3 from 'cli-table3'
 import { Command, program } from 'commander'
 import { uniq } from 'lodash'
 import { URL } from 'url'

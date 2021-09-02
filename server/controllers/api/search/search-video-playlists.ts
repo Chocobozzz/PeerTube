@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { sanitizeUrl } from '@server/helpers/core-utils'
 import { isUserAbleToSearchRemoteURI } from '@server/helpers/express-utils'
 import { logger } from '@server/helpers/logger'

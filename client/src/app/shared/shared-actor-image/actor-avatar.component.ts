@@ -17,6 +17,8 @@ export type ActorAvatarSize = '18' | '25' | '32' | '34' | '36' | '40' | '100' | 
   templateUrl: './actor-avatar.component.html'
 })
 export class ActorAvatarComponent {
+  private _title: string
+
   @Input() account: ActorInput
   @Input() channel: ActorInput
 
@@ -33,8 +35,6 @@ export class ActorAvatarComponent {
     this._title = value
   }
 
-  private _title: string
-
   get title () {
     if (this._title) return this._title
     if (this.account) return $localize`${this.account.name} (account page)`
@@ -48,22 +48,6 @@ export class ActorAvatarComponent {
     if (this.channel) return $localize`Channel avatar`
 
     return ''
-  }
-
-  getClass (type: 'avatar' | 'initial') {
-    const base = [ 'avatar' ]
-
-    if (this.size) base.push(`avatar-${this.size}`)
-
-    if (this.channel) base.push('channel')
-    else base.push('account')
-
-    if (type === 'initial' && this.initial) {
-      base.push('initial')
-      base.push(this.getColorTheme())
-    }
-
-    return base
   }
 
   get defaultAvatarUrl () {
@@ -84,6 +68,22 @@ export class ActorAvatarComponent {
     if (!name) return ''
 
     return name.slice(0, 1)
+  }
+
+  getClass (type: 'avatar' | 'initial') {
+    const base = [ 'avatar' ]
+
+    if (this.size) base.push(`avatar-${this.size}`)
+
+    if (this.channel) base.push('channel')
+    else base.push('account')
+
+    if (type === 'initial' && this.initial) {
+      base.push('initial')
+      base.push(this.getColorTheme())
+    }
+
+    return base
   }
 
   hasActor () {

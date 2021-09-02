@@ -51,7 +51,7 @@ export abstract class FormReactive {
       }
 
       // clear previous error message (if any)
-      formErrors[ field ] = ''
+      formErrors[field] = ''
       const control = form.get(field)
 
       if (control.dirty) this.formChanged = true
@@ -59,9 +59,9 @@ export abstract class FormReactive {
       // Don't care if dirty on force check
       const isDirty = control.dirty || forceCheck === true
       if (control && isDirty && control.enabled && !control.valid) {
-        const messages = validationMessages[ field ]
+        const messages = validationMessages[field]
         for (const key of Object.keys(control.errors)) {
-          formErrors[ field ] += messages[ key ] + ' '
+          formErrors[field] += messages[key] + ' '
         }
       }
     }

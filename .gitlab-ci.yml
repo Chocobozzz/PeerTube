@@ -15,7 +15,6 @@ build-openapi-clients:
   only:
     refs:
       - master
-      - schedules
     changes:
       - support/doc/api/openapi.yaml
   script:

@@ -4,10 +4,6 @@ const Component = videojs.getComponent('Component')
 
 class SettingsPanel extends Component {
 
-  constructor (player: videojs.Player, options?: videojs.ComponentOptions) {
-    super(player, options)
-  }
-
   createEl () {
     return super.createEl('div', {
       className: 'vjs-settings-panel',

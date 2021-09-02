@@ -1,5 +1,5 @@
 import { SortMeta } from 'primeng/api'
-import { AfterViewInit, Component, OnInit } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, ConfirmService, MarkdownService, Notifier, RestPagination, RestTable } from '@app/core'
 import { AdvancedInputFilter } from '@app/shared/shared-forms'
@@ -44,11 +44,11 @@ export class VideoCommentListComponent extends RestTable implements OnInit {
 
   inputFilters: AdvancedInputFilter[] = [
     {
-      queryParams: { 'search': 'local:true' },
+      queryParams: { search: 'local:true' },
       label: $localize`Local comments`
     },
     {
-      queryParams: { 'search': 'local:false' },
+      queryParams: { search: 'local:false' },
       label: $localize`Remote comments`
     }
   ]
@@ -66,7 +66,7 @@ export class VideoCommentListComponent extends RestTable implements OnInit {
     private videoCommentService: VideoCommentService,
     private markdownRenderer: MarkdownService,
     private bulkService: BulkService
-    ) {
+  ) {
     super()
 
     this.videoCommentActions = [
@@ -117,45 +117,46 @@ export class VideoCommentListComponent extends RestTable implements OnInit {
       pagination: this.pagination,
       sort: this.sort,
       search: this.search
-    }).subscribe(
-        async resultList => {
-          this.totalRecords = resultList.total
+    }).subscribe({
+      next: async resultList => {
+        this.totalRecords = resultList.total
 
-          this.comments = []
+        this.comments = []
 
-          for (const c of resultList.data) {
-            this.comments.push(
-              new VideoCommentAdmin(c, await this.toHtml(c.text))
-            )
-          }
-        },
-
-        err => this.notifier.error(err.message)
-      )
-  }
-
-  private async removeComments (comments: VideoCommentAdmin[]) {
-    const commentArgs = comments.map(c => ({ videoId: c.video.id, commentId: c.id }))
-
-    this.videoCommentService.deleteVideoComments(commentArgs).subscribe(
-      () => {
-        this.notifier.success($localize`${commentArgs.length} comments deleted.`)
-        this.reloadData()
+        for (const c of resultList.data) {
+          this.comments.push(
+            new VideoCommentAdmin(c, await this.toHtml(c.text))
+          )
+        }
       },
 
-      err => this.notifier.error(err.message),
+      error: err => this.notifier.error(err.message)
+    })
+  }
 
-      () => this.selectedComments = []
-    )
+  private removeComments (comments: VideoCommentAdmin[]) {
+    const commentArgs = comments.map(c => ({ videoId: c.video.id, commentId: c.id }))
+
+    this.videoCommentService.deleteVideoComments(commentArgs)
+      .subscribe({
+        next: () => {
+          this.notifier.success($localize`${commentArgs.length} comments deleted.`)
+          this.reloadData()
+        },
+
+        error: err => this.notifier.error(err.message),
+
+        complete: () => this.selectedComments = []
+      })
   }
 
   private deleteComment (comment: VideoCommentAdmin) {
     this.videoCommentService.deleteVideoComment(comment.video.id, comment.id)
-      .subscribe(
-        () => this.reloadData(),
+      .subscribe({
+        next: () => this.reloadData(),
 
-        err => this.notifier.error(err.message)
-      )
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   private async deleteUserComments (comment: VideoCommentAdmin) {
@@ -169,12 +170,12 @@ export class VideoCommentListComponent extends RestTable implements OnInit {
     }
 
     this.bulkService.removeCommentsOf(options)
-      .subscribe(
-        () => {
+      .subscribe({
+        next: () => {
           this.notifier.success($localize`Comments of ${options.accountName} will be deleted in a few minutes`)
         },
 
-        err => this.notifier.error(err.message)
-      )
+        error: err => this.notifier.error(err.message)
+      })
   }
 }

@@ -5,6 +5,7 @@ import { Injectable } from '@angular/core'
 import { ComponentPaginationLight, RestExtractor, RestService, ServerService, UserService } from '@app/core'
 import { objectToFormData } from '@app/helpers'
 import {
+  BooleanBothQuery,
   FeedFormat,
   NSFWPolicyType,
   ResultList,
@@ -28,19 +29,21 @@ import { VideoDetails } from './video-details.model'
 import { VideoEdit } from './video-edit.model'
 import { Video } from './video.model'
 
-export interface VideosProvider {
-  getVideos (parameters: {
-    videoPagination: ComponentPaginationLight,
-    sort: VideoSortField,
-    filter?: VideoFilter,
-    categoryOneOf?: number[],
-    languageOneOf?: string[]
-    nsfwPolicy: NSFWPolicyType
-  }): Observable<ResultList<Video>>
+export type CommonVideoParams = {
+  videoPagination: ComponentPaginationLight
+  sort: VideoSortField
+  filter?: VideoFilter
+  categoryOneOf?: number[]
+  languageOneOf?: string[]
+  isLive?: boolean
+  skipCount?: boolean
+  // FIXME: remove?
+  nsfwPolicy?: NSFWPolicyType
+  nsfw?: BooleanBothQuery
 }
 
 @Injectable()
-export class VideoService implements VideosProvider {
+export class VideoService {
   static BASE_VIDEO_URL = environment.apiUrl + '/api/v1/videos/'
   static BASE_FEEDS_URL = environment.apiUrl + '/feeds/videos.'
   static BASE_SUBSCRIPTION_FEEDS_URL = environment.apiUrl + '/feeds/subscriptions.'
@@ -144,32 +147,16 @@ export class VideoService implements VideosProvider {
                )
   }
 
-  getAccountVideos (parameters: {
-    account: Pick<Account, 'nameWithHost'>,
-    videoPagination: ComponentPaginationLight,
-    sort: VideoSortField
-    nsfwPolicy?: NSFWPolicyType
-    videoFilter?: VideoFilter
+  getAccountVideos (parameters: CommonVideoParams & {
+    account: Pick<Account, 'nameWithHost'>
     search?: string
   }): Observable<ResultList<Video>> {
-    const { account, videoPagination, sort, videoFilter, nsfwPolicy, search } = parameters
-
-    const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
+    const { account, search } = parameters
 
     let params = new HttpParams()
-    params = this.restService.addRestGetParams(params, pagination, sort)
+    params = this.buildCommonVideosParams({ params, ...parameters })
 
-    if (nsfwPolicy) {
-      params = params.set('nsfw', this.nsfwPolicyToParam(nsfwPolicy))
-    }
-
-    if (videoFilter) {
-      params = params.set('filter', videoFilter)
-    }
-
-    if (search) {
-      params = params.set('search', search)
-    }
+    if (search) params = params.set('search', search)
 
     return this.authHttp
                .get<ResultList<Video>>(AccountService.BASE_ACCOUNT_URL + account.nameWithHost + '/videos', { params })
@@ -179,27 +166,13 @@ export class VideoService implements VideosProvider {
                )
   }
 
-  getVideoChannelVideos (parameters: {
-    videoChannel: Pick<VideoChannel, 'nameWithHost'>,
-    videoPagination: ComponentPaginationLight,
-    sort: VideoSortField,
-    nsfwPolicy?: NSFWPolicyType
-    videoFilter?: VideoFilter
+  getVideoChannelVideos (parameters: CommonVideoParams & {
+    videoChannel: Pick<VideoChannel, 'nameWithHost'>
   }): Observable<ResultList<Video>> {
-    const { videoChannel, videoPagination, sort, nsfwPolicy, videoFilter } = parameters
-
-    const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
+    const { videoChannel } = parameters
 
     let params = new HttpParams()
-    params = this.restService.addRestGetParams(params, pagination, sort)
-
-    if (nsfwPolicy) {
-      params = params.set('nsfw', this.nsfwPolicyToParam(nsfwPolicy))
-    }
-
-    if (videoFilter) {
-      params = params.set('filter', videoFilter)
-    }
+    params = this.buildCommonVideosParams({ params, ...parameters })
 
     return this.authHttp
                .get<ResultList<Video>>(VideoChannelService.BASE_VIDEO_CHANNEL_URL + videoChannel.nameWithHost + '/videos', { params })
@@ -209,30 +182,9 @@ export class VideoService implements VideosProvider {
                )
   }
 
-  getVideos (parameters: {
-    videoPagination: ComponentPaginationLight
-    sort: VideoSortField
-    filter?: VideoFilter
-    categoryOneOf?: number[]
-    languageOneOf?: string[]
-    isLive?: boolean
-    skipCount?: boolean
-    nsfwPolicy?: NSFWPolicyType
-  }): Observable<ResultList<Video>> {
-    const { videoPagination, sort, filter, categoryOneOf, languageOneOf, skipCount, nsfwPolicy, isLive } = parameters
-
-    const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
-
+  getVideos (parameters: CommonVideoParams): Observable<ResultList<Video>> {
     let params = new HttpParams()
-    params = this.restService.addRestGetParams(params, pagination, sort)
-
-    if (filter) params = params.set('filter', filter)
-    if (skipCount) params = params.set('skipCount', skipCount + '')
-
-    if (isLive) params = params.set('isLive', isLive)
-    if (nsfwPolicy) params = params.set('nsfw', this.nsfwPolicyToParam(nsfwPolicy))
-    if (languageOneOf) this.restService.addArrayParams(params, 'languageOneOf', languageOneOf)
-    if (categoryOneOf) this.restService.addArrayParams(params, 'categoryOneOf', categoryOneOf)
+    params = this.buildCommonVideosParams({ params, ...parameters })
 
     return this.authHttp
                .get<ResultList<Video>>(VideoService.BASE_VIDEO_URL, { params })
@@ -420,5 +372,23 @@ export class VideoService implements VideosProvider {
                  map(this.restExtractor.extractDataBool),
                  catchError(err => this.restExtractor.handleError(err))
                )
+  }
+
+  private buildCommonVideosParams (options: CommonVideoParams & { params: HttpParams }) {
+    const { params, videoPagination, sort, filter, categoryOneOf, languageOneOf, skipCount, nsfwPolicy, isLive, nsfw } = options
+
+    const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
+    let newParams = this.restService.addRestGetParams(params, pagination, sort)
+
+    if (filter) newParams = newParams.set('filter', filter)
+    if (skipCount) newParams = newParams.set('skipCount', skipCount + '')
+
+    if (isLive) newParams = newParams.set('isLive', isLive)
+    if (nsfw) newParams = newParams.set('nsfw', nsfw)
+    if (nsfwPolicy) newParams = newParams.set('nsfw', this.nsfwPolicyToParam(nsfwPolicy))
+    if (languageOneOf) newParams = this.restService.addArrayParams(newParams, 'languageOneOf', languageOneOf)
+    if (categoryOneOf) newParams = this.restService.addArrayParams(newParams, 'categoryOneOf', categoryOneOf)
+
+    return newParams
   }
 }

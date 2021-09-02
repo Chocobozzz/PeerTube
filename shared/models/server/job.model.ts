@@ -19,6 +19,7 @@ export type JobType =
   | 'video-redundancy'
   | 'video-live-ending'
   | 'actor-keys'
+  | 'move-to-object-storage'
 
 export interface Job {
   id: number
@@ -135,4 +136,9 @@ export interface VideoLiveEndingPayload {
 
 export interface ActorKeysPayload {
   actorId: number
+}
+
+export interface MoveObjectStoragePayload {
+  videoUUID: string
+  isNewVideo: boolean
 }

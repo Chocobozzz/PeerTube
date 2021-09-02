@@ -161,7 +161,7 @@ describe('Test handle downs', function () {
     const states: JobState[] = [ 'waiting', 'active' ]
 
     for (const state of states) {
-      const body = await servers[0].jobs.getJobsList({
+      const body = await servers[0].jobs.list({
         state: state,
         start: 0,
         count: 50,

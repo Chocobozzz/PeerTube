@@ -1,9 +1,8 @@
-import { Injectable } from '@angular/core'
-import { HttpClient } from '@angular/common/http'
-import { environment } from '../../../environments/environment'
-import { AuthService } from '../auth'
-import { ScopedToken } from '@shared/models/users/user-scoped-token'
 import { catchError } from 'rxjs/operators'
+import { HttpClient } from '@angular/common/http'
+import { Injectable } from '@angular/core'
+import { ScopedToken } from '@shared/models/users/user-scoped-token'
+import { environment } from '../../../environments/environment'
 import { RestExtractor } from '../rest'
 
 @Injectable()

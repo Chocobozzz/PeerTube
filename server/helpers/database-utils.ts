@@ -1,5 +1,5 @@
-import * as retry from 'async/retry'
-import * as Bluebird from 'bluebird'
+import retry from 'async/retry'
+import Bluebird from 'bluebird'
 import { Transaction } from 'sequelize'
 import { Model } from 'sequelize-typescript'
 import { sequelizeTypescript } from '@server/initializers/database'

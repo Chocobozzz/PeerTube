@@ -68,8 +68,8 @@ export class VideoOverviewComponent implements OnInit {
     this.isLoading = true
 
     this.overviewService.getVideosOverview(this.currentPage)
-        .subscribe(
-          overview => {
+        .subscribe({
+          next: overview => {
             this.isLoading = false
 
             if (overview.tags.length === 0 && overview.channels.length === 0 && overview.categories.length === 0) {
@@ -85,10 +85,10 @@ export class VideoOverviewComponent implements OnInit {
             this.overviews.push(overview)
           },
 
-          err => {
+          error: err => {
             this.notifier.error(err.message)
             this.isLoading = false
           }
-        )
+        })
   }
 }

@@ -6,7 +6,7 @@ import { resolve } from 'path'
 import { VideoModel } from '../server/models/video/video'
 import { initDatabaseModels } from '../server/initializers/database'
 import { JobQueue } from '../server/lib/job-queue'
-import { isUUIDValid } from '@server/helpers/custom-validators/misc'
+import { isUUIDValid, toCompleteUUID } from '@server/helpers/custom-validators/misc'
 
 program
   .option('-v, --video [videoUUID]', 'Video UUID')
@@ -31,12 +31,14 @@ run()
 async function run () {
   await initDatabaseModels(true)
 
-  if (isUUIDValid(options.video) === false) {
+  const uuid = toCompleteUUID(options.video)
+
+  if (isUUIDValid(uuid) === false) {
     console.error('%s is not a valid video UUID.', options.video)
     return
   }
 
-  const video = await VideoModel.load(options.video)
+  const video = await VideoModel.load(uuid)
   if (!video) throw new Error('Video not found.')
   if (video.isOwned() === false) throw new Error('Cannot import files of a non owned video.')
 

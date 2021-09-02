@@ -1,7 +1,7 @@
 import { remove } from 'fs-extra'
 import { basename } from 'path'
 import { MStreamingPlaylist, MVideo } from '@server/types/models'
-import { getHLSDirectory } from '../video-paths'
+import { getLiveDirectory } from '../paths'
 
 function buildConcatenatedName (segmentOrPlaylistPath: string) {
   const num = basename(segmentOrPlaylistPath).match(/^(\d+)(-|\.)/)
@@ -10,7 +10,7 @@ function buildConcatenatedName (segmentOrPlaylistPath: string) {
 }
 
 async function cleanupLive (video: MVideo, streamingPlaylist: MStreamingPlaylist) {
-  const hlsDirectory = getHLSDirectory(video)
+  const hlsDirectory = getLiveDirectory(video)
 
   await remove(hlsDirectory)
 

@@ -1,10 +1,25 @@
-import * as memoizee from 'memoizee'
+import memoizee from 'memoizee'
 import { join } from 'path'
 import { Op } from 'sequelize'
-import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, HasMany, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import {
+  AllowNull,
+  BelongsTo,
+  Column,
+  CreatedAt,
+  DataType,
+  Default,
+  ForeignKey,
+  HasMany,
+  Is,
+  Model,
+  Table,
+  UpdatedAt
+} from 'sequelize-typescript'
+import { getHLSPublicFileUrl } from '@server/lib/object-storage'
 import { VideoFileModel } from '@server/models/video/video-file'
 import { MStreamingPlaylist, MVideo } from '@server/types/models'
 import { AttributesOnly } from '@shared/core-utils'
+import { VideoStorage } from '@shared/models'
 import { VideoStreamingPlaylistType } from '../../../shared/models/videos/video-streaming-playlist.type'
 import { sha1 } from '../../helpers/core-utils'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
@@ -80,6 +95,11 @@ export class VideoStreamingPlaylistModel extends Model<Partial<AttributesOnly<Vi
   @ForeignKey(() => VideoModel)
   @Column
   videoId: number
+
+  @AllowNull(false)
+  @Default(VideoStorage.FILE_SYSTEM)
+  @Column
+  storage: VideoStorage
 
   @BelongsTo(() => VideoModel, {
     foreignKey: {
@@ -185,12 +205,20 @@ export class VideoStreamingPlaylistModel extends Model<Partial<AttributesOnly<Vi
   }
 
   getMasterPlaylistUrl (video: MVideo) {
+    if (this.storage === VideoStorage.OBJECT_STORAGE) {
+      return getHLSPublicFileUrl(this.playlistUrl)
+    }
+
     if (video.isOwned()) return WEBSERVER.URL + this.getMasterPlaylistStaticPath(video.uuid)
 
     return this.playlistUrl
   }
 
   getSha256SegmentsUrl (video: MVideo) {
+    if (this.storage === VideoStorage.OBJECT_STORAGE) {
+      return getHLSPublicFileUrl(this.segmentsSha256Url)
+    }
+
     if (video.isOwned()) return WEBSERVER.URL + this.getSha256SegmentsStaticPath(video.uuid, video.isLive)
 
     return this.segmentsSha256Url

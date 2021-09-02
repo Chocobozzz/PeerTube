@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { AuthService, Notifier, ConfirmService, ScopedTokensService } from '@app/core'
+import { AuthService, ConfirmService, Notifier, ScopedTokensService } from '@app/core'
 import { VideoService } from '@app/shared/shared-main'
 import { FeedFormat } from '@shared/models'
 import { ScopedToken } from '@shared/models/users/user-scoped-token'
@@ -27,33 +27,30 @@ export class MyAccountApplicationsComponent implements OnInit {
   ngOnInit () {
     this.feedUrl = this.baseURL
     this.scopedTokensService.getScopedTokens()
-      .subscribe(
-        tokens => this.regenApplications(tokens),
+      .subscribe({
+        next: tokens => this.regenApplications(tokens),
 
-        err => {
-          this.notifier.error(err.message)
-        }
-      )
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   async renewToken () {
     const res = await this.confirmService.confirm(
+      // eslint-disable-next-line max-len
       $localize`Renewing the token will disallow previously configured clients from retrieving the feed until they use the new token. Proceed?`,
       $localize`Renew token`
     )
     if (res === false) return
 
-    this.scopedTokensService.renewScopedTokens().subscribe(
-      tokens => {
-        this.regenApplications(tokens)
-        this.notifier.success($localize`Token renewed. Update your client configuration accordingly.`)
-      },
+    this.scopedTokensService.renewScopedTokens()
+      .subscribe({
+        next: tokens => {
+          this.regenApplications(tokens)
+          this.notifier.success($localize`Token renewed. Update your client configuration accordingly.`)
+        },
 
-      err => {
-        this.notifier.error(err.message)
-      }
-    )
-
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   private regenApplications (tokens: ScopedToken) {

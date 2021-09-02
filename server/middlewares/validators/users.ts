@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { body, param, query } from 'express-validator'
 import { omit } from 'lodash'
 import { Hooks } from '@server/lib/plugins/hooks'
@@ -9,14 +9,13 @@ import { UserRegister } from '../../../shared/models/users/user-register.model'
 import { toBooleanOrNull, toIntOrNull } from '../../helpers/custom-validators/misc'
 import { isThemeNameValid } from '../../helpers/custom-validators/plugins'
 import {
-  isNoInstanceConfigWarningModal,
-  isNoWelcomeModal,
   isUserAdminFlagsValid,
   isUserAutoPlayNextVideoValid,
   isUserAutoPlayVideoValid,
   isUserBlockedReasonValid,
   isUserDescriptionValid,
   isUserDisplayNameValid,
+  isUserNoModal,
   isUserNSFWPolicyValid,
   isUserPasswordValid,
   isUserPasswordValidOrEmpty,
@@ -251,12 +250,17 @@ const usersUpdateMeValidator = [
   body('theme')
     .optional()
     .custom(v => isThemeNameValid(v) && isThemeRegistered(v)).withMessage('Should have a valid theme'),
+
   body('noInstanceConfigWarningModal')
     .optional()
-    .custom(v => isNoInstanceConfigWarningModal(v)).withMessage('Should have a valid noInstanceConfigWarningModal boolean'),
+    .custom(v => isUserNoModal(v)).withMessage('Should have a valid noInstanceConfigWarningModal boolean'),
   body('noWelcomeModal')
     .optional()
-    .custom(v => isNoWelcomeModal(v)).withMessage('Should have a valid noWelcomeModal boolean'),
+    .custom(v => isUserNoModal(v)).withMessage('Should have a valid noWelcomeModal boolean'),
+  body('noAccountSetupWarningModal')
+    .optional()
+    .custom(v => isUserNoModal(v)).withMessage('Should have a valid noAccountSetupWarningModal boolean'),
+
   body('autoPlayNextVideo')
     .optional()
     .custom(v => isUserAutoPlayNextVideoValid(v)).withMessage('Should have a valid autoPlayNextVideo boolean'),

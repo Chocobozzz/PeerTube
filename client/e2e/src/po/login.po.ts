@@ -1,23 +1,25 @@
-import { browser, element, by } from 'protractor'
+import { go } from '../utils'
 
 export class LoginPage {
   async loginAsRootUser () {
-    await browser.get('/login')
+    await go('/login')
 
-    await browser.executeScript(`window.localStorage.setItem('no_instance_config_warning_modal', 'true')`)
-    await browser.executeScript(`window.localStorage.setItem('no_welcome_modal', 'true')`)
+    await browser.execute(`window.localStorage.setItem('no_instance_config_warning_modal', 'true')`)
+    await browser.execute(`window.localStorage.setItem('no_welcome_modal', 'true')`)
 
-    element(by.css('input#username')).sendKeys('root')
-    element(by.css('input#password')).sendKeys('test1')
+    await $('input#username').setValue('root')
+    await $('input#password').setValue('test1')
 
-    await browser.sleep(1000)
+    await browser.pause(1000)
 
-    await element(by.css('form input[type=submit]')).click()
+    await $('form input[type=submit]').click()
 
-    expect(this.getLoggedInInfo().getText()).toContain('root')
+    await this.getLoggedInInfoElem().waitForExist()
+
+    await expect(this.getLoggedInInfoElem()).toHaveText('root')
   }
 
-  private getLoggedInInfo () {
-    return element(by.css('.logged-in-display-name'))
+  private getLoggedInInfoElem () {
+    return $('.logged-in-display-name')
   }
 }

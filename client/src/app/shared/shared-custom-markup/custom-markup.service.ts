@@ -1,4 +1,4 @@
-import { first } from 'rxjs/operators'
+import { firstValueFrom } from 'rxjs'
 import { ComponentRef, Injectable } from '@angular/core'
 import { MarkdownService } from '@app/core'
 import {
@@ -85,7 +85,7 @@ export class CustomMarkupService {
             const component = this.execAngularBuilder(selector, e)
 
             if (component.instance.loaded) {
-              const p = component.instance.loaded.pipe(first()).toPromise()
+              const p = firstValueFrom(component.instance.loaded)
               loadedPromises.push(p)
             }
 
@@ -216,6 +216,8 @@ export class CustomMarkupService {
       : 'layout-column'
 
     root.classList.add('peertube-container', layoutClass)
+
+    root.style.justifyContent = data.justifyContent || 'space-between'
 
     if (data.width) {
       root.setAttribute('width', data.width)

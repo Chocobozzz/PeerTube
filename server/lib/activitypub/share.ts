@@ -1,4 +1,4 @@
-import * as Bluebird from 'bluebird'
+import { map } from 'bluebird'
 import { Transaction } from 'sequelize'
 import { getServerActor } from '@server/models/application/application'
 import { checkUrlsSameHost, getAPId } from '../../helpers/activitypub'
@@ -38,7 +38,7 @@ async function changeVideoChannelShare (
 }
 
 async function addVideoShares (shareUrls: string[], video: MVideoId) {
-  await Bluebird.map(shareUrls, async shareUrl => {
+  await map(shareUrls, async shareUrl => {
     try {
       await addVideoShare(shareUrl, video)
     } catch (err) {

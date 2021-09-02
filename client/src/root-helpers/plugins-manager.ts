@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-implied-eval */
 import * as debug from 'debug'
-import { ReplaySubject } from 'rxjs'
+import { firstValueFrom, ReplaySubject } from 'rxjs'
 import { first, shareReplay } from 'rxjs/operators'
 import { RegisterClientHelpers } from 'src/types/register-client-option.model'
 import { getHookType, internalRunHook } from '@shared/core-utils/plugins/hooks'
@@ -102,9 +103,10 @@ class PluginsManager {
   ensurePluginsAreLoaded (scope: PluginClientScope) {
     this.loadPluginsByScope(scope)
 
-    return this.pluginsLoaded[scope].asObservable()
+    const obs = this.pluginsLoaded[scope].asObservable()
                .pipe(first(), shareReplay())
-               .toPromise()
+
+    return firstValueFrom(obs)
   }
 
   async reloadLoadedScopes () {
@@ -154,7 +156,7 @@ class PluginsManager {
     try {
       if (!isReload) this.loadedScopes.push(scope)
 
-      const toLoad = this.scopes[ scope ]
+      const toLoad = this.scopes[scope]
       if (!Array.isArray(toLoad)) {
         this.loadingScopes[scope] = false
         this.pluginsLoaded[scope].next(true)
@@ -167,11 +169,11 @@ class PluginsManager {
       for (const pluginInfo of toLoad) {
         const clientScript = pluginInfo.clientScript
 
-        if (this.loadedScripts[ clientScript.script ]) continue
+        if (this.loadedScripts[clientScript.script]) continue
 
         promises.push(this.loadPlugin(pluginInfo))
 
-        this.loadedScripts[ clientScript.script ] = true
+        this.loadedScripts[clientScript.script] = true
       }
 
       await Promise.all(promises)
@@ -226,7 +228,7 @@ class PluginsManager {
     console.log('Loading script %s of plugin %s.', clientScript.script, plugin.name)
 
     const absURL = (environment.apiUrl || window.location.origin) + clientScript.script
-    return import(/* webpackIgnore: true */ absURL)
+    return dynamicImport(absURL)
       .then((script: ClientScriptModule) => script.register({ registerHook, registerVideoField, registerSettingsScript, peertubeHelpers }))
       .then(() => this.sortHooksByPriority())
       .catch(err => console.error('Cannot import or register plugin %s.', pluginInfo.plugin.name, err))
@@ -248,4 +250,46 @@ export {
   PeertubeHelpersFactory,
   OnFormFields,
   OnSettingsScripts
+}
+
+// ---------------------------------------------------------------------------
+
+async function dynamicImport (url: string) {
+  try {
+    // eslint-disable-next-line no-new-func
+    return new Function(`return import('${url}')`)()
+  } catch {
+    console.log('Fallback to import polyfill')
+
+    return new Promise((resolve, reject) => {
+      const vector = '$importModule$' + Math.random().toString(32).slice(2)
+      const script = document.createElement('script')
+
+      const destructor = () => {
+        delete window[vector]
+        script.onerror = null
+        script.onload = null
+        script.remove()
+        URL.revokeObjectURL(script.src)
+        script.src = ''
+      }
+
+      script.defer = true
+      script.type = 'module'
+
+      script.onerror = () => {
+        reject(new Error(`Failed to import: ${url}`))
+        destructor()
+      }
+      script.onload = () => {
+        resolve(window[vector])
+        destructor()
+      }
+      const loader = `import * as m from "${url}"; window.${vector} = m;` // export Module
+      const blob = new Blob([ loader ], { type: 'text/javascript' })
+      script.src = URL.createObjectURL(blob)
+
+      document.head.appendChild(script)
+    })
+  }
 }

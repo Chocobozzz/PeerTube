@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { param } from 'express-validator'
 import { HttpStatusCode } from '../../../shared/models/http/http-error-codes'
 import { isSafePath } from '../../helpers/custom-validators/misc'

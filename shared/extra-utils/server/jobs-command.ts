@@ -5,7 +5,17 @@ import { AbstractCommand, OverrideCommandOptions } from '../shared'
 
 export class JobsCommand extends AbstractCommand {
 
-  getJobsList (options: OverrideCommandOptions & {
+  async getLatest (options: OverrideCommandOptions & {
+    jobType: JobType
+  }) {
+    const { data } = await this.list({ ...options, start: 0, count: 1, sort: '-createdAt' })
+
+    if (data.length === 0) return undefined
+
+    return data[0]
+  }
+
+  list (options: OverrideCommandOptions & {
     state?: JobState
     jobType?: JobType
     start?: number

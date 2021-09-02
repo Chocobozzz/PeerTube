@@ -53,4 +53,6 @@ export type ContainerMarkupData = {
   title?: string
   description?: string
   layout?: 'row' | 'column'
+
+  justifyContent?: 'space-between' | 'normal' // default to 'space-between'
 }

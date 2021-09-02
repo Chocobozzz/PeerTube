@@ -58,6 +58,9 @@ export const clientFilterHookObject = {
   // Filter left menu links
   'filter:left-menu.links.create.result': true,
 
+  // Filter upload page alert messages
+  'filter:upload.messages.create.result': true,
+
   // Filter videojs options built for PeerTube player
   'filter:internal.player.videojs.options.result': true
 }

@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await,@typescript-eslint/no-floating-promises */
 
 import 'mocha'
-import * as magnetUtil from 'magnet-uri'
-import * as WebTorrent from 'webtorrent'
+import magnetUtil from 'magnet-uri'
+import WebTorrent from 'webtorrent'
 import { cleanupTests, createSingleServer, killallServers, PeerTubeServer, setAccessTokensToServers } from '@shared/extra-utils'
 
 describe('Test tracker', function () {

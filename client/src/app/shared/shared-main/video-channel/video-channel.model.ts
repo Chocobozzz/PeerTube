@@ -1,6 +1,5 @@
 import { getAbsoluteAPIUrl } from '@app/helpers'
 import { Account as ServerAccount, ActorImage, VideoChannel as ServerVideoChannel, ViewsPerDate } from '@shared/models'
-import { Account } from '../account/account.model'
 import { Actor } from '../account/actor.model'
 
 export class VideoChannel extends Actor implements ServerVideoChannel {
@@ -25,14 +24,14 @@ export class VideoChannel extends Actor implements ServerVideoChannel {
 
   viewsPerDay?: ViewsPerDate[]
 
-  static GET_ACTOR_AVATAR_URL (actor: object) {
+  static GET_ACTOR_AVATAR_URL (actor: { avatar?: { url?: string, path: string } }) {
     return Actor.GET_ACTOR_AVATAR_URL(actor)
   }
 
   static GET_ACTOR_BANNER_URL (channel: ServerVideoChannel) {
     if (channel?.banner?.url) return channel.banner.url
 
-    if (channel && channel.banner) {
+    if (channel?.banner) {
       const absoluteAPIUrl = getAbsoluteAPIUrl()
 
       return absoluteAPIUrl + channel.banner.path

@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { param } from 'express-validator'
 import { isAccountNameValid } from '../../helpers/custom-validators/accounts'
 import { logger } from '../../helpers/logger'

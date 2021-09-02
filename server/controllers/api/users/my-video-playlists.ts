@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { VideosExistInPlaylists } from '../../../../shared/models/videos/playlist/video-exist-in-playlist.model'
 import { asyncMiddleware, authenticate } from '../../../middlewares'
 import { doVideosInPlaylistExistValidator } from '../../../middlewares/validators/videos/video-playlists'

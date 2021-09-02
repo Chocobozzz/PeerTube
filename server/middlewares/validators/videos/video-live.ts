@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { body } from 'express-validator'
 import { CONSTRAINTS_FIELDS } from '@server/initializers/constants'
 import { isLocalLiveVideoAccepted } from '@server/lib/moderation'

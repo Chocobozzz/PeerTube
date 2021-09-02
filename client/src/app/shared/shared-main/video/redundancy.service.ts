@@ -30,8 +30,8 @@ export class RedundancyService {
   }
 
   listVideoRedundancies (options: {
-    pagination: RestPagination,
-    sort: SortMeta,
+    pagination: RestPagination
+    sort: SortMeta
     target?: VideoRedundanciesTarget
   }): Observable<ResultList<VideoRedundancy>> {
     const { pagination, sort, target } = options

@@ -17,6 +17,8 @@ export class InstanceStatisticsComponent implements OnInit {
 
   ngOnInit () {
     this.serverService.getServerStats()
-        .subscribe(res => this.serverStats = res)
+        .subscribe(res => {
+          this.serverStats = res
+        })
   }
 }

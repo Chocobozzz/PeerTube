@@ -1,16 +1,16 @@
+import { compare, genSalt, hash } from 'bcrypt'
+import { createSign, createVerify } from 'crypto'
 import { Request } from 'express'
+import { cloneDeep } from 'lodash'
 import { BCRYPT_SALT_SIZE, HTTP_SIGNATURE, PRIVATE_RSA_KEY_SIZE } from '../initializers/constants'
+import { MActor } from '../types/models'
 import { createPrivateKey, getPublicKey, promisify1, promisify2, sha256 } from './core-utils'
 import { jsonld } from './custom-jsonld-signature'
 import { logger } from './logger'
-import { cloneDeep } from 'lodash'
-import { createSign, createVerify } from 'crypto'
-import * as bcrypt from 'bcrypt'
-import { MActor } from '../types/models'
 
-const bcryptComparePromise = promisify2<any, string, boolean>(bcrypt.compare)
-const bcryptGenSaltPromise = promisify1<number, string>(bcrypt.genSalt)
-const bcryptHashPromise = promisify2<any, string | number, string>(bcrypt.hash)
+const bcryptComparePromise = promisify2<any, string, boolean>(compare)
+const bcryptGenSaltPromise = promisify1<number, string>(genSalt)
+const bcryptHashPromise = promisify2<any, string | number, string>(hash)
 
 const httpSignature = require('http-signature')
 
@@ -129,7 +129,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function hash (obj: any): Promise<any> {
+function hashObject (obj: any): Promise<any> {
   return jsonld.promises
                .normalize(obj, {
                  algorithm: 'URDNA2015',
@@ -151,12 +151,12 @@ function createSignatureHash (signature: any) {
   delete signatureCopy.id
   delete signatureCopy.signatureValue
 
-  return hash(signatureCopy)
+  return hashObject(signatureCopy)
 }
 
 function createDocWithoutSignatureHash (doc: any) {
   const docWithoutSignature = cloneDeep(doc)
   delete docWithoutSignature.signature
 
-  return hash(docWithoutSignature)
+  return hashObject(docWithoutSignature)
 }

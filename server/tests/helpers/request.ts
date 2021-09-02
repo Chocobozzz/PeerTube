@@ -13,7 +13,7 @@ describe('Request helpers', function () {
 
   it('Should throw an error when the bytes limit is exceeded for request', async function () {
     try {
-      await doRequest(FIXTURE_URLS.video4K, { bodyKBLimit: 3 })
+      await doRequest(FIXTURE_URLS.file4K, { bodyKBLimit: 3 })
     } catch {
       return
     }
@@ -23,7 +23,7 @@ describe('Request helpers', function () {
 
   it('Should throw an error when the bytes limit is exceeded for request and save file', async function () {
     try {
-      await doRequestAndSaveToFile(FIXTURE_URLS.video4K, destPath1, { bodyKBLimit: 3 })
+      await doRequestAndSaveToFile(FIXTURE_URLS.file4K, destPath1, { bodyKBLimit: 3 })
     } catch {
 
       await wait(500)
@@ -35,8 +35,8 @@ describe('Request helpers', function () {
   })
 
   it('Should succeed if the file is below the limit', async function () {
-    await doRequest(FIXTURE_URLS.video4K, { bodyKBLimit: 5 })
-    await doRequestAndSaveToFile(FIXTURE_URLS.video4K, destPath2, { bodyKBLimit: 5 })
+    await doRequest(FIXTURE_URLS.file4K, { bodyKBLimit: 5 })
+    await doRequestAndSaveToFile(FIXTURE_URLS.file4K, destPath2, { bodyKBLimit: 5 })
 
     expect(await pathExists(destPath2)).to.be.true
   })

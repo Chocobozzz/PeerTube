@@ -1,6 +1,6 @@
 import { uuidToShort } from '@server/helpers/uuid'
 import { generateMagnetUri } from '@server/helpers/webtorrent'
-import { getLocalVideoFileMetadataUrl } from '@server/lib/video-paths'
+import { getLocalVideoFileMetadataUrl } from '@server/lib/video-urls'
 import { VideoFile } from '@shared/models/videos/video-file.model'
 import { ActivityTagObject, ActivityUrlObject, VideoObject } from '../../../../shared/models/activitypub/objects'
 import { Video, VideoDetails } from '../../../../shared/models/videos'

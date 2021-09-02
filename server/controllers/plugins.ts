@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { join } from 'path'
 import { logger } from '@server/helpers/logger'
 import { optionalAuthenticate } from '@server/middlewares/auth'

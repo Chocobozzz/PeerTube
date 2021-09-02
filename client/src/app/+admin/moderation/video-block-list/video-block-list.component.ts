@@ -28,11 +28,11 @@ export class VideoBlockListComponent extends RestTable implements OnInit {
 
   inputFilters: AdvancedInputFilter[] = [
     {
-      queryParams: { 'search': 'type:auto' },
+      queryParams: { search: 'type:auto' },
       label: $localize`Automatic blocks`
     },
     {
-      queryParams: { 'search': 'type:manual' },
+      queryParams: { search: 'type:manual' },
       label: $localize`Manual blocks`
     }
   ]
@@ -62,14 +62,14 @@ export class VideoBlockListComponent extends RestTable implements OnInit {
           handler: videoBlock => {
             this.videoBlocklistService.unblockVideo(videoBlock.video.id).pipe(
               switchMap(_ => this.videoBlocklistService.blockVideo(videoBlock.video.id, undefined, true))
-            ).subscribe(
-              () => {
+            ).subscribe({
+              next: () => {
                 this.notifier.success($localize`Video ${videoBlock.video.name} switched to manual block.`)
                 this.reloadData()
               },
 
-              err => this.notifier.error(err.message)
-            )
+              error: err => this.notifier.error(err.message)
+            })
           },
           isDisplayed: videoBlock => videoBlock.type === VideoBlacklistType.AUTO_BEFORE_PUBLISHED
         }
@@ -94,13 +94,11 @@ export class VideoBlockListComponent extends RestTable implements OnInit {
             if (res === false) return
 
             this.videoService.removeVideo(videoBlock.video.id)
-              .subscribe(
-                () => {
-                  this.notifier.success($localize`Video deleted.`)
-                },
+              .subscribe({
+                next: () => this.notifier.success($localize`Video deleted.`),
 
-                err => this.notifier.error(err.message)
-              )
+                error: err => this.notifier.error(err.message)
+              })
           }
         }
       ]
@@ -136,14 +134,15 @@ export class VideoBlockListComponent extends RestTable implements OnInit {
     const res = await this.confirmService.confirm(confirmMessage, $localize`Unblock`)
     if (res === false) return
 
-    this.videoBlocklistService.unblockVideo(entry.video.id).subscribe(
-      () => {
-        this.notifier.success($localize`Video ${entry.video.name} unblocked.`)
-        this.reloadData()
-      },
+    this.videoBlocklistService.unblockVideo(entry.video.id)
+      .subscribe({
+        next: () => {
+          this.notifier.success($localize`Video ${entry.video.name} unblocked.`)
+          this.reloadData()
+        },
 
-      err => this.notifier.error(err.message)
-    )
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   getVideoEmbed (entry: VideoBlacklist) {
@@ -164,8 +163,8 @@ export class VideoBlockListComponent extends RestTable implements OnInit {
       sort: this.sort,
       search: this.search
     })
-      .subscribe(
-        async resultList => {
+      .subscribe({
+        next: async resultList => {
           this.totalRecords = resultList.total
 
           this.blocklist = resultList.data
@@ -178,7 +177,7 @@ export class VideoBlockListComponent extends RestTable implements OnInit {
           }
         },
 
-        err => this.notifier.error(err.message)
-      )
+        error: err => this.notifier.error(err.message)
+      })
   }
 }

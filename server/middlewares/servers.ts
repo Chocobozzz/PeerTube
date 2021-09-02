@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { HttpStatusCode } from '../../shared/models/http/http-error-codes'
 import { getHostWithPort } from '../helpers/express-utils'
 

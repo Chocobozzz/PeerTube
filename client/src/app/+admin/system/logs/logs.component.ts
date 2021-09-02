@@ -52,8 +52,8 @@ export class LogsComponent implements OnInit {
     this.loading = true
 
     this.logsService.getLogs({ isAuditLog: this.isAuditLog(), level: this.level, startDate: this.startDate })
-        .subscribe(
-          logs => {
+        .subscribe({
+          next: logs => {
             this.logs = logs
 
             setTimeout(() => {
@@ -61,10 +61,10 @@ export class LogsComponent implements OnInit {
             })
           },
 
-          err => this.notifier.error(err.message),
+          error: err => this.notifier.error(err.message),
 
-          () => this.loading = false
-        )
+          complete: () => this.loading = false
+        })
   }
 
   isAuditLog () {

@@ -1,0 +1,109 @@
+@use '_bootstrap-variables';
+@use '_variables' as *;
+@use '_mixins' as *;
+@use '_miniature' as *;
+
+// Cannot set margin top to videos-header because of the main header fixed position
+$margin-top: 30px;
+
+.videos-header {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  margin-bottom: 30px;
+
+  .title,
+  .title-subscription {
+    grid-column: 1;
+  }
+
+  .title {
+    font-size: 18px;
+    color: pvar(--mainForegroundColor);
+    display: inline-block;
+    font-weight: $font-semibold;
+
+    margin-top: $margin-top;
+    margin-bottom: 0;
+  }
+
+  .title-subscription {
+    grid-row: 2;
+    font-size: 14px;
+    color: pvar(--greyForegroundColor);
+
+    &.no-title {
+      margin-top: 10px;
+    }
+  }
+
+  .action-block {
+    grid-column: 3;
+    grid-row: 1/3;
+    margin-top: $margin-top;
+  }
+
+  my-feed {
+    @include margin-left(5px);
+
+    display: inline-block;
+    width: 16px;
+    color: pvar(--mainColor);
+    position: relative;
+    top: -2px;
+  }
+}
+
+.date-title {
+  font-size: 16px;
+  font-weight: $font-semibold;
+  margin-bottom: 20px;
+
+  // Make the element span a full grid row within .videos grid
+  grid-column: 1 / -1;
+
+  &:not(:first-child) {
+    margin-top: .5rem;
+    padding-top: 20px;
+    border-top: 1px solid $separator-border-color;
+  }
+}
+
+.margin-content {
+  @include grid-videos-miniature-layout-with-margins;
+}
+
+.display-as-row.videos {
+  @include margin-left(pvar(--horizontalMarginContent));
+  @include margin-right(pvar(--horizontalMarginContent));
+
+  .video-wrapper {
+    margin-bottom: 15px;
+  }
+}
+
+@media screen and (max-width: $mobile-view) {
+  .videos-header,
+  my-video-filters-header {
+    @include margin-left(15px);
+    @include margin-right(15px);
+
+    display: inline-block;
+  }
+
+  .date-title {
+    text-align: center;
+  }
+
+  .videos-header {
+    flex-direction: column;
+    align-items: center;
+    height: auto;
+    margin-bottom: 10px;
+
+    .title-page {
+      @include margin-right(0);
+
+      margin-bottom: 10px;
+    }
+  }
+}

@@ -113,7 +113,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     return this.userService.getAnonymousUser()
   }
 
-  async ngOnInit () {
+  ngOnInit () {
     this.serverConfig = this.serverService.getHTMLConfig()
 
     PeertubePlayerManager.initState()
@@ -195,10 +195,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   private loadRouteParams () {
     this.paramsSub = this.route.params.subscribe(routeParams => {
-      const videoId = routeParams[ 'videoId' ]
+      const videoId = routeParams['videoId']
       if (videoId) return this.loadVideo(videoId)
 
-      const playlistId = routeParams[ 'playlistId' ]
+      const playlistId = routeParams['playlistId']
       if (playlistId) return this.loadPlaylist(playlistId)
     })
   }
@@ -206,7 +206,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   private loadRouteQuery () {
     this.queryParamsSub = this.route.queryParams.subscribe(queryParams => {
       // Handle the ?playlistPosition
-      const positionParam = queryParams[ 'playlistPosition' ] ?? 1
+      const positionParam = queryParams['playlistPosition'] ?? 1
 
       this.playlistPosition = positionParam === 'last'
         ? -1 // Handle the "last" index
@@ -219,7 +219,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
       this.videoWatchPlaylist.updatePlaylistIndex(this.playlistPosition)
 
-      const start = queryParams[ 'start' ]
+      const start = queryParams['start']
       if (this.player && start) this.player.currentTime(parseInt(start, 10))
     })
   }
@@ -237,9 +237,9 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       'filter:api.video-watch.video.get.result'
     )
 
-    forkJoin([ videoObs, this.videoCaptionService.listCaptions(videoId)])
-      .subscribe(
-        ([ video, captionsResult ]) => {
+    forkJoin([ videoObs, this.videoCaptionService.listCaptions(videoId) ])
+      .subscribe({
+        next: ([ video, captionsResult ]) => {
           const queryParams = this.route.snapshot.queryParams
 
           const urlOptions = {
@@ -260,23 +260,23 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
               .catch(err => this.handleGlobalError(err))
         },
 
-        err => this.handleRequestError(err)
-      )
+        error: err => this.handleRequestError(err)
+      })
   }
 
   private loadPlaylist (playlistId: string) {
     if (this.isSameElement(this.playlist, playlistId)) return
 
     this.playlistService.getVideoPlaylist(playlistId)
-      .subscribe(
-        playlist => {
+      .subscribe({
+        next: playlist => {
           this.playlist = playlist
 
           this.videoWatchPlaylist.loadPlaylistElements(playlist, !this.playlistPosition, this.playlistPosition)
         },
 
-        err => this.handleRequestError(err)
-      )
+        error: err => this.handleRequestError(err)
+      })
   }
 
   private isSameElement (element: VideoDetails | VideoPlaylist, newId: string) {
@@ -292,6 +292,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       const originUrl = errorBody.originUrl + (window.location.search ?? '')
 
       const res = await this.confirmService.confirm(
+        // eslint-disable-next-line max-len
         $localize`This video is not available on this instance. Do you want to be redirected on the origin instance: <a href="${originUrl}">${originUrl}</a>?`,
         $localize`Redirection`
       )
@@ -312,7 +313,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     if (!errorMessage) return
 
     // Display a message in the video player instead of a notification
-    if (errorMessage.indexOf('from xs param') !== -1) {
+    if (errorMessage.includes('from xs param')) {
       this.flushPlayer()
       this.remoteServerDown = true
 
@@ -466,7 +467,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     if (this.nextVideoUUID) {
       this.router.navigate([ '/w', this.nextVideoUUID ])
-      return
     }
   }
 
@@ -483,14 +483,14 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   private isAutoPlayNext () {
     return (
-      (this.user && this.user.autoPlayNextVideo) ||
+      (this.user?.autoPlayNextVideo) ||
       this.anonymousUser.autoPlayNextVideo
     )
   }
 
   private isPlaylistAutoPlayNext () {
     return (
-      (this.user && this.user.autoPlayNextVideoPlaylist) ||
+      (this.user?.autoPlayNextVideoPlaylist) ||
       this.anonymousUser.autoPlayNextVideoPlaylist
     )
   }
@@ -508,9 +508,9 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   }
 
   private buildPlayerManagerOptions (params: {
-    video: VideoDetails,
-    videoCaptions: VideoCaption[],
-    urlOptions: CustomizationOptions & { playerMode: PlayerMode },
+    video: VideoDetails
+    videoCaptions: VideoCaption[]
+    urlOptions: CustomizationOptions & { playerMode: PlayerMode }
     user?: AuthUser
   }) {
     const { video, videoCaptions, urlOptions, user } = params
@@ -573,10 +573,12 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
         language: this.localeId,
 
-        userWatching: user && user.videosHistoryEnabled === true ? {
-          url: this.videoService.getUserWatchingVideoUrl(video.uuid),
-          authorizationHeader: this.authService.getRequestHeaderValue()
-        } : undefined,
+        userWatching: user && user.videosHistoryEnabled === true
+          ? {
+            url: this.videoService.getUserWatchingVideoUrl(video.uuid),
+            authorizationHeader: this.authService.getRequestHeaderValue()
+          }
+          : undefined,
 
         serverUrl: environment.apiUrl,
 
@@ -638,7 +640,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     }
 
     if (oldVideo && oldVideo.id !== newVideo.id) {
-      await this.peertubeSocket.unsubscribeLiveVideos(oldVideo.id)
+      this.peertubeSocket.unsubscribeLiveVideos(oldVideo.id)
     }
 
     if (!newVideo.isLive) return
@@ -704,9 +706,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     if (this.isUserLoggedIn()) {
       this.hotkeys = this.hotkeys.concat([
         new Hotkey('shift+s', () => {
-          this.subscribeButton.isSubscribedToAll()
-            ? this.subscribeButton.unsubscribe()
-            : this.subscribeButton.subscribe()
+          if (this.subscribeButton.isSubscribedToAll()) this.subscribeButton.unsubscribe()
+          else this.subscribeButton.subscribe()
 
           return false
         }, undefined, $localize`Subscribe to the account`)

@@ -126,7 +126,7 @@ export class LiveCommand extends AbstractCommand {
       video = await this.server.videos.getWithToken({ token: options.token, id: options.videoId })
 
       await wait(500)
-    } while (video.isLive === true && video.state.id !== VideoState.PUBLISHED)
+    } while (video.isLive === true || video.state.id !== VideoState.PUBLISHED)
   }
 
   async countPlaylists (options: OverrideCommandOptions & {

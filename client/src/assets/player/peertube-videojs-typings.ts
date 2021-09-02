@@ -1,3 +1,6 @@
+// FIXME: lint
+/* eslint-disable @typescript-eslint/ban-types */
+
 import { HlsConfig, Level } from 'hls.js'
 import videojs from 'video.js'
 import { VideoFile, VideoPlaylist, VideoPlaylistElement } from '@shared/models'
@@ -93,7 +96,7 @@ type VideoJSCaption = {
 }
 
 type UserWatching = {
-  url: string,
+  url: string
   authorizationHeader: string
 }
 
@@ -166,7 +169,7 @@ type VideoJSPluginOptions = {
 }
 
 type LoadedQualityData = {
-  qualitySwitchCallback: Function,
+  qualitySwitchCallback: (resolutionId: number, type: 'video') => void
   qualityData: {
     video: {
       id: number
@@ -177,7 +180,7 @@ type LoadedQualityData = {
 }
 
 type ResolutionUpdateData = {
-  auto: boolean,
+  auto: boolean
   resolutionId: number
   id?: number
 }

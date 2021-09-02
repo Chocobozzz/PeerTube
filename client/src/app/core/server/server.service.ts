@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http'
 import { Inject, Injectable, LOCALE_ID } from '@angular/core'
 import { getDevLocale, isOnDevLocale, sortBy } from '@app/helpers'
 import { getCompleteLocale, isDefaultLocale, peertubeTranslate } from '@shared/core-utils/i18n'
-import { HTMLServerConfig, SearchTargetType, ServerConfig, ServerStats, VideoConstant } from '@shared/models'
+import { HTMLServerConfig, ServerConfig, ServerStats, VideoConstant } from '@shared/models'
 import { environment } from '../../../environments/environment'
 
 @Injectable()
@@ -171,7 +171,7 @@ export class ServerService {
                  map(({ data, translations }) => {
                    const hashToPopulate: VideoConstant<T>[] = Object.keys(data)
                                                                     .map(dataKey => {
-                                                                      const label = data[ dataKey ]
+                                                                      const label = data[dataKey]
 
                                                                       const id = attributeName === 'languages'
                                                                         ? dataKey as T

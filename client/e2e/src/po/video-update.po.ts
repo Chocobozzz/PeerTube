@@ -1,11 +1,11 @@
-import { by, element } from 'protractor'
-
 export class VideoUpdatePage {
 
   async updateName (videoName: string) {
-    const nameInput = element(by.css('input#name'))
-    await nameInput.clear()
-    await nameInput.sendKeys(videoName)
+    const nameInput = $('input#name')
+
+    await nameInput.waitForDisplayed()
+    await nameInput.clearValue()
+    await nameInput.setValue(videoName)
   }
 
   async validUpdate () {
@@ -15,6 +15,6 @@ export class VideoUpdatePage {
   }
 
   private getSubmitButton () {
-    return element(by.css('.submit-container .action-button'))
+    return $('.submit-container .action-button')
   }
 }

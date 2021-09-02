@@ -188,7 +188,7 @@ class SettingsButton extends Button {
     }
 
     const offset = this.settingsButtonOptions.setup.maxHeightOffset
-    const maxHeight = (this.player().el() as HTMLElement).offsetHeight - offset // FIXME: typings
+    const maxHeight = (this.player().el() as HTMLElement).offsetHeight - offset
 
     const panelEl = this.panel.el() as HTMLElement
 

@@ -61,16 +61,16 @@ export class PluginListInstalledComponent implements OnInit {
 
   loadMorePlugins () {
     this.pluginApiService.getPlugins(this.pluginType, this.pagination, this.sort)
-        .subscribe(
-          res => {
+        .subscribe({
+          next: res => {
             this.plugins = this.plugins.concat(res.data)
             this.pagination.totalItems = res.total
 
             this.onDataSubject.next(res.data)
           },
 
-          err => this.notifier.error(err.message)
-        )
+          error: err => this.notifier.error(err.message)
+        })
   }
 
   onNearOfBottom () {
@@ -113,16 +113,16 @@ export class PluginListInstalledComponent implements OnInit {
     if (res === false) return
 
     this.pluginApiService.uninstall(plugin.name, plugin.type)
-      .subscribe(
-        () => {
+      .subscribe({
+        next: () => {
           this.notifier.success($localize`${plugin.name} uninstalled.`)
 
           this.plugins = this.plugins.filter(p => p.name !== plugin.name)
           this.pagination.totalItems--
         },
 
-        err => this.notifier.error(err.message)
-      )
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   async update (plugin: PeerTubePlugin) {
@@ -143,8 +143,8 @@ export class PluginListInstalledComponent implements OnInit {
 
     this.pluginApiService.update(plugin.name, plugin.type)
         .pipe()
-        .subscribe(
-          res => {
+        .subscribe({
+          next: res => {
             this.updating[updatingKey] = false
 
             this.notifier.success($localize`${plugin.name} updated.`)
@@ -152,8 +152,8 @@ export class PluginListInstalledComponent implements OnInit {
             Object.assign(plugin, res)
           },
 
-          err => this.notifier.error(err.message)
-        )
+          error: err => this.notifier.error(err.message)
+        })
   }
 
   getShowRouterLink (plugin: PeerTubePlugin) {

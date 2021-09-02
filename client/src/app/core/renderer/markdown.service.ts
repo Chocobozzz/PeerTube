@@ -103,20 +103,20 @@ export class MarkdownService {
     const { name, markdown, withEmoji, additionalAllowedTags } = options
     if (!markdown) return ''
 
-    const config = this.parsersConfig[ name ]
-    if (!this.markdownParsers[ name ]) {
-      this.markdownParsers[ name ] = await this.createMarkdownIt(config)
+    const config = this.parsersConfig[name]
+    if (!this.markdownParsers[name]) {
+      this.markdownParsers[name] = await this.createMarkdownIt(config)
 
       if (withEmoji) {
         if (!this.emojiModule) {
           this.emojiModule = (await import('markdown-it-emoji/light')).default
         }
 
-        this.markdownParsers[ name ].use(this.emojiModule)
+        this.markdownParsers[name].use(this.emojiModule)
       }
     }
 
-    let html = this.markdownParsers[ name ].render(markdown)
+    let html = this.markdownParsers[name].render(markdown)
     html = this.avoidTruncatedTags(html)
 
     if (config.escape) return this.htmlRenderer.toSafeHtml(html, additionalAllowedTags)
@@ -156,7 +156,7 @@ export class MarkdownService {
       if (relIndex < 0) token.attrPush([ 'rel', 'noopener noreferrer' ])
       else token.attrs[relIndex][1] = 'noopener noreferrer'
 
-      // pass token to default renderer.
+      // pass token to default renderer.*
       return defaultRender(tokens, index, options, env, self)
     }
   }
@@ -164,7 +164,7 @@ export class MarkdownService {
   private avoidTruncatedTags (html: string) {
     return html.replace(/\*\*?([^*]+)$/, '$1')
       .replace(/<a[^>]+>([^<]+)<\/a>\s*...((<\/p>)|(<\/li>)|(<\/strong>))?$/mi, '$1...')
-      .replace(/\[[^\]]+\]\(([^\)]+)$/m, '$1')
+      .replace(/\[[^\]]+\]\(([^)]+)$/m, '$1')
       .replace(/\s?\[[^\]]+\]?[.]{3}<\/p>$/m, '...</p>')
   }
 }

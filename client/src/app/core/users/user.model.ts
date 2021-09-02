@@ -55,6 +55,7 @@ export class User implements UserServerModel {
 
   noInstanceConfigWarningModal: boolean
   noWelcomeModal: boolean
+  noAccountSetupWarningModal: boolean
 
   pluginAuth: string | null
 
@@ -98,6 +99,7 @@ export class User implements UserServerModel {
 
     this.noInstanceConfigWarningModal = hash.noInstanceConfigWarningModal
     this.noWelcomeModal = hash.noWelcomeModal
+    this.noAccountSetupWarningModal = hash.noAccountSetupWarningModal
 
     this.notificationSettings = hash.notificationSettings
 
@@ -132,5 +134,9 @@ export class User implements UserServerModel {
 
   isUploadDisabled () {
     return this.videoQuota === 0 || this.videoQuotaDaily === 0
+  }
+
+  isAutoBlocked () {
+    return this.role === UserRole.USER && this.adminFlags !== UserAdminFlag.BYPASS_VIDEO_AUTO_BLACKLIST
   }
 }

@@ -1,6 +1,6 @@
 import { remove } from 'fs-extra'
 import { logger } from '../../helpers/logger'
-import * as memoizee from 'memoizee'
+import memoizee from 'memoizee'
 
 type GetFilePathResult = { isOwned: boolean, path: string, downloadName?: string } | undefined
 

@@ -61,8 +61,8 @@ export class AbuseMessageModalComponent extends FormReactive implements OnInit {
     this.sendingMessage = true
 
     this.abuseService.addAbuseMessage(this.abuse, this.form.value['message'])
-      .subscribe(
-        () => {
+      .subscribe({
+        next: () => {
           this.form.reset()
           this.sendingMessage = false
           this.countMessagesUpdated.emit({ abuseId: this.abuse.id, countMessages: this.abuseMessages.length + 1 })
@@ -70,25 +70,25 @@ export class AbuseMessageModalComponent extends FormReactive implements OnInit {
           this.loadMessages()
         },
 
-        err => {
+        error: err => {
           this.sendingMessage = false
           console.error(err)
           this.notifier.error('Sorry but you cannot send this message. Please retry later')
         }
-      )
+      })
   }
 
   deleteMessage (abuseMessage: AbuseMessage) {
     this.abuseService.deleteAbuseMessage(this.abuse, abuseMessage)
-      .subscribe(
-        () => {
+      .subscribe({
+        next: () => {
           this.countMessagesUpdated.emit({ abuseId: this.abuse.id, countMessages: this.abuseMessages.length - 1 })
 
           this.abuseMessages = this.abuseMessages.filter(m => m.id !== abuseMessage.id)
         },
 
-        err => this.notifier.error(err.message)
-      )
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   isMessageByMe (abuseMessage: AbuseMessage) {
@@ -105,8 +105,8 @@ export class AbuseMessageModalComponent extends FormReactive implements OnInit {
 
   private loadMessages () {
     this.abuseService.listAbuseMessages(this.abuse)
-      .subscribe(
-        async res => {
+      .subscribe({
+        next: async res => {
           this.abuseMessages = []
 
           for (const m of res.data) {
@@ -124,8 +124,8 @@ export class AbuseMessageModalComponent extends FormReactive implements OnInit {
           })
         },
 
-        err => this.notifier.error(err.message)
-      )
+        error: err => this.notifier.error(err.message)
+      })
   }
 
 }

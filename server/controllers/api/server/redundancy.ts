@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { JobQueue } from '@server/lib/job-queue'
 import { VideoRedundancyModel } from '@server/models/redundancy/video-redundancy'
 import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
@@ -106,9 +106,11 @@ async function updateRedundancy (req: express.Request, res: express.Response) {
 
   await server.save()
 
-  // Async, could be long
-  removeRedundanciesOfServer(server.id)
-    .catch(err => logger.error('Cannot remove redundancy of %s.', server.host, { err }))
+  if (server.redundancyAllowed !== true) {
+    // Async, could be long
+    removeRedundanciesOfServer(server.id)
+      .catch(err => logger.error('Cannot remove redundancy of %s.', server.host, { err }))
+  }
 
   return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }

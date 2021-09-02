@@ -9,7 +9,7 @@ import { VideoComment, VideoCommentService, VideoCommentThreadTree } from '@app/
 @Component({
   selector: 'my-video-comments',
   templateUrl: './video-comments.component.html',
-  styleUrls: ['./video-comments.component.scss']
+  styleUrls: [ './video-comments.component.scss' ]
 })
 export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('commentHighlightBlock') commentHighlightBlock: ElementRef
@@ -90,22 +90,22 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
       'filter:api.video-watch.video-thread-replies.list.result'
     )
 
-    obs.subscribe(
-        res => {
-          this.threadComments[commentId] = res
-          this.threadLoading[commentId] = false
-          this.hooks.runAction('action:video-watch.video-thread-replies.loaded', 'video-watch', { data: res })
+    obs.subscribe({
+      next: res => {
+        this.threadComments[commentId] = res
+        this.threadLoading[commentId] = false
+        this.hooks.runAction('action:video-watch.video-thread-replies.loaded', 'video-watch', { data: res })
 
-          if (highlightThread) {
-            this.highlightedThread = new VideoComment(res.comment)
+        if (highlightThread) {
+          this.highlightedThread = new VideoComment(res.comment)
 
-            // Scroll to the highlighted thread
-            setTimeout(() => this.commentHighlightBlock.nativeElement.scrollIntoView(), 0)
-          }
-        },
+          // Scroll to the highlighted thread
+          setTimeout(() => this.commentHighlightBlock.nativeElement.scrollIntoView(), 0)
+        }
+      },
 
-        err => this.notifier.error(err.message)
-      )
+      error: err => this.notifier.error(err.message)
+    })
   }
 
   loadMoreThreads () {
@@ -123,8 +123,8 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
       'filter:api.video-watch.video-threads.list.result'
     )
 
-    obs.subscribe(
-      res => {
+    obs.subscribe({
+      next: res => {
         this.comments = this.comments.concat(res.data)
         this.componentPagination.totalItems = res.total
         this.totalNotDeletedComments = res.totalNotDeletedComments
@@ -133,8 +133,8 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
         this.hooks.runAction('action:video-watch.video-threads.loaded', 'video-watch', { data: this.componentPagination })
       },
 
-      err => this.notifier.error(err.message)
-    )
+      error: err => this.notifier.error(err.message)
+    })
   }
 
   onCommentThreadCreated (comment: VideoComment) {
@@ -181,8 +181,8 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
     if (res === false) return false
 
     this.videoCommentService.deleteVideoComment(commentToDelete.videoId, commentToDelete.id)
-      .subscribe(
-        () => {
+      .subscribe({
+        next: () => {
           if (this.highlightedThread?.id === commentToDelete.id) {
             commentToDelete = this.comments.find(c => c.id === commentToDelete.id)
 
@@ -193,14 +193,18 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
           this.softDeleteComment(commentToDelete)
         },
 
-        err => this.notifier.error(err.message)
-      )
+        error: err => this.notifier.error(err.message)
+      })
 
     return true
   }
 
   async onWantedToRedraft (commentToRedraft: VideoComment) {
-    const confirm = await this.onWantedToDelete(commentToRedraft, $localize`Delete and re-draft`, $localize`Do you really want to delete and re-draft this comment?`)
+    const confirm = await this.onWantedToDelete(
+      commentToRedraft,
+      $localize`Delete and re-draft`,
+      $localize`Do you really want to delete and re-draft this comment?`
+    )
 
     if (confirm) {
       this.inReplyToCommentId = commentToRedraft.inReplyToCommentId

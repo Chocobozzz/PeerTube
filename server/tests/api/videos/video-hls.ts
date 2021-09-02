@@ -5,6 +5,7 @@ import * as chai from 'chai'
 import { basename, join } from 'path'
 import { removeFragmentedMP4Ext, uuidRegex } from '@shared/core-utils'
 import {
+  areObjectStorageTestsDisabled,
   checkDirectoryIsEmpty,
   checkResolutionsInMasterPlaylist,
   checkSegmentHash,
@@ -12,7 +13,9 @@ import {
   cleanupTests,
   createMultipleServers,
   doubleFollow,
+  expectStartWith,
   makeRawRequest,
+  ObjectStorageCommand,
   PeerTubeServer,
   setAccessTokensToServers,
   waitJobs,
@@ -23,8 +26,19 @@ import { DEFAULT_AUDIO_RESOLUTION } from '../../../initializers/constants'
 
 const expect = chai.expect
 
-async function checkHlsPlaylist (servers: PeerTubeServer[], videoUUID: string, hlsOnly: boolean, resolutions = [ 240, 360, 480, 720 ]) {
-  for (const server of servers) {
+async function checkHlsPlaylist (options: {
+  servers: PeerTubeServer[]
+  videoUUID: string
+  hlsOnly: boolean
+
+  resolutions?: number[]
+  objectStorageBaseUrl: string
+}) {
+  const { videoUUID, hlsOnly, objectStorageBaseUrl } = options
+
+  const resolutions = options.resolutions ?? [ 240, 360, 480, 720 ]
+
+  for (const server of options.servers) {
     const videoDetails = await server.videos.get({ id: videoUUID })
     const baseUrl = `http://${videoDetails.account.host}`
 
@@ -48,9 +62,15 @@ async function checkHlsPlaylist (servers: PeerTubeServer[], videoUUID: string, h
       expect(file.torrentUrl).to.match(
         new RegExp(`http://${server.host}/lazy-static/torrents/${uuidRegex}-${file.resolution.id}-hls.torrent`)
       )
-      expect(file.fileUrl).to.match(
-        new RegExp(`${baseUrl}/static/streaming-playlists/hls/${videoDetails.uuid}/${uuidRegex}-${file.resolution.id}-fragmented.mp4`)
-      )
+
+      if (objectStorageBaseUrl) {
+        expectStartWith(file.fileUrl, objectStorageBaseUrl)
+      } else {
+        expect(file.fileUrl).to.match(
+          new RegExp(`${baseUrl}/static/streaming-playlists/hls/${videoDetails.uuid}/${uuidRegex}-${file.resolution.id}-fragmented.mp4`)
+        )
+      }
+
       expect(file.resolution.label).to.equal(resolution + 'p')
 
       await makeRawRequest(file.torrentUrl, HttpStatusCode.OK_200)
@@ -80,9 +100,11 @@ async function checkHlsPlaylist (servers: PeerTubeServer[], videoUUID: string, h
         const file = hlsFiles.find(f => f.resolution.id === resolution)
         const playlistName = removeFragmentedMP4Ext(basename(file.fileUrl)) + '.m3u8'
 
-        const subPlaylist = await server.streamingPlaylists.get({
-          url: `${baseUrl}/static/streaming-playlists/hls/${videoUUID}/${playlistName}`
-        })
+        const url = objectStorageBaseUrl
+          ? `${objectStorageBaseUrl}hls/${videoUUID}/${playlistName}`
+          : `${baseUrl}/static/streaming-playlists/hls/${videoUUID}/${playlistName}`
+
+        const subPlaylist = await server.streamingPlaylists.get({ url })
 
         expect(subPlaylist).to.match(new RegExp(`${uuidRegex}-${resolution}-fragmented.mp4`))
         expect(subPlaylist).to.contain(basename(file.fileUrl))
@@ -90,14 +112,15 @@ async function checkHlsPlaylist (servers: PeerTubeServer[], videoUUID: string, h
     }
 
     {
-      const baseUrlAndPath = baseUrl + '/static/streaming-playlists/hls'
+      const baseUrlAndPath = objectStorageBaseUrl
+        ? objectStorageBaseUrl + 'hls/' + videoUUID
+        : baseUrl + '/static/streaming-playlists/hls/' + videoUUID
 
       for (const resolution of resolutions) {
         await checkSegmentHash({
           server,
           baseUrlPlaylist: baseUrlAndPath,
           baseUrlSegment: baseUrlAndPath,
-          videoUUID,
           resolution,
           hlsPlaylist
         })
@@ -111,7 +134,7 @@ describe('Test HLS videos', function () {
   let videoUUID = ''
   let videoAudioUUID = ''
 
-  function runTestSuite (hlsOnly: boolean) {
+  function runTestSuite (hlsOnly: boolean, objectStorageBaseUrl?: string) {
 
     it('Should upload a video and transcode it to HLS', async function () {
       this.timeout(120000)
@@ -121,7 +144,7 @@ describe('Test HLS videos', function () {
 
       await waitJobs(servers)
 
-      await checkHlsPlaylist(servers, videoUUID, hlsOnly)
+      await checkHlsPlaylist({ servers, videoUUID, hlsOnly, objectStorageBaseUrl })
     })
 
     it('Should upload an audio file and transcode it to HLS', async function () {
@@ -132,17 +155,23 @@ describe('Test HLS videos', function () {
 
       await waitJobs(servers)
 
-      await checkHlsPlaylist(servers, videoAudioUUID, hlsOnly, [ DEFAULT_AUDIO_RESOLUTION, 360, 240 ])
+      await checkHlsPlaylist({
+        servers,
+        videoUUID: videoAudioUUID,
+        hlsOnly,
+        resolutions: [ DEFAULT_AUDIO_RESOLUTION, 360, 240 ],
+        objectStorageBaseUrl
+      })
     })
 
     it('Should update the video', async function () {
-      this.timeout(10000)
+      this.timeout(30000)
 
       await servers[0].videos.update({ id: videoUUID, attributes: { name: 'video 1 updated' } })
 
       await waitJobs(servers)
 
-      await checkHlsPlaylist(servers, videoUUID, hlsOnly)
+      await checkHlsPlaylist({ servers, videoUUID, hlsOnly, objectStorageBaseUrl })
     })
 
     it('Should delete videos', async function () {
@@ -227,6 +256,22 @@ describe('Test HLS videos', function () {
     })
 
     runTestSuite(true)
+  })
+
+  describe('With object storage enabled', function () {
+    if (areObjectStorageTestsDisabled()) return
+
+    before(async function () {
+      this.timeout(120000)
+
+      const configOverride = ObjectStorageCommand.getDefaultConfig()
+      await ObjectStorageCommand.prepareDefaultBuckets()
+
+      await servers[0].kill()
+      await servers[0].run(configOverride)
+    })
+
+    runTestSuite(true, ObjectStorageCommand.getPlaylistBaseUrl())
   })
 
   after(async function () {

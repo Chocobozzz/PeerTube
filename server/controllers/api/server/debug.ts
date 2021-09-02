@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { InboxManager } from '@server/lib/activitypub/inbox-manager'
 import { RemoveDanglingResumableUploadsScheduler } from '@server/lib/schedulers/remove-dangling-resumable-uploads-scheduler'
 import { Debug, SendDebugCommand } from '@shared/models'

@@ -1,7 +1,7 @@
 // Thanks: https://github.com/kwhitley/apicache
 // We duplicated the library because it is unmaintened and prevent us to upgrade to recent NodeJS versions
 
-import * as express from 'express'
+import express from 'express'
 import { OutgoingHttpHeaders } from 'http'
 import { isTestInstance, parseDurationToMs } from '@server/helpers/core-utils'
 import { logger } from '@server/helpers/logger'

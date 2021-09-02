@@ -1,12 +1,15 @@
-import * as createTorrent from 'create-torrent'
-import { createWriteStream, ensureDir, remove, writeFile } from 'fs-extra'
-import * as magnetUtil from 'magnet-uri'
-import * as parseTorrent from 'parse-torrent'
+import { decode, encode } from 'bencode'
+import createTorrent from 'create-torrent'
+import { createWriteStream, ensureDir, readFile, remove, writeFile } from 'fs-extra'
+import magnetUtil from 'magnet-uri'
+import parseTorrent from 'parse-torrent'
 import { dirname, join } from 'path'
-import * as WebTorrent from 'webtorrent'
+import { pipeline } from 'stream'
+import WebTorrent, { Instance, TorrentFile } from 'webtorrent'
 import { isArray } from '@server/helpers/custom-validators/misc'
 import { WEBSERVER } from '@server/initializers/constants'
-import { generateTorrentFileName, getVideoFilePath } from '@server/lib/video-paths'
+import { generateTorrentFileName } from '@server/lib/paths'
+import { VideoPathManager } from '@server/lib/video-path-manager'
 import { MVideo } from '@server/types/models/video/video'
 import { MVideoFile, MVideoFileRedundanciesOpt } from '@server/types/models/video/video-file'
 import { MStreamingPlaylistVideo } from '@server/types/models/video/video-streaming-playlist'
@@ -30,7 +33,7 @@ async function downloadWebTorrentVideo (target: { magnetUri: string, torrentName
 
   return new Promise<string>((res, rej) => {
     const webtorrent = new WebTorrent()
-    let file: WebTorrent.TorrentFile
+    let file: TorrentFile
 
     const torrentId = target.magnetUri || join(CONFIG.STORAGE.TORRENTS_DIR, target.torrentName)
 
@@ -47,6 +50,8 @@ async function downloadWebTorrentVideo (target: { magnetUri: string, torrentName
           .then(() => rej(new Error('Cannot import torrent ' + torrentId + ': there are multiple files in it')))
       }
 
+      logger.debug('Got torrent from webtorrent %s.', id, { infoHash: torrent.infoHash })
+
       file = torrent.files[0]
 
       // FIXME: avoid creating another stream when https://github.com/webtorrent/webtorrent/issues/1517 is fixed
@@ -59,7 +64,13 @@ async function downloadWebTorrentVideo (target: { magnetUri: string, torrentName
           .catch(err => logger.error('Cannot destroy webtorrent.', { err }))
       })
 
-      file.createReadStream().pipe(writeStream)
+      pipeline(
+        file.createReadStream(),
+        writeStream,
+        err => {
+          if (err) rej(err)
+        }
+      )
     })
 
     torrent.on('error', err => rej(err))
@@ -78,39 +89,59 @@ async function downloadWebTorrentVideo (target: { magnetUri: string, torrentName
   })
 }
 
-async function createTorrentAndSetInfoHash (
-  videoOrPlaylist: MVideo | MStreamingPlaylistVideo,
-  videoFile: MVideoFile
-) {
+function createTorrentAndSetInfoHash (videoOrPlaylist: MVideo | MStreamingPlaylistVideo, videoFile: MVideoFile) {
   const video = extractVideo(videoOrPlaylist)
 
   const options = {
     // Keep the extname, it's used by the client to stream the file inside a web browser
     name: `${video.name} ${videoFile.resolution}p${videoFile.extname}`,
     createdBy: 'PeerTube',
-    announceList: [
-      [ WEBSERVER.WS + '://' + WEBSERVER.HOSTNAME + ':' + WEBSERVER.PORT + '/tracker/socket' ],
-      [ WEBSERVER.URL + '/tracker/announce' ]
-    ],
-    urlList: [ videoFile.getFileUrl(video) ]
+    announceList: buildAnnounceList(),
+    urlList: buildUrlList(video, videoFile)
   }
 
-  const torrent = await createTorrentPromise(getVideoFilePath(videoOrPlaylist, videoFile), options)
+  return VideoPathManager.Instance.makeAvailableVideoFile(videoOrPlaylist, videoFile, async videoPath => {
+    const torrentContent = await createTorrentPromise(videoPath, options)
 
-  const torrentFilename = generateTorrentFileName(videoOrPlaylist, videoFile.resolution)
-  const torrentPath = join(CONFIG.STORAGE.TORRENTS_DIR, torrentFilename)
-  logger.info('Creating torrent %s.', torrentPath)
+    const torrentFilename = generateTorrentFileName(videoOrPlaylist, videoFile.resolution)
+    const torrentPath = join(CONFIG.STORAGE.TORRENTS_DIR, torrentFilename)
+    logger.info('Creating torrent %s.', torrentPath)
 
-  await writeFile(torrentPath, torrent)
+    await writeFile(torrentPath, torrentContent)
 
-  // Remove old torrent file if it existed
-  if (videoFile.hasTorrent()) {
-    await remove(join(CONFIG.STORAGE.TORRENTS_DIR, videoFile.torrentFilename))
-  }
+    // Remove old torrent file if it existed
+    if (videoFile.hasTorrent()) {
+      await remove(join(CONFIG.STORAGE.TORRENTS_DIR, videoFile.torrentFilename))
+    }
 
-  const parsedTorrent = parseTorrent(torrent)
-  videoFile.infoHash = parsedTorrent.infoHash
-  videoFile.torrentFilename = torrentFilename
+    const parsedTorrent = parseTorrent(torrentContent)
+    videoFile.infoHash = parsedTorrent.infoHash
+    videoFile.torrentFilename = torrentFilename
+  })
+}
+
+async function updateTorrentUrls (videoOrPlaylist: MVideo | MStreamingPlaylistVideo, videoFile: MVideoFile) {
+  const video = extractVideo(videoOrPlaylist)
+
+  const oldTorrentPath = join(CONFIG.STORAGE.TORRENTS_DIR, videoFile.torrentFilename)
+
+  const torrentContent = await readFile(oldTorrentPath)
+  const decoded = decode(torrentContent)
+
+  decoded['announce-list'] = buildAnnounceList()
+  decoded.announce = decoded['announce-list'][0][0]
+
+  decoded['url-list'] = buildUrlList(video, videoFile)
+
+  const newTorrentFilename = generateTorrentFileName(videoOrPlaylist, videoFile.resolution)
+  const newTorrentPath = join(CONFIG.STORAGE.TORRENTS_DIR, newTorrentFilename)
+
+  logger.info('Updating torrent URLs %s -> %s.', oldTorrentPath, newTorrentPath)
+
+  await writeFile(newTorrentPath, encode(decoded))
+  await remove(join(CONFIG.STORAGE.TORRENTS_DIR, videoFile.torrentFilename))
+
+  videoFile.torrentFilename = newTorrentFilename
 }
 
 function generateMagnetUri (
@@ -140,6 +171,7 @@ function generateMagnetUri (
 
 export {
   createTorrentPromise,
+  updateTorrentUrls,
   createTorrentAndSetInfoHash,
   generateMagnetUri,
   downloadWebTorrentVideo
@@ -148,7 +180,7 @@ export {
 // ---------------------------------------------------------------------------
 
 function safeWebtorrentDestroy (
-  webtorrent: WebTorrent.Instance,
+  webtorrent: Instance,
   torrentId: string,
   downloadedFile?: { directoryPath: string, filepath: string },
   torrentName?: string
@@ -182,4 +214,15 @@ function deleteDownloadedFile (downloadedFile: { directoryPath: string, filepath
   logger.debug('Removing %s after webtorrent download.', toRemovePath)
   remove(toRemovePath)
     .catch(err => logger.error('Cannot remove torrent file %s in webtorrent download.', toRemovePath, { err }))
+}
+
+function buildAnnounceList () {
+  return [
+    [ WEBSERVER.WS + '://' + WEBSERVER.HOSTNAME + ':' + WEBSERVER.PORT + '/tracker/socket' ],
+    [ WEBSERVER.URL + '/tracker/announce' ]
+  ]
+}
+
+function buildUrlList (video: MVideo, videoFile: MVideoFile) {
+  return [ videoFile.getFileUrl(video) ]
 }

@@ -491,20 +491,20 @@ describe('Test users API validators', function () {
       await makePutBodyRequest({ url: server.url, path: path + 'me', token: userToken, fields })
     })
 
-    it('Should fail with an invalid noInstanceConfigWarningModal attribute', async function () {
-      const fields = {
-        noInstanceConfigWarningModal: -1
+    it('Should fail with invalid no modal attributes', async function () {
+      const keys = [
+        'noInstanceConfigWarningModal',
+        'noAccountSetupWarningModal',
+        'noWelcomeModal'
+      ]
+
+      for (const key of keys) {
+        const fields = {
+          [key]: -1
+        }
+
+        await makePutBodyRequest({ url: server.url, path: path + 'me', token: userToken, fields })
       }
-
-      await makePutBodyRequest({ url: server.url, path: path + 'me', token: userToken, fields })
-    })
-
-    it('Should fail with an invalid noWelcomeModal attribute', async function () {
-      const fields = {
-        noWelcomeModal: -1
-      }
-
-      await makePutBodyRequest({ url: server.url, path: path + 'me', token: userToken, fields })
     })
 
     it('Should succeed to change password with the correct params', async function () {
@@ -516,7 +516,8 @@ describe('Test users API validators', function () {
         email: 'super_email@example.com',
         theme: 'default',
         noInstanceConfigWarningModal: true,
-        noWelcomeModal: true
+        noWelcomeModal: true,
+        noAccountSetupWarningModal: true
       }
 
       await makePutBodyRequest({

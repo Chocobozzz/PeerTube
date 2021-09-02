@@ -1,14 +1,65 @@
-/*
-  This is a "Solution Style" tsconfig.json file, and is used by editors and TypeScript’s language server to improve development experience.
-  It is not intended to be used to perform a compilation.
-
-  To learn more about this file see: https://angular.io/config/solution-tsconfig.
-*/
 {
-  "files": [],
-  "references": [
-    {
-      "path": "./tsconfig.app.json"
+  "compileOnSave": false,
+  "compilerOptions": {
+    "downlevelIteration": true,
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "module": "esnext",
+    "experimentalDecorators": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "suppressImplicitAnyIndexErrors":true,
+    "alwaysStrict": true,
+    "importHelpers": true,
+    "strictBindCallApply": true,
+    "target": "es2015",
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "lib": [
+      "es2018",
+      "es2017",
+      "es2016",
+      "es2015",
+      "dom"
+    ],
+    "baseUrl": "./",
+    "paths": {
+      "hls.js": [ "node_modules/hls.js/dist/hls.light" ],
+      "video.js": [ "node_modules/video.js/core" ],
+      "@app/*": [ "src/app/*" ],
+      "@shared/models/*": [ "../shared/models/*" ],
+      "@shared/models": [ "../shared/models" ],
+      "@shared/core-utils": [ "../shared/core-utils" ],
+      "@shared/core-utils/*": [ "../shared/core-utils/*" ],
+      "@root-helpers/*": [ "src/root-helpers/*" ],
+      "fs": [ "src/shims/noop.ts" ],
+      "http": [ "src/shims/http.ts" ],
+      "https": [ "src/shims/https.ts" ],
+      "path": [ "src/shims/path.ts" ],
+      "stream": [ "src/shims/stream.ts" ],
+      "crypto": [ "src/shims/noop.ts" ]
     }
-  ]
+  },
+  "files": [
+    "src/polyfills.ts"
+  ],
+  "include": [
+    "src/main*.ts",
+    "src/**/*.d.ts",
+    "src/shims/*.ts"
+  ],
+  "exclude": [
+    "../node_modules",
+    "../server",
+    "node_modules"
+  ],
+  "angularCompilerOptions": {
+    "strictInjectionParameters": true,
+    "fullTemplateTypeCheck": true,
+    "strictTemplates": true,
+    "enableI18nLegacyMessageIdFormat": false
+  }
 }

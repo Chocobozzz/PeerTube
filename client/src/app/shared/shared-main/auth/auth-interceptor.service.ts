@@ -36,7 +36,7 @@ export class AuthInterceptor implements HttpInterceptor {
                      return this.handleNotAuthenticated(err)
                    }
 
-                   return observableThrowError(err)
+                   return observableThrowError(() => err)
                  })
                )
   }

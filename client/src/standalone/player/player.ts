@@ -17,7 +17,7 @@ const PASSTHROUGH_EVENTS = [
  */
 export class PeerTubePlayer {
 
-  private eventRegistrar: EventRegistrar = new EventRegistrar()
+  private readonly eventRegistrar: EventRegistrar = new EventRegistrar()
   private channel: Channel.MessagingChannel
   private readyPromise: Promise<void>
 
@@ -31,8 +31,8 @@ export class PeerTubePlayer {
    * @param scope
    */
   constructor (
-    private embedElement: HTMLIFrameElement,
-    private scope?: string
+    private readonly embedElement: HTMLIFrameElement,
+    private readonly scope?: string
   ) {
     this.eventRegistrar.registerTypes(PASSTHROUGH_EVENTS)
 
@@ -90,6 +90,7 @@ export class PeerTubePlayer {
 
   /**
    * Tell the embed to change the audio volume
+   *
    * @param value A number from 0 to 1
    */
   async setVolume (value: number) {
@@ -98,14 +99,16 @@ export class PeerTubePlayer {
 
   /**
    * Get the current volume level in the embed.
+   *
    * @param value A number from 0 to 1
    */
   async getVolume (): Promise<number> {
-    return this.sendMessage<void, number>('getVolume')
+    return this.sendMessage<undefined, number>('getVolume')
   }
 
   /**
    * Tell the embed to change the current caption
+   *
    * @param value Caption id
    */
   async setCaption (value: string) {
@@ -116,11 +119,12 @@ export class PeerTubePlayer {
    * Get video captions
    */
   async getCaptions (): Promise<PeerTubeTextTrack[]> {
-    return this.sendMessage<void, PeerTubeTextTrack[]>('getCaptions')
+    return this.sendMessage<undefined, PeerTubeTextTrack[]>('getCaptions')
   }
 
   /**
    * Tell the embed to seek to a specific position (in seconds)
+   *
    * @param seconds
    */
   async seek (seconds: number) {
@@ -143,21 +147,21 @@ export class PeerTubePlayer {
    * resolutions change.
    */
   async getResolutions (): Promise<PeerTubeResolution[]> {
-    return this.sendMessage<void, PeerTubeResolution[]>('getResolutions')
+    return this.sendMessage<undefined, PeerTubeResolution[]>('getResolutions')
   }
 
   /**
    * Retrieve a list of available playback rates.
    */
   async getPlaybackRates (): Promise<number[]> {
-    return this.sendMessage<void, number[]>('getPlaybackRates')
+    return this.sendMessage<undefined, number[]>('getPlaybackRates')
   }
 
   /**
    * Get the current playback rate. Defaults to 1 (1x playback rate).
    */
   async getPlaybackRate (): Promise<number> {
-    return this.sendMessage<void, number>('getPlaybackRate')
+    return this.sendMessage<undefined, number>('getPlaybackRate')
   }
 
   /**
@@ -188,7 +192,7 @@ export class PeerTubePlayer {
    * Get video position currently played (starts from 1)
    */
   async getCurrentPosition () {
-    return this.sendMessage<void, number>('getCurrentPosition')
+    return this.sendMessage<undefined, number>('getCurrentPosition')
   }
 
   private constructChannel () {
@@ -201,8 +205,8 @@ export class PeerTubePlayer {
   }
 
   private prepareToBeReady () {
-    let readyResolve: Function
-    let readyReject: Function
+    let readyResolve: () => void
+    let readyReject: () => void
 
     this.readyPromise = new Promise<void>((res, rej) => {
       readyResolve = res
@@ -219,7 +223,8 @@ export class PeerTubePlayer {
   private sendMessage<TIn, TOut> (method: string, params?: TIn): Promise<TOut> {
     return new Promise<TOut>((resolve, reject) => {
       this.channel.call({
-        method, params,
+        method,
+        params,
         success: result => resolve(result),
         error: error => reject(error)
       })
@@ -228,4 +233,4 @@ export class PeerTubePlayer {
 }
 
 // put it on the window as well as the export
-(window[ 'PeerTubePlayer' ] as any) = PeerTubePlayer
+(window['PeerTubePlayer'] as any) = PeerTubePlayer

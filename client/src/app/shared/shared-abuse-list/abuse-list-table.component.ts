@@ -39,23 +39,23 @@ export class AbuseListTableComponent extends RestTable implements OnInit {
 
   inputFilters: AdvancedInputFilter[] = [
     {
-      queryParams: { 'search': 'state:pending' },
+      queryParams: { search: 'state:pending' },
       label: $localize`Unsolved reports`
     },
     {
-      queryParams: { 'search': 'state:accepted' },
+      queryParams: { search: 'state:accepted' },
       label: $localize`Accepted reports`
     },
     {
-      queryParams: { 'search': 'state:rejected' },
+      queryParams: { search: 'state:rejected' },
       label: $localize`Refused reports`
     },
     {
-      queryParams: { 'search': 'videoIs:blacklisted' },
+      queryParams: { search: 'videoIs:blacklisted' },
       label: $localize`Reports with blocked videos`
     },
     {
-      queryParams: { 'search': 'videoIs:deleted' },
+      queryParams: { search: 'videoIs:deleted' },
       label: $localize`Reports with deleted videos`
     }
   ]
@@ -145,23 +145,24 @@ export class AbuseListTableComponent extends RestTable implements OnInit {
     const res = await this.confirmService.confirm($localize`Do you really want to delete this abuse report?`, $localize`Delete`)
     if (res === false) return
 
-    this.abuseService.removeAbuse(abuse).subscribe(
-      () => {
-        this.notifier.success($localize`Abuse deleted.`)
-        this.reloadData()
-      },
+    this.abuseService.removeAbuse(abuse)
+      .subscribe({
+        next: () => {
+          this.notifier.success($localize`Abuse deleted.`)
+          this.reloadData()
+        },
 
-      err => this.notifier.error(err.message)
-    )
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   updateAbuseState (abuse: AdminAbuse, state: AbuseState) {
     this.abuseService.updateAbuse(abuse, { state })
-      .subscribe(
-        () => this.reloadData(),
+      .subscribe({
+        next: () => this.reloadData(),
 
-        err => this.notifier.error(err.message)
-      )
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   onCountMessagesUpdated (event: { abuseId: number, countMessages: number }) {
@@ -198,55 +199,55 @@ export class AbuseListTableComponent extends RestTable implements OnInit {
       ? this.abuseService.getAdminAbuses(options)
       : this.abuseService.getUserAbuses(options)
 
-    return observable.subscribe(
-        async resultList => {
-          this.totalRecords = resultList.total
+    return observable.subscribe({
+      next: async resultList => {
+        this.totalRecords = resultList.total
 
-          this.abuses = []
+        this.abuses = []
 
-          for (const a of resultList.data) {
-            const abuse = a as ProcessedAbuse
+        for (const a of resultList.data) {
+          const abuse = a as ProcessedAbuse
 
-            abuse.reasonHtml = await this.toHtml(abuse.reason)
+          abuse.reasonHtml = await this.toHtml(abuse.reason)
 
-            if (abuse.moderationComment) {
-              abuse.moderationCommentHtml = await this.toHtml(abuse.moderationComment)
-            }
-
-            if (abuse.video) {
-              abuse.embedHtml = this.sanitizer.bypassSecurityTrustHtml(this.getVideoEmbed(abuse))
-
-              if (abuse.video.channel?.ownerAccount) {
-                abuse.video.channel.ownerAccount = new Account(abuse.video.channel.ownerAccount)
-              }
-            }
-
-            if (abuse.comment) {
-              if (abuse.comment.deleted) {
-                abuse.truncatedCommentHtml = abuse.commentHtml = $localize`Deleted comment`
-              } else {
-                const truncated = truncate(abuse.comment.text, { length: 100 })
-                abuse.truncatedCommentHtml = await this.markdownRenderer.textMarkdownToHTML(truncated, true)
-                abuse.commentHtml = await this.markdownRenderer.textMarkdownToHTML(abuse.comment.text, true)
-              }
-            }
-
-            if (abuse.reporterAccount) {
-              abuse.reporterAccount = new Account(abuse.reporterAccount)
-            }
-
-            if (abuse.flaggedAccount) {
-              abuse.flaggedAccount = new Account(abuse.flaggedAccount)
-            }
-
-            if (abuse.updatedAt === abuse.createdAt) delete abuse.updatedAt
-
-            this.abuses.push(abuse)
+          if (abuse.moderationComment) {
+            abuse.moderationCommentHtml = await this.toHtml(abuse.moderationComment)
           }
-        },
 
-        err => this.notifier.error(err.message)
-      )
+          if (abuse.video) {
+            abuse.embedHtml = this.sanitizer.bypassSecurityTrustHtml(this.getVideoEmbed(abuse))
+
+            if (abuse.video.channel?.ownerAccount) {
+              abuse.video.channel.ownerAccount = new Account(abuse.video.channel.ownerAccount)
+            }
+          }
+
+          if (abuse.comment) {
+            if (abuse.comment.deleted) {
+              abuse.truncatedCommentHtml = abuse.commentHtml = $localize`Deleted comment`
+            } else {
+              const truncated = truncate(abuse.comment.text, { length: 100 })
+              abuse.truncatedCommentHtml = await this.markdownRenderer.textMarkdownToHTML(truncated, true)
+              abuse.commentHtml = await this.markdownRenderer.textMarkdownToHTML(abuse.comment.text, true)
+            }
+          }
+
+          if (abuse.reporterAccount) {
+            abuse.reporterAccount = new Account(abuse.reporterAccount)
+          }
+
+          if (abuse.flaggedAccount) {
+            abuse.flaggedAccount = new Account(abuse.flaggedAccount)
+          }
+
+          if (abuse.updatedAt === abuse.createdAt) delete abuse.updatedAt
+
+          this.abuses.push(abuse)
+        }
+      },
+
+      error: err => this.notifier.error(err.message)
+    })
   }
 
   private buildInternalActions (): DropdownAction<ProcessedAbuse>[] {
@@ -351,15 +352,15 @@ export class AbuseListTableComponent extends RestTable implements OnInit {
         isDisplayed: abuse => abuse.video && !abuse.video.deleted && !abuse.video.blacklisted,
         handler: abuse => {
           this.videoBlocklistService.blockVideo(abuse.video.id, undefined, abuse.video.channel.isLocal)
-            .subscribe(
-              () => {
+            .subscribe({
+              next: () => {
                 this.notifier.success($localize`Video blocked.`)
 
                 this.updateAbuseState(abuse, AbuseState.ACCEPTED)
               },
 
-              err => this.notifier.error(err.message)
-            )
+              error: err => this.notifier.error(err.message)
+            })
         }
       },
       {
@@ -367,15 +368,15 @@ export class AbuseListTableComponent extends RestTable implements OnInit {
         isDisplayed: abuse => abuse.video && !abuse.video.deleted && abuse.video.blacklisted,
         handler: abuse => {
           this.videoBlocklistService.unblockVideo(abuse.video.id)
-            .subscribe(
-              () => {
+            .subscribe({
+              next: () => {
                 this.notifier.success($localize`Video unblocked.`)
 
                 this.updateAbuseState(abuse, AbuseState.ACCEPTED)
               },
 
-              err => this.notifier.error(err.message)
-            )
+              error: err => this.notifier.error(err.message)
+            })
         }
       },
       {
@@ -389,15 +390,15 @@ export class AbuseListTableComponent extends RestTable implements OnInit {
           if (res === false) return
 
           this.videoService.removeVideo(abuse.video.id)
-            .subscribe(
-              () => {
+            .subscribe({
+              next: () => {
                 this.notifier.success($localize`Video deleted.`)
 
                 this.updateAbuseState(abuse, AbuseState.ACCEPTED)
               },
 
-              err => this.notifier.error(err.message)
-            )
+              error: err => this.notifier.error(err.message)
+            })
         }
       }
     ]
@@ -424,15 +425,15 @@ export class AbuseListTableComponent extends RestTable implements OnInit {
           if (res === false) return
 
           this.commentService.deleteVideoComment(abuse.comment.video.id, abuse.comment.id)
-            .subscribe(
-              () => {
+            .subscribe({
+              next: () => {
                 this.notifier.success($localize`Comment deleted.`)
 
                 this.updateAbuseState(abuse, AbuseState.ACCEPTED)
               },
 
-              err => this.notifier.error(err.message)
-            )
+              error: err => this.notifier.error(err.message)
+            })
         }
       }
     ]
@@ -440,25 +441,25 @@ export class AbuseListTableComponent extends RestTable implements OnInit {
 
   private muteAccountHelper (account: Account) {
     this.blocklistService.blockAccountByInstance(account)
-      .subscribe(
-        () => {
+      .subscribe({
+        next: () => {
           this.notifier.success($localize`Account ${account.nameWithHost} muted by the instance.`)
           account.mutedByInstance = true
         },
 
-        err => this.notifier.error(err.message)
-      )
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   private muteServerHelper (host: string) {
     this.blocklistService.blockServerByInstance(host)
-      .subscribe(
-        () => {
+      .subscribe({
+        next: () => {
           this.notifier.success($localize`Server ${host} muted by the instance.`)
         },
 
-        err => this.notifier.error(err.message)
-      )
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   private toHtml (text: string) {

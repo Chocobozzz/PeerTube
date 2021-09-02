@@ -2,10 +2,15 @@
 
 import 'mocha'
 import * as chai from 'chai'
+import { HttpStatusCode, VideoFile } from '@shared/models'
 import {
+  areObjectStorageTestsDisabled,
   cleanupTests,
   createMultipleServers,
   doubleFollow,
+  expectStartWith,
+  makeRawRequest,
+  ObjectStorageCommand,
   PeerTubeServer,
   setAccessTokensToServers,
   waitJobs
@@ -13,42 +18,47 @@ import {
 
 const expect = chai.expect
 
-describe('Test create transcoding jobs', function () {
+async function checkFilesInObjectStorage (files: VideoFile[], type: 'webtorrent' | 'playlist') {
+  for (const file of files) {
+    const shouldStartWith = type === 'webtorrent'
+      ? ObjectStorageCommand.getWebTorrentBaseUrl()
+      : ObjectStorageCommand.getPlaylistBaseUrl()
+
+    expectStartWith(file.fileUrl, shouldStartWith)
+
+    await makeRawRequest(file.fileUrl, HttpStatusCode.OK_200)
+  }
+}
+
+function runTests (objectStorage: boolean) {
   let servers: PeerTubeServer[] = []
   const videosUUID: string[] = []
-
-  const config = {
-    transcoding: {
-      enabled: false,
-      resolutions: {
-        '240p': true,
-        '360p': true,
-        '480p': true,
-        '720p': true,
-        '1080p': true,
-        '1440p': true,
-        '2160p': true
-      },
-      hls: {
-        enabled: false
-      }
-    }
-  }
 
   before(async function () {
     this.timeout(60000)
 
+    const config = objectStorage
+      ? ObjectStorageCommand.getDefaultConfig()
+      : {}
+
     // Run server 2 to have transcoding enabled
-    servers = await createMultipleServers(2)
+    servers = await createMultipleServers(2, config)
     await setAccessTokensToServers(servers)
 
-    await servers[0].config.updateCustomSubConfig({ newConfig: config })
+    await servers[0].config.disableTranscoding()
 
     await doubleFollow(servers[0], servers[1])
 
+    if (objectStorage) await ObjectStorageCommand.prepareDefaultBuckets()
+
     for (let i = 1; i <= 5; i++) {
-      const { uuid } = await servers[0].videos.upload({ attributes: { name: 'video' + i } })
-      videosUUID.push(uuid)
+      const { uuid, shortUUID } = await servers[0].videos.upload({ attributes: { name: 'video' + i } })
+
+      if (i > 2) {
+        videosUUID.push(uuid)
+      } else {
+        videosUUID.push(shortUUID)
+      }
     }
 
     await waitJobs(servers)
@@ -81,27 +91,29 @@ describe('Test create transcoding jobs', function () {
       let infoHashes: { [id: number]: string }
 
       for (const video of data) {
-        const videoDetail = await server.videos.get({ id: video.uuid })
+        const videoDetails = await server.videos.get({ id: video.uuid })
 
-        if (video.uuid === videosUUID[1]) {
-          expect(videoDetail.files).to.have.lengthOf(4)
-          expect(videoDetail.streamingPlaylists).to.have.lengthOf(0)
+        if (video.shortUUID === videosUUID[1] || video.uuid === videosUUID[1]) {
+          expect(videoDetails.files).to.have.lengthOf(4)
+          expect(videoDetails.streamingPlaylists).to.have.lengthOf(0)
+
+          if (objectStorage) await checkFilesInObjectStorage(videoDetails.files, 'webtorrent')
 
           if (!infoHashes) {
             infoHashes = {}
 
-            for (const file of videoDetail.files) {
+            for (const file of videoDetails.files) {
               infoHashes[file.resolution.id.toString()] = file.magnetUri
             }
           } else {
             for (const resolution of Object.keys(infoHashes)) {
-              const file = videoDetail.files.find(f => f.resolution.id.toString() === resolution)
+              const file = videoDetails.files.find(f => f.resolution.id.toString() === resolution)
               expect(file.magnetUri).to.equal(infoHashes[resolution])
             }
           }
         } else {
-          expect(videoDetail.files).to.have.lengthOf(1)
-          expect(videoDetail.streamingPlaylists).to.have.lengthOf(0)
+          expect(videoDetails.files).to.have.lengthOf(1)
+          expect(videoDetails.streamingPlaylists).to.have.lengthOf(0)
         }
       }
     }
@@ -125,6 +137,8 @@ describe('Test create transcoding jobs', function () {
       expect(videoDetails.files[1].resolution.id).to.equal(480)
 
       expect(videoDetails.streamingPlaylists).to.have.lengthOf(0)
+
+      if (objectStorage) await checkFilesInObjectStorage(videoDetails.files, 'webtorrent')
     }
   })
 
@@ -139,11 +153,15 @@ describe('Test create transcoding jobs', function () {
       const videoDetails = await server.videos.get({ id: videosUUID[2] })
 
       expect(videoDetails.files).to.have.lengthOf(1)
+      if (objectStorage) await checkFilesInObjectStorage(videoDetails.files, 'webtorrent')
+
       expect(videoDetails.streamingPlaylists).to.have.lengthOf(1)
 
       const files = videoDetails.streamingPlaylists[0].files
       expect(files).to.have.lengthOf(1)
       expect(files[0].resolution.id).to.equal(480)
+
+      if (objectStorage) await checkFilesInObjectStorage(files, 'playlist')
     }
   })
 
@@ -160,6 +178,8 @@ describe('Test create transcoding jobs', function () {
       const files = videoDetails.streamingPlaylists[0].files
       expect(files).to.have.lengthOf(1)
       expect(files[0].resolution.id).to.equal(480)
+
+      if (objectStorage) await checkFilesInObjectStorage(files, 'playlist')
     }
   })
 
@@ -178,15 +198,15 @@ describe('Test create transcoding jobs', function () {
 
       const files = videoDetails.streamingPlaylists[0].files
       expect(files).to.have.lengthOf(4)
+
+      if (objectStorage) await checkFilesInObjectStorage(files, 'playlist')
     }
   })
 
   it('Should optimize the video file and generate HLS videos if enabled in config', async function () {
     this.timeout(120000)
 
-    config.transcoding.hls.enabled = true
-    await servers[0].config.updateCustomSubConfig({ newConfig: config })
-
+    await servers[0].config.enableTranscoding()
     await servers[0].cli.execWithEnv(`npm run create-transcoding-job -- -v ${videosUUID[4]}`)
 
     await waitJobs(servers)
@@ -197,10 +217,28 @@ describe('Test create transcoding jobs', function () {
       expect(videoDetails.files).to.have.lengthOf(4)
       expect(videoDetails.streamingPlaylists).to.have.lengthOf(1)
       expect(videoDetails.streamingPlaylists[0].files).to.have.lengthOf(4)
+
+      if (objectStorage) {
+        await checkFilesInObjectStorage(videoDetails.files, 'webtorrent')
+        await checkFilesInObjectStorage(videoDetails.streamingPlaylists[0].files, 'playlist')
+      }
     }
   })
 
   after(async function () {
     await cleanupTests(servers)
+  })
+}
+
+describe('Test create transcoding jobs', function () {
+
+  describe('On filesystem', function () {
+    runTests(false)
+  })
+
+  describe('On object storage', function () {
+    if (areObjectStorageTestsDisabled()) return
+
+    runTests(true)
   })
 })

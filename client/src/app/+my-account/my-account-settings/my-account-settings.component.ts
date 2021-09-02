@@ -19,7 +19,7 @@ export class MyAccountSettingsComponent implements OnInit, AfterViewChecked {
     private userService: UserService,
     private authService: AuthService,
     private notifier: Notifier
-    ) {}
+  ) {}
 
   get userInformationLoaded () {
     return this.authService.userInformationLoaded
@@ -39,31 +39,31 @@ export class MyAccountSettingsComponent implements OnInit, AfterViewChecked {
 
   onAvatarChange (formData: FormData) {
     this.userService.changeAvatar(formData)
-      .subscribe(
-        data => {
+      .subscribe({
+        next: data => {
           this.notifier.success($localize`Avatar changed.`)
 
           this.user.updateAccountAvatar(data.avatar)
         },
 
-        (err: HttpErrorResponse) => genericUploadErrorHandler({
+        error: (err: HttpErrorResponse) => genericUploadErrorHandler({
           err,
           name: $localize`avatar`,
           notifier: this.notifier
         })
-      )
+      })
   }
 
   onAvatarDelete () {
     this.userService.deleteAvatar()
-      .subscribe(
-        data => {
+      .subscribe({
+        next: data => {
           this.notifier.success($localize`Avatar deleted.`)
 
           this.user.updateAccountAvatar()
         },
 
-        (err: HttpErrorResponse) => this.notifier.error(err.message)
-      )
+        error: (err: HttpErrorResponse) => this.notifier.error(err.message)
+      })
   }
 }

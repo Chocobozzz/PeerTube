@@ -2,7 +2,7 @@ import { Component, forwardRef, Input, OnInit } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { SelectOptionsItem } from '../../../../types/select-options-item.model'
 
-export type ItemSelectCheckboxValue = { id?: string | number, group?: string } | string
+export type ItemSelectCheckboxValue = { id?: string, group?: string } | string
 
 @Component({
   selector: 'my-select-checkbox',
@@ -21,7 +21,6 @@ export class SelectCheckboxComponent implements OnInit, ControlValueAccessor {
   @Input() selectedItems: ItemSelectCheckboxValue[] = []
   @Input() selectableGroup: boolean
   @Input() selectableGroupAsModel: boolean
-  @Input() maxSelectedItems: number
   @Input() placeholder: string
 
   disabled = false
@@ -48,8 +47,6 @@ export class SelectCheckboxComponent implements OnInit, ControlValueAccessor {
     } else {
       this.selectedItems = items
     }
-
-    this.propagateChange(this.selectedItems)
   }
 
   registerOnChange (fn: (_: any) => void) {
@@ -69,7 +66,7 @@ export class SelectCheckboxComponent implements OnInit, ControlValueAccessor {
   }
 
   compareFn (item: SelectOptionsItem, selected: ItemSelectCheckboxValue) {
-    if (typeof selected === 'string') {
+    if (typeof selected === 'string' || typeof selected === 'number') {
       return item.id === selected
     }
 

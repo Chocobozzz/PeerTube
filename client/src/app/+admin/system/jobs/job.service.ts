@@ -20,9 +20,9 @@ export class JobService {
   ) {}
 
   getJobs (options: {
-    jobState?: JobStateClient,
-    jobType: JobTypeClient,
-    pagination: RestPagination,
+    jobState?: JobStateClient
+    jobType: JobTypeClient
+    pagination: RestPagination
     sort: SortMeta
   }): Observable<ResultList<Job>> {
     const { jobState, jobType, pagination, sort } = options
@@ -32,7 +32,7 @@ export class JobService {
 
     if (jobType !== 'all') params = params.append('jobType', jobType)
 
-    return this.authHttp.get<ResultList<Job>>(JobService.BASE_JOB_URL + `/${jobState ? jobState : ''}`, { params })
+    return this.authHttp.get<ResultList<Job>>(JobService.BASE_JOB_URL + `/${jobState || ''}`, { params })
                .pipe(
                  map(res => {
                    return this.restExtractor.convertResultListDateToHuman(res, [ 'createdAt', 'processedOn', 'finishedOn' ])

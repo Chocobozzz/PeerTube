@@ -17,7 +17,7 @@ export class MyLibraryComponent implements OnInit {
     private serverService: ServerService,
     private authService: AuthService,
     private screenService: ScreenService
-    ) { }
+  ) { }
 
   get isBroadcastMessageDisplayed () {
     return this.screenService.isBroadcastMessageDisplayed

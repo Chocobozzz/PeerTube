@@ -28,7 +28,9 @@ export class SupportModalComponent {
     const support = this.video?.support || this.videoChannel.support
 
     this.markdownService.enhancedMarkdownToHTML(support)
-      .then(r => this.htmlSupport = r)
+      .then(r => {
+        this.htmlSupport = r
+      })
 
     this.displayName = this.video
       ? this.video.channel.displayName

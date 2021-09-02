@@ -4,7 +4,7 @@ import { BuildFormValidator } from './form-validator.model'
 export function validateHost (value: string) {
   // Thanks to http://stackoverflow.com/a/106223
   const HOST_REGEXP = new RegExp(
-    '^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$'
+    '^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]).)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9])$'
   )
 
   return HOST_REGEXP.test(value)
@@ -32,7 +32,7 @@ const validHosts: ValidatorFn = (control: AbstractControl) => {
   if (errors.length === 0) return null
 
   return {
-    'validHosts': {
+    validHosts: {
       reason: 'invalid',
       value: errors.join('. ') + '.'
     }
@@ -55,7 +55,7 @@ const validHostsOrHandles: ValidatorFn = (control: AbstractControl) => {
   if (errors.length === 0) return null
 
   return {
-    'validHostsOrHandles': {
+    validHostsOrHandles: {
       reason: 'invalid',
       value: errors.join('. ') + '.'
     }
@@ -80,7 +80,7 @@ export const unique: ValidatorFn = (control: AbstractControl) => {
   }
 
   return {
-    'unique': {
+    unique: {
       reason: 'invalid'
     }
   }
@@ -89,17 +89,17 @@ export const unique: ValidatorFn = (control: AbstractControl) => {
 export const UNIQUE_HOSTS_VALIDATOR: BuildFormValidator = {
   VALIDATORS: [ Validators.required, validHosts, unique ],
   MESSAGES: {
-    'required': $localize`Domain is required.`,
-    'validHosts': $localize`Hosts entered are invalid.`,
-    'unique': $localize`Hosts entered contain duplicates.`
+    required: $localize`Domain is required.`,
+    validHosts: $localize`Hosts entered are invalid.`,
+    unique: $localize`Hosts entered contain duplicates.`
   }
 }
 
 export const UNIQUE_HOSTS_OR_HANDLE_VALIDATOR: BuildFormValidator = {
   VALIDATORS: [ Validators.required, validHostsOrHandles, unique ],
   MESSAGES: {
-    'required': $localize`Domain is required.`,
-    'validHostsOrHandles': $localize`Hosts or handles are invalid.`,
-    'unique': $localize`Hosts or handles contain duplicates.`
+    required: $localize`Domain is required.`,
+    validHostsOrHandles: $localize`Hosts or handles are invalid.`,
+    unique: $localize`Hosts or handles contain duplicates.`
   }
 }

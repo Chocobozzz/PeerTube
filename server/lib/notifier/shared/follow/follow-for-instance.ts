@@ -43,7 +43,7 @@ export class FollowForInstance extends AbstractNotification <MActorFollowFull> {
     return notification
   }
 
-  async createEmail (to: string) {
+  createEmail (to: string) {
     const awaitingApproval = this.actorFollow.state === 'pending'
       ? ' awaiting manual approval.'
       : ''

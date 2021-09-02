@@ -2,7 +2,7 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import * as request from 'supertest'
+import request from 'supertest'
 import {
   buildAbsoluteFixturePath,
   checkTmpIsEmpty,

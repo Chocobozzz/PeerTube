@@ -39,8 +39,6 @@ import { UserAdminFlag } from '../../../shared/models/users/user-flag.model'
 import { NSFWPolicyType } from '../../../shared/models/videos/nsfw-policy.type'
 import { isThemeNameValid } from '../../helpers/custom-validators/plugins'
 import {
-  isNoInstanceConfigWarningModal,
-  isNoWelcomeModal,
   isUserAdminFlagsValid,
   isUserAutoPlayNextVideoPlaylistValid,
   isUserAutoPlayNextVideoValid,
@@ -48,6 +46,7 @@ import {
   isUserBlockedReasonValid,
   isUserBlockedValid,
   isUserEmailVerifiedValid,
+  isUserNoModal,
   isUserNSFWPolicyValid,
   isUserPasswordValid,
   isUserRoleValid,
@@ -349,7 +348,7 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
   @Default(false)
   @Is(
     'UserNoInstanceConfigWarningModal',
-    value => throwIfNotValid(value, isNoInstanceConfigWarningModal, 'no instance config warning modal')
+    value => throwIfNotValid(value, isUserNoModal, 'no instance config warning modal')
   )
   @Column
   noInstanceConfigWarningModal: boolean
@@ -357,11 +356,20 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
   @AllowNull(false)
   @Default(false)
   @Is(
-    'UserNoInstanceConfigWarningModal',
-    value => throwIfNotValid(value, isNoWelcomeModal, 'no welcome modal')
+    'UserNoWelcomeModal',
+    value => throwIfNotValid(value, isUserNoModal, 'no welcome modal')
   )
   @Column
   noWelcomeModal: boolean
+
+  @AllowNull(false)
+  @Default(false)
+  @Is(
+    'UserNoAccountSetupWarningModal',
+    value => throwIfNotValid(value, isUserNoModal, 'no account setup warning modal')
+  )
+  @Column
+  noAccountSetupWarningModal: boolean
 
   @AllowNull(true)
   @Default(null)
@@ -920,6 +928,7 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
 
       noInstanceConfigWarningModal: this.noInstanceConfigWarningModal,
       noWelcomeModal: this.noWelcomeModal,
+      noAccountSetupWarningModal: this.noAccountSetupWarningModal,
 
       blocked: this.blocked,
       blockedReason: this.blockedReason,
@@ -958,7 +967,7 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
   }
 
   toMeFormattedJSON (this: MMyUserFormattable): MyUser {
-    const formatted = this.toFormattedJSON()
+    const formatted = this.toFormattedJSON({ withAdminFlags: true })
 
     const specialPlaylists = this.Account.VideoPlaylists
                                  .map(p => ({ id: p.id, name: p.name, type: p.type }))

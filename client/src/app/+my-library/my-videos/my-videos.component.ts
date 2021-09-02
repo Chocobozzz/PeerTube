@@ -49,10 +49,12 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
 
   inputFilters: AdvancedInputFilter[] = [
     {
-      queryParams: { 'search': 'isLive:true' },
+      queryParams: { search: 'isLive:true' },
       label: $localize`Only live videos`
     }
   ]
+
+  disabled = false
 
   private search: string
 
@@ -89,11 +91,11 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
   }
 
   disableForReuse () {
-    this.videosSelection.disableForReuse()
+    this.disabled = true
   }
 
   enabledForReuse () {
-    this.videosSelection.enabledForReuse()
+    this.disabled = false
   }
 
   getVideosObservable (page: number) {
@@ -107,7 +109,7 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
 
   async deleteSelectedVideos () {
     const toDeleteVideosIds = Object.keys(this.selection)
-                                    .filter(k => this.selection[ k ] === true)
+                                    .filter(k => this.selection[k] === true)
                                     .map(k => parseInt(k, 10))
 
     const res = await this.confirmService.confirm(
@@ -126,14 +128,14 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
 
     concat(...observables)
       .pipe(toArray())
-      .subscribe(
-        () => {
+      .subscribe({
+        next: () => {
           this.notifier.success($localize`${toDeleteVideosIds.length} videos deleted.`)
           this.selection = {}
         },
 
-        err => this.notifier.error(err.message)
-      )
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   async deleteVideo (video: Video) {
@@ -144,14 +146,14 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
     if (res === false) return
 
     this.videoService.removeVideo(video.id)
-        .subscribe(
-          () => {
+        .subscribe({
+          next: () => {
             this.notifier.success($localize`Video ${video.name} deleted.`)
             this.removeVideoFromArray(video.id)
           },
 
-          error => this.notifier.error(error.message)
-        )
+          error: err => this.notifier.error(err.message)
+        })
   }
 
   changeOwnership (video: Video) {

@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import * as ffmpeg from 'fluent-ffmpeg'
+import ffmpeg from 'fluent-ffmpeg'
 import { ensureDir, pathExists } from 'fs-extra'
 import { dirname } from 'path'
 import { getVideoFileBitrate, getVideoFileFPS, getVideoFileResolution } from '@server/helpers/ffprobe-utils'

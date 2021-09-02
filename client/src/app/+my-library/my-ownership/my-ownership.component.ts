@@ -53,16 +53,16 @@ export class MyOwnershipComponent extends RestTable implements OnInit {
 
   refuse (videoChangeOwnership: VideoChangeOwnership) {
     this.videoOwnershipService.refuseOwnership(videoChangeOwnership.id)
-      .subscribe(
-        () => this.reloadData(),
-        err => this.notifier.error(err.message)
-      )
+      .subscribe({
+        next: () => this.reloadData(),
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   protected reloadData () {
     return this.videoOwnershipService.getOwnershipChanges(this.pagination, this.sort)
-      .subscribe(
-        resultList => {
+      .subscribe({
+        next: resultList => {
           this.videoChangeOwnerships = resultList.data.map(change => ({
             ...change,
             initiatorAccount: new Account(change.initiatorAccount),
@@ -71,7 +71,7 @@ export class MyOwnershipComponent extends RestTable implements OnInit {
           this.totalRecords = resultList.total
         },
 
-        err => this.notifier.error(err.message)
-      )
+        error: err => this.notifier.error(err.message)
+      })
   }
 }

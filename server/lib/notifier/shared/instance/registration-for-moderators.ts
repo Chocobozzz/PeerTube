@@ -36,7 +36,7 @@ export class RegistrationForModerators extends AbstractNotification <MUserDefaul
     return notification
   }
 
-  async createEmail (to: string) {
+  createEmail (to: string) {
     return {
       template: 'user-registered',
       to,

@@ -1,9 +1,9 @@
-import * as short from 'short-uuid'
+import short, { uuid } from 'short-uuid'
 
 const translator = short()
 
 function buildUUID () {
-  return short.uuid()
+  return uuid()
 }
 
 function uuidToShort (uuid: string) {

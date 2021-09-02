@@ -41,10 +41,10 @@ export class PlaylistMiniatureMarkupComponent implements CustomMarkupComponent, 
   ngOnInit () {
     this.findInBulkService.getPlaylist(this.uuid)
       .pipe(finalize(() => this.loaded.emit(true)))
-      .subscribe(
-        playlist => this.playlist = playlist,
+      .subscribe({
+        next: playlist => this.playlist = playlist,
 
-        err => this.notifier.error($localize`Error in playlist miniature component: ${err.message}`)
-      )
+        error: err => this.notifier.error($localize`Error in playlist miniature component: ${err.message}`)
+      })
   }
 }

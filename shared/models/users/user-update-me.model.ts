@@ -20,4 +20,5 @@ export interface UserUpdateMe {
 
   noInstanceConfigWarningModal?: boolean
   noWelcomeModal?: boolean
+  noAccountSetupWarningModal?: boolean
 }

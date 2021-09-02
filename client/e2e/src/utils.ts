@@ -1,34 +1,37 @@
-import { browser } from 'protractor'
-
 async function browserSleep (amount: number) {
-  const oldValue = await browser.waitForAngularEnabled()
-
-  // iOS does not seem to work with protractor
-  // https://github.com/angular/protractor/issues/2840
-  if (await isIOS()) browser.waitForAngularEnabled(true)
-
-  await browser.sleep(amount)
-
-  if (await isIOS()) browser.waitForAngularEnabled(oldValue)
+  await browser.pause(amount)
 }
 
-async function isMobileDevice () {
-  const caps = await browser.getCapabilities()
-  return caps.get('realMobile') === 'true' || caps.get('realMobile') === true
+function isMobileDevice () {
+  const platformName = (browser.capabilities['platformName'] || '').toLowerCase()
+
+  return platformName === 'android' || platformName === 'ios'
 }
 
-async function isSafari () {
-  const caps = await browser.getCapabilities()
-  return caps.get('browserName') && caps.get('browserName').toLowerCase() === 'safari'
+function isSafari () {
+  return browser.capabilities['browserName'] &&
+         browser.capabilities['browserName'].toLowerCase() === 'safari'
 }
 
-async function isIOS () {
-  return await isMobileDevice() && await isSafari()
+function isIOS () {
+  return isMobileDevice() && isSafari()
 }
 
-export  {
+async function go (url: string) {
+  await browser.url(url)
+
+  // Hide notifications that could fail tests when hiding buttons
+  await browser.execute(() => {
+    const style = document.createElement('style')
+    style.innerHTML = 'p-toast { display: none }'
+    document.head.appendChild(style)
+  })
+}
+
+export {
   isMobileDevice,
   isSafari,
   isIOS,
+  go,
   browserSleep
 }

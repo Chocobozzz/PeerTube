@@ -1,14 +1,14 @@
-import { browser } from 'protractor'
 import { LoginPage } from './po/login.po'
 import { MyAccountPage } from './po/my-account'
 import { PlayerPage } from './po/player.po'
 import { VideoUpdatePage } from './po/video-update.po'
 import { VideoUploadPage } from './po/video-upload.po'
 import { VideoWatchPage } from './po/video-watch.po'
-import { isIOS, isMobileDevice, isSafari } from './utils'
+import { FIXTURE_URLS } from './urls'
+import { browserSleep, go, isIOS, isMobileDevice, isSafari } from './utils'
 
-async function skipIfUploadNotSupported () {
-  if (await isMobileDevice() || await isSafari()) {
+function isUploadUnsupported () {
+  if (isMobileDevice() || isSafari()) {
     console.log('Skipping because we are on a real device or Safari and BrowserStack does not support file upload.')
     return true
   }
@@ -24,10 +24,29 @@ describe('Videos workflow', () => {
   let loginPage: LoginPage
   let playerPage: PlayerPage
 
-  let videoName = new Date().getTime() + ' video'
-  const video2Name = new Date().getTime() + ' second video'
-  const playlistName = new Date().getTime() + ' playlist'
+  let videoName = Math.random() + ' video'
+  const video2Name = Math.random() + ' second video'
+  const playlistName = Math.random() + ' playlist'
   let videoWatchUrl: string
+
+  before(async () => {
+    if (isIOS()) {
+      console.log('iOS detected')
+    } else if (isMobileDevice()) {
+      console.log('Android detected.')
+    } else if (isSafari()) {
+      console.log('Safari detected.')
+    }
+
+    if (isUploadUnsupported()) return
+
+    await browser.waitUntil(async () => {
+      await go('/')
+      await browserSleep(500)
+
+      return $('<my-app>').isDisplayed()
+    }, { timeout: 20 * 1000 })
+  })
 
   beforeEach(async () => {
     videoWatchPage = new VideoWatchPage()
@@ -37,25 +56,13 @@ describe('Videos workflow', () => {
     loginPage = new LoginPage()
     playerPage = new PlayerPage()
 
-    if (await isIOS()) {
-      // iOS does not seem to work with protractor
-      // https://github.com/angular/protractor/issues/2840
-      browser.waitForAngularEnabled(false)
-
-      console.log('iOS detected')
-    } else if (await isMobileDevice()) {
-      console.log('Android detected.')
-    } else if (await isSafari()) {
-      console.log('Safari detected.')
-    }
-
-    if (!await isMobileDevice()) {
-      await browser.driver.manage().window().maximize()
+    if (!isMobileDevice()) {
+      await browser.maximizeWindow()
     }
   })
 
   it('Should log in', async () => {
-    if (await isMobileDevice() || await isSafari()) {
+    if (isMobileDevice() || isSafari()) {
       console.log('Skipping because we are on a real device or Safari and BrowserStack does not support file upload.')
       return
     }
@@ -64,7 +71,7 @@ describe('Videos workflow', () => {
   })
 
   it('Should upload a video', async () => {
-    if (await skipIfUploadNotSupported()) return
+    if (isUploadUnsupported()) return
 
     await videoUploadPage.navigateTo()
 
@@ -73,62 +80,52 @@ describe('Videos workflow', () => {
   })
 
   it('Should list videos', async () => {
-    await videoWatchPage.goOnVideosList(await isMobileDevice(), await isSafari())
+    await videoWatchPage.goOnVideosList(isMobileDevice(), isSafari())
 
-    if (await skipIfUploadNotSupported()) return
+    if (isUploadUnsupported()) return
 
-    const videoNames = videoWatchPage.getVideosListName()
+    const videoNames = await videoWatchPage.getVideosListName()
     expect(videoNames).toContain(videoName)
   })
 
   it('Should go on video watch page', async () => {
     let videoNameToExcept = videoName
 
-    if (await isMobileDevice() || await isSafari()) {
-      await browser.get('https://peertube2.cpy.re/w/122d093a-1ede-43bd-bd34-59d2931ffc5e')
+    if (isMobileDevice() || isSafari()) {
+      await go(FIXTURE_URLS.WEBTORRENT_VIDEO)
       videoNameToExcept = 'E2E tests'
     } else {
       await videoWatchPage.clickOnVideo(videoName)
     }
 
-    return videoWatchPage.waitWatchVideoName(videoNameToExcept, await isMobileDevice(), await isSafari())
+    return videoWatchPage.waitWatchVideoName(videoNameToExcept, isMobileDevice(), isSafari())
   })
 
   it('Should play the video', async () => {
-    videoWatchUrl = await browser.getCurrentUrl()
+    videoWatchUrl = await browser.getUrl()
 
-    await playerPage.playAndPauseVideo(true)
-    expect(playerPage.getWatchVideoPlayerCurrentTime()).toBeGreaterThanOrEqual(2)
+    await playerPage.playAndPauseVideo(true, 2)
+    expect(await playerPage.getWatchVideoPlayerCurrentTime()).toBeGreaterThanOrEqual(2)
   })
 
   it('Should watch the associated embed video', async () => {
-    const oldValue = await browser.waitForAngularEnabled()
-    await browser.waitForAngularEnabled(false)
-
     await videoWatchPage.goOnAssociatedEmbed()
 
-    await playerPage.playAndPauseVideo(false)
-    expect(playerPage.getWatchVideoPlayerCurrentTime()).toBeGreaterThanOrEqual(2)
-
-    await browser.waitForAngularEnabled(oldValue)
+    await playerPage.playAndPauseVideo(false, 2)
+    expect(await playerPage.getWatchVideoPlayerCurrentTime()).toBeGreaterThanOrEqual(2)
   })
 
   it('Should watch the p2p media loader embed video', async () => {
-    const oldValue = await browser.waitForAngularEnabled()
-    await browser.waitForAngularEnabled(false)
-
     await videoWatchPage.goOnP2PMediaLoaderEmbed()
 
-    await playerPage.playAndPauseVideo(false)
-    expect(playerPage.getWatchVideoPlayerCurrentTime()).toBeGreaterThanOrEqual(2)
-
-    await browser.waitForAngularEnabled(oldValue)
+    await playerPage.playAndPauseVideo(false, 2)
+    expect(await playerPage.getWatchVideoPlayerCurrentTime()).toBeGreaterThanOrEqual(2)
   })
 
   it('Should update the video', async () => {
-    if (await skipIfUploadNotSupported()) return
+    if (isUploadUnsupported()) return
 
-    await browser.get(videoWatchUrl)
+    await go(videoWatchUrl)
 
     await videoWatchPage.clickOnUpdate()
 
@@ -142,14 +139,14 @@ describe('Videos workflow', () => {
   })
 
   it('Should add the video in my playlist', async () => {
-    if (await skipIfUploadNotSupported()) return
+    if (isUploadUnsupported()) return
 
     await videoWatchPage.clickOnSave()
 
     await videoWatchPage.createPlaylist(playlistName)
 
     await videoWatchPage.saveToPlaylist(playlistName)
-    await browser.sleep(5000)
+    await browser.pause(5000)
 
     await videoUploadPage.navigateTo()
 
@@ -161,7 +158,7 @@ describe('Videos workflow', () => {
   })
 
   it('Should have the playlist in my account', async () => {
-    if (await skipIfUploadNotSupported()) return
+    if (isUploadUnsupported()) return
 
     await myAccountPage.navigateToMyPlaylists()
 
@@ -175,26 +172,18 @@ describe('Videos workflow', () => {
   })
 
   it('Should watch the playlist', async () => {
-    if (await skipIfUploadNotSupported()) return
+    if (isUploadUnsupported()) return
 
     await myAccountPage.playPlaylist()
 
-    const oldValue = await browser.waitForAngularEnabled()
-    await browser.waitForAngularEnabled(false)
-
-    await videoWatchPage.waitUntilVideoName(video2Name, 20000 * 1000)
-
-    await browser.waitForAngularEnabled(oldValue)
+    await videoWatchPage.waitUntilVideoName(video2Name, 30 * 1000)
   })
 
   it('Should watch the webtorrent playlist in the embed', async () => {
-    if (await skipIfUploadNotSupported()) return
+    if (isUploadUnsupported()) return
 
-    const accessToken = await browser.executeScript(`return window.localStorage.getItem('access_token');`)
-    const refreshToken = await browser.executeScript(`return window.localStorage.getItem('refresh_token');`)
-
-    const oldValue = await browser.waitForAngularEnabled()
-    await browser.waitForAngularEnabled(false)
+    const accessToken = await browser.execute(`return window.localStorage.getItem('access_token');`)
+    const refreshToken = await browser.execute(`return window.localStorage.getItem('refresh_token');`)
 
     await myAccountPage.goOnAssociatedPlaylistEmbed()
 
@@ -202,49 +191,45 @@ describe('Videos workflow', () => {
 
     console.log('Will set %s and %s tokens in local storage.', accessToken, refreshToken)
 
-    await browser.executeScript(`window.localStorage.setItem('access_token', '${accessToken}');`)
-    await browser.executeScript(`window.localStorage.setItem('refresh_token', '${refreshToken}');`)
-    await browser.executeScript(`window.localStorage.setItem('token_type', 'Bearer');`)
+    await browser.execute(`window.localStorage.setItem('access_token', '${accessToken}');`)
+    await browser.execute(`window.localStorage.setItem('refresh_token', '${refreshToken}');`)
+    await browser.execute(`window.localStorage.setItem('token_type', 'Bearer');`)
 
     await browser.refresh()
 
     await playerPage.playVideo()
 
-    await playerPage.waitUntilPlaylistInfo('2/2')
-
-    await browser.waitForAngularEnabled(oldValue)
+    await playerPage.waitUntilPlaylistInfo('2/2', 30 * 1000)
   })
 
   it('Should watch the HLS playlist in the embed', async () => {
-    const oldValue = await browser.waitForAngularEnabled()
-    await browser.waitForAngularEnabled(false)
-
     await videoWatchPage.goOnP2PMediaLoaderPlaylistEmbed()
 
     await playerPage.playVideo()
 
-    await playerPage.waitUntilPlaylistInfo('2/2')
-
-    await browser.waitForAngularEnabled(oldValue)
+    await playerPage.waitUntilPlaylistInfo('2/2', 30 * 1000)
   })
 
   it('Should delete the video 2', async () => {
-    if (await skipIfUploadNotSupported()) return
+    if (isUploadUnsupported()) return
 
     // Go to the dev website
-    await browser.get(videoWatchUrl)
+    await go(videoWatchUrl)
 
     await myAccountPage.navigateToMyVideos()
 
     await myAccountPage.removeVideo(video2Name)
     await myAccountPage.validRemove()
 
-    const count = await myAccountPage.countVideos([ videoName, video2Name ])
-    expect(count).toEqual(1)
+    await browser.waitUntil(async () => {
+      const count = await myAccountPage.countVideos([ videoName, video2Name ])
+
+      return count === 1
+    })
   })
 
   it('Should delete the first video', async () => {
-    if (await skipIfUploadNotSupported()) return
+    if (isUploadUnsupported()) return
 
     await myAccountPage.removeVideo(videoName)
     await myAccountPage.validRemove()

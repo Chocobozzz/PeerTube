@@ -7,7 +7,7 @@ import { genericUploadErrorHandler, scrollToTop } from '@app/helpers'
 import { FormValidatorService } from '@app/shared/shared-forms'
 import { BytesPipe, Video, VideoCaptionService, VideoEdit, VideoService } from '@app/shared/shared-main'
 import { LoadingBarService } from '@ngx-loading-bar/core'
-import { HttpStatusCode, VideoPrivacy } from '@shared/models'
+import { HttpStatusCode, VideoCreateResult, VideoPrivacy } from '@shared/models'
 import { UploaderXFormData } from './uploaderx-form-data'
 import { VideoSend } from './video-send'
 
@@ -33,9 +33,10 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
 
   videoUploaded = false
   videoUploadPercents = 0
-  videoUploadedIds = {
+  videoUploadedIds: VideoCreateResult = {
     id: 0,
-    uuid: ''
+    uuid: '',
+    shortUUID: ''
   }
   formData: FormData
 
@@ -128,7 +129,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
 
   onUploadVideoOngoing (state: UploadState) {
     switch (state.status) {
-      case 'error':
+      case 'error': {
         const error = state.response?.error || 'Unknow error'
 
         this.handleUploadError({
@@ -143,6 +144,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
           url: state.url
         })
         break
+      }
 
       case 'cancelled':
         this.isUploadingVideo = false
@@ -236,12 +238,13 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     video.patch(this.form.value)
     video.id = this.videoUploadedIds.id
     video.uuid = this.videoUploadedIds.uuid
+    video.shortUUID = this.videoUploadedIds.shortUUID
 
     this.isUpdatingVideo = true
 
     this.updateVideoAndCaptions(video)
-        .subscribe(
-          () => {
+        .subscribe({
+          next: () => {
             this.isUpdatingVideo = false
             this.isUploadingVideo = false
 
@@ -249,12 +252,12 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
             this.router.navigateByUrl(Video.buildWatchUrl(video))
           },
 
-          err => {
+          error: err => {
             this.error = err.message
             scrollToTop()
             console.error(err)
           }
-        )
+        })
   }
 
   private getInputVideoFile () {
@@ -323,6 +326,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
       const videoQuotaUsedBytes = bytePipes.transform(this.userVideoQuotaUsed, 0)
       const videoQuotaBytes = bytePipes.transform(videoQuota, 0)
 
+      // eslint-disable-next-line max-len
       const msg = $localize`Your video quota is exceeded with this video (video size: ${videoSizeBytes}, used: ${videoQuotaUsedBytes}, quota: ${videoQuotaBytes})`
       this.notifier.error(msg)
 
@@ -341,6 +345,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
       const videoSizeBytes = bytePipes.transform(videofile.size, 0)
       const quotaUsedDailyBytes = bytePipes.transform(this.userVideoQuotaUsedDaily, 0)
       const quotaDailyBytes = bytePipes.transform(videoQuotaDaily, 0)
+      // eslint-disable-next-line max-len
       const msg = $localize`Your daily video quota is exceeded with this video (video size: ${videoSizeBytes}, used: ${quotaUsedDailyBytes}, quota: ${quotaDailyBytes})`
       this.notifier.error(msg)
 

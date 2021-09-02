@@ -10,11 +10,11 @@ async function createSingleServer (serverNumber: number, configOverride?: Object
   return server
 }
 
-function createMultipleServers (totalServers: number, configOverride?: Object) {
+function createMultipleServers (totalServers: number, configOverride?: Object, options: RunServerOptions = {}) {
   const serverPromises: Promise<PeerTubeServer>[] = []
 
   for (let i = 1; i <= totalServers; i++) {
-    serverPromises.push(createSingleServer(i, configOverride))
+    serverPromises.push(createSingleServer(i, configOverride, options))
   }
 
   return Promise.all(serverPromises)

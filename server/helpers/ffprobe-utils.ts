@@ -1,4 +1,4 @@
-import * as ffmpeg from 'fluent-ffmpeg'
+import { ffprobe, FfprobeData } from 'fluent-ffmpeg'
 import { getMaxBitrate } from '@shared/core-utils'
 import { VideoFileMetadata, VideoResolution, VideoTranscodingFPS } from '../../shared/models/videos'
 import { CONFIG } from '../initializers/config'
@@ -12,8 +12,8 @@ import { logger } from './logger'
  */
 
 function ffprobePromise (path: string) {
-  return new Promise<ffmpeg.FfprobeData>((res, rej) => {
-    ffmpeg.ffprobe(path, (err, data) => {
+  return new Promise<FfprobeData>((res, rej) => {
+    ffprobe(path, (err, data) => {
       if (err) return rej(err)
 
       return res(data)
@@ -21,7 +21,7 @@ function ffprobePromise (path: string) {
   })
 }
 
-async function getAudioStream (videoPath: string, existingProbe?: ffmpeg.FfprobeData) {
+async function getAudioStream (videoPath: string, existingProbe?: FfprobeData) {
   // without position, ffprobe considers the last input only
   // we make it consider the first input only
   // if you pass a file path to pos, then ffprobe acts on that file directly
@@ -76,7 +76,7 @@ function getMaxAudioBitrate (type: 'aac' | 'mp3' | string, bitrate: number) {
   }
 }
 
-async function getVideoStreamSize (path: string, existingProbe?: ffmpeg.FfprobeData): Promise<{ width: number, height: number }> {
+async function getVideoStreamSize (path: string, existingProbe?: FfprobeData): Promise<{ width: number, height: number }> {
   const videoStream = await getVideoStreamFromFile(path, existingProbe)
 
   return videoStream === null
@@ -127,7 +127,7 @@ async function getVideoStreamCodec (path: string) {
   return `${videoCodec}.${baseProfile}${level}`
 }
 
-async function getAudioStreamCodec (path: string, existingProbe?: ffmpeg.FfprobeData) {
+async function getAudioStreamCodec (path: string, existingProbe?: FfprobeData) {
   const { audioStream } = await getAudioStream(path, existingProbe)
 
   if (!audioStream) return ''
@@ -143,7 +143,7 @@ async function getAudioStreamCodec (path: string, existingProbe?: ffmpeg.Ffprobe
   return 'mp4a.40.2' // Fallback
 }
 
-async function getVideoFileResolution (path: string, existingProbe?: ffmpeg.FfprobeData) {
+async function getVideoFileResolution (path: string, existingProbe?: FfprobeData) {
   const size = await getVideoStreamSize(path, existingProbe)
 
   return {
@@ -155,7 +155,7 @@ async function getVideoFileResolution (path: string, existingProbe?: ffmpeg.Ffpr
   }
 }
 
-async function getVideoFileFPS (path: string, existingProbe?: ffmpeg.FfprobeData) {
+async function getVideoFileFPS (path: string, existingProbe?: FfprobeData) {
   const videoStream = await getVideoStreamFromFile(path, existingProbe)
   if (videoStream === null) return 0
 
@@ -173,13 +173,13 @@ async function getVideoFileFPS (path: string, existingProbe?: ffmpeg.FfprobeData
   return 0
 }
 
-async function getMetadataFromFile (path: string, existingProbe?: ffmpeg.FfprobeData) {
+async function getMetadataFromFile (path: string, existingProbe?: FfprobeData) {
   const metadata = existingProbe || await ffprobePromise(path)
 
   return new VideoFileMetadata(metadata)
 }
 
-async function getVideoFileBitrate (path: string, existingProbe?: ffmpeg.FfprobeData): Promise<number> {
+async function getVideoFileBitrate (path: string, existingProbe?: FfprobeData): Promise<number> {
   const metadata = await getMetadataFromFile(path, existingProbe)
 
   let bitrate = metadata.format.bit_rate as number
@@ -194,13 +194,13 @@ async function getVideoFileBitrate (path: string, existingProbe?: ffmpeg.Ffprobe
   return undefined
 }
 
-async function getDurationFromVideoFile (path: string, existingProbe?: ffmpeg.FfprobeData) {
+async function getDurationFromVideoFile (path: string, existingProbe?: FfprobeData) {
   const metadata = await getMetadataFromFile(path, existingProbe)
 
   return Math.round(metadata.format.duration)
 }
 
-async function getVideoStreamFromFile (path: string, existingProbe?: ffmpeg.FfprobeData) {
+async function getVideoStreamFromFile (path: string, existingProbe?: FfprobeData) {
   const metadata = await getMetadataFromFile(path, existingProbe)
 
   return metadata.streams.find(s => s.codec_type === 'video') || null
@@ -243,7 +243,7 @@ async function canDoQuickTranscode (path: string): Promise<boolean> {
          await canDoQuickAudioTranscode(path, probe)
 }
 
-async function canDoQuickVideoTranscode (path: string, probe?: ffmpeg.FfprobeData): Promise<boolean> {
+async function canDoQuickVideoTranscode (path: string, probe?: FfprobeData): Promise<boolean> {
   const videoStream = await getVideoStreamFromFile(path, probe)
   const fps = await getVideoFileFPS(path, probe)
   const bitRate = await getVideoFileBitrate(path, probe)
@@ -262,7 +262,7 @@ async function canDoQuickVideoTranscode (path: string, probe?: ffmpeg.FfprobeDat
   return true
 }
 
-async function canDoQuickAudioTranscode (path: string, probe?: ffmpeg.FfprobeData): Promise<boolean> {
+async function canDoQuickAudioTranscode (path: string, probe?: FfprobeData): Promise<boolean> {
   const parsedAudio = await getAudioStream(path, probe)
 
   if (!parsedAudio.audioStream) return true

@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { ResultList } from '../../../shared'
 import { Job, JobState, JobType } from '../../../shared/models'
 import { UserRight } from '../../../shared/models/users'

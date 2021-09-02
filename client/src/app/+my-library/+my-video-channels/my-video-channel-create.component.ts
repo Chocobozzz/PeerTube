@@ -31,7 +31,7 @@ export class MyVideoChannelCreateComponent extends MyVideoChannelEdit implements
     private notifier: Notifier,
     private router: Router,
     private videoChannelService: VideoChannelService
-    ) {
+  ) {
     super()
   }
 
@@ -59,15 +59,15 @@ export class MyVideoChannelCreateComponent extends MyVideoChannelEdit implements
       .pipe(
         switchMap(() => this.uploadAvatar()),
         switchMap(() => this.uploadBanner())
-      ).subscribe(
-        () => {
+      ).subscribe({
+        next: () => {
           this.authService.refreshUserInformation()
 
           this.notifier.success($localize`Video channel ${videoChannelCreate.displayName} created.`)
-          this.router.navigate(['/my-library', 'video-channels'])
+          this.router.navigate([ '/my-library', 'video-channels' ])
         },
 
-        err => {
+        error: err => {
           if (err.status === HttpStatusCode.CONFLICT_409) {
             this.error = $localize`This name already exists on this instance.`
             return
@@ -75,7 +75,7 @@ export class MyVideoChannelCreateComponent extends MyVideoChannelEdit implements
 
           this.error = err.message
         }
-      )
+      })
   }
 
   onAvatarChange (formData: FormData) {

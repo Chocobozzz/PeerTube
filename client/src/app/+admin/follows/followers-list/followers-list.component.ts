@@ -35,17 +35,17 @@ export class FollowersListComponent extends RestTable implements OnInit {
     follow.state = 'accepted'
 
     this.followService.acceptFollower(follow)
-      .subscribe(
-        () => {
+      .subscribe({
+        next: () => {
           const handle = follow.follower.name + '@' + follow.follower.host
           this.notifier.success($localize`${handle} accepted in instance followers`)
         },
 
-        err => {
+        error: err => {
           follow.state = 'pending'
           this.notifier.error(err.message)
         }
-      )
+      })
   }
 
   async rejectFollower (follow: ActorFollow) {
@@ -54,19 +54,19 @@ export class FollowersListComponent extends RestTable implements OnInit {
     if (res === false) return
 
     this.followService.rejectFollower(follow)
-        .subscribe(
-          () => {
+        .subscribe({
+          next: () => {
             const handle = follow.follower.name + '@' + follow.follower.host
             this.notifier.success($localize`${handle} rejected from instance followers`)
 
             this.reloadData()
           },
 
-          err => {
+          error: err => {
             follow.state = 'pending'
             this.notifier.error(err.message)
           }
-        )
+        })
   }
 
   async deleteFollower (follow: ActorFollow) {
@@ -75,27 +75,27 @@ export class FollowersListComponent extends RestTable implements OnInit {
     if (res === false) return
 
     this.followService.removeFollower(follow)
-        .subscribe(
-          () => {
+        .subscribe({
+          next: () => {
             const handle = follow.follower.name + '@' + follow.follower.host
             this.notifier.success($localize`${handle} removed from instance followers`)
 
             this.reloadData()
           },
 
-          err => this.notifier.error(err.message)
-        )
+          error: err => this.notifier.error(err.message)
+        })
   }
 
   protected reloadData () {
     this.followService.getFollowers({ pagination: this.pagination, sort: this.sort, search: this.search })
-                      .subscribe(
-                        resultList => {
+                      .subscribe({
+                        next: resultList => {
                           this.followers = resultList.data
                           this.totalRecords = resultList.total
                         },
 
-                        err => this.notifier.error(err.message)
-                      )
+                        error: err => this.notifier.error(err.message)
+                      })
   }
 }

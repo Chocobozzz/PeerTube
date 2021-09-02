@@ -30,8 +30,8 @@ export class AbuseService {
   ) { }
 
   getAdminAbuses (options: {
-    pagination: RestPagination,
-    sort: SortMeta,
+    pagination: RestPagination
+    sort: SortMeta
     search?: string
   }): Observable<ResultList<AdminAbuse>> {
     const { pagination, sort, search } = options
@@ -51,8 +51,8 @@ export class AbuseService {
   }
 
   getUserAbuses (options: {
-    pagination: RestPagination,
-    sort: SortMeta,
+    pagination: RestPagination
+    sort: SortMeta
     search?: string
   }): Observable<ResultList<UserAbuse>> {
     const { pagination, sort, search } = options
@@ -74,7 +74,7 @@ export class AbuseService {
   reportVideo (parameters: AbuseCreate) {
     const url = AbuseService.BASE_ABUSE_URL
 
-    const body = omit(parameters, ['id'])
+    const body = omit(parameters, [ 'id' ])
 
     return this.authHttp.post(url, body)
       .pipe(
@@ -147,11 +147,13 @@ export class AbuseService {
       {
         id: 'spamOrMisleading',
         label: $localize`Spam, ad or false news`,
+        // eslint-disable-next-line max-len
         help: $localize`Contains marketing, spam, purposefully deceitful news, or otherwise misleading thumbnail/text/tags. Please provide reputable sources to report hoaxes.`
       },
       {
         id: 'privacy',
         label: $localize`Privacy breach or doxxing`,
+        // eslint-disable-next-line max-len
         help: $localize`Contains personal information that could be used to track, identify, contact or impersonate someone (e.g. name, address, phone number, email, or credit card details).`
       },
       {
@@ -162,6 +164,7 @@ export class AbuseService {
       {
         id: 'serverRules',
         label: $localize`Breaks server rules`,
+        // eslint-disable-next-line max-len
         description: $localize`Anything not included in the above that breaks the terms of service, code of conduct, or general rules in place on the server.`
       }
     ]

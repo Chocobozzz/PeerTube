@@ -95,6 +95,6 @@ export class AboutInstanceComponent implements OnInit, AfterViewChecked {
   onClickCopyLink (anchor: HTMLAnchorElement) {
     const link = anchor.href
     copyToClipboard(link)
-    this.notifier.success(link, $localize `Link copied`)
+    this.notifier.success(link, $localize`Link copied`)
   }
 }

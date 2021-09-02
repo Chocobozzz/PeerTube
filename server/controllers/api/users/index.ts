@@ -1,5 +1,5 @@
-import * as express from 'express'
-import * as RateLimit from 'express-rate-limit'
+import express from 'express'
+import RateLimit from 'express-rate-limit'
 import { tokensRouter } from '@server/controllers/api/users/token'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { OAuthTokenModel } from '@server/models/oauth/oauth-token'

@@ -100,7 +100,7 @@ export class Video implements VideoServerModel {
     return '/videos/update/' + video.uuid
   }
 
-  constructor (hash: VideoServerModel, translations = {}) {
+  constructor (hash: VideoServerModel, translations: { [ id: string ]: string } = {}) {
     const absoluteAPIUrl = getAbsoluteAPIUrl()
 
     this.createdAt = new Date(hash.createdAt.toString())

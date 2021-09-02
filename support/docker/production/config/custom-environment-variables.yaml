@@ -45,6 +45,29 @@ smtp:
     __format: "json"
   from_address: "PEERTUBE_SMTP_FROM"
 
+object_storage:
+  enabled:
+    __name: "PEERTUBE_OBJECT_STORAGE_ENABLED"
+    __format: "json"
+
+  endpoint: "PEERTUBE_OBJECT_STORAGE_ENDPOINT"
+
+  region: "PEERTUBE_OBJECT_STORAGE_REGION"
+
+  max_upload_part:
+    __name: "PEERTUBE_OBJECT_STORAGE_MAX_UPLOAD_PART"
+    __format: "json"
+
+  streaming_playlists:
+    bucket_name: "PEERTUBE_OBJECT_STORAGE_STREAMING_PLAYLISTS_BUCKET_NAME"
+    prefix: "PEERTUBE_OBJECT_STORAGE_STREAMING_PLAYLISTS_PREFIX"
+    base_url: "PEERTUBE_OBJECT_STORAGE_STREAMING_PLAYLISTS_BASE_URL"
+
+  videos:
+    bucket_name: "PEERTUBE_OBJECT_STORAGE_VIDEOS_BUCKET_NAME"
+    prefix: "PEERTUBE_OBJECT_STORAGE_VIDEOS_PREFIX"
+    base_url: "PEERTUBE_OBJECT_STORAGE_VIDEOS_BASE_URL"
+
 webadmin:
   configuration:
     edit:

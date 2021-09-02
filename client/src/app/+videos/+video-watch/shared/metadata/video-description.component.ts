@@ -50,8 +50,8 @@ export class VideoDescriptionComponent implements OnChanges {
     this.descriptionLoading = true
 
     this.videoService.loadCompleteDescription(this.video.descriptionPath)
-        .subscribe(
-          description => {
+        .subscribe({
+          next: description => {
             this.completeDescriptionShown = true
             this.descriptionLoading = false
 
@@ -61,11 +61,11 @@ export class VideoDescriptionComponent implements OnChanges {
             this.updateVideoDescription(this.completeVideoDescription)
           },
 
-          error => {
+          error: err => {
             this.descriptionLoading = false
-            this.notifier.error(error.message)
+            this.notifier.error(err.message)
           }
-        )
+        })
   }
 
   onTimestampClicked (timestamp: number) {

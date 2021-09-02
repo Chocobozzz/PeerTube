@@ -15,7 +15,9 @@ import {
   stopFfmpeg,
   testFfmpegStreamError,
   wait,
-  waitJobs
+  waitJobs,
+  waitUntilLivePublishedOnAllServers,
+  waitUntilLiveSavedOnAllServers
 } from '@shared/extra-utils'
 import { HttpStatusCode, LiveVideoCreate, VideoPrivacy, VideoState } from '@shared/models'
 
@@ -63,18 +65,6 @@ describe('Save replay setting', function () {
     for (const server of servers) {
       const video = await server.videos.get({ id: videoId })
       expect(video.state.id).to.equal(state)
-    }
-  }
-
-  async function waitUntilLivePublishedOnAllServers (videoId: string) {
-    for (const server of servers) {
-      await server.live.waitUntilPublished({ videoId })
-    }
-  }
-
-  async function waitUntilLiveSavedOnAllServers (videoId: string) {
-    for (const server of servers) {
-      await server.live.waitUntilSaved({ videoId })
     }
   }
 
@@ -127,7 +117,7 @@ describe('Save replay setting', function () {
 
       ffmpegCommand = await servers[0].live.sendRTMPStreamInVideo({ videoId: liveVideoUUID })
 
-      await waitUntilLivePublishedOnAllServers(liveVideoUUID)
+      await waitUntilLivePublishedOnAllServers(servers, liveVideoUUID)
 
       await waitJobs(servers)
 
@@ -160,7 +150,7 @@ describe('Save replay setting', function () {
 
       ffmpegCommand = await servers[0].live.sendRTMPStreamInVideo({ videoId: liveVideoUUID })
 
-      await waitUntilLivePublishedOnAllServers(liveVideoUUID)
+      await waitUntilLivePublishedOnAllServers(servers, liveVideoUUID)
 
       await waitJobs(servers)
       await checkVideosExist(liveVideoUUID, true, HttpStatusCode.OK_200)
@@ -189,7 +179,7 @@ describe('Save replay setting', function () {
 
       ffmpegCommand = await servers[0].live.sendRTMPStreamInVideo({ videoId: liveVideoUUID })
 
-      await waitUntilLivePublishedOnAllServers(liveVideoUUID)
+      await waitUntilLivePublishedOnAllServers(servers, liveVideoUUID)
 
       await waitJobs(servers)
       await checkVideosExist(liveVideoUUID, true, HttpStatusCode.OK_200)
@@ -224,7 +214,7 @@ describe('Save replay setting', function () {
       this.timeout(20000)
 
       ffmpegCommand = await servers[0].live.sendRTMPStreamInVideo({ videoId: liveVideoUUID })
-      await waitUntilLivePublishedOnAllServers(liveVideoUUID)
+      await waitUntilLivePublishedOnAllServers(servers, liveVideoUUID)
 
       await waitJobs(servers)
 
@@ -237,7 +227,7 @@ describe('Save replay setting', function () {
 
       await stopFfmpeg(ffmpegCommand)
 
-      await waitUntilLiveSavedOnAllServers(liveVideoUUID)
+      await waitUntilLiveSavedOnAllServers(servers, liveVideoUUID)
       await waitJobs(servers)
 
       // Live has been transcoded
@@ -268,7 +258,7 @@ describe('Save replay setting', function () {
       liveVideoUUID = await createLiveWrapper(true)
 
       ffmpegCommand = await servers[0].live.sendRTMPStreamInVideo({ videoId: liveVideoUUID })
-      await waitUntilLivePublishedOnAllServers(liveVideoUUID)
+      await waitUntilLivePublishedOnAllServers(servers, liveVideoUUID)
 
       await waitJobs(servers)
       await checkVideosExist(liveVideoUUID, true, HttpStatusCode.OK_200)
@@ -296,7 +286,7 @@ describe('Save replay setting', function () {
       liveVideoUUID = await createLiveWrapper(true)
 
       ffmpegCommand = await servers[0].live.sendRTMPStreamInVideo({ videoId: liveVideoUUID })
-      await waitUntilLivePublishedOnAllServers(liveVideoUUID)
+      await waitUntilLivePublishedOnAllServers(servers, liveVideoUUID)
 
       await waitJobs(servers)
       await checkVideosExist(liveVideoUUID, true, HttpStatusCode.OK_200)

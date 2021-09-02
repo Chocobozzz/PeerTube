@@ -73,36 +73,37 @@ export class SearchComponent implements OnInit, OnDestroy {
   ngOnInit () {
     this.serverConfig = this.serverService.getHTMLConfig()
 
-    this.subActivatedRoute = this.route.queryParams.subscribe(
-      async queryParams => {
-        const querySearch = queryParams['search']
-        const searchTarget = queryParams['searchTarget']
+    this.subActivatedRoute = this.route.queryParams
+      .subscribe({
+        next: queryParams => {
+          const querySearch = queryParams['search']
+          const searchTarget = queryParams['searchTarget']
 
-        // Search updated, reset filters
-        if (this.currentSearch !== querySearch || searchTarget !== this.advancedSearch.searchTarget) {
-          this.resetPagination()
-          this.advancedSearch.reset()
+          // Search updated, reset filters
+          if (this.currentSearch !== querySearch || searchTarget !== this.advancedSearch.searchTarget) {
+            this.resetPagination()
+            this.advancedSearch.reset()
 
-          this.currentSearch = querySearch || undefined
-          this.updateTitle()
-        }
+            this.currentSearch = querySearch || undefined
+            this.updateTitle()
+          }
 
-        this.advancedSearch = new AdvancedSearch(queryParams)
-        if (!this.advancedSearch.searchTarget) {
-          this.advancedSearch.searchTarget = this.getDefaultSearchTarget()
-        }
+          this.advancedSearch = new AdvancedSearch(queryParams)
+          if (!this.advancedSearch.searchTarget) {
+            this.advancedSearch.searchTarget = this.getDefaultSearchTarget()
+          }
 
-        this.error = this.checkFieldsAndGetError()
+          this.error = this.checkFieldsAndGetError()
 
-        // Don't hide filters if we have some of them AND the user just came on the webpage, or we have an error
-        this.isSearchFilterCollapsed = !this.error && (this.isInitialLoad === false || !this.advancedSearch.containsValues())
-        this.isInitialLoad = false
+          // Don't hide filters if we have some of them AND the user just came on the webpage, or we have an error
+          this.isSearchFilterCollapsed = !this.error && (this.isInitialLoad === false || !this.advancedSearch.containsValues())
+          this.isInitialLoad = false
 
-        this.search()
-      },
+          this.search()
+        },
 
-      err => this.notifier.error(err.text)
-    )
+        error: err => this.notifier.error(err.text)
+      })
 
     this.userService.getAnonymousOrLoggedUser()
       .subscribe(user => this.userMiniature = user)
@@ -140,33 +141,35 @@ export class SearchComponent implements OnInit, OnDestroy {
       this.getVideoChannelObs(),
       this.getVideoPlaylistObs(),
       this.getVideosObs()
-    ]).subscribe(results => {
-      for (const result of results) {
-        this.results = this.results.concat(result.data)
+    ]).subscribe({
+      next: results => {
+        for (const result of results) {
+          this.results = this.results.concat(result.data)
+        }
+
+        this.pagination.totalItems = results.reduce((p, r) => p += r.total, 0)
+        this.lastSearchTarget = this.advancedSearch.searchTarget
+
+        this.hasMoreResults = this.results.length < this.pagination.totalItems
+      },
+
+      error: err => {
+        if (this.advancedSearch.searchTarget !== 'search-index') {
+          this.notifier.error(err.message)
+          return
+        }
+
+        this.notifier.error(
+          $localize`Search index is unavailable. Retrying with instance results instead.`,
+          $localize`Search error`
+        )
+        this.advancedSearch.searchTarget = 'local'
+        this.search()
+      },
+
+      complete: () => {
+        this.isSearching = false
       }
-
-      this.pagination.totalItems = results.reduce((p, r) => p += r.total, 0)
-      this.lastSearchTarget = this.advancedSearch.searchTarget
-
-      this.hasMoreResults = this.results.length < this.pagination.totalItems
-    },
-
-    err => {
-      if (this.advancedSearch.searchTarget !== 'search-index') {
-        this.notifier.error(err.message)
-        return
-      }
-
-      this.notifier.error(
-        $localize`Search index is unavailable. Retrying with instance results instead.`,
-        $localize`Search error`
-      )
-      this.advancedSearch.searchTarget = 'local'
-      this.search()
-    },
-
-    () => {
-      this.isSearching = false
     })
   }
 

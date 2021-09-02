@@ -21,7 +21,7 @@
 
   <ng-template pTemplate="header">
     <tr>
-      <th style="width: 40px"></th>
+      <th style="width: 40px;"></th>
       <th style="width: 150px;"></th>
       <th i18n pSortableColumn="name">Video <p-sortIcon field="name"></p-sortIcon></th>
       <th style="width: 100px;" i18n>Sensitive</th>
@@ -54,7 +54,7 @@
             </div>
             <div class="table-video-text">
               <div>
-                <my-global-icon i18n-title title="The video was blocked due to automatic blocking of new videos" *ngIf="videoBlock.type == 2" iconName="robot"></my-global-icon>
+                <my-global-icon i18n-title title="The video was blocked due to automatic blocking of new videos" *ngIf="videoBlock.type === 2" iconName="robot"></my-global-icon>
                 {{ videoBlock.video.name }}
               </div>
               <div class="text-muted">by {{ videoBlock.video.channel?.displayName }} on {{ videoBlock.video.channel?.host }} </div>

@@ -1,4 +1,4 @@
-import * as helmet from 'helmet'
+import { contentSecurityPolicy } from 'helmet'
 import { CONFIG } from '../initializers/config'
 
 const baseDirectives = Object.assign({},
@@ -22,12 +22,12 @@ const baseDirectives = Object.assign({},
   CONFIG.WEBSERVER.SCHEME === 'https' ? { upgradeInsecureRequests: [] } : {}
 )
 
-const baseCSP = helmet.contentSecurityPolicy({
+const baseCSP = contentSecurityPolicy({
   directives: baseDirectives,
   reportOnly: CONFIG.CSP.REPORT_ONLY
 })
 
-const embedCSP = helmet.contentSecurityPolicy({
+const embedCSP = contentSecurityPolicy({
   directives: Object.assign({}, baseDirectives, { frameAncestors: [ '*' ] }),
   reportOnly: CONFIG.CSP.REPORT_ONLY
 })

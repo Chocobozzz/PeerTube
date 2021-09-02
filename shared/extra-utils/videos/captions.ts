@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import * as request from 'supertest'
+import request from 'supertest'
 import { HttpStatusCode } from '@shared/models'
 
 async function testCaptionFile (url: string, captionPath: string, containsString: string) {

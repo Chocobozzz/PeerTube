@@ -9,6 +9,8 @@
     "importHelpers": true,
     "removeComments": true,
     "strictBindCallApply": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
     "outDir": "./dist",
     "lib": [
       "dom",
@@ -19,7 +21,6 @@
       "es2019"
     ],
     "typeRoots": [
-      "node_modules/sitemap/node_modules/@types",
       "node_modules/@types",
       "server/typings"
     ],

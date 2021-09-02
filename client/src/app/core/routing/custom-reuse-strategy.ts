@@ -1,5 +1,7 @@
-import { ActivatedRouteSnapshot, DetachedRouteHandle, RouteReuseStrategy } from '@angular/router'
 import { Injectable } from '@angular/core'
+import { ActivatedRouteSnapshot, DetachedRouteHandle, RouteReuseStrategy } from '@angular/router'
+import { RouterSetting } from './'
+import { PeerTubeRouterService } from './peertube-router.service'
 
 @Injectable()
 export class CustomReuseStrategy implements RouteReuseStrategy {
@@ -78,6 +80,8 @@ export class CustomReuseStrategy implements RouteReuseStrategy {
   }
 
   private isReuseEnabled (route: ActivatedRouteSnapshot) {
-    return route.data.reuse && route.data.reuse.enabled && route.queryParams[ 'a-state' ]
+    // Cannot use peertube router here because of cyclic router dependency
+    return route.data.reuse?.enabled &&
+      !!(route.queryParams[PeerTubeRouterService.ROUTE_SETTING_NAME] & RouterSetting.REUSE_COMPONENT)
   }
 }

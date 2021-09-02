@@ -23,13 +23,13 @@ export class TranslationsManager {
 
     let p: Promise<any>
 
-    if (TranslationsManager.videojsLocaleCache[ path ]) {
-      p = Promise.resolve(TranslationsManager.videojsLocaleCache[ path ])
+    if (TranslationsManager.videojsLocaleCache[path]) {
+      p = Promise.resolve(TranslationsManager.videojsLocaleCache[path])
     } else {
       p = fetch(path + '/player.json')
         .then(res => res.json())
         .then(json => {
-          TranslationsManager.videojsLocaleCache[ path ] = json
+          TranslationsManager.videojsLocaleCache[path] = json
           return json
         })
         .catch(err => {

@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { Activity } from '../../../shared/models/activitypub/activity'
 import { VideoPrivacy } from '../../../shared/models/videos'
 import { activityPubCollectionPagination, activityPubContextify } from '../../helpers/activitypub'

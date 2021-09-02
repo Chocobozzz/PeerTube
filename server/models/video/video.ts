@@ -1,4 +1,4 @@
-import * as Bluebird from 'bluebird'
+import Bluebird from 'bluebird'
 import { remove } from 'fs-extra'
 import { maxBy, minBy } from 'lodash'
 import { join } from 'path'
@@ -28,14 +28,16 @@ import { buildNSFWFilter } from '@server/helpers/express-utils'
 import { uuidToShort } from '@server/helpers/uuid'
 import { getPrivaciesForFederation, isPrivacyForFederation, isStateForFederation } from '@server/helpers/video'
 import { LiveManager } from '@server/lib/live/live-manager'
-import { getHLSDirectory, getVideoFilePath } from '@server/lib/video-paths'
+import { removeHLSObjectStorage, removeWebTorrentObjectStorage } from '@server/lib/object-storage'
+import { getHLSDirectory, getHLSRedundancyDirectory } from '@server/lib/paths'
+import { VideoPathManager } from '@server/lib/video-path-manager'
 import { getServerActor } from '@server/models/application/application'
 import { ModelCache } from '@server/models/model-cache'
 import { AttributesOnly, buildVideoEmbedPath, buildVideoWatchPath, pick } from '@shared/core-utils'
 import { VideoFile } from '@shared/models/videos/video-file.model'
 import { ResultList, UserRight, VideoPrivacy, VideoState } from '../../../shared'
 import { VideoObject } from '../../../shared/models/activitypub/objects'
-import { Video, VideoDetails, VideoRateType } from '../../../shared/models/videos'
+import { Video, VideoDetails, VideoRateType, VideoStorage } from '../../../shared/models/videos'
 import { ThumbnailType } from '../../../shared/models/videos/thumbnail.type'
 import { VideoFilter } from '../../../shared/models/videos/video-query.type'
 import { VideoStreamingPlaylistType } from '../../../shared/models/videos/video-streaming-playlist.type'
@@ -114,6 +116,7 @@ import { ScopeNames as VideoChannelScopeNames, SummaryOptions, VideoChannelModel
 import { VideoCommentModel } from './video-comment'
 import { VideoFileModel } from './video-file'
 import { VideoImportModel } from './video-import'
+import { VideoJobInfoModel } from './video-job-info'
 import { VideoLiveModel } from './video-live'
 import { VideoPlaylistElementModel } from './video-playlist-element'
 import { VideoShareModel } from './video-share'
@@ -731,6 +734,15 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     ['separate' as any]: true
   })
   VideoCaptions: VideoCaptionModel[]
+
+  @HasOne(() => VideoJobInfoModel, {
+    foreignKey: {
+      name: 'videoId',
+      allowNull: false
+    },
+    onDelete: 'cascade'
+  })
+  VideoJobInfo: VideoJobInfoModel
 
   @BeforeDestroy
   static async sendDelete (instance: MVideoAccountLight, options) {
@@ -1641,9 +1653,10 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
   getMaxQualityResolution () {
     const file = this.getMaxQualityFile()
     const videoOrPlaylist = file.getVideoOrStreamingPlaylist()
-    const originalFilePath = getVideoFilePath(videoOrPlaylist, file)
 
-    return getVideoFileResolution(originalFilePath)
+    return VideoPathManager.Instance.makeAvailableVideoFile(videoOrPlaylist, file, originalFilePath => {
+      return getVideoFileResolution(originalFilePath)
+    })
   }
 
   getDescriptionAPIPath () {
@@ -1673,16 +1686,24 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
   }
 
   removeFileAndTorrent (videoFile: MVideoFile, isRedundancy = false) {
-    const filePath = getVideoFilePath(this, videoFile, isRedundancy)
+    const filePath = isRedundancy
+      ? VideoPathManager.Instance.getFSRedundancyVideoFilePath(this, videoFile)
+      : VideoPathManager.Instance.getFSVideoFileOutputPath(this, videoFile)
 
     const promises: Promise<any>[] = [ remove(filePath) ]
     if (!isRedundancy) promises.push(videoFile.removeTorrent())
+
+    if (videoFile.storage === VideoStorage.OBJECT_STORAGE) {
+      promises.push(removeWebTorrentObjectStorage(videoFile))
+    }
 
     return Promise.all(promises)
   }
 
   async removeStreamingPlaylistFiles (streamingPlaylist: MStreamingPlaylist, isRedundancy = false) {
-    const directoryPath = getHLSDirectory(this, isRedundancy)
+    const directoryPath = isRedundancy
+      ? getHLSRedundancyDirectory(this)
+      : getHLSDirectory(this)
 
     await remove(directoryPath)
 
@@ -1698,6 +1719,10 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
       await Promise.all(
         streamingPlaylistWithFiles.VideoFiles.map(file => file.removeTorrent())
       )
+
+      if (streamingPlaylist.storage === VideoStorage.OBJECT_STORAGE) {
+        await removeHLSObjectStorage(streamingPlaylist, this)
+      }
     }
   }
 
@@ -1741,16 +1766,16 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
       this.privacy === VideoPrivacy.INTERNAL
   }
 
-  async publishIfNeededAndSave (t: Transaction) {
-    if (this.state !== VideoState.PUBLISHED) {
-      this.state = VideoState.PUBLISHED
-      this.publishedAt = new Date()
-      await this.save({ transaction: t })
+  async setNewState (newState: VideoState, transaction: Transaction) {
+    if (this.state === newState) throw new Error('Cannot use same state ' + newState)
 
-      return true
+    this.state = newState
+
+    if (this.state === VideoState.PUBLISHED) {
+      this.publishedAt = new Date()
     }
 
-    return false
+    await this.save({ transaction })
   }
 
   getBandwidthBits (videoFile: MVideoFile) {

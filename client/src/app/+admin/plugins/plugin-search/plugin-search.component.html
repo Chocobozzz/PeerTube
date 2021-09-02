@@ -3,7 +3,7 @@
 </div>
 
 <div class="search-bar">
-  <input type="text" (input)="onSearchChange($event)" i18n-placeholder placeholder="Search..." autofocus />
+  <input type="text" (input)="onSearchChange($event)" i18n-placeholder placeholder="Search..." myAutofocus />
 </div>
 
 <div class="alert alert-info" i18n *ngIf="pluginInstalled">
@@ -29,7 +29,7 @@
   No results.
 </div>
 
-<div class="plugins" myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [autoInit]="true" [dataObservable]="onDataSubject.asObservable()">
+<div class="plugins" myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [dataObservable]="onDataSubject.asObservable()">
   <div class="card plugin" *ngFor="let plugin of plugins">
     <div class="card-body">
       <div class="first-row">

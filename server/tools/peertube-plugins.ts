@@ -7,7 +7,7 @@ import { program, Command, OptionValues } from 'commander'
 import { assignToken, buildServer, getServerCredentials } from './cli'
 import { PluginType } from '../../shared/models'
 import { isAbsolute } from 'path'
-import * as CliTable3 from 'cli-table3'
+import CliTable3 from 'cli-table3'
 
 program
   .name('plugins')

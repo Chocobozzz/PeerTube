@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { createReqFiles } from '@server/helpers/express-utils'
 import { buildUUID, uuidToShort } from '@server/helpers/uuid'
 import { CONFIG } from '@server/initializers/config'
@@ -39,7 +39,7 @@ liveRouter.post('/live',
 liveRouter.get('/live/:videoId',
   authenticate,
   asyncMiddleware(videoLiveGetValidator),
-  asyncRetryTransactionMiddleware(getLiveVideo)
+  getLiveVideo
 )
 
 liveRouter.put('/live/:videoId',
@@ -57,7 +57,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function getLiveVideo (req: express.Request, res: express.Response) {
+function getLiveVideo (req: express.Request, res: express.Response) {
   const videoLive = res.locals.videoLive
 
   return res.json(videoLive.toFormattedJSON())

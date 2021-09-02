@@ -1,14 +1,14 @@
 import { registerTSPaths } from '../server/helpers/register-ts-paths'
 registerTSPaths()
 
-import * as prompt from 'prompt'
+import { start, get } from 'prompt'
 import { join, basename } from 'path'
 import { CONFIG } from '../server/initializers/config'
 import { VideoModel } from '../server/models/video/video'
 import { initDatabaseModels } from '../server/initializers/database'
 import { readdir, remove, stat } from 'fs-extra'
 import { VideoRedundancyModel } from '../server/models/redundancy/video-redundancy'
-import * as Bluebird from 'bluebird'
+import { map } from 'bluebird'
 import { getUUIDFromFilename } from '../server/helpers/utils'
 import { ThumbnailModel } from '../server/models/video/thumbnail'
 import { ActorImageModel } from '../server/models/actor/actor-image'
@@ -78,7 +78,7 @@ async function pruneDirectory (directory: string, existFun: ExistFun) {
   const files = await readdir(directory)
 
   const toDelete: string[] = []
-  await Bluebird.map(files, async file => {
+  await map(files, async file => {
     const filePath = join(directory, file)
 
     if (await existFun(filePath) !== true) {
@@ -141,7 +141,7 @@ async function doesRedundancyExist (filePath: string) {
 
 async function askConfirmation () {
   return new Promise((res, rej) => {
-    prompt.start()
+    start()
     const schema = {
       properties: {
         confirm: {
@@ -154,7 +154,7 @@ async function askConfirmation () {
         }
       }
     }
-    prompt.get(schema, function (err, result) {
+    get(schema, function (err, result) {
       if (err) return rej(err)
 
       return res(result.confirm?.match(/y/) !== null)

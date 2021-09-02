@@ -60,9 +60,10 @@
   </ng-template>
 </p-toast>
 
-<ng-template [ngIf]="isUserLoggedIn()">
-  <my-welcome-modal #welcomeModal></my-welcome-modal>
+<ng-container *ngIf="isUserLoggedIn()">
+  <my-account-setup-warning-modal #accountSetupWarningModal></my-account-setup-warning-modal>
+  <my-admin-welcome-modal #adminWelcomeModal></my-admin-welcome-modal>
   <my-instance-config-warning-modal #instanceConfigWarningModal></my-instance-config-warning-modal>
-</ng-template>
+</ng-container>
 
 <my-custom-modal #customModal></my-custom-modal>

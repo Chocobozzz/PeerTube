@@ -28,11 +28,11 @@ export class FormValidatorService {
         continue
       }
 
-      if (field && field.MESSAGES) validationMessages[name] = field.MESSAGES as { [ name: string ]: string }
+      if (field?.MESSAGES) validationMessages[name] = field.MESSAGES as { [ name: string ]: string }
 
       const defaultValue = defaultValues[name] || ''
 
-      if (field && field.VALIDATORS) group[name] = [ defaultValue, field.VALIDATORS ]
+      if (field?.VALIDATORS) group[name] = [ defaultValue, field.VALIDATORS ]
       else group[name] = [ defaultValue ]
     }
 
@@ -62,11 +62,11 @@ export class FormValidatorService {
         continue
       }
 
-      if (field && field.MESSAGES) validationMessages[name] = field.MESSAGES as { [ name: string ]: string }
+      if (field?.MESSAGES) validationMessages[name] = field.MESSAGES as { [ name: string ]: string }
 
       const defaultValue = defaultValues[name] || ''
 
-      if (field && field.VALIDATORS) form.addControl(name, new FormControl(defaultValue, field.VALIDATORS as ValidatorFn[]))
+      if (field?.VALIDATORS) form.addControl(name, new FormControl(defaultValue, field.VALIDATORS as ValidatorFn[]))
       else form.addControl(name, new FormControl(defaultValue))
     }
   }

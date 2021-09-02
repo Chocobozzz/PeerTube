@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express, { Request, Response } from 'express'
 import { Server } from 'http'
 import { randomInt } from '@shared/core-utils'
 
@@ -18,7 +18,7 @@ export class MockBlocklist {
     return new Promise<number>(res => {
       const app = express()
 
-      app.get('/blocklist', (req: express.Request, res: express.Response) => {
+      app.get('/blocklist', (req: Request, res: Response) => {
         return res.json(this.body)
       })
 

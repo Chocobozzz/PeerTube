@@ -188,6 +188,17 @@ export class VideosCommand extends AbstractCommand {
     return id
   }
 
+  async listFiles (options: OverrideCommandOptions & {
+    id: number | string
+  }) {
+    const video = await this.get(options)
+
+    const files = video.files || []
+    const hlsFiles = video.streamingPlaylists[0]?.files || []
+
+    return files.concat(hlsFiles)
+  }
+
   // ---------------------------------------------------------------------------
 
   listMyVideos (options: OverrideCommandOptions & {

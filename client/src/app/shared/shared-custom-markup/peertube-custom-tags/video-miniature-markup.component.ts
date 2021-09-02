@@ -1,10 +1,10 @@
 import { finalize } from 'rxjs/operators'
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { AuthService, Notifier } from '@app/core'
-import { Video, VideoService } from '../../shared-main'
+import { FindInBulkService } from '@app/shared/shared-search'
+import { Video } from '../../shared-main'
 import { MiniatureDisplayOptions } from '../../shared-video-miniature'
 import { CustomMarkupComponent } from './shared'
-import { FindInBulkService } from '@app/shared/shared-search'
 
 /*
  * Markup component that creates a video miniature only
@@ -53,10 +53,10 @@ export class VideoMiniatureMarkupComponent implements CustomMarkupComponent, OnI
 
     this.findInBulk.getVideo(this.uuid)
       .pipe(finalize(() => this.loaded.emit(true)))
-      .subscribe(
-        video => this.video = video,
+      .subscribe({
+        next: video => this.video = video,
 
-        err => this.notifier.error($localize`Error in video miniature component: ${err.message}`)
-      )
+        error: err => this.notifier.error($localize`Error in video miniature component: ${err.message}`)
+      })
   }
 }

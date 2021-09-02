@@ -30,12 +30,7 @@
     </my-help>
 
     <div>
-      <my-select-checkbox
-        formControlName="videoLanguages" [availableItems]="languageItems"
-        [selectableGroup]="true" [selectableGroupAsModel]="true"
-        i18n-placeholder placeholder="Add a new language"
-      >
-      </my-select-checkbox >
+      <my-select-languages formControlName="videoLanguages"></my-select-languages>
     </div>
   </div>
 

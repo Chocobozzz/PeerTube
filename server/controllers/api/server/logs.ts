@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { readdir, readFile } from 'fs-extra'
 import { join } from 'path'
 import { logger, mtimeSortFilesDesc } from '@server/helpers/logger'

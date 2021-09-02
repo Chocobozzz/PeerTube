@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { ServerConfigManager } from '@server/lib/server-config-manager'
 import { ActorCustomPageModel } from '@server/models/account/actor-custom-page'
 import { HttpStatusCode, UserRight } from '@shared/models'

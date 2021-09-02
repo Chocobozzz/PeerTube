@@ -13,7 +13,8 @@ export class PeerTubeEmbedApi {
   private isReady = false
   private resolutions: PeerTubeResolution[] = []
 
-  constructor (private embed: PeerTubeEmbed) {
+  constructor (private readonly embed: PeerTubeEmbed) {
+
   }
 
   initialize () {
@@ -45,7 +46,7 @@ export class PeerTubeEmbedApi {
     channel.bind('getResolutions', (txn, params) => this.resolutions)
 
     channel.bind('getCaptions', (txn, params) => this.getCaptions())
-    channel.bind('setCaption', (txn, id) => this.setCaption(id)),
+    channel.bind('setCaption', (txn, id) => this.setCaption(id))
 
     channel.bind('setPlaybackRate', (txn, playbackRate) => this.embed.player.playbackRate(playbackRate))
     channel.bind('getPlaybackRate', (txn, params) => this.embed.player.playbackRate())
@@ -79,14 +80,12 @@ export class PeerTubeEmbedApi {
   }
 
   private getCaptions (): PeerTubeTextTrack[] {
-    return this.embed.player.textTracks().tracks_.map(t => {
-      return {
-        id: t.id,
-        src: t.src,
-        label: t.label,
-        mode: t.mode as any
-      }
-    })
+    return this.embed.player.textTracks().tracks_.map(t => ({
+      id: t.id,
+      src: t.src,
+      label: t.label,
+      mode: t.mode
+    }))
   }
 
   private setCaption (id: string) {

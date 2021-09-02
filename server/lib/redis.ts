@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { createClient, RedisClient } from 'redis'
 import { logger } from '../helpers/logger'
 import { generateRandomString } from '../helpers/utils'

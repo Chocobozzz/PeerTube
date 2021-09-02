@@ -6,7 +6,7 @@ const MenuItem = videojs.getComponent('MenuItem')
 export interface ResolutionMenuItemOptions extends videojs.MenuItemOptions {
   labels?: { [id: number]: string }
   id: number
-  callback: Function
+  callback: (resolutionId: number, type: 'video') => void
 }
 
 class ResolutionMenuItem extends MenuItem {
@@ -14,7 +14,7 @@ class ResolutionMenuItem extends MenuItem {
   private readonly label: string
   // Only used for the automatic item
   private readonly labels: { [id: number]: string }
-  private readonly callback: Function
+  private readonly callback: (resolutionId: number, type: 'video') => void
 
   private autoResolutionPossible: boolean
   private currentResolutionLabel: string

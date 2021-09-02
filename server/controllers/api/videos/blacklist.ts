@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { blacklistVideo, unblacklistVideo } from '@server/lib/video-blacklist'
 import { UserRight, VideoBlacklistCreate } from '../../../../shared'
 import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'

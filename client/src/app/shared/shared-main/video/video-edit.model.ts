@@ -20,25 +20,28 @@ export class VideoEdit implements VideoUpdate {
   previewfile?: any
   thumbnailUrl: string
   previewUrl: string
-  uuid?: string
-  id?: number
   scheduleUpdate?: VideoScheduleUpdate
   originallyPublishedAt?: Date | string
+
+  id?: number
+  uuid?: string
+  shortUUID?: string
 
   pluginData?: any
 
   constructor (
     video?: Video & {
-      tags: string[],
-      commentsEnabled: boolean,
-      downloadEnabled: boolean,
-      support: string,
-      thumbnailUrl: string,
+      tags: string[]
+      commentsEnabled: boolean
+      downloadEnabled: boolean
+      support: string
+      thumbnailUrl: string
       previewUrl: string
     }) {
     if (video) {
       this.id = video.id
       this.uuid = video.uuid
+      this.shortUUID = video.shortUUID
       this.category = video.category.id
       this.licence = video.licence.id
       this.language = video.language.id
@@ -64,7 +67,7 @@ export class VideoEdit implements VideoUpdate {
 
   patch (values: { [ id: string ]: any }) {
     Object.keys(values).forEach((key) => {
-      this[ key ] = values[ key ]
+      this[key] = values[key]
     })
 
     // If schedule publication, the video is private and will be changed to public privacy

@@ -753,7 +753,7 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
     return this.Actor.isOutdated()
   }
 
-  setAsUpdated (transaction: Transaction) {
+  setAsUpdated (transaction?: Transaction) {
     return setAsUpdated('videoChannel', this.id, transaction)
   }
 }

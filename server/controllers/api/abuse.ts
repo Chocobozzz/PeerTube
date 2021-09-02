@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { logger } from '@server/helpers/logger'
 import { createAccountAbuse, createVideoAbuse, createVideoCommentAbuse } from '@server/lib/moderation'
 import { Notifier } from '@server/lib/notifier'

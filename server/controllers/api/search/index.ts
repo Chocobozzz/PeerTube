@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { searchChannelsRouter } from './search-video-channels'
 import { searchPlaylistsRouter } from './search-video-playlists'
 import { searchVideosRouter } from './search-videos'

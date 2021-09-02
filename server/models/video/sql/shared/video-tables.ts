@@ -87,7 +87,8 @@ export class VideoTables {
       'fps',
       'metadataUrl',
       'videoStreamingPlaylistId',
-      'videoId'
+      'videoId',
+      'storage'
     ]
   }
 
@@ -102,7 +103,8 @@ export class VideoTables {
         'segmentsSha256Url',
         'videoId',
         'createdAt',
-        'updatedAt'
+        'updatedAt',
+        'storage'
       ])
     }
 
@@ -258,7 +260,8 @@ export class VideoTables {
       'originallyPublishedAt',
       'channelId',
       'createdAt',
-      'updatedAt'
+      'updatedAt',
+      'moveJobsRunning'
     ]
   }
 }

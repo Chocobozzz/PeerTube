@@ -56,7 +56,7 @@ export class FollowForUser extends AbstractNotification <MActorFollowFull> {
     return notification
   }
 
-  async createEmail (to: string) {
+  createEmail (to: string) {
     const following = this.actorFollow.ActorFollowing
     const follower = this.actorFollow.ActorFollower
 

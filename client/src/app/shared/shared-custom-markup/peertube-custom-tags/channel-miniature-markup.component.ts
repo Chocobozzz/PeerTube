@@ -39,19 +39,23 @@ export class ChannelMiniatureMarkupComponent implements CustomMarkupComponent, O
   ngOnInit () {
     this.findInBulk.getChannel(this.name)
       .pipe(
-        tap(channel => this.channel = channel),
+        tap(channel => {
+          this.channel = channel
+        }),
         switchMap(() => from(this.markdown.textMarkdownToHTML(this.channel.description))),
-        tap(html => this.descriptionHTML = html),
+        tap(html => {
+          this.descriptionHTML = html
+        }),
         switchMap(() => this.loadVideosObservable()),
         finalize(() => this.loaded.emit(true))
-      ).subscribe(
-        ({ total, data }) => {
+      ).subscribe({
+        next: ({ total, data }) => {
           this.totalVideos = total
           this.video = data[0]
         },
 
-        err => this.notifier.error($localize`Error in channel miniature component: ${err.message}`)
-      )
+        error: err => this.notifier.error($localize`Error in channel miniature component: ${err.message}`)
+      })
   }
 
   getVideoChannelLink () {

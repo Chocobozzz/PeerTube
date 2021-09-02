@@ -7,15 +7,17 @@ _note_: only **LTS** versions of external dependencies are supported. If no LTS 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-
 - [Debian / Ubuntu and derivatives](#debian--ubuntu-and-derivatives)
 - [Arch Linux](#arch-linux)
 - [CentOS 7](#centos-7)
-- [CentOS 8](#centos-8)
+- [Centos 8](#centos-8)
+- [Rocky Linux 8.4](#rocky-linux-84)
 - [Fedora](#fedora)
+- [Red Hat Enterprise Linux 8](#red-hat-enterprise-linux-8)
 - [FreeBSD](#freebsd)
 - [macOS](#macos)
 - [Gentoo](#gentoo)
+- [OpenBSD](#openbsd)
 - [Other distributions](#other-distributions)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -35,11 +37,29 @@ _note_: only **LTS** versions of external dependencies are supported. If no LTS 
 4. Install yarn, and be sure to have [a recent version](https://github.com/yarnpkg/yarn/releases/latest):
 [https://yarnpkg.com/en/docs/install#linux-tab](https://yarnpkg.com/en/docs/install#linux-tab)
 
-5. Run:
+5. Install Python:
+
+On Ubuntu <= bionic (18.04 LTS) or Debian <= Buster:
 
 ```
 sudo apt update
-sudo apt install certbot nginx ffmpeg postgresql postgresql-contrib openssl g++ make redis-server git python-dev cron wget
+sudo apt install python-dev
+python --version # Should be >= 2.x or >= 3.x
+```
+
+On Ubuntu >= focal (20.04 LTS) or Debian >= Bullseye:
+
+```
+sudo apt update
+sudo apt install python3-dev python-is-python3 # python-is-python2 should also work
+python --version # Should be >= 2.x or >= 3.x
+```
+
+6. Install common dependencies:
+
+```
+sudo apt update
+sudo apt install certbot nginx ffmpeg postgresql postgresql-contrib openssl g++ make redis-server git cron wget
 ffmpeg -version # Should be >= 4.1
 g++ -v # Should be >= 5.x
 ```
@@ -55,7 +75,7 @@ sudo systemctl start redis postgresql
 1. Run:
 
 ```
-sudo pacman -S nodejs-lts-dubnium yarn ffmpeg postgresql openssl redis git wget unzip python2 base-devel npm nginx
+sudo pacman -S nodejs-lts-fermium  yarn ffmpeg postgresql openssl redis git wget unzip python base-devel npm nginx
 ```
 
 Now that dependencies are installed, before running PeerTube you should start PostgreSQL and Redis:
@@ -151,26 +171,26 @@ sudo systemctl enable --now redis
 sudo systemctl enable --now postgresql
 ```
 
-## Rocky Linux 8.4  
+## Rocky Linux 8.4
 
-1. Pull the latest updates:  
+1. Pull the latest updates:
 ```
 sudo dnf update -y
 ```
 
-2. Install NodeJS 12.x (why 12 and not 14? Not sure...):  
+2. Install NodeJS 12.x (or 14):
 ```
 sudo dnf module install -y nodejs:12
 ```
 
-3. Install yarn:  
+3. Install yarn:
 ```
 sudo npm install --global yarn
 ```
 
-4. Install or compile ffmpeg (if you want to compile... enjoy):  
+4. Install or compile ffmpeg (if you want to compile... enjoy):
 ```
-sudo dnf install -y epel-release 
+sudo dnf install -y epel-release
 sudo dnf --enablerepo=powertools install -y SDL2 SDL2-devel
 sudo dnf install -y --nogpgcheck https://download1.rpmfusion.org/free/el/rpmfusion-free-release-8.noarch.rpm https://download1.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-8.noarch.rpm
 sudo dnf install -y ffmpeg
@@ -192,10 +212,10 @@ sudo useradd -m -d /var/www/peertube -s /bin/bash -p peertube peertube
 ```
 
 7. Unknown missing steps:
-- Steps missing here... these were adapted from the CentOS 8 steps which abruptly ended.  
-- /var/www/peertube does not exist yet (expected? done in future steps? documentation?).  
-- Nothing about Certbot, NGINX, Firewall settings, and etc.  
-- Hopefully someone can suggest what is missing here with some hints so I can add it?  
+- Steps missing here... these were adapted from the CentOS 8 steps which abruptly ended.
+- /var/www/peertube does not exist yet (expected? done in future steps? documentation?).
+- Nothing about Certbot, NGINX, Firewall settings, and etc.
+- Hopefully someone can suggest what is missing here with some hints so I can add it?
 
 ## Fedora
 
@@ -268,14 +288,21 @@ sudo systemctl start redis.service
 
 By default, you cannot access your server via public IP. To do so, you must configure firewall:
 
+-  Ports used by peertube dev setup:
 ```
-# Ports used by peertube dev setup
 sudo firewall-cmd --permanent --zone=public --add-port=3000/tcp
 sudo firewall-cmd --permanent --zone=public --add-port=9000/tcp
-# Optional
+```
+- Optional
+
+```
 sudo firewall-cmd --permanent --zone=public --add-service=http
 sudo firewall-cmd --permanent --zone=public --add-service=https
-# Reload firewall
+```
+
+- Reload firewall
+
+```
 sudo firewall-cmd --reload
 ```
 
@@ -288,6 +315,121 @@ echo fs.inotify.max_user_watches=582222 | sudo tee -a /etc/sysctl.conf && sudo s
 ```
 
 [More info](https://stackoverflow.com/questions/34662574/node-js-getting-error-nodemon-internal-watch-failed-watch-enospc#34664097)
+
+## Red Hat Enterprise Linux 8
+
+1. Register system as root user to Red Hat Subscription Management (create a free Red Hat account if you don't have one yet).
+
+```
+# subscription-manager register --username <username> --password <password> --auto-attach
+# dnf upgrade
+# reboot
+```
+
+2. Install Node.JS
+
+```
+sudo dnf module install nodejs:12
+```
+
+3. Install Yarn
+
+```
+curl --silent --location https://dl.yarnpkg.com/rpm/yarn.repo | sudo tee /etc/yum.repos.d/yarn.repo
+sudo dnf install yarn
+```
+
+4. Install FFmpeg
+
+```
+sudo subscription-manager repos --enable "codeready-builder-for-rhel-8-$(arch)-rpms"
+sudo dnf install --nogpgcheck https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+sudo dnf install --nogpgcheck https://mirrors.rpmfusion.org/free/el/rpmfusion-free-release-8.noarch.rpm
+sudo dnf upgrade
+sudo dnf install ffmpeg
+```
+
+5. Run:
+
+```
+sudo dnf install nginx postgresql postgresql-server postgresql-contrib openssl gcc-c++ make wget redis git
+```
+
+6. You'll need a symlink for python3 to python for youtube-dl to work
+
+```
+sudo ln -s /usr/bin/python3 /usr/bin/python
+```
+
+7. Initialize the PostgreSQL database:
+
+```
+sudo PGSETUP_INITDB_OPTIONS='--auth-host=md5' postgresql-setup --initdb --unit postgresql
+```
+
+Now that dependencies are installed, before running PeerTube you should enable and start PostgreSQL and Redis:
+
+```
+sudo systemctl enable --now redis
+sudo systemctl enable --now postgresql
+```
+
+If you are running the production guide, you also need to slightly pre-configure nginx, because nginx is packaged differently in the Red Hat family distributions:
+
+8. Configure nginx
+
+```
+sudo mkdir /etc/nginx/sites-available
+sudo mkdir /etc/nginx/sites-enabled
+sudo ln -s /etc/nginx/sites-enabled/peertube /etc/nginx/conf.d/peertube.conf
+sudo systemctl enable --now nginx
+```
+
+9. Prepare directory
+
+To add the 'peertube' user, you first have to create the 'www' folder and once the 'peertube' user is added, you have to set the access permissions.
+
+```
+sudo mkdir /var/www
+
+sudo useradd -m -d /var/www/peertube -s /bin/bash -p peertube peertube
+sudo passwd peertube
+
+sudo chmod 755 /var/www/peertube/
+```
+
+10. Firewall
+
+By default, you cannot access your server via public IP. To do so, you must configure firewall:
+
+-  Ports used by peertube dev setup:
+```
+sudo firewall-cmd --permanent --zone=public --add-port=3000/tcp
+sudo firewall-cmd --permanent --zone=public --add-port=9000/tcp
+```
+- Optional
+
+```
+sudo firewall-cmd --permanent --zone=public --add-service=http
+sudo firewall-cmd --permanent --zone=public --add-service=https
+```
+
+- Reload firewall
+
+```
+sudo firewall-cmd --reload
+```
+
+11. Configure max ports
+
+This is necessary if you are running dev setup, otherwise you will have errors with `nodemon`
+
+```
+echo fs.inotify.max_user_watches=582222 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
+```
+
+[More info](https://stackoverflow.com/questions/34662574/node-js-getting-error-nodemon-internal-watch-failed-watch-enospc#34664097)
+
 
 ## FreeBSD
 
@@ -349,7 +491,7 @@ sudo vim /etc/shells # Add in this file : /usr/local/bin/bash
 chsh -s /usr/local/bin/bash # To set the brew-installed bash as default bash
 ```
 
-In a new shell, type `bash --version` to assert your changes took effect and 
+In a new shell, type `bash --version` to assert your changes took effect and
 correctly modified your default bash version.
 
 2. Run the services:

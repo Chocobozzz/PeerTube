@@ -411,7 +411,7 @@ export class VideoRedundancyModel extends Model<Partial<AttributesOnly<VideoRedu
     return VideoRedundancyModel.scope([ ScopeNames.WITH_VIDEO ]).findOne(query)
   }
 
-  static async listLocalExpired () {
+  static async listLocalExpired (): Promise<MVideoRedundancyVideo[]> {
     const actor = await getServerActor()
 
     const query = {
@@ -470,16 +470,34 @@ export class VideoRedundancyModel extends Model<Partial<AttributesOnly<VideoRedu
 
     const query = {
       where: {
-        actorId: actor.id
+        [Op.and]: [
+          {
+            actorId: actor.id
+          },
+          {
+            [Op.or]: [
+              {
+                '$VideoStreamingPlaylist.id$': {
+                  [Op.ne]: null
+                }
+              },
+              {
+                '$VideoFile.id$': {
+                  [Op.ne]: null
+                }
+              }
+            ]
+          }
+        ]
       },
       include: [
         {
-          model: VideoFileModel,
+          model: VideoFileModel.unscoped(),
           required: false,
           include: [ buildVideoInclude() ]
         },
         {
-          model: VideoStreamingPlaylistModel,
+          model: VideoStreamingPlaylistModel.unscoped(),
           required: false,
           include: [ buildVideoInclude() ]
         }
@@ -681,6 +699,13 @@ export class VideoRedundancyModel extends Model<Partial<AttributesOnly<VideoRedu
     if (this.VideoStreamingPlaylist?.Video) return this.VideoStreamingPlaylist.Video
 
     return undefined
+  }
+
+  getVideoUUID () {
+    const video = this.getVideo()
+    if (!video) return undefined
+
+    return video.uuid
   }
 
   isOwned () {

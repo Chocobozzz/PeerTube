@@ -1,94 +1,53 @@
 
-import { switchMap } from 'rxjs/operators'
-import { Component, ComponentFactoryResolver, OnDestroy, OnInit } from '@angular/core'
-import { ActivatedRoute, Router } from '@angular/router'
-import { AuthService, LocalStorageService, Notifier, ScopedTokensService, ScreenService, ServerService, UserService } from '@app/core'
+import { firstValueFrom } from 'rxjs'
+import { switchMap, tap } from 'rxjs/operators'
+import { Component } from '@angular/core'
+import { AuthService, ComponentPaginationLight, DisableForReuseHook, ScopedTokensService } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
-import { immutableAssign } from '@app/helpers'
 import { VideoService } from '@app/shared/shared-main'
 import { UserSubscriptionService } from '@app/shared/shared-user-subscription'
-import { AbstractVideoList } from '@app/shared/shared-video-miniature'
-import { FeedFormat, VideoSortField } from '@shared/models'
-import { environment } from '../../../environments/environment'
-import { copyToClipboard } from '../../../root-helpers/utils'
+import { VideoFilters } from '@app/shared/shared-video-miniature'
+import { VideoSortField } from '@shared/models'
 
 @Component({
   selector: 'my-videos-user-subscriptions',
-  styleUrls: [ '../../shared/shared-video-miniature/abstract-video-list.scss' ],
-  templateUrl: '../../shared/shared-video-miniature/abstract-video-list.html'
+  templateUrl: './video-user-subscriptions.component.html'
 })
-export class VideoUserSubscriptionsComponent extends AbstractVideoList implements OnInit, OnDestroy {
-  titlePage: string
-  sort = '-publishedAt' as VideoSortField
-  groupByDate = true
+export class VideoUserSubscriptionsComponent implements DisableForReuseHook {
+  getVideosObservableFunction = this.getVideosObservable.bind(this)
+  getSyndicationItemsFunction = this.getSyndicationItems.bind(this)
+
+  defaultSort = '-publishedAt' as VideoSortField
+
+  actions = [
+    {
+      routerLink: '/my-library/subscriptions',
+      label: $localize`Subscriptions`,
+      iconName: 'cog' as 'cog'
+    }
+  ]
+
+  titlePage = $localize`Videos from your subscriptions`
+
+  disabled = false
+
+  private feedToken: string
 
   constructor (
-    protected router: Router,
-    protected serverService: ServerService,
-    protected route: ActivatedRoute,
-    protected notifier: Notifier,
-    protected authService: AuthService,
-    protected userService: UserService,
-    protected screenService: ScreenService,
-    protected storageService: LocalStorageService,
+    private authService: AuthService,
     private userSubscription: UserSubscriptionService,
-    protected cfr: ComponentFactoryResolver,
     private hooks: HooksService,
     private videoService: VideoService,
     private scopedTokensService: ScopedTokensService
   ) {
-    super()
 
-    this.titlePage = $localize`Videos from your subscriptions`
-
-    this.actions.push({
-      routerLink: '/my-library/subscriptions',
-      label: $localize`Subscriptions`,
-      iconName: 'cog'
-    })
   }
 
-  ngOnInit () {
-    super.ngOnInit()
-
-    const user = this.authService.getUser()
-    let feedUrl = environment.originServerUrl
-
-    this.authService.userInformationLoaded
-      .pipe(switchMap(() => this.scopedTokensService.getScopedTokens()))
-      .subscribe(
-        tokens => {
-          const feeds = this.videoService.getVideoSubscriptionFeedUrls(user.account.id, tokens.feedToken)
-          feedUrl = feedUrl + feeds.find(f => f.format === FeedFormat.RSS).url
-
-          this.actions.unshift({
-            label: $localize`Copy feed URL`,
-            iconName: 'syndication',
-            justIcon: true,
-            href: feedUrl,
-            click: e => {
-              e.preventDefault()
-              copyToClipboard(feedUrl)
-              this.activateCopiedMessage()
-            }
-          })
-        },
-
-        err => {
-          this.notifier.error(err.message)
-        }
-      )
-  }
-
-  ngOnDestroy () {
-    super.ngOnDestroy()
-  }
-
-  getVideosObservable (page: number) {
-    const newPagination = immutableAssign(this.pagination, { currentPage: page })
+  getVideosObservable (pagination: ComponentPaginationLight, filters: VideoFilters) {
     const params = {
-      videoPagination: newPagination,
-      sort: this.sort,
+      ...filters.toVideosAPIObject(),
+
+      videoPagination: pagination,
       skipCount: true
     }
 
@@ -101,12 +60,32 @@ export class VideoUserSubscriptionsComponent extends AbstractVideoList implement
     )
   }
 
-  generateSyndicationList () {
-    /* method disabled: the view provides its own */
-    throw new Error('Method not implemented.')
+  getSyndicationItems () {
+    return this.loadFeedToken()
+      .then(() => {
+        const user = this.authService.getUser()
+
+        return this.videoService.getVideoSubscriptionFeedUrls(user.account.id, this.feedToken)
+      })
   }
 
-  activateCopiedMessage () {
-    this.notifier.success($localize`Feed URL copied`)
+  disableForReuse () {
+    this.disabled = true
+  }
+
+  enabledForReuse () {
+    this.disabled = false
+  }
+
+  private loadFeedToken () {
+    if (this.feedToken) return Promise.resolve(this.feedToken)
+
+    const obs = this.authService.userInformationLoaded
+      .pipe(
+        switchMap(() => this.scopedTokensService.getScopedTokens()),
+        tap(tokens => this.feedToken = tokens.feedToken)
+      )
+
+    return firstValueFrom(obs)
   }
 }

@@ -1,22 +1,8 @@
-import { Observable } from 'rxjs'
-import {
-  AfterContentInit,
-  Component,
-  ComponentFactoryResolver,
-  ContentChildren,
-  EventEmitter,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output,
-  QueryList,
-  TemplateRef
-} from '@angular/core'
-import { ActivatedRoute, Router } from '@angular/router'
-import { AuthService, ComponentPagination, LocalStorageService, Notifier, ScreenService, ServerService, User, UserService } from '@app/core'
+import { Observable, Subject } from 'rxjs'
+import { AfterContentInit, Component, ContentChildren, EventEmitter, Input, Output, QueryList, TemplateRef } from '@angular/core'
+import { ComponentPagination, Notifier, User } from '@app/core'
 import { ResultList, VideoSortField } from '@shared/models'
 import { PeerTubeTemplateDirective, Video } from '../shared-main'
-import { AbstractVideoList } from './abstract-video-list'
 import { MiniatureDisplayOptions } from './video-miniature.component'
 
 export type SelectionType = { [ id: number ]: boolean }
@@ -26,14 +12,18 @@ export type SelectionType = { [ id: number ]: boolean }
   templateUrl: './videos-selection.component.html',
   styleUrls: [ './videos-selection.component.scss' ]
 })
-export class VideosSelectionComponent extends AbstractVideoList implements OnInit, OnDestroy, AfterContentInit {
+export class VideosSelectionComponent implements AfterContentInit {
   @Input() user: User
   @Input() pagination: ComponentPagination
+
   @Input() titlePage: string
+
   @Input() miniatureDisplayOptions: MiniatureDisplayOptions
+
   @Input() noResultMessage = $localize`No results.`
   @Input() enableSelection = true
-  @Input() loadOnInit = true
+
+  @Input() disabled = false
 
   @Input() getVideosObservableFunction: (page: number, sort?: VideoSortField) => Observable<ResultList<Video>>
 
@@ -47,19 +37,18 @@ export class VideosSelectionComponent extends AbstractVideoList implements OnIni
   rowButtonsTemplate: TemplateRef<any>
   globalButtonsTemplate: TemplateRef<any>
 
+  videos: Video[] = []
+  sort: VideoSortField = '-publishedAt'
+
+  onDataSubject = new Subject<any[]>()
+
+  hasDoneFirstQuery = false
+
+  private lastQueryLength: number
+
   constructor (
-    protected router: Router,
-    protected route: ActivatedRoute,
-    protected notifier: Notifier,
-    protected authService: AuthService,
-    protected userService: UserService,
-    protected screenService: ScreenService,
-    protected storageService: LocalStorageService,
-    protected serverService: ServerService,
-    protected cfr: ComponentFactoryResolver
-  ) {
-    super()
-  }
+    private notifier: Notifier
+  ) { }
 
   @Input() get selection () {
     return this._selection
@@ -79,10 +68,6 @@ export class VideosSelectionComponent extends AbstractVideoList implements OnIni
     this.videosModelChange.emit(this.videos)
   }
 
-  ngOnInit () {
-    super.ngOnInit()
-  }
-
   ngAfterContentInit () {
     {
       const t = this.templates.find(t => t.name === 'rowButtons')
@@ -93,10 +78,8 @@ export class VideosSelectionComponent extends AbstractVideoList implements OnIni
       const t = this.templates.find(t => t.name === 'globalButtons')
       if (t) this.globalButtonsTemplate = t.template
     }
-  }
 
-  ngOnDestroy () {
-    super.ngOnDestroy()
+    this.loadMoreVideos()
   }
 
   getVideosObservable (page: number) {
@@ -108,14 +91,53 @@ export class VideosSelectionComponent extends AbstractVideoList implements OnIni
   }
 
   isInSelectionMode () {
-    return Object.keys(this._selection).some(k => this._selection[ k ] === true)
+    return Object.keys(this._selection).some(k => this._selection[k] === true)
   }
 
-  generateSyndicationList () {
-    throw new Error('Method not implemented.')
+  videoById (index: number, video: Video) {
+    return video.id
   }
 
-  protected onMoreVideos () {
-    this.videosModel = this.videos
+  onNearOfBottom () {
+    if (this.disabled) return
+
+    // No more results
+    if (this.lastQueryLength !== undefined && this.lastQueryLength < this.pagination.itemsPerPage) return
+
+    this.pagination.currentPage += 1
+
+    this.loadMoreVideos()
+  }
+
+  loadMoreVideos (reset = false) {
+    this.getVideosObservable(this.pagination.currentPage)
+      .subscribe({
+        next: ({ data }) => {
+          this.hasDoneFirstQuery = true
+          this.lastQueryLength = data.length
+
+          if (reset) this.videos = []
+          this.videos = this.videos.concat(data)
+          this.videosModel = this.videos
+
+          this.onDataSubject.next(data)
+        },
+
+        error: err => {
+          const message = $localize`Cannot load more videos. Try again later.`
+
+          console.error(message, { err })
+          this.notifier.error(message)
+        }
+      })
+  }
+
+  reloadVideos () {
+    this.pagination.currentPage = 1
+    this.loadMoreVideos(true)
+  }
+
+  removeVideoFromArray (video: Video) {
+    this.videos = this.videos.filter(v => v.id !== video.id)
   }
 }

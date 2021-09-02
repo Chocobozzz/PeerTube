@@ -30,16 +30,16 @@ export type RegisterClientHelpers = {
   getServerConfig: () => Promise<ServerConfig>
 
   notifier: {
-    info: (text: string, title?: string, timeout?: number) => void,
-    error: (text: string, title?: string, timeout?: number) => void,
+    info: (text: string, title?: string, timeout?: number) => void
+    error: (text: string, title?: string, timeout?: number) => void
     success: (text: string, title?: string, timeout?: number) => void
   }
 
   showModal: (input: {
-    title: string,
-    content: string,
-    close?: boolean,
-    cancel?: { value: string, action?: () => void },
+    title: string
+    content: string
+    close?: boolean
+    cancel?: { value: string, action?: () => void }
     confirm?: { value: string, action?: () => void }
   }) => void
 

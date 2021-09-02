@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { getServerActor } from '@server/models/application/application'
 import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
 import { isRootActivityValid } from '../../../helpers/custom-validators/activitypub/activity'

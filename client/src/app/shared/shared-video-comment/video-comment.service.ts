@@ -37,8 +37,8 @@ export class VideoCommentService {
 
     return this.authHttp.post<{ comment: VideoCommentServerModel }>(url, normalizedComment)
                .pipe(
-                  map(data => this.extractVideoComment(data.comment)),
-                  catchError(err => this.restExtractor.handleError(err))
+                 map(data => this.extractVideoComment(data.comment)),
+                 catchError(err => this.restExtractor.handleError(err))
                )
   }
 
@@ -54,8 +54,8 @@ export class VideoCommentService {
   }
 
   getAdminVideoComments (options: {
-    pagination: RestPagination,
-    sort: SortMeta,
+    pagination: RestPagination
+    sort: SortMeta
     search?: string
   }): Observable<ResultList<VideoCommentAdmin>> {
     const { pagination, sort, search } = options
@@ -75,8 +75,8 @@ export class VideoCommentService {
   }
 
   getVideoCommentThreads (parameters: {
-    videoId: number | string,
-    componentPagination: ComponentPaginationLight,
+    videoId: number | string
+    componentPagination: ComponentPaginationLight
     sort: string
   }): Observable<ThreadsResultList<VideoComment>> {
     const { videoId, componentPagination, sort } = parameters
@@ -95,7 +95,7 @@ export class VideoCommentService {
   }
 
   getVideoThreadComments (parameters: {
-    videoId: number | string,
+    videoId: number | string
     threadId: number
   }): Observable<VideoCommentThreadTree> {
     const { videoId, threadId } = parameters

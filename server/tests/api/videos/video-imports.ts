@@ -336,6 +336,32 @@ Ajouter un sous-titre est vraiment facile`)
     expect(maxResolution, 'expected max resolution not met').to.equals(VideoResolution.H_1080P)
   })
 
+  it('Should import a peertube video', async function () {
+    this.timeout(120_000)
+
+    // TODO: include peertube_short when https://github.com/ytdl-org/youtube-dl/pull/29475 is merged
+    for (const targetUrl of [ FIXTURE_URLS.peertube_long ]) {
+    // for (const targetUrl of [ FIXTURE_URLS.peertube_long, FIXTURE_URLS.peertube_short ]) {
+      await servers[0].config.disableTranscoding()
+
+      const attributes = {
+        targetUrl,
+        channelId: channelIdServer1,
+        privacy: VideoPrivacy.PUBLIC
+      }
+      const { video } = await servers[0].imports.importVideo({ attributes })
+      const videoUUID = video.uuid
+
+      await waitJobs(servers)
+
+      for (const server of servers) {
+        const video = await server.videos.get({ id: videoUUID })
+
+        expect(video.name).to.equal('E2E tests')
+      }
+    }
+  })
+
   after(async function () {
     await cleanupTests(servers)
   })

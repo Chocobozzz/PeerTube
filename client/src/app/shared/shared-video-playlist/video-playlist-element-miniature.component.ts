@@ -88,14 +88,14 @@ export class VideoPlaylistElementMiniatureComponent implements OnInit {
     const videoId = this.playlistElement.video ? this.playlistElement.video.id : undefined
 
     this.videoPlaylistService.removeVideoFromPlaylist(this.playlist.id, playlistElement.id, videoId)
-        .subscribe(
-          () => {
+        .subscribe({
+          next: () => {
             this.notifier.success($localize`Video removed from ${this.playlist.displayName}`)
             this.elementRemoved.emit(playlistElement)
           },
 
-          err => this.notifier.error(err.message)
-        )
+          error: err => this.notifier.error(err.message)
+        })
 
     this.moreDropdown.close()
   }
@@ -107,8 +107,8 @@ export class VideoPlaylistElementMiniatureComponent implements OnInit {
     body.stopTimestamp = this.timestampOptions.stopTimestampEnabled ? this.timestampOptions.stopTimestamp : null
 
     this.videoPlaylistService.updateVideoOfPlaylist(this.playlist.id, playlistElement.id, body, this.playlistElement.video.id)
-        .subscribe(
-          () => {
+        .subscribe({
+          next: () => {
             this.notifier.success($localize`Timestamps updated`)
 
             playlistElement.startTimestamp = body.startTimestamp
@@ -117,8 +117,8 @@ export class VideoPlaylistElementMiniatureComponent implements OnInit {
             this.cdr.detectChanges()
           },
 
-          err => this.notifier.error(err.message)
-        )
+          error: err => this.notifier.error(err.message)
+        })
 
     this.moreDropdown.close()
   }

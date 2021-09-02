@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { ProblemDocument, ProblemDocumentExtension } from 'http-problem-details'
 import { HttpStatusCode } from '@shared/models'
 

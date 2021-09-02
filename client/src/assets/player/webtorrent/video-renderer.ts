@@ -3,7 +3,7 @@
 
 const MediaElementWrapper = require('mediasource')
 import { extname } from 'path'
-const videostream = require('videostream')
+const Videostream = require('videostream')
 
 const VIDEOSTREAM_EXTS = [
   '.m4a',
@@ -34,7 +34,7 @@ function renderMedia (file: any, elem: HTMLVideoElement, opts: RenderMediaOption
   let renderer: any
 
   try {
-    if (VIDEOSTREAM_EXTS.indexOf(extension) >= 0) {
+    if (VIDEOSTREAM_EXTS.includes(extension)) {
       renderer = useVideostream()
     } else {
       renderer = useMediaSource()
@@ -51,7 +51,7 @@ function renderMedia (file: any, elem: HTMLVideoElement, opts: RenderMediaOption
       return callback(err)
     })
     preparedElem.addEventListener('loadstart', onLoadStart)
-    return new videostream(file, preparedElem)
+    return new Videostream(file, preparedElem)
   }
 
   function useMediaSource (useVP9 = false) {
@@ -62,7 +62,7 @@ function renderMedia (file: any, elem: HTMLVideoElement, opts: RenderMediaOption
       preparedElem.removeEventListener('error', onError)
 
       // Try with vp9 before returning an error
-      if (codecs.indexOf('vp8') !== -1) return fallbackToMediaSource(true)
+      if (codecs.includes('vp8')) return fallbackToMediaSource(true)
 
       return callback(err)
     })

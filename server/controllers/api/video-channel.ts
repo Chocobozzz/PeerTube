@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { pickCommonVideoQuery } from '@server/helpers/query'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { getServerActor } from '@server/models/application/application'
@@ -108,7 +108,7 @@ videoChannelRouter.delete('/:nameWithHost',
 
 videoChannelRouter.get('/:nameWithHost',
   asyncMiddleware(videoChannelsNameWithHostValidator),
-  asyncMiddleware(getVideoChannel)
+  getVideoChannel
 )
 
 videoChannelRouter.get('/:nameWithHost/video-playlists',
@@ -281,7 +281,7 @@ async function removeVideoChannel (req: express.Request, res: express.Response) 
   return res.type('json').status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
-async function getVideoChannel (req: express.Request, res: express.Response) {
+function getVideoChannel (req: express.Request, res: express.Response) {
   const videoChannel = res.locals.videoChannel
 
   if (videoChannel.isOutdated()) {

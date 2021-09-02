@@ -6,7 +6,6 @@ import { accessSync, constants } from 'fs'
 import { remove } from 'fs-extra'
 import { truncate } from 'lodash'
 import { join } from 'path'
-import * as prompt from 'prompt'
 import { promisify } from 'util'
 import { YoutubeDL } from '@server/helpers/youtube-dl'
 import { sha256 } from '../helpers/core-utils'
@@ -21,6 +20,8 @@ import {
   getServerCredentials
 } from './cli'
 import { PeerTubeServer } from '@shared/extra-utils'
+
+import prompt = require('prompt')
 
 const processOptions = {
   maxBuffer: Infinity
@@ -407,7 +408,7 @@ function getYoutubeDLInfo (youtubeDL: any, url: string, args: string[]) {
   return new Promise<any>((res, rej) => {
     const options = [ '-j', '--flat-playlist', '--playlist-reverse', ...args ]
 
-    youtubeDL.getInfo(url, options, processOptions, async (err, info) => {
+    youtubeDL.getInfo(url, options, processOptions, (err, info) => {
       if (err) return rej(err)
 
       return res(info)

@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { body, query } from 'express-validator'
 import { isNotEmptyIntArray, toBooleanOrNull } from '../../helpers/custom-validators/misc'
 import { isUserNotificationSettingValid } from '../../helpers/custom-validators/user-notifications'
