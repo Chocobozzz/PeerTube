@@ -1,3 +1,4 @@
+import { FIXTURE_URLS } from '../urls'
 import { browserSleep, go } from '../utils'
 
 export class VideoWatchPage {
@@ -50,15 +51,11 @@ export class VideoWatchPage {
   }
 
   goOnP2PMediaLoaderEmbed () {
-    return go(
-      'https://peertube2.cpy.re/videos/embed/969bf103-7818-43b5-94a0-de159e13de50'
-    )
+    return go(FIXTURE_URLS.HLS_EMBED)
   }
 
   goOnP2PMediaLoaderPlaylistEmbed () {
-    return go(
-      'https://peertube2.cpy.re/video-playlists/embed/73804a40-da9a-40c2-b1eb-2c6d9eec8f0a'
-    )
+    return go(FIXTURE_URLS.HLS_PLAYLIST_EMBED)
   }
 
   async clickOnVideo (videoName: string) {

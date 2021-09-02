@@ -22,7 +22,7 @@
   },
   "typings": "*.d.ts",
   "scripts": {
-    "e2e": "bash ./scripts/e2e/index.sh",
+    "e2e:browserstack": "bash ./scripts/e2e/browserstack.sh",
     "e2e:local": "bash ./scripts/e2e/local.sh",
     "setup:cli": "bash ./scripts/setup/cli.sh",
     "build": "bash ./scripts/build/index.sh",

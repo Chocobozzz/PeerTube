@@ -4,6 +4,7 @@ import { PlayerPage } from './po/player.po'
 import { VideoUpdatePage } from './po/video-update.po'
 import { VideoUploadPage } from './po/video-upload.po'
 import { VideoWatchPage } from './po/video-watch.po'
+import { FIXTURE_URLS } from './urls'
 import { browserSleep, go, isIOS, isMobileDevice, isSafari } from './utils'
 
 function isUploadUnsupported () {
@@ -91,7 +92,7 @@ describe('Videos workflow', () => {
     let videoNameToExcept = videoName
 
     if (isMobileDevice() || isSafari()) {
-      await go('https://peertube2.cpy.re/w/122d093a-1ede-43bd-bd34-59d2931ffc5e')
+      await go(FIXTURE_URLS.WEBTORRENT_VIDEO)
       videoNameToExcept = 'E2E tests'
     } else {
       await videoWatchPage.clickOnVideo(videoName)
@@ -103,21 +104,21 @@ describe('Videos workflow', () => {
   it('Should play the video', async () => {
     videoWatchUrl = await browser.getUrl()
 
-    await playerPage.playAndPauseVideo(true)
+    await playerPage.playAndPauseVideo(true, 2)
     expect(await playerPage.getWatchVideoPlayerCurrentTime()).toBeGreaterThanOrEqual(2)
   })
 
   it('Should watch the associated embed video', async () => {
     await videoWatchPage.goOnAssociatedEmbed()
 
-    await playerPage.playAndPauseVideo(false)
+    await playerPage.playAndPauseVideo(false, 2)
     expect(await playerPage.getWatchVideoPlayerCurrentTime()).toBeGreaterThanOrEqual(2)
   })
 
   it('Should watch the p2p media loader embed video', async () => {
     await videoWatchPage.goOnP2PMediaLoaderEmbed()
 
-    await playerPage.playAndPauseVideo(false)
+    await playerPage.playAndPauseVideo(false, 2)
     expect(await playerPage.getWatchVideoPlayerCurrentTime()).toBeGreaterThanOrEqual(2)
   })
 

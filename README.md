@@ -31,8 +31,8 @@ Be part of a network of multiple small federated, interoperable video hosting pr
 
   <br />
 
-  <a href="https://automate.browserstack.com/public-build/VHUxYy9zYnZqWnkxTTcyNEpPRVdzY2VzN1VhY3hBQUIrYTk2NGFtMnMvTT0tLWxuMk1vVnBzeDJ4cFpFY1JEK2xjSUE9PQ==--cf445693d1fc03efd86a3a5030d079a0de3ece7a">
-    <img src="https://automate.browserstack.com/badge.svg?badge_key=VHUxYy9zYnZqWnkxTTcyNEpPRVdzY2VzN1VhY3hBQUIrYTk2NGFtMnMvTT0tLWxuMk1vVnBzeDJ4cFpFY1JEK2xjSUE9PQ==--cf445693d1fc03efd86a3a5030d079a0de3ece7a"/>
+  <a href="https://automate.browserstack.com/public-build/ZEZqamJQUXFQd1l3cFp3QmxLSVVwdjBGZjNGc3J2M09INFpka296em9VYz0tLUowWVdoemxkY1hBOU9aZzNlY1htZ3c9PQ==--68e0184ce76481d36559d681d9cddc68235ff536">
+    <img src="https://automate.browserstack.com/badge.svg?badge_key=ZEZqamJQUXFQd1l3cFp3QmxLSVVwdjBGZjNGc3J2M09INFpka296em9VYz0tLUowWVdoemxkY1hBOU9aZzNlY1htZ3c9PQ==--68e0184ce76481d36559d681d9cddc68235ff536"/>
   </a>
 
   <a href="https://weblate.framasoft.org/projects/peertube/angular/">

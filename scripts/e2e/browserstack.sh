@@ -4,11 +4,6 @@ set -eu
 
 npm run clean:server:test
 
-(
-    cd client
-    npm run webpack -- --config webpack/webpack.video-embed.js --mode development
-)
-
 npm run concurrently -- -k -s first \
-    "cd client && npm run ng -- e2e --port 3333" \
+    "cd client/e2e && ../node_modules/.bin/wdio run ./wdio.browserstack.conf.ts" \
     "NODE_ENV=test NODE_APP_INSTANCE=1 NODE_CONFIG='{ \"log\": { \"level\": \"warn\" }, \"signup\": { \"enabled\": false } }' node dist/server"

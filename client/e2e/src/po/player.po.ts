@@ -5,13 +5,12 @@ export class PlayerPage {
   getWatchVideoPlayerCurrentTime () {
     const elem = $('video')
 
-    if (isIOS()) {
-      return elem.getAttribute('currentTime')
-        .then(t => parseInt(t, 10))
-        .then(t => Math.round(t))
-    }
+    const p = isIOS()
+      ? elem.getAttribute('currentTime')
+      : elem.getProperty('currentTime')
 
-    return elem.getProperty('currentTime')
+    return p.then(t => parseInt(t + '', 10))
+            .then(t => Math.ceil(t))
   }
 
   waitUntilPlaylistInfo (text: string, maxTime: number) {
@@ -26,7 +25,7 @@ export class PlayerPage {
     })
   }
 
-  async playAndPauseVideo (isAutoplay: boolean) {
+  async playAndPauseVideo (isAutoplay: boolean, waitUntilSec: number) {
     const videojsElem = () => $('div.video-js')
 
     await videojsElem().waitForExist()
@@ -43,10 +42,8 @@ export class PlayerPage {
     await browserSleep(2000)
 
     await browser.waitUntil(async () => {
-      return !await $('.vjs-loading-spinner').isDisplayedInViewport()
-    }, { timeout: 20 * 1000 })
-
-    await browserSleep(4000)
+      return (await this.getWatchVideoPlayerCurrentTime()) >= 2
+    })
 
     await videojsElem().click()
   }
