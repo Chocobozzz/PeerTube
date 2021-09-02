@@ -258,12 +258,8 @@ export class PeerTubeEmbed {
   }
 
   async init () {
-    try {
-      this.userTokens = Tokens.load()
-      await this.initCore()
-    } catch (e) {
-      console.error(e)
-    }
+    this.userTokens = Tokens.load()
+    await this.initCore()
   }
 
   private initializeApi () {
@@ -791,4 +787,8 @@ export class PeerTubeEmbed {
 }
 
 PeerTubeEmbed.main()
-  .catch(err => console.error('Cannot init embed.', err))
+  .catch(err => {
+    (window as any).displayIncompatibleBrowser()
+
+    console.error('Cannot init embed.', err)
+  })

@@ -44,5 +44,31 @@
 
     <div id="placeholder-preview"></div>
 
+    <script type="text/javascript">
+      // Can be called in embed.ts
+      window.displayIncompatibleBrowser = function () {
+        const text = 'The player is not compatible with your web browser. Please try latest Firefox version.'
+
+        document.title = 'Sorry' + ' - ' + text
+
+        const errorBlock = document.getElementById('error-block')
+        errorBlock.style.display = 'flex'
+
+        const errorTitle = document.getElementById('error-title')
+        errorTitle.innerHTML = 'Sorry'
+
+        const errorText = document.getElementById('error-content')
+        errorText.innerHTML = text
+      }
+
+      window.onerror = function () {
+        window.displayIncompatibleBrowser()
+      }
+
+      if (/MSIE|Trident/.test(window.navigator.userAgent) ) {
+        window.displayIncompatibleBrowser()
+      }
+    </script>
+
   </body>
 </html>
