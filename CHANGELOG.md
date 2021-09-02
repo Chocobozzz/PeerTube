@@ -5,6 +5,7 @@
 ### IMPORTANT NOTES
 
  * **Important:** Due to a bug in ffmpeg, PeerTube is not compatible with ffmpeg 4.4. See https://github.com/Chocobozzz/PeerTube/issues/3990
+ * **Debian Bullseye admins:** Debian Bullseye removed `python` binary/link in favour of explicit `python2`/`python3` binaries. But `youtube-dl` used by PeerTube needs it so you'll have to install [python-is-python2](https://packages.debian.org/bullseye/python-is-python2) or [python-is-python3](https://packages.debian.org/bullseye/python-is-python3) **before** upgrading PeerTube
  * PeerTube now supports NodeJS 16
 
 ### Plugins/Themes/Embed API

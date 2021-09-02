@@ -7,16 +7,17 @@ _note_: only **LTS** versions of external dependencies are supported. If no LTS 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-
 - [Debian / Ubuntu and derivatives](#debian--ubuntu-and-derivatives)
 - [Arch Linux](#arch-linux)
 - [CentOS 7](#centos-7)
-- [CentOS 8](#centos-8)
+- [Centos 8](#centos-8)
+- [Rocky Linux 8.4](#rocky-linux-84)
 - [Fedora](#fedora)
-- [RHEL 8](#red-hat-enterprise-linux-8)
+- [Red Hat Enterprise Linux 8](#red-hat-enterprise-linux-8)
 - [FreeBSD](#freebsd)
 - [macOS](#macos)
 - [Gentoo](#gentoo)
+- [OpenBSD](#openbsd)
 - [Other distributions](#other-distributions)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -36,11 +37,29 @@ _note_: only **LTS** versions of external dependencies are supported. If no LTS 
 4. Install yarn, and be sure to have [a recent version](https://github.com/yarnpkg/yarn/releases/latest):
 [https://yarnpkg.com/en/docs/install#linux-tab](https://yarnpkg.com/en/docs/install#linux-tab)
 
-5. Run:
+5. Install Python:
+
+On Ubuntu <= bionic (18.04 LTS) or Debian <= Buster:
 
 ```
 sudo apt update
-sudo apt install certbot nginx ffmpeg postgresql postgresql-contrib openssl g++ make redis-server git python-dev cron wget
+sudo apt install python-dev
+python --version # Should be >= 2.x or >= 3.x
+```
+
+On Ubuntu >= focal (20.04 LTS) or Debian >= Bullseye:
+
+```
+sudo apt update
+sudo apt install python3-dev python-is-python3 # python-is-python2 should also work
+python --version # Should be >= 2.x or >= 3.x
+```
+
+6. Install common dependencies:
+
+```
+sudo apt update
+sudo apt install certbot nginx ffmpeg postgresql postgresql-contrib openssl g++ make redis-server git cron wget
 ffmpeg -version # Should be >= 4.1
 g++ -v # Should be >= 5.x
 ```
@@ -56,7 +75,7 @@ sudo systemctl start redis postgresql
 1. Run:
 
 ```
-sudo pacman -S nodejs-lts-fermium  yarn ffmpeg postgresql openssl redis git wget unzip python2 base-devel npm nginx
+sudo pacman -S nodejs-lts-fermium  yarn ffmpeg postgresql openssl redis git wget unzip python base-devel npm nginx
 ```
 
 Now that dependencies are installed, before running PeerTube you should start PostgreSQL and Redis:
