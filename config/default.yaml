@@ -212,7 +212,8 @@ peertube:
 
 webadmin:
   configuration:
-    allow_edits: true
+    edit: 
+      allowed: true
 
 cache:
   previews:

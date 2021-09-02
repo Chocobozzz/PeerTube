@@ -1,7 +1,3 @@
-allow_webadmin_config: 
-  __name: "PEERTUBE_ALLOW_WEBADMIN_CONFIG"
-  __format: "json"
-
 webserver:
   hostname: "PEERTUBE_WEBSERVER_HOSTNAME"
   port:
@@ -48,6 +44,13 @@ smtp:
     __name: "PEERTUBE_SMTP_DISABLE_STARTTLS"
     __format: "json"
   from_address: "PEERTUBE_SMTP_FROM"
+
+webadmin:
+  configuration:
+    edit:
+      allowed: 
+        __name: "PEERTUBE_ALLOW_WEBADMIN_CONFIG"
+        __format: "json"
 
 log:
   level: "PEERTUBE_LOG_LEVEL"

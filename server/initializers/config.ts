@@ -177,7 +177,9 @@ const CONFIG = {
   },
   WEBADMIN: {
     CONFIGURATION: {
-      ALLOW_EDITS: config.get<boolean>('webadmin.configuration.allow_edits')
+      EDITS: {
+        ALLOWED: config.get<boolean>('webadmin.configuration.edit.allowed')
+      }
     }
   },
   ADMIN: {
