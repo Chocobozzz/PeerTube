@@ -15,6 +15,7 @@ import { ActorImageModel } from '../server/models/actor/actor-image'
 import { uniq, values } from 'lodash'
 import { ThumbnailType } from '@shared/models'
 import { VideoFileModel } from '@server/models/video/video-file'
+import { HLS_REDUNDANCY_DIRECTORY } from '@server/initializers/constants'
 
 run()
   .then(() => process.exit(0))
@@ -121,6 +122,9 @@ async function doesRedundancyExist (filePath: string) {
   const isPlaylist = (await stat(filePath)).isDirectory()
 
   if (isPlaylist) {
+    // Don't delete HLS directory
+    if (filePath === HLS_REDUNDANCY_DIRECTORY) return true
+
     const uuid = getUUIDFromFilename(filePath)
     const video = await VideoModel.loadWithFiles(uuid)
     if (!video) return false
