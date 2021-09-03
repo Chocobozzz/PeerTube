@@ -379,7 +379,7 @@ describe('Test static config', function () {
   before(async function () {
     this.timeout(30000)
 
-    server = await createSingleServer(1, { allow_webadmin_config: false })
+    server = await createSingleServer(1, { webadmin: { configuration: { edit: { allowed: false } } } })
     await setAccessTokensToServers([ server ])
   })
 

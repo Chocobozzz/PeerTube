@@ -34,7 +34,7 @@ input[type=number] {
     right: 2.5rem;
   }
 
-  &>input[disabled] {
+  input[disabled] {
     background-color: #f9f9f9;
     pointer-events: none;
   }
