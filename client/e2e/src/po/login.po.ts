@@ -1,6 +1,7 @@
 import { go } from '../utils'
 
 export class LoginPage {
+
   async loginAsRootUser () {
     await go('/login')
 
@@ -8,7 +9,7 @@ export class LoginPage {
     await browser.execute(`window.localStorage.setItem('no_welcome_modal', 'true')`)
 
     await $('input#username').setValue('root')
-    await $('input#password').setValue('test1')
+    await $('input#password').setValue('test' + this.getSuffix())
 
     await browser.pause(1000)
 
@@ -19,7 +20,24 @@ export class LoginPage {
     await expect(this.getLoggedInInfoElem()).toHaveText('root')
   }
 
+  async logout () {
+    await $('.logged-in-more').click()
+
+    const logout = () => $('.dropdown-item*=Log out')
+
+    await logout().waitForDisplayed()
+    await logout().click()
+
+    await $('.login-buttons-block').waitForDisplayed()
+  }
+
   private getLoggedInInfoElem () {
     return $('.logged-in-display-name')
+  }
+
+  private getSuffix () {
+    return browser.config.baseUrl
+      ? browser.config.baseUrl.slice(-1)
+      : '1'
   }
 }

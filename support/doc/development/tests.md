@@ -70,3 +70,18 @@ To run tests on browser stack:
 ```
 $ BROWSERSTACK_USER=your_user BROWSERSTACK_KEY=your_key npm run e2e:browserstack
 ```
+
+### Add E2E tests
+
+To add E2E tests and quickly run tests using a local Chrome, first create a test instance:
+
+```
+$ npm run clean:server:test && NODE_APP_INSTANCE=1 NODE_ENV=test npm start
+```
+
+Then, just run your suite using:
+
+```
+$ cd client/e2e
+$ ../node_modules/.bin/wdio wdio.local-test.conf.ts # you can also add --mochaOpts.grep to only run tests you want
+```

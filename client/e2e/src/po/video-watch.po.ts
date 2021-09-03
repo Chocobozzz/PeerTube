@@ -1,37 +1,16 @@
-import { FIXTURE_URLS } from '../urls'
-import { browserSleep, go } from '../utils'
+import { browserSleep, FIXTURE_URLS, go } from '../utils'
 
 export class VideoWatchPage {
-  async goOnVideosList (isMobileDevice: boolean, isSafari: boolean) {
-    let url: string
 
-    // We did not upload a file on a mobile device
-    if (isMobileDevice === true || isSafari === true) {
-      url = 'https://peertube2.cpy.re/videos/local'
-    } else {
-      url = '/videos/recently-added'
-    }
+  constructor (private isMobileDevice: boolean, private isSafari: boolean) {
 
-    await go(url)
-
-    // Waiting the following element does not work on Safari...
-    if (isSafari) return browserSleep(3000)
-
-    await $('.videos .video-miniature .video-miniature-name').waitForDisplayed()
   }
 
-  async getVideosListName () {
-    const elems = await $$('.videos .video-miniature .video-miniature-name')
-    const texts = await Promise.all(elems.map(e => e.getText()))
-
-    return texts.map(t => t.trim())
-  }
-
-  waitWatchVideoName (videoName: string, isMobileDevice: boolean, isSafari: boolean) {
-    if (isSafari) return browserSleep(5000)
+  waitWatchVideoName (videoName: string) {
+    if (this.isSafari) return browserSleep(5000)
 
     // On mobile we display the first node, on desktop the second
-    const index = isMobileDevice ? 0 : 1
+    const index = this.isMobileDevice ? 0 : 1
 
     return browser.waitUntil(async () => {
       return (await $$('.video-info .video-info-name')[index].getText()).includes(videoName)
@@ -56,42 +35,6 @@ export class VideoWatchPage {
 
   goOnP2PMediaLoaderPlaylistEmbed () {
     return go(FIXTURE_URLS.HLS_PLAYLIST_EMBED)
-  }
-
-  async clickOnVideo (videoName: string) {
-    const video = async () => {
-      const videos = await $$('.videos .video-miniature .video-miniature-name').filter(async e => {
-        const t = await e.getText()
-
-        return t === videoName
-      })
-
-      return videos[0]
-    }
-
-    await browser.waitUntil(async () => {
-      const elem = await video()
-
-      return elem?.isClickable()
-    });
-
-    (await video()).click()
-
-    await browser.waitUntil(async () => (await browser.getUrl()).includes('/w/'))
-  }
-
-  async clickOnFirstVideo () {
-    const video = () => $('.videos .video-miniature .video-thumbnail')
-    const videoName = () => $('.videos .video-miniature .video-miniature-name')
-
-    await video().waitForClickable()
-
-    const textToReturn = await videoName().getText()
-    await video().click()
-
-    await browser.waitUntil(async () => (await browser.getUrl()).includes('/w/'))
-
-    return textToReturn
   }
 
   async clickOnUpdate () {

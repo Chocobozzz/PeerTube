@@ -17,6 +17,7 @@ import {
   UserUpdateMe,
   UserVideoQuota
 } from '@shared/models'
+import { ServerService } from '../'
 import { environment } from '../../../environments/environment'
 import { RestExtractor, RestPagination, RestService } from '../rest'
 import { LocalStorageService, SessionStorageService } from '../wrappers/storage.service'
@@ -32,6 +33,7 @@ export class UserService {
 
   constructor (
     private authHttp: HttpClient,
+    private server: ServerService,
     private authService: AuthService,
     private restExtractor: RestExtractor,
     private restService: RestService,
@@ -298,9 +300,11 @@ export class UserService {
       console.error('Cannot parse desired video languages from localStorage.', err)
     }
 
+    const defaultNSFWPolicy = this.server.getHTMLConfig().instance.defaultNSFWPolicy
+
     return new User({
       // local storage keys
-      nsfwPolicy: this.localStorageService.getItem(UserLocalStorageKeys.NSFW_POLICY),
+      nsfwPolicy: this.localStorageService.getItem(UserLocalStorageKeys.NSFW_POLICY) || defaultNSFWPolicy,
       webTorrentEnabled: this.localStorageService.getItem(UserLocalStorageKeys.WEBTORRENT_ENABLED) !== 'false',
       theme: this.localStorageService.getItem(UserLocalStorageKeys.THEME) || 'instance-default',
       videoLanguages,

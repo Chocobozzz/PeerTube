@@ -28,10 +28,20 @@ async function go (url: string) {
   })
 }
 
+async function waitServerUp () {
+  await browser.waitUntil(async () => {
+    await go('/')
+    await browserSleep(500)
+
+    return $('<my-app>').isDisplayed()
+  }, { timeout: 20 * 1000 })
+}
+
 export {
   isMobileDevice,
   isSafari,
   isIOS,
+  waitServerUp,
   go,
   browserSleep
 }

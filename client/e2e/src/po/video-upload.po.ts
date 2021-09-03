@@ -1,4 +1,5 @@
 import { join } from 'path'
+import { clickOnCheckbox } from '../utils'
 
 export class VideoUploadPage {
   async navigateTo () {
@@ -28,6 +29,10 @@ export class VideoUploadPage {
       const klass = await actionButton.getAttribute('class')
       return !klass.includes('disabled')
     })
+  }
+
+  setAsNSFW () {
+    return clickOnCheckbox('nsfw')
   }
 
   async validSecondUploadStep (videoName: string) {

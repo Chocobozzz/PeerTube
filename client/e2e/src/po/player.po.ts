@@ -15,6 +15,9 @@ export class PlayerPage {
 
   waitUntilPlaylistInfo (text: string, maxTime: number) {
     return browser.waitUntil(async () => {
+      // Without this we have issues on iphone
+      await $('.video-js').click()
+
       return (await $('.video-js .vjs-playlist-info').getText()).includes(text)
     }, { timeout: maxTime })
   }
@@ -42,7 +45,7 @@ export class PlayerPage {
     await browserSleep(2000)
 
     await browser.waitUntil(async () => {
-      return (await this.getWatchVideoPlayerCurrentTime()) >= 2
+      return (await this.getWatchVideoPlayerCurrentTime()) >= waitUntilSec
     })
 
     await videojsElem().click()

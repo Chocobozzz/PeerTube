@@ -10,12 +10,11 @@ module.exports = {
 
     runner: 'local',
 
-    maxInstances: 1,
+    maxInstances: 2,
 
     capabilities: [
       {
         browserName: 'chrome',
-        acceptInsecureCerts: true,
         'goog:chromeOptions': {
           prefs
         }
@@ -23,21 +22,20 @@ module.exports = {
       {
         browserName: 'firefox',
         'moz:firefoxOptions': {
-          // args: [ '-headless' ],
           binary: '/usr/bin/firefox-developer-edition',
-          prefs
-        }
-      },
-      {
-        browserName: 'firefox',
-        'moz:firefoxOptions': {
-          // args: [ '-headless' ],
-          binary: '/usr/bin/firefox-esr',
           prefs
         }
       }
     ],
 
-    services: [ 'chromedriver', 'geckodriver' ]
+    services: [ 'chromedriver', 'geckodriver' ],
+
+    beforeSession: function (config, capabilities) {
+      if (capabilities['browserName'] === 'chrome') {
+        config.baseUrl = 'http://localhost:9001'
+      } else {
+        config.baseUrl = 'http://localhost:9002'
+      }
+    }
   } as WebdriverIO.Config
 }

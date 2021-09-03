@@ -5,7 +5,6 @@ import { FormBuilder, FormGroup } from '@angular/forms'
 import { AuthService } from '@app/core'
 import { ServerService } from '@app/core/server/server.service'
 import { UserRight } from '@shared/models'
-import { NSFWPolicyType } from '@shared/models/videos'
 import { PeertubeModalService } from '../shared-main'
 import { VideoFilters } from './video-filters.model'
 
@@ -18,12 +17,7 @@ const logger = debug('peertube:videos:VideoFiltersHeaderComponent')
 })
 export class VideoFiltersHeaderComponent implements OnInit, OnDestroy {
   @Input() filters: VideoFilters
-
   @Input() displayModerationBlock = false
-
-  @Input() defaultSort = '-publishedAt'
-  @Input() nsfwPolicy: NSFWPolicyType
-
   @Input() hideScope = false
 
   @Output() filtersChanged = new EventEmitter()

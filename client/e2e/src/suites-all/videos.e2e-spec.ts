@@ -1,11 +1,11 @@
-import { LoginPage } from './po/login.po'
-import { MyAccountPage } from './po/my-account'
-import { PlayerPage } from './po/player.po'
-import { VideoUpdatePage } from './po/video-update.po'
-import { VideoUploadPage } from './po/video-upload.po'
-import { VideoWatchPage } from './po/video-watch.po'
-import { FIXTURE_URLS } from './urls'
-import { browserSleep, go, isIOS, isMobileDevice, isSafari } from './utils'
+import { LoginPage } from '../po/login.po'
+import { MyAccountPage } from '../po/my-account'
+import { PlayerPage } from '../po/player.po'
+import { VideoListPage } from '../po/video-list.po'
+import { VideoUpdatePage } from '../po/video-update.po'
+import { VideoUploadPage } from '../po/video-upload.po'
+import { VideoWatchPage } from '../po/video-watch.po'
+import { FIXTURE_URLS, go, isIOS, isMobileDevice, isSafari, waitServerUp } from '../utils'
 
 function isUploadUnsupported () {
   if (isMobileDevice() || isSafari()) {
@@ -16,8 +16,9 @@ function isUploadUnsupported () {
   return false
 }
 
-describe('Videos workflow', () => {
+describe('Videos all workflow', () => {
   let videoWatchPage: VideoWatchPage
+  let videoListPage: VideoListPage
   let videoUploadPage: VideoUploadPage
   let videoUpdatePage: VideoUpdatePage
   let myAccountPage: MyAccountPage
@@ -40,21 +41,17 @@ describe('Videos workflow', () => {
 
     if (isUploadUnsupported()) return
 
-    await browser.waitUntil(async () => {
-      await go('/')
-      await browserSleep(500)
-
-      return $('<my-app>').isDisplayed()
-    }, { timeout: 20 * 1000 })
+    await waitServerUp()
   })
 
   beforeEach(async () => {
-    videoWatchPage = new VideoWatchPage()
+    videoWatchPage = new VideoWatchPage(isMobileDevice(), isSafari())
     videoUploadPage = new VideoUploadPage()
     videoUpdatePage = new VideoUpdatePage()
     myAccountPage = new MyAccountPage()
     loginPage = new LoginPage()
     playerPage = new PlayerPage()
+    videoListPage = new VideoListPage(isMobileDevice(), isSafari())
 
     if (!isMobileDevice()) {
       await browser.maximizeWindow()
@@ -80,11 +77,11 @@ describe('Videos workflow', () => {
   })
 
   it('Should list videos', async () => {
-    await videoWatchPage.goOnVideosList(isMobileDevice(), isSafari())
+    await videoListPage.goOnVideosList()
 
     if (isUploadUnsupported()) return
 
-    const videoNames = await videoWatchPage.getVideosListName()
+    const videoNames = await videoListPage.getVideosListName()
     expect(videoNames).toContain(videoName)
   })
 
@@ -95,10 +92,10 @@ describe('Videos workflow', () => {
       await go(FIXTURE_URLS.WEBTORRENT_VIDEO)
       videoNameToExcept = 'E2E tests'
     } else {
-      await videoWatchPage.clickOnVideo(videoName)
+      await videoListPage.clickOnVideo(videoName)
     }
 
-    return videoWatchPage.waitWatchVideoName(videoNameToExcept, isMobileDevice(), isSafari())
+    return videoWatchPage.waitWatchVideoName(videoNameToExcept)
   })
 
   it('Should play the video', async () => {

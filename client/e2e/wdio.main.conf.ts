@@ -21,7 +21,8 @@ export const config = {
   // will be called from there.
   //
   specs: [
-    './src/**/*.e2e-spec.ts'
+    './src/suites-all/*.e2e-spec.ts',
+    './src/suites-local/*.e2e-spec.ts'
   ],
   // Patterns to exclude.
   exclude: [
@@ -79,7 +80,7 @@ export const config = {
   framework: 'mocha',
   //
   // The number of times to retry the entire specfile when it fails as a whole
-  specFileRetries: 2,
+  specFileRetries: 1,
   //
   // Delay in seconds between the spec file retry attempts
   // specFileRetriesDelay: 0,
@@ -105,6 +106,14 @@ export const config = {
 
     tsNodeOpts: {
       project: require('path').join(__dirname, './tsconfig.json')
+    },
+
+    tsConfigPathsOpts: {
+      baseUrl: './',
+      paths: {
+        '@server/*': [ '../../server/*' ],
+        '@shared/*': [ '../../shared/*' ]
+      }
     }
   },
 

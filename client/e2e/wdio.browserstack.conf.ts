@@ -26,14 +26,16 @@ function buildBStackDesktopOptions (sessionName: string, resolution?: string) {
   }
 }
 
-function buildBStackMobileOptions (sessionName: string, deviceName: string, osVersion: string) {
+function buildBStackMobileOptions (sessionName: string, deviceName: string, osVersion: string, appiumVersion?: string) {
   return {
     'bstack:options': {
       ...buildMainOptions(sessionName),
 
       realMobile: true,
       osVersion,
-      deviceName
+      deviceName,
+
+      appiumVersion
     }
   }
 }
@@ -84,7 +86,7 @@ module.exports = {
       {
         browserName: 'Safari',
 
-        ...buildBStackMobileOptions('Safari iPhone', 'iPhone 8 Plus', '11')
+        ...buildBStackMobileOptions('Safari iPhone', 'iPhone SE', '11')
       },
       {
         browserName: 'Safari',
@@ -97,17 +99,20 @@ module.exports = {
     connectionRetryTimeout: 240000,
     waitforTimeout: 20000,
 
+    specs: [
+      // We don't want to test "local" tests
+      './src/suites-all/*.e2e-spec.ts'
+    ],
+
     services: [
       [
         'browserstack', { browserstackLocal: true }
       ]
     ],
 
-    after: function (result) {
-      if (result === 0) {
-        browser.executeScript('browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"passed","reason": ""}}', [])
-      } else {
-        browser.executeScript('browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"failed","reason": ""}}', [])
+    onWorkerStart: function (_cid, capabilities) {
+      if (capabilities['bstack:options'].realMobile === true) {
+        capabilities['bstack:options'].local = false
       }
     }
   } as WebdriverIO.Config

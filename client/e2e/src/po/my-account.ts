@@ -14,6 +14,24 @@ export class MyAccountPage {
     return $('a[href="/my-library/history/videos"]').click()
   }
 
+  // Settings
+
+  navigateToMySettings () {
+    return $('a[href="/my-account"]').click()
+  }
+
+  async updateNSFW (newValue: 'do_not_list' | 'blur' | 'display') {
+    const nsfw = $('#nsfwPolicy')
+
+    await nsfw.waitForDisplayed()
+    await nsfw.scrollIntoView(false) // Avoid issues with fixed header on firefox
+    await nsfw.selectByAttribute('value', newValue)
+
+    const submit = $('my-user-video-settings input[type=submit]')
+    await submit.scrollIntoView(false)
+    await submit.click()
+  }
+
   // My account Videos
 
   async removeVideo (name: string) {
