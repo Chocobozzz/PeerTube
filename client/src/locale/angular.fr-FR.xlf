@@ -1636,7 +1636,7 @@
       </trans-unit>
       <trans-unit id="2218100934178971211" datatype="html">
         <source>Don't show me this anymore</source>
-        <target state="translated">Ne plus me montrer ça</target>
+        <target state="translated">Ne me montre plus cela</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/account-setup-warning-modal.component.html</context>
           <context context-type="linenumber">23</context>
@@ -2094,7 +2094,7 @@
       </trans-unit>
       <trans-unit id="283609029522452529" datatype="html">
         <source>Error in channel miniature component: <x id="PH" equiv-text="err.message"/></source>
-        <target state="new">Error in channel miniature component: <x id="PH" equiv-text="err.message"/></target>
+        <target state="translated">Erreur dans le composant miniature de la chaîne : <x id="PH" equiv-text="err.message"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/channel-miniature-markup.component.ts</context>
           <context context-type="linenumber">57</context>
@@ -2102,7 +2102,7 @@
       </trans-unit>
       <trans-unit id="3059355667050002541" datatype="html">
         <source>Error in playlist miniature component: <x id="PH" equiv-text="err.message"/></source>
-        <target state="new">Error in playlist miniature component: <x id="PH" equiv-text="err.message"/></target>
+        <target state="translated">Erreur dans le composant miniature de la chaîne : <x id="PH" equiv-text="err.message"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/playlist-miniature-markup.component.ts</context>
           <context context-type="linenumber">47</context>
@@ -2110,7 +2110,7 @@
       </trans-unit>
       <trans-unit id="863691161959989717" datatype="html">
         <source>Error in video miniature component: <x id="PH" equiv-text="err.message"/></source>
-        <target state="new">Error in video miniature component: <x id="PH" equiv-text="err.message"/></target>
+        <target state="translated">Erreur dans le composant miniature de la vidéo : <x id="PH" equiv-text="err.message"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/video-miniature-markup.component.ts</context>
           <context context-type="linenumber">59</context>
@@ -2118,7 +2118,7 @@
       </trans-unit>
       <trans-unit id="1247256698916587400" datatype="html">
         <source>Error in videos list component: <x id="PH" equiv-text="err.message"/></source>
-        <target state="new">Error in videos list component: <x id="PH" equiv-text="err.message"/></target>
+        <target state="translated">Erreur dans le composant de liste des vidéos : <x id="PH" equiv-text="err.message"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/videos-list-markup.component.ts</context>
           <context context-type="linenumber">77</context>
@@ -2932,8 +2932,7 @@
       </trans-unit>
       <trans-unit id="9080034597841586171" datatype="html">
         <source>The video is being moved to an external server, it may not work properly.</source>
-        <target state="new"> The video is being moved to an external server, it may not work properly.
-</target>
+        <target state="translated">La vidéo est déplacée vers un serveur externe, elle peut ne pas fonctionner correctement.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.html</context>
           <context context-type="linenumber">10,11</context>
@@ -4102,7 +4101,7 @@
       </trans-unit>
       <trans-unit id="8731139416455609016" datatype="html">
         <source>Videos with the most views during the last <x id="PH" equiv-text="this.trendingDays"/> days</source>
-        <target state="new">Videos with the most views during the last <x id="PH" equiv-text="this.trendingDays"/> days</target>
+        <target state="translated">Vidéos les plus vues au cours des derniers <x id="PH" equiv-text="this.trendingDays"/> jours</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/videos-list-common-page.component.ts</context>
           <context context-type="linenumber">209</context>
@@ -5329,7 +5328,7 @@
       </trans-unit>
       <trans-unit id="6317170736181476800" datatype="html">
         <source>Update <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/settings&quot; [fragment]=&quot;fragment&quot;&gt;"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span (click)=&quot;onAccountSettingsClick($event)&quot;&gt;"/>your settings<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a   &gt;"/></source>
-        <target state="new"> Update <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/settings&quot; [fragment]=&quot;fragment&quot;&gt;"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span (click)=&quot;onAccountSettingsClick($event)&quot;&gt;"/>your settings<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a   &gt;"/></target>
+        <target state="translated">Mettez à jour <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/settings&quot; [fragment]=&quot;fragment&quot;&gt;"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span (click)=&quot;onAccountSettingsClick($event)&quot;&gt;"/>vos paramètres<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a   &gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">3,7</context>
@@ -5337,7 +5336,7 @@
       </trans-unit>
       <trans-unit id="1405600824334286337" datatype="html">
         <source>More filters</source>
-        <target state="new">More filters</target>
+        <target state="translated">Plus de filtres</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">20</context>
@@ -5345,7 +5344,7 @@
       </trans-unit>
       <trans-unit id="8867436033163146458" datatype="html">
         <source>Less filters</source>
-        <target state="new">Less filters</target>
+        <target state="translated">Moins de filtres</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">21</context>
@@ -5353,7 +5352,7 @@
       </trans-unit>
       <trans-unit id="7028708681117573961" datatype="html">
         <source>Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Recently Added"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Recently Added"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">Trier par <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"les ajouts récents"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">46</context>
@@ -5361,7 +5360,7 @@
       </trans-unit>
       <trans-unit id="5691258609562173281" datatype="html">
         <source>Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Views"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Views"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">Trier par <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Vues"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">48</context>
@@ -5369,7 +5368,7 @@
       </trans-unit>
       <trans-unit id="3224510615614621760" datatype="html">
         <source>Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Hot"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Hot"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">Trier par <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Hot"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">49</context>
@@ -5377,7 +5376,7 @@
       </trans-unit>
       <trans-unit id="3082811226222076503" datatype="html">
         <source>Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Best"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Best"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">Trier par <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Meilleur"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">50</context>
@@ -5385,7 +5384,7 @@
       </trans-unit>
       <trans-unit id="4322133526902910662" datatype="html">
         <source>Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Likes"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Likes"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">Trier par <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Likes"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">51</context>
@@ -5393,7 +5392,7 @@
       </trans-unit>
       <trans-unit id="2343321245279384373" datatype="html">
         <source>Languages:</source>
-        <target state="new">Languages:</target>
+        <target state="translated">Langues :</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">59</context>
@@ -5401,7 +5400,7 @@
       </trans-unit>
       <trans-unit id="5063779773341398537" datatype="html">
         <source>Sensitive content:</source>
-        <target state="new">Sensitive content:</target>
+        <target state="translated">Contenu sensible :</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">66</context>
@@ -5409,7 +5408,7 @@
       </trans-unit>
       <trans-unit id="1598170280549949741" datatype="html">
         <source>both</source>
-        <target state="new">both</target>
+        <target state="translated">Les deux</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">70</context>
@@ -5421,7 +5420,7 @@
       </trans-unit>
       <trans-unit id="1444040760165348386" datatype="html">
         <source>false</source>
-        <target state="new">false</target>
+        <target state="translated">faux</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">75</context>
@@ -5433,7 +5432,7 @@
       </trans-unit>
       <trans-unit id="5723033003381016192" datatype="html">
         <source>Scope:</source>
-        <target state="new">Scope:</target>
+        <target state="translated">Portée :</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">81</context>
@@ -5441,7 +5440,7 @@
       </trans-unit>
       <trans-unit id="1795824228003639006" datatype="html">
         <source>local</source>
-        <target state="new">local</target>
+        <target state="translated">locale</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">84</context>
@@ -5449,7 +5448,7 @@
       </trans-unit>
       <trans-unit id="8481241275509347668" datatype="html">
         <source>Local videos (this instance)</source>
-        <target state="new">Local videos (this instance)</target>
+        <target state="translated">Vidéos locales (cette instance)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">85</context>
@@ -5457,7 +5456,7 @@
       </trans-unit>
       <trans-unit id="1095298643764131468" datatype="html">
         <source>federated</source>
-        <target state="new">federated</target>
+        <target state="translated">fédérées</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">89</context>
@@ -5465,7 +5464,7 @@
       </trans-unit>
       <trans-unit id="8383401711408398806" datatype="html">
         <source>Federated videos (this instance + followed instances)</source>
-        <target state="new">Federated videos (this instance + followed instances)</target>
+        <target state="translated">Vidéos fédérées (cette instance + les instances suivies)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">90</context>
@@ -5473,7 +5472,7 @@
       </trans-unit>
       <trans-unit id="2736556170366900089" datatype="html">
         <source>Type:</source>
-        <target state="new">Type:</target>
+        <target state="translated">Type :</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">95</context>
@@ -5481,7 +5480,7 @@
       </trans-unit>
       <trans-unit id="1744425032255703211" datatype="html">
         <source>VOD &amp; Live videos</source>
-        <target state="new">VOD &amp; Live videos</target>
+        <target state="translated">VOD &amp; vidéos en direct</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">99</context>
@@ -5489,7 +5488,7 @@
       </trans-unit>
       <trans-unit id="8510110714273600559" datatype="html">
         <source>true</source>
-        <target state="new">true</target>
+        <target state="translated">vrai</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">103</context>
@@ -5497,7 +5496,7 @@
       </trans-unit>
       <trans-unit id="1370537846415473089" datatype="html">
         <source>Categories:</source>
-        <target state="new">Categories:</target>
+        <target state="translated">Catégories :</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">114</context>
@@ -5505,7 +5504,7 @@
       </trans-unit>
       <trans-unit id="4250125031269088402" datatype="html">
         <source>Moderation:</source>
-        <target state="new">Moderation:</target>
+        <target state="translated">Modération :</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">120</context>
@@ -6732,57 +6731,57 @@
       </trans-unit>
       <trans-unit id="784681343382270982" datatype="html">
         <source>Remove this filter</source>
-        <target state="new">Remove this filter</target>
+        <target state="translated">Supprimer ce filtre</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.ts</context><context context-type="linenumber">101</context></context-group>
       </trans-unit>
       <trans-unit id="5254305728396198887" datatype="html">
         <source>Sensitive content</source>
-        <target state="new">Sensitive content</target>
+        <target state="translated">Contenu sensible</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">115</context></context-group>
       </trans-unit>
       <trans-unit id="5590086849807274701" datatype="html">
         <source>Scope</source>
-        <target state="new">Scope</target>
+        <target state="translated">Périmètre</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">122</context></context-group>
       </trans-unit>
       <trans-unit id="5019568087038659501" datatype="html">
         <source>Federated</source>
-        <target state="new">Federated</target>
+        <target state="translated">Fédérée</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">124</context></context-group>
       </trans-unit>
       <trans-unit id="1949800099101277248" datatype="html">
         <source>Languages</source>
-        <target state="new">Languages</target>
+        <target state="translated">Langues</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">132</context></context-group>
       </trans-unit>
       <trans-unit id="1902100407096396858" datatype="html">
         <source>Categories</source>
-        <target state="new">Categories</target>
+        <target state="translated">Catégories</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">141</context></context-group>
       </trans-unit>
       <trans-unit id="3599150758014724057" datatype="html">
         <source>All videos</source>
-        <target state="new">All videos</target>
+        <target state="translated">Toutes les vidéos</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">150</context></context-group>
       </trans-unit>
       <trans-unit id="8466337030143068285" datatype="html">
         <source>Blurred</source>
-        <target state="new">Blurred</target>
+        <target state="translated">Floues</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">225</context></context-group>
       </trans-unit>
       <trans-unit id="7054829409324166420" datatype="html">
         <source>hidden</source>
-        <target state="new">hidden</target>
+        <target state="translated">cachée</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">231</context></context-group>
       </trans-unit>
       <trans-unit id="5766954855630346873" datatype="html">
         <source>blurred</source>
-        <target state="new">blurred</target>
+        <target state="translated">floues</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">232</context></context-group>
       </trans-unit>
       <trans-unit id="1833483831276078393" datatype="html">
         <source>displayed</source>
-        <target state="new">displayed</target>
+        <target state="translated">affichée</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">234</context></context-group>
       </trans-unit>
       <trans-unit id="4856575356061361269" datatype="html">
@@ -9517,7 +9516,7 @@
       </trans-unit>
       <trans-unit id="3393133458004181121" datatype="html">
         <source>All categories</source>
-        <target state="new">All categories</target>
+        <target state="translated">Toutes les catégories</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-categories.component.ts</context>
           <context context-type="linenumber">24</context>
@@ -9525,7 +9524,7 @@
       </trans-unit>
       <trans-unit id="3999967345340145904" datatype="html">
         <source>You can't select more than <x id="PH" equiv-text="this.maxItems"/> items</source>
-        <target state="new">You can't select more than <x id="PH" equiv-text="this.maxItems"/> items</target>
+        <target state="translated">Vous ne pouvez pas sélectionner plus de <x id="PH" equiv-text="this.maxItems"/> éléments</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-checkbox-all.component.ts</context>
           <context context-type="linenumber">81</context>
@@ -10592,7 +10591,7 @@
       </trans-unit>
       <trans-unit id="8492933894084361602" datatype="html">
         <source>Subscribe to RSS feed "<x id="INTERPOLATION" equiv-text="{{ title }}"/>"</source>
-        <target state="new">Subscribe to RSS feed "<x id="INTERPOLATION" equiv-text="{{ title }}"/>"</target>
+        <target state="translated">S'abonner au flux RSS "<x id="INTERPOLATION" equiv-text="{{ title }}"/>"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/videos-list.component.html</context>
           <context context-type="linenumber">8</context>
@@ -11032,7 +11031,7 @@
       </trans-unit>
       <trans-unit id="3037358578603095196" datatype="html">
         <source>Only videos uploaded on this instance are displayed</source>
-        <target state="new">Only videos uploaded on this instance are displayed</target>
+        <target state="translated">Seules les vidéos téléchargées sur cette instance sont affichées</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/videos-list-common-page.component.ts</context>
           <context context-type="linenumber">190</context>
