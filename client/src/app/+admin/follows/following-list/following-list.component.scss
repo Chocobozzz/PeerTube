@@ -19,3 +19,10 @@ a {
 .follow-button {
   @include create-button;
 }
+
+my-delete-button {
+  ::ng-deep .button-label {
+    @include ellipsis;
+    width: 70px;
+  }
+}

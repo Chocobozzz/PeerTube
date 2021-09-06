@@ -21,3 +21,10 @@ a {
     @include margin-right(10px);
   }
 }
+
+my-delete-button {
+  ::ng-deep .button-label {
+    @include ellipsis;
+    width: 70px;
+  }
+}

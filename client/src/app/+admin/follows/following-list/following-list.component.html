@@ -38,7 +38,7 @@
   <ng-template pTemplate="body" let-follow>
     <tr>
       <td class="action-cell">
-        <my-delete-button label="Unfollow" i18n-label (click)="removeFollowing(follow)"></my-delete-button>
+        <my-delete-button label (click)="removeFollowing(follow)"></my-delete-button>
       </td>
       <td>
         <a [href]="follow.following.url" i18n-title title="Open instance in a new tab" target="_blank" rel="noopener noreferrer">
