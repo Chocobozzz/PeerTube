@@ -16,14 +16,10 @@ export class ChannelsSetupMessageComponent implements OnInit {
     private authService: AuthService
   ) {}
 
-  get userInformationLoaded () {
-    return this.authService.userInformationLoaded
-  }
-
   get hasChannelNotConfigured () {
-    return this.user.videoChannels
-      .filter((channel: VideoChannel) => (!channel.avatar || !channel.description))
-      .length > 0
+    if (!this.user.videoChannels) return
+
+    return this.user.videoChannels.filter((channel: VideoChannel) => (!channel.avatar || !channel.description)).length > 0
   }
 
   ngOnInit () {
