@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express'
 import { Server } from 'http'
 import { randomInt } from '@shared/core-utils'
+import { terminateServer } from './utils'
 
 type BlocklistResponse = {
   data: {
@@ -32,6 +33,6 @@ export class MockBlocklist {
   }
 
   terminate () {
-    if (this.server) this.server.close()
+    return terminateServer(this.server)
   }
 }

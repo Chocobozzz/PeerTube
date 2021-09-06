@@ -2,6 +2,7 @@
 import { createServer, Server } from 'http'
 import proxy from 'proxy'
 import { randomInt } from '@shared/core-utils'
+import { terminateServer } from './utils'
 
 class MockProxy {
   private server: Server
@@ -16,7 +17,7 @@ class MockProxy {
   }
 
   terminate () {
-    if (this.server) this.server.close()
+    return terminateServer(this.server)
   }
 }
 

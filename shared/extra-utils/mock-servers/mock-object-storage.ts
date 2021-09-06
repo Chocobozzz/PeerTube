@@ -4,6 +4,7 @@ import { Server } from 'http'
 import { pipeline } from 'stream'
 import { randomInt } from '@shared/core-utils'
 import { ObjectStorageCommand } from '../server'
+import { terminateServer } from './utils'
 
 export class MockObjectStorage {
   private server: Server
@@ -37,6 +38,6 @@ export class MockObjectStorage {
   }
 
   terminate () {
-    if (this.server) this.server.close()
+    return terminateServer(this.server)
   }
 }

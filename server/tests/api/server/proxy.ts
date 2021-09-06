@@ -65,7 +65,7 @@ describe('Test proxy', function () {
   })
 
   after(async function () {
-    proxy.terminate()
+    await proxy.terminate()
 
     await cleanupTests(servers)
   })

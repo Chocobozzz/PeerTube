@@ -243,7 +243,7 @@ function runTestSuite (options: {
   })
 
   after(async function () {
-    mockObjectStorage.terminate()
+    await mockObjectStorage.terminate()
 
     await cleanupTests(servers)
   })
@@ -380,8 +380,8 @@ describe('Object storage for videos', function () {
       playlistBucket: 'mybucket',
       webtorrentBucket: 'mybucket',
 
-      playlistPrefix: 'streaming-playlists_',
-      webtorrentPrefix: 'webtorrent_',
+      playlistPrefix: 'streaming-playlists/',
+      webtorrentPrefix: 'webtorrent/',
 
       useMockBaseUrl: true
     })
