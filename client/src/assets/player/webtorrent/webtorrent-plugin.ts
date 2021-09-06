@@ -9,7 +9,7 @@ import {
   getStoredVolume,
   saveAverageBandwidth
 } from '../peertube-player-local-storage'
-import { LoadedQualityData, PlayerNetworkInfo, WebtorrentPluginOptions } from '../peertube-videojs-typings'
+import { PeerTubeResolution, PlayerNetworkInfo, WebtorrentPluginOptions } from '../peertube-videojs-typings'
 import { getRtcConfig, isIOS, videoFileMaxByResolution, videoFileMinByResolution } from '../utils'
 import { PeertubeChunkStore } from './peertube-chunk-store'
 import { renderVideo } from './video-renderer'
@@ -175,8 +175,7 @@ class WebTorrentPlugin extends Plugin {
       return done()
     })
 
-    this.changeQuality()
-    this.trigger('resolutionChange', { auto: this.autoResolution, resolutionId: this.currentVideoFile.resolution.id })
+    this.selectAppropriateResolution(true)
   }
 
   updateResolution (resolutionId: number, delay = 0) {
@@ -219,17 +218,10 @@ class WebTorrentPlugin extends Plugin {
     }
   }
 
-  enableAutoResolution () {
-    this.autoResolution = true
-    this.trigger('resolutionChange', { auto: this.autoResolution, resolutionId: this.getCurrentResolutionId() })
-  }
-
-  disableAutoResolution (forbid = false) {
-    if (forbid === true) this.autoResolutionPossible = false
-
+  disableAutoResolution () {
     this.autoResolution = false
-    this.trigger('autoResolutionChange', { possible: this.autoResolutionPossible })
-    this.trigger('resolutionChange', { auto: this.autoResolution, resolutionId: this.getCurrentResolutionId() })
+    this.autoResolutionPossible = false
+    this.player.peertubeResolutions().disableAutoResolution()
   }
 
   isAutoResolutionPossible () {
@@ -516,7 +508,7 @@ class WebTorrentPlugin extends Plugin {
   private fallbackToHttp (options: PlayOptions, done?: (err?: Error) => void) {
     const paused = this.player.paused()
 
-    this.disableAutoResolution(true)
+    this.disableAutoResolution()
 
     this.flushVideoFile(this.currentVideoFile, true)
     this.torrent = null
@@ -528,7 +520,7 @@ class WebTorrentPlugin extends Plugin {
     this.player.src = this.savePlayerSrcFunction
     this.player.src(httpUrl)
 
-    this.changeQuality()
+    this.selectAppropriateResolution(true)
 
     // We changed the source, so reinit captions
     this.player.trigger('sourcechange')
@@ -601,32 +593,22 @@ class WebTorrentPlugin extends Plugin {
   }
 
   private buildQualities () {
-    const qualityLevelsPayload = []
+    const resolutions: PeerTubeResolution[] = this.videoFiles.map(file => ({
+      id: file.resolution.id,
+      label: this.buildQualityLabel(file),
+      height: file.resolution.id,
+      selected: false,
+      selectCallback: () => this.qualitySwitchCallback(file.resolution.id)
+    }))
 
-    for (const file of this.videoFiles) {
-      const representation = {
-        id: file.resolution.id,
-        label: this.buildQualityLabel(file),
-        height: file.resolution.id,
-        _enabled: true
-      }
+    resolutions.push({
+      id: -1,
+      label: this.player.localize('Auto'),
+      selected: true,
+      selectCallback: () => this.qualitySwitchCallback(-1)
+    })
 
-      this.player.qualityLevels().addQualityLevel(representation)
-
-      qualityLevelsPayload.push({
-        id: representation.id,
-        label: representation.label,
-        selected: false
-      })
-    }
-
-    const payload: LoadedQualityData = {
-      qualitySwitchCallback: (d: any) => this.qualitySwitchCallback(d),
-      qualityData: {
-        video: qualityLevelsPayload
-      }
-    }
-    this.player.tech(true).trigger('loadedqualitydata', payload)
+    this.player.peertubeResolutions().add(resolutions)
   }
 
   private buildQualityLabel (file: VideoFile) {
@@ -641,27 +623,30 @@ class WebTorrentPlugin extends Plugin {
 
   private qualitySwitchCallback (id: number) {
     if (id === -1) {
-      if (this.autoResolutionPossible === true) this.enableAutoResolution()
+      if (this.autoResolutionPossible === true) {
+        this.autoResolution = true
+
+        this.selectAppropriateResolution(false)
+      }
+
       return
     }
 
-    this.disableAutoResolution()
+    this.autoResolution = false
     this.updateResolution(id)
+    this.selectAppropriateResolution(false)
   }
 
-  private changeQuality () {
-    const resolutionId = this.currentVideoFile.resolution.id as number
-    const qualityLevels = this.player.qualityLevels()
+  private selectAppropriateResolution (byEngine: boolean) {
+    const resolution = this.autoResolution
+      ? -1
+      : this.getCurrentResolutionId()
 
-    if (resolutionId === -1) {
-      qualityLevels.selectedIndex = -1
-      return
-    }
+    const autoResolutionChosen = this.autoResolution
+      ? this.getCurrentResolutionId()
+      : undefined
 
-    for (let i = 0; i < qualityLevels.length; i++) {
-      const q = qualityLevels[i]
-      if (q.height === resolutionId) qualityLevels.selectedIndex_ = i
-    }
+    this.player.peertubeResolutions().select({ id: resolution, autoResolutionChosenId: autoResolutionChosen, byEngine })
   }
 }
 

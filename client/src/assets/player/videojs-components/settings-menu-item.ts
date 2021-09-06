@@ -248,7 +248,7 @@ class SettingsMenuItem extends MenuItem {
   }
 
   build () {
-    this.subMenu.on('updateLabel', () => {
+    this.subMenu.on('labelUpdated', () => {
       this.update()
     })
     this.subMenu.on('menuChanged', () => {

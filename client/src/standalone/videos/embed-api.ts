@@ -139,15 +139,8 @@ export class PeerTubeEmbedApi {
     })
 
     // PeerTube specific capabilities
-    if (this.isWebtorrent()) {
-      this.embed.player.webtorrent().on('autoResolutionUpdate', () => this.loadWebTorrentResolutions())
-      this.embed.player.webtorrent().on('videoFileUpdate', () => this.loadWebTorrentResolutions())
-
-      this.loadWebTorrentResolutions()
-    } else {
-      this.embed.player.p2pMediaLoader().on('resolutionChange', () => this.loadP2PMediaLoaderResolutions())
-      this.embed.player.p2pMediaLoader().on('resolutionsLoaded', () => this.loadP2PMediaLoaderResolutions())
-    }
+    this.embed.player.peertubeResolutions().on('resolutionsAdded', () => this.loadResolutions())
+    this.embed.player.peertubeResolutions().on('resolutionChanged', () => this.loadResolutions())
 
     this.embed.player.on('volumechange', () => {
       this.channel.notify({
@@ -183,23 +176,15 @@ export class PeerTubeEmbedApi {
     })
   }
 
-  private loadP2PMediaLoaderResolutions () {
-    this.resolutions = []
-
-    const qualityLevels = this.embed.player.qualityLevels()
-    const currentResolutionId = this.embed.player.qualityLevels().selectedIndex
-
-    for (let i = 0; i < qualityLevels.length; i++) {
-      const level = qualityLevels[i]
-
-      this.resolutions.push({
-        id: level.id,
-        label: level.height + 'p',
-        active: level.id === currentResolutionId,
-        width: level.width,
-        height: level.height
-      })
-    }
+  private loadResolutions () {
+    this.resolutions = this.embed.player.peertubeResolutions().getResolutions()
+      .map(r => ({
+        id: r.id,
+        label: r.height + 'p',
+        active: r.selected,
+        width: r.width,
+        height: r.height
+      }))
 
     this.channel.notify({
       method: 'resolutionUpdate',

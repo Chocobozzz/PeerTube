@@ -12618,14 +12618,6 @@ videojs-contextmenu-pt@^5.4.1:
     global "^4.4.0"
     video.js "^7.6.0"
 
-videojs-contrib-quality-levels@^2.0.9:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/videojs-contrib-quality-levels/-/videojs-contrib-quality-levels-2.1.0.tgz#046e9e21ed01043f512b83a1916001d552457083"
-  integrity sha512-dqGQGbL9AFhucxki7Zh0c3kIhH0PAPcHEh6jUdRyaFCVeOuqnJrOYs/3wNtsokDdBdRf2Du2annpu4Z2XaSZRg==
-  dependencies:
-    global "^4.3.2"
-    video.js "^6 || ^7"
-
 videojs-dock@^2.0.2:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/videojs-dock/-/videojs-dock-2.2.0.tgz#57e4f942da1b8e930c4387fed85942473bc40829"
