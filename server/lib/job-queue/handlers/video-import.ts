@@ -63,7 +63,7 @@ async function processTorrentImport (job: Job, payload: VideoImportTorrentPayloa
   }
   const target = {
     torrentName: videoImport.torrentName ? getSecureTorrentName(videoImport.torrentName) : undefined,
-    magnetUri: videoImport.magnetUri
+    uri: videoImport.magnetUri
   }
   return processFile(() => downloadWebTorrentVideo(target, VIDEO_IMPORT_TIMEOUT), videoImport, options)
 }

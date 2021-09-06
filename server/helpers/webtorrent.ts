@@ -21,8 +21,8 @@ import { extractVideo } from './video'
 
 const createTorrentPromise = promisify2<string, any, any>(createTorrent)
 
-async function downloadWebTorrentVideo (target: { magnetUri: string, torrentName?: string }, timeout: number) {
-  const id = target.magnetUri || target.torrentName
+async function downloadWebTorrentVideo (target: { uri: string, torrentName?: string }, timeout: number) {
+  const id = target.uri || target.torrentName
   let timer
 
   const path = generateVideoImportTmpPath(id)
@@ -35,7 +35,7 @@ async function downloadWebTorrentVideo (target: { magnetUri: string, torrentName
     const webtorrent = new WebTorrent()
     let file: TorrentFile
 
-    const torrentId = target.magnetUri || join(CONFIG.STORAGE.TORRENTS_DIR, target.torrentName)
+    const torrentId = target.uri || join(CONFIG.STORAGE.TORRENTS_DIR, target.torrentName)
 
     const options = { path: directoryPath }
     const torrent = webtorrent.add(torrentId, options, torrent => {

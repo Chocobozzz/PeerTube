@@ -194,6 +194,7 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
   @Column
   metadataUrl: string
 
+  // Could be null for remote files
   @AllowNull(true)
   @Column
   fileUrl: string
@@ -203,6 +204,7 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
   @Column
   filename: string
 
+  // Could be null for remote files
   @AllowNull(true)
   @Column
   torrentUrl: string

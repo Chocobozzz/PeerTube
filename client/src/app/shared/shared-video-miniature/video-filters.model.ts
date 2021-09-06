@@ -74,8 +74,6 @@ export class VideoFilters {
   }
 
   setNSFWPolicy (nsfwPolicy: NSFWPolicyType) {
-    console.log(nsfwPolicy)
-
     this.updateDefaultNSFW(nsfwPolicy)
   }
 
