@@ -9,3 +9,5 @@
 /src/locale/target/player_*.xml
 /src/locale/target/server_*.xml
 /e2e/local.log
+/src/standalone/player/build
+/src/standalone/player/dist
