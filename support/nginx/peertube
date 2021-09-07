@@ -251,12 +251,6 @@ server {
     sendfile_max_chunk 1M; # prevent one fast connection from entirely occupying the worker process. should be > 800k.
     aio threads;
 
-    # Use this in tandem with fuse-mounting i.e. https://docs.joinpeertube.org/admin-remote-storage
-    # to serve files directly from a public bucket without proxying.
-    # Assumes you have buckets named after the storage subdirectories, i.e. 'videos', 'redundancy', etc.
-    #set $cdn <your S3-compatiable bucket public url mounted via fuse>;
-    #rewrite ^/static/webseed/(.*)$ $cdn/videos/$1 redirect;
-    #rewrite ^/static/(.*)$         $cdn/$1        redirect;
     rewrite ^/static/webseed/(.*)$ /videos/$1 break;
     rewrite ^/static/(.*)$         /$1        break;
 
