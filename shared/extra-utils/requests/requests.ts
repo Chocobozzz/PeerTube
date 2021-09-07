@@ -29,9 +29,12 @@ function makeRawRequest (url: string, expectedStatus?: HttpStatusCode, range?: s
 
 function makeGetRequest (options: CommonRequestParams & {
   query?: any
+  rawQuery?: string
 }) {
   const req = request(options.url).get(options.path)
-                                  .query(options.query)
+
+  if (options.query) req.query(options.query)
+  if (options.rawQuery) req.query(options.rawQuery)
 
   return buildRequest(req, { contentType: 'application/json', expectedStatus: HttpStatusCode.BAD_REQUEST_400, ...options })
 }

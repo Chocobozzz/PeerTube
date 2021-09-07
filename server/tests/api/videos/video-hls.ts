@@ -14,6 +14,7 @@ import {
   createMultipleServers,
   doubleFollow,
   expectStartWith,
+  hlsInfohashExist,
   makeRawRequest,
   ObjectStorageCommand,
   PeerTubeServer,
@@ -88,9 +89,15 @@ async function checkHlsPlaylist (options: {
 
       const masterPlaylist = await server.streamingPlaylists.get({ url: hlsPlaylist.playlistUrl })
 
+      let i = 0
       for (const resolution of resolutions) {
         expect(masterPlaylist).to.contain(`${resolution}.m3u8`)
         expect(masterPlaylist).to.contain(`${resolution}.m3u8`)
+
+        const url = 'http://' + videoDetails.account.host
+        await hlsInfohashExist(url, hlsPlaylist.playlistUrl, i)
+
+        i++
       }
     }
 

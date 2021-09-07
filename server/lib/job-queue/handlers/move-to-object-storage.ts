@@ -4,6 +4,7 @@ import { join } from 'path'
 import { logger } from '@server/helpers/logger'
 import { updateTorrentUrls } from '@server/helpers/webtorrent'
 import { CONFIG } from '@server/initializers/config'
+import { P2P_MEDIA_LOADER_PEER_VERSION } from '@server/initializers/constants'
 import { storeHLSFile, storeWebTorrentFile } from '@server/lib/object-storage'
 import { getHLSDirectory, getHlsResolutionPlaylistFilename } from '@server/lib/paths'
 import { moveToNextState } from '@server/lib/video-state'
@@ -83,6 +84,9 @@ async function doAfterLastJob (video: MVideoWithAllFiles, isNewVideo: boolean) {
     playlist.segmentsSha256Url = await storeHLSFile(playlist, video, playlist.segmentsSha256Filename)
 
     playlist.storage = VideoStorage.OBJECT_STORAGE
+
+    playlist.assignP2PMediaLoaderInfoHashes(video, playlist.VideoFiles)
+    playlist.p2pMediaLoaderPeerVersion = P2P_MEDIA_LOADER_PEER_VERSION
 
     await playlist.save()
   }
