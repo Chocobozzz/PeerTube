@@ -1055,6 +1055,8 @@ function buildLanguages () {
 
     kab: true, // Kabyle
 
+    lat: true, // Latin
+
     epo: true, // Esperanto
     tlh: true, // Klingon
     jbo: true, // Lojban
