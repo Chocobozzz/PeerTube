@@ -450,7 +450,7 @@ describe('Test config', function () {
   })
 
   it('Should have the configuration updated after a restart', async function () {
-    this.timeout(10000)
+    this.timeout(30000)
 
     await killallServers([ server ])
 
