@@ -23,8 +23,5 @@ a {
 }
 
 my-delete-button {
-  ::ng-deep .button-label {
-    @include ellipsis;
-    width: 70px;
-  }
+  max-width: 130px;
 }
