@@ -26,7 +26,6 @@ type PeerTubeRequestOptions = {
     key: string
     headers: string[]
   }
-  timeout?: number
   jsonResponse?: boolean
 } & Pick<GotOptions, 'headers' | 'json' | 'method' | 'searchParams'>
 
@@ -216,7 +215,6 @@ function buildGotOptions (options: PeerTubeRequestOptions) {
     dnsCache: true,
     json: options.json,
     searchParams: options.searchParams,
-    timeout: options.timeout ?? REQUEST_TIMEOUT,
     headers,
     context
   }
