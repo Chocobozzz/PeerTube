@@ -13,6 +13,7 @@
 
 :host {
   outline: none;
+  display: inline-block;
 }
 
 my-small-loader ::ng-deep .root {
@@ -31,6 +32,8 @@ span[class$=-button] {
 .action-button {
   @include peertube-button-link;
   @include button-with-icon(21px);
+
+  width: 100%; // useful for ellipsis, allow to define a max-width on host component
 }
 
 .orange-button {
@@ -51,6 +54,10 @@ span[class$=-button] {
 .grey-button-link {
   @include peertube-button-link;
   @include grey-button;
+}
+
+.button-label {
+  @include ellipsis;
 }
 
 // In a table, try to minimize the space taken by this button

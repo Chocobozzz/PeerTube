@@ -21,3 +21,7 @@ a {
     @include margin-right(10px);
   }
 }
+
+my-delete-button {
+  max-width: 130px;
+}
