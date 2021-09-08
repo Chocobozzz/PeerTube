@@ -16,8 +16,8 @@ export class ChannelsSetupMessageComponent implements OnInit {
     private authService: AuthService
   ) {}
 
-  get hasChannelNotConfigured () {
-    if (!this.user.videoChannels) return
+  hasChannelNotConfigured () {
+    if (!this.user.videoChannels) return false
 
     return this.user.videoChannels.filter((channel: VideoChannel) => (!channel.avatar || !channel.description)).length > 0
   }
