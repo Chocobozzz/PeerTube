@@ -1,6 +1,6 @@
 # Changelog
 
-## v3.4.0-rc.1
+## v3.4.0
 
 ### IMPORTANT NOTES
 
@@ -66,7 +66,9 @@
    * Display a modal when logged in to explain why and where set up the account profile [#4352](https://github.com/Chocobozzz/PeerTube/pull/4352)
    * Display messages to inform why and where set up channels in *My library* pages [#4352](https://github.com/Chocobozzz/PeerTube/pull/4352)
    * Display a warning when using capitalized letter for the email/username in the login form
+   * Display a message in embed on unsupported web browser
  * Support out proxy using env variables (`HTTP_PROXY` and `HTTPS_PROXY`) [#4346](https://github.com/Chocobozzz/PeerTube/pull/4346)
+ * Support *Latin* language for videos
 
 ### Bug fixes
 
@@ -85,6 +87,11 @@
  * Fix moderation embeds
  * Fix description timestamp click
  * Fix privacy descriptions
+ * Safer avatar, banner and video preview
+ * Fix broken delete buttons of admin federation lists [#4378](https://github.com/Chocobozzz/PeerTube/pull/4378)
+ * More robust webtorrent redundancy download
+ * Fix hls redundancy in pruning script
+ * Fix compat' with old web browsers (Pale Moon, Safari 11, iOS 11, old webkit...))
 
 
 ## v3.3.0
