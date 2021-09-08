@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core'
 import { Router } from '@angular/router'
-import { AuthService, ComponentPagination, LocalStorageService, Notifier, SessionStorageService, UserService } from '@app/core'
+import { AuthService, ComponentPagination, HooksService, LocalStorageService, Notifier, SessionStorageService, UserService } from '@app/core'
 import { VideoPlaylist, VideoPlaylistElement, VideoPlaylistService } from '@app/shared/shared-video-playlist'
 import { peertubeLocalStorage, peertubeSessionStorage } from '@root-helpers/peertube-web-storage'
 import { VideoPlaylistPrivacy } from '@shared/models'
@@ -34,6 +34,7 @@ export class VideoWatchPlaylistComponent {
   currentPlaylistPosition: number
 
   constructor (
+    private hooks: HooksService,
     private userService: UserService,
     private auth: AuthService,
     private notifier: Notifier,
@@ -88,8 +89,8 @@ export class VideoWatchPlaylistComponent {
 
   loadPlaylistElements (playlist: VideoPlaylist, redirectToFirst = false, position?: number) {
     this.videoPlaylist.getPlaylistVideos(playlist.uuid, this.playlistPagination)
-        .subscribe(({ total, data }) => {
-          this.playlistElements = this.playlistElements.concat(data)
+        .subscribe(({ total, data: playlistElements }) => {
+          this.playlistElements = this.playlistElements.concat(playlistElements)
           this.playlistPagination.totalItems = total
 
           const firstAvailableVideo = this.playlistElements.find(e => !!e.video)
@@ -111,6 +112,10 @@ export class VideoWatchPlaylistComponent {
             }
             this.router.navigate([], extras)
           }
+
+          this.hooks.runAction('action:video-watch-playlist.elements.loaded', 'video-watch', {
+            playlistElements
+          })
         })
   }
 
