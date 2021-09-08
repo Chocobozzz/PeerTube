@@ -1,9 +1,10 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser'
+import { SafeResourceUrl } from '@angular/platform-browser'
 import { Notifier, ServerService } from '@app/core'
 import { VideoChannel } from '@app/shared/shared-main'
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap'
 import { getBytes } from '@root-helpers/bytes'
+import { imageToDataURL } from '@root-helpers/images'
 
 @Component({
   selector: 'my-actor-banner-edit',
@@ -30,7 +31,6 @@ export class ActorBannerEditComponent implements OnInit {
   preview: SafeResourceUrl
 
   constructor (
-    private sanitizer: DomSanitizer,
     private serverService: ServerService,
     private notifier: Notifier
   ) { }
@@ -59,7 +59,7 @@ export class ActorBannerEditComponent implements OnInit {
     this.bannerChange.emit(formData)
 
     if (this.previewImage) {
-      this.preview = this.sanitizer.bypassSecurityTrustResourceUrl(URL.createObjectURL(bannerfile))
+      imageToDataURL(bannerfile).then(result => this.preview = result)
     }
   }
 

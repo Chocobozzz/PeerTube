@@ -1,9 +1,9 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser'
 import { Notifier, ServerService } from '@app/core'
 import { Account, VideoChannel } from '@app/shared/shared-main'
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap'
 import { getBytes } from '@root-helpers/bytes'
+import { imageToDataURL } from '@root-helpers/images'
 
 @Component({
   selector: 'my-actor-avatar-edit',
@@ -30,10 +30,9 @@ export class ActorAvatarEditComponent implements OnInit {
   maxAvatarSize = 0
   avatarExtensions = ''
 
-  preview: SafeResourceUrl
+  preview: string
 
   constructor (
-    private sanitizer: DomSanitizer,
     private serverService: ServerService,
     private notifier: Notifier
   ) { }
@@ -63,7 +62,7 @@ export class ActorAvatarEditComponent implements OnInit {
     this.avatarChange.emit(formData)
 
     if (this.previewImage) {
-      this.preview = this.sanitizer.bypassSecurityTrustResourceUrl(URL.createObjectURL(avatarfile))
+      imageToDataURL(avatarfile).then(result => this.preview = result)
     }
   }
 

@@ -1,5 +1,4 @@
 import { Component, Input } from '@angular/core'
-import { SafeResourceUrl } from '@angular/platform-browser'
 import { VideoChannel } from '../shared-main'
 import { Account } from '../shared-main/account/account.model'
 
@@ -22,7 +21,7 @@ export class ActorAvatarComponent {
   @Input() account: ActorInput
   @Input() channel: ActorInput
 
-  @Input() previewImage: SafeResourceUrl
+  @Input() previewImage: string
 
   @Input() size: ActorAvatarSize
 
