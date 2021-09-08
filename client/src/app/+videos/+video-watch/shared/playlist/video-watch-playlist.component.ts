@@ -1,6 +1,14 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core'
 import { Router } from '@angular/router'
-import { AuthService, ComponentPagination, HooksService, LocalStorageService, Notifier, SessionStorageService, UserService } from '@app/core'
+import {
+  AuthService,
+  ComponentPagination,
+  HooksService,
+  LocalStorageService,
+  Notifier,
+  SessionStorageService,
+  UserService
+} from '@app/core'
 import { VideoPlaylist, VideoPlaylistElement, VideoPlaylistService } from '@app/shared/shared-video-playlist'
 import { peertubeLocalStorage, peertubeSessionStorage } from '@root-helpers/peertube-web-storage'
 import { VideoPlaylistPrivacy } from '@shared/models'
