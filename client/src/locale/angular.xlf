@@ -3373,17 +3373,6 @@ color: red;
           <context context-type="linenumber">34</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9160510009013134726" datatype="html">
-        <source>Unfollow</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
-          <context context-type="linenumber">41</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.ts</context>
-          <context context-type="linenumber">47</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="8246779176913476983" datatype="html">
         <source>Open instance in a new tab</source>
         <context-group purpose="location">
@@ -3418,6 +3407,13 @@ color: red;
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.ts</context>
           <context context-type="linenumber">46</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9160510009013134726" datatype="html">
+        <source>Unfollow</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.ts</context>
+          <context context-type="linenumber">47</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3935234189109112926" datatype="html">
@@ -5386,7 +5382,7 @@ color: red;
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/users/user.service.ts</context>
-          <context context-type="linenumber">412</context>
+          <context context-type="linenumber">416</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3997350348765083892" datatype="html">
@@ -9557,7 +9553,7 @@ channel with the same name (<x id="PH_2" equiv-text="videoChannel.name"/>)!</sou
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-actor-image/actor-avatar.component.ts</context>
-          <context context-type="linenumber">41</context>
+          <context context-type="linenumber">40</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
@@ -9572,7 +9568,7 @@ channel with the same name (<x id="PH_2" equiv-text="videoChannel.name"/>)!</sou
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-actor-image/actor-avatar.component.ts</context>
-          <context context-type="linenumber">40</context>
+          <context context-type="linenumber">39</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7215101881367554791" datatype="html">
@@ -10243,14 +10239,14 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>Administrator</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/users/user.service.ts</context>
-          <context context-type="linenumber">413</context>
+          <context context-type="linenumber">417</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4968151111061046122" datatype="html">
         <source>Moderator</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/users/user.service.ts</context>
-          <context context-type="linenumber">414</context>
+          <context context-type="linenumber">418</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2279527393438260622" datatype="html">
@@ -12351,25 +12347,25 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>max size</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-avatar-edit.component.ts</context>
-          <context context-type="linenumber">47</context>
+          <context context-type="linenumber">46</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/preview-upload.component.ts</context>
-          <context context-type="linenumber">39</context>
+          <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6179532215548637839" datatype="html">
         <source>extensions</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-avatar-edit.component.ts</context>
-          <context context-type="linenumber">48</context>
+          <context context-type="linenumber">47</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8054921481196967348" datatype="html">
         <source>This image is too large.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-avatar-edit.component.ts</context>
-          <context context-type="linenumber">56</context>
+          <context context-type="linenumber">55</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-banner-edit.component.ts</context>
@@ -12412,14 +12408,14 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>Account avatar</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-actor-image/actor-avatar.component.ts</context>
-          <context context-type="linenumber">47</context>
+          <context context-type="linenumber">46</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1138964882426023395" datatype="html">
         <source>Channel avatar</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-actor-image/actor-avatar.component.ts</context>
-          <context context-type="linenumber">48</context>
+          <context context-type="linenumber">47</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1358902062258458923" datatype="html">
@@ -14828,28 +14824,6 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">66</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1598170280549949741" datatype="html">
-        <source>both</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
-          <context context-type="linenumber">70</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
-          <context context-type="linenumber">98</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="1444040760165348386" datatype="html">
-        <source>false</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
-          <context context-type="linenumber">75</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
-          <context context-type="linenumber">108</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="5723033003381016192" datatype="html">
         <source>Scope:</source>
         <context-group purpose="location">
@@ -14857,25 +14831,11 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">81</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1795824228003639006" datatype="html">
-        <source>local</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
-          <context context-type="linenumber">84</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="8481241275509347668" datatype="html">
         <source>Local videos (this instance)</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">85</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="1095298643764131468" datatype="html">
-        <source>federated</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
-          <context context-type="linenumber">89</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8383401711408398806" datatype="html">
@@ -14897,13 +14857,6 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">99</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="8510110714273600559" datatype="html">
-        <source>true</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
-          <context context-type="linenumber">103</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1370537846415473089" datatype="html">
@@ -14931,7 +14884,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>Remove this filter</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.ts</context>
-          <context context-type="linenumber">101</context>
+          <context context-type="linenumber">95</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5254305728396198887" datatype="html">
