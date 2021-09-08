@@ -351,7 +351,7 @@ class YoutubeDL {
       }
 
       const newUrl = result.headers.location
-      const newVersion = /yt-dl\.org\/downloads\/(\d{4}\.\d\d\.\d\d(\.\d)?)\/youtube-dl/.exec(newUrl)[1]
+      const newVersion = /\/(\d{4}\.\d\d\.\d\d(\.\d)?)\/youtube-dl$/.exec(newUrl)[1]
 
       const downloadFileStream = got.stream(newUrl)
       const writeStream = createWriteStream(bin, { mode: 493 })
