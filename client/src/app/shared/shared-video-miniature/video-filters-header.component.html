@@ -67,12 +67,12 @@
         <ng-template *ngTemplateOutlet="updateSettings; context: { $implicit: 'video-sensitive-content-policy' }"></ng-template>
 
         <div class="peertube-radio-container">
-          <input formControlName="nsfw" type="radio" name="nsfw" id="nsfwBoth" i18n-value value="both" />
+          <input formControlName="nsfw" type="radio" name="nsfw" id="nsfwBoth" value="both" />
           <label for="nsfwBoth">{{ filters.getNSFWDisplayLabel() }}</label>
         </div>
 
         <div class="peertube-radio-container">
-          <input formControlName="nsfw" type="radio" name="nsfw" id="nsfwFalse" i18n-value value="false" />
+          <input formControlName="nsfw" type="radio" name="nsfw" id="nsfwFalse" value="false" />
           <label for="nsfwFalse" i18n>Hide</label>
         </div>
       </div>
@@ -81,12 +81,12 @@
         <label for="scope" i18n>Scope:</label>
 
         <div class="peertube-radio-container">
-          <input formControlName="scope" type="radio" name="scope" id="scopeLocal" i18n-value value="local" />
+          <input formControlName="scope" type="radio" name="scope" id="scopeLocal" value="local" />
           <label for="scopeLocal" i18n>Local videos (this instance)</label>
         </div>
 
         <div class="peertube-radio-container">
-          <input formControlName="scope" type="radio" name="scope" id="scopeFederated" i18n-value value="federated" />
+          <input formControlName="scope" type="radio" name="scope" id="scopeFederated" value="federated" />
           <label for="scopeFederated" i18n>Federated videos (this instance + followed instances)</label>
         </div>
       </div>
@@ -95,17 +95,17 @@
         <label for="type" i18n>Type:</label>
 
         <div class="peertube-radio-container">
-          <input formControlName="live" type="radio" name="live" id="liveBoth" i18n-value value="both" />
+          <input formControlName="live" type="radio" name="live" id="liveBoth" value="both" />
           <label for="liveBoth" i18n>VOD & Live videos</label>
         </div>
 
         <div class="peertube-radio-container">
-          <input formControlName="live" type="radio" name="live" id="liveTrue" i18n-value value="true" />
+          <input formControlName="live" type="radio" name="live" id="liveTrue" value="true" />
           <label for="liveTrue" i18n>Live videos</label>
         </div>
 
         <div class="peertube-radio-container">
-          <input formControlName="live" type="radio" name="live" id="liveFalse" i18n-value value="false" />
+          <input formControlName="live" type="radio" name="live" id="liveFalse" value="false" />
           <label for="liveFalse" i18n>VOD videos</label>
         </div>
       </div>
