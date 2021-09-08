@@ -29,6 +29,20 @@ function getClient () {
       : undefined
   })
 
+  // FIXME: https://github.com/aws/aws-sdk-js-v3/issues/2445 workaround
+  s3Client.middlewareStack.add(
+    (next, _context) => (args: any) => {
+      if (typeof args.request?.body === 'string' && args.request.body.includes('CompletedMultipartUpload')) {
+        args.request.body = args.request.body.replace(/CompletedMultipartUpload/g, 'CompleteMultipartUpload')
+      }
+      return next(args)
+    },
+    {
+      step: 'build',
+      priority: 'high'
+    }
+  )
+
   logger.info('Initialized S3 client %s with region %s.', getEndpoint(), OBJECT_STORAGE.REGION, lTags())
 
   return s3Client

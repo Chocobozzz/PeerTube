@@ -216,7 +216,7 @@ async function multiPartUpload (options: {
 
   const completeUploadCommand = new CompleteMultipartUploadCommand({
     Bucket: bucketInfo.BUCKET_NAME,
-    Key: objectStorageKey,
+    Key: key,
     UploadId: createResponse.UploadId,
     MultipartUpload: { Parts: parts }
   })
