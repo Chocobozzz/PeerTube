@@ -449,7 +449,9 @@ export class VideosCommand extends AbstractCommand {
 
       const result = await this.sendResumableChunks({ ...options, pathUploadId, videoFilePath, size })
 
-      await this.endResumableUpload({ ...options, pathUploadId })
+      if (result.statusCode === HttpStatusCode.OK_200) {
+        await this.endResumableUpload({ ...options, expectedStatus: HttpStatusCode.NO_CONTENT_204, pathUploadId })
+      }
 
       return result.body?.video || result.body as any
     }
