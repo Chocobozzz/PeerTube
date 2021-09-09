@@ -92,6 +92,9 @@
  * More robust webtorrent redundancy download
  * Fix hls redundancy in pruning script
  * Fix compat' with old web browsers (Pale Moon, Safari 11, iOS 11, old webkit...))
+ * Fix silent 500 after resumable upload
+ * Fix HTML config injection with custom HTML/CSS
+ * Fix video upload on iOS
 
 
 ## v3.3.0
