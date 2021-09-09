@@ -10,6 +10,7 @@ import { LoadingBarService } from '@ngx-loading-bar/core'
 import { HttpStatusCode, VideoCreateResult, VideoPrivacy } from '@shared/models'
 import { UploaderXFormData } from './uploaderx-form-data'
 import { VideoSend } from './video-send'
+import { isIOS } from 'src/assets/player/utils'
 
 @Component({
   selector: 'my-video-upload',
@@ -69,11 +70,17 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
   ) {
     super()
 
+    // FIXME: https://github.com/Chocobozzz/PeerTube/issues/4382#issuecomment-915854167
+    const chunkSize = isIOS()
+      ? 0
+      : undefined // Auto chunk size
+
     this.uploadxOptions = {
       endpoint: this.BASE_VIDEO_UPLOAD_URL,
       multiple: false,
       token: this.authService.getAccessToken(),
       uploaderClass: UploaderXFormData,
+      chunkSize,
       retryConfig: {
         maxAttempts: 6,
         shouldRetry: (code: number) => {
