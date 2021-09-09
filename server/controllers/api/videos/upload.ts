@@ -2,7 +2,7 @@ import express from 'express'
 import { move } from 'fs-extra'
 import { basename } from 'path'
 import { getLowercaseExtension } from '@server/helpers/core-utils'
-import { deleteResumableUploadMetaFile, getResumableUploadPath } from '@server/helpers/upload'
+import { getResumableUploadPath } from '@server/helpers/upload'
 import { uuidToShort } from '@server/helpers/uuid'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
 import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url'
@@ -129,9 +129,6 @@ export async function addVideoResumable (_req: express.Request, res: express.Res
   const videoPhysicalFile = res.locals.videoFileResumable
   const videoInfo = videoPhysicalFile.metadata
   const files = { previewfile: videoInfo.previewfile }
-
-  // Don't need the meta file anymore
-  await deleteResumableUploadMetaFile(videoPhysicalFile.path)
 
   return addVideo({ res, videoPhysicalFile, videoInfo, files })
 }

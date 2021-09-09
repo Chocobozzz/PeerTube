@@ -449,6 +449,8 @@ export class VideosCommand extends AbstractCommand {
 
       const result = await this.sendResumableChunks({ ...options, pathUploadId, videoFilePath, size })
 
+      await this.endResumableUpload({ ...options, pathUploadId })
+
       return result.body?.video || result.body as any
     }
 
@@ -539,6 +541,19 @@ export class VideosCommand extends AbstractCommand {
 
         readable.resume()
       })
+    })
+  }
+
+  endResumableUpload (options: OverrideCommandOptions & {
+    pathUploadId: string
+  }) {
+    return this.deleteRequest({
+      ...options,
+
+      path: '/api/v1/videos/upload-resumable',
+      rawQuery: options.pathUploadId,
+      implicitToken: true,
+      defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
     })
   }
 

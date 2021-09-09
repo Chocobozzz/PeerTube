@@ -113,6 +113,7 @@ describe('Test resumable upload', function () {
     it('Should correctly delete files after an upload', async function () {
       const uploadId = await prepareUpload()
       await sendChunks({ pathUploadId: uploadId })
+      await server.videos.endResumableUpload({ pathUploadId: uploadId })
 
       expect(await countResumableUploads()).to.equal(0)
     })

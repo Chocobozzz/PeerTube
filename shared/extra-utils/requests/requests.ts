@@ -57,8 +57,14 @@ function makeActivityPubGetRequest (url: string, path: string, expectedStatus = 
   })
 }
 
-function makeDeleteRequest (options: CommonRequestParams) {
+function makeDeleteRequest (options: CommonRequestParams & {
+  query?: any
+  rawQuery?: string
+}) {
   const req = request(options.url).delete(options.path)
+
+  if (options.query) req.query(options.query)
+  if (options.rawQuery) req.query(options.rawQuery)
 
   return buildRequest(req, { accept: 'application/json', expectedStatus: HttpStatusCode.BAD_REQUEST_400, ...options })
 }

@@ -40,6 +40,11 @@ interface InternalGetCommandOptions extends InternalCommonCommandOptions {
   query?: { [ id: string ]: any }
 }
 
+interface InternalDeleteCommandOptions extends InternalCommonCommandOptions {
+  query?: { [ id: string ]: any }
+  rawQuery?: string
+}
+
 abstract class AbstractCommand {
 
   constructor (
@@ -82,8 +87,15 @@ abstract class AbstractCommand {
     })
   }
 
-  protected deleteRequest (options: InternalCommonCommandOptions) {
-    return makeDeleteRequest(this.buildCommonRequestOptions(options))
+  protected deleteRequest (options: InternalDeleteCommandOptions) {
+    const { query, rawQuery } = options
+
+    return makeDeleteRequest({
+      ...this.buildCommonRequestOptions(options),
+
+      query,
+      rawQuery
+    })
   }
 
   protected putBodyRequest (options: InternalCommonCommandOptions & {
