@@ -382,8 +382,9 @@ class ClientHtml {
   }
 
   private static addServerConfig (htmlStringPage: string, serverConfig: HTMLServerConfig) {
-    const serverConfigString = JSON.stringify(serverConfig)
-    const configScriptTag = `<script type="application/javascript">window.PeerTubeServerConfig = '${serverConfigString}'</script>`
+    // Stringify the JSON object, and then stringify the string object so we can inject it into the HTML
+    const serverConfigString = JSON.stringify(JSON.stringify(serverConfig))
+    const configScriptTag = `<script type="application/javascript">window.PeerTubeServerConfig = ${serverConfigString}</script>`
 
     return htmlStringPage.replace(CUSTOM_HTML_TAG_COMMENTS.SERVER_CONFIG, configScriptTag)
   }
