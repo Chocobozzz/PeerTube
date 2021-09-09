@@ -24,7 +24,10 @@ function checkIndexTags (html: string, title: string, description: string, css: 
   expect(html).to.contain('<style class="custom-css-style">' + css + '</style>')
 
   const htmlConfig: HTMLServerConfig = omit(config, 'signup')
-  expect(html).to.contain(`<script type="application/javascript">window.PeerTubeServerConfig = '${JSON.stringify(htmlConfig)}'</script>`)
+  const configObjectString = JSON.stringify(htmlConfig)
+  const configEscapedString = JSON.stringify(configObjectString)
+
+  expect(html).to.contain(`<script type="application/javascript">window.PeerTubeServerConfig = ${configEscapedString}</script>`)
 }
 
 describe('Test a client controllers', function () {
