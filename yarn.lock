@@ -5967,16 +5967,6 @@ markdown-it@^12.0.4:
     mdurl "^1.0.1"
     uc.micro "^1.0.5"
 
-marked-man@^0.7.0:
-  version "0.7.0"
-  resolved "https://registry.yarnpkg.com/marked-man/-/marked-man-0.7.0.tgz#220ba01d275d16f1a98e4e7fc3c5eac0630c68e4"
-  integrity sha512-zxK5E4jbuARALc+fIUAanM2njVGnrd9YvKrqoDHUg2XwNLJijo39EzMIg59LecHBHsIHNtPqepqnJp4SmL/EVg==
-
-marked@^3.0.2:
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/marked/-/marked-3.0.2.tgz#60ce97d6aec34dd882ab4bb4df82494666854e17"
-  integrity sha512-TMJQQ79Z0e3rJYazY0tIoMsFzteUGw9fB3FD+gzuIT3zLuG9L9ckIvUfF51apdJkcqc208jJN2KbtPbOvXtbjA==
-
 math-interval-parser@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/math-interval-parser/-/math-interval-parser-2.0.1.tgz#e22cd6d15a0a7f4c03aec560db76513da615bed4"

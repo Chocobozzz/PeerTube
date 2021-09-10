@@ -5,8 +5,7 @@
   "dependencies": {
     "application-config": "^2.0.0",
     "cli-table3": "^0.6.0",
-    "netrc-parser": "^3.1.6",
-    "webtorrent-hybrid": "^4.0.3"
+    "netrc-parser": "^3.1.6"
   },
   "devDependencies": {}
 }
