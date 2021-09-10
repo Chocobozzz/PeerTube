@@ -178,7 +178,7 @@ class WebTorrentPlugin extends Plugin {
     this.selectAppropriateResolution(true)
   }
 
-  updateResolution (resolutionId: number, delay = 0) {
+  updateEngineResolution (resolutionId: number, delay = 0) {
     // Remember player state
     const currentTime = this.player.currentTime()
     const isPaused = this.player.paused()
@@ -234,6 +234,22 @@ class WebTorrentPlugin extends Plugin {
 
   getCurrentVideoFile () {
     return this.currentVideoFile
+  }
+
+  changeQuality (id: number) {
+    if (id === -1) {
+      if (this.autoResolutionPossible === true) {
+        this.autoResolution = true
+
+        this.selectAppropriateResolution(false)
+      }
+
+      return
+    }
+
+    this.autoResolution = false
+    this.updateEngineResolution(id)
+    this.selectAppropriateResolution(false)
   }
 
   private addTorrent (
@@ -458,7 +474,7 @@ class WebTorrentPlugin extends Plugin {
       }
 
       if (changeResolution === true) {
-        this.updateResolution(file.resolution.id, changeResolutionDelay)
+        this.updateEngineResolution(file.resolution.id, changeResolutionDelay)
 
         // Wait some seconds in observation of our new resolution
         this.isAutoResolutionObservation = true
@@ -598,14 +614,14 @@ class WebTorrentPlugin extends Plugin {
       label: this.buildQualityLabel(file),
       height: file.resolution.id,
       selected: false,
-      selectCallback: () => this.qualitySwitchCallback(file.resolution.id)
+      selectCallback: () => this.changeQuality(file.resolution.id)
     }))
 
     resolutions.push({
       id: -1,
       label: this.player.localize('Auto'),
       selected: true,
-      selectCallback: () => this.qualitySwitchCallback(-1)
+      selectCallback: () => this.changeQuality(-1)
     })
 
     this.player.peertubeResolutions().add(resolutions)
@@ -619,22 +635,6 @@ class WebTorrentPlugin extends Plugin {
     }
 
     return label
-  }
-
-  private qualitySwitchCallback (id: number) {
-    if (id === -1) {
-      if (this.autoResolutionPossible === true) {
-        this.autoResolution = true
-
-        this.selectAppropriateResolution(false)
-      }
-
-      return
-    }
-
-    this.autoResolution = false
-    this.updateResolution(id)
-    this.selectAppropriateResolution(false)
   }
 
   private selectAppropriateResolution (byEngine: boolean) {

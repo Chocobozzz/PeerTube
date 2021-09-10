@@ -64,19 +64,12 @@ export class PeerTubeEmbedApi {
     if (this.isWebtorrent()) {
       if (resolutionId === -1 && this.embed.player.webtorrent().isAutoResolutionPossible() === false) return
 
-      // Auto resolution
-      if (resolutionId === -1) {
-        this.embed.player.webtorrent().enableAutoResolution()
-        return
-      }
-
-      this.embed.player.webtorrent().disableAutoResolution()
-      this.embed.player.webtorrent().updateResolution(resolutionId)
+      this.embed.player.webtorrent().changeQuality(resolutionId)
 
       return
     }
 
-    this.embed.player.p2pMediaLoader().getHLSJS().nextLevel = resolutionId
+    this.embed.player.p2pMediaLoader().getHLSJS().currentLevel = resolutionId
   }
 
   private getCaptions (): PeerTubeTextTrack[] {
@@ -142,6 +135,8 @@ export class PeerTubeEmbedApi {
     this.embed.player.peertubeResolutions().on('resolutionsAdded', () => this.loadResolutions())
     this.embed.player.peertubeResolutions().on('resolutionChanged', () => this.loadResolutions())
 
+    this.loadResolutions()
+
     this.embed.player.on('volumechange', () => {
       this.channel.notify({
         method: 'volumeChange',
@@ -150,37 +145,11 @@ export class PeerTubeEmbedApi {
     })
   }
 
-  private loadWebTorrentResolutions () {
-    this.resolutions = []
-
-    const currentResolutionId = this.embed.player.webtorrent().getCurrentResolutionId()
-
-    for (const videoFile of this.embed.player.webtorrent().videoFiles) {
-      let label = videoFile.resolution.label
-      if (videoFile.fps && videoFile.fps >= 50) {
-        label += videoFile.fps
-      }
-
-      this.resolutions.push({
-        id: videoFile.resolution.id,
-        label,
-        src: videoFile.magnetUri,
-        active: videoFile.resolution.id === currentResolutionId,
-        height: videoFile.resolution.id
-      })
-    }
-
-    this.channel.notify({
-      method: 'resolutionUpdate',
-      params: this.resolutions
-    })
-  }
-
   private loadResolutions () {
     this.resolutions = this.embed.player.peertubeResolutions().getResolutions()
       .map(r => ({
         id: r.id,
-        label: r.height + 'p',
+        label: r.label,
         active: r.selected,
         width: r.width,
         height: r.height
