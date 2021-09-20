@@ -51,7 +51,9 @@ class ServerConfigManager {
         customizations: {
           javascript: CONFIG.INSTANCE.CUSTOMIZATIONS.JAVASCRIPT,
           css: CONFIG.INSTANCE.CUSTOMIZATIONS.CSS
-        }
+        },
+        onlyShowAuthorChannel: CONFIG.INSTANCE.ONLY_SHOW_CHANNEL_AUTHOR,
+        showAuthorDisplayNameInMiniatures: CONFIG.INSTANCE.SHOW_AUTHOR_DISPLAY_NAME_IN_MINIATURES
       },
       search: {
         remoteUri: {

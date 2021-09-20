@@ -43,6 +43,8 @@ export interface ServerConfig {
       javascript: string
       css: string
     }
+    onlyShowAuthorChannel: boolean
+    showAuthorDisplayNameInMiniatures: boolean
   }
 
   search: {

@@ -20,23 +20,11 @@
   position: relative;
   margin-bottom: 5px;
 
-  &.generic-channel {
-    .account {
-      @include main();
-    }
-
-    .channel {
-      display: none !important;
-    }
+  .main-avatar {
+    @include main();
   }
 
-  &:not(.generic-channel) {
-    .account {
-      @include secondary();
-    }
-
-    .channel {
-      @include main();
-    }
+  .second-avatar {
+    @include secondary();
   }
 }

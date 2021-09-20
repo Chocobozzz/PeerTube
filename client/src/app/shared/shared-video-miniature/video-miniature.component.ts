@@ -240,6 +240,11 @@ export class VideoMiniatureComponent implements OnInit {
   }
 
   private setUpBy () {
+    if (this.serverConfig.instance.onlyShowAuthorChannel === true) {
+      this.ownerDisplayType = 'videoChannel'
+      return
+    }
+
     const accountName = this.video.account.name
 
     // If the video channel name is an UUID (not really displayable, we changed this behaviour in v1.0.0-beta.12)

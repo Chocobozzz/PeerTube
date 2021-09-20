@@ -60,19 +60,19 @@
 
           <div class="pt-3 border-top video-info-channel d-flex">
             <div class="video-info-channel-left d-flex">
-              <my-video-avatar-channel [video]="video" [genericChannel]="isChannelDisplayNameGeneric()"></my-video-avatar-channel>
+              <my-video-avatar-channel [video]="video" [showAccount]="!onlyShowAuthorChannel" [showChannel]="!isChannelDisplayNameGeneric() || onlyShowAuthorChannel"></my-video-avatar-channel>
 
               <div class="video-info-channel-left-links ml-1">
-                <ng-container *ngIf="!isChannelDisplayNameGeneric()">
-                  <a [routerLink]="[ '/c', video.byVideoChannel ]" i18n-title title="Channel page">
+                <ng-container *ngIf="!isChannelDisplayNameGeneric() || onlyShowAuthorChannel">
+                  <a [routerLink]="[ '/c', video.byVideoChannel ]" i18n-title title="Channel page" [class.single-link]="onlyShowAuthorChannel">
                     {{ video.channel.displayName }}
                   </a>
-                  <a [routerLink]="[ '/a', video.byAccount ]" i18n-title title="Account page">
+                  <a [routerLink]="[ '/a', video.byAccount ]" i18n-title title="Account page" *ngIf="!onlyShowAuthorChannel">
                     <span i18n>By {{ video.byAccount }}</span>
                   </a>
                 </ng-container>
 
-                <ng-container *ngIf="isChannelDisplayNameGeneric()">
+                <ng-container *ngIf="isChannelDisplayNameGeneric() && !onlyShowAuthorChannel">
                   <a [routerLink]="[ '/a', video.byAccount ]" class="single-link" i18n-title title="Account page">
                     <span i18n>{{ video.byAccount }}</span>
                   </a>

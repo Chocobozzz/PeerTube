@@ -409,6 +409,9 @@ instance:
   terms: 'No terms for now.' # Support markdown
   code_of_conduct: '' # Supports markdown
 
+  only_show_channel_author: false
+  show_author_display_name_in_miniatures: false
+
   # Who moderates the instance? What is the policy regarding NSFW videos? Political videos? etc
   moderation_information: '' # Supports markdown
 
