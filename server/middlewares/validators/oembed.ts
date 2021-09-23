@@ -67,7 +67,7 @@ const oembedValidator = [
 
     const startIsOk = isVideo || isPlaylist
 
-    const matches = watchRegex.exec(url)
+    const matches = watchRegex.exec(new URL(url).pathname)
 
     if (startIsOk === false || matches === null) {
       return res.fail({
