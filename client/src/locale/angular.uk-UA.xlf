@@ -220,12 +220,12 @@
       </trans-unit>
       <trans-unit id="5201790281220738609" datatype="html">
         <source>Search playlists</source>
-        <target state="translated">Шукати списки відтворення</target>
+        <target state="translated">Шукати добірки</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-add-to-playlist.component.html</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
       <trans-unit id="6056859576122955708" datatype="html">
         <source>Create a private playlist</source>
-        <target state="translated">Створити приватний список відтворення</target>
+        <target state="translated">Створити приватну добірку</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-add-to-playlist.component.html</context><context context-type="linenumber">66</context></context-group>
       </trans-unit>
       <trans-unit id="2409672154570643758" datatype="html">
@@ -646,12 +646,12 @@
       </trans-unit>
       <trans-unit id="6691897331062834756" datatype="html">
         <source>Subscribe with an account on this instance</source>
-        <target state="translated">Підписатися через обліковий запис на цьому сервері</target>
+        <target state="translated">Підписатися за допомогою облікового запису на цьому сервері</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">57</context></context-group>
       </trans-unit>
       <trans-unit id="1740917574463702967">
         <source>Subscribe with your local account</source>
-        <target state="translated">Підписатися через локальний обліковий запис</target>
+        <target state="translated">Підписатися за допомогою локального облікового запису</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">58</context></context-group>
       </trans-unit>
       <trans-unit id="7639191791633609999" datatype="html">
@@ -666,7 +666,7 @@
       </trans-unit>
       <trans-unit id="7695158742270602420">
         <source>Subscribe via RSS</source>
-        <target>Підписатися через RSS</target>
+        <target>Підписатися за допомогою RSS</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">69</context></context-group>
       </trans-unit>
       <trans-unit id="6086125715086510222" datatype="html">
@@ -676,12 +676,12 @@
       </trans-unit>
       <trans-unit id="855178133027341271" datatype="html">
         <source><x id="START_TAG_SPAN"/>Remote subscribe<x id="CLOSE_TAG_SPAN"/><x id="START_TAG_SPAN_1"/>Remote interact<x id="CLOSE_TAG_SPAN"/></source>
-        <target state="translated"><x id="START_TAG_SPAN"/>Віддалена підписка <x id="CLOSE_TAG_SPAN"/><x id="START_TAG_SPAN_1"/>Віддалена взаємодія<x id="CLOSE_TAG_SPAN"/></target>
+        <target state="translated"><x id="START_TAG_SPAN"/>Віддалена підписка<x id="CLOSE_TAG_SPAN"/><x id="START_TAG_SPAN_1"/>Віддалена взаємодія<x id="CLOSE_TAG_SPAN"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/remote-subscribe.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="6462281745850371027" datatype="html">
         <source>You can subscribe to the channel via any ActivityPub-capable fediverse instance (PeerTube, Mastodon or Pleroma for example).</source>
-        <target state="translated">Ви можете підписатись на канал через будь-який екземпляр Fediverse з підтримною ActivityPub (наприклад, PeerTube, Mastodon або Pleroma).</target>
+        <target state="translated">Ви можете підписатися на канал через будь-який сервер Fediverse з підтримною ActivityPub (наприклад, PeerTube, Mastodon або Pleroma).</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/remote-subscribe.component.html</context>
           <context context-type="linenumber">18,19</context>
@@ -1193,9 +1193,7 @@
       </trans-unit>
       <trans-unit id="5500467336262464724" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ result.followersCount }}"/> subscribers </source>
-        <target state="translated">
-          <x id="INTERPOLATION" equiv-text="{{ result.followersCount }}"/> підписалися
-        </target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ result.followersCount }}"/> підписників </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-subscriptions/my-subscriptions.component.html</context><context context-type="linenumber">25</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search.component.html</context><context context-type="linenumber">55</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-avatar-edit.component.html</context><context context-type="linenumber">27</context></context-group>
@@ -1232,7 +1230,7 @@
       </trans-unit>
       <trans-unit id="3848077896245199337" datatype="html">
         <source>Setup your account, managing video playlists, discover third-party applications...</source>
-        <target state="translated">Налаштувати ваш обліковий запис, керувати списками відтворення, переглянути додатки третіх сторін...</target>
+        <target state="translated">Налаштувати ваш обліковий запис, керувати добірками, переглянути сторонні застосунки...</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="6284442506490785579" datatype="html">
@@ -4677,7 +4675,7 @@
       </trans-unit>
       <trans-unit id="407487463718398437" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {Subscriber} other {Subscribers} }</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {підписник} few {підписники} many {підписників} other {підписників} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {підписник} few {підписники} many {підписників} other {підписника} }</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">36</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">36</context></context-group>
       </trans-unit>
@@ -5696,9 +5694,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5500467336262464724" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ videoChannel.followersCount }}"/> subscribers </source>
-        <target state="new">
-          <x id="INTERPOLATION" equiv-text="{{ videoChannel.followersCount }}"/> subscribers
-        </target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ videoChannel.followersCount }}"/> підписників </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-subscriptions/my-subscriptions.component.html</context><context context-type="linenumber">25</context></context-group>
       </trans-unit>
       <trans-unit id="626184983378002054" datatype="html">
@@ -5740,9 +5736,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5500467336262464724" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ actor.followersCount }}"/> subscribers </source>
-        <target state="new">
-          <x id="INTERPOLATION" equiv-text="{{ actor.followersCount }}"/> subscribers
-        </target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ actor.followersCount }}"/> підписників </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-avatar-edit.component.html</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="31472093355465024" datatype="html">
@@ -6133,7 +6127,7 @@ color: red;
       </trans-unit>
       <trans-unit id="403587185492002456" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 subscriber} other {<x id="INTERPOLATION"/> subscribers}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {1 підписник} few {<x id="INTERPOLATION"/> підписники}} many {<x id="INTERPOLATION"/> підписників}} other {<x id="INTERPOLATION"/> підписників}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 підписник} few {<x id="INTERPOLATION"/> підписники} many {<x id="INTERPOLATION"/> підписників} other {<x id="INTERPOLATION"/> підписника}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context><context context-type="linenumber">23</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.html</context><context context-type="linenumber">28</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.html</context><context context-type="linenumber">73</context></context-group>
@@ -6707,25 +6701,25 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="8583412279916132438" datatype="html">
         <source>Channel display name</source>
-        <target state="new">Channel display name</target>
+        <target state="translated">Показувана назва каналу</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register-step-channel.component.html</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="6980413875907286634" datatype="html">
         <source>Channel name</source>
-        <target state="new">Channel name</target>
+        <target state="translated">Назва каналу</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register-step-channel.component.html</context><context context-type="linenumber">30</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">94</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">94</context></context-group>
       </trans-unit>
       <trans-unit id="8463487834152954723" datatype="html">
         <source>john_channel</source>
-        <target state="new">john_channel</target>
+        <target state="translated">максим_канал</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">96</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">96</context></context-group>
       </trans-unit>
       <trans-unit id="7901486036096751355" datatype="html">
         <source>Example: my_super_channel</source>
-        <target state="new">Example: my_super_channel</target>
+        <target state="translated">Приклад: my_super_channel</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register-step-channel.component.html</context><context context-type="linenumber">34</context></context-group>
       </trans-unit>
       <trans-unit id="7981235640417633362" datatype="html">
@@ -6887,7 +6881,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="4097331874769079975" datatype="html">
         <source><x id="PH"/> subscribers</source>
-        <target state="translated"><x id="PH"/> підписники</target>
+        <target state="translated"><x id="PH"/> підписників</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context><context context-type="linenumber">126</context></context-group>
       </trans-unit>
       <trans-unit id="1035838766454786107" datatype="html">
@@ -8355,7 +8349,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="5032453707232754344" datatype="html">
         <source>Playlist <x id="PH"/> created.</source>
-        <target state="translated">Список відтворення <x id="PH"/> створено.</target>
+        <target state="translated">Добірку <x id="PH"/> створено.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-create.component.ts</context><context context-type="linenumber">77</context></context-group>
       </trans-unit>
       <trans-unit id="5674286808255988565" datatype="html">
@@ -8366,7 +8360,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="8869957234869568361" datatype="html">
         <source>Update playlist</source>
-        <target state="translated">Оновити список відтворення</target>
+        <target state="translated">Оновити добірку</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-library-routing.module.ts</context><context context-type="linenumber">66</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-elements.component.ts</context><context context-type="linenumber">47</context></context-group>
       </trans-unit>
@@ -8384,12 +8378,12 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="104404386496394770" datatype="html">
         <source>Delete playlist</source>
-        <target state="translated">Видалити список відтворення</target>
+        <target state="translated">Видалити добірку</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-elements.component.ts</context><context context-type="linenumber">52</context></context-group>
       </trans-unit>
       <trans-unit id="1431617394009162547" datatype="html">
         <source>Playlist <x id="PH"/> updated.</source>
-        <target state="translated">Список відтворення <x id="PH"/> оновлено.</target>
+        <target state="translated">Добірку <x id="PH"/> оновлено.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-update.component.ts</context><context context-type="linenumber">100</context></context-group>
       </trans-unit>
       <trans-unit id="2027805873922338635" datatype="html">
@@ -8406,7 +8400,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="3380608219513805292" datatype="html">
         <source>Playlist <x id="PH"/> deleted.</source>
-        <target state="translated">Список відтворення <x id="PH"/> видалено.</target>
+        <target state="translated">Добірку <x id="PH"/> видалено.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-elements.component.ts</context><context context-type="linenumber">135</context></context-group>
       </trans-unit>
       <trans-unit id="3058024914967508975" datatype="html">
@@ -8464,7 +8458,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="7545420287297803988" datatype="html">
         <source>My playlists</source>
-        <target state="translated">Мої списки відтворення</target>
+        <target state="translated">Мої добірки</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="2527931602940887636" datatype="html">
@@ -8504,7 +8498,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="1823843876735462104" datatype="html">
         <source>Playlists</source>
-        <target state="translated">Списки відтворення</target>
+        <target state="translated">Добірки</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-library.component.ts</context><context context-type="linenumber">61</context></context-group>
       </trans-unit>
       <trans-unit id="7916647920967632052" datatype="html">
@@ -8548,7 +8542,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="1783173774503340906" datatype="html">
         <source>Subscribe to the account</source>
-        <target state="new">Subscribe to the account</target>
+        <target state="translated">Підписатися на обліковий запис</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.ts</context><context context-type="linenumber">71</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">713</context></context-group>
       </trans-unit>
@@ -9595,17 +9589,17 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="8728283516316752593" datatype="html">
         <source>This file is too large.</source>
-        <target state="new">This file is too large.</target>
+        <target state="translated">Цей файл завеликий.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/reactive-file.component.ts</context><context context-type="linenumber">50</context></context-group>
       </trans-unit>
       <trans-unit id="6360987759186261451" datatype="html">
         <source>PeerTube cannot handle this kind of file. Accepted extensions are <x id="PH"/>}.</source>
-        <target state="new">PeerTube cannot handle this kind of file. Accepted extensions are <x id="PH"/>}.</target>
+        <target state="translated">PeerTube не може обробляти такі файли. Допустимі розширення <x id="PH"/>}.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/reactive-file.component.ts</context><context context-type="linenumber">56</context></context-group>
       </trans-unit>
       <trans-unit id="3393133458004181121" datatype="html">
         <source>All categories</source>
-        <target state="new">All categories</target>
+        <target state="translated">Усі категорії</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-categories.component.ts</context>
           <context context-type="linenumber">24</context>
@@ -9613,7 +9607,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="3999967345340145904" datatype="html">
         <source>You can't select more than <x id="PH" equiv-text="this.maxItems"/> items</source>
-        <target state="new">You can't select more than <x id="PH" equiv-text="this.maxItems"/> items</target>
+        <target state="translated">Ви не можете вибрати більше за <x id="PH" equiv-text="this.maxItems"/> елементів</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-checkbox-all.component.ts</context>
           <context context-type="linenumber">81</context>
@@ -9621,12 +9615,12 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="6708273825233539746" datatype="html">
         <source>Add a new option</source>
-        <target state="new">Add a new option</target>
+        <target state="translated">Додати нову опцію</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/select/select-checkbox.component.ts</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="4076995379551303829" datatype="html">
         <source>Custom value...</source>
-        <target state="new">Custom value...</target>
+        <target state="translated">Власне значення...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-custom-value.component.ts</context>
           <context context-type="linenumber">69</context>
@@ -9634,338 +9628,328 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="4670312387769733978" datatype="html">
         <source>All unsaved data will be lost, are you sure you want to leave this page?</source>
-        <target state="new">All unsaved data will be lost, are you sure you want to leave this page?</target>
+        <target state="translated">Усі незбережені дані будуть втрачені. Ви впевнені, що хочете залишити цю сторінку?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/routing/can-deactivate-guard.service.ts</context><context context-type="linenumber">19</context></context-group>
       </trans-unit>
       <trans-unit id="6950140976689343775" datatype="html">
         <source>Sunday</source>
-        <target state="new">Sunday</target>
+        <target state="translated">Неділя</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="8739442281958563044" datatype="html">
         <source>Monday</source>
-        <target state="new">Monday</target>
+        <target state="translated">Понеділок</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="9176037901730521018" datatype="html">
         <source>Tuesday</source>
-        <target state="new">Tuesday</target>
+        <target state="translated">Вівторок</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">12</context></context-group>
       </trans-unit>
       <trans-unit id="8798932904948432529" datatype="html">
         <source>Wednesday</source>
-        <target state="new">Wednesday</target>
+        <target state="translated">Середа</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="1433683192825895947" datatype="html">
         <source>Thursday</source>
-        <target state="new">Thursday</target>
+        <target state="translated">Четвер</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="3730139500618908668" datatype="html">
         <source>Friday</source>
-        <target state="new">Friday</target>
+        <target state="translated">П'ятниця</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="1830554030016307335" datatype="html">
         <source>Saturday</source>
-        <target state="new">Saturday</target>
+        <target state="translated">Субота</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">16</context></context-group>
       </trans-unit>
       <trans-unit id="4921929243068857081" datatype="html">
         <source>Sun</source>
-        <target state="new">Sun</target>
+        <target state="translated">Нд</target>
         <note priority="1" from="description">Day name short</note>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">20</context></context-group>
       </trans-unit>
       <trans-unit id="8563137213157122993" datatype="html">
         <source>Mon</source>
-        <target state="new">Mon</target>
+        <target state="translated">Пн</target>
         <note priority="1" from="description">Day name short</note>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">21</context></context-group>
       </trans-unit>
       <trans-unit id="8502240922750617054" datatype="html">
         <source>Tue</source>
-        <target state="new">Tue</target>
+        <target state="translated">Вт</target>
         <note priority="1" from="description">Day name short</note>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">22</context></context-group>
       </trans-unit>
       <trans-unit id="7421778640995344715" datatype="html">
         <source>Wed</source>
-        <target state="new">Wed</target>
+        <target state="translated">Ср</target>
         <note priority="1" from="description">Day name short</note>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">23</context></context-group>
       </trans-unit>
       <trans-unit id="4409954796361883558" datatype="html">
         <source>Thu</source>
-        <target state="new">Thu</target>
+        <target state="translated">Чт</target>
         <note priority="1" from="description">Day name short</note>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">24</context></context-group>
       </trans-unit>
       <trans-unit id="5651951128882735477" datatype="html">
         <source>Fri</source>
-        <target state="new">Fri</target>
+        <target state="translated">Пт</target>
         <note priority="1" from="description">Day name short</note>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">25</context></context-group>
       </trans-unit>
       <trans-unit id="93026920674143073" datatype="html">
         <source>Sat</source>
-        <target state="new">Sat</target>
+        <target state="translated">Сб</target>
         <note priority="1" from="description">Day name short</note>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="8349763432924710200" datatype="html">
         <source>Su</source>
-        <target state="new">Su</target>
+        <target state="translated">Нд</target>
         <note priority="1" from="description">Day name min</note>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">30</context></context-group>
       </trans-unit>
       <trans-unit id="4197236438302165051" datatype="html">
         <source>Mo</source>
-        <target state="new">Mo</target>
+        <target state="translated">Пн</target>
         <note priority="1" from="description">Day name min</note>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">31</context></context-group>
       </trans-unit>
       <trans-unit id="6034455877220674404" datatype="html">
         <source>Tu</source>
-        <target state="new">Tu</target>
+        <target state="translated">Вт</target>
         <note priority="1" from="description">Day name min</note>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">32</context></context-group>
       </trans-unit>
       <trans-unit id="3221670730445125135" datatype="html">
         <source>We</source>
-        <target state="new">We</target>
+        <target state="translated">Ср</target>
         <note priority="1" from="description">Day name min</note>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">33</context></context-group>
       </trans-unit>
       <trans-unit id="772466829681972216" datatype="html">
         <source>Th</source>
-        <target state="new">Th</target>
+        <target state="translated">Чт</target>
         <note priority="1" from="description">Day name min</note>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">34</context></context-group>
       </trans-unit>
       <trans-unit id="8598262708800132669" datatype="html">
         <source>Fr</source>
-        <target state="new">Fr</target>
+        <target state="translated">Пт</target>
         <note priority="1" from="description">Day name min</note>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">35</context></context-group>
       </trans-unit>
       <trans-unit id="569007902695332072" datatype="html">
         <source>Sa</source>
-        <target state="new">Sa</target>
+        <target state="translated">Сб</target>
         <note priority="1" from="description">Day name min</note>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">36</context></context-group>
       </trans-unit>
       <trans-unit id="3913843642962116845" datatype="html">
         <source>January</source>
-        <target state="new">January</target>
+        <target state="translated">Січень</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">40</context></context-group>
       </trans-unit>
       <trans-unit id="6642324138857419870" datatype="html">
         <source>February</source>
-        <target state="new">February</target>
+        <target state="translated">Лютий</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="7918954644624211958" datatype="html">
         <source>March</source>
-        <target state="new">March</target>
+        <target state="translated">Березень</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">42</context></context-group>
       </trans-unit>
       <trans-unit id="1809521303476565743" datatype="html">
         <source>April</source>
-        <target state="new">April</target>
+        <target state="translated">Квітень</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">43</context></context-group>
       </trans-unit>
       <trans-unit id="8469692700277617405" datatype="html">
         <source>May</source>
-        <target state="new">May</target>
+        <target state="translated">Травень</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">44</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">59</context></context-group>
       </trans-unit>
       <trans-unit id="9055297580745330415" datatype="html">
         <source>June</source>
-        <target state="new">June</target>
+        <target state="translated">Червень</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
       <trans-unit id="9087113544612471348" datatype="html">
         <source>July</source>
-        <target state="new">July</target>
+        <target state="translated">Липень</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">46</context></context-group>
       </trans-unit>
       <trans-unit id="3984618989093293779" datatype="html">
         <source>August</source>
-        <target state="new">August</target>
+        <target state="translated">Серпень</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">47</context></context-group>
       </trans-unit>
       <trans-unit id="5872622085239011307" datatype="html">
         <source>September</source>
-        <target state="new">September</target>
+        <target state="translated">Вересень</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">48</context></context-group>
       </trans-unit>
       <trans-unit id="1491482705364427867" datatype="html">
         <source>October</source>
-        <target state="new">October</target>
+        <target state="translated">Жовтень</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">49</context></context-group>
       </trans-unit>
       <trans-unit id="1109977718843277527" datatype="html">
         <source>November</source>
-        <target state="new">November</target>
+        <target state="translated">Листопад</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">50</context></context-group>
       </trans-unit>
       <trans-unit id="124191049522509365" datatype="html">
         <source>December</source>
-        <target state="new">December</target>
+        <target state="translated">Грудень</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">51</context></context-group>
       </trans-unit>
       <trans-unit id="7595747576974676670" datatype="html">
         <source>Jan</source>
-        <target state="new">Jan</target>
+        <target state="translated">Січ</target>
         <note priority="1" from="description">Month name short</note>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">55</context></context-group>
       </trans-unit>
       <trans-unit id="4916040996255005712" datatype="html">
         <source>Feb</source>
-        <target state="new">Feb</target>
+        <target state="translated">Лют</target>
         <note priority="1" from="description">Month name short</note>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">56</context></context-group>
       </trans-unit>
       <trans-unit id="6438827956918137617" datatype="html">
         <source>Mar</source>
-        <target state="new">Mar</target>
+        <target state="translated">Бер</target>
         <note priority="1" from="description">Month name short</note>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">57</context></context-group>
       </trans-unit>
       <trans-unit id="5507326650332881991" datatype="html">
         <source>Apr</source>
-        <target state="new">Apr</target>
+        <target state="translated">Кві</target>
         <note priority="1" from="description">Month name short</note>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">58</context></context-group>
       </trans-unit>
       <trans-unit id="2113470244260512015" datatype="html">
         <source>Jun</source>
-        <target state="new">Jun</target>
+        <target state="translated">Чер</target>
         <note priority="1" from="description">Month name short</note>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">60</context></context-group>
       </trans-unit>
       <trans-unit id="53176888553719239" datatype="html">
         <source>Jul</source>
-        <target state="new">Jul</target>
+        <target state="translated">Лип</target>
         <note priority="1" from="description">Month name short</note>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">61</context></context-group>
       </trans-unit>
       <trans-unit id="5648574669404659458" datatype="html">
         <source>Aug</source>
-        <target state="new">Aug</target>
+        <target state="translated">Сер</target>
         <note priority="1" from="description">Month name short</note>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">62</context></context-group>
       </trans-unit>
       <trans-unit id="4354095055982674918" datatype="html">
         <source>Sep</source>
-        <target state="new">Sep</target>
+        <target state="translated">Вер</target>
         <note priority="1" from="description">Month name short</note>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">63</context></context-group>
       </trans-unit>
       <trans-unit id="6207754626941051341" datatype="html">
         <source>Oct</source>
-        <target state="new">Oct</target>
+        <target state="translated">Жов</target>
         <note priority="1" from="description">Month name short</note>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">64</context></context-group>
       </trans-unit>
       <trans-unit id="8269261039058575292" datatype="html">
         <source>Nov</source>
-        <target state="new">Nov</target>
+        <target state="translated">Лис</target>
         <note priority="1" from="description">Month name short</note>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">65</context></context-group>
       </trans-unit>
       <trans-unit id="7777579586760423636" datatype="html">
         <source>Dec</source>
-        <target state="new">Dec</target>
+        <target state="translated">Гру</target>
         <note priority="1" from="description">Month name short</note>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">66</context></context-group>
       </trans-unit>
       <trans-unit id="8700121026680200191" datatype="html">
         <source>Clear</source>
-        <target state="new">Clear</target>
+        <target state="translated">Очистити</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">71</context></context-group>
       </trans-unit>
       <trans-unit id="5922757127987546008" datatype="html">
         <source>yy-mm-dd</source>
-        <target state="new">yy-mm-dd </target>
+        <target state="translated">рр-мм-дд</target>
         <note priority="1" from="description">Date format in this locale.</note>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">83</context></context-group>
       </trans-unit>
       <trans-unit id="2830831449226931729" datatype="html">
         <source>Instance languages</source>
-        <target state="new">Instance languages</target>
+        <target state="translated">Мови сервера</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context><context context-type="linenumber">179</context></context-group>
       </trans-unit>
       <trans-unit id="40119547597591062" datatype="html">
         <source>All languages</source>
-        <target state="new">All languages</target>
+        <target state="translated">Усі мови</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context><context context-type="linenumber">180</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/select/select-languages.component.ts</context><context context-type="linenumber">25</context></context-group>
       </trans-unit>
       <trans-unit id="996392855508119363" datatype="html">
         <source>Hidden</source>
-        <target state="new">Hidden</target>
+        <target state="translated">Сховані</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context><context context-type="linenumber">53</context></context-group>
       </trans-unit>
       <trans-unit id="2173989454916398137" datatype="html">
         <source>Blurred with confirmation request</source>
-        <target state="new">Blurred with confirmation request</target>
+        <target state="translated">Розмито запитом підтвердження</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context><context context-type="linenumber">54</context></context-group>
       </trans-unit>
       <trans-unit id="8929218224642530466" datatype="html">
         <source>Displayed</source>
-        <target state="new">Displayed</target>
+        <target state="translated">Показано</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context><context context-type="linenumber">55</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">227</context></context-group>
       </trans-unit>
       <trans-unit id="6291055174438137560" datatype="html">
         <source>~ 1 minute</source>
-        <target state="new">~ 1 minute</target>
+        <target state="translated">~ 1 хвилина</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context><context context-type="linenumber">74</context></context-group>
       </trans-unit>
       <trans-unit id="189524047518780716" datatype="html">
         <source>~ <x id="PH"/> minutes</source>
-        <target state="new">~ <x id="PH"/> minutes</target>
+        <target state="translated">~ <x id="PH"/> хвилин</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context><context context-type="linenumber">76</context></context-group>
       </trans-unit>
       <trans-unit id="6028521920505655348" datatype="html">
         <source><x id="PH"/> of full HD videos </source>
-        <target state="new">
-          <x id="PH"/> of full HD videos
-        </target>
+        <target state="translated"><x id="PH"/> із full HD відео </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context><context context-type="linenumber">92</context></context-group>
       </trans-unit>
       <trans-unit id="117588083391484998" datatype="html">
         <source><x id="PH"/> of HD videos </source>
-        <target state="new">
-          <x id="PH"/> of HD videos
-        </target>
+        <target state="translated"><x id="PH"/> із HD відео </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context><context context-type="linenumber">93</context></context-group>
       </trans-unit>
       <trans-unit id="6636555695556123073" datatype="html">
         <source><x id="PH"/> of average quality videos </source>
-        <target state="new">
-          <x id="PH"/> of average quality videos
-        </target>
+        <target state="translated"><x id="PH"/> із середньою якістю відео </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context><context context-type="linenumber">94</context></context-group>
       </trans-unit>
       <trans-unit id="6952960992592445535" datatype="html">
         <source><x id="PH"/> (channel page) </source>
-        <target state="new">
-          <x id="PH"/> (channel page)
-        </target>
+        <target state="translated"><x id="PH"/> (сторінка каналу) </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/metadata/video-avatar-channel.component.ts</context><context context-type="linenumber">19</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image/actor-avatar.component.ts</context><context context-type="linenumber">40</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context><context context-type="linenumber">113</context></context-group>
       </trans-unit>
       <trans-unit id="1209500590333005801" datatype="html">
         <source><x id="PH"/> (account page) </source>
-        <target state="new">
-          <x id="PH"/> (account page)
-        </target>
+        <target state="translated"><x id="PH"/> (сторінка облікового запису) </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/metadata/video-avatar-channel.component.ts</context><context context-type="linenumber">20</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image/actor-avatar.component.ts</context><context context-type="linenumber">39</context></context-group>
       </trans-unit>
@@ -9976,12 +9960,12 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="7565716024468232322" datatype="html">
         <source>Links</source>
-        <target state="new">Links</target>
+        <target state="translated">Посилання</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/misc/help.component.ts</context><context context-type="linenumber">82</context></context-group>
       </trans-unit>
       <trans-unit id="7838476952710404110" datatype="html">
         <source>New lines</source>
-        <target state="new">New lines</target>
+        <target state="translated">Нові рядки</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/misc/help.component.ts</context><context context-type="linenumber">83</context></context-group>
       </trans-unit>
       <trans-unit id="8756167649220050929" datatype="html">
@@ -9991,19 +9975,17 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="414887388288176527" datatype="html">
         <source>Images</source>
-        <target state="new">Images</target>
+        <target state="translated">Зображення</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/misc/help.component.ts</context><context context-type="linenumber">85</context></context-group>
       </trans-unit>
       <trans-unit id="6853170548960328665" datatype="html">
         <source>Close search</source>
-        <target state="new">Close search</target>
+        <target state="translated">Закрити пошук</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/misc/simple-search-input.component.html</context><context context-type="linenumber">19</context></context-group>
       </trans-unit>
       <trans-unit id="5708680277917691451" datatype="html">
         <source><x id="PH"/> users banned. </source>
-        <target state="new">
-          <x id="PH"/> users banned.
-        </target>
+        <target state="translated"><x id="PH"/> користувачів заблоковано. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-ban-modal.component.ts</context><context context-type="linenumber">53</context></context-group>
       </trans-unit>
       <trans-unit id="2448281151916042849" datatype="html">
@@ -10114,17 +10096,17 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="6315346579373254461" datatype="html">
         <source>Delete account comments</source>
-        <target state="new">Delete account comments</target>
+        <target state="translated">Видалити коментарі облікового запису</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">227</context></context-group>
       </trans-unit>
       <trans-unit id="8559170154828316298" datatype="html">
         <source>Will remove comments of this account (may take several minutes).</source>
-        <target state="new">Will remove comments of this account (may take several minutes).</target>
+        <target state="translated">Вилучить коментарі цього облікового запису (може тривати кілька хвилин).</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">233</context></context-group>
       </trans-unit>
       <trans-unit id="7187838764371214919" datatype="html">
         <source>Edit user</source>
-        <target state="new">Edit user</target>
+        <target state="translated">Редагувати користувача</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">261</context></context-group>
       </trans-unit>
       <trans-unit id="4728427543536046034" datatype="html">
@@ -10134,12 +10116,12 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="7913022656086109932" datatype="html">
         <source>Delete user</source>
-        <target state="new">Delete user</target>
+        <target state="translated">Видалити користувача</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">266</context></context-group>
       </trans-unit>
       <trans-unit id="7577876364431026966" datatype="html">
         <source>Unban user</source>
-        <target state="new">Unban user</target>
+        <target state="translated">Розблокувати користувача</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">277</context></context-group>
       </trans-unit>
       <trans-unit id="3508163549683020253" datatype="html">
@@ -10294,7 +10276,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="1378933246324202613" datatype="html">
         <source>Breaks server rules</source>
-        <target state="new">Breaks server rules</target>
+        <target state="translated">Порушує правила сервера</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">166</context></context-group>
       </trans-unit>
       <trans-unit id="7930601470861156366" datatype="html">
@@ -10389,7 +10371,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="4968151111061046122" datatype="html">
         <source>Moderator</source>
-        <target state="new">Moderator</target>
+        <target state="translated">Модератор</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/users/user.service.ts</context><context context-type="linenumber">418</context></context-group>
       </trans-unit>
       <trans-unit id="2279527393438260622" datatype="html">
@@ -10447,43 +10429,43 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="2909684945706361544" datatype="html">
         <source>Delete video</source>
-        <target state="new">Delete video</target>
+        <target state="translated">Видалити відео</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">383</context></context-group>
       </trans-unit>
       <trans-unit id="2210418817778733727" datatype="html">
         <source>Actions for the comment</source>
-        <target state="new">Actions for the comment</target>
+        <target state="translated">Дії з коментарем</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">412</context></context-group>
       </trans-unit>
       <trans-unit id="7978668497183230348" datatype="html">
         <source>Delete comment</source>
-        <target state="new">Delete comment</target>
+        <target state="translated">Видалити коментар</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">418</context></context-group>
       </trans-unit>
       <trans-unit id="6747218355168080191" datatype="html">
         <source>Do you really want to delete this comment?</source>
-        <target state="new">Do you really want to delete this comment?</target>
+        <target state="translated">Справді хочете видалити цей коментар?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.ts</context><context context-type="linenumber">172</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">422</context></context-group>
       </trans-unit>
       <trans-unit id="7837272126865175984" datatype="html">
         <source>Comment deleted.</source>
-        <target state="new">Comment deleted.</target>
+        <target state="translated">Коментар видалено.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">430</context></context-group>
       </trans-unit>
       <trans-unit id="346270517625845962" datatype="html">
         <source>Encoder</source>
-        <target state="new">Encoder</target>
+        <target state="translated">Кодувальник</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">213</context></context-group>
       </trans-unit>
       <trans-unit id="2331557444464201331" datatype="html">
         <source>Format name</source>
-        <target state="new">Format name</target>
+        <target state="translated">Назва формату</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">214</context></context-group>
       </trans-unit>
       <trans-unit id="45739481977493163" datatype="html">
         <source>Size</source>
-        <target state="new">Size</target>
+        <target state="translated">Розмір</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">215</context></context-group>
       </trans-unit>
       <trans-unit id="7742520815129539114" datatype="html">
@@ -10494,36 +10476,36 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="4094960161662677662" datatype="html">
         <source>Codec</source>
-        <target state="new">Codec</target>
+        <target state="translated">Кодек</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">237</context></context-group>
       </trans-unit>
       <trans-unit id="2115592966120408375" datatype="html">
         <source>Copied</source>
-        <target state="new">Copied</target>
+        <target state="translated">Скопійовано</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/input-toggle-hidden.component.ts</context><context context-type="linenumber">47</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">197</context></context-group>
       </trans-unit>
       <trans-unit id="4323470180912194028" datatype="html">
         <source>Copy</source>
-        <target state="new">Copy</target>
+        <target state="translated">Копіювати</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/input-toggle-hidden.component.html</context><context context-type="linenumber">15</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/input-toggle-hidden.component.html</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="1472171759957681533" datatype="html">
         <source>Video reported.</source>
-        <target state="new">Video reported.</target>
+        <target state="translated">Скаргу на відео надіслано.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/video-report.component.ts</context><context context-type="linenumber">113</context></context-group>
       </trans-unit>
       <trans-unit id="3622946684246476652" datatype="html">
         <source>Do you really want to delete this video?</source>
-        <target state="new">Do you really want to delete this video?</target>
+        <target state="translated">Справді хочете видалити це відео?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context><context context-type="linenumber">91</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">387</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">203</context></context-group>
       </trans-unit>
       <trans-unit id="3941342949736653028" datatype="html">
         <source>Video deleted.</source>
-        <target state="new">Video deleted.</target>
+        <target state="translated">Відео видалено.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context><context context-type="linenumber">98</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">395</context></context-group>
       </trans-unit>
@@ -10564,28 +10546,28 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="420763834450076269" datatype="html">
         <source>Block</source>
-        <target state="new">Block</target>
+        <target state="translated">Блокувати</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">290</context></context-group>
       </trans-unit>
       <trans-unit id="1950057220179636309" datatype="html">
         <source>Save to playlist</source>
-        <target state="new">Save to playlist</target>
+        <target state="translated">Зберегти у добірку</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/action-buttons/action-buttons.component.ts</context><context context-type="linenumber">57</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">264</context></context-group>
       </trans-unit>
       <trans-unit id="8272123190776748811" datatype="html">
         <source>You need to be &lt;a href="/login"&gt;logged in&lt;/a&gt; to rate this video.</source>
-        <target state="new">You need to be &lt;a href="/login"&gt;logged in&lt;/a&gt; to rate this video.</target>
+        <target state="translated">&lt;a href="/login"&gt;Увійдіть&lt;/a&gt;, щоб оцінити це відео.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/action-buttons/video-rate.component.ts</context><context context-type="linenumber">85</context></context-group>
       </trans-unit>
       <trans-unit id="4503408361537553733" datatype="html">
         <source>Mirror</source>
-        <target state="new">Mirror</target>
+        <target state="translated">Дзеркало</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">302</context></context-group>
       </trans-unit>
       <trans-unit id="2631340539474479416" datatype="html">
         <source>Subtitles</source>
-        <target state="new">Subtitles</target>
+        <target state="translated">Субтитри</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.html</context>
           <context context-type="linenumber">9</context>
@@ -10599,7 +10581,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="4814285799071780083" datatype="html">
         <source>Remove</source>
-        <target state="new">Remove</target>
+        <target state="translated">Вилучити</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment.component.ts</context><context context-type="linenumber">186</context></context-group>
       </trans-unit>
       <trans-unit id="6871668720687277843" datatype="html">
@@ -10609,7 +10591,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="992317512448454409" datatype="html">
         <source>{VAR_PLURAL, plural, =0 {Comments} =1 {1 Comment} other {<x id="INTERPOLATION"/> Comments}}</source>
-        <target state="new">{VAR_PLURAL, plural, =0 {Comments} =1 {1 Comment} other {<x id="INTERPOLATION"/> Comments}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {коментарів} =1 {1 коментар} few {<x id="INTERPOLATION"/> коментарі} many {<x id="INTERPOLATION"/> коментарів} other {<x id="INTERPOLATION"/> коментаря}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context><context context-type="linenumber">4</context></context-group>
       </trans-unit>
       <trans-unit id="4903651219400691248" datatype="html">
@@ -10620,7 +10602,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="4021487547497211597" datatype="html">
         <source>Open video actions</source>
-        <target state="new">Open video actions</target>
+        <target state="translated">Відкрити дії з відео</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.html</context>
           <context context-type="linenumber">4</context>
@@ -10637,7 +10619,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="7008439939460403347" datatype="html">
         <source>Report</source>
-        <target state="new">Report</target>
+        <target state="translated">Поскаржитися</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.html</context><context context-type="linenumber">55</context></context-group>
       </trans-unit>
       <trans-unit id="829951422090160526" datatype="html">
@@ -10647,12 +10629,12 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="4388879716045736175" datatype="html">
         <source>Note</source>
-        <target state="new">Note</target>
+        <target state="translated">Примітка</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.html</context><context context-type="linenumber">80</context></context-group>
       </trans-unit>
       <trans-unit id="7234922541542636802" datatype="html">
         <source>The video was deleted</source>
-        <target state="new">The video was deleted</target>
+        <target state="translated">Відео було видалено</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.html</context><context context-type="linenumber">89</context></context-group>
       </trans-unit>
       <trans-unit id="872792317034860453" datatype="html">
@@ -10707,7 +10689,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="8492933894084361602" datatype="html">
         <source>Subscribe to RSS feed "<x id="INTERPOLATION" equiv-text="{{ title }}"/>"</source>
-        <target state="new">Subscribe to RSS feed "<x id="INTERPOLATION" equiv-text="{{ title }}"/>"</target>
+        <target state="translated">Підписатися на RSS-стрічку «<x id="INTERPOLATION" equiv-text="{{ title }}"/>»</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/videos-list.component.html</context>
           <context context-type="linenumber">8</context>
@@ -10715,7 +10697,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="187187500641108332" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ noResultMessage }}"/></source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{ noResultMessage }}"/></target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ noResultMessage }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/videos-selection.component.html</context>
           <context context-type="linenumber">1</context>
@@ -10773,82 +10755,82 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="ngb.carousel.slide-number" datatype="html">
         <source>Slide <x id="INTERPOLATION" equiv-text="ate _pauseOnHov"/> of <x id="INTERPOLATION_1" equiv-text="ect(false);   p"/> </source>
-        <target state="new"> Slide <x id="INTERPOLATION" equiv-text="ate _pauseOnHov"/> of <x id="INTERPOLATION_1" equiv-text="ect(false);   p"/> </target>
+        <target state="translated">Слайд <x id="INTERPOLATION" equiv-text="ate _pauseOnHov"/> з <x id="INTERPOLATION_1" equiv-text="ect(false); p"/> </target>
         <note priority="1" from="description">Currently selected slide number read by screen reader</note>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/src/carousel/carousel.ts</context><context context-type="linenumber">114</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.carousel.previous" datatype="html">
         <source>Previous</source>
-        <target state="new">Previous</target>
+        <target state="translated">Попередній</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/src/carousel/carousel.ts</context><context context-type="linenumber">132</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.carousel.next" datatype="html">
         <source>Next</source>
-        <target state="translated">Наступне</target>
+        <target state="translated">Наступний</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/src/carousel/carousel.ts</context><context context-type="linenumber">147</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.datepicker.previous-month" datatype="html">
         <source>Previous month</source>
-        <target state="new">Previous month</target>
+        <target state="translated">Попередній місяць</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/src/datepicker/datepicker-navigation.ts</context><context context-type="linenumber">24</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/src/datepicker/datepicker-navigation.ts</context><context context-type="linenumber">35</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.datepicker.next-month" datatype="html">
         <source>Next month</source>
-        <target state="new">Next month</target>
+        <target state="translated">Наступний місяць</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/src/datepicker/datepicker-navigation.ts</context><context context-type="linenumber">47</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/src/datepicker/datepicker-navigation.ts</context><context context-type="linenumber">60</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.datepicker.select-month" datatype="html">
         <source>Select month</source>
-        <target state="new">Select month</target>
+        <target state="translated">Вибрати місяць</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/src/datepicker/datepicker-navigation-select.ts</context><context context-type="linenumber">44</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/src/datepicker/datepicker-navigation-select.ts</context><context context-type="linenumber">49</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.datepicker.select-year" datatype="html">
         <source>Select year</source>
-        <target state="new">Select year</target>
+        <target state="translated">Вибрати рік</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/src/datepicker/datepicker-navigation-select.ts</context><context context-type="linenumber">59</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/src/datepicker/datepicker-navigation-select.ts</context><context context-type="linenumber">74</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.pagination.first" datatype="html">
         <source>««</source>
-        <target state="new">««</target>
+        <target state="translated">««</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/src/pagination/pagination.ts</context><context context-type="linenumber">182</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.pagination.previous" datatype="html">
         <source>«</source>
-        <target state="new">«</target>
+        <target state="translated">«</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/src/pagination/pagination.ts</context><context context-type="linenumber">186</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.pagination.next" datatype="html">
         <source>»</source>
-        <target state="new">»</target>
+        <target state="translated">»</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/src/pagination/pagination.ts</context><context context-type="linenumber">194</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.pagination.last" datatype="html">
         <source>»»</source>
-        <target state="new">»»</target>
+        <target state="translated">»»</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/src/pagination/pagination.ts</context><context context-type="linenumber">201</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.pagination.first-aria" datatype="html">
         <source>First</source>
-        <target state="new">First</target>
+        <target state="translated">Перший</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/src/pagination/pagination.ts</context><context context-type="linenumber">208</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.pagination.previous-aria" datatype="html">
         <source>Previous</source>
-        <target state="new">Previous</target>
+        <target state="translated">Попередній</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/src/pagination/pagination.ts</context><context context-type="linenumber">215</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.pagination.next-aria" datatype="html">
         <source>Next</source>
-        <target state="translated">Наступне</target>
+        <target state="translated">Наступний</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/src/pagination/pagination.ts</context><context context-type="linenumber">226</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.pagination.last-aria" datatype="html">
         <source>Last</source>
-        <target state="new">Last</target>
+        <target state="translated">Останній</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/src/pagination/pagination.ts</context><context context-type="linenumber">232</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.progressbar.value" datatype="html">
@@ -10954,34 +10936,32 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="6932865105766151309" datatype="html">
         <source>Upload</source>
-        <target state="new">Upload</target>
+        <target state="translated">Вивантажити</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">227</context></context-group>
       </trans-unit>
       <trans-unit id="8278735427925094503" datatype="html">
         <source>Upload <x id="PH"/> </source>
-        <target state="new">Upload 
-          <x id="PH"/>
-        </target>
+        <target state="translated">Вивантажити <x id="PH"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">229</context></context-group>
       </trans-unit>
       <trans-unit id="5981816353437801748" datatype="html">
         <source>Video published.</source>
-        <target state="new">Video published.</target>
+        <target state="translated">Відео оприлюднено.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">251</context></context-group>
       </trans-unit>
       <trans-unit id="764164089183618119" datatype="html">
         <source>You have unsaved changes! If you leave, your changes will be lost.</source>
-        <target state="new">You have unsaved changes! If you leave, your changes will be lost.</target>
+        <target state="translated">Ви маєте незбережені зміни! Якщо ви йдете, ваші зміни будуть втрачені.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.ts</context><context context-type="linenumber">94</context></context-group>
       </trans-unit>
       <trans-unit id="8306050839443016954" datatype="html">
         <source>Video updated.</source>
-        <target state="new">Video updated.</target>
+        <target state="translated">Відео оновлено.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.ts</context><context context-type="linenumber">158</context></context-group>
       </trans-unit>
       <trans-unit id="5512208811126492983" datatype="html">
         <source>Report comment</source>
-        <target state="new">Report comment</target>
+        <target state="translated">Поскаржитися на коментар</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/comment-report.component.ts</context><context context-type="linenumber">51</context></context-group>
       </trans-unit>
       <trans-unit id="6775540171466219199" datatype="html">
@@ -11019,7 +10999,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="5761611056224181752" datatype="html">
         <source>Redirection</source>
-        <target state="new">Redirection</target>
+        <target state="translated">Перенаправлення</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">297</context></context-group>
       </trans-unit>
       <trans-unit id="8858527736400081688" datatype="html">
@@ -11104,12 +11084,12 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="8025996572234182184" datatype="html">
         <source>Like the video</source>
-        <target state="new">Like the video</target>
+        <target state="translated">Вподобати відео</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/action-buttons/video-rate.component.ts</context><context context-type="linenumber">46</context></context-group>
       </trans-unit>
       <trans-unit id="7692127636377222448" datatype="html">
         <source>Dislike the video</source>
-        <target state="new">Dislike the video</target>
+        <target state="translated">Не подобається</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/action-buttons/video-rate.component.ts</context><context context-type="linenumber">51</context></context-group>
       </trans-unit>
       <trans-unit id="1729036051846673606" datatype="html">
@@ -11142,7 +11122,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="5237588857224999862" datatype="html">
         <source>Open actions</source>
-        <target state="new">Open actions</target>
+        <target state="translated">Показати дії</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/buttons/action-dropdown.component.html</context>
           <context context-type="linenumber">4</context>
@@ -11150,7 +11130,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="8681933925782924101" datatype="html">
         <source>Local videos</source>
-        <target state="new">Local videos</target>
+        <target state="translated">Локальні відео</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/video-list/videos-list-common-page.component.ts</context><context context-type="linenumber">189</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/menu/menu.service.ts</context><context context-type="linenumber">142</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/menu/menu.service.ts</context><context context-type="linenumber">143</context></context-group>
@@ -11181,12 +11161,12 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="8212906256415538361" datatype="html">
         <source>Upload a video</source>
-        <target state="new">Upload a video</target>
+        <target state="translated">Вивантажити відео</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/app-routing.module.ts</context><context context-type="linenumber">91</context></context-group>
       </trans-unit>
       <trans-unit id="7590784934397800835" datatype="html">
         <source>Edit a video</source>
-        <target state="new">Edit a video</target>
+        <target state="translated">Редагувати відео</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/app-routing.module.ts</context><context context-type="linenumber">100</context></context-group>
       </trans-unit>
     </body>
