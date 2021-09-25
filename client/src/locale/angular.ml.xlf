@@ -437,7 +437,7 @@
       </trans-unit>
       <trans-unit id="8685905644837116382" datatype="html">
         <source>MODERATION</source>
-        <target/>
+        <target>മോഡറേഷൻ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">128,129</context>
@@ -537,6 +537,7 @@
       </trans-unit>
       <trans-unit id="6613567056718289931" datatype="html">
         <source>Contact <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> administrator</source>
+        <target><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> അഡ്മിനുമായി ബന്ധപ്പെടുക</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/contact-admin-modal.component.html</context>
           <context context-type="linenumber">3</context>
@@ -688,7 +689,7 @@
       </trans-unit>
       <trans-unit id="2072135752262464360" datatype="html">
         <source>You already sent this form recently</source>
-        <target/>
+        <target>നിങ്ങൾ കുറച്ച് നേരം മുമ്പ് ഈ ഫോം അയയ്ച്ചായിരുന്നു</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/contact-admin-modal.component.ts</context>
           <context context-type="linenumber">83</context>
@@ -976,7 +977,7 @@
       </trans-unit>
       <trans-unit id="1812900507515561988" datatype="html">
         <source>About this instance's network</source>
-        <target/>
+        <target>ഈ ഇൻസ്റ്റൻസിന്റെ നെറ്റ്വർക്കിനെ കുറിച്ച്</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-routing.module.ts</context>
           <context context-type="linenumber">45</context>
