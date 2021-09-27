@@ -554,6 +554,12 @@ rc-service redis start
 rc-service postgresql-11 start
 ```
 
+6. Create Python version symlink for youtube-dl:
+
+```
+sudo ln -s /usr/bin/python3 /usr/bin/python
+```
+
 ## OpenBSD
 
 1. Install Packages:
