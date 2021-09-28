@@ -189,7 +189,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.increment-hours" datatype="html">
         <source>Increment hours</source>
-        <target/>
+        <target>Gå fram timar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">62,63</context>
@@ -197,7 +197,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.decrement-hours" datatype="html">
         <source>Decrement hours</source>
-        <target/>
+        <target>Gå tilbake timar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">67,68</context>
@@ -205,7 +205,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.increment-minutes" datatype="html">
         <source>Increment minutes</source>
-        <target/>
+        <target>Gå fram minutt</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">75,76</context>
@@ -213,7 +213,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.decrement-minutes" datatype="html">
         <source>Decrement minutes</source>
-        <target/>
+        <target>Gå tilbake minutt</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">82</context>
@@ -237,7 +237,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.increment-seconds" datatype="html">
         <source>Increment seconds</source>
-        <target/>
+        <target>Gå fram sekund</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">98,99</context>
@@ -245,7 +245,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.decrement-seconds" datatype="html">
         <source>Decrement seconds</source>
-        <target/>
+        <target>Gå tilbake sekund</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">105,109</context>
@@ -269,7 +269,7 @@
       </trans-unit>
       <trans-unit id="ngb.toast.close-aria" datatype="html">
         <source>Close</source>
-        <target/>
+        <target>Lukk</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/src/toast/toast.ts</context>
           <context context-type="linenumber">76,85</context>
@@ -277,7 +277,7 @@
       </trans-unit>
       <trans-unit id="3701439542279610547" datatype="html">
         <source>Follows</source>
-        <target/>
+        <target>Fylgjer</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">2</context>
@@ -293,7 +293,7 @@
       </trans-unit>
       <trans-unit id="3857357852909495917" datatype="html">
         <source>This instance does not have instances followers.</source>
-        <target/>
+        <target>Ingen nettstader fylgjer denne nettstaden.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">6</context>
@@ -301,7 +301,7 @@
       </trans-unit>
       <trans-unit id="8438752523256358076" datatype="html">
         <source>Show full list</source>
-        <target/>
+        <target>Vis heile lista</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">12</context>
@@ -321,7 +321,7 @@
       </trans-unit>
       <trans-unit id="7128556172318221342" datatype="html">
         <source>This instance is not following any other.</source>
-        <target/>
+        <target>Denne nettstaden fylgjer ingen andre.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">18</context>
@@ -337,7 +337,7 @@
       </trans-unit>
       <trans-unit id="8253752633925167769" datatype="html">
         <source>Contact administrator</source>
-        <target/>
+        <target>Kontakt styraren</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">7</context>
