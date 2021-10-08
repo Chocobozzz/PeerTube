@@ -2,6 +2,7 @@ import { Account } from '@app/shared/shared-main/account/account.model'
 import { hasUserRight } from '@shared/core-utils/users'
 import {
   ActorImage,
+  HTMLServerConfig,
   NSFWPolicyType,
   User as UserServerModel,
   UserAdminFlag,
@@ -136,7 +137,9 @@ export class User implements UserServerModel {
     return this.videoQuota === 0 || this.videoQuotaDaily === 0
   }
 
-  isAutoBlocked () {
+  isAutoBlocked (serverConfig: HTMLServerConfig) {
+    if (serverConfig.autoBlacklist.videos.ofUsers.enabled !== true) return false
+
     return this.role === UserRole.USER && this.adminFlags !== UserAdminFlag.BYPASS_VIDEO_AUTO_BLACKLIST
   }
 }

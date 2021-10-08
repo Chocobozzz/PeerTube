@@ -43,7 +43,7 @@ export class VideoAddComponent implements OnInit, CanComponentDeactivate {
   hasNoQuotaLeft = false
   hasNoQuotaLeftDaily = false
 
-  private serverConfig: HTMLServerConfig
+  serverConfig: HTMLServerConfig
 
   constructor (
     private auth: AuthService,
