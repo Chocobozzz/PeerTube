@@ -482,6 +482,16 @@ describe('Test a client controllers', function () {
         }
       }
     })
+
+    it('Should add noindex header for some paths', async function () {
+      const paths = [ '/about/peertube' ]
+
+      for (const path of paths) {
+        const { headers } = await makeHTMLRequest(servers[0].url, path)
+
+        expect(headers['x-robots-tag']).to.equal('noindex')
+      }
+    })
   })
 
   describe('Embed HTML', function () {

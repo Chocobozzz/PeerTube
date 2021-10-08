@@ -69,6 +69,7 @@ staticRouter.get('/robots.txt',
   cacheRoute(ROUTE_CACHE_LIFETIME.ROBOTS),
   (_, res: express.Response) => {
     res.type('text/plain')
+
     return res.send(CONFIG.INSTANCE.ROBOTS)
   }
 )
