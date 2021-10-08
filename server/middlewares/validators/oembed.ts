@@ -62,12 +62,26 @@ const oembedValidator = [
 
     const url = req.query.url as string
 
+    let urlPath: string
+
+    try {
+      urlPath = new URL(url).pathname
+    } catch (err) {
+      return res.fail({
+        status: HttpStatusCode.BAD_REQUEST_400,
+        message: err.message,
+        data: {
+          url
+        }
+      })
+    }
+
     const isPlaylist = startPlaylistURLs.some(u => url.startsWith(u))
     const isVideo = isPlaylist ? false : startVideoURLs.some(u => url.startsWith(u))
 
     const startIsOk = isVideo || isPlaylist
 
-    const matches = watchRegex.exec(url)
+    const matches = watchRegex.exec(urlPath)
 
     if (startIsOk === false || matches === null) {
       return res.fail({
