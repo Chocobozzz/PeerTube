@@ -1766,12 +1766,12 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
       this.privacy === VideoPrivacy.INTERNAL
   }
 
-  async setNewState (newState: VideoState, transaction: Transaction) {
+  async setNewState (newState: VideoState, isNewVideo: boolean, transaction: Transaction) {
     if (this.state === newState) throw new Error('Cannot use same state ' + newState)
 
     this.state = newState
 
-    if (this.state === VideoState.PUBLISHED) {
+    if (this.state === VideoState.PUBLISHED && isNewVideo) {
       this.publishedAt = new Date()
     }
 
