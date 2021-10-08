@@ -50,7 +50,6 @@ export class SQLCommand extends AbstractCommand {
   async countVideoViewsOf (uuid: string) {
     const seq = this.getSequelize()
 
-    // tslint:disable
     const query = 'SELECT SUM("videoView"."views") AS "total" FROM "videoView" ' +
       `INNER JOIN "video" ON "video"."id" = "videoView"."videoId" WHERE "video"."uuid" = '${uuid}'`
 
