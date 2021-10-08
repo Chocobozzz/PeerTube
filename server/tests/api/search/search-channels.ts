@@ -129,6 +129,13 @@ describe('Test channels search', function () {
     }
 
     {
+      const body = await command.advancedChannelSearch({ search: { handles: [ 'squall_channel@' + server.host ] } })
+      expect(body.total).to.equal(1)
+      expect(body.data).to.have.lengthOf(1)
+      expect(body.data[0].displayName).to.equal('Squall channel')
+    }
+
+    {
       const body = await command.advancedChannelSearch({ search: { handles: [ 'chocobozzz_channel' ] } })
       expect(body.total).to.equal(0)
       expect(body.data).to.have.lengthOf(0)
