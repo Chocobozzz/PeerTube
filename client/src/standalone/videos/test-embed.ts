@@ -15,6 +15,8 @@ window.addEventListener('load', async () => {
     ? `/video-playlists/embed/${elementId}?api=1`
     : `/videos/embed/${elementId}?api=1`
 
+  iframe.sandbox.add('allow-same-origin', 'allow-scripts', 'allow-popups')
+
   const mainElement = document.querySelector('#host')
   mainElement.appendChild(iframe)
 
