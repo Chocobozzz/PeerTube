@@ -6,19 +6,17 @@ function proxify (instance: MemoryStorage) {
   return new Proxy(instance, {
     set: function (obj, prop: string | symbol, value) {
       if (Object.prototype.hasOwnProperty.call(MemoryStorage, prop)) {
-        // FIXME: symbol typing issue https://github.com/microsoft/TypeScript/issues/1863
-        instance[prop as any] = value
+        instance[prop] = value
       } else {
         instance.setItem(prop, value)
       }
+
       return true
     },
     get: function (target, name: string | symbol | number) {
-      if (Object.prototype.hasOwnProperty.call(MemoryStorage, name)) {
-        // FIXME: symbol typing issue https://github.com/microsoft/TypeScript/issues/1863
-        return instance[name as any]
-      }
-      if (valuesMap.has(name)) {
+      if (typeof instance[name] === 'function') {
+        return instance[name]
+      } else if (valuesMap.has(name)) {
         return instance.getItem(name)
       }
     }
@@ -26,7 +24,7 @@ function proxify (instance: MemoryStorage) {
 }
 
 class MemoryStorage implements Storage {
-  [key: string]: any
+  [key: string | symbol]: any
 
   getItem (key: any) {
     const stringKey = String(key)
@@ -83,7 +81,7 @@ try {
 }
 
 // support Brave and other browsers using null rather than an exception
-if (peertubeLocalStorage === null || peertubeSessionStorage === null) {
+if (!peertubeLocalStorage || !peertubeSessionStorage) {
   reinitStorage()
 }
 
