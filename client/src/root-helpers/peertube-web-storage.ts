@@ -6,7 +6,8 @@ function proxify (instance: MemoryStorage) {
   return new Proxy(instance, {
     set: function (obj, prop: string | symbol, value) {
       if (Object.prototype.hasOwnProperty.call(MemoryStorage, prop)) {
-        instance[prop] = value
+        // FIXME: remove cast on typescript upgrade
+        instance[prop as any] = value
       } else {
         instance.setItem(prop, value)
       }
@@ -14,8 +15,10 @@ function proxify (instance: MemoryStorage) {
       return true
     },
     get: function (target, name: string | symbol | number) {
-      if (typeof instance[name] === 'function') {
-        return instance[name]
+      // FIXME: remove cast on typescript upgrade
+      if (typeof instance[name as any] === 'function') {
+        // FIXME: remove cast on typescript upgrade
+        return instance[name as any]
       } else if (valuesMap.has(name)) {
         return instance.getItem(name)
       }
@@ -24,7 +27,7 @@ function proxify (instance: MemoryStorage) {
 }
 
 class MemoryStorage implements Storage {
-  [key: string | symbol]: any
+  [key: string]: any
 
   getItem (key: any) {
     const stringKey = String(key)
