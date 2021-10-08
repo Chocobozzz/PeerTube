@@ -33,9 +33,10 @@ async function checkFilesInObjectStorage (files: VideoFile[], type: 'webtorrent'
 function runTests (objectStorage: boolean) {
   let servers: PeerTubeServer[] = []
   const videosUUID: string[] = []
+  const publishedAt: string[] = []
 
   before(async function () {
-    this.timeout(60000)
+    this.timeout(120000)
 
     const config = objectStorage
       ? ObjectStorageCommand.getDefaultConfig()
@@ -53,6 +54,11 @@ function runTests (objectStorage: boolean) {
 
     for (let i = 1; i <= 5; i++) {
       const { uuid, shortUUID } = await servers[0].videos.upload({ attributes: { name: 'video' + i } })
+
+      await waitJobs(servers)
+
+      const video = await servers[0].videos.get({ id: uuid })
+      publishedAt.push(video.publishedAt as string)
 
       if (i > 2) {
         videosUUID.push(uuid)
@@ -222,6 +228,14 @@ function runTests (objectStorage: boolean) {
         await checkFilesInObjectStorage(videoDetails.files, 'webtorrent')
         await checkFilesInObjectStorage(videoDetails.streamingPlaylists[0].files, 'playlist')
       }
+    }
+  })
+
+  it('Should not have updated published at attributes', async function () {
+    for (const id of videosUUID) {
+      const video = await servers[0].videos.get({ id })
+
+      expect(publishedAt.some(p => video.publishedAt === p)).to.be.true
     }
   })
 

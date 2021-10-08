@@ -70,13 +70,13 @@ async function moveToPublishedState (video: MVideoFullLight, isNewVideo: boolean
   logger.info('Publishing video %s.', video.uuid, { tags: [ video.uuid ] })
 
   const previousState = video.state
-  await video.setNewState(VideoState.PUBLISHED, transaction)
+  await video.setNewState(VideoState.PUBLISHED, isNewVideo, transaction)
 
   // If the video was not published, we consider it is a new one for other instances
   // Live videos are always federated, so it's not a new video
   await federateVideoIfNeeded(video, isNewVideo, transaction)
 
-  Notifier.Instance.notifyOnNewVideoIfNeeded(video)
+  if (isNewVideo) Notifier.Instance.notifyOnNewVideoIfNeeded(video)
 
   if (previousState === VideoState.TO_TRANSCODE) {
     Notifier.Instance.notifyOnVideoPublishedAfterTranscoding(video)
@@ -90,7 +90,7 @@ async function moveToExternalStorageState (video: MVideoFullLight, isNewVideo: b
   // We want to wait all transcoding jobs before moving the video on an external storage
   if (pendingTranscode !== 0) return
 
-  await video.setNewState(VideoState.TO_MOVE_TO_EXTERNAL_STORAGE, transaction)
+  await video.setNewState(VideoState.TO_MOVE_TO_EXTERNAL_STORAGE, isNewVideo, transaction)
 
   logger.info('Creating external storage move job for video %s.', video.uuid, { tags: [ video.uuid ] })
 
