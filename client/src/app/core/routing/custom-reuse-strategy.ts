@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core'
+import { ComponentRef, Injectable } from '@angular/core'
 import { ActivatedRouteSnapshot, DetachedRouteHandle, RouteReuseStrategy } from '@angular/router'
-import { RouterSetting } from './'
-import { PeerTubeRouterService } from './peertube-router.service'
+import { DisableForReuseHook } from './disable-for-reuse-hook'
+import { PeerTubeRouterService, RouterSetting } from './peertube-router.service'
 
 @Injectable()
 export class CustomReuseStrategy implements RouteReuseStrategy {
@@ -22,9 +22,11 @@ export class CustomReuseStrategy implements RouteReuseStrategy {
     const key = this.generateKey(route)
     this.recentlyUsed = key
 
-    console.log('Storing component %s to reuse later.', key);
+    console.log('Storing component %s to reuse later.', key)
 
-    (handle as any).componentRef.instance.disableForReuse()
+    const componentRef = (handle as any).componentRef as ComponentRef<DisableForReuseHook>
+    componentRef.instance.disableForReuse()
+    componentRef.changeDetectorRef.detectChanges()
 
     this.storedRouteHandles.set(key, handle)
 
