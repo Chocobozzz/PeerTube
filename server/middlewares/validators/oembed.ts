@@ -28,7 +28,7 @@ function buildUrls (paths: string[]) {
 const startPlaylistURLs = buildUrls(playlistPaths)
 const startVideoURLs = buildUrls(videoPaths)
 
-const watchRegex = /([^/]+)$/
+const watchRegex = /\/([^/]+)$/
 const isURLOptions = {
   require_host: true,
   require_tld: true
