@@ -116,14 +116,6 @@ class P2pMediaLoaderPlugin extends Plugin {
     const options = this.player.tech(true).options_ as any
     this.p2pEngine = options.hlsjsConfig.loader.getEngine()
 
-    this.hlsjs.on(Hlsjs.Events.LEVEL_SWITCHING, (_: any, data: any) => {
-      this.trigger('resolutionChange', { auto: this.hlsjs.autoLevelEnabled, resolutionId: data.height })
-    })
-
-    this.hlsjs.on(Hlsjs.Events.MANIFEST_LOADED, (_: any, data: any) => {
-      this.trigger('resolutionsLoaded')
-    })
-
     this.p2pEngine.on(Events.SegmentError, (segment: Segment, err) => {
       console.error('Segment error.', segment, err)
 

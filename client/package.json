@@ -128,7 +128,6 @@
     "typescript": "~4.3.4",
     "video.js": "^7",
     "videojs-contextmenu-pt": "^5.4.1",
-    "videojs-contrib-quality-levels": "^2.0.9",
     "videojs-dock": "^2.0.2",
     "videojs-hotkeys": "^0.2.27",
     "videostream": "~3.2.1",
