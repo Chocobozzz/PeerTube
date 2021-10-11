@@ -28,7 +28,6 @@ function buildUrls (paths: string[]) {
 const startPlaylistURLs = buildUrls(playlistPaths)
 const startVideoURLs = buildUrls(videoPaths)
 
-const watchRegex = /\/([^/]+)$/
 const isURLOptions = {
   require_host: true,
   require_tld: true
@@ -81,9 +80,9 @@ const oembedValidator = [
 
     const startIsOk = isVideo || isPlaylist
 
-    const matches = watchRegex.exec(urlPath)
+    const parts = urlPath.split('/')
 
-    if (startIsOk === false || matches === null) {
+    if (startIsOk === false || parts.length === 0) {
       return res.fail({
         status: HttpStatusCode.BAD_REQUEST_400,
         message: 'Invalid url.',
@@ -93,7 +92,7 @@ const oembedValidator = [
       })
     }
 
-    const elementId = toCompleteUUID(matches[1])
+    const elementId = toCompleteUUID(parts.pop())
     if (isIdOrUUIDValid(elementId) === false) {
       return res.fail({ message: 'Invalid video or playlist id.' })
     }
