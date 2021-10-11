@@ -42,6 +42,13 @@ class ServerConfigManager {
     const defaultTheme = getThemeOrDefault(CONFIG.THEME.DEFAULT, DEFAULT_THEME_NAME)
 
     return {
+      client: {
+        videos: {
+          miniature: {
+            showAuthorDisplayName: CONFIG.CLIENT.VIDEOS.MINIATURE.SHOW_AUTHOR_DISPLAY_NAME
+          }
+        }
+      },
       instance: {
         name: CONFIG.INSTANCE.NAME,
         shortDescription: CONFIG.INSTANCE.SHORT_DESCRIPTION,
@@ -51,9 +58,7 @@ class ServerConfigManager {
         customizations: {
           javascript: CONFIG.INSTANCE.CUSTOMIZATIONS.JAVASCRIPT,
           css: CONFIG.INSTANCE.CUSTOMIZATIONS.CSS
-        },
-        onlyShowAuthorChannel: CONFIG.INSTANCE.ONLY_SHOW_CHANNEL_AUTHOR,
-        showAuthorDisplayNameInMiniatures: CONFIG.INSTANCE.SHOW_AUTHOR_DISPLAY_NAME_IN_MINIATURES
+        }
       },
       search: {
         remoteUri: {

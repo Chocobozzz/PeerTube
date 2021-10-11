@@ -58,6 +58,15 @@ const CONFIG = {
       PREFIX: config.get<string>('email.subject.prefix') + ' '
     }
   },
+
+  CLIENT: {
+    VIDEOS: {
+      MINIATURE: {
+        get SHOW_AUTHOR_DISPLAY_NAME () { return config.get<boolean>('client.videos.miniature.show_author_display_name') }
+      }
+    }
+  },
+
   STORAGE: {
     TMP_DIR: buildPath(config.get<string>('storage.tmp')),
     ACTOR_IMAGES: buildPath(config.get<string>('storage.avatars')),
@@ -334,10 +343,7 @@ const CONFIG = {
     },
     get ROBOTS () { return config.get<string>('instance.robots') },
     get SECURITYTXT () { return config.get<string>('instance.securitytxt') },
-    get SECURITYTXT_CONTACT () { return config.get<string>('admin.email') },
-
-    get ONLY_SHOW_CHANNEL_AUTHOR () { return config.get<boolean>('instance.only_show_channel_author') },
-    get SHOW_AUTHOR_DISPLAY_NAME_IN_MINIATURES () { return config.get<boolean>('instance.show_author_display_name_in_miniatures') }
+    get SECURITYTXT_CONTACT () { return config.get<string>('admin.email') }
   },
   SERVICES: {
     TWITTER: {

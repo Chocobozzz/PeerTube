@@ -67,8 +67,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   remoteServerDown = false
 
-  onlyShowAuthorChannel: boolean
-
   private nextVideoUUID = ''
   private nextVideoTitle = ''
 
@@ -117,8 +115,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   ngOnInit () {
     this.serverConfig = this.serverService.getHTMLConfig()
-
-    this.onlyShowAuthorChannel = this.serverConfig.instance.onlyShowAuthorChannel
 
     PeertubePlayerManager.initState()
 

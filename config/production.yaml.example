@@ -73,6 +73,11 @@ email:
   subject:
     prefix: "[PeerTube]"
 
+client:
+  videos:
+    miniature:
+      show_author_display_name: false
+
 # From the project root directory
 storage:
   tmp: '/var/www/peertube/storage/tmp/' # Use to download data (imports etc), store uploaded files before and during processing...
@@ -408,9 +413,6 @@ instance:
   description: 'Welcome to this PeerTube instance!' # Support markdown
   terms: 'No terms for now.' # Support markdown
   code_of_conduct: '' # Supports markdown
-
-  only_show_channel_author: false
-  show_author_display_name_in_miniatures: false
 
   # Who moderates the instance? What is the policy regarding NSFW videos? Political videos? etc
   moderation_information: '' # Supports markdown
