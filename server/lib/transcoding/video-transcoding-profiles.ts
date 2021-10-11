@@ -65,7 +65,7 @@ const defaultAACOptionsBuilder: EncoderOptionsBuilder = async ({ input, streamNu
 
   logger.debug('Calculating audio bitrate of %s by AAC encoder.', input, { bitrate: parsedAudio.bitrate, audioCodecName })
 
-  if (bitrate !== undefined && bitrate !== -1) {
+  if (bitrate !== -1) {
     return { outputOptions: [ buildStreamSuffix('-b:a', streamNum), bitrate + 'k' ] }
   }
 
