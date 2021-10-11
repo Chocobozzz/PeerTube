@@ -65,7 +65,7 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
     date: true,
     views: true,
     by: true,
-    avatar: true,
+    avatar: false,
     privacyLabel: true,
     privacyText: false,
     state: false,
