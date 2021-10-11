@@ -101,7 +101,7 @@ class MuxingSession extends EventEmitter {
     this.fps = options.fps
 
     this.bitrate = options.bitrate
-    this.ratio = options.bitrate
+    this.ratio = options.ratio
 
     this.allResolutions = options.allResolutions
 
