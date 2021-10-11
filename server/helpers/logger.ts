@@ -123,10 +123,9 @@ function buildLogger (labelSuffix?: string) {
 }
 
 function bunyanLogFactory (level: string) {
-  return function () {
+  return function (...params: any[]) {
     let meta = null
-    let args: any[] = []
-    args.concat(arguments)
+    let args = [].concat(params)
 
     if (arguments[0] instanceof Error) {
       meta = arguments[0].toString()
@@ -143,6 +142,7 @@ function bunyanLogFactory (level: string) {
 }
 
 const bunyanLogger = {
+  level: () => { },
   trace: bunyanLogFactory('debug'),
   debug: bunyanLogFactory('debug'),
   info: bunyanLogFactory('info'),
