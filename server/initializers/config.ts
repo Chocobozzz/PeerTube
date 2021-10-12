@@ -204,6 +204,13 @@ const CONFIG = {
       URL: config.get<string>('peertube.check_latest_version.url')
     }
   },
+  WEBADMIN: {
+    CONFIGURATION: {
+      EDITS: {
+        ALLOWED: config.get<boolean>('webadmin.configuration.edit.allowed')
+      }
+    }
+  },
   ADMIN: {
     get EMAIL () { return config.get<string>('admin.email') }
   },
@@ -420,14 +427,22 @@ export {
 // ---------------------------------------------------------------------------
 
 function getLocalConfigFilePath () {
-  const configSources = config.util.getConfigSources()
-  if (configSources.length === 0) throw new Error('Invalid config source.')
+  const localConfigDir = getLocalConfigDir()
 
   let filename = 'local'
   if (process.env.NODE_ENV) filename += `-${process.env.NODE_ENV}`
   if (process.env.NODE_APP_INSTANCE) filename += `-${process.env.NODE_APP_INSTANCE}`
 
-  return join(dirname(configSources[0].name), filename + '.json')
+  return join(localConfigDir, filename + '.json')
+}
+
+function getLocalConfigDir () {
+  if (process.env.PEERTUBE_LOCAL_CONFIG) return process.env.PEERTUBE_LOCAL_CONFIG
+
+  const configSources = config.util.getConfigSources()
+  if (configSources.length === 0) throw new Error('Invalid config source.')
+
+  return dirname(configSources[0].name)
 }
 
 function buildVideosRedundancy (objs: any[]): VideosRedundancyStrategy[] {
@@ -446,19 +461,19 @@ function buildVideosRedundancy (objs: any[]): VideosRedundancyStrategy[] {
 
 export function reloadConfig () {
 
-  function getConfigDirectory () {
+  function getConfigDirectories () {
     if (process.env.NODE_CONFIG_DIR) {
-      return process.env.NODE_CONFIG_DIR
+      return process.env.NODE_CONFIG_DIR.split(":")
     }
 
-    return join(root(), 'config')
+    return [ join(root(), 'config') ]
   }
 
   function purge () {
-    const directory = getConfigDirectory()
+    const directories = getConfigDirectories()
 
     for (const fileName in require.cache) {
-      if (fileName.includes(directory) === false) {
+      if (directories.some((dir) => fileName.includes(dir)) === false) {
         continue
       }
 

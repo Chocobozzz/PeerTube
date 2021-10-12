@@ -64,19 +64,12 @@ export class PeerTubeEmbedApi {
     if (this.isWebtorrent()) {
       if (resolutionId === -1 && this.embed.player.webtorrent().isAutoResolutionPossible() === false) return
 
-      // Auto resolution
-      if (resolutionId === -1) {
-        this.embed.player.webtorrent().enableAutoResolution()
-        return
-      }
-
-      this.embed.player.webtorrent().disableAutoResolution()
-      this.embed.player.webtorrent().updateResolution(resolutionId)
+      this.embed.player.webtorrent().changeQuality(resolutionId)
 
       return
     }
 
-    this.embed.player.p2pMediaLoader().getHLSJS().nextLevel = resolutionId
+    this.embed.player.p2pMediaLoader().getHLSJS().currentLevel = resolutionId
   }
 
   private getCaptions (): PeerTubeTextTrack[] {
@@ -139,15 +132,10 @@ export class PeerTubeEmbedApi {
     })
 
     // PeerTube specific capabilities
-    if (this.isWebtorrent()) {
-      this.embed.player.webtorrent().on('autoResolutionUpdate', () => this.loadWebTorrentResolutions())
-      this.embed.player.webtorrent().on('videoFileUpdate', () => this.loadWebTorrentResolutions())
+    this.embed.player.peertubeResolutions().on('resolutionsAdded', () => this.loadResolutions())
+    this.embed.player.peertubeResolutions().on('resolutionChanged', () => this.loadResolutions())
 
-      this.loadWebTorrentResolutions()
-    } else {
-      this.embed.player.p2pMediaLoader().on('resolutionChange', () => this.loadP2PMediaLoaderResolutions())
-      this.embed.player.p2pMediaLoader().on('resolutionsLoaded', () => this.loadP2PMediaLoaderResolutions())
-    }
+    this.loadResolutions()
 
     this.embed.player.on('volumechange', () => {
       this.channel.notify({
@@ -157,49 +145,15 @@ export class PeerTubeEmbedApi {
     })
   }
 
-  private loadWebTorrentResolutions () {
-    this.resolutions = []
-
-    const currentResolutionId = this.embed.player.webtorrent().getCurrentResolutionId()
-
-    for (const videoFile of this.embed.player.webtorrent().videoFiles) {
-      let label = videoFile.resolution.label
-      if (videoFile.fps && videoFile.fps >= 50) {
-        label += videoFile.fps
-      }
-
-      this.resolutions.push({
-        id: videoFile.resolution.id,
-        label,
-        src: videoFile.magnetUri,
-        active: videoFile.resolution.id === currentResolutionId,
-        height: videoFile.resolution.id
-      })
-    }
-
-    this.channel.notify({
-      method: 'resolutionUpdate',
-      params: this.resolutions
-    })
-  }
-
-  private loadP2PMediaLoaderResolutions () {
-    this.resolutions = []
-
-    const qualityLevels = this.embed.player.qualityLevels()
-    const currentResolutionId = this.embed.player.qualityLevels().selectedIndex
-
-    for (let i = 0; i < qualityLevels.length; i++) {
-      const level = qualityLevels[i]
-
-      this.resolutions.push({
-        id: level.id,
-        label: level.height + 'p',
-        active: level.id === currentResolutionId,
-        width: level.width,
-        height: level.height
-      })
-    }
+  private loadResolutions () {
+    this.resolutions = this.embed.player.peertubeResolutions().getResolutions()
+      .map(r => ({
+        id: r.id,
+        label: r.label,
+        active: r.selected,
+        width: r.width,
+        height: r.height
+      }))
 
     this.channel.notify({
       method: 'resolutionUpdate',

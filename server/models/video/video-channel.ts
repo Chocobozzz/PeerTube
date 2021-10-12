@@ -121,7 +121,7 @@ export type SummaryOptions = {
       for (const handle of options.handles || []) {
         const [ preferredUsername, host ] = handle.split('@')
 
-        if (!host) {
+        if (!host || host === WEBSERVER.HOST) {
           or.push({
             '$Actor.preferredUsername$': preferredUsername,
             '$Actor.serverId$': null

@@ -302,7 +302,10 @@ function computeFPS (fpsArg: number, resolution: VideoResolution) {
 
   // Hard FPS limits
   if (fps > VIDEO_TRANSCODING_FPS.MAX) fps = getClosestFramerateStandard(fps, 'HD_STANDARD')
-  else if (fps < VIDEO_TRANSCODING_FPS.MIN) fps = VIDEO_TRANSCODING_FPS.MIN
+
+  if (fps < VIDEO_TRANSCODING_FPS.MIN) {
+    throw new Error(`Cannot compute FPS because ${fps} is lower than our minimum value ${VIDEO_TRANSCODING_FPS.MIN}`)
+  }
 
   return fps
 }

@@ -15,7 +15,7 @@
 </ng-container>
 
 <ng-container *ngIf="!user.isUploadDisabled()">
-  <div *ngIf="user.isAutoBlocked()" class="upload-message auto-blocked alert alert-warning">
+  <div *ngIf="user.isAutoBlocked(serverConfig)" class="upload-message auto-blocked alert alert-warning">
     <div>{{ uploadMessages.autoBlock }}</div>
     <ng-template [ngTemplateOutlet]="AlertButtons" *ngIf="!hasNoQuotaLeft && !hasNoQuotaLeftDaily"></ng-template>
   </div>

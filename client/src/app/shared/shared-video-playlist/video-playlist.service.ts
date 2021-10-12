@@ -256,12 +256,12 @@ export class VideoPlaylistService {
                )
   }
 
-  getPlaylistVideos (
-    videoPlaylistId: number | string,
+  getPlaylistVideos (options: {
+    videoPlaylistId: number | string
     componentPagination: ComponentPaginationLight
-  ): Observable<ResultList<VideoPlaylistElement>> {
-    const path = VideoPlaylistService.BASE_VIDEO_PLAYLIST_URL + videoPlaylistId + '/videos'
-    const pagination = this.restService.componentPaginationToRestPagination(componentPagination)
+  }): Observable<ResultList<VideoPlaylistElement>> {
+    const path = VideoPlaylistService.BASE_VIDEO_PLAYLIST_URL + options.videoPlaylistId + '/videos'
+    const pagination = this.restService.componentPaginationToRestPagination(options.componentPagination)
 
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination)

@@ -255,9 +255,9 @@
       <trans-unit id="1006562256968398209" datatype="html">
         <source>video</source>
         <target state="translated">影片</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">294</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">56</context></context-group>
-      </trans-unit>
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">301</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">56</context></context-group></trans-unit>
       <trans-unit id="6438815964972582865" datatype="html">
         <source>The following link contains a private token and should not be shared with anyone.</source>
         <target state="translated">以下連結包含了一個專用權杖，不應該與其他人分享。</target>
@@ -329,13 +329,13 @@
       <trans-unit id="6995024616159044376" datatype="html">
         <source>Your video quota is exceeded with this video (video size: <x id="PH" equiv-text="videoSizeBytes"/>, used: <x id="PH_1" equiv-text="videoQuotaUsedBytes"/>, quota: <x id="PH_2" equiv-text="videoQuotaBytes"/>)</source>
         <target state="translated">此影片超過了您的影片配額（影片大小：<x id="PH" equiv-text="videoSizeBytes"/>，已使用：<x id="PH_1" equiv-text="videoQuotaUsedBytes"/>，配額：<x id="PH_2" equiv-text="videoQuotaBytes"/>）</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">330</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">337</context></context-group></trans-unit>
       <trans-unit id="7873395933409147217" datatype="html">
         <source>Your daily video quota is exceeded with this video (video size: <x id="PH" equiv-text="videoSizeBytes"/>, used: <x id="PH_1" equiv-text="quotaUsedDailyBytes"/>, quota: <x id="PH_2" equiv-text="quotaDailyBytes"/>)</source>
         <target state="translated">此影片超過了您的每日影片配額（影片大小：<x id="PH" equiv-text="videoSizeBytes"/>，已使用：<x id="PH_1" equiv-text="quotaUsedDailyBytes"/>，配額：<x id="PH_2" equiv-text="quotaDailyBytes"/>）</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">349</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">356</context></context-group></trans-unit>
       <trans-unit id="5235042777215655908" datatype="html">
         <source>subtitles</source>
         <target state="translated">字幕</target>
@@ -346,9 +346,9 @@
         <target>
       取消
     </target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context><context context-type="linenumber">48</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/videos-selection.component.html</context><context context-type="linenumber">22</context></context-group>
-      </trans-unit>
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context><context context-type="linenumber">48</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/videos-selection.component.html</context><context context-type="linenumber">23</context></context-group></trans-unit>
       <trans-unit id="3099741642167775297">
         <source>Download</source>
         <target>下載</target>
@@ -912,10 +912,10 @@
       <trans-unit id="2392488717875840729" datatype="html">
         <source>User</source>
         <target state="translated">使用者</target>
-        
-        
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">21</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register.component.html</context><context context-type="linenumber">27</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/core/users/user.service.ts</context><context context-type="linenumber">416</context></context-group></trans-unit>
+        <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">21</context></context-group>
+        <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register.component.html</context><context context-type="linenumber">27</context></context-group>
+        <context-group purpose="location"><context context-type="sourcefile">src/app/core/users/user.service.ts</context><context context-type="linenumber">416</context></context-group>
+      </trans-unit>
       <trans-unit id="4209525355702493436">
         <source>Ban</source>
         <target>阻擋</target>
@@ -2031,14 +2031,14 @@ The link will expire within 1 hour.</source>
       <trans-unit id="6179532215548637839" datatype="html">
         <source>extensions</source>
         <target state="translated">擴充套件</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-avatar-edit.component.ts</context><context context-type="linenumber">47</context></context-group></trans-unit>
+        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-avatar-edit.component.ts</context><context context-type="linenumber">47</context></context-group>
+      </trans-unit>
       <trans-unit id="8054921481196967348" datatype="html">
         <source>This image is too large.</source>
         <target state="translated">此圖片太大了。</target>
-        
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-avatar-edit.component.ts</context><context context-type="linenumber">55</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-banner-edit.component.ts</context><context context-type="linenumber">52</context></context-group></trans-unit>
+        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-avatar-edit.component.ts</context><context context-type="linenumber">55</context></context-group>
+        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-banner-edit.component.ts</context><context context-type="linenumber">52</context></context-group>
+      </trans-unit>
       <trans-unit id="6259523075362402245" datatype="html">
         <source>Upload a new banner</source>
         <target state="translated">上傳新橫幅</target>
@@ -2063,13 +2063,13 @@ The link will expire within 1 hour.</source>
       <trans-unit id="3220184757632006830" datatype="html">
         <source>Account avatar</source>
         <target state="translated">帳號大頭照</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image/actor-avatar.component.ts</context><context context-type="linenumber">46</context></context-group></trans-unit>
+        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image/actor-avatar.component.ts</context><context context-type="linenumber">46</context></context-group>
+      </trans-unit>
       <trans-unit id="1138964882426023395" datatype="html">
         <source>Channel avatar</source>
         <target state="translated">頻道大頭照</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image/actor-avatar.component.ts</context><context context-type="linenumber">47</context></context-group></trans-unit>
+        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image/actor-avatar.component.ts</context><context context-type="linenumber">47</context></context-group>
+      </trans-unit>
       <trans-unit id="1358902062258458923" datatype="html">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://en.wikipedia.org/wiki/Markdown#Example&quot; target=&quot;_blank&quot; rel=&quot;noreferer noopener&quot;>"/>Markdown compatible<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/> that also supports <x id="START_LINK_1" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/api-custom-client-markup&quot; target=&quot;_blank&quot; rel=&quot;noreferer noopener&quot;>"/>custom PeerTube HTML tags<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/></source>
         <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://en.wikipedia.org/wiki/Markdown#Example&quot; target=&quot;_blank&quot; rel=&quot;noreferer noopener&quot;>"/>Markdown 相容版本<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/>也支援<x id="START_LINK_1" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/api-custom-client-markup&quot; target=&quot;_blank&quot; rel=&quot;noreferer noopener&quot;>"/>自訂 PeerTube HTML 標籤<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/></target>
@@ -2518,8 +2518,8 @@ The link will expire within 1 hour.</source>
       <trans-unit id="6161604372916832458" datatype="html">
         <source>Upload on hold</source>
         <target state="translated">暫緩上傳</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">167</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">174</context></context-group></trans-unit>
       <trans-unit id="285180972645018518" datatype="html">
         <source>Sorry, the upload feature is disabled for your account. If you want to add videos, an admin must unlock your quota.</source>
         <target state="translated">抱歉，您的帳號已停用上傳功能。如果您想要新增影片，管理員必須解鎖您的配額。</target>
@@ -3305,9 +3305,8 @@ The link will expire within 1 hour.</source>
       <trans-unit id="9160510009013134726" datatype="html">
         <source>Unfollow</source>
         <target state="translated">取消追蹤</target>
-        
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.ts</context><context context-type="linenumber">47</context></context-group></trans-unit>
+        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.ts</context><context context-type="linenumber">47</context></context-group>
+      </trans-unit>
       <trans-unit id="8246779176913476983" datatype="html">
         <source>Open instance in a new tab</source>
         <target state="translated">在新分頁中開啟站臺</target>
@@ -4838,8 +4837,8 @@ The link will expire within 1 hour.</source>
       <trans-unit id="2149300564474427551">
         <source>Administrator</source>
         <target>管理員</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/core/users/user.service.ts</context><context context-type="linenumber">417</context></context-group></trans-unit>
+        <context-group purpose="location"><context context-type="sourcefile">src/app/core/users/user.service.ts</context><context context-type="linenumber">417</context></context-group>
+      </trans-unit>
       <trans-unit id="3171683206914962995">
         <source>Admin email</source>
         <target>管理電子郵件</target>
@@ -5403,8 +5402,6 @@ color: red;
           <context context-type="linenumber">66</context>
         </context-group>
       </trans-unit>
-      
-      
       <trans-unit id="5723033003381016192" datatype="html">
         <source>Scope:</source>
         <target state="translated">範圍：</target>
@@ -5413,7 +5410,6 @@ color: red;
           <context context-type="linenumber">81</context>
         </context-group>
       </trans-unit>
-      
       <trans-unit id="8481241275509347668" datatype="html">
         <source>Local videos (this instance)</source>
         <target state="translated">本機影片（此站台）</target>
@@ -5422,7 +5418,6 @@ color: red;
           <context context-type="linenumber">85</context>
         </context-group>
       </trans-unit>
-      
       <trans-unit id="8383401711408398806" datatype="html">
         <source>Federated videos (this instance + followed instances)</source>
         <target state="translated">聯盟影片（此站台 + 已追蹤的站台）</target>
@@ -5447,7 +5442,6 @@ color: red;
           <context context-type="linenumber">99</context>
         </context-group>
       </trans-unit>
-      
       <trans-unit id="1370537846415473089" datatype="html">
         <source>Categories:</source>
         <target state="translated">分類：</target>
@@ -6689,8 +6683,8 @@ channel with the same name (<x id="PH_2" equiv-text="videoChannel.name"/>)!</sou
       <trans-unit id="784681343382270982" datatype="html">
         <source>Remove this filter</source>
         <target state="translated">移除此過濾條件</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.ts</context><context context-type="linenumber">95</context></context-group></trans-unit>
+        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.ts</context><context context-type="linenumber">95</context></context-group>
+      </trans-unit>
       <trans-unit id="5254305728396198887" datatype="html">
         <source>Sensitive content</source>
         <target state="translated">敏感內容</target>
@@ -8384,9 +8378,9 @@ channel with the same name (<x id="PH_2" equiv-text="videoChannel.name"/>)!</sou
       <trans-unit id="7916647920967632052" datatype="html">
         <source>max size</source>
         <target state="translated">最大大小</target>
-        
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-avatar-edit.component.ts</context><context context-type="linenumber">46</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/preview-upload.component.ts</context><context context-type="linenumber">38</context></context-group></trans-unit>
+        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-avatar-edit.component.ts</context><context context-type="linenumber">46</context></context-group>
+        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/preview-upload.component.ts</context><context context-type="linenumber">38</context></context-group>
+      </trans-unit>
       <trans-unit id="6489275254908395777" datatype="html">
         <source>Maximize editor</source>
         <target state="translated">最大化編輯器</target>
@@ -9822,18 +9816,18 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="translated">
           <x id="PH"/>（頻道頁面）
         </target>
-        
-        
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/metadata/video-avatar-channel.component.ts</context><context context-type="linenumber">19</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image/actor-avatar.component.ts</context><context context-type="linenumber">40</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context><context context-type="linenumber">113</context></context-group></trans-unit>
+        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/metadata/video-avatar-channel.component.ts</context><context context-type="linenumber">19</context></context-group>
+        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image/actor-avatar.component.ts</context><context context-type="linenumber">40</context></context-group>
+        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context><context context-type="linenumber">113</context></context-group>
+      </trans-unit>
       <trans-unit id="1209500590333005801" datatype="html">
         <source><x id="PH"/> (account page) </source>
         <target state="translated">
           <x id="PH"/>（帳號頁面）
         </target>
-        
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/metadata/video-avatar-channel.component.ts</context><context context-type="linenumber">20</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image/actor-avatar.component.ts</context><context context-type="linenumber">39</context></context-group></trans-unit>
+        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/metadata/video-avatar-channel.component.ts</context><context context-type="linenumber">20</context></context-group>
+        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image/actor-avatar.component.ts</context><context context-type="linenumber">39</context></context-group>
+      </trans-unit>
       <trans-unit id="2516633974298697807">
         <source>Emphasis</source>
         <target>強調</target>
@@ -10235,8 +10229,8 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       <trans-unit id="4968151111061046122">
         <source>Moderator</source>
         <target>調解員</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/core/users/user.service.ts</context><context context-type="linenumber">418</context></context-group></trans-unit>
+        <context-group purpose="location"><context context-type="sourcefile">src/app/core/users/user.service.ts</context><context context-type="linenumber">418</context></context-group>
+      </trans-unit>
       <trans-unit id="2279527393438260622" datatype="html">
         <source>Search videos, playlists, channels…</source>
         <target state="translated">搜尋影片、播放清單、頻道……</target>
@@ -10768,35 +10762,35 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       <trans-unit id="3284171506518522275">
         <source>Your video was uploaded to your account and is private.</source>
         <target>您的影片已上傳到您的帳號並為私人影片。</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">118</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">125</context></context-group></trans-unit>
       <trans-unit id="5699822024600815733">
         <source>But associated data (tags, description...) will be lost, are you sure you want to leave this page?</source>
         <target>但相關資料（標籤、描述等）將會遺失，您確定您想要離開此頁面嗎？</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">119</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">126</context></context-group></trans-unit>
       <trans-unit id="1219739004043110649">
         <source>Your video is not uploaded yet, are you sure you want to leave this page?</source>
         <target>您的影片尚未上傳，您確定您想要離開此頁面嗎？</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">121</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">128</context></context-group></trans-unit>
       <trans-unit id="6932865105766151309" datatype="html">
         <source>Upload</source>
         <target state="translated">上傳</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">227</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">234</context></context-group></trans-unit>
       <trans-unit id="8278735427925094503">
         <source>Upload <x id="PH"/> </source>
         <target>上傳 
           <x id="PH"/>
         </target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">229</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">236</context></context-group></trans-unit>
       <trans-unit id="5981816353437801748">
         <source>Video published.</source>
         <target>影片已發佈。</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">251</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">258</context></context-group></trans-unit>
       <trans-unit id="764164089183618119">
         <source>You have unsaved changes! If you leave, your changes will be lost.</source>
         <target>您有未儲存的變更！如果您離開，您的變更將會遺失。</target>

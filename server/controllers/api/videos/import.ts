@@ -158,7 +158,11 @@ async function addYoutubeDLImport (req: express.Request, res: express.Response) 
 
   // Process video thumbnail from url if processing from request.files failed
   if (!thumbnailModel && youtubeDLInfo.thumbnailUrl) {
-    thumbnailModel = await processThumbnailFromUrl(youtubeDLInfo.thumbnailUrl, video)
+    try {
+      thumbnailModel = await processThumbnailFromUrl(youtubeDLInfo.thumbnailUrl, video)
+    } catch (err) {
+      logger.warn('Cannot process thumbnail %s from youtubedl.', youtubeDLInfo.thumbnailUrl, { err })
+    }
   }
 
   // Process video preview from request.files
@@ -166,7 +170,11 @@ async function addYoutubeDLImport (req: express.Request, res: express.Response) 
 
   // Process video preview from url if processing from request.files failed
   if (!previewModel && youtubeDLInfo.thumbnailUrl) {
-    previewModel = await processPreviewFromUrl(youtubeDLInfo.thumbnailUrl, video)
+    try {
+      previewModel = await processPreviewFromUrl(youtubeDLInfo.thumbnailUrl, video)
+    } catch (err) {
+      logger.warn('Cannot process preview %s from youtubedl.', youtubeDLInfo.thumbnailUrl, { err })
+    }
   }
 
   const videoImport = await insertIntoDB({

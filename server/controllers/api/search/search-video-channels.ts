@@ -47,7 +47,7 @@ export { searchChannelsRouter }
 
 function searchVideoChannels (req: express.Request, res: express.Response) {
   const query = pickSearchChannelQuery(req.query)
-  let search = query.search || ''
+  const search = query.search || ''
 
   const parts = search.split('@')
 
@@ -58,7 +58,7 @@ function searchVideoChannels (req: express.Request, res: express.Response) {
   if (isURISearch(search) || isWebfingerSearch) return searchVideoChannelURI(search, isWebfingerSearch, res)
 
   // @username -> username to search in DB
-  if (search.startsWith('@')) search = search.replace(/^@/, '')
+  if (search.startsWith('@')) query.search = search.replace(/^@/, '')
 
   if (isSearchIndexSearch(query)) {
     return searchVideoChannelsIndex(query, res)

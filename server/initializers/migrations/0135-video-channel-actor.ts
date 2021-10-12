@@ -56,7 +56,6 @@ async function up (utils: {
   }
 
   {
-    // tslint:disable:no-trailing-whitespace
     const query1 =
       `
       INSERT INTO "actor"

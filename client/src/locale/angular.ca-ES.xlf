@@ -310,7 +310,7 @@
         <target state="translated">vídeo</target>
         
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">294</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">56</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">301</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">56</context></context-group></trans-unit>
       <trans-unit id="6438815964972582865" datatype="html">
         <source>The following link contains a private token and should not be shared with anyone.</source>
         <target state="translated">El següent enllaç conté un token privat i no es deuria compartir amb cap persona.</target>
@@ -381,12 +381,12 @@
         <source>Your video quota is exceeded with this video (video size: <x id="PH" equiv-text="videoSizeBytes"/>, used: <x id="PH_1" equiv-text="videoQuotaUsedBytes"/>, quota: <x id="PH_2" equiv-text="videoQuotaBytes"/>)</source>
         <target state="translated">La seua cuota de vídeo s'excedeix amb aquest vídeo (tamany del vídeo: <x id="PH" equiv-text="videoSizeBytes"/>, utilitzat: <x id="PH_1" equiv-text="videoQuotaUsedBytes"/>, quota: <x id="PH_2" equiv-text="videoQuotaBytes"/>)</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">330</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">337</context></context-group></trans-unit>
       <trans-unit id="7873395933409147217" datatype="html">
         <source>Your daily video quota is exceeded with this video (video size: <x id="PH" equiv-text="videoSizeBytes"/>, used: <x id="PH_1" equiv-text="quotaUsedDailyBytes"/>, quota: <x id="PH_2" equiv-text="quotaDailyBytes"/>)</source>
         <target state="translated">La seua quota diària de vídeo s'excedeix amb aquest vídeo (tamany del vídeo: <x id="PH" equiv-text="videoSizeBytes"/>, utilitzat: <x id="PH_1" equiv-text="quotaUsedDailyBytes"/>, quota: <x id="PH_2" equiv-text="quotaDailyBytes"/>)</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">349</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">356</context></context-group></trans-unit>
       <trans-unit id="5235042777215655908" datatype="html">
         <source>subtitles</source>
         <target state="translated">subtítols</target>
@@ -397,7 +397,7 @@
         <target state="translated">Cancel·lar</target>
         
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context><context context-type="linenumber">48</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/videos-selection.component.html</context><context context-type="linenumber">22</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context><context context-type="linenumber">48</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/videos-selection.component.html</context><context context-type="linenumber">23</context></context-group></trans-unit>
       <trans-unit id="3099741642167775297">
         <source>Download</source>
         <target>Baixa</target>
@@ -2591,7 +2591,7 @@ The link will expire within 1 hour.</source>
         <source>Upload on hold</source>
         <target state="translated">Pujada en espera</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">167</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">174</context></context-group></trans-unit>
       <trans-unit id="285180972645018518" datatype="html">
         <source>Sorry, the upload feature is disabled for your account. If you want to add videos, an admin must unlock your quota.</source>
         <target state="translated">Ho sentim, la funció de pujada està deshabilitada per al teu compte. Si vols agregar vídeos, un administrador ha de desbloquejar la teua quota</target>
@@ -11129,34 +11129,34 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>Your video was uploaded to your account and is private.</source>
         <target state="new">Your video was uploaded to your account and is private.</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">118</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">125</context></context-group></trans-unit>
       <trans-unit id="5699822024600815733">
         <source>But associated data (tags, description...) will be lost, are you sure you want to leave this page?</source>
         <target>Però es perdran les dades associades (etiquetes, descripció ...), estàs segur que vols deixar aquesta pàgina?</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">119</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">126</context></context-group></trans-unit>
       <trans-unit id="1219739004043110649">
         <source>Your video is not uploaded yet, are you sure you want to leave this page?</source>
         <target>El teu vídeo encara no s'ha carregat, estàs segur que vols sortir d'aquesta pàgina?</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">121</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">128</context></context-group></trans-unit>
       <trans-unit id="6932865105766151309" datatype="html">
         <source>Upload</source>
         <target state="new">Upload</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">227</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">234</context></context-group></trans-unit>
       <trans-unit id="8278735427925094503" datatype="html">
         <source>Upload <x id="PH"/> </source>
         <target state="translated">Puja 
           <x id="PH"/>
         </target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">229</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">236</context></context-group></trans-unit>
       <trans-unit id="5981816353437801748">
         <source>Video published.</source>
         <target>Vídeo publicat.</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">251</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">258</context></context-group></trans-unit>
       <trans-unit id="764164089183618119" datatype="html">
         <source>You have unsaved changes! If you leave, your changes will be lost.</source>
         <target state="new">You have unsaved changes! If you leave, your changes will be lost.</target>

@@ -5,12 +5,12 @@ import { join } from 'path'
 import { logger } from '@server/helpers/logger'
 import { CONFIG } from '@server/initializers/config'
 import { Hooks } from '@server/lib/plugins/hooks'
-import { HttpStatusCode } from '@shared/models'
 import { buildFileLocale, getCompleteLocale, is18nLocale, LOCALE_FILES } from '@shared/core-utils/i18n'
+import { HttpStatusCode } from '@shared/models'
 import { root } from '../helpers/core-utils'
 import { STATIC_MAX_AGE } from '../initializers/constants'
 import { ClientHtml, sendHTML, serveIndexHTML } from '../lib/client-html'
-import { asyncMiddleware, embedCSP } from '../middlewares'
+import { asyncMiddleware, disableRobots, embedCSP } from '../middlewares'
 
 const clientsRouter = express.Router()
 
@@ -65,7 +65,10 @@ const staticClientOverrides = [
   'assets/images/icons/icon-96x96.png',
   'assets/images/icons/icon-144x144.png',
   'assets/images/icons/icon-192x192.png',
-  'assets/images/icons/icon-512x512.png'
+  'assets/images/icons/icon-512x512.png',
+  'assets/images/default-playlist.jpg',
+  'assets/images/default-avatar-account.png',
+  'assets/images/default-avatar-video-channel.png'
 ]
 
 for (const staticClientOverride of staticClientOverrides) {
@@ -80,6 +83,12 @@ clientsRouter.use('/client', express.static(distPath, { maxAge: STATIC_MAX_AGE.C
 clientsRouter.use('/client/*', (req: express.Request, res: express.Response) => {
   res.status(HttpStatusCode.NOT_FOUND_404).end()
 })
+
+// No index exceptions
+clientsRouter.all('/about/peertube',
+  disableRobots,
+  asyncMiddleware(serveIndexHTML)
+)
 
 // Always serve index client page (the client is a single page application, let it handle routing)
 // Try to provide the right language index.html

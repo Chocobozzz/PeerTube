@@ -11,7 +11,6 @@ import {
   doubleFollow,
   generateHighBitrateVideo,
   generateVideoWithFramerate,
-  getFileSize,
   makeGetRequest,
   PeerTubeServer,
   setAccessTokensToServers,
@@ -617,8 +616,8 @@ describe('Test video transcoding', function () {
         const file = video.files.find(f => f.resolution.id === r)
 
         const path = servers[1].servers.buildWebTorrentFilePath(file.fileUrl)
-        const size = await getFileSize(path)
-        expect(size, `${path} not below ${60_000}`).to.be.below(60_000)
+        const bitrate = await getVideoFileBitrate(path)
+        expect(bitrate, `${path} not below ${60_000}`).to.be.below(60_000)
       }
     })
   })

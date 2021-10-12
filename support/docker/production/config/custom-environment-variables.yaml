@@ -68,6 +68,13 @@ object_storage:
     prefix: "PEERTUBE_OBJECT_STORAGE_VIDEOS_PREFIX"
     base_url: "PEERTUBE_OBJECT_STORAGE_VIDEOS_BASE_URL"
 
+webadmin:
+  configuration:
+    edit:
+      allowed: 
+        __name: "PEERTUBE_ALLOW_WEBADMIN_CONFIG"
+        __format: "json"
+
 log:
   level: "PEERTUBE_LOG_LEVEL"
   log_ping_requests:

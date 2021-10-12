@@ -43,7 +43,7 @@ export class VideoAddComponent implements OnInit, CanComponentDeactivate {
   hasNoQuotaLeft = false
   hasNoQuotaLeftDaily = false
 
-  private serverConfig: HTMLServerConfig
+  serverConfig: HTMLServerConfig
 
   constructor (
     private auth: AuthService,
@@ -144,6 +144,7 @@ export class VideoAddComponent implements OnInit, CanComponentDeactivate {
   }
 
   canDeactivate (): { canDeactivate: boolean, text?: string} {
+    if (this.secondStepType === 'upload') return this.videoUpload.canDeactivate()
     if (this.secondStepType === 'import-url') return this.videoImportUrl.canDeactivate()
     if (this.secondStepType === 'import-torrent') return this.videoImportTorrent.canDeactivate()
     if (this.secondStepType === 'go-live') return this.videoGoLive.canDeactivate()

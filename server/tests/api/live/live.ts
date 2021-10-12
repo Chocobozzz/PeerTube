@@ -439,7 +439,7 @@ describe('Test live', function () {
     })
 
     it('Should enable transcoding without additional resolutions', async function () {
-      this.timeout(60000)
+      this.timeout(120000)
 
       liveVideoId = await createLiveWrapper(false)
 
@@ -453,7 +453,7 @@ describe('Test live', function () {
     })
 
     it('Should enable transcoding with some resolutions', async function () {
-      this.timeout(60000)
+      this.timeout(120000)
 
       const resolutions = [ 240, 480 ]
       await updateConf(resolutions)
@@ -517,10 +517,16 @@ describe('Test live', function () {
 
       await waitUntilLivePublishedOnAllServers(servers, liveVideoId)
 
-      const bitrateLimits = {
-        720: 5000 * 1000, // 60FPS
-        360: 1100 * 1000,
-        240: 600 * 1000
+      const maxBitrateLimits = {
+        720: 6500 * 1000, // 60FPS
+        360: 1250 * 1000,
+        240: 700 * 1000
+      }
+
+      const minBitrateLimits = {
+        720: 5500 * 1000,
+        360: 1000 * 1000,
+        240: 550 * 1000
       }
 
       for (const server of servers) {
@@ -560,7 +566,8 @@ describe('Test live', function () {
           const probe = await ffprobePromise(segmentPath)
           const videoStream = await getVideoStreamFromFile(segmentPath, probe)
 
-          expect(probe.format.bit_rate).to.be.below(bitrateLimits[videoStream.height])
+          expect(probe.format.bit_rate).to.be.below(maxBitrateLimits[videoStream.height])
+          expect(probe.format.bit_rate).to.be.at.least(minBitrateLimits[videoStream.height])
 
           await makeRawRequest(file.torrentUrl, HttpStatusCode.OK_200)
           await makeRawRequest(file.fileUrl, HttpStatusCode.OK_200)

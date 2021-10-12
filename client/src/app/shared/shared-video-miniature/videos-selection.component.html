@@ -2,7 +2,8 @@
 
 <div
   class="videos"
-  myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [dataObservable]="onDataSubject.asObservable()" [setAngularState]="true"
+  myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [dataObservable]="onDataSubject.asObservable()"
+  [parentDisabled]="disabled" [setAngularState]="true"
 >
   <div class="video" *ngFor="let video of videos; let i = index; trackBy: videoById">
 

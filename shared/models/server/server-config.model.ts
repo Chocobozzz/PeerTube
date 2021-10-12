@@ -30,6 +30,7 @@ export interface RegisteredIdAndPassAuthConfig {
 }
 
 export interface ServerConfig {
+  allowEdits: boolean
   serverVersion: string
   serverCommit?: string
 

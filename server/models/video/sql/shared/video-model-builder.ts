@@ -120,7 +120,7 @@ export class VideoModelBuilder {
   private grabSeparateStreamingPlaylistFiles (rowsStreamingPlaylist?: SQLRow[]) {
     if (!rowsStreamingPlaylist) return
 
-    for (const row of rowsStreamingPlaylist || []) {
+    for (const row of rowsStreamingPlaylist) {
       const id = row['VideoStreamingPlaylists.id']
       if (!id) continue
 

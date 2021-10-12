@@ -13,6 +13,7 @@ export class InfiniteScrollerDirective implements OnInit, OnDestroy, AfterViewCh
 
   // Add angular state in query params to reuse the routed component
   @Input() setAngularState: boolean
+  @Input() parentDisabled = false
 
   @Output() nearOfBottom = new EventEmitter<void>()
 
@@ -74,7 +75,7 @@ export class InfiniteScrollerDirective implements OnInit, OnDestroy, AfterViewCh
         filter(({ current, maximumScroll }) => (current / maximumScroll) > this.decimalLimit)
       )
       .subscribe(() => {
-        if (this.setAngularState) this.setScrollRouteParams()
+        if (this.setAngularState && !this.parentDisabled) this.setScrollRouteParams()
 
         this.nearOfBottom.emit()
       })

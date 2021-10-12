@@ -22,7 +22,7 @@ export class MockJoinPeerTubeVersions {
         })
       })
 
-      const port = 42201 + randomInt(1, 100)
+      const port = 43000 + randomInt(1, 1000)
       app.listen(port, () => res(port))
     })
   }

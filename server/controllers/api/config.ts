@@ -11,7 +11,7 @@ import { objectConverter } from '../../helpers/core-utils'
 import { CONFIG, reloadConfig } from '../../initializers/config'
 import { ClientHtml } from '../../lib/client-html'
 import { asyncMiddleware, authenticate, ensureUserHasRight, openapiOperationDoc } from '../../middlewares'
-import { customConfigUpdateValidator } from '../../middlewares/validators/config'
+import { customConfigUpdateValidator, ensureConfigIsEditable } from '../../middlewares/validators/config'
 
 const configRouter = express.Router()
 
@@ -38,6 +38,7 @@ configRouter.put('/custom',
   openapiOperationDoc({ operationId: 'putCustomConfig' }),
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
+  ensureConfigIsEditable,
   customConfigUpdateValidator,
   asyncMiddleware(updateCustomConfig)
 )
@@ -46,6 +47,7 @@ configRouter.delete('/custom',
   openapiOperationDoc({ operationId: 'delCustomConfig' }),
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
+  ensureConfigIsEditable,
   asyncMiddleware(deleteCustomConfig)
 )
 

@@ -40,7 +40,8 @@
 
   <div class="no-results" i18n *ngIf="hasDoneFirstQuery && videos.length === 0">No results.</div>
   <div
-    myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [dataObservable]="onDataSubject.asObservable()" [setAngularState]="true"
+    myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [dataObservable]="onDataSubject.asObservable()"
+    [setAngularState]="true" [parentDisabled]="disabled"
     class="videos" [ngClass]="{ 'display-as-row': displayAsRow }"
   >
     <ng-container *ngFor="let video of videos; trackBy: videoById;">

@@ -303,7 +303,6 @@ class ClientHtml {
 
     let html = buffer.toString()
 
-    if (paramLang) html = ClientHtml.addHtmlLang(html, paramLang)
     html = ClientHtml.addManifestContentHash(html)
     html = ClientHtml.addFaviconContentHash(html)
     html = ClientHtml.addLogoContentHash(html)
@@ -555,8 +554,7 @@ function sendHTML (html: string, res: express.Response) {
 }
 
 async function serveIndexHTML (req: express.Request, res: express.Response) {
-  if (req.accepts(ACCEPT_HEADERS) === 'html' ||
-      !req.headers.accept) {
+  if (req.accepts(ACCEPT_HEADERS) === 'html' || !req.headers.accept) {
     try {
       await generateHTMLPage(req, res, req.params.language)
       return

@@ -34,7 +34,7 @@ const mdToPlainText = text => {
 
   return safeHtml.replace(/<[^>]+>/g, '')
                  .replace(/\n$/, '')
-                 .replace('\n', ', ')
+                 .replace(/\n/g, ', ')
 }
 
 // ---------------------------------------------------------------------------

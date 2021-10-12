@@ -222,7 +222,7 @@ class Emailer {
       sendmail: true,
       newline: 'unix',
       path: CONFIG.SMTP.SENDMAIL,
-      logger: bunyanLogger as any
+      logger: bunyanLogger
     })
   }
 

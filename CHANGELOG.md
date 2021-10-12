@@ -1,5 +1,18 @@
 # Changelog
 
+## v3.4.1
+
+### Bug fixes
+
+ * Fix broken PeerTube when cookies are disabled or if the embed iframe does not have appropriate options
+ * Fix search by channel's handle with an handle containing the local host
+ * Don't display autoblock message in upload page it is not enabled by the admin
+ * Don't index `/about/peertube` page
+ * Correctly handle OEmbed with an URL containing query parameters
+ * More robust youtube-dl thumbnail import
+ * Don't send a new video notification when using create transcoding CLI script
+
+
 ## v3.4.0
 
 ### IMPORTANT NOTES

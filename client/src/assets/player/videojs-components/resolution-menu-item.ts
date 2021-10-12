@@ -1,82 +1,72 @@
 import videojs from 'video.js'
-import { AutoResolutionUpdateData, ResolutionUpdateData } from '../peertube-videojs-typings'
 
 const MenuItem = videojs.getComponent('MenuItem')
 
 export interface ResolutionMenuItemOptions extends videojs.MenuItemOptions {
-  labels?: { [id: number]: string }
   id: number
-  callback: (resolutionId: number, type: 'video') => void
 }
 
 class ResolutionMenuItem extends MenuItem {
   private readonly resolutionId: number
   private readonly label: string
-  // Only used for the automatic item
-  private readonly labels: { [id: number]: string }
-  private readonly callback: (resolutionId: number, type: 'video') => void
 
-  private autoResolutionPossible: boolean
-  private currentResolutionLabel: string
+  private autoResolutionEnabled: boolean
+  private autoResolutionChosen: string
 
   constructor (player: videojs.Player, options?: ResolutionMenuItemOptions) {
     options.selectable = true
 
     super(player, options)
 
-    this.autoResolutionPossible = true
-    this.currentResolutionLabel = ''
+    this.autoResolutionEnabled = true
+    this.autoResolutionChosen = ''
 
     this.resolutionId = options.id
     this.label = options.label
-    this.labels = options.labels
-    this.callback = options.callback
 
-    player.peertube().on('resolutionChange', (_: any, data: ResolutionUpdateData) => this.updateSelection(data))
+    player.peertubeResolutions().on('resolutionChanged', () => this.updateSelection())
 
     // We only want to disable the "Auto" item
     if (this.resolutionId === -1) {
-      player.peertube().on('autoResolutionChange', (_: any, data: AutoResolutionUpdateData) => this.updateAutoResolution(data))
+      player.peertubeResolutions().on('autoResolutionEnabledChanged', () => this.updateAutoResolution())
     }
   }
 
   handleClick (event: any) {
     // Auto button disabled?
-    if (this.autoResolutionPossible === false && this.resolutionId === -1) return
+    if (this.autoResolutionEnabled === false && this.resolutionId === -1) return
 
     super.handleClick(event)
 
-    this.callback(this.resolutionId, 'video')
+    this.player().peertubeResolutions().select({ id: this.resolutionId, byEngine: false })
   }
 
-  updateSelection (data: ResolutionUpdateData) {
+  updateSelection () {
+    const selectedResolution = this.player().peertubeResolutions().getSelected()
+
     if (this.resolutionId === -1) {
-      this.currentResolutionLabel = this.labels[data.id]
+      this.autoResolutionChosen = this.player().peertubeResolutions().getAutoResolutionChosen()?.label
     }
 
-    // Automatic resolution only
-    if (data.auto === true) {
-      this.selected(this.resolutionId === -1)
-      return
-    }
-
-    this.selected(this.resolutionId === data.id)
+    this.selected(this.resolutionId === selectedResolution.id)
   }
 
-  updateAutoResolution (data: AutoResolutionUpdateData) {
+  updateAutoResolution () {
+    const enabled = this.player().peertubeResolutions().isAutoResolutionEnabeld()
+
     // Check if the auto resolution is enabled or not
-    if (data.possible === false) {
+    if (enabled === false) {
       this.addClass('disabled')
     } else {
       this.removeClass('disabled')
     }
 
-    this.autoResolutionPossible = data.possible
+    this.autoResolutionEnabled = enabled
   }
 
   getLabel () {
     if (this.resolutionId === -1) {
-      return this.label + ' <small>' + this.currentResolutionLabel + '</small>'
+      return this.label + ' <small>' + this.autoResolutionChosen + '</small>'
     }
 
     return this.label
