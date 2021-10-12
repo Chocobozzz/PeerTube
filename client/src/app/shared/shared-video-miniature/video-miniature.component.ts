@@ -101,11 +101,15 @@ export class VideoMiniatureComponent implements OnInit {
   ) {}
 
   get authorAccount () {
-    return this.serverConfig.client.videos.miniature.showAuthorDisplayName ? this.video.account.displayName : this.video.byAccount
+    return this.serverConfig.client.videos.miniature.preferAuthorDisplayName
+      ? this.video.account.displayName
+      : this.video.byAccount
   }
 
   get authorChannel () {
-    return this.serverConfig.client.videos.miniature.showAuthorDisplayName ? this.video.channel.displayName : this.video.byVideoChannel
+    return this.serverConfig.client.videos.miniature.preferAuthorDisplayName
+      ? this.video.channel.displayName
+      : this.video.byVideoChannel
   }
 
   get isVideoBlur () {

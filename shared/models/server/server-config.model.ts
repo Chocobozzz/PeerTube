@@ -37,7 +37,7 @@ export interface ServerConfig {
   client: {
     videos: {
       miniature: {
-        showAuthorDisplayName: boolean
+        preferAuthorDisplayName: boolean
       }
     }
   }

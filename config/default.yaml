@@ -75,10 +75,12 @@ email:
   subject:
     prefix: "[PeerTube]"
 
+# PeerTube client/interface configuration
 client:
   videos:
     miniature:
-      show_author_display_name: false
+      # By default PeerTube client displays author username
+      prefer_author_display_name: false
 
 # From the project root directory
 storage:

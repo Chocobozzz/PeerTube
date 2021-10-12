@@ -62,7 +62,7 @@ const CONFIG = {
   CLIENT: {
     VIDEOS: {
       MINIATURE: {
-        get SHOW_AUTHOR_DISPLAY_NAME () { return config.get<boolean>('client.videos.miniature.show_author_display_name') }
+        get PREFER_AUTHOR_DISPLAY_NAME () { return config.get<boolean>('client.videos.miniature.prefer_author_display_name') }
       }
     }
   },
