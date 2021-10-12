@@ -25,6 +25,7 @@ export class SelectCustomValueComponent implements ControlValueAccessor, OnChang
 
   customValue: number | string = ''
   selectedId: number | string
+  disabled = false
 
   itemsWithCustom: SelectOptionsItem[] = []
 
@@ -74,5 +75,9 @@ export class SelectCustomValueComponent implements ControlValueAccessor, OnChang
 
   isCustomValue () {
     return this.selectedId === 'other'
+  }
+
+  setDisabledState (isDisabled: boolean) {
+    this.disabled = isDisabled
   }
 }

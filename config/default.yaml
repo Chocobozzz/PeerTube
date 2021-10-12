@@ -243,6 +243,11 @@ peertube:
     # You can use a custom URL if your want, that respect the format behind https://joinpeertube.org/api/v1/versions.json
     url: 'https://joinpeertube.org/api/v1/versions.json'
 
+webadmin:
+  configuration:
+    edit: 
+      allowed: true
+
 cache:
   previews:
     size: 500 # Max number of previews you want to cache

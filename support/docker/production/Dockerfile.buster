@@ -33,7 +33,8 @@ RUN mkdir /data /config
 RUN chown -R peertube:peertube /data /config
 
 ENV NODE_ENV production
-ENV NODE_CONFIG_DIR /config
+ENV NODE_CONFIG_DIR /app/config:/app/support/docker/production/config:/config
+ENV PEERTUBE_LOCAL_CONFIG /config
 
 VOLUME /data
 VOLUME /config

@@ -63,7 +63,7 @@
     <div class="col-md-7 col-xl-5"></div>
     <div class="col-md-5 col-xl-5">
 
-      <div class="form-error submit-error" i18n *ngIf="!form.valid">
+      <div class="form-error submit-error" i18n *ngIf="!form.valid && serverConfig.allowEdits">
         There are errors in the form:
 
         <ul>
@@ -77,7 +77,11 @@
         You cannot allow live replay if you don't enable transcoding.
       </span>
 
-      <input (click)="formValidated()" type="submit" i18n-value value="Update configuration" [disabled]="!form.valid || !hasConsistentOptions()">
+      <span i18n *ngIf="!serverConfig.allowEdits">
+        You cannot change the server configuration because it's managed externally.
+      </span>
+
+      <input (click)="formValidated()" type="submit" i18n-value value="Update configuration" [disabled]="!form.valid || !hasConsistentOptions() || !serverConfig.allowEdits">
     </div>
   </div>
 </form>
