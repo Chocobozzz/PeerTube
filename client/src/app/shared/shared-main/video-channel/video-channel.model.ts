@@ -41,7 +41,7 @@ export class VideoChannel extends Actor implements ServerVideoChannel {
   }
 
   static GET_DEFAULT_AVATAR_URL () {
-    return `${window.location.origin}/client/assets/images/default-avatar-videochannel.png`
+    return `${window.location.origin}/client/assets/images/default-avatar-video-channel.png`
   }
 
   constructor (hash: Partial<ServerVideoChannel>) {

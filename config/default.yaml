@@ -89,7 +89,13 @@ storage:
   captions: 'storage/captions/'
   cache: 'storage/cache/'
   plugins: 'storage/plugins/'
-  # Overridable client files : logo.svg, favicon.png and icons/*.png (PWA) in client/dist/assets/images
+  # Overridable client files in client/dist/assets/images :
+  # - logo.svg
+  # - favicon.png
+  # - default-playlist.jpg
+  # - default-avatar-account.png
+  # - default-avatar-video-channel.png
+  # - and icons/*.png (PWA)
   # Could contain for example assets/images/favicon.png
   # If the file exists, peertube will serve it
   # If not, peertube will fallback to the default fil

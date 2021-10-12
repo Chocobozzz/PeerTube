@@ -65,7 +65,10 @@ const staticClientOverrides = [
   'assets/images/icons/icon-96x96.png',
   'assets/images/icons/icon-144x144.png',
   'assets/images/icons/icon-192x192.png',
-  'assets/images/icons/icon-512x512.png'
+  'assets/images/icons/icon-512x512.png',
+  'assets/images/default-playlist.jpg',
+  'assets/images/default-avatar-account.png',
+  'assets/images/default-avatar-video-channel.png'
 ]
 
 for (const staticClientOverride of staticClientOverrides) {
