@@ -213,6 +213,12 @@ function runTestSuite (options: {
     }
   })
 
+  it('Should fetch correctly all the files', async function () {
+    for (const url of deletedUrls.concat(keptUrls)) {
+      await makeRawRequest(url, HttpStatusCode.OK_200)
+    }
+  })
+
   it('Should correctly delete the files', async function () {
     await servers[0].videos.remove({ id: uuidsToDelete[0] })
     await servers[1].videos.remove({ id: uuidsToDelete[1] })
