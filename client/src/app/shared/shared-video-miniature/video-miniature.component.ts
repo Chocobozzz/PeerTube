@@ -100,6 +100,14 @@ export class VideoMiniatureComponent implements OnInit {
     @Inject(LOCALE_ID) private localeId: string
   ) {}
 
+  get authorAccount () {
+    return this.serverConfig.client.videos.miniature.showAuthorDisplayName ? this.video.account.displayName : this.video.byAccount
+  }
+
+  get authorChannel () {
+    return this.serverConfig.client.videos.miniature.showAuthorDisplayName ? this.video.channel.displayName : this.video.byVideoChannel
+  }
+
   get isVideoBlur () {
     return this.video.isVideoNSFWForUser(this.user, this.serverConfig)
   }

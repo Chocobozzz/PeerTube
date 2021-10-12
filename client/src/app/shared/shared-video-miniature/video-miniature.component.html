@@ -39,10 +39,10 @@
           </span>
 
           <a tabindex="-1" *ngIf="displayOptions.by && displayOwnerAccount()" class="video-miniature-account" [routerLink]="[ '/c', video.byVideoChannel ]">
-            {{ video.byAccount }}
+            {{ authorAccount }}
           </a>
           <a tabindex="-1" *ngIf="displayOptions.by && displayOwnerVideoChannel()" class="video-miniature-channel" [routerLink]="[ '/c', video.byVideoChannel ]">
-            {{ video.byVideoChannel }}
+            {{ authorChannel }}
           </a>
 
           <div class="video-info-privacy">

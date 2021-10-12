@@ -58,6 +58,15 @@ const CONFIG = {
       PREFIX: config.get<string>('email.subject.prefix') + ' '
     }
   },
+
+  CLIENT: {
+    VIDEOS: {
+      MINIATURE: {
+        get SHOW_AUTHOR_DISPLAY_NAME () { return config.get<boolean>('client.videos.miniature.show_author_display_name') }
+      }
+    }
+  },
+
   STORAGE: {
     TMP_DIR: buildPath(config.get<string>('storage.tmp')),
     ACTOR_IMAGES: buildPath(config.get<string>('storage.avatars')),

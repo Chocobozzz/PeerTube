@@ -43,6 +43,13 @@ class ServerConfigManager {
 
     return {
       allowEdits: CONFIG.WEBADMIN.CONFIGURATION.EDITS.ALLOWED,
+      client: {
+        videos: {
+          miniature: {
+            showAuthorDisplayName: CONFIG.CLIENT.VIDEOS.MINIATURE.SHOW_AUTHOR_DISPLAY_NAME
+          }
+        }
+      },
       instance: {
         name: CONFIG.INSTANCE.NAME,
         shortDescription: CONFIG.INSTANCE.SHORT_DESCRIPTION,

@@ -34,6 +34,14 @@ export interface ServerConfig {
   serverVersion: string
   serverCommit?: string
 
+  client: {
+    videos: {
+      miniature: {
+        showAuthorDisplayName: boolean
+      }
+    }
+  }
+
   instance: {
     name: string
     shortDescription: string
