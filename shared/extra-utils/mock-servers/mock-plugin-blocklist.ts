@@ -23,7 +23,7 @@ export class MockBlocklist {
         return res.json(this.body)
       })
 
-      const port = 42201 + randomInt(1, 100)
+      const port = 45000 + randomInt(1, 1000)
       this.server = app.listen(port, () => res(port))
     })
   }

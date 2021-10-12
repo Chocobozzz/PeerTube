@@ -9,7 +9,7 @@ class MockProxy {
 
   initialize () {
     return new Promise<number>(res => {
-      const port = 42501 + randomInt(1, 100)
+      const port = 46000 + randomInt(1, 1000)
 
       this.server = proxy(createServer())
       this.server.listen(port, () => res(port))
