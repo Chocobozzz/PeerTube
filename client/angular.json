@@ -156,6 +156,7 @@
               "chart.js",
               "htmlparser2",
               "markdown-it-emoji/light",
+              "linkifyjs/lib/linkify-html",
               "sanitize-html",
               "debug",
               "@peertube/p2p-media-loader-hlsjs",
