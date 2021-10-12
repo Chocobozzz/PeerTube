@@ -94,7 +94,7 @@ storage:
   # - favicon.png
   # - default-playlist.jpg
   # - default-avatar-account.png
-  # - default-avatar-videochannel.png
+  # - default-avatar-video-channel.png
   # - and icons/*.png (PWA)
   # Could contain for example assets/images/favicon.png
   # If the file exists, peertube will serve it
