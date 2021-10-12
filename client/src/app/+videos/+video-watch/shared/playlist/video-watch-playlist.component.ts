@@ -1,6 +1,14 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core'
 import { Router } from '@angular/router'
-import { AuthService, ComponentPagination, LocalStorageService, Notifier, SessionStorageService, UserService } from '@app/core'
+import {
+  AuthService,
+  ComponentPagination,
+  HooksService,
+  LocalStorageService,
+  Notifier,
+  SessionStorageService,
+  UserService
+} from '@app/core'
 import { VideoPlaylist, VideoPlaylistElement, VideoPlaylistService } from '@app/shared/shared-video-playlist'
 import { peertubeLocalStorage, peertubeSessionStorage } from '@root-helpers/peertube-web-storage'
 import { VideoPlaylistPrivacy } from '@shared/models'
@@ -34,6 +42,7 @@ export class VideoWatchPlaylistComponent {
   currentPlaylistPosition: number
 
   constructor (
+    private hooks: HooksService,
     private userService: UserService,
     private auth: AuthService,
     private notifier: Notifier,
@@ -87,31 +96,38 @@ export class VideoWatchPlaylistComponent {
   }
 
   loadPlaylistElements (playlist: VideoPlaylist, redirectToFirst = false, position?: number) {
-    this.videoPlaylist.getPlaylistVideos(playlist.uuid, this.playlistPagination)
-        .subscribe(({ total, data }) => {
-          this.playlistElements = this.playlistElements.concat(data)
-          this.playlistPagination.totalItems = total
+    const obs = this.hooks.wrapObsFun(
+      this.videoPlaylist.getPlaylistVideos.bind(this.videoPlaylist),
+      { videoPlaylistId: playlist.uuid, componentPagination: this.playlistPagination },
+      'video-watch',
+      'filter:api.video-watch.video-playlist-elements.get.params',
+      'filter:api.video-watch.video-playlist-elements.get.result'
+    )
 
-          const firstAvailableVideo = this.playlistElements.find(e => !!e.video)
-          if (!firstAvailableVideo) {
-            this.noPlaylistVideos = true
-            return
-          }
+    obs.subscribe(({ total, data: playlistElements }) => {
+      this.playlistElements = this.playlistElements.concat(playlistElements)
+      this.playlistPagination.totalItems = total
 
-          if (position) this.updatePlaylistIndex(position)
+      const firstAvailableVideo = this.playlistElements.find(e => !!e.video)
+      if (!firstAvailableVideo) {
+        this.noPlaylistVideos = true
+        return
+      }
 
-          if (redirectToFirst) {
-            const extras = {
-              queryParams: {
-                start: firstAvailableVideo.startTimestamp,
-                stop: firstAvailableVideo.stopTimestamp,
-                playlistPosition: firstAvailableVideo.position
-              },
-              replaceUrl: true
-            }
-            this.router.navigate([], extras)
-          }
-        })
+      if (position) this.updatePlaylistIndex(position)
+
+      if (redirectToFirst) {
+        const extras = {
+          queryParams: {
+            start: firstAvailableVideo.startTimestamp,
+            stop: firstAvailableVideo.stopTimestamp,
+            playlistPosition: firstAvailableVideo.position
+          },
+          replaceUrl: true
+        }
+        this.router.navigate([], extras)
+      }
+    })
   }
 
   updatePlaylistIndex (position: number) {
