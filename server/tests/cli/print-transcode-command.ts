@@ -9,7 +9,7 @@ import { VideoResolution } from '../../../shared/models/videos'
 
 const expect = chai.expect
 
-describe('Test create transcoding jobs', function () {
+describe('Test print transcode jobs', function () {
 
   it('Should print the correct command for each resolution', async function () {
     const fixturePath = buildAbsoluteFixturePath('video_short.webm')
@@ -21,7 +21,7 @@ describe('Test create transcoding jobs', function () {
       VideoResolution.H_1080P
     ]) {
       const command = await CLICommand.exec(`npm run print-transcode-command -- ${fixturePath} -r ${resolution}`)
-      const targetBitrate = Math.min(getMaxBitrate({ resolution, fps, ratio: 16 / 9 }), bitrate)
+      const targetBitrate = Math.min(getMaxBitrate({ resolution, fps, ratio: 16 / 9 }), bitrate + (bitrate * 0.3))
 
       expect(command).to.includes(`-vf scale=w=-2:h=${resolution}`)
       expect(command).to.includes(`-y -acodec aac -vcodec libx264`)
