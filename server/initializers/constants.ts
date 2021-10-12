@@ -346,7 +346,7 @@ const VIEW_LIFETIME = {
 let CONTACT_FORM_LIFETIME = 60000 * 60 // 1 hour
 
 const VIDEO_TRANSCODING_FPS: VideoTranscodingFPS = {
-  MIN: 10,
+  MIN: 1,
   STANDARD: [ 24, 25, 30 ],
   HD_STANDARD: [ 50, 60 ],
   AVERAGE: 30,
