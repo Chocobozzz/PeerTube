@@ -78,7 +78,7 @@ function calculateBitrate (options: {
 
   for (const toTestResolution of resolutionsOrder) {
     if (toTestResolution <= resolution) {
-      return resolution * resolution * ratio * fps * bitPerPixel[toTestResolution]
+      return Math.floor(resolution * resolution * ratio * fps * bitPerPixel[toTestResolution])
     }
   }
 
