@@ -26,6 +26,10 @@ export const clientFilterHookObject = {
   'filter:api.video-watch.video.get.params': true,
   'filter:api.video-watch.video.get.result': true,
 
+  // Filter params/result of the function that fetch video playlist elements of the video-watch page
+  'filter:api.video-watch.video-playlist-elements.get.params': true,
+  'filter:api.video-watch.video-playlist-elements.get.result': true,
+
   // Filter params/result of the function that fetch the threads of the video-watch page
   'filter:api.video-watch.video-threads.list.params': true,
   'filter:api.video-watch.video-threads.list.result': true,
@@ -81,8 +85,6 @@ export const clientActionHookObject = {
   'action:video-watch.video-threads.loaded': true,
   // Fired when a user click on 'View x replies' and they're loaded
   'action:video-watch.video-thread-replies.loaded': true,
-  // Fired when video watch playlist elements are loaded
-  'action:video-watch-playlist.elements.loaded': true,
 
   // Fired when the video edit page (upload, URL/torrent import, update) is being initialized
   'action:video-edit.init': true,

@@ -155,7 +155,7 @@ export class MyVideoPlaylistElementsComponent implements OnInit, OnDestroy {
   }
 
   private loadElements () {
-    this.videoPlaylistService.getPlaylistVideos(this.videoPlaylistId, this.pagination)
+    this.videoPlaylistService.getPlaylistVideos({ videoPlaylistId: this.videoPlaylistId, componentPagination: this.pagination })
         .subscribe(({ total, data }) => {
           this.playlistElements = this.playlistElements.concat(data)
           this.pagination.totalItems = total
