@@ -288,7 +288,7 @@ Ajouter un sous-titre est vraiment facile`)
   })
 
   it('Should import no HDR version on a HDR video', async function () {
-    this.timeout(120_000)
+    this.timeout(300_000)
 
     const config = {
       transcoding: {
