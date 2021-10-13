@@ -19,7 +19,10 @@ class ActorFollowScoreCache {
   updateActorFollowsScore (goodInboxes: string[], badInboxes: string[]) {
     if (goodInboxes.length === 0 && badInboxes.length === 0) return
 
-    logger.info('Updating %d good actor follows and %d bad actor follows scores in cache.', goodInboxes.length, badInboxes.length)
+    logger.info(
+      'Updating %d good actor follows and %d bad actor follows scores in cache.',
+      goodInboxes.length, badInboxes.length, { badInboxes }
+    )
 
     for (const goodInbox of goodInboxes) {
       if (this.pendingFollowsScore[goodInbox] === undefined) this.pendingFollowsScore[goodInbox] = 0
