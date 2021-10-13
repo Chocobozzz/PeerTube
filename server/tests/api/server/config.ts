@@ -392,6 +392,10 @@ describe('Test static config', function () {
   it('Should error when client tries to update', async function () {
     await server.config.updateCustomConfig({ newCustomConfig, expectedStatus: 405 })
   })
+
+  after(async function () {
+    await cleanupTests([ server ])
+  })
 })
 
 describe('Test config', function () {
