@@ -96,10 +96,6 @@ const peertubeGot = got.extend({
             path
           }, httpSignatureOptions)
         }
-      },
-
-      (options: GotOptions) => {
-        options.timeout = REQUEST_TIMEOUT
       }
     ]
   }
@@ -213,6 +209,7 @@ function buildGotOptions (options: PeerTubeRequestOptions) {
   return {
     method: options.method,
     dnsCache: true,
+    timeout: REQUEST_TIMEOUT,
     json: options.json,
     searchParams: options.searchParams,
     headers,
