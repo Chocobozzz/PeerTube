@@ -94,7 +94,7 @@ storage:
   captions: '/var/www/peertube/storage/captions/'
   cache: '/var/www/peertube/storage/cache/'
   plugins: '/var/www/peertube/storage/plugins/'
-  # Overridable client files in client/dist/assets/images :
+  # Overridable client files in client/dist/assets/images:
   # - logo.svg
   # - favicon.png
   # - default-playlist.jpg
