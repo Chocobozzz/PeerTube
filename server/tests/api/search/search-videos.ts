@@ -27,7 +27,7 @@ describe('Test videos search', function () {
   let command: SearchCommand
 
   before(async function () {
-    this.timeout(120000)
+    this.timeout(240000)
 
     const servers = await Promise.all([
       createSingleServer(1),
