@@ -48,12 +48,14 @@ async function processFollow (byActor: MActorSignature, activityId: string, targ
       return { actorFollow: undefined as MActorFollowActors }
     }
 
-    const [ actorFollow, created ] = await ActorFollowModel.findOrCreate<MActorFollowActors>({
-      where: {
-        actorId: byActor.id,
-        targetActorId: targetActor.id
-      },
-      defaults: {
+    // Don't use findOrCreate by sequelize that breaks our actor follow hooks
+    let created = false
+    let actorFollow: MActorFollowActors = await ActorFollowModel.loadByActorAndTarget(byActor.id, targetActor.id, t)
+
+    if (!actorFollow) {
+      created = true
+
+      actorFollow = await ActorFollowModel.create({
         actorId: byActor.id,
         targetActorId: targetActor.id,
         url: activityId,
@@ -61,9 +63,8 @@ async function processFollow (byActor: MActorSignature, activityId: string, targ
         state: CONFIG.FOLLOWERS.INSTANCE.MANUAL_APPROVAL
           ? 'pending'
           : 'accepted'
-      },
-      transaction: t
-    })
+      }, { transaction: t })
+    }
 
     // Set the follow as accepted if the remote actor follows a channel or account
     // Or if the instance automatically accepts followers

@@ -19,6 +19,7 @@ import {
   UpdatedAt
 } from 'sequelize-typescript'
 import { isActivityPubUrlValid } from '@server/helpers/custom-validators/activitypub/misc'
+import { afterCommitIfTransaction } from '@server/helpers/database-utils'
 import { getServerActor } from '@server/models/application/application'
 import {
   MActorFollowActorsDefault,
@@ -118,20 +119,22 @@ export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowMo
   @AfterCreate
   @AfterUpdate
   static incrementFollowerAndFollowingCount (instance: ActorFollowModel, options: any) {
-    if (instance.state !== 'accepted') return undefined
-
-    return Promise.all([
-      ActorModel.rebuildFollowsCount(instance.actorId, 'following', options.transaction),
-      ActorModel.rebuildFollowsCount(instance.targetActorId, 'followers', options.transaction)
-    ])
+    return afterCommitIfTransaction(options.transaction, () => {
+      return Promise.all([
+        ActorModel.rebuildFollowsCount(instance.actorId, 'following'),
+        ActorModel.rebuildFollowsCount(instance.targetActorId, 'followers')
+      ])
+    })
   }
 
   @AfterDestroy
   static decrementFollowerAndFollowingCount (instance: ActorFollowModel, options: any) {
-    return Promise.all([
-      ActorModel.rebuildFollowsCount(instance.actorId, 'following', options.transaction),
-      ActorModel.rebuildFollowsCount(instance.targetActorId, 'followers', options.transaction)
-    ])
+    return afterCommitIfTransaction(options.transaction, () => {
+      return Promise.all([
+        ActorModel.rebuildFollowsCount(instance.actorId, 'following'),
+        ActorModel.rebuildFollowsCount(instance.targetActorId, 'followers')
+      ])
+    })
   }
 
   static removeFollowsOf (actorId: number, t?: Transaction) {

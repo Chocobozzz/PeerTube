@@ -12,7 +12,7 @@ class ActorFollowHealthCache {
   private pendingBadServer = new Set<number>()
   private pendingGoodServer = new Set<number>()
 
-  private badInboxes = new Set<string>()
+  private readonly badInboxes = new Set<string>()
 
   private constructor () {}
 

@@ -19,16 +19,16 @@ async function checkFollow (follower: PeerTubeServer, following: PeerTubeServer,
     const body = await following.follows.getFollowers({ start: 0, count: 5, sort: '-createdAt' })
     const follow = body.data.find(f => f.follower.host === follower.host && f.state === 'accepted')
 
-    if (exists === true) expect(follow).to.exist
-    else expect(follow).to.be.undefined
+    if (exists === true) expect(follow, `Follower ${follower.url} should exist on ${following.url}`).to.exist
+    else expect(follow, `Follower ${follower.url} should not exist on ${following.url}`).to.be.undefined
   }
 
   {
     const body = await follower.follows.getFollowings({ start: 0, count: 5, sort: '-createdAt' })
     const follow = body.data.find(f => f.following.host === following.host && f.state === 'accepted')
 
-    if (exists === true) expect(follow).to.exist
-    else expect(follow).to.be.undefined
+    if (exists === true) expect(follow, `Following ${following.url} should exist on ${follower.url}`).to.exist
+    else expect(follow, `Following ${following.url} should not exist on ${follower.url}`).to.be.undefined
   }
 }
 

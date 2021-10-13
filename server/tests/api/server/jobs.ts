@@ -88,8 +88,6 @@ describe('Test jobs', function () {
     const jobs = body.data
     expect(jobs).to.have.length.above(2)
 
-    // We know there are a least 1 delayed job (video views) and 1 completed job (broadcast)
-    expect(jobs.find(j => j.state === 'delayed')).to.not.be.undefined
     expect(jobs.find(j => j.state === 'completed')).to.not.be.undefined
   })
 
