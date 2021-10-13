@@ -134,9 +134,9 @@ const REMOTE_SCHEME = {
 }
 
 const JOB_ATTEMPTS: { [id in JobType]: number } = {
-  'activitypub-http-broadcast': 5,
-  'activitypub-http-unicast': 5,
-  'activitypub-http-fetcher': 5,
+  'activitypub-http-broadcast': 1,
+  'activitypub-http-unicast': 1,
+  'activitypub-http-fetcher': 2,
   'activitypub-follow': 5,
   'activitypub-cleaner': 1,
   'video-file-import': 1,
@@ -153,7 +153,7 @@ const JOB_ATTEMPTS: { [id in JobType]: number } = {
 // Excluded keys are jobs that can be configured by admins
 const JOB_CONCURRENCY: { [id in Exclude<JobType, 'video-transcoding' | 'video-import'>]: number } = {
   'activitypub-http-broadcast': 1,
-  'activitypub-http-unicast': 5,
+  'activitypub-http-unicast': 10,
   'activitypub-http-fetcher': 3,
   'activitypub-cleaner': 1,
   'activitypub-follow': 1,

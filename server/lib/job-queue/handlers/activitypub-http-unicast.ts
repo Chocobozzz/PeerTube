@@ -2,7 +2,7 @@ import { Job } from 'bull'
 import { ActivitypubHttpUnicastPayload } from '@shared/models'
 import { logger } from '../../../helpers/logger'
 import { doRequest } from '../../../helpers/requests'
-import { ActorFollowScoreCache } from '../../files-cache'
+import { ActorFollowHealthCache } from '../../actor-follow-health-cache'
 import { buildGlobalHeaders, buildSignedRequestOptions, computeBody } from './utils/activitypub-http-utils'
 
 async function processActivityPubHttpUnicast (job: Job) {
@@ -23,9 +23,9 @@ async function processActivityPubHttpUnicast (job: Job) {
 
   try {
     await doRequest(uri, options)
-    ActorFollowScoreCache.Instance.updateActorFollowsScore([ uri ], [])
+    ActorFollowHealthCache.Instance.updateActorFollowsHealth([ uri ], [])
   } catch (err) {
-    ActorFollowScoreCache.Instance.updateActorFollowsScore([], [ uri ])
+    ActorFollowHealthCache.Instance.updateActorFollowsHealth([], [ uri ])
 
     throw err
   }

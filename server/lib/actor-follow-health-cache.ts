@@ -1,14 +1,18 @@
-import { ACTOR_FOLLOW_SCORE } from '../../initializers/constants'
-import { logger } from '../../helpers/logger'
+import { ACTOR_FOLLOW_SCORE } from '../initializers/constants'
+import { logger } from '../helpers/logger'
 
 // Cache follows scores, instead of writing them too often in database
 // Keep data in memory, we don't really need Redis here as we don't really care to loose some scores
-class ActorFollowScoreCache {
+class ActorFollowHealthCache {
 
-  private static instance: ActorFollowScoreCache
+  private static instance: ActorFollowHealthCache
+
   private pendingFollowsScore: { [ url: string ]: number } = {}
+
   private pendingBadServer = new Set<number>()
   private pendingGoodServer = new Set<number>()
+
+  private badInboxes = new Set<string>()
 
   private constructor () {}
 
@@ -16,7 +20,9 @@ class ActorFollowScoreCache {
     return this.instance || (this.instance = new this())
   }
 
-  updateActorFollowsScore (goodInboxes: string[], badInboxes: string[]) {
+  updateActorFollowsHealth (goodInboxes: string[], badInboxes: string[]) {
+    this.badInboxes.clear()
+
     if (goodInboxes.length === 0 && badInboxes.length === 0) return
 
     logger.info(
@@ -34,7 +40,12 @@ class ActorFollowScoreCache {
       if (this.pendingFollowsScore[badInbox] === undefined) this.pendingFollowsScore[badInbox] = 0
 
       this.pendingFollowsScore[badInbox] += ACTOR_FOLLOW_SCORE.PENALTY
+      this.badInboxes.add(badInbox)
     }
+  }
+
+  isBadInbox (inboxUrl: string) {
+    return this.badInboxes.has(inboxUrl)
   }
 
   addBadServerId (serverId: number) {
@@ -71,5 +82,5 @@ class ActorFollowScoreCache {
 }
 
 export {
-  ActorFollowScoreCache
+  ActorFollowHealthCache
 }
