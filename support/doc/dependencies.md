@@ -519,6 +519,7 @@ dev-db/redis
 dev-vcs/git
 app-arch/unzip
 dev-lang/python
+dev-lang/python-exec
 www-servers/nginx
 
 # Optional, client for Let’s Encrypt:
@@ -559,7 +560,7 @@ rc-service postgresql-11 start
 6. Create Python version symlink for youtube-dl:
 
 ```
-sudo ln -s /usr/bin/python3 /usr/bin/python
+emerge -1 python-exec
 ```
 
 ## OpenBSD
