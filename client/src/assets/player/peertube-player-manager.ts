@@ -374,7 +374,7 @@ export class PeertubePlayerManager {
         rtcConfig: getRtcConfig(),
         requiredSegmentsPriority: 1,
         simultaneousHttpDownloads: 1,
-        segmentUrlBuilder: segmentUrlBuilderFactory(redundancyUrlManager),
+        segmentUrlBuilder: segmentUrlBuilderFactory(redundancyUrlManager, 1),
         useP2P: getStoredP2PEnabled(),
         consumeOnly
       },

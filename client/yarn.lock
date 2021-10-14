@@ -1701,10 +1701,10 @@
     tslib "^2.0.0"
     yargs-parser "20.0.0"
 
-"@peertube/p2p-media-loader-core@^1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@peertube/p2p-media-loader-core/-/p2p-media-loader-core-1.0.2.tgz#ef36a23df5a5393cc5d180a45dfb70d2c3ecff87"
-  integrity sha512-2F6Cx2ncXe+ySaaGiAWf7jJ8snJpyd7WNCxYbJ5Zadst1mNSQlxUqH4/qEl/bai4DiuzzhudlzXS8U3SX9c9Jw==
+"@peertube/p2p-media-loader-core@^1.0.4":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@peertube/p2p-media-loader-core/-/p2p-media-loader-core-1.0.4.tgz#61ef559e57b582c334790f0dc0230ee038703614"
+  integrity sha512-JuWMTMTkyQRUf3VbGElQ6VlbKCiFUu5ioMEPNwYx75rE+BPnIXQf6jMUyAEpPoHhGSlcef546Z3mxcDHKJtZ6g==
   dependencies:
     bittorrent-tracker "^9.16.1"
     debug "^4.3.1"
@@ -1712,12 +1712,11 @@
     sha.js "^2.4.11"
     simple-peer "^9.10.0"
 
-"@peertube/p2p-media-loader-hlsjs@^1.0.4":
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/@peertube/p2p-media-loader-hlsjs/-/p2p-media-loader-hlsjs-1.0.4.tgz#849809067886e41bf2ba7e71a2da33478863bc66"
-  integrity sha512-FFFlYPFwTGxB3CPChqlzPqJw65ajIjCCxCn4IQRNuagYpo0fdaxrgepMHNPW3Zl5DmvEppv+ohUfYyr98U1wiw==
+"@peertube/p2p-media-loader-hlsjs@^1.0.6":
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/@peertube/p2p-media-loader-hlsjs/-/p2p-media-loader-hlsjs-1.0.6.tgz#d7f6ee786d756e20953428322bdffec80691b78e"
+  integrity sha512-nCV+mgpLL+XVJg5zv5m0oiVxsS/V/+NfJ0HtmVEXSU0EP5S32zPGMQpSWRNwGT6o+VZnyvKOtiqZDIK1vpabyA==
   dependencies:
-    "@peertube/p2p-media-loader-core" "^1.0.2"
     events "^3.3.0"
     m3u8-parser "^4.6.0"
 
