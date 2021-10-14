@@ -294,11 +294,11 @@ Ajouter un sous-titre est vraiment facile`)
       transcoding: {
         enabled: true,
         resolutions: {
-          '240p': false,
+          '240p': true,
           '360p': false,
           '480p': false,
           '720p': false,
-          '1080p': true, // the resulting resolution shouldn't be higher than this, and not vp9.2/av01
+          '1080p': false, // the resulting resolution shouldn't be higher than this, and not vp9.2/av01
           '1440p': false,
           '2160p': false
         },
@@ -333,7 +333,7 @@ Ajouter un sous-titre est vraiment facile`)
     const video = await servers[0].videos.get({ id: videoUUID })
     expect(video.name).to.equal('hdr video')
     const maxResolution = Math.max.apply(Math, video.files.map(function (o) { return o.resolution.id }))
-    expect(maxResolution, 'expected max resolution not met').to.equals(VideoResolution.H_1080P)
+    expect(maxResolution, 'expected max resolution not met').to.equals(VideoResolution.H_240P)
   })
 
   it('Should import a peertube video', async function () {
