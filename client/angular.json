@@ -157,6 +157,7 @@
               "htmlparser2",
               "markdown-it-emoji/light",
               "linkifyjs/lib/linkify-html",
+              "linkifyjs/lib/plugins/mention",
               "sanitize-html",
               "debug",
               "@peertube/p2p-media-loader-hlsjs",

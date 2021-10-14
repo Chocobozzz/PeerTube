@@ -20,8 +20,11 @@ import {
 } from 'sequelize-typescript'
 import { isActivityPubUrlValid } from '@server/helpers/custom-validators/activitypub/misc'
 import { afterCommitIfTransaction } from '@server/helpers/database-utils'
+import { CONFIG } from '@server/initializers/config'
 import { getServerActor } from '@server/models/application/application'
 import {
+  MActor,
+  MActorFollowActors,
   MActorFollowActorsDefault,
   MActorFollowActorsDefaultSubscription,
   MActorFollowFollowingHost,
@@ -135,6 +138,44 @@ export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowMo
         ActorModel.rebuildFollowsCount(instance.targetActorId, 'followers')
       ])
     })
+  }
+
+  /*
+   * @deprecated Use `findOrCreateCustom` instead
+  */
+  static findOrCreate (): any {
+    throw new Error('Should not be called')
+  }
+
+  // findOrCreate has issues with actor follow hooks
+  static async findOrCreateCustom (options: {
+    byActor: MActor
+    targetActor: MActor
+    activityId: string
+    state: FollowState
+    transaction: Transaction
+  }): Promise<[ MActorFollowActors, boolean ]> {
+    const { byActor, targetActor, activityId, state, transaction } = options
+
+    let created = false
+    let actorFollow: MActorFollowActors = await ActorFollowModel.loadByActorAndTarget(byActor.id, targetActor.id, transaction)
+
+    if (!actorFollow) {
+      created = true
+
+      actorFollow = await ActorFollowModel.create({
+        actorId: byActor.id,
+        targetActorId: targetActor.id,
+        url: activityId,
+
+        state
+      }, { transaction })
+
+      actorFollow.ActorFollowing = targetActor
+      actorFollow.ActorFollower = byActor
+    }
+
+    return [ actorFollow, created ]
   }
 
   static removeFollowsOf (actorId: number, t?: Transaction) {

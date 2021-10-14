@@ -54,21 +54,13 @@ async function follow (fromActor: MActor, targetActor: MActorFull, isAutoFollow 
   const state = !fromActor.serverId && !targetActor.serverId ? 'accepted' : 'pending'
 
   const actorFollow = await sequelizeTypescript.transaction(async t => {
-    const [ actorFollow ] = await ActorFollowModel.findOrCreate<MActorFollowActors>({
-      where: {
-        actorId: fromActor.id,
-        targetActorId: targetActor.id
-      },
-      defaults: {
-        state,
-        url: getLocalActorFollowActivityPubUrl(fromActor, targetActor),
-        actorId: fromActor.id,
-        targetActorId: targetActor.id
-      },
+    const [ actorFollow ] = await ActorFollowModel.findOrCreateCustom({
+      byActor: fromActor,
+      state,
+      targetActor,
+      activityId: getLocalActorFollowActivityPubUrl(fromActor, targetActor),
       transaction: t
     })
-    actorFollow.ActorFollowing = targetActor
-    actorFollow.ActorFollower = fromActor
 
     // Send a notification to remote server if our follow is not already accepted
     if (actorFollow.state !== 'accepted') sendFollow(actorFollow, t)
