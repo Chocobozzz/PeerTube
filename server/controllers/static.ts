@@ -32,14 +32,6 @@ staticRouter.use(cors())
   Cors is very important to let other servers access torrent and video files
 */
 
-// FIXME: deprecated in 3.2, use lazy-statics instead
-// Due to historical reasons, we can't really remove this controller
-const torrentsPhysicalPath = CONFIG.STORAGE.TORRENTS_DIR
-staticRouter.use(
-  STATIC_PATHS.TORRENTS,
-  express.static(torrentsPhysicalPath, { maxAge: 0 }) // Don't cache because we could regenerate the torrent file
-)
-
 // Videos path for webseed
 staticRouter.use(
   STATIC_PATHS.WEBSEED,
