@@ -47,7 +47,7 @@ export interface ServerConfig {
         allowed: boolean
       }
     }
-  },
+  }
 
   instance: {
     name: string

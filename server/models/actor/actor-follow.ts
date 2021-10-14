@@ -20,7 +20,6 @@ import {
 } from 'sequelize-typescript'
 import { isActivityPubUrlValid } from '@server/helpers/custom-validators/activitypub/misc'
 import { afterCommitIfTransaction } from '@server/helpers/database-utils'
-import { CONFIG } from '@server/initializers/config'
 import { getServerActor } from '@server/models/application/application'
 import {
   MActor,
