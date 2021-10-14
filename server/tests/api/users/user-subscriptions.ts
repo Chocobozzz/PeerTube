@@ -22,7 +22,7 @@ describe('Test users subscriptions', function () {
   let command: SubscriptionsCommand
 
   before(async function () {
-    this.timeout(120000)
+    this.timeout(240000)
 
     servers = await createMultipleServers(3)
 
