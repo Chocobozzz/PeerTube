@@ -186,6 +186,10 @@ describe('Test auto follows', function () {
       await checkFollow(servers[0], servers[1], false)
       await checkFollow(servers[0], servers[2], true)
     })
+
+    after(async function () {
+      await instanceIndexServer.terminate()
+    })
   })
 
   after(async function () {

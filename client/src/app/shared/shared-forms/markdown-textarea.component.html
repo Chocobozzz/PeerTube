@@ -2,7 +2,7 @@
   <textarea #textarea
     [(ngModel)]="content" (ngModelChange)="onModelChange()"
     class="form-control" [ngClass]="classes"
-    [attr.disabled]="disabled"
+    [attr.disabled]="disabled || null"
     [ngStyle]="{ height: textareaHeight }"
     [id]="name" [name]="name">
   </textarea>

@@ -258,7 +258,7 @@ peertube:
 
 webadmin:
   configuration:
-    edit:
+    edition:
       # Set this to false if you don't want to allow config edition in the web interface by instance admins
       allowed: true
 

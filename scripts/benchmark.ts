@@ -135,7 +135,7 @@ async function run () {
       title: 'API - config',
       path: '/api/v1/config',
       expecter: (body, status) => {
-        return status === 200 && body.startsWith('{"allowEdits":')
+        return status === 200 && body.startsWith('{"client":')
       }
     }
   ]

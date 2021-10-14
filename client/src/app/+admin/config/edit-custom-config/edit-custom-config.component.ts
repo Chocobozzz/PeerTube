@@ -258,7 +258,8 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
 
     this.loadConfigAndUpdateForm()
     this.loadCategoriesAndLanguages()
-    if (!this.serverConfig.allowEdits) {
+
+    if (!this.isUpdateAllowed()) {
       this.form.disable()
     }
   }
@@ -291,6 +292,10 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
 
         error: err => this.notifier.error(err.message)
       })
+  }
+
+  isUpdateAllowed () {
+    return this.serverConfig.webadmin.configuration.edition.allowed === true
   }
 
   hasConsistentOptions () {

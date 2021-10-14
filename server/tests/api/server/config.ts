@@ -379,14 +379,14 @@ describe('Test static config', function () {
   before(async function () {
     this.timeout(30000)
 
-    server = await createSingleServer(1, { webadmin: { configuration: { edit: { allowed: false } } } })
+    server = await createSingleServer(1, { webadmin: { configuration: { edition: { allowed: false } } } })
     await setAccessTokensToServers([ server ])
   })
 
   it('Should tell the client that edits are not allowed', async function () {
     const data = await server.config.getConfig()
 
-    expect(data.allowEdits).to.be.false
+    expect(data.webadmin.configuration.edition.allowed).to.be.false
   })
 
   it('Should error when client tries to update', async function () {

@@ -30,7 +30,6 @@ export interface RegisteredIdAndPassAuthConfig {
 }
 
 export interface ServerConfig {
-  allowEdits: boolean
   serverVersion: string
   serverCommit?: string
 
@@ -41,6 +40,14 @@ export interface ServerConfig {
       }
     }
   }
+
+  webadmin: {
+    configuration: {
+      edition: {
+        allowed: boolean
+      }
+    }
+  },
 
   instance: {
     name: string

@@ -70,9 +70,9 @@ object_storage:
 
 webadmin:
   configuration:
-    edit:
-      allowed: 
-        __name: "PEERTUBE_ALLOW_WEBADMIN_CONFIG"
+    edition:
+      allowed:
+        __name: "PEERTUBE_WEBADMIN_CONFIGURATION_EDITION_ALLOWED"
         __format: "json"
 
 log:

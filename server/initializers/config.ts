@@ -206,8 +206,8 @@ const CONFIG = {
   },
   WEBADMIN: {
     CONFIGURATION: {
-      EDITS: {
-        ALLOWED: config.get<boolean>('webadmin.configuration.edit.allowed')
+      EDITION: {
+        ALLOWED: config.get<boolean>('webadmin.configuration.edition.allowed')
       }
     }
   },
@@ -463,7 +463,7 @@ export function reloadConfig () {
 
   function getConfigDirectories () {
     if (process.env.NODE_CONFIG_DIR) {
-      return process.env.NODE_CONFIG_DIR.split(":")
+      return process.env.NODE_CONFIG_DIR.split(':')
     }
 
     return [ join(root(), 'config') ]

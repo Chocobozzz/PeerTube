@@ -106,12 +106,13 @@ const customConfigUpdateValidator = [
 ]
 
 function ensureConfigIsEditable (req: express.Request, res: express.Response, next: express.NextFunction) {
-  if (!CONFIG.WEBADMIN.CONFIGURATION.EDITS.ALLOWED) {
+  if (!CONFIG.WEBADMIN.CONFIGURATION.EDITION.ALLOWED) {
     return res.fail({
       status: HttpStatusCode.METHOD_NOT_ALLOWED_405,
       message: 'Server configuration is static and cannot be edited'
     })
   }
+
   return next()
 }
 

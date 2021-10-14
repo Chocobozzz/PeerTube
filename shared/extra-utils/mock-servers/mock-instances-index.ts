@@ -1,7 +1,11 @@
 import express from 'express'
+import { Server } from 'http'
 import { randomInt } from '@shared/core-utils'
+import { terminateServer } from './utils'
 
 export class MockInstancesIndex {
+  private server: Server
+
   private readonly indexInstances: { host: string, createdAt: string }[] = []
 
   initialize () {
@@ -30,11 +34,15 @@ export class MockInstancesIndex {
       })
 
       const port = 42000 + randomInt(1, 1000)
-      app.listen(port, () => res(port))
+      this.server = app.listen(port, () => res(port))
     })
   }
 
   addInstance (host: string) {
     this.indexInstances.push({ host, createdAt: new Date().toISOString() })
+  }
+
+  terminate () {
+    return terminateServer(this.server)
   }
 }
