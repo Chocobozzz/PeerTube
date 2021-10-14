@@ -35,7 +35,7 @@ export class PlayerPage {
 
     // Autoplay is disabled on iOS and Safari
     if (isIOS() || isSafari() || isMobileDevice()) {
-      // We can't play the video using protractor if it is not muted
+      // We can't play the video if it is not muted
       await browser.execute(`document.querySelector('video').muted = true`)
       await this.clickOnPlayButton()
     } else if (isAutoplay === false) {

@@ -2,7 +2,7 @@ import * as debug from 'debug'
 import { merge, Observable, of, ReplaySubject, Subject } from 'rxjs'
 import { catchError, filter, map, switchMap, tap } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
-import { Injectable, NgZone } from '@angular/core'
+import { Injectable } from '@angular/core'
 import { ComponentPaginationLight, RestExtractor, RestService } from '@app/core'
 import { buildBulkObservable } from '@app/helpers'
 import { Video, VideoChannel, VideoChannelService, VideoService } from '@app/shared/shared-main'
@@ -30,13 +30,11 @@ export class UserSubscriptionService {
     private authHttp: HttpClient,
     private restExtractor: RestExtractor,
     private videoService: VideoService,
-    private restService: RestService,
-    private ngZone: NgZone
+    private restService: RestService
   ) {
     this.existsObservable = merge(
       buildBulkObservable({
         time: 500,
-        ngZone: this.ngZone,
         notifierObservable: this.existsSubject,
         bulkGet: this.doSubscriptionsExist.bind(this)
       }),

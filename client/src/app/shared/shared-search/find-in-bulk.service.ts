@@ -1,7 +1,7 @@
 import * as debug from 'debug'
 import { Observable, Subject } from 'rxjs'
 import { first, map } from 'rxjs/operators'
-import { Injectable, NgZone } from '@angular/core'
+import { Injectable } from '@angular/core'
 import { buildBulkObservable } from '@app/helpers'
 import { ResultList } from '@shared/models/common'
 import { Video, VideoChannel } from '../shared-main'
@@ -23,8 +23,7 @@ export class FindInBulkService {
   private getPlaylistInBulk: BulkObservables<string, ResultList<VideoPlaylist>>
 
   constructor (
-    private searchService: SearchService,
-    private ngZone: NgZone
+    private searchService: SearchService
   ) {
     this.getVideoInBulk = this.buildBulkObservableObject(this.getVideosInBulk.bind(this))
     this.getChannelInBulk = this.buildBulkObservableObject(this.getChannelsInBulk.bind(this))
@@ -115,7 +114,6 @@ export class FindInBulkService {
       result: buildBulkObservable({
         time: 500,
         bulkGet,
-        ngZone: this.ngZone,
         notifierObservable: notifier.asObservable()
       })
     }

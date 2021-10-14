@@ -2,7 +2,7 @@ import * as debug from 'debug'
 import { merge, Observable, of, ReplaySubject, Subject } from 'rxjs'
 import { catchError, filter, map, share, switchMap, tap } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
-import { Injectable, NgZone } from '@angular/core'
+import { Injectable } from '@angular/core'
 import { AuthUser, ComponentPaginationLight, RestExtractor, RestService, ServerService } from '@app/core'
 import { buildBulkObservable, objectToFormData } from '@app/helpers'
 import { Account, AccountService, VideoChannel, VideoChannelService } from '@app/shared/shared-main'
@@ -47,13 +47,11 @@ export class VideoPlaylistService {
     private authHttp: HttpClient,
     private serverService: ServerService,
     private restExtractor: RestExtractor,
-    private restService: RestService,
-    private ngZone: NgZone
+    private restService: RestService
   ) {
     this.videoExistsInPlaylistObservable = merge(
       buildBulkObservable({
         time: 500,
-        ngZone: this.ngZone,
         bulkGet: this.doVideosExistInPlaylist.bind(this),
         notifierObservable: this.videoExistsInPlaylistNotifier
       }),
