@@ -259,6 +259,7 @@ peertube:
 webadmin:
   configuration:
     edit:
+      # Set this to false if you don't want to allow config edition in the web interface by instance admins
       allowed: true
 
 cache:

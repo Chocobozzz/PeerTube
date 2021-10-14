@@ -256,8 +256,9 @@ peertube:
 
 webadmin:
   configuration:
-    # Set to false if you want the config to be readonly
-    allow_edits: true
+    edit:
+      # Set this to false if you don't want to allow config edition in the web interface by instance admins
+      allowed: true
 
 ###############################################################################
 #
@@ -290,7 +291,7 @@ contact_form:
 signup:
   enabled: false
   limit: 10 # When the limit is reached, registrations are disabled. -1 == unlimited
-  minimum_age: 16
+  minimum_age: 16 # Used to configure the signup form
   requires_email_verification: false
   filters:
     cidr: # You can specify CIDR ranges to whitelist (empty = no filtering) or blacklist
