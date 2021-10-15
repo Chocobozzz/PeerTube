@@ -86,7 +86,7 @@ export const VIDEO_SUPPORT_VALIDATOR: BuildFormValidator = {
 }
 
 export const VIDEO_SCHEDULE_PUBLICATION_AT_VALIDATOR: BuildFormValidator = {
-  VALIDATORS: [ ],
+  VALIDATORS: [ ], // Required is set dynamically
   MESSAGES: {
     required: $localize`A date is required to schedule video update.`
   }

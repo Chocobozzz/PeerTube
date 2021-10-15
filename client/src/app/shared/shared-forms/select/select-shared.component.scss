@@ -3,6 +3,10 @@
 
 $form-base-input-width: auto;
 
+.text-muted {
+  font-size: 90%;
+}
+
 ng-select {
   width: $form-base-input-width;
 

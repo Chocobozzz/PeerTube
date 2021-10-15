@@ -11,7 +11,7 @@ import { VideoCaptionModel } from '@server/models/video/video-caption'
 import { VideoFileModel } from '@server/models/video/video-file'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist'
 import { FilteredModelAttributes } from '@server/types'
-import { isStreamingPlaylist, MChannelId, MStreamingPlaylistVideo, MVideo, MVideoFile, MVideoId } from '@server/types/models'
+import { isStreamingPlaylist, MChannelId, MStreamingPlaylistVideo, MVideo, MVideoId } from '@server/types/models'
 import {
   ActivityHashTagObject,
   ActivityMagnetUrlObject,
@@ -110,7 +110,7 @@ function getFileAttributesFromUrl (
   return attributes
 }
 
-function getStreamingPlaylistAttributesFromObject (video: MVideoId, videoObject: VideoObject, videoFiles: MVideoFile[]) {
+function getStreamingPlaylistAttributesFromObject (video: MVideoId, videoObject: VideoObject) {
   const playlistUrls = videoObject.url.filter(u => isAPStreamingPlaylistUrlObject(u)) as ActivityPlaylistUrlObject[]
   if (playlistUrls.length === 0) return []
 
@@ -118,7 +118,7 @@ function getStreamingPlaylistAttributesFromObject (video: MVideoId, videoObject:
   for (const playlistUrlObject of playlistUrls) {
     const segmentsSha256UrlObject = playlistUrlObject.tag.find(isAPPlaylistSegmentHashesUrlObject)
 
-    let files: unknown[] = playlistUrlObject.tag.filter(u => isAPVideoUrlObject(u)) as ActivityVideoUrlObject[]
+    const files: unknown[] = playlistUrlObject.tag.filter(u => isAPVideoUrlObject(u)) as ActivityVideoUrlObject[]
 
     if (!segmentsSha256UrlObject) {
       logger.warn('No segment sha256 URL found in AP playlist object.', { playlistUrl: playlistUrlObject })
