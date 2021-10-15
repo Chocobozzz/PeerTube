@@ -198,7 +198,7 @@ function runTestSuite (options: {
   })
 
   it('Should upload a video and move it to the object storage with transcoding', async function () {
-    this.timeout(40000)
+    this.timeout(120000)
 
     const { uuid } = await servers[1].videos.quickUpload({ name: 'video 2' })
     uuidsToDelete.push(uuid)
