@@ -1,6 +1,5 @@
 import { createWriteStream } from 'fs'
 import { ensureDir, move, pathExists, remove, writeFile } from 'fs-extra'
-import got from 'got'
 import { join } from 'path'
 import { CONFIG } from '@server/initializers/config'
 import { HttpStatusCode } from '../../shared/models/http/http-error-codes'
@@ -9,6 +8,7 @@ import { CONSTRAINTS_FIELDS, VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES }
 import { peertubeTruncate, pipelinePromise, root } from './core-utils'
 import { isVideoFileExtnameValid } from './custom-validators/videos'
 import { logger } from './logger'
+import { peertubeGot } from './requests'
 import { generateVideoImportTmpPath } from './utils'
 
 export type YoutubeDLInfo = {
@@ -343,7 +343,9 @@ class YoutubeDL {
     await ensureDir(binDirectory)
 
     try {
-      const result = await got(url, { followRedirect: false })
+      const gotContext = { bodyKBLimit: 20_000 }
+
+      const result = await peertubeGot(url, { followRedirect: false, context: gotContext })
 
       if (result.statusCode !== HttpStatusCode.FOUND_302) {
         logger.error('youtube-dl update error: did not get redirect for the latest version link. Status %d', result.statusCode)
@@ -353,7 +355,7 @@ class YoutubeDL {
       const newUrl = result.headers.location
       const newVersion = /\/(\d{4}\.\d\d\.\d\d(\.\d)?)\/youtube-dl$/.exec(newUrl)[1]
 
-      const downloadFileStream = got.stream(newUrl)
+      const downloadFileStream = peertubeGot.stream(newUrl, { context: gotContext })
       const writeStream = createWriteStream(bin, { mode: 493 })
 
       await pipelinePromise(

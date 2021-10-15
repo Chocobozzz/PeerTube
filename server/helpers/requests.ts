@@ -186,7 +186,8 @@ export {
   doRequest,
   doJSONRequest,
   doRequestAndSaveToFile,
-  downloadImage
+  downloadImage,
+  peertubeGot
 }
 
 // ---------------------------------------------------------------------------
