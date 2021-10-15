@@ -438,6 +438,8 @@
     cursor: pointer;
     line-height: 20px;
     display: inline-block;
+    font-size: 15px;
+    font-weight: $font-regular;
   }
 
   [type=radio]:checked + label::before,
@@ -472,6 +474,13 @@
   [type=radio]:checked + label::after {
     opacity: 1;
     transform: scale(1);
+  }
+
+  .form-group-description {
+    display: block;
+    margin-top: -10px;
+    margin-bottom: 10px;
+    margin-left: 29px;
   }
 }
 

@@ -70,6 +70,8 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, AfterView
       waitTranscoding: true,
       commentsEnabled: true,
       downloadEnabled: true,
+      permanentLive: false,
+      saveReplay: false,
       channelId: this.firstStepChannelId
     }
 
