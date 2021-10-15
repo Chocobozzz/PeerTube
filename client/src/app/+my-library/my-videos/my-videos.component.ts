@@ -75,6 +75,10 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
     this.buildActions()
 
     this.user = this.authService.getUser()
+
+    if (this.route.snapshot.queryParams['search']) {
+      this.search = this.route.snapshot.queryParams['search']
+    }
   }
 
   onSearch (search: string) {
