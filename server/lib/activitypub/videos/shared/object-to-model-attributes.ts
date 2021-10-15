@@ -120,9 +120,6 @@ function getStreamingPlaylistAttributesFromObject (video: MVideoId, videoObject:
 
     let files: unknown[] = playlistUrlObject.tag.filter(u => isAPVideoUrlObject(u)) as ActivityVideoUrlObject[]
 
-    // FIXME: backward compatibility introduced in v2.1.0
-    if (files.length === 0) files = videoFiles
-
     if (!segmentsSha256UrlObject) {
       logger.warn('No segment sha256 URL found in AP playlist object.', { playlistUrl: playlistUrlObject })
       continue
