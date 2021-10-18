@@ -266,7 +266,7 @@ Ajouter un sous-titre est vraiment facile`)
   })
 
   it('Should import a video that will be transcoded', async function () {
-    this.timeout(120_000)
+    this.timeout(240_000)
 
     const attributes = {
       name: 'transcoded video',
