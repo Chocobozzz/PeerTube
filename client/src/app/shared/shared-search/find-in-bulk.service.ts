@@ -1,6 +1,6 @@
 import * as debug from 'debug'
 import { Observable, Subject } from 'rxjs'
-import { first, map } from 'rxjs/operators'
+import { filter, first, map } from 'rxjs/operators'
 import { Injectable } from '@angular/core'
 import { buildBulkObservable } from '@app/helpers'
 import { ResultList } from '@shared/models/common'
@@ -12,7 +12,7 @@ const logger = debug('peertube:search:FindInBulkService')
 
 type BulkObservables <P extends number | string, R> = {
   notifier: Subject<P>
-  result: Observable<R>
+  result: Observable<{ params: P[], response: R }>
 }
 
 @Injectable()
@@ -70,8 +70,9 @@ export class FindInBulkService {
     return new Observable<R>(obs => {
       observableObject.result
         .pipe(
+          filter(result => result.params.includes(param)),
           first(),
-          map(({ data }) => data),
+          map(result => result.response.data),
           map(data => data.find(finder))
         )
         .subscribe(result => {
@@ -105,8 +106,8 @@ export class FindInBulkService {
     return this.searchService.searchVideoPlaylists({ uuids })
   }
 
-  private buildBulkObservableObject <T extends number | string, R> (bulkGet: (params: T[]) => Observable<R>) {
-    const notifier = new Subject<T>()
+  private buildBulkObservableObject <P extends number | string, R> (bulkGet: (params: P[]) => Observable<R>) {
+    const notifier = new Subject<P>()
 
     return {
       notifier,

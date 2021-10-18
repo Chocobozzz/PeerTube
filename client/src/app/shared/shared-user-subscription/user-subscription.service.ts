@@ -37,7 +37,7 @@ export class UserSubscriptionService {
         time: 500,
         notifierObservable: this.existsSubject,
         bulkGet: this.doSubscriptionsExist.bind(this)
-      }),
+      }).pipe(map(r => r.response)),
 
       this.myAccountSubscriptionCacheSubject
     )

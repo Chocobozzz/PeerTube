@@ -54,7 +54,7 @@ export class VideoPlaylistService {
         time: 500,
         bulkGet: this.doVideosExistInPlaylist.bind(this),
         notifierObservable: this.videoExistsInPlaylistNotifier
-      }),
+      }).pipe(map(({ response }) => response)),
 
       this.videoExistsInPlaylistCacheSubject
     )

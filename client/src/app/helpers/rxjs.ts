@@ -2,10 +2,10 @@ import { uniq } from 'lodash-es'
 import { Observable } from 'rxjs'
 import { bufferTime, distinctUntilChanged, filter, map, share, switchMap } from 'rxjs/operators'
 
-function buildBulkObservable <T extends number | string, R> (options: {
-  notifierObservable: Observable<T>
+function buildBulkObservable <P extends number | string, R> (options: {
+  notifierObservable: Observable<P>
   time: number
-  bulkGet: (params: T[]) => Observable<R>
+  bulkGet: (params: P[]) => Observable<R>
 }) {
   const { notifierObservable, time, bulkGet } = options
 
@@ -14,7 +14,10 @@ function buildBulkObservable <T extends number | string, R> (options: {
     bufferTime(time),
     filter(params => params.length !== 0),
     map(params => uniq(params)),
-    switchMap(params => bulkGet(params)),
+    switchMap(params => {
+      return bulkGet(params)
+        .pipe(map(response => ({ params, response })))
+    }),
     share()
   )
 }
