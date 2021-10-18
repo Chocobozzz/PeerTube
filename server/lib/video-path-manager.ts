@@ -16,8 +16,8 @@ class VideoPathManager {
 
   private constructor () {}
 
-  getFSHLSOutputPath (video: MVideoUUID, filename?: string) {
-    const base = getHLSDirectory(video)
+  getFSHLSOutputPath (video: MVideoUUID, filename?: string, storage?: VideoStorage) {
+    const base = getHLSDirectory(video, storage)
     if (!filename) return base
 
     return join(base, filename)
@@ -37,7 +37,7 @@ class VideoPathManager {
     if (videoFile.isHLS()) {
       const video = extractVideo(videoOrPlaylist)
 
-      return join(getHLSDirectory(video), videoFile.filename)
+      return join(getHLSDirectory(video, videoFile.storage), videoFile.filename)
     }
 
     return join(CONFIG.STORAGE.VIDEOS_DIR, videoFile.filename)
@@ -76,7 +76,7 @@ class VideoPathManager {
 
     if (videoFile.storage === VideoStorage.FILE_SYSTEM) {
       return this.makeAvailableFactory(
-        () => join(getHLSDirectory(playlist.Video), filename),
+        () => join(getHLSDirectory(playlist.Video, videoFile.storage), filename),
         false,
         cb
       )
@@ -92,7 +92,7 @@ class VideoPathManager {
   async makeAvailablePlaylistFile <T> (playlist: MStreamingPlaylistVideo, filename: string, cb: MakeAvailableCB<T>) {
     if (playlist.storage === VideoStorage.FILE_SYSTEM) {
       return this.makeAvailableFactory(
-        () => join(getHLSDirectory(playlist.Video), filename),
+        () => join(getHLSDirectory(playlist.Video, playlist.storage), filename),
         false,
         cb
       )

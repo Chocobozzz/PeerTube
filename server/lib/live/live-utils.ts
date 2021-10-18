@@ -10,7 +10,7 @@ function buildConcatenatedName (segmentOrPlaylistPath: string) {
 }
 
 async function cleanupLive (video: MVideo, streamingPlaylist: MStreamingPlaylist) {
-  const hlsDirectory = getLiveDirectory(video)
+  const hlsDirectory = getLiveDirectory(video, streamingPlaylist.storage)
 
   await remove(hlsDirectory)
 

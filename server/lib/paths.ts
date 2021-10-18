@@ -4,6 +4,7 @@ import { CONFIG } from '@server/initializers/config'
 import { HLS_REDUNDANCY_DIRECTORY, HLS_STREAMING_PLAYLIST_DIRECTORY } from '@server/initializers/constants'
 import { isStreamingPlaylist, MStreamingPlaylistVideo, MVideo, MVideoFile, MVideoUUID } from '@server/types/models'
 import { removeFragmentedMP4Ext } from '@shared/core-utils'
+import { VideoStorage } from '@shared/models'
 
 // ################## Video file name ##################
 
@@ -17,11 +18,11 @@ function generateHLSVideoFilename (resolution: number) {
 
 // ################## Streaming playlist ##################
 
-function getLiveDirectory (video: MVideoUUID) {
-  return getHLSDirectory(video)
+function getLiveDirectory (video: MVideoUUID, storage: VideoStorage) {
+  return getHLSDirectory(video, storage)
 }
 
-function getHLSDirectory (video: MVideoUUID) {
+function getHLSDirectory (video: MVideoUUID, storage: VideoStorage) {
   return join(HLS_STREAMING_PLAYLIST_DIRECTORY, video.uuid)
 }
 

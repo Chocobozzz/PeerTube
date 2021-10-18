@@ -56,15 +56,15 @@ export {
 // ---------------------------------------------------------------------------
 
 async function saveLive (video: MVideo, live: MVideoLive, streamingPlaylist: MStreamingPlaylist) {
-  const replayDirectory = VideoPathManager.Instance.getFSHLSOutputPath(video, VIDEO_LIVE.REPLAY_DIRECTORY)
+  const replayDirectory = VideoPathManager.Instance.getFSHLSOutputPath(video, VIDEO_LIVE.REPLAY_DIRECTORY, streamingPlaylist.storage)
 
-  const rootFiles = await readdir(getLiveDirectory(video))
+  const rootFiles = await readdir(getLiveDirectory(video, streamingPlaylist.storage))
 
   const playlistFiles = rootFiles.filter(file => {
     return file.endsWith('.m3u8') && file !== streamingPlaylist.playlistFilename
   })
 
-  await cleanupTMPLiveFiles(getLiveDirectory(video))
+  await cleanupTMPLiveFiles(getLiveDirectory(video, streamingPlaylist.storage))
 
   await live.destroy()
 

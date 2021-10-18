@@ -1703,7 +1703,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
   async removeStreamingPlaylistFiles (streamingPlaylist: MStreamingPlaylist, isRedundancy = false) {
     const directoryPath = isRedundancy
       ? getHLSRedundancyDirectory(this)
-      : getHLSDirectory(this)
+      : getHLSDirectory(this, streamingPlaylist.storage)
 
     await remove(directoryPath)
 

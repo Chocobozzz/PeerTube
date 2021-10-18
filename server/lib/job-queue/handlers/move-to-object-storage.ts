@@ -67,7 +67,7 @@ async function moveHLSFiles (video: MVideoWithAllFiles) {
       // Resolution fragmented file
       const fileUrl = await storeHLSFile(playlist, video, file.filename)
 
-      const oldPath = join(getHLSDirectory(video), file.filename)
+      const oldPath = join(getHLSDirectory(video, file.storage), file.filename)
 
       await onFileMoved({ videoOrPlaylist: Object.assign(playlist, { Video: video }), file, fileUrl, oldPath })
     }
@@ -93,7 +93,7 @@ async function doAfterLastJob (video: MVideoWithAllFiles, isNewVideo: boolean) {
 
   // Remove empty hls video directory
   if (video.VideoStreamingPlaylists) {
-    await remove(getHLSDirectory(video))
+    await remove(getHLSDirectory(video, video.VideoStreamingPlaylists[0].storage))
   }
 
   await moveToNextState(video, isNewVideo)

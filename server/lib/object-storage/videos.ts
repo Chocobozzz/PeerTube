@@ -5,9 +5,10 @@ import { MStreamingPlaylist, MVideoFile, MVideoUUID } from '@server/types/models
 import { getHLSDirectory } from '../paths'
 import { generateHLSObjectBaseStorageKey, generateHLSObjectStorageKey, generateWebTorrentObjectStorageKey } from './keys'
 import { lTags, makeAvailable, removeObject, removePrefix, storeObject } from './shared'
+import { VideoStorage } from '@shared/models'
 
 function storeHLSFile (playlist: MStreamingPlaylist, video: MVideoUUID, filename: string) {
-  const baseHlsDirectory = getHLSDirectory(video)
+  const baseHlsDirectory = getHLSDirectory(video, VideoStorage.OBJECT_STORAGE)
 
   return storeObject({
     inputPath: join(baseHlsDirectory, filename),

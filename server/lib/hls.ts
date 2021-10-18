@@ -91,7 +91,7 @@ async function updateSha256VODSegments (video: MVideoWithFile, playlist: MStream
     })
   }
 
-  const outputPath = VideoPathManager.Instance.getFSHLSOutputPath(video, playlist.segmentsSha256Filename)
+  const outputPath = VideoPathManager.Instance.getFSHLSOutputPath(video, playlist.segmentsSha256Filename, playlist.storage)
   await outputJSON(outputPath, json)
 }
 

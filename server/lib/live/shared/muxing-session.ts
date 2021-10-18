@@ -282,7 +282,7 @@ class MuxingSession extends EventEmitter {
   }
 
   private async prepareDirectories () {
-    const outPath = getLiveDirectory(this.videoLive.Video)
+    const outPath = getLiveDirectory(this.videoLive.Video, this.streamingPlaylist.storage)
     await ensureDir(outPath)
 
     const replayDirectory = join(outPath, VIDEO_LIVE.REPLAY_DIRECTORY)

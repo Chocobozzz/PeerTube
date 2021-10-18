@@ -332,10 +332,10 @@ async function generateHlsPlaylistCommon (options: {
   const videoFilePath = VideoPathManager.Instance.getFSVideoFileOutputPath(playlist, newVideoFile)
 
   // Move files from tmp transcoded directory to the appropriate place
-  await ensureDir(VideoPathManager.Instance.getFSHLSOutputPath(video))
+  await ensureDir(VideoPathManager.Instance.getFSHLSOutputPath(video, undefined, playlist.storage))
 
   // Move playlist file
-  const resolutionPlaylistPath = VideoPathManager.Instance.getFSHLSOutputPath(video, resolutionPlaylistFilename)
+  const resolutionPlaylistPath = VideoPathManager.Instance.getFSHLSOutputPath(video, resolutionPlaylistFilename, playlist.storage)
   await move(resolutionPlaylistFileTranscodePath, resolutionPlaylistPath, { overwrite: true })
   // Move video file
   await move(join(videoTranscodedBasePath, videoFilename), videoFilePath, { overwrite: true })
