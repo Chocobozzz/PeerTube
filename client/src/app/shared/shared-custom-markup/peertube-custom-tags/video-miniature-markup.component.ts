@@ -18,10 +18,9 @@ import { CustomMarkupComponent } from './shared'
 export class VideoMiniatureMarkupComponent implements CustomMarkupComponent, OnInit {
   @Input() uuid: string
   @Input() onlyDisplayTitle: boolean
+  @Input() video: Video
 
   @Output() loaded = new EventEmitter<boolean>()
-
-  video: Video
 
   displayOptions: MiniatureDisplayOptions = {
     date: true,
@@ -50,6 +49,8 @@ export class VideoMiniatureMarkupComponent implements CustomMarkupComponent, OnI
         this.displayOptions[key] = false
       }
     }
+
+    if (this.video) return
 
     this.findInBulk.getVideo(this.uuid)
       .pipe(finalize(() => this.loaded.emit(true)))
