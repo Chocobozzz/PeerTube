@@ -123,7 +123,7 @@ export class VideoService {
   }
 
   getMyVideos (videoPagination: ComponentPaginationLight, sort: VideoSortField, search?: string): Observable<ResultList<Video>> {
-    const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
+    const pagination = this.restService.componentToRestPagination(videoPagination)
 
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
@@ -377,7 +377,7 @@ export class VideoService {
   private buildCommonVideosParams (options: CommonVideoParams & { params: HttpParams }) {
     const { params, videoPagination, sort, filter, categoryOneOf, languageOneOf, skipCount, nsfwPolicy, isLive, nsfw } = options
 
-    const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
+    const pagination = this.restService.componentToRestPagination(videoPagination)
     let newParams = this.restService.addRestGetParams(params, pagination, sort)
 
     if (filter) newParams = newParams.set('filter', filter)

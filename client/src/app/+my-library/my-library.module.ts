@@ -13,12 +13,13 @@ import { SharedUserSubscriptionModule } from '@app/shared/shared-user-subscripti
 import { SharedVideoLiveModule } from '@app/shared/shared-video-live'
 import { SharedVideoMiniatureModule } from '@app/shared/shared-video-miniature'
 import { SharedVideoPlaylistModule } from '@app/shared/shared-video-playlist/shared-video-playlist.module'
+import { SharedActorImageModule } from '../shared/shared-actor-image/shared-actor-image.module'
+import { MySubscriptionsComponent } from './my-follows/my-subscriptions.component'
 import { MyHistoryComponent } from './my-history/my-history.component'
 import { MyLibraryRoutingModule } from './my-library-routing.module'
 import { MyLibraryComponent } from './my-library.component'
 import { MyAcceptOwnershipComponent } from './my-ownership/my-accept-ownership/my-accept-ownership.component'
 import { MyOwnershipComponent } from './my-ownership/my-ownership.component'
-import { MySubscriptionsComponent } from './my-subscriptions/my-subscriptions.component'
 import { MyVideoImportsComponent } from './my-video-imports/my-video-imports.component'
 import { MyVideoPlaylistCreateComponent } from './my-video-playlists/my-video-playlist-create.component'
 import { MyVideoPlaylistElementsComponent } from './my-video-playlists/my-video-playlist-elements.component'
@@ -26,7 +27,7 @@ import { MyVideoPlaylistUpdateComponent } from './my-video-playlists/my-video-pl
 import { MyVideoPlaylistsComponent } from './my-video-playlists/my-video-playlists.component'
 import { VideoChangeOwnershipComponent } from './my-videos/modals/video-change-ownership.component'
 import { MyVideosComponent } from './my-videos/my-videos.component'
-import { SharedActorImageModule } from '../shared/shared-actor-image/shared-actor-image.module'
+import { MyFollowersComponent } from './my-follows/my-followers.component'
 
 @NgModule({
   imports: [
@@ -61,6 +62,7 @@ import { SharedActorImageModule } from '../shared/shared-actor-image/shared-acto
     MyAcceptOwnershipComponent,
     MyVideoImportsComponent,
     MySubscriptionsComponent,
+    MyFollowersComponent,
     MyHistoryComponent,
 
     MyVideoPlaylistCreateComponent,

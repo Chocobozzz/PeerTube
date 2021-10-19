@@ -77,6 +77,8 @@ export class AdvancedInputFilterComponent implements OnInit, AfterViewInit {
 
         logger('On route search change "%s".', search)
 
+        if (this.searchValue === search) return
+
         this.searchValue = search
         this.emitSearch()
       })

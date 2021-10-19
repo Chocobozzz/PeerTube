@@ -51,7 +51,7 @@ export class PluginApiService {
     componentPagination: ComponentPagination,
     sort: string
   ) {
-    const pagination = this.restService.componentPaginationToRestPagination(componentPagination)
+    const pagination = this.restService.componentToRestPagination(componentPagination)
 
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
@@ -67,7 +67,7 @@ export class PluginApiService {
     sort: string,
     search?: string
   ) {
-    const pagination = this.restService.componentPaginationToRestPagination(componentPagination)
+    const pagination = this.restService.componentToRestPagination(componentPagination)
 
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)

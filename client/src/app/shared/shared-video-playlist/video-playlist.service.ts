@@ -62,7 +62,7 @@ export class VideoPlaylistService {
 
   listChannelPlaylists (videoChannel: VideoChannel, componentPagination: ComponentPaginationLight): Observable<ResultList<VideoPlaylist>> {
     const url = VideoChannelService.BASE_VIDEO_CHANNEL_URL + videoChannel.nameWithHost + '/video-playlists'
-    const pagination = this.restService.componentPaginationToRestPagination(componentPagination)
+    const pagination = this.restService.componentToRestPagination(componentPagination)
 
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination)
@@ -103,7 +103,7 @@ export class VideoPlaylistService {
   ): Observable<ResultList<VideoPlaylist>> {
     const url = AccountService.BASE_ACCOUNT_URL + account.nameWithHost + '/video-playlists'
     const pagination = componentPagination
-      ? this.restService.componentPaginationToRestPagination(componentPagination)
+      ? this.restService.componentToRestPagination(componentPagination)
       : undefined
 
     let params = new HttpParams()
@@ -259,7 +259,7 @@ export class VideoPlaylistService {
     componentPagination: ComponentPaginationLight
   }): Observable<ResultList<VideoPlaylistElement>> {
     const path = VideoPlaylistService.BASE_VIDEO_PLAYLIST_URL + options.videoPlaylistId + '/videos'
-    const pagination = this.restService.componentPaginationToRestPagination(options.componentPagination)
+    const pagination = this.restService.componentToRestPagination(options.componentPagination)
 
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination)

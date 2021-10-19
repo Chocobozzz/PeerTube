@@ -653,12 +653,15 @@
   @include button-with-icon(20px, 5px, -1px);
 }
 
-@mixin row-blocks ($column-responsive: true) {
+@mixin row-blocks ($column-responsive: true, $min-height: 130px, $separator: true) {
   display: flex;
-  min-height: 130px;
+  min-height: $min-height;
   padding-bottom: 20px;
   margin-bottom: 20px;
-  border-bottom: 1px solid #C6C6C6;
+
+  @if $separator {
+    border-bottom: 1px solid #C6C6C6;
+  }
 
   @media screen and (max-width: $small-view) {
     @if $column-responsive {

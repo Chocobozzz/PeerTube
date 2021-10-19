@@ -29,7 +29,7 @@ export class UserNotificationService {
     const { pagination, ignoreLoadingBar, unread, sort } = parameters
 
     let params = new HttpParams()
-    params = this.restService.addRestGetParams(params, this.restService.componentPaginationToRestPagination(pagination), sort)
+    params = this.restService.addRestGetParams(params, this.restService.componentToRestPagination(pagination), sort)
 
     if (unread) params = params.append('unread', `${unread}`)
 

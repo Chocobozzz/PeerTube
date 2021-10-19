@@ -65,22 +65,6 @@ const videoChannelsUpdateValidator = [
     logger.debug('Checking videoChannelsUpdate parameters', { parameters: req.body })
 
     if (areValidationErrors(req, res)) return
-    if (!await doesVideoChannelNameWithHostExist(req.params.nameWithHost, res)) return
-
-    // We need to make additional checks
-    if (res.locals.videoChannel.Actor.isOwned() === false) {
-      return res.fail({
-        status: HttpStatusCode.FORBIDDEN_403,
-        message: 'Cannot update video channel of another server'
-      })
-    }
-
-    if (res.locals.videoChannel.Account.userId !== res.locals.oauth.token.User.id) {
-      return res.fail({
-        status: HttpStatusCode.FORBIDDEN_403,
-        message: 'Cannot update video channel of another user'
-      })
-    }
 
     return next()
   }

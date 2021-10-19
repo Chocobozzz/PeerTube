@@ -95,7 +95,7 @@ async function areSubscriptionsExist (req: express.Request, res: express.Respons
     return { name, host, uri: u }
   })
 
-  const results = await ActorFollowModel.listSubscribedIn(user.Account.Actor.id, handles)
+  const results = await ActorFollowModel.listSubscriptionsOf(user.Account.Actor.id, handles)
 
   const existObject: { [id: string ]: boolean } = {}
   for (const handle of handles) {

@@ -26,7 +26,7 @@ import {
   isVideoChannelDisplayNameValid,
   isVideoChannelSupportValid
 } from '../../helpers/custom-validators/video-channels'
-import { CONSTRAINTS_FIELDS, WEBSERVER } from '../../initializers/constants'
+import { CONSTRAINTS_FIELDS, VIDEO_CHANNELS, WEBSERVER } from '../../initializers/constants'
 import { sendDeleteActor } from '../../lib/activitypub/send'
 import {
   MChannelActor,
@@ -527,7 +527,7 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
       })
   }
 
-  static listByAccount (options: {
+  static listByAccountForAPI (options: {
     accountId: number
     start: number
     count: number
@@ -581,6 +581,26 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
         return { total: count, data: rows }
       })
   }
+
+
+  static listAllByAccount (accountId: number) {
+    const query = {
+      limit: VIDEO_CHANNELS.MAX_PER_USER,
+      include: [
+        {
+          attributes: [],
+          model: AccountModel,
+          where: {
+            id: accountId
+          },
+          required: true
+        }
+      ]
+    }
+
+    return VideoChannelModel.findAll(query)
+  }
+
 
   static loadAndPopulateAccount (id: number, transaction?: Transaction): Promise<MChannelBannerAccountDefault> {
     return VideoChannelModel.unscoped()

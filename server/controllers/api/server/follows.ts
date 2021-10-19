@@ -98,7 +98,7 @@ export {
 
 async function listFollowing (req: express.Request, res: express.Response) {
   const serverActor = await getServerActor()
-  const resultList = await ActorFollowModel.listFollowingForApi({
+  const resultList = await ActorFollowModel.listInstanceFollowingForApi({
     id: serverActor.id,
     start: req.query.start,
     count: req.query.count,
@@ -114,7 +114,7 @@ async function listFollowing (req: express.Request, res: express.Response) {
 async function listFollowers (req: express.Request, res: express.Response) {
   const serverActor = await getServerActor()
   const resultList = await ActorFollowModel.listFollowersForApi({
-    actorId: serverActor.id,
+    actorIds: [ serverActor.id ],
     start: req.query.start,
     count: req.query.count,
     sort: req.query.sort,

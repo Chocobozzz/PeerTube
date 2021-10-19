@@ -1,0 +1,26 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+@use '_actor' as *;
+
+.followers-header {
+  margin-bottom: 30px;
+  display: flex;
+}
+
+input[type=text] {
+  @include peertube-input-text(300px);
+}
+
+.actor {
+  @include actor-row($avatar-size: 40px, $min-height: auto, $separator: true);
+
+  .actor-display-name {
+    font-size: 16px;
+
+    + .glyphicon {
+      @include margin-left(5px);
+
+      font-size: 12px;
+    }
+  }
+}

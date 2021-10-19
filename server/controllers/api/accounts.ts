@@ -1,5 +1,6 @@
 import express from 'express'
 import { pickCommonVideoQuery } from '@server/helpers/query'
+import { ActorFollowModel } from '@server/models/actor/actor-follow'
 import { getServerActor } from '@server/models/application/application'
 import { buildNSFWFilter, getCountVideos, isUserAbleToSearchRemoteURI } from '../../helpers/express-utils'
 import { getFormattedObjects } from '../../helpers/utils'
@@ -20,6 +21,7 @@ import {
 } from '../../middlewares'
 import {
   accountNameWithHostGetValidator,
+  accountsFollowersSortValidator,
   accountsSortValidator,
   ensureAuthUserOwnsAccountValidator,
   videoChannelsSortValidator,
@@ -93,6 +95,17 @@ accountsRouter.get('/:accountName/ratings',
   asyncMiddleware(listAccountRatings)
 )
 
+accountsRouter.get('/:accountName/followers',
+  authenticate,
+  asyncMiddleware(accountNameWithHostGetValidator),
+  ensureAuthUserOwnsAccountValidator,
+  paginationValidator,
+  accountsFollowersSortValidator,
+  setDefaultSort,
+  setDefaultPagination,
+  asyncMiddleware(listAccountFollowers)
+)
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -127,7 +140,7 @@ async function listAccountChannels (req: express.Request, res: express.Response)
     search: req.query.search
   }
 
-  const resultList = await VideoChannelModel.listByAccount(options)
+  const resultList = await VideoChannelModel.listByAccountForAPI(options)
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
@@ -194,4 +207,22 @@ async function listAccountRatings (req: express.Request, res: express.Response) 
     type: req.query.rating
   })
   return res.json(getFormattedObjects(resultList.rows, resultList.count))
+}
+
+async function listAccountFollowers (req: express.Request, res: express.Response) {
+  const account = res.locals.account
+
+  const channels = await VideoChannelModel.listAllByAccount(account.id)
+  const actorIds = [ account.actorId ].concat(channels.map(c => c.actorId))
+
+  const resultList = await ActorFollowModel.listFollowersForApi({
+    actorIds,
+    start: req.query.start,
+    count: req.query.count,
+    sort: req.query.sort,
+    search: req.query.search,
+    state: 'accepted',
+  })
+
+  return res.json(getFormattedObjects(resultList.data, resultList.total))
 }

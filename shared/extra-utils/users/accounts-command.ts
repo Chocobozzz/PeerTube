@@ -1,5 +1,5 @@
 import { HttpStatusCode, ResultList } from '@shared/models'
-import { Account } from '../../models/actors'
+import { Account, ActorFollow } from '../../models/actors'
 import { AccountVideoRate, VideoRateType } from '../../models/videos'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
 
@@ -45,6 +45,28 @@ export class AccountsCommand extends AbstractCommand {
     const query = { rating }
 
     return this.getRequestBody<ResultList<AccountVideoRate>>({
+      ...options,
+
+      path,
+      query,
+      implicitToken: true,
+      defaultExpectedStatus: HttpStatusCode.OK_200
+    })
+  }
+
+  listFollowers (options: OverrideCommandOptions & {
+    accountName: string
+    start?: number
+    count?: number
+    sort?: string
+    search?: string
+  }) {
+    const { accountName, start, count, sort, search } = options
+    const path = '/api/v1/accounts/' + accountName + '/followers'
+
+    const query = { start, count, sort, search }
+
+    return this.getRequestBody<ResultList<ActorFollow>>({
       ...options,
 
       path,

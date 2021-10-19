@@ -1,6 +1,7 @@
 import express from 'express'
 import { pickCommonVideoQuery } from '@server/helpers/query'
 import { Hooks } from '@server/lib/plugins/hooks'
+import { ActorFollowModel } from '@server/models/actor/actor-follow'
 import { getServerActor } from '@server/models/application/application'
 import { MChannelBannerAccountDefault } from '@server/types/models'
 import { ActorImageType, VideoChannelCreate, VideoChannelUpdate } from '../../../shared'
@@ -33,7 +34,13 @@ import {
   videoChannelsUpdateValidator,
   videoPlaylistsSortValidator
 } from '../../middlewares'
-import { videoChannelsListValidator, videoChannelsNameWithHostValidator, videosSortValidator } from '../../middlewares/validators'
+import {
+  ensureAuthUserOwnsChannelValidator,
+  videoChannelsFollowersSortValidator,
+  videoChannelsListValidator,
+  videoChannelsNameWithHostValidator,
+  videosSortValidator
+} from '../../middlewares/validators'
 import { updateAvatarValidator, updateBannerValidator } from '../../middlewares/validators/actor-image'
 import { commonVideoPlaylistFiltersValidator } from '../../middlewares/validators/videos/video-playlists'
 import { AccountModel } from '../../models/account/account'
@@ -65,8 +72,8 @@ videoChannelRouter.post('/',
 videoChannelRouter.post('/:nameWithHost/avatar/pick',
   authenticate,
   reqAvatarFile,
-  // Check the rights
-  asyncMiddleware(videoChannelsUpdateValidator),
+  asyncMiddleware(videoChannelsNameWithHostValidator),
+  ensureAuthUserOwnsChannelValidator,
   updateAvatarValidator,
   asyncMiddleware(updateVideoChannelAvatar)
 )
@@ -74,29 +81,31 @@ videoChannelRouter.post('/:nameWithHost/avatar/pick',
 videoChannelRouter.post('/:nameWithHost/banner/pick',
   authenticate,
   reqBannerFile,
-  // Check the rights
-  asyncMiddleware(videoChannelsUpdateValidator),
+  asyncMiddleware(videoChannelsNameWithHostValidator),
+  ensureAuthUserOwnsChannelValidator,
   updateBannerValidator,
   asyncMiddleware(updateVideoChannelBanner)
 )
 
 videoChannelRouter.delete('/:nameWithHost/avatar',
   authenticate,
-  // Check the rights
-  asyncMiddleware(videoChannelsUpdateValidator),
+  asyncMiddleware(videoChannelsNameWithHostValidator),
+  ensureAuthUserOwnsChannelValidator,
   asyncMiddleware(deleteVideoChannelAvatar)
 )
 
 videoChannelRouter.delete('/:nameWithHost/banner',
   authenticate,
-  // Check the rights
-  asyncMiddleware(videoChannelsUpdateValidator),
+  asyncMiddleware(videoChannelsNameWithHostValidator),
+  ensureAuthUserOwnsChannelValidator,
   asyncMiddleware(deleteVideoChannelBanner)
 )
 
 videoChannelRouter.put('/:nameWithHost',
   authenticate,
-  asyncMiddleware(videoChannelsUpdateValidator),
+  asyncMiddleware(videoChannelsNameWithHostValidator),
+  ensureAuthUserOwnsChannelValidator,
+  videoChannelsUpdateValidator,
   asyncRetryTransactionMiddleware(updateVideoChannel)
 )
 
@@ -130,6 +139,17 @@ videoChannelRouter.get('/:nameWithHost/videos',
   optionalAuthenticate,
   commonVideosFiltersValidator,
   asyncMiddleware(listVideoChannelVideos)
+)
+
+videoChannelRouter.get('/:nameWithHost/followers',
+  authenticate,
+  asyncMiddleware(videoChannelsNameWithHostValidator),
+  ensureAuthUserOwnsChannelValidator,
+  paginationValidator,
+  videoChannelsFollowersSortValidator,
+  setDefaultSort,
+  setDefaultPagination,
+  asyncMiddleware(listVideoChannelFollowers)
 )
 
 // ---------------------------------------------------------------------------
@@ -329,6 +349,21 @@ async function listVideoChannelVideos (req: express.Request, res: express.Respon
     apiOptions,
     'filter:api.video-channels.videos.list.result'
   )
+
+  return res.json(getFormattedObjects(resultList.data, resultList.total))
+}
+
+async function listVideoChannelFollowers (req: express.Request, res: express.Response) {
+  const channel = res.locals.videoChannel
+
+  const resultList = await ActorFollowModel.listFollowersForApi({
+    actorIds: [ channel.actorId ],
+    start: req.query.start,
+    count: req.query.count,
+    sort: req.query.sort,
+    search: req.query.search,
+    state: 'accepted',
+  })
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }

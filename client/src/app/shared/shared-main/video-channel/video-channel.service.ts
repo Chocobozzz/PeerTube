@@ -50,7 +50,7 @@ export class VideoChannelService {
     const { account, componentPagination, withStats = false, sort, search } = options
 
     const pagination = componentPagination
-      ? this.restService.componentPaginationToRestPagination(componentPagination)
+      ? this.restService.componentToRestPagination(componentPagination)
       : { start: 0, count: 20 }
 
     let params = new HttpParams()

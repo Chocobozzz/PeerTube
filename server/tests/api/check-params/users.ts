@@ -840,6 +840,34 @@ describe('Test users API validators', function () {
     })
   })
 
+  describe('When getting my global followers', function () {
+    const path = '/api/v1/accounts/user1/followers'
+
+    it('Should fail with a bad start pagination', async function () {
+      await checkBadStartPagination(server.url, path, userToken)
+    })
+
+    it('Should fail with a bad count pagination', async function () {
+      await checkBadCountPagination(server.url, path, userToken)
+    })
+
+    it('Should fail with an incorrect sort', async function () {
+      await checkBadSortPagination(server.url, path, userToken)
+    })
+
+    it('Should fail with a unauthenticated user', async function () {
+      await makeGetRequest({ url: server.url, path, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
+    })
+
+    it('Should fail with a another user', async function () {
+      await makeGetRequest({ url: server.url, path, token: server.accessToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+    })
+
+    it('Should succeed with the correct params', async function () {
+      await makeGetRequest({ url: server.url, path, token: userToken, expectedStatus: HttpStatusCode.OK_200 })
+    })
+  })
+
   describe('When blocking/unblocking/removing user', function () {
 
     it('Should fail with an incorrect id', async function () {

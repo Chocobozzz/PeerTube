@@ -143,7 +143,7 @@ export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowMo
    * @deprecated Use `findOrCreateCustom` instead
   */
   static findOrCreate (): any {
-    throw new Error('Should not be called')
+    throw new Error('Must not be called')
   }
 
   // findOrCreate has issues with actor follow hooks
@@ -288,7 +288,7 @@ export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowMo
     return ActorFollowModel.findOne(query)
   }
 
-  static listSubscribedIn (actorId: number, targets: { name: string, host?: string }[]): Promise<MActorFollowFollowingHost[]> {
+  static listSubscriptionsOf (actorId: number, targets: { name: string, host?: string }[]): Promise<MActorFollowFollowingHost[]> {
     const whereTab = targets
       .map(t => {
         if (t.host) {
@@ -348,7 +348,7 @@ export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowMo
     return ActorFollowModel.findAll(query)
   }
 
-  static listFollowingForApi (options: {
+  static listInstanceFollowingForApi (options: {
     id: number
     start: number
     count: number
@@ -415,7 +415,7 @@ export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowMo
   }
 
   static listFollowersForApi (options: {
-    actorId: number
+    actorIds: number[]
     start: number
     count: number
     sort: string
@@ -423,7 +423,7 @@ export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowMo
     actorType?: ActivityPubActorType
     search?: string
   }) {
-    const { actorId, start, count, sort, search, state, actorType } = options
+    const { actorIds, start, count, sort, search, state, actorType } = options
 
     const followWhere = state ? { state } : {}
     const followerWhere: WhereOptions = {}
@@ -452,20 +452,16 @@ export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowMo
           model: ActorModel,
           required: true,
           as: 'ActorFollower',
-          where: followerWhere,
-          include: [
-            {
-              model: ServerModel,
-              required: true
-            }
-          ]
+          where: followerWhere
         },
         {
           model: ActorModel,
           as: 'ActorFollowing',
           required: true,
           where: {
-            id: actorId
+            id: {
+              [Op.in]: actorIds
+            }
           }
         }
       ]

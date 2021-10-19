@@ -3,9 +3,7 @@ import { body, param, query } from 'express-validator'
 import { omit } from 'lodash'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { MUserDefault } from '@server/types/models'
-import { HttpStatusCode } from '../../../shared/models/http/http-error-codes'
-import { UserRole } from '../../../shared/models/users'
-import { UserRegister } from '../../../shared/models/users/user-register.model'
+import { HttpStatusCode, UserRegister, UserRole } from '@shared/models'
 import { toBooleanOrNull, toIntOrNull } from '../../helpers/custom-validators/misc'
 import { isThemeNameValid } from '../../helpers/custom-validators/plugins'
 import {
@@ -462,7 +460,22 @@ const ensureAuthUserOwnsAccountValidator = [
     if (res.locals.account.id !== user.Account.id) {
       return res.fail({
         status: HttpStatusCode.FORBIDDEN_403,
-        message: 'Only owner can access ratings list.'
+        message: 'Only owner of this account can access this ressource.'
+      })
+    }
+
+    return next()
+  }
+]
+
+const ensureAuthUserOwnsChannelValidator = [
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    const user = res.locals.oauth.token.User
+
+    if (res.locals.videoChannel.Account.userId !== user.id) {
+      return res.fail({
+        status: HttpStatusCode.FORBIDDEN_403,
+        message: 'Only owner of this video channel can access this ressource'
       })
     }
 
@@ -506,6 +519,7 @@ export {
   usersVerifyEmailValidator,
   userAutocompleteValidator,
   ensureAuthUserOwnsAccountValidator,
+  ensureAuthUserOwnsChannelValidator,
   ensureCanManageUser
 }
 
