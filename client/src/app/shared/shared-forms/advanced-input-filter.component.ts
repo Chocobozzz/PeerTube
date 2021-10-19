@@ -55,7 +55,7 @@ export class AdvancedInputFilterComponent implements OnInit, AfterViewInit {
   }
 
   hasFilters () {
-    return this.filters.length !== 0
+    return this.filters && this.filters.length !== 0
   }
 
   private scheduleSearchUpdate (value: string) {

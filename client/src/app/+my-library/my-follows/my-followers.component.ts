@@ -2,6 +2,7 @@ import { Subject } from 'rxjs'
 import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { AuthService, ComponentPagination, Notifier } from '@app/core'
+import { AdvancedInputFilter } from '@app/shared/shared-forms'
 import { UserSubscriptionService } from '@app/shared/shared-user-subscription'
 import { ActorFollow } from '@shared/models'
 
@@ -21,6 +22,8 @@ export class MyFollowersComponent implements OnInit {
   onDataSubject = new Subject<any[]>()
   search: string
 
+  inputFilters: AdvancedInputFilter[]
+
   constructor (
     private route: ActivatedRoute,
     private auth: AuthService,
@@ -32,6 +35,15 @@ export class MyFollowersComponent implements OnInit {
     if (this.route.snapshot.queryParams['search']) {
       this.search = this.route.snapshot.queryParams['search']
     }
+
+    this.auth.userInformationLoaded.subscribe(() => {
+      this.inputFilters = this.auth.getUser().videoChannels.map(c => {
+        return {
+          queryParams: { search: 'channel:' + c.name },
+          label: $localize`Followers of ${c.name}`
+        }
+      })
+    })
   }
 
   onNearOfBottom () {

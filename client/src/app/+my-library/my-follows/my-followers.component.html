@@ -7,7 +7,7 @@
 </h1>
 
 <div class="followers-header">
-  <my-advanced-input-filter (search)="onSearch($event)"></my-advanced-input-filter>
+  <my-advanced-input-filter [filters]="inputFilters" (search)="onSearch($event)"></my-advanced-input-filter>
 </div>
 
 <div class="no-results" i18n *ngIf="pagination.totalItems === 0">No follower found.</div>
