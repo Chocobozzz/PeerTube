@@ -414,6 +414,36 @@ paths:
 
             print(json)
 
+  '/accounts/{name}/followers':
+    get:
+      tags:
+        - Accounts
+      summary: 'List followers of an account'
+      security:
+        - OAuth2: []
+      operationId: getAccountFollowers
+      parameters:
+        - $ref: '#/components/parameters/name'
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/followersSort'
+        - $ref: '#/components/parameters/search'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                    example: 1
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Follow'
+
   /accounts:
     get:
       tags:
@@ -2832,6 +2862,36 @@ paths:
               schema:
                 $ref: '#/components/schemas/VideoListResponse'
 
+  '/video-channels/{channelHandle}/followers':
+    get:
+      tags:
+        - Video Channels
+      summary: 'List followers of a video channel'
+      security:
+        - OAuth2: []
+      operationId: getVideoChannelFollowers
+      parameters:
+        - $ref: '#/components/parameters/channelHandle'
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/followersSort'
+        - $ref: '#/components/parameters/search'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                    example: 1
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Follow'
+
   '/video-channels/{channelHandle}/avatar/pick':
     post:
       summary: Update channel avatar
@@ -4532,6 +4592,15 @@ components:
         type: string
         enum:
         - name
+    followersSort:
+      name: sort
+      in: query
+      required: false
+      description: Sort followers by criteria
+      schema:
+        type: string
+        enum:
+        - createdAt
     name:
       name: name
       in: path

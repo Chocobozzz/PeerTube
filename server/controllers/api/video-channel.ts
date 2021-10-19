@@ -362,7 +362,7 @@ async function listVideoChannelFollowers (req: express.Request, res: express.Res
     count: req.query.count,
     sort: req.query.sort,
     search: req.query.search,
-    state: 'accepted',
+    state: 'accepted'
   })
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))

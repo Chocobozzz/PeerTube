@@ -390,6 +390,8 @@ describe('Test users subscriptions', function () {
       })
 
       expect(total).to.equal(3)
+      expect(data).to.have.lengthOf(3)
+
       expect(data[0].following.host).to.equal(servers[2].host)
       expect(data[0].following.name).to.equal('user3_channel')
       expect(data[0].follower.host).to.equal(servers[0].host)
@@ -416,6 +418,8 @@ describe('Test users subscriptions', function () {
       })
 
       expect(total).to.equal(3)
+      expect(data).to.have.lengthOf(1)
+
       expect(data[0].following.host).to.equal(servers[2].host)
       expect(data[0].following.name).to.equal('user3_channel2')
       expect(data[0].follower.host).to.equal(servers[2].host)
@@ -432,6 +436,8 @@ describe('Test users subscriptions', function () {
       })
 
       expect(total).to.equal(3)
+      expect(data).to.have.lengthOf(1)
+
       expect(data[0].following.host).to.equal(servers[2].host)
       expect(data[0].following.name).to.equal('user3_channel')
       expect(data[0].follower.host).to.equal(servers[2].host)
@@ -447,6 +453,8 @@ describe('Test users subscriptions', function () {
       })
 
       expect(total).to.equal(1)
+      expect(data).to.have.lengthOf(1)
+
       expect(data[0].following.host).to.equal(servers[2].host)
       expect(data[0].following.name).to.equal('user3_channel')
       expect(data[0].follower.host).to.equal(servers[0].host)
@@ -465,6 +473,8 @@ describe('Test users subscriptions', function () {
       })
 
       expect(total).to.equal(2)
+      expect(data).to.have.lengthOf(2)
+
       expect(data[0].following.host).to.equal(servers[2].host)
       expect(data[0].following.name).to.equal('user3_channel')
       expect(data[0].follower.host).to.equal(servers[0].host)
@@ -486,6 +496,8 @@ describe('Test users subscriptions', function () {
       })
 
       expect(total).to.equal(2)
+      expect(data).to.have.lengthOf(1)
+
       expect(data[0].following.host).to.equal(servers[2].host)
       expect(data[0].following.name).to.equal('user3_channel')
       expect(data[0].follower.host).to.equal(servers[2].host)
@@ -502,10 +514,12 @@ describe('Test users subscriptions', function () {
       })
 
       expect(total).to.equal(2)
+      expect(data).to.have.lengthOf(1)
+
       expect(data[0].following.host).to.equal(servers[2].host)
       expect(data[0].following.name).to.equal('user3_channel')
       expect(data[0].follower.host).to.equal(servers[0].host)
-      expect(data[0].follower.name).to.equal('root')
+      expect(data[0].follower.name).to.equal('user1')
     }
 
     {
@@ -517,6 +531,8 @@ describe('Test users subscriptions', function () {
       })
 
       expect(total).to.equal(1)
+      expect(data).to.have.lengthOf(1)
+
       expect(data[0].following.host).to.equal(servers[2].host)
       expect(data[0].following.name).to.equal('user3_channel')
       expect(data[0].follower.host).to.equal(servers[0].host)

@@ -221,7 +221,7 @@ async function listAccountFollowers (req: express.Request, res: express.Response
     count: req.query.count,
     sort: req.query.sort,
     search: req.query.search,
-    state: 'accepted',
+    state: 'accepted'
   })
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))

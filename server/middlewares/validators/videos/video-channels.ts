@@ -61,7 +61,7 @@ const videoChannelsUpdateValidator = [
     .optional()
     .custom(isBooleanValid).withMessage('Should have a valid bulkVideosSupportUpdate boolean field'),
 
-  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoChannelsUpdate parameters', { parameters: req.body })
 
     if (areValidationErrors(req, res)) return

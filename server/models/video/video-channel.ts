@@ -582,7 +582,6 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
       })
   }
 
-
   static listAllByAccount (accountId: number) {
     const query = {
       limit: VIDEO_CHANNELS.MAX_PER_USER,
@@ -600,7 +599,6 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
 
     return VideoChannelModel.findAll(query)
   }
-
 
   static loadAndPopulateAccount (id: number, transaction?: Transaction): Promise<MChannelBannerAccountDefault> {
     return VideoChannelModel.unscoped()
