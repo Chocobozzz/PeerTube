@@ -3115,6 +3115,8 @@ paths:
         - Video Playlists
       parameters:
         - $ref: '#/components/parameters/playlistId'
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/count'
       responses:
         '200':
           description: successful operation
