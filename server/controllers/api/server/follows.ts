@@ -21,8 +21,8 @@ import {
 } from '../../../middlewares'
 import {
   acceptOrRejectFollowerValidator,
-  followersSortValidator,
-  followingSortValidator,
+  instanceFollowersSortValidator,
+  instanceFollowingSortValidator,
   followValidator,
   getFollowerValidator,
   listFollowsValidator,
@@ -35,7 +35,7 @@ const serverFollowsRouter = express.Router()
 serverFollowsRouter.get('/following',
   listFollowsValidator,
   paginationValidator,
-  followingSortValidator,
+  instanceFollowingSortValidator,
   setDefaultSort,
   setDefaultPagination,
   asyncMiddleware(listFollowing)
@@ -59,7 +59,7 @@ serverFollowsRouter.delete('/following/:hostOrHandle',
 serverFollowsRouter.get('/followers',
   listFollowsValidator,
   paginationValidator,
-  followersSortValidator,
+  instanceFollowersSortValidator,
   setDefaultSort,
   setDefaultPagination,
   asyncMiddleware(listFollowers)

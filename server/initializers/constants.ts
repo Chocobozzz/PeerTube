@@ -69,8 +69,8 @@ const SORTABLE_COLUMNS = {
 
   VIDEO_RATES: [ 'createdAt' ],
   BLACKLISTS: [ 'id', 'name', 'duration', 'views', 'likes', 'dislikes', 'uuid', 'createdAt' ],
-  FOLLOWERS: [ 'createdAt', 'state', 'score' ],
-  FOLLOWING: [ 'createdAt', 'redundancyAllowed', 'state' ],
+  INSTANCE_FOLLOWERS: [ 'createdAt', 'state', 'score' ],
+  INSTANCE_FOLLOWING: [ 'createdAt', 'redundancyAllowed', 'state' ],
 
   VIDEOS: [ 'name', 'duration', 'createdAt', 'publishedAt', 'originallyPublishedAt', 'views', 'likes', 'trending', 'hot', 'best' ],
 
