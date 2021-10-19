@@ -168,7 +168,7 @@ export class VideoShareComponent extends FormReactive implements OnInit  {
     this.videoPlaylistService.updateVideoPlaylist(this.playlist, videoPlaylistUpdate)
       .subscribe({
         next: () => {
-          this.notifier.success($localize`Playlist ${videoPlaylistUpdate.displayName} updated.`)
+          this.notifier.success($localize`Playlist ${this.playlist.displayName} updated.`)
           this.updatePlaylistInfo();
         },
 
