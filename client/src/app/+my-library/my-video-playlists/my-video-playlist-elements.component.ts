@@ -164,6 +164,10 @@ export class MyVideoPlaylistElementsComponent implements OnInit, OnDestroy {
         })
   }
 
+  updatePlaylistInfo = (): void => {
+    this.loadPlaylistInfo()
+  }
+
   private loadPlaylistInfo () {
     this.videoPlaylistService.getVideoPlaylist(this.videoPlaylistId)
       .subscribe(playlist => {
