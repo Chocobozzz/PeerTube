@@ -53,3 +53,13 @@ my-global-icon {
   width: auto;
   max-width: 100%;
 }
+
+@media screen and (max-width: $primeng-breakpoint) {
+  .progress {
+    width: 100%;
+  }
+
+  .empty-cell {
+    padding: 0;
+  }
+}

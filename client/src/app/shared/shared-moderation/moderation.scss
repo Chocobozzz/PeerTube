@@ -5,12 +5,18 @@
 
 .moderation-expanded {
   font-size: 90%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
 
   .moderation-expanded-label {
+    @include margin-right(5px);
+
     font-weight: $font-semibold;
     display: inline-block;
     vertical-align: top;
     text-align: end;
+    min-width: 100px;
   }
 
   .moderation-expanded-text {
@@ -19,6 +25,17 @@
 
     ::ng-deep p:last-child {
       margin-bottom: 0 !important;
+    }
+  }
+
+  .right {
+    width: 50%;
+    max-width: 500px;
+  }
+
+  @media screen and (max-width: $primeng-breakpoint) {
+    .right {
+      width: 100%;
     }
   }
 }
@@ -123,5 +140,15 @@ my-action-dropdown.show {
       color: var(--greyForegroundColor);
       font-size: 11px;
     }
+  }
+}
+
+my-abuse-details {
+  width: 100%;
+}
+
+@media screen and (max-width: $primeng-breakpoint) {
+  .abuse-messages {
+    justify-content: flex-start !important;
   }
 }

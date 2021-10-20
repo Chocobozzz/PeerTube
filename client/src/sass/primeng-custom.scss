@@ -768,7 +768,7 @@ p-table {
     max-width: 100%;
 
     table {
-      min-width: breakpoint(lg);
+      width: 100%;
     }
   }
 
@@ -977,5 +977,42 @@ p-toast {
     padding: 5px 15px;
     font-size: 15px;
     font-weight: 600;
+  }
+}
+
+@media screen and (max-width: $primeng-breakpoint) {
+  p-table {
+    td {
+      padding: 3px 0;
+
+      &.expand-cell {
+        padding: 5px;
+      }
+    }
+
+    .p-datatable-tbody {
+
+      td:last-child {
+        padding-bottom: 15px;
+        margin-bottom: 15px;
+        border-bottom: 1px solid $separator-border-color !important;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: $mobile-view) {
+  p-table {
+    .p-datatable-header {
+      .caption {
+        flex-wrap: wrap;
+
+        > div {
+          width: 100%;
+          padding: 0 !important;
+          margin-bottom: 5px;
+        }
+      }
+    }
   }
 }

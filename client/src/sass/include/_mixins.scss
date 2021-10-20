@@ -701,6 +701,7 @@
   span {
     position: absolute;
     color: $grey-foreground-color;
+
     @if $small {
       top: -1px;
     }
