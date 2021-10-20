@@ -330,7 +330,7 @@ const usersVideosValidator = [
     .custom(isIdValid).withMessage('Should have a valid channel id'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking usersVideosValidator parameters', { parameters: req.params })
+    logger.debug('Checking usersVideosValidator parameters', { parameters: req.query })
 
     if (areValidationErrors(req, res)) return
 

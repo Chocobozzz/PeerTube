@@ -43,7 +43,7 @@ import { VideoFilter } from '../../../shared/models/videos/video-query.type'
 import { VideoStreamingPlaylistType } from '../../../shared/models/videos/video-streaming-playlist.type'
 import { peertubeTruncate } from '../../helpers/core-utils'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
-import { isBooleanValid } from '../../helpers/custom-validators/misc'
+import { exists, isBooleanValid } from '../../helpers/custom-validators/misc'
 import {
   isVideoDescriptionValid,
   isVideoDurationValid,
@@ -994,7 +994,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
         }
       }
 
-      if (isLive) {
+      if (exists(isLive)) {
         where.isLive = isLive
       }
 
