@@ -978,10 +978,12 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     start: number
     count: number
     sort: string
+
+    channelId?: number
     isLive?: boolean
     search?: string
   }) {
-    const { accountId, start, count, sort, search, isLive } = options
+    const { accountId, channelId, start, count, sort, search, isLive } = options
 
     function buildBaseQuery (): FindOptions {
       const where: WhereOptions = {}
@@ -996,6 +998,10 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
         where.isLive = isLive
       }
 
+      const channelWhere = channelId
+        ? { id: channelId }
+        : {}
+
       const baseQuery = {
         offset: start,
         limit: count,
@@ -1005,6 +1011,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
           {
             model: VideoChannelModel,
             required: true,
+            where: channelWhere,
             include: [
               {
                 model: AccountModel,

@@ -37,12 +37,19 @@ export class MyFollowersComponent implements OnInit {
     }
 
     this.auth.userInformationLoaded.subscribe(() => {
-      this.inputFilters = this.auth.getUser().videoChannels.map(c => {
+      const channelFilters = this.auth.getUser().videoChannels.map(c => {
         return {
           queryParams: { search: 'channel:' + c.name },
-          label: $localize`Followers of ${c.name}`
+          label: c.name
         }
       })
+
+      this.inputFilters = [
+        {
+          title: $localize`Channel filters`,
+          children: channelFilters
+        }
+      ]
     })
   }
 

@@ -207,6 +207,7 @@ export class VideosCommand extends AbstractCommand {
     sort?: string
     search?: string
     isLive?: boolean
+    channelId?: number
   } = {}) {
     const path = '/api/v1/users/me/videos'
 
@@ -214,7 +215,7 @@ export class VideosCommand extends AbstractCommand {
       ...options,
 
       path,
-      query: pick(options, [ 'start', 'count', 'sort', 'search', 'isLive' ]),
+      query: pick(options, [ 'start', 'count', 'sort', 'search', 'isLive', 'channelId' ]),
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })

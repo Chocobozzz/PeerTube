@@ -318,6 +318,8 @@ describe('Test users', function () {
         fixture: 'video_short.webm'
       }
       await server.videos.upload({ token: userToken, attributes })
+
+      await server.channels.create({ token: userToken, attributes: { name: 'other_channel' } })
     })
 
     it('Should have video quota updated', async function () {
@@ -338,6 +340,29 @@ describe('Test users', function () {
       expect(video.name).to.equal('super user video')
       expect(video.thumbnailPath).to.not.be.null
       expect(video.previewPath).to.not.be.null
+    })
+
+    it('Should be able to filter by channel in my videos', async function () {
+      const myInfo = await server.users.getMyInfo({ token: userToken })
+      const mainChannel = myInfo.videoChannels.find(c => c.name !== 'other_channel')
+      const otherChannel = myInfo.videoChannels.find(c => c.name === 'other_channel')
+
+      {
+        const { total, data } = await server.videos.listMyVideos({ token: userToken, channelId: mainChannel.id })
+        expect(total).to.equal(1)
+        expect(data).to.have.lengthOf(1)
+
+        const video: Video = data[0]
+        expect(video.name).to.equal('super user video')
+        expect(video.thumbnailPath).to.not.be.null
+        expect(video.previewPath).to.not.be.null
+      }
+
+      {
+        const { total, data } = await server.videos.listMyVideos({ token: userToken, channelId: otherChannel.id })
+        expect(total).to.equal(0)
+        expect(data).to.have.lengthOf(0)
+      }
     })
 
     it('Should be able to search in my videos', async function () {

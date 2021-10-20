@@ -4,7 +4,7 @@ import { omit } from 'lodash'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { MUserDefault } from '@server/types/models'
 import { HttpStatusCode, UserRegister, UserRole } from '@shared/models'
-import { toBooleanOrNull, toIntOrNull } from '../../helpers/custom-validators/misc'
+import { isBooleanValid, isIdValid, toBooleanOrNull, toIntOrNull } from '../../helpers/custom-validators/misc'
 import { isThemeNameValid } from '../../helpers/custom-validators/plugins'
 import {
   isUserAdminFlagsValid,
@@ -31,7 +31,7 @@ import { Redis } from '../../lib/redis'
 import { isSignupAllowed, isSignupAllowedForCurrentIP } from '../../lib/signup'
 import { ActorModel } from '../../models/actor/actor'
 import { UserModel } from '../../models/user/user'
-import { areValidationErrors, doesVideoExist, isValidVideoIdParam } from './shared'
+import { areValidationErrors, doesVideoChannelIdExist, doesVideoExist, isValidVideoIdParam } from './shared'
 
 const usersListValidator = [
   query('blocked')
@@ -318,6 +318,28 @@ const usersVideoRatingValidator = [
   }
 ]
 
+const usersVideosValidator = [
+  query('isLive')
+    .optional()
+    .customSanitizer(toBooleanOrNull)
+    .custom(isBooleanValid).withMessage('Should have a valid live boolean'),
+
+  query('channelId')
+    .optional()
+    .customSanitizer(toIntOrNull)
+    .custom(isIdValid).withMessage('Should have a valid channel id'),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking usersVideosValidator parameters', { parameters: req.params })
+
+    if (areValidationErrors(req, res)) return
+
+    if (req.query.channelId && !await doesVideoChannelIdExist(req.query.channelId, res)) return
+
+    return next()
+  }
+]
+
 const ensureUserRegistrationAllowed = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const allowedParams = {
@@ -513,6 +535,7 @@ export {
   ensureUserRegistrationAllowed,
   ensureUserRegistrationAllowedForIP,
   usersGetValidator,
+  usersVideosValidator,
   usersAskResetPasswordValidator,
   usersResetPasswordValidator,
   usersAskSendVerifyEmailValidator,

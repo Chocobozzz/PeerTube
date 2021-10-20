@@ -13,6 +13,7 @@ import {
   UserVideoRateType,
   UserVideoRateUpdate,
   Video as VideoServerModel,
+  VideoChannel as VideoChannelServerModel,
   VideoConstant,
   VideoDetails as VideoDetailsServerModel,
   VideoFileMetadata,
@@ -122,7 +123,14 @@ export class VideoService {
                .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
-  getMyVideos (videoPagination: ComponentPaginationLight, sort: VideoSortField, search?: string): Observable<ResultList<Video>> {
+  getMyVideos (options: {
+    videoPagination: ComponentPaginationLight
+    sort: VideoSortField
+    userChannels?: VideoChannelServerModel[]
+    search?: string
+  }): Observable<ResultList<Video>> {
+    const { videoPagination, sort, userChannels = [], search } = options
+
     const pagination = this.restService.componentToRestPagination(videoPagination)
 
     let params = new HttpParams()
@@ -133,6 +141,16 @@ export class VideoService {
         isLive: {
           prefix: 'isLive:',
           isBoolean: true
+        },
+        channelId: {
+          prefix: 'channel:',
+          handler: (name: string) => {
+            const channel = userChannels.find(c => c.name === name)
+
+            if (channel) return channel.id
+
+            return undefined
+          }
         }
       })
 

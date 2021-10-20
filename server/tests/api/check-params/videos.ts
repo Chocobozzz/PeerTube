@@ -119,6 +119,20 @@ describe('Test videos API validator', function () {
       await checkBadSortPagination(server.url, path, server.accessToken)
     })
 
+    it('Should fail with an invalid channel', async function () {
+      await makeGetRequest({ url: server.url, token: server.accessToken, path, query: { channelId: 'toto' } })
+    })
+
+    it('Should fail with an unknown channel', async function () {
+      await makeGetRequest({
+        url: server.url,
+        token: server.accessToken,
+        path,
+        query: { channelId: 89898 },
+        expectedStatus: HttpStatusCode.NOT_FOUND_404
+      })
+    })
+
     it('Should success with the correct parameters', async function () {
       await makeGetRequest({ url: server.url, token: server.accessToken, path, expectedStatus: HttpStatusCode.OK_200 })
     })

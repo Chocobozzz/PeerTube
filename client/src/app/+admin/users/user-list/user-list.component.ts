@@ -36,8 +36,13 @@ export class UserListComponent extends RestTable implements OnInit {
 
   inputFilters: AdvancedInputFilter[] = [
     {
-      queryParams: { search: 'banned:true' },
-      label: $localize`Banned users`
+      title: $localize`Advanced filters`,
+      children: [
+        {
+          queryParams: { search: 'banned:true' },
+          label: $localize`Banned users`
+        }
+      ]
     }
   ]
 

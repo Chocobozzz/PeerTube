@@ -5,8 +5,12 @@ import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@
 import { ActivatedRoute, Params, Router } from '@angular/router'
 
 export type AdvancedInputFilter = {
-  label: string
-  queryParams: Params
+  title: string
+
+  children: {
+    label: string
+    queryParams: Params
+  }[]
 }
 
 const logger = debug('peertube:AdvancedInputFilterComponent')

@@ -28,12 +28,17 @@ export class VideoBlockListComponent extends RestTable implements OnInit {
 
   inputFilters: AdvancedInputFilter[] = [
     {
-      queryParams: { search: 'type:auto' },
-      label: $localize`Automatic blocks`
-    },
-    {
-      queryParams: { search: 'type:manual' },
-      label: $localize`Manual blocks`
+      title: $localize`Advanced filters`,
+      children: [
+        {
+          queryParams: { search: 'type:auto' },
+          label: $localize`Automatic blocks`
+        },
+        {
+          queryParams: { search: 'type:manual' },
+          label: $localize`Manual blocks`
+        }
+      ]
     }
   ]
 
