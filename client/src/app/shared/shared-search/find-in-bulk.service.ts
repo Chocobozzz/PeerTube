@@ -91,19 +91,19 @@ export class FindInBulkService {
   private getVideosInBulk (uuids: string[]) {
     logger('Fetching videos %s.', uuids.join(', '))
 
-    return this.searchService.searchVideos({ uuids })
+    return this.searchService.searchVideos({ uuids, componentPagination: { itemsPerPage: uuids.length, currentPage: 1 } })
   }
 
   private getChannelsInBulk (handles: string[]) {
     logger('Fetching channels %s.', handles.join(', '))
 
-    return this.searchService.searchVideoChannels({ handles })
+    return this.searchService.searchVideoChannels({ handles, componentPagination: { itemsPerPage: handles.length, currentPage: 1 } })
   }
 
   private getPlaylistsInBulk (uuids: string[]) {
     logger('Fetching playlists %s.', uuids.join(', '))
 
-    return this.searchService.searchVideoPlaylists({ uuids })
+    return this.searchService.searchVideoPlaylists({ uuids, componentPagination: { itemsPerPage: uuids.length, currentPage: 1 } })
   }
 
   private buildBulkObservableObject <P extends number | string, R> (bulkGet: (params: P[]) => Observable<R>) {
