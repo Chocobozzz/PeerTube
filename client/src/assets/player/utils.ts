@@ -46,6 +46,8 @@ function buildVideoOrPlaylistEmbed (embedUrl: string, embedTitle: string) {
   const iframe = document.createElement('iframe')
 
   iframe.title = embedTitle
+  iframe.width = '560'
+  iframe.height = '315'
   iframe.src = embedUrl
   iframe.frameBorder = '0'
   iframe.allowFullscreen = true
