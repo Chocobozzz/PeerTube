@@ -59,7 +59,7 @@ function getHostWithPort (host: string) {
   return host
 }
 
-function badRequest (req: express.Request, res: express.Response) {
+function badRequest (_req: express.Request, res: express.Response) {
   return res.type('json')
             .status(HttpStatusCode.BAD_REQUEST_400)
             .end()

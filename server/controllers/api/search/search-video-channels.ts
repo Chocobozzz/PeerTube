@@ -25,6 +25,7 @@ import {
 } from '../../../middlewares'
 import { VideoChannelModel } from '../../../models/video/video-channel'
 import { MChannelAccountDefault } from '../../../types/models'
+import { searchLocalUrl } from './shared'
 
 const searchChannelsRouter = express.Router()
 
@@ -131,7 +132,7 @@ async function searchVideoChannelURI (search: string, isWebfingerSearch: boolean
       logger.info('Cannot search remote video channel %s.', uri, { err })
     }
   } else {
-    videoChannel = await VideoChannelModel.loadByUrlAndPopulateAccount(sanitizeLocalUrl(uri))
+    videoChannel = await searchLocalUrl(sanitizeLocalUrl(uri), url => VideoChannelModel.loadByUrlAndPopulateAccount(url))
   }
 
   return res.json({

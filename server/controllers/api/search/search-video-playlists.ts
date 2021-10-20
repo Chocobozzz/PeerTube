@@ -24,6 +24,7 @@ import {
   videoPlaylistsListSearchValidator,
   videoPlaylistsSearchSortValidator
 } from '../../../middlewares'
+import { searchLocalUrl } from './shared'
 
 const searchPlaylistsRouter = express.Router()
 
@@ -109,7 +110,7 @@ async function searchVideoPlaylistsURI (search: string, res: express.Response) {
       logger.info('Cannot search remote video playlist %s.', search, { err })
     }
   } else {
-    videoPlaylist = await VideoPlaylistModel.loadByUrlWithAccountAndChannelSummary(sanitizeLocalUrl(search))
+    videoPlaylist = await searchLocalUrl(sanitizeLocalUrl(search), url => VideoPlaylistModel.loadByUrlWithAccountAndChannelSummary(url))
   }
 
   return res.json({

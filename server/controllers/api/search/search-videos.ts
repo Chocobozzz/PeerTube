@@ -25,6 +25,7 @@ import {
 } from '../../../middlewares'
 import { VideoModel } from '../../../models/video/video'
 import { MVideoAccountLightBlacklistAllFiles } from '../../../types/models'
+import { searchLocalUrl } from './shared'
 
 const searchVideosRouter = express.Router()
 
@@ -141,7 +142,7 @@ async function searchVideoURI (url: string, res: express.Response) {
       logger.info('Cannot search remote video %s.', url, { err })
     }
   } else {
-    video = await VideoModel.loadByUrlAndPopulateAccount(sanitizeLocalUrl(url))
+    video = await searchLocalUrl(sanitizeLocalUrl(url), url => VideoModel.loadByUrlAndPopulateAccount(url))
   }
 
   return res.json({

@@ -46,7 +46,7 @@ describe('Test ActivityPub videos search', function () {
 
   it('Should not find a remote video', async function () {
     {
-      const search = 'http://localhost:' + servers[1].port + '/videos/watch/43'
+      const search = servers[1].url + '/videos/watch/43'
       const body = await command.searchVideos({ search, token: servers[0].accessToken })
 
       expect(body.total).to.equal(0)
@@ -56,7 +56,7 @@ describe('Test ActivityPub videos search', function () {
 
     {
       // Without token
-      const search = 'http://localhost:' + servers[1].port + '/videos/watch/' + videoServer2UUID
+      const search = servers[1].url + '/videos/watch/' + videoServer2UUID
       const body = await command.searchVideos({ search })
 
       expect(body.total).to.equal(0)
@@ -66,7 +66,7 @@ describe('Test ActivityPub videos search', function () {
   })
 
   it('Should search a local video', async function () {
-    const search = 'http://localhost:' + servers[0].port + '/videos/watch/' + videoServer1UUID
+    const search = servers[0].url + '/videos/watch/' + videoServer1UUID
     const body = await command.searchVideos({ search })
 
     expect(body.total).to.equal(1)
@@ -76,7 +76,7 @@ describe('Test ActivityPub videos search', function () {
   })
 
   it('Should search a local video with an alternative URL', async function () {
-    const search = 'http://localhost:' + servers[0].port + '/w/' + videoServer1UUID
+    const search = servers[0].url + '/w/' + videoServer1UUID
     const body1 = await command.searchVideos({ search })
     const body2 = await command.searchVideos({ search, token: servers[0].accessToken })
 
@@ -88,10 +88,28 @@ describe('Test ActivityPub videos search', function () {
     }
   })
 
+  it('Should search a local video with a query in URL', async function () {
+    const searches = [
+      servers[0].url + '/w/' + videoServer1UUID,
+      servers[0].url + '/videos/watch/' + videoServer1UUID
+    ]
+
+    for (const search of searches) {
+      for (const token of [ undefined, servers[0].accessToken ]) {
+        const body = await command.searchVideos({ search: search + '?startTime=4', token })
+
+        expect(body.total).to.equal(1)
+        expect(body.data).to.be.an('array')
+        expect(body.data).to.have.lengthOf(1)
+        expect(body.data[0].name).to.equal('video 1 on server 1')
+      }
+    }
+  })
+
   it('Should search a remote video', async function () {
     const searches = [
-      'http://localhost:' + servers[1].port + '/w/' + videoServer2UUID,
-      'http://localhost:' + servers[1].port + '/videos/watch/' + videoServer2UUID
+      servers[1].url + '/w/' + videoServer2UUID,
+      servers[1].url + '/videos/watch/' + videoServer2UUID
     ]
 
     for (const search of searches) {
@@ -134,7 +152,7 @@ describe('Test ActivityPub videos search', function () {
     await wait(10000)
 
     // Will run refresh async
-    const search = 'http://localhost:' + servers[1].port + '/videos/watch/' + videoServer2UUID
+    const search = servers[1].url + '/videos/watch/' + videoServer2UUID
     await command.searchVideos({ search, token: servers[0].accessToken })
 
     // Wait refresh
@@ -160,7 +178,7 @@ describe('Test ActivityPub videos search', function () {
     await wait(10000)
 
     // Will run refresh async
-    const search = 'http://localhost:' + servers[1].port + '/videos/watch/' + videoServer2UUID
+    const search = servers[1].url + '/videos/watch/' + videoServer2UUID
     await command.searchVideos({ search, token: servers[0].accessToken })
 
     // Wait refresh
