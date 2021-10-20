@@ -1,6 +1,7 @@
 import express from 'express'
 import { readdir, readFile } from 'fs-extra'
 import { join } from 'path'
+import { isArray } from '@server/helpers/custom-validators/misc'
 import { logger, mtimeSortFilesDesc } from '@server/helpers/logger'
 import { LogLevel } from '../../../../shared/models/server/log-level.type'
 import { UserRight } from '../../../../shared/models/users'
@@ -51,19 +52,26 @@ async function getLogs (req: express.Request, res: express.Response) {
     startDateQuery: req.query.startDate,
     endDateQuery: req.query.endDate,
     level: req.query.level || 'info',
+    tagsOneOf: req.query.tagsOneOf,
     nameFilter: logNameFilter
   })
 
-  return res.json(output).end()
+  return res.json(output)
 }
 
 async function generateOutput (options: {
   startDateQuery: string
   endDateQuery?: string
+
   level: LogLevel
   nameFilter: RegExp
+  tagsOneOf?: string[]
 }) {
   const { startDateQuery, level, nameFilter } = options
+
+  const tagsOneOf = Array.isArray(options.tagsOneOf) && options.tagsOneOf.length !== 0
+    ? new Set(options.tagsOneOf)
+    : undefined
 
   const logFiles = await readdir(CONFIG.STORAGE.LOG_DIR)
   const sortedLogFiles = await mtimeSortFilesDesc(logFiles, CONFIG.STORAGE.LOG_DIR)
@@ -80,7 +88,7 @@ async function generateOutput (options: {
     const path = join(CONFIG.STORAGE.LOG_DIR, meta.file)
     logger.debug('Opening %s to fetch logs.', path)
 
-    const result = await getOutputFromFile(path, startDate, endDate, level, currentSize)
+    const result = await getOutputFromFile({ path, startDate, endDate, level, currentSize, tagsOneOf })
     if (!result.output) break
 
     output = result.output.concat(output)
@@ -92,9 +100,20 @@ async function generateOutput (options: {
   return output
 }
 
-async function getOutputFromFile (path: string, startDate: Date, endDate: Date, level: LogLevel, currentSize: number) {
+async function getOutputFromFile (options: {
+  path: string
+  startDate: Date
+  endDate: Date
+  level: LogLevel
+  currentSize: number
+  tagsOneOf: Set<string>
+}) {
+  const { path, startDate, endDate, level, tagsOneOf } = options
+
   const startTime = startDate.getTime()
   const endTime = endDate.getTime()
+  let currentSize = options.currentSize
+
   let logTime: number
 
   const logsLevel: { [ id in LogLevel ]: number } = {
@@ -121,7 +140,12 @@ async function getOutputFromFile (path: string, startDate: Date, endDate: Date, 
     }
 
     logTime = new Date(log.timestamp).getTime()
-    if (logTime >= startTime && logTime <= endTime && logsLevel[log.level] >= logsLevel[level]) {
+    if (
+      logTime >= startTime &&
+      logTime <= endTime &&
+      logsLevel[log.level] >= logsLevel[level] &&
+      (!tagsOneOf || lineHasTag(log, tagsOneOf))
+    ) {
       output.push(log)
 
       currentSize += line.length
@@ -133,6 +157,16 @@ async function getOutputFromFile (path: string, startDate: Date, endDate: Date, 
   }
 
   return { currentSize, output: output.reverse(), logTime }
+}
+
+function lineHasTag (line: { tags?: string }, tagsOneOf: Set<string>) {
+  if (!isArray(line.tags)) return false
+
+  for (const lineTag of line.tags) {
+    if (tagsOneOf.has(lineTag)) return true
+  }
+
+  return false
 }
 
 function generateLogNameFilter (baseName: string) {

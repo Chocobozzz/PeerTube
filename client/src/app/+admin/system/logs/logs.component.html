@@ -28,6 +28,8 @@
     </ng-option>
   </ng-select>
 
+  <my-select-tags i18n-placeholder placeholder="Filter logs by tags" [(ngModel)]="tagsOneOf" (ngModelChange)="refresh()"></my-select-tags>
+
   <my-button i18n-label label="Refresh" icon="refresh" (click)="refresh()"></my-button>
 </div>
 

@@ -16,6 +16,7 @@ import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms'
 export class SelectTagsComponent implements ControlValueAccessor {
   @Input() availableItems: string[] = []
   @Input() selectedItems: string[] = []
+  @Input() placeholder = $localize`Enter a new tag`
 
   propagateChange = (_: any) => { /* empty */ }
 

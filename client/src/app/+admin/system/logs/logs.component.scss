@@ -52,9 +52,7 @@
     @include peertube-select-container(150px);
   }
 
-  my-button,
-  .peertube-select-container,
-  ng-select {
+  > * {
     @include margin-left(10px);
   }
 }

@@ -71,7 +71,7 @@ describe('Test logs', function () {
       expect(logsString.includes('video 5')).to.be.false
     })
 
-    it('Should get filter by level', async function () {
+    it('Should filter by level', async function () {
       this.timeout(20000)
 
       const now = new Date()
@@ -91,6 +91,27 @@ describe('Test logs', function () {
         const logsString = JSON.stringify(body)
 
         expect(logsString.includes('video 6')).to.be.false
+      }
+    })
+
+    it('Should filter by tag', async function () {
+      const now = new Date()
+
+      const { uuid } = await server.videos.upload({ attributes: { name: 'video 6' } })
+      await waitJobs([ server ])
+
+      {
+        const body = await logsCommand.getLogs({ startDate: now, level: 'debug', tagsOneOf: [ 'toto' ] })
+        expect(body).to.have.lengthOf(0)
+      }
+
+      {
+        const body = await logsCommand.getLogs({ startDate: now, level: 'debug', tagsOneOf: [ uuid ] })
+        expect(body).to.not.have.lengthOf(0)
+
+        for (const line of body) {
+          expect(line.tags).to.contain(uuid)
+        }
       }
     })
 
