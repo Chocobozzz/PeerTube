@@ -356,6 +356,7 @@
   background: pvar(--inputBackgroundColor);
   position: relative;
   font-size: 15px;
+  height: min-content;
 
   &.disabled {
     background-color: #E5E5E5;

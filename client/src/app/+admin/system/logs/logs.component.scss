@@ -52,6 +52,11 @@
     @include peertube-select-container(150px);
   }
 
+  my-select-tags {
+    min-width: 250px;
+    max-width: 400px;
+  }
+
   > * {
     @include margin-left(10px);
   }
