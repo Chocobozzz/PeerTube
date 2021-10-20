@@ -131,10 +131,10 @@ const CONFIG = {
     LEVEL: config.get<string>('log.level'),
     ROTATION: {
       ENABLED: config.get<boolean>('log.rotation.enabled'),
-      MAX_FILE_SIZE: bytes.parse(config.get<string>('log.rotation.maxFileSize')),
-      MAX_FILES: config.get<number>('log.rotation.maxFiles')
+      MAX_FILE_SIZE: bytes.parse(config.get<string>('log.rotation.max_file_size')),
+      MAX_FILES: config.get<number>('log.rotation.max_files')
     },
-    ANONYMIZE_IP: config.get<boolean>('log.anonymizeIP'),
+    ANONYMIZE_IP: config.get<boolean>('log.anonymize_ip'),
     LOG_PING_REQUESTS: config.get<boolean>('log.log_ping_requests'),
     PRETTIFY_SQL: config.get<boolean>('log.prettify_sql')
   },

@@ -32,7 +32,7 @@ rates_limit:
 trust_proxy:
   - 'loopback'
 
-# Your database name will be database.name OR "peertube"+database.suffix
+# Your database name will be database.name OR 'peertube'+database.suffix
 database:
   hostname: 'localhost'
   port: 5432
@@ -69,9 +69,9 @@ smtp:
 
 email:
   body:
-    signature: "PeerTube"
+    signature: 'PeerTube'
   subject:
-    prefix: "[PeerTube]"
+    prefix: '[PeerTube]'
 
 # PeerTube client/interface configuration
 client:
@@ -143,9 +143,9 @@ log:
   level: 'info' # 'debug' | 'info' | 'warn' | 'error'
   rotation:
     enabled : true # Enabled by default, if disabled make sure that 'storage.logs' is pointing to a folder handled by logrotate
-    maxFileSize: 12MB
-    maxFiles: 20
-  anonymizeIP: false
+    max_file_size: 12MB
+    max_files: 20
+  anonymize_ip: false
   log_ping_requests: true
   prettify_sql: false
 
@@ -304,7 +304,7 @@ user:
   video_quota: -1
   video_quota_daily: -1
 
-# If enabled, the video will be transcoded to mp4 (x264) with "faststart" flag
+# If enabled, the video will be transcoded to mp4 (x264) with `faststart` flag
 # In addition, if some resolutions are enabled the mp4 video file will be transcoded to these new resolutions.
 # Please, do not disable transcoding since many uploaded videos will not work
 transcoding:
@@ -410,7 +410,7 @@ import:
       # You can use an HTTP/HTTPS/SOCKS proxy with youtube-dl
       proxy:
         enabled: false
-        url: ""
+        url: ''
     torrent: # Magnet URI or torrent file (use classic TCP/UDP/WebSeed to download the file)
       enabled: false
 
@@ -444,7 +444,7 @@ instance:
   business_model: '' # Supports Markdown
 
   # If you want to explain on what type of hardware your PeerTube instance runs
-  # Example: "2 vCore, 2GB RAM..."
+  # Example: '2 vCore, 2GB RAM...'
   hardware_information: '' # Supports Markdown
 
   # What are the main languages of your instance? To interact with your users for example
@@ -484,20 +484,20 @@ instance:
   # Enabling it will allow other administrators to know that you are mainly federating sensitive content
   # Moreover, the NSFW checkbox on video upload will be automatically checked by default
   is_nsfw: false
-  # By default, "do_not_list" or "blur" or "display" NSFW videos
+  # By default, `do_not_list` or `blur` or `display` NSFW videos
   # Could be overridden per user with a setting
   default_nsfw_policy: 'do_not_list'
 
   customizations:
     javascript: '' # Directly your JavaScript code (without <script> tags). Will be eval at runtime
     css: '' # Directly your CSS code (without <style> tags). Will be injected at runtime
-  # Robot.txt rules. To disallow robots to crawl your instance and disallow indexation of your site, add '/' to "Disallow:'
+  # Robot.txt rules. To disallow robots to crawl your instance and disallow indexation of your site, add `/` to `Disallow:`
   robots: |
     User-agent: *
     Disallow:
   # Security.txt rules. To discourage researchers from testing your instance and disable security.txt integration, set this to an empty string.
   securitytxt:
-    "# If you would like to report a security issue\n# you may report it to:\nContact: https://github.com/Chocobozzz/PeerTube/blob/develop/SECURITY.md\nContact: mailto:"
+    '# If you would like to report a security issue\n# you may report it to:\nContact: https://github.com/Chocobozzz/PeerTube/blob/develop/SECURITY.md\nContact: mailto:'
 
 services:
   # Cards configuration to format video in Twitter
@@ -505,7 +505,7 @@ services:
     username: '@Chocobozzz' # Indicates the Twitter account for the website or platform on which the content was published
     # If true, a video player will be embedded in the Twitter feed on PeerTube video share
     # If false, we use an image link card that will redirect on your PeerTube instance
-    # Change it to "true", and then test on https://cards-dev.twitter.com/validator to see if you are whitelisted
+    # Change it to `true`, and then test on https://cards-dev.twitter.com/validator to see if you are whitelisted
     whitelisted: false
 
 followers:
