@@ -1,14 +1,9 @@
-import { Component, ElementRef, Input, ViewChild, OnInit } from '@angular/core'
-import { Notifier } from '@app/core'
+import { Component, ElementRef, Input, ViewChild } from '@angular/core'
 import { VideoDetails } from '@app/shared/shared-main'
-import { VideoPlaylist, VideoPlaylistService } from '@app/shared/shared-video-playlist'
+import { VideoPlaylist } from '@app/shared/shared-video-playlist'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { buildPlaylistLink, buildVideoLink, decoratePlaylistLink, decorateVideoLink } from '@shared/core-utils'
 import { VideoCaption, VideoPlaylistPrivacy } from '@shared/models'
-import { VIDEO_PLAYLIST_PRIVACY_VALIDATOR } from '@app/shared/form-validators/video-playlist-validators'
-import { FormValidatorService } from '@app/shared/shared-forms'
-import { FormReactive } from '@app/shared/shared-forms'
-import { VideoPlaylistUpdate } from '@shared/models'
 import { buildVideoOrPlaylistEmbed } from '../../../assets/player/utils'
 
 type Customizations = {
@@ -38,18 +33,13 @@ type TabId = 'url' | 'qrcode' | 'embed'
   templateUrl: './video-share.component.html',
   styleUrls: [ './video-share.component.scss' ]
 })
-export class VideoShareComponent extends FormReactive implements OnInit  {
-  error: string
-  videoPlaylistToUpdate: VideoPlaylist
-
+export class VideoShareComponent {
   @ViewChild('modal', { static: true }) modal: ElementRef
 
   @Input() video: VideoDetails = null
   @Input() videoCaptions: VideoCaption[] = []
   @Input() playlist: VideoPlaylist = null
   @Input() playlistPosition: number = null
-  @Input() updatePlaylistInfo: () => void;
-
 
   activeVideoId: TabId = 'url'
   activePlaylistId: TabId = 'url'
@@ -57,26 +47,8 @@ export class VideoShareComponent extends FormReactive implements OnInit  {
   customizations: Customizations
   isAdvancedCustomizationCollapsed = true
   includeVideoInPlaylist = false
-  privacyOption = VideoPlaylistPrivacy.PUBLIC;
 
-  constructor (
-    private modalService: NgbModal,
-    private videoPlaylistService: VideoPlaylistService,
-    protected formValidatorService: FormValidatorService,
-    private notifier: Notifier,
-    ) {
-      super()
-    }
-
-  ngOnInit () {
-    this.buildForm({
-      privacy: VIDEO_PLAYLIST_PRIVACY_VALIDATOR,
-    })
-  }
-
-  getFormButtonTitle () {
-    return $localize`Update`
-  }
+  constructor (private modalService: NgbModal) { }
 
   show (currentVideoTimestamp?: number, currentPlaylistPosition?: number) {
     let subtitle: string
@@ -156,26 +128,6 @@ export class VideoShareComponent extends FormReactive implements OnInit  {
 
   isPrivatePlaylist () {
     return this.playlist.privacy.id === VideoPlaylistPrivacy.PRIVATE
-  }
-
-  formValidated () {
-    this.error = undefined
-
-    const body = this.form.value
-    const videoPlaylistUpdate: VideoPlaylistUpdate = {
-      privacy: body.privacy,
-    }
-    this.videoPlaylistService.updateVideoPlaylist(this.playlist, videoPlaylistUpdate)
-      .subscribe({
-        next: () => {
-          this.notifier.success($localize`Playlist ${this.playlist.displayName} updated.`)
-          this.updatePlaylistInfo();
-        },
-
-        error: err => {
-          this.error = err.message
-        }
-      })
   }
 
   private getPlaylistOptions (baseUrl?: string) {

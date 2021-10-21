@@ -82,7 +82,7 @@ my-input-toggle-hidden {
   }
 }
 
-input[type=submit] {
+a.update {
   @include peertube-button;
   @include orange-button;
 }

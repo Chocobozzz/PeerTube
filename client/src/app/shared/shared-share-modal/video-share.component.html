@@ -14,26 +14,11 @@
       <div *ngIf="isPrivatePlaylist(); else notPrivate" class="form-group">
         <p>
           <my-global-icon iconName="alert" aria-hidden="true"></my-global-icon>
-          This playlist is in Private mode you are the only one who can see playlist.
+          This playlist is private, you can update it's privacy 
+          <a class="update" [routerLink]="[ '/my-library/video-playlists/update', playlist.uuid ]" target="_blank" rel="noreferrer">
+            Here
+          </a>
         </p>
-        <form role="form" (ngSubmit)="formValidated()" [formGroup]="form">
-          <label i18n for="privacy">Would you like to update the privacy?</label>
-          <div class="form-row">
-              <div class="col-md-7 col-xl-5">
-                  <div class="peertube-select-container">
-                      <select id="privacy" formControlName="privacy" class="form-control">
-                      <option [value]="privacyOption">Public</option>
-                      </select>
-                  </div>
-                  <div *ngIf="formErrors.privacy" class="form-error">
-                      {{ formErrors.privacy }}
-                  </div>
-              </div>
-              <div class="col-md-5 col-xl-5 d-inline-flex">
-                <input type="submit" value="{{ getFormButtonTitle() }}" [disabled]="!form.valid">
-              </div>
-          </div>
-        </form>
         <hr>
       </div>
 
