@@ -51,6 +51,7 @@ const playerKeys = {
   'Buffer Progress': 'Buffer Progress',
   'Buffer State': 'Buffer State',
   'Live Latency': 'Live Latency',
+  '  off': '  off',
   'Player mode': 'Player mode'
 }
 Object.assign(playerKeys, videojs)

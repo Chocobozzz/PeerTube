@@ -310,7 +310,7 @@ class SettingsMenuItem extends MenuItem {
             break
           }
 
-          this.settingsSubMenuValueEl_.innerHTML = subMenuItemUntyped.options_.label
+          this.settingsSubMenuValueEl_.innerHTML = this.player().localize(subMenuItemUntyped.options_.label)
         }
       }
     }
