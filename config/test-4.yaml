@@ -11,6 +11,7 @@ database:
 # From the project root directory
 storage:
   tmp: 'test4/tmp/'
+  bin: 'test4/bin/'
   avatars: 'test4/avatars/'
   videos: 'test4/videos/'
   streaming_playlists: 'test4/streaming-playlists/'

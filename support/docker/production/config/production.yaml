@@ -44,6 +44,7 @@ redis:
 # From the project root directory
 storage:
   tmp: '../data/tmp/' # Use to download data (imports etc), store uploaded files before and during processing...
+  bin: '../data/bin/'
   avatars: '../data/avatars/'
   videos: '../data/videos/'
   streaming_playlists: '../data/streaming-playlists'

@@ -1,4 +1,4 @@
-import { YoutubeDL } from '@server/helpers/youtube-dl'
+import { YoutubeDLCLI } from '@server/helpers/youtube-dl'
 import { SCHEDULER_INTERVALS_MS } from '../../initializers/constants'
 import { AbstractScheduler } from './abstract-scheduler'
 
@@ -13,7 +13,7 @@ export class YoutubeDlUpdateScheduler extends AbstractScheduler {
   }
 
   protected internalExecute () {
-    return YoutubeDL.updateYoutubeDLBinary()
+    return YoutubeDLCLI.updateYoutubeDLBinary()
   }
 
   static get Instance () {

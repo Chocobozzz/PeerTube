@@ -26,7 +26,7 @@ import { isArray } from '../../../helpers/custom-validators/misc'
 import { cleanUpReqFiles, createReqFiles } from '../../../helpers/express-utils'
 import { logger } from '../../../helpers/logger'
 import { getSecureTorrentName } from '../../../helpers/utils'
-import { YoutubeDL, YoutubeDLInfo } from '../../../helpers/youtube-dl'
+import { YoutubeDLWrapper, YoutubeDLInfo } from '../../../helpers/youtube-dl'
 import { CONFIG } from '../../../initializers/config'
 import { MIMETYPES } from '../../../initializers/constants'
 import { sequelizeTypescript } from '../../../initializers/database'
@@ -134,12 +134,12 @@ async function addYoutubeDLImport (req: express.Request, res: express.Response) 
   const targetUrl = body.targetUrl
   const user = res.locals.oauth.token.User
 
-  const youtubeDL = new YoutubeDL(targetUrl, ServerConfigManager.Instance.getEnabledResolutions('vod'))
+  const youtubeDL = new YoutubeDLWrapper(targetUrl, ServerConfigManager.Instance.getEnabledResolutions('vod'))
 
   // Get video infos
   let youtubeDLInfo: YoutubeDLInfo
   try {
-    youtubeDLInfo = await youtubeDL.getYoutubeDLInfo()
+    youtubeDLInfo = await youtubeDL.getInfoForDownload()
   } catch (err) {
     logger.info('Cannot fetch information from import for URL %s.', targetUrl, { err })
 
@@ -373,9 +373,9 @@ function extractNameFromArray (name: string | string[]) {
   return isArray(name) ? name[0] : name
 }
 
-async function processYoutubeSubtitles (youtubeDL: YoutubeDL, targetUrl: string, videoId: number) {
+async function processYoutubeSubtitles (youtubeDL: YoutubeDLWrapper, targetUrl: string, videoId: number) {
   try {
-    const subtitles = await youtubeDL.getYoutubeDLSubs()
+    const subtitles = await youtubeDL.getSubtitles()
 
     logger.info('Will create %s subtitles from youtube import %s.', subtitles.length, targetUrl)
 

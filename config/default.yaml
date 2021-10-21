@@ -85,6 +85,7 @@ client:
 # From the project root directory
 storage:
   tmp: 'storage/tmp/' # Use to download data (imports etc), store uploaded files before and during processing...
+  bin: 'storage/bin/'
   avatars: 'storage/avatars/'
   videos: 'storage/videos/'
   streaming_playlists: 'storage/streaming-playlists/'
@@ -394,13 +395,21 @@ import:
     http: # Classic HTTP or all sites supported by youtube-dl https://rg3.github.io/youtube-dl/supportedsites.html
       enabled: false
 
+      youtube_dl_release:
+        # Direct download URL to youtube-dl binary
+        # Github releases API is also supported
+        # Examples:
+        #   * https://api.github.com/repos/ytdl-org/youtube-dl/releases
+        #   * https://api.github.com/repos/yt-dlp/yt-dlp/releases
+        url: 'https://yt-dl.org/downloads/latest/youtube-dl'
+
+        # youtube-dl binary name
+        # yt-dlp is also supported
+        name: 'youtube-dl'
+
       # IPv6 is very strongly rate-limited on most sites supported by youtube-dl
       force_ipv4: false
 
-      # You can use an HTTP/HTTPS/SOCKS proxy with youtube-dl
-      proxy:
-        enabled: false
-        url: ''
     torrent: # Magnet URI or torrent file (use classic TCP/UDP/WebSeed to download the file)
       enabled: false
 

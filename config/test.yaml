@@ -118,9 +118,6 @@ import:
     concurrency: 2
     http:
       enabled: true
-      proxy:
-        enabled: false
-        url: ""
     torrent:
       enabled: true
 

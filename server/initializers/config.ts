@@ -69,6 +69,7 @@ const CONFIG = {
 
   STORAGE: {
     TMP_DIR: buildPath(config.get<string>('storage.tmp')),
+    BIN_DIR: buildPath(config.get<string>('storage.bin')),
     ACTOR_IMAGES: buildPath(config.get<string>('storage.avatars')),
     LOG_DIR: buildPath(config.get<string>('storage.logs')),
     VIDEOS_DIR: buildPath(config.get<string>('storage.videos')),
@@ -292,11 +293,13 @@ const CONFIG = {
 
       HTTP: {
         get ENABLED () { return config.get<boolean>('import.videos.http.enabled') },
-        get FORCE_IPV4 () { return config.get<boolean>('import.videos.http.force_ipv4') },
-        PROXY: {
-          get ENABLED () { return config.get<boolean>('import.videos.http.proxy.enabled') },
-          get URL () { return config.get<string>('import.videos.http.proxy.url') }
-        }
+
+        YOUTUBE_DL_RELEASE: {
+          get URL () { return config.get<string>('import.videos.http.youtube_dl_release.url') },
+          get NAME () { return config.get<string>('import.videos.http.youtube_dl_release.name') }
+        },
+
+        get FORCE_IPV4 () { return config.get<boolean>('import.videos.http.force_ipv4') }
       },
       TORRENT: {
         get ENABLED () { return config.get<boolean>('import.videos.torrent.enabled') }

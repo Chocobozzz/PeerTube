@@ -497,6 +497,12 @@ const MIMETYPES = {
 MIMETYPES.AUDIO.EXT_MIMETYPE = invert(MIMETYPES.AUDIO.MIMETYPE_EXT)
 MIMETYPES.IMAGE.EXT_MIMETYPE = invert(MIMETYPES.IMAGE.MIMETYPE_EXT)
 
+const BINARY_CONTENT_TYPES = new Set([
+  'binary/octet-stream',
+  'application/octet-stream',
+  'application/x-binary'
+])
+
 // ---------------------------------------------------------------------------
 
 const OVERVIEWS = {
@@ -903,6 +909,7 @@ export {
   MIMETYPES,
   CRAWL_REQUEST_CONCURRENCY,
   DEFAULT_AUDIO_RESOLUTION,
+  BINARY_CONTENT_TYPES,
   JOB_COMPLETED_LIFETIME,
   HTTP_SIGNATURE,
   VIDEO_IMPORT_STATES,

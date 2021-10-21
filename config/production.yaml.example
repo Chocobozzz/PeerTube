@@ -83,6 +83,7 @@ client:
 # From the project root directory
 storage:
   tmp: '/var/www/peertube/storage/tmp/' # Use to download data (imports etc), store uploaded files before and during processing...
+  bin: '/var/www/peertube/storage/bin/'
   avatars: '/var/www/peertube/storage/avatars/'
   videos: '/var/www/peertube/storage/videos/'
   streaming_playlists: '/var/www/peertube/storage/streaming-playlists/'
@@ -407,10 +408,6 @@ import:
       # IPv6 is very strongly rate-limited on most sites supported by youtube-dl
       force_ipv4: false
 
-      # You can use an HTTP/HTTPS/SOCKS proxy with youtube-dl
-      proxy:
-        enabled: false
-        url: ''
     torrent: # Magnet URI or torrent file (use classic TCP/UDP/WebSeed to download the file)
       enabled: false
 

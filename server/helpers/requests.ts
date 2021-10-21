@@ -1,9 +1,9 @@
 import { createWriteStream, remove } from 'fs-extra'
-import got, { CancelableRequest, Options as GotOptions, RequestError } from 'got'
+import got, { CancelableRequest, Options as GotOptions, RequestError, Response } from 'got'
 import { HttpProxyAgent, HttpsProxyAgent } from 'hpagent'
 import { join } from 'path'
 import { CONFIG } from '../initializers/config'
-import { ACTIVITY_PUB, PEERTUBE_VERSION, REQUEST_TIMEOUT, WEBSERVER } from '../initializers/constants'
+import { ACTIVITY_PUB, BINARY_CONTENT_TYPES, PEERTUBE_VERSION, REQUEST_TIMEOUT, WEBSERVER } from '../initializers/constants'
 import { pipelinePromise } from './core-utils'
 import { processImage } from './image-utils'
 import { logger } from './logger'
@@ -180,12 +180,17 @@ function getUserAgent () {
   return `PeerTube/${PEERTUBE_VERSION} (+${WEBSERVER.URL})`
 }
 
+function isBinaryResponse (result: Response<any>) {
+  return BINARY_CONTENT_TYPES.has(result.headers['content-type'])
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   doRequest,
   doJSONRequest,
   doRequestAndSaveToFile,
+  isBinaryResponse,
   downloadImage,
   peertubeGot
 }

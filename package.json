@@ -91,6 +91,7 @@
     "decache": "^4.6.0",
     "deep-object-diff": "^1.1.0",
     "email-templates": "^8.0.3",
+    "execa": "^5.1.1",
     "express": "^4.12.4",
     "express-rate-limit": "^5.0.0",
     "express-validator": "^6.4.0",
@@ -144,8 +145,7 @@
     "webfinger.js": "^2.6.6",
     "webtorrent": "^1.0.0",
     "winston": "3.3.3",
-    "ws": "^8.0.0",
-    "youtube-dl": "^3.0.2"
+    "ws": "^8.0.0"
   },
   "devDependencies": {
     "@types/async": "^3.0.0",

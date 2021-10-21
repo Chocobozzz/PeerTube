@@ -2,7 +2,7 @@ import { Job } from 'bull'
 import { move, remove, stat } from 'fs-extra'
 import { getLowercaseExtension } from '@server/helpers/core-utils'
 import { retryTransactionWrapper } from '@server/helpers/database-utils'
-import { YoutubeDL } from '@server/helpers/youtube-dl'
+import { YoutubeDLWrapper } from '@server/helpers/youtube-dl'
 import { isPostImportVideoAccepted } from '@server/lib/moderation'
 import { generateWebTorrentVideoFilename } from '@server/lib/paths'
 import { Hooks } from '@server/lib/plugins/hooks'
@@ -77,10 +77,10 @@ async function processYoutubeDLImport (job: Job, payload: VideoImportYoutubeDLPa
     videoImportId: videoImport.id
   }
 
-  const youtubeDL = new YoutubeDL(videoImport.targetUrl, ServerConfigManager.Instance.getEnabledResolutions('vod'))
+  const youtubeDL = new YoutubeDLWrapper(videoImport.targetUrl, ServerConfigManager.Instance.getEnabledResolutions('vod'))
 
   return processFile(
-    () => youtubeDL.downloadYoutubeDLVideo(payload.fileExt, VIDEO_IMPORT_TIMEOUT),
+    () => youtubeDL.downloadVideo(payload.fileExt, VIDEO_IMPORT_TIMEOUT),
     videoImport,
     options
   )
