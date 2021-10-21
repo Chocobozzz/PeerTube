@@ -11,7 +11,7 @@
       <div class="title-page title-page-single" i18n *ngIf="video">Share the playlist</div>
 
 
-      <div *ngIf="isPrivatePlaylist(); else notPrivate" class="form-group">
+      <div *ngIf="isPrivatePlaylist()" class="form-group">
         <p>
           <my-global-icon iconName="alert" aria-hidden="true"></my-global-icon>
           This playlist is private, you can update it's privacy 
@@ -21,9 +21,6 @@
         </p>
         <hr>
       </div>
-
-      <ng-template #notPrivate>
-      </ng-template>
 
         <div ngbNav #nav="ngbNav" class="nav-tabs" [(activeId)]="activePlaylistId">
 
