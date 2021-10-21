@@ -106,7 +106,7 @@
     ></my-recommended-videos>
   </div>
 
-  <my-privacy-concerns></my-privacy-concerns>
+  <my-privacy-concerns *ngIf="video" [video]="video"></my-privacy-concerns>
 </div>
 
 <my-player-styles></my-player-styles>

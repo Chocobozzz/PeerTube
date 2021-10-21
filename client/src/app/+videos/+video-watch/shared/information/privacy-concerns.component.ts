@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, Input, OnInit } from '@angular/core'
 import { ServerService } from '@app/core'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
-import { HTMLServerConfig } from '@shared/models'
+import { HTMLServerConfig, Video } from '@shared/models'
 import { getStoredP2PEnabled } from '../../../../../assets/player/peertube-player-local-storage'
 import { isWebRTCDisabled } from '../../../../../assets/player/utils'
 
@@ -13,7 +13,9 @@ import { isWebRTCDisabled } from '../../../../../assets/player/utils'
 export class PrivacyConcernsComponent implements OnInit {
   private static LOCAL_STORAGE_PRIVACY_CONCERN_KEY = 'video-watch-privacy-concern'
 
-  hasAlreadyAcceptedPrivacyConcern = false
+  @Input() video: Video
+
+  display = true
 
   private serverConfig: HTMLServerConfig
 
@@ -24,23 +26,25 @@ export class PrivacyConcernsComponent implements OnInit {
   ngOnInit () {
     this.serverConfig = this.serverService.getHTMLConfig()
 
-    if (
-      isWebRTCDisabled() ||
-      this.serverConfig.tracker.enabled === false ||
-      getStoredP2PEnabled() === false ||
-      peertubeLocalStorage.getItem(PrivacyConcernsComponent.LOCAL_STORAGE_PRIVACY_CONCERN_KEY) === 'true'
-    ) {
-      this.hasAlreadyAcceptedPrivacyConcern = true
+    if (isWebRTCDisabled() || this.isTrackerDisabled() || this.isP2PDisabled() || this.alreadyAccepted()) {
+      this.display = false
     }
-  }
-
-  declinedPrivacyConcern () {
-    peertubeLocalStorage.setItem(PrivacyConcernsComponent.LOCAL_STORAGE_PRIVACY_CONCERN_KEY, 'false')
-    this.hasAlreadyAcceptedPrivacyConcern = false
   }
 
   acceptedPrivacyConcern () {
     peertubeLocalStorage.setItem(PrivacyConcernsComponent.LOCAL_STORAGE_PRIVACY_CONCERN_KEY, 'true')
-    this.hasAlreadyAcceptedPrivacyConcern = true
+    this.display = false
+  }
+
+  private isTrackerDisabled () {
+    return this.video.isLocal && this.serverConfig.tracker.enabled === false
+  }
+
+  private isP2PDisabled () {
+    return getStoredP2PEnabled() === false
+  }
+
+  private alreadyAccepted () {
+    return peertubeLocalStorage.getItem(PrivacyConcernsComponent.LOCAL_STORAGE_PRIVACY_CONCERN_KEY) === 'true'
   }
 }
