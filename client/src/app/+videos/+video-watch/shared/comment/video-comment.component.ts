@@ -197,8 +197,11 @@ export class VideoCommentComponent implements OnInit, OnChanges {
       })
     }
 
-    if (this.prependModerationActions.length === 0) {
-      this.prependModerationActions = undefined
+    if (this.prependModerationActions.length !== 0) {
+      this.prependModerationActions.unshift({
+        label: $localize`Actions on comment`,
+        isHeader: true
+      })
     }
   }
 
