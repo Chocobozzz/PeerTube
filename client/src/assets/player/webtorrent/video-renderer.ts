@@ -1,5 +1,4 @@
 // Thanks: https://github.com/feross/render-media
-// TODO: use render-media once https://github.com/feross/render-media/issues/32 is fixed
 
 const MediaElementWrapper = require('mediasource')
 import { extname } from 'path'
