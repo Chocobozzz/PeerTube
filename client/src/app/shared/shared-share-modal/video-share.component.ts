@@ -96,12 +96,12 @@ export class VideoShareComponent {
   }
 
   getVideoUrl () {
-    const baseUrl = this.customizations.originUrl
-      ? this.video.originInstanceUrl
-      : window.location.origin
+    const url = this.customizations.originUrl
+      ? this.video.url
+      : buildVideoLink(this.video, window.location.origin)
 
     return decorateVideoLink({
-      url: buildVideoLink(this.video, baseUrl),
+      url,
 
       ...this.getVideoOptions()
     })

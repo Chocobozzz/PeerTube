@@ -50,6 +50,8 @@ function videoModelToFormattedJSON (video: MVideoFormattable, options?: VideoFor
     uuid: video.uuid,
     shortUUID: uuidToShort(video.uuid),
 
+    url: video.url,
+
     name: video.name,
     category: {
       id: video.category,

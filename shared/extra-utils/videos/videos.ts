@@ -113,7 +113,7 @@ async function completeVideoCheck (
     channel: {
       displayName: string
       name: string
-      description
+      description: string
       isLocal: boolean
     }
     fixture: string
@@ -151,6 +151,7 @@ async function completeVideoCheck (
   expect(video.dislikes).to.equal(attributes.dislikes)
   expect(video.isLocal).to.equal(attributes.isLocal)
   expect(video.duration).to.equal(attributes.duration)
+  expect(video.url).to.contain(originHost)
   expect(dateIsValid(video.createdAt)).to.be.true
   expect(dateIsValid(video.publishedAt)).to.be.true
   expect(dateIsValid(video.updatedAt)).to.be.true

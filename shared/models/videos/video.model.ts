@@ -36,8 +36,7 @@ export interface Video {
   embedPath: string
   embedUrl?: string
 
-  // When using the search index
-  url?: string
+  url: string
 
   views: number
   likes: number

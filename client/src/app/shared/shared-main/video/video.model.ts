@@ -52,7 +52,7 @@ export class Video implements VideoServerModel {
   embedPath: string
   embedUrl: string
 
-  url?: string
+  url: string
 
   views: number
   likes: number
