@@ -206,17 +206,17 @@ const JOB_COMPLETED_LIFETIME = 60000 * 60 * 24 * 2 // 2 days
 const VIDEO_IMPORT_TIMEOUT = 1000 * 3600 // 1 hour
 
 const SCHEDULER_INTERVALS_MS = {
-  actorFollowScores: 60000 * 60, // 1 hour
-  removeOldJobs: 60000 * 60, // 1 hour
-  updateVideos: 60000, // 1 minute
-  youtubeDLUpdate: 60000 * 60 * 24, // 1 day
-  checkPlugins: CONFIG.PLUGINS.INDEX.CHECK_LATEST_VERSIONS_INTERVAL,
-  checkPeerTubeVersion: 60000 * 60 * 24, // 1 day
-  autoFollowIndexInstances: 60000 * 60 * 24, // 1 day
-  removeOldViews: 60000 * 60 * 24, // 1 day
-  removeOldHistory: 60000 * 60 * 24, // 1 day
-  updateInboxStats: 1000 * 60, // 1 minute
-  removeDanglingResumableUploads: 60000 * 60 * 16 // 16 hours
+  ACTOR_FOLLOW_SCORES: 60000 * 60, // 1 hour
+  REMOVE_OLD_JOBS: 60000 * 60, // 1 hour
+  UPDATE_VIDEOS: 60000, // 1 minute
+  YOUTUBE_DL_UPDATE: 60000 * 60 * 24, // 1 day
+  CHECK_PLUGINS: CONFIG.PLUGINS.INDEX.CHECK_LATEST_VERSIONS_INTERVAL,
+  CHECK_PEERTUBE_VERSION: 60000 * 60 * 24, // 1 day
+  AUTO_FOLLOW_INDEX_INSTANCES: 60000 * 60 * 24, // 1 day
+  REMOVE_OLD_VIEWS: 60000 * 60 * 24, // 1 day
+  REMOVE_OLD_HISTORY: 60000 * 60 * 24, // 1 day
+  UPDATE_INBOX_STATS: 1000 * 60, // 1 minute
+  REMOVE_DANGLING_RESUMABLE_UPLOADS: 60000 * 60 * 16 // 16 hours
 }
 
 // ---------------------------------------------------------------------------
@@ -782,14 +782,14 @@ if (isTestInstance() === true) {
   CONSTRAINTS_FIELDS.ACTORS.IMAGE.FILE_SIZE.max = 100 * 1024 // 100KB
   CONSTRAINTS_FIELDS.VIDEOS.IMAGE.FILE_SIZE.max = 400 * 1024 // 400KB
 
-  SCHEDULER_INTERVALS_MS.actorFollowScores = 1000
-  SCHEDULER_INTERVALS_MS.removeOldJobs = 10000
-  SCHEDULER_INTERVALS_MS.removeOldHistory = 5000
-  SCHEDULER_INTERVALS_MS.removeOldViews = 5000
-  SCHEDULER_INTERVALS_MS.updateVideos = 5000
-  SCHEDULER_INTERVALS_MS.autoFollowIndexInstances = 5000
-  SCHEDULER_INTERVALS_MS.updateInboxStats = 5000
-  SCHEDULER_INTERVALS_MS.checkPeerTubeVersion = 2000
+  SCHEDULER_INTERVALS_MS.ACTOR_FOLLOW_SCORES = 1000
+  SCHEDULER_INTERVALS_MS.REMOVE_OLD_JOBS = 10000
+  SCHEDULER_INTERVALS_MS.REMOVE_OLD_HISTORY = 5000
+  SCHEDULER_INTERVALS_MS.REMOVE_OLD_VIEWS = 5000
+  SCHEDULER_INTERVALS_MS.UPDATE_VIDEOS = 5000
+  SCHEDULER_INTERVALS_MS.AUTO_FOLLOW_INDEX_INSTANCES = 5000
+  SCHEDULER_INTERVALS_MS.UPDATE_INBOX_STATS = 5000
+  SCHEDULER_INTERVALS_MS.CHECK_PEERTUBE_VERSION = 2000
   REPEAT_JOBS['videos-views'] = { every: 5000 }
   REPEAT_JOBS['activitypub-cleaner'] = { every: 5000 }
 

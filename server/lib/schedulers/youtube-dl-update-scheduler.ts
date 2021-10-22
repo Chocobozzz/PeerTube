@@ -6,7 +6,7 @@ export class YoutubeDlUpdateScheduler extends AbstractScheduler {
 
   private static instance: AbstractScheduler
 
-  protected schedulerIntervalMs = SCHEDULER_INTERVALS_MS.youtubeDLUpdate
+  protected schedulerIntervalMs = SCHEDULER_INTERVALS_MS.YOUTUBE_DL_UPDATE
 
   private constructor () {
     super()

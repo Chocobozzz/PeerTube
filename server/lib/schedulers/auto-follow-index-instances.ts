@@ -12,7 +12,7 @@ export class AutoFollowIndexInstances extends AbstractScheduler {
 
   private static instance: AbstractScheduler
 
-  protected schedulerIntervalMs = SCHEDULER_INTERVALS_MS.autoFollowIndexInstances
+  protected schedulerIntervalMs = SCHEDULER_INTERVALS_MS.AUTO_FOLLOW_INDEX_INSTANCES
 
   private lastCheck: Date
 

@@ -13,7 +13,7 @@ export class PeerTubeVersionCheckScheduler extends AbstractScheduler {
 
   private static instance: AbstractScheduler
 
-  protected schedulerIntervalMs = SCHEDULER_INTERVALS_MS.checkPeerTubeVersion
+  protected schedulerIntervalMs = SCHEDULER_INTERVALS_MS.CHECK_PEERTUBE_VERSION
 
   private constructor () {
     super()

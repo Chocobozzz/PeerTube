@@ -9,7 +9,7 @@ export class ActorFollowScheduler extends AbstractScheduler {
 
   private static instance: AbstractScheduler
 
-  protected schedulerIntervalMs = SCHEDULER_INTERVALS_MS.actorFollowScores
+  protected schedulerIntervalMs = SCHEDULER_INTERVALS_MS.ACTOR_FOLLOW_SCORES
 
   private constructor () {
     super()

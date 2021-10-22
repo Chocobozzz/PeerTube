@@ -12,7 +12,7 @@ export class UpdateVideosScheduler extends AbstractScheduler {
 
   private static instance: AbstractScheduler
 
-  protected schedulerIntervalMs = SCHEDULER_INTERVALS_MS.updateVideos
+  protected schedulerIntervalMs = SCHEDULER_INTERVALS_MS.UPDATE_VIDEOS
 
   private constructor () {
     super()

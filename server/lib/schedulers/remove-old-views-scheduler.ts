@@ -8,7 +8,7 @@ export class RemoveOldViewsScheduler extends AbstractScheduler {
 
   private static instance: AbstractScheduler
 
-  protected schedulerIntervalMs = SCHEDULER_INTERVALS_MS.removeOldViews
+  protected schedulerIntervalMs = SCHEDULER_INTERVALS_MS.REMOVE_OLD_VIEWS
 
   private constructor () {
     super()
