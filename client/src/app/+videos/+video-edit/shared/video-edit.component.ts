@@ -63,6 +63,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
 
   @ViewChild('videoCaptionAddModal', { static: true }) videoCaptionAddModal: VideoCaptionAddModalComponent
 
+  @Output() formBuilt = new EventEmitter<void>()
   @Output() pluginFieldsAdded = new EventEmitter<void>()
 
   // So that it can be accessed in the template
@@ -154,6 +155,8 @@ export class VideoEditComponent implements OnInit, OnDestroy {
     this.trackChannelChange()
     this.trackPrivacyChange()
     this.trackLivePermanentFieldChange()
+
+    this.formBuilt.emit()
   }
 
   ngOnInit () {
