@@ -208,8 +208,8 @@ security:
 tracker:
   # If you disable the tracker, you disable the P2P aspect of PeerTube
   enabled: true
-  # Only handle requests on your videos.
-  # If you set this to false it means you have a public tracker.
+  # Only handle requests on your videos
+  # If you set this to false it means you have a public tracker
   # Then, it is possible that clients overload your instance with external torrents
   private: true
   # Reject peers that do a lot of announces (could improve privacy of TCP/UDP peers)
@@ -290,13 +290,14 @@ signup:
       blacklist: []
 
 user:
-  # Default value of maximum video BYTES the user can upload (does not take into account transcoded files).
+  # Default value of maximum video bytes the user can upload (does not take into account transcoded files)
+  # Byte format is supported ("1GB" etc)
   # -1 == unlimited
   video_quota: -1
   video_quota_daily: -1
 
 # If enabled, the video will be transcoded to mp4 (x264) with `faststart` flag
-# In addition, if some resolutions are enabled the mp4 video file will be transcoded to these new resolutions.
+# In addition, if some resolutions are enabled the mp4 video file will be transcoded to these new resolutions
 # Please, do not disable transcoding since many uploaded videos will not work
 transcoding:
   enabled: true
@@ -494,7 +495,7 @@ instance:
   robots: |
     User-agent: *
     Disallow:
-  # Security.txt rules. To discourage researchers from testing your instance and disable security.txt integration, set this to an empty string.
+  # Security.txt rules. To discourage researchers from testing your instance and disable security.txt integration, set this to an empty string
   securitytxt:
     '# If you would like to report a security issue\n# you may report it to:\nContact: https://github.com/Chocobozzz/PeerTube/blob/develop/SECURITY.md\nContact: mailto:'
 
