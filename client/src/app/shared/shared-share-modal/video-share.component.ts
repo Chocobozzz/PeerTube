@@ -3,7 +3,7 @@ import { VideoDetails } from '@app/shared/shared-main'
 import { VideoPlaylist } from '@app/shared/shared-video-playlist'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { buildPlaylistLink, buildVideoLink, decoratePlaylistLink, decorateVideoLink } from '@shared/core-utils'
-import { VideoCaption, VideoPlaylistPrivacy } from '@shared/models'
+import { VideoCaption, VideoPlaylistPrivacy, VideoPrivacy } from '@shared/models'
 import { buildVideoOrPlaylistEmbed } from '../../../assets/player/utils'
 
 type Customizations = {
@@ -124,6 +124,10 @@ export class VideoShareComponent {
 
   isLocalVideo () {
     return this.video.isLocal
+  }
+
+  isPrivateVideo () {
+    return this.video.privacy.id === VideoPrivacy.PRIVATE
   }
 
   isPrivatePlaylist () {

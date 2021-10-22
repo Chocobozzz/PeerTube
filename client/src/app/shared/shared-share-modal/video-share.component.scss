@@ -82,7 +82,8 @@ my-input-toggle-hidden {
   }
 }
 
-a.update {
-  @include peertube-button;
-  @include orange-button;
+.alert-private {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
