@@ -73,12 +73,11 @@ class YoutubeDLWrapper {
     // Leave empty the extension, youtube-dl will add it
     const pathWithoutExtension = generateVideoImportTmpPath(this.url, '')
 
-    let timer: NodeJS.Timeout
-
     logger.info('Importing youtubeDL video %s to %s', this.url, pathWithoutExtension, lTags())
 
     const youtubeDL = await YoutubeDLCLI.safeGet()
 
+    let timer: NodeJS.Timeout
     const timeoutPromise = new Promise<string>((_, rej) => {
       timer = setTimeout(() => rej(new Error('YoutubeDL download timeout.')), timeout)
     })
@@ -102,6 +101,7 @@ class YoutubeDLWrapper {
       .catch(async err => {
         const path = await this.guessVideoPathWithExtension(pathWithoutExtension, fileExt)
 
+        logger.debug('Error in youtube-dl import, deleting file %s.', path, { err, ...lTags() })
         remove(path)
           .catch(err => logger.error('Cannot remove file in youtubeDL timeout.', { err, ...lTags() }))
 

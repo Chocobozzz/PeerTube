@@ -345,9 +345,14 @@ describe('Test video imports', function () {
       it('Should import a peertube video', async function () {
         this.timeout(120_000)
 
+        const toTest = [ FIXTURE_URLS.peertube_long ]
+
         // TODO: include peertube_short when https://github.com/ytdl-org/youtube-dl/pull/29475 is merged
-        for (const targetUrl of [ FIXTURE_URLS.peertube_long ]) {
-        // for (const targetUrl of [ FIXTURE_URLS.peertube_long, FIXTURE_URLS.peertube_short ]) {
+        if (mode === 'yt-dlp') {
+          toTest.push(FIXTURE_URLS.peertube_short)
+        }
+
+        for (const targetUrl of toTest) {
           await servers[0].config.disableTranscoding()
 
           const attributes = {
