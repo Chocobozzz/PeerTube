@@ -68,10 +68,6 @@ function hlsjsConfigHandler (this: videojs.Player, options: HlsjsConfigHandlerOp
     player.srOptions_.hlsjsConfig = options.hlsjsConfig
   }
 
-  if (!player.srOptions_.captionConfig) {
-    player.srOptions_.captionConfig = options.captionConfig
-  }
-
   if (options.levelLabelHandler && !player.srOptions_.levelLabelHandler) {
     player.srOptions_.levelLabelHandler = options.levelLabelHandler
   }

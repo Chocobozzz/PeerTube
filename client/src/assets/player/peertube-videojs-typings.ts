@@ -1,6 +1,7 @@
 import { HlsConfig, Level } from 'hls.js'
 import videojs from 'video.js'
 import { VideoFile, VideoPlaylist, VideoPlaylistElement } from '@shared/models'
+import { Html5Hlsjs } from './p2p-media-loader/hls-plugin'
 import { P2pMediaLoaderPlugin } from './p2p-media-loader/p2p-media-loader-plugin'
 import { RedundancyUrlManager } from './p2p-media-loader/redundancy-url-manager'
 import { PlayerMode } from './peertube-player-manager'
@@ -56,12 +57,11 @@ declare module 'video.js' {
 }
 
 export interface VideoJSTechHLS extends videojs.Tech {
-  hlsProvider: any // FIXME: typings
+  hlsProvider: Html5Hlsjs
 }
 
 export interface HlsjsConfigHandlerOptions {
-  hlsjsConfig?: HlsConfig & { cueHandler: any }// FIXME: typings
-  captionConfig?: any // FIXME: typings
+  hlsjsConfig?: HlsConfig
 
   levelLabelHandler?: (level: Level) => string
 }

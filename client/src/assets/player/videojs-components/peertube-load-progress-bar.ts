@@ -25,7 +25,6 @@ class PeerTubeLoadProgressBar extends Component {
     const torrent = this.player().webtorrent().getTorrent()
     if (!torrent) return
 
-    // FIXME: typings
     (this.el() as HTMLElement).style.width = (torrent.progress * 100) + '%'
   }
 

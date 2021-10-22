@@ -53,8 +53,7 @@ $sub-menu-height: 81px;
 
 $channel-background-color: #f6ede8;
 
-// FIXME: cannot use math.div here because of compilation error
-$banner-inverted-ratio: 0.1666666666;
+$banner-inverted-ratio: math.div(1, 6);
 
 $max-channels-width: 1200px;
 
