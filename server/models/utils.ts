@@ -74,8 +74,8 @@ function getVideoSort (value: string, lastSort: OrderItem = [ 'id', 'ASC' ]): Or
     finalField = field
   }
 
-  const firstSort = typeof finalField === 'string'
-    ? finalField.split('.').concat([ direction ]) as any // FIXME: sequelize typings
+  const firstSort: OrderItem = typeof finalField === 'string'
+    ? finalField.split('.').concat([ direction ]) as OrderItem
     : [ finalField, direction ]
 
   return [ firstSort, lastSort ]
@@ -84,7 +84,7 @@ function getVideoSort (value: string, lastSort: OrderItem = [ 'id', 'ASC' ]): Or
 function getBlacklistSort (model: any, value: string, lastSort: OrderItem = [ 'id', 'ASC' ]): OrderItem[] {
   const [ firstSort ] = getSort(value)
 
-  if (model) return [ [ literal(`"${model}.${firstSort[0]}" ${firstSort[1]}`) ], lastSort ] as any[] // FIXME: typings
+  if (model) return [ [ literal(`"${model}.${firstSort[0]}" ${firstSort[1]}`) ], lastSort ] as OrderItem[]
   return [ firstSort, lastSort ]
 }
 

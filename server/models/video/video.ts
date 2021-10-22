@@ -864,7 +864,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
       distinct: true,
       offset: start,
       limit: count,
-      order: getVideoSort('-createdAt', [ 'Tags', 'name', 'ASC' ] as any), // FIXME: sequelize typings
+      order: getVideoSort('-createdAt', [ 'Tags', 'name', 'ASC' ]),
       where: {
         id: {
           [Op.in]: Sequelize.literal('(' + rawQuery + ')')
