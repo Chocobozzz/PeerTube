@@ -6,7 +6,6 @@ import { VideoRedundancyConfigFilter } from '@shared/models/redundancy/video-red
 import { BroadcastMessageLevel } from '@shared/models/server'
 import { VideosRedundancyStrategy } from '../../shared/models'
 import { NSFWPolicyType } from '../../shared/models/videos/nsfw-policy.type'
-// Do not use barrels, remain constants as independent as possible
 import { buildPath, parseBytes, parseDurationToMs, root } from '../helpers/core-utils'
 
 // Use a variable to reload the configuration if we need
