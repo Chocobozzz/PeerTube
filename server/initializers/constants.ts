@@ -583,7 +583,6 @@ const NSFW_POLICY_TYPES: { [ id: string ]: NSFWPolicyType } = {
 // Express static paths (router)
 const STATIC_PATHS = {
   THUMBNAILS: '/static/thumbnails/',
-  TORRENTS: '/static/torrents/',
   WEBSEED: '/static/webseed/',
   REDUNDANCY: '/static/redundancy/',
   STREAMING_PLAYLISTS: {
