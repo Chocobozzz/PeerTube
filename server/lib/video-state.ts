@@ -11,6 +11,10 @@ import { Notifier } from './notifier'
 import { addMoveToObjectStorageJob } from './video'
 
 function buildNextVideoState (currentState?: VideoState) {
+  if (currentState === VideoState.TO_MIGRATE_TO_EXTERNAL_STORAGE) {
+    return VideoState.TO_MOVE_TO_EXTERNAL_STORAGE
+  }
+
   if (currentState === VideoState.PUBLISHED) {
     throw new Error('Video is already in its final state')
   }
