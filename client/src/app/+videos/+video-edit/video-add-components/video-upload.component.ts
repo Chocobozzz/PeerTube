@@ -121,7 +121,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     let text = ''
 
     if (this.videoUploaded === true) {
-      // FIXME: cannot concatenate strings using $localize
+      // We can't concatenate strings using $localize
       text = $localize`Your video was uploaded to your account and is private.` + ' ' +
         $localize`But associated data (tags, description...) will be lost, are you sure you want to leave this page?`
     } else {
