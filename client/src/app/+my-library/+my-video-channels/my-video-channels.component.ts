@@ -3,7 +3,7 @@ import { max, maxBy, min, minBy } from 'lodash-es'
 import { mergeMap } from 'rxjs/operators'
 import { Component } from '@angular/core'
 import { AuthService, ConfirmService, Notifier, ScreenService } from '@app/core'
-import { VideoChannel, VideoChannelService } from '@app/shared/shared-main'
+import { VideoChannel, VideoChannelService, VideoService } from '@app/shared/shared-main'
 
 @Component({
   templateUrl: './my-video-channels.component.html',
@@ -13,6 +13,7 @@ export class MyVideoChannelsComponent {
   totalItems: number
 
   videoChannels: VideoChannel[] = []
+  videoChannelsViewCount: Record<string, number> = {}
 
   videoChannelsChartData: ChartData[]
   videoChannelsMinimumDailyViews = 0
@@ -27,6 +28,7 @@ export class MyVideoChannelsComponent {
     private notifier: Notifier,
     private confirmService: ConfirmService,
     private videoChannelService: VideoChannelService,
+    private videoService: VideoService,
     private screenService: ScreenService
   ) {}
 
@@ -79,6 +81,8 @@ channel with the same name (${videoChannel.name})!`,
         })).subscribe(res => {
           this.videoChannels = res.data
           this.totalItems = res.total
+
+          this.getVideoChannelsViewsCounts()
 
           // chart data
           this.videoChannelsChartData = this.videoChannels.map(v => ({
@@ -163,5 +167,20 @@ channel with the same name (${videoChannel.name})!`,
         intersect: false
       }
     }
+  }
+
+  private getVideoChannelsViewsCounts() {
+    this.videoChannels.forEach(element => {
+      this.videoService.getVideoChannelVideos({
+        videoChannel: element,
+        videoPagination: {
+          currentPage: 1,
+          itemsPerPage: 50 // how to get it more than that?
+        },
+        sort: '-publishedAt'
+      }).subscribe(res => {
+        this.videoChannelsViewCount[element.nameWithHost] = res.data.map(video => video.views).reduce((acc, views) => acc + views, 0)
+      });
+    });
   }
 }
