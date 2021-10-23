@@ -1,6 +1,7 @@
 import { LinkType } from 'src/types/link.type'
 import { Component, Input, OnInit } from '@angular/core'
 import { VideoPlaylist } from './video-playlist.model'
+import { MarkdownService } from '@app/core'
 
 @Component({
   selector: 'my-video-playlist-miniature',
@@ -22,9 +23,17 @@ export class VideoPlaylistMiniatureComponent implements OnInit {
   routerLink: any
   playlistHref: string
   playlistTarget: string
+  playlistDescription: string
 
-  ngOnInit () {
+  constructor (
+    private markdownService: MarkdownService
+  ) {}
+
+  async ngOnInit () {
     this.buildPlaylistUrl()
+    if (this.displayDescription) {
+      this.playlistDescription = await this.markdownService.textMarkdownToHTML(this.playlist.description)
+    }
   }
 
   buildPlaylistUrl () {
