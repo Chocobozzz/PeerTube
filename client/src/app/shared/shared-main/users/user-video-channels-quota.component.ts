@@ -1,12 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core'
 import { HTMLServerConfig } from '@shared/models/server'
-import { ServerService } from '@app/core'
-import { User } from '@app/core'
+import { ServerService, User } from '@app/core'
 
 @Component({
-    selector: 'my-user-video-channels-quota',
-    templateUrl: './user-video-channels-quota.component.html',
-    styleUrls: [ './user-video-channels-quota.component.scss' ]
+  selector: 'my-user-video-channels-quota',
+  templateUrl: './user-video-channels-quota.component.html',
+  styleUrls: [ './user-video-channels-quota.component.scss' ]
 })
 
 export class UserVideoChannelsQuotaComponent implements OnInit {
@@ -22,7 +21,7 @@ export class UserVideoChannelsQuotaComponent implements OnInit {
     private serverService: ServerService
   ) { }
 
-  ngOnInit() {
+  ngOnInit () {
     this.serverConfig = this.serverService.getHTMLConfig()
     this.maxVideoChannelsQuota = this.serverConfig.videoChannels.maxPerUser
 
@@ -32,6 +31,6 @@ export class UserVideoChannelsQuotaComponent implements OnInit {
   }
 
   titleVideoChannelsQuota () {
-    return `${ this.userVideoChannels } / ${ this.maxVideoChannelsQuota }`
+    return `${this.userVideoChannels} / ${this.maxVideoChannelsQuota}`
   }
 }
