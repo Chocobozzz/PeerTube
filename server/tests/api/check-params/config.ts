@@ -93,6 +93,7 @@ describe('Test config API validators', function () {
       profile: 'vod_profile',
       resolutions: {
         '0p': false,
+        '144p': false,
         '240p': false,
         '360p': true,
         '480p': true,
@@ -121,6 +122,7 @@ describe('Test config API validators', function () {
         threads: 4,
         profile: 'live_profile',
         resolutions: {
+          '144p': true,
           '240p': true,
           '360p': true,
           '480p': true,

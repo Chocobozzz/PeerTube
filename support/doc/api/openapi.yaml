@@ -6167,6 +6167,8 @@ components:
               properties:
                 0p:
                   type: boolean
+                144p:
+                  type: boolean
                 240p:
                   type: boolean
                 360p:

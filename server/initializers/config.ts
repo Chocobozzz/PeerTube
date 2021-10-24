@@ -245,6 +245,7 @@ const CONFIG = {
     get PROFILE () { return config.get<string>('transcoding.profile') },
     RESOLUTIONS: {
       get '0p' () { return config.get<boolean>('transcoding.resolutions.0p') },
+      get '144p' () { return config.get<boolean>('transcoding.resolutions.144p') },
       get '240p' () { return config.get<boolean>('transcoding.resolutions.240p') },
       get '360p' () { return config.get<boolean>('transcoding.resolutions.360p') },
       get '480p' () { return config.get<boolean>('transcoding.resolutions.480p') },
@@ -279,6 +280,7 @@ const CONFIG = {
       get PROFILE () { return config.get<string>('live.transcoding.profile') },
 
       RESOLUTIONS: {
+        get '144p' () { return config.get<boolean>('live.transcoding.resolutions.144p') },
         get '240p' () { return config.get<boolean>('live.transcoding.resolutions.240p') },
         get '360p' () { return config.get<boolean>('live.transcoding.resolutions.360p') },
         get '480p' () { return config.get<boolean>('live.transcoding.resolutions.480p') },

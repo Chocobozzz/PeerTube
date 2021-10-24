@@ -18,6 +18,10 @@ export class EditConfigurationService {
         description: $localize`A <code>.mp4</code> that keeps the original audio track, with no video`
       },
       {
+        id: '144p',
+        label: $localize`144p`
+      },
+      {
         id: '240p',
         label: $localize`240p`
       },

@@ -80,6 +80,7 @@ transcoding:
   concurrency: 2
   resolutions:
     0p: false
+    144p: true
     240p: true
     360p: true
     480p: true
@@ -105,6 +106,7 @@ live:
     threads: 2
 
     resolutions:
+      144p: false
       240p: false
       360p: false
       480p: false

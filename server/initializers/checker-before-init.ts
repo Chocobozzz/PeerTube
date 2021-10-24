@@ -28,8 +28,9 @@ function checkMissedConfig () {
     'redundancy.videos.strategies', 'redundancy.videos.check_interval',
     'transcoding.enabled', 'transcoding.threads', 'transcoding.allow_additional_extensions', 'transcoding.hls.enabled',
     'transcoding.profile', 'transcoding.concurrency',
-    'transcoding.resolutions.0p', 'transcoding.resolutions.240p', 'transcoding.resolutions.360p', 'transcoding.resolutions.480p',
-    'transcoding.resolutions.720p', 'transcoding.resolutions.1080p', 'transcoding.resolutions.1440p', 'transcoding.resolutions.2160p',
+    'transcoding.resolutions.0p', 'transcoding.resolutions.144p', 'transcoding.resolutions.240p', 'transcoding.resolutions.360p',
+    'transcoding.resolutions.480p', 'transcoding.resolutions.720p', 'transcoding.resolutions.1080p', 'transcoding.resolutions.1440p',
+    'transcoding.resolutions.2160p',
     'import.videos.http.enabled', 'import.videos.torrent.enabled', 'import.videos.concurrency', 'auto_blacklist.videos.of_users.enabled',
     'trending.videos.interval_days',
     'instance.name', 'instance.short_description', 'instance.description', 'instance.terms', 'instance.default_client_route',
@@ -47,9 +48,9 @@ function checkMissedConfig () {
     'search.search_index.disable_local_search', 'search.search_index.is_default_search',
     'live.enabled', 'live.allow_replay', 'live.max_duration', 'live.max_user_lives', 'live.max_instance_lives',
     'live.transcoding.enabled', 'live.transcoding.threads', 'live.transcoding.profile',
-    'live.transcoding.resolutions.240p', 'live.transcoding.resolutions.360p', 'live.transcoding.resolutions.480p',
-    'live.transcoding.resolutions.720p', 'live.transcoding.resolutions.1080p', 'live.transcoding.resolutions.1440p',
-    'live.transcoding.resolutions.2160p'
+    'live.transcoding.resolutions.144p', 'live.transcoding.resolutions.240p', 'live.transcoding.resolutions.360p',
+    'live.transcoding.resolutions.480p', 'live.transcoding.resolutions.720p', 'live.transcoding.resolutions.1080p',
+    'live.transcoding.resolutions.1440p', 'live.transcoding.resolutions.2160p'
   ]
 
   const requiredAlternatives = [

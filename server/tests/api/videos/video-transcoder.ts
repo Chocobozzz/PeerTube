@@ -40,6 +40,7 @@ function updateConfigForTranscoding (server: PeerTubeServer) {
         webtorrent: { enabled: true },
         resolutions: {
           '0p': false,
+          '144p': true,
           '240p': true,
           '360p': true,
           '480p': true,
@@ -348,6 +349,7 @@ describe('Test video transcoding', function () {
               webtorrent: { enabled: true },
               resolutions: {
                 '0p': false,
+                '144p': false,
                 '240p': false,
                 '360p': false,
                 '480p': false,
@@ -419,6 +421,7 @@ describe('Test video transcoding', function () {
               webtorrent: { enabled: true },
               resolutions: {
                 '0p': true,
+                '144p': false,
                 '240p': false,
                 '360p': false
               }
@@ -586,6 +589,7 @@ describe('Test video transcoding', function () {
         transcoding: {
           enabled: true,
           resolutions: {
+            '144p': true,
             '240p': true,
             '360p': true,
             '480p': true,
