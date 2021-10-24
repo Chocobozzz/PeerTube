@@ -169,7 +169,7 @@ channel with the same name (${videoChannel.name})!`,
     }
   }
 
-  private getVideoChannelsViewsCounts() {
+  private getVideoChannelsViewsCounts () {
     this.videoChannels.forEach(element => {
       this.videoService.getVideoChannelVideos({
         videoChannel: element,
@@ -180,7 +180,7 @@ channel with the same name (${videoChannel.name})!`,
         sort: '-publishedAt'
       }).subscribe(res => {
         this.videoChannelsViewCount[element.nameWithHost] = res.data.map(video => video.views).reduce((acc, views) => acc + views, 0)
-      });
-    });
+      })
+    })
   }
 }
