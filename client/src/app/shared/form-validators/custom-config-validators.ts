@@ -98,6 +98,15 @@ export const MAX_USER_LIVES_VALIDATOR: BuildFormValidator = {
   }
 }
 
+export const MAX_VIDEO_CHANNELS_PER_USER_VALIDATOR: BuildFormValidator = {
+  VALIDATORS: [Validators.required, Validators.min(1), Validators.pattern('[0-9]+')],
+  MESSAGES: {
+    required: $localize`Max video channels per user is required.`,
+    min: $localize`Max video channels per user must be greater or equal to 1.`,
+    pattern: $localize`Max video channels per user must be a number.`
+  }
+}
+
 export const CONCURRENCY_VALIDATOR: BuildFormValidator = {
   VALIDATORS: [ Validators.required, Validators.min(1) ],
   MESSAGES: {

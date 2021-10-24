@@ -58,6 +58,8 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
   expect(data.user.videoQuota).to.equal(5242880)
   expect(data.user.videoQuotaDaily).to.equal(-1)
 
+  expect(data.videoChannels.maxPerUser).to.equal(20)
+
   expect(data.transcoding.enabled).to.be.false
   expect(data.transcoding.allowAdditionalExtensions).to.be.false
   expect(data.transcoding.allowAudioFiles).to.be.false
@@ -152,6 +154,8 @@ function checkUpdatedConfig (data: CustomConfig) {
 
   expect(data.user.videoQuota).to.equal(5242881)
   expect(data.user.videoQuotaDaily).to.equal(318742)
+
+  expect(data.videoChannels.maxPerUser).to.equal(24)
 
   expect(data.transcoding.enabled).to.be.true
   expect(data.transcoding.threads).to.equal(1)
@@ -264,6 +268,9 @@ const newCustomConfig: CustomConfig = {
   user: {
     videoQuota: 5242881,
     videoQuotaDaily: 318742
+  },
+  videoChannels: {
+    maxPerUser: 24
   },
   transcoding: {
     enabled: true,

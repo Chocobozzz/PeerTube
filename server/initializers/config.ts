@@ -234,6 +234,9 @@ const CONFIG = {
     get VIDEO_QUOTA () { return parseBytes(config.get<number>('user.video_quota')) },
     get VIDEO_QUOTA_DAILY () { return parseBytes(config.get<number>('user.video_quota_daily')) }
   },
+  VIDEO_CHANNELS: {
+    get MAX_PER_USER() { return config.get<number>('video_channels.max_per_user') }
+  },
   TRANSCODING: {
     get ENABLED () { return config.get<boolean>('transcoding.enabled') },
     get ALLOW_ADDITIONAL_EXTENSIONS () { return config.get<boolean>('transcoding.allow_additional_extensions') },

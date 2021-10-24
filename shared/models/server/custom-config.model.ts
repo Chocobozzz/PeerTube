@@ -85,6 +85,10 @@ export interface CustomConfig {
     videoQuotaDaily: number
   }
 
+  videoChannels: {
+    maxPerUser: number
+  }
+
   transcoding: {
     enabled: boolean
 

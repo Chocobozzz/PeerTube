@@ -196,6 +196,9 @@ function customConfig (): CustomConfig {
       videoQuota: CONFIG.USER.VIDEO_QUOTA,
       videoQuotaDaily: CONFIG.USER.VIDEO_QUOTA_DAILY
     },
+    videoChannels: {
+      maxPerUser: CONFIG.VIDEO_CHANNELS.MAX_PER_USER
+    },
     transcoding: {
       enabled: CONFIG.TRANSCODING.ENABLED,
       allowAdditionalExtensions: CONFIG.TRANSCODING.ALLOW_ADDITIONAL_EXTENSIONS,

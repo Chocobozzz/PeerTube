@@ -184,6 +184,9 @@ class ServerConfigManager {
         videoQuota: CONFIG.USER.VIDEO_QUOTA,
         videoQuotaDaily: CONFIG.USER.VIDEO_QUOTA_DAILY
       },
+      videoChannels: {
+        maxPerUser: CONFIG.VIDEO_CHANNELS.MAX_PER_USER
+      },
       trending: {
         videos: {
           intervalDays: CONFIG.TRENDING.VIDEOS.INTERVAL_DAYS,

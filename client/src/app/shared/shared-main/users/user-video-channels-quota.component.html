@@ -1,0 +1,11 @@
+<div class="user-video-channels-quota mb-3">
+  <div>
+    <label class="user-video-channels-quota-title" tabindex="0" i18n>Total video channels quota</label>
+    <div class="progress" tabindex="0" [ngbTooltip]="titleVideoChannelsQuota()">
+      <div class="progress-bar" tabindex="0" role="progressbar" [style]="{ width: userVideoChannelsPercentage + '%' }"
+        [attr.aria-valuenow]="userVideoChannels" aria-valuemin="0" [attr.aria-valuemax]="maxVideoChannelsQuota"></div>
+      <span>{{ userVideoChannels }}</span>
+      <span>{{ maxVideoChannelsQuota }}</span>
+    </div>
+  </div>
+</div>

@@ -81,6 +81,9 @@ describe('Test config API validators', function () {
       videoQuota: 5242881,
       videoQuotaDaily: 318742
     },
+    videoChannels: {
+      maxPerUser: 20,
+    },
     transcoding: {
       enabled: true,
       allowAdditionalExtensions: true,

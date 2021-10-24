@@ -203,6 +203,10 @@ export interface ServerConfig {
     videoQuotaDaily: number
   }
 
+  videoChannels: {
+    maxPerUser: number
+  }
+
   trending: {
     videos: {
       intervalDays: number

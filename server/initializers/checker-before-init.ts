@@ -19,6 +19,7 @@ function checkMissedConfig () {
     'storage.redundancy', 'storage.tmp', 'storage.streaming_playlists', 'storage.plugins',
     'log.level',
     'user.video_quota', 'user.video_quota_daily',
+    'video_channels.max_per_user',
     'csp.enabled', 'csp.report_only', 'csp.report_uri',
     'security.frameguard.enabled',
     'cache.previews.size', 'cache.captions.size', 'cache.torrents.size', 'admin.email', 'contact_form.enabled',
