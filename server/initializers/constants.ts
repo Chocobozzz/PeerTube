@@ -151,7 +151,6 @@ const JOB_ATTEMPTS: { [id in JobType]: number } = {
   'activitypub-refresher': 1,
   'video-redundancy': 1,
   'video-live-ending': 1,
-  'delete-resumable-upload-meta-file': 1,
   'move-to-object-storage': 3
 }
 // Excluded keys are jobs that can be configured by admins
@@ -168,7 +167,6 @@ const JOB_CONCURRENCY: { [id in Exclude<JobType, 'video-transcoding' | 'video-im
   'activitypub-refresher': 1,
   'video-redundancy': 1,
   'video-live-ending': 10,
-  'delete-resumable-upload-meta-file': 5,
   'move-to-object-storage': 1
 }
 const JOB_TTL: { [id in JobType]: number } = {
@@ -186,7 +184,6 @@ const JOB_TTL: { [id in JobType]: number } = {
   'activitypub-refresher': 60000 * 10, // 10 minutes
   'video-redundancy': 1000 * 3600 * 3, // 3 hours
   'video-live-ending': 1000 * 60 * 10, // 10 minutes
-  'delete-resumable-upload-meta-file': 60000 * 10, // 10 minutes
   'move-to-object-storage': 1000 * 60 * 60 * 3 // 3 hours
 }
 const REPEAT_JOBS: { [ id: string ]: EveryRepeatOptions | CronRepeatOptions } = {
@@ -668,7 +665,7 @@ const RESUMABLE_UPLOAD_DIRECTORY = join(CONFIG.STORAGE.TMP_DIR, 'resumable-uploa
 const HLS_STREAMING_PLAYLIST_DIRECTORY = join(CONFIG.STORAGE.STREAMING_PLAYLISTS_DIR, 'hls')
 const HLS_REDUNDANCY_DIRECTORY = join(CONFIG.STORAGE.REDUNDANCY_DIR, 'hls')
 
-const RESUMABLE_UPLOAD_SESSION_LIFETIME = 60000 * 60 * 16 // 16 hours
+const RESUMABLE_UPLOAD_SESSION_LIFETIME = SCHEDULER_INTERVALS_MS.REMOVE_DANGLING_RESUMABLE_UPLOADS
 
 const VIDEO_LIVE = {
   EXTENSION: '.ts',

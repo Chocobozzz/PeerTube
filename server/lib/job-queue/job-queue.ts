@@ -37,7 +37,6 @@ import { processVideoImport } from './handlers/video-import'
 import { processVideoLiveEnding } from './handlers/video-live-ending'
 import { processVideoTranscoding } from './handlers/video-transcoding'
 import { processVideosViews } from './handlers/video-views'
-import { processDeleteResumableUploadMetaFile } from './handlers/delete-resumable-upload-meta-file'
 
 type CreateJobArgument =
   { type: 'activitypub-http-broadcast', payload: ActivitypubHttpBroadcastPayload } |
@@ -77,7 +76,6 @@ const handlers: { [id in JobType]: (job: Job) => Promise<any> } = {
   'video-live-ending': processVideoLiveEnding,
   'actor-keys': processActorKeys,
   'video-redundancy': processVideoRedundancy,
-  'delete-resumable-upload-meta-file': processDeleteResumableUploadMetaFile,
   'move-to-object-storage': processMoveToObjectStorage
 }
 
@@ -96,7 +94,6 @@ const jobTypes: JobType[] = [
   'video-redundancy',
   'actor-keys',
   'video-live-ending',
-  'delete-resumable-upload-meta-file',
   'move-to-object-storage'
 ]
 

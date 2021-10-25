@@ -19,7 +19,6 @@ export type JobType =
   | 'video-redundancy'
   | 'video-live-ending'
   | 'actor-keys'
-  | 'delete-resumable-upload-meta-file'
   | 'move-to-object-storage'
 
 export interface Job {
