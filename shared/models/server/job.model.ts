@@ -138,6 +138,10 @@ export interface ActorKeysPayload {
   actorId: number
 }
 
+export interface DeleteResumableUploadMetaFilePayload {
+  filepath: string
+}
+
 export interface MoveObjectStoragePayload {
   videoUUID: string
   isNewVideo: boolean

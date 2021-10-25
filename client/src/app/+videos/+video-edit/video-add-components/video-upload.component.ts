@@ -82,9 +82,10 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
       uploaderClass: UploaderXFormData,
       chunkSize,
       retryConfig: {
-        maxAttempts: 6,
-        shouldRetry: (code: number) => {
-          return code < 400 || code >= 501
+        maxAttempts: 30, // maximum attempts for 503 codes, otherwise set to 6, see below
+        maxDelay: 120_000, // 2 min
+        shouldRetry: (code: number, attempts: number) => {
+          return code === HttpStatusCode.SERVICE_UNAVAILABLE_503 || ((code < 400 || code > 500) && attempts < 6)
         }
       }
     }

@@ -8,6 +8,7 @@ import {
   ActivitypubHttpFetcherPayload,
   ActivitypubHttpUnicastPayload,
   ActorKeysPayload,
+  DeleteResumableUploadMetaFilePayload,
   EmailPayload,
   JobState,
   JobType,
@@ -52,6 +53,7 @@ type CreateJobArgument =
   { type: 'video-live-ending', payload: VideoLiveEndingPayload } |
   { type: 'actor-keys', payload: ActorKeysPayload } |
   { type: 'video-redundancy', payload: VideoRedundancyPayload } |
+  { type: 'delete-resumable-upload-meta-file', payload: DeleteResumableUploadMetaFilePayload } |
   { type: 'move-to-object-storage', payload: MoveObjectStoragePayload }
 
 export type CreateJobOptions = {
