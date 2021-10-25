@@ -1,9 +1,9 @@
 import 'multer'
-import * as express from 'express'
+import express from 'express'
+import { pickCommonVideoQuery } from '@server/helpers/query'
 import { sendUndoFollow } from '@server/lib/activitypub/send'
 import { VideoChannelModel } from '@server/models/video/video-channel'
-import { VideosCommonQuery } from '@shared/models'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
 import { buildNSFWFilter, getCountVideos } from '../../../helpers/express-utils'
 import { getFormattedObjects } from '../../../helpers/utils'
 import { WEBSERVER } from '../../../initializers/constants'
@@ -95,7 +95,7 @@ async function areSubscriptionsExist (req: express.Request, res: express.Respons
     return { name, host, uri: u }
   })
 
-  const results = await ActorFollowModel.listSubscribedIn(user.Account.Actor.id, handles)
+  const results = await ActorFollowModel.listSubscriptionsOf(user.Account.Actor.id, handles)
 
   const existObject: { [id: string ]: boolean } = {}
   for (const handle of handles) {
@@ -170,20 +170,13 @@ async function getUserSubscriptions (req: express.Request, res: express.Response
 async function getUserSubscriptionVideos (req: express.Request, res: express.Response) {
   const user = res.locals.oauth.token.User
   const countVideos = getCountVideos(req)
-  const query = req.query as VideosCommonQuery
+  const query = pickCommonVideoQuery(req.query)
 
   const resultList = await VideoModel.listForApi({
-    start: query.start,
-    count: query.count,
-    sort: query.sort,
+    ...query,
+
     includeLocalVideos: false,
-    categoryOneOf: query.categoryOneOf,
-    licenceOneOf: query.licenceOneOf,
-    languageOneOf: query.languageOneOf,
-    tagsOneOf: query.tagsOneOf,
-    tagsAllOf: query.tagsAllOf,
     nsfw: buildNSFWFilter(res, query.nsfw),
-    filter: query.filter,
     withFiles: false,
     followerActorId: user.Account.Actor.id,
     user,

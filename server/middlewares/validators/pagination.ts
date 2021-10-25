@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { query } from 'express-validator'
 import { PAGINATION } from '@server/initializers/constants'
 import { logger } from '../../helpers/logger'

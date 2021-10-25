@@ -1,61 +1,38 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-import { ServerHookName, VideoPrivacy } from '@shared/models'
-import {
-  addVideoCommentReply,
-  addVideoCommentThread,
-  blockUser,
-  createLive,
-  createUser,
-  deleteVideoComment,
-  getPluginTestPath,
-  installPlugin,
-  registerUser,
-  removeUser,
-  setAccessTokensToServers,
-  setDefaultVideoChannel,
-  unblockUser,
-  updateUser,
-  updateVideo,
-  uploadVideo,
-  userLogin,
-  viewVideo
-} from '../../../shared/extra-utils'
 import {
   cleanupTests,
-  flushAndRunMultipleServers,
+  createMultipleServers,
   killallServers,
-  reRunServer,
-  ServerInfo,
-  waitUntilLog
-} from '../../../shared/extra-utils/server/servers'
+  PeerTubeServer,
+  PluginsCommand,
+  setAccessTokensToServers,
+  setDefaultVideoChannel
+} from '@shared/extra-utils'
+import { ServerHookName, VideoPlaylistPrivacy, VideoPrivacy } from '@shared/models'
 
 describe('Test plugin action hooks', function () {
-  let servers: ServerInfo[]
+  let servers: PeerTubeServer[]
   let videoUUID: string
   let threadId: number
 
   function checkHook (hook: ServerHookName) {
-    return waitUntilLog(servers[0], 'Run hook ' + hook)
+    return servers[0].servers.waitUntilLog('Run hook ' + hook)
   }
 
   before(async function () {
     this.timeout(30000)
 
-    servers = await flushAndRunMultipleServers(2)
+    servers = await createMultipleServers(2)
     await setAccessTokensToServers(servers)
     await setDefaultVideoChannel(servers)
 
-    await installPlugin({
-      url: servers[0].url,
-      accessToken: servers[0].accessToken,
-      path: getPluginTestPath()
-    })
+    await servers[0].plugins.install({ path: PluginsCommand.getPluginTestPath() })
 
-    killallServers([ servers[0] ])
+    await killallServers([ servers[0] ])
 
-    await reRunServer(servers[0], {
+    await servers[0].run({
       live: {
         enabled: true
       }
@@ -69,21 +46,22 @@ describe('Test plugin action hooks', function () {
   })
 
   describe('Videos hooks', function () {
+
     it('Should run action:api.video.uploaded', async function () {
-      const res = await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'video' })
-      videoUUID = res.body.video.uuid
+      const { uuid } = await servers[0].videos.upload({ attributes: { name: 'video' } })
+      videoUUID = uuid
 
       await checkHook('action:api.video.uploaded')
     })
 
     it('Should run action:api.video.updated', async function () {
-      await updateVideo(servers[0].url, servers[0].accessToken, videoUUID, { name: 'video updated' })
+      await servers[0].videos.update({ id: videoUUID, attributes: { name: 'video updated' } })
 
       await checkHook('action:api.video.updated')
     })
 
     it('Should run action:api.video.viewed', async function () {
-      await viewVideo(servers[0].url, videoUUID)
+      await servers[0].videos.view({ id: videoUUID })
 
       await checkHook('action:api.video.viewed')
     })
@@ -95,10 +73,10 @@ describe('Test plugin action hooks', function () {
       const attributes = {
         name: 'live',
         privacy: VideoPrivacy.PUBLIC,
-        channelId: servers[0].videoChannel.id
+        channelId: servers[0].store.channel.id
       }
 
-      await createLive(servers[0].url, servers[0].accessToken, attributes)
+      await servers[0].live.create({ fields: attributes })
 
       await checkHook('action:api.live-video.created')
     })
@@ -106,20 +84,20 @@ describe('Test plugin action hooks', function () {
 
   describe('Comments hooks', function () {
     it('Should run action:api.video-thread.created', async function () {
-      const res = await addVideoCommentThread(servers[0].url, servers[0].accessToken, videoUUID, 'thread')
-      threadId = res.body.comment.id
+      const created = await servers[0].comments.createThread({ videoId: videoUUID, text: 'thread' })
+      threadId = created.id
 
       await checkHook('action:api.video-thread.created')
     })
 
     it('Should run action:api.video-comment-reply.created', async function () {
-      await addVideoCommentReply(servers[0].url, servers[0].accessToken, videoUUID, threadId, 'reply')
+      await servers[0].comments.addReply({ videoId: videoUUID, toCommentId: threadId, text: 'reply' })
 
       await checkHook('action:api.video-comment-reply.created')
     })
 
     it('Should run action:api.video-comment.deleted', async function () {
-      await deleteVideoComment(servers[0].url, servers[0].accessToken, videoUUID, threadId)
+      await servers[0].comments.delete({ videoId: videoUUID, commentId: threadId })
 
       await checkHook('action:api.video-comment.deleted')
     })
@@ -129,51 +107,74 @@ describe('Test plugin action hooks', function () {
     let userId: number
 
     it('Should run action:api.user.registered', async function () {
-      await registerUser(servers[0].url, 'registered_user', 'super_password')
+      await servers[0].users.register({ username: 'registered_user' })
 
       await checkHook('action:api.user.registered')
     })
 
     it('Should run action:api.user.created', async function () {
-      const res = await createUser({
-        url: servers[0].url,
-        accessToken: servers[0].accessToken,
-        username: 'created_user',
-        password: 'super_password'
-      })
-      userId = res.body.user.id
+      const user = await servers[0].users.create({ username: 'created_user' })
+      userId = user.id
 
       await checkHook('action:api.user.created')
     })
 
     it('Should run action:api.user.oauth2-got-token', async function () {
-      await userLogin(servers[0], { username: 'created_user', password: 'super_password' })
+      await servers[0].login.login({ user: { username: 'created_user' } })
 
       await checkHook('action:api.user.oauth2-got-token')
     })
 
     it('Should run action:api.user.blocked', async function () {
-      await blockUser(servers[0].url, userId, servers[0].accessToken)
+      await servers[0].users.banUser({ userId })
 
       await checkHook('action:api.user.blocked')
     })
 
     it('Should run action:api.user.unblocked', async function () {
-      await unblockUser(servers[0].url, userId, servers[0].accessToken)
+      await servers[0].users.unbanUser({ userId })
 
       await checkHook('action:api.user.unblocked')
     })
 
     it('Should run action:api.user.updated', async function () {
-      await updateUser({ url: servers[0].url, accessToken: servers[0].accessToken, userId, videoQuota: 50 })
+      await servers[0].users.update({ userId, videoQuota: 50 })
 
       await checkHook('action:api.user.updated')
     })
 
     it('Should run action:api.user.deleted', async function () {
-      await removeUser(servers[0].url, userId, servers[0].accessToken)
+      await servers[0].users.remove({ userId })
 
       await checkHook('action:api.user.deleted')
+    })
+  })
+
+  describe('Playlist hooks', function () {
+    let playlistId: number
+    let videoId: number
+
+    before(async function () {
+      {
+        const { id } = await servers[0].playlists.create({
+          attributes: {
+            displayName: 'My playlist',
+            privacy: VideoPlaylistPrivacy.PRIVATE
+          }
+        })
+        playlistId = id
+      }
+
+      {
+        const { id } = await servers[0].videos.upload({ attributes: { name: 'my super name' } })
+        videoId = id
+      }
+    })
+
+    it('Should run action:api.video-playlist-element.created', async function () {
+      await servers[0].playlists.addElement({ playlistId, attributes: { videoId } })
+
+      await checkHook('action:api.video-playlist-element.created')
     })
   })
 

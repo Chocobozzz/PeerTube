@@ -1,3 +1,5 @@
+import { of } from 'rxjs'
+import { switchMap } from 'rxjs/operators'
 import { Component, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
 import { AuthService, Notifier } from '@app/core'
@@ -9,11 +11,8 @@ import {
 } from '@app/shared/form-validators/video-channel-validators'
 import { FormValidatorService } from '@app/shared/shared-forms'
 import { VideoChannel, VideoChannelService } from '@app/shared/shared-main'
-import { VideoChannelCreate } from '@shared/models'
-import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode, VideoChannelCreate } from '@shared/models'
 import { MyVideoChannelEdit } from './my-video-channel-edit'
-import { switchMap } from 'rxjs/operators'
-import { of } from 'rxjs'
 
 @Component({
   templateUrl: './my-video-channel-edit.component.html',
@@ -32,7 +31,7 @@ export class MyVideoChannelCreateComponent extends MyVideoChannelEdit implements
     private notifier: Notifier,
     private router: Router,
     private videoChannelService: VideoChannelService
-    ) {
+  ) {
     super()
   }
 
@@ -60,15 +59,15 @@ export class MyVideoChannelCreateComponent extends MyVideoChannelEdit implements
       .pipe(
         switchMap(() => this.uploadAvatar()),
         switchMap(() => this.uploadBanner())
-      ).subscribe(
-        () => {
+      ).subscribe({
+        next: () => {
           this.authService.refreshUserInformation()
 
           this.notifier.success($localize`Video channel ${videoChannelCreate.displayName} created.`)
-          this.router.navigate(['/my-library', 'video-channels'])
+          this.router.navigate([ '/my-library', 'video-channels' ])
         },
 
-        err => {
+        error: err => {
           if (err.status === HttpStatusCode.CONFLICT_409) {
             this.error = $localize`This name already exists on this instance.`
             return
@@ -76,7 +75,7 @@ export class MyVideoChannelCreateComponent extends MyVideoChannelEdit implements
 
           this.error = err.message
         }
-      )
+      })
   }
 
   onAvatarChange (formData: FormData) {

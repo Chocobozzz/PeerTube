@@ -1,6 +1,6 @@
-import * as express from 'express'
+import express from 'express'
 import { getServerActor } from '@server/models/application/application'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
 import { UserRight } from '../../../../shared/models/users'
 import { logger } from '../../../helpers/logger'
 import { getFormattedObjects } from '../../../helpers/utils'
@@ -21,20 +21,21 @@ import {
 } from '../../../middlewares'
 import {
   acceptOrRejectFollowerValidator,
-  followersSortValidator,
-  followingSortValidator,
+  instanceFollowersSortValidator,
+  instanceFollowingSortValidator,
   followValidator,
   getFollowerValidator,
   listFollowsValidator,
   removeFollowingValidator
 } from '../../../middlewares/validators'
 import { ActorFollowModel } from '../../../models/actor/actor-follow'
+import { ServerFollowCreate } from '@shared/models'
 
 const serverFollowsRouter = express.Router()
 serverFollowsRouter.get('/following',
   listFollowsValidator,
   paginationValidator,
-  followingSortValidator,
+  instanceFollowingSortValidator,
   setDefaultSort,
   setDefaultPagination,
   asyncMiddleware(listFollowing)
@@ -45,10 +46,10 @@ serverFollowsRouter.post('/following',
   ensureUserHasRight(UserRight.MANAGE_SERVER_FOLLOW),
   followValidator,
   setBodyHostsPort,
-  asyncMiddleware(followInstance)
+  asyncMiddleware(addFollow)
 )
 
-serverFollowsRouter.delete('/following/:host',
+serverFollowsRouter.delete('/following/:hostOrHandle',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_SERVER_FOLLOW),
   asyncMiddleware(removeFollowingValidator),
@@ -58,7 +59,7 @@ serverFollowsRouter.delete('/following/:host',
 serverFollowsRouter.get('/followers',
   listFollowsValidator,
   paginationValidator,
-  followersSortValidator,
+  instanceFollowersSortValidator,
   setDefaultSort,
   setDefaultPagination,
   asyncMiddleware(listFollowers)
@@ -97,7 +98,7 @@ export {
 
 async function listFollowing (req: express.Request, res: express.Response) {
   const serverActor = await getServerActor()
-  const resultList = await ActorFollowModel.listFollowingForApi({
+  const resultList = await ActorFollowModel.listInstanceFollowingForApi({
     id: serverActor.id,
     start: req.query.start,
     count: req.query.count,
@@ -113,7 +114,7 @@ async function listFollowing (req: express.Request, res: express.Response) {
 async function listFollowers (req: express.Request, res: express.Response) {
   const serverActor = await getServerActor()
   const resultList = await ActorFollowModel.listFollowersForApi({
-    actorId: serverActor.id,
+    actorIds: [ serverActor.id ],
     start: req.query.start,
     count: req.query.count,
     sort: req.query.sort,
@@ -125,14 +126,26 @@ async function listFollowers (req: express.Request, res: express.Response) {
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
-async function followInstance (req: express.Request, res: express.Response) {
-  const hosts = req.body.hosts as string[]
+async function addFollow (req: express.Request, res: express.Response) {
+  const { hosts, handles } = req.body as ServerFollowCreate
   const follower = await getServerActor()
 
   for (const host of hosts) {
     const payload = {
       host,
       name: SERVER_ACTOR_NAME,
+      followerActorId: follower.id
+    }
+
+    JobQueue.Instance.createJob({ type: 'activitypub-follow', payload })
+  }
+
+  for (const handle of handles) {
+    const [ name, host ] = handle.split('@')
+
+    const payload = {
+      host,
+      name,
       followerActorId: follower.id
     }
 
@@ -176,7 +189,7 @@ async function removeOrRejectFollower (req: express.Request, res: express.Respon
 async function acceptFollower (req: express.Request, res: express.Response) {
   const follow = res.locals.follow
 
-  await sendAccept(follow)
+  sendAccept(follow)
 
   follow.state = 'accepted'
   await follow.save()

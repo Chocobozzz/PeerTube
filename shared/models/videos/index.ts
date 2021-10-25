@@ -26,6 +26,7 @@ export * from './video-resolution.enum'
 export * from './video-schedule-update.model'
 export * from './video-sort-field.type'
 export * from './video-state.enum'
+export * from './video-storage.enum'
 
 export * from './video-streaming-playlist.model'
 export * from './video-streaming-playlist.type'
@@ -35,3 +36,4 @@ export * from './video-transcoding-fps.model'
 
 export * from './video-update.model'
 export * from './video.model'
+export * from './video-create-result.model'

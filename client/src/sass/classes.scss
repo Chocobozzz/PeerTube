@@ -1,5 +1,5 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 .peertube-button {
   @include peertube-button;
@@ -23,4 +23,8 @@
 
 .tertiary-button {
   @include tertiary-button;
+}
+
+.peertube-radio-container {
+  @include peertube-radio-container;
 }

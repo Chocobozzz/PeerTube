@@ -2,45 +2,36 @@
 
 import 'mocha'
 import * as chai from 'chai'
+import { activityPubContextify, buildSignedActivity } from '@server/helpers/activitypub'
 import { buildDigest } from '@server/helpers/peertube-crypto'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
-import {
-  cleanupTests,
-  closeAllSequelize,
-  flushAndRunMultipleServers,
-  killallServers,
-  reRunServer,
-  ServerInfo,
-  setActorField,
-  wait
-} from '../../../../shared/extra-utils'
-import { makeFollowRequest, makePOSTAPRequest } from '../../../../shared/extra-utils/requests/activitypub'
-import { activityPubContextify, buildSignedActivity } from '../../../helpers/activitypub'
-import { HTTP_SIGNATURE } from '../../../initializers/constants'
-import { buildGlobalHeaders } from '../../../lib/job-queue/handlers/utils/activitypub-http-utils'
+import { HTTP_SIGNATURE } from '@server/initializers/constants'
+import { buildGlobalHeaders } from '@server/lib/job-queue/handlers/utils/activitypub-http-utils'
+import { buildAbsoluteFixturePath, cleanupTests, createMultipleServers, killallServers, PeerTubeServer, wait } from '@shared/extra-utils'
+import { makeFollowRequest, makePOSTAPRequest } from '@shared/extra-utils/requests/activitypub'
+import { HttpStatusCode } from '@shared/models'
 
 const expect = chai.expect
 
-function setKeysOfServer (onServer: ServerInfo, ofServer: ServerInfo, publicKey: string, privateKey: string) {
+function setKeysOfServer (onServer: PeerTubeServer, ofServer: PeerTubeServer, publicKey: string, privateKey: string) {
   const url = 'http://localhost:' + ofServer.port + '/accounts/peertube'
 
   return Promise.all([
-    setActorField(onServer.internalServerNumber, url, 'publicKey', publicKey),
-    setActorField(onServer.internalServerNumber, url, 'privateKey', privateKey)
+    onServer.sql.setActorField(url, 'publicKey', publicKey),
+    onServer.sql.setActorField(url, 'privateKey', privateKey)
   ])
 }
 
-function setUpdatedAtOfServer (onServer: ServerInfo, ofServer: ServerInfo, updatedAt: string) {
+function setUpdatedAtOfServer (onServer: PeerTubeServer, ofServer: PeerTubeServer, updatedAt: string) {
   const url = 'http://localhost:' + ofServer.port + '/accounts/peertube'
 
   return Promise.all([
-    setActorField(onServer.internalServerNumber, url, 'createdAt', updatedAt),
-    setActorField(onServer.internalServerNumber, url, 'updatedAt', updatedAt)
+    onServer.sql.setActorField(url, 'createdAt', updatedAt),
+    onServer.sql.setActorField(url, 'updatedAt', updatedAt)
   ])
 }
 
-function getAnnounceWithoutContext (server: ServerInfo) {
-  const json = require('./json/peertube/announce-without-context.json')
+function getAnnounceWithoutContext (server: PeerTubeServer) {
+  const json = require(buildAbsoluteFixturePath('./ap-json/peertube/announce-without-context.json'))
   const result: typeof json = {}
 
   for (const key of Object.keys(json)) {
@@ -55,11 +46,11 @@ function getAnnounceWithoutContext (server: ServerInfo) {
 }
 
 describe('Test ActivityPub security', function () {
-  let servers: ServerInfo[]
+  let servers: PeerTubeServer[]
   let url: string
 
-  const keys = require('./json/peertube/keys.json')
-  const invalidKeys = require('./json/peertube/invalid-keys.json')
+  const keys = require(buildAbsoluteFixturePath('./ap-json/peertube/keys.json'))
+  const invalidKeys = require(buildAbsoluteFixturePath('./ap-json/peertube/invalid-keys.json'))
   const baseHttpSignature = () => ({
     algorithm: HTTP_SIGNATURE.ALGORITHM,
     authorizationHeaderName: HTTP_SIGNATURE.HEADER_NAME,
@@ -73,7 +64,7 @@ describe('Test ActivityPub security', function () {
   before(async function () {
     this.timeout(60000)
 
-    servers = await flushAndRunMultipleServers(3)
+    servers = await createMultipleServers(3)
 
     url = servers[0].url + '/inbox'
 
@@ -172,8 +163,8 @@ describe('Test ActivityPub security', function () {
       await setUpdatedAtOfServer(servers[0], servers[1], '2015-07-17 22:00:00+00')
 
       // Invalid peertube actor cache
-      killallServers([ servers[1] ])
-      await reRunServer(servers[1])
+      await killallServers([ servers[1] ])
+      await servers[1].run()
 
       const body = activityPubContextify(getAnnounceWithoutContext(servers[1]))
       const headers = buildGlobalHeaders(body)
@@ -293,7 +284,5 @@ describe('Test ActivityPub security', function () {
     this.timeout(10000)
 
     await cleanupTests(servers)
-
-    await closeAllSequelize(servers)
   })
 })

@@ -36,8 +36,13 @@ export class UserListComponent extends RestTable implements OnInit {
 
   inputFilters: AdvancedInputFilter[] = [
     {
-      queryParams: { 'search': 'banned:true' },
-      label: $localize`Banned users`
+      title: $localize`Advanced filters`,
+      children: [
+        {
+          queryParams: { search: 'banned:true' },
+          label: $localize`Banned users`
+        }
+      ]
     }
   ]
 
@@ -108,18 +113,18 @@ export class UserListComponent extends RestTable implements OnInit {
     ]
 
     this.columns = [
-      { id: 'username', label: 'Username' },
-      { id: 'email', label: 'Email' },
-      { id: 'quota', label: 'Video quota' },
-      { id: 'role', label: 'Role' },
-      { id: 'createdAt', label: 'Created' }
+      { id: 'username', label: $localize`Username` },
+      { id: 'email', label: $localize`Email` },
+      { id: 'quota', label: $localize`Video quota` },
+      { id: 'role', label: $localize`Role` },
+      { id: 'createdAt', label: $localize`Created` }
     ]
 
     this.selectedColumns = this.columns.map(c => c.id)
 
-    this.columns.push({ id: 'quotaDaily', label: 'Daily quota' })
-    this.columns.push({ id: 'pluginAuth', label: 'Auth plugin' })
-    this.columns.push({ id: 'lastLoginDate', label: 'Last login' })
+    this.columns.push({ id: 'quotaDaily', label: $localize`Daily quota` })
+    this.columns.push({ id: 'pluginAuth', label: $localize`Auth plugin` })
+    this.columns.push({ id: 'lastLoginDate', label: $localize`Last login` })
   }
 
   getIdentifier () {
@@ -173,14 +178,14 @@ export class UserListComponent extends RestTable implements OnInit {
     if (res === false) return
 
     this.userService.unbanUsers(users)
-        .subscribe(
-          () => {
+        .subscribe({
+          next: () => {
             this.notifier.success($localize`${users.length} users unbanned.`)
             this.reloadData()
           },
 
-          err => this.notifier.error(err.message)
-        )
+          error: err => this.notifier.error(err.message)
+        })
   }
 
   async removeUsers (users: User[]) {
@@ -195,25 +200,27 @@ export class UserListComponent extends RestTable implements OnInit {
     const res = await this.confirmService.confirm(message, $localize`Delete`)
     if (res === false) return
 
-    this.userService.removeUser(users).subscribe(
-      () => {
-        this.notifier.success($localize`${users.length} users deleted.`)
-        this.reloadData()
-      },
+    this.userService.removeUser(users)
+      .subscribe({
+        next: () => {
+          this.notifier.success($localize`${users.length} users deleted.`)
+          this.reloadData()
+        },
 
-      err => this.notifier.error(err.message)
-    )
+        error: err => this.notifier.error(err.message)
+      })
   }
 
-  async setEmailsAsVerified (users: User[]) {
-    this.userService.updateUsers(users, { emailVerified: true }).subscribe(
-      () => {
-        this.notifier.success($localize`${users.length} users email set as verified.`)
-        this.reloadData()
-      },
+  setEmailsAsVerified (users: User[]) {
+    this.userService.updateUsers(users, { emailVerified: true })
+      .subscribe({
+        next: () => {
+          this.notifier.success($localize`${users.length} users email set as verified.`)
+          this.reloadData()
+        },
 
-      err => this.notifier.error(err.message)
-    )
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   isInSelectionMode () {
@@ -227,13 +234,13 @@ export class UserListComponent extends RestTable implements OnInit {
       pagination: this.pagination,
       sort: this.sort,
       search: this.search
-    }).subscribe(
-      resultList => {
+    }).subscribe({
+      next: resultList => {
         this.users = resultList.data
         this.totalRecords = resultList.total
       },
 
-      err => this.notifier.error(err.message)
-    )
+      error: err => this.notifier.error(err.message)
+    })
   }
 }

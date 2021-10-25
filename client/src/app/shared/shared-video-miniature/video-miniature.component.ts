@@ -12,6 +12,7 @@ import {
 } from '@angular/core'
 import { AuthService, ScreenService, ServerService, User } from '@app/core'
 import { HTMLServerConfig, VideoPlaylistType, VideoPrivacy, VideoState } from '@shared/models'
+import { LinkType } from '../../../types/link.type'
 import { ActorAvatarSize } from '../shared-actor-image/actor-avatar.component'
 import { Video } from '../shared-main'
 import { VideoPlaylistService } from '../shared-video-playlist'
@@ -28,8 +29,6 @@ export type MiniatureDisplayOptions = {
   blacklistInfo?: boolean
   nsfw?: boolean
 }
-export type VideoLinkType = 'internal' | 'lazy-load' | 'external'
-
 @Component({
   selector: 'my-video-miniature',
   styleUrls: [ './video-miniature.component.scss' ],
@@ -56,7 +55,7 @@ export class VideoMiniatureComponent implements OnInit {
 
   @Input() displayAsRow = false
 
-  @Input() videoLinkType: VideoLinkType = 'internal'
+  @Input() videoLinkType: LinkType = 'internal'
 
   @Output() videoBlocked = new EventEmitter()
   @Output() videoUnblocked = new EventEmitter()
@@ -86,7 +85,7 @@ export class VideoMiniatureComponent implements OnInit {
     playlistElementId?: number
   }
 
-  videoRouterLink: any[] = []
+  videoRouterLink: string | any[] = []
   videoHref: string
   videoTarget: string
 
@@ -100,6 +99,18 @@ export class VideoMiniatureComponent implements OnInit {
     private cd: ChangeDetectorRef,
     @Inject(LOCALE_ID) private localeId: string
   ) {}
+
+  get authorAccount () {
+    return this.serverConfig.client.videos.miniature.preferAuthorDisplayName
+      ? this.video.account.displayName
+      : this.video.byAccount
+  }
+
+  get authorChannel () {
+    return this.serverConfig.client.videos.miniature.preferAuthorDisplayName
+      ? this.video.channel.displayName
+      : this.video.byVideoChannel
+  }
 
   get isVideoBlur () {
     return this.video.isVideoNSFWForUser(this.user, this.serverConfig)
@@ -121,7 +132,7 @@ export class VideoMiniatureComponent implements OnInit {
 
   buildVideoLink () {
     if (this.videoLinkType === 'internal' || !this.video.url) {
-      this.videoRouterLink = [ '/w', this.video.uuid ]
+      this.videoRouterLink = Video.buildWatchUrl(this.video)
       return
     }
 
@@ -215,11 +226,12 @@ export class VideoMiniatureComponent implements OnInit {
   addToWatchLater () {
     const body = { videoId: this.video.id }
 
-    this.videoPlaylistService.addVideoInPlaylist(this.watchLaterPlaylist.id, body).subscribe(
-      res => {
-        this.watchLaterPlaylist.playlistElementId = res.videoPlaylistElement.id
-      }
-    )
+    this.videoPlaylistService.addVideoInPlaylist(this.watchLaterPlaylist.id, body)
+      .subscribe(
+        res => {
+          this.watchLaterPlaylist.playlistElementId = res.videoPlaylistElement.id
+        }
+      )
   }
 
   removeFromWatchLater () {

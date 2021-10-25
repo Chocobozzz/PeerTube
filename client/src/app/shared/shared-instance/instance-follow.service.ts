@@ -4,7 +4,7 @@ import { catchError, map } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { RestExtractor, RestPagination, RestService } from '@app/core'
-import { ActivityPubActorType, ActorFollow, FollowState, ResultList } from '@shared/models'
+import { ActivityPubActorType, ActorFollow, FollowState, ResultList, ServerFollowCreate } from '@shared/models'
 import { environment } from '../../../environments/environment'
 
 @Injectable()
@@ -19,10 +19,10 @@ export class InstanceFollowService {
   }
 
   getFollowing (options: {
-    pagination: RestPagination,
-    sort: SortMeta,
-    search?: string,
-    actorType?: ActivityPubActorType,
+    pagination: RestPagination
+    sort: SortMeta
+    search?: string
+    actorType?: ActivityPubActorType
     state?: FollowState
   }): Observable<ResultList<ActorFollow>> {
     const { pagination, sort, search, state, actorType } = options
@@ -42,10 +42,10 @@ export class InstanceFollowService {
   }
 
   getFollowers (options: {
-    pagination: RestPagination,
-    sort: SortMeta,
-    search?: string,
-    actorType?: ActivityPubActorType,
+    pagination: RestPagination
+    sort: SortMeta
+    search?: string
+    actorType?: ActivityPubActorType
     state?: FollowState
   }): Observable<ResultList<ActorFollow>> {
     const { pagination, sort, search, state, actorType } = options
@@ -64,9 +64,10 @@ export class InstanceFollowService {
                )
   }
 
-  follow (notEmptyHosts: string[]) {
-    const body = {
-      hosts: notEmptyHosts
+  follow (hostsOrHandles: string[]) {
+    const body: ServerFollowCreate = {
+      handles: hostsOrHandles.filter(v => v.includes('@')),
+      hosts: hostsOrHandles.filter(v => !v.includes('@'))
     }
 
     return this.authHttp.post(InstanceFollowService.BASE_APPLICATION_URL + '/following', body)
@@ -77,7 +78,9 @@ export class InstanceFollowService {
   }
 
   unfollow (follow: ActorFollow) {
-    return this.authHttp.delete(InstanceFollowService.BASE_APPLICATION_URL + '/following/' + follow.following.host)
+    const handle = follow.following.name + '@' + follow.following.host
+
+    return this.authHttp.delete(InstanceFollowService.BASE_APPLICATION_URL + '/following/' + handle)
                .pipe(
                  map(this.restExtractor.extractDataBool),
                  catchError(res => this.restExtractor.handleError(res))

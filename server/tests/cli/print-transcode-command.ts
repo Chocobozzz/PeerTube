@@ -2,16 +2,17 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { execCLI } from '../../../shared/extra-utils'
-import { getTargetBitrate, VideoResolution } from '../../../shared/models/videos'
-import { VIDEO_TRANSCODING_FPS } from '../../initializers/constants'
 import { getVideoFileBitrate, getVideoFileFPS } from '@server/helpers/ffprobe-utils'
+import { getMaxBitrate } from '@shared/core-utils'
+import { buildAbsoluteFixturePath, CLICommand } from '@shared/extra-utils'
+import { VideoResolution } from '../../../shared/models/videos'
 
 const expect = chai.expect
 
-describe('Test create transcoding jobs', function () {
+describe('Test print transcode jobs', function () {
+
   it('Should print the correct command for each resolution', async function () {
-    const fixturePath = 'server/tests/fixtures/video_short.webm'
+    const fixturePath = buildAbsoluteFixturePath('video_short.webm')
     const fps = await getVideoFileFPS(fixturePath)
     const bitrate = await getVideoFileBitrate(fixturePath)
 
@@ -19,8 +20,8 @@ describe('Test create transcoding jobs', function () {
       VideoResolution.H_720P,
       VideoResolution.H_1080P
     ]) {
-      const command = await execCLI(`npm run print-transcode-command -- ${fixturePath} -r ${resolution}`)
-      const targetBitrate = Math.min(getTargetBitrate(resolution, fps, VIDEO_TRANSCODING_FPS), bitrate)
+      const command = await CLICommand.exec(`npm run print-transcode-command -- ${fixturePath} -r ${resolution}`)
+      const targetBitrate = Math.min(getMaxBitrate({ resolution, fps, ratio: 16 / 9 }), bitrate + (bitrate * 0.3))
 
       expect(command).to.includes(`-vf scale=w=-2:h=${resolution}`)
       expect(command).to.includes(`-y -acodec aac -vcodec libx264`)

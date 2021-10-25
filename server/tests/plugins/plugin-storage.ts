@@ -4,37 +4,32 @@ import 'mocha'
 import { expect } from 'chai'
 import { pathExists, readdir, readFile } from 'fs-extra'
 import { join } from 'path'
-import { HttpStatusCode } from '@shared/core-utils'
 import {
-  buildServerDirectory,
-  getPluginTestPath,
-  installPlugin,
+  cleanupTests,
+  createSingleServer,
   makeGetRequest,
-  setAccessTokensToServers,
-  uninstallPlugin
-} from '../../../shared/extra-utils'
-import { cleanupTests, flushAndRunServer, ServerInfo, waitUntilLog } from '../../../shared/extra-utils/server/servers'
+  PeerTubeServer,
+  PluginsCommand,
+  setAccessTokensToServers
+} from '@shared/extra-utils'
+import { HttpStatusCode } from '@shared/models'
 
 describe('Test plugin storage', function () {
-  let server: ServerInfo
+  let server: PeerTubeServer
 
   before(async function () {
     this.timeout(30000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
     await setAccessTokensToServers([ server ])
 
-    await installPlugin({
-      url: server.url,
-      accessToken: server.accessToken,
-      path: getPluginTestPath('-six')
-    })
+    await server.plugins.install({ path: PluginsCommand.getPluginTestPath('-six') })
   })
 
   describe('DB storage', function () {
 
     it('Should correctly store a subkey', async function () {
-      await waitUntilLog(server, 'superkey stored value is toto')
+      await server.servers.waitUntilLog('superkey stored value is toto')
     })
   })
 
@@ -50,12 +45,12 @@ describe('Test plugin storage', function () {
     }
 
     before(function () {
-      dataPath = buildServerDirectory(server, 'plugins/data')
+      dataPath = server.servers.buildDirectory('plugins/data')
       pluginDataPath = join(dataPath, 'peertube-plugin-test-six')
     })
 
     it('Should have created the directory on install', async function () {
-      const dataPath = buildServerDirectory(server, 'plugins/data')
+      const dataPath = server.servers.buildDirectory('plugins/data')
       const pluginDataPath = join(dataPath, 'peertube-plugin-test-six')
 
       expect(await pathExists(dataPath)).to.be.true
@@ -68,7 +63,7 @@ describe('Test plugin storage', function () {
         url: server.url,
         token: server.accessToken,
         path: '/plugins/test-six/router/create-file',
-        statusCodeExpected: HttpStatusCode.OK_200
+        expectedStatus: HttpStatusCode.OK_200
       })
 
       const content = await getFileContent()
@@ -76,22 +71,14 @@ describe('Test plugin storage', function () {
     })
 
     it('Should still have the file after an uninstallation', async function () {
-      await uninstallPlugin({
-        url: server.url,
-        accessToken: server.accessToken,
-        npmName: 'peertube-plugin-test-six'
-      })
+      await server.plugins.uninstall({ npmName: 'peertube-plugin-test-six' })
 
       const content = await getFileContent()
       expect(content).to.equal('Prince Ali')
     })
 
     it('Should still have the file after the reinstallation', async function () {
-      await installPlugin({
-        url: server.url,
-        accessToken: server.accessToken,
-        path: getPluginTestPath('-six')
-      })
+      await server.plugins.install({ path: PluginsCommand.getPluginTestPath('-six') })
 
       const content = await getFileContent()
       expect(content).to.equal('Prince Ali')

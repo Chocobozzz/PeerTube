@@ -74,7 +74,7 @@
         <p-tableCheckbox [value]="user" ariaLabel="Select this row" i18n-ariaLabel></p-tableCheckbox>
       </td>
 
-      <td class="expand-cell">
+      <td class="expand-cell" [ngClass]="{ 'empty-cell': !user.blockedReason }">
         <span *ngIf="user.blockedReason" class="expander" [pRowToggler]="user">
           <i [ngClass]="expanded ? 'glyphicon glyphicon-menu-down' : 'glyphicon glyphicon-menu-right'"></i>
         </span>

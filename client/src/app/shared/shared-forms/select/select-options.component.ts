@@ -23,6 +23,7 @@ export class SelectOptionsComponent implements ControlValueAccessor {
   @Input() searchFn: any
 
   selectedId: number | string
+  disabled = false
 
   propagateChange = (_: any) => { /* empty */ }
 
@@ -47,5 +48,9 @@ export class SelectOptionsComponent implements ControlValueAccessor {
 
   onModelChange () {
     this.propagateChange(this.selectedId)
+  }
+
+  setDisabledState (isDisabled: boolean) {
+    this.disabled = isDisabled
   }
 }

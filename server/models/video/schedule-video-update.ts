@@ -1,9 +1,9 @@
 import { Op, Transaction } from 'sequelize'
 import { AllowNull, BelongsTo, Column, CreatedAt, Default, ForeignKey, Model, Table, UpdatedAt } from 'sequelize-typescript'
-import { MScheduleVideoUpdateFormattable, MScheduleVideoUpdateVideoAll } from '@server/types/models'
+import { MScheduleVideoUpdateFormattable, MScheduleVideoUpdate } from '@server/types/models'
 import { AttributesOnly } from '@shared/core-utils'
 import { VideoPrivacy } from '../../../shared/models/videos'
-import { ScopeNames as VideoScopeNames, VideoModel } from './video'
+import { VideoModel } from './video'
 
 @Table({
   tableName: 'scheduleVideoUpdate',
@@ -62,31 +62,17 @@ export class ScheduleVideoUpdateModel extends Model<Partial<AttributesOnly<Sched
       .then(res => !!res)
   }
 
-  static listVideosToUpdate (t: Transaction) {
+  static listVideosToUpdate (transaction?: Transaction) {
     const query = {
       where: {
         updateAt: {
           [Op.lte]: new Date()
         }
       },
-      include: [
-        {
-          model: VideoModel.scope(
-            [
-              VideoScopeNames.WITH_WEBTORRENT_FILES,
-              VideoScopeNames.WITH_STREAMING_PLAYLISTS,
-              VideoScopeNames.WITH_ACCOUNT_DETAILS,
-              VideoScopeNames.WITH_BLACKLISTED,
-              VideoScopeNames.WITH_THUMBNAILS,
-              VideoScopeNames.WITH_TAGS
-            ]
-          )
-        }
-      ],
-      transaction: t
+      transaction
     }
 
-    return ScheduleVideoUpdateModel.findAll<MScheduleVideoUpdateVideoAll>(query)
+    return ScheduleVideoUpdateModel.findAll<MScheduleVideoUpdate>(query)
   }
 
   static deleteByVideoId (videoId: number, t: Transaction) {

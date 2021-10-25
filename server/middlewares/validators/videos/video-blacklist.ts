@@ -1,13 +1,13 @@
-import * as express from 'express'
-import { body, param, query } from 'express-validator'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
-import { isBooleanValid, isIdOrUUIDValid, toBooleanOrNull, toIntOrNull } from '../../../helpers/custom-validators/misc'
+import express from 'express'
+import { body, query } from 'express-validator'
+import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
+import { isBooleanValid, toBooleanOrNull, toIntOrNull } from '../../../helpers/custom-validators/misc'
 import { isVideoBlacklistReasonValid, isVideoBlacklistTypeValid } from '../../../helpers/custom-validators/video-blacklist'
 import { logger } from '../../../helpers/logger'
-import { areValidationErrors, doesVideoBlacklistExist, doesVideoExist } from '../shared'
+import { areValidationErrors, doesVideoBlacklistExist, doesVideoExist, isValidVideoIdParam } from '../shared'
 
 const videosBlacklistRemoveValidator = [
-  param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid videoId'),
+  isValidVideoIdParam('videoId'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking blacklistRemove parameters.', { parameters: req.params })
@@ -21,7 +21,8 @@ const videosBlacklistRemoveValidator = [
 ]
 
 const videosBlacklistAddValidator = [
-  param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid videoId'),
+  isValidVideoIdParam('videoId'),
+
   body('unfederate')
     .optional()
     .customSanitizer(toBooleanOrNull)
@@ -49,7 +50,8 @@ const videosBlacklistAddValidator = [
 ]
 
 const videosBlacklistUpdateValidator = [
-  param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid videoId'),
+  isValidVideoIdParam('videoId'),
+
   body('reason')
     .optional()
     .custom(isVideoBlacklistReasonValid).withMessage('Should have a valid reason'),

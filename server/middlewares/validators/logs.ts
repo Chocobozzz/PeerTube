@@ -1,7 +1,8 @@
-import * as express from 'express'
+import express from 'express'
 import { query } from 'express-validator'
+import { isStringArray } from '@server/helpers/custom-validators/search'
 import { isValidLogLevel } from '../../helpers/custom-validators/logs'
-import { isDateValid } from '../../helpers/custom-validators/misc'
+import { isDateValid, toArray } from '../../helpers/custom-validators/misc'
 import { logger } from '../../helpers/logger'
 import { areValidationErrors } from './shared'
 
@@ -11,6 +12,10 @@ const getLogsValidator = [
   query('level')
     .optional()
     .custom(isValidLogLevel).withMessage('Should have a valid level'),
+  query('tagsOneOf')
+    .optional()
+    .customSanitizer(toArray)
+    .custom(isStringArray).withMessage('Should have a valid one of tags array'),
   query('endDate')
     .optional()
     .custom(isDateValid).withMessage('Should have an end date that conforms to ISO 8601'),

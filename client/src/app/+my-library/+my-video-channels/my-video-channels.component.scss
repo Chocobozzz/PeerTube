@@ -1,5 +1,5 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 h1 my-global-icon {
   position: relative;
@@ -52,6 +52,10 @@ my-edit-button {
 
   font-size: 14px;
   color: $grey-actor-name;
+}
+
+.video-channel-followers {
+  color: pvar(--mainForegroundColor);
 }
 
 .video-channel-buttons {

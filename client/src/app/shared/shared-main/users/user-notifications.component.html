@@ -1,6 +1,6 @@
 <div *ngIf="componentPagination.totalItems === 0" class="no-notification" i18n>You don't have notifications.</div>
 
-<div class="notifications" myInfiniteScroller [autoInit]="true" (nearOfBottom)="onNearOfBottom()" [dataObservable]="onDataSubject.asObservable()">
+<div class="notifications" myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [dataObservable]="onDataSubject.asObservable()">
   <div *ngFor="let notification of notifications" class="notification" [ngClass]="{ unread: !notification.read }" (click)="markAsRead(notification)">
 
     <ng-container [ngSwitch]="notification.type">
@@ -203,7 +203,7 @@
         <my-global-icon iconName="cog" aria-hidden="true"></my-global-icon>
 
         <div class="message" i18n>
-            <a (click)="markAsRead(notification)" [href]="notification.peertubeVersionLink" target="_blank" rel="noopener noreferer">A new version of PeerTube</a> is available: {{ notification.peertube.latestVersion }}
+            <a (click)="markAsRead(notification)" [href]="notification.peertubeVersionLink" target="_blank" rel="noopener noreferrer">A new version of PeerTube</a> is available: {{ notification.peertube.latestVersion }}
         </div>
       </ng-container>
 

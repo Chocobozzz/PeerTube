@@ -1,4 +1,4 @@
-import * as Bluebird from 'bluebird'
+import Bluebird from 'bluebird'
 import { ServerActionHookName, ServerFilterHookName } from '../../../shared/models'
 import { logger } from '../../helpers/logger'
 import { PluginManager } from './plugin-manager'

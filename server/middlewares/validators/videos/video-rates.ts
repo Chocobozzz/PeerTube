@@ -1,17 +1,18 @@
-import * as express from 'express'
+import express from 'express'
 import { body, param, query } from 'express-validator'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
 import { VideoRateType } from '../../../../shared/models/videos'
 import { isAccountNameValid } from '../../../helpers/custom-validators/accounts'
-import { isIdOrUUIDValid, isIdValid } from '../../../helpers/custom-validators/misc'
+import { isIdValid } from '../../../helpers/custom-validators/misc'
 import { isRatingValid } from '../../../helpers/custom-validators/video-rates'
 import { isVideoRatingTypeValid } from '../../../helpers/custom-validators/videos'
 import { logger } from '../../../helpers/logger'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
-import { areValidationErrors, doesVideoExist } from '../shared'
+import { areValidationErrors, doesVideoExist, isValidVideoIdParam } from '../shared'
 
 const videoUpdateRateValidator = [
-  param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
+  isValidVideoIdParam('id'),
+
   body('rating').custom(isVideoRatingTypeValid).withMessage('Should have a valid rate type'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {

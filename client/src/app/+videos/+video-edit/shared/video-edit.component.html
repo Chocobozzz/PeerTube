@@ -45,7 +45,7 @@
                 </ng-template>
               </my-help>
 
-              <my-markdown-textarea [truncate]="250" formControlName="description" [markdownVideo]="true"></my-markdown-textarea>
+              <my-markdown-textarea [truncate]="250" formControlName="description" [markdownVideo]="videoToUpdate"></my-markdown-textarea>
 
               <div *ngIf="formErrors.description" class="form-error">
                 {{ formErrors.description }}
@@ -227,15 +227,23 @@
             </div>
 
             <div class="form-group">
-              <my-peertube-checkbox inputName="liveVideoPermanentLive" formControlName="permanentLive">
-                <ng-template ptTemplate="label">
-                  <ng-container i18n>This is a permanent live</ng-container>
-                </ng-template>
+              <div class="peertube-radio-container">
+                <input type="radio" formControlName="permanentLive" id="permanentLiveFalse" [value]="false">
+                <label i18n for="permanentLiveFalse" class="radio">This is a normal live</label>
 
-                <ng-container ngProjectAs="description">
-                  <span i18n>You can stream multiple times in a permanent live. The URL for your viewers won't change but you cannot save replays of your lives</span>
-                </ng-container>
-              </my-peertube-checkbox>
+                <span class="form-group-description" i18n>
+                  You can't stream multiple times in a normal live, but you can save a replay of it that will use the same URL
+                </span>
+              </div>
+
+              <div class="peertube-radio-container">
+                <input type="radio" formControlName="permanentLive" id="permanentLiveTrue" [value]="true">
+                <label i18n for="permanentLiveTrue" class="radio">This is a permanent/recurring live</label>
+
+                <span class="form-group-description" i18n>
+                  You can stream multiple times in a permanent/recurring live. The URL for your viewers won't change but you cannot save replays of your lives
+                </span>
+              </div>
             </div>
 
             <div class="form-group" *ngIf="isSaveReplayEnabled()">

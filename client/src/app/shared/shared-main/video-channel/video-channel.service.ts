@@ -15,6 +15,12 @@ export class VideoChannelService {
 
   videoChannelLoaded = new ReplaySubject<VideoChannel>(1)
 
+  constructor (
+    private authHttp: HttpClient,
+    private restService: RestService,
+    private restExtractor: RestExtractor
+  ) { }
+
   static extractVideoChannels (result: ResultList<VideoChannelServer>) {
     const videoChannels: VideoChannel[] = []
 
@@ -24,12 +30,6 @@ export class VideoChannelService {
 
     return { data: videoChannels, total: result.total }
   }
-
-  constructor (
-    private authHttp: HttpClient,
-    private restService: RestService,
-    private restExtractor: RestExtractor
-  ) { }
 
   getVideoChannel (videoChannelName: string) {
     return this.authHttp.get<VideoChannel>(VideoChannelService.BASE_VIDEO_CHANNEL_URL + videoChannelName)
@@ -50,7 +50,7 @@ export class VideoChannelService {
     const { account, componentPagination, withStats = false, sort, search } = options
 
     const pagination = componentPagination
-      ? this.restService.componentPaginationToRestPagination(componentPagination)
+      ? this.restService.componentToRestPagination(componentPagination)
       : { start: 0, count: 20 }
 
     let params = new HttpParams()

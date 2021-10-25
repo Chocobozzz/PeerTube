@@ -1,13 +1,7 @@
-import * as express from 'express'
+import express from 'express'
 import { logger } from '@server/helpers/logger'
-import {
-  VIDEO_CATEGORIES,
-  VIDEO_LANGUAGES,
-  VIDEO_LICENCES,
-  VIDEO_PLAYLIST_PRIVACIES,
-  VIDEO_PRIVACIES
-} from '@server/initializers/constants'
 import { onExternalUserAuthenticated } from '@server/lib/auth/external-auth'
+import { VideoConstantManagerFactory } from '@server/lib/plugins/video-constant-manager-factory'
 import { PluginModel } from '@server/models/server/plugin'
 import {
   RegisterServerAuthExternalOptions,
@@ -18,39 +12,18 @@ import {
 } from '@server/types/plugins'
 import {
   EncoderOptionsBuilder,
-  PluginPlaylistPrivacyManager,
   PluginSettingsManager,
   PluginStorageManager,
-  PluginVideoCategoryManager,
-  PluginVideoLanguageManager,
-  PluginVideoLicenceManager,
-  PluginVideoPrivacyManager,
   RegisterServerHookOptions,
   RegisterServerSettingOptions,
-  serverHookObject
+  serverHookObject,
+  VideoPlaylistPrivacy,
+  VideoPrivacy
 } from '@shared/models'
 import { VideoTranscodingProfilesManager } from '../transcoding/video-transcoding-profiles'
 import { buildPluginHelpers } from './plugin-helpers-builder'
 
-type AlterableVideoConstant = 'language' | 'licence' | 'category' | 'privacy' | 'playlistPrivacy'
-type VideoConstant = { [key in number | string]: string }
-
-type UpdatedVideoConstant = {
-  [name in AlterableVideoConstant]: {
-    added: { key: number | string, label: string }[]
-    deleted: { key: number | string, label: string }[]
-  }
-}
-
 export class RegisterHelpers {
-  private readonly updatedVideoConstants: UpdatedVideoConstant = {
-    playlistPrivacy: { added: [], deleted: [] },
-    privacy: { added: [], deleted: [] },
-    language: { added: [], deleted: [] },
-    licence: { added: [], deleted: [] },
-    category: { added: [], deleted: [] }
-  }
-
   private readonly transcodingProfiles: {
     [ npmName: string ]: {
       type: 'vod' | 'live'
@@ -76,6 +49,7 @@ export class RegisterHelpers {
   private readonly onSettingsChangeCallbacks: ((settings: any) => Promise<any>)[] = []
 
   private readonly router: express.Router
+  private readonly videoConstantManagerFactory: VideoConstantManagerFactory
 
   constructor (
     private readonly npmName: string,
@@ -83,6 +57,7 @@ export class RegisterHelpers {
     private readonly onHookAdded: (options: RegisterServerHookOptions) => void
   ) {
     this.router = express.Router()
+    this.videoConstantManagerFactory = new VideoConstantManagerFactory(this.npmName)
   }
 
   buildRegisterHelpers (): RegisterServerOptions {
@@ -94,13 +69,13 @@ export class RegisterHelpers {
     const settingsManager = this.buildSettingsManager()
     const storageManager = this.buildStorageManager()
 
-    const videoLanguageManager = this.buildVideoLanguageManager()
+    const videoLanguageManager = this.videoConstantManagerFactory.createVideoConstantManager<string>('language')
 
-    const videoLicenceManager = this.buildVideoLicenceManager()
-    const videoCategoryManager = this.buildVideoCategoryManager()
+    const videoLicenceManager = this.videoConstantManagerFactory.createVideoConstantManager<number>('licence')
+    const videoCategoryManager = this.videoConstantManagerFactory.createVideoConstantManager<number>('category')
 
-    const videoPrivacyManager = this.buildVideoPrivacyManager()
-    const playlistPrivacyManager = this.buildPlaylistPrivacyManager()
+    const videoPrivacyManager = this.videoConstantManagerFactory.createVideoConstantManager<VideoPrivacy>('privacy')
+    const playlistPrivacyManager = this.videoConstantManagerFactory.createVideoConstantManager<VideoPlaylistPrivacy>('playlistPrivacy')
 
     const transcodingManager = this.buildTranscodingManager()
 
@@ -120,12 +95,38 @@ export class RegisterHelpers {
       settingsManager,
       storageManager,
 
-      videoLanguageManager,
-      videoCategoryManager,
-      videoLicenceManager,
+      videoLanguageManager: {
+        ...videoLanguageManager,
+        /** @deprecated use `addConstant` instead **/
+        addLanguage: videoLanguageManager.addConstant,
+        /** @deprecated use `deleteConstant` instead **/
+        deleteLanguage: videoLanguageManager.deleteConstant
+      },
+      videoCategoryManager: {
+        ...videoCategoryManager,
+        /** @deprecated use `addConstant` instead **/
+        addCategory: videoCategoryManager.addConstant,
+        /** @deprecated use `deleteConstant` instead **/
+        deleteCategory: videoCategoryManager.deleteConstant
+      },
+      videoLicenceManager: {
+        ...videoLicenceManager,
+        /** @deprecated use `addConstant` instead **/
+        addLicence: videoLicenceManager.addConstant,
+        /** @deprecated use `deleteConstant` instead **/
+        deleteLicence: videoLicenceManager.deleteConstant
+      },
 
-      videoPrivacyManager,
-      playlistPrivacyManager,
+      videoPrivacyManager: {
+        ...videoPrivacyManager,
+        /** @deprecated use `deleteConstant` instead **/
+        deletePrivacy: videoPrivacyManager.deleteConstant
+      },
+      playlistPrivacyManager: {
+        ...playlistPrivacyManager,
+        /** @deprecated use `deleteConstant` instead **/
+        deletePlaylistPrivacy: playlistPrivacyManager.deleteConstant
+      },
 
       transcodingManager,
 
@@ -139,29 +140,7 @@ export class RegisterHelpers {
   }
 
   reinitVideoConstants (npmName: string) {
-    const hash = {
-      language: VIDEO_LANGUAGES,
-      licence: VIDEO_LICENCES,
-      category: VIDEO_CATEGORIES,
-      privacy: VIDEO_PRIVACIES,
-      playlistPrivacy: VIDEO_PLAYLIST_PRIVACIES
-    }
-    const types: AlterableVideoConstant[] = [ 'language', 'licence', 'category', 'privacy', 'playlistPrivacy' ]
-
-    for (const type of types) {
-      const updatedConstants = this.updatedVideoConstants[type][npmName]
-      if (!updatedConstants) continue
-
-      for (const added of updatedConstants.added) {
-        delete hash[type][added.key]
-      }
-
-      for (const deleted of updatedConstants.deleted) {
-        hash[type][deleted.key] = deleted.label
-      }
-
-      delete this.updatedVideoConstants[type][npmName]
-    }
+    this.videoConstantManagerFactory.resetVideoConstants(npmName)
   }
 
   reinitTranscodingProfilesAndEncoders (npmName: string) {
@@ -287,111 +266,6 @@ export class RegisterHelpers {
 
       storeData: (key: string, data: any) => PluginModel.storeData(this.plugin.name, this.plugin.type, key, data)
     }
-  }
-
-  private buildVideoLanguageManager (): PluginVideoLanguageManager {
-    return {
-      addLanguage: (key: string, label: string) => {
-        return this.addConstant({ npmName: this.npmName, type: 'language', obj: VIDEO_LANGUAGES, key, label })
-      },
-
-      deleteLanguage: (key: string) => {
-        return this.deleteConstant({ npmName: this.npmName, type: 'language', obj: VIDEO_LANGUAGES, key })
-      }
-    }
-  }
-
-  private buildVideoCategoryManager (): PluginVideoCategoryManager {
-    return {
-      addCategory: (key: number, label: string) => {
-        return this.addConstant({ npmName: this.npmName, type: 'category', obj: VIDEO_CATEGORIES, key, label })
-      },
-
-      deleteCategory: (key: number) => {
-        return this.deleteConstant({ npmName: this.npmName, type: 'category', obj: VIDEO_CATEGORIES, key })
-      }
-    }
-  }
-
-  private buildVideoPrivacyManager (): PluginVideoPrivacyManager {
-    return {
-      deletePrivacy: (key: number) => {
-        return this.deleteConstant({ npmName: this.npmName, type: 'privacy', obj: VIDEO_PRIVACIES, key })
-      }
-    }
-  }
-
-  private buildPlaylistPrivacyManager (): PluginPlaylistPrivacyManager {
-    return {
-      deletePlaylistPrivacy: (key: number) => {
-        return this.deleteConstant({ npmName: this.npmName, type: 'playlistPrivacy', obj: VIDEO_PLAYLIST_PRIVACIES, key })
-      }
-    }
-  }
-
-  private buildVideoLicenceManager (): PluginVideoLicenceManager {
-    return {
-      addLicence: (key: number, label: string) => {
-        return this.addConstant({ npmName: this.npmName, type: 'licence', obj: VIDEO_LICENCES, key, label })
-      },
-
-      deleteLicence: (key: number) => {
-        return this.deleteConstant({ npmName: this.npmName, type: 'licence', obj: VIDEO_LICENCES, key })
-      }
-    }
-  }
-
-  private addConstant<T extends string | number> (parameters: {
-    npmName: string
-    type: AlterableVideoConstant
-    obj: VideoConstant
-    key: T
-    label: string
-  }) {
-    const { npmName, type, obj, key, label } = parameters
-
-    if (obj[key]) {
-      logger.warn('Cannot add %s %s by plugin %s: key already exists.', type, npmName, key)
-      return false
-    }
-
-    if (!this.updatedVideoConstants[type][npmName]) {
-      this.updatedVideoConstants[type][npmName] = {
-        added: [],
-        deleted: []
-      }
-    }
-
-    this.updatedVideoConstants[type][npmName].added.push({ key, label })
-    obj[key] = label
-
-    return true
-  }
-
-  private deleteConstant<T extends string | number> (parameters: {
-    npmName: string
-    type: AlterableVideoConstant
-    obj: VideoConstant
-    key: T
-  }) {
-    const { npmName, type, obj, key } = parameters
-
-    if (!obj[key]) {
-      logger.warn('Cannot delete %s %s by plugin %s: key does not exist.', type, npmName, key)
-      return false
-    }
-
-    if (!this.updatedVideoConstants[type][npmName]) {
-      this.updatedVideoConstants[type][npmName] = {
-        added: [],
-        deleted: []
-      }
-    }
-
-    this.updatedVideoConstants[type][npmName].deleted.push({ key, label: obj[key] })
-    delete obj[key]
-
-    return true
   }
 
   private buildTranscodingManager () {

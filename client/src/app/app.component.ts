@@ -1,20 +1,32 @@
 import { Hotkey, HotkeysService } from 'angular2-hotkeys'
-import { filter, map, pairwise, switchMap } from 'rxjs/operators'
-import { DOCUMENT, getLocaleDirection, PlatformLocation, ViewportScroller } from '@angular/common'
+import { forkJoin, delay } from 'rxjs'
+import { filter, first, map } from 'rxjs/operators'
+import { DOCUMENT, getLocaleDirection, PlatformLocation } from '@angular/common'
 import { AfterViewInit, Component, Inject, LOCALE_ID, OnInit, ViewChild } from '@angular/core'
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
-import { Event, GuardsCheckStart, NavigationEnd, RouteConfigLoadEnd, RouteConfigLoadStart, Router, Scroll } from '@angular/router'
-import { AuthService, MarkdownService, RedirectService, ScreenService, ServerService, ThemeService, User } from '@app/core'
+import { Event, GuardsCheckStart, RouteConfigLoadEnd, RouteConfigLoadStart, Router } from '@angular/router'
+import {
+  AuthService,
+  MarkdownService,
+  PeerTubeRouterService,
+  RedirectService,
+  ScreenService,
+  ScrollService,
+  ServerService,
+  ThemeService,
+  User
+} from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { PluginService } from '@app/core/plugins/plugin.service'
+import { AccountSetupWarningModalComponent } from '@app/modal/account-setup-warning-modal.component'
 import { CustomModalComponent } from '@app/modal/custom-modal.component'
 import { InstanceConfigWarningModalComponent } from '@app/modal/instance-config-warning-modal.component'
-import { WelcomeModalComponent } from '@app/modal/welcome-modal.component'
+import { AdminWelcomeModalComponent } from '@app/modal/admin-welcome-modal.component'
 import { NgbConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { LoadingBarService } from '@ngx-loading-bar/core'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 import { getShortLocale } from '@shared/core-utils/i18n'
-import { BroadcastMessageLevel, HTMLServerConfig, ServerConfig, UserRole } from '@shared/models'
+import { BroadcastMessageLevel, HTMLServerConfig, UserRole } from '@shared/models'
 import { MenuService } from './core/menu/menu.service'
 import { POP_STATE_MODAL_DISMISS } from './helpers'
 import { InstanceService } from './shared/shared-instance'
@@ -27,7 +39,8 @@ import { InstanceService } from './shared/shared-instance'
 export class AppComponent implements OnInit, AfterViewInit {
   private static BROADCAST_MESSAGE_KEY = 'app-broadcast-message-dismissed'
 
-  @ViewChild('welcomeModal') welcomeModal: WelcomeModalComponent
+  @ViewChild('accountSetupWarningModal') accountSetupWarningModal: AccountSetupWarningModalComponent
+  @ViewChild('adminWelcomeModal') adminWelcomeModal: AdminWelcomeModalComponent
   @ViewChild('instanceConfigWarningModal') instanceConfigWarningModal: InstanceConfigWarningModalComponent
   @ViewChild('customModal') customModal: CustomModalComponent
 
@@ -39,10 +52,10 @@ export class AppComponent implements OnInit, AfterViewInit {
   constructor (
     @Inject(DOCUMENT) private document: Document,
     @Inject(LOCALE_ID) private localeId: string,
-    private viewportScroller: ViewportScroller,
     private router: Router,
     private authService: AuthService,
     private serverService: ServerService,
+    private peertubeRouter: PeerTubeRouterService,
     private pluginService: PluginService,
     private instanceService: InstanceService,
     private domSanitizer: DomSanitizer,
@@ -56,6 +69,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     private markdownService: MarkdownService,
     private ngbConfig: NgbConfig,
     private loadingBar: LoadingBarService,
+    private scrollService: ScrollService,
     public menu: MenuService
   ) {
     this.ngbConfig.animation = false
@@ -85,6 +99,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     }
 
     this.initRouteEvents()
+    this.scrollService.enableScrollRestoration()
 
     this.injectJS()
     this.injectCSS()
@@ -132,66 +147,10 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   private initRouteEvents () {
-    let resetScroll = true
     const eventsObs = this.router.events
 
-    const scrollEvent = eventsObs.pipe(filter((e: Event): e is Scroll => e instanceof Scroll))
-
-    // Handle anchors/restore position
-    scrollEvent.subscribe(e => {
-      // scrollToAnchor first to preserve anchor position when using history navigation
-      if (e.anchor) {
-        setTimeout(() => {
-          this.viewportScroller.scrollToAnchor(e.anchor)
-        })
-
-        return
-      }
-
-      if (e.position) {
-        return this.viewportScroller.scrollToPosition(e.position)
-      }
-
-      if (resetScroll) {
-        return this.viewportScroller.scrollToPosition([ 0, 0 ])
-      }
-    })
-
-    const navigationEndEvent = eventsObs.pipe(filter((e: Event): e is NavigationEnd => e instanceof NavigationEnd))
-
-    // When we add the a-state parameter, we don't want to alter the scroll
-    navigationEndEvent.pipe(pairwise())
-                      .subscribe(([ e1, e2 ]) => {
-                        try {
-                          resetScroll = false
-
-                          const previousUrl = new URL(window.location.origin + e1.urlAfterRedirects)
-                          const nextUrl = new URL(window.location.origin + e2.urlAfterRedirects)
-
-                          if (previousUrl.pathname !== nextUrl.pathname) {
-                            resetScroll = true
-                            return
-                          }
-
-                          const nextSearchParams = nextUrl.searchParams
-                          nextSearchParams.delete('a-state')
-
-                          const previousSearchParams = previousUrl.searchParams
-
-                          nextSearchParams.sort()
-                          previousSearchParams.sort()
-
-                          if (nextSearchParams.toString() !== previousSearchParams.toString()) {
-                            resetScroll = true
-                          }
-                        } catch (e) {
-                          console.error('Cannot parse URL to check next scroll.', e)
-                          resetScroll = true
-                        }
-                      })
-
     // Plugin hooks
-    navigationEndEvent.subscribe(e => {
+    this.peertubeRouter.getNavigationEndEvents().subscribe(e => {
       this.hooks.runAction('action:router.navigation-end', 'common', { path: e.url })
     })
 
@@ -243,7 +202,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     // Inject JS
     if (this.serverConfig.instance.customizations.javascript) {
       try {
-        // tslint:disable:no-eval
+        /* eslint-disable no-eval */
         eval(this.serverConfig.instance.customizations.javascript)
       } catch (err) {
         console.error('Cannot eval custom JavaScript.', err)
@@ -262,39 +221,50 @@ export class AppComponent implements OnInit, AfterViewInit {
     }
   }
 
-  private async openModalsIfNeeded () {
-    this.authService.userInformationLoaded
+  private openModalsIfNeeded () {
+    const userSub = this.authService.userInformationLoaded
         .pipe(
-          map(() => this.authService.getUser()),
-          filter(user => user.role === UserRole.ADMINISTRATOR),
-          switchMap(user => {
-            return this.serverService.getConfig()
-              .pipe(map(serverConfig => ({ serverConfig, user })))
-          })
-        ).subscribe(({ serverConfig, user }) => this._openAdminModalsIfNeeded(serverConfig, user))
+          delay(0), // Wait for modals creations
+          map(() => this.authService.getUser())
+        )
+
+    // Admin modal
+    userSub.pipe(
+      filter(user => user.role === UserRole.ADMINISTRATOR)
+    ).subscribe(user => this.openAdminModalsIfNeeded(user))
+
+    // Account modal
+    userSub.pipe(
+      filter(user => user.role !== UserRole.ADMINISTRATOR)
+    ).subscribe(user => this.openAccountModalsIfNeeded(user))
   }
 
-  private async _openAdminModalsIfNeeded (serverConfig: ServerConfig, user: User) {
-    if (user.noWelcomeModal !== true) return this.welcomeModal.show()
+  private openAdminModalsIfNeeded (user: User) {
+    if (this.adminWelcomeModal.shouldOpen(user)) {
+      return this.adminWelcomeModal.show()
+    }
 
-    if (user.noInstanceConfigWarningModal === true || !serverConfig.signup.allowed) return
+    if (!this.instanceConfigWarningModal.shouldOpenByUser(user)) return
 
-    this.instanceService.getAbout()
-      .subscribe(about => {
-        if (
-          this.serverConfig.instance.name.toLowerCase() === 'peertube' ||
-          !about.instance.terms ||
-          !about.instance.administrator ||
-          !about.instance.maintenanceLifetime
-        ) {
-          this.instanceConfigWarningModal.show(about)
-        }
-      })
+    forkJoin([
+      this.serverService.getConfig().pipe(first()),
+      this.instanceService.getAbout().pipe(first())
+    ]).subscribe(([ config, about ]) => {
+      if (this.instanceConfigWarningModal.shouldOpen(config, about)) {
+        this.instanceConfigWarningModal.show(about)
+      }
+    })
+  }
+
+  private openAccountModalsIfNeeded (user: User) {
+    if (this.accountSetupWarningModal.shouldOpen(user)) {
+      this.accountSetupWarningModal.show(user)
+    }
   }
 
   private initHotkeys () {
     this.hotkeysService.add([
-      new Hotkey(['/', 's'], (event: KeyboardEvent): boolean => {
+      new Hotkey([ '/', 's' ], (event: KeyboardEvent): boolean => {
         document.getElementById('search-video').focus()
         return false
       }, undefined, $localize`Focus the search bar`),

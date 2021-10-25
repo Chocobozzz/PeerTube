@@ -1,7 +1,7 @@
-@import '_variables';
-@import '_mixins';
-@import '_actor';
-@import '_miniature';
+@use '_variables' as *;
+@use '_mixins' as *;
+@use '_account-channel-page' as *;
+@use '_miniature' as *;
 
 .root {
   --myGlobalTopPadding: 60px;
@@ -20,7 +20,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  max-width: $max-channels-width;
+
+  &.on-channel-page {
+    max-width: $max-channels-width;
+  }
 
   simple-search-input {
     @include margin-left(auto);

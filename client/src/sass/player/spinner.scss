@@ -1,5 +1,5 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 // Thanks: https://projects.lukehaas.me/css-loaders/
 .vjs-loading-spinner {

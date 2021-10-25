@@ -40,7 +40,7 @@ languages=(
 
 cd client
 
-rm -rf ./dist ./compiled
+rm -rf ./dist
 
 # Don't build other languages if --light arg is provided
 if [ -z ${1+x} ] || ([ "$1" != "--light" ] && [ "$1" != "--analyze-bundle" ]); then
@@ -49,7 +49,7 @@ if [ -z ${1+x} ] || ([ "$1" != "--light" ] && [ "$1" != "--analyze-bundle" ]); t
         additionalParams="--sourceMap=true"
     fi
 
-    npm run ng build -- --configuration production --output-path "dist/build" $additionalParams
+    node --max_old_space_size=8192 node_modules/.bin/ng build --configuration production --output-path "dist/build" $additionalParams
 
     for key in "${!languages[@]}"; do
         lang=${languages[$key]}
@@ -69,10 +69,12 @@ else
     additionalParams=""
     if [ ! -z ${1+x} ] && [ "$1" == "--analyze-bundle" ]; then
         additionalParams="--namedChunks=true --outputHashing=none"
+
+        # For webpack
         export ANALYZE_BUNDLE=true
     fi
 
-    npm run ng build -- --localize=false --output-path "dist/$defaultLanguage/" \
+    node --max_old_space_size=8192 node_modules/.bin/ng build --localize=false --output-path "dist/$defaultLanguage/" \
                         --deploy-url "/client/$defaultLanguage/" --configuration production --stats-json $additionalParams
 fi
 

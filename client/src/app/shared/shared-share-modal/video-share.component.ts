@@ -2,8 +2,9 @@ import { Component, ElementRef, Input, ViewChild } from '@angular/core'
 import { VideoDetails } from '@app/shared/shared-main'
 import { VideoPlaylist } from '@app/shared/shared-video-playlist'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
-import { VideoCaption } from '@shared/models'
-import { buildPlaylistLink, buildVideoLink, buildVideoOrPlaylistEmbed } from '../../../assets/player/utils'
+import { buildPlaylistLink, buildVideoLink, decoratePlaylistLink, decorateVideoLink } from '@shared/core-utils'
+import { VideoCaption, VideoPlaylistPrivacy, VideoPrivacy } from '@shared/models'
+import { buildVideoOrPlaylistEmbed } from '../../../assets/player/utils'
 
 type Customizations = {
   startAtCheckbox: boolean
@@ -83,33 +84,34 @@ export class VideoShareComponent {
   }
 
   getVideoIframeCode () {
-    const options = this.getVideoOptions(this.video.embedUrl)
+    const embedUrl = decorateVideoLink({ url: this.video.embedUrl, ...this.getVideoOptions() })
 
-    const embedUrl = buildVideoLink(options)
     return buildVideoOrPlaylistEmbed(embedUrl, this.video.name)
   }
 
   getPlaylistIframeCode () {
-    const options = this.getPlaylistOptions(this.playlist.embedUrl)
+    const embedUrl = decoratePlaylistLink({ url: this.playlist.embedUrl, ...this.getPlaylistOptions() })
 
-    const embedUrl = buildPlaylistLink(options)
     return buildVideoOrPlaylistEmbed(embedUrl, this.playlist.displayName)
   }
 
   getVideoUrl () {
-    let baseUrl = this.customizations.originUrl ? this.video.originInstanceUrl : window.location.origin
-    baseUrl += '/w/' + this.video.uuid
-    const options = this.getVideoOptions(baseUrl)
+    const url = this.customizations.originUrl
+      ? this.video.url
+      : buildVideoLink(this.video, window.location.origin)
 
-    return buildVideoLink(options)
+    return decorateVideoLink({
+      url,
+
+      ...this.getVideoOptions()
+    })
   }
 
   getPlaylistUrl () {
-    const base = window.location.origin + '/w/p/' + this.playlist.uuid
+    const url = buildPlaylistLink(this.playlist)
+    if (!this.includeVideoInPlaylist) return url
 
-    if (!this.includeVideoInPlaylist) return base
-
-    return base + '?playlistPosition=' + this.playlistPosition
+    return decoratePlaylistLink({ url, playlistPosition: this.playlistPosition })
   }
 
   notSecure () {
@@ -124,6 +126,14 @@ export class VideoShareComponent {
     return this.video.isLocal
   }
 
+  isPrivateVideo () {
+    return this.video.privacy.id === VideoPrivacy.PRIVATE
+  }
+
+  isPrivatePlaylist () {
+    return this.playlist.privacy.id === VideoPlaylistPrivacy.PRIVATE
+  }
+
   private getPlaylistOptions (baseUrl?: string) {
     return {
       baseUrl,
@@ -132,10 +142,8 @@ export class VideoShareComponent {
     }
   }
 
-  private getVideoOptions (baseUrl?: string) {
+  private getVideoOptions () {
     return {
-      baseUrl,
-
       startTime: this.customizations.startAtCheckbox ? this.customizations.startAt : undefined,
       stopTime: this.customizations.stopAtCheckbox ? this.customizations.stopAt : undefined,
 

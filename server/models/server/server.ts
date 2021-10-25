@@ -1,3 +1,4 @@
+import { Transaction } from 'sequelize'
 import { AllowNull, Column, CreatedAt, Default, HasMany, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import { MServer, MServerFormattable } from '@server/types/models/server'
 import { AttributesOnly } from '@shared/core-utils'
@@ -51,11 +52,12 @@ export class ServerModel extends Model<Partial<AttributesOnly<ServerModel>>> {
   })
   BlockedByAccounts: ServerBlocklistModel[]
 
-  static load (id: number): Promise<MServer> {
+  static load (id: number, transaction?: Transaction): Promise<MServer> {
     const query = {
       where: {
         id
-      }
+      },
+      transaction
     }
 
     return ServerModel.findOne(query)

@@ -1,8 +1,8 @@
 import { registerTSPaths } from '../server/helpers/register-ts-paths'
 registerTSPaths()
 
-import * as Bluebird from 'bluebird'
-import * as program from 'commander'
+import { map } from 'bluebird'
+import { program } from 'commander'
 import { pathExists, remove } from 'fs-extra'
 import { generateImageFilename, processImage } from '@server/helpers/image-utils'
 import { THUMBNAILS_SIZE } from '@server/initializers/constants'
@@ -23,7 +23,7 @@ async function run () {
 
   const videos = await VideoModel.listLocal()
 
-  await Bluebird.map(videos, v => {
+  await map(videos, v => {
     return processVideo(v)
       .catch(err => console.error('Cannot process video %s.', v.url, err))
   }, { concurrency: 20 })

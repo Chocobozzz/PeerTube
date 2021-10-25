@@ -27,17 +27,15 @@ function up (utils: {
         const ext = matches[2]
 
         const p = getVideoFileResolution(join(videoFileDir, videoFile))
-          .then(height => {
+          .then(async ({ resolution }) => {
             const oldTorrentName = uuid + '.torrent'
-            const newTorrentName = uuid + '-' + height + '.torrent'
-            return rename(join(torrentDir, oldTorrentName), join(torrentDir, newTorrentName)).then(() => height)
-          })
-          .then(height => {
-            const newVideoFileName = uuid + '-' + height + '.' + ext
-            return rename(join(videoFileDir, videoFile), join(videoFileDir, newVideoFileName)).then(() => height)
-          })
-          .then(height => {
-            const query = 'UPDATE "VideoFiles" SET "resolution" = ' + height +
+            const newTorrentName = uuid + '-' + resolution + '.torrent'
+            await rename(join(torrentDir, oldTorrentName), join(torrentDir, newTorrentName)).then(() => resolution)
+
+            const newVideoFileName = uuid + '-' + resolution + '.' + ext
+            await rename(join(videoFileDir, videoFile), join(videoFileDir, newVideoFileName)).then(() => resolution)
+
+            const query = 'UPDATE "VideoFiles" SET "resolution" = ' + resolution +
                           ' WHERE "videoId" = (SELECT "id" FROM "Videos" WHERE "uuid" = \'' + uuid + '\')'
             return utils.sequelize.query(query)
           })

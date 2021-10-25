@@ -2,11 +2,6 @@ name: Test Suite
 
 on:
   push:
-    branches:
-      - develop
-      - master
-      - ci
-      - next
   pull_request:
     types: [synchronize, opened]
   schedule:
@@ -24,7 +19,7 @@ jobs:
           - 6379:6379
 
       postgres:
-        image: postgres:9.6
+        image: postgres:10
         ports:
           - 5432:5432
         env:
@@ -36,15 +31,21 @@ jobs:
         ports:
           - 10389:10389
 
+      s3ninja:
+        image: chocobozzz/s3-ninja
+        ports:
+          - 9444:9000
+
     strategy:
       fail-fast: false
       matrix:
-        test_suite: [ misc, api-1, api-2, api-3, api-4, cli, lint, external-plugins ]
+        test_suite: [ client, api-1, api-2, api-3, api-4, cli-plugin, lint, external-plugins ]
 
     env:
       PGUSER: peertube
       PGHOST: localhost
       NODE_PENDING_JOB_WAIT: 250
+      ENABLE_OBJECT_STORAGE_TESTS: true
 
     steps:
       - uses: actions/checkout@v2

@@ -1,5 +1,5 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 .root {
   display: flex;
@@ -11,20 +11,17 @@ my-global-icon {
   height: 28px;
   width: 28px;
   cursor: pointer;
+  color: pvar(--mainColor);
 
   &:hover {
     color: pvar(--mainHoverColor);
-  }
-
-  &[iconName=search] {
-    color: pvar(--mainForegroundColor);
-  }
-
-  &[iconName=cross] {
-    color: pvar(--mainForegroundColor);
   }
 }
 
 input {
   @include peertube-input-text(200px);
+
+  &:focus {
+    box-shadow: 0 0 5px 0 #a5a5a5;
+  }
 }

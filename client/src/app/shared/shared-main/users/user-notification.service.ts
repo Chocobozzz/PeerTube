@@ -1,11 +1,11 @@
+import { SortMeta } from 'primeng/api'
 import { catchError, map, tap } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import { ComponentPaginationLight, RestExtractor, RestService, User, PeerTubeSocket, AuthService } from '@app/core'
+import { AuthService, ComponentPaginationLight, PeerTubeSocket, RestExtractor, RestService } from '@app/core'
 import { ResultList, UserNotification as UserNotificationServer, UserNotificationSetting } from '@shared/models'
 import { environment } from '../../../../environments/environment'
 import { UserNotification } from './user-notification.model'
-import { SortMeta } from 'primeng/api'
 
 @Injectable()
 export class UserNotificationService {
@@ -23,13 +23,13 @@ export class UserNotificationService {
   listMyNotifications (parameters: {
     pagination: ComponentPaginationLight
     ignoreLoadingBar?: boolean
-    unread?: boolean,
+    unread?: boolean
     sort?: SortMeta
   }) {
     const { pagination, ignoreLoadingBar, unread, sort } = parameters
 
     let params = new HttpParams()
-    params = this.restService.addRestGetParams(params, this.restService.componentPaginationToRestPagination(pagination), sort)
+    params = this.restService.addRestGetParams(params, this.restService.componentToRestPagination(pagination), sort)
 
     if (unread) params = params.append('unread', `${unread}`)
 

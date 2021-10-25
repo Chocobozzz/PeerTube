@@ -1,9 +1,5 @@
-@import '_variables';
-@import '_mixins';
-@import './_bootstrap-variables';
-
-@import '~bootstrap/scss/functions';
-@import '~bootstrap/scss/variables';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 .instance-name {
   line-height: 1.7rem;
@@ -19,7 +15,6 @@
 .block {
   font-size: 15px;
   margin-bottom: 15px;
-  padding: 0 $btn-padding-x;
 }
 
 ngb-accordion ::ng-deep {

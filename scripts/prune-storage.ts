@@ -1,19 +1,21 @@
 import { registerTSPaths } from '../server/helpers/register-ts-paths'
 registerTSPaths()
 
-import * as prompt from 'prompt'
-import { join } from 'path'
+import { start, get } from 'prompt'
+import { join, basename } from 'path'
 import { CONFIG } from '../server/initializers/config'
 import { VideoModel } from '../server/models/video/video'
 import { initDatabaseModels } from '../server/initializers/database'
-import { readdir, remove } from 'fs-extra'
+import { readdir, remove, stat } from 'fs-extra'
 import { VideoRedundancyModel } from '../server/models/redundancy/video-redundancy'
-import * as Bluebird from 'bluebird'
+import { map } from 'bluebird'
 import { getUUIDFromFilename } from '../server/helpers/utils'
 import { ThumbnailModel } from '../server/models/video/thumbnail'
 import { ActorImageModel } from '../server/models/actor/actor-image'
 import { uniq, values } from 'lodash'
 import { ThumbnailType } from '@shared/models'
+import { VideoFileModel } from '@server/models/video/video-file'
+import { HLS_REDUNDANCY_DIRECTORY } from '@server/initializers/constants'
 
 run()
   .then(() => process.exit(0))
@@ -37,8 +39,8 @@ async function run () {
   console.log('Detecting files to remove, it could take a while...')
 
   toDelete = toDelete.concat(
-    await pruneDirectory(CONFIG.STORAGE.VIDEOS_DIR, doesVideoExist(true)),
-    await pruneDirectory(CONFIG.STORAGE.TORRENTS_DIR, doesVideoExist(true)),
+    await pruneDirectory(CONFIG.STORAGE.VIDEOS_DIR, doesWebTorrentFileExist()),
+    await pruneDirectory(CONFIG.STORAGE.TORRENTS_DIR, doesTorrentFileExist()),
 
     await pruneDirectory(CONFIG.STORAGE.REDUNDANCY_DIR, doesRedundancyExist),
 
@@ -77,27 +79,28 @@ async function pruneDirectory (directory: string, existFun: ExistFun) {
   const files = await readdir(directory)
 
   const toDelete: string[] = []
-  await Bluebird.map(files, async file => {
-    if (await existFun(file) !== true) {
-      toDelete.push(join(directory, file))
+  await map(files, async file => {
+    const filePath = join(directory, file)
+
+    if (await existFun(filePath) !== true) {
+      toDelete.push(filePath)
     }
   }, { concurrency: 20 })
 
   return toDelete
 }
 
-function doesVideoExist (keepOnlyOwned: boolean) {
-  return async (file: string) => {
-    const uuid = getUUIDFromFilename(file)
-    const video = await VideoModel.loadByUUID(uuid)
+function doesWebTorrentFileExist () {
+  return (filePath: string) => VideoFileModel.doesOwnedWebTorrentVideoFileExist(basename(filePath))
+}
 
-    return video && (keepOnlyOwned === false || video.isOwned())
-  }
+function doesTorrentFileExist () {
+  return (filePath: string) => VideoFileModel.doesOwnedTorrentFileExist(basename(filePath))
 }
 
 function doesThumbnailExist (keepOnlyOwned: boolean, type: ThumbnailType) {
-  return async (file: string) => {
-    const thumbnail = await ThumbnailModel.loadByFilename(file, type)
+  return async (filePath: string) => {
+    const thumbnail = await ThumbnailModel.loadByFilename(basename(filePath), type)
     if (!thumbnail) return false
 
     if (keepOnlyOwned) {
@@ -109,21 +112,23 @@ function doesThumbnailExist (keepOnlyOwned: boolean, type: ThumbnailType) {
   }
 }
 
-async function doesActorImageExist (file: string) {
-  const image = await ActorImageModel.loadByName(file)
+async function doesActorImageExist (filePath: string) {
+  const image = await ActorImageModel.loadByName(basename(filePath))
 
   return !!image
 }
 
-async function doesRedundancyExist (file: string) {
-  const uuid = getUUIDFromFilename(file)
-  const video = await VideoModel.loadWithFiles(uuid)
-
-  if (!video) return false
-
-  const isPlaylist = file.includes('.') === false
+async function doesRedundancyExist (filePath: string) {
+  const isPlaylist = (await stat(filePath)).isDirectory()
 
   if (isPlaylist) {
+    // Don't delete HLS directory
+    if (filePath === HLS_REDUNDANCY_DIRECTORY) return true
+
+    const uuid = getUUIDFromFilename(filePath)
+    const video = await VideoModel.loadWithFiles(uuid)
+    if (!video) return false
+
     const p = video.getHLSPlaylist()
     if (!p) return false
 
@@ -131,25 +136,16 @@ async function doesRedundancyExist (file: string) {
     return !!redundancy
   }
 
-  const resolution = parseInt(file.split('-')[5], 10)
-  if (isNaN(resolution)) {
-    console.error('Cannot prune %s because we cannot guess guess the resolution.', file)
-    return true
-  }
+  const file = await VideoFileModel.loadByFilename(basename(filePath))
+  if (!file) return false
 
-  const videoFile = video.getWebTorrentFile(resolution)
-  if (!videoFile) {
-    console.error('Cannot find webtorrent file of video %s - %d', video.url, resolution)
-    return true
-  }
-
-  const redundancy = await VideoRedundancyModel.loadLocalByFileId(videoFile.id)
+  const redundancy = await VideoRedundancyModel.loadLocalByFileId(file.id)
   return !!redundancy
 }
 
 async function askConfirmation () {
   return new Promise((res, rej) => {
-    prompt.start()
+    start()
     const schema = {
       properties: {
         confirm: {
@@ -162,7 +158,7 @@ async function askConfirmation () {
         }
       }
     }
-    prompt.get(schema, function (err, result) {
+    get(schema, function (err, result) {
       if (err) return rej(err)
 
       return res(result.confirm?.match(/y/) !== null)

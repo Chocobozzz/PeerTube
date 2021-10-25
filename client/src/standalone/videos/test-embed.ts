@@ -4,28 +4,30 @@ import { PeerTubePlayer } from '../player/player'
 
 window.addEventListener('load', async () => {
   const urlParts = window.location.href.split('/')
-  const lastPart = urlParts[ urlParts.length - 1 ]
+  const lastPart = urlParts[urlParts.length - 1]
 
   const isPlaylist = window.location.pathname.startsWith('/video-playlists/')
 
-  const elementId = lastPart.indexOf('?') === -1 ? lastPart : lastPart.split('?')[ 0 ]
+  const elementId = !lastPart.includes('?') ? lastPart : lastPart.split('?')[0]
 
   const iframe = document.createElement('iframe')
   iframe.src = isPlaylist
     ? `/video-playlists/embed/${elementId}?api=1`
     : `/videos/embed/${elementId}?api=1`
 
+  iframe.sandbox.add('allow-same-origin', 'allow-scripts', 'allow-popups')
+
   const mainElement = document.querySelector('#host')
   mainElement.appendChild(iframe)
 
-  console.log(`Document finished loading.`)
+  console.log('Document finished loading.')
   const player = new PeerTubePlayer(document.querySelector('iframe'))
 
-  window[ 'player' ] = player
+  window['player'] = player
 
-  console.log(`Awaiting player ready...`)
+  console.log('Awaiting player ready...')
   await player.ready
-  console.log(`Player is ready.`)
+  console.log('Player is ready.')
 
   const monitoredEvents = [
     'pause',
@@ -39,13 +41,15 @@ window.addEventListener('load', async () => {
     console.log(`PLAYER: now listening for event '${e}'`)
 
     player.getCurrentPosition()
-      .then(position => document.getElementById('playlist-position').innerHTML = position + '')
+      .then(position => {
+        document.getElementById('playlist-position').innerHTML = position + ''
+      })
   })
 
   let playbackRates: number[] = []
   let currentRate = await player.getPlaybackRate()
 
-  const updateRates = async () => {
+  const updateRates = () => {
     const rateListEl = document.querySelector('#rate-list')
     rateListEl.innerHTML = ''
 
@@ -82,8 +86,6 @@ window.addEventListener('load', async () => {
     captionEl.innerHTML = ''
 
     captions.forEach(c => {
-      console.log(c)
-
       if (c.mode === 'showing') {
         const itemEl = document.createElement('strong')
         itemEl.innerText = `${c.label} (active)`
@@ -105,7 +107,7 @@ window.addEventListener('load', async () => {
 
   updateCaptions()
 
-  const updateResolutions = ((resolutions: PeerTubeResolution[]) => {
+  const updateResolutions = (resolutions: PeerTubeResolution[]) => {
     const resolutionListEl = document.querySelector('#resolution-list')
     resolutionListEl.innerHTML = ''
 
@@ -126,7 +128,7 @@ window.addEventListener('load', async () => {
         resolutionListEl.appendChild(itemEl)
       }
     })
-  })
+  }
 
   player.getResolutions().then(
     resolutions => updateResolutions(resolutions))

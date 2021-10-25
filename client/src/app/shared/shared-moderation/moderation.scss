@@ -1,15 +1,22 @@
-@import 'variables';
-@import 'mixins';
-@import 'miniature';
+@use 'sass:math';
+@use '_mixins' as *;
+@use '_variables' as *;
+@use '_miniature' as *;
 
 .moderation-expanded {
   font-size: 90%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
 
   .moderation-expanded-label {
+    @include margin-right(5px);
+
     font-weight: $font-semibold;
     display: inline-block;
     vertical-align: top;
     text-align: end;
+    min-width: 100px;
   }
 
   .moderation-expanded-text {
@@ -20,6 +27,17 @@
       margin-bottom: 0 !important;
     }
   }
+
+  .right {
+    width: 50%;
+    max-width: 500px;
+  }
+
+  @media screen and (max-width: $primeng-breakpoint) {
+    .right {
+      width: 100%;
+    }
+  }
 }
 
 .screenratio {
@@ -28,15 +46,6 @@
     height: 100% !important;
     left: 0;
   };
-
-  div {
-    @include miniature-thumbnail;
-
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    color: pvar(--inputPlaceholderColor);
-  }
 }
 
 .chip {
@@ -82,7 +91,7 @@ my-action-dropdown.show {
     @include margin-right(0.5rem);
 
     height: $image-height;
-    width: #{(16/9) * $image-height};
+    width: #{math.div(16, 9) * $image-height};
     border-radius: 2px;
     border: 0;
     background: transparent;
@@ -131,5 +140,15 @@ my-action-dropdown.show {
       color: var(--greyForegroundColor);
       font-size: 11px;
     }
+  }
+}
+
+my-abuse-details {
+  width: 100%;
+}
+
+@media screen and (max-width: $primeng-breakpoint) {
+  .abuse-messages {
+    justify-content: flex-start !important;
   }
 }

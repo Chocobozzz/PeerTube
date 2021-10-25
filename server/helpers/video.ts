@@ -4,7 +4,7 @@ import { isStreamingPlaylist, MStreamingPlaylistVideo, MVideo } from '@server/ty
 import { VideoPrivacy, VideoState } from '@shared/models'
 
 function getVideoWithAttributes (res: Response) {
-  return res.locals.videoAll || res.locals.onlyVideo || res.locals.onlyVideoWithRights
+  return res.locals.videoAPI || res.locals.videoAll || res.locals.onlyVideo
 }
 
 function extractVideo (videoOrPlaylist: MVideo | MStreamingPlaylistVideo) {

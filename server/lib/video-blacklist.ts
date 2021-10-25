@@ -16,7 +16,7 @@ import { CONFIG } from '../initializers/config'
 import { VideoBlacklistModel } from '../models/video/video-blacklist'
 import { sendDeleteVideo } from './activitypub/send'
 import { federateVideoIfNeeded } from './activitypub/videos'
-import { LiveManager } from './live-manager'
+import { LiveManager } from './live/live-manager'
 import { Notifier } from './notifier'
 import { Hooks } from './plugins/hooks'
 

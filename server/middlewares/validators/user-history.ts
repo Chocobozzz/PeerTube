@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { body, query } from 'express-validator'
 import { exists, isDateValid } from '../../helpers/custom-validators/misc'
 import { logger } from '../../helpers/logger'

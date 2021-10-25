@@ -1,30 +1,24 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-
-import {
-  cleanupTests,
-  createUser,
-  flushAndRunServer,
-  makeDeleteRequest,
-  makeGetRequest,
-  makePostBodyRequest,
-  ServerInfo,
-  setAccessTokensToServers,
-  userLogin
-} from '../../../../shared/extra-utils'
-
 import {
   checkBadCountPagination,
   checkBadSortPagination,
-  checkBadStartPagination
-} from '../../../../shared/extra-utils/requests/check-api-params'
-import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+  checkBadStartPagination,
+  cleanupTests,
+  createSingleServer,
+  makeDeleteRequest,
+  makeGetRequest,
+  makePostBodyRequest,
+  PeerTubeServer,
+  setAccessTokensToServers,
+  waitJobs
+} from '@shared/extra-utils'
+import { HttpStatusCode } from '@shared/models'
 
 describe('Test user subscriptions API validators', function () {
   const path = '/api/v1/users/me/subscriptions'
-  let server: ServerInfo
+  let server: PeerTubeServer
   let userAccessToken = ''
 
   // ---------------------------------------------------------------
@@ -32,7 +26,7 @@ describe('Test user subscriptions API validators', function () {
   before(async function () {
     this.timeout(30000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
 
     await setAccessTokensToServers([ server ])
 
@@ -40,8 +34,8 @@ describe('Test user subscriptions API validators', function () {
       username: 'user1',
       password: 'my super password'
     }
-    await createUser({ url: server.url, accessToken: server.accessToken, username: user.username, password: user.password })
-    userAccessToken = await userLogin(server, user)
+    await server.users.create({ username: user.username, password: user.password })
+    userAccessToken = await server.login.getAccessToken(user)
   })
 
   describe('When listing my subscriptions', function () {
@@ -61,7 +55,7 @@ describe('Test user subscriptions API validators', function () {
       await makeGetRequest({
         url: server.url,
         path,
-        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
       })
     })
 
@@ -70,7 +64,7 @@ describe('Test user subscriptions API validators', function () {
         url: server.url,
         path,
         token: userAccessToken,
-        statusCodeExpected: HttpStatusCode.OK_200
+        expectedStatus: HttpStatusCode.OK_200
       })
     })
   })
@@ -94,7 +88,7 @@ describe('Test user subscriptions API validators', function () {
       await makeGetRequest({
         url: server.url,
         path,
-        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
       })
     })
 
@@ -103,7 +97,7 @@ describe('Test user subscriptions API validators', function () {
         url: server.url,
         path,
         token: userAccessToken,
-        statusCodeExpected: HttpStatusCode.OK_200
+        expectedStatus: HttpStatusCode.OK_200
       })
     })
   })
@@ -114,7 +108,7 @@ describe('Test user subscriptions API validators', function () {
         url: server.url,
         path,
         fields: { uri: 'user1_channel@localhost:' + server.port },
-        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
       })
     })
 
@@ -124,7 +118,7 @@ describe('Test user subscriptions API validators', function () {
         path,
         token: server.accessToken,
         fields: { uri: 'root' },
-        statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
       })
 
       await makePostBodyRequest({
@@ -132,7 +126,7 @@ describe('Test user subscriptions API validators', function () {
         path,
         token: server.accessToken,
         fields: { uri: 'root@' },
-        statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
       })
 
       await makePostBodyRequest({
@@ -140,7 +134,7 @@ describe('Test user subscriptions API validators', function () {
         path,
         token: server.accessToken,
         fields: { uri: 'root@hello@' },
-        statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
       })
     })
 
@@ -152,7 +146,7 @@ describe('Test user subscriptions API validators', function () {
         path,
         token: server.accessToken,
         fields: { uri: 'user1_channel@localhost:' + server.port },
-        statusCodeExpected: HttpStatusCode.NO_CONTENT_204
+        expectedStatus: HttpStatusCode.NO_CONTENT_204
       })
 
       await waitJobs([ server ])
@@ -164,7 +158,7 @@ describe('Test user subscriptions API validators', function () {
       await makeGetRequest({
         url: server.url,
         path: path + '/user1_channel@localhost:' + server.port,
-        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
       })
     })
 
@@ -173,21 +167,21 @@ describe('Test user subscriptions API validators', function () {
         url: server.url,
         path: path + '/root',
         token: server.accessToken,
-        statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
       })
 
       await makeGetRequest({
         url: server.url,
         path: path + '/root@',
         token: server.accessToken,
-        statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
       })
 
       await makeGetRequest({
         url: server.url,
         path: path + '/root@hello@',
         token: server.accessToken,
-        statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
       })
     })
 
@@ -196,7 +190,7 @@ describe('Test user subscriptions API validators', function () {
         url: server.url,
         path: path + '/root1@localhost:' + server.port,
         token: server.accessToken,
-        statusCodeExpected: HttpStatusCode.NOT_FOUND_404
+        expectedStatus: HttpStatusCode.NOT_FOUND_404
       })
     })
 
@@ -205,7 +199,7 @@ describe('Test user subscriptions API validators', function () {
         url: server.url,
         path: path + '/user1_channel@localhost:' + server.port,
         token: server.accessToken,
-        statusCodeExpected: HttpStatusCode.OK_200
+        expectedStatus: HttpStatusCode.OK_200
       })
     })
   })
@@ -217,7 +211,7 @@ describe('Test user subscriptions API validators', function () {
       await makeGetRequest({
         url: server.url,
         path: existPath,
-        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
       })
     })
 
@@ -227,7 +221,7 @@ describe('Test user subscriptions API validators', function () {
         path: existPath,
         query: { uris: 'toto' },
         token: server.accessToken,
-        statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
       })
 
       await makeGetRequest({
@@ -235,7 +229,7 @@ describe('Test user subscriptions API validators', function () {
         path: existPath,
         query: { 'uris[]': 1 },
         token: server.accessToken,
-        statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
       })
     })
 
@@ -245,7 +239,7 @@ describe('Test user subscriptions API validators', function () {
         path: existPath,
         query: { 'uris[]': 'coucou@localhost:' + server.port },
         token: server.accessToken,
-        statusCodeExpected: HttpStatusCode.OK_200
+        expectedStatus: HttpStatusCode.OK_200
       })
     })
   })
@@ -255,7 +249,7 @@ describe('Test user subscriptions API validators', function () {
       await makeDeleteRequest({
         url: server.url,
         path: path + '/user1_channel@localhost:' + server.port,
-        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
       })
     })
 
@@ -264,21 +258,21 @@ describe('Test user subscriptions API validators', function () {
         url: server.url,
         path: path + '/root',
         token: server.accessToken,
-        statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
       })
 
       await makeDeleteRequest({
         url: server.url,
         path: path + '/root@',
         token: server.accessToken,
-        statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
       })
 
       await makeDeleteRequest({
         url: server.url,
         path: path + '/root@hello@',
         token: server.accessToken,
-        statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
       })
     })
 
@@ -287,7 +281,7 @@ describe('Test user subscriptions API validators', function () {
         url: server.url,
         path: path + '/root1@localhost:' + server.port,
         token: server.accessToken,
-        statusCodeExpected: HttpStatusCode.NOT_FOUND_404
+        expectedStatus: HttpStatusCode.NOT_FOUND_404
       })
     })
 
@@ -296,7 +290,7 @@ describe('Test user subscriptions API validators', function () {
         url: server.url,
         path: path + '/user1_channel@localhost:' + server.port,
         token: server.accessToken,
-        statusCodeExpected: HttpStatusCode.NO_CONTENT_204
+        expectedStatus: HttpStatusCode.NO_CONTENT_204
       })
     })
   })

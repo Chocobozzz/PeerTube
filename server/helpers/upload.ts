@@ -1,7 +1,7 @@
-import { JobQueue } from '@server/lib/job-queue'
-import { METAFILE_EXTNAME } from '@uploadx/core'
 import { remove } from 'fs-extra'
 import { join } from 'path'
+import { JobQueue } from '@server/lib/job-queue'
+import { METAFILE_EXTNAME } from '@uploadx/core'
 import { RESUMABLE_UPLOAD_DIRECTORY } from '../initializers/constants'
 
 function getResumableUploadPath (filename?: string) {

@@ -4,7 +4,6 @@ import { logger, loggerTagsFactory, LoggerTagsFn } from '@server/helpers/logger'
 import { Notifier } from '@server/lib/notifier'
 import { PeerTubeSocket } from '@server/lib/peertube-socket'
 import { autoBlacklistVideoIfNeeded } from '@server/lib/video-blacklist'
-import { VideoCaptionModel } from '@server/models/video/video-caption'
 import { VideoLiveModel } from '@server/models/video/video-live'
 import { MActor, MChannelAccountLight, MChannelId, MVideoAccountLightBlacklistAllFiles, MVideoFullLight } from '@server/types/models'
 import { VideoObject, VideoPrivacy } from '@shared/models'
@@ -136,8 +135,6 @@ export class APVideoUpdater extends APVideoAbstractBuilder {
   }
 
   private async setCaptions (videoUpdated: MVideoFullLight, t: Transaction) {
-    await VideoCaptionModel.deleteAllCaptionsOfRemoteVideo(videoUpdated.id, t)
-
     await this.insertOrReplaceCaptions(videoUpdated, t)
   }
 

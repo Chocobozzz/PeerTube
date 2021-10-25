@@ -1,18 +1,38 @@
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
+import { PromiseCache } from '@server/helpers/promise-cache'
 import { PeerTubeRequestError } from '@server/helpers/requests'
 import { ActorLoadByUrlType } from '@server/lib/model-loaders'
 import { ActorModel } from '@server/models/actor/actor'
 import { MActorAccountChannelId, MActorFull } from '@server/types/models'
-import { HttpStatusCode } from '@shared/core-utils'
+import { HttpStatusCode } from '@shared/models'
 import { fetchRemoteActor } from './shared'
 import { APActorUpdater } from './updater'
 import { getUrlFromWebfinger } from './webfinger'
 
-async function refreshActorIfNeeded <T extends MActorFull | MActorAccountChannelId> (
-  actorArg: T,
+type RefreshResult <T> = Promise<{ actor: T | MActorFull, refreshed: boolean }>
+
+type RefreshOptions <T> = {
+  actor: T
   fetchedType: ActorLoadByUrlType
-): Promise<{ actor: T | MActorFull, refreshed: boolean }> {
-  if (!actorArg.isOutdated()) return { actor: actorArg, refreshed: false }
+}
+
+const promiseCache = new PromiseCache(doRefresh, (options: RefreshOptions<MActorFull | MActorAccountChannelId>) => options.actor.url)
+
+function refreshActorIfNeeded <T extends MActorFull | MActorAccountChannelId> (options: RefreshOptions<T>): RefreshResult <T> {
+  const actorArg = options.actor
+  if (!actorArg.isOutdated()) return Promise.resolve({ actor: actorArg, refreshed: false })
+
+  return promiseCache.run(options)
+}
+
+export {
+  refreshActorIfNeeded
+}
+
+// ---------------------------------------------------------------------------
+
+async function doRefresh <T extends MActorFull | MActorAccountChannelId> (options: RefreshOptions<T>): RefreshResult <MActorFull> {
+  const { actor: actorArg, fetchedType } = options
 
   // We need more attributes
   const actor = fetchedType === 'all'
@@ -51,12 +71,6 @@ async function refreshActorIfNeeded <T extends MActorFull | MActorAccountChannel
     return { actor, refreshed: false }
   }
 }
-
-export {
-  refreshActorIfNeeded
-}
-
-// ---------------------------------------------------------------------------
 
 function getActorUrl (actor: MActorFull) {
   return getUrlFromWebfinger(actor.preferredUsername + '@' + actor.getHost())

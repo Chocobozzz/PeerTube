@@ -1,5 +1,6 @@
-@import '_variables';
-@import '_mixins';
+@use 'sass:math';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 $grey-color: #9CA3AB;
 $index-block-height: 32px;
@@ -69,7 +70,7 @@ header {
 
   .connector {
     flex: auto;
-    margin: $index-block-height/2 10px 0 10px;
+    margin: math.div($index-block-height, 2) 10px 0 10px;
     height: 2px;
     background-color: $grey-color;
   }

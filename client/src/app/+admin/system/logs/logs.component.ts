@@ -23,6 +23,7 @@ export class LogsComponent implements OnInit {
   startDate: string
   level: LogLevel
   logType: 'audit' | 'standard'
+  tagsOneOf: string[] = []
 
   constructor (
     private logsService: LogsService,
@@ -51,20 +52,28 @@ export class LogsComponent implements OnInit {
   load () {
     this.loading = true
 
-    this.logsService.getLogs({ isAuditLog: this.isAuditLog(), level: this.level, startDate: this.startDate })
-        .subscribe(
-          logs => {
-            this.logs = logs
+    const tagsOneOf = this.tagsOneOf.length !== 0
+      ? this.tagsOneOf
+      : undefined
 
-            setTimeout(() => {
-              this.logsElement.nativeElement.scrollIntoView({ block: 'end', inline: 'nearest' })
-            })
-          },
+    this.logsService.getLogs({
+      isAuditLog: this.isAuditLog(),
+      level: this.level,
+      startDate: this.startDate,
+      tagsOneOf
+    }).subscribe({
+      next: logs => {
+        this.logs = logs
 
-          err => this.notifier.error(err.message),
+        setTimeout(() => {
+          this.logsElement.nativeElement.scrollIntoView({ block: 'end', inline: 'nearest' })
+        })
+      },
 
-          () => this.loading = false
-        )
+      error: err => this.notifier.error(err.message),
+
+      complete: () => this.loading = false
+    })
   }
 
   isAuditLog () {

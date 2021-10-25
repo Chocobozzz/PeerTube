@@ -31,8 +31,9 @@
     "Published": "Publicado",
     "To transcode": "Para transcodificar",
     "To import": "Para importar",
-    "Waiting for livestream": "Waiting for livestream",
-    "Livestream ended": "Livestream ended",
+    "Waiting for livestream": "Aguardando a transmissão ao vivo",
+    "Livestream ended": "Transmissão ao vivo se encerrou",
+    "To move to an external storage": "To move to an external storage",
     "Pending": "Pendente",
     "Success": "Sucesso",
     "Failed": "Falhou",
@@ -149,6 +150,7 @@
     "Kuanyama": "Cuanhama",
     "Kurdish": "Curdo",
     "Lao": "Laosiano",
+    "Latin": "Latin",
     "Latvian": "Letão",
     "Limburgan": "Lituano",
     "Lingala": "Lingala",
@@ -244,5 +246,5 @@
     "Chinese": "Chinês",
     "Zulu": "Zulu",
     "Normal mode": "Normal mode",
-    "Theater mode": "Theater mode"
+    "Theater mode": "Modo cinema"
 }

@@ -3,18 +3,15 @@
 import 'mocha'
 import {
   cleanupTests,
-  createUser,
-  flushAndRunServer,
+  createSingleServer,
   makeGetRequest,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers,
-  setDefaultVideoChannel,
-  userLogin
-} from '../../../../shared/extra-utils'
-import { UserRole } from '../../../../shared/models/users'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+  setDefaultVideoChannel
+} from '@shared/extra-utils'
+import { HttpStatusCode, UserRole } from '@shared/models'
 
-async function testEndpoints (server: ServerInfo, token: string, filter: string, statusCodeExpected: HttpStatusCode) {
+async function testEndpoints (server: PeerTubeServer, token: string, filter: string, expectedStatus: HttpStatusCode) {
   const paths = [
     '/api/v1/video-channels/root_channel/videos',
     '/api/v1/accounts/root/videos',
@@ -30,13 +27,13 @@ async function testEndpoints (server: ServerInfo, token: string, filter: string,
       query: {
         filter
       },
-      statusCodeExpected
+      expectedStatus
     })
   }
 }
 
-describe('Test videos filters', function () {
-  let server: ServerInfo
+describe('Test video filters validators', function () {
+  let server: PeerTubeServer
   let userAccessToken: string
   let moderatorAccessToken: string
 
@@ -45,28 +42,19 @@ describe('Test videos filters', function () {
   before(async function () {
     this.timeout(30000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
 
     await setAccessTokensToServers([ server ])
     await setDefaultVideoChannel([ server ])
 
     const user = { username: 'user1', password: 'my super password' }
-    await createUser({ url: server.url, accessToken: server.accessToken, username: user.username, password: user.password })
-    userAccessToken = await userLogin(server, user)
+    await server.users.create({ username: user.username, password: user.password })
+    userAccessToken = await server.login.getAccessToken(user)
 
     const moderator = { username: 'moderator', password: 'my super password' }
-    await createUser(
-      {
-        url: server.url,
-        accessToken: server.accessToken,
-        username: moderator.username,
-        password: moderator.password,
-        videoQuota: undefined,
-        videoQuotaDaily: undefined,
-        role: UserRole.MODERATOR
-      }
-    )
-    moderatorAccessToken = await userLogin(server, moderator)
+    await server.users.create({ username: moderator.username, password: moderator.password, role: UserRole.MODERATOR })
+
+    moderatorAccessToken = await server.login.getAccessToken(moderator)
   })
 
   describe('When setting a video filter', function () {
@@ -100,7 +88,7 @@ describe('Test videos filters', function () {
         await makeGetRequest({
           url: server.url,
           path: '/feeds/videos.json',
-          statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401,
+          expectedStatus: HttpStatusCode.UNAUTHORIZED_401,
           query: {
             filter
           }
@@ -112,7 +100,7 @@ describe('Test videos filters', function () {
       await makeGetRequest({
         url: server.url,
         path: '/feeds/videos.json',
-        statusCodeExpected: HttpStatusCode.OK_200,
+        expectedStatus: HttpStatusCode.OK_200,
         query: {
           filter: 'local'
         }

@@ -1,6 +1,7 @@
 import videojs from 'video.js'
+import { secondsToTime } from '@shared/core-utils'
 import { PlayerNetworkInfo as EventPlayerNetworkInfo } from '../peertube-videojs-typings'
-import { bytes, secondsToTime } from '../utils'
+import { bytes } from '../utils'
 
 interface StatsCardOptions extends videojs.ComponentOptions {
   videoUUID: string
@@ -37,10 +38,6 @@ class StatsCard extends Component {
 
   intervalMs = 300
   playerNetworkInfo: PlayerNetworkInfo = {}
-
-  constructor (player: videojs.Player, options: StatsCardOptions) {
-    super(player, options)
-  }
 
   createEl () {
     const container = super.createEl('div', {
@@ -80,9 +77,8 @@ class StatsCard extends Component {
   }
 
   toggle () {
-    this.updateInterval
-      ? this.hide()
-      : this.show()
+    if (this.updateInterval) this.hide()
+    else this.show()
   }
 
   show () {
@@ -90,7 +86,7 @@ class StatsCard extends Component {
     this.updateInterval = setInterval(async () => {
       try {
         const options = this.mode === 'p2p-media-loader'
-          ? await this.buildHLSOptions()
+          ? this.buildHLSOptions()
           : await this.buildWebTorrentOptions() // Default
 
         this.list.innerHTML = this.getListTemplate(options)
@@ -106,7 +102,7 @@ class StatsCard extends Component {
     this.container.style.display = 'none'
   }
 
-  private async buildHLSOptions () {
+  private buildHLSOptions () {
     const p2pMediaLoader = this.player_.p2pMediaLoader()
     const level = p2pMediaLoader.getCurrentLevel()
 

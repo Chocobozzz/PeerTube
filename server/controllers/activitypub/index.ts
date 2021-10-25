@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { activityPubClientRouter } from './client'
 import { inboxRouter } from './inbox'
 import { outboxRouter } from './outbox'

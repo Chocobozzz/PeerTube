@@ -1,5 +1,6 @@
-@import '_variables';
-@import '_mixins';
+@use 'sass:math';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 $menu-link-icon-size: 22px;
 $menu-link-icon-margin-right: 18px;
@@ -113,8 +114,8 @@ my-notification {
         display: inherit !important;
       }
 
-      .dropdown-toggle:first-child {
-        @include padding-left(30px !important);
+      .dropdown-toggle {
+        max-width: 88% !important;
       }
     }
   }
@@ -220,7 +221,7 @@ my-actor-avatar {
 
   a {
     $icon-size: 13px;
-    $additional-margin: ($menu-link-icon-size - $icon-size) / 2;
+    $additional-margin: math.div($menu-link-icon-size - $icon-size, 2);
 
     font-size: 14px;
     width: 100%;

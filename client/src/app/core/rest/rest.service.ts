@@ -13,9 +13,8 @@ interface QueryStringFilterPrefixes {
   }
 }
 
-type ParseQueryStringFilterResult = {
-  [key: string]: string | number | boolean | (string | number | boolean)[]
-}
+type ParseQueryStringFilters <K extends keyof any> = Partial<Record<K, string | number | boolean | (string | number | boolean)[]>>
+type ParseQueryStringFiltersResult <K extends keyof any> = ParseQueryStringFilters<K> & { search?: string }
 
 @Injectable()
 export class RestService {
@@ -44,13 +43,21 @@ export class RestService {
     return newParams
   }
 
+  addArrayParams (params: HttpParams, name: string, values: (string | number)[]) {
+    for (const v of values) {
+      params = params.append(name, v)
+    }
+
+    return params
+  }
+
   addObjectParams (params: HttpParams, object: { [ name: string ]: any }) {
     for (const name of Object.keys(object)) {
       const value = object[name]
       if (value === undefined || value === null) continue
 
       if (Array.isArray(value)) {
-        for (const v of value) params = params.append(name, v)
+        params = this.addArrayParams(params, name, value)
       } else {
         params = params.append(name, value)
       }
@@ -59,14 +66,17 @@ export class RestService {
     return params
   }
 
-  componentPaginationToRestPagination (componentPagination: ComponentPaginationLight): RestPagination {
+  componentToRestPagination (componentPagination: ComponentPaginationLight): RestPagination {
     const start: number = (componentPagination.currentPage - 1) * componentPagination.itemsPerPage
     const count: number = componentPagination.itemsPerPage
 
     return { start, count }
   }
 
-  parseQueryStringFilter (q: string, prefixes: QueryStringFilterPrefixes): ParseQueryStringFilterResult {
+  /*
+  * Returns an object containing the filters and the remaining search
+  */
+  parseQueryStringFilter <T extends QueryStringFilterPrefixes> (q: string, prefixes: T): ParseQueryStringFiltersResult<keyof T> {
     if (!q) return {}
 
     // Tokenize the strings using spaces that are not in quotes
@@ -82,9 +92,9 @@ export class RestService {
       return prefixeStrings.every(prefixString => t.startsWith(prefixString) === false)
     })
 
-    const additionalFilters: ParseQueryStringFilterResult = {}
+    const additionalFilters: ParseQueryStringFilters<keyof T> = {}
 
-    for (const prefixKey of Object.keys(prefixes)) {
+    for (const prefixKey of Object.keys(prefixes) as (keyof T)[]) {
       const prefixObj = prefixes[prefixKey]
       const prefix = prefixObj.prefix
 

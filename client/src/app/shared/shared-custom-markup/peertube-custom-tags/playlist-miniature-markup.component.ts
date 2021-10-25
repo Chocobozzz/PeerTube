@@ -1,6 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core'
+import { finalize } from 'rxjs/operators'
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
+import { Notifier } from '@app/core'
+import { FindInBulkService } from '@app/shared/shared-search'
 import { MiniatureDisplayOptions } from '../../shared-video-miniature'
-import { VideoPlaylist, VideoPlaylistService } from '../../shared-video-playlist'
+import { VideoPlaylist } from '../../shared-video-playlist'
+import { CustomMarkupComponent } from './shared'
 
 /*
  * Markup component that creates a playlist miniature only
@@ -11,8 +15,10 @@ import { VideoPlaylist, VideoPlaylistService } from '../../shared-video-playlist
   templateUrl: 'playlist-miniature-markup.component.html',
   styleUrls: [ 'playlist-miniature-markup.component.scss' ]
 })
-export class PlaylistMiniatureMarkupComponent implements OnInit {
+export class PlaylistMiniatureMarkupComponent implements CustomMarkupComponent, OnInit {
   @Input() uuid: string
+
+  @Output() loaded = new EventEmitter<boolean>()
 
   playlist: VideoPlaylist
 
@@ -28,11 +34,17 @@ export class PlaylistMiniatureMarkupComponent implements OnInit {
   }
 
   constructor (
-    private playlistService: VideoPlaylistService
+    private findInBulkService: FindInBulkService,
+    private notifier: Notifier
   ) { }
 
   ngOnInit () {
-    this.playlistService.getVideoPlaylist(this.uuid)
-      .subscribe(playlist => this.playlist = playlist)
+    this.findInBulkService.getPlaylist(this.uuid)
+      .pipe(finalize(() => this.loaded.emit(true)))
+      .subscribe({
+        next: playlist => this.playlist = playlist,
+
+        error: err => this.notifier.error($localize`Error in playlist miniature component: ${err.message}`)
+      })
   }
 }

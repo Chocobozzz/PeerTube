@@ -1,15 +1,13 @@
 import { UploadFiles } from 'express'
 import { Transaction } from 'sequelize/types'
 import { DEFAULT_AUDIO_RESOLUTION, JOB_PRIORITY } from '@server/initializers/constants'
-import { sequelizeTypescript } from '@server/initializers/database'
 import { TagModel } from '@server/models/video/tag'
 import { VideoModel } from '@server/models/video/video'
+import { VideoJobInfoModel } from '@server/models/video/video-job-info'
 import { FilteredModelAttributes } from '@server/types'
-import { MThumbnail, MUserId, MVideo, MVideoFile, MVideoTag, MVideoThumbnail, MVideoUUID } from '@server/types/models'
+import { MThumbnail, MUserId, MVideoFile, MVideoTag, MVideoThumbnail, MVideoUUID } from '@server/types/models'
 import { ThumbnailType, VideoCreate, VideoPrivacy, VideoTranscodingPayload } from '@shared/models'
-import { federateVideoIfNeeded } from './activitypub/videos'
-import { JobQueue } from './job-queue/job-queue'
-import { Notifier } from './notifier'
+import { CreateJobOptions, JobQueue } from './job-queue/job-queue'
 import { updateVideoMiniatureFromExisting } from './thumbnail'
 
 function buildLocalVideoFromReq (videoInfo: VideoCreate, channelId: number): FilteredModelAttributes<VideoModel> {
@@ -82,30 +80,7 @@ async function setVideoTags (options: {
   video.Tags = tagInstances
 }
 
-async function publishAndFederateIfNeeded (video: MVideoUUID, wasLive = false) {
-  const result = await sequelizeTypescript.transaction(async t => {
-    // Maybe the video changed in database, refresh it
-    const videoDatabase = await VideoModel.loadAndPopulateAccountAndServerAndTags(video.uuid, t)
-    // Video does not exist anymore
-    if (!videoDatabase) return undefined
-
-    // We transcoded the video file in another format, now we can publish it
-    const videoPublished = await videoDatabase.publishIfNeededAndSave(t)
-
-    // If the video was not published, we consider it is a new one for other instances
-    // Live videos are always federated, so it's not a new video
-    await federateVideoIfNeeded(videoDatabase, !wasLive && videoPublished, t)
-
-    return { videoDatabase, videoPublished }
-  })
-
-  if (result?.videoPublished) {
-    Notifier.Instance.notifyOnNewVideoIfNeeded(result.videoDatabase)
-    Notifier.Instance.notifyOnVideoPublishedAfterTranscoding(result.videoDatabase)
-  }
-}
-
-async function addOptimizeOrMergeAudioJob (video: MVideo, videoFile: MVideoFile, user: MUserId) {
+async function addOptimizeOrMergeAudioJob (video: MVideoUUID, videoFile: MVideoFile, user: MUserId) {
   let dataInput: VideoTranscodingPayload
 
   if (videoFile.isAudio()) {
@@ -127,7 +102,20 @@ async function addOptimizeOrMergeAudioJob (video: MVideo, videoFile: MVideoFile,
     priority: await getTranscodingJobPriority(user)
   }
 
-  return JobQueue.Instance.createJobWithPromise({ type: 'video-transcoding', payload: dataInput }, jobOptions)
+  return addTranscodingJob(dataInput, jobOptions)
+}
+
+async function addTranscodingJob (payload: VideoTranscodingPayload, options: CreateJobOptions) {
+  await VideoJobInfoModel.increaseOrCreate(payload.videoUUID, 'pendingTranscode')
+
+  return JobQueue.Instance.createJobWithPromise({ type: 'video-transcoding', payload: payload }, options)
+}
+
+async function addMoveToObjectStorageJob (video: MVideoUUID, isNewVideo = true) {
+  await VideoJobInfoModel.increaseOrCreate(video.uuid, 'pendingMove')
+
+  const dataInput = { videoUUID: video.uuid, isNewVideo }
+  return JobQueue.Instance.createJobWithPromise({ type: 'move-to-object-storage', payload: dataInput })
 }
 
 async function getTranscodingJobPriority (user: MUserId) {
@@ -143,9 +131,10 @@ async function getTranscodingJobPriority (user: MUserId) {
 
 export {
   buildLocalVideoFromReq,
-  publishAndFederateIfNeeded,
   buildVideoThumbnailsFromReq,
   setVideoTags,
   addOptimizeOrMergeAudioJob,
+  addTranscodingJob,
+  addMoveToObjectStorageJob,
   getTranscodingJobPriority
 }

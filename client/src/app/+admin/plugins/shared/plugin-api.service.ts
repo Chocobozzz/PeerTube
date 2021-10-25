@@ -1,10 +1,8 @@
-import { Observable } from 'rxjs'
-import { catchError, map, switchMap } from 'rxjs/operators'
+import { catchError } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { ComponentPagination, RestExtractor, RestService } from '@app/core'
 import { PluginService } from '@app/core/plugins/plugin.service'
-import { peertubeTranslate } from '@shared/core-utils/i18n'
 import {
   InstallOrUpdatePlugin,
   ManagePlugin,
@@ -53,7 +51,7 @@ export class PluginApiService {
     componentPagination: ComponentPagination,
     sort: string
   ) {
-    const pagination = this.restService.componentPaginationToRestPagination(componentPagination)
+    const pagination = this.restService.componentToRestPagination(componentPagination)
 
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
@@ -69,7 +67,7 @@ export class PluginApiService {
     sort: string,
     search?: string
   ) {
-    const pagination = this.restService.componentPaginationToRestPagination(componentPagination)
+    const pagination = this.restService.componentToRestPagination(componentPagination)
 
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)

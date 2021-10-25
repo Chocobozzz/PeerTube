@@ -1,12 +1,10 @@
 import './embed.scss'
 import videojs from 'video.js'
 import { peertubeTranslate } from '../../../../shared/core-utils/i18n'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import {
-  ClientHookName,
   HTMLServerConfig,
+  HttpStatusCode,
   OAuth2ErrorCode,
-  PluginType,
   ResultList,
   UserRefreshToken,
   VideoCaption,
@@ -19,7 +17,7 @@ import { P2PMediaLoaderOptions, PeertubePlayerManagerOptions, PlayerMode } from 
 import { VideoJSCaption } from '../../assets/player/peertube-videojs-typings'
 import { TranslationsManager } from '../../assets/player/translations-manager'
 import { peertubeLocalStorage } from '../../root-helpers/peertube-web-storage'
-import { Hooks, loadPlugin, runHook } from '../../root-helpers/plugins'
+import { PluginsManager } from '../../root-helpers/plugins-manager'
 import { Tokens } from '../../root-helpers/users'
 import { objectToUrlEncoded } from '../../root-helpers/utils'
 import { RegisterClientHelpers } from '../../types/register-client-option.model'
@@ -66,18 +64,11 @@ export class PeerTubeEmbed {
   private playlistElements: VideoPlaylistElement[]
   private currentPlaylistElement: VideoPlaylistElement
 
-  private wrapperElement: HTMLElement
+  private readonly wrapperElement: HTMLElement
 
-  private peertubeHooks: Hooks = {}
-  private loadedScripts = new Set<string>()
+  private pluginsManager: PluginsManager
 
-  static async main () {
-    const videoContainerId = 'video-wrapper'
-    const embed = new PeerTubeEmbed(videoContainerId)
-    await embed.init()
-  }
-
-  constructor (private videoWrapperId: string) {
+  constructor (private readonly videoWrapperId: string) {
     this.wrapperElement = document.getElementById(this.videoWrapperId)
 
     try {
@@ -85,6 +76,12 @@ export class PeerTubeEmbed {
     } catch (err) {
       console.error('Cannot parse HTML config.', err)
     }
+  }
+
+  static async main () {
+    const videoContainerId = 'video-wrapper'
+    const embed = new PeerTubeEmbed(videoContainerId)
+    await embed.init()
   }
 
   getVideoUrl (id: string) {
@@ -261,12 +258,8 @@ export class PeerTubeEmbed {
   }
 
   async init () {
-    try {
-      this.userTokens = Tokens.load()
-      await this.initCore()
-    } catch (e) {
-      console.error(e)
-    }
+    this.userTokens = Tokens.load()
+    await this.initCore()
   }
 
   private initializeApi () {
@@ -319,7 +312,7 @@ export class PeerTubeEmbed {
     while (total > elements.length && i < 10) {
       const result = await this.loadPlaylistElements(playlistId, elements.length)
 
-      const json = await result.json() as ResultList<VideoPlaylistElement>
+      const json = await result.json()
       total = json.total
 
       elements = elements.concat(json.data)
@@ -472,12 +465,14 @@ export class PeerTubeEmbed {
     // Issue when we parsed config from HTML, fallback to API
     if (!this.config) {
       this.config = await this.refreshFetch('/api/v1/config')
-                              .then(res => res.json())
+        .then(res => res.json())
     }
 
     const videoInfoPromise = videoResponse.json()
       .then((videoInfo: VideoDetails) => {
-        if (!alreadyHadPlayer) this.loadPlaceholder(videoInfo)
+        this.loadParams(videoInfo)
+
+        if (!alreadyHadPlayer && !this.autoplay) this.loadPlaceholder(videoInfo)
 
         return videoInfo
       })
@@ -489,14 +484,12 @@ export class PeerTubeEmbed {
       this.PeertubePlayerManagerModulePromise
     ])
 
-    await this.ensurePluginsAreLoaded(serverTranslations)
+    await this.loadPlugins(serverTranslations)
 
     const videoInfo: VideoDetails = videoInfoTmp
 
     const PeertubePlayerManager = PeertubePlayerManagerModule.PeertubePlayerManager
     const videoCaptions = await this.buildCaptions(serverTranslations, captionsResponse)
-
-    this.loadParams(videoInfo)
 
     const playlistPlugin = this.currentPlaylistElement
       ? {
@@ -509,7 +502,7 @@ export class PeerTubeEmbed {
           this.currentPlaylistElement = videoPlaylistElement
 
           this.loadVideoAndBuildPlayer(this.currentPlaylistElement.video.uuid)
-            .catch(err => console.error(err))
+              .catch(err => console.error(err))
         }
       }
       : undefined
@@ -539,12 +532,15 @@ export class PeerTubeEmbed {
         videoCaptions,
         inactivityTimeout: 2500,
         videoViewUrl: this.getVideoUrl(videoInfo.uuid) + '/views',
+        videoShortUUID: videoInfo.shortUUID,
         videoUUID: videoInfo.uuid,
 
         isLive: videoInfo.isLive,
 
         playerElement: this.playerElement,
-        onPlayerElementChange: (element: HTMLVideoElement) => this.playerElement = element,
+        onPlayerElementChange: (element: HTMLVideoElement) => {
+          this.playerElement = element
+        },
 
         videoDuration: videoInfo.duration,
         enableHotkeys: true,
@@ -560,7 +556,9 @@ export class PeerTubeEmbed {
 
       webtorrent: {
         videoFiles: videoInfo.files
-      }
+      },
+
+      pluginsManager: this.pluginsManager
     }
 
     if (this.mode === 'p2p-media-loader') {
@@ -577,14 +575,17 @@ export class PeerTubeEmbed {
       })
     }
 
-    this.player = await PeertubePlayerManager.initialize(this.mode, options, (player: videojs.Player) => this.player = player)
+    this.player = await PeertubePlayerManager.initialize(this.mode, options, (player: videojs.Player) => {
+      this.player = player
+    })
+
     this.player.on('customError', (event: any, data: any) => this.handleError(data.err, serverTranslations))
 
-    window[ 'videojsPlayer' ] = this.player
+    window['videojsPlayer'] = this.player
 
     this.buildCSS()
 
-    await this.buildDock(videoInfo)
+    this.buildDock(videoInfo)
 
     this.initializeApi()
 
@@ -600,7 +601,7 @@ export class PeerTubeEmbed {
       })
     }
 
-    this.runHook('action:embed.player.loaded', undefined, { player: this.player, videojs, video: videoInfo })
+    this.pluginsManager.runHook('action:embed.player.loaded', undefined, { player: this.player, videojs, video: videoInfo })
   }
 
   private async initCore () {
@@ -652,15 +653,15 @@ export class PeerTubeEmbed {
   }
 
   private handleError (err: Error, translations?: { [ id: string ]: string }) {
-    if (err.message.indexOf('from xs param') !== -1) {
+    if (err.message.includes('from xs param')) {
       this.player.dispose()
       this.playerElement = null
       this.displayError('This video is not available because the remote instance is not responding.', translations)
-      return
+
     }
   }
 
-  private async buildDock (videoInfo: VideoDetails) {
+  private buildDock (videoInfo: VideoDetails) {
     if (!this.controls) return
 
     // On webtorrent fallback, player may have been disposed
@@ -668,7 +669,7 @@ export class PeerTubeEmbed {
 
     const title = this.title ? videoInfo.name : undefined
 
-    const description = this.config.tracker.enabled && this.warningTitle
+    const description = this.warningTitle && (!videoInfo.isLocal || this.config.tracker.enabled)
       ? '<span class="text">' + peertubeTranslate('Watching this video may reveal your IP address to others.') + '</span>'
       : undefined
 
@@ -694,9 +695,9 @@ export class PeerTubeEmbed {
 
   private async buildCaptions (serverTranslations: any, captionsResponse: Response): Promise<VideoJSCaption[]> {
     if (captionsResponse.ok) {
-      const { data } = (await captionsResponse.json()) as ResultList<VideoCaption>
+      const { data } = await captionsResponse.json()
 
-      return data.map(c => ({
+      return data.map((c: VideoCaption) => ({
         label: peertubeTranslate(c.language.label, serverTranslations),
         language: c.language.id,
         src: window.location.origin + c.captionPath
@@ -733,48 +734,25 @@ export class PeerTubeEmbed {
 
   private getResourceId () {
     const urlParts = window.location.pathname.split('/')
-    return urlParts[ urlParts.length - 1 ]
+    return urlParts[urlParts.length - 1]
   }
 
   private isPlaylistEmbed () {
     return window.location.pathname.split('/')[1] === 'video-playlists'
   }
 
-  private async ensurePluginsAreLoaded (translations?: { [ id: string ]: string }) {
-    if (this.config.plugin.registered.length === 0) return
+  private loadPlugins (translations?: { [ id: string ]: string }) {
+    this.pluginsManager = new PluginsManager({
+      peertubeHelpersFactory: _ => this.buildPeerTubeHelpers(translations)
+    })
 
-    for (const plugin of this.config.plugin.registered) {
-      for (const key of Object.keys(plugin.clientScripts)) {
-        const clientScript = plugin.clientScripts[key]
+    this.pluginsManager.loadPluginsList(this.config)
 
-        if (clientScript.scopes.includes('embed') === false) continue
-
-        const script = `/plugins/${plugin.name}/${plugin.version}/client-scripts/${clientScript.script}`
-
-        if (this.loadedScripts.has(script)) continue
-
-        const pluginInfo = {
-          plugin,
-          clientScript: {
-            script,
-            scopes: clientScript.scopes
-          },
-          pluginType: PluginType.PLUGIN,
-          isTheme: false
-        }
-
-        await loadPlugin({
-          hooks: this.peertubeHooks,
-          pluginInfo,
-          onSettingsScripts: () => undefined,
-          peertubeHelpersFactory: _ => this.buildPeerTubeHelpers(translations)
-        })
-      }
-    }
+    return this.pluginsManager.ensurePluginsAreLoaded('embed')
   }
 
   private buildPeerTubeHelpers (translations?: { [ id: string ]: string }): RegisterClientHelpers {
-    function unimplemented (): any {
+    const unimplemented = () => {
       throw new Error('This helper is not implemented in embed.')
     }
 
@@ -803,16 +781,14 @@ export class PeerTubeEmbed {
         enhancedMarkdownToHTML: unimplemented
       },
 
-      translate: (value: string) => {
-        return Promise.resolve(peertubeTranslate(value, translations))
-      }
+      translate: (value: string) => Promise.resolve(peertubeTranslate(value, translations))
     }
-  }
-
-  private runHook <T> (hookName: ClientHookName, result?: T, params?: any): Promise<T> {
-    return runHook(this.peertubeHooks, hookName, result, params)
   }
 }
 
 PeerTubeEmbed.main()
-  .catch(err => console.error('Cannot init embed.', err))
+  .catch(err => {
+    (window as any).displayIncompatibleBrowser()
+
+    console.error('Cannot init embed.', err)
+  })

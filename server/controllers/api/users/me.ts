@@ -1,9 +1,10 @@
 import 'multer'
-import * as express from 'express'
+import express from 'express'
 import { auditLoggerFactory, getAuditIdFromRes, UserAuditView } from '@server/helpers/audit-logger'
 import { Hooks } from '@server/lib/plugins/hooks'
+import { AttributesOnly } from '@shared/core-utils'
 import { ActorImageType, UserUpdateMe, UserVideoRate as FormattedUserVideoRate } from '../../../../shared'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
 import { UserVideoQuota } from '../../../../shared/models/users/user-video-quota.model'
 import { createReqFiles } from '../../../helpers/express-utils'
 import { getFormattedObjects } from '../../../helpers/utils'
@@ -24,14 +25,13 @@ import {
   usersUpdateMeValidator,
   usersVideoRatingValidator
 } from '../../../middlewares'
-import { deleteMeValidator, videoImportsSortValidator, videosSortValidator } from '../../../middlewares/validators'
+import { deleteMeValidator, usersVideosValidator, videoImportsSortValidator, videosSortValidator } from '../../../middlewares/validators'
 import { updateAvatarValidator } from '../../../middlewares/validators/actor-image'
 import { AccountModel } from '../../../models/account/account'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
 import { UserModel } from '../../../models/user/user'
 import { VideoModel } from '../../../models/video/video'
 import { VideoImportModel } from '../../../models/video/video-import'
-import { AttributesOnly } from '@shared/core-utils'
 
 const auditLogger = auditLoggerFactory('users')
 
@@ -69,6 +69,7 @@ meRouter.get('/me/videos',
   videosSortValidator,
   setDefaultVideosSort,
   setDefaultPagination,
+  asyncMiddleware(usersVideosValidator),
   asyncMiddleware(getUserVideos)
 )
 
@@ -113,6 +114,7 @@ async function getUserVideos (req: express.Request, res: express.Response) {
     count: req.query.count,
     sort: req.query.sort,
     search: req.query.search,
+    channelId: res.locals.videoChannel?.id,
     isLive: req.query.isLive
   }, 'filter:api.user.me.videos.list.params')
 
@@ -203,6 +205,7 @@ async function updateMe (req: express.Request, res: express.Response) {
     'videoLanguages',
     'theme',
     'noInstanceConfigWarningModal',
+    'noAccountSetupWarningModal',
     'noWelcomeModal'
   ]
 

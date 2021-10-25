@@ -1,85 +1,135 @@
-import { by, element, browser } from 'protractor'
+import { go } from '../utils'
 
 export class MyAccountPage {
 
   navigateToMyVideos () {
-    return element(by.css('a[href="/my-library/videos"]')).click()
+    return $('a[href="/my-library/videos"]').click()
   }
 
   navigateToMyPlaylists () {
-    return element(by.css('a[href="/my-library/video-playlists"]')).click()
+    return $('a[href="/my-library/video-playlists"]').click()
   }
 
   navigateToMyHistory () {
-    return element(by.css('a[href="/my-library/history/videos"]')).click()
+    return $('a[href="/my-library/history/videos"]').click()
+  }
+
+  // Settings
+
+  navigateToMySettings () {
+    return $('a[href="/my-account"]').click()
+  }
+
+  async updateNSFW (newValue: 'do_not_list' | 'blur' | 'display') {
+    const nsfw = $('#nsfwPolicy')
+
+    await nsfw.waitForDisplayed()
+    await nsfw.scrollIntoView(false) // Avoid issues with fixed header on firefox
+    await nsfw.selectByAttribute('value', newValue)
+
+    const submit = $('my-user-video-settings input[type=submit]')
+    await submit.scrollIntoView(false)
+    await submit.click()
   }
 
   // My account Videos
 
   async removeVideo (name: string) {
-    const container = this.getVideoElement(name)
+    const container = await this.getVideoElement(name)
 
-    await container.element(by.css('.dropdown-toggle')).click()
+    await container.$('.dropdown-toggle').click()
 
-    const dropdownMenu = container.element(by.css('.dropdown-menu .dropdown-item:nth-child(2)'))
-    await browser.wait(browser.ExpectedConditions.presenceOf(dropdownMenu))
+    const dropdownMenu = () => container.$('.dropdown-menu .dropdown-item:nth-child(2)')
 
-    return dropdownMenu.click()
+    await dropdownMenu().waitForDisplayed()
+    return dropdownMenu().click()
   }
 
   validRemove () {
-    return element(by.css('input[type=submit]')).click()
+    return $('input[type=submit]').click()
   }
 
-  countVideos (names: string[]) {
-    return element.all(by.css('.video'))
-                  .filter(e => {
-                    return e.element(by.css('.video-miniature-name'))
-                            .getText()
-                            .then(t => names.some(n => t.includes(n)))
-                  })
-                  .count()
+  async countVideos (names: string[]) {
+    const elements = await $$('.video').filter(async e => {
+      const t = await e.$('.video-miniature-name').getText()
+
+      return names.some(n => t.includes(n))
+    })
+
+    return elements.length
   }
 
   // My account playlists
 
-  getPlaylistVideosText (name: string) {
-    return this.getPlaylist(name).element(by.css('.miniature-playlist-info-overlay')).getText()
+  async getPlaylistVideosText (name: string) {
+    const elem = await this.getPlaylist(name)
+
+    return elem.$('.miniature-playlist-info-overlay').getText()
   }
 
-  clickOnPlaylist (name: string) {
-    return this.getPlaylist(name).element(by.css('.miniature-thumbnail')).click()
+  async clickOnPlaylist (name: string) {
+    const elem = await this.getPlaylist(name)
+
+    return elem.$('.miniature-thumbnail').click()
   }
 
-  countTotalPlaylistElements () {
-    return element.all(by.css('my-video-playlist-element-miniature')).count()
+  async countTotalPlaylistElements () {
+    await $('<my-video-playlist-element-miniature>').waitForDisplayed()
+
+    return $$('<my-video-playlist-element-miniature>').length
   }
 
   playPlaylist () {
-    return element(by.css('.playlist-info .miniature-thumbnail')).click()
+    return $('.playlist-info .miniature-thumbnail').click()
   }
 
   async goOnAssociatedPlaylistEmbed () {
-    let url = await browser.getCurrentUrl()
+    let url = await browser.getUrl()
     url = url.replace('/w/p/', '/video-playlists/embed/')
     url = url.replace(':3333', ':9001')
 
-    return browser.get(url)
+    return go(url)
   }
 
   // My account Videos
 
-  private getVideoElement (name: string) {
-    return element.all(by.css('.video'))
-                  .filter(e => e.element(by.css('.video-miniature-name')).getText().then(t => t.includes(name)))
-                  .first()
+  private async getVideoElement (name: string) {
+    const video = async () => {
+      const videos = await $$('.video').filter(async e => {
+        const t = await e.$('.video-miniature-name').getText()
+
+        return t.includes(name)
+      })
+
+      return videos[0]
+    }
+
+    await browser.waitUntil(async () => {
+      return (await video()).isDisplayed()
+    })
+
+    return video()
   }
 
   // My account playlists
 
-  private getPlaylist (name: string) {
-    return element.all(by.css('my-video-playlist-miniature'))
-      .filter(e => e.element(by.css('.miniature-name')).getText().then(t => t.includes(name)))
-      .first()
+  private async getPlaylist (name: string) {
+    const playlist = () => {
+      return $$('my-video-playlist-miniature')
+        .filter(async e => {
+          const t = await e.$('.miniature-name').getText()
+
+          return t.includes(name)
+        })
+        .then(elems => elems[0])
+    }
+
+    await browser.waitUntil(async () => {
+      const el = await playlist()
+
+      return el?.isDisplayed()
+    })
+
+    return playlist()
   }
 }

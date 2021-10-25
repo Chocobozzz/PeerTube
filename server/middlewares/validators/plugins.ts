@@ -1,6 +1,6 @@
-import * as express from 'express'
+import express from 'express'
 import { body, param, query, ValidationChain } from 'express-validator'
-import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '../../../shared/models/http/http-error-codes'
 import { PluginType } from '../../../shared/models/plugins/plugin.type'
 import { InstallOrUpdatePlugin } from '../../../shared/models/plugins/server/api/install-plugin.model'
 import { exists, isBooleanValid, isSafePath, toBooleanOrNull, toIntOrNull } from '../../helpers/custom-validators/misc'

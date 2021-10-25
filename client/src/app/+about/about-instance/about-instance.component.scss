@@ -1,5 +1,5 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 .about-instance-title {
   display: flex;
@@ -11,7 +11,7 @@
   }
 
   .contact-admin {
-    @include peertube-button;
+    @include peertube-button-link;
     @include orange-button;
 
     height: fit-content;
@@ -52,6 +52,10 @@
 .block {
   margin-bottom: 75px;
   font-size: 15px;
+}
+
+.short-description {
+  margin-top: 10px;
 }
 
 .short-description .dedicated-to-nsfw {

@@ -29,6 +29,19 @@ const aboutRoutes: Routes = [
         }
       },
       {
+        path: 'contact',
+        component: AboutInstanceComponent,
+        data: {
+          meta: {
+            title: $localize`Contact`
+          },
+          isContact: true
+        },
+        resolve: {
+          instanceData: AboutInstanceResolver
+        }
+      },
+      {
         path: 'peertube',
         component: AboutPeertubeComponent,
         data: {

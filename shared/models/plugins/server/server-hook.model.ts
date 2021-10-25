@@ -18,6 +18,10 @@ export const serverFilterHookObject = {
   'filter:api.user.me.videos.list.params': true,
   'filter:api.user.me.videos.list.result': true,
 
+  // Filter params/result used to list overview videos for the REST API
+  'filter:api.overviews.videos.list.params': true,
+  'filter:api.overviews.videos.list.result': true,
+
   // Filter params/results to search videos/channels in the DB or on the remote index
   'filter:api.search.videos.local.list.params': true,
   'filter:api.search.videos.local.list.result': true,
@@ -27,6 +31,10 @@ export const serverFilterHookObject = {
   'filter:api.search.video-channels.local.list.result': true,
   'filter:api.search.video-channels.index.list.params': true,
   'filter:api.search.video-channels.index.list.result': true,
+  'filter:api.search.video-playlists.local.list.params': true,
+  'filter:api.search.video-playlists.local.list.result': true,
+  'filter:api.search.video-playlists.index.list.params': true,
+  'filter:api.search.video-playlists.index.list.result': true,
 
   // Filter the result of the get function
   // Used to get detailed video information (video watch page for example)
@@ -110,7 +118,10 @@ export const serverActionHookObject = {
   'action:api.user.updated': true,
 
   // Fired when a user got a new oauth2 token
-  'action:api.user.oauth2-got-token': true
+  'action:api.user.oauth2-got-token': true,
+
+  // Fired when a video is added to a playlist
+  'action:api.video-playlist-element.created': true
 }
 
 export type ServerActionHookName = keyof typeof serverActionHookObject

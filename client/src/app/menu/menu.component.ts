@@ -28,7 +28,7 @@ const logger = debug('peertube:menu:MenuComponent')
 @Component({
   selector: 'my-menu',
   templateUrl: './menu.component.html',
-  styleUrls: ['./menu.component.scss']
+  styleUrls: [ './menu.component.scss' ]
 })
 export class MenuComponent implements OnInit {
   @ViewChild('languageChooserModal', { static: true }) languageChooserModal: LanguageChooserComponent
@@ -121,6 +121,9 @@ export class MenuComponent implements OnInit {
         this.authService.userInformationLoaded
           .subscribe(() => this.buildUserLanguages())
       })
+
+    this.serverService.getConfig()
+      .subscribe(config => this.serverConfig = config)
 
     this.modalService.openQuickSettingsSubject
       .subscribe(() => this.openQuickSettings())

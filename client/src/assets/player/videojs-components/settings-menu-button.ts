@@ -64,10 +64,7 @@ class SettingsButton extends Button {
   onDocumentClick (event: MouseEvent) {
     const element = event.target as HTMLElement
 
-    if (
-      element && element.classList &&
-      (element.classList.contains('vjs-settings') || element.parentElement.classList.contains('vjs-settings'))
-    ) {
+    if (element?.classList?.contains('vjs-settings') || element?.parentElement?.classList?.contains('vjs-settings')) {
       return
     }
 
@@ -191,7 +188,7 @@ class SettingsButton extends Button {
     }
 
     const offset = this.settingsButtonOptions.setup.maxHeightOffset
-    const maxHeight = (this.player().el() as HTMLElement).offsetHeight - offset // FIXME: typings
+    const maxHeight = (this.player().el() as HTMLElement).offsetHeight - offset
 
     const panelEl = this.panel.el() as HTMLElement
 

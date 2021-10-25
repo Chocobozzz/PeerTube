@@ -19,7 +19,7 @@ export class UserHistoryService {
   ) {}
 
   getUserVideosHistory (historyPagination: ComponentPaginationLight, search?: string) {
-    const pagination = this.restService.componentPaginationToRestPagination(historyPagination)
+    const pagination = this.restService.componentToRestPagination(historyPagination)
 
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination)

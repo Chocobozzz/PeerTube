@@ -4,7 +4,7 @@ contact_links:
     url: https://matrix.to/#/#peertube:matrix.org
     about: Chat with us via Matrix for quick Q/A here
   - name: 💬 IRC
-    url: https://kiwiirc.com/nextclient/irc.libera.chat/#peertube
+    url: https://web.libera.chat/#peertube
     about: Chat with us via IRC for quick Q/A here
   - name: 🤷💻🤦 Forum
     url: https://framacolibri.org/c/peertube

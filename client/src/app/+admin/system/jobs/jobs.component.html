@@ -107,6 +107,7 @@
               <ng-container *ngIf="jobType === 'all'" i18n>No jobs found.</ng-container>
               <ng-container *ngIf="jobType !== 'all'" i18n>No <code>{{ jobType }}</code> jobs found.</ng-container>
             </ng-container>
+
             <ng-container *ngIf="jobState !== 'all'">
               <ng-container *ngIf="jobType === 'all'" i18n>No <span class="badge" [ngClass]="getJobStateClass(jobState)">{{ jobState }}</span> jobs found.</ng-container>
               <ng-container *ngIf="jobType !== 'all'" i18n>No <code>{{ jobType }}</code> jobs found that are <span class="badge" [ngClass]="getJobStateClass(jobState)">{{ jobState }}</span>.</ng-container>

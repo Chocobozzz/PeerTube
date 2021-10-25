@@ -10,6 +10,8 @@ import { VideoStreamingPlaylist } from './video-streaming-playlist.model'
 export interface Video {
   id: number
   uuid: string
+  shortUUID: string
+
   createdAt: Date | string
   updatedAt: Date | string
   publishedAt: Date | string
@@ -34,8 +36,7 @@ export interface Video {
   embedPath: string
   embedUrl?: string
 
-  // When using the search index
-  url?: string
+  url: string
 
   views: number
   likes: number

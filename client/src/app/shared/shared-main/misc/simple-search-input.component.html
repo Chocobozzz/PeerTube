@@ -1,13 +1,18 @@
 <div class="root">
-  <input
-    #ref
-    type="text"
-    [(ngModel)]="value"
-    (keyup.enter)="searchChange()"
-    [hidden]="!inputShown"
-    [name]="name"
-    [placeholder]="placeholder"
-  >
+  <div class="input-group has-feedback has-clear">
+    <input
+      #ref
+      type="text"
+      [(ngModel)]="value"
+      (keyup.enter)="sendSearch()"
+      [hidden]="!inputShown"
+      [name]="name"
+      [placeholder]="placeholder"
+    >
+
+    <a class="glyphicon glyphicon-remove-sign form-control-feedback form-control-clear" (click)="onResetFilter()"></a>
+    <span class="sr-only" i18n>Clear filters</span>
+  </div>
 
   <my-global-icon iconName="search" aria-label="Search" role="button" (click)="onIconClick()" [title]="iconTitle"></my-global-icon>
 

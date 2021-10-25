@@ -21,6 +21,14 @@ export interface VideosCommonQuery {
   tagsAllOf?: string[]
 
   filter?: VideoFilter
+
+  skipCount?: boolean
+}
+
+export interface VideosCommonQueryAfterSanitize extends VideosCommonQuery {
+  start: number
+  count: number
+  sort: string
 }
 
 export interface VideosWithSearchCommonQuery extends VideosCommonQuery {

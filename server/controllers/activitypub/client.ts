@@ -1,5 +1,5 @@
-import * as cors from 'cors'
-import * as express from 'express'
+import cors from 'cors'
+import express from 'express'
 import { getServerActor } from '@server/models/application/application'
 import { MAccountId, MActorId, MChannelId, MVideoId } from '@server/types/models'
 import { VideoPrivacy, VideoRateType } from '../../../shared/models/videos'
@@ -24,14 +24,13 @@ import {
   videosCustomGetValidator,
   videosShareValidator
 } from '../../middlewares'
-import { cacheRoute } from '../../middlewares/cache'
+import { cacheRoute } from '../../middlewares/cache/cache'
 import { getAccountVideoRateValidatorFactory, videoCommentGetValidator } from '../../middlewares/validators'
 import { videoFileRedundancyGetValidator, videoPlaylistRedundancyGetValidator } from '../../middlewares/validators/redundancy'
 import { videoPlaylistElementAPGetValidator, videoPlaylistsGetValidator } from '../../middlewares/validators/videos/video-playlists'
 import { AccountModel } from '../../models/account/account'
 import { AccountVideoRateModel } from '../../models/account/account-video-rate'
 import { ActorFollowModel } from '../../models/actor/actor-follow'
-import { VideoModel } from '../../models/video/video'
 import { VideoCaptionModel } from '../../models/video/video-caption'
 import { VideoCommentModel } from '../../models/video/video-comment'
 import { VideoPlaylistModel } from '../../models/video/video-playlist'
@@ -44,7 +43,7 @@ activityPubClientRouter.use(cors())
 // Intercept ActivityPub client requests
 
 activityPubClientRouter.get(
-  [ '/accounts?/:name', '/accounts?/:name/video-channels' ],
+  [ '/accounts?/:name', '/accounts?/:name/video-channels', '/a/:name', '/a/:name/video-channels' ],
   executeIfActivityPub,
   asyncMiddleware(localAccountValidator),
   accountController
@@ -75,15 +74,16 @@ activityPubClientRouter.get('/accounts?/:name/dislikes/:videoId',
   getAccountVideoRateFactory('dislike')
 )
 
-activityPubClientRouter.get('/videos/watch/:id',
+activityPubClientRouter.get(
+  [ '/videos/watch/:id', '/w/:id' ],
   executeIfActivityPub,
-  asyncMiddleware(cacheRoute()(ROUTE_CACHE_LIFETIME.ACTIVITY_PUB.VIDEOS)),
-  asyncMiddleware(videosCustomGetValidator('only-video-with-rights')),
+  cacheRoute(ROUTE_CACHE_LIFETIME.ACTIVITY_PUB.VIDEOS),
+  asyncMiddleware(videosCustomGetValidator('all')),
   asyncMiddleware(videoController)
 )
 activityPubClientRouter.get('/videos/watch/:id/activity',
   executeIfActivityPub,
-  asyncMiddleware(videosCustomGetValidator('only-video-with-rights')),
+  asyncMiddleware(videosCustomGetValidator('all')),
   asyncMiddleware(videoController)
 )
 activityPubClientRouter.get('/videos/watch/:id/announces',
@@ -123,7 +123,7 @@ activityPubClientRouter.get('/videos/watch/:videoId/comments/:commentId/activity
 )
 
 activityPubClientRouter.get(
-  [ '/video-channels/:name', '/video-channels/:name/videos' ],
+  [ '/video-channels/:name', '/video-channels/:name/videos', '/c/:name', '/c/:name/videos' ],
   executeIfActivityPub,
   asyncMiddleware(localVideoChannelValidator),
   videoChannelController
@@ -155,7 +155,8 @@ activityPubClientRouter.get('/redundancy/streaming-playlists/:streamingPlaylistT
   asyncMiddleware(videoRedundancyController)
 )
 
-activityPubClientRouter.get('/video-playlists/:playlistId',
+activityPubClientRouter.get(
+  [ '/video-playlists/:playlistId', '/videos/watch/playlist/:playlistId', '/w/p/:playlistId' ],
   executeIfActivityPub,
   asyncMiddleware(videoPlaylistsGetValidator('all')),
   asyncMiddleware(videoPlaylistController)
@@ -222,8 +223,7 @@ function getAccountVideoRateFactory (rateType: VideoRateType) {
 }
 
 async function videoController (req: express.Request, res: express.Response) {
-  // We need more attributes
-  const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(res.locals.onlyVideoWithRights.id)
+  const video = res.locals.videoAll
 
   if (redirectIfNotOwned(video.url, res)) return
 

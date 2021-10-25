@@ -19,7 +19,9 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
     'action:api.user.created',
     'action:api.user.deleted',
     'action:api.user.updated',
-    'action:api.user.oauth2-got-token'
+    'action:api.user.oauth2-got-token',
+
+    'action:api.video-playlist-element.created'
   ]
 
   for (const h of actionHooks) {
@@ -232,7 +234,7 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
   })
 
   {
-    const searchHooks = [
+    const filterHooks = [
       'filter:api.search.videos.local.list.params',
       'filter:api.search.videos.local.list.result',
       'filter:api.search.videos.index.list.params',
@@ -241,9 +243,16 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
       'filter:api.search.video-channels.local.list.result',
       'filter:api.search.video-channels.index.list.params',
       'filter:api.search.video-channels.index.list.result',
+      'filter:api.search.video-playlists.local.list.params',
+      'filter:api.search.video-playlists.local.list.result',
+      'filter:api.search.video-playlists.index.list.params',
+      'filter:api.search.video-playlists.index.list.result',
+
+      'filter:api.overviews.videos.list.params',
+      'filter:api.overviews.videos.list.result'
     ]
 
-    for (const h of searchHooks) {
+    for (const h of filterHooks) {
       registerHook({
         target: h,
         handler: (obj) => {

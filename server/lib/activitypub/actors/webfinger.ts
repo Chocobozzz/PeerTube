@@ -1,16 +1,16 @@
-import * as WebFinger from 'webfinger.js'
-import { isTestInstance } from '@server/helpers/core-utils'
+import WebFinger from 'webfinger.js'
+import { isProdInstance } from '@server/helpers/core-utils'
 import { isActivityPubUrlValid } from '@server/helpers/custom-validators/activitypub/misc'
-import { WEBSERVER } from '@server/initializers/constants'
+import { REQUEST_TIMEOUT, WEBSERVER } from '@server/initializers/constants'
 import { ActorModel } from '@server/models/actor/actor'
 import { MActorFull } from '@server/types/models'
 import { WebFingerData } from '@shared/models'
 
 const webfinger = new WebFinger({
   webfist_fallback: false,
-  tls_only: isTestInstance(),
+  tls_only: isProdInstance(),
   uri_fallback: false,
-  request_timeout: 3000
+  request_timeout: REQUEST_TIMEOUT
 })
 
 async function loadActorUrlOrGetFromWebfinger (uriArg: string) {

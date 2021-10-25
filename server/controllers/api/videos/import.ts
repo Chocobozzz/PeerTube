@@ -1,8 +1,9 @@
-import * as express from 'express'
+import express from 'express'
 import { move, readFile } from 'fs-extra'
-import * as magnetUtil from 'magnet-uri'
-import * as parseTorrent from 'parse-torrent'
+import { decode } from 'magnet-uri'
+import parseTorrent, { Instance } from 'parse-torrent'
 import { join } from 'path'
+import { isVideoFileExtnameValid } from '@server/helpers/custom-validators/videos'
 import { ServerConfigManager } from '@server/lib/server-config-manager'
 import { setVideoTags } from '@server/lib/video'
 import { FilteredModelAttributes } from '@server/types'
@@ -25,7 +26,7 @@ import { isArray } from '../../../helpers/custom-validators/misc'
 import { cleanUpReqFiles, createReqFiles } from '../../../helpers/express-utils'
 import { logger } from '../../../helpers/logger'
 import { getSecureTorrentName } from '../../../helpers/utils'
-import { YoutubeDL, YoutubeDLInfo } from '../../../helpers/youtube-dl'
+import { YoutubeDLWrapper, YoutubeDLInfo } from '../../../helpers/youtube-dl'
 import { CONFIG } from '../../../initializers/config'
 import { MIMETYPES } from '../../../initializers/constants'
 import { sequelizeTypescript } from '../../../initializers/database'
@@ -133,12 +134,12 @@ async function addYoutubeDLImport (req: express.Request, res: express.Response) 
   const targetUrl = body.targetUrl
   const user = res.locals.oauth.token.User
 
-  const youtubeDL = new YoutubeDL(targetUrl, ServerConfigManager.Instance.getEnabledResolutions('vod'))
+  const youtubeDL = new YoutubeDLWrapper(targetUrl, ServerConfigManager.Instance.getEnabledResolutions('vod'))
 
   // Get video infos
   let youtubeDLInfo: YoutubeDLInfo
   try {
-    youtubeDLInfo = await youtubeDL.getYoutubeDLInfo()
+    youtubeDLInfo = await youtubeDL.getInfoForDownload()
   } catch (err) {
     logger.info('Cannot fetch information from import for URL %s.', targetUrl, { err })
 
@@ -157,7 +158,11 @@ async function addYoutubeDLImport (req: express.Request, res: express.Response) 
 
   // Process video thumbnail from url if processing from request.files failed
   if (!thumbnailModel && youtubeDLInfo.thumbnailUrl) {
-    thumbnailModel = await processThumbnailFromUrl(youtubeDLInfo.thumbnailUrl, video)
+    try {
+      thumbnailModel = await processThumbnailFromUrl(youtubeDLInfo.thumbnailUrl, video)
+    } catch (err) {
+      logger.warn('Cannot process thumbnail %s from youtubedl.', youtubeDLInfo.thumbnailUrl, { err })
+    }
   }
 
   // Process video preview from request.files
@@ -165,7 +170,11 @@ async function addYoutubeDLImport (req: express.Request, res: express.Response) 
 
   // Process video preview from url if processing from request.files failed
   if (!previewModel && youtubeDLInfo.thumbnailUrl) {
-    previewModel = await processPreviewFromUrl(youtubeDLInfo.thumbnailUrl, video)
+    try {
+      previewModel = await processPreviewFromUrl(youtubeDLInfo.thumbnailUrl, video)
+    } catch (err) {
+      logger.warn('Cannot process preview %s from youtubedl.', youtubeDLInfo.thumbnailUrl, { err })
+    }
   }
 
   const videoImport = await insertIntoDB({
@@ -185,11 +194,14 @@ async function addYoutubeDLImport (req: express.Request, res: express.Response) 
   // Get video subtitles
   await processYoutubeSubtitles(youtubeDL, targetUrl, video.id)
 
+  let fileExt = `.${youtubeDLInfo.ext}`
+  if (!isVideoFileExtnameValid(fileExt)) fileExt = '.mp4'
+
   // Create job to import the video
   const payload = {
     type: 'youtube-dl' as 'youtube-dl',
     videoImportId: videoImport.id,
-    fileExt: `.${youtubeDLInfo.ext || 'mp4'}`
+    fileExt
   }
   await JobQueue.Instance.createJobWithPromise({ type: 'video-import', payload })
 
@@ -329,7 +341,7 @@ async function processTorrentOrAbortRequest (req: express.Request, res: express.
   torrentfile.path = newTorrentPath
 
   const buf = await readFile(torrentfile.path)
-  const parsedTorrent = parseTorrent(buf) as parseTorrent.Instance
+  const parsedTorrent = parseTorrent(buf) as Instance
 
   if (parsedTorrent.files.length !== 1) {
     cleanUpReqFiles(req)
@@ -349,7 +361,7 @@ async function processTorrentOrAbortRequest (req: express.Request, res: express.
 
 function processMagnetURI (body: VideoImportCreate) {
   const magnetUri = body.magnetUri
-  const parsed = magnetUtil.decode(magnetUri)
+  const parsed = decode(magnetUri)
 
   return {
     name: extractNameFromArray(parsed.name),
@@ -361,9 +373,9 @@ function extractNameFromArray (name: string | string[]) {
   return isArray(name) ? name[0] : name
 }
 
-async function processYoutubeSubtitles (youtubeDL: YoutubeDL, targetUrl: string, videoId: number) {
+async function processYoutubeSubtitles (youtubeDL: YoutubeDLWrapper, targetUrl: string, videoId: number) {
   try {
-    const subtitles = await youtubeDL.getYoutubeDLSubs()
+    const subtitles = await youtubeDL.getSubtitles()
 
     logger.info('Will create %s subtitles from youtube import %s.', subtitles.length, targetUrl)
 

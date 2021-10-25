@@ -1,6 +1,7 @@
-@import '_variables';
-@import '_mixins';
-@import './_player-variables';
+@use 'sass:math';
+@use '_variables' as *;
+@use '_mixins' as *;
+@use './_player-variables' as *;
 
 body {
   --embedForegroundColor: #{$primary-foreground-color};
@@ -11,8 +12,8 @@ body {
 @mixin big-play-button-triangle-size($triangle-size) {
   width: $triangle-size;
   height: $triangle-size;
-  top: calc(50% - #{$triangle-size / 2});
-  left: calc(53% - #{($triangle-size / 2)});
+  top: calc(50% - #{math.div($triangle-size, 2)});
+  left: calc(53% - #{math.div($triangle-size, 2)});
 }
 
 .video-js.vjs-peertube-skin {
@@ -56,7 +57,7 @@ body {
     $big-play-width: 1.2em;
     $big-play-height: 1.2em;
 
-    @include margin-left(-($big-play-width / 2));
+    @include margin-left(-(math.div($big-play-width, 2)));
 
     outline: 0;
     font-size: 6em;
@@ -69,7 +70,7 @@ body {
     width: $big-play-width;
     height: $big-play-height;
     line-height: $big-play-height;
-    margin-top: -($big-play-height / 2);
+    margin-top: -(math.div($big-play-height, 2));
     transition: 0.4s opacity;
 
     &::-moz-focus-inner {
@@ -353,9 +354,10 @@ body {
         &.icon-previous {
           mask-image: url('#{$assets-path}/player/images/next.svg');
           -webkit-mask-image: url('#{$assets-path}/player/images/next.svg');
+          mask-size: cover;
+          -webkit-mask-size: cover;
 
           background-color: #fff;
-          mask-size: cover;
           width: 11px;
           height: 11px;
           margin-top: -2px;

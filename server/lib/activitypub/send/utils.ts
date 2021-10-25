@@ -1,4 +1,5 @@
 import { Transaction } from 'sequelize'
+import { ActorFollowHealthCache } from '@server/lib/actor-follow-health-cache'
 import { getServerActor } from '@server/models/application/application'
 import { ContextType } from '@shared/models/activitypub/context'
 import { Activity, ActivityAudience } from '../../../../shared/models/activitypub'
@@ -22,7 +23,9 @@ async function sendVideoRelatedActivity (activityBuilder: (audience: ActivityAud
 
   // Send to origin
   if (video.isOwned() === false) {
-    const accountActor = (video as MVideoAccountLight).VideoChannel?.Account?.Actor || await ActorModel.loadAccountActorByVideoId(video.id)
+    let accountActor: MActorLight = (video as MVideoAccountLight).VideoChannel?.Account?.Actor
+
+    if (!accountActor) accountActor = await ActorModel.loadAccountActorByVideoId(video.id, transaction)
 
     const audience = getRemoteVideoAudience(accountActor, actorsInvolvedInVideo)
     const activity = activityBuilder(audience)
@@ -117,16 +120,41 @@ async function broadcastToActors (
 function broadcastTo (uris: string[], data: any, byActor: MActorId, contextType?: ContextType) {
   if (uris.length === 0) return undefined
 
-  logger.debug('Creating broadcast job.', { uris })
+  const broadcastUris: string[] = []
+  const unicastUris: string[] = []
 
-  const payload = {
-    uris,
-    signatureActorId: byActor.id,
-    body: data,
-    contextType
+  // Bad URIs could be slow to respond, prefer to process them in a dedicated queue
+  for (const uri of uris) {
+    if (ActorFollowHealthCache.Instance.isBadInbox(uri)) {
+      unicastUris.push(uri)
+    } else {
+      broadcastUris.push(uri)
+    }
   }
 
-  return JobQueue.Instance.createJob({ type: 'activitypub-http-broadcast', payload })
+  logger.debug('Creating broadcast job.', { broadcastUris, unicastUris })
+
+  if (broadcastUris.length !== 0) {
+    const payload = {
+      uris: broadcastUris,
+      signatureActorId: byActor.id,
+      body: data,
+      contextType
+    }
+
+    JobQueue.Instance.createJob({ type: 'activitypub-http-broadcast', payload })
+  }
+
+  for (const unicastUri of unicastUris) {
+    const payload = {
+      uri: unicastUri,
+      signatureActorId: byActor.id,
+      body: data,
+      contextType
+    }
+
+    JobQueue.Instance.createJob({ type: 'activitypub-http-unicast', payload })
+  }
 }
 
 function unicastTo (data: any, byActor: MActorId, toActorUrl: string, contextType?: ContextType) {

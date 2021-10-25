@@ -1,11 +1,14 @@
-import { forkJoin, of, Subscription } from 'rxjs'
+import { forkJoin, Subscription } from 'rxjs'
+import { LinkType } from 'src/types/link.type'
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { AuthService, ComponentPagination, HooksService, MetaService, Notifier, ServerService, User, UserService } from '@app/core'
+import { AuthService, HooksService, MetaService, Notifier, ServerService, User, UserService } from '@app/core'
 import { immutableAssign } from '@app/helpers'
+import { validateHost } from '@app/shared/form-validators/host-validators'
 import { Video, VideoChannel } from '@app/shared/shared-main'
 import { AdvancedSearch, SearchService } from '@app/shared/shared-search'
-import { MiniatureDisplayOptions, VideoLinkType } from '@app/shared/shared-video-miniature'
+import { MiniatureDisplayOptions } from '@app/shared/shared-video-miniature'
+import { VideoPlaylist } from '@app/shared/shared-video-playlist'
 import { HTMLServerConfig, SearchTargetType } from '@shared/models'
 
 @Component({
@@ -14,12 +17,13 @@ import { HTMLServerConfig, SearchTargetType } from '@shared/models'
   templateUrl: './search.component.html'
 })
 export class SearchComponent implements OnInit, OnDestroy {
-  results: (Video | VideoChannel)[] = []
+  error: string
 
-  pagination: ComponentPagination = {
+  results: (Video | VideoChannel | VideoPlaylist)[] = []
+
+  pagination = {
     currentPage: 1,
-    itemsPerPage: 10, // Only for videos, use another variable for channels
-    totalItems: null
+    totalItems: null as number
   }
   advancedSearch: AdvancedSearch = new AdvancedSearch()
   isSearchFilterCollapsed = true
@@ -42,9 +46,13 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   private subActivatedRoute: Subscription
   private isInitialLoad = false // set to false to show the search filters on first arrival
-  private firstSearch = true
 
   private channelsPerPage = 2
+  private playlistsPerPage = 2
+  private videosPerPage = 10
+
+  private hasMoreResults = true
+  private isSearching = false
 
   private lastSearchTarget: SearchTargetType
 
@@ -65,34 +73,37 @@ export class SearchComponent implements OnInit, OnDestroy {
   ngOnInit () {
     this.serverConfig = this.serverService.getHTMLConfig()
 
-    this.subActivatedRoute = this.route.queryParams.subscribe(
-      async queryParams => {
-        const querySearch = queryParams['search']
-        const searchTarget = queryParams['searchTarget']
+    this.subActivatedRoute = this.route.queryParams
+      .subscribe({
+        next: queryParams => {
+          const querySearch = queryParams['search']
+          const searchTarget = queryParams['searchTarget']
 
-        // Search updated, reset filters
-        if (this.currentSearch !== querySearch || searchTarget !== this.advancedSearch.searchTarget) {
-          this.resetPagination()
-          this.advancedSearch.reset()
+          // Search updated, reset filters
+          if (this.currentSearch !== querySearch || searchTarget !== this.advancedSearch.searchTarget) {
+            this.resetPagination()
+            this.advancedSearch.reset()
 
-          this.currentSearch = querySearch || undefined
-          this.updateTitle()
-        }
+            this.currentSearch = querySearch || undefined
+            this.updateTitle()
+          }
 
-        this.advancedSearch = new AdvancedSearch(queryParams)
-        if (!this.advancedSearch.searchTarget) {
-          this.advancedSearch.searchTarget = this.getDefaultSearchTarget()
-        }
+          this.advancedSearch = new AdvancedSearch(queryParams)
+          if (!this.advancedSearch.searchTarget) {
+            this.advancedSearch.searchTarget = this.getDefaultSearchTarget()
+          }
 
-        // Don't hide filters if we have some of them AND the user just came on the webpage
-        this.isSearchFilterCollapsed = this.isInitialLoad === false || !this.advancedSearch.containsValues()
-        this.isInitialLoad = false
+          this.error = this.checkFieldsAndGetError()
 
-        this.search()
-      },
+          // Don't hide filters if we have some of them AND the user just came on the webpage, or we have an error
+          this.isSearchFilterCollapsed = !this.error && (this.isInitialLoad === false || !this.advancedSearch.containsValues())
+          this.isInitialLoad = false
 
-      err => this.notifier.error(err.text)
-    )
+          this.search()
+        },
+
+        error: err => this.notifier.error(err.text)
+      })
 
     this.userService.getAnonymousOrLoggedUser()
       .subscribe(user => this.userMiniature = user)
@@ -104,59 +115,45 @@ export class SearchComponent implements OnInit, OnDestroy {
     if (this.subActivatedRoute) this.subActivatedRoute.unsubscribe()
   }
 
-  isVideoChannel (d: VideoChannel | Video): d is VideoChannel {
+  isVideoChannel (d: VideoChannel | Video | VideoPlaylist): d is VideoChannel {
     return d instanceof VideoChannel
   }
 
-  isVideo (v: VideoChannel | Video): v is Video {
+  isVideo (v: VideoChannel | Video | VideoPlaylist): v is Video {
     return v instanceof Video
+  }
+
+  isPlaylist (v: VideoChannel | Video | VideoPlaylist): v is VideoPlaylist {
+    return v instanceof VideoPlaylist
   }
 
   isUserLoggedIn () {
     return this.authService.isLoggedIn()
   }
 
-  getVideoLinkType (): VideoLinkType {
-    if (this.advancedSearch.searchTarget === 'search-index') {
-      const remoteUriConfig = this.serverConfig.search.remoteUri
-
-      // Redirect on the external instance if not allowed to fetch remote data
-      if ((!this.isUserLoggedIn() && !remoteUriConfig.anonymous) || !remoteUriConfig.users) {
-        return 'external'
-      }
-
-      return 'lazy-load'
-    }
-
-    return 'internal'
-  }
-
   search () {
+    this.error = this.checkFieldsAndGetError()
+    if (this.error) return
+
+    this.isSearching = true
+
     forkJoin([
-      this.getVideosObs(),
-      this.getVideoChannelObs()
-    ]).subscribe(
-      ([videosResult, videoChannelsResult]) => {
-        this.results = this.results
-          .concat(videoChannelsResult.data)
-          .concat(videosResult.data)
-
-        this.pagination.totalItems = videosResult.total + videoChannelsResult.total
-        this.lastSearchTarget = this.advancedSearch.searchTarget
-
-        // Focus on channels if there are no enough videos
-        if (this.firstSearch === true && videosResult.data.length < this.pagination.itemsPerPage) {
-          this.resetPagination()
-          this.firstSearch = false
-
-          this.channelsPerPage = 10
-          this.search()
+      this.getVideoChannelObs(),
+      this.getVideoPlaylistObs(),
+      this.getVideosObs()
+    ]).subscribe({
+      next: results => {
+        for (const result of results) {
+          this.results = this.results.concat(result.data)
         }
 
-        this.firstSearch = false
+        this.pagination.totalItems = results.reduce((p, r) => p += r.total, 0)
+        this.lastSearchTarget = this.advancedSearch.searchTarget
+
+        this.hasMoreResults = this.results.length < this.pagination.totalItems
       },
 
-      err => {
+      error: err => {
         if (this.advancedSearch.searchTarget !== 'search-index') {
           this.notifier.error(err.message)
           return
@@ -168,13 +165,17 @@ export class SearchComponent implements OnInit, OnDestroy {
         )
         this.advancedSearch.searchTarget = 'local'
         this.search()
+      },
+
+      complete: () => {
+        this.isSearching = false
       }
-    )
+    })
   }
 
   onNearOfBottom () {
     // Last page
-    if (this.pagination.totalItems <= (this.pagination.currentPage * this.pagination.itemsPerPage)) return
+    if (!this.hasMoreResults || this.isSearching) return
 
     this.pagination.currentPage += 1
     this.search()
@@ -190,18 +191,33 @@ export class SearchComponent implements OnInit, OnDestroy {
     return this.advancedSearch.size()
   }
 
-  // Add VideoChannel for typings, but the template already checks "video" argument is a video
-  removeVideoFromArray (video: Video | VideoChannel) {
+  // Add VideoChannel/VideoPlaylist for typings, but the template already checks "video" argument is a video
+  removeVideoFromArray (video: Video | VideoChannel | VideoPlaylist) {
     this.results = this.results.filter(r => !this.isVideo(r) || r.id !== video.id)
   }
 
+  getLinkType (): LinkType {
+    if (this.advancedSearch.searchTarget === 'search-index') {
+      const remoteUriConfig = this.serverConfig.search.remoteUri
+
+      // Redirect on the external instance if not allowed to fetch remote data
+      if ((!this.isUserLoggedIn() && !remoteUriConfig.anonymous) || !remoteUriConfig.users) {
+        return 'external'
+      }
+
+      return 'lazy-load'
+    }
+
+    return 'internal'
+  }
+
   isExternalChannelUrl () {
-    return this.getVideoLinkType() === 'external'
+    return this.getLinkType() === 'external'
   }
 
   getExternalChannelUrl (channel: VideoChannel) {
     // Same algorithm than videos
-    if (this.getVideoLinkType() === 'external') {
+    if (this.getLinkType() === 'external') {
       return channel.url
     }
 
@@ -210,7 +226,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   getInternalChannelUrl (channel: VideoChannel) {
-    const linkType = this.getVideoLinkType()
+    const linkType = this.getLinkType()
 
     if (linkType === 'internal') {
       return [ '/c', channel.nameWithHost ]
@@ -256,7 +272,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   private getVideosObs () {
     const params = {
       search: this.currentSearch,
-      componentPagination: this.pagination,
+      componentPagination: immutableAssign(this.pagination, { itemsPerPage: this.videosPerPage }),
       advancedSearch: this.advancedSearch
     }
 
@@ -270,12 +286,10 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   private getVideoChannelObs () {
-    if (!this.currentSearch) return of({ data: [], total: 0 })
-
     const params = {
       search: this.currentSearch,
       componentPagination: immutableAssign(this.pagination, { itemsPerPage: this.channelsPerPage }),
-      searchTarget: this.advancedSearch.searchTarget
+      advancedSearch: this.advancedSearch
     }
 
     return this.hooks.wrapObsFun(
@@ -287,6 +301,22 @@ export class SearchComponent implements OnInit, OnDestroy {
     )
   }
 
+  private getVideoPlaylistObs () {
+    const params = {
+      search: this.currentSearch,
+      componentPagination: immutableAssign(this.pagination, { itemsPerPage: this.playlistsPerPage }),
+      advancedSearch: this.advancedSearch
+    }
+
+    return this.hooks.wrapObsFun(
+      this.searchService.searchVideoPlaylists.bind(this.searchService),
+      params,
+      'search',
+      'filter:api.search.video-playlists.list.params',
+      'filter:api.search.video-playlists.list.result'
+    )
+  }
+
   private getDefaultSearchTarget (): SearchTargetType {
     const searchIndexConfig = this.serverConfig.search.searchIndex
 
@@ -295,5 +325,13 @@ export class SearchComponent implements OnInit, OnDestroy {
     }
 
     return 'local'
+  }
+
+  private checkFieldsAndGetError () {
+    if (this.advancedSearch.host && !validateHost(this.advancedSearch.host)) {
+      return $localize`PeerTube instance host filter is invalid`
+    }
+
+    return undefined
   }
 }

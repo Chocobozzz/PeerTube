@@ -1,22 +1,27 @@
-import * as express from 'express'
-import { body, param } from 'express-validator'
+import express from 'express'
+import { body } from 'express-validator'
 import { CONSTRAINTS_FIELDS } from '@server/initializers/constants'
 import { isLocalLiveVideoAccepted } from '@server/lib/moderation'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { VideoModel } from '@server/models/video/video'
 import { VideoLiveModel } from '@server/models/video/video-live'
-import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
-import { ServerErrorCode, UserRight, VideoState } from '@shared/models'
-import { isBooleanValid, isIdOrUUIDValid, isIdValid, toBooleanOrNull, toIntOrNull } from '../../../helpers/custom-validators/misc'
+import { HttpStatusCode, ServerErrorCode, UserRight, VideoState } from '@shared/models'
+import { isBooleanValid, isIdValid, toBooleanOrNull, toIntOrNull } from '../../../helpers/custom-validators/misc'
 import { isVideoNameValid } from '../../../helpers/custom-validators/videos'
 import { cleanUpReqFiles } from '../../../helpers/express-utils'
 import { logger } from '../../../helpers/logger'
 import { CONFIG } from '../../../initializers/config'
-import { areValidationErrors, checkUserCanManageVideo, doesVideoChannelOfAccountExist, doesVideoExist } from '../shared'
+import {
+  areValidationErrors,
+  checkUserCanManageVideo,
+  doesVideoChannelOfAccountExist,
+  doesVideoExist,
+  isValidVideoIdParam
+} from '../shared'
 import { getCommonVideoEditAttributes } from './videos'
 
 const videoLiveGetValidator = [
-  param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid videoId'),
+  isValidVideoIdParam('videoId'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoLiveGetValidator parameters', { parameters: req.params, user: res.locals.oauth.token.User.username })

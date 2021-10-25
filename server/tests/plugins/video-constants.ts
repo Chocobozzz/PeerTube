@@ -1,55 +1,44 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
 import 'mocha'
-import { cleanupTests, flushAndRunServer, ServerInfo } from '../../../shared/extra-utils/server/servers'
+import * as chai from 'chai'
 import {
-  createVideoPlaylist,
-  getPluginTestPath,
-  getVideo,
-  getVideoCategories,
-  getVideoLanguages,
-  getVideoLicences, getVideoPlaylistPrivacies, getVideoPrivacies,
-  installPlugin,
-  setAccessTokensToServers,
-  uninstallPlugin,
-  uploadVideo
-} from '../../../shared/extra-utils'
-import { VideoDetails, VideoPlaylistPrivacy } from '../../../shared/models/videos'
-import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
+  cleanupTests,
+  createSingleServer,
+  makeGetRequest,
+  PeerTubeServer,
+  PluginsCommand,
+  setAccessTokensToServers
+} from '@shared/extra-utils'
+import { HttpStatusCode, VideoPlaylistPrivacy } from '@shared/models'
 
 const expect = chai.expect
 
 describe('Test plugin altering video constants', function () {
-  let server: ServerInfo
+  let server: PeerTubeServer
 
   before(async function () {
     this.timeout(30000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
     await setAccessTokensToServers([ server ])
 
-    await installPlugin({
-      url: server.url,
-      accessToken: server.accessToken,
-      path: getPluginTestPath('-three')
-    })
+    await server.plugins.install({ path: PluginsCommand.getPluginTestPath('-video-constants') })
   })
 
   it('Should have updated languages', async function () {
-    const res = await getVideoLanguages(server.url)
-    const languages = res.body
+    const languages = await server.videos.getLanguages()
 
     expect(languages['en']).to.not.exist
     expect(languages['fr']).to.not.exist
 
     expect(languages['al_bhed']).to.equal('Al Bhed')
     expect(languages['al_bhed2']).to.equal('Al Bhed 2')
+    expect(languages['al_bhed3']).to.not.exist
   })
 
   it('Should have updated categories', async function () {
-    const res = await getVideoCategories(server.url)
-    const categories = res.body
+    const categories = await server.videos.getCategories()
 
     expect(categories[1]).to.not.exist
     expect(categories[2]).to.not.exist
@@ -59,8 +48,7 @@ describe('Test plugin altering video constants', function () {
   })
 
   it('Should have updated licences', async function () {
-    const res = await getVideoLicences(server.url)
-    const licences = res.body
+    const licences = await server.videos.getLicences()
 
     expect(licences[1]).to.not.exist
     expect(licences[7]).to.not.exist
@@ -70,8 +58,7 @@ describe('Test plugin altering video constants', function () {
   })
 
   it('Should have updated video privacies', async function () {
-    const res = await getVideoPrivacies(server.url)
-    const privacies = res.body
+    const privacies = await server.videos.getPrivacies()
 
     expect(privacies[1]).to.exist
     expect(privacies[2]).to.not.exist
@@ -80,8 +67,7 @@ describe('Test plugin altering video constants', function () {
   })
 
   it('Should have updated playlist privacies', async function () {
-    const res = await getVideoPlaylistPrivacies(server.url)
-    const playlistPrivacies = res.body
+    const playlistPrivacies = await server.playlists.getPrivacies()
 
     expect(playlistPrivacies[1]).to.exist
     expect(playlistPrivacies[2]).to.exist
@@ -89,49 +75,41 @@ describe('Test plugin altering video constants', function () {
   })
 
   it('Should not be able to create a video with this privacy', async function () {
-    const attrs = { name: 'video', privacy: 2 }
-    await uploadVideo(server.url, server.accessToken, attrs, HttpStatusCode.BAD_REQUEST_400)
+    const attributes = { name: 'video', privacy: 2 }
+    await server.videos.upload({ attributes, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
   })
 
   it('Should not be able to create a video with this privacy', async function () {
-    const attrs = { displayName: 'video playlist', privacy: VideoPlaylistPrivacy.PRIVATE }
-    await createVideoPlaylist({
-      url: server.url,
-      token: server.accessToken,
-      playlistAttrs: attrs,
-      expectedStatus: HttpStatusCode.BAD_REQUEST_400
-    })
+    const attributes = { displayName: 'video playlist', privacy: VideoPlaylistPrivacy.PRIVATE }
+    await server.playlists.create({ attributes, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
   })
 
   it('Should be able to upload a video with these values', async function () {
-    const attrs = { name: 'video', category: 42, licence: 42, language: 'al_bhed2' }
-    const resUpload = await uploadVideo(server.url, server.accessToken, attrs)
+    const attributes = { name: 'video', category: 42, licence: 42, language: 'al_bhed2' }
+    const { uuid } = await server.videos.upload({ attributes })
 
-    const res = await getVideo(server.url, resUpload.body.video.uuid)
-
-    const video: VideoDetails = res.body
+    const video = await server.videos.get({ id: uuid })
     expect(video.language.label).to.equal('Al Bhed 2')
     expect(video.licence.label).to.equal('Best licence')
     expect(video.category.label).to.equal('Best category')
   })
 
   it('Should uninstall the plugin and reset languages, categories, licences and privacies', async function () {
-    await uninstallPlugin({ url: server.url, accessToken: server.accessToken, npmName: 'peertube-plugin-test-three' })
+    await server.plugins.uninstall({ npmName: 'peertube-plugin-test-video-constants' })
 
     {
-      const res = await getVideoLanguages(server.url)
-      const languages = res.body
+      const languages = await server.videos.getLanguages()
 
       expect(languages['en']).to.equal('English')
       expect(languages['fr']).to.equal('French')
 
       expect(languages['al_bhed']).to.not.exist
       expect(languages['al_bhed2']).to.not.exist
+      expect(languages['al_bhed3']).to.not.exist
     }
 
     {
-      const res = await getVideoCategories(server.url)
-      const categories = res.body
+      const categories = await server.videos.getCategories()
 
       expect(categories[1]).to.equal('Music')
       expect(categories[2]).to.equal('Films')
@@ -141,8 +119,7 @@ describe('Test plugin altering video constants', function () {
     }
 
     {
-      const res = await getVideoLicences(server.url)
-      const licences = res.body
+      const licences = await server.videos.getLicences()
 
       expect(licences[1]).to.equal('Attribution')
       expect(licences[7]).to.equal('Public Domain Dedication')
@@ -152,8 +129,7 @@ describe('Test plugin altering video constants', function () {
     }
 
     {
-      const res = await getVideoPrivacies(server.url)
-      const privacies = res.body
+      const privacies = await server.videos.getPrivacies()
 
       expect(privacies[1]).to.exist
       expect(privacies[2]).to.exist
@@ -162,12 +138,42 @@ describe('Test plugin altering video constants', function () {
     }
 
     {
-      const res = await getVideoPlaylistPrivacies(server.url)
-      const playlistPrivacies = res.body
+      const playlistPrivacies = await server.playlists.getPrivacies()
 
       expect(playlistPrivacies[1]).to.exist
       expect(playlistPrivacies[2]).to.exist
       expect(playlistPrivacies[3]).to.exist
+    }
+  })
+
+  it('Should be able to reset categories', async function () {
+    await server.plugins.install({ path: PluginsCommand.getPluginTestPath('-video-constants') })
+
+    {
+      const categories = await server.videos.getCategories()
+
+      expect(categories[1]).to.not.exist
+      expect(categories[2]).to.not.exist
+
+      expect(categories[42]).to.exist
+      expect(categories[43]).to.exist
+    }
+
+    await makeGetRequest({
+      url: server.url,
+      token: server.accessToken,
+      path: '/plugins/test-video-constants/router/reset-categories',
+      expectedStatus: HttpStatusCode.NO_CONTENT_204
+    })
+
+    {
+      const categories = await server.videos.getCategories()
+
+      expect(categories[1]).to.exist
+      expect(categories[2]).to.exist
+
+      expect(categories[42]).to.not.exist
+      expect(categories[43]).to.not.exist
     }
   })
 

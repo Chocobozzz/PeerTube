@@ -24,7 +24,7 @@ function hydrateFormFromVideo (formGroup: FormGroup, video: VideoEdit, thumbnail
       .then(response => response.blob())
       .then(data => {
         formGroup.patchValue({
-          [ obj.name ]: data
+          [obj.name]: data
         })
       })
   }

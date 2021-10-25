@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core'
-import { ActivatedRouteSnapshot, CanActivate, CanActivateChild, RouterStateSnapshot } from '@angular/router'
+import { ActivatedRouteSnapshot, CanActivate, CanActivateChild } from '@angular/router'
 import { MetaService } from './meta.service'
 
 @Injectable()

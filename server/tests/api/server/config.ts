@@ -2,31 +2,20 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { About } from '../../../../shared/models/server/about.model'
-import { CustomConfig } from '../../../../shared/models/server/custom-config.model'
 import {
   cleanupTests,
-  deleteCustomConfig,
-  flushAndRunServer,
-  getAbout,
-  getConfig,
-  getCustomConfig,
+  createSingleServer,
   killallServers,
   makeGetRequest,
   parallelTests,
-  registerUser,
-  reRunServer,
-  ServerInfo,
-  setAccessTokensToServers,
-  updateCustomConfig,
-  uploadVideo
-} from '../../../../shared/extra-utils'
-import { ServerConfig } from '../../../../shared/models'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+  PeerTubeServer,
+  setAccessTokensToServers
+} from '@shared/extra-utils'
+import { CustomConfig, HttpStatusCode } from '@shared/models'
 
 const expect = chai.expect
 
-function checkInitialConfig (server: ServerInfo, data: CustomConfig) {
+function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
   expect(data.instance.name).to.equal('PeerTube')
   expect(data.instance.shortDescription).to.equal(
     'PeerTube, an ActivityPub-federated video streaming platform using P2P directly in your web browser.'
@@ -212,19 +201,215 @@ function checkUpdatedConfig (data: CustomConfig) {
   expect(data.broadcastMessage.dismissable).to.be.true
 }
 
-describe('Test config', function () {
-  let server = null
+const newCustomConfig: CustomConfig = {
+  instance: {
+    name: 'PeerTube updated',
+    shortDescription: 'my short description',
+    description: 'my super description',
+    terms: 'my super terms',
+    codeOfConduct: 'my super coc',
+
+    creationReason: 'my super creation reason',
+    moderationInformation: 'my super moderation information',
+    administrator: 'Kuja',
+    maintenanceLifetime: 'forever',
+    businessModel: 'my super business model',
+    hardwareInformation: '2vCore 3GB RAM',
+
+    languages: [ 'en', 'es' ],
+    categories: [ 1, 2 ],
+
+    isNSFW: true,
+    defaultNSFWPolicy: 'blur' as 'blur',
+
+    defaultClientRoute: '/videos/recently-added',
+
+    customizations: {
+      javascript: 'alert("coucou")',
+      css: 'body { background-color: red; }'
+    }
+  },
+  theme: {
+    default: 'default'
+  },
+  services: {
+    twitter: {
+      username: '@Kuja',
+      whitelisted: true
+    }
+  },
+  cache: {
+    previews: {
+      size: 2
+    },
+    captions: {
+      size: 3
+    },
+    torrents: {
+      size: 4
+    }
+  },
+  signup: {
+    enabled: false,
+    limit: 5,
+    requiresEmailVerification: false,
+    minimumAge: 10
+  },
+  admin: {
+    email: 'superadmin1@example.com'
+  },
+  contactForm: {
+    enabled: false
+  },
+  user: {
+    videoQuota: 5242881,
+    videoQuotaDaily: 318742
+  },
+  transcoding: {
+    enabled: true,
+    allowAdditionalExtensions: true,
+    allowAudioFiles: true,
+    threads: 1,
+    concurrency: 3,
+    profile: 'vod_profile',
+    resolutions: {
+      '0p': false,
+      '240p': false,
+      '360p': true,
+      '480p': true,
+      '720p': false,
+      '1080p': false,
+      '1440p': false,
+      '2160p': false
+    },
+    webtorrent: {
+      enabled: true
+    },
+    hls: {
+      enabled: false
+    }
+  },
+  live: {
+    enabled: true,
+    allowReplay: true,
+    maxDuration: 5000,
+    maxInstanceLives: -1,
+    maxUserLives: 10,
+    transcoding: {
+      enabled: true,
+      threads: 4,
+      profile: 'live_profile',
+      resolutions: {
+        '240p': true,
+        '360p': true,
+        '480p': true,
+        '720p': true,
+        '1080p': true,
+        '1440p': true,
+        '2160p': true
+      }
+    }
+  },
+  import: {
+    videos: {
+      concurrency: 4,
+      http: {
+        enabled: false
+      },
+      torrent: {
+        enabled: false
+      }
+    }
+  },
+  trending: {
+    videos: {
+      algorithms: {
+        enabled: [ 'best', 'hot', 'most-viewed', 'most-liked' ],
+        default: 'hot'
+      }
+    }
+  },
+  autoBlacklist: {
+    videos: {
+      ofUsers: {
+        enabled: true
+      }
+    }
+  },
+  followers: {
+    instance: {
+      enabled: false,
+      manualApproval: true
+    }
+  },
+  followings: {
+    instance: {
+      autoFollowBack: {
+        enabled: true
+      },
+      autoFollowIndex: {
+        enabled: true,
+        indexUrl: 'https://updated.example.com'
+      }
+    }
+  },
+  broadcastMessage: {
+    enabled: true,
+    level: 'error',
+    message: 'super bad message',
+    dismissable: true
+  },
+  search: {
+    remoteUri: {
+      anonymous: true,
+      users: true
+    },
+    searchIndex: {
+      enabled: true,
+      url: 'https://search.joinpeertube.org',
+      disableLocalSearch: true,
+      isDefaultSearch: true
+    }
+  }
+}
+
+describe('Test static config', function () {
+  let server: PeerTubeServer = null
 
   before(async function () {
     this.timeout(30000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1, { webadmin: { configuration: { edition: { allowed: false } } } })
+    await setAccessTokensToServers([ server ])
+  })
+
+  it('Should tell the client that edits are not allowed', async function () {
+    const data = await server.config.getConfig()
+
+    expect(data.webadmin.configuration.edition.allowed).to.be.false
+  })
+
+  it('Should error when client tries to update', async function () {
+    await server.config.updateCustomConfig({ newCustomConfig, expectedStatus: 405 })
+  })
+
+  after(async function () {
+    await cleanupTests([ server ])
+  })
+})
+
+describe('Test config', function () {
+  let server: PeerTubeServer = null
+
+  before(async function () {
+    this.timeout(30000)
+
+    server = await createSingleServer(1)
     await setAccessTokensToServers([ server ])
   })
 
   it('Should have a correct config on a server with registration enabled', async function () {
-    const res = await getConfig(server.url)
-    const data: ServerConfig = res.body
+    const data = await server.config.getConfig()
 
     expect(data.signup.allowed).to.be.true
   })
@@ -233,224 +418,47 @@ describe('Test config', function () {
     this.timeout(5000)
 
     await Promise.all([
-      registerUser(server.url, 'user1', 'super password'),
-      registerUser(server.url, 'user2', 'super password'),
-      registerUser(server.url, 'user3', 'super password')
+      server.users.register({ username: 'user1' }),
+      server.users.register({ username: 'user2' }),
+      server.users.register({ username: 'user3' })
     ])
 
-    const res = await getConfig(server.url)
-    const data: ServerConfig = res.body
+    const data = await server.config.getConfig()
 
     expect(data.signup.allowed).to.be.false
   })
 
   it('Should have the correct video allowed extensions', async function () {
-    const res = await getConfig(server.url)
-    const data: ServerConfig = res.body
+    const data = await server.config.getConfig()
 
     expect(data.video.file.extensions).to.have.lengthOf(3)
     expect(data.video.file.extensions).to.contain('.mp4')
     expect(data.video.file.extensions).to.contain('.webm')
     expect(data.video.file.extensions).to.contain('.ogv')
 
-    await uploadVideo(server.url, server.accessToken, { fixture: 'video_short.mkv' }, HttpStatusCode.UNSUPPORTED_MEDIA_TYPE_415)
-    await uploadVideo(server.url, server.accessToken, { fixture: 'sample.ogg' }, HttpStatusCode.UNSUPPORTED_MEDIA_TYPE_415)
+    await server.videos.upload({ attributes: { fixture: 'video_short.mkv' }, expectedStatus: HttpStatusCode.UNSUPPORTED_MEDIA_TYPE_415 })
+    await server.videos.upload({ attributes: { fixture: 'sample.ogg' }, expectedStatus: HttpStatusCode.UNSUPPORTED_MEDIA_TYPE_415 })
 
     expect(data.contactForm.enabled).to.be.true
   })
 
   it('Should get the customized configuration', async function () {
-    const res = await getCustomConfig(server.url, server.accessToken)
-    const data = res.body as CustomConfig
+    const data = await server.config.getCustomConfig()
 
     checkInitialConfig(server, data)
   })
 
   it('Should update the customized configuration', async function () {
-    const newCustomConfig: CustomConfig = {
-      instance: {
-        name: 'PeerTube updated',
-        shortDescription: 'my short description',
-        description: 'my super description',
-        terms: 'my super terms',
-        codeOfConduct: 'my super coc',
+    await server.config.updateCustomConfig({ newCustomConfig })
 
-        creationReason: 'my super creation reason',
-        moderationInformation: 'my super moderation information',
-        administrator: 'Kuja',
-        maintenanceLifetime: 'forever',
-        businessModel: 'my super business model',
-        hardwareInformation: '2vCore 3GB RAM',
-
-        languages: [ 'en', 'es' ],
-        categories: [ 1, 2 ],
-
-        isNSFW: true,
-        defaultNSFWPolicy: 'blur' as 'blur',
-
-        defaultClientRoute: '/videos/recently-added',
-
-        customizations: {
-          javascript: 'alert("coucou")',
-          css: 'body { background-color: red; }'
-        }
-      },
-      theme: {
-        default: 'default'
-      },
-      services: {
-        twitter: {
-          username: '@Kuja',
-          whitelisted: true
-        }
-      },
-      cache: {
-        previews: {
-          size: 2
-        },
-        captions: {
-          size: 3
-        },
-        torrents: {
-          size: 4
-        }
-      },
-      signup: {
-        enabled: false,
-        limit: 5,
-        requiresEmailVerification: false,
-        minimumAge: 10
-      },
-      admin: {
-        email: 'superadmin1@example.com'
-      },
-      contactForm: {
-        enabled: false
-      },
-      user: {
-        videoQuota: 5242881,
-        videoQuotaDaily: 318742
-      },
-      transcoding: {
-        enabled: true,
-        allowAdditionalExtensions: true,
-        allowAudioFiles: true,
-        threads: 1,
-        concurrency: 3,
-        profile: 'vod_profile',
-        resolutions: {
-          '0p': false,
-          '240p': false,
-          '360p': true,
-          '480p': true,
-          '720p': false,
-          '1080p': false,
-          '1440p': false,
-          '2160p': false
-        },
-        webtorrent: {
-          enabled: true
-        },
-        hls: {
-          enabled: false
-        }
-      },
-      live: {
-        enabled: true,
-        allowReplay: true,
-        maxDuration: 5000,
-        maxInstanceLives: -1,
-        maxUserLives: 10,
-        transcoding: {
-          enabled: true,
-          threads: 4,
-          profile: 'live_profile',
-          resolutions: {
-            '240p': true,
-            '360p': true,
-            '480p': true,
-            '720p': true,
-            '1080p': true,
-            '1440p': true,
-            '2160p': true
-          }
-        }
-      },
-      import: {
-        videos: {
-          concurrency: 4,
-          http: {
-            enabled: false
-          },
-          torrent: {
-            enabled: false
-          }
-        }
-      },
-      trending: {
-        videos: {
-          algorithms: {
-            enabled: [ 'best', 'hot', 'most-viewed', 'most-liked' ],
-            default: 'hot'
-          }
-        }
-      },
-      autoBlacklist: {
-        videos: {
-          ofUsers: {
-            enabled: true
-          }
-        }
-      },
-      followers: {
-        instance: {
-          enabled: false,
-          manualApproval: true
-        }
-      },
-      followings: {
-        instance: {
-          autoFollowBack: {
-            enabled: true
-          },
-          autoFollowIndex: {
-            enabled: true,
-            indexUrl: 'https://updated.example.com'
-          }
-        }
-      },
-      broadcastMessage: {
-        enabled: true,
-        level: 'error',
-        message: 'super bad message',
-        dismissable: true
-      },
-      search: {
-        remoteUri: {
-          anonymous: true,
-          users: true
-        },
-        searchIndex: {
-          enabled: true,
-          url: 'https://search.joinpeertube.org',
-          disableLocalSearch: true,
-          isDefaultSearch: true
-        }
-      }
-    }
-    await updateCustomConfig(server.url, server.accessToken, newCustomConfig)
-
-    const res = await getCustomConfig(server.url, server.accessToken)
-    const data = res.body
-
+    const data = await server.config.getCustomConfig()
     checkUpdatedConfig(data)
   })
 
   it('Should have the correct updated video allowed extensions', async function () {
     this.timeout(10000)
 
-    const res = await getConfig(server.url)
-    const data: ServerConfig = res.body
+    const data = await server.config.getConfig()
 
     expect(data.video.file.extensions).to.have.length.above(4)
     expect(data.video.file.extensions).to.contain('.mp4')
@@ -463,26 +471,24 @@ describe('Test config', function () {
     expect(data.video.file.extensions).to.contain('.ogg')
     expect(data.video.file.extensions).to.contain('.flac')
 
-    await uploadVideo(server.url, server.accessToken, { fixture: 'video_short.mkv' }, HttpStatusCode.OK_200)
-    await uploadVideo(server.url, server.accessToken, { fixture: 'sample.ogg' }, HttpStatusCode.OK_200)
+    await server.videos.upload({ attributes: { fixture: 'video_short.mkv' }, expectedStatus: HttpStatusCode.OK_200 })
+    await server.videos.upload({ attributes: { fixture: 'sample.ogg' }, expectedStatus: HttpStatusCode.OK_200 })
   })
 
   it('Should have the configuration updated after a restart', async function () {
-    this.timeout(10000)
+    this.timeout(30000)
 
-    killallServers([ server ])
+    await killallServers([ server ])
 
-    await reRunServer(server)
+    await server.run()
 
-    const res = await getCustomConfig(server.url, server.accessToken)
-    const data = res.body
+    const data = await server.config.getCustomConfig()
 
     checkUpdatedConfig(data)
   })
 
   it('Should fetch the about information', async function () {
-    const res = await getAbout(server.url)
-    const data: About = res.body
+    const data = await server.config.getAbout()
 
     expect(data.instance.name).to.equal('PeerTube updated')
     expect(data.instance.shortDescription).to.equal('my short description')
@@ -504,11 +510,9 @@ describe('Test config', function () {
   it('Should remove the custom configuration', async function () {
     this.timeout(10000)
 
-    await deleteCustomConfig(server.url, server.accessToken)
+    await server.config.deleteCustomConfig()
 
-    const res = await getCustomConfig(server.url, server.accessToken)
-    const data = res.body
-
+    const data = await server.config.getCustomConfig()
     checkInitialConfig(server, data)
   })
 
@@ -519,26 +523,26 @@ describe('Test config', function () {
       const res = await makeGetRequest({
         url: server.url,
         path: '/api/v1/config',
-        statusCodeExpected: 200
+        expectedStatus: 200
       })
 
       expect(res.headers['x-frame-options']).to.exist
     }
 
-    killallServers([ server ])
+    await killallServers([ server ])
 
     const config = {
       security: {
         frameguard: { enabled: false }
       }
     }
-    server = await reRunServer(server, config)
+    await server.run(config)
 
     {
       const res = await makeGetRequest({
         url: server.url,
         path: '/api/v1/config',
-        statusCodeExpected: 200
+        expectedStatus: 200
       })
 
       expect(res.headers['x-frame-options']).to.not.exist

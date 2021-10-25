@@ -1,4 +1,4 @@
-import * as config from 'config'
+import config from 'config'
 import { uniq } from 'lodash'
 import { URL } from 'url'
 import { getFFmpegVersion } from '@server/helpers/ffmpeg-utils'
@@ -7,9 +7,9 @@ import { RecentlyAddedStrategy } from '../../shared/models/redundancy'
 import { isProdInstance, isTestInstance, parseSemVersion } from '../helpers/core-utils'
 import { isArray } from '../helpers/custom-validators/misc'
 import { logger } from '../helpers/logger'
-import { UserModel } from '../models/user/user'
 import { ApplicationModel, getServerActor } from '../models/application/application'
 import { OAuthClientModel } from '../models/oauth/oauth-client'
+import { UserModel } from '../models/user/user'
 import { CONFIG, isEmailEnabled } from './config'
 import { WEBSERVER } from './constants'
 
@@ -150,6 +150,29 @@ function checkConfig () {
   if (CONFIG.LIVE.ENABLED === true) {
     if (CONFIG.LIVE.ALLOW_REPLAY === true && CONFIG.TRANSCODING.ENABLED === false) {
       return 'Live allow replay cannot be enabled if transcoding is not enabled.'
+    }
+  }
+
+  // Object storage
+  if (CONFIG.OBJECT_STORAGE.ENABLED === true) {
+
+    if (!CONFIG.OBJECT_STORAGE.VIDEOS.BUCKET_NAME) {
+      return 'videos_bucket should be set when object storage support is enabled.'
+    }
+
+    if (!CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.BUCKET_NAME) {
+      return 'streaming_playlists_bucket should be set when object storage support is enabled.'
+    }
+
+    if (
+      CONFIG.OBJECT_STORAGE.VIDEOS.BUCKET_NAME === CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.BUCKET_NAME &&
+      CONFIG.OBJECT_STORAGE.VIDEOS.PREFIX === CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.PREFIX
+    ) {
+      if (CONFIG.OBJECT_STORAGE.VIDEOS.PREFIX === '') {
+        return 'Object storage bucket prefixes should be set when the same bucket is used for both types of video.'
+      } else {
+        return 'Object storage bucket prefixes should be set to different values when the same bucket is used for both types of video.'
+      }
     }
   }
 

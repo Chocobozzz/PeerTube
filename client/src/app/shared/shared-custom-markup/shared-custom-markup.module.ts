@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core'
 import { SharedActorImageModule } from '../shared-actor-image/shared-actor-image.module'
 import { SharedGlobalIconModule } from '../shared-icons'
 import { SharedMainModule } from '../shared-main'
+import { SharedSearchModule } from '../shared-search'
 import { SharedVideoMiniatureModule } from '../shared-video-miniature'
 import { SharedVideoPlaylistModule } from '../shared-video-playlist'
 import { CustomMarkupContainerComponent } from './custom-markup-container.component'
@@ -26,7 +27,8 @@ import {
     SharedGlobalIconModule,
     SharedVideoMiniatureModule,
     SharedVideoPlaylistModule,
-    SharedActorImageModule
+    SharedActorImageModule,
+    SharedSearchModule
   ],
 
   declarations: [

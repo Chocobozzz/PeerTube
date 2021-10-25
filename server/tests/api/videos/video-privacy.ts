@@ -1,29 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
 import 'mocha'
-import { VideoPrivacy } from '../../../../shared/models/videos/video-privacy.enum'
-import {
-  cleanupTests,
-  flushAndRunServer,
-  getVideosList,
-  getVideosListWithToken,
-  ServerInfo,
-  setAccessTokensToServers,
-  uploadVideo
-} from '../../../../shared/extra-utils/index'
-import { doubleFollow } from '../../../../shared/extra-utils/server/follows'
-import { userLogin } from '../../../../shared/extra-utils/users/login'
-import { createUser } from '../../../../shared/extra-utils/users/users'
-import { getMyVideos, getVideo, getVideoWithToken, updateVideo } from '../../../../shared/extra-utils/videos/videos'
-import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
-import { Video } from '@shared/models'
-import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
+import * as chai from 'chai'
+import { cleanupTests, createSingleServer, doubleFollow, PeerTubeServer, setAccessTokensToServers, waitJobs } from '@shared/extra-utils'
+import { HttpStatusCode, VideoCreateResult, VideoPrivacy } from '@shared/models'
 
 const expect = chai.expect
 
 describe('Test video privacy', function () {
-  const servers: ServerInfo[] = []
+  const servers: PeerTubeServer[] = []
   let anotherUserToken: string
 
   let privateVideoId: number
@@ -32,7 +17,7 @@ describe('Test video privacy', function () {
   let internalVideoId: number
   let internalVideoUUID: string
 
-  let unlistedVideoUUID: string
+  let unlistedVideo: VideoCreateResult
   let nonFederatedUnlistedVideoUUID: string
 
   let now: number
@@ -49,8 +34,8 @@ describe('Test video privacy', function () {
     this.timeout(50000)
 
     // Run servers
-    servers.push(await flushAndRunServer(1, dontFederateUnlistedConfig))
-    servers.push(await flushAndRunServer(2))
+    servers.push(await createSingleServer(1, dontFederateUnlistedConfig))
+    servers.push(await createSingleServer(2))
 
     // Get the access tokens
     await setAccessTokensToServers(servers)
@@ -59,231 +44,246 @@ describe('Test video privacy', function () {
     await doubleFollow(servers[0], servers[1])
   })
 
-  it('Should upload a private and internal videos on server 1', async function () {
-    this.timeout(10000)
+  describe('Private and internal videos', function () {
 
-    for (const privacy of [ VideoPrivacy.PRIVATE, VideoPrivacy.INTERNAL ]) {
-      const attributes = { privacy }
-      await uploadVideo(servers[0].url, servers[0].accessToken, attributes)
-    }
+    it('Should upload a private and internal videos on server 1', async function () {
+      this.timeout(10000)
 
-    await waitJobs(servers)
-  })
-
-  it('Should not have these private and internal videos on server 2', async function () {
-    const res = await getVideosList(servers[1].url)
-
-    expect(res.body.total).to.equal(0)
-    expect(res.body.data).to.have.lengthOf(0)
-  })
-
-  it('Should not list the private and internal videos for an unauthenticated user on server 1', async function () {
-    const res = await getVideosList(servers[0].url)
-
-    expect(res.body.total).to.equal(0)
-    expect(res.body.data).to.have.lengthOf(0)
-  })
-
-  it('Should not list the private video and list the internal video for an authenticated user on server 1', async function () {
-    const res = await getVideosListWithToken(servers[0].url, servers[0].accessToken)
-
-    expect(res.body.total).to.equal(1)
-    expect(res.body.data).to.have.lengthOf(1)
-
-    expect(res.body.data[0].privacy.id).to.equal(VideoPrivacy.INTERNAL)
-  })
-
-  it('Should list my (private and internal) videos', async function () {
-    const res = await getMyVideos(servers[0].url, servers[0].accessToken, 0, 10)
-
-    expect(res.body.total).to.equal(2)
-    expect(res.body.data).to.have.lengthOf(2)
-
-    const videos: Video[] = res.body.data
-
-    const privateVideo = videos.find(v => v.privacy.id === VideoPrivacy.PRIVATE)
-    privateVideoId = privateVideo.id
-    privateVideoUUID = privateVideo.uuid
-
-    const internalVideo = videos.find(v => v.privacy.id === VideoPrivacy.INTERNAL)
-    internalVideoId = internalVideo.id
-    internalVideoUUID = internalVideo.uuid
-  })
-
-  it('Should not be able to watch the private/internal video with non authenticated user', async function () {
-    await getVideo(servers[0].url, privateVideoUUID, HttpStatusCode.UNAUTHORIZED_401)
-    await getVideo(servers[0].url, internalVideoUUID, HttpStatusCode.UNAUTHORIZED_401)
-  })
-
-  it('Should not be able to watch the private video with another user', async function () {
-    this.timeout(10000)
-
-    const user = {
-      username: 'hello',
-      password: 'super password'
-    }
-    await createUser({ url: servers[0].url, accessToken: servers[0].accessToken, username: user.username, password: user.password })
-
-    anotherUserToken = await userLogin(servers[0], user)
-    await getVideoWithToken(servers[0].url, anotherUserToken, privateVideoUUID, HttpStatusCode.FORBIDDEN_403)
-  })
-
-  it('Should be able to watch the internal video with another user', async function () {
-    await getVideoWithToken(servers[0].url, anotherUserToken, internalVideoUUID, HttpStatusCode.OK_200)
-  })
-
-  it('Should be able to watch the private video with the correct user', async function () {
-    await getVideoWithToken(servers[0].url, servers[0].accessToken, privateVideoUUID, HttpStatusCode.OK_200)
-  })
-
-  it('Should upload an unlisted video on server 2', async function () {
-    this.timeout(60000)
-
-    const attributes = {
-      name: 'unlisted video',
-      privacy: VideoPrivacy.UNLISTED
-    }
-    await uploadVideo(servers[1].url, servers[1].accessToken, attributes)
-
-    // Server 2 has transcoding enabled
-    await waitJobs(servers)
-  })
-
-  it('Should not have this unlisted video listed on server 1 and 2', async function () {
-    for (const server of servers) {
-      const res = await getVideosList(server.url)
-
-      expect(res.body.total).to.equal(0)
-      expect(res.body.data).to.have.lengthOf(0)
-    }
-  })
-
-  it('Should list my (unlisted) videos', async function () {
-    const res = await getMyVideos(servers[1].url, servers[1].accessToken, 0, 1)
-
-    expect(res.body.total).to.equal(1)
-    expect(res.body.data).to.have.lengthOf(1)
-
-    unlistedVideoUUID = res.body.data[0].uuid
-  })
-
-  it('Should be able to get this unlisted video', async function () {
-    for (const server of servers) {
-      const res = await getVideo(server.url, unlistedVideoUUID)
-
-      expect(res.body.name).to.equal('unlisted video')
-    }
-  })
-
-  it('Should upload a non-federating unlisted video to server 1', async function () {
-    this.timeout(30000)
-
-    const attributes = {
-      name: 'unlisted video',
-      privacy: VideoPrivacy.UNLISTED
-    }
-    await uploadVideo(servers[0].url, servers[0].accessToken, attributes)
-
-    await waitJobs(servers)
-  })
-
-  it('Should list my new unlisted video', async function () {
-    const res = await getMyVideos(servers[0].url, servers[0].accessToken, 0, 3)
-
-    expect(res.body.total).to.equal(3)
-    expect(res.body.data).to.have.lengthOf(3)
-
-    nonFederatedUnlistedVideoUUID = res.body.data[0].uuid
-  })
-
-  it('Should be able to get non-federated unlisted video from origin', async function () {
-    const res = await getVideo(servers[0].url, nonFederatedUnlistedVideoUUID)
-
-    expect(res.body.name).to.equal('unlisted video')
-  })
-
-  it('Should not be able to get non-federated unlisted video from federated server', async function () {
-    await getVideo(servers[1].url, nonFederatedUnlistedVideoUUID, HttpStatusCode.NOT_FOUND_404)
-  })
-
-  it('Should update the private and internal videos to public on server 1', async function () {
-    this.timeout(10000)
-
-    now = Date.now()
-
-    {
-      const attribute = {
-        name: 'private video becomes public',
-        privacy: VideoPrivacy.PUBLIC
+      for (const privacy of [ VideoPrivacy.PRIVATE, VideoPrivacy.INTERNAL ]) {
+        const attributes = { privacy }
+        await servers[0].videos.upload({ attributes })
       }
 
-      await updateVideo(servers[0].url, servers[0].accessToken, privateVideoId, attribute)
-    }
+      await waitJobs(servers)
+    })
 
-    {
-      const attribute = {
-        name: 'internal video becomes public',
-        privacy: VideoPrivacy.PUBLIC
+    it('Should not have these private and internal videos on server 2', async function () {
+      const { total, data } = await servers[1].videos.list()
+
+      expect(total).to.equal(0)
+      expect(data).to.have.lengthOf(0)
+    })
+
+    it('Should not list the private and internal videos for an unauthenticated user on server 1', async function () {
+      const { total, data } = await servers[0].videos.list()
+
+      expect(total).to.equal(0)
+      expect(data).to.have.lengthOf(0)
+    })
+
+    it('Should not list the private video and list the internal video for an authenticated user on server 1', async function () {
+      const { total, data } = await servers[0].videos.listWithToken()
+
+      expect(total).to.equal(1)
+      expect(data).to.have.lengthOf(1)
+
+      expect(data[0].privacy.id).to.equal(VideoPrivacy.INTERNAL)
+    })
+
+    it('Should list my (private and internal) videos', async function () {
+      const { total, data } = await servers[0].videos.listMyVideos()
+
+      expect(total).to.equal(2)
+      expect(data).to.have.lengthOf(2)
+
+      const privateVideo = data.find(v => v.privacy.id === VideoPrivacy.PRIVATE)
+      privateVideoId = privateVideo.id
+      privateVideoUUID = privateVideo.uuid
+
+      const internalVideo = data.find(v => v.privacy.id === VideoPrivacy.INTERNAL)
+      internalVideoId = internalVideo.id
+      internalVideoUUID = internalVideo.uuid
+    })
+
+    it('Should not be able to watch the private/internal video with non authenticated user', async function () {
+      await servers[0].videos.get({ id: privateVideoUUID, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
+      await servers[0].videos.get({ id: internalVideoUUID, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
+    })
+
+    it('Should not be able to watch the private video with another user', async function () {
+      this.timeout(10000)
+
+      const user = {
+        username: 'hello',
+        password: 'super password'
       }
-      await updateVideo(servers[0].url, servers[0].accessToken, internalVideoId, attribute)
-    }
+      await servers[0].users.create({ username: user.username, password: user.password })
 
-    await waitJobs(servers)
+      anotherUserToken = await servers[0].login.getAccessToken(user)
+
+      await servers[0].videos.getWithToken({
+        token: anotherUserToken,
+        id: privateVideoUUID,
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
+    })
+
+    it('Should be able to watch the internal video with another user', async function () {
+      await servers[0].videos.getWithToken({ token: anotherUserToken, id: internalVideoUUID })
+    })
+
+    it('Should be able to watch the private video with the correct user', async function () {
+      await servers[0].videos.getWithToken({ id: privateVideoUUID })
+    })
   })
 
-  it('Should have this new public video listed on server 1 and 2', async function () {
-    for (const server of servers) {
-      const res = await getVideosList(server.url)
-      expect(res.body.total).to.equal(2)
-      expect(res.body.data).to.have.lengthOf(2)
+  describe('Unlisted videos', function () {
 
-      const videos: Video[] = res.body.data
-      const privateVideo = videos.find(v => v.name === 'private video becomes public')
-      const internalVideo = videos.find(v => v.name === 'internal video becomes public')
+    it('Should upload an unlisted video on server 2', async function () {
+      this.timeout(60000)
 
-      expect(privateVideo).to.not.be.undefined
-      expect(internalVideo).to.not.be.undefined
+      const attributes = {
+        name: 'unlisted video',
+        privacy: VideoPrivacy.UNLISTED
+      }
+      await servers[1].videos.upload({ attributes })
 
-      expect(new Date(privateVideo.publishedAt).getTime()).to.be.at.least(now)
-      // We don't change the publish date of internal videos
-      expect(new Date(internalVideo.publishedAt).getTime()).to.be.below(now)
+      // Server 2 has transcoding enabled
+      await waitJobs(servers)
+    })
 
-      expect(privateVideo.privacy.id).to.equal(VideoPrivacy.PUBLIC)
-      expect(internalVideo.privacy.id).to.equal(VideoPrivacy.PUBLIC)
-    }
+    it('Should not have this unlisted video listed on server 1 and 2', async function () {
+      for (const server of servers) {
+        const { total, data } = await server.videos.list()
+
+        expect(total).to.equal(0)
+        expect(data).to.have.lengthOf(0)
+      }
+    })
+
+    it('Should list my (unlisted) videos', async function () {
+      const { total, data } = await servers[1].videos.listMyVideos()
+
+      expect(total).to.equal(1)
+      expect(data).to.have.lengthOf(1)
+
+      unlistedVideo = data[0]
+    })
+
+    it('Should not be able to get this unlisted video using its id', async function () {
+      await servers[1].videos.get({ id: unlistedVideo.id, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+    })
+
+    it('Should be able to get this unlisted video using its uuid/shortUUID', async function () {
+      for (const server of servers) {
+        for (const id of [ unlistedVideo.uuid, unlistedVideo.shortUUID ]) {
+          const video = await server.videos.get({ id })
+
+          expect(video.name).to.equal('unlisted video')
+        }
+      }
+    })
+
+    it('Should upload a non-federating unlisted video to server 1', async function () {
+      this.timeout(30000)
+
+      const attributes = {
+        name: 'unlisted video',
+        privacy: VideoPrivacy.UNLISTED
+      }
+      await servers[0].videos.upload({ attributes })
+
+      await waitJobs(servers)
+    })
+
+    it('Should list my new unlisted video', async function () {
+      const { total, data } = await servers[0].videos.listMyVideos()
+
+      expect(total).to.equal(3)
+      expect(data).to.have.lengthOf(3)
+
+      nonFederatedUnlistedVideoUUID = data[0].uuid
+    })
+
+    it('Should be able to get non-federated unlisted video from origin', async function () {
+      const video = await servers[0].videos.get({ id: nonFederatedUnlistedVideoUUID })
+
+      expect(video.name).to.equal('unlisted video')
+    })
+
+    it('Should not be able to get non-federated unlisted video from federated server', async function () {
+      await servers[1].videos.get({ id: nonFederatedUnlistedVideoUUID, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+    })
   })
 
-  it('Should set these videos as private and internal', async function () {
-    this.timeout(10000)
+  describe('Privacy update', function () {
 
-    await updateVideo(servers[0].url, servers[0].accessToken, internalVideoId, { privacy: VideoPrivacy.PRIVATE })
-    await updateVideo(servers[0].url, servers[0].accessToken, privateVideoId, { privacy: VideoPrivacy.INTERNAL })
+    it('Should update the private and internal videos to public on server 1', async function () {
+      this.timeout(10000)
 
-    await waitJobs(servers)
+      now = Date.now()
 
-    for (const server of servers) {
-      const res = await getVideosList(server.url)
+      {
+        const attributes = {
+          name: 'private video becomes public',
+          privacy: VideoPrivacy.PUBLIC
+        }
 
-      expect(res.body.total).to.equal(0)
-      expect(res.body.data).to.have.lengthOf(0)
-    }
+        await servers[0].videos.update({ id: privateVideoId, attributes })
+      }
 
-    {
-      const res = await getMyVideos(servers[0].url, servers[0].accessToken, 0, 5)
-      const videos = res.body.data
+      {
+        const attributes = {
+          name: 'internal video becomes public',
+          privacy: VideoPrivacy.PUBLIC
+        }
+        await servers[0].videos.update({ id: internalVideoId, attributes })
+      }
 
-      expect(res.body.total).to.equal(3)
-      expect(videos).to.have.lengthOf(3)
+      await waitJobs(servers)
+    })
 
-      const privateVideo = videos.find(v => v.name === 'private video becomes public')
-      const internalVideo = videos.find(v => v.name === 'internal video becomes public')
+    it('Should have this new public video listed on server 1 and 2', async function () {
+      for (const server of servers) {
+        const { total, data } = await server.videos.list()
+        expect(total).to.equal(2)
+        expect(data).to.have.lengthOf(2)
 
-      expect(privateVideo).to.not.be.undefined
-      expect(internalVideo).to.not.be.undefined
+        const privateVideo = data.find(v => v.name === 'private video becomes public')
+        const internalVideo = data.find(v => v.name === 'internal video becomes public')
 
-      expect(privateVideo.privacy.id).to.equal(VideoPrivacy.INTERNAL)
-      expect(internalVideo.privacy.id).to.equal(VideoPrivacy.PRIVATE)
-    }
+        expect(privateVideo).to.not.be.undefined
+        expect(internalVideo).to.not.be.undefined
+
+        expect(new Date(privateVideo.publishedAt).getTime()).to.be.at.least(now)
+        // We don't change the publish date of internal videos
+        expect(new Date(internalVideo.publishedAt).getTime()).to.be.below(now)
+
+        expect(privateVideo.privacy.id).to.equal(VideoPrivacy.PUBLIC)
+        expect(internalVideo.privacy.id).to.equal(VideoPrivacy.PUBLIC)
+      }
+    })
+
+    it('Should set these videos as private and internal', async function () {
+      this.timeout(10000)
+
+      await servers[0].videos.update({ id: internalVideoId, attributes: { privacy: VideoPrivacy.PRIVATE } })
+      await servers[0].videos.update({ id: privateVideoId, attributes: { privacy: VideoPrivacy.INTERNAL } })
+
+      await waitJobs(servers)
+
+      for (const server of servers) {
+        const { total, data } = await server.videos.list()
+
+        expect(total).to.equal(0)
+        expect(data).to.have.lengthOf(0)
+      }
+
+      {
+        const { total, data } = await servers[0].videos.listMyVideos()
+        expect(total).to.equal(3)
+        expect(data).to.have.lengthOf(3)
+
+        const privateVideo = data.find(v => v.name === 'private video becomes public')
+        const internalVideo = data.find(v => v.name === 'internal video becomes public')
+
+        expect(privateVideo).to.not.be.undefined
+        expect(internalVideo).to.not.be.undefined
+
+        expect(privateVideo.privacy.id).to.equal(VideoPrivacy.INTERNAL)
+        expect(internalVideo.privacy.id).to.equal(VideoPrivacy.PRIVATE)
+      }
+    })
   })
 
   after(async function () {

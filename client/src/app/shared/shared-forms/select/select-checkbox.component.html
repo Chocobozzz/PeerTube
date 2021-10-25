@@ -7,6 +7,7 @@
   [multiple]="true"
   [searchable]="true"
   [closeOnSelect]="false"
+  [disabled]="disabled"
 
   bindValue="id"
   bindLabel="label"
@@ -18,8 +19,6 @@
 
   groupBy="group"
   [compareWith]="compareFn"
-
-  [maxSelectedItems]="maxSelectedItems"
 >
 
   <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">

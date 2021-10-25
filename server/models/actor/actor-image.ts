@@ -98,4 +98,8 @@ export class ActorImageModel extends Model<Partial<AttributesOnly<ActorImageMode
     const imagePath = join(CONFIG.STORAGE.ACTOR_IMAGES, this.filename)
     return remove(imagePath)
   }
+
+  isOwned () {
+    return !this.fileUrl
+  }
 }

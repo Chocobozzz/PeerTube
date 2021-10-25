@@ -1,6 +1,6 @@
-@import '_variables';
-@import '_mixins';
-@import '_miniature';
+@use '_variables' as *;
+@use '_mixins' as *;
+@use '_miniature' as *;
 
 .section-title {
   // make the element span a full grid row within .videos grid
@@ -8,7 +8,7 @@
 }
 
 .margin-content {
-  @include grid-videos-miniature-layout;
+  @include grid-videos-miniature-layout-with-margins;
 }
 
 .section {

@@ -6,14 +6,13 @@ import {
   MUser,
   MUserAccountId,
   MVideoAccountLight,
+  MVideoFormattableDetails,
   MVideoFullLight,
-  MVideoIdThumbnail,
+  MVideoId,
   MVideoImmutable,
-  MVideoThumbnail,
-  MVideoWithRights
+  MVideoThumbnail
 } from '@server/types/models'
-import { HttpStatusCode } from '@shared/core-utils'
-import { UserRight } from '@shared/models'
+import { HttpStatusCode, UserRight } from '@shared/models'
 
 async function doesVideoExist (id: number | string, res: Response, fetchType: VideoLoadType = 'all') {
   const userId = res.locals.oauth ? res.locals.oauth.token.User.id : undefined
@@ -29,6 +28,10 @@ async function doesVideoExist (id: number | string, res: Response, fetchType: Vi
   }
 
   switch (fetchType) {
+    case 'for-api':
+      res.locals.videoAPI = video as MVideoFormattableDetails
+      break
+
     case 'all':
       res.locals.videoAll = video as MVideoFullLight
       break
@@ -38,15 +41,11 @@ async function doesVideoExist (id: number | string, res: Response, fetchType: Vi
       break
 
     case 'id':
-      res.locals.videoId = video as MVideoIdThumbnail
+      res.locals.videoId = video as MVideoId
       break
 
     case 'only-video':
       res.locals.onlyVideo = video as MVideoThumbnail
-      break
-
-    case 'only-video-with-rights':
-      res.locals.onlyVideoWithRights = video as MVideoWithRights
       break
   }
 

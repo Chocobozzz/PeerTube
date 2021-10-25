@@ -49,20 +49,20 @@ export class ModerationCommentModalComponent extends FormReactive implements OnI
     this.form.reset()
   }
 
-  async banUser () {
-    const moderationComment: string = this.form.value[ 'moderationComment' ]
+  banUser () {
+    const moderationComment: string = this.form.value['moderationComment']
 
     this.abuseService.updateAbuse(this.abuseToComment, { moderationComment })
-        .subscribe(
-          () => {
+        .subscribe({
+          next: () => {
             this.notifier.success($localize`Comment updated.`)
 
             this.commentUpdated.emit(moderationComment)
             this.hide()
           },
 
-          err => this.notifier.error(err.message)
-        )
+          error: err => this.notifier.error(err.message)
+        })
   }
 
 }

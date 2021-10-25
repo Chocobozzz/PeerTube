@@ -1,4 +1,4 @@
-<div *ngIf="!isUploadingVideo" class="upload-video-container" dragDrop (fileDropped)="onFileDropped($event)">
+<div *ngIf="!isUploadingVideo" class="upload-video-container" myDragDrop (fileDropped)="onFileDropped($event)">
   <div class="first-step-block">
     <my-global-icon class="upload-icon" iconName="upload" aria-hidden="true"></my-global-icon>
 
@@ -96,7 +96,7 @@
   <my-video-edit
     [form]="form" [formErrors]="formErrors" [videoCaptions]="videoCaptions"
     [validationMessages]="validationMessages" [userVideoChannels]="userVideoChannels"
-    [waitTranscodingEnabled]="true"
+    [waitTranscodingEnabled]="true" [schedulePublicationPossible]="schedulePublicationPossible"
     type="upload"
   ></my-video-edit>
 

@@ -6,7 +6,7 @@ import { getAbsoluteAPIUrl, scrollToTop } from '@app/helpers'
 import { FormValidatorService } from '@app/shared/shared-forms'
 import { VideoCaptionService, VideoEdit, VideoImportService, VideoService } from '@app/shared/shared-main'
 import { LoadingBarService } from '@ngx-loading-bar/core'
-import { VideoPrivacy, VideoUpdate } from '@shared/models'
+import { VideoUpdate } from '@shared/models'
 import { hydrateFormFromVideo } from '../shared/video-edit-utils'
 import { VideoSend } from './video-send'
 
@@ -59,14 +59,14 @@ export class VideoImportUrlComponent extends VideoSend implements OnInit, AfterV
   }
 
   isTargetUrlValid () {
-    return this.targetUrl && this.targetUrl.match(/https?:\/\//)
+    return this.targetUrl?.match(/https?:\/\//)
   }
 
   importVideo () {
     this.isImportingVideo = true
 
     const videoUpdate: VideoUpdate = {
-      privacy: VideoPrivacy.PRIVATE,
+      privacy: this.highestPrivacy,
       waitTranscoding: false,
       commentsEnabled: true,
       downloadEnabled: true,
@@ -86,8 +86,8 @@ export class VideoImportUrlComponent extends VideoSend implements OnInit, AfterV
                 )
           })
         )
-        .subscribe(
-          ({ video, videoCaptions }) => {
+        .subscribe({
+          next: ({ video, videoCaptions }) => {
             this.loadingBar.useRef().complete()
             this.firstStepDone.emit(video.name)
             this.isImportingVideo = false
@@ -117,13 +117,13 @@ export class VideoImportUrlComponent extends VideoSend implements OnInit, AfterV
             hydrateFormFromVideo(this.form, this.video, true)
           },
 
-          err => {
+          error: err => {
             this.loadingBar.useRef().complete()
             this.isImportingVideo = false
             this.firstStepError.emit()
             this.notifier.error(err.message)
           }
-        )
+        })
   }
 
   updateSecondStep () {
@@ -137,19 +137,19 @@ export class VideoImportUrlComponent extends VideoSend implements OnInit, AfterV
 
     // Update the video
     this.updateVideoAndCaptions(this.video)
-        .subscribe(
-          () => {
+        .subscribe({
+          next: () => {
             this.isUpdatingVideo = false
             this.notifier.success($localize`Video to import updated.`)
 
             this.router.navigate([ '/my-library', 'video-imports' ])
           },
 
-          err => {
+          error: err => {
             this.error = err.message
             scrollToTop()
             console.error(err)
           }
-        )
+        })
   }
 }

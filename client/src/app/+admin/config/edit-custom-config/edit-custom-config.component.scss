@@ -1,5 +1,5 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 $form-base-input-width: 340px;
 
@@ -32,6 +32,11 @@ input[type=number] {
     position: absolute;
     top: 5px;
     right: 2.5rem;
+  }
+
+  input[disabled] {
+    background-color: #f9f9f9;
+    pointer-events: none;
   }
 }
 
@@ -92,6 +97,11 @@ textarea {
     pointer-events: none;
   }
 }
+
+input[disabled] {
+  opacity: 0.5;
+}
+
 
 .form-group-right {
   padding-top: 2px;

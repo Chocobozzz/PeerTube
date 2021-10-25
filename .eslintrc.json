@@ -89,6 +89,10 @@
     "@typescript-eslint/no-empty-interface": "off",
     "@typescript-eslint/no-extraneous-class": "off",
     "@typescript-eslint/no-use-before-define": "off",
+
+    "require-await": "off",
+    "@typescript-eslint/require-await": "error",
+
     // bugged but useful
     "@typescript-eslint/restrict-plus-operands": "off"
   },

@@ -1,4 +1,4 @@
-import * as bytes from 'bytes'
+import bytes from 'bytes'
 import { IConfig } from 'config'
 import decache from 'decache'
 import { dirname, join } from 'path'
@@ -6,7 +6,6 @@ import { VideoRedundancyConfigFilter } from '@shared/models/redundancy/video-red
 import { BroadcastMessageLevel } from '@shared/models/server'
 import { VideosRedundancyStrategy } from '../../shared/models'
 import { NSFWPolicyType } from '../../shared/models/videos/nsfw-policy.type'
-// Do not use barrels, remain constants as independent as possible
 import { buildPath, parseBytes, parseDurationToMs, root } from '../helpers/core-utils'
 
 // Use a variable to reload the configuration if we need
@@ -58,8 +57,18 @@ const CONFIG = {
       PREFIX: config.get<string>('email.subject.prefix') + ' '
     }
   },
+
+  CLIENT: {
+    VIDEOS: {
+      MINIATURE: {
+        get PREFER_AUTHOR_DISPLAY_NAME () { return config.get<boolean>('client.videos.miniature.prefer_author_display_name') }
+      }
+    }
+  },
+
   STORAGE: {
     TMP_DIR: buildPath(config.get<string>('storage.tmp')),
+    BIN_DIR: buildPath(config.get<string>('storage.bin')),
     ACTOR_IMAGES: buildPath(config.get<string>('storage.avatars')),
     LOG_DIR: buildPath(config.get<string>('storage.logs')),
     VIDEOS_DIR: buildPath(config.get<string>('storage.videos')),
@@ -72,6 +81,26 @@ const CONFIG = {
     CACHE_DIR: buildPath(config.get<string>('storage.cache')),
     PLUGINS_DIR: buildPath(config.get<string>('storage.plugins')),
     CLIENT_OVERRIDES_DIR: buildPath(config.get<string>('storage.client_overrides'))
+  },
+  OBJECT_STORAGE: {
+    ENABLED: config.get<boolean>('object_storage.enabled'),
+    MAX_UPLOAD_PART: bytes.parse(config.get<string>('object_storage.max_upload_part')),
+    ENDPOINT: config.get<string>('object_storage.endpoint'),
+    REGION: config.get<string>('object_storage.region'),
+    CREDENTIALS: {
+      ACCESS_KEY_ID: config.get<string>('object_storage.credentials.access_key_id'),
+      SECRET_ACCESS_KEY: config.get<string>('object_storage.credentials.secret_access_key')
+    },
+    VIDEOS: {
+      BUCKET_NAME: config.get<string>('object_storage.videos.bucket_name'),
+      PREFIX: config.get<string>('object_storage.videos.prefix'),
+      BASE_URL: config.get<string>('object_storage.videos.base_url')
+    },
+    STREAMING_PLAYLISTS: {
+      BUCKET_NAME: config.get<string>('object_storage.streaming_playlists.bucket_name'),
+      PREFIX: config.get<string>('object_storage.streaming_playlists.prefix'),
+      BASE_URL: config.get<string>('object_storage.streaming_playlists.base_url')
+    }
   },
   WEBSERVER: {
     SCHEME: config.get<boolean>('webserver.https') === true ? 'https' : 'http',
@@ -102,10 +131,10 @@ const CONFIG = {
     LEVEL: config.get<string>('log.level'),
     ROTATION: {
       ENABLED: config.get<boolean>('log.rotation.enabled'),
-      MAX_FILE_SIZE: bytes.parse(config.get<string>('log.rotation.maxFileSize')),
-      MAX_FILES: config.get<number>('log.rotation.maxFiles')
+      MAX_FILE_SIZE: bytes.parse(config.get<string>('log.rotation.max_file_size')),
+      MAX_FILES: config.get<number>('log.rotation.max_files')
     },
-    ANONYMIZE_IP: config.get<boolean>('log.anonymizeIP'),
+    ANONYMIZE_IP: config.get<boolean>('log.anonymize_ip'),
     LOG_PING_REQUESTS: config.get<boolean>('log.log_ping_requests'),
     PRETTIFY_SQL: config.get<boolean>('log.prettify_sql')
   },
@@ -173,6 +202,13 @@ const CONFIG = {
     CHECK_LATEST_VERSION: {
       ENABLED: config.get<boolean>('peertube.check_latest_version.enabled'),
       URL: config.get<string>('peertube.check_latest_version.url')
+    }
+  },
+  WEBADMIN: {
+    CONFIGURATION: {
+      EDITION: {
+        ALLOWED: config.get<boolean>('webadmin.configuration.edition.allowed')
+      }
     }
   },
   ADMIN: {
@@ -256,11 +292,13 @@ const CONFIG = {
 
       HTTP: {
         get ENABLED () { return config.get<boolean>('import.videos.http.enabled') },
-        get FORCE_IPV4 () { return config.get<boolean>('import.videos.http.force_ipv4') },
-        PROXY: {
-          get ENABLED () { return config.get<boolean>('import.videos.http.proxy.enabled') },
-          get URL () { return config.get<string>('import.videos.http.proxy.url') }
-        }
+
+        YOUTUBE_DL_RELEASE: {
+          get URL () { return config.get<string>('import.videos.http.youtube_dl_release.url') },
+          get NAME () { return config.get<string>('import.videos.http.youtube_dl_release.name') }
+        },
+
+        get FORCE_IPV4 () { return config.get<boolean>('import.videos.http.force_ipv4') }
       },
       TORRENT: {
         get ENABLED () { return config.get<boolean>('import.videos.torrent.enabled') }
@@ -391,14 +429,22 @@ export {
 // ---------------------------------------------------------------------------
 
 function getLocalConfigFilePath () {
-  const configSources = config.util.getConfigSources()
-  if (configSources.length === 0) throw new Error('Invalid config source.')
+  const localConfigDir = getLocalConfigDir()
 
   let filename = 'local'
   if (process.env.NODE_ENV) filename += `-${process.env.NODE_ENV}`
   if (process.env.NODE_APP_INSTANCE) filename += `-${process.env.NODE_APP_INSTANCE}`
 
-  return join(dirname(configSources[0].name), filename + '.json')
+  return join(localConfigDir, filename + '.json')
+}
+
+function getLocalConfigDir () {
+  if (process.env.PEERTUBE_LOCAL_CONFIG) return process.env.PEERTUBE_LOCAL_CONFIG
+
+  const configSources = config.util.getConfigSources()
+  if (configSources.length === 0) throw new Error('Invalid config source.')
+
+  return dirname(configSources[0].name)
 }
 
 function buildVideosRedundancy (objs: any[]): VideosRedundancyStrategy[] {
@@ -417,19 +463,19 @@ function buildVideosRedundancy (objs: any[]): VideosRedundancyStrategy[] {
 
 export function reloadConfig () {
 
-  function getConfigDirectory () {
+  function getConfigDirectories () {
     if (process.env.NODE_CONFIG_DIR) {
-      return process.env.NODE_CONFIG_DIR
+      return process.env.NODE_CONFIG_DIR.split(':')
     }
 
-    return join(root(), 'config')
+    return [ join(root(), 'config') ]
   }
 
   function purge () {
-    const directory = getConfigDirectory()
+    const directories = getConfigDirectories()
 
     for (const fileName in require.cache) {
-      if (fileName.includes(directory) === false) {
+      if (directories.some((dir) => fileName.includes(dir)) === false) {
         continue
       }
 

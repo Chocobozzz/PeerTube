@@ -1,6 +1,12 @@
-import * as express from 'express'
+import express from 'express'
+import { MVideoFullLight } from '@server/types/models'
+import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
+import { VideoChangeOwnershipStatus, VideoState } from '../../../../shared/models/videos'
 import { logger } from '../../../helpers/logger'
+import { getFormattedObjects } from '../../../helpers/utils'
 import { sequelizeTypescript } from '../../../initializers/database'
+import { sendUpdateVideo } from '../../../lib/activitypub/send'
+import { changeVideoChannelShare } from '../../../lib/activitypub/share'
 import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
@@ -11,15 +17,9 @@ import {
   videosChangeOwnershipValidator,
   videosTerminateChangeOwnershipValidator
 } from '../../../middlewares'
-import { VideoChangeOwnershipModel } from '../../../models/video/video-change-ownership'
-import { VideoChangeOwnershipStatus, VideoState } from '../../../../shared/models/videos'
-import { VideoChannelModel } from '../../../models/video/video-channel'
-import { getFormattedObjects } from '../../../helpers/utils'
-import { changeVideoChannelShare } from '../../../lib/activitypub/share'
-import { sendUpdateVideo } from '../../../lib/activitypub/send'
 import { VideoModel } from '../../../models/video/video'
-import { MVideoFullLight } from '@server/types/models'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { VideoChangeOwnershipModel } from '../../../models/video/video-change-ownership'
+import { VideoChannelModel } from '../../../models/video/video-channel'
 
 const ownershipVideoRouter = express.Router()
 
@@ -105,9 +105,9 @@ function acceptOwnership (req: express.Request, res: express.Response) {
     const channel = res.locals.videoChannel
 
     // We need more attributes for federation
-    const targetVideo = await VideoModel.loadAndPopulateAccountAndServerAndTags(videoChangeOwnership.Video.id)
+    const targetVideo = await VideoModel.loadAndPopulateAccountAndServerAndTags(videoChangeOwnership.Video.id, t)
 
-    const oldVideoChannel = await VideoChannelModel.loadAndPopulateAccount(targetVideo.channelId)
+    const oldVideoChannel = await VideoChannelModel.loadAndPopulateAccount(targetVideo.channelId, t)
 
     targetVideo.channelId = channel.id
 

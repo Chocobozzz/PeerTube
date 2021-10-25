@@ -1,11 +1,11 @@
 import { of } from 'rxjs'
-import { map, switchMap } from 'rxjs/operators'
+import { switchMap } from 'rxjs/operators'
 import { SelectChannelItem } from 'src/types/select-options-item.model'
 import { Component, HostListener, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Notifier } from '@app/core'
 import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
-import { VideoCaptionEdit, VideoCaptionService, VideoDetails, VideoEdit, VideoService } from '@app/shared/shared-main'
+import { Video, VideoCaptionEdit, VideoCaptionService, VideoDetails, VideoEdit, VideoService } from '@app/shared/shared-main'
 import { LiveVideoService } from '@app/shared/shared-video-live'
 import { LoadingBarService } from '@ngx-loading-bar/core'
 import { LiveVideo, LiveVideoUpdate, VideoPrivacy } from '@shared/models'
@@ -38,43 +38,35 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
     private loadingBar: LoadingBarService,
     private videoCaptionService: VideoCaptionService,
     private liveVideoService: LiveVideoService
-    ) {
+  ) {
     super()
   }
 
   ngOnInit () {
     this.buildForm({})
 
-    this.route.data
-        .pipe(map(data => data.videoData))
-        .subscribe(({ video, videoChannels, videoCaptions, liveVideo }) => {
-          this.video = new VideoEdit(video)
-          this.videoDetails = video
+    const { videoData } = this.route.snapshot.data
+    const { video, videoChannels, videoCaptions, liveVideo } = videoData
 
-          this.userVideoChannels = videoChannels
-          this.videoCaptions = videoCaptions
-          this.liveVideo = liveVideo
+    this.video = new VideoEdit(video)
+    this.videoDetails = video
 
-          this.schedulePublicationPossible = this.video.privacy === VideoPrivacy.PRIVATE
+    this.userVideoChannels = videoChannels
+    this.videoCaptions = videoCaptions
+    this.liveVideo = liveVideo
 
-          // FIXME: Angular does not detect the change inside this subscription, so use the patched setTimeout
-          setTimeout(() => {
-            hydrateFormFromVideo(this.form, this.video, true)
+    this.schedulePublicationPossible = this.video.privacy === VideoPrivacy.PRIVATE
+  }
 
-            if (this.liveVideo) {
-              this.form.patchValue({
-                saveReplay: this.liveVideo.saveReplay,
-                permanentLive: this.liveVideo.permanentLive
-              })
-            }
-          })
-        },
+  onFormBuilt () {
+    hydrateFormFromVideo(this.form, this.video, true)
 
-        err => {
-          console.error(err)
-          this.notifier.error(err.message)
-        }
-      )
+    if (this.liveVideo) {
+      this.form.patchValue({
+        saveReplay: this.liveVideo.saveReplay,
+        permanentLive: this.liveVideo.permanentLive
+      })
+    }
   }
 
   @HostListener('window:beforeunload', [ '$event' ])
@@ -118,8 +110,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
   }
 
   update () {
-    if (this.checkForm() === false
-      || this.isUpdatingVideo === true) {
+    if (this.checkForm() === false || this.isUpdatingVideo === true) {
       return
     }
 
@@ -150,22 +141,22 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
             return this.liveVideoService.updateLive(this.video.id, liveVideoUpdate)
           })
         )
-        .subscribe(
-          () => {
+        .subscribe({
+          next: () => {
             this.updateDone = true
             this.isUpdatingVideo = false
             this.loadingBar.useRef().complete()
             this.notifier.success($localize`Video updated.`)
-            this.router.navigate([ '/w', this.video.uuid ])
+            this.router.navigateByUrl(Video.buildWatchUrl(this.video))
           },
 
-          err => {
+          error: err => {
             this.loadingBar.useRef().complete()
             this.isUpdatingVideo = false
             this.notifier.error(err.message)
             console.error(err)
           }
-        )
+        })
   }
 
   hydratePluginFieldsFromVideo () {
@@ -174,5 +165,9 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
     this.form.patchValue({
       pluginData: this.video.pluginData
     })
+  }
+
+  getVideoUrl () {
+    return Video.buildWatchUrl(this.videoDetails)
   }
 }

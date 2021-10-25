@@ -1,10 +1,7 @@
-import { Subject } from 'rxjs'
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators'
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
-import { ActivatedRoute, Router } from '@angular/router'
 
 @Component({
-  selector: 'simple-search-input',
+  selector: 'my-simple-search-input',
   templateUrl: './simple-search-input.component.html',
   styleUrls: [ './simple-search-input.component.scss' ]
 })
@@ -22,23 +19,9 @@ export class SimpleSearchInputComponent implements OnInit {
   value = ''
   inputShown: boolean
 
-  private searchSubject = new Subject<string>()
-
-  constructor (
-    private router: Router,
-    private route: ActivatedRoute
-  ) {}
+  private hasAlreadySentSearch = false
 
   ngOnInit () {
-    this.searchSubject
-        .pipe(
-          debounceTime(400),
-          distinctUntilChanged()
-        )
-        .subscribe(value => this.searchChanged.emit(value))
-
-    this.searchSubject.next(this.value)
-
     if (this.isInputShown()) this.showInput(false)
   }
 
@@ -54,7 +37,7 @@ export class SimpleSearchInputComponent implements OnInit {
       return
     }
 
-    this.searchChange()
+    this.sendSearch()
   }
 
   showInput (focus = true) {
@@ -80,9 +63,14 @@ export class SimpleSearchInputComponent implements OnInit {
     this.hideInput()
   }
 
-  searchChange () {
-    this.router.navigate([ './search' ], { relativeTo: this.route })
+  sendSearch () {
+    this.hasAlreadySentSearch = true
+    this.searchChanged.emit(this.value)
+  }
 
-    this.searchSubject.next(this.value)
+  onResetFilter () {
+    this.value = ''
+
+    if (this.hasAlreadySentSearch) this.sendSearch()
   }
 }

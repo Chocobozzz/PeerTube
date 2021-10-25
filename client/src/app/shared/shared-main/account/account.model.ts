@@ -1,4 +1,4 @@
-import { Account as ServerAccount, Actor as ServerActor, ActorImage } from '@shared/models'
+import { Account as ServerAccount, ActorImage } from '@shared/models'
 import { Actor } from './actor.model'
 
 export class Account extends Actor implements ServerAccount {

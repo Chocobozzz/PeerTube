@@ -9,7 +9,7 @@ import { exec, ExecOptions } from 'child_process'
 import { BinaryToTextEncoding, createHash, randomBytes } from 'crypto'
 import { truncate } from 'lodash'
 import { basename, extname, isAbsolute, join, resolve } from 'path'
-import * as pem from 'pem'
+import { createPrivateKey as createPrivateKey_1, getPublicKey as getPublicKey_1 } from 'pem'
 import { pipeline } from 'stream'
 import { URL } from 'url'
 import { promisify } from 'util'
@@ -164,9 +164,10 @@ let rootPath: string
 function root () {
   if (rootPath) return rootPath
 
-  // We are in /helpers/utils.js
-  rootPath = join(__dirname, '..', '..')
+  rootPath = __dirname
 
+  if (basename(rootPath) === 'helpers') rootPath = resolve(rootPath, '..')
+  if (basename(rootPath) === 'server') rootPath = resolve(rootPath, '..')
   if (basename(rootPath) === 'dist') rootPath = resolve(rootPath, '..')
 
   return rootPath
@@ -281,8 +282,8 @@ function promisify2<T, U, A> (func: (arg1: T, arg2: U, cb: (err: any, result: A)
 }
 
 const randomBytesPromise = promisify1<number, Buffer>(randomBytes)
-const createPrivateKey = promisify1<number, { key: string }>(pem.createPrivateKey)
-const getPublicKey = promisify1<string, { publicKey: string }>(pem.getPublicKey)
+const createPrivateKey = promisify1<number, { key: string }>(createPrivateKey_1)
+const getPublicKey = promisify1<string, { publicKey: string }>(getPublicKey_1)
 const execPromise2 = promisify2<string, any, string>(exec)
 const execPromise = promisify1<string, string>(exec)
 const pipelinePromise = promisify(pipeline)

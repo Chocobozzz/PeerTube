@@ -1,4 +1,4 @@
-import * as Bull from 'bull'
+import { Job } from 'bull'
 import { refreshVideoPlaylistIfNeeded } from '@server/lib/activitypub/playlists'
 import { refreshVideoIfNeeded } from '@server/lib/activitypub/videos'
 import { loadVideoByUrl } from '@server/lib/model-loaders'
@@ -8,7 +8,7 @@ import { ActorModel } from '../../../models/actor/actor'
 import { VideoPlaylistModel } from '../../../models/video/video-playlist'
 import { refreshActorIfNeeded } from '../../activitypub/actors'
 
-async function refreshAPObject (job: Bull.Job) {
+async function refreshAPObject (job: Job) {
   const payload = job.data as RefreshPayload
 
   logger.info('Processing AP refresher in job %d for %s.', job.id, payload.url)
@@ -47,7 +47,7 @@ async function refreshActor (actorUrl: string) {
   const actor = await ActorModel.loadByUrlAndPopulateAccountAndChannel(actorUrl)
 
   if (actor) {
-    await refreshActorIfNeeded(actor, fetchType)
+    await refreshActorIfNeeded({ actor, fetchedType: fetchType })
   }
 }
 

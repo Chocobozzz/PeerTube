@@ -1,7 +1,7 @@
-@import 'variables';
-@import 'mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
-$width-size: 190px;
+$width-size: 250px;
 
 .alert.alert-danger {
   text-align: center;
@@ -29,6 +29,7 @@ $width-size: 190px;
   my-select-options ::ng-deep ng-select,
   my-select-channel ::ng-deep ng-select {
     width: $width-size;
+
     @media screen and (max-width: $width-size) {
       width: 100%;
     }

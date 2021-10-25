@@ -1,5 +1,5 @@
-@import '_mixins';
-@import '_variables';
+@use '_mixins' as *;
+@use '_variables' as *;
 
 my-input-toggle-hidden {
   width: 100%;
@@ -80,4 +80,10 @@ my-input-toggle-hidden {
       @include margin-left(10px);
     }
   }
+}
+
+.alert-private {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }

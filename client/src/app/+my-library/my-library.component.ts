@@ -17,7 +17,7 @@ export class MyLibraryComponent implements OnInit {
     private serverService: ServerService,
     private authService: AuthService,
     private screenService: ScreenService
-    ) { }
+  ) { }
 
   get isBroadcastMessageDisplayed () {
     return this.screenService.isBroadcastMessageDisplayed
@@ -61,8 +61,19 @@ export class MyLibraryComponent implements OnInit {
       },
 
       {
-        label: $localize`Subscriptions`,
-        routerLink: '/my-library/subscriptions'
+        label: $localize`Follows`,
+        children: [
+          {
+            label: $localize`Subscriptions`,
+            iconName: 'subscriptions',
+            routerLink: '/my-library/subscriptions'
+          },
+          {
+            label: $localize`Followers`,
+            iconName: 'follower',
+            routerLink: '/my-library/followers'
+          }
+        ]
       },
 
       {

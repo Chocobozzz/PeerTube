@@ -1,4 +1,4 @@
-@import '_mixins';
+@use '_mixins' as *;
 
 .btn-remote-follow {
   @include peertube-button;

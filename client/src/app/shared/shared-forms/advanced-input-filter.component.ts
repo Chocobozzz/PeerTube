@@ -5,8 +5,12 @@ import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@
 import { ActivatedRoute, Params, Router } from '@angular/router'
 
 export type AdvancedInputFilter = {
-  label: string
-  queryParams: Params
+  title: string
+
+  children: {
+    label: string
+    queryParams: Params
+  }[]
 }
 
 const logger = debug('peertube:AdvancedInputFilterComponent')
@@ -18,6 +22,7 @@ const logger = debug('peertube:AdvancedInputFilterComponent')
 })
 export class AdvancedInputFilterComponent implements OnInit, AfterViewInit {
   @Input() filters: AdvancedInputFilter[] = []
+  @Input() emitOnInit = true
 
   @Output() search = new EventEmitter<string>()
 
@@ -42,7 +47,7 @@ export class AdvancedInputFilterComponent implements OnInit, AfterViewInit {
     this.viewInitialized = true
 
     // Init after view init to not send an event too early
-    if (this.emitSearchAfterViewInit) this.emitSearch()
+    if (this.emitOnInit && this.emitSearchAfterViewInit) this.emitSearch()
   }
 
   onInputSearch (event: Event) {
@@ -54,7 +59,7 @@ export class AdvancedInputFilterComponent implements OnInit, AfterViewInit {
   }
 
   hasFilters () {
-    return this.filters.length !== 0
+    return this.filters && this.filters.length !== 0
   }
 
   private scheduleSearchUpdate (value: string) {
@@ -75,6 +80,8 @@ export class AdvancedInputFilterComponent implements OnInit, AfterViewInit {
         const search = params.search || ''
 
         logger('On route search change "%s".', search)
+
+        if (this.searchValue === search) return
 
         this.searchValue = search
         this.emitSearch()

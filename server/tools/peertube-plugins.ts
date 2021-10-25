@@ -3,13 +3,11 @@
 import { registerTSPaths } from '../helpers/register-ts-paths'
 registerTSPaths()
 
-import * as program from 'commander'
-import { installPlugin, listPlugins, uninstallPlugin, updatePlugin } from '../../shared/extra-utils/server/plugins'
-import { getAdminTokenOrDie, getServerCredentials } from './cli'
-import { PeerTubePlugin, PluginType } from '../../shared/models'
+import { program, Command, OptionValues } from 'commander'
+import { assignToken, buildServer, getServerCredentials } from './cli'
+import { PluginType } from '../../shared/models'
 import { isAbsolute } from 'path'
-import * as CliTable3 from 'cli-table3'
-import commander = require('commander')
+import CliTable3 from 'cli-table3'
 
 program
   .name('plugins')
@@ -62,30 +60,23 @@ program.parse(process.argv)
 
 // ----------------------------------------------------------------------------
 
-async function pluginsListCLI (command: commander.CommanderStatic, options: commander.OptionValues) {
+async function pluginsListCLI (command: Command, options: OptionValues) {
   const { url, username, password } = await getServerCredentials(command)
-  const accessToken = await getAdminTokenOrDie(url, username, password)
+  const server = buildServer(url)
+  await assignToken(server, username, password)
 
   let pluginType: PluginType
   if (options.onlyThemes) pluginType = PluginType.THEME
   if (options.onlyPlugins) pluginType = PluginType.PLUGIN
 
-  const res = await listPlugins({
-    url,
-    accessToken,
-    start: 0,
-    count: 100,
-    sort: 'name',
-    pluginType
-  })
-  const plugins: PeerTubePlugin[] = res.body.data
+  const { data } = await server.plugins.list({ start: 0, count: 100, sort: 'name', pluginType })
 
   const table = new CliTable3({
     head: [ 'name', 'version', 'homepage' ],
     colWidths: [ 50, 10, 50 ]
   }) as any
 
-  for (const plugin of plugins) {
+  for (const plugin of data) {
     const npmName = plugin.type === PluginType.PLUGIN
       ? 'peertube-plugin-' + plugin.name
       : 'peertube-theme-' + plugin.name
@@ -101,7 +92,7 @@ async function pluginsListCLI (command: commander.CommanderStatic, options: comm
   process.exit(0)
 }
 
-async function installPluginCLI (command: commander.CommanderStatic, options: commander.OptionValues) {
+async function installPluginCLI (command: Command, options: OptionValues) {
   if (!options.path && !options.npmName) {
     console.error('You need to specify the npm name or the path of the plugin you want to install.\n')
     program.outputHelp()
@@ -114,15 +105,11 @@ async function installPluginCLI (command: commander.CommanderStatic, options: co
   }
 
   const { url, username, password } = await getServerCredentials(command)
-  const accessToken = await getAdminTokenOrDie(url, username, password)
+  const server = buildServer(url)
+  await assignToken(server, username, password)
 
   try {
-    await installPlugin({
-      url,
-      accessToken,
-      npmName: options.npmName,
-      path: options.path
-    })
+    await server.plugins.install({ npmName: options.npmName, path: options.path })
   } catch (err) {
     console.error('Cannot install plugin.', err)
     process.exit(-1)
@@ -132,7 +119,7 @@ async function installPluginCLI (command: commander.CommanderStatic, options: co
   process.exit(0)
 }
 
-async function updatePluginCLI (command: commander.CommanderStatic, options: commander.OptionValues) {
+async function updatePluginCLI (command: Command, options: OptionValues) {
   if (!options.path && !options.npmName) {
     console.error('You need to specify the npm name or the path of the plugin you want to update.\n')
     program.outputHelp()
@@ -145,15 +132,11 @@ async function updatePluginCLI (command: commander.CommanderStatic, options: com
   }
 
   const { url, username, password } = await getServerCredentials(command)
-  const accessToken = await getAdminTokenOrDie(url, username, password)
+  const server = buildServer(url)
+  await assignToken(server, username, password)
 
   try {
-    await updatePlugin({
-      url,
-      accessToken,
-      npmName: options.npmName,
-      path: options.path
-    })
+    await server.plugins.update({ npmName: options.npmName, path: options.path })
   } catch (err) {
     console.error('Cannot update plugin.', err)
     process.exit(-1)
@@ -163,7 +146,7 @@ async function updatePluginCLI (command: commander.CommanderStatic, options: com
   process.exit(0)
 }
 
-async function uninstallPluginCLI (command: commander.CommanderStatic, options: commander.OptionValues) {
+async function uninstallPluginCLI (command: Command, options: OptionValues) {
   if (!options.npmName) {
     console.error('You need to specify the npm name of the plugin/theme you want to uninstall.\n')
     program.outputHelp()
@@ -171,14 +154,11 @@ async function uninstallPluginCLI (command: commander.CommanderStatic, options: 
   }
 
   const { url, username, password } = await getServerCredentials(command)
-  const accessToken = await getAdminTokenOrDie(url, username, password)
+  const server = buildServer(url)
+  await assignToken(server, username, password)
 
   try {
-    await uninstallPlugin({
-      url,
-      accessToken,
-      npmName: options.npmName
-    })
+    await server.plugins.uninstall({ npmName: options.npmName })
   } catch (err) {
     console.error('Cannot uninstall plugin.', err)
     process.exit(-1)

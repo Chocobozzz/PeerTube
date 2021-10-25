@@ -2,33 +2,25 @@
 
 import 'mocha'
 import { omit } from 'lodash'
-import { join } from 'path'
 import {
+  buildAbsoluteFixturePath,
+  checkBadCountPagination,
+  checkBadSortPagination,
+  checkBadStartPagination,
   cleanupTests,
-  createUser,
-  flushAndRunServer,
-  getMyUserInformation,
-  immutableAssign,
+  createSingleServer,
+  FIXTURE_URLS,
   makeGetRequest,
   makePostBodyRequest,
   makeUploadRequest,
-  ServerInfo,
-  setAccessTokensToServers,
-  updateCustomSubConfig,
-  userLogin
-} from '../../../../shared/extra-utils'
-import {
-  checkBadCountPagination,
-  checkBadSortPagination,
-  checkBadStartPagination
-} from '../../../../shared/extra-utils/requests/check-api-params'
-import { getMagnetURI, getGoodVideoUrl } from '../../../../shared/extra-utils/videos/video-imports'
-import { VideoPrivacy } from '../../../../shared/models/videos/video-privacy.enum'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+  PeerTubeServer,
+  setAccessTokensToServers
+} from '@shared/extra-utils'
+import { HttpStatusCode, VideoPrivacy } from '@shared/models'
 
 describe('Test video imports API validator', function () {
   const path = '/api/v1/videos/imports'
-  let server: ServerInfo
+  let server: PeerTubeServer
   let userAccessToken = ''
   let channelId: number
 
@@ -37,18 +29,18 @@ describe('Test video imports API validator', function () {
   before(async function () {
     this.timeout(30000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
 
     await setAccessTokensToServers([ server ])
 
     const username = 'user1'
     const password = 'my super password'
-    await createUser({ url: server.url, accessToken: server.accessToken, username: username, password: password })
-    userAccessToken = await userLogin(server, { username, password })
+    await server.users.create({ username: username, password: password })
+    userAccessToken = await server.login.getAccessToken({ username, password })
 
     {
-      const res = await getMyUserInformation(server.url, server.accessToken)
-      channelId = res.body.videoChannels[0].id
+      const { videoChannels } = await server.users.getMyInfo()
+      channelId = videoChannels[0].id
     }
   })
 
@@ -68,7 +60,7 @@ describe('Test video imports API validator', function () {
     })
 
     it('Should success with the correct parameters', async function () {
-      await makeGetRequest({ url: server.url, path: myPath, statusCodeExpected: HttpStatusCode.OK_200, token: server.accessToken })
+      await makeGetRequest({ url: server.url, path: myPath, expectedStatus: HttpStatusCode.OK_200, token: server.accessToken })
     })
   })
 
@@ -77,7 +69,7 @@ describe('Test video imports API validator', function () {
 
     before(function () {
       baseCorrectParams = {
-        targetUrl: getGoodVideoUrl(),
+        targetUrl: FIXTURE_URLS.goodVideo,
         name: 'my super name',
         category: 5,
         licence: 1,
@@ -106,48 +98,48 @@ describe('Test video imports API validator', function () {
         path,
         token: server.accessToken,
         fields,
-        statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
       })
     })
 
     it('Should fail with a bad target url', async function () {
-      const fields = immutableAssign(baseCorrectParams, { targetUrl: 'htt://hello' })
+      const fields = { ...baseCorrectParams, targetUrl: 'htt://hello' }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should fail with a long name', async function () {
-      const fields = immutableAssign(baseCorrectParams, { name: 'super'.repeat(65) })
+      const fields = { ...baseCorrectParams, name: 'super'.repeat(65) }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should fail with a bad category', async function () {
-      const fields = immutableAssign(baseCorrectParams, { category: 125 })
+      const fields = { ...baseCorrectParams, category: 125 }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should fail with a bad licence', async function () {
-      const fields = immutableAssign(baseCorrectParams, { licence: 125 })
+      const fields = { ...baseCorrectParams, licence: 125 }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should fail with a bad language', async function () {
-      const fields = immutableAssign(baseCorrectParams, { language: 'a'.repeat(15) })
+      const fields = { ...baseCorrectParams, language: 'a'.repeat(15) }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should fail with a long description', async function () {
-      const fields = immutableAssign(baseCorrectParams, { description: 'super'.repeat(2500) })
+      const fields = { ...baseCorrectParams, description: 'super'.repeat(2500) }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should fail with a long support text', async function () {
-      const fields = immutableAssign(baseCorrectParams, { support: 'super'.repeat(201) })
+      const fields = { ...baseCorrectParams, support: 'super'.repeat(201) }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
@@ -159,7 +151,7 @@ describe('Test video imports API validator', function () {
     })
 
     it('Should fail with a bad channel', async function () {
-      const fields = immutableAssign(baseCorrectParams, { channelId: 545454 })
+      const fields = { ...baseCorrectParams, channelId: 545454 }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
@@ -169,31 +161,31 @@ describe('Test video imports API validator', function () {
         username: 'fake',
         password: 'fake_password'
       }
-      await createUser({ url: server.url, accessToken: server.accessToken, username: user.username, password: user.password })
+      await server.users.create({ username: user.username, password: user.password })
 
-      const accessTokenUser = await userLogin(server, user)
-      const res = await getMyUserInformation(server.url, accessTokenUser)
-      const customChannelId = res.body.videoChannels[0].id
+      const accessTokenUser = await server.login.getAccessToken(user)
+      const { videoChannels } = await server.users.getMyInfo({ token: accessTokenUser })
+      const customChannelId = videoChannels[0].id
 
-      const fields = immutableAssign(baseCorrectParams, { channelId: customChannelId })
+      const fields = { ...baseCorrectParams, channelId: customChannelId }
 
       await makePostBodyRequest({ url: server.url, path, token: userAccessToken, fields })
     })
 
     it('Should fail with too many tags', async function () {
-      const fields = immutableAssign(baseCorrectParams, { tags: [ 'tag1', 'tag2', 'tag3', 'tag4', 'tag5', 'tag6' ] })
+      const fields = { ...baseCorrectParams, tags: [ 'tag1', 'tag2', 'tag3', 'tag4', 'tag5', 'tag6' ] }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should fail with a tag length too low', async function () {
-      const fields = immutableAssign(baseCorrectParams, { tags: [ 'tag1', 't' ] })
+      const fields = { ...baseCorrectParams, tags: [ 'tag1', 't' ] }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should fail with a tag length too big', async function () {
-      const fields = immutableAssign(baseCorrectParams, { tags: [ 'tag1', 'my_super_tag_too_long_long_long_long_long_long' ] })
+      const fields = { ...baseCorrectParams, tags: [ 'tag1', 'my_super_tag_too_long_long_long_long_long_long' ] }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
@@ -201,7 +193,7 @@ describe('Test video imports API validator', function () {
     it('Should fail with an incorrect thumbnail file', async function () {
       const fields = baseCorrectParams
       const attaches = {
-        thumbnailfile: join(__dirname, '..', '..', 'fixtures', 'video_short.mp4')
+        thumbnailfile: buildAbsoluteFixturePath('video_short.mp4')
       }
 
       await makeUploadRequest({ url: server.url, path, token: server.accessToken, fields, attaches })
@@ -210,7 +202,7 @@ describe('Test video imports API validator', function () {
     it('Should fail with a big thumbnail file', async function () {
       const fields = baseCorrectParams
       const attaches = {
-        thumbnailfile: join(__dirname, '..', '..', 'fixtures', 'preview-big.png')
+        thumbnailfile: buildAbsoluteFixturePath('preview-big.png')
       }
 
       await makeUploadRequest({ url: server.url, path, token: server.accessToken, fields, attaches })
@@ -219,7 +211,7 @@ describe('Test video imports API validator', function () {
     it('Should fail with an incorrect preview file', async function () {
       const fields = baseCorrectParams
       const attaches = {
-        previewfile: join(__dirname, '..', '..', 'fixtures', 'video_short.mp4')
+        previewfile: buildAbsoluteFixturePath('video_short.mp4')
       }
 
       await makeUploadRequest({ url: server.url, path, token: server.accessToken, fields, attaches })
@@ -228,7 +220,7 @@ describe('Test video imports API validator', function () {
     it('Should fail with a big preview file', async function () {
       const fields = baseCorrectParams
       const attaches = {
-        previewfile: join(__dirname, '..', '..', 'fixtures', 'preview-big.png')
+        previewfile: buildAbsoluteFixturePath('preview-big.png')
       }
 
       await makeUploadRequest({ url: server.url, path, token: server.accessToken, fields, attaches })
@@ -237,7 +229,7 @@ describe('Test video imports API validator', function () {
     it('Should fail with an invalid torrent file', async function () {
       const fields = omit(baseCorrectParams, 'targetUrl')
       const attaches = {
-        torrentfile: join(__dirname, '..', '..', 'fixtures', 'avatar-big.png')
+        torrentfile: buildAbsoluteFixturePath('avatar-big.png')
       }
 
       await makeUploadRequest({ url: server.url, path, token: server.accessToken, fields, attaches })
@@ -245,7 +237,7 @@ describe('Test video imports API validator', function () {
 
     it('Should fail with an invalid magnet URI', async function () {
       let fields = omit(baseCorrectParams, 'targetUrl')
-      fields = immutableAssign(fields, { magnetUri: 'blabla' })
+      fields = { ...fields, magnetUri: 'blabla' }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
@@ -258,19 +250,21 @@ describe('Test video imports API validator', function () {
         path,
         token: server.accessToken,
         fields: baseCorrectParams,
-        statusCodeExpected: HttpStatusCode.OK_200
+        expectedStatus: HttpStatusCode.OK_200
       })
     })
 
     it('Should forbid to import http videos', async function () {
-      await updateCustomSubConfig(server.url, server.accessToken, {
-        import: {
-          videos: {
-            http: {
-              enabled: false
-            },
-            torrent: {
-              enabled: true
+      await server.config.updateCustomSubConfig({
+        newConfig: {
+          import: {
+            videos: {
+              http: {
+                enabled: false
+              },
+              torrent: {
+                enabled: true
+              }
             }
           }
         }
@@ -281,38 +275,40 @@ describe('Test video imports API validator', function () {
         path,
         token: server.accessToken,
         fields: baseCorrectParams,
-        statusCodeExpected: HttpStatusCode.CONFLICT_409
+        expectedStatus: HttpStatusCode.CONFLICT_409
       })
     })
 
     it('Should forbid to import torrent videos', async function () {
-      await updateCustomSubConfig(server.url, server.accessToken, {
-        import: {
-          videos: {
-            http: {
-              enabled: true
-            },
-            torrent: {
-              enabled: false
+      await server.config.updateCustomSubConfig({
+        newConfig: {
+          import: {
+            videos: {
+              http: {
+                enabled: true
+              },
+              torrent: {
+                enabled: false
+              }
             }
           }
         }
       })
 
       let fields = omit(baseCorrectParams, 'targetUrl')
-      fields = immutableAssign(fields, { magnetUri: getMagnetURI() })
+      fields = { ...fields, magnetUri: FIXTURE_URLS.magnet }
 
       await makePostBodyRequest({
         url: server.url,
         path,
         token: server.accessToken,
         fields,
-        statusCodeExpected: HttpStatusCode.CONFLICT_409
+        expectedStatus: HttpStatusCode.CONFLICT_409
       })
 
       fields = omit(fields, 'magnetUri')
       const attaches = {
-        torrentfile: join(__dirname, '..', '..', 'fixtures', 'video-720p.torrent')
+        torrentfile: buildAbsoluteFixturePath('video-720p.torrent')
       }
 
       await makeUploadRequest({
@@ -321,7 +317,7 @@ describe('Test video imports API validator', function () {
         token: server.accessToken,
         fields,
         attaches,
-        statusCodeExpected: HttpStatusCode.CONFLICT_409
+        expectedStatus: HttpStatusCode.CONFLICT_409
       })
     })
   })

@@ -63,6 +63,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
 
   @ViewChild('videoCaptionAddModal', { static: true }) videoCaptionAddModal: VideoCaptionAddModalComponent
 
+  @Output() formBuilt = new EventEmitter<void>()
   @Output() pluginFieldsAdded = new EventEmitter<void>()
 
   // So that it can be accessed in the template
@@ -154,6 +155,8 @@ export class VideoEditComponent implements OnInit, OnDestroy {
     this.trackChannelChange()
     this.trackPrivacyChange()
     this.trackLivePermanentFieldChange()
+
+    this.formBuilt.emit()
   }
 
   ngOnInit () {
@@ -185,6 +188,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
     this.serverService.getVideoPrivacies()
       .subscribe(privacies => {
         this.videoPrivacies = this.videoService.explainedPrivacyLabels(privacies).videoPrivacies
+
         if (this.schedulePublicationPossible) {
           this.videoPrivacies.push({
             id: this.SPECIAL_SCHEDULED_PRIVACY,
@@ -230,9 +234,9 @@ export class VideoEditComponent implements OnInit, OnDestroy {
     this.sortVideoCaptions()
   }
 
-  async deleteCaption (caption: VideoCaptionEdit) {
+  deleteCaption (caption: VideoCaptionEdit) {
     // Caption recovers his former state
-    if (caption.action && this.initialVideoCaptions.indexOf(caption.language.id) !== -1) {
+    if (caption.action && this.initialVideoCaptions.includes(caption.language.id)) {
       caption.action = undefined
       return
     }
@@ -296,7 +300,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
 
   private trackPrivacyChange () {
     // We will update the schedule input and the wait transcoding checkbox validators
-    this.form.controls[ 'privacy' ]
+    this.form.controls['privacy']
       .valueChanges
       .pipe(map(res => parseInt(res.toString(), 10)))
       .subscribe(
@@ -335,12 +339,12 @@ export class VideoEditComponent implements OnInit, OnDestroy {
 
   private trackChannelChange () {
     // We will update the "support" field depending on the channel
-    this.form.controls[ 'channelId' ]
+    this.form.controls['channelId']
       .valueChanges
       .pipe(map(res => parseInt(res.toString(), 10)))
       .subscribe(
         newChannelId => {
-          const oldChannelId = parseInt(this.form.value[ 'channelId' ], 10)
+          const oldChannelId = parseInt(this.form.value['channelId'], 10)
 
           // Not initialized yet
           if (isNaN(newChannelId)) return
@@ -349,7 +353,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
 
           // Wait support field update
           setTimeout(() => {
-            const currentSupport = this.form.value[ 'support' ]
+            const currentSupport = this.form.value['support']
 
             // First time we set the channel?
             if (isNaN(oldChannelId)) {

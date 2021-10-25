@@ -1,24 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-import { cleanupTests, flushAndRunServer, ServerInfo, waitUntilLog } from '../../../shared/extra-utils/server/servers'
-import {
-  getMyUserInformation,
-  getPluginTestPath,
-  installPlugin,
-  logout,
-  setAccessTokensToServers,
-  uninstallPlugin,
-  updateMyUser,
-  userLogin,
-  wait,
-  login, refreshToken, getConfig, updatePluginSettings, getUsersList
-} from '../../../shared/extra-utils'
-import { User, UserRole, ServerConfig } from '@shared/models'
 import { expect } from 'chai'
+import { cleanupTests, createSingleServer, PeerTubeServer, PluginsCommand, setAccessTokensToServers, wait } from '@shared/extra-utils'
+import { HttpStatusCode, UserRole } from '@shared/models'
 
 describe('Test id and pass auth plugins', function () {
-  let server: ServerInfo
+  let server: PeerTubeServer
 
   let crashAccessToken: string
   let crashRefreshToken: string
@@ -29,22 +17,16 @@ describe('Test id and pass auth plugins', function () {
   before(async function () {
     this.timeout(30000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
     await setAccessTokensToServers([ server ])
 
     for (const suffix of [ 'one', 'two', 'three' ]) {
-      await installPlugin({
-        url: server.url,
-        accessToken: server.accessToken,
-        path: getPluginTestPath('-id-pass-auth-' + suffix)
-      })
+      await server.plugins.install({ path: PluginsCommand.getPluginTestPath('-id-pass-auth-' + suffix) })
     }
   })
 
   it('Should display the correct configuration', async function () {
-    const res = await getConfig(server.url)
-
-    const config: ServerConfig = res.body
+    const config = await server.config.getConfig()
 
     const auths = config.plugin.registeredIdAndPassAuths
     expect(auths).to.have.lengthOf(8)
@@ -56,15 +38,14 @@ describe('Test id and pass auth plugins', function () {
   })
 
   it('Should not login', async function () {
-    await userLogin(server, { username: 'toto', password: 'password' }, 400)
+    await server.login.login({ user: { username: 'toto', password: 'password' }, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
   })
 
   it('Should login Spyro, create the user and use the token', async function () {
-    const accessToken = await userLogin(server, { username: 'spyro', password: 'spyro password' })
+    const accessToken = await server.login.getAccessToken({ username: 'spyro', password: 'spyro password' })
 
-    const res = await getMyUserInformation(server.url, accessToken)
+    const body = await server.users.getMyInfo({ token: accessToken })
 
-    const body: User = res.body
     expect(body.username).to.equal('spyro')
     expect(body.account.displayName).to.equal('Spyro the Dragon')
     expect(body.role).to.equal(UserRole.USER)
@@ -72,15 +53,14 @@ describe('Test id and pass auth plugins', function () {
 
   it('Should login Crash, create the user and use the token', async function () {
     {
-      const res = await login(server.url, server.client, { username: 'crash', password: 'crash password' })
-      crashAccessToken = res.body.access_token
-      crashRefreshToken = res.body.refresh_token
+      const body = await server.login.login({ user: { username: 'crash', password: 'crash password' } })
+      crashAccessToken = body.access_token
+      crashRefreshToken = body.refresh_token
     }
 
     {
-      const res = await getMyUserInformation(server.url, crashAccessToken)
+      const body = await server.users.getMyInfo({ token: crashAccessToken })
 
-      const body: User = res.body
       expect(body.username).to.equal('crash')
       expect(body.account.displayName).to.equal('Crash Bandicoot')
       expect(body.role).to.equal(UserRole.MODERATOR)
@@ -89,15 +69,14 @@ describe('Test id and pass auth plugins', function () {
 
   it('Should login the first Laguna, create the user and use the token', async function () {
     {
-      const res = await login(server.url, server.client, { username: 'laguna', password: 'laguna password' })
-      lagunaAccessToken = res.body.access_token
-      lagunaRefreshToken = res.body.refresh_token
+      const body = await server.login.login({ user: { username: 'laguna', password: 'laguna password' } })
+      lagunaAccessToken = body.access_token
+      lagunaRefreshToken = body.refresh_token
     }
 
     {
-      const res = await getMyUserInformation(server.url, lagunaAccessToken)
+      const body = await server.users.getMyInfo({ token: lagunaAccessToken })
 
-      const body: User = res.body
       expect(body.username).to.equal('laguna')
       expect(body.account.displayName).to.equal('laguna')
       expect(body.role).to.equal(UserRole.USER)
@@ -106,51 +85,47 @@ describe('Test id and pass auth plugins', function () {
 
   it('Should refresh crash token, but not laguna token', async function () {
     {
-      const resRefresh = await refreshToken(server, crashRefreshToken)
+      const resRefresh = await server.login.refreshToken({ refreshToken: crashRefreshToken })
       crashAccessToken = resRefresh.body.access_token
       crashRefreshToken = resRefresh.body.refresh_token
 
-      const res = await getMyUserInformation(server.url, crashAccessToken)
-      const user: User = res.body
-      expect(user.username).to.equal('crash')
+      const body = await server.users.getMyInfo({ token: crashAccessToken })
+      expect(body.username).to.equal('crash')
     }
 
     {
-      await refreshToken(server, lagunaRefreshToken, 400)
+      await server.login.refreshToken({ refreshToken: lagunaRefreshToken, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     }
   })
 
   it('Should update Crash profile', async function () {
-    await updateMyUser({
-      url: server.url,
-      accessToken: crashAccessToken,
+    await server.users.updateMe({
+      token: crashAccessToken,
       displayName: 'Beautiful Crash',
       description: 'Mutant eastern barred bandicoot'
     })
 
-    const res = await getMyUserInformation(server.url, crashAccessToken)
+    const body = await server.users.getMyInfo({ token: crashAccessToken })
 
-    const body: User = res.body
     expect(body.account.displayName).to.equal('Beautiful Crash')
     expect(body.account.description).to.equal('Mutant eastern barred bandicoot')
   })
 
   it('Should logout Crash', async function () {
-    await logout(server.url, crashAccessToken)
+    await server.login.logout({ token: crashAccessToken })
   })
 
   it('Should have logged out Crash', async function () {
-    await waitUntilLog(server, 'On logout for auth 1 - 2')
+    await server.servers.waitUntilLog('On logout for auth 1 - 2')
 
-    await getMyUserInformation(server.url, crashAccessToken, 401)
+    await server.users.getMyInfo({ token: crashAccessToken, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
   })
 
   it('Should login Crash and keep the old existing profile', async function () {
-    crashAccessToken = await userLogin(server, { username: 'crash', password: 'crash password' })
+    crashAccessToken = await server.login.getAccessToken({ username: 'crash', password: 'crash password' })
 
-    const res = await getMyUserInformation(server.url, crashAccessToken)
+    const body = await server.users.getMyInfo({ token: crashAccessToken })
 
-    const body: User = res.body
     expect(body.username).to.equal('crash')
     expect(body.account.displayName).to.equal('Beautiful Crash')
     expect(body.account.description).to.equal('Mutant eastern barred bandicoot')
@@ -162,39 +137,38 @@ describe('Test id and pass auth plugins', function () {
 
     await wait(5000)
 
-    await getMyUserInformation(server.url, lagunaAccessToken, 401)
+    await server.users.getMyInfo({ token: lagunaAccessToken, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
   })
 
   it('Should reject an invalid username, email, role or display name', async function () {
-    await userLogin(server, { username: 'ward', password: 'ward password' }, 400)
-    await waitUntilLog(server, 'valid username')
+    const command = server.login
 
-    await userLogin(server, { username: 'kiros', password: 'kiros password' }, 400)
-    await waitUntilLog(server, 'valid display name')
+    await command.login({ user: { username: 'ward', password: 'ward password' }, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    await server.servers.waitUntilLog('valid username')
 
-    await userLogin(server, { username: 'raine', password: 'raine password' }, 400)
-    await waitUntilLog(server, 'valid role')
+    await command.login({ user: { username: 'kiros', password: 'kiros password' }, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    await server.servers.waitUntilLog('valid display name')
 
-    await userLogin(server, { username: 'ellone', password: 'elonne password' }, 400)
-    await waitUntilLog(server, 'valid email')
+    await command.login({ user: { username: 'raine', password: 'raine password' }, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    await server.servers.waitUntilLog('valid role')
+
+    await command.login({ user: { username: 'ellone', password: 'elonne password' }, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    await server.servers.waitUntilLog('valid email')
   })
 
   it('Should unregister spyro-auth and do not login existing Spyro', async function () {
-    await updatePluginSettings({
-      url: server.url,
-      accessToken: server.accessToken,
+    await server.plugins.updateSettings({
       npmName: 'peertube-plugin-test-id-pass-auth-one',
       settings: { disableSpyro: true }
     })
 
-    await userLogin(server, { username: 'spyro', password: 'spyro password' }, 400)
-    await userLogin(server, { username: 'spyro', password: 'fake' }, 400)
+    const command = server.login
+    await command.login({ user: { username: 'spyro', password: 'spyro password' }, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    await command.login({ user: { username: 'spyro', password: 'fake' }, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
   })
 
   it('Should have disabled this auth', async function () {
-    const res = await getConfig(server.url)
-
-    const config: ServerConfig = res.body
+    const config = await server.config.getConfig()
 
     const auths = config.plugin.registeredIdAndPassAuths
     expect(auths).to.have.lengthOf(7)
@@ -204,19 +178,16 @@ describe('Test id and pass auth plugins', function () {
   })
 
   it('Should uninstall the plugin one and do not login existing Crash', async function () {
-    await uninstallPlugin({
-      url: server.url,
-      accessToken: server.accessToken,
-      npmName: 'peertube-plugin-test-id-pass-auth-one'
-    })
+    await server.plugins.uninstall({ npmName: 'peertube-plugin-test-id-pass-auth-one' })
 
-    await userLogin(server, { username: 'crash', password: 'crash password' }, 400)
+    await server.login.login({
+      user: { username: 'crash', password: 'crash password' },
+      expectedStatus: HttpStatusCode.BAD_REQUEST_400
+    })
   })
 
   it('Should display the correct configuration', async function () {
-    const res = await getConfig(server.url)
-
-    const config: ServerConfig = res.body
+    const config = await server.config.getConfig()
 
     const auths = config.plugin.registeredIdAndPassAuths
     expect(auths).to.have.lengthOf(6)
@@ -226,13 +197,11 @@ describe('Test id and pass auth plugins', function () {
   })
 
   it('Should display plugin auth information in users list', async function () {
-    const res = await getUsersList(server.url, server.accessToken)
+    const { data } = await server.users.list()
 
-    const users: User[] = res.body.data
-
-    const root = users.find(u => u.username === 'root')
-    const crash = users.find(u => u.username === 'crash')
-    const laguna = users.find(u => u.username === 'laguna')
+    const root = data.find(u => u.username === 'root')
+    const crash = data.find(u => u.username === 'crash')
+    const laguna = data.find(u => u.username === 'laguna')
 
     expect(root.pluginAuth).to.be.null
     expect(crash.pluginAuth).to.equal('peertube-plugin-test-id-pass-auth-one')

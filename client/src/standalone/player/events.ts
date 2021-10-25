@@ -1,7 +1,7 @@
 import { EventHandler } from './definitions'
 
 interface PlayerEventRegistrar {
-  registrations: Function[]
+  registrations: EventHandler<any>[]
 }
 
 interface PlayerEventRegistrationMap {
@@ -20,28 +20,28 @@ export class EventRegistrar {
 
   public registerTypes (names: string[]) {
     for (const name of names) {
-      this.eventRegistrations[ name ] = { registrations: [] }
+      this.eventRegistrations[name] = { registrations: [] }
     }
   }
 
   public fire<T> (name: string, event: T) {
-    this.eventRegistrations[ name ].registrations.forEach(x => x(event))
+    this.eventRegistrations[name].registrations.forEach(x => x(event))
   }
 
   public addListener<T> (name: string, handler: EventHandler<T>) {
-    if (!this.eventRegistrations[ name ]) {
+    if (!this.eventRegistrations[name]) {
       console.warn(`PeerTube: addEventListener(): The event '${name}' is not supported`)
       return false
     }
 
-    this.eventRegistrations[ name ].registrations.push(handler)
+    this.eventRegistrations[name].registrations.push(handler)
     return true
   }
 
   public removeListener<T> (name: string, handler: EventHandler<T>) {
-    if (!this.eventRegistrations[ name ]) return false
+    if (!this.eventRegistrations[name]) return false
 
-    this.eventRegistrations[ name ].registrations = this.eventRegistrations[ name ].registrations.filter(x => x === handler)
+    this.eventRegistrations[name].registrations = this.eventRegistrations[name].registrations.filter(x => x === handler)
 
     return true
   }

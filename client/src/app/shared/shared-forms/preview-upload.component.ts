@@ -1,7 +1,7 @@
 import { Component, forwardRef, Input, OnInit } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser'
 import { ServerService } from '@app/core'
+import { imageToDataURL } from '@root-helpers/images'
 import { HTMLServerConfig } from '@shared/models'
 import { BytesPipe } from '../shared-main'
 
@@ -23,7 +23,7 @@ export class PreviewUploadComponent implements OnInit, ControlValueAccessor {
   @Input() previewWidth: string
   @Input() previewHeight: string
 
-  imageSrc: SafeResourceUrl
+  imageSrc: string
   allowedExtensionsMessage = ''
   maxSizeText: string
 
@@ -32,7 +32,6 @@ export class PreviewUploadComponent implements OnInit, ControlValueAccessor {
   private file: Blob
 
   constructor (
-    private sanitizer: DomSanitizer,
     private serverService: ServerService
   ) {
     this.bytesPipe = new BytesPipe()
@@ -81,8 +80,7 @@ export class PreviewUploadComponent implements OnInit, ControlValueAccessor {
 
   private updatePreview () {
     if (this.file) {
-      const url = URL.createObjectURL(this.file)
-      this.imageSrc = this.sanitizer.bypassSecurityTrustResourceUrl(url)
+      imageToDataURL(this.file).then(result => this.imageSrc = result)
     }
   }
 }

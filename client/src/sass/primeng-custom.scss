@@ -1,8 +1,8 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 /* stylelint-disable */
-@import '~primeng/resources/primeng.css';
+@use 'primeng/resources/primeng';
 
 // Override primeng style we don't want
 input[type=button] {
@@ -620,20 +620,20 @@ p-table {
       background-color: pvar(--submenuBackgroundColor) !important;
 
       .pi {
-        @extend .glyphicon;
+        @extend .glyphicon !optional;
 
         color: #000 !important;
         font-size: 11px !important;
         top: 0 !important;
 
         &.pi-sort-amount-up-alt {
-          @extend .glyphicon-triangle-top;
+          @extend .glyphicon-triangle-top !optional;
 
           color: pvar(--mainForegroundColor) !important;
         }
 
         &.pi-sort-amount-down {
-          @extend .glyphicon-triangle-bottom;
+          @extend .glyphicon-triangle-bottom !optional;
 
           color: pvar(--mainForegroundColor) !important;
         }
@@ -711,23 +711,23 @@ p-table {
         }
 
         &.p-paginator-first {
-          @extend .glyphicon-step-backward;
+          @extend .glyphicon-step-backward !optional;
         }
 
         &.p-paginator-prev {
-          @extend .glyphicon-chevron-left;
+          @extend .glyphicon-chevron-left !optional;
 
           @include margin-right(10px);
         }
 
         &.p-paginator-next {
-          @extend .glyphicon-chevron-right;
+          @extend .glyphicon-chevron-right !optional;
 
           @include margin-left(10px);
         }
 
         &.p-paginator-last {
-          @extend .glyphicon-step-forward;
+          @extend .glyphicon-step-forward !optional;
         }
       }
 
@@ -768,7 +768,7 @@ p-table {
     max-width: 100%;
 
     table {
-      min-width: breakpoint(lg);
+      width: 100%;
     }
   }
 
@@ -806,7 +806,7 @@ p-calendar .p-datepicker {
     }
 
     .p-datepicker-next {
-      @extend .glyphicon-chevron-right;
+      @extend .glyphicon-chevron-right !optional;
       @include glyphicon-light;
 
       color: #000 !important;
@@ -818,7 +818,7 @@ p-calendar .p-datepicker {
     }
 
     .p-datepicker-prev {
-      @extend .glyphicon-chevron-left;
+      @extend .glyphicon-chevron-left !optional;
       @include glyphicon-light;
 
       color: #000 !important;
@@ -833,14 +833,14 @@ p-calendar .p-datepicker {
   .p-timepicker {
 
     .pi.pi-chevron-up {
-      @extend .glyphicon-chevron-up;
+      @extend .glyphicon-chevron-up !optional;
       @include glyphicon-light;
 
       color: #000 !important;
     }
 
     .pi.pi-chevron-down {
-      @extend .glyphicon-chevron-down;
+      @extend .glyphicon-chevron-down !optional;
       @include glyphicon-light;
 
       color: #000 !important;
@@ -977,5 +977,42 @@ p-toast {
     padding: 5px 15px;
     font-size: 15px;
     font-weight: 600;
+  }
+}
+
+@media screen and (max-width: $primeng-breakpoint) {
+  p-table {
+    td {
+      padding: 3px 0;
+
+      &.expand-cell {
+        padding: 5px;
+      }
+    }
+
+    .p-datatable-tbody {
+
+      td:last-child {
+        padding-bottom: 15px;
+        margin-bottom: 15px;
+        border-bottom: 1px solid $separator-border-color !important;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: $mobile-view) {
+  p-table {
+    .p-datatable-header {
+      .caption {
+        flex-wrap: wrap;
+
+        > div {
+          width: 100%;
+          padding: 0 !important;
+          margin-bottom: 5px;
+        }
+      }
+    }
   }
 }

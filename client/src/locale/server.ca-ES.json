@@ -33,6 +33,7 @@
     "To import": "Per importar",
     "Waiting for livestream": "Waiting for livestream",
     "Livestream ended": "Livestream ended",
+    "To move to an external storage": "To move to an external storage",
     "Pending": "Pendent",
     "Success": "Èxit",
     "Failed": "Ha fallat",
@@ -149,6 +150,7 @@
     "Kuanyama": "Kwanyama",
     "Kurdish": "Kurd",
     "Lao": "Laosià",
+    "Latin": "Latin",
     "Latvian": "Letó",
     "Limburgan": "Limburgan",
     "Lingala": "Lingala",
@@ -244,5 +246,5 @@
     "Chinese": "Xinès",
     "Zulu": "Zulu",
     "Normal mode": "Normal mode",
-    "Theater mode": "Theater mode"
+    "Theater mode": "Mode cinema"
 }

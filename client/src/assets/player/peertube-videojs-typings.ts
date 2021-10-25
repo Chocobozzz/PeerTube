@@ -1,15 +1,17 @@
-import { Config, Level } from 'hls.js'
+import { HlsConfig, Level } from 'hls.js'
 import videojs from 'video.js'
 import { VideoFile, VideoPlaylist, VideoPlaylistElement } from '@shared/models'
+import { Html5Hlsjs } from './p2p-media-loader/hls-plugin'
 import { P2pMediaLoaderPlugin } from './p2p-media-loader/p2p-media-loader-plugin'
 import { RedundancyUrlManager } from './p2p-media-loader/redundancy-url-manager'
 import { PlayerMode } from './peertube-player-manager'
 import { PeerTubePlugin } from './peertube-plugin'
+import { PeerTubeResolutionsPlugin } from './peertube-resolutions-plugin'
 import { PlaylistPlugin } from './playlist/playlist-plugin'
-import { EndCardOptions } from './upnext/end-card'
 import { StatsCardOptions } from './stats/stats-card'
-import { WebTorrentPlugin } from './webtorrent/webtorrent-plugin'
 import { StatsForNerdsPlugin } from './stats/stats-plugin'
+import { EndCardOptions } from './upnext/end-card'
+import { WebTorrentPlugin } from './webtorrent/webtorrent-plugin'
 
 declare module 'video.js' {
 
@@ -34,16 +36,15 @@ declare module 'video.js' {
 
     p2pMediaLoader (): P2pMediaLoaderPlugin
 
+    peertubeResolutions (): PeerTubeResolutionsPlugin
+
     contextmenuUI (options: any): any
 
     bezels (): void
 
     stats (options?: StatsCardOptions): StatsForNerdsPlugin
 
-    qualityLevels (): QualityLevels
-
     textTracks (): TextTrackList & {
-      on: Function
       tracks_: (TextTrack & { id: string, label: string, src: string })[]
     }
 
@@ -56,34 +57,25 @@ declare module 'video.js' {
 }
 
 export interface VideoJSTechHLS extends videojs.Tech {
-  hlsProvider: any // FIXME: typings
+  hlsProvider: Html5Hlsjs
 }
 
 export interface HlsjsConfigHandlerOptions {
-  hlsjsConfig?: Config & { cueHandler: any }// FIXME: typings
-  captionConfig?: any // FIXME: typings
+  hlsjsConfig?: HlsConfig
 
   levelLabelHandler?: (level: Level) => string
 }
 
-type QualityLevelRepresentation = {
+type PeerTubeResolution = {
   id: number
-  height: number
 
+  height?: number
   label?: string
   width?: number
-  bandwidth?: number
   bitrate?: number
 
-  enabled?: Function
-  _enabled: boolean
-}
-
-type QualityLevels = QualityLevelRepresentation[] & {
-  selectedIndex: number
-  selectedIndex_: number
-
-  addQualityLevel (representation: QualityLevelRepresentation): void
+  selected: boolean
+  selectCallback: () => void
 }
 
 type VideoJSCaption = {
@@ -93,7 +85,7 @@ type VideoJSCaption = {
 }
 
 type UserWatching = {
-  url: string,
+  url: string
   authorizationHeader: string
 }
 
@@ -128,8 +120,12 @@ type PlaylistPluginOptions = {
 
 type NextPreviousVideoButtonOptions = {
   type: 'next' | 'previous'
-  handler: Function
+  handler: () => void
   isDisabled: () => boolean
+}
+
+type PeerTubeLinkButtonOptions = {
+  shortUUID: string
 }
 
 type WebtorrentPluginOptions = {
@@ -162,7 +158,7 @@ type VideoJSPluginOptions = {
 }
 
 type LoadedQualityData = {
-  qualitySwitchCallback: Function,
+  qualitySwitchCallback: (resolutionId: number, type: 'video') => void
   qualityData: {
     video: {
       id: number
@@ -173,7 +169,7 @@ type LoadedQualityData = {
 }
 
 type ResolutionUpdateData = {
-  auto: boolean,
+  auto: boolean
   resolutionId: number
   id?: number
 }
@@ -207,7 +203,7 @@ type PlayerNetworkInfo = {
 type PlaylistItemOptions = {
   element: VideoPlaylistElement
 
-  onClicked: Function
+  onClicked: () => void
 }
 
 export {
@@ -222,8 +218,8 @@ export {
   PeerTubePluginOptions,
   WebtorrentPluginOptions,
   P2PMediaLoaderPluginOptions,
+  PeerTubeResolution,
   VideoJSPluginOptions,
   LoadedQualityData,
-  QualityLevelRepresentation,
-  QualityLevels
+  PeerTubeLinkButtonOptions
 }

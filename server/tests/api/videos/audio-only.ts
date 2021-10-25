@@ -2,26 +2,16 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { join } from 'path'
 import { getAudioStream, getVideoStreamSize } from '@server/helpers/ffprobe-utils'
-import {
-  buildServerDirectory,
-  cleanupTests,
-  doubleFollow,
-  flushAndRunMultipleServers,
-  getVideo,
-  ServerInfo,
-  setAccessTokensToServers,
-  uploadVideo,
-  waitJobs
-} from '../../../../shared/extra-utils'
-import { VideoDetails } from '../../../../shared/models/videos'
+import { cleanupTests, createMultipleServers, doubleFollow, PeerTubeServer, setAccessTokensToServers, waitJobs } from '@shared/extra-utils'
 
 const expect = chai.expect
 
 describe('Test audio only video transcoding', function () {
-  let servers: ServerInfo[] = []
+  let servers: PeerTubeServer[] = []
   let videoUUID: string
+  let webtorrentAudioFileUrl: string
+  let fragmentedAudioFileUrl: string
 
   before(async function () {
     this.timeout(120000)
@@ -47,7 +37,7 @@ describe('Test audio only video transcoding', function () {
         }
       }
     }
-    servers = await flushAndRunMultipleServers(2, configOverride)
+    servers = await createMultipleServers(2, configOverride)
 
     // Get the access tokens
     await setAccessTokensToServers(servers)
@@ -59,15 +49,13 @@ describe('Test audio only video transcoding', function () {
   it('Should upload a video and transcode it', async function () {
     this.timeout(120000)
 
-    const resUpload = await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'audio only' })
-    videoUUID = resUpload.body.video.uuid
+    const { uuid } = await servers[0].videos.upload({ attributes: { name: 'audio only' } })
+    videoUUID = uuid
 
     await waitJobs(servers)
 
     for (const server of servers) {
-      const res = await getVideo(server.url, videoUUID)
-      const video: VideoDetails = res.body
-
+      const video = await server.videos.get({ id: videoUUID })
       expect(video.streamingPlaylists).to.have.lengthOf(1)
 
       for (const files of [ video.files, video.streamingPlaylists[0].files ]) {
@@ -76,13 +64,18 @@ describe('Test audio only video transcoding', function () {
         expect(files[1].resolution.id).to.equal(240)
         expect(files[2].resolution.id).to.equal(0)
       }
+
+      if (server.serverNumber === 1) {
+        webtorrentAudioFileUrl = video.files[2].fileUrl
+        fragmentedAudioFileUrl = video.streamingPlaylists[0].files[2].fileUrl
+      }
     }
   })
 
   it('0p transcoded video should not have video', async function () {
     const paths = [
-      buildServerDirectory(servers[0], join('videos', videoUUID + '-0.mp4')),
-      buildServerDirectory(servers[0], join('streaming-playlists', 'hls', videoUUID, videoUUID + '-0-fragmented.mp4'))
+      servers[0].servers.buildWebTorrentFilePath(webtorrentAudioFileUrl),
+      servers[0].servers.buildFragmentedFilePath(videoUUID, fragmentedAudioFileUrl)
     ]
 
     for (const path of paths) {

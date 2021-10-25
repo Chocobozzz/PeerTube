@@ -1,4 +1,4 @@
-import * as bluebird from 'bluebird'
+import { map } from 'bluebird'
 import { readdir, remove, stat } from 'fs-extra'
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
 import { getResumableUploadPath } from '@server/helpers/upload'
@@ -13,7 +13,7 @@ export class RemoveDanglingResumableUploadsScheduler extends AbstractScheduler {
   private static instance: AbstractScheduler
   private lastExecutionTimeMs: number
 
-  protected schedulerIntervalMs = SCHEDULER_INTERVALS_MS.removeDanglingResumableUploads
+  protected schedulerIntervalMs = SCHEDULER_INTERVALS_MS.REMOVE_DANGLING_RESUMABLE_UPLOADS
 
   private constructor () {
     super()
@@ -32,7 +32,7 @@ export class RemoveDanglingResumableUploadsScheduler extends AbstractScheduler {
     logger.debug('Reading resumable video upload folder %s with %d files', path, metafiles.length, lTags())
 
     try {
-      await bluebird.map(metafiles, metafile => {
+      await map(metafiles, metafile => {
         return this.deleteIfOlderThan(metafile, this.lastExecutionTimeMs)
       }, { concurrency: 5 })
     } catch (error) {

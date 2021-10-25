@@ -2,7 +2,7 @@ import { Response } from 'express'
 import { AccountModel } from '@server/models/account/account'
 import { UserModel } from '@server/models/user/user'
 import { MAccountDefault } from '@server/types/models'
-import { HttpStatusCode } from '@shared/core-utils'
+import { HttpStatusCode } from '@shared/models'
 
 function doesAccountIdExist (id: number | string, res: Response, sendNotFound = true) {
   const promise = AccountModel.load(parseInt(id + '', 10))

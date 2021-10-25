@@ -2,6 +2,7 @@ import 'multer'
 import { UploadFilesForCheck } from 'express'
 import { sep } from 'path'
 import validator from 'validator'
+import { isShortUUID, shortToUUID } from '../uuid'
 
 function exists (value: any) {
   return value !== undefined && value !== null
@@ -22,6 +23,10 @@ function isNotEmptyIntArray (value: any) {
   return Array.isArray(value) && value.every(v => validator.isInt('' + v)) && value.length !== 0
 }
 
+function isNotEmptyStringArray (value: any) {
+  return Array.isArray(value) && value.every(v => typeof v === 'string' && v.length !== 0) && value.length !== 0
+}
+
 function isArrayOf (value: any, validator: (value: any) => boolean) {
   return isArray(value) && value.every(v => validator(v))
 }
@@ -38,6 +43,10 @@ function isUUIDValid (value: string) {
   return exists(value) && validator.isUUID('' + value, 4)
 }
 
+function areUUIDsValid (values: string[]) {
+  return isArray(values) && values.every(v => isUUIDValid(v))
+}
+
 function isIdOrUUIDValid (value: string) {
   return isIdValid(value) || isUUIDValid(value)
 }
@@ -50,42 +59,7 @@ function isIntOrNull (value: any) {
   return value === null || validator.isInt('' + value)
 }
 
-function toIntOrNull (value: string) {
-  const v = toValueOrNull(value)
-
-  if (v === null || v === undefined) return v
-  if (typeof v === 'number') return v
-
-  return validator.toInt('' + v)
-}
-
-function toBooleanOrNull (value: any) {
-  const v = toValueOrNull(value)
-
-  if (v === null || v === undefined) return v
-  if (typeof v === 'boolean') return v
-
-  return validator.toBoolean('' + v)
-}
-
-function toValueOrNull (value: string) {
-  if (value === 'null') return null
-
-  return value
-}
-
-function toArray (value: any) {
-  if (value && isArray(value) === false) return [ value ]
-
-  return value
-}
-
-function toIntArray (value: any) {
-  if (!value) return []
-  if (isArray(value) === false) return [ validator.toInt(value) ]
-
-  return value.map(v => validator.toInt(v))
-}
+// ---------------------------------------------------------------------------
 
 function isFileFieldValid (
   files: { [ fieldname: string ]: Express.Multer.File[] } | Express.Multer.File[],
@@ -160,6 +134,55 @@ function isFileValid (
 
 // ---------------------------------------------------------------------------
 
+function toCompleteUUID (value: string) {
+  if (isShortUUID(value)) return shortToUUID(value)
+
+  return value
+}
+
+function toCompleteUUIDs (values: string[]) {
+  return values.map(v => toCompleteUUID(v))
+}
+
+function toIntOrNull (value: string) {
+  const v = toValueOrNull(value)
+
+  if (v === null || v === undefined) return v
+  if (typeof v === 'number') return v
+
+  return validator.toInt('' + v)
+}
+
+function toBooleanOrNull (value: any) {
+  const v = toValueOrNull(value)
+
+  if (v === null || v === undefined) return v
+  if (typeof v === 'boolean') return v
+
+  return validator.toBoolean('' + v)
+}
+
+function toValueOrNull (value: string) {
+  if (value === 'null') return null
+
+  return value
+}
+
+function toArray (value: any) {
+  if (value && isArray(value) === false) return [ value ]
+
+  return value
+}
+
+function toIntArray (value: any) {
+  if (!value) return []
+  if (isArray(value) === false) return [ validator.toInt(value) ]
+
+  return value.map(v => validator.toInt(v))
+}
+
+// ---------------------------------------------------------------------------
+
 export {
   exists,
   isArrayOf,
@@ -168,13 +191,17 @@ export {
   isIntOrNull,
   isIdValid,
   isSafePath,
+  isNotEmptyStringArray,
   isUUIDValid,
+  toCompleteUUIDs,
+  toCompleteUUID,
   isIdOrUUIDValid,
   isDateValid,
   toValueOrNull,
   toBooleanOrNull,
   isBooleanValid,
   toIntOrNull,
+  areUUIDsValid,
   toArray,
   toIntArray,
   isFileFieldValid,

@@ -2,46 +2,39 @@
 
 import 'mocha'
 import { expect } from 'chai'
-import { HttpStatusCode, randomInt } from '@shared/core-utils'
-import { getGoodVideoUrl, getMagnetURI, getMyVideoImports, importVideo } from '@shared/extra-utils/videos/video-imports'
-import { MyUser, VideoImport, VideoImportState, VideoPrivacy } from '@shared/models'
+import { randomInt } from '@shared/core-utils'
 import {
   cleanupTests,
-  flushAndRunServer,
-  getMyUserInformation,
-  immutableAssign,
-  registerUser,
-  ServerInfo,
+  createSingleServer,
+  FIXTURE_URLS,
+  PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel,
-  updateUser,
-  uploadVideo,
-  userLogin,
+  VideosCommand,
   waitJobs
-} from '../../../../shared/extra-utils'
+} from '@shared/extra-utils'
+import { HttpStatusCode, VideoImportState, VideoPrivacy } from '@shared/models'
 
 describe('Test upload quota', function () {
-  let server: ServerInfo
+  let server: PeerTubeServer
   let rootId: number
+  let command: VideosCommand
 
   // ---------------------------------------------------------------
 
   before(async function () {
     this.timeout(30000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
     await setAccessTokensToServers([ server ])
     await setDefaultVideoChannel([ server ])
 
-    const res = await getMyUserInformation(server.url, server.accessToken)
-    rootId = (res.body as MyUser).id
+    const user = await server.users.getMyInfo()
+    rootId = user.id
 
-    await updateUser({
-      url: server.url,
-      userId: rootId,
-      accessToken: server.accessToken,
-      videoQuota: 42
-    })
+    await server.users.update({ userId: rootId, videoQuota: 42 })
+
+    command = server.videos
   })
 
   describe('When having a video quota', function () {
@@ -50,49 +43,48 @@ describe('Test upload quota', function () {
       this.timeout(30000)
 
       const user = { username: 'registered' + randomInt(1, 1500), password: 'password' }
-      await registerUser(server.url, user.username, user.password)
-      const userAccessToken = await userLogin(server, user)
+      await server.users.register(user)
+      const userToken = await server.login.getAccessToken(user)
 
-      const videoAttributes = { fixture: 'video_short2.webm' }
+      const attributes = { fixture: 'video_short2.webm' }
       for (let i = 0; i < 5; i++) {
-        await uploadVideo(server.url, userAccessToken, videoAttributes)
+        await command.upload({ token: userToken, attributes })
       }
 
-      await uploadVideo(server.url, userAccessToken, videoAttributes, HttpStatusCode.PAYLOAD_TOO_LARGE_413, 'legacy')
+      await command.upload({ token: userToken, attributes, expectedStatus: HttpStatusCode.PAYLOAD_TOO_LARGE_413, mode: 'legacy' })
     })
 
     it('Should fail with a registered user having too many videos with resumable upload', async function () {
       this.timeout(30000)
 
       const user = { username: 'registered' + randomInt(1, 1500), password: 'password' }
-      await registerUser(server.url, user.username, user.password)
-      const userAccessToken = await userLogin(server, user)
+      await server.users.register(user)
+      const userToken = await server.login.getAccessToken(user)
 
-      const videoAttributes = { fixture: 'video_short2.webm' }
+      const attributes = { fixture: 'video_short2.webm' }
       for (let i = 0; i < 5; i++) {
-        await uploadVideo(server.url, userAccessToken, videoAttributes)
+        await command.upload({ token: userToken, attributes })
       }
 
-      await uploadVideo(server.url, userAccessToken, videoAttributes, HttpStatusCode.PAYLOAD_TOO_LARGE_413, 'resumable')
+      await command.upload({ token: userToken, attributes, expectedStatus: HttpStatusCode.PAYLOAD_TOO_LARGE_413, mode: 'resumable' })
     })
 
     it('Should fail to import with HTTP/Torrent/magnet', async function () {
       this.timeout(120000)
 
       const baseAttributes = {
-        channelId: server.videoChannel.id,
+        channelId: server.store.channel.id,
         privacy: VideoPrivacy.PUBLIC
       }
-      await importVideo(server.url, server.accessToken, immutableAssign(baseAttributes, { targetUrl: getGoodVideoUrl() }))
-      await importVideo(server.url, server.accessToken, immutableAssign(baseAttributes, { magnetUri: getMagnetURI() }))
-      await importVideo(server.url, server.accessToken, immutableAssign(baseAttributes, { torrentfile: 'video-720p.torrent' as any }))
+      await server.imports.importVideo({ attributes: { ...baseAttributes, targetUrl: FIXTURE_URLS.goodVideo } })
+      await server.imports.importVideo({ attributes: { ...baseAttributes, magnetUri: FIXTURE_URLS.magnet } })
+      await server.imports.importVideo({ attributes: { ...baseAttributes, torrentfile: 'video-720p.torrent' as any } })
 
       await waitJobs([ server ])
 
-      const res = await getMyVideoImports(server.url, server.accessToken)
+      const { total, data: videoImports } = await server.imports.getMyVideoImports()
+      expect(total).to.equal(3)
 
-      expect(res.body.total).to.equal(3)
-      const videoImports: VideoImport[] = res.body.data
       expect(videoImports).to.have.lengthOf(3)
 
       for (const videoImport of videoImports) {
@@ -106,43 +98,34 @@ describe('Test upload quota', function () {
   describe('When having a daily video quota', function () {
 
     it('Should fail with a user having too many videos daily', async function () {
-      await updateUser({
-        url: server.url,
-        userId: rootId,
-        accessToken: server.accessToken,
-        videoQuotaDaily: 42
-      })
+      await server.users.update({ userId: rootId, videoQuotaDaily: 42 })
 
-      await uploadVideo(server.url, server.accessToken, {}, HttpStatusCode.PAYLOAD_TOO_LARGE_413, 'legacy')
-      await uploadVideo(server.url, server.accessToken, {}, HttpStatusCode.PAYLOAD_TOO_LARGE_413, 'resumable')
+      await command.upload({ expectedStatus: HttpStatusCode.PAYLOAD_TOO_LARGE_413, mode: 'legacy' })
+      await command.upload({ expectedStatus: HttpStatusCode.PAYLOAD_TOO_LARGE_413, mode: 'resumable' })
     })
   })
 
   describe('When having an absolute and daily video quota', function () {
     it('Should fail if exceeding total quota', async function () {
-      await updateUser({
-        url: server.url,
+      await server.users.update({
         userId: rootId,
-        accessToken: server.accessToken,
         videoQuota: 42,
         videoQuotaDaily: 1024 * 1024 * 1024
       })
 
-      await uploadVideo(server.url, server.accessToken, {}, HttpStatusCode.PAYLOAD_TOO_LARGE_413, 'legacy')
-      await uploadVideo(server.url, server.accessToken, {}, HttpStatusCode.PAYLOAD_TOO_LARGE_413, 'resumable')
+      await command.upload({ expectedStatus: HttpStatusCode.PAYLOAD_TOO_LARGE_413, mode: 'legacy' })
+      await command.upload({ expectedStatus: HttpStatusCode.PAYLOAD_TOO_LARGE_413, mode: 'resumable' })
     })
 
     it('Should fail if exceeding daily quota', async function () {
-      await updateUser({
-        url: server.url,
+      await server.users.update({
         userId: rootId,
-        accessToken: server.accessToken,
         videoQuota: 1024 * 1024 * 1024,
         videoQuotaDaily: 42
       })
 
-      await uploadVideo(server.url, server.accessToken, {}, HttpStatusCode.PAYLOAD_TOO_LARGE_413, 'legacy')
-      await uploadVideo(server.url, server.accessToken, {}, HttpStatusCode.PAYLOAD_TOO_LARGE_413, 'resumable')
+      await command.upload({ expectedStatus: HttpStatusCode.PAYLOAD_TOO_LARGE_413, mode: 'legacy' })
+      await command.upload({ expectedStatus: HttpStatusCode.PAYLOAD_TOO_LARGE_413, mode: 'resumable' })
     })
   })
 

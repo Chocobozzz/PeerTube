@@ -1,5 +1,6 @@
-@import '_variables';
-@import '_mixins';
+@use 'sass:math';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 $nav-preview-tab-height: 30px;
 $base-padding: 15px;
@@ -124,8 +125,8 @@ $input-border-radius: 3px;
     @include padding-right(0);
     @include padding-left(0);
 
-    padding-top: #{$nav-preview-vertical-padding / 2};
-    padding-bottom: #{$nav-preview-vertical-padding / 2};
+    padding-top: math.div($nav-preview-vertical-padding, 2);
+    padding-bottom: math.div($nav-preview-vertical-padding, 2);
     position: absolute;
     background-color: pvar(--mainBackgroundColor);
     width: 100% !important;

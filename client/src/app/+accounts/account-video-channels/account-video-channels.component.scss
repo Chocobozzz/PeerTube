@@ -1,6 +1,7 @@
-@import '_variables';
-@import '_mixins';
-@import '_miniature';
+@use 'sass:math';
+@use '_variables' as *;
+@use '_mixins' as *;
+@use '_miniature' as *;
 
 .margin-content {
   @include grid-videos-miniature-margins;
@@ -52,19 +53,10 @@
 
   .actor-counters {
     @include margin-left(15px);
+    @include actor-counters;
 
     grid-row: 1;
     grid-column: 3;
-    color: pvar(--greyForegroundColor);
-    font-size: 16px;
-    display: flex;
-    align-items: center;
-  }
-
-  .actor-counters > *:not(:last-child)::after {
-    content: '•';
-    margin: 0 10px;
-    color: pvar(--mainColor);
   }
 
   .description-html {
@@ -94,6 +86,7 @@ my-subscribe-button {
 
   my-video-miniature {
     @include margin-right(15px);
+
     min-width: $video-thumbnail-medium-width;
     max-width: $video-thumbnail-medium-width;
   }
@@ -108,7 +101,7 @@ my-subscribe-button {
   position: absolute;
   right: 0;
   background: linear-gradient(90deg, transparent 0, pvar(--channelBackgroundColor) 45px);
-  padding: ($video-thumbnail-medium-height / 2 - 10px) 15px 0 60px;
+  padding: (math.div($video-thumbnail-medium-height, 2) - 10px) 15px 0 60px;
   z-index: z(miniature) + 1;
 
   a {

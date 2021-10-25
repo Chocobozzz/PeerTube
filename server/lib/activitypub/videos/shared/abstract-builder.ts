@@ -1,6 +1,6 @@
 import { Transaction } from 'sequelize/types'
 import { checkUrlsSameHost } from '@server/helpers/activitypub'
-import { deleteNonExistingModels } from '@server/helpers/database-utils'
+import { deleteAllModels, filterNonExistingModels } from '@server/helpers/database-utils'
 import { logger, LoggerTagsFn } from '@server/helpers/logger'
 import { updatePlaceholderThumbnail, updateVideoMiniatureFromUrl } from '@server/lib/thumbnail'
 import { setVideoTags } from '@server/lib/video'
@@ -75,11 +75,28 @@ export abstract class APVideoAbstractBuilder {
   }
 
   protected async insertOrReplaceCaptions (video: MVideoFullLight, t: Transaction) {
-    const videoCaptionsPromises = getCaptionAttributesFromObject(video, this.videoObject)
-      .map(a => new VideoCaptionModel(a) as MVideoCaption)
-      .map(c => VideoCaptionModel.insertOrReplaceLanguage(c, t))
+    const existingCaptions = await VideoCaptionModel.listVideoCaptions(video.id, t)
 
-    await Promise.all(videoCaptionsPromises)
+    let captionsToCreate = getCaptionAttributesFromObject(video, this.videoObject)
+                            .map(a => new VideoCaptionModel(a) as MVideoCaption)
+
+    for (const existingCaption of existingCaptions) {
+      // Only keep captions that do not already exist
+      const filtered = captionsToCreate.filter(c => !c.isEqual(existingCaption))
+
+      // This caption already exists, we don't need to destroy and create it
+      if (filtered.length !== captionsToCreate.length) {
+        captionsToCreate = filtered
+        continue
+      }
+
+      // Destroy this caption that does not exist anymore
+      await existingCaption.destroy({ transaction: t })
+    }
+
+    for (const captionToCreate of captionsToCreate) {
+      await captionToCreate.save({ transaction: t })
+    }
   }
 
   protected async insertOrReplaceLive (video: MVideoFullLight, transaction: Transaction) {
@@ -94,8 +111,7 @@ export abstract class APVideoAbstractBuilder {
     const newVideoFiles = videoFileAttributes.map(a => new VideoFileModel(a))
 
     // Remove video files that do not exist anymore
-    const destroyTasks = deleteNonExistingModels(video.VideoFiles || [], newVideoFiles, t)
-    await Promise.all(destroyTasks)
+    await deleteAllModels(filterNonExistingModels(video.VideoFiles || [], newVideoFiles), t)
 
     // Update or add other one
     const upsertTasks = newVideoFiles.map(f => VideoFileModel.customUpsert(f, 'video', t))
@@ -103,17 +119,15 @@ export abstract class APVideoAbstractBuilder {
   }
 
   protected async setStreamingPlaylists (video: MVideoFullLight, t: Transaction) {
-    const streamingPlaylistAttributes = getStreamingPlaylistAttributesFromObject(video, this.videoObject, video.VideoFiles || [])
+    const streamingPlaylistAttributes = getStreamingPlaylistAttributesFromObject(video, this.videoObject)
     const newStreamingPlaylists = streamingPlaylistAttributes.map(a => new VideoStreamingPlaylistModel(a))
 
     // Remove video playlists that do not exist anymore
-    const destroyTasks = deleteNonExistingModels(video.VideoStreamingPlaylists || [], newStreamingPlaylists, t)
-    await Promise.all(destroyTasks)
+    await deleteAllModels(filterNonExistingModels(video.VideoStreamingPlaylists || [], newStreamingPlaylists), t)
 
     video.VideoStreamingPlaylists = []
 
     for (const playlistAttributes of streamingPlaylistAttributes) {
-
       const streamingPlaylistModel = await this.insertOrReplaceStreamingPlaylist(playlistAttributes, t)
       streamingPlaylistModel.Video = video
 
@@ -146,8 +160,7 @@ export abstract class APVideoAbstractBuilder {
 
     const newVideoFiles: MVideoFile[] = getFileAttributesFromUrl(playlistModel, tagObjects).map(a => new VideoFileModel(a))
 
-    const destroyTasks = deleteNonExistingModels(oldStreamingPlaylistFiles, newVideoFiles, t)
-    await Promise.all(destroyTasks)
+    await deleteAllModels(filterNonExistingModels(oldStreamingPlaylistFiles, newVideoFiles), t)
 
     // Update or add other one
     const upsertTasks = newVideoFiles.map(f => VideoFileModel.customUpsert(f, 'streaming-playlist', t))

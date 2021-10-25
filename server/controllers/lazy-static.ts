@@ -1,7 +1,7 @@
-import * as cors from 'cors'
-import * as express from 'express'
+import cors from 'cors'
+import express from 'express'
 import { VideosTorrentCache } from '@server/lib/files-cache/videos-torrent-cache'
-import { HttpStatusCode } from '../../shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '../../shared/models/http/http-error-codes'
 import { logger } from '../helpers/logger'
 import { LAZY_STATIC_PATHS, STATIC_MAX_AGE } from '../initializers/constants'
 import { VideosCaptionCache, VideosPreviewCache } from '../lib/files-cache'
@@ -48,7 +48,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function getActorImage (req: express.Request, res: express.Response) {
+async function getActorImage (req: express.Request, res: express.Response, next: express.NextFunction) {
   const filename = req.params.filename
 
   if (actorImagePathUnsafeCache.has(filename)) {
@@ -78,7 +78,23 @@ async function getActorImage (req: express.Request, res: express.Response) {
   const path = image.getPath()
 
   actorImagePathUnsafeCache.set(filename, path)
-  return res.sendFile(path, { maxAge: STATIC_MAX_AGE.LAZY_SERVER })
+
+  return res.sendFile(path, { maxAge: STATIC_MAX_AGE.LAZY_SERVER }, (err: any) => {
+    if (!err) return
+
+    // It seems this actor image is not on the disk anymore
+    if (err.status === HttpStatusCode.NOT_FOUND_404 && !image.isOwned()) {
+      logger.error('Cannot lazy serve actor image %s.', filename, { err })
+
+      actorImagePathUnsafeCache.del(filename)
+
+      image.onDisk = false
+      image.save()
+       .catch(err => logger.error('Cannot save new actor image disk state.', { err }))
+    }
+
+    return next(err)
+  })
 }
 
 async function getPreview (req: express.Request, res: express.Response) {

@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core'
+import { Router } from '@angular/router'
 import { Notifier, ServerService } from '@app/core'
 import {
   BODY_VALIDATOR,
@@ -10,8 +11,12 @@ import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
 import { InstanceService } from '@app/shared/shared-instance'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
-import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
-import { HTMLServerConfig } from '@shared/models'
+import { HTMLServerConfig, HttpStatusCode } from '@shared/models'
+
+type Prefill = {
+  subject?: string
+  body?: string
+}
 
 @Component({
   selector: 'my-contact-admin-modal',
@@ -28,6 +33,7 @@ export class ContactAdminModalComponent extends FormReactive implements OnInit {
 
   constructor (
     protected formValidatorService: FormValidatorService,
+    private router: Router,
     private modalService: NgbModal,
     private instanceService: InstanceService,
     private serverService: ServerService,
@@ -51,8 +57,15 @@ export class ContactAdminModalComponent extends FormReactive implements OnInit {
     })
   }
 
-  show () {
+  isContactFormEnabled () {
+    return this.serverConfig.email.enabled && this.serverConfig.contactForm.enabled
+  }
+
+  show (prefill: Prefill = {}) {
     this.openedModal = this.modalService.open(this.modal, { centered: true, keyboard: false })
+
+    this.openedModal.shown.subscribe(() => this.prefillForm(prefill))
+    this.openedModal.result.finally(() => this.router.navigateByUrl('/about/instance'))
   }
 
   hide () {
@@ -65,22 +78,32 @@ export class ContactAdminModalComponent extends FormReactive implements OnInit {
 
   sendForm () {
     const fromName = this.form.value['fromName']
-    const fromEmail = this.form.value[ 'fromEmail' ]
-    const subject = this.form.value[ 'subject' ]
-    const body = this.form.value[ 'body' ]
+    const fromEmail = this.form.value['fromEmail']
+    const subject = this.form.value['subject']
+    const body = this.form.value['body']
 
     this.instanceService.contactAdministrator(fromEmail, fromName, subject, body)
-        .subscribe(
-          () => {
+        .subscribe({
+          next: () => {
             this.notifier.success($localize`Your message has been sent.`)
             this.hide()
           },
 
-          err => {
+          error: err => {
             this.error = err.status === HttpStatusCode.FORBIDDEN_403
               ? $localize`You already sent this form recently`
               : err.message
           }
-        )
+        })
+  }
+
+  private prefillForm (prefill: Prefill) {
+    if (prefill.subject) {
+      this.form.get('subject').setValue(prefill.subject)
+    }
+
+    if (prefill.body) {
+      this.form.get('body').setValue(prefill.body)
+    }
   }
 }

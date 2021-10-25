@@ -1,6 +1,6 @@
 <div class="d-inline-flex position-relative" id="typeahead-container">
   <input
-    type="text" id="search-video" name="search-video" #searchVideo i18n-placeholder placeholder="Search videos, channels…"
+    type="text" id="search-video" name="search-video" #searchVideo i18n-placeholder placeholder="Search videos, playlists, channels…"
     [(ngModel)]="search" (ngModelChange)="onSearchChange()" (keydown)="handleKey($event)" (keydown.enter)="doSearch()"
     aria-label="Search" autocomplete="off"
   >

@@ -10,6 +10,15 @@
     <div class="playlist" *ngIf="playlist">
       <div class="title-page title-page-single" i18n *ngIf="video">Share the playlist</div>
 
+
+      <div *ngIf="isPrivatePlaylist()" class="alert-private alert alert-warning">
+        <div i18n>This playlist is private so you won't be able to share it with external users</div>
+
+        <a i18n class="peertube-button-link orange-button" [routerLink]="[ '/my-library/video-playlists/update', playlist.uuid ]" target="_blank" rel="noopener noreferrer">
+          Update playlist privacy
+        </a>
+      </div>
+
       <div ngbNav #nav="ngbNav" class="nav-tabs" [(activeId)]="activePlaylistId">
 
         <ng-container ngbNavItem="url">
@@ -64,6 +73,14 @@
 
     <div class="video" *ngIf="video">
       <div class="title-page title-page-single" *ngIf="playlist" i18n>Share the video</div>
+
+      <div *ngIf="isPrivateVideo()" class="alert-private alert alert-warning">
+        <div i18n>This video is private so you won't be able to share it with external users</div>
+
+        <a i18n class="peertube-button-link orange-button" [routerLink]="[ '/videos/', 'update', video.shortUUID ]" target="_blank" rel="noopener noreferrer">
+          Update video privacy
+        </a>
+      </div>
 
       <div ngbNav #nav="ngbNav" class="nav-tabs" [(activeId)]="activeVideoId">
 

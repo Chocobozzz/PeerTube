@@ -1,5 +1,6 @@
-import * as express from 'express'
-import { query, validationResult } from 'express-validator'
+import express from 'express'
+import { param, validationResult } from 'express-validator'
+import { isIdOrUUIDValid, toCompleteUUID } from '@server/helpers/custom-validators/misc'
 import { logger } from '../../../helpers/logger'
 
 function areValidationErrors (req: express.Request, res: express.Response) {
@@ -21,30 +22,22 @@ function areValidationErrors (req: express.Request, res: express.Response) {
   return false
 }
 
-function checkSort (sortableColumns: string[], tags: string[] = []) {
-  return [
-    query('sort').optional().isIn(sortableColumns).withMessage('Should have correct sortable column'),
-
-    (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      logger.debug('Checking sort parameters', { parameters: req.query, tags })
-
-      if (areValidationErrors(req, res)) return
-
-      return next()
-    }
-  ]
+function isValidVideoIdParam (paramName: string) {
+  return param(paramName)
+    .customSanitizer(toCompleteUUID)
+    .custom(isIdOrUUIDValid).withMessage('Should have a valid video id')
 }
 
-function createSortableColumns (sortableColumns: string[]) {
-  const sortableColumnDesc = sortableColumns.map(sortableColumn => '-' + sortableColumn)
-
-  return sortableColumns.concat(sortableColumnDesc)
+function isValidPlaylistIdParam (paramName: string) {
+  return param(paramName)
+    .customSanitizer(toCompleteUUID)
+    .custom(isIdOrUUIDValid).withMessage('Should have a valid playlist id')
 }
 
 // ---------------------------------------------------------------------------
 
 export {
   areValidationErrors,
-  checkSort,
-  createSortableColumns
+  isValidVideoIdParam,
+  isValidPlaylistIdParam
 }

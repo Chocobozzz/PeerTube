@@ -1,5 +1,5 @@
 import { mapValues, pick } from 'lodash-es'
-import { pipe } from 'rxjs'
+import { firstValueFrom } from 'rxjs'
 import { tap } from 'rxjs/operators'
 import { Component, ElementRef, Inject, LOCALE_ID, ViewChild } from '@angular/core'
 import { AuthService, HooksService, Notifier } from '@app/core'
@@ -19,23 +19,25 @@ export class VideoDownloadComponent {
   @ViewChild('modal', { static: true }) modal: ElementRef
 
   downloadType: 'direct' | 'torrent' = 'direct'
+
   resolutionId: number | string = -1
   subtitleLanguageId: string
 
-  video: VideoDetails
-  videoFile: VideoFile
   videoFileMetadataFormat: FileMetadata
   videoFileMetadataVideoStream: FileMetadata | undefined
   videoFileMetadataAudioStream: FileMetadata | undefined
-  videoCaptions: VideoCaption[]
-  activeModal: NgbModalRef
 
   isAdvancedCustomizationCollapsed = true
 
   type: DownloadType = 'video'
 
+  private activeModal: NgbModalRef
+
   private bytesPipe: BytesPipe
   private numbersPipe: NumberFormatterPipe
+
+  private video: VideoDetails
+  private videoCaptions: VideoCaption[]
 
   constructor (
     @Inject(LOCALE_ID) private localeId: string,
@@ -61,15 +63,25 @@ export class VideoDownloadComponent {
     return this.video.getFiles()
   }
 
+  getCaptions () {
+    if (!this.videoCaptions) return []
+
+    return this.videoCaptions
+  }
+
   show (video: VideoDetails, videoCaptions?: VideoCaption[]) {
     this.video = video
-    this.videoCaptions = videoCaptions && videoCaptions.length ? videoCaptions : undefined
+    this.videoCaptions = videoCaptions
 
     this.activeModal = this.modalService.open(this.modal, { centered: true })
 
-    this.onResolutionIdChange(this.getVideoFiles()[0].resolution.id)
+    if (this.hasFiles()) {
+      this.onResolutionIdChange(this.getVideoFiles()[0].resolution.id)
+    }
 
-    if (this.videoCaptions) this.subtitleLanguageId = this.videoCaptions[0].language.id
+    if (this.hasCaptions()) {
+      this.subtitleLanguageId = this.videoCaptions[0].language.id
+    }
 
     this.activeModal.shown.subscribe(() => {
       this.hooks.runAction('action:modal.video-download.shown', 'common')
@@ -83,48 +95,63 @@ export class VideoDownloadComponent {
 
   download () {
     window.location.assign(this.getLink())
+
     this.activeModal.close()
   }
 
   getLink () {
     return this.type === 'subtitles' && this.videoCaptions
-      ? this.getSubtitlesLink()
+      ? this.getCaptionLink()
       : this.getVideoFileLink()
   }
 
   async onResolutionIdChange (resolutionId: number) {
     this.resolutionId = resolutionId
-    this.videoFile = this.getVideoFile()
 
-    if (!this.videoFile.metadata) {
-      if (!this.videoFile.metadataUrl) return
+    const videoFile = this.getVideoFile()
 
-      await this.hydrateMetadataFromMetadataUrl(this.videoFile)
+    if (!videoFile.metadata) {
+      if (!videoFile.metadataUrl) return
+
+      await this.hydrateMetadataFromMetadataUrl(videoFile)
     }
 
-    this.videoFileMetadataFormat = this.videoFile
-      ? this.getMetadataFormat(this.videoFile.metadata.format)
+    if (!videoFile.metadata) return
+
+    this.videoFileMetadataFormat = videoFile
+      ? this.getMetadataFormat(videoFile.metadata.format)
       : undefined
-    this.videoFileMetadataVideoStream = this.videoFile
-      ? this.getMetadataStream(this.videoFile.metadata.streams, 'video')
+    this.videoFileMetadataVideoStream = videoFile
+      ? this.getMetadataStream(videoFile.metadata.streams, 'video')
       : undefined
-    this.videoFileMetadataAudioStream = this.videoFile
-      ? this.getMetadataStream(this.videoFile.metadata.streams, 'audio')
+    this.videoFileMetadataAudioStream = videoFile
+      ? this.getMetadataStream(videoFile.metadata.streams, 'audio')
       : undefined
   }
 
+  onSubtitleIdChange (subtitleId: string) {
+    this.subtitleLanguageId = subtitleId
+  }
+
+  hasFiles () {
+    return this.getVideoFiles().length !== 0
+  }
+
   getVideoFile () {
-    const file = this.getVideoFiles().find(f => f.resolution.id === this.resolutionId)
+    const file = this.getVideoFiles()
+                     .find(f => f.resolution.id === this.resolutionId)
+
     if (!file) {
       console.error('Could not find file with resolution %d.', this.resolutionId)
-      return
+      return undefined
     }
+
     return file
   }
 
   getVideoFileLink () {
-    const file = this.videoFile
-    if (!file) return
+    const file = this.getVideoFile()
+    if (!file) return ''
 
     const suffix = this.isConfidentialVideo()
       ? '?access_token=' + this.auth.getAccessToken()
@@ -139,12 +166,31 @@ export class VideoDownloadComponent {
     }
   }
 
-  isConfidentialVideo () {
-    return this.video.privacy.id === VideoPrivacy.PRIVATE || this.video.privacy.id === VideoPrivacy.INTERNAL
+  hasCaptions () {
+    return this.getCaptions().length !== 0
   }
 
-  getSubtitlesLink () {
-    return window.location.origin + this.videoCaptions.find(caption => caption.language.id === this.subtitleLanguageId).captionPath
+  getCaption () {
+    const caption = this.getCaptions()
+                        .find(c => c.language.id === this.subtitleLanguageId)
+
+    if (!caption) {
+      console.error('Cannot find caption %s.', this.subtitleLanguageId)
+      return undefined
+    }
+
+    return caption
+  }
+
+  getCaptionLink () {
+    const caption = this.getCaption()
+    if (!caption) return ''
+
+    return window.location.origin + caption.captionPath
+  }
+
+  isConfidentialVideo () {
+    return this.video.privacy.id === VideoPrivacy.PRIVATE || this.video.privacy.id === VideoPrivacy.INTERNAL
   }
 
   activateCopiedMessage () {
@@ -155,12 +201,19 @@ export class VideoDownloadComponent {
     this.type = type
   }
 
-  getMetadataFormat (format: any) {
+  getFileMetadata () {
+    const file = this.getVideoFile()
+    if (!file) return undefined
+
+    return file.metadata
+  }
+
+  private getMetadataFormat (format: any) {
     const keyToTranslateFunction = {
-      'encoder': (value: string) => ({ label: $localize`Encoder`, value }),
-      'format_long_name': (value: string) => ({ label: $localize`Format name`, value }),
-      'size': (value: number) => ({ label: $localize`Size`, value: this.bytesPipe.transform(value, 2) }),
-      'bit_rate': (value: number) => ({
+      encoder: (value: string) => ({ label: $localize`Encoder`, value }),
+      format_long_name: (value: string) => ({ label: $localize`Format name`, value }),
+      size: (value: number) => ({ label: $localize`Size`, value: this.bytesPipe.transform(value, 2) }),
+      bit_rate: (value: number) => ({
         label: $localize`Bitrate`,
         value: `${this.numbersPipe.transform(value)}bps`
       })
@@ -176,14 +229,14 @@ export class VideoDownloadComponent {
     )
   }
 
-  getMetadataStream (streams: any[], type: 'video' | 'audio') {
+  private getMetadataStream (streams: any[], type: 'video' | 'audio') {
     const stream = streams.find(s => s.codec_type === type)
     if (!stream) return undefined
 
     let keyToTranslateFunction = {
-      'codec_long_name': (value: string) => ({ label: $localize`Codec`, value }),
-      'profile': (value: string) => ({ label: $localize`Profile`, value }),
-      'bit_rate': (value: number) => ({
+      codec_long_name: (value: string) => ({ label: $localize`Codec`, value }),
+      profile: (value: string) => ({ label: $localize`Profile`, value }),
+      bit_rate: (value: number) => ({
         label: $localize`Bitrate`,
         value: `${this.numbersPipe.transform(value)}bps`
       })
@@ -191,15 +244,15 @@ export class VideoDownloadComponent {
 
     if (type === 'video') {
       keyToTranslateFunction = Object.assign(keyToTranslateFunction, {
-        'width': (value: number) => ({ label: $localize`Resolution`, value: `${value}x${stream.height}` }),
-        'display_aspect_ratio': (value: string) => ({ label: $localize`Aspect ratio`, value }),
-        'avg_frame_rate': (value: string) => ({ label: $localize`Average frame rate`, value }),
-        'pix_fmt': (value: string) => ({ label: $localize`Pixel format`, value })
+        width: (value: number) => ({ label: $localize`Resolution`, value: `${value}x${stream.height}` }),
+        display_aspect_ratio: (value: string) => ({ label: $localize`Aspect ratio`, value }),
+        avg_frame_rate: (value: string) => ({ label: $localize`Average frame rate`, value }),
+        pix_fmt: (value: string) => ({ label: $localize`Pixel format`, value })
       })
     } else {
       keyToTranslateFunction = Object.assign(keyToTranslateFunction, {
-        'sample_rate': (value: number) => ({ label: $localize`Sample rate`, value }),
-        'channel_layout': (value: number) => ({ label: $localize`Channel Layout`, value })
+        sample_rate: (value: number) => ({ label: $localize`Sample rate`, value }),
+        channel_layout: (value: number) => ({ label: $localize`Channel Layout`, value })
       })
     }
 
@@ -213,6 +266,6 @@ export class VideoDownloadComponent {
     const observable = this.videoService.getVideoFileMetadata(file.metadataUrl)
       .pipe(tap(res => file.metadata = res))
 
-    return observable.toPromise()
+    return firstValueFrom(observable)
   }
 }

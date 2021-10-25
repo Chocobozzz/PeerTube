@@ -7,14 +7,14 @@ if (isTestInstance()) {
 }
 
 // ----------- Node modules -----------
-import * as express from 'express'
-import * as morgan from 'morgan'
-import * as cors from 'cors'
-import * as cookieParser from 'cookie-parser'
-import * as helmet from 'helmet'
-import * as useragent from 'useragent'
-import * as anonymize from 'ip-anonymize'
-import * as cli from 'commander'
+import express from 'express'
+import morgan, { token } from 'morgan'
+import cors from 'cors'
+import cookieParser from 'cookie-parser'
+import { frameguard } from 'helmet'
+import { parse } from 'useragent'
+import anonymize from 'ip-anonymize'
+import { program as cli } from 'commander'
 
 process.title = 'peertube'
 
@@ -61,7 +61,7 @@ if (CONFIG.CSP.ENABLED) {
 }
 
 if (CONFIG.SECURITY.FRAMEGUARD.ENABLED) {
-  app.use(helmet.frameguard({
+  app.use(frameguard({
     action: 'deny' // we only allow it for /videos/embed, see server/controllers/client.ts
   }))
 }
@@ -124,8 +124,8 @@ import { PluginsCheckScheduler } from './server/lib/schedulers/plugins-check-sch
 import { PeerTubeVersionCheckScheduler } from './server/lib/schedulers/peertube-version-check-scheduler'
 import { Hooks } from './server/lib/plugins/hooks'
 import { PluginManager } from './server/lib/plugins/plugin-manager'
-import { LiveManager } from './server/lib/live-manager'
-import { HttpStatusCode } from './shared/core-utils/miscs/http-error-codes'
+import { LiveManager } from './server/lib/live'
+import { HttpStatusCode } from './shared/models/http/http-error-codes'
 import { VideosTorrentCache } from '@server/lib/files-cache/videos-torrent-cache'
 import { ServerConfigManager } from '@server/lib/server-config-manager'
 
@@ -148,23 +148,23 @@ if (isTestInstance()) {
 }
 
 // For the logger
-morgan.token('remote-addr', (req: express.Request) => {
+token('remote-addr', (req: express.Request) => {
   if (CONFIG.LOG.ANONYMIZE_IP === true || req.get('DNT') === '1') {
     return anonymize(req.ip, 16, 16)
   }
 
   return req.ip
 })
-morgan.token('user-agent', (req: express.Request) => {
+token('user-agent', (req: express.Request) => {
   if (req.get('DNT') === '1') {
-    return useragent.parse(req.get('user-agent')).family
+    return parse(req.get('user-agent')).family
   }
 
   return req.get('user-agent')
 })
 app.use(morgan('combined', {
   stream: {
-    write: (str: string) => logger.info(str, { tags: [ 'http' ] })
+    write: (str: string) => logger.info(str.trim(), { tags: [ 'http' ] })
   },
   skip: req => CONFIG.LOG.LOG_PING_REQUESTS === false && req.originalUrl === '/api/v1/ping'
 }))
@@ -305,13 +305,19 @@ async function startApplication () {
   updateStreamingPlaylistsInfohashesIfNeeded()
     .catch(err => logger.error('Cannot update streaming playlist infohashes.', { err }))
 
-  if (cliOptions.plugins) await PluginManager.Instance.registerPluginsAndThemes()
-
   LiveManager.Instance.init()
   if (CONFIG.LIVE.ENABLED) LiveManager.Instance.run()
 
   // Make server listening
-  server.listen(port, hostname, () => {
+  server.listen(port, hostname, async () => {
+    if (cliOptions.plugins) {
+      try {
+        await PluginManager.Instance.registerPluginsAndThemes()
+      } catch (err) {
+        logger.error('Cannot register plugins and themes.', { err })
+      }
+    }
+
     logger.info('HTTP server listening on %s:%d', hostname, port)
     logger.info('Web server: %s', WEBSERVER.URL)
 

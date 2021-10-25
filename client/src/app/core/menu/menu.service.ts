@@ -25,7 +25,7 @@ export type MenuSection = {
 export class MenuService {
   isMenuDisplayed = true
   isMenuChangedByUser = false
-  menuWidth = 240  // should be kept equal to $menu-width
+  menuWidth = 240 // should be kept equal to $menu-width
 
   constructor (
     private screenService: ScreenService
@@ -55,7 +55,7 @@ export class MenuService {
     // On touch screens, lock body scroll and display content overlay when memu is opened
     if (this.isMenuDisplayed) {
       document.body.classList.add('menu-open')
-      this.screenService.onFingerSwipe('left', () => { this.setMenuDisplay(false) })
+      this.screenService.onFingerSwipe('left', () => this.setMenuDisplay(false))
       return
     }
 
@@ -101,7 +101,7 @@ export class MenuService {
 
     return {
       key: 'in-my-library',
-      title: 'In my library',
+      title: $localize`In my library`,
       links
     }
   }

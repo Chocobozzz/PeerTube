@@ -6,6 +6,7 @@ import { Component, ElementRef, forwardRef, Input, OnInit, ViewChild } from '@an
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { SafeHtml } from '@angular/platform-browser'
 import { MarkdownService, ScreenService } from '@app/core'
+import { Video } from '@shared/models'
 
 @Component({
   selector: 'my-markdown-textarea',
@@ -33,7 +34,7 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
   @Input() markdownType: 'text' | 'enhanced' = 'text'
   @Input() customMarkdownRenderer?: (text: string) => Promise<string | HTMLElement>
 
-  @Input() markdownVideo = false
+  @Input() markdownVideo: Video
 
   @Input() name = 'description'
 
@@ -44,6 +45,7 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
   previewHTML: SafeHtml | string = ''
 
   isMaximized = false
+  disabled = false
 
   maximizeInText = $localize`Maximize editor`
   maximizeOutText = $localize`Exit maximized editor`
@@ -107,6 +109,10 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
     }
   }
 
+  setDisabledState (isDisabled: boolean) {
+    this.disabled = isDisabled
+  }
+
   private lockBodyScroll () {
     this.scrollPosition = this.viewportScroller.getScrollPosition()
     document.getElementById('content').classList.add('lock-scroll')
@@ -131,8 +137,6 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
       const result = await this.customMarkdownRenderer(text)
 
       if (result instanceof HTMLElement) {
-        html = ''
-
         const wrapperElement = this.previewElement.nativeElement as HTMLElement
         wrapperElement.innerHTML = ''
         wrapperElement.appendChild(result)
@@ -147,7 +151,7 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
     }
 
     if (this.markdownVideo) {
-      html = this.markdownService.processVideoTimestamps(html)
+      html = this.markdownService.processVideoTimestamps(this.markdownVideo.shortUUID, html)
     }
 
     return html

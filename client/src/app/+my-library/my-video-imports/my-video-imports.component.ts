@@ -1,7 +1,7 @@
 import { SortMeta } from 'primeng/api'
 import { Component, OnInit } from '@angular/core'
 import { Notifier, RestPagination, RestTable } from '@app/core'
-import { VideoImportService } from '@app/shared/shared-main'
+import { Video, VideoImportService } from '@app/shared/shared-main'
 import { VideoImport, VideoImportState } from '@shared/models'
 
 @Component({
@@ -55,22 +55,22 @@ export class MyVideoImportsComponent extends RestTable implements OnInit {
   }
 
   getVideoUrl (video: { uuid: string }) {
-    return '/w/' + video.uuid
+    return Video.buildWatchUrl(video)
   }
 
   getEditVideoUrl (video: { uuid: string }) {
-    return '/videos/update/' + video.uuid
+    return Video.buildUpdateUrl(video)
   }
 
   protected reloadData () {
     this.videoImportService.getMyVideoImports(this.pagination, this.sort)
-        .subscribe(
-          resultList => {
+        .subscribe({
+          next: resultList => {
             this.videoImports = resultList.data
             this.totalRecords = resultList.total
           },
 
-          err => this.notifier.error(err.message)
-        )
+          error: err => this.notifier.error(err.message)
+        })
   }
 }

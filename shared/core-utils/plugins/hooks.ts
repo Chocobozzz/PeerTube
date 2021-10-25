@@ -1,5 +1,5 @@
 import { HookType } from '../../models/plugins/hook-type.enum'
-import { isCatchable, isPromise } from '../miscs/miscs'
+import { isCatchable, isPromise } from '../common/promises'
 
 function getHookType (hookName: string) {
   if (hookName.startsWith('filter:')) return HookType.FILTER

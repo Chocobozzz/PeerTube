@@ -1,0 +1,20 @@
+<div class="wrapper">
+  <my-actor-avatar
+    *ngIf="showChannel"
+    class="channel"
+    [class.main-avatar]="showChannel"
+    [channel]="video.channel"
+    [internalHref]="[ '/c', video.byVideoChannel ]"
+    [title]="channelLinkTitle"
+  ></my-actor-avatar>
+
+  <my-actor-avatar
+    *ngIf="showAccount"
+    class="account"
+    [class.main-avatar]="!showChannel"
+    [class.second-avatar]="showChannel"
+    [account]="video.account"
+    [internalHref]="[ '/a', video.byAccount ]"
+    [title]="accountLinkTitle">
+  </my-actor-avatar>
+</div>

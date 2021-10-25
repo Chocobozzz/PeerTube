@@ -1,3 +1,4 @@
+import { ChartData, ChartOptions, TooltipItem } from 'chart.js'
 import { SortMeta } from 'primeng/api'
 import { Component, OnInit } from '@angular/core'
 import { ConfirmService, Notifier, RestPagination, RestTable, ServerService } from '@app/core'
@@ -21,7 +22,7 @@ export class VideoRedundanciesListComponent extends RestTable implements OnInit 
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
   displayType: VideoRedundanciesTarget = 'my-videos'
 
-  redundanciesGraphsData: { stats: VideosRedundancyStats, graphData: object, options: object }[] = []
+  redundanciesGraphsData: { stats: VideosRedundancyStats, graphData: ChartData, options: ChartOptions }[] = []
 
   noRedundancies = false
 
@@ -32,7 +33,7 @@ export class VideoRedundanciesListComponent extends RestTable implements OnInit 
     private confirmService: ConfirmService,
     private redundancyService: RedundancyService,
     private serverService: ServerService
-    ) {
+  ) {
     super()
 
     this.bytesPipe = new BytesPipe()
@@ -114,21 +115,22 @@ export class VideoRedundanciesListComponent extends RestTable implements OnInit 
         ]
       },
       options: {
-        title: {
-          display: true,
-          text: stats.strategy
-        },
+        plugins: {
+          title: {
+            display: true,
+            text: stats.strategy
+          },
 
-        tooltips: {
-          callbacks: {
-            label: (tooltipItem: any, data: any) => {
-              const dataset = data.datasets[tooltipItem.datasetIndex]
-              let label = data.labels[tooltipItem.index]
-              if (label) label += ': '
-              else label = ''
+          tooltip: {
+            callbacks: {
+              label: (tooltip: TooltipItem<any>) => {
+                let label = tooltip.label || ''
+                if (label) label += ': '
 
-              label += this.bytesPipe.transform(dataset.data[tooltipItem.index], 1)
-              return label
+                label += this.bytesPipe.transform(tooltip.raw as number, 1)
+
+                return label
+              }
             }
           }
         }
@@ -142,14 +144,14 @@ export class VideoRedundanciesListComponent extends RestTable implements OnInit 
     if (res === false) return
 
     this.redundancyService.removeVideoRedundancies(redundancy)
-      .subscribe(
-        () => {
+      .subscribe({
+        next: () => {
           this.notifier.success($localize`Video redundancies removed!`)
           this.reloadData()
         },
 
-        err => this.notifier.error(err.message)
-      )
+        error: err => this.notifier.error(err.message)
+      })
 
   }
 
@@ -161,14 +163,14 @@ export class VideoRedundanciesListComponent extends RestTable implements OnInit 
     }
 
     this.redundancyService.listVideoRedundancies(options)
-                      .subscribe(
-                        resultList => {
+                      .subscribe({
+                        next: resultList => {
                           this.videoRedundancies = resultList.data
                           this.totalRecords = resultList.total
                         },
 
-                        err => this.notifier.error(err.message)
-                      )
+                        error: err => this.notifier.error(err.message)
+                      })
   }
 
   private loadSelectLocalStorage () {

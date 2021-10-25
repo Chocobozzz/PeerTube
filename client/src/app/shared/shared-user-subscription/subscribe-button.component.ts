@@ -102,8 +102,8 @@ export class SubscribeButtonComponent implements OnInit, OnChanges {
       .map(handle => this.userSubscriptionService.addSubscription(handle))
 
     forkJoin(observableBatch)
-      .subscribe(
-        () => {
+      .subscribe({
+        next: () => {
           this.notifier.success(
             this.account
               ? $localize`Subscribed to all current channels of ${this.account.displayName}. You will be notified of all their new videos.`
@@ -113,8 +113,8 @@ export class SubscribeButtonComponent implements OnInit, OnChanges {
           )
         },
 
-        err => this.notifier.error(err.message)
-      )
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   unsubscribe () {
@@ -137,7 +137,7 @@ export class SubscribeButtonComponent implements OnInit, OnChanges {
           this.notifier.success(
             this.account
               ? $localize`Unsubscribed from all channels of ${this.account.nameWithHost}`
-              : $localize`Unsubscribed from ${this.videoChannels[ 0 ].nameWithHost}`,
+              : $localize`Unsubscribed from ${this.videoChannels[0].nameWithHost}`,
 
             $localize`Unsubscribed`
           )
@@ -157,11 +157,15 @@ export class SubscribeButtonComponent implements OnInit, OnChanges {
 
   subscribeStatus (subscribed: boolean) {
     const accumulator: string[] = []
-    for (const [key, value] of this.subscribed.entries()) {
+    for (const [ key, value ] of this.subscribed.entries()) {
       if (value === subscribed) accumulator.push(key)
     }
 
     return accumulator
+  }
+
+  isSubscribedToAll () {
+    return Array.from(this.subscribed.values()).every(v => v === true)
   }
 
   private getChannelHandler (videoChannel: VideoChannel) {
@@ -178,11 +182,11 @@ export class SubscribeButtonComponent implements OnInit, OnChanges {
       merge(
         this.userSubscriptionService.listenToSubscriptionCacheChange(handle),
         this.userSubscriptionService.doesSubscriptionExist(handle)
-      ).subscribe(
-        res => this.subscribed.set(handle, res),
+      ).subscribe({
+        next: res => this.subscribed.set(handle, res),
 
-        err => this.notifier.error(err.message)
-      )
+        error: err => this.notifier.error(err.message)
+      })
     }
   }
 }

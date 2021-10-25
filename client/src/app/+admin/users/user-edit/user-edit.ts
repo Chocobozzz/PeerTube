@@ -7,7 +7,7 @@ import { HTMLServerConfig, UserAdminFlag, UserRole, VideoResolution } from '@sha
 import { SelectOptionsItem } from '../../../../types/select-options-item.model'
 
 @Directive()
-// tslint:disable-next-line: directive-class-suffix
+// eslint-disable-next-line @angular-eslint/directive-class-suffix
 export abstract class UserEdit extends FormReactive implements OnInit {
   videoQuotaOptions: SelectOptionsItem[] = []
   videoQuotaDailyOptions: SelectOptionsItem[] = []

@@ -1,12 +1,12 @@
-import * as express from 'express'
+import express from 'express'
 import { query } from 'express-validator'
 import { join } from 'path'
 import { loadVideo } from '@server/lib/model-loaders'
 import { VideoPlaylistModel } from '@server/models/video/video-playlist'
 import { VideoPlaylistPrivacy, VideoPrivacy } from '@shared/models'
-import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '../../../shared/models/http/http-error-codes'
 import { isTestInstance } from '../../helpers/core-utils'
-import { isIdOrUUIDValid } from '../../helpers/custom-validators/misc'
+import { isIdOrUUIDValid, toCompleteUUID } from '../../helpers/custom-validators/misc'
 import { logger } from '../../helpers/logger'
 import { WEBSERVER } from '../../initializers/constants'
 import { areValidationErrors } from './shared'
@@ -28,7 +28,6 @@ function buildUrls (paths: string[]) {
 const startPlaylistURLs = buildUrls(playlistPaths)
 const startVideoURLs = buildUrls(videoPaths)
 
-const watchRegex = /([^/]+)$/
 const isURLOptions = {
   require_host: true,
   require_tld: true
@@ -62,14 +61,28 @@ const oembedValidator = [
 
     const url = req.query.url as string
 
+    let urlPath: string
+
+    try {
+      urlPath = new URL(url).pathname
+    } catch (err) {
+      return res.fail({
+        status: HttpStatusCode.BAD_REQUEST_400,
+        message: err.message,
+        data: {
+          url
+        }
+      })
+    }
+
     const isPlaylist = startPlaylistURLs.some(u => url.startsWith(u))
     const isVideo = isPlaylist ? false : startVideoURLs.some(u => url.startsWith(u))
 
     const startIsOk = isVideo || isPlaylist
 
-    const matches = watchRegex.exec(url)
+    const parts = urlPath.split('/')
 
-    if (startIsOk === false || matches === null) {
+    if (startIsOk === false || parts.length === 0) {
       return res.fail({
         status: HttpStatusCode.BAD_REQUEST_400,
         message: 'Invalid url.',
@@ -79,7 +92,7 @@ const oembedValidator = [
       })
     }
 
-    const elementId = matches[1]
+    const elementId = toCompleteUUID(parts.pop())
     if (isIdOrUUIDValid(elementId) === false) {
       return res.fail({ message: 'Invalid video or playlist id.' })
     }

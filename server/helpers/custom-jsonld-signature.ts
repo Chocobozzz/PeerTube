@@ -1,6 +1,7 @@
-import * as AsyncLRU from 'async-lru'
-import * as jsonld from 'jsonld'
+import AsyncLRU from 'async-lru'
 import { logger } from './logger'
+
+import jsonld = require('jsonld')
 
 const CACHE = {
   'https://w3id.org/security/v1': {

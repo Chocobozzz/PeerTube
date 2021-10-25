@@ -1,9 +1,10 @@
-@import '_variables';
-@import '_mixins';
+@use 'sass:math';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 @mixin build-channel-img-size ($video-img-width) {
   $image-size: min(130px, $video-img-width);
-  $margin-size: ($video-img-width - $image-size) / 2; // So we have the same width than the video miniature
+  $margin-size: math.div(($video-img-width - $image-size), 2); // So we have the same width than the video miniature
 
   @include actor-avatar-size($image-size);
 
@@ -12,6 +13,10 @@
 
 .search-result {
   padding: 40px;
+}
+
+.alert-danger {
+  margin-top: 10px;
 }
 
 .results-header {

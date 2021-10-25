@@ -1,16 +1,17 @@
 import { maxBy, minBy } from 'lodash'
-import * as magnetUtil from 'magnet-uri'
+import magnetUtil from 'magnet-uri'
 import { basename } from 'path'
 import { isAPVideoFileUrlMetadataObject } from '@server/helpers/custom-validators/activitypub/videos'
 import { isVideoFileInfoHashValid } from '@server/helpers/custom-validators/videos'
 import { logger } from '@server/helpers/logger'
 import { getExtFromMimetype } from '@server/helpers/video'
 import { ACTIVITY_PUB, MIMETYPES, P2P_MEDIA_LOADER_PEER_VERSION, PREVIEWS_SIZE, THUMBNAILS_SIZE } from '@server/initializers/constants'
-import { generateTorrentFileName } from '@server/lib/video-paths'
+import { generateTorrentFileName } from '@server/lib/paths'
+import { VideoCaptionModel } from '@server/models/video/video-caption'
 import { VideoFileModel } from '@server/models/video/video-file'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist'
 import { FilteredModelAttributes } from '@server/types'
-import { MChannelId, MStreamingPlaylist, MStreamingPlaylistVideo, MVideo, MVideoFile, MVideoId } from '@server/types/models'
+import { isStreamingPlaylist, MChannelId, MStreamingPlaylistVideo, MVideo, MVideoId } from '@server/types/models'
 import {
   ActivityHashTagObject,
   ActivityMagnetUrlObject,
@@ -23,7 +24,6 @@ import {
   VideoPrivacy,
   VideoStreamingPlaylistType
 } from '@shared/models'
-import { VideoCaptionModel } from '@server/models/video/video-caption'
 
 function getThumbnailFromIcons (videoObject: VideoObject) {
   let validIcons = videoObject.icon.filter(i => i.width > THUMBNAILS_SIZE.minWidth)
@@ -80,8 +80,8 @@ function getFileAttributesFromUrl (
 
     const extname = getExtFromMimetype(MIMETYPES.VIDEO.MIMETYPE_EXT, fileUrl.mediaType)
     const resolution = fileUrl.height
-    const videoId = (videoOrPlaylist as MStreamingPlaylist).playlistUrl ? null : videoOrPlaylist.id
-    const videoStreamingPlaylistId = (videoOrPlaylist as MStreamingPlaylist).playlistUrl ? videoOrPlaylist.id : null
+    const videoId = isStreamingPlaylist(videoOrPlaylist) ? null : videoOrPlaylist.id
+    const videoStreamingPlaylistId = isStreamingPlaylist(videoOrPlaylist) ? videoOrPlaylist.id : null
 
     const attribute = {
       extname,
@@ -110,7 +110,7 @@ function getFileAttributesFromUrl (
   return attributes
 }
 
-function getStreamingPlaylistAttributesFromObject (video: MVideoId, videoObject: VideoObject, videoFiles: MVideoFile[]) {
+function getStreamingPlaylistAttributesFromObject (video: MVideoId, videoObject: VideoObject) {
   const playlistUrls = videoObject.url.filter(u => isAPStreamingPlaylistUrlObject(u)) as ActivityPlaylistUrlObject[]
   if (playlistUrls.length === 0) return []
 
@@ -118,10 +118,7 @@ function getStreamingPlaylistAttributesFromObject (video: MVideoId, videoObject:
   for (const playlistUrlObject of playlistUrls) {
     const segmentsSha256UrlObject = playlistUrlObject.tag.find(isAPPlaylistSegmentHashesUrlObject)
 
-    let files: unknown[] = playlistUrlObject.tag.filter(u => isAPVideoUrlObject(u)) as ActivityVideoUrlObject[]
-
-    // FIXME: backward compatibility introduced in v2.1.0
-    if (files.length === 0) files = videoFiles
+    const files: unknown[] = playlistUrlObject.tag.filter(u => isAPVideoUrlObject(u)) as ActivityVideoUrlObject[]
 
     if (!segmentsSha256UrlObject) {
       logger.warn('No segment sha256 URL found in AP playlist object.', { playlistUrl: playlistUrlObject })
@@ -130,8 +127,13 @@ function getStreamingPlaylistAttributesFromObject (video: MVideoId, videoObject:
 
     const attribute = {
       type: VideoStreamingPlaylistType.HLS,
+
+      playlistFilename: basename(playlistUrlObject.href),
       playlistUrl: playlistUrlObject.href,
+
+      segmentsSha256Filename: basename(segmentsSha256UrlObject.href),
       segmentsSha256Url: segmentsSha256UrlObject.href,
+
       p2pMediaLoaderInfohashes: VideoStreamingPlaylistModel.buildP2PMediaLoaderInfoHashes(playlistUrlObject.href, files),
       p2pMediaLoaderPeerVersion: P2P_MEDIA_LOADER_PEER_VERSION,
       videoId: video.id,

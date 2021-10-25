@@ -52,6 +52,7 @@ export enum ScopeNames {
 export type SummaryOptions = {
   actorRequired?: boolean // Default: true
   whereActor?: WhereOptions
+  whereServer?: WhereOptions
   withAccountBlockerIds?: number[]
 }
 
@@ -65,12 +66,11 @@ export type SummaryOptions = {
 }))
 @Scopes(() => ({
   [ScopeNames.SUMMARY]: (options: SummaryOptions = {}) => {
-    const whereActor = options.whereActor || undefined
-
     const serverInclude: IncludeOptions = {
       attributes: [ 'host' ],
       model: ServerModel.unscoped(),
-      required: false
+      required: !!options.whereServer,
+      where: options.whereServer
     }
 
     const queryInclude: Includeable[] = [
@@ -78,7 +78,7 @@ export type SummaryOptions = {
         attributes: [ 'id', 'preferredUsername', 'url', 'serverId', 'avatarId' ],
         model: ActorModel.unscoped(),
         required: options.actorRequired ?? true,
-        where: whereActor,
+        where: options.whereActor,
         include: [
           serverInclude,
 

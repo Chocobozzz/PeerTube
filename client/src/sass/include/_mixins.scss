@@ -1,4 +1,5 @@
-@import '_variables';
+@use 'sass:math';
+@use '_variables' as *;
 
 @mixin disable-default-a-behaviour {
   &:hover,
@@ -102,7 +103,7 @@
     opacity: 0.7;
   }
 
-  @media screen and (max-width: $width) {
+  @media screen and (max-width: calc(#{$width} + 40px)) {
     width: 100%;
   }
 }
@@ -263,8 +264,10 @@
   font-size: 15px;
   height: $button-height;
   line-height: $button-height;
-  // FIXME: because of primeng that redefines border-radius of all input[type="..."]
+
+  // Because of primeng that redefines border-radius of all input[type="..."]
   border-radius: 3px !important;
+
   text-align: center;
   cursor: pointer;
 }
@@ -355,6 +358,7 @@
   background: pvar(--inputBackgroundColor);
   position: relative;
   font-size: 15px;
+  height: min-content;
 
   &.disabled {
     background-color: #E5E5E5;
@@ -362,6 +366,9 @@
     select {
       cursor: default;
     }
+  }
+  select[disabled] {
+    background-color: #f9f9f9;
   }
 
   @media screen and (max-width: $width) {
@@ -419,42 +426,64 @@
   }
 }
 
-// Thanks: https://codepen.io/triss90/pen/XNEdRe/
+// Thanks: https://codepen.io/manabox/pen/raQmpL
 @mixin peertube-radio-container {
-  input[type=radio] {
-    display: none;
+  [type=radio]:checked,
+  [type=radio]:not(:checked) {
+    position: absolute;
+    left: -9999px;
+  }
 
-    + label {
-      font-weight: $font-regular;
-      cursor: pointer;
+  [type=radio]:checked + label,
+  [type=radio]:not(:checked) + label {
+    position: relative;
+    padding-left: 28px;
+    cursor: pointer;
+    line-height: 20px;
+    display: inline-block;
+    font-size: 15px;
+    font-weight: $font-regular;
+  }
 
-      &::before {
-        @include margin-right(10px);
+  [type=radio]:checked + label::before,
+  [type=radio]:not(:checked) + label::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 18px;
+    height: 18px;
+    border: 1px solid #C6C6C6;
+    border-radius: 100%;
+    background: #fff;
+  }
 
-        position: relative;
-        top: -2px;
-        content: '';
-        background: #fff;
-        border-radius: 100%;
-        border: 1px solid #000;
-        display: inline-block;
-        width: 15px;
-        height: 15px;
-        vertical-align: middle;
-        cursor: pointer;
-        text-align: center;
-      }
-    }
+  [type=radio]:checked + label::after,
+  [type=radio]:not(:checked) + label::after {
+    content: '';
+    width: 10px;
+    height: 10px;
+    background: pvar(--mainColor);
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    border-radius: 100%;
+    transition: all 0.2s ease;
+  }
+  [type=radio]:not(:checked) + label::after {
+    opacity: 0;
+    transform: scale(0);
+  }
+  [type=radio]:checked + label::after {
+    opacity: 1;
+    transform: scale(1);
+  }
 
-    &:checked + label::before {
-      background-color: #000;
-      box-shadow: inset 0 0 0 4px #fff;
-    }
-
-    &:focus + label::before {
-      outline: none;
-      border-color: #000;
-    }
+  .form-group-description {
+    display: block;
+    margin-top: -7px;
+    margin-bottom: 10px;
+    margin-left: 29px;
   }
 }
 
@@ -569,6 +598,19 @@
   min-height: $size;
 }
 
+@mixin actor-counters ($separator-margin: 10px) {
+  color: pvar(--greyForegroundColor);
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+
+  > *:not(:last-child)::after {
+    content: '•';
+    margin: 0 $separator-margin;
+    color: pvar(--mainColor);
+  }
+}
+
 @mixin chevron ($size, $border-width) {
   border-style: solid;
   border-width: $border-width $border-width 0 0;
@@ -614,12 +656,15 @@
   @include button-with-icon(20px, 5px, -1px);
 }
 
-@mixin row-blocks ($column-responsive: true) {
+@mixin row-blocks ($column-responsive: true, $min-height: 130px, $separator: true) {
   display: flex;
-  min-height: 130px;
+  min-height: $min-height;
   padding-bottom: 20px;
   margin-bottom: 20px;
-  border-bottom: 1px solid #C6C6C6;
+
+  @if $separator {
+    border-bottom: 1px solid #C6C6C6;
+  }
 
   @media screen and (max-width: $small-view) {
     @if $column-responsive {
@@ -659,6 +704,7 @@
   span {
     position: absolute;
     color: $grey-foreground-color;
+
     @if $small {
       top: -1px;
     }
@@ -732,7 +778,7 @@
 
   > div {
     box-sizing: border-box;
-    flex: 0 0 percentage(1/3);
+    flex: 0 0 percentage(math.div(1, 3));
     padding: 0 5px;
     margin-bottom: 10px;
 
@@ -854,7 +900,7 @@
 // applies ratio (default to 16:9) to a child element (using $selector) only using
 // an immediate's parent size. This allows to set a ratio without explicit
 // dimensions, as width/height cannot be computed from each other.
-@mixin block-ratio ($selector: 'div', $inverted-ratio: 9/16) {
+@mixin block-ratio ($selector: 'div', $inverted-ratio: math.div(9, 16)) {
   $padding-percent: percentage($inverted-ratio);
 
   position: relative;
@@ -867,6 +913,7 @@
     width: 100%;
     height: 100%;
     top: 0;
+
     @content;
   }
 }
@@ -902,8 +949,8 @@
   top: 50%;
   transform: translate(-50%, -50%) scale(0.5);
 
-  border-top: ($height / 2) solid transparent;
-  border-bottom: ($height / 2) solid transparent;
+  border-top: #{math.div($height, 2)} solid transparent;
+  border-bottom: #{math.div($height, 2)} solid transparent;
 
   border-left: $width solid rgba(255, 255, 255, 0.95);
 }

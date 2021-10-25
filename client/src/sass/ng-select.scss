@@ -1,4 +1,5 @@
-@import '_variables';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 $ng-select-highlight: #f2690d;
 // $ng-select-primary-text: #333 !default;
@@ -22,12 +23,12 @@ $ng-select-value-font-size: 15px;
   &.ng-select-focused {
     &:not(.ng-select-opened) > .ng-select-container {
       border-color: #ccc !important;
+      box-shadow: none !important;
     }
   }
 
   .ng-select-container {
     background-color: pvar(--inputBackgroundColor);
-
   }
 
   .ng-arrow-wrapper {

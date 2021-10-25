@@ -19,9 +19,11 @@ import {
   UpdatedAt
 } from 'sequelize-typescript'
 import { isActivityPubUrlValid } from '@server/helpers/custom-validators/activitypub/misc'
+import { afterCommitIfTransaction } from '@server/helpers/database-utils'
 import { getServerActor } from '@server/models/application/application'
-import { VideoModel } from '@server/models/video/video'
 import {
+  MActor,
+  MActorFollowActors,
   MActorFollowActorsDefault,
   MActorFollowActorsDefaultSubscription,
   MActorFollowFollowingHost,
@@ -36,6 +38,7 @@ import { logger } from '../../helpers/logger'
 import { ACTOR_FOLLOW_SCORE, CONSTRAINTS_FIELDS, FOLLOW_STATES, SERVER_ACTOR_NAME } from '../../initializers/constants'
 import { AccountModel } from '../account/account'
 import { ServerModel } from '../server/server'
+import { doesExist } from '../shared/query'
 import { createSafeIn, getFollowsSort, getSort, searchAttribute, throwIfNotValid } from '../utils'
 import { VideoChannelModel } from '../video/video-channel'
 import { ActorModel, unusedActorAttributesForAPI } from './actor'
@@ -118,20 +121,60 @@ export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowMo
   @AfterCreate
   @AfterUpdate
   static incrementFollowerAndFollowingCount (instance: ActorFollowModel, options: any) {
-    if (instance.state !== 'accepted') return undefined
-
-    return Promise.all([
-      ActorModel.rebuildFollowsCount(instance.actorId, 'following', options.transaction),
-      ActorModel.rebuildFollowsCount(instance.targetActorId, 'followers', options.transaction)
-    ])
+    return afterCommitIfTransaction(options.transaction, () => {
+      return Promise.all([
+        ActorModel.rebuildFollowsCount(instance.actorId, 'following'),
+        ActorModel.rebuildFollowsCount(instance.targetActorId, 'followers')
+      ])
+    })
   }
 
   @AfterDestroy
   static decrementFollowerAndFollowingCount (instance: ActorFollowModel, options: any) {
-    return Promise.all([
-      ActorModel.rebuildFollowsCount(instance.actorId, 'following', options.transaction),
-      ActorModel.rebuildFollowsCount(instance.targetActorId, 'followers', options.transaction)
-    ])
+    return afterCommitIfTransaction(options.transaction, () => {
+      return Promise.all([
+        ActorModel.rebuildFollowsCount(instance.actorId, 'following'),
+        ActorModel.rebuildFollowsCount(instance.targetActorId, 'followers')
+      ])
+    })
+  }
+
+  /*
+   * @deprecated Use `findOrCreateCustom` instead
+  */
+  static findOrCreate (): any {
+    throw new Error('Must not be called')
+  }
+
+  // findOrCreate has issues with actor follow hooks
+  static async findOrCreateCustom (options: {
+    byActor: MActor
+    targetActor: MActor
+    activityId: string
+    state: FollowState
+    transaction: Transaction
+  }): Promise<[ MActorFollowActors, boolean ]> {
+    const { byActor, targetActor, activityId, state, transaction } = options
+
+    let created = false
+    let actorFollow: MActorFollowActors = await ActorFollowModel.loadByActorAndTarget(byActor.id, targetActor.id, transaction)
+
+    if (!actorFollow) {
+      created = true
+
+      actorFollow = await ActorFollowModel.create({
+        actorId: byActor.id,
+        targetActorId: targetActor.id,
+        url: activityId,
+
+        state
+      }, { transaction })
+
+      actorFollow.ActorFollowing = targetActor
+      actorFollow.ActorFollower = byActor
+    }
+
+    return [ actorFollow, created ]
   }
 
   static removeFollowsOf (actorId: number, t?: Transaction) {
@@ -166,14 +209,8 @@ export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowMo
 
   static isFollowedBy (actorId: number, followerActorId: number) {
     const query = 'SELECT 1 FROM "actorFollow" WHERE "actorId" = $followerActorId AND "targetActorId" = $actorId LIMIT 1'
-    const options = {
-      type: QueryTypes.SELECT as QueryTypes.SELECT,
-      bind: { actorId, followerActorId },
-      raw: true
-    }
 
-    return VideoModel.sequelize.query(query, options)
-                     .then(results => results.length === 1)
+    return doesExist(query, { actorId, followerActorId })
   }
 
   static loadByActorAndTarget (actorId: number, targetActorId: number, t?: Transaction): Promise<MActorFollowActorsDefault> {
@@ -251,7 +288,7 @@ export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowMo
     return ActorFollowModel.findOne(query)
   }
 
-  static listSubscribedIn (actorId: number, targets: { name: string, host?: string }[]): Promise<MActorFollowFollowingHost[]> {
+  static listSubscriptionsOf (actorId: number, targets: { name: string, host?: string }[]): Promise<MActorFollowFollowingHost[]> {
     const whereTab = targets
       .map(t => {
         if (t.host) {
@@ -311,7 +348,7 @@ export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowMo
     return ActorFollowModel.findAll(query)
   }
 
-  static listFollowingForApi (options: {
+  static listInstanceFollowingForApi (options: {
     id: number
     start: number
     count: number
@@ -324,13 +361,13 @@ export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowMo
 
     const followWhere = state ? { state } : {}
     const followingWhere: WhereOptions = {}
-    const followingServerWhere: WhereOptions = {}
 
     if (search) {
-      Object.assign(followingServerWhere, {
-        host: {
-          [Op.iLike]: '%' + search + '%'
-        }
+      Object.assign(followWhere, {
+        [Op.or]: [
+          searchAttribute(options.search, '$ActorFollowing.preferredUsername$'),
+          searchAttribute(options.search, '$ActorFollowing.Server.host$')
+        ]
       })
     }
 
@@ -361,8 +398,7 @@ export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowMo
           include: [
             {
               model: ServerModel,
-              required: true,
-              where: followingServerWhere
+              required: true
             }
           ]
         }
@@ -379,7 +415,7 @@ export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowMo
   }
 
   static listFollowersForApi (options: {
-    actorId: number
+    actorIds: number[]
     start: number
     count: number
     sort: string
@@ -387,17 +423,17 @@ export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowMo
     actorType?: ActivityPubActorType
     search?: string
   }) {
-    const { actorId, start, count, sort, search, state, actorType } = options
+    const { actorIds, start, count, sort, search, state, actorType } = options
 
     const followWhere = state ? { state } : {}
     const followerWhere: WhereOptions = {}
-    const followerServerWhere: WhereOptions = {}
 
     if (search) {
-      Object.assign(followerServerWhere, {
-        host: {
-          [Op.iLike]: '%' + search + '%'
-        }
+      Object.assign(followWhere, {
+        [Op.or]: [
+          searchAttribute(search, '$ActorFollower.preferredUsername$'),
+          searchAttribute(search, '$ActorFollower.Server.host$')
+        ]
       })
     }
 
@@ -416,21 +452,16 @@ export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowMo
           model: ActorModel,
           required: true,
           as: 'ActorFollower',
-          where: followerWhere,
-          include: [
-            {
-              model: ServerModel,
-              required: true,
-              where: followerServerWhere
-            }
-          ]
+          where: followerWhere
         },
         {
           model: ActorModel,
           as: 'ActorFollowing',
           required: true,
           where: {
-            id: actorId
+            id: {
+              [Op.in]: actorIds
+            }
           }
         }
       ]

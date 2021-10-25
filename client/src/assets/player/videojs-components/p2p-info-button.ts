@@ -96,11 +96,11 @@ class P2pInfoButton extends Button {
       }
       subDivWebtorrent.title += this.player().localize('Total uploaded: ') + totalUploaded.join(' ')
 
-      downloadSpeedNumber.textContent = downloadSpeed[ 0 ]
-      downloadSpeedUnit.textContent = ' ' + downloadSpeed[ 1 ]
+      downloadSpeedNumber.textContent = downloadSpeed[0]
+      downloadSpeedUnit.textContent = ' ' + downloadSpeed[1]
 
-      uploadSpeedNumber.textContent = uploadSpeed[ 0 ]
-      uploadSpeedUnit.textContent = ' ' + uploadSpeed[ 1 ]
+      uploadSpeedNumber.textContent = uploadSpeed[0]
+      uploadSpeedUnit.textContent = ' ' + uploadSpeed[1]
 
       peersNumber.textContent = numPeers.toString()
       peersText.textContent = ' ' + (numPeers > 1 ? this.player().localize('peers') : this.player_.localize('peer'))

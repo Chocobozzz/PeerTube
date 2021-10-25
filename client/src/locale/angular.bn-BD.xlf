@@ -220,7 +220,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.SS" datatype="html">
         <source>SS</source>
-        <target>সেসে</target>
+        <target>সেকে</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context>
           <context context-type="linenumber">57</context>
@@ -812,7 +812,7 @@
       </trans-unit>
       <trans-unit id="4a806761798181e907e28ed1af053d466526800d" datatype="html">
         <source>Blacklisted</source>
-        <target/>
+        <target>অবরুদ্ধ তালিকাকৃত</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/video-miniature.component.html</context>
           <context context-type="linenumber">41</context>
@@ -1548,7 +1548,7 @@
       </trans-unit>
       <trans-unit id="1534085756270333258" datatype="html">
         <source>In Recently added, Trending, Local, Most liked and Search pages</source>
-        <target/>
+        <target>সাম্প্রতিক যুক্ত, চলমান, স্থানীয়, সবচেয়ে পছন্দকৃত এবং অনুসন্ধান পাতা</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-video-settings/my-account-video-settings.component.html</context>
           <context context-type="linenumber">26</context>
@@ -2384,7 +2384,7 @@
       </trans-unit>
       <trans-unit id="b6b7986bc3721ac483baf20bc9a320529075c807" datatype="html">
         <source>Trending</source>
-        <target/>
+        <target>চলমান</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">116</context>
@@ -5932,7 +5932,7 @@
       </trans-unit>
       <trans-unit id="9091b36f8890eabbd2305789eb826d16e8f4641d" datatype="html">
         <source>Trending videos</source>
-        <target/>
+        <target>চলমান ভিডিও</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">267</context>
@@ -9612,7 +9612,7 @@
       </trans-unit>
       <trans-unit id="1e919c88a3f889d6659288e69d3e178da0ea7ab0" datatype="html">
         <source>Go to the trending videos page</source>
-        <target/>
+        <target>চলমান ভিডিও পাতায় যাও</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -12310,7 +12310,7 @@
       </trans-unit>
       <trans-unit id="5b94148c16fa19e3db89972d11e93f790a73a054" datatype="html">
         <source>Trending for the last 24 hours</source>
-        <target/>
+        <target>শেষ ২৪ ঘণ্টায় চলমান</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/video-list/video-trending.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -12318,7 +12318,7 @@
       </trans-unit>
       <trans-unit id="6e9cb0b3b38312870471954abec8690170429a4e" datatype="html">
         <source>Trending videos are those totalizing the greatest number of views during the last 24 hours</source>
-        <target/>
+        <target>শেষ ২৪ ঘণ্টায় যেসব ভিডিও সবচেয়ে বেশি দর্শক পেয়েছে তাই চলমান</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/video-list/video-trending.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -12326,7 +12326,7 @@
       </trans-unit>
       <trans-unit id="6da9ddede61711ecfeaa94fc61a6b7bb844ab3df" datatype="html">
         <source>Trending for the last <x id="INTERPOLATION" equiv-text="{{days}}"/> days</source>
-        <target/>
+        <target>শেষ <x id="INTERPOLATION" equiv-text="{{days}}"/> দিনে চলমান</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/video-list/video-trending.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -12334,7 +12334,7 @@
       </trans-unit>
       <trans-unit id="caa0a70f34df9b60a71ed0ad6c82de7b07c0c509" datatype="html">
         <source>Trending videos are those totalizing the greatest number of views during the last <x id="INTERPOLATION" equiv-text="{{days}}"/> days</source>
-        <target/>
+        <target>শেষ <x id="INTERPOLATION" equiv-text="{{days}}"/> দিনে যেসব ভিডিও সবচেয়ে বেশি দর্শক পেয়েছে তাই চলমান</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/video-list/video-trending.component.ts</context>
           <context context-type="linenumber">1</context>

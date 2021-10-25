@@ -111,5 +111,5 @@ async function processUpdatePlaylist (byActor: MActorSignature, activity: Activi
 
   if (!byAccount) throw new Error('Cannot update video playlist with the non account actor ' + byActor.url)
 
-  await createOrUpdateVideoPlaylist(playlistObject, byAccount, activity.to)
+  await createOrUpdateVideoPlaylist(playlistObject, activity.to)
 }

@@ -43,25 +43,18 @@ async function processFollow (byActor: MActorSignature, activityId: string, targ
     if (isFollowingInstance && CONFIG.FOLLOWERS.INSTANCE.ENABLED === false) {
       logger.info('Rejecting %s because instance followers are disabled.', targetActor.url)
 
-      await sendReject(activityId, byActor, targetActor)
+      sendReject(activityId, byActor, targetActor)
 
       return { actorFollow: undefined as MActorFollowActors }
     }
 
-    const [ actorFollow, created ] = await ActorFollowModel.findOrCreate<MActorFollowActors>({
-      where: {
-        actorId: byActor.id,
-        targetActorId: targetActor.id
-      },
-      defaults: {
-        actorId: byActor.id,
-        targetActorId: targetActor.id,
-        url: activityId,
-
-        state: CONFIG.FOLLOWERS.INSTANCE.MANUAL_APPROVAL
-          ? 'pending'
-          : 'accepted'
-      },
+    const [ actorFollow, created ] = await ActorFollowModel.findOrCreateCustom({
+      byActor,
+      targetActor,
+      activityId,
+      state: CONFIG.FOLLOWERS.INSTANCE.MANUAL_APPROVAL
+        ? 'pending'
+        : 'accepted',
       transaction: t
     })
 
@@ -84,8 +77,9 @@ async function processFollow (byActor: MActorSignature, activityId: string, targ
 
     // Target sends to actor he accepted the follow request
     if (actorFollow.state === 'accepted') {
-      await sendAccept(actorFollow)
-      await autoFollowBackIfNeeded(actorFollow)
+      sendAccept(actorFollow)
+
+      await autoFollowBackIfNeeded(actorFollow, t)
     }
 
     return { actorFollow, created, isFollowingInstance, targetActor }

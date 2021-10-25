@@ -1,6 +1,6 @@
-@import '_variables';
-@import '_mixins';
-@import '_miniature';
+@use '_variables' as *;
+@use '_mixins' as *;
+@use '_miniature' as *;
 
 .playlists {
   display: flex;
@@ -14,7 +14,7 @@
 }
 
 .margin-content {
-  @include grid-videos-miniature-layout;
+  @include grid-videos-miniature-layout-with-margins;
 }
 
 @media screen and (max-width: $mobile-view) {

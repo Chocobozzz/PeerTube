@@ -1,9 +1,9 @@
 import { diff } from 'deep-object-diff'
-import * as express from 'express'
-import * as flatten from 'flat'
+import express from 'express'
+import flatten from 'flat'
 import { chain } from 'lodash'
-import * as path from 'path'
-import * as winston from 'winston'
+import { join } from 'path'
+import { addColors, config, createLogger, format, transports } from 'winston'
 import { AUDIT_LOG_FILENAME } from '@server/initializers/constants'
 import { AdminAbuse, User, VideoChannel, VideoDetails, VideoImport } from '../../shared'
 import { CustomConfig } from '../../shared/models/server/custom-config.model'
@@ -21,23 +21,23 @@ enum AUDIT_TYPE {
   DELETE = 'delete'
 }
 
-const colors = winston.config.npm.colors
-colors.audit = winston.config.npm.colors.info
+const colors = config.npm.colors
+colors.audit = config.npm.colors.info
 
-winston.addColors(colors)
+addColors(colors)
 
-const auditLogger = winston.createLogger({
+const auditLogger = createLogger({
   levels: { audit: 0 },
   transports: [
-    new winston.transports.File({
-      filename: path.join(CONFIG.STORAGE.LOG_DIR, AUDIT_LOG_FILENAME),
+    new transports.File({
+      filename: join(CONFIG.STORAGE.LOG_DIR, AUDIT_LOG_FILENAME),
       level: 'audit',
       maxsize: 5242880,
       maxFiles: 5,
-      format: winston.format.combine(
-        winston.format.timestamp(),
+      format: format.combine(
+        format.timestamp(),
         labelFormatter(),
-        winston.format.splat(),
+        format.splat(),
         jsonLoggerFormat
       )
     })
@@ -84,9 +84,9 @@ abstract class EntityAuditView {
   constructor (private readonly keysToKeep: string[], private readonly prefix: string, private readonly entityInfos: object) { }
 
   toLogKeys (): object {
-    return chain(flatten(this.entityInfos, { delimiter: '-', safe: true }))
+    return chain(flatten<object, any>(this.entityInfos, { delimiter: '-', safe: true }))
       .pick(this.keysToKeep)
-      .mapKeys((value, key) => `${this.prefix}-${key}`)
+      .mapKeys((_value, key) => `${this.prefix}-${key}`)
       .value()
   }
 }

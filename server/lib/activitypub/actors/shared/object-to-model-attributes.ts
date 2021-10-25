@@ -1,6 +1,6 @@
-import { v4 as uuidv4 } from 'uuid'
 import { getLowercaseExtension } from '@server/helpers/core-utils'
 import { isActivityPubUrlValid } from '@server/helpers/custom-validators/activitypub/misc'
+import { buildUUID } from '@server/helpers/uuid'
 import { MIMETYPES } from '@server/initializers/constants'
 import { ActorModel } from '@server/models/actor/actor'
 import { FilteredModelAttributes } from '@server/types'
@@ -51,7 +51,7 @@ function getImageInfoFromObject (actorObject: ActivityPubActor, type: ActorImage
   if (!extension) return undefined
 
   return {
-    name: uuidv4() + extension,
+    name: buildUUID() + extension,
     fileUrl: icon.url,
     height: icon.height,
     width: icon.width,

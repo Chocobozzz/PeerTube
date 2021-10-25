@@ -9,6 +9,7 @@ import {
   FeedFormat,
   ResultList,
   ThreadsResultList,
+  Video,
   VideoComment as VideoCommentServerModel,
   VideoCommentAdmin,
   VideoCommentCreate,
@@ -36,8 +37,8 @@ export class VideoCommentService {
 
     return this.authHttp.post<{ comment: VideoCommentServerModel }>(url, normalizedComment)
                .pipe(
-                  map(data => this.extractVideoComment(data.comment)),
-                  catchError(err => this.restExtractor.handleError(err))
+                 map(data => this.extractVideoComment(data.comment)),
+                 catchError(err => this.restExtractor.handleError(err))
                )
   }
 
@@ -53,8 +54,8 @@ export class VideoCommentService {
   }
 
   getAdminVideoComments (options: {
-    pagination: RestPagination,
-    sort: SortMeta,
+    pagination: RestPagination
+    sort: SortMeta
     search?: string
   }): Observable<ResultList<VideoCommentAdmin>> {
     const { pagination, sort, search } = options
@@ -74,13 +75,13 @@ export class VideoCommentService {
   }
 
   getVideoCommentThreads (parameters: {
-    videoId: number | string,
-    componentPagination: ComponentPaginationLight,
+    videoId: number | string
+    componentPagination: ComponentPaginationLight
     sort: string
   }): Observable<ThreadsResultList<VideoComment>> {
     const { videoId, componentPagination, sort } = parameters
 
-    const pagination = this.restService.componentPaginationToRestPagination(componentPagination)
+    const pagination = this.restService.componentToRestPagination(componentPagination)
 
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
@@ -94,7 +95,7 @@ export class VideoCommentService {
   }
 
   getVideoThreadComments (parameters: {
-    videoId: number | string,
+    videoId: number | string
     threadId: number
   }): Observable<VideoCommentThreadTree> {
     const { videoId, threadId } = parameters
@@ -127,7 +128,7 @@ export class VideoCommentService {
       )
   }
 
-  getVideoCommentsFeeds (videoUUID?: string) {
+  getVideoCommentsFeeds (video: Pick<Video, 'uuid'>) {
     const feeds = [
       {
         format: FeedFormat.RSS,
@@ -146,9 +147,9 @@ export class VideoCommentService {
       }
     ]
 
-    if (videoUUID !== undefined) {
+    if (video !== undefined) {
       for (const feed of feeds) {
-        feed.url += '?videoId=' + videoUUID
+        feed.url += '?videoId=' + video.uuid
       }
     }
 

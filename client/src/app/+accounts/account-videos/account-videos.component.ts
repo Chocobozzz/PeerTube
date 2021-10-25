@@ -1,96 +1,69 @@
-import { forkJoin, Subscription } from 'rxjs'
-import { first, tap } from 'rxjs/operators'
-import { Component, ComponentFactoryResolver, OnDestroy, OnInit } from '@angular/core'
-import { ActivatedRoute, Router } from '@angular/router'
-import { AuthService, ConfirmService, LocalStorageService, Notifier, ScreenService, ServerService, UserService } from '@app/core'
-import { immutableAssign } from '@app/helpers'
+import { Subscription } from 'rxjs'
+import { first } from 'rxjs/operators'
+import { Component, OnDestroy, OnInit } from '@angular/core'
+import { ComponentPaginationLight, DisableForReuseHook, ScreenService } from '@app/core'
 import { Account, AccountService, VideoService } from '@app/shared/shared-main'
-import { AbstractVideoList } from '@app/shared/shared-video-miniature'
-import { VideoFilter } from '@shared/models'
+import { VideoFilters } from '@app/shared/shared-video-miniature'
+import { VideoSortField } from '@shared/models'
 
 @Component({
   selector: 'my-account-videos',
-  templateUrl: '../../shared/shared-video-miniature/abstract-video-list.html',
-  styleUrls: [
-    '../../shared/shared-video-miniature/abstract-video-list.scss'
-  ]
+  templateUrl: './account-videos.component.html'
 })
-export class AccountVideosComponent extends AbstractVideoList implements OnInit, OnDestroy {
-  // No value because we don't want a page title
-  titlePage: string
-  loadOnInit = false
-  loadUserVideoPreferences = true
+export class AccountVideosComponent implements OnInit, OnDestroy, DisableForReuseHook {
+  getVideosObservableFunction = this.getVideosObservable.bind(this)
+  getSyndicationItemsFunction = this.getSyndicationItems.bind(this)
 
-  filter: VideoFilter = null
+  title = $localize`Videos`
+  defaultSort = '-publishedAt' as VideoSortField
 
-  private account: Account
+  account: Account
+  disabled = false
+
   private accountSub: Subscription
 
   constructor (
-    protected router: Router,
-    protected serverService: ServerService,
-    protected route: ActivatedRoute,
-    protected authService: AuthService,
-    protected userService: UserService,
-    protected notifier: Notifier,
-    protected confirmService: ConfirmService,
-    protected screenService: ScreenService,
-    protected storageService: LocalStorageService,
+    private screenService: ScreenService,
     private accountService: AccountService,
-    private videoService: VideoService,
-    protected cfr: ComponentFactoryResolver
+    private videoService: VideoService
   ) {
-    super()
   }
 
   ngOnInit () {
-    super.ngOnInit()
-
-    this.enableAllFilterIfPossible()
-
     // Parent get the account for us
-    this.accountSub = forkJoin([
-      this.accountService.accountLoaded.pipe(first()),
-      this.onUserLoadedSubject.pipe(first())
-    ]).subscribe(([ account ]) => {
-      this.account = account
-
-      this.reloadVideos()
-      this.generateSyndicationList()
-    })
+    this.accountService.accountLoaded.pipe(first())
+      .subscribe(account => this.account = account)
   }
 
   ngOnDestroy () {
     if (this.accountSub) this.accountSub.unsubscribe()
-
-    super.ngOnDestroy()
   }
 
-  getVideosObservable (page: number) {
-    const newPagination = immutableAssign(this.pagination, { currentPage: page })
+  getVideosObservable (pagination: ComponentPaginationLight, filters: VideoFilters) {
     const options = {
+      ...filters.toVideosAPIObject(),
+
+      videoPagination: pagination,
       account: this.account,
-      videoPagination: newPagination,
-      sort: this.sort,
-      nsfwPolicy: this.nsfwPolicy,
-      videoFilter: this.filter
+      skipCount: true
     }
 
-    return this.videoService
-               .getAccountVideos(options)
+    return this.videoService.getAccountVideos(options)
   }
 
-  toggleModerationDisplay () {
-    this.filter = this.buildLocalFilter(this.filter, null)
-
-    this.reloadVideos()
-  }
-
-  generateSyndicationList () {
-    this.syndicationItems = this.videoService.getAccountFeedUrls(this.account.id)
+  getSyndicationItems () {
+    return this.videoService.getAccountFeedUrls(this.account.id)
   }
 
   displayAsRow () {
     return this.screenService.isInMobileView()
+  }
+
+  disableForReuse () {
+    this.disabled = true
+  }
+
+  enabledForReuse () {
+    this.disabled = false
   }
 }

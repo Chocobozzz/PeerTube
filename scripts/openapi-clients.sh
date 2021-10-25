@@ -59,11 +59,12 @@ for lang in ${API_LANGS//:/ } ; do
         git clone "https://${host_path}" "$out_dir"
     fi
 
-    npx openapi-generator generate \
+    npx @openapitools/openapi-generator-cli generate \
         -i support/doc/api/openapi.yaml \
         -c "${lang_dir}/def.yaml" \
         -t "${lang_dir}" \
         -g "$lang" \
+        --skip-validate-spec \
         --git-host "${API_REPO_HOST}" \
         --git-user-id "${API_URL_USERNAME}" \
         --git-repo-id "${git_repo_id}" \

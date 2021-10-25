@@ -1,18 +1,18 @@
-import { logger } from '../../helpers/logger'
-import { AbstractScheduler } from './abstract-scheduler'
-import { SCHEDULER_INTERVALS_MS } from '../../initializers/constants'
-import { CONFIG } from '../../initializers/config'
-import { PluginModel } from '../../models/server/plugin'
 import { chunk } from 'lodash'
-import { getLatestPluginsVersion } from '../plugins/plugin-index'
-import { compareSemVer } from '../../../shared/core-utils/miscs/miscs'
+import { compareSemVer } from '@shared/core-utils'
+import { logger } from '../../helpers/logger'
+import { CONFIG } from '../../initializers/config'
+import { SCHEDULER_INTERVALS_MS } from '../../initializers/constants'
+import { PluginModel } from '../../models/server/plugin'
 import { Notifier } from '../notifier'
+import { getLatestPluginsVersion } from '../plugins/plugin-index'
+import { AbstractScheduler } from './abstract-scheduler'
 
 export class PluginsCheckScheduler extends AbstractScheduler {
 
   private static instance: AbstractScheduler
 
-  protected schedulerIntervalMs = SCHEDULER_INTERVALS_MS.checkPlugins
+  protected schedulerIntervalMs = SCHEDULER_INTERVALS_MS.CHECK_PLUGINS
 
   private constructor () {
     super()

@@ -1,11 +1,11 @@
-import * as express from 'express'
+import express from 'express'
 import { readFile } from 'fs-extra'
 import { join } from 'path'
 import validator from 'validator'
 import { escapeHTML } from '@shared/core-utils/renderer'
 import { HTMLServerConfig } from '@shared/models'
 import { buildFileLocale, getDefaultLocale, is18nLocale, POSSIBLE_LOCALES } from '../../shared/core-utils/i18n/i18n'
-import { HttpStatusCode } from '../../shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '../../shared/models/http/http-error-codes'
 import { VideoPlaylistPrivacy, VideoPrivacy } from '../../shared/models/videos'
 import { isTestInstance, sha256 } from '../helpers/core-utils'
 import { logger } from '../helpers/logger'
@@ -21,12 +21,13 @@ import {
   WEBSERVER
 } from '../initializers/constants'
 import { AccountModel } from '../models/account/account'
+import { getActivityStreamDuration } from '../models/video/formatter/video-format-utils'
 import { VideoModel } from '../models/video/video'
 import { VideoChannelModel } from '../models/video/video-channel'
-import { getActivityStreamDuration } from '../models/video/video-format-utils'
 import { VideoPlaylistModel } from '../models/video/video-playlist'
 import { MAccountActor, MChannelActor } from '../types/models'
 import { ServerConfigManager } from './server-config-manager'
+import { toCompleteUUID } from '@server/helpers/custom-validators/misc'
 
 type Tags = {
   ogType: string
@@ -42,6 +43,8 @@ type Tags = {
   url: string
   originUrl: string
   description: string
+
+  disallowIndexation?: boolean
 
   embed?: {
     url: string
@@ -78,7 +81,9 @@ class ClientHtml {
     return customHtml
   }
 
-  static async getWatchHTMLPage (videoId: string, req: express.Request, res: express.Response) {
+  static async getWatchHTMLPage (videoIdArg: string, req: express.Request, res: express.Response) {
+    const videoId = toCompleteUUID(videoIdArg)
+
     // Let Angular application handle errors
     if (!validator.isInt(videoId) && !validator.isUUID(videoId, 4)) {
       res.status(HttpStatusCode.NOT_FOUND_404)
@@ -136,7 +141,9 @@ class ClientHtml {
     return customHtml
   }
 
-  static async getWatchPlaylistHTMLPage (videoPlaylistId: string, req: express.Request, res: express.Response) {
+  static async getWatchPlaylistHTMLPage (videoPlaylistIdArg: string, req: express.Request, res: express.Response) {
+    const videoPlaylistId = toCompleteUUID(videoPlaylistIdArg)
+
     // Let Angular application handle errors
     if (!validator.isInt(videoPlaylistId) && !validator.isUUID(videoPlaylistId, 4)) {
       res.status(HttpStatusCode.NOT_FOUND_404)
@@ -157,7 +164,7 @@ class ClientHtml {
     let customHtml = ClientHtml.addTitleTag(html, escapeHTML(videoPlaylist.name))
     customHtml = ClientHtml.addDescriptionTag(customHtml, mdToPlainText(videoPlaylist.description))
 
-    const url = videoPlaylist.getWatchUrl()
+    const url = WEBSERVER.URL + videoPlaylist.getWatchStaticPath()
     const originUrl = videoPlaylist.url
     const title = escapeHTML(videoPlaylist.name)
     const siteName = escapeHTML(CONFIG.INSTANCE.NAME)
@@ -280,7 +287,8 @@ class ClientHtml {
       image,
       ogType,
       twitterCard,
-      schemaType
+      schemaType,
+      disallowIndexation: !entity.Actor.isOwned()
     })
 
     return customHtml
@@ -295,7 +303,6 @@ class ClientHtml {
 
     let html = buffer.toString()
 
-    if (paramLang) html = ClientHtml.addHtmlLang(html, paramLang)
     html = ClientHtml.addManifestContentHash(html)
     html = ClientHtml.addFaviconContentHash(html)
     html = ClientHtml.addLogoContentHash(html)
@@ -374,8 +381,9 @@ class ClientHtml {
   }
 
   private static addServerConfig (htmlStringPage: string, serverConfig: HTMLServerConfig) {
-    const serverConfigString = JSON.stringify(serverConfig)
-    const configScriptTag = `<script type="application/javascript">window.PeerTubeServerConfig = '${serverConfigString}'</script>`
+    // Stringify the JSON object, and then stringify the string object so we can inject it into the HTML
+    const serverConfigString = JSON.stringify(JSON.stringify(serverConfig))
+    const configScriptTag = `<script type="application/javascript">window.PeerTubeServerConfig = ${serverConfigString}</script>`
 
     return htmlStringPage.replace(CUSTOM_HTML_TAG_COMMENTS.SERVER_CONFIG, configScriptTag)
   }
@@ -483,7 +491,7 @@ class ClientHtml {
     const twitterCardMetaTags = this.generateTwitterCardMetaTags(tagsValues)
     const schemaTags = this.generateSchemaTags(tagsValues)
 
-    const { url, title, embed, originUrl } = tagsValues
+    const { url, title, embed, originUrl, disallowIndexation } = tagsValues
 
     const oembedLinkTags: { type: string, href: string, title: string }[] = []
 
@@ -531,6 +539,10 @@ class ClientHtml {
     // SEO, use origin URL
     tagsString += `<link rel="canonical" href="${originUrl}" />`
 
+    if (disallowIndexation) {
+      tagsString += `<meta name="robots" content="noindex" />`
+    }
+
     return htmlStringPage.replace(CUSTOM_HTML_TAG_COMMENTS.META_TAGS, tagsString)
   }
 }
@@ -542,8 +554,7 @@ function sendHTML (html: string, res: express.Response) {
 }
 
 async function serveIndexHTML (req: express.Request, res: express.Response) {
-  if (req.accepts(ACCEPT_HEADERS) === 'html' ||
-      !req.headers.accept) {
+  if (req.accepts(ACCEPT_HEADERS) === 'html' || !req.headers.accept) {
     try {
       await generateHTMLPage(req, res, req.params.language)
       return

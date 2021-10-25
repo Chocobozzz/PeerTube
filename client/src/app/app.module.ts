@@ -17,7 +17,8 @@ import { ConfirmComponent } from './modal/confirm.component'
 import { CustomModalComponent } from './modal/custom-modal.component'
 import { InstanceConfigWarningModalComponent } from './modal/instance-config-warning-modal.component'
 import { QuickSettingsModalComponent } from './modal/quick-settings-modal.component'
-import { WelcomeModalComponent } from './modal/welcome-modal.component'
+import { AdminWelcomeModalComponent } from './modal/admin-welcome-modal.component'
+import { AccountSetupWarningModalComponent } from './modal/account-setup-warning-modal.component'
 import { SharedActorImageModule } from './shared/shared-actor-image/shared-actor-image.module'
 import { SharedFormModule } from './shared/shared-forms'
 import { SharedGlobalIconModule } from './shared/shared-icons'
@@ -53,8 +54,9 @@ export function loadConfigFactory (server: ServerService, pluginService: PluginS
     SuggestionComponent,
     HighlightPipe,
 
+    AccountSetupWarningModalComponent,
     CustomModalComponent,
-    WelcomeModalComponent,
+    AdminWelcomeModalComponent,
     InstanceConfigWarningModalComponent,
     ConfirmComponent
   ],

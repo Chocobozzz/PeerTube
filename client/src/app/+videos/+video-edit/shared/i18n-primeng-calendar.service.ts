@@ -73,7 +73,7 @@ export class I18nPrimengCalendarService {
   }
 
   getTimezone () {
-    const gmt = new Date().toString().match(/([A-Z]+[\+-][0-9]+)/)[1]
+    const gmt = new Date().toString().match(/([A-Z]+[+-][0-9]+)/)[1]
     const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
 
     return `${timezone} - ${gmt}`

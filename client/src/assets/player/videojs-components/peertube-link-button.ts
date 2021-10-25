@@ -1,11 +1,12 @@
-import { buildVideoLink } from '../utils'
 import videojs from 'video.js'
+import { buildVideoLink, decorateVideoLink } from '@shared/core-utils'
+import { PeerTubeLinkButtonOptions } from '../peertube-videojs-typings'
 
 const Button = videojs.getComponent('Button')
 class PeerTubeLinkButton extends Button {
 
-  constructor (player: videojs.Player, options?: videojs.ComponentOptions) {
-    super(player, options)
+  constructor (player: videojs.Player, options?: PeerTubeLinkButtonOptions) {
+    super(player, options as any)
   }
 
   createEl () {
@@ -13,7 +14,7 @@ class PeerTubeLinkButton extends Button {
   }
 
   updateHref () {
-    this.el().setAttribute('href', buildVideoLink({ startTime: this.player().currentTime() }))
+    this.el().setAttribute('href', this.buildLink())
   }
 
   handleClick () {
@@ -22,7 +23,7 @@ class PeerTubeLinkButton extends Button {
 
   private buildElement () {
     const el = videojs.dom.createEl('a', {
-      href: buildVideoLink(),
+      href: this.buildLink(),
       innerHTML: 'PeerTube',
       title: this.player().localize('Video page (new window)'),
       className: 'vjs-peertube-link',
@@ -32,6 +33,12 @@ class PeerTubeLinkButton extends Button {
     el.addEventListener('mouseenter', () => this.updateHref())
 
     return el as HTMLButtonElement
+  }
+
+  private buildLink () {
+    const url = buildVideoLink({ shortUUID: (this.options_ as PeerTubeLinkButtonOptions).shortUUID })
+
+    return decorateVideoLink({ url, startTime: this.player().currentTime() })
   }
 }
 

@@ -585,7 +585,7 @@ export class VideoCommentModel extends Model<Partial<AttributesOnly<VideoComment
 
     if (accountId) {
       whereAnd.push({
-        [Op.eq]: accountId
+        accountId
       })
     }
 
@@ -737,6 +737,12 @@ export class VideoCommentModel extends Model<Partial<AttributesOnly<VideoComment
     }
 
     return this.Account.isOwned()
+  }
+
+  markAsDeleted () {
+    this.text = ''
+    this.deletedAt = new Date()
+    this.accountId = null
   }
 
   isDeleted () {

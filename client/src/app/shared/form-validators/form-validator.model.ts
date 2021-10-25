@@ -1,7 +1,7 @@
 import { ValidatorFn } from '@angular/forms'
 
 export type BuildFormValidator = {
-  VALIDATORS: ValidatorFn[],
+  VALIDATORS: ValidatorFn[]
   MESSAGES: { [ name: string ]: string }
 }
 

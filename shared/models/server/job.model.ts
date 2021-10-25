@@ -20,6 +20,7 @@ export type JobType =
   | 'video-live-ending'
   | 'actor-keys'
   | 'delete-resumable-upload-meta-file'
+  | 'move-to-object-storage'
 
 export interface Job {
   id: number
@@ -54,7 +55,6 @@ export type ActivitypubHttpFetcherPayload = {
   uri: string
   type: FetchType
   videoId?: number
-  accountId?: number
 }
 
 export type ActivitypubHttpUnicastPayload = {
@@ -141,4 +141,9 @@ export interface ActorKeysPayload {
 
 export interface DeleteResumableUploadMetaFilePayload {
   filepath: string
+}
+
+export interface MoveObjectStoragePayload {
+  videoUUID: string
+  isNewVideo: boolean
 }

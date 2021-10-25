@@ -1,12 +1,13 @@
-import * as express from 'express'
-import { body, param } from 'express-validator'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
-import { isIdOrUUIDValid, toIntOrNull } from '../../../helpers/custom-validators/misc'
+import express from 'express'
+import { body } from 'express-validator'
+import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
+import { toIntOrNull } from '../../../helpers/custom-validators/misc'
 import { logger } from '../../../helpers/logger'
-import { areValidationErrors, doesVideoExist } from '../shared'
+import { areValidationErrors, doesVideoExist, isValidVideoIdParam } from '../shared'
 
 const videoWatchingValidator = [
-  param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
+  isValidVideoIdParam('videoId'),
+
   body('currentTime')
     .customSanitizer(toIntOrNull)
     .isInt().withMessage('Should have correct current time'),

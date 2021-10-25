@@ -2,7 +2,7 @@ listen:
   hostname: '0.0.0.0'
   port: 9000
 
-# Correspond to your reverse proxy "listen" configuration
+# Correspond to your reverse proxy server_name/listen configuration (i.e., your public PeerTube instance URL)
 webserver:
   https: true
   hostname: undefined
@@ -26,7 +26,7 @@ trust_proxy:
   - 'linklocal'
   - 'uniquelocal'
 
-# Your database name will be database.name or "peertube"+database.suffix
+# Your database name will be database.name OR 'peertube'+database.suffix
 database:
   hostname: 'postgres'
   port: 5432
@@ -44,6 +44,7 @@ redis:
 # From the project root directory
 storage:
   tmp: '../data/tmp/' # Use to download data (imports etc), store uploaded files before and during processing...
+  bin: '../data/bin/'
   avatars: '../data/avatars/'
   videos: '../data/videos/'
   streaming_playlists: '../data/streaming-playlists'
@@ -55,7 +56,13 @@ storage:
   captions: '../data/captions/'
   cache: '../data/cache/'
   plugins: '../data/plugins/'
-  # Overridable client files : logo.svg, favicon.png and icons/*.png (PWA) in client/dist/assets/images
+  # Overridable client files in client/dist/assets/images :
+  # - logo.svg
+  # - favicon.png
+  # - default-playlist.jpg
+  # - default-avatar-account.png
+  # - default-avatar-video-channel.png
+  # - and icons/*.png (PWA)
   # Could contain for example assets/images/favicon.png
   # If the file exists, peertube will serve it
   # If not, peertube will fallback to the default fil

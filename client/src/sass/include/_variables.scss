@@ -1,4 +1,4 @@
-@import '_bootstrap-variables';
+@use 'sass:math';
 
 $small-view: 800px;
 $mobile-view: 500px;
@@ -53,7 +53,7 @@ $sub-menu-height: 81px;
 
 $channel-background-color: #f6ede8;
 
-$banner-inverted-ratio: 1/6;
+$banner-inverted-ratio: math.div(1, 6);
 
 $max-channels-width: 1200px;
 
@@ -93,6 +93,11 @@ $sub-menu-margin-bottom-small-view: 10px;
 $activated-action-button-color: #000;
 
 $focus-box-shadow-form: 0 0 0 .2rem;
+
+$video-watch-player-factor: math.div(16, 9);
+$video-watch-info-margin-left: 44px;
+
+$primeng-breakpoint: 960px;
 
 /*** map theme ***/
 
@@ -155,17 +160,18 @@ $variables: (
 
 $zindex: (
   miniature       :    10,
-  privacymsg      :    20,
   sub-menu        : 12500,
+  overlay         : 12550,
   menu            : 12600,
   search-typeahead: 12650,
-  header          : 12700,
   popover         : 13000,
   tooltip         : 14000,
   loadbar         : 15000,
   modal           : 16000,
   dropdown        : 17000,
   help-popover    : 17000,
+  privacymsg      : 17500,
+  header          : 17500,
   notification    : 18000,
   hotkeys         : 19000
 );

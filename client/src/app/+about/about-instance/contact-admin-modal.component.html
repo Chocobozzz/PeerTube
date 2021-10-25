@@ -1,12 +1,12 @@
 <ng-template #modal>
   <div class="modal-header">
-    <h1 i18n class="modal-title">Contact {{ instanceName }} administrator</h1>
+    <h1 i18n class="modal-title">Contact the administrator(s)<p class="modal-subtitle">{{ instanceName }}</p></h1>
     <my-global-icon iconName="cross" aria-label="Close" tabindex="0" role="button" (click)="hide()" (keydown.enter)="hide()"></my-global-icon>
   </div>
 
   <div class="modal-body">
 
-    <form novalidate [formGroup]="form" (ngSubmit)="sendForm()">
+    <form *ngIf="isContactFormEnabled()" novalidate [formGroup]="form" (ngSubmit)="sendForm()">
       <div class="form-group">
         <label i18n for="fromName">Your name</label>
         <input
@@ -52,6 +52,8 @@
         <input type="submit" i18n-value value="Submit" class="peertube-button orange-button" [disabled]="!form.valid" />
       </div>
     </form>
+
+    <div *ngIf="!isContactFormEnabled()" class="alert alert-error" i18n>The contact form is not enabled on this instance.</div>
 
   </div>
 </ng-template>

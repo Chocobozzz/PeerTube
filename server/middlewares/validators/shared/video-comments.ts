@@ -1,7 +1,7 @@
-import * as express from 'express'
+import express from 'express'
 import { VideoCommentModel } from '@server/models/video/video-comment'
 import { MVideoId } from '@server/types/models'
-import { HttpStatusCode } from '@shared/core-utils'
+import { HttpStatusCode } from '@shared/models'
 
 async function doesVideoCommentThreadExist (idArg: number | string, video: MVideoId, res: express.Response) {
   const id = parseInt(idArg + '', 10)

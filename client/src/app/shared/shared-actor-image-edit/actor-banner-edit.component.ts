@@ -1,9 +1,10 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser'
+import { SafeResourceUrl } from '@angular/platform-browser'
 import { Notifier, ServerService } from '@app/core'
 import { VideoChannel } from '@app/shared/shared-main'
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap'
 import { getBytes } from '@root-helpers/bytes'
+import { imageToDataURL } from '@root-helpers/images'
 
 @Component({
   selector: 'my-actor-banner-edit',
@@ -30,7 +31,6 @@ export class ActorBannerEditComponent implements OnInit {
   preview: SafeResourceUrl
 
   constructor (
-    private sanitizer: DomSanitizer,
     private serverService: ServerService,
     private notifier: Notifier
   ) { }
@@ -40,14 +40,14 @@ export class ActorBannerEditComponent implements OnInit {
     this.maxBannerSize = config.banner.file.size.max
     this.bannerExtensions = config.banner.file.extensions.join(', ')
 
-    // tslint:disable:max-line-length
+    /* eslint-disable max-len */
     this.bannerFormat = $localize`ratio 6/1, recommended size: 1920x317, max size: ${getBytes(this.maxBannerSize)}, extensions: ${this.bannerExtensions}`
   }
 
   onBannerChange (input: HTMLInputElement) {
     this.bannerfileInput = new ElementRef(input)
 
-    const bannerfile = this.bannerfileInput.nativeElement.files[ 0 ]
+    const bannerfile = this.bannerfileInput.nativeElement.files[0]
     if (bannerfile.size > this.maxBannerSize) {
       this.notifier.error('Error', $localize`This image is too large.`)
       return
@@ -59,7 +59,7 @@ export class ActorBannerEditComponent implements OnInit {
     this.bannerChange.emit(formData)
 
     if (this.previewImage) {
-      this.preview = this.sanitizer.bypassSecurityTrustResourceUrl(URL.createObjectURL(bannerfile))
+      imageToDataURL(bannerfile).then(result => this.preview = result)
     }
   }
 

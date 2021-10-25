@@ -1,12 +1,11 @@
-import * as cors from 'cors'
-import * as express from 'express'
+import cors from 'cors'
+import express from 'express'
 import { logger } from '@server/helpers/logger'
 import { VideosTorrentCache } from '@server/lib/files-cache/videos-torrent-cache'
 import { Hooks } from '@server/lib/plugins/hooks'
-import { getVideoFilePath } from '@server/lib/video-paths'
+import { VideoPathManager } from '@server/lib/video-path-manager'
 import { MStreamingPlaylist, MVideo, MVideoFile, MVideoFullLight } from '@server/types/models'
-import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
-import { VideoStreamingPlaylistType } from '@shared/models'
+import { HttpStatusCode, VideoStorage, VideoStreamingPlaylistType } from '@shared/models'
 import { STATIC_DOWNLOAD_PATHS } from '../initializers/constants'
 import { asyncMiddleware, videosDownloadValidator } from '../middlewares'
 
@@ -82,7 +81,15 @@ async function downloadVideoFile (req: express.Request, res: express.Response) {
 
   if (!checkAllowResult(res, allowParameters, allowedResult)) return
 
-  return res.download(getVideoFilePath(video, videoFile), `${video.name}-${videoFile.resolution}p${videoFile.extname}`)
+  if (videoFile.storage === VideoStorage.OBJECT_STORAGE) {
+    return res.redirect(videoFile.getObjectStorageUrl())
+  }
+
+  await VideoPathManager.Instance.makeAvailableVideoFile(video, videoFile, path => {
+    const filename = `${video.name}-${videoFile.resolution}p${videoFile.extname}`
+
+    return res.download(path, filename)
+  })
 }
 
 async function downloadHLSVideoFile (req: express.Request, res: express.Response) {
@@ -108,8 +115,15 @@ async function downloadHLSVideoFile (req: express.Request, res: express.Response
 
   if (!checkAllowResult(res, allowParameters, allowedResult)) return
 
-  const filename = `${video.name}-${videoFile.resolution}p-${streamingPlaylist.getStringType()}${videoFile.extname}`
-  return res.download(getVideoFilePath(streamingPlaylist, videoFile), filename)
+  if (videoFile.storage === VideoStorage.OBJECT_STORAGE) {
+    return res.redirect(videoFile.getObjectStorageUrl())
+  }
+
+  await VideoPathManager.Instance.makeAvailableVideoFile(streamingPlaylist, videoFile, path => {
+    const filename = `${video.name}-${videoFile.resolution}p-${streamingPlaylist.getStringType()}${videoFile.extname}`
+
+    return res.download(path, filename)
+  })
 }
 
 function getVideoFile (req: express.Request, files: MVideoFile[]) {

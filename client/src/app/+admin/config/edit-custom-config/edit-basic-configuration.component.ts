@@ -97,7 +97,7 @@ export class EditBasicConfigurationComponent implements OnInit, OnChanges {
       .pipe(pairwise())
       .subscribe(([ oldValue, newValue ]) => {
         if (oldValue !== true && newValue === true) {
-          // tslint:disable:max-line-length
+          /* eslint-disable max-len */
           this.signupAlertMessage = $localize`You enabled signup: we automatically enabled the "Block new videos automatically" checkbox of the "Videos" section just below.`
 
           this.form.patchValue({

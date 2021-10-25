@@ -3,64 +3,45 @@
 import 'mocha'
 import * as chai from 'chai'
 import {
-  acceptFollower,
   cleanupTests,
-  flushAndRunMultipleServers,
+  createMultipleServers,
   MockInstancesIndex,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers,
-  unfollow,
-  updateCustomSubConfig,
-  wait
-} from '../../../../shared/extra-utils/index'
-import { follow, getFollowersListPaginationAndSort, getFollowingListPaginationAndSort } from '../../../../shared/extra-utils/server/follows'
-import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
-import { ActorFollow } from '../../../../shared/models/actors'
+  wait,
+  waitJobs
+} from '@shared/extra-utils'
 
 const expect = chai.expect
 
-async function checkFollow (follower: ServerInfo, following: ServerInfo, exists: boolean) {
+async function checkFollow (follower: PeerTubeServer, following: PeerTubeServer, exists: boolean) {
   {
-    const res = await getFollowersListPaginationAndSort({ url: following.url, start: 0, count: 5, sort: '-createdAt' })
-    const follows = res.body.data as ActorFollow[]
+    const body = await following.follows.getFollowers({ start: 0, count: 5, sort: '-createdAt' })
+    const follow = body.data.find(f => f.follower.host === follower.host && f.state === 'accepted')
 
-    const follow = follows.find(f => {
-      return f.follower.host === follower.host && f.state === 'accepted'
-    })
-
-    if (exists === true) {
-      expect(follow).to.exist
-    } else {
-      expect(follow).to.be.undefined
-    }
+    if (exists === true) expect(follow, `Follower ${follower.url} should exist on ${following.url}`).to.exist
+    else expect(follow, `Follower ${follower.url} should not exist on ${following.url}`).to.be.undefined
   }
 
   {
-    const res = await getFollowingListPaginationAndSort({ url: follower.url, start: 0, count: 5, sort: '-createdAt' })
-    const follows = res.body.data as ActorFollow[]
+    const body = await follower.follows.getFollowings({ start: 0, count: 5, sort: '-createdAt' })
+    const follow = body.data.find(f => f.following.host === following.host && f.state === 'accepted')
 
-    const follow = follows.find(f => {
-      return f.following.host === following.host && f.state === 'accepted'
-    })
-
-    if (exists === true) {
-      expect(follow).to.exist
-    } else {
-      expect(follow).to.be.undefined
-    }
+    if (exists === true) expect(follow, `Following ${following.url} should exist on ${follower.url}`).to.exist
+    else expect(follow, `Following ${following.url} should not exist on ${follower.url}`).to.be.undefined
   }
 }
 
-async function server1Follows2 (servers: ServerInfo[]) {
-  await follow(servers[0].url, [ servers[1].host ], servers[0].accessToken)
+async function server1Follows2 (servers: PeerTubeServer[]) {
+  await servers[0].follows.follow({ hosts: [ servers[1].host ] })
 
   await waitJobs(servers)
 }
 
-async function resetFollows (servers: ServerInfo[]) {
+async function resetFollows (servers: PeerTubeServer[]) {
   try {
-    await unfollow(servers[0].url, servers[0].accessToken, servers[1])
-    await unfollow(servers[1].url, servers[1].accessToken, servers[0])
+    await servers[0].follows.unfollow({ target: servers[1] })
+    await servers[1].follows.unfollow({ target: servers[0] })
   } catch { /* empty */
   }
 
@@ -71,12 +52,12 @@ async function resetFollows (servers: ServerInfo[]) {
 }
 
 describe('Test auto follows', function () {
-  let servers: ServerInfo[] = []
+  let servers: PeerTubeServer[] = []
 
   before(async function () {
     this.timeout(30000)
 
-    servers = await flushAndRunMultipleServers(3)
+    servers = await createMultipleServers(3)
 
     // Get the access tokens
     await setAccessTokensToServers(servers)
@@ -105,7 +86,7 @@ describe('Test auto follows', function () {
           }
         }
       }
-      await updateCustomSubConfig(servers[1].url, servers[1].accessToken, config)
+      await servers[1].config.updateCustomSubConfig({ newConfig: config })
 
       await server1Follows2(servers)
 
@@ -130,14 +111,14 @@ describe('Test auto follows', function () {
           }
         }
       }
-      await updateCustomSubConfig(servers[1].url, servers[1].accessToken, config)
+      await servers[1].config.updateCustomSubConfig({ newConfig: config })
 
       await server1Follows2(servers)
 
       await checkFollow(servers[0], servers[1], false)
       await checkFollow(servers[1], servers[0], false)
 
-      await acceptFollower(servers[1].url, servers[1].accessToken, 'peertube@' + servers[0].host)
+      await servers[1].follows.acceptFollower({ follower: 'peertube@' + servers[0].host })
       await waitJobs(servers)
 
       await checkFollow(servers[0], servers[1], true)
@@ -147,7 +128,7 @@ describe('Test auto follows', function () {
 
       config.followings.instance.autoFollowBack.enabled = false
       config.followers.instance.manualApproval = false
-      await updateCustomSubConfig(servers[1].url, servers[1].accessToken, config)
+      await servers[1].config.updateCustomSubConfig({ newConfig: config })
     })
   })
 
@@ -184,7 +165,7 @@ describe('Test auto follows', function () {
           }
         }
       }
-      await updateCustomSubConfig(servers[0].url, servers[0].accessToken, config)
+      await servers[0].config.updateCustomSubConfig({ newConfig: config })
 
       await wait(5000)
       await waitJobs(servers)
@@ -204,6 +185,10 @@ describe('Test auto follows', function () {
 
       await checkFollow(servers[0], servers[1], false)
       await checkFollow(servers[0], servers[2], true)
+    })
+
+    after(async function () {
+      await instanceIndexServer.terminate()
     })
   })
 

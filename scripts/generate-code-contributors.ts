@@ -1,7 +1,7 @@
 import { registerTSPaths } from '../server/helpers/register-ts-paths'
 registerTSPaths()
 
-import { execCLI } from '@shared/extra-utils'
+import { CLICommand } from '@shared/extra-utils'
 
 run()
   .then(() => process.exit(0))
@@ -31,7 +31,7 @@ async function run () {
 
     console.log('\n\n# Icons\n')
     console.log(' * [Feather Icons](https://feathericons.com) (MIT)')
-    console.log(' * `playlist add`, `history`, `subscriptions`, `miscellaneous-services.svg` by Material UI (Apache 2.0)')
+    console.log(' * `playlist add`, `history`, `subscriptions`, `miscellaneous-services.svg`, `tip` by Material UI (Apache 2.0)')
     console.log(' * `support` by Chocobozzz (CC-BY)')
     console.log(' * `language` by Aaron Jin (CC-BY)')
     console.log(' * `video-language` by Rigel Kent (CC-BY)')
@@ -59,7 +59,7 @@ async function run () {
 }
 
 async function getGitContributors () {
-  const output = await execCLI(`git --no-pager shortlog -sn < /dev/tty | sed 's/^\\s\\+[0-9]\\+\\s\\+//g'`)
+  const output = await CLICommand.exec(`git --no-pager shortlog -sn < /dev/tty | sed 's/^\\s\\+[0-9]\\+\\s\\+//g'`)
 
   return output.split('\n')
                .filter(l => !!l)

@@ -9,7 +9,7 @@ import { AdvancedInputFilter } from '@app/shared/shared-forms'
 import { DropdownAction, Video, VideoService } from '@app/shared/shared-main'
 import { LiveStreamInformationComponent } from '@app/shared/shared-video-live'
 import { MiniatureDisplayOptions, SelectionType, VideosSelectionComponent } from '@app/shared/shared-video-miniature'
-import { VideoSortField } from '@shared/models'
+import { VideoChannel, VideoSortField } from '@shared/models'
 import { VideoChangeOwnershipComponent } from './modals/video-change-ownership.component'
 
 @Component({
@@ -47,14 +47,12 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
 
   user: User
 
-  inputFilters: AdvancedInputFilter[] = [
-    {
-      queryParams: { 'search': 'isLive:true' },
-      label: $localize`Only live videos`
-    }
-  ]
+  inputFilters: AdvancedInputFilter[]
+
+  disabled = false
 
   private search: string
+  private userChannels: VideoChannel[] = []
 
   constructor (
     protected router: Router,
@@ -73,6 +71,39 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
     this.buildActions()
 
     this.user = this.authService.getUser()
+
+    if (this.route.snapshot.queryParams['search']) {
+      this.search = this.route.snapshot.queryParams['search']
+    }
+
+    this.authService.userInformationLoaded.subscribe(() => {
+      this.user = this.authService.getUser()
+      this.userChannels = this.user.videoChannels
+
+      const channelFilters = this.userChannels.map(c => {
+        return {
+          queryParams: { search: 'channel:' + c.name },
+          label: c.name
+        }
+      })
+
+      this.inputFilters = [
+        {
+          title: $localize`Advanced filters`,
+          children: [
+            {
+              queryParams: { search: 'isLive:true' },
+              label: $localize`Only live videos`
+            }
+          ]
+        },
+
+        {
+          title: $localize`Channel filters`,
+          children: channelFilters
+        }
+      ]
+    })
   }
 
   onSearch (search: string) {
@@ -89,17 +120,22 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
   }
 
   disableForReuse () {
-    this.videosSelection.disableForReuse()
+    this.disabled = true
   }
 
   enabledForReuse () {
-    this.videosSelection.enabledForReuse()
+    this.disabled = false
   }
 
   getVideosObservable (page: number) {
     const newPagination = immutableAssign(this.pagination, { currentPage: page })
 
-    return this.videoService.getMyVideos(newPagination, this.sort, this.search)
+    return this.videoService.getMyVideos({
+      videoPagination: newPagination,
+      sort: this.sort,
+      userChannels: this.userChannels,
+      search: this.search
+    })
       .pipe(
         tap(res => this.pagination.totalItems = res.total)
       )
@@ -107,7 +143,7 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
 
   async deleteSelectedVideos () {
     const toDeleteVideosIds = Object.keys(this.selection)
-                                    .filter(k => this.selection[ k ] === true)
+                                    .filter(k => this.selection[k] === true)
                                     .map(k => parseInt(k, 10))
 
     const res = await this.confirmService.confirm(
@@ -126,14 +162,14 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
 
     concat(...observables)
       .pipe(toArray())
-      .subscribe(
-        () => {
+      .subscribe({
+        next: () => {
           this.notifier.success($localize`${toDeleteVideosIds.length} videos deleted.`)
           this.selection = {}
         },
 
-        err => this.notifier.error(err.message)
-      )
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   async deleteVideo (video: Video) {
@@ -144,14 +180,14 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
     if (res === false) return
 
     this.videoService.removeVideo(video.id)
-        .subscribe(
-          () => {
+        .subscribe({
+          next: () => {
             this.notifier.success($localize`Video ${video.name} deleted.`)
             this.removeVideoFromArray(video.id)
           },
 
-          error => this.notifier.error(error.message)
-        )
+          error: err => this.notifier.error(err.message)
+        })
   }
 
   changeOwnership (video: Video) {

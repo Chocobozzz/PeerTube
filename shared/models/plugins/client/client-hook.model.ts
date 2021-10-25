@@ -26,6 +26,10 @@ export const clientFilterHookObject = {
   'filter:api.video-watch.video.get.params': true,
   'filter:api.video-watch.video.get.result': true,
 
+  // Filter params/result of the function that fetch video playlist elements of the video-watch page
+  'filter:api.video-watch.video-playlist-elements.get.params': true,
+  'filter:api.video-watch.video-playlist-elements.get.result': true,
+
   // Filter params/result of the function that fetch the threads of the video-watch page
   'filter:api.video-watch.video-threads.list.params': true,
   'filter:api.video-watch.video-threads.list.result': true,
@@ -37,9 +41,12 @@ export const clientFilterHookObject = {
   // Filter params/result of the function that fetch videos according to the user search
   'filter:api.search.videos.list.params': true,
   'filter:api.search.videos.list.result': true,
-  // Filter params/result of the function that fetch video-channels according to the user search
+  // Filter params/result of the function that fetch video channels according to the user search
   'filter:api.search.video-channels.list.params': true,
   'filter:api.search.video-channels.list.result': true,
+  // Filter params/result of the function that fetch video playlists according to the user search
+  'filter:api.search.video-playlists.list.params': true,
+  'filter:api.search.video-playlists.list.result': true,
 
   // Filter form
   'filter:api.signup.registration.create.params': true,
@@ -53,7 +60,13 @@ export const clientFilterHookObject = {
   'filter:internal.common.svg-icons.get-content.result': true,
 
   // Filter left menu links
-  'filter:left-menu.links.create.result': true
+  'filter:left-menu.links.create.result': true,
+
+  // Filter upload page alert messages
+  'filter:upload.messages.create.result': true,
+
+  // Filter videojs options built for PeerTube player
+  'filter:internal.player.videojs.options.result': true
 }
 
 export type ClientFilterHookName = keyof typeof clientFilterHookObject

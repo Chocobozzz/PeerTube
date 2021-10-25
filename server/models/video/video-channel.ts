@@ -1,4 +1,4 @@
-import { FindOptions, Includeable, literal, Op, QueryTypes, ScopeOptions, Transaction } from 'sequelize'
+import { FindOptions, Includeable, literal, Op, QueryTypes, ScopeOptions, Transaction, WhereOptions } from 'sequelize'
 import {
   AllowNull,
   BeforeDestroy,
@@ -17,17 +17,16 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { setAsUpdated } from '@server/helpers/database-utils'
 import { MAccountActor } from '@server/types/models'
-import { AttributesOnly } from '@shared/core-utils'
+import { AttributesOnly, pick } from '@shared/core-utils'
 import { ActivityPubActor } from '../../../shared/models/activitypub'
 import { VideoChannel, VideoChannelSummary } from '../../../shared/models/videos'
 import {
   isVideoChannelDescriptionValid,
-  isVideoChannelNameValid,
+  isVideoChannelDisplayNameValid,
   isVideoChannelSupportValid
 } from '../../helpers/custom-validators/video-channels'
-import { CONSTRAINTS_FIELDS, WEBSERVER } from '../../initializers/constants'
+import { CONSTRAINTS_FIELDS, VIDEO_CHANNELS, WEBSERVER } from '../../initializers/constants'
 import { sendDeleteActor } from '../../lib/activitypub/send'
 import {
   MChannelActor,
@@ -41,6 +40,7 @@ import { ActorModel, unusedActorAttributesForAPI } from '../actor/actor'
 import { ActorFollowModel } from '../actor/actor-follow'
 import { ActorImageModel } from '../actor/actor-image'
 import { ServerModel } from '../server/server'
+import { setAsUpdated } from '../shared'
 import { buildServerIdsFollowedBy, buildTrigramSearchIndex, createSimilarityAttribute, getSort, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 import { VideoPlaylistModel } from './video-playlist'
@@ -58,6 +58,8 @@ export enum ScopeNames {
 type AvailableForListOptions = {
   actorId: number
   search?: string
+  host?: string
+  handles?: string[]
 }
 
 type AvailableWithStatsOptions = {
@@ -83,7 +85,62 @@ export type SummaryOptions = {
     // Only list local channels OR channels that are on an instance followed by actorId
     const inQueryInstanceFollow = buildServerIdsFollowedBy(options.actorId)
 
+    const whereActorAnd: WhereOptions[] = [
+      {
+        [Op.or]: [
+          {
+            serverId: null
+          },
+          {
+            serverId: {
+              [Op.in]: Sequelize.literal(inQueryInstanceFollow)
+            }
+          }
+        ]
+      }
+    ]
+
+    let serverRequired = false
+    let whereServer: WhereOptions
+
+    if (options.host && options.host !== WEBSERVER.HOST) {
+      serverRequired = true
+      whereServer = { host: options.host }
+    }
+
+    if (options.host === WEBSERVER.HOST) {
+      whereActorAnd.push({
+        serverId: null
+      })
+    }
+
+    let rootWhere: WhereOptions
+    if (options.handles) {
+      const or: WhereOptions[] = []
+
+      for (const handle of options.handles || []) {
+        const [ preferredUsername, host ] = handle.split('@')
+
+        if (!host || host === WEBSERVER.HOST) {
+          or.push({
+            '$Actor.preferredUsername$': preferredUsername,
+            '$Actor.serverId$': null
+          })
+        } else {
+          or.push({
+            '$Actor.preferredUsername$': preferredUsername,
+            '$Actor.Server.host$': host
+          })
+        }
+      }
+
+      rootWhere = {
+        [Op.or]: or
+      }
+    }
+
     return {
+      where: rootWhere,
       include: [
         {
           attributes: {
@@ -91,18 +148,19 @@ export type SummaryOptions = {
           },
           model: ActorModel,
           where: {
-            [Op.or]: [
-              {
-                serverId: null
-              },
-              {
-                serverId: {
-                  [Op.in]: Sequelize.literal(inQueryInstanceFollow)
-                }
-              }
-            ]
+            [Op.and]: whereActorAnd
           },
           include: [
+            {
+              model: ServerModel,
+              required: serverRequired,
+              where: whereServer
+            },
+            {
+              model: ActorImageModel,
+              as: 'Avatar',
+              required: false
+            },
             {
               model: ActorImageModel,
               as: 'Banner',
@@ -250,7 +308,7 @@ export type SummaryOptions = {
 export class VideoChannelModel extends Model<Partial<AttributesOnly<VideoChannelModel>>> {
 
   @AllowNull(false)
-  @Is('VideoChannelName', value => throwIfNotValid(value, isVideoChannelNameValid, 'name'))
+  @Is('VideoChannelName', value => throwIfNotValid(value, isVideoChannelDisplayNameValid, 'name'))
   @Column
   name: string
 
@@ -291,8 +349,7 @@ export class VideoChannelModel extends Model<Partial<AttributesOnly<VideoChannel
   @BelongsTo(() => AccountModel, {
     foreignKey: {
       allowNull: false
-    },
-    hooks: true
+    }
   })
   Account: AccountModel
 
@@ -381,8 +438,28 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
     }
   }
 
-  static listForApi (parameters: {
-    actorId: number
+  static listLocalsForSitemap (sort: string): Promise<MChannelActor[]> {
+    const query = {
+      attributes: [ ],
+      offset: 0,
+      order: getSort(sort),
+      include: [
+        {
+          attributes: [ 'preferredUsername', 'serverId' ],
+          model: ActorModel.unscoped(),
+          where: {
+            serverId: null
+          }
+        }
+      ]
+    }
+
+    return VideoChannelModel
+      .unscoped()
+      .findAll(query)
+  }
+
+  static listForApi (parameters: Pick<AvailableForListOptions, 'actorId'> & {
     start: number
     count: number
     sort: string
@@ -405,47 +482,20 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
       })
   }
 
-  static listLocalsForSitemap (sort: string): Promise<MChannelActor[]> {
-    const query = {
-      attributes: [ ],
-      offset: 0,
-      order: getSort(sort),
-      include: [
-        {
-          attributes: [ 'preferredUsername', 'serverId' ],
-          model: ActorModel.unscoped(),
-          where: {
-            serverId: null
-          }
-        }
-      ]
-    }
-
-    return VideoChannelModel
-      .unscoped()
-      .findAll(query)
-  }
-
-  static searchForApi (options: {
-    actorId: number
-    search: string
+  static searchForApi (options: Pick<AvailableForListOptions, 'actorId' | 'search' | 'host' | 'handles'> & {
     start: number
     count: number
     sort: string
   }) {
-    const attributesInclude = []
-    const escapedSearch = VideoModel.sequelize.escape(options.search)
-    const escapedLikeSearch = VideoModel.sequelize.escape('%' + options.search + '%')
-    attributesInclude.push(createSimilarityAttribute('VideoChannelModel.name', options.search))
+    let attributesInclude: any[] = [ literal('0 as similarity') ]
+    let where: WhereOptions
 
-    const query = {
-      attributes: {
-        include: attributesInclude
-      },
-      offset: options.start,
-      limit: options.count,
-      order: getSort(options.sort),
-      where: {
+    if (options.search) {
+      const escapedSearch = VideoChannelModel.sequelize.escape(options.search)
+      const escapedLikeSearch = VideoChannelModel.sequelize.escape('%' + options.search + '%')
+      attributesInclude = [ createSimilarityAttribute('VideoChannelModel.name', options.search) ]
+
+      where = {
         [Op.or]: [
           Sequelize.literal(
             'lower(immutable_unaccent("VideoChannelModel"."name")) % lower(immutable_unaccent(' + escapedSearch + '))'
@@ -457,9 +507,19 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
       }
     }
 
+    const query = {
+      attributes: {
+        include: attributesInclude
+      },
+      offset: options.start,
+      limit: options.count,
+      order: getSort(options.sort),
+      where
+    }
+
     return VideoChannelModel
       .scope({
-        method: [ ScopeNames.FOR_API, { actorId: options.actorId } as AvailableForListOptions ]
+        method: [ ScopeNames.FOR_API, pick(options, [ 'actorId', 'host', 'handles' ]) as AvailableForListOptions ]
       })
       .findAndCountAll(query)
       .then(({ rows, count }) => {
@@ -467,7 +527,7 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
       })
   }
 
-  static listByAccount (options: {
+  static listByAccountForAPI (options: {
     accountId: number
     start: number
     count: number
@@ -522,10 +582,28 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
       })
   }
 
-  static loadAndPopulateAccount (id: number): Promise<MChannelBannerAccountDefault> {
+  static listAllByAccount (accountId: number) {
+    const query = {
+      limit: VIDEO_CHANNELS.MAX_PER_USER,
+      include: [
+        {
+          attributes: [],
+          model: AccountModel,
+          where: {
+            id: accountId
+          },
+          required: true
+        }
+      ]
+    }
+
+    return VideoChannelModel.findAll(query)
+  }
+
+  static loadAndPopulateAccount (id: number, transaction?: Transaction): Promise<MChannelBannerAccountDefault> {
     return VideoChannelModel.unscoped()
       .scope([ ScopeNames.WITH_ACTOR_BANNER, ScopeNames.WITH_ACCOUNT ])
-      .findByPk(id)
+      .findByPk(id, { transaction })
   }
 
   static loadByUrlAndPopulateAccount (url: string): Promise<MChannelBannerAccountDefault> {
@@ -693,7 +771,7 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
     return this.Actor.isOutdated()
   }
 
-  setAsUpdated (transaction: Transaction) {
+  setAsUpdated (transaction?: Transaction) {
     return setAsUpdated('videoChannel', this.id, transaction)
   }
 }

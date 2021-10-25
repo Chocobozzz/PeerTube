@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { ActivatedRoute, Router } from '@angular/router'
+import { Router } from '@angular/router'
 import { ConfigService } from '@app/+admin/config/shared/config.service'
 import { AuthService, Notifier, ScreenService, ServerService, UserService } from '@app/core'
 import {
@@ -30,11 +30,10 @@ export class UserCreateComponent extends UserEdit implements OnInit {
     protected configService: ConfigService,
     protected screenService: ScreenService,
     protected auth: AuthService,
-    private route: ActivatedRoute,
     private router: Router,
     private notifier: Notifier,
     private userService: UserService
-    ) {
+  ) {
     super()
 
     this.buildQuotaOptions()
@@ -72,14 +71,17 @@ export class UserCreateComponent extends UserEdit implements OnInit {
     userCreate.videoQuota = parseInt(this.form.value['videoQuota'], 10)
     userCreate.videoQuotaDaily = parseInt(this.form.value['videoQuotaDaily'], 10)
 
-    this.userService.addUser(userCreate).subscribe(
-      () => {
-        this.notifier.success($localize`User ${userCreate.username} created.`)
-        this.router.navigate([ '/admin/users/list' ])
-      },
+    this.userService.addUser(userCreate)
+      .subscribe({
+        next: () => {
+          this.notifier.success($localize`User ${userCreate.username} created.`)
+          this.router.navigate([ '/admin/users/list' ])
+        },
 
-      err => this.error = err.message
-    )
+        error: err => {
+          this.error = err.message
+        }
+      })
   }
 
   isCreation () {
@@ -87,8 +89,7 @@ export class UserCreateComponent extends UserEdit implements OnInit {
   }
 
   isPasswordOptional () {
-    const serverConfig = this.route.snapshot.data.serverConfig
-    return serverConfig.email.enabled
+    return this.serverConfig.email.enabled
   }
 
   getFormButtonTitle () {

@@ -4,7 +4,7 @@ import 'mocha'
 import { expect } from 'chai'
 import { pathExists, remove } from 'fs-extra'
 import { join } from 'path'
-import { get4KFileUrl, root, wait } from '../../../shared/extra-utils'
+import { FIXTURE_URLS, root, wait } from '../../../shared/extra-utils'
 import { doRequest, doRequestAndSaveToFile } from '../../helpers/requests'
 
 describe('Request helpers', function () {
@@ -13,7 +13,7 @@ describe('Request helpers', function () {
 
   it('Should throw an error when the bytes limit is exceeded for request', async function () {
     try {
-      await doRequest(get4KFileUrl(), { bodyKBLimit: 3 })
+      await doRequest(FIXTURE_URLS.file4K, { bodyKBLimit: 3 })
     } catch {
       return
     }
@@ -23,7 +23,7 @@ describe('Request helpers', function () {
 
   it('Should throw an error when the bytes limit is exceeded for request and save file', async function () {
     try {
-      await doRequestAndSaveToFile(get4KFileUrl(), destPath1, { bodyKBLimit: 3 })
+      await doRequestAndSaveToFile(FIXTURE_URLS.file4K, destPath1, { bodyKBLimit: 3 })
     } catch {
 
       await wait(500)
@@ -35,8 +35,8 @@ describe('Request helpers', function () {
   })
 
   it('Should succeed if the file is below the limit', async function () {
-    await doRequest(get4KFileUrl(), { bodyKBLimit: 5 })
-    await doRequestAndSaveToFile(get4KFileUrl(), destPath2, { bodyKBLimit: 5 })
+    await doRequest(FIXTURE_URLS.file4K, { bodyKBLimit: 5 })
+    await doRequestAndSaveToFile(FIXTURE_URLS.file4K, destPath2, { bodyKBLimit: 5 })
 
     expect(await pathExists(destPath2)).to.be.true
   })

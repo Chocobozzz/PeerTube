@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
-import { AccountSearchComponent } from './account-search/account-search.component'
 import { AccountVideoChannelsComponent } from './account-video-channels/account-video-channels.component'
 import { AccountVideosComponent } from './account-videos/account-videos.component'
 import { AccountsComponent } from './accounts.component'
@@ -41,14 +40,11 @@ const accountsRoutes: Routes = [
           }
         }
       },
+
+      // Old URL redirection
       {
         path: 'search',
-        component: AccountSearchComponent,
-        data: {
-          meta: {
-            title: $localize`Search videos within account`
-          }
-        }
+        redirectTo: 'videos'
       }
     ]
   }

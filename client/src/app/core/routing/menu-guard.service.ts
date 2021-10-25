@@ -4,11 +4,10 @@ import { MenuService } from '../menu'
 import { ScreenService } from '../wrappers'
 
 abstract class MenuGuard implements CanActivate, CanDeactivate<any> {
-  display = true
   canDeactivate = this.canActivate
 
-  constructor (protected menu: MenuService, protected screen: ScreenService, display: boolean) {
-    this.display = display
+  constructor (protected menu: MenuService, protected screen: ScreenService, protected display: boolean) {
+
   }
 
   canActivate (): boolean {
@@ -17,33 +16,43 @@ abstract class MenuGuard implements CanActivate, CanDeactivate<any> {
     if (!this.screen.isInMobileView() && this.screen.isInMediumView()) {
       this.menu.setMenuDisplay(this.display)
     }
+
     return true
   }
 }
 
 @Injectable()
 export class OpenMenuGuard extends MenuGuard {
-  constructor (menu: MenuService, screen: ScreenService) { super(menu, screen, true) }
+  constructor (menu: MenuService, screen: ScreenService) {
+    super(menu, screen, true)
+  }
 }
 
 @Injectable()
 export class OpenMenuAlwaysGuard extends MenuGuard {
-  constructor (menu: MenuService, screen: ScreenService) { super(menu, screen, true) }
+  constructor (menu: MenuService, screen: ScreenService) {
+    super(menu, screen, true)
+  }
 
   canActivate (): boolean {
     this.menu.setMenuDisplay(this.display)
+
     return true
   }
 }
 
 @Injectable()
 export class CloseMenuGuard extends MenuGuard {
-  constructor (menu: MenuService, screen: ScreenService) { super(menu, screen, false) }
+  constructor (menu: MenuService, screen: ScreenService) {
+    super(menu, screen, false)
+  }
 }
 
 @Injectable()
 export class CloseMenuAlwaysGuard extends MenuGuard {
-  constructor (menu: MenuService, screen: ScreenService) { super(menu, screen, false) }
+  constructor (menu: MenuService, screen: ScreenService) {
+    super(menu, screen, false)
+  }
 
   canActivate (): boolean {
     this.menu.setMenuDisplay(this.display)

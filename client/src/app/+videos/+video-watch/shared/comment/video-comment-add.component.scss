@@ -1,0 +1,119 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+$markdown-icon-height: 18px;
+$markdown-icon-width: 30px;
+$peertube-textarea-height: 60px;
+
+form {
+  margin-bottom: 30px;
+}
+
+.avatar-and-textarea {
+  display: flex;
+  margin-bottom: 10px;
+
+  my-actor-avatar {
+    @include margin-right(10px);
+  }
+
+  .form-group {
+    flex-grow: 1;
+    margin: 0;
+    position: relative;
+  }
+
+  textarea {
+    @include peertube-textarea(100%, $peertube-textarea-height);
+    @include button-focus(pvar(--mainColorLightest));
+    @include padding-right($markdown-icon-width + 15px !important);
+
+    min-height: calc(#{$peertube-textarea-height} - 15px * 2);
+
+    @media screen and (max-width: 600px) {
+      @include padding-right($markdown-icon-width + 19px !important);
+    }
+
+    &:focus::placeholder {
+      opacity: 0;
+    }
+  }
+}
+
+.markdown-guide {
+  position: absolute;
+  top: 5px;
+  right: 9px;
+
+  // inset-inline is not well supported by web browsers
+  &.is-rtl {
+    right: unset;
+    left: 9px;
+  }
+
+  ::ng-deep .help-tooltip-button {
+    my-global-icon {
+      height: $markdown-icon-height;
+      width: $markdown-icon-width;
+
+      svg {
+        color: #C6C6C6;
+        fill: #C6C6C6;
+        border-radius: 3px;
+      }
+    }
+
+    &:focus,
+    &:active,
+    &:hover {
+      my-global-icon svg {
+        background-color: #C6C6C6;
+        color: pvar(--mainBackgroundColor);
+        fill: pvar(--mainBackgroundColor);
+      }
+    }
+  }
+}
+
+.comment-buttons {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.emoji-flex {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+
+  .emoji-flex-item {
+    text-align: left;
+    margin: auto;
+    min-width: 227px;
+    flex: 1;
+
+    code {
+      @include margin-left(5px);
+
+      display: inline-block;
+      vertical-align: middle;
+    }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  textarea,
+  .comment-buttons button {
+    font-size: 14px !important;
+  }
+
+  textarea {
+    padding: 5px !important;
+  }
+}
+
+.modal-body {
+  > span {
+    float: left;
+    margin-bottom: 20px;
+  }
+}

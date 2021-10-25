@@ -2,6 +2,7 @@
   <textarea #textarea
     [(ngModel)]="content" (ngModelChange)="onModelChange()"
     class="form-control" [ngClass]="classes"
+    [attr.disabled]="disabled || null"
     [ngStyle]="{ height: textareaHeight }"
     [id]="name" [name]="name">
   </textarea>
@@ -25,11 +26,11 @@
     </ng-container>
 
     <my-button
-      *ngIf="!isMaximized" [title]="maximizeInText" className="maximize-button" icon="fullscreen" (click)="onMaximizeClick()"
+      *ngIf="!isMaximized" [title]="maximizeInText" className="maximize-button" icon="fullscreen" (click)="onMaximizeClick()" [disabled]="disabled"
     ></my-button>
 
     <my-button
-      *ngIf="isMaximized" [title]="maximizeOutText" className="maximize-button" icon="exit-fullscreen" (click)="onMaximizeClick()"
+      *ngIf="isMaximized" [title]="maximizeOutText" className="maximize-button" icon="exit-fullscreen" (click)="onMaximizeClick()" [disabled]="disabled"
     ></my-button>
   </div>
 

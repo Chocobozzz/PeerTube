@@ -1,12 +1,20 @@
 import { Job } from 'bull'
-import * as ffmpeg from 'fluent-ffmpeg'
+import ffmpeg, { FfmpegCommand, FilterSpecification, getAvailableEncoders } from 'fluent-ffmpeg'
 import { readFile, remove, writeFile } from 'fs-extra'
 import { dirname, join } from 'path'
 import { FFMPEG_NICE, VIDEO_LIVE } from '@server/initializers/constants'
-import { AvailableEncoders, EncoderOptions, EncoderOptionsBuilder, EncoderProfile, VideoResolution } from '../../shared/models/videos'
+import { pick } from '@shared/core-utils'
+import {
+  AvailableEncoders,
+  EncoderOptions,
+  EncoderOptionsBuilder,
+  EncoderOptionsBuilderParams,
+  EncoderProfile,
+  VideoResolution
+} from '../../shared/models/videos'
 import { CONFIG } from '../initializers/config'
 import { execPromise, promisify0 } from './core-utils'
-import { computeFPS, getAudioStream, getVideoFileFPS } from './ffprobe-utils'
+import { computeFPS, ffprobePromise, getAudioStream, getVideoFileBitrate, getVideoFileFPS, getVideoFileResolution } from './ffprobe-utils'
 import { processImage } from './image-utils'
 import { logger } from './logger'
 
@@ -34,7 +42,7 @@ async function checkFFmpegEncoders (peertubeAvailableEncoders: AvailableEncoders
     return supportedEncoders
   }
 
-  const getAvailableEncodersPromise = promisify0(ffmpeg.getAvailableEncoders)
+  const getAvailableEncodersPromise = promisify0(getAvailableEncoders)
   const availableFFmpegEncoders = await getAvailableEncodersPromise()
 
   const searchEncoders = new Set<string>()
@@ -183,7 +191,7 @@ type TranscodeOptions =
   | QuickTranscodeOptions
 
 const builders: {
-  [ type in TranscodeOptionsType ]: (c: ffmpeg.FfmpegCommand, o?: TranscodeOptions) => Promise<ffmpeg.FfmpegCommand> | ffmpeg.FfmpegCommand
+  [ type in TranscodeOptionsType ]: (c: FfmpegCommand, o?: TranscodeOptions) => Promise<FfmpegCommand> | FfmpegCommand
 } = {
   'quick-transcode': buildQuickTranscodeCommand,
   'hls': buildHLSVODCommand,
@@ -212,21 +220,28 @@ async function transcode (options: TranscodeOptions) {
 
 async function getLiveTranscodingCommand (options: {
   rtmpUrl: string
+
   outPath: string
+  masterPlaylistName: string
+
   resolutions: number[]
+
+  // Input information
   fps: number
+  bitrate: number
+  ratio: number
 
   availableEncoders: AvailableEncoders
   profile: string
 }) {
-  const { rtmpUrl, outPath, resolutions, fps, availableEncoders, profile } = options
+  const { rtmpUrl, outPath, resolutions, fps, bitrate, availableEncoders, profile, masterPlaylistName, ratio } = options
   const input = rtmpUrl
 
   const command = getFFmpeg(input, 'live')
 
   const varStreamMap: string[] = []
 
-  const complexFilter: ffmpeg.FilterSpecification[] = [
+  const complexFilter: FilterSpecification[] = [
     {
       inputs: '[v:0]',
       filter: 'split',
@@ -249,15 +264,19 @@ async function getLiveTranscodingCommand (options: {
       availableEncoders,
       profile,
 
-      fps: resolutionFPS,
+      inputBitrate: bitrate,
+      inputRatio: ratio,
+
       resolution,
+      fps: resolutionFPS,
+
       streamNum: i,
       videoType: 'live' as 'live'
     }
 
     {
       const streamType: StreamType = 'video'
-      const builderResult = await getEncoderBuilderResult(Object.assign({}, baseEncoderBuilderParams, { streamType }))
+      const builderResult = await getEncoderBuilderResult({ ...baseEncoderBuilderParams, streamType })
       if (!builderResult) {
         throw new Error('No available live video encoder found')
       }
@@ -281,7 +300,7 @@ async function getLiveTranscodingCommand (options: {
 
     {
       const streamType: StreamType = 'audio'
-      const builderResult = await getEncoderBuilderResult(Object.assign({}, baseEncoderBuilderParams, { streamType }))
+      const builderResult = await getEncoderBuilderResult({ ...baseEncoderBuilderParams, streamType })
       if (!builderResult) {
         throw new Error('No available live audio encoder found')
       }
@@ -301,14 +320,14 @@ async function getLiveTranscodingCommand (options: {
 
   command.complexFilter(complexFilter)
 
-  addDefaultLiveHLSParams(command, outPath)
+  addDefaultLiveHLSParams(command, outPath, masterPlaylistName)
 
   command.outputOption('-var_stream_map', varStreamMap.join(' '))
 
   return command
 }
 
-function getLiveMuxingCommand (rtmpUrl: string, outPath: string) {
+function getLiveMuxingCommand (rtmpUrl: string, outPath: string, masterPlaylistName: string) {
   const command = getFFmpeg(rtmpUrl, 'live')
 
   command.outputOption('-c:v copy')
@@ -316,7 +335,7 @@ function getLiveMuxingCommand (rtmpUrl: string, outPath: string) {
   command.outputOption('-map 0:a?')
   command.outputOption('-map 0:v?')
 
-  addDefaultLiveHLSParams(command, outPath)
+  addDefaultLiveHLSParams(command, outPath, masterPlaylistName)
 
   return command
 }
@@ -334,7 +353,7 @@ function buildStreamSuffix (base: string, streamNum?: number) {
 // ---------------------------------------------------------------------------
 
 function addDefaultEncoderGlobalParams (options: {
-  command: ffmpeg.FfmpegCommand
+  command: FfmpegCommand
 }) {
   const { command } = options
 
@@ -351,7 +370,7 @@ function addDefaultEncoderGlobalParams (options: {
 }
 
 function addDefaultEncoderParams (options: {
-  command: ffmpeg.FfmpegCommand
+  command: FfmpegCommand
   encoder: 'libx264' | string
   streamNum?: number
   fps?: number
@@ -371,12 +390,12 @@ function addDefaultEncoderParams (options: {
   }
 }
 
-function addDefaultLiveHLSParams (command: ffmpeg.FfmpegCommand, outPath: string) {
+function addDefaultLiveHLSParams (command: FfmpegCommand, outPath: string, masterPlaylistName: string) {
   command.outputOption('-hls_time ' + VIDEO_LIVE.SEGMENT_TIME_SECONDS)
   command.outputOption('-hls_list_size ' + VIDEO_LIVE.SEGMENTS_LIST_SIZE)
   command.outputOption('-hls_flags delete_segments+independent_segments')
   command.outputOption(`-hls_segment_filename ${join(outPath, '%v-%06d.ts')}`)
-  command.outputOption('-master_pl_name master.m3u8')
+  command.outputOption('-master_pl_name ' + masterPlaylistName)
   command.outputOption(`-f hls`)
 
   command.output(join(outPath, '%v.m3u8'))
@@ -386,7 +405,7 @@ function addDefaultLiveHLSParams (command: ffmpeg.FfmpegCommand, outPath: string
 // Transcode VOD command builders
 // ---------------------------------------------------------------------------
 
-async function buildx264VODCommand (command: ffmpeg.FfmpegCommand, options: TranscodeOptions) {
+async function buildx264VODCommand (command: FfmpegCommand, options: TranscodeOptions) {
   let fps = await getVideoFileFPS(options.inputPath)
   fps = computeFPS(fps, options.resolution)
 
@@ -403,7 +422,7 @@ async function buildx264VODCommand (command: ffmpeg.FfmpegCommand, options: Tran
   return command
 }
 
-async function buildAudioMergeCommand (command: ffmpeg.FfmpegCommand, options: MergeAudioTranscodeOptions) {
+async function buildAudioMergeCommand (command: FfmpegCommand, options: MergeAudioTranscodeOptions) {
   command = command.loop(undefined)
 
   const scaleFilterValue = getScaleCleanerValue()
@@ -418,13 +437,13 @@ async function buildAudioMergeCommand (command: ffmpeg.FfmpegCommand, options: M
   return command
 }
 
-function buildOnlyAudioCommand (command: ffmpeg.FfmpegCommand, _options: OnlyAudioTranscodeOptions) {
+function buildOnlyAudioCommand (command: FfmpegCommand, _options: OnlyAudioTranscodeOptions) {
   command = presetOnlyAudio(command)
 
   return command
 }
 
-function buildQuickTranscodeCommand (command: ffmpeg.FfmpegCommand) {
+function buildQuickTranscodeCommand (command: FfmpegCommand) {
   command = presetCopy(command)
 
   command = command.outputOption('-map_metadata -1') // strip all metadata
@@ -433,7 +452,7 @@ function buildQuickTranscodeCommand (command: ffmpeg.FfmpegCommand) {
   return command
 }
 
-function addCommonHLSVODCommandOptions (command: ffmpeg.FfmpegCommand, outputPath: string) {
+function addCommonHLSVODCommandOptions (command: FfmpegCommand, outputPath: string) {
   return command.outputOption('-hls_time 4')
                 .outputOption('-hls_list_size 0')
                 .outputOption('-hls_playlist_type vod')
@@ -443,7 +462,7 @@ function addCommonHLSVODCommandOptions (command: ffmpeg.FfmpegCommand, outputPat
                 .outputOption('-hls_flags single_file')
 }
 
-async function buildHLSVODCommand (command: ffmpeg.FfmpegCommand, options: HLSTranscodeOptions) {
+async function buildHLSVODCommand (command: FfmpegCommand, options: HLSTranscodeOptions) {
   const videoPath = getHLSVideoPath(options)
 
   if (options.copyCodecs) command = presetCopy(command)
@@ -455,7 +474,7 @@ async function buildHLSVODCommand (command: ffmpeg.FfmpegCommand, options: HLSTr
   return command
 }
 
-async function buildHLSVODFromTSCommand (command: ffmpeg.FfmpegCommand, options: HLSFromTSTranscodeOptions) {
+function buildHLSVODFromTSCommand (command: FfmpegCommand, options: HLSFromTSTranscodeOptions) {
   const videoPath = getHLSVideoPath(options)
 
   command.outputOption('-c copy')
@@ -497,7 +516,7 @@ function getHLSVideoPath (options: HLSTranscodeOptions | HLSFromTSTranscodeOptio
 // Run encoder builder depending on available encoders
 // Try encoders by priority: if the encoder is available, run the chosen profile or fallback to the default one
 // If the default one does not exist, check the next encoder
-async function getEncoderBuilderResult (options: {
+async function getEncoderBuilderResult (options: EncoderOptionsBuilderParams & {
   streamType: 'video' | 'audio'
   input: string
 
@@ -505,12 +524,8 @@ async function getEncoderBuilderResult (options: {
   profile: string
 
   videoType: 'vod' | 'live'
-
-  resolution: number
-  fps?: number
-  streamNum?: number
 }) {
-  const { availableEncoders, input, profile, resolution, streamType, fps, streamNum, videoType } = options
+  const { availableEncoders, profile, streamType, videoType } = options
 
   const encodersToTry = availableEncoders.encodersToTry[videoType][streamType]
   const encoders = availableEncoders.available[videoType]
@@ -540,7 +555,7 @@ async function getEncoderBuilderResult (options: {
       }
     }
 
-    const result = await builder({ input, resolution, fps, streamNum })
+    const result = await builder(pick(options, [ 'input', 'resolution', 'inputBitrate', 'fps', 'inputRatio', 'streamNum' ]))
 
     return {
       result,
@@ -556,7 +571,7 @@ async function getEncoderBuilderResult (options: {
 }
 
 async function presetVideo (options: {
-  command: ffmpeg.FfmpegCommand
+  command: FfmpegCommand
   input: string
   transcodeOptions: TranscodeOptions
   fps?: number
@@ -570,8 +585,12 @@ async function presetVideo (options: {
 
   addDefaultEncoderGlobalParams({ command })
 
+  const probe = await ffprobePromise(input)
+
   // Audio encoder
-  const parsedAudio = await getAudioStream(input)
+  const parsedAudio = await getAudioStream(input, probe)
+  const bitrate = await getVideoFileBitrate(input, probe)
+  const { ratio } = await getVideoFileResolution(input, probe)
 
   let streamsToProcess: StreamType[] = [ 'audio', 'video' ]
 
@@ -590,6 +609,8 @@ async function presetVideo (options: {
       availableEncoders,
       profile,
       fps,
+      inputBitrate: bitrate,
+      inputRatio: ratio,
       videoType: 'vod' as 'vod'
     })
 
@@ -619,21 +640,21 @@ async function presetVideo (options: {
   return localCommand
 }
 
-function presetCopy (command: ffmpeg.FfmpegCommand): ffmpeg.FfmpegCommand {
+function presetCopy (command: FfmpegCommand): FfmpegCommand {
   return command
     .format('mp4')
     .videoCodec('copy')
     .audioCodec('copy')
 }
 
-function presetOnlyAudio (command: ffmpeg.FfmpegCommand): ffmpeg.FfmpegCommand {
+function presetOnlyAudio (command: FfmpegCommand): FfmpegCommand {
   return command
     .format('mp4')
     .audioCodec('copy')
     .noVideo()
 }
 
-function applyEncoderOptions (command: ffmpeg.FfmpegCommand, options: EncoderOptions): ffmpeg.FfmpegCommand {
+function applyEncoderOptions (command: FfmpegCommand, options: EncoderOptions): FfmpegCommand {
   return command
     .inputOptions(options.inputOptions ?? [])
     .outputOptions(options.outputOptions ?? [])
@@ -693,13 +714,17 @@ function getFFmpegVersion () {
 }
 
 async function runCommand (options: {
-  command: ffmpeg.FfmpegCommand
+  command: FfmpegCommand
   silent?: boolean // false
   job?: Job
 }) {
   const { command, silent = false, job } = options
 
   return new Promise<void>((res, rej) => {
+    let shellCommand: string
+
+    command.on('start', cmdline => { shellCommand = cmdline })
+
     command.on('error', (err, stdout, stderr) => {
       if (silent !== true) logger.error('Error in ffmpeg.', { stdout, stderr })
 
@@ -707,7 +732,7 @@ async function runCommand (options: {
     })
 
     command.on('end', (stdout, stderr) => {
-      logger.debug('FFmpeg command ended.', { stdout, stderr })
+      logger.debug('FFmpeg command ended.', { stdout, stderr, shellCommand })
 
       res()
     })

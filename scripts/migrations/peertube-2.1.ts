@@ -8,7 +8,7 @@ import { HLS_STREAMING_PLAYLIST_DIRECTORY, STATIC_PATHS, WEBSERVER } from '@serv
 import { pathExists, stat, writeFile } from 'fs-extra'
 import { createTorrentPromise } from '@server/helpers/webtorrent'
 import { CONFIG } from '@server/initializers/config'
-import * as parseTorrent from 'parse-torrent'
+import parseTorrent from 'parse-torrent'
 import { logger } from '@server/helpers/logger'
 
 run()

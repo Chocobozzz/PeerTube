@@ -1,7 +1,9 @@
-@import 'mixins';
+@use '_mixins' as *;
+@use '_variables' as *;
 
 my-feed {
   @include margin-left(5px);
+
   display: inline-block;
   width: 15px;
 }
@@ -40,5 +42,11 @@ my-global-icon {
     p {
       margin: 0;
     }
+  }
+}
+
+@media screen and (max-width: $primeng-breakpoint) {
+  .video {
+    align-items: flex-start !important;
   }
 }

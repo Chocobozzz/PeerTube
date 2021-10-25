@@ -1,87 +1,68 @@
-@import '_variables';
+@use '_variables' as *;
+@use '_mixins' as *;
 
-@mixin section-label-responsive {
-  color: pvar(--mainColor);
-  font-size: 12px;
-  margin-bottom: 15px;
-  font-weight: $font-bold;
-  letter-spacing: 2.5px;
+@mixin actor-row ($avatar-size: 80px, $avatar-margin-right: 10px, $min-height: 130px, $separator: true) {
+  @include row-blocks($min-height: $min-height, $separator: $separator);
 
-  @media screen and (max-width: $mobile-view) {
-    font-size: 10px;
-    letter-spacing: 2.1px;
-    margin-bottom: 5px;
-  }
-}
+  > my-actor-avatar {
+    @include actor-avatar-size($avatar-size);
 
-@mixin show-more-description {
-  color: pvar(--mainColor);
-  cursor: pointer;
-  margin: 10px auto 45px;
-}
-
-@mixin avatar-row-responsive ($img-margin, $grey-font-size) {
-  display: flex;
-  grid-column: 1;
-  margin-bottom: 30px;
-
-  .main-avatar {
-    @include actor-avatar-size(120px);
-  }
-
-  > div {
-    @include margin-left($img-margin);
-
-    min-width: 1px;
+    @include margin-right($avatar-margin-right);
   }
 
   .actor-info {
-    display: flex;
+    flex-grow: 1;
+  }
 
-    > div:first-child {
-      flex-grow: 1;
-      min-width: 1px;
-    }
+  .actor-names {
+    @include disable-default-a-behaviour;
+
+    width: fit-content;
+    display: flex;
+    align-items: baseline;
+    color: pvar(--mainForegroundColor);
   }
 
   .actor-display-name {
-    @include peertube-word-wrap;
-
-    display: flex;
-    flex-wrap: wrap;
+    font-weight: $font-semibold;
+    font-size: 18px;
   }
 
-  h1 {
-    font-size: 28px;
-    font-weight: $font-bold;
-    margin: 0;
+  .actor-name {
+    @include margin-left(5px);
+
+    font-size: 14px;
+    color: $grey-actor-name;
   }
 
-  .actor-handle {
-    @include ellipsis;
-  }
+  .actor-owner {
+    @include disable-default-a-behaviour;
 
-  .actor-handle,
-  .actor-counters {
-    color: pvar(--greyForegroundColor);
-    font-size: $grey-font-size;
-  }
+    font-size: 13px;
+    color: pvar(--mainForegroundColor);
 
-  .actor-counters > *:not(:last-child)::after {
-    content: '•';
-    margin: 0 10px;
-    color: pvar(--mainColor);
-  }
-
-  @media screen and (max-width: $mobile-view) {
-    margin-bottom: 15px;
-
-    h1 {
-      font-size: 22px;
+    span:hover {
+      opacity: 0.8;
     }
 
-    .main-avatar {
-      @include actor-avatar-size(80px);
+    my-actor-avatar {
+      @include margin-left(7px);
+
+      display: inline-block;
+      vertical-align: top;
+    }
+  }
+
+  @media screen and (max-width: $small-view) {
+    .actor-info {
+      padding-bottom: 10px;
+      text-align: center;
+
+      .actor-names {
+        flex-direction: column;
+        align-items: center !important;
+        margin: auto;
+      }
     }
   }
 }

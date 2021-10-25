@@ -74,14 +74,14 @@
       </td>
     </tr>
 
-    <tr>
+    <tr *ngIf="serverConfig.live.enabled">
       <th i18n class="sub-label" scope="row">Transcode live video in multiple resolutions</th>
       <td>
         <my-feature-boolean [value]="serverConfig.live.transcoding.enabled && serverConfig.live.transcoding.enabledResolutions.length > 1"></my-feature-boolean>
       </td>
     </tr>
 
-    <tr>
+    <tr *ngIf="serverConfig.live.enabled">
       <th i18n class="sub-label" scope="row">Max parallel lives</th>
       <td i18n>
         {{ maxUserLives }} per user / {{ maxInstanceLives }} per instance

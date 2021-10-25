@@ -1,4 +1,4 @@
-import * as Bluebird from 'bluebird'
+import Bluebird from 'bluebird'
 import { URL } from 'url'
 import validator from 'validator'
 import { ContextType } from '@shared/models/activitypub/context'

@@ -37,16 +37,16 @@ export class MyVideoPlaylistsComponent {
     if (res === false) return
 
     this.videoPlaylistService.removeVideoPlaylist(videoPlaylist)
-      .subscribe(
-        () => {
+      .subscribe({
+        next: () => {
           this.videoPlaylists = this.videoPlaylists
                                     .filter(p => p.id !== videoPlaylist.id)
 
           this.notifier.success($localize`Playlist ${videoPlaylist.displayName}} deleted.`)
         },
 
-        error => this.notifier.error(error.message)
-      )
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   isRegularPlaylist (playlist: VideoPlaylist) {

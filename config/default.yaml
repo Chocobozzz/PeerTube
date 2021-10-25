@@ -34,7 +34,7 @@ rates_limit:
 trust_proxy:
   - 'loopback'
 
-# Your database name will be database.name OR "peertube"+database.suffix
+# Your database name will be database.name OR 'peertube'+database.suffix
 database:
   hostname: 'localhost'
   port: 5432
@@ -71,13 +71,21 @@ smtp:
 
 email:
   body:
-    signature: "PeerTube"
+    signature: 'PeerTube'
   subject:
-    prefix: "[PeerTube]"
+    prefix: '[PeerTube]'
+
+# PeerTube client/interface configuration
+client:
+  videos:
+    miniature:
+      # By default PeerTube client displays author username
+      prefer_author_display_name: false
 
 # From the project root directory
 storage:
   tmp: 'storage/tmp/' # Use to download data (imports etc), store uploaded files before and during processing...
+  bin: 'storage/bin/'
   avatars: 'storage/avatars/'
   videos: 'storage/videos/'
   streaming_playlists: 'storage/streaming-playlists/'
@@ -89,19 +97,58 @@ storage:
   captions: 'storage/captions/'
   cache: 'storage/cache/'
   plugins: 'storage/plugins/'
-  # Overridable client files : logo.svg, favicon.png and icons/*.png (PWA) in client/dist/assets/images
+  # Overridable client files in client/dist/assets/images:
+  # - logo.svg
+  # - favicon.png
+  # - default-playlist.jpg
+  # - default-avatar-account.png
+  # - default-avatar-video-channel.png
+  # - and icons/*.png (PWA)
   # Could contain for example assets/images/favicon.png
   # If the file exists, peertube will serve it
-  # If not, peertube will fallback to the default fil
+  # If not, peertube will fallback to the default file
   client_overrides: 'storage/client-overrides/'
+
+object_storage:
+  enabled: false
+
+  # Without protocol, will default to HTTPS
+  endpoint: '' # 's3.amazonaws.com' or 's3.fr-par.scw.cloud' for example
+
+  region: 'us-east-1'
+
+  credentials:
+    # You can also use AWS_ACCESS_KEY_ID env variable
+    access_key_id: ''
+    # You can also use AWS_SECRET_ACCESS_KEY env variable
+    secret_access_key: ''
+
+  # Maximum amount to upload in one request to object storage
+  max_upload_part: 2GB
+
+  streaming_playlists:
+    bucket_name: 'streaming-playlists'
+
+    # Allows setting all buckets to the same value but with a different prefix
+    prefix: '' # Example: 'streaming-playlists:'
+
+    # Base url for object URL generation, scheme and host will be replaced by this URL
+    # Useful when you want to use a CDN/external proxy
+    base_url: '' # Example: 'https://mirror.example.com'
+
+  # Same settings but for webtorrent videos
+  videos:
+    bucket_name: 'videos'
+    prefix: ''
+    base_url: ''
 
 log:
   level: 'info' # 'debug' | 'info' | 'warn' | 'error'
   rotation:
     enabled : true # Enabled by default, if disabled make sure that 'storage.logs' is pointing to a folder handled by logrotate
-    maxFileSize: 12MB
-    maxFiles: 20
-  anonymizeIP: false
+    max_file_size: 12MB
+    max_files: 20
+  anonymize_ip: false
   log_ping_requests: true
   prettify_sql: false
 
@@ -161,8 +208,8 @@ security:
 tracker:
   # If you disable the tracker, you disable the P2P aspect of PeerTube
   enabled: true
-  # Only handle requests on your videos.
-  # If you set this to false it means you have a public tracker.
+  # Only handle requests on your videos
+  # If you set this to false it means you have a public tracker
   # Then, it is possible that clients overload your instance with external torrents
   private: true
   # Reject peers that do a lot of announces (could improve privacy of TCP/UDP peers)
@@ -210,6 +257,12 @@ peertube:
     # You can use a custom URL if your want, that respect the format behind https://joinpeertube.org/api/v1/versions.json
     url: 'https://joinpeertube.org/api/v1/versions.json'
 
+webadmin:
+  configuration:
+    edition:
+      # Set this to false if you don't want to allow config edition in the web interface by instance admins
+      allowed: true
+
 cache:
   previews:
     size: 500 # Max number of previews you want to cache
@@ -237,13 +290,14 @@ signup:
       blacklist: []
 
 user:
-  # Default value of maximum video BYTES the user can upload (does not take into account transcoded files).
+  # Default value of maximum video bytes the user can upload (does not take into account transcoded files)
+  # Byte format is supported ("1GB" etc)
   # -1 == unlimited
   video_quota: -1
   video_quota_daily: -1
 
-# If enabled, the video will be transcoded to mp4 (x264) with "faststart" flag
-# In addition, if some resolutions are enabled the mp4 video file will be transcoded to these new resolutions.
+# If enabled, the video will be transcoded to mp4 (x264) with `faststart` flag
+# In addition, if some resolutions are enabled the mp4 video file will be transcoded to these new resolutions
 # Please, do not disable transcoding since many uploaded videos will not work
 transcoding:
   enabled: true
@@ -342,13 +396,21 @@ import:
     http: # Classic HTTP or all sites supported by youtube-dl https://rg3.github.io/youtube-dl/supportedsites.html
       enabled: false
 
+      youtube_dl_release:
+        # Direct download URL to youtube-dl binary
+        # Github releases API is also supported
+        # Examples:
+        #   * https://api.github.com/repos/ytdl-org/youtube-dl/releases
+        #   * https://api.github.com/repos/yt-dlp/yt-dlp/releases
+        url: 'https://yt-dl.org/downloads/latest/youtube-dl'
+
+        # youtube-dl binary name
+        # yt-dlp is also supported
+        name: 'youtube-dl'
+
       # IPv6 is very strongly rate-limited on most sites supported by youtube-dl
       force_ipv4: false
 
-      # You can use an HTTP/HTTPS/SOCKS proxy with youtube-dl
-      proxy:
-        enabled: false
-        url: ""
     torrent: # Magnet URI or torrent file (use classic TCP/UDP/WebSeed to download the file)
       enabled: false
 
@@ -382,7 +444,7 @@ instance:
   business_model: '' # Supports Markdown
 
   # If you want to explain on what type of hardware your PeerTube instance runs
-  # Example: "2 vCore, 2GB RAM..."
+  # Example: '2 vCore, 2GB RAM...'
   hardware_information: '' # Supports Markdown
 
   # What are the main languages of your instance? To interact with your users for example
@@ -422,20 +484,20 @@ instance:
   # Enabling it will allow other administrators to know that you are mainly federating sensitive content
   # Moreover, the NSFW checkbox on video upload will be automatically checked by default
   is_nsfw: false
-  # By default, "do_not_list" or "blur" or "display" NSFW videos
+  # By default, `do_not_list` or `blur` or `display` NSFW videos
   # Could be overridden per user with a setting
   default_nsfw_policy: 'do_not_list'
 
   customizations:
     javascript: '' # Directly your JavaScript code (without <script> tags). Will be eval at runtime
     css: '' # Directly your CSS code (without <style> tags). Will be injected at runtime
-  # Robot.txt rules. To disallow robots to crawl your instance and disallow indexation of your site, add '/' to "Disallow:'
+  # Robot.txt rules. To disallow robots to crawl your instance and disallow indexation of your site, add `/` to `Disallow:`
   robots: |
     User-agent: *
     Disallow:
-  # Security.txt rules. To discourage researchers from testing your instance and disable security.txt integration, set this to an empty string.
+  # Security.txt rules. To discourage researchers from testing your instance and disable security.txt integration, set this to an empty string
   securitytxt:
-    "# If you would like to report a security issue\n# you may report it to:\nContact: https://github.com/Chocobozzz/PeerTube/blob/develop/SECURITY.md\nContact: mailto:"
+    '# If you would like to report a security issue\n# you may report it to:\nContact: https://github.com/Chocobozzz/PeerTube/blob/develop/SECURITY.md\nContact: mailto:'
 
 services:
   # Cards configuration to format video in Twitter
@@ -443,7 +505,7 @@ services:
     username: '@Chocobozzz' # Indicates the Twitter account for the website or platform on which the content was published
     # If true, a video player will be embedded in the Twitter feed on PeerTube video share
     # If false, we use an image link card that will redirect on your PeerTube instance
-    # Change it to "true", and then test on https://cards-dev.twitter.com/validator to see if you are whitelisted
+    # Change it to `true`, and then test on https://cards-dev.twitter.com/validator to see if you are whitelisted
     whitelisted: false
 
 followers:

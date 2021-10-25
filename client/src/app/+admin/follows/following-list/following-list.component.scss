@@ -1,5 +1,5 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 a {
   @include disable-default-a-behaviour;
@@ -18,4 +18,8 @@ a {
 
 .follow-button {
   @include create-button;
+}
+
+my-delete-button {
+  max-width: 130px;
 }

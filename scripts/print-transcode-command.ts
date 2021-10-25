@@ -1,8 +1,8 @@
 import { registerTSPaths } from '../server/helpers/register-ts-paths'
 registerTSPaths()
 
-import * as program from 'commander'
-import * as ffmpeg from 'fluent-ffmpeg'
+import { program } from 'commander'
+import ffmpeg from 'fluent-ffmpeg'
 import { buildx264VODCommand, runCommand, TranscodeOptions } from '@server/helpers/ffmpeg-utils'
 import { exit } from 'process'
 import { VideoTranscodingProfilesManager } from '@server/lib/transcoding/video-transcoding-profiles'

@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 
 function activityPubResponse (data: any, res: express.Response) {
   return res.type('application/activity+json; charset=utf-8')

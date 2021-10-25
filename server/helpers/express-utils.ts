@@ -1,6 +1,6 @@
-import * as express from 'express'
-import * as multer from 'multer'
-import { HttpStatusCode } from '../../shared/core-utils/miscs/http-error-codes'
+import express from 'express'
+import multer, { diskStorage } from 'multer'
+import { HttpStatusCode } from '../../shared/models/http/http-error-codes'
 import { CONFIG } from '../initializers/config'
 import { REMOTE_SCHEME } from '../initializers/constants'
 import { getLowercaseExtension } from './core-utils'
@@ -30,9 +30,7 @@ function buildNSFWFilter (res?: express.Response, paramNSFW?: string) {
   return null
 }
 
-function cleanUpReqFiles (
-  req: { files: { [fieldname: string]: Express.Multer.File[] } | Express.Multer.File[] }
-) {
+function cleanUpReqFiles (req: express.Request) {
   const filesObject = req.files
   if (!filesObject) return
 
@@ -61,7 +59,7 @@ function getHostWithPort (host: string) {
   return host
 }
 
-function badRequest (req: express.Request, res: express.Response) {
+function badRequest (_req: express.Request, res: express.Response) {
   return res.type('json')
             .status(HttpStatusCode.BAD_REQUEST_400)
             .end()
@@ -72,7 +70,7 @@ function createReqFiles (
   mimeTypes: { [id: string]: string | string[] },
   destinations: { [fieldName: string]: string }
 ) {
-  const storage = multer.diskStorage({
+  const storage = diskStorage({
     destination: (req, file, cb) => {
       cb(null, destinations[file.fieldname])
     },

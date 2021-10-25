@@ -1,0 +1,199 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+.root-comment {
+  font-size: 15px;
+  display: flex;
+
+  .left {
+    @include margin-right(10px);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .vertical-border {
+      width: 2px;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.05);
+      margin: 10px calc(1rem + 1px);
+    }
+  }
+
+  .right {
+    width: 100%;
+  }
+}
+
+my-actor-avatar {
+  @include actor-avatar-size(36px);
+}
+
+.comment {
+  flex-grow: 1;
+  // Fix word-wrap with flex
+  min-width: 1px;
+}
+
+.highlighted-comment {
+  display: inline-block;
+  background-color: #F5F5F5;
+  color: #3d3d3d;
+  padding: 0 5px;
+  font-size: 13px;
+  margin-bottom: 5px;
+  font-weight: $font-semibold;
+  border-radius: 3px;
+}
+
+.comment-account-date {
+  display: flex;
+  margin-bottom: 4px;
+}
+
+.video-author {
+  @include padding-right(6px);
+  @include padding-left(6px);
+
+  height: 20px;
+  background-color: #888888;
+  border-radius: 12px;
+  margin-bottom: 2px;
+  max-width: 100%;
+  box-sizing: border-box;
+  flex-direction: row;
+  align-items: center;
+  display: inline-flex;
+  color: #fff !important;
+}
+
+.comment-account {
+  word-break: break-all;
+  font-weight: 600;
+  font-size: 90%;
+
+  a {
+    @include disable-default-a-behaviour;
+
+    color: pvar(--mainForegroundColor);
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .comment-account-fid {
+    opacity: .6;
+  }
+}
+
+.comment-date {
+  @include margin-left(5px);
+
+  font-size: 90%;
+  color: pvar(--greyForegroundColor);
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.comment-html {
+  @include peertube-word-wrap;
+
+  // Mentions
+  ::ng-deep a {
+
+    &:not(.linkified-url) {
+      @include disable-default-a-behaviour;
+
+      color: pvar(--mainForegroundColor);
+
+      font-weight: $font-semibold;
+    }
+
+  }
+
+  // Paragraphs
+  ::ng-deep p {
+    margin-bottom: .3rem;
+  }
+
+  &.comment-html-deleted {
+    color: pvar(--greyForegroundColor);
+    margin-bottom: 1rem;
+  }
+}
+
+.comment-actions {
+  margin-bottom: 10px;
+  display: flex;
+
+  ::ng-deep .dropdown-toggle,
+  .comment-action-reply {
+    @include margin-right(10px);
+
+    color: pvar(--greyForegroundColor);
+    cursor: pointer;
+
+    &:hover,
+    &:active,
+    &:focus,
+    &:focus-visible {
+      color: pvar(--mainForegroundColor);
+    }
+  }
+
+  ::ng-deep .action-button {
+    background-color: transparent;
+    padding: 0;
+    font-weight: unset;
+  }
+}
+
+my-video-comment-add {
+  ::ng-deep form {
+    margin-top: 1rem;
+    margin-bottom: 0;
+  }
+}
+
+.is-child {
+  // Reduce avatars size for replies
+  my-actor-avatar {
+    @include actor-avatar-size(25px);
+  }
+
+  .left {
+    @include margin-right(6px);
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .children {
+    @include margin-left(-10px);
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .children {
+    @include margin-left(-20px);
+
+    .left {
+      align-items: flex-start;
+
+      .vertical-border {
+        @include margin-left(2px);
+      }
+    }
+  }
+
+  .comment-account-date {
+    flex-direction: column;
+
+    .comment-date {
+      @include margin-left(0);
+    }
+  }
+}

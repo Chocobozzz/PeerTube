@@ -1,5 +1,5 @@
 import { Transaction } from 'sequelize/types'
-import { v4 as uuidv4 } from 'uuid'
+import { buildUUID } from '@server/helpers/uuid'
 import { UserModel } from '@server/models/user/user'
 import { MActorDefault } from '@server/types/models/actor'
 import { ActivityPubActorType } from '../../shared/models/activitypub'
@@ -14,7 +14,7 @@ import { MUser, MUserDefault, MUserId } from '../types/models/user'
 import { generateAndSaveActorKeys } from './activitypub/actors'
 import { getLocalAccountActivityPubUrl } from './activitypub/url'
 import { Emailer } from './emailer'
-import { LiveManager } from './live-manager'
+import { LiveQuotaStore } from './live/live-quota-store'
 import { buildActorInstance } from './local-actor'
 import { Redis } from './redis'
 import { createLocalVideoChannel } from './video-channel'
@@ -44,11 +44,11 @@ async function createUserAccountAndChannelAndPlaylist (parameters: {
       displayName: userDisplayName,
       userId: userCreated.id,
       applicationId: null,
-      t: t
+      t
     })
     userCreated.Account = accountCreated
 
-    const channelAttributes = await buildChannelAttributes(userCreated, channelNames)
+    const channelAttributes = await buildChannelAttributes(userCreated, t, channelNames)
     const videoChannel = await createLocalVideoChannel(channelAttributes, accountCreated, t)
 
     const videoPlaylist = await createWatchLaterPlaylist(accountCreated, t)
@@ -129,7 +129,7 @@ async function getOriginalVideoFileTotalFromUser (user: MUserId) {
 
   const base = await UserModel.getTotalRawQuery(query, user.id)
 
-  return base + LiveManager.Instance.getLiveQuotaUsedByUser(user.id)
+  return base + LiveQuotaStore.Instance.getLiveQuotaOf(user.id)
 }
 
 // Returns cumulative size of all video files uploaded in the last 24 hours.
@@ -143,10 +143,10 @@ async function getOriginalVideoFileTotalDailyFromUser (user: MUserId) {
 
   const base = await UserModel.getTotalRawQuery(query, user.id)
 
-  return base + LiveManager.Instance.getLiveQuotaUsedByUser(user.id)
+  return base + LiveQuotaStore.Instance.getLiveQuotaOf(user.id)
 }
 
-async function isAbleToUploadVideo (userId: number, size: number) {
+async function isAbleToUploadVideo (userId: number, newVideoSize: number) {
   const user = await UserModel.loadById(userId)
 
   if (user.videoQuota === -1 && user.videoQuotaDaily === -1) return Promise.resolve(true)
@@ -156,8 +156,8 @@ async function isAbleToUploadVideo (userId: number, size: number) {
     getOriginalVideoFileTotalDailyFromUser(user)
   ])
 
-  const uploadedTotal = size + totalBytes
-  const uploadedDaily = size + totalBytesDaily
+  const uploadedTotal = newVideoSize + totalBytes
+  const uploadedDaily = newVideoSize + totalBytesDaily
 
   if (user.videoQuotaDaily === -1) return uploadedTotal < user.videoQuota
   if (user.videoQuota === -1) return uploadedDaily < user.videoQuotaDaily
@@ -203,14 +203,14 @@ function createDefaultUserNotificationSettings (user: MUserId, t: Transaction | 
   return UserNotificationSettingModel.create(values, { transaction: t })
 }
 
-async function buildChannelAttributes (user: MUser, channelNames?: ChannelNames) {
+async function buildChannelAttributes (user: MUser, transaction?: Transaction, channelNames?: ChannelNames) {
   if (channelNames) return channelNames
 
   let channelName = user.username + '_channel'
 
   // Conflict, generate uuid instead
-  const actor = await ActorModel.loadLocalByName(channelName)
-  if (actor) channelName = uuidv4()
+  const actor = await ActorModel.loadLocalByName(channelName, transaction)
+  if (actor) channelName = buildUUID()
 
   const videoChannelDisplayName = `Main ${user.username} channel`
 

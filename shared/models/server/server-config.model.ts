@@ -33,6 +33,22 @@ export interface ServerConfig {
   serverVersion: string
   serverCommit?: string
 
+  client: {
+    videos: {
+      miniature: {
+        preferAuthorDisplayName: boolean
+      }
+    }
+  }
+
+  webadmin: {
+    configuration: {
+      edition: {
+        allowed: boolean
+      }
+    }
+  }
+
   instance: {
     name: string
     shortDescription: string

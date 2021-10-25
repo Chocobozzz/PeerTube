@@ -1,10 +1,11 @@
 import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
 import { LoginGuard } from '../core'
+import { MyFollowersComponent } from './my-follows/my-followers.component'
+import { MySubscriptionsComponent } from './my-follows/my-subscriptions.component'
 import { MyHistoryComponent } from './my-history/my-history.component'
 import { MyLibraryComponent } from './my-library.component'
 import { MyOwnershipComponent } from './my-ownership/my-ownership.component'
-import { MySubscriptionsComponent } from './my-subscriptions/my-subscriptions.component'
 import { MyVideoImportsComponent } from './my-video-imports/my-video-imports.component'
 import { MyVideoPlaylistCreateComponent } from './my-video-playlists/my-video-playlist-create.component'
 import { MyVideoPlaylistElementsComponent } from './my-video-playlists/my-video-playlist-elements.component'
@@ -96,6 +97,15 @@ const myLibraryRoutes: Routes = [
         data: {
           meta: {
             title: $localize`My subscriptions`
+          }
+        }
+      },
+      {
+        path: 'followers',
+        component: MyFollowersComponent,
+        data: {
+          meta: {
+            title: $localize`My followers`
           }
         }
       },

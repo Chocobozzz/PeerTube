@@ -4,14 +4,10 @@ $browser-context: 16;
   @return #{$pixels/$context}em;
 }
 
-@mixin transition($string: $transition--default) {
-  transition: $string;
-}
-
 .video-js {
 
   .vjs-upnext-content {
-    @include transition(opacity 0.1s);
+    transition: opacity 0.1s;
 
     font-size: 1.8em;
     pointer-events: auto;
@@ -93,7 +89,7 @@ $browser-context: 16;
   }
 
   .vjs-upnext-autoplay-icon {
-    @include transition(stroke-dasharray 0.1s cubic-bezier(0.4,0,1,1));
+    transition: stroke-dasharray 0.1s cubic-bezier(0.4, 0, 1, 1);
 
     position: absolute;
     top: 50%;

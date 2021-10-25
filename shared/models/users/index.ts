@@ -1,3 +1,4 @@
+export * from './user-create-result.model'
 export * from './user-create.model'
 export * from './user-flag.model'
 export * from './user-login.model'

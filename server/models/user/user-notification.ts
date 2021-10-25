@@ -1,5 +1,6 @@
 import { FindOptions, ModelIndexesOptions, Op, WhereOptions } from 'sequelize'
 import { AllowNull, BelongsTo, Column, CreatedAt, Default, ForeignKey, Is, Model, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
+import { uuidToShort } from '@server/helpers/uuid'
 import { UserNotificationIncludes, UserNotificationModelForApi } from '@server/types/models/user'
 import { AttributesOnly } from '@shared/core-utils'
 import { UserNotification, UserNotificationType } from '../../../shared'
@@ -615,6 +616,7 @@ export class UserNotificationModel extends Model<Partial<AttributesOnly<UserNoti
     return {
       id: video.id,
       uuid: video.uuid,
+      shortUUID: uuidToShort(video.uuid),
       name: video.name
     }
   }
@@ -628,6 +630,7 @@ export class UserNotificationModel extends Model<Partial<AttributesOnly<UserNoti
           ? {
             id: abuse.VideoCommentAbuse.VideoComment.Video.id,
             name: abuse.VideoCommentAbuse.VideoComment.Video.name,
+            shortUUID: uuidToShort(abuse.VideoCommentAbuse.VideoComment.Video.uuid),
             uuid: abuse.VideoCommentAbuse.VideoComment.Video.uuid
           }
           : undefined

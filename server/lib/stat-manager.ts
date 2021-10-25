@@ -1,14 +1,14 @@
+import { mapSeries } from 'bluebird'
 import { CONFIG } from '@server/initializers/config'
-import { UserModel } from '@server/models/user/user'
 import { ActorFollowModel } from '@server/models/actor/actor-follow'
 import { VideoRedundancyModel } from '@server/models/redundancy/video-redundancy'
+import { UserModel } from '@server/models/user/user'
 import { VideoModel } from '@server/models/video/video'
 import { VideoChannelModel } from '@server/models/video/video-channel'
 import { VideoCommentModel } from '@server/models/video/video-comment'
 import { VideoFileModel } from '@server/models/video/video-file'
 import { VideoPlaylistModel } from '@server/models/video/video-playlist'
 import { ActivityType, ServerStats, VideoRedundancyStrategyWithManual } from '@shared/models'
-import * as Bluebird from 'bluebird'
 
 class StatsManager {
 
@@ -107,7 +107,7 @@ class StatsManager {
 
     strategies.push({ strategy: 'manual', size: null })
 
-    return Bluebird.mapSeries(strategies, r => {
+    return mapSeries(strategies, r => {
       return VideoRedundancyModel.getStats(r.strategy)
         .then(stats => Object.assign(stats, { strategy: r.strategy, totalSize: r.size }))
     })

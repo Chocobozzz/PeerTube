@@ -1,4 +1,4 @@
-import * as Bull from 'bull'
+import { Job } from 'bull'
 import { getLocalActorFollowActivityPubUrl } from '@server/lib/activitypub/url'
 import { ActivitypubFollowPayload } from '@shared/models'
 import { sanitizeHost } from '../../../helpers/core-utils'
@@ -8,12 +8,12 @@ import { REMOTE_SCHEME, WEBSERVER } from '../../../initializers/constants'
 import { sequelizeTypescript } from '../../../initializers/database'
 import { ActorModel } from '../../../models/actor/actor'
 import { ActorFollowModel } from '../../../models/actor/actor-follow'
-import { MActor, MActorFollowActors, MActorFull } from '../../../types/models'
+import { MActor, MActorFull } from '../../../types/models'
 import { getOrCreateAPActor, loadActorUrlOrGetFromWebfinger } from '../../activitypub/actors'
 import { sendFollow } from '../../activitypub/send'
 import { Notifier } from '../../notifier'
 
-async function processActivityPubFollow (job: Bull.Job) {
+async function processActivityPubFollow (job: Job) {
   const payload = job.data as ActivitypubFollowPayload
   const host = payload.host
 
@@ -54,21 +54,13 @@ async function follow (fromActor: MActor, targetActor: MActorFull, isAutoFollow 
   const state = !fromActor.serverId && !targetActor.serverId ? 'accepted' : 'pending'
 
   const actorFollow = await sequelizeTypescript.transaction(async t => {
-    const [ actorFollow ] = await ActorFollowModel.findOrCreate<MActorFollowActors>({
-      where: {
-        actorId: fromActor.id,
-        targetActorId: targetActor.id
-      },
-      defaults: {
-        state,
-        url: getLocalActorFollowActivityPubUrl(fromActor, targetActor),
-        actorId: fromActor.id,
-        targetActorId: targetActor.id
-      },
+    const [ actorFollow ] = await ActorFollowModel.findOrCreateCustom({
+      byActor: fromActor,
+      state,
+      targetActor,
+      activityId: getLocalActorFollowActivityPubUrl(fromActor, targetActor),
       transaction: t
     })
-    actorFollow.ActorFollowing = targetActor
-    actorFollow.ActorFollower = fromActor
 
     // Send a notification to remote server if our follow is not already accepted
     if (actorFollow.state !== 'accepted') sendFollow(actorFollow, t)

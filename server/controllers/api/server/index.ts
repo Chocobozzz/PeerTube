@@ -1,11 +1,11 @@
-import * as express from 'express'
+import express from 'express'
+import { contactRouter } from './contact'
+import { debugRouter } from './debug'
 import { serverFollowsRouter } from './follows'
-import { statsRouter } from './stats'
+import { logsRouter } from './logs'
 import { serverRedundancyRouter } from './redundancy'
 import { serverBlocklistRouter } from './server-blocklist'
-import { contactRouter } from './contact'
-import { logsRouter } from './logs'
-import { debugRouter } from './debug'
+import { statsRouter } from './stats'
 
 const serverRouter = express.Router()
 

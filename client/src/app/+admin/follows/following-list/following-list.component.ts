@@ -2,15 +2,15 @@ import { SortMeta } from 'primeng/api'
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { ConfirmService, Notifier, RestPagination, RestTable } from '@app/core'
 import { InstanceFollowService } from '@app/shared/shared-instance'
-import { BatchDomainsModalComponent } from '@app/shared/shared-moderation'
 import { ActorFollow } from '@shared/models'
+import { FollowModalComponent } from './follow-modal.component'
 
 @Component({
   templateUrl: './following-list.component.html',
   styleUrls: [ '../follows.component.scss', './following-list.component.scss' ]
 })
 export class FollowingListComponent extends RestTable implements OnInit {
-  @ViewChild('batchDomainsModal') batchDomainsModal: BatchDomainsModalComponent
+  @ViewChild('followModal') followModal: FollowModalComponent
 
   following: ActorFollow[] = []
   totalRecords = 0
@@ -21,7 +21,7 @@ export class FollowingListComponent extends RestTable implements OnInit {
     private notifier: Notifier,
     private confirmService: ConfirmService,
     private followService: InstanceFollowService
-    ) {
+  ) {
     super()
   }
 
@@ -33,23 +33,12 @@ export class FollowingListComponent extends RestTable implements OnInit {
     return 'FollowingListComponent'
   }
 
-  addDomainsToFollow () {
-    this.batchDomainsModal.openModal()
+  openFollowModal () {
+    this.followModal.openModal()
   }
 
-  httpEnabled () {
-    return window.location.protocol === 'https:'
-  }
-
-  async addFollowing (hosts: string[]) {
-    this.followService.follow(hosts).subscribe(
-      () => {
-        this.notifier.success($localize`Follow request(s) sent!`)
-        this.reloadData()
-      },
-
-      err => this.notifier.error(err.message)
-    )
+  isInstanceFollowing (follow: ActorFollow) {
+    return follow.following.name === 'peertube'
   }
 
   async removeFollowing (follow: ActorFollow) {
@@ -59,25 +48,26 @@ export class FollowingListComponent extends RestTable implements OnInit {
     )
     if (res === false) return
 
-    this.followService.unfollow(follow).subscribe(
-      () => {
-        this.notifier.success($localize`You are not following ${follow.following.host} anymore.`)
-        this.reloadData()
-      },
+    this.followService.unfollow(follow)
+      .subscribe({
+        next: () => {
+          this.notifier.success($localize`You are not following ${follow.following.host} anymore.`)
+          this.reloadData()
+        },
 
-      err => this.notifier.error(err.message)
-    )
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   protected reloadData () {
     this.followService.getFollowing({ pagination: this.pagination, sort: this.sort, search: this.search })
-                      .subscribe(
-                        resultList => {
+                      .subscribe({
+                        next: resultList => {
                           this.following = resultList.data
                           this.totalRecords = resultList.total
                         },
 
-                        err => this.notifier.error(err.message)
-                      )
+                        error: err => this.notifier.error(err.message)
+                      })
   }
 }

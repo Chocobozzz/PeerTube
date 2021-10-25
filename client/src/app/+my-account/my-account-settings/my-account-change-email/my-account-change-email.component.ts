@@ -28,7 +28,7 @@ export class MyAccountChangeEmailComponent extends FormReactive implements OnIni
   ngOnInit () {
     this.buildForm({
       'new-email': USER_EMAIL_VALIDATOR,
-      'password': USER_PASSWORD_VALIDATOR
+      password: USER_PASSWORD_VALIDATOR
     })
 
     this.user = this.authService.getUser()
@@ -38,15 +38,15 @@ export class MyAccountChangeEmailComponent extends FormReactive implements OnIni
     this.error = null
     this.success = null
 
-    const password = this.form.value[ 'password' ]
-    const email = this.form.value[ 'new-email' ]
+    const password = this.form.value['password']
+    const email = this.form.value['new-email']
 
     forkJoin([
       this.serverService.getConfig(),
       this.userService.changeEmail(password, email)
     ]).pipe(tap(() => this.authService.refreshUserInformation()))
-      .subscribe(
-        ([ config ]) => {
+      .subscribe({
+        next: ([ config ]) => {
           this.form.reset()
 
           if (config.signup.requiresEmailVerification) {
@@ -56,7 +56,7 @@ export class MyAccountChangeEmailComponent extends FormReactive implements OnIni
           }
         },
 
-        err => {
+        error: err => {
           if (err.status === 401) {
             this.error = $localize`You current password is invalid.`
             return
@@ -64,6 +64,6 @@ export class MyAccountChangeEmailComponent extends FormReactive implements OnIni
 
           this.error = err.message
         }
-      )
+      })
   }
 }

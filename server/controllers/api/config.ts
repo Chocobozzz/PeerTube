@@ -1,8 +1,8 @@
-import { ServerConfigManager } from '@server/lib/server-config-manager'
-import * as express from 'express'
+import express from 'express'
 import { remove, writeJSON } from 'fs-extra'
 import { snakeCase } from 'lodash'
 import validator from 'validator'
+import { ServerConfigManager } from '@server/lib/server-config-manager'
 import { UserRight } from '../../../shared'
 import { About } from '../../../shared/models/server/about.model'
 import { CustomConfig } from '../../../shared/models/server/custom-config.model'
@@ -11,7 +11,7 @@ import { objectConverter } from '../../helpers/core-utils'
 import { CONFIG, reloadConfig } from '../../initializers/config'
 import { ClientHtml } from '../../lib/client-html'
 import { asyncMiddleware, authenticate, ensureUserHasRight, openapiOperationDoc } from '../../middlewares'
-import { customConfigUpdateValidator } from '../../middlewares/validators/config'
+import { customConfigUpdateValidator, ensureConfigIsEditable } from '../../middlewares/validators/config'
 
 const configRouter = express.Router()
 
@@ -38,6 +38,7 @@ configRouter.put('/custom',
   openapiOperationDoc({ operationId: 'putCustomConfig' }),
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
+  ensureConfigIsEditable,
   customConfigUpdateValidator,
   asyncMiddleware(updateCustomConfig)
 )
@@ -46,6 +47,7 @@ configRouter.delete('/custom',
   openapiOperationDoc({ operationId: 'delCustomConfig' }),
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
+  ensureConfigIsEditable,
   asyncMiddleware(deleteCustomConfig)
 )
 

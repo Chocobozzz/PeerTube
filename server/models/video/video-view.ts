@@ -1,5 +1,5 @@
-import * as Sequelize from 'sequelize'
-import { AllowNull, BelongsTo, Column, CreatedAt, ForeignKey, Model, Table } from 'sequelize-typescript'
+import { literal, Op } from 'sequelize'
+import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Model, Table } from 'sequelize-typescript'
 import { AttributesOnly } from '@shared/core-utils'
 import { VideoModel } from './video'
 
@@ -20,11 +20,11 @@ export class VideoViewModel extends Model<Partial<AttributesOnly<VideoViewModel>
   createdAt: Date
 
   @AllowNull(false)
-  @Column(Sequelize.DATE)
+  @Column(DataType.DATE)
   startDate: Date
 
   @AllowNull(false)
-  @Column(Sequelize.DATE)
+  @Column(DataType.DATE)
   endDate: Date
 
   @AllowNull(false)
@@ -47,10 +47,10 @@ export class VideoViewModel extends Model<Partial<AttributesOnly<VideoViewModel>
     const query = {
       where: {
         startDate: {
-          [Sequelize.Op.lt]: beforeDate
+          [Op.lt]: beforeDate
         },
         videoId: {
-          [Sequelize.Op.in]: Sequelize.literal('(SELECT "id" FROM "video" WHERE "remote" IS TRUE)')
+          [Op.in]: literal('(SELECT "id" FROM "video" WHERE "remote" IS TRUE)')
         }
       }
     }

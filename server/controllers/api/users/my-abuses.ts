@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { AbuseModel } from '@server/models/abuse/abuse'
 import {
   abuseListForUserValidator,

@@ -1,9 +1,7 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
+@use '_miniature' as *;
 
-my-video-miniature {
-  @include margin-right(15px);
-  display: inline-block;
-  min-width: $video-thumbnail-width;
-  max-width: $video-thumbnail-width;
+.root {
+  @include grid-videos-miniature-layout;
 }

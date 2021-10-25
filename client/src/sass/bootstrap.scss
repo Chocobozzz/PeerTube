@@ -1,8 +1,35 @@
 $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
-@import '_bootstrap';
 
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
+
+@import './_bootstrap-variables';
+
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+
+@import '~bootstrap/scss/mixins';
+@import '~bootstrap/scss/root';
+@import '~bootstrap/scss/reboot';
+@import '~bootstrap/scss/type';
+@import '~bootstrap/scss/grid';
+@import '~bootstrap/scss/tables';
+@import '~bootstrap/scss/forms';
+@import '~bootstrap/scss/buttons';
+@import '~bootstrap/scss/dropdown';
+@import '~bootstrap/scss/button-group';
+@import '~bootstrap/scss/input-group';
+@import '~bootstrap/scss/nav';
+@import '~bootstrap/scss/card';
+@import '~bootstrap/scss/badge';
+@import '~bootstrap/scss/alert';
+@import '~bootstrap/scss/close';
+@import '~bootstrap/scss/modal';
+@import '~bootstrap/scss/tooltip';
+@import '~bootstrap/scss/popover';
+@import '~bootstrap/scss/utilities';
+
+@import '~@neos21/bootstrap3-glyphicons/assets/stylesheets/bootstrap3-glyphicons';
 
 // Thanks https://gist.github.com/alexandrevicenzi/680147013e902a4eaa5d
 .glyphicon-refresh-animate {
@@ -32,13 +59,14 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
 }
 
 /* rules for dropdowns excepts when in button group, to avoid impacting the dropdown-toggle */
-.dropdown {
+.dropdown,
+.dropup {
   z-index: z(dropdown) !important;
 }
 
 .list-overflow-menu,
 .parent-entry {
-  z-index: z(header) - 1 !important;
+  z-index: z(menu) - 1 !important;
 }
 
 .btn-group,
@@ -186,7 +214,7 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
         content: '';
         display: block;
         position: fixed;
-        z-index: z('menu') - 1;
+        z-index: z(overlay);
       }
     }
   }
@@ -259,6 +287,7 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
 
   &.show {
     max-height: 1500px;
+    overflow: inherit !important;
   }
 }
 

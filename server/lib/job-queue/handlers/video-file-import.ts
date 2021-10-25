@@ -1,18 +1,22 @@
-import * as Bull from 'bull'
+import { Job } from 'bull'
 import { copy, stat } from 'fs-extra'
 import { getLowercaseExtension } from '@server/helpers/core-utils'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
-import { generateVideoFilename, getVideoFilePath } from '@server/lib/video-paths'
+import { CONFIG } from '@server/initializers/config'
+import { federateVideoIfNeeded } from '@server/lib/activitypub/videos'
+import { generateWebTorrentVideoFilename } from '@server/lib/paths'
+import { addMoveToObjectStorageJob } from '@server/lib/video'
+import { VideoPathManager } from '@server/lib/video-path-manager'
 import { UserModel } from '@server/models/user/user'
 import { MVideoFullLight } from '@server/types/models'
-import { VideoFileImportPayload } from '@shared/models'
+import { VideoFileImportPayload, VideoStorage } from '@shared/models'
 import { getVideoFileFPS, getVideoFileResolution } from '../../../helpers/ffprobe-utils'
 import { logger } from '../../../helpers/logger'
 import { VideoModel } from '../../../models/video/video'
 import { VideoFileModel } from '../../../models/video/video-file'
-import { onNewWebTorrentFileResolution } from './video-transcoding'
+import { createHlsJobIfEnabled } from './video-transcoding'
 
-async function processVideoFileImport (job: Bull.Job) {
+async function processVideoFileImport (job: Job) {
   const payload = job.data as VideoFileImportPayload
   logger.info('Processing video file import in job %d.', job.id)
 
@@ -29,15 +33,19 @@ async function processVideoFileImport (job: Bull.Job) {
 
   const user = await UserModel.loadByChannelActorId(video.VideoChannel.actorId)
 
-  const newResolutionPayload = {
-    type: 'new-resolution-to-webtorrent' as 'new-resolution-to-webtorrent',
+  await createHlsJobIfEnabled(user, {
     videoUUID: video.uuid,
-    resolution: data.videoFileResolution,
+    resolution: data.resolution,
     isPortraitMode: data.isPortraitMode,
-    copyCodecs: false,
-    isNewVideo: false
+    copyCodecs: true,
+    isMaxQuality: false
+  })
+
+  if (CONFIG.OBJECT_STORAGE.ENABLED) {
+    await addMoveToObjectStorageJob(video)
+  } else {
+    await federateVideoIfNeeded(video, false)
   }
-  await onNewWebTorrentFileResolution(video, user, newResolutionPayload)
 
   return video
 }
@@ -51,18 +59,17 @@ export {
 // ---------------------------------------------------------------------------
 
 async function updateVideoFile (video: MVideoFullLight, inputFilePath: string) {
-  const { videoFileResolution } = await getVideoFileResolution(inputFilePath)
+  const { resolution } = await getVideoFileResolution(inputFilePath)
   const { size } = await stat(inputFilePath)
   const fps = await getVideoFileFPS(inputFilePath)
 
   const fileExt = getLowercaseExtension(inputFilePath)
 
-  const currentVideoFile = video.VideoFiles.find(videoFile => videoFile.resolution === videoFileResolution)
+  const currentVideoFile = video.VideoFiles.find(videoFile => videoFile.resolution === resolution)
 
   if (currentVideoFile) {
     // Remove old file and old torrent
-    await video.removeFile(currentVideoFile)
-    await currentVideoFile.removeTorrent()
+    await video.removeFileAndTorrent(currentVideoFile)
     // Remove the old video file from the array
     video.VideoFiles = video.VideoFiles.filter(f => f !== currentVideoFile)
 
@@ -70,15 +77,16 @@ async function updateVideoFile (video: MVideoFullLight, inputFilePath: string) {
   }
 
   const newVideoFile = new VideoFileModel({
-    resolution: videoFileResolution,
+    resolution,
     extname: fileExt,
-    filename: generateVideoFilename(video, false, videoFileResolution, fileExt),
+    filename: generateWebTorrentVideoFilename(resolution, fileExt),
+    storage: VideoStorage.FILE_SYSTEM,
     size,
     fps,
     videoId: video.id
   })
 
-  const outputPath = getVideoFilePath(video, newVideoFile)
+  const outputPath = VideoPathManager.Instance.getFSVideoFileOutputPath(video, newVideoFile)
   await copy(inputFilePath, outputPath)
 
   video.VideoFiles.push(newVideoFile)

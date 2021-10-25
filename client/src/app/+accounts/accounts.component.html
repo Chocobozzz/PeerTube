@@ -66,22 +66,22 @@
     </div>
   </div>
 
-  <div class="links">
+  <div class="links" [ngClass]="{ 'on-channel-page': isOnChannelPage() }">
     <ng-template #linkTemplate let-item="item">
       <a [routerLink]="item.routerLink" routerLinkActive="active" class="title-page">{{ item.label }}</a>
     </ng-template>
 
-    <list-overflow [hidden]="hideMenu" [items]="links" [itemTemplate]="linkTemplate"></list-overflow>
+    <my-list-overflow [hidden]="hideMenu" [items]="links" [itemTemplate]="linkTemplate"></my-list-overflow>
 
-    <simple-search-input
+    <my-simple-search-input
       [alwaysShow]="!isInSmallView()" (searchChanged)="searchChanged($event)"
       (inputDisplayChanged)="onSearchInputDisplayChanged($event)" name="search-videos"
       i18n-iconTitle icon-title="Search account videos"
       i18n-placeholder placeholder="Search account videos"
-    ></simple-search-input>
+    ></my-simple-search-input>
   </div>
 
-  <router-outlet (activate)="onOutletLoaded($event)"></router-outlet>
+  <router-outlet></router-outlet>
 </div>
 
 <ng-container *ngIf="prependModerationActions">

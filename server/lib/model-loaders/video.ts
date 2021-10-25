@@ -1,35 +1,43 @@
 import { VideoModel } from '@server/models/video/video'
 import {
   MVideoAccountLightBlacklistAllFiles,
+  MVideoFormattableDetails,
   MVideoFullLight,
-  MVideoIdThumbnail,
+  MVideoId,
   MVideoImmutable,
-  MVideoThumbnail,
-  MVideoWithRights
+  MVideoThumbnail
 } from '@server/types/models'
+import { Hooks } from '../plugins/hooks'
 
-type VideoLoadType = 'all' | 'only-video' | 'only-video-with-rights' | 'id' | 'none' | 'only-immutable-attributes'
+type VideoLoadType = 'for-api' | 'all' | 'only-video' | 'id' | 'none' | 'only-immutable-attributes'
 
+function loadVideo (id: number | string, fetchType: 'for-api', userId?: number): Promise<MVideoFormattableDetails>
 function loadVideo (id: number | string, fetchType: 'all', userId?: number): Promise<MVideoFullLight>
 function loadVideo (id: number | string, fetchType: 'only-immutable-attributes'): Promise<MVideoImmutable>
 function loadVideo (id: number | string, fetchType: 'only-video', userId?: number): Promise<MVideoThumbnail>
-function loadVideo (id: number | string, fetchType: 'only-video-with-rights', userId?: number): Promise<MVideoWithRights>
-function loadVideo (id: number | string, fetchType: 'id' | 'none', userId?: number): Promise<MVideoIdThumbnail>
+function loadVideo (id: number | string, fetchType: 'id' | 'none', userId?: number): Promise<MVideoId>
 function loadVideo (
   id: number | string,
   fetchType: VideoLoadType,
   userId?: number
-): Promise<MVideoFullLight | MVideoThumbnail | MVideoWithRights | MVideoIdThumbnail | MVideoImmutable>
+): Promise<MVideoFullLight | MVideoThumbnail | MVideoId | MVideoImmutable>
 function loadVideo (
   id: number | string,
   fetchType: VideoLoadType,
   userId?: number
-): Promise<MVideoFullLight | MVideoThumbnail | MVideoWithRights | MVideoIdThumbnail | MVideoImmutable> {
+): Promise<MVideoFullLight | MVideoThumbnail | MVideoId | MVideoImmutable> {
+
+  if (fetchType === 'for-api') {
+    return Hooks.wrapPromiseFun(
+      VideoModel.loadForGetAPI,
+      { id, userId },
+      'filter:api.video.get.result'
+    )
+  }
+
   if (fetchType === 'all') return VideoModel.loadAndPopulateAccountAndServerAndTags(id, undefined, userId)
 
   if (fetchType === 'only-immutable-attributes') return VideoModel.loadImmutableAttributes(id)
-
-  if (fetchType === 'only-video-with-rights') return VideoModel.loadWithRights(id)
 
   if (fetchType === 'only-video') return VideoModel.load(id)
 

@@ -1,7 +1,7 @@
 <div class="margin-content">
   <div class="title-page title-page-single">
     <span class="mr-1" i18n>Update</span>
-    <a [routerLink]="[ '/w', video.uuid ]">{{ video?.name }}</a>
+    <a [routerLink]="getVideoUrl()">{{ video?.name }}</a>
   </div>
 
   <form novalidate [formGroup]="form">
@@ -12,6 +12,8 @@
       [videoCaptions]="videoCaptions" [waitTranscodingEnabled]="isWaitTranscodingEnabled()"
       type="update" (pluginFieldsAdded)="hydratePluginFieldsFromVideo()"
       [liveVideo]="liveVideo" [videoToUpdate]="videoDetails"
+
+      (formBuilt)="onFormBuilt()"
     ></my-video-edit>
 
     <div class="submit-container">
