@@ -14,7 +14,7 @@ import { logger } from '../../../helpers/logger'
 import { ActorModel } from '../../../models/actor/actor'
 import { VideoChannelModel } from '../../../models/video/video-channel'
 import { areValidationErrors, doesLocalVideoChannelNameExist, doesVideoChannelNameWithHostExist } from '../shared'
-import { ServerConfigManager } from '@server/lib/server-config-manager'
+import { CONFIG } from '@server/initializers/config'
 
 const videoChannelsAddValidator = [
   body('name').custom(isVideoChannelUsernameValid).withMessage('Should have a valid channel name'),
@@ -37,9 +37,8 @@ const videoChannelsAddValidator = [
     }
 
     const count = await VideoChannelModel.countByAccount(res.locals.oauth.token.User.Account.id)
-    const maxVideoChannels = (await ServerConfigManager.Instance.getServerConfig(req.ip)).videoChannels.maxPerUser
-    if (count >= maxVideoChannels) {
-      res.fail({ message: `You cannot create more than ${maxVideoChannels} channels` })
+    if (count >= CONFIG.VIDEO_CHANNELS.MAX_PER_USER) {
+      res.fail({ message: `You cannot create more than ${CONFIG.VIDEO_CHANNELS.MAX_PER_USER} channels` })
       return false
     }
 

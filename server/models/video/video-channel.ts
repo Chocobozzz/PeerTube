@@ -44,6 +44,7 @@ import { setAsUpdated } from '../shared'
 import { buildServerIdsFollowedBy, buildTrigramSearchIndex, createSimilarityAttribute, getSort, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 import { VideoPlaylistModel } from './video-playlist'
+import { CONFIG } from '@server/initializers/config'
 
 export enum ScopeNames {
   FOR_API = 'FOR_API',
@@ -584,7 +585,7 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
 
   static listAllByAccount (accountId: number) {
     const query = {
-      limit: 20, // FIXME: how to get the videoChannels.maxPerUser here?
+      limit: CONFIG.VIDEO_CHANNELS.MAX_PER_USER,
       include: [
         {
           attributes: [],
