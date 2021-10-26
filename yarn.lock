@@ -6944,7 +6944,7 @@ prompt@^1.0.0:
     revalidator "0.1.x"
     winston "2.x"
 
-proxy-addr@~2.0.5:
+proxy-addr@^2.0.7, proxy-addr@~2.0.5:
   version "2.0.7"
   resolved "https://registry.yarnpkg.com/proxy-addr/-/proxy-addr-2.0.7.tgz#f19fe69ceab311eeb94b42e70e8c2070f9ba1025"
   integrity sha512-llQsMLSUDUPT44jdrU/O37qlnifitDP+ZwrmmZcoSKyLKvtZxpyV0n2/bD/N4tBAAZ/gJEdZU7KMraoK1+XYAg==
