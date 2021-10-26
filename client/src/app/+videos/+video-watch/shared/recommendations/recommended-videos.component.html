@@ -13,7 +13,7 @@
     </div>
 
     <ng-container *ngFor="let video of (videos$ | async); let i = index; let length = count">
-      <span i18n *ngIf="!playlist && i === 0 && length > 1 && autoPlayNextVideo" class="title-page-next-video-label">Next video to be played</span>
+      <span i18n *ngIf="!playlist && i === 0 && length !== 0 && autoPlayNextVideo" class="title-page-next-video-label">Next video to be played</span>
       <my-video-miniature
         [displayOptions]="displayOptions" [video]="video" [user]="userMiniature" [displayAsRow]="displayAsRow"
         (videoBlocked)="onVideoRemoved()" (videoRemoved)="onVideoRemoved()" (videoAccountMuted)="onVideoRemoved()"
