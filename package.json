@@ -149,6 +149,7 @@
     "ws": "^8.0.0"
   },
   "devDependencies": {
+    "@peertube/maildev": "^1.2.0",
     "@types/async": "^3.0.0",
     "@types/async-lock": "^1.1.0",
     "@types/bcrypt": "^5.0.0",
@@ -197,7 +198,6 @@
     "eslint-plugin-node": "^11.0.0",
     "eslint-plugin-promise": "^5.1.0",
     "fast-xml-parser": "^3.19.0",
-    "maildev": "^1.0.0-rc3",
     "mocha": "^9.0.0",
     "nodemon": "^2.0.1",
     "proxy": "^1.0.2",
