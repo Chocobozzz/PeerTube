@@ -1,5 +1,5 @@
 // Thanks http://tostring.it/2014/06/23/advanced-logging-with-nodejs/
-import { mkdirpSync, stat } from 'fs-extra'
+import { stat } from 'fs-extra'
 import { omit } from 'lodash'
 import { join } from 'path'
 import { format as sqlFormat } from 'sql-formatter'

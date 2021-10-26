@@ -1,6 +1,8 @@
 import express from 'express'
 import { body, header, param, query, ValidationChain } from 'express-validator'
+import { isTestInstance } from '@server/helpers/core-utils'
 import { getResumableUploadPath } from '@server/helpers/upload'
+import { Redis } from '@server/lib/redis'
 import { isAbleToUploadVideo } from '@server/lib/user'
 import { getServerActor } from '@server/models/application/application'
 import { ExpressPromiseHandler } from '@server/types/express'
@@ -105,11 +107,33 @@ const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
 const videosAddResumableValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const user = res.locals.oauth.token.User
-
     const body: express.CustomUploadXFile<express.UploadXFileMetadata> = req.body
     const file = { ...body, duration: undefined, path: getResumableUploadPath(body.id), filename: body.metadata.filename }
-
     const cleanup = () => deleteFileAndCatch(file.path)
+
+    const uploadId = req.query.upload_id
+    const sessionExists = await Redis.Instance.doesUploadSessionExist(uploadId)
+
+    if (sessionExists) {
+      const sessionResponse = await Redis.Instance.getUploadSession(uploadId)
+
+      if (!sessionResponse) {
+        res.setHeader('Retry-After', 300) // ask to retry after 5 min, knowing the upload_id is kept for up to 15 min after completion
+
+        return res.fail({
+          status: HttpStatusCode.SERVICE_UNAVAILABLE_503,
+          message: 'The upload is already being processed'
+        })
+      }
+
+      if (isTestInstance()) {
+        res.setHeader('x-resumable-upload-cached', 'true')
+      }
+
+      return res.json(sessionResponse)
+    }
+
+    await Redis.Instance.setUploadSession(uploadId)
 
     if (!await doesVideoChannelOfAccountExist(file.metadata.channelId, user, res)) return cleanup()
 

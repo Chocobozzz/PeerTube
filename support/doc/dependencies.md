@@ -360,7 +360,7 @@ sudo dnf install nginx postgresql postgresql-server postgresql-contrib openssl g
 6. You'll need a symlink for python3 to python for youtube-dl to work
 
 ```
-sudo ln -s /usr/bin/python3 /usr/bin/python
+sudo alternatives --set python3 /usr/bin/python
 ```
 
 7. Initialize the PostgreSQL database:
