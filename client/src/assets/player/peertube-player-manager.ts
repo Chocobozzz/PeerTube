@@ -1,6 +1,6 @@
 import 'videojs-hotkeys/videojs.hotkeys'
 import 'videojs-dock'
-import 'videojs-contextmenu-pt'
+import '@peertube/videojs-contextmenu'
 import './upnext/end-card'
 import './upnext/upnext-plugin'
 import './stats/stats-card'
