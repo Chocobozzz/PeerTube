@@ -47,8 +47,7 @@ import {
   UserHistoryService,
   UserNotificationsComponent,
   UserNotificationService,
-  UserQuotaComponent,
-  UserVideoChannelsQuotaComponent
+  UserQuotaComponent
 } from './users'
 import { RedundancyService, VideoImportService, VideoOwnershipService, VideoService } from './video'
 import { VideoCaptionService } from './video-caption'
@@ -111,7 +110,6 @@ import { VideoChannelService } from './video-channel'
 
     UserQuotaComponent,
     UserNotificationsComponent,
-    UserVideoChannelsQuotaComponent,
 
     PluginPlaceholderComponent
   ],
@@ -168,7 +166,6 @@ import { VideoChannelService } from './video-channel'
 
     UserQuotaComponent,
     UserNotificationsComponent,
-    UserVideoChannelsQuotaComponent,
 
     PluginPlaceholderComponent
   ],
