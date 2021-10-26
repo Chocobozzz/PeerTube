@@ -38,6 +38,8 @@ const customConfigUpdateValidator = [
   body('user.videoQuota').custom(isUserVideoQuotaValid).withMessage('Should have a valid video quota'),
   body('user.videoQuotaDaily').custom(isUserVideoQuotaDailyValid).withMessage('Should have a valid daily video quota'),
 
+  body('videoChannels.maxPerUser').isInt().withMessage("Should have a valid maximum amount of video channels per user"),
+
   body('transcoding.enabled').isBoolean().withMessage('Should have a valid transcoding enabled boolean'),
   body('transcoding.allowAdditionalExtensions').isBoolean().withMessage('Should have a valid additional extensions boolean'),
   body('transcoding.threads').isInt().withMessage('Should have a valid transcoding threads number'),

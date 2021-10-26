@@ -306,6 +306,9 @@ user:
   video_quota: -1
   video_quota_daily: -1
 
+video_channels:
+  max_per_user: 20 # Allows each user to create up to 20 video channels.
+
 # If enabled, the video will be transcoded to mp4 (x264) with `faststart` flag
 # In addition, if some resolutions are enabled the mp4 video file will be transcoded to these new resolutions
 # Please, do not disable transcoding since many uploaded videos will not work

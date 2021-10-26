@@ -1,6 +1,5 @@
 import express from 'express'
 import { body, param, query } from 'express-validator'
-import { VIDEO_CHANNELS } from '@server/initializers/constants'
 import { MChannelAccountDefault, MUser } from '@server/types/models'
 import { UserRight } from '../../../../shared'
 import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
@@ -15,6 +14,7 @@ import { logger } from '../../../helpers/logger'
 import { ActorModel } from '../../../models/actor/actor'
 import { VideoChannelModel } from '../../../models/video/video-channel'
 import { areValidationErrors, doesLocalVideoChannelNameExist, doesVideoChannelNameWithHostExist } from '../shared'
+import { CONFIG } from '@server/initializers/config'
 
 const videoChannelsAddValidator = [
   body('name').custom(isVideoChannelUsernameValid).withMessage('Should have a valid channel name'),
@@ -37,8 +37,8 @@ const videoChannelsAddValidator = [
     }
 
     const count = await VideoChannelModel.countByAccount(res.locals.oauth.token.User.Account.id)
-    if (count >= VIDEO_CHANNELS.MAX_PER_USER) {
-      res.fail({ message: `You cannot create more than ${VIDEO_CHANNELS.MAX_PER_USER} channels` })
+    if (count >= CONFIG.VIDEO_CHANNELS.MAX_PER_USER) {
+      res.fail({ message: `You cannot create more than ${CONFIG.VIDEO_CHANNELS.MAX_PER_USER} channels` })
       return false
     }
 
