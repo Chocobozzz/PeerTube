@@ -9,7 +9,7 @@ import { processImage } from './image-utils'
 import { logger } from './logger'
 import { getProxy, isProxyEnabled } from './proxy'
 
-const httpSignature = require('http-signature')
+const httpSignature = require('@peertube/http-signature')
 
 export interface PeerTubeRequestError extends Error {
   statusCode?: number

@@ -73,6 +73,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.23.0",
+    "@peertube/http-signature": "^1.4.0",
     "@uploadx/core": "^4.4.0",
     "async": "^3.0.1",
     "async-lru": "^1.1.1",
@@ -102,7 +103,6 @@
     "helmet": "^4.1.0",
     "hpagent": "^0.1.2",
     "http-problem-details": "^0.1.5",
-    "http-signature": "1.3.5",
     "ip-anonymize": "^0.1.0",
     "ipaddr.js": "2.0.1",
     "is-cidr": "^4.0.0",
@@ -196,7 +196,6 @@
     "eslint-plugin-import": "^2.20.1",
     "eslint-plugin-node": "^11.0.0",
     "eslint-plugin-promise": "^5.1.0",
-    "eslint-plugin-standard": "^5.0.0",
     "fast-xml-parser": "^3.19.0",
     "maildev": "^1.0.0-rc3",
     "mocha": "^9.0.0",
