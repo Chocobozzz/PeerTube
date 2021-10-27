@@ -1,8 +1,9 @@
-import { Observable } from 'rxjs'
-import { catchError, map, switchMap } from 'rxjs/operators'
+import { SortMeta } from 'primeng/api'
+import { from, Observable } from 'rxjs'
+import { catchError, concatMap, map, switchMap, toArray } from 'rxjs/operators'
 import { HttpClient, HttpParams, HttpRequest } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import { ComponentPaginationLight, RestExtractor, RestService, ServerService, UserService } from '@app/core'
+import { ComponentPaginationLight, RestExtractor, RestPagination, RestService, ServerService, UserService } from '@app/core'
 import { objectToFormData } from '@app/helpers'
 import {
   BooleanBothQuery,
@@ -31,8 +32,8 @@ import { VideoEdit } from './video-edit.model'
 import { Video } from './video.model'
 
 export type CommonVideoParams = {
-  videoPagination: ComponentPaginationLight
-  sort: VideoSortField
+  videoPagination?: ComponentPaginationLight
+  sort: VideoSortField | SortMeta
   filter?: VideoFilter
   categoryOneOf?: number[]
   languageOneOf?: string[]
@@ -200,6 +201,31 @@ export class VideoService {
                )
   }
 
+  getAdminVideos (
+    parameters: Omit<CommonVideoParams, 'filter'> & { pagination: RestPagination, search?: string }
+  ): Observable<ResultList<Video>> {
+    const { pagination, search } = parameters
+
+    let params = new HttpParams()
+    params = this.buildCommonVideosParams({ params, ...parameters })
+
+    params = params.set('start', pagination.start.toString())
+                   .set('count', pagination.count.toString())
+
+    if (search) {
+      params = this.buildAdminParamsFromSearch(search, params)
+    }
+
+    if (!params.has('filter')) params = params.set('filter', 'all')
+
+    return this.authHttp
+               .get<ResultList<Video>>(VideoService.BASE_VIDEO_URL, { params })
+               .pipe(
+                 switchMap(res => this.extractVideos(res)),
+                 catchError(err => this.restExtractor.handleError(err))
+               )
+  }
+
   getVideos (parameters: CommonVideoParams): Observable<ResultList<Video>> {
     let params = new HttpParams()
     params = this.buildCommonVideosParams({ params, ...parameters })
@@ -284,13 +310,15 @@ export class VideoService {
                )
   }
 
-  removeVideo (id: number) {
-    return this.authHttp
-               .delete(VideoService.BASE_VIDEO_URL + id)
-               .pipe(
-                 map(this.restExtractor.extractDataBool),
-                 catchError(err => this.restExtractor.handleError(err))
-               )
+  removeVideo (idArg: number | number[]) {
+    const ids = Array.isArray(idArg) ? idArg : [ idArg ]
+
+    return from(ids)
+      .pipe(
+        concatMap(id => this.authHttp.delete(VideoService.BASE_VIDEO_URL + id)),
+        toArray(),
+        catchError(err => this.restExtractor.handleError(err))
+      )
   }
 
   loadCompleteDescription (descriptionPath: string) {
@@ -393,9 +421,23 @@ export class VideoService {
   }
 
   private buildCommonVideosParams (options: CommonVideoParams & { params: HttpParams }) {
-    const { params, videoPagination, sort, filter, categoryOneOf, languageOneOf, skipCount, nsfwPolicy, isLive, nsfw } = options
+    const {
+      params,
+      videoPagination,
+      sort,
+      filter,
+      categoryOneOf,
+      languageOneOf,
+      skipCount,
+      nsfwPolicy,
+      isLive,
+      nsfw
+    } = options
 
-    const pagination = this.restService.componentToRestPagination(videoPagination)
+    const pagination = videoPagination
+      ? this.restService.componentToRestPagination(videoPagination)
+      : undefined
+
     let newParams = this.restService.addRestGetParams(params, pagination, sort)
 
     if (filter) newParams = newParams.set('filter', filter)
@@ -408,5 +450,20 @@ export class VideoService {
     if (categoryOneOf) newParams = this.restService.addArrayParams(newParams, 'categoryOneOf', categoryOneOf)
 
     return newParams
+  }
+
+  private buildAdminParamsFromSearch (search: string, params: HttpParams) {
+    const filters = this.restService.parseQueryStringFilter(search, {
+      filter: {
+        prefix: 'local:',
+        handler: v => {
+          if (v === 'true') return 'all-local'
+
+          return 'all'
+        }
+      }
+    })
+
+    return this.restService.addObjectParams(params, filters)
   }
 }

@@ -3,11 +3,10 @@ import { switchMap } from 'rxjs/operators'
 import { buildVideoOrPlaylistEmbed } from 'src/assets/player/utils'
 import { environment } from 'src/environments/environment'
 import { Component, OnInit } from '@angular/core'
-import { DomSanitizer } from '@angular/platform-browser'
 import { ActivatedRoute, Router } from '@angular/router'
 import { ConfirmService, MarkdownService, Notifier, RestPagination, RestTable, ServerService } from '@app/core'
 import { AdvancedInputFilter } from '@app/shared/shared-forms'
-import { DropdownAction, Video, VideoService } from '@app/shared/shared-main'
+import { DropdownAction, VideoService } from '@app/shared/shared-main'
 import { VideoBlockService } from '@app/shared/shared-moderation'
 import { buildVideoEmbedLink, decorateVideoLink } from '@shared/core-utils'
 import { VideoBlacklist, VideoBlacklistType } from '@shared/models'
@@ -18,7 +17,7 @@ import { VideoBlacklist, VideoBlacklistType } from '@shared/models'
   styleUrls: [ '../../../shared/shared-moderation/moderation.scss', './video-block-list.component.scss' ]
 })
 export class VideoBlockListComponent extends RestTable implements OnInit {
-  blocklist: (VideoBlacklist & { reasonHtml?: string, embedHtml?: string })[] = []
+  blocklist: (VideoBlacklist & { reasonHtml?: string })[] = []
   totalRecords = 0
   sort: SortMeta = { field: 'createdAt', order: -1 }
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
@@ -50,7 +49,6 @@ export class VideoBlockListComponent extends RestTable implements OnInit {
     private confirmService: ConfirmService,
     private videoBlocklistService: VideoBlockService,
     private markdownRenderer: MarkdownService,
-    private sanitizer: DomSanitizer,
     private videoService: VideoService
   ) {
     super()
@@ -125,10 +123,6 @@ export class VideoBlockListComponent extends RestTable implements OnInit {
     return 'VideoBlockListComponent'
   }
 
-  getVideoUrl (videoBlock: VideoBlacklist) {
-    return Video.buildWatchUrl(videoBlock.video)
-  }
-
   toHtml (text: string) {
     return this.markdownRenderer.textMarkdownToHTML(text)
   }
@@ -176,8 +170,7 @@ export class VideoBlockListComponent extends RestTable implements OnInit {
 
           for (const element of this.blocklist) {
             Object.assign(element, {
-              reasonHtml: await this.toHtml(element.reason),
-              embedHtml: this.sanitizer.bypassSecurityTrustHtml(this.getVideoEmbed(element))
+              reasonHtml: await this.toHtml(element.reason)
             })
           }
         },
