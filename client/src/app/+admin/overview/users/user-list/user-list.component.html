@@ -1,3 +1,8 @@
+<h1>
+  <my-global-icon iconName="user" aria-hidden="true"></my-global-icon>
+  <ng-container i18n>Users</ng-container>
+</h1>
+
 <p-table
   [value]="users" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions"
   [sortField]="sort.field" [sortOrder]="sort.order"  dataKey="id" [resizableColumns]="true" [(selection)]="selectedUsers"

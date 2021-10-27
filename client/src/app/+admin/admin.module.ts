@@ -33,6 +33,7 @@ import { AbuseListComponent, VideoBlockListComponent } from './moderation'
 import { InstanceAccountBlocklistComponent, InstanceServerBlocklistComponent } from './moderation/instance-blocklist'
 import { ModerationComponent } from './moderation/moderation.component'
 import { VideoCommentListComponent } from './moderation/video-comment-list'
+import { UserCreateComponent, UserListComponent, UserPasswordComponent, UserUpdateComponent } from './overview'
 import { PluginListInstalledComponent } from './plugins/plugin-list-installed/plugin-list-installed.component'
 import { PluginSearchComponent } from './plugins/plugin-search/plugin-search.component'
 import { PluginShowInstalledComponent } from './plugins/plugin-show-installed/plugin-show-installed.component'
@@ -41,7 +42,6 @@ import { PluginApiService } from './plugins/shared/plugin-api.service'
 import { JobService, LogsComponent, LogsService, SystemComponent } from './system'
 import { DebugComponent, DebugService } from './system/debug'
 import { JobsComponent } from './system/jobs/jobs.component'
-import { UserCreateComponent, UserListComponent, UserPasswordComponent, UsersComponent, UserUpdateComponent } from './users'
 
 @NgModule({
   imports: [
@@ -73,7 +73,6 @@ import { UserCreateComponent, UserListComponent, UserPasswordComponent, UsersCom
     VideoRedundanciesListComponent,
     VideoRedundancyInformationComponent,
 
-    UsersComponent,
     UserCreateComponent,
     UserUpdateComponent,
     UserPasswordComponent,

@@ -31,8 +31,21 @@ export class AdminComponent implements OnInit {
   }
 
   private buildOverviewItems () {
+    const overviewItems: TopMenuDropdownParam = {
+      label: $localize`Overview`,
+      children: []
+    }
+
     if (this.hasUsersRight()) {
-      this.menuEntries.push({ label: $localize`Users`, routerLink: '/admin/users' })
+      overviewItems.children.push({
+        label: $localize`Users`,
+        routerLink: '/admin/users',
+        iconName: 'user'
+      })
+    }
+
+    if (overviewItems.children.length !== 0) {
+      this.menuEntries.push(overviewItems)
     }
   }
 

@@ -4,7 +4,7 @@ import { AuthService, ScreenService, ServerService, User } from '@app/core'
 import { FormReactive } from '@app/shared/shared-forms'
 import { USER_ROLE_LABELS } from '@shared/core-utils/users'
 import { HTMLServerConfig, UserAdminFlag, UserRole, VideoResolution } from '@shared/models'
-import { SelectOptionsItem } from '../../../../types/select-options-item.model'
+import { SelectOptionsItem } from '../../../../../types/select-options-item.model'
 
 @Directive()
 // eslint-disable-next-line @angular-eslint/directive-class-suffix
