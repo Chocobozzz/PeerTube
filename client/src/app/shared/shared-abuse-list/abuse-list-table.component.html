@@ -29,7 +29,7 @@
 
   <ng-template pTemplate="body" let-expanded="expanded" let-abuse>
     <tr>
-      <td class="expand-cell c-hand" [pRowToggler]="abuse" i18n-ngbTooltip ngbTooltip="More information" placement="top-left" container="body">
+      <td class="expand-cell" [pRowToggler]="abuse">
         <my-table-expander-icon [expanded]="expanded"></my-table-expander-icon>
       </td>
 

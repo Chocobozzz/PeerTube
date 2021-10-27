@@ -33,7 +33,7 @@
   <ng-template pTemplate="body" let-videoBlock let-expanded="expanded">
     <tr>
       <td *ngIf="!videoBlock.reason"></td>
-      <td *ngIf="videoBlock.reason" class="expand-cell c-hand" [pRowToggler]="videoBlock" i18n-ngbTooltip ngbTooltip="More information" placement="top-left" container="body">
+      <td class="expand-cell" *ngIf="videoBlock.reason" [pRowToggler]="videoBlock">
         <my-table-expander-icon [expanded]="expanded"></my-table-expander-icon>
       </td>
 
