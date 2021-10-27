@@ -6,7 +6,7 @@ import { PluginsRoutes } from '@app/+admin/plugins/plugins.routes'
 import { SystemRoutes } from '@app/+admin/system'
 import { AdminComponent } from './admin.component'
 import { FollowsRoutes } from './follows'
-import { UsersRoutes } from './users'
+import { OverviewRoutes } from './overview'
 
 const adminRoutes: Routes = [
   {
@@ -18,8 +18,9 @@ const adminRoutes: Routes = [
         redirectTo: 'users',
         pathMatch: 'full'
       },
+
       ...FollowsRoutes,
-      ...UsersRoutes,
+      ...OverviewRoutes,
       ...ModerationRoutes,
       ...SystemRoutes,
       ...ConfigRoutes,
