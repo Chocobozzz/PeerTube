@@ -1,0 +1,10 @@
+@use '_mixins' as *;
+@use '_variables' as *;
+
+.screenratio {
+  @include block-ratio($selector: 'div, ::ng-deep iframe') {
+    width: 100% !important;
+    height: 100% !important;
+    left: 0;
+  };
+}

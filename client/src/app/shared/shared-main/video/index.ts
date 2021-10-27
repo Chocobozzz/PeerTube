@@ -1,3 +1,4 @@
+export * from './embed.component'
 export * from './redundancy.service'
 export * from './video-details.model'
 export * from './video-edit.model'

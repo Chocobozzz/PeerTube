@@ -85,9 +85,9 @@
 
   <!-- report right part (video/comment details) -->
   <div class="right">
-    <div *ngIf="abuse.video" class="screenratio">
+    <div *ngIf="abuse.video">
       <div *ngIf="abuse.video.deleted" i18n>The video was deleted</div>
-      <div *ngIf="!abuse.video.deleted" [innerHTML]="abuse.embedHtml"></div>
+      <my-embed *ngIf="!abuse.video.deleted" [video]="abuse.video"></my-embed>
     </div>
 
     <div *ngIf="abuse.comment" class="comment-html">
