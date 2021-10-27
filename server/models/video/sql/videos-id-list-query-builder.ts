@@ -4,7 +4,7 @@ import { exists } from '@server/helpers/custom-validators/misc'
 import { WEBSERVER } from '@server/initializers/constants'
 import { buildDirectionAndField, createSafeIn } from '@server/models/utils'
 import { MUserAccountId, MUserId } from '@server/types/models'
-import { VideoFilter, VideoPrivacy, VideoState } from '@shared/models'
+import { VideoInclude, VideoPrivacy, VideoState } from '@shared/models'
 import { AbstractVideosQueryBuilder } from './shared/abstract-videos-query-builder'
 
 /**
@@ -13,21 +13,27 @@ import { AbstractVideosQueryBuilder } from './shared/abstract-videos-query-build
  *
  */
 
+export type DisplayOnlyForFollowerOptions = {
+  actorId: number
+  orLocalVideos: boolean
+}
+
 export type BuildVideosListQueryOptions = {
   attributes?: string[]
 
-  serverAccountId: number
-  followerActorId: number
-  includeLocalVideos: boolean
+  serverAccountIdForBlock: number
+
+  displayOnlyForFollower: DisplayOnlyForFollowerOptions
 
   count: number
   start: number
   sort: string
 
   nsfw?: boolean
-  filter?: VideoFilter
   host?: string
   isLive?: boolean
+  isLocal?: boolean
+  include?: VideoInclude
 
   categoryOneOf?: number[]
   licenceOneOf?: number[]
@@ -101,6 +107,7 @@ export class VideosIdListQueryBuilder extends AbstractVideosQueryBuilder {
 
   getIdsListQueryAndSort (options: BuildVideosListQueryOptions) {
     this.buildIdsListQuery(options)
+
     return { query: this.query, sort: this.sort, replacements: this.replacements }
   }
 
@@ -116,23 +123,30 @@ export class VideosIdListQueryBuilder extends AbstractVideosQueryBuilder {
       'INNER JOIN "actor" "accountActor" ON "account"."actorId" = "accountActor"."id"'
     ])
 
-    this.whereNotBlacklisted()
-
-    if (options.serverAccountId) {
-      this.whereNotBlocked(options.serverAccountId, options.user)
+    if (!(options.include & VideoInclude.BLACKLISTED)) {
+      this.whereNotBlacklisted()
     }
 
-    // Only list public/published videos
-    if (!options.filter || (options.filter !== 'all-local' && options.filter !== 'all')) {
-      this.whereStateAndPrivacyAvailable(options.user)
+    if (options.serverAccountIdForBlock && !(options.include & VideoInclude.BLOCKED_OWNER)) {
+      this.whereNotBlocked(options.serverAccountIdForBlock, options.user)
+    }
+
+    // Only list published videos
+    if (!(options.include & VideoInclude.NOT_PUBLISHED_STATE)) {
+      this.whereStateAvailable()
+    }
+
+    // Only list videos with the appropriate priavcy
+    if (!(options.include & VideoInclude.HIDDEN_PRIVACY)) {
+      this.wherePrivacyAvailable(options.user)
     }
 
     if (options.videoPlaylistId) {
       this.joinPlaylist(options.videoPlaylistId)
     }
 
-    if (options.filter && (options.filter === 'local' || options.filter === 'all-local')) {
-      this.whereOnlyLocal()
+    if (exists(options.isLocal)) {
+      this.whereLocal(options.isLocal)
     }
 
     if (options.host) {
@@ -147,8 +161,8 @@ export class VideosIdListQueryBuilder extends AbstractVideosQueryBuilder {
       this.whereChannelId(options.videoChannelId)
     }
 
-    if (options.followerActorId) {
-      this.whereFollowerActorId(options.followerActorId, options.includeLocalVideos)
+    if (options.displayOnlyForFollower) {
+      this.whereFollowerActorId(options.displayOnlyForFollower)
     }
 
     if (options.withFiles === true) {
@@ -282,12 +296,14 @@ export class VideosIdListQueryBuilder extends AbstractVideosQueryBuilder {
     this.replacements.videoPlaylistId = playlistId
   }
 
-  private whereStateAndPrivacyAvailable (user?: MUserAccountId) {
+  private whereStateAvailable () {
     this.and.push(
       `("video"."state" = ${VideoState.PUBLISHED} OR ` +
       `("video"."state" = ${VideoState.TO_TRANSCODE} AND "video"."waitTranscoding" IS false))`
     )
+  }
 
+  private wherePrivacyAvailable (user?: MUserAccountId) {
     if (user) {
       this.and.push(
         `("video"."privacy" = ${VideoPrivacy.PUBLIC} OR "video"."privacy" = ${VideoPrivacy.INTERNAL})`
@@ -299,8 +315,10 @@ export class VideosIdListQueryBuilder extends AbstractVideosQueryBuilder {
     }
   }
 
-  private whereOnlyLocal () {
-    this.and.push('"video"."remote" IS FALSE')
+  private whereLocal (isLocal: boolean) {
+    const isRemote = isLocal ? 'FALSE' : 'TRUE'
+
+    this.and.push('"video"."remote" IS ' + isRemote)
   }
 
   private whereHost (host: string) {
@@ -326,7 +344,7 @@ export class VideosIdListQueryBuilder extends AbstractVideosQueryBuilder {
     this.replacements.videoChannelId = channelId
   }
 
-  private whereFollowerActorId (followerActorId: number, includeLocalVideos: boolean) {
+  private whereFollowerActorId (options: { actorId: number, orLocalVideos: boolean }) {
     let query =
     '(' +
     '  EXISTS (' + // Videos shared by actors we follow
@@ -342,14 +360,14 @@ export class VideosIdListQueryBuilder extends AbstractVideosQueryBuilder {
     '    AND "actorFollow"."state" = \'accepted\'' +
     '  )'
 
-    if (includeLocalVideos) {
+    if (options.orLocalVideos) {
       query += '  OR "video"."remote" IS FALSE'
     }
 
     query += ')'
 
     this.and.push(query)
-    this.replacements.followerActorId = followerActorId
+    this.replacements.followerActorId = options.actorId
   }
 
   private whereFileExists () {

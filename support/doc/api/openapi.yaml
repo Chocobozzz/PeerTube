@@ -367,7 +367,8 @@ paths:
         - $ref: '#/components/parameters/licenceOneOf'
         - $ref: '#/components/parameters/languageOneOf'
         - $ref: '#/components/parameters/nsfw'
-        - $ref: '#/components/parameters/filter'
+        - $ref: '#/components/parameters/isLocal'
+        - $ref: '#/components/parameters/include'
         - $ref: '#/components/parameters/skipCount'
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
@@ -1300,7 +1301,8 @@ paths:
         - $ref: '#/components/parameters/licenceOneOf'
         - $ref: '#/components/parameters/languageOneOf'
         - $ref: '#/components/parameters/nsfw'
-        - $ref: '#/components/parameters/filter'
+        - $ref: '#/components/parameters/isLocal'
+        - $ref: '#/components/parameters/include'
         - $ref: '#/components/parameters/skipCount'
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
@@ -1620,7 +1622,8 @@ paths:
         - $ref: '#/components/parameters/licenceOneOf'
         - $ref: '#/components/parameters/languageOneOf'
         - $ref: '#/components/parameters/nsfw'
-        - $ref: '#/components/parameters/filter'
+        - $ref: '#/components/parameters/isLocal'
+        - $ref: '#/components/parameters/include'
         - $ref: '#/components/parameters/skipCount'
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
@@ -2856,7 +2859,8 @@ paths:
         - $ref: '#/components/parameters/licenceOneOf'
         - $ref: '#/components/parameters/languageOneOf'
         - $ref: '#/components/parameters/nsfw'
-        - $ref: '#/components/parameters/filter'
+        - $ref: '#/components/parameters/isLocal'
+        - $ref: '#/components/parameters/include'
         - $ref: '#/components/parameters/skipCount'
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
@@ -3576,7 +3580,8 @@ paths:
         - $ref: '#/components/parameters/licenceOneOf'
         - $ref: '#/components/parameters/languageOneOf'
         - $ref: '#/components/parameters/nsfw'
-        - $ref: '#/components/parameters/filter'
+        - $ref: '#/components/parameters/isLocal'
+        - $ref: '#/components/parameters/include'
         - $ref: '#/components/parameters/skipCount'
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
@@ -4078,7 +4083,8 @@ paths:
             type: string
         - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/nsfw'
-        - $ref: '#/components/parameters/filter'
+        - $ref: '#/components/parameters/isLocal'
+        - $ref: '#/components/parameters/include'
       responses:
         '204':
           description: successful operation
@@ -4159,7 +4165,8 @@ paths:
           required: true
         - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/nsfw'
-        - $ref: '#/components/parameters/filter'
+        - $ref: '#/components/parameters/isLocal'
+        - $ref: '#/components/parameters/include'
       responses:
         '204':
           description: successful operation
@@ -4792,20 +4799,37 @@ components:
         enum:
         - 'true'
         - 'false'
-    filter:
-      name: filter
+    isLocal:
+      name: isLocal
       in: query
       required: false
-      description: >
-        Special filters which might require special rights:
-         * `local` - only videos local to the instance
-         * `all-local` - only videos local to the instance, but showing private and unlisted videos (requires Admin privileges)
-         * `all` - all videos, showing private and unlisted videos (requires Admin privileges)
       schema:
-        type: string
+        type: boolean
+      description: 'Display only local or remote videos'
+    include:
+      name: include
+      in: query
+      required: false
+      schema:
+        type: integer
         enum:
-        - local
-        - all-local
+        - 0
+        - 1
+        - 2
+        - 4
+        - 8
+      description: >
+        Include additional videos in results (can be combined using bitwise or operator)
+
+        - `0` NONE
+
+        - `1` NOT_PUBLISHED_STATE
+
+        - `2` HIDDEN_PRIVACY
+
+        - `4` BLACKLISTED
+
+        - `8` BLOCKED
     subscriptionsUris:
       name: uris
       in: query
@@ -6995,7 +7019,7 @@ components:
       enum:
         - 0
         - 1
-        - 3
+        - 2
     Notification:
       properties:
         id:

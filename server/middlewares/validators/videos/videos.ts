@@ -7,6 +7,7 @@ import { isAbleToUploadVideo } from '@server/lib/user'
 import { getServerActor } from '@server/models/application/application'
 import { ExpressPromiseHandler } from '@server/types/express'
 import { MUserAccountId, MVideoFullLight } from '@server/types/models'
+import { VideoInclude } from '@shared/models'
 import { ServerErrorCode, UserRight, VideoPrivacy } from '../../../../shared'
 import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
 import {
@@ -30,6 +31,7 @@ import {
   isVideoFileSizeValid,
   isVideoFilterValid,
   isVideoImage,
+  isVideoIncludeValid,
   isVideoLanguageValid,
   isVideoLicenceValid,
   isVideoNameValid,
@@ -487,6 +489,13 @@ const commonVideosFiltersValidator = [
   query('filter')
     .optional()
     .custom(isVideoFilterValid).withMessage('Should have a valid filter attribute'),
+  query('include')
+    .optional()
+    .custom(isVideoIncludeValid).withMessage('Should have a valid include attribute'),
+  query('isLocal')
+    .optional()
+    .customSanitizer(toBooleanOrNull)
+    .custom(isBooleanValid).withMessage('Should have a valid local boolean'),
   query('skipCount')
     .optional()
     .customSanitizer(toBooleanOrNull)
@@ -500,11 +509,23 @@ const commonVideosFiltersValidator = [
 
     if (areValidationErrors(req, res)) return
 
-    const user = res.locals.oauth ? res.locals.oauth.token.User : undefined
-    if (
-      (req.query.filter === 'all-local' || req.query.filter === 'all') &&
-      (!user || user.hasRight(UserRight.SEE_ALL_VIDEOS) === false)
-    ) {
+    // FIXME: deprecated in 4.0, to remove
+    {
+      if (req.query.filter === 'all-local') {
+        req.query.include = VideoInclude.NOT_PUBLISHED_STATE | VideoInclude.HIDDEN_PRIVACY
+        req.query.isLocal = true
+      } else if (req.query.filter === 'all') {
+        req.query.include = VideoInclude.NOT_PUBLISHED_STATE | VideoInclude.HIDDEN_PRIVACY
+      } else if (req.query.filter === 'local') {
+        req.query.isLocal = true
+      }
+
+      req.query.filter = undefined
+    }
+
+    const user = res.locals.oauth?.token.User
+
+    if (req.query.include && (!user || user.hasRight(UserRight.SEE_ALL_VIDEOS) !== true)) {
       res.fail({
         status: HttpStatusCode.UNAUTHORIZED_401,
         message: 'You are not allowed to see all local videos.'

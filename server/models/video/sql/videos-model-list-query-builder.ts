@@ -1,3 +1,4 @@
+import { VideoInclude } from '@shared/models'
 import { Sequelize } from 'sequelize'
 import { AbstractVideosModelQueryBuilder } from './shared/abstract-videos-model-query-builder'
 import { VideoModelBuilder } from './shared/video-model-builder'
@@ -28,7 +29,7 @@ export class VideosModelListQueryBuilder extends AbstractVideosModelQueryBuilder
     this.buildListQueryFromIdsQuery(options)
 
     return this.runQuery()
-      .then(rows => this.videoModelBuilder.buildVideosFromRows(rows))
+      .then(rows => this.videoModelBuilder.buildVideosFromRows({ rows, include: options.include }))
   }
 
   private buildInnerQuery (options: BuildVideosListQueryOptions) {
@@ -62,6 +63,14 @@ export class VideosModelListQueryBuilder extends AbstractVideosModelQueryBuilder
 
     if (options.videoPlaylistId) {
       this.includePlaylist(options.videoPlaylistId)
+    }
+
+    if (options.include & VideoInclude.BLACKLISTED) {
+      this.includeBlacklisted()
+    }
+
+    if (options.include & VideoInclude.BLOCKED_OWNER) {
+      this.includeBlockedOwnerAndServer(options.serverAccountIdForBlock, options.user)
     }
 
     const select = this.buildSelect()

@@ -354,19 +354,6 @@ describe('Test a single server', function () {
       await server.videos.update({ id: videoId, attributes })
     })
 
-    it('Should filter by tags and category', async function () {
-      {
-        const { data, total } = await server.videos.list({ tagsAllOf: [ 'tagup1', 'tagup2' ], categoryOneOf: [ 4 ] })
-        expect(total).to.equal(1)
-        expect(data[0].name).to.equal('my super video updated')
-      }
-
-      {
-        const { total } = await server.videos.list({ tagsAllOf: [ 'tagup1', 'tagup2' ], categoryOneOf: [ 3 ] })
-        expect(total).to.equal(0)
-      }
-    })
-
     it('Should have the video updated', async function () {
       this.timeout(60000)
 

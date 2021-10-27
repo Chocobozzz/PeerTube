@@ -61,7 +61,7 @@ export class VideoBlockComponent extends FormReactive implements OnInit {
             this.hide()
 
             this.video.blacklisted = true
-            this.video.blockedReason = reason
+            this.video.blacklistedReason = reason
 
             this.videoBlocked.emit()
           },

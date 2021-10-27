@@ -18,7 +18,7 @@ import {
   VideoConstant,
   VideoDetails as VideoDetailsServerModel,
   VideoFileMetadata,
-  VideoFilter,
+  VideoInclude,
   VideoPrivacy,
   VideoSortField,
   VideoUpdate
@@ -34,11 +34,13 @@ import { Video } from './video.model'
 export type CommonVideoParams = {
   videoPagination?: ComponentPaginationLight
   sort: VideoSortField | SortMeta
-  filter?: VideoFilter
+  include?: VideoInclude
+  isLocal?: boolean
   categoryOneOf?: number[]
   languageOneOf?: string[]
   isLive?: boolean
   skipCount?: boolean
+
   // FIXME: remove?
   nsfwPolicy?: NSFWPolicyType
   nsfw?: BooleanBothQuery
@@ -202,12 +204,14 @@ export class VideoService {
   }
 
   getAdminVideos (
-    parameters: Omit<CommonVideoParams, 'filter'> & { pagination: RestPagination, search?: string }
+    parameters: CommonVideoParams & { pagination: RestPagination, search?: string }
   ): Observable<ResultList<Video>> {
     const { pagination, search } = parameters
 
+    const include = VideoInclude.BLACKLISTED | VideoInclude.BLOCKED_OWNER | VideoInclude.HIDDEN_PRIVACY | VideoInclude.NOT_PUBLISHED_STATE
+
     let params = new HttpParams()
-    params = this.buildCommonVideosParams({ params, ...parameters })
+    params = this.buildCommonVideosParams({ params, include, ...parameters })
 
     params = params.set('start', pagination.start.toString())
                    .set('count', pagination.count.toString())
@@ -215,8 +219,6 @@ export class VideoService {
     if (search) {
       params = this.buildAdminParamsFromSearch(search, params)
     }
-
-    if (!params.has('filter')) params = params.set('filter', 'all')
 
     return this.authHttp
                .get<ResultList<Video>>(VideoService.BASE_VIDEO_URL, { params })
@@ -266,10 +268,10 @@ export class VideoService {
     return feeds
   }
 
-  getVideoFeedUrls (sort: VideoSortField, filter?: VideoFilter, categoryOneOf?: number[]) {
+  getVideoFeedUrls (sort: VideoSortField, isLocal: boolean, categoryOneOf?: number[]) {
     let params = this.restService.addRestGetParams(new HttpParams(), undefined, sort)
 
-    if (filter) params = params.set('filter', filter)
+    if (isLocal) params = params.set('isLocal', isLocal)
 
     if (categoryOneOf) {
       for (const c of categoryOneOf) {
@@ -425,7 +427,8 @@ export class VideoService {
       params,
       videoPagination,
       sort,
-      filter,
+      isLocal,
+      include,
       categoryOneOf,
       languageOneOf,
       skipCount,
@@ -440,9 +443,10 @@ export class VideoService {
 
     let newParams = this.restService.addRestGetParams(params, pagination, sort)
 
-    if (filter) newParams = newParams.set('filter', filter)
     if (skipCount) newParams = newParams.set('skipCount', skipCount + '')
 
+    if (isLocal) newParams = newParams.set('isLocal', isLocal)
+    if (include) newParams = newParams.set('include', include)
     if (isLive) newParams = newParams.set('isLive', isLive)
     if (nsfw) newParams = newParams.set('nsfw', nsfw)
     if (nsfwPolicy) newParams = newParams.set('nsfw', this.nsfwPolicyToParam(nsfwPolicy))
@@ -454,13 +458,9 @@ export class VideoService {
 
   private buildAdminParamsFromSearch (search: string, params: HttpParams) {
     const filters = this.restService.parseQueryStringFilter(search, {
-      filter: {
-        prefix: 'local:',
-        handler: v => {
-          if (v === 'true') return 'all-local'
-
-          return 'all'
-        }
+      isLocal: {
+        prefix: 'isLocal:',
+        isBoolean: true
       }
     })
 

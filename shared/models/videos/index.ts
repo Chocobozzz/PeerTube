@@ -19,7 +19,8 @@ export * from './video-file-metadata.model'
 export * from './video-file.model'
 
 export * from './video-privacy.enum'
-export * from './video-query.type'
+export * from './video-filter.type'
+export * from './video-include.enum'
 export * from './video-rate.type'
 export * from './video-resolution.enum'
 

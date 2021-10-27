@@ -2,6 +2,7 @@ import 'multer'
 import express from 'express'
 import { pickCommonVideoQuery } from '@server/helpers/query'
 import { sendUndoFollow } from '@server/lib/activitypub/send'
+import { guessAdditionalAttributesFromQuery } from '@server/models/video/formatter/video-format-utils'
 import { VideoChannelModel } from '@server/models/video/video-channel'
 import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
 import { buildNSFWFilter, getCountVideos } from '../../../helpers/express-utils'
@@ -175,13 +176,15 @@ async function getUserSubscriptionVideos (req: express.Request, res: express.Res
   const resultList = await VideoModel.listForApi({
     ...query,
 
-    includeLocalVideos: false,
+    displayOnlyForFollower: {
+      actorId: user.Account.Actor.id,
+      orLocalVideos: false
+    },
     nsfw: buildNSFWFilter(res, query.nsfw),
     withFiles: false,
-    followerActorId: user.Account.Actor.id,
     user,
     countVideos
   })
 
-  return res.json(getFormattedObjects(resultList.data, resultList.total))
+  return res.json(getFormattedObjects(resultList.data, resultList.total, guessAdditionalAttributesFromQuery(query)))
 }

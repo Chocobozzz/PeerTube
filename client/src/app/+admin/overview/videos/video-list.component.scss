@@ -7,4 +7,6 @@ my-embed {
 
 .badge {
   @include table-badge;
+
+  margin-right: 5px;
 }

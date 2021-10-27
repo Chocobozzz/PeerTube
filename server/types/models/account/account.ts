@@ -84,7 +84,7 @@ export type MAccountSummary =
 
 export type MAccountSummaryBlocks =
   MAccountSummary &
-  Use<'BlockedAccounts', MAccountBlocklistId[]>
+  Use<'BlockedByAccounts', MAccountBlocklistId[]>
 
 export type MAccountAPI =
   MAccount &

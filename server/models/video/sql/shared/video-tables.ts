@@ -139,6 +139,10 @@ export class VideoTables {
     return [ 'id', 'reason', 'unfederated' ]
   }
 
+  getBlocklistAttributes () {
+    return [ 'id' ]
+  }
+
   getScheduleUpdateAttributes () {
     return [
       'id',

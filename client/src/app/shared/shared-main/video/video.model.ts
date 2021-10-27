@@ -65,8 +65,12 @@ export class Video implements VideoServerModel {
   waitTranscoding?: boolean
   state?: VideoConstant<VideoState>
   scheduledUpdate?: VideoScheduleUpdate
+
   blacklisted?: boolean
-  blockedReason?: string
+  blacklistedReason?: string
+
+  blockedOwner?: boolean
+  blockedServer?: boolean
 
   account: {
     id: number
@@ -163,7 +167,10 @@ export class Video implements VideoServerModel {
     if (this.state) this.state.label = peertubeTranslate(this.state.label, translations)
 
     this.blacklisted = hash.blacklisted
-    this.blockedReason = hash.blacklistedReason
+    this.blacklistedReason = hash.blacklistedReason
+
+    this.blockedOwner = hash.blockedOwner
+    this.blockedServer = hash.blockedServer
 
     this.userHistory = hash.userHistory
 

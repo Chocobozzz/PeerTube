@@ -34,12 +34,12 @@ import { VideoPathManager } from '@server/lib/video-path-manager'
 import { getServerActor } from '@server/models/application/application'
 import { ModelCache } from '@server/models/model-cache'
 import { AttributesOnly, buildVideoEmbedPath, buildVideoWatchPath, pick } from '@shared/core-utils'
+import { VideoInclude } from '@shared/models'
 import { VideoFile } from '@shared/models/videos/video-file.model'
 import { ResultList, UserRight, VideoPrivacy, VideoState } from '../../../shared'
 import { VideoObject } from '../../../shared/models/activitypub/objects'
 import { Video, VideoDetails, VideoRateType, VideoStorage } from '../../../shared/models/videos'
 import { ThumbnailType } from '../../../shared/models/videos/thumbnail.type'
-import { VideoFilter } from '../../../shared/models/videos/video-query.type'
 import { VideoStreamingPlaylistType } from '../../../shared/models/videos/video-streaming-playlist.type'
 import { peertubeTruncate } from '../../helpers/core-utils'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
@@ -106,7 +106,7 @@ import {
 } from './formatter/video-format-utils'
 import { ScheduleVideoUpdateModel } from './schedule-video-update'
 import { VideosModelGetQueryBuilder } from './sql/video-model-get-query-builder'
-import { BuildVideosListQueryOptions, VideosIdListQueryBuilder } from './sql/videos-id-list-query-builder'
+import { BuildVideosListQueryOptions, DisplayOnlyForFollowerOptions, VideosIdListQueryBuilder } from './sql/videos-id-list-query-builder'
 import { VideosModelListQueryBuilder } from './sql/videos-model-list-query-builder'
 import { TagModel } from './tag'
 import { ThumbnailModel } from './thumbnail'
@@ -143,35 +143,6 @@ export type ForAPIOptions = {
   videoPlaylistId?: number
 
   withAccountBlockerIds?: number[]
-}
-
-export type AvailableForListIDsOptions = {
-  serverAccountId: number
-  followerActorId: number
-  includeLocalVideos: boolean
-
-  attributesType?: 'none' | 'id' | 'all'
-
-  filter?: VideoFilter
-  categoryOneOf?: number[]
-  nsfw?: boolean
-  licenceOneOf?: number[]
-  languageOneOf?: string[]
-  tagsOneOf?: string[]
-  tagsAllOf?: string[]
-
-  withFiles?: boolean
-
-  accountId?: number
-  videoChannelId?: number
-
-  videoPlaylistId?: number
-
-  trendingDays?: number
-  user?: MUserAccountId
-  historyOfUser?: MUserId
-
-  baseWhere?: WhereOptions[]
 }
 
 @Scopes(() => ({
@@ -1054,10 +1025,10 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     sort: string
 
     nsfw: boolean
-    filter?: VideoFilter
     isLive?: boolean
+    isLocal?: boolean
+    include?: VideoInclude
 
-    includeLocalVideos: boolean
     withFiles: boolean
 
     categoryOneOf?: number[]
@@ -1069,7 +1040,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     accountId?: number
     videoChannelId?: number
 
-    followerActorId?: number
+    displayOnlyForFollower: DisplayOnlyForFollowerOptions | null
 
     videoPlaylistId?: number
 
@@ -1082,7 +1053,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
 
     search?: string
   }) {
-    if ((options.filter === 'all-local' || options.filter === 'all') && !options.user.hasRight(UserRight.SEE_ALL_VIDEOS)) {
+    if (options.include && !options.user.hasRight(UserRight.SEE_ALL_VIDEOS)) {
       throw new Error('Try to filter all-local but no user has not the see all videos right')
     }
 
@@ -1096,11 +1067,6 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
 
     const serverActor = await getServerActor()
 
-    // followerActorId === null has a meaning, so just check undefined
-    const followerActorId = options.followerActorId !== undefined
-      ? options.followerActorId
-      : serverActor.id
-
     const queryOptions = {
       ...pick(options, [
         'start',
@@ -1113,19 +1079,19 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
         'languageOneOf',
         'tagsOneOf',
         'tagsAllOf',
-        'filter',
+        'isLocal',
+        'include',
+        'displayOnlyForFollower',
         'withFiles',
         'accountId',
         'videoChannelId',
         'videoPlaylistId',
-        'includeLocalVideos',
         'user',
         'historyOfUser',
         'search'
       ]),
 
-      followerActorId,
-      serverAccountId: serverActor.Account.id,
+      serverAccountIdForBlock: serverActor.Account.id,
       trendingDays,
       trendingAlgorithm
     }
@@ -1137,7 +1103,6 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     start: number
     count: number
     sort: string
-    includeLocalVideos: boolean
     search?: string
     host?: string
     startDate?: string // ISO 8601
@@ -1146,6 +1111,8 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     originallyPublishedEndDate?: string
     nsfw?: boolean
     isLive?: boolean
+    isLocal?: boolean
+    include?: VideoInclude
     categoryOneOf?: number[]
     licenceOneOf?: number[]
     languageOneOf?: string[]
@@ -1154,14 +1121,14 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     durationMin?: number // seconds
     durationMax?: number // seconds
     user?: MUserAccountId
-    filter?: VideoFilter
     uuids?: string[]
+    displayOnlyForFollower: DisplayOnlyForFollowerOptions | null
   }) {
     const serverActor = await getServerActor()
 
     const queryOptions = {
       ...pick(options, [
-        'includeLocalVideos',
+        'include',
         'nsfw',
         'isLive',
         'categoryOneOf',
@@ -1170,7 +1137,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
         'tagsOneOf',
         'tagsAllOf',
         'user',
-        'filter',
+        'isLocal',
         'host',
         'start',
         'count',
@@ -1182,11 +1149,10 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
         'durationMin',
         'durationMax',
         'uuids',
-        'search'
+        'search',
+        'displayOnlyForFollower'
       ]),
-
-      followerActorId: serverActor.id,
-      serverAccountId: serverActor.Account.id
+      serverAccountIdForBlock: serverActor.Account.id
     }
 
     return VideoModel.getAvailableForApi(queryOptions)
@@ -1369,12 +1335,17 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     // Sequelize could return null...
     if (!totalLocalVideoViews) totalLocalVideoViews = 0
 
+    const serverActor = await getServerActor()
+
     const { total: totalVideos } = await VideoModel.listForApi({
       start: 0,
       count: 0,
       sort: '-publishedAt',
       nsfw: buildNSFWFilter(),
-      includeLocalVideos: true,
+      displayOnlyForFollower: {
+        actorId: serverActor.id,
+        orLocalVideos: true
+      },
       withFiles: false
     })
 
@@ -1455,7 +1426,6 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
   // threshold corresponds to how many video the field should have to be returned
   static async getRandomFieldSamples (field: 'category' | 'channelId', threshold: number, count: number) {
     const serverActor = await getServerActor()
-    const followerActorId = serverActor.id
 
     const queryOptions: BuildVideosListQueryOptions = {
       attributes: [ `"${field}"` ],
@@ -1464,9 +1434,11 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
       start: 0,
       sort: 'random',
       count,
-      serverAccountId: serverActor.Account.id,
-      followerActorId,
-      includeLocalVideos: true
+      serverAccountIdForBlock: serverActor.Account.id,
+      displayOnlyForFollower: {
+        actorId: serverActor.id,
+        orLocalVideos: true
+      }
     }
 
     const queryBuilder = new VideosIdListQueryBuilder(VideoModel.sequelize)

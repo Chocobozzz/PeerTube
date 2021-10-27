@@ -5,6 +5,7 @@ import { doJSONRequest } from '@server/helpers/requests'
 import { LiveManager } from '@server/lib/live'
 import { openapiOperationDoc } from '@server/middlewares/doc'
 import { getServerActor } from '@server/models/application/application'
+import { guessAdditionalAttributesFromQuery } from '@server/models/video/formatter/video-format-utils'
 import { MVideoAccountLight } from '@server/types/models'
 import { HttpStatusCode } from '../../../../shared/models'
 import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../helpers/audit-logger'
@@ -211,13 +212,18 @@ async function getVideoFileMetadata (req: express.Request, res: express.Response
 }
 
 async function listVideos (req: express.Request, res: express.Response) {
+  const serverActor = await getServerActor()
+
   const query = pickCommonVideoQuery(req.query)
   const countVideos = getCountVideos(req)
 
   const apiOptions = await Hooks.wrapObject({
     ...query,
 
-    includeLocalVideos: true,
+    displayOnlyForFollower: {
+      actorId: serverActor.id,
+      orLocalVideos: true
+    },
     nsfw: buildNSFWFilter(res, query.nsfw),
     withFiles: false,
     user: res.locals.oauth ? res.locals.oauth.token.User : undefined,
@@ -230,7 +236,7 @@ async function listVideos (req: express.Request, res: express.Response) {
     'filter:api.videos.list.result'
   )
 
-  return res.json(getFormattedObjects(resultList.data, resultList.total))
+  return res.json(getFormattedObjects(resultList.data, resultList.total, guessAdditionalAttributesFromQuery(query)))
 }
 
 async function removeVideo (_req: express.Request, res: express.Response) {

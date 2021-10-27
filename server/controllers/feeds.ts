@@ -1,7 +1,7 @@
 import express from 'express'
 import Feed from 'pfeed'
+import { getServerActor } from '@server/models/application/application'
 import { getCategoryLabel } from '@server/models/video/formatter/video-format-utils'
-import { VideoFilter } from '../../shared/models/videos/video-query.type'
 import { buildNSFWFilter } from '../helpers/express-utils'
 import { CONFIG } from '../initializers/config'
 import { FEEDS, PREVIEWS_SIZE, ROUTE_CACHE_LIFETIME, WEBSERVER } from '../initializers/constants'
@@ -160,13 +160,18 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
     videoChannelId: videoChannel ? videoChannel.id : null
   }
 
+  const server = await getServerActor()
   const { data } = await VideoModel.listForApi({
     start,
     count: FEEDS.COUNT,
     sort: req.query.sort,
-    includeLocalVideos: true,
+    displayOnlyForFollower: {
+      actorId: server.id,
+      orLocalVideos: true
+    },
     nsfw,
-    filter: req.query.filter as VideoFilter,
+    isLocal: req.query.isLocal,
+    include: req.query.include,
     withFiles: true,
     countVideos: false,
     ...options
@@ -196,14 +201,18 @@ async function generateVideoFeedForSubscriptions (req: express.Request, res: exp
     start,
     count: FEEDS.COUNT,
     sort: req.query.sort,
-    includeLocalVideos: false,
     nsfw,
-    filter: req.query.filter as VideoFilter,
+
+    isLocal: req.query.isLocal,
+    include: req.query.include,
 
     withFiles: true,
     countVideos: false,
 
-    followerActorId: res.locals.user.Account.Actor.id,
+    displayOnlyForFollower: {
+      actorId: res.locals.user.Account.Actor.id,
+      orLocalVideos: false
+    },
     user: res.locals.user
   })
 
