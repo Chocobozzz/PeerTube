@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, ConfirmService, Notifier, RestPagination, RestTable } from '@app/core'
 import { DropdownAction, Video, VideoService } from '@app/shared/shared-main'
-import { UserRight } from '@shared/models'
+import { UserRight, VideoPrivacy, VideoState } from '@shared/models'
 import { AdvancedInputFilter } from '@app/shared/shared-forms'
 import { VideoActionsDisplayType } from '@app/shared/shared-video-miniature'
 
@@ -28,8 +28,12 @@ export class VideoListComponent extends RestTable implements OnInit {
       title: $localize`Advanced filters`,
       children: [
         {
-          queryParams: { search: 'local:true' },
-          label: $localize`Only local videos`
+          queryParams: { search: 'isLocal:false' },
+          label: $localize`Remote videos`
+        },
+        {
+          queryParams: { search: 'isLocal:true' },
+          label: $localize`Local videos`
         }
       ]
     }
@@ -86,6 +90,28 @@ export class VideoListComponent extends RestTable implements OnInit {
 
   onVideoRemoved () {
     this.reloadData()
+  }
+
+  getPrivacyBadgeClass (privacy: VideoPrivacy) {
+    if (privacy === VideoPrivacy.PUBLIC) return 'badge-blue'
+
+    return 'badge-yellow'
+  }
+
+  isUnpublished (state: VideoState) {
+    return state !== VideoState.PUBLISHED
+  }
+
+  isAccountBlocked (video: Video) {
+    return video.blockedOwner
+  }
+
+  isServerBlocked (video: Video) {
+    return video.blockedServer
+  }
+
+  isVideoBlocked (video: Video) {
+    return video.blacklisted
   }
 
   protected reloadData () {

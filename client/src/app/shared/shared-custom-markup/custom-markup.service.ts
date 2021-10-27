@@ -7,7 +7,6 @@ import {
   ContainerMarkupData,
   EmbedMarkupData,
   PlaylistMiniatureMarkupData,
-  VideoFilter,
   VideoMiniatureMarkupData,
   VideosListMarkupData
 } from '@shared/models'
@@ -193,7 +192,7 @@ export class CustomMarkupService {
 
       isLive: this.buildBoolean(data.isLive),
 
-      filter: this.buildBoolean(data.onlyLocal) ? 'local' as VideoFilter : undefined
+      isLocal: this.buildBoolean(data.onlyLocal) ? true : undefined
     }
 
     this.dynamicElementService.setModel(component, model)

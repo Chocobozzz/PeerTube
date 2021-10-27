@@ -1,3 +1,5 @@
+import { createSafeIn } from '@server/models/utils'
+import { MUserAccountId } from '@server/types/models'
 import validator from 'validator'
 import { AbstractVideosQueryBuilder } from './abstract-videos-query-builder'
 import { VideoTables } from './video-tables'
@@ -185,6 +187,32 @@ export class AbstractVideosModelQueryBuilder extends AbstractVideosQueryBuilder 
       ...this.attributes,
 
       ...this.buildAttributesObject('VideoBlacklist', this.tables.getBlacklistedAttributes())
+    }
+  }
+
+  protected includeBlockedOwnerAndServer (serverAccountId: number, user?: MUserAccountId) {
+    const blockerIds = [ serverAccountId ]
+    if (user) blockerIds.push(user.Account.id)
+
+    const inClause = createSafeIn(this.sequelize, blockerIds)
+
+    this.addJoin(
+      'LEFT JOIN "accountBlocklist" AS "VideoChannel->Account->AccountBlocklist" ' +
+        'ON "VideoChannel->Account"."id" = "VideoChannel->Account->AccountBlocklist"."targetAccountId" ' +
+        'AND "VideoChannel->Account->AccountBlocklist"."accountId" IN (' + inClause + ')'
+    )
+
+    this.addJoin(
+      'LEFT JOIN "serverBlocklist" AS "VideoChannel->Account->Actor->Server->ServerBlocklist" ' +
+        'ON "VideoChannel->Account->Actor->Server->ServerBlocklist"."targetServerId" = "VideoChannel->Account->Actor"."serverId" ' +
+        'AND "VideoChannel->Account->Actor->Server->ServerBlocklist"."accountId" IN (' + inClause + ') '
+    )
+
+    this.attributes = {
+      ...this.attributes,
+
+      ...this.buildAttributesObject('VideoChannel->Account->AccountBlocklist', this.tables.getBlocklistAttributes()),
+      ...this.buildAttributesObject('VideoChannel->Account->Actor->Server->ServerBlocklist', this.tables.getBlocklistAttributes())
     }
   }
 

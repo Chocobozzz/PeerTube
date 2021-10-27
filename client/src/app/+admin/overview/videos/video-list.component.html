@@ -63,10 +63,17 @@
         <my-video-cell [video]="video"></my-video-cell>
       </td>
 
-      <td>
-        <span class="badge badge-blue" i18n>{{ video.privacy.label }}</span>
+      <td class="badges">
+        <span [ngClass]="getPrivacyBadgeClass(video.privacy.id)" class="badge" i18n>{{ video.privacy.label }}</span>
+
         <span *ngIf="video.nsfw" class="badge badge-red" i18n>NSFW</span>
-        <span *ngIf="video.blocked" class="badge badge-red" i18n>NSFW</span>
+
+        <span *ngIf="isUnpublished(video.state.id)" class="badge badge-yellow" i18n>Not published yet</span>
+
+        <span *ngIf="isAccountBlocked(video)" class="badge badge-red" i18n>Account muted</span>
+        <span *ngIf="isServerBlocked(video)" class="badge badge-red" i18n>Server muted</span>
+
+        <span *ngIf="isVideoBlocked(video)" class="badge badge-red" i18n>Blocked</span>
       </td>
 
       <td>

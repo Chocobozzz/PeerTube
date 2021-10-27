@@ -188,7 +188,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
             this.notifier.success($localize`Video ${this.video.name} unblocked.`)
 
             this.video.blacklisted = false
-            this.video.blockedReason = null
+            this.video.blacklistedReason = null
 
             this.videoUnblocked.emit()
           },

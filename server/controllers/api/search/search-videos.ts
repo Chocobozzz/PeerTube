@@ -7,6 +7,8 @@ import { WEBSERVER } from '@server/initializers/constants'
 import { getOrCreateAPVideo } from '@server/lib/activitypub/videos'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { buildMutedForSearchIndex, isSearchIndexSearch, isURISearch } from '@server/lib/search'
+import { getServerActor } from '@server/models/application/application'
+import { guessAdditionalAttributesFromQuery } from '@server/models/video/formatter/video-format-utils'
 import { HttpStatusCode, ResultList, Video } from '@shared/models'
 import { VideosSearchQueryAfterSanitize } from '../../../../shared/models/search'
 import { buildNSFWFilter, isUserAbleToSearchRemoteURI } from '../../../helpers/express-utils'
@@ -100,11 +102,15 @@ async function searchVideosIndex (query: VideosSearchQueryAfterSanitize, res: ex
 }
 
 async function searchVideosDB (query: VideosSearchQueryAfterSanitize, res: express.Response) {
+  const serverActor = await getServerActor()
+
   const apiOptions = await Hooks.wrapObject({
     ...query,
 
-    includeLocalVideos: true,
-    filter: query.filter,
+    displayOnlyForFollower: {
+      actorId: serverActor.id,
+      orLocalVideos: true
+    },
 
     nsfw: buildNSFWFilter(res, query.nsfw),
     user: res.locals.oauth
@@ -118,7 +124,7 @@ async function searchVideosDB (query: VideosSearchQueryAfterSanitize, res: expre
     'filter:api.search.videos.local.list.result'
   )
 
-  return res.json(getFormattedObjects(resultList.data, resultList.total))
+  return res.json(getFormattedObjects(resultList.data, resultList.total, guessAdditionalAttributesFromQuery(query)))
 }
 
 async function searchVideoURI (url: string, res: express.Response) {

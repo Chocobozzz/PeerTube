@@ -62,7 +62,11 @@ export class VideosModelGetQueryBuilder {
         : Promise.resolve(undefined)
     ])
 
-    const videos = this.videoModelBuilder.buildVideosFromRows(videoRows, webtorrentFilesRows, streamingPlaylistFilesRows)
+    const videos = this.videoModelBuilder.buildVideosFromRows({
+      rows: videoRows,
+      rowsWebTorrentFiles: webtorrentFilesRows,
+      rowsStreamingPlaylist: streamingPlaylistFilesRows
+    })
 
     if (videos.length > 1) {
       throw new Error('Video results is more than ')

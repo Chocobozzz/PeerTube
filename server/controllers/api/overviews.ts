@@ -8,6 +8,7 @@ import { buildNSFWFilter } from '../../helpers/express-utils'
 import { MEMOIZE_TTL, OVERVIEWS } from '../../initializers/constants'
 import { asyncMiddleware, optionalAuthenticate, videosOverviewValidator } from '../../middlewares'
 import { TagModel } from '../../models/video/tag'
+import { getServerActor } from '@server/models/application/application'
 
 const overviewsRouter = express.Router()
 
@@ -109,11 +110,16 @@ async function getVideos (
   res: express.Response,
   where: { videoChannelId?: number, tagsOneOf?: string[], categoryOneOf?: number[] }
 ) {
+  const serverActor = await getServerActor()
+
   const query = await Hooks.wrapObject({
     start: 0,
     count: 12,
     sort: '-createdAt',
-    includeLocalVideos: true,
+    displayOnlyForFollower: {
+      actorId: serverActor.id,
+      orLocalVideos: true
+    },
     nsfw: buildNSFWFilter(res),
     user: res.locals.oauth ? res.locals.oauth.token.User : undefined,
     withFiles: false,

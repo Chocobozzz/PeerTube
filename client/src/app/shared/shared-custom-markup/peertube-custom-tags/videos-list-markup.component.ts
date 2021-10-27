@@ -1,7 +1,7 @@
 import { finalize } from 'rxjs/operators'
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { AuthService, Notifier } from '@app/core'
-import { VideoFilter, VideoSortField } from '@shared/models'
+import { VideoSortField } from '@shared/models'
 import { Video, VideoService } from '../../shared-main'
 import { MiniatureDisplayOptions } from '../../shared-video-miniature'
 import { CustomMarkupComponent } from './shared'
@@ -21,7 +21,7 @@ export class VideosListMarkupComponent implements CustomMarkupComponent, OnInit 
   @Input() languageOneOf: string[]
   @Input() count: number
   @Input() onlyDisplayTitle: boolean
-  @Input() filter: VideoFilter
+  @Input() isLocal: boolean
   @Input() isLive: boolean
   @Input() maxRows: number
   @Input() channelHandle: string
@@ -86,7 +86,7 @@ export class VideosListMarkupComponent implements CustomMarkupComponent, OnInit 
       },
       categoryOneOf: this.categoryOneOf,
       languageOneOf: this.languageOneOf,
-      filter: this.filter,
+      isLocal: this.isLocal,
       isLive: this.isLive,
       sort: this.sort as VideoSortField,
       account: { nameWithHost: this.accountHandle },

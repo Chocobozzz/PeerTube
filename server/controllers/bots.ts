@@ -1,3 +1,4 @@
+import { getServerActor } from '@server/models/application/application'
 import express from 'express'
 import { truncate } from 'lodash'
 import { SitemapStream, streamToPromise } from 'sitemap'
@@ -63,13 +64,18 @@ async function getSitemapAccountUrls () {
 }
 
 async function getSitemapLocalVideoUrls () {
+  const serverActor = await getServerActor()
+
   const { data } = await VideoModel.listForApi({
     start: 0,
     count: undefined,
     sort: 'createdAt',
-    includeLocalVideos: true,
+    displayOnlyForFollower: {
+      actorId: serverActor.id,
+      orLocalVideos: true
+    },
+    isLocal: true,
     nsfw: buildNSFWFilter(),
-    filter: 'local',
     withFiles: false,
     countVideos: false
   })

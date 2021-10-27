@@ -1,11 +1,14 @@
 
 import { AccountModel } from '@server/models/account/account'
+import { AccountBlocklistModel } from '@server/models/account/account-blocklist'
 import { ActorModel } from '@server/models/actor/actor'
 import { ActorImageModel } from '@server/models/actor/actor-image'
 import { VideoRedundancyModel } from '@server/models/redundancy/video-redundancy'
 import { ServerModel } from '@server/models/server/server'
+import { ServerBlocklistModel } from '@server/models/server/server-blocklist'
 import { TrackerModel } from '@server/models/server/tracker'
 import { UserVideoHistoryModel } from '@server/models/user/user-video-history'
+import { VideoInclude } from '@shared/models'
 import { ScheduleVideoUpdateModel } from '../../schedule-video-update'
 import { TagModel } from '../../tag'
 import { ThumbnailModel } from '../../thumbnail'
@@ -33,6 +36,8 @@ export class VideoModelBuilder {
   private thumbnailsDone: Set<any>
   private historyDone: Set<any>
   private blacklistDone: Set<any>
+  private accountBlocklistDone: Set<any>
+  private serverBlocklistDone: Set<any>
   private liveDone: Set<any>
   private redundancyDone: Set<any>
   private scheduleVideoUpdateDone: Set<any>
@@ -51,7 +56,14 @@ export class VideoModelBuilder {
 
   }
 
-  buildVideosFromRows (rows: SQLRow[], rowsWebTorrentFiles?: SQLRow[], rowsStreamingPlaylist?: SQLRow[]) {
+  buildVideosFromRows (options: {
+    rows: SQLRow[]
+    include?: VideoInclude
+    rowsWebTorrentFiles?: SQLRow[]
+    rowsStreamingPlaylist?: SQLRow[]
+  }) {
+    const { rows, rowsWebTorrentFiles, rowsStreamingPlaylist, include } = options
+
     this.reinit()
 
     for (const row of rows) {
@@ -77,6 +89,15 @@ export class VideoModelBuilder {
         this.setBlacklisted(row, videoModel)
         this.setScheduleVideoUpdate(row, videoModel)
         this.setLive(row, videoModel)
+      } else {
+        if (include & VideoInclude.BLACKLISTED) {
+          this.setBlacklisted(row, videoModel)
+        }
+
+        if (include & VideoInclude.BLOCKED_OWNER) {
+          this.setBlockedOwner(row, videoModel)
+          this.setBlockedServer(row, videoModel)
+        }
       }
     }
 
@@ -91,15 +112,18 @@ export class VideoModelBuilder {
     this.videoStreamingPlaylistMemo = {}
     this.videoFileMemo = {}
 
-    this.thumbnailsDone = new Set<number>()
-    this.historyDone = new Set<number>()
-    this.blacklistDone = new Set<number>()
-    this.liveDone = new Set<number>()
-    this.redundancyDone = new Set<number>()
-    this.scheduleVideoUpdateDone = new Set<number>()
+    this.thumbnailsDone = new Set()
+    this.historyDone = new Set()
+    this.blacklistDone = new Set()
+    this.liveDone = new Set()
+    this.redundancyDone = new Set()
+    this.scheduleVideoUpdateDone = new Set()
 
-    this.trackersDone = new Set<string>()
-    this.tagsDone = new Set<string>()
+    this.accountBlocklistDone = new Set()
+    this.serverBlocklistDone = new Set()
+
+    this.trackersDone = new Set()
+    this.tagsDone = new Set()
 
     this.videos = []
   }
@@ -162,6 +186,8 @@ export class VideoModelBuilder {
     const accountModel = new AccountModel(this.grab(row, this.tables.getAccountAttributes(), 'VideoChannel.Account'), this.buildOpts)
     accountModel.Actor = this.buildActor(row, 'VideoChannel.Account')
 
+    accountModel.BlockedBy = []
+
     channelModel.Account = accountModel
 
     videoModel.VideoChannel = channelModel
@@ -179,6 +205,8 @@ export class VideoModelBuilder {
     const serverModel = row[`${serverPrefix}.id`] !== null
       ? new ServerModel(this.grab(row, this.tables.getServerAttributes(), serverPrefix), this.buildOpts)
       : null
+
+    if (serverModel) serverModel.BlockedBy = []
 
     const actorModel = new ActorModel(this.grab(row, this.tables.getActorAttributes(), actorPrefix), this.buildOpts)
     actorModel.Avatar = avatarModel
@@ -295,6 +323,32 @@ export class VideoModelBuilder {
     videoModel.VideoBlacklist = new VideoBlacklistModel(attributes, this.buildOpts)
 
     this.blacklistDone.add(id)
+  }
+
+  private setBlockedOwner (row: SQLRow, videoModel: VideoModel) {
+    const id = row['VideoChannel.Account.AccountBlocklist.id']
+    if (!id) return
+
+    const key = `${videoModel.id}-${id}`
+    if (this.accountBlocklistDone.has(key)) return
+
+    const attributes = this.grab(row, this.tables.getBlocklistAttributes(), 'VideoChannel.Account.AccountBlocklist')
+    videoModel.VideoChannel.Account.BlockedBy.push(new AccountBlocklistModel(attributes, this.buildOpts))
+
+    this.accountBlocklistDone.add(key)
+  }
+
+  private setBlockedServer (row: SQLRow, videoModel: VideoModel) {
+    const id = row['VideoChannel.Account.Actor.Server.ServerBlocklist.id']
+    if (!id || this.serverBlocklistDone.has(id)) return
+
+    const key = `${videoModel.id}-${id}`
+    if (this.serverBlocklistDone.has(key)) return
+
+    const attributes = this.grab(row, this.tables.getBlocklistAttributes(), 'VideoChannel.Account.Actor.Server.ServerBlocklist')
+    videoModel.VideoChannel.Account.Actor.Server.BlockedBy.push(new ServerBlocklistModel(attributes, this.buildOpts))
+
+    this.serverBlocklistDone.add(key)
   }
 
   private setScheduleVideoUpdate (row: SQLRow, videoModel: VideoModel) {

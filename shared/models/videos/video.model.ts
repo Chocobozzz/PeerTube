@@ -43,13 +43,6 @@ export interface Video {
   dislikes: number
   nsfw: boolean
 
-  waitTranscoding?: boolean
-  state?: VideoConstant<VideoState>
-  scheduledUpdate?: VideoScheduleUpdate
-
-  blacklisted?: boolean
-  blacklistedReason?: string
-
   account: AccountSummary
   channel: VideoChannelSummary
 
@@ -58,6 +51,17 @@ export interface Video {
   }
 
   pluginData?: any
+
+  // Additional attributes dependending on the query
+  waitTranscoding?: boolean
+  state?: VideoConstant<VideoState>
+  scheduledUpdate?: VideoScheduleUpdate
+
+  blacklisted?: boolean
+  blacklistedReason?: string
+
+  blockedOwner?: boolean
+  blockedServer?: boolean
 }
 
 export interface VideoDetails extends Video {
@@ -70,7 +74,7 @@ export interface VideoDetails extends Video {
   commentsEnabled: boolean
   downloadEnabled: boolean
 
-  // Not optional in details (unlike in Video)
+  // Not optional in details (unlike in parent Video)
   waitTranscoding: boolean
   state: VideoConstant<VideoState>
 

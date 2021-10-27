@@ -55,7 +55,7 @@
 
       <div *ngIf="displayOptions.blacklistInfo && video.blacklisted" class="video-info-blocked">
         <span class="blocked-label" i18n>Blocked</span>
-        <span class="blocked-reason" *ngIf="video.blockedReason">{{ video.blockedReason }}</span>
+        <span class="blocked-reason" *ngIf="video.blacklistedReason">{{ video.blacklistedReason }}</span>
       </div>
 
       <div i18n *ngIf="displayOptions.nsfw && video.nsfw" class="video-info-nsfw">

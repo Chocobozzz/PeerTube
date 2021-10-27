@@ -23,4 +23,7 @@ export interface VideosSearchQueryAfterSanitize extends VideosSearchQuery {
   start: number
   count: number
   sort: string
+
+  // FIXME: deprecated in 4.0, to remove
+  filter?: never
 }

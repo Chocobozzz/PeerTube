@@ -228,10 +228,10 @@ export class AccountModel extends Model<Partial<AttributesOnly<AccountModel>>> {
       name: 'targetAccountId',
       allowNull: false
     },
-    as: 'BlockedAccounts',
+    as: 'BlockedBy',
     onDelete: 'CASCADE'
   })
-  BlockedAccounts: AccountBlocklistModel[]
+  BlockedBy: AccountBlocklistModel[]
 
   @BeforeDestroy
   static async sendDeleteIfOwned (instance: AccountModel, options) {
@@ -457,6 +457,6 @@ export class AccountModel extends Model<Partial<AttributesOnly<AccountModel>>> {
   }
 
   isBlocked () {
-    return this.BlockedAccounts && this.BlockedAccounts.length !== 0
+    return this.BlockedBy && this.BlockedBy.length !== 0
   }
 }

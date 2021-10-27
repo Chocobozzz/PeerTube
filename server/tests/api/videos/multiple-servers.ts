@@ -349,7 +349,7 @@ describe('Test multiple servers', function () {
 
   describe('It should list local videos', function () {
     it('Should list only local videos on server 1', async function () {
-      const { data, total } = await servers[0].videos.list({ filter: 'local' })
+      const { data, total } = await servers[0].videos.list({ isLocal: true })
 
       expect(total).to.equal(1)
       expect(data).to.be.an('array')
@@ -358,7 +358,7 @@ describe('Test multiple servers', function () {
     })
 
     it('Should list only local videos on server 2', async function () {
-      const { data, total } = await servers[1].videos.list({ filter: 'local' })
+      const { data, total } = await servers[1].videos.list({ isLocal: true })
 
       expect(total).to.equal(1)
       expect(data).to.be.an('array')
@@ -367,7 +367,7 @@ describe('Test multiple servers', function () {
     })
 
     it('Should list only local videos on server 3', async function () {
-      const { data, total } = await servers[2].videos.list({ filter: 'local' })
+      const { data, total } = await servers[2].videos.list({ isLocal: true })
 
       expect(total).to.equal(2)
       expect(data).to.be.an('array')

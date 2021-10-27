@@ -1,9 +1,10 @@
 import { uuidToShort } from '@server/helpers/uuid'
 import { generateMagnetUri } from '@server/helpers/webtorrent'
 import { getLocalVideoFileMetadataUrl } from '@server/lib/video-urls'
+import { VideosCommonQueryAfterSanitize } from '@shared/models'
 import { VideoFile } from '@shared/models/videos/video-file.model'
 import { ActivityTagObject, ActivityUrlObject, VideoObject } from '../../../../shared/models/activitypub/objects'
-import { Video, VideoDetails } from '../../../../shared/models/videos'
+import { Video, VideoDetails, VideoInclude } from '../../../../shared/models/videos'
 import { VideoStreamingPlaylist } from '../../../../shared/models/videos/video-streaming-playlist.model'
 import { isArray } from '../../../helpers/custom-validators/misc'
 import {
@@ -22,6 +23,7 @@ import {
   getLocalVideoSharesActivityPubUrl
 } from '../../../lib/activitypub/url'
 import {
+  MServer,
   MStreamingPlaylistRedundanciesOpt,
   MVideo,
   MVideoAP,
@@ -34,15 +36,31 @@ import { VideoCaptionModel } from '../video-caption'
 
 export type VideoFormattingJSONOptions = {
   completeDescription?: boolean
-  additionalAttributes: {
+
+  additionalAttributes?: {
     state?: boolean
     waitTranscoding?: boolean
     scheduledUpdate?: boolean
     blacklistInfo?: boolean
+    blockedOwner?: boolean
   }
 }
 
-function videoModelToFormattedJSON (video: MVideoFormattable, options?: VideoFormattingJSONOptions): Video {
+function guessAdditionalAttributesFromQuery (query: VideosCommonQueryAfterSanitize): VideoFormattingJSONOptions {
+  if (!query || !query.include) return {}
+
+  return {
+    additionalAttributes: {
+      state: !!(query.include & VideoInclude.NOT_PUBLISHED_STATE),
+      waitTranscoding: !!(query.include & VideoInclude.NOT_PUBLISHED_STATE),
+      scheduledUpdate: !!(query.include & VideoInclude.NOT_PUBLISHED_STATE),
+      blacklistInfo: !!(query.include & VideoInclude.BLACKLISTED),
+      blockedOwner: !!(query.include & VideoInclude.BLOCKED_OWNER)
+    }
+  }
+}
+
+function videoModelToFormattedJSON (video: MVideoFormattable, options: VideoFormattingJSONOptions = {}): Video {
   const userHistory = isArray(video.UserVideoHistories) ? video.UserVideoHistories[0] : undefined
 
   const videoObject: Video = {
@@ -101,29 +119,35 @@ function videoModelToFormattedJSON (video: MVideoFormattable, options?: VideoFor
     pluginData: (video as any).pluginData
   }
 
-  if (options) {
-    if (options.additionalAttributes.state === true) {
-      videoObject.state = {
-        id: video.state,
-        label: getStateLabel(video.state)
-      }
+  const add = options.additionalAttributes
+  if (add?.state === true) {
+    videoObject.state = {
+      id: video.state,
+      label: getStateLabel(video.state)
     }
+  }
 
-    if (options.additionalAttributes.waitTranscoding === true) {
-      videoObject.waitTranscoding = video.waitTranscoding
-    }
+  if (add?.waitTranscoding === true) {
+    videoObject.waitTranscoding = video.waitTranscoding
+  }
 
-    if (options.additionalAttributes.scheduledUpdate === true && video.ScheduleVideoUpdate) {
-      videoObject.scheduledUpdate = {
-        updateAt: video.ScheduleVideoUpdate.updateAt,
-        privacy: video.ScheduleVideoUpdate.privacy || undefined
-      }
+  if (add?.scheduledUpdate === true && video.ScheduleVideoUpdate) {
+    videoObject.scheduledUpdate = {
+      updateAt: video.ScheduleVideoUpdate.updateAt,
+      privacy: video.ScheduleVideoUpdate.privacy || undefined
     }
+  }
 
-    if (options.additionalAttributes.blacklistInfo === true) {
-      videoObject.blacklisted = !!video.VideoBlacklist
-      videoObject.blacklistedReason = video.VideoBlacklist ? video.VideoBlacklist.reason : null
-    }
+  if (add?.blacklistInfo === true) {
+    videoObject.blacklisted = !!video.VideoBlacklist
+    videoObject.blacklistedReason = video.VideoBlacklist ? video.VideoBlacklist.reason : null
+  }
+
+  if (add?.blockedOwner === true) {
+    videoObject.blockedOwner = video.VideoChannel.Account.isBlocked()
+
+    const server = video.VideoChannel.Account.Actor.Server as MServer
+    videoObject.blockedServer = !!(server?.isBlocked())
   }
 
   return videoObject
@@ -463,6 +487,8 @@ export {
   videoFilesModelToFormattedJSON,
   videoModelToActivityPubObject,
   getActivityStreamDuration,
+
+  guessAdditionalAttributesFromQuery,
 
   getCategoryLabel,
   getLicenceLabel,
