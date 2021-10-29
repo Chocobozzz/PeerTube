@@ -52,7 +52,7 @@ export class VideosModelListQueryBuilder extends AbstractVideosModelQueryBuilder
     this.includeAccounts()
     this.includeThumbnails()
 
-    if (options.withFiles) {
+    if (options.include & VideoInclude.FILES) {
       this.includeWebtorrentFiles()
       this.includeStreamingPlaylistFiles()
     }

@@ -15,7 +15,7 @@ export type MServerRedundancyAllowed = Pick<MServer, 'redundancyAllowed'>
 
 export type MServerHostBlocks =
   MServerHost &
-  Use<'BlockedByAccounts', MAccountBlocklistId[]>
+  Use<'BlockedBy', MAccountBlocklistId[]>
 
 // ############################################################################
 

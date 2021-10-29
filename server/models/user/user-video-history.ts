@@ -70,7 +70,6 @@ export class UserVideoHistoryModel extends Model<Partial<AttributesOnly<UserVide
         actorId: serverActor.id,
         orLocalVideos: true
       },
-      withFiles: false,
       user,
       historyOfUser: user
     })

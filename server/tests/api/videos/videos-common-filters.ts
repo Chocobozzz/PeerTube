@@ -13,7 +13,7 @@ import {
   setDefaultVideoChannel,
   waitJobs
 } from '@shared/extra-utils'
-import { HttpStatusCode, UserRole, Video, VideoInclude, VideoPrivacy } from '@shared/models'
+import { HttpStatusCode, UserRole, Video, VideoDetails, VideoInclude, VideoPrivacy } from '@shared/models'
 
 describe('Test videos filter', function () {
   let servers: PeerTubeServer[]
@@ -363,6 +363,32 @@ describe('Test videos filter', function () {
       }
 
       await servers[0].blocklist.removeFromServerBlocklist({ server: servers[1].host })
+    })
+
+    it('Should include video files', async function () {
+      for (const path of paths) {
+        {
+          const videos = await listVideos({ server: servers[0], path })
+
+          for (const video of videos) {
+            const videoWithFiles = video as VideoDetails
+
+            expect(videoWithFiles.files).to.not.exist
+            expect(videoWithFiles.streamingPlaylists).to.not.exist
+          }
+        }
+
+        {
+          const videos = await listVideos({ server: servers[0], path, include: VideoInclude.FILES })
+
+          for (const video of videos) {
+            const videoWithFiles = video as VideoDetails
+
+            expect(videoWithFiles.files).to.exist
+            expect(videoWithFiles.files).to.have.length.at.least(1)
+          }
+        }
+      }
     })
 
     it('Should filter by tags and category', async function () {

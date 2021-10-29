@@ -2,6 +2,7 @@ import express from 'express'
 import Feed from 'pfeed'
 import { getServerActor } from '@server/models/application/application'
 import { getCategoryLabel } from '@server/models/video/formatter/video-format-utils'
+import { VideoInclude } from '@shared/models'
 import { buildNSFWFilter } from '../helpers/express-utils'
 import { CONFIG } from '../initializers/config'
 import { FEEDS, PREVIEWS_SIZE, ROUTE_CACHE_LIFETIME, WEBSERVER } from '../initializers/constants'
@@ -171,8 +172,8 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
     },
     nsfw,
     isLocal: req.query.isLocal,
-    include: req.query.include,
-    withFiles: true,
+    include: req.query.include | VideoInclude.FILES,
+    hasFiles: true,
     countVideos: false,
     ...options
   })
@@ -204,9 +205,10 @@ async function generateVideoFeedForSubscriptions (req: express.Request, res: exp
     nsfw,
 
     isLocal: req.query.isLocal,
-    include: req.query.include,
 
-    withFiles: true,
+    hasFiles: true,
+    include: req.query.include | VideoInclude.FILES,
+
     countVideos: false,
 
     displayOnlyForFollower: {

@@ -189,7 +189,6 @@ async function listAccountVideos (req: express.Request, res: express.Response) {
 
     displayOnlyForFollower,
     nsfw: buildNSFWFilter(res, query.nsfw),
-    withFiles: false,
     accountId: account.id,
     user: res.locals.oauth ? res.locals.oauth.token.User : undefined,
     countVideos

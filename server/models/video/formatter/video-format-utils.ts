@@ -42,6 +42,7 @@ export type VideoFormattingJSONOptions = {
     waitTranscoding?: boolean
     scheduledUpdate?: boolean
     blacklistInfo?: boolean
+    files?: boolean
     blockedOwner?: boolean
   }
 }
@@ -55,6 +56,7 @@ function guessAdditionalAttributesFromQuery (query: VideosCommonQueryAfterSaniti
       waitTranscoding: !!(query.include & VideoInclude.NOT_PUBLISHED_STATE),
       scheduledUpdate: !!(query.include & VideoInclude.NOT_PUBLISHED_STATE),
       blacklistInfo: !!(query.include & VideoInclude.BLACKLISTED),
+      files: !!(query.include & VideoInclude.FILES),
       blockedOwner: !!(query.include & VideoInclude.BLOCKED_OWNER)
     }
   }
@@ -150,22 +152,26 @@ function videoModelToFormattedJSON (video: MVideoFormattable, options: VideoForm
     videoObject.blockedServer = !!(server?.isBlocked())
   }
 
+  if (add?.files === true) {
+    videoObject.streamingPlaylists = streamingPlaylistsModelToFormattedJSON(video, video.VideoStreamingPlaylists)
+    videoObject.files = videoFilesModelToFormattedJSON(video, video.VideoFiles)
+  }
+
   return videoObject
 }
 
 function videoModelToFormattedDetailsJSON (video: MVideoFormattableDetails): VideoDetails {
-  const formattedJson = video.toFormattedJSON({
+  const videoJSON = video.toFormattedJSON({
     additionalAttributes: {
       scheduledUpdate: true,
-      blacklistInfo: true
+      blacklistInfo: true,
+      files: true
     }
-  })
+  }) as Video & Required<Pick<Video, 'files' | 'streamingPlaylists'>>
 
   const tags = video.Tags ? video.Tags.map(t => t.name) : []
 
-  const streamingPlaylists = streamingPlaylistsModelToFormattedJSON(video, video.VideoStreamingPlaylists)
-
-  const detailsJson = {
+  const detailsJSON = {
     support: video.support,
     descriptionPath: video.getDescriptionAPIPath(),
     channel: video.VideoChannel.toFormattedJSON(),
@@ -179,20 +185,14 @@ function videoModelToFormattedDetailsJSON (video: MVideoFormattableDetails): Vid
       label: getStateLabel(video.state)
     },
 
-    trackerUrls: video.getTrackerUrls(),
-
-    files: [],
-    streamingPlaylists
+    trackerUrls: video.getTrackerUrls()
   }
 
-  // Format and sort video files
-  detailsJson.files = videoFilesModelToFormattedJSON(video, video.VideoFiles)
-
-  return Object.assign(formattedJson, detailsJson)
+  return Object.assign(videoJSON, detailsJSON)
 }
 
 function streamingPlaylistsModelToFormattedJSON (
-  video: MVideoFormattableDetails,
+  video: MVideoFormattable,
   playlists: MStreamingPlaylistRedundanciesOpt[]
 ): VideoStreamingPlaylist[] {
   if (isArray(playlists) === false) return []
@@ -223,7 +223,7 @@ function sortByResolutionDesc (fileA: MVideoFile, fileB: MVideoFile) {
 }
 
 function videoFilesModelToFormattedJSON (
-  video: MVideoFormattableDetails,
+  video: MVideoFormattable,
   videoFiles: MVideoFileRedundanciesOpt[],
   includeMagnet = true
 ): VideoFile[] {

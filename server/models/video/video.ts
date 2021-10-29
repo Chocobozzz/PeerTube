@@ -105,7 +105,7 @@ import {
   videoModelToFormattedJSON
 } from './formatter/video-format-utils'
 import { ScheduleVideoUpdateModel } from './schedule-video-update'
-import { VideosModelGetQueryBuilder } from './sql/video-model-get-query-builder'
+import { VideoModelGetQueryBuilder } from './sql/video-model-get-query-builder'
 import { BuildVideosListQueryOptions, DisplayOnlyForFollowerOptions, VideosIdListQueryBuilder } from './sql/videos-id-list-query-builder'
 import { VideosModelListQueryBuilder } from './sql/videos-model-list-query-builder'
 import { TagModel } from './tag'
@@ -1029,7 +1029,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     isLocal?: boolean
     include?: VideoInclude
 
-    withFiles: boolean
+    hasFiles?: boolean // default false
 
     categoryOneOf?: number[]
     licenceOneOf?: number[]
@@ -1053,7 +1053,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
 
     search?: string
   }) {
-    if (options.include && !options.user.hasRight(UserRight.SEE_ALL_VIDEOS)) {
+    if (VideoModel.isPrivateInclude(options.include) && !options.user.hasRight(UserRight.SEE_ALL_VIDEOS)) {
       throw new Error('Try to filter all-local but no user has not the see all videos right')
     }
 
@@ -1082,7 +1082,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
         'isLocal',
         'include',
         'displayOnlyForFollower',
-        'withFiles',
+        'hasFiles',
         'accountId',
         'videoChannelId',
         'videoPlaylistId',
@@ -1229,13 +1229,13 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
   }
 
   static load (id: number | string, transaction?: Transaction): Promise<MVideoThumbnail> {
-    const queryBuilder = new VideosModelGetQueryBuilder(VideoModel.sequelize)
+    const queryBuilder = new VideoModelGetQueryBuilder(VideoModel.sequelize)
 
     return queryBuilder.queryVideo({ id, transaction, type: 'thumbnails' })
   }
 
   static loadWithBlacklist (id: number | string, transaction?: Transaction): Promise<MVideoThumbnailBlacklist> {
-    const queryBuilder = new VideosModelGetQueryBuilder(VideoModel.sequelize)
+    const queryBuilder = new VideoModelGetQueryBuilder(VideoModel.sequelize)
 
     return queryBuilder.queryVideo({ id, transaction, type: 'thumbnails-blacklist' })
   }
@@ -1279,31 +1279,31 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
   }
 
   static loadOnlyId (id: number | string, transaction?: Transaction): Promise<MVideoId> {
-    const queryBuilder = new VideosModelGetQueryBuilder(VideoModel.sequelize)
+    const queryBuilder = new VideoModelGetQueryBuilder(VideoModel.sequelize)
 
     return queryBuilder.queryVideo({ id, transaction, type: 'id' })
   }
 
   static loadWithFiles (id: number | string, transaction?: Transaction, logging?: boolean): Promise<MVideoWithAllFiles> {
-    const queryBuilder = new VideosModelGetQueryBuilder(VideoModel.sequelize)
+    const queryBuilder = new VideoModelGetQueryBuilder(VideoModel.sequelize)
 
     return queryBuilder.queryVideo({ id, transaction, type: 'all-files', logging })
   }
 
   static loadByUrl (url: string, transaction?: Transaction): Promise<MVideoThumbnail> {
-    const queryBuilder = new VideosModelGetQueryBuilder(VideoModel.sequelize)
+    const queryBuilder = new VideoModelGetQueryBuilder(VideoModel.sequelize)
 
     return queryBuilder.queryVideo({ url, transaction, type: 'thumbnails' })
   }
 
   static loadByUrlAndPopulateAccount (url: string, transaction?: Transaction): Promise<MVideoAccountLightBlacklistAllFiles> {
-    const queryBuilder = new VideosModelGetQueryBuilder(VideoModel.sequelize)
+    const queryBuilder = new VideoModelGetQueryBuilder(VideoModel.sequelize)
 
     return queryBuilder.queryVideo({ url, transaction, type: 'account-blacklist-files' })
   }
 
   static loadAndPopulateAccountAndServerAndTags (id: number | string, t?: Transaction, userId?: number): Promise<MVideoFullLight> {
-    const queryBuilder = new VideosModelGetQueryBuilder(VideoModel.sequelize)
+    const queryBuilder = new VideoModelGetQueryBuilder(VideoModel.sequelize)
 
     return queryBuilder.queryVideo({ id, transaction: t, type: 'full-light', userId })
   }
@@ -1314,7 +1314,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     userId?: number
   }): Promise<MVideoDetails> {
     const { id, transaction, userId } = parameters
-    const queryBuilder = new VideosModelGetQueryBuilder(VideoModel.sequelize)
+    const queryBuilder = new VideoModelGetQueryBuilder(VideoModel.sequelize)
 
     return queryBuilder.queryVideo({ id, transaction, type: 'api', userId })
   }
@@ -1345,8 +1345,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
       displayOnlyForFollower: {
         actorId: serverActor.id,
         orLocalVideos: true
-      },
-      withFiles: false
+      }
     })
 
     return {
@@ -1488,6 +1487,13 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
       data: rows,
       total: count
     }
+  }
+
+  private static isPrivateInclude (include: VideoInclude) {
+    return include & VideoInclude.BLACKLISTED ||
+           include & VideoInclude.BLOCKED_OWNER ||
+           include & VideoInclude.HIDDEN_PRIVACY ||
+           include & VideoInclude.NOT_PUBLISHED_STATE
   }
 
   isBlacklisted () {

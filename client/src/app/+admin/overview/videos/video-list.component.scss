@@ -3,10 +3,15 @@
 my-embed {
   display: block;
   max-width: 500px;
+  width: 50%;
 }
 
 .badge {
   @include table-badge;
 
   margin-right: 5px;
+}
+
+.video-info > div {
+  display: flex;
 }

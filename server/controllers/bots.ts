@@ -76,7 +76,6 @@ async function getSitemapLocalVideoUrls () {
     },
     isLocal: true,
     nsfw: buildNSFWFilter(),
-    withFiles: false,
     countVideos: false
   })
 

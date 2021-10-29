@@ -10,9 +10,11 @@ import {
   UserRight,
   Video as VideoServerModel,
   VideoConstant,
+  VideoFile,
   VideoPrivacy,
   VideoScheduleUpdate,
-  VideoState
+  VideoState,
+  VideoStreamingPlaylist
 } from '@shared/models'
 
 export class Video implements VideoServerModel {
@@ -96,6 +98,9 @@ export class Video implements VideoServerModel {
 
   pluginData?: any
 
+  streamingPlaylists?: VideoStreamingPlaylist[]
+  files?: VideoFile[]
+
   static buildWatchUrl (video: Partial<Pick<Video, 'uuid' | 'shortUUID'>>) {
     return buildVideoWatchPath({ shortUUID: video.shortUUID || video.uuid })
   }
@@ -171,6 +176,9 @@ export class Video implements VideoServerModel {
 
     this.blockedOwner = hash.blockedOwner
     this.blockedServer = hash.blockedServer
+
+    this.streamingPlaylists = hash.streamingPlaylists
+    this.files = hash.files
 
     this.userHistory = hash.userHistory
 

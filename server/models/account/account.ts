@@ -99,7 +99,7 @@ export type SummaryOptions = {
       queryInclude.push({
         attributes: [ 'id' ],
         model: AccountBlocklistModel.unscoped(),
-        as: 'BlockedAccounts',
+        as: 'BlockedBy',
         required: false,
         where: {
           accountId: {

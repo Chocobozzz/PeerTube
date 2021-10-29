@@ -225,7 +225,6 @@ async function listVideos (req: express.Request, res: express.Response) {
       orLocalVideos: true
     },
     nsfw: buildNSFWFilter(res, query.nsfw),
-    withFiles: false,
     user: res.locals.oauth ? res.locals.oauth.token.User : undefined,
     countVideos
   }, 'filter:api.videos.list.params')
