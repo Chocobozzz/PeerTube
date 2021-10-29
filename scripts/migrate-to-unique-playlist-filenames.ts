@@ -10,6 +10,8 @@ import { generateHLSMasterPlaylistFilename, generateHlsSha256SegmentsFilename, g
 import { VideoPathManager } from '@server/lib/video-path-manager'
 import { move } from 'fs-extra'
 import { join } from 'path'
+import { updateMasterHLSPlaylist, updateSha256VODSegments } from '@server/lib/hls'
+import { MStreamingPlaylistFilesVideo } from '@server/types/models'
 
 program
   .description('Migrate HLS videos to get unique playlist filenames.')
@@ -58,8 +60,9 @@ async function run () {
         await move(from, moveMap[from])
         moved.push(from)
       }
+
       await playlist.save()
-      console.log(`Successfully migrated ${video.id} with ${moved.length} files.`)
+      console.log(`Successfully moved ${video.id} with ${moved.length} files.`)
     } catch (error) {
       console.error(error)
       console.error(`Failed to migrate video ${video.id}.`)
@@ -79,7 +82,17 @@ async function run () {
           console.error(`Failed to restore ${from}.`)
         }
       })
+    }
 
+    try {
+      const playlistWithFiles = playlist as MStreamingPlaylistFilesVideo
+      playlistWithFiles.Video = await playlist.$get('Video')
+      playlistWithFiles.VideoFiles = await playlist.$get('VideoFiles')
+      await updateMasterHLSPlaylist(video, playlistWithFiles)
+      await updateSha256VODSegments(video, playlistWithFiles)
+      console.log(`Successfully updated master playlist and SHA 256 segments for video ${video.id}`)
+    } catch (error) {
+      console.error(`Failed to update master playlist and SHA 256 segments for video ${video.id}`, error)
     }
     continue
   }
