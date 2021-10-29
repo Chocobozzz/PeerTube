@@ -208,7 +208,11 @@ export class VideoService {
   ): Observable<ResultList<Video>> {
     const { pagination, search } = parameters
 
-    const include = VideoInclude.BLACKLISTED | VideoInclude.BLOCKED_OWNER | VideoInclude.HIDDEN_PRIVACY | VideoInclude.NOT_PUBLISHED_STATE
+    const include = VideoInclude.BLACKLISTED |
+                    VideoInclude.BLOCKED_OWNER |
+                    VideoInclude.HIDDEN_PRIVACY |
+                    VideoInclude.NOT_PUBLISHED_STATE |
+                    VideoInclude.FILES
 
     let params = new HttpParams()
     params = this.buildCommonVideosParams({ params, include, ...parameters })

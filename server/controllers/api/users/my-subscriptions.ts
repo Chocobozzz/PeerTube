@@ -181,7 +181,6 @@ async function getUserSubscriptionVideos (req: express.Request, res: express.Res
       orLocalVideos: false
     },
     nsfw: buildNSFWFilter(res, query.nsfw),
-    withFiles: false,
     user,
     countVideos
   })

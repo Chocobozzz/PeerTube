@@ -43,7 +43,7 @@ export type BuildVideosListQueryOptions = {
 
   uuids?: string[]
 
-  withFiles?: boolean
+  hasFiles?: boolean
 
   accountId?: number
   videoChannelId?: number
@@ -165,7 +165,7 @@ export class VideosIdListQueryBuilder extends AbstractVideosQueryBuilder {
       this.whereFollowerActorId(options.displayOnlyForFollower)
     }
 
-    if (options.withFiles === true) {
+    if (options.hasFiles === true) {
       this.whereFileExists()
     }
 

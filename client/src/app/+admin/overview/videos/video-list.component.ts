@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, ConfirmService, Notifier, RestPagination, RestTable } from '@app/core'
 import { DropdownAction, Video, VideoService } from '@app/shared/shared-main'
-import { UserRight, VideoPrivacy, VideoState } from '@shared/models'
+import { UserRight, VideoPrivacy, VideoState, VideoStreamingPlaylistType } from '@shared/models'
 import { AdvancedInputFilter } from '@app/shared/shared-forms'
 import { VideoActionsDisplayType } from '@app/shared/shared-video-miniature'
 
@@ -112,6 +112,24 @@ export class VideoListComponent extends RestTable implements OnInit {
 
   isVideoBlocked (video: Video) {
     return video.blacklisted
+  }
+
+  isHLS (video: Video) {
+    return video.streamingPlaylists.some(p => p.type === VideoStreamingPlaylistType.HLS)
+  }
+
+  isWebTorrent (video: Video) {
+    return video.files.length !== 0
+  }
+
+  getFilesSize (video: Video) {
+    let files = video.files
+
+    if (this.isHLS(video)) {
+      files = files.concat(video.streamingPlaylists[0].files)
+    }
+
+    return files.reduce((p, f) => p += f.size, 0)
   }
 
   protected reloadData () {

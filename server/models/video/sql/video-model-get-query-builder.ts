@@ -32,7 +32,7 @@ export type BuildVideoGetQueryOptions = {
   logging?: boolean
 }
 
-export class VideosModelGetQueryBuilder {
+export class VideoModelGetQueryBuilder {
   videoQueryBuilder: VideosModelGetQuerySubBuilder
   webtorrentFilesQueryBuilder: VideoFileQueryBuilder
   streamingPlaylistFilesQueryBuilder: VideoFileQueryBuilder
@@ -53,11 +53,11 @@ export class VideosModelGetQueryBuilder {
     const [ videoRows, webtorrentFilesRows, streamingPlaylistFilesRows ] = await Promise.all([
       this.videoQueryBuilder.queryVideos(options),
 
-      VideosModelGetQueryBuilder.videoFilesInclude.has(options.type)
+      VideoModelGetQueryBuilder.videoFilesInclude.has(options.type)
         ? this.webtorrentFilesQueryBuilder.queryWebTorrentVideos(options)
         : Promise.resolve(undefined),
 
-      VideosModelGetQueryBuilder.videoFilesInclude.has(options.type)
+      VideoModelGetQueryBuilder.videoFilesInclude.has(options.type)
         ? this.streamingPlaylistFilesQueryBuilder.queryStreamingPlaylistVideos(options)
         : Promise.resolve(undefined)
     ])

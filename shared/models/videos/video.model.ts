@@ -62,6 +62,9 @@ export interface Video {
 
   blockedOwner?: boolean
   blockedServer?: boolean
+
+  files?: VideoFile[]
+  streamingPlaylists?: VideoStreamingPlaylist[]
 }
 
 export interface VideoDetails extends Video {
@@ -70,7 +73,6 @@ export interface VideoDetails extends Video {
   channel: VideoChannel
   account: Account
   tags: string[]
-  files: VideoFile[]
   commentsEnabled: boolean
   downloadEnabled: boolean
 
@@ -80,5 +82,6 @@ export interface VideoDetails extends Video {
 
   trackerUrls: string[]
 
+  files: VideoFile[]
   streamingPlaylists: VideoStreamingPlaylist[]
 }

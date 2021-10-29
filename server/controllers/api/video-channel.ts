@@ -347,7 +347,6 @@ async function listVideoChannelVideos (req: express.Request, res: express.Respon
 
     displayOnlyForFollower,
     nsfw: buildNSFWFilter(res, query.nsfw),
-    withFiles: false,
     videoChannelId: videoChannelInstance.id,
     user: res.locals.oauth ? res.locals.oauth.token.User : undefined,
     countVideos

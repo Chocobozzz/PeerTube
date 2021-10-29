@@ -37,6 +37,7 @@
       <th style="width: 60px;"></th>
       <th i18n>Video</th>
       <th i18n>Info</th>
+      <th i18n>Files</th>
       <th style="width: 150px;" i18n pSortableColumn="publishedAt">Published <p-sortIcon field="publishedAt"></p-sortIcon></th>
     </tr>
   </ng-template>
@@ -63,8 +64,8 @@
         <my-video-cell [video]="video"></my-video-cell>
       </td>
 
-      <td class="badges">
-        <span [ngClass]="getPrivacyBadgeClass(video.privacy.id)" class="badge" i18n>{{ video.privacy.label }}</span>
+      <td>
+        <span [ngClass]="getPrivacyBadgeClass(video.privacy.id)" class="badge">{{ video.privacy.label }}</span>
 
         <span *ngIf="video.nsfw" class="badge badge-red" i18n>NSFW</span>
 
@@ -77,6 +78,13 @@
       </td>
 
       <td>
+        <span *ngIf="isHLS(video)" class="badge badge-blue">HLS</span>
+        <span *ngIf="isWebTorrent(video)" class="badge badge-blue">WebTorrent</span>
+
+        <span *ngIf="!video.remote">{{ getFilesSize(video) | bytes: 1 }}</span>
+      </td>
+
+      <td>
         {{ video.publishedAt | date: 'short' }}
       </td>
 
@@ -85,8 +93,30 @@
 
   <ng-template pTemplate="rowexpansion" let-video>
     <tr>
-      <td colspan="50">
-        <my-embed [video]="video"></my-embed>
+      <td class="video-info expand-cell" colspan="7">
+        <div>
+          <div *ngIf="isWebTorrent(video)">
+            WebTorrent:
+
+            <ul>
+              <li *ngFor="let file of video.files">
+                {{ file.resolution.label }}: {{ file.size | bytes: 1 }}
+              </li>
+            </ul>
+          </div>
+
+          <div *ngIf="isHLS(video)">
+            HLS:
+
+            <ul>
+              <li *ngFor="let file of video.streamingPlaylists[0].files">
+                {{ file.resolution.label }}: {{ file.size | bytes: 1 }}
+              </li>
+            </ul>
+          </div>
+
+          <my-embed class="ml-auto" [video]="video"></my-embed>
+        </div>
       </td>
     </tr>
   </ng-template>
