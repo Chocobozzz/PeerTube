@@ -43,10 +43,6 @@ my-global-icon {
   @include chip;
 }
 
-.badge {
-  @include table-badge;
-}
-
 .progress {
   @include progressbar($small: true);
 

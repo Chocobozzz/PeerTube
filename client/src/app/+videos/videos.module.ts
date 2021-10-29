@@ -9,7 +9,6 @@ import { OverviewService, VideosListCommonPageComponent } from './video-list'
 import { VideoOverviewComponent } from './video-list/overview/video-overview.component'
 import { VideoUserSubscriptionsComponent } from './video-list/video-user-subscriptions.component'
 import { VideosRoutingModule } from './videos-routing.module'
-import { VideosComponent } from './videos.component'
 
 @NgModule({
   imports: [
@@ -24,16 +23,12 @@ import { VideosComponent } from './videos.component'
   ],
 
   declarations: [
-    VideosComponent,
-
     VideoUserSubscriptionsComponent,
     VideoOverviewComponent,
     VideosListCommonPageComponent
   ],
 
-  exports: [
-    VideosComponent
-  ],
+  exports: [],
 
   providers: [
     OverviewService

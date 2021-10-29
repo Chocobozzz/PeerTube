@@ -16,7 +16,6 @@ import { SharedVideoMiniatureModule } from '@app/shared/shared-video-miniature'
 import { AdminRoutingModule } from './admin-routing.module'
 import { AdminComponent } from './admin.component'
 import {
-  ConfigComponent,
   EditAdvancedConfigurationComponent,
   EditBasicConfigurationComponent,
   EditConfigurationService,
@@ -27,13 +26,12 @@ import {
   EditVODTranscodingComponent
 } from './config'
 import { ConfigService } from './config/shared/config.service'
-import { FollowersListComponent, FollowModalComponent, FollowsComponent, VideoRedundanciesListComponent } from './follows'
+import { FollowersListComponent, FollowModalComponent, VideoRedundanciesListComponent } from './follows'
 import { FollowingListComponent } from './follows/following-list/following-list.component'
 import { RedundancyCheckboxComponent } from './follows/shared/redundancy-checkbox.component'
 import { VideoRedundancyInformationComponent } from './follows/video-redundancies-list/video-redundancy-information.component'
 import { AbuseListComponent, VideoBlockListComponent } from './moderation'
 import { InstanceAccountBlocklistComponent, InstanceServerBlocklistComponent } from './moderation/instance-blocklist'
-import { ModerationComponent } from './moderation/moderation.component'
 import { VideoCommentListComponent } from './moderation/video-comment-list'
 import { UserCreateComponent, UserListComponent, UserPasswordComponent, UserUpdateComponent, VideoListComponent } from './overview'
 import { PluginListInstalledComponent } from './plugins/plugin-list-installed/plugin-list-installed.component'
@@ -41,7 +39,7 @@ import { PluginSearchComponent } from './plugins/plugin-search/plugin-search.com
 import { PluginShowInstalledComponent } from './plugins/plugin-show-installed/plugin-show-installed.component'
 import { PluginsComponent } from './plugins/plugins.component'
 import { PluginApiService } from './plugins/shared/plugin-api.service'
-import { JobService, LogsComponent, LogsService, SystemComponent } from './system'
+import { JobService, LogsComponent, LogsService } from './system'
 import { DebugComponent, DebugService } from './system/debug'
 import { JobsComponent } from './system/jobs/jobs.component'
 
@@ -71,7 +69,6 @@ import { JobsComponent } from './system/jobs/jobs.component'
 
     VideoListComponent,
 
-    FollowsComponent,
     FollowersListComponent,
     FollowingListComponent,
     FollowModalComponent,
@@ -84,7 +81,6 @@ import { JobsComponent } from './system/jobs/jobs.component'
     UserPasswordComponent,
     UserListComponent,
 
-    ModerationComponent,
     VideoBlockListComponent,
     AbuseListComponent,
     VideoCommentListComponent,
@@ -97,12 +93,9 @@ import { JobsComponent } from './system/jobs/jobs.component'
     PluginSearchComponent,
     PluginShowInstalledComponent,
 
-    SystemComponent,
     JobsComponent,
     LogsComponent,
     DebugComponent,
-
-    ConfigComponent,
 
     EditCustomConfigComponent,
     EditBasicConfigurationComponent,

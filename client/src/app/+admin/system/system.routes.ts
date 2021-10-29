@@ -4,12 +4,10 @@ import { UserRight } from '@shared/models'
 import { DebugComponent } from './debug'
 import { JobsComponent } from './jobs/jobs.component'
 import { LogsComponent } from './logs'
-import { SystemComponent } from './system.component'
 
 export const SystemRoutes: Routes = [
   {
     path: 'system',
-    component: SystemComponent,
     children: [
       {
         path: '',
