@@ -54,6 +54,8 @@ object_storage:
 
   region: "PEERTUBE_OBJECT_STORAGE_REGION"
 
+  force_path_style: "PEERTUBE_OBJECT_STORAGE_FORCE_PATH_STYLE"
+
   max_upload_part:
     __name: "PEERTUBE_OBJECT_STORAGE_MAX_UPLOAD_PART"
     __format: "json"

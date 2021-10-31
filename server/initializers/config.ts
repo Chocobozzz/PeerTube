@@ -91,6 +91,7 @@ const CONFIG = {
       ACCESS_KEY_ID: config.get<string>('object_storage.credentials.access_key_id'),
       SECRET_ACCESS_KEY: config.get<string>('object_storage.credentials.secret_access_key')
     },
+    FORCE_PATH_STYLE: config.get<boolean>('object_storage.force_path_style'),
     VIDEOS: {
       BUCKET_NAME: config.get<string>('object_storage.videos.bucket_name'),
       PREFIX: config.get<string>('object_storage.videos.prefix'),

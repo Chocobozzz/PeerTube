@@ -26,7 +26,8 @@ function getClient () {
         accessKeyId: OBJECT_STORAGE.CREDENTIALS.ACCESS_KEY_ID,
         secretAccessKey: OBJECT_STORAGE.CREDENTIALS.SECRET_ACCESS_KEY
       }
-      : undefined
+      : undefined,
+    forcePathStyle: CONFIG.OBJECT_STORAGE.FORCE_PATH_STYLE
   })
 
   logger.info('Initialized S3 client %s with region %s.', getEndpoint(), OBJECT_STORAGE.REGION, lTags())

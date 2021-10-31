@@ -123,6 +123,10 @@ object_storage:
     # You can also use AWS_SECRET_ACCESS_KEY env variable
     secret_access_key: ''
 
+  # Reference buckets via path rather than subdomain
+  # (i.e. "my-endpoint.com/bucket" instead of "bucket.my-endpoint.com")
+  force_path_style: false
+
   # Maximum amount to upload in one request to object storage
   max_upload_part: 2GB
 
