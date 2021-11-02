@@ -7,6 +7,7 @@ import { AdvancedInputFilter } from '@app/shared/shared-forms'
 import { DropdownAction, Video, VideoService } from '@app/shared/shared-main'
 import { VideoActionsDisplayType } from '@app/shared/shared-video-miniature'
 import { UserRight, VideoPrivacy, VideoState, VideoStreamingPlaylistType } from '@shared/models'
+import { VideoAdminService } from './video-admin.service'
 
 @Component({
   selector: 'my-video-list',
@@ -46,7 +47,8 @@ export class VideoListComponent extends RestTable implements OnInit {
     private confirmService: ConfirmService,
     private auth: AuthService,
     private notifier: Notifier,
-    private videoService: VideoService
+    private videoService: VideoService,
+    private videoAdminService: VideoAdminService
   ) {
     super()
   }
@@ -58,7 +60,7 @@ export class VideoListComponent extends RestTable implements OnInit {
   ngOnInit () {
     this.initialize()
 
-    this.inputFilters = this.videoService.buildAdminInputFilter()
+    this.inputFilters = this.videoAdminService.buildAdminInputFilter()
 
     this.bulkVideoActions = [
       [
@@ -128,7 +130,7 @@ export class VideoListComponent extends RestTable implements OnInit {
 
     this.loading = true
 
-    this.videoService.getAdminVideos({
+    this.videoAdminService.getAdminVideos({
       pagination: this.pagination,
       sort: this.sort,
       search: this.search

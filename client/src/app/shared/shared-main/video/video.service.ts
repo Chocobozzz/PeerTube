@@ -3,9 +3,8 @@ import { from, Observable } from 'rxjs'
 import { catchError, concatMap, map, switchMap, toArray } from 'rxjs/operators'
 import { HttpClient, HttpParams, HttpRequest } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import { ComponentPaginationLight, RestExtractor, RestPagination, RestService, ServerService, UserService } from '@app/core'
+import { ComponentPaginationLight, RestExtractor, RestService, ServerService, UserService } from '@app/core'
 import { objectToFormData } from '@app/helpers'
-import { AdvancedInputFilter } from '@app/shared/shared-forms'
 import {
   BooleanBothQuery,
   FeedFormat,
@@ -204,27 +203,6 @@ export class VideoService {
                )
   }
 
-  getAdminVideos (
-    options: CommonVideoParams & { pagination: RestPagination, search?: string }
-  ): Observable<ResultList<Video>> {
-    const { pagination, search } = options
-
-    let params = new HttpParams()
-    params = this.buildCommonVideosParams({ params, ...options })
-
-    params = params.set('start', pagination.start.toString())
-                   .set('count', pagination.count.toString())
-
-    params = this.buildAdminParamsFromSearch(search, params)
-
-    return this.authHttp
-               .get<ResultList<Video>>(VideoService.BASE_VIDEO_URL, { params })
-               .pipe(
-                 switchMap(res => this.extractVideos(res)),
-                 catchError(err => this.restExtractor.handleError(err))
-               )
-  }
-
   getVideos (parameters: CommonVideoParams): Observable<ResultList<Video>> {
     let params = new HttpParams()
     params = this.buildCommonVideosParams({ params, ...parameters })
@@ -405,21 +383,7 @@ export class VideoService {
       : 'both'
   }
 
-  private setVideoRate (id: number, rateType: UserVideoRateType) {
-    const url = `${VideoService.BASE_VIDEO_URL}/${id}/rate`
-    const body: UserVideoRateUpdate = {
-      rating: rateType
-    }
-
-    return this.authHttp
-               .put(url, body)
-               .pipe(
-                 map(this.restExtractor.extractDataBool),
-                 catchError(err => this.restExtractor.handleError(err))
-               )
-  }
-
-  private buildCommonVideosParams (options: CommonVideoParams & { params: HttpParams }) {
+  buildCommonVideosParams (options: CommonVideoParams & { params: HttpParams }) {
     const {
       params,
       videoPagination,
@@ -453,60 +417,17 @@ export class VideoService {
     return newParams
   }
 
-  buildAdminInputFilter (): AdvancedInputFilter[] {
-    return [
-      {
-        title: $localize`Videos scope`,
-        children: [
-          {
-            queryParams: { search: 'isLocal:false' },
-            label: $localize`Remote videos`
-          },
-          {
-            queryParams: { search: 'isLocal:true' },
-            label: $localize`Local videos`
-          }
-        ]
-      },
-
-      {
-        title: $localize`Include/Exclude`,
-        children: [
-          {
-            queryParams: { search: 'excludeMuted' },
-            label: $localize`Exclude muted accounts`
-          }
-        ]
-      }
-    ]
-  }
-
-  private buildAdminParamsFromSearch (search: string, params: HttpParams) {
-    let include = VideoInclude.BLACKLISTED |
-      VideoInclude.BLOCKED_OWNER |
-      VideoInclude.HIDDEN_PRIVACY |
-      VideoInclude.NOT_PUBLISHED_STATE |
-      VideoInclude.FILES
-
-    if (!search) return this.restService.addObjectParams(params, { include })
-
-    const filters = this.restService.parseQueryStringFilter(search, {
-      isLocal: {
-        prefix: 'isLocal:',
-        isBoolean: true
-      },
-      excludeMuted: {
-        prefix: 'excludeMuted',
-        handler: () => true
-      }
-    })
-
-    if (filters.excludeMuted) {
-      include &= ~VideoInclude.BLOCKED_OWNER
-
-      filters.excludeMuted = undefined
+  private setVideoRate (id: number, rateType: UserVideoRateType) {
+    const url = `${VideoService.BASE_VIDEO_URL}/${id}/rate`
+    const body: UserVideoRateUpdate = {
+      rating: rateType
     }
 
-    return this.restService.addObjectParams(params, { ...filters, include })
+    return this.authHttp
+               .put(url, body)
+               .pipe(
+                 map(this.restExtractor.extractDataBool),
+                 catchError(err => this.restExtractor.handleError(err))
+               )
   }
 }
