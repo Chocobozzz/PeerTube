@@ -48,7 +48,7 @@ export type CommonVideoParams = {
 
 @Injectable()
 export class VideoService {
-  static BASE_VIDEO_URL = environment.apiUrl + '/api/v1/videos/'
+  static BASE_VIDEO_URL = environment.apiUrl + '/api/v1/videos'
   static BASE_FEEDS_URL = environment.apiUrl + '/feeds/videos.'
   static BASE_SUBSCRIPTION_FEEDS_URL = environment.apiUrl + '/feeds/subscriptions.'
 
@@ -60,18 +60,18 @@ export class VideoService {
   ) {}
 
   getVideoViewUrl (uuid: string) {
-    return VideoService.BASE_VIDEO_URL + uuid + '/views'
+    return VideoService.BASE_VIDEO_URL + '/' + uuid + '/views'
   }
 
   getUserWatchingVideoUrl (uuid: string) {
-    return VideoService.BASE_VIDEO_URL + uuid + '/watching'
+    return VideoService.BASE_VIDEO_URL + '/' + uuid + '/watching'
   }
 
   getVideo (options: { videoId: string }): Observable<VideoDetails> {
     return this.serverService.getServerLocale()
                .pipe(
                  switchMap(translations => {
-                   return this.authHttp.get<VideoDetailsServerModel>(VideoService.BASE_VIDEO_URL + options.videoId)
+                   return this.authHttp.get<VideoDetailsServerModel>(VideoService.BASE_VIDEO_URL + '/' + options.videoId)
                               .pipe(map(videoHash => ({ videoHash, translations })))
                  }),
                  map(({ videoHash, translations }) => new VideoDetails(videoHash, translations)),
@@ -111,7 +111,7 @@ export class VideoService {
 
     const data = objectToFormData(body)
 
-    return this.authHttp.put(VideoService.BASE_VIDEO_URL + video.id, data)
+    return this.authHttp.put(VideoService.BASE_VIDEO_URL + '/' + video.id, data)
                .pipe(
                  map(this.restExtractor.extractDataBool),
                  catchError(err => this.restExtractor.handleError(err))
@@ -119,7 +119,7 @@ export class VideoService {
   }
 
   uploadVideo (video: FormData) {
-    const req = new HttpRequest('POST', VideoService.BASE_VIDEO_URL + 'upload', video, { reportProgress: true })
+    const req = new HttpRequest('POST', VideoService.BASE_VIDEO_URL + '/' + 'upload', video, { reportProgress: true })
 
     return this.authHttp
                .request<{ video: { id: number, uuid: string } }>(req)
@@ -321,7 +321,7 @@ export class VideoService {
 
     return from(ids)
       .pipe(
-        concatMap(id => this.authHttp.delete(VideoService.BASE_VIDEO_URL + id)),
+        concatMap(id => this.authHttp.delete(VideoService.BASE_VIDEO_URL + '/' + id)),
         toArray(),
         catchError(err => this.restExtractor.handleError(err))
       )
@@ -413,7 +413,7 @@ export class VideoService {
   }
 
   private setVideoRate (id: number, rateType: UserVideoRateType) {
-    const url = VideoService.BASE_VIDEO_URL + id + '/rate'
+    const url = VideoService.BASE_VIDEO_URL + '/' + id + '/rate'
     const body: UserVideoRateUpdate = {
       rating: rateType
     }

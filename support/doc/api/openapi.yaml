@@ -4805,7 +4805,7 @@ components:
       required: false
       schema:
         type: boolean
-      description: 'Display only local or remote videos'
+      description: '**PeerTube >= 4.0** Display only local or remote videos'
     include:
       name: include
       in: query
@@ -4819,7 +4819,7 @@ components:
         - 4
         - 8
       description: >
-        Include additional videos in results (can be combined using bitwise or operator)
+        **PeerTube >= 4.0** Include additional videos in results (can be combined using bitwise or operator)
 
         - `0` NONE
 

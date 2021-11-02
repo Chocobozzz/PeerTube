@@ -16,7 +16,7 @@ export class VideoListComponent extends RestTable implements OnInit {
   videos: Video[] = []
 
   totalRecords = 0
-  sort: SortMeta = { field: 'publishedAt', order: 1 }
+  sort: SortMeta = { field: 'publishedAt', order: -1 }
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
 
   bulkVideoActions: DropdownAction<Video[]>[][] = []
@@ -99,7 +99,7 @@ export class VideoListComponent extends RestTable implements OnInit {
   }
 
   isUnpublished (state: VideoState) {
-    return state !== VideoState.PUBLISHED
+    return state !== VideoState.LIVE_ENDED && state !== VideoState.PUBLISHED
   }
 
   isAccountBlocked (video: Video) {

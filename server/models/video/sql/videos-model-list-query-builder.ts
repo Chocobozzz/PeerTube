@@ -1,6 +1,6 @@
 import { VideoInclude } from '@shared/models'
 import { Sequelize } from 'sequelize'
-import { AbstractVideosModelQueryBuilder } from './shared/abstract-videos-model-query-builder'
+import { AbstractVideoQueryBuilder } from './shared/abstract-video-query-builder'
 import { VideoModelBuilder } from './shared/video-model-builder'
 import { BuildVideosListQueryOptions, VideosIdListQueryBuilder } from './videos-id-list-query-builder'
 
@@ -10,7 +10,7 @@ import { BuildVideosListQueryOptions, VideosIdListQueryBuilder } from './videos-
  *
  */
 
-export class VideosModelListQueryBuilder extends AbstractVideosModelQueryBuilder {
+export class VideosModelListQueryBuilder extends AbstractVideoQueryBuilder {
   protected attributes: { [key: string]: string }
 
   private innerQuery: string
@@ -26,7 +26,7 @@ export class VideosModelListQueryBuilder extends AbstractVideosModelQueryBuilder
 
   queryVideos (options: BuildVideosListQueryOptions) {
     this.buildInnerQuery(options)
-    this.buildListQueryFromIdsQuery(options)
+    this.buildMainQuery(options)
 
     return this.runQuery()
       .then(rows => this.videoModelBuilder.buildVideosFromRows({ rows, include: options.include }))
@@ -34,14 +34,14 @@ export class VideosModelListQueryBuilder extends AbstractVideosModelQueryBuilder
 
   private buildInnerQuery (options: BuildVideosListQueryOptions) {
     const idsQueryBuilder = new VideosIdListQueryBuilder(this.sequelize)
-    const { query, sort, replacements } = idsQueryBuilder.getIdsListQueryAndSort(options)
+    const { query, sort, replacements } = idsQueryBuilder.getQuery(options)
 
     this.replacements = replacements
     this.innerQuery = query
     this.innerSort = sort
   }
 
-  private buildListQueryFromIdsQuery (options: BuildVideosListQueryOptions) {
+  private buildMainQuery (options: BuildVideosListQueryOptions) {
     this.attributes = {
       '"video".*': ''
     }

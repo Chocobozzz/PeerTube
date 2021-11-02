@@ -69,7 +69,7 @@
 
         <span *ngIf="video.nsfw" class="badge badge-red" i18n>NSFW</span>
 
-        <span *ngIf="isUnpublished(video.state.id)" class="badge badge-yellow" i18n>Not published yet</span>
+        <span *ngIf="isUnpublished(video.state.id)" class="badge badge-yellow" i18n>{{ video.state.label }}</span>
 
         <span *ngIf="isAccountBlocked(video)" class="badge badge-red" i18n>Account muted</span>
         <span *ngIf="isServerBlocked(video)" class="badge badge-red" i18n>Server muted</span>
@@ -80,8 +80,9 @@
       <td>
         <span *ngIf="isHLS(video)" class="badge badge-blue">HLS</span>
         <span *ngIf="isWebTorrent(video)" class="badge badge-blue">WebTorrent</span>
+        <span *ngIf="video.isLive" class="badge badge-blue">Live</span>
 
-        <span *ngIf="!video.remote">{{ getFilesSize(video) | bytes: 1 }}</span>
+        <span *ngIf="!video.isLive && video.isLocal">{{ getFilesSize(video) | bytes: 1 }}</span>
       </td>
 
       <td>

@@ -1,8 +1,8 @@
 import { Sequelize, Transaction } from 'sequelize'
-import { AbstractVideosModelQueryBuilder } from './shared/abstract-videos-model-query-builder'
+import { AbstractVideoQueryBuilder } from './shared/abstract-video-query-builder'
 import { VideoFileQueryBuilder } from './shared/video-file-query-builder'
 import { VideoModelBuilder } from './shared/video-model-builder'
-import { VideoTables } from './shared/video-tables'
+import { VideoTableAttributes } from './shared/video-table-attributes'
 
 /**
  *
@@ -46,7 +46,7 @@ export class VideoModelGetQueryBuilder {
     this.webtorrentFilesQueryBuilder = new VideoFileQueryBuilder(sequelize)
     this.streamingPlaylistFilesQueryBuilder = new VideoFileQueryBuilder(sequelize)
 
-    this.videoModelBuilder = new VideoModelBuilder('get', new VideoTables('get'))
+    this.videoModelBuilder = new VideoModelBuilder('get', new VideoTableAttributes('get'))
   }
 
   async queryVideo (options: BuildVideoGetQueryOptions) {
@@ -69,15 +69,16 @@ export class VideoModelGetQueryBuilder {
     })
 
     if (videos.length > 1) {
-      throw new Error('Video results is more than ')
+      throw new Error('Video results is more than 1')
     }
 
     if (videos.length === 0) return null
+
     return videos[0]
   }
 }
 
-export class VideosModelGetQuerySubBuilder extends AbstractVideosModelQueryBuilder {
+export class VideosModelGetQuerySubBuilder extends AbstractVideoQueryBuilder {
   protected attributes: { [key: string]: string }
 
   protected webtorrentFilesQuery: string

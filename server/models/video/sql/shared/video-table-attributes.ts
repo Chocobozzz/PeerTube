@@ -4,7 +4,7 @@
  * Class to build video attributes/join names we want to fetch from the database
  *
  */
-export class VideoTables {
+export class VideoTableAttributes {
 
   constructor (readonly mode: 'get' | 'list') {
 
@@ -93,22 +93,20 @@ export class VideoTables {
   }
 
   getStreamingPlaylistAttributes () {
-    let playlistKeys = [ 'id', 'playlistUrl', 'playlistFilename', 'type' ]
-
-    if (this.mode === 'get') {
-      playlistKeys = playlistKeys.concat([
-        'p2pMediaLoaderInfohashes',
-        'p2pMediaLoaderPeerVersion',
-        'segmentsSha256Filename',
-        'segmentsSha256Url',
-        'videoId',
-        'createdAt',
-        'updatedAt',
-        'storage'
-      ])
-    }
-
-    return playlistKeys
+    return [
+      'id',
+      'playlistUrl',
+      'playlistFilename',
+      'type',
+      'p2pMediaLoaderInfohashes',
+      'p2pMediaLoaderPeerVersion',
+      'segmentsSha256Filename',
+      'segmentsSha256Url',
+      'videoId',
+      'createdAt',
+      'updatedAt',
+      'storage'
+    ]
   }
 
   getUserHistoryAttributes () {

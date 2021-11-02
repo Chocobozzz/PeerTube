@@ -18,7 +18,7 @@ import { VideoChannelModel } from '../../video-channel'
 import { VideoFileModel } from '../../video-file'
 import { VideoLiveModel } from '../../video-live'
 import { VideoStreamingPlaylistModel } from '../../video-streaming-playlist'
-import { VideoTables } from './video-tables'
+import { VideoTableAttributes } from './video-table-attributes'
 
 type SQLRow = { [id: string]: string | number }
 
@@ -51,7 +51,7 @@ export class VideoModelBuilder {
 
   constructor (
     readonly mode: 'get' | 'list',
-    readonly tables: VideoTables
+    readonly tables: VideoTableAttributes
   ) {
 
   }

@@ -6,7 +6,7 @@ import { QueryTypes, Sequelize, Transaction } from 'sequelize'
  *
  */
 
-export class AbstractVideosQueryBuilder {
+export class AbstractRunQuery {
   protected sequelize: Sequelize
 
   protected query: string

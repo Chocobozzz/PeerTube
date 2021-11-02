@@ -5,7 +5,7 @@ import { WEBSERVER } from '@server/initializers/constants'
 import { buildDirectionAndField, createSafeIn } from '@server/models/utils'
 import { MUserAccountId, MUserId } from '@server/types/models'
 import { VideoInclude, VideoPrivacy, VideoState } from '@shared/models'
-import { AbstractVideosQueryBuilder } from './shared/abstract-videos-query-builder'
+import { AbstractRunQuery } from './shared/abstract-run-query'
 
 /**
  *
@@ -72,7 +72,7 @@ export type BuildVideosListQueryOptions = {
   having?: string
 }
 
-export class VideosIdListQueryBuilder extends AbstractVideosQueryBuilder {
+export class VideosIdListQueryBuilder extends AbstractRunQuery {
   protected replacements: any = {}
 
   private attributes: string[]
@@ -105,7 +105,7 @@ export class VideosIdListQueryBuilder extends AbstractVideosQueryBuilder {
     return this.runQuery().then(rows => rows.length !== 0 ? rows[0].total : 0)
   }
 
-  getIdsListQueryAndSort (options: BuildVideosListQueryOptions) {
+  getQuery (options: BuildVideosListQueryOptions) {
     this.buildIdsListQuery(options)
 
     return { query: this.query, sort: this.sort, replacements: this.replacements }

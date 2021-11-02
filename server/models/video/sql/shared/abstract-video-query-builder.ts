@@ -1,8 +1,8 @@
 import { createSafeIn } from '@server/models/utils'
 import { MUserAccountId } from '@server/types/models'
 import validator from 'validator'
-import { AbstractVideosQueryBuilder } from './abstract-videos-query-builder'
-import { VideoTables } from './video-tables'
+import { AbstractRunQuery } from './abstract-run-query'
+import { VideoTableAttributes } from './video-table-attributes'
 
 /**
  *
@@ -10,18 +10,18 @@ import { VideoTables } from './video-tables'
  *
  */
 
-export class AbstractVideosModelQueryBuilder extends AbstractVideosQueryBuilder {
+export class AbstractVideoQueryBuilder extends AbstractRunQuery {
   protected attributes: { [key: string]: string } = {}
 
   protected joins = ''
   protected where: string
 
-  protected tables: VideoTables
+  protected tables: VideoTableAttributes
 
   constructor (protected readonly mode: 'list' | 'get') {
     super()
 
-    this.tables = new VideoTables(this.mode)
+    this.tables = new VideoTableAttributes(this.mode)
   }
 
   protected buildSelect () {
