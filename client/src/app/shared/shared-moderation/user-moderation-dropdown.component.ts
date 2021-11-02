@@ -270,7 +270,7 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
 
     const myAccountActions: DropdownAction<{ user: User, account: Account }>[] = [
       {
-        label: $localize`Personal moderation`,
+        label: $localize`My account moderation`,
         class: [ 'red' ],
         isHeader: true
       },
