@@ -5,7 +5,6 @@ import * as chai from 'chai'
 import {
   checkVideoFilesWereRemoved,
   cleanupTests,
-  completeVideoCheck,
   createSingleServer,
   PeerTubeServer,
   setAccessTokensToServers,
@@ -13,6 +12,7 @@ import {
   wait
 } from '@shared/extra-utils'
 import { Video, VideoPrivacy } from '@shared/models'
+import { completeVideoCheck } from '@server/tests/shared/video'
 
 const expect = chai.expect
 

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-import { buildUUID } from '@server/helpers/uuid'
+import { buildUUID } from '@shared/core-utils/uuid'
 import {
   checkAbuseStateChange,
   checkAutoInstanceFollowing,

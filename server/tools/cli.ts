@@ -5,7 +5,9 @@ import { createLogger, format, transports } from 'winston'
 import { PeerTubeServer } from '@shared/extra-utils'
 import { UserRole } from '@shared/models'
 import { VideoPrivacy } from '../../shared/models/videos'
-import { getAppNumber, isTestInstance, root } from '../helpers/core-utils'
+import { getAppNumber, isTestInstance } from '../helpers/core-utils'
+import { root } from '@shared/core-utils'
+import { loadLanguages } from '@server/initializers/constants'
 
 let configName = 'PeerTube/CLI'
 if (isTestInstance()) configName += `-${getAppNumber()}`
@@ -180,6 +182,7 @@ function getServerCredentials (program: Command) {
 }
 
 function buildServer (url: string) {
+  loadLanguages()
   return new PeerTubeServer({ url })
 }
 

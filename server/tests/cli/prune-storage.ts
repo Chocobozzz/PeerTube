@@ -4,7 +4,7 @@ import 'mocha'
 import * as chai from 'chai'
 import { createFile, readdir } from 'fs-extra'
 import { join } from 'path'
-import { buildUUID } from '@server/helpers/uuid'
+import { buildUUID } from '@shared/core-utils/uuid'
 import {
   cleanupTests,
   CLICommand,

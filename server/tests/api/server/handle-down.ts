@@ -5,7 +5,6 @@ import * as chai from 'chai'
 import {
   cleanupTests,
   CommentsCommand,
-  completeVideoCheck,
   createMultipleServers,
   killallServers,
   PeerTubeServer,
@@ -14,6 +13,7 @@ import {
   waitJobs
 } from '@shared/extra-utils'
 import { HttpStatusCode, JobState, VideoCreateResult, VideoPrivacy } from '@shared/models'
+import { completeVideoCheck } from '@server/tests/shared/video'
 
 const expect = chai.expect
 

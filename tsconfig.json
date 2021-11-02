@@ -1,46 +1,9 @@
 {
-  "compilerOptions": {
-    "module": "commonjs",
-    "target": "es2015",
-    "noImplicitAny": false,
-    "sourceMap": false,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "importHelpers": true,
-    "removeComments": true,
-    "strictBindCallApply": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "outDir": "./dist",
-    "lib": [
-      "dom",
-      "es2015",
-      "es2016",
-      "es2017",
-      "es2018",
-      "es2019"
-    ],
-    "typeRoots": [
-      "node_modules/@types",
-      "server/typings"
-    ],
-    "baseUrl": "./",
-    "paths": {
-      "@server/*": [ "server/*" ],
-      "@shared/*": [ "shared/*" ]
-    }
-  },
-  "exclude": [
-    "server/tools/",
-    "node_modules",
-    "dist",
-    "storage",
-    "client",
-    "test1",
-    "test2",
-    "test3",
-    "test4",
-    "test5",
-    "test6"
-  ]
+  "extends": "./tsconfig.base.json",
+  "references": [
+    { "path": "./shared" },
+    { "path": "./server" },
+    { "path": "./scripts" }
+  ],
+  "files": ["server.ts"]
 }

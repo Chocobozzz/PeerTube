@@ -6,9 +6,8 @@
 */
 
 import { exec, ExecOptions } from 'child_process'
-import { BinaryToTextEncoding, createHash, randomBytes } from 'crypto'
+import { randomBytes } from 'crypto'
 import { truncate } from 'lodash'
-import { basename, extname, isAbsolute, join, resolve } from 'path'
 import { createPrivateKey as createPrivateKey_1, getPublicKey as getPublicKey_1 } from 'pem'
 import { pipeline } from 'stream'
 import { URL } from 'url'
@@ -159,34 +158,6 @@ function getAppNumber () {
 
 // ---------------------------------------------------------------------------
 
-let rootPath: string
-
-function root () {
-  if (rootPath) return rootPath
-
-  rootPath = __dirname
-
-  if (basename(rootPath) === 'helpers') rootPath = resolve(rootPath, '..')
-  if (basename(rootPath) === 'server') rootPath = resolve(rootPath, '..')
-  if (basename(rootPath) === 'dist') rootPath = resolve(rootPath, '..')
-
-  return rootPath
-}
-
-function buildPath (path: string) {
-  if (isAbsolute(path)) return path
-
-  return join(root(), path)
-}
-
-function getLowercaseExtension (filename: string) {
-  const ext = extname(filename) || ''
-
-  return ext.toLowerCase()
-}
-
-// ---------------------------------------------------------------------------
-
 // Consistent with .length, lodash truncate function is not
 function peertubeTruncate (str: string, options: { length: number, separator?: RegExp, omission?: string }) {
   const truncatedStr = truncate(str, options)
@@ -217,16 +188,6 @@ function parseSemVersion (s: string) {
     minor: parseInt(parsed[2]),
     patch: parseInt(parsed[3])
   } as SemVersion
-}
-
-// ---------------------------------------------------------------------------
-
-function sha256 (str: string | Buffer, encoding: BinaryToTextEncoding = 'hex') {
-  return createHash('sha256').update(str).digest(encoding)
-}
-
-function sha1 (str: string | Buffer, encoding: BinaryToTextEncoding = 'hex') {
-  return createHash('sha1').update(str).digest(encoding)
 }
 
 // ---------------------------------------------------------------------------
@@ -298,9 +259,6 @@ export {
   objectConverter,
   mapToJSON,
 
-  root,
-  buildPath,
-  getLowercaseExtension,
   sanitizeUrl,
   sanitizeHost,
 
@@ -308,9 +266,6 @@ export {
 
   pageToStartAndCount,
   peertubeTruncate,
-
-  sha256,
-  sha1,
 
   promisify0,
   promisify1,

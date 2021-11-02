@@ -2,7 +2,7 @@
 
 import { readJSON, writeJSON } from 'fs-extra'
 import { join } from 'path'
-import { root } from '@server/helpers/core-utils'
+import { root } from '@shared/core-utils'
 import {
   HttpStatusCode,
   PeerTubePlugin,

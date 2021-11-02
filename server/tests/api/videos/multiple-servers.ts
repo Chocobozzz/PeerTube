@@ -8,7 +8,6 @@ import {
   checkTmpIsEmpty,
   checkVideoFilesWereRemoved,
   cleanupTests,
-  completeVideoCheck,
   createMultipleServers,
   dateIsValid,
   doubleFollow,
@@ -21,6 +20,7 @@ import {
   webtorrentAdd
 } from '@shared/extra-utils'
 import { HttpStatusCode, VideoCommentThreadTree, VideoPrivacy } from '@shared/models'
+import { completeVideoCheck } from '@server/tests/shared/video'
 
 const expect = chai.expect
 

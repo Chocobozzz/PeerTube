@@ -25,7 +25,7 @@ import {
   UpdatedAt
 } from 'sequelize-typescript'
 import { buildNSFWFilter } from '@server/helpers/express-utils'
-import { uuidToShort } from '@server/helpers/uuid'
+import { uuidToShort } from '@shared/core-utils/uuid'
 import { getPrivaciesForFederation, isPrivacyForFederation, isStateForFederation } from '@server/helpers/video'
 import { LiveManager } from '@server/lib/live/live-manager'
 import { removeHLSObjectStorage, removeWebTorrentObjectStorage } from '@server/lib/object-storage'

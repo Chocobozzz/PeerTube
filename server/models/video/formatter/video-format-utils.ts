@@ -1,4 +1,4 @@
-import { uuidToShort } from '@server/helpers/uuid'
+import { uuidToShort } from '@shared/core-utils/uuid'
 import { generateMagnetUri } from '@server/helpers/webtorrent'
 import { getLocalVideoFileMetadataUrl } from '@server/lib/video-urls'
 import { VideoViews } from '@server/lib/video-views'

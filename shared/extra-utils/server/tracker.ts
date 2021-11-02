@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { sha1 } from '@server/helpers/core-utils'
+import { sha1 } from '@shared/core-utils/crypto'
 import { makeGetRequest } from '../requests'
 
 async function hlsInfohashExist (serverUrl: string, masterPlaylistUrl: string, fileNumber: number) {

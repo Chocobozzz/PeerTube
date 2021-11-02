@@ -2,7 +2,7 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { buildUUID } from '@server/helpers/uuid'
+import { buildUUID } from '@shared/core-utils/uuid'
 import {
   CheckerBaseParams,
   checkMyVideoImportIsFinished,

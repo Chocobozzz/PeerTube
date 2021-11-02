@@ -16,9 +16,8 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { getLowercaseExtension } from '@server/helpers/core-utils'
 import { ModelCache } from '@server/models/model-cache'
-import { AttributesOnly } from '@shared/core-utils'
+import { getLowercaseExtension, AttributesOnly } from '@shared/core-utils'
 import { ActivityIconObject, ActivityPubActorType } from '../../../shared/models/activitypub'
 import { ActorImage } from '../../../shared/models/actors/actor-image.model'
 import { activityPubContextify } from '../../helpers/activitypub'

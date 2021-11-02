@@ -3,7 +3,7 @@
 import { expect } from 'chai'
 import { pathExists, readFile } from 'fs-extra'
 import { join } from 'path'
-import { root } from '@server/helpers/core-utils'
+import { root } from '@shared/core-utils'
 import { HttpStatusCode } from '@shared/models'
 import { makeGetRequest } from '../requests'
 import { PeerTubeServer } from '../server'

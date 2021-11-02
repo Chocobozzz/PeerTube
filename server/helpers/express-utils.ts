@@ -1,9 +1,9 @@
-import express from 'express'
+import express, { RequestHandler } from 'express'
 import multer, { diskStorage } from 'multer'
 import { HttpStatusCode } from '../../shared/models/http/http-error-codes'
 import { CONFIG } from '../initializers/config'
 import { REMOTE_SCHEME } from '../initializers/constants'
-import { getLowercaseExtension } from './core-utils'
+import { getLowercaseExtension } from '@shared/core-utils'
 import { isArray } from './custom-validators/misc'
 import { logger } from './logger'
 import { deleteFileAndCatch, generateRandomString } from './utils'
@@ -69,7 +69,7 @@ function createReqFiles (
   fieldNames: string[],
   mimeTypes: { [id: string]: string | string[] },
   destinations: { [fieldName: string]: string }
-) {
+): RequestHandler {
   const storage = diskStorage({
     destination: (req, file, cb) => {
       cb(null, destinations[file.fieldname])

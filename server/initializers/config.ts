@@ -6,7 +6,8 @@ import { VideoRedundancyConfigFilter } from '@shared/models/redundancy/video-red
 import { BroadcastMessageLevel } from '@shared/models/server'
 import { VideoPrivacy, VideosRedundancyStrategy } from '../../shared/models'
 import { NSFWPolicyType } from '../../shared/models/videos/nsfw-policy.type'
-import { buildPath, parseBytes, parseDurationToMs, root } from '../helpers/core-utils'
+import { buildPath, root } from '../../shared/core-utils'
+import { parseBytes, parseDurationToMs } from '../helpers/core-utils'
 
 // Use a variable to reload the configuration if we need
 let config: IConfig = require('config')

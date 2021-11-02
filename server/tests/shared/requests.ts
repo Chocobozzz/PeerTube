@@ -1,9 +1,9 @@
-import { activityPubContextify } from '../../../server/helpers/activitypub'
-import { doRequest } from '../../../server/helpers/requests'
-import { HTTP_SIGNATURE } from '../../../server/initializers/constants'
-import { buildGlobalHeaders } from '../../../server/lib/job-queue/handlers/utils/activitypub-http-utils'
+import { doRequest } from '@server/helpers/requests'
+import { activityPubContextify } from '@server/helpers/activitypub'
+import { HTTP_SIGNATURE } from '@server/initializers/constants'
+import { buildGlobalHeaders } from '@server/lib/job-queue/handlers/utils/activitypub-http-utils'
 
-function makePOSTAPRequest (url: string, body: any, httpSignature: any, headers: any) {
+export function makePOSTAPRequest (url: string, body: any, httpSignature: any, headers: any) {
   const options = {
     method: 'POST' as 'POST',
     json: body,
@@ -14,7 +14,7 @@ function makePOSTAPRequest (url: string, body: any, httpSignature: any, headers:
   return doRequest(url, options)
 }
 
-async function makeFollowRequest (to: { url: string }, by: { url: string, privateKey }) {
+export async function makeFollowRequest (to: { url: string }, by: { url: string, privateKey }) {
   const follow = {
     type: 'Follow',
     id: by.url + '/' + new Date().getTime(),
@@ -34,9 +34,4 @@ async function makeFollowRequest (to: { url: string }, by: { url: string, privat
   const headers = buildGlobalHeaders(body)
 
   return makePOSTAPRequest(to.url + '/inbox', body, httpSignature, headers)
-}
-
-export {
-  makePOSTAPRequest,
-  makeFollowRequest
 }

@@ -1,6 +1,6 @@
 import { Job } from 'bull'
 import { copy, stat } from 'fs-extra'
-import { getLowercaseExtension } from '@server/helpers/core-utils'
+import { getLowercaseExtension } from '@shared/core-utils'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
 import { CONFIG } from '@server/initializers/config'
 import { federateVideoIfNeeded } from '@server/lib/activitypub/videos'

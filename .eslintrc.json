@@ -102,6 +102,9 @@
   "parserOptions": {
     "project": [
       "./tsconfig.json",
+      "./shared/tsconfig.json",
+      "./scripts/tsconfig.json",
+      "./server/tsconfig.json",
       "./server/tools/tsconfig.json"
     ]
   }

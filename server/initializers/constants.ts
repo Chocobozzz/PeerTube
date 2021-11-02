@@ -18,8 +18,9 @@ import { FollowState } from '../../shared/models/actors'
 import { NSFWPolicyType } from '../../shared/models/videos/nsfw-policy.type'
 import { VideoPlaylistPrivacy } from '../../shared/models/videos/playlist/video-playlist-privacy.model'
 import { VideoPlaylistType } from '../../shared/models/videos/playlist/video-playlist-type.model'
+import { root } from '../../shared/core-utils'
 // Do not use barrels, remain constants as independent as possible
-import { isTestInstance, root, sanitizeHost, sanitizeUrl } from '../helpers/core-utils'
+import { isTestInstance, sanitizeHost, sanitizeUrl } from '../helpers/core-utils'
 import { CONFIG, registerConfigChangedHandler } from './config'
 
 // ---------------------------------------------------------------------------

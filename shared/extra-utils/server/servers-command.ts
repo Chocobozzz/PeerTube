@@ -1,7 +1,7 @@
 import { exec } from 'child_process'
 import { copy, ensureDir, readFile, remove } from 'fs-extra'
 import { basename, join } from 'path'
-import { root } from '@server/helpers/core-utils'
+import { root } from '@shared/core-utils'
 import { HttpStatusCode } from '@shared/models'
 import { getFileSize, isGithubCI, wait } from '../miscs'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'

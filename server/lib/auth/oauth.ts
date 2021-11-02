@@ -8,7 +8,8 @@ import {
   UnauthorizedClientError,
   UnsupportedGrantTypeError
 } from 'oauth2-server'
-import { randomBytesPromise, sha1 } from '@server/helpers/core-utils'
+import { sha1 } from '@shared/core-utils/crypto'
+import { randomBytesPromise } from '@server/helpers/core-utils'
 import { MOAuthClient } from '@server/types/models'
 import { OAUTH_LIFETIME } from '../../initializers/constants'
 import { BypassLogin, getClient, getRefreshToken, getUser, revokeToken, saveToken } from './oauth-model'
