@@ -155,7 +155,7 @@
             ></my-peertube-checkbox>
 
             <div class="peertube-select-container" [ngClass]="{ disabled: !customizations.subtitleCheckbox }">
-              <select [(ngModel)]="customizations.subtitle" [disabled]="!customizations.subtitleCheckbox">
+              <select [(ngModel)]="customizations.subtitle" [disabled]="!customizations.subtitleCheckbox" class="form-control">
                 <option *ngFor="let caption of videoCaptions" [value]="caption.language.id">{{ caption.language.label }}</option>
               </select>
             </div>
