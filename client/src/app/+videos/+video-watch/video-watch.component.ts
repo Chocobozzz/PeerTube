@@ -288,7 +288,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   private async handleRequestError (err: any) {
     const errorBody = err.body as PeerTubeProblemDocument
 
-    if (errorBody.code === ServerErrorCode.DOES_NOT_RESPECT_FOLLOW_CONSTRAINTS && errorBody.originUrl) {
+    if (errorBody?.code === ServerErrorCode.DOES_NOT_RESPECT_FOLLOW_CONSTRAINTS && errorBody.originUrl) {
       const originUrl = errorBody.originUrl + (window.location.search ?? '')
 
       const res = await this.confirmService.confirm(

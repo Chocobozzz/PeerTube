@@ -5,6 +5,7 @@ import { HttpClient, HttpParams, HttpRequest } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { ComponentPaginationLight, RestExtractor, RestPagination, RestService, ServerService, UserService } from '@app/core'
 import { objectToFormData } from '@app/helpers'
+import { AdvancedInputFilter } from '@app/shared/shared-forms'
 import {
   BooleanBothQuery,
   FeedFormat,
@@ -60,18 +61,18 @@ export class VideoService {
   ) {}
 
   getVideoViewUrl (uuid: string) {
-    return VideoService.BASE_VIDEO_URL + '/' + uuid + '/views'
+    return `${VideoService.BASE_VIDEO_URL}/${uuid}/views`
   }
 
   getUserWatchingVideoUrl (uuid: string) {
-    return VideoService.BASE_VIDEO_URL + '/' + uuid + '/watching'
+    return `${VideoService.BASE_VIDEO_URL}/${uuid}/watching`
   }
 
   getVideo (options: { videoId: string }): Observable<VideoDetails> {
     return this.serverService.getServerLocale()
                .pipe(
                  switchMap(translations => {
-                   return this.authHttp.get<VideoDetailsServerModel>(VideoService.BASE_VIDEO_URL + '/' + options.videoId)
+                   return this.authHttp.get<VideoDetailsServerModel>(`${VideoService.BASE_VIDEO_URL}/${options.videoId}`)
                               .pipe(map(videoHash => ({ videoHash, translations })))
                  }),
                  map(({ videoHash, translations }) => new VideoDetails(videoHash, translations)),
@@ -111,7 +112,7 @@ export class VideoService {
 
     const data = objectToFormData(body)
 
-    return this.authHttp.put(VideoService.BASE_VIDEO_URL + '/' + video.id, data)
+    return this.authHttp.put(`${VideoService.BASE_VIDEO_URL}/${video.id}`, data)
                .pipe(
                  map(this.restExtractor.extractDataBool),
                  catchError(err => this.restExtractor.handleError(err))
@@ -119,7 +120,7 @@ export class VideoService {
   }
 
   uploadVideo (video: FormData) {
-    const req = new HttpRequest('POST', VideoService.BASE_VIDEO_URL + '/' + 'upload', video, { reportProgress: true })
+    const req = new HttpRequest('POST', `${VideoService.BASE_VIDEO_URL}/upload`, video, { reportProgress: true })
 
     return this.authHttp
                .request<{ video: { id: number, uuid: string } }>(req)
@@ -204,25 +205,17 @@ export class VideoService {
   }
 
   getAdminVideos (
-    parameters: CommonVideoParams & { pagination: RestPagination, search?: string }
+    options: CommonVideoParams & { pagination: RestPagination, search?: string }
   ): Observable<ResultList<Video>> {
-    const { pagination, search } = parameters
-
-    const include = VideoInclude.BLACKLISTED |
-                    VideoInclude.BLOCKED_OWNER |
-                    VideoInclude.HIDDEN_PRIVACY |
-                    VideoInclude.NOT_PUBLISHED_STATE |
-                    VideoInclude.FILES
+    const { pagination, search } = options
 
     let params = new HttpParams()
-    params = this.buildCommonVideosParams({ params, include, ...parameters })
+    params = this.buildCommonVideosParams({ params, ...options })
 
     params = params.set('start', pagination.start.toString())
                    .set('count', pagination.count.toString())
 
-    if (search) {
-      params = this.buildAdminParamsFromSearch(search, params)
-    }
+    params = this.buildAdminParamsFromSearch(search, params)
 
     return this.authHttp
                .get<ResultList<Video>>(VideoService.BASE_VIDEO_URL, { params })
@@ -321,7 +314,7 @@ export class VideoService {
 
     return from(ids)
       .pipe(
-        concatMap(id => this.authHttp.delete(VideoService.BASE_VIDEO_URL + '/' + id)),
+        concatMap(id => this.authHttp.delete(`${VideoService.BASE_VIDEO_URL}/${id}`)),
         toArray(),
         catchError(err => this.restExtractor.handleError(err))
       )
@@ -413,7 +406,7 @@ export class VideoService {
   }
 
   private setVideoRate (id: number, rateType: UserVideoRateType) {
-    const url = VideoService.BASE_VIDEO_URL + '/' + id + '/rate'
+    const url = `${VideoService.BASE_VIDEO_URL}/${id}/rate`
     const body: UserVideoRateUpdate = {
       rating: rateType
     }
@@ -460,14 +453,60 @@ export class VideoService {
     return newParams
   }
 
+  buildAdminInputFilter (): AdvancedInputFilter[] {
+    return [
+      {
+        title: $localize`Videos scope`,
+        children: [
+          {
+            queryParams: { search: 'isLocal:false' },
+            label: $localize`Remote videos`
+          },
+          {
+            queryParams: { search: 'isLocal:true' },
+            label: $localize`Local videos`
+          }
+        ]
+      },
+
+      {
+        title: $localize`Include/Exclude`,
+        children: [
+          {
+            queryParams: { search: 'excludeMuted' },
+            label: $localize`Exclude muted accounts`
+          }
+        ]
+      }
+    ]
+  }
+
   private buildAdminParamsFromSearch (search: string, params: HttpParams) {
+    let include = VideoInclude.BLACKLISTED |
+      VideoInclude.BLOCKED_OWNER |
+      VideoInclude.HIDDEN_PRIVACY |
+      VideoInclude.NOT_PUBLISHED_STATE |
+      VideoInclude.FILES
+
+    if (!search) return this.restService.addObjectParams(params, { include })
+
     const filters = this.restService.parseQueryStringFilter(search, {
       isLocal: {
         prefix: 'isLocal:',
         isBoolean: true
+      },
+      excludeMuted: {
+        prefix: 'excludeMuted',
+        handler: () => true
       }
     })
 
-    return this.restService.addObjectParams(params, filters)
+    if (filters.excludeMuted) {
+      include &= ~VideoInclude.BLOCKED_OWNER
+
+      filters.excludeMuted = undefined
+    }
+
+    return this.restService.addObjectParams(params, { ...filters, include })
   }
 }

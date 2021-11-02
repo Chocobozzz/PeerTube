@@ -24,21 +24,7 @@ export class VideoListComponent extends RestTable implements OnInit {
 
   selectedVideos: Video[] = []
 
-  inputFilters: AdvancedInputFilter[] = [
-    {
-      title: $localize`Advanced filters`,
-      children: [
-        {
-          queryParams: { search: 'isLocal:false' },
-          label: $localize`Remote videos`
-        },
-        {
-          queryParams: { search: 'isLocal:true' },
-          label: $localize`Local videos`
-        }
-      ]
-    }
-  ]
+  inputFilters: AdvancedInputFilter[]
 
   videoActionsOptions: VideoActionsDisplayType = {
     playlist: false,
@@ -52,7 +38,7 @@ export class VideoListComponent extends RestTable implements OnInit {
     liveInfo: false
   }
 
-  loading = false
+  loading = true
 
   constructor (
     protected route: ActivatedRoute,
@@ -71,6 +57,8 @@ export class VideoListComponent extends RestTable implements OnInit {
 
   ngOnInit () {
     this.initialize()
+
+    this.inputFilters = this.videoService.buildAdminInputFilter()
 
     this.bulkVideoActions = [
       [

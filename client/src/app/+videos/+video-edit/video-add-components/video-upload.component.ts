@@ -49,7 +49,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
   schedulePublicationPossible = false
 
   // So that it can be accessed in the template
-  protected readonly BASE_VIDEO_UPLOAD_URL = VideoService.BASE_VIDEO_URL + 'upload-resumable'
+  protected readonly BASE_VIDEO_UPLOAD_URL = VideoService.BASE_VIDEO_URL + '/upload-resumable'
 
   private uploadxOptions: UploadxOptions
   private isUpdatingVideo = false

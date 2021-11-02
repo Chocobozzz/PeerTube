@@ -1,13 +1,16 @@
+import * as debug from 'debug'
 import { SortMeta } from 'primeng/api'
 import { HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { ComponentPaginationLight } from './component-pagination.model'
 import { RestPagination } from './rest-pagination'
 
+const logger = debug('peertube:rest')
+
 interface QueryStringFilterPrefixes {
   [key: string]: {
     prefix: string
-    handler?: (v: string) => string | number
+    handler?: (v: string) => string | number | boolean
     multiple?: boolean
     isBoolean?: boolean
   }
@@ -87,6 +90,8 @@ export class RestService {
     const prefixeStrings = Object.values(prefixes)
                            .map(p => p.prefix)
 
+    logger(`Built tokens "${tokens.join(', ')}" for prefixes "${prefixeStrings.join(', ')}"`)
+
     // Search is the querystring minus defined filters
     const searchTokens = tokens.filter(t => {
       return prefixeStrings.every(prefixString => t.startsWith(prefixString) === false)
@@ -122,8 +127,12 @@ export class RestService {
         : matchedTokens[0]
     }
 
+    const search = searchTokens.join(' ') || undefined
+
+    logger('Built search: ' + search, additionalFilters)
+
     return {
-      search: searchTokens.join(' ') || undefined,
+      search,
 
       ...additionalFilters
     }
