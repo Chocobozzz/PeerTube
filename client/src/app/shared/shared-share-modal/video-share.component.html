@@ -10,7 +10,6 @@
     <div class="playlist" *ngIf="playlist">
       <div class="title-page title-page-single" i18n *ngIf="video">Share the playlist</div>
 
-
       <div *ngIf="isPrivatePlaylist()" class="alert-private alert alert-warning">
         <div i18n>This playlist is private so you won't be able to share it with external users</div>
 
@@ -47,11 +46,16 @@
 
           <ng-template ngbNavContent>
             <div class="nav-content">
-              <my-input-toggle-hidden [value]="getPlaylistIframeCode()" [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"></my-input-toggle-hidden>
+              <my-input-toggle-hidden
+                [value]="getPlaylistIframeCode()" (change)="updateEmbedCode()"
+                [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"
+              ></my-input-toggle-hidden>
 
               <div i18n *ngIf="notSecure()" class="alert alert-warning">
                 The url is not secured (no HTTPS), so the embed video won't work on HTTPS websites (web browsers block non secured HTTP requests on HTTPS websites).
               </div>
+
+              <div [innerHTML]="playlistEmbedHTML"></div>
             </div>
           </ng-template>
         </ng-container>
@@ -109,11 +113,16 @@
 
           <ng-template ngbNavContent>
             <div class="nav-content">
-              <my-input-toggle-hidden [value]="getVideoIframeCode()" [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"></my-input-toggle-hidden>
+              <my-input-toggle-hidden
+                [value]="getVideoIframeCode()" (ngModelChange)="updateEmbedCode()"
+                [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"
+              ></my-input-toggle-hidden>
 
               <div i18n *ngIf="notSecure()" class="alert alert-warning">
                 The url is not secured (no HTTPS), so the embed video won't work on HTTPS websites (web browsers block non secured HTTP requests on HTTPS websites).
               </div>
+
+              <div [innerHTML]="videoEmbedHTML"></div>
             </div>
           </ng-template>
         </ng-container>

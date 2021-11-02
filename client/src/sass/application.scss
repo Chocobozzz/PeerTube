@@ -92,7 +92,7 @@ strong {
   font-weight: $font-semibold;
 }
 
-input.readonly {
+input[readonly] {
   /* Force blank on readonly inputs */
   background-color: pvar(--inputBackgroundColor) !important;
 }
