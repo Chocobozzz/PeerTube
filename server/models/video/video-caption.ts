@@ -15,7 +15,7 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { buildUUID } from '@server/helpers/uuid'
+import { buildUUID } from '@shared/core-utils/uuid'
 import { MVideo, MVideoCaption, MVideoCaptionFormattable, MVideoCaptionVideo } from '@server/types/models'
 import { AttributesOnly } from '@shared/core-utils'
 import { VideoCaption } from '../../../shared/models/videos/caption/video-caption.model'

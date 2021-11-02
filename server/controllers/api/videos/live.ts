@@ -1,6 +1,6 @@
 import express from 'express'
 import { createReqFiles } from '@server/helpers/express-utils'
-import { buildUUID, uuidToShort } from '@server/helpers/uuid'
+import { buildUUID, uuidToShort } from '@shared/core-utils/uuid'
 import { CONFIG } from '@server/initializers/config'
 import { ASSETS_PATH, MIMETYPES } from '@server/initializers/constants'
 import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url'

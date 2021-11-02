@@ -1,5 +1,11 @@
 {
   "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../dist/server/tools"
+  },
   "include": [ ".", "../typings" ],
+  "references": [
+    { "path": "../" },
+  ],
   "exclude": [ ] // Overwrite exclude property
 }

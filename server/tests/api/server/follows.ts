@@ -4,7 +4,6 @@ import 'mocha'
 import * as chai from 'chai'
 import {
   cleanupTests,
-  completeVideoCheck,
   createMultipleServers,
   dateIsValid,
   expectAccountFollows,
@@ -15,6 +14,7 @@ import {
   waitJobs
 } from '@shared/extra-utils'
 import { VideoCreateResult, VideoPrivacy } from '@shared/models'
+import { completeVideoCheck } from '@server/tests/shared/video'
 
 const expect = chai.expect
 

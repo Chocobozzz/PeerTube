@@ -2,7 +2,7 @@ import { expect } from 'chai'
 import ffmpeg from 'fluent-ffmpeg'
 import { ensureDir, pathExists } from 'fs-extra'
 import { dirname } from 'path'
-import { getVideoFileBitrate, getVideoFileFPS, getVideoFileResolution } from '@server/helpers/ffprobe-utils'
+import { getVideoFileBitrate, getVideoFileFPS, getVideoFileResolution } from '@shared/extra-utils/ffprobe'
 import { getMaxBitrate } from '@shared/core-utils'
 import { buildAbsoluteFixturePath } from './tests'
 

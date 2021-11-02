@@ -5,8 +5,7 @@ import { createReadStream, stat } from 'fs-extra'
 import got, { Response as GotResponse } from 'got'
 import { omit } from 'lodash'
 import validator from 'validator'
-import { buildUUID } from '@server/helpers/uuid'
-import { loadLanguages } from '@server/initializers/constants'
+import { buildUUID } from '@shared/core-utils/uuid'
 import { pick } from '@shared/core-utils'
 import {
   HttpStatusCode,
@@ -23,7 +22,7 @@ import {
 } from '@shared/models'
 import { buildAbsoluteFixturePath, wait } from '../miscs'
 import { unwrapBody } from '../requests'
-import { PeerTubeServer, waitJobs } from '../server'
+import { waitJobs } from '../server'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
 
 export type VideoEdit = Partial<Omit<VideoCreate, 'thumbnailfile' | 'previewfile'>> & {
@@ -33,13 +32,6 @@ export type VideoEdit = Partial<Omit<VideoCreate, 'thumbnailfile' | 'previewfile
 }
 
 export class VideosCommand extends AbstractCommand {
-
-  constructor (server: PeerTubeServer) {
-    super(server)
-
-    loadLanguages()
-  }
-
   getCategories (options: OverrideCommandOptions = {}) {
     const path = '/api/v1/videos/categories'
 

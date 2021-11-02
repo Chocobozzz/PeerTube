@@ -1,5 +1,5 @@
 import { join } from 'path'
-import { buildUUID } from '@server/helpers/uuid'
+import { buildUUID } from '@shared/core-utils/uuid'
 import { CONFIG } from '@server/initializers/config'
 import { HLS_REDUNDANCY_DIRECTORY, HLS_STREAMING_PLAYLIST_DIRECTORY } from '@server/initializers/constants'
 import { isStreamingPlaylist, MStreamingPlaylistVideo, MVideo, MVideoFile, MVideoUUID } from '@server/types/models'

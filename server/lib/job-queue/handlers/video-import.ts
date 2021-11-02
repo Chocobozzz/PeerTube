@@ -1,6 +1,6 @@
 import { Job } from 'bull'
 import { move, remove, stat } from 'fs-extra'
-import { getLowercaseExtension } from '@server/helpers/core-utils'
+import { getLowercaseExtension } from '@shared/core-utils'
 import { retryTransactionWrapper } from '@server/helpers/database-utils'
 import { YoutubeDLWrapper } from '@server/helpers/youtube-dl'
 import { isPostImportVideoAccepted } from '@server/lib/moderation'

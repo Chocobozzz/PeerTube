@@ -7,7 +7,7 @@ import { buildDigest } from '@server/helpers/peertube-crypto'
 import { HTTP_SIGNATURE } from '@server/initializers/constants'
 import { buildGlobalHeaders } from '@server/lib/job-queue/handlers/utils/activitypub-http-utils'
 import { buildAbsoluteFixturePath, cleanupTests, createMultipleServers, killallServers, PeerTubeServer, wait } from '@shared/extra-utils'
-import { makeFollowRequest, makePOSTAPRequest } from '@shared/extra-utils/requests/activitypub'
+import { makeFollowRequest, makePOSTAPRequest } from '@server/tests/shared'
 import { HttpStatusCode } from '@shared/models'
 
 const expect = chai.expect

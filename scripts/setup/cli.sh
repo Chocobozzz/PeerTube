@@ -11,6 +11,6 @@ rm -rf ./dist/server/tools/
     yarn install --pure-lockfile
 )
 
-npm run tsc -- --build ./server/tools/tsconfig.json
+npm run tsc -- --build --verbose ./server/tools/tsconfig.json
 cp -r "./server/tools/node_modules" "./dist/server/tools"
 cp "./tsconfig.json" "./dist"

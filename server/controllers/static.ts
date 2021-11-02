@@ -5,7 +5,7 @@ import { serveIndexHTML } from '@server/lib/client-html'
 import { ServerConfigManager } from '@server/lib/server-config-manager'
 import { HttpStatusCode } from '@shared/models'
 import { HttpNodeinfoDiasporaSoftwareNsSchema20 } from '../../shared/models/nodeinfo/nodeinfo.model'
-import { root } from '../helpers/core-utils'
+import { root } from '@shared/core-utils'
 import { CONFIG, isEmailEnabled } from '../initializers/config'
 import {
   CONSTRAINTS_FIELDS,

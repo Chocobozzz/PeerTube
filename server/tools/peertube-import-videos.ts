@@ -5,7 +5,7 @@ import { program } from 'commander'
 import { accessSync, constants } from 'fs'
 import { remove } from 'fs-extra'
 import { join } from 'path'
-import { sha256 } from '../helpers/core-utils'
+import { sha256 } from '@shared/core-utils/crypto'
 import { doRequestAndSaveToFile } from '../helpers/requests'
 import {
   assignToken,

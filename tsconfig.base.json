@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es2015",
+    "noImplicitAny": false,
+    "sourceMap": false,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "importHelpers": true,
+    "removeComments": true,
+    "strictBindCallApply": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "lib": [
+      "es2015",
+      "es2016",
+      "es2017",
+      "es2018",
+      "es2019"
+    ],
+    "typeRoots": [
+      "node_modules/@types",
+    ],
+    "baseUrl": "./",
+    "outDir": "./dist/",
+    "paths": {
+      "@server/*": [ "server/*" ],
+      "@shared/*": [ "shared/*" ]
+    },
+    "resolveJsonModule": true,
+    "strict": false,
+    "skipLibCheck": true,
+    "composite": true
+  }
+}

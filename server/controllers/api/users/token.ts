@@ -1,7 +1,7 @@
 import express from 'express'
 import RateLimit from 'express-rate-limit'
 import { logger } from '@server/helpers/logger'
-import { buildUUID } from '@server/helpers/uuid'
+import { buildUUID } from '@shared/core-utils/uuid'
 import { CONFIG } from '@server/initializers/config'
 import { getAuthNameFromRefreshGrant, getBypassFromExternalAuth, getBypassFromPasswordGrant } from '@server/lib/auth/external-auth'
 import { handleOAuthToken } from '@server/lib/auth/oauth'

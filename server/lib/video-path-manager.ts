@@ -1,6 +1,6 @@
 import { remove } from 'fs-extra'
 import { extname, join } from 'path'
-import { buildUUID } from '@server/helpers/uuid'
+import { buildUUID } from '@shared/core-utils/uuid'
 import { extractVideo } from '@server/helpers/video'
 import { CONFIG } from '@server/initializers/config'
 import {

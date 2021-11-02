@@ -2,7 +2,7 @@ import 'multer'
 import { UploadFilesForCheck } from 'express'
 import { sep } from 'path'
 import validator from 'validator'
-import { isShortUUID, shortToUUID } from '../uuid'
+import { isShortUUID, shortToUUID } from '@shared/core-utils/uuid'
 
 function exists (value: any) {
   return value !== undefined && value !== null

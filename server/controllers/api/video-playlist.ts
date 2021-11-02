@@ -1,6 +1,6 @@
 import express from 'express'
 import { join } from 'path'
-import { uuidToShort } from '@server/helpers/uuid'
+import { uuidToShort } from '@shared/core-utils/uuid'
 import { scheduleRefreshIfNeeded } from '@server/lib/activitypub/playlists'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { getServerActor } from '@server/models/application/application'

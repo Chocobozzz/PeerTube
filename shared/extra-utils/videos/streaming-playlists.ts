@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import { basename } from 'path'
-import { sha256 } from '@server/helpers/core-utils'
+import { sha256 } from '@shared/core-utils/crypto'
 import { removeFragmentedMP4Ext } from '@shared/core-utils'
 import { HttpStatusCode, VideoStreamingPlaylist } from '@shared/models'
 import { PeerTubeServer } from '../server'

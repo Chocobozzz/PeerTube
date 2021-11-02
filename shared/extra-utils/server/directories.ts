@@ -3,7 +3,7 @@
 import { expect } from 'chai'
 import { pathExists, readdir } from 'fs-extra'
 import { join } from 'path'
-import { root } from '@server/helpers/core-utils'
+import { root } from '@shared/core-utils'
 import { PeerTubeServer } from './server'
 
 async function checkTmpIsEmpty (server: PeerTubeServer) {
