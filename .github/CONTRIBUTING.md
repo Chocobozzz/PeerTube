@@ -7,7 +7,6 @@ Interested in contributing? Awesome!
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-
 - [Translate](#translate)
 - [Give your feedback](#give-your-feedback)
 - [Write documentation](#write-documentation)
@@ -20,7 +19,7 @@ Interested in contributing? Awesome!
   - [Client and server side](#client-and-server-side)
   - [RTL layout](#rtl-layout)
   - [Testing](#testing)
-    - [Unit tests](#unit-tests)
+    - [Unit/integration tests](#unitintegration-tests)
     - [Testing the federation of PeerTube servers](#testing-the-federation-of-peertube-servers)
   - [Emails](#emails)
 - [Plugins & Themes](#plugins--themes)
