@@ -10,6 +10,7 @@
   [showCurrentPageReport]="true" i18n-currentPageReportTemplate
   currentPageReportTemplate="Showing {{'{first}'}} to {{'{last}'}} of {{'{totalRecords}'}} videos"
   (onPage)="onPage($event)" [expandedRowKeys]="expandedRows"
+  [ngClass]="{ loading: loading }"
 >
   <ng-template pTemplate="caption">
     <div class="caption">

@@ -1,11 +1,12 @@
 import { SortMeta } from 'primeng/api'
+import { finalize } from 'rxjs/operators'
 import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, ConfirmService, Notifier, RestPagination, RestTable } from '@app/core'
-import { DropdownAction, Video, VideoService } from '@app/shared/shared-main'
-import { UserRight, VideoPrivacy, VideoState, VideoStreamingPlaylistType } from '@shared/models'
 import { AdvancedInputFilter } from '@app/shared/shared-forms'
+import { DropdownAction, Video, VideoService } from '@app/shared/shared-main'
 import { VideoActionsDisplayType } from '@app/shared/shared-video-miniature'
+import { UserRight, VideoPrivacy, VideoState, VideoStreamingPlaylistType } from '@shared/models'
 
 @Component({
   selector: 'my-video-list',
@@ -50,6 +51,8 @@ export class VideoListComponent extends RestTable implements OnInit {
     mute: true,
     liveInfo: false
   }
+
+  loading = false
 
   constructor (
     protected route: ActivatedRoute,
@@ -135,18 +138,21 @@ export class VideoListComponent extends RestTable implements OnInit {
   protected reloadData () {
     this.selectedVideos = []
 
+    this.loading = true
+
     this.videoService.getAdminVideos({
       pagination: this.pagination,
       sort: this.sort,
       search: this.search
-    }).subscribe({
-      next: resultList => {
-        this.videos = resultList.data
-        this.totalRecords = resultList.total
-      },
+    }).pipe(finalize(() => this.loading = false))
+      .subscribe({
+        next: resultList => {
+          this.videos = resultList.data
+          this.totalRecords = resultList.total
+        },
 
-      error: err => this.notifier.error(err.message)
-    })
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   private async removeVideos (videos: Video[]) {
