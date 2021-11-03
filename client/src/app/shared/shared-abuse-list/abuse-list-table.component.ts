@@ -39,23 +39,23 @@ export class AbuseListTableComponent extends RestTable implements OnInit {
       title: $localize`Advanced filters`,
       children: [
         {
-          queryParams: { search: 'state:pending' },
+          value: 'state:pending',
           label: $localize`Unsolved reports`
         },
         {
-          queryParams: { search: 'state:accepted' },
+          value: 'state:accepted',
           label: $localize`Accepted reports`
         },
         {
-          queryParams: { search: 'state:rejected' },
+          value: 'state:rejected',
           label: $localize`Refused reports`
         },
         {
-          queryParams: { search: 'videoIs:blacklisted' },
+          value: 'videoIs:blacklisted',
           label: $localize`Reports with blocked videos`
         },
         {
-          queryParams: { search: 'videoIs:deleted' },
+          value: 'videoIs:deleted',
           label: $localize`Reports with deleted videos`
         }
       ]

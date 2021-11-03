@@ -86,7 +86,7 @@ export class VideoListComponent extends RestTable implements OnInit {
   }
 
   getPrivacyBadgeClass (video: Video) {
-    if (video.privacy.id === VideoPrivacy.PUBLIC) return 'badge-blue'
+    if (video.privacy.id === VideoPrivacy.PUBLIC) return 'badge-green'
 
     return 'badge-yellow'
   }

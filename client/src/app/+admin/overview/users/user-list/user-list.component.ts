@@ -39,7 +39,7 @@ export class UserListComponent extends RestTable implements OnInit {
       title: $localize`Advanced filters`,
       children: [
         {
-          queryParams: { search: 'banned:true' },
+          value: 'banned:true',
           label: $localize`Banned users`
         }
       ]

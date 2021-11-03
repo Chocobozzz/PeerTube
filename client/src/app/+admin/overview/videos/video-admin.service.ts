@@ -44,11 +44,11 @@ export class VideoAdminService {
         title: $localize`Video type`,
         children: [
           {
-            queryParams: { search: 'isLive:false' },
+            value: 'isLive:false',
             label: $localize`VOD`
           },
           {
-            queryParams: { search: 'isLive:true' },
+            value: 'isLive:true',
             label: $localize`Live`
           }
         ]
@@ -58,19 +58,19 @@ export class VideoAdminService {
         title: $localize`Video files`,
         children: [
           {
-            queryParams: { search: 'webtorrent:true' },
+            value: 'webtorrent:true',
             label: $localize`With WebTorrent`
           },
           {
-            queryParams: { search: 'webtorrent:false' },
+            value: 'webtorrent:false',
             label: $localize`Without WebTorrent`
           },
           {
-            queryParams: { search: 'hls:true' },
+            value: 'hls:true',
             label: $localize`With HLS`
           },
           {
-            queryParams: { search: 'hls:false' },
+            value: 'hls:false',
             label: $localize`Without HLS`
           }
         ]
@@ -80,11 +80,11 @@ export class VideoAdminService {
         title: $localize`Videos scope`,
         children: [
           {
-            queryParams: { search: 'isLocal:false' },
+            value: 'isLocal:false',
             label: $localize`Remote videos`
           },
           {
-            queryParams: { search: 'isLocal:true' },
+            value: 'isLocal:true',
             label: $localize`Local videos`
           }
         ]
@@ -94,7 +94,7 @@ export class VideoAdminService {
         title: $localize`Exclude`,
         children: [
           {
-            queryParams: { search: 'excludeMuted' },
+            value: 'excludeMuted',
             label: $localize`Exclude muted accounts`
           }
         ]

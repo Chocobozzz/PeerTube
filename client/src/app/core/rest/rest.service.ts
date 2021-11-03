@@ -82,13 +82,11 @@ export class RestService {
   parseQueryStringFilter <T extends QueryStringFilterPrefixes> (q: string, prefixes: T): ParseQueryStringFiltersResult<keyof T> {
     if (!q) return {}
 
-    // Tokenize the strings using spaces that are not in quotes
-    const tokens = q.match(/(?:[^\s"]+|"[^"]*")+/g)
-                    .filter(token => !!token)
+    const tokens = this.tokenizeString(q)
 
     // Build prefix array
     const prefixeStrings = Object.values(prefixes)
-                           .map(p => p.prefix)
+                                 .map(p => p.prefix)
 
     logger(`Built tokens "${tokens.join(', ')}" for prefixes "${prefixeStrings.join(', ')}"`)
 
@@ -136,5 +134,13 @@ export class RestService {
 
       ...additionalFilters
     }
+  }
+
+  tokenizeString (q: string) {
+    if (!q) return []
+
+    // Tokenize the strings using spaces that are not in quotes
+    return q.match(/(?:[^\s"]+|"[^"]*")+/g)
+            .filter(token => !!token)
   }
 }

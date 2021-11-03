@@ -30,11 +30,11 @@ export class VideoBlockListComponent extends RestTable implements OnInit {
       title: $localize`Advanced filters`,
       children: [
         {
-          queryParams: { search: 'type:auto' },
+          value: 'type:auto',
           label: $localize`Automatic blocks`
         },
         {
-          queryParams: { search: 'type:manual' },
+          value: 'type:manual',
           label: $localize`Manual blocks`
         }
       ]
