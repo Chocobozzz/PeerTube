@@ -108,7 +108,10 @@ export class VideoListComponent extends RestTable implements OnInit {
   }
 
   isHLS (video: Video) {
-    return video.streamingPlaylists.some(p => p.type === VideoStreamingPlaylistType.HLS)
+    const p = video.streamingPlaylists.find(p => p.type === VideoStreamingPlaylistType.HLS)
+    if (!p) return false
+
+    return p.files.length !== 0
   }
 
   isWebTorrent (video: Video) {

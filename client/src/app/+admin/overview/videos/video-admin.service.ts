@@ -41,6 +41,20 @@ export class VideoAdminService {
   buildAdminInputFilter (): AdvancedInputFilter[] {
     return [
       {
+        title: $localize`Video type`,
+        children: [
+          {
+            queryParams: { search: 'isLive:false' },
+            label: $localize`VOD videos`
+          },
+          {
+            queryParams: { search: 'isLive:true' },
+            label: $localize`Live videos`
+          }
+        ]
+      },
+
+      {
         title: $localize`Videos scope`,
         children: [
           {
@@ -78,6 +92,10 @@ export class VideoAdminService {
     const filters = this.restService.parseQueryStringFilter(search, {
       isLocal: {
         prefix: 'isLocal:',
+        isBoolean: true
+      },
+      isLive: {
+        prefix: 'isLive:',
         isBoolean: true
       },
       excludeMuted: {
