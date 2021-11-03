@@ -44,6 +44,8 @@ export type BuildVideosListQueryOptions = {
   uuids?: string[]
 
   hasFiles?: boolean
+  hasHLSFiles?: boolean
+  hasWebtorrentFiles?: boolean
 
   accountId?: number
   videoChannelId?: number
@@ -167,6 +169,14 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
 
     if (options.hasFiles === true) {
       this.whereFileExists()
+    }
+
+    if (exists(options.hasWebtorrentFiles)) {
+      this.whereWebTorrentFileExists(options.hasWebtorrentFiles)
+    }
+
+    if (exists(options.hasHLSFiles)) {
+      this.whereHLSFileExists(options.hasHLSFiles)
     }
 
     if (options.tagsOneOf) {
@@ -371,16 +381,31 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
   }
 
   private whereFileExists () {
-    this.and.push(
-      '(' +
-      '  EXISTS (SELECT 1 FROM "videoFile" WHERE "videoFile"."videoId" = "video"."id") ' +
-      '  OR EXISTS (' +
-      '    SELECT 1 FROM "videoStreamingPlaylist" ' +
-      '    INNER JOIN "videoFile" ON "videoFile"."videoStreamingPlaylistId" = "videoStreamingPlaylist"."id" ' +
-      '    WHERE "videoStreamingPlaylist"."videoId" = "video"."id"' +
-      '  )' +
-      ')'
-    )
+    this.and.push(`(${this.buildWebTorrentFileExistsQuery(true)} OR ${this.buildHLSFileExistsQuery(true)})`)
+  }
+
+  private whereWebTorrentFileExists (exists: boolean) {
+    this.and.push(this.buildWebTorrentFileExistsQuery(exists))
+  }
+
+  private whereHLSFileExists (exists: boolean) {
+    this.and.push(this.buildHLSFileExistsQuery(exists))
+  }
+
+  private buildWebTorrentFileExistsQuery (exists: boolean) {
+    const prefix = exists ? '' : 'NOT '
+
+    return prefix + 'EXISTS (SELECT 1 FROM "videoFile" WHERE "videoFile"."videoId" = "video"."id")'
+  }
+
+  private buildHLSFileExistsQuery (exists: boolean) {
+    const prefix = exists ? '' : 'NOT '
+
+    return prefix + 'EXISTS (' +
+    '  SELECT 1 FROM "videoStreamingPlaylist" ' +
+    '  INNER JOIN "videoFile" ON "videoFile"."videoStreamingPlaylistId" = "videoStreamingPlaylist"."id" ' +
+    '  WHERE "videoStreamingPlaylist"."videoId" = "video"."id"' +
+    ')'
   }
 
   private whereTagsOneOf (tagsOneOf: string[]) {

@@ -26,6 +26,9 @@ export interface VideosCommonQuery {
   tagsOneOf?: string[]
   tagsAllOf?: string[]
 
+  hasHLSFiles?: boolean
+  hasWebtorrentFiles?: boolean
+
   skipCount?: boolean
 
   search?: string

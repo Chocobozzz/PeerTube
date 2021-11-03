@@ -1030,6 +1030,8 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     include?: VideoInclude
 
     hasFiles?: boolean // default false
+    hasWebtorrentFiles?: boolean
+    hasHLSFiles?: boolean
 
     categoryOneOf?: number[]
     licenceOneOf?: number[]
@@ -1053,9 +1055,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
 
     search?: string
   }) {
-    if (VideoModel.isPrivateInclude(options.include) && !options.user.hasRight(UserRight.SEE_ALL_VIDEOS)) {
-      throw new Error('Try to filter all-local but no user has not the see all videos right')
-    }
+    VideoModel.throwIfPrivateIncludeWithoutUser(options.include, options.user)
 
     const trendingDays = options.sort.endsWith('trending')
       ? CONFIG.TRENDING.VIDEOS.INTERVAL_DAYS
@@ -1088,6 +1088,8 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
         'videoPlaylistId',
         'user',
         'historyOfUser',
+        'hasHLSFiles',
+        'hasWebtorrentFiles',
         'search'
       ]),
 
@@ -1103,27 +1105,39 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     start: number
     count: number
     sort: string
-    search?: string
-    host?: string
-    startDate?: string // ISO 8601
-    endDate?: string // ISO 8601
-    originallyPublishedStartDate?: string
-    originallyPublishedEndDate?: string
+
     nsfw?: boolean
     isLive?: boolean
     isLocal?: boolean
     include?: VideoInclude
+
     categoryOneOf?: number[]
     licenceOneOf?: number[]
     languageOneOf?: string[]
     tagsOneOf?: string[]
     tagsAllOf?: string[]
+
+    displayOnlyForFollower: DisplayOnlyForFollowerOptions | null
+
+    user?: MUserAccountId
+
+    hasWebtorrentFiles?: boolean
+    hasHLSFiles?: boolean
+
+    search?: string
+
+    host?: string
+    startDate?: string // ISO 8601
+    endDate?: string // ISO 8601
+    originallyPublishedStartDate?: string
+    originallyPublishedEndDate?: string
+
     durationMin?: number // seconds
     durationMax?: number // seconds
-    user?: MUserAccountId
     uuids?: string[]
-    displayOnlyForFollower: DisplayOnlyForFollowerOptions | null
   }) {
+    VideoModel.throwIfPrivateIncludeWithoutUser(options.include, options.user)
+
     const serverActor = await getServerActor()
 
     const queryOptions = {
@@ -1148,6 +1162,8 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
         'originallyPublishedEndDate',
         'durationMin',
         'durationMax',
+        'hasHLSFiles',
+        'hasWebtorrentFiles',
         'uuids',
         'search',
         'displayOnlyForFollower'
@@ -1486,6 +1502,12 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     return {
       data: rows,
       total: count
+    }
+  }
+
+  private static throwIfPrivateIncludeWithoutUser (include: VideoInclude, user: MUserAccountId) {
+    if (VideoModel.isPrivateInclude(include) && !user?.hasRight(UserRight.SEE_ALL_VIDEOS)) {
+      throw new Error('Try to filter all-local but no user has not the see all videos right')
     }
   }
 

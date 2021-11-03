@@ -135,6 +135,8 @@ describe('Test videos filter', function () {
       server: PeerTubeServer
       path: string
       isLocal?: boolean
+      hasWebtorrentFiles?: boolean
+      hasHLSFiles?: boolean
       include?: VideoInclude
       category?: number
       tagsAllOf?: string[]
@@ -146,7 +148,7 @@ describe('Test videos filter', function () {
         path: options.path,
         token: options.token ?? options.server.accessToken,
         query: {
-          ...pick(options, [ 'isLocal', 'include', 'category', 'tagsAllOf' ]),
+          ...pick(options, [ 'isLocal', 'include', 'category', 'tagsAllOf', 'hasWebtorrentFiles', 'hasHLSFiles' ]),
 
           sort: 'createdAt'
         },
@@ -397,11 +399,9 @@ describe('Test videos filter', function () {
 
       for (const path of paths) {
         {
-
           const videos = await listVideos({ server: servers[0], path, tagsAllOf: [ 'tag1', 'tag2' ] })
           expect(videos).to.have.lengthOf(1)
           expect(videos[0].name).to.equal('tag filter')
-
         }
 
         {
@@ -418,6 +418,80 @@ describe('Test videos filter', function () {
         {
           const { total } = await servers[0].videos.list({ tagsAllOf: [ 'tag4' ], categoryOneOf: [ 4 ] })
           expect(total).to.equal(0)
+        }
+      }
+    })
+
+    it('Should filter by HLS or WebTorrent files', async function () {
+      this.timeout(360000)
+
+      const finderFactory = (name: string) => (videos: Video[]) => videos.some(v => v.name === name)
+
+      await servers[0].config.enableTranscoding(true, false)
+      await servers[0].videos.upload({ attributes: { name: 'webtorrent video' } })
+      const hasWebtorrent = finderFactory('webtorrent video')
+
+      await waitJobs(servers)
+
+      await servers[0].config.enableTranscoding(false, true)
+      await servers[0].videos.upload({ attributes: { name: 'hls video' } })
+      const hasHLS = finderFactory('hls video')
+
+      await waitJobs(servers)
+
+      await servers[0].config.enableTranscoding(true, true)
+      await servers[0].videos.upload({ attributes: { name: 'hls and webtorrent video' } })
+      const hasBoth = finderFactory('hls and webtorrent video')
+
+      await waitJobs(servers)
+
+      for (const path of paths) {
+        {
+          const videos = await listVideos({ server: servers[0], path, hasWebtorrentFiles: true })
+
+          expect(hasWebtorrent(videos)).to.be.true
+          expect(hasHLS(videos)).to.be.false
+          expect(hasBoth(videos)).to.be.true
+        }
+
+        {
+          const videos = await listVideos({ server: servers[0], path, hasWebtorrentFiles: false })
+
+          expect(hasWebtorrent(videos)).to.be.false
+          expect(hasHLS(videos)).to.be.true
+          expect(hasBoth(videos)).to.be.false
+        }
+
+        {
+          const videos = await listVideos({ server: servers[0], path, hasHLSFiles: true })
+
+          expect(hasWebtorrent(videos)).to.be.false
+          expect(hasHLS(videos)).to.be.true
+          expect(hasBoth(videos)).to.be.true
+        }
+
+        {
+          const videos = await listVideos({ server: servers[0], path, hasHLSFiles: false })
+
+          expect(hasWebtorrent(videos)).to.be.true
+          expect(hasHLS(videos)).to.be.false
+          expect(hasBoth(videos)).to.be.false
+        }
+
+        {
+          const videos = await listVideos({ server: servers[0], path, hasHLSFiles: false, hasWebtorrentFiles: false })
+
+          expect(hasWebtorrent(videos)).to.be.false
+          expect(hasHLS(videos)).to.be.false
+          expect(hasBoth(videos)).to.be.false
+        }
+
+        {
+          const videos = await listVideos({ server: servers[0], path, hasHLSFiles: true, hasWebtorrentFiles: true })
+
+          expect(hasWebtorrent(videos)).to.be.false
+          expect(hasHLS(videos)).to.be.false
+          expect(hasBoth(videos)).to.be.true
         }
       }
     })

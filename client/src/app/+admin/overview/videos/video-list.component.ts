@@ -85,14 +85,14 @@ export class VideoListComponent extends RestTable implements OnInit {
     this.reloadData()
   }
 
-  getPrivacyBadgeClass (privacy: VideoPrivacy) {
-    if (privacy === VideoPrivacy.PUBLIC) return 'badge-blue'
+  getPrivacyBadgeClass (video: Video) {
+    if (video.privacy.id === VideoPrivacy.PUBLIC) return 'badge-blue'
 
     return 'badge-yellow'
   }
 
-  isUnpublished (state: VideoState) {
-    return state !== VideoState.LIVE_ENDED && state !== VideoState.PUBLISHED
+  isUnpublished (video: Video) {
+    return video.state.id !== VideoState.LIVE_ENDED && video.state.id !== VideoState.PUBLISHED
   }
 
   isAccountBlocked (video: Video) {
@@ -105,6 +105,10 @@ export class VideoListComponent extends RestTable implements OnInit {
 
   isVideoBlocked (video: Video) {
     return video.blacklisted
+  }
+
+  isImport (video: Video) {
+    return video.state.id === VideoState.TO_IMPORT
   }
 
   isHLS (video: Video) {

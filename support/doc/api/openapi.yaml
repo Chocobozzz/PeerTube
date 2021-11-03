@@ -369,6 +369,8 @@ paths:
         - $ref: '#/components/parameters/nsfw'
         - $ref: '#/components/parameters/isLocal'
         - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/hasHLSFiles'
+        - $ref: '#/components/parameters/hasWebtorrentFiles'
         - $ref: '#/components/parameters/skipCount'
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
@@ -1303,6 +1305,8 @@ paths:
         - $ref: '#/components/parameters/nsfw'
         - $ref: '#/components/parameters/isLocal'
         - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/hasHLSFiles'
+        - $ref: '#/components/parameters/hasWebtorrentFiles'
         - $ref: '#/components/parameters/skipCount'
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
@@ -1624,6 +1628,8 @@ paths:
         - $ref: '#/components/parameters/nsfw'
         - $ref: '#/components/parameters/isLocal'
         - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/hasHLSFiles'
+        - $ref: '#/components/parameters/hasWebtorrentFiles'
         - $ref: '#/components/parameters/skipCount'
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
@@ -2861,6 +2867,8 @@ paths:
         - $ref: '#/components/parameters/nsfw'
         - $ref: '#/components/parameters/isLocal'
         - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/hasHLSFiles'
+        - $ref: '#/components/parameters/hasWebtorrentFiles'
         - $ref: '#/components/parameters/skipCount'
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
@@ -3582,6 +3590,8 @@ paths:
         - $ref: '#/components/parameters/nsfw'
         - $ref: '#/components/parameters/isLocal'
         - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/hasHLSFiles'
+        - $ref: '#/components/parameters/hasWebtorrentFiles'
         - $ref: '#/components/parameters/skipCount'
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
@@ -4085,6 +4095,8 @@ paths:
         - $ref: '#/components/parameters/nsfw'
         - $ref: '#/components/parameters/isLocal'
         - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/hasHLSFiles'
+        - $ref: '#/components/parameters/hasWebtorrentFiles'
       responses:
         '204':
           description: successful operation
@@ -4167,6 +4179,8 @@ paths:
         - $ref: '#/components/parameters/nsfw'
         - $ref: '#/components/parameters/isLocal'
         - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/hasHLSFiles'
+        - $ref: '#/components/parameters/hasWebtorrentFiles'
       responses:
         '204':
           description: successful operation
@@ -4806,6 +4820,20 @@ components:
       schema:
         type: boolean
       description: '**PeerTube >= 4.0** Display only local or remote videos'
+    hasHLSFiles:
+      name: hasHLSFiles
+      in: query
+      required: false
+      schema:
+        type: boolean
+      description: '**PeerTube >= 4.0** Display only videos that have HLS files'
+    hasWebtorrentFiles:
+      name: hasWebtorrentFiles
+      in: query
+      required: false
+      schema:
+        type: boolean
+      description: '**PeerTube >= 4.0** Display only videos that have WebTorrent files'
     include:
       name: include
       in: query

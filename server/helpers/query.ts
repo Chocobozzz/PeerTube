@@ -21,6 +21,8 @@ function pickCommonVideoQuery (query: VideosCommonQueryAfterSanitize) {
     'isLocal',
     'include',
     'skipCount',
+    'hasHLSFiles',
+    'hasWebtorrentFiles',
     'search'
   ])
 }

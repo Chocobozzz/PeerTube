@@ -496,6 +496,14 @@ const commonVideosFiltersValidator = [
     .optional()
     .customSanitizer(toBooleanOrNull)
     .custom(isBooleanValid).withMessage('Should have a valid local boolean'),
+  query('hasHLSFiles')
+    .optional()
+    .customSanitizer(toBooleanOrNull)
+    .custom(isBooleanValid).withMessage('Should have a valid has hls boolean'),
+  query('hasWebtorrentFiles')
+    .optional()
+    .customSanitizer(toBooleanOrNull)
+    .custom(isBooleanValid).withMessage('Should have a valid has webtorrent boolean'),
   query('skipCount')
     .optional()
     .customSanitizer(toBooleanOrNull)
@@ -525,12 +533,13 @@ const commonVideosFiltersValidator = [
 
     const user = res.locals.oauth?.token.User
 
-    if (req.query.include && (!user || user.hasRight(UserRight.SEE_ALL_VIDEOS) !== true)) {
-      res.fail({
-        status: HttpStatusCode.UNAUTHORIZED_401,
-        message: 'You are not allowed to see all local videos.'
-      })
-      return
+    if ((!user || user.hasRight(UserRight.SEE_ALL_VIDEOS) !== true)) {
+      if (req.query.include) {
+        return res.fail({
+          status: HttpStatusCode.UNAUTHORIZED_401,
+          message: 'You are not allowed to see all videos.'
+        })
+      }
     }
 
     return next()

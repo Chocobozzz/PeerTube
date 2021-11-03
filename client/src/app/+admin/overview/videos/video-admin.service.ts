@@ -45,11 +45,33 @@ export class VideoAdminService {
         children: [
           {
             queryParams: { search: 'isLive:false' },
-            label: $localize`VOD videos`
+            label: $localize`VOD`
           },
           {
             queryParams: { search: 'isLive:true' },
-            label: $localize`Live videos`
+            label: $localize`Live`
+          }
+        ]
+      },
+
+      {
+        title: $localize`Video files`,
+        children: [
+          {
+            queryParams: { search: 'webtorrent:true' },
+            label: $localize`With WebTorrent`
+          },
+          {
+            queryParams: { search: 'webtorrent:false' },
+            label: $localize`Without WebTorrent`
+          },
+          {
+            queryParams: { search: 'hls:true' },
+            label: $localize`With HLS`
+          },
+          {
+            queryParams: { search: 'hls:false' },
+            label: $localize`Without HLS`
           }
         ]
       },
@@ -69,7 +91,7 @@ export class VideoAdminService {
       },
 
       {
-        title: $localize`Include/Exclude`,
+        title: $localize`Exclude`,
         children: [
           {
             queryParams: { search: 'excludeMuted' },
@@ -92,6 +114,14 @@ export class VideoAdminService {
     const filters = this.restService.parseQueryStringFilter(search, {
       isLocal: {
         prefix: 'isLocal:',
+        isBoolean: true
+      },
+      hasHLSFiles: {
+        prefix: 'hls:',
+        isBoolean: true
+      },
+      hasWebtorrentFiles: {
+        prefix: 'webtorrent:',
         isBoolean: true
       },
       isLive: {
