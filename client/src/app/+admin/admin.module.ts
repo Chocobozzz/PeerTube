@@ -33,7 +33,14 @@ import { VideoRedundancyInformationComponent } from './follows/video-redundancie
 import { AbuseListComponent, VideoBlockListComponent } from './moderation'
 import { InstanceAccountBlocklistComponent, InstanceServerBlocklistComponent } from './moderation/instance-blocklist'
 import { VideoCommentListComponent } from './moderation/video-comment-list'
-import { UserCreateComponent, UserListComponent, UserPasswordComponent, UserUpdateComponent, VideoAdminService, VideoListComponent } from './overview'
+import {
+  UserCreateComponent,
+  UserListComponent,
+  UserPasswordComponent,
+  UserUpdateComponent,
+  VideoAdminService,
+  VideoListComponent
+} from './overview'
 import { PluginListInstalledComponent } from './plugins/plugin-list-installed/plugin-list-installed.component'
 import { PluginSearchComponent } from './plugins/plugin-search/plugin-search.component'
 import { PluginShowInstalledComponent } from './plugins/plugin-show-installed/plugin-show-installed.component'
