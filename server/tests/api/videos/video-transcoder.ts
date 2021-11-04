@@ -206,7 +206,7 @@ describe('Test video transcoding', function () {
 
           const video = data.find(v => v.name === attributes.name)
           const videoDetails = await server.videos.get({ id: video.id })
-          expect(videoDetails.files).to.have.lengthOf(4)
+          expect(videoDetails.files).to.have.lengthOf(5)
 
           const magnetUri = videoDetails.files[0].magnetUri
           expect(magnetUri).to.contain('.mp4')
