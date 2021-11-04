@@ -66,7 +66,7 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
   expect(data.transcoding.threads).to.equal(2)
   expect(data.transcoding.concurrency).to.equal(2)
   expect(data.transcoding.profile).to.equal('default')
-  expect(data.transcoding.resolutions['144p']).to.be.true
+  expect(data.transcoding.resolutions['144p']).to.be.false
   expect(data.transcoding.resolutions['240p']).to.be.true
   expect(data.transcoding.resolutions['360p']).to.be.true
   expect(data.transcoding.resolutions['480p']).to.be.true
