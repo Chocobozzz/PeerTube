@@ -303,6 +303,33 @@ $ cd /var/www/peertube-docker
 $ docker-compose exec -u peertube peertube npm run create-import-video-file-job -- -v [videoUUID] -i [videoFile]
 ```
 
+### create-move-video-storage-job.js
+
+Use this script to move a specific video file in object storage.
+
+```bash
+$ # Basic installation
+$ cd /var/www/peertube/peertube-latest
+$ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run create-move-video-storage-job -- --to-object-storage -v [videoUUID]
+
+$ # Docker installation
+$ cd /var/www/peertube-docker
+$ docker-compose exec -u peertube peertube npm run create-move-video-storage-job -- --to-object-storage -v [videoUUID]
+```
+
+The script can also move all video files that are not already in object storage:
+
+```bash
+$ # Basic installation
+$ cd /var/www/peertube/peertube-latest
+$ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run create-move-video-storage-job -- --to-object-storage --all-videos
+
+$ # Docker installation
+$ cd /var/www/peertube-docker
+$ docker-compose exec -u peertube peertube npm run create-move-video-storage-job -- --to-object-storage --all-videos
+```
+
+
 ### prune-storage.js
 
 Some transcoded videos or shutdown at a bad time can leave some unused files on your storage.

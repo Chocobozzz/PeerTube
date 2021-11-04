@@ -1,7 +1,7 @@
 import { close, ensureDir, move, open, outputJSON, read, readFile, remove, stat, writeFile } from 'fs-extra'
 import { flatten, uniq } from 'lodash'
 import { basename, dirname, join } from 'path'
-import { MStreamingPlaylistFilesVideo, MVideoWithFile } from '@server/types/models'
+import { MStreamingPlaylistFilesVideo, MVideo, MVideoUUID } from '@server/types/models'
 import { sha256 } from '../helpers/core-utils'
 import { getAudioStreamCodec, getVideoStreamCodec, getVideoStreamSize } from '../helpers/ffprobe-utils'
 import { logger } from '../helpers/logger'
@@ -31,7 +31,7 @@ async function updateStreamingPlaylistsInfohashesIfNeeded () {
   }
 }
 
-async function updateMasterHLSPlaylist (video: MVideoWithFile, playlist: MStreamingPlaylistFilesVideo) {
+async function updateMasterHLSPlaylist (video: MVideo, playlist: MStreamingPlaylistFilesVideo) {
   const masterPlaylists: string[] = [ '#EXTM3U', '#EXT-X-VERSION:3' ]
 
   for (const file of playlist.VideoFiles) {
@@ -63,7 +63,7 @@ async function updateMasterHLSPlaylist (video: MVideoWithFile, playlist: MStream
   })
 }
 
-async function updateSha256VODSegments (video: MVideoWithFile, playlist: MStreamingPlaylistFilesVideo) {
+async function updateSha256VODSegments (video: MVideoUUID, playlist: MStreamingPlaylistFilesVideo) {
   const json: { [filename: string]: { [range: string]: string } } = {}
 
   // For all the resolutions available for this video

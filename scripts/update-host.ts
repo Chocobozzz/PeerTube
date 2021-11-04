@@ -115,9 +115,9 @@ async function run () {
 
   console.log('Updating video and torrent files.')
 
-  const localVideos = await VideoModel.listLocal()
-  for (const localVideo of localVideos) {
-    const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(localVideo.id)
+  const ids = await VideoModel.listLocalIds()
+  for (const id of ids) {
+    const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(id)
 
     console.log('Updating video ' + video.uuid)
 
