@@ -558,7 +558,7 @@
       </trans-unit>
       <trans-unit id="8726138323871139597" datatype="html">
         <source>Following</source>
-        <target state="translated">يتابع</target>
+        <target state="translated">متابَعون</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/admin.component.ts</context><context context-type="linenumber">46</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">31</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/follows.routes.ts</context><context context-type="linenumber">28</context></context-group>
@@ -577,7 +577,7 @@
       </trans-unit>
       <trans-unit id="6751995972535426095" datatype="html">
         <source>following</source>
-        <target>يتابِع</target>
+        <target>متابَعون</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-statistics.component.html</context><context context-type="linenumber">95</context></context-group>
       </trans-unit>
       <trans-unit id="2605931708025789621" datatype="html">
@@ -619,7 +619,7 @@
       </trans-unit>
       <trans-unit id="8901933019590352016" datatype="html">
         <source>You enabled user registration on your instance but did not configure the following fields:</source>
-        <target>مكنت تسجيل المستخدمين الجدد على مثيل الخادم الخاص بك ولكنك لم تقم بتكوين الحقول التالية:</target>
+        <target>مكنت تسجيل المستخدمين الجدد على مثيل الخادم ولكنك لم تضبط الحقول التالية:</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="8948444690892731948" datatype="html">
@@ -639,7 +639,7 @@
       </trans-unit>
       <trans-unit id="5026256683194518810" datatype="html">
         <source>How long you plan to maintain your instance</source>
-        <target>إلى متى تخطط على إبقاء مثيل الخادم شغلًا</target>
+        <target>إلى متى تخطط على إبقاء مثيل الخادم شغّالًا</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="1909672990242291785" datatype="html">
@@ -657,7 +657,7 @@
       </trans-unit>
       <trans-unit id="5032335000394561521" datatype="html">
         <source>Instance terms</source>
-        <target>شروط استخدام مثيل الخادم</target>
+        <target>شروط الاستخدام</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">21</context></context-group>
       </trans-unit>
       <trans-unit id="4116024528500133384" datatype="html">
@@ -686,7 +686,7 @@
       </trans-unit>
       <trans-unit id="7819314041543176992" datatype="html">
         <source>Close</source>
-        <target>اغلق</target>
+        <target>أغلق</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">38</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context><context context-type="linenumber">33</context></context-group>
       </trans-unit>
@@ -752,17 +752,17 @@
       </trans-unit>
       <trans-unit id="2081626998027585315" datatype="html">
         <source>It's time to configure your instance!</source>
-        <target>حان الوقت تكوين مثيل الخادم الخاص بك!</target>
+        <target>حان الوقت ضبط مثيل الخادم !</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context><context context-type="linenumber">55</context></context-group>
       </trans-unit>
       <trans-unit id="5083058563861587027" datatype="html">
         <source>Choosing your <x id="START_TAG_STRONG"/>instance name<x id="CLOSE_TAG_STRONG"/>, <x id="START_TAG_STRONG"/>setting up a description<x id="CLOSE_TAG_STRONG"/>, specifying <x id="START_TAG_STRONG"/>who you are<x id="CLOSE_TAG_STRONG"/>, why <x id="START_TAG_STRONG"/>you created your instance<x id="CLOSE_TAG_STRONG"/> and <x id="START_TAG_STRONG"/>how long<x id="CLOSE_TAG_STRONG"/> you plan to <x id="START_TAG_STRONG"/>maintain your it<x id="CLOSE_TAG_STRONG"/> is very important for visitors to understand on what type of instance they are. </source>
-        <target>أختيارك <x id="START_TAG_STRONG"/>اسما لمثيل الخادم<x id="CLOSE_TAG_STRONG"/> واعدادك <x id="START_TAG_STRONG"/>لوصف<x id="CLOSE_TAG_STRONG"/> ، تحدد فيه من <x id="START_TAG_STRONG"/>أنت<x id="CLOSE_TAG_STRONG"/> ، لماذا <x id="START_TAG_STRONG"/>قمت بأنشاء هذا المثيل<x id="CLOSE_TAG_STRONG"/>، <x id="START_TAG_STRONG"/>وكم من الوقت<x id="CLOSE_TAG_STRONG"/> تخطط <x id="START_TAG_STRONG"/> لإبقائه شغالا<x id="CLOSE_TAG_STRONG"/>. أمر مهم ليفهم الزوار نوع مثيل الخادم الذي يستخدمونه. </target>
+        <target>اختيارك <x id="START_TAG_STRONG"/>اسما لمثيل الخادم<x id="CLOSE_TAG_STRONG"/> واعدادك <x id="START_TAG_STRONG"/>لوصف<x id="CLOSE_TAG_STRONG"/> ، تحدد فيه من <x id="START_TAG_STRONG"/>أنت<x id="CLOSE_TAG_STRONG"/> ، لماذا <x id="START_TAG_STRONG"/>قمت بأنشاء هذا المثيل<x id="CLOSE_TAG_STRONG"/>، <x id="START_TAG_STRONG"/>وكم من الوقت<x id="CLOSE_TAG_STRONG"/> تخطط <x id="START_TAG_STRONG"/> لإبقائه شغالا<x id="CLOSE_TAG_STRONG"/>. أمر مهم ليفهم الزوار نوع مثيل الخادم الذي يستخدمونه. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context><context context-type="linenumber">57</context></context-group>
       </trans-unit>
       <trans-unit id="5329436244765769292" datatype="html">
         <source>If you want to open registrations, please decide what <x id="START_TAG_STRONG"/>your moderation rules<x id="CLOSE_TAG_STRONG"/> and <x id="START_TAG_STRONG"/>instance terms of service<x id="CLOSE_TAG_STRONG"/> are, as well as specify the categories and languages and your moderators speak. This way, you will help users to register on <x id="START_TAG_STRONG"/>the appropriate<x id="CLOSE_TAG_STRONG"/> PeerTube instance. </source>
-        <target state="translated">إذا أردت فتح التسجيل، رجاء حدد <x id="START_TAG_STRONG"/>قواعد الاشراف<x id="CLOSE_TAG_STRONG"/>، واكتب <x id="START_TAG_STRONG"/>شروط استخدام مثيل الخادم<x id="START_TAG_STRONG"/> ،وحدد الفئات واللغات التي تستخدم. بهذا ستسمح للمتسخدمين بتحديد مثيل الخادم <x id="START_TAG_STRONG"/>الذي يناسبهم<x id="CLOSE_TAG_STRONG"/>. </target>
+        <target state="translated">إذا أردت فتح التسجيل، رجاء حدد <x id="START_TAG_STRONG"/>قواعد الاشراف<x id="CLOSE_TAG_STRONG"/>، واكتب <x id="START_TAG_STRONG"/>شروط الاستخدام<x id="START_TAG_STRONG"/> ،وحدد الفئات واللغات التي تستخدم. بهذا ستسمح للمتسخدمين بتحديد مثيل الخادم <x id="START_TAG_STRONG"/>الذي يناسبهم<x id="CLOSE_TAG_STRONG"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context><context context-type="linenumber">63</context></context-group>
       </trans-unit>
       <trans-unit id="5704345824323933019" datatype="html">
@@ -778,7 +778,7 @@
       </trans-unit>
       <trans-unit id="9202089339019827574" datatype="html">
         <source>Configure my instance</source>
-        <target>كوّن مثيل الخادم الخاص بي</target>
+        <target>اضبط مثيل الخادم</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context><context context-type="linenumber">80</context></context-group>
       </trans-unit>
       <trans-unit id="5410940035535748578" datatype="html">
@@ -794,7 +794,7 @@
       </trans-unit>
       <trans-unit id="2964653499524716819" datatype="html">
         <source>Help to translate PeerTube!</source>
-        <target>ساهموا في ترجمة PeerTube!</target>
+        <target>ساهم في ترجمة بيرتيوب!</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/language-chooser.component.html</context><context context-type="linenumber">8</context></context-group>
       </trans-unit>
       <trans-unit id="4930506384627295710" datatype="html">
@@ -807,7 +807,7 @@
       </trans-unit>
       <trans-unit id="4786000816576841850" datatype="html">
         <source>Display settings</source>
-        <target>اعدادات العرض</target>
+        <target>إعدادات العرض</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/quick-settings-modal.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="6460084371385263470" datatype="html">
@@ -936,7 +936,7 @@
       </trans-unit>
       <trans-unit id="780513172839038392" datatype="html">
         <source>jobs in parallel</source>
-        <target state="translated">العمليات التي تعمل بالتوازي</target>
+        <target state="translated">العمليات المتوازية</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">230</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">171</context></context-group>
       </trans-unit>
@@ -1396,7 +1396,7 @@
       </trans-unit>
       <trans-unit id="658727060940996385" datatype="html">
         <source>Renewing the token will disallow previously configured clients from retrieving the feed until they use the new token. Proceed?</source>
-        <target state="translated">تجديد الرمز سيمنع العملاء الذين يستخدمون الرمز القديم من جلب الخلاصات، لذا عليك تكوينهم لاستخدام الرمز الجديد. تُتابع؟</target>
+        <target state="translated">تجديد الرمز سيمنع العملاء الذين يستخدمون الرمز القديم من جلب الخلاصات لذا يجب عليهم ضبط الرمز الجديد. تُتابع؟</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.ts</context><context context-type="linenumber">40</context></context-group>
       </trans-unit>
       <trans-unit id="270726559962362501" datatype="html">
@@ -5186,7 +5186,7 @@ color: red;
       </trans-unit>
       <trans-unit id="87327320394367488" datatype="html">
         <source>We are sorry, you cannot recover your password because your instance administrator did not configure the PeerTube email system.</source>
-        <target>عذرًا ، لا يمكنك استرداد كلمة المرور الخاصة بك لأن مدير مثيل الخادم الخاص بك لم يقم بتكوين نظام البريد الإلكتروني لبيرتيوب.</target>
+        <target>عذرًا ، لا يمكنك استرداد كلمة المرور الخاصة بك لأن مدير مثيل الخادم الخاص بك لم يضبط نظام البريد الإلكتروني لبيرتيوب.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">102</context></context-group>
       </trans-unit>
       <trans-unit id="3188014010833256853" datatype="html">
