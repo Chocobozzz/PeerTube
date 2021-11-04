@@ -37,7 +37,7 @@ async function checkHlsPlaylist (options: {
 }) {
   const { videoUUID, hlsOnly, objectStorageBaseUrl } = options
 
-  const resolutions = options.resolutions ?? [ 144, 240, 360, 480, 720 ]
+  const resolutions = options.resolutions ?? [ 240, 360, 480, 720 ]
 
   for (const server of options.servers) {
     const videoDetails = await server.videos.get({ id: videoUUID })
