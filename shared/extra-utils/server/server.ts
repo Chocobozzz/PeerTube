@@ -56,6 +56,7 @@ export class PeerTubeServer {
   port?: number
 
   rtmpPort?: number
+  rtmpsPort?: number
 
   parallel?: boolean
   internalServerNumber: number
@@ -154,6 +155,7 @@ export class PeerTubeServer {
 
     this.internalServerNumber = this.parallel ? this.randomServer() : this.serverNumber
     this.rtmpPort = this.parallel ? this.randomRTMP() : 1936
+    this.rtmpsPort = this.parallel ? this.randomRTMP() : 1937
     this.port = 9000 + this.internalServerNumber
 
     this.url = `http://localhost:${this.port}`

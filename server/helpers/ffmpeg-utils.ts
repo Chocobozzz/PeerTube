@@ -219,7 +219,7 @@ async function transcode (options: TranscodeOptions) {
 // ---------------------------------------------------------------------------
 
 async function getLiveTranscodingCommand (options: {
-  rtmpUrl: string
+  inputUrl: string
 
   outPath: string
   masterPlaylistName: string
@@ -234,10 +234,9 @@ async function getLiveTranscodingCommand (options: {
   availableEncoders: AvailableEncoders
   profile: string
 }) {
-  const { rtmpUrl, outPath, resolutions, fps, bitrate, availableEncoders, profile, masterPlaylistName, ratio } = options
-  const input = rtmpUrl
+  const { inputUrl, outPath, resolutions, fps, bitrate, availableEncoders, profile, masterPlaylistName, ratio } = options
 
-  const command = getFFmpeg(input, 'live')
+  const command = getFFmpeg(inputUrl, 'live')
 
   const varStreamMap: string[] = []
 
@@ -259,7 +258,7 @@ async function getLiveTranscodingCommand (options: {
     const resolutionFPS = computeFPS(fps, resolution)
 
     const baseEncoderBuilderParams = {
-      input,
+      input: inputUrl,
 
       availableEncoders,
       profile,
@@ -327,8 +326,8 @@ async function getLiveTranscodingCommand (options: {
   return command
 }
 
-function getLiveMuxingCommand (rtmpUrl: string, outPath: string, masterPlaylistName: string) {
-  const command = getFFmpeg(rtmpUrl, 'live')
+function getLiveMuxingCommand (inputUrl: string, outPath: string, masterPlaylistName: string) {
+  const command = getFFmpeg(inputUrl, 'live')
 
   command.outputOption('-c:v copy')
   command.outputOption('-c:a copy')

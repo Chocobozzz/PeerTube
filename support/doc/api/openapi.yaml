@@ -7258,6 +7258,8 @@ components:
       properties:
         rtmpUrl:
           type: string
+        rtmpsUrl:
+          type: string
         streamKey:
           type: string
           description: RTMP stream key to use to stream into this live video

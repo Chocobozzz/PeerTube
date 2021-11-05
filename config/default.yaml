@@ -370,7 +370,16 @@ live:
 
   # Your firewall should accept traffic from this port in TCP if you enable live
   rtmp:
+    enabled: true
     port: 1935
+
+  rtmps:
+    enabled: false
+    port: 1936
+    # Absolute path
+    key_file: ''
+    # Absolute path
+    cert_file: ''
 
   # Allow to transcode the live streaming in multiple live resolutions
   transcoding:

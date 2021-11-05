@@ -151,6 +151,20 @@ function checkConfig () {
     if (CONFIG.LIVE.ALLOW_REPLAY === true && CONFIG.TRANSCODING.ENABLED === false) {
       return 'Live allow replay cannot be enabled if transcoding is not enabled.'
     }
+
+    if (CONFIG.LIVE.RTMP.ENABLED === false && CONFIG.LIVE.RTMPS.ENABLED === false) {
+      return 'You must enable at least RTMP or RTMPS'
+    }
+
+    if (CONFIG.LIVE.RTMPS.ENABLED) {
+      if (!CONFIG.LIVE.RTMPS.KEY_FILE) {
+        return 'You must specify a key file to enabled RTMPS'
+      }
+
+      if (!CONFIG.LIVE.RTMPS.CERT_FILE) {
+        return 'You must specify a cert file to enable RTMPS'
+      }
+    }
   }
 
   // Object storage

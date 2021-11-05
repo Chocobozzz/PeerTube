@@ -52,7 +52,8 @@ const WEBSERVER = {
   WS: '',
   HOSTNAME: '',
   PORT: 0,
-  RTMP_URL: ''
+  RTMP_URL: '',
+  RTMPS_URL: ''
 }
 
 // Sortable columns per schema
@@ -998,6 +999,7 @@ function updateWebserverUrls () {
   WEBSERVER.PORT = CONFIG.WEBSERVER.PORT
 
   WEBSERVER.RTMP_URL = 'rtmp://' + CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.LIVE.RTMP.PORT + '/' + VIDEO_LIVE.RTMP.BASE_PATH
+  WEBSERVER.RTMPS_URL = 'rtmps://' + CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.LIVE.RTMPS.PORT + '/' + VIDEO_LIVE.RTMP.BASE_PATH
 }
 
 function updateWebserverConfig () {

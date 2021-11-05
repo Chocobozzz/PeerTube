@@ -5,6 +5,7 @@ import { AttributesOnly } from '@shared/core-utils'
 import { LiveVideo, VideoState } from '@shared/models'
 import { VideoModel } from './video'
 import { VideoBlacklistModel } from './video-blacklist'
+import { CONFIG } from '@server/initializers/config'
 
 @DefaultScope(() => ({
   include: [
@@ -97,11 +98,18 @@ export class VideoLiveModel extends Model<Partial<AttributesOnly<VideoLiveModel>
   }
 
   toFormattedJSON (): LiveVideo {
+    let rtmpUrl: string = null
+    let rtmpsUrl: string = null
+
+    // If we don't have a stream key, it means this is a remote live so we don't specify the rtmp URL
+    if (this.streamKey) {
+      if (CONFIG.LIVE.RTMP.ENABLED) rtmpUrl = WEBSERVER.RTMP_URL
+      if (CONFIG.LIVE.RTMPS.ENABLED) rtmpsUrl = WEBSERVER.RTMPS_URL
+    }
+
     return {
-      // If we don't have a stream key, it means this is a remote live so we don't specify the rtmp URL
-      rtmpUrl: this.streamKey
-        ? WEBSERVER.RTMP_URL
-        : null,
+      rtmpUrl,
+      rtmpsUrl,
 
       streamKey: this.streamKey,
       permanentLive: this.permanentLive,

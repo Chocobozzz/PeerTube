@@ -271,7 +271,15 @@ const CONFIG = {
     get ALLOW_REPLAY () { return config.get<boolean>('live.allow_replay') },
 
     RTMP: {
+      get ENABLED () { return config.get<boolean>('live.rtmp.enabled') },
       get PORT () { return config.get<number>('live.rtmp.port') }
+    },
+
+    RTMPS: {
+      get ENABLED () { return config.get<boolean>('live.rtmps.enabled') },
+      get PORT () { return config.get<number>('live.rtmps.port') },
+      get KEY_FILE () { return config.get<string>('live.rtmps.key_file') },
+      get CERT_FILE () { return config.get<string>('live.rtmps.cert_file') }
     },
 
     TRANSCODING: {
