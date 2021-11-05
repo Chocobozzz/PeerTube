@@ -8,6 +8,7 @@ export class ConfigCommand extends AbstractCommand {
 
   static getCustomConfigResolutions (enabled: boolean) {
     return {
+      '144p': enabled,
       '240p': enabled,
       '360p': enabled,
       '480p': enabled,
@@ -232,6 +233,7 @@ export class ConfigCommand extends AbstractCommand {
         profile: 'default',
         resolutions: {
           '0p': false,
+          '144p': false,
           '240p': false,
           '360p': true,
           '480p': true,
@@ -258,6 +260,7 @@ export class ConfigCommand extends AbstractCommand {
           threads: 4,
           profile: 'default',
           resolutions: {
+            '144p': true,
             '240p': true,
             '360p': true,
             '480p': true,

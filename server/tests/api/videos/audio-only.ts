@@ -21,6 +21,7 @@ describe('Test audio only video transcoding', function () {
         enabled: true,
         resolutions: {
           '0p': true,
+          '144p': false,
           '240p': true,
           '360p': false,
           '480p': false,

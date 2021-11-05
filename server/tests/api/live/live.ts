@@ -421,6 +421,7 @@ describe('Test live', function () {
             transcoding: {
               enabled: true,
               resolutions: {
+                '144p': resolutions.includes(144),
                 '240p': resolutions.includes(240),
                 '360p': resolutions.includes(360),
                 '480p': resolutions.includes(480),

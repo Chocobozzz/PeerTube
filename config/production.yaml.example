@@ -333,6 +333,7 @@ transcoding:
 
   resolutions: # Only created if the original video has a higher resolution, uses more storage!
     0p: false # audio-only (creates mp4 without video stream, always created when enabled)
+    144p: false
     240p: false
     360p: false
     480p: false
@@ -392,6 +393,7 @@ live:
     profile: 'default'
 
     resolutions:
+      144p: false
       240p: false
       360p: false
       480p: false

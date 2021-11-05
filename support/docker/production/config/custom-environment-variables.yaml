@@ -130,6 +130,9 @@ transcoding:
     __name: "PEERTUBE_TRANSCODING_THREADS"
     __format: "json"
   resolutions:
+    144p:
+      __name: "PEERTUBE_TRANSCODING_144P"
+      __format: "json"
     240p:
       __name: "PEERTUBE_TRANSCODING_240P"
       __format: "json"
