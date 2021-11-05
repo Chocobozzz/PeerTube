@@ -243,7 +243,7 @@ describe('Test HLS videos', function () {
             enabled: true,
             allowAudioFiles: true,
             resolutions: {
-              '144p': true,
+              '144p': false,
               '240p': true,
               '360p': true,
               '480p': true,
