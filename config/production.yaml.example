@@ -386,7 +386,9 @@ live:
   rtmps:
     enabled: false
     port: 1936
+    # Absolute path
     key_file: ''
+    # Absolute path
     cert_file: ''
 
   # Allow to transcode the live streaming in multiple live resolutions

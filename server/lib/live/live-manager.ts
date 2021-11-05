@@ -150,10 +150,19 @@ class LiveManager {
   stop () {
     this.running = false
 
-    logger.info('Stopping RTMP server.', lTags())
+    if (this.rtmpServer) {
+      logger.info('Stopping RTMP server.', lTags())
 
-    this.rtmpServer.close()
-    this.rtmpServer = undefined
+      this.rtmpServer.close()
+      this.rtmpServer = undefined
+    }
+
+    if (this.rtmpsServer) {
+      logger.info('Stopping RTMPS server.', lTags())
+
+      this.rtmpsServer.close()
+      this.rtmpsServer = undefined
+    }
 
     // Sessions is an object
     this.getContext().sessions.forEach((session: any) => {
