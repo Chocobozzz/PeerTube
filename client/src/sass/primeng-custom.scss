@@ -760,7 +760,7 @@ p-table {
   }
 
   .badge {
-    @include table-badge;
+    @include peertube-badge;
   }
 }
 

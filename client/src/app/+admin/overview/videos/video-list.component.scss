@@ -7,7 +7,7 @@ my-embed {
 }
 
 .badge {
-  @include table-badge;
+  @include peertube-badge;
 
   margin-right: 5px;
 }
