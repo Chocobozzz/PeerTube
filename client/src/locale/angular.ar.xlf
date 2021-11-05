@@ -1162,7 +1162,7 @@
       </trans-unit>
       <trans-unit id="2933819425721221134" datatype="html">
         <source>Sepia seems to like it.</source>
-        <target state="translated">يبدو أنّه يعجب سبيا.</target>
+        <target state="translated">يبدو أنّه يعجب سِبيا.</target>
         <note priority="1" from="description">This is about Sepia's tea</note>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context><context context-type="linenumber">42</context></context-group>
       </trans-unit>
@@ -1178,7 +1178,7 @@
       </trans-unit>
       <trans-unit id="4494942989613184609" datatype="html">
         <source>In the vidiverse</source>
-        <target state="translated">في الكون</target>
+        <target state="needs-translation">في الكون</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/suggestion.component.html</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="5131854469652959713" datatype="html">
@@ -1216,12 +1216,12 @@
       </trans-unit>
       <trans-unit id="1764675694412365696" datatype="html">
         <source>only followed instances</source>
-        <target>مثلاء الخادم المتّبعون فقط</target>
+        <target>مثلاء الخادم المتابَعون فقط</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">43</context></context-group>
       </trans-unit>
       <trans-unit id="6462732349450217281" datatype="html">
         <source>Determines whether you can resolve any distant content, or if this instance only allows doing so for instances it follows.</source>
-        <target state="translated">يحدد ما إذا كان يمكنك حل أي محتوى بعيد ، أو إذا كان هذا المثيل يسمح فقط بالقيام بذلك المثلاء المتبعين.</target>
+        <target state="translated">يحدد ما إذا كان يمكنك حل أي محتوى بعيد ، أو إذا كان هذا المثيل يسمح فقط بالقيام بذلك المثلاء المتابَعين.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="3710530516408401495" datatype="html">
@@ -1297,7 +1297,7 @@
       </trans-unit>
       <trans-unit id="4710350176324657996" datatype="html">
         <source>This will ask remote instances to delete it</source>
-        <target>سيطلب من المثلاء البعدين حذفها</target>
+        <target>سيُطلب من المثلاء البِعاد حذفها</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="1974768985735973432" datatype="html">
@@ -1366,7 +1366,7 @@
       </trans-unit>
       <trans-unit id="2816407313459209541" datatype="html">
         <source>Your report will be sent to moderators of <x id="INTERPOLATION"/><x id="START_TAG_NG_CONTAINER"/> and will be forwarded to the video origin (<x id="INTERPOLATION_1"/>) too<x id="CLOSE_TAG_NG_CONTAINER"/>. </source>
-        <target state="translated">سيرسل البلاغ الى مشرفي <x id="INTERPOLATION"/><x id="START_TAG_NG_CONTAINER"/> وسيوجه الى الفيديو الأصلي (<x id="INTERPOLATION_1"/>) كذلك<x id="CLOSE_TAG_NG_CONTAINER"/>. </target>
+        <target state="translated">سيرسل البلاغ الى مشرفي <x id="INTERPOLATION"/><x id="START_TAG_NG_CONTAINER"/> وسيوجه الى مصدر الفيديو (<x id="INTERPOLATION_1"/>) كذلك<x id="CLOSE_TAG_NG_CONTAINER"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/video-report.component.html</context><context context-type="linenumber">74</context></context-group>
       </trans-unit>
       <trans-unit id="6990204431018013063" datatype="html">
@@ -1390,7 +1390,7 @@
       </trans-unit>
       <trans-unit id="7651712714082200084" datatype="html">
         <source>Your report will be sent to moderators of <x id="INTERPOLATION"/><x id="START_TAG_NG_CONTAINER"/> and will be forwarded to the comment origin (<x id="INTERPOLATION_1"/>) too<x id="CLOSE_TAG_NG_CONTAINER"/>. </source>
-        <target state="translated">سيرسل البلاغ الى مشرفي <x id="INTERPOLATION"/><x id="START_TAG_NG_CONTAINER"/> وسيوجه الى التعليق الأصلي (<x id="INTERPOLATION_1"/>) كذلك<x id="CLOSE_TAG_NG_CONTAINER"/>. </target>
+        <target state="translated">سيرسل البلاغ الى مشرفي <x id="INTERPOLATION"/><x id="START_TAG_NG_CONTAINER"/> وسيوجه إلى مصدر التعليق (<x id="INTERPOLATION_1"/>) كذلك<x id="CLOSE_TAG_NG_CONTAINER"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/report.component.html</context><context context-type="linenumber">36</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/report.component.html</context><context context-type="linenumber">36</context></context-group>
       </trans-unit>
@@ -1407,7 +1407,7 @@
       </trans-unit>
       <trans-unit id="3029923402309610616" datatype="html">
         <source>Token renewed. Update your client configuration accordingly.</source>
-        <target state="translated">أُعيد تجديد الرمز، اضبط العميل تبعًا له.</target>
+        <target state="translated">جُدِد الرمز، اضبط العميل تبعًا له.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.ts</context>
           <context context-type="linenumber">49</context>
@@ -1459,7 +1459,7 @@
       </trans-unit>
       <trans-unit id="270726559962362501" datatype="html">
         <source>Renew token</source>
-        <target state="new">Renew token</target>
+        <target state="translated">جدِّد الرمز</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.html</context><context context-type="linenumber">35</context></context-group>
       </trans-unit>
       <trans-unit id="9031514421077169181" datatype="html">
