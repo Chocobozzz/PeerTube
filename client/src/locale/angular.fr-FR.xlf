@@ -2574,7 +2574,7 @@
       </trans-unit>
       <trans-unit id="5872059367236038160" datatype="html">
         <source>Stream only once and save a replay of your live</source>
-        <target state="new">Stream only once and save a replay of your live</target>
+        <target state="translated">Ne diffusez qu'une seule fois et enregistrez une rediffusion de votre direct</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context>
           <context context-type="linenumber">161</context>
@@ -2582,7 +2582,7 @@
       </trans-unit>
       <trans-unit id="2360261543675520397" datatype="html">
         <source>Stream only once</source>
-        <target state="new">Stream only once</target>
+        <target state="translated">Ne diffusez qu'une seule fois</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context>
           <context context-type="linenumber">164</context>
@@ -2590,7 +2590,7 @@
       </trans-unit>
       <trans-unit id="5168540607709796871" datatype="html">
         <source>Stream multiple times, replays can't be saved</source>
-        <target state="new">Stream multiple times, replays can't be saved</target>
+        <target state="translated">Diffusez en continu, les rediffusions ne peuvent pas être sauvegardées</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context>
           <context context-type="linenumber">169</context>
@@ -2598,7 +2598,7 @@
       </trans-unit>
       <trans-unit id="58134197356653483" datatype="html">
         <source>Stream multiple times using the same URL</source>
-        <target state="new">Stream multiple times using the same URL</target>
+        <target state="translated">Diffusez en continu en utilisant la même URL</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context>
           <context context-type="linenumber">172</context>
@@ -4286,7 +4286,7 @@
       </trans-unit>
       <trans-unit id="8984988128489304664" datatype="html">
         <source>Filter logs by tags</source>
-        <target state="new">Filter logs by tags</target>
+        <target state="translated">filtrez les journaux par tags</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context>
           <context context-type="linenumber">31</context>
@@ -4299,7 +4299,7 @@
       </trans-unit>
       <trans-unit id="1570003374195931619" datatype="html">
         <source>No log.</source>
-        <target state="new">No log.</target>
+        <target state="translated">Pas de journal.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context>
           <context context-type="linenumber">40</context>
@@ -5218,7 +5218,7 @@
       </trans-unit>
       <trans-unit id="4249062553881932496" datatype="html">
         <source>You cannot change the server configuration because it's managed externally.</source>
-        <target state="new"> You cannot change the server configuration because it's managed externally. </target>
+        <target state="translated">Vous ne pouvez pas modifier la configuration du serveur car il est géré de manière externe.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">85,87</context>
@@ -6846,8 +6846,7 @@
       </trans-unit>
       <trans-unit id="709846045064893539" datatype="html">
         <source>Updating instance configuration from the web interface is disabled by the system administrator.</source>
-        <target state="new"> Updating instance configuration from the web interface is disabled by the system administrator.
-</target>
+        <target state="translated">La mise à jour de la configuration des instances à partir de l'interface web est désactivée par l'administrateur système.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">3,5</context>
@@ -8106,7 +8105,7 @@
       </trans-unit>
       <trans-unit id="7440637814928143808" datatype="html">
         <source>My followers</source>
-        <target state="new">My followers</target>
+        <target state="translated">Mes followers</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-follows/my-followers.component.html</context>
           <context context-type="linenumber">4</context>
@@ -8118,7 +8117,7 @@
       </trans-unit>
       <trans-unit id="2521678336272309407" datatype="html">
         <source>No follower found.</source>
-        <target state="new">No follower found.</target>
+        <target state="translated">Aucun follower trouvé.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-follows/my-followers.component.html</context>
           <context context-type="linenumber">13</context>
