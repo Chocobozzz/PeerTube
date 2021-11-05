@@ -1430,7 +1430,7 @@
       </trans-unit>
       <trans-unit id="2645809032917283525" datatype="html">
         <source>Use third-party feed aggregators to retrieve the list of videos from channels you subscribed to.</source>
-        <target state="new"> Use third-party feed aggregators to retrieve the list of videos from channels you subscribed to. </target>
+        <target state="translated">استخدم مجمعة تلقيم خارجية لجلب قائمة فيديوهات اشتركاتك.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.html</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
       <trans-unit id="7944777648309302794" datatype="html">
@@ -1443,7 +1443,7 @@
       </trans-unit>
       <trans-unit id="6086365181226161548" datatype="html">
         <source>Feed Token</source>
-        <target state="translated">رمز التغذية</target>
+        <target state="translated">رمز التلقيم</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.html</context>
           <context context-type="linenumber">23</context>
@@ -1451,7 +1451,7 @@
       </trans-unit>
       <trans-unit id="6492684506192237359" datatype="html">
         <source>⚠️ Never share your feed token with anyone.</source>
-        <target state="translated">⚠️ لا تشارك رمز التغذية مع أي أحد.</target>
+        <target state="translated">⚠️ لا تشارك رمز التلقيم مع أي أحد.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.html</context>
           <context context-type="linenumber">26</context>
@@ -1516,24 +1516,24 @@
       </trans-unit>
       <trans-unit id="8898602327647937914" datatype="html">
         <source>Open actor page in a new tab</source>
-        <target>افتح صفحة الممثل في علامة تبويب جديدة</target>
+        <target>افتح صفحة الممثل في لسانٍ جديد</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">42</context></context-group>
       </trans-unit>
       <trans-unit id="7317290694079257887" datatype="html">
         <source>Accepted</source>
-        <target>تم القبول</target>
+        <target>مقبول</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">49</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">51</context></context-group>
       </trans-unit>
       <trans-unit id="4416413576346763682" datatype="html">
         <source>Pending</source>
-        <target>معلق</target>
+        <target>معلّق</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">52</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">54</context></context-group>
       </trans-unit>
       <trans-unit id="8905995985388209337" datatype="html">
         <source>Accept</source>
-        <target>موافقة</target>
+        <target>موافق</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">35</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-ownership/my-accept-ownership/my-accept-ownership.component.html</context><context context-type="linenumber">25</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-ownership/my-ownership.component.html</context><context context-type="linenumber">33</context></context-group>
@@ -1546,22 +1546,22 @@
       </trans-unit>
       <trans-unit id="6961112234462008319" datatype="html">
         <source>No follower found matching current filters.</source>
-        <target>لم يتم العثور على متابع مطابق للمرشحات الحالية.</target>
+        <target>لم يُعثر على متابع مطابق للمرشحات الحالية.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">64</context></context-group>
       </trans-unit>
       <trans-unit id="2117404838551056159" datatype="html">
         <source>Your instance doesn't have any follower.</source>
-        <target>مثيل الخادم الخاص بك ليس لديه أي متابع.</target>
+        <target>مثيل الخادم الخاص بك ليس لديه أي متابِع.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">65</context></context-group>
       </trans-unit>
       <trans-unit id="2845798909207198924" datatype="html">
         <source>Showing <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> followers</source>
-        <target>يعرض <x id="INTERPOLATION"/> ل <x id="INTERPOLATION_1"/> من <x id="INTERPOLATION_2"/> متابع</target>
+        <target>يعرض <x id="INTERPOLATION"/> لـ <x id="INTERPOLATION_1"/> من <x id="INTERPOLATION_2"/> متابع</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="6571718060636962350" datatype="html">
         <source>Redundancy allowed <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></source>
-        <target state="translated">Redundancy allowed <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></target>
+        <target state="translated">التكرار مسموح<x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">34</context></context-group>
       </trans-unit>
       <trans-unit id="9160510009013134726" datatype="html">
@@ -1588,12 +1588,12 @@
       </trans-unit>
       <trans-unit id="4774348799569692380" datatype="html">
         <source>Showing <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> hosts</source>
-        <target>يعرض <x id="INTERPOLATION"/> ل <x id="INTERPOLATION_1"/> من <x id="INTERPOLATION_2"/> مضيفا</target>
+        <target>يعرض <x id="INTERPOLATION"/> لـ <x id="INTERPOLATION_1"/> من <x id="INTERPOLATION_2"/> مضيفا</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="4917252294930256268" datatype="html">
         <source>It seems that you are not on a HTTPS server. Your webserver needs to have TLS activated in order to follow servers.</source>
-        <target>يبدو أنك لست على خادم HTTPS. يحتاج خادم الويب الخاص بك إلى تنشيط TLS لمتابعة الخوادم.</target>
+        <target>يبدو أنك لست على خادم HTTPS. يحتاج خادم الويب إلى تنشيط TLS لمتابعة الخوادم.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/follow-modal.component.html</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="9216117865911519658" datatype="html">
@@ -1608,17 +1608,17 @@
       </trans-unit>
       <trans-unit id="5968342253366599875" datatype="html">
         <source>Videos redundancies</source>
-        <target state="new">Videos redundancies</target>
+        <target state="translated">تكرارات الفيديو</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="4937132637898470918" datatype="html">
         <source>My videos duplicated by remote instances</source>
-        <target>كررت مقاطع الفيديو الخاصة بي بواسطة مثلاء بعيدين</target>
+        <target>كرّر مثلاء بِعاد فيديوهاتي</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">12</context></context-group>
       </trans-unit>
       <trans-unit id="4667534933980942398" datatype="html">
         <source>Remote videos duplicated by my instance</source>
-        <target>كرر مثيل الخادم خاصتي مقاطع الفيديو البعيدة</target>
+        <target>فيديوهات كررها مثيل الخادم خاصتي</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="1617785425462022303" datatype="html">
