@@ -184,6 +184,16 @@ function isBinaryResponse (result: Response<any>) {
   return BINARY_CONTENT_TYPES.has(result.headers['content-type'])
 }
 
+async function findLatestRedirection (url: string, options: PeerTubeRequestOptions, iteration = 1) {
+  if (iteration > 10) throw new Error('Too much iterations to find final URL ' + url)
+
+  const { headers } = await peertubeGot(url, { followRedirect: false, ...buildGotOptions(options) })
+
+  if (headers.location) return findLatestRedirection(headers.location, options, iteration + 1)
+
+  return url
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -192,6 +202,7 @@ export {
   doRequestAndSaveToFile,
   isBinaryResponse,
   downloadImage,
+  findLatestRedirection,
   peertubeGot
 }
 

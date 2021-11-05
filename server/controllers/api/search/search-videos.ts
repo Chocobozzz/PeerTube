@@ -1,7 +1,7 @@
 import express from 'express'
 import { sanitizeUrl } from '@server/helpers/core-utils'
 import { pickSearchVideoQuery } from '@server/helpers/query'
-import { doJSONRequest } from '@server/helpers/requests'
+import { doJSONRequest, findLatestRedirection } from '@server/helpers/requests'
 import { CONFIG } from '@server/initializers/config'
 import { WEBSERVER } from '@server/initializers/constants'
 import { getOrCreateAPVideo } from '@server/lib/activitypub/videos'
@@ -142,7 +142,10 @@ async function searchVideoURI (url: string, res: express.Response) {
         refreshVideo: false
       }
 
-      const result = await getOrCreateAPVideo({ videoObject: url, syncParam })
+      const result = await getOrCreateAPVideo({
+        videoObject: await findLatestRedirection(url, { activityPub: true }),
+        syncParam
+      })
       video = result ? result.video : undefined
     } catch (err) {
       logger.info('Cannot search remote video %s.', url, { err })
