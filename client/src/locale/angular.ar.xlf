@@ -1649,7 +1649,7 @@
       </trans-unit>
       <trans-unit id="7423116442791683693" datatype="html">
         <source>Your instance doesn't mirror any video.</source>
-        <target state="translated">مثيلك لا يعكس أي فيديو.</target>
+        <target state="needs-translation">مثيلك لا يعكس أي فيديو.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">81</context></context-group>
       </trans-unit>
       <trans-unit id="1944582937285351613" datatype="html">
@@ -1664,7 +1664,7 @@
       </trans-unit>
       <trans-unit id="7595922272001217567" datatype="html">
         <source>No redundancy strategy is enabled on your instance.</source>
-        <target state="translated">لم يتم تمكين استراتيجية التكرار على المنصة الخاص بك.</target>
+        <target state="needs-translation">لم يتم تمكين استراتيجية التكرار على المنصة الخاص بك.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">95</context></context-group>
       </trans-unit>
       <trans-unit id="4555457172864212828" datatype="html">
@@ -1689,19 +1689,19 @@
       </trans-unit>
       <trans-unit id="8147229944654164397" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {Video} other {Videos} }</source>
-        <target>{VAR_PLURAL, plural, =1 {فيديو} other {مقاطع فيديو} }</target>
+        <target state="needs-translation">{VAR_PLURAL, plural, =1 {فيديو} other {مقاطع فيديو} }</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">24</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">24</context></context-group>
       </trans-unit>
       <trans-unit id="2068564237394270744" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {Channel} other {Channels} }</source>
-        <target>{VAR_PLURAL, plural, =1 {قناة} other {قنوات} }</target>
+        <target state="needs-translation">{VAR_PLURAL, plural, =1 {قناة} other {قنوات} }</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">30</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">30</context></context-group>
       </trans-unit>
       <trans-unit id="407487463718398437" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {Subscriber} other {Subscribers} }</source>
-        <target>{VAR_PLURAL, plural, =1 {مشترك} other {مشتركون} }</target>
+        <target state="needs-translation">{VAR_PLURAL, plural, =1 {مشترك} other {مشتركون} }</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">36</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">36</context></context-group>
       </trans-unit>
@@ -1719,7 +1719,7 @@
       </trans-unit>
       <trans-unit id="3094586852616580737" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {Comment} other {Comments} }</source>
-        <target>{VAR_PLURAL , plural, =1 {تعليق} other {تعليقات} }</target>
+        <target state="needs-translation">{VAR_PLURAL , plural, =1 {تعليق} other {تعليقات} }</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">54</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">54</context></context-group>
       </trans-unit>
@@ -1782,7 +1782,7 @@
       </trans-unit>
       <trans-unit id="8371296837649897723" datatype="html">
         <source>If you leave the password empty, an email will be sent to the user.</source>
-        <target>إذا تركت كلمة المرور فارغة ، فسيتم إرسال بريد إلكتروني إلى المستخدم.</target>
+        <target>إذا تركت كلمة المرور فارغة ، سترسل رسالة إلى البريد الإلكتروني للمستخدم.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">120</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">120</context></context-group>
       </trans-unit>
@@ -1808,7 +1808,7 @@
       </trans-unit>
       <trans-unit id="2622255144026150901" datatype="html">
         <source>Auth plugin</source>
-        <target state="translated">إضافة المصادقة</target>
+        <target state="translated">إضافة استيثاق</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">188</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">188</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.ts</context><context context-type="linenumber">126</context></context-group>
@@ -1827,7 +1827,7 @@
       </trans-unit>
       <trans-unit id="2070907480317730379" datatype="html">
         <source>Doesn't need review before a video goes public</source>
-        <target>لا يحتاج إلى مراجعة قبل نشر الفيديو على الملأ</target>
+        <target>لا يحتاج إلى مراجعة قبل نشر الفيديو للعلن</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">201</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">201</context></context-group>
       </trans-unit>
