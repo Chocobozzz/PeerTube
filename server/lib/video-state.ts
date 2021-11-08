@@ -79,11 +79,18 @@ async function moveToExternalStorageState (video: MVideoFullLight, isNewVideo: b
   }
 }
 
+function moveToFailedState (video: MVideoFullLight) {
+  return sequelizeTypescript.transaction(async t => {
+    await video.setNewState(VideoState.TRANSCODING_FAILED, false, t)
+  })
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   buildNextVideoState,
   moveToExternalStorageState,
+  moveToFailedState,
   moveToNextState
 }
 
