@@ -17,6 +17,7 @@
   - [regenerate-thumbnails.js](#regenerate-thumbnailsjs)
   - [create-transcoding-job.js](#create-transcoding-jobjs)
   - [create-import-video-file-job.js](#create-import-video-file-jobjs)
+  - [create-move-video-storage-job.js](#create-move-video-storage-jobjs)
   - [prune-storage.js](#prune-storagejs)
   - [update-host.js](#update-hostjs)
   - [reset-password.js](#reset-passwordjs)
@@ -305,7 +306,7 @@ $ docker-compose exec -u peertube peertube npm run create-import-video-file-job 
 
 ### create-move-video-storage-job.js
 
-Use this script to move a specific video file in object storage.
+Use this script to move all video files or a specific video file to object storage.
 
 ```bash
 $ # Basic installation

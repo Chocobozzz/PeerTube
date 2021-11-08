@@ -71,7 +71,14 @@ async function run () {
     if (files.some(f => f.storage === VideoStorage.FILE_SYSTEM) || hls?.storage === VideoStorage.FILE_SYSTEM) {
       console.log('Processing video %s.', videoFull.name)
 
-      await moveToExternalStorageState(videoFull, false, undefined)
+      const success = await moveToExternalStorageState(videoFull, false, undefined)
+
+      if (!success) {
+        console.error(
+          'Cannot create move job for %s: job creation may have failed or there may be pending transcoding jobs for this video',
+          videoFull.name
+        )
+      }
     }
 
     console.log(`Created move-to-object-storage job for ${videoFull.name}.`)

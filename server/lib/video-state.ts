@@ -62,7 +62,7 @@ async function moveToExternalStorageState (video: MVideoFullLight, isNewVideo: b
   const pendingTranscode = videoJobInfo?.pendingTranscode || 0
 
   // We want to wait all transcoding jobs before moving the video on an external storage
-  if (pendingTranscode !== 0) return
+  if (pendingTranscode !== 0) return false
 
   await video.setNewState(VideoState.TO_MOVE_TO_EXTERNAL_STORAGE, isNewVideo, transaction)
 
@@ -70,8 +70,12 @@ async function moveToExternalStorageState (video: MVideoFullLight, isNewVideo: b
 
   try {
     await addMoveToObjectStorageJob(video, isNewVideo)
+
+    return true
   } catch (err) {
     logger.error('Cannot add move to object storage job', { err })
+
+    return false
   }
 }
 
