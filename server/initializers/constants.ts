@@ -420,7 +420,8 @@ const VIDEO_STATES: { [ id in VideoState ]: string } = {
   [VideoState.TO_IMPORT]: 'To import',
   [VideoState.WAITING_FOR_LIVE]: 'Waiting for livestream',
   [VideoState.LIVE_ENDED]: 'Livestream ended',
-  [VideoState.TO_MOVE_TO_EXTERNAL_STORAGE]: 'To move to an external storage'
+  [VideoState.TO_MOVE_TO_EXTERNAL_STORAGE]: 'To move to an external storage',
+  [VideoState.TRANSCODING_FAILED]: 'Transcoding failed'
 }
 
 const VIDEO_IMPORT_STATES: { [ id in VideoImportState ]: string } = {
