@@ -23,6 +23,7 @@ export class VideoChannel extends Actor implements ServerVideoChannel {
   videosCount?: number
 
   viewsPerDay?: ViewsPerDate[]
+  totalViews: number
 
   static GET_ACTOR_AVATAR_URL (actor: { avatar?: { url?: string, path: string } }) {
     return Actor.GET_ACTOR_AVATAR_URL(actor)

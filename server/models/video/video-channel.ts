@@ -373,6 +373,9 @@ export class VideoChannelModel extends Model<Partial<AttributesOnly<VideoChannel
   })
   VideoPlaylists: VideoPlaylistModel[]
 
+  @Column
+  totalViews: number
+
   @BeforeDestroy
   static async sendDeleteIfOwned (instance: VideoChannelModel, options) {
     if (!instance.Actor) {

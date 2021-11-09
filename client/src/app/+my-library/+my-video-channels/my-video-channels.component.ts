@@ -82,8 +82,6 @@ channel with the same name (${videoChannel.name})!`,
           this.videoChannels = res.data
           this.totalItems = res.total
 
-          this.getVideoChannelsViewsCounts()
-
           // chart data
           this.videoChannelsChartData = this.videoChannels.map(v => ({
             labels: v.viewsPerDay.map(day => day.date.toLocaleDateString()),
@@ -167,20 +165,5 @@ channel with the same name (${videoChannel.name})!`,
         intersect: false
       }
     }
-  }
-
-  private getVideoChannelsViewsCounts () {
-    this.videoChannels.forEach(element => {
-      this.videoService.getVideoChannelVideos({
-        videoChannel: element,
-        videoPagination: {
-          currentPage: 1,
-          itemsPerPage: 50 // how to get it more than that?
-        },
-        sort: '-publishedAt'
-      }).subscribe(res => {
-        this.videoChannelsViewCount[element.nameWithHost] = res.data.map(video => video.views).reduce((acc, views) => acc + views, 0)
-      })
-    })
   }
 }
