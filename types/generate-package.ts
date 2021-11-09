@@ -14,11 +14,12 @@ run()
 async function run () {
   execSync('npm run build:types', { stdio: 'inherit' })
   const typesPath = resolve(cwd(), './types/')
-  const typesPackageJsonPath = resolve(typesPath, './package.json')
-  const typesGitIgnorePath = resolve(typesPath, './.gitignore')
+  const typesDistPath = resolve(cwd(), typesPath, './dist/')
+  const typesDistPackageJsonPath = resolve(typesDistPath, './package.json')
+  const typesDistGitIgnorePath = resolve(typesDistPath, './.gitignore')
   const mainPackageJson = await readJson(resolve(cwd(), './package.json'))
-  const tsConfigPath = resolve(cwd(), './tsconfig.json')
-  const tsConfig = await readJson(tsConfigPath)
+  const distTsConfigPath = resolve(cwd(), typesPath, './tsconfig.dist.json')
+  const distTsConfig = await readJson(distTsConfigPath)
   const clientPackageJson = await readJson(resolve(cwd(), './client/package.json'))
 
   const allDependencies = Object.assign(
@@ -34,7 +35,7 @@ async function run () {
       depcheck.detector.requireCallExpression,
       depcheck.detector.importDeclaration
     ],
-    ignoreMatches: Object.keys(tsConfig?.compilerOptions?.paths || []),
+    ignoreMatches: Object.keys(distTsConfig?.compilerOptions?.paths || []),
     package: { dependencies: allDependencies }
   }
 
@@ -60,19 +61,15 @@ async function run () {
     repository,
     dependencies
   }
-  console.log(`Writing package.json to ${typesPackageJsonPath}`)
-  await writeJSON(typesPackageJsonPath, typesPackageJson, { spaces: 2 })
+  console.log(`Writing package.json to ${typesDistPackageJsonPath}`)
+  await writeJSON(typesDistPackageJsonPath, typesPackageJson, { spaces: 2 })
 
-  console.log(`Writing git ignore to ${typesGitIgnorePath}`)
-  await writeFile(typesGitIgnorePath, '*.tsbuildinfo')
+  console.log(`Writing git ignore to ${typesDistGitIgnorePath}`)
+  await writeFile(typesDistGitIgnorePath, '*.tsbuildinfo')
 
   console.log('Copying tsconfig files')
-  await copyFile(tsConfigPath, resolve(typesPath, './tsconfig.json'))
-  await copyFile(resolve(cwd(), './tsconfig.base.json'), resolve(typesPath, './tsconfig.base.json'))
-  tsConfig.references.map(({ path }) => path).forEach((path) => {
-    const src = resolve(cwd(), path, '/tsconfig.json')
-    const dest = resolve(typesPath, path, './tsconfig.json')
-    console.log(`${src} -> ${dest}`)
-    copyFile(src, dest).catch((e) => console.error(e))
-  })
+  await copyFile(distTsConfigPath, resolve(typesDistPath, './tsconfig.json'))
+  await copyFile(resolve(cwd(), './tsconfig.base.json'), resolve(typesDistPath, './tsconfig.base.json'))
+
+  await copyFile(resolve(typesPath, './README.md'), resolve(typesDistPath, './README.md'))
 }

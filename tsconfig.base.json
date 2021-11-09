@@ -24,10 +24,10 @@
       "client/node_modules/@types"
     ],
     "baseUrl": "./",
-    "outDir": "./dist/",
     "paths": {
       "@server/*": [ "server/*" ],
-      "@shared/*": [ "shared/*" ]
+      "@shared/*": [ "shared/*" ],
+      "@client/*": [ "client/src/*" ],
     },
     "resolveJsonModule": true,
     "strict": false,

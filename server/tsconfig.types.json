@@ -1,7 +1,7 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "../types/server",
+    "outDir": "../types/dist/server",
     "stripInternal": true,
     "removeComments": false,
     "emitDeclarationOnly": true

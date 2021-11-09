@@ -7,5 +7,6 @@
   "references": [
     { "path": "../" },
   ],
+  "files": [],
   "exclude": [ ] // Overwrite exclude property
 }

@@ -6,7 +6,11 @@
     "paths": {
       "@server/*": [ "server/*" ],
       "@shared/*": [ "shared/*" ]
-    }
+    },
+    "typeRoots": [
+      "server/typings",
+      "node_modules/@types"
+    ]
   },
   "references": [
     { "path": "./shared" },
