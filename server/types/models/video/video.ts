@@ -210,7 +210,9 @@ export type MVideoFormattable =
   PickWithOpt<VideoModel, 'UserVideoHistories', MUserVideoHistoryTime[]> &
   Use<'VideoChannel', MChannelAccountSummaryFormattable> &
   PickWithOpt<VideoModel, 'ScheduleVideoUpdate', Pick<MScheduleVideoUpdate, 'updateAt' | 'privacy'>> &
-  PickWithOpt<VideoModel, 'VideoBlacklist', Pick<MVideoBlacklist, 'reason'>>
+  PickWithOpt<VideoModel, 'VideoBlacklist', Pick<MVideoBlacklist, 'reason'>> &
+  PickWithOpt<VideoModel, 'VideoStreamingPlaylists', MStreamingPlaylistFiles[]> &
+  PickWithOpt<VideoModel, 'VideoFiles', MVideoFile[]>
 
 export type MVideoFormattableDetails =
   MVideoFormattable &

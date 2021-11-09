@@ -367,7 +367,10 @@ paths:
         - $ref: '#/components/parameters/licenceOneOf'
         - $ref: '#/components/parameters/languageOneOf'
         - $ref: '#/components/parameters/nsfw'
-        - $ref: '#/components/parameters/filter'
+        - $ref: '#/components/parameters/isLocal'
+        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/hasHLSFiles'
+        - $ref: '#/components/parameters/hasWebtorrentFiles'
         - $ref: '#/components/parameters/skipCount'
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
@@ -1300,7 +1303,10 @@ paths:
         - $ref: '#/components/parameters/licenceOneOf'
         - $ref: '#/components/parameters/languageOneOf'
         - $ref: '#/components/parameters/nsfw'
-        - $ref: '#/components/parameters/filter'
+        - $ref: '#/components/parameters/isLocal'
+        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/hasHLSFiles'
+        - $ref: '#/components/parameters/hasWebtorrentFiles'
         - $ref: '#/components/parameters/skipCount'
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
@@ -1620,7 +1626,10 @@ paths:
         - $ref: '#/components/parameters/licenceOneOf'
         - $ref: '#/components/parameters/languageOneOf'
         - $ref: '#/components/parameters/nsfw'
-        - $ref: '#/components/parameters/filter'
+        - $ref: '#/components/parameters/isLocal'
+        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/hasHLSFiles'
+        - $ref: '#/components/parameters/hasWebtorrentFiles'
         - $ref: '#/components/parameters/skipCount'
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
@@ -2081,6 +2090,13 @@ paths:
           description: video unreadable
         '429':
           description: too many concurrent requests
+        '503':
+          description: upload is already being processed
+          headers:
+            'Retry-After':
+              schema:
+                type: number
+                example: 300
     delete:
       summary: Cancel the resumable upload of a video, deleting any data uploaded so far
       description: Uses [a resumable protocol](https://github.com/kukhariev/node-uploadx/blob/master/proto.md) to cancel the upload of a video
@@ -2849,7 +2865,10 @@ paths:
         - $ref: '#/components/parameters/licenceOneOf'
         - $ref: '#/components/parameters/languageOneOf'
         - $ref: '#/components/parameters/nsfw'
-        - $ref: '#/components/parameters/filter'
+        - $ref: '#/components/parameters/isLocal'
+        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/hasHLSFiles'
+        - $ref: '#/components/parameters/hasWebtorrentFiles'
         - $ref: '#/components/parameters/skipCount'
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
@@ -3569,7 +3588,10 @@ paths:
         - $ref: '#/components/parameters/licenceOneOf'
         - $ref: '#/components/parameters/languageOneOf'
         - $ref: '#/components/parameters/nsfw'
-        - $ref: '#/components/parameters/filter'
+        - $ref: '#/components/parameters/isLocal'
+        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/hasHLSFiles'
+        - $ref: '#/components/parameters/hasWebtorrentFiles'
         - $ref: '#/components/parameters/skipCount'
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
@@ -4071,7 +4093,10 @@ paths:
             type: string
         - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/nsfw'
-        - $ref: '#/components/parameters/filter'
+        - $ref: '#/components/parameters/isLocal'
+        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/hasHLSFiles'
+        - $ref: '#/components/parameters/hasWebtorrentFiles'
       responses:
         '204':
           description: successful operation
@@ -4152,7 +4177,10 @@ paths:
           required: true
         - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/nsfw'
-        - $ref: '#/components/parameters/filter'
+        - $ref: '#/components/parameters/isLocal'
+        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/hasHLSFiles'
+        - $ref: '#/components/parameters/hasWebtorrentFiles'
       responses:
         '204':
           description: successful operation
@@ -4785,20 +4813,51 @@ components:
         enum:
         - 'true'
         - 'false'
-    filter:
-      name: filter
+    isLocal:
+      name: isLocal
       in: query
       required: false
-      description: >
-        Special filters which might require special rights:
-         * `local` - only videos local to the instance
-         * `all-local` - only videos local to the instance, but showing private and unlisted videos (requires Admin privileges)
-         * `all` - all videos, showing private and unlisted videos (requires Admin privileges)
       schema:
-        type: string
+        type: boolean
+      description: '**PeerTube >= 4.0** Display only local or remote videos'
+    hasHLSFiles:
+      name: hasHLSFiles
+      in: query
+      required: false
+      schema:
+        type: boolean
+      description: '**PeerTube >= 4.0** Display only videos that have HLS files'
+    hasWebtorrentFiles:
+      name: hasWebtorrentFiles
+      in: query
+      required: false
+      schema:
+        type: boolean
+      description: '**PeerTube >= 4.0** Display only videos that have WebTorrent files'
+    include:
+      name: include
+      in: query
+      required: false
+      schema:
+        type: integer
         enum:
-        - local
-        - all-local
+        - 0
+        - 1
+        - 2
+        - 4
+        - 8
+      description: >
+        **PeerTube >= 4.0** Include additional videos in results (can be combined using bitwise or operator)
+
+        - `0` NONE
+
+        - `1` NOT_PUBLISHED_STATE
+
+        - `2` HIDDEN_PRIVACY
+
+        - `4` BLACKLISTED
+
+        - `8` BLOCKED
     subscriptionsUris:
       name: uris
       in: query
@@ -4833,7 +4892,7 @@ components:
           - video-transcoding
           - video-file-import
           - video-import
-          - videos-views
+          - videos-views-stats
           - activitypub-refresher
           - video-redundancy
           - video-live-ending
@@ -5338,6 +5397,9 @@ components:
         - $ref: '#/components/schemas/Video'
         - type: object
           properties:
+            viewers:
+              type: integer
+              description: If the video is a live, you have the amount of current viewers
             descriptionPath:
               type: string
               example: /api/v1/videos/9c9de5e8-0a1e-484a-b099-e80766180a6d/description
@@ -6108,6 +6170,8 @@ components:
               properties:
                 0p:
                   type: boolean
+                144p:
+                  type: boolean
                 240p:
                   type: boolean
                 360p:
@@ -6239,7 +6303,7 @@ components:
             - video-transcoding
             - email
             - video-import
-            - videos-views
+            - videos-views-stats
             - activitypub-refresher
             - video-redundancy
         data:
@@ -6988,7 +7052,7 @@ components:
       enum:
         - 0
         - 1
-        - 3
+        - 2
     Notification:
       properties:
         id:
@@ -7196,6 +7260,8 @@ components:
     LiveVideoResponse:
       properties:
         rtmpUrl:
+          type: string
+        rtmpsUrl:
           type: string
         streamKey:
           type: string

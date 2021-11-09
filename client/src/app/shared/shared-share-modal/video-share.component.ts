@@ -1,4 +1,5 @@
 import { Component, ElementRef, Input, ViewChild } from '@angular/core'
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
 import { VideoDetails } from '@app/shared/shared-main'
 import { VideoPlaylist } from '@app/shared/shared-video-playlist'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
@@ -48,7 +49,13 @@ export class VideoShareComponent {
   isAdvancedCustomizationCollapsed = true
   includeVideoInPlaylist = false
 
-  constructor (private modalService: NgbModal) { }
+  playlistEmbedHTML: SafeHtml
+  videoEmbedHTML: SafeHtml
+
+  constructor (
+    private modalService: NgbModal,
+    private sanitizer: DomSanitizer
+  ) { }
 
   show (currentVideoTimestamp?: number, currentPlaylistPosition?: number) {
     let subtitle: string
@@ -56,7 +63,7 @@ export class VideoShareComponent {
       subtitle = this.videoCaptions[0].language.id
     }
 
-    this.customizations = {
+    this.customizations = new Proxy({
       startAtCheckbox: false,
       startAt: currentVideoTimestamp ? Math.floor(currentVideoTimestamp) : 0,
 
@@ -76,9 +83,19 @@ export class VideoShareComponent {
       warningTitle: true,
       controls: true,
       peertubeLink: true
-    }
+    }, {
+      set: (target, prop, value) => {
+        target[prop] = value
+
+        this.updateEmbedCode()
+
+        return true
+      }
+    })
 
     this.playlistPosition = currentPlaylistPosition
+
+    this.updateEmbedCode()
 
     this.modalService.open(this.modal, { centered: true })
   }
@@ -112,6 +129,12 @@ export class VideoShareComponent {
     if (!this.includeVideoInPlaylist) return url
 
     return decoratePlaylistLink({ url, playlistPosition: this.playlistPosition })
+  }
+
+  updateEmbedCode () {
+    if (this.playlist) this.playlistEmbedHTML = this.sanitizer.bypassSecurityTrustHtml(this.getPlaylistIframeCode())
+
+    if (this.video) this.videoEmbedHTML = this.sanitizer.bypassSecurityTrustHtml(this.getVideoIframeCode())
   }
 
   notSecure () {

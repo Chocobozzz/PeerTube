@@ -196,6 +196,9 @@ function customConfig (): CustomConfig {
       videoQuota: CONFIG.USER.VIDEO_QUOTA,
       videoQuotaDaily: CONFIG.USER.VIDEO_QUOTA_DAILY
     },
+    videoChannels: {
+      maxPerUser: CONFIG.VIDEO_CHANNELS.MAX_PER_USER
+    },
     transcoding: {
       enabled: CONFIG.TRANSCODING.ENABLED,
       allowAdditionalExtensions: CONFIG.TRANSCODING.ALLOW_ADDITIONAL_EXTENSIONS,
@@ -205,6 +208,7 @@ function customConfig (): CustomConfig {
       profile: CONFIG.TRANSCODING.PROFILE,
       resolutions: {
         '0p': CONFIG.TRANSCODING.RESOLUTIONS['0p'],
+        '144p': CONFIG.TRANSCODING.RESOLUTIONS['144p'],
         '240p': CONFIG.TRANSCODING.RESOLUTIONS['240p'],
         '360p': CONFIG.TRANSCODING.RESOLUTIONS['360p'],
         '480p': CONFIG.TRANSCODING.RESOLUTIONS['480p'],
@@ -231,6 +235,7 @@ function customConfig (): CustomConfig {
         threads: CONFIG.LIVE.TRANSCODING.THREADS,
         profile: CONFIG.LIVE.TRANSCODING.PROFILE,
         resolutions: {
+          '144p': CONFIG.LIVE.TRANSCODING.RESOLUTIONS['144p'],
           '240p': CONFIG.LIVE.TRANSCODING.RESOLUTIONS['240p'],
           '360p': CONFIG.LIVE.TRANSCODING.RESOLUTIONS['360p'],
           '480p': CONFIG.LIVE.TRANSCODING.RESOLUTIONS['480p'],

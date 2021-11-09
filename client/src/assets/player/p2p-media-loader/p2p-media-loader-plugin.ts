@@ -89,8 +89,7 @@ class P2pMediaLoaderPlugin extends Plugin {
   }
 
   getLiveLatency () {
-    // FIXME: typings
-    return Math.round((this.hlsjs as any).latency)
+    return Math.round(this.hlsjs.latency)
   }
 
   getHLSJS () {
@@ -113,7 +112,7 @@ class P2pMediaLoaderPlugin extends Plugin {
     initHlsJsPlayer(this.hlsjs)
 
     // FIXME: typings
-    const options = this.player.tech(true).options_ as any
+    const options = (this.player.tech(true).options_ as any)
     this.p2pEngine = options.hlsjsConfig.loader.getEngine()
 
     this.p2pEngine.on(Events.SegmentError, (segment: Segment, err) => {

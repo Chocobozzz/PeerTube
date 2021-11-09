@@ -1720,6 +1720,14 @@
     events "^3.3.0"
     m3u8-parser "^4.6.0"
 
+"@peertube/videojs-contextmenu@^5.5.0":
+  version "5.5.0"
+  resolved "https://registry.yarnpkg.com/@peertube/videojs-contextmenu/-/videojs-contextmenu-5.5.0.tgz#d1e8d368ee978fe04dcbcdd1d125a656f7350f55"
+  integrity sha512-+zV/RbrybVJHwqOO+YmtJjTwKM8r695Ax8AbXmNoL3J7NVguqy6TI8XKyQo3g5WHNj5nJozzaJQqDBc+BhKGRw==
+  dependencies:
+    global "^4.4.0"
+    video.js "^7.6.0"
+
 "@polka/url@^1.0.0-next.20":
   version "1.0.0-next.21"
   resolved "https://registry.yarnpkg.com/@polka/url/-/url-1.0.0-next.21.tgz#5de5a2385a35309427f6011992b544514d559aa1"
@@ -12880,14 +12888,6 @@ vfile@^4.0.0:
     safe-json-parse "4.0.0"
     videojs-font "3.2.0"
     videojs-vtt.js "^0.15.3"
-
-videojs-contextmenu-pt@^5.4.1:
-  version "5.4.1"
-  resolved "https://registry.yarnpkg.com/videojs-contextmenu-pt/-/videojs-contextmenu-pt-5.4.1.tgz#db160cc4bce489ae6d66ef59b85e2a82edae972e"
-  integrity sha512-JtVvmO8fH4vnE6B1tI5efA828nxlc1N/V500/l8Zwvi81VsYVX4EOteTXnP3Rc3o1l9cd22N/t+wenymi3oplw==
-  dependencies:
-    global "^4.4.0"
-    video.js "^7.6.0"
 
 videojs-dock@^2.0.2:
   version "2.2.0"

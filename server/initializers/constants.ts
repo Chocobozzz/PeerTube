@@ -52,7 +52,8 @@ const WEBSERVER = {
   WS: '',
   HOSTNAME: '',
   PORT: 0,
-  RTMP_URL: ''
+  RTMP_URL: '',
+  RTMPS_URL: ''
 }
 
 // Sortable columns per schema
@@ -147,7 +148,7 @@ const JOB_ATTEMPTS: { [id in JobType]: number } = {
   'video-import': 1,
   'email': 5,
   'actor-keys': 3,
-  'videos-views': 1,
+  'videos-views-stats': 1,
   'activitypub-refresher': 1,
   'video-redundancy': 1,
   'video-live-ending': 1,
@@ -163,7 +164,7 @@ const JOB_CONCURRENCY: { [id in Exclude<JobType, 'video-transcoding' | 'video-im
   'video-file-import': 1,
   'email': 5,
   'actor-keys': 1,
-  'videos-views': 1,
+  'videos-views-stats': 1,
   'activitypub-refresher': 1,
   'video-redundancy': 1,
   'video-live-ending': 10,
@@ -180,14 +181,14 @@ const JOB_TTL: { [id in JobType]: number } = {
   'video-import': 1000 * 3600 * 2, // 2 hours
   'email': 60000 * 10, // 10 minutes
   'actor-keys': 60000 * 20, // 20 minutes
-  'videos-views': undefined, // Unlimited
+  'videos-views-stats': undefined, // Unlimited
   'activitypub-refresher': 60000 * 10, // 10 minutes
   'video-redundancy': 1000 * 3600 * 3, // 3 hours
   'video-live-ending': 1000 * 60 * 10, // 10 minutes
   'move-to-object-storage': 1000 * 60 * 60 * 3 // 3 hours
 }
-const REPEAT_JOBS: { [ id: string ]: EveryRepeatOptions | CronRepeatOptions } = {
-  'videos-views': {
+const REPEAT_JOBS: { [ id in JobType ]?: EveryRepeatOptions | CronRepeatOptions } = {
+  'videos-views-stats': {
     cron: randomInt(1, 20) + ' * * * *' // Between 1-20 minutes past the hour
   },
   'activitypub-cleaner': {
@@ -210,6 +211,7 @@ const SCHEDULER_INTERVALS_MS = {
   REMOVE_OLD_JOBS: 60000 * 60, // 1 hour
   UPDATE_VIDEOS: 60000, // 1 minute
   YOUTUBE_DL_UPDATE: 60000 * 60 * 24, // 1 day
+  VIDEO_VIEWS_BUFFER_UPDATE: CONFIG.VIEWS.VIDEOS.LOCAL_BUFFER_UPDATE_INTERVAL,
   CHECK_PLUGINS: CONFIG.PLUGINS.INDEX.CHECK_LATEST_VERSIONS_INTERVAL,
   CHECK_PEERTUBE_VERSION: 60000 * 60 * 24, // 1 day
   AUTO_FOLLOW_INDEX_INSTANCES: 60000 * 60 * 24, // 1 day
@@ -342,8 +344,8 @@ const CONSTRAINTS_FIELDS = {
 }
 
 const VIEW_LIFETIME = {
-  VIDEO: 60000 * 60, // 1 hour
-  LIVE: 60000 * 5 // 5 minutes
+  VIEW: CONFIG.VIEWS.VIDEOS.IP_VIEW_EXPIRATION,
+  VIEWER: 60000 * 5 // 5 minutes
 }
 
 let CONTACT_FORM_LIFETIME = 60000 * 60 // 1 hour
@@ -419,7 +421,8 @@ const VIDEO_STATES: { [ id in VideoState ]: string } = {
   [VideoState.TO_IMPORT]: 'To import',
   [VideoState.WAITING_FOR_LIVE]: 'Waiting for livestream',
   [VideoState.LIVE_ENDED]: 'Livestream ended',
-  [VideoState.TO_MOVE_TO_EXTERNAL_STORAGE]: 'To move to an external storage'
+  [VideoState.TO_MOVE_TO_EXTERNAL_STORAGE]: 'To move to an external storage',
+  [VideoState.TRANSCODING_FAILED]: 'Transcoding failed'
 }
 
 const VIDEO_IMPORT_STATES: { [ id in VideoImportState ]: string } = {
@@ -510,10 +513,6 @@ const OVERVIEWS = {
     SAMPLE_THRESHOLD: 6,
     SAMPLES_COUNT: 20
   }
-}
-
-const VIDEO_CHANNELS = {
-  MAX_PER_USER: 20
 }
 
 // ---------------------------------------------------------------------------
@@ -665,6 +664,8 @@ const RESUMABLE_UPLOAD_DIRECTORY = join(CONFIG.STORAGE.TMP_DIR, 'resumable-uploa
 const HLS_STREAMING_PLAYLIST_DIRECTORY = join(CONFIG.STORAGE.STREAMING_PLAYLISTS_DIR, 'hls')
 const HLS_REDUNDANCY_DIRECTORY = join(CONFIG.STORAGE.REDUNDANCY_DIR, 'hls')
 
+const RESUMABLE_UPLOAD_SESSION_LIFETIME = SCHEDULER_INTERVALS_MS.REMOVE_DANGLING_RESUMABLE_UPLOADS
+
 const VIDEO_LIVE = {
   EXTENSION: '.ts',
   CLEANUP_DELAY: 1000 * 60 * 5, // 5 minutes
@@ -789,13 +790,12 @@ if (isTestInstance() === true) {
   SCHEDULER_INTERVALS_MS.AUTO_FOLLOW_INDEX_INSTANCES = 5000
   SCHEDULER_INTERVALS_MS.UPDATE_INBOX_STATS = 5000
   SCHEDULER_INTERVALS_MS.CHECK_PEERTUBE_VERSION = 2000
-  REPEAT_JOBS['videos-views'] = { every: 5000 }
+  REPEAT_JOBS['videos-views-stats'] = { every: 5000 }
   REPEAT_JOBS['activitypub-cleaner'] = { every: 5000 }
 
   REDUNDANCY.VIDEOS.RANDOMIZED_FACTOR = 1
 
-  VIEW_LIFETIME.VIDEO = 1000 // 1 second
-  VIEW_LIFETIME.LIVE = 1000 * 5 // 5 second
+  VIEW_LIFETIME.VIEWER = 1000 * 5 // 5 second
   CONTACT_FORM_LIFETIME = 1000 // 1 second
 
   JOB_ATTEMPTS['email'] = 1
@@ -838,6 +838,7 @@ export {
   LAZY_STATIC_PATHS,
   SEARCH_INDEX,
   RESUMABLE_UPLOAD_DIRECTORY,
+  RESUMABLE_UPLOAD_SESSION_LIFETIME,
   HLS_REDUNDANCY_DIRECTORY,
   P2P_MEDIA_LOADER_PEER_VERSION,
   ACTOR_IMAGES_SIZE,
@@ -894,7 +895,6 @@ export {
   VIDEO_TRANSCODING_FPS,
   FFMPEG_NICE,
   ABUSE_STATES,
-  VIDEO_CHANNELS,
   LRU_CACHE,
   REQUEST_TIMEOUT,
   USER_PASSWORD_RESET_LIFETIME,
@@ -1000,6 +1000,7 @@ function updateWebserverUrls () {
   WEBSERVER.PORT = CONFIG.WEBSERVER.PORT
 
   WEBSERVER.RTMP_URL = 'rtmp://' + CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.LIVE.RTMP.PORT + '/' + VIDEO_LIVE.RTMP.BASE_PATH
+  WEBSERVER.RTMPS_URL = 'rtmps://' + CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.LIVE.RTMPS.PORT + '/' + VIDEO_LIVE.RTMP.BASE_PATH
 }
 
 function updateWebserverConfig () {

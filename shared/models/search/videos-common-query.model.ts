@@ -1,4 +1,4 @@
-import { VideoFilter } from '../videos'
+import { VideoInclude } from '../videos/video-include.enum'
 import { BooleanBothQuery } from './boolean-both-query.model'
 
 // These query parameters can be used with any endpoint that list videos
@@ -11,6 +11,12 @@ export interface VideosCommonQuery {
 
   isLive?: boolean
 
+  // FIXME: deprecated in 4.0 in favour of isLocal and include, to remove
+  filter?: never
+
+  isLocal?: boolean
+  include?: VideoInclude
+
   categoryOneOf?: number[]
 
   licenceOneOf?: number[]
@@ -20,17 +26,19 @@ export interface VideosCommonQuery {
   tagsOneOf?: string[]
   tagsAllOf?: string[]
 
-  filter?: VideoFilter
+  hasHLSFiles?: boolean
+  hasWebtorrentFiles?: boolean
 
   skipCount?: boolean
+
+  search?: string
 }
 
 export interface VideosCommonQueryAfterSanitize extends VideosCommonQuery {
   start: number
   count: number
   sort: string
-}
 
-export interface VideosWithSearchCommonQuery extends VideosCommonQuery {
-  search?: string
+  // FIXME: deprecated in 4.0, to remove
+  filter?: never
 }

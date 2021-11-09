@@ -53,10 +53,8 @@
         <p-tableCheckbox [value]="videoComment" ariaLabel="Select this row" i18n-ariaLabel></p-tableCheckbox>
       </td>
 
-      <td class="expand-cell c-hand" [pRowToggler]="videoComment" i18n-ngbTooltip ngbTooltip="More information" placement="top-left" container="body">
-        <span class="expander">
-          <i [ngClass]="expanded ? 'glyphicon glyphicon-menu-down' : 'glyphicon glyphicon-menu-right'"></i>
-        </span>
+      <td class="expand-cell" [pRowToggler]="videoComment">
+        <my-table-expander-icon i18n-ngbTooltip ngbTooltip="See full comment" [expanded]="expanded"></my-table-expander-icon>
       </td>
 
       <td class="action-cell">

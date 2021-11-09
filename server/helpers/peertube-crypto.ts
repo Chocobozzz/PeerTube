@@ -12,7 +12,7 @@ const bcryptComparePromise = promisify2<any, string, boolean>(compare)
 const bcryptGenSaltPromise = promisify1<number, string>(genSalt)
 const bcryptHashPromise = promisify2<any, string | number, string>(hash)
 
-const httpSignature = require('http-signature')
+const httpSignature = require('@peertube/http-signature')
 
 async function createPrivateAndPublicKeys () {
   logger.info('Generating a RSA key...')

@@ -1,8 +1,6 @@
 import * as debug from 'debug'
 import truncate from 'lodash-es/truncate'
 import { SortMeta } from 'primeng/api'
-import { buildVideoOrPlaylistEmbed } from 'src/assets/player/utils'
-import { environment } from 'src/environments/environment'
 import { Component, Input, OnInit, ViewChild } from '@angular/core'
 import { DomSanitizer } from '@angular/platform-browser'
 import { ActivatedRoute, Router } from '@angular/router'
@@ -10,7 +8,6 @@ import { ConfirmService, MarkdownService, Notifier, RestPagination, RestTable } 
 import { Account, Actor, DropdownAction, Video, VideoService } from '@app/shared/shared-main'
 import { AbuseService, BlocklistService, VideoBlockService } from '@app/shared/shared-moderation'
 import { VideoCommentService } from '@app/shared/shared-video-comment'
-import { buildVideoEmbedLink, decorateVideoLink } from '@shared/core-utils'
 import { AbuseState, AdminAbuse } from '@shared/models'
 import { AdvancedInputFilter } from '../shared-forms'
 import { AbuseMessageModalComponent } from './abuse-message-modal.component'
@@ -42,23 +39,23 @@ export class AbuseListTableComponent extends RestTable implements OnInit {
       title: $localize`Advanced filters`,
       children: [
         {
-          queryParams: { search: 'state:pending' },
+          value: 'state:pending',
           label: $localize`Unsolved reports`
         },
         {
-          queryParams: { search: 'state:accepted' },
+          value: 'state:accepted',
           label: $localize`Accepted reports`
         },
         {
-          queryParams: { search: 'state:rejected' },
+          value: 'state:rejected',
           label: $localize`Refused reports`
         },
         {
-          queryParams: { search: 'videoIs:blacklisted' },
+          value: 'videoIs:blacklisted',
           label: $localize`Reports with blocked videos`
         },
         {
-          queryParams: { search: 'videoIs:deleted' },
+          value: 'videoIs:deleted',
           label: $localize`Reports with deleted videos`
         }
       ]
@@ -131,19 +128,6 @@ export class AbuseListTableComponent extends RestTable implements OnInit {
 
   getAccountUrl (abuse: ProcessedAbuse) {
     return '/a/' + abuse.flaggedAccount.nameWithHost
-  }
-
-  getVideoEmbed (abuse: AdminAbuse) {
-    return buildVideoOrPlaylistEmbed(
-      decorateVideoLink({
-        url: buildVideoEmbedLink(abuse.video, environment.originServerUrl),
-        title: false,
-        warningTitle: false,
-        startTime: abuse.video.startAt,
-        stopTime: abuse.video.endAt
-      }),
-      abuse.video.name
-    )
   }
 
   async removeAbuse (abuse: AdminAbuse) {
@@ -220,8 +204,6 @@ export class AbuseListTableComponent extends RestTable implements OnInit {
           }
 
           if (abuse.video) {
-            abuse.embedHtml = this.sanitizer.bypassSecurityTrustHtml(this.getVideoEmbed(abuse))
-
             if (abuse.video.channel?.ownerAccount) {
               abuse.video.channel.ownerAccount = new Account(abuse.video.channel.ownerAccount)
             }

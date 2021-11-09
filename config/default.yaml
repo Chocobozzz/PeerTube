@@ -232,6 +232,11 @@ views:
     remote:
       max_age: '30 days'
 
+    # PeerTube buffers local video views before updating and federating the video
+    local_buffer_update_interval: '30 minutes'
+
+    ip_view_expiration: '1 hour'
+
 plugins:
   # The website PeerTube will ask for available PeerTube plugins and themes
   # This is an unmoderated plugin index, so only install plugins/themes you trust
@@ -296,6 +301,9 @@ user:
   video_quota: -1
   video_quota_daily: -1
 
+video_channels:
+  max_per_user: 20 # Allows each user to create up to 20 video channels.
+
 # If enabled, the video will be transcoded to mp4 (x264) with `faststart` flag
 # In addition, if some resolutions are enabled the mp4 video file will be transcoded to these new resolutions
 # Please, do not disable transcoding since many uploaded videos will not work
@@ -320,6 +328,7 @@ transcoding:
 
   resolutions: # Only created if the original video has a higher resolution, uses more storage!
     0p: false # audio-only (creates mp4 without video stream, always created when enabled)
+    144p: false
     240p: false
     360p: false
     480p: false
@@ -366,7 +375,16 @@ live:
 
   # Your firewall should accept traffic from this port in TCP if you enable live
   rtmp:
+    enabled: true
     port: 1935
+
+  rtmps:
+    enabled: false
+    port: 1936
+    # Absolute path
+    key_file: ''
+    # Absolute path
+    cert_file: ''
 
   # Allow to transcode the live streaming in multiple live resolutions
   transcoding:
@@ -379,6 +397,7 @@ live:
     profile: 'default'
 
     resolutions:
+      144p: false
       240p: false
       360p: false
       480p: false

@@ -7,14 +7,12 @@ import { federateVideoIfNeeded } from '@server/lib/activitypub/videos'
 import { generateWebTorrentVideoFilename } from '@server/lib/paths'
 import { addMoveToObjectStorageJob } from '@server/lib/video'
 import { VideoPathManager } from '@server/lib/video-path-manager'
-import { UserModel } from '@server/models/user/user'
 import { MVideoFullLight } from '@server/types/models'
 import { VideoFileImportPayload, VideoStorage } from '@shared/models'
 import { getVideoFileFPS, getVideoFileResolution } from '../../../helpers/ffprobe-utils'
 import { logger } from '../../../helpers/logger'
 import { VideoModel } from '../../../models/video/video'
 import { VideoFileModel } from '../../../models/video/video-file'
-import { createHlsJobIfEnabled } from './video-transcoding'
 
 async function processVideoFileImport (job: Job) {
   const payload = job.data as VideoFileImportPayload
@@ -27,19 +25,7 @@ async function processVideoFileImport (job: Job) {
     return undefined
   }
 
-  const data = await getVideoFileResolution(payload.filePath)
-
   await updateVideoFile(video, payload.filePath)
-
-  const user = await UserModel.loadByChannelActorId(video.VideoChannel.actorId)
-
-  await createHlsJobIfEnabled(user, {
-    videoUUID: video.uuid,
-    resolution: data.resolution,
-    isPortraitMode: data.isPortraitMode,
-    copyCodecs: true,
-    isMaxQuality: false
-  })
 
   if (CONFIG.OBJECT_STORAGE.ENABLED) {
     await addMoveToObjectStorageJob(video)

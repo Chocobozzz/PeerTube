@@ -10,9 +10,11 @@ import {
   UserRight,
   Video as VideoServerModel,
   VideoConstant,
+  VideoFile,
   VideoPrivacy,
   VideoScheduleUpdate,
-  VideoState
+  VideoState,
+  VideoStreamingPlaylist
 } from '@shared/models'
 
 export class Video implements VideoServerModel {
@@ -55,6 +57,9 @@ export class Video implements VideoServerModel {
   url: string
 
   views: number
+  // If live
+  viewers?: number
+
   likes: number
   dislikes: number
   nsfw: boolean
@@ -65,8 +70,12 @@ export class Video implements VideoServerModel {
   waitTranscoding?: boolean
   state?: VideoConstant<VideoState>
   scheduledUpdate?: VideoScheduleUpdate
+
   blacklisted?: boolean
-  blockedReason?: string
+  blacklistedReason?: string
+
+  blockedOwner?: boolean
+  blockedServer?: boolean
 
   account: {
     id: number
@@ -91,6 +100,9 @@ export class Video implements VideoServerModel {
   }
 
   pluginData?: any
+
+  streamingPlaylists?: VideoStreamingPlaylist[]
+  files?: VideoFile[]
 
   static buildWatchUrl (video: Partial<Pick<Video, 'uuid' | 'shortUUID'>>) {
     return buildVideoWatchPath({ shortUUID: video.shortUUID || video.uuid })
@@ -141,6 +153,7 @@ export class Video implements VideoServerModel {
     this.url = hash.url
 
     this.views = hash.views
+    this.viewers = hash.viewers
     this.likes = hash.likes
     this.dislikes = hash.dislikes
 
@@ -163,7 +176,13 @@ export class Video implements VideoServerModel {
     if (this.state) this.state.label = peertubeTranslate(this.state.label, translations)
 
     this.blacklisted = hash.blacklisted
-    this.blockedReason = hash.blacklistedReason
+    this.blacklistedReason = hash.blacklistedReason
+
+    this.blockedOwner = hash.blockedOwner
+    this.blockedServer = hash.blockedServer
+
+    this.streamingPlaylists = hash.streamingPlaylists
+    this.files = hash.files
 
     this.userHistory = hash.userHistory
 

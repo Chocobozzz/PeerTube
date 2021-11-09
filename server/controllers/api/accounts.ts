@@ -2,6 +2,7 @@ import express from 'express'
 import { pickCommonVideoQuery } from '@server/helpers/query'
 import { ActorFollowModel } from '@server/models/actor/actor-follow'
 import { getServerActor } from '@server/models/application/application'
+import { guessAdditionalAttributesFromQuery } from '@server/models/video/formatter/video-format-utils'
 import { buildNSFWFilter, getCountVideos, isUserAbleToSearchRemoteURI } from '../../helpers/express-utils'
 import { getFormattedObjects } from '../../helpers/utils'
 import { JobQueue } from '../../lib/job-queue'
@@ -169,19 +170,25 @@ async function listAccountPlaylists (req: express.Request, res: express.Response
 }
 
 async function listAccountVideos (req: express.Request, res: express.Response) {
+  const serverActor = await getServerActor()
+
   const account = res.locals.account
-  const followerActorId = isUserAbleToSearchRemoteURI(res) ? null : undefined
+
+  const displayOnlyForFollower = isUserAbleToSearchRemoteURI(res)
+    ? null
+    : {
+      actorId: serverActor.id,
+      orLocalVideos: true
+    }
+
   const countVideos = getCountVideos(req)
   const query = pickCommonVideoQuery(req.query)
 
   const apiOptions = await Hooks.wrapObject({
     ...query,
 
-    followerActorId,
-    search: req.query.search,
-    includeLocalVideos: true,
+    displayOnlyForFollower,
     nsfw: buildNSFWFilter(res, query.nsfw),
-    withFiles: false,
     accountId: account.id,
     user: res.locals.oauth ? res.locals.oauth.token.User : undefined,
     countVideos
@@ -193,7 +200,7 @@ async function listAccountVideos (req: express.Request, res: express.Response) {
     'filter:api.accounts.videos.list.result'
   )
 
-  return res.json(getFormattedObjects(resultList.data, resultList.total))
+  return res.json(getFormattedObjects(resultList.data, resultList.total, guessAdditionalAttributesFromQuery(query)))
 }
 
 async function listAccountRatings (req: express.Request, res: express.Response) {

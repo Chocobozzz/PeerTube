@@ -123,7 +123,7 @@ describe('Object storage for lives', function () {
         expect(video.streamingPlaylists).to.have.lengthOf(1)
 
         const files = video.streamingPlaylists[0].files
-        expect(files).to.have.lengthOf(4)
+        expect(files).to.have.lengthOf(5)
 
         await checkFiles(files)
       }

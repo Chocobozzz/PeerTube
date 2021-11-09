@@ -52,7 +52,7 @@ class MuxingSession extends EventEmitter {
   private readonly sessionId: string
   private readonly videoLive: MVideoLiveVideo
   private readonly streamingPlaylist: MStreamingPlaylistVideo
-  private readonly rtmpUrl: string
+  private readonly inputUrl: string
   private readonly fps: number
   private readonly allResolutions: number[]
 
@@ -84,7 +84,7 @@ class MuxingSession extends EventEmitter {
     sessionId: string
     videoLive: MVideoLiveVideo
     streamingPlaylist: MStreamingPlaylistVideo
-    rtmpUrl: string
+    inputUrl: string
     fps: number
     bitrate: number
     ratio: number
@@ -97,7 +97,7 @@ class MuxingSession extends EventEmitter {
     this.sessionId = options.sessionId
     this.videoLive = options.videoLive
     this.streamingPlaylist = options.streamingPlaylist
-    this.rtmpUrl = options.rtmpUrl
+    this.inputUrl = options.inputUrl
     this.fps = options.fps
 
     this.bitrate = options.bitrate
@@ -120,7 +120,7 @@ class MuxingSession extends EventEmitter {
 
     this.ffmpegCommand = CONFIG.LIVE.TRANSCODING.ENABLED
       ? await getLiveTranscodingCommand({
-        rtmpUrl: this.rtmpUrl,
+        inputUrl: this.inputUrl,
 
         outPath,
         masterPlaylistName: this.streamingPlaylist.playlistFilename,
@@ -133,7 +133,7 @@ class MuxingSession extends EventEmitter {
         availableEncoders: VideoTranscodingProfilesManager.Instance.getAvailableEncoders(),
         profile: CONFIG.LIVE.TRANSCODING.PROFILE
       })
-      : getLiveMuxingCommand(this.rtmpUrl, outPath, this.streamingPlaylist.playlistFilename)
+      : getLiveMuxingCommand(this.inputUrl, outPath, this.streamingPlaylist.playlistFilename)
 
     logger.info('Running live muxing/transcoding for %s.', this.videoUUID, this.lTags)
 
@@ -173,7 +173,7 @@ class MuxingSession extends EventEmitter {
   }
 
   private onFFmpegEnded (outPath: string) {
-    logger.info('RTMP transmuxing for video %s ended. Scheduling cleanup', this.rtmpUrl, this.lTags)
+    logger.info('RTMP transmuxing for video %s ended. Scheduling cleanup', this.inputUrl, this.lTags)
 
     setTimeout(() => {
       // Wait latest segments generation, and close watchers

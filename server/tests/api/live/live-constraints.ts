@@ -168,7 +168,7 @@ describe('Test live constraints', function () {
     await waitUntilLivePublishedOnAllServers(userVideoLiveoId)
     await waitJobs(servers)
 
-    await checkSaveReplay(userVideoLiveoId, [ 720, 480, 360, 240 ])
+    await checkSaveReplay(userVideoLiveoId, [ 720, 480, 360, 240, 144 ])
   })
 
   after(async function () {

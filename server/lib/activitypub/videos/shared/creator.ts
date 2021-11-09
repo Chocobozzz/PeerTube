@@ -64,7 +64,6 @@ export class APVideoCreator extends APVideoAbstractBuilder {
         return { autoBlacklisted, videoCreated }
       } catch (err) {
         // FIXME: Use rollback hook when https://github.com/sequelize/sequelize/pull/13038 is released
-        // Remove thumbnail
         if (thumbnailModel) await thumbnailModel.removeThumbnail()
 
         throw err

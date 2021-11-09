@@ -166,9 +166,6 @@ export class VideoPlaylistElementMiniatureComponent implements OnInit {
       }
     }
 
-    // FIXME: why do we have to use setTimeout here?
-    setTimeout(() => {
-      this.cdr.detectChanges()
-    })
+    this.cdr.markForCheck()
   }
 }

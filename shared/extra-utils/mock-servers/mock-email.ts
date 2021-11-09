@@ -1,5 +1,5 @@
 import { ChildProcess } from 'child_process'
-import MailDev from 'maildev'
+import MailDev from '@peertube/maildev'
 import { randomInt } from '@shared/core-utils'
 import { parallelTests } from '../miscs'
 

@@ -495,7 +495,7 @@ body p-selectbutton.ng-dirty.ng-invalid .p-button {
   border: 1px solid #a80000;
 }
 
-//
+// data table customizations
 
 @mixin glyphicon-light {
   font-family: 'Glyphicons Halflings';
@@ -504,7 +504,6 @@ body p-selectbutton.ng-dirty.ng-invalid .p-button {
   font-display: swap;
 }
 
-// data table customizations
 p-table {
   .p-datatable-header {
     border: none !important;
@@ -758,6 +757,10 @@ p-table {
         }
       }
     }
+  }
+
+  .badge {
+    @include peertube-badge;
   }
 }
 

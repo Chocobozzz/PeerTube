@@ -92,7 +92,7 @@ strong {
   font-weight: $font-semibold;
 }
 
-input.readonly {
+input[readonly] {
   /* Force blank on readonly inputs */
   background-color: pvar(--inputBackgroundColor) !important;
 }
@@ -262,10 +262,6 @@ my-input-toggle-hidden ::ng-deep input {
   align-items: center;
   margin-bottom: 30px;
 
-  .form-sub-title {
-    flex-grow: 1;
-  }
-
   .admin-sub-nav a {
     @include disable-default-a-behaviour;
 
@@ -287,11 +283,6 @@ my-input-toggle-hidden ::ng-deep input {
       opacity: 1;
     }
   }
-}
-
-.form-sub-title {
-  font-size: 20px;
-  font-weight: bold;
 }
 
 // In tables, don't have a hover different background
@@ -411,13 +402,6 @@ ngx-loading-bar {
 
     .admin-sub-header {
       flex-direction: column;
-
-      .form-sub-title {
-        @include margin-right(0 !important);
-
-        margin-bottom: 10px;
-        text-align: center;
-      }
 
       .admin-sub-nav {
         display: block;

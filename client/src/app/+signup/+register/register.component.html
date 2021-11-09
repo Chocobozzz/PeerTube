@@ -1,56 +1,62 @@
 <div class="margin-content">
 
-  <div i18n class="title-page title-page-single">
-    Create an account
+  <div class="signup-disabled" *ngIf="signupDisabled">
+    <div class="alert alert-warning" i18n>Signup is not enabled on this instance.</div>
   </div>
 
-  <my-signup-success *ngIf="signupDone" [message]="success"></my-signup-success>
-  <div *ngIf="info" class="alert alert-info">{{ info }}</div>
-
-  <div class="wrapper" [hidden]="signupDone">
-    <div class="register-form">
-      <my-custom-stepper linear *ngIf="!signupDone">
-        <cdk-step [stepControl]="formStepTerms" i18n-label="Stepper label for the registration page describing terms of service" label="Terms">
-          <div class="instance-information">
-            <my-instance-about-accordion (init)="onInstanceAboutAccordionInit($event)" [panels]="instanceInformationPanels"></my-instance-about-accordion>
-          </div>
-
-          <my-register-step-terms
-            [hasCodeOfConduct]="!!aboutHtml.codeOfConduct"
-            [minimumAge]="minimumAge"
-            (formBuilt)="onTermsFormBuilt($event)" (termsClick)="onTermsClick()" (codeOfConductClick)="onCodeOfConductClick()"
-          ></my-register-step-terms>
-
-          <button cdkStepperNext [disabled]="!formStepTerms || !formStepTerms.valid">{{ defaultNextStepButtonLabel }}</button>
-        </cdk-step>
-
-        <cdk-step [stepControl]="formStepUser" i18n-label="Stepper label for the registration page asking user informations" label="User">
-          <my-register-step-user (formBuilt)="onUserFormBuilt($event)" [videoUploadDisabled]="videoUploadDisabled"></my-register-step-user>
-
-          <button cdkStepperPrevious>{{ defaultPreviousStepButtonLabel }}</button>
-          <button cdkStepperNext [disabled]="!formStepUser || !formStepUser.valid" (click)="videoUploadDisabled && signup()">{{ stepUserButtonLabel }}</button>
-        </cdk-step>
-
-        <cdk-step [stepControl]="formStepChannel" i18n-label="Stepper label for the registration page asking information about the default channel" label="Channel" *ngIf="!videoUploadDisabled">
-          <my-register-step-channel (formBuilt)="onChannelFormBuilt($event)" [username]="getUsername()"></my-register-step-channel>
-
-          <button cdkStepperPrevious>{{ defaultPreviousStepButtonLabel }}</button>
-          <button cdkStepperNext [disabled]="!formStepChannel || !formStepChannel.valid || hasSameChannelAndAccountNames()" (click)="signup()" i18n>
-            Create my account
-          </button>
-        </cdk-step>
-
-        <cdk-step i18n-label label="Done" editable="false">
-          <div *ngIf="!signupDone && !error" class="done-loader">
-            <my-loader [loading]="true"></my-loader>
-
-            <div i18n>PeerTube is creating your account...</div>
-          </div>
-
-          <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
-        </cdk-step>
-      </my-custom-stepper>
+  <ng-container *ngIf="!signupDisabled">
+    <div i18n class="title-page title-page-single">
+      Create an account
     </div>
-  </div>
+
+    <my-signup-success *ngIf="signupDone" [message]="success"></my-signup-success>
+    <div *ngIf="info" class="alert alert-info">{{ info }}</div>
+
+    <div class="wrapper" [hidden]="signupDone">
+      <div class="register-form">
+        <my-custom-stepper linear *ngIf="!signupDone">
+          <cdk-step [stepControl]="formStepTerms" i18n-label="Stepper label for the registration page describing terms of service" label="Terms">
+            <div class="instance-information">
+              <my-instance-about-accordion (init)="onInstanceAboutAccordionInit($event)" [panels]="instanceInformationPanels"></my-instance-about-accordion>
+            </div>
+
+            <my-register-step-terms
+              [hasCodeOfConduct]="!!aboutHtml.codeOfConduct"
+              [minimumAge]="minimumAge"
+              (formBuilt)="onTermsFormBuilt($event)" (termsClick)="onTermsClick()" (codeOfConductClick)="onCodeOfConductClick()"
+            ></my-register-step-terms>
+
+            <button cdkStepperNext [disabled]="!formStepTerms || !formStepTerms.valid">{{ defaultNextStepButtonLabel }}</button>
+          </cdk-step>
+
+          <cdk-step [stepControl]="formStepUser" i18n-label="Stepper label for the registration page asking user informations" label="User">
+            <my-register-step-user (formBuilt)="onUserFormBuilt($event)" [videoUploadDisabled]="videoUploadDisabled"></my-register-step-user>
+
+            <button cdkStepperPrevious>{{ defaultPreviousStepButtonLabel }}</button>
+            <button cdkStepperNext [disabled]="!formStepUser || !formStepUser.valid" (click)="videoUploadDisabled && signup()">{{ stepUserButtonLabel }}</button>
+          </cdk-step>
+
+          <cdk-step [stepControl]="formStepChannel" i18n-label="Stepper label for the registration page asking information about the default channel" label="Channel" *ngIf="!videoUploadDisabled">
+            <my-register-step-channel (formBuilt)="onChannelFormBuilt($event)" [username]="getUsername()"></my-register-step-channel>
+
+            <button cdkStepperPrevious>{{ defaultPreviousStepButtonLabel }}</button>
+            <button cdkStepperNext [disabled]="!formStepChannel || !formStepChannel.valid || hasSameChannelAndAccountNames()" (click)="signup()" i18n>
+              Create my account
+            </button>
+          </cdk-step>
+
+          <cdk-step i18n-label label="Done" editable="false">
+            <div *ngIf="!signupDone && !error" class="done-loader">
+              <my-loader [loading]="true"></my-loader>
+
+              <div i18n>PeerTube is creating your account...</div>
+            </div>
+
+            <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+          </cdk-step>
+        </my-custom-stepper>
+      </div>
+    </div>
+  </ng-container>
 
 </div>

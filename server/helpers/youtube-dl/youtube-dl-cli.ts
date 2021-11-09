@@ -155,7 +155,7 @@ export class YoutubeDLCLI {
 
     const output = await execa('python', [ youtubeDLBinaryPath, ...completeArgs, url ], processOptions)
 
-    logger.debug('Runned youtube-dl command.', { command: output.command, stdout: output.stdout, ...lTags() })
+    logger.debug('Runned youtube-dl command.', { command: output.command, ...lTags() })
 
     return output.stdout
       ? output.stdout.trim().split(/\r?\n/)

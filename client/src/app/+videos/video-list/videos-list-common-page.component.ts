@@ -85,7 +85,7 @@ export class VideosListCommonPageComponent implements OnInit, OnDestroy, Disable
   getSyndicationItems (filters: VideoFilters) {
     const result = filters.toVideosAPIObject()
 
-    return this.videoService.getVideoFeedUrls(result.sort, result.filter)
+    return this.videoService.getVideoFeedUrls(result.sort, result.isLocal)
   }
 
   onFiltersChanged (filters: VideoFilters) {

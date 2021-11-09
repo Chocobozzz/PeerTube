@@ -34,6 +34,11 @@ table {
     font-weight: $font-semibold;
     color: pvar(--mainForegroundColor);
   }
+
+  .plugin,
+  .theme {
+    &:not(:last-child):after {
+      content: '•';
+    }
+  }
 }
-
-

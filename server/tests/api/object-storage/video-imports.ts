@@ -88,9 +88,9 @@ describe('Object storage for video import', function () {
 
       const video = await server.videos.get({ id: uuid })
 
-      expect(video.files).to.have.lengthOf(4)
+      expect(video.files).to.have.lengthOf(5)
       expect(video.streamingPlaylists).to.have.lengthOf(1)
-      expect(video.streamingPlaylists[0].files).to.have.lengthOf(4)
+      expect(video.streamingPlaylists[0].files).to.have.lengthOf(5)
 
       for (const file of video.files) {
         expectStartWith(file.fileUrl, ObjectStorageCommand.getWebTorrentBaseUrl())

@@ -56,6 +56,6 @@ pre {
   color: #ff0000;
 }
 
-.badge {
-  @include table-badge;
+.select-filter-block .badge {
+  @include peertube-badge;
 }

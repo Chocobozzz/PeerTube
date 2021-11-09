@@ -31,8 +31,29 @@ export class AdminComponent implements OnInit {
   }
 
   private buildOverviewItems () {
+    const overviewItems: TopMenuDropdownParam = {
+      label: $localize`Overview`,
+      children: []
+    }
+
     if (this.hasUsersRight()) {
-      this.menuEntries.push({ label: $localize`Users`, routerLink: '/admin/users' })
+      overviewItems.children.push({
+        label: $localize`Users`,
+        routerLink: '/admin/users',
+        iconName: 'user'
+      })
+    }
+
+    if (this.hasVideosRight()) {
+      overviewItems.children.push({
+        label: $localize`Videos`,
+        routerLink: '/admin/videos',
+        iconName: 'videos'
+      })
+    }
+
+    if (overviewItems.children.length !== 0) {
+      this.menuEntries.push(overviewItems)
     }
   }
 
@@ -203,5 +224,9 @@ export class AdminComponent implements OnInit {
 
   private hasVideoCommentsRight () {
     return this.auth.getUser().hasRight(UserRight.SEE_ALL_COMMENTS)
+  }
+
+  private hasVideosRight () {
+    return this.auth.getUser().hasRight(UserRight.SEE_ALL_VIDEOS)
   }
 }

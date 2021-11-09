@@ -17,6 +17,7 @@
   - [regenerate-thumbnails.js](#regenerate-thumbnailsjs)
   - [create-transcoding-job.js](#create-transcoding-jobjs)
   - [create-import-video-file-job.js](#create-import-video-file-jobjs)
+  - [create-move-video-storage-job.js](#create-move-video-storage-jobjs)
   - [prune-storage.js](#prune-storagejs)
   - [update-host.js](#update-hostjs)
   - [reset-password.js](#reset-passwordjs)
@@ -291,7 +292,8 @@ $ docker-compose exec -u peertube peertube npm run create-transcoding-job -- --g
 
 ### create-import-video-file-job.js
 
-You can use this script to import a video file to replace an already uploaded file or to add a new resolution to a video. PeerTube needs to be running.
+You can use this script to import a video file to replace an already uploaded file or to add a new webtorrent resolution to a video. PeerTube needs to be running.
+You can then create a transcoding job using `npm run create-transcoding-job` if you need to optimize your file or create an HLS version of it.
 
 ```bash
 $ # Basic installation
@@ -302,6 +304,35 @@ $ # Docker installation
 $ cd /var/www/peertube-docker
 $ docker-compose exec -u peertube peertube npm run create-import-video-file-job -- -v [videoUUID] -i [videoFile]
 ```
+
+### create-move-video-storage-job.js
+
+**PeerTube >= 4.0**
+
+Use this script to move all video files or a specific video file to object storage.
+
+```bash
+$ # Basic installation
+$ cd /var/www/peertube/peertube-latest
+$ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run create-move-video-storage-job -- --to-object-storage -v [videoUUID]
+
+$ # Docker installation
+$ cd /var/www/peertube-docker
+$ docker-compose exec -u peertube peertube npm run create-move-video-storage-job -- --to-object-storage -v [videoUUID]
+```
+
+The script can also move all video files that are not already in object storage:
+
+```bash
+$ # Basic installation
+$ cd /var/www/peertube/peertube-latest
+$ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run create-move-video-storage-job -- --to-object-storage --all-videos
+
+$ # Docker installation
+$ cd /var/www/peertube-docker
+$ docker-compose exec -u peertube peertube npm run create-move-video-storage-job -- --to-object-storage --all-videos
+```
+
 
 ### prune-storage.js
 

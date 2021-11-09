@@ -49,7 +49,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
   schedulePublicationPossible = false
 
   // So that it can be accessed in the template
-  protected readonly BASE_VIDEO_UPLOAD_URL = VideoService.BASE_VIDEO_URL + 'upload-resumable'
+  protected readonly BASE_VIDEO_UPLOAD_URL = VideoService.BASE_VIDEO_URL + '/upload-resumable'
 
   private uploadxOptions: UploadxOptions
   private isUpdatingVideo = false
@@ -82,9 +82,10 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
       uploaderClass: UploaderXFormData,
       chunkSize,
       retryConfig: {
-        maxAttempts: 6,
-        shouldRetry: (code: number) => {
-          return code < 400 || code >= 501
+        maxAttempts: 30, // maximum attempts for 503 codes, otherwise set to 6, see below
+        maxDelay: 120_000, // 2 min
+        shouldRetry: (code: number, attempts: number) => {
+          return code === HttpStatusCode.SERVICE_UNAVAILABLE_503 || ((code < 400 || code > 500) && attempts < 6)
         }
       }
     }
@@ -121,7 +122,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     let text = ''
 
     if (this.videoUploaded === true) {
-      // FIXME: cannot concatenate strings using $localize
+      // We can't concatenate strings using $localize
       text = $localize`Your video was uploaded to your account and is private.` + ' ' +
         $localize`But associated data (tags, description...) will be lost, are you sure you want to leave this page?`
     } else {

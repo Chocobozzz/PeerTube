@@ -18,7 +18,7 @@
         [ngClass]="{ active: !areFiltersCollapsed }"
       >
         <ng-container i18n *ngIf="areFiltersCollapsed">More filters</ng-container>
-        <ng-container i18n *ngIf="!areFiltersCollapsed">Less filters</ng-container>
+        <ng-container i18n *ngIf="!areFiltersCollapsed">Hide filters</ng-container>
 
         <my-global-icon iconName="chevrons-up"></my-global-icon>
       </div>
@@ -45,7 +45,7 @@
     >
       <ng-option i18n value="-publishedAt">Sort by <strong>"Recently Added"</strong></ng-option>
 
-      <ng-option i18n *ngIf="isTrendingSortEnabled('most-viewed')" value="-trending">Sort by <strong>"Views"</strong></ng-option>
+      <ng-option i18n *ngIf="isTrendingSortEnabled('most-viewed')" value="-trending">Sort by <strong>"Recent Views"</strong></ng-option>
       <ng-option i18n *ngIf="isTrendingSortEnabled('hot')" value="-hot">Sort by <strong>"Hot"</strong></ng-option>
       <ng-option i18n *ngIf="isTrendingSortEnabled('best')" value="-best">Sort by <strong>"Best"</strong></ng-option>
       <ng-option i18n *ngIf="isTrendingSortEnabled('most-liked')" value="-likes">Sort by <strong>"Likes"</strong></ng-option>

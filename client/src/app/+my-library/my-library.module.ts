@@ -8,12 +8,14 @@ import { SharedGlobalIconModule } from '@app/shared/shared-icons'
 import { SharedMainModule } from '@app/shared/shared-main'
 import { SharedModerationModule } from '@app/shared/shared-moderation'
 import { SharedShareModal } from '@app/shared/shared-share-modal'
+import { SharedTablesModule } from '@app/shared/shared-tables'
 import { SharedUserInterfaceSettingsModule } from '@app/shared/shared-user-settings'
 import { SharedUserSubscriptionModule } from '@app/shared/shared-user-subscription/shared-user-subscription.module'
 import { SharedVideoLiveModule } from '@app/shared/shared-video-live'
 import { SharedVideoMiniatureModule } from '@app/shared/shared-video-miniature'
 import { SharedVideoPlaylistModule } from '@app/shared/shared-video-playlist/shared-video-playlist.module'
 import { SharedActorImageModule } from '../shared/shared-actor-image/shared-actor-image.module'
+import { MyFollowersComponent } from './my-follows/my-followers.component'
 import { MySubscriptionsComponent } from './my-follows/my-subscriptions.component'
 import { MyHistoryComponent } from './my-history/my-history.component'
 import { MyLibraryRoutingModule } from './my-library-routing.module'
@@ -27,7 +29,6 @@ import { MyVideoPlaylistUpdateComponent } from './my-video-playlists/my-video-pl
 import { MyVideoPlaylistsComponent } from './my-video-playlists/my-video-playlists.component'
 import { VideoChangeOwnershipComponent } from './my-videos/modals/video-change-ownership.component'
 import { MyVideosComponent } from './my-videos/my-videos.component'
-import { MyFollowersComponent } from './my-follows/my-followers.component'
 
 @NgModule({
   imports: [
@@ -48,7 +49,8 @@ import { MyFollowersComponent } from './my-follows/my-followers.component'
     SharedAbuseListModule,
     SharedShareModal,
     SharedVideoLiveModule,
-    SharedActorImageModule
+    SharedActorImageModule,
+    SharedTablesModule
   ],
 
   declarations: [

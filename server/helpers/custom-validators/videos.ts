@@ -2,6 +2,7 @@ import { UploadFilesForCheck } from 'express'
 import { values } from 'lodash'
 import magnetUtil from 'magnet-uri'
 import validator from 'validator'
+import { VideoInclude } from '@shared/models'
 import { VideoFilter, VideoPrivacy, VideoRateType } from '../../../shared'
 import {
   CONSTRAINTS_FIELDS,
@@ -19,6 +20,10 @@ const VIDEOS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEOS
 
 function isVideoFilterValid (filter: VideoFilter) {
   return filter === 'local' || filter === 'all-local' || filter === 'all'
+}
+
+function isVideoIncludeValid (include: VideoInclude) {
+  return exists(include) && validator.isInt('' + include)
 }
 
 function isVideoCategoryValid (value: any) {
@@ -146,6 +151,7 @@ export {
   isVideoOriginallyPublishedAtValid,
   isVideoMagnetUriValid,
   isVideoStateValid,
+  isVideoIncludeValid,
   isVideoViewsValid,
   isVideoRatingTypeValid,
   isVideoFileExtnameValid,

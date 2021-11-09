@@ -3,6 +3,7 @@ import { pickCommonVideoQuery } from '@server/helpers/query'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { ActorFollowModel } from '@server/models/actor/actor-follow'
 import { getServerActor } from '@server/models/application/application'
+import { guessAdditionalAttributesFromQuery } from '@server/models/video/formatter/video-format-utils'
 import { MChannelBannerAccountDefault } from '@server/types/models'
 import { ActorImageType, VideoChannelCreate, VideoChannelUpdate } from '../../../shared'
 import { HttpStatusCode } from '../../../shared/models/http/http-error-codes'
@@ -327,18 +328,25 @@ async function listVideoChannelPlaylists (req: express.Request, res: express.Res
 }
 
 async function listVideoChannelVideos (req: express.Request, res: express.Response) {
+  const serverActor = await getServerActor()
+
   const videoChannelInstance = res.locals.videoChannel
-  const followerActorId = isUserAbleToSearchRemoteURI(res) ? null : undefined
+
+  const displayOnlyForFollower = isUserAbleToSearchRemoteURI(res)
+    ? null
+    : {
+      actorId: serverActor.id,
+      orLocalVideos: true
+    }
+
   const countVideos = getCountVideos(req)
   const query = pickCommonVideoQuery(req.query)
 
   const apiOptions = await Hooks.wrapObject({
     ...query,
 
-    followerActorId,
-    includeLocalVideos: true,
+    displayOnlyForFollower,
     nsfw: buildNSFWFilter(res, query.nsfw),
-    withFiles: false,
     videoChannelId: videoChannelInstance.id,
     user: res.locals.oauth ? res.locals.oauth.token.User : undefined,
     countVideos
@@ -350,7 +358,7 @@ async function listVideoChannelVideos (req: express.Request, res: express.Respon
     'filter:api.video-channels.videos.list.result'
   )
 
-  return res.json(getFormattedObjects(resultList.data, resultList.total))
+  return res.json(getFormattedObjects(resultList.data, resultList.total, guessAdditionalAttributesFromQuery(query)))
 }
 
 async function listVideoChannelFollowers (req: express.Request, res: express.Response) {

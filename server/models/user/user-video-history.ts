@@ -4,6 +4,7 @@ import { MUserAccountId, MUserId } from '@server/types/models'
 import { AttributesOnly } from '@shared/core-utils'
 import { VideoModel } from '../video/video'
 import { UserModel } from './user'
+import { getServerActor } from '../application/application'
 
 @Table({
   tableName: 'userVideoHistory',
@@ -56,15 +57,19 @@ export class UserVideoHistoryModel extends Model<Partial<AttributesOnly<UserVide
   })
   User: UserModel
 
-  static listForApi (user: MUserAccountId, start: number, count: number, search?: string) {
+  static async listForApi (user: MUserAccountId, start: number, count: number, search?: string) {
+    const serverActor = await getServerActor()
+
     return VideoModel.listForApi({
       start,
       count,
       search,
       sort: '-"userVideoHistory"."updatedAt"',
       nsfw: null, // All
-      includeLocalVideos: true,
-      withFiles: false,
+      displayOnlyForFollower: {
+        actorId: serverActor.id,
+        orLocalVideos: true
+      },
       user,
       historyOfUser: user
     })

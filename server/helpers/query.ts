@@ -18,8 +18,12 @@ function pickCommonVideoQuery (query: VideosCommonQueryAfterSanitize) {
     'languageOneOf',
     'tagsOneOf',
     'tagsAllOf',
-    'filter',
-    'skipCount'
+    'isLocal',
+    'include',
+    'skipCount',
+    'hasHLSFiles',
+    'hasWebtorrentFiles',
+    'search'
   ])
 }
 
@@ -29,7 +33,6 @@ function pickSearchVideoQuery (query: VideosSearchQueryAfterSanitize) {
 
     ...pick(query, [
       'searchTarget',
-      'search',
       'host',
       'startDate',
       'endDate',

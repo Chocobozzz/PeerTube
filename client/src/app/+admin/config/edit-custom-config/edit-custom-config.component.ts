@@ -22,7 +22,8 @@ import {
   SERVICES_TWITTER_USERNAME_VALIDATOR,
   SIGNUP_LIMIT_VALIDATOR,
   SIGNUP_MINIMUM_AGE_VALIDATOR,
-  TRANSCODING_THREADS_VALIDATOR
+  TRANSCODING_THREADS_VALIDATOR,
+  MAX_VIDEO_CHANNELS_PER_USER_VALIDATOR
 } from '@app/shared/form-validators/custom-config-validators'
 import { USER_VIDEO_QUOTA_DAILY_VALIDATOR, USER_VIDEO_QUOTA_VALIDATOR } from '@app/shared/form-validators/user-validators'
 import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
@@ -150,6 +151,9 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
       user: {
         videoQuota: USER_VIDEO_QUOTA_VALIDATOR,
         videoQuotaDaily: USER_VIDEO_QUOTA_DAILY_VALIDATOR
+      },
+      videoChannels: {
+        maxPerUser: MAX_VIDEO_CHANNELS_PER_USER_VALIDATOR
       },
       transcoding: {
         enabled: null,

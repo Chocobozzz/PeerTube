@@ -1,7 +1,7 @@
 <div class="input-group input-group-sm">
   <input
     [id]="inputId" [autocomplete]="autocomplete" [value]="value" [placeholder]="placeholder" [tabindex]="tabindex"
-    [(ngModel)]="value" (ngModelChange)="update()" [ngClass]="{ 'readonly': readonly }" [readonly]="readonly"
+    [(ngModel)]="value" (ngModelChange)="update()" [readonly]="readonly"
     #input (click)="input.select()" (input)="update()" (change)="update()" [type]="inputType" class="form-control"
   />
 

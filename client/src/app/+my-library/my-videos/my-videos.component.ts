@@ -82,7 +82,7 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
 
       const channelFilters = this.userChannels.map(c => {
         return {
-          queryParams: { search: 'channel:' + c.name },
+          value: 'channel:' + c.name,
           label: c.name
         }
       })
@@ -92,7 +92,7 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
           title: $localize`Advanced filters`,
           children: [
             {
-              queryParams: { search: 'isLive:true' },
+              value: 'isLive:true',
               label: $localize`Only live videos`
             }
           ]

@@ -55,7 +55,7 @@ async function run () {
   // Generate HLS files
   if (options.generateHls || CONFIG.TRANSCODING.WEBTORRENT.ENABLED === false) {
     const resolutionsEnabled = options.resolution
-      ? [ options.resolution ]
+      ? [ parseInt(options.resolution) ]
       : computeResolutionsToTranscode(resolution, 'vod').concat([ resolution ])
 
     for (const resolution of resolutionsEnabled) {
@@ -75,7 +75,7 @@ async function run () {
         type: 'new-resolution-to-webtorrent',
         videoUUID: video.uuid,
         isNewVideo: false,
-        resolution: options.resolution
+        resolution: parseInt(options.resolution)
       })
     } else {
       if (video.VideoFiles.length === 0) {
@@ -91,7 +91,7 @@ async function run () {
     }
   }
 
-  JobQueue.Instance.init()
+  JobQueue.Instance.init(true)
 
   video.state = VideoState.TO_TRANSCODE
   await video.save()

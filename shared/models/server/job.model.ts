@@ -14,7 +14,7 @@ export type JobType =
   | 'video-transcoding'
   | 'email'
   | 'video-import'
-  | 'videos-views'
+  | 'videos-views-stats'
   | 'activitypub-refresher'
   | 'video-redundancy'
   | 'video-live-ending'
@@ -136,6 +136,10 @@ export interface VideoLiveEndingPayload {
 
 export interface ActorKeysPayload {
   actorId: number
+}
+
+export interface DeleteResumableUploadMetaFilePayload {
+  filepath: string
 }
 
 export interface MoveObjectStoragePayload {

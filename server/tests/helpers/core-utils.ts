@@ -104,6 +104,7 @@ describe('Bitrate', function () {
 
   it('Should get appropriate max bitrate', function () {
     const tests = [
+      { resolution: VideoResolution.H_144P, ratio: 16 / 9, fps: 24, min: 200, max: 400 },
       { resolution: VideoResolution.H_240P, ratio: 16 / 9, fps: 24, min: 600, max: 800 },
       { resolution: VideoResolution.H_360P, ratio: 16 / 9, fps: 24, min: 1200, max: 1600 },
       { resolution: VideoResolution.H_480P, ratio: 16 / 9, fps: 24, min: 2000, max: 2300 },
@@ -119,6 +120,7 @@ describe('Bitrate', function () {
 
   it('Should get appropriate average bitrate', function () {
     const tests = [
+      { resolution: VideoResolution.H_144P, ratio: 16 / 9, fps: 24, min: 50, max: 300 },
       { resolution: VideoResolution.H_240P, ratio: 16 / 9, fps: 24, min: 350, max: 450 },
       { resolution: VideoResolution.H_360P, ratio: 16 / 9, fps: 24, min: 700, max: 900 },
       { resolution: VideoResolution.H_480P, ratio: 16 / 9, fps: 24, min: 1100, max: 1300 },

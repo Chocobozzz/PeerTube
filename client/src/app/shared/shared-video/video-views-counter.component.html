@@ -4,6 +4,6 @@
   </ng-container>
 
   <ng-container i18n *ngIf="video.isLive">
-    {video.views, plural, =1 {1 viewer} other {{{ video.views | myNumberFormatter }} viewers}}
+    {video.viewers, plural, =1 {1 viewer} other {{{ video.viewers | myNumberFormatter }} viewers}}
   </ng-container>
 </span>

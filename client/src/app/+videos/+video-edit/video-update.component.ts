@@ -1,5 +1,5 @@
 import { of } from 'rxjs'
-import { map, switchMap } from 'rxjs/operators'
+import { switchMap } from 'rxjs/operators'
 import { SelectChannelItem } from 'src/types/select-options-item.model'
 import { Component, HostListener, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
@@ -45,37 +45,28 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
   ngOnInit () {
     this.buildForm({})
 
-    this.route.data
-        .pipe(map(data => data.videoData))
-        .subscribe({
-          next: ({ video, videoChannels, videoCaptions, liveVideo }) => {
-            this.video = new VideoEdit(video)
-            this.videoDetails = video
+    const { videoData } = this.route.snapshot.data
+    const { video, videoChannels, videoCaptions, liveVideo } = videoData
 
-            this.userVideoChannels = videoChannels
-            this.videoCaptions = videoCaptions
-            this.liveVideo = liveVideo
+    this.video = new VideoEdit(video)
+    this.videoDetails = video
 
-            this.schedulePublicationPossible = this.video.privacy === VideoPrivacy.PRIVATE
+    this.userVideoChannels = videoChannels
+    this.videoCaptions = videoCaptions
+    this.liveVideo = liveVideo
 
-            // FIXME: Angular does not detect the change inside this subscription, so use the patched setTimeout
-            setTimeout(() => {
-              hydrateFormFromVideo(this.form, this.video, true)
+    this.schedulePublicationPossible = this.video.privacy === VideoPrivacy.PRIVATE
+  }
 
-              if (this.liveVideo) {
-                this.form.patchValue({
-                  saveReplay: this.liveVideo.saveReplay,
-                  permanentLive: this.liveVideo.permanentLive
-                })
-              }
-            })
-          },
+  onFormBuilt () {
+    hydrateFormFromVideo(this.form, this.video, true)
 
-          error: err => {
-            console.error(err)
-            this.notifier.error(err.message)
-          }
-        })
+    if (this.liveVideo) {
+      this.form.patchValue({
+        saveReplay: this.liveVideo.saveReplay,
+        permanentLive: this.liveVideo.permanentLive
+      })
+    }
   }
 
   @HostListener('window:beforeunload', [ '$event' ])

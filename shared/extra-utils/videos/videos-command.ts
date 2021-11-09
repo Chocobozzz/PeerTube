@@ -18,8 +18,7 @@ import {
   VideoDetails,
   VideoFileMetadata,
   VideoPrivacy,
-  VideosCommonQuery,
-  VideosWithSearchCommonQuery
+  VideosCommonQuery
 } from '@shared/models'
 import { buildAbsoluteFixturePath, wait } from '../miscs'
 import { unwrapBody } from '../requests'
@@ -246,7 +245,7 @@ export class VideosCommand extends AbstractCommand {
     })
   }
 
-  listByAccount (options: OverrideCommandOptions & VideosWithSearchCommonQuery & {
+  listByAccount (options: OverrideCommandOptions & VideosCommonQuery & {
     handle: string
   }) {
     const { handle, search } = options
@@ -262,7 +261,7 @@ export class VideosCommand extends AbstractCommand {
     })
   }
 
-  listByChannel (options: OverrideCommandOptions & VideosWithSearchCommonQuery & {
+  listByChannel (options: OverrideCommandOptions & VideosCommonQuery & {
     handle: string
   }) {
     const { handle } = options
@@ -605,7 +604,8 @@ export class VideosCommand extends AbstractCommand {
       'languageOneOf',
       'tagsOneOf',
       'tagsAllOf',
-      'filter',
+      'isLocal',
+      'include',
       'skipCount'
     ])
   }

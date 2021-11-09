@@ -1,5 +1,6 @@
 export const enum VideoResolution {
   H_NOVIDEO = 0,
+  H_144P = 144,
   H_240P = 240,
   H_360P = 360,
   H_480P = 480,

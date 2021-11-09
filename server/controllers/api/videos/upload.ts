@@ -7,6 +7,7 @@ import { uuidToShort } from '@server/helpers/uuid'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
 import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url'
 import { generateWebTorrentVideoFilename } from '@server/lib/paths'
+import { Redis } from '@server/lib/redis'
 import {
   addMoveToObjectStorageJob,
   addOptimizeOrMergeAudioJob,
@@ -94,7 +95,7 @@ uploadRouter.delete('/upload-resumable',
 uploadRouter.put('/upload-resumable',
   openapiOperationDoc({ operationId: 'uploadResumable' }),
   authenticate,
-  uploadxMiddleware, // uploadx doesn't use call next() before the file upload completes
+  uploadxMiddleware, // uploadx doesn't next() before the file upload completes
   asyncMiddleware(videosAddResumableValidator),
   asyncMiddleware(addVideoResumable)
 )
@@ -122,15 +123,20 @@ export async function addVideoLegacy (req: express.Request, res: express.Respons
   const videoInfo: VideoCreate = req.body
   const files = req.files
 
-  return addVideo({ res, videoPhysicalFile, videoInfo, files })
+  const response = await addVideo({ res, videoPhysicalFile, videoInfo, files })
+
+  return res.json(response)
 }
 
-export async function addVideoResumable (_req: express.Request, res: express.Response) {
+export async function addVideoResumable (req: express.Request, res: express.Response) {
   const videoPhysicalFile = res.locals.videoFileResumable
   const videoInfo = videoPhysicalFile.metadata
   const files = { previewfile: videoInfo.previewfile }
 
-  return addVideo({ res, videoPhysicalFile, videoInfo, files })
+  const response = await addVideo({ res, videoPhysicalFile, videoInfo, files })
+  await Redis.Instance.setUploadSession(req.query.upload_id, response)
+
+  return res.json(response)
 }
 
 async function addVideo (options: {
@@ -225,13 +231,13 @@ async function addVideo (options: {
 
   Hooks.runAction('action:api.video.uploaded', { video: videoCreated })
 
-  return res.json({
+  return {
     video: {
       id: videoCreated.id,
       shortUUID: uuidToShort(videoCreated.uuid),
       uuid: videoCreated.uuid
     }
-  })
+  }
 }
 
 async function buildNewFile (videoPhysicalFile: express.VideoUploadFile) {

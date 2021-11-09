@@ -47,11 +47,11 @@ export class VideoCommentListComponent extends RestTable implements OnInit {
       title: $localize`Advanced filters`,
       children: [
         {
-          queryParams: { search: 'local:true' },
+          value: 'local:true',
           label: $localize`Local comments`
         },
         {
-          queryParams: { search: 'local:false' },
+          value: 'local:false',
           label: $localize`Remote comments`
         }
       ]

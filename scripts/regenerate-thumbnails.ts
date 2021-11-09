@@ -7,7 +7,6 @@ import { pathExists, remove } from 'fs-extra'
 import { generateImageFilename, processImage } from '@server/helpers/image-utils'
 import { THUMBNAILS_SIZE } from '@server/initializers/constants'
 import { VideoModel } from '@server/models/video/video'
-import { MVideo } from '@server/types/models'
 import { initDatabaseModels } from '@server/initializers/database'
 
 program
@@ -21,16 +20,16 @@ run()
 async function run () {
   await initDatabaseModels(true)
 
-  const videos = await VideoModel.listLocal()
+  const ids = await VideoModel.listLocalIds()
 
-  await map(videos, v => {
-    return processVideo(v)
-      .catch(err => console.error('Cannot process video %s.', v.url, err))
+  await map(ids, id => {
+    return processVideo(id)
+      .catch(err => console.error('Cannot process video %d.', id, err))
   }, { concurrency: 20 })
 }
 
-async function processVideo (videoArg: MVideo) {
-  const video = await VideoModel.loadWithFiles(videoArg.id)
+async function processVideo (id: number) {
+  const video = await VideoModel.loadWithFiles(id)
 
   console.log('Processing video %s.', video.name)
 

@@ -17,7 +17,11 @@ export class CLICommand extends AbstractCommand {
     return `NODE_ENV=test NODE_APP_INSTANCE=${this.server.internalServerNumber}`
   }
 
-  async execWithEnv (command: string) {
-    return CLICommand.exec(`${this.getEnv()} ${command}`)
+  async execWithEnv (command: string, configOverride?: any) {
+    const prefix = configOverride
+      ? `NODE_CONFIG='${JSON.stringify(configOverride)}'`
+      : ''
+
+    return CLICommand.exec(`${prefix} ${this.getEnv()} ${command}`)
   }
 }

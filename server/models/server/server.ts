@@ -50,7 +50,7 @@ export class ServerModel extends Model<Partial<AttributesOnly<ServerModel>>> {
     },
     onDelete: 'CASCADE'
   })
-  BlockedByAccounts: ServerBlocklistModel[]
+  BlockedBy: ServerBlocklistModel[]
 
   static load (id: number, transaction?: Transaction): Promise<MServer> {
     const query = {
@@ -81,7 +81,7 @@ export class ServerModel extends Model<Partial<AttributesOnly<ServerModel>>> {
   }
 
   isBlocked () {
-    return this.BlockedByAccounts && this.BlockedByAccounts.length !== 0
+    return this.BlockedBy && this.BlockedBy.length !== 0
   }
 
   toFormattedJSON (this: MServerFormattable) {

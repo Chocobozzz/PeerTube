@@ -1,5 +1,5 @@
 
-import { JobState } from '../../models'
+import { JobState, JobType } from '../../models'
 import { wait } from '../miscs'
 import { PeerTubeServer } from './server'
 
@@ -16,7 +16,7 @@ async function waitJobs (serversArg: PeerTubeServer[] | PeerTubeServer, skipDela
   const states: JobState[] = [ 'waiting', 'active' ]
   if (!skipDelayed) states.push('delayed')
 
-  const repeatableJobs = [ 'videos-views', 'activitypub-cleaner' ]
+  const repeatableJobs: JobType[] = [ 'videos-views-stats', 'activitypub-cleaner' ]
   let pendingRequests: boolean
 
   function tasksBuilder () {

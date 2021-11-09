@@ -40,6 +40,7 @@ function updateConfigForTranscoding (server: PeerTubeServer) {
         webtorrent: { enabled: true },
         resolutions: {
           '0p': false,
+          '144p': true,
           '240p': true,
           '360p': true,
           '480p': true,
@@ -119,7 +120,7 @@ describe('Test video transcoding', function () {
         const video = data.find(v => v.name === attributes.name)
         const videoDetails = await server.videos.get({ id: video.id })
 
-        expect(videoDetails.files).to.have.lengthOf(4)
+        expect(videoDetails.files).to.have.lengthOf(5)
 
         const magnetUri = videoDetails.files[0].magnetUri
         expect(magnetUri).to.match(/\.mp4/)
@@ -205,7 +206,7 @@ describe('Test video transcoding', function () {
 
           const video = data.find(v => v.name === attributes.name)
           const videoDetails = await server.videos.get({ id: video.id })
-          expect(videoDetails.files).to.have.lengthOf(4)
+          expect(videoDetails.files).to.have.lengthOf(5)
 
           const magnetUri = videoDetails.files[0].magnetUri
           expect(magnetUri).to.contain('.mp4')
@@ -226,7 +227,7 @@ describe('Test video transcoding', function () {
 
       await waitJobs(servers)
 
-      const resolutions = [ 240, 360, 480, 720, 1080, 1440, 2160 ]
+      const resolutions = [ 144, 240, 360, 480, 720, 1080, 1440, 2160 ]
 
       for (const server of servers) {
         const videoDetails = await server.videos.get({ id: video4k })
@@ -259,7 +260,7 @@ describe('Test video transcoding', function () {
         const video = data.find(v => v.name === attributes.name)
         const videoDetails = await server.videos.get({ id: video.id })
 
-        expect(videoDetails.files).to.have.lengthOf(4)
+        expect(videoDetails.files).to.have.lengthOf(5)
 
         const file = videoDetails.files.find(f => f.resolution.id === 240)
         const path = servers[1].servers.buildWebTorrentFilePath(file.fileUrl)
@@ -316,7 +317,7 @@ describe('Test video transcoding', function () {
         const video = data.find(v => v.name === attributes.name)
         const videoDetails = await server.videos.get({ id: video.id })
 
-        expect(videoDetails.files).to.have.lengthOf(4)
+        expect(videoDetails.files).to.have.lengthOf(5)
 
         const fixturePath = buildAbsoluteFixturePath(attributes.fixture)
         const fixtureVideoProbe = await getAudioStream(fixturePath)
@@ -348,6 +349,7 @@ describe('Test video transcoding', function () {
               webtorrent: { enabled: true },
               resolutions: {
                 '0p': false,
+                '144p': false,
                 '240p': false,
                 '360p': false,
                 '480p': false,
@@ -419,6 +421,7 @@ describe('Test video transcoding', function () {
               webtorrent: { enabled: true },
               resolutions: {
                 '0p': true,
+                '144p': false,
                 '240p': false,
                 '360p': false
               }
@@ -473,13 +476,14 @@ describe('Test video transcoding', function () {
         const video = data.find(v => v.name === attributes.name)
         const videoDetails = await server.videos.get({ id: video.id })
 
-        expect(videoDetails.files).to.have.lengthOf(4)
+        expect(videoDetails.files).to.have.lengthOf(5)
         expect(videoDetails.files[0].fps).to.be.above(58).and.below(62)
         expect(videoDetails.files[1].fps).to.be.below(31)
         expect(videoDetails.files[2].fps).to.be.below(31)
         expect(videoDetails.files[3].fps).to.be.below(31)
+        expect(videoDetails.files[4].fps).to.be.below(31)
 
-        for (const resolution of [ 240, 360, 480 ]) {
+        for (const resolution of [ 144, 240, 360, 480 ]) {
           const file = videoDetails.files.find(f => f.resolution.id === resolution)
           const path = servers[1].servers.buildWebTorrentFilePath(file.fileUrl)
           const fps = await getVideoFileFPS(path)
@@ -586,6 +590,7 @@ describe('Test video transcoding', function () {
         transcoding: {
           enabled: true,
           resolutions: {
+            '144p': true,
             '240p': true,
             '360p': true,
             '480p': true,
@@ -667,7 +672,7 @@ describe('Test video transcoding', function () {
 
         const videoFiles = videoDetails.files
                                       .concat(videoDetails.streamingPlaylists[0].files)
-        expect(videoFiles).to.have.lengthOf(8)
+        expect(videoFiles).to.have.lengthOf(10)
 
         for (const file of videoFiles) {
           expect(file.metadata).to.be.undefined
@@ -695,21 +700,21 @@ describe('Test video transcoding', function () {
       const body = await servers[1].jobs.list({
         start: 0,
         count: 100,
-        sort: '-createdAt',
+        sort: 'createdAt',
         jobType: 'video-transcoding'
       })
 
       const jobs = body.data
       const transcodingJobs = jobs.filter(j => j.data.videoUUID === video4k)
 
-      expect(transcodingJobs).to.have.lengthOf(14)
+      expect(transcodingJobs).to.have.lengthOf(16)
 
       const hlsJobs = transcodingJobs.filter(j => j.data.type === 'new-resolution-to-hls')
       const webtorrentJobs = transcodingJobs.filter(j => j.data.type === 'new-resolution-to-webtorrent')
       const optimizeJobs = transcodingJobs.filter(j => j.data.type === 'optimize-to-webtorrent')
 
-      expect(hlsJobs).to.have.lengthOf(7)
-      expect(webtorrentJobs).to.have.lengthOf(6)
+      expect(hlsJobs).to.have.lengthOf(8)
+      expect(webtorrentJobs).to.have.lengthOf(7)
       expect(optimizeJobs).to.have.lengthOf(1)
 
       for (const j of optimizeJobs.concat(hlsJobs.concat(webtorrentJobs))) {

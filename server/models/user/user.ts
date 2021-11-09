@@ -487,7 +487,7 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
               ')'
             ),
             'videoQuotaUsed'
-          ] as any // FIXME: typings
+          ]
         ]
       },
       offset: start,

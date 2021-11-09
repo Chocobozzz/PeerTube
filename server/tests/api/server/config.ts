@@ -58,12 +58,15 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
   expect(data.user.videoQuota).to.equal(5242880)
   expect(data.user.videoQuotaDaily).to.equal(-1)
 
+  expect(data.videoChannels.maxPerUser).to.equal(20)
+
   expect(data.transcoding.enabled).to.be.false
   expect(data.transcoding.allowAdditionalExtensions).to.be.false
   expect(data.transcoding.allowAudioFiles).to.be.false
   expect(data.transcoding.threads).to.equal(2)
   expect(data.transcoding.concurrency).to.equal(2)
   expect(data.transcoding.profile).to.equal('default')
+  expect(data.transcoding.resolutions['144p']).to.be.false
   expect(data.transcoding.resolutions['240p']).to.be.true
   expect(data.transcoding.resolutions['360p']).to.be.true
   expect(data.transcoding.resolutions['480p']).to.be.true
@@ -82,6 +85,7 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
   expect(data.live.transcoding.enabled).to.be.false
   expect(data.live.transcoding.threads).to.equal(2)
   expect(data.live.transcoding.profile).to.equal('default')
+  expect(data.live.transcoding.resolutions['144p']).to.be.false
   expect(data.live.transcoding.resolutions['240p']).to.be.false
   expect(data.live.transcoding.resolutions['360p']).to.be.false
   expect(data.live.transcoding.resolutions['480p']).to.be.false
@@ -153,12 +157,15 @@ function checkUpdatedConfig (data: CustomConfig) {
   expect(data.user.videoQuota).to.equal(5242881)
   expect(data.user.videoQuotaDaily).to.equal(318742)
 
+  expect(data.videoChannels.maxPerUser).to.equal(24)
+
   expect(data.transcoding.enabled).to.be.true
   expect(data.transcoding.threads).to.equal(1)
   expect(data.transcoding.concurrency).to.equal(3)
   expect(data.transcoding.allowAdditionalExtensions).to.be.true
   expect(data.transcoding.allowAudioFiles).to.be.true
   expect(data.transcoding.profile).to.equal('vod_profile')
+  expect(data.transcoding.resolutions['144p']).to.be.false
   expect(data.transcoding.resolutions['240p']).to.be.false
   expect(data.transcoding.resolutions['360p']).to.be.true
   expect(data.transcoding.resolutions['480p']).to.be.true
@@ -176,6 +183,7 @@ function checkUpdatedConfig (data: CustomConfig) {
   expect(data.live.transcoding.enabled).to.be.true
   expect(data.live.transcoding.threads).to.equal(4)
   expect(data.live.transcoding.profile).to.equal('live_profile')
+  expect(data.live.transcoding.resolutions['144p']).to.be.true
   expect(data.live.transcoding.resolutions['240p']).to.be.true
   expect(data.live.transcoding.resolutions['360p']).to.be.true
   expect(data.live.transcoding.resolutions['480p']).to.be.true
@@ -265,6 +273,9 @@ const newCustomConfig: CustomConfig = {
     videoQuota: 5242881,
     videoQuotaDaily: 318742
   },
+  videoChannels: {
+    maxPerUser: 24
+  },
   transcoding: {
     enabled: true,
     allowAdditionalExtensions: true,
@@ -274,6 +285,7 @@ const newCustomConfig: CustomConfig = {
     profile: 'vod_profile',
     resolutions: {
       '0p': false,
+      '144p': false,
       '240p': false,
       '360p': true,
       '480p': true,
@@ -300,6 +312,7 @@ const newCustomConfig: CustomConfig = {
       threads: 4,
       profile: 'live_profile',
       resolutions: {
+        '144p': true,
         '240p': true,
         '360p': true,
         '480p': true,

@@ -1,7 +1,7 @@
 import express from 'express'
 import { sanitizeUrl } from '@server/helpers/core-utils'
 import { pickSearchChannelQuery } from '@server/helpers/query'
-import { doJSONRequest } from '@server/helpers/requests'
+import { doJSONRequest, findLatestRedirection } from '@server/helpers/requests'
 import { CONFIG } from '@server/initializers/config'
 import { WEBSERVER } from '@server/initializers/constants'
 import { Hooks } from '@server/lib/plugins/hooks'
@@ -126,7 +126,9 @@ async function searchVideoChannelURI (search: string, isWebfingerSearch: boolean
 
   if (isUserAbleToSearchRemoteURI(res)) {
     try {
-      const actor = await getOrCreateAPActor(uri, 'all', true, true)
+      const latestUri = await findLatestRedirection(uri, { activityPub: true })
+
+      const actor = await getOrCreateAPActor(latestUri, 'all', true, true)
       videoChannel = actor.VideoChannel
     } catch (err) {
       logger.info('Cannot search remote video channel %s.', uri, { err })

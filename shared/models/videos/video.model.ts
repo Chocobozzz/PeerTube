@@ -39,16 +39,12 @@ export interface Video {
   url: string
 
   views: number
+  // If live
+  viewers?: number
+
   likes: number
   dislikes: number
   nsfw: boolean
-
-  waitTranscoding?: boolean
-  state?: VideoConstant<VideoState>
-  scheduledUpdate?: VideoScheduleUpdate
-
-  blacklisted?: boolean
-  blacklistedReason?: string
 
   account: AccountSummary
   channel: VideoChannelSummary
@@ -58,6 +54,20 @@ export interface Video {
   }
 
   pluginData?: any
+
+  // Additional attributes dependending on the query
+  waitTranscoding?: boolean
+  state?: VideoConstant<VideoState>
+  scheduledUpdate?: VideoScheduleUpdate
+
+  blacklisted?: boolean
+  blacklistedReason?: string
+
+  blockedOwner?: boolean
+  blockedServer?: boolean
+
+  files?: VideoFile[]
+  streamingPlaylists?: VideoStreamingPlaylist[]
 }
 
 export interface VideoDetails extends Video {
@@ -66,15 +76,15 @@ export interface VideoDetails extends Video {
   channel: VideoChannel
   account: Account
   tags: string[]
-  files: VideoFile[]
   commentsEnabled: boolean
   downloadEnabled: boolean
 
-  // Not optional in details (unlike in Video)
+  // Not optional in details (unlike in parent Video)
   waitTranscoding: boolean
   state: VideoConstant<VideoState>
 
   trackerUrls: string[]
 
+  files: VideoFile[]
   streamingPlaylists: VideoStreamingPlaylist[]
 }

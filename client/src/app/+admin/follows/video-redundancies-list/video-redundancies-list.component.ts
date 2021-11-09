@@ -10,7 +10,7 @@ import { VideosRedundancyStats } from '@shared/models/server'
 @Component({
   selector: 'my-video-redundancies-list',
   templateUrl: './video-redundancies-list.component.html',
-  styleUrls: [ '../follows.component.scss', './video-redundancies-list.component.scss' ]
+  styleUrls: [ './video-redundancies-list.component.scss' ]
 })
 export class VideoRedundanciesListComponent extends RestTable implements OnInit {
   private static LOCAL_STORAGE_DISPLAY_TYPE = 'video-redundancies-list-display-type'

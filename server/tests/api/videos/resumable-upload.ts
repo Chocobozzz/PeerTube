@@ -180,6 +180,21 @@ describe('Test resumable upload', function () {
       await sendChunks({ pathUploadId: uploadId, expectedStatus, contentRangeBuilder, contentLength: size })
       await checkFileSize(uploadId, 0)
     })
+
+    it('Should be able to accept 2 PUT requests', async function () {
+      const uploadId = await prepareUpload()
+
+      const result1 = await sendChunks({ pathUploadId: uploadId })
+      const result2 = await sendChunks({ pathUploadId: uploadId })
+
+      expect(result1.body.video.uuid).to.exist
+      expect(result1.body.video.uuid).to.equal(result2.body.video.uuid)
+
+      expect(result1.headers['x-resumable-upload-cached']).to.not.exist
+      expect(result2.headers['x-resumable-upload-cached']).to.equal('true')
+
+      await checkFileSize(uploadId, null)
+    })
   })
 
   after(async function () {

@@ -56,7 +56,7 @@ class SettingsMenuItem extends MenuItem {
 
     const newOptions = Object.assign({}, options, { entry: options.menuButton, menuButton: this })
 
-    this.subMenu = new SubMenuComponent(this.player(), newOptions) as any // FIXME: typings
+    this.subMenu = new SubMenuComponent(this.player(), newOptions) as SettingsButton
     const subMenuClass = this.subMenu.buildCSSClass().split(' ')[0]
     this.settingsSubMenuEl_.className += ' ' + subMenuClass
 

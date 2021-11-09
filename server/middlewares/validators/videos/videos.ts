@@ -1,10 +1,13 @@
 import express from 'express'
 import { body, header, param, query, ValidationChain } from 'express-validator'
+import { isTestInstance } from '@server/helpers/core-utils'
 import { getResumableUploadPath } from '@server/helpers/upload'
+import { Redis } from '@server/lib/redis'
 import { isAbleToUploadVideo } from '@server/lib/user'
 import { getServerActor } from '@server/models/application/application'
 import { ExpressPromiseHandler } from '@server/types/express'
 import { MUserAccountId, MVideoFullLight } from '@server/types/models'
+import { VideoInclude } from '@shared/models'
 import { ServerErrorCode, UserRight, VideoPrivacy } from '../../../../shared'
 import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
 import {
@@ -28,6 +31,7 @@ import {
   isVideoFileSizeValid,
   isVideoFilterValid,
   isVideoImage,
+  isVideoIncludeValid,
   isVideoLanguageValid,
   isVideoLicenceValid,
   isVideoNameValid,
@@ -105,11 +109,33 @@ const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
 const videosAddResumableValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const user = res.locals.oauth.token.User
-
     const body: express.CustomUploadXFile<express.UploadXFileMetadata> = req.body
     const file = { ...body, duration: undefined, path: getResumableUploadPath(body.id), filename: body.metadata.filename }
-
     const cleanup = () => deleteFileAndCatch(file.path)
+
+    const uploadId = req.query.upload_id
+    const sessionExists = await Redis.Instance.doesUploadSessionExist(uploadId)
+
+    if (sessionExists) {
+      const sessionResponse = await Redis.Instance.getUploadSession(uploadId)
+
+      if (!sessionResponse) {
+        res.setHeader('Retry-After', 300) // ask to retry after 5 min, knowing the upload_id is kept for up to 15 min after completion
+
+        return res.fail({
+          status: HttpStatusCode.SERVICE_UNAVAILABLE_503,
+          message: 'The upload is already being processed'
+        })
+      }
+
+      if (isTestInstance()) {
+        res.setHeader('x-resumable-upload-cached', 'true')
+      }
+
+      return res.json(sessionResponse)
+    }
+
+    await Redis.Instance.setUploadSession(uploadId)
 
     if (!await doesVideoChannelOfAccountExist(file.metadata.channelId, user, res)) return cleanup()
 
@@ -463,6 +489,21 @@ const commonVideosFiltersValidator = [
   query('filter')
     .optional()
     .custom(isVideoFilterValid).withMessage('Should have a valid filter attribute'),
+  query('include')
+    .optional()
+    .custom(isVideoIncludeValid).withMessage('Should have a valid include attribute'),
+  query('isLocal')
+    .optional()
+    .customSanitizer(toBooleanOrNull)
+    .custom(isBooleanValid).withMessage('Should have a valid local boolean'),
+  query('hasHLSFiles')
+    .optional()
+    .customSanitizer(toBooleanOrNull)
+    .custom(isBooleanValid).withMessage('Should have a valid has hls boolean'),
+  query('hasWebtorrentFiles')
+    .optional()
+    .customSanitizer(toBooleanOrNull)
+    .custom(isBooleanValid).withMessage('Should have a valid has webtorrent boolean'),
   query('skipCount')
     .optional()
     .customSanitizer(toBooleanOrNull)
@@ -476,16 +517,29 @@ const commonVideosFiltersValidator = [
 
     if (areValidationErrors(req, res)) return
 
-    const user = res.locals.oauth ? res.locals.oauth.token.User : undefined
-    if (
-      (req.query.filter === 'all-local' || req.query.filter === 'all') &&
-      (!user || user.hasRight(UserRight.SEE_ALL_VIDEOS) === false)
-    ) {
-      res.fail({
-        status: HttpStatusCode.UNAUTHORIZED_401,
-        message: 'You are not allowed to see all local videos.'
-      })
-      return
+    // FIXME: deprecated in 4.0, to remove
+    {
+      if (req.query.filter === 'all-local') {
+        req.query.include = VideoInclude.NOT_PUBLISHED_STATE | VideoInclude.HIDDEN_PRIVACY
+        req.query.isLocal = true
+      } else if (req.query.filter === 'all') {
+        req.query.include = VideoInclude.NOT_PUBLISHED_STATE | VideoInclude.HIDDEN_PRIVACY
+      } else if (req.query.filter === 'local') {
+        req.query.isLocal = true
+      }
+
+      req.query.filter = undefined
+    }
+
+    const user = res.locals.oauth?.token.User
+
+    if ((!user || user.hasRight(UserRight.SEE_ALL_VIDEOS) !== true)) {
+      if (req.query.include) {
+        return res.fail({
+          status: HttpStatusCode.UNAUTHORIZED_401,
+          message: 'You are not allowed to see all videos.'
+        })
+      }
     }
 
     return next()

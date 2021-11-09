@@ -1,5 +1,5 @@
 // Thanks http://tostring.it/2014/06/23/advanced-logging-with-nodejs/
-import { mkdirpSync, stat } from 'fs-extra'
+import { stat } from 'fs-extra'
 import { omit } from 'lodash'
 import { join } from 'path'
 import { format as sqlFormat } from 'sql-formatter'
@@ -9,10 +9,6 @@ import { CONFIG } from '../initializers/config'
 import { LOG_FILENAME } from '../initializers/constants'
 
 const label = CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT
-
-// Create the directory if it does not exist
-// FIXME: use async
-mkdirpSync(CONFIG.STORAGE.LOG_DIR)
 
 function getLoggerReplacer () {
   const seen = new WeakSet()

@@ -272,6 +272,28 @@
     </div>
   </div>
 
+  <div class="form-row mt-4"> <!-- video channels grid -->
+    <div class="form-group col-12 col-lg-4 col-xl-3">
+      <div i18n class="inner-form-title">VIDEO CHANNELS</div>
+    </div>
+    
+    <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
+      <div class="form-group" formGroupName="videoChannels">
+        <label i18n for="videoChannelsMaxPerUser">Max video channels per user</label>
+
+        <div class="number-with-unit">
+          <input
+            type="number" min="1" id="videoChannelsMaxPerUser" class="form-control"
+            formControlName="maxPerUser" [ngClass]="{ 'input-error': formErrors['videoChannels.maxPerUser'] }"
+          >
+          <span i18n>{form.value['videoChannels']['maxPerUser'], plural, =1 {channel} other {channels}}</span>
+        </div>
+
+        <div *ngIf="formErrors.videoChannels.maxPerUser" class="form-error">{{ formErrors.videoChannels.maxPerUser }}</div>
+      </div>
+    </div>
+  </div>
+
   <div class="form-row mt-4"> <!-- search grid -->
     <div class="form-group col-12 col-lg-4 col-xl-3">
       <div i18n class="inner-form-title">SEARCH</div>

@@ -1,4 +1,5 @@
 import { Transaction } from 'sequelize'
+import { VideoViews } from '@server/lib/video-views'
 import { MActorAudience, MVideoImmutable, MVideoUrl } from '@server/types/models'
 import { ActivityAudience, ActivityView } from '../../../../shared/models/activitypub'
 import { logger } from '../../../helpers/logger'
@@ -27,7 +28,8 @@ function buildViewActivity (url: string, byActor: MActorAudience, video: MVideoU
       id: url,
       type: 'View' as 'View',
       actor: byActor.url,
-      object: video.url
+      object: video.url,
+      expires: new Date(VideoViews.Instance.buildViewerExpireTime()).toISOString()
     },
     audience
   )

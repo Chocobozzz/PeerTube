@@ -6,7 +6,6 @@ import { VideoRedundancyConfigFilter } from '@shared/models/redundancy/video-red
 import { BroadcastMessageLevel } from '@shared/models/server'
 import { VideosRedundancyStrategy } from '../../shared/models'
 import { NSFWPolicyType } from '../../shared/models/videos/nsfw-policy.type'
-// Do not use barrels, remain constants as independent as possible
 import { buildPath, parseBytes, parseDurationToMs, root } from '../helpers/core-utils'
 
 // Use a variable to reload the configuration if we need
@@ -183,7 +182,9 @@ const CONFIG = {
     VIDEOS: {
       REMOTE: {
         MAX_AGE: parseDurationToMs(config.get('views.videos.remote.max_age'))
-      }
+      },
+      LOCAL_BUFFER_UPDATE_INTERVAL: parseDurationToMs(config.get('views.videos.local_buffer_update_interval')),
+      IP_VIEW_EXPIRATION: parseDurationToMs(config.get('views.videos.ip_view_expiration'))
     }
   },
   PLUGINS: {
@@ -234,6 +235,9 @@ const CONFIG = {
     get VIDEO_QUOTA () { return parseBytes(config.get<number>('user.video_quota')) },
     get VIDEO_QUOTA_DAILY () { return parseBytes(config.get<number>('user.video_quota_daily')) }
   },
+  VIDEO_CHANNELS: {
+    get MAX_PER_USER () { return config.get<number>('video_channels.max_per_user') }
+  },
   TRANSCODING: {
     get ENABLED () { return config.get<boolean>('transcoding.enabled') },
     get ALLOW_ADDITIONAL_EXTENSIONS () { return config.get<boolean>('transcoding.allow_additional_extensions') },
@@ -243,6 +247,7 @@ const CONFIG = {
     get PROFILE () { return config.get<string>('transcoding.profile') },
     RESOLUTIONS: {
       get '0p' () { return config.get<boolean>('transcoding.resolutions.0p') },
+      get '144p' () { return config.get<boolean>('transcoding.resolutions.144p') },
       get '240p' () { return config.get<boolean>('transcoding.resolutions.240p') },
       get '360p' () { return config.get<boolean>('transcoding.resolutions.360p') },
       get '480p' () { return config.get<boolean>('transcoding.resolutions.480p') },
@@ -268,7 +273,15 @@ const CONFIG = {
     get ALLOW_REPLAY () { return config.get<boolean>('live.allow_replay') },
 
     RTMP: {
+      get ENABLED () { return config.get<boolean>('live.rtmp.enabled') },
       get PORT () { return config.get<number>('live.rtmp.port') }
+    },
+
+    RTMPS: {
+      get ENABLED () { return config.get<boolean>('live.rtmps.enabled') },
+      get PORT () { return config.get<number>('live.rtmps.port') },
+      get KEY_FILE () { return config.get<string>('live.rtmps.key_file') },
+      get CERT_FILE () { return config.get<string>('live.rtmps.cert_file') }
     },
 
     TRANSCODING: {
@@ -277,6 +290,7 @@ const CONFIG = {
       get PROFILE () { return config.get<string>('live.transcoding.profile') },
 
       RESOLUTIONS: {
+        get '144p' () { return config.get<boolean>('live.transcoding.resolutions.144p') },
         get '240p' () { return config.get<boolean>('live.transcoding.resolutions.240p') },
         get '360p' () { return config.get<boolean>('live.transcoding.resolutions.360p') },
         get '480p' () { return config.get<boolean>('live.transcoding.resolutions.480p') },

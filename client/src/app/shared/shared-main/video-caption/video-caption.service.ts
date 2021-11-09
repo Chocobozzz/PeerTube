@@ -18,7 +18,7 @@ export class VideoCaptionService {
   ) {}
 
   listCaptions (videoId: number | string): Observable<ResultList<VideoCaption>> {
-    return this.authHttp.get<ResultList<VideoCaption>>(VideoService.BASE_VIDEO_URL + videoId + '/captions')
+    return this.authHttp.get<ResultList<VideoCaption>>(`${VideoService.BASE_VIDEO_URL}/${videoId}/captions`)
                .pipe(
                  switchMap(captionsResult => {
                    return this.serverService.getServerLocale()
@@ -41,7 +41,7 @@ export class VideoCaptionService {
   }
 
   removeCaption (videoId: number | string, language: string) {
-    return this.authHttp.delete(VideoService.BASE_VIDEO_URL + videoId + '/captions/' + language)
+    return this.authHttp.delete(`${VideoService.BASE_VIDEO_URL}/${videoId}/captions/${language}`)
                .pipe(
                  map(this.restExtractor.extractDataBool),
                  catchError(res => this.restExtractor.handleError(res))
@@ -52,7 +52,7 @@ export class VideoCaptionService {
     const body = { captionfile }
     const data = objectToFormData(body)
 
-    return this.authHttp.put(VideoService.BASE_VIDEO_URL + videoId + '/captions/' + language, data)
+    return this.authHttp.put(`${VideoService.BASE_VIDEO_URL}/${videoId}/captions/${language}`, data)
                .pipe(
                  map(this.restExtractor.extractDataBool),
                  catchError(res => this.restExtractor.handleError(res))

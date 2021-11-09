@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router'
 import { AbuseListComponent } from '@app/+admin/moderation/abuse-list'
 import { InstanceAccountBlocklistComponent, InstanceServerBlocklistComponent } from '@app/+admin/moderation/instance-blocklist'
-import { ModerationComponent } from '@app/+admin/moderation/moderation.component'
 import { VideoBlockListComponent } from '@app/+admin/moderation/video-block-list'
 import { VideoCommentListComponent } from './video-comment-list'
 import { UserRightGuard } from '@app/core'
@@ -10,7 +9,6 @@ import { UserRight } from '@shared/models'
 export const ModerationRoutes: Routes = [
   {
     path: 'moderation',
-    component: ModerationComponent,
     children: [
       {
         path: '',

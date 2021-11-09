@@ -300,6 +300,7 @@ describe('Test video imports', function () {
           transcoding: {
             enabled: true,
             resolutions: {
+              '144p': true,
               '240p': true,
               '360p': false,
               '480p': false,
