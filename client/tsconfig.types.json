@@ -4,15 +4,15 @@
     "stripInternal": true,
     "removeComments": false,
     "declaration": true,
-    "outDir": "../types/client/",
+    "outDir": "../types/dist/client/",
     "emitDeclarationOnly": true,
     "composite": true,
     "rootDir": "src/",
-    "tsBuildInfoFile": "../types/client.tsbuildinfo"
+    "tsBuildInfoFile": "../types/dist/tsconfig.client.tsbuildinfo"
   },
   "references": [
     { "path": "../shared/tsconfig.types.json" }
   ],
-  "files": ["src/index.ts"],
-  "include": ["src/index.ts", "src/types/**/*"]
+  "files": ["src/types/index.ts"],
+  "include": ["src/**/*", "src/types/**/*"]
 }

@@ -1,7 +1,7 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "../types/shared",
+    "outDir": "../types/dist/shared",
     "stripInternal": true,
     "removeComments": false,
     "emitDeclarationOnly": true

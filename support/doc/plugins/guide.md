@@ -889,12 +889,12 @@ If you want to use __Typescript__ see section below.
 
 You can add __PeerTube__ types as dev dependencies:
 ```
-npm install --dev @peertube/peertube-types
+npm install --save-dev @peertube/peertube-types
 ```
 
 This package exposes *server* definition files by default:
 ```ts
-import { RegisterServerOptions } from '@peertube/peertube-types'
+import { RegisterServerOptions } from '@peertube/peertube-types/server/types'
 
 export async function register ({ registerHook }: RegisterServerOptions) {
   registerHook({
@@ -906,14 +906,33 @@ export async function register ({ registerHook }: RegisterServerOptions) {
 
 But it also exposes client types and various models used in __PeerTube__:
 ```ts
-import { RegisterClientOptions } from '@peertube/peertube-types/client'
+import { RegisterClientOptions } from '@larriereguichet/peertube-types/client/types';
+import { Video } from '@larriereguichet/peertube-types/shared';
 
-export function register ({ registerHook, peertubeHelpers }: RegisterClientOptions) {
+function register({ registerHook, peertubeHelpers }: RegisterClientOptions) {
   registerHook({
-    target: 'action:application.init',
-    handler: () => onApplicationInit(peertubeHelpers)
-  })
+    target: 'action:admin-plugin-settings.init',
+    handler: ({ npmName }: { npmName: string }) => {
+      if ('peertube-plugin-transcription' !== npmName) {
+        return;
+      }
+    },
+  });
+
+  registerHook({
+    target: 'action:video-watch.video.loaded',
+    handler: ({ video }: { video: Video }) => {
+      fetch(`${peertubeHelpers.getBaseRouterRoute()}/videos/${video.uuid}/captions`, {
+        method: 'PUT',
+        headers: peertubeHelpers.getAuthHeader(),
+      })
+              .then((res) => res.json())
+              .then((data) => console.log('Hi %s.', data));
+    },
+  });
 }
+
+export { register };
 ```
 > Other types are accessible from the shared path `@peertube/peertube-types/shared`.
 
