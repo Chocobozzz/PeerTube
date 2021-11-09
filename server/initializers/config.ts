@@ -182,7 +182,9 @@ const CONFIG = {
     VIDEOS: {
       REMOTE: {
         MAX_AGE: parseDurationToMs(config.get('views.videos.remote.max_age'))
-      }
+      },
+      LOCAL_BUFFER_UPDATE_INTERVAL: parseDurationToMs(config.get('views.videos.local_buffer_update_interval')),
+      IP_VIEW_EXPIRATION: parseDurationToMs(config.get('views.videos.ip_view_expiration'))
     }
   },
   PLUGINS: {

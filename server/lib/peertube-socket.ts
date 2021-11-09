@@ -1,7 +1,7 @@
 import { Server as HTTPServer } from 'http'
 import { Namespace, Server as SocketServer, Socket } from 'socket.io'
 import { isIdValid } from '@server/helpers/custom-validators/misc'
-import { MVideo } from '@server/types/models'
+import { MVideo, MVideoImmutable } from '@server/types/models'
 import { UserNotificationModelForApi } from '@server/types/models/user'
 import { LiveVideoEventPayload, LiveVideoEventType } from '@shared/models'
 import { logger } from '../helpers/logger'
@@ -78,11 +78,11 @@ class PeerTubeSocket {
       .emit(type, data)
   }
 
-  sendVideoViewsUpdate (video: MVideo) {
-    const data: LiveVideoEventPayload = { views: video.views }
+  sendVideoViewsUpdate (video: MVideoImmutable, numViewers: number) {
+    const data: LiveVideoEventPayload = { viewers: numViewers, views: numViewers }
     const type: LiveVideoEventType = 'views-change'
 
-    logger.debug('Sending video live views update notification of %s.', video.url, { views: video.views })
+    logger.debug('Sending video live views update notification of %s.', video.url, { viewers: numViewers })
 
     this.liveVideosNamespace
       .in(video.id)

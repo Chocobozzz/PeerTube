@@ -36,7 +36,7 @@ import { processVideoFileImport } from './handlers/video-file-import'
 import { processVideoImport } from './handlers/video-import'
 import { processVideoLiveEnding } from './handlers/video-live-ending'
 import { processVideoTranscoding } from './handlers/video-transcoding'
-import { processVideosViews } from './handlers/video-views'
+import { processVideosViewsStats } from './handlers/video-views-stats'
 
 type CreateJobArgument =
   { type: 'activitypub-http-broadcast', payload: ActivitypubHttpBroadcastPayload } |
@@ -49,7 +49,7 @@ type CreateJobArgument =
   { type: 'email', payload: EmailPayload } |
   { type: 'video-import', payload: VideoImportPayload } |
   { type: 'activitypub-refresher', payload: RefreshPayload } |
-  { type: 'videos-views', payload: {} } |
+  { type: 'videos-views-stats', payload: {} } |
   { type: 'video-live-ending', payload: VideoLiveEndingPayload } |
   { type: 'actor-keys', payload: ActorKeysPayload } |
   { type: 'video-redundancy', payload: VideoRedundancyPayload } |
@@ -71,7 +71,7 @@ const handlers: { [id in JobType]: (job: Job) => Promise<any> } = {
   'video-transcoding': processVideoTranscoding,
   'email': processEmail,
   'video-import': processVideoImport,
-  'videos-views': processVideosViews,
+  'videos-views-stats': processVideosViewsStats,
   'activitypub-refresher': refreshAPObject,
   'video-live-ending': processVideoLiveEnding,
   'actor-keys': processActorKeys,
@@ -89,7 +89,7 @@ const jobTypes: JobType[] = [
   'video-transcoding',
   'video-file-import',
   'video-import',
-  'videos-views',
+  'videos-views-stats',
   'activitypub-refresher',
   'video-redundancy',
   'actor-keys',
@@ -241,8 +241,8 @@ class JobQueue {
   }
 
   private addRepeatableJobs () {
-    this.queues['videos-views'].add({}, {
-      repeat: REPEAT_JOBS['videos-views']
+    this.queues['videos-views-stats'].add({}, {
+      repeat: REPEAT_JOBS['videos-views-stats']
     }).catch(err => logger.error('Cannot add repeatable job.', { err }))
 
     if (CONFIG.FEDERATION.VIDEOS.CLEANUP_REMOTE_INTERACTIONS) {

@@ -4892,7 +4892,7 @@ components:
           - video-transcoding
           - video-file-import
           - video-import
-          - videos-views
+          - videos-views-stats
           - activitypub-refresher
           - video-redundancy
           - video-live-ending
@@ -5397,6 +5397,9 @@ components:
         - $ref: '#/components/schemas/Video'
         - type: object
           properties:
+            viewers:
+              type: integer
+              description: If the video is a live, you have the amount of current viewers
             descriptionPath:
               type: string
               example: /api/v1/videos/9c9de5e8-0a1e-484a-b099-e80766180a6d/description
@@ -6300,7 +6303,7 @@ components:
             - video-transcoding
             - email
             - video-import
-            - videos-views
+            - videos-views-stats
             - activitypub-refresher
             - video-redundancy
         data:

@@ -2,7 +2,6 @@
 import { readFile } from 'fs-extra'
 import { createServer, Server } from 'net'
 import { createServer as createServerTLS, Server as ServerTLS } from 'tls'
-import { isTestInstance } from '@server/helpers/core-utils'
 import {
   computeResolutionsToTranscode,
   ffprobePromise,
@@ -12,7 +11,7 @@ import {
 } from '@server/helpers/ffprobe-utils'
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
 import { CONFIG, registerConfigChangedHandler } from '@server/initializers/config'
-import { P2P_MEDIA_LOADER_PEER_VERSION, VIDEO_LIVE, VIEW_LIFETIME } from '@server/initializers/constants'
+import { P2P_MEDIA_LOADER_PEER_VERSION, VIDEO_LIVE } from '@server/initializers/constants'
 import { UserModel } from '@server/models/user/user'
 import { VideoModel } from '@server/models/video/video'
 import { VideoLiveModel } from '@server/models/video/video-live'
@@ -53,8 +52,6 @@ class LiveManager {
 
   private readonly muxingSessions = new Map<string, MuxingSession>()
   private readonly videoSessions = new Map<number, string>()
-  // Values are Date().getTime()
-  private readonly watchersPerVideo = new Map<number, number[]>()
 
   private rtmpServer: Server
   private rtmpsServer: ServerTLS
@@ -99,8 +96,6 @@ class LiveManager {
     // Cleanup broken lives, that were terminated by a server restart for example
     this.handleBrokenLives()
       .catch(err => logger.error('Cannot handle broken lives.', { err, ...lTags() }))
-
-    setInterval(() => this.updateLiveViews(), VIEW_LIFETIME.LIVE)
   }
 
   async run () {
@@ -182,19 +177,6 @@ class LiveManager {
 
     this.videoSessions.delete(videoId)
     this.abortSession(sessionId)
-  }
-
-  addViewTo (videoId: number) {
-    if (this.videoSessions.has(videoId) === false) return
-
-    let watchers = this.watchersPerVideo.get(videoId)
-
-    if (!watchers) {
-      watchers = []
-      this.watchersPerVideo.set(videoId, watchers)
-    }
-
-    watchers.push(new Date().getTime())
   }
 
   private getContext () {
@@ -377,7 +359,6 @@ class LiveManager {
   }
 
   private onMuxingFFmpegEnd (videoId: number) {
-    this.watchersPerVideo.delete(videoId)
     this.videoSessions.delete(videoId)
   }
 
@@ -408,34 +389,6 @@ class LiveManager {
       await federateVideoIfNeeded(fullVideo, false)
     } catch (err) {
       logger.error('Cannot save/federate new video state of live streaming of video %d.', videoUUID, { err, ...lTags(videoUUID) })
-    }
-  }
-
-  private async updateLiveViews () {
-    if (!this.isRunning()) return
-
-    if (!isTestInstance()) logger.info('Updating live video views.', lTags())
-
-    for (const videoId of this.watchersPerVideo.keys()) {
-      const notBefore = new Date().getTime() - VIEW_LIFETIME.LIVE
-
-      const watchers = this.watchersPerVideo.get(videoId)
-
-      const numWatchers = watchers.length
-
-      const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(videoId)
-      video.views = numWatchers
-      await video.save()
-
-      await federateVideoIfNeeded(video, false)
-
-      PeerTubeSocket.Instance.sendVideoViewsUpdate(video)
-
-      // Only keep not expired watchers
-      const newWatchers = watchers.filter(w => w > notBefore)
-      this.watchersPerVideo.set(videoId, newWatchers)
-
-      logger.debug('New live video views for %s is %d.', video.url, numWatchers, lTags())
     }
   }
 

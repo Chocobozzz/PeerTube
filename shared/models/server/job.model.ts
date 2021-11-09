@@ -14,7 +14,7 @@ export type JobType =
   | 'video-transcoding'
   | 'email'
   | 'video-import'
-  | 'videos-views'
+  | 'videos-views-stats'
   | 'activitypub-refresher'
   | 'video-redundancy'
   | 'video-live-ending'
