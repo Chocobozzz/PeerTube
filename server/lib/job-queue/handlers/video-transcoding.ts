@@ -2,7 +2,7 @@ import { Job } from 'bull'
 import { TranscodeOptionsType } from '@server/helpers/ffmpeg-utils'
 import { addTranscodingJob, getTranscodingJobPriority } from '@server/lib/video'
 import { VideoPathManager } from '@server/lib/video-path-manager'
-import { moveToFailedState, moveToNextState } from '@server/lib/video-state'
+import { moveToFailedTranscodingState, moveToNextState } from '@server/lib/video-state'
 import { UserModel } from '@server/models/user/user'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info'
 import { MUser, MUserId, MVideo, MVideoFullLight, MVideoWithFile } from '@server/types/models'
@@ -52,14 +52,15 @@ async function processVideoTranscoding (job: Job) {
   const handler = handlers[payload.type]
 
   if (!handler) {
-    await moveToFailedState(video)
+    await moveToFailedTranscodingState(video)
+
     throw new Error('Cannot find transcoding handler for ' + payload.type)
   }
 
   try {
     await handler(job, payload, video, user)
   } catch (error) {
-    await moveToFailedState(video)
+    await moveToFailedTranscodingState(video)
 
     throw error
   }
