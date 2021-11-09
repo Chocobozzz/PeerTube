@@ -47,7 +47,7 @@ async function run () {
     filePath: resolve(options.import)
   }
 
-  JobQueue.Instance.init()
+  JobQueue.Instance.init(true)
   await JobQueue.Instance.createJobWithPromise({ type: 'video-file-import', payload: dataInput })
   console.log('Import job for video %s created.', video.uuid)
 }

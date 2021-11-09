@@ -108,7 +108,7 @@ class JobQueue {
   private constructor () {
   }
 
-  init () {
+  init (produceOnly = false) {
     // Already initialized
     if (this.initialized === true) return
     this.initialized = true
@@ -124,6 +124,12 @@ class JobQueue {
 
     for (const handlerName of (Object.keys(handlers) as JobType[])) {
       const queue = new Bull(handlerName, queueOptions)
+
+      if (produceOnly) {
+        queue.pause(true)
+             .catch(err => logger.error('Cannot pause queue %s in produced only job queue', handlerName, { err }))
+      }
+
       const handler = handlers[handlerName]
 
       queue.process(this.getJobConcurrency(handlerName), handler)

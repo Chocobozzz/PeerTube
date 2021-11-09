@@ -57,10 +57,33 @@ function moveToNextState (video: MVideoUUID, isNewVideo = true) {
   })
 }
 
+async function moveToExternalStorageState (video: MVideoFullLight, isNewVideo: boolean, transaction: Transaction) {
+  const videoJobInfo = await VideoJobInfoModel.load(video.id, transaction)
+  const pendingTranscode = videoJobInfo?.pendingTranscode || 0
+
+  // We want to wait all transcoding jobs before moving the video on an external storage
+  if (pendingTranscode !== 0) return false
+
+  await video.setNewState(VideoState.TO_MOVE_TO_EXTERNAL_STORAGE, isNewVideo, transaction)
+
+  logger.info('Creating external storage move job for video %s.', video.uuid, { tags: [ video.uuid ] })
+
+  try {
+    await addMoveToObjectStorageJob(video, isNewVideo)
+
+    return true
+  } catch (err) {
+    logger.error('Cannot add move to object storage job', { err })
+
+    return false
+  }
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   buildNextVideoState,
+  moveToExternalStorageState,
   moveToNextState
 }
 
@@ -81,19 +104,4 @@ async function moveToPublishedState (video: MVideoFullLight, isNewVideo: boolean
   if (previousState === VideoState.TO_TRANSCODE) {
     Notifier.Instance.notifyOnVideoPublishedAfterTranscoding(video)
   }
-}
-
-async function moveToExternalStorageState (video: MVideoFullLight, isNewVideo: boolean, transaction: Transaction) {
-  const videoJobInfo = await VideoJobInfoModel.load(video.id, transaction)
-  const pendingTranscode = videoJobInfo?.pendingTranscode || 0
-
-  // We want to wait all transcoding jobs before moving the video on an external storage
-  if (pendingTranscode !== 0) return
-
-  await video.setNewState(VideoState.TO_MOVE_TO_EXTERNAL_STORAGE, isNewVideo, transaction)
-
-  logger.info('Creating external storage move job for video %s.', video.uuid, { tags: [ video.uuid ] })
-
-  addMoveToObjectStorageJob(video, isNewVideo)
-    .catch(err => logger.error('Cannot add move to object storage job', { err }))
 }

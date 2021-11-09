@@ -805,14 +805,17 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     await Promise.all(tasks)
   }
 
-  static listLocal (): Promise<MVideo[]> {
+  static listLocalIds (): Promise<number[]> {
     const query = {
+      attributes: [ 'id' ],
+      raw: true,
       where: {
         remote: false
       }
     }
 
     return VideoModel.findAll(query)
+      .then(rows => rows.map(r => r.id))
   }
 
   static listAllAndSharedByActorForOutbox (actorId: number, start: number, count: number) {
@@ -1674,6 +1677,8 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     if (!this.VideoStreamingPlaylists) return undefined
 
     const playlist = this.VideoStreamingPlaylists.find(p => p.type === VideoStreamingPlaylistType.HLS)
+    if (!playlist) return undefined
+
     playlist.Video = this
 
     return playlist
@@ -1785,7 +1790,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     await this.save({ transaction })
   }
 
-  getBandwidthBits (videoFile: MVideoFile) {
+  getBandwidthBits (this: MVideo, videoFile: MVideoFile) {
     return Math.ceil((videoFile.size * 8) / this.duration)
   }
 
