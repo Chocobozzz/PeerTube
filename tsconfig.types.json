@@ -1,19 +1,16 @@
 {
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "incremental": true,
-    "sourceMap": true,
     "stripInternal": true,
     "removeComments": false,
-    "declaration": true,
-    "declarationMap": true,
-    "emitDeclarationOnly": true
+    "emitDeclarationOnly": true,
+    "outDir": "./types/"
   },
   "references": [
     { "path": "./shared/tsconfig.types.json" },
     { "path": "./server/tsconfig.types.json" },
-    { "path": "./scripts/tsconfig.types.json" }
+    { "path": "./client/tsconfig.types.json" }
   ],
-  "files": []
+  "files": ["./index.ts"],
 }
 

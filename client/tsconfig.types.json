@@ -1,0 +1,18 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "stripInternal": true,
+    "removeComments": false,
+    "declaration": true,
+    "outDir": "../types/client/",
+    "emitDeclarationOnly": true,
+    "composite": true,
+    "rootDir": "src/",
+    "tsBuildInfoFile": "../types/client.tsbuildinfo"
+  },
+  "references": [
+    { "path": "../shared/tsconfig.types.json" }
+  ],
+  "files": ["src/index.ts"],
+  "include": ["src/index.ts", "src/types/**/*"]
+}
