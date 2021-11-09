@@ -98,12 +98,14 @@ class YoutubeDLWrapper {
       })
 
     return Promise.race([ downloadPromise, timeoutPromise ])
-      .catch(async err => {
-        const path = await this.guessVideoPathWithExtension(pathWithoutExtension, fileExt)
+      .catch(err => {
+        this.guessVideoPathWithExtension(pathWithoutExtension, fileExt)
+          .then(path => {
+            logger.debug('Error in youtube-dl import, deleting file %s.', path, { err, ...lTags() })
 
-        logger.debug('Error in youtube-dl import, deleting file %s.', path, { err, ...lTags() })
-        remove(path)
-          .catch(err => logger.error('Cannot remove file in youtubeDL timeout.', { err, ...lTags() }))
+            return remove(path)
+          })
+          .catch(innerErr => logger.error('Cannot remove file in youtubeDL timeout.', { innerErr, ...lTags() }))
 
         throw err
       })
