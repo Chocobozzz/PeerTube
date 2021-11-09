@@ -14,7 +14,7 @@ import {
   setAccessTokensToServers,
   waitJobs
 } from '@shared/extra-utils'
-import { HttpStatusCode, VideoDetails, VideoFile } from '@shared/models'
+import { HttpStatusCode, VideoDetails, VideoFile, VideoInclude } from '@shared/models'
 
 const expect = chai.expect
 
@@ -100,7 +100,7 @@ function runTests (objectStorage: boolean) {
     await waitJobs(servers)
 
     for (const server of servers) {
-      const { data: videos } = await server.videos.list()
+      const { data: videos } = await server.videos.listWithToken({ include: VideoInclude.NOT_PUBLISHED_STATE })
       expect(videos).to.have.lengthOf(2)
 
       const video = videos.find(({ uuid }) => uuid === video2UUID)
@@ -124,7 +124,7 @@ function runTests (objectStorage: boolean) {
     await waitJobs(servers)
 
     for (const server of servers) {
-      const { data: videos } = await server.videos.list()
+      const { data: videos } = await server.videos.listWithToken({ include: VideoInclude.NOT_PUBLISHED_STATE })
       expect(videos).to.have.lengthOf(2)
 
       const video = videos.find(({ shortUUID }) => shortUUID === video1ShortId)

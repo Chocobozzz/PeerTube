@@ -175,6 +175,10 @@ export class VideoMiniatureComponent implements OnInit {
       return $localize`Publication scheduled on ` + updateAt
     }
 
+    if (video.state.id === VideoState.TRANSCODING_FAILED) {
+      return $localize`Transcoding failed`
+    }
+
     if (video.state.id === VideoState.TO_TRANSCODE && video.waitTranscoding === true) {
       return $localize`Waiting transcoding`
     }

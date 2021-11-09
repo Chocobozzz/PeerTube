@@ -14,6 +14,10 @@ export class VideoAlertComponent {
     return this.video && this.video.state.id === VideoState.TO_TRANSCODE
   }
 
+  isVideoTranscodingFailed () {
+    return this.video && this.video.state.id === VideoState.TRANSCODING_FAILED
+  }
+
   isVideoToImport () {
     return this.video && this.video.state.id === VideoState.TO_IMPORT
   }
