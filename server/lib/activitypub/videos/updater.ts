@@ -81,7 +81,6 @@ export class APVideoUpdater extends APVideoAbstractBuilder {
 
       if (videoUpdated.isLive) {
         PeerTubeSocket.Instance.sendVideoLiveNewState(videoUpdated)
-        PeerTubeSocket.Instance.sendVideoViewsUpdate(videoUpdated)
       }
 
       logger.info('Remote video with uuid %s updated', this.videoObject.uuid, this.lTags())

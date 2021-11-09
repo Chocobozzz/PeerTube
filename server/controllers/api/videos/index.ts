@@ -2,7 +2,7 @@ import express from 'express'
 import toInt from 'validator/lib/toInt'
 import { pickCommonVideoQuery } from '@server/helpers/query'
 import { doJSONRequest } from '@server/helpers/requests'
-import { LiveManager } from '@server/lib/live'
+import { VideoViews } from '@server/lib/video-views'
 import { openapiOperationDoc } from '@server/middlewares/doc'
 import { getServerActor } from '@server/models/application/application'
 import { guessAdditionalAttributesFromQuery } from '@server/models/video/formatter/video-format-utils'
@@ -17,7 +17,6 @@ import { sequelizeTypescript } from '../../../initializers/database'
 import { sendView } from '../../../lib/activitypub/send/send-view'
 import { JobQueue } from '../../../lib/job-queue'
 import { Hooks } from '../../../lib/plugins/hooks'
-import { Redis } from '../../../lib/redis'
 import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
@@ -107,7 +106,7 @@ videosRouter.get('/:id',
 )
 videosRouter.post('/:id/views',
   openapiOperationDoc({ operationId: 'addView' }),
-  asyncMiddleware(videosCustomGetValidator('only-immutable-attributes')),
+  asyncMiddleware(videosCustomGetValidator('only-video')),
   asyncMiddleware(viewVideo)
 )
 
@@ -153,44 +152,17 @@ function getVideo (_req: express.Request, res: express.Response) {
 }
 
 async function viewVideo (req: express.Request, res: express.Response) {
-  const immutableVideoAttrs = res.locals.onlyImmutableVideo
+  const video = res.locals.onlyVideo
 
   const ip = req.ip
-  const exists = await Redis.Instance.doesVideoIPViewExist(ip, immutableVideoAttrs.uuid)
-  if (exists) {
-    logger.debug('View for ip %s and video %s already exists.', ip, immutableVideoAttrs.uuid)
-    return res.status(HttpStatusCode.NO_CONTENT_204).end()
-  }
+  const success = await VideoViews.Instance.processView({ video, ip })
 
-  const video = await VideoModel.load(immutableVideoAttrs.id)
-
-  const promises: Promise<any>[] = [
-    Redis.Instance.setIPVideoView(ip, video.uuid, video.isLive)
-  ]
-
-  let federateView = true
-
-  // Increment our live manager
-  if (video.isLive && video.isOwned()) {
-    LiveManager.Instance.addViewTo(video.id)
-
-    // Views of our local live will be sent by our live manager
-    federateView = false
-  }
-
-  // Increment our video views cache counter
-  if (!video.isLive) {
-    promises.push(Redis.Instance.addVideoView(video.id))
-  }
-
-  if (federateView) {
+  if (success) {
     const serverActor = await getServerActor()
-    promises.push(sendView(serverActor, video, undefined))
+    await sendView(serverActor, video, undefined)
+
+    Hooks.runAction('action:api.video.viewed', { video: video, ip })
   }
-
-  await Promise.all(promises)
-
-  Hooks.runAction('action:api.video.viewed', { video, ip })
 
   return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }

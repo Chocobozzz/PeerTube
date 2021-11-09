@@ -160,3 +160,6 @@ views:
   videos:
     remote:
       max_age: -1
+
+    local_buffer_update_interval: '5 seconds'
+    ip_view_expiration: '1 second'

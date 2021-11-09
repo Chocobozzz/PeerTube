@@ -148,7 +148,7 @@ const JOB_ATTEMPTS: { [id in JobType]: number } = {
   'video-import': 1,
   'email': 5,
   'actor-keys': 3,
-  'videos-views': 1,
+  'videos-views-stats': 1,
   'activitypub-refresher': 1,
   'video-redundancy': 1,
   'video-live-ending': 1,
@@ -164,7 +164,7 @@ const JOB_CONCURRENCY: { [id in Exclude<JobType, 'video-transcoding' | 'video-im
   'video-file-import': 1,
   'email': 5,
   'actor-keys': 1,
-  'videos-views': 1,
+  'videos-views-stats': 1,
   'activitypub-refresher': 1,
   'video-redundancy': 1,
   'video-live-ending': 10,
@@ -181,14 +181,14 @@ const JOB_TTL: { [id in JobType]: number } = {
   'video-import': 1000 * 3600 * 2, // 2 hours
   'email': 60000 * 10, // 10 minutes
   'actor-keys': 60000 * 20, // 20 minutes
-  'videos-views': undefined, // Unlimited
+  'videos-views-stats': undefined, // Unlimited
   'activitypub-refresher': 60000 * 10, // 10 minutes
   'video-redundancy': 1000 * 3600 * 3, // 3 hours
   'video-live-ending': 1000 * 60 * 10, // 10 minutes
   'move-to-object-storage': 1000 * 60 * 60 * 3 // 3 hours
 }
-const REPEAT_JOBS: { [ id: string ]: EveryRepeatOptions | CronRepeatOptions } = {
-  'videos-views': {
+const REPEAT_JOBS: { [ id in JobType ]?: EveryRepeatOptions | CronRepeatOptions } = {
+  'videos-views-stats': {
     cron: randomInt(1, 20) + ' * * * *' // Between 1-20 minutes past the hour
   },
   'activitypub-cleaner': {
@@ -211,6 +211,7 @@ const SCHEDULER_INTERVALS_MS = {
   REMOVE_OLD_JOBS: 60000 * 60, // 1 hour
   UPDATE_VIDEOS: 60000, // 1 minute
   YOUTUBE_DL_UPDATE: 60000 * 60 * 24, // 1 day
+  VIDEO_VIEWS_BUFFER_UPDATE: CONFIG.VIEWS.VIDEOS.LOCAL_BUFFER_UPDATE_INTERVAL,
   CHECK_PLUGINS: CONFIG.PLUGINS.INDEX.CHECK_LATEST_VERSIONS_INTERVAL,
   CHECK_PEERTUBE_VERSION: 60000 * 60 * 24, // 1 day
   AUTO_FOLLOW_INDEX_INSTANCES: 60000 * 60 * 24, // 1 day
@@ -343,8 +344,8 @@ const CONSTRAINTS_FIELDS = {
 }
 
 const VIEW_LIFETIME = {
-  VIDEO: 60000 * 60, // 1 hour
-  LIVE: 60000 * 5 // 5 minutes
+  VIEW: CONFIG.VIEWS.VIDEOS.IP_VIEW_EXPIRATION,
+  VIEWER: 60000 * 5 // 5 minutes
 }
 
 let CONTACT_FORM_LIFETIME = 60000 * 60 // 1 hour
@@ -789,13 +790,12 @@ if (isTestInstance() === true) {
   SCHEDULER_INTERVALS_MS.AUTO_FOLLOW_INDEX_INSTANCES = 5000
   SCHEDULER_INTERVALS_MS.UPDATE_INBOX_STATS = 5000
   SCHEDULER_INTERVALS_MS.CHECK_PEERTUBE_VERSION = 2000
-  REPEAT_JOBS['videos-views'] = { every: 5000 }
+  REPEAT_JOBS['videos-views-stats'] = { every: 5000 }
   REPEAT_JOBS['activitypub-cleaner'] = { every: 5000 }
 
   REDUNDANCY.VIDEOS.RANDOMIZED_FACTOR = 1
 
-  VIEW_LIFETIME.VIDEO = 1000 // 1 second
-  VIEW_LIFETIME.LIVE = 1000 * 5 // 5 second
+  VIEW_LIFETIME.VIEWER = 1000 * 5 // 5 second
   CONTACT_FORM_LIFETIME = 1000 // 1 second
 
   JOB_ATTEMPTS['email'] = 1

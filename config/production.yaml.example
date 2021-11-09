@@ -230,6 +230,11 @@ views:
     remote:
       max_age: '30 days'
 
+    # PeerTube buffers local video views before updating and federating the video
+    local_buffer_update_interval: '30 minutes'
+
+    ip_view_expiration: '1 hour'
+
 plugins:
   # The website PeerTube will ask for available PeerTube plugins and themes
   # This is an unmoderated plugin index, so only install plugins/themes you trust

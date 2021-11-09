@@ -19,7 +19,7 @@ import {
 
 const expect = chai.expect
 
-describe('Test live', function () {
+describe('Live views', function () {
   let servers: PeerTubeServer[] = []
 
   before(async function () {
@@ -47,79 +47,86 @@ describe('Test live', function () {
     await doubleFollow(servers[0], servers[1])
   })
 
-  describe('Live views', function () {
-    let liveVideoId: string
-    let command: FfmpegCommand
+  let liveVideoId: string
+  let command: FfmpegCommand
 
-    async function countViews (expected: number) {
-      for (const server of servers) {
-        const video = await server.videos.get({ id: liveVideoId })
-        expect(video.views).to.equal(expected)
-      }
+  async function countViewers (expectedViewers: number) {
+    for (const server of servers) {
+      const video = await server.videos.get({ id: liveVideoId })
+      expect(video.viewers).to.equal(expectedViewers)
+    }
+  }
+
+  async function countViews (expectedViews: number) {
+    for (const server of servers) {
+      const video = await server.videos.get({ id: liveVideoId })
+      expect(video.views).to.equal(expectedViews)
+    }
+  }
+
+  before(async function () {
+    this.timeout(30000)
+
+    const liveAttributes = {
+      name: 'live video',
+      channelId: servers[0].store.channel.id,
+      privacy: VideoPrivacy.PUBLIC
     }
 
-    before(async function () {
-      this.timeout(30000)
+    const live = await servers[0].live.create({ fields: liveAttributes })
+    liveVideoId = live.uuid
 
-      const liveAttributes = {
-        name: 'live video',
-        channelId: servers[0].store.channel.id,
-        privacy: VideoPrivacy.PUBLIC
-      }
+    command = await servers[0].live.sendRTMPStreamInVideo({ videoId: liveVideoId })
+    await waitUntilLivePublishedOnAllServers(servers, liveVideoId)
+    await waitJobs(servers)
+  })
 
-      const live = await servers[0].live.create({ fields: liveAttributes })
-      liveVideoId = live.uuid
+  it('Should display no views and viewers for a live', async function () {
+    await countViews(0)
+    await countViewers(0)
+  })
 
-      command = await servers[0].live.sendRTMPStreamInVideo({ videoId: liveVideoId })
-      await waitUntilLivePublishedOnAllServers(servers, liveVideoId)
-      await waitJobs(servers)
-    })
+  it('Should view a live twice and display 1 view/viewer', async function () {
+    this.timeout(30000)
 
-    it('Should display no views for a live', async function () {
-      await countViews(0)
-    })
+    await servers[0].videos.view({ id: liveVideoId })
+    await servers[0].videos.view({ id: liveVideoId })
 
-    it('Should view a live twice and display 1 view', async function () {
-      this.timeout(30000)
+    await waitJobs(servers)
+    await countViewers(1)
 
-      await servers[0].videos.view({ id: liveVideoId })
-      await servers[0].videos.view({ id: liveVideoId })
+    await wait(7000)
+    await countViews(1)
+  })
 
-      await wait(7000)
+  it('Should wait and display 0 viewers while still have 1 view', async function () {
+    this.timeout(30000)
 
-      await waitJobs(servers)
+    await wait(12000)
+    await waitJobs(servers)
 
-      await countViews(1)
-    })
+    await countViews(1)
+    await countViewers(0)
+  })
 
-    it('Should wait and display 0 views', async function () {
-      this.timeout(30000)
+  it('Should view a live on a remote and on local and display 2 viewers and 3 views', async function () {
+    this.timeout(30000)
 
-      await wait(12000)
-      await waitJobs(servers)
+    await servers[0].videos.view({ id: liveVideoId })
+    await servers[1].videos.view({ id: liveVideoId })
+    await servers[1].videos.view({ id: liveVideoId })
+    await waitJobs(servers)
 
-      await countViews(0)
-    })
+    await countViewers(2)
 
-    it('Should view a live on a remote and on local and display 2 views', async function () {
-      this.timeout(30000)
+    await wait(7000)
+    await waitJobs(servers)
 
-      await servers[0].videos.view({ id: liveVideoId })
-      await servers[1].videos.view({ id: liveVideoId })
-      await servers[1].videos.view({ id: liveVideoId })
-
-      await wait(7000)
-      await waitJobs(servers)
-
-      await countViews(2)
-    })
-
-    after(async function () {
-      await stopFfmpeg(command)
-    })
+    await countViews(3)
   })
 
   after(async function () {
+    await stopFfmpeg(command)
     await cleanupTests(servers)
   })
 })

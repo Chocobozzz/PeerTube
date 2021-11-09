@@ -57,6 +57,9 @@ export class Video implements VideoServerModel {
   url: string
 
   views: number
+  // If live
+  viewers?: number
+
   likes: number
   dislikes: number
   nsfw: boolean
@@ -150,6 +153,7 @@ export class Video implements VideoServerModel {
     this.url = hash.url
 
     this.views = hash.views
+    this.viewers = hash.viewers
     this.likes = hash.likes
     this.dislikes = hash.dislikes
 
