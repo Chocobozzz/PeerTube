@@ -306,6 +306,8 @@ $ docker-compose exec -u peertube peertube npm run create-import-video-file-job 
 
 ### create-move-video-storage-job.js
 
+**PeerTube >= 4.0**
+
 Use this script to move all video files or a specific video file to object storage.
 
 ```bash
