@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../types/shared",
+    "stripInternal": true,
+    "removeComments": false,
+    "emitDeclarationOnly": true
+  }
+}

@@ -118,3 +118,8 @@ rm -f "./client/dist/embed-stats.json"
       git checkout "$branch"
   fi
 )
+
+# Release types package
+npm run generate-types-package
+cd types
+npm publish --access public

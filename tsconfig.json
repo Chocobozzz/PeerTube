@@ -1,5 +1,13 @@
 {
   "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "./dist/",
+    "baseUrl": "./",
+    "paths": {
+      "@server/*": [ "server/*" ],
+      "@shared/*": [ "shared/*" ]
+    }
+  },
   "references": [
     { "path": "./shared" },
     { "path": "./server" },

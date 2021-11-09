@@ -883,6 +883,39 @@ Now you can register hooks or settings, write CSS and add static directories to 
 **Caution:** It's up to you to check the code you write will be compatible with the PeerTube NodeJS version,
 and will be supported by web browsers.
 If you want to write modern JavaScript, please use a transpiler like [Babel](https://babeljs.io/).
+If you want to use __Typescript__ see section below.
+
+### Typescript
+
+You can add __PeerTube__ types as dev dependencies:
+```
+npm install --dev @peertube/peertube-types
+```
+
+This package exposes *server* definition files by default:
+```ts
+import { RegisterServerOptions } from '@peertube/peertube-types'
+
+export async function register ({ registerHook }: RegisterServerOptions) {
+  registerHook({
+    target: 'action:application.listening',
+    handler: () => displayHelloWorld()
+  })
+}
+```
+
+But it also exposes client types and various models used in __PeerTube__:
+```ts
+import { RegisterClientOptions } from '@peertube/peertube-types/client'
+
+export function register ({ registerHook, peertubeHelpers }: RegisterClientOptions) {
+  registerHook({
+    target: 'action:application.init',
+    handler: () => onApplicationInit(peertubeHelpers)
+  })
+}
+```
+> Other types are accessible from the shared path `@peertube/peertube-types/shared`.
 
 ### Add translations
 
