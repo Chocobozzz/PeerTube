@@ -23,7 +23,7 @@ export class VideoChannel extends Actor implements ServerVideoChannel {
   videosCount?: number
 
   viewsPerDay?: ViewsPerDate[]
-  totalViews: number
+  totalViews?: number
 
   static GET_ACTOR_AVATAR_URL (actor: { avatar?: { url?: string, path: string } }) {
     return Actor.GET_ACTOR_AVATAR_URL(actor)
@@ -65,6 +65,10 @@ export class VideoChannel extends Actor implements ServerVideoChannel {
 
     if (hash.viewsPerDay) {
       this.viewsPerDay = hash.viewsPerDay.map(v => ({ ...v, date: new Date(v.date) }))
+    }
+
+    if (hash.totalViews) {
+      this.totalViews = hash.totalViews
     }
 
     if (hash.ownerAccount) {

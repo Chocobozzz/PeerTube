@@ -287,6 +287,12 @@ export type SummaryOptions = {
               ')'
             ),
             'viewsPerDay'
+          ],
+          [
+            literal(
+              //TODO
+            ),
+            'totalViews'
           ]
         ]
       }
@@ -372,9 +378,6 @@ export class VideoChannelModel extends Model<Partial<AttributesOnly<VideoChannel
     hooks: true
   })
   VideoPlaylists: VideoPlaylistModel[]
-
-  @Column
-  totalViews: number
 
   @BeforeDestroy
   static async sendDeleteIfOwned (instance: VideoChannelModel, options) {
@@ -730,6 +733,8 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
         })
     }
 
+    let totalViews = this.get('totalViews') as number
+
     const actor = this.Actor.toFormattedJSON()
     const videoChannel = {
       id: this.id,
@@ -740,7 +745,8 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
       updatedAt: this.updatedAt,
       ownerAccount: undefined,
       videosCount,
-      viewsPerDay
+      viewsPerDay,
+      totalViews
     }
 
     if (this.Account) videoChannel.ownerAccount = this.Account.toFormattedJSON()
