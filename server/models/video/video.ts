@@ -1754,8 +1754,8 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     return this.hasPrivacyForFederation() === false && isPrivacyForFederation(newPrivacy) === true
   }
 
-  setAsRefreshed () {
-    return setAsUpdated('video', this.id)
+  setAsRefreshed (transaction?: Transaction) {
+    return setAsUpdated('video', this.id, transaction)
   }
 
   requiresAuth () {

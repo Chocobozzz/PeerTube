@@ -104,7 +104,7 @@ export async function updateVideo (req: express.Request, res: express.Response) 
 
       // Force updatedAt attribute change
       if (!video.changed()) {
-        await video.setAsRefreshed()
+        await video.setAsRefreshed(t)
       }
 
       const videoInstanceUpdated = await video.save(sequelizeOptions) as MVideoFullLight
