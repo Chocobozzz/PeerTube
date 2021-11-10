@@ -1576,9 +1576,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
 
     if (Array.isArray(this.Thumbnails) === false) this.Thumbnails = []
 
-    // Already have this thumbnail, skip
-    if (this.Thumbnails.find(t => t.id === savedThumbnail.id)) return
-
+    this.Thumbnails = this.Thumbnails.filter(t => t.id !== savedThumbnail.id)
     this.Thumbnails.push(savedThumbnail)
   }
 
