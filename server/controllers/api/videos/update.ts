@@ -99,6 +99,11 @@ export async function updateVideo (req: express.Request, res: express.Response) 
         isNewVideo = await updateVideoPrivacy({ videoInstance, videoInfoToUpdate, hadPrivacyForFederation, transaction: t })
       }
 
+      // Force updatedAt attribute change
+      if (!videoInstance.changed()) {
+        await videoInstance.setAsRefreshed()
+      }
+
       const videoInstanceUpdated = await videoInstance.save(sequelizeOptions) as MVideoFullLight
 
       // Thumbnail & preview updates?

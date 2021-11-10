@@ -85,6 +85,7 @@ function makeUploadRequest (options: CommonRequestParams & {
 
   Object.keys(options.attaches || {}).forEach(attach => {
     const value = options.attaches[attach]
+    if (!value) return
 
     if (Array.isArray(value)) {
       req.attach(attach, buildAbsoluteFixturePath(value[0]), value[1])

@@ -667,6 +667,26 @@ describe('Test multiple servers', function () {
       }
     })
 
+    it('Should only update thumbnail and update updatedAt attribute', async function () {
+      this.timeout(10000)
+
+      const attributes = {
+        thumbnailfile: 'thumbnail.jpg'
+      }
+
+      updatedAtMin = new Date()
+      await servers[2].videos.update({ id: toRemove[0].id, attributes })
+
+      await waitJobs(servers)
+
+      for (const server of servers) {
+        const { data } = await server.videos.list()
+
+        const videoUpdated = data.find(video => video.name === 'my super video updated')
+        expect(new Date(videoUpdated.updatedAt)).to.be.greaterThan(updatedAtMin)
+      }
+    })
+
     it('Should remove the videos 3 and 3-2 by asking server 3 and correctly delete files', async function () {
       this.timeout(30000)
 
