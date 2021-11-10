@@ -591,7 +591,9 @@ describe('Test multiple servers', function () {
   })
 
   describe('Should manipulate these videos', function () {
-    it('Should update the video 3 by asking server 3', async function () {
+    let updatedAtMin: Date
+
+    it('Should update video 3', async function () {
       this.timeout(10000)
 
       const attributes = {
@@ -608,6 +610,7 @@ describe('Test multiple servers', function () {
         previewfile: 'preview.jpg'
       }
 
+      updatedAtMin = new Date()
       await servers[2].videos.update({ id: toRemove[0].id, attributes })
 
       await waitJobs(servers)
@@ -621,6 +624,8 @@ describe('Test multiple servers', function () {
 
         const videoUpdated = data.find(video => video.name === 'my super video updated')
         expect(!!videoUpdated).to.be.true
+
+        expect(new Date(videoUpdated.updatedAt)).to.be.greaterThan(updatedAtMin)
 
         const isLocal = server.url === 'http://localhost:' + servers[2].port
         const checkAttributes = {
@@ -1024,15 +1029,15 @@ describe('Test multiple servers', function () {
           files: [
             {
               resolution: 720,
-              size: 59000
+              size: 61000
             },
             {
               resolution: 480,
-              size: 34000
+              size: 40000
             },
             {
               resolution: 360,
-              size: 31000
+              size: 32000
             },
             {
               resolution: 240,

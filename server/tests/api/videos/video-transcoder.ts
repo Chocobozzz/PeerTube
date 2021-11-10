@@ -3,7 +3,7 @@
 import 'mocha'
 import * as chai from 'chai'
 import { omit } from 'lodash'
-import { getMaxBitrate } from '@shared/core-utils'
+import { getMaxBitrate, getMinLimitBitrate } from '@shared/core-utils'
 import {
   buildAbsoluteFixturePath,
   cleanupTests,
@@ -583,7 +583,7 @@ describe('Test video transcoding', function () {
       }
     })
 
-    it('Should not transcode to an higher bitrate than the original file', async function () {
+    it('Should not transcode to an higher bitrate than the original file but above our low limit', async function () {
       this.timeout(160_000)
 
       const newConfig = {
@@ -622,7 +622,13 @@ describe('Test video transcoding', function () {
 
         const path = servers[1].servers.buildWebTorrentFilePath(file.fileUrl)
         const bitrate = await getVideoFileBitrate(path)
-        expect(bitrate, `${path} not below ${60_000}`).to.be.below(60_000)
+
+        const inputBitrate = 60_000
+        const limit = getMinLimitBitrate({ fps: 10, ratio: 1, resolution: r })
+        let belowValue = Math.max(inputBitrate, limit)
+        belowValue += belowValue * 0.20 // Apply 20% margin because bitrate control is not very precise
+
+        expect(bitrate, `${path} not below ${limit}`).to.be.below(belowValue)
       }
     })
   })
