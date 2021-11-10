@@ -4,6 +4,18 @@ type BitPerPixel = { [ id in VideoResolution ]: number }
 
 // https://bitmovin.com/video-bitrate-streaming-hls-dash/
 
+const minLimitBitPerPixel: BitPerPixel = {
+  [VideoResolution.H_NOVIDEO]: 0,
+  [VideoResolution.H_144P]: 0.02,
+  [VideoResolution.H_240P]: 0.02,
+  [VideoResolution.H_360P]: 0.02,
+  [VideoResolution.H_480P]: 0.02,
+  [VideoResolution.H_720P]: 0.02,
+  [VideoResolution.H_1080P]: 0.02,
+  [VideoResolution.H_1440P]: 0.02,
+  [VideoResolution.H_4K]: 0.02
+}
+
 const averageBitPerPixel: BitPerPixel = {
   [VideoResolution.H_NOVIDEO]: 0,
   [VideoResolution.H_144P]: 0.19,
@@ -50,11 +62,23 @@ function getMaxBitrate (options: {
   return targetBitrate
 }
 
+function getMinLimitBitrate (options: {
+  resolution: VideoResolution
+  ratio: number
+  fps: number
+}) {
+  const minLimitBitrate = calculateBitrate({ ...options, bitPerPixel: minLimitBitPerPixel })
+  if (!minLimitBitrate) return 10 * 1000
+
+  return minLimitBitrate
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   getAverageBitrate,
-  getMaxBitrate
+  getMaxBitrate,
+  getMinLimitBitrate
 }
 
 // ---------------------------------------------------------------------------

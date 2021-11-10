@@ -286,7 +286,10 @@ async function getLiveTranscodingCommand (options: {
 
       addDefaultEncoderParams({ command, encoder: builderResult.encoder, fps: resolutionFPS, streamNum: i })
 
-      logger.debug('Apply ffmpeg live video params from %s using %s profile.', builderResult.encoder, profile, builderResult, lTags())
+      logger.debug(
+        'Apply ffmpeg live video params from %s using %s profile.', builderResult.encoder, profile, builderResult,
+        { fps: resolutionFPS, resolution, ...lTags() }
+      )
 
       command.outputOption(`${buildStreamSuffix('-c:v', i)} ${builderResult.encoder}`)
       applyEncoderOptions(command, builderResult.result)
@@ -310,7 +313,10 @@ async function getLiveTranscodingCommand (options: {
 
       addDefaultEncoderParams({ command, encoder: builderResult.encoder, fps: resolutionFPS, streamNum: i })
 
-      logger.debug('Apply ffmpeg live audio params from %s using %s profile.', builderResult.encoder, profile, builderResult, lTags())
+      logger.debug(
+        'Apply ffmpeg live audio params from %s using %s profile.', builderResult.encoder, profile, builderResult,
+        { fps: resolutionFPS, resolution, ...lTags() }
+      )
 
       command.outputOption(`${buildStreamSuffix('-c:a', i)} ${builderResult.encoder}`)
       applyEncoderOptions(command, builderResult.result)
@@ -622,7 +628,7 @@ async function presetVideo (options: {
     logger.debug(
       'Apply ffmpeg params from %s for %s stream of input %s using %s profile.',
       builderResult.encoder, streamType, input, profile, builderResult,
-      lTags()
+      { resolution, fps, ...lTags() }
     )
 
     if (streamType === 'video') {
