@@ -2709,7 +2709,7 @@
       </trans-unit>
       <trans-unit id="937533808893845780" datatype="html">
         <source>This playlist is private so you won't be able to share it with external users</source>
-        <target state="translated">Этот плейлист является частным, поэтому вы не сможете поделиться им с другими пользователями.</target>
+        <target state="translated">Этот плейлист является частным, поэтому вы не сможете поделиться им с другими пользователями</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">14</context>
@@ -2735,7 +2735,7 @@
       </trans-unit>
       <trans-unit id="5254843797242866315" datatype="html">
         <source>This video is private so you won't be able to share it with external users</source>
-        <target state="translated">Это видео является частным, поэтому вы не сможете поделиться им с другими пользователями.</target>
+        <target state="translated">Это видео является частным, поэтому вы не сможете поделиться им с другими пользователями</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">82</context>
