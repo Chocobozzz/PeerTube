@@ -193,6 +193,9 @@ function getContributorsBlacklist () {
   return {
     'Bigard Florian': true,
     'chocobozzz': true,
-    'Rigel': true
+    'Rigel': true,
+
+    // Requested by the contributor
+    'Marcel Cramm': true
   }
 }
