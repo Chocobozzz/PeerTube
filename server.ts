@@ -136,6 +136,7 @@ import { VideoViews } from '@server/lib/video-views'
 cli
   .option('--no-client', 'Start PeerTube without client interface')
   .option('--no-plugins', 'Start PeerTube without plugins/themes enabled')
+  .option('--benchmark-startup', 'Automatically stop server when initialized')
   .parse(process.argv)
 
 // ----------- App -----------
@@ -324,6 +325,8 @@ async function startApplication () {
     logger.info('Web server: %s', WEBSERVER.URL)
 
     Hooks.runAction('action:application.listening')
+
+    if (cliOptions['benchmarkStartup']) process.exit(0)
   })
 
   process.on('exit', () => {
