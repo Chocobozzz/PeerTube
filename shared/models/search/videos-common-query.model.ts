@@ -1,3 +1,4 @@
+import { VideoPrivacy } from '@shared/models'
 import { VideoInclude } from '../videos/video-include.enum'
 import { BooleanBothQuery } from './boolean-both-query.model'
 
@@ -22,6 +23,8 @@ export interface VideosCommonQuery {
   licenceOneOf?: number[]
 
   languageOneOf?: string[]
+
+  privacyOneOf?: VideoPrivacy[]
 
   tagsOneOf?: string[]
   tagsAllOf?: string[]

@@ -9,7 +9,7 @@ import {
   setAccessTokensToServers,
   setDefaultVideoChannel
 } from '@shared/extra-utils'
-import { HttpStatusCode, UserRole, VideoInclude } from '@shared/models'
+import { HttpStatusCode, UserRole, VideoInclude, VideoPrivacy } from '@shared/models'
 
 describe('Test video filters validators', function () {
   let server: PeerTubeServer
@@ -112,7 +112,7 @@ describe('Test video filters validators', function () {
 
     const validIncludes = [
       VideoInclude.NONE,
-      VideoInclude.HIDDEN_PRIVACY,
+      VideoInclude.BLOCKED_OWNER,
       VideoInclude.NOT_PUBLISHED_STATE | VideoInclude.BLACKLISTED
     ]
 
@@ -120,6 +120,7 @@ describe('Test video filters validators', function () {
       token?: string
       isLocal?: boolean
       include?: VideoInclude
+      privacyOneOf?: VideoPrivacy[]
       expectedStatus: HttpStatusCode
     }) {
       const paths = [
@@ -136,12 +137,29 @@ describe('Test video filters validators', function () {
           token: options.token || server.accessToken,
           query: {
             isLocal: options.isLocal,
+            privacyOneOf: options.privacyOneOf,
             include: options.include
           },
           expectedStatus: options.expectedStatus
         })
       }
     }
+
+    it('Should fail with a bad privacyOneOf', async function () {
+      await testEndpoints({ privacyOneOf: [ 'toto' ] as any, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    })
+
+    it('Should succeed with a good privacyOneOf', async function () {
+      await testEndpoints({ privacyOneOf: [ VideoPrivacy.INTERNAL ], expectedStatus: HttpStatusCode.OK_200 })
+    })
+
+    it('Should fail to use privacyOneOf with a simple user', async function () {
+      await testEndpoints({
+        privacyOneOf: [ VideoPrivacy.INTERNAL ],
+        token: userAccessToken,
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
+      })
+    })
 
     it('Should fail with a bad include', async function () {
       await testEndpoints({ include: 'toto' as any, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })

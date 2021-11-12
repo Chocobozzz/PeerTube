@@ -369,6 +369,7 @@ paths:
         - $ref: '#/components/parameters/nsfw'
         - $ref: '#/components/parameters/isLocal'
         - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/privacyOneOf'
         - $ref: '#/components/parameters/hasHLSFiles'
         - $ref: '#/components/parameters/hasWebtorrentFiles'
         - $ref: '#/components/parameters/skipCount'
@@ -1305,6 +1306,7 @@ paths:
         - $ref: '#/components/parameters/nsfw'
         - $ref: '#/components/parameters/isLocal'
         - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/privacyOneOf'
         - $ref: '#/components/parameters/hasHLSFiles'
         - $ref: '#/components/parameters/hasWebtorrentFiles'
         - $ref: '#/components/parameters/skipCount'
@@ -1628,6 +1630,7 @@ paths:
         - $ref: '#/components/parameters/nsfw'
         - $ref: '#/components/parameters/isLocal'
         - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/privacyOneOf'
         - $ref: '#/components/parameters/hasHLSFiles'
         - $ref: '#/components/parameters/hasWebtorrentFiles'
         - $ref: '#/components/parameters/skipCount'
@@ -2867,6 +2870,7 @@ paths:
         - $ref: '#/components/parameters/nsfw'
         - $ref: '#/components/parameters/isLocal'
         - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/privacyOneOf'
         - $ref: '#/components/parameters/hasHLSFiles'
         - $ref: '#/components/parameters/hasWebtorrentFiles'
         - $ref: '#/components/parameters/skipCount'
@@ -3590,6 +3594,7 @@ paths:
         - $ref: '#/components/parameters/nsfw'
         - $ref: '#/components/parameters/isLocal'
         - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/privacyOneOf'
         - $ref: '#/components/parameters/hasHLSFiles'
         - $ref: '#/components/parameters/hasWebtorrentFiles'
         - $ref: '#/components/parameters/skipCount'
@@ -4095,6 +4100,7 @@ paths:
         - $ref: '#/components/parameters/nsfw'
         - $ref: '#/components/parameters/isLocal'
         - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/privacyOneOf'
         - $ref: '#/components/parameters/hasHLSFiles'
         - $ref: '#/components/parameters/hasWebtorrentFiles'
       responses:
@@ -4179,6 +4185,7 @@ paths:
         - $ref: '#/components/parameters/nsfw'
         - $ref: '#/components/parameters/isLocal'
         - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/privacyOneOf'
         - $ref: '#/components/parameters/hasHLSFiles'
         - $ref: '#/components/parameters/hasWebtorrentFiles'
       responses:
@@ -4834,6 +4841,13 @@ components:
       schema:
         type: boolean
       description: '**PeerTube >= 4.0** Display only videos that have WebTorrent files'
+    privacyOneOf:
+      name: privacyOneOf
+      in: query
+      required: false
+      schema:
+        $ref: '#/components/schemas/VideoPrivacySet'
+      description: '**PeerTube >= 4.0** Display only videos in this specific privacy/privacies'
     include:
       name: include
       in: query
@@ -4853,11 +4867,11 @@ components:
 
         - `1` NOT_PUBLISHED_STATE
 
-        - `2` HIDDEN_PRIVACY
+        - `2` BLACKLISTED
 
-        - `4` BLACKLISTED
+        - `4` BLOCKED_OWNER
 
-        - `8` BLOCKED
+        - `8` FILES
     subscriptionsUris:
       name: uris
       in: query

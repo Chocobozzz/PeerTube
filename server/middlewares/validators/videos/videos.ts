@@ -7,6 +7,7 @@ import { isAbleToUploadVideo } from '@server/lib/user'
 import { getServerActor } from '@server/models/application/application'
 import { ExpressPromiseHandler } from '@server/types/express'
 import { MUserAccountId, MVideoFullLight } from '@server/types/models'
+import { getAllPrivacies } from '@shared/core-utils'
 import { VideoInclude } from '@shared/models'
 import { ServerErrorCode, UserRight, VideoPrivacy } from '../../../../shared'
 import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
@@ -487,6 +488,10 @@ const commonVideosFiltersValidator = [
     .optional()
     .customSanitizer(toArray)
     .custom(isStringArray).withMessage('Should have a valid one of language array'),
+  query('privacyOneOf')
+    .optional()
+    .customSanitizer(toArray)
+    .custom(isNumberArray).withMessage('Should have a valid one of privacy array'),
   query('tagsOneOf')
     .optional()
     .customSanitizer(toArray)
@@ -536,10 +541,12 @@ const commonVideosFiltersValidator = [
     // FIXME: deprecated in 4.0, to remove
     {
       if (req.query.filter === 'all-local') {
-        req.query.include = VideoInclude.NOT_PUBLISHED_STATE | VideoInclude.HIDDEN_PRIVACY
+        req.query.include = VideoInclude.NOT_PUBLISHED_STATE
         req.query.isLocal = true
+        req.query.privacyOneOf = getAllPrivacies()
       } else if (req.query.filter === 'all') {
-        req.query.include = VideoInclude.NOT_PUBLISHED_STATE | VideoInclude.HIDDEN_PRIVACY
+        req.query.include = VideoInclude.NOT_PUBLISHED_STATE
+        req.query.privacyOneOf = getAllPrivacies()
       } else if (req.query.filter === 'local') {
         req.query.isLocal = true
       }
@@ -550,7 +557,7 @@ const commonVideosFiltersValidator = [
     const user = res.locals.oauth?.token.User
 
     if ((!user || user.hasRight(UserRight.SEE_ALL_VIDEOS) !== true)) {
-      if (req.query.include) {
+      if (req.query.include || req.query.privacyOneOf) {
         return res.fail({
           status: HttpStatusCode.UNAUTHORIZED_401,
           message: 'You are not allowed to see all videos.'

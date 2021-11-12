@@ -10,7 +10,7 @@ import { HttpStatusCode } from '@shared/models'
 import { root } from '../helpers/core-utils'
 import { STATIC_MAX_AGE } from '../initializers/constants'
 import { ClientHtml, sendHTML, serveIndexHTML } from '../lib/client-html'
-import { asyncMiddleware, disableRobots, embedCSP } from '../middlewares'
+import { asyncMiddleware, embedCSP } from '../middlewares'
 
 const clientsRouter = express.Router()
 

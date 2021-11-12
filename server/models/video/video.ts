@@ -1041,6 +1041,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     languageOneOf?: string[]
     tagsOneOf?: string[]
     tagsAllOf?: string[]
+    privacyOneOf?: VideoPrivacy[]
 
     accountId?: number
     videoChannelId?: number
@@ -1059,6 +1060,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     search?: string
   }) {
     VideoModel.throwIfPrivateIncludeWithoutUser(options.include, options.user)
+    VideoModel.throwIfPrivacyOneOfWithoutUser(options.privacyOneOf, options.user)
 
     const trendingDays = options.sort.endsWith('trending')
       ? CONFIG.TRENDING.VIDEOS.INTERVAL_DAYS
@@ -1082,6 +1084,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
         'languageOneOf',
         'tagsOneOf',
         'tagsAllOf',
+        'privacyOneOf',
         'isLocal',
         'include',
         'displayOnlyForFollower',
@@ -1119,6 +1122,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     languageOneOf?: string[]
     tagsOneOf?: string[]
     tagsAllOf?: string[]
+    privacyOneOf?: VideoPrivacy[]
 
     displayOnlyForFollower: DisplayOnlyForFollowerOptions | null
 
@@ -1140,6 +1144,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     uuids?: string[]
   }) {
     VideoModel.throwIfPrivateIncludeWithoutUser(options.include, options.user)
+    VideoModel.throwIfPrivacyOneOfWithoutUser(options.privacyOneOf, options.user)
 
     const serverActor = await getServerActor()
 
@@ -1153,6 +1158,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
         'languageOneOf',
         'tagsOneOf',
         'tagsAllOf',
+        'privacyOneOf',
         'user',
         'isLocal',
         'host',
@@ -1510,14 +1516,19 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
 
   private static throwIfPrivateIncludeWithoutUser (include: VideoInclude, user: MUserAccountId) {
     if (VideoModel.isPrivateInclude(include) && !user?.hasRight(UserRight.SEE_ALL_VIDEOS)) {
-      throw new Error('Try to filter all-local but no user has not the see all videos right')
+      throw new Error('Try to filter all-local but user cannot see all videos')
+    }
+  }
+
+  private static throwIfPrivacyOneOfWithoutUser (privacyOneOf: VideoPrivacy[], user: MUserAccountId) {
+    if (privacyOneOf && !user?.hasRight(UserRight.SEE_ALL_VIDEOS)) {
+      throw new Error('Try to choose video privacies but user cannot see all videos')
     }
   }
 
   private static isPrivateInclude (include: VideoInclude) {
     return include & VideoInclude.BLACKLISTED ||
            include & VideoInclude.BLOCKED_OWNER ||
-           include & VideoInclude.HIDDEN_PRIVACY ||
            include & VideoInclude.NOT_PUBLISHED_STATE
   }
 

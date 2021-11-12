@@ -138,6 +138,7 @@ describe('Test videos filter', function () {
       hasWebtorrentFiles?: boolean
       hasHLSFiles?: boolean
       include?: VideoInclude
+      privacyOneOf?: VideoPrivacy[]
       category?: number
       tagsAllOf?: string[]
       token?: string
@@ -148,7 +149,7 @@ describe('Test videos filter', function () {
         path: options.path,
         token: options.token ?? options.server.accessToken,
         query: {
-          ...pick(options, [ 'isLocal', 'include', 'category', 'tagsAllOf', 'hasWebtorrentFiles', 'hasHLSFiles' ]),
+          ...pick(options, [ 'isLocal', 'include', 'category', 'tagsAllOf', 'hasWebtorrentFiles', 'hasHLSFiles', 'privacyOneOf' ]),
 
           sort: 'createdAt'
         },
@@ -162,6 +163,7 @@ describe('Test videos filter', function () {
       server: PeerTubeServer
       isLocal?: boolean
       include?: VideoInclude
+      privacyOneOf?: VideoPrivacy[]
       token?: string
       expectedStatus?: HttpStatusCode
     }) {
@@ -195,7 +197,7 @@ describe('Test videos filter', function () {
             server,
             token,
             isLocal: true,
-            include: VideoInclude.HIDDEN_PRIVACY
+            privacyOneOf: [ VideoPrivacy.UNLISTED, VideoPrivacy.PUBLIC, VideoPrivacy.PRIVATE ]
           })
 
           for (const names of namesResults) {
@@ -216,7 +218,7 @@ describe('Test videos filter', function () {
           const [ channelVideos, accountVideos, videos, searchVideos ] = await getVideosNames({
             server,
             token,
-            include: VideoInclude.HIDDEN_PRIVACY
+            privacyOneOf: [ VideoPrivacy.UNLISTED, VideoPrivacy.PUBLIC, VideoPrivacy.PRIVATE ]
           })
 
           expect(channelVideos).to.have.lengthOf(3)

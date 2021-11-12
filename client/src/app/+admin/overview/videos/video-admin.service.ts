@@ -5,7 +5,8 @@ import { Injectable } from '@angular/core'
 import { RestExtractor, RestPagination, RestService } from '@app/core'
 import { AdvancedInputFilter } from '@app/shared/shared-forms'
 import { CommonVideoParams, Video, VideoService } from '@app/shared/shared-main'
-import { ResultList, VideoInclude } from '@shared/models'
+import { ResultList, VideoInclude, VideoPrivacy } from '@shared/models'
+import { getAllPrivacies } from '@shared/core-utils'
 
 @Injectable()
 export class VideoAdminService {
@@ -96,6 +97,10 @@ export class VideoAdminService {
           {
             value: 'excludeMuted',
             label: $localize`Exclude muted accounts`
+          },
+          {
+            value: 'excludePublic',
+            label: $localize`Exclude public videos`
           }
         ]
       }
@@ -105,11 +110,12 @@ export class VideoAdminService {
   private buildAdminParamsFromSearch (search: string, params: HttpParams) {
     let include = VideoInclude.BLACKLISTED |
       VideoInclude.BLOCKED_OWNER |
-      VideoInclude.HIDDEN_PRIVACY |
       VideoInclude.NOT_PUBLISHED_STATE |
       VideoInclude.FILES
 
-    if (!search) return this.restService.addObjectParams(params, { include })
+    let privacyOneOf = getAllPrivacies()
+
+    if (!search) return this.restService.addObjectParams(params, { include, privacyOneOf })
 
     const filters = this.restService.parseQueryStringFilter(search, {
       isLocal: {
@@ -131,6 +137,10 @@ export class VideoAdminService {
       excludeMuted: {
         prefix: 'excludeMuted',
         handler: () => true
+      },
+      excludePublic: {
+        prefix: 'excludePublic',
+        handler: () => true
       }
     })
 
@@ -140,6 +150,12 @@ export class VideoAdminService {
       filters.excludeMuted = undefined
     }
 
-    return this.restService.addObjectParams(params, { ...filters, include })
+    if (filters.excludePublic) {
+      privacyOneOf = [ VideoPrivacy.PRIVATE, VideoPrivacy.UNLISTED, VideoPrivacy.INTERNAL ]
+
+      filters.excludePublic = undefined
+    }
+
+    return this.restService.addObjectParams(params, { ...filters, include, privacyOneOf })
   }
 }

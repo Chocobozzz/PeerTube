@@ -38,6 +38,7 @@ export type CommonVideoParams = {
   isLocal?: boolean
   categoryOneOf?: number[]
   languageOneOf?: string[]
+  privacyOneOf?: VideoPrivacy[]
   isLive?: boolean
   skipCount?: boolean
 
@@ -392,6 +393,7 @@ export class VideoService {
       include,
       categoryOneOf,
       languageOneOf,
+      privacyOneOf,
       skipCount,
       nsfwPolicy,
       isLive,
@@ -413,6 +415,7 @@ export class VideoService {
     if (nsfwPolicy) newParams = newParams.set('nsfw', this.nsfwPolicyToParam(nsfwPolicy))
     if (languageOneOf) newParams = this.restService.addArrayParams(newParams, 'languageOneOf', languageOneOf)
     if (categoryOneOf) newParams = this.restService.addArrayParams(newParams, 'categoryOneOf', categoryOneOf)
+    if (privacyOneOf) newParams = this.restService.addArrayParams(newParams, 'privacyOneOf', privacyOneOf)
 
     return newParams
   }
