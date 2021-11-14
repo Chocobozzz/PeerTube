@@ -290,7 +290,7 @@ export type SummaryOptions = {
           ],
           [
             literal(
-              //TODO
+              '(SELECT COALESCE(SUM("video".views), 0) AS totalViews FROM "video" WHERE "video"."channelId" = "VideoChannelModel"."id" GROUP BY "video"."channelId")'
             ),
             'totalViews'
           ]
@@ -733,7 +733,7 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
         })
     }
 
-    let totalViews = this.get('totalViews') as number
+    const totalViews = this.get('totalViews') as number
 
     const actor = this.Actor.toFormattedJSON()
     const videoChannel = {
