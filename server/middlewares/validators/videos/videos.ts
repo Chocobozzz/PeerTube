@@ -7,6 +7,7 @@ import { isAbleToUploadVideo } from '@server/lib/user'
 import { getServerActor } from '@server/models/application/application'
 import { ExpressPromiseHandler } from '@server/types/express'
 import { MUserAccountId, MVideoFullLight } from '@server/types/models'
+import { getAllPrivacies } from '@shared/core-utils'
 import { VideoInclude } from '@shared/models'
 import { ServerErrorCode, UserRight, VideoPrivacy } from '../../../../shared'
 import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
@@ -103,6 +104,22 @@ const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
   }
 ])
 
+const videosResumableUploadIdValidator = [
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    const user = res.locals.oauth.token.User
+    const uploadId = req.query.upload_id
+
+    if (uploadId.startsWith(user.id + '-') !== true) {
+      return res.fail({
+        status: HttpStatusCode.FORBIDDEN_403,
+        message: 'You cannot send chunks in another user upload'
+      })
+    }
+
+    return next()
+  }
+]
+
 /**
  * Gets called after the last PUT request
  */
@@ -110,7 +127,7 @@ const videosAddResumableValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const user = res.locals.oauth.token.User
     const body: express.CustomUploadXFile<express.UploadXFileMetadata> = req.body
-    const file = { ...body, duration: undefined, path: getResumableUploadPath(body.id), filename: body.metadata.filename }
+    const file = { ...body, duration: undefined, path: getResumableUploadPath(body.name), filename: body.metadata.filename }
     const cleanup = () => deleteFileAndCatch(file.path)
 
     const uploadId = req.query.upload_id
@@ -471,6 +488,10 @@ const commonVideosFiltersValidator = [
     .optional()
     .customSanitizer(toArray)
     .custom(isStringArray).withMessage('Should have a valid one of language array'),
+  query('privacyOneOf')
+    .optional()
+    .customSanitizer(toArray)
+    .custom(isNumberArray).withMessage('Should have a valid one of privacy array'),
   query('tagsOneOf')
     .optional()
     .customSanitizer(toArray)
@@ -520,10 +541,12 @@ const commonVideosFiltersValidator = [
     // FIXME: deprecated in 4.0, to remove
     {
       if (req.query.filter === 'all-local') {
-        req.query.include = VideoInclude.NOT_PUBLISHED_STATE | VideoInclude.HIDDEN_PRIVACY
+        req.query.include = VideoInclude.NOT_PUBLISHED_STATE
         req.query.isLocal = true
+        req.query.privacyOneOf = getAllPrivacies()
       } else if (req.query.filter === 'all') {
-        req.query.include = VideoInclude.NOT_PUBLISHED_STATE | VideoInclude.HIDDEN_PRIVACY
+        req.query.include = VideoInclude.NOT_PUBLISHED_STATE
+        req.query.privacyOneOf = getAllPrivacies()
       } else if (req.query.filter === 'local') {
         req.query.isLocal = true
       }
@@ -534,7 +557,7 @@ const commonVideosFiltersValidator = [
     const user = res.locals.oauth?.token.User
 
     if ((!user || user.hasRight(UserRight.SEE_ALL_VIDEOS) !== true)) {
-      if (req.query.include) {
+      if (req.query.include || req.query.privacyOneOf) {
         return res.fail({
           status: HttpStatusCode.UNAUTHORIZED_401,
           message: 'You are not allowed to see all videos.'
@@ -552,6 +575,7 @@ export {
   videosAddLegacyValidator,
   videosAddResumableValidator,
   videosAddResumableInitValidator,
+  videosResumableUploadIdValidator,
 
   videosUpdateValidator,
   videosGetValidator,

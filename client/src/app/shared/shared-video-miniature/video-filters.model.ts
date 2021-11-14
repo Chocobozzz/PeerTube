@@ -1,6 +1,6 @@
 import { intoArray, toBoolean } from '@app/helpers'
-import { AttributesOnly } from '@shared/core-utils'
-import { BooleanBothQuery, NSFWPolicyType, VideoInclude, VideoSortField } from '@shared/models'
+import { AttributesOnly, getAllPrivacies } from '@shared/core-utils'
+import { BooleanBothQuery, NSFWPolicyType, VideoInclude, VideoPrivacy, VideoSortField } from '@shared/models'
 
 type VideoFiltersKeys = {
   [ id in keyof AttributesOnly<VideoFilters> ]: any
@@ -198,13 +198,15 @@ export class VideoFilters {
   toVideosAPIObject () {
     let isLocal: boolean
     let include: VideoInclude
+    let privacyOneOf: VideoPrivacy[]
 
     if (this.scope === 'local') {
       isLocal = true
     }
 
     if (this.allVideos) {
-      include = VideoInclude.NOT_PUBLISHED_STATE | VideoInclude.HIDDEN_PRIVACY
+      include = VideoInclude.NOT_PUBLISHED_STATE
+      privacyOneOf = getAllPrivacies()
     }
 
     let isLive: boolean
@@ -219,6 +221,7 @@ export class VideoFilters {
       search: this.search,
       isLocal,
       include,
+      privacyOneOf,
       isLive
     }
   }

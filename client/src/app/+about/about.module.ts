@@ -3,7 +3,6 @@ import { AboutFollowsComponent } from '@app/+about/about-follows/about-follows.c
 import { AboutInstanceComponent } from '@app/+about/about-instance/about-instance.component'
 import { AboutInstanceResolver } from '@app/+about/about-instance/about-instance.resolver'
 import { ContactAdminModalComponent } from '@app/+about/about-instance/contact-admin-modal.component'
-import { AboutPeertubeContributorsComponent } from '@app/+about/about-peertube/about-peertube-contributors.component'
 import { AboutPeertubeComponent } from '@app/+about/about-peertube/about-peertube.component'
 import { SharedCustomMarkupModule } from '@app/shared/shared-custom-markup'
 import { SharedFormModule } from '@app/shared/shared-forms'
@@ -29,7 +28,6 @@ import { AboutComponent } from './about.component'
     AboutInstanceComponent,
     AboutPeertubeComponent,
     AboutFollowsComponent,
-    AboutPeertubeContributorsComponent,
     ContactAdminModalComponent
   ],
 

@@ -52,16 +52,16 @@ export {
 // ---------------------------------------------------------------------------
 
 export async function updateVideo (req: express.Request, res: express.Response) {
-  const videoInstance = res.locals.videoAll
-  const videoFieldsSave = videoInstance.toJSON()
-  const oldVideoAuditView = new VideoAuditView(videoInstance.toFormattedDetailsJSON())
+  const videoFromReq = res.locals.videoAll
+  const videoFieldsSave = videoFromReq.toJSON()
+  const oldVideoAuditView = new VideoAuditView(videoFromReq.toFormattedDetailsJSON())
   const videoInfoToUpdate: VideoUpdate = req.body
 
-  const wasConfidentialVideo = videoInstance.isConfidential()
-  const hadPrivacyForFederation = videoInstance.hasPrivacyForFederation()
+  const wasConfidentialVideo = videoFromReq.isConfidential()
+  const hadPrivacyForFederation = videoFromReq.hasPrivacyForFederation()
 
   const [ thumbnailModel, previewModel ] = await buildVideoThumbnailsFromReq({
-    video: videoInstance,
+    video: videoFromReq,
     files: req.files,
     fallback: () => Promise.resolve(undefined),
     automaticallyGenerated: false
@@ -69,8 +69,11 @@ export async function updateVideo (req: express.Request, res: express.Response) 
 
   try {
     const videoInstanceUpdated = await sequelizeTypescript.transaction(async t => {
+      // Refresh video since thumbnails to prevent concurrent updates
+      const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(videoFromReq.id, t)
+
       const sequelizeOptions = { transaction: t }
-      const oldVideoChannel = videoInstance.VideoChannel
+      const oldVideoChannel = video.VideoChannel
 
       const keysToUpdate: (keyof VideoUpdate & FilteredModelAttributes<VideoModel>)[] = [
         'name',
@@ -86,20 +89,25 @@ export async function updateVideo (req: express.Request, res: express.Response) 
       ]
 
       for (const key of keysToUpdate) {
-        if (videoInfoToUpdate[key] !== undefined) videoInstance.set(key, videoInfoToUpdate[key])
+        if (videoInfoToUpdate[key] !== undefined) video.set(key, videoInfoToUpdate[key])
       }
 
       if (videoInfoToUpdate.originallyPublishedAt !== undefined && videoInfoToUpdate.originallyPublishedAt !== null) {
-        videoInstance.originallyPublishedAt = new Date(videoInfoToUpdate.originallyPublishedAt)
+        video.originallyPublishedAt = new Date(videoInfoToUpdate.originallyPublishedAt)
       }
 
       // Privacy update?
       let isNewVideo = false
       if (videoInfoToUpdate.privacy !== undefined) {
-        isNewVideo = await updateVideoPrivacy({ videoInstance, videoInfoToUpdate, hadPrivacyForFederation, transaction: t })
+        isNewVideo = await updateVideoPrivacy({ videoInstance: video, videoInfoToUpdate, hadPrivacyForFederation, transaction: t })
       }
 
-      const videoInstanceUpdated = await videoInstance.save(sequelizeOptions) as MVideoFullLight
+      // Force updatedAt attribute change
+      if (!video.changed()) {
+        await video.setAsRefreshed(t)
+      }
+
+      const videoInstanceUpdated = await video.save(sequelizeOptions) as MVideoFullLight
 
       // Thumbnail & preview updates?
       if (thumbnailModel) await videoInstanceUpdated.addAndSaveThumbnail(thumbnailModel, t)
@@ -136,7 +144,7 @@ export async function updateVideo (req: express.Request, res: express.Response) 
         new VideoAuditView(videoInstanceUpdated.toFormattedDetailsJSON()),
         oldVideoAuditView
       )
-      logger.info('Video with name %s and uuid %s updated.', videoInstance.name, videoInstance.uuid, lTags(videoInstance.uuid))
+      logger.info('Video with name %s and uuid %s updated.', video.name, video.uuid, lTags(video.uuid))
 
       return videoInstanceUpdated
     })
@@ -150,7 +158,7 @@ export async function updateVideo (req: express.Request, res: express.Response) 
     // Force fields we want to update
     // If the transaction is retried, sequelize will think the object has not changed
     // So it will skip the SQL request, even if the last one was ROLLBACKed!
-    resetSequelizeInstance(videoInstance, videoFieldsSave)
+    resetSequelizeInstance(videoFromReq, videoFieldsSave)
 
     throw err
   }

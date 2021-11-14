@@ -271,6 +271,10 @@ class Redis {
       : ''
   }
 
+  deleteUploadSession (uploadId: string) {
+    return this.deleteKey('resumable-upload-' + uploadId)
+  }
+
   /* ************ Keys generation ************ */
 
   generateCachedRouteKey (req: express.Request) {

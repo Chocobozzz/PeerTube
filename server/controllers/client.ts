@@ -10,7 +10,7 @@ import { HttpStatusCode } from '@shared/models'
 import { root } from '../helpers/core-utils'
 import { STATIC_MAX_AGE } from '../initializers/constants'
 import { ClientHtml, sendHTML, serveIndexHTML } from '../lib/client-html'
-import { asyncMiddleware, disableRobots, embedCSP } from '../middlewares'
+import { asyncMiddleware, embedCSP } from '../middlewares'
 
 const clientsRouter = express.Router()
 
@@ -83,12 +83,6 @@ clientsRouter.use('/client', express.static(distPath, { maxAge: STATIC_MAX_AGE.C
 clientsRouter.use('/client/*', (req: express.Request, res: express.Response) => {
   res.status(HttpStatusCode.NOT_FOUND_404).end()
 })
-
-// No index exceptions
-clientsRouter.all('/about/peertube',
-  disableRobots,
-  asyncMiddleware(serveIndexHTML)
-)
 
 // Always serve index client page (the client is a single page application, let it handle routing)
 // Try to provide the right language index.html

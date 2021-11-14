@@ -37,7 +37,7 @@ table {
 
   .plugin,
   .theme {
-    &:not(:last-child):after {
+    &:not(:last-child)::after {
       content: '•';
     }
   }

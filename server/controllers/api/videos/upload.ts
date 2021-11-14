@@ -19,7 +19,7 @@ import { VideoPathManager } from '@server/lib/video-path-manager'
 import { buildNextVideoState } from '@server/lib/video-state'
 import { openapiOperationDoc } from '@server/middlewares/doc'
 import { MVideo, MVideoFile, MVideoFullLight } from '@server/types/models'
-import { uploadx } from '@uploadx/core'
+import { Uploadx } from '@uploadx/core'
 import { VideoCreate, VideoState } from '../../../../shared'
 import { HttpStatusCode } from '../../../../shared/models'
 import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../helpers/audit-logger'
@@ -41,6 +41,7 @@ import {
   authenticate,
   videosAddLegacyValidator,
   videosAddResumableInitValidator,
+  videosResumableUploadIdValidator,
   videosAddResumableValidator
 } from '../../../middlewares'
 import { ScheduleVideoUpdateModel } from '../../../models/video/schedule-video-update'
@@ -50,7 +51,9 @@ import { VideoFileModel } from '../../../models/video/video-file'
 const lTags = loggerTagsFactory('api', 'video')
 const auditLogger = auditLoggerFactory('videos')
 const uploadRouter = express.Router()
-const uploadxMiddleware = uploadx.upload({ directory: getResumableUploadPath() })
+
+const uploadx = new Uploadx({ directory: getResumableUploadPath() })
+uploadx.getUserId = (_, res: express.Response) => res.locals.oauth?.token.user.id
 
 const reqVideoFileAdd = createReqFiles(
   [ 'videofile', 'thumbnailfile', 'previewfile' ],
@@ -84,18 +87,21 @@ uploadRouter.post('/upload-resumable',
   authenticate,
   reqVideoFileAddResumable,
   asyncMiddleware(videosAddResumableInitValidator),
-  uploadxMiddleware
+  uploadx.upload
 )
 
 uploadRouter.delete('/upload-resumable',
   authenticate,
-  uploadxMiddleware
+  videosResumableUploadIdValidator,
+  asyncMiddleware(deleteUploadResumableCache),
+  uploadx.upload
 )
 
 uploadRouter.put('/upload-resumable',
   openapiOperationDoc({ operationId: 'uploadResumable' }),
   authenticate,
-  uploadxMiddleware, // uploadx doesn't next() before the file upload completes
+  videosResumableUploadIdValidator,
+  uploadx.upload, // uploadx doesn't next() before the file upload completes
   asyncMiddleware(videosAddResumableValidator),
   asyncMiddleware(addVideoResumable)
 )
@@ -108,7 +114,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-export async function addVideoLegacy (req: express.Request, res: express.Response) {
+async function addVideoLegacy (req: express.Request, res: express.Response) {
   // Uploading the video could be long
   // Set timeout to 10 minutes, as Express's default is 2 minutes
   req.setTimeout(1000 * 60 * 10, () => {
@@ -128,7 +134,7 @@ export async function addVideoLegacy (req: express.Request, res: express.Respons
   return res.json(response)
 }
 
-export async function addVideoResumable (req: express.Request, res: express.Response) {
+async function addVideoResumable (req: express.Request, res: express.Response) {
   const videoPhysicalFile = res.locals.videoFileResumable
   const videoInfo = videoPhysicalFile.metadata
   const files = { previewfile: videoInfo.previewfile }
@@ -290,4 +296,10 @@ function createTorrentFederate (video: MVideoFullLight, videoFile: MVideoFile) {
       })
     })
     .catch(err => logger.error('Cannot federate or notify video creation %s', video.url, { err, ...lTags(video.uuid) }))
+}
+
+async function deleteUploadResumableCache (req: express.Request, res: express.Response, next: express.NextFunction) {
+  await Redis.Instance.deleteUploadSession(req.query.upload_id)
+
+  return next()
 }

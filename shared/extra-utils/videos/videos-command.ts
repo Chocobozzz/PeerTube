@@ -469,8 +469,11 @@ export class VideosCommand extends AbstractCommand {
     attributes: VideoEdit
     size: number
     mimetype: string
+
+    originalName?: string
+    lastModified?: number
   }) {
-    const { attributes, size, mimetype } = options
+    const { attributes, originalName, lastModified, size, mimetype } = options
 
     const path = '/api/v1/videos/upload-resumable'
 
@@ -482,7 +485,14 @@ export class VideosCommand extends AbstractCommand {
         'X-Upload-Content-Type': mimetype,
         'X-Upload-Content-Length': size.toString()
       },
-      fields: { filename: attributes.fixture, ...this.buildUploadFields(options.attributes) },
+      fields: {
+        filename: attributes.fixture,
+        originalName,
+        lastModified,
+
+        ...this.buildUploadFields(options.attributes)
+      },
+
       // Fixture will be sent later
       attaches: this.buildUploadAttaches(omit(options.attributes, 'fixture')),
       implicitToken: true,

@@ -1,6 +1,7 @@
+
 import { logger } from '@server/helpers/logger'
-import { getAverageBitrate } from '@shared/core-utils'
-import { AvailableEncoders, EncoderOptionsBuilder, EncoderOptionsBuilderParams } from '../../../shared/models/videos'
+import { getAverageBitrate, getMinLimitBitrate } from '@shared/core-utils'
+import { AvailableEncoders, EncoderOptionsBuilder, EncoderOptionsBuilderParams, VideoResolution } from '../../../shared/models/videos'
 import { buildStreamSuffix, resetSupportedEncoders } from '../../helpers/ffmpeg-utils'
 import { canDoQuickAudioTranscode, ffprobePromise, getAudioStream, getMaxAudioBitrate } from '../../helpers/ffprobe-utils'
 
@@ -15,10 +16,10 @@ import { canDoQuickAudioTranscode, ffprobePromise, getAudioStream, getMaxAudioBi
  */
 
 const defaultX264VODOptionsBuilder: EncoderOptionsBuilder = (options: EncoderOptionsBuilderParams) => {
-  const { fps, inputRatio, inputBitrate } = options
+  const { fps, inputRatio, inputBitrate, resolution } = options
   if (!fps) return { outputOptions: [ ] }
 
-  const targetBitrate = capBitrate(inputBitrate, getAverageBitrate({ ...options, fps, ratio: inputRatio }))
+  const targetBitrate = getTargetBitrate({ inputBitrate, ratio: inputRatio, fps, resolution })
 
   return {
     outputOptions: [
@@ -31,9 +32,9 @@ const defaultX264VODOptionsBuilder: EncoderOptionsBuilder = (options: EncoderOpt
 }
 
 const defaultX264LiveOptionsBuilder: EncoderOptionsBuilder = (options: EncoderOptionsBuilderParams) => {
-  const { streamNum, fps, inputBitrate, inputRatio } = options
+  const { streamNum, fps, inputBitrate, inputRatio, resolution } = options
 
-  const targetBitrate = capBitrate(inputBitrate, getAverageBitrate({ ...options, fps, ratio: inputRatio }))
+  const targetBitrate = getTargetBitrate({ inputBitrate, ratio: inputRatio, fps, resolution })
 
   return {
     outputOptions: [
@@ -233,6 +234,20 @@ export {
 }
 
 // ---------------------------------------------------------------------------
+
+function getTargetBitrate (options: {
+  inputBitrate: number
+  resolution: VideoResolution
+  ratio: number
+  fps: number
+}) {
+  const { inputBitrate, resolution, ratio, fps } = options
+
+  const capped = capBitrate(inputBitrate, getAverageBitrate({ resolution, fps, ratio }))
+  const limit = getMinLimitBitrate({ resolution, fps, ratio })
+
+  return Math.max(limit, capped)
+}
 
 function capBitrate (inputBitrate: number, targetBitrate: number) {
   if (!inputBitrate) return targetBitrate

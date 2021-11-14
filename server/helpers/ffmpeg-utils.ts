@@ -16,7 +16,9 @@ import { CONFIG } from '../initializers/config'
 import { execPromise, promisify0 } from './core-utils'
 import { computeFPS, ffprobePromise, getAudioStream, getVideoFileBitrate, getVideoFileFPS, getVideoFileResolution } from './ffprobe-utils'
 import { processImage } from './image-utils'
-import { logger } from './logger'
+import { logger, loggerTagsFactory } from './logger'
+
+const lTags = loggerTagsFactory('ffmpeg')
 
 /**
  *
@@ -60,7 +62,7 @@ async function checkFFmpegEncoders (peertubeAvailableEncoders: AvailableEncoders
     supportedEncoders.set(searchEncoder, availableFFmpegEncoders[searchEncoder] !== undefined)
   }
 
-  logger.info('Built supported ffmpeg encoders.', { supportedEncoders, searchEncoders })
+  logger.info('Built supported ffmpeg encoders.', { supportedEncoders, searchEncoders, ...lTags() })
 
   return supportedEncoders
 }
@@ -115,12 +117,12 @@ async function generateImageFromVideoFile (fromPath: string, folder: string, ima
     const destination = join(folder, imageName)
     await processImage(pendingImagePath, destination, size)
   } catch (err) {
-    logger.error('Cannot generate image from video %s.', fromPath, { err })
+    logger.error('Cannot generate image from video %s.', fromPath, { err, ...lTags() })
 
     try {
       await remove(pendingImagePath)
     } catch (err) {
-      logger.debug('Cannot remove pending image path after generation error.', { err })
+      logger.debug('Cannot remove pending image path after generation error.', { err, ...lTags() })
     }
   }
 }
@@ -202,7 +204,7 @@ const builders: {
 }
 
 async function transcode (options: TranscodeOptions) {
-  logger.debug('Will run transcode.', { options })
+  logger.debug('Will run transcode.', { options, ...lTags() })
 
   let command = getFFmpeg(options.inputPath, 'vod')
     .output(options.outputPath)
@@ -284,7 +286,10 @@ async function getLiveTranscodingCommand (options: {
 
       addDefaultEncoderParams({ command, encoder: builderResult.encoder, fps: resolutionFPS, streamNum: i })
 
-      logger.debug('Apply ffmpeg live video params from %s using %s profile.', builderResult.encoder, profile, builderResult)
+      logger.debug(
+        'Apply ffmpeg live video params from %s using %s profile.', builderResult.encoder, profile, builderResult,
+        { fps: resolutionFPS, resolution, ...lTags() }
+      )
 
       command.outputOption(`${buildStreamSuffix('-c:v', i)} ${builderResult.encoder}`)
       applyEncoderOptions(command, builderResult.result)
@@ -308,7 +313,10 @@ async function getLiveTranscodingCommand (options: {
 
       addDefaultEncoderParams({ command, encoder: builderResult.encoder, fps: resolutionFPS, streamNum: i })
 
-      logger.debug('Apply ffmpeg live audio params from %s using %s profile.', builderResult.encoder, profile, builderResult)
+      logger.debug(
+        'Apply ffmpeg live audio params from %s using %s profile.', builderResult.encoder, profile, builderResult,
+        { fps: resolutionFPS, resolution, ...lTags() }
+      )
 
       command.outputOption(`${buildStreamSuffix('-c:a', i)} ${builderResult.encoder}`)
       applyEncoderOptions(command, builderResult.result)
@@ -531,12 +539,12 @@ async function getEncoderBuilderResult (options: EncoderOptionsBuilderParams & {
 
   for (const encoder of encodersToTry) {
     if (!(await checkFFmpegEncoders(availableEncoders)).get(encoder)) {
-      logger.debug('Encoder %s not available in ffmpeg, skipping.', encoder)
+      logger.debug('Encoder %s not available in ffmpeg, skipping.', encoder, lTags())
       continue
     }
 
     if (!encoders[encoder]) {
-      logger.debug('Encoder %s not available in peertube encoders, skipping.', encoder)
+      logger.debug('Encoder %s not available in peertube encoders, skipping.', encoder, lTags())
       continue
     }
 
@@ -545,11 +553,11 @@ async function getEncoderBuilderResult (options: EncoderOptionsBuilderParams & {
     let builder = builderProfiles[profile]
 
     if (!builder) {
-      logger.debug('Profile %s for encoder %s not available. Fallback to default.', profile, encoder)
+      logger.debug('Profile %s for encoder %s not available. Fallback to default.', profile, encoder, lTags())
       builder = builderProfiles.default
 
       if (!builder) {
-        logger.debug('Default profile for encoder %s not available. Try next available encoder.', encoder)
+        logger.debug('Default profile for encoder %s not available. Try next available encoder.', encoder, lTags())
         continue
       }
     }
@@ -619,7 +627,8 @@ async function presetVideo (options: {
 
     logger.debug(
       'Apply ffmpeg params from %s for %s stream of input %s using %s profile.',
-      builderResult.encoder, streamType, input, profile, builderResult
+      builderResult.encoder, streamType, input, profile, builderResult,
+      { resolution, fps, ...lTags() }
     )
 
     if (streamType === 'video') {
@@ -725,13 +734,13 @@ async function runCommand (options: {
     command.on('start', cmdline => { shellCommand = cmdline })
 
     command.on('error', (err, stdout, stderr) => {
-      if (silent !== true) logger.error('Error in ffmpeg.', { stdout, stderr })
+      if (silent !== true) logger.error('Error in ffmpeg.', { stdout, stderr, ...lTags() })
 
       rej(err)
     })
 
     command.on('end', (stdout, stderr) => {
-      logger.debug('FFmpeg command ended.', { stdout, stderr, shellCommand })
+      logger.debug('FFmpeg command ended.', { stdout, stderr, shellCommand, ...lTags() })
 
       res()
     })
@@ -741,7 +750,7 @@ async function runCommand (options: {
         if (!progress.percent) return
 
         job.progress(Math.round(progress.percent))
-          .catch(err => logger.warn('Cannot set ffmpeg job progress.', { err }))
+          .catch(err => logger.warn('Cannot set ffmpeg job progress.', { err, ...lTags() }))
       })
     }
 

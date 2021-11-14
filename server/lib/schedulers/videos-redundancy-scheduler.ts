@@ -115,19 +115,11 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
     for (const redundancyModel of expired) {
       try {
         const redundancyConfig = CONFIG.REDUNDANCY.VIDEOS.STRATEGIES.find(s => s.strategy === redundancyModel.strategy)
-        const candidate: CandidateToDuplicate = {
-          redundancy: redundancyConfig,
-          video: null,
-          files: [],
-          streamingPlaylists: []
-        }
+        const { totalUsed } = await VideoRedundancyModel.getStats(redundancyConfig.strategy)
 
         // If the administrator disabled the redundancy or decreased the cache size, remove this redundancy instead of extending it
-        if (!redundancyConfig || await this.isTooHeavy(candidate)) {
-          logger.info(
-            'Destroying redundancy %s because the cache size %s is too heavy.',
-            redundancyModel.url, redundancyModel.strategy, lTags(candidate.video.uuid)
-          )
+        if (!redundancyConfig || totalUsed > redundancyConfig.size) {
+          logger.info('Destroying redundancy %s because the cache size %s is too heavy.', redundancyModel.url, redundancyModel.strategy)
 
           await removeVideoRedundancy(redundancyModel)
         } else {

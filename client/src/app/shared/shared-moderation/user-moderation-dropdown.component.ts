@@ -83,8 +83,8 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
       return
     }
 
-    const message = $localize`If you remove this user, you will not be able to create another with the same username!`
-    const res = await this.confirmService.confirm(message, $localize`Delete`)
+    const message = $localize`If you remove user ${user.username}, you won't be able to create another with the same username!`
+    const res = await this.confirmService.confirm(message, $localize`Delete ${user.username}`)
     if (res === false) return
 
     this.userService.removeUser(user)

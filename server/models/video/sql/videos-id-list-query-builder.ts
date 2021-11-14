@@ -40,6 +40,7 @@ export type BuildVideosListQueryOptions = {
   languageOneOf?: string[]
   tagsOneOf?: string[]
   tagsAllOf?: string[]
+  privacyOneOf?: VideoPrivacy[]
 
   uuids?: string[]
 
@@ -138,11 +139,6 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
       this.whereStateAvailable()
     }
 
-    // Only list videos with the appropriate priavcy
-    if (!(options.include & VideoInclude.HIDDEN_PRIVACY)) {
-      this.wherePrivacyAvailable(options.user)
-    }
-
     if (options.videoPlaylistId) {
       this.joinPlaylist(options.videoPlaylistId)
     }
@@ -185,6 +181,13 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
 
     if (options.tagsAllOf) {
       this.whereTagsAllOf(options.tagsAllOf)
+    }
+
+    if (options.privacyOneOf) {
+      this.wherePrivacyOneOf(options.privacyOneOf)
+    } else {
+      // Only list videos with the appropriate priavcy
+      this.wherePrivacyAvailable(options.user)
     }
 
     if (options.uuids) {
@@ -433,6 +436,11 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
       '  GROUP BY "videoTag"."videoId" HAVING COUNT(*) = ' + tagsAllOfLower.length +
       ')'
     )
+  }
+
+  private wherePrivacyOneOf (privacyOneOf: VideoPrivacy[]) {
+    this.and.push('"video"."privacy" IN (:privacyOneOf)')
+    this.replacements.privacyOneOf = privacyOneOf
   }
 
   private whereUUIDs (uuids: string[]) {
