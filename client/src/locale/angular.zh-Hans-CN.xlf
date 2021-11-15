@@ -10830,171 +10830,38 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="new"><x id="PH" equiv-text="this.views"/> views</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/video/video.model.ts</context><context context-type="linenumber">238</context></context-group></trans-unit>
-      <trans-unit id="ngb.alert.close" datatype="html">
-        <source>Close</source>
-        <target state="translated">关闭</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/src/alert/alert.ts</context><context context-type="linenumber">58</context></context-group></trans-unit>
-      <trans-unit id="ngb.carousel.slide-number" datatype="html">
-        <source>Slide <x id="INTERPOLATION" equiv-text="ate _pauseOnHov"/> of <x id="INTERPOLATION_1" equiv-text="ect(false);   p"/> </source>
-        <target state="new"> Slide <x id="INTERPOLATION" equiv-text="ate _pauseOnHov"/> of <x id="INTERPOLATION_1" equiv-text="ect(false);   p"/> </target>
-        <note priority="1" from="description">Currently selected slide number read by screen reader</note>
-        
-      <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/src/carousel/carousel.ts</context><context context-type="linenumber">114</context></context-group></trans-unit>
-      <trans-unit id="ngb.carousel.previous" datatype="html">
-        <source>Previous</source>
-        <target state="translated">上一个</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/src/carousel/carousel.ts</context><context context-type="linenumber">132</context></context-group></trans-unit>
-      <trans-unit id="ngb.carousel.next" datatype="html">
-        <source>Next</source>
-        <target state="translated">下一个</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/src/carousel/carousel.ts</context><context context-type="linenumber">147</context></context-group></trans-unit>
-      <trans-unit id="ngb.datepicker.previous-month" datatype="html">
-        <source>Previous month</source>
-        <target state="translated">上个月</target>
-        
-        
-      <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/src/datepicker/datepicker-navigation.ts</context><context context-type="linenumber">24</context></context-group><context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/src/datepicker/datepicker-navigation.ts</context><context context-type="linenumber">35</context></context-group></trans-unit>
-      <trans-unit id="ngb.datepicker.next-month" datatype="html">
-        <source>Next month</source>
-        <target state="translated">下个月</target>
-        
-        
-      <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/src/datepicker/datepicker-navigation.ts</context><context context-type="linenumber">47</context></context-group><context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/src/datepicker/datepicker-navigation.ts</context><context context-type="linenumber">60</context></context-group></trans-unit>
-      <trans-unit id="ngb.datepicker.select-month" datatype="html">
-        <source>Select month</source>
-        <target state="translated">选择月份</target>
-        
-        
-      <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/src/datepicker/datepicker-navigation-select.ts</context><context context-type="linenumber">44</context></context-group><context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/src/datepicker/datepicker-navigation-select.ts</context><context context-type="linenumber">49</context></context-group></trans-unit>
-      <trans-unit id="ngb.datepicker.select-year" datatype="html">
-        <source>Select year</source>
-        <target state="translated">选择年份</target>
-        
-        
-      <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/src/datepicker/datepicker-navigation-select.ts</context><context context-type="linenumber">59</context></context-group><context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/src/datepicker/datepicker-navigation-select.ts</context><context context-type="linenumber">74</context></context-group></trans-unit>
-      <trans-unit id="ngb.pagination.first" datatype="html">
-        <source>««</source>
-        <target state="new">««</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/src/pagination/pagination.ts</context><context context-type="linenumber">182</context></context-group></trans-unit>
-      <trans-unit id="ngb.pagination.previous" datatype="html">
-        <source>«</source>
-        <target state="new">«</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/src/pagination/pagination.ts</context><context context-type="linenumber">186</context></context-group></trans-unit>
-      <trans-unit id="ngb.pagination.next" datatype="html">
-        <source>»</source>
-        <target state="new">»</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/src/pagination/pagination.ts</context><context context-type="linenumber">194</context></context-group></trans-unit>
-      <trans-unit id="ngb.pagination.last" datatype="html">
-        <source>»»</source>
-        <target state="new">»»</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/src/pagination/pagination.ts</context><context context-type="linenumber">201</context></context-group></trans-unit>
-      <trans-unit id="ngb.pagination.first-aria" datatype="html">
-        <source>First</source>
-        <target state="translated">第一</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/src/pagination/pagination.ts</context><context context-type="linenumber">208</context></context-group></trans-unit>
-      <trans-unit id="ngb.pagination.previous-aria" datatype="html">
-        <source>Previous</source>
-        <target state="translated">上一個</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/src/pagination/pagination.ts</context><context context-type="linenumber">215</context></context-group></trans-unit>
-      <trans-unit id="ngb.pagination.next-aria" datatype="html">
-        <source>Next</source>
-        <target state="translated">下一个</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/src/pagination/pagination.ts</context><context context-type="linenumber">226</context></context-group></trans-unit>
-      <trans-unit id="ngb.pagination.last-aria" datatype="html">
-        <source>Last</source>
-        <target state="translated">最后</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/src/pagination/pagination.ts</context><context context-type="linenumber">232</context></context-group></trans-unit>
-      <trans-unit id="ngb.progressbar.value" datatype="html">
-        <source><x id="INTERPOLATION"/></source>
-        <target state="new"><x id="INTERPOLATION"/></target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/src/progressbar/progressbar.ts</context><context context-type="linenumber">32</context></context-group></trans-unit>
-      <trans-unit id="ngb.timepicker.HH" datatype="html">
-        <source>HH</source>
-        <target state="new">HH</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/src/timepicker/timepicker.ts</context><context context-type="linenumber">40</context></context-group></trans-unit>
-      <trans-unit id="ngb.timepicker.hours" datatype="html">
-        <source>Hours</source>
-        <target state="translated">小时</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/src/timepicker/timepicker.ts</context><context context-type="linenumber">46</context></context-group></trans-unit>
-      <trans-unit id="ngb.timepicker.MM" datatype="html">
-        <source>MM</source>
-        <target state="new">MM</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/src/timepicker/timepicker.ts</context><context context-type="linenumber">51</context></context-group></trans-unit>
-      <trans-unit id="ngb.timepicker.minutes" datatype="html">
-        <source>Minutes</source>
-        <target state="translated">分钟</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/src/timepicker/timepicker.ts</context><context context-type="linenumber">58</context></context-group></trans-unit>
-      <trans-unit id="ngb.timepicker.increment-hours" datatype="html">
-        <source>Increment hours</source>
-        <target state="translated">增加小时</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/src/timepicker/timepicker.ts</context><context context-type="linenumber">63</context></context-group></trans-unit>
-      <trans-unit id="ngb.timepicker.decrement-hours" datatype="html">
-        <source>Decrement hours</source>
-        <target state="translated">减少小时</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/src/timepicker/timepicker.ts</context><context context-type="linenumber">69</context></context-group></trans-unit>
-      <trans-unit id="ngb.timepicker.increment-minutes" datatype="html">
-        <source>Increment minutes</source>
-        <target state="translated">增加分钟</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/src/timepicker/timepicker.ts</context><context context-type="linenumber">76</context></context-group></trans-unit>
-      <trans-unit id="ngb.timepicker.decrement-minutes" datatype="html">
-        <source>Decrement minutes</source>
-        <target state="translated">减少分钟</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/src/timepicker/timepicker.ts</context><context context-type="linenumber">82</context></context-group></trans-unit>
-      <trans-unit id="ngb.timepicker.SS" datatype="html">
-        <source>SS</source>
-        <target state="new">SS</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/src/timepicker/timepicker.ts</context><context context-type="linenumber">87</context></context-group></trans-unit>
-      <trans-unit id="ngb.timepicker.seconds" datatype="html">
-        <source>Seconds</source>
-        <target state="translated">秒</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/src/timepicker/timepicker.ts</context><context context-type="linenumber">92</context></context-group></trans-unit>
-      <trans-unit id="ngb.timepicker.increment-seconds" datatype="html">
-        <source>Increment seconds</source>
-        <target state="translated">增加秒</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/src/timepicker/timepicker.ts</context><context context-type="linenumber">100</context></context-group></trans-unit>
-      <trans-unit id="ngb.timepicker.decrement-seconds" datatype="html">
-        <source>Decrement seconds</source>
-        <target state="translated">减少秒</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/src/timepicker/timepicker.ts</context><context context-type="linenumber">106</context></context-group></trans-unit>
-      <trans-unit id="ngb.timepicker.PM" datatype="html">
-        <source><x id="INTERPOLATION"/></source>
-        <target state="new"><x id="INTERPOLATION"/></target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/src/timepicker/timepicker.ts</context><context context-type="linenumber">123</context></context-group></trans-unit>
-      <trans-unit id="ngb.timepicker.AM" datatype="html">
-        <source><x id="INTERPOLATION"/></source>
-        <target state="new"><x id="INTERPOLATION"/></target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/src/timepicker/timepicker.ts</context><context context-type="linenumber">115</context></context-group></trans-unit>
-      <trans-unit id="ngb.toast.close-aria" datatype="html">
-        <source>Close</source>
-        <target state="translated">关闭</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/src/toast/toast.ts</context><context context-type="linenumber">78</context></context-group></trans-unit>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
       <trans-unit id="5210096066382592800">
         <source>Video to import updated.</source>
         <target>已更新待导入的视频。</target>

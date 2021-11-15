@@ -1,0 +1,9 @@
+{
+  "xliffmergeOptions": {
+    "i18nFormat": "xlf",
+    "srcDir": "src/locale",
+    "genDir": "src/locale",
+    "i18nBaseFile": "angular",
+    "defaultLanguage": "en-US"
+  }
+}

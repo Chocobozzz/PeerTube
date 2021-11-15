@@ -288,61 +288,6 @@
               "src/**/*.html"
             ]
           }
-        },
-        "xliffmerge": {
-          "builder": "@ngx-i18nsupport/tooling:xliffmerge",
-          "options": {
-            "xliffmergeOptions": {
-              "i18nFormat": "xlf",
-              "srcDir": "src/locale",
-              "genDir": "src/locale",
-              "i18nBaseFile": "angular",
-              "defaultLanguage": "en-US",
-              "languages": [
-                "ar",
-                "ca-ES",
-                "gl-ES",
-                "cs-CZ",
-                "da-DK",
-                "de-DE",
-                "el-GR",
-                "en-GB",
-                "en-US",
-                "eo",
-                "es-ES",
-                "eu-ES",
-                "fa-IR",
-                "fi-FI",
-                "fr-FR",
-                "gd",
-                "gl-ES",
-                "hu-HU",
-                "it-IT",
-                "ja-JP",
-                "jbo",
-                "kab",
-                "ko-KR",
-                "lt-LT",
-                "nb-NO",
-                "nl-NL",
-                "oc",
-                "pl-PL",
-                "pt-BR",
-                "pt-PT",
-                "ru-RU",
-                "sk-SK",
-                "sl-SI",
-                "sv-SE",
-                "ta",
-                "th-TH",
-                "tr-TR",
-                "uk-UA",
-                "vi-VN",
-                "zh-Hans-CN",
-                "zh-Hant-TW"
-              ]
-            }
-          }
         }
       }
     }
