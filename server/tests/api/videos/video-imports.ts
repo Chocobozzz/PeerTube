@@ -446,5 +446,9 @@ describe('Test video imports', function () {
 
       await testBinaryUpdate('https://api.github.com/repos/yt-dlp/yt-dlp/releases', 'yt-dlp')
     })
+
+    after(async function () {
+      await cleanupTests([ server ])
+    })
   })
 })
