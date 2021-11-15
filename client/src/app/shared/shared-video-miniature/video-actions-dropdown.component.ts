@@ -177,9 +177,9 @@ export class VideoActionsDropdownComponent implements OnChanges {
   /* Action handlers */
 
   async unblockVideo () {
-    const confirmMessage = $localize`Do you really want to unblock this video? It will be available again in the videos list.`
+    const confirmMessage = $localize`Do you really want to unblock ${this.video.name}? It will be available again in the videos list.`
 
-    const res = await this.confirmService.confirm(confirmMessage, $localize`Unblock`)
+    const res = await this.confirmService.confirm(confirmMessage, $localize`Unblock ${this.video.name}`)
     if (res === false) return
 
     this.videoBlocklistService.unblockVideo(this.video.id)
@@ -200,12 +200,12 @@ export class VideoActionsDropdownComponent implements OnChanges {
   async removeVideo () {
     this.modalOpened.emit()
 
-    let message = $localize`Do you really want to delete this video?`
+    let message = $localize`Do you really want to delete ${this.video.name}?`
     if (this.video.isLive) {
       message += ' ' + $localize`The live stream will be automatically terminated.`
     }
 
-    const res = await this.confirmService.confirm(message, $localize`Delete`)
+    const res = await this.confirmService.confirm(message, $localize`Delete ${this.video.name}`)
     if (res === false) return
 
     this.videoService.removeVideo(this.video.id)
@@ -223,7 +223,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
     this.redundancyService.addVideoRedundancy(this.video)
         .subscribe({
           next: () => {
-            const message = $localize`This video will be duplicated by your instance.`
+            const message = $localize`${this.video.name} will be duplicated by your instance.`
             this.notifier.success(message)
           },
 
