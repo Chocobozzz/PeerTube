@@ -144,8 +144,6 @@ describe('Test live', function () {
       await servers[1].videos.view({ id: liveVideoUUID })
 
       await waitJobs(servers)
-      await wait(5000)
-      await waitJobs(servers)
 
       expect(localLastVideoViews).to.equal(2)
       expect(remoteLastVideoViews).to.equal(2)
