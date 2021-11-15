@@ -68,11 +68,13 @@ cd $PEERTUBE_PATH/versions
 unzip -o "peertube-${VERSION}.zip"
 rm -f "peertube-${VERSION}.zip"
 
-# Upgrade Scripts
+# Launch yarn to check if we have all required dependencies
+cd "$PEERTUBE_PATH/versions/peertube-${VERSION}"
+NOCLIENT=1 yarn install --production --pure-lockfile
+
+# Switch to latest code version
 rm -rf $PEERTUBE_PATH/peertube-latest
 ln -s "$PEERTUBE_PATH/versions/peertube-${VERSION}" $PEERTUBE_PATH/peertube-latest
-cd $PEERTUBE_PATH/peertube-latest
-NOCLIENT=1 yarn install --production --pure-lockfile
 cp $PEERTUBE_PATH/peertube-latest/config/default.yaml $PEERTUBE_PATH/config/default.yaml
 
 echo "Differences in configuration files..."
