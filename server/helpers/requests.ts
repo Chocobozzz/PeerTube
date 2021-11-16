@@ -6,8 +6,10 @@ import { CONFIG } from '../initializers/config'
 import { ACTIVITY_PUB, BINARY_CONTENT_TYPES, PEERTUBE_VERSION, REQUEST_TIMEOUT, WEBSERVER } from '../initializers/constants'
 import { pipelinePromise } from './core-utils'
 import { processImage } from './image-utils'
-import { logger } from './logger'
+import { logger, loggerTagsFactory } from './logger'
 import { getProxy, isProxyEnabled } from './proxy'
+
+const lTags = loggerTagsFactory('request')
 
 const httpSignature = require('@peertube/http-signature')
 
@@ -48,7 +50,7 @@ const peertubeGot = got.extend({
       promiseOrStream.on('downloadProgress', progress => {
         if (progress.transferred > bodyLimit && progress.percent !== 1) {
           const message = `Exceeded the download limit of ${bodyLimit} B`
-          logger.warn(message)
+          logger.warn(message, lTags())
 
           // CancelableRequest
           if (promiseOrStream.cancel) {
@@ -105,6 +107,7 @@ function doRequest (url: string, options: PeerTubeRequestOptions = {}) {
   const gotOptions = buildGotOptions(options)
 
   return peertubeGot(url, gotOptions)
+    .on('retry', logRetryFactory(url))
     .catch(err => { throw buildRequestError(err) })
 }
 
@@ -112,6 +115,7 @@ function doJSONRequest <T> (url: string, options: PeerTubeRequestOptions = {}) {
   const gotOptions = buildGotOptions(options)
 
   return peertubeGot<T>(url, { ...gotOptions, responseType: 'json' })
+    .on('retry', logRetryFactory(url))
     .catch(err => { throw buildRequestError(err) })
 }
 
@@ -131,7 +135,7 @@ async function doRequestAndSaveToFile (
     )
   } catch (err) {
     remove(destPath)
-      .catch(err => logger.error('Cannot remove %s after request failure.', destPath, { err }))
+      .catch(err => logger.error('Cannot remove %s after request failure.', destPath, { err, ...lTags() }))
 
     throw buildRequestError(err)
   }
@@ -157,7 +161,7 @@ function getAgent () {
 
   const proxy = getProxy()
 
-  logger.info('Using proxy %s.', proxy)
+  logger.info('Using proxy %s.', proxy, lTags())
 
   const proxyAgentOptions = {
     keepAlive: true,
@@ -229,6 +233,7 @@ function buildGotOptions (options: PeerTubeRequestOptions) {
     timeout: REQUEST_TIMEOUT,
     json: options.json,
     searchParams: options.searchParams,
+    retry: 2,
     headers,
     context
   }
@@ -245,4 +250,10 @@ function buildRequestError (error: RequestError) {
   }
 
   return newError
+}
+
+function logRetryFactory (url: string) {
+  return (retryCount: number, error: RequestError) => {
+    logger.debug('Retrying request to %s.', url, { retryCount, error, ...lTags() })
+  }
 }
