@@ -76,8 +76,11 @@ async function autoResize (options: {
 }) {
   const { sourceImage, newSize, destination } = options
 
-  // Portrait mode, special handling
-  if (sourceImage.getWidth() < sourceImage.getHeight()) {
+  // Portrait mode targetting a landscape, apply some effect on the image
+  const sourceIsPortrait = sourceImage.getWidth() < sourceImage.getHeight()
+  const destIsPortraitOrSquare = newSize.width <= newSize.height
+
+  if (sourceIsPortrait && !destIsPortraitOrSquare) {
     const baseImage = sourceImage.cloneQuiet().cover(newSize.width, newSize.height)
                                               .color([ { apply: 'shade', params: [ 50 ] } ])
 
@@ -86,7 +89,7 @@ async function autoResize (options: {
     return write(baseImage.blit(topImage, 0, 0), destination)
   }
 
-  return write(sourceImage.contain(newSize.width, newSize.height), destination)
+  return write(sourceImage.cover(newSize.width, newSize.height), destination)
 }
 
 function write (image: Jimp, destination: string) {
