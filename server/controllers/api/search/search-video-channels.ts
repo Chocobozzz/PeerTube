@@ -56,7 +56,7 @@ function searchVideoChannels (req: express.Request, res: express.Response) {
   if (parts.length === 3 && parts[0].length === 0) parts.shift()
   const isWebfingerSearch = parts.length === 2 && parts.every(p => p && !p.includes(' '))
 
-  if (isURISearch(search) || isWebfingerSearch) return searchVideoChannelURI(search, isWebfingerSearch, res)
+  if (isURISearch(search) || isWebfingerSearch) return searchVideoChannelURI(search, res)
 
   // @username -> username to search in DB
   if (search.startsWith('@')) query.search = search.replace(/^@/, '')
@@ -110,11 +110,11 @@ async function searchVideoChannelsDB (query: VideoChannelsSearchQueryAfterSaniti
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
-async function searchVideoChannelURI (search: string, isWebfingerSearch: boolean, res: express.Response) {
+async function searchVideoChannelURI (search: string, res: express.Response) {
   let videoChannel: MChannelAccountDefault
   let uri = search
 
-  if (isWebfingerSearch) {
+  if (!isURISearch(search)) {
     try {
       uri = await loadActorUrlOrGetFromWebfinger(search)
     } catch (err) {
