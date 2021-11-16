@@ -147,7 +147,7 @@ $ docker-compose up -d
 ```shell
 $ git clone https://github.com/chocobozzz/PeerTube /tmp/peertube
 $ cd /tmp/peertube
-$ docker build . -f ./support/docker/production/Dockerfile.buster
+$ docker build . -f ./support/docker/production/Dockerfile.bullseye
 ```
 
 ### Development
