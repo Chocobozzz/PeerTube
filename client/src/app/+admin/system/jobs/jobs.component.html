@@ -46,7 +46,7 @@
       <th style="width: 200px" class="job-type" i18n>Type</th>
       <th style="width: 200px" class="job-priority" i18n>Priority <small>(1 = highest priority)</small></th>
       <th style="width: 200px" class="job-state" i18n *ngIf="jobState === 'all'">State</th>
-      <th style="width: 100px" class="job-progress" i18n *ngIf="hasProgress()">Progress</th>
+      <th style="width: 100px" class="job-progress" i18n *ngIf="hasGlobalProgress()">Progress</th>
       <th style="width: 150px" class="job-date" i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
     </tr>
   </ng-template>
@@ -65,8 +65,8 @@
         <span class="badge" [ngClass]="getJobStateClass(job.state)">{{ job.state }}</span>
       </td>
 
-      <td class="job-progress c-hand" [pRowToggler]="job" *ngIf="hasProgress()">
-        {{ getProgress(job) }}
+      <td class="job-progress c-hand" [pRowToggler]="job">
+        <ng-container *ngIf="hasProgress(job)">{{ getProgress(job) }}</ng-container>
       </td>
 
       <td class="job-date c-hand" [pRowToggler]="job">{{ job.createdAt | date: 'short' }}</td>
