@@ -4,6 +4,7 @@ import 'mocha'
 import { expect } from 'chai'
 import { pathExists, remove } from 'fs-extra'
 import { join } from 'path'
+import { Mock429 } from '@shared/extra-utils/mock-servers/mock-429'
 import { FIXTURE_URLS, root, wait } from '../../../shared/extra-utils'
 import { doRequest, doRequestAndSaveToFile } from '../../helpers/requests'
 
@@ -32,6 +33,20 @@ describe('Request helpers', function () {
     }
 
     throw new Error('No error thrown by do request and save to file')
+  })
+
+  it('Should correctly retry on 429 error', async function () {
+    this.timeout(25000)
+
+    const mock = new Mock429()
+    const port = await mock.initialize()
+
+    const before = new Date().getTime()
+    await doRequest('http://localhost:' + port)
+
+    expect(new Date().getTime() - before).to.be.greaterThan(2000)
+
+    await mock.terminate()
   })
 
   it('Should succeed if the file is below the limit', async function () {

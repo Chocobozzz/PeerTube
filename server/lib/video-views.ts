@@ -1,3 +1,4 @@
+import { isTestInstance } from '@server/helpers/core-utils'
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
 import { VIEW_LIFETIME } from '@server/initializers/constants'
 import { VideoModel } from '@server/models/video/video'
@@ -98,7 +99,7 @@ export class VideoViews {
   }
 
   private async cleanViewers () {
-    logger.info('Cleaning video viewers.', lTags())
+    if (!isTestInstance()) logger.info('Cleaning video viewers.', lTags())
 
     for (const videoId of this.viewersPerVideo.keys()) {
       const notBefore = new Date().getTime()

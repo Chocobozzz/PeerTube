@@ -1,5 +1,5 @@
 import { createWriteStream, remove } from 'fs-extra'
-import got, { CancelableRequest, Options as GotOptions, RequestError, Response } from 'got'
+import got, { CancelableRequest, NormalizedOptions, Options as GotOptions, RequestError, Response } from 'got'
 import { HttpProxyAgent, HttpsProxyAgent } from 'hpagent'
 import { join } from 'path'
 import { CONFIG } from '../initializers/config'
@@ -16,6 +16,7 @@ const httpSignature = require('@peertube/http-signature')
 export interface PeerTubeRequestError extends Error {
   statusCode?: number
   responseBody?: any
+  responseHeaders?: any
 }
 
 type PeerTubeRequestOptions = {
@@ -99,6 +100,12 @@ const peertubeGot = got.extend({
           }, httpSignatureOptions)
         }
       }
+    ],
+
+    beforeRetry: [
+      (_options: NormalizedOptions, error: RequestError, retryCount: number) => {
+        logger.debug('Retrying request to %s.', error.request.requestUrl, { retryCount, error: buildRequestError(error), ...lTags() })
+      }
     ]
   }
 })
@@ -107,7 +114,6 @@ function doRequest (url: string, options: PeerTubeRequestOptions = {}) {
   const gotOptions = buildGotOptions(options)
 
   return peertubeGot(url, gotOptions)
-    .on('retry', logRetryFactory(url))
     .catch(err => { throw buildRequestError(err) })
 }
 
@@ -115,7 +121,6 @@ function doJSONRequest <T> (url: string, options: PeerTubeRequestOptions = {}) {
   const gotOptions = buildGotOptions(options)
 
   return peertubeGot<T>(url, { ...gotOptions, responseType: 'json' })
-    .on('retry', logRetryFactory(url))
     .catch(err => { throw buildRequestError(err) })
 }
 
@@ -246,14 +251,9 @@ function buildRequestError (error: RequestError) {
 
   if (error.response) {
     newError.responseBody = error.response.body
+    newError.responseHeaders = error.response.headers
     newError.statusCode = error.response.statusCode
   }
 
   return newError
-}
-
-function logRetryFactory (url: string) {
-  return (retryCount: number, error: RequestError) => {
-    logger.debug('Retrying request to %s.', url, { retryCount, error, ...lTags() })
-  }
 }
