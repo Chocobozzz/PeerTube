@@ -282,7 +282,6 @@ export class VideoPlaylistElementModel extends Model<Partial<AttributesOnly<Vide
   static increasePositionOf (
     videoPlaylistId: number,
     fromPosition: number,
-    toPosition?: number,
     by = 1,
     transaction?: Transaction
   ) {
