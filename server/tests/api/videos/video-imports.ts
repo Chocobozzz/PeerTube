@@ -2,7 +2,7 @@
 
 import 'mocha'
 import { expect } from 'chai'
-import { pathExists, remove } from 'fs-extra'
+import { pathExists, readdir, remove } from 'fs-extra'
 import { join } from 'path'
 import {
   areHttpImportTestsDisabled,
@@ -416,7 +416,11 @@ describe('Test video imports', function () {
 
       await quickPeerTubeImport()
 
-      expect(await pathExists(join(server.servers.buildDirectory('bin'), releaseName))).to.be.true
+      const base = server.servers.buildDirectory('bin')
+      const content = await readdir(base)
+      const binaryPath = join(base, releaseName)
+
+      expect(await pathExists(binaryPath), `${binaryPath} does not exist in ${base} (${content.join(', ')})`).to.be.true
     }
 
     before(async function () {
