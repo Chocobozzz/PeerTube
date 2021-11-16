@@ -28,6 +28,9 @@ async function processCreateActivity (options: APProcessorOptions<ActivityCreate
   }
 
   if (activityType === 'Note') {
+    // Comments will be fetched from videos
+    if (options.fromFetch) return
+
     return retryTransactionWrapper(processCreateVideoComment, activity, byActor, notify)
   }
 

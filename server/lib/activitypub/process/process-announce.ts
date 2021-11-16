@@ -8,11 +8,15 @@ import { Notifier } from '../../notifier'
 import { logger } from '../../../helpers/logger'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model'
 import { MActorSignature, MVideoAccountLightBlacklistAllFiles } from '../../../types/models'
+import { getAPId } from '@server/helpers/activitypub'
 
 async function processAnnounceActivity (options: APProcessorOptions<ActivityAnnounce>) {
   const { activity, byActor: actorAnnouncer } = options
   // Only notify if it is not from a fetcher job
   const notify = options.fromFetch !== true
+
+  // Announces on accounts are not supported
+  if (actorAnnouncer.type !== 'Application' && actorAnnouncer.type !== 'Group') return
 
   return retryTransactionWrapper(processVideoShare, actorAnnouncer, activity, notify)
 }
@@ -26,7 +30,7 @@ export {
 // ---------------------------------------------------------------------------
 
 async function processVideoShare (actorAnnouncer: MActorSignature, activity: ActivityAnnounce, notify: boolean) {
-  const objectUri = typeof activity.object === 'string' ? activity.object : activity.object.id
+  const objectUri = getAPId(activity.object)
 
   let video: MVideoAccountLightBlacklistAllFiles
   let videoCreated: boolean

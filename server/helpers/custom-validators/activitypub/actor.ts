@@ -60,11 +60,12 @@ function isActorDeleteActivityValid (activity: any) {
 }
 
 function sanitizeAndCheckActorObject (actor: any) {
+  if (!isActorTypeValid(actor.type)) return false
+
   normalizeActor(actor)
 
   return exists(actor) &&
     isActivityPubUrlValid(actor.id) &&
-    isActorTypeValid(actor.type) &&
     isActivityPubUrlValid(actor.inbox) &&
     isActorPreferredUsernameValid(actor.preferredUsername) &&
     isActivityPubUrlValid(actor.url) &&
