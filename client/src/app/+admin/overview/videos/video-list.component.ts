@@ -1,10 +1,11 @@
 import { SortMeta } from 'primeng/api'
 import { finalize } from 'rxjs/operators'
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, ConfirmService, Notifier, RestPagination, RestTable } from '@app/core'
 import { AdvancedInputFilter } from '@app/shared/shared-forms'
 import { DropdownAction, Video, VideoService } from '@app/shared/shared-main'
+import { VideoBlockComponent, VideoBlockService } from '@app/shared/shared-moderation'
 import { VideoActionsDisplayType } from '@app/shared/shared-video-miniature'
 import { UserRight, VideoPrivacy, VideoState, VideoStreamingPlaylistType } from '@shared/models'
 import { VideoAdminService } from './video-admin.service'
@@ -15,6 +16,8 @@ import { VideoAdminService } from './video-admin.service'
   styleUrls: [ './video-list.component.scss' ]
 })
 export class VideoListComponent extends RestTable implements OnInit {
+  @ViewChild('videoBlockModal') videoBlockModal: VideoBlockComponent
+
   videos: Video[] = []
 
   totalRecords = 0
@@ -48,7 +51,8 @@ export class VideoListComponent extends RestTable implements OnInit {
     private auth: AuthService,
     private notifier: Notifier,
     private videoService: VideoService,
-    private videoAdminService: VideoAdminService
+    private videoAdminService: VideoAdminService,
+    private videoBlockService: VideoBlockService
   ) {
     super()
   }
@@ -68,6 +72,16 @@ export class VideoListComponent extends RestTable implements OnInit {
           label: $localize`Delete`,
           handler: videos => this.removeVideos(videos),
           isDisplayed: () => this.authUser.hasRight(UserRight.REMOVE_ANY_VIDEO)
+        },
+        {
+          label: $localize`Block`,
+          handler: videos => this.videoBlockModal.show(videos),
+          isDisplayed: videos => this.authUser.hasRight(UserRight.MANAGE_VIDEO_BLACKLIST) && videos.every(v => !v.blacklisted)
+        },
+        {
+          label: $localize`Unblock`,
+          handler: videos => this.unblockVideos(videos),
+          isDisplayed: videos => this.authUser.hasRight(UserRight.MANAGE_VIDEO_BLACKLIST) && videos.every(v => v.blacklisted)
         }
       ]
     ]
@@ -132,6 +146,10 @@ export class VideoListComponent extends RestTable implements OnInit {
     return files.reduce((p, f) => p += f.size, 0)
   }
 
+  onVideoBlocked () {
+    this.reloadData()
+  }
+
   protected reloadData () {
     this.selectedVideos = []
 
@@ -160,7 +178,19 @@ export class VideoListComponent extends RestTable implements OnInit {
     this.videoService.removeVideo(videos.map(v => v.id))
       .subscribe({
         next: () => {
-          this.notifier.success($localize`${videos.length} videos deleted.`)
+          this.notifier.success($localize`Deleted ${videos.length} videos.`)
+          this.reloadData()
+        },
+
+        error: err => this.notifier.error(err.message)
+      })
+  }
+
+  private unblockVideos (videos: Video[]) {
+    this.videoBlockService.unblockVideo(videos.map(v => v.id))
+      .subscribe({
+        next: () => {
+          this.notifier.success($localize`Unblocked ${videos.length} videos.`)
           this.reloadData()
         },
 

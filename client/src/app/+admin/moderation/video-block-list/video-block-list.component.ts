@@ -64,7 +64,7 @@ export class VideoBlockListComponent extends RestTable implements OnInit {
           label: $localize`Switch video block to manual`,
           handler: videoBlock => {
             this.videoBlocklistService.unblockVideo(videoBlock.video.id).pipe(
-              switchMap(_ => this.videoBlocklistService.blockVideo(videoBlock.video.id, undefined, true))
+              switchMap(_ => this.videoBlocklistService.blockVideo([ { videoId: videoBlock.video.id, unfederate: true } ]))
             ).subscribe({
               next: () => {
                 this.notifier.success($localize`Video ${videoBlock.video.name} switched to manual block.`)

@@ -128,7 +128,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
   showBlockModal () {
     this.modalOpened.emit()
 
-    this.videoBlockModal.show()
+    this.videoBlockModal.show([ this.video ])
   }
 
   showLiveInfoModal (video: Video) {

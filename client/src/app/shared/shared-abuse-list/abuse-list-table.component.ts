@@ -338,7 +338,7 @@ export class AbuseListTableComponent extends RestTable implements OnInit {
         label: $localize`Block video`,
         isDisplayed: abuse => abuse.video && !abuse.video.deleted && !abuse.video.blacklisted,
         handler: abuse => {
-          this.videoBlocklistService.blockVideo(abuse.video.id, undefined, abuse.video.channel.isLocal)
+          this.videoBlocklistService.blockVideo([ { videoId: abuse.video.id, unfederate: abuse.video.channel.isLocal } ])
             .subscribe({
               next: () => {
                 this.notifier.success($localize`Video blocked.`)

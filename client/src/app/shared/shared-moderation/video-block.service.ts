@@ -63,16 +63,20 @@ export class VideoBlockService {
       )
   }
 
-  blockVideo (videoId: number, reason: string, unfederate: boolean) {
-    const body = {
-      unfederate,
-      reason
-    }
+  blockVideo (options: {
+    videoId: number
+    reason?: string
+    unfederate: boolean
+  }[]) {
+    return observableFrom(options)
+      .pipe(
+        concatMap(({ videoId, unfederate, reason }) => {
+          const body = { unfederate, reason }
 
-    return this.authHttp.post(VideoBlockService.BASE_VIDEOS_URL + videoId + '/blacklist', body)
-               .pipe(
-                 map(this.restExtractor.extractDataBool),
-                 catchError(res => this.restExtractor.handleError(res))
-               )
+          return this.authHttp.post(VideoBlockService.BASE_VIDEOS_URL + videoId + '/blacklist', body)
+        }),
+        toArray(),
+        catchError(res => this.restExtractor.handleError(res))
+      )
   }
 }
