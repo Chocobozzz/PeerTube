@@ -138,7 +138,6 @@
             "tsConfig": "tsconfig.json",
             "polyfills": "src/polyfills.ts",
             "baseHref": "/",
-            "deployUrl": "",
             "stylePreprocessorOptions": {
               "includePaths": [
                 "src/sass/include"
