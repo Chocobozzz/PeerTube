@@ -602,6 +602,36 @@ export class VideosCommand extends AbstractCommand {
 
   // ---------------------------------------------------------------------------
 
+  removeHLSFiles (options: OverrideCommandOptions & {
+    videoId: number | string
+  }) {
+    const path = '/api/v1/videos/' + options.videoId + '/hls'
+
+    return this.deleteRequest({
+      ...options,
+
+      path,
+      implicitToken: true,
+      defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
+    })
+  }
+
+  removeWebTorrentFiles (options: OverrideCommandOptions & {
+    videoId: number | string
+  }) {
+    const path = '/api/v1/videos/' + options.videoId + '/webtorrent'
+
+    return this.deleteRequest({
+      ...options,
+
+      path,
+      implicitToken: true,
+      defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
+    })
+  }
+
+  // ---------------------------------------------------------------------------
+
   private buildListQuery (options: VideosCommonQuery) {
     return pick(options, [
       'start',

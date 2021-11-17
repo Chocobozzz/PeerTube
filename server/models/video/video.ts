@@ -746,7 +746,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
 
       // Remove physical files and torrents
       instance.VideoFiles.forEach(file => {
-        tasks.push(instance.removeFileAndTorrent(file))
+        tasks.push(instance.removeWebTorrentFileAndTorrent(file))
       })
 
       // Remove playlists file
@@ -1706,7 +1706,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
                                        .concat(toAdd)
   }
 
-  removeFileAndTorrent (videoFile: MVideoFile, isRedundancy = false) {
+  removeWebTorrentFileAndTorrent (videoFile: MVideoFile, isRedundancy = false) {
     const filePath = isRedundancy
       ? VideoPathManager.Instance.getFSRedundancyVideoFilePath(this, videoFile)
       : VideoPathManager.Instance.getFSVideoFileOutputPath(this, videoFile)

@@ -51,7 +51,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-export async function updateVideo (req: express.Request, res: express.Response) {
+async function updateVideo (req: express.Request, res: express.Response) {
   const videoFromReq = res.locals.videoAll
   const videoFieldsSave = videoFromReq.toJSON()
   const oldVideoAuditView = new VideoAuditView(videoFromReq.toFormattedDetailsJSON())

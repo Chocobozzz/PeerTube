@@ -55,7 +55,7 @@ async function updateVideoFile (video: MVideoFullLight, inputFilePath: string) {
 
   if (currentVideoFile) {
     // Remove old file and old torrent
-    await video.removeFileAndTorrent(currentVideoFile)
+    await video.removeWebTorrentFileAndTorrent(currentVideoFile)
     // Remove the old video file from the array
     video.VideoFiles = video.VideoFiles.filter(f => f !== currentVideoFile)
 

@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from '@a
 import { AuthService, ConfirmService, Notifier, ScreenService } from '@app/core'
 import { BlocklistService, VideoBlockComponent, VideoBlockService, VideoReportComponent } from '@app/shared/shared-moderation'
 import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap'
-import { VideoCaption } from '@shared/models'
+import { UserRight, VideoCaption } from '@shared/models'
 import {
   Actor,
   DropdownAction,
@@ -27,6 +27,7 @@ export type VideoActionsDisplayType = {
   duplicate?: boolean
   mute?: boolean
   liveInfo?: boolean
+  removeFiles?: boolean
 }
 
 @Component({
@@ -65,6 +66,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
   @Input() buttonSize: DropdownButtonSize = 'normal'
   @Input() buttonDirection: DropdownDirection = 'vertical'
 
+  @Output() videoFilesRemoved = new EventEmitter()
   @Output() videoRemoved = new EventEmitter()
   @Output() videoUnblocked = new EventEmitter()
   @Output() videoBlocked = new EventEmitter()
@@ -174,6 +176,10 @@ export class VideoActionsDropdownComponent implements OnChanges {
     return this.video.account.id !== this.user.account.id
   }
 
+  canRemoveVideoFiles () {
+    return this.user.hasRight(UserRight.MANAGE_VIDEO_FILES) && this.video.hasHLS() && this.video.hasWebTorrent()
+  }
+
   /* Action handlers */
 
   async unblockVideo () {
@@ -243,6 +249,23 @@ export class VideoActionsDropdownComponent implements OnChanges {
 
           error: err => this.notifier.error(err.message)
         })
+  }
+
+  async removeVideoFiles (video: Video, type: 'hls' | 'webtorrent') {
+    const confirmMessage = $localize`Do you really want to remove "${this.video.name}" files?`
+
+    const res = await this.confirmService.confirm(confirmMessage, $localize`Remove "${this.video.name}" files`)
+    if (res === false) return
+
+    this.videoService.removeVideoFiles([ video.id ], type)
+      .subscribe({
+        next: () => {
+          this.notifier.success($localize`Removed files of ${video.name}.`)
+          this.videoFilesRemoved.emit()
+        },
+
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   onVideoBlocked () {
@@ -315,6 +338,20 @@ export class VideoActionsDropdownComponent implements OnChanges {
           handler: () => this.showReportModal(),
           isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions.report,
           iconName: 'flag'
+        }
+      ],
+      [
+        {
+          label: $localize`Delete HLS files`,
+          handler: ({ video }) => this.removeVideoFiles(video, 'hls'),
+          isDisplayed: () => this.displayOptions.removeFiles && this.canRemoveVideoFiles(),
+          iconName: 'delete'
+        },
+        {
+          label: $localize`Delete WebTorrent files`,
+          handler: ({ video }) => this.removeVideoFiles(video, 'webtorrent'),
+          isDisplayed: () => this.displayOptions.removeFiles && this.canRemoveVideoFiles(),
+          iconName: 'delete'
         }
       ],
       [ // actions regarding the account/its server

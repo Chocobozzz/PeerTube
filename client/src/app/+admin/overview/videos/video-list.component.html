@@ -57,7 +57,7 @@
       <td class="action-cell">
         <my-video-actions-dropdown
           placement="bottom auto" buttonDirection="horizontal" [buttonStyled]="true" [video]="video"
-          [displayOptions]="videoActionsOptions" (videoRemoved)="onVideoRemoved()"
+          [displayOptions]="videoActionsOptions" (videoRemoved)="reloadData()" (videoFilesRemoved)="reloadData()"
         ></my-video-actions-dropdown>
       </td>
 
@@ -127,4 +127,4 @@
   </ng-template>
 </p-table>
 
-<my-video-block #videoBlockModal (videoBlocked)="onVideoBlocked()"></my-video-block>
+<my-video-block #videoBlockModal (videoBlocked)="reloadData()"></my-video-block>

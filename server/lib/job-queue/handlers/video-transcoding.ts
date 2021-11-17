@@ -138,7 +138,7 @@ async function onHlsPlaylistGeneration (video: MVideoFullLight, user: MUser, pay
   if (payload.isMaxQuality && CONFIG.TRANSCODING.WEBTORRENT.ENABLED === false) {
     // Remove webtorrent files if not enabled
     for (const file of video.VideoFiles) {
-      await video.removeFileAndTorrent(file)
+      await video.removeWebTorrentFileAndTorrent(file)
       await file.destroy()
     }
 

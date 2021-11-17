@@ -14,7 +14,8 @@ import {
   VideoPrivacy,
   VideoScheduleUpdate,
   VideoState,
-  VideoStreamingPlaylist
+  VideoStreamingPlaylist,
+  VideoStreamingPlaylistType
 } from '@shared/models'
 
 export class Video implements VideoServerModel {
@@ -217,6 +218,14 @@ export class Video implements VideoServerModel {
 
   isUpdatableBy (user: AuthUser) {
     return user && this.isLocal === true && (this.account.name === user.username || user.hasRight(UserRight.UPDATE_ANY_VIDEO))
+  }
+
+  hasHLS () {
+    return this.streamingPlaylists?.some(p => p.type === VideoStreamingPlaylistType.HLS)
+  }
+
+  hasWebTorrent () {
+    return this.files && this.files.length !== 0
   }
 
   isLiveInfoAvailableBy (user: AuthUser) {

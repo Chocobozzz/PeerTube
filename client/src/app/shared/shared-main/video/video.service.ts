@@ -299,6 +299,15 @@ export class VideoService {
       )
   }
 
+  removeVideoFiles (videoIds: (number | string)[], type: 'hls' | 'webtorrent') {
+    return from(videoIds)
+      .pipe(
+        concatMap(id => this.authHttp.delete(VideoService.BASE_VIDEO_URL + '/' + id + '/' + type)),
+        toArray(),
+        catchError(err => this.restExtractor.handleError(err))
+      )
+  }
+
   loadCompleteDescription (descriptionPath: string) {
     return this.authHttp
                .get<{ description: string }>(environment.apiUrl + descriptionPath)

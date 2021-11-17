@@ -39,7 +39,8 @@ export class VideoListComponent extends RestTable implements OnInit {
     report: false,
     duplicate: true,
     mute: true,
-    liveInfo: false
+    liveInfo: false,
+    removeFiles: true
   }
 
   loading = true
@@ -71,17 +72,34 @@ export class VideoListComponent extends RestTable implements OnInit {
         {
           label: $localize`Delete`,
           handler: videos => this.removeVideos(videos),
-          isDisplayed: () => this.authUser.hasRight(UserRight.REMOVE_ANY_VIDEO)
+          isDisplayed: () => this.authUser.hasRight(UserRight.REMOVE_ANY_VIDEO),
+          iconName: 'delete'
         },
         {
           label: $localize`Block`,
           handler: videos => this.videoBlockModal.show(videos),
-          isDisplayed: videos => this.authUser.hasRight(UserRight.MANAGE_VIDEO_BLACKLIST) && videos.every(v => !v.blacklisted)
+          isDisplayed: videos => this.authUser.hasRight(UserRight.MANAGE_VIDEO_BLACKLIST) && videos.every(v => !v.blacklisted),
+          iconName: 'no'
         },
         {
           label: $localize`Unblock`,
           handler: videos => this.unblockVideos(videos),
-          isDisplayed: videos => this.authUser.hasRight(UserRight.MANAGE_VIDEO_BLACKLIST) && videos.every(v => v.blacklisted)
+          isDisplayed: videos => this.authUser.hasRight(UserRight.MANAGE_VIDEO_BLACKLIST) && videos.every(v => v.blacklisted),
+          iconName: 'undo'
+        }
+      ],
+      [
+        {
+          label: $localize`Delete HLS files`,
+          handler: videos => this.removeVideoFiles(videos, 'hls'),
+          isDisplayed: videos => this.authUser.hasRight(UserRight.MANAGE_VIDEO_FILES) && videos.every(v => v.hasHLS() && v.hasWebTorrent()),
+          iconName: 'delete'
+        },
+        {
+          label: $localize`Delete WebTorrent files`,
+          handler: videos => this.removeVideoFiles(videos, 'webtorrent'),
+          isDisplayed: videos => this.authUser.hasRight(UserRight.MANAGE_VIDEO_FILES) && videos.every(v => v.hasHLS() && v.hasWebTorrent()),
+          iconName: 'delete'
         }
       ]
     ]
@@ -93,10 +111,6 @@ export class VideoListComponent extends RestTable implements OnInit {
 
   isInSelectionMode () {
     return this.selectedVideos.length !== 0
-  }
-
-  onVideoRemoved () {
-    this.reloadData()
   }
 
   getPrivacyBadgeClass (video: Video) {
@@ -146,11 +160,7 @@ export class VideoListComponent extends RestTable implements OnInit {
     return files.reduce((p, f) => p += f.size, 0)
   }
 
-  onVideoBlocked () {
-    this.reloadData()
-  }
-
-  protected reloadData () {
+  reloadData () {
     this.selectedVideos = []
 
     this.loading = true
@@ -191,6 +201,25 @@ export class VideoListComponent extends RestTable implements OnInit {
       .subscribe({
         next: () => {
           this.notifier.success($localize`Unblocked ${videos.length} videos.`)
+          this.reloadData()
+        },
+
+        error: err => this.notifier.error(err.message)
+      })
+  }
+
+  private async removeVideoFiles (videos: Video[], type: 'hls' | 'webtorrent') {
+    const message = type === 'hls'
+      ? $localize`Are you sure you want to delete ${videos.length} HLS streaming playlists?`
+      : $localize`Are you sure you want to delete WebTorrent files of ${videos.length} videos?`
+
+    const res = await this.confirmService.confirm(message, $localize`Delete`)
+    if (res === false) return
+
+    this.videoService.removeVideoFiles(videos.map(v => v.id), type)
+      .subscribe({
+        next: () => {
+          this.notifier.success($localize`Files were removed.`)
           this.reloadData()
         },
 

@@ -1,5 +1,4 @@
 import express from 'express'
-import toInt from 'validator/lib/toInt'
 import { pickCommonVideoQuery } from '@server/helpers/query'
 import { doJSONRequest } from '@server/helpers/requests'
 import { VideoViews } from '@server/lib/video-views'
@@ -27,17 +26,16 @@ import {
   paginationValidator,
   setDefaultPagination,
   setDefaultVideosSort,
-  videoFileMetadataGetValidator,
   videosCustomGetValidator,
   videosGetValidator,
   videosRemoveValidator,
   videosSortValidator
 } from '../../../middlewares'
 import { VideoModel } from '../../../models/video/video'
-import { VideoFileModel } from '../../../models/video/video-file'
 import { blacklistRouter } from './blacklist'
 import { videoCaptionsRouter } from './captions'
 import { videoCommentRouter } from './comment'
+import { filesRouter } from './files'
 import { videoImportsRouter } from './import'
 import { liveRouter } from './live'
 import { ownershipVideoRouter } from './ownership'
@@ -59,6 +57,7 @@ videosRouter.use('/', watchingRouter)
 videosRouter.use('/', liveRouter)
 videosRouter.use('/', uploadRouter)
 videosRouter.use('/', updateRouter)
+videosRouter.use('/', filesRouter)
 
 videosRouter.get('/categories',
   openapiOperationDoc({ operationId: 'getCategories' }),
@@ -92,10 +91,6 @@ videosRouter.get('/:id/description',
   openapiOperationDoc({ operationId: 'getVideoDesc' }),
   asyncMiddleware(videosGetValidator),
   asyncMiddleware(getVideoDescription)
-)
-videosRouter.get('/:id/metadata/:videoFileId',
-  asyncMiddleware(videoFileMetadataGetValidator),
-  asyncMiddleware(getVideoFileMetadata)
 )
 videosRouter.get('/:id',
   openapiOperationDoc({ operationId: 'getVideo' }),
@@ -175,12 +170,6 @@ async function getVideoDescription (req: express.Request, res: express.Response)
     : await fetchRemoteVideoDescription(videoInstance)
 
   return res.json({ description })
-}
-
-async function getVideoFileMetadata (req: express.Request, res: express.Response) {
-  const videoFile = await VideoFileModel.loadWithMetadata(toInt(req.params.videoFileId))
-
-  return res.json(videoFile.metadata)
 }
 
 async function listVideos (req: express.Request, res: express.Response) {
