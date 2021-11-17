@@ -322,6 +322,7 @@ export class PeerTubeServer {
       },
       storage: {
         tmp: `test${this.internalServerNumber}/tmp/`,
+        bin: `test${this.internalServerNumber}/bin/`,
         avatars: `test${this.internalServerNumber}/avatars/`,
         videos: `test${this.internalServerNumber}/videos/`,
         streaming_playlists: `test${this.internalServerNumber}/streaming-playlists/`,
