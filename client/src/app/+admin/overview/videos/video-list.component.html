@@ -66,6 +66,9 @@
       </td>
 
       <td>
+        <span class="badge badge-blue" *ngIf="video.isLocal">Local</span>
+        <span class="badge badge-purple" *ngIf="!video.isLocal">Remote</span>
+
         <span [ngClass]="getPrivacyBadgeClass(video)" class="badge">{{ video.privacy.label }}</span>
 
         <span *ngIf="video.nsfw" class="badge badge-red" i18n>NSFW</span>
