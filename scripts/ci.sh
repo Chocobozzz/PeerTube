@@ -7,8 +7,6 @@ if [ $# -eq 0 ]; then
     exit -1
 fi
 
-killall -q peertube || true
-
 retries=3
 
 runTest () {

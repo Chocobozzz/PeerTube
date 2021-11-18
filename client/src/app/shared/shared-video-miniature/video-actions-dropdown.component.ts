@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from '@a
 import { AuthService, ConfirmService, Notifier, ScreenService } from '@app/core'
 import { BlocklistService, VideoBlockComponent, VideoBlockService, VideoReportComponent } from '@app/shared/shared-moderation'
 import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap'
-import { UserRight, VideoCaption, VideoState } from '@shared/models'
+import { VideoCaption } from '@shared/models'
 import {
   Actor,
   DropdownAction,
