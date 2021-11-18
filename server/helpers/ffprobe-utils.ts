@@ -206,7 +206,7 @@ async function getVideoStreamFromFile (path: string, existingProbe?: FfprobeData
   return metadata.streams.find(s => s.codec_type === 'video') || null
 }
 
-function computeResolutionsToTranscode (videoFileResolution: number, type: 'vod' | 'live') {
+function computeLowerResolutionsToTranscode (videoFileResolution: number, type: 'vod' | 'live') {
   const configResolutions = type === 'vod'
     ? CONFIG.TRANSCODING.RESOLUTIONS
     : CONFIG.LIVE.TRANSCODING.RESOLUTIONS
@@ -214,7 +214,7 @@ function computeResolutionsToTranscode (videoFileResolution: number, type: 'vod'
   const resolutionsEnabled: number[] = []
 
   // Put in the order we want to proceed jobs
-  const resolutions = [
+  const resolutions: VideoResolution[] = [
     VideoResolution.H_NOVIDEO,
     VideoResolution.H_480P,
     VideoResolution.H_360P,
@@ -327,7 +327,7 @@ export {
   getVideoFileFPS,
   ffprobePromise,
   getClosestFramerateStandard,
-  computeResolutionsToTranscode,
+  computeLowerResolutionsToTranscode,
   getVideoFileBitrate,
   canDoQuickTranscode,
   canDoQuickVideoTranscode,

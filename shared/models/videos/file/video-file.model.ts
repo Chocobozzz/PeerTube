@@ -1,4 +1,4 @@
-import { VideoConstant } from './video-constant.model'
+import { VideoConstant } from '../video-constant.model'
 import { VideoFileMetadata } from './video-file-metadata.model'
 import { VideoResolution } from './video-resolution.enum'
 

@@ -40,7 +40,8 @@ export class VideoListComponent extends RestTable implements OnInit {
     duplicate: true,
     mute: true,
     liveInfo: false,
-    removeFiles: true
+    removeFiles: true,
+    transcoding: true
   }
 
   loading = true
@@ -90,15 +91,27 @@ export class VideoListComponent extends RestTable implements OnInit {
       ],
       [
         {
+          label: $localize`Run HLS transcoding`,
+          handler: videos => this.runTranscoding(videos, 'hls'),
+          isDisplayed: videos => videos.every(v => v.canRunTranscoding(this.authUser)),
+          iconName: 'cog'
+        },
+        {
+          label: $localize`Run WebTorrent transcoding`,
+          handler: videos => this.runTranscoding(videos, 'webtorrent'),
+          isDisplayed: videos => videos.every(v => v.canRunTranscoding(this.authUser)),
+          iconName: 'cog'
+        },
+        {
           label: $localize`Delete HLS files`,
           handler: videos => this.removeVideoFiles(videos, 'hls'),
-          isDisplayed: videos => this.authUser.hasRight(UserRight.MANAGE_VIDEO_FILES) && videos.every(v => v.hasHLS() && v.hasWebTorrent()),
+          isDisplayed: videos => videos.every(v => v.canRemoveFiles(this.authUser)),
           iconName: 'delete'
         },
         {
           label: $localize`Delete WebTorrent files`,
           handler: videos => this.removeVideoFiles(videos, 'webtorrent'),
-          isDisplayed: videos => this.authUser.hasRight(UserRight.MANAGE_VIDEO_FILES) && videos.every(v => v.hasHLS() && v.hasWebTorrent()),
+          isDisplayed: videos => videos.every(v => v.canRemoveFiles(this.authUser)),
           iconName: 'delete'
         }
       ]
@@ -220,6 +233,19 @@ export class VideoListComponent extends RestTable implements OnInit {
       .subscribe({
         next: () => {
           this.notifier.success($localize`Files were removed.`)
+          this.reloadData()
+        },
+
+        error: err => this.notifier.error(err.message)
+      })
+  }
+
+  private runTranscoding (videos: Video[], type: 'hls' | 'webtorrent') {
+    this.videoService.runTranscoding(videos.map(v => v.id), type)
+      .subscribe({
+        next: () => {
+          this.notifier.success($localize`Transcoding jobs created.`)
+
           this.reloadData()
         },
 

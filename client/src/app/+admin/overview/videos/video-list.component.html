@@ -56,8 +56,8 @@
 
       <td class="action-cell">
         <my-video-actions-dropdown
-          placement="bottom auto" buttonDirection="horizontal" [buttonStyled]="true" [video]="video"
-          [displayOptions]="videoActionsOptions" (videoRemoved)="reloadData()" (videoFilesRemoved)="reloadData()"
+          placement="bottom auto" buttonDirection="horizontal" [buttonStyled]="true" [video]="video" [displayOptions]="videoActionsOptions"
+          (videoRemoved)="reloadData()" (videoFilesRemoved)="reloadData()" (transcodingCreated)="reloadData()"
         ></my-video-actions-dropdown>
       </td>
 

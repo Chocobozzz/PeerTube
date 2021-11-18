@@ -267,6 +267,10 @@ tags:
     description: Like/dislike a video.
   - name: Video Playlists
     description: Operations dealing with playlists of videos. Playlists are bound to users and/or channels.
+  - name: Video Files
+    description: Operations on video files
+  - name: Video Transcoding
+    description: Video transcoding related operations
   - name: Feeds
     description: Server syndication feeds
   - name: Search
@@ -309,6 +313,8 @@ x-tagGroups:
       - Video Playlists
       - Video Ownership Change
       - Video Mirroring
+      - Video Files
+      - Video Transcoding
       - Live Videos
       - Feeds
   - name: Search
@@ -3562,6 +3568,69 @@ paths:
                     - dislike
               required:
                 - rating
+      responses:
+        '204':
+          description: successful operation
+        '404':
+          description: video does not exist
+
+  '/videos/{id}/hls':
+    delete:
+      summary: Delete video HLS files
+      security:
+        - OAuth2:
+          - admin
+      tags:
+        - Video Files
+      operationId: delVideoHLS
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+      responses:
+        '204':
+          description: successful operation
+        '404':
+          description: video does not exist
+  '/videos/{id}/webtorrent':
+    delete:
+      summary: Delete video WebTorrent files
+      security:
+        - OAuth2:
+          - admin
+      tags:
+        - Video Files
+      operationId: delVideoWebTorrent
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+      responses:
+        '204':
+          description: successful operation
+        '404':
+          description: video does not exist
+
+  '/videos/{id}/transcoding':
+    post:
+      summary: Create a transcoding job
+      security:
+        - OAuth2:
+          - admin
+      tags:
+        - Video Transcoding
+      operationId: createVideoTranscoding
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+      requestBody:
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  transcodingType:
+                    type: string
+                    enum:
+                      - hls
+                      - webtorrent
+                required:
+                  - transcodingType
       responses:
         '204':
           description: successful operation

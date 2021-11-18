@@ -115,7 +115,7 @@ function generateVideoMiniature (options: {
 }) {
   const { video, videoFile, type } = options
 
-  return VideoPathManager.Instance.makeAvailableVideoFile(video, videoFile, input => {
+  return VideoPathManager.Instance.makeAvailableVideoFile(videoFile.withVideoOrPlaylist(video), input => {
     const { filename, basePath, height, width, existingThumbnail, outputPath } = buildMetadataFromVideo(video, type)
 
     const thumbnailCreator = videoFile.isAudio()

@@ -1,12 +1,12 @@
 import { join } from 'path'
-import { MStreamingPlaylist, MVideoUUID } from '@server/types/models'
+import { MStreamingPlaylistVideo } from '@server/types/models'
 
-function generateHLSObjectStorageKey (playlist: MStreamingPlaylist, video: MVideoUUID, filename: string) {
-  return join(generateHLSObjectBaseStorageKey(playlist, video), filename)
+function generateHLSObjectStorageKey (playlist: MStreamingPlaylistVideo, filename: string) {
+  return join(generateHLSObjectBaseStorageKey(playlist), filename)
 }
 
-function generateHLSObjectBaseStorageKey (playlist: MStreamingPlaylist, video: MVideoUUID) {
-  return join(playlist.getStringType(), video.uuid)
+function generateHLSObjectBaseStorageKey (playlist: MStreamingPlaylistVideo) {
+  return join(playlist.getStringType(), playlist.Video.uuid)
 }
 
 function generateWebTorrentObjectStorageKey (filename: string) {

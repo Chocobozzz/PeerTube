@@ -33,9 +33,8 @@ import { getHLSDirectory, getHLSRedundancyDirectory } from '@server/lib/paths'
 import { VideoPathManager } from '@server/lib/video-path-manager'
 import { getServerActor } from '@server/models/application/application'
 import { ModelCache } from '@server/models/model-cache'
-import { AttributesOnly, buildVideoEmbedPath, buildVideoWatchPath, pick } from '@shared/core-utils'
-import { VideoInclude } from '@shared/models'
-import { VideoFile } from '@shared/models/videos/video-file.model'
+import { AttributesOnly, buildVideoEmbedPath, buildVideoWatchPath, isThisWeek, pick } from '@shared/core-utils'
+import { VideoFile, VideoInclude } from '@shared/models'
 import { ResultList, UserRight, VideoPrivacy, VideoState } from '../../../shared'
 import { VideoObject } from '../../../shared/models/activitypub/objects'
 import { Video, VideoDetails, VideoRateType, VideoStorage } from '../../../shared/models/videos'
@@ -1673,7 +1672,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     const file = this.getMaxQualityFile()
     const videoOrPlaylist = file.getVideoOrStreamingPlaylist()
 
-    return VideoPathManager.Instance.makeAvailableVideoFile(videoOrPlaylist, file, originalFilePath => {
+    return VideoPathManager.Instance.makeAvailableVideoFile(file.withVideoOrPlaylist(videoOrPlaylist), originalFilePath => {
       return getVideoFileResolution(originalFilePath)
     })
   }
@@ -1742,7 +1741,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
       )
 
       if (streamingPlaylist.storage === VideoStorage.OBJECT_STORAGE) {
-        await removeHLSObjectStorage(streamingPlaylist, this)
+        await removeHLSObjectStorage(streamingPlaylist.withVideo(this))
       }
     }
   }

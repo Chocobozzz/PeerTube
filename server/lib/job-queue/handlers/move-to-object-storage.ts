@@ -56,16 +56,17 @@ async function moveWebTorrentFiles (video: MVideoWithAllFiles) {
 
 async function moveHLSFiles (video: MVideoWithAllFiles) {
   for (const playlist of video.VideoStreamingPlaylists) {
+    const playlistWithVideo = playlist.withVideo(video)
 
     for (const file of playlist.VideoFiles) {
       if (file.storage !== VideoStorage.FILE_SYSTEM) continue
 
       // Resolution playlist
       const playlistFilename = getHlsResolutionPlaylistFilename(file.filename)
-      await storeHLSFile(playlist, video, playlistFilename)
+      await storeHLSFile(playlistWithVideo, playlistFilename)
 
       // Resolution fragmented file
-      const fileUrl = await storeHLSFile(playlist, video, file.filename)
+      const fileUrl = await storeHLSFile(playlistWithVideo, file.filename)
 
       const oldPath = join(getHLSDirectory(video), file.filename)
 
@@ -78,10 +79,12 @@ async function doAfterLastJob (video: MVideoWithAllFiles, isNewVideo: boolean) {
   for (const playlist of video.VideoStreamingPlaylists) {
     if (playlist.storage === VideoStorage.OBJECT_STORAGE) continue
 
+    const playlistWithVideo = playlist.withVideo(video)
+
     // Master playlist
-    playlist.playlistUrl = await storeHLSFile(playlist, video, playlist.playlistFilename)
+    playlist.playlistUrl = await storeHLSFile(playlistWithVideo, playlist.playlistFilename)
     // Sha256 segments file
-    playlist.segmentsSha256Url = await storeHLSFile(playlist, video, playlist.segmentsSha256Filename)
+    playlist.segmentsSha256Url = await storeHLSFile(playlistWithVideo, playlist.segmentsSha256Filename)
 
     playlist.storage = VideoStorage.OBJECT_STORAGE
 

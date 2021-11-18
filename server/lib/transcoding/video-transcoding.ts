@@ -35,7 +35,7 @@ function optimizeOriginalVideofile (video: MVideoFullLight, inputVideoFile: MVid
   const transcodeDirectory = CONFIG.STORAGE.TMP_DIR
   const newExtname = '.mp4'
 
-  return VideoPathManager.Instance.makeAvailableVideoFile(video, inputVideoFile, async videoInputPath => {
+  return VideoPathManager.Instance.makeAvailableVideoFile(inputVideoFile.withVideoOrPlaylist(video), async videoInputPath => {
     const videoTranscodedPath = join(transcodeDirectory, video.id + '-transcoded' + newExtname)
 
     const transcodeType: TranscodeOptionsType = await canDoQuickTranscode(videoInputPath)
@@ -81,7 +81,7 @@ function transcodeNewWebTorrentResolution (video: MVideoFullLight, resolution: V
   const transcodeDirectory = CONFIG.STORAGE.TMP_DIR
   const extname = '.mp4'
 
-  return VideoPathManager.Instance.makeAvailableVideoFile(video, video.getMaxQualityFile(), async videoInputPath => {
+  return VideoPathManager.Instance.makeAvailableVideoFile(video.getMaxQualityFile().withVideoOrPlaylist(video), async videoInputPath => {
     const newVideoFile = new VideoFileModel({
       resolution,
       extname,
@@ -134,7 +134,7 @@ function mergeAudioVideofile (video: MVideoFullLight, resolution: VideoResolutio
 
   const inputVideoFile = video.getMinQualityFile()
 
-  return VideoPathManager.Instance.makeAvailableVideoFile(video, inputVideoFile, async audioInputPath => {
+  return VideoPathManager.Instance.makeAvailableVideoFile(inputVideoFile.withVideoOrPlaylist(video), async audioInputPath => {
     const videoTranscodedPath = join(transcodeDirectory, video.id + '-transcoded' + newExtname)
 
     // If the user updates the video preview during transcoding

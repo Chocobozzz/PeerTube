@@ -3,10 +3,11 @@ import toInt from 'validator/lib/toInt'
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
 import { federateVideoIfNeeded } from '@server/lib/activitypub/videos'
 import { VideoFileModel } from '@server/models/video/video-file'
-import { HttpStatusCode } from '@shared/models'
+import { HttpStatusCode, UserRight } from '@shared/models'
 import {
   asyncMiddleware,
   authenticate,
+  ensureUserHasRight,
   videoFileMetadataGetValidator,
   videoFilesDeleteHLSValidator,
   videoFilesDeleteWebTorrentValidator
@@ -22,12 +23,14 @@ filesRouter.get('/:id/metadata/:videoFileId',
 
 filesRouter.delete('/:id/hls',
   authenticate,
+  ensureUserHasRight(UserRight.MANAGE_VIDEO_FILES),
   asyncMiddleware(videoFilesDeleteHLSValidator),
   asyncMiddleware(removeHLSPlaylist)
 )
 
 filesRouter.delete('/:id/webtorrent',
   authenticate,
+  ensureUserHasRight(UserRight.MANAGE_VIDEO_FILES),
   asyncMiddleware(videoFilesDeleteWebTorrentValidator),
   asyncMiddleware(removeWebTorrentFiles)
 )

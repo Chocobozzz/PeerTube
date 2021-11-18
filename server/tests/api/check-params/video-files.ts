@@ -1,16 +1,19 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-import { cleanupTests, createMultipleServers, PeerTubeServer, setAccessTokensToServers, waitJobs } from '@shared/extra-utils'
+import { cleanupTests, createMultipleServers, doubleFollow, PeerTubeServer, setAccessTokensToServers, waitJobs } from '@shared/extra-utils'
 import { HttpStatusCode, UserRole } from '@shared/models'
 
 describe('Test videos files', function () {
   let servers: PeerTubeServer[]
+
   let webtorrentId: string
   let hlsId: string
   let remoteId: string
+
   let userToken: string
   let moderatorToken: string
+
   let validId1: string
   let validId2: string
 
@@ -22,8 +25,15 @@ describe('Test videos files', function () {
     servers = await createMultipleServers(2)
     await setAccessTokensToServers(servers)
 
+    await doubleFollow(servers[0], servers[1])
+
     userToken = await servers[0].users.generateUserAndToken('user', UserRole.USER)
     moderatorToken = await servers[0].users.generateUserAndToken('moderator', UserRole.MODERATOR)
+
+    {
+      const { uuid } = await servers[1].videos.quickUpload({ name: 'remote video' })
+      remoteId = uuid
+    }
 
     {
       await servers[0].config.enableTranscoding(true, true)
@@ -56,6 +66,11 @@ describe('Test videos files', function () {
     }
 
     await waitJobs(servers)
+  })
+
+  it('Should not delete files of a unknown video', async function () {
+    await servers[0].videos.removeHLSFiles({ videoId: 404, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+    await servers[0].videos.removeWebTorrentFiles({ videoId: 404, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
   })
 
   it('Should not delete files of a remote video', async function () {

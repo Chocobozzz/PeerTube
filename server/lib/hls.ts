@@ -37,7 +37,7 @@ async function updateMasterHLSPlaylist (video: MVideo, playlist: MStreamingPlayl
   for (const file of playlist.VideoFiles) {
     const playlistFilename = getHlsResolutionPlaylistFilename(file.filename)
 
-    await VideoPathManager.Instance.makeAvailableVideoFile(playlist, file, async videoFilePath => {
+    await VideoPathManager.Instance.makeAvailableVideoFile(file.withVideoOrPlaylist(playlist), async videoFilePath => {
       const size = await getVideoStreamSize(videoFilePath)
 
       const bandwidth = 'BANDWIDTH=' + video.getBandwidthBits(file)
@@ -69,10 +69,11 @@ async function updateSha256VODSegments (video: MVideoUUID, playlist: MStreamingP
   // For all the resolutions available for this video
   for (const file of playlist.VideoFiles) {
     const rangeHashes: { [range: string]: string } = {}
+    const fileWithPlaylist = file.withVideoOrPlaylist(playlist)
 
-    await VideoPathManager.Instance.makeAvailableVideoFile(playlist, file, videoPath => {
+    await VideoPathManager.Instance.makeAvailableVideoFile(fileWithPlaylist, videoPath => {
 
-      return VideoPathManager.Instance.makeAvailableResolutionPlaylistFile(playlist, file, async resolutionPlaylistPath => {
+      return VideoPathManager.Instance.makeAvailableResolutionPlaylistFile(fileWithPlaylist, async resolutionPlaylistPath => {
         const playlistContent = await readFile(resolutionPlaylistPath)
         const ranges = getRangesFromPlaylist(playlistContent.toString())
 

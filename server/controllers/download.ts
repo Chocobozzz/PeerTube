@@ -85,7 +85,7 @@ async function downloadVideoFile (req: express.Request, res: express.Response) {
     return res.redirect(videoFile.getObjectStorageUrl())
   }
 
-  await VideoPathManager.Instance.makeAvailableVideoFile(video, videoFile, path => {
+  await VideoPathManager.Instance.makeAvailableVideoFile(videoFile.withVideoOrPlaylist(video), path => {
     const filename = `${video.name}-${videoFile.resolution}p${videoFile.extname}`
 
     return res.download(path, filename)
@@ -119,7 +119,7 @@ async function downloadHLSVideoFile (req: express.Request, res: express.Response
     return res.redirect(videoFile.getObjectStorageUrl())
   }
 
-  await VideoPathManager.Instance.makeAvailableVideoFile(streamingPlaylist, videoFile, path => {
+  await VideoPathManager.Instance.makeAvailableVideoFile(videoFile.withVideoOrPlaylist(streamingPlaylist), path => {
     const filename = `${video.name}-${videoFile.resolution}p-${streamingPlaylist.getStringType()}${videoFile.extname}`
 
     return res.download(path, filename)

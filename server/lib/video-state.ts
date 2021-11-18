@@ -80,6 +80,8 @@ async function moveToExternalStorageState (video: MVideoFullLight, isNewVideo: b
 }
 
 function moveToFailedTranscodingState (video: MVideoFullLight) {
+  if (video.state === VideoState.TRANSCODING_FAILED) return
+
   return video.setNewState(VideoState.TRANSCODING_FAILED, false, undefined)
 }
 

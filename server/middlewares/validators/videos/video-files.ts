@@ -1,6 +1,6 @@
 import express from 'express'
-import { MUser, MVideo } from '@server/types/models'
-import { HttpStatusCode, UserRight } from '../../../../shared'
+import { MVideo } from '@server/types/models'
+import { HttpStatusCode } from '../../../../shared'
 import { logger } from '../../../helpers/logger'
 import { areValidationErrors, doesVideoExist, isValidVideoIdParam } from '../shared'
 
@@ -14,9 +14,7 @@ const videoFilesDeleteWebTorrentValidator = [
     if (!await doesVideoExist(req.params.id, res)) return
 
     const video = res.locals.videoAll
-    const user = res.locals.oauth.token.User
 
-    if (!checkUserCanDeleteFiles(user, res)) return
     if (!checkLocalVideo(video, res)) return
 
     if (!video.hasWebTorrentFiles()) {
@@ -47,9 +45,7 @@ const videoFilesDeleteHLSValidator = [
     if (!await doesVideoExist(req.params.id, res)) return
 
     const video = res.locals.videoAll
-    const user = res.locals.oauth.token.User
 
-    if (!checkUserCanDeleteFiles(user, res)) return
     if (!checkLocalVideo(video, res)) return
 
     if (!video.getHLSPlaylist()) {
@@ -82,19 +78,6 @@ function checkLocalVideo (video: MVideo, res: express.Response) {
     res.fail({
       status: HttpStatusCode.BAD_REQUEST_400,
       message: 'Cannot delete files of remote video'
-    })
-
-    return false
-  }
-
-  return true
-}
-
-function checkUserCanDeleteFiles (user: MUser, res: express.Response) {
-  if (user.hasRight(UserRight.MANAGE_VIDEO_FILES) !== true) {
-    res.fail({
-      status: HttpStatusCode.FORBIDDEN_403,
-      message: 'User cannot update video files'
     })
 
     return false

@@ -40,6 +40,7 @@ import { videoImportsRouter } from './import'
 import { liveRouter } from './live'
 import { ownershipVideoRouter } from './ownership'
 import { rateVideoRouter } from './rate'
+import { transcodingRouter } from './transcoding'
 import { updateRouter } from './update'
 import { uploadRouter } from './upload'
 import { watchingRouter } from './watching'
@@ -58,6 +59,7 @@ videosRouter.use('/', liveRouter)
 videosRouter.use('/', uploadRouter)
 videosRouter.use('/', updateRouter)
 videosRouter.use('/', filesRouter)
+videosRouter.use('/', transcodingRouter)
 
 videosRouter.get('/categories',
   openapiOperationDoc({ operationId: 'getCategories' }),

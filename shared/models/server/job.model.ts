@@ -1,5 +1,5 @@
 import { ContextType } from '../activitypub/context'
-import { VideoResolution } from '../videos/video-resolution.enum'
+import { VideoResolution } from '../videos/file/video-resolution.enum'
 import { SendEmailOptions } from './emailer.model'
 
 export type JobState = 'active' | 'completed' | 'failed' | 'waiting' | 'delayed' | 'paused'
@@ -106,6 +106,8 @@ export interface HLSTranscodingPayload extends BaseTranscodingPayload {
   isPortraitMode?: boolean
   resolution: VideoResolution
   copyCodecs: boolean
+
+  autoDeleteWebTorrentIfNeeded: boolean
   isMaxQuality: boolean
 }
 

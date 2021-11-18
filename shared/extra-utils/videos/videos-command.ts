@@ -18,7 +18,8 @@ import {
   VideoDetails,
   VideoFileMetadata,
   VideoPrivacy,
-  VideosCommonQuery
+  VideosCommonQuery,
+  VideoTranscodingCreate
 } from '@shared/models'
 import { buildAbsoluteFixturePath, wait } from '../miscs'
 import { unwrapBody } from '../requests'
@@ -625,6 +626,24 @@ export class VideosCommand extends AbstractCommand {
       ...options,
 
       path,
+      implicitToken: true,
+      defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
+    })
+  }
+
+  runTranscoding (options: OverrideCommandOptions & {
+    videoId: number | string
+    transcodingType: 'hls' | 'webtorrent'
+  }) {
+    const path = '/api/v1/videos/' + options.videoId + '/transcoding'
+
+    const fields: VideoTranscodingCreate = pick(options, [ 'transcodingType' ])
+
+    return this.postBodyRequest({
+      ...options,
+
+      path,
+      fields,
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
     })

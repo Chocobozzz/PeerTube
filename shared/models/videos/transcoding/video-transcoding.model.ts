@@ -1,4 +1,4 @@
-import { VideoResolution } from './video-resolution.enum'
+import { VideoResolution } from '../file/video-resolution.enum'
 
 // Types used by plugins and ffmpeg-utils
 

@@ -3,7 +3,7 @@ import { readFile } from 'fs-extra'
 import { createServer, Server } from 'net'
 import { createServer as createServerTLS, Server as ServerTLS } from 'tls'
 import {
-  computeResolutionsToTranscode,
+  computeLowerResolutionsToTranscode,
   ffprobePromise,
   getVideoFileBitrate,
   getVideoFileFPS,
@@ -402,7 +402,7 @@ class LiveManager {
 
   private buildAllResolutionsToTranscode (originResolution: number) {
     const resolutionsEnabled = CONFIG.LIVE.TRANSCODING.ENABLED
-      ? computeResolutionsToTranscode(originResolution, 'live')
+      ? computeLowerResolutionsToTranscode(originResolution, 'live')
       : []
 
     return resolutionsEnabled.concat([ originResolution ])

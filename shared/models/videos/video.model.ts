@@ -1,7 +1,7 @@
 import { Account, AccountSummary } from '../actors'
 import { VideoChannel, VideoChannelSummary } from './channel/video-channel.model'
+import { VideoFile } from './file'
 import { VideoConstant } from './video-constant.model'
-import { VideoFile } from './video-file.model'
 import { VideoPrivacy } from './video-privacy.enum'
 import { VideoScheduleUpdate } from './video-schedule-update.model'
 import { VideoState } from './video-state.enum'

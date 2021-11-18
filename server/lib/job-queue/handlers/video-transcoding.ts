@@ -14,7 +14,7 @@ import {
   VideoTranscodingPayload
 } from '../../../../shared'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
-import { computeResolutionsToTranscode } from '../../../helpers/ffprobe-utils'
+import { computeLowerResolutionsToTranscode } from '../../../helpers/ffprobe-utils'
 import { logger, loggerTagsFactory } from '../../../helpers/logger'
 import { CONFIG } from '../../../initializers/config'
 import { VideoModel } from '../../../models/video/video'
@@ -81,7 +81,7 @@ async function handleHLSJob (job: Job, payload: HLSTranscodingPayload, video: MV
 
   const videoOrStreamingPlaylist = videoFileInput.getVideoOrStreamingPlaylist()
 
-  await VideoPathManager.Instance.makeAvailableVideoFile(videoOrStreamingPlaylist, videoFileInput, videoInputPath => {
+  await VideoPathManager.Instance.makeAvailableVideoFile(videoFileInput.withVideoOrPlaylist(videoOrStreamingPlaylist), videoInputPath => {
     return generateHlsPlaylistResolution({
       video,
       videoInputPath,
@@ -135,7 +135,7 @@ async function handleWebTorrentOptimizeJob (job: Job, payload: OptimizeTranscodi
 // ---------------------------------------------------------------------------
 
 async function onHlsPlaylistGeneration (video: MVideoFullLight, user: MUser, payload: HLSTranscodingPayload) {
-  if (payload.isMaxQuality && CONFIG.TRANSCODING.WEBTORRENT.ENABLED === false) {
+  if (payload.isMaxQuality && payload.autoDeleteWebTorrentIfNeeded && CONFIG.TRANSCODING.WEBTORRENT.ENABLED === false) {
     // Remove webtorrent files if not enabled
     for (const file of video.VideoFiles) {
       await video.removeWebTorrentFileAndTorrent(file)
@@ -232,6 +232,7 @@ async function createHlsJobIfEnabled (user: MUserId, payload: {
     isPortraitMode: payload.isPortraitMode,
     copyCodecs: payload.copyCodecs,
     isMaxQuality: payload.isMaxQuality,
+    autoDeleteWebTorrentIfNeeded: true,
     isNewVideo: payload.isNewVideo
   }
 
@@ -261,7 +262,7 @@ async function createLowerResolutionsJobs (options: {
   const { video, user, videoFileResolution, isPortraitMode, isNewVideo, type } = options
 
   // Create transcoding jobs if there are enabled resolutions
-  const resolutionsEnabled = computeResolutionsToTranscode(videoFileResolution, 'vod')
+  const resolutionsEnabled = computeLowerResolutionsToTranscode(videoFileResolution, 'vod')
   const resolutionCreated: string[] = []
 
   for (const resolution of resolutionsEnabled) {
@@ -288,6 +289,7 @@ async function createLowerResolutionsJobs (options: {
         isPortraitMode,
         copyCodecs: false,
         isMaxQuality: false,
+        autoDeleteWebTorrentIfNeeded: true,
         isNewVideo
       }
 

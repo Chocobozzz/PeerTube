@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from '@a
 import { AuthService, ConfirmService, Notifier, ScreenService } from '@app/core'
 import { BlocklistService, VideoBlockComponent, VideoBlockService, VideoReportComponent } from '@app/shared/shared-moderation'
 import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap'
-import { UserRight, VideoCaption } from '@shared/models'
+import { UserRight, VideoCaption, VideoState } from '@shared/models'
 import {
   Actor,
   DropdownAction,
@@ -28,6 +28,7 @@ export type VideoActionsDisplayType = {
   mute?: boolean
   liveInfo?: boolean
   removeFiles?: boolean
+  transcoding?: boolean
 }
 
 @Component({
@@ -56,7 +57,9 @@ export class VideoActionsDropdownComponent implements OnChanges {
     report: true,
     duplicate: true,
     mute: true,
-    liveInfo: false
+    liveInfo: false,
+    removeFiles: false,
+    transcoding: false
   }
   @Input() placement = 'left'
 
@@ -71,6 +74,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
   @Output() videoUnblocked = new EventEmitter()
   @Output() videoBlocked = new EventEmitter()
   @Output() videoAccountMuted = new EventEmitter()
+  @Output() transcodingCreated = new EventEmitter()
   @Output() modalOpened = new EventEmitter()
 
   videoActions: DropdownAction<{ video: Video }>[][] = []
@@ -177,7 +181,11 @@ export class VideoActionsDropdownComponent implements OnChanges {
   }
 
   canRemoveVideoFiles () {
-    return this.user.hasRight(UserRight.MANAGE_VIDEO_FILES) && this.video.hasHLS() && this.video.hasWebTorrent()
+    return this.video.canRemoveFiles(this.user)
+  }
+
+  canRunTranscoding () {
+    return this.video.canRunTranscoding(this.user)
   }
 
   /* Action handlers */
@@ -268,6 +276,18 @@ export class VideoActionsDropdownComponent implements OnChanges {
       })
   }
 
+  runTranscoding (video: Video, type: 'hls' | 'webtorrent') {
+    this.videoService.runTranscoding([ video.id ], type)
+      .subscribe({
+        next: () => {
+          this.notifier.success($localize`Transcoding jobs created for ${video.name}.`)
+          this.transcodingCreated.emit()
+        },
+
+        error: err => this.notifier.error(err.message)
+      })
+  }
+
   onVideoBlocked () {
     this.videoBlocked.emit()
   }
@@ -341,6 +361,18 @@ export class VideoActionsDropdownComponent implements OnChanges {
         }
       ],
       [
+        {
+          label: $localize`Run HLS transcoding`,
+          handler: ({ video }) => this.runTranscoding(video, 'hls'),
+          isDisplayed: () => this.displayOptions.transcoding && this.canRunTranscoding(),
+          iconName: 'cog'
+        },
+        {
+          label: $localize`Run WebTorrent transcoding`,
+          handler: ({ video }) => this.runTranscoding(video, 'webtorrent'),
+          isDisplayed: () => this.displayOptions.transcoding && this.canRunTranscoding(),
+          iconName: 'cog'
+        },
         {
           label: $localize`Delete HLS files`,
           handler: ({ video }) => this.removeVideoFiles(video, 'hls'),

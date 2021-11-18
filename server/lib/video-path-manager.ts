@@ -3,7 +3,14 @@ import { extname, join } from 'path'
 import { buildUUID } from '@server/helpers/uuid'
 import { extractVideo } from '@server/helpers/video'
 import { CONFIG } from '@server/initializers/config'
-import { MStreamingPlaylistVideo, MVideo, MVideoFile, MVideoUUID } from '@server/types/models'
+import {
+  MStreamingPlaylistVideo,
+  MVideo,
+  MVideoFile,
+  MVideoFileStreamingPlaylistVideo,
+  MVideoFileVideo,
+  MVideoUUID
+} from '@server/types/models'
 import { VideoStorage } from '@shared/models'
 import { makeHLSFileAvailable, makeWebTorrentFileAvailable } from './object-storage'
 import { getHLSDirectory, getHLSRedundancyDirectory, getHlsResolutionPlaylistFilename } from './paths'
@@ -43,10 +50,10 @@ class VideoPathManager {
     return join(CONFIG.STORAGE.VIDEOS_DIR, videoFile.filename)
   }
 
-  async makeAvailableVideoFile <T> (videoOrPlaylist: MVideo | MStreamingPlaylistVideo, videoFile: MVideoFile, cb: MakeAvailableCB<T>) {
+  async makeAvailableVideoFile <T> (videoFile: MVideoFileVideo | MVideoFileStreamingPlaylistVideo, cb: MakeAvailableCB<T>) {
     if (videoFile.storage === VideoStorage.FILE_SYSTEM) {
       return this.makeAvailableFactory(
-        () => this.getFSVideoFileOutputPath(videoOrPlaylist, videoFile),
+        () => this.getFSVideoFileOutputPath(videoFile.getVideoOrStreamingPlaylist(), videoFile),
         false,
         cb
       )
@@ -55,10 +62,10 @@ class VideoPathManager {
     const destination = this.buildTMPDestination(videoFile.filename)
 
     if (videoFile.isHLS()) {
-      const video = extractVideo(videoOrPlaylist)
+      const playlist = (videoFile as MVideoFileStreamingPlaylistVideo).VideoStreamingPlaylist
 
       return this.makeAvailableFactory(
-        () => makeHLSFileAvailable(videoOrPlaylist as MStreamingPlaylistVideo, video, videoFile.filename, destination),
+        () => makeHLSFileAvailable(playlist, videoFile.filename, destination),
         true,
         cb
       )
@@ -71,19 +78,20 @@ class VideoPathManager {
     )
   }
 
-  async makeAvailableResolutionPlaylistFile <T> (playlist: MStreamingPlaylistVideo, videoFile: MVideoFile, cb: MakeAvailableCB<T>) {
+  async makeAvailableResolutionPlaylistFile <T> (videoFile: MVideoFileStreamingPlaylistVideo, cb: MakeAvailableCB<T>) {
     const filename = getHlsResolutionPlaylistFilename(videoFile.filename)
 
     if (videoFile.storage === VideoStorage.FILE_SYSTEM) {
       return this.makeAvailableFactory(
-        () => join(getHLSDirectory(playlist.Video), filename),
+        () => join(getHLSDirectory(videoFile.getVideo()), filename),
         false,
         cb
       )
     }
 
+    const playlist = videoFile.VideoStreamingPlaylist
     return this.makeAvailableFactory(
-      () => makeHLSFileAvailable(playlist, playlist.Video, filename, this.buildTMPDestination(filename)),
+      () => makeHLSFileAvailable(playlist, filename, this.buildTMPDestination(filename)),
       true,
       cb
     )
@@ -99,7 +107,7 @@ class VideoPathManager {
     }
 
     return this.makeAvailableFactory(
-      () => makeHLSFileAvailable(playlist, playlist.Video, filename, this.buildTMPDestination(filename)),
+      () => makeHLSFileAvailable(playlist, filename, this.buildTMPDestination(filename)),
       true,
       cb
     )

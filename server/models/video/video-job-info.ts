@@ -49,7 +49,7 @@ export class VideoJobInfoModel extends Model<Partial<AttributesOnly<VideoJobInfo
   })
   Video: VideoModel
 
-  static load (videoId: number, transaction: Transaction) {
+  static load (videoId: number, transaction?: Transaction) {
     const where = {
       videoId
     }

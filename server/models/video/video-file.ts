@@ -25,7 +25,7 @@ import { logger } from '@server/helpers/logger'
 import { extractVideo } from '@server/helpers/video'
 import { getHLSPublicFileUrl, getWebTorrentPublicFileUrl } from '@server/lib/object-storage'
 import { getFSTorrentFilePath } from '@server/lib/paths'
-import { MStreamingPlaylistVideo, MVideo, MVideoWithHost } from '@server/types/models'
+import { isStreamingPlaylist, MStreamingPlaylistVideo, MVideo, MVideoWithHost } from '@server/types/models'
 import { AttributesOnly } from '@shared/core-utils'
 import { VideoStorage } from '@shared/models'
 import {
@@ -535,5 +535,11 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
         (this.videoId !== null && this.videoId === other.videoId) ||
         (this.videoStreamingPlaylistId !== null && this.videoStreamingPlaylistId === other.videoStreamingPlaylistId)
       )
+  }
+
+  withVideoOrPlaylist (videoOrPlaylist: MVideo | MStreamingPlaylistVideo) {
+    if (isStreamingPlaylist(videoOrPlaylist)) return Object.assign(this, { VideoStreamingPlaylist: videoOrPlaylist })
+
+    return Object.assign(this, { Video: videoOrPlaylist })
   }
 }
