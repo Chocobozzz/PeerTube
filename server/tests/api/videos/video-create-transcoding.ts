@@ -60,12 +60,12 @@ function runTests (objectStorage: boolean) {
     const { shortUUID } = await servers[0].videos.quickUpload({ name: 'video' })
     videoUUID = shortUUID
 
+    await waitJobs(servers)
+
     const video = await servers[0].videos.get({ id: videoUUID })
     publishedAt = video.publishedAt as string
 
     await servers[0].config.enableTranscoding()
-
-    await waitJobs(servers)
   })
 
   it('Should generate HLS', async function () {
