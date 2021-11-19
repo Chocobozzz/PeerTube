@@ -221,14 +221,16 @@ export class Video implements VideoServerModel {
   }
 
   canRemoveFiles (user: AuthUser) {
-    return user.hasRight(UserRight.MANAGE_VIDEO_FILES) &&
+    return this.isLocal &&
+      user.hasRight(UserRight.MANAGE_VIDEO_FILES) &&
       this.state.id !== VideoState.TO_TRANSCODE &&
       this.hasHLS() &&
       this.hasWebTorrent()
   }
 
   canRunTranscoding (user: AuthUser) {
-    return user.hasRight(UserRight.RUN_VIDEO_TRANSCODING) &&
+    return this.isLocal &&
+      user.hasRight(UserRight.RUN_VIDEO_TRANSCODING) &&
       this.state.id !== VideoState.TO_TRANSCODE
   }
 
