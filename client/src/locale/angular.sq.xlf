@@ -10752,7 +10752,7 @@
       </trans-unit>
       <trans-unit id="665092574f9af9fec262f8349b67b14192391ae6" datatype="html">
         <source>Video support must be at least 3 characters long.</source>
-        <target/>
+        <target>Mbulimi video duhet të jetë të paktën 3 shenja i gjatë.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -10760,7 +10760,7 @@
       </trans-unit>
       <trans-unit id="f17de746af56840511cae11559539b6d8b6955ad" datatype="html">
         <source>Video support cannot be more than 1000 characters long.</source>
-        <target/>
+        <target>Mbulimi për video s’mund të jetë më tepër se 1000 shenja i gjatë.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-validators.service.ts</context>
           <context context-type="linenumber">1</context>
