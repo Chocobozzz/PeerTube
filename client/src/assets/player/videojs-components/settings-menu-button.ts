@@ -150,6 +150,9 @@ class SettingsButton extends Button {
     this.dialog.show()
 
     this.setDialogSize(this.getComponentSize(this.menu))
+
+    const firstChild = this.menu.children()[0]
+    if (firstChild) firstChild.focus()
   }
 
   hideDialog () {

@@ -146,7 +146,6 @@ $setting-transition-easing: ease-out;
           padding: 5px 8px;
 
           &.vjs-back-button {
-            background-color: inherit;
             padding: 8px 8px 13px 12px;
             margin-bottom: 5px;
             border-bottom: 1px solid #808080;
@@ -163,6 +162,10 @@ $setting-transition-easing: ease-out;
             background-color: inherit;
             color: inherit;
             position: relative;
+
+            &:focus {
+              background-color: rgba(115, 133, 159, 0.5);
+            }
 
             &::before {
               @include icon(15px);
