@@ -61,7 +61,7 @@ describe('Test user notifications', function () {
 
       await uploadRandomVideoOnServers(servers, 1)
 
-      const notification = await servers[0].notifications.getLastest({ token: userAccessToken })
+      const notification = await servers[0].notifications.getLatest({ token: userAccessToken })
       expect(notification).to.be.undefined
 
       expect(emails).to.have.lengthOf(0)
@@ -237,12 +237,12 @@ describe('Test user notifications', function () {
     })
 
     it('Should not send a notification if the wait transcoding is false', async function () {
-      this.timeout(50000)
+      this.timeout(100_000)
 
       await uploadRandomVideoOnServers(servers, 2, { waitTranscoding: false })
       await waitJobs(servers)
 
-      const notification = await servers[0].notifications.getLastest({ token: userAccessToken })
+      const notification = await servers[0].notifications.getLatest({ token: userAccessToken })
       if (notification) {
         expect(notification.type).to.not.equal(UserNotificationType.MY_VIDEO_PUBLISHED)
       }

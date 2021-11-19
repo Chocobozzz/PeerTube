@@ -20,7 +20,7 @@ describe('Test videos files', function () {
   // ---------------------------------------------------------------
 
   before(async function () {
-    this.timeout(150_000)
+    this.timeout(300_000)
 
     servers = await createMultipleServers(2)
     await setAccessTokensToServers(servers)
