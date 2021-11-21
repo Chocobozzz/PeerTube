@@ -34,7 +34,7 @@
     "Waiting for livestream": "Čekání na živý stream",
     "Livestream ended": "Živý stream skončil",
     "To move to an external storage": "Přesunout na externí úložiště",
-    "Transcoding failed": "Transcoding failed",
+    "Transcoding failed": "Překódování selhalo",
     "Pending": "Čekající",
     "Success": "Úspěch",
     "Failed": "Neúspěch",
@@ -247,5 +247,5 @@
     "Chinese": "Čínština",
     "Zulu": "Zuluština",
     "Normal mode": "Normal mode",
-    "Theater mode": "Theater mode"
+    "Theater mode": "Režim Divadlo"
 }
