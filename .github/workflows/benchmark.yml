@@ -88,7 +88,7 @@ jobs:
 
       - name: Startup
         run: |
-          npm run clean:server:tests
+          npm run clean:server:test
 
           startCold=`date +%s`
           NODE_APP_INSTANCE=1 NODE_ENV=test node dist/server --benchmark-startup
