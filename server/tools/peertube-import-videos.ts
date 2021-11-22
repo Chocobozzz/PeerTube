@@ -95,7 +95,7 @@ async function run (url: string, username: string, password: string) {
 
   log.info('Will download and upload %d videos.\n', infoArray.length)
 
-  let skipInterval = 1;
+  let skipInterval = true
   for (const [ index, info ] of infoArray.entries()) {
     try {
       if (index > 0 && options.waitInterval && !skipInterval) {
@@ -135,12 +135,12 @@ async function processVideo (parameters: {
 
   if (options.since && videoInfo.originallyPublishedAt && videoInfo.originallyPublishedAt.getTime() < options.since.getTime()) {
     log.info('Video "%s" has been published before "%s", don\'t upload it.\n', videoInfo.name, formatDate(options.since))
-    return 1
+    return true
   }
 
   if (options.until && videoInfo.originallyPublishedAt && videoInfo.originallyPublishedAt.getTime() > options.until.getTime()) {
     log.info('Video "%s" has been published after "%s", don\'t upload it.\n', videoInfo.name, formatDate(options.until))
-    return 1
+    return true
   }
 
   const server = buildServer(url)
@@ -156,7 +156,7 @@ async function processVideo (parameters: {
 
   if (data.find(v => v.name === videoInfo.name)) {
     log.info('Video "%s" already exists, don\'t reupload it.\n', videoInfo.name)
-    return 1
+    return true
   }
 
   const path = join(cwd, sha256(videoInfo.url) + '.mp4')
@@ -186,7 +186,7 @@ async function processVideo (parameters: {
     log.error(err.message)
   }
 
-  return 0;
+  return false
 }
 
 async function uploadVideoOnPeerTube (parameters: {
