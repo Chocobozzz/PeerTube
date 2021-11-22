@@ -10139,7 +10139,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="9208009623124569456" datatype="html">
         <source>If you remove user <x id="PH" equiv-text="user.username"/>, you won't be able to create another with the same username!</source>
-        <target state="translated">Wenn Sie den Benutzer <x id="PH" equiv-text="user.username"/>entfernen werden Sie keinen Benutzer mit dem gleichen Benutzernamen anlegen können.</target>
+        <target state="translated">Wenn Sie den Benutzer <x id="PH" equiv-text="user.username"/>entfernen werden Sie keinen Benutzer mit dem gleichen Benutzernamen anlegen können!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">86</context>
