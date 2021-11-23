@@ -1,4 +1,5 @@
 
+import { expect } from 'chai'
 import { JobState, JobType } from '../../models'
 import { wait } from '../miscs'
 import { PeerTubeServer } from './server'
@@ -70,8 +71,14 @@ async function waitJobs (serversArg: PeerTubeServer[] | PeerTubeServer, skipDela
   } while (pendingRequests)
 }
 
+async function expectNoFailedTranscodingJob (server: PeerTubeServer) {
+  const { data } = await server.jobs.listFailed({ jobType: 'video-transcoding' })
+  expect(data).to.have.lengthOf(0)
+}
+
 // ---------------------------------------------------------------------------
 
 export {
-  waitJobs
+  waitJobs,
+  expectNoFailedTranscodingJob
 }

@@ -7,6 +7,7 @@ import {
   cleanupTests,
   createMultipleServers,
   doubleFollow,
+  expectNoFailedTranscodingJob,
   expectStartWith,
   makeRawRequest,
   ObjectStorageCommand,
@@ -28,11 +29,6 @@ async function checkFilesInObjectStorage (video: VideoDetails) {
     expectStartWith(file.fileUrl, ObjectStorageCommand.getPlaylistBaseUrl())
     await makeRawRequest(file.fileUrl, HttpStatusCode.OK_200)
   }
-}
-
-async function expectNoFailedTranscodingJob (server: PeerTubeServer) {
-  const { data } = await server.jobs.listFailed({ jobType: 'video-transcoding' })
-  expect(data).to.have.lengthOf(0)
 }
 
 function runTests (objectStorage: boolean) {

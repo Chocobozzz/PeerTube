@@ -7,6 +7,7 @@ import {
   cleanupTests,
   createMultipleServers,
   doubleFollow,
+  expectNoFailedTranscodingJob,
   expectStartWith,
   makeRawRequest,
   ObjectStorageCommand,
@@ -69,6 +70,10 @@ function runTests (objectStorage: boolean) {
     }
 
     await waitJobs(servers)
+
+    for (const server of servers) {
+      await server.config.enableTranscoding()
+    }
   })
 
   it('Should run a import job on video 1 with a lower resolution', async function () {
@@ -137,6 +142,11 @@ function runTests (objectStorage: boolean) {
 
       await checkFiles(videoDetails, objectStorage)
     }
+  })
+
+  it('Should not have run transcoding after an import job', async function () {
+    const { data } = await servers[0].jobs.list({ jobType: 'video-transcoding' })
+    expect(data).to.have.lengthOf(0)
   })
 
   after(async function () {
