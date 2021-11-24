@@ -85,6 +85,8 @@ export const serverActionHookObject = {
   // Fired when the application has been loaded and is listening HTTP requests
   'action:application.listening': true,
 
+  // API actions hooks give access to the original express `req` and `res` parameters
+
   // Fired when a local video is updated
   'action:api.video.updated': true,
   // Fired when a local video is deleted

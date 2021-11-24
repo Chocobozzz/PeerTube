@@ -129,7 +129,7 @@ async function addVideoLegacy (req: express.Request, res: express.Response) {
   const videoInfo: VideoCreate = req.body
   const files = req.files
 
-  const response = await addVideo({ res, videoPhysicalFile, videoInfo, files })
+  const response = await addVideo({ req, res, videoPhysicalFile, videoInfo, files })
 
   return res.json(response)
 }
@@ -139,19 +139,20 @@ async function addVideoResumable (req: express.Request, res: express.Response) {
   const videoInfo = videoPhysicalFile.metadata
   const files = { previewfile: videoInfo.previewfile }
 
-  const response = await addVideo({ res, videoPhysicalFile, videoInfo, files })
+  const response = await addVideo({ req, res, videoPhysicalFile, videoInfo, files })
   await Redis.Instance.setUploadSession(req.query.upload_id, response)
 
   return res.json(response)
 }
 
 async function addVideo (options: {
+  req: express.Request
   res: express.Response
   videoPhysicalFile: express.VideoUploadFile
   videoInfo: VideoCreate
   files: express.UploadFiles
 }) {
-  const { res, videoPhysicalFile, videoInfo, files } = options
+  const { req, res, videoPhysicalFile, videoInfo, files } = options
   const videoChannel = res.locals.videoChannel
   const user = res.locals.oauth.token.User
 
@@ -235,7 +236,7 @@ async function addVideo (options: {
     })
     .catch(err => logger.error('Cannot add optimize/merge audio job for %s.', videoCreated.uuid, { err, ...lTags(videoCreated.uuid) }))
 
-  Hooks.runAction('action:api.video.uploaded', { video: videoCreated })
+  Hooks.runAction('action:api.video.uploaded', { video: videoCreated, req, res })
 
   return {
     video: {

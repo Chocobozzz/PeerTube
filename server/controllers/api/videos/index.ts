@@ -158,7 +158,7 @@ async function viewVideo (req: express.Request, res: express.Response) {
     const serverActor = await getServerActor()
     await sendView(serverActor, video, undefined)
 
-    Hooks.runAction('action:api.video.viewed', { video: video, ip })
+    Hooks.runAction('action:api.video.viewed', { video: video, ip, req, res })
   }
 
   return res.status(HttpStatusCode.NO_CONTENT_204).end()
@@ -201,7 +201,7 @@ async function listVideos (req: express.Request, res: express.Response) {
   return res.json(getFormattedObjects(resultList.data, resultList.total, guessAdditionalAttributesFromQuery(query)))
 }
 
-async function removeVideo (_req: express.Request, res: express.Response) {
+async function removeVideo (req: express.Request, res: express.Response) {
   const videoInstance = res.locals.videoAll
 
   await sequelizeTypescript.transaction(async t => {
@@ -211,7 +211,7 @@ async function removeVideo (_req: express.Request, res: express.Response) {
   auditLogger.delete(getAuditIdFromRes(res), new VideoAuditView(videoInstance.toFormattedDetailsJSON()))
   logger.info('Video with name %s and uuid %s deleted.', videoInstance.name, videoInstance.uuid)
 
-  Hooks.runAction('action:api.video.deleted', { video: videoInstance })
+  Hooks.runAction('action:api.video.deleted', { video: videoInstance, req, res })
 
   return res.type('json')
             .status(HttpStatusCode.NO_CONTENT_204)
