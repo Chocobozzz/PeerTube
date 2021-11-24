@@ -153,7 +153,7 @@ async function updateVideo (req: express.Request, res: express.Response) {
       Notifier.Instance.notifyOnNewVideoIfNeeded(videoInstanceUpdated)
     }
 
-    Hooks.runAction('action:api.video.updated', { video: videoInstanceUpdated, body: req.body })
+    Hooks.runAction('action:api.video.updated', { video: videoInstanceUpdated, body: req.body, req, res })
   } catch (err) {
     // Force fields we want to update
     // If the transaction is retried, sequelize will think the object has not changed

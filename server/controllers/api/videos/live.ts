@@ -133,7 +133,7 @@ async function addLiveVideo (req: express.Request, res: express.Response) {
     return { videoCreated }
   })
 
-  Hooks.runAction('action:api.live-video.created', { video: videoCreated })
+  Hooks.runAction('action:api.live-video.created', { video: videoCreated, req, res })
 
   return res.json({
     video: {

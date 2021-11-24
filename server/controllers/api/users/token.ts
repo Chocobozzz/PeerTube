@@ -66,7 +66,7 @@ async function handleToken (req: express.Request, res: express.Response, next: e
     res.set('Cache-Control', 'no-store')
     res.set('Pragma', 'no-cache')
 
-    Hooks.runAction('action:api.user.oauth2-got-token', { username: token.user.username, ip: req.ip })
+    Hooks.runAction('action:api.user.oauth2-got-token', { username: token.user.username, ip: req.ip, req, res })
 
     return res.json({
       token_type: 'Bearer',

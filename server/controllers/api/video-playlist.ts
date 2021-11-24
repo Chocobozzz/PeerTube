@@ -334,7 +334,7 @@ async function addVideoInPlaylist (req: express.Request, res: express.Response) 
 
   logger.info('Video added in playlist %s at position %d.', videoPlaylist.uuid, playlistElement.position)
 
-  Hooks.runAction('action:api.video-playlist-element.created', { playlistElement })
+  Hooks.runAction('action:api.video-playlist-element.created', { playlistElement, req, res })
 
   return res.json({
     videoPlaylistElement: {

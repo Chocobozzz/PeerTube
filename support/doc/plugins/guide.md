@@ -108,6 +108,20 @@ async function register ({
 }
 ```
 
+Hooks prefixed by `action:api` also give access the original **express** [Request](http://expressjs.com/en/api.html#req) and [Response](http://expressjs.com/en/api.html#res):
+
+```js
+async function register ({
+  registerHook,
+  peertubeHelpers: { logger }
+}) {
+  registerHook({
+    target: 'action:api.video.updated',
+    handler: ({ req, res }) => logger.debug('original request parameters', { params: req.params })
+  })
+}
+```
+
 
 On client side, these hooks are registered by the `clientScripts` files defined in `package.json`.
 All client scripts have scopes so PeerTube client only loads scripts it needs:
