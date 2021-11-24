@@ -335,6 +335,11 @@ class ClientHtml {
       lang = req.acceptsLanguages(POSSIBLE_LOCALES) || getDefaultLocale()
     }
 
+    logger.debug(
+      'Serving %s HTML language', buildFileLocale(lang),
+      { cookie: req.cookies?.clientLanguage, paramLang, acceptLanguage: req.headers['accept-language'] }
+    )
+
     return join(__dirname, '../../../client/dist/' + buildFileLocale(lang) + '/index.html')
   }
 

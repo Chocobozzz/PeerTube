@@ -39,7 +39,7 @@ export class MyAccountPage {
 
     await container.$('.dropdown-toggle').click()
 
-    const dropdownMenu = () => container.$('.dropdown-menu .dropdown-item:nth-child(2)')
+    const dropdownMenu = () => container.$$('.dropdown-menu .dropdown-item')[1]
 
     await dropdownMenu().waitForDisplayed()
     return dropdownMenu().click()

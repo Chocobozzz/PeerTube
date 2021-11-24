@@ -7,7 +7,6 @@ import {
   cleanupTests,
   createMultipleServers,
   doubleFollow,
-  expectNoFailedTranscodingJob,
   expectStartWith,
   makeRawRequest,
   ObjectStorageCommand,

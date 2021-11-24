@@ -3,6 +3,7 @@ import { config as mainConfig } from './wdio.main.conf'
 const prefs = {
   'intl.accept_languages': 'en'
 }
+process.env.LANG = 'en'
 
 module.exports = {
   config: {
@@ -16,6 +17,7 @@ module.exports = {
       {
         browserName: 'chrome',
         'goog:chromeOptions': {
+          args: [ '--headless', '--disable-gpu', '--window-size=1280,1024' ],
           prefs
         }
       },
@@ -23,6 +25,8 @@ module.exports = {
         browserName: 'firefox',
         'moz:firefoxOptions': {
           binary: '/usr/bin/firefox-developer-edition',
+          args: [ '--headless', '--window-size=1280,1024' ],
+
           prefs
         }
       }
