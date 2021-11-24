@@ -90,15 +90,15 @@ jobs:
         run: |
           npm run clean:server:test
 
-          startCold=`date +%s`
+          startCold=`date +%s%3N`
           NODE_APP_INSTANCE=1 NODE_ENV=test node dist/server --benchmark-startup
-          endCold=`date +%s`
-          coldStartupTime=$((endCold-startCold))
+          endCold=`date +%s%3N`
+          coldStartupTime=$(echo "scale=2; ($endCold-$startCold)/1000" | bc)
 
-          startHot=`date +%s`
+          startHot=`date +%s%3N`
           NODE_APP_INSTANCE=1 NODE_ENV=test node dist/server --benchmark-startup
-          endHot=`date +%s`
-          hotStartupTime=$((endHot-startHot))
+          endHot=`date +%s%3N`
+          hotStartupTime=$(echo "scale=2; ($endHot-$startHot)/1000" | bc)
 
           echo '{"coldStartupTime":'$coldStartupTime',"hotStartupTime":'$hotStartupTime'}'> startup-time.json
 
