@@ -4,6 +4,9 @@
 
 ### IMPORTANT NOTES
 
+ * **Important** You need to execute manually a migration script (can be executed after your upgrade, while your PeerTube instance is running) to migrate HLS files name:
+   * Classic installation: `cd /var/www/peertube/peertube-latest && sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production node dist/scripts/migrations/peertube-4.0.js`
+   * Docker installation: `cd /var/www/peertube-docker && docker-compose exec -u peertube peertube node dist/scripts/migrations/peertube-4.0.js`
  * **Important** We fixed configuration inconsistencies and added some keys. **You must change/add them in your production.yaml**
    * `log.rotation.maxFileSize` becomes `log.rotation.max_file_size`
    * `log.rotation.maxFiles` becomes `log.rotation.max_files`
