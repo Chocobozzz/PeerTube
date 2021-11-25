@@ -43,7 +43,7 @@ async function processVideo (videoId: number) {
   const video = await VideoModel.loadWithFiles(videoId)
 
   const hls = video.getHLSPlaylist()
-  if (!hls || hls.playlistFilename !== 'master.m3u8' || hls.VideoFiles.length === 0) {
+  if (video.isLive || !hls || hls.playlistFilename !== 'master.m3u8' || hls.VideoFiles.length === 0) {
     return
   }
 
