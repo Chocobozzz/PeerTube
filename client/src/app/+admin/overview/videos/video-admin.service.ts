@@ -59,19 +59,19 @@ export class VideoAdminService {
         title: $localize`Video files`,
         children: [
           {
-            value: 'webtorrent:true',
+            value: 'webtorrent:true isLocal:true',
             label: $localize`With WebTorrent`
           },
           {
-            value: 'webtorrent:false',
+            value: 'webtorrent:false isLocal:true',
             label: $localize`Without WebTorrent`
           },
           {
-            value: 'hls:true',
+            value: 'hls:true isLocal:true',
             label: $localize`With HLS`
           },
           {
-            value: 'hls:false',
+            value: 'hls:false isLocal:true',
             label: $localize`Without HLS`
           }
         ]
