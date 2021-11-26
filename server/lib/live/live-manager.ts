@@ -343,6 +343,7 @@ class LiveManager {
       logger.info('Will publish and federate live %s.', video.url, localLTags)
 
       video.state = VideoState.PUBLISHED
+      video.publishedAt = new Date()
       await video.save()
 
       live.Video = video
