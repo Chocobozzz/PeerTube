@@ -41,7 +41,7 @@ import {
   SimpleSearchInputComponent,
   TopMenuDropdownComponent
 } from './misc'
-import { PluginPlaceholderComponent } from './plugins'
+import { PluginPlaceholderComponent, PluginSelectorDirective } from './plugins'
 import { ActorRedirectGuard } from './router'
 import { UserHistoryService, UserNotificationsComponent, UserNotificationService, UserQuotaComponent } from './users'
 import { EmbedComponent, RedundancyService, VideoImportService, VideoOwnershipService, VideoService } from './video'
@@ -108,7 +108,8 @@ import { VideoChannelService } from './video-channel'
 
     EmbedComponent,
 
-    PluginPlaceholderComponent
+    PluginPlaceholderComponent,
+    PluginSelectorDirective
   ],
 
   exports: [
@@ -166,7 +167,8 @@ import { VideoChannelService } from './video-channel'
 
     EmbedComponent,
 
-    PluginPlaceholderComponent
+    PluginPlaceholderComponent,
+    PluginSelectorDirective
   ],
 
   providers: [
