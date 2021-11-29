@@ -32,6 +32,8 @@
 
  * Add client plugin hooks:
    * `filter:api.video-watch.video-playlist-elements.get.params` and `filter:api.video-watch.video-playlist-elements.get.result` [#4387](https://github.com/Chocobozzz/PeerTube/pull/4387)
+ * Introduce plugin id selectors: https://docs.joinpeertube.org/contribute-plugins?id=plugin-selector-on-html-elements
+   * Add `#plugin-selector-login-form` to login form
 
 ### Docker
 
@@ -71,6 +73,7 @@
     * Add embed preview in share modal
     * Add user username in modal when deleting a user
     * Add video name in modal when blocking/removing a video
+    * Improve notification settings organization
  * Video/live views:
    * Add ability for admins to change local buffer update interval
    * Add ability for admins to change view expiration for a specific IP
@@ -83,6 +86,7 @@
    * Correctly set HTTP request timeout
    * Process slow/bad targets in a dedicated queue
    * Optimize ActivityPub outbox fetch
+ * Automatically update `publishedAt` attribute when re-streaming in a permanent live
  * Add ability for users to view their followers
  * Add ability for users to filter their videos per channel
  * Add ability for admins to show author display name instead of username in video miniatures [#4422](https://github.com/Chocobozzz/PeerTube/pull/4422)
@@ -111,6 +115,8 @@
  * Fix account switch in account channels page
  * Hide job progress information for jobs that don't support it
  * Fix player settings menu keyboard navigation
+ * Fix player placeholder width
+ * Fix playlist miniature size with big description
 
 
 ## v3.4.1
