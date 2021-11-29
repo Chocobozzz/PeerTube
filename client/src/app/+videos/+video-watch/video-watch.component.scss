@@ -28,6 +28,8 @@ $video-height: 66vh;
 
 .placeholder-image {
   height: 100%;
+  max-width: 100%;
+  object-fit: contain;
 }
 
 .flex-direction-column {
