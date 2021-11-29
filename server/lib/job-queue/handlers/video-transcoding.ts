@@ -94,7 +94,7 @@ async function handleHLSJob (job: Job, payload: HLSTranscodingPayload, video: MV
 
   logger.info('HLS transcoding job for %s ended.', video.uuid, lTags(video.uuid))
 
-  await retryTransactionWrapper(onHlsPlaylistGeneration, video, user, payload)
+  await onHlsPlaylistGeneration(video, user, payload)
 }
 
 async function handleNewWebTorrentResolutionJob (
@@ -109,7 +109,7 @@ async function handleNewWebTorrentResolutionJob (
 
   logger.info('WebTorrent transcoding job for %s ended.', video.uuid, lTags(video.uuid))
 
-  await retryTransactionWrapper(onNewWebTorrentFileResolution, video, user, payload)
+  await onNewWebTorrentFileResolution(video, user, payload)
 }
 
 async function handleWebTorrentMergeAudioJob (job: Job, payload: MergeAudioTranscodingPayload, video: MVideoFullLight, user: MUserId) {
@@ -119,7 +119,7 @@ async function handleWebTorrentMergeAudioJob (job: Job, payload: MergeAudioTrans
 
   logger.info('Merge audio transcoding job for %s ended.', video.uuid, lTags(video.uuid))
 
-  await retryTransactionWrapper(onVideoFileOptimizer, video, payload, 'video', user)
+  await onVideoFileOptimizer(video, payload, 'video', user)
 }
 
 async function handleWebTorrentOptimizeJob (job: Job, payload: OptimizeTranscodingPayload, video: MVideoFullLight, user: MUserId) {
@@ -129,7 +129,7 @@ async function handleWebTorrentOptimizeJob (job: Job, payload: OptimizeTranscodi
 
   logger.info('Optimize transcoding job for %s ended.', video.uuid, lTags(video.uuid))
 
-  await retryTransactionWrapper(onVideoFileOptimizer, video, payload, transcodeType, user)
+  await onVideoFileOptimizer(video, payload, transcodeType, user)
 }
 
 // ---------------------------------------------------------------------------
@@ -156,7 +156,7 @@ async function onHlsPlaylistGeneration (video: MVideoFullLight, user: MUser, pay
   }
 
   await VideoJobInfoModel.decrease(video.uuid, 'pendingTranscode')
-  await moveToNextState(video, payload.isNewVideo)
+  await retryTransactionWrapper(moveToNextState, video, payload.isNewVideo)
 }
 
 async function onVideoFileOptimizer (
@@ -196,7 +196,7 @@ async function onVideoFileOptimizer (
 
   // Move to next state if there are no other resolutions to generate
   if (!hasHls && !hasNewResolutions) {
-    await moveToNextState(videoDatabase, payload.isNewVideo)
+    await retryTransactionWrapper(moveToNextState, videoDatabase, payload.isNewVideo)
   }
 }
 
@@ -208,7 +208,7 @@ async function onNewWebTorrentFileResolution (
   await createHlsJobIfEnabled(user, { ...payload, copyCodecs: true, isMaxQuality: false })
   await VideoJobInfoModel.decrease(video.uuid, 'pendingTranscode')
 
-  await moveToNextState(video, payload.isNewVideo)
+  await retryTransactionWrapper(moveToNextState, video, payload.isNewVideo)
 }
 
 async function createHlsJobIfEnabled (user: MUserId, payload: {
