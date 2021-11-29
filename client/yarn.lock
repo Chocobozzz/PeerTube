@@ -1741,10 +1741,10 @@
     global "^4.4.0"
     video.js "^7.6.0"
 
-"@peertube/xliffmerge@^2.0.2":
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/@peertube/xliffmerge/-/xliffmerge-2.0.2.tgz#09b25e09871934de180f55d9315a595653c07709"
-  integrity sha512-VJzLOZDCMxv4oT143Na2v3q2hNn/ITkF2aQluSNCEtrFCA8yrxNmddFaKBDWdM6mz555Gbr1aXHl2R/vdapy0w==
+"@peertube/xliffmerge@^2.0.3":
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/@peertube/xliffmerge/-/xliffmerge-2.0.3.tgz#31e5e6506900c275131a0057216e8141999a936e"
+  integrity sha512-g+NipJeuD1C1BhxpVpRQTnYn5fR5vmwh2yrU4vZpZaPrKXyhZYZrTFMBFoPntJYdtCqVTB9bzAO1hfjDaOcQrw==
   dependencies:
     chalk "^2.4.1"
     he "^1.2.0"

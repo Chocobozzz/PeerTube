@@ -56,7 +56,7 @@
     "@peertube/p2p-media-loader-core": "^1.0.4",
     "@peertube/p2p-media-loader-hlsjs": "^1.0.6",
     "@peertube/videojs-contextmenu": "^5.5.0",
-    "@peertube/xliffmerge": "^2.0.2",
+    "@peertube/xliffmerge": "^2.0.3",
     "@types/chart.js": "^2.9.16",
     "@types/core-js": "^2.5.2",
     "@types/debug": "^4.1.5",
