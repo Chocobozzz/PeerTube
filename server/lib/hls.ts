@@ -130,7 +130,7 @@ function downloadPlaylistSegments (playlistUrl: string, destinationDir: string, 
       for (const fileUrl of fileUrls) {
         const destPath = join(tmpDirectory, basename(fileUrl))
 
-        await doRequestAndSaveToFile(fileUrl, destPath, { bodyKBLimit: remainingBodyKBLimit })
+        await doRequestAndSaveToFile(fileUrl, destPath, { bodyKBLimit: remainingBodyKBLimit, timeout: REQUEST_TIMEOUTS.FILE })
 
         const { size } = await stat(destPath)
         remainingBodyKBLimit -= (size / 1000)

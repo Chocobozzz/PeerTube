@@ -3,7 +3,7 @@ import got, { CancelableRequest, NormalizedOptions, Options as GotOptions, Reque
 import { HttpProxyAgent, HttpsProxyAgent } from 'hpagent'
 import { join } from 'path'
 import { CONFIG } from '../initializers/config'
-import { ACTIVITY_PUB, BINARY_CONTENT_TYPES, PEERTUBE_VERSION, REQUEST_TIMEOUT, WEBSERVER } from '../initializers/constants'
+import { ACTIVITY_PUB, BINARY_CONTENT_TYPES, PEERTUBE_VERSION, REQUEST_TIMEOUTS, WEBSERVER } from '../initializers/constants'
 import { pipelinePromise } from './core-utils'
 import { processImage } from './image-utils'
 import { logger, loggerTagsFactory } from './logger'
@@ -20,6 +20,7 @@ export interface PeerTubeRequestError extends Error {
 }
 
 type PeerTubeRequestOptions = {
+  timeout?: number
   activityPub?: boolean
   bodyKBLimit?: number // 1MB
   httpSignature?: {
@@ -129,7 +130,7 @@ async function doRequestAndSaveToFile (
   destPath: string,
   options: PeerTubeRequestOptions = {}
 ) {
-  const gotOptions = buildGotOptions(options)
+  const gotOptions = buildGotOptions({ ...options, timeout: options.timeout ?? REQUEST_TIMEOUTS.FILE })
 
   const outFile = createWriteStream(destPath)
 
@@ -235,7 +236,7 @@ function buildGotOptions (options: PeerTubeRequestOptions) {
   return {
     method: options.method,
     dnsCache: true,
-    timeout: REQUEST_TIMEOUT,
+    timeout: options.timeout ?? REQUEST_TIMEOUTS.DEFAULT,
     json: options.json,
     searchParams: options.searchParams,
     retry: 2,
