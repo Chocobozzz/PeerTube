@@ -4448,7 +4448,7 @@
       </trans-unit>
       <trans-unit id="6568991917245875948" datatype="html">
         <source>Otherwise the local search stays used by default</source>
-        <target state="translated">V opačném případě zůstane ve výchozím nastavení použito místní vyhledávání.</target>
+        <target state="translated">V opačném případě zůstane ve výchozím nastavení použito místní vyhledávání</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">370</context></context-group>
       </trans-unit>
       <trans-unit id="4444955208013675027" datatype="html">
@@ -4571,7 +4571,7 @@
       </trans-unit>
       <trans-unit id="8894612824234881672" datatype="html">
         <source>⚠️ Enabling live streaming requires trust in your users and extra moderation work</source>
-        <target state="translated">⚠️ Povolení živého vysílání vyžaduje důvěru uživatelů a další moderátorskou práci.</target>
+        <target state="translated">⚠️ Povolení živého vysílání vyžaduje důvěru uživatelů a další moderátorskou práci</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">22</context></context-group>
       </trans-unit>
       <trans-unit id="5205613575147327732" datatype="html">
@@ -4584,12 +4584,12 @@
       </trans-unit>
       <trans-unit id="6421580347313273983" datatype="html">
         <source>Allow your users to automatically publish a replay of their live</source>
-        <target state="translated">Umožněte uživatelům automaticky publikovat přehrávání jejich živého vysílání.</target>
+        <target state="translated">Umožněte uživatelům automaticky publikovat přehrávání jejich živého vysílání</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">31</context></context-group>
       </trans-unit>
       <trans-unit id="3472969629566153023" datatype="html">
         <source>If the user quota is reached, PeerTube will automatically terminate the live streaming</source>
-        <target state="translated">Pokud je kvóta uživatelů vyčerpána, PeerTube automaticky ukončí živé vysílání.</target>
+        <target state="translated">Pokud je kvóta uživatelů vyčerpána, PeerTube automaticky ukončí živé vysílání</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">33</context></context-group>
       </trans-unit>
       <trans-unit id="4420104899393268652" datatype="html">
@@ -4640,7 +4640,7 @@
       </trans-unit>
       <trans-unit id="8294583621306221742" datatype="html">
         <source>new live transcoding profiles can be added by PeerTube plugins</source>
-        <target state="translated">nové profily živého překódování lze přidávat pomocí pluginů PeerTube.</target>
+        <target state="translated">nové profily živého překódování lze přidávat pomocí pluginů PeerTube</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">151</context></context-group>
       </trans-unit>
       <trans-unit id="6727057461851446921" datatype="html">
@@ -5170,12 +5170,12 @@ color: red;
       </trans-unit>
       <trans-unit id="1534085756270333258" datatype="html">
         <source>In Recently added, Trending, Local, Most liked and Search pages</source>
-        <target state="new">In Recently added, Trending, Local, Most liked and Search pages</target>
+        <target state="translated">Na stránkách Nedávno přidané, Trendy, Místní, Nejoblíbenější a Vyhledávání</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="2658703380934466003" datatype="html">
         <source>Add a new language</source>
-        <target state="new">Add a new language</target>
+        <target state="translated">Přidat nový jazyk</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context><context context-type="linenumber">71</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/select/select-languages.component.html</context><context context-type="linenumber">6</context></context-group>
       </trans-unit>
@@ -5201,18 +5201,18 @@ color: red;
       </trans-unit>
       <trans-unit id="7103588127254721505" datatype="html">
         <source>Theme</source>
-        <target state="new">Theme</target>
+        <target state="translated">Motiv</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">14</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.html</context><context context-type="linenumber">4</context></context-group>
       </trans-unit>
       <trans-unit id="4541462271161741535" datatype="html">
         <source>instance default</source>
-        <target state="new">instance default</target>
+        <target state="translated">výchozí instance</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.html</context><context context-type="linenumber">8</context></context-group>
       </trans-unit>
       <trans-unit id="5192951216991773088" datatype="html">
         <source>peertube default</source>
-        <target state="new">peertube default</target>
+        <target state="translated">výchozí peertube</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.html</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
       <trans-unit id="4561174610228620528">
@@ -5222,32 +5222,32 @@ color: red;
       </trans-unit>
       <trans-unit id="1788875035518441092" datatype="html">
         <source>Last published first</source>
-        <target state="new">Last published first</target>
+        <target state="translated">Poslední zveřejněné jako první</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="4541072509002204177" datatype="html">
         <source>Last created first</source>
-        <target state="new">Last created first</target>
+        <target state="translated">Poslední vytvořené jako první</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="1142493792593089647" datatype="html">
         <source>Most viewed first</source>
-        <target state="new">Most viewed first</target>
+        <target state="translated">Nejsledovanější jako první</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="8108088952881606566" datatype="html">
         <source>Most liked first</source>
-        <target state="new">Most liked first</target>
+        <target state="translated">Nejoblíbenější jako první</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context><context context-type="linenumber">30</context></context-group>
       </trans-unit>
       <trans-unit id="2782422473180760140" datatype="html">
         <source>Longest first</source>
-        <target state="new">Longest first</target>
+        <target state="translated">Nejdelší jako první</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context><context context-type="linenumber">31</context></context-group>
       </trans-unit>
       <trans-unit id="8714145624854863455" datatype="html">
         <source>Accept ownership</source>
-        <target state="new">Accept ownership</target>
+        <target state="translated">Přijmout vlastnictví</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-ownership/my-accept-ownership/my-accept-ownership.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="321229234608559490" datatype="html">
