@@ -4831,7 +4831,7 @@
       </trans-unit>
       <trans-unit id="2279905277031617076" datatype="html">
         <source>Number of video captions to keep in cache</source>
-        <target state="new">Number of video captions to keep in cache</target>
+        <target state="translated">Počet titulků videa, které se mají uchovávat v mezipaměti</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="6193666854590647323" datatype="html">
@@ -4844,7 +4844,7 @@
       </trans-unit>
       <trans-unit id="330647913034301472" datatype="html">
         <source>Number of video torrents to keep in cache</source>
-        <target state="new">Number of video torrents to keep in cache</target>
+        <target state="translated">Počet video torrentů, které se mají uchovávat v mezipaměti</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">43</context>
@@ -4860,12 +4860,12 @@
       </trans-unit>
       <trans-unit id="2528135865630556778" datatype="html">
         <source>CUSTOMIZATIONS</source>
-        <target state="new">CUSTOMIZATIONS</target>
+        <target state="translated">PŘIZPŮSOBENÍ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context><context context-type="linenumber">63</context></context-group>
       </trans-unit>
       <trans-unit id="1714039296068260295" datatype="html">
         <source>Slight modifications to your PeerTube instance for when creating a plugin or theme is overkill.</source>
-        <target state="new"> Slight modifications to your PeerTube instance for when creating a plugin or theme is overkill. </target>
+        <target state="translated">Mírné úpravy instance PeerTube při vytváření pluginu nebo tématu jsou zbytečné.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context><context context-type="linenumber">64</context></context-group>
       </trans-unit>
       <trans-unit id="6180346896314915203">
@@ -4891,12 +4891,12 @@ color: red;
       </trans-unit>
       <trans-unit id="283725429207896837" datatype="html">
         <source>You cannot allow live replay if you don't enable transcoding.</source>
-        <target state="new"> You cannot allow live replay if you don't enable transcoding. </target>
+        <target state="translated">Pokud nepovolíte překódování, nelze povolit živé přehrávání.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">81</context></context-group>
       </trans-unit>
       <trans-unit id="4249062553881932496" datatype="html">
         <source>You cannot change the server configuration because it's managed externally.</source>
-        <target state="new"> You cannot change the server configuration because it's managed externally. </target>
+        <target state="translated">Konfiguraci serveru nelze změnit, protože je spravována externě.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">85,87</context>
@@ -4914,32 +4914,32 @@ color: red;
       </trans-unit>
       <trans-unit id="5439158575454281141" datatype="html">
         <source>VIDEO SETTINGS</source>
-        <target state="new">VIDEO SETTINGS</target>
+        <target state="translated">NASTAVENÍ VIDEA</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="507542497458686905" datatype="html">
         <source>NOTIFICATIONS</source>
-        <target state="new">NOTIFICATIONS</target>
+        <target state="translated">OZNÁMENÍ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
       <trans-unit id="9138757724802460941" datatype="html">
         <source>INTERFACE</source>
-        <target state="new">INTERFACE</target>
+        <target state="translated">ROZHRANÍ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context><context context-type="linenumber">47</context></context-group>
       </trans-unit>
       <trans-unit id="7789395291034300662" datatype="html">
         <source>PASSWORD</source>
-        <target state="new">PASSWORD</target>
+        <target state="translated">HESLO</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context><context context-type="linenumber">57</context></context-group>
       </trans-unit>
       <trans-unit id="9012586956848595996" datatype="html">
         <source>EMAIL</source>
-        <target state="new">EMAIL</target>
+        <target state="translated">E-MAIL</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context><context context-type="linenumber">67</context></context-group>
       </trans-unit>
       <trans-unit id="7752239348028675311" datatype="html">
         <source>DANGER ZONE</source>
-        <target state="new">DANGER ZONE</target>
+        <target state="translated">NEBEZPEČNÁ ZÓNA</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">219</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">219</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context><context context-type="linenumber">77</context></context-group>
@@ -4951,32 +4951,32 @@ color: red;
       </trans-unit>
       <trans-unit id="1963136290621768454" datatype="html">
         <source>Resolution</source>
-        <target state="new">Resolution</target>
+        <target state="translated">Rozlišení</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">247</context></context-group>
       </trans-unit>
       <trans-unit id="7814358426066520520" datatype="html">
         <source>Aspect ratio</source>
-        <target state="new">Aspect ratio</target>
+        <target state="translated">Poměr stran</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">248</context></context-group>
       </trans-unit>
       <trans-unit id="44862519224794374" datatype="html">
         <source>Average frame rate</source>
-        <target state="new">Average frame rate</target>
+        <target state="translated">Průměrná snímková frekvence</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">249</context></context-group>
       </trans-unit>
       <trans-unit id="5053683525387462246" datatype="html">
         <source>Pixel format</source>
-        <target state="new">Pixel format</target>
+        <target state="translated">Formát pixelů</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">250</context></context-group>
       </trans-unit>
       <trans-unit id="7858676566953242358" datatype="html">
         <source>Sample rate</source>
-        <target state="new">Sample rate</target>
+        <target state="translated">Vzorkovací frekvence</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">254</context></context-group>
       </trans-unit>
       <trans-unit id="5403856660543890284" datatype="html">
         <source>Channel Layout</source>
-        <target state="new">Channel Layout</target>
+        <target state="translated">Rozložení kanálů</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">255</context></context-group>
       </trans-unit>
       <trans-unit id="6317170736181476800" datatype="html">
@@ -4986,7 +4986,7 @@ color: red;
       </trans-unit>
       <trans-unit id="1405600824334286337" datatype="html">
         <source>More filters</source>
-        <target state="new">More filters</target>
+        <target state="translated">Další filtry</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">20</context>
@@ -4994,7 +4994,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5797835178123017550" datatype="html">
         <source>Hide filters</source>
-        <target state="new">Hide filters</target>
+        <target state="translated">Skrýt filtry</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">21</context>
@@ -5042,7 +5042,7 @@ color: red;
       </trans-unit>
       <trans-unit id="2343321245279384373" datatype="html">
         <source>Languages:</source>
-        <target state="new">Languages:</target>
+        <target state="translated">Jazyky:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">59</context>
@@ -5050,7 +5050,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5063779773341398537" datatype="html">
         <source>Sensitive content:</source>
-        <target state="new">Sensitive content:</target>
+        <target state="translated">Citlivý obsah:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">66</context>
@@ -5058,7 +5058,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5723033003381016192" datatype="html">
         <source>Scope:</source>
-        <target state="new">Scope:</target>
+        <target state="translated">Rozsah působnosti:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">81</context>
@@ -5066,7 +5066,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8481241275509347668" datatype="html">
         <source>Local videos (this instance)</source>
-        <target state="new">Local videos (this instance)</target>
+        <target state="translated">Místní videa (tento případ)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">85</context>
@@ -5074,7 +5074,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8383401711408398806" datatype="html">
         <source>Federated videos (this instance + followed instances)</source>
-        <target state="new">Federated videos (this instance + followed instances)</target>
+        <target state="translated">Federovaná videa (tato instance + sledované instance)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">90</context>
@@ -5082,7 +5082,7 @@ color: red;
       </trans-unit>
       <trans-unit id="2736556170366900089" datatype="html">
         <source>Type:</source>
-        <target state="new">Type:</target>
+        <target state="translated">Typ:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">95</context>
@@ -5090,7 +5090,7 @@ color: red;
       </trans-unit>
       <trans-unit id="1744425032255703211" datatype="html">
         <source>VOD &amp; Live videos</source>
-        <target state="new">VOD &amp; Live videos</target>
+        <target state="translated">VOD &amp; Živé přenosy</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">99</context>
@@ -5098,7 +5098,7 @@ color: red;
       </trans-unit>
       <trans-unit id="1370537846415473089" datatype="html">
         <source>Categories:</source>
-        <target state="new">Categories:</target>
+        <target state="translated">Kategorie:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">114</context>
@@ -5106,7 +5106,7 @@ color: red;
       </trans-unit>
       <trans-unit id="4250125031269088402" datatype="html">
         <source>Moderation:</source>
-        <target state="new">Moderation:</target>
+        <target state="translated">Moderování:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">120</context>
@@ -5119,7 +5119,7 @@ color: red;
       </trans-unit>
       <trans-unit id="1288210794011686132" datatype="html">
         <source>Interface settings</source>
-        <target state="new">Interface settings</target>
+        <target state="translated">Nastavení rozhraní</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/quick-settings-modal.component.html</context><context context-type="linenumber">22</context></context-group>
       </trans-unit>
       <trans-unit id="6309828574111583895">
@@ -5159,13 +5159,13 @@ color: red;
       </trans-unit>
       <trans-unit id="4409859601539810260" datatype="html">
         <source>Policy for sensitive videos</source>
-        <target state="new">Policy for sensitive videos</target>
+        <target state="translated">Zásady pro citlivá videa</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context><context context-type="linenumber">118</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="2864176699435587977" datatype="html">
         <source>Only display videos in the following languages/subtitles</source>
-        <target state="new">Only display videos in the following languages/subtitles</target>
+        <target state="translated">Videa se zobrazují pouze v následujících jazycích/podtitulcích</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">25</context></context-group>
       </trans-unit>
       <trans-unit id="1534085756270333258" datatype="html">
