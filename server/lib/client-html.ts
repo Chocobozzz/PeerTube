@@ -2,6 +2,7 @@ import express from 'express'
 import { readFile } from 'fs-extra'
 import { join } from 'path'
 import validator from 'validator'
+import { toCompleteUUID } from '@server/helpers/custom-validators/misc'
 import { escapeHTML } from '@shared/core-utils/renderer'
 import { HTMLServerConfig } from '@shared/models'
 import { buildFileLocale, getDefaultLocale, is18nLocale, POSSIBLE_LOCALES } from '../../shared/core-utils/i18n/i18n'
@@ -27,7 +28,6 @@ import { VideoChannelModel } from '../models/video/video-channel'
 import { VideoPlaylistModel } from '../models/video/video-playlist'
 import { MAccountActor, MChannelActor } from '../types/models'
 import { ServerConfigManager } from './server-config-manager'
-import { toCompleteUUID } from '@server/helpers/custom-validators/misc'
 
 type Tags = {
   ogType: string
@@ -38,11 +38,12 @@ type Tags = {
     numberOfItems: number
   }
 
-  siteName: string
-  title: string
+  escapedSiteName: string
+  escapedTitle: string
+  escapedDescription: string
+
   url: string
   originUrl: string
-  description: string
 
   disallowIndexation?: boolean
 
@@ -100,15 +101,15 @@ class ClientHtml {
       res.status(HttpStatusCode.NOT_FOUND_404)
       return html
     }
+    const description = mdToPlainText(video.description)
 
-    let customHtml = ClientHtml.addTitleTag(html, escapeHTML(video.name))
-    customHtml = ClientHtml.addDescriptionTag(customHtml, mdToPlainText(video.description))
+    let customHtml = ClientHtml.addTitleTag(html, video.name)
+    customHtml = ClientHtml.addDescriptionTag(customHtml, description)
 
     const url = WEBSERVER.URL + video.getWatchStaticPath()
     const originUrl = video.url
-    const title = escapeHTML(video.name)
-    const siteName = escapeHTML(CONFIG.INSTANCE.NAME)
-    const description = mdToPlainText(video.description)
+    const title = video.name
+    const siteName = CONFIG.INSTANCE.NAME
 
     const image = {
       url: WEBSERVER.URL + video.getPreviewStaticPath()
@@ -128,9 +129,9 @@ class ClientHtml {
     customHtml = ClientHtml.addTags(customHtml, {
       url,
       originUrl,
-      siteName,
-      title,
-      description,
+      escapedSiteName: escapeHTML(siteName),
+      escapedTitle: escapeHTML(title),
+      escapedDescription: escapeHTML(description),
       image,
       embed,
       ogType,
@@ -161,14 +162,15 @@ class ClientHtml {
       return html
     }
 
-    let customHtml = ClientHtml.addTitleTag(html, escapeHTML(videoPlaylist.name))
-    customHtml = ClientHtml.addDescriptionTag(customHtml, mdToPlainText(videoPlaylist.description))
+    const description = mdToPlainText(videoPlaylist.description)
+
+    let customHtml = ClientHtml.addTitleTag(html, videoPlaylist.name)
+    customHtml = ClientHtml.addDescriptionTag(customHtml, description)
 
     const url = WEBSERVER.URL + videoPlaylist.getWatchStaticPath()
     const originUrl = videoPlaylist.url
-    const title = escapeHTML(videoPlaylist.name)
-    const siteName = escapeHTML(CONFIG.INSTANCE.NAME)
-    const description = mdToPlainText(videoPlaylist.description)
+    const title = videoPlaylist.name
+    const siteName = CONFIG.INSTANCE.NAME
 
     const image = {
       url: videoPlaylist.getThumbnailUrl()
@@ -190,10 +192,10 @@ class ClientHtml {
     customHtml = ClientHtml.addTags(customHtml, {
       url,
       originUrl,
-      siteName,
+      escapedSiteName: escapeHTML(siteName),
+      escapedTitle: escapeHTML(title),
+      escapedDescription: escapeHTML(description),
       embed,
-      title,
-      description,
       image,
       list,
       ogType,
@@ -259,14 +261,15 @@ class ClientHtml {
       return ClientHtml.getIndexHTML(req, res)
     }
 
-    let customHtml = ClientHtml.addTitleTag(html, escapeHTML(entity.getDisplayName()))
-    customHtml = ClientHtml.addDescriptionTag(customHtml, mdToPlainText(entity.description))
+    const description = mdToPlainText(entity.description)
+
+    let customHtml = ClientHtml.addTitleTag(html, entity.getDisplayName())
+    customHtml = ClientHtml.addDescriptionTag(customHtml, description)
 
     const url = entity.getLocalUrl()
     const originUrl = entity.Actor.url
-    const siteName = escapeHTML(CONFIG.INSTANCE.NAME)
-    const title = escapeHTML(entity.getDisplayName())
-    const description = mdToPlainText(entity.description)
+    const siteName = CONFIG.INSTANCE.NAME
+    const title = entity.getDisplayName()
 
     const image = {
       url: entity.Actor.getAvatarUrl(),
@@ -281,9 +284,9 @@ class ClientHtml {
     customHtml = ClientHtml.addTags(customHtml, {
       url,
       originUrl,
-      title,
-      siteName,
-      description,
+      escapedTitle: escapeHTML(title),
+      escapedSiteName: escapeHTML(siteName),
+      escapedDescription: escapeHTML(description),
       image,
       ogType,
       twitterCard,
@@ -367,14 +370,14 @@ class ClientHtml {
     let text = title || CONFIG.INSTANCE.NAME
     if (title) text += ` - ${CONFIG.INSTANCE.NAME}`
 
-    const titleTag = `<title>${text}</title>`
+    const titleTag = `<title>${escapeHTML(text)}</title>`
 
     return htmlStringPage.replace(CUSTOM_HTML_TAG_COMMENTS.TITLE, titleTag)
   }
 
   private static addDescriptionTag (htmlStringPage: string, description?: string) {
     const content = description || CONFIG.INSTANCE.SHORT_DESCRIPTION
-    const descriptionTag = `<meta name="description" content="${content}" />`
+    const descriptionTag = `<meta name="description" content="${escapeHTML(content)}" />`
 
     return htmlStringPage.replace(CUSTOM_HTML_TAG_COMMENTS.DESCRIPTION, descriptionTag)
   }
@@ -406,8 +409,8 @@ class ClientHtml {
   private static generateOpenGraphMetaTags (tags: Tags) {
     const metaTags = {
       'og:type': tags.ogType,
-      'og:site_name': tags.siteName,
-      'og:title': tags.title,
+      'og:site_name': tags.escapedSiteName,
+      'og:title': tags.escapedTitle,
       'og:image': tags.image.url
     }
 
@@ -417,7 +420,7 @@ class ClientHtml {
     }
 
     metaTags['og:url'] = tags.url
-    metaTags['og:description'] = mdToPlainText(tags.description)
+    metaTags['og:description'] = tags.escapedDescription
 
     if (tags.embed) {
       metaTags['og:video:url'] = tags.embed.url
@@ -432,8 +435,8 @@ class ClientHtml {
 
   private static generateStandardMetaTags (tags: Tags) {
     return {
-      name: tags.title,
-      description: mdToPlainText(tags.description),
+      name: tags.escapedTitle,
+      description: tags.escapedDescription,
       image: tags.image.url
     }
   }
@@ -442,8 +445,8 @@ class ClientHtml {
     const metaTags = {
       'twitter:card': tags.twitterCard,
       'twitter:site': CONFIG.SERVICES.TWITTER.USERNAME,
-      'twitter:title': tags.title,
-      'twitter:description': tags.description,
+      'twitter:title': tags.escapedTitle,
+      'twitter:description': tags.escapedDescription,
       'twitter:image': tags.image.url
     }
 
@@ -465,8 +468,8 @@ class ClientHtml {
     const schema = {
       '@context': 'http://schema.org',
       '@type': tags.schemaType,
-      'name': tags.title,
-      'description': tags.description,
+      'name': tags.escapedTitle,
+      'description': tags.escapedDescription,
       'image': tags.image.url,
       'url': tags.url
     }
@@ -496,59 +499,59 @@ class ClientHtml {
     const twitterCardMetaTags = this.generateTwitterCardMetaTags(tagsValues)
     const schemaTags = this.generateSchemaTags(tagsValues)
 
-    const { url, title, embed, originUrl, disallowIndexation } = tagsValues
+    const { url, escapedTitle, embed, originUrl, disallowIndexation } = tagsValues
 
-    const oembedLinkTags: { type: string, href: string, title: string }[] = []
+    const oembedLinkTags: { type: string, href: string, escapedTitle: string }[] = []
 
     if (embed) {
       oembedLinkTags.push({
         type: 'application/json+oembed',
         href: WEBSERVER.URL + '/services/oembed?url=' + encodeURIComponent(url),
-        title
+        escapedTitle
       })
     }
 
-    let tagsString = ''
+    let tagsStr = ''
 
     // Opengraph
     Object.keys(openGraphMetaTags).forEach(tagName => {
       const tagValue = openGraphMetaTags[tagName]
 
-      tagsString += `<meta property="${tagName}" content="${tagValue}" />`
+      tagsStr += `<meta property="${tagName}" content="${tagValue}" />`
     })
 
     // Standard
     Object.keys(standardMetaTags).forEach(tagName => {
       const tagValue = standardMetaTags[tagName]
 
-      tagsString += `<meta property="${tagName}" content="${tagValue}" />`
+      tagsStr += `<meta property="${tagName}" content="${tagValue}" />`
     })
 
     // Twitter card
     Object.keys(twitterCardMetaTags).forEach(tagName => {
       const tagValue = twitterCardMetaTags[tagName]
 
-      tagsString += `<meta property="${tagName}" content="${tagValue}" />`
+      tagsStr += `<meta property="${tagName}" content="${tagValue}" />`
     })
 
     // OEmbed
     for (const oembedLinkTag of oembedLinkTags) {
-      tagsString += `<link rel="alternate" type="${oembedLinkTag.type}" href="${oembedLinkTag.href}" title="${oembedLinkTag.title}" />`
+      tagsStr += `<link rel="alternate" type="${oembedLinkTag.type}" href="${oembedLinkTag.href}" title="${oembedLinkTag.escapedTitle}" />`
     }
 
     // Schema.org
     if (schemaTags) {
-      tagsString += `<script type="application/ld+json">${JSON.stringify(schemaTags)}</script>`
+      tagsStr += `<script type="application/ld+json">${JSON.stringify(schemaTags)}</script>`
     }
 
     // SEO, use origin URL
-    tagsString += `<link rel="canonical" href="${originUrl}" />`
+    tagsStr += `<link rel="canonical" href="${originUrl}" />`
 
     if (disallowIndexation) {
-      tagsString += `<meta name="robots" content="noindex" />`
+      tagsStr += `<meta name="robots" content="noindex" />`
     }
 
-    return htmlStringPage.replace(CUSTOM_HTML_TAG_COMMENTS.META_TAGS, tagsString)
+    return htmlStringPage.replace(CUSTOM_HTML_TAG_COMMENTS.META_TAGS, tagsStr)
   }
 }
 

@@ -117,6 +117,7 @@
  * Fix player settings menu keyboard navigation
  * Fix player placeholder width
  * Fix playlist miniature size with big description
+ * Correctly escape meta tags
 
 
 ## v3.4.1
