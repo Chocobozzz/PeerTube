@@ -549,6 +549,7 @@ class ClientHtml {
 
 function sendHTML (html: string, res: express.Response) {
   res.set('Content-Type', 'text/html; charset=UTF-8')
+  res.set('Vary', 'Accept-Language')
 
   return res.send(html)
 }
