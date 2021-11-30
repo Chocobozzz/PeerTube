@@ -6,9 +6,9 @@
 ```
 npm run clean:server:test
 git checkout master && rm -r ./node_modules && yarn install --pure-lockfile && npm run build:server
-NODE_APP_INSTANCE=6 NODE_ENV=test npm run start
+NODE_APP_INSTANCE=6 NODE_ENV=test node dist/server --benchmark-startup
 git checkout develop && rm -r ./node_modules && yarn install --pure-lockfile && npm run build:server
-NODE_APP_INSTANCE=6 NODE_ENV=test npm run start
+NODE_APP_INSTANCE=6 NODE_ENV=test node dist/server --benchmark-startup
 ```
  * Run `rm -rf node_modules && rm -rf client/node_modules && yarn install --pure-lockfile && npm run build` to see if all the supported languages compile correctly
  * Update https://peertube2.cpy.re and check it works correctly
