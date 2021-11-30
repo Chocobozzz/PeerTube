@@ -4245,7 +4245,7 @@
       </trans-unit>
       <trans-unit id="2669509104300979449" datatype="html">
         <source>Manage <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/users&quot;&gt;"/>users<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> to set their quota individually. </source>
-        <target state="new"> Manage <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/users&quot;&gt;"/>users<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> to set their quota individually. </target>
+        <target state="translated">Spravujte <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/users&quot;&gt;"/>uživatele<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> pro individuální nastavení jejich kvóty. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">121</context></context-group>
       </trans-unit>
       <trans-unit id="4497115134891299867">
@@ -4576,7 +4576,7 @@
       </trans-unit>
       <trans-unit id="5205613575147327732" datatype="html">
         <source>If enabled, your server needs to accept incoming TCP traffic on port <x id="INTERPOLATION" equiv-text="{{ getLiveRTMPPort() }}"/></source>
-        <target state="new">If enabled, your server needs to accept incoming TCP traffic on port <x id="INTERPOLATION" equiv-text="{{ getLiveRTMPPort() }}"/></target>
+        <target state="translated">Pokud je tato možnost povolena, musí server přijímat příchozí přenosy TCP na portu <x id="INTERPOLATION" equiv-text="{{ getLiveRTMPPort() }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">23</context>
@@ -5252,12 +5252,12 @@ color: red;
       </trans-unit>
       <trans-unit id="321229234608559490" datatype="html">
         <source>Select a channel to receive the video</source>
-        <target state="new">Select a channel to receive the video</target>
+        <target state="translated">Vyberte kanál pro příjem videa</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-ownership/my-accept-ownership/my-accept-ownership.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="3610344835750059476" datatype="html">
         <source>My ownership changes</source>
-        <target state="new">My ownership changes</target>
+        <target state="translated">Změny mého vlastnictví</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-ownership/my-ownership.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="7391040346436232576">
@@ -5272,44 +5272,44 @@ color: red;
       </trans-unit>
       <trans-unit id="5611592591303869712">
         <source>Status</source>
-        <target state="new">Status</target>
+        <target state="translated">Stav</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-ownership/my-ownership.component.html</context><context context-type="linenumber">25</context></context-group>
       </trans-unit>
       <trans-unit id="5417361655914085905" datatype="html">
         <source>Account page</source>
-        <target state="new">Account page</target>
+        <target state="translated">Strana účtu</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">70</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">76</context></context-group>
       </trans-unit>
       <trans-unit id="2000373220662583633" datatype="html">
         <source>No ownership change request found.</source>
-        <target state="new">No ownership change request found.</target>
+        <target state="translated">Nebyla nalezena žádná žádost o změnu vlastnictví.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-ownership/my-ownership.component.html</context><context context-type="linenumber">78</context></context-group>
       </trans-unit>
       <trans-unit id="4247400351982331798" datatype="html">
         <source>Account settings</source>
-        <target state="new">Account settings</target>
+        <target state="translated">Nastavení účtu</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-routing.module.ts</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="2864486939135008600" datatype="html">
         <source>Playlist elements</source>
-        <target state="new">Playlist elements</target>
+        <target state="translated">Prvky playlistu</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-library-routing.module.ts</context><context context-type="linenumber">58</context></context-group>
       </trans-unit>
       <trans-unit id="7801453816697513153" datatype="html">
         <source>My imports</source>
-        <target state="new">My imports</target>
+        <target state="translated">Moje importy</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context><context context-type="linenumber">11</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="7000850040589508423" datatype="html">
         <source>Create video channel</source>
-        <target state="new">Create video channel</target>
+        <target state="translated">Vytvořit videokanál</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.html</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="5700655611297335752" datatype="html">
         <source>No channel found.</source>
-        <target state="new">No channel found.</target>
+        <target state="translated">Nenalezen žádný kanál.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.html</context><context context-type="linenumber">18</context></context-group>
       </trans-unit>
       <trans-unit id="626184983378002054">
@@ -5320,13 +5320,13 @@ color: red;
       </trans-unit>
       <trans-unit id="5871023634125368211" datatype="html">
         <source>CHANNEL</source>
-        <target state="new">CHANNEL</target>
+        <target state="translated">KANÁL</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channel-edit.component.html</context><context context-type="linenumber">26</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channel-edit.component.html</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="3582855804901374179" datatype="html">
         <source>Banner image of your channel</source>
-        <target state="new">Banner image of your channel</target>
+        <target state="translated">Úvodní obrázek vašeho kanálu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channel-edit.component.html</context>
           <context context-type="linenumber">30</context>
@@ -5345,7 +5345,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5278589041647101772" datatype="html">
         <source>Overwrite support field of all videos of this channel</source>
-        <target state="new">Overwrite support field of all videos of this channel</target>
+        <target state="translated">Přepsat pole podpory všech videí tohoto kanálu</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channel-edit.component.html</context><context context-type="linenumber">99</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channel-edit.component.html</context><context context-type="linenumber">99</context></context-group>
       </trans-unit>
@@ -5358,18 +5358,18 @@ color: red;
       </trans-unit>
       <trans-unit id="31472093355465024" datatype="html">
         <source>Upload a new avatar</source>
-        <target state="new">Upload a new avatar</target>
+        <target state="translated">Nahrát nový avatar</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-avatar-edit.component.html</context><context context-type="linenumber">9</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-avatar-edit.component.html</context><context context-type="linenumber">34</context></context-group>
       </trans-unit>
       <trans-unit id="4854396465510517671" datatype="html">
         <source>Target</source>
-        <target state="new">Target</target>
+        <target state="translated">Cíl</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.html</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="6376690302059877029" datatype="html">
         <source>This video was deleted</source>
-        <target state="new">This video was deleted</target>
+        <target state="translated">Toto video bylo smazáno</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.html</context><context context-type="linenumber">47</context></context-group>
       </trans-unit>
       <trans-unit id="6924803931258995553" datatype="html">
@@ -5379,12 +5379,12 @@ color: red;
       </trans-unit>
       <trans-unit id="8173902679178787744" datatype="html">
         <source>Once you delete your account, there is no going back. You will be asked to confirm this action.</source>
-        <target state="new">Once you delete your account, there is no going back. You will be asked to confirm this action.</target>
+        <target state="translated">Jakmile jednou účet odstraníte, není cesty zpět. Budete vyzváni k potvrzení této akce.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.html</context><context context-type="linenumber">2</context></context-group>
       </trans-unit>
       <trans-unit id="4000980858407872649" datatype="html">
         <source>Channel page</source>
-        <target state="new">Channel page</target>
+        <target state="translated">Stránka kanálu</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.html</context><context context-type="linenumber">25</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-follows/my-subscriptions.component.html</context><context context-type="linenumber">20</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">67</context></context-group>
@@ -7197,22 +7197,22 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="3229595422546554334" datatype="html">
         <source>Jobs</source>
-        <target state="new">Jobs</target>
+        <target state="translated">Úlohy</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/system.routes.ts</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="4804785061014590286" datatype="html">
         <source>Logs</source>
-        <target state="new">Logs</target>
+        <target state="translated">Protokoly</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/system.routes.ts</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
       <trans-unit id="3150704904301058778" datatype="html">
         <source>The plugin index is not available. Please retry later.</source>
-        <target state="new">The plugin index is not available. Please retry later.</target>
+        <target state="translated">Seznam zásuvných modulů není k dispozici. Zkuste to prosím později.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.ts</context><context context-type="linenumber">100</context></context-group>
       </trans-unit>
       <trans-unit id="1387301493234848481" datatype="html">
         <source>Please only install plugins or themes you trust, since they can execute any code on your instance.</source>
-        <target state="new">Please only install plugins or themes you trust, since they can execute any code on your instance.</target>
+        <target state="translated">Instalujte prosím pouze zásuvné moduly nebo témata, kterým důvěřujete, protože mohou ve vaší instanci spustit libovolný kód.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.ts</context><context context-type="linenumber">134</context></context-group>
       </trans-unit>
       <trans-unit id="2994182849694226596" datatype="html">
@@ -7222,39 +7222,37 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="6703720397495603345" datatype="html">
         <source><x id="PH"/> installed. </source>
-        <target state="new">
-          <x id="PH"/> installed.
-        </target>
+        <target state="translated"><x id="PH"/> instalován. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.ts</context><context context-type="linenumber">147</context></context-group>
       </trans-unit>
       <trans-unit id="1875025899004073421" datatype="html">
         <source>Settings updated.</source>
-        <target state="new">Settings updated.</target>
+        <target state="translated">Nastavení aktualizováno.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugin-show-installed/plugin-show-installed.component.ts</context><context context-type="linenumber">55</context></context-group>
       </trans-unit>
       <trans-unit id="6901018060567164184" datatype="html">
         <source>Plugins</source>
-        <target state="new">Plugins</target>
+        <target state="translated">Pluginy</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/shared/plugin-api.service.ts</context><context context-type="linenumber">31</context></context-group>
       </trans-unit>
       <trans-unit id="2798270190074840767" datatype="html">
         <source>Themes</source>
-        <target state="new">Themes</target>
+        <target state="translated">Témata</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/shared/plugin-api.service.ts</context><context context-type="linenumber">35</context></context-group>
       </trans-unit>
       <trans-unit id="2941409202780782189" datatype="html">
         <source>plugin</source>
-        <target state="new">plugin</target>
+        <target state="translated">plugin</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/shared/plugin-api.service.ts</context><context context-type="linenumber">43</context></context-group>
       </trans-unit>
       <trans-unit id="840045833311458646" datatype="html">
         <source>theme</source>
-        <target state="new">theme</target>
+        <target state="translated">téma</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/shared/plugin-api.service.ts</context><context context-type="linenumber">46</context></context-group>
       </trans-unit>
       <trans-unit id="2483018961011868950" datatype="html">
         <source>IP address</source>
-        <target state="new">IP address</target>
+        <target state="translated">IP adresa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/debug/debug.component.html</context>
           <context context-type="linenumber">2</context>
@@ -7270,7 +7268,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="722088235348685072" datatype="html">
         <source>If this is not your correct public IP, please consider fixing it because:</source>
-        <target state="new">If this is not your correct public IP, please consider fixing it because:</target>
+        <target state="translated">Pokud to není vaše správná veřejná IP adresa, zvažte její opravu, protože:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/debug/debug.component.html</context>
           <context context-type="linenumber">6</context>
@@ -7278,7 +7276,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="8079826195972333513" datatype="html">
         <source>Views may not be counted correctly (reduced compared to what they should be)</source>
-        <target state="new">Views may not be counted correctly (reduced compared to what they should be)</target>
+        <target state="translated">Zobrazení nemusí být správně započítána (snížena oproti tomu, co by měla být)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/debug/debug.component.html</context>
           <context context-type="linenumber">8</context>
@@ -7286,7 +7284,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="565435193934699740" datatype="html">
         <source>Anti brute force system could be overzealous</source>
-        <target state="new">Anti brute force system could be overzealous</target>
+        <target state="translated">Systém proti hrubé síle by mohl být příliš horliv</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/debug/debug.component.html</context>
           <context context-type="linenumber">9</context>
@@ -7294,7 +7292,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="4468853448271686046" datatype="html">
         <source>P2P system could not work correctly</source>
-        <target state="new">P2P system could not work correctly</target>
+        <target state="translated">Systém P2P by nemohl správně fungovat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/debug/debug.component.html</context>
           <context context-type="linenumber">10</context>
@@ -7302,7 +7300,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="5743050350352753869" datatype="html">
         <source>To fix it:</source>
-        <target state="new">To fix it:</target>
+        <target state="translated">Jak to napravit:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/debug/debug.component.html</context>
           <context context-type="linenumber">13</context>
@@ -7326,42 +7324,42 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="7591870443991978948" datatype="html">
         <source>Last week</source>
-        <target state="new">Last week</target>
+        <target state="translated">Minulý týden</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">96</context></context-group>
       </trans-unit>
       <trans-unit id="4981709795568846080" datatype="html">
         <source>Last day</source>
-        <target state="new">Last day</target>
+        <target state="translated">Poslední den</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">101</context></context-group>
       </trans-unit>
       <trans-unit id="9178360613965745088" datatype="html">
         <source>Last hour</source>
-        <target state="new">Last hour</target>
+        <target state="translated">Poslední hodinu</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">106</context></context-group>
       </trans-unit>
       <trans-unit id="3164845764519833078" datatype="html">
         <source>debug</source>
-        <target state="new">debug</target>
+        <target state="translated">ladit kód</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">118</context></context-group>
       </trans-unit>
       <trans-unit id="4279081882680795350" datatype="html">
         <source>info</source>
-        <target state="new">info</target>
+        <target state="translated">info</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">122</context></context-group>
       </trans-unit>
       <trans-unit id="3379167598974960777" datatype="html">
         <source>warning</source>
-        <target state="new">warning</target>
+        <target state="translated">upozornění</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">126</context></context-group>
       </trans-unit>
       <trans-unit id="8772116786769251214" datatype="html">
         <source>error</source>
-        <target state="new">error</target>
+        <target state="translated">chyba</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">130</context></context-group>
       </trans-unit>
       <trans-unit id="3422890808980876594" datatype="html">
         <source>Debug</source>
-        <target state="new">Debug</target>
+        <target state="translated">Ladění</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/system.routes.ts</context><context context-type="linenumber">48</context></context-group>
       </trans-unit>
       <trans-unit id="314315645942131479">
@@ -7372,7 +7370,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="4116911651502837995" datatype="html">
         <source>Files</source>
-        <target state="new">Files</target>
+        <target state="translated">Soubory</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.html</context>
           <context context-type="linenumber">41</context>
@@ -7399,12 +7397,12 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="5076187961693950167" datatype="html">
         <source>Standard logs</source>
-        <target state="new">Standard logs</target>
+        <target state="translated">Standardní protokoly</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">141</context></context-group>
       </trans-unit>
       <trans-unit id="4737341634746310376" datatype="html">
         <source>Audit logs</source>
-        <target state="new">Audit logs</target>
+        <target state="translated">Protokoly auditu</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">145</context></context-group>
       </trans-unit>
       <trans-unit id="1886888801485703107">
@@ -7414,17 +7412,17 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="8286337167859377104" datatype="html">
         <source>Create user</source>
-        <target state="new">Create user</target>
+        <target state="translated">Vytvořit uživatele</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-create.component.ts</context><context context-type="linenumber">95</context></context-group>
       </trans-unit>
       <trans-unit id="7098180453085889026" datatype="html">
         <source>Blocked videos</source>
-        <target state="new">Blocked videos</target>
+        <target state="translated">Blokovaná videa</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/moderation.routes.ts</context><context context-type="linenumber">67</context></context-group>
       </trans-unit>
       <trans-unit id="7805059636749367886" datatype="html">
         <source>Muted instances</source>
-        <target state="new">Muted instances</target>
+        <target state="translated">Ztlumené instance</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/moderation.routes.ts</context><context context-type="linenumber">107</context></context-group>
       </trans-unit>
       <trans-unit id="5974506725502681113" datatype="html">
@@ -7434,7 +7432,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="149953821752893163" datatype="html">
         <source>Update user password</source>
-        <target state="new">Update user password</target>
+        <target state="translated">Aktualizovat uživatelské heslo</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-password.component.ts</context><context context-type="linenumber">53</context></context-group>
       </trans-unit>
       <trans-unit id="780323526182667308" datatype="html">
@@ -7454,67 +7452,67 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="7483807629538115183" datatype="html">
         <source>Users list</source>
-        <target state="new">Users list</target>
+        <target state="translated">Seznam uživatelů</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/users.routes.ts</context><context context-type="linenumber">25</context></context-group>
       </trans-unit>
       <trans-unit id="1525334987774465166" datatype="html">
         <source>Create a user</source>
-        <target state="new">Create a user</target>
+        <target state="translated">Vytvořit uživatele</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/users.routes.ts</context><context context-type="linenumber">34</context></context-group>
       </trans-unit>
       <trans-unit id="5552039423287890133" datatype="html">
         <source>Update a user</source>
-        <target state="new">Update a user</target>
+        <target state="translated">Aktualizovat uživatele</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/users.routes.ts</context><context context-type="linenumber">43</context></context-group>
       </trans-unit>
       <trans-unit id="2005509140164856243" datatype="html">
         <source>Video type</source>
-        <target state="new">Video type</target>
+        <target state="translated">Typ videa</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
       <trans-unit id="1878553503929537171" datatype="html">
         <source>VOD</source>
-        <target state="new">VOD</target>
+        <target state="translated">VOD</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context><context context-type="linenumber">49</context></context-group>
       </trans-unit>
       <trans-unit id="8610504659433544583" datatype="html">
         <source>Live</source>
-        <target state="new">Live</target>
+        <target state="translated">Živý přenos</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context><context context-type="linenumber">53</context></context-group>
       </trans-unit>
       <trans-unit id="545237611115823456" datatype="html">
         <source>Video files</source>
-        <target state="new">Video files</target>
+        <target state="translated">Video soubory</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context><context context-type="linenumber">59</context></context-group>
       </trans-unit>
       <trans-unit id="5876109550513228304" datatype="html">
         <source>With WebTorrent</source>
-        <target state="new">With WebTorrent</target>
+        <target state="translated">Pomocí WebTorrentu</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context><context context-type="linenumber">63</context></context-group>
       </trans-unit>
       <trans-unit id="9036202975131076885" datatype="html">
         <source>Without WebTorrent</source>
-        <target state="new">Without WebTorrent</target>
+        <target state="translated">Bez WebTorrentu</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context><context context-type="linenumber">67</context></context-group>
       </trans-unit>
       <trans-unit id="7468888924775619361" datatype="html">
         <source>With HLS</source>
-        <target state="new">With HLS</target>
+        <target state="translated">s pomocí HLS</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context><context context-type="linenumber">71</context></context-group>
       </trans-unit>
       <trans-unit id="5489331826268601489" datatype="html">
         <source>Without HLS</source>
-        <target state="new">Without HLS</target>
+        <target state="translated">Bez HLS</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context><context context-type="linenumber">75</context></context-group>
       </trans-unit>
       <trans-unit id="7091163288887549392" datatype="html">
         <source>Videos scope</source>
-        <target state="new">Videos scope</target>
+        <target state="translated">Rozsah videí</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context><context context-type="linenumber">81</context></context-group>
       </trans-unit>
       <trans-unit id="1144415254281227966" datatype="html">
         <source>Remote videos</source>
-        <target state="new">Remote videos</target>
+        <target state="translated">Vzdálená videa</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context><context context-type="linenumber">85</context></context-group>
       </trans-unit>
       <trans-unit id="8564701209009684429" datatype="html">
@@ -7524,19 +7522,19 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="3767259920053407667" datatype="html">
         <source>Videos will be deleted, comments will be tombstoned.</source>
-        <target state="new">Videos will be deleted, comments will be tombstoned.</target>
+        <target state="translated">Videa budou smazána, komentáře budou pohřbeny.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">87</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">328</context></context-group>
       </trans-unit>
       <trans-unit id="4209525355702493436" datatype="html">
         <source>Ban</source>
-        <target state="new">Ban</target>
+        <target state="translated">Zakázat</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.ts</context><context context-type="linenumber">91</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">274</context></context-group>
       </trans-unit>
       <trans-unit id="3855396975723886053" datatype="html">
         <source>User won't be able to login anymore, but videos and comments will be kept as is.</source>
-        <target state="new">User won't be able to login anymore, but videos and comments will be kept as is.</target>
+        <target state="translated">Uživatel se již nebude moci přihlásit, ale videa a komentáře zůstanou zachovány.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">93</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">334</context></context-group>
       </trans-unit>
@@ -7549,28 +7547,28 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="7210277223053877333" datatype="html">
         <source>Set Email as Verified</source>
-        <target state="new">Set Email as Verified</target>
+        <target state="translated">Nastavit e-mail jako ověřený</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">105</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">345</context></context-group>
       </trans-unit>
       <trans-unit id="4207916966377787111" datatype="html">
         <source>Created</source>
-        <target state="new">Created</target>
+        <target state="translated">Vytvořeno</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">120</context></context-group>
       </trans-unit>
       <trans-unit id="8140268298586972139" datatype="html">
         <source>Daily quota</source>
-        <target state="new">Daily quota</target>
+        <target state="translated">Denní kvóta</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">125</context></context-group>
       </trans-unit>
       <trans-unit id="7910076708497708162" datatype="html">
         <source>Last login</source>
-        <target state="new">Last login</target>
+        <target state="translated">Poslední přihlášení</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">127</context></context-group>
       </trans-unit>
       <trans-unit id="3403978719736970622" datatype="html">
         <source>You cannot ban root.</source>
-        <target state="new">You cannot ban root.</target>
+        <target state="translated">Nemůžete zakázat root.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">164</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">54</context></context-group>
       </trans-unit>
@@ -7594,7 +7592,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="4086135983283545219" datatype="html">
         <source>If you remove these users, you will not be able to create others with the same username!</source>
-        <target state="new">If you remove these users, you will not be able to create others with the same username!</target>
+        <target state="translated">Pokud tyto uživatele odstraníte, nebudete moci vytvořit další uživatele se stejným uživatelským jménem!</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">199</context></context-group>
       </trans-unit>
       <trans-unit id="7166936623843420016" datatype="html">
@@ -8168,33 +8166,33 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="8936704404804793618" datatype="html">
         <source>Videos</source>
-        <target state="new">Videos</target>
+        <target state="translated">Videa</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-library.component.ts</context><context context-type="linenumber">54</context></context-group>
       </trans-unit>
       <trans-unit id="1823843876735462104" datatype="html">
         <source>Playlists</source>
-        <target state="new">Playlists</target>
+        <target state="translated">Playlisty</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-library.component.ts</context><context context-type="linenumber">61</context></context-group>
       </trans-unit>
       <trans-unit id="7916647920967632052" datatype="html">
         <source>max size</source>
-        <target state="new">max size</target>
+        <target state="translated">max velikost</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-avatar-edit.component.ts</context><context context-type="linenumber">46</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/preview-upload.component.ts</context><context context-type="linenumber">38</context></context-group>
       </trans-unit>
       <trans-unit id="6489275254908395777" datatype="html">
         <source>Maximize editor</source>
-        <target state="new">Maximize editor</target>
+        <target state="translated">Zvětšit editor</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/markdown-textarea.component.ts</context><context context-type="linenumber">50</context></context-group>
       </trans-unit>
       <trans-unit id="4243591013849340688" datatype="html">
         <source>Exit maximized editor</source>
-        <target state="new">Exit maximized editor</target>
+        <target state="translated">Ukončit zvětšený editor</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/markdown-textarea.component.ts</context><context context-type="linenumber">51</context></context-group>
       </trans-unit>
       <trans-unit id="6537885755702623401" datatype="html">
         <source>Now please check your emails to verify your account and complete signup.</source>
-        <target state="new">Now please check your emails to verify your account and complete signup.</target>
+        <target state="translated">Nyní prosím zkontrolujte své e-maily pro ověření účtu a dokončení registrace.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register.component.ts</context><context context-type="linenumber">136</context></context-group>
       </trans-unit>
       <trans-unit id="2847376451647729886">
@@ -8221,7 +8219,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="3131904093925601441" datatype="html">
         <source>PLAYLISTS</source>
-        <target state="new">PLAYLISTS</target>
+        <target state="translated">PLAYLISTY</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-channels/video-channels.component.ts</context>
           <context context-type="linenumber">77</context>
@@ -8234,42 +8232,42 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="4049262826107502276" datatype="html">
         <source>Toggle the left menu</source>
-        <target state="new">Toggle the left menu</target>
+        <target state="translated">Přepnutí levého menu</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.ts</context><context context-type="linenumber">275</context></context-group>
       </trans-unit>
       <trans-unit id="5409372033656550095" datatype="html">
         <source>Go to the discover videos page</source>
-        <target state="new">Go to the discover videos page</target>
+        <target state="translated">Přejděte na stránku procházení videí</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.ts</context><context context-type="linenumber">280</context></context-group>
       </trans-unit>
       <trans-unit id="4278050445961255445" datatype="html">
         <source>Go to the trending videos page</source>
-        <target state="new">Go to the trending videos page</target>
+        <target state="translated">Přejděte na stránku s trendovými videi</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.ts</context><context context-type="linenumber">285</context></context-group>
       </trans-unit>
       <trans-unit id="3242234958443825475" datatype="html">
         <source>Go to the recently added videos page</source>
-        <target state="new">Go to the recently added videos page</target>
+        <target state="translated">Přejděte na stránku nedávno přidaných videí</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.ts</context><context context-type="linenumber">290</context></context-group>
       </trans-unit>
       <trans-unit id="2887122197778293919" datatype="html">
         <source>Go to the local videos page</source>
-        <target state="new">Go to the local videos page</target>
+        <target state="translated">Přejděte na stránku s místními videi</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.ts</context><context context-type="linenumber">295</context></context-group>
       </trans-unit>
       <trans-unit id="8009065619559214982" datatype="html">
         <source>Go to the videos upload page</source>
-        <target state="new">Go to the videos upload page</target>
+        <target state="translated">Přejděte na stránku pro nahrávání videí</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.ts</context><context context-type="linenumber">300</context></context-group>
       </trans-unit>
       <trans-unit id="3779524668013120370" datatype="html">
         <source>Go to my subscriptions</source>
-        <target state="new">Go to my subscriptions</target>
+        <target state="translated">Přejděte na mé odběry</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/auth/auth.service.ts</context><context context-type="linenumber">63</context></context-group>
       </trans-unit>
       <trans-unit id="1136469849928650779" datatype="html">
         <source>Go to my videos</source>
-        <target state="new">Go to my videos</target>
+        <target state="translated">Přejděte na moje videa</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/auth/auth.service.ts</context><context context-type="linenumber">67</context></context-group>
       </trans-unit>
       <trans-unit id="7836683738999600376" datatype="html">
