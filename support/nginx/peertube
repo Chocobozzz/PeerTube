@@ -75,7 +75,6 @@ server {
   }
 
   location / {
-    add_header Vary Accept-Language;
     try_files /dev/null @api;
   }
 
