@@ -842,7 +842,7 @@
       </trans-unit>
       <trans-unit id="9133713232258232158" datatype="html">
         <source>Unfederate</source>
-        <target state="new">Unfederate</target>
+        <target state="translated">Sluta federera</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context>
           <context context-type="linenumber">31</context>
@@ -866,7 +866,7 @@
       </trans-unit>
       <trans-unit id="3849007546028672808" datatype="html">
         <source>Blocking a live will automatically terminate the live stream.</source>
-        <target state="translated">Blockering av direktsändning kommer automatiskt att avsluta direktsändningen</target>
+        <target state="translated">Blockering av en direktsändning kommer automatiskt att avsluta den.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context>
           <context context-type="linenumber">40,42</context>
@@ -4184,7 +4184,7 @@
       </trans-unit>
       <trans-unit id="4739907951373047958" datatype="html">
         <source>i.e. 2vCore 2GB RAM, a direct the link to the server you rent, etc.</source>
-        <target state="translated">till exempel 2vCore 2GB RAM eller en länk till den servertjänst du hyr</target>
+        <target state="translated">till exempel 2vCore, 2GB RAM eller en länk till den servertjänst du hyr</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context><context context-type="linenumber">232</context></context-group>
       </trans-unit>
       <trans-unit id="8557599287230755359" datatype="html">
@@ -7427,7 +7427,7 @@
       </trans-unit>
       <trans-unit id="7091163288887549392" datatype="html">
         <source>Videos scope</source>
-        <target state="new">Videos scope</target>
+        <target state="translated">Omfång för videor</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context><context context-type="linenumber">81</context></context-group>
       </trans-unit>
       <trans-unit id="1144415254281227966" datatype="html">
@@ -7732,7 +7732,7 @@
       </trans-unit>
       <trans-unit id="4579496777570550463" datatype="html">
         <source>Social</source>
-        <target state="new">Social</target>
+        <target state="translated">Socialt</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">51</context>
@@ -7864,7 +7864,7 @@
       </trans-unit>
       <trans-unit id="5294742063044966238" datatype="html">
         <source>Follower page</source>
-        <target state="new">Follower page</target>
+        <target state="translated">Följarens sida</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-follows/my-followers.component.html</context>
           <context context-type="linenumber">20</context>
@@ -8406,7 +8406,7 @@
       </trans-unit>
       <trans-unit id="8491751845906232809" datatype="html">
         <source>PeerTube instance host filter is invalid</source>
-        <target state="new">PeerTube instance host filter is invalid</target>
+        <target state="translated">PeerTube-instansens host-filter är ogiltigt</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search.component.ts</context><context context-type="linenumber">332</context></context-group>
       </trans-unit>
       <trans-unit id="4580988005648117665" datatype="html">
@@ -8681,7 +8681,7 @@
       </trans-unit>
       <trans-unit id="351272950792130803" datatype="html">
         <source>Max video channels per user is required.</source>
-        <target state="new">Max video channels per user is required.</target>
+        <target state="translated">Maximalt antal videokanaler per användare måste uppges.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">104</context>
@@ -8689,7 +8689,7 @@
       </trans-unit>
       <trans-unit id="5253683089104713724" datatype="html">
         <source>Max video channels per user must be greater or equal to 1.</source>
-        <target state="new">Max video channels per user must be greater or equal to 1.</target>
+        <target state="translated">Maximalt antal videokanaler per användare måste vara minst 1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">105</context>
@@ -8697,7 +8697,7 @@
       </trans-unit>
       <trans-unit id="8354695459880751923" datatype="html">
         <source>Max video channels per user must be a number.</source>
-        <target state="new">Max video channels per user must be a number.</target>
+        <target state="translated">Maximalt antal videokanaler per användare måste vara ett nummer.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">106</context>
@@ -9655,7 +9655,7 @@
       </trans-unit>
       <trans-unit id="9208009623124569456" datatype="html">
         <source>If you remove user <x id="PH" equiv-text="user.username"/>, you won't be able to create another with the same username!</source>
-        <target state="new">If you remove user <x id="PH" equiv-text="user.username"/>, you won't be able to create another with the same username!</target>
+        <target state="translated">Om du tar bort användaren <x id="PH" equiv-text="user.username"/> kommer du inte kunna skapa en annan med samma användarnamn!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">86</context>
@@ -10310,7 +10310,7 @@
       </trans-unit>
       <trans-unit id="3076101305843397295" datatype="html">
         <source>Do you really want to unblock <x id="PH" equiv-text="this.video.name"/>? It will be available again in the videos list.</source>
-        <target state="new">Do you really want to unblock <x id="PH" equiv-text="this.video.name"/>? It will be available again in the videos list.</target>
+        <target state="translated">Vill du verkligen sluta blockera <x id="PH" equiv-text="this.video.name"/>? Den kommer i så fall åter synas i videolistan.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">194</context></context-group>
       </trans-unit>
       <trans-unit id="8359747231611535508" datatype="html">
