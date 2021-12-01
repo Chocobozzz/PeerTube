@@ -7037,19 +7037,17 @@
       </trans-unit>
       <trans-unit id="2849750161085431718" datatype="html">
         <source>Upgrade</source>
-        <target state="translated">Upgradovat</target>
+        <target state="translated">Aktualizovat</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.ts</context><context context-type="linenumber">135</context></context-group>
       </trans-unit>
       <trans-unit id="7686590072950686188" datatype="html">
         <source>Proceed upgrade</source>
-        <target state="new">Proceed upgrade</target>
+        <target state="translated">Pokračovat v aktualizaci</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.ts</context><context context-type="linenumber">136</context></context-group>
       </trans-unit>
       <trans-unit id="7830308409197461339" datatype="html">
         <source><x id="PH"/> updated. </source>
-        <target state="new">
-          <x id="PH"/> updated.
-        </target>
+        <target state="translated"><x id="PH"/> aktualizováno. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.ts</context><context context-type="linenumber">150</context></context-group>
       </trans-unit>
       <trans-unit id="3229595422546554334" datatype="html">
