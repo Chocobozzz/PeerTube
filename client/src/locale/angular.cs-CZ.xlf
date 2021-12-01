@@ -7002,19 +7002,17 @@
       </trans-unit>
       <trans-unit id="212615365039028546" datatype="html">
         <source>You don't have plugins installed yet.</source>
-        <target state="new">You don't have plugins installed yet.</target>
+        <target state="translated">Ještě nemáte nainstalované pluginy.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.ts</context><context context-type="linenumber">86</context></context-group>
       </trans-unit>
       <trans-unit id="1710094819987243777" datatype="html">
         <source>You don't have themes installed yet.</source>
-        <target state="new">You don't have themes installed yet.</target>
+        <target state="translated">Ještě nemáte nainstalovaná témata.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.ts</context><context context-type="linenumber">89</context></context-group>
       </trans-unit>
       <trans-unit id="931472057457682240" datatype="html">
         <source>Update to <x id="PH"/> </source>
-        <target state="new">Update to 
-          <x id="PH"/>
-        </target>
+        <target state="translated">Aktualizovat na <x id="PH"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.ts</context><context context-type="linenumber">97</context></context-group>
       </trans-unit>
       <trans-unit id="9107383323119159110" datatype="html">
