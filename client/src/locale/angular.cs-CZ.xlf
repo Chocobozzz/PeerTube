@@ -7452,16 +7452,12 @@
       </trans-unit>
       <trans-unit id="7166936623843420016" datatype="html">
         <source><x id="PH"/> users deleted. </source>
-        <target state="new">
-          <x id="PH"/> users deleted.
-        </target>
+        <target state="translated"><x id="PH"/> uživatelé smazáni. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">206</context></context-group>
       </trans-unit>
       <trans-unit id="8360664597512051242" datatype="html">
         <source><x id="PH"/> users email set as verified. </source>
-        <target state="new">
-          <x id="PH"/> users email set as verified.
-        </target>
+        <target state="translated"><x id="PH"/> e-mail uživatelů nastavený jako ověřený. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">218</context></context-group>
       </trans-unit>
       <trans-unit id="7390990800435887351" datatype="html">
@@ -7478,27 +7474,27 @@
       </trans-unit>
       <trans-unit id="5551551295632950210" datatype="html">
         <source>Videos history is enabled</source>
-        <target state="new">Videos history is enabled</target>
+        <target state="translated">Historie videí je povolena</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context><context context-type="linenumber">114</context></context-group>
       </trans-unit>
       <trans-unit id="9136227503281311926" datatype="html">
         <source>Videos history is disabled</source>
-        <target state="new">Videos history is disabled</target>
+        <target state="translated">Historie videí je zakázána</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context><context context-type="linenumber">115</context></context-group>
       </trans-unit>
       <trans-unit id="8966726118414892732" datatype="html">
         <source>Delete videos history</source>
-        <target state="new">Delete videos history</target>
+        <target state="translated">Smazat historii videí</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context><context context-type="linenumber">127</context></context-group>
       </trans-unit>
       <trans-unit id="2482543433481435105" datatype="html">
         <source>Are you sure you want to delete all your videos history?</source>
-        <target state="new">Are you sure you want to delete all your videos history?</target>
+        <target state="translated">Jste si jisti, že chcete odstranit celou historii videí?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context><context context-type="linenumber">128</context></context-group>
       </trans-unit>
       <trans-unit id="4051606152827088952" datatype="html">
         <source>Videos history deleted</source>
-        <target state="new">Videos history deleted</target>
+        <target state="translated">Historie videí smazána</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context><context context-type="linenumber">136</context></context-group>
       </trans-unit>
       <trans-unit id="1486537403020619891" datatype="html">
@@ -7511,22 +7507,22 @@
       </trans-unit>
       <trans-unit id="3656932706364053858" datatype="html">
         <source>Track watch history</source>
-        <target state="new">Track watch history</target>
+        <target state="translated">Trasování historie sledování</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.html</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="3183245287221165928" datatype="html">
         <source>Ownership accepted</source>
-        <target state="new">Ownership accepted</target>
+        <target state="translated">Vlastnictví přijato</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-ownership/my-accept-ownership/my-accept-ownership.component.ts</context><context context-type="linenumber">69</context></context-group>
       </trans-unit>
       <trans-unit id="6012072687166259654" datatype="html">
         <source>Please check your emails to verify your new email.</source>
-        <target state="new">Please check your emails to verify your new email.</target>
+        <target state="translated">Zkontrolujte své e-maily a ověřte si svůj nový e-mail.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.ts</context><context context-type="linenumber">53</context></context-group>
       </trans-unit>
       <trans-unit id="6585766371605707311" datatype="html">
         <source>Email updated.</source>
-        <target state="new">Email updated.</target>
+        <target state="translated">E-mail aktualizován.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.ts</context><context context-type="linenumber">55</context></context-group>
       </trans-unit>
       <trans-unit id="8553059323353586765" datatype="html">
@@ -7537,7 +7533,7 @@
       </trans-unit>
       <trans-unit id="853586874765134886" datatype="html">
         <source>You current password is invalid.</source>
-        <target state="new">You current password is invalid.</target>
+        <target state="translated">Vaše aktuální heslo je neplatné.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.ts</context><context context-type="linenumber">61</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-password/my-account-change-password.component.ts</context><context context-type="linenumber">61</context></context-group>
       </trans-unit>
@@ -7553,27 +7549,27 @@
       </trans-unit>
       <trans-unit id="6897292459203320054" datatype="html">
         <source>Type your username to confirm</source>
-        <target state="new">Type your username to confirm</target>
+        <target state="translated">Zadejte své uživatelské jméno pro potvrzení</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context><context context-type="linenumber">24</context></context-group>
       </trans-unit>
       <trans-unit id="3122895472333547524" datatype="html">
         <source>Delete your account</source>
-        <target state="new">Delete your account</target>
+        <target state="translated">Smazat účet</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context><context context-type="linenumber">25</context></context-group>
       </trans-unit>
       <trans-unit id="2520605306994744004" datatype="html">
         <source>Delete my account</source>
-        <target state="new">Delete my account</target>
+        <target state="translated">Smazat můj účet</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="3902597758945766483" datatype="html">
         <source>Your account is deleted.</source>
-        <target state="new">Your account is deleted.</target>
+        <target state="translated">Váš účet je smazán.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context><context context-type="linenumber">34</context></context-group>
       </trans-unit>
       <trans-unit id="4776289814033837037" datatype="html">
         <source>Interface settings updated.</source>
-        <target state="new">Interface settings updated.</target>
+        <target state="translated">Nastavení rozhraní aktualizováno.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.ts</context><context context-type="linenumber">73</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.ts</context><context context-type="linenumber">83</context></context-group>
       </trans-unit>
