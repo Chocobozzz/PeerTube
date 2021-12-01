@@ -5008,7 +5008,7 @@
       </trans-unit>
       <trans-unit id="3082811226222076503" datatype="html">
         <source>Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Best"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Best"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">Seřadit podle <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Nejlepší"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">50</context>
@@ -5016,7 +5016,7 @@
       </trans-unit>
       <trans-unit id="4322133526902910662" datatype="html">
         <source>Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Likes"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Likes"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">Seřadit podle <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Líbí se mi"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">51</context>
