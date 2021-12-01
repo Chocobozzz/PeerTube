@@ -6976,7 +6976,7 @@
       </trans-unit>
       <trans-unit id="4859202148272511129" datatype="html">
         <source>Unblock</source>
-        <target state="new">Unblock</target>
+        <target state="translated">Odblokovat</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context><context context-type="linenumber">86</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context><context context-type="linenumber">133</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">86</context></context-group>
@@ -6990,7 +6990,7 @@
       </trans-unit>
       <trans-unit id="6286037250766429054" datatype="html">
         <source>yes</source>
-        <target state="new">yes</target>
+        <target state="translated">ano</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/feature-boolean.component.html</context><context context-type="linenumber">1</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/feature-boolean.component.html</context><context context-type="linenumber">1</context></context-group>
       </trans-unit>
