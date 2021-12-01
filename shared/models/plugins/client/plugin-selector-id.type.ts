@@ -1,1 +1,8 @@
 export type PluginSelectorId = 'login-form'
+| 'menu-dropdown-language-item'
+| 'about-instance-features'
+| 'about-instance-statistics'
+| 'about-instance-moderation'
+| 'about-sub-menu-instance'
+| 'about-sub-menu-peertube'
+| 'about-sub-menu-network'
