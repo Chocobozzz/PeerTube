@@ -20,23 +20,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Use Node.js
-        uses: actions/setup-node@v1
+      - uses: './.github/actions/reusable-prepare-peertube-build'
         with:
           node-version: '14.x'
-
-      - name: Cache Node.js modules
-        uses: actions/cache@v2
-        with:
-          path: |
-            **/node_modules
-          key: ${{ runner.OS }}-node-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.OS }}-node-
-            ${{ runner.OS }}-
-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
 
       - name: Angular bundlewatch
         uses: jackyef/bundlewatch-gh-action@master
@@ -73,27 +59,11 @@ jobs:
 
       - name: Upload stats
         if: github.event_name != 'pull_request'
-        env:
-          STATS_DEPLOYEMENT_KNOWN_HOSTS: ${{ secrets.STATS_DEPLOYEMENT_KNOWN_HOSTS }}
-          STATS_DEPLOYEMENT_KEY: ${{ secrets.STATS_DEPLOYEMENT_KEY }}
-          STATS_DEPLOYEMENT_USER: ${{ secrets.STATS_DEPLOYEMENT_USER }}
-          STATS_DEPLOYEMENT_HOST: ${{ secrets.STATS_DEPLOYEMENT_HOST }}
-        run: |
-          mkdir -p ~/.ssh
-          chmod 700  ~/.ssh
-          if [ ! -z ${STATS_DEPLOYEMENT_KNOWN_HOSTS+x} ]; then
-            echo "Adding ssh key to known hosts"
-            echo -e "${STATS_DEPLOYEMENT_KNOWN_HOSTS}" > ~/.ssh/known_hosts;
-          fi
-
-          eval `ssh-agent -s`
-
-          if [ ! -z ${STATS_DEPLOYEMENT_KEY+x} ]; then
-            echo "Adding ssh reployement key"
-            ssh-add <(echo "${STATS_DEPLOYEMENT_KEY}");
-          fi
-
-          if [ ! -z ${STATS_DEPLOYEMENT_KEY+x} ]; then
-            echo "Uploading files"
-            scp lighthouse.json client-build-stats.json scc.json ${STATS_DEPLOYEMENT_USER}@${STATS_DEPLOYEMENT_HOST}:../../web/peertube-stats;
-          fi
+        uses: './.github/actions/reusable-deploy'
+        with:
+          source: lighthouse.json client-build-stats.json scc.json
+          destination: peertube-stats
+          knownHosts: ${{ secrets.STATS_DEPLOYEMENT_KNOWN_HOSTS }}
+          deployKey: ${{ secrets.STATS_DEPLOYEMENT_KEY }}
+          deployUser: ${{ secrets.STATS_DEPLOYEMENT_USER }}
+          deployHost: ${{ secrets.STATS_DEPLOYEMENT_HOST }}

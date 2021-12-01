@@ -1,0 +1,46 @@
+name: "Reusable deploy on builds.joinpeertube.org"
+
+description: "Reusable deploy on builds.joinpeertube.org"
+
+inputs:
+  source:
+    required: true
+    description: "Source file/files/directory/directories to deploy"
+  destination:
+    required: true
+    description: "Destination directory on builds.joinpeertube.org"
+  knownHosts:
+    required: true
+    description: "Known hosts"
+  deployKey:
+    required: true
+    description: "Deploy key"
+  deployUser:
+    required: true
+    description: "Deploy user"
+  deployHost:
+    required: true
+    description: "Deploy host"
+
+
+runs:
+  using: "composite"
+
+  steps:
+    - name: "Deploy"
+      shell: bash
+      run: |
+        mkdir -p ~/.ssh
+        chmod 700  ~/.ssh
+
+        echo "Adding ssh key to known hosts"
+        echo -e "${{ inputs.knownHosts }}" > ~/.ssh/known_hosts;
+
+        eval `ssh-agent -s`
+
+        echo "Adding ssh deploy key"
+        ssh-add <(echo "${{ inputs.deployKey }}");
+
+        echo "Uploading files"
+
+        scp ${{ inputs.source }} ${{ inputs.deployUser }}@${{ inputs.deployHost }}:../../web/${{ inputs.destination }};
