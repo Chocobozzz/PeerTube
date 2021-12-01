@@ -106,7 +106,9 @@ async function moveToPublishedState (video: MVideoFullLight, isNewVideo: boolean
   // Live videos are always federated, so it's not a new video
   await federateVideoIfNeeded(video, isNewVideo, transaction)
 
-  if (isNewVideo) Notifier.Instance.notifyOnNewVideoIfNeeded(video)
+  if (!isNewVideo) return
+
+  Notifier.Instance.notifyOnNewVideoIfNeeded(video)
 
   if (previousState === VideoState.TO_TRANSCODE) {
     Notifier.Instance.notifyOnVideoPublishedAfterTranscoding(video)
