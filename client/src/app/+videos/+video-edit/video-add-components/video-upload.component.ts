@@ -161,6 +161,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
         this.firstStepError.emit()
         this.enableRetryAfterError = false
         this.error = ''
+        this.isUploadingAudioFile = false
         break
 
       case 'queue':
