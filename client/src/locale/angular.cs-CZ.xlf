@@ -651,7 +651,7 @@
       </trans-unit>
       <trans-unit id="330610135077253864" datatype="html">
         <source>Live streaming enabled</source>
-        <target state="translated">živí vysílání je povoleno</target>
+        <target state="translated">živé přenosy jsou povoleny</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">71</context></context-group>
       </trans-unit>
       <trans-unit id="8135461567542503937" datatype="html">
@@ -4615,7 +4615,7 @@
       </trans-unit>
       <trans-unit id="8489317904250057957" datatype="html">
         <source>will claim at least <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with VOD transcoding </source>
-        <target state="new"> will claim at least <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with VOD transcoding </target>
+        <target state="translated">bude požadovat alespoň <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> s překódováním VOD </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">135,137</context>
@@ -4754,7 +4754,7 @@
       </trans-unit>
       <trans-unit id="7815122216882553289" datatype="html">
         <source>will claim at most <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with live transcoding </source>
-        <target state="new"> will claim at most <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with live transcoding </target>
+        <target state="translated">bude požadovat maximálně <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> s překódováním živého přenosu </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">146,148</context>
@@ -4762,7 +4762,7 @@
       </trans-unit>
       <trans-unit id="8685484763568827375" datatype="html">
         <source>will claim at least <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with live transcoding </source>
-        <target state="new"> will claim at least <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with live transcoding </target>
+        <target state="translated">bude požadovat alespoň <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> s překódováním živého přenosu </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">150,152</context>
@@ -4863,18 +4863,12 @@
       </trans-unit>
       <trans-unit id="4067880101082150743" datatype="html">
         <source>Write JavaScript code directly.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>Example: <x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>console.log('my instance is amazing');<x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></source>
-        <target state="new"> Write JavaScript code directly.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>Example: <x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>console.log('my instance is amazing');<x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></target>
+        <target state="translated">Napište přímo kód JavaScriptu.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>Příklad: <x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>console.log('moje instance je skvělá');<x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context><context context-type="linenumber">77</context></context-group>
       </trans-unit>
       <trans-unit id="5464209657969421100" datatype="html">
         <source>Write CSS code directly. Example:<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>#custom-css <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color: red; <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/> Prepend with <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> to override styles. Example:<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>#custom-css .logged-in-email <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color: red; <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></source>
-        <target state="new"> Write CSS code directly. Example:<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt; "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt; "/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>#custom-css <x id="INTERPOLATION" equiv-text=" {{ '{' }"/>
-color: red;
-<x id="INTERPOLATION_1" equiv-text=" {{ '}' }"/>
-<x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/> Prepend with <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt; "/> to override styles. Example:<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt; "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt; "/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>#custom-css .logged-in-email <x id="INTERPOLATION" equiv-text=" {{ '{' }"/>
-color: red;
-<x id="INTERPOLATION_1" equiv-text=" {{ '}' }"/>
-<x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></target>
+        <target state="translated">Napište kód CSS přímo. Příklad: <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>#custom-css <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color: red; <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/> Předřazení <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> pro přepsání stylů. Příklad:<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>#custom-css . logged-in-email <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color: red; <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context><context context-type="linenumber">96</context></context-group>
       </trans-unit>
       <trans-unit id="283725429207896837" datatype="html">
@@ -4892,7 +4886,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8167543029214637769" datatype="html">
         <source>There are errors in the form: <x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;           "/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li *ngFor=&quot;let error of grabAllErrors()&quot;&gt;"/> <x id="INTERPOLATION" equiv-text="{{ error }}"/> <x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/></source>
-        <target state="new"> There are errors in the form: <x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;           "/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li *ngFor=&quot;let error of grabAllErrors()&quot;&gt;"/> <x id="INTERPOLATION" equiv-text="{{ error }}"/> <x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/></target>
+        <target state="translated">Ve formuláři jsou chyby: <x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;           "/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li *ngFor=&quot;let error of grabAllErrors()&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ error }}"/> <x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">71</context></context-group>
       </trans-unit>
       <trans-unit id="1445676851449000175">
