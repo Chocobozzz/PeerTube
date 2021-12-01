@@ -547,9 +547,12 @@ class ClientHtml {
   }
 }
 
-function sendHTML (html: string, res: express.Response) {
+function sendHTML (html: string, res: express.Response, localizedHTML: boolean = false) {
   res.set('Content-Type', 'text/html; charset=UTF-8')
-  res.set('Vary', 'Accept-Language')
+
+  if (localizedHTML) {
+    res.set('Vary', 'Accept-Language')
+  }
 
   return res.send(html)
 }
@@ -579,5 +582,5 @@ export {
 async function generateHTMLPage (req: express.Request, res: express.Response, paramLang?: string) {
   const html = await ClientHtml.getDefaultHTMLPage(req, res, paramLang)
 
-  return sendHTML(html, res)
+  return sendHTML(html, res, true)
 }
