@@ -6911,32 +6911,32 @@
       </trans-unit>
       <trans-unit id="3924877328520650445" datatype="html">
         <source>Block video</source>
-        <target state="new">Block video</target>
+        <target state="translated">Blokovat video</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">338</context></context-group>
       </trans-unit>
       <trans-unit id="4762794934098378428" datatype="html">
         <source>Video blocked.</source>
-        <target state="new">Video blocked.</target>
+        <target state="translated">Video blokováno.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">344</context></context-group>
       </trans-unit>
       <trans-unit id="4328862996304258770" datatype="html">
         <source>Unblock video</source>
-        <target state="new">Unblock video</target>
+        <target state="translated">Odblokovat video</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">354</context></context-group>
       </trans-unit>
       <trans-unit id="9065327551191479877" datatype="html">
         <source>Video unblocked.</source>
-        <target state="new">Video unblocked.</target>
+        <target state="translated">Video odblokováno.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">360</context></context-group>
       </trans-unit>
       <trans-unit id="1250415136605923486" datatype="html">
         <source>Do you really want to delete this abuse report?</source>
-        <target state="new">Do you really want to delete this abuse report?</target>
+        <target state="translated">Opravdu chcete toto hlášení o zneužití smazat?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">134</context></context-group>
       </trans-unit>
       <trans-unit id="3482559157143817408" datatype="html">
         <source>Abuse deleted.</source>
-        <target state="new">Abuse deleted.</target>
+        <target state="translated">Zneužití smazáno.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">140</context></context-group>
       </trans-unit>
       <trans-unit id="6282990098351939529" datatype="html">
