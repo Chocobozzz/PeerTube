@@ -7032,12 +7032,12 @@
       </trans-unit>
       <trans-unit id="7914215986085479339" datatype="html">
         <source>This is a major plugin upgrade. Please go on the plugin homepage to check potential release notes.</source>
-        <target state="new">This is a major plugin upgrade. Please go on the plugin homepage to check potential release notes.</target>
+        <target state="translated">Jde o významnou aktualizaci pluginu. Přejděte prosím na domovskou stránku pluginu a podívejte se na případné poznámky k vydání.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.ts</context><context context-type="linenumber">134</context></context-group>
       </trans-unit>
       <trans-unit id="2849750161085431718" datatype="html">
         <source>Upgrade</source>
-        <target state="new">Upgrade</target>
+        <target state="translated">Upgradovat</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.ts</context><context context-type="linenumber">135</context></context-group>
       </trans-unit>
       <trans-unit id="7686590072950686188" datatype="html">
