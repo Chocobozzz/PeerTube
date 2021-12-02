@@ -2,6 +2,12 @@
 
 ## Preparation
 
+Install devDepedencies:
+
+```bash
+yarn install --pure-lockfile --production=false
+```
+
 Prepare PostgreSQL user so PeerTube can delete/create the test databases:
 
 ```bash
@@ -42,7 +48,7 @@ $ npm run test # See scripts/test.sh to run a particular suite
 Most of tests can be runned using:
 
 ```bash
-TS_NODE_TRANSPILE_ONLY=true mocha -- --timeout 30000 --exit -r ts-node/register -r tsconfig-paths/register --bail server/tests/api/videos/video-transcoder.ts
+TS_NODE_TRANSPILE_ONLY=true npx mocha -- --timeout 30000 --exit -r ts-node/register -r tsconfig-paths/register --bail server/tests/api/videos/video-transcoder.ts
 ```
 
 `server/tests/api/activitypub` tests will need different options:
