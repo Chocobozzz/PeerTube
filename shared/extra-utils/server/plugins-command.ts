@@ -158,15 +158,16 @@ export class PluginsCommand extends AbstractCommand {
   install (options: OverrideCommandOptions & {
     path?: string
     npmName?: string
+    pluginVersion?: string
   }) {
-    const { npmName, path } = options
+    const { npmName, path, pluginVersion } = options
     const apiPath = '/api/v1/plugins/install'
 
     return this.postBodyRequest({
       ...options,
 
       path: apiPath,
-      fields: { npmName, path },
+      fields: { npmName, path, pluginVersion },
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })

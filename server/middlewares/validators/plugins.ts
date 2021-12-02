@@ -116,6 +116,9 @@ const installOrUpdatePluginValidator = [
   body('npmName')
     .optional()
     .custom(isNpmPluginNameValid).withMessage('Should have a valid npm name'),
+  body('pluginVersion')
+    .optional()
+    .custom(isPluginVersionValid).withMessage('Should have a valid plugin version'),
   body('path')
     .optional()
     .custom(isSafePath).withMessage('Should have a valid safe path'),
@@ -128,6 +131,9 @@ const installOrUpdatePluginValidator = [
     const body: InstallOrUpdatePlugin = req.body
     if (!body.path && !body.npmName) {
       return res.fail({ message: 'Should have either a npmName or a path' })
+    }
+    if (body.pluginVersion &&!body.npmName) {
+      return res.fail({ message: 'Should have a npmName when specifying a pluginVersion' })
     }
 
     return next()
