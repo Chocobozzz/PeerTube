@@ -138,31 +138,31 @@ async function generateEmbedHtmlPage (req: express.Request, res: express.Respons
 async function generateWatchHtmlPage (req: express.Request, res: express.Response) {
   const html = await ClientHtml.getWatchHTMLPage(req.params.id + '', req, res)
 
-  return sendHTML(html, res)
+  return sendHTML(html, res, true)
 }
 
 async function generateWatchPlaylistHtmlPage (req: express.Request, res: express.Response) {
   const html = await ClientHtml.getWatchPlaylistHTMLPage(req.params.id + '', req, res)
 
-  return sendHTML(html, res)
+  return sendHTML(html, res, true)
 }
 
 async function generateAccountHtmlPage (req: express.Request, res: express.Response) {
   const html = await ClientHtml.getAccountHTMLPage(req.params.nameWithHost, req, res)
 
-  return sendHTML(html, res)
+  return sendHTML(html, res, true)
 }
 
 async function generateVideoChannelHtmlPage (req: express.Request, res: express.Response) {
   const html = await ClientHtml.getVideoChannelHTMLPage(req.params.nameWithHost, req, res)
 
-  return sendHTML(html, res)
+  return sendHTML(html, res, true)
 }
 
 async function generateActorHtmlPage (req: express.Request, res: express.Response) {
   const html = await ClientHtml.getActorHTMLPage(req.params.nameWithHost, req, res)
 
-  return sendHTML(html, res)
+  return sendHTML(html, res, true)
 }
 
 async function generateManifest (req: express.Request, res: express.Response) {
