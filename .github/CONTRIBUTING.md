@@ -85,7 +85,7 @@ to install the dependencies.
 $ git clone https://github.com/Chocobozzz/PeerTube
 $ cd PeerTube
 $ git remote add me git@github.com:YOUR_GITHUB_USERNAME/PeerTube.git
-$ yarn install --pure-lockfile
+$ yarn install --pure-lockfile --production=false
 ```
 
 Note that development is done on the `develop` branch. If you want to hack on

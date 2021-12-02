@@ -2,7 +2,7 @@
 
 ## Preparation
 
-Install devDepedencies:
+If you not already installed devDependencies:
 
 ```bash
 yarn install --pure-lockfile --production=false
