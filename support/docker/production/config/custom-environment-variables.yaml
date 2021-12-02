@@ -54,6 +54,10 @@ object_storage:
 
   region: "PEERTUBE_OBJECT_STORAGE_REGION"
 
+  credentials:
+    access_key_id: "PEERTUBE_OBJECT_STORAGE_CREDENTIALS_ACCESS_KEY_ID"
+    secret_access_key: 'PEERTUBE_OBJECT_STORAGE_CREDENTIALS_SECRET_ACCESS_KEY'
+
   max_upload_part:
     __name: "PEERTUBE_OBJECT_STORAGE_MAX_UPLOAD_PART"
     __format: "json"
