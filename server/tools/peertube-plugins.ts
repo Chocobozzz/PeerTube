@@ -31,6 +31,7 @@ program
   .option('-p, --password <token>', 'Password')
   .option('-P --path <path>', 'Install from a path')
   .option('-n, --npm-name <npmName>', 'Install from npm')
+  .option('--plugin-version <pluginVersion>', 'Specify the plugin version to install (only available when installing from npm)')
   .action((options, command) => installPluginCLI(command, options))
 
 program
@@ -109,7 +110,7 @@ async function installPluginCLI (command: Command, options: OptionValues) {
   await assignToken(server, username, password)
 
   try {
-    await server.plugins.install({ npmName: options.npmName, path: options.path })
+    await server.plugins.install({ npmName: options.npmName, path: options.path, pluginVersion: options.pluginVersion })
   } catch (err) {
     console.error('Cannot install plugin.', err)
     process.exit(-1)

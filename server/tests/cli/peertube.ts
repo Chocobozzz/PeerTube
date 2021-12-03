@@ -207,6 +207,25 @@ describe('Test CLI wrapper', function () {
 
       expect(res).to.not.contain('peertube-plugin-hello-world')
     })
+
+    it('Should install a plugin in requested version', async function () {
+      this.timeout(60000)
+
+      await cliCommand.execWithEnv(`${cmd} plugins install --npm-name peertube-plugin-hello-world --plugin-version 0.0.17`)
+    })
+
+    it('Should list installed plugins, in correct version', async function () {
+      const res = await cliCommand.execWithEnv(`${cmd} plugins list`)
+
+      expect(res).to.contain('peertube-plugin-hello-world')
+      expect(res).to.contain('0.0.17')
+    })
+
+    it('Should uninstall the plugin again', async function () {
+      const res = await cliCommand.execWithEnv(`${cmd} plugins uninstall --npm-name peertube-plugin-hello-world`)
+
+      expect(res).to.not.contain('peertube-plugin-hello-world')
+    })
   })
 
   describe('Manage video redundancies', function () {
