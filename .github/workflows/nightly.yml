@@ -1,9 +1,6 @@
 name: Nightly
 
 on:
-  push:
-    branches:
-      - 'next'
   schedule:
     - cron: '0 3 * * *'
 
@@ -17,7 +14,7 @@ jobs:
         name: Checkout develop
         uses: actions/checkout@v2
         with:
-          ref: next
+          ref: develop
 
       - uses: './.github/actions/reusable-prepare-peertube-build'
         with:
@@ -29,7 +26,7 @@ jobs:
       - uses: './.github/actions/reusable-deploy'
         with:
           source: ./peertube-nightly-*
-          destination: nightly-test
+          destination: nightly
           knownHosts: ${{ secrets.STATS_DEPLOYEMENT_KNOWN_HOSTS }}
           deployKey: ${{ secrets.STATS_DEPLOYEMENT_KEY }}
           deployUser: ${{ secrets.STATS_DEPLOYEMENT_USER }}
