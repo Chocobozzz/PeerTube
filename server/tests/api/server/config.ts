@@ -43,6 +43,9 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
   expect(data.services.twitter.username).to.equal('@Chocobozzz')
   expect(data.services.twitter.whitelisted).to.be.false
 
+  expect(data.client.videos.miniature.preferAuthorDisplayName).to.be.false
+  expect(data.client.menu.login.redirectOnSingleExternalAuth).to.be.false
+
   expect(data.cache.previews.size).to.equal(1)
   expect(data.cache.captions.size).to.equal(1)
   expect(data.cache.torrents.size).to.equal(1)
@@ -137,6 +140,9 @@ function checkUpdatedConfig (data: CustomConfig) {
 
   expect(data.services.twitter.username).to.equal('@Kuja')
   expect(data.services.twitter.whitelisted).to.be.true
+
+  expect(data.client.videos.miniature.preferAuthorDisplayName).to.be.true
+  expect(data.client.menu.login.redirectOnSingleExternalAuth).to.be.true
 
   expect(data.cache.previews.size).to.equal(2)
   expect(data.cache.captions.size).to.equal(3)
@@ -244,6 +250,18 @@ const newCustomConfig: CustomConfig = {
     twitter: {
       username: '@Kuja',
       whitelisted: true
+    }
+  },
+  client: {
+    videos: {
+      miniature: {
+        preferAuthorDisplayName: true
+      }
+    },
+    menu: {
+      login: {
+        redirectOnSingleExternalAuth: true
+      }
     }
   },
   cache: {

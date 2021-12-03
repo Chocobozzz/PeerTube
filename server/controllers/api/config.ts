@@ -169,6 +169,18 @@ function customConfig (): CustomConfig {
         whitelisted: CONFIG.SERVICES.TWITTER.WHITELISTED
       }
     },
+    client: {
+      videos: {
+        miniature: {
+          preferAuthorDisplayName: CONFIG.CLIENT.VIDEOS.MINIATURE.PREFER_AUTHOR_DISPLAY_NAME
+        }
+      },
+      menu: {
+        login: {
+          redirectOnSingleExternalAuth: CONFIG.CLIENT.MENU.LOGIN.REDIRECT_ON_SINGLE_EXTERNAL_AUTH
+        }
+      }
+    },
     cache: {
       previews: {
         size: CONFIG.CACHE.PREVIEWS.SIZE

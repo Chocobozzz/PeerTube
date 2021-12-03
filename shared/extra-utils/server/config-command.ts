@@ -194,6 +194,18 @@ export class ConfigCommand extends AbstractCommand {
           whitelisted: true
         }
       },
+      client: {
+        videos: {
+          miniature: {
+            preferAuthorDisplayName: false
+          }
+        },
+        menu: {
+          login: {
+            redirectOnSingleExternalAuth: false
+          }
+        }
+      },
       cache: {
         previews: {
           size: 2

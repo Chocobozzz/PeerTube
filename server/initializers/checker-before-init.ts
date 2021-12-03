@@ -33,6 +33,7 @@ function checkMissedConfig () {
     'transcoding.resolutions.2160p',
     'import.videos.http.enabled', 'import.videos.torrent.enabled', 'import.videos.concurrency', 'auto_blacklist.videos.of_users.enabled',
     'trending.videos.interval_days',
+    'client.videos.miniature.prefer_author_display_name', 'client.menu.login.redirect_on_single_external_auth',
     'instance.name', 'instance.short_description', 'instance.description', 'instance.terms', 'instance.default_client_route',
     'instance.is_nsfw', 'instance.default_nsfw_policy', 'instance.robots', 'instance.securitytxt',
     'services.twitter.username', 'services.twitter.whitelisted',

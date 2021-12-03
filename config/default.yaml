@@ -82,6 +82,12 @@ client:
       # By default PeerTube client displays author username
       prefer_author_display_name: false
 
+  menu:
+    login:
+      # If you enable only one external auth plugin
+      # You can automatically redirect your users on this external platform when they click on the login button
+      redirect_on_single_external_auth: false
+
 # From the project root directory
 storage:
   tmp: 'storage/tmp/' # Use to download data (imports etc), store uploaded files before and during processing...

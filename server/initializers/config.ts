@@ -63,6 +63,11 @@ const CONFIG = {
       MINIATURE: {
         get PREFER_AUTHOR_DISPLAY_NAME () { return config.get<boolean>('client.videos.miniature.prefer_author_display_name') }
       }
+    },
+    MENU: {
+      LOGIN: {
+        get REDIRECT_ON_SINGLE_EXTERNAL_AUTH () { return config.get<boolean>('client.menu.login.redirect_on_single_external_auth') }
+      }
     }
   },
 

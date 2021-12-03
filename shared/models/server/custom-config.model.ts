@@ -52,6 +52,20 @@ export interface CustomConfig {
     }
   }
 
+  client: {
+    videos: {
+      miniature: {
+        preferAuthorDisplayName: boolean
+      }
+    }
+
+    menu: {
+      login: {
+        redirectOnSingleExternalAuth: boolean
+      }
+    }
+  }
+
   cache: {
     previews: {
       size: number

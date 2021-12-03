@@ -1,4 +1,4 @@
-import { environment } from 'src/environments/environment'
+
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { AuthService, Notifier, RedirectService, UserService } from '@app/core'
@@ -7,6 +7,7 @@ import { LOGIN_PASSWORD_VALIDATOR, LOGIN_USERNAME_VALIDATOR } from '@app/shared/
 import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
 import { InstanceAboutAccordionComponent } from '@app/shared/shared-instance'
 import { NgbAccordion, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
+import { PluginsManager } from '@root-helpers/plugins-manager'
 import { RegisteredExternalAuthConfig, ServerConfig } from '@shared/models'
 
 @Component({
@@ -98,7 +99,7 @@ export class LoginComponent extends FormReactive implements OnInit, AfterViewIni
   }
 
   getAuthHref (auth: RegisteredExternalAuthConfig) {
-    return environment.apiUrl + `/plugins/${auth.name}/${auth.version}/auth/${auth.authName}`
+    return PluginsManager.getExternalAuthHref(auth)
   }
 
   login () {
