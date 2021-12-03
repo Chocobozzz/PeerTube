@@ -144,10 +144,11 @@ async function installPlugin (req: express.Request, res: express.Response) {
 
   const fromDisk = !!body.path
   const toInstall = body.npmName || body.path
-  let pluginVersion
-  if (body.pluginVersion && body.npmName) {
-    pluginVersion = body.pluginVersion
-  }
+
+  const pluginVersion = body.pluginVersion && body.npmName
+    ? body.pluginVersion
+    : undefined
+
   try {
     const plugin = await PluginManager.Instance.install(toInstall, pluginVersion, fromDisk)
 
