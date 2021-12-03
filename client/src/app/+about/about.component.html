@@ -2,11 +2,11 @@
   <div class="sub-menu" [ngClass]="{ 'sub-menu-fixed': !isBroadcastMessageDisplayed }">
 
     <div class="links">
-      <a i18n routerLink="instance" routerLinkActive="active" class="title-page title-page-about">Instance</a>
+      <a myPluginSelector pluginSelectorId="about-menu-instance" i18n routerLink="instance" routerLinkActive="active" class="title-page title-page-about">Instance</a>
 
-      <a i18n routerLink="peertube" routerLinkActive="active" class="title-page title-page-about">PeerTube</a>
+      <a myPluginSelector pluginSelectorId="about-menu-peertube" i18n routerLink="peertube" routerLinkActive="active" class="title-page title-page-about">PeerTube</a>
 
-      <a i18n routerLink="follows" routerLinkActive="active" class="title-page title-page-about">Network</a>
+      <a myPluginSelector pluginSelectorId="about-menu-network" i18n routerLink="follows" routerLinkActive="active" class="title-page title-page-about">Network</a>
     </div>
   </div>
 
