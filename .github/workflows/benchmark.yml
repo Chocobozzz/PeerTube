@@ -78,7 +78,7 @@ jobs:
           cat benchmark.json build-time.json startup-time.json
 
       - name: Upload benchmark result
-        uses: './.github/actions/reusable-deploy.yml'
+        uses: './.github/actions/reusable-deploy'
         with:
           source: benchmark.json build-time.json startup-time.json
           destination: peertube-stats
