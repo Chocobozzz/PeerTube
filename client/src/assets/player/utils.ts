@@ -50,7 +50,7 @@ function buildVideoOrPlaylistEmbed (embedUrl: string, embedTitle: string) {
   iframe.height = '315'
   iframe.src = embedUrl
   iframe.frameBorder = '0'
-  iframe.allowFullscreen = true
+  iframe.allow = 'fullscreen'
   iframe.sandbox.add('allow-same-origin', 'allow-scripts', 'allow-popups')
 
   return iframe.outerHTML
