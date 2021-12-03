@@ -152,7 +152,7 @@ export class SearchTypeaheadComponent implements OnInit, AfterViewChecked, OnDes
     }
   }
 
-  onSuggestionlicked (payload: SuggestionPayload) {
+  onSuggestionClicked (payload: SuggestionPayload) {
     this.doSearch(this.buildSearchTarget(payload))
   }
 
@@ -169,6 +169,11 @@ export class SearchTypeaheadComponent implements OnInit, AfterViewChecked, OnDes
         event.stopPropagation()
 
         this.keyboardEventsManager.onKeydown(event)
+        break
+
+      case 'Enter':
+        event.stopPropagation()
+        this.doSearch()
         break
     }
   }
