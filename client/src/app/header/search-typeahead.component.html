@@ -1,7 +1,7 @@
 <div class="d-inline-flex position-relative" id="typeahead-container">
   <input
-    type="text" id="search-video" name="search-video" #searchVideo i18n-placeholder placeholder="Search videos, playlists, channels…"
-    [(ngModel)]="search" (ngModelChange)="onSearchChange()" (keydown)="handleKey($event)" (keydown.enter)="doSearch()"
+    type="search" id="search-video" name="search-video" #searchVideo i18n-placeholder placeholder="Search videos, playlists, channels…"
+    [(ngModel)]="search" (ngModelChange)="onSearchChange()" (keydown)="handleKey($event)"
     aria-label="Search" autocomplete="off"
   >
   <my-global-icon
@@ -14,7 +14,7 @@
     <ul [hidden]="!search || !areSuggestionsOpened" role="listbox" class="p-0 m-0">
       <li
         *ngFor="let result of results; let i = index" class="suggestion d-flex flex-justify-start flex-items-center p-0 f5"
-        role="option" aria-selected="true" (mouseenter)="onSuggestionHover(i)" (click)="onSuggestionlicked(result)"
+        role="option" aria-selected="true" (mouseenter)="onSuggestionHover(i)" (click)="onSuggestionClicked(result)"
       >
         <my-suggestion [result]="result" [highlight]="search"></my-suggestion>
       </li>
