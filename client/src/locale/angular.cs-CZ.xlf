@@ -491,7 +491,7 @@
       </trans-unit>
       <trans-unit id="158575725114802951" datatype="html">
         <source>Only live videos</source>
-        <target state="translated">Jenom živý videa</target>
+        <target state="translated">Jen živá videa</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context><context context-type="linenumber">96</context></context-group>
       </trans-unit>
       <trans-unit id="7585826646011739428">
@@ -553,7 +553,7 @@
       </trans-unit>
       <trans-unit id="7639191791633609999" datatype="html">
         <source>The live stream will be automatically terminated.</source>
-        <target state="translated">Živí přenos bude automaticky ukončen.</target>
+        <target state="translated">Živý přenos bude automaticky ukončen.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">219</context></context-group>
       </trans-unit>
       <trans-unit id="8023282004085823427" datatype="html">
@@ -620,7 +620,7 @@
       </trans-unit>
       <trans-unit id="20374890400263257" datatype="html">
         <source>You can interact with this via any ActivityPub-capable fediverse instance (PeerTube, Mastodon or Pleroma for example).</source>
-        <target state="translated">Můžete s ním komunikovat prostřednictvím libovolné instance fediverzy podporující ActivityPub (například PeerTube, Mastodon nebo Pleroma).</target>
+        <target state="translated">Můžete s ním komunikovat prostřednictvím libovolné instance fediverse podporující ActivityPub (například PeerTube, Mastodon nebo Pleroma).</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/remote-subscribe.component.html</context><context context-type="linenumber">25</context></context-group>
       </trans-unit>
       <trans-unit id="6751395526297887552" datatype="html">
