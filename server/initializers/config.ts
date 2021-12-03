@@ -1,7 +1,7 @@
 import bytes from 'bytes'
 import { IConfig } from 'config'
-import decache from 'decache'
 import { dirname, join } from 'path'
+import { decacheModule } from '@server/helpers/decache'
 import { VideoRedundancyConfigFilter } from '@shared/models/redundancy/video-redundancy-config-filter.type'
 import { BroadcastMessageLevel } from '@shared/models/server'
 import { VideosRedundancyStrategy } from '../../shared/models'
@@ -497,7 +497,7 @@ export function reloadConfig () {
       delete require.cache[fileName]
     }
 
-    decache('config')
+    decacheModule('config')
   }
 
   purge()

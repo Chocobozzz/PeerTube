@@ -155,6 +155,7 @@ search:
 federation:
   videos:
     federate_unlisted: true
+    cleanup_remote_interactions: false
 
 views:
   videos:

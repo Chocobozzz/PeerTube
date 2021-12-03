@@ -1,8 +1,8 @@
-import decache from 'decache'
 import express from 'express'
 import { createReadStream, createWriteStream } from 'fs'
 import { ensureDir, outputFile, readJSON } from 'fs-extra'
 import { basename, join } from 'path'
+import { decachePlugin } from '@server/helpers/decache'
 import { MOAuthTokenUser, MUser } from '@server/types/models'
 import { getCompleteLocale } from '@shared/core-utils'
 import { ClientScript, PluginPackageJson, PluginTranslation, PluginTranslationPaths, RegisterServerHookOptions } from '@shared/models'
@@ -312,12 +312,12 @@ export class PluginManager implements ServerHook {
       logger.error('Cannot install plugin %s, removing it...', toInstall, { err: rootErr })
 
       try {
-        await this.uninstall(npmName)
+        // await this.uninstall(npmName)
       } catch (err) {
         logger.error('Cannot uninstall plugin %s after failed installation.', toInstall, { err })
 
         try {
-          await removeNpmPlugin(npmName)
+          // await removeNpmPlugin(npmName)
         } catch (err) {
           logger.error('Cannot remove plugin %s after failed installation.', toInstall, { err })
         }
@@ -420,7 +420,7 @@ export class PluginManager implements ServerHook {
 
     // Delete cache if needed
     const modulePath = join(pluginPath, packageJSON.library)
-    decache(modulePath)
+    decachePlugin(pluginPath, modulePath)
     const library: PluginLibrary = require(modulePath)
 
     if (!isLibraryCodeValid(library)) {

@@ -90,7 +90,6 @@
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.1",
     "create-torrent": "^5.0.0",
-    "decache": "^4.6.0",
     "deep-object-diff": "^1.1.0",
     "email-templates": "^8.0.3",
     "execa": "^5.1.1",
