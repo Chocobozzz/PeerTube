@@ -223,7 +223,7 @@ const SCHEDULER_INTERVALS_MS = {
   REMOVE_OLD_VIEWS: 60000 * 60 * 24, // 1 day
   REMOVE_OLD_HISTORY: 60000 * 60 * 24, // 1 day
   UPDATE_INBOX_STATS: 1000 * 60, // 1 minute
-  REMOVE_DANGLING_RESUMABLE_UPLOADS: 60000 * 60 * 16 // 16 hours
+  REMOVE_DANGLING_RESUMABLE_UPLOADS: 60000 * 60 // 1 hour
 }
 
 // ---------------------------------------------------------------------------
