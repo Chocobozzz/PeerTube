@@ -132,7 +132,7 @@ const installOrUpdatePluginValidator = [
     if (!body.path && !body.npmName) {
       return res.fail({ message: 'Should have either a npmName or a path' })
     }
-    if (body.pluginVersion &&!body.npmName) {
+    if (body.pluginVersion && !body.npmName) {
       return res.fail({ message: 'Should have a npmName when specifying a pluginVersion' })
     }
 

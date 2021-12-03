@@ -144,7 +144,7 @@ async function installPlugin (req: express.Request, res: express.Response) {
 
   const fromDisk = !!body.path
   const toInstall = body.npmName || body.path
-  let pluginVersion = undefined
+  let pluginVersion
   if (body.pluginVersion && body.npmName) {
     pluginVersion = body.pluginVersion
   }
