@@ -211,7 +211,7 @@ const videosAddResumableInitValidator = getCommonVideoEditAttributes().concat([
     const videoFileMetadata = {
       mimetype: req.headers['x-upload-content-type'] as string,
       size: +req.headers['x-upload-content-length'],
-      originalname: req.body.name
+      originalname: req.body.filename
     }
 
     const user = res.locals.oauth.token.User

@@ -1,4 +1,6 @@
+import { truncate } from 'lodash-es'
 import { UploadState, UploadxOptions, UploadxService } from 'ngx-uploadx'
+import { isIOS } from 'src/assets/player/utils'
 import { HttpErrorResponse, HttpEventType, HttpHeaders } from '@angular/common/http'
 import { AfterViewInit, Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core'
 import { Router } from '@angular/router'
@@ -10,7 +12,6 @@ import { LoadingBarService } from '@ngx-loading-bar/core'
 import { HttpStatusCode, VideoCreateResult, VideoPrivacy } from '@shared/models'
 import { UploaderXFormData } from './uploaderx-form-data'
 import { VideoSend } from './video-send'
-import { isIOS } from 'src/assets/player/utils'
 
 @Component({
   selector: 'my-video-upload',
@@ -281,6 +282,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
       channelId: this.firstStepChannelId,
       nsfw: this.serverConfig.instance.isNSFW,
       privacy: this.highestPrivacy.toString(),
+      name: this.buildVideoFilename(file.name),
       filename: file.name,
       previewfile: previewfile as any
     }
@@ -311,8 +313,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
   }
 
   private closeFirstStep (filename: string) {
-    const nameWithoutExtension = filename.replace(/\.[^/.]+$/, '')
-    const name = nameWithoutExtension.length < 3 ? filename : nameWithoutExtension
+    const name = this.buildVideoFilename(filename)
 
     this.form.patchValue({
       name,
@@ -368,5 +369,19 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     const extensions = [ '.mp3', '.flac', '.ogg', '.wma', '.wav' ]
 
     return extensions.some(e => filename.endsWith(e))
+  }
+
+  private buildVideoFilename (filename: string) {
+    const nameWithoutExtension = filename.replace(/\.[^/.]+$/, '')
+    let name = nameWithoutExtension.length < 3
+      ? filename
+      : nameWithoutExtension
+
+    const videoNameMaxSize = 110
+    if (name.length > videoNameMaxSize) {
+      name = truncate(name, { length: videoNameMaxSize, omission: '' })
+    }
+
+    return name
   }
 }
