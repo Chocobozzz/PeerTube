@@ -315,7 +315,7 @@
       </trans-unit>
       <trans-unit id="5910455707959454672">
         <source>Torrent (.torrent file)</source>
-        <target>Torrent (.torrent ファイル)</target>
+        <target>Torrent (.torrentファイル)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.html</context><context context-type="linenumber">121</context></context-group>
       </trans-unit>
       <trans-unit id="5830517253429165613" datatype="html">
@@ -672,12 +672,12 @@
       </trans-unit>
       <trans-unit id="855178133027341271">
         <source><x id="START_TAG_SPAN"/>Remote subscribe<x id="CLOSE_TAG_SPAN"/><x id="START_TAG_SPAN_1"/>Remote interact<x id="CLOSE_TAG_SPAN"/></source>
-        <target><x id="START_TAG_SPAN"/>リモートアカウントで登録<x id="CLOSE_TAG_SPAN"/><x id="START_TAG_SPAN_1"/>リモートアカウントでコメントするt<x id="CLOSE_TAG_SPAN"/></target>
+        <target><x id="START_TAG_SPAN"/>リモートアカウントで登録<x id="CLOSE_TAG_SPAN"/><x id="START_TAG_SPAN_1"/>リモートアカウントでコメントする<x id="CLOSE_TAG_SPAN"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/remote-subscribe.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="6462281745850371027" datatype="html">
         <source>You can subscribe to the channel via any ActivityPub-capable fediverse instance (PeerTube, Mastodon or Pleroma for example).</source>
-        <target state="translated">ActivityPubに対応できるfediverseのインスタンス（例えば、PeerTubeやマストドンまたはPleromaなど）を通してチャンネルが登録できます。</target>
+        <target state="translated">ActivityPubに対応できるfediverseのインスタンス（例えば、PeerTubeやMastodonまたはPleromaなど）を通してチャンネルが登録できます。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/remote-subscribe.component.html</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="20374890400263257" datatype="html">
@@ -768,12 +768,12 @@
       </trans-unit>
       <trans-unit id="5812787579835788700">
         <source>HTTP import (YouTube, Vimeo, direct URL...)</source>
-        <target>HTTP でのインポート (YouTube、Vimeo、ダイレクトURLなど)</target>
+        <target>HTTP経由でのインポート (YouTube、Vimeo、ダイレクトURLなど)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">96</context></context-group>
       </trans-unit>
       <trans-unit id="4992364287704007430">
         <source>Torrent import</source>
-        <target>Torrent でのインポート</target>
+        <target>Torrent経由でのインポート</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">103</context></context-group>
       </trans-unit>
       <trans-unit id="7683705529753923369" datatype="html">
@@ -1361,7 +1361,7 @@
       </trans-unit>
       <trans-unit id="742596572641738016">
         <source>Change the language</source>
-        <target>言語を変更する</target>
+        <target>設定言語を変更する</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/language-chooser.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="2964653499524716819">
@@ -1376,7 +1376,7 @@
       </trans-unit>
       <trans-unit id="7773271640656013365" datatype="html">
         <source>Interface:</source>
-        <target state="translated">言語:</target>
+        <target state="translated">設定言語:</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">35</context></context-group>
       </trans-unit>
       <trans-unit id="1674139713929545659" datatype="html">
@@ -1453,7 +1453,7 @@
       </trans-unit>
       <trans-unit id="2689878465089314112" datatype="html">
         <source>Interface: <x id="INTERPOLATION" equiv-text="{{ currentInterfaceLanguage }}"/></source>
-        <target state="translated">言語: <x id="INTERPOLATION" equiv-text="{{ currentInterfaceLanguage }}"/></target>
+        <target state="translated">設定言語: <x id="INTERPOLATION" equiv-text="{{ currentInterfaceLanguage }}"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">132</context></context-group>
       </trans-unit>
       <trans-unit id="667372110624203230" datatype="html">
@@ -1496,7 +1496,7 @@
       </trans-unit>
       <trans-unit id="7922989125096435449" datatype="html">
         <source>Contact</source>
-        <target state="translated">連絡先</target>
+        <target state="translated">お問い合わせ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-routing.module.ts</context><context context-type="linenumber">36</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">136</context></context-group>
       </trans-unit>
@@ -1663,14 +1663,12 @@
       </trans-unit>
       <trans-unit id="1843010981261389722" datatype="html">
         <source>using <x id="INTERPOLATION"/></source>
-        <target state="new">using 
-          <x id="INTERPOLATION" equiv-text="{{ serverConfig.search.searchIndex.url }}"/>
-        </target>
+        <target state="translated"><x id="INTERPOLATION"/>を利用します</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="4070041848101291003" datatype="html">
         <source>Results will be augmented with those of a third-party index. Only data necessary to make the query will be sent.</source>
-        <target state="new">Results will be augmented with those of a third-party index. Only data necessary to make the query will be sent.</target>
+        <target state="translated">検索結果の件数は、サードパーティの検索インデックスによって増加します。検索のために必要とするデータのみ、送信されます。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">32</context></context-group>
       </trans-unit>
       <trans-unit id="2807610143550376912" datatype="html">
@@ -2170,7 +2168,7 @@
       </trans-unit>
       <trans-unit id="2288513108450439427">
         <source>Support</source>
-        <target>支持</target>
+        <target>支援</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.html</context><context context-type="linenumber">17</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">289</context></context-group>
       </trans-unit>
@@ -2358,7 +2356,7 @@
       </trans-unit>
       <trans-unit id="7430416142942514215">
         <source>Publish</source>
-        <target>投稿</target>
+        <target>動画を投稿</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.html</context><context context-type="linenumber">106</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/header.component.html</context><context context-type="linenumber">5</context></context-group>
       </trans-unit>
@@ -2522,7 +2520,7 @@
       </trans-unit>
       <trans-unit id="8740142697043012403">
         <source>Import with torrent</source>
-        <target>Torrent でインポート</target>
+        <target>Torrent経由でインポート</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.html</context><context context-type="linenumber">73</context></context-group>
       </trans-unit>
       <trans-unit id="6066940329544282265" datatype="html">
@@ -2555,13 +2553,13 @@
       </trans-unit>
       <trans-unit id="7419704019640008953">
         <source>Share</source>
-        <target>共有</target>
+        <target>シェア</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-elements.component.html</context><context context-type="linenumber">12</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="6599497107591892109" datatype="html">
         <source>Share the playlist</source>
-        <target state="translated">プレイリストを共有する</target>
+        <target state="translated">プレイリストをシェアする</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="937533808893845780" datatype="html">
@@ -2587,7 +2585,7 @@
       </trans-unit>
       <trans-unit id="1253396341165671470" datatype="html">
         <source>Share the video</source>
-        <target state="translated">動画を共有する</target>
+        <target state="translated">動画をシェアする</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">79</context></context-group>
       </trans-unit>
       <trans-unit id="5254843797242866315" datatype="html">
@@ -2643,7 +2641,7 @@
       </trans-unit>
       <trans-unit id="1290987288288099212" datatype="html">
         <source>Support <x id="INTERPOLATION" equiv-text="{{ displayName }}"/></source>
-        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ displayName }}"/>に寄付する</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ displayName }}"/>を支援する</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-support-modal/support-modal.component.html</context>
           <context context-type="linenumber">3</context>
@@ -2717,7 +2715,7 @@
       </trans-unit>
       <trans-unit id="1813238393038053050" datatype="html">
         <source>SUPPORT</source>
-        <target state="translated">寄付する</target>
+        <target state="translated">支援する</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/action-buttons/action-buttons.component.html</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="9219888125536520293" datatype="html">
@@ -2737,17 +2735,17 @@
       </trans-unit>
       <trans-unit id="677619204556459328">
         <source>Like this video</source>
-        <target>動画を高く評価</target>
+        <target>動画を高評価する</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/action-buttons/video-rate.component.ts</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
       <trans-unit id="1979134407801821102">
         <source>Dislike this video</source>
-        <target>動画を低く評価</target>
+        <target>動画を低評価する</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/action-buttons/video-rate.component.ts</context><context context-type="linenumber">38</context></context-group>
       </trans-unit>
       <trans-unit id="4001371302469308813" datatype="html">
         <source>Support options for this video</source>
-        <target state="translated">この動画への寄付方法</target>
+        <target state="translated">この動画への支援方法</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/action-buttons/action-buttons.component.ts</context><context context-type="linenumber">56</context></context-group>
       </trans-unit>
       <trans-unit id="687548610091961489">
@@ -2981,17 +2979,17 @@
       </trans-unit>
       <trans-unit id="2263890353858735493">
         <source>You are one step away from commenting</source>
-        <target state="translated">あなたはコメントから一歩離れています</target>
+        <target state="translated">コメントをするために、もう１ステップのアクションが必要です</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context><context context-type="linenumber">59</context></context-group>
       </trans-unit>
       <trans-unit id="7508177761852352782" datatype="html">
         <source>You can comment using an account on any ActivityPub-compatible instance (PeerTube/Mastodon/Pleroma account for example).</source>
-        <target state="translated">ActivityPubと互換性のあるインスタンスのアカウント（例えば、PeerTube・Mastodon・Pleromaなどのアカウント）を利用してコメントできます。</target>
+        <target state="translated">ActivityPubと互換性のあるインスタンスのアカウント（例えば、PeerTube・Mastodon・Pleromaなどのアカウント）を利用することで、コメントできます。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context><context context-type="linenumber">64</context></context-group>
       </trans-unit>
       <trans-unit id="2958389355547305739" datatype="html">
         <source>Login to comment</source>
-        <target state="translated">ログインしてコメントする</target>
+        <target state="translated">PeerTubeアカウントでコメントする</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context><context context-type="linenumber">78</context></context-group>
       </trans-unit>
       <trans-unit id="4817080330698362530" datatype="html">
@@ -3089,7 +3087,7 @@
       </trans-unit>
       <trans-unit id="270726559962362501" datatype="html">
         <source>Renew token</source>
-        <target state="new">Renew token</target>
+        <target state="needs-translation">Renew token</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.html</context><context context-type="linenumber">35</context></context-group>
       </trans-unit>
       <trans-unit id="9209781328340965816">
@@ -3915,7 +3913,7 @@
       </trans-unit>
       <trans-unit id="2144158274184161635" datatype="html">
         <source>Videos with the most interactions for recent videos</source>
-        <target state="translated">最近の動画でインタラクションが多かった動画を表示します</target>
+        <target state="translated">最近の動画でインタラクションが多かった動画が表示されます</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/video-list/videos-list-common-page.component.ts</context><context context-type="linenumber">204</context></context-group>
       </trans-unit>
       <trans-unit id="8312243926314494468" datatype="html">
@@ -3925,7 +3923,7 @@
       </trans-unit>
       <trans-unit id="8731139416455609016" datatype="html">
         <source>Videos with the most views during the last <x id="PH" equiv-text="this.trendingDays"/> days</source>
-        <target state="new">Videos with the most views during the last <x id="PH" equiv-text="this.trendingDays"/> days</target>
+        <target state="translated">過去<x id="PH" equiv-text="this.trendingDays"/>日間で、再生回数が多かった動画が表示されます</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/videos-list-common-page.component.ts</context>
           <context context-type="linenumber">209</context>
@@ -3933,7 +3931,7 @@
       </trans-unit>
       <trans-unit id="1671858302647356245" datatype="html">
         <source>Videos that have the most likes</source>
-        <target state="translated">いいね！が多かった動画を表示します</target>
+        <target state="translated">高評価が多かった動画を表示します</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/video-list/videos-list-common-page.component.ts</context><context context-type="linenumber">205</context></context-group>
       </trans-unit>
       <trans-unit id="2006841089844688970" datatype="html">
@@ -4298,7 +4296,7 @@
       </trans-unit>
       <trans-unit id="6995481962115300007" datatype="html">
         <source>To share your personal videos? To open registrations and allow people to upload what they want?</source>
-        <target state="translated">運営者が自分の動画を他のユーザーと共有するためですか？新規のアカウント作成を開放し、ユーザーに好きな動画をアップロードすることを可能にするためですか？</target>
+        <target state="translated">運営者が自分の動画を他のユーザーとシェアするためですか？新規のアカウント作成を開放し、ユーザーに好きな動画をアップロードすることを可能にするためですか？</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context><context context-type="linenumber">186</context></context-group>
       </trans-unit>
       <trans-unit id="3667968987954856844" datatype="html">
@@ -4378,7 +4376,7 @@
       </trans-unit>
       <trans-unit id="8177374861384376651" datatype="html">
         <source>Most liked videos</source>
-        <target state="translated">いいねが多くされてる動画</target>
+        <target state="translated">高評価が多い動画</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">50</context></context-group>
       </trans-unit>
       <trans-unit id="4809162812315301010" datatype="html">
@@ -4611,7 +4609,7 @@
       </trans-unit>
       <trans-unit id="2331464426553277323" datatype="html">
         <source>Search index URL</source>
-        <target state="needs-translation">検索インデックスのURL</target>
+        <target state="translated">検索インデックスのURL</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">347</context></context-group>
       </trans-unit>
       <trans-unit id="8524278911521465398" datatype="html">
@@ -4626,7 +4624,7 @@
       </trans-unit>
       <trans-unit id="4444955208013675027" datatype="html">
         <source>Search bar uses the global search index by default</source>
-        <target state="new">Search bar uses the global search index by default</target>
+        <target state="translated">検索バーはデフォルトで、グローバル検索を使用します</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">367</context></context-group>
       </trans-unit>
       <trans-unit id="6476750382562952780" datatype="html">
@@ -5207,7 +5205,7 @@ color: red;
       </trans-unit>
       <trans-unit id="4322133526902910662" datatype="html">
         <source>Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Likes"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"いいね！された動画"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>順に並び替える</target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"高評価された動画"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>順に並び替える</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">51</context>
@@ -5324,7 +5322,7 @@ color: red;
       </trans-unit>
       <trans-unit id="7350483582490037954" datatype="html">
         <source>With <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Hide<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> or <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Blur thumbnails<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, a confirmation will be requested to watch the video. </source>
-        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>表示しない<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>もしくは <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>サムネイルをぼかす<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>設定の場合、動画を見る際に確認が求められます。 </target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>「表示しない」<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>もしくは <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>「サムネイルをぼかす」<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>の設定の場合、動画を見る際に確認が求められます。 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context>
           <context context-type="linenumber">8,9</context>
@@ -5343,7 +5341,7 @@ color: red;
       </trans-unit>
       <trans-unit id="1534085756270333258" datatype="html">
         <source>In Recently added, Trending, Local, Most liked and Search pages</source>
-        <target state="translated">最近投稿された動画、トレンド、ローカルの動画、多くいいね！された動画、そして検索結果のページに反映されます</target>
+        <target state="translated">最近投稿された動画、トレンド、ローカルの動画、高評価が多かった動画、そして検索結果のページに反映されます</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="2658703380934466003" datatype="html">
@@ -5573,7 +5571,7 @@ color: red;
       </trans-unit>
       <trans-unit id="228548407872312756" datatype="html">
         <source>Owner account page</source>
-        <target state="translated">管理者アカウントページ</target>
+        <target state="translated">チャンネル所有者のアカウントページ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-follows/my-subscriptions.component.html</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="2204625138753484173">
@@ -6568,7 +6566,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="1504521795586863905" datatype="html">
         <source>VIDEOS</source>
-        <target state="new">VIDEOS</target>
+        <target state="translated">動画</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context><context context-type="linenumber">83</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.ts</context><context context-type="linenumber">76</context></context-group>
       </trans-unit>
@@ -7637,7 +7635,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="1144415254281227966" datatype="html">
         <source>Remote videos</source>
-        <target state="new">Remote videos</target>
+        <target state="translated">リモート動画</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context><context context-type="linenumber">85</context></context-group>
       </trans-unit>
       <trans-unit id="8564701209009684429" datatype="html">
@@ -7994,7 +7992,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="3761504852202418603" datatype="html">
         <source>Too many languages are enabled. Please enable them all or stay below 20 enabled languages.</source>
-        <target state="translated">非常に多くの言語が設定されています。全ての言語を有効にするか、または20言語以下に設定してください。</target>
+        <target state="translated">非常に多くの言語が選択されています。全ての言語を選択するか、または20言語以下で選択してください。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.ts</context><context context-type="linenumber">76</context></context-group>
       </trans-unit>
       <trans-unit id="3960396487495291449" datatype="html">
@@ -8213,7 +8211,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="2591467977473302125" datatype="html">
         <source>Videos list</source>
-        <target state="new">Videos list</target>
+        <target state="translated">動画リスト</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video.routes.ts</context>
           <context context-type="linenumber">24</context>
@@ -8290,7 +8288,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="8936704404804793618" datatype="html">
         <source>Videos</source>
-        <target state="new">Videos</target>
+        <target state="translated">動画</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-library.component.ts</context><context context-type="linenumber">54</context></context-group>
       </trans-unit>
       <trans-unit id="1823843876735462104" datatype="html">
@@ -8738,7 +8736,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="4930506384627295710" datatype="html">
         <source>Settings</source>
-        <target state="new">Settings</target>
+        <target state="translated">設定</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context><context context-type="linenumber">50</context></context-group>
       </trans-unit>
       <trans-unit id="9178182467454450952">
@@ -9240,7 +9238,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="6880459830525364741">
         <source>Support text must be at least 3 characters long.</source>
-        <target>支持テキストは 3 文字以上にする必要があります。</target>
+        <target>支援コメントは、最低でも 3 文字必要です。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">47</context></context-group>
       </trans-unit>
       <trans-unit id="6461548560008228165" datatype="html">
@@ -9322,7 +9320,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="5058286083557987083" datatype="html">
         <source>⚠️ Never share your stream key with anyone.</source>
-        <target state="translated">⚠️ストリームキーは決して誰とも共有しないでください。</target>
+        <target state="translated">⚠️ストリームキーは誰とも共有しないでください。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">231</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context><context context-type="linenumber">32</context></context-group>
       </trans-unit>
@@ -9419,12 +9417,12 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="4806300480558315727">
         <source>Video support must be at least 3 characters long.</source>
-        <target>動画の支持は 3 文字以上にする必要があります。</target>
+        <target>動画への支援コメントは、最低でも 3 文字必要です。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">83</context></context-group>
       </trans-unit>
       <trans-unit id="6655773021893755977">
         <source>Video support cannot be more than 1000 characters long.</source>
-        <target>動画の支持は 1,000 文字以内でなければなりません。</target>
+        <target>動画への支援コメントは、1,000 文字以内でなければなりません。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">84</context></context-group>
       </trans-unit>
       <trans-unit id="4246579596585402255">
@@ -9790,7 +9788,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="6952960992592445535" datatype="html">
         <source><x id="PH"/> (channel page) </source>
-        <target state="translated"><x id="PH"/> (チャンネルページへ) </target>
+        <target state="translated"><x id="PH"/> (のチャンネルページへ) </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/metadata/video-avatar-channel.component.ts</context><context context-type="linenumber">20</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image/actor-avatar.component.ts</context><context context-type="linenumber">40</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context><context context-type="linenumber">125</context></context-group>
@@ -10636,7 +10634,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="6767380569816110388" datatype="html">
         <source>Only shareable via a private link</source>
-        <target state="translated">プライベートURLのみで共有できます</target>
+        <target state="translated">プライベートURLのみでシェアできます</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context><context context-type="linenumber">371</context></context-group>
       </trans-unit>
       <trans-unit id="6828965264297239528">
@@ -10850,12 +10848,12 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="8025996572234182184">
         <source>Like the video</source>
-        <target>高く評価</target>
+        <target>高評価する</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/action-buttons/video-rate.component.ts</context><context context-type="linenumber">46</context></context-group>
       </trans-unit>
       <trans-unit id="7692127636377222448">
         <source>Dislike the video</source>
-        <target>低く評価</target>
+        <target>動画を低評価する</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/action-buttons/video-rate.component.ts</context><context context-type="linenumber">51</context></context-group>
       </trans-unit>
       <trans-unit id="1729036051846673606" datatype="html">
@@ -10930,7 +10928,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="3037358578603095196" datatype="html">
         <source>Only videos uploaded on this instance are displayed</source>
-        <target state="new">Only videos uploaded on this instance are displayed</target>
+        <target state="translated">このインスタンスに投稿された動画のみ、表示されます</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/videos-list-common-page.component.ts</context>
           <context context-type="linenumber">190</context>
