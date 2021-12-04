@@ -826,14 +826,14 @@
       </trans-unit>
       <trans-unit id="8726138323871139597" datatype="html">
         <source>Following</source>
-        <target state="new">Following</target>
+        <target state="translated">フォロー</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/admin.component.ts</context><context context-type="linenumber">67</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">31</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/follows.routes.ts</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="4914577418256256836" datatype="html">
         <source>Followers</source>
-        <target state="new">Followers</target>
+        <target state="translated">フォロワー</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/admin.component.ts</context><context context-type="linenumber">72</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/follows.routes.ts</context><context context-type="linenumber">35</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-library.component.ts</context><context context-type="linenumber">72</context></context-group>
@@ -855,12 +855,12 @@
       </trans-unit>
       <trans-unit id="1447760976255144968" datatype="html">
         <source>The connection was interrupted</source>
-        <target state="new">The connection was interrupted</target>
+        <target state="translated">接続が寸断されました</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/helpers/utils/upload.ts</context><context context-type="linenumber">16</context></context-group>
       </trans-unit>
       <trans-unit id="4499233456830047129" datatype="html">
         <source>The server encountered an error</source>
-        <target state="new">The server encountered an error</target>
+        <target state="translated">サーバーにエラーが発生しました</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/helpers/utils/upload.ts</context><context context-type="linenumber">19</context></context-group>
       </trans-unit>
       <trans-unit id="3334825601859787496" datatype="html">
@@ -996,7 +996,7 @@
       </trans-unit>
       <trans-unit id="7215649348148521605" datatype="html">
         <source>Currently this instance doesn't allow for user registration, you may check the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more details or find an instance that gives you the possibility to sign up for an account and upload your videos there. Find yours among multiple instances at: <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt; "/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;alert-link&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="new"> Currently this instance doesn't allow for user registration, you may check the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more details or find an instance that gives you the possibility to sign up for an account and upload your videos there. Find yours among multiple instances at: <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt; "/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;alert-link&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target state="translated">現在、このインスタンスではユーザーの新規登録は許可されていません。<x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>このインスタンスの利用規約<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>を詳しく確認するか、またはアカウントの新規登録ができる可能性のあるインスタンスを探し、動画を投稿してください。複数のインスタンスから、あなたにあったインスタンスを探しましょう: <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt; "/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;alert-link&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">68</context></context-group>
       </trans-unit>
       <trans-unit id="2392488717875840729">
@@ -1039,7 +1039,7 @@
       </trans-unit>
       <trans-unit id="2101170466365500913" datatype="html">
         <source>Logging into an account lets you publish content</source>
-        <target state="translated">あなたのアカウントでログインする事で、コンテンツを公開することができます</target>
+        <target state="translated">自分のアカウントでログインする事で、あなただけの動画を投稿することができます</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">59</context></context-group>
       </trans-unit>
       <trans-unit id="3183213940445113677" datatype="html">
@@ -1093,12 +1093,12 @@
       </trans-unit>
       <trans-unit id="4319634264526091601" datatype="html">
         <source>on this instance</source>
-        <target state="new">on this instance</target>
+        <target state="translated">このインスタンス内</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search.component.html</context><context context-type="linenumber">7</context></context-group>
       </trans-unit>
       <trans-unit id="761579517995454927" datatype="html">
         <source>on the vidiverse</source>
-        <target state="new">on the vidiverse</target>
+        <target state="translated">Vidiverse内</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search.component.html</context><context context-type="linenumber">8</context></context-group>
       </trans-unit>
       <trans-unit id="8434369348784683733" datatype="html">
@@ -2163,7 +2163,7 @@
       </trans-unit>
       <trans-unit id="1168086599577356916" datatype="html">
         <source>Video preview</source>
-        <target state="new">Video preview</target>
+        <target state="translated">動画のプレビュー</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">280</context></context-group>
       </trans-unit>
       <trans-unit id="2288513108450439427">
@@ -2540,7 +2540,7 @@
       </trans-unit>
       <trans-unit id="2738123251363312498" datatype="html">
         <source>Next video to be played</source>
-        <target state="new">Next video to be played</target>
+        <target state="translated">再生される次の動画</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/recommendations/recommended-videos.component.html</context>
           <context context-type="linenumber">16</context>
@@ -2572,7 +2572,7 @@
       </trans-unit>
       <trans-unit id="5806907163449517166" datatype="html">
         <source>Update playlist privacy</source>
-        <target state="new"> Update playlist privacy </target>
+        <target state="translated">プレイリストの投稿範囲を変更する</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">16,18</context>
@@ -2598,7 +2598,7 @@
       </trans-unit>
       <trans-unit id="3201319007886576629" datatype="html">
         <source>Update video privacy</source>
-        <target state="new"> Update video privacy </target>
+        <target state="translated">動画の投稿範囲を変更する</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">84,86</context>
@@ -3079,7 +3079,7 @@
       </trans-unit>
       <trans-unit id="6492684506192237359" datatype="html">
         <source>⚠️ Never share your feed token with anyone.</source>
-        <target state="new">⚠️ Never share your feed token with anyone.</target>
+        <target state="translated">⚠️ トークンは誰とも共有しないでください。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.html</context>
           <context context-type="linenumber">26</context>
@@ -3087,7 +3087,7 @@
       </trans-unit>
       <trans-unit id="270726559962362501" datatype="html">
         <source>Renew token</source>
-        <target state="needs-translation">Renew token</target>
+        <target state="translated">トークンを新しいものにする</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.html</context><context context-type="linenumber">35</context></context-group>
       </trans-unit>
       <trans-unit id="9209781328340965816">
@@ -3211,7 +3211,7 @@
       </trans-unit>
       <trans-unit id="9216117865911519658" datatype="html">
         <source>Action</source>
-        <target state="new">Action</target>
+        <target state="translated">アクション</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">30</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">27</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.html</context><context context-type="linenumber">22</context></context-group>
@@ -3314,7 +3314,7 @@
       </trans-unit>
       <trans-unit id="2622255144026150901" datatype="html">
         <source>Auth plugin</source>
-        <target state="new">Auth plugin</target>
+        <target state="translated">認証プラグイン</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">188</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">188</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">126</context></context-group>
