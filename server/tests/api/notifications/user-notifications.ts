@@ -267,7 +267,7 @@ describe('Test user notifications', function () {
     })
 
     it('Should send a notification when an imported video is transcoded', async function () {
-      this.timeout(50000)
+      this.timeout(120000)
 
       const name = 'video import ' + buildUUID()
 
