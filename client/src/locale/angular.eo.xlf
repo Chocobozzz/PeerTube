@@ -364,7 +364,7 @@
       </trans-unit>
       <trans-unit id="3267631941074558910" datatype="html">
         <source>Cannot fetch information of this remote account</source>
-        <target state="translated">Ne povas akiri informojn pri ĉi tiu fora konto</target>
+        <target state="translated">Ne povas akiri informojn pri ĉi tiu defora konto</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/remote-subscribe.component.ts</context><context context-type="linenumber">64</context></context-group>
       </trans-unit>
       <trans-unit id="9081463435738465430" datatype="html">
@@ -537,7 +537,7 @@
       </trans-unit>
       <trans-unit id="3372646000533908418" datatype="html">
         <source>Subscribe with a remote account:</source>
-        <target state="translated">Aboni per fora konto:</target>
+        <target state="translated">Aboni per defora konto:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">62</context>
@@ -2786,7 +2786,7 @@
       </trans-unit>
       <trans-unit id="4036338619293319383" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 reply} other {<x id="INTERPOLATION"/> replies}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {1 reply} other {<x id="INTERPOLATION"/> replies}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 respondo} other {<x id="INTERPOLATION"/> respondoj}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context><context context-type="linenumber">74</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context><context context-type="linenumber">77</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context><context context-type="linenumber">81</context></context-group>
@@ -2815,7 +2815,7 @@
       </trans-unit>
       <trans-unit id="7321800851971795962" datatype="html">
         <source>It is a remote comment, so the deletion will only be effective on your instance.</source>
-        <target state="translated">Ĝi estas fora komento, tial la forigo nur efektiviĝos je via nodo.</target>
+        <target state="translated">Ĝi estas defora komento, tial la forigo nur efektiviĝos je via nodo.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.ts</context><context context-type="linenumber">177</context></context-group>
       </trans-unit>
       <trans-unit id="5964038603724691720" datatype="html">
@@ -3094,7 +3094,7 @@
       </trans-unit>
       <trans-unit id="9216117865911519658" datatype="html">
         <source>Action</source>
-        <target state="new">Action</target>
+        <target state="translated">Ago</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">30</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">27</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.html</context><context context-type="linenumber">22</context></context-group>
@@ -3114,7 +3114,7 @@
       </trans-unit>
       <trans-unit id="4667534933980942398" datatype="html">
         <source>Remote videos duplicated by my instance</source>
-        <target state="translated">Forigi filmojn duobligitajn de mia nodo</target>
+        <target state="translated">Deforaj filmoj duobligitaj de mia nodo</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="8363291180171434623" datatype="html">
@@ -3283,7 +3283,7 @@
       </trans-unit>
       <trans-unit id="6124612368324200166" datatype="html">
         <source>Banned users</source>
-        <target state="new">Banned users</target>
+        <target state="translated">Forbaritaj uzantoj</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">43</context></context-group>
       </trans-unit>
       <trans-unit id="5642198289374753866" datatype="html">
@@ -3377,7 +3377,7 @@
       </trans-unit>
       <trans-unit id="4043531994869127329" datatype="html">
         <source>See full comment</source>
-        <target state="new">See full comment</target>
+        <target state="translated">Vidi plenan komenton</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-comment-list/video-comment-list.component.html</context>
           <context context-type="linenumber">57</context>
@@ -3394,7 +3394,7 @@
       </trans-unit>
       <trans-unit id="8390803680962035202" datatype="html">
         <source>Follower</source>
-        <target state="new">Follower</target>
+        <target state="translated">Abonanto</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context>
           <context context-type="linenumber">24</context>
@@ -3417,12 +3417,12 @@
       </trans-unit>
       <trans-unit id="4604870995665811499" datatype="html">
         <source>Local comments</source>
-        <target state="new">Local comments</target>
+        <target state="translated">Lokaj komentoj</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-comment-list/video-comment-list.component.ts</context><context context-type="linenumber">51</context></context-group>
       </trans-unit>
       <trans-unit id="2721988499779041837" datatype="html">
         <source>Remote comments</source>
-        <target state="new">Remote comments</target>
+        <target state="translated">Deforaj komentoj</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-comment-list/video-comment-list.component.ts</context><context context-type="linenumber">55</context></context-group>
       </trans-unit>
       <trans-unit id="1420624050293070194" datatype="html">
@@ -4435,7 +4435,7 @@
       </trans-unit>
       <trans-unit id="2258148539285928012" datatype="html">
         <source>Allow <x id="START_TAG_STRONG"/>your users<x id="CLOSE_TAG_STRONG"/> to look up remote videos/actors that may not be federated with your instance</source>
-        <target state="translated">Permesi al <x id="START_TAG_STRONG"/>viaj uzantoj<x id="CLOSE_TAG_STRONG"/> trovi forajn filmojn/agantojn, kiuj eble ne federas kun via nodo</target>
+        <target state="translated">Permesi al <x id="START_TAG_STRONG"/>viaj uzantoj<x id="CLOSE_TAG_STRONG"/> trovi deforajn filmojn/agantojn, kiuj eble ne federas kun via nodo</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">313</context></context-group>
       </trans-unit>
       <trans-unit id="7295422540935146771" datatype="html">
@@ -4445,7 +4445,7 @@
       </trans-unit>
       <trans-unit id="7305237807882754643" datatype="html">
         <source>Allow <x id="START_TAG_STRONG"/>anonymous users<x id="CLOSE_TAG_STRONG"/> to look up remote videos/actors that may not be federated with your instance</source>
-        <target state="translated">Permesi al <x id="START_TAG_STRONG"/>sennomaj uzantoj<x id="CLOSE_TAG_STRONG"/> trovi forajn filmojn/agantojn, kiuj eble ne federas kun via nodo</target>
+        <target state="translated">Permesi al <x id="START_TAG_STRONG"/>sennomaj uzantoj<x id="CLOSE_TAG_STRONG"/> trovi deforajn filmojn/agantojn, kiuj eble ne federas kun via nodo</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">324</context></context-group>
       </trans-unit>
       <trans-unit id="5273935530181504015" datatype="html">
@@ -5745,7 +5745,7 @@
       </trans-unit>
       <trans-unit id="2705478076887104088" datatype="html">
         <source>SHOW THIS CHANNEL &gt;</source>
-        <target state="new">SHOW THIS CHANNEL &gt;</target>
+        <target state="translated">MONTRI ĈI TIUN KANALON &gt;</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context><context context-type="linenumber">46</context></context-group>
       </trans-unit>
       <trans-unit id="4088311569349098646">
@@ -5776,7 +5776,7 @@
       </trans-unit>
       <trans-unit id="400578776928464905" datatype="html">
         <source>Follower instances (<x id="INTERPOLATION" equiv-text="{{ followersPagination.totalItems }}"/>)</source>
-        <target state="new">Follower instances (<x id="INTERPOLATION" equiv-text="{{ followersPagination.totalItems }}"/>)</target>
+        <target state="translated">Abonantaj nodoj (<x id="INTERPOLATION" equiv-text="{{ followersPagination.totalItems }}"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">4</context>
@@ -5784,7 +5784,7 @@
       </trans-unit>
       <trans-unit id="2081837971167498893" datatype="html">
         <source>Following instances (<x id="INTERPOLATION" equiv-text="{{ followingsPagination.totalItems }}"/>)</source>
-        <target state="new">Following instances (<x id="INTERPOLATION" equiv-text="{{ followingsPagination.totalItems }}"/>)</target>
+        <target state="translated">Abonataj nodoj (<x id="INTERPOLATION" equiv-text="{{ followingsPagination.totalItems }}"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">16</context>
@@ -5817,7 +5817,7 @@
       </trans-unit>
       <trans-unit id="8525213662266893834" datatype="html">
         <source>Contact us</source>
-        <target state="new">Contact us</target>
+        <target state="translated">Kontaktu nin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">7</context>
@@ -5854,7 +5854,7 @@
       </trans-unit>
       <trans-unit id="8765504394950427814" datatype="html">
         <source>How we will pay for keeping our instance running</source>
-        <target state="new">How we will pay for keeping our instance running</target>
+        <target state="translated">Kiel ni pagos funkciadon de nia nodo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">86</context>
@@ -6096,7 +6096,7 @@
       </trans-unit>
       <trans-unit id="4807161697338135032" datatype="html">
         <source>Contact the administrator(s)<x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;modal-subtitle&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
-        <target state="new">Contact the administrator(s)<x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;modal-subtitle&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></target>
+        <target state="translated">Konaktu la administranto(j)n <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;modal-subtitle&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/contact-admin-modal.component.html</context>
           <context context-type="linenumber">3</context>
@@ -6204,7 +6204,7 @@
       </trans-unit>
       <trans-unit id="7440807341905682986" datatype="html">
         <source>I am at least <x id="INTERPOLATION" equiv-text="{{ minimumAge }}"/> years old and agree to the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;terms-anchor&quot; (click)=&quot;onTermsClick($event)&quot; href='#'&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;hasCodeOfConduct&quot;&gt;"/> and to the <x id="START_LINK_1" equiv-text="&lt;a (click)=&quot;onCodeOfConductClick($event)&quot; href='#'&gt;"/>Code of Conduct<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/> of this instance </source>
-        <target state="new"> I am at least <x id="INTERPOLATION" equiv-text="{{ minimumAge }}"/> years old and agree to the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;terms-anchor&quot; (click)=&quot;onTermsClick($event)&quot; href='#'&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;hasCodeOfConduct&quot;&gt;"/> and to the <x id="START_LINK_1" equiv-text="&lt;a (click)=&quot;onCodeOfConductClick($event)&quot; href='#'&gt;"/>Code of Conduct<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/> of this instance </target>
+        <target state="translated">Mi aĝas almenaŭ <x id="INTERPOLATION" equiv-text="{{ minimumAge }}"/> jarojn, kaj konsentas al la <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;terms-anchor&quot; (click)=&quot;onTermsClick($event)&quot; href='#'&gt;"/>Uzokondiĉoj<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;hasCodeOfConduct&quot;&gt;"/> kaj al la <x id="START_LINK_1" equiv-text="&lt;a (click)=&quot;onCodeOfConductClick($event)&quot; href='#'&gt;"/>Kondutkodo<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/> de ĉi tiu nodo </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register-step-terms.component.html</context>
           <context context-type="linenumber">5,10</context>
@@ -6217,7 +6217,7 @@
       </trans-unit>
       <trans-unit id="2770947245861951784" datatype="html">
         <source>Signup is not enabled on this instance.</source>
-        <target state="new">Signup is not enabled on this instance.</target>
+        <target state="translated">Registriĝo ne estas ŝaltita sur ĉi tiu nodo.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">4</context>
@@ -6245,7 +6245,7 @@
       </trans-unit>
       <trans-unit id="1097932116708163073" datatype="html">
         <source>This website is powered by PeerTube</source>
-        <target state="new"> This website is powered by PeerTube </target>
+        <target state="translated">Ĉi tiu retpaĝo estas povigata de PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">2,4</context>
@@ -6258,7 +6258,7 @@
       </trans-unit>
       <trans-unit id="4605517634011438234" datatype="html">
         <source>ACCOUNT</source>
-        <target state="new">ACCOUNT</target>
+        <target state="translated">KONTO</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.html</context>
           <context context-type="linenumber">8</context>
@@ -6276,12 +6276,12 @@
       </trans-unit>
       <trans-unit id="784681343382270982" datatype="html">
         <source>Remove this filter</source>
-        <target state="new">Remove this filter</target>
+        <target state="translated">Forigi ĉi tiun filtrilon</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.ts</context><context context-type="linenumber">95</context></context-group>
       </trans-unit>
       <trans-unit id="5254305728396198887" datatype="html">
         <source>Sensitive content</source>
-        <target state="new">Sensitive content</target>
+        <target state="needs-translation">Konsterna enhavo</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">115</context></context-group>
       </trans-unit>
       <trans-unit id="5590086849807274701" datatype="html">
@@ -6291,42 +6291,42 @@
       </trans-unit>
       <trans-unit id="5019568087038659501" datatype="html">
         <source>Federated</source>
-        <target state="new">Federated</target>
+        <target state="translated">Federa</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">124</context></context-group>
       </trans-unit>
       <trans-unit id="1949800099101277248" datatype="html">
         <source>Languages</source>
-        <target state="new">Languages</target>
+        <target state="translated">Lingvoj</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">132</context></context-group>
       </trans-unit>
       <trans-unit id="1902100407096396858" datatype="html">
         <source>Categories</source>
-        <target state="new">Categories</target>
+        <target state="translated">Kategorioj</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">141</context></context-group>
       </trans-unit>
       <trans-unit id="3599150758014724057" datatype="html">
         <source>All videos</source>
-        <target state="new">All videos</target>
+        <target state="translated">Ĉiuj filmoj</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">150</context></context-group>
       </trans-unit>
       <trans-unit id="8466337030143068285" datatype="html">
         <source>Blurred</source>
-        <target state="new">Blurred</target>
+        <target state="translated">Malklarigitaj</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">230</context></context-group>
       </trans-unit>
       <trans-unit id="7054829409324166420" datatype="html">
         <source>hidden</source>
-        <target state="new">hidden</target>
+        <target state="translated">kaŝita</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">236</context></context-group>
       </trans-unit>
       <trans-unit id="5766954855630346873" datatype="html">
         <source>blurred</source>
-        <target state="new">blurred</target>
+        <target state="translated">malklarigita</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">237</context></context-group>
       </trans-unit>
       <trans-unit id="1833483831276078393" datatype="html">
         <source>displayed</source>
-        <target state="new">displayed</target>
+        <target state="translated">montrita</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">239</context></context-group>
       </trans-unit>
       <trans-unit id="4856575356061361269" datatype="html">
@@ -6343,7 +6343,7 @@
       </trans-unit>
       <trans-unit id="2614607010577950577" datatype="html">
         <source>Overview</source>
-        <target state="new">Overview</target>
+        <target state="translated">Superrigardo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">35</context>
@@ -6383,7 +6383,7 @@
       </trans-unit>
       <trans-unit id="7756250490108954499" datatype="html">
         <source>144p</source>
-        <target state="new">144p</target>
+        <target state="translated">144p</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context>
           <context context-type="linenumber">22</context>
@@ -6431,7 +6431,7 @@
       </trans-unit>
       <trans-unit id="3642770981085338761" datatype="html">
         <source>Followers of your instance</source>
-        <target state="new">Followers of your instance</target>
+        <target state="translated">Abonantoj de via nodo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context>
           <context context-type="linenumber">3</context>
@@ -6500,8 +6500,7 @@
       </trans-unit>
       <trans-unit id="709846045064893539" datatype="html">
         <source>Updating instance configuration from the web interface is disabled by the system administrator.</source>
-        <target state="new"> Updating instance configuration from the web interface is disabled by the system administrator.
-</target>
+        <target state="translated">Ĝisdatigoj de agordaro de la nodo estas malŝaltitaj de la sistema administranto.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">3,5</context>
@@ -6509,18 +6508,18 @@
       </trans-unit>
       <trans-unit id="1305357231288135414" datatype="html">
         <source>Homepage</source>
-        <target state="new">Homepage</target>
+        <target state="translated">Ĉefpaĝo</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">12</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-homepage.component.html</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="5037437391296624618" datatype="html">
         <source>Information</source>
-        <target state="new">Information</target>
+        <target state="translated">Informoj</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">20</context></context-group>
       </trans-unit>
       <trans-unit id="8643289769990675407" datatype="html">
         <source>Basic</source>
-        <target state="new">Basic</target>
+        <target state="needs-translation">Baza</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="2060042292048624940">
@@ -6530,7 +6529,7 @@
       </trans-unit>
       <trans-unit id="6920964195632624609" datatype="html">
         <source>INSTANCE HOMEPAGE</source>
-        <target state="new">INSTANCE HOMEPAGE</target>
+        <target state="translated">ĈEFPAĜO DE NODO</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-homepage.component.html</context>
           <context context-type="linenumber">7</context>
@@ -6574,7 +6573,7 @@
       </trans-unit>
       <trans-unit id="7951488350851416577" datatype="html">
         <source>Hosts entered are invalid.</source>
-        <target state="new">Hosts entered are invalid.</target>
+        <target state="translated">Enigitaj gastigantoj estas nevalidaj.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/host-validators.ts</context>
           <context context-type="linenumber">93</context>
@@ -6582,7 +6581,7 @@
       </trans-unit>
       <trans-unit id="1469559036084108672" datatype="html">
         <source>Hosts entered contain duplicates.</source>
-        <target state="new">Hosts entered contain duplicates.</target>
+        <target state="translated">Enigitaj gastigantoj enhavas duoblaĵojn.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/host-validators.ts</context>
           <context context-type="linenumber">94</context>
@@ -6766,7 +6765,7 @@
       </trans-unit>
       <trans-unit id="6018246591673612412" datatype="html">
         <source>Follow</source>
-        <target state="new">Follow</target>
+        <target state="translated">Aboni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/follow-modal.component.html</context>
           <context context-type="linenumber">3</context>
@@ -7164,7 +7163,7 @@
       </trans-unit>
       <trans-unit id="2483018961011868950" datatype="html">
         <source>IP address</source>
-        <target state="new">IP address</target>
+        <target state="translated">IP-adreso</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/debug/debug.component.html</context>
           <context context-type="linenumber">2</context>
@@ -7172,7 +7171,7 @@
       </trans-unit>
       <trans-unit id="7223931053738621590" datatype="html">
         <source>PeerTube thinks your web browser public IP is <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ debug?.ip }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>.</source>
-        <target state="new">PeerTube thinks your web browser public IP is <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ debug?.ip }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>.</target>
+        <target state="translated">PeerTube pensas, ke la publika IP-adreso de via foliumilo estas <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ debug?.ip }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/debug/debug.component.html</context>
           <context context-type="linenumber">4</context>
@@ -7180,7 +7179,7 @@
       </trans-unit>
       <trans-unit id="722088235348685072" datatype="html">
         <source>If this is not your correct public IP, please consider fixing it because:</source>
-        <target state="new">If this is not your correct public IP, please consider fixing it because:</target>
+        <target state="translated">Se tio ne estas via ĝusta publika IP-adreso, bonvolu pripensi riparon, ĉar:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/debug/debug.component.html</context>
           <context context-type="linenumber">6</context>
@@ -7212,7 +7211,7 @@
       </trans-unit>
       <trans-unit id="5743050350352753869" datatype="html">
         <source>To fix it:</source>
-        <target state="new">To fix it:</target>
+        <target state="translated">Por ripari ĝin:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/debug/debug.component.html</context>
           <context context-type="linenumber">13</context>
@@ -7220,7 +7219,7 @@
       </trans-unit>
       <trans-unit id="1285026053775066761" datatype="html">
         <source>Check the <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>trust_proxy<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> configuration key</source>
-        <target state="new">Check the <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>trust_proxy<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> configuration key</target>
+        <target state="translated">Kontrolu la agordaran ŝlosilon <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>trust_proxy<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/debug/debug.component.html</context>
           <context context-type="linenumber">15</context>
@@ -7228,7 +7227,7 @@
       </trans-unit>
       <trans-unit id="7014275542536964627" datatype="html">
         <source>If you run PeerTube using Docker, check you run the <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>reverse-proxy<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> with <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>network_mode: "host"<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> (see <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/Chocobozzz/PeerTube/issues/1643#issuecomment-464789666&quot;&gt;"/>issue 1643<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>)</source>
-        <target state="new">If you run PeerTube using Docker, check you run the <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>reverse-proxy<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> with <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>network_mode: "host"<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> (see <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/Chocobozzz/PeerTube/issues/1643#issuecomment-464789666&quot;&gt;"/>issue 1643<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>)</target>
+        <target state="translated">Se vi rulas la programon PeerTube per Docker, kontrolu, ke vi rulas on <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>reverse-proxy<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> kun <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>network_mode: "host"<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> (vidu <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/Chocobozzz/PeerTube/issues/1643#issuecomment-464789666&quot;&gt;"/>problemon 1643<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/debug/debug.component.html</context>
           <context context-type="linenumber">16,17</context>
@@ -7282,7 +7281,7 @@
       </trans-unit>
       <trans-unit id="4116911651502837995" datatype="html">
         <source>Files</source>
-        <target state="new">Files</target>
+        <target state="translated">Dosieroj</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.html</context>
           <context context-type="linenumber">41</context>
@@ -7394,22 +7393,22 @@
       </trans-unit>
       <trans-unit id="545237611115823456" datatype="html">
         <source>Video files</source>
-        <target state="new">Video files</target>
+        <target state="translated">Filmaj dosieroj</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context><context context-type="linenumber">59</context></context-group>
       </trans-unit>
       <trans-unit id="5876109550513228304" datatype="html">
         <source>With WebTorrent</source>
-        <target state="new">With WebTorrent</target>
+        <target state="translated">Kun WebTorrent</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context><context context-type="linenumber">63</context></context-group>
       </trans-unit>
       <trans-unit id="9036202975131076885" datatype="html">
         <source>Without WebTorrent</source>
-        <target state="new">Without WebTorrent</target>
+        <target state="translated">Sen WebTorrent</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context><context context-type="linenumber">67</context></context-group>
       </trans-unit>
       <trans-unit id="7468888924775619361" datatype="html">
         <source>With HLS</source>
-        <target state="new">With HLS</target>
+        <target state="translated">Kun HLS (tujelsendo per HTTP)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context><context context-type="linenumber">71</context></context-group>
       </trans-unit>
       <trans-unit id="5489331826268601489" datatype="html">
@@ -7424,7 +7423,7 @@
       </trans-unit>
       <trans-unit id="1144415254281227966" datatype="html">
         <source>Remote videos</source>
-        <target state="new">Remote videos</target>
+        <target state="translated">Deforaj filmoj</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context><context context-type="linenumber">85</context></context-group>
       </trans-unit>
       <trans-unit id="8564701209009684429" datatype="html">
@@ -7910,7 +7909,7 @@
       </trans-unit>
       <trans-unit id="7553172329217243895" datatype="html">
         <source>Cannot access to the remote resource</source>
-        <target state="translated">Ne povas atingi la foran rimedon</target>
+        <target state="translated">Ne povas atingi la deforan rimedon</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+remote-interaction/remote-interaction.component.ts</context>
           <context context-type="linenumber">48</context>
@@ -7926,7 +7925,7 @@
       </trans-unit>
       <trans-unit id="3851357780293085233" datatype="html">
         <source>Remote interaction</source>
-        <target state="translated">Fora interagado</target>
+        <target state="translated">Defora interagado</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+remote-interaction/remote-interaction-routing.module.ts</context>
           <context context-type="linenumber">13</context>
