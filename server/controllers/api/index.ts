@@ -6,6 +6,7 @@ import { badRequest } from '../../helpers/express-utils'
 import { CONFIG } from '../../initializers/config'
 import { abuseRouter } from './abuse'
 import { accountsRouter } from './accounts'
+import { blocklistRouter } from './blocklist'
 import { bulkRouter } from './bulk'
 import { configRouter } from './config'
 import { customPageRouter } from './custom-page'
@@ -49,6 +50,7 @@ apiRouter.use('/search', searchRouter)
 apiRouter.use('/overviews', overviewsRouter)
 apiRouter.use('/plugins', pluginRouter)
 apiRouter.use('/custom-pages', customPageRouter)
+apiRouter.use('/blocklist', blocklistRouter)
 apiRouter.use('/ping', pong)
 apiRouter.use('/*', badRequest)
 

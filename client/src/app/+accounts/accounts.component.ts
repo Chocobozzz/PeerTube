@@ -12,7 +12,7 @@ import {
   VideoChannelService,
   VideoService
 } from '@app/shared/shared-main'
-import { AccountReportComponent } from '@app/shared/shared-moderation'
+import { AccountReportComponent, BlocklistService } from '@app/shared/shared-moderation'
 import { HttpStatusCode, User, UserRight } from '@shared/models'
 
 @Component({
@@ -52,6 +52,7 @@ export class AccountsComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private videoService: VideoService,
     private markdown: MarkdownService,
+    private blocklist: BlocklistService,
     private screenService: ScreenService
   ) {
   }
@@ -159,6 +160,7 @@ export class AccountsComponent implements OnInit, OnDestroy {
     this.updateModerationActions()
     this.loadUserIfNeeded(account)
     this.loadAccountVideosCount()
+    this.loadAccountBlockStatus()
   }
 
   private showReportModal () {
@@ -216,5 +218,10 @@ export class AccountsComponent implements OnInit, OnDestroy {
     }).subscribe(res => {
       this.accountVideosCount = res.total
     })
+  }
+
+  private loadAccountBlockStatus () {
+    this.blocklist.getStatus({ accounts: [ this.account.nameWithHostForced ], hosts: [ this.account.host ] })
+      .subscribe(status => this.account.updateBlockStatus(status))
   }
 }

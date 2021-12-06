@@ -254,6 +254,45 @@ describe('Test blocklist', function () {
         }
       })
 
+      it('Should get blocked status', async function () {
+        const remoteHandle = 'user2@' + servers[1].host
+        const localHandle = 'user1@' + servers[0].host
+        const unknownHandle = 'user5@' + servers[0].host
+
+        {
+          const status = await command.getStatus({ accounts: [ remoteHandle ] })
+          expect(Object.keys(status.accounts)).to.have.lengthOf(1)
+          expect(status.accounts[remoteHandle].blockedByUser).to.be.false
+          expect(status.accounts[remoteHandle].blockedByServer).to.be.false
+
+          expect(Object.keys(status.hosts)).to.have.lengthOf(0)
+        }
+
+        {
+          const status = await command.getStatus({ token: servers[0].accessToken, accounts: [ remoteHandle ] })
+          expect(Object.keys(status.accounts)).to.have.lengthOf(1)
+          expect(status.accounts[remoteHandle].blockedByUser).to.be.true
+          expect(status.accounts[remoteHandle].blockedByServer).to.be.false
+
+          expect(Object.keys(status.hosts)).to.have.lengthOf(0)
+        }
+
+        {
+          const status = await command.getStatus({ token: servers[0].accessToken, accounts: [ localHandle, remoteHandle, unknownHandle ] })
+          expect(Object.keys(status.accounts)).to.have.lengthOf(3)
+
+          for (const handle of [ localHandle, remoteHandle ]) {
+            expect(status.accounts[handle].blockedByUser).to.be.true
+            expect(status.accounts[handle].blockedByServer).to.be.false
+          }
+
+          expect(status.accounts[unknownHandle].blockedByUser).to.be.false
+          expect(status.accounts[unknownHandle].blockedByServer).to.be.false
+
+          expect(Object.keys(status.hosts)).to.have.lengthOf(0)
+        }
+      })
+
       it('Should not allow a remote blocked user to comment my videos', async function () {
         this.timeout(60000)
 
@@ -434,6 +473,35 @@ describe('Test blocklist', function () {
         expect(block.blockedServer.host).to.equal('localhost:' + servers[1].port)
       })
 
+      it('Should get blocklist status', async function () {
+        const blockedServer = servers[1].host
+        const notBlockedServer = 'example.com'
+
+        {
+          const status = await command.getStatus({ hosts: [ blockedServer, notBlockedServer ] })
+          expect(Object.keys(status.accounts)).to.have.lengthOf(0)
+
+          expect(Object.keys(status.hosts)).to.have.lengthOf(2)
+          expect(status.hosts[blockedServer].blockedByUser).to.be.false
+          expect(status.hosts[blockedServer].blockedByServer).to.be.false
+
+          expect(status.hosts[notBlockedServer].blockedByUser).to.be.false
+          expect(status.hosts[notBlockedServer].blockedByServer).to.be.false
+        }
+
+        {
+          const status = await command.getStatus({ token: servers[0].accessToken, hosts: [ blockedServer, notBlockedServer ] })
+          expect(Object.keys(status.accounts)).to.have.lengthOf(0)
+
+          expect(Object.keys(status.hosts)).to.have.lengthOf(2)
+          expect(status.hosts[blockedServer].blockedByUser).to.be.true
+          expect(status.hosts[blockedServer].blockedByServer).to.be.false
+
+          expect(status.hosts[notBlockedServer].blockedByUser).to.be.false
+          expect(status.hosts[notBlockedServer].blockedByServer).to.be.false
+        }
+      })
+
       it('Should unblock the remote server', async function () {
         await command.removeFromMyBlocklist({ server: 'localhost:' + servers[1].port })
       })
@@ -575,6 +643,27 @@ describe('Test blocklist', function () {
         }
       })
 
+      it('Should get blocked status', async function () {
+        const remoteHandle = 'user2@' + servers[1].host
+        const localHandle = 'user1@' + servers[0].host
+        const unknownHandle = 'user5@' + servers[0].host
+
+        for (const token of [ undefined, servers[0].accessToken ]) {
+          const status = await command.getStatus({ token, accounts: [ localHandle, remoteHandle, unknownHandle ] })
+          expect(Object.keys(status.accounts)).to.have.lengthOf(3)
+
+          for (const handle of [ localHandle, remoteHandle ]) {
+            expect(status.accounts[handle].blockedByUser).to.be.false
+            expect(status.accounts[handle].blockedByServer).to.be.true
+          }
+
+          expect(status.accounts[unknownHandle].blockedByUser).to.be.false
+          expect(status.accounts[unknownHandle].blockedByServer).to.be.false
+
+          expect(Object.keys(status.hosts)).to.have.lengthOf(0)
+        }
+      })
+
       it('Should unblock the remote account', async function () {
         await command.removeFromServerBlocklist({ account: 'user2@localhost:' + servers[1].port })
       })
@@ -620,6 +709,7 @@ describe('Test blocklist', function () {
     })
 
     describe('When managing server blocklist', function () {
+
       it('Should list all videos', async function () {
         for (const token of [ userModeratorToken, servers[0].accessToken ]) {
           await checkAllVideos(servers[0], token)
@@ -711,6 +801,23 @@ describe('Test blocklist', function () {
         expect(block.byAccount.displayName).to.equal('peertube')
         expect(block.byAccount.name).to.equal('peertube')
         expect(block.blockedServer.host).to.equal('localhost:' + servers[1].port)
+      })
+
+      it('Should get blocklist status', async function () {
+        const blockedServer = servers[1].host
+        const notBlockedServer = 'example.com'
+
+        for (const token of [ undefined, servers[0].accessToken ]) {
+          const status = await command.getStatus({ token, hosts: [ blockedServer, notBlockedServer ] })
+          expect(Object.keys(status.accounts)).to.have.lengthOf(0)
+
+          expect(Object.keys(status.hosts)).to.have.lengthOf(2)
+          expect(status.hosts[blockedServer].blockedByUser).to.be.false
+          expect(status.hosts[blockedServer].blockedByServer).to.be.true
+
+          expect(status.hosts[notBlockedServer].blockedByUser).to.be.false
+          expect(status.hosts[notBlockedServer].blockedByServer).to.be.false
+        }
       })
 
       it('Should unblock the remote server', async function () {

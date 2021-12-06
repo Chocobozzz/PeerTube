@@ -13,6 +13,7 @@ import { UserBanModalComponent } from './user-ban-modal.component'
 import { UserModerationDropdownComponent } from './user-moderation-dropdown.component'
 import { VideoBlockComponent } from './video-block.component'
 import { VideoBlockService } from './video-block.service'
+import { AccountBlockBadgesComponent } from './account-block-badges.component'
 import { SharedActorImageModule } from '../shared-actor-image/shared-actor-image.module'
 
 @NgModule({
@@ -31,7 +32,8 @@ import { SharedActorImageModule } from '../shared-actor-image/shared-actor-image
     VideoReportComponent,
     BatchDomainsModalComponent,
     CommentReportComponent,
-    AccountReportComponent
+    AccountReportComponent,
+    AccountBlockBadgesComponent
   ],
 
   exports: [
@@ -41,7 +43,8 @@ import { SharedActorImageModule } from '../shared-actor-image/shared-actor-image
     VideoReportComponent,
     BatchDomainsModalComponent,
     CommentReportComponent,
-    AccountReportComponent
+    AccountReportComponent,
+    AccountBlockBadgesComponent
   ],
 
   providers: [

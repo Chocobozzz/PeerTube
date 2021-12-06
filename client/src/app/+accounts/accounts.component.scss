@@ -30,16 +30,10 @@
   }
 }
 
-my-user-moderation-dropdown,
-.badge {
-  @include margin-left(10px);
+my-user-moderation-dropdown {
+  margin: 0 10px;
 
-  position: relative;
-  top: 3px;
-}
-
-.badge {
-  font-size: 13px;
+  height: fit-content;
 }
 
 .copy-button {
@@ -62,6 +56,10 @@ my-user-moderation-dropdown,
 
 .account-avatar-row {
   @include avatar-row-responsive(var(--myImgMargin), var(--myGreyFontSize));
+}
+
+.actor-display-name {
+  align-items: center;
 }
 
 .description {

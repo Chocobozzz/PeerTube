@@ -1,4 +1,4 @@
-import { Account as ServerAccount, ActorImage } from '@shared/models'
+import { Account as ServerAccount, ActorImage, BlockStatus } from '@shared/models'
 import { Actor } from './actor.model'
 
 export class Account extends Actor implements ServerAccount {
@@ -48,5 +48,12 @@ export class Account extends Actor implements ServerAccount {
 
   resetAvatar () {
     this.avatar = null
+  }
+
+  updateBlockStatus (blockStatus: BlockStatus) {
+    this.mutedByInstance = blockStatus.accounts[this.nameWithHostForced].blockedByServer
+    this.mutedByUser = blockStatus.accounts[this.nameWithHostForced].blockedByUser
+    this.mutedServerByUser = blockStatus.hosts[this.host].blockedByUser
+    this.mutedServerByInstance = blockStatus.hosts[this.host].blockedByServer
   }
 }

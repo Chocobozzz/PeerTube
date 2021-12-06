@@ -1,10 +1,10 @@
-import { Op } from 'sequelize'
+import { Op, QueryTypes } from 'sequelize'
 import { BelongsTo, Column, CreatedAt, ForeignKey, Model, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
 import { MServerBlocklist, MServerBlocklistAccountServer, MServerBlocklistFormattable } from '@server/types/models'
 import { AttributesOnly } from '@shared/core-utils'
 import { ServerBlock } from '@shared/models'
 import { AccountModel } from '../account/account'
-import { getSort, searchAttribute } from '../utils'
+import { createSafeIn, getSort, searchAttribute } from '../utils'
 import { ServerModel } from './server'
 
 enum ScopeNames {
@@ -76,7 +76,7 @@ export class ServerBlocklistModel extends Model<Partial<AttributesOnly<ServerBlo
   })
   BlockedServer: ServerModel
 
-  static isServerMutedByMulti (accountIds: number[], targetServerId: number) {
+  static isServerMutedByAccounts (accountIds: number[], targetServerId: number) {
     const query = {
       attributes: [ 'accountId', 'id' ],
       where: {
@@ -139,6 +139,19 @@ export class ServerBlocklistModel extends Model<Partial<AttributesOnly<ServerBlo
 
     return ServerBlocklistModel.findAll(query)
       .then(entries => entries.map(e => e.BlockedServer.host))
+  }
+
+  static getBlockStatus (byAccountIds: number[], hosts: string[]): Promise<{ host: string, accountId: number }[]> {
+    const rawQuery = `SELECT "server"."host", "serverBlocklist"."accountId" ` +
+      `FROM "serverBlocklist" ` +
+      `INNER JOIN "server" ON "server"."id" = "serverBlocklist"."targetServerId" ` +
+      `WHERE "server"."host" IN (:hosts) ` +
+      `AND "serverBlocklist"."accountId" IN (${createSafeIn(ServerBlocklistModel.sequelize, byAccountIds)})`
+
+    return ServerBlocklistModel.sequelize.query(rawQuery, {
+      type: QueryTypes.SELECT as QueryTypes.SELECT,
+      replacements: { hosts }
+    })
   }
 
   static listForApi (parameters: {

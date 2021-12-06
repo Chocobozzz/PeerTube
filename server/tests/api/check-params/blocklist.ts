@@ -481,6 +481,78 @@ describe('Test blocklist API validators', function () {
     })
   })
 
+  describe('When getting blocklist status', function () {
+    const path = '/api/v1/blocklist/status'
+
+    it('Should fail with a bad token', async function () {
+      await makeGetRequest({
+        url: server.url,
+        path,
+        token: 'false',
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
+      })
+    })
+
+    it('Should fail with a bad accounts field', async function () {
+      await makeGetRequest({
+        url: server.url,
+        path,
+        query: {
+          accounts: 1
+        },
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+
+      await makeGetRequest({
+        url: server.url,
+        path,
+        query: {
+          accounts: [ 1 ]
+        },
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+    })
+
+    it('Should fail with a bad hosts field', async function () {
+      await makeGetRequest({
+        url: server.url,
+        path,
+        query: {
+          hosts: 1
+        },
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+
+      await makeGetRequest({
+        url: server.url,
+        path,
+        query: {
+          hosts: [ 1 ]
+        },
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+    })
+
+    it('Should succeed with the correct parameters', async function () {
+      await makeGetRequest({
+        url: server.url,
+        path,
+        query: {},
+        expectedStatus: HttpStatusCode.OK_200
+      })
+
+      await makeGetRequest({
+        url: server.url,
+        path,
+        query: {
+          hosts: [ 'example.com' ],
+          accounts: [ 'john@example.com' ]
+        },
+        expectedStatus: HttpStatusCode.OK_200
+      })
+    })
+  })
+
   after(async function () {
     await cleanupTests(servers)
   })

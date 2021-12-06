@@ -1,8 +1,10 @@
 import express from 'express'
-import { body, param } from 'express-validator'
+import { body, param, query } from 'express-validator'
+import { areValidActorHandles } from '@server/helpers/custom-validators/activitypub/actor'
+import { toArray } from '@server/helpers/custom-validators/misc'
 import { getServerActor } from '@server/models/application/application'
 import { HttpStatusCode } from '../../../shared/models/http/http-error-codes'
-import { isHostValid } from '../../helpers/custom-validators/servers'
+import { isEachUniqueHostValid, isHostValid } from '../../helpers/custom-validators/servers'
 import { logger } from '../../helpers/logger'
 import { WEBSERVER } from '../../initializers/constants'
 import { AccountBlocklistModel } from '../../models/account/account-blocklist'
@@ -123,6 +125,26 @@ const unblockServerByServerValidator = [
   }
 ]
 
+const blocklistStatusValidator = [
+  query('hosts')
+    .optional()
+    .customSanitizer(toArray)
+    .custom(isEachUniqueHostValid).withMessage('Should have a valid hosts array'),
+
+  query('accounts')
+    .optional()
+    .customSanitizer(toArray)
+    .custom(areValidActorHandles).withMessage('Should have a valid accounts array'),
+
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking blocklistStatusValidator parameters', { query: req.query })
+
+    if (areValidationErrors(req, res)) return
+
+    return next()
+  }
+]
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -131,7 +153,8 @@ export {
   unblockAccountByAccountValidator,
   unblockServerByAccountValidator,
   unblockAccountByServerValidator,
-  unblockServerByServerValidator
+  unblockServerByServerValidator,
+  blocklistStatusValidator
 }
 
 // ---------------------------------------------------------------------------

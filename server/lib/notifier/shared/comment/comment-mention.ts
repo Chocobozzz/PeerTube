@@ -47,8 +47,8 @@ export class CommentMention extends AbstractNotification <MCommentOwnerVideo, MU
 
     const sourceAccounts = this.users.map(u => u.Account.id).concat([ this.serverAccountId ])
 
-    this.accountMutedHash = await AccountBlocklistModel.isAccountMutedByMulti(sourceAccounts, this.payload.accountId)
-    this.instanceMutedHash = await ServerBlocklistModel.isServerMutedByMulti(sourceAccounts, this.payload.Account.Actor.serverId)
+    this.accountMutedHash = await AccountBlocklistModel.isAccountMutedByAccounts(sourceAccounts, this.payload.accountId)
+    this.instanceMutedHash = await ServerBlocklistModel.isServerMutedByAccounts(sourceAccounts, this.payload.Account.Actor.serverId)
   }
 
   log () {
