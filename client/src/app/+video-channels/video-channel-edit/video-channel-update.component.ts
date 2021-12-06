@@ -12,14 +12,14 @@ import {
 import { FormValidatorService } from '@app/shared/shared-forms'
 import { VideoChannel, VideoChannelService } from '@app/shared/shared-main'
 import { HTMLServerConfig, VideoChannelUpdate } from '@shared/models'
-import { MyVideoChannelEdit } from './my-video-channel-edit'
+import { MyVideoChannelEdit } from './video-channel-edit'
 
 @Component({
   selector: 'my-video-channel-update',
-  templateUrl: './my-video-channel-edit.component.html',
-  styleUrls: [ './my-video-channel-edit.component.scss' ]
+  templateUrl: './video-channel-edit.component.html',
+  styleUrls: [ './video-channel-edit.component.scss' ]
 })
-export class MyVideoChannelUpdateComponent extends MyVideoChannelEdit implements OnInit, OnDestroy {
+export class VideoChannelUpdateComponent extends MyVideoChannelEdit implements OnInit, OnDestroy {
   error: string
   videoChannel: VideoChannel
 
@@ -50,9 +50,9 @@ export class MyVideoChannelUpdateComponent extends MyVideoChannelEdit implements
     })
 
     this.paramsSub = this.route.params.subscribe(routeParams => {
-      const videoChannelId = routeParams['videoChannelId']
+      const videoChannelName = routeParams['videoChannelName']
 
-      this.videoChannelService.getVideoChannel(videoChannelId)
+      this.videoChannelService.getVideoChannel(videoChannelName)
         .subscribe({
           next: videoChannelToUpdate => {
             this.videoChannel = videoChannelToUpdate
@@ -95,7 +95,7 @@ export class MyVideoChannelUpdateComponent extends MyVideoChannelEdit implements
 
           this.notifier.success($localize`Video channel ${videoChannelUpdate.displayName} updated.`)
 
-          this.router.navigate([ '/my-library', 'video-channels' ])
+          this.router.navigate([ '/c', this.videoChannel.name ])
         },
 
         error: err => {

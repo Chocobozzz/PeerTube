@@ -24,6 +24,7 @@ import {
   asyncRetryTransactionMiddleware,
   authenticate,
   commonVideosFiltersValidator,
+  ensureUserCanManageChannel,
   optionalAuthenticate,
   paginationValidator,
   setDefaultPagination,
@@ -74,7 +75,7 @@ videoChannelRouter.post('/:nameWithHost/avatar/pick',
   authenticate,
   reqAvatarFile,
   asyncMiddleware(videoChannelsNameWithHostValidator),
-  ensureAuthUserOwnsChannelValidator,
+  ensureUserCanManageChannel,
   updateAvatarValidator,
   asyncMiddleware(updateVideoChannelAvatar)
 )
@@ -83,7 +84,7 @@ videoChannelRouter.post('/:nameWithHost/banner/pick',
   authenticate,
   reqBannerFile,
   asyncMiddleware(videoChannelsNameWithHostValidator),
-  ensureAuthUserOwnsChannelValidator,
+  ensureUserCanManageChannel,
   updateBannerValidator,
   asyncMiddleware(updateVideoChannelBanner)
 )
@@ -91,21 +92,21 @@ videoChannelRouter.post('/:nameWithHost/banner/pick',
 videoChannelRouter.delete('/:nameWithHost/avatar',
   authenticate,
   asyncMiddleware(videoChannelsNameWithHostValidator),
-  ensureAuthUserOwnsChannelValidator,
+  ensureUserCanManageChannel,
   asyncMiddleware(deleteVideoChannelAvatar)
 )
 
 videoChannelRouter.delete('/:nameWithHost/banner',
   authenticate,
   asyncMiddleware(videoChannelsNameWithHostValidator),
-  ensureAuthUserOwnsChannelValidator,
+  ensureUserCanManageChannel,
   asyncMiddleware(deleteVideoChannelBanner)
 )
 
 videoChannelRouter.put('/:nameWithHost',
   authenticate,
   asyncMiddleware(videoChannelsNameWithHostValidator),
-  ensureAuthUserOwnsChannelValidator,
+  ensureUserCanManageChannel,
   videoChannelsUpdateValidator,
   asyncRetryTransactionMiddleware(updateVideoChannel)
 )

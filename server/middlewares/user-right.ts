@@ -20,8 +20,26 @@ function ensureUserHasRight (userRight: UserRight) {
   }
 }
 
+function ensureUserCanManageChannel (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const user = res.locals.oauth.token.user
+  const isUserOwner = res.locals.videoChannel.Account.userId !== user.id
+
+  if (isUserOwner && user.hasRight(UserRight.MANAGE_VIDEO_CHANNELS) === false) {
+    const message = `User ${user.username} does not have right to manage channel ${req.params.nameWithHost}.`
+    logger.info(message)
+
+    return res.fail({
+      status: HttpStatusCode.FORBIDDEN_403,
+      message
+    })
+  }
+
+  return next()
+}
+
 // ---------------------------------------------------------------------------
 
 export {
-  ensureUserHasRight
+  ensureUserHasRight,
+  ensureUserCanManageChannel
 }

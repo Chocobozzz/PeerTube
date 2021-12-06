@@ -11,6 +11,9 @@ import { VideoChannelVideosComponent } from './video-channel-videos/video-channe
 import { VideoChannelsRoutingModule } from './video-channels-routing.module'
 import { VideoChannelsComponent } from './video-channels.component'
 import { SharedActorImageModule } from '../shared/shared-actor-image/shared-actor-image.module'
+import { MyVideoChannelCreateComponent } from './video-channel-edit/video-channel-create.component'
+import { VideoChannelUpdateComponent } from './video-channel-edit/video-channel-update.component'
+import { SharedActorImageEditModule } from '@app/shared/shared-actor-image-edit'
 
 @NgModule({
   imports: [
@@ -23,13 +26,16 @@ import { SharedActorImageModule } from '../shared/shared-actor-image/shared-acto
     SharedUserSubscriptionModule,
     SharedGlobalIconModule,
     SharedSupportModal,
-    SharedActorImageModule
+    SharedActorImageModule,
+    SharedActorImageEditModule
   ],
 
   declarations: [
     VideoChannelsComponent,
     VideoChannelVideosComponent,
-    VideoChannelPlaylistsComponent
+    VideoChannelPlaylistsComponent,
+    MyVideoChannelCreateComponent,
+    VideoChannelUpdateComponent
   ],
 
   exports: [

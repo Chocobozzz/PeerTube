@@ -7,7 +7,7 @@ import { AuthService, MarkdownService, Notifier, RestExtractor, ScreenService } 
 import { ListOverflowItem, VideoChannel, VideoChannelService, VideoService } from '@app/shared/shared-main'
 import { SupportModalComponent } from '@app/shared/shared-support-modal'
 import { SubscribeButtonComponent } from '@app/shared/shared-user-subscription'
-import { HttpStatusCode } from '@shared/models'
+import { HttpStatusCode, UserRight } from '@shared/models'
 
 @Component({
   templateUrl: './video-channels.component.html',
@@ -93,10 +93,14 @@ export class VideoChannelsComponent implements OnInit, OnDestroy {
     return this.authService.isLoggedIn()
   }
 
+  isOwner () {
+    return this.videoChannel?.ownerAccount.userId === this.authService.getUser().id
+  }
+
   isManageable () {
     if (!this.isUserLoggedIn()) return false
 
-    return this.videoChannel?.ownerAccount.userId === this.authService.getUser().id
+    return this.isOwner() || this.authService.getUser().hasRight(UserRight.MANAGE_VIDEO_CHANNELS)
   }
 
   activateCopiedMessage () {
