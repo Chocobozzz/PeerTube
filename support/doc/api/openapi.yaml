@@ -3792,6 +3792,39 @@ paths:
         '500':
           description: search index unavailable
 
+  /blocklist/status:
+    get:
+      tags:
+        - Account Blocks
+        - Server Blocks
+      summary: Get block status of accounts/hosts
+      parameters:
+        -
+          name: 'accounts'
+          in: query
+          description: 'Check if these accounts are blocked'
+          example: [ 'goofy@example.com', 'donald@example.com' ]
+          schema:
+            type: array
+            items:
+              type: string
+        -
+          name: 'hosts'
+          in: query
+          description: 'Check if these hosts are blocked'
+          example: [ 'example.com' ]
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/BlockStatus'
+
   /server/blocklist/accounts:
     get:
       tags:
@@ -5133,6 +5166,29 @@ components:
           $ref: '#/components/schemas/VideoPrivacySet'
         label:
           type: string
+
+    BlockStatus:
+      properties:
+        accounts:
+          type: object
+          additionalProperties:
+            x-additionalPropertiesName: account
+            type: object
+            properties:
+              blockedByServer:
+                type: boolean
+              blockedByUser:
+                type: boolean
+        hosts:
+          type: object
+          additionalProperties:
+            x-additionalPropertiesName: host
+            type: object
+            properties:
+              blockedByServer:
+                type: boolean
+              blockedByUser:
+                type: boolean
 
     NSFWPolicy:
       type: string
