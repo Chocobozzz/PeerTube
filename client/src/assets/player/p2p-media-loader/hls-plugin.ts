@@ -146,6 +146,7 @@ class Html5Hlsjs {
   }
 
   duration () {
+    if (this._duration === Infinity) return Infinity
     if (!isNaN(this.videoElement.duration)) return this.videoElement.duration
 
     return this._duration || 0
