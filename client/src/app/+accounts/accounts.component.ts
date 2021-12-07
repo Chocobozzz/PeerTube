@@ -164,7 +164,7 @@ export class AccountsComponent implements OnInit, OnDestroy {
   }
 
   private showReportModal () {
-    this.accountReportModal.show()
+    this.accountReportModal.show(this.account)
   }
 
   private loadUserIfNeeded (account: Account) {

@@ -1,5 +1,5 @@
 import { mapValues, pickBy } from 'lodash-es'
-import { Component, Input, OnInit, ViewChild } from '@angular/core'
+import { Component, OnInit, ViewChild } from '@angular/core'
 import { Notifier } from '@app/core'
 import { ABUSE_REASON_VALIDATOR } from '@app/shared/form-validators/abuse-validators'
 import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
@@ -16,13 +16,12 @@ import { AbuseService } from '../abuse.service'
   styleUrls: [ './report.component.scss' ]
 })
 export class AccountReportComponent extends FormReactive implements OnInit {
-  @Input() account: Account = null
-
   @ViewChild('modal', { static: true }) modal: NgbModal
 
   error: string = null
   predefinedReasons: { id: AbusePredefinedReasonsString, label: string, description?: string, help?: string }[] = []
   modalTitle: string
+  account: Account = null
 
   private openedModal: NgbModalRef
 
@@ -48,8 +47,6 @@ export class AccountReportComponent extends FormReactive implements OnInit {
   }
 
   ngOnInit () {
-    this.modalTitle = $localize`Report ${this.account.displayName}`
-
     this.buildForm({
       reason: ABUSE_REASON_VALIDATOR,
       predefinedReasons: mapValues(abusePredefinedReasonsMap, r => null)
@@ -58,7 +55,11 @@ export class AccountReportComponent extends FormReactive implements OnInit {
     this.predefinedReasons = this.abuseService.getPrefefinedReasons('account')
   }
 
-  show () {
+  show (account: Account) {
+    this.account = account
+
+    this.modalTitle = $localize`Report ${this.account.displayName}`
+
     this.openedModal = this.modalService.open(this.modal, { centered: true, keyboard: false, size: 'lg' })
   }
 
