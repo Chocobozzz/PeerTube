@@ -1,5 +1,6 @@
 import express from 'express'
 import { Transaction } from 'sequelize/types'
+import { updateTorrentMetadata } from '@server/helpers/webtorrent'
 import { changeVideoChannelShare } from '@server/lib/activitypub/share'
 import { buildVideoThumbnailsFromReq, setVideoTags } from '@server/lib/video'
 import { openapiOperationDoc } from '@server/middlewares/doc'
@@ -149,9 +150,8 @@ async function updateVideo (req: express.Request, res: express.Response) {
       return videoInstanceUpdated
     })
 
-    if (wasConfidentialVideo) {
-      Notifier.Instance.notifyOnNewVideoIfNeeded(videoInstanceUpdated)
-    }
+    if (videoInfoToUpdate.name) await updateTorrentsMetadata(videoInstanceUpdated)
+    if (wasConfidentialVideo) Notifier.Instance.notifyOnNewVideoIfNeeded(videoInstanceUpdated)
 
     Hooks.runAction('action:api.video.updated', { video: videoInstanceUpdated, body: req.body, req, res })
   } catch (err) {
@@ -197,5 +197,11 @@ function updateSchedule (videoInstance: MVideoFullLight, videoInfoToUpdate: Vide
     }, { transaction })
   } else if (videoInfoToUpdate.scheduleUpdate === null) {
     return ScheduleVideoUpdateModel.deleteByVideoId(videoInstance.id, transaction)
+  }
+}
+
+async function updateTorrentsMetadata (video: MVideoFullLight) {
+  for (const file of video.getAllFiles()) {
+    await updateTorrentMetadata(video, file)
   }
 }

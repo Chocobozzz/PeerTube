@@ -2,7 +2,7 @@ import { Job } from 'bull'
 import { remove } from 'fs-extra'
 import { join } from 'path'
 import { logger } from '@server/helpers/logger'
-import { updateTorrentUrls } from '@server/helpers/webtorrent'
+import { updateTorrentMetadata } from '@server/helpers/webtorrent'
 import { CONFIG } from '@server/initializers/config'
 import { P2P_MEDIA_LOADER_PEER_VERSION } from '@server/initializers/constants'
 import { storeHLSFile, storeWebTorrentFile } from '@server/lib/object-storage'
@@ -113,7 +113,7 @@ async function onFileMoved (options: {
   file.fileUrl = fileUrl
   file.storage = VideoStorage.OBJECT_STORAGE
 
-  await updateTorrentUrls(videoOrPlaylist, file)
+  await updateTorrentMetadata(videoOrPlaylist, file)
   await file.save()
 
   logger.debug('Removing %s because it\'s now on object storage', oldPath)

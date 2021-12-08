@@ -276,7 +276,7 @@ export class VideoPlaylistElementModel extends Model<Partial<AttributesOnly<Vide
     }
 
     const positionQuery = Sequelize.literal(`${newPosition} + "position" - ${firstPosition}`)
-    return VideoPlaylistElementModel.update({ position: positionQuery as any }, query)
+    return VideoPlaylistElementModel.update({ position: positionQuery }, query)
   }
 
   static increasePositionOf (

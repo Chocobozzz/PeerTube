@@ -94,7 +94,7 @@ function createTorrentAndSetInfoHash (videoOrPlaylist: MVideo | MStreamingPlayli
 
   const options = {
     // Keep the extname, it's used by the client to stream the file inside a web browser
-    name: `${video.name} ${videoFile.resolution}p${videoFile.extname}`,
+    name: buildInfoName(video, videoFile),
     createdBy: 'PeerTube',
     announceList: buildAnnounceList(),
     urlList: buildUrlList(video, videoFile)
@@ -120,7 +120,7 @@ function createTorrentAndSetInfoHash (videoOrPlaylist: MVideo | MStreamingPlayli
   })
 }
 
-async function updateTorrentUrls (videoOrPlaylist: MVideo | MStreamingPlaylistVideo, videoFile: MVideoFile) {
+async function updateTorrentMetadata (videoOrPlaylist: MVideo | MStreamingPlaylistVideo, videoFile: MVideoFile) {
   const video = extractVideo(videoOrPlaylist)
 
   const oldTorrentPath = join(CONFIG.STORAGE.TORRENTS_DIR, videoFile.torrentFilename)
@@ -133,10 +133,13 @@ async function updateTorrentUrls (videoOrPlaylist: MVideo | MStreamingPlaylistVi
 
   decoded['url-list'] = buildUrlList(video, videoFile)
 
+  decoded.info.name = buildInfoName(video, videoFile)
+  decoded['creation date'] = Math.ceil(Date.now() / 1000)
+
   const newTorrentFilename = generateTorrentFileName(videoOrPlaylist, videoFile.resolution)
   const newTorrentPath = join(CONFIG.STORAGE.TORRENTS_DIR, newTorrentFilename)
 
-  logger.info('Updating torrent URLs %s -> %s.', oldTorrentPath, newTorrentPath)
+  logger.info('Updating torrent metadata %s -> %s.', oldTorrentPath, newTorrentPath)
 
   await writeFile(newTorrentPath, encode(decoded))
   await remove(join(CONFIG.STORAGE.TORRENTS_DIR, videoFile.torrentFilename))
@@ -171,7 +174,7 @@ function generateMagnetUri (
 
 export {
   createTorrentPromise,
-  updateTorrentUrls,
+  updateTorrentMetadata,
   createTorrentAndSetInfoHash,
   generateMagnetUri,
   downloadWebTorrentVideo
@@ -225,4 +228,8 @@ function buildAnnounceList () {
 
 function buildUrlList (video: MVideo, videoFile: MVideoFile) {
   return [ videoFile.getFileUrl(video) ]
+}
+
+function buildInfoName (video: MVideo, videoFile: MVideoFile) {
+  return `${video.name} ${videoFile.resolution}p${videoFile.extname}`
 }

@@ -17,7 +17,7 @@ import { VideoCommentModel } from '../server/models/video/video-comment'
 import { AccountModel } from '../server/models/account/account'
 import { VideoChannelModel } from '../server/models/video/video-channel'
 import { initDatabaseModels } from '../server/initializers/database'
-import { updateTorrentUrls } from '@server/helpers/webtorrent'
+import { updateTorrentMetadata } from '@server/helpers/webtorrent'
 import { getServerActor } from '@server/models/application/application'
 
 run()
@@ -126,7 +126,7 @@ async function run () {
 
     for (const file of video.VideoFiles) {
       console.log('Updating torrent file %s of video %s.', file.resolution, video.uuid)
-      await updateTorrentUrls(video, file)
+      await updateTorrentMetadata(video, file)
 
       await file.save()
     }
@@ -135,7 +135,7 @@ async function run () {
     for (const file of (playlist?.VideoFiles || [])) {
       console.log('Updating fragmented torrent file %s of video %s.', file.resolution, video.uuid)
 
-      await updateTorrentUrls(video, file)
+      await updateTorrentMetadata(video, file)
 
       await file.save()
     }

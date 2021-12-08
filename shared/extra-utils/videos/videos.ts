@@ -217,6 +217,7 @@ async function completeVideoCheck (
     expect(torrent.files).to.be.an('array')
     expect(torrent.files.length).to.equal(1)
     expect(torrent.files[0].path).to.exist.and.to.not.equal('')
+    expect(torrent.files[0].name).to.equal(`${videoDetails.name} ${file.resolution.id}p${extension}`)
   }
 
   expect(videoDetails.thumbnailPath).to.exist
