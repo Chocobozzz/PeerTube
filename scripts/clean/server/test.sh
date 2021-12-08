@@ -20,9 +20,9 @@ dropRedis () {
   port=$((9000+$1))
   host="localhost"
 
-  redis-cli -h "$host" KEYS "bull-localhost:$port*" | grep -v empty | xargs --no-run-if-empty redis-cli -h "$host" DEL
-  redis-cli -h "$host" KEYS "redis-localhost:$port*" | grep -v empty | xargs --no-run-if-empty redis-cli -h "$host" DEL
-  redis-cli -h "$host" KEYS "*redis-localhost:$port-" | grep -v empty | xargs --no-run-if-empty redis-cli -h "$host" DEL
+  redis-cli -h "$host" KEYS "bull-localhost:$port*" | grep -v empty | xargs -r redis-cli -h "$host" DEL
+  redis-cli -h "$host" KEYS "redis-localhost:$port*" | grep -v empty | xargs -r redis-cli -h "$host" DEL
+  redis-cli -h "$host" KEYS "*redis-localhost:$port-" | grep -v empty | xargs -r redis-cli -h "$host" DEL
 }
 
 seq=$(seq 1 6)
