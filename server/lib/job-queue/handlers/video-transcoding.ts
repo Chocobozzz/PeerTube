@@ -53,6 +53,7 @@ async function processVideoTranscoding (job: Job) {
 
   if (!handler) {
     await moveToFailedTranscodingState(video)
+    await VideoJobInfoModel.decrease(video.uuid, 'pendingTranscode')
 
     throw new Error('Cannot find transcoding handler for ' + payload.type)
   }
@@ -62,10 +63,18 @@ async function processVideoTranscoding (job: Job) {
   } catch (error) {
     await moveToFailedTranscodingState(video)
 
+    await VideoJobInfoModel.decrease(video.uuid, 'pendingTranscode')
+
     throw error
   }
 
   return video
+}
+
+// ---------------------------------------------------------------------------
+
+export {
+  processVideoTranscoding
 }
 
 // ---------------------------------------------------------------------------
@@ -119,7 +128,7 @@ async function handleWebTorrentMergeAudioJob (job: Job, payload: MergeAudioTrans
 
   logger.info('Merge audio transcoding job for %s ended.', video.uuid, lTags(video.uuid))
 
-  await onVideoFileOptimizer(video, payload, 'video', user)
+  await onVideoFirstWebTorrentTranscoding(video, payload, 'video', user)
 }
 
 async function handleWebTorrentOptimizeJob (job: Job, payload: OptimizeTranscodingPayload, video: MVideoFullLight, user: MUserId) {
@@ -129,7 +138,7 @@ async function handleWebTorrentOptimizeJob (job: Job, payload: OptimizeTranscodi
 
   logger.info('Optimize transcoding job for %s ended.', video.uuid, lTags(video.uuid))
 
-  await onVideoFileOptimizer(video, payload, transcodeType, user)
+  await onVideoFirstWebTorrentTranscoding(video, payload, transcodeType, user)
 }
 
 // ---------------------------------------------------------------------------
@@ -159,7 +168,7 @@ async function onHlsPlaylistGeneration (video: MVideoFullLight, user: MUser, pay
   await retryTransactionWrapper(moveToNextState, video, payload.isNewVideo)
 }
 
-async function onVideoFileOptimizer (
+async function onVideoFirstWebTorrentTranscoding (
   videoArg: MVideoWithFile,
   payload: OptimizeTranscodingPayload | MergeAudioTranscodingPayload,
   transcodeType: TranscodeOptionsType,
@@ -211,6 +220,8 @@ async function onNewWebTorrentFileResolution (
   await retryTransactionWrapper(moveToNextState, video, payload.isNewVideo)
 }
 
+// ---------------------------------------------------------------------------
+
 async function createHlsJobIfEnabled (user: MUserId, payload: {
   videoUUID: string
   resolution: number
@@ -240,16 +251,6 @@ async function createHlsJobIfEnabled (user: MUserId, payload: {
 
   return true
 }
-
-// ---------------------------------------------------------------------------
-
-export {
-  processVideoTranscoding,
-  createHlsJobIfEnabled,
-  onNewWebTorrentFileResolution
-}
-
-// ---------------------------------------------------------------------------
 
 async function createLowerResolutionsJobs (options: {
   video: MVideoFullLight

@@ -30,7 +30,10 @@
 
               <div class="dropdown-divider"></div>
 
-              <a ngbDropdownItem ngbDropdownToggle class="dropdown-item" (click)="openLanguageChooser()">
+              <a
+                myPluginSelector pluginSelectorId="menu-user-dropdown-language-item"
+                ngbDropdownItem ngbDropdownToggle class="dropdown-item" (click)="openLanguageChooser()"
+              >
                 <my-global-icon iconName="language" aria-hidden="true"></my-global-icon>
                 <span i18n>Interface:</span>
                 <span class="ml-auto text-muted">{{ currentInterfaceLanguage }}</span>
@@ -96,7 +99,9 @@
       </div>
 
       <div *ngIf="!isLoggedIn" class="login-buttons-block">
-        <a i18n routerLink="/login" class="peertube-button-link orange-button">Login</a>
+        <a i18n *ngIf="!getExternalLoginHref()" routerLink="/login" class="peertube-button-link orange-button">Login</a>
+        <a i18n *ngIf="getExternalLoginHref()" [href]="getExternalLoginHref()" class="peertube-button-link orange-button">Login</a>
+
         <a i18n *ngIf="isRegistrationAllowed()" routerLink="/signup" class="peertube-button-link create-account-button">Create an account</a>
       </div>
 

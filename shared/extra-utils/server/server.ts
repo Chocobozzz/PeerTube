@@ -220,10 +220,11 @@ export class PeerTubeServer {
 
     return new Promise<void>((res, rej) => {
       const self = this
+      let aggregatedLogs = ''
 
       this.app = fork(join(root(), 'dist', 'server.js'), options.peertubeArgs || [], forkOptions)
 
-      const onPeerTubeExit = () => rej(new Error('Process exited'))
+      const onPeerTubeExit = () => rej(new Error('Process exited:\n' + aggregatedLogs))
       const onParentExit = () => {
         if (!this.app || !this.app.pid) return
 
@@ -238,10 +239,13 @@ export class PeerTubeServer {
       this.app.stdout.on('data', function onStdout (data) {
         let dontContinue = false
 
+        const log: string = data.toString()
+        aggregatedLogs += log
+
         // Capture things if we want to
         for (const key of Object.keys(regexps)) {
           const regexp = regexps[key]
-          const matches = data.toString().match(regexp)
+          const matches = log.match(regexp)
           if (matches !== null) {
             if (key === 'client_id') self.store.client.id = matches[1]
             else if (key === 'client_secret') self.store.client.secret = matches[1]
@@ -252,7 +256,7 @@ export class PeerTubeServer {
 
         // Check if all required sentences are here
         for (const key of Object.keys(serverRunString)) {
-          if (data.toString().indexOf(key) !== -1) serverRunString[key] = true
+          if (log.includes(key)) serverRunString[key] = true
           if (serverRunString[key] === false) dontContinue = true
         }
 
@@ -260,7 +264,7 @@ export class PeerTubeServer {
         if (dontContinue === true) return
 
         if (options.hideLogs === false) {
-          console.log(data.toString())
+          console.log(log)
         } else {
           process.removeListener('exit', onParentExit)
           self.app.stdout.removeListener('data', onStdout)

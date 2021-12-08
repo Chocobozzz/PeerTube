@@ -1,5 +1,6 @@
 import 'multer'
 import express from 'express'
+import { handlesToNameAndHost } from '@server/helpers/actors'
 import { pickCommonVideoQuery } from '@server/helpers/query'
 import { sendUndoFollow } from '@server/lib/activitypub/send'
 import { guessAdditionalAttributesFromQuery } from '@server/models/video/formatter/video-format-utils'
@@ -7,7 +8,6 @@ import { VideoChannelModel } from '@server/models/video/video-channel'
 import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
 import { buildNSFWFilter, getCountVideos } from '../../../helpers/express-utils'
 import { getFormattedObjects } from '../../../helpers/utils'
-import { WEBSERVER } from '../../../initializers/constants'
 import { sequelizeTypescript } from '../../../initializers/database'
 import { JobQueue } from '../../../lib/job-queue'
 import {
@@ -89,28 +89,23 @@ async function areSubscriptionsExist (req: express.Request, res: express.Respons
   const uris = req.query.uris as string[]
   const user = res.locals.oauth.token.User
 
-  const handles = uris.map(u => {
-    let [ name, host ] = u.split('@')
-    if (host === WEBSERVER.HOST) host = null
+  const sanitizedHandles = handlesToNameAndHost(uris)
 
-    return { name, host, uri: u }
-  })
-
-  const results = await ActorFollowModel.listSubscriptionsOf(user.Account.Actor.id, handles)
+  const results = await ActorFollowModel.listSubscriptionsOf(user.Account.Actor.id, sanitizedHandles)
 
   const existObject: { [id: string ]: boolean } = {}
-  for (const handle of handles) {
+  for (const sanitizedHandle of sanitizedHandles) {
     const obj = results.find(r => {
       const server = r.ActorFollowing.Server
 
-      return r.ActorFollowing.preferredUsername === handle.name &&
+      return r.ActorFollowing.preferredUsername === sanitizedHandle.name &&
         (
-          (!server && !handle.host) ||
-          (server.host === handle.host)
+          (!server && !sanitizedHandle.host) ||
+          (server.host === sanitizedHandle.host)
         )
     })
 
-    existObject[handle.uri] = obj !== undefined
+    existObject[sanitizedHandle.handle] = obj !== undefined
   }
 
   return res.json(existObject)

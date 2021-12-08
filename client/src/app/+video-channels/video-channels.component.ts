@@ -4,7 +4,8 @@ import { catchError, distinctUntilChanged, map, switchMap } from 'rxjs/operators
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { AuthService, MarkdownService, Notifier, RestExtractor, ScreenService } from '@app/core'
-import { ListOverflowItem, VideoChannel, VideoChannelService, VideoService } from '@app/shared/shared-main'
+import { Account, ListOverflowItem, VideoChannel, VideoChannelService, VideoService } from '@app/shared/shared-main'
+import { BlocklistService } from '@app/shared/shared-moderation'
 import { SupportModalComponent } from '@app/shared/shared-support-modal'
 import { SubscribeButtonComponent } from '@app/shared/shared-user-subscription'
 import { HttpStatusCode, UserRight } from '@shared/models'
@@ -18,6 +19,7 @@ export class VideoChannelsComponent implements OnInit, OnDestroy {
   @ViewChild('supportModal') supportModal: SupportModalComponent
 
   videoChannel: VideoChannel
+  ownerAccount: Account
   hotkeys: Hotkey[]
   links: ListOverflowItem[] = []
   isChannelManageable = false
@@ -38,7 +40,8 @@ export class VideoChannelsComponent implements OnInit, OnDestroy {
     private restExtractor: RestExtractor,
     private hotkeysService: HotkeysService,
     private screenService: ScreenService,
-    private markdown: MarkdownService
+    private markdown: MarkdownService,
+    private blocklist: BlocklistService
   ) { }
 
   ngOnInit () {
@@ -58,8 +61,10 @@ export class VideoChannelsComponent implements OnInit, OnDestroy {
 
                           // After the markdown renderer to avoid layout changes
                           this.videoChannel = videoChannel
+                          this.ownerAccount = new Account(this.videoChannel.ownerAccount)
 
                           this.loadChannelVideosCount()
+                          this.loadOwnerBlockStatus()
                         })
 
     this.hotkeys = [
@@ -128,5 +133,10 @@ export class VideoChannelsComponent implements OnInit, OnDestroy {
       },
       sort: '-publishedAt'
     }).subscribe(res => this.channelVideosCount = res.total)
+  }
+
+  private loadOwnerBlockStatus () {
+    this.blocklist.getStatus({ accounts: [ this.ownerAccount.nameWithHostForced ], hosts: [ this.ownerAccount.host ] })
+      .subscribe(status => this.ownerAccount.updateBlockStatus(status))
   }
 }

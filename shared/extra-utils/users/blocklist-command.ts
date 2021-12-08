@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { AccountBlock, HttpStatusCode, ResultList, ServerBlock } from '@shared/models'
+import { AccountBlock, BlockStatus, HttpStatusCode, ResultList, ServerBlock } from '@shared/models'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
 
 type ListBlocklistOptions = OverrideCommandOptions & {
@@ -33,6 +33,29 @@ export class BlocklistCommand extends AbstractCommand {
     const path = '/api/v1/server/blocklist/servers'
 
     return this.listBlocklist<ServerBlock>(options, path)
+  }
+
+  // ---------------------------------------------------------------------------
+
+  getStatus (options: OverrideCommandOptions & {
+    accounts?: string[]
+    hosts?: string[]
+  }) {
+    const { accounts, hosts } = options
+
+    const path = '/api/v1/blocklist/status'
+
+    return this.getRequestBody<BlockStatus>({
+      ...options,
+
+      path,
+      query: {
+        accounts,
+        hosts
+      },
+      implicitToken: false,
+      defaultExpectedStatus: HttpStatusCode.OK_200
+    })
   }
 
   // ---------------------------------------------------------------------------

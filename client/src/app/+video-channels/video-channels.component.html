@@ -23,14 +23,16 @@
         <div class="section-label" i18n>OWNER ACCOUNT</div>
 
         <div class="avatar-row">
-          <my-actor-avatar class="account-avatar" [account]="videoChannel.ownerAccount" [internalHref]="getAccountUrl()"></my-actor-avatar>
+          <my-actor-avatar class="account-avatar" [account]="ownerAccount" [internalHref]="getAccountUrl()"></my-actor-avatar>
 
           <div class="actor-info">
             <h4>
-              <a [routerLink]="getAccountUrl()" title="View account" i18n-title>{{ videoChannel.ownerAccount.displayName }}</a>
+              <a [routerLink]="getAccountUrl()" title="View account" i18n-title>{{ ownerAccount.displayName }}</a>
             </h4>
 
             <div class="actor-handle">@{{ videoChannel.ownerBy }}</div>
+
+            <my-account-block-badges [account]="ownerAccount"></my-account-block-badges>
           </div>
         </div>
 

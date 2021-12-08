@@ -21,6 +21,7 @@ import { LanguageChooserComponent } from '@app/menu/language-chooser.component'
 import { QuickSettingsModalComponent } from '@app/modal/quick-settings-modal.component'
 import { PeertubeModalService } from '@app/shared/shared-main/peertube-modal/peertube-modal.service'
 import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap'
+import { PluginsManager } from '@root-helpers/plugins-manager'
 import { HTMLServerConfig, ServerConfig, UserRight, VideoConstant } from '@shared/models'
 
 const logger = debug('peertube:menu:MenuComponent')
@@ -127,6 +128,15 @@ export class MenuComponent implements OnInit {
 
     this.modalService.openQuickSettingsSubject
       .subscribe(() => this.openQuickSettings())
+  }
+
+  getExternalLoginHref () {
+    if (this.serverConfig.client.menu.login.redirectOnSingleExternalAuth !== true) return undefined
+
+    const externalAuths = this.serverConfig.plugin.registeredExternalAuths
+    if (externalAuths.length !== 1) return undefined
+
+    return PluginsManager.getExternalAuthHref(externalAuths[0])
   }
 
   isRegistrationAllowed () {

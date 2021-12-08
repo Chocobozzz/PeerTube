@@ -3,6 +3,8 @@ import { AllowNull, BelongsTo, Column, CreatedAt, Default, ForeignKey, IsInt, Mo
 import { AttributesOnly } from '@shared/core-utils'
 import { VideoModel } from './video'
 
+export type VideoJobInfoColumnType = 'pendingMove' | 'pendingTranscode'
+
 @Table({
   tableName: 'videoJobInfo',
   indexes: [
@@ -57,7 +59,7 @@ export class VideoJobInfoModel extends Model<Partial<AttributesOnly<VideoJobInfo
     return VideoJobInfoModel.findOne({ where, transaction })
   }
 
-  static async increaseOrCreate (videoUUID: string, column: 'pendingMove' | 'pendingTranscode'): Promise<number> {
+  static async increaseOrCreate (videoUUID: string, column: VideoJobInfoColumnType): Promise<number> {
     const options = { type: QueryTypes.SELECT as QueryTypes.SELECT, bind: { videoUUID } }
 
     const [ { pendingMove } ] = await VideoJobInfoModel.sequelize.query<{ pendingMove: number }>(`
@@ -79,7 +81,7 @@ export class VideoJobInfoModel extends Model<Partial<AttributesOnly<VideoJobInfo
     return pendingMove
   }
 
-  static async decrease (videoUUID: string, column: 'pendingMove' | 'pendingTranscode'): Promise<number> {
+  static async decrease (videoUUID: string, column: VideoJobInfoColumnType): Promise<number> {
     const options = { type: QueryTypes.SELECT as QueryTypes.SELECT, bind: { videoUUID } }
 
     const [ { pendingMove } ] = await VideoJobInfoModel.sequelize.query<{ pendingMove: number }>(`

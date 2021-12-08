@@ -36,6 +36,10 @@ export class EditBasicConfigurationComponent implements OnInit, OnChanges {
     }
   }
 
+  countExternalAuth () {
+    return this.serverConfig.plugin.registeredExternalAuths.length
+  }
+
   getVideoQuotaOptions () {
     return this.configService.videoQuotaOptions
   }

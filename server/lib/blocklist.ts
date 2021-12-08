@@ -40,12 +40,12 @@ async function isBlockedByServerOrAccount (targetAccount: MAccountServer, userAc
 
   if (userAccount) sourceAccounts.push(userAccount.id)
 
-  const accountMutedHash = await AccountBlocklistModel.isAccountMutedByMulti(sourceAccounts, targetAccount.id)
+  const accountMutedHash = await AccountBlocklistModel.isAccountMutedByAccounts(sourceAccounts, targetAccount.id)
   if (accountMutedHash[serverAccountId] || (userAccount && accountMutedHash[userAccount.id])) {
     return true
   }
 
-  const instanceMutedHash = await ServerBlocklistModel.isServerMutedByMulti(sourceAccounts, targetAccount.Actor.serverId)
+  const instanceMutedHash = await ServerBlocklistModel.isServerMutedByAccounts(sourceAccounts, targetAccount.Actor.serverId)
   if (instanceMutedHash[serverAccountId] || (userAccount && instanceMutedHash[userAccount.id])) {
     return true
   }

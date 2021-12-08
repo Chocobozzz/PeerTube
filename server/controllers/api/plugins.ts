@@ -144,8 +144,13 @@ async function installPlugin (req: express.Request, res: express.Response) {
 
   const fromDisk = !!body.path
   const toInstall = body.npmName || body.path
+
+  const pluginVersion = body.pluginVersion && body.npmName
+    ? body.pluginVersion
+    : undefined
+
   try {
-    const plugin = await PluginManager.Instance.install(toInstall, undefined, fromDisk)
+    const plugin = await PluginManager.Instance.install(toInstall, pluginVersion, fromDisk)
 
     return res.json(plugin.toFormattedJSON())
   } catch (err) {

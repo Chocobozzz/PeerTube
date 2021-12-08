@@ -350,10 +350,6 @@ class ClientHtml {
     return join(__dirname, '../../../client/dist/standalone/videos/embed.html')
   }
 
-  private static addHtmlLang (htmlStringPage: string, paramLang: string) {
-    return htmlStringPage.replace('<html>', `<html lang="${paramLang}">`)
-  }
-
   private static addManifestContentHash (htmlStringPage: string) {
     return htmlStringPage.replace('[manifestContentHash]', FILES_CONTENT_HASH.MANIFEST)
   }

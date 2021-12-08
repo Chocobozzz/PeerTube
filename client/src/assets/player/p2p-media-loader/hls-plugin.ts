@@ -146,7 +146,10 @@ class Html5Hlsjs {
   }
 
   duration () {
-    return this._duration || this.videoElement.duration || 0
+    if (this._duration === Infinity) return Infinity
+    if (!isNaN(this.videoElement.duration)) return this.videoElement.duration
+
+    return this._duration || 0
   }
 
   seekable () {
@@ -366,6 +369,7 @@ class Html5Hlsjs {
 
       this.isLive = data.details.live
       this.dvrDuration = data.details.totalduration
+
       this._duration = this.isLive ? Infinity : data.details.totalduration
     })
 

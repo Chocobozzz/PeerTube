@@ -47,6 +47,11 @@ class ServerConfigManager {
           miniature: {
             preferAuthorDisplayName: CONFIG.CLIENT.VIDEOS.MINIATURE.PREFER_AUTHOR_DISPLAY_NAME
           }
+        },
+        menu: {
+          login: {
+            redirectOnSingleExternalAuth: CONFIG.CLIENT.MENU.LOGIN.REDIRECT_ON_SINGLE_EXTERNAL_AUTH
+          }
         }
       },
 

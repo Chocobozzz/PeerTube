@@ -106,6 +106,18 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
           whitelisted: null
         }
       },
+      client: {
+        videos: {
+          miniature: {
+            preferAuthorDisplayName: null
+          }
+        },
+        menu: {
+          login: {
+            redirectOnSingleExternalAuth: null
+          }
+        }
+      },
       cache: {
         previews: {
           size: CACHE_PREVIEWS_SIZE_VALIDATOR

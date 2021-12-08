@@ -1,0 +1,9 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+.badge {
+  @include margin-right(10px);
+
+  height: fit-content;
+  font-size: 12px;
+}

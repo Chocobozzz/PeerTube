@@ -15,6 +15,7 @@ import {
   RegisterClientHookOptions,
   RegisterClientSettingsScript,
   RegisterClientVideoFieldOptions,
+  RegisteredExternalAuthConfig,
   ServerConfigPlugin
 } from '../../../shared/models'
 import { environment } from '../environments/environment'
@@ -76,6 +77,11 @@ class PluginsManager {
 
   static getPluginPathPrefix (isTheme: boolean) {
     return isTheme ? '/themes' : '/plugins'
+  }
+
+  static getExternalAuthHref (auth: RegisteredExternalAuthConfig) {
+    return environment.apiUrl + `/plugins/${auth.name}/${auth.version}/auth/${auth.authName}`
+
   }
 
   loadPluginsList (config: HTMLServerConfig) {

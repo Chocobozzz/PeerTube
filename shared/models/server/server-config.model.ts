@@ -39,6 +39,12 @@ export interface ServerConfig {
         preferAuthorDisplayName: boolean
       }
     }
+
+    menu: {
+      login: {
+        redirectOnSingleExternalAuth: boolean
+      }
+    }
   }
 
   webadmin: {

@@ -54,6 +54,18 @@ describe('Test config API validators', function () {
         whitelisted: true
       }
     },
+    client: {
+      videos: {
+        miniature: {
+          preferAuthorDisplayName: false
+        }
+      },
+      menu: {
+        login: {
+          redirectOnSingleExternalAuth: false
+        }
+      }
+    },
     cache: {
       previews: {
         size: 2

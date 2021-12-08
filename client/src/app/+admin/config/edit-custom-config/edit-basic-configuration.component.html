@@ -56,6 +56,36 @@
         </ng-container>
       </div>
 
+      <ng-container formGroupName="client">
+
+        <ng-container formGroupName="videos">
+          <ng-container formGroupName="miniature">
+            <div class="form-group">
+              <my-peertube-checkbox
+                inputName="clientVideosMiniaturePreferAuthorDisplayName" formControlName="preferAuthorDisplayName"
+                i18n-labelText labelText="Prefer author display name in video miniature"
+              ></my-peertube-checkbox>
+            </div>
+          </ng-container>
+        </ng-container>
+
+        <ng-container formGroupName="menu">
+          <ng-container formGroupName="login">
+            <div class="form-group">
+              <my-peertube-checkbox
+                inputName="clientMenuLoginRedirectOnSingleExternalAuth" formControlName="redirectOnSingleExternalAuth"
+                i18n-labelText labelText="Redirect users on single external auth when users click on the login button in menu"
+              >
+                <ng-container ngProjectAs="description">
+                  <span *ngIf="countExternalAuth() === 0" i18n>⚠️ You don't have any external auth plugin enabled.</span>
+                  <span *ngIf="countExternalAuth() > 1" i18n>⚠️ You have multiple external auth plugins enabled.</span>
+                </ng-container>
+             </my-peertube-checkbox>
+            </div>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+
     </div>
   </div>
 
@@ -276,7 +306,7 @@
     <div class="form-group col-12 col-lg-4 col-xl-3">
       <div i18n class="inner-form-title">VIDEO CHANNELS</div>
     </div>
-    
+
     <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
       <div class="form-group" formGroupName="videoChannels">
         <label i18n for="videoChannelsMaxPerUser">Max video channels per user</label>

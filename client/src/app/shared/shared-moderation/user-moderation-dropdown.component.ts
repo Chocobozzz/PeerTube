@@ -289,13 +289,13 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
       {
         label: $localize`Mute the instance`,
         description: $localize`Hide any content from that instance for you.`,
-        isDisplayed: ({ account }) => !account.userId && account.mutedServerByInstance === false,
+        isDisplayed: ({ account }) => !account.userId && account.mutedServerByUser === false,
         handler: ({ account }) => this.blockServerByUser(account.host)
       },
       {
         label: $localize`Unmute the instance`,
         description: $localize`Show back content from that instance for you.`,
-        isDisplayed: ({ account }) => !account.userId && account.mutedServerByInstance === true,
+        isDisplayed: ({ account }) => !account.userId && account.mutedServerByUser === true,
         handler: ({ account }) => this.unblockServerByUser(account.host)
       },
       {

@@ -8,6 +8,7 @@ import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
 import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url'
 import { generateWebTorrentVideoFilename } from '@server/lib/paths'
 import { Redis } from '@server/lib/redis'
+import { uploadx } from '@server/lib/uploadx'
 import {
   addMoveToObjectStorageJob,
   addOptimizeOrMergeAudioJob,
@@ -19,7 +20,6 @@ import { VideoPathManager } from '@server/lib/video-path-manager'
 import { buildNextVideoState } from '@server/lib/video-state'
 import { openapiOperationDoc } from '@server/middlewares/doc'
 import { MVideo, MVideoFile, MVideoFullLight } from '@server/types/models'
-import { Uploadx } from '@uploadx/core'
 import { VideoCreate, VideoState } from '../../../../shared'
 import { HttpStatusCode } from '../../../../shared/models'
 import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../helpers/audit-logger'
@@ -41,8 +41,8 @@ import {
   authenticate,
   videosAddLegacyValidator,
   videosAddResumableInitValidator,
-  videosResumableUploadIdValidator,
-  videosAddResumableValidator
+  videosAddResumableValidator,
+  videosResumableUploadIdValidator
 } from '../../../middlewares'
 import { ScheduleVideoUpdateModel } from '../../../models/video/schedule-video-update'
 import { VideoModel } from '../../../models/video/video'
@@ -51,9 +51,6 @@ import { VideoFileModel } from '../../../models/video/video-file'
 const lTags = loggerTagsFactory('api', 'video')
 const auditLogger = auditLoggerFactory('videos')
 const uploadRouter = express.Router()
-
-const uploadx = new Uploadx({ directory: getResumableUploadPath() })
-uploadx.getUserId = (_, res: express.Response) => res.locals.oauth?.token.user.id
 
 const reqVideoFileAdd = createReqFiles(
   [ 'videofile', 'thumbnailfile', 'previewfile' ],

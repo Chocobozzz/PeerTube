@@ -1,4 +1,4 @@
-name: Test Suite
+name: Test
 
 on:
   push:
@@ -50,29 +50,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Use Node.js
-        uses: actions/setup-node@v1
+      - uses: './.github/actions/reusable-prepare-peertube-build'
         with:
           node-version: '12.x'
 
-      - name: Setup system dependencies
-        run: |
-          sudo apt-get install postgresql-client-common redis-tools parallel
-          wget --quiet --no-check-certificate "https://download.cpy.re/ffmpeg/ffmpeg-release-4.3.1-64bit-static.tar.xz"
-          tar xf ffmpeg-release-4.3.1-64bit-static.tar.xz
-          mkdir -p $HOME/bin
-          cp ffmpeg-*/{ffmpeg,ffprobe} $HOME/bin
-          echo "$HOME/bin" >> $GITHUB_PATH
-
-      - name: Cache Node.js modules
-        uses: actions/cache@v2
-        with:
-          path: |
-            **/node_modules
-          key: ${{ runner.OS }}-node-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.OS }}-node-
-            ${{ runner.OS }}-
+      - uses: './.github/actions/reusable-prepare-peertube-run'
 
       - name: Cache fixtures
         uses: actions/cache@v2
@@ -84,9 +66,6 @@ jobs:
             ${{ runner.OS }}-fixtures-${{ matrix.test_suite }}-
             ${{ runner.OS }}-fixtures-
             ${{ runner.OS }}-
-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
 
       - name: Set env test variable (schedule)
         if: github.event_name != 'schedule'

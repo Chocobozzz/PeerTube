@@ -1,11 +1,12 @@
-import { Op } from 'sequelize'
+import { Op, QueryTypes } from 'sequelize'
 import { BelongsTo, Column, CreatedAt, ForeignKey, Model, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
+import { handlesToNameAndHost } from '@server/helpers/actors'
 import { MAccountBlocklist, MAccountBlocklistAccounts, MAccountBlocklistFormattable } from '@server/types/models'
 import { AttributesOnly } from '@shared/core-utils'
 import { AccountBlock } from '../../../shared/models'
 import { ActorModel } from '../actor/actor'
 import { ServerModel } from '../server/server'
-import { getSort, searchAttribute } from '../utils'
+import { createSafeIn, getSort, searchAttribute } from '../utils'
 import { AccountModel } from './account'
 
 enum ScopeNames {
@@ -77,7 +78,7 @@ export class AccountBlocklistModel extends Model<Partial<AttributesOnly<AccountB
   })
   BlockedAccount: AccountModel
 
-  static isAccountMutedByMulti (accountIds: number[], targetAccountId: number) {
+  static isAccountMutedByAccounts (accountIds: number[], targetAccountId: number) {
     const query = {
       attributes: [ 'accountId', 'id' ],
       where: {
@@ -185,6 +186,39 @@ export class AccountBlocklistModel extends Model<Partial<AttributesOnly<AccountB
 
     return AccountBlocklistModel.findAll(query)
       .then(entries => entries.map(e => `${e.BlockedAccount.Actor.preferredUsername}@${e.BlockedAccount.Actor.Server.host}`))
+  }
+
+  static getBlockStatus (byAccountIds: number[], handles: string[]): Promise<{ name: string, host: string, accountId: number }[]> {
+    const sanitizedHandles = handlesToNameAndHost(handles)
+
+    const localHandles = sanitizedHandles.filter(h => !h.host)
+                                         .map(h => h.name)
+
+    const remoteHandles = sanitizedHandles.filter(h => !!h.host)
+                                          .map(h => ([ h.name, h.host ]))
+
+    const handlesWhere: string[] = []
+
+    if (localHandles.length !== 0) {
+      handlesWhere.push(`("actor"."preferredUsername" IN (:localHandles) AND "server"."id" IS NULL)`)
+    }
+
+    if (remoteHandles.length !== 0) {
+      handlesWhere.push(`(("actor"."preferredUsername", "server"."host") IN (:remoteHandles))`)
+    }
+
+    const rawQuery = `SELECT "accountBlocklist"."accountId", "actor"."preferredUsername" AS "name", "server"."host" ` +
+      `FROM "accountBlocklist" ` +
+      `INNER JOIN "account" ON "account"."id" = "accountBlocklist"."targetAccountId" ` +
+      `INNER JOIN "actor" ON "actor"."id" = "account"."actorId" ` +
+      `LEFT JOIN "server" ON "server"."id" = "actor"."serverId" ` +
+      `WHERE "accountBlocklist"."accountId" IN (${createSafeIn(AccountBlocklistModel.sequelize, byAccountIds)}) ` +
+      `AND (${handlesWhere.join(' OR ')})`
+
+    return AccountBlocklistModel.sequelize.query(rawQuery, {
+      type: QueryTypes.SELECT as QueryTypes.SELECT,
+      replacements: { byAccountIds, localHandles, remoteHandles }
+    })
   }
 
   toFormattedJSON (this: MAccountBlocklistFormattable): AccountBlock {
