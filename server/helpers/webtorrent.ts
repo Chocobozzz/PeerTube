@@ -14,7 +14,7 @@ import { MVideo } from '@server/types/models/video/video'
 import { MVideoFile, MVideoFileRedundanciesOpt } from '@server/types/models/video/video-file'
 import { MStreamingPlaylistVideo } from '@server/types/models/video/video-streaming-playlist'
 import { CONFIG } from '../initializers/config'
-import { promisify2 } from './core-utils'
+import { promisify2, sha1 } from './core-utils'
 import { logger } from './logger'
 import { generateVideoImportTmpPath } from './utils'
 import { extractVideo } from './video'
@@ -145,6 +145,7 @@ async function updateTorrentMetadata (videoOrPlaylist: MVideo | MStreamingPlayli
   await remove(join(CONFIG.STORAGE.TORRENTS_DIR, videoFile.torrentFilename))
 
   videoFile.torrentFilename = newTorrentFilename
+  videoFile.infoHash = sha1(encode(decoded.info))
 }
 
 function generateMagnetUri (

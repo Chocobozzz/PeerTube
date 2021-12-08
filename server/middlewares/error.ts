@@ -1,5 +1,6 @@
 import express from 'express'
 import { ProblemDocument, ProblemDocumentExtension } from 'http-problem-details'
+import { logger } from '@server/helpers/logger'
 import { HttpStatusCode } from '@shared/models'
 
 function apiFailMiddleware (req: express.Request, res: express.Response, next: express.NextFunction) {
@@ -18,7 +19,8 @@ function apiFailMiddleware (req: express.Request, res: express.Response, next: e
 
     res.status(status)
     res.setHeader('Content-Type', 'application/problem+json')
-    res.json(new ProblemDocument({
+
+    const json = new ProblemDocument({
       status,
       title,
       instance,
@@ -28,7 +30,11 @@ function apiFailMiddleware (req: express.Request, res: express.Response, next: e
       type: type
         ? `https://docs.joinpeertube.org/api-rest-reference.html#section/Errors/${type}`
         : undefined
-    }, extension))
+    }, extension)
+
+    logger.debug('Bad HTTP request.', { json })
+
+    res.json(json)
   }
 
   if (next) next()

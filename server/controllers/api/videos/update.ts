@@ -69,7 +69,7 @@ async function updateVideo (req: express.Request, res: express.Response) {
   })
 
   try {
-    const videoInstanceUpdated = await sequelizeTypescript.transaction(async t => {
+    const { videoInstanceUpdated, isNewVideo } = await sequelizeTypescript.transaction(async t => {
       // Refresh video since thumbnails to prevent concurrent updates
       const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(videoFromReq.id, t)
 
@@ -138,8 +138,6 @@ async function updateVideo (req: express.Request, res: express.Response) {
         transaction: t
       })
 
-      await federateVideoIfNeeded(videoInstanceUpdated, isNewVideo, t)
-
       auditLogger.update(
         getAuditIdFromRes(res),
         new VideoAuditView(videoInstanceUpdated.toFormattedDetailsJSON()),
@@ -147,10 +145,13 @@ async function updateVideo (req: express.Request, res: express.Response) {
       )
       logger.info('Video with name %s and uuid %s updated.', video.name, video.uuid, lTags(video.uuid))
 
-      return videoInstanceUpdated
+      return { videoInstanceUpdated, isNewVideo }
     })
 
     if (videoInfoToUpdate.name) await updateTorrentsMetadata(videoInstanceUpdated)
+
+    await federateVideoIfNeeded(videoInstanceUpdated, isNewVideo, undefined)
+
     if (wasConfidentialVideo) Notifier.Instance.notifyOnNewVideoIfNeeded(videoInstanceUpdated)
 
     Hooks.runAction('action:api.video.updated', { video: videoInstanceUpdated, body: req.body, req, res })
@@ -203,5 +204,7 @@ function updateSchedule (videoInstance: MVideoFullLight, videoInfoToUpdate: Vide
 async function updateTorrentsMetadata (video: MVideoFullLight) {
   for (const file of video.getAllFiles()) {
     await updateTorrentMetadata(video, file)
+
+    await file.save()
   }
 }

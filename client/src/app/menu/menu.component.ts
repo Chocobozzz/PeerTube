@@ -131,7 +131,7 @@ export class MenuComponent implements OnInit {
   }
 
   getExternalLoginHref () {
-    if (this.serverConfig.client.menu.login.redirectOnSingleExternalAuth !== true) return undefined
+    if (!this.serverConfig || this.serverConfig.client.menu.login.redirectOnSingleExternalAuth !== true) return undefined
 
     const externalAuths = this.serverConfig.plugin.registeredExternalAuths
     if (externalAuths.length !== 1) return undefined
