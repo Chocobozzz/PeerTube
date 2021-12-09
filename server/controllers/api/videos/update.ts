@@ -202,8 +202,17 @@ function updateSchedule (videoInstance: MVideoFullLight, videoInfoToUpdate: Vide
 }
 
 async function updateTorrentsMetadata (video: MVideoFullLight) {
-  for (const file of video.getAllFiles()) {
+  for (const file of (video.VideoFiles || [])) {
     await updateTorrentMetadata(video, file)
+
+    await file.save()
+  }
+
+  const hls = video.getHLSPlaylist()
+  if (!hls) return
+
+  for (const file of (hls.VideoFiles || [])) {
+    await updateTorrentMetadata(hls, file)
 
     await file.save()
   }

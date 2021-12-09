@@ -135,7 +135,7 @@ async function run () {
     for (const file of (playlist?.VideoFiles || [])) {
       console.log('Updating fragmented torrent file %s of video %s.', file.resolution, video.uuid)
 
-      await updateTorrentMetadata(video, file)
+      await updateTorrentMetadata(playlist, file)
 
       await file.save()
     }

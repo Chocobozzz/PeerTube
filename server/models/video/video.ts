@@ -1539,21 +1539,6 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     return this.VideoChannel.Account.Actor.Server?.isBlocked() || this.VideoChannel.Account.isBlocked()
   }
 
-  getAllFiles () {
-    let files: MVideoFile[] = []
-
-    if (Array.isArray(this.VideoFiles)) {
-      files = files.concat(this.VideoFiles)
-    }
-
-    const hls = this.getHLSPlaylist()
-    if (hls) {
-      files = files.concat(hls.VideoFiles)
-    }
-
-    return files
-  }
-
   getQualityFileBy<T extends MVideoWithFile> (this: T, fun: (files: MVideoFile[], it: (file: MVideoFile) => number) => MVideoFile) {
     // We first transcode to WebTorrent format, so try this array first
     if (Array.isArray(this.VideoFiles) && this.VideoFiles.length !== 0) {
