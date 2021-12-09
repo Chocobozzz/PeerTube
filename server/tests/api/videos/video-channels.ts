@@ -222,8 +222,11 @@ describe('Test video channels', function () {
 
   it('Should update another accounts video channel', async function () {
     this.timeout(15000)
+
     const result = await servers[0].users.generate('second_user')
     secondUserChannelName = result.userChannelName
+
+    await servers[0].videos.quickUpload({ name: 'video', token: result.token })
 
     const videoChannelAttributes = {
       displayName: 'video channel updated',
@@ -236,9 +239,9 @@ describe('Test video channels', function () {
     await waitJobs(servers)
   })
 
-  it('Should have another acccounts video channel updated', async function () {
+  it('Should have another accounts video channel updated', async function () {
     for (const server of servers) {
-      const body = await server.channels.get({ channelName: secondUserChannelName })
+      const body = await server.channels.get({ channelName: `${secondUserChannelName}@${servers[0].host}` })
 
       expect(body.displayName).to.equal('video channel updated')
       expect(body.description).to.equal('video channel description updated')
@@ -395,12 +398,13 @@ describe('Test video channels', function () {
   })
 
   it('Should have video channel deleted', async function () {
-    const body = await servers[0].channels.list({ start: 0, count: 10 })
+    const body = await servers[0].channels.list({ start: 0, count: 10, sort: 'createdAt' })
 
-    expect(body.total).to.equal(1)
+    expect(body.total).to.equal(2)
     expect(body.data).to.be.an('array')
-    expect(body.data).to.have.lengthOf(1)
+    expect(body.data).to.have.lengthOf(2)
     expect(body.data[0].displayName).to.equal('Main root channel')
+    expect(body.data[1].displayName).to.equal('video channel updated')
   })
 
   it('Should create the main channel with an uuid if there is a conflict', async function () {
