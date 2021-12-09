@@ -141,7 +141,6 @@ export class ThemeService {
     }
 
     this.auth.userInformationLoaded
-      .pipe(first())
       .subscribe(() => this.updateCurrentTheme())
   }
 
