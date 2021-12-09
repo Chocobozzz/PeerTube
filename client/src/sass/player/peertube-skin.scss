@@ -71,7 +71,7 @@ body {
     height: $big-play-height;
     line-height: $big-play-height;
     margin-top: -(math.div($big-play-height, 2));
-    transition: 0.4s opacity;
+    transition: 0.2s background-color;
 
     &::-moz-focus-inner {
       border: 0;
@@ -88,30 +88,6 @@ body {
     &.focus-visible,
     &:hover {
       background-color: var(--mainColor, #696969);
-    }
-
-  }
-
-  // Small effect when we click on the play button
-  &.vjs-has-big-play-button-clicked {
-
-    .vjs-big-play-button,
-    .vjs-poster {
-      display: block;
-      visibility: hidden;
-
-      &.vjs-big-play-button,
-      &.vjs-big-play-button::before {
-        opacity: 0;
-        transition: visibility 0.2s, opacity 0.2s;
-      }
-
-      &.vjs-poster,
-      &.vjs-poster::before {
-        opacity: 0;
-        transition: visibility 0.3s, opacity 0.3s;
-        transition-delay: 0.05s;
-      }
     }
   }
 
