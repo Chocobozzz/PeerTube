@@ -48,7 +48,7 @@ export class UserInterfaceSettingsComponent extends FormReactive implements OnIn
         })
 
         if (this.reactiveUpdate) {
-          this.formValuesWatcher = this.form.valueChanges.subscribe(val => this.updateInterfaceSettings())
+          this.formValuesWatcher = this.form.valueChanges.subscribe(() => this.updateInterfaceSettings())
         }
       })
   }
