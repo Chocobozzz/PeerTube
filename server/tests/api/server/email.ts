@@ -185,7 +185,7 @@ describe('Test emails', function () {
       this.timeout(10000)
 
       const reason = 'my super bad reason'
-      await server.abuses.report({ videoId, reason })
+      await server.abuses.report({ token: userAccessToken, videoId, reason })
 
       await waitJobs(server)
       expect(emails).to.have.lengthOf(3)

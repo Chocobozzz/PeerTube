@@ -150,7 +150,7 @@ async function updateVideo (req: express.Request, res: express.Response) {
 
     if (videoInfoToUpdate.name) await updateTorrentsMetadata(videoInstanceUpdated)
 
-    await federateVideoIfNeeded(videoInstanceUpdated, isNewVideo, undefined)
+    await sequelizeTypescript.transaction(t => federateVideoIfNeeded(videoInstanceUpdated, isNewVideo, t))
 
     if (wasConfidentialVideo) Notifier.Instance.notifyOnNewVideoIfNeeded(videoInstanceUpdated)
 

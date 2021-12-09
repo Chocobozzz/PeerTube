@@ -2,7 +2,15 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { cleanupTests, createSingleServer, doubleFollow, PeerTubeServer, setAccessTokensToServers, waitJobs } from '@shared/extra-utils'
+import {
+  cleanupTests,
+  createSingleServer,
+  doubleFollow,
+  PeerTubeServer,
+  setAccessTokensToServers,
+  wait,
+  waitJobs
+} from '@shared/extra-utils'
 import { HttpStatusCode, VideoCreateResult, VideoPrivacy } from '@shared/models'
 
 const expect = chai.expect
@@ -209,7 +217,7 @@ describe('Test video privacy', function () {
   describe('Privacy update', function () {
 
     it('Should update the private and internal videos to public on server 1', async function () {
-      this.timeout(10000)
+      this.timeout(100000)
 
       now = Date.now()
 
@@ -230,6 +238,7 @@ describe('Test video privacy', function () {
         await servers[0].videos.update({ id: internalVideoId, attributes })
       }
 
+      await wait(10000)
       await waitJobs(servers)
     })
 

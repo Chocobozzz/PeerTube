@@ -307,7 +307,7 @@ describe('Test videos redundancy', function () {
     const strategy = 'most-views'
 
     before(function () {
-      this.timeout(120000)
+      this.timeout(240000)
 
       return createServers(strategy)
     })
@@ -357,7 +357,7 @@ describe('Test videos redundancy', function () {
     const strategy = 'trending'
 
     before(function () {
-      this.timeout(120000)
+      this.timeout(240000)
 
       return createServers(strategy)
     })
@@ -420,7 +420,7 @@ describe('Test videos redundancy', function () {
     const strategy = 'recently-added'
 
     before(function () {
-      this.timeout(120000)
+      this.timeout(240000)
 
       return createServers(strategy, { min_views: 3 })
     })
@@ -491,7 +491,7 @@ describe('Test videos redundancy', function () {
     const strategy = 'recently-added'
 
     before(async function () {
-      this.timeout(120000)
+      this.timeout(240000)
 
       await createServers(strategy, { min_views: 3 }, false)
     })
@@ -553,7 +553,7 @@ describe('Test videos redundancy', function () {
 
   describe('With manual strategy', function () {
     before(function () {
-      this.timeout(120000)
+      this.timeout(240000)
 
       return createServers(null)
     })
@@ -632,7 +632,7 @@ describe('Test videos redundancy', function () {
     }
 
     before(async function () {
-      this.timeout(120000)
+      this.timeout(240000)
 
       await createServers(strategy, { min_lifetime: '7 seconds', min_views: 0 })
 
@@ -674,7 +674,7 @@ describe('Test videos redundancy', function () {
     const strategy = 'recently-added'
 
     before(async function () {
-      this.timeout(120000)
+      this.timeout(240000)
 
       await createServers(strategy, { min_lifetime: '7 seconds', min_views: 0 })
 
@@ -698,7 +698,7 @@ describe('Test videos redundancy', function () {
     })
 
     it('Should cache video 2 webseeds on the first video', async function () {
-      this.timeout(120000)
+      this.timeout(240000)
 
       await waitJobs(servers)
 
