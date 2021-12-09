@@ -126,6 +126,8 @@ class PeerTubePlugin extends Plugin {
     this.initCaptions()
 
     this.listenControlBarMouse()
+
+    this.listenFullScreenChange()
   }
 
   private runViewAdd () {
@@ -196,6 +198,12 @@ class PeerTubePlugin extends Plugin {
     const headers = new Headers({ Authorization: authorizationHeader })
 
     return fetch(url, { method: 'PUT', body, headers })
+  }
+
+  private listenFullScreenChange () {
+    this.player.on('fullscreenchange', () => {
+      if (this.player.isFullscreen()) this.player.focus()
+    })
   }
 
   private listenControlBarMouse () {
