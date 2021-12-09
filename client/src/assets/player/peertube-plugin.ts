@@ -11,6 +11,7 @@ import {
 } from './peertube-player-local-storage'
 import { PeerTubePluginOptions, UserWatching, VideoJSCaption } from './peertube-videojs-typings'
 import { isMobile } from './utils'
+import { SettingsButton } from './videojs-components/settings-menu-button'
 
 const Plugin = videojs.getPlugin('plugin')
 
@@ -31,7 +32,8 @@ class PeerTubePlugin extends Plugin {
 
   private menuOpened = false
   private mouseInControlBar = false
-  private readonly savedInactivityTimeout: number
+  private mouseInSettings = false
+  private readonly initialInactivityTimeout: number
 
   constructor (player: videojs.Player, options?: PeerTubePluginOptions) {
     super(player)
@@ -40,8 +42,7 @@ class PeerTubePlugin extends Plugin {
     this.videoDuration = options.videoDuration
     this.videoCaptions = options.videoCaptions
     this.isLive = options.isLive
-
-    this.savedInactivityTimeout = player.options_.inactivityTimeout
+    this.initialInactivityTimeout = this.player.options_.inactivityTimeout
 
     if (options.autoplay) this.player.addClass('vjs-has-autoplay')
 
@@ -108,13 +109,13 @@ class PeerTubePlugin extends Plugin {
     if (this.userWatchingVideoInterval) clearInterval(this.userWatchingVideoInterval)
   }
 
-  onMenuOpen () {
-    this.menuOpened = false
+  onMenuOpened () {
+    this.menuOpened = true
     this.alterInactivity()
   }
 
   onMenuClosed () {
-    this.menuOpened = true
+    this.menuOpened = false
     this.alterInactivity()
   }
 
@@ -207,26 +208,43 @@ class PeerTubePlugin extends Plugin {
   }
 
   private listenControlBarMouse () {
-    this.player.controlBar.on('mouseenter', () => {
+    const controlBar = this.player.controlBar
+    const settingsButton: SettingsButton = (controlBar as any).settingsButton
+
+    controlBar.on('mouseenter', () => {
       this.mouseInControlBar = true
       this.alterInactivity()
     })
 
-    this.player.controlBar.on('mouseleave', () => {
+    controlBar.on('mouseleave', () => {
       this.mouseInControlBar = false
+      this.alterInactivity()
+    })
+
+    settingsButton.dialog.on('mouseenter', () => {
+      this.mouseInSettings = true
+      this.alterInactivity()
+    })
+
+    settingsButton.dialog.on('mouseleave', () => {
+      this.mouseInSettings = false
       this.alterInactivity()
     })
   }
 
   private alterInactivity () {
-    if (this.menuOpened) {
-      this.player.options_.inactivityTimeout = this.savedInactivityTimeout
+    if (this.menuOpened || this.mouseInSettings || this.mouseInControlBar || this.isTouchEnabled()) {
+      this.setInactivityTimeout(0)
       return
     }
 
-    if (!this.mouseInControlBar && !this.isTouchEnabled()) {
-      this.player.options_.inactivityTimeout = 1
-    }
+    this.setInactivityTimeout(this.initialInactivityTimeout)
+    this.player.reportUserActivity(true)
+  }
+
+  private setInactivityTimeout (timeout: number) {
+    (this.player as any).cache_.inactivityTimeout = timeout
+    this.player.options_.inactivityTimeout = timeout
   }
 
   private isTouchEnabled () {

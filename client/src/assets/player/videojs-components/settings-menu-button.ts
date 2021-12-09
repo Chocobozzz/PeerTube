@@ -144,7 +144,7 @@ class SettingsButton extends Button {
   }
 
   showDialog () {
-    this.player().peertube().onMenuOpen();
+    this.player().peertube().onMenuOpened();
 
     (this.menu.el() as HTMLElement).style.opacity = '1'
 
