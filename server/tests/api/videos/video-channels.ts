@@ -33,6 +33,7 @@ describe('Test video channels', function () {
   let totoChannel: number
   let videoUUID: string
   let accountName: string
+  let secondUserChannelName: string
 
   const avatarPaths: { [ port: number ]: string } = {}
   const bannerPaths: { [ port: number ]: string } = {}
@@ -216,6 +217,32 @@ describe('Test video channels', function () {
     for (const server of servers) {
       const video = await server.videos.get({ id: videoUUID })
       expect(video.support).to.equal('video support field')
+    }
+  })
+
+  it('Should update another accounts video channel', async function () {
+    this.timeout(15000)
+    const result = await servers[0].users.generate('second_user')
+    secondUserChannelName = result.userChannelName
+
+    const videoChannelAttributes = {
+      displayName: 'video channel updated',
+      description: 'video channel description updated',
+      support: 'support updated'
+    }
+
+    await servers[0].channels.update({ channelName: secondUserChannelName, attributes: videoChannelAttributes })
+
+    await waitJobs(servers)
+  })
+
+  it('Should have another acccounts video channel updated', async function () {
+    for (const server of servers) {
+      const body = await server.channels.get({ channelName: secondUserChannelName })
+
+      expect(body.displayName).to.equal('video channel updated')
+      expect(body.description).to.equal('video channel description updated')
+      expect(body.support).to.equal('support updated')
     }
   })
 
