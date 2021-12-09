@@ -1,7 +1,6 @@
 import express from 'express'
 import { body, param, query } from 'express-validator'
-import { MChannelAccountDefault, MUser } from '@server/types/models'
-import { UserRight } from '../../../../shared'
+import { MChannelAccountDefault } from '@server/types/models'
 import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
 import { isBooleanValid, toBooleanOrNull } from '../../../helpers/custom-validators/misc'
 import {
@@ -79,7 +78,6 @@ const videoChannelsRemoveValidator = [
     if (areValidationErrors(req, res)) return
     if (!await doesVideoChannelNameWithHostExist(req.params.nameWithHost, res)) return
 
-    if (!checkUserCanDeleteVideoChannel(res.locals.oauth.token.User, res.locals.videoChannel, res)) return
     if (!await checkVideoChannelIsNotTheLastOne(res.locals.videoChannel, res)) return
 
     return next()
@@ -150,29 +148,6 @@ export {
 }
 
 // ---------------------------------------------------------------------------
-
-function checkUserCanDeleteVideoChannel (user: MUser, videoChannel: MChannelAccountDefault, res: express.Response) {
-  if (videoChannel.Actor.isOwned() === false) {
-    res.fail({
-      status: HttpStatusCode.FORBIDDEN_403,
-      message: 'Cannot remove video channel of another server.'
-    })
-    return false
-  }
-
-  // Check if the user can delete the video channel
-  // The user can delete it if s/he is an admin
-  // Or if s/he is the video channel's account
-  if (user.hasRight(UserRight.REMOVE_ANY_VIDEO_CHANNEL) === false && videoChannel.Account.userId !== user.id) {
-    res.fail({
-      status: HttpStatusCode.FORBIDDEN_403,
-      message: 'Cannot remove video channel of another user'
-    })
-    return false
-  }
-
-  return true
-}
 
 async function checkVideoChannelIsNotTheLastOne (videoChannel: MChannelAccountDefault, res: express.Response) {
   const count = await VideoChannelModel.countByAccount(videoChannel.Account.id)

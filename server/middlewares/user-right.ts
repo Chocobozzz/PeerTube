@@ -20,11 +20,11 @@ function ensureUserHasRight (userRight: UserRight) {
   }
 }
 
-function ensureUserCanManageChannel (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function ensureUserCanManageChannel (req: express.Request, res: express.Response, next: express.NextFunction) {
   const user = res.locals.oauth.token.user
   const isUserOwner = res.locals.videoChannel.Account.userId !== user.id
 
-  if (isUserOwner && user.hasRight(UserRight.MANAGE_VIDEO_CHANNELS) === false) {
+  if (isUserOwner && user.hasRight(UserRight.MANAGE_ANY_VIDEO_CHANNEL) === false) {
     const message = `User ${user.username} does not have right to manage channel ${req.params.nameWithHost}.`
     logger.info(message)
 

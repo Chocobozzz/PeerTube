@@ -105,7 +105,7 @@ export class VideoChannelsComponent implements OnInit, OnDestroy {
   isManageable () {
     if (!this.isUserLoggedIn()) return false
 
-    return this.isOwner() || this.authService.getUser().hasRight(UserRight.MANAGE_VIDEO_CHANNELS)
+    return this.isOwner() || this.authService.getUser().hasRight(UserRight.MANAGE_ANY_VIDEO_CHANNEL)
   }
 
   activateCopiedMessage () {
