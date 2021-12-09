@@ -68,26 +68,6 @@ async function getOrCreateAPActor (
   return actorRefreshed
 }
 
-// ---------------------------------------------------------------------------
-
-export {
-  getOrCreateAPActor
-}
-
-// ---------------------------------------------------------------------------
-
-async function loadActorFromDB (actorUrl: string, fetchType: ActorLoadByUrlType) {
-  let actor = await loadActorByUrl(actorUrl, fetchType)
-
-  // Orphan actor (not associated to an account of channel) so recreate it
-  if (actor && (!actor.Account && !actor.VideoChannel)) {
-    await actor.destroy()
-    actor = null
-  }
-
-  return actor
-}
-
 function getOrCreateAPOwner (actorObject: ActivityPubActor, actorUrl: string) {
   const accountAttributedTo = actorObject.attributedTo.find(a => a.type === 'Person')
   if (!accountAttributedTo) throw new Error('Cannot find account attributed to video channel ' + actorUrl)
@@ -104,6 +84,27 @@ function getOrCreateAPOwner (actorObject: ActivityPubActor, actorUrl: string) {
     logger.error('Cannot get or create account attributed to video channel ' + actorUrl)
     throw new Error(err)
   }
+}
+
+// ---------------------------------------------------------------------------
+
+export {
+  getOrCreateAPOwner,
+  getOrCreateAPActor
+}
+
+// ---------------------------------------------------------------------------
+
+async function loadActorFromDB (actorUrl: string, fetchType: ActorLoadByUrlType) {
+  let actor = await loadActorByUrl(actorUrl, fetchType)
+
+  // Orphan actor (not associated to an account of channel) so recreate it
+  if (actor && (!actor.Account && !actor.VideoChannel)) {
+    await actor.destroy()
+    actor = null
+  }
+
+  return actor
 }
 
 async function scheduleOutboxFetchIfNeeded (actor: MActor, created: boolean, refreshed: boolean, updateCollections: boolean) {

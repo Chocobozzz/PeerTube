@@ -1,8 +1,10 @@
 import { resetSequelizeInstance, runInReadCommittedTransaction } from '@server/helpers/database-utils'
 import { logger } from '@server/helpers/logger'
+import { AccountModel } from '@server/models/account/account'
 import { VideoChannelModel } from '@server/models/video/video-channel'
 import { MAccount, MActor, MActorFull, MChannel } from '@server/types/models'
 import { ActivityPubActor, ActorImageType } from '@shared/models'
+import { getOrCreateAPOwner } from './get'
 import { updateActorImageInstance } from './image'
 import { fetchActorFollowsCount } from './shared'
 import { getImageInfoFromObject } from './shared/object-to-model-attributes'
@@ -36,7 +38,13 @@ export class APActorUpdater {
       this.accountOrChannel.name = this.actorObject.name || this.actorObject.preferredUsername
       this.accountOrChannel.description = this.actorObject.summary
 
-      if (this.accountOrChannel instanceof VideoChannelModel) this.accountOrChannel.support = this.actorObject.support
+      if (this.accountOrChannel instanceof VideoChannelModel) {
+        const owner = await getOrCreateAPOwner(this.actorObject, this.actorObject.url)
+        this.accountOrChannel.accountId = owner.Account.id
+        this.accountOrChannel.Account = owner.Account as AccountModel
+
+        this.accountOrChannel.support = this.actorObject.support
+      }
 
       await runInReadCommittedTransaction(async t => {
         await updateActorImageInstance(this.actor, ActorImageType.AVATAR, avatarInfo, t)

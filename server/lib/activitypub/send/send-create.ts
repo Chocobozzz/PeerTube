@@ -116,7 +116,7 @@ function buildCreateActivity (url: string, byActor: MActorLight, object: any, au
       type: 'Create' as 'Create',
       id: url + '/activity',
       actor: byActor.url,
-      object: audiencify(object, audience)
+      object
     },
     audience
   )
