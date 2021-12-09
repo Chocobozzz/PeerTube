@@ -80,7 +80,7 @@ const videoChannelsRemoveValidator = [
     if (!await doesVideoChannelNameWithHostExist(req.params.nameWithHost, res)) return
 
     if (!checkUserCanDeleteVideoChannel(res.locals.oauth.token.User, res.locals.videoChannel, res)) return
-    if (!await checkVideoChannelIsNotTheLastOne(res)) return
+    if (!await checkVideoChannelIsNotTheLastOne(res.locals.videoChannel, res)) return
 
     return next()
   }
@@ -174,8 +174,8 @@ function checkUserCanDeleteVideoChannel (user: MUser, videoChannel: MChannelAcco
   return true
 }
 
-async function checkVideoChannelIsNotTheLastOne (res: express.Response) {
-  const count = await VideoChannelModel.countByAccount(res.locals.oauth.token.User.Account.id)
+async function checkVideoChannelIsNotTheLastOne (videoChannel: MChannelAccountDefault, res: express.Response) {
+  const count = await VideoChannelModel.countByAccount(videoChannel.Account.id)
 
   if (count <= 1) {
     res.fail({
