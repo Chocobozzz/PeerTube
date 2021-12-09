@@ -63,6 +63,9 @@ export const serverFilterHookObject = {
   'filter:api.video-thread-comments.list.params': true,
   'filter:api.video-thread-comments.list.result': true,
 
+  // Filter get stats result
+  'filter:api.server.stats.get.result': true,
+
   // Filter result used to check if we need to auto blacklist a video
   // (fired when a local or remote video is created or updated)
   'filter:video.auto-blacklist.result': true,

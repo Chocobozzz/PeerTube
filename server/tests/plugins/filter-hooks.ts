@@ -537,6 +537,16 @@ describe('Test plugin filter hooks', function () {
     })
   })
 
+  describe('Stats filters', function () {
+
+    it('Should run filter:api.server.stats.get.result', async function () {
+      const data = await servers[0].stats.get()
+
+      expect((data as any).customStats).to.equal(14)
+    })
+
+  })
+
   after(async function () {
     await cleanupTests(servers)
   })

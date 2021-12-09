@@ -233,6 +233,13 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
     }
   })
 
+  registerHook({
+    target: 'filter:api.server.stats.get.result',
+    handler: (result) => {
+      return { ...result, customStats: 14 }
+    }
+  })
+
   {
     const filterHooks = [
       'filter:api.search.videos.local.list.params',
