@@ -189,7 +189,7 @@ export type SummaryOptions = {
   [ScopeNames.SUMMARY]: (options: SummaryOptions = {}) => {
     const include: Includeable[] = [
       {
-        attributes: [ 'id', 'preferredUsername', 'url', 'serverId', 'avatarId' ],
+        attributes: [ 'id', 'preferredUsername', 'url', 'serverId', 'avatarMiniatureId' ],
         model: ActorModel.unscoped(),
         required: options.actorRequired ?? true,
         include: [
@@ -200,7 +200,7 @@ export type SummaryOptions = {
           },
           {
             model: ActorImageModel.unscoped(),
-            as: 'Avatar',
+            as: 'AvatarMini',
             required: false
           }
         ]
@@ -706,7 +706,7 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
       displayName: this.getDisplayName(),
       url: actor.url,
       host: actor.host,
-      avatar: actor.avatar
+      avatarMiniature: actor.avatarMiniature
     }
   }
 
@@ -731,6 +731,8 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
     const actor = this.Actor.toFormattedJSON()
     const videoChannel = {
       id: this.id,
+      avatar: actor.avatar,
+      avatarMiniature: actor.avatarMiniature,
       displayName: this.getDisplayName(),
       description: this.description,
       support: this.support,

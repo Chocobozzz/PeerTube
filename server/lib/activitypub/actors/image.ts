@@ -15,7 +15,9 @@ type ImageInfo = {
 async function updateActorImageInstance (actor: MActorImages, type: ActorImageType, imageInfo: ImageInfo | null, t: Transaction) {
   const oldImageModel = type === ActorImageType.AVATAR
     ? actor.Avatar
-    : actor.Banner
+    : type === ActorImageType.AVATAR_MINIATURE
+      ? actor.AvatarMini
+      : actor.Banner
 
   if (oldImageModel) {
     // Don't update the avatar if the file URL did not change
@@ -48,16 +50,25 @@ async function updateActorImageInstance (actor: MActorImages, type: ActorImageTy
 
 async function deleteActorImageInstance (actor: MActorImages, type: ActorImageType, t: Transaction) {
   try {
-    if (type === ActorImageType.AVATAR) {
-      await actor.Avatar.destroy({ transaction: t })
+    switch (type) {
+      case ActorImageType.AVATAR:
+        await actor.Avatar.destroy({ transaction: t })
 
-      actor.avatarId = null
-      actor.Avatar = null
-    } else {
-      await actor.Banner.destroy({ transaction: t })
+        actor.avatarId = null
+        actor.Avatar = null
+        break
+      case ActorImageType.BANNER:
+        await actor.Banner.destroy({ transaction: t })
 
-      actor.bannerId = null
-      actor.Banner = null
+        actor.bannerId = null
+        actor.Banner = null
+        break
+      case ActorImageType.AVATAR_MINIATURE:
+        await actor.AvatarMini.destroy({ transaction: t })
+
+        actor.AvatarMini = null
+        actor.AvatarMini = null
+        break
     }
   } catch (err) {
     logger.error('Cannot remove old image of actor %s.', actor.url, { err })
@@ -82,12 +93,19 @@ function setActorImage (actorModel: MActorImages, type: ActorImageType, imageMod
     ? imageModel.id
     : null
 
-  if (type === ActorImageType.AVATAR) {
-    actorModel.avatarId = id
-    actorModel.Avatar = imageModel
-  } else {
-    actorModel.bannerId = id
-    actorModel.Banner = imageModel
+  switch (type) {
+    case ActorImageType.AVATAR:
+      actorModel.avatarId = id
+      actorModel.Avatar = imageModel
+      break
+    case ActorImageType.BANNER:
+      actorModel.bannerId = id
+      actorModel.Banner = imageModel
+      break
+    case ActorImageType.AVATAR_MINIATURE:
+      actorModel.avatarMiniatureId = id
+      actorModel.AvatarMini = imageModel
+      break
   }
 
   return actorModel

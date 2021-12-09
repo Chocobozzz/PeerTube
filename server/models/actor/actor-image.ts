@@ -83,11 +83,13 @@ export class ActorImageModel extends Model<Partial<AttributesOnly<ActorImageMode
   }
 
   getStaticPath () {
-    if (this.type === ActorImageType.AVATAR) {
-      return join(LAZY_STATIC_PATHS.AVATARS, this.filename)
+    switch (this.type) {
+      case ActorImageType.AVATAR:
+      case ActorImageType.AVATAR_MINIATURE:
+        return join(LAZY_STATIC_PATHS.AVATARS, this.filename)
+      default:
+        return join(LAZY_STATIC_PATHS.BANNERS, this.filename)
     }
-
-    return join(LAZY_STATIC_PATHS.BANNERS, this.filename)
   }
 
   getPath () {

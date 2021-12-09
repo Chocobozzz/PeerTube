@@ -19,6 +19,7 @@ export interface VideoChannel extends Actor {
   videosCount?: number
   viewsPerDay?: ViewsPerDate[] // chronologically ordered
 
+  avatar?: ActorImage
   banner?: ActorImage
 }
 
@@ -28,5 +29,5 @@ export interface VideoChannelSummary {
   displayName: string
   url: string
   host: string
-  avatar?: ActorImage
+  avatarMiniature?: ActorImage
 }

@@ -36,7 +36,7 @@ function buildActorWithAvatarInclude () {
     include: [
       {
         attributes: [ 'filename' ],
-        as: 'Avatar',
+        as: 'AvatarMini',
         model: ActorImageModel.unscoped(),
         required: false
       },
@@ -175,7 +175,7 @@ function buildAccountInclude (required: boolean, withActor = false) {
               },
               {
                 attributes: [ 'filename' ],
-                as: 'Avatar',
+                as: 'AvatarMini',
                 model: ActorImageModel.unscoped(),
                 required: false
               },
@@ -570,7 +570,9 @@ export class UserNotificationModel extends Model<Partial<AttributesOnly<UserNoti
           id: this.ActorFollow.ActorFollower.Account.id,
           displayName: this.ActorFollow.ActorFollower.Account.getDisplayName(),
           name: this.ActorFollow.ActorFollower.preferredUsername,
-          avatar: this.ActorFollow.ActorFollower.Avatar ? { path: this.ActorFollow.ActorFollower.Avatar.getStaticPath() } : undefined,
+          avatarMiniature: this.ActorFollow.ActorFollower.AvatarMini
+            ? { path: this.ActorFollow.ActorFollower.AvatarMini.getStaticPath() }
+            : undefined,
           host: this.ActorFollow.ActorFollower.getHost()
         },
         following: {
@@ -654,8 +656,8 @@ export class UserNotificationModel extends Model<Partial<AttributesOnly<UserNoti
     this: UserNotificationModelForApi,
     accountOrChannel: UserNotificationIncludes.AccountIncludeActor | UserNotificationIncludes.VideoChannelIncludeActor
   ) {
-    const avatar = accountOrChannel.Actor.Avatar
-      ? { path: accountOrChannel.Actor.Avatar.getStaticPath() }
+    const avatarMiniature = accountOrChannel.Actor.AvatarMini
+      ? { path: accountOrChannel.Actor.AvatarMini.getStaticPath() }
       : undefined
 
     return {
@@ -663,7 +665,7 @@ export class UserNotificationModel extends Model<Partial<AttributesOnly<UserNoti
       displayName: accountOrChannel.getDisplayName(),
       name: accountOrChannel.Actor.preferredUsername,
       host: accountOrChannel.Actor.getHost(),
-      avatar
+      avatarMiniature
     }
   }
 }

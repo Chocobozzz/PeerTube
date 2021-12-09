@@ -4,6 +4,7 @@ import { Actor } from './actor.model'
 export interface Account extends Actor {
   displayName: string
   description: string
+  avatar?: ActorImage
 
   updatedAt: Date | string
 
@@ -16,5 +17,5 @@ export interface AccountSummary {
   displayName: string
   url: string
   host: string
-  avatar?: ActorImage
+  avatarMiniature?: ActorImage
 }

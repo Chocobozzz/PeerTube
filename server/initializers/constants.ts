@@ -14,7 +14,7 @@ import {
   VideoTranscodingFPS
 } from '../../shared/models'
 import { ActivityPubActorType } from '../../shared/models/activitypub'
-import { FollowState } from '../../shared/models/actors'
+import { ActorImageType, FollowState } from '../../shared/models/actors'
 import { NSFWPolicyType } from '../../shared/models/videos/nsfw-policy.type'
 import { VideoPlaylistPrivacy } from '../../shared/models/videos/playlist/video-playlist-privacy.model'
 import { VideoPlaylistType } from '../../shared/models/videos/playlist/video-playlist-type.model'
@@ -633,12 +633,16 @@ const PREVIEWS_SIZE = {
   height: 480,
   minWidth: 400
 }
-const ACTOR_IMAGES_SIZE = {
-  AVATARS: {
+const ACTOR_IMAGES_SIZE: { [key in ActorImageType]: { width: number, height: number }} = {
+  [ActorImageType.AVATAR]: {
     width: 120,
     height: 120
   },
-  BANNERS: {
+  [ActorImageType.AVATAR_MINIATURE]: {
+    width: 48,
+    height: 48
+  },
+  [ActorImageType.BANNER]: {
     width: 1920,
     height: 317 // 6/1 ratio
   }
@@ -793,8 +797,8 @@ if (isTestInstance() === true) {
   ACTIVITY_PUB.VIDEO_REFRESH_INTERVAL = 10 * 1000 // 10 seconds
   ACTIVITY_PUB.VIDEO_PLAYLIST_REFRESH_INTERVAL = 10 * 1000 // 10 seconds
 
-  CONSTRAINTS_FIELDS.ACTORS.IMAGE.FILE_SIZE.max = 100 * 1024 // 100KB
-  CONSTRAINTS_FIELDS.VIDEOS.IMAGE.FILE_SIZE.max = 400 * 1024 // 400KB
+  // CONSTRAINTS_FIELDS.ACTORS.IMAGE.FILE_SIZE.max = 100 * 1024 // 100KB
+  // CONSTRAINTS_FIELDS.VIDEOS.IMAGE.FILE_SIZE.max = 400 * 1024 // 400KB
 
   SCHEDULER_INTERVALS_MS.ACTOR_FOLLOW_SCORES = 1000
   SCHEDULER_INTERVALS_MS.REMOVE_OLD_JOBS = 10000

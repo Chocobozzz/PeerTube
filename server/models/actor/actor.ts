@@ -81,6 +81,11 @@ export const unusedActorAttributesForAPI = [
     },
     {
       model: ActorImageModel,
+      as: 'AvatarMini',
+      required: false
+    },
+    {
+      model: ActorImageModel,
       as: 'Avatar',
       required: false
     }
@@ -110,6 +115,11 @@ export const unusedActorAttributesForAPI = [
       {
         model: ActorImageModel,
         as: 'Avatar',
+        required: false
+      },
+      {
+        model: ActorImageModel,
+        as: 'AvatarMini',
         required: false
       },
       {
@@ -237,6 +247,10 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
 
   @ForeignKey(() => ActorImageModel)
   @Column
+  avatarMiniatureId: number
+
+  @ForeignKey(() => ActorImageModel)
+  @Column
   bannerId: number
 
   @BelongsTo(() => ActorImageModel, {
@@ -249,6 +263,17 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
     hooks: true
   })
   Avatar: ActorImageModel
+
+  @BelongsTo(() => ActorImageModel, {
+    foreignKey: {
+      name: 'avatarMiniatureId',
+      allowNull: true
+    },
+    as: 'AvatarMini',
+    onDelete: 'set null',
+    hooks: true
+  })
+  AvatarMini: ActorImageModel
 
   @BelongsTo(() => ActorImageModel, {
     foreignKey: {
@@ -532,16 +557,16 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
   }
 
   toFormattedSummaryJSON (this: MActorSummaryFormattable) {
-    let avatar: ActorImage = null
-    if (this.Avatar) {
-      avatar = this.Avatar.toFormattedJSON()
+    let avatarMiniature: ActorImage = null
+    if (this.AvatarMini) {
+      avatarMiniature = this.AvatarMini.toFormattedJSON()
     }
 
     return {
       url: this.url,
       name: this.preferredUsername,
       host: this.getHost(),
-      avatar
+      avatarMiniature
     }
   }
 
@@ -553,13 +578,19 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
       banner = this.Banner.toFormattedJSON()
     }
 
+    let avatar: ActorImage = null
+    if (this.Avatar) {
+      avatar = this.Avatar.toFormattedJSON()
+    }
+
     return Object.assign(base, {
       id: this.id,
       hostRedundancyAllowed: this.getRedundancyAllowed(),
       followingCount: this.followingCount,
       followersCount: this.followersCount,
       banner,
-      createdAt: this.getCreatedAt()
+      createdAt: this.getCreatedAt(),
+      avatar
     })
   }
 

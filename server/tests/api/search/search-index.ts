@@ -134,12 +134,12 @@ describe('Test videos search', function () {
       expect(video.account.host).to.equal('framatube.org')
       expect(video.account.name).to.equal('framasoft')
       expect(video.account.url).to.equal('https://framatube.org/accounts/framasoft')
-      expect(video.account.avatar).to.exist
+      expect(video.account.avatarMiniature).to.exist
 
       expect(video.channel.host).to.equal('framatube.org')
       expect(video.channel.name).to.equal('joinpeertube')
       expect(video.channel.url).to.equal('https://framatube.org/video-channels/joinpeertube')
-      expect(video.channel.avatar).to.exist
+      expect(video.channel.avatarMiniature).to.exist
     }
 
     const baseSearch: VideosSearchQuery = {
@@ -388,12 +388,12 @@ describe('Test videos search', function () {
       expect(videoPlaylist.ownerAccount.url).to.equal('https://peertube2.cpy.re/accounts/chocobozzz')
       expect(videoPlaylist.ownerAccount.name).to.equal('chocobozzz')
       expect(videoPlaylist.ownerAccount.host).to.equal('peertube2.cpy.re')
-      expect(videoPlaylist.ownerAccount.avatar).to.exist
+      expect(videoPlaylist.ownerAccount.avatarMiniature).to.exist
 
       expect(videoPlaylist.videoChannel.url).to.equal('https://peertube2.cpy.re/video-channels/chocobozzz_channel')
       expect(videoPlaylist.videoChannel.name).to.equal('chocobozzz_channel')
       expect(videoPlaylist.videoChannel.host).to.equal('peertube2.cpy.re')
-      expect(videoPlaylist.videoChannel.avatar).to.exist
+      expect(videoPlaylist.videoChannel.avatarMiniature).to.exist
     }
 
     it('Should make a simple search and not have results', async function () {

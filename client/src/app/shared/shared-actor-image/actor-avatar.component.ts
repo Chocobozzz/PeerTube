@@ -5,6 +5,7 @@ import { Account } from '../shared-main/account/account.model'
 type ActorInput = {
   name: string
   avatar?: { url?: string, path: string }
+  avatarMiniature?: { url?: string, path: string }
   url: string
 }
 
@@ -50,14 +51,23 @@ export class ActorAvatarComponent {
   }
 
   get defaultAvatarUrl () {
-    if (this.channel) return VideoChannel.GET_DEFAULT_AVATAR_URL()
-
-    return Account.GET_DEFAULT_AVATAR_URL()
+    if (+this.size <= 48) {
+      if (this.account) return Account.GET_DEFAULT_AVATAR_MINIATURE_URL()
+      if (this.channel) return VideoChannel.GET_DEFAULT_AVATAR_MINIATURE_URL()
+    } else {
+      if (this.account) return Account.GET_DEFAULT_AVATAR_URL()
+      if (this.channel) return VideoChannel.GET_DEFAULT_AVATAR_URL()
+    }
   }
 
   get avatarUrl () {
-    if (this.account) return Account.GET_ACTOR_AVATAR_URL(this.account)
-    if (this.channel) return VideoChannel.GET_ACTOR_AVATAR_URL(this.channel)
+    if (+this.size <= 48) {
+      if (this.account) return Account.GET_ACTOR_AVATAR_MINIATURE_URL(this.account)
+      if (this.channel) return VideoChannel.GET_ACTOR_AVATAR_MINIATURE_URL(this.channel)
+    } else {
+      if (this.account) return Account.GET_ACTOR_AVATAR_URL(this.account)
+      if (this.channel) return VideoChannel.GET_ACTOR_AVATAR_URL(this.channel)
+    }
 
     return ''
   }

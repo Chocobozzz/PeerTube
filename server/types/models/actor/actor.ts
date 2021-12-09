@@ -35,7 +35,8 @@ export type MActorRedundancyAllowedOpt = PickWithOpt<ActorModel, 'Server', MServ
 export type MActorDefaultLight =
   MActorLight &
   Use<'Server', MServerHost> &
-  Use<'Avatar', MActorImage>
+  Use<'Avatar', MActorImage> &
+  Use<'AvatarMini', MActorImage>
 
 export type MActorAccountId =
   MActor &
@@ -79,7 +80,8 @@ export type MActorServer =
 export type MActorImages =
   MActor &
   Use<'Avatar', MActorImage> &
-  UseOpt<'Banner', MActorImage>
+  UseOpt<'Banner', MActorImage> &
+  UseOpt<'AvatarMini', MActorImage>
 
 export type MActorDefault =
   MActor &
@@ -125,9 +127,9 @@ export type MActorFullActor =
 
 export type MActorSummary =
   FunctionProperties<MActor> &
-  Pick<MActor, 'id' | 'preferredUsername' | 'url' | 'serverId' | 'avatarId'> &
+  Pick<MActor, 'id' | 'preferredUsername' | 'url' | 'serverId' | 'avatarMiniatureId'> &
   Use<'Server', MServerHost> &
-  Use<'Avatar', MActorImage>
+  Use<'AvatarMini', MActorImage>
 
 export type MActorSummaryBlocks =
   MActorSummary &
@@ -145,13 +147,14 @@ export type MActorSummaryFormattable =
   FunctionProperties<MActor> &
   Pick<MActor, 'url' | 'preferredUsername'> &
   Use<'Server', MServerHost> &
-  Use<'Avatar', MActorImageFormattable>
+  Use<'AvatarMini', MActorImageFormattable>
 
 export type MActorFormattable =
   MActorSummaryFormattable &
   Pick<MActor, 'id' | 'followingCount' | 'followersCount' | 'createdAt' | 'updatedAt' | 'remoteCreatedAt' | 'bannerId' | 'avatarId'> &
   Use<'Server', MServerHost & Partial<Pick<MServer, 'redundancyAllowed'>>> &
-  UseOpt<'Banner', MActorImageFormattable>
+  UseOpt<'Banner', MActorImageFormattable> &
+  UseOpt<'Avatar', MActorImageFormattable>
 
 type MActorAPBase =
   MActor &

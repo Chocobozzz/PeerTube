@@ -14,6 +14,7 @@ export abstract class Actor implements ServerActor {
   createdAt: Date | string
 
   avatar: ActorImage
+  avatarMiniature: ActorImage
 
   isLocal: boolean
 
@@ -24,6 +25,18 @@ export abstract class Actor implements ServerActor {
       const absoluteAPIUrl = getAbsoluteAPIUrl()
 
       return absoluteAPIUrl + actor.avatar.path
+    }
+
+    return ''
+  }
+
+  static GET_ACTOR_AVATAR_MINIATURE_URL (actor: { avatarMiniature?: { url?: string, path: string } }) {
+    if (actor?.avatarMiniature?.url) return actor.avatarMiniature.url
+
+    if (actor?.avatarMiniature) {
+      const absoluteAPIUrl = getAbsoluteAPIUrl()
+
+      return absoluteAPIUrl + actor.avatarMiniature.path
     }
 
     return ''
@@ -56,6 +69,7 @@ export abstract class Actor implements ServerActor {
     if (hash.createdAt) this.createdAt = new Date(hash.createdAt.toString())
 
     this.avatar = hash.avatar
+    this.avatarMiniature = hash.avatarMiniature
     this.isLocal = Actor.IS_LOCAL(this.host)
   }
 }

@@ -20,7 +20,7 @@ export class UserNotification implements UserNotificationServer {
   read: boolean
 
   video?: VideoInfo & {
-    channel: ActorInfo & { avatarUrl?: string }
+    channel: ActorInfo & { avatarMiniatureUrl?: string }
   }
 
   videoImport?: {
@@ -34,7 +34,7 @@ export class UserNotification implements UserNotificationServer {
   comment?: {
     id: number
     threadId: number
-    account: ActorInfo & { avatarUrl?: string }
+    account: ActorInfo & { avatarMiniatureUrl?: string }
     video: VideoInfo
   }
 
@@ -58,12 +58,12 @@ export class UserNotification implements UserNotificationServer {
     video: VideoInfo
   }
 
-  account?: ActorInfo & { avatarUrl?: string }
+  account?: ActorInfo & { avatarMiniatureUrl?: string }
 
   actorFollow?: {
     id: number
     state: FollowState
-    follower: ActorInfo & { avatarUrl?: string }
+    follower: ActorInfo & { avatarMiniatureUrl?: string }
     following: {
       type: 'account' | 'channel' | 'instance'
       name: string
@@ -120,17 +120,17 @@ export class UserNotification implements UserNotificationServer {
       this.videoImport = hash.videoImport
 
       this.comment = hash.comment
-      if (this.comment) this.setAccountAvatarUrl(this.comment.account)
+      if (this.comment) this.setAccountAvatarMiniatureUrl(this.comment.account)
 
       this.abuse = hash.abuse
 
       this.videoBlacklist = hash.videoBlacklist
 
       this.account = hash.account
-      if (this.account) this.setAccountAvatarUrl(this.account)
+      if (this.account) this.setAccountAvatarMiniatureUrl(this.account)
 
       this.actorFollow = hash.actorFollow
-      if (this.actorFollow) this.setAccountAvatarUrl(this.actorFollow.follower)
+      if (this.actorFollow) this.setAccountAvatarMiniatureUrl(this.actorFollow.follower)
 
       this.plugin = hash.plugin
       this.peertube = hash.peertube
@@ -254,11 +254,11 @@ export class UserNotification implements UserNotificationServer {
     return [ this.buildVideoUrl(comment.video), { threadId: comment.threadId } ]
   }
 
-  private setAccountAvatarUrl (actor: { avatarUrl?: string, avatar?: { url?: string, path: string } }) {
-    actor.avatarUrl = Account.GET_ACTOR_AVATAR_URL(actor) || Account.GET_DEFAULT_AVATAR_URL()
+  private setAccountAvatarMiniatureUrl (actor: { avatarMiniatureUrl?: string, avatarMiniature?: { url?: string, path: string } }) {
+    actor.avatarMiniatureUrl = Account.GET_ACTOR_AVATAR_MINIATURE_URL(actor) || Account.GET_DEFAULT_AVATAR_MINIATURE_URL()
   }
 
-  private setVideoChannelAvatarUrl (actor: { avatarUrl?: string, avatar?: { url?: string, path: string } }) {
-    actor.avatarUrl = VideoChannel.GET_ACTOR_AVATAR_URL(actor) || VideoChannel.GET_DEFAULT_AVATAR_URL()
+  private setVideoChannelAvatarUrl (actor: { avatarMiniatureUrl?: string, avatarMiniature?: { url?: string, path: string } }) {
+    actor.avatarMiniatureUrl = VideoChannel.GET_ACTOR_AVATAR_MINIATURE_URL(actor) || VideoChannel.GET_DEFAULT_AVATAR_URL()
   }
 }

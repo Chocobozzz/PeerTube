@@ -1,10 +1,10 @@
 import { isActivityPubUrlValid } from '@server/helpers/custom-validators/activitypub/misc'
-import { MIMETYPES } from '@server/initializers/constants'
+import { ACTOR_IMAGES_SIZE, MIMETYPES } from '@server/initializers/constants'
 import { ActorModel } from '@server/models/actor/actor'
 import { FilteredModelAttributes } from '@server/types'
 import { getLowercaseExtension } from '@shared/core-utils'
 import { buildUUID } from '@shared/extra-utils'
-import { ActivityPubActor, ActorImageType } from '@shared/models'
+import { ActivityIconObject, ActivityPubActor, ActorImageType } from '@shared/models'
 
 function getActorAttributesFromObject (
   actorObject: ActivityPubActor,
@@ -30,10 +30,17 @@ function getActorAttributesFromObject (
   }
 }
 
+function normalizeIcon (icon: ActivityIconObject | ActivityIconObject[]): ActivityIconObject[] {
+  if (Array.isArray(icon) === true) return icon as ActivityIconObject[]
+
+  return [ icon ] as ActivityIconObject[]
+}
+
 function getImageInfoFromObject (actorObject: ActivityPubActor, type: ActorImageType) {
   const mimetypes = MIMETYPES.IMAGE
-  const icon = type === ActorImageType.AVATAR
-    ? actorObject.icon
+  const nIcon = normalizeIcon(actorObject.icon)
+  const icon = [ ActorImageType.AVATAR, ActorImageType.AVATAR_MINIATURE ].includes(type)
+    ? (nIcon.length > 1 ? nIcon.find(icon => icon?.height === ACTOR_IMAGES_SIZE[type].height) : nIcon[0]) // Backward compatibility
     : actorObject.image
 
   if (!icon || icon.type !== 'Image' || !isActivityPubUrlValid(icon.url)) return undefined

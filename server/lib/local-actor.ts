@@ -2,6 +2,7 @@ import 'multer'
 import { queue } from 'async'
 import LRUCache from 'lru-cache'
 import { join } from 'path'
+import { remove } from 'fs-extra'
 import { ActorModel } from '@server/models/actor/actor'
 import { getLowercaseExtension } from '@shared/core-utils'
 import { buildUUID } from '@shared/extra-utils'
@@ -12,9 +13,11 @@ import { downloadImage } from '../helpers/requests'
 import { CONFIG } from '../initializers/config'
 import { ACTOR_IMAGES_SIZE, LRU_CACHE, QUEUE_CONCURRENCY, WEBSERVER } from '../initializers/constants'
 import { sequelizeTypescript } from '../initializers/database'
-import { MAccountDefault, MActor, MChannelDefault } from '../types/models'
+import { MAccountDefault, MActor, MActorDefault, MActorImages, MChannelDefault } from '../types/models'
 import { deleteActorImageInstance, updateActorImageInstance } from './activitypub/actors'
 import { sendUpdateActor } from './activitypub/send'
+import { Transaction } from 'sequelize/types'
+import { logger } from '@server/helpers/logger'
 
 function buildActorInstance (type: ActivityPubActorType, url: string, preferredUsername: string) {
   return new ActorModel({
@@ -33,23 +36,30 @@ function buildActorInstance (type: ActivityPubActorType, url: string, preferredU
   }) as MActor
 }
 
-async function updateLocalActorImageFile (
+async function updateLocalActorImagesFile (
   accountOrChannel: MAccountDefault | MChannelDefault,
   imagePhysicalFile: Express.Multer.File,
-  type: ActorImageType
+  types: ActorImageType[]
 ) {
-  const imageSize = type === ActorImageType.AVATAR
-    ? ACTOR_IMAGES_SIZE.AVATARS
-    : ACTOR_IMAGES_SIZE.BANNERS
+  const results = await Promise.all(types.map(async type => {
+    const imageSize = ACTOR_IMAGES_SIZE[type]
+    const extension = getLowercaseExtension(imagePhysicalFile.filename)
 
-  const extension = getLowercaseExtension(imagePhysicalFile.filename)
+    const imageName = buildUUID() + extension
+    const destination = join(CONFIG.STORAGE.ACTOR_IMAGES, imageName)
+    await processImage(imagePhysicalFile.path, destination, imageSize, true)
 
-  const imageName = buildUUID() + extension
-  const destination = join(CONFIG.STORAGE.ACTOR_IMAGES, imageName)
-  await processImage(imagePhysicalFile.path, destination, imageSize)
+    return {
+      imageName,
+      imageSize,
+      type
+    }
+  }))
 
-  return retryTransactionWrapper(() => {
-    return sequelizeTypescript.transaction(async t => {
+  await remove(imagePhysicalFile.path)
+
+  return retryTransactionWrapper(() => sequelizeTypescript.transaction(async t =>
+    Promise.all(results.map(async ({ imageName, imageSize, type }) => {
       const actorImageInfo = {
         name: imageName,
         fileUrl: null,
@@ -65,9 +75,11 @@ async function updateLocalActorImageFile (
 
       return type === ActorImageType.AVATAR
         ? updatedActor.Avatar
-        : updatedActor.Banner
-    })
-  })
+        : type === ActorImageType.AVATAR_MINIATURE
+          ? updatedActor.AvatarMini
+          : updatedActor.Banner
+    }))
+  ))
 }
 
 async function deleteLocalActorImageFile (accountOrChannel: MAccountDefault | MChannelDefault, type: ActorImageType) {
@@ -86,9 +98,7 @@ async function deleteLocalActorImageFile (accountOrChannel: MAccountDefault | MC
 type DownloadImageQueueTask = { fileUrl: string, filename: string, type: ActorImageType }
 
 const downloadImageQueue = queue<DownloadImageQueueTask, Error>((task, cb) => {
-  const size = task.type === ActorImageType.AVATAR
-    ? ACTOR_IMAGES_SIZE.AVATARS
-    : ACTOR_IMAGES_SIZE.BANNERS
+  const size = ACTOR_IMAGES_SIZE[task.type]
 
   downloadImage(task.fileUrl, CONFIG.STORAGE.ACTOR_IMAGES, task.filename, size)
     .then(() => cb())
@@ -108,10 +118,65 @@ function pushActorImageProcessInQueue (task: DownloadImageQueueTask) {
 // Unsafe so could returns paths that does not exist anymore
 const actorImagePathUnsafeCache = new LRUCache<string, string>({ max: LRU_CACHE.ACTOR_IMAGE_STATIC.MAX_SIZE })
 
+async function generateAvatarMini
+(Actor: MActorDefault, afterCb?: (t: Transaction, updateActor: MActorImages) => Promise<any>, transaction?: Transaction) {
+  if (Actor.Avatar.onDisk === false) {
+    try {
+      await pushActorImageProcessInQueue({ filename: Actor.Avatar.filename, fileUrl: Actor.Avatar.fileUrl, type: Actor.Avatar.type })
+    } catch (err) {
+      logger.warn('Cannot process remote actor image %s.', Actor.Avatar.fileUrl, { err })
+
+      throw err
+    }
+
+    Actor.Avatar.onDisk = true
+    Actor.Avatar.save()
+      .catch(err => logger.error('Cannot save new actor image disk state.', { err }))
+  }
+
+  const imageSize = ACTOR_IMAGES_SIZE[ActorImageType.AVATAR_MINIATURE]
+  const sourceFilename = Actor.Avatar.filename
+  const extension = getLowercaseExtension(sourceFilename)
+
+  const imageName = buildUUID() + extension
+  const source = join(CONFIG.STORAGE.ACTOR_IMAGES, sourceFilename)
+  const destination = join(CONFIG.STORAGE.ACTOR_IMAGES, imageName)
+  await processImage(source, destination, imageSize, true)
+
+  return retryTransactionWrapper(async () => {
+    const save = async t => {
+      const actorImageInfo = {
+        name: imageName,
+        fileUrl: null,
+        height: imageSize.height,
+        width: imageSize.width,
+        onDisk: true
+      }
+
+      const updatedActor = await updateActorImageInstance(Actor, ActorImageType.AVATAR_MINIATURE, actorImageInfo, t)
+
+      if (!transaction) {
+        await updatedActor.save({ transaction: t })
+      }
+
+      if (afterCb) {
+        await afterCb(t, updatedActor)
+      }
+    }
+
+    if (transaction) {
+      await save(transaction)
+    } else {
+      await sequelizeTypescript.transaction(save)
+    }
+  })
+}
+
 export {
   actorImagePathUnsafeCache,
-  updateLocalActorImageFile,
+  updateLocalActorImagesFile as updateLocalActorImageFile,
   deleteLocalActorImageFile,
   pushActorImageProcessInQueue,
-  buildActorInstance
+  buildActorInstance,
+  generateAvatarMini
 }

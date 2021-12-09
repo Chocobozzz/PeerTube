@@ -48,6 +48,9 @@ export interface ActorInfo {
   avatar?: {
     path: string
   }
+  avatarMiniature?: {
+    path: string
+  }
 }
 
 export interface UserNotification {

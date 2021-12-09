@@ -42,8 +42,8 @@ export class AbstractVideoQueryBuilder extends AbstractRunQuery {
     )
 
     this.addJoin(
-      'LEFT OUTER JOIN "actorImage" AS "VideoChannel->Actor->Avatar" ' +
-        'ON "VideoChannel->Actor"."avatarId" = "VideoChannel->Actor->Avatar"."id"'
+      'LEFT OUTER JOIN "actorImage" AS "VideoChannel->Actor->AvatarMini" ' +
+        'ON "VideoChannel->Actor"."avatarMiniatureId" = "VideoChannel->Actor->AvatarMini"."id"'
     )
 
     this.attributes = {
@@ -51,7 +51,7 @@ export class AbstractVideoQueryBuilder extends AbstractRunQuery {
 
       ...this.buildAttributesObject('VideoChannel', this.tables.getChannelAttributes()),
       ...this.buildActorInclude('VideoChannel->Actor'),
-      ...this.buildAvatarInclude('VideoChannel->Actor->Avatar'),
+      ...this.buildAvatarInclude('VideoChannel->Actor->AvatarMini'),
       ...this.buildServerInclude('VideoChannel->Actor->Server')
     }
   }
@@ -68,8 +68,8 @@ export class AbstractVideoQueryBuilder extends AbstractRunQuery {
     )
 
     this.addJoin(
-      'LEFT OUTER JOIN "actorImage" AS "VideoChannel->Account->Actor->Avatar" ' +
-        'ON "VideoChannel->Account->Actor"."avatarId" = "VideoChannel->Account->Actor->Avatar"."id"'
+      'LEFT OUTER JOIN "actorImage" AS "VideoChannel->Account->Actor->AvatarMini" ' +
+        'ON "VideoChannel->Account->Actor"."avatarMiniatureId" = "VideoChannel->Account->Actor->AvatarMini"."id"'
     )
 
     this.attributes = {
@@ -77,7 +77,7 @@ export class AbstractVideoQueryBuilder extends AbstractRunQuery {
 
       ...this.buildAttributesObject('VideoChannel->Account', this.tables.getAccountAttributes()),
       ...this.buildActorInclude('VideoChannel->Account->Actor'),
-      ...this.buildAvatarInclude('VideoChannel->Account->Actor->Avatar'),
+      ...this.buildAvatarInclude('VideoChannel->Account->Actor->AvatarMini'),
       ...this.buildServerInclude('VideoChannel->Account->Actor->Server')
     }
   }

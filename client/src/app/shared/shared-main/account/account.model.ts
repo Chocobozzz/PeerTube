@@ -21,8 +21,16 @@ export class Account extends Actor implements ServerAccount {
     return Actor.GET_ACTOR_AVATAR_URL(actor)
   }
 
+  static GET_ACTOR_AVATAR_MINIATURE_URL (actor: { avatarMiniature?: { url?: string, path: string } }) {
+    return Actor.GET_ACTOR_AVATAR_MINIATURE_URL(actor)
+  }
+
   static GET_DEFAULT_AVATAR_URL () {
     return `${window.location.origin}/client/assets/images/default-avatar-account.png`
+  }
+
+  static GET_DEFAULT_AVATAR_MINIATURE_URL () {
+    return `${window.location.origin}/client/assets/images/default-avatar-account-48x48.png`
   }
 
   constructor (hash: ServerAccount) {
@@ -44,6 +52,7 @@ export class Account extends Actor implements ServerAccount {
 
   updateAvatar (newAvatar: ActorImage) {
     this.avatar = newAvatar
+    this.avatarMiniature = newAvatar
   }
 
   resetAvatar () {

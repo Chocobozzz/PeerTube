@@ -9,6 +9,7 @@ import { ActivityPubActor, ActorImageType } from '@shared/models'
 import { updateActorImageInstance } from '../image'
 import { getActorAttributesFromObject, getActorDisplayNameFromObject, getImageInfoFromObject } from './object-to-model-attributes'
 import { fetchActorFollowsCount } from './url-to-object'
+import { generateAvatarMini } from '@server/lib/local-actor'
 
 export class APActorCreator {
 
@@ -29,6 +30,12 @@ export class APActorCreator {
 
       await this.setImageIfNeeded(actorInstance, ActorImageType.AVATAR, t)
       await this.setImageIfNeeded(actorInstance, ActorImageType.BANNER, t)
+
+      if (Array.isArray(this.actorObject.icon)) {
+        await this.setImageIfNeeded(actorInstance, ActorImageType.AVATAR_MINIATURE, t)
+      } else if (actorInstance.Avatar) {
+        await generateAvatarMini(actorInstance, null, t) // Backward compatibility for version < 4.1
+      }
 
       const { actorCreated, created } = await this.saveActor(actorInstance, t)
 

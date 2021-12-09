@@ -6,7 +6,7 @@ import { basename } from 'path'
 import { ACTOR_IMAGES_SIZE } from '@server/initializers/constants'
 import { testFileExistsOrNot, testImage } from '@server/tests/shared'
 import { wait } from '@shared/core-utils'
-import { User, VideoChannel } from '@shared/models'
+import { ActorImageType, User, VideoChannel } from '@shared/models'
 import {
   cleanupTests,
   createMultipleServers,
@@ -287,8 +287,8 @@ describe('Test video channels', function () {
       await testFileExistsOrNot(server, 'avatars', basename(avatarPaths[server.port]), true)
 
       const row = await server.sql.getActorImage(basename(avatarPaths[server.port]))
-      expect(row.height).to.equal(ACTOR_IMAGES_SIZE.AVATARS.height)
-      expect(row.width).to.equal(ACTOR_IMAGES_SIZE.AVATARS.width)
+      expect(row.height).to.equal(ACTOR_IMAGES_SIZE[ActorImageType.AVATAR].height)
+      expect(row.width).to.equal(ACTOR_IMAGES_SIZE[ActorImageType.AVATAR].width)
     }
   })
 
@@ -313,8 +313,8 @@ describe('Test video channels', function () {
       await testFileExistsOrNot(server, 'avatars', basename(bannerPaths[server.port]), true)
 
       const row = await server.sql.getActorImage(basename(bannerPaths[server.port]))
-      expect(row.height).to.equal(ACTOR_IMAGES_SIZE.BANNERS.height)
-      expect(row.width).to.equal(ACTOR_IMAGES_SIZE.BANNERS.width)
+      expect(row.height).to.equal(ACTOR_IMAGES_SIZE[ActorImageType.BANNER].height)
+      expect(row.width).to.equal(ACTOR_IMAGES_SIZE[ActorImageType.BANNER].width)
     }
   })
 

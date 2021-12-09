@@ -9,7 +9,7 @@
 
         <ng-template #hasVideo>
           <a (click)="markAsRead(notification)" [routerLink]="notification.accountUrl">
-            <img alt="" aria-labelledby="avatar" class="avatar" [src]="notification.video.channel.avatarUrl" />
+            <img alt="" aria-labelledby="avatar" class="avatar" [src]="notification.video.channel.avatarMiniatureUrl" />
           </a>
 
           <div class="message" i18n>
@@ -92,7 +92,7 @@
       <ng-container *ngSwitchCase="2">
         <ng-container *ngIf="notification.comment">
           <a (click)="markAsRead(notification)" [routerLink]="notification.accountUrl">
-            <img alt="" aria-labelledby="avatar" class="avatar" [src]="notification.comment.account.avatarUrl" />
+            <img alt="" aria-labelledby="avatar" class="avatar" [src]="notification.comment.account.avatarMiniatureUrl" />
           </a>
 
           <div class="message" i18n>
@@ -143,7 +143,7 @@
 
       <ng-container *ngSwitchCase="10"> <!-- UserNotificationType.NEW_FOLLOW -->
         <a (click)="markAsRead(notification)" [routerLink]="notification.accountUrl">
-          <img alt="" aria-labelledby="avatar" class="avatar" [src]="notification.actorFollow.follower.avatarUrl" />
+          <img alt="" aria-labelledby="avatar" class="avatar" [src]="notification.actorFollow.follower.avatarMiniatureUrl" />
         </a>
 
         <div class="message" i18n>
@@ -157,7 +157,7 @@
       <ng-container *ngSwitchCase="11">
         <ng-container *ngIf="notification.comment">
           <a (click)="markAsRead(notification)" [routerLink]="notification.accountUrl">
-            <img alt="" aria-labelledby="avatar" class="avatar" [src]="notification.comment.account.avatarUrl" />
+            <img alt="" aria-labelledby="avatar" class="avatar" [src]="notification.comment.account.avatarMiniatureUrl" />
           </a>
 
           <div class="message" i18n>

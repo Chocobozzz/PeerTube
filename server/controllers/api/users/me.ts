@@ -253,9 +253,16 @@ async function updateMyAvatar (req: express.Request, res: express.Response) {
 
   const userAccount = await AccountModel.load(user.Account.id)
 
-  const avatar = await updateLocalActorImageFile(userAccount, avatarPhysicalFile, ActorImageType.AVATAR)
+  const [ avatar, avatarMiniature ] = await updateLocalActorImageFile(
+    userAccount,
+    avatarPhysicalFile,
+    [ ActorImageType.AVATAR, ActorImageType.AVATAR_MINIATURE ]
+  )
 
-  return res.json({ avatar: avatar.toFormattedJSON() })
+  return res.json({
+    avatar: avatar.toFormattedJSON(),
+    avatarMiniature: avatarMiniature.toFormattedJSON()
+  })
 }
 
 async function deleteMyAvatar (req: express.Request, res: express.Response) {
@@ -263,6 +270,7 @@ async function deleteMyAvatar (req: express.Request, res: express.Response) {
 
   const userAccount = await AccountModel.load(user.Account.id)
   await deleteLocalActorImageFile(userAccount, ActorImageType.AVATAR)
+  await deleteLocalActorImageFile(userAccount, ActorImageType.AVATAR_MINIATURE)
 
   return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }

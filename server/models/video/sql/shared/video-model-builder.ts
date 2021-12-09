@@ -195,7 +195,7 @@ export class VideoModelBuilder {
 
   private buildActor (row: SQLRow, prefix: string) {
     const actorPrefix = `${prefix}.Actor`
-    const avatarPrefix = `${actorPrefix}.Avatar`
+    const avatarPrefix = `${actorPrefix}.AvatarMini`
     const serverPrefix = `${actorPrefix}.Server`
 
     const avatarModel = row[`${avatarPrefix}.id`] !== null
@@ -209,7 +209,7 @@ export class VideoModelBuilder {
     if (serverModel) serverModel.BlockedBy = []
 
     const actorModel = new ActorModel(this.grab(row, this.tables.getActorAttributes(), actorPrefix), this.buildOpts)
-    actorModel.Avatar = avatarModel
+    actorModel.AvatarMini = avatarModel
     actorModel.Server = serverModel
 
     return actorModel

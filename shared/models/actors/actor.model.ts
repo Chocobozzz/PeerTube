@@ -9,4 +9,5 @@ export interface Actor {
   followersCount: number
   createdAt: Date | string
   avatar?: ActorImage
+  avatarMiniature?: ActorImage
 }
