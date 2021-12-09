@@ -167,7 +167,11 @@ async function reportAbuse (req: express.Request, res: express.Response) {
   const body: AbuseCreate = req.body
 
   const { id } = await sequelizeTypescript.transaction(async t => {
-    const reporterAccount = await AccountModel.load(res.locals.oauth.token.User.Account.id, t)
+    const user = res.locals.oauth.token.User
+    // Don't send abuse notification if reporter is an admin/moderator
+    const skipNotification = user.hasRight(UserRight.MANAGE_ABUSES)
+
+    const reporterAccount = await AccountModel.load(user.Account.id, t)
     const predefinedReasons = body.predefinedReasons?.map(r => abusePredefinedReasonsMap[r])
 
     const baseAbuse = {
@@ -184,7 +188,8 @@ async function reportAbuse (req: express.Request, res: express.Response) {
         reporterAccount,
         transaction: t,
         startAt: body.video.startAt,
-        endAt: body.video.endAt
+        endAt: body.video.endAt,
+        skipNotification
       })
     }
 
@@ -193,7 +198,8 @@ async function reportAbuse (req: express.Request, res: express.Response) {
         baseAbuse,
         commentInstance,
         reporterAccount,
-        transaction: t
+        transaction: t,
+        skipNotification
       })
     }
 
@@ -202,7 +208,8 @@ async function reportAbuse (req: express.Request, res: express.Response) {
       baseAbuse,
       accountInstance,
       reporterAccount,
-      transaction: t
+      transaction: t,
+      skipNotification
     })
   })
 

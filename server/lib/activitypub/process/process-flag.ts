@@ -75,7 +75,8 @@ async function processCreateAbuse (activity: ActivityCreate | ActivityFlag, byAc
             endAt,
             reporterAccount,
             transaction: t,
-            videoInstance: video
+            videoInstance: video,
+            skipNotification: false
           })
         }
 
@@ -84,7 +85,8 @@ async function processCreateAbuse (activity: ActivityCreate | ActivityFlag, byAc
             baseAbuse,
             reporterAccount,
             transaction: t,
-            commentInstance: videoComment
+            commentInstance: videoComment,
+            skipNotification: false
           })
         }
 
@@ -92,7 +94,8 @@ async function processCreateAbuse (activity: ActivityCreate | ActivityFlag, byAc
           baseAbuse,
           reporterAccount,
           transaction: t,
-          accountInstance: flaggedAccount
+          accountInstance: flaggedAccount,
+          skipNotification: false
         })
       })
     } catch (err) {

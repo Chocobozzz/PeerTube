@@ -107,8 +107,9 @@ async function createVideoAbuse (options: {
   endAt: number
   transaction: Transaction
   reporterAccount: MAccountDefault
+  skipNotification: boolean
 }) {
-  const { baseAbuse, videoInstance, startAt, endAt, transaction, reporterAccount } = options
+  const { baseAbuse, videoInstance, startAt, endAt, transaction, reporterAccount, skipNotification } = options
 
   const associateFun = async (abuseInstance: MAbuseFull) => {
     const videoAbuseInstance: MVideoAbuseVideoFull = await VideoAbuseModel.create({
@@ -129,6 +130,7 @@ async function createVideoAbuse (options: {
     reporterAccount,
     flaggedAccount: videoInstance.VideoChannel.Account,
     transaction,
+    skipNotification,
     associateFun
   })
 }
@@ -138,8 +140,9 @@ function createVideoCommentAbuse (options: {
   commentInstance: MCommentOwnerVideo
   transaction: Transaction
   reporterAccount: MAccountDefault
+  skipNotification: boolean
 }) {
-  const { baseAbuse, commentInstance, transaction, reporterAccount } = options
+  const { baseAbuse, commentInstance, transaction, reporterAccount, skipNotification } = options
 
   const associateFun = async (abuseInstance: MAbuseFull) => {
     const commentAbuseInstance: MCommentAbuseAccountVideo = await VideoCommentAbuseModel.create({
@@ -158,6 +161,7 @@ function createVideoCommentAbuse (options: {
     reporterAccount,
     flaggedAccount: commentInstance.Account,
     transaction,
+    skipNotification,
     associateFun
   })
 }
@@ -167,8 +171,9 @@ function createAccountAbuse (options: {
   accountInstance: MAccountDefault
   transaction: Transaction
   reporterAccount: MAccountDefault
+  skipNotification: boolean
 }) {
-  const { baseAbuse, accountInstance, transaction, reporterAccount } = options
+  const { baseAbuse, accountInstance, transaction, reporterAccount, skipNotification } = options
 
   const associateFun = () => {
     return Promise.resolve({ isOwned: accountInstance.isOwned() })
@@ -179,6 +184,7 @@ function createAccountAbuse (options: {
     reporterAccount,
     flaggedAccount: accountInstance,
     transaction,
+    skipNotification,
     associateFun
   })
 }
@@ -207,9 +213,10 @@ async function createAbuse (options: {
   reporterAccount: MAccountDefault
   flaggedAccount: MAccountLight
   associateFun: (abuseInstance: MAbuseFull) => Promise<{ isOwned: boolean} >
+  skipNotification: boolean
   transaction: Transaction
 }) {
-  const { base, reporterAccount, flaggedAccount, associateFun, transaction } = options
+  const { base, reporterAccount, flaggedAccount, associateFun, transaction, skipNotification } = options
   const auditLogger = auditLoggerFactory('abuse')
 
   const abuseAttributes = Object.assign({}, base, { flaggedAccountId: flaggedAccount.id })
@@ -227,13 +234,15 @@ async function createAbuse (options: {
   const abuseJSON = abuseInstance.toFormattedAdminJSON()
   auditLogger.create(reporterAccount.Actor.getIdentifier(), new AbuseAuditView(abuseJSON))
 
-  afterCommitIfTransaction(transaction, () => {
-    Notifier.Instance.notifyOnNewAbuse({
-      abuse: abuseJSON,
-      abuseInstance,
-      reporter: reporterAccount.Actor.getIdentifier()
+  if (!skipNotification) {
+    afterCommitIfTransaction(transaction, () => {
+      Notifier.Instance.notifyOnNewAbuse({
+        abuse: abuseJSON,
+        abuseInstance,
+        reporter: reporterAccount.Actor.getIdentifier()
+      })
     })
-  })
+  }
 
   logger.info('Abuse report %d created.', abuseInstance.id)
 
