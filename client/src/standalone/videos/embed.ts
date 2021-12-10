@@ -758,8 +758,8 @@ export class PeerTubeEmbed {
 
     return {
       getBaseStaticRoute: unimplemented,
-
       getBaseRouterRoute: unimplemented,
+      getBasePluginClientPath: unimplemented,
 
       getSettings: unimplemented,
 

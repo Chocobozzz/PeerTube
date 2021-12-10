@@ -1,6 +1,6 @@
 import { RegisterServerSettingOptions } from '../server'
 
-export interface RegisterClientSettingsScript {
+export interface RegisterClientSettingsScriptOptions {
   isSettingHidden (options: {
     setting: RegisterServerSettingOptions
     formValues: { [name: string]: any }

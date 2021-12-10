@@ -1,7 +1,8 @@
 import {
   RegisterClientFormFieldOptions,
   RegisterClientHookOptions,
-  RegisterClientSettingsScript,
+  RegisterClientRouteOptions,
+  RegisterClientSettingsScriptOptions,
   RegisterClientVideoFieldOptions,
   ServerConfig
 } from '@shared/models'
@@ -11,7 +12,9 @@ export type RegisterClientOptions = {
 
   registerVideoField: (commonOptions: RegisterClientFormFieldOptions, videoFormOptions: RegisterClientVideoFieldOptions) => void
 
-  registerSettingsScript: (options: RegisterClientSettingsScript) => void
+  registerSettingsScript: (options: RegisterClientSettingsScriptOptions) => void
+
+  registerClientRoute: (options: RegisterClientRouteOptions) => void
 
   peertubeHelpers: RegisterClientHelpers
 }
@@ -20,6 +23,8 @@ export type RegisterClientHelpers = {
   getBaseStaticRoute: () => string
 
   getBaseRouterRoute: () => string
+
+  getBasePluginClientPath: () => string
 
   isLoggedIn: () => boolean
 

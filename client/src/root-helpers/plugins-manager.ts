@@ -13,7 +13,8 @@ import {
   PluginType,
   RegisterClientFormFieldOptions,
   RegisterClientHookOptions,
-  RegisterClientSettingsScript,
+  RegisterClientRouteOptions,
+  RegisterClientSettingsScriptOptions,
   RegisterClientVideoFieldOptions,
   RegisteredExternalAuthConfig,
   ServerConfigPlugin
@@ -37,7 +38,8 @@ type PluginInfo = {
 
 type PeertubeHelpersFactory = (pluginInfo: PluginInfo) => RegisterClientHelpers
 type OnFormFields = (options: RegisterClientFormFieldOptions, videoFormOptions: RegisterClientVideoFieldOptions) => void
-type OnSettingsScripts = (pluginInfo: PluginInfo, options: RegisterClientSettingsScript) => void
+type OnSettingsScripts = (pluginInfo: PluginInfo, options: RegisterClientSettingsScriptOptions) => void
+type OnClientRoute = (options: RegisterClientRouteOptions) => void
 
 const logger = debug('peertube:plugins')
 
@@ -64,15 +66,18 @@ class PluginsManager {
   private readonly peertubeHelpersFactory: PeertubeHelpersFactory
   private readonly onFormFields: OnFormFields
   private readonly onSettingsScripts: OnSettingsScripts
+  private readonly onClientRoute: OnClientRoute
 
   constructor (options: {
     peertubeHelpersFactory: PeertubeHelpersFactory
     onFormFields?: OnFormFields
     onSettingsScripts?: OnSettingsScripts
+    onClientRoute?: OnClientRoute
   }) {
     this.peertubeHelpersFactory = options.peertubeHelpersFactory
     this.onFormFields = options.onFormFields
     this.onSettingsScripts = options.onSettingsScripts
+    this.onClientRoute = options.onClientRoute
   }
 
   static getPluginPathPrefix (isTheme: boolean) {
@@ -221,12 +226,20 @@ class PluginsManager {
       return this.onFormFields(commonOptions, videoFormOptions)
     }
 
-    const registerSettingsScript = (options: RegisterClientSettingsScript) => {
+    const registerSettingsScript = (options: RegisterClientSettingsScriptOptions) => {
       if (!this.onSettingsScripts) {
         throw new Error('Registering settings script is not supported')
       }
 
       return this.onSettingsScripts(pluginInfo, options)
+    }
+
+    const registerClientRoute = (options: RegisterClientRouteOptions) => {
+      if (!this.onClientRoute) {
+        throw new Error('Registering client route is not supported')
+      }
+
+      return this.onClientRoute(options)
     }
 
     const peertubeHelpers = this.peertubeHelpersFactory(pluginInfo)
@@ -235,7 +248,15 @@ class PluginsManager {
 
     const absURL = (environment.apiUrl || window.location.origin) + clientScript.script
     return dynamicImport(absURL)
-      .then((script: ClientScriptModule) => script.register({ registerHook, registerVideoField, registerSettingsScript, peertubeHelpers }))
+      .then((script: ClientScriptModule) => {
+        return script.register({
+          registerHook,
+          registerVideoField,
+          registerSettingsScript,
+          registerClientRoute,
+          peertubeHelpers
+        })
+      })
       .then(() => this.sortHooksByPriority())
       .catch(err => console.error('Cannot import or register plugin %s.', pluginInfo.plugin.name, err))
   }

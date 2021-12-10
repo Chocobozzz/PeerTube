@@ -20,7 +20,8 @@ import {
   PluginType,
   PublicServerSetting,
   RegisterClientFormFieldOptions,
-  RegisterClientSettingsScript,
+  RegisterClientSettingsScriptOptions,
+  RegisterClientRouteOptions,
   RegisterClientVideoFieldOptions,
   ServerConfigPlugin
 } from '@shared/models'
@@ -48,7 +49,8 @@ export class PluginService implements ClientHook {
   private formFields: FormFields = {
     video: []
   }
-  private settingsScripts: { [ npmName: string ]: RegisterClientSettingsScript } = {}
+  private settingsScripts: { [ npmName: string ]: RegisterClientSettingsScriptOptions } = {}
+  private clientRoutes: { [ route: string ]: RegisterClientRouteOptions } = {}
 
   private pluginsManager: PluginsManager
 
@@ -67,7 +69,8 @@ export class PluginService implements ClientHook {
     this.pluginsManager = new PluginsManager({
       peertubeHelpersFactory: this.buildPeerTubeHelpers.bind(this),
       onFormFields: this.onFormFields.bind(this),
-      onSettingsScripts: this.onSettingsScripts.bind(this)
+      onSettingsScripts: this.onSettingsScripts.bind(this),
+      onClientRoute: this.onClientRoute.bind(this)
     })
   }
 
@@ -123,6 +126,14 @@ export class PluginService implements ClientHook {
     return this.settingsScripts[npmName]
   }
 
+  getRegisteredClientRoute (route: string) {
+    return this.clientRoutes[route]
+  }
+
+  getAllRegisteredClientRoutes () {
+    return Object.keys(this.clientRoutes)
+  }
+
   translateBy (npmName: string, toTranslate: string) {
     const helpers = this.helpers[npmName]
     if (!helpers) {
@@ -140,10 +151,18 @@ export class PluginService implements ClientHook {
     })
   }
 
-  private onSettingsScripts (pluginInfo: PluginInfo, options: RegisterClientSettingsScript) {
+  private onSettingsScripts (pluginInfo: PluginInfo, options: RegisterClientSettingsScriptOptions) {
     const npmName = this.nameToNpmName(pluginInfo.plugin.name, pluginInfo.pluginType)
 
     this.settingsScripts[npmName] = options
+  }
+
+  private onClientRoute (options: RegisterClientRouteOptions) {
+    const route = options.route.startsWith('/')
+      ? options.route
+      : `/${options.route}`
+
+    this.clientRoutes[route] = options
   }
 
   private buildPeerTubeHelpers (pluginInfo: PluginInfo): RegisterClientHelpers {
@@ -159,6 +178,10 @@ export class PluginService implements ClientHook {
       getBaseRouterRoute: () => {
         const pathPrefix = PluginsManager.getPluginPathPrefix(pluginInfo.isTheme)
         return environment.apiUrl + `${pathPrefix}/${plugin.name}/${plugin.version}/router`
+      },
+
+      getBasePluginClientPath: () => {
+        return '/p'
       },
 
       getSettings: () => {

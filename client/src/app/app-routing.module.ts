@@ -58,6 +58,12 @@ const routes: Routes = [
   },
 
   {
+    path: 'p',
+    loadChildren: () => import('./+plugin-pages/plugin-pages.module').then(m => m.PluginPagesModule),
+    canActivateChild: [ MetaGuard ]
+  },
+
+  {
     path: 'about',
     loadChildren: () => import('./+about/about.module').then(m => m.AboutModule),
     canActivateChild: [ MetaGuard ]
