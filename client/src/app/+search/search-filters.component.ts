@@ -22,7 +22,6 @@ export class SearchFiltersComponent implements OnInit {
   publishedDateRanges: FormOption[] = []
   sorts: FormOption[] = []
   durationRanges: FormOption[] = []
-  videoType: FormOption[] = []
 
   publishedDateRange: string
   durationRange: string
@@ -51,17 +50,6 @@ export class SearchFiltersComponent implements OnInit {
       {
         id: 'last_365days',
         label: $localize`Last 365 days`
-      }
-    ]
-
-    this.videoType = [
-      {
-        id: 'vod',
-        label: $localize`VOD videos`
-      },
-      {
-        id: 'live',
-        label: $localize`Live videos`
       }
     ]
 

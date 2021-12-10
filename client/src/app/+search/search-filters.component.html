@@ -182,6 +182,31 @@
         >
       </div>
 
+      <div class="form-group">
+        <div class="radio-label label-container">
+          <label i18n>Result types</label>
+          <button i18n class="reset-button reset-button-small" (click)="resetField('resultType')" *ngIf="advancedSearch.resultType !== undefined">
+            Reset
+          </button>
+        </div>
+
+        <div class="peertube-radio-container">
+          <input type="radio" name="resultType" id="resultTypeVideos" value="videos" [(ngModel)]="advancedSearch.resultType">
+          <label i18n for="resultTypeVideos" class="radio">Videos</label>
+        </div>
+
+        <div class="peertube-radio-container">
+          <input type="radio" name="resultType" id="resultTypeChannels" value="channels" [(ngModel)]="advancedSearch.resultType">
+          <label i18n for="resultTypeChannels" class="radio">Channels</label>
+        </div>
+
+        <div class="peertube-radio-container">
+          <input type="radio" name="resultType" id="resultTypePlaylists" value="playlists" [(ngModel)]="advancedSearch.resultType">
+          <label i18n for="resultTypePlaylists" class="radio">Playlists</label>
+        </div>
+
+      </div>
+
       <div class="form-group" *ngIf="isSearchTargetEnabled()">
         <div class="radio-label label-container">
           <label i18n>Search target</label>

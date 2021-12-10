@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs'
+import { Observable, of } from 'rxjs'
 import { catchError, map, switchMap } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
@@ -39,6 +39,10 @@ export class SearchService {
   }): Observable<ResultList<Video>> {
     const { search, uuids, componentPagination, advancedSearch } = parameters
 
+    if (advancedSearch.resultType !== undefined && advancedSearch.resultType !== 'videos') {
+      return of({ total: 0, data: [] })
+    }
+
     const url = SearchService.BASE_SEARCH_URL + 'videos'
     let pagination: RestPagination
 
@@ -73,6 +77,10 @@ export class SearchService {
   }): Observable<ResultList<VideoChannel>> {
     const { search, advancedSearch, componentPagination, handles } = parameters
 
+    if (advancedSearch.resultType !== undefined && advancedSearch.resultType !== 'channels') {
+      return of({ total: 0, data: [] })
+    }
+
     const url = SearchService.BASE_SEARCH_URL + 'video-channels'
 
     let pagination: RestPagination
@@ -106,6 +114,10 @@ export class SearchService {
     uuids?: string[]
   }): Observable<ResultList<VideoPlaylist>> {
     const { search, advancedSearch, componentPagination, uuids } = parameters
+
+    if (advancedSearch.resultType !== undefined && advancedSearch.resultType !== 'playlists') {
+      return of({ total: 0, data: [] })
+    }
 
     const url = SearchService.BASE_SEARCH_URL + 'video-playlists'
 

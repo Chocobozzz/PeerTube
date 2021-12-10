@@ -8,6 +8,8 @@ import {
   VideosSearchQuery
 } from '@shared/models'
 
+export type AdvancedSearchResultType = 'videos' | 'playlists' | 'channels'
+
 export class AdvancedSearch {
   startDate: string // ISO 8601
   endDate: string // ISO 8601
@@ -36,6 +38,7 @@ export class AdvancedSearch {
   sort: string
 
   searchTarget: SearchTargetType
+  resultType: AdvancedSearchResultType
 
   // Filters we don't want to count, because they are mandatory
   private silentFilters = new Set([ 'sort', 'searchTarget' ])
@@ -61,6 +64,7 @@ export class AdvancedSearch {
     durationMax?: string
     sort?: string
     searchTarget?: SearchTargetType
+    resultType?: AdvancedSearchResultType
   }) {
     if (!options) return
 
@@ -83,6 +87,12 @@ export class AdvancedSearch {
     this.host = options.host || undefined
 
     this.searchTarget = options.searchTarget || undefined
+
+    this.resultType = options.resultType || undefined
+
+    if (!this.resultType && this.hasVideoFilter()) {
+      this.resultType = 'videos'
+    }
 
     if (isNaN(this.durationMin)) this.durationMin = undefined
     if (isNaN(this.durationMax)) this.durationMax = undefined
@@ -137,7 +147,8 @@ export class AdvancedSearch {
       isLive: this.isLive,
       host: this.host,
       sort: this.sort,
-      searchTarget: this.searchTarget
+      searchTarget: this.searchTarget,
+      resultType: this.resultType
     }
   }
 
@@ -198,5 +209,22 @@ export class AdvancedSearch {
     if (Array.isArray(val) && val.length === 0) return false
 
     return true
+  }
+
+  private hasVideoFilter () {
+    return this.startDate !== undefined ||
+      this.endDate !== undefined ||
+      this.originallyPublishedStartDate !== undefined ||
+      this.originallyPublishedEndDate !== undefined ||
+      this.nsfw !== undefined !== undefined ||
+      this.categoryOneOf !== undefined ||
+      this.licenceOneOf !== undefined ||
+      this.languageOneOf !== undefined ||
+      this.tagsOneOf !== undefined ||
+      this.tagsAllOf !== undefined ||
+      this.durationMin !== undefined ||
+      this.durationMax !== undefined ||
+      this.host !== undefined ||
+      this.isLive !== undefined
   }
 }
