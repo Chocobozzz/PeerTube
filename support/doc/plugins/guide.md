@@ -686,7 +686,11 @@ async function register ({ registerVideoField, peertubeHelpers }) {
     name: 'my-field-name,
     label: 'My added field',
     descriptionHTML: 'Optional description',
+
+    // type: 'input' | 'input-checkbox' | 'input-password' | 'input-textarea' | 'markdown-text' | 'markdown-enhanced' | 'select' | 'html'
+    // /!\ 'input-checkbox' could send "false" and "true" strings instead of boolean
     type: 'input-textarea',
+
     default: '',
     // Optional, to hide a field depending on the current form state
     // liveVideo is in the options object when the user is creating/updating a live
