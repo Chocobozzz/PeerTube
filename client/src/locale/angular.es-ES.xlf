@@ -5273,7 +5273,7 @@ color: red;
       </trans-unit>
       <trans-unit id="9012586956848595996" datatype="html">
         <source>EMAIL</source>
-        <target state="translated">ORREO ELECTRÓNICO</target>
+        <target state="translated">CORREO ELECTRÓNICO</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context><context context-type="linenumber">67</context></context-group>
       </trans-unit>
       <trans-unit id="7752239348028675311" datatype="html">
