@@ -76,6 +76,12 @@ async function register ({
       return res.json({ serverConfig })
     })
 
+    router.get('/videos-storage-path', async (req, res) => {
+      const videosStoragePath = await peertubeHelpers.config.getVideosStoragePath()
+
+      return res.json({ videosStoragePath })
+    })
+
     router.get('/static-route', async (req, res) => {
       const staticRoute = peertubeHelpers.plugin.getBaseStaticRoute()
 

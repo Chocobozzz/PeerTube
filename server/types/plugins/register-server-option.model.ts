@@ -41,6 +41,8 @@ export type PeerTubeHelpers = {
     getWebserverUrl: () => string
 
     getServerConfig: () => Promise<ServerConfig>
+
+    getVideosStoragePath: () => string
   }
 
   moderation: {

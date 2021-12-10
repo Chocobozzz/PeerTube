@@ -148,6 +148,10 @@ function buildConfigHelpers () {
 
     getServerConfig () {
       return ServerConfigManager.Instance.getServerConfig()
+    },
+
+    getVideosStoragePath () {
+      return CONFIG.STORAGE.VIDEOS_DIR
     }
   }
 }

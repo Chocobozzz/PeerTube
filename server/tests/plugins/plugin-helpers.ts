@@ -73,6 +73,17 @@ describe('Test plugin helpers', function () {
       expect(res.body.serverConfig).to.exist
       expect(res.body.serverConfig.instance.name).to.equal('PeerTube')
     })
+
+    it('Should have the correct config', async function () {
+      const res = await makeGetRequest({
+        url: servers[0].url,
+        path: '/plugins/test-four/router/videos-storage-path',
+        expectedStatus: HttpStatusCode.OK_200
+      })
+
+      expect(res.body.videosStoragePath).to.exist
+      expect(res.body.videosStoragePath).to.equal('storage/videos/')
+    })
   })
 
   describe('Server', function () {
