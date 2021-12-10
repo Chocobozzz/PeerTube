@@ -198,6 +198,15 @@ export class VideoStreamingPlaylistModel extends Model<Partial<AttributesOnly<Vi
     return Object.assign(playlist, { videoId: video.id, Video: video })
   }
 
+  static doesOwnedHLSPlaylistExist (videoUUID: string) {
+    const query = `SELECT 1 FROM "videoStreamingPlaylist" ` +
+      `INNER JOIN "video" ON "video"."id" = "videoStreamingPlaylist"."videoId" ` +
+      `AND "video"."remote" IS FALSE AND "video"."uuid" = $videoUUID ` +
+      `AND "storage" = ${VideoStorage.FILE_SYSTEM} LIMIT 1`
+
+    return doesExist(query, { videoUUID })
+  }
+
   assignP2PMediaLoaderInfoHashes (video: MVideo, files: unknown[]) {
     const masterPlaylistUrl = this.getMasterPlaylistUrl(video)
 

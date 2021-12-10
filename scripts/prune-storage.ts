@@ -15,7 +15,8 @@ import { ActorImageModel } from '../server/models/actor/actor-image'
 import { uniq, values } from 'lodash'
 import { ThumbnailType } from '@shared/models'
 import { VideoFileModel } from '@server/models/video/video-file'
-import { HLS_REDUNDANCY_DIRECTORY } from '@server/initializers/constants'
+import { HLS_REDUNDANCY_DIRECTORY, HLS_STREAMING_PLAYLIST_DIRECTORY } from '@server/initializers/constants'
+import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist'
 
 run()
   .then(() => process.exit(0))
@@ -40,6 +41,9 @@ async function run () {
 
   toDelete = toDelete.concat(
     await pruneDirectory(CONFIG.STORAGE.VIDEOS_DIR, doesWebTorrentFileExist()),
+
+    await pruneDirectory(HLS_STREAMING_PLAYLIST_DIRECTORY, doesHLSPlaylistExist()),
+
     await pruneDirectory(CONFIG.STORAGE.TORRENTS_DIR, doesTorrentFileExist()),
 
     await pruneDirectory(CONFIG.STORAGE.REDUNDANCY_DIR, doesRedundancyExist),
@@ -92,6 +96,10 @@ async function pruneDirectory (directory: string, existFun: ExistFun) {
 
 function doesWebTorrentFileExist () {
   return (filePath: string) => VideoFileModel.doesOwnedWebTorrentVideoFileExist(basename(filePath))
+}
+
+function doesHLSPlaylistExist () {
+  return (hlsPath: string) => VideoStreamingPlaylistModel.doesOwnedHLSPlaylistExist(basename(hlsPath))
 }
 
 function doesTorrentFileExist () {
