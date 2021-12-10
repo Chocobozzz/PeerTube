@@ -240,6 +240,21 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
     }
   })
 
+  // Upload/import/live attributes
+  for (const target of [
+    'filter:api.video.upload.video-attribute.result',
+    'filter:api.video.import-url.video-attribute.result',
+    'filter:api.video.import-torrent.video-attribute.result',
+    'filter:api.video.live.video-attribute.result'
+  ]) {
+    registerHook({
+      target,
+      handler: (result) => {
+        return { ...result, description: result.description + ' - ' + target }
+      }
+    })
+  }
+
   {
     const filterHooks = [
       'filter:api.search.videos.local.list.params',

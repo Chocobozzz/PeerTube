@@ -153,7 +153,8 @@ async function addVideo (options: {
   const videoChannel = res.locals.videoChannel
   const user = res.locals.oauth.token.User
 
-  const videoData = buildLocalVideoFromReq(videoInfo, videoChannel.id)
+  let videoData = buildLocalVideoFromReq(videoInfo, videoChannel.id)
+  videoData = await Hooks.wrapObject(videoData, 'filter:api.video.upload.video-attribute.result')
 
   videoData.state = buildNextVideoState()
   videoData.duration = videoPhysicalFile.duration // duration was added by a previous middleware

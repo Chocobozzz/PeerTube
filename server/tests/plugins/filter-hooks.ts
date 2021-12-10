@@ -537,6 +537,65 @@ describe('Test plugin filter hooks', function () {
     })
   })
 
+  describe('Upload/import/live attributes filters', function () {
+
+    before(async function () {
+      await servers[0].config.enableLive({ transcoding: false, allowReplay: false })
+      await servers[0].config.enableImports()
+      await servers[0].config.disableTranscoding()
+    })
+
+    it('Should run filter:api.video.upload.video-attribute.result', async function () {
+      for (const mode of [ 'legacy' as 'legacy', 'resumable' as 'resumable' ]) {
+        const { id } = await servers[0].videos.upload({ attributes: { name: 'video', description: 'upload' }, mode })
+
+        const video = await servers[0].videos.get({ id })
+        expect(video.description).to.equal('upload - filter:api.video.upload.video-attribute.result')
+      }
+    })
+
+    it('Should run filter:api.video.import-url.video-attribute.result', async function () {
+      const attributes = {
+        name: 'video',
+        description: 'import url',
+        channelId: servers[0].store.channel.id,
+        targetUrl: FIXTURE_URLS.goodVideo,
+        privacy: VideoPrivacy.PUBLIC
+      }
+      const { video: { id } } = await servers[0].imports.importVideo({ attributes })
+
+      const video = await servers[0].videos.get({ id })
+      expect(video.description).to.equal('import url - filter:api.video.import-url.video-attribute.result')
+    })
+
+    it('Should run filter:api.video.import-torrent.video-attribute.result', async function () {
+      const attributes = {
+        name: 'video',
+        description: 'import torrent',
+        channelId: servers[0].store.channel.id,
+        magnetUri: FIXTURE_URLS.magnet,
+        privacy: VideoPrivacy.PUBLIC
+      }
+      const { video: { id } } = await servers[0].imports.importVideo({ attributes })
+
+      const video = await servers[0].videos.get({ id })
+      expect(video.description).to.equal('import torrent - filter:api.video.import-torrent.video-attribute.result')
+    })
+
+    it('Should run filter:api.video.live.video-attribute.result', async function () {
+      const fields = {
+        name: 'live',
+        description: 'live',
+        channelId: servers[0].store.channel.id,
+        privacy: VideoPrivacy.PUBLIC
+      }
+      const { id } = await servers[0].live.create({ fields })
+
+      const video = await servers[0].videos.get({ id })
+      expect(video.description).to.equal('live - filter:api.video.live.video-attribute.result')
+    })
+  })
+
   describe('Stats filters', function () {
 
     it('Should run filter:api.server.stats.get.result', async function () {

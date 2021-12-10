@@ -83,7 +83,9 @@ async function addLiveVideo (req: express.Request, res: express.Response) {
   const videoInfo: LiveVideoCreate = req.body
 
   // Prepare data so we don't block the transaction
-  const videoData = buildLocalVideoFromReq(videoInfo, res.locals.videoChannel.id)
+  let videoData = buildLocalVideoFromReq(videoInfo, res.locals.videoChannel.id)
+  videoData = await Hooks.wrapObject(videoData, 'filter:api.video.live.video-attribute.result')
+
   videoData.isLive = true
   videoData.state = VideoState.WAITING_FOR_LIVE
   videoData.duration = 0

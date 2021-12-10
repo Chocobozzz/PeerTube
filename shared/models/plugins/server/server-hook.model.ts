@@ -53,6 +53,12 @@ export const serverFilterHookObject = {
   'filter:api.video-thread.create.accept.result': true,
   'filter:api.video-comment-reply.create.accept.result': true,
 
+  // Filter attributes when creating video object
+  'filter:api.video.upload.video-attribute.result': true,
+  'filter:api.video.import-url.video-attribute.result': true,
+  'filter:api.video.import-torrent.video-attribute.result': true,
+  'filter:api.video.live.video-attribute.result': true,
+
   // Filter params/result used to list threads of a specific video
   // (used by the video watch page)
   'filter:api.video-threads.list.params': true,

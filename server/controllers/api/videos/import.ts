@@ -38,6 +38,7 @@ import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate, videoIm
 import { VideoModel } from '../../../models/video/video'
 import { VideoCaptionModel } from '../../../models/video/video-caption'
 import { VideoImportModel } from '../../../models/video/video-import'
+import { Hooks } from '@server/lib/plugins/hooks'
 
 const auditLogger = auditLoggerFactory('video-imports')
 const videoImportsRouter = express.Router()
@@ -94,7 +95,7 @@ async function addTorrentImport (req: express.Request, res: express.Response, to
     videoName = result.name
   }
 
-  const video = buildVideo(res.locals.videoChannel.id, body, { name: videoName })
+  const video = await buildVideo(res.locals.videoChannel.id, body, { name: videoName })
 
   const thumbnailModel = await processThumbnail(req, video)
   const previewModel = await processPreview(req, video)
@@ -151,7 +152,7 @@ async function addYoutubeDLImport (req: express.Request, res: express.Response) 
     })
   }
 
-  const video = buildVideo(res.locals.videoChannel.id, body, youtubeDLInfo)
+  const video = await buildVideo(res.locals.videoChannel.id, body, youtubeDLInfo)
 
   // Process video thumbnail from request.files
   let thumbnailModel = await processThumbnail(req, video)
@@ -210,8 +211,8 @@ async function addYoutubeDLImport (req: express.Request, res: express.Response) 
   return res.json(videoImport.toFormattedJSON()).end()
 }
 
-function buildVideo (channelId: number, body: VideoImportCreate, importData: YoutubeDLInfo): MVideoThumbnail {
-  const videoData = {
+async function buildVideo (channelId: number, body: VideoImportCreate, importData: YoutubeDLInfo): Promise<MVideoThumbnail> {
+  let videoData = {
     name: body.name || importData.name || 'Unknown name',
     remote: false,
     category: body.category || importData.category,
@@ -231,6 +232,14 @@ function buildVideo (channelId: number, body: VideoImportCreate, importData: You
       ? new Date(body.originallyPublishedAt)
       : importData.originallyPublishedAt
   }
+
+  videoData = await Hooks.wrapObject(
+    videoData,
+    body.targetUrl
+      ? 'filter:api.video.import-url.video-attribute.result'
+      : 'filter:api.video.import-torrent.video-attribute.result'
+  )
+
   const video = new VideoModel(videoData)
   video.url = getLocalVideoActivityPubUrl(video)
 
