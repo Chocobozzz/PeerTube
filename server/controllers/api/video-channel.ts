@@ -37,7 +37,6 @@ import {
   videoPlaylistsSortValidator
 } from '../../middlewares'
 import {
-  ensureAuthUserOwnsChannelValidator,
   videoChannelsFollowersSortValidator,
   videoChannelsListValidator,
   videoChannelsNameWithHostValidator,
@@ -148,7 +147,7 @@ videoChannelRouter.get('/:nameWithHost/videos',
 videoChannelRouter.get('/:nameWithHost/followers',
   authenticate,
   asyncMiddleware(videoChannelsNameWithHostValidator),
-  ensureAuthUserOwnsChannelValidator,
+  ensureUserCanManageChannel,
   paginationValidator,
   videoChannelsFollowersSortValidator,
   setDefaultSort,

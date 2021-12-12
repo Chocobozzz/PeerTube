@@ -3,7 +3,7 @@ import { body, param, query } from 'express-validator'
 import { omit } from 'lodash'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { MUserDefault } from '@server/types/models'
-import { HttpStatusCode, UserRegister, UserRole } from '@shared/models'
+import { HttpStatusCode, UserRegister, UserRight, UserRole } from '@shared/models'
 import { isBooleanValid, isIdValid, toBooleanOrNull, toIntOrNull } from '../../helpers/custom-validators/misc'
 import { isThemeNameValid } from '../../helpers/custom-validators/plugins'
 import {
@@ -490,20 +490,21 @@ const ensureAuthUserOwnsAccountValidator = [
   }
 ]
 
-const ensureAuthUserOwnsChannelValidator = [
-  (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const user = res.locals.oauth.token.User
+function ensureUserCanManageChannel (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const user = res.locals.oauth.token.user
+  const isUserOwner = res.locals.videoChannel.Account.userId === user.id
 
-    if (res.locals.videoChannel.Account.userId !== user.id) {
-      return res.fail({
-        status: HttpStatusCode.FORBIDDEN_403,
-        message: 'Only owner of this video channel can access this ressource'
-      })
-    }
+  if (!isUserOwner && user.hasRight(UserRight.MANAGE_ANY_VIDEO_CHANNEL) === false) {
+    const message = `User ${user.username} does not have right to manage channel ${req.params.nameWithHost}.`
 
-    return next()
+    return res.fail({
+      status: HttpStatusCode.FORBIDDEN_403,
+      message
+    })
   }
-]
+
+  return next()
+}
 
 const ensureCanManageUser = [
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -542,8 +543,8 @@ export {
   usersVerifyEmailValidator,
   userAutocompleteValidator,
   ensureAuthUserOwnsAccountValidator,
-  ensureAuthUserOwnsChannelValidator,
-  ensureCanManageUser
+  ensureCanManageUser,
+  ensureUserCanManageChannel
 }
 
 // ---------------------------------------------------------------------------
