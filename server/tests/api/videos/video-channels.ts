@@ -16,7 +16,7 @@ import {
   wait,
   waitJobs
 } from '@shared/extra-utils'
-import { HttpStatusCode, User, UserRole, VideoChannel } from '@shared/models'
+import { User, VideoChannel } from '@shared/models'
 
 const expect = chai.expect
 
@@ -405,28 +405,6 @@ describe('Test video channels', function () {
     expect(body.data).to.have.lengthOf(2)
     expect(body.data[0].displayName).to.equal('Main root channel')
     expect(body.data[1].displayName).to.equal('video channel updated')
-  })
-
-  it('Should not allow moderator to update an admins video channel', async function () {
-    this.timeout(15000)
-
-    const { token: moderatorToken } = await servers[0].users.generate('moderator1', UserRole.MODERATOR)
-    const result = await servers[0].users.generate('admin_user', UserRole.ADMINISTRATOR)
-
-    await servers[0].videos.quickUpload({ name: 'video', token: result.token })
-
-    const videoChannelAttributes = {
-      displayName: 'video channel updated',
-      description: 'video channel description updated',
-      support: 'support updated'
-    }
-
-    await servers[0].channels.update({
-      channelName: result.userChannelName,
-      attributes: videoChannelAttributes,
-      expectedStatus: HttpStatusCode.FORBIDDEN_403,
-      token: moderatorToken
-    })
   })
 
   it('Should create the main channel with an uuid if there is a conflict', async function () {

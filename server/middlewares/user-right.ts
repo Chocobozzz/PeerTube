@@ -1,5 +1,5 @@
 import express from 'express'
-import { UserRight, UserRole } from '../../shared'
+import { UserRight } from '../../shared'
 import { HttpStatusCode } from '../../shared/models/http/http-error-codes'
 import { logger } from '../helpers/logger'
 
@@ -31,14 +31,6 @@ async function ensureUserCanManageChannel (req: express.Request, res: express.Re
     return res.fail({
       status: HttpStatusCode.FORBIDDEN_403,
       message
-    })
-  }
-
-  const onUser = await res.locals.videoChannel.Account.$get('User')
-  if (user.role === UserRole.MODERATOR && onUser.role === UserRole.ADMINISTRATOR) {
-    return res.fail({
-      status: HttpStatusCode.FORBIDDEN_403,
-      message: 'A moderator can\'t manage an admins video channel.'
     })
   }
 
