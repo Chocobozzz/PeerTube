@@ -12,14 +12,14 @@ import {
 import { FormValidatorService } from '@app/shared/shared-forms'
 import { VideoChannel, VideoChannelService } from '@app/shared/shared-main'
 import { HTMLServerConfig, VideoChannelUpdate } from '@shared/models'
-import { MyVideoChannelEdit } from './video-channel-edit'
+import { VideoChannelEdit } from './video-channel-edit'
 
 @Component({
   selector: 'my-video-channel-update',
   templateUrl: './video-channel-edit.component.html',
   styleUrls: [ './video-channel-edit.component.scss' ]
 })
-export class VideoChannelUpdateComponent extends MyVideoChannelEdit implements OnInit, OnDestroy {
+export class VideoChannelUpdateComponent extends VideoChannelEdit implements OnInit, OnDestroy {
   error: string
   videoChannel: VideoChannel
 
