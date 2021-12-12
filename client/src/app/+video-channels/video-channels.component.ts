@@ -99,6 +99,8 @@ export class VideoChannelsComponent implements OnInit, OnDestroy {
   }
 
   isOwner () {
+    if (!this.isUserLoggedIn()) return false
+
     return this.videoChannel?.ownerAccount.userId === this.authService.getUser().id
   }
 
