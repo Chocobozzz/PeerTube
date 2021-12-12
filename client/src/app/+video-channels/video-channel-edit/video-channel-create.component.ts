@@ -18,7 +18,7 @@ import { MyVideoChannelEdit } from './video-channel-edit'
   templateUrl: './video-channel-edit.component.html',
   styleUrls: [ './video-channel-edit.component.scss' ]
 })
-export class MyVideoChannelCreateComponent extends MyVideoChannelEdit implements OnInit {
+export class VideoChannelCreateComponent extends MyVideoChannelEdit implements OnInit {
   error: string
   videoChannel = new VideoChannel({})
 

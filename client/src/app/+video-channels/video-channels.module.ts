@@ -12,7 +12,7 @@ import { VideoChannelPlaylistsComponent } from './video-channel-playlists/video-
 import { VideoChannelVideosComponent } from './video-channel-videos/video-channel-videos.component'
 import { VideoChannelsRoutingModule } from './video-channels-routing.module'
 import { VideoChannelsComponent } from './video-channels.component'
-import { MyVideoChannelCreateComponent } from './video-channel-edit/video-channel-create.component'
+import { VideoChannelCreateComponent } from './video-channel-edit/video-channel-create.component'
 import { VideoChannelUpdateComponent } from './video-channel-edit/video-channel-update.component'
 import { SharedActorImageEditModule } from '@app/shared/shared-actor-image-edit'
 
@@ -36,7 +36,7 @@ import { SharedActorImageEditModule } from '@app/shared/shared-actor-image-edit'
     VideoChannelsComponent,
     VideoChannelVideosComponent,
     VideoChannelPlaylistsComponent,
-    MyVideoChannelCreateComponent,
+    VideoChannelCreateComponent,
     VideoChannelUpdateComponent
   ],
 
