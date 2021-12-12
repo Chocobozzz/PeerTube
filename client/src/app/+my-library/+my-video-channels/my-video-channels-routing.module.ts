@@ -11,6 +11,14 @@ const myVideoChannelsRoutes: Routes = [
         title: $localize`My video channels`
       }
     }
+  },
+  {
+    path: 'create',
+    redirectTo: '/manage/create'
+  },
+  {
+    path: 'update/:videoChannelName',
+    redirectTo: '/manage/update/:videoChannelName'
   }
 ]
 

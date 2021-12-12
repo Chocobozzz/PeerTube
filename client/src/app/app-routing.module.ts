@@ -56,7 +56,11 @@ const routes: Routes = [
     loadChildren: () => import('./+video-channels/video-channels.module').then(m => m.VideoChannelsModule),
     canActivateChild: [ MetaGuard ]
   },
-
+  {
+    path: 'manage',
+    loadChildren: () => import('./+manage/manage.module').then(m => m.ManageModule),
+    canActivateChild: [ MetaGuard ]
+  },
   {
     path: 'about',
     loadChildren: () => import('./+about/about.module').then(m => m.AboutModule),

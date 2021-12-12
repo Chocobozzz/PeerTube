@@ -1,21 +1,10 @@
 import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
-import { VideoChannelCreateComponent } from './video-channel-edit/video-channel-create.component'
-import { VideoChannelUpdateComponent } from './video-channel-edit/video-channel-update.component'
 import { VideoChannelPlaylistsComponent } from './video-channel-playlists/video-channel-playlists.component'
 import { VideoChannelVideosComponent } from './video-channel-videos/video-channel-videos.component'
 import { VideoChannelsComponent } from './video-channels.component'
 
 const videoChannelsRoutes: Routes = [
-  {
-    path: '@create',
-    component: VideoChannelCreateComponent,
-    data: {
-      meta: {
-        title: $localize`Create a new video channel`
-      }
-    }
-  },
   {
     path: ':videoChannelName',
     component: VideoChannelsComponent,
@@ -48,16 +37,6 @@ const videoChannelsRoutes: Routes = [
         }
       }
     ]
-  },
-  {
-    path: ':videoChannelName/update',
-    component: VideoChannelUpdateComponent,
-
-    data: {
-      meta: {
-        title: $localize`Update video channel`
-      }
-    }
   }
 ]
 
