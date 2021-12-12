@@ -75,7 +75,7 @@ videoChannelRouter.post('/:nameWithHost/avatar/pick',
   authenticate,
   reqAvatarFile,
   asyncMiddleware(videoChannelsNameWithHostValidator),
-  asyncMiddleware(ensureUserCanManageChannel),
+  ensureUserCanManageChannel,
   updateAvatarValidator,
   asyncMiddleware(updateVideoChannelAvatar)
 )
@@ -84,7 +84,7 @@ videoChannelRouter.post('/:nameWithHost/banner/pick',
   authenticate,
   reqBannerFile,
   asyncMiddleware(videoChannelsNameWithHostValidator),
-  asyncMiddleware(ensureUserCanManageChannel),
+  ensureUserCanManageChannel,
   updateBannerValidator,
   asyncMiddleware(updateVideoChannelBanner)
 )
@@ -92,21 +92,21 @@ videoChannelRouter.post('/:nameWithHost/banner/pick',
 videoChannelRouter.delete('/:nameWithHost/avatar',
   authenticate,
   asyncMiddleware(videoChannelsNameWithHostValidator),
-  asyncMiddleware(ensureUserCanManageChannel),
+  ensureUserCanManageChannel,
   asyncMiddleware(deleteVideoChannelAvatar)
 )
 
 videoChannelRouter.delete('/:nameWithHost/banner',
   authenticate,
   asyncMiddleware(videoChannelsNameWithHostValidator),
-  asyncMiddleware(ensureUserCanManageChannel),
+  ensureUserCanManageChannel,
   asyncMiddleware(deleteVideoChannelBanner)
 )
 
 videoChannelRouter.put('/:nameWithHost',
   authenticate,
   asyncMiddleware(videoChannelsNameWithHostValidator),
-  asyncMiddleware(ensureUserCanManageChannel),
+  ensureUserCanManageChannel,
   videoChannelsUpdateValidator,
   asyncRetryTransactionMiddleware(updateVideoChannel)
 )
@@ -115,7 +115,7 @@ videoChannelRouter.delete('/:nameWithHost',
   authenticate,
   asyncMiddleware(videoChannelsNameWithHostValidator),
   asyncMiddleware(videoChannelsRemoveValidator),
-  asyncMiddleware(ensureUserCanManageChannel),
+  ensureUserCanManageChannel,
   asyncRetryTransactionMiddleware(removeVideoChannel)
 )
 
