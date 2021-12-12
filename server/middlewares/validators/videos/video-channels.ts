@@ -70,13 +70,8 @@ const videoChannelsUpdateValidator = [
 ]
 
 const videoChannelsRemoveValidator = [
-  param('nameWithHost').exists().withMessage('Should have an video channel name with host'),
-
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoChannelsRemove parameters', { parameters: req.params })
-
-    if (areValidationErrors(req, res)) return
-    if (!await doesVideoChannelNameWithHostExist(req.params.nameWithHost, res)) return
 
     if (!await checkVideoChannelIsNotTheLastOne(res.locals.videoChannel, res)) return
 

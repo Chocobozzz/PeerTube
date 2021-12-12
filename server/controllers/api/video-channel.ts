@@ -113,6 +113,7 @@ videoChannelRouter.put('/:nameWithHost',
 
 videoChannelRouter.delete('/:nameWithHost',
   authenticate,
+  asyncMiddleware(videoChannelsNameWithHostValidator),
   asyncMiddleware(videoChannelsRemoveValidator),
   asyncMiddleware(ensureUserCanManageChannel),
   asyncRetryTransactionMiddleware(removeVideoChannel)
