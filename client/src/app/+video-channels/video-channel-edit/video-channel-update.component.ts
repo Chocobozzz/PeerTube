@@ -2,7 +2,7 @@ import { Subscription } from 'rxjs'
 import { HttpErrorResponse } from '@angular/common/http'
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { AuthService, Notifier, ServerService } from '@app/core'
+import { AuthService, Notifier, RedirectService, ServerService } from '@app/core'
 import { genericUploadErrorHandler } from '@app/helpers'
 import {
   VIDEO_CHANNEL_DESCRIPTION_VALIDATOR,
@@ -34,7 +34,8 @@ export class VideoChannelUpdateComponent extends VideoChannelEdit implements OnI
     private router: Router,
     private route: ActivatedRoute,
     private videoChannelService: VideoChannelService,
-    private serverService: ServerService
+    private serverService: ServerService,
+    private redirectService: RedirectService
   ) {
     super()
   }
@@ -95,7 +96,7 @@ export class VideoChannelUpdateComponent extends VideoChannelEdit implements OnI
 
           this.notifier.success($localize`Video channel ${videoChannelUpdate.displayName} updated.`)
 
-          this.router.navigate([ '/c', this.videoChannel.name ])
+          this.redirectService.redirectToPreviousRoute([ '/c', this.videoChannel.name ])
         },
 
         error: err => {
