@@ -39,7 +39,7 @@ export class SearchService {
   }): Observable<ResultList<Video>> {
     const { search, uuids, componentPagination, advancedSearch } = parameters
 
-    if (advancedSearch.resultType !== undefined && advancedSearch.resultType !== 'videos') {
+    if (advancedSearch?.resultType !== undefined && advancedSearch.resultType !== 'videos') {
       return of({ total: 0, data: [] })
     }
 
@@ -77,7 +77,7 @@ export class SearchService {
   }): Observable<ResultList<VideoChannel>> {
     const { search, advancedSearch, componentPagination, handles } = parameters
 
-    if (advancedSearch.resultType !== undefined && advancedSearch.resultType !== 'channels') {
+    if (advancedSearch?.resultType !== undefined && advancedSearch.resultType !== 'channels') {
       return of({ total: 0, data: [] })
     }
 
@@ -115,7 +115,7 @@ export class SearchService {
   }): Observable<ResultList<VideoPlaylist>> {
     const { search, advancedSearch, componentPagination, uuids } = parameters
 
-    if (advancedSearch.resultType !== undefined && advancedSearch.resultType !== 'playlists') {
+    if (advancedSearch?.resultType !== undefined && advancedSearch.resultType !== 'playlists') {
       return of({ total: 0, data: [] })
     }
 
