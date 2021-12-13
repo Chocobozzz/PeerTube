@@ -9581,91 +9581,133 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>Saturday</source>
         <target state="new">Saturday</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">16</context></context-group>
-      </trans-unit>
-      <trans-unit id="4921929243068857081" datatype="html">
-        <source>Sun</source>
-        <target state="new">Sun</target>
+      </trans-unit><trans-unit id="1391351050292665308" datatype="html">
+        <source>Sun</source><target state="new">Sun</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
         <note priority="1" from="description">Day name short</note>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">20</context></context-group>
-      </trans-unit>
-      <trans-unit id="8563137213157122993" datatype="html">
-        <source>Mon</source>
-        <target state="new">Mon</target>
+        <note priority="1" from="meaning">Sunday short name</note>
+      </trans-unit><trans-unit id="7037142944838911104" datatype="html">
+        <source>Mon</source><target state="new">Mon</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
         <note priority="1" from="description">Day name short</note>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">21</context></context-group>
-      </trans-unit>
-      <trans-unit id="8502240922750617054" datatype="html">
-        <source>Tue</source>
-        <target state="new">Tue</target>
+        <note priority="1" from="meaning">Monday short name</note>
+      </trans-unit><trans-unit id="4051951828654963549" datatype="html">
+        <source>Tue</source><target state="new">Tue</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
         <note priority="1" from="description">Day name short</note>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">22</context></context-group>
-      </trans-unit>
-      <trans-unit id="7421778640995344715" datatype="html">
-        <source>Wed</source>
-        <target state="new">Wed</target>
+        <note priority="1" from="meaning">Tuesday short name</note>
+      </trans-unit><trans-unit id="5265738215297391426" datatype="html">
+        <source>Wed</source><target state="new">Wed</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
+          <context context-type="linenumber">23</context>
+        </context-group>
         <note priority="1" from="description">Day name short</note>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">23</context></context-group>
-      </trans-unit>
-      <trans-unit id="4409954796361883558" datatype="html">
-        <source>Thu</source>
-        <target state="new">Thu</target>
+        <note priority="1" from="meaning">Wednesday short name</note>
+      </trans-unit><trans-unit id="1370330981433231150" datatype="html">
+        <source>Thu</source><target state="new">Thu</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
+          <context context-type="linenumber">24</context>
+        </context-group>
         <note priority="1" from="description">Day name short</note>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">24</context></context-group>
-      </trans-unit>
-      <trans-unit id="5651951128882735477" datatype="html">
-        <source>Fri</source>
-        <target state="new">Fri</target>
+        <note priority="1" from="meaning">Thursday short name</note>
+      </trans-unit><trans-unit id="8713535243933137493" datatype="html">
+        <source>Fri</source><target state="new">Fri</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
+          <context context-type="linenumber">25</context>
+        </context-group>
         <note priority="1" from="description">Day name short</note>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">25</context></context-group>
-      </trans-unit>
-      <trans-unit id="93026920674143073" datatype="html">
-        <source>Sat</source>
-        <target state="new">Sat</target>
+        <note priority="1" from="meaning">Friday short name</note>
+      </trans-unit><trans-unit id="3547824477629753314" datatype="html">
+        <source>Sat</source><target state="new">Sat</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
         <note priority="1" from="description">Day name short</note>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">26</context></context-group>
-      </trans-unit>
-      <trans-unit id="8349763432924710200" datatype="html">
-        <source>Su</source>
-        <target state="new">Su</target>
+        <note priority="1" from="meaning">Saturday short name</note>
+      </trans-unit><trans-unit id="6115403217651453591" datatype="html">
+        <source>Su</source><target state="new">Su</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
+          <context context-type="linenumber">30</context>
+        </context-group>
         <note priority="1" from="description">Day name min</note>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">30</context></context-group>
-      </trans-unit>
-      <trans-unit id="4197236438302165051" datatype="html">
-        <source>Mo</source>
-        <target state="new">Mo</target>
+        <note priority="1" from="meaning">Sunday min name</note>
+      </trans-unit><trans-unit id="3797918310510782582" datatype="html">
+        <source>Mo</source><target state="new">Mo</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
+          <context context-type="linenumber">31</context>
+        </context-group>
         <note priority="1" from="description">Day name min</note>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">31</context></context-group>
-      </trans-unit>
-      <trans-unit id="6034455877220674404" datatype="html">
-        <source>Tu</source>
-        <target state="new">Tu</target>
+        <note priority="1" from="meaning">Monday min name</note>
+      </trans-unit><trans-unit id="8011371911136291436" datatype="html">
+        <source>Tu</source><target state="new">Tu</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
+          <context context-type="linenumber">32</context>
+        </context-group>
         <note priority="1" from="description">Day name min</note>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">32</context></context-group>
-      </trans-unit>
-      <trans-unit id="3221670730445125135" datatype="html">
-        <source>We</source>
-        <target state="new">We</target>
+        <note priority="1" from="meaning">Tuesday min name</note>
+      </trans-unit><trans-unit id="1673380870543456256" datatype="html">
+        <source>We</source><target state="new">We</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
+          <context context-type="linenumber">33</context>
+        </context-group>
         <note priority="1" from="description">Day name min</note>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">33</context></context-group>
-      </trans-unit>
-      <trans-unit id="772466829681972216" datatype="html">
-        <source>Th</source>
-        <target state="new">Th</target>
+        <note priority="1" from="meaning">Wednesday min name</note>
+      </trans-unit><trans-unit id="8502005439670299526" datatype="html">
+        <source>Th</source><target state="new">Th</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
+          <context context-type="linenumber">34</context>
+        </context-group>
         <note priority="1" from="description">Day name min</note>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">34</context></context-group>
-      </trans-unit>
-      <trans-unit id="8598262708800132669" datatype="html">
-        <source>Fr</source>
-        <target state="new">Fr</target>
+        <note priority="1" from="meaning">Thursday min name</note>
+      </trans-unit><trans-unit id="2800261787799336637" datatype="html">
+        <source>Fr</source><target state="new">Fr</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
+          <context context-type="linenumber">35</context>
+        </context-group>
         <note priority="1" from="description">Day name min</note>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">35</context></context-group>
-      </trans-unit>
-      <trans-unit id="569007902695332072" datatype="html">
-        <source>Sa</source>
-        <target state="new">Sa</target>
+        <note priority="1" from="meaning">Friday min name</note>
+      </trans-unit><trans-unit id="2045915324506422459" datatype="html">
+        <source>Sa</source><target state="new">Sa</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
+          <context context-type="linenumber">36</context>
+        </context-group>
         <note priority="1" from="description">Day name min</note>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">36</context></context-group>
+        <note priority="1" from="meaning">Saturday min name</note>
       </trans-unit>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
       <trans-unit id="3913843642962116845" datatype="html">
         <source>January</source>
         <target state="new">January</target>
@@ -9689,9 +9731,9 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       <trans-unit id="8469692700277617405" datatype="html">
         <source>May</source>
         <target state="new">May</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">44</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">59</context></context-group>
-      </trans-unit>
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">44</context></context-group></trans-unit>
       <trans-unit id="9055297580745330415" datatype="html">
         <source>June</source>
         <target state="new">June</target>
@@ -9726,73 +9768,114 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>December</source>
         <target state="new">December</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">51</context></context-group>
-      </trans-unit>
-      <trans-unit id="7595747576974676670" datatype="html">
-        <source>Jan</source>
-        <target state="new">Jan</target>
+      </trans-unit><trans-unit id="1799348348510504995" datatype="html">
+        <source>Jan</source><target state="new">Jan</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
+          <context context-type="linenumber">55</context>
+        </context-group>
         <note priority="1" from="description">Month name short</note>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">55</context></context-group>
-      </trans-unit>
-      <trans-unit id="4916040996255005712" datatype="html">
-        <source>Feb</source>
-        <target state="new">Feb</target>
+        <note priority="1" from="meaning">January short name</note>
+      </trans-unit><trans-unit id="2980544278361296608" datatype="html">
+        <source>Feb</source><target state="new">Feb</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
+          <context context-type="linenumber">56</context>
+        </context-group>
         <note priority="1" from="description">Month name short</note>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">56</context></context-group>
-      </trans-unit>
-      <trans-unit id="6438827956918137617" datatype="html">
-        <source>Mar</source>
-        <target state="new">Mar</target>
+        <note priority="1" from="meaning">February short name</note>
+      </trans-unit><trans-unit id="3124926955462217092" datatype="html">
+        <source>Mar</source><target state="new">Mar</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
+          <context context-type="linenumber">57</context>
+        </context-group>
         <note priority="1" from="description">Month name short</note>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">57</context></context-group>
-      </trans-unit>
-      <trans-unit id="5507326650332881991" datatype="html">
-        <source>Apr</source>
-        <target state="new">Apr</target>
+        <note priority="1" from="meaning">March short name</note>
+      </trans-unit><trans-unit id="9658641661863772" datatype="html">
+        <source>Apr</source><target state="new">Apr</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
+          <context context-type="linenumber">58</context>
+        </context-group>
         <note priority="1" from="description">Month name short</note>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">58</context></context-group>
-      </trans-unit>
-      <trans-unit id="2113470244260512015" datatype="html">
-        <source>Jun</source>
-        <target state="new">Jun</target>
+        <note priority="1" from="meaning">April short name</note>
+      </trans-unit><trans-unit id="502512326533496869" datatype="html">
+        <source>May</source><target state="new">May</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
+          <context context-type="linenumber">59</context>
+        </context-group>
         <note priority="1" from="description">Month name short</note>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">60</context></context-group>
-      </trans-unit>
-      <trans-unit id="53176888553719239" datatype="html">
-        <source>Jul</source>
-        <target state="new">Jul</target>
+        <note priority="1" from="meaning">May short name</note>
+      </trans-unit><trans-unit id="3044090977322782161" datatype="html">
+        <source>Jun</source><target state="new">Jun</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
+          <context context-type="linenumber">60</context>
+        </context-group>
         <note priority="1" from="description">Month name short</note>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">61</context></context-group>
-      </trans-unit>
-      <trans-unit id="5648574669404659458" datatype="html">
-        <source>Aug</source>
-        <target state="new">Aug</target>
+        <note priority="1" from="meaning">June short name</note>
+      </trans-unit><trans-unit id="8066434078267346927" datatype="html">
+        <source>Jul</source><target state="new">Jul</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
+          <context context-type="linenumber">61</context>
+        </context-group>
         <note priority="1" from="description">Month name short</note>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">62</context></context-group>
-      </trans-unit>
-      <trans-unit id="4354095055982674918" datatype="html">
-        <source>Sep</source>
-        <target state="new">Sep</target>
+        <note priority="1" from="meaning">July short name</note>
+      </trans-unit><trans-unit id="1796563865253467834" datatype="html">
+        <source>Aug</source><target state="new">Aug</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
+          <context context-type="linenumber">62</context>
+        </context-group>
         <note priority="1" from="description">Month name short</note>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">63</context></context-group>
-      </trans-unit>
-      <trans-unit id="6207754626941051341" datatype="html">
-        <source>Oct</source>
-        <target state="new">Oct</target>
+        <note priority="1" from="meaning">August short name</note>
+      </trans-unit><trans-unit id="5865190625753625986" datatype="html">
+        <source>Sep</source><target state="new">Sep</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
+          <context context-type="linenumber">63</context>
+        </context-group>
         <note priority="1" from="description">Month name short</note>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">64</context></context-group>
-      </trans-unit>
-      <trans-unit id="8269261039058575292" datatype="html">
-        <source>Nov</source>
-        <target state="new">Nov</target>
+        <note priority="1" from="meaning">September short name</note>
+      </trans-unit><trans-unit id="4011114601374284323" datatype="html">
+        <source>Oct</source><target state="new">Oct</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
+          <context context-type="linenumber">64</context>
+        </context-group>
         <note priority="1" from="description">Month name short</note>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">65</context></context-group>
-      </trans-unit>
-      <trans-unit id="7777579586760423636" datatype="html">
-        <source>Dec</source>
-        <target state="new">Dec</target>
+        <note priority="1" from="meaning">October short name</note>
+      </trans-unit><trans-unit id="5063734982204786445" datatype="html">
+        <source>Nov</source><target state="new">Nov</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
+          <context context-type="linenumber">65</context>
+        </context-group>
         <note priority="1" from="description">Month name short</note>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">66</context></context-group>
+        <note priority="1" from="meaning">November short name</note>
+      </trans-unit><trans-unit id="4789897150069082503" datatype="html">
+        <source>Dec</source><target state="new">Dec</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
+          <context context-type="linenumber">66</context>
+        </context-group>
+        <note priority="1" from="description">Month name short</note>
+        <note priority="1" from="meaning">December short name</note>
       </trans-unit>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
       <trans-unit id="8700121026680200191" datatype="html">
         <source>Clear</source>
         <target state="new">Clear</target>

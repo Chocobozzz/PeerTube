@@ -16,7 +16,6 @@ import {
 } from '../../server/initializers/constants'
 import { I18N_LOCALES } from '../../shared/core-utils/i18n'
 
-
 const videojs = require(join(__dirname, '../../../client/src/locale/videojs.en-US.json'))
 const playerKeys = {
   'Quality': 'Quality',
