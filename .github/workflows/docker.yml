@@ -25,7 +25,7 @@ jobs:
           git fetch --force --tags
 
           one="{ \"file\": \"./support/docker/production/Dockerfile.bullseye\", \"ref\": \"develop\", \"tags\": \"chocobozzz/peertube:develop-bullseye\" }"
-          two="{ \"file\": \"./support/docker/production/Dockerfile.buster\", \"ref\": \"master\", \"tags\": \"chocobozzz/peertube:production-buster,chocobozzz/peertube:$(git describe --abbrev=0)-buster\" }"
+          two="{ \"file\": \"./support/docker/production/Dockerfile.bullseye\", \"ref\": \"master\", \"tags\": \"chocobozzz/peertube:production-bullseye,chocobozzz/peertube:$(git describe --abbrev=0)-bullseye\" }"
           three="{ \"file\": \"./support/docker/production/Dockerfile.nginx\", \"ref\": \"master\", \"tags\": \"chocobozzz/peertube-webserver:latest\" }"
 
           matrix="[$one,$two,$three]"
