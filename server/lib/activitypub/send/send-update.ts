@@ -134,7 +134,7 @@ function buildUpdateActivity (url: string, byActor: MActorLight, object: any, au
       type: 'Update' as 'Update',
       id: url,
       actor: byActor.url,
-      object
+      object: audiencify(object, audience)
     },
     audience
   )
