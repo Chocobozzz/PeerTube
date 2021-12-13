@@ -1,15 +1,15 @@
 import express from 'express'
+import { MActorLight } from '@server/types/models'
 import { Activity } from '../../../shared/models/activitypub/activity'
 import { VideoPrivacy } from '../../../shared/models/videos'
 import { activityPubCollectionPagination, activityPubContextify } from '../../helpers/activitypub'
 import { logger } from '../../helpers/logger'
-import { buildAnnounceActivity, buildCreateActivity } from '../../lib/activitypub/send'
 import { buildAudience } from '../../lib/activitypub/audience'
-import { asyncMiddleware, localAccountValidator, localVideoChannelValidator } from '../../middlewares'
+import { buildAnnounceActivity, buildCreateActivity } from '../../lib/activitypub/send'
+import { asyncMiddleware, ensureIsLocalChannel, localAccountValidator, videoChannelsNameWithHostValidator } from '../../middlewares'
+import { apPaginationValidator } from '../../middlewares/validators/activitypub'
 import { VideoModel } from '../../models/video/video'
 import { activityPubResponse } from './utils'
-import { MActorLight } from '@server/types/models'
-import { apPaginationValidator } from '../../middlewares/validators/activitypub'
 
 const outboxRouter = express.Router()
 
@@ -19,9 +19,10 @@ outboxRouter.get('/accounts/:name/outbox',
   asyncMiddleware(outboxController)
 )
 
-outboxRouter.get('/video-channels/:name/outbox',
+outboxRouter.get('/video-channels/:nameWithHost/outbox',
   apPaginationValidator,
-  localVideoChannelValidator,
+  asyncMiddleware(videoChannelsNameWithHostValidator),
+  ensureIsLocalChannel,
   asyncMiddleware(outboxController)
 )
 

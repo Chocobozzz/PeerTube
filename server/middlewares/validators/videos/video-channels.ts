@@ -1,5 +1,6 @@
 import express from 'express'
 import { body, param, query } from 'express-validator'
+import { CONFIG } from '@server/initializers/config'
 import { MChannelAccountDefault } from '@server/types/models'
 import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
 import { isBooleanValid, toBooleanOrNull } from '../../../helpers/custom-validators/misc'
@@ -12,8 +13,7 @@ import {
 import { logger } from '../../../helpers/logger'
 import { ActorModel } from '../../../models/actor/actor'
 import { VideoChannelModel } from '../../../models/video/video-channel'
-import { areValidationErrors, doesLocalVideoChannelNameExist, doesVideoChannelNameWithHostExist } from '../shared'
-import { CONFIG } from '@server/initializers/config'
+import { areValidationErrors, doesVideoChannelNameWithHostExist } from '../shared'
 
 const videoChannelsAddValidator = [
   body('name').custom(isVideoChannelUsernameValid).withMessage('Should have a valid channel name'),
@@ -93,14 +93,14 @@ const videoChannelsNameWithHostValidator = [
   }
 ]
 
-const localVideoChannelValidator = [
-  param('name').custom(isVideoChannelDisplayNameValid).withMessage('Should have a valid video channel name'),
-
-  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking localVideoChannelValidator parameters', { parameters: req.params })
-
-    if (areValidationErrors(req, res)) return
-    if (!await doesLocalVideoChannelNameExist(req.params.name, res)) return
+const ensureIsLocalChannel = [
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (res.locals.videoChannel.Actor.isOwned() === false) {
+      return res.fail({
+        status: HttpStatusCode.FORBIDDEN_403,
+        message: 'This channel is not owned.'
+      })
+    }
 
     return next()
   }
@@ -137,8 +137,8 @@ export {
   videoChannelsUpdateValidator,
   videoChannelsRemoveValidator,
   videoChannelsNameWithHostValidator,
+  ensureIsLocalChannel,
   videoChannelsListValidator,
-  localVideoChannelValidator,
   videoChannelStatsValidator
 }
 

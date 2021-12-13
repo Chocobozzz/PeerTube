@@ -490,21 +490,23 @@ const ensureAuthUserOwnsAccountValidator = [
   }
 ]
 
-function ensureUserCanManageChannel (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const user = res.locals.oauth.token.user
-  const isUserOwner = res.locals.videoChannel.Account.userId === user.id
+const ensureCanManageChannel = [
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    const user = res.locals.oauth.token.user
+    const isUserOwner = res.locals.videoChannel.Account.userId === user.id
 
-  if (!isUserOwner && user.hasRight(UserRight.MANAGE_ANY_VIDEO_CHANNEL) === false) {
-    const message = `User ${user.username} does not have right to manage channel ${req.params.nameWithHost}.`
+    if (!isUserOwner && user.hasRight(UserRight.MANAGE_ANY_VIDEO_CHANNEL) === false) {
+      const message = `User ${user.username} does not have right to manage channel ${req.params.nameWithHost}.`
 
-    return res.fail({
-      status: HttpStatusCode.FORBIDDEN_403,
-      message
-    })
+      return res.fail({
+        status: HttpStatusCode.FORBIDDEN_403,
+        message
+      })
+    }
+
+    return next()
   }
-
-  return next()
-}
+]
 
 const ensureCanManageUser = [
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -544,7 +546,7 @@ export {
   userAutocompleteValidator,
   ensureAuthUserOwnsAccountValidator,
   ensureCanManageUser,
-  ensureUserCanManageChannel
+  ensureCanManageChannel
 }
 
 // ---------------------------------------------------------------------------

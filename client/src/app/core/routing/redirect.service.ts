@@ -58,7 +58,7 @@ export class RedirectService {
     }
 
     if (fallbackRoute) {
-      this.router.navigate(fallbackRoute)
+      return this.router.navigate(fallbackRoute)
     }
 
     return this.redirectToHomepage()

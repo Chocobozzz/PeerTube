@@ -20,7 +20,8 @@ import {
   asyncMiddleware,
   executeIfActivityPub,
   localAccountValidator,
-  localVideoChannelValidator,
+  videoChannelsNameWithHostValidator,
+  ensureIsLocalChannel,
   videosCustomGetValidator,
   videosShareValidator
 } from '../../middlewares'
@@ -123,24 +124,28 @@ activityPubClientRouter.get('/videos/watch/:videoId/comments/:commentId/activity
 )
 
 activityPubClientRouter.get(
-  [ '/video-channels/:name', '/video-channels/:name/videos', '/c/:name', '/c/:name/videos' ],
+  [ '/video-channels/:nameWithHost', '/video-channels/:nameWithHost/videos', '/c/:nameWithHost', '/c/:nameWithHost/videos' ],
   executeIfActivityPub,
-  asyncMiddleware(localVideoChannelValidator),
+  asyncMiddleware(videoChannelsNameWithHostValidator),
+  ensureIsLocalChannel,
   videoChannelController
 )
-activityPubClientRouter.get('/video-channels/:name/followers',
+activityPubClientRouter.get('/video-channels/:nameWithHost/followers',
   executeIfActivityPub,
-  asyncMiddleware(localVideoChannelValidator),
+  asyncMiddleware(videoChannelsNameWithHostValidator),
+  ensureIsLocalChannel,
   asyncMiddleware(videoChannelFollowersController)
 )
-activityPubClientRouter.get('/video-channels/:name/following',
+activityPubClientRouter.get('/video-channels/:nameWithHost/following',
   executeIfActivityPub,
-  asyncMiddleware(localVideoChannelValidator),
+  asyncMiddleware(videoChannelsNameWithHostValidator),
+  ensureIsLocalChannel,
   asyncMiddleware(videoChannelFollowingController)
 )
-activityPubClientRouter.get('/video-channels/:name/playlists',
+activityPubClientRouter.get('/video-channels/:nameWithHost/playlists',
   executeIfActivityPub,
-  asyncMiddleware(localVideoChannelValidator),
+  asyncMiddleware(videoChannelsNameWithHostValidator),
+  ensureIsLocalChannel,
   asyncMiddleware(videoChannelPlaylistsController)
 )
 

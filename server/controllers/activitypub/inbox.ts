@@ -4,7 +4,14 @@ import { Activity, ActivityPubCollection, ActivityPubOrderedCollection, RootActi
 import { HttpStatusCode } from '../../../shared/models/http/http-error-codes'
 import { isActivityValid } from '../../helpers/custom-validators/activitypub/activity'
 import { logger } from '../../helpers/logger'
-import { asyncMiddleware, checkSignature, localAccountValidator, localVideoChannelValidator, signatureValidator } from '../../middlewares'
+import {
+  asyncMiddleware,
+  checkSignature,
+  ensureIsLocalChannel,
+  localAccountValidator,
+  signatureValidator,
+  videoChannelsNameWithHostValidator
+} from '../../middlewares'
 import { activityPubValidator } from '../../middlewares/validators/activitypub/activity'
 
 const inboxRouter = express.Router()
@@ -23,10 +30,11 @@ inboxRouter.post('/accounts/:name/inbox',
   asyncMiddleware(activityPubValidator),
   inboxController
 )
-inboxRouter.post('/video-channels/:name/inbox',
+inboxRouter.post('/video-channels/:nameWithHost/inbox',
   signatureValidator,
   asyncMiddleware(checkSignature),
-  asyncMiddleware(localVideoChannelValidator),
+  asyncMiddleware(videoChannelsNameWithHostValidator),
+  ensureIsLocalChannel,
   asyncMiddleware(activityPubValidator),
   inboxController
 )
