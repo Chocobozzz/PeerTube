@@ -12,7 +12,7 @@ import { assignToken, buildServer, getServerCredentials } from './cli'
 import bytes = require('bytes')
 
 program
-  .name('plugins')
+  .name('redundancy')
   .usage('[command] [options]')
 
 program
