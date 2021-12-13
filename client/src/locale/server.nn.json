@@ -33,6 +33,8 @@
     "To import": "Å importera",
     "Waiting for livestream": "Ventar på direktesending",
     "Livestream ended": "Direktesendinga er slutt",
+    "To move to an external storage": "To move to an external storage",
+    "Transcoding failed": "Transcoding failed",
     "Pending": "Ventar",
     "Success": "Vellukka",
     "Failed": "Mislukka",
@@ -149,6 +151,7 @@
     "Kuanyama": "Kuanyama",
     "Kurdish": "Kurdisk",
     "Lao": "Laotisk",
+    "Latin": "Latin",
     "Latvian": "Latvisk",
     "Limburgan": "Limburgisk",
     "Lingala": "Lingala",
@@ -242,5 +245,6 @@
     "Yoruba": "Yoruba",
     "Zhuang": "Zhuang",
     "Chinese": "Kinesisk",
-    "Zulu": "Zulu"
+    "Zulu": "Zulu",
+    "No linguistic content": "No linguistic content"
 }
