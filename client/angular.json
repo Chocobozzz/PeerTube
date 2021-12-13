@@ -124,6 +124,14 @@
           "kab": {
             "translation": "src/locale/angular.kab.xlf",
             "baseHref": "/client/kab/"
+          },
+          "nb": {
+            "translation": "src/locale/angular.nb-NO.xlf",
+            "baseHref": "/client/nb-NO/"
+          },
+          "nn": {
+            "translation": "src/locale/angular.nn.xlf",
+            "baseHref": "/client/nn/"
           }
         }
       },

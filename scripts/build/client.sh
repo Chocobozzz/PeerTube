@@ -35,6 +35,8 @@ languages=(
     ["de"]="de-DE"
     ["it"]="it-IT"
     ["sq"]="sq"
+    ["nn"]="nn"
+    ["nb"]="nb-NO"
     ["kab"]="kab"
 )
 
