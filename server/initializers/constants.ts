@@ -1075,7 +1075,9 @@ function buildLanguages () {
     epo: true, // Esperanto
     tlh: true, // Klingon
     jbo: true, // Lojban
-    avk: true // Kotava
+    avk: true, // Kotava
+
+    zxx: true // No linguistic content (ISO-639-2)
   }
 
   // Only add ISO639-1 languages and some sign languages (ISO639-3)
