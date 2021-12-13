@@ -1,6 +1,6 @@
 # Changelog
 
-## v4.0.0-rc.1
+## v4.0.0
 
 ### IMPORTANT NOTES
 
@@ -118,6 +118,15 @@
  * Fix player placeholder width
  * Fix playlist miniature size with big description
  * Correctly escape meta tags
+ * Fix audio upload client bug if not enabled by instance
+ * Add header Vary Accept-Language [#4588](https://github.com/Chocobozzz/PeerTube/pull/4588)
+ * Fix additional extensions admin config description
+ * Fix upload of video with long filename
+ * Fix pending transcoding counter with failed job
+ * Fix client header search on ios
+ * Fix iframe attribute `allow-popups` for oembed
+ * Fix theme update when logged in
+ * Fix homepage title
 
 
 ## v3.4.1
