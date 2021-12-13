@@ -1,7 +1,9 @@
+import { registerTSPaths } from '../../server/helpers/register-ts-paths'
+registerTSPaths()
+
 import { writeJSON } from 'fs-extra'
 import { values } from 'lodash'
 import { join } from 'path'
-import { registerTSPaths } from '../../server/helpers/register-ts-paths'
 import {
   buildLanguages,
   VIDEO_CATEGORIES,
@@ -14,7 +16,6 @@ import {
 } from '../../server/initializers/constants'
 import { I18N_LOCALES } from '../../shared/core-utils/i18n'
 
-registerTSPaths()
 
 const videojs = require(join(__dirname, '../../../client/src/locale/videojs.en-US.json'))
 const playerKeys = {
