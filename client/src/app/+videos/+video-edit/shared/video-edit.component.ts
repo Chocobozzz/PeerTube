@@ -178,10 +178,11 @@ export class VideoEditComponent implements OnInit, OnDestroy {
       .subscribe(res => {
         this.videoLanguages = res.languages
           .map(l => {
-            if (l.id === 'zxx') return { ...l, group: $localize`Special values`, groupOrder: -1 }
+            if (l.id === 'zxx') return { ...l, group: $localize`Other`, groupOrder: 1 }
+
             return res.about.instance.languages.includes(l.id)
               ? { ...l, group: $localize`Instance languages`, groupOrder: 0 }
-              : { ...l, group: $localize`All languages`, groupOrder: 1 }
+              : { ...l, group: $localize`All languages`, groupOrder: 2 }
           })
           .sort((a, b) => a.groupOrder - b.groupOrder)
       })
