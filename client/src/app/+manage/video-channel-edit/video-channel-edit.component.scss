@@ -1,6 +1,10 @@
 @use '_variables' as *;
 @use '_mixins' as *;
 
+.margin-content {
+  padding-top: 20px;
+}
+
 label {
   font-weight: $font-regular;
   font-size: 100%;

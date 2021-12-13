@@ -9,7 +9,7 @@
 <div class="video-channels-header d-flex justify-content-between">
   <my-advanced-input-filter (search)="onSearch($event)"></my-advanced-input-filter>
 
-  <a class="create-button" routerLink="create">
+  <a class="create-button" routerLink="/manage/create">
     <my-global-icon iconName="add" aria-hidden="true"></my-global-icon>
     <ng-container i18n>Create video channel</ng-container>
   </a>
@@ -37,7 +37,7 @@
       <div i18n class="video-channel-videos">{videoChannel.videosCount, plural, =0 {No videos} =1 {1 video} other {{{ videoChannel.videosCount }} videos}}</div>
 
       <div class="video-channel-buttons">
-        <my-edit-button label [routerLink]="[ 'update', videoChannel.nameWithHost ]"></my-edit-button>
+        <my-edit-button label [routerLink]="[ '/manage/update', videoChannel.nameWithHost ]"></my-edit-button>
         <my-delete-button label (click)="deleteVideoChannel(videoChannel)"></my-delete-button>
       </div>
 

@@ -1,7 +1,7 @@
 import express from 'express'
 import { body, param, query } from 'express-validator'
-import { MChannelAccountDefault, MUser } from '@server/types/models'
-import { UserRight } from '../../../../shared'
+import { CONFIG } from '@server/initializers/config'
+import { MChannelAccountDefault } from '@server/types/models'
 import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
 import { isBooleanValid, toBooleanOrNull } from '../../../helpers/custom-validators/misc'
 import {
@@ -13,8 +13,7 @@ import {
 import { logger } from '../../../helpers/logger'
 import { ActorModel } from '../../../models/actor/actor'
 import { VideoChannelModel } from '../../../models/video/video-channel'
-import { areValidationErrors, doesLocalVideoChannelNameExist, doesVideoChannelNameWithHostExist } from '../shared'
-import { CONFIG } from '@server/initializers/config'
+import { areValidationErrors, doesVideoChannelNameWithHostExist } from '../shared'
 
 const videoChannelsAddValidator = [
   body('name').custom(isVideoChannelUsernameValid).withMessage('Should have a valid channel name'),
@@ -71,16 +70,10 @@ const videoChannelsUpdateValidator = [
 ]
 
 const videoChannelsRemoveValidator = [
-  param('nameWithHost').exists().withMessage('Should have an video channel name with host'),
-
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoChannelsRemove parameters', { parameters: req.params })
 
-    if (areValidationErrors(req, res)) return
-    if (!await doesVideoChannelNameWithHostExist(req.params.nameWithHost, res)) return
-
-    if (!checkUserCanDeleteVideoChannel(res.locals.oauth.token.User, res.locals.videoChannel, res)) return
-    if (!await checkVideoChannelIsNotTheLastOne(res)) return
+    if (!await checkVideoChannelIsNotTheLastOne(res.locals.videoChannel, res)) return
 
     return next()
   }
@@ -100,14 +93,14 @@ const videoChannelsNameWithHostValidator = [
   }
 ]
 
-const localVideoChannelValidator = [
-  param('name').custom(isVideoChannelDisplayNameValid).withMessage('Should have a valid video channel name'),
-
-  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking localVideoChannelValidator parameters', { parameters: req.params })
-
-    if (areValidationErrors(req, res)) return
-    if (!await doesLocalVideoChannelNameExist(req.params.name, res)) return
+const ensureIsLocalChannel = [
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (res.locals.videoChannel.Actor.isOwned() === false) {
+      return res.fail({
+        status: HttpStatusCode.FORBIDDEN_403,
+        message: 'This channel is not owned.'
+      })
+    }
 
     return next()
   }
@@ -144,38 +137,15 @@ export {
   videoChannelsUpdateValidator,
   videoChannelsRemoveValidator,
   videoChannelsNameWithHostValidator,
+  ensureIsLocalChannel,
   videoChannelsListValidator,
-  localVideoChannelValidator,
   videoChannelStatsValidator
 }
 
 // ---------------------------------------------------------------------------
 
-function checkUserCanDeleteVideoChannel (user: MUser, videoChannel: MChannelAccountDefault, res: express.Response) {
-  if (videoChannel.Actor.isOwned() === false) {
-    res.fail({
-      status: HttpStatusCode.FORBIDDEN_403,
-      message: 'Cannot remove video channel of another server.'
-    })
-    return false
-  }
-
-  // Check if the user can delete the video channel
-  // The user can delete it if s/he is an admin
-  // Or if s/he is the video channel's account
-  if (user.hasRight(UserRight.REMOVE_ANY_VIDEO_CHANNEL) === false && videoChannel.Account.userId !== user.id) {
-    res.fail({
-      status: HttpStatusCode.FORBIDDEN_403,
-      message: 'Cannot remove video channel of another user'
-    })
-    return false
-  }
-
-  return true
-}
-
-async function checkVideoChannelIsNotTheLastOne (res: express.Response) {
-  const count = await VideoChannelModel.countByAccount(res.locals.oauth.token.User.Account.id)
+async function checkVideoChannelIsNotTheLastOne (videoChannel: MChannelAccountDefault, res: express.Response) {
+  const count = await VideoChannelModel.countByAccount(videoChannel.Account.id)
 
   if (count <= 1) {
     res.fail({

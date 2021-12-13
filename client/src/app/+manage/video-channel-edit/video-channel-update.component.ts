@@ -2,7 +2,7 @@ import { Subscription } from 'rxjs'
 import { HttpErrorResponse } from '@angular/common/http'
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { AuthService, Notifier, ServerService } from '@app/core'
+import { AuthService, Notifier, RedirectService, ServerService } from '@app/core'
 import { genericUploadErrorHandler } from '@app/helpers'
 import {
   VIDEO_CHANNEL_DESCRIPTION_VALIDATOR,
@@ -12,14 +12,14 @@ import {
 import { FormValidatorService } from '@app/shared/shared-forms'
 import { VideoChannel, VideoChannelService } from '@app/shared/shared-main'
 import { HTMLServerConfig, VideoChannelUpdate } from '@shared/models'
-import { MyVideoChannelEdit } from './my-video-channel-edit'
+import { VideoChannelEdit } from './video-channel-edit'
 
 @Component({
   selector: 'my-video-channel-update',
-  templateUrl: './my-video-channel-edit.component.html',
-  styleUrls: [ './my-video-channel-edit.component.scss' ]
+  templateUrl: './video-channel-edit.component.html',
+  styleUrls: [ './video-channel-edit.component.scss' ]
 })
-export class MyVideoChannelUpdateComponent extends MyVideoChannelEdit implements OnInit, OnDestroy {
+export class VideoChannelUpdateComponent extends VideoChannelEdit implements OnInit, OnDestroy {
   error: string
   videoChannel: VideoChannel
 
@@ -34,7 +34,8 @@ export class MyVideoChannelUpdateComponent extends MyVideoChannelEdit implements
     private router: Router,
     private route: ActivatedRoute,
     private videoChannelService: VideoChannelService,
-    private serverService: ServerService
+    private serverService: ServerService,
+    private redirectService: RedirectService
   ) {
     super()
   }
@@ -50,9 +51,9 @@ export class MyVideoChannelUpdateComponent extends MyVideoChannelEdit implements
     })
 
     this.paramsSub = this.route.params.subscribe(routeParams => {
-      const videoChannelId = routeParams['videoChannelId']
+      const videoChannelName = routeParams['videoChannelName']
 
-      this.videoChannelService.getVideoChannel(videoChannelId)
+      this.videoChannelService.getVideoChannel(videoChannelName)
         .subscribe({
           next: videoChannelToUpdate => {
             this.videoChannel = videoChannelToUpdate
@@ -95,7 +96,7 @@ export class MyVideoChannelUpdateComponent extends MyVideoChannelEdit implements
 
           this.notifier.success($localize`Video channel ${videoChannelUpdate.displayName} updated.`)
 
-          this.router.navigate([ '/my-library', 'video-channels' ])
+          this.redirectService.redirectToPreviousRoute([ '/c', this.videoChannel.name ])
         },
 
         error: err => {

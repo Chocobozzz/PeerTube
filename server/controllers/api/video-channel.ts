@@ -24,6 +24,7 @@ import {
   asyncRetryTransactionMiddleware,
   authenticate,
   commonVideosFiltersValidator,
+  ensureCanManageChannel,
   optionalAuthenticate,
   paginationValidator,
   setDefaultPagination,
@@ -36,7 +37,7 @@ import {
   videoPlaylistsSortValidator
 } from '../../middlewares'
 import {
-  ensureAuthUserOwnsChannelValidator,
+  ensureIsLocalChannel,
   videoChannelsFollowersSortValidator,
   videoChannelsListValidator,
   videoChannelsNameWithHostValidator,
@@ -74,7 +75,8 @@ videoChannelRouter.post('/:nameWithHost/avatar/pick',
   authenticate,
   reqAvatarFile,
   asyncMiddleware(videoChannelsNameWithHostValidator),
-  ensureAuthUserOwnsChannelValidator,
+  ensureIsLocalChannel,
+  ensureCanManageChannel,
   updateAvatarValidator,
   asyncMiddleware(updateVideoChannelAvatar)
 )
@@ -83,7 +85,8 @@ videoChannelRouter.post('/:nameWithHost/banner/pick',
   authenticate,
   reqBannerFile,
   asyncMiddleware(videoChannelsNameWithHostValidator),
-  ensureAuthUserOwnsChannelValidator,
+  ensureIsLocalChannel,
+  ensureCanManageChannel,
   updateBannerValidator,
   asyncMiddleware(updateVideoChannelBanner)
 )
@@ -91,27 +94,33 @@ videoChannelRouter.post('/:nameWithHost/banner/pick',
 videoChannelRouter.delete('/:nameWithHost/avatar',
   authenticate,
   asyncMiddleware(videoChannelsNameWithHostValidator),
-  ensureAuthUserOwnsChannelValidator,
+  ensureIsLocalChannel,
+  ensureCanManageChannel,
   asyncMiddleware(deleteVideoChannelAvatar)
 )
 
 videoChannelRouter.delete('/:nameWithHost/banner',
   authenticate,
   asyncMiddleware(videoChannelsNameWithHostValidator),
-  ensureAuthUserOwnsChannelValidator,
+  ensureIsLocalChannel,
+  ensureCanManageChannel,
   asyncMiddleware(deleteVideoChannelBanner)
 )
 
 videoChannelRouter.put('/:nameWithHost',
   authenticate,
   asyncMiddleware(videoChannelsNameWithHostValidator),
-  ensureAuthUserOwnsChannelValidator,
+  ensureIsLocalChannel,
+  ensureCanManageChannel,
   videoChannelsUpdateValidator,
   asyncRetryTransactionMiddleware(updateVideoChannel)
 )
 
 videoChannelRouter.delete('/:nameWithHost',
   authenticate,
+  asyncMiddleware(videoChannelsNameWithHostValidator),
+  ensureIsLocalChannel,
+  ensureCanManageChannel,
   asyncMiddleware(videoChannelsRemoveValidator),
   asyncRetryTransactionMiddleware(removeVideoChannel)
 )
@@ -145,7 +154,7 @@ videoChannelRouter.get('/:nameWithHost/videos',
 videoChannelRouter.get('/:nameWithHost/followers',
   authenticate,
   asyncMiddleware(videoChannelsNameWithHostValidator),
-  ensureAuthUserOwnsChannelValidator,
+  ensureCanManageChannel,
   paginationValidator,
   videoChannelsFollowersSortValidator,
   setDefaultSort,

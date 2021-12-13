@@ -12,13 +12,13 @@ import {
 import { FormValidatorService } from '@app/shared/shared-forms'
 import { VideoChannel, VideoChannelService } from '@app/shared/shared-main'
 import { HttpStatusCode, VideoChannelCreate } from '@shared/models'
-import { MyVideoChannelEdit } from './my-video-channel-edit'
+import { VideoChannelEdit } from './video-channel-edit'
 
 @Component({
-  templateUrl: './my-video-channel-edit.component.html',
-  styleUrls: [ './my-video-channel-edit.component.scss' ]
+  templateUrl: './video-channel-edit.component.html',
+  styleUrls: [ './video-channel-edit.component.scss' ]
 })
-export class MyVideoChannelCreateComponent extends MyVideoChannelEdit implements OnInit {
+export class VideoChannelCreateComponent extends VideoChannelEdit implements OnInit {
   error: string
   videoChannel = new VideoChannel({})
 

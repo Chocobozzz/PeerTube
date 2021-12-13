@@ -6,11 +6,11 @@
   <div class="channel-info">
 
     <ng-template #buttonsTemplate>
-      <a *ngIf="isManageable()" [routerLink]="[ '/my-library/video-channels/update', videoChannel.nameWithHost ]" class="peertube-button-link orange-button" i18n>
+      <a *ngIf="isManageable()" [routerLink]="[ '/manage/update', videoChannel.nameWithHost  ]" class="peertube-button-link orange-button" i18n>
         Manage channel
       </a>
 
-      <my-subscribe-button *ngIf="!isManageable()" #subscribeButton [videoChannels]="[videoChannel]"></my-subscribe-button>
+      <my-subscribe-button *ngIf="!isOwner()" #subscribeButton [videoChannels]="[videoChannel]"></my-subscribe-button>
 
       <button *ngIf="videoChannel.support" (click)="showSupportModal()" class="support-button peertube-button orange-button-inverted">
         <my-global-icon iconName="support" aria-hidden="true"></my-global-icon>

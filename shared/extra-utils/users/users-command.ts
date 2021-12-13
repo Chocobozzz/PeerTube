@@ -202,7 +202,8 @@ export class UsersCommand extends AbstractCommand {
     return {
       token,
       userId: user.id,
-      userChannelId: me.videoChannels[0].id
+      userChannelId: me.videoChannels[0].id,
+      userChannelName: me.videoChannels[0].name
     }
   }
 

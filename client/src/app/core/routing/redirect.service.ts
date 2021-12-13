@@ -46,7 +46,7 @@ export class RedirectService {
     return this.defaultTrendingAlgorithm
   }
 
-  redirectToPreviousRoute () {
+  redirectToPreviousRoute (fallbackRoute: string[] = null) {
     const exceptions = [
       '/verify-account',
       '/reset-password'
@@ -55,6 +55,10 @@ export class RedirectService {
     if (this.previousUrl) {
       const isException = exceptions.find(e => this.previousUrl.startsWith(e))
       if (!isException) return this.router.navigateByUrl(this.previousUrl)
+    }
+
+    if (fallbackRoute) {
+      return this.router.navigate(fallbackRoute)
     }
 
     return this.redirectToHomepage()

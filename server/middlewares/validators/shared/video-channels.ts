@@ -3,12 +3,6 @@ import { VideoChannelModel } from '@server/models/video/video-channel'
 import { MChannelBannerAccountDefault } from '@server/types/models'
 import { HttpStatusCode } from '@shared/models'
 
-async function doesLocalVideoChannelNameExist (name: string, res: express.Response) {
-  const videoChannel = await VideoChannelModel.loadLocalByNameAndPopulateAccount(name)
-
-  return processVideoChannelExist(videoChannel, res)
-}
-
 async function doesVideoChannelIdExist (id: number, res: express.Response) {
   const videoChannel = await VideoChannelModel.loadAndPopulateAccount(+id)
 
@@ -24,7 +18,6 @@ async function doesVideoChannelNameWithHostExist (nameWithDomain: string, res: e
 // ---------------------------------------------------------------------------
 
 export {
-  doesLocalVideoChannelNameExist,
   doesVideoChannelIdExist,
   doesVideoChannelNameWithHostExist
 }
