@@ -2,7 +2,14 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { cleanupTests, createSingleServer, FIXTURE_URLS, PeerTubeServer, setAccessTokensToServers, setDefaultVideoChannel } from '@shared/extra-utils'
+import {
+  cleanupTests,
+  createSingleServer,
+  FIXTURE_URLS,
+  PeerTubeServer,
+  setAccessTokensToServers,
+  setDefaultVideoChannel
+} from '@shared/extra-utils'
 import { VideoDetails, VideoPrivacy } from '@shared/models'
 
 const expect = chai.expect
