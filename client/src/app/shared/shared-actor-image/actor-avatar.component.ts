@@ -8,7 +8,7 @@ type ActorInput = {
   url: string
 }
 
-export type ActorAvatarSize = '18' | '25' | '32' | '34' | '36' | '40' | '100' | '120'
+export type ActorAvatarSize = '18' | '25' | '28' | '32' | '34' | '35' | '36' | '40' | '48' | '75' | '80' | '100' | '120'
 
 @Component({
   selector: 'my-actor-avatar',

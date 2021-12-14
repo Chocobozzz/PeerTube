@@ -58,10 +58,6 @@
   max-width: 800px;
 }
 
-.video-channel my-actor-avatar {
-  @include build-channel-img-size($video-thumbnail-width);
-}
-
 .video-channel-info {
   flex-grow: 1;
   margin: 0 10px;

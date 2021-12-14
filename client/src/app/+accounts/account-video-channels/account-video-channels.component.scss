@@ -29,7 +29,6 @@
   grid-template-rows: auto 1fr;
 
   my-actor-avatar {
-    @include actor-avatar-size(75px);
     @include margin-right(15px);
 
     grid-column: 1;
