@@ -16,7 +16,7 @@ describe('Test transcoding API validators', function () {
   // ---------------------------------------------------------------
 
   before(async function () {
-    this.timeout(60000)
+    this.timeout(120000)
 
     servers = await createMultipleServers(2)
     await setAccessTokensToServers(servers)
