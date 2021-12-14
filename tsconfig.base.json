@@ -3,7 +3,7 @@
     "module": "commonjs",
     "target": "es2015",
     "noImplicitAny": false,
-    "sourceMap": false,
+    "sourceMap": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "importHelpers": true,
@@ -32,6 +32,7 @@
     "resolveJsonModule": true,
     "strict": false,
     "skipLibCheck": true,
-    "composite": true
+    "composite": true,
+    "declarationMap": true
   }
 }
