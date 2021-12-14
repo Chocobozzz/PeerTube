@@ -19,10 +19,10 @@ rm -rf "./dist"
 mkdir "./dist"
 cp "./tsconfig.json" "./dist"
 
-npm run tsc -- --incremental --sourceMap
+npm run tsc -- -b -v --incremental
 cp -r ./server/static ./server/assets ./dist/server
 cp -r "./server/lib/emails" "./dist/server/lib"
 
 NODE_ENV=test node node_modules/.bin/concurrently -k \
   "node_modules/.bin/nodemon --delay 1 --watch ./dist dist/server" \
-  "node_modules/.bin/tsc --incremental --sourceMap --preserveWatchOutput -w"
+  "node_modules/.bin/tsc -b -w --preserveWatchOutput"

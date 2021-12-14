@@ -13,6 +13,7 @@ run()
 
 async function run () {
   execSync('npm run build:types', { stdio: 'inherit' })
+
   const typesPath = resolve(cwd(), './types/')
   const typesDistPath = resolve(cwd(), typesPath, './dist/')
   const typesDistPackageJsonPath = resolve(typesDistPath, './package.json')

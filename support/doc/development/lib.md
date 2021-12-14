@@ -2,22 +2,24 @@
 
 ## @peertube/embed-api
 
-### Build
+### Build & Publish
 
 ```
 $ cd client/src/standalone/player/
 $ npm run build
+$ npm publish --access=public
 ```
 
 ## @peertube/peertube-types
 
-Typescript definition files generation is controlled by the various `tsconfig.types.json` files, see:
+Typescript definition files generation is controlled by the various `tsconfig.types.json` files.
+
+The complete types package is generated via:
+
 ```
-yarn tsc -b --verbose tsconfig.types.json
+$ npm run generate-types-package
+$ cd dist
+$ npm publish --access=public
 ```
 
-But the complete types package is generated via:
-```
-yarn generate-types-package
-```
 > See [scripts/generate-types-package.ts](scripts/generate-types-package.ts) for details.
