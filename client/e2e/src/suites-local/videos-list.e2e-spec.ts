@@ -4,6 +4,7 @@ import { MyAccountPage } from '../po/my-account'
 import { VideoListPage } from '../po/video-list.po'
 import { VideoSearchPage } from '../po/video-search.po'
 import { VideoUploadPage } from '../po/video-upload.po'
+import { VideoWatchPage } from '../po/video-watch.po'
 import { NSFWPolicy } from '../types/common'
 import { isMobileDevice, isSafari, waitServerUp } from '../utils'
 
@@ -14,6 +15,7 @@ describe('Videos list', () => {
   let loginPage: LoginPage
   let myAccountPage: MyAccountPage
   let videoSearchPage: VideoSearchPage
+  let videoWatchPage: VideoWatchPage
 
   const seed = Math.random()
   const nsfwVideo = seed + ' - nsfw'
@@ -108,6 +110,7 @@ describe('Videos list', () => {
     videoUploadPage = new VideoUploadPage()
     myAccountPage = new MyAccountPage()
     videoSearchPage = new VideoSearchPage()
+    videoWatchPage = new VideoWatchPage(isMobileDevice(), isSafari())
 
     await browser.maximizeWindow()
   })
@@ -190,6 +193,27 @@ describe('Videos list', () => {
       await updateUserNSFW('display')
       await checkCommonVideoListPages('display')
       await checkSearchPage('display')
+    })
+
+    after(async () => {
+      await loginPage.logout()
+    })
+  })
+
+  describe('Default upload values', function () {
+
+    it('Should have default video values', async function () {
+      await loginPage.loginAsRootUser()
+      await videoUploadPage.navigateTo()
+      await videoUploadPage.uploadVideo()
+      await videoUploadPage.validSecondUploadStep('video')
+
+      await videoWatchPage.waitWatchVideoName('video')
+
+      expect(await videoWatchPage.getPrivacy()).toBe('Public')
+      expect(await videoWatchPage.getLicence()).toBe('Unknown')
+      expect(await videoWatchPage.isDownloadEnabled()).toBeTruthy()
+      expect(await videoWatchPage.areCommentsEnabled()).toBeTruthy()
     })
   })
 })

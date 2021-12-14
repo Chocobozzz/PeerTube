@@ -55,6 +55,15 @@ class ServerConfigManager {
         }
       },
 
+      defaults: {
+        publish: {
+          downloadEnabled: CONFIG.DEFAULTS.PUBLISH.DOWNLOAD_ENABLED,
+          commentsEnabled: CONFIG.DEFAULTS.PUBLISH.COMMENTS_ENABLED,
+          privacy: CONFIG.DEFAULTS.PUBLISH.PRIVACY,
+          licence: CONFIG.DEFAULTS.PUBLISH.LICENCE
+        }
+      },
+
       webadmin: {
         configuration: {
           edition: {

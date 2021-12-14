@@ -49,7 +49,9 @@ export abstract class VideoSend extends FormReactive implements OnInit {
     this.serverService.getVideoPrivacies()
         .subscribe(
           privacies => {
-            const { videoPrivacies, defaultPrivacyId } = this.videoService.explainedPrivacyLabels(privacies)
+            const defaultPrivacy = this.serverConfig.defaults.publish.privacy
+
+            const { videoPrivacies, defaultPrivacyId } = this.videoService.explainedPrivacyLabels(privacies, defaultPrivacy)
 
             this.videoPrivacies = videoPrivacies
             this.firstStepPrivacyId = defaultPrivacyId

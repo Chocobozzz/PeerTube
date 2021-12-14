@@ -75,18 +75,22 @@ email:
   subject:
     prefix: '[PeerTube]'
 
-# PeerTube client/interface configuration
-client:
-  videos:
-    miniature:
-      # By default PeerTube client displays author username
-      prefer_author_display_name: false
+# Update default PeerTube values
+# Set by API when the field is not provided and put as default value in client
+defaults:
+  # Change default values when publishing a video (upload/import/go Live)
+  publish:
+    download_enabled: true
 
-  menu:
-    login:
-      # If you enable only one external auth plugin
-      # You can automatically redirect your users on this external platform when they click on the login button
-      redirect_on_single_external_auth: false
+    comments_enabled: true
+
+    # public = 1, unlisted = 2, private = 3, internal = 4
+    privacy: 1
+
+    # CC-BY = 1, CC-SA = 2, CC-ND = 3, CC-NC = 4, CC-NC-SA = 5, CC-NC-ND = 6, Public Domain = 7
+    # You can also choose a custom licence value added by a plugin
+    # No licence by default
+    licence: null
 
 # From the project root directory
 storage:
@@ -587,3 +591,16 @@ search:
     disable_local_search: false
     # If you did not disable local search, you can decide to use the search index by default
     is_default_search: false
+
+# PeerTube client/interface configuration
+client:
+  videos:
+    miniature:
+      # By default PeerTube client displays author username
+      prefer_author_display_name: false
+
+  menu:
+    login:
+      # If you enable only one external auth plugin
+      # You can automatically redirect your users on this external platform when they click on the login button
+      redirect_on_single_external_auth: false

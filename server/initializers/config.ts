@@ -4,7 +4,7 @@ import { dirname, join } from 'path'
 import { decacheModule } from '@server/helpers/decache'
 import { VideoRedundancyConfigFilter } from '@shared/models/redundancy/video-redundancy-config-filter.type'
 import { BroadcastMessageLevel } from '@shared/models/server'
-import { VideosRedundancyStrategy } from '../../shared/models'
+import { VideoPrivacy, VideosRedundancyStrategy } from '../../shared/models'
 import { NSFWPolicyType } from '../../shared/models/videos/nsfw-policy.type'
 import { buildPath, parseBytes, parseDurationToMs, root } from '../helpers/core-utils'
 
@@ -68,6 +68,15 @@ const CONFIG = {
       LOGIN: {
         get REDIRECT_ON_SINGLE_EXTERNAL_AUTH () { return config.get<boolean>('client.menu.login.redirect_on_single_external_auth') }
       }
+    }
+  },
+
+  DEFAULTS: {
+    PUBLISH: {
+      DOWNLOAD_ENABLED: config.get<boolean>('defaults.publish.download_enabled'),
+      COMMENTS_ENABLED: config.get<boolean>('defaults.publish.comments_enabled'),
+      PRIVACY: config.get<VideoPrivacy>('defaults.publish.privacy'),
+      LICENCE: config.get<number>('defaults.publish.licence')
     }
   },
 

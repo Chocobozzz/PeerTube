@@ -277,8 +277,6 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
   private uploadFile (file: File, previewfile?: File) {
     const metadata = {
       waitTranscoding: true,
-      commentsEnabled: true,
-      downloadEnabled: true,
       channelId: this.firstStepChannelId,
       nsfw: this.serverConfig.instance.isNSFW,
       privacy: this.highestPrivacy.toString(),

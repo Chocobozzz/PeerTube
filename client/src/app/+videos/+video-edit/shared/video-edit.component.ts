@@ -110,9 +110,10 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   updateForm () {
     const defaultValues: any = {
       nsfw: 'false',
-      commentsEnabled: 'true',
-      downloadEnabled: 'true',
+      commentsEnabled: this.serverConfig.defaults.publish.commentsEnabled,
+      downloadEnabled: this.serverConfig.defaults.publish.downloadEnabled,
       waitTranscoding: 'true',
+      licence: this.serverConfig.defaults.publish.licence,
       tags: []
     }
     const obj: any = {
@@ -160,6 +161,8 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit () {
+    this.serverConfig = this.serverService.getHTMLConfig()
+
     this.updateForm()
 
     this.pluginService.ensurePluginsAreLoaded('video-edit')
@@ -199,8 +202,6 @@ export class VideoEditComponent implements OnInit, OnDestroy {
           })
         }
       })
-
-    this.serverConfig = this.serverService.getHTMLConfig()
 
     this.initialVideoCaptions = this.videoCaptions.map(c => c.language.id)
 

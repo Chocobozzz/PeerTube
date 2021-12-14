@@ -88,13 +88,7 @@ $ BROWSERSTACK_USER=your_user BROWSERSTACK_KEY=your_key npm run e2e:browserstack
 
 ### Add E2E tests
 
-To add E2E tests and quickly run tests using a local Chrome, first create a test instance:
-
-```bash
-$ npm run clean:server:test && NODE_APP_INSTANCE=1 NODE_ENV=test npm start
-```
-
-Then, just run your suite using:
+To add E2E tests and quickly run tests using a local Chrome:
 
 ```bash
 $ cd client/e2e

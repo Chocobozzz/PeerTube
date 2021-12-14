@@ -21,6 +21,24 @@ export class VideoWatchPage {
     return this.getVideoNameElement().then(e => e.getText())
   }
 
+  getPrivacy () {
+    return $('.attribute-privacy .attribute-value').getText()
+  }
+
+  getLicence () {
+    return $('.attribute-licence .attribute-value').getText()
+  }
+
+  async isDownloadEnabled () {
+    await this.clickOnMoreDropdownIcon()
+
+    return $('.dropdown-item .icon-download').isExisting()
+  }
+
+  areCommentsEnabled () {
+    return $('my-video-comment-add').isExisting()
+  }
+
   async goOnAssociatedEmbed () {
     let url = await browser.getUrl()
     url = url.replace('/w/', '/videos/embed/')
@@ -38,10 +56,8 @@ export class VideoWatchPage {
   }
 
   async clickOnUpdate () {
-    const dropdown = $('my-video-actions-dropdown .action-button')
-    await dropdown.click()
+    await this.clickOnMoreDropdownIcon()
 
-    await $('.dropdown-menu.show .dropdown-item').waitForDisplayed()
     const items = await $$('.dropdown-menu.show .dropdown-item')
 
     for (const item of items) {
@@ -84,6 +100,13 @@ export class VideoWatchPage {
     return browser.waitUntil(async () => {
       return (await this.getVideoName()) === name
     }, { timeout: maxTime })
+  }
+
+  async clickOnMoreDropdownIcon () {
+    const dropdown = $('my-video-actions-dropdown .action-button')
+    await dropdown.click()
+
+    await $('.dropdown-menu.show .dropdown-item').waitForDisplayed()
   }
 
   private async getVideoNameElement () {

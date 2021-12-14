@@ -1,3 +1,4 @@
+import { onBrowserStackComplete, onBrowserStackPrepare } from './src/utils'
 import { config as mainConfig } from './wdio.main.conf'
 
 const user = process.env.BROWSERSTACK_USER
@@ -114,6 +115,10 @@ module.exports = {
       if (capabilities['bstack:options'].realMobile === true) {
         capabilities['bstack:options'].local = false
       }
-    }
+    },
+
+    onPrepare: onBrowserStackPrepare,
+    onComplete: onBrowserStackComplete
+
   } as WebdriverIO.Config
 }

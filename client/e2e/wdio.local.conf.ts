@@ -1,3 +1,4 @@
+import { afterLocalSuite, beforeLocalSession, beforeLocalSuite } from './src/utils'
 import { config as mainConfig } from './wdio.main.conf'
 
 const prefs = {
@@ -11,7 +12,7 @@ module.exports = {
 
     runner: 'local',
 
-    maxInstances: 2,
+    maxInstancesPerCapability: 1,
 
     capabilities: [
       {
@@ -34,12 +35,8 @@ module.exports = {
 
     services: [ 'chromedriver', 'geckodriver' ],
 
-    beforeSession: function (config, capabilities) {
-      if (capabilities['browserName'] === 'chrome') {
-        config.baseUrl = 'http://localhost:9001'
-      } else {
-        config.baseUrl = 'http://localhost:9002'
-      }
-    }
+    beforeSession: beforeLocalSession,
+    beforeSuite: beforeLocalSuite,
+    afterSuite: afterLocalSuite
   } as WebdriverIO.Config
 }

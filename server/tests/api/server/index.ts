@@ -1,4 +1,6 @@
 import './auto-follows'
+import './bulk'
+import './config-defaults'
 import './config'
 import './contact-form'
 import './email'

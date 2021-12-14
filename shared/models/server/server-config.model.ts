@@ -1,3 +1,4 @@
+import { VideoPrivacy } from '../videos/video-privacy.enum'
 import { ClientScript } from '../plugins/plugin-package-json.model'
 import { NSFWPolicyType } from '../videos/nsfw-policy.type'
 import { BroadcastMessageLevel } from './broadcast-message-level.type'
@@ -44,6 +45,15 @@ export interface ServerConfig {
       login: {
         redirectOnSingleExternalAuth: boolean
       }
+    }
+  }
+
+  defaults: {
+    publish: {
+      downloadEnabled: boolean
+      commentsEnabled: boolean
+      privacy: VideoPrivacy
+      licence: number
     }
   }
 

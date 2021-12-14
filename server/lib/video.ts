@@ -9,16 +9,17 @@ import { MThumbnail, MUserId, MVideoFile, MVideoTag, MVideoThumbnail, MVideoUUID
 import { ThumbnailType, VideoCreate, VideoPrivacy, VideoTranscodingPayload } from '@shared/models'
 import { CreateJobOptions, JobQueue } from './job-queue/job-queue'
 import { updateVideoMiniatureFromExisting } from './thumbnail'
+import { CONFIG } from '@server/initializers/config'
 
 function buildLocalVideoFromReq (videoInfo: VideoCreate, channelId: number): FilteredModelAttributes<VideoModel> {
   return {
     name: videoInfo.name,
     remote: false,
     category: videoInfo.category,
-    licence: videoInfo.licence,
+    licence: videoInfo.licence ?? CONFIG.DEFAULTS.PUBLISH.LICENCE,
     language: videoInfo.language,
-    commentsEnabled: videoInfo.commentsEnabled !== false, // If the value is not "false", the default is "true"
-    downloadEnabled: videoInfo.downloadEnabled !== false,
+    commentsEnabled: videoInfo.commentsEnabled ?? CONFIG.DEFAULTS.PUBLISH.COMMENTS_ENABLED,
+    downloadEnabled: videoInfo.downloadEnabled ?? CONFIG.DEFAULTS.PUBLISH.DOWNLOAD_ENABLED,
     waitTranscoding: videoInfo.waitTranscoding || false,
     nsfw: videoInfo.nsfw || false,
     description: videoInfo.description,
