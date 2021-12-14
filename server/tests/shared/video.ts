@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 import { dateIsValid, makeRawRequest, PeerTubeServer, testImage, webtorrentAdd } from '@shared/extra-utils'
 import { expect } from 'chai'
-import { VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_PRIVACIES } from '@server/initializers/constants'
+import { loadLanguages, VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_PRIVACIES } from '@server/initializers/constants'
 import { getLowercaseExtension, uuidRegex } from '@shared/core-utils'
+
+loadLanguages()
 
 export async function completeVideoCheck (
   server: PeerTubeServer,
