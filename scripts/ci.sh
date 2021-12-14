@@ -98,6 +98,8 @@ elif [ "$1" = "external-plugins" ]; then
 
     runTest "$1" 1 $externalPluginsFiles
 elif [ "$1" = "lint" ]; then
+    npm run build:server
+
     npm run eslint -- --ext .ts "./server/**/*.ts" "shared/**/*.ts" "scripts/**/*.ts"
     npm run swagger-cli -- validate support/doc/api/openapi.yaml
 

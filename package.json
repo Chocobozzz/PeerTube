@@ -29,7 +29,6 @@
     "build:embed": "bash ./scripts/build/embed.sh",
     "build:server": "bash ./scripts/build/server.sh",
     "build:client": "bash ./scripts/build/client.sh",
-    "build:types": "tsc -b --verbose types",
     "clean:client": "bash ./scripts/clean/client/index.sh",
     "clean:server:test": "bash ./scripts/clean/server/test.sh",
     "i18n:update": "bash ./scripts/i18n/update.sh",
