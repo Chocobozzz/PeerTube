@@ -23,10 +23,9 @@ const defaultX264VODOptionsBuilder: EncoderOptionsBuilder = (options: EncoderOpt
 
   return {
     outputOptions: [
-      `-preset veryfast`,
-      `-r ${fps}`,
-      `-maxrate ${targetBitrate}`,
-      `-bufsize ${targetBitrate * 2}`
+      ...getCommonOutputOptions(targetBitrate),
+
+      `-r ${fps}`
     ]
   }
 }
@@ -38,11 +37,10 @@ const defaultX264LiveOptionsBuilder: EncoderOptionsBuilder = (options: EncoderOp
 
   return {
     outputOptions: [
-      `-preset veryfast`,
+      ...getCommonOutputOptions(targetBitrate),
+
       `${buildStreamSuffix('-r:v', streamNum)} ${fps}`,
-      `${buildStreamSuffix('-b:v', streamNum)} ${targetBitrate}`,
-      `-maxrate ${targetBitrate}`,
-      `-bufsize ${targetBitrate * 2}`
+      `${buildStreamSuffix('-b:v', streamNum)} ${targetBitrate}`
     ]
   }
 }
@@ -256,4 +254,17 @@ function capBitrate (inputBitrate: number, targetBitrate: number) {
   const inputBitrateWithMargin = inputBitrate + (inputBitrate * 0.3)
 
   return Math.min(targetBitrate, inputBitrateWithMargin)
+}
+
+function getCommonOutputOptions (targetBitrate: number) {
+  return [
+    `-preset veryfast`,
+    `-maxrate ${targetBitrate}`,
+    `-bufsize ${targetBitrate * 2}`,
+
+    // NOTE: b-strategy 1 - heuristic algorithm, 16 is optimal B-frames for it
+    `-b_strategy 1`,
+    // NOTE: Why 16: https://github.com/Chocobozzz/PeerTube/pull/774. b-strategy 2 -> B-frames<16
+    `-bf 16`
+  ]
 }

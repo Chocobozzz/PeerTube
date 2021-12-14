@@ -287,8 +287,8 @@ async function getLiveTranscodingCommand (options: {
       addDefaultEncoderParams({ command, encoder: builderResult.encoder, fps: resolutionFPS, streamNum: i })
 
       logger.debug(
-        'Apply ffmpeg live video params from %s using %s profile.', builderResult.encoder, profile, builderResult,
-        { fps: resolutionFPS, resolution, ...lTags() }
+        'Apply ffmpeg live video params from %s using %s profile.', builderResult.encoder, profile,
+        { builderResult, fps: resolutionFPS, resolution, ...lTags() }
       )
 
       command.outputOption(`${buildStreamSuffix('-c:v', i)} ${builderResult.encoder}`)
@@ -314,8 +314,8 @@ async function getLiveTranscodingCommand (options: {
       addDefaultEncoderParams({ command, encoder: builderResult.encoder, fps: resolutionFPS, streamNum: i })
 
       logger.debug(
-        'Apply ffmpeg live audio params from %s using %s profile.', builderResult.encoder, profile, builderResult,
-        { fps: resolutionFPS, resolution, ...lTags() }
+        'Apply ffmpeg live audio params from %s using %s profile.', builderResult.encoder, profile,
+        { builderResult, fps: resolutionFPS, resolution, ...lTags() }
       )
 
       command.outputOption(`${buildStreamSuffix('-c:a', i)} ${builderResult.encoder}`)
@@ -368,10 +368,6 @@ function addDefaultEncoderGlobalParams (options: {
   command.outputOption('-max_muxing_queue_size 1024')
          // strip all metadata
          .outputOption('-map_metadata -1')
-         // NOTE: b-strategy 1 - heuristic algorithm, 16 is optimal B-frames for it
-         .outputOption('-b_strategy 1')
-         // NOTE: Why 16: https://github.com/Chocobozzz/PeerTube/pull/774. b-strategy 2 -> B-frames<16
-         .outputOption('-bf 16')
          // allows import of source material with incompatible pixel formats (e.g. MJPEG video)
          .outputOption('-pix_fmt yuv420p')
 }
@@ -627,8 +623,8 @@ async function presetVideo (options: {
 
     logger.debug(
       'Apply ffmpeg params from %s for %s stream of input %s using %s profile.',
-      builderResult.encoder, streamType, input, profile, builderResult,
-      { resolution, fps, ...lTags() }
+      builderResult.encoder, streamType, input, profile,
+      { builderResult, resolution, fps, ...lTags() }
     )
 
     if (streamType === 'video') {
@@ -734,7 +730,7 @@ async function runCommand (options: {
     command.on('start', cmdline => { shellCommand = cmdline })
 
     command.on('error', (err, stdout, stderr) => {
-      if (silent !== true) logger.error('Error in ffmpeg.', { stdout, stderr, ...lTags() })
+      if (silent !== true) logger.error('Error in ffmpeg.', { stdout, stderr, shellCommand, ...lTags() })
 
       rej(err)
     })
