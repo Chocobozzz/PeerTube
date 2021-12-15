@@ -197,15 +197,11 @@ export class PluginModel extends Model<Partial<AttributesOnly<PluginModel>>> {
         if (!c) return undefined
         const value = c.value
 
-        if (typeof value === 'string' && value.startsWith('{')) {
-          try {
-            return JSON.parse(value)
-          } catch {
-            return value
-          }
+        try {
+          return JSON.parse(value)
+        } catch {
+          return value
         }
-
-        return c.value
       })
   }
 
