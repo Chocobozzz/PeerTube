@@ -320,6 +320,7 @@ export class PeertubePlayerManager {
       controlBar: {
         children: this.getControlBarChildren(mode, {
           videoShortUUID: commonOptions.videoShortUUID,
+          p2pEnabled: commonOptions.p2pEnabled,
 
           captions: commonOptions.captions,
           peertubeLink: commonOptions.peertubeLink,
@@ -452,6 +453,7 @@ export class PeertubePlayerManager {
   }
 
   private static getControlBarChildren (mode: PlayerMode, options: {
+    p2pEnabled: boolean
     videoShortUUID: string
 
     peertubeLink: boolean
@@ -527,7 +529,9 @@ export class PeertubePlayerManager {
         }
       },
 
-      p2PInfoButton: {},
+      p2PInfoButton: {
+        p2pEnabled: options.p2pEnabled
+      },
 
       muteToggle: {},
       volumeControl: {},

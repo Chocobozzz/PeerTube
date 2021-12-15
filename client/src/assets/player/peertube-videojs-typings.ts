@@ -128,6 +128,10 @@ type PeerTubeLinkButtonOptions = {
   shortUUID: string
 }
 
+type PeerTubeP2PInfoButtonOptions = {
+  p2pEnabled: boolean
+}
+
 type WebtorrentPluginOptions = {
   playerElement: HTMLVideoElement
 
@@ -223,5 +227,6 @@ export {
   PeerTubeResolution,
   VideoJSPluginOptions,
   LoadedQualityData,
-  PeerTubeLinkButtonOptions
+  PeerTubeLinkButtonOptions,
+  PeerTubeP2PInfoButtonOptions
 }

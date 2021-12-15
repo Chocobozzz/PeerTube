@@ -1,9 +1,13 @@
-import { PlayerNetworkInfo } from '../peertube-videojs-typings'
 import videojs from 'video.js'
+import { PeerTubeP2PInfoButtonOptions, PlayerNetworkInfo } from '../peertube-videojs-typings'
 import { bytes } from '../utils'
 
 const Button = videojs.getComponent('Button')
 class P2pInfoButton extends Button {
+
+  constructor (player: videojs.Player, options?: PeerTubeP2PInfoButtonOptions) {
+    super(player, options as any)
+  }
 
   createEl () {
     const div = videojs.dom.createEl('div', {
@@ -13,6 +17,10 @@ class P2pInfoButton extends Button {
       className: 'vjs-peertube-hidden' // Hide the stats before we get the info
     }) as HTMLDivElement
     div.appendChild(subDivWebtorrent)
+
+    // Stop here if P2P is not enabled
+    const p2pEnabled = (this.options_ as PeerTubeP2PInfoButtonOptions).p2pEnabled
+    if (!p2pEnabled) return div as HTMLButtonElement
 
     const downloadIcon = videojs.dom.createEl('span', {
       className: 'icon icon-download'
