@@ -193,7 +193,8 @@ export class PeertubePlayerManager {
         player.stats({
           videoUUID: options.common.videoUUID,
           videoIsLive: options.common.isLive,
-          mode
+          mode,
+          p2pEnabled: options.common.p2pEnabled
         })
 
         player.on('p2pInfo', (_, data: PlayerNetworkInfo) => {

@@ -7,6 +7,7 @@ interface StatsCardOptions extends videojs.ComponentOptions {
   videoUUID: string
   videoIsLive: boolean
   mode: 'webtorrent' | 'p2p-media-loader'
+  p2pEnabled: boolean
 }
 
 interface PlayerNetworkInfo {
@@ -33,6 +34,7 @@ class StatsCard extends Component {
   updateInterval: any
 
   mode: 'webtorrent' | 'p2p-media-loader'
+  p2pEnabled: boolean
 
   metadataStore: any = {}
 
@@ -200,7 +202,7 @@ class StatsCard extends Component {
       ? `${playerNetworkInfo.totalDownloaded} &dArr; / ${playerNetworkInfo.totalUploaded} &uArr;`
       : undefined
     const downloadBreakdown = playerNetworkInfo.downloadedFromServer
-      ? `${playerNetworkInfo.downloadedFromServer} from server · ${playerNetworkInfo.downloadedFromPeers} from peers`
+      ? `${playerNetworkInfo.downloadedFromServer} from servers · ${playerNetworkInfo.downloadedFromPeers} from peers`
       : undefined
 
     const bufferProgress = progress !== undefined
@@ -209,6 +211,7 @@ class StatsCard extends Component {
 
     return `
       ${this.buildElement(player.localize('Player mode'), this.mode || 'HTTP')}
+      ${this.buildElement(player.localize('P2P'), player.localize(this.p2pEnabled ? 'enabled' : 'disabled'))}
 
       ${this.buildElement(player.localize('Video UUID'), this.options_.videoUUID)}
 
