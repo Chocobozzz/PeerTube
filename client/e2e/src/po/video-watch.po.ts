@@ -39,12 +39,23 @@ export class VideoWatchPage {
     return $('my-video-comment-add').isExisting()
   }
 
+  isPrivacyWarningDisplayed () {
+    return $('my-privacy-concerns').isDisplayed()
+  }
+
   async goOnAssociatedEmbed () {
     let url = await browser.getUrl()
     url = url.replace('/w/', '/videos/embed/')
     url = url.replace(':3333', ':9001')
 
-    return go(url)
+    await go(url)
+    await $('.vjs-big-play-button').waitForDisplayed()
+  }
+
+  async isEmbedWarningDisplayed () {
+    const text = await $('.vjs-dock-description').getText()
+
+    return !!text.trim()
   }
 
   goOnP2PMediaLoaderEmbed () {

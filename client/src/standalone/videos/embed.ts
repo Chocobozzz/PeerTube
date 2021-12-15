@@ -7,6 +7,7 @@ import {
   OAuth2ErrorCode,
   ResultList,
   UserRefreshToken,
+  Video,
   VideoCaption,
   VideoDetails,
   VideoPlaylist,
@@ -16,9 +17,11 @@ import {
 import { P2PMediaLoaderOptions, PeertubePlayerManagerOptions, PlayerMode } from '../../assets/player/peertube-player-manager'
 import { VideoJSCaption } from '../../assets/player/peertube-videojs-typings'
 import { TranslationsManager } from '../../assets/player/translations-manager'
+import { isP2PEnabled } from '../../assets/player/utils'
+import { getBoolOrDefault } from '../../root-helpers/local-storage-utils'
 import { peertubeLocalStorage } from '../../root-helpers/peertube-web-storage'
 import { PluginsManager } from '../../root-helpers/plugins-manager'
-import { Tokens } from '../../root-helpers/users'
+import { UserLocalStorageKeys, UserTokens } from '../../root-helpers/users'
 import { objectToUrlEncoded } from '../../root-helpers/utils'
 import { RegisterClientHelpers } from '../../types/register-client-option.model'
 import { PeerTubeEmbedApi } from './embed-api'
@@ -48,7 +51,7 @@ export class PeerTubeEmbed {
   mode: PlayerMode
   scope = 'peertube'
 
-  userTokens: Tokens
+  userTokens: UserTokens
   headers = new Headers()
   LOCAL_STORAGE_OAUTH_CLIENT_KEYS = {
     CLIENT_ID: 'client_id',
@@ -118,7 +121,7 @@ export class PeerTubeEmbed {
             return res.json()
           }).then((obj: UserRefreshToken & { code?: OAuth2ErrorCode }) => {
             if (!obj || obj.code === OAuth2ErrorCode.INVALID_GRANT) {
-              Tokens.flush()
+              UserTokens.flushLocalStorage(peertubeLocalStorage)
               this.removeTokensFromHeaders()
 
               return resolve()
@@ -126,7 +129,7 @@ export class PeerTubeEmbed {
 
             this.userTokens.accessToken = obj.access_token
             this.userTokens.refreshToken = obj.refresh_token
-            this.userTokens.save()
+            UserTokens.saveToLocalStorage(peertubeLocalStorage, this.userTokens)
 
             this.setHeadersFromTokens()
 
@@ -138,7 +141,7 @@ export class PeerTubeEmbed {
 
         return refreshingTokenPromise
           .catch(() => {
-            Tokens.flush()
+            UserTokens.flushLocalStorage(peertubeLocalStorage)
 
             this.removeTokensFromHeaders()
           }).then(() => fetch(url, {
@@ -258,7 +261,7 @@ export class PeerTubeEmbed {
   }
 
   async init () {
-    this.userTokens = Tokens.load()
+    this.userTokens = UserTokens.getUserTokens(peertubeLocalStorage)
     await this.initCore()
   }
 
@@ -515,6 +518,8 @@ export class PeerTubeEmbed {
         muted: this.muted,
         loop: this.loop,
 
+        p2pEnabled: this.isP2PEnabled(videoInfo),
+
         captions: videoCaptions.length !== 0,
         subtitle: this.subtitle,
 
@@ -669,7 +674,7 @@ export class PeerTubeEmbed {
 
     const title = this.title ? videoInfo.name : undefined
 
-    const description = this.warningTitle && (!videoInfo.isLocal || this.config.tracker.enabled)
+    const description = this.warningTitle && this.isP2PEnabled(videoInfo)
       ? '<span class="text">' + peertubeTranslate('Watching this video may reveal your IP address to others.') + '</span>'
       : undefined
 
@@ -783,6 +788,15 @@ export class PeerTubeEmbed {
 
       translate: (value: string) => Promise.resolve(peertubeTranslate(value, translations))
     }
+  }
+
+  private isP2PEnabled (video: Video) {
+    const userP2PEnabled = getBoolOrDefault(
+      peertubeLocalStorage.getItem(UserLocalStorageKeys.P2P_ENABLED),
+      this.config.defaults.p2p.enabled
+    )
+
+    return isP2PEnabled(video, this.config, userP2PEnabled)
   }
 }
 

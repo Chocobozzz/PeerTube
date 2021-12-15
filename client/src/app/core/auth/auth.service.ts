@@ -5,7 +5,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { Router } from '@angular/router'
 import { Notifier } from '@app/core/notification/notifier.service'
-import { objectToUrlEncoded, peertubeLocalStorage } from '@root-helpers/index'
+import { objectToUrlEncoded, peertubeLocalStorage, UserTokens } from '@root-helpers/index'
 import { HttpStatusCode, MyUser as UserServerModel, OAuthClientLocal, User, UserLogin, UserRefreshToken } from '@shared/models'
 import { environment } from '../../../environments/environment'
 import { RestExtractor } from '../rest/rest-extractor.service'
@@ -34,6 +34,7 @@ export class AuthService {
 
   loginChangedSource: Observable<AuthStatus>
   userInformationLoaded = new ReplaySubject<boolean>(1)
+  tokensRefreshed = new ReplaySubject<void>(1)
   hotkeys: Hotkey[]
 
   private clientId: string = peertubeLocalStorage.getItem(AuthService.LOCAL_STORAGE_OAUTH_CLIENT_KEYS.CLIENT_ID)
@@ -51,9 +52,6 @@ export class AuthService {
   ) {
     this.loginChanged = new Subject<AuthStatus>()
     this.loginChangedSource = this.loginChanged.asObservable()
-
-    // Return null if there is nothing to load
-    this.user = AuthUser.load()
 
     // Set HotKeys
     this.hotkeys = [
@@ -74,6 +72,10 @@ export class AuthService {
         return false
       }, undefined, $localize`Go to my channels`)
     ]
+  }
+
+  buildAuthUser (userInfo: Partial<User>, tokens: UserTokens) {
+    this.user = new AuthUser(userInfo, tokens)
   }
 
   loadClientCredentials () {
@@ -180,8 +182,6 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
 
     this.user = null
 
-    AuthUser.flush()
-
     this.setStatus(AuthStatus.LoggedOut)
 
     this.hotkeysService.remove(this.hotkeys)
@@ -239,7 +239,6 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         .subscribe({
           next: res => {
             this.user.patch(res)
-            this.user.save()
 
             this.userInformationLoaded.next(true)
           }
@@ -262,7 +261,6 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
     }
 
     this.user = new AuthUser(obj, hashTokens)
-    this.user.save()
 
     this.setStatus(AuthStatus.LoggedIn)
     this.userInformationLoaded.next(true)
@@ -272,7 +270,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
 
   private handleRefreshToken (obj: UserRefreshToken) {
     this.user.refreshTokens(obj.access_token, obj.refresh_token)
-    this.user.save()
+    this.tokensRefreshed.next()
   }
 
   private setStatus (status: AuthStatus) {

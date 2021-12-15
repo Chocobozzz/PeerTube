@@ -55,6 +55,10 @@ export interface ServerConfig {
       privacy: VideoPrivacy
       licence: number
     }
+
+    p2p: {
+      enabled: boolean
+    }
   }
 
   webadmin: {

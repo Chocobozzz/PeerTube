@@ -1,16 +1,9 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core'
 import { Router } from '@angular/router'
-import {
-  AuthService,
-  ComponentPagination,
-  HooksService,
-  LocalStorageService,
-  Notifier,
-  SessionStorageService,
-  UserService
-} from '@app/core'
+import { AuthService, ComponentPagination, HooksService, Notifier, SessionStorageService, UserService } from '@app/core'
 import { VideoPlaylist, VideoPlaylistElement, VideoPlaylistService } from '@app/shared/shared-video-playlist'
-import { peertubeLocalStorage, peertubeSessionStorage } from '@root-helpers/peertube-web-storage'
+import { peertubeSessionStorage } from '@root-helpers/peertube-web-storage'
+import { getBoolOrDefault } from '@root-helpers/local-storage-utils'
 import { VideoPlaylistPrivacy } from '@shared/models'
 
 @Component({
@@ -19,8 +12,7 @@ import { VideoPlaylistPrivacy } from '@shared/models'
   styleUrls: [ './video-watch-playlist.component.scss' ]
 })
 export class VideoWatchPlaylistComponent {
-  static LOCAL_STORAGE_AUTO_PLAY_NEXT_VIDEO_PLAYLIST = 'auto_play_video_playlist'
-  static SESSION_STORAGE_AUTO_PLAY_NEXT_VIDEO_PLAYLIST = 'loop_playlist'
+  static SESSION_STORAGE_LOOP_PLAYLIST = 'loop_playlist'
 
   @Input() playlist: VideoPlaylist
 
@@ -47,19 +39,15 @@ export class VideoWatchPlaylistComponent {
     private auth: AuthService,
     private notifier: Notifier,
     private videoPlaylist: VideoPlaylistService,
-    private localStorageService: LocalStorageService,
     private sessionStorage: SessionStorageService,
     private router: Router
   ) {
-    // defaults to true
-    this.autoPlayNextVideoPlaylist = this.auth.isLoggedIn()
-      ? this.auth.getUser().autoPlayNextVideoPlaylist
-      : this.localStorageService.getItem(VideoWatchPlaylistComponent.LOCAL_STORAGE_AUTO_PLAY_NEXT_VIDEO_PLAYLIST) !== 'false'
+    this.userService.getAnonymousOrLoggedUser()
+      .subscribe(user => this.autoPlayNextVideoPlaylist = user.autoPlayNextVideoPlaylist)
 
     this.setAutoPlayNextVideoPlaylistSwitchText()
 
-    // defaults to false
-    this.loopPlaylist = this.sessionStorage.getItem(VideoWatchPlaylistComponent.SESSION_STORAGE_AUTO_PLAY_NEXT_VIDEO_PLAYLIST) === 'true'
+    this.loopPlaylist = getBoolOrDefault(this.sessionStorage.getItem(VideoWatchPlaylistComponent.SESSION_STORAGE_LOOP_PLAYLIST), false)
     this.setLoopPlaylistSwitchText()
   }
 
@@ -201,16 +189,9 @@ export class VideoWatchPlaylistComponent {
     this.autoPlayNextVideoPlaylist = !this.autoPlayNextVideoPlaylist
     this.setAutoPlayNextVideoPlaylistSwitchText()
 
-    peertubeLocalStorage.setItem(
-      VideoWatchPlaylistComponent.LOCAL_STORAGE_AUTO_PLAY_NEXT_VIDEO_PLAYLIST,
-      this.autoPlayNextVideoPlaylist.toString()
-    )
+    const details = { autoPlayNextVideoPlaylist: this.autoPlayNextVideoPlaylist }
 
     if (this.auth.isLoggedIn()) {
-      const details = {
-        autoPlayNextVideoPlaylist: this.autoPlayNextVideoPlaylist
-      }
-
       this.userService.updateMyProfile(details)
         .subscribe({
           next: () => {
@@ -219,6 +200,8 @@ export class VideoWatchPlaylistComponent {
 
           error: err => this.notifier.error(err.message)
         })
+    } else {
+      this.userService.updateMyAnonymousProfile(details)
     }
   }
 
@@ -227,7 +210,7 @@ export class VideoWatchPlaylistComponent {
     this.setLoopPlaylistSwitchText()
 
     peertubeSessionStorage.setItem(
-      VideoWatchPlaylistComponent.SESSION_STORAGE_AUTO_PLAY_NEXT_VIDEO_PLAYLIST,
+      VideoWatchPlaylistComponent.SESSION_STORAGE_LOOP_PLAYLIST,
       this.loopPlaylist.toString()
     )
   }

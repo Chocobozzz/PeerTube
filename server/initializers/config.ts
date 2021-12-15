@@ -78,6 +78,9 @@ const CONFIG = {
       COMMENTS_ENABLED: config.get<boolean>('defaults.publish.comments_enabled'),
       PRIVACY: config.get<VideoPrivacy>('defaults.publish.privacy'),
       LICENCE: config.get<number>('defaults.publish.licence')
+    },
+    P2P: {
+      ENABLED: config.get<boolean>('defaults.p2p.enabled')
     }
   },
 

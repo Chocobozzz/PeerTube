@@ -26,7 +26,11 @@ export class User implements UserServerModel {
   autoPlayVideo: boolean
   autoPlayNextVideo: boolean
   autoPlayNextVideoPlaylist: boolean
-  webTorrentEnabled: boolean
+
+  p2pEnabled: boolean
+  // FIXME: deprecated in 4.1
+  webTorrentEnabled: never
+
   videosHistoryEnabled: boolean
   videoLanguages: string[]
 
@@ -84,7 +88,7 @@ export class User implements UserServerModel {
     this.videoCommentsCount = hash.videoCommentsCount
 
     this.nsfwPolicy = hash.nsfwPolicy
-    this.webTorrentEnabled = hash.webTorrentEnabled
+    this.p2pEnabled = hash.p2pEnabled
     this.autoPlayVideo = hash.autoPlayVideo
     this.autoPlayNextVideo = hash.autoPlayNextVideo
     this.autoPlayNextVideoPlaylist = hash.autoPlayNextVideoPlaylist

@@ -196,9 +196,9 @@ export class MenuComponent implements OnInit {
 
   toggleUseP2P () {
     if (!this.user) return
-    this.user.webTorrentEnabled = !this.user.webTorrentEnabled
+    this.user.p2pEnabled = !this.user.p2pEnabled
 
-    this.userService.updateMyProfile({ webTorrentEnabled: this.user.webTorrentEnabled })
+    this.userService.updateMyProfile({ p2pEnabled: this.user.p2pEnabled })
       .subscribe(() => this.authService.refreshUserInformation())
   }
 

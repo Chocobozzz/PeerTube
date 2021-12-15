@@ -4,7 +4,6 @@ import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { ComponentPaginationLight, RestExtractor, RestPagination, RestService } from '@app/core'
 import { Video, VideoChannel, VideoChannelService, VideoService } from '@app/shared/shared-main'
-import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 import {
   ResultList,
   Video as VideoServerModel,
@@ -25,11 +24,7 @@ export class SearchService {
     private restService: RestService,
     private videoService: VideoService,
     private playlistService: VideoPlaylistService
-  ) {
-    // Add ability to override search endpoint if the user updated this local storage key
-    const searchUrl = peertubeLocalStorage.getItem('search-url')
-    if (searchUrl) SearchService.BASE_SEARCH_URL = searchUrl
-  }
+  ) { }
 
   searchVideos (parameters: {
     search?: string

@@ -1,5 +1,5 @@
 import { LoginPage } from '../po/login.po'
-import { MyAccountPage } from '../po/my-account'
+import { MyAccountPage } from '../po/my-account.po'
 import { PlayerPage } from '../po/player.po'
 import { VideoListPage } from '../po/video-list.po'
 import { VideoUpdatePage } from '../po/video-update.po'

@@ -34,7 +34,7 @@ export class UserVideoSettingsComponent extends FormReactive implements OnInit, 
   ngOnInit () {
     this.buildForm({
       nsfwPolicy: null,
-      webTorrentEnabled: null,
+      p2pEnabled: null,
       autoPlayVideo: null,
       autoPlayNextVideo: null,
       videoLanguages: null
@@ -48,7 +48,7 @@ export class UserVideoSettingsComponent extends FormReactive implements OnInit, 
 
           this.form.patchValue({
             nsfwPolicy: this.user.nsfwPolicy || this.defaultNSFWPolicy,
-            webTorrentEnabled: this.user.webTorrentEnabled,
+            p2pEnabled: this.user.p2pEnabled,
             autoPlayVideo: this.user.autoPlayVideo === true,
             autoPlayNextVideo: this.user.autoPlayNextVideo,
             videoLanguages: this.user.videoLanguages
@@ -65,7 +65,7 @@ export class UserVideoSettingsComponent extends FormReactive implements OnInit, 
 
   updateDetails (onlyKeys?: string[]) {
     const nsfwPolicy = this.form.value['nsfwPolicy']
-    const webTorrentEnabled = this.form.value['webTorrentEnabled']
+    const p2pEnabled = this.form.value['p2pEnabled']
     const autoPlayVideo = this.form.value['autoPlayVideo']
     const autoPlayNextVideo = this.form.value['autoPlayNextVideo']
 
@@ -80,7 +80,7 @@ export class UserVideoSettingsComponent extends FormReactive implements OnInit, 
 
     let details: UserUpdateMe = {
       nsfwPolicy,
-      webTorrentEnabled,
+      p2pEnabled,
       autoPlayVideo,
       autoPlayNextVideo,
       videoLanguages

@@ -30,7 +30,7 @@ import { ServerConfigResolver } from './routing/server-config-resolver.service'
 import { ScopedTokensService } from './scoped-tokens'
 import { ServerService } from './server'
 import { ThemeService } from './theme'
-import { UserService } from './users'
+import { UserLocalStorageService, UserService } from './users'
 import { LocalStorageService, ScreenService, SessionStorageService } from './wrappers'
 
 @NgModule({
@@ -79,6 +79,7 @@ import { LocalStorageService, ScreenService, SessionStorageService } from './wra
     RestService,
 
     UserService,
+    UserLocalStorageService,
 
     ScreenService,
     LocalStorageService,

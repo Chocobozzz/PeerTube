@@ -92,6 +92,11 @@ defaults:
     # No licence by default
     licence: null
 
+  p2p:
+    # Enable P2P by default
+    # Can be enabled/disabled by anonymous users and logged in users
+    enabled: true
+
 # From the project root directory
 storage:
   tmp: 'storage/tmp/' # Use to download data (imports etc), store uploaded files before and during processing...
@@ -216,7 +221,7 @@ security:
     enabled: true
 
 tracker:
-  # If you disable the tracker, you disable the P2P aspect of PeerTube
+  # If you disable the tracker, you disable the P2P on your PeerTube instance
   enabled: true
   # Only handle requests on your videos
   # If you set this to false it means you have a public tracker

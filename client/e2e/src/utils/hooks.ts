@@ -55,6 +55,9 @@ function buildConfig (suiteFile: string = undefined) {
           comments_enabled: false,
           privacy: 4,
           licence: 4
+        },
+        p2p: {
+          enabled: false
         }
       }
     }

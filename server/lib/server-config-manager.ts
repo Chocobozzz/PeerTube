@@ -61,6 +61,9 @@ class ServerConfigManager {
           commentsEnabled: CONFIG.DEFAULTS.PUBLISH.COMMENTS_ENABLED,
           privacy: CONFIG.DEFAULTS.PUBLISH.PRIVACY,
           licence: CONFIG.DEFAULTS.PUBLISH.LICENCE
+        },
+        p2p: {
+          enabled: CONFIG.DEFAULTS.P2P.ENABLED
         }
       },
 

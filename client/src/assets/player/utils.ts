@@ -1,4 +1,4 @@
-import { VideoFile } from '@shared/models'
+import { HTMLServerConfig, Video, VideoFile } from '@shared/models'
 
 function toTitleCase (str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1)
@@ -6,6 +6,13 @@ function toTitleCase (str: string) {
 
 function isWebRTCDisabled () {
   return !!((window as any).RTCPeerConnection || (window as any).mozRTCPeerConnection || (window as any).webkitRTCPeerConnection) === false
+}
+
+function isP2PEnabled (video: Video, config: HTMLServerConfig, userP2PEnabled: boolean) {
+  if (video.isLocal && config.tracker.enabled === false) return false
+  if (isWebRTCDisabled()) return false
+
+  return userP2PEnabled
 }
 
 function isIOS () {
@@ -97,6 +104,7 @@ export {
   getRtcConfig,
   toTitleCase,
   isWebRTCDisabled,
+  isP2PEnabled,
 
   buildVideoOrPlaylistEmbed,
   videoFileMaxByResolution,

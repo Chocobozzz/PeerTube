@@ -1,11 +1,10 @@
 import { SortMeta } from 'primeng/api'
 import { from, Observable, of } from 'rxjs'
-import { catchError, concatMap, filter, first, map, shareReplay, tap, throttleTime, toArray } from 'rxjs/operators'
+import { catchError, concatMap, first, map, shareReplay, tap, toArray } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { AuthService } from '@app/core/auth'
 import { getBytes } from '@root-helpers/bytes'
-import { UserLocalStorageKeys } from '@root-helpers/users'
 import {
   ActorImage,
   ResultList,
@@ -17,10 +16,9 @@ import {
   UserUpdateMe,
   UserVideoQuota
 } from '@shared/models'
-import { ServerService } from '../'
 import { environment } from '../../../environments/environment'
 import { RestExtractor, RestPagination, RestService } from '../rest'
-import { LocalStorageService, SessionStorageService } from '../wrappers/storage.service'
+import { UserLocalStorageService } from './'
 import { User } from './user.model'
 
 @Injectable()
@@ -33,12 +31,10 @@ export class UserService {
 
   constructor (
     private authHttp: HttpClient,
-    private server: ServerService,
     private authService: AuthService,
     private restExtractor: RestExtractor,
     private restService: RestService,
-    private localStorageService: LocalStorageService,
-    private sessionStorageService: SessionStorageService
+    private userLocalStorageService: UserLocalStorageService
   ) { }
 
   hasSignupInThisSession () {
@@ -73,6 +69,23 @@ export class UserService {
                )
   }
 
+  // ---------------------------------------------------------------------------
+
+  updateMyAnonymousProfile (profile: UserUpdateMe) {
+    this.userLocalStorageService.setUserInfo(profile)
+  }
+
+  listenAnonymousUpdate () {
+    return this.userLocalStorageService.listenUserInfoChange()
+                                       .pipe(map(() => this.getAnonymousUser()))
+  }
+
+  getAnonymousUser () {
+    return new User(this.userLocalStorageService.getUserInfo())
+  }
+
+  // ---------------------------------------------------------------------------
+
   updateMyProfile (profile: UserUpdateMe) {
     const url = UserService.BASE_USERS_URL + 'me'
 
@@ -81,53 +94,6 @@ export class UserService {
                  map(this.restExtractor.extractDataBool),
                  catchError(err => this.restExtractor.handleError(err))
                )
-  }
-
-  updateMyAnonymousProfile (profile: UserUpdateMe) {
-    const localStorageKeys: { [ id in keyof UserUpdateMe ]: string } = {
-      nsfwPolicy: UserLocalStorageKeys.NSFW_POLICY,
-      webTorrentEnabled: UserLocalStorageKeys.WEBTORRENT_ENABLED,
-      autoPlayNextVideo: UserLocalStorageKeys.AUTO_PLAY_VIDEO,
-      autoPlayNextVideoPlaylist: UserLocalStorageKeys.AUTO_PLAY_VIDEO_PLAYLIST,
-      theme: UserLocalStorageKeys.THEME,
-      videoLanguages: UserLocalStorageKeys.VIDEO_LANGUAGES
-    }
-
-    const obj = Object.keys(localStorageKeys)
-      .filter(key => key in profile)
-      .map(key => ([ localStorageKeys[key], profile[key] ]))
-
-    for (const [ key, value ] of obj) {
-      try {
-        if (value === undefined) {
-          this.localStorageService.removeItem(key)
-          continue
-        }
-
-        const localStorageValue = typeof value === 'string'
-          ? value
-          : JSON.stringify(value)
-
-        this.localStorageService.setItem(key, localStorageValue)
-      } catch (err) {
-        console.error(`Cannot set ${key}->${value} in localStorage. Likely due to a value impossible to stringify.`, err)
-      }
-    }
-  }
-
-  listenAnonymousUpdate () {
-    return this.localStorageService.watch([
-      UserLocalStorageKeys.NSFW_POLICY,
-      UserLocalStorageKeys.WEBTORRENT_ENABLED,
-      UserLocalStorageKeys.AUTO_PLAY_VIDEO,
-      UserLocalStorageKeys.AUTO_PLAY_VIDEO_PLAYLIST,
-      UserLocalStorageKeys.THEME,
-      UserLocalStorageKeys.VIDEO_LANGUAGES
-    ]).pipe(
-      throttleTime(200),
-      filter(() => this.authService.isLoggedIn() !== true),
-      map(() => this.getAnonymousUser())
-    )
   }
 
   deleteMe () {
@@ -285,36 +251,6 @@ export class UserService {
     const params = new HttpParams().append('withStats', withStats + '')
     return this.authHttp.get<UserServerModel>(UserService.BASE_USERS_URL + userId, { params })
                .pipe(catchError(err => this.restExtractor.handleError(err)))
-  }
-
-  getAnonymousUser () {
-    let videoLanguages: string[]
-
-    try {
-      const languagesString = this.localStorageService.getItem(UserLocalStorageKeys.VIDEO_LANGUAGES)
-      videoLanguages = languagesString && languagesString !== 'undefined'
-        ? JSON.parse(languagesString)
-        : null
-    } catch (err) {
-      videoLanguages = null
-      console.error('Cannot parse desired video languages from localStorage.', err)
-    }
-
-    const defaultNSFWPolicy = this.server.getHTMLConfig().instance.defaultNSFWPolicy
-
-    return new User({
-      // local storage keys
-      nsfwPolicy: this.localStorageService.getItem(UserLocalStorageKeys.NSFW_POLICY) || defaultNSFWPolicy,
-      webTorrentEnabled: this.localStorageService.getItem(UserLocalStorageKeys.WEBTORRENT_ENABLED) !== 'false',
-      theme: this.localStorageService.getItem(UserLocalStorageKeys.THEME) || 'instance-default',
-      videoLanguages,
-
-      autoPlayNextVideoPlaylist: this.localStorageService.getItem(UserLocalStorageKeys.AUTO_PLAY_VIDEO_PLAYLIST) !== 'false',
-      autoPlayVideo: this.localStorageService.getItem(UserLocalStorageKeys.AUTO_PLAY_VIDEO) === 'true',
-
-      // session storage keys
-      autoPlayNextVideo: this.sessionStorageService.getItem(UserLocalStorageKeys.SESSION_STORAGE_AUTO_PLAY_NEXT_VIDEO) === 'true'
-    })
   }
 
   getUsers (parameters: {

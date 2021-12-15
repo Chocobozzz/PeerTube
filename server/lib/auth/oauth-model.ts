@@ -226,6 +226,7 @@ async function createUserFromExternal (pluginAuth: string, options: {
     password: null,
     email: options.email,
     nsfwPolicy: CONFIG.INSTANCE.DEFAULT_NSFW_POLICY,
+    p2pEnabled: CONFIG.DEFAULTS.P2P.ENABLED,
     autoPlayVideo: true,
     role: options.role,
     videoQuota: CONFIG.USER.VIDEO_QUOTA,

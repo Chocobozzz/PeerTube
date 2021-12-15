@@ -31,7 +31,7 @@ import { copyToClipboard } from '../../root-helpers/utils'
 import { RedundancyUrlManager } from './p2p-media-loader/redundancy-url-manager'
 import { segmentUrlBuilderFactory } from './p2p-media-loader/segment-url-builder'
 import { segmentValidatorFactory } from './p2p-media-loader/segment-validator'
-import { getAverageBandwidthInStore, getStoredP2PEnabled, saveAverageBandwidth } from './peertube-player-local-storage'
+import { getAverageBandwidthInStore, saveAverageBandwidth } from './peertube-player-local-storage'
 import {
   NextPreviousVideoButtonOptions,
   P2PMediaLoaderPluginOptions,
@@ -86,6 +86,7 @@ export interface CommonOptions extends CustomizationOptions {
   onPlayerElementChange: (element: HTMLVideoElement) => void
 
   autoplay: boolean
+  p2pEnabled: boolean
 
   nextVideo?: () => void
   hasNextVideo?: () => boolean
@@ -374,7 +375,7 @@ export class PeertubePlayerManager {
         requiredSegmentsPriority: 1,
         simultaneousHttpDownloads: 1,
         segmentUrlBuilder: segmentUrlBuilderFactory(redundancyUrlManager, 1),
-        useP2P: getStoredP2PEnabled(),
+        useP2P: commonOptions.p2pEnabled,
         consumeOnly
       },
       segments: {
@@ -437,6 +438,7 @@ export class PeertubePlayerManager {
 
     const webtorrent = {
       autoplay,
+      playerRefusedP2P: commonOptions.p2pEnabled === false,
       videoDuration: commonOptions.videoDuration,
       playerElement: commonOptions.playerElement,
       videoFiles: webtorrentOptions.videoFiles.length !== 0

@@ -49,7 +49,7 @@ function isUserNSFWPolicyValid (value: any) {
   return exists(value) && nsfwPolicies.includes(value)
 }
 
-function isUserWebTorrentEnabledValid (value: any) {
+function isUserP2PEnabledValid (value: any) {
   return isBooleanValid(value)
 }
 
@@ -109,7 +109,7 @@ export {
   isUserAdminFlagsValid,
   isUserEmailVerifiedValid,
   isUserNSFWPolicyValid,
-  isUserWebTorrentEnabledValid,
+  isUserP2PEnabledValid,
   isUserAutoPlayVideoValid,
   isUserAutoPlayNextVideoValid,
   isUserAutoPlayNextVideoPlaylistValid,

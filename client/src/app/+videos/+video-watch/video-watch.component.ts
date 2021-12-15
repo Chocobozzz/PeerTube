@@ -1,5 +1,6 @@
 import { Hotkey, HotkeysService } from 'angular2-hotkeys'
 import { forkJoin, Subscription } from 'rxjs'
+import { isP2PEnabled } from 'src/assets/player/utils'
 import { PlatformLocation } from '@angular/common'
 import { Component, ElementRef, Inject, LOCALE_ID, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
@@ -14,6 +15,7 @@ import {
   RestExtractor,
   ScreenService,
   ServerService,
+  User,
   UserService
 } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
@@ -237,31 +239,34 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       'filter:api.video-watch.video.get.result'
     )
 
-    forkJoin([ videoObs, this.videoCaptionService.listCaptions(videoId) ])
-      .subscribe({
-        next: ([ video, captionsResult ]) => {
-          const queryParams = this.route.snapshot.queryParams
+    forkJoin([
+      videoObs,
+      this.videoCaptionService.listCaptions(videoId),
+      this.userService.getAnonymousOrLoggedUser()
+    ]).subscribe({
+      next: ([ video, captionsResult, loggedInOrAnonymousUser ]) => {
+        const queryParams = this.route.snapshot.queryParams
 
-          const urlOptions = {
-            resume: queryParams.resume,
+        const urlOptions = {
+          resume: queryParams.resume,
 
-            startTime: queryParams.start,
-            stopTime: queryParams.stop,
+          startTime: queryParams.start,
+          stopTime: queryParams.stop,
 
-            muted: queryParams.muted,
-            loop: queryParams.loop,
-            subtitle: queryParams.subtitle,
+          muted: queryParams.muted,
+          loop: queryParams.loop,
+          subtitle: queryParams.subtitle,
 
-            playerMode: queryParams.mode,
-            peertubeLink: false
-          }
+          playerMode: queryParams.mode,
+          peertubeLink: false
+        }
 
-          this.onVideoFetched(video, captionsResult.data, urlOptions)
-              .catch(err => this.handleGlobalError(err))
-        },
+        this.onVideoFetched({ video, videoCaptions: captionsResult.data, loggedInOrAnonymousUser, urlOptions })
+            .catch(err => this.handleGlobalError(err))
+      },
 
-        error: err => this.handleRequestError(err)
-      })
+      error: err => this.handleRequestError(err)
+    })
   }
 
   private loadPlaylist (playlistId: string) {
@@ -323,11 +328,14 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.notifier.error(errorMessage)
   }
 
-  private async onVideoFetched (
-    video: VideoDetails,
-    videoCaptions: VideoCaption[],
+  private async onVideoFetched (options: {
+    video: VideoDetails
+    videoCaptions: VideoCaption[]
     urlOptions: URLOptions
-  ) {
+    loggedInOrAnonymousUser: User
+  }) {
+    const { video, videoCaptions, urlOptions, loggedInOrAnonymousUser } = options
+
     this.subscribeToLiveEventsIfNeeded(this.video, video)
 
     this.video = video
@@ -346,7 +354,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       if (res === false) return this.location.back()
     }
 
-    this.buildPlayer(urlOptions)
+    this.buildPlayer(urlOptions, loggedInOrAnonymousUser)
       .catch(err => console.error('Cannot build the player', err))
 
     this.setOpenGraphTags()
@@ -359,7 +367,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.hooks.runAction('action:video-watch.video.loaded', 'video-watch', hookOptions)
   }
 
-  private async buildPlayer (urlOptions: URLOptions) {
+  private async buildPlayer (urlOptions: URLOptions, loggedInOrAnonymousUser: User) {
     // Flush old player if needed
     this.flushPlayer()
 
@@ -380,6 +388,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       video: this.video,
       videoCaptions: this.videoCaptions,
       urlOptions,
+      loggedInOrAnonymousUser,
       user: this.user
     }
     const { playerMode, playerOptions } = await this.hooks.wrapFun(
@@ -517,9 +526,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     video: VideoDetails
     videoCaptions: VideoCaption[]
     urlOptions: CustomizationOptions & { playerMode: PlayerMode }
+    loggedInOrAnonymousUser: User
     user?: AuthUser
   }) {
-    const { video, videoCaptions, urlOptions, user } = params
+    const { video, videoCaptions, urlOptions, loggedInOrAnonymousUser, user } = params
 
     const getStartTime = () => {
       const byUrl = urlOptions.startTime !== undefined
@@ -547,6 +557,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     const options: PeertubePlayerManagerOptions = {
       common: {
         autoplay: this.isAutoplay(),
+        p2pEnabled: isP2PEnabled(video, this.serverConfig, loggedInOrAnonymousUser.p2pEnabled),
+
         nextVideo: () => this.playNextVideoInAngularZone(),
 
         playerElement: this.playerElement,

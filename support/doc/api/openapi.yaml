@@ -6679,7 +6679,7 @@ components:
           type: integer
           description: The user daily video quota in bytes
           example: -1
-        webtorrentEnabled:
+        p2pEnabled:
           type: boolean
           description: Enable P2P in the player
     UserWithStats:
@@ -6780,7 +6780,7 @@ components:
             - 'true'
             - 'false'
             - both
-        webTorrentEnabled:
+        p2pEnabled:
           type: boolean
           description: whether to enable P2P in the player or not
         autoPlayVideo:

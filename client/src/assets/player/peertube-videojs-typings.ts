@@ -137,6 +137,8 @@ type WebtorrentPluginOptions = {
   videoFiles: VideoFile[]
 
   startTime: number | string
+
+  playerRefusedP2P: boolean
 }
 
 type P2PMediaLoaderPluginOptions = {

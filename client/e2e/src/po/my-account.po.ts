@@ -1,4 +1,4 @@
-import { go } from '../utils'
+import { getCheckbox, go } from '../utils'
 
 export class MyAccountPage {
 
@@ -27,6 +27,21 @@ export class MyAccountPage {
     await nsfw.scrollIntoView(false) // Avoid issues with fixed header on firefox
     await nsfw.selectByAttribute('value', newValue)
 
+    await this.submitVideoSettings()
+  }
+
+  async clickOnP2PCheckbox () {
+    const p2p = getCheckbox('p2pEnabled')
+
+    await p2p.waitForClickable()
+    await p2p.scrollIntoView(false) // Avoid issues with fixed header on firefox
+
+    await p2p.click()
+
+    await this.submitVideoSettings()
+  }
+
+  private async submitVideoSettings () {
     const submit = $('my-user-video-settings input[type=submit]')
     await submit.scrollIntoView(false)
     await submit.click()

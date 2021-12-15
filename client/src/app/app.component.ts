@@ -14,7 +14,8 @@ import {
   ScrollService,
   ServerService,
   ThemeService,
-  User
+  User,
+  UserLocalStorageService
 } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { PluginService } from '@app/core/plugins/plugin.service'
@@ -70,6 +71,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     private ngbConfig: NgbConfig,
     private loadingBar: LoadingBarService,
     private scrollService: ScrollService,
+    private userLocalStorage: UserLocalStorageService,
     public menu: MenuService
   ) {
     this.ngbConfig.animation = false
@@ -85,6 +87,8 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   ngOnInit () {
     document.getElementById('incompatible-browser').className += ' browser-ok'
+
+    this.loadUser()
 
     this.serverConfig = this.serverService.getHTMLConfig()
 
@@ -299,5 +303,16 @@ export class AppComponent implements OnInit, AfterViewInit {
         return false
       }, undefined, $localize`Go to the videos upload page`)
     ])
+  }
+
+  private loadUser () {
+    const tokens = this.userLocalStorage.getTokens()
+    if (!tokens) return
+
+    const user = this.userLocalStorage.getLoggedInUser()
+    if (!user) return
+
+    // Initialize user
+    this.authService.buildAuthUser(user, tokens)
   }
 }

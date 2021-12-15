@@ -1,6 +1,6 @@
 import { AdminConfigPage } from '../po/admin-config.po'
 import { LoginPage } from '../po/login.po'
-import { MyAccountPage } from '../po/my-account'
+import { MyAccountPage } from '../po/my-account.po'
 import { VideoListPage } from '../po/video-list.po'
 import { VideoSearchPage } from '../po/video-search.po'
 import { VideoUploadPage } from '../po/video-upload.po'

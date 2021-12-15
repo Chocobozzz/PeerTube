@@ -1,13 +1,7 @@
 import { Observable, of } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { User } from '@app/core/users/user.model'
-import {
-  flushUserInfoFromLocalStorage,
-  getUserInfoFromLocalStorage,
-  saveUserInfoIntoLocalStorage,
-  TokenOptions,
-  Tokens
-} from '@root-helpers/users'
+import { UserTokens } from '@root-helpers/users'
 import { hasUserRight } from '@shared/core-utils/users'
 import {
   MyUser as ServerMyUserModel,
@@ -19,31 +13,15 @@ import {
 } from '@shared/models'
 
 export class AuthUser extends User implements ServerMyUserModel {
-  tokens: Tokens
+  tokens: UserTokens
   specialPlaylists: MyUserSpecialPlaylist[]
 
   canSeeVideosLink = true
 
-  static load () {
-    const tokens = Tokens.load()
-    if (!tokens) return null
-
-    const userInfo = getUserInfoFromLocalStorage()
-    if (!userInfo) return null
-
-    return new AuthUser(userInfo, tokens)
-  }
-
-  static flush () {
-    flushUserInfoFromLocalStorage()
-
-    Tokens.flush()
-  }
-
-  constructor (userHash: Partial<ServerMyUserModel>, hashTokens: TokenOptions) {
+  constructor (userHash: Partial<ServerMyUserModel>, hashTokens: Partial<UserTokens>) {
     super(userHash)
 
-    this.tokens = new Tokens(hashTokens)
+    this.tokens = new UserTokens(hashTokens)
     this.specialPlaylists = userHash.specialPlaylists
   }
 
@@ -75,20 +53,6 @@ export class AuthUser extends User implements ServerMyUserModel {
 
     // I'm a moderator: I can only manage users
     return user.role === UserRole.USER
-  }
-
-  save () {
-    saveUserInfoIntoLocalStorage({
-      id: this.id,
-      username: this.username,
-      email: this.email,
-      role: this.role,
-      nsfwPolicy: this.nsfwPolicy,
-      webTorrentEnabled: this.webTorrentEnabled,
-      autoPlayVideo: this.autoPlayVideo
-    })
-
-    this.tokens.save()
   }
 
   computeCanSeeVideosLink (quotaObservable: Observable<UserVideoQuota>): Observable<boolean> {

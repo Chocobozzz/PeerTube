@@ -21,18 +21,7 @@ describe('Test config defaults', function () {
   before(async function () {
     this.timeout(30000)
 
-    const overrideConfig = {
-      defaults: {
-        publish: {
-          comments_enabled: false,
-          download_enabled: false,
-          privacy: VideoPrivacy.INTERNAL,
-          licence: 4
-        }
-      }
-    }
-
-    server = await createSingleServer(1, overrideConfig)
+    server = await createSingleServer(1)
     await setAccessTokensToServers([ server ])
     await setDefaultVideoChannel([ server ])
 
@@ -40,6 +29,23 @@ describe('Test config defaults', function () {
   })
 
   describe('Default publish values', function () {
+
+    before(async function () {
+      const overrideConfig = {
+        defaults: {
+          publish: {
+            comments_enabled: false,
+            download_enabled: false,
+            privacy: VideoPrivacy.INTERNAL,
+            licence: 4
+          }
+        }
+      }
+
+      await server.kill()
+      await server.run(overrideConfig)
+    })
+
     const attributes = {
       name: 'video',
       downloadEnabled: undefined,
@@ -114,6 +120,45 @@ describe('Test config defaults', function () {
 
       const video = await server.videos.get({ id })
       checkVideo(video)
+    })
+  })
+
+  describe('Default P2P values', function () {
+
+    before(async function () {
+      const overrideConfig = {
+        defaults: {
+          p2p: {
+            enabled: false
+          }
+        }
+      }
+
+      await server.kill()
+      await server.run(overrideConfig)
+    })
+
+    it('Should not have P2P enabled', async function () {
+      const config = await server.config.getConfig()
+
+      expect(config.defaults.p2p.enabled).to.be.false
+    })
+
+    it('Should create a user with this default setting', async function () {
+      await server.users.create({ username: 'user_p2p_1' })
+      const userToken = await server.login.getAccessToken('user_p2p_1')
+
+      const { p2pEnabled } = await server.users.getMyInfo({ token: userToken })
+      expect(p2pEnabled).to.be.false
+    })
+
+    it('Should register a user with this default setting', async function () {
+      await server.users.register({ username: 'user_p2p_2' })
+
+      const userToken = await server.login.getAccessToken('user_p2p_2')
+
+      const { p2pEnabled } = await server.users.getMyInfo({ token: userToken })
+      expect(p2pEnabled).to.be.false
     })
   })
 

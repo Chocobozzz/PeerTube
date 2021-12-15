@@ -15,6 +15,7 @@ import {
   isUserDisplayNameValid,
   isUserNoModal,
   isUserNSFWPolicyValid,
+  isUserP2PEnabledValid,
   isUserPasswordValid,
   isUserPasswordValidOrEmpty,
   isUserRoleValid,
@@ -239,6 +240,9 @@ const usersUpdateMeValidator = [
   body('autoPlayVideo')
     .optional()
     .custom(isUserAutoPlayVideoValid).withMessage('Should have a valid automatically plays video attribute'),
+  body('p2pEnabled')
+    .optional()
+    .custom(isUserP2PEnabledValid).withMessage('Should have a valid p2p enabled boolean'),
   body('videoLanguages')
     .optional()
     .custom(isUserVideoLanguages).withMessage('Should have a valid video languages attribute'),

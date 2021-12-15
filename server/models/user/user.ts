@@ -55,7 +55,7 @@ import {
   isUserVideoQuotaDailyValid,
   isUserVideoQuotaValid,
   isUserVideosHistoryEnabledValid,
-  isUserWebTorrentEnabledValid
+  isUserP2PEnabledValid
 } from '../../helpers/custom-validators/users'
 import { comparePassword, cryptPassword } from '../../helpers/peertube-crypto'
 import { DEFAULT_USER_THEME_NAME, NSFW_POLICY_TYPES } from '../../initializers/constants'
@@ -267,10 +267,9 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
   nsfwPolicy: NSFWPolicyType
 
   @AllowNull(false)
-  @Default(true)
-  @Is('UserWebTorrentEnabled', value => throwIfNotValid(value, isUserWebTorrentEnabledValid, 'WebTorrent enabled'))
+  @Is('p2pEnabled', value => throwIfNotValid(value, isUserP2PEnabledValid, 'P2P enabled'))
   @Column
-  webTorrentEnabled: boolean
+  p2pEnabled: boolean
 
   @AllowNull(false)
   @Default(true)
@@ -892,7 +891,11 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
       emailVerified: this.emailVerified,
 
       nsfwPolicy: this.nsfwPolicy,
-      webTorrentEnabled: this.webTorrentEnabled,
+
+      // FIXME: deprecated in 4.1
+      webTorrentEnabled: this.p2pEnabled,
+      p2pEnabled: this.p2pEnabled,
+
       videosHistoryEnabled: this.videosHistoryEnabled,
       autoPlayVideo: this.autoPlayVideo,
       autoPlayNextVideo: this.autoPlayNextVideo,

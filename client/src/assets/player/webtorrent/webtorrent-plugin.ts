@@ -2,13 +2,7 @@ import videojs from 'video.js'
 import * as WebTorrent from 'webtorrent'
 import { timeToInt } from '@shared/core-utils'
 import { VideoFile } from '@shared/models'
-import {
-  getAverageBandwidthInStore,
-  getStoredMute,
-  getStoredP2PEnabled,
-  getStoredVolume,
-  saveAverageBandwidth
-} from '../peertube-player-local-storage'
+import { getAverageBandwidthInStore, getStoredMute, getStoredVolume, saveAverageBandwidth } from '../peertube-player-local-storage'
 import { PeerTubeResolution, PlayerNetworkInfo, WebtorrentPluginOptions } from '../peertube-videojs-typings'
 import { getRtcConfig, isIOS, videoFileMaxByResolution, videoFileMinByResolution } from '../utils'
 import { PeertubeChunkStore } from './peertube-chunk-store'
@@ -74,9 +68,10 @@ class WebTorrentPlugin extends Plugin {
 
     this.startTime = timeToInt(options.startTime)
 
-    // Disable auto play on iOS
+    // Custom autoplay handled by webtorrent because we lazy play the video
     this.autoplay = options.autoplay
-    this.playerRefusedP2P = !getStoredP2PEnabled()
+
+    this.playerRefusedP2P = options.playerRefusedP2P
 
     this.videoFiles = options.videoFiles
     this.videoDuration = options.videoDuration

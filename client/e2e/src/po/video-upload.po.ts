@@ -1,5 +1,5 @@
 import { join } from 'path'
-import { clickOnCheckbox } from '../utils'
+import { getCheckbox, selectCustomSelect } from '../utils'
 
 export class VideoUploadPage {
   async navigateTo () {
@@ -32,7 +32,7 @@ export class VideoUploadPage {
   }
 
   setAsNSFW () {
-    return clickOnCheckbox('nsfw')
+    return getCheckbox('nsfw').click()
   }
 
   async validSecondUploadStep (videoName: string) {
@@ -45,6 +45,10 @@ export class VideoUploadPage {
     return browser.waitUntil(async () => {
       return (await browser.getUrl()).includes('/w/')
     })
+  }
+
+  setAsPublic () {
+    return selectCustomSelect('privacy', 'Public')
   }
 
   private getSecondStepSubmitButton () {
