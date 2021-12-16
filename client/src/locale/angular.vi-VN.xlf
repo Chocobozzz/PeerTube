@@ -4283,7 +4283,7 @@
       </trans-unit>
       <trans-unit id="2138469194506455231" datatype="html">
         <source>⚠️ You don't have any external auth plugin enabled.</source>
-        <target state="new">⚠️ You don't have any external auth plugin enabled.</target>
+        <target state="translated">⚠️ Bạn chưa bật bất kỳ plugin xác thực bên ngoài nào.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">80</context>
@@ -4291,7 +4291,7 @@
       </trans-unit>
       <trans-unit id="6608125149782412086" datatype="html">
         <source>⚠️ You have multiple external auth plugins enabled.</source>
-        <target state="new">⚠️ You have multiple external auth plugins enabled.</target>
+        <target state="translated">⚠️ Bạn có nhiều plugin xác thực đang bật.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">81</context>
