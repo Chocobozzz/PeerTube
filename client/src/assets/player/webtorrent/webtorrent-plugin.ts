@@ -368,11 +368,10 @@ class WebTorrentPlugin extends Plugin {
 
   private getAppropriateFile (averageDownloadSpeed?: number): VideoFile {
     if (this.videoFiles === undefined) return undefined
+    if (this.videoFiles.length === 1) return this.videoFiles[0]
 
     const files = this.videoFiles.filter(f => f.resolution.id !== 0)
-
     if (files.length === 0) return undefined
-    if (files.length === 1) return files[0]
 
     // Don't change the torrent if the player ended
     if (this.torrent && this.torrent.progress === 1 && this.player.ended()) return this.currentVideoFile
