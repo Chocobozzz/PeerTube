@@ -228,8 +228,7 @@
       </trans-unit>
       <trans-unit id="2193037168694505715" datatype="html">
         <source>Short text to tell people how they can support the channel (membership platform...).&lt;br /&gt;&lt;br /&gt; When a video is uploaded in this channel, the video support field will be automatically filled by this text.</source>
-        <target state="new">Short text to tell people how they can support the channel (membership platform...).&lt;br /&gt;&lt;br /&gt;
-      When a video is uploaded in this channel, the video support field will be automatically filled by this text.</target>
+        <target state="translated">Nói cho thành viên biết cách họ có thể bảo trợ kênh (nền tảng chuyển tiền...).&lt;br /&gt;&lt;br /&gt; Khi một video được tải lên kênh, phần hỗ trợ video sẽ hiển thị văn bản này.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+manage/video-channel-edit/video-channel-edit.component.html</context>
           <context context-type="linenumber">67,68</context>
@@ -4268,7 +4267,7 @@
       </trans-unit>
       <trans-unit id="5862227717871131052" datatype="html">
         <source>Prefer author display name in video miniature</source>
-        <target state="new">Prefer author display name in video miniature</target>
+        <target state="translated">Ưu tiên tên hiển thị của thành viên trong hình thu nhỏ video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">66</context>
