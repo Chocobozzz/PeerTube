@@ -224,6 +224,7 @@ describe('Test plugin helpers', function () {
 
   describe('Videos', function () {
     let videoUUID: string
+    let videoPath: string
 
     before(async () => {
       this.timeout(240000)
@@ -260,6 +261,8 @@ describe('Test plugin helpers', function () {
             await makeRawRequest(file.url, HttpStatusCode.OK_200)
           }
         }
+
+        videoPath = body.webtorrent.videoFiles[0].path
       }
 
       // Thumbnails check
@@ -276,6 +279,20 @@ describe('Test plugin helpers', function () {
         expect(await pathExists(preview.path)).to.be.true
         await makeRawRequest(preview.url, HttpStatusCode.OK_200)
       }
+    })
+
+    it('Should probe a file', async function () {
+      const { body } = await makeGetRequest({
+        url: servers[0].url,
+        path: '/plugins/test-four/router/ffprobe',
+        query: {
+          path: videoPath
+        },
+        expectedStatus: HttpStatusCode.OK_200
+      })
+
+      expect(body.streams).to.be.an('array')
+      expect(body.streams).to.have.lengthOf(2)
     })
 
     it('Should remove a video after a view', async function () {

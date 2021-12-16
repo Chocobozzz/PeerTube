@@ -1,5 +1,6 @@
 import express from 'express'
 import { join } from 'path'
+import { ffprobePromise } from '@server/helpers/ffprobe-utils'
 import { buildLogger } from '@server/helpers/logger'
 import { CONFIG } from '@server/initializers/config'
 import { WEBSERVER } from '@server/initializers/constants'
@@ -86,6 +87,10 @@ function buildVideosHelpers () {
 
         await video.destroy({ transaction: t })
       })
+    },
+
+    ffprobe: (path: string) => {
+      return ffprobePromise(path)
     },
 
     getFiles: async (id: number | string) => {

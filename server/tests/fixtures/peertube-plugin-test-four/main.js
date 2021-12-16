@@ -111,6 +111,13 @@ async function register ({
 
       return res.json(details)
     })
+
+    router.get('/ffprobe', async (req, res) => {
+      const result = await peertubeHelpers.videos.ffprobe(req.query.path)
+      if (!result) return res.sendStatus(404)
+
+      return res.json(result)
+    })
   }
 
 }

@@ -37,6 +37,8 @@ export type PeerTubeHelpers = {
 
     removeVideo: (videoId: number) => Promise<void>
 
+    ffprobe: (path: string) => Promise<any>
+
     getFiles: (id: number | string) => Promise<{
       webtorrent: {
         videoFiles: {
