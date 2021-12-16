@@ -17,7 +17,7 @@ async function register ({
     logger.info('superkey stored value is %s', result.value)
 
     const storedArrayValue = await storageManager.getData('storedArrayKey')
-    logger.info('storedArrayKey value type is %s', typeof storedArrayValue)
+    logger.info('storedArrayKey isArray is %s', Array.isArray(storedArrayValue) ? 'true' : 'false')
     logger.info('storedArrayKey stored value is %s', storedArrayValue.join(', '))
   }
 
