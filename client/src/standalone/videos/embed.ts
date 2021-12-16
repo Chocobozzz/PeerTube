@@ -793,7 +793,7 @@ export class PeerTubeEmbed {
   private isP2PEnabled (video: Video) {
     const userP2PEnabled = getBoolOrDefault(
       peertubeLocalStorage.getItem(UserLocalStorageKeys.P2P_ENABLED),
-      this.config.defaults.p2p.enabled
+      this.config.defaults.p2p.embed.enabled
     )
 
     return isP2PEnabled(video, this.config, userP2PEnabled)

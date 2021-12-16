@@ -63,7 +63,12 @@ class ServerConfigManager {
           licence: CONFIG.DEFAULTS.PUBLISH.LICENCE
         },
         p2p: {
-          enabled: CONFIG.DEFAULTS.P2P.ENABLED
+          webapp: {
+            enabled: CONFIG.DEFAULTS.P2P.WEBAPP.ENABLED
+          },
+          embed: {
+            enabled: CONFIG.DEFAULTS.P2P.EMBED.ENABLED
+          }
         }
       },
 

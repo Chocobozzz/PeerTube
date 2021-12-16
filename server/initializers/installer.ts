@@ -144,7 +144,7 @@ async function createOAuthAdminIfNotExist () {
     role,
     verified: true,
     nsfwPolicy: CONFIG.INSTANCE.DEFAULT_NSFW_POLICY,
-    p2pEnabled: CONFIG.DEFAULTS.P2P.ENABLED,
+    p2pEnabled: CONFIG.DEFAULTS.P2P.WEBAPP.ENABLED,
     videoQuota: -1,
     videoQuotaDaily: -1
   }

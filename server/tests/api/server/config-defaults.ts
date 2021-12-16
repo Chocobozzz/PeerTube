@@ -125,40 +125,91 @@ describe('Test config defaults', function () {
 
   describe('Default P2P values', function () {
 
-    before(async function () {
-      const overrideConfig = {
-        defaults: {
-          p2p: {
-            enabled: false
+    describe('Webapp default value', function () {
+
+      before(async function () {
+        const overrideConfig = {
+          defaults: {
+            p2p: {
+              webapp: {
+                enabled: false
+              }
+            }
           }
         }
-      }
 
-      await server.kill()
-      await server.run(overrideConfig)
+        await server.kill()
+        await server.run(overrideConfig)
+      })
+
+      it('Should have appropriate P2P config', async function () {
+        const config = await server.config.getConfig()
+
+        expect(config.defaults.p2p.webapp.enabled).to.be.false
+        expect(config.defaults.p2p.embed.enabled).to.be.true
+      })
+
+      it('Should create a user with this default setting', async function () {
+        await server.users.create({ username: 'user_p2p_1' })
+        const userToken = await server.login.getAccessToken('user_p2p_1')
+
+        const { p2pEnabled } = await server.users.getMyInfo({ token: userToken })
+        expect(p2pEnabled).to.be.false
+      })
+
+      it('Should register a user with this default setting', async function () {
+        await server.users.register({ username: 'user_p2p_2' })
+
+        const userToken = await server.login.getAccessToken('user_p2p_2')
+
+        const { p2pEnabled } = await server.users.getMyInfo({ token: userToken })
+        expect(p2pEnabled).to.be.false
+      })
     })
 
-    it('Should not have P2P enabled', async function () {
-      const config = await server.config.getConfig()
+    describe('Embed default value', function () {
 
-      expect(config.defaults.p2p.enabled).to.be.false
-    })
+      before(async function () {
+        const overrideConfig = {
+          defaults: {
+            p2p: {
+              embed: {
+                enabled: false
+              }
+            }
+          },
+          signup: {
+            limit: 15
+          }
+        }
 
-    it('Should create a user with this default setting', async function () {
-      await server.users.create({ username: 'user_p2p_1' })
-      const userToken = await server.login.getAccessToken('user_p2p_1')
+        await server.kill()
+        await server.run(overrideConfig)
+      })
 
-      const { p2pEnabled } = await server.users.getMyInfo({ token: userToken })
-      expect(p2pEnabled).to.be.false
-    })
+      it('Should have appropriate P2P config', async function () {
+        const config = await server.config.getConfig()
 
-    it('Should register a user with this default setting', async function () {
-      await server.users.register({ username: 'user_p2p_2' })
+        expect(config.defaults.p2p.webapp.enabled).to.be.true
+        expect(config.defaults.p2p.embed.enabled).to.be.false
+      })
 
-      const userToken = await server.login.getAccessToken('user_p2p_2')
+      it('Should create a user with this default setting', async function () {
+        await server.users.create({ username: 'user_p2p_3' })
+        const userToken = await server.login.getAccessToken('user_p2p_3')
 
-      const { p2pEnabled } = await server.users.getMyInfo({ token: userToken })
-      expect(p2pEnabled).to.be.false
+        const { p2pEnabled } = await server.users.getMyInfo({ token: userToken })
+        expect(p2pEnabled).to.be.true
+      })
+
+      it('Should register a user with this default setting', async function () {
+        await server.users.register({ username: 'user_p2p_4' })
+
+        const userToken = await server.login.getAccessToken('user_p2p_4')
+
+        const { p2pEnabled } = await server.users.getMyInfo({ token: userToken })
+        expect(p2pEnabled).to.be.true
+      })
     })
   })
 

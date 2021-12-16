@@ -93,7 +93,11 @@ defaults:
   p2p:
     # Enable P2P by default
     # Can be enabled/disabled by anonymous users and logged in users
-    enabled: true
+    webapp:
+      enabled: true
+
+    embed:
+      enabled: true
 
 # From the project root directory
 storage:

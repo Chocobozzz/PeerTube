@@ -57,7 +57,13 @@ export interface ServerConfig {
     }
 
     p2p: {
-      enabled: boolean
+      webapp: {
+        enabled: boolean
+      }
+
+      embed: {
+        enabled: boolean
+      }
     }
   }
 

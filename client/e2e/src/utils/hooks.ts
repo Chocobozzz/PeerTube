@@ -57,7 +57,12 @@ function buildConfig (suiteFile: string = undefined) {
           licence: 4
         },
         p2p: {
-          enabled: false
+          webapp: {
+            enabled: false
+          },
+          embed: {
+            enabled: false
+          }
         }
       }
     }

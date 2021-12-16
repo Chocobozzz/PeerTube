@@ -93,9 +93,15 @@ defaults:
     licence: null
 
   p2p:
-    # Enable P2P by default
+    # Enable P2P by default in PeerTube client
     # Can be enabled/disabled by anonymous users and logged in users
-    enabled: true
+    webapp:
+      enabled: true
+
+    # Enable P2P by default in PeerTube embed
+    # Can be enabled/disabled by URL option
+    embed:
+      enabled: true
 
 # From the project root directory
 storage:
