@@ -4775,7 +4775,7 @@
       </trans-unit>
       <trans-unit id="5698272164915890247" datatype="html">
         <source>Allows users to upload videos with additional extensions than .mp4, .ogv and .webm (for example: .avi, .mov, .mkv etc).</source>
-        <target state="new">Allows users to upload videos with additional extensions than .mp4, .ogv and .webm (for example: .avi, .mov, .mkv etc).</target>
+        <target state="translated">Cho phép thành viên tải lên định dạng video khác mp4, ogv và webm (ví dụ như avi, mov, mkv etc).</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">54</context>
@@ -5391,7 +5391,7 @@
       </trans-unit>
       <trans-unit id="5013100494982905528" datatype="html">
         <source>Banner image of the channel</source>
-        <target state="new">Banner image of the channel</target>
+        <target state="translated">Ảnh bìa của kênh</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+manage/video-channel-edit/video-channel-edit.component.html</context>
           <context context-type="linenumber">13</context>
@@ -9346,7 +9346,7 @@
       </trans-unit>
       <trans-unit id="1391351050292665308" datatype="html">
         <source>Sun</source>
-        <target state="new">Sun</target>
+        <target state="translated">CN</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">20</context>
@@ -9356,7 +9356,7 @@
       </trans-unit>
       <trans-unit id="7037142944838911104" datatype="html">
         <source>Mon</source>
-        <target state="new">Mon</target>
+        <target state="translated">T2</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">21</context>
@@ -9366,7 +9366,7 @@
       </trans-unit>
       <trans-unit id="4051951828654963549" datatype="html">
         <source>Tue</source>
-        <target state="new">Tue</target>
+        <target state="translated">T3</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">22</context>
@@ -9376,7 +9376,7 @@
       </trans-unit>
       <trans-unit id="5265738215297391426" datatype="html">
         <source>Wed</source>
-        <target state="new">Wed</target>
+        <target state="translated">T4</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">23</context>
@@ -9386,7 +9386,7 @@
       </trans-unit>
       <trans-unit id="1370330981433231150" datatype="html">
         <source>Thu</source>
-        <target state="new">Thu</target>
+        <target state="translated">T5</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">24</context>
@@ -9396,7 +9396,7 @@
       </trans-unit>
       <trans-unit id="8713535243933137493" datatype="html">
         <source>Fri</source>
-        <target state="new">Fri</target>
+        <target state="translated">T6</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">25</context>
@@ -9406,7 +9406,7 @@
       </trans-unit>
       <trans-unit id="3547824477629753314" datatype="html">
         <source>Sat</source>
-        <target state="new">Sat</target>
+        <target state="translated">T7</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">26</context>
@@ -9416,7 +9416,7 @@
       </trans-unit>
       <trans-unit id="6115403217651453591" datatype="html">
         <source>Su</source>
-        <target state="new">Su</target>
+        <target state="translated">CN</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">30</context>
@@ -9426,7 +9426,7 @@
       </trans-unit>
       <trans-unit id="3797918310510782582" datatype="html">
         <source>Mo</source>
-        <target state="new">Mo</target>
+        <target state="translated">T2</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">31</context>
@@ -9436,7 +9436,7 @@
       </trans-unit>
       <trans-unit id="8011371911136291436" datatype="html">
         <source>Tu</source>
-        <target state="new">Tu</target>
+        <target state="translated">T3</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">32</context>
@@ -9446,7 +9446,7 @@
       </trans-unit>
       <trans-unit id="1673380870543456256" datatype="html">
         <source>We</source>
-        <target state="new">We</target>
+        <target state="translated">T4</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">33</context>
@@ -9456,7 +9456,7 @@
       </trans-unit>
       <trans-unit id="8502005439670299526" datatype="html">
         <source>Th</source>
-        <target state="new">Th</target>
+        <target state="translated">T5</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">34</context>
@@ -9466,7 +9466,7 @@
       </trans-unit>
       <trans-unit id="2800261787799336637" datatype="html">
         <source>Fr</source>
-        <target state="new">Fr</target>
+        <target state="translated">T6</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">35</context>
@@ -9476,7 +9476,7 @@
       </trans-unit>
       <trans-unit id="2045915324506422459" datatype="html">
         <source>Sa</source>
-        <target state="new">Sa</target>
+        <target state="translated">T7</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">36</context>
@@ -9546,7 +9546,7 @@
       </trans-unit>
       <trans-unit id="1799348348510504995" datatype="html">
         <source>Jan</source>
-        <target state="new">Jan</target>
+        <target state="translated">Tháng 1</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">55</context>
@@ -9556,7 +9556,7 @@
       </trans-unit>
       <trans-unit id="2980544278361296608" datatype="html">
         <source>Feb</source>
-        <target state="new">Feb</target>
+        <target state="translated">Tháng 2</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">56</context>
@@ -9566,7 +9566,7 @@
       </trans-unit>
       <trans-unit id="3124926955462217092" datatype="html">
         <source>Mar</source>
-        <target state="new">Mar</target>
+        <target state="translated">Tháng 3</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">57</context>
@@ -9576,7 +9576,7 @@
       </trans-unit>
       <trans-unit id="9658641661863772" datatype="html">
         <source>Apr</source>
-        <target state="new">Apr</target>
+        <target state="translated">Tháng 4</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">58</context>
@@ -9586,7 +9586,7 @@
       </trans-unit>
       <trans-unit id="502512326533496869" datatype="html">
         <source>May</source>
-        <target state="new">May</target>
+        <target state="translated">Tháng 5</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">59</context>
@@ -9596,7 +9596,7 @@
       </trans-unit>
       <trans-unit id="3044090977322782161" datatype="html">
         <source>Jun</source>
-        <target state="new">Jun</target>
+        <target state="translated">Tháng 6</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">60</context>
@@ -9606,7 +9606,7 @@
       </trans-unit>
       <trans-unit id="8066434078267346927" datatype="html">
         <source>Jul</source>
-        <target state="new">Jul</target>
+        <target state="translated">Tháng 7</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">61</context>
@@ -9616,7 +9616,7 @@
       </trans-unit>
       <trans-unit id="1796563865253467834" datatype="html">
         <source>Aug</source>
-        <target state="new">Aug</target>
+        <target state="translated">Tháng 8</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">62</context>
@@ -9626,7 +9626,7 @@
       </trans-unit>
       <trans-unit id="5865190625753625986" datatype="html">
         <source>Sep</source>
-        <target state="new">Sep</target>
+        <target state="translated">Tháng 9</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">63</context>
@@ -9636,7 +9636,7 @@
       </trans-unit>
       <trans-unit id="4011114601374284323" datatype="html">
         <source>Oct</source>
-        <target state="new">Oct</target>
+        <target state="translated">Tháng 10</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">64</context>
@@ -9646,7 +9646,7 @@
       </trans-unit>
       <trans-unit id="5063734982204786445" datatype="html">
         <source>Nov</source>
-        <target state="new">Nov</target>
+        <target state="translated">Tháng 11</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">65</context>
@@ -9656,7 +9656,7 @@
       </trans-unit>
       <trans-unit id="4789897150069082503" datatype="html">
         <source>Dec</source>
-        <target state="new">Dec</target>
+        <target state="translated">Tháng 12</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">66</context>
