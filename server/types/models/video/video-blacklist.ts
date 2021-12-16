@@ -1,5 +1,5 @@
+import { PickWith } from '@shared/typescript-utils'
 import { VideoBlacklistModel } from '../../../models/video/video-blacklist'
-import { PickWith } from '@shared/core-utils'
 import { MVideo, MVideoFormattable } from './video'
 
 type Use<K extends keyof VideoBlacklistModel, M> = PickWith<VideoBlacklistModel, K, M>

@@ -17,9 +17,10 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { buildUUID, uuidToShort } from '@shared/core-utils/uuid'
 import { MAccountId, MChannelId } from '@server/types/models'
-import { AttributesOnly, buildPlaylistEmbedPath, buildPlaylistWatchPath, pick } from '@shared/core-utils'
+import { buildPlaylistEmbedPath, buildPlaylistWatchPath, pick } from '@shared/core-utils'
+import { buildUUID, uuidToShort } from '@shared/core-utils/uuid'
+import { AttributesOnly } from '@shared/typescript-utils'
 import { ActivityIconObject } from '../../../shared/models/activitypub/objects'
 import { PlaylistObject } from '../../../shared/models/activitypub/objects/playlist-object'
 import { VideoPlaylistPrivacy } from '../../../shared/models/videos/playlist/video-playlist-privacy.model'

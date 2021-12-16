@@ -1,6 +1,6 @@
 import memoizee from 'memoizee'
 import { AllowNull, Column, Default, DefaultScope, HasOne, IsInt, Model, Table } from 'sequelize-typescript'
-import { AttributesOnly } from '@shared/core-utils'
+import { AttributesOnly } from '@shared/typescript-utils'
 import { AccountModel } from '../account/account'
 
 export const getServerActor = memoizee(async function () {

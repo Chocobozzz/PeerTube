@@ -1,4 +1,4 @@
-import { PickWith } from '@shared/core-utils'
+import { PickWith } from '@shared/typescript-utils'
 import { ThumbnailModel } from '../../../models/video/thumbnail'
 import { MVideo } from './video'
 

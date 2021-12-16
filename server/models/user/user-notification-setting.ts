@@ -14,7 +14,7 @@ import {
 } from 'sequelize-typescript'
 import { TokensCache } from '@server/lib/auth/tokens-cache'
 import { MNotificationSettingFormattable } from '@server/types/models'
-import { AttributesOnly } from '@shared/core-utils'
+import { AttributesOnly } from '@shared/typescript-utils'
 import { UserNotificationSetting, UserNotificationSettingValue } from '../../../shared/models/users/user-notification-setting.model'
 import { isUserNotificationSettingValid } from '../../helpers/custom-validators/user-notifications'
 import { throwIfNotValid } from '../utils'

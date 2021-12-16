@@ -2,7 +2,7 @@ import { ACTIVITY_PUB } from '@server/initializers/constants'
 import { VideoPlaylistModel } from '@server/models/video/video-playlist'
 import { VideoPlaylistElementModel } from '@server/models/video/video-playlist-element'
 import { MVideoId, MVideoPlaylistId } from '@server/types/models'
-import { AttributesOnly } from '@shared/core-utils'
+import { AttributesOnly } from '@shared/typescript-utils'
 import { PlaylistElementObject, PlaylistObject, VideoPlaylistPrivacy } from '@shared/models'
 
 function playlistObjectToDBAttributes (playlistObject: PlaylistObject, to: string[]) {

@@ -26,7 +26,7 @@ import { extractVideo } from '@server/helpers/video'
 import { getHLSPublicFileUrl, getWebTorrentPublicFileUrl } from '@server/lib/object-storage'
 import { getFSTorrentFilePath } from '@server/lib/paths'
 import { isStreamingPlaylist, MStreamingPlaylistVideo, MVideo, MVideoWithHost } from '@server/types/models'
-import { AttributesOnly } from '@shared/core-utils'
+import { AttributesOnly } from '@shared/typescript-utils'
 import { VideoStorage } from '@shared/models'
 import {
   isVideoFileExtnameValid,

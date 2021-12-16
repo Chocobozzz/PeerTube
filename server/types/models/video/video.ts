@@ -1,4 +1,4 @@
-import { PickWith, PickWithOpt } from '@shared/core-utils'
+import { PickWith, PickWithOpt } from '@shared/typescript-utils'
 import { VideoModel } from '../../../models/video/video'
 import { MTrackerUrl } from '../server/tracker'
 import { MUserVideoHistoryTime } from '../user/user-video-history'

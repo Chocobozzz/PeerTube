@@ -17,7 +17,7 @@ import {
 } from 'sequelize-typescript'
 import { afterCommitIfTransaction } from '@server/helpers/database-utils'
 import { MThumbnail, MThumbnailVideo, MVideo } from '@server/types/models'
-import { AttributesOnly } from '@shared/core-utils'
+import { AttributesOnly } from '@shared/typescript-utils'
 import { ThumbnailType } from '../../../shared/models/videos/thumbnail.type'
 import { logger } from '../../helpers/logger'
 import { CONFIG } from '../../initializers/config'

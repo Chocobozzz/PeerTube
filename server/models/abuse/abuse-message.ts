@@ -1,7 +1,7 @@
 import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import { isAbuseMessageValid } from '@server/helpers/custom-validators/abuses'
 import { MAbuseMessage, MAbuseMessageFormattable } from '@server/types/models'
-import { AttributesOnly } from '@shared/core-utils'
+import { AttributesOnly } from '@shared/typescript-utils'
 import { AbuseMessage } from '@shared/models'
 import { AccountModel, ScopeNames as AccountScopeNames } from '../account/account'
 import { getSort, throwIfNotValid } from '../utils'

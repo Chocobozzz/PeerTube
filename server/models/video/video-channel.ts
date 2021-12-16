@@ -17,8 +17,10 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
+import { CONFIG } from '@server/initializers/config'
 import { MAccountActor } from '@server/types/models'
-import { AttributesOnly, pick } from '@shared/core-utils'
+import { pick } from '@shared/core-utils'
+import { AttributesOnly } from '@shared/typescript-utils'
 import { ActivityPubActor } from '../../../shared/models/activitypub'
 import { VideoChannel, VideoChannelSummary } from '../../../shared/models/videos'
 import {
@@ -44,7 +46,6 @@ import { setAsUpdated } from '../shared'
 import { buildServerIdsFollowedBy, buildTrigramSearchIndex, createSimilarityAttribute, getSort, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 import { VideoPlaylistModel } from './video-playlist'
-import { CONFIG } from '@server/initializers/config'
 
 export enum ScopeNames {
   FOR_API = 'FOR_API',

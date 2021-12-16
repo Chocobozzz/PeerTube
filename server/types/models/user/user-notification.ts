@@ -3,7 +3,7 @@ import { VideoCommentAbuseModel } from '@server/models/abuse/video-comment-abuse
 import { ApplicationModel } from '@server/models/application/application'
 import { PluginModel } from '@server/models/server/plugin'
 import { UserNotificationModel } from '@server/models/user/user-notification'
-import { PickWith, PickWithOpt } from '@shared/core-utils'
+import { PickWith, PickWithOpt } from '@shared/typescript-utils'
 import { AbuseModel } from '../../../models/abuse/abuse'
 import { AccountModel } from '../../../models/account/account'
 import { ActorModel } from '../../../models/actor/actor'

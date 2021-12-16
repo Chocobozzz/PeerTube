@@ -1,7 +1,7 @@
 import { Op, Transaction } from 'sequelize'
 import { AllowNull, BelongsTo, Column, CreatedAt, Default, ForeignKey, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import { MScheduleVideoUpdateFormattable, MScheduleVideoUpdate } from '@server/types/models'
-import { AttributesOnly } from '@shared/core-utils'
+import { AttributesOnly } from '@shared/typescript-utils'
 import { VideoPrivacy } from '../../../shared/models/videos'
 import { VideoModel } from './video'
 

@@ -1,5 +1,5 @@
 import { BelongsTo, Column, CreatedAt, ForeignKey, Model, Table, UpdatedAt } from 'sequelize-typescript'
-import { AttributesOnly } from '@shared/core-utils'
+import { AttributesOnly } from '@shared/typescript-utils'
 import { VideoCommentModel } from '../video/video-comment'
 import { AbuseModel } from './abuse'
 

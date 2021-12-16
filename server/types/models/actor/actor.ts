@@ -1,4 +1,4 @@
-import { FunctionProperties, PickWith, PickWithOpt } from '@shared/core-utils'
+import { FunctionProperties, PickWith, PickWithOpt } from '@shared/typescript-utils'
 import { ActorModel } from '../../../models/actor/actor'
 import { MAccount, MAccountDefault, MAccountId, MAccountIdActor } from '../account'
 import { MServer, MServerHost, MServerHostBlocks, MServerRedundancyAllowed } from '../server'

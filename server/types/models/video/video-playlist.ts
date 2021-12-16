@@ -1,9 +1,9 @@
+import { MVideoPlaylistElementLight } from '@server/types/models/video/video-playlist-element'
+import { PickWith } from '@shared/typescript-utils'
 import { VideoPlaylistModel } from '../../../models/video/video-playlist'
-import { PickWith } from '@shared/core-utils'
 import { MAccount, MAccountDefault, MAccountSummary, MAccountSummaryFormattable } from '../account'
 import { MThumbnail } from './thumbnail'
 import { MChannelDefault, MChannelSummary, MChannelSummaryFormattable, MChannelUrl } from './video-channels'
-import { MVideoPlaylistElementLight } from '@server/types/models/video/video-playlist-element'
 
 type Use<K extends keyof VideoPlaylistModel, M> = PickWith<VideoPlaylistModel, K, M>
 

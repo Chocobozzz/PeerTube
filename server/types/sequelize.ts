@@ -1,4 +1,4 @@
-import { AttributesOnly } from '@shared/core-utils'
+import { AttributesOnly } from '@shared/typescript-utils'
 import { Model } from 'sequelize'
 
 // Thanks to sequelize-typescript: https://github.com/RobinBuschmann/sequelize-typescript

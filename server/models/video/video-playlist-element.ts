@@ -32,7 +32,7 @@ import { AccountModel } from '../account/account'
 import { getSort, throwIfNotValid } from '../utils'
 import { ForAPIOptions, ScopeNames as VideoScopeNames, VideoModel } from './video'
 import { VideoPlaylistModel } from './video-playlist'
-import { AttributesOnly } from '@shared/core-utils'
+import { AttributesOnly } from '@shared/typescript-utils'
 
 @Table({
   tableName: 'videoPlaylistElement',

@@ -1,4 +1,4 @@
-import { FunctionProperties, PickWith } from '@shared/core-utils'
+import { FunctionProperties, PickWith } from '@shared/typescript-utils'
 import { AccountModel } from '../../../models/account/account'
 import {
   MActor,

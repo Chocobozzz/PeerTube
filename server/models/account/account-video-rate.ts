@@ -7,7 +7,7 @@ import {
   MAccountVideoRateAccountVideo,
   MAccountVideoRateFormattable
 } from '@server/types/models/video/video-rate'
-import { AttributesOnly } from '@shared/core-utils'
+import { AttributesOnly } from '@shared/typescript-utils'
 import { AccountVideoRate } from '../../../shared'
 import { VideoRateType } from '../../../shared/models/videos'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'

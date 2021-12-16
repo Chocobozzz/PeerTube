@@ -1,5 +1,5 @@
 import { VideoLiveModel } from '@server/models/video/video-live'
-import { PickWith } from '@shared/core-utils'
+import { PickWith } from '@shared/typescript-utils'
 import { MVideo } from './video'
 
 type Use<K extends keyof VideoLiveModel, M> = PickWith<VideoLiveModel, K, M>

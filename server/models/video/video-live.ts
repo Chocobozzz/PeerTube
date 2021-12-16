@@ -1,7 +1,7 @@
 import { AllowNull, BelongsTo, Column, CreatedAt, DataType, DefaultScope, ForeignKey, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import { WEBSERVER } from '@server/initializers/constants'
 import { MVideoLive, MVideoLiveVideo } from '@server/types/models'
-import { AttributesOnly } from '@shared/core-utils'
+import { AttributesOnly } from '@shared/typescript-utils'
 import { LiveVideo, VideoState } from '@shared/models'
 import { VideoModel } from './video'
 import { VideoBlacklistModel } from './video-blacklist'

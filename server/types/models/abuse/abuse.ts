@@ -1,7 +1,7 @@
 import { VideoAbuseModel } from '@server/models/abuse/video-abuse'
 import { VideoCommentAbuseModel } from '@server/models/abuse/video-comment-abuse'
 import { VideoCommentModel } from '@server/models/video/video-comment'
-import { PickWith } from '@shared/core-utils'
+import { PickWith } from '@shared/typescript-utils'
 import { AbuseModel } from '../../../models/abuse/abuse'
 import { MAccountDefault, MAccountFormattable, MAccountLight, MAccountUrl } from '../account'
 import { MComment, MCommentOwner, MCommentUrl, MCommentVideo, MVideoUrl } from '../video'

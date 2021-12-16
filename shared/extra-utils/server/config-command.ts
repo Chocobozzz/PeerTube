@@ -1,5 +1,5 @@
 import { merge } from 'lodash'
-import { DeepPartial } from '@shared/core-utils'
+import { DeepPartial } from '@shared/typescript-utils'
 import { About, HttpStatusCode, ServerConfig } from '@shared/models'
 import { CustomConfig } from '../../models/server/custom-config.model'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'

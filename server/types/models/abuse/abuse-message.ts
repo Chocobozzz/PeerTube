@@ -1,5 +1,5 @@
 import { AbuseMessageModel } from '@server/models/abuse/abuse-message'
-import { PickWith } from '@shared/core-utils'
+import { PickWith } from '@shared/typescript-utils'
 import { AbuseModel } from '../../../models/abuse/abuse'
 import { MAccountFormattable } from '../account'
 

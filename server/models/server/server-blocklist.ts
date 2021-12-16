@@ -1,7 +1,7 @@
 import { Op, QueryTypes } from 'sequelize'
 import { BelongsTo, Column, CreatedAt, ForeignKey, Model, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
 import { MServerBlocklist, MServerBlocklistAccountServer, MServerBlocklistFormattable } from '@server/types/models'
-import { AttributesOnly } from '@shared/core-utils'
+import { AttributesOnly } from '@shared/typescript-utils'
 import { ServerBlock } from '@shared/models'
 import { AccountModel } from '../account/account'
 import { createSafeIn, getSort, searchAttribute } from '../utils'

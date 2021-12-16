@@ -1,8 +1,8 @@
+import { PickWith, PickWithOpt } from '@shared/typescript-utils'
 import { VideoFileModel } from '../../../models/video/video-file'
-import { PickWith, PickWithOpt } from '@shared/core-utils'
 import { MVideo, MVideoUUID } from './video'
 import { MVideoRedundancy, MVideoRedundancyFileUrl } from './video-redundancy'
-import { MStreamingPlaylistVideo, MStreamingPlaylist } from './video-streaming-playlist'
+import { MStreamingPlaylist, MStreamingPlaylistVideo } from './video-streaming-playlist'
 
 type Use<K extends keyof VideoFileModel, M> = PickWith<VideoFileModel, K, M>
 

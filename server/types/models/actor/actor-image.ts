@@ -1,4 +1,4 @@
-import { FunctionProperties } from '@shared/core-utils'
+import { FunctionProperties } from '@shared/typescript-utils'
 import { ActorImageModel } from '../../../models/actor/actor-image'
 
 export type MActorImage = ActorImageModel

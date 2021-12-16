@@ -30,7 +30,7 @@ import {
   MActorFollowFormattable,
   MActorFollowSubscriptions
 } from '@server/types/models'
-import { AttributesOnly } from '@shared/core-utils'
+import { AttributesOnly } from '@shared/typescript-utils'
 import { ActivityPubActorType } from '@shared/models'
 import { FollowState } from '../../../shared/models/actors'
 import { ActorFollow } from '../../../shared/models/actors/follow.model'

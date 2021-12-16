@@ -15,7 +15,7 @@ import {
 } from 'sequelize-typescript'
 import { afterCommitIfTransaction } from '@server/helpers/database-utils'
 import { MVideoImportDefault, MVideoImportFormattable } from '@server/types/models/video/video-import'
-import { AttributesOnly } from '@shared/core-utils'
+import { AttributesOnly } from '@shared/typescript-utils'
 import { VideoImport, VideoImportState } from '../../../shared'
 import { isVideoImportStateValid, isVideoImportTargetUrlValid } from '../../helpers/custom-validators/video-imports'
 import { isVideoMagnetUriValid } from '../../helpers/custom-validators/videos'
