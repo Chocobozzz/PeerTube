@@ -58,26 +58,34 @@ $ sudo -u postgres psql -c "CREATE EXTENSION unaccent;" peertube_prod
 
 ### :page_facing_up: Prepare PeerTube directory
 
-Fetch the latest tagged version of Peertube
+Fetch the latest tagged version of Peertube:
+
 ```bash
 $ VERSION=$(curl -s https://api.github.com/repos/chocobozzz/peertube/releases/latest | grep tag_name | cut -d '"' -f 4) && echo "Latest Peertube version is $VERSION"
 ```
 
-Open the peertube directory, create a few required directories
+
+Open the peertube directory, create a few required directories:
+
 ```bash
 $ cd /var/www/peertube
 $ sudo -u peertube mkdir config storage versions
 $ sudo -u peertube chmod 750 config/
 ```
 
-Download the latest version of the Peertube client, unzip it and remove the zip
+
+Download the latest version of the Peertube client, unzip it and remove the zip:
+
 ```bash
 $ cd /var/www/peertube/versions
+$ # Releases are also available on https://builds.joinpeertube.org/release
 $ sudo -u peertube wget -q "https://github.com/Chocobozzz/PeerTube/releases/download/${VERSION}/peertube-${VERSION}.zip"
 $ sudo -u peertube unzip -q peertube-${VERSION}.zip && sudo -u peertube rm peertube-${VERSION}.zip
 ```
 
+
 Install Peertube:
+
 ```bash
 $ cd /var/www/peertube
 $ sudo -u peertube ln -s versions/peertube-${VERSION} ./peertube-latest
