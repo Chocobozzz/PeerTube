@@ -6530,7 +6530,7 @@
       </trans-unit>
       <trans-unit id="9122600735711449044" datatype="html">
         <source>However, you may want to read our guidelines before tweaking the following values.</source>
-        <target state="translated">但是在調整以下的值錢，您可能會想要先閱讀我們的指南。</target>
+        <target state="translated">但是在調整以下的值前，您可能會想要先閱讀我們的指南。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="9035429011363248302" datatype="html">
