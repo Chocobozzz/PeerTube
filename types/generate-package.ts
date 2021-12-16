@@ -1,8 +1,8 @@
-import { copyFile, readJson, writeFile, writeJSON } from 'fs-extra'
-import { resolve } from 'path'
-import { cwd } from 'process'
 import { execSync } from 'child_process'
 import depcheck, { PackageDependencies } from 'depcheck'
+import { copyFile, readJson, remove, writeFile, writeJSON } from 'fs-extra'
+import { resolve } from 'path'
+import { cwd } from 'process'
 
 run()
   .then(() => process.exit(0))
@@ -12,8 +12,6 @@ run()
   })
 
 async function run () {
-  execSync('npm run tsc -- -b --verbose types', { stdio: 'inherit' })
-
   const typesPath = resolve(cwd(), './types/')
   const typesDistPath = resolve(cwd(), typesPath, './dist/')
   const typesDistPackageJsonPath = resolve(typesDistPath, './package.json')
@@ -22,6 +20,9 @@ async function run () {
   const distTsConfigPath = resolve(cwd(), typesPath, './tsconfig.dist.json')
   const distTsConfig = await readJson(distTsConfigPath)
   const clientPackageJson = await readJson(resolve(cwd(), './client/package.json'))
+
+  await remove(typesDistPath)
+  execSync('npm run tsc -- -b --verbose types', { stdio: 'inherit' })
 
   const allDependencies = Object.assign(
     mainPackageJson.dependencies,
