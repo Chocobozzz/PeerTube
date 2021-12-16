@@ -34,7 +34,6 @@ class StatsCard extends Component {
   updateInterval: any
 
   mode: 'webtorrent' | 'p2p-media-loader'
-  p2pEnabled: boolean
 
   metadataStore: any = {}
 
@@ -211,7 +210,7 @@ class StatsCard extends Component {
 
     return `
       ${this.buildElement(player.localize('Player mode'), this.mode || 'HTTP')}
-      ${this.buildElement(player.localize('P2P'), player.localize(this.p2pEnabled ? 'enabled' : 'disabled'))}
+      ${this.buildElement(player.localize('P2P'), player.localize(this.options_.p2pEnabled ? 'enabled' : 'disabled'))}
 
       ${this.buildElement(player.localize('Video UUID'), this.options_.videoUUID)}
 

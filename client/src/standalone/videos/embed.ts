@@ -45,6 +45,7 @@ export class PeerTubeEmbed {
   title: boolean
   warningTitle: boolean
   peertubeLink: boolean
+  p2pEnabled: boolean
   bigPlayBackgroundColor: string
   foregroundColor: string
 
@@ -284,6 +285,7 @@ export class PeerTubeEmbed {
       this.enableApi = this.getParamToggle(params, 'api', this.enableApi)
       this.warningTitle = this.getParamToggle(params, 'warningTitle', true)
       this.peertubeLink = this.getParamToggle(params, 'peertubeLink', true)
+      this.p2pEnabled = this.getParamToggle(params, 'p2p', this.isP2PEnabled(video))
 
       this.scope = this.getParamString(params, 'scope', this.scope)
       this.subtitle = this.getParamString(params, 'subtitle')
@@ -518,7 +520,7 @@ export class PeerTubeEmbed {
         muted: this.muted,
         loop: this.loop,
 
-        p2pEnabled: this.isP2PEnabled(videoInfo),
+        p2pEnabled: this.p2pEnabled,
 
         captions: videoCaptions.length !== 0,
         subtitle: this.subtitle,
@@ -674,7 +676,7 @@ export class PeerTubeEmbed {
 
     const title = this.title ? videoInfo.name : undefined
 
-    const description = this.warningTitle && this.isP2PEnabled(videoInfo)
+    const description = this.warningTitle && this.p2pEnabled
       ? '<span class="text">' + peertubeTranslate('Watching this video may reveal your IP address to others.') + '</span>'
       : undefined
 

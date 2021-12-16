@@ -218,8 +218,15 @@
 
             <div class="form-group">
               <my-peertube-checkbox
+                inputName="embedP2P" [(ngModel)]="customizations.embedP2P"
+                i18n-labelText labelText="P2P"
+              ></my-peertube-checkbox>
+            </div>
+
+            <div class="form-group">
+              <my-peertube-checkbox
                 inputName="warningTitle" [(ngModel)]="customizations.warningTitle"
-                i18n-labelText labelText="Display privacy warning"
+                i18n-labelText labelText="Display privacy warning" [disabled]="!customizations.embedP2P"
               ></my-peertube-checkbox>
             </div>
 
@@ -232,7 +239,7 @@
 
             <div class="form-group">
               <my-peertube-checkbox
-                inputName="controls" [(ngModel)]="customizations.peertubeLink"
+                inputName="peertubeLink" [(ngModel)]="customizations.peertubeLink"
                 i18n-labelText labelText="Display PeerTube button link"
               ></my-peertube-checkbox>
             </div>

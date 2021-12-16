@@ -1,5 +1,6 @@
 import { Component, ElementRef, Input, ViewChild } from '@angular/core'
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
+import { ServerService } from '@app/core'
 import { VideoDetails } from '@app/shared/shared-main'
 import { VideoPlaylist } from '@app/shared/shared-video-playlist'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
@@ -21,6 +22,8 @@ type Customizations = {
   originUrl: boolean
   autoplay: boolean
   muted: boolean
+
+  embedP2P: boolean
   title: boolean
   warningTitle: boolean
   controls: boolean
@@ -54,7 +57,8 @@ export class VideoShareComponent {
 
   constructor (
     private modalService: NgbModal,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private server: ServerService
   ) { }
 
   show (currentVideoTimestamp?: number, currentPlaylistPosition?: number) {
@@ -78,6 +82,8 @@ export class VideoShareComponent {
       autoplay: false,
       muted: false,
 
+      embedP2P: this.server.getHTMLConfig().defaults.p2p.embed.enabled,
+
       // Embed options
       title: true,
       warningTitle: true,
@@ -86,6 +92,11 @@ export class VideoShareComponent {
     }, {
       set: (target, prop, value) => {
         target[prop] = value
+
+        if (prop === 'embedP2P') {
+          // Auto enabled warning title if P2P is enabled
+          this.customizations.warningTitle = value
+        }
 
         this.updateEmbedCode()
 
@@ -101,7 +112,7 @@ export class VideoShareComponent {
   }
 
   getVideoIframeCode () {
-    const embedUrl = decorateVideoLink({ url: this.video.embedUrl, ...this.getVideoOptions() })
+    const embedUrl = decorateVideoLink({ url: this.video.embedUrl, ...this.getVideoOptions(true) })
 
     return buildVideoOrPlaylistEmbed(embedUrl, this.video.name)
   }
@@ -120,7 +131,7 @@ export class VideoShareComponent {
     return decorateVideoLink({
       url,
 
-      ...this.getVideoOptions()
+      ...this.getVideoOptions(false)
     })
   }
 
@@ -165,7 +176,21 @@ export class VideoShareComponent {
     }
   }
 
-  private getVideoOptions () {
+  private getVideoOptions (forEmbed: boolean) {
+    const embedOptions = forEmbed
+      ? {
+        title: this.customizations.title,
+        warningTitle: this.customizations.warningTitle,
+        controls: this.customizations.controls,
+        peertubeLink: this.customizations.peertubeLink,
+
+        // If using default value, we don't need to specify it
+        p2p: this.customizations.embedP2P === this.server.getHTMLConfig().defaults.p2p.embed.enabled
+          ? undefined
+          : this.customizations.embedP2P
+      }
+      : {}
+
     return {
       startTime: this.customizations.startAtCheckbox ? this.customizations.startAt : undefined,
       stopTime: this.customizations.stopAtCheckbox ? this.customizations.stopAt : undefined,
@@ -176,10 +201,7 @@ export class VideoShareComponent {
       autoplay: this.customizations.autoplay,
       muted: this.customizations.muted,
 
-      title: this.customizations.title,
-      warningTitle: this.customizations.warningTitle,
-      controls: this.customizations.controls,
-      peertubeLink: this.customizations.peertubeLink
+      ...embedOptions
     }
   }
 }
