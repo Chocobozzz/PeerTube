@@ -18,7 +18,7 @@ The complete types package is generated via:
 
 ```
 $ npm run generate-types-package
-$ cd dist
+$ cd types/dist
 $ npm publish --access=public
 ```
 

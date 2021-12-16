@@ -12,7 +12,7 @@ run()
   })
 
 async function run () {
-  execSync('npm run build:types', { stdio: 'inherit' })
+  execSync('npm run tsc -- -b --verbose types', { stdio: 'inherit' })
 
   const typesPath = resolve(cwd(), './types/')
   const typesDistPath = resolve(cwd(), typesPath, './dist/')
