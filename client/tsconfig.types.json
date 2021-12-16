@@ -13,6 +13,8 @@
   "references": [
     { "path": "../shared/tsconfig.types.json" }
   ],
-  "files": ["src/types/index.ts"],
-  "include": ["src/**/*", "src/types/**/*"]
+  "files": [ "src/types/index.ts" ],
+  "include": [
+    "src/types/**/*"
+  ]
 }
