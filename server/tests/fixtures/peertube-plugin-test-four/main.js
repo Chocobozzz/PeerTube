@@ -104,6 +104,13 @@ async function register ({
         isUser
       })
     })
+
+    router.get('/video-files/:id', async (req, res) => {
+      const details = await peertubeHelpers.videos.getFiles(req.params.id)
+      if (!details) return res.sendStatus(404)
+
+      return res.json(details)
+    })
   }
 
 }

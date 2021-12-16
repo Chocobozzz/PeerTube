@@ -2,6 +2,7 @@
 
 import 'mocha'
 import { expect } from 'chai'
+import { pathExists } from 'fs-extra'
 import {
   checkVideoFilesWereRemoved,
   cleanupTests,
@@ -9,12 +10,13 @@ import {
   doubleFollow,
   makeGetRequest,
   makePostBodyRequest,
+  makeRawRequest,
   PeerTubeServer,
   PluginsCommand,
   setAccessTokensToServers,
   waitJobs
 } from '@shared/extra-utils'
-import { HttpStatusCode } from '@shared/models'
+import { HttpStatusCode, ThumbnailType } from '@shared/models'
 
 function postCommand (server: PeerTubeServer, command: string, bodyArg?: object) {
   const body = { command }
@@ -224,8 +226,56 @@ describe('Test plugin helpers', function () {
     let videoUUID: string
 
     before(async () => {
+      this.timeout(240000)
+
+      await servers[0].config.enableTranscoding()
+
       const res = await servers[0].videos.quickUpload({ name: 'video1' })
       videoUUID = res.uuid
+
+      await waitJobs(servers)
+    })
+
+    it('Should get video files', async function () {
+      const { body } = await makeGetRequest({
+        url: servers[0].url,
+        path: '/plugins/test-four/router/video-files/' + videoUUID,
+        expectedStatus: HttpStatusCode.OK_200
+      })
+
+      // Video files check
+      {
+        expect(body.webtorrent.videoFiles).to.be.an('array')
+        expect(body.hls.videoFiles).to.be.an('array')
+
+        for (const resolution of [ 144, 240, 360, 480, 720 ]) {
+          for (const files of [ body.webtorrent.videoFiles, body.hls.videoFiles ]) {
+            const file = files.find(f => f.resolution === resolution)
+            expect(file).to.exist
+
+            expect(file.size).to.be.a('number')
+            expect(file.fps).to.equal(25)
+
+            expect(await pathExists(file.path)).to.be.true
+            await makeRawRequest(file.url, HttpStatusCode.OK_200)
+          }
+        }
+      }
+
+      // Thumbnails check
+      {
+        expect(body.thumbnails).to.be.an('array')
+
+        const miniature = body.thumbnails.find(t => t.type === ThumbnailType.MINIATURE)
+        expect(miniature).to.exist
+        expect(await pathExists(miniature.path)).to.be.true
+        await makeRawRequest(miniature.url, HttpStatusCode.OK_200)
+
+        const preview = body.thumbnails.find(t => t.type === ThumbnailType.PREVIEW)
+        expect(preview).to.exist
+        expect(await pathExists(preview.path)).to.be.true
+        await makeRawRequest(preview.url, HttpStatusCode.OK_200)
+      }
     })
 
     it('Should remove a video after a view', async function () {

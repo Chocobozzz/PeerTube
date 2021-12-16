@@ -13,6 +13,7 @@ import {
   RegisterServerHookOptions,
   RegisterServerSettingOptions,
   ServerConfig,
+  ThumbnailType,
   UserRole,
   VideoBlacklistCreate
 } from '@shared/models'
@@ -35,6 +36,33 @@ export type PeerTubeHelpers = {
     loadByIdOrUUID: (id: number | string) => Promise<MVideoThumbnail>
 
     removeVideo: (videoId: number) => Promise<void>
+
+    getFiles: (id: number | string) => Promise<{
+      webtorrent: {
+        videoFiles: {
+          path: string // Could be null if using remote storage
+          url: string
+          resolution: number
+          size: number
+          fps: number
+        }[]
+      }
+
+      hls: {
+        videoFiles: {
+          path: string // Could be null if using remote storage
+          url: string
+          resolution: number
+          size: number
+          fps: number
+        }[]
+      }
+
+      thumbnails: {
+        type: ThumbnailType
+        path: string
+      }[]
+    }>
   }
 
   config: {
