@@ -103,6 +103,20 @@ describe('Test plugin action hooks', function () {
     })
   })
 
+  describe('Captions hooks', function () {
+    it('Should run action:api.video-caption.created', async function () {
+      await servers[0].captions.add({ videoId: videoUUID, language: 'en', fixture: 'subtitle-good.srt' })
+
+      await checkHook('action:api.video-caption.created')
+    })
+
+    it('Should run action:api.video-caption.deleted', async function () {
+      await servers[0].captions.delete({ videoId: videoUUID, language: 'en' })
+
+      await checkHook('action:api.video-caption.deleted')
+    })
+  })
+
   describe('Users hooks', function () {
     let userId: number
 

@@ -115,6 +115,11 @@ export const serverActionHookObject = {
   // Fired when a comment (thread or reply) is deleted
   'action:api.video-comment.deleted': true,
 
+  // Fired when a caption is created
+  'action:api.video-caption.created': true,
+  // Fired when a caption is deleted
+  'action:api.video-caption.deleted': true,
+
   // Fired when a user is blocked (banned)
   'action:api.user.blocked': true,
   // Fired when a user is unblocked (unbanned)

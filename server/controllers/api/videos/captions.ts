@@ -12,6 +12,7 @@ import { federateVideoIfNeeded } from '../../../lib/activitypub/videos'
 import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate } from '../../../middlewares'
 import { addVideoCaptionValidator, deleteVideoCaptionValidator, listVideoCaptionsValidator } from '../../../middlewares/validators'
 import { VideoCaptionModel } from '../../../models/video/video-caption'
+import { Hooks } from '@server/lib/plugins/hooks'
 
 const reqVideoCaptionAdd = createReqFiles(
   [ 'captionfile' ],
@@ -75,6 +76,8 @@ async function addVideoCaption (req: express.Request, res: express.Response) {
     await federateVideoIfNeeded(video, false, t)
   })
 
+  Hooks.runAction('action:api.video-caption.created', { caption: videoCaption, req, res })
+
   return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
@@ -90,6 +93,8 @@ async function deleteVideoCaption (req: express.Request, res: express.Response) 
   })
 
   logger.info('Video caption %s of video %s deleted.', videoCaption.language, video.uuid)
+
+  Hooks.runAction('action:api.video-caption.deleted', { caption: videoCaption, req, res })
 
   return res.type('json').status(HttpStatusCode.NO_CONTENT_204).end()
 }
