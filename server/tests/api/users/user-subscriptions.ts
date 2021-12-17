@@ -2,6 +2,7 @@
 
 import 'mocha'
 import * as chai from 'chai'
+import { VideoPrivacy } from '@shared/models'
 import {
   cleanupTests,
   createMultipleServers,
@@ -32,20 +33,18 @@ describe('Test users subscriptions', function () {
     // Server 1 and server 2 follow each other
     await doubleFollow(servers[0], servers[1])
 
-    {
-      for (const server of servers) {
-        const user = { username: 'user' + server.serverNumber, password: 'password' }
-        await server.users.create({ username: user.username, password: user.password })
+    for (const server of servers) {
+      const user = { username: 'user' + server.serverNumber, password: 'password' }
+      await server.users.create({ username: user.username, password: user.password })
 
-        const accessToken = await server.login.getAccessToken(user)
-        users.push({ accessToken })
+      const accessToken = await server.login.getAccessToken(user)
+      users.push({ accessToken })
 
-        const videoName1 = 'video 1-' + server.serverNumber
-        await server.videos.upload({ token: accessToken, attributes: { name: videoName1 } })
+      const videoName1 = 'video 1-' + server.serverNumber
+      await server.videos.upload({ token: accessToken, attributes: { name: videoName1 } })
 
-        const videoName2 = 'video 2-' + server.serverNumber
-        await server.videos.upload({ token: accessToken, attributes: { name: videoName2 } })
-      }
+      const videoName2 = 'video 2-' + server.serverNumber
+      await server.videos.upload({ token: accessToken, attributes: { name: videoName2 } })
     }
 
     await waitJobs(servers)
@@ -537,6 +536,40 @@ describe('Test users subscriptions', function () {
       expect(data[0].following.name).to.equal('user3_channel')
       expect(data[0].follower.host).to.equal(servers[0].host)
       expect(data[0].follower.name).to.equal('user1')
+    }
+  })
+
+  it('Should update video as internal and not see from remote server', async function () {
+    this.timeout(30000)
+
+    await servers[2].videos.update({ id: video3UUID, attributes: { name: 'internal', privacy: VideoPrivacy.INTERNAL } })
+    await waitJobs(servers)
+
+    {
+      const { data } = await command.listVideos({ token: users[0].accessToken })
+      expect(data.find(v => v.name === 'internal')).to.not.exist
+    }
+  })
+
+  it('Should see internal from local user', async function () {
+    const { data } = await servers[2].subscriptions.listVideos({ token: servers[2].accessToken })
+    expect(data.find(v => v.name === 'internal')).to.exist
+  })
+
+  it('Should update video as private and not see from anyone server', async function () {
+    this.timeout(30000)
+
+    await servers[2].videos.update({ id: video3UUID, attributes: { name: 'private', privacy: VideoPrivacy.PRIVATE } })
+    await waitJobs(servers)
+
+    {
+      const { data } = await command.listVideos({ token: users[0].accessToken })
+      expect(data.find(v => v.name === 'private')).to.not.exist
+    }
+
+    {
+      const { data } = await servers[2].subscriptions.listVideos({ token: servers[2].accessToken })
+      expect(data.find(v => v.name === 'private')).to.not.exist
     }
   })
 
