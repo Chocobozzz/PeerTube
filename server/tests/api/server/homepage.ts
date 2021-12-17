@@ -10,7 +10,7 @@ import {
   killallServers,
   PeerTubeServer,
   setAccessTokensToServers
-} from '../../../../shared/extra-utils/index'
+} from '../../../../shared/server-commands/index'
 
 const expect = chai.expect
 

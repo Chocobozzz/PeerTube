@@ -17,7 +17,7 @@ import {
   makeUploadRequest,
   PeerTubeServer,
   setAccessTokensToServers
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 import { HttpStatusCode, VideoChannelUpdate } from '@shared/models'
 
 const expect = chai.expect

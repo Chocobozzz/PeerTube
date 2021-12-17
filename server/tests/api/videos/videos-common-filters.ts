@@ -12,7 +12,7 @@ import {
   setAccessTokensToServers,
   setDefaultVideoChannel,
   waitJobs
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 import { HttpStatusCode, UserRole, Video, VideoDetails, VideoInclude, VideoPrivacy } from '@shared/models'
 
 describe('Test videos filter', function () {

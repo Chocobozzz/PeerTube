@@ -24,7 +24,7 @@ import {
   wait,
   waitJobs,
   waitUntilLivePublishedOnAllServers
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 import {
   HttpStatusCode,
   LiveVideo,

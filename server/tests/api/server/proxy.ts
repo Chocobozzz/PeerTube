@@ -11,8 +11,8 @@ import {
   setAccessTokensToServers,
   setDefaultVideoChannel,
   waitJobs
-} from '@shared/extra-utils'
-import { MockProxy } from '@shared/extra-utils/mock-servers/mock-proxy'
+} from '@shared/server-commands'
+import { MockProxy } from '@shared/server-commands/mock-servers/mock-proxy'
 import { HttpStatusCode, VideoPrivacy } from '@shared/models'
 
 const expect = chai.expect

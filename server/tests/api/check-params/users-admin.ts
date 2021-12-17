@@ -15,7 +15,7 @@ import {
   MockSmtpServer,
   PeerTubeServer,
   setAccessTokensToServers
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 import { HttpStatusCode, UserAdminFlag, UserRole } from '@shared/models'
 
 describe('Test users admin API validators', function () {

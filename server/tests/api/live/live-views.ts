@@ -15,7 +15,7 @@ import {
   wait,
   waitJobs,
   waitUntilLivePublishedOnAllServers
-} from '../../../../shared/extra-utils'
+} from '../../../../shared/server-commands'
 
 const expect = chai.expect
 

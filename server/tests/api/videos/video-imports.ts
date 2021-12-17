@@ -17,7 +17,7 @@ import {
   testCaptionFile,
   testImage,
   waitJobs
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 import { VideoPrivacy, VideoResolution } from '@shared/models'
 
 async function checkVideosServer1 (server: PeerTubeServer, idHttp: string, idMagnet: string, idTorrent: string) {

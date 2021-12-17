@@ -11,7 +11,7 @@ import {
   PeerTubeServer,
   prepareNotificationsTest,
   waitJobs
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 import { UserNotification } from '@shared/models'
 
 const expect = chai.expect

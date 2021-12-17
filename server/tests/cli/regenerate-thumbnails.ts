@@ -11,7 +11,7 @@ import {
   PeerTubeServer,
   setAccessTokensToServers,
   waitJobs
-} from '../../../shared/extra-utils'
+} from '../../../shared/server-commands'
 
 async function testThumbnail (server: PeerTubeServer, videoId: number | string) {
   const video = await server.videos.get({ id: videoId })

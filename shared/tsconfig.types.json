@@ -5,5 +5,8 @@
     "stripInternal": true,
     "removeComments": false,
     "emitDeclarationOnly": true
-  }
+  },
+  "exclude": [
+    "server-commands/"
+  ]
 }

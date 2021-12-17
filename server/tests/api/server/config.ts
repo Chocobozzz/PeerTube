@@ -10,7 +10,7 @@ import {
   parallelTests,
   PeerTubeServer,
   setAccessTokensToServers
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 import { CustomConfig, HttpStatusCode } from '@shared/models'
 
 const expect = chai.expect

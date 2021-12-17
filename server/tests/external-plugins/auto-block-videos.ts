@@ -11,7 +11,7 @@ import {
   PeerTubeServer,
   setAccessTokensToServers,
   wait
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 import { Video } from '@shared/models'
 
 async function check (server: PeerTubeServer, videoUUID: string, exists = true) {

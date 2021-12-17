@@ -12,7 +12,7 @@ import {
   PlaylistsCommand,
   setAccessTokensToServers,
   setDefaultVideoChannel
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 import {
   HttpStatusCode,
   VideoPlaylistCreate,

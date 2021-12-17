@@ -6,7 +6,7 @@ import { activityPubContextify, buildSignedActivity } from '@server/helpers/acti
 import { buildDigest } from '@server/helpers/peertube-crypto'
 import { HTTP_SIGNATURE } from '@server/initializers/constants'
 import { buildGlobalHeaders } from '@server/lib/job-queue/handlers/utils/activitypub-http-utils'
-import { buildAbsoluteFixturePath, cleanupTests, createMultipleServers, killallServers, PeerTubeServer, wait } from '@shared/extra-utils'
+import { buildAbsoluteFixturePath, cleanupTests, createMultipleServers, killallServers, PeerTubeServer, wait } from '@shared/server-commands'
 import { makeFollowRequest, makePOSTAPRequest } from '@server/tests/shared'
 import { HttpStatusCode } from '@shared/models'
 

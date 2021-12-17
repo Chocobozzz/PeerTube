@@ -1,7 +1,7 @@
 import { registerTSPaths } from '../server/helpers/register-ts-paths'
 registerTSPaths()
 
-import { CLICommand } from '@shared/extra-utils'
+import { CLICommand } from '@shared/server-commands'
 
 run()
   .then(() => process.exit(0))

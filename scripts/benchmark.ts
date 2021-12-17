@@ -3,7 +3,7 @@ registerTSPaths()
 
 import autocannon, { printResult } from 'autocannon'
 import { writeJson } from 'fs-extra'
-import { createSingleServer, killallServers, PeerTubeServer, setAccessTokensToServers } from '@shared/extra-utils'
+import { createSingleServer, killallServers, PeerTubeServer, setAccessTokensToServers } from '@shared/server-commands'
 import { Video, VideoPrivacy } from '@shared/models'
 
 let server: PeerTubeServer

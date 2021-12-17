@@ -11,7 +11,7 @@ import {
   PeerTubeServer,
   setAccessTokensToServers,
   waitJobs
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 
 describe('Test update host scripts', function () {
   let server: PeerTubeServer

@@ -14,7 +14,7 @@ import {
   setAccessTokensToServers,
   testImage,
   waitJobs
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 import { MyUser } from '@shared/models'
 
 const expect = chai.expect

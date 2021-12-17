@@ -10,7 +10,7 @@ import {
   PeerTubeServer,
   PluginsCommand,
   setAccessTokensToServers
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 import { HttpStatusCode } from '@shared/models'
 
 describe('Test plugin helpers', function () {

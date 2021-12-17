@@ -23,7 +23,7 @@ import {
   prepareNotificationsTest,
   wait,
   waitJobs
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 import { AbuseState, CustomConfig, UserNotification, UserRole, VideoPrivacy } from '@shared/models'
 
 describe('Test moderation notifications', function () {

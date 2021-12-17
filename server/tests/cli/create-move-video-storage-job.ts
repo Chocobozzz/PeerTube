@@ -13,7 +13,7 @@ import {
   PeerTubeServer,
   setAccessTokensToServers,
   waitJobs
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 import { HttpStatusCode, VideoDetails } from '@shared/models'
 
 async function checkFiles (origin: PeerTubeServer, video: VideoDetails, inObjectStorage: boolean) {

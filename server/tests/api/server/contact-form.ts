@@ -11,7 +11,7 @@ import {
   setAccessTokensToServers,
   wait,
   waitJobs
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 import { HttpStatusCode } from '@shared/models'
 
 const expect = chai.expect

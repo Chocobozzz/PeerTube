@@ -18,7 +18,7 @@ import {
   waitJobs,
   waitUntilLivePublishedOnAllServers,
   waitUntilLiveSavedOnAllServers
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 import { HttpStatusCode, LiveVideoCreate, VideoFile, VideoPrivacy } from '@shared/models'
 
 const expect = chai.expect

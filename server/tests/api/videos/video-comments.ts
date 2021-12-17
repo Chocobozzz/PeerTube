@@ -10,7 +10,7 @@ import {
   PeerTubeServer,
   setAccessTokensToServers,
   testImage
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 
 const expect = chai.expect
 

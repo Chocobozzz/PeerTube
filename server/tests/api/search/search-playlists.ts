@@ -10,7 +10,7 @@ import {
   SearchCommand,
   setAccessTokensToServers,
   setDefaultVideoChannel
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 import { VideoPlaylistPrivacy } from '@shared/models'
 
 const expect = chai.expect

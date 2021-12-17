@@ -9,7 +9,7 @@ import {
   MockSmtpServer,
   PeerTubeServer,
   setAccessTokensToServers
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 import { HttpStatusCode, UserRole } from '@shared/models'
 
 describe('Test users API validators', function () {

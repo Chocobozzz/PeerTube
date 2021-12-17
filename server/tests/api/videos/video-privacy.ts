@@ -10,7 +10,7 @@ import {
   setAccessTokensToServers,
   wait,
   waitJobs
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 import { HttpStatusCode, VideoCreateResult, VideoPrivacy } from '@shared/models'
 
 const expect = chai.expect

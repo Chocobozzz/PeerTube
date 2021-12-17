@@ -15,7 +15,7 @@ import {
   PluginsCommand,
   setAccessTokensToServers,
   waitJobs
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 import { HttpStatusCode, ThumbnailType } from '@shared/models'
 
 function postCommand (server: PeerTubeServer, command: string, bodyArg?: object) {

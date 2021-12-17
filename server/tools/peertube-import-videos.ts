@@ -15,7 +15,7 @@ import {
   getLogger,
   getServerCredentials
 } from './cli'
-import { wait } from '@shared/extra-utils'
+import { wait } from '@shared/server-commands'
 import { YoutubeDLCLI, YoutubeDLInfo, YoutubeDLInfoBuilder } from '@server/helpers/youtube-dl'
 import prompt = require('prompt')
 

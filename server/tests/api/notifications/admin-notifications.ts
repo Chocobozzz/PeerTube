@@ -12,7 +12,7 @@ import {
   PeerTubeServer,
   prepareNotificationsTest,
   wait
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 import { PluginType, UserNotification, UserNotificationType } from '@shared/models'
 
 describe('Test admin notifications', function () {

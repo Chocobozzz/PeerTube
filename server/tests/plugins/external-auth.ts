@@ -10,7 +10,7 @@ import {
   PluginsCommand,
   setAccessTokensToServers,
   wait
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 import { HttpStatusCode, UserRole } from '@shared/models'
 
 async function loginExternal (options: {

@@ -3,7 +3,7 @@
 import 'mocha'
 import magnetUtil from 'magnet-uri'
 import WebTorrent from 'webtorrent'
-import { cleanupTests, createSingleServer, killallServers, PeerTubeServer, setAccessTokensToServers } from '@shared/extra-utils'
+import { cleanupTests, createSingleServer, killallServers, PeerTubeServer, setAccessTokensToServers } from '@shared/server-commands'
 
 describe('Test tracker', function () {
   let server: PeerTubeServer

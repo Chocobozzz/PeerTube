@@ -12,7 +12,7 @@ import {
   setAccessTokensToServers,
   testCaptionFile,
   waitJobs
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 import { VideoCreateResult, VideoPrivacy } from '@shared/models'
 import { completeVideoCheck } from '@server/tests/shared/video'
 

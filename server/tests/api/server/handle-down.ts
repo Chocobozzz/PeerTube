@@ -11,7 +11,7 @@ import {
   setAccessTokensToServers,
   wait,
   waitJobs
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 import { HttpStatusCode, JobState, VideoCreateResult, VideoPrivacy } from '@shared/models'
 import { completeVideoCheck } from '@server/tests/shared/video'
 

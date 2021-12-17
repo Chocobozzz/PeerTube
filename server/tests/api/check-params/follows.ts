@@ -12,7 +12,7 @@ import {
   makePostBodyRequest,
   PeerTubeServer,
   setAccessTokensToServers
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 import { HttpStatusCode } from '@shared/models'
 
 describe('Test server follows API validators', function () {

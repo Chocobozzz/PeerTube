@@ -12,7 +12,7 @@ import {
   setDefaultVideoChannel,
   VideosCommand,
   waitJobs
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 import { HttpStatusCode, VideoImportState, VideoPrivacy } from '@shared/models'
 
 describe('Test upload quota', function () {

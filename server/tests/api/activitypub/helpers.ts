@@ -3,7 +3,7 @@
 import 'mocha'
 import { expect } from 'chai'
 import { cloneDeep } from 'lodash'
-import { buildAbsoluteFixturePath, buildRequestStub } from '@shared/extra-utils'
+import { buildAbsoluteFixturePath, buildRequestStub } from '@shared/server-commands'
 import { buildSignedActivity } from '../../../helpers/activitypub'
 import { isHTTPSignatureVerified, isJsonLDSignatureVerified, parseHTTPSignature } from '../../../helpers/peertube-crypto'
 

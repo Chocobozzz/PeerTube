@@ -14,7 +14,7 @@ import {
   PeerTubeServer,
   setAccessTokensToServers,
   waitJobs
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 import { AbuseCreate, AbuseState, HttpStatusCode } from '@shared/models'
 
 describe('Test abuses API validators', function () {

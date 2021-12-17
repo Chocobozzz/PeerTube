@@ -14,7 +14,7 @@ import {
   testImage,
   wait,
   waitJobs
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 import {
   HttpStatusCode,
   VideoPlaylist,

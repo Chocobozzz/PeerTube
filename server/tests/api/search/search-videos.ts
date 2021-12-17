@@ -12,7 +12,7 @@ import {
   setDefaultVideoChannel,
   stopFfmpeg,
   wait
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 import { VideoPrivacy } from '@shared/models'
 
 const expect = chai.expect

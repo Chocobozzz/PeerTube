@@ -9,7 +9,7 @@ import {
   PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 import { VideoDetails, VideoPrivacy } from '@shared/models'
 
 const expect = chai.expect

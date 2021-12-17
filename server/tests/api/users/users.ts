@@ -11,7 +11,7 @@ import {
   setAccessTokensToServers,
   testImage,
   waitJobs
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 import { AbuseState, HttpStatusCode, OAuth2ErrorCode, UserAdminFlag, UserRole, Video, VideoPlaylistType } from '@shared/models'
 
 const expect = chai.expect

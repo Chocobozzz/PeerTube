@@ -14,7 +14,7 @@ import {
   setAccessTokensToServers,
   setDefaultVideoChannel,
   waitJobs
-} from '../../shared/extra-utils'
+} from '../../shared/server-commands'
 
 const expect = chai.expect
 

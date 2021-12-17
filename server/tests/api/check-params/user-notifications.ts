@@ -14,7 +14,7 @@ import {
   PeerTubeServer,
   setAccessTokensToServers,
   wait
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 import { HttpStatusCode, UserNotificationSetting, UserNotificationSettingValue } from '@shared/models'
 
 describe('Test user notifications API validators', function () {

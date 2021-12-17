@@ -8,7 +8,7 @@ import {
   cleanupTests,
   createSingleServer,
   PeerTubeServer
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 import { HttpStatusCode } from '@shared/models'
 
 describe('Test accounts API validators', function () {

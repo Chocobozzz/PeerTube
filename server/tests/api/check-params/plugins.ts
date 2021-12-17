@@ -12,7 +12,7 @@ import {
   makePutBodyRequest,
   PeerTubeServer,
   setAccessTokensToServers
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 import { HttpStatusCode, PeerTubePlugin, PluginType } from '@shared/models'
 
 describe('Test server plugins API validators', function () {

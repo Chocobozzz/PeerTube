@@ -11,7 +11,7 @@ import {
   setDefaultVideoChannel,
   wait,
   waitJobs
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 import { VideoPlaylistPrivacy } from '@shared/models'
 
 const expect = chai.expect

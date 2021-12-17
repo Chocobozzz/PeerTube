@@ -13,7 +13,7 @@ import {
   makePostBodyRequest,
   PeerTubeServer,
   setAccessTokensToServers
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 import { HttpStatusCode, VideoCreateResult } from '@shared/models'
 
 const expect = chai.expect

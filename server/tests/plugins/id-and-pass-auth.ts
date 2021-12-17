@@ -2,7 +2,7 @@
 
 import 'mocha'
 import { expect } from 'chai'
-import { cleanupTests, createSingleServer, PeerTubeServer, PluginsCommand, setAccessTokensToServers, wait } from '@shared/extra-utils'
+import { cleanupTests, createSingleServer, PeerTubeServer, PluginsCommand, setAccessTokensToServers, wait } from '@shared/server-commands'
 import { HttpStatusCode, UserRole } from '@shared/models'
 
 describe('Test id and pass auth plugins', function () {

@@ -10,7 +10,7 @@ import {
   makeGetRequest,
   PeerTubeServer,
   setAccessTokensToServers
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 import { HttpStatusCode } from '@shared/models'
 
 function updateSearchIndex (server: PeerTubeServer, enabled: boolean, disableLocalSearch = false) {

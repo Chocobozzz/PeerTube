@@ -8,7 +8,7 @@ import {
   PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 import { HttpStatusCode, UserRole, VideoInclude, VideoPrivacy } from '@shared/models'
 
 describe('Test video filters validators', function () {

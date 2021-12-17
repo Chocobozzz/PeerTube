@@ -10,7 +10,7 @@ import {
   PeerTubeServer,
   setAccessTokensToServers,
   wait
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 import { HttpStatusCode, Video } from '@shared/models'
 
 const expect = chai.expect

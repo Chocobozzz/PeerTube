@@ -10,7 +10,7 @@ import {
   makeUploadRequest,
   PeerTubeServer,
   setAccessTokensToServers
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 import { HttpStatusCode, VideoCreateResult } from '@shared/models'
 
 describe('Test video captions API validator', function () {

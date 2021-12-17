@@ -12,7 +12,7 @@ import {
   setDefaultVideoChannel,
   testFfmpegStreamError,
   waitJobs
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 import { VideoPrivacy } from '@shared/models'
 
 async function createLiveWrapper (server: PeerTubeServer) {

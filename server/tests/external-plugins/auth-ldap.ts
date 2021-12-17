@@ -2,7 +2,7 @@
 
 import 'mocha'
 import { expect } from 'chai'
-import { cleanupTests, createSingleServer, PeerTubeServer, setAccessTokensToServers } from '@shared/extra-utils'
+import { cleanupTests, createSingleServer, PeerTubeServer, setAccessTokensToServers } from '@shared/server-commands'
 import { HttpStatusCode } from '@shared/models'
 
 describe('Official plugin auth-ldap', function () {

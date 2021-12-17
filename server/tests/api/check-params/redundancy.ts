@@ -15,7 +15,7 @@ import {
   PeerTubeServer,
   setAccessTokensToServers,
   waitJobs
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 import { HttpStatusCode, VideoCreateResult } from '@shared/models'
 
 describe('Test server redundancy API validators', function () {

@@ -15,7 +15,7 @@ import {
   makeUploadRequest,
   PeerTubeServer,
   setAccessTokensToServers
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 import { HttpStatusCode, VideoPrivacy } from '@shared/models'
 
 describe('Test video imports API validator', function () {

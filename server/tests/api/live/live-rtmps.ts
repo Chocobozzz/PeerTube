@@ -14,7 +14,7 @@ import {
   stopFfmpeg,
   testFfmpegStreamError,
   waitUntilLivePublishedOnAllServers
-} from '../../../../shared/extra-utils'
+} from '../../../../shared/server-commands'
 
 const expect = chai.expect
 

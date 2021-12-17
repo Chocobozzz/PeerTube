@@ -10,7 +10,7 @@ import {
   RedundancyCommand,
   setAccessTokensToServers,
   waitJobs
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 import { VideoPrivacy, VideoRedundanciesTarget } from '@shared/models'
 
 const expect = chai.expect

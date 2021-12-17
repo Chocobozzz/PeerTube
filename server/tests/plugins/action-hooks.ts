@@ -9,7 +9,7 @@ import {
   PluginsCommand,
   setAccessTokensToServers,
   setDefaultVideoChannel
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 import { ServerHookName, VideoPlaylistPrivacy, VideoPrivacy } from '@shared/models'
 
 describe('Test plugin action hooks', function () {

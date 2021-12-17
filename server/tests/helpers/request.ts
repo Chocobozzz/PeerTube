@@ -4,8 +4,8 @@ import 'mocha'
 import { expect } from 'chai'
 import { pathExists, remove } from 'fs-extra'
 import { join } from 'path'
-import { Mock429 } from '@shared/extra-utils/mock-servers/mock-429'
-import { FIXTURE_URLS, root, wait } from '../../../shared/extra-utils'
+import { Mock429 } from '@shared/server-commands/mock-servers/mock-429'
+import { FIXTURE_URLS, root, wait } from '../../../shared/server-commands'
 import { doRequest, doRequestAndSaveToFile } from '../../helpers/requests'
 
 describe('Request helpers', function () {

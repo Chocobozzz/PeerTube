@@ -12,7 +12,7 @@ import {
   PeerTubeServer,
   setAccessTokensToServers,
   waitJobs
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 import { HttpStatusCode, VideoPrivacy } from '@shared/models'
 
 chai.use(require('chai-xml'))

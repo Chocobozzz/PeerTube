@@ -17,7 +17,7 @@ import {
   uploadRandomVideoOnServers,
   wait,
   waitJobs
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 import { UserNotification, UserNotificationType, VideoPrivacy } from '@shared/models'
 
 const expect = chai.expect

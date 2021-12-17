@@ -16,7 +16,7 @@ import {
   setAccessTokensToServers,
   waitJobs,
   webtorrentAdd
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 import { HttpStatusCode, VideoState } from '@shared/models'
 import {
   canDoQuickTranscode,

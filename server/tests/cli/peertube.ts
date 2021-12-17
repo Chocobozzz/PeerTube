@@ -14,7 +14,7 @@ import {
   setAccessTokensToServers,
   testHelloWorldRegisteredSettings,
   waitJobs
-} from '../../../shared/extra-utils'
+} from '../../../shared/server-commands'
 
 describe('Test CLI wrapper', function () {
   let server: PeerTubeServer

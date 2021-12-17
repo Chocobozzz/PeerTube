@@ -15,7 +15,7 @@ import {
   testImage,
   wait,
   waitJobs
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 import { User, VideoChannel } from '@shared/models'
 
 const expect = chai.expect

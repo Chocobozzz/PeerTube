@@ -11,7 +11,7 @@ import {
   setDefaultVideoChannel,
   testImage,
   waitJobs
-} from '../../../../shared/extra-utils'
+} from '../../../../shared/server-commands'
 import { VideoPlaylistPrivacy } from '../../../../shared/models/videos/playlist/video-playlist-privacy.model'
 
 const expect = chai.expect

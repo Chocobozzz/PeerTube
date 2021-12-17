@@ -11,7 +11,7 @@ import {
   setDefaultVideoChannel,
   wait,
   waitJobs
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 import { HttpStatusCode, VideoPlaylistPrivacy } from '@shared/models'
 
 describe('Test AP refresher', function () {

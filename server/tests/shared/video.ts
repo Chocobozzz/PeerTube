@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
-import { dateIsValid, makeRawRequest, PeerTubeServer, testImage, webtorrentAdd } from '@shared/extra-utils'
+import { dateIsValid, makeRawRequest, PeerTubeServer, testImage, webtorrentAdd } from '@shared/server-commands'
 import { expect } from 'chai'
 import { loadLanguages, VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_PRIVACIES } from '@server/initializers/constants'
 import { getLowercaseExtension, uuidRegex } from '@shared/core-utils'

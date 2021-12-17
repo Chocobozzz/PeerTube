@@ -21,7 +21,7 @@ import {
   setAccessTokensToServers,
   waitJobs,
   webtorrentAdd
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 import { HttpStatusCode, VideoStreamingPlaylistType } from '@shared/models'
 import { DEFAULT_AUDIO_RESOLUTION } from '../../../initializers/constants'
 

@@ -13,7 +13,7 @@ import {
   sendRTMPStream,
   setAccessTokensToServers,
   stopFfmpeg
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 import { HttpStatusCode, VideoCreateResult, VideoPrivacy } from '@shared/models'
 
 describe('Test video lives API validator', function () {

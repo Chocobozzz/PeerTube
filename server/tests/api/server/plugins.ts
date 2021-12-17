@@ -11,7 +11,7 @@ import {
   setAccessTokensToServers,
   testHelloWorldRegisteredSettings,
   wait
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 import { HttpStatusCode, PluginType } from '@shared/models'
 
 const expect = chai.expect

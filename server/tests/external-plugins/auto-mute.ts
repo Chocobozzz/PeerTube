@@ -12,7 +12,7 @@ import {
   PeerTubeServer,
   setAccessTokensToServers,
   wait
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 import { HttpStatusCode } from '@shared/models'
 
 describe('Official plugin auto-mute', function () {

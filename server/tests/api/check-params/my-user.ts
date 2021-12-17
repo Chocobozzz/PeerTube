@@ -15,7 +15,7 @@ import {
   PeerTubeServer,
   setAccessTokensToServers,
   UsersCommand
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 import { HttpStatusCode, UserRole, VideoCreateResult } from '@shared/models'
 
 describe('Test my user API validators', function () {
