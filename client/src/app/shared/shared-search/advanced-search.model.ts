@@ -81,8 +81,8 @@ export class AdvancedSearch {
     this.languageOneOf = options.languageOneOf || undefined
     this.tagsOneOf = intoArray(options.tagsOneOf)
     this.tagsAllOf = intoArray(options.tagsAllOf)
-    this.durationMin = parseInt(options.durationMin, 10)
-    this.durationMax = parseInt(options.durationMax, 10)
+    this.durationMin = options.durationMin ? parseInt(options.durationMin, 10) : undefined
+    this.durationMax = options.durationMax ? parseInt(options.durationMax, 10) : undefined
 
     this.host = options.host || undefined
 
@@ -216,7 +216,7 @@ export class AdvancedSearch {
       this.endDate !== undefined ||
       this.originallyPublishedStartDate !== undefined ||
       this.originallyPublishedEndDate !== undefined ||
-      this.nsfw !== undefined !== undefined ||
+      this.nsfw !== undefined ||
       this.categoryOneOf !== undefined ||
       this.licenceOneOf !== undefined ||
       this.languageOneOf !== undefined ||
