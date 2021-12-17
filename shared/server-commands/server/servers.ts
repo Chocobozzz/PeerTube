@@ -1,5 +1,5 @@
 import { ensureDir } from 'fs-extra'
-import { isGithubCI } from '../miscs'
+import { isGithubCI } from '@shared/core-utils'
 import { PeerTubeServer, RunServerOptions } from './server'
 
 async function createSingleServer (serverNumber: number, configOverride?: Object, options: RunServerOptions = {}) {

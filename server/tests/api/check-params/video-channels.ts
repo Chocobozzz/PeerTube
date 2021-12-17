@@ -3,12 +3,11 @@
 import 'mocha'
 import * as chai from 'chai'
 import { omit } from 'lodash'
+import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@server/tests/shared'
+import { buildAbsoluteFixturePath } from '@shared/core-utils'
+import { HttpStatusCode, VideoChannelUpdate } from '@shared/models'
 import {
-  buildAbsoluteFixturePath,
   ChannelsCommand,
-  checkBadCountPagination,
-  checkBadSortPagination,
-  checkBadStartPagination,
   cleanupTests,
   createSingleServer,
   makeGetRequest,
@@ -18,7 +17,6 @@ import {
   PeerTubeServer,
   setAccessTokensToServers
 } from '@shared/server-commands'
-import { HttpStatusCode, VideoChannelUpdate } from '@shared/models'
 
 const expect = chai.expect
 

@@ -1,7 +1,7 @@
 
 import { expect } from 'chai'
+import { wait } from '@shared/core-utils'
 import { JobState, JobType } from '../../models'
-import { wait } from '../miscs'
 import { PeerTubeServer } from './server'
 
 async function waitJobs (serversArg: PeerTubeServer[] | PeerTubeServer, skipDelayed = false) {

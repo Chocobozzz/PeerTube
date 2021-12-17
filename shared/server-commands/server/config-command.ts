@@ -1,8 +1,7 @@
 import { merge } from 'lodash'
+import { About, CustomConfig, HttpStatusCode, ServerConfig } from '@shared/models'
 import { DeepPartial } from '@shared/typescript-utils'
-import { About, HttpStatusCode, ServerConfig } from '@shared/models'
-import { CustomConfig } from '../../models/server/custom-config.model'
-import { AbstractCommand, OverrideCommandOptions } from '../shared'
+import { AbstractCommand, OverrideCommandOptions } from '../shared/abstract-command'
 
 export class ConfigCommand extends AbstractCommand {
 

@@ -1,6 +1,5 @@
 
-import { HttpStatusCode, ResultList } from '@shared/models'
-import { VideoBlacklist, VideoBlacklistType } from '../../models/videos'
+import { HttpStatusCode, ResultList, VideoBlacklist, VideoBlacklistType } from '@shared/models'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
 
 export class BlacklistCommand extends AbstractCommand {

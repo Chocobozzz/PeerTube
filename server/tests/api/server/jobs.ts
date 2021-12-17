@@ -2,10 +2,10 @@
 
 import 'mocha'
 import * as chai from 'chai'
+import { dateIsValid } from '@server/tests/shared'
 import {
   cleanupTests,
   createMultipleServers,
-  dateIsValid,
   doubleFollow,
   PeerTubeServer,
   setAccessTokensToServers,

@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
+import { wait } from '@shared/core-utils'
+import { HttpStatusCode, VideoPlaylistPrivacy } from '@shared/models'
 import {
   cleanupTests,
   createMultipleServers,
@@ -9,10 +11,8 @@ import {
   PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel,
-  wait,
   waitJobs
 } from '@shared/server-commands'
-import { HttpStatusCode, VideoPlaylistPrivacy } from '@shared/models'
 
 describe('Test AP refresher', function () {
   let servers: PeerTubeServer[] = []

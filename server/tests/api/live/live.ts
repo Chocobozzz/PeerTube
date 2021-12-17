@@ -4,10 +4,18 @@ import 'mocha'
 import * as chai from 'chai'
 import { basename, join } from 'path'
 import { ffprobePromise, getVideoStreamFromFile } from '@server/helpers/ffprobe-utils'
+import { checkLiveCleanupAfterSave, checkLiveSegmentHash, checkResolutionsInMasterPlaylist, testImage } from '@server/tests/shared'
+import { wait } from '@shared/core-utils'
 import {
-  checkLiveCleanupAfterSave,
-  checkLiveSegmentHash,
-  checkResolutionsInMasterPlaylist,
+  HttpStatusCode,
+  LiveVideo,
+  LiveVideoCreate,
+  VideoDetails,
+  VideoPrivacy,
+  VideoState,
+  VideoStreamingPlaylistType
+} from '@shared/models'
+import {
   cleanupTests,
   createMultipleServers,
   doubleFollow,
@@ -20,20 +28,9 @@ import {
   setDefaultVideoChannel,
   stopFfmpeg,
   testFfmpegStreamError,
-  testImage,
-  wait,
   waitJobs,
   waitUntilLivePublishedOnAllServers
 } from '@shared/server-commands'
-import {
-  HttpStatusCode,
-  LiveVideo,
-  LiveVideoCreate,
-  VideoDetails,
-  VideoPrivacy,
-  VideoState,
-  VideoStreamingPlaylistType
-} from '@shared/models'
 
 const expect = chai.expect
 

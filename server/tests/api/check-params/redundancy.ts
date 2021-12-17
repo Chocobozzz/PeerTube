@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
+import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@server/tests/shared'
+import { HttpStatusCode, VideoCreateResult } from '@shared/models'
 import {
-  checkBadCountPagination,
-  checkBadSortPagination,
-  checkBadStartPagination,
   cleanupTests,
   createMultipleServers,
   doubleFollow,
@@ -16,7 +15,6 @@ import {
   setAccessTokensToServers,
   waitJobs
 } from '@shared/server-commands'
-import { HttpStatusCode, VideoCreateResult } from '@shared/models'
 
 describe('Test server redundancy API validators', function () {
   let servers: PeerTubeServer[]

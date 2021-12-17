@@ -2,6 +2,8 @@
 
 import 'mocha'
 import * as chai from 'chai'
+import { testImage } from '@server/tests/shared'
+import { AbuseState, HttpStatusCode, OAuth2ErrorCode, UserAdminFlag, UserRole, Video, VideoPlaylistType } from '@shared/models'
 import {
   cleanupTests,
   createSingleServer,
@@ -9,10 +11,8 @@ import {
   makePutBodyRequest,
   PeerTubeServer,
   setAccessTokensToServers,
-  testImage,
   waitJobs
 } from '@shared/server-commands'
-import { AbuseState, HttpStatusCode, OAuth2ErrorCode, UserAdminFlag, UserRole, Video, VideoPlaylistType } from '@shared/models'
 
 const expect = chai.expect
 

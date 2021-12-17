@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express'
 import { Server } from 'http'
-import { getPort, randomListen, terminateServer } from './utils'
+import { getPort, randomListen, terminateServer } from './shared'
 
 type BlocklistResponse = {
   data: {

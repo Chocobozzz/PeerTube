@@ -1,6 +1,5 @@
 import { remove } from 'fs-extra'
 import { extname, join } from 'path'
-import { buildUUID } from '@shared/core-utils/uuid'
 import { extractVideo } from '@server/helpers/video'
 import { CONFIG } from '@server/initializers/config'
 import {
@@ -11,6 +10,7 @@ import {
   MVideoFileVideo,
   MVideoUUID
 } from '@server/types/models'
+import { buildUUID } from '@shared/core-utils'
 import { VideoStorage } from '@shared/models'
 import { makeHLSFileAvailable, makeWebTorrentFileAvailable } from './object-storage'
 import { getHLSDirectory, getHLSRedundancyDirectory, getHlsResolutionPlaylistFilename } from './paths'

@@ -2,16 +2,16 @@
 
 import 'mocha'
 import { expect } from 'chai'
+import { wait } from '@shared/core-utils'
+import { HttpStatusCode, UserRole } from '@shared/models'
 import {
   cleanupTests,
   createSingleServer,
   decodeQueryString,
   PeerTubeServer,
   PluginsCommand,
-  setAccessTokensToServers,
-  wait
+  setAccessTokensToServers
 } from '@shared/server-commands'
-import { HttpStatusCode, UserRole } from '@shared/models'
 
 async function loginExternal (options: {
   server: PeerTubeServer

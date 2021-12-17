@@ -2,16 +2,16 @@
 
 import 'mocha'
 import * as chai from 'chai'
+import { wait } from '@shared/core-utils'
+import { VideoPrivacy } from '@shared/models'
 import {
   cleanupTests,
   createMultipleServers,
   PeerTubeServer,
   SearchCommand,
   setAccessTokensToServers,
-  wait,
   waitJobs
 } from '@shared/server-commands'
-import { VideoPrivacy } from '@shared/models'
 
 const expect = chai.expect
 

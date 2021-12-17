@@ -1,9 +1,9 @@
 import { expect } from 'chai'
 import { basename } from 'path'
-import { sha256 } from '@shared/core-utils/crypto'
 import { removeFragmentedMP4Ext } from '@shared/core-utils'
+import { sha256 } from '@shared/core-utils/common/crypto'
 import { HttpStatusCode, VideoStreamingPlaylist } from '@shared/models'
-import { PeerTubeServer } from '../server'
+import { PeerTubeServer } from '@shared/server-commands'
 
 async function checkSegmentHash (options: {
   server: PeerTubeServer

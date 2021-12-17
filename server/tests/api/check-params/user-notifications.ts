@@ -2,20 +2,18 @@
 
 import 'mocha'
 import { io } from 'socket.io-client'
+import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@server/tests/shared'
+import { wait } from '@shared/core-utils'
+import { HttpStatusCode, UserNotificationSetting, UserNotificationSettingValue } from '@shared/models'
 import {
-  checkBadCountPagination,
-  checkBadSortPagination,
-  checkBadStartPagination,
   cleanupTests,
   createSingleServer,
   makeGetRequest,
   makePostBodyRequest,
   makePutBodyRequest,
   PeerTubeServer,
-  setAccessTokensToServers,
-  wait
+  setAccessTokensToServers
 } from '@shared/server-commands'
-import { HttpStatusCode, UserNotificationSetting, UserNotificationSettingValue } from '@shared/models'
 
 describe('Test user notifications API validators', function () {
   let server: PeerTubeServer

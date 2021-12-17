@@ -1,5 +1,5 @@
 import { isAbsolute, join } from 'path'
-import { root } from '../miscs/tests'
+import { root } from '@shared/core-utils'
 import {
   makeDeleteRequest,
   makeGetRequest,

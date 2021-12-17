@@ -2,6 +2,8 @@
 
 import 'mocha'
 import * as chai from 'chai'
+import { testImage } from '@server/tests/shared'
+import { VideoPlaylistPrivacy } from '@shared/models'
 import {
   cleanupTests,
   createMultipleServers,
@@ -9,10 +11,8 @@ import {
   PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel,
-  testImage,
   waitJobs
-} from '../../../../shared/server-commands'
-import { VideoPlaylistPrivacy } from '../../../../shared/models/videos/playlist/video-playlist-privacy.model'
+} from '@shared/server-commands'
 
 const expect = chai.expect
 

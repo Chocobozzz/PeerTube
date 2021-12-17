@@ -2,19 +2,8 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import {
-  checkPlaylistFilesWereRemoved,
-  cleanupTests,
-  createMultipleServers,
-  doubleFollow,
-  PeerTubeServer,
-  PlaylistsCommand,
-  setAccessTokensToServers,
-  setDefaultVideoChannel,
-  testImage,
-  wait,
-  waitJobs
-} from '@shared/server-commands'
+import { checkPlaylistFilesWereRemoved, testImage } from '@server/tests/shared'
+import { wait } from '@shared/core-utils'
 import {
   HttpStatusCode,
   VideoPlaylist,
@@ -24,6 +13,16 @@ import {
   VideoPlaylistType,
   VideoPrivacy
 } from '@shared/models'
+import {
+  cleanupTests,
+  createMultipleServers,
+  doubleFollow,
+  PeerTubeServer,
+  PlaylistsCommand,
+  setAccessTokensToServers,
+  setDefaultVideoChannel,
+  waitJobs
+} from '@shared/server-commands'
 
 const expect = chai.expect
 

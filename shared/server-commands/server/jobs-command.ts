@@ -1,6 +1,5 @@
 import { pick } from '@shared/core-utils'
-import { HttpStatusCode } from '@shared/models'
-import { Job, JobState, JobType, ResultList } from '../../models'
+import { HttpStatusCode, Job, JobState, JobType, ResultList } from '@shared/models'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
 
 export class JobsCommand extends AbstractCommand {

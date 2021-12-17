@@ -3,6 +3,7 @@
 import 'mocha'
 import * as chai from 'chai'
 import { FfmpegCommand } from 'fluent-ffmpeg'
+import { wait } from '@shared/core-utils'
 import { VideoPrivacy } from '@shared/models'
 import {
   cleanupTests,
@@ -12,10 +13,9 @@ import {
   setAccessTokensToServers,
   setDefaultVideoChannel,
   stopFfmpeg,
-  wait,
   waitJobs,
   waitUntilLivePublishedOnAllServers
-} from '../../../../shared/server-commands'
+} from '@shared/server-commands'
 
 const expect = chai.expect
 

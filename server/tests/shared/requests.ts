@@ -1,7 +1,7 @@
-import { doRequest } from '@server/helpers/requests'
 import { activityPubContextify } from '@server/helpers/activitypub'
-import { HTTP_SIGNATURE } from '@server/initializers/constants'
-import { buildGlobalHeaders } from '@server/lib/job-queue/handlers/utils/activitypub-http-utils'
+import { buildDigest } from '@server/helpers/peertube-crypto'
+import { doRequest } from '@server/helpers/requests'
+import { ACTIVITY_PUB, HTTP_SIGNATURE } from '@server/initializers/constants'
 
 export function makePOSTAPRequest (url: string, body: any, httpSignature: any, headers: any) {
   const options = {
@@ -31,7 +31,11 @@ export async function makeFollowRequest (to: { url: string }, by: { url: string,
     key: by.privateKey,
     headers: HTTP_SIGNATURE.HEADERS_TO_SIGN
   }
-  const headers = buildGlobalHeaders(body)
+  const headers = {
+    'digest': buildDigest(body),
+    'content-type': 'application/activity+json',
+    'accept': ACTIVITY_PUB.ACCEPT_HEADER
+  }
 
   return makePOSTAPRequest(to.url + '/inbox', body, httpSignature, headers)
 }

@@ -2,15 +2,9 @@
 
 import 'mocha'
 import { omit } from 'lodash'
-import {
-  cleanupTests,
-  createSingleServer,
-  makePostBodyRequest,
-  MockSmtpServer,
-  PeerTubeServer,
-  setAccessTokensToServers
-} from '@shared/server-commands'
+import { MockSmtpServer } from '@server/tests/shared'
 import { HttpStatusCode, UserRole } from '@shared/models'
+import { cleanupTests, createSingleServer, makePostBodyRequest, PeerTubeServer, setAccessTokensToServers } from '@shared/server-commands'
 
 describe('Test users API validators', function () {
   const path = '/api/v1/users/'

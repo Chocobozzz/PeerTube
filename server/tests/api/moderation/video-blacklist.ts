@@ -3,18 +3,18 @@
 import 'mocha'
 import * as chai from 'chai'
 import { orderBy } from 'lodash'
+import { FIXTURE_URLS } from '@server/tests/shared'
+import { UserAdminFlag, UserRole, VideoBlacklist, VideoBlacklistType } from '@shared/models'
 import {
   BlacklistCommand,
   cleanupTests,
   createMultipleServers,
   doubleFollow,
-  FIXTURE_URLS,
   killallServers,
   PeerTubeServer,
   setAccessTokensToServers,
   waitJobs
 } from '@shared/server-commands'
-import { UserAdminFlag, UserRole, VideoBlacklist, VideoBlacklistType } from '@shared/models'
 
 const expect = chai.expect
 

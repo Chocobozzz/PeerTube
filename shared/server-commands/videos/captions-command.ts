@@ -1,5 +1,5 @@
+import { buildAbsoluteFixturePath } from '@shared/core-utils'
 import { HttpStatusCode, ResultList, VideoCaption } from '@shared/models'
-import { buildAbsoluteFixturePath } from '../miscs'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
 
 export class CaptionsCommand extends AbstractCommand {

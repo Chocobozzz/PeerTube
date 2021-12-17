@@ -9,7 +9,7 @@ import { buildFileLocale, getDefaultLocale, is18nLocale, POSSIBLE_LOCALES } from
 import { HttpStatusCode } from '../../shared/models/http/http-error-codes'
 import { VideoPlaylistPrivacy, VideoPrivacy } from '../../shared/models/videos'
 import { isTestInstance } from '../helpers/core-utils'
-import { sha256 } from '@shared/core-utils/crypto'
+import { sha256 } from '@shared/core-utils/common/crypto'
 import { logger } from '../helpers/logger'
 import { mdToPlainText } from '../helpers/markdown'
 import { CONFIG } from '../initializers/config'

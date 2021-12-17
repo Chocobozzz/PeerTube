@@ -1,6 +1,6 @@
 import { expect } from 'chai'
-import { sha1 } from '@shared/core-utils/crypto'
-import { makeGetRequest } from '../requests'
+import { sha1 } from '@shared/core-utils'
+import { makeGetRequest } from '@shared/server-commands'
 
 async function hlsInfohashExist (serverUrl: string, masterPlaylistUrl: string, fileNumber: number) {
   const path = '/tracker/announce'

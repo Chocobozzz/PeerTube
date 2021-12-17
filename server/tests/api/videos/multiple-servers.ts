@@ -4,23 +4,24 @@ import 'mocha'
 import * as chai from 'chai'
 import request from 'supertest'
 import {
-  buildAbsoluteFixturePath,
   checkTmpIsEmpty,
   checkVideoFilesWereRemoved,
+  completeVideoCheck,
+  dateIsValid,
+  saveVideoInServers,
+  testImage
+} from '@server/tests/shared'
+import { buildAbsoluteFixturePath, wait } from '@shared/core-utils'
+import { HttpStatusCode, VideoCommentThreadTree, VideoPrivacy } from '@shared/models'
+import {
   cleanupTests,
   createMultipleServers,
-  dateIsValid,
   doubleFollow,
   PeerTubeServer,
-  saveVideoInServers,
   setAccessTokensToServers,
-  testImage,
-  wait,
   waitJobs,
   webtorrentAdd
 } from '@shared/server-commands'
-import { HttpStatusCode, VideoCommentThreadTree, VideoPrivacy } from '@shared/models'
-import { completeVideoCheck } from '@server/tests/shared/video'
 
 const expect = chai.expect
 

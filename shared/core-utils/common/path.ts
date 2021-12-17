@@ -7,6 +7,7 @@ function root () {
 
   rootPath = __dirname
 
+  if (basename(rootPath) === 'common') rootPath = resolve(rootPath, '..')
   if (basename(rootPath) === 'core-utils') rootPath = resolve(rootPath, '..')
   if (basename(rootPath) === 'shared') rootPath = resolve(rootPath, '..')
   if (basename(rootPath) === 'server') rootPath = resolve(rootPath, '..')
@@ -27,8 +28,19 @@ function getLowercaseExtension (filename: string) {
   return ext.toLowerCase()
 }
 
+function buildAbsoluteFixturePath (path: string, customCIPath = false) {
+  if (isAbsolute(path)) return path
+
+  if (customCIPath && process.env.GITHUB_WORKSPACE) {
+    return join(process.env.GITHUB_WORKSPACE, 'fixtures', path)
+  }
+
+  return join(root(), 'server', 'tests', 'fixtures', path)
+}
+
 export {
   root,
   buildPath,
+  buildAbsoluteFixturePath,
   getLowercaseExtension
 }

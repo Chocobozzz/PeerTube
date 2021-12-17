@@ -3,29 +3,21 @@
 import 'mocha'
 import * as chai from 'chai'
 import { omit } from 'lodash'
-import { getMaxBitrate, getMinLimitBitrate } from '@shared/core-utils'
+import { canDoQuickTranscode } from '@server/helpers/ffprobe-utils'
+import { generateHighBitrateVideo, generateVideoWithFramerate } from '@server/tests/shared'
+import { buildAbsoluteFixturePath, getMaxBitrate, getMinLimitBitrate } from '@shared/core-utils'
+import { getAudioStream, getMetadataFromFile, getVideoFileBitrate, getVideoFileFPS, getVideoFileResolution } from '@shared/extra-utils'
+import { HttpStatusCode, VideoState } from '@shared/models'
 import {
-  buildAbsoluteFixturePath,
   cleanupTests,
   createMultipleServers,
   doubleFollow,
-  generateHighBitrateVideo,
-  generateVideoWithFramerate,
   makeGetRequest,
   PeerTubeServer,
   setAccessTokensToServers,
   waitJobs,
   webtorrentAdd
 } from '@shared/server-commands'
-import { HttpStatusCode, VideoState } from '@shared/models'
-import {
-  canDoQuickTranscode,
-  getAudioStream,
-  getMetadataFromFile,
-  getVideoFileBitrate,
-  getVideoFileFPS,
-  getVideoFileResolution
-} from '../../../helpers/ffprobe-utils'
 
 const expect = chai.expect
 

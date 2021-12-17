@@ -1,6 +1,4 @@
-import { HttpStatusCode, ResultList } from '@shared/models'
-import { Account, ActorFollow } from '../../models/actors'
-import { AccountVideoRate, VideoRateType } from '../../models/videos'
+import { Account, AccountVideoRate, ActorFollow, HttpStatusCode, ResultList, VideoRateType } from '@shared/models'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
 
 export class AccountsCommand extends AbstractCommand {

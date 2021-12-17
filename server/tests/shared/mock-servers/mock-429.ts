@@ -1,6 +1,6 @@
 import express from 'express'
 import { Server } from 'http'
-import { getPort, randomListen, terminateServer } from './utils'
+import { getPort, randomListen, terminateServer } from './shared'
 
 export class Mock429 {
   private server: Server

@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
+import { checkBadCountPagination, checkBadStartPagination } from '@server/tests/shared'
+import { HttpStatusCode } from '@shared/models'
 import {
-  checkBadCountPagination,
-  checkBadStartPagination,
   cleanupTests,
   createSingleServer,
   makeGetRequest,
@@ -12,7 +12,6 @@ import {
   PeerTubeServer,
   setAccessTokensToServers
 } from '@shared/server-commands'
-import { HttpStatusCode } from '@shared/models'
 
 describe('Test videos history API validator', function () {
   const myHistoryPath = '/api/v1/users/me/history/videos'

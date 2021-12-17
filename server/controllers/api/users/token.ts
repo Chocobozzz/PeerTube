@@ -1,13 +1,13 @@
 import express from 'express'
 import RateLimit from 'express-rate-limit'
 import { logger } from '@server/helpers/logger'
-import { buildUUID } from '@shared/core-utils/uuid'
 import { CONFIG } from '@server/initializers/config'
 import { getAuthNameFromRefreshGrant, getBypassFromExternalAuth, getBypassFromPasswordGrant } from '@server/lib/auth/external-auth'
 import { handleOAuthToken } from '@server/lib/auth/oauth'
 import { BypassLogin, revokeToken } from '@server/lib/auth/oauth-model'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { asyncMiddleware, authenticate, openapiOperationDoc } from '@server/middlewares'
+import { buildUUID } from '@shared/core-utils'
 import { ScopedToken } from '@shared/models/users/user-scoped-token'
 
 const tokensRouter = express.Router()

@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
-import { cleanupTests, createSingleServer, PeerTubeServer, setAccessTokensToServers, wait } from '@shared/server-commands'
+import { wait } from '@shared/core-utils'
 import { HttpStatusCode } from '@shared/models'
+import { cleanupTests, createSingleServer, PeerTubeServer, setAccessTokensToServers } from '@shared/server-commands'
 
 describe('Test application behind a reverse proxy', function () {
   let server: PeerTubeServer

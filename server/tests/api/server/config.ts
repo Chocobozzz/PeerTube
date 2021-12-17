@@ -2,16 +2,16 @@
 
 import 'mocha'
 import * as chai from 'chai'
+import { parallelTests } from '@shared/core-utils'
+import { CustomConfig, HttpStatusCode } from '@shared/models'
 import {
   cleanupTests,
   createSingleServer,
   killallServers,
   makeGetRequest,
-  parallelTests,
   PeerTubeServer,
   setAccessTokensToServers
 } from '@shared/server-commands'
-import { CustomConfig, HttpStatusCode } from '@shared/models'
 
 const expect = chai.expect
 

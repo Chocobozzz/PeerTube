@@ -1,7 +1,6 @@
-
 import { createServer, Server } from 'http'
 import proxy from 'proxy'
-import { getPort, terminateServer } from './utils'
+import { getPort, terminateServer } from './shared'
 
 class MockProxy {
   private server: Server

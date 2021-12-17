@@ -2,13 +2,16 @@
 
 import { expect } from 'chai'
 import { inspect } from 'util'
-import { AbuseState, PluginType } from '@shared/models'
-import { UserNotification, UserNotificationSetting, UserNotificationSettingValue, UserNotificationType } from '../../models/users'
-import { MockSmtpServer } from '../mock-servers/mock-email'
-import { PeerTubeServer } from '../server'
-import { doubleFollow } from '../server/follows'
-import { createMultipleServers } from '../server/servers'
-import { setAccessTokensToServers } from './login'
+import {
+  AbuseState,
+  PluginType,
+  UserNotification,
+  UserNotificationSetting,
+  UserNotificationSettingValue,
+  UserNotificationType
+} from '@shared/models'
+import { createMultipleServers, doubleFollow, PeerTubeServer, setAccessTokensToServers } from '@shared/server-commands'
+import { MockSmtpServer } from './mock-servers'
 
 type CheckerBaseParams = {
   server: PeerTubeServer

@@ -2,6 +2,9 @@
 
 import 'mocha'
 import * as chai from 'chai'
+import { completeVideoCheck } from '@server/tests/shared'
+import { wait } from '@shared/core-utils'
+import { HttpStatusCode, JobState, VideoCreateResult, VideoPrivacy } from '@shared/models'
 import {
   cleanupTests,
   CommentsCommand,
@@ -9,11 +12,8 @@ import {
   killallServers,
   PeerTubeServer,
   setAccessTokensToServers,
-  wait,
   waitJobs
 } from '@shared/server-commands'
-import { HttpStatusCode, JobState, VideoCreateResult, VideoPrivacy } from '@shared/models'
-import { completeVideoCheck } from '@server/tests/shared/video'
 
 const expect = chai.expect
 

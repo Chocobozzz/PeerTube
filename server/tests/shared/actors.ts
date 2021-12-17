@@ -5,7 +5,7 @@ import { pathExists, readdir } from 'fs-extra'
 import { join } from 'path'
 import { root } from '@shared/core-utils'
 import { Account, VideoChannel } from '@shared/models'
-import { PeerTubeServer } from '../server'
+import { PeerTubeServer } from '@shared/server-commands'
 
 async function expectChannelsFollows (options: {
   server: PeerTubeServer

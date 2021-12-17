@@ -5,8 +5,7 @@ import { createReadStream, stat } from 'fs-extra'
 import got, { Response as GotResponse } from 'got'
 import { omit } from 'lodash'
 import validator from 'validator'
-import { buildUUID } from '@shared/core-utils/uuid'
-import { pick } from '@shared/core-utils'
+import { buildAbsoluteFixturePath, buildUUID, pick, wait } from '@shared/core-utils'
 import {
   HttpStatusCode,
   ResultList,
@@ -20,7 +19,6 @@ import {
   VideosCommonQuery,
   VideoTranscodingCreate
 } from '@shared/models'
-import { buildAbsoluteFixturePath, wait } from '../miscs'
 import { unwrapBody } from '../requests'
 import { waitJobs } from '../server'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'

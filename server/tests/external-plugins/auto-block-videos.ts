@@ -2,17 +2,17 @@
 
 import 'mocha'
 import { expect } from 'chai'
+import { wait } from '@shared/core-utils'
+import { Video } from '@shared/models'
 import {
   cleanupTests,
   createMultipleServers,
   doubleFollow,
   killallServers,
-  MockBlocklist,
   PeerTubeServer,
-  setAccessTokensToServers,
-  wait
+  setAccessTokensToServers
 } from '@shared/server-commands'
-import { Video } from '@shared/models'
+import { MockBlocklist } from '../shared'
 
 async function check (server: PeerTubeServer, videoUUID: string, exists = true) {
   const { data } = await server.videos.list()

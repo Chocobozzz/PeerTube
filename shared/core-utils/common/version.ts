@@ -1,8 +1,3 @@
-// high excluded
-function randomInt (low: number, high: number) {
-  return Math.floor(Math.random() * (high - low) + low)
-}
-
 // Thanks https://stackoverflow.com/a/16187766
 function compareSemVer (a: string, b: string) {
   const regExStrip0 = /(\.0+)+$/
@@ -20,22 +15,6 @@ function compareSemVer (a: string, b: string) {
   return segmentsA.length - segmentsB.length
 }
 
-function sortObjectComparator (key: string, order: 'asc' | 'desc') {
-  return (a: any, b: any) => {
-    if (a[key] < b[key]) {
-      return order === 'asc' ? -1 : 1
-    }
-
-    if (a[key] > b[key]) {
-      return order === 'asc' ? 1 : -1
-    }
-
-    return 0
-  }
-}
-
 export {
-  randomInt,
-  compareSemVer,
-  sortObjectComparator
+  compareSemVer
 }

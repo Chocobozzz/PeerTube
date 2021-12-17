@@ -2,7 +2,8 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { buildAbsoluteFixturePath, CLICommand } from '@shared/server-commands'
+import { buildAbsoluteFixturePath } from '@shared/core-utils'
+import { CLICommand } from '@shared/server-commands'
 import { VideoResolution } from '../../../shared/models/videos'
 
 const expect = chai.expect

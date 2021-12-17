@@ -5,8 +5,7 @@ import { pathExists, readFile } from 'fs-extra'
 import { join } from 'path'
 import { root } from '@shared/core-utils'
 import { HttpStatusCode } from '@shared/models'
-import { makeGetRequest } from '../requests'
-import { PeerTubeServer } from '../server'
+import { makeGetRequest, PeerTubeServer } from '@shared/server-commands'
 
 // Default interval -> 5 minutes
 function dateIsValid (dateString: string, interval = 300000) {
@@ -49,10 +48,51 @@ async function testFileExistsOrNot (server: PeerTubeServer, directory: string, f
   expect(await pathExists(join(base, filePath))).to.equal(exist)
 }
 
+function checkBadStartPagination (url: string, path: string, token?: string, query = {}) {
+  return makeGetRequest({
+    url,
+    path,
+    token,
+    query: { ...query, start: 'hello' },
+    expectedStatus: HttpStatusCode.BAD_REQUEST_400
+  })
+}
+
+async function checkBadCountPagination (url: string, path: string, token?: string, query = {}) {
+  await makeGetRequest({
+    url,
+    path,
+    token,
+    query: { ...query, count: 'hello' },
+    expectedStatus: HttpStatusCode.BAD_REQUEST_400
+  })
+
+  await makeGetRequest({
+    url,
+    path,
+    token,
+    query: { ...query, count: 2000 },
+    expectedStatus: HttpStatusCode.BAD_REQUEST_400
+  })
+}
+
+function checkBadSortPagination (url: string, path: string, token?: string, query = {}) {
+  return makeGetRequest({
+    url,
+    path,
+    token,
+    query: { ...query, sort: 'hello' },
+    expectedStatus: HttpStatusCode.BAD_REQUEST_400
+  })
+}
+
 export {
   dateIsValid,
   testImage,
   expectLogDoesNotContain,
   testFileExistsOrNot,
-  expectStartWith
+  expectStartWith,
+  checkBadStartPagination,
+  checkBadCountPagination,
+  checkBadSortPagination
 }

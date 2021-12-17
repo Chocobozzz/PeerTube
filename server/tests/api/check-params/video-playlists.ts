@@ -1,18 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-import {
-  checkBadCountPagination,
-  checkBadSortPagination,
-  checkBadStartPagination,
-  cleanupTests,
-  createSingleServer,
-  makeGetRequest,
-  PeerTubeServer,
-  PlaylistsCommand,
-  setAccessTokensToServers,
-  setDefaultVideoChannel
-} from '@shared/server-commands'
+import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@server/tests/shared'
 import {
   HttpStatusCode,
   VideoPlaylistCreate,
@@ -23,6 +12,15 @@ import {
   VideoPlaylistReorder,
   VideoPlaylistType
 } from '@shared/models'
+import {
+  cleanupTests,
+  createSingleServer,
+  makeGetRequest,
+  PeerTubeServer,
+  PlaylistsCommand,
+  setAccessTokensToServers,
+  setDefaultVideoChannel
+} from '@shared/server-commands'
 
 describe('Test video playlists API validator', function () {
   let server: PeerTubeServer

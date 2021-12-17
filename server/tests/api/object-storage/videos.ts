@@ -3,25 +3,22 @@
 import 'mocha'
 import * as chai from 'chai'
 import { merge } from 'lodash'
+import { checkTmpIsEmpty, expectLogDoesNotContain, expectStartWith, MockObjectStorage } from '@server/tests/shared'
+import { areObjectStorageTestsDisabled } from '@shared/core-utils'
+import { HttpStatusCode, VideoDetails } from '@shared/models'
 import {
-  areObjectStorageTestsDisabled,
-  checkTmpIsEmpty,
   cleanupTests,
   createMultipleServers,
   createSingleServer,
   doubleFollow,
-  expectLogDoesNotContain,
-  expectStartWith,
   killallServers,
   makeRawRequest,
-  MockObjectStorage,
   ObjectStorageCommand,
   PeerTubeServer,
   setAccessTokensToServers,
   waitJobs,
   webtorrentAdd
 } from '@shared/server-commands'
-import { HttpStatusCode, VideoDetails } from '@shared/models'
 
 const expect = chai.expect
 

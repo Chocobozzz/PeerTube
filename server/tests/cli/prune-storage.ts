@@ -4,7 +4,8 @@ import 'mocha'
 import * as chai from 'chai'
 import { createFile, readdir } from 'fs-extra'
 import { join } from 'path'
-import { buildUUID } from '@shared/core-utils/uuid'
+import { buildUUID, wait } from '@shared/core-utils'
+import { HttpStatusCode, VideoPlaylistPrivacy } from '@shared/models'
 import {
   cleanupTests,
   CLICommand,
@@ -15,10 +16,8 @@ import {
   PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel,
-  wait,
   waitJobs
 } from '@shared/server-commands'
-import { HttpStatusCode, VideoPlaylistPrivacy } from '@shared/models'
 
 const expect = chai.expect
 

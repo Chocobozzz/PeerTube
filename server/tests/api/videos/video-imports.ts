@@ -4,21 +4,19 @@ import 'mocha'
 import { expect } from 'chai'
 import { pathExists, readdir, remove } from 'fs-extra'
 import { join } from 'path'
+import { FIXTURE_URLS, testCaptionFile, testImage } from '@server/tests/shared'
+import { areHttpImportTestsDisabled } from '@shared/core-utils'
+import { VideoPrivacy, VideoResolution } from '@shared/models'
 import {
-  areHttpImportTestsDisabled,
   cleanupTests,
   createMultipleServers,
   createSingleServer,
   doubleFollow,
-  FIXTURE_URLS,
   PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel,
-  testCaptionFile,
-  testImage,
   waitJobs
 } from '@shared/server-commands'
-import { VideoPrivacy, VideoResolution } from '@shared/models'
 
 async function checkVideosServer1 (server: PeerTubeServer, idHttp: string, idMagnet: string, idTorrent: string) {
   const videoHttp = await server.videos.get({ id: idHttp })

@@ -1,5 +1,4 @@
-import { HttpStatusCode } from '@shared/models'
-import { LogLevel } from '../../models/server/log-level.type'
+import { HttpStatusCode, LogLevel } from '@shared/models'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
 
 export class LogsCommand extends AbstractCommand {

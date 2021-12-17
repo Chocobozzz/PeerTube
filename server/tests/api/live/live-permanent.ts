@@ -2,6 +2,7 @@
 
 import 'mocha'
 import * as chai from 'chai'
+import { wait } from '@shared/core-utils'
 import { LiveVideoCreate, VideoPrivacy, VideoState } from '@shared/models'
 import {
   cleanupTests,
@@ -12,9 +13,8 @@ import {
   setAccessTokensToServers,
   setDefaultVideoChannel,
   stopFfmpeg,
-  wait,
   waitJobs
-} from '../../../../shared/server-commands'
+} from '@shared/server-commands'
 
 const expect = chai.expect
 

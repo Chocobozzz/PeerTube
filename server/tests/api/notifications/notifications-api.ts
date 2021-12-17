@@ -5,14 +5,12 @@ import * as chai from 'chai'
 import {
   CheckerBaseParams,
   checkNewVideoFromSubscription,
-  cleanupTests,
   getAllNotificationsSettings,
   MockSmtpServer,
-  PeerTubeServer,
-  prepareNotificationsTest,
-  waitJobs
-} from '@shared/server-commands'
+  prepareNotificationsTest
+} from '@server/tests/shared'
 import { UserNotification, UserNotificationSettingValue } from '@shared/models'
+import { cleanupTests, PeerTubeServer, waitJobs } from '@shared/server-commands'
 
 const expect = chai.expect
 

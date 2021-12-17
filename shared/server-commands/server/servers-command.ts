@@ -1,9 +1,9 @@
 import { exec } from 'child_process'
 import { copy, ensureDir, readFile, remove } from 'fs-extra'
 import { basename, join } from 'path'
-import { root } from '@shared/core-utils'
+import { isGithubCI, root, wait } from '@shared/core-utils'
+import { getFileSize } from '@shared/extra-utils'
 import { HttpStatusCode } from '@shared/models'
-import { getFileSize, isGithubCI, wait } from '../miscs'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
 
 export class ServersCommand extends AbstractCommand {

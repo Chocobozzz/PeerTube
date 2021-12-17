@@ -1,17 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-import {
-  checkBadCountPagination,
-  checkBadSortPagination,
-  checkBadStartPagination,
-  cleanupTests,
-  createSingleServer,
-  makeGetRequest,
-  PeerTubeServer,
-  setAccessTokensToServers
-} from '@shared/server-commands'
+import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@server/tests/shared'
 import { HttpStatusCode } from '@shared/models'
+import { cleanupTests, createSingleServer, makeGetRequest, PeerTubeServer, setAccessTokensToServers } from '@shared/server-commands'
 
 describe('Test jobs API validators', function () {
   const path = '/api/v1/jobs/failed'

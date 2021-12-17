@@ -3,18 +3,20 @@
 import 'mocha'
 import * as chai from 'chai'
 import { basename, join } from 'path'
-import { removeFragmentedMP4Ext, uuidRegex } from '@shared/core-utils'
 import {
-  areObjectStorageTestsDisabled,
   checkDirectoryIsEmpty,
   checkResolutionsInMasterPlaylist,
   checkSegmentHash,
   checkTmpIsEmpty,
+  expectStartWith,
+  hlsInfohashExist
+} from '@server/tests/shared'
+import { areObjectStorageTestsDisabled, removeFragmentedMP4Ext, uuidRegex } from '@shared/core-utils'
+import { HttpStatusCode, VideoStreamingPlaylistType } from '@shared/models'
+import {
   cleanupTests,
   createMultipleServers,
   doubleFollow,
-  expectStartWith,
-  hlsInfohashExist,
   makeRawRequest,
   ObjectStorageCommand,
   PeerTubeServer,
@@ -22,7 +24,6 @@ import {
   waitJobs,
   webtorrentAdd
 } from '@shared/server-commands'
-import { HttpStatusCode, VideoStreamingPlaylistType } from '@shared/models'
 import { DEFAULT_AUDIO_RESOLUTION } from '../../../initializers/constants'
 
 const expect = chai.expect

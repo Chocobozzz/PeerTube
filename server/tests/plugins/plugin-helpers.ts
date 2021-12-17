@@ -3,8 +3,8 @@
 import 'mocha'
 import { expect } from 'chai'
 import { pathExists } from 'fs-extra'
+import { HttpStatusCode, ThumbnailType } from '@shared/models'
 import {
-  checkVideoFilesWereRemoved,
   cleanupTests,
   createMultipleServers,
   doubleFollow,
@@ -16,7 +16,7 @@ import {
   setAccessTokensToServers,
   waitJobs
 } from '@shared/server-commands'
-import { HttpStatusCode, ThumbnailType } from '@shared/models'
+import { checkVideoFilesWereRemoved } from '../shared'
 
 function postCommand (server: PeerTubeServer, command: string, bodyArg?: object) {
   const body = { command }

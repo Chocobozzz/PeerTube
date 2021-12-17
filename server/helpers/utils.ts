@@ -3,7 +3,7 @@ import { Instance as ParseTorrent } from 'parse-torrent'
 import { join } from 'path'
 import { ResultList } from '../../shared'
 import { CONFIG } from '../initializers/config'
-import { sha256 } from '@shared/core-utils/crypto'
+import { sha256 } from '@shared/core-utils/common/crypto'
 import { execPromise, execPromise2, randomBytesPromise } from './core-utils'
 import { logger } from './logger'
 

@@ -2,8 +2,15 @@
 
 import 'mocha'
 import { expect } from 'chai'
-import { cleanupTests, createSingleServer, killallServers, PeerTubeServer, setAccessTokensToServers, waitJobs } from '@shared/server-commands'
 import { VideoPrivacy } from '@shared/models'
+import {
+  cleanupTests,
+  createSingleServer,
+  killallServers,
+  PeerTubeServer,
+  setAccessTokensToServers,
+  waitJobs
+} from '@shared/server-commands'
 
 describe('Test redundancy constraints', function () {
   let remoteServer: PeerTubeServer

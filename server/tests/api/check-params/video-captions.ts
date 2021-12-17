@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
+import { buildAbsoluteFixturePath } from '@shared/core-utils'
+import { HttpStatusCode, VideoCreateResult } from '@shared/models'
 import {
-  buildAbsoluteFixturePath,
   cleanupTests,
   createSingleServer,
   makeDeleteRequest,
@@ -11,7 +12,6 @@ import {
   PeerTubeServer,
   setAccessTokensToServers
 } from '@shared/server-commands'
-import { HttpStatusCode, VideoCreateResult } from '@shared/models'
 
 describe('Test video captions API validator', function () {
   const path = '/api/v1/videos/'

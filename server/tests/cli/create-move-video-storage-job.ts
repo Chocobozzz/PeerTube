@@ -1,20 +1,19 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-
+import { areObjectStorageTestsDisabled } from '@shared/core-utils'
+import { HttpStatusCode, VideoDetails } from '@shared/models'
 import {
-  areObjectStorageTestsDisabled,
   cleanupTests,
   createMultipleServers,
   doubleFollow,
-  expectStartWith,
   makeRawRequest,
   ObjectStorageCommand,
   PeerTubeServer,
   setAccessTokensToServers,
   waitJobs
 } from '@shared/server-commands'
-import { HttpStatusCode, VideoDetails } from '@shared/models'
+import { expectStartWith } from '../shared'
 
 async function checkFiles (origin: PeerTubeServer, video: VideoDetails, inObjectStorage: boolean) {
   for (const file of video.files) {

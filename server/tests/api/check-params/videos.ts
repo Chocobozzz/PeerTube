@@ -4,12 +4,10 @@ import 'mocha'
 import * as chai from 'chai'
 import { omit } from 'lodash'
 import { join } from 'path'
-import { randomInt } from '@shared/core-utils'
+import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination, checkUploadVideoParam } from '@server/tests/shared'
+import { randomInt, root } from '@shared/core-utils'
+import { HttpStatusCode, PeerTubeProblemDocument, VideoCreateResult, VideoPrivacy } from '@shared/models'
 import {
-  checkBadCountPagination,
-  checkBadSortPagination,
-  checkBadStartPagination,
-  checkUploadVideoParam,
   cleanupTests,
   createSingleServer,
   makeDeleteRequest,
@@ -17,10 +15,8 @@ import {
   makePutBodyRequest,
   makeUploadRequest,
   PeerTubeServer,
-  root,
   setAccessTokensToServers
 } from '@shared/server-commands'
-import { HttpStatusCode, PeerTubeProblemDocument, VideoCreateResult, VideoPrivacy } from '@shared/models'
 
 const expect = chai.expect
 

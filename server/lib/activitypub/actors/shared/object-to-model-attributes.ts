@@ -1,9 +1,8 @@
-import { getLowercaseExtension } from '@shared/core-utils'
 import { isActivityPubUrlValid } from '@server/helpers/custom-validators/activitypub/misc'
-import { buildUUID } from '@shared/core-utils/uuid'
 import { MIMETYPES } from '@server/initializers/constants'
 import { ActorModel } from '@server/models/actor/actor'
 import { FilteredModelAttributes } from '@server/types'
+import { buildUUID, getLowercaseExtension } from '@shared/core-utils'
 import { ActivityPubActor, ActorImageType } from '@shared/models'
 
 function getActorAttributesFromObject (

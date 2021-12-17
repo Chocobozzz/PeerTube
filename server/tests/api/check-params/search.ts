@@ -1,17 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-import {
-  checkBadCountPagination,
-  checkBadSortPagination,
-  checkBadStartPagination,
-  cleanupTests,
-  createSingleServer,
-  makeGetRequest,
-  PeerTubeServer,
-  setAccessTokensToServers
-} from '@shared/server-commands'
+import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@server/tests/shared'
 import { HttpStatusCode } from '@shared/models'
+import { cleanupTests, createSingleServer, makeGetRequest, PeerTubeServer, setAccessTokensToServers } from '@shared/server-commands'
 
 function updateSearchIndex (server: PeerTubeServer, enabled: boolean, disableLocalSearch = false) {
   return server.config.updateCustomSubConfig({

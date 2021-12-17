@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
-import { PeerTubeServer } from './server'
+import { PeerTubeServer } from '@shared/server-commands'
 
 async function testHelloWorldRegisteredSettings (server: PeerTubeServer) {
   const body = await server.plugins.getRegisteredSettings({ npmName: 'peertube-plugin-hello-world' })

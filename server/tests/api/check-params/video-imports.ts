@@ -2,21 +2,18 @@
 
 import 'mocha'
 import { omit } from 'lodash'
+import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination, FIXTURE_URLS } from '@server/tests/shared'
+import { buildAbsoluteFixturePath } from '@shared/core-utils'
+import { HttpStatusCode, VideoPrivacy } from '@shared/models'
 import {
-  buildAbsoluteFixturePath,
-  checkBadCountPagination,
-  checkBadSortPagination,
-  checkBadStartPagination,
   cleanupTests,
   createSingleServer,
-  FIXTURE_URLS,
   makeGetRequest,
   makePostBodyRequest,
   makeUploadRequest,
   PeerTubeServer,
   setAccessTokensToServers
 } from '@shared/server-commands'
-import { HttpStatusCode, VideoPrivacy } from '@shared/models'
 
 describe('Test video imports API validator', function () {
   const path = '/api/v1/videos/imports'

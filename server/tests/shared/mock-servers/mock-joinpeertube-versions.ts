@@ -1,6 +1,6 @@
 import express from 'express'
 import { Server } from 'http'
-import { getPort, randomListen } from './utils'
+import { getPort, randomListen } from './shared'
 
 export class MockJoinPeerTubeVersions {
   private server: Server

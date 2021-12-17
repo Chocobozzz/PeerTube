@@ -2,7 +2,7 @@ import { CronRepeatOptions, EveryRepeatOptions } from 'bull'
 import { randomBytes } from 'crypto'
 import { invert } from 'lodash'
 import { join } from 'path'
-import { randomInt } from '../../shared/core-utils/common/miscs'
+import { randomInt, root } from '@shared/core-utils'
 import {
   AbuseState,
   JobType,
@@ -18,7 +18,6 @@ import { FollowState } from '../../shared/models/actors'
 import { NSFWPolicyType } from '../../shared/models/videos/nsfw-policy.type'
 import { VideoPlaylistPrivacy } from '../../shared/models/videos/playlist/video-playlist-privacy.model'
 import { VideoPlaylistType } from '../../shared/models/videos/playlist/video-playlist-type.model'
-import { root } from '../../shared/core-utils'
 // Do not use barrels, remain constants as independent as possible
 import { isTestInstance, sanitizeHost, sanitizeUrl } from '../helpers/core-utils'
 import { CONFIG, registerConfigChangedHandler } from './config'

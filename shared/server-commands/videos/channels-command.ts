@@ -1,7 +1,13 @@
 import { pick } from '@shared/core-utils'
-import { ActorFollow, HttpStatusCode, ResultList, VideoChannel, VideoChannelCreateResult } from '@shared/models'
-import { VideoChannelCreate } from '../../models/videos/channel/video-channel-create.model'
-import { VideoChannelUpdate } from '../../models/videos/channel/video-channel-update.model'
+import {
+  ActorFollow,
+  HttpStatusCode,
+  ResultList,
+  VideoChannel,
+  VideoChannelCreate,
+  VideoChannelCreateResult,
+  VideoChannelUpdate
+} from '@shared/models'
 import { unwrapBody } from '../requests'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
 

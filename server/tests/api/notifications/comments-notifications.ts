@@ -6,13 +6,11 @@ import {
   checkCommentMention,
   CheckerBaseParams,
   checkNewCommentOnMyVideo,
-  cleanupTests,
   MockSmtpServer,
-  PeerTubeServer,
-  prepareNotificationsTest,
-  waitJobs
-} from '@shared/server-commands'
+  prepareNotificationsTest
+} from '@server/tests/shared'
 import { UserNotification } from '@shared/models'
+import { cleanupTests, PeerTubeServer, waitJobs } from '@shared/server-commands'
 
 const expect = chai.expect
 

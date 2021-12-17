@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-import { buildUUID } from '@shared/core-utils/uuid'
 import {
   checkAbuseStateChange,
   checkAutoInstanceFollowing,
@@ -16,15 +15,13 @@ import {
   checkUserRegistered,
   checkVideoAutoBlacklistForModerators,
   checkVideoIsPublished,
-  cleanupTests,
   MockInstancesIndex,
   MockSmtpServer,
-  PeerTubeServer,
-  prepareNotificationsTest,
-  wait,
-  waitJobs
-} from '@shared/server-commands'
+  prepareNotificationsTest
+} from '@server/tests/shared'
+import { buildUUID, wait } from '@shared/core-utils'
 import { AbuseState, CustomConfig, UserNotification, UserRole, VideoPrivacy } from '@shared/models'
+import { cleanupTests, PeerTubeServer, waitJobs } from '@shared/server-commands'
 
 describe('Test moderation notifications', function () {
   let servers: PeerTubeServer[] = []

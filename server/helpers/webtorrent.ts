@@ -15,7 +15,7 @@ import { MVideoFile, MVideoFileRedundanciesOpt } from '@server/types/models/vide
 import { MStreamingPlaylistVideo } from '@server/types/models/video/video-streaming-playlist'
 import { CONFIG } from '../initializers/config'
 import { promisify2 } from './core-utils'
-import { sha1 } from '@shared/core-utils/crypto'
+import { sha1 } from '@shared/core-utils/common/crypto'
 import { logger } from './logger'
 import { generateVideoImportTmpPath } from './utils'
 import { extractVideo } from './video'

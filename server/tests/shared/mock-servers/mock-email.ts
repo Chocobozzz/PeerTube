@@ -1,7 +1,6 @@
 import { ChildProcess } from 'child_process'
 import MailDev from '@peertube/maildev'
-import { randomInt } from '@shared/core-utils'
-import { parallelTests } from '../miscs'
+import { parallelTests, randomInt } from '@shared/core-utils'
 
 class MockSmtpServer {
 

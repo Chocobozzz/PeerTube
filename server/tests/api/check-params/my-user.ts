@@ -1,22 +1,19 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
+import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination, MockSmtpServer } from '@server/tests/shared'
+import { buildAbsoluteFixturePath } from '@shared/core-utils'
+import { HttpStatusCode, UserRole, VideoCreateResult } from '@shared/models'
 import {
-  buildAbsoluteFixturePath,
-  checkBadCountPagination,
-  checkBadSortPagination,
-  checkBadStartPagination,
   cleanupTests,
   createSingleServer,
   makeGetRequest,
   makePutBodyRequest,
   makeUploadRequest,
-  MockSmtpServer,
   PeerTubeServer,
   setAccessTokensToServers,
   UsersCommand
 } from '@shared/server-commands'
-import { HttpStatusCode, UserRole, VideoCreateResult } from '@shared/models'
 
 describe('Test my user API validators', function () {
   const path = '/api/v1/users/'

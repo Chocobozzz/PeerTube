@@ -4,6 +4,9 @@ import 'mocha'
 import * as chai from 'chai'
 import { basename } from 'path'
 import { ACTOR_IMAGES_SIZE } from '@server/initializers/constants'
+import { testFileExistsOrNot, testImage } from '@server/tests/shared'
+import { wait } from '@shared/core-utils'
+import { User, VideoChannel } from '@shared/models'
 import {
   cleanupTests,
   createMultipleServers,
@@ -11,12 +14,8 @@ import {
   PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel,
-  testFileExistsOrNot,
-  testImage,
-  wait,
   waitJobs
 } from '@shared/server-commands'
-import { User, VideoChannel } from '@shared/models'
 
 const expect = chai.expect
 

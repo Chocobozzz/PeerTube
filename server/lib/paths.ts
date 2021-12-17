@@ -1,9 +1,8 @@
 import { join } from 'path'
-import { buildUUID } from '@shared/core-utils/uuid'
 import { CONFIG } from '@server/initializers/config'
 import { HLS_REDUNDANCY_DIRECTORY, HLS_STREAMING_PLAYLIST_DIRECTORY } from '@server/initializers/constants'
 import { isStreamingPlaylist, MStreamingPlaylistVideo, MVideo, MVideoFile, MVideoUUID } from '@server/types/models'
-import { removeFragmentedMP4Ext } from '@shared/core-utils'
+import { buildUUID, removeFragmentedMP4Ext } from '@shared/core-utils'
 
 // ################## Video file name ##################
 

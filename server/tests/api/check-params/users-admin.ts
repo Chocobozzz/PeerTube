@@ -2,21 +2,18 @@
 
 import 'mocha'
 import { omit } from 'lodash'
+import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination, MockSmtpServer } from '@server/tests/shared'
+import { HttpStatusCode, UserAdminFlag, UserRole } from '@shared/models'
 import {
-  checkBadCountPagination,
-  checkBadSortPagination,
-  checkBadStartPagination,
   cleanupTests,
   createSingleServer,
   killallServers,
   makeGetRequest,
   makePostBodyRequest,
   makePutBodyRequest,
-  MockSmtpServer,
   PeerTubeServer,
   setAccessTokensToServers
 } from '@shared/server-commands'
-import { HttpStatusCode, UserAdminFlag, UserRole } from '@shared/models'
 
 describe('Test users admin API validators', function () {
   const path = '/api/v1/users/'

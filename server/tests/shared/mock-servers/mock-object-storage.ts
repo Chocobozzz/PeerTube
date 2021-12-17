@@ -2,8 +2,8 @@ import express from 'express'
 import got, { RequestError } from 'got'
 import { Server } from 'http'
 import { pipeline } from 'stream'
-import { ObjectStorageCommand } from '../server'
-import { getPort, randomListen, terminateServer } from './utils'
+import { ObjectStorageCommand } from '@shared/server-commands'
+import { getPort, randomListen, terminateServer } from './shared'
 
 export class MockObjectStorage {
   private server: Server

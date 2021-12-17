@@ -2,23 +2,20 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { buildUUID } from '@shared/core-utils/uuid'
 import {
   CheckerBaseParams,
   checkMyVideoImportIsFinished,
   checkNewActorFollow,
   checkNewVideoFromSubscription,
   checkVideoIsPublished,
-  cleanupTests,
   FIXTURE_URLS,
   MockSmtpServer,
-  PeerTubeServer,
   prepareNotificationsTest,
-  uploadRandomVideoOnServers,
-  wait,
-  waitJobs
-} from '@shared/server-commands'
+  uploadRandomVideoOnServers
+} from '@server/tests/shared'
+import { buildUUID, wait } from '@shared/core-utils'
 import { UserNotification, UserNotificationType, VideoPrivacy } from '@shared/models'
+import { cleanupTests, PeerTubeServer, waitJobs } from '@shared/server-commands'
 
 const expect = chai.expect
 

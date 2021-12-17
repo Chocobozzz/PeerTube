@@ -2,15 +2,14 @@
 
 import 'mocha'
 import * as chai from 'chai'
+import { checkVideoFilesWereRemoved, testCaptionFile } from '@server/tests/shared'
+import { wait } from '@shared/core-utils'
 import {
-  checkVideoFilesWereRemoved,
   cleanupTests,
   createMultipleServers,
   doubleFollow,
   PeerTubeServer,
   setAccessTokensToServers,
-  testCaptionFile,
-  wait,
   waitJobs
 } from '@shared/server-commands'
 

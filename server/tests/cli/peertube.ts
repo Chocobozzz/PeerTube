@@ -2,19 +2,17 @@
 
 import 'mocha'
 import { expect } from 'chai'
+import { areHttpImportTestsDisabled, buildAbsoluteFixturePath } from '@shared/core-utils'
 import {
-  areHttpImportTestsDisabled,
-  buildAbsoluteFixturePath,
   cleanupTests,
   CLICommand,
   createSingleServer,
   doubleFollow,
-  FIXTURE_URLS,
   PeerTubeServer,
   setAccessTokensToServers,
-  testHelloWorldRegisteredSettings,
   waitJobs
-} from '../../../shared/server-commands'
+} from '@shared/server-commands'
+import { FIXTURE_URLS, testHelloWorldRegisteredSettings } from '../shared'
 
 describe('Test CLI wrapper', function () {
   let server: PeerTubeServer

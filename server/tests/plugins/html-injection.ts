@@ -9,7 +9,7 @@ import {
   PeerTubeServer,
   PluginsCommand,
   setAccessTokensToServers
-} from '../../../shared/server-commands'
+} from '@shared/server-commands'
 
 const expect = chai.expect
 

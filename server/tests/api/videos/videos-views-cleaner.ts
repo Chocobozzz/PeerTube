@@ -2,6 +2,7 @@
 
 import 'mocha'
 import * as chai from 'chai'
+import { wait } from '@shared/core-utils'
 import {
   cleanupTests,
   createMultipleServers,
@@ -9,9 +10,8 @@ import {
   killallServers,
   PeerTubeServer,
   setAccessTokensToServers,
-  wait,
   waitJobs
-} from '../../../../shared/server-commands'
+} from '@shared/server-commands'
 
 const expect = chai.expect
 

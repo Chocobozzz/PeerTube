@@ -10,10 +10,10 @@ import {
   SearchCommand,
   setAccessTokensToServers,
   setDefaultVideoChannel,
-  stopFfmpeg,
-  wait
+  stopFfmpeg
 } from '@shared/server-commands'
 import { VideoPrivacy } from '@shared/models'
+import { wait } from '@shared/core-utils'
 
 const expect = chai.expect
 

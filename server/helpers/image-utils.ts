@@ -1,9 +1,8 @@
 import { copy, readFile, remove, rename } from 'fs-extra'
 import Jimp, { read } from 'jimp'
-import { getLowercaseExtension } from '@shared/core-utils'
+import { buildUUID, getLowercaseExtension } from '@shared/core-utils'
 import { convertWebPToJPG, processGIF } from './ffmpeg-utils'
 import { logger } from './logger'
-import { buildUUID } from '@shared/core-utils/uuid'
 
 function generateImageFilename (extension = '.jpg') {
   return buildUUID() + extension

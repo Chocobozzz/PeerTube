@@ -4,9 +4,9 @@ import 'mocha'
 import { expect } from 'chai'
 import { pathExists, remove } from 'fs-extra'
 import { join } from 'path'
-import { Mock429 } from '@shared/server-commands/mock-servers/mock-429'
-import { FIXTURE_URLS, root, wait } from '../../../shared/server-commands'
+import { root, wait } from '@shared/core-utils'
 import { doRequest, doRequestAndSaveToFile } from '../../helpers/requests'
+import { FIXTURE_URLS, Mock429 } from '../shared'
 
 describe('Request helpers', function () {
   const destPath1 = join(root(), 'test-output-1.txt')

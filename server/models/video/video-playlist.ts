@@ -18,8 +18,7 @@ import {
   UpdatedAt
 } from 'sequelize-typescript'
 import { MAccountId, MChannelId } from '@server/types/models'
-import { buildPlaylistEmbedPath, buildPlaylistWatchPath, pick } from '@shared/core-utils'
-import { buildUUID, uuidToShort } from '@shared/core-utils/uuid'
+import { buildPlaylistEmbedPath, buildPlaylistWatchPath, buildUUID, pick, uuidToShort } from '@shared/core-utils'
 import { AttributesOnly } from '@shared/typescript-utils'
 import { ActivityIconObject } from '../../../shared/models/activitypub/objects'
 import { PlaylistObject } from '../../../shared/models/activitypub/objects/playlist-object'

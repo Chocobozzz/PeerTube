@@ -2,18 +2,17 @@
 
 import 'mocha'
 import * as chai from 'chai'
+import { FIXTURE_URLS, MockProxy } from '@server/tests/shared'
+import { HttpStatusCode, VideoPrivacy } from '@shared/models'
 import {
   cleanupTests,
   createMultipleServers,
   doubleFollow,
-  FIXTURE_URLS,
   PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel,
   waitJobs
 } from '@shared/server-commands'
-import { MockProxy } from '@shared/server-commands/mock-servers/mock-proxy'
-import { HttpStatusCode, VideoPrivacy } from '@shared/models'
 
 const expect = chai.expect
 

@@ -2,18 +2,18 @@
 
 import 'mocha'
 import { expect } from 'chai'
+import { wait } from '@shared/core-utils'
+import { HttpStatusCode } from '@shared/models'
 import {
   cleanupTests,
   createMultipleServers,
   doubleFollow,
   killallServers,
   makeGetRequest,
-  MockBlocklist,
   PeerTubeServer,
-  setAccessTokensToServers,
-  wait
+  setAccessTokensToServers
 } from '@shared/server-commands'
-import { HttpStatusCode } from '@shared/models'
+import { MockBlocklist } from '../shared'
 
 describe('Official plugin auto-mute', function () {
   const autoMuteListPath = '/plugins/auto-mute/router/api/v1/mute-list'

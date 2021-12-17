@@ -2,9 +2,9 @@
 
 import 'mocha'
 import * as chai from 'chai'
+import { wait } from '@shared/core-utils'
 import { VideoPrivacy } from '@shared/models'
 import {
-  checkLiveCleanupAfterSave,
   cleanupTests,
   ConfigCommand,
   createMultipleServers,
@@ -12,9 +12,9 @@ import {
   PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel,
-  wait,
   waitJobs
-} from '../../../../shared/server-commands'
+} from '@shared/server-commands'
+import { checkLiveCleanupAfterSave } from '../../shared'
 
 const expect = chai.expect
 

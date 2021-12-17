@@ -2,19 +2,19 @@
 
 import 'mocha'
 import * as chai from 'chai'
+import { areObjectStorageTestsDisabled } from '@shared/core-utils'
 import { HttpStatusCode, VideoFile } from '@shared/models'
 import {
-  areObjectStorageTestsDisabled,
   cleanupTests,
   createMultipleServers,
   doubleFollow,
-  expectStartWith,
   makeRawRequest,
   ObjectStorageCommand,
   PeerTubeServer,
   setAccessTokensToServers,
   waitJobs
-} from '../../../shared/server-commands'
+} from '@shared/server-commands'
+import { expectStartWith } from '../shared'
 
 const expect = chai.expect
 

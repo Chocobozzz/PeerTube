@@ -4,6 +4,7 @@ import {
   HttpStatusCode,
   MyUser,
   ResultList,
+  ScopedToken,
   User,
   UserAdminFlag,
   UserCreateResult,
@@ -13,7 +14,6 @@ import {
   UserVideoQuota,
   UserVideoRate
 } from '@shared/models'
-import { ScopedToken } from '@shared/models/users/user-scoped-token'
 import { unwrapBody } from '../requests'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
 

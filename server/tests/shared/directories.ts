@@ -4,7 +4,7 @@ import { expect } from 'chai'
 import { pathExists, readdir } from 'fs-extra'
 import { join } from 'path'
 import { root } from '@shared/core-utils'
-import { PeerTubeServer } from './server'
+import { PeerTubeServer } from '@shared/server-commands'
 
 async function checkTmpIsEmpty (server: PeerTubeServer) {
   await checkDirectoryIsEmpty(server, 'tmp', [ 'plugins-global.css', 'hls', 'resumable-uploads' ])

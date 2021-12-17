@@ -2,11 +2,11 @@
 
 import 'mocha'
 import * as chai from 'chai'
+import { expectStartWith, FIXTURE_URLS } from '@server/tests/shared'
+import { areObjectStorageTestsDisabled } from '@shared/core-utils'
+import { HttpStatusCode, VideoPrivacy } from '@shared/models'
 import {
-  areObjectStorageTestsDisabled,
   createSingleServer,
-  expectStartWith,
-  FIXTURE_URLS,
   killallServers,
   makeRawRequest,
   ObjectStorageCommand,
@@ -15,7 +15,6 @@ import {
   setDefaultVideoChannel,
   waitJobs
 } from '@shared/server-commands'
-import { HttpStatusCode, VideoPrivacy } from '@shared/models'
 
 const expect = chai.expect
 

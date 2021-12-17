@@ -3,8 +3,10 @@
 import 'mocha'
 import * as chai from 'chai'
 import { FfmpegCommand } from 'fluent-ffmpeg'
+import { checkLiveCleanupAfterSave } from '@server/tests/shared'
+import { wait } from '@shared/core-utils'
+import { HttpStatusCode, LiveVideoCreate, VideoPrivacy, VideoState } from '@shared/models'
 import {
-  checkLiveCleanupAfterSave,
   cleanupTests,
   ConfigCommand,
   createMultipleServers,
@@ -14,12 +16,10 @@ import {
   setDefaultVideoChannel,
   stopFfmpeg,
   testFfmpegStreamError,
-  wait,
   waitJobs,
   waitUntilLivePublishedOnAllServers,
   waitUntilLiveSavedOnAllServers
 } from '@shared/server-commands'
-import { HttpStatusCode, LiveVideoCreate, VideoPrivacy, VideoState } from '@shared/models'
 
 const expect = chai.expect
 

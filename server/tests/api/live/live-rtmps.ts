@@ -2,9 +2,9 @@
 
 import 'mocha'
 import * as chai from 'chai'
+import { buildAbsoluteFixturePath } from '@shared/core-utils'
 import { VideoPrivacy } from '@shared/models'
 import {
-  buildAbsoluteFixturePath,
   cleanupTests,
   createSingleServer,
   PeerTubeServer,
@@ -14,7 +14,7 @@ import {
   stopFfmpeg,
   testFfmpegStreamError,
   waitUntilLivePublishedOnAllServers
-} from '../../../../shared/server-commands'
+} from '@shared/server-commands'
 
 const expect = chai.expect
 

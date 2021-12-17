@@ -2,11 +2,11 @@
 
 import 'mocha'
 import * as chai from 'chai'
+import { HttpStatusCode, VideoDetails, VideoImportState, VideoPlaylist, VideoPlaylistPrivacy, VideoPrivacy } from '@shared/models'
 import {
   cleanupTests,
   createMultipleServers,
   doubleFollow,
-  FIXTURE_URLS,
   makeRawRequest,
   PeerTubeServer,
   PluginsCommand,
@@ -14,7 +14,7 @@ import {
   setDefaultVideoChannel,
   waitJobs
 } from '@shared/server-commands'
-import { HttpStatusCode, VideoDetails, VideoImportState, VideoPlaylist, VideoPlaylistPrivacy, VideoPrivacy } from '@shared/models'
+import { FIXTURE_URLS } from '../shared'
 
 const expect = chai.expect
 

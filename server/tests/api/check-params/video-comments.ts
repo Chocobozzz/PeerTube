@@ -2,10 +2,9 @@
 
 import 'mocha'
 import * as chai from 'chai'
+import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@server/tests/shared'
+import { HttpStatusCode, VideoCreateResult } from '@shared/models'
 import {
-  checkBadCountPagination,
-  checkBadSortPagination,
-  checkBadStartPagination,
   cleanupTests,
   createSingleServer,
   makeDeleteRequest,
@@ -14,7 +13,6 @@ import {
   PeerTubeServer,
   setAccessTokensToServers
 } from '@shared/server-commands'
-import { HttpStatusCode, VideoCreateResult } from '@shared/models'
 
 const expect = chai.expect
 

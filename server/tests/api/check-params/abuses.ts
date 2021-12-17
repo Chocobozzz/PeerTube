@@ -1,11 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
+import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@server/tests/shared'
+import { AbuseCreate, AbuseState, HttpStatusCode } from '@shared/models'
 import {
   AbusesCommand,
-  checkBadCountPagination,
-  checkBadSortPagination,
-  checkBadStartPagination,
   cleanupTests,
   createSingleServer,
   doubleFollow,
@@ -15,7 +14,6 @@ import {
   setAccessTokensToServers,
   waitJobs
 } from '@shared/server-commands'
-import { AbuseCreate, AbuseState, HttpStatusCode } from '@shared/models'
 
 describe('Test abuses API validators', function () {
   const basePath = '/api/v1/abuses/'

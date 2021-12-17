@@ -6,16 +6,18 @@ import {
   checkActorFilesWereRemoved,
   checkTmpIsEmpty,
   checkVideoFilesWereRemoved,
+  saveVideoInServers,
+  testImage
+} from '@server/tests/shared'
+import { MyUser } from '@shared/models'
+import {
   cleanupTests,
   createMultipleServers,
   doubleFollow,
   PeerTubeServer,
-  saveVideoInServers,
   setAccessTokensToServers,
-  testImage,
   waitJobs
 } from '@shared/server-commands'
-import { MyUser } from '@shared/models'
 
 const expect = chai.expect
 

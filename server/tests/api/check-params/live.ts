@@ -2,8 +2,9 @@
 
 import 'mocha'
 import { omit } from 'lodash'
+import { buildAbsoluteFixturePath } from '@shared/core-utils'
+import { HttpStatusCode, VideoCreateResult, VideoPrivacy } from '@shared/models'
 import {
-  buildAbsoluteFixturePath,
   cleanupTests,
   createSingleServer,
   LiveCommand,
@@ -14,7 +15,6 @@ import {
   setAccessTokensToServers,
   stopFfmpeg
 } from '@shared/server-commands'
-import { HttpStatusCode, VideoCreateResult, VideoPrivacy } from '@shared/models'
 
 describe('Test video lives API validator', function () {
   const path = '/api/v1/videos/live'

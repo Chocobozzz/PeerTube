@@ -3,8 +3,8 @@
 import { decode } from 'querystring'
 import request from 'supertest'
 import { URL } from 'url'
+import { buildAbsoluteFixturePath } from '@shared/core-utils'
 import { HttpStatusCode } from '@shared/models'
-import { buildAbsoluteFixturePath } from '../miscs/tests'
 
 export type CommonRequestParams = {
   url: string
