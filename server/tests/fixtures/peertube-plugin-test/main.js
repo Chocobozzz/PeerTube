@@ -13,6 +13,9 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
     'action:api.video-comment-reply.created',
     'action:api.video-comment.deleted',
 
+    'action:api.video-caption.created',
+    'action:api.video-caption.deleted',
+
     'action:api.user.blocked',
     'action:api.user.unblocked',
     'action:api.user.registered',
