@@ -367,9 +367,9 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
     '    WHERE "videoShare"."videoId" = "video"."id"' +
     '  )' +
     '  OR' +
-    '  EXISTS (' + // Videos published by accounts we follow
+    '  EXISTS (' + // Videos published by channels we follow
     '    SELECT 1 from "actorFollow" ' +
-    '    WHERE "actorFollow"."targetActorId" = "account"."actorId" AND "actorFollow"."actorId" = :followerActorId ' +
+    '    WHERE "actorFollow"."targetActorId" = "videoChannel"."actorId" AND "actorFollow"."actorId" = :followerActorId ' +
     '    AND "actorFollow"."state" = \'accepted\'' +
     '  )'
 
