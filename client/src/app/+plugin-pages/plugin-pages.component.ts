@@ -17,6 +17,11 @@ export class PluginPagesComponent implements AfterViewInit {
   }
 
   ngAfterViewInit () {
+    this.pluginService.ensurePluginsAreLoaded('common')
+      .then(() => this.loadRoute())
+  }
+
+  private loadRoute () {
     const path = '/' + this.route.snapshot.url.map(u => u.path).join('/')
 
     const registered = this.pluginService.getRegisteredClientRoute(path)
