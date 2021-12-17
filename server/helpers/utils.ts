@@ -1,9 +1,9 @@
 import { remove } from 'fs-extra'
 import { Instance as ParseTorrent } from 'parse-torrent'
 import { join } from 'path'
+import { sha256 } from '@shared/extra-utils'
 import { ResultList } from '../../shared'
 import { CONFIG } from '../initializers/config'
-import { sha256 } from '@shared/core-utils/common/crypto'
 import { execPromise, execPromise2, randomBytesPromise } from './core-utils'
 import { logger } from './logger'
 

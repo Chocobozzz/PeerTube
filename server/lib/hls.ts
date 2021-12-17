@@ -2,7 +2,7 @@ import { close, ensureDir, move, open, outputJSON, read, readFile, remove, stat,
 import { flatten, uniq } from 'lodash'
 import { basename, dirname, join } from 'path'
 import { MStreamingPlaylistFilesVideo, MVideo, MVideoUUID } from '@server/types/models'
-import { sha256 } from '@shared/core-utils/common/crypto'
+import { sha256 } from '@shared/extra-utils'
 import { getAudioStreamCodec, getVideoStreamCodec, getVideoStreamSize } from '../helpers/ffprobe-utils'
 import { logger } from '../helpers/logger'
 import { doRequest, doRequestAndSaveToFile } from '../helpers/requests'

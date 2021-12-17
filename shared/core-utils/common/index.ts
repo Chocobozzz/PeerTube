@@ -1,5 +1,5 @@
 export * from './array'
-export * from './crypto'
+export * from './random'
 export * from './date'
 export * from './env'
 export * from './object'

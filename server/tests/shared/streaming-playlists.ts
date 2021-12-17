@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import { basename } from 'path'
 import { removeFragmentedMP4Ext } from '@shared/core-utils'
-import { sha256 } from '@shared/core-utils/common/crypto'
+import { sha256 } from '@shared/extra-utils'
 import { HttpStatusCode, VideoStreamingPlaylist } from '@shared/models'
 import { PeerTubeServer } from '@shared/server-commands'
 

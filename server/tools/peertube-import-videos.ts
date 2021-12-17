@@ -5,7 +5,7 @@ import { program } from 'commander'
 import { accessSync, constants } from 'fs'
 import { remove } from 'fs-extra'
 import { join } from 'path'
-import { sha256 } from '@shared/core-utils/crypto'
+import { sha256, wait } from '@shared/core-utils'
 import { doRequestAndSaveToFile } from '../helpers/requests'
 import {
   assignToken,
@@ -15,7 +15,6 @@ import {
   getLogger,
   getServerCredentials
 } from './cli'
-import { wait } from '@shared/server-commands'
 import { YoutubeDLCLI, YoutubeDLInfo, YoutubeDLInfoBuilder } from '@server/helpers/youtube-dl'
 import prompt = require('prompt')
 

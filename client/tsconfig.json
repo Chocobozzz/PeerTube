@@ -35,6 +35,8 @@
       "@shared/models": [ "../shared/models" ],
       "@shared/core-utils": [ "../shared/core-utils" ],
       "@shared/core-utils/*": [ "../shared/core-utils/*" ],
+      "@shared/typescript-utils": [ "../shared/typescript-utils" ],
+      "@shared/typescript-utils/*": [ "../shared/typescript-utils/*" ],
       "@root-helpers/*": [ "src/root-helpers/*" ],
       "fs": [ "src/shims/noop.ts" ],
       "http": [ "src/shims/http.ts" ],

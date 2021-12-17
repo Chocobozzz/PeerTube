@@ -1,5 +1,6 @@
 import { intoArray, toBoolean } from '@app/helpers'
-import { AttributesOnly, getAllPrivacies } from '@shared/core-utils'
+import { getAllPrivacies } from '@shared/core-utils'
+import { AttributesOnly } from '@shared/typescript-utils'
 import { BooleanBothQuery, NSFWPolicyType, VideoInclude, VideoPrivacy, VideoSortField } from '@shared/models'
 
 type VideoFiltersKeys = {
