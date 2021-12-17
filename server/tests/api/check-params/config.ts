@@ -91,7 +91,10 @@ describe('Test config API validators', function () {
     },
     user: {
       videoQuota: 5242881,
-      videoQuotaDaily: 318742
+      videoQuotaDaily: 318742,
+      history: {
+        enabledByDefault: true
+      }
     },
     videoChannels: {
       maxPerUser: 20

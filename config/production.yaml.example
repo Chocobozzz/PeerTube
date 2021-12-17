@@ -327,6 +327,9 @@ user:
   # -1 == unlimited
   video_quota: -1
   video_quota_daily: -1
+  # Whether video history should be enabled by default for new users or not
+  history:
+    enabled_by_default: true
 
 video_channels:
   max_per_user: 20 # Allows each user to create up to 20 video channels.

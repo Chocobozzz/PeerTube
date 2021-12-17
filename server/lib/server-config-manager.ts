@@ -204,7 +204,10 @@ class ServerConfigManager {
       },
       user: {
         videoQuota: CONFIG.USER.VIDEO_QUOTA,
-        videoQuotaDaily: CONFIG.USER.VIDEO_QUOTA_DAILY
+        videoQuotaDaily: CONFIG.USER.VIDEO_QUOTA_DAILY,
+        history: {
+          enabledByDefault: CONFIG.USER.HISTORY.ENABLED_BY_DEFAULT
+        }
       },
       videoChannels: {
         maxPerUser: CONFIG.VIDEO_CHANNELS.MAX_PER_USER

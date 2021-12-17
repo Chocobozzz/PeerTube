@@ -18,7 +18,7 @@ function checkMissedConfig () {
     'storage.avatars', 'storage.videos', 'storage.logs', 'storage.previews', 'storage.thumbnails', 'storage.torrents', 'storage.cache',
     'storage.redundancy', 'storage.tmp', 'storage.streaming_playlists', 'storage.plugins',
     'log.level',
-    'user.video_quota', 'user.video_quota_daily',
+    'user.video_quota', 'user.video_quota_daily', 'user.history.enabled_by_default',
     'video_channels.max_per_user',
     'csp.enabled', 'csp.report_only', 'csp.report_uri',
     'security.frameguard.enabled',

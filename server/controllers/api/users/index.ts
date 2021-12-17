@@ -238,6 +238,7 @@ async function registerUser (req: express.Request, res: express.Response) {
     role: UserRole.USER,
     videoQuota: CONFIG.USER.VIDEO_QUOTA,
     videoQuotaDaily: CONFIG.USER.VIDEO_QUOTA_DAILY,
+    videosHistoryEnabled: CONFIG.USER.HISTORY.ENABLED_BY_DEFAULT,
     emailVerified: CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION ? false : null
   })
 

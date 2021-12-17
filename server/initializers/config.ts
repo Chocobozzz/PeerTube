@@ -256,7 +256,10 @@ const CONFIG = {
   },
   USER: {
     get VIDEO_QUOTA () { return parseBytes(config.get<number>('user.video_quota')) },
-    get VIDEO_QUOTA_DAILY () { return parseBytes(config.get<number>('user.video_quota_daily')) }
+    get VIDEO_QUOTA_DAILY () { return parseBytes(config.get<number>('user.video_quota_daily')) },
+    HISTORY: {
+      get ENABLED_BY_DEFAULT () { return config.get<boolean>('user.history.enabled_by_default') }
+    }
   },
   VIDEO_CHANNELS: {
     get MAX_PER_USER () { return config.get<number>('video_channels.max_per_user') }

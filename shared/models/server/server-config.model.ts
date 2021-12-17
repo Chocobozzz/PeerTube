@@ -227,6 +227,9 @@ export interface ServerConfig {
   user: {
     videoQuota: number
     videoQuotaDaily: number
+    history: {
+      enabledByDefault: boolean
+    }
   }
 
   videoChannels: {

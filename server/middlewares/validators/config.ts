@@ -37,6 +37,7 @@ const customConfigUpdateValidator = [
 
   body('user.videoQuota').custom(isUserVideoQuotaValid).withMessage('Should have a valid video quota'),
   body('user.videoQuotaDaily').custom(isUserVideoQuotaDailyValid).withMessage('Should have a valid daily video quota'),
+  body('user.history.enabledByDefault').isBoolean().withMessage('Should have a valid enabled by default history boolean'),
 
   body('videoChannels.maxPerUser').isInt().withMessage("Should have a valid maximum amount of video channels per user"),
 

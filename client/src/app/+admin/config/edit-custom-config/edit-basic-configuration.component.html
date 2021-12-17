@@ -235,6 +235,15 @@
 
           <div *ngIf="formErrors.user.videoQuotaDaily" class="form-error">{{ formErrors.user.videoQuotaDaily }}</div>
         </div>
+
+        <ng-container formGroupName="history">
+          <div class="form-group">
+            <my-peertube-checkbox
+              inputName="userHistoryEnabledByDefault" formControlName="enabledByDefault"
+              i18n-labelText labelText="Enable user video history for new users"
+            ></my-peertube-checkbox>
+          </div>
+        </ng-container>
       </ng-container>
 
     </div>
