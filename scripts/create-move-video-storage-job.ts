@@ -57,6 +57,11 @@ async function run () {
       process.exit(-1)
     }
 
+    if (video.isLive) {
+      console.error('Cannot process live video')
+      process.exit(-1)
+    }
+
     ids.push(video.id)
   } else {
     ids = await VideoModel.listLocalIds()
