@@ -188,6 +188,7 @@ async function createUser (req: express.Request, res: express.Response) {
     role: body.role,
     videoQuota: body.videoQuota,
     videoQuotaDaily: body.videoQuotaDaily,
+    videosHistoryEnabled: CONFIG.USER.HISTORY.ENABLED_BY_DEFAULT,
     adminFlags: body.adminFlags || UserAdminFlag.NONE
   }) as MUser
 
