@@ -290,7 +290,12 @@ export type SummaryOptions = {
           ],
           [
             literal(
-              '(SELECT COALESCE(SUM("video".views), 0) AS totalViews FROM "video" WHERE "video"."channelId" = "VideoChannelModel"."id" GROUP BY "video"."channelId")'
+              '(' +
+              'SELECT COALESCE(SUM("video".views), 0) AS totalViews' +
+              'FROM "video"' +
+              'WHERE "video"."channelId" = "VideoChannelModel"."id"' +
+              'GROUP BY "video"."channelId"' +
+              ')'
             ),
             'totalViews'
           ]
