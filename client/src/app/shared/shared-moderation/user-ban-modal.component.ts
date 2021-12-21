@@ -5,7 +5,9 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
 import { User } from '@shared/models'
 import { USER_BAN_REASON_VALIDATOR } from '../form-validators/user-validators'
+import { Account } from '../shared-main'
 import { UserAdminService } from '../shared-users'
+import { BlocklistService } from './blocklist.service'
 
 @Component({
   selector: 'my-user-ban-modal',
@@ -24,14 +26,16 @@ export class UserBanModalComponent extends FormReactive implements OnInit {
     protected formValidatorService: FormValidatorService,
     private modalService: NgbModal,
     private notifier: Notifier,
-    private userAdminService: UserAdminService
+    private userAdminService: UserAdminService,
+    private blocklistService: BlocklistService
   ) {
     super()
   }
 
   ngOnInit () {
     this.buildForm({
-      reason: USER_BAN_REASON_VALIDATOR
+      reason: USER_BAN_REASON_VALIDATOR,
+      mute: null
     })
   }
 
@@ -50,6 +54,7 @@ export class UserBanModalComponent extends FormReactive implements OnInit {
 
   banUser () {
     const reason = this.form.value['reason'] || undefined
+    const mute = this.form.value['mute']
 
     this.userAdminService.banUsers(this.usersToBan, reason)
       .subscribe({
@@ -61,6 +66,23 @@ export class UserBanModalComponent extends FormReactive implements OnInit {
           this.notifier.success(message)
 
           this.userBanned.emit(this.usersToBan)
+
+          if (mute) {
+            const users = Array.isArray(this.usersToBan) ? this.usersToBan : [ this.usersToBan ]
+            users.forEach(user => {
+              const account = new Account(user.account)
+              this.blocklistService.blockAccountByInstance(account)
+                .subscribe({
+                  next: () => {
+                    this.notifier.success($localize`Account ${user.username} muted by the instance.`)
+                    account.mutedByInstance = true
+                  },
+
+                  error: err => this.notifier.error(err.message)
+                })
+            })
+          }
+
           this.hide()
         },
 
