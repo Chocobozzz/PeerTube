@@ -96,6 +96,10 @@ my-peertube-checkbox {
     }
   }
 
+  .caption-entry-edit {
+    @include peertube-button;
+  }
+
   .caption-entry-delete {
     @include peertube-button;
     @include grey-button;

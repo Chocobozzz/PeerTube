@@ -8,6 +8,7 @@ import { VideoService } from '@app/shared/shared-main/video'
 import { peertubeTranslate } from '@shared/core-utils/i18n'
 import { ResultList, VideoCaption } from '@shared/models'
 import { VideoCaptionEdit } from './video-caption-edit.model'
+import { environment } from '../../../../environments/environment'
 
 @Injectable()
 export class VideoCaptionService {
@@ -57,7 +58,7 @@ export class VideoCaptionService {
     let obs: Observable<any> = of(undefined)
 
     for (const videoCaption of videoCaptions) {
-      if (videoCaption.action === 'CREATE') {
+      if (videoCaption.action === 'CREATE' || videoCaption.action === 'UPDATE') {
         obs = obs.pipe(switchMap(() => this.addCaption(videoId, videoCaption.language.id, videoCaption.captionfile)))
       } else if (videoCaption.action === 'REMOVE') {
         obs = obs.pipe(switchMap(() => this.removeCaption(videoId, videoCaption.language.id)))
@@ -65,5 +66,9 @@ export class VideoCaptionService {
     }
 
     return obs
+  }
+
+  getCaptionContent ({ captionPath }: Pick<VideoCaption, 'captionPath'>) {
+    return this.authHttp.get(`${environment.originServerUrl}${captionPath}`, { responseType: 'text' })
   }
 }

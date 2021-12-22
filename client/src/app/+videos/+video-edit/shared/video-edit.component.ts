@@ -21,7 +21,7 @@ import {
 } from '@app/shared/form-validators/video-validators'
 import { FormReactiveValidationMessages, FormValidatorService } from '@app/shared/shared-forms'
 import { InstanceService } from '@app/shared/shared-instance'
-import { VideoCaptionEdit, VideoEdit, VideoService } from '@app/shared/shared-main'
+import { VideoCaptionEdit, VideoCaptionWithPathEdit, VideoEdit, VideoService } from '@app/shared/shared-main'
 import { PluginInfo } from '@root-helpers/plugins-manager'
 import {
   HTMLServerConfig,
@@ -34,6 +34,7 @@ import {
 } from '@shared/models'
 import { I18nPrimengCalendarService } from './i18n-primeng-calendar.service'
 import { VideoCaptionAddModalComponent } from './video-caption-add-modal.component'
+import { VideoCaptionEditModalComponent } from './video-caption-edit-modal/video-caption-edit-modal.component'
 import { VideoEditType } from './video-edit.type'
 
 type VideoLanguages = VideoConstant<string> & { group?: string }
@@ -58,13 +59,14 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   @Input() userVideoChannels: SelectChannelItem[] = []
   @Input() forbidScheduledPublication = true
 
-  @Input() videoCaptions: (VideoCaptionEdit & { captionPath?: string })[] = []
+  @Input() videoCaptions: (VideoCaptionWithPathEdit)[] = []
 
   @Input() waitTranscodingEnabled = true
   @Input() type: VideoEditType
   @Input() liveVideo: LiveVideo
 
   @ViewChild('videoCaptionAddModal', { static: true }) videoCaptionAddModal: VideoCaptionAddModalComponent
+  @ViewChild('videoCaptionEditModal', { static: true }) editCaptionModal: VideoCaptionEditModalComponent
 
   @Output() formBuilt = new EventEmitter<void>()
   @Output() pluginFieldsAdded = new EventEmitter<void>()
@@ -228,12 +230,12 @@ export class VideoEditComponent implements OnInit, OnDestroy {
                .map(c => c.language.id)
   }
 
-  onCaptionAdded (caption: VideoCaptionEdit) {
+  onCaptionEdited (caption: VideoCaptionEdit) {
     const existingCaption = this.videoCaptions.find(c => c.language.id === caption.language.id)
 
     // Replace existing caption?
     if (existingCaption) {
-      Object.assign(existingCaption, caption, { action: 'CREATE' as 'CREATE' })
+      Object.assign(existingCaption, caption)
     } else {
       this.videoCaptions.push(
         Object.assign(caption, { action: 'CREATE' as 'CREATE' })
@@ -251,7 +253,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
     }
 
     // This caption is not on the server, just remove it from our array
-    if (caption.action === 'CREATE') {
+    if (caption.action === 'CREATE' || caption.action === 'UPDATE') {
       removeElementFromArray(this.videoCaptions, caption)
       return
     }
