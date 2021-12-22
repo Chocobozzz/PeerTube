@@ -31,7 +31,7 @@ export class MyAccountPage {
   }
 
   async clickOnP2PCheckbox () {
-    const p2p = getCheckbox('p2pEnabled')
+    const p2p = await getCheckbox('p2pEnabled')
 
     await p2p.waitForClickable()
     await p2p.scrollIntoView(false) // Avoid issues with fixed header on firefox

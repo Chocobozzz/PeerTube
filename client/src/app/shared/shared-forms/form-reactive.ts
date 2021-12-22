@@ -56,13 +56,18 @@ export abstract class FormReactive {
 
       if (control.dirty) this.formChanged = true
 
-      // Don't care if dirty on force check
-      const isDirty = control.dirty || forceCheck === true
-      if (control && isDirty && control.enabled && !control.valid) {
-        const messages = validationMessages[field]
-        for (const key of Object.keys(control.errors)) {
-          formErrors[field] += messages[key] + ' '
-        }
+      if (forceCheck) control.updateValueAndValidity({ emitEvent: false })
+      if (!control || !control.dirty || !control.enabled || control.valid) continue
+
+      const staticMessages = validationMessages[field]
+      for (const key of Object.keys(control.errors)) {
+        const formErrorValue = control.errors[key]
+
+        // Try to find error message in static validation messages first
+        // Then check if the validator returns a string that is the error
+        if (typeof formErrorValue === 'boolean') formErrors[field] += staticMessages[key] + ' '
+        else if (typeof formErrorValue === 'string') formErrors[field] += control.errors[key]
+        else throw new Error('Form error value of ' + field + ' is invalid')
       }
     }
   }

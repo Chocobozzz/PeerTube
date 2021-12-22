@@ -1,10 +1,11 @@
 import { forkJoin } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { SelectChannelItem } from 'src/types/select-options-item.model'
-import { Component, EventEmitter, Input, NgZone, OnDestroy, OnInit, Output, ViewChild } from '@angular/core'
-import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms'
+import { ChangeDetectorRef, Component, EventEmitter, Input, NgZone, OnDestroy, OnInit, Output, ViewChild } from '@angular/core'
+import { AbstractControl, FormArray, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms'
 import { HooksService, PluginService, ServerService } from '@app/core'
 import { removeElementFromArray } from '@app/helpers'
+import { BuildFormValidator } from '@app/shared/form-validators'
 import {
   VIDEO_CATEGORY_VALIDATOR,
   VIDEO_CHANNEL_VALIDATOR,
@@ -101,7 +102,8 @@ export class VideoEditComponent implements OnInit, OnDestroy {
     private instanceService: InstanceService,
     private i18nPrimengCalendarService: I18nPrimengCalendarService,
     private ngZone: NgZone,
-    private hooks: HooksService
+    private hooks: HooksService,
+    private cd: ChangeDetectorRef
   ) {
     this.calendarTimezone = this.i18nPrimengCalendarService.getTimezone()
     this.calendarDateFormat = this.i18nPrimengCalendarService.getDateFormat()
@@ -116,7 +118,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
       licence: this.serverConfig.defaults.publish.licence,
       tags: []
     }
-    const obj: any = {
+    const obj: { [ id: string ]: BuildFormValidator } = {
       name: VIDEO_NAME_VALIDATOR,
       privacy: VIDEO_PRIVACY_VALIDATOR,
       channelId: VIDEO_CHANNEL_VALIDATOR,
@@ -138,7 +140,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
       saveReplay: null
     }
 
-    this.formValidatorService.updateForm(
+    this.formValidatorService.updateFormGroup(
       this.form,
       this.formErrors,
       this.validationMessages,
@@ -275,6 +277,14 @@ export class VideoEditComponent implements OnInit, OnDestroy {
     })
   }
 
+  getPluginsFields (tab: 'main' | 'plugin-settings') {
+    return this.pluginFields.filter(p => {
+      const wanted = p.videoFormOptions.tab ?? 'plugin-settings'
+
+      return wanted === tab
+    })
+  }
+
   private sortVideoCaptions () {
     this.videoCaptions.sort((v1, v2) => {
       if (v1.language.label < v2.language.label) return -1
@@ -289,15 +299,44 @@ export class VideoEditComponent implements OnInit, OnDestroy {
 
     if (this.pluginFields.length === 0) return
 
-    const obj: any = {}
+    const pluginObj: { [ id: string ]: BuildFormValidator } = {}
+    const pluginValidationMessages: FormReactiveValidationMessages = {}
+    const pluginFormErrors: any = {}
+    const pluginDefaults: any = {}
 
     for (const setting of this.pluginFields) {
-      obj[setting.commonOptions.name] = new FormControl(setting.commonOptions.default)
+      const validator = (control: AbstractControl): ValidationErrors | null => {
+        if (!setting.commonOptions.error) return null
+
+        const error = setting.commonOptions.error({ formValues: this.form.value, value: control.value })
+
+        return error?.error ? { [setting.commonOptions.name]: error.text } : null
+      }
+
+      const name = setting.commonOptions.name
+
+      pluginObj[name] = {
+        VALIDATORS: [ validator ],
+        MESSAGES: {}
+      }
+
+      pluginDefaults[name] = setting.commonOptions.default
     }
 
-    this.pluginDataFormGroup = new FormGroup(obj)
-    this.form.addControl('pluginData', this.pluginDataFormGroup)
+    this.pluginDataFormGroup = new FormGroup({})
+    this.formValidatorService.updateFormGroup(
+      this.pluginDataFormGroup,
+      pluginFormErrors,
+      pluginValidationMessages,
+      pluginObj,
+      pluginDefaults
+    )
 
+    this.form.addControl('pluginData', this.pluginDataFormGroup)
+    this.formErrors['pluginData'] = pluginFormErrors
+    this.validationMessages['pluginData'] = pluginValidationMessages
+
+    this.cd.detectChanges()
     this.pluginFieldsAdded.emit()
   }
 

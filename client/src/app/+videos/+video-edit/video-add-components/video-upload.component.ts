@@ -226,7 +226,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
   }
 
   isPublishingButtonDisabled () {
-    return !this.form.valid ||
+    return !this.checkForm() ||
       this.isUpdatingVideo === true ||
       this.videoUploaded !== true ||
       !this.videoUploadedIds.id
@@ -240,7 +240,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
   }
 
   updateSecondStep () {
-    if (this.isPublishingButtonDisabled() || !this.checkForm()) {
+    if (this.isPublishingButtonDisabled()) {
       return
     }
 

@@ -40,7 +40,7 @@ export class FormValidatorService {
     return { form, formErrors, validationMessages }
   }
 
-  updateForm (
+  updateFormGroup (
     form: FormGroup,
     formErrors: FormReactiveErrors,
     validationMessages: FormReactiveValidationMessages,
@@ -52,7 +52,7 @@ export class FormValidatorService {
 
       const field = obj[name]
       if (this.isRecursiveField(field)) {
-        this.updateForm(
+        this.updateFormGroup(
           form[name],
           formErrors[name] as FormReactiveErrors,
           validationMessages[name] as FormReactiveValidationMessages,
@@ -66,8 +66,10 @@ export class FormValidatorService {
 
       const defaultValue = defaultValues[name] || ''
 
-      if (field?.VALIDATORS) form.addControl(name, new FormControl(defaultValue, field.VALIDATORS as ValidatorFn[]))
-      else form.addControl(name, new FormControl(defaultValue))
+      form.addControl(
+        name,
+        new FormControl(defaultValue, field?.VALIDATORS as ValidatorFn[])
+      )
     }
   }
 

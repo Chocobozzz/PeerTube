@@ -1,5 +1,5 @@
 function getCheckbox (name: string) {
-  return $(`my-peertube-checkbox[inputname=${name}] label`)
+  return $(`my-peertube-checkbox input[id=${name}]`).parentElement()
 }
 
 async function selectCustomSelect (id: string, valueLabel: string) {

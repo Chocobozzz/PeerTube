@@ -3,7 +3,10 @@ import { getCheckbox, selectCustomSelect } from '../utils'
 
 export class VideoUploadPage {
   async navigateTo () {
-    await $('.header .publish-button').click()
+    const publishButton = await $('.header .publish-button')
+
+    await publishButton.waitForClickable()
+    await publishButton.click()
 
     await $('.upload-video-container').waitForDisplayed()
   }
@@ -24,15 +27,17 @@ export class VideoUploadPage {
 
     // Wait for the upload to finish
     await browser.waitUntil(async () => {
-      const actionButton = this.getSecondStepSubmitButton().$('.action-button')
+      const warning = await $('=Publish will be available when upload is finished').isDisplayed()
+      const progress = await $('.progress-bar=100%').isDisplayed()
 
-      const klass = await actionButton.getAttribute('class')
-      return !klass.includes('disabled')
+      return !warning && progress
     })
   }
 
-  setAsNSFW () {
-    return getCheckbox('nsfw').click()
+  async setAsNSFW () {
+    const checkbox = await getCheckbox('nsfw')
+
+    return checkbox.click()
   }
 
   async validSecondUploadStep (videoName: string) {
@@ -49,6 +54,10 @@ export class VideoUploadPage {
 
   setAsPublic () {
     return selectCustomSelect('privacy', 'Public')
+  }
+
+  setAsPrivate () {
+    return selectCustomSelect('privacy', 'Private')
   }
 
   private getSecondStepSubmitButton () {

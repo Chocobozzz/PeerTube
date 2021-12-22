@@ -13,7 +13,7 @@ export class AnonymousSettingsPage {
   }
 
   async clickOnP2PCheckbox () {
-    const p2p = getCheckbox('p2pEnabled')
+    const p2p = await getCheckbox('p2pEnabled')
     await p2p.waitForClickable()
 
     await p2p.click()
