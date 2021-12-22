@@ -39,12 +39,12 @@ export class SelectLanguagesComponent implements ControlValueAccessor, OnInit {
     this.server.getVideoLanguages()
       .subscribe(
         languages => {
-          this.availableLanguages = [{
+          this.availableLanguages = [ {
             label: $localize`Unknown language`,
             id: '_unknown',
             group: this.allLanguagesGroup,
             groupOrder: this.allLanguagesGroupOrder
-          }]
+          } ]
 
           this.availableLanguages = this.availableLanguages
             .concat(languages.map(l => {
