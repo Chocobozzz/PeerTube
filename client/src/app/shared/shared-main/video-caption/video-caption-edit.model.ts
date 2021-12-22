@@ -4,6 +4,8 @@ export interface VideoCaptionEdit {
     label?: string
   }
 
-  action?: 'CREATE' | 'REMOVE'
+  action?: 'CREATE' | 'REMOVE' | 'UPDATE'
   captionfile?: any
 }
+
+export type VideoCaptionWithPathEdit = VideoCaptionEdit & { captionPath?: string }

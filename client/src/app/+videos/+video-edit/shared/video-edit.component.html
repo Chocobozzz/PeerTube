@@ -186,6 +186,7 @@
 
                 <div i18n class="caption-entry-state">Already uploaded	&#10004;</div>
 
+                <span i18n class="caption-entry-edit" (click)="videoCaptionEditModal.show()">Edit</span>
                 <span i18n class="caption-entry-delete" (click)="deleteCaption(videoCaption)">Delete</span>
               </ng-container>
 
@@ -197,6 +198,14 @@
                 <span i18n class="caption-entry-delete" (click)="deleteCaption(videoCaption)">Cancel create</span>
               </ng-container>
 
+              <ng-container *ngIf="videoCaption.action === 'UPDATE'">
+                <span class="caption-entry-label">{{ videoCaption.language.label }}</span>
+
+                <div i18n class="caption-entry-state caption-entry-state-create">Will be edited on update</div>
+
+                <span i18n class="caption-entry-delete" (click)="deleteCaption(videoCaption)">Cancel edition</span>
+              </ng-container>
+
               <ng-container *ngIf="videoCaption.action === 'REMOVE'">
                 <span class="caption-entry-label">{{ videoCaption.language.label }}</span>
 
@@ -204,6 +213,13 @@
 
                 <span i18n class="caption-entry-delete" (click)="deleteCaption(videoCaption)">Cancel deletion</span>
               </ng-container>
+
+              <my-video-caption-edit-modal
+                #videoCaptionEditModal
+                [videoCaption]="videoCaption"
+                [serverConfig]="serverConfig"
+                (captionEdited)="onCaptionEdited($event)"
+              ></my-video-caption-edit-modal>
             </div>
           </div>
 
@@ -373,5 +389,5 @@
 </div>
 
 <my-video-caption-add-modal
-  #videoCaptionAddModal [existingCaptions]="getExistingCaptions()" [serverConfig]="serverConfig" (captionAdded)="onCaptionAdded($event)"
+  #videoCaptionAddModal [existingCaptions]="getExistingCaptions()" [serverConfig]="serverConfig" (captionAdded)="onCaptionEdited($event)"
 ></my-video-caption-add-modal>

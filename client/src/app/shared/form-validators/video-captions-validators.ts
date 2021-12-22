@@ -14,3 +14,10 @@ export const VIDEO_CAPTION_FILE_VALIDATOR: BuildFormValidator = {
     required: $localize`Video caption file is required.`
   }
 }
+
+export const VIDEO_CAPTION_FILE_CONTENT_VALIDATOR: BuildFormValidator = {
+  VALIDATORS: [ Validators.required ],
+  MESSAGES: {
+    required: $localize`Caption content is required.`
+  }
+}
