@@ -59,6 +59,12 @@
 
         const errorText = document.getElementById('error-content')
         errorText.innerHTML = text
+
+        const videoWrapper = document.getElementById('video-wrapper')
+        if (videoWrapper) videoWrapper.style.display = 'none'
+
+        const placeholderPreview = document.getElementById('placeholder-preview')
+        if (placeholderPreview) placeholderPreview.style.display = 'none'
       }
 
       window.onerror = function () {
