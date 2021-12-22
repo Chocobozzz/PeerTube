@@ -23,6 +23,7 @@ export class SelectLanguagesComponent implements ControlValueAccessor, OnInit {
   availableLanguages: SelectOptionsItem[] = []
 
   allLanguagesGroup = $localize`All languages`
+  allLanguagesGroupOrder = 1
 
   // Fix a bug on ng-select when we update items after we selected items
   private toWrite: any
@@ -38,10 +39,16 @@ export class SelectLanguagesComponent implements ControlValueAccessor, OnInit {
     this.server.getVideoLanguages()
       .subscribe(
         languages => {
-          this.availableLanguages = [ { label: $localize`Unknown language`, id: '_unknown', group: this.allLanguagesGroup } ]
+          this.availableLanguages = [ { label: $localize`Unknown language`, id: '_unknown', group: this.allLanguagesGroup,
+                                        groupOrder: this.allLanguagesGroupOrder } ]
 
           this.availableLanguages = this.availableLanguages
-            .concat(languages.map(l => ({ label: l.label, id: l.id, group: this.allLanguagesGroup })))
+            .concat(languages.map(l => {
+              if (l.id === 'zxx') return { label: l.label, id: l.id, group: $localize`Other`, groupOrder: 0 }
+              return { label: l.label, id: l.id, group: this.allLanguagesGroup, groupOrder: this.allLanguagesGroupOrder }
+            }))
+
+          this.availableLanguages.sort((a, b) => a.groupOrder - b.groupOrder)
 
           this.loaded = true
           this.writeValue(this.toWrite)
