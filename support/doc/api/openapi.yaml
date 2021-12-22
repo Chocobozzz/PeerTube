@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: PeerTube
-  version: 3.3.0
+  version: 4.0.0
   contact:
     name: PeerTube Community
     url: https://joinpeertube.org
@@ -7228,6 +7228,14 @@ components:
             - `13` NEW_INSTANCE_FOLLOWER
 
             - `14` AUTO_INSTANCE_FOLLOWING
+            
+            - `15` ABUSE_STATE_CHANGE
+            
+            - `16` ABUSE_NEW_MESSAGE
+            
+            - `17` NEW_PLUGIN_VERSION
+            
+            - `18` NEW_PEERTUBE_VERSION
         read:
           type: boolean
         video:
