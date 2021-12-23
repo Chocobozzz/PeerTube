@@ -4,7 +4,6 @@ export interface SelectOptionsItem {
   description?: string
   group?: string
   groupLabel?: string
-  groupOrder?: number
 }
 
 export interface SelectChannelItem extends SelectOptionsItem {
