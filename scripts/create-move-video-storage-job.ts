@@ -4,7 +4,7 @@ registerTSPaths()
 import { program } from 'commander'
 import { VideoModel } from '@server/models/video/video'
 import { initDatabaseModels } from '@server/initializers/database'
-import { VideoStorage } from '@shared/models'
+import { VideoState, VideoStorage } from '@shared/models'
 import { moveToExternalStorageState } from '@server/lib/video-state'
 import { JobQueue } from '@server/lib/job-queue'
 import { CONFIG } from '@server/initializers/config'
@@ -59,6 +59,11 @@ async function run () {
 
     if (video.isLive) {
       console.error('Cannot process live video')
+      process.exit(-1)
+    }
+
+    if (video.state === VideoState.TO_MOVE_TO_EXTERNAL_STORAGE) {
+      console.error('This video is already being moved to external storage')
       process.exit(-1)
     }
 

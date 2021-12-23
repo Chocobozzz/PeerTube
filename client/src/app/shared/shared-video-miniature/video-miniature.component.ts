@@ -179,6 +179,10 @@ export class VideoMiniatureComponent implements OnInit {
       return $localize`Transcoding failed`
     }
 
+    if (video.state.id === VideoState.TO_MOVE_TO_EXTERNAL_STORAGE_FAILED) {
+      return $localize`Move to external storage failed`
+    }
+
     if (video.state.id === VideoState.TO_TRANSCODE && video.waitTranscoding === true) {
       return $localize`Waiting transcoding`
     }

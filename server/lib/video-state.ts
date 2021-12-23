@@ -4,7 +4,7 @@ import { CONFIG } from '@server/initializers/config'
 import { sequelizeTypescript } from '@server/initializers/database'
 import { VideoModel } from '@server/models/video/video'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info'
-import { MVideoFullLight, MVideoUUID } from '@server/types/models'
+import { MVideo, MVideoFullLight, MVideoUUID } from '@server/types/models'
 import { VideoState } from '@shared/models'
 import { federateVideoIfNeeded } from './activitypub/videos'
 import { Notifier } from './notifier'
@@ -79,10 +79,16 @@ async function moveToExternalStorageState (video: MVideoFullLight, isNewVideo: b
   }
 }
 
-function moveToFailedTranscodingState (video: MVideoFullLight) {
+function moveToFailedTranscodingState (video: MVideo) {
   if (video.state === VideoState.TRANSCODING_FAILED) return
 
   return video.setNewState(VideoState.TRANSCODING_FAILED, false, undefined)
+}
+
+function moveToFailedMoveToObjectStorageState (video: MVideo) {
+  if (video.state === VideoState.TO_MOVE_TO_EXTERNAL_STORAGE_FAILED) return
+
+  return video.setNewState(VideoState.TO_MOVE_TO_EXTERNAL_STORAGE_FAILED, false, undefined)
 }
 
 // ---------------------------------------------------------------------------
@@ -91,6 +97,7 @@ export {
   buildNextVideoState,
   moveToExternalStorageState,
   moveToFailedTranscodingState,
+  moveToFailedMoveToObjectStorageState,
   moveToNextState
 }
 

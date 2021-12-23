@@ -7,7 +7,7 @@ import { CONFIG } from '@server/initializers/config'
 import { P2P_MEDIA_LOADER_PEER_VERSION } from '@server/initializers/constants'
 import { storeHLSFile, storeWebTorrentFile } from '@server/lib/object-storage'
 import { getHLSDirectory, getHlsResolutionPlaylistFilename } from '@server/lib/paths'
-import { moveToNextState } from '@server/lib/video-state'
+import { moveToFailedMoveToObjectStorageState, moveToNextState } from '@server/lib/video-state'
 import { VideoModel } from '@server/models/video/video'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info'
 import { MStreamingPlaylistVideo, MVideo, MVideoFile, MVideoWithAllFiles } from '@server/types/models'
@@ -24,18 +24,25 @@ export async function processMoveToObjectStorage (job: Job) {
     return undefined
   }
 
-  if (video.VideoFiles) {
-    await moveWebTorrentFiles(video)
-  }
+  try {
+    if (video.VideoFiles) {
+      await moveWebTorrentFiles(video)
+    }
 
-  if (video.VideoStreamingPlaylists) {
-    await moveHLSFiles(video)
-  }
+    if (video.VideoStreamingPlaylists) {
+      await moveHLSFiles(video)
+    }
 
-  const pendingMove = await VideoJobInfoModel.decrease(video.uuid, 'pendingMove')
-  if (pendingMove === 0) {
-    logger.info('Running cleanup after moving files to object storage (video %s in job %d)', video.uuid, job.id)
-    await doAfterLastJob(video, payload.isNewVideo)
+    const pendingMove = await VideoJobInfoModel.decrease(video.uuid, 'pendingMove')
+    if (pendingMove === 0) {
+      logger.info('Running cleanup after moving files to object storage (video %s in job %d)', video.uuid, job.id)
+      await doAfterLastJob(video, payload.isNewVideo)
+    }
+  } catch (err) {
+    logger.error('Cannot move video %s to object storage.', video.url, { err })
+
+    await moveToFailedMoveToObjectStorageState(video)
+    await VideoJobInfoModel.abortAllTasks(video.uuid, 'pendingMove')
   }
 
   return payload.videoUUID

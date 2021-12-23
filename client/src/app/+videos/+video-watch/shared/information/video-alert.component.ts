@@ -18,6 +18,10 @@ export class VideoAlertComponent {
     return this.video && this.video.state.id === VideoState.TRANSCODING_FAILED
   }
 
+  isVideoMoveToObjectStorageFailed () {
+    return this.video && this.video.state.id === VideoState.TO_MOVE_TO_EXTERNAL_STORAGE_FAILED
+  }
+
   isVideoToImport () {
     return this.video && this.video.state.id === VideoState.TO_IMPORT
   }

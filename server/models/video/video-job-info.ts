@@ -99,4 +99,19 @@ export class VideoJobInfoModel extends Model<Partial<AttributesOnly<VideoJobInfo
 
     return pendingMove
   }
+
+  static async abortAllTasks (videoUUID: string, column: VideoJobInfoColumnType): Promise<void> {
+    const options = { type: QueryTypes.UPDATE as QueryTypes.UPDATE, bind: { videoUUID } }
+
+    await VideoJobInfoModel.sequelize.query(`
+    UPDATE
+      "videoJobInfo"
+    SET
+      "${column}" = 0,
+      "updatedAt" = NOW()
+    FROM "video"
+    WHERE
+      "video"."id" = "videoJobInfo"."videoId" AND "video"."uuid" = $videoUUID
+    `, options)
+  }
 }

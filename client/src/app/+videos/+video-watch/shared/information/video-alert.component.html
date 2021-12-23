@@ -2,6 +2,10 @@
   Transcoding failed, this video may not work properly.
 </div>
 
+<div i18n class="alert alert-warning" *ngIf="isVideoMoveToObjectStorageFailed()">
+  Move to external storage failed, this video may not work properly.
+</div>
+
 <div i18n class="alert alert-warning" *ngIf="isVideoToImport()">
   The video is being imported, it will be available when the import is finished.
 </div>
