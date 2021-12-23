@@ -17,6 +17,12 @@ function ffprobePromise (path: string) {
   })
 }
 
+async function isAudioFile (path: string, existingProbe?: FfprobeData) {
+  const videoStream = await getVideoStreamFromFile(path, existingProbe)
+
+  return !videoStream
+}
+
 async function getAudioStream (videoPath: string, existingProbe?: FfprobeData) {
   // without position, ffprobe considers the last input only
   // we make it consider the first input only
@@ -174,6 +180,7 @@ export {
   getDurationFromVideoFile,
   getAudioStream,
   getVideoFileFPS,
+  isAudioFile,
   ffprobePromise,
   getVideoFileBitrate,
   canDoQuickAudioTranscode

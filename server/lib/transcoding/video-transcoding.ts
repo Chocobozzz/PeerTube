@@ -169,6 +169,7 @@ function mergeAudioVideofile (video: MVideoFullLight, resolution: VideoResolutio
 
     // Important to do this before getVideoFilename() to take in account the new file extension
     inputVideoFile.extname = newExtname
+    inputVideoFile.resolution = resolution
     inputVideoFile.filename = generateWebTorrentVideoFilename(inputVideoFile.resolution, newExtname)
 
     const videoOutputPath = VideoPathManager.Instance.getFSVideoFileOutputPath(video, inputVideoFile)

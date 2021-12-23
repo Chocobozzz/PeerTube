@@ -19,15 +19,16 @@ import { buildNextVideoState } from '@server/lib/video-state'
 import { openapiOperationDoc } from '@server/middlewares/doc'
 import { MVideo, MVideoFile, MVideoFullLight } from '@server/types/models'
 import { getLowercaseExtension, uuidToShort } from '@shared/core-utils'
+import { isAudioFile } from '@shared/extra-utils'
 import { VideoCreate, VideoState } from '../../../../shared'
-import { HttpStatusCode } from '../../../../shared/models'
+import { HttpStatusCode, VideoResolution } from '../../../../shared/models'
 import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../helpers/audit-logger'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { createReqFiles } from '../../../helpers/express-utils'
-import { getMetadataFromFile, getVideoFileFPS, getVideoFileResolution } from '../../../helpers/ffprobe-utils'
+import { ffprobePromise, getMetadataFromFile, getVideoFileFPS, getVideoFileResolution } from '../../../helpers/ffprobe-utils'
 import { logger, loggerTagsFactory } from '../../../helpers/logger'
 import { CONFIG } from '../../../initializers/config'
-import { DEFAULT_AUDIO_RESOLUTION, MIMETYPES } from '../../../initializers/constants'
+import { MIMETYPES } from '../../../initializers/constants'
 import { sequelizeTypescript } from '../../../initializers/database'
 import { federateVideoIfNeeded } from '../../../lib/activitypub/videos'
 import { Notifier } from '../../../lib/notifier'
@@ -252,11 +253,13 @@ async function buildNewFile (videoPhysicalFile: express.VideoUploadFile) {
     metadata: await getMetadataFromFile(videoPhysicalFile.path)
   })
 
-  if (videoFile.isAudio()) {
-    videoFile.resolution = DEFAULT_AUDIO_RESOLUTION
+  const probe = await ffprobePromise(videoPhysicalFile.path)
+
+  if (await isAudioFile(videoPhysicalFile.path, probe)) {
+    videoFile.resolution = VideoResolution.H_NOVIDEO
   } else {
-    videoFile.fps = await getVideoFileFPS(videoPhysicalFile.path)
-    videoFile.resolution = (await getVideoFileResolution(videoPhysicalFile.path)).resolution
+    videoFile.fps = await getVideoFileFPS(videoPhysicalFile.path, probe)
+    videoFile.resolution = (await getVideoFileResolution(videoPhysicalFile.path, probe)).resolution
   }
 
   videoFile.filename = generateWebTorrentVideoFilename(videoFile.resolution, videoFile.extname)

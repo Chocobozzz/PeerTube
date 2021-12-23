@@ -26,8 +26,8 @@ import { extractVideo } from '@server/helpers/video'
 import { getHLSPublicFileUrl, getWebTorrentPublicFileUrl } from '@server/lib/object-storage'
 import { getFSTorrentFilePath } from '@server/lib/paths'
 import { isStreamingPlaylist, MStreamingPlaylistVideo, MVideo, MVideoWithHost } from '@server/types/models'
+import { VideoResolution, VideoStorage } from '@shared/models'
 import { AttributesOnly } from '@shared/typescript-utils'
-import { VideoStorage } from '@shared/models'
 import {
   isVideoFileExtnameValid,
   isVideoFileInfoHashValid,
@@ -39,7 +39,6 @@ import {
   LAZY_STATIC_PATHS,
   MEMOIZE_LENGTH,
   MEMOIZE_TTL,
-  MIMETYPES,
   STATIC_DOWNLOAD_PATHS,
   STATIC_PATHS,
   WEBSERVER
@@ -448,7 +447,7 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
   }
 
   isAudio () {
-    return !!MIMETYPES.AUDIO.EXT_MIMETYPE[this.extname]
+    return this.resolution === VideoResolution.H_NOVIDEO
   }
 
   isLive () {

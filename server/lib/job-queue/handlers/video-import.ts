@@ -21,9 +21,9 @@ import {
   VideoImportYoutubeDLPayloadType,
   VideoState
 } from '../../../../shared'
-import { VideoImportState } from '../../../../shared/models/videos'
+import { VideoImportState, VideoResolution } from '../../../../shared/models/videos'
 import { ThumbnailType } from '../../../../shared/models/videos/thumbnail.type'
-import { getDurationFromVideoFile, getVideoFileFPS, getVideoFileResolution } from '../../../helpers/ffprobe-utils'
+import { ffprobePromise, getDurationFromVideoFile, getVideoFileFPS, getVideoFileResolution } from '../../../helpers/ffprobe-utils'
 import { logger } from '../../../helpers/logger'
 import { getSecureTorrentName } from '../../../helpers/utils'
 import { createTorrentAndSetInfoHash, downloadWebTorrentVideo } from '../../../helpers/webtorrent'
@@ -36,6 +36,7 @@ import { MThumbnail } from '../../../types/models/video/thumbnail'
 import { federateVideoIfNeeded } from '../../activitypub/videos'
 import { Notifier } from '../../notifier'
 import { generateVideoMiniature } from '../../thumbnail'
+import { isAudioFile } from '@shared/extra-utils'
 
 async function processVideoImport (job: Job) {
   const payload = job.data as VideoImportPayload
@@ -114,9 +115,14 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
       throw new Error('The user video quota is exceeded with this video to import.')
     }
 
-    const { resolution } = await getVideoFileResolution(tempVideoPath)
-    const fps = await getVideoFileFPS(tempVideoPath)
-    const duration = await getDurationFromVideoFile(tempVideoPath)
+    const probe = await ffprobePromise(tempVideoPath)
+
+    const { resolution } = await isAudioFile(tempVideoPath, probe)
+      ? await getVideoFileResolution(tempVideoPath)
+      : { resolution: VideoResolution.H_NOVIDEO }
+
+    const fps = await getVideoFileFPS(tempVideoPath, probe)
+    const duration = await getDurationFromVideoFile(tempVideoPath, probe)
 
     // Prepare video file object for creation in database
     const fileExt = getLowercaseExtension(tempVideoPath)
