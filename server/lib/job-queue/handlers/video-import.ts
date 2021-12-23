@@ -118,8 +118,8 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
     const probe = await ffprobePromise(tempVideoPath)
 
     const { resolution } = await isAudioFile(tempVideoPath, probe)
-      ? await getVideoFileResolution(tempVideoPath)
-      : { resolution: VideoResolution.H_NOVIDEO }
+      ? { resolution: VideoResolution.H_NOVIDEO }
+      : await getVideoFileResolution(tempVideoPath)
 
     const fps = await getVideoFileFPS(tempVideoPath, probe)
     const duration = await getDurationFromVideoFile(tempVideoPath, probe)
