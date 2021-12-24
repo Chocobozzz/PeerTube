@@ -140,7 +140,7 @@ describe('Permanent live', function () {
   })
 
   it('Should be able to stream again in the permanent live', async function () {
-    this.timeout(20000)
+    this.timeout(60000)
 
     await servers[0].config.updateCustomSubConfig({
       newConfig: {
