@@ -20,7 +20,7 @@ export class SelectLanguagesComponent implements ControlValueAccessor, OnInit {
   @Input() maxLanguages: number
 
   selectedLanguages: ItemSelectCheckboxValue[]
-  availableLanguages: SelectOptionsItem[] = []
+  availableLanguages: (SelectOptionsItem & { groupOrder: number })[] = []
 
   allLanguagesGroup = $localize`All languages`
 
@@ -38,10 +38,20 @@ export class SelectLanguagesComponent implements ControlValueAccessor, OnInit {
     this.server.getVideoLanguages()
       .subscribe(
         languages => {
-          this.availableLanguages = [ { label: $localize`Unknown language`, id: '_unknown', group: this.allLanguagesGroup } ]
+          this.availableLanguages = [ {
+            label: $localize`Unknown language`,
+            id: '_unknown',
+            group: this.allLanguagesGroup,
+            groupOrder: 1
+          } ]
 
           this.availableLanguages = this.availableLanguages
-            .concat(languages.map(l => ({ label: l.label, id: l.id, group: this.allLanguagesGroup })))
+            .concat(languages.map(l => {
+              if (l.id === 'zxx') return { label: l.label, id: l.id, group: $localize`Other`, groupOrder: 0 }
+              return { label: l.label, id: l.id, group: this.allLanguagesGroup, groupOrder: 1 }
+            }))
+
+          this.availableLanguages.sort((a, b) => a.groupOrder - b.groupOrder)
 
           this.loaded = true
           this.writeValue(this.toWrite)
