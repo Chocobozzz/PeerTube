@@ -5,7 +5,13 @@ import { basename, join } from 'path'
 import { decachePlugin } from '@server/helpers/decache'
 import { MOAuthTokenUser, MUser } from '@server/types/models'
 import { getCompleteLocale } from '@shared/core-utils'
-import { ClientScriptJSON, PluginPackageJSON, PluginTranslation, PluginTranslationPathsJSON, RegisterServerHookOptions } from '@shared/models'
+import {
+  ClientScriptJSON,
+  PluginPackageJSON,
+  PluginTranslation,
+  PluginTranslationPathsJSON,
+  RegisterServerHookOptions
+} from '@shared/models'
 import { getHookType, internalRunHook } from '../../../shared/core-utils/plugins/hooks'
 import { PluginType } from '../../../shared/models/plugins/plugin.type'
 import { ServerHook, ServerHookName } from '../../../shared/models/plugins/server/server-hook.model'

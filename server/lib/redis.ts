@@ -1,31 +1,29 @@
 import express from 'express'
-import { createClient, RedisClient } from 'redis'
+import { createClient } from 'redis'
+import { exists } from '@server/helpers/custom-validators/misc'
 import { logger } from '../helpers/logger'
 import { generateRandomString } from '../helpers/utils'
+import { CONFIG } from '../initializers/config'
 import {
   CONTACT_FORM_LIFETIME,
-  USER_EMAIL_VERIFY_LIFETIME,
-  USER_PASSWORD_RESET_LIFETIME,
-  USER_PASSWORD_CREATE_LIFETIME,
-  VIEW_LIFETIME,
-  WEBSERVER,
+  RESUMABLE_UPLOAD_SESSION_LIFETIME,
   TRACKER_RATE_LIMITS,
-  RESUMABLE_UPLOAD_SESSION_LIFETIME
+  USER_EMAIL_VERIFY_LIFETIME,
+  USER_PASSWORD_CREATE_LIFETIME,
+  USER_PASSWORD_RESET_LIFETIME,
+  VIEW_LIFETIME,
+  WEBSERVER
 } from '../initializers/constants'
-import { CONFIG } from '../initializers/config'
-import { exists } from '@server/helpers/custom-validators/misc'
 
-type CachedRoute = {
-  body: string
-  contentType?: string
-  statusCode?: string
-}
+// Only used for typings
+const redisClientWrapperForType = () => createClient<{}>()
 
 class Redis {
 
   private static instance: Redis
   private initialized = false
-  private client: RedisClient
+  private connected = false
+  private client: ReturnType<typeof redisClientWrapperForType>
   private prefix: string
 
   private constructor () {
@@ -38,21 +36,24 @@ class Redis {
 
     this.client = createClient(Redis.getRedisClientOptions())
 
+    this.client.connect()
+      .then(() => { this.connected = true })
+      .catch(err => {
+        logger.error('Cannot connect to redis', { err })
+        process.exit(-1)
+      })
+
     this.client.on('error', err => {
       logger.error('Error in Redis client.', { err })
       process.exit(-1)
     })
-
-    if (CONFIG.REDIS.AUTH) {
-      this.client.auth(CONFIG.REDIS.AUTH)
-    }
 
     this.prefix = 'redis-' + WEBSERVER.HOST + '-'
   }
 
   static getRedisClientOptions () {
     return Object.assign({},
-      (CONFIG.REDIS.AUTH && CONFIG.REDIS.AUTH != null) ? { password: CONFIG.REDIS.AUTH } : {},
+      CONFIG.REDIS.AUTH ? { password: CONFIG.REDIS.AUTH } : {},
       (CONFIG.REDIS.DB) ? { db: CONFIG.REDIS.DB } : {},
       (CONFIG.REDIS.HOSTNAME && CONFIG.REDIS.PORT)
         ? { host: CONFIG.REDIS.HOSTNAME, port: CONFIG.REDIS.PORT }
@@ -66,6 +67,10 @@ class Redis {
 
   getPrefix () {
     return this.prefix
+  }
+
+  isConnected () {
+    return this.connected
   }
 
   /* ************ Forgot password ************ */
@@ -144,25 +149,6 @@ class Redis {
 
   async doesTrackerBlockIPExist (ip: string) {
     return this.exists(this.generateTrackerBlockIPKey(ip))
-  }
-
-  /* ************ API cache ************ */
-
-  async getCachedRoute (req: express.Request) {
-    const cached = await this.getObject(this.generateCachedRouteKey(req))
-
-    return cached as CachedRoute
-  }
-
-  setCachedRoute (req: express.Request, body: any, lifetime: number, contentType?: string, statusCode?: number) {
-    const cached: CachedRoute = Object.assign(
-      {},
-      { body: body.toString() },
-      (contentType) ? { contentType } : null,
-      (statusCode) ? { statusCode: statusCode.toString() } : null
-    )
-
-    return this.setObject(this.generateCachedRouteKey(req), cached, lifetime)
   }
 
   /* ************ Video views stats ************ */
@@ -277,10 +263,6 @@ class Redis {
 
   /* ************ Keys generation ************ */
 
-  generateCachedRouteKey (req: express.Request) {
-    return req.method + '-' + req.originalUrl
-  }
-
   private generateLocalVideoViewsKeys (videoId?: Number) {
     return { setKey: `local-video-views-buffer`, videoKey: `local-video-views-buffer-${videoId}` }
   }
@@ -320,125 +302,45 @@ class Redis {
   /* ************ Redis helpers ************ */
 
   private getValue (key: string) {
-    return new Promise<string>((res, rej) => {
-      this.client.get(this.prefix + key, (err, value) => {
-        if (err) return rej(err)
-
-        return res(value)
-      })
-    })
+    return this.client.get(this.prefix + key)
   }
 
   private getSet (key: string) {
-    return new Promise<string[]>((res, rej) => {
-      this.client.smembers(this.prefix + key, (err, value) => {
-        if (err) return rej(err)
-
-        return res(value)
-      })
-    })
+    return this.client.sMembers(this.prefix + key)
   }
 
   private addToSet (key: string, value: string) {
-    return new Promise<void>((res, rej) => {
-      this.client.sadd(this.prefix + key, value, err => err ? rej(err) : res())
-    })
+    return this.client.sAdd(this.prefix + key, value)
   }
 
   private deleteFromSet (key: string, value: string) {
-    return new Promise<void>((res, rej) => {
-      this.client.srem(this.prefix + key, value, err => err ? rej(err) : res())
-    })
+    return this.client.sRem(this.prefix + key, value)
   }
 
   private deleteKey (key: string) {
-    return new Promise<void>((res, rej) => {
-      this.client.del(this.prefix + key, err => err ? rej(err) : res())
-    })
+    return this.client.del(this.prefix + key)
   }
 
-  private deleteFieldInHash (key: string, field: string) {
-    return new Promise<void>((res, rej) => {
-      this.client.hdel(this.prefix + key, field, err => err ? rej(err) : res())
-    })
-  }
+  private async setValue (key: string, value: string, expirationMilliseconds: number) {
+    const result = await this.client.set(this.prefix + key, value, { PX: expirationMilliseconds })
 
-  private setValue (key: string, value: string, expirationMilliseconds: number) {
-    return new Promise<void>((res, rej) => {
-      this.client.set(this.prefix + key, value, 'PX', expirationMilliseconds, (err, ok) => {
-        if (err) return rej(err)
-
-        if (ok !== 'OK') return rej(new Error('Redis set result is not OK.'))
-
-        return res()
-      })
-    })
+    if (result !== 'OK') throw new Error('Redis set result is not OK.')
   }
 
   private removeValue (key: string) {
-    return new Promise<void>((res, rej) => {
-      this.client.del(this.prefix + key, err => {
-        if (err) return rej(err)
-
-        return res()
-      })
-    })
-  }
-
-  private setObject (key: string, obj: { [id: string]: string }, expirationMilliseconds: number) {
-    return new Promise<void>((res, rej) => {
-      this.client.hmset(this.prefix + key, obj, (err, ok) => {
-        if (err) return rej(err)
-        if (!ok) return rej(new Error('Redis mset result is not OK.'))
-
-        this.client.pexpire(this.prefix + key, expirationMilliseconds, (err, ok) => {
-          if (err) return rej(err)
-          if (!ok) return rej(new Error('Redis expiration result is not OK.'))
-
-          return res()
-        })
-      })
-    })
+    return this.client.del(this.prefix + key)
   }
 
   private getObject (key: string) {
-    return new Promise<{ [id: string]: string }>((res, rej) => {
-      this.client.hgetall(this.prefix + key, (err, value) => {
-        if (err) return rej(err)
-
-        return res(value)
-      })
-    })
-  }
-
-  private setValueInHash (key: string, field: string, value: string) {
-    return new Promise<void>((res, rej) => {
-      this.client.hset(this.prefix + key, field, value, (err) => {
-        if (err) return rej(err)
-
-        return res()
-      })
-    })
+    return this.client.hGetAll(this.prefix + key)
   }
 
   private increment (key: string) {
-    return new Promise<number>((res, rej) => {
-      this.client.incr(this.prefix + key, (err, value) => {
-        if (err) return rej(err)
-
-        return res(value)
-      })
-    })
+    return this.client.incr(this.prefix + key)
   }
 
   private exists (key: string) {
-    return new Promise<boolean>((res, rej) => {
-      this.client.exists(this.prefix + key, (err, existsNumber) => {
-        if (err) return rej(err)
-
-        return res(existsNumber === 1)
-      })
-    })
+    return this.client.exists(this.prefix + key)
   }
 
   static get Instance () {
