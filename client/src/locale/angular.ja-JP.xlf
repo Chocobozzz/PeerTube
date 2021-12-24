@@ -637,7 +637,7 @@
       </trans-unit>
       <trans-unit id="5975923297757530070" datatype="html">
         <source><x id="START_TAG_DIV"/>Default NSFW/sensitive videos policy<x id="CLOSE_TAG_DIV"/><x id="START_TAG_DIV_1"/>can be redefined by the users<x id="CLOSE_TAG_DIV"/></source>
-        <target state="translated"><x id="START_TAG_DIV"/>NSFW/センシティブな動画へのデフォルトポリシー<x id="CLOSE_TAG_DIV"/><x id="START_TAG_DIV_1"/>ユーザーは「設定」から変更できます<x id="CLOSE_TAG_DIV"/></target>
+        <target state="translated"><x id="START_TAG_DIV"/>NSFW/センシティブな動画へのデフォルト・ポリシー<x id="CLOSE_TAG_DIV"/><x id="START_TAG_DIV_1"/>ユーザーは「設定」から変更できます<x id="CLOSE_TAG_DIV"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="3386631781603205915">
@@ -1585,7 +1585,7 @@
       </trans-unit>
       <trans-unit id="2807610143550376912" datatype="html">
         <source>Your query will be matched against video names or descriptions, channel names.</source>
-        <target state="translated">検索ワードと動画のタイトル、その説明、またはチャンネルの名前と合った結果が表示されます。</target>
+        <target state="translated">動画のタイトル、その説明、またはチャンネルの名前と検索ワードが合った結果が表示されます。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">37</context>
@@ -1613,13 +1613,13 @@
       </trans-unit>
       <trans-unit id="3710530516408401495" datatype="html">
         <source>will list the matching channel</source>
-        <target state="translated">検索にマッチしたチャンネルを表示します</target>
+        <target state="translated">チャンネルのURLにマッチしたチャンネルを表示します</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">50</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">53</context></context-group>
       </trans-unit>
       <trans-unit id="6913541939335935215" datatype="html">
         <source>will list the matching video</source>
-        <target state="translated">検索にマッチした動画を表示します</target>
+        <target state="translated">動画のUUIDにマッチした動画を表示します</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">56</context></context-group>
       </trans-unit>
       <trans-unit id="8854094932942190741">
@@ -1662,12 +1662,12 @@
       </trans-unit>
       <trans-unit id="2316758236788716819">
         <source>After...</source>
-        <target>後…</target>
+        <target>この年より後…</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">85</context></context-group>
       </trans-unit>
       <trans-unit id="5418443214217152433">
         <source>Before...</source>
-        <target>前…</target>
+        <target>この年より前…</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">95</context></context-group>
       </trans-unit>
       <trans-unit id="7410432243549869948">
@@ -1730,7 +1730,7 @@
       </trans-unit>
       <trans-unit id="2252476112877289102">
         <source>All of these tags</source>
-        <target>これらのタグすべて</target>
+        <target>以下に入力した全てのタグ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">162</context></context-group>
       </trans-unit>
       <trans-unit id="4413784616961145955">
@@ -3829,7 +3829,7 @@
       </trans-unit>
       <trans-unit id="1780056719120519633" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {result} other {results}}"/> for "<x id="INTERPOLATION_1" equiv-text="{{ search }}"/>" </source>
-        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {result} other {results}}"/> 検索ワード "<x id="INTERPOLATION_1" equiv-text="{{ search }}"/>" </target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {件} other {件}}"/> 検索ワード "<x id="INTERPOLATION_1" equiv-text="{{ search }}"/>" </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">22,24</context>
@@ -5147,7 +5147,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8383401711408398806" datatype="html">
         <source>Federated videos (this instance + followed instances)</source>
-        <target state="translated">連合されている動画（このインスタンスとこのインスタンスからフォローされているインスタンスの)</target>
+        <target state="translated">連合動画（ローカル動画とフォローしているインスタンスの動画)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">90</context>
@@ -5219,7 +5219,7 @@ color: red;
       </trans-unit>
       <trans-unit id="7377817702119089263">
         <source>Default policy on videos containing sensitive content</source>
-        <target>センシティブなコンテンツを含む動画のデフォルトポリシー</target>
+        <target>センシティブなコンテンツを含む動画へのデフォルト・ポリシー</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">4</context></context-group>
       </trans-unit>
       <trans-unit id="7350483582490037954" datatype="html">
@@ -6382,7 +6382,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5019568087038659501" datatype="html">
         <source>Federated</source>
-        <target state="translated">連合されている動画を含む</target>
+        <target state="translated">連合動画を含む</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">124</context></context-group>
       </trans-unit>
       <trans-unit id="1949800099101277248" datatype="html">
@@ -8497,7 +8497,7 @@ color: red;
       </trans-unit>
       <trans-unit id="1787083504545967">
         <source>Relevance</source>
-        <target>関連性</target>
+        <target>関連性の高さ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.ts</context><context context-type="linenumber">74</context></context-group>
       </trans-unit>
       <trans-unit id="7944277186358179990">
@@ -8538,7 +8538,7 @@ color: red;
       </trans-unit>
       <trans-unit id="7804724824750282316" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {result} other {results}}"/></source>
-        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {result} other {results}}"/></target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {件} other {件}}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search.component.html</context>
           <context context-type="linenumber">5</context>
