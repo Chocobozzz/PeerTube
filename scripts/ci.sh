@@ -40,7 +40,10 @@ findTestFiles () {
     find $1 -type f -name "*.js" $exception | xargs echo
 }
 
-if [ "$1" = "client" ]; then
+if [ "$1" = "types" ]; then
+    npm run generate-types-package
+    npm run tsc -- --noEmit --esModuleInterop types/tests/test.ts
+elif [ "$1" = "client" ]; then
     npm run build
 
     feedsFiles=$(findTestFiles ./dist/server/tests/feeds)

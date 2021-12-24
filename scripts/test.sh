@@ -2,6 +2,7 @@
 
 set -eu
 
+npm run ci -- types
 npm run ci -- client
 npm run ci -- cli-plugin
 npm run ci -- api-1

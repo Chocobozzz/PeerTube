@@ -37,7 +37,6 @@
   - [Update README](#update-readme)
   - [Update package.json](#update-packagejson)
   - [Write code](#write-code)
-  - [Typescript](#typescript)
   - [Add translations](#add-translations)
   - [Build your plugin](#build-your-plugin)
   - [Test your plugin/theme](#test-your-plugintheme)
@@ -880,22 +879,23 @@ And if you don't need CSS or client script files, use an empty `array`:
 ### Write code
 
 Now you can register hooks or settings, write CSS and add static directories to your plugin or your theme :)
+It's up to you to check the code you write will be compatible with the PeerTube NodeJS version, and will be supported by web browsers.
 
-**Caution:** It's up to you to check the code you write will be compatible with the PeerTube NodeJS version,
-and will be supported by web browsers.
+**JavaScript**
+
 If you want to write modern JavaScript, please use a transpiler like [Babel](https://babeljs.io/).
-If you want to use __Typescript__ see section below.
 
-### Typescript
+**Typescript**
 
-You can add __PeerTube__ types as dev dependencies:
+If you want to use __Typescript__, you can add __PeerTube__ types as dev dependencies:
+
 ```
 npm install --save-dev @peertube/peertube-types
 ```
 
 This package exposes *server* definition files by default:
 ```ts
-import { RegisterServerOptions } from '@peertube/peertube-types/server/types'
+import { RegisterServerOptions } from '@peertube/peertube-types'
 
 export async function register ({ registerHook }: RegisterServerOptions) {
   registerHook({
@@ -907,8 +907,8 @@ export async function register ({ registerHook }: RegisterServerOptions) {
 
 But it also exposes client types and various models used in __PeerTube__:
 ```ts
-import { RegisterClientOptions } from '@larriereguichet/peertube-types/client/types';
-import { Video } from '@larriereguichet/peertube-types/shared';
+import { Video } from '@peertube/peertube-types';
+import { RegisterClientOptions } from '@peertube/peertube-types/client';
 
 function register({ registerHook, peertubeHelpers }: RegisterClientOptions) {
   registerHook({
@@ -926,16 +926,14 @@ function register({ registerHook, peertubeHelpers }: RegisterClientOptions) {
       fetch(`${peertubeHelpers.getBaseRouterRoute()}/videos/${video.uuid}/captions`, {
         method: 'PUT',
         headers: peertubeHelpers.getAuthHeader(),
-      })
-              .then((res) => res.json())
-              .then((data) => console.log('Hi %s.', data));
+      }).then((res) => res.json())
+        .then((data) => console.log('Hi %s.', data));
     },
   });
 }
 
 export { register };
 ```
-> Other types are accessible from the shared path `@peertube/peertube-types/shared`.
 
 ### Add translations
 

@@ -23,6 +23,7 @@ async function run () {
 
   await remove(typesDistPath)
   execSync('npm run tsc -- -b --verbose types', { stdio: 'inherit' })
+  execSync(`npm run resolve-tspaths -- --project ${distTsConfigPath} --src ${typesDistPath} --out ${typesDistPath}`, { stdio: 'inherit' })
 
   const allDependencies = Object.assign(
     mainPackageJson.dependencies,
@@ -68,10 +69,6 @@ async function run () {
 
   console.log(`Writing git ignore to ${typesDistGitIgnorePath}`)
   await writeFile(typesDistGitIgnorePath, '*.tsbuildinfo')
-
-  console.log('Copying tsconfig files')
-  await copyFile(distTsConfigPath, resolve(typesDistPath, './tsconfig.json'))
-  await copyFile(resolve(cwd(), './tsconfig.base.json'), resolve(typesDistPath, './tsconfig.base.json'))
 
   await copyFile(resolve(typesPath, './README.md'), resolve(typesDistPath, './README.md'))
 }

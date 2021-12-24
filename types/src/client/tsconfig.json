@@ -1,6 +1,9 @@
 {
   "extends": "../../../tsconfig.base.json",
   "compilerOptions": {
+    "stripInternal": true,
+    "removeComments": false,
+    "emitDeclarationOnly": true,
     "outDir": "../../dist/client/",
     "rootDir": "./",
     "tsBuildInfoFile": "../../dist/tsconfig.client.types.tsbuildinfo"

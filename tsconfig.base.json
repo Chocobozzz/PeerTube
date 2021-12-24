@@ -27,7 +27,7 @@
     "paths": {
       "@server/*": [ "server/*" ],
       "@shared/*": [ "shared/*" ],
-      "@client/*": [ "client/src/*" ],
+      "@client/*": [ "client/src/*" ]
     },
     "resolveJsonModule": true,
     "strict": false,
