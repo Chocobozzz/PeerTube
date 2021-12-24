@@ -8,7 +8,7 @@
   [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)" dataKey="id"
   [showCurrentPageReport]="true" i18n-currentPageReportTemplate
   currentPageReportTemplate="Showing {{'{first}'}} to {{'{last}'}} of {{'{totalRecords}'}} imports"
-  (onPage)="onPage($event)" [expandedRowKeys]="expandedRows"
+  [expandedRowKeys]="expandedRows"
 >
   <ng-template pTemplate="header">
     <tr>

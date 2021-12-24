@@ -47,10 +47,14 @@ export abstract class RestTable {
       field: event.sortField
     }
 
+    this.rowsPerPage = event.rows
+
     this.pagination = {
       start: event.first,
       count: this.rowsPerPage
     }
+
+    this.expandedRows = {}
 
     this.reloadData()
     this.saveSort()
@@ -58,22 +62,6 @@ export abstract class RestTable {
 
   saveSort () {
     peertubeLocalStorage.setItem(this.getSortLocalStorageKey(), JSON.stringify(this.sort))
-  }
-
-  onPage (event: { first: number, rows: number }) {
-    logger('On page %o.', event)
-
-    if (this.rowsPerPage !== event.rows) {
-      this.rowsPerPage = event.rows
-      this.pagination = {
-        start: event.first,
-        count: this.rowsPerPage
-      }
-
-      this.reloadData()
-    }
-
-    this.expandedRows = {}
   }
 
   onSearch (search: string) {

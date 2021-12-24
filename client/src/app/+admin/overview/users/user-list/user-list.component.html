@@ -9,7 +9,7 @@
   [lazy]="true" (onLazyLoad)="loadLazy($event)" [lazyLoadOnInit]="false" [selectionPageOnly]="true"
   [showCurrentPageReport]="true" i18n-currentPageReportTemplate
   currentPageReportTemplate="Showing {{'{first}'}} to {{'{last}'}} of {{'{totalRecords}'}} users"
-  (onPage)="onPage($event)" [expandedRowKeys]="expandedRows"
+  [expandedRowKeys]="expandedRows"
 >
   <ng-template pTemplate="caption">
     <div class="caption">

@@ -5,12 +5,11 @@
 
 <p-table
   [value]="videos" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions"
-  [sortField]="sort.field" [sortOrder]="sort.order"  dataKey="id" [resizableColumns]="true" [(selection)]="selectedVideos"
+  [sortField]="sort.field" [sortOrder]="sort.order" dataKey="id" [resizableColumns]="true" [(selection)]="selectedVideos"
   [lazy]="true" (onLazyLoad)="loadLazy($event)" [lazyLoadOnInit]="false" [selectionPageOnly]="true"
   [showCurrentPageReport]="true" i18n-currentPageReportTemplate
   currentPageReportTemplate="Showing {{'{first}'}} to {{'{last}'}} of {{'{totalRecords}'}} videos"
-  (onPage)="onPage($event)" [expandedRowKeys]="expandedRows"
-  [ngClass]="{ loading: loading }"
+  [expandedRowKeys]="expandedRows" [ngClass]="{ loading: loading }"
 >
   <ng-template pTemplate="caption">
     <div class="caption">
