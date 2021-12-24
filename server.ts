@@ -41,7 +41,12 @@ checkFFmpeg(CONFIG)
     process.exit(-1)
   })
 
-checkNodeVersion()
+try {
+  checkNodeVersion()
+} catch (err) {
+  logger.error('Error in NodeJS check.', { err })
+  process.exit(-1)
+}
 
 import { checkConfig, checkActivityPubUrls, checkFFmpegVersion } from './server/initializers/checker-after-init'
 
