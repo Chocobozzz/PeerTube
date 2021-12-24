@@ -37,6 +37,7 @@
   - [Update README](#update-readme)
   - [Update package.json](#update-packagejson)
   - [Write code](#write-code)
+  - [Typescript](#typescript)
   - [Add translations](#add-translations)
   - [Build your plugin](#build-your-plugin)
   - [Test your plugin/theme](#test-your-plugintheme)
