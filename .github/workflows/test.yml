@@ -39,7 +39,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        test_suite: [ types, client, api-1, api-2, api-3, api-4, cli-plugin, lint, external-plugins ]
+        test_suite: [ client, api-1, api-2, api-3, api-4, cli-plugin, lint, external-plugins ]
 
     env:
       PGUSER: peertube
