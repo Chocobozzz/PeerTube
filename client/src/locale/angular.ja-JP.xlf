@@ -251,7 +251,7 @@
       </trans-unit>
       <trans-unit id="7385834259346199883" datatype="html">
         <source>Video stream</source>
-        <target state="translated">ビデオストリーム</target>
+        <target state="translated">動画ストリーム</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.html</context><context context-type="linenumber">85</context></context-group>
       </trans-unit>
       <trans-unit id="5496771215105419189" datatype="html">
@@ -602,7 +602,7 @@
       </trans-unit>
       <trans-unit id="2949829240129672512">
         <source>Using a syndication feed</source>
-        <target>フィードを使用</target>
+        <target>RSSフィードを使用</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">68</context></context-group>
       </trans-unit>
       <trans-unit id="7695158742270602420">
@@ -986,7 +986,7 @@
       </trans-unit>
       <trans-unit id="3238209155172574367">
         <source>Forgot your password</source>
-        <target>パスワードをお忘れですか</target>
+        <target>パスワードをお忘れですか？</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">96</context></context-group>
       </trans-unit>
       <trans-unit id="87327320394367488" datatype="html">
@@ -1238,7 +1238,7 @@
       </trans-unit>
       <trans-unit id="1420294365005204590" datatype="html">
         <source>These settings apply only to your session on this instance.</source>
-        <target state="translated">これらの設定はこのインスタンスでの現在のセッションにのみ適用されます。</target>
+        <target state="translated">これらの設定は、このインスタンスでの現在のセッションにのみ適用されます。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/quick-settings-modal.component.html</context>
           <context context-type="linenumber">8</context>
@@ -2717,7 +2717,7 @@
       </trans-unit>
       <trans-unit id="2935783216050341269" datatype="html">
         <source>the sharing system used for this video implies that some technical information about your system (such as a public IP address) can be sent to other peers.</source>
-        <target state="translated">動画再生の際に使用される共有システムは、あなたのシステムの技術的情報（例えば、公開IPアドレスなど）が他のピアに送信される事を暗に意味しています。</target>
+        <target state="translated">動画再生の際に使用されるP2P機能は、あなたのシステムの技術的情報（例えば、公開IPアドレスなど）が他のピアに送信される事を暗に意味しています。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/privacy-concerns.component.html</context><context context-type="linenumber">5</context></context-group>
       </trans-unit>
       <trans-unit id="4619188387782427495">
@@ -4052,7 +4052,7 @@
       </trans-unit>
       <trans-unit id="8953934448427251062" datatype="html">
         <source>The <x id="START_LINK"/>sharing system<x id="CLOSE_LINK"/> implies that some technical information about your system (such as a public IP address) can be sent to other peers, but greatly helps to reduce server load.</source>
-        <target state="translated"><x id="START_LINK"/>共有システム<x id="CLOSE_LINK"/>は、あなたのシステムの技術的情報（例えば、公開IPアドレスなど）が他のピアに送信される事を暗に意味していますが、サーバーへの負荷を軽減することへの大きな助けとなります。</target>
+        <target state="translated"><x id="START_LINK"/>P2P機能<x id="CLOSE_LINK"/>は、あなたのシステムの技術的情報（例えば、公開IPアドレスなど）が他のピアに送信される事を暗に意味していますが、サーバーへの負荷を軽減することへの大きな助けとなります。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
       <trans-unit id="34094919610906740" datatype="html">
@@ -5236,7 +5236,7 @@ color: red;
       </trans-unit>
       <trans-unit id="2864176699435587977" datatype="html">
         <source>Only display videos in the following languages/subtitles</source>
-        <target state="translated">次の言語の動画および字幕のみが表示されます</target>
+        <target state="needs-translation">Only display videos in the following languages/subtitles</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">25</context></context-group>
       </trans-unit>
       <trans-unit id="1534085756270333258" datatype="html">
@@ -6285,7 +6285,7 @@ color: red;
       </trans-unit>
       <trans-unit id="7981235640417633362" datatype="html">
         <source>The channel name is a unique identifier of your channel on this and all the other instances. It's as unique as an email address, which makes it easy for other people to interact with it.</source>
-        <target state="translated">チャンネル名はこのインスタンスだけでなく、全ての他のインスタンスでもあなただけの固有のものです。メールアドレスのように固有のものであり、これによって他のユーザーとの交流が簡単にできます。</target>
+        <target state="translated">チャンネル名はこのインスタンスだけでなく、他の全てのインスタンスにおいても、あなただけの唯一のものです。メールアドレスのようにあなた固有のものであり、このチャンネル名によって他のユーザーとの交流が簡単にできます。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register-step-channel.component.html</context><context context-type="linenumber">42</context></context-group>
       </trans-unit>
       <trans-unit id="5203776997447520497" datatype="html">
@@ -6295,7 +6295,7 @@ color: red;
       </trans-unit>
       <trans-unit id="7440807341905682986" datatype="html">
         <source>I am at least <x id="INTERPOLATION" equiv-text="{{ minimumAge }}"/> years old and agree to the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;terms-anchor&quot; (click)=&quot;onTermsClick($event)&quot; href='#'&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;hasCodeOfConduct&quot;&gt;"/> and to the <x id="START_LINK_1" equiv-text="&lt;a (click)=&quot;onCodeOfConductClick($event)&quot; href='#'&gt;"/>Code of Conduct<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/> of this instance </source>
-        <target state="translated">私は少なくとも<x id="INTERPOLATION" equiv-text="{{ minimumAge }}"/>歳以上でこのインスタンスの<x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;terms-anchor&quot; (click)=&quot;onTermsClick($event)&quot; href='#'&gt;"/>利用規約<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;hasCodeOfConduct&quot;&gt;"/>と<x id="START_LINK_1" equiv-text="&lt;a (click)=&quot;onCodeOfConductClick($event)&quot; href='#'&gt;"/>行動規範<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/>に同意します </target>
+        <target state="translated">私は少なくとも<x id="INTERPOLATION" equiv-text="{{ minimumAge }}"/>歳以上で、このインスタンスの<x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;terms-anchor&quot; (click)=&quot;onTermsClick($event)&quot; href='#'&gt;"/>利用規約<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;hasCodeOfConduct&quot;&gt;"/>と<x id="START_LINK_1" equiv-text="&lt;a (click)=&quot;onCodeOfConductClick($event)&quot; href='#'&gt;"/>行動規範<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/>に同意します </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register-step-terms.component.html</context>
           <context context-type="linenumber">5,10</context>
@@ -6303,7 +6303,7 @@ color: red;
       </trans-unit>
       <trans-unit id="7326471570669373149" datatype="html">
         <source>The username is a unique identifier of your account on this and all the other instances. It's as unique as an email address, which makes it easy for other people to interact with it.</source>
-        <target state="translated">ユーザー名はこのインスタンスだけでなく、全ての他のインスタンスでもあなただけの固有のものです。メールアドレスのように固有のものであり、これによって他のユーザーとの交流が簡単にできます。</target>
+        <target state="translated">ユーザー名はこのインスタンスだけでなく、他の全てのインスタンスにおいても、あなただけの唯一のものです。メールアドレスのようにあなた固有のものであり、このユーザー名によって他のユーザーとの交流が簡単にできます。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register-step-user.component.html</context><context context-type="linenumber">35</context></context-group>
       </trans-unit>
       <trans-unit id="2770947245861951784" datatype="html">
