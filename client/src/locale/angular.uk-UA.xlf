@@ -4462,7 +4462,7 @@
       </trans-unit>
       <trans-unit id="4719342289581047890" datatype="html">
         <source>Allow import with a torrent file or a magnet URI</source>
-        <target state="new">Allow import with a torrent file or a magnet URI</target>
+        <target state="translated">Дозволити імпортування за допомогою торент-файлу або магнет-URI</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">276</context></context-group>
       </trans-unit>
       <trans-unit id="3950258704315544174" datatype="html">
@@ -4477,7 +4477,7 @@
       </trans-unit>
       <trans-unit id="7026684190224451991" datatype="html">
         <source>Max video channels per user</source>
-        <target state="new">Max video channels per user</target>
+        <target state="translated">Найбільша кількість відеоканалів на користувача</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">312</context></context-group>
       </trans-unit>
       <trans-unit id="3840267063842708224" datatype="html">
@@ -4487,7 +4487,7 @@
       </trans-unit>
       <trans-unit id="3428986951244800347" datatype="html">
         <source>Block new videos automatically</source>
-        <target state="new">Block new videos automatically</target>
+        <target state="translated">Автоматично блокувати нові відео</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">290</context></context-group>
       </trans-unit>
       <trans-unit id="2054846790157376783" datatype="html">
@@ -4532,12 +4532,12 @@
       </trans-unit>
       <trans-unit id="8524278911521465398" datatype="html">
         <source>Disable local search in search bar</source>
-        <target state="new">Disable local search in search bar</target>
+        <target state="translated">Вимкнути локальний пошук у панелі пошуку</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">390</context></context-group>
       </trans-unit>
       <trans-unit id="6568991917245875948" datatype="html">
         <source>Otherwise the local search stays used by default</source>
-        <target state="new">Otherwise the local search stays used by default</target>
+        <target state="translated">Інакше локальний пошук буде використано типовим</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">400</context></context-group>
       </trans-unit>
       <trans-unit id="4444955208013675027" datatype="html">
