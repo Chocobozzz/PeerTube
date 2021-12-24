@@ -118,7 +118,7 @@
       </trans-unit>
       <trans-unit id="5354239156470982824" datatype="html">
         <source>Your instance has <x id="START_LINK"/>a new follower<x id="CLOSE_LINK"/> (<x id="INTERPOLATION"/>) <x id="START_TAG_NG_CONTAINER"/> awaiting your approval<x id="CLOSE_TAG_NG_CONTAINER"/></source>
-        <target state="needs-translation">Your instance has <x id="START_LINK"/>a new follower<x id="CLOSE_LINK"/> (<x id="INTERPOLATION"/>) <x id="START_TAG_NG_CONTAINER"/> awaiting your approval<x id="CLOSE_TAG_NG_CONTAINER"/></target>
+        <target state="translated">あなたのインスタンス宛てに<x id="START_LINK"/>新しいフォロワー<x id="CLOSE_LINK"/> (<x id="INTERPOLATION"/>) <x id="START_TAG_NG_CONTAINER"/> が承認を待っています。<x id="CLOSE_TAG_NG_CONTAINER"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">180</context></context-group>
       </trans-unit>
       <trans-unit id="325842756252267394" datatype="html">
@@ -144,7 +144,7 @@
       </trans-unit>
       <trans-unit id="5421414445136873229" datatype="html">
         <source>The notification points to content now unavailable</source>
-        <target state="new"> The notification points to content now unavailable </target>
+        <target state="translated">通知は、現在利用できないコンテンツを指しています</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">213</context></context-group>
       </trans-unit>
       <trans-unit id="3321250177023376249" datatype="html">
@@ -195,7 +195,7 @@
       </trans-unit>
       <trans-unit id="2816407313459209541" datatype="html">
         <source>Your report will be sent to moderators of <x id="INTERPOLATION"/><x id="START_TAG_NG_CONTAINER"/> and will be forwarded to the video origin (<x id="INTERPOLATION_1"/>) too<x id="CLOSE_TAG_NG_CONTAINER"/>. </source>
-        <target state="needs-translation">Your report will be sent to moderators of <x id="INTERPOLATION"/><x id="START_TAG_NG_CONTAINER"/> and will be forwarded to the video origin (<x id="INTERPOLATION_1"/>) too<x id="CLOSE_TAG_NG_CONTAINER"/>. </target>
+        <target state="translated">あなたの通報は<x id="INTERPOLATION"/><x id="START_TAG_NG_CONTAINER"/>のモデレーターに送信され、ビデオの発信元 (<x id="INTERPOLATION_1"/>) <x id="CLOSE_TAG_NG_CONTAINER"/>にも送信されます。 </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/video-report.component.html</context><context context-type="linenumber">72</context></context-group>
       </trans-unit>
       <trans-unit id="6990204431018013063" datatype="html">
