@@ -1,4 +1,3 @@
-import express from 'express'
 import { createClient } from 'redis'
 import { exists } from '@server/helpers/custom-validators/misc'
 import { logger } from '../helpers/logger'

@@ -6,47 +6,49 @@
  * Александр
  * josé m
  * Simon Brosdetzko
- * Jeff Huang
  * Berto Te
- * kimsible
+ * Jeff Huang
  * kontrollanten
+ * kimsible
  * Laurent Ettouati
  * Phongpanot
  * Clemens Schielicke
+ * Jiri Podhorecky
+ * GunChleoc
  * Racida S
  * Marcin Mikołajczak
- * GunChleoc
+ * Tirifto
  * Zet
  * Kim
- * Tirifto
- * Vodoyo Kamal
  * Ihor Hordiichuk
+ * Hồ Nhất Duy
+ * Vodoyo Kamal
  * Kimsible
  * Felix Ableitner
  * Frank Sträter
- * Hồ Nhất Duy
  * Gérald Niel
+ * DignifiedSilence
  * Duy
+ * John Livingston
  * Slimane Selyan AMIRI
  * Mark Van den Borre
  * x
- * John Livingston
  * Julien Maulny
  * Eivind Ødegård
  * Jorropo
  * Josh Morel
  * BO41
  * Balázs Meskó
+ * Besnik Bleta
  * vachan
  * Francesc
  * Quentin PAGÈS
  * mando laress
+ * Florian CUNY
  * Cedric F
  * Marc Strange
- * Besnik Bleta
+ * Manuel Viens
  * ButterflyOfFire
- * DignifiedSilence
- * Florian CUNY
  * Martin Hoefler
  * Xabi
  * buoyantair
@@ -55,11 +57,11 @@
  * Luca Calcaterra
  * Attila F
  * Caroline Chuong
- * Manuel Viens
  * Porrumentzio
  * Siourdakis Thanos
  * Thomas Citharel
  * knuxify
+ * lutangar
  * Agron Selimaj
  * Benjamin Bouvier
  * Joe Bill
@@ -97,6 +99,7 @@
  * Micah Elizabeth Scott
  * SVNET Libre
  * Thomas Kuntz
+ * Tony Simoes
  * William Lahti
  * Wirebrass
  * Yury Bulka
@@ -133,6 +136,7 @@
  * Andréas Livet
  * Andrés Maldonado
  * Arco
+ * Asier Iturralde Sarasola
  * Asr128
  * Aurélien Bertron
  * Axel Viala
@@ -148,6 +152,7 @@
  * Iñigo A
  * Jefferson Hernandez
  * Joan Montané
+ * Jocelyn Jaubert
  * Johan Fleury
  * Kiro
  * LecygneNoir
@@ -196,7 +201,6 @@
  * Hjalte
  * Hugo Peixoto
  * Jelle Besseling
- * Jocelyn Jaubert
  * Julien Lemaire
  * Lucas Teixeira
  * Millicent Billette
@@ -221,7 +225,6 @@
  * framail
  * les
  * libertas
- * lutangar
  * mater
  * merty
  * plr20
@@ -252,12 +255,12 @@
  * Armin Kunkel
  * Artem Prosvetov
  * Arthur Lutz
- * Asier Iturralde Sarasola
  * Austin Heap
  * Autom
  * Ben Abbott
  * Ben Lubar
  * Benjamin EWFT
+ * Benoît Piédallu
  * Brad Johnson
  * Cadence Ember
  * Cale
@@ -365,6 +368,7 @@
  * Rech
  * Rep Dolsay
  * Robin
+ * Rostyslav Haitkulov
  * Sankar
  * SansPseudoFix
  * Sebastian Paweł Wolski
@@ -391,6 +395,7 @@
  * WhiredPlanck
  * WingsLikeEagles
  * Yann Sionneau
+ * Yaron Shahrabani
  * Yorwba
  * Yun
  * Zig-03
@@ -419,6 +424,7 @@
  * mahdi
  * memorybox
  * mike stedman
+ * mj-saunders
  * morteza
  * norrist
  * osauzet
