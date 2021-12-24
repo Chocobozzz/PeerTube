@@ -1,6 +1,5 @@
 import express from 'express'
-import { UserVideoRateUpdate } from '../../../../shared'
-import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
+import { HttpStatusCode, UserVideoRateUpdate } from '@shared/models'
 import { logger } from '../../../helpers/logger'
 import { VIDEO_RATE_TYPES } from '../../../initializers/constants'
 import { sequelizeTypescript } from '../../../initializers/database'

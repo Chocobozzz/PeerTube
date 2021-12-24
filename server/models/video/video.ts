@@ -33,13 +33,22 @@ import { VideoPathManager } from '@server/lib/video-path-manager'
 import { getServerActor } from '@server/models/application/application'
 import { ModelCache } from '@server/models/model-cache'
 import { buildVideoEmbedPath, buildVideoWatchPath, pick, uuidToShort } from '@shared/core-utils'
-import { VideoFile, VideoInclude } from '@shared/models'
+import {
+  ResultList,
+  ThumbnailType,
+  UserRight,
+  Video,
+  VideoDetails,
+  VideoFile,
+  VideoInclude,
+  VideoObject,
+  VideoPrivacy,
+  VideoRateType,
+  VideoState,
+  VideoStorage,
+  VideoStreamingPlaylistType
+} from '@shared/models'
 import { AttributesOnly } from '@shared/typescript-utils'
-import { ResultList, UserRight, VideoPrivacy, VideoState } from '../../../shared'
-import { VideoObject } from '../../../shared/models/activitypub/objects'
-import { Video, VideoDetails, VideoRateType, VideoStorage } from '../../../shared/models/videos'
-import { ThumbnailType } from '../../../shared/models/videos/thumbnail.type'
-import { VideoStreamingPlaylistType } from '../../../shared/models/videos/video-streaming-playlist.type'
 import { peertubeTruncate } from '../../helpers/core-utils'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import { exists, isBooleanValid } from '../../helpers/custom-validators/misc'

@@ -4,10 +4,7 @@ import { tokensRouter } from '@server/controllers/api/users/token'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { OAuthTokenModel } from '@server/models/oauth/oauth-token'
 import { MUser, MUserAccountDefault } from '@server/types/models'
-import { UserCreate, UserCreateResult, UserRight, UserRole, UserUpdate } from '../../../../shared'
-import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
-import { UserAdminFlag } from '../../../../shared/models/users/user-flag.model'
-import { UserRegister } from '../../../../shared/models/users/user-register.model'
+import { HttpStatusCode, UserAdminFlag, UserCreate, UserCreateResult, UserRegister, UserRight, UserRole, UserUpdate } from '@shared/models'
 import { auditLoggerFactory, getAuditIdFromRes, UserAuditView } from '../../../helpers/audit-logger'
 import { logger } from '../../../helpers/logger'
 import { generateRandomString, getFormattedObjects } from '../../../helpers/utils'
@@ -210,7 +207,7 @@ async function createUser (req: express.Request, res: express.Response) {
     logger.info('Sending to user %s a create password email', body.username)
     const verificationString = await Redis.Instance.setCreatePasswordVerificationString(user.id)
     const url = WEBSERVER.URL + '/reset-password?userId=' + user.id + '&verificationString=' + verificationString
-    await Emailer.Instance.addPasswordCreateEmailJob(userToCreate.username, user.email, url)
+    Emailer.Instance.addPasswordCreateEmailJob(userToCreate.username, user.email, url)
   }
 
   Hooks.runAction('action:api.user.created', { body, user, account, videoChannel, req, res })

@@ -1,6 +1,6 @@
 import { values } from 'lodash'
 import validator from 'validator'
-import { UserRole } from '../../../shared'
+import { UserRole } from '@shared/models'
 import { isEmailEnabled } from '../../initializers/config'
 import { CONSTRAINTS_FIELDS, NSFW_POLICY_TYPES } from '../../initializers/constants'
 import { exists, isArray, isBooleanValid } from './misc'

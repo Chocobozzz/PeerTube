@@ -4,6 +4,7 @@ import { decode } from 'magnet-uri'
 import parseTorrent, { Instance } from 'parse-torrent'
 import { join } from 'path'
 import { isVideoFileExtnameValid } from '@server/helpers/custom-validators/videos'
+import { Hooks } from '@server/lib/plugins/hooks'
 import { ServerConfigManager } from '@server/lib/server-config-manager'
 import { setVideoTags } from '@server/lib/video'
 import { FilteredModelAttributes } from '@server/types'
@@ -18,15 +19,14 @@ import {
   MVideoWithBlacklistLight
 } from '@server/types/models'
 import { MVideoImportFormattable } from '@server/types/models/video/video-import'
-import { ServerErrorCode, VideoImportCreate, VideoImportState, VideoPrivacy, VideoState } from '../../../../shared'
-import { ThumbnailType } from '../../../../shared/models/videos/thumbnail.type'
+import { ServerErrorCode, ThumbnailType, VideoImportCreate, VideoImportState, VideoPrivacy, VideoState } from '@shared/models'
 import { auditLoggerFactory, getAuditIdFromRes, VideoImportAuditView } from '../../../helpers/audit-logger'
 import { moveAndProcessCaptionFile } from '../../../helpers/captions-utils'
 import { isArray } from '../../../helpers/custom-validators/misc'
 import { cleanUpReqFiles, createReqFiles } from '../../../helpers/express-utils'
 import { logger } from '../../../helpers/logger'
 import { getSecureTorrentName } from '../../../helpers/utils'
-import { YoutubeDLWrapper, YoutubeDLInfo } from '../../../helpers/youtube-dl'
+import { YoutubeDLInfo, YoutubeDLWrapper } from '../../../helpers/youtube-dl'
 import { CONFIG } from '../../../initializers/config'
 import { MIMETYPES } from '../../../initializers/constants'
 import { sequelizeTypescript } from '../../../initializers/database'
@@ -38,7 +38,6 @@ import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate, videoIm
 import { VideoModel } from '../../../models/video/video'
 import { VideoCaptionModel } from '../../../models/video/video-caption'
 import { VideoImportModel } from '../../../models/video/video-import'
-import { Hooks } from '@server/lib/plugins/hooks'
 
 const auditLogger = auditLoggerFactory('video-imports')
 const videoImportsRouter = express.Router()

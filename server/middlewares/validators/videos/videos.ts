@@ -8,9 +8,7 @@ import { getServerActor } from '@server/models/application/application'
 import { ExpressPromiseHandler } from '@server/types/express'
 import { MUserAccountId, MVideoFullLight } from '@server/types/models'
 import { getAllPrivacies } from '@shared/core-utils'
-import { VideoInclude } from '@shared/models'
-import { ServerErrorCode, UserRight, VideoPrivacy } from '../../../../shared'
-import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
+import { HttpStatusCode, ServerErrorCode, UserRight, VideoInclude, VideoPrivacy } from '@shared/models'
 import {
   exists,
   isBooleanValid,

@@ -1,6 +1,6 @@
 import express from 'express'
 import { MVideo } from '@server/types/models'
-import { HttpStatusCode } from '../../../../shared'
+import { HttpStatusCode } from '@shared/models'
 import { logger } from '../../../helpers/logger'
 import { areValidationErrors, doesVideoExist, isValidVideoIdParam } from '../shared'
 

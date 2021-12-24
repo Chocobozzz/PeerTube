@@ -1,7 +1,6 @@
 import { Transaction } from 'sequelize'
 import { MActorId, MVideoRedundancy, MVideoWithAllFiles } from '@server/types/models'
-import { CacheFileObject } from '../../../shared/index'
-import { VideoStreamingPlaylistType } from '../../../shared/models/videos/video-streaming-playlist.type'
+import { CacheFileObject, VideoStreamingPlaylistType } from '@shared/models'
 import { VideoRedundancyModel } from '../../models/redundancy/video-redundancy'
 
 async function createOrUpdateCacheFile (cacheFileObject: CacheFileObject, video: MVideoWithAllFiles, byActor: MActorId, t: Transaction) {

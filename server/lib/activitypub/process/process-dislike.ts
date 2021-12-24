@@ -1,5 +1,4 @@
-import { ActivityCreate, ActivityDislike } from '../../../../shared'
-import { DislikeObject } from '../../../../shared/models/activitypub/objects'
+import { ActivityCreate, ActivityDislike, DislikeObject } from '@shared/models'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { sequelizeTypescript } from '../../../initializers/database'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'

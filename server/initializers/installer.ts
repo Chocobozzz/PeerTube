@@ -1,6 +1,6 @@
 import { ensureDir, remove } from 'fs-extra'
 import passwordGenerator from 'password-generator'
-import { UserRole } from '../../shared'
+import { UserRole } from '@shared/models'
 import { logger } from '../helpers/logger'
 import { createApplicationActor, createUserAccountAndChannelAndPlaylist } from '../lib/user'
 import { ApplicationModel } from '../models/application/application'

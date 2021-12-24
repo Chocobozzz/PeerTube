@@ -11,7 +11,7 @@ import { moveToFailedMoveToObjectStorageState, moveToNextState } from '@server/l
 import { VideoModel } from '@server/models/video/video'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info'
 import { MStreamingPlaylistVideo, MVideo, MVideoFile, MVideoWithAllFiles } from '@server/types/models'
-import { MoveObjectStoragePayload, VideoStorage } from '../../../../shared'
+import { MoveObjectStoragePayload, VideoStorage } from '@shared/models'
 
 export async function processMoveToObjectStorage (job: Job) {
   const payload = job.data as MoveObjectStoragePayload

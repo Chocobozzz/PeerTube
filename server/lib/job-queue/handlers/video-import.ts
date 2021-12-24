@@ -1,6 +1,5 @@
 import { Job } from 'bull'
 import { move, remove, stat } from 'fs-extra'
-import { getLowercaseExtension } from '@shared/core-utils'
 import { retryTransactionWrapper } from '@server/helpers/database-utils'
 import { YoutubeDLWrapper } from '@server/helpers/youtube-dl'
 import { isPostImportVideoAccepted } from '@server/lib/moderation'
@@ -13,16 +12,19 @@ import { VideoPathManager } from '@server/lib/video-path-manager'
 import { buildNextVideoState } from '@server/lib/video-state'
 import { ThumbnailModel } from '@server/models/video/thumbnail'
 import { MVideoImportDefault, MVideoImportDefaultFiles, MVideoImportVideo } from '@server/types/models/video/video-import'
+import { getLowercaseExtension } from '@shared/core-utils'
+import { isAudioFile } from '@shared/extra-utils'
 import {
+  ThumbnailType,
   VideoImportPayload,
+  VideoImportState,
   VideoImportTorrentPayload,
   VideoImportTorrentPayloadType,
   VideoImportYoutubeDLPayload,
   VideoImportYoutubeDLPayloadType,
+  VideoResolution,
   VideoState
-} from '../../../../shared'
-import { VideoImportState, VideoResolution } from '../../../../shared/models/videos'
-import { ThumbnailType } from '../../../../shared/models/videos/thumbnail.type'
+} from '@shared/models'
 import { ffprobePromise, getDurationFromVideoFile, getVideoFileFPS, getVideoFileResolution } from '../../../helpers/ffprobe-utils'
 import { logger } from '../../../helpers/logger'
 import { getSecureTorrentName } from '../../../helpers/utils'
@@ -36,7 +38,6 @@ import { MThumbnail } from '../../../types/models/video/thumbnail'
 import { federateVideoIfNeeded } from '../../activitypub/videos'
 import { Notifier } from '../../notifier'
 import { generateVideoMiniature } from '../../thumbnail'
-import { isAudioFile } from '@shared/extra-utils'
 
 async function processVideoImport (job: Job) {
   const payload = job.data as VideoImportPayload

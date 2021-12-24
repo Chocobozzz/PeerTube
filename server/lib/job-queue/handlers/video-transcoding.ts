@@ -12,7 +12,7 @@ import {
   NewResolutionTranscodingPayload,
   OptimizeTranscodingPayload,
   VideoTranscodingPayload
-} from '../../../../shared'
+} from '@shared/models'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { computeLowerResolutionsToTranscode } from '../../../helpers/ffprobe-utils'
 import { logger, loggerTagsFactory } from '../../../helpers/logger'

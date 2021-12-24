@@ -1,6 +1,6 @@
 import express from 'express'
 import { InboxManager } from '@server/lib/activitypub/inbox-manager'
-import { Activity, ActivityPubCollection, ActivityPubOrderedCollection, RootActivity } from '../../../shared'
+import { Activity, ActivityPubCollection, ActivityPubOrderedCollection, RootActivity } from '@shared/models'
 import { HttpStatusCode } from '../../../shared/models/http/http-error-codes'
 import { isActivityValid } from '../../helpers/custom-validators/activitypub/activity'
 import { logger } from '../../helpers/logger'

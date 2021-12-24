@@ -1,10 +1,9 @@
 import express from 'express'
-import { OAuthClientLocal } from '../../../shared'
-import { HttpStatusCode } from '../../../shared/models/http/http-error-codes'
+import { OAuthClientModel } from '@server/models/oauth/oauth-client'
+import { HttpStatusCode, OAuthClientLocal } from '@shared/models'
 import { logger } from '../../helpers/logger'
 import { CONFIG } from '../../initializers/config'
 import { asyncMiddleware, openapiOperationDoc } from '../../middlewares'
-import { OAuthClientModel } from '../../models/oauth/oauth-client'
 
 const oauthClientsRouter = express.Router()
 

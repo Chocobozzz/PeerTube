@@ -6,10 +6,9 @@ import {
   MAccountVideoRateAccountUrl,
   MAccountVideoRateAccountVideo,
   MAccountVideoRateFormattable
-} from '@server/types/models/video/video-rate'
+} from '@server/types/models'
+import { AccountVideoRate, VideoRateType } from '@shared/models'
 import { AttributesOnly } from '@shared/typescript-utils'
-import { AccountVideoRate } from '../../../shared'
-import { VideoRateType } from '../../../shared/models/videos'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import { CONSTRAINTS_FIELDS, VIDEO_RATE_TYPES } from '../../initializers/constants'
 import { ActorModel } from '../actor/actor'

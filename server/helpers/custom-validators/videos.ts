@@ -2,8 +2,7 @@ import { UploadFilesForCheck } from 'express'
 import { values } from 'lodash'
 import magnetUtil from 'magnet-uri'
 import validator from 'validator'
-import { VideoInclude } from '@shared/models'
-import { VideoFilter, VideoPrivacy, VideoRateType } from '../../../shared'
+import { VideoFilter, VideoInclude, VideoPrivacy, VideoRateType } from '@shared/models'
 import {
   CONSTRAINTS_FIELDS,
   MIMETYPES,

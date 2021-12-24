@@ -2,10 +2,14 @@ import express from 'express'
 import { body, param, query, ValidationChain } from 'express-validator'
 import { ExpressPromiseHandler } from '@server/types/express'
 import { MUserAccountId } from '@server/types/models'
-import { UserRight, VideoPlaylistCreate, VideoPlaylistUpdate } from '../../../../shared'
-import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
-import { VideoPlaylistPrivacy } from '../../../../shared/models/videos/playlist/video-playlist-privacy.model'
-import { VideoPlaylistType } from '../../../../shared/models/videos/playlist/video-playlist-type.model'
+import {
+  HttpStatusCode,
+  UserRight,
+  VideoPlaylistCreate,
+  VideoPlaylistPrivacy,
+  VideoPlaylistType,
+  VideoPlaylistUpdate
+} from '@shared/models'
 import {
   isArrayOf,
   isIdOrUUIDValid,
