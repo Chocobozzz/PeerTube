@@ -6,7 +6,7 @@
 <p-table
   [value]="users" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions"
   [sortField]="sort.field" [sortOrder]="sort.order"  dataKey="id" [resizableColumns]="true" [(selection)]="selectedUsers"
-  [lazy]="true" (onLazyLoad)="loadLazy($event)" [lazyLoadOnInit]="false"
+  [lazy]="true" (onLazyLoad)="loadLazy($event)" [lazyLoadOnInit]="false" [selectionPageOnly]="true"
   [showCurrentPageReport]="true" i18n-currentPageReportTemplate
   currentPageReportTemplate="Showing {{'{first}'}} to {{'{last}'}} of {{'{totalRecords}'}} users"
   (onPage)="onPage($event)" [expandedRowKeys]="expandedRows"
