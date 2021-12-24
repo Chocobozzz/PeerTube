@@ -2,7 +2,7 @@ import { exists, isArray, isSafePath } from './misc'
 import validator from 'validator'
 import { PluginType } from '../../../shared/models/plugins/plugin.type'
 import { CONSTRAINTS_FIELDS } from '../../initializers/constants'
-import { PluginPackageJson } from '../../../shared/models/plugins/plugin-package-json.model'
+import { PluginPackageJSON } from '../../../shared/models/plugins/plugin-package-json.model'
 import { isUrlValid } from './activitypub/misc'
 
 const PLUGINS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.PLUGINS
@@ -84,7 +84,7 @@ function isThemeNameValid (name: string) {
   return isPluginNameValid(name)
 }
 
-function isPackageJSONValid (packageJSON: PluginPackageJson, pluginType: PluginType) {
+function isPackageJSONValid (packageJSON: PluginPackageJSON, pluginType: PluginType) {
   let result = true
   const badFields: string[] = []
 

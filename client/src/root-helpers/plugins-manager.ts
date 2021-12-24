@@ -7,7 +7,7 @@ import { getHookType, internalRunHook } from '@shared/core-utils/plugins/hooks'
 import {
   ClientHookName,
   clientHookObject,
-  ClientScript,
+  ClientScriptJSON,
   HTMLServerConfig,
   PluginClientScope,
   PluginType,
@@ -18,20 +18,20 @@ import {
   RegisterClientVideoFieldOptions,
   RegisteredExternalAuthConfig,
   ServerConfigPlugin
-} from '../../../shared/models'
+} from '@shared/models'
 import { environment } from '../environments/environment'
-import { ClientScript as ClientScriptModule } from '../types/client-script.model'
+import { ClientScript } from '../types'
 
 interface HookStructValue extends RegisterClientHookOptions {
   plugin: ServerConfigPlugin
-  clientScript: ClientScript
+  clientScript: ClientScriptJSON
 }
 
 type Hooks = { [ name: string ]: HookStructValue[] }
 
 type PluginInfo = {
   plugin: ServerConfigPlugin
-  clientScript: ClientScript
+  clientScript: ClientScriptJSON
   pluginType: PluginType
   isTheme: boolean
 }
@@ -248,7 +248,7 @@ class PluginsManager {
 
     const absURL = (environment.apiUrl || window.location.origin) + clientScript.script
     return dynamicImport(absURL)
-      .then((script: ClientScriptModule) => {
+      .then((script: ClientScript) => {
         return script.register({
           registerHook,
           registerVideoField,

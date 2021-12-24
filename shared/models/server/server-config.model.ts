@@ -1,5 +1,5 @@
 import { VideoPrivacy } from '../videos/video-privacy.enum'
-import { ClientScript } from '../plugins/plugin-package-json.model'
+import { ClientScriptJSON } from '../plugins/plugin-package-json.model'
 import { NSFWPolicyType } from '../videos/nsfw-policy.type'
 import { BroadcastMessageLevel } from './broadcast-message-level.type'
 
@@ -7,7 +7,7 @@ export interface ServerConfigPlugin {
   name: string
   version: string
   description: string
-  clientScripts: { [name: string]: ClientScript }
+  clientScripts: { [name: string]: ClientScriptJSON }
 }
 
 export interface ServerConfigTheme extends ServerConfigPlugin {

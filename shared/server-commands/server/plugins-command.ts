@@ -8,7 +8,7 @@ import {
   PeerTubePlugin,
   PeerTubePluginIndex,
   PeertubePluginIndexList,
-  PluginPackageJson,
+  PluginPackageJSON,
   PluginTranslation,
   PluginType,
   PublicServerSetting,
@@ -245,7 +245,7 @@ export class PluginsCommand extends AbstractCommand {
     return writeJSON(path, json)
   }
 
-  getPackageJSON (npmName: string): Promise<PluginPackageJson> {
+  getPackageJSON (npmName: string): Promise<PluginPackageJSON> {
     const path = this.getPackageJSONPath(npmName)
 
     return readJSON(path)
