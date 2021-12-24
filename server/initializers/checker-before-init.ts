@@ -119,6 +119,10 @@ function checkNodeVersion () {
   if (major <= 10) {
     throw new Error('Your NodeJS version ' + v + ' is not supported. Please upgrade.')
   }
+
+  if (major <= 12) {
+    logger.warn('Your NodeJS version ' + v + ' is deprecated. Please upgrade.')
+  }
 }
 
 // ---------------------------------------------------------------------------

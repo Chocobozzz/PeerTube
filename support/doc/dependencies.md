@@ -77,7 +77,7 @@ sudo systemctl start redis postgresql
 1. Run:
 
 ```
-sudo pacman -S nodejs-lts-fermium  yarn ffmpeg postgresql openssl redis git wget unzip python base-devel npm nginx
+sudo pacman -S nodejs-lts-fermium yarn ffmpeg postgresql openssl redis git wget unzip python base-devel npm nginx
 ```
 
 Now that dependencies are installed, before running PeerTube you should start PostgreSQL and Redis:
@@ -88,7 +88,7 @@ sudo systemctl start redis postgresql
 
 ## CentOS 7
 
-1. Install NodeJS 12.x:
+1. Install NodeJS 14.x:
 [https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora](https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora)
 
 2. Install yarn:
@@ -135,7 +135,7 @@ sudo systemctl enable --now postgresql
 
 ## Centos 8
 
-1. Install NodeJS 12.x:
+1. Install NodeJS 14.x:
 [https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora](https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora)
 
 2. Install yarn:
@@ -180,9 +180,9 @@ sudo systemctl enable --now postgresql
 sudo dnf update -y
 ```
 
-2. Install NodeJS 12.x (or 14):
+2. Install NodeJS 14.x:
 ```
-sudo dnf module install -y nodejs:12
+sudo dnf module install -y nodejs:14
 ```
 
 3. Install yarn:
@@ -239,7 +239,7 @@ su my-peertube-user
 3. (Optional) Install certbot (choose instructions for your distribution):
 [https://certbot.eff.org/all-instructions](https://certbot.eff.org/all-instructions)
 
-4. Install NodeJS 12.x:
+4. Install NodeJS 14.x:
 [https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora](https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora)
 
 5. Install yarn:
@@ -331,7 +331,7 @@ echo fs.inotify.max_user_watches=582222 | sudo tee -a /etc/sysctl.conf && sudo s
 2. Install Node.JS
 
 ```
-sudo dnf module install nodejs:12
+sudo dnf module install nodejs:14
 ```
 
 3. Install Yarn

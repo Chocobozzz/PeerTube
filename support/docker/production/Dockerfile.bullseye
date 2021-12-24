@@ -1,4 +1,4 @@
-FROM node:12-bullseye-slim
+FROM node:14-bullseye-slim
 
 # Allow to pass extra options to the npm run build
 # eg: --light --light-fr to not build all client languages
