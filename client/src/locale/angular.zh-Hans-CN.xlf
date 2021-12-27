@@ -69,7 +69,7 @@
       </trans-unit>
       <trans-unit id="420488506127153204" datatype="html">
         <source>The recently added video <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> has been <x id="START_LINK_1"/>automatically blocked<x id="CLOSE_LINK"/></source>
-        <target state="translated">最近新增的视频 <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> 已被 <x id="START_LINK_1"/>自动封锁<x id="CLOSE_LINK"/></target>
+        <target state="translated">近期新增的视频 <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> 已被 <x id="START_LINK_1"/>自动屏蔽<x id="CLOSE_LINK"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">87</context></context-group>
       </trans-unit>
       <trans-unit id="2740435661398285769" datatype="html">
@@ -5090,7 +5090,7 @@ color: red;
       </trans-unit>
       <trans-unit id="7028708681117573961" datatype="html">
         <source>Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Recently Added"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Recently Added"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">按<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>“近期新增”<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>排序</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">46</context>
@@ -5256,7 +5256,7 @@ color: red;
       </trans-unit>
       <trans-unit id="1534085756270333258" datatype="html">
         <source>In Recently added, Trending, Local, Most liked and Search pages</source>
-        <target state="translated">在近期添加、趋势、本地、最受欢迎和搜索页面中</target>
+        <target state="translated">在近期新增、时下流行、本地、最受欢迎和搜索页面中</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="2658703380934466003" datatype="html">
@@ -5323,12 +5323,12 @@ color: red;
       </trans-unit>
       <trans-unit id="8108088952881606566" datatype="html">
         <source>Most liked first</source>
-        <target state="translated">近期添加优先</target>
+        <target state="translated">最受欢迎的优先</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context><context context-type="linenumber">30</context></context-group>
       </trans-unit>
       <trans-unit id="2782422473180760140" datatype="html">
         <source>Longest first</source>
-        <target state="new">Longest first</target>
+        <target state="translated">最长的优先</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context><context context-type="linenumber">31</context></context-group>
       </trans-unit>
       <trans-unit id="8714145624854863455">
@@ -8394,7 +8394,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="3242234958443825475">
         <source>Go to the recently added videos page</source>
-        <target>转到最近添加</target>
+        <target>转到近期新增视频页面</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.ts</context><context context-type="linenumber">290</context></context-group>
       </trans-unit>
       <trans-unit id="2887122197778293919">
@@ -11082,7 +11082,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="2431286785954354122" datatype="html">
         <source>Recently added</source>
-        <target state="translated">最近添加的</target>
+        <target state="translated">近期新增</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/video-list/videos-list-common-page.component.ts</context><context context-type="linenumber">195</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/menu/menu.service.ts</context><context context-type="linenumber">137</context></context-group>
       </trans-unit>
@@ -11168,7 +11168,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="664221386829541948" datatype="html">
         <source>Recently added videos</source>
-        <target state="translated">最近新增的视频</target>
+        <target state="translated">近期新增的视频</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/menu/menu.service.ts</context><context context-type="linenumber">136</context></context-group>
       </trans-unit>
       <trans-unit id="8212906256415538361" datatype="html">
