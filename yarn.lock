@@ -3108,10 +3108,10 @@ combined-stream@^1.0.6, combined-stream@^1.0.8:
   dependencies:
     delayed-stream "~1.0.0"
 
-commander@8.2.0:
-  version "8.2.0"
-  resolved "https://registry.yarnpkg.com/commander/-/commander-8.2.0.tgz#37fe2bde301d87d47a53adeff8b5915db1381ca8"
-  integrity sha512-LLKxDvHeL91/8MIyTAD5BFMNtoIwztGPMiM/7Bl8rIPmHCZXRxmSWr91h57dpOpnQ6jIUqEWdXE/uBYMfiVZDA==
+commander@8.3.0, commander@^8.0.0, commander@^8.3.0:
+  version "8.3.0"
+  resolved "https://registry.yarnpkg.com/commander/-/commander-8.3.0.tgz#4837ea1b2da67b9c616a67afbb0fafee567bca66"
+  integrity sha512-OkTL9umf+He2DZkUq8f8J9of7yL6RJKI24dVITBmNfZBmri9zYZQrKkuXiKhyfPSu8tUhnVBB1iKXevvnlR4Ww==
 
 commander@^2.19.0, commander@^2.7.1:
   version "2.20.3"
@@ -3122,11 +3122,6 @@ commander@^5.1.0:
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/commander/-/commander-5.1.0.tgz#46abbd1652f8e059bddaef99bbdcb2ad9cf179ae"
   integrity sha512-P0CysNDQ7rtVw4QIQtm+MRxV66vKFSvlsQvGYXZWR3qFU0jlMKHZZZgw8e+8DSah4UDKMqnknRDQz+xuQXQ/Zg==
-
-commander@^8.0.0, commander@^8.3.0:
-  version "8.3.0"
-  resolved "https://registry.yarnpkg.com/commander/-/commander-8.3.0.tgz#4837ea1b2da67b9c616a67afbb0fafee567bca66"
-  integrity sha512-OkTL9umf+He2DZkUq8f8J9of7yL6RJKI24dVITBmNfZBmri9zYZQrKkuXiKhyfPSu8tUhnVBB1iKXevvnlR4Ww==
 
 compact2string@^1.4.1:
   version "1.4.1"
@@ -7479,13 +7474,13 @@ resolve-from@^4.0.0:
   resolved "https://registry.yarnpkg.com/resolve-from/-/resolve-from-4.0.0.tgz#4abcd852ad32dd7baabfe9b40e00a36db5f392e6"
   integrity sha512-pb/MYmXstAkysRFx8piNI1tGFNQIFA3vkE3Gq4EuA1dF6gHp/+vgZqsCGJapvy8N3Q+4o7FwvquPJcnZ7RYy4g==
 
-resolve-tspaths@^0.1.2:
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/resolve-tspaths/-/resolve-tspaths-0.1.2.tgz#621c78f2372dea919f7cecf4f228e7fd6dbd8d45"
-  integrity sha512-HBU+9gBL/CWzCXudGVJAOGph9xspBShW2Ay8cngXMB8fLBkv8Oz/yoe/LC9cCAzuZouul9YNRyKQKdr/GEFR3w==
+resolve-tspaths@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/resolve-tspaths/-/resolve-tspaths-0.2.1.tgz#3e148ed4c8806b54b0fba27e0c781529e0d0de30"
+  integrity sha512-waDnPicvN/dCGKaVZOuQXj440sYKg5tckOug8s76XiNpdFOwSsnkl9TP7coYWYEysxsO1pGTkOFs6UMATde/mg==
   dependencies:
     ansi-colors "4.1.1"
-    commander "8.2.0"
+    commander "8.3.0"
     fast-glob "3.2.7"
 
 resolve@^1.10.1, resolve@^1.15.1, resolve@^1.18.1, resolve@^1.20.0:
