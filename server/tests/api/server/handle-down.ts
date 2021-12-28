@@ -50,7 +50,7 @@ describe('Test handle downs', function () {
   let commentCommands: CommentsCommand[]
 
   before(async function () {
-    this.timeout(30000)
+    this.timeout(120000)
 
     servers = await createMultipleServers(3)
     commentCommands = servers.map(s => s.comments)

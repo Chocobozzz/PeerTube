@@ -291,12 +291,12 @@ describe('Test AP cleaner', function () {
       {
         const video = await servers[0].videos.get({ id: uuid })
 
-        expect(video.likes).to.equal(3)
+        expect(video.likes).to.equal(2)
         expect(video.dislikes).to.equal(0)
       }
 
       {
-        const { total } = await servers[0].comments.listThreads({ videoId: videoUUID1 })
+        const { total } = await servers[0].comments.listThreads({ videoId: uuid })
         expect(total).to.equal(2)
       }
     }
@@ -319,8 +319,15 @@ describe('Test AP cleaner', function () {
     await wait(5000)
     await expectNotDeleted()
 
-    await wait(15000)
-    await expectDeleted()
+    let continueWhile = true
+
+    do {
+      try {
+        await expectDeleted()
+        continueWhile = false
+      } catch {
+      }
+    } while (continueWhile)
   })
 
   after(async function () {

@@ -14,29 +14,27 @@ import { VideoModel } from '@server/models/video/video'
 import { VideoCommentModel } from '@server/models/video/video-comment'
 import { VideoShareModel } from '@server/models/video/video-share'
 import { HttpStatusCode } from '@shared/models'
-import { logger } from '../../../helpers/logger'
+import { logger, loggerTagsFactory } from '../../../helpers/logger'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
+
+const lTags = loggerTagsFactory('ap-cleaner')
 
 // Job to clean remote interactions off local videos
 
 async function processActivityPubCleaner (_job: Job) {
-  logger.info('Processing ActivityPub cleaner.')
+  logger.info('Processing ActivityPub cleaner.', lTags())
 
   {
     const rateUrls = await AccountVideoRateModel.listRemoteRateUrlsOfLocalVideos()
     const { bodyValidator, deleter, updater } = rateOptionsFactory()
 
     await map(rateUrls, async rateUrl => {
-      try {
-        const result = await updateObjectIfNeeded({ url: rateUrl, bodyValidator, updater, deleter })
+      const result = await updateObjectIfNeeded({ url: rateUrl, bodyValidator, updater, deleter })
 
-        if (result?.status === 'deleted') {
-          const { videoId, type } = result.data
+      if (result?.status === 'deleted') {
+        const { videoId, type } = result.data
 
-          await VideoModel.updateRatesOf(videoId, type, undefined)
-        }
-      } catch (err) {
-        logger.warn('Cannot update/delete remote AP rate %s.', rateUrl, { err })
+        await VideoModel.updateRatesOf(videoId, type, undefined)
       }
     }, { concurrency: AP_CLEANER.CONCURRENCY })
   }
@@ -46,11 +44,7 @@ async function processActivityPubCleaner (_job: Job) {
     const { bodyValidator, deleter, updater } = shareOptionsFactory()
 
     await map(shareUrls, async shareUrl => {
-      try {
-        await updateObjectIfNeeded({ url: shareUrl, bodyValidator, updater, deleter })
-      } catch (err) {
-        logger.warn('Cannot update/delete remote AP share %s.', shareUrl, { err })
-      }
+      await updateObjectIfNeeded({ url: shareUrl, bodyValidator, updater, deleter })
     }, { concurrency: AP_CLEANER.CONCURRENCY })
   }
 
@@ -59,11 +53,7 @@ async function processActivityPubCleaner (_job: Job) {
     const { bodyValidator, deleter, updater } = commentOptionsFactory()
 
     await map(commentUrls, async commentUrl => {
-      try {
-        await updateObjectIfNeeded({ url: commentUrl, bodyValidator, updater, deleter })
-      } catch (err) {
-        logger.warn('Cannot update/delete remote AP comment %s.', commentUrl, { err })
-      }
+      await updateObjectIfNeeded({ url: commentUrl, bodyValidator, updater, deleter })
     }, { concurrency: AP_CLEANER.CONCURRENCY })
   }
 }
@@ -85,7 +75,7 @@ async function updateObjectIfNeeded <T> (options: {
   const { url, bodyValidator, updater, deleter } = options
 
   const on404OrTombstone = async () => {
-    logger.info('Removing remote AP object %s.', url)
+    logger.info('Removing remote AP object %s.', url, lTags(url))
     const data = await deleter(url)
 
     return { status: 'deleted' as 'deleted', data }
@@ -107,7 +97,7 @@ async function updateObjectIfNeeded <T> (options: {
         throw new Error(`New url ${newUrl} has not the same host than old url ${url}`)
       }
 
-      logger.info('Updating remote AP object %s.', url)
+      logger.info('Updating remote AP object %s.', url, lTags(url))
       const data = await updater(url, newUrl)
 
       return { status: 'updated', data }
@@ -120,11 +110,11 @@ async function updateObjectIfNeeded <T> (options: {
       return on404OrTombstone()
     }
 
-    logger.debug('Remote AP object %s is unavailable.', url)
+    logger.debug('Remote AP object %s is unavailable.', url, lTags(url))
 
     const unavailability = await Redis.Instance.addAPUnavailability(url)
     if (unavailability >= AP_CLEANER.UNAVAILABLE_TRESHOLD) {
-      logger.info('Removing unavailable AP resource %s.', url)
+      logger.info('Removing unavailable AP resource %s.', url, lTags(url))
       return on404OrTombstone()
     }
 
