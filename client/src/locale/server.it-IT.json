@@ -35,6 +35,7 @@
     "Livestream ended": "Il live streaming è terminato",
     "To move to an external storage": "To move to an external storage",
     "Transcoding failed": "Transcoding failed",
+    "External storage move failed": "External storage move failed",
     "Pending": "In sospeso",
     "Success": "Successo",
     "Failed": "Fallito",
