@@ -1,5 +1,5 @@
 {
-  "extends": "../../../tsconfig.base.json",
+  "extends": "../../../../tsconfig.base.json",
   "compilerOptions": {
     "stripInternal": true,
     "removeComments": false,
@@ -9,7 +9,7 @@
     "tsBuildInfoFile": "../../dist/tsconfig.client.types.tsbuildinfo"
   },
   "references": [
-    { "path": "../../../client/tsconfig.types.json" }
+    { "path": "../../../../client/tsconfig.types.json" }
   ],
   "files": ["index.ts"]
 }

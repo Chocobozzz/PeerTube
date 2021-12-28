@@ -52,7 +52,7 @@
     "test": "bash ./scripts/test.sh",
     "help": "bash ./scripts/help.sh",
     "generate-cli-doc": "bash ./scripts/generate-cli-doc.sh",
-    "generate-types-package": "ts-node ./types/generate-package.ts",
+    "generate-types-package": "ts-node ./packages/types/generate-package.ts",
     "parse-log": "node ./dist/scripts/parse-log.js",
     "prune-storage": "node ./dist/scripts/prune-storage.js",
     "postinstall": "test -n \"$NOCLIENT\" || (cd client && yarn install --pure-lockfile)",

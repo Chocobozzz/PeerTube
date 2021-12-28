@@ -12,7 +12,7 @@ run()
   })
 
 async function run () {
-  const typesPath = resolve(cwd(), './types/')
+  const typesPath = resolve(cwd(), './packages/types/')
   const typesDistPath = resolve(cwd(), typesPath, './dist/')
   const typesDistPackageJsonPath = resolve(typesDistPath, './package.json')
   const typesDistGitIgnorePath = resolve(typesDistPath, './.gitignore')
@@ -22,7 +22,7 @@ async function run () {
   const clientPackageJson = await readJson(resolve(cwd(), './client/package.json'))
 
   await remove(typesDistPath)
-  execSync('npm run tsc -- -b --verbose types', { stdio: 'inherit' })
+  execSync('npm run tsc -- -b --verbose packages/types', { stdio: 'inherit' })
   execSync(`npm run resolve-tspaths -- --project ${distTsConfigPath} --src ${typesDistPath} --out ${typesDistPath}`, { stdio: 'inherit' })
 
   const allDependencies = Object.assign(
@@ -42,7 +42,7 @@ async function run () {
     package: { dependencies: allDependencies }
   }
 
-  const { dependencies: unusedDependencies } = await depcheck(resolve(cwd(), './types/'), depcheckOptions)
+  const { dependencies: unusedDependencies } = await depcheck(resolve(typesPath), depcheckOptions)
   console.log(`Removing ${Object.keys(unusedDependencies).length} unused dependencies.`)
   const dependencies = Object
     .keys(allDependencies)

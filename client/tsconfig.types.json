@@ -4,11 +4,11 @@
     "stripInternal": true,
     "removeComments": false,
     "declaration": true,
-    "outDir": "../types/dist/client/",
+    "outDir": "../packages/types/dist/client/",
     "emitDeclarationOnly": true,
     "composite": true,
     "rootDir": "src/",
-    "tsBuildInfoFile": "../types/dist/tsconfig.client.tsbuildinfo"
+    "tsBuildInfoFile": "../packages/types/dist/tsconfig.client.tsbuildinfo"
   },
   "references": [
     { "path": "../shared/tsconfig.types.json" }

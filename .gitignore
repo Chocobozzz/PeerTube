@@ -53,4 +53,6 @@ yarn-error.log
 
 # TypeScript
 *.tsbuildinfo
-/types/dist/
+
+# Packages
+/packages/types/dist/
