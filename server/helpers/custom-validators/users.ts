@@ -90,7 +90,7 @@ function isUserBlockedReasonValid (value: any) {
 }
 
 function isUserRoleValid (value: any) {
-  return exists(value) && validator.isInt('' + value) && UserRole[value] !== undefined
+  return exists(value) && validator.isInt('' + value) && [ UserRole.ADMINISTRATOR, UserRole.MODERATOR, UserRole.USER ].includes(value)
 }
 
 // ---------------------------------------------------------------------------

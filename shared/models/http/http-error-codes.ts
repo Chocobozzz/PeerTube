@@ -4,7 +4,7 @@
  *
  * WebDAV and other codes useless with regards to PeerTube are not listed.
  */
-export enum HttpStatusCode {
+export const enum HttpStatusCode {
 
   /**
    * Official Documentation @ https://tools.ietf.org/html/rfc7231#section-6.2.1
