@@ -4915,7 +4915,7 @@
       </trans-unit>
       <trans-unit id="5205613575147327732" datatype="html">
         <source>If enabled, your server needs to accept incoming TCP traffic on port <x id="INTERPOLATION" equiv-text="{{ getLiveRTMPPort() }}"/></source>
-        <target state="new">If enabled, your server needs to accept incoming TCP traffic on port <x id="INTERPOLATION" equiv-text="{{ getLiveRTMPPort() }}"/></target>
+        <target state="translated">もし有効にした場合、あなたのサーバーは<x id="INTERPOLATION" equiv-text="{{ getLiveRTMPPort() }}"/>ポートからのTCPトラフィックを受信する必要があります</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">23</context>
@@ -4928,7 +4928,7 @@
       </trans-unit>
       <trans-unit id="3472969629566153023" datatype="html">
         <source>If the user quota is reached, PeerTube will automatically terminate the live streaming</source>
-        <target state="new"> If the user quota is reached, PeerTube will automatically terminate the live streaming </target>
+        <target state="translated">ユーザーが動画容量の制限に達した場合、PeerTubeは自動的にライブ配信を終了します</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">33</context></context-group>
       </trans-unit>
       <trans-unit id="4420104899393268652" datatype="html">
@@ -4954,7 +4954,7 @@
       </trans-unit>
       <trans-unit id="5309195634424105927" datatype="html">
         <source>Live transcoding threads</source>
-        <target state="new">Live transcoding threads</target>
+        <target state="translated">ライブ配信のトランスコードのスレッド</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">128</context></context-group>
       </trans-unit>
       <trans-unit id="4240037618955024499" datatype="html">
@@ -5215,18 +5215,12 @@
       </trans-unit>
       <trans-unit id="4067880101082150743" datatype="html">
         <source>Write JavaScript code directly.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>Example: <x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>console.log('my instance is amazing');<x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></source>
-        <target state="new"> Write JavaScript code directly.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>Example: <x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>console.log('my instance is amazing');<x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></target>
+        <target state="translated">JavaScriptのコードを直接入力します。<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>例えば: <x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>console.log('my instance is amazing');<x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context><context context-type="linenumber">77</context></context-group>
       </trans-unit>
       <trans-unit id="5464209657969421100" datatype="html">
         <source>Write CSS code directly. Example:<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>#custom-css <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color: red; <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/> Prepend with <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> to override styles. Example:<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>#custom-css .logged-in-email <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color: red; <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></source>
-        <target state="new"> Write CSS code directly. Example:<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt; "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt; "/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>#custom-css <x id="INTERPOLATION" equiv-text=" {{ '{' }"/>
-color: red;
-<x id="INTERPOLATION_1" equiv-text=" {{ '}' }"/>
-<x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/> Prepend with <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt; "/> to override styles. Example:<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt; "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt; "/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>#custom-css .logged-in-email <x id="INTERPOLATION" equiv-text=" {{ '{' }"/>
-color: red;
-<x id="INTERPOLATION_1" equiv-text=" {{ '}' }"/>
-<x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></target>
+        <target state="translated">CSSのコードを直接入力します。例えば:<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>#custom-css <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color: red; <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/> Prepend with <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> to override styles. Example:<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>#custom-css .logged-in-email <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color: red; <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context><context context-type="linenumber">96</context></context-group>
       </trans-unit>
       <trans-unit id="283725429207896837" datatype="html">
@@ -5585,7 +5579,6 @@ color: red;
       </trans-unit>
       <trans-unit id="321229234608559490" datatype="html">
         <source>Select a channel to receive the video</source>
-        <target state="new">Select a channel to receive the video</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-ownership/my-accept-ownership/my-accept-ownership.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="3610344835750059476" datatype="html">
@@ -5751,7 +5744,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5511928240200239994" datatype="html">
         <source>Some of your channels are not fully set up. Make them welcoming and explicit about what you publish by adding a <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>banner<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, an <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>avatar<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> and a <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>description<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>.</source>
-        <target state="new">Some of your channels are not fully set up. Make them welcoming and explicit about what you publish by adding a <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>banner<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, an <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>avatar<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> and a <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>description<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>.</target>
+        <target state="needs-translation">チャンネルの設定が完全には終わっていません. Make them welcoming and explicit about what you publish by adding a <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>バナー<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, an <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>avatar<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> and a <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>description<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/misc/channels-setup-message.component.html</context>
           <context context-type="linenumber">5</context>
@@ -6374,7 +6367,7 @@ color: red;
       </trans-unit>
       <trans-unit id="401806741040118292">
         <source>What will be done to mitigate this problem?</source>
-        <target>この問題を軽減するために何が行われますか?</target>
+        <target>この問題のリスクを軽減するために、何らかの対策を行う予定はありますか？</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">145</context></context-group>
       </trans-unit>
       <trans-unit id="7404776804526394585" datatype="html">
@@ -6697,7 +6690,7 @@ color: red;
       </trans-unit>
       <trans-unit id="2614607010577950577" datatype="html">
         <source>Overview</source>
-        <target state="new">Overview</target>
+        <target state="translated">概要</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">35</context>
@@ -6830,7 +6823,7 @@ color: red;
       </trans-unit>
       <trans-unit id="9122600735711449044" datatype="html">
         <source>However, you may want to read our guidelines before tweaking the following values.</source>
-        <target state="new"> However, you may want to read our guidelines before tweaking the following values. </target>
+        <target state="translated">しかし、次の値を調整する前に、私たちのガイドラインをよろしければ読んでください。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="9035429011363248302" datatype="html">
@@ -6875,7 +6868,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8643289769990675407" datatype="html">
         <source>Basic</source>
-        <target state="new">Basic</target>
+        <target state="translated">ベーシック</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="2060042292048624940">
@@ -6913,12 +6906,12 @@ color: red;
       </trans-unit>
       <trans-unit id="5065410539274460415" datatype="html">
         <source>Account reported.</source>
-        <target state="needs-translation">Account reported.</target>
+        <target state="translated">アカウントを通報しました。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/account-report.component.ts</context><context context-type="linenumber">83</context></context-group>
       </trans-unit>
       <trans-unit id="6245265026120479954" datatype="html">
         <source>Comment reported.</source>
-        <target state="needs-translation">Comment reported.</target>
+        <target state="translated">コメントを通報しました。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/comment-report.component.ts</context><context context-type="linenumber">82</context></context-group>
       </trans-unit>
       <trans-unit id="2127446333083057097" datatype="html">
@@ -6929,7 +6922,7 @@ color: red;
       </trans-unit>
       <trans-unit id="7951488350851416577" datatype="html">
         <source>Hosts entered are invalid.</source>
-        <target state="new">Hosts entered are invalid.</target>
+        <target state="translated">入力されたホストは有効なものではありません。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/host-validators.ts</context>
           <context context-type="linenumber">93</context>
@@ -6945,7 +6938,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5991533283446904296" datatype="html">
         <source>Hosts or handles are invalid.</source>
-        <target state="new">Hosts or handles are invalid.</target>
+        <target state="translated">無効なホストまたはアカウントIDです。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/host-validators.ts</context>
           <context context-type="linenumber">102</context>
@@ -7059,7 +7052,7 @@ color: red;
       </trans-unit>
       <trans-unit id="2520968456492632777" datatype="html">
         <source><x id="PH"/> accepted in instance followers </source>
-        <target state="needs-translation"><x id="PH"/> accepted in instance followers </target>
+        <target state="needs-translation"><x id="PH"/>がインスタンスのフォロワーを </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="450530533730658004">
@@ -7157,7 +7150,7 @@ color: red;
       </trans-unit>
       <trans-unit id="3459358413436264734" datatype="html">
         <source>Your instance subscriptions</source>
-        <target state="new">Your instance subscriptions</target>
+        <target state="translated">あなたのインスタンス購読</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
           <context context-type="linenumber">3</context>
@@ -7372,7 +7365,7 @@ color: red;
       </trans-unit>
       <trans-unit id="3962242315365992494" datatype="html">
         <source>Switch video block to manual</source>
-        <target state="needs-translation">Switch video block to manual</target>
+        <target state="translated">動画のブロックを手動に変える</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context><context context-type="linenumber">64</context></context-group>
       </trans-unit>
       <trans-unit id="6906423861055262169" datatype="html">
@@ -7561,7 +7554,7 @@ color: red;
       </trans-unit>
       <trans-unit id="565435193934699740" datatype="html">
         <source>Anti brute force system could be overzealous</source>
-        <target state="new">Anti brute force system could be overzealous</target>
+        <target state="translated">ブルートフォースシステムの設定を角にしすぎている</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/debug/debug.component.html</context>
           <context context-type="linenumber">9</context>
