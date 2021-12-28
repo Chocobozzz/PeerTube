@@ -1,9 +1,11 @@
 import { createClient } from 'redis'
 import { exists } from '@server/helpers/custom-validators/misc'
+import { sha256 } from '@shared/extra-utils'
 import { logger } from '../helpers/logger'
 import { generateRandomString } from '../helpers/utils'
 import { CONFIG } from '../initializers/config'
 import {
+  AP_CLEANER,
   CONTACT_FORM_LIFETIME,
   RESUMABLE_UPLOAD_SESSION_LIFETIME,
   TRACKER_RATE_LIMITS,
@@ -260,6 +262,17 @@ class Redis {
     return this.deleteKey('resumable-upload-' + uploadId)
   }
 
+  /* ************ AP ressource unavailability ************ */
+
+  async addAPUnavailability (url: string) {
+    const key = this.generateAPUnavailabilityKey(url)
+
+    const value = await this.increment(key)
+    await this.setExpiration(key, AP_CLEANER.PERIOD * 2)
+
+    return value
+  }
+
   /* ************ Keys generation ************ */
 
   private generateLocalVideoViewsKeys (videoId?: Number) {
@@ -298,6 +311,10 @@ class Redis {
     return 'contact-form-' + ip
   }
 
+  private generateAPUnavailabilityKey (url: string) {
+    return 'ap-unavailability-' + sha256(url)
+  }
+
   /* ************ Redis helpers ************ */
 
   private getValue (key: string) {
@@ -330,16 +347,16 @@ class Redis {
     return this.client.del(this.prefix + key)
   }
 
-  private getObject (key: string) {
-    return this.client.hGetAll(this.prefix + key)
-  }
-
   private increment (key: string) {
     return this.client.incr(this.prefix + key)
   }
 
   private exists (key: string) {
     return this.client.exists(this.prefix + key)
+  }
+
+  private setExpiration (key: string, ms: number) {
+    return this.client.expire(this.prefix + key, ms / 1000)
   }
 
   static get Instance () {

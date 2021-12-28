@@ -8,7 +8,8 @@ import {
 } from '@server/helpers/custom-validators/activitypub/activity'
 import { sanitizeAndCheckVideoCommentObject } from '@server/helpers/custom-validators/activitypub/video-comments'
 import { doJSONRequest, PeerTubeRequestError } from '@server/helpers/requests'
-import { AP_CLEANER_CONCURRENCY } from '@server/initializers/constants'
+import { AP_CLEANER } from '@server/initializers/constants'
+import { Redis } from '@server/lib/redis'
 import { VideoModel } from '@server/models/video/video'
 import { VideoCommentModel } from '@server/models/video/video-comment'
 import { VideoShareModel } from '@server/models/video/video-share'
@@ -27,7 +28,7 @@ async function processActivityPubCleaner (_job: Job) {
 
     await map(rateUrls, async rateUrl => {
       try {
-        const result = await updateObjectIfNeeded(rateUrl, bodyValidator, updater, deleter)
+        const result = await updateObjectIfNeeded({ url: rateUrl, bodyValidator, updater, deleter })
 
         if (result?.status === 'deleted') {
           const { videoId, type } = result.data
@@ -37,7 +38,7 @@ async function processActivityPubCleaner (_job: Job) {
       } catch (err) {
         logger.warn('Cannot update/delete remote AP rate %s.', rateUrl, { err })
       }
-    }, { concurrency: AP_CLEANER_CONCURRENCY })
+    }, { concurrency: AP_CLEANER.CONCURRENCY })
   }
 
   {
@@ -46,11 +47,11 @@ async function processActivityPubCleaner (_job: Job) {
 
     await map(shareUrls, async shareUrl => {
       try {
-        await updateObjectIfNeeded(shareUrl, bodyValidator, updater, deleter)
+        await updateObjectIfNeeded({ url: shareUrl, bodyValidator, updater, deleter })
       } catch (err) {
         logger.warn('Cannot update/delete remote AP share %s.', shareUrl, { err })
       }
-    }, { concurrency: AP_CLEANER_CONCURRENCY })
+    }, { concurrency: AP_CLEANER.CONCURRENCY })
   }
 
   {
@@ -59,11 +60,11 @@ async function processActivityPubCleaner (_job: Job) {
 
     await map(commentUrls, async commentUrl => {
       try {
-        await updateObjectIfNeeded(commentUrl, bodyValidator, updater, deleter)
+        await updateObjectIfNeeded({ url: commentUrl, bodyValidator, updater, deleter })
       } catch (err) {
         logger.warn('Cannot update/delete remote AP comment %s.', commentUrl, { err })
       }
-    }, { concurrency: AP_CLEANER_CONCURRENCY })
+    }, { concurrency: AP_CLEANER.CONCURRENCY })
   }
 }
 
@@ -75,12 +76,14 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function updateObjectIfNeeded <T> (
-  url: string,
-  bodyValidator: (body: any) => boolean,
-  updater: (url: string, newUrl: string) => Promise<T>,
-  deleter: (url: string) => Promise<T>
+async function updateObjectIfNeeded <T> (options: {
+  url: string
+  bodyValidator: (body: any) => boolean
+  updater: (url: string, newUrl: string) => Promise<T>
+  deleter: (url: string) => Promise<T> }
 ): Promise<{ data: T, status: 'deleted' | 'updated' } | null> {
+  const { url, bodyValidator, updater, deleter } = options
+
   const on404OrTombstone = async () => {
     logger.info('Removing remote AP object %s.', url)
     const data = await deleter(url)
@@ -117,7 +120,15 @@ async function updateObjectIfNeeded <T> (
       return on404OrTombstone()
     }
 
-    throw err
+    logger.debug('Remote AP object %s is unavailable.', url)
+
+    const unavailability = await Redis.Instance.addAPUnavailability(url)
+    if (unavailability >= AP_CLEANER.UNAVAILABLE_TRESHOLD) {
+      logger.info('Removing unavailable AP resource %s.', url)
+      return on404OrTombstone()
+    }
+
+    return null
   }
 }
 

@@ -19,7 +19,7 @@ import { NSFWPolicyType } from '../../shared/models/videos/nsfw-policy.type'
 import { VideoPlaylistPrivacy } from '../../shared/models/videos/playlist/video-playlist-privacy.model'
 import { VideoPlaylistType } from '../../shared/models/videos/playlist/video-playlist-type.model'
 // Do not use barrels, remain constants as independent as possible
-import { isTestInstance, sanitizeHost, sanitizeUrl } from '../helpers/core-utils'
+import { isTestInstance, parseDurationToMs, sanitizeHost, sanitizeUrl } from '../helpers/core-utils'
 import { CONFIG, registerConfigChangedHandler } from './config'
 
 // ---------------------------------------------------------------------------
@@ -200,8 +200,14 @@ const JOB_PRIORITY = {
 }
 
 const BROADCAST_CONCURRENCY = 30 // How many requests in parallel we do in activitypub-http-broadcast job
-const AP_CLEANER_CONCURRENCY = 10 // How many requests in parallel we do in activitypub-cleaner job
 const CRAWL_REQUEST_CONCURRENCY = 1 // How many requests in parallel to fetch remote data (likes, shares...)
+
+const AP_CLEANER = {
+  CONCURRENCY: 10, // How many requests in parallel we do in activitypub-cleaner job
+  UNAVAILABLE_TRESHOLD: 3, // How many attemps we do before removing an unavailable remote resource
+  PERIOD: parseDurationToMs('1 week') // /!\ Has to be sync with REPEAT_JOBS
+}
+
 const REQUEST_TIMEOUTS = {
   DEFAULT: 7000, // 7 seconds
   FILE: 30000, // 30 seconds
@@ -796,8 +802,11 @@ if (isTestInstance() === true) {
   SCHEDULER_INTERVALS_MS.AUTO_FOLLOW_INDEX_INSTANCES = 5000
   SCHEDULER_INTERVALS_MS.UPDATE_INBOX_STATS = 5000
   SCHEDULER_INTERVALS_MS.CHECK_PEERTUBE_VERSION = 2000
+
   REPEAT_JOBS['videos-views-stats'] = { every: 5000 }
+
   REPEAT_JOBS['activitypub-cleaner'] = { every: 5000 }
+  AP_CLEANER.PERIOD = 5000
 
   REDUNDANCY.VIDEOS.RANDOMIZED_FACTOR = 1
 
@@ -858,7 +867,7 @@ export {
   REDUNDANCY,
   JOB_CONCURRENCY,
   JOB_ATTEMPTS,
-  AP_CLEANER_CONCURRENCY,
+  AP_CLEANER,
   LAST_MIGRATION_VERSION,
   OAUTH_LIFETIME,
   CUSTOM_HTML_TAG_COMMENTS,
