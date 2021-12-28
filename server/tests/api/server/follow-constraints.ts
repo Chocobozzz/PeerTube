@@ -14,7 +14,7 @@ describe('Test follow constraints', function () {
   let userToken: string
 
   before(async function () {
-    this.timeout(90000)
+    this.timeout(240000)
 
     servers = await createMultipleServers(2)
 

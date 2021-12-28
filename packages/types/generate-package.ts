@@ -1,8 +1,8 @@
 import { execSync } from 'child_process'
 import depcheck, { PackageDependencies } from 'depcheck'
 import { copyFile, readJson, remove, writeFile, writeJSON } from 'fs-extra'
-import { resolve } from 'path'
-import { cwd } from 'process'
+import { join, resolve } from 'path'
+import { root } from '../../shared/core-utils'
 
 if (!process.argv[2]) {
   console.error('Need version as argument')
@@ -20,14 +20,14 @@ run()
   })
 
 async function run () {
-  const typesPath = resolve(cwd(), './packages/types/')
-  const typesDistPath = resolve(cwd(), typesPath, './dist/')
-  const typesDistPackageJsonPath = resolve(typesDistPath, './package.json')
-  const typesDistGitIgnorePath = resolve(typesDistPath, './.gitignore')
-  const mainPackageJson = await readJson(resolve(cwd(), './package.json'))
-  const distTsConfigPath = resolve(cwd(), typesPath, './tsconfig.dist.json')
+  const typesPath = __dirname
+  const typesDistPath = join(typesPath, 'dist')
+  const typesDistPackageJsonPath = join(typesDistPath, 'package.json')
+  const typesDistGitIgnorePath = join(typesDistPath, '.gitignore')
+  const mainPackageJson = await readJson(join(root(), 'package.json'))
+  const distTsConfigPath = join(typesPath, 'tsconfig.dist.json')
   const distTsConfig = await readJson(distTsConfigPath)
-  const clientPackageJson = await readJson(resolve(cwd(), './client/package.json'))
+  const clientPackageJson = await readJson(join(root(), 'client', 'package.json'))
 
   await remove(typesDistPath)
   execSync('npm run tsc -- -b --verbose packages/types', { stdio: 'inherit' })
@@ -35,8 +35,9 @@ async function run () {
 
   const allDependencies = Object.assign(
     mainPackageJson.dependencies,
-    mainPackageJson.devDepencies,
-    clientPackageJson.dependencies
+    mainPackageJson.devDependencies,
+    clientPackageJson.dependencies,
+    clientPackageJson.devDependencies
   ) as PackageDependencies
 
   // https://github.com/depcheck/depcheck#api
@@ -50,7 +51,20 @@ async function run () {
     package: { dependencies: allDependencies }
   }
 
-  const { dependencies: unusedDependencies } = await depcheck(resolve(typesPath), depcheckOptions)
+  const result = await depcheck(typesDistPath, depcheckOptions)
+
+  if (Object.keys(result.invalidDirs).length !== 0) {
+    console.error('Invalid directories detected.', { invalidDirs: result.invalidDirs })
+    process.exit(-1)
+  }
+
+  if (Object.keys(result.invalidFiles).length !== 0) {
+    console.error('Invalid files detected.', { invalidFiles: result.invalidFiles })
+    process.exit(-1)
+  }
+
+  const unusedDependencies = result.dependencies
+
   console.log(`Removing ${Object.keys(unusedDependencies).length} unused dependencies.`)
   const dependencies = Object
     .keys(allDependencies)

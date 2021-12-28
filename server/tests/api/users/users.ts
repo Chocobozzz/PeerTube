@@ -230,7 +230,7 @@ describe('Test users', function () {
     })
 
     it('Should have an expired access token', async function () {
-      this.timeout(15000)
+      this.timeout(60000)
 
       await server.sql.setTokenField(server.accessToken, 'accessTokenExpiresAt', new Date().toISOString())
       await server.sql.setTokenField(server.accessToken, 'refreshTokenExpiresAt', new Date().toISOString())
