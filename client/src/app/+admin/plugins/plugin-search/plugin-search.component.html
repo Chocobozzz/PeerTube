@@ -47,6 +47,11 @@
 
         <span *ngIf="plugin.installed" class="badge badge-success">Installed</span>
 
+
+        <span *ngIf="plugin.official" class="badge badge-primary" i18n i18n-title title="This plugin is developed by Framasoft">
+          Official
+        </span>
+
         <div class="buttons">
           <my-edit-button
             *ngIf="plugin.installed === true && !isThemeSearch()" [routerLink]="getShowRouterLink(plugin)"
