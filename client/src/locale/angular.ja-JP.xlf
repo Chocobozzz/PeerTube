@@ -3092,7 +3092,7 @@
       </trans-unit>
       <trans-unit id="127329338495775339" datatype="html">
         <source>View <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}" xid="2084023438878610739"/> from <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> </source>
-        <target state="translated"><x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> からの <x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, =1 {1 返信} other {{{ comment.totalReplies }} 返信}}"/>を見る </target>
+        <target state="translated"><x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> からの <x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, =1 {1 返信} other {{{ comment.totalReplies }} 返信}}"/> を見る </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context><context context-type="linenumber">76</context></context-group>
       </trans-unit>
       <trans-unit id="5535545444690528619" datatype="html">
@@ -9627,7 +9627,7 @@
       </trans-unit>
       <trans-unit id="4076995379551303829" datatype="html">
         <source>Custom value...</source>
-        <target state="new">Custom value...</target>
+        <target state="translated">値を設定する...</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/select/select-custom-value.component.ts</context><context context-type="linenumber">70</context></context-group>
       </trans-unit>
       <trans-unit id="4670312387769733978">
@@ -10178,12 +10178,12 @@
       </trans-unit>
       <trans-unit id="2044813052587776285" datatype="html">
         <source>Add a message to communicate with the reporter</source>
-        <target state="new">Add a message to communicate with the reporter</target>
+        <target state="translated">通報者と連絡を取り合うためにメッセージを加える</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-message-modal.component.ts</context><context context-type="linenumber">100</context></context-group>
       </trans-unit>
       <trans-unit id="4117663541503607703" datatype="html">
         <source>Add a message to communicate with the moderation team</source>
-        <target state="new">Add a message to communicate with the moderation team</target>
+        <target state="translated">モデレーションチームと連絡を取り合うためにメッセージを加える</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-message-modal.component.ts</context><context context-type="linenumber">103</context></context-group>
       </trans-unit>
       <trans-unit id="3085641638748358969">
@@ -10231,7 +10231,7 @@
       </trans-unit>
       <trans-unit id="4728427543536046034" datatype="html">
         <source>Change quota, role, and more.</source>
-        <target state="new">Change quota, role, and more.</target>
+        <target state="translated">動画容量の制限、役割、その他について変更</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">323</context></context-group>
       </trans-unit>
       <trans-unit id="7913022656086109932" datatype="html">
@@ -10334,7 +10334,7 @@
       </trans-unit>
       <trans-unit id="4809327075591089709" datatype="html">
         <source>Remove comments made by this account from your instance.</source>
-        <target state="new">Remove comments made by this account from your instance.</target>
+        <target state="translated">あなたのインスタンスの、このアカウントが作成したコメントを削除</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">392</context></context-group>
       </trans-unit>
       <trans-unit id="6504240011224861621" datatype="html">
@@ -10347,7 +10347,7 @@
       </trans-unit>
       <trans-unit id="8546847443058492245" datatype="html">
         <source>Block <x id="INTERPOLATION" equiv-text="{{ videos.length }}"/> videos</source>
-        <target state="new">Block <x id="INTERPOLATION" equiv-text="{{ videos.length }}"/> videos</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ videos.length }}"/> 動画をブロック</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context>
           <context context-type="linenumber">4</context>
@@ -10472,7 +10472,7 @@
       </trans-unit>
       <trans-unit id="1000724328916033777" datatype="html">
         <source>Multiple ways to subscribe to the current channel</source>
-        <target state="new">Multiple ways to subscribe to the current channel</target>
+        <target state="translated">このチャンネルを登録するための様々な方法</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">44</context>
@@ -10746,7 +10746,7 @@
       </trans-unit>
       <trans-unit id="60216491008745400" datatype="html">
         <source>Actions on comment</source>
-        <target state="new">Actions on comment</target>
+        <target state="translated">コメントへのアクション</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment.component.ts</context>
           <context context-type="linenumber">202</context>
@@ -10857,7 +10857,7 @@
       </trans-unit>
       <trans-unit id="118687079501751948" datatype="html">
         <source>Move to external storage failed</source>
-        <target state="new">Move to external storage failed</target>
+        <target state="translated">外部ストレージへの移動は失敗しました</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
           <context context-type="linenumber">183</context>
@@ -11198,7 +11198,7 @@
       </trans-unit>
       <trans-unit id="5237588857224999862" datatype="html">
         <source>Open actions</source>
-        <target state="new">Open actions</target>
+        <target state="translated">アクションを開く</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/buttons/action-dropdown.component.html</context>
           <context context-type="linenumber">4</context>
@@ -11214,17 +11214,17 @@
       </trans-unit>
       <trans-unit id="5668077948386857930" datatype="html">
         <source>Exclude</source>
-        <target state="new">Exclude</target>
+        <target state="translated">除外</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context><context context-type="linenumber">95</context></context-group>
       </trans-unit>
       <trans-unit id="7147755274837297932" datatype="html">
         <source>Exclude muted accounts</source>
-        <target state="new">Exclude muted accounts</target>
+        <target state="translated">ミュートしたアカウントを除外</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context><context context-type="linenumber">99</context></context-group>
       </trans-unit>
       <trans-unit id="8397092871503752085" datatype="html">
         <source>Exclude public videos</source>
-        <target state="new">Exclude public videos</target>
+        <target state="translated">公開動画を除外</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context>
           <context context-type="linenumber">103</context>
