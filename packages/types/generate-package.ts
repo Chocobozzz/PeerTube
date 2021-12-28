@@ -4,6 +4,14 @@ import { copyFile, readJson, remove, writeFile, writeJSON } from 'fs-extra'
 import { resolve } from 'path'
 import { cwd } from 'process'
 
+if (!process.argv[2]) {
+  console.error('Need version as argument')
+  process.exit(-1)
+}
+
+const version = process.argv[2]
+console.log('Will generate package version %s.', version)
+
 run()
   .then(() => process.exit(0))
   .catch(err => {
@@ -52,7 +60,7 @@ async function run () {
       return dependencies
     }, {})
 
-  const { description, version, licence, engines, author, repository } = mainPackageJson
+  const { description, licence, engines, author, repository } = mainPackageJson
   const typesPackageJson = {
     name: '@peertube/peertube-types',
     description,

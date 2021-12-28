@@ -41,7 +41,7 @@ findTestFiles () {
 }
 
 if [ "$1" = "types-package" ]; then
-    npm run generate-types-package
+    npm run generate-types-package 0.0.0
     npm run tsc -- --noEmit --esModuleInterop packages/types/tests/test.ts
 elif [ "$1" = "client" ]; then
     npm run build

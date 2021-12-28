@@ -17,8 +17,8 @@ Typescript definition files generation is controlled by the various `tsconfig.ty
 The complete types package is generated via:
 
 ```
-$ npm run generate-types-package
-$ cd types/dist
+$ npm run generate-types-package 4.x.x
+$ cd packages/types/dist
 $ npm publish --access=public
 ```
 
