@@ -41,7 +41,7 @@ export class PluginListInstalledComponent implements OnInit {
     if (!this.route.snapshot.queryParams['pluginType']) {
       const queryParams = { pluginType: PluginType.PLUGIN }
 
-      this.router.navigate([], { queryParams })
+      this.router.navigate([], { queryParams, replaceUrl: true })
     }
 
     this.route.queryParams.subscribe(query => {
