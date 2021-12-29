@@ -126,25 +126,9 @@ export class PluginShowInstalledComponent extends FormReactive implements OnInit
 
   private async translateSettings (settings: RegisterServerSettingOptions[]) {
     for (const setting of settings) {
-      for (const key of [ 'label', 'html', 'descriptionHTML' ]) {
-        if (setting[key]) setting[key] = await this.pluginService.translateBy(this.npmName, setting[key])
-      }
-
-      if (Array.isArray(setting.options)) {
-        const newOptions = []
-
-        for (const o of setting.options) {
-          newOptions.push({
-            value: o.value,
-            label: await this.pluginService.translateBy(this.npmName, o.label)
-          })
-        }
-
-        setting.options = newOptions
-      }
+      await this.pluginService.translateSetting(this.npmName, setting)
     }
 
     return settings
   }
-
 }

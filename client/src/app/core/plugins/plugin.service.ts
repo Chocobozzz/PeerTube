@@ -20,8 +20,8 @@ import {
   PluginType,
   PublicServerSetting,
   RegisterClientFormFieldOptions,
-  RegisterClientSettingsScriptOptions,
   RegisterClientRouteOptions,
+  RegisterClientSettingsScriptOptions,
   RegisterClientVideoFieldOptions,
   ServerConfigPlugin
 } from '@shared/models'
@@ -30,6 +30,7 @@ import { RegisterClientHelpers } from '../../../types/register-client-option.mod
 
 type FormFields = {
   video: {
+    pluginInfo: PluginInfo
     commonOptions: RegisterClientFormFieldOptions
     videoFormOptions: RegisterClientVideoFieldOptions
   }[]
@@ -43,8 +44,6 @@ export class PluginService implements ClientHook {
   translationsObservable: Observable<PluginTranslation>
 
   customModal: CustomModalComponent
-
-  private helpers: { [ npmName: string ]: RegisterClientHelpers } = {}
 
   private formFields: FormFields = {
     video: []
@@ -134,27 +133,49 @@ export class PluginService implements ClientHook {
     return Object.keys(this.clientRoutes)
   }
 
-  translateBy (npmName: string, toTranslate: string) {
-    const helpers = this.helpers[npmName]
-    if (!helpers) {
-      console.error('Unknown helpers to translate %s from %s.', toTranslate, npmName)
-      return toTranslate
+  async translateSetting (npmName: string, setting: RegisterClientFormFieldOptions) {
+    for (const key of [ 'label', 'html', 'descriptionHTML' ]) {
+      if (setting[key]) setting[key] = await this.translateBy(npmName, setting[key])
     }
 
-    return helpers.translate(toTranslate)
+    if (Array.isArray(setting.options)) {
+      const newOptions = []
+
+      for (const o of setting.options) {
+        newOptions.push({
+          value: o.value,
+          label: await this.translateBy(npmName, o.label)
+        })
+      }
+
+      setting.options = newOptions
+    }
   }
 
-  private onFormFields (commonOptions: RegisterClientFormFieldOptions, videoFormOptions: RegisterClientVideoFieldOptions) {
+  translateBy (npmName: string, toTranslate: string) {
+    const obs = this.translationsObservable
+        .pipe(
+          map(allTranslations => allTranslations[npmName]),
+          map(translations => peertubeTranslate(toTranslate, translations))
+        )
+
+    return firstValueFrom(obs)
+  }
+
+  private onFormFields (
+    pluginInfo: PluginInfo,
+    commonOptions: RegisterClientFormFieldOptions,
+    videoFormOptions: RegisterClientVideoFieldOptions
+  ) {
     this.formFields.video.push({
+      pluginInfo,
       commonOptions,
       videoFormOptions
     })
   }
 
   private onSettingsScripts (pluginInfo: PluginInfo, options: RegisterClientSettingsScriptOptions) {
-    const npmName = this.nameToNpmName(pluginInfo.plugin.name, pluginInfo.pluginType)
-
-    this.settingsScripts[npmName] = options
+    this.settingsScripts[pluginInfo.plugin.npmName] = options
   }
 
   private onClientRoute (options: RegisterClientRouteOptions) {
@@ -167,7 +188,7 @@ export class PluginService implements ClientHook {
 
   private buildPeerTubeHelpers (pluginInfo: PluginInfo): RegisterClientHelpers {
     const { plugin } = pluginInfo
-    const npmName = this.nameToNpmName(pluginInfo.plugin.name, pluginInfo.pluginType)
+    const npmName = pluginInfo.plugin.npmName
 
     return {
       getBaseStaticRoute: () => {
@@ -241,11 +262,7 @@ export class PluginService implements ClientHook {
       },
 
       translate: (value: string) => {
-        const obs = this.translationsObservable
-            .pipe(map(allTranslations => allTranslations[npmName]))
-            .pipe(map(translations => peertubeTranslate(value, translations)))
-
-        return firstValueFrom(obs)
+        return this.translateBy(npmName, value)
       }
     }
   }

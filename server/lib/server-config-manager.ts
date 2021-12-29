@@ -3,6 +3,7 @@ import { CONFIG, isEmailEnabled } from '@server/initializers/config'
 import { CONSTRAINTS_FIELDS, DEFAULT_THEME_NAME, PEERTUBE_VERSION } from '@server/initializers/constants'
 import { isSignupAllowed, isSignupAllowedForCurrentIP } from '@server/lib/signup'
 import { ActorCustomPageModel } from '@server/models/account/actor-custom-page'
+import { PluginModel } from '@server/models/server/plugin'
 import { HTMLServerConfig, RegisteredExternalAuthConfig, RegisteredIdAndPassAuthConfig, ServerConfig } from '@shared/models'
 import { Hooks } from './plugins/hooks'
 import { PluginManager } from './plugins/plugin-manager'
@@ -269,6 +270,7 @@ class ServerConfigManager {
   getRegisteredThemes () {
     return PluginManager.Instance.getRegisteredThemes()
                         .map(t => ({
+                          npmName: PluginModel.buildNpmName(t.name, t.type),
                           name: t.name,
                           version: t.version,
                           description: t.description,
@@ -280,6 +282,7 @@ class ServerConfigManager {
   getRegisteredPlugins () {
     return PluginManager.Instance.getRegisteredPlugins()
                         .map(p => ({
+                          npmName: PluginModel.buildNpmName(p.name, p.type),
                           name: p.name,
                           version: p.version,
                           description: p.description,

@@ -37,8 +37,15 @@ type PluginInfo = {
 }
 
 type PeertubeHelpersFactory = (pluginInfo: PluginInfo) => RegisterClientHelpers
-type OnFormFields = (options: RegisterClientFormFieldOptions, videoFormOptions: RegisterClientVideoFieldOptions) => void
+
+type OnFormFields = (
+  pluginInfo: PluginInfo,
+  options: RegisterClientFormFieldOptions,
+  videoFormOptions: RegisterClientVideoFieldOptions
+) => void
+
 type OnSettingsScripts = (pluginInfo: PluginInfo, options: RegisterClientSettingsScriptOptions) => void
+
 type OnClientRoute = (options: RegisterClientRouteOptions) => void
 
 const logger = debug('peertube:plugins')
@@ -223,7 +230,7 @@ class PluginsManager {
         throw new Error('Video field registration is not supported')
       }
 
-      return this.onFormFields(commonOptions, videoFormOptions)
+      return this.onFormFields(pluginInfo, commonOptions, videoFormOptions)
     }
 
     const registerSettingsScript = (options: RegisterClientSettingsScriptOptions) => {

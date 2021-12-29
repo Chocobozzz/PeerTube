@@ -22,6 +22,7 @@ import {
 import { FormReactiveValidationMessages, FormValidatorService } from '@app/shared/shared-forms'
 import { InstanceService } from '@app/shared/shared-instance'
 import { VideoCaptionEdit, VideoEdit, VideoService } from '@app/shared/shared-main'
+import { PluginInfo } from '@root-helpers/plugins-manager'
 import {
   HTMLServerConfig,
   LiveVideo,
@@ -37,6 +38,7 @@ import { VideoEditType } from './video-edit.type'
 
 type VideoLanguages = VideoConstant<string> & { group?: string }
 type PluginField = {
+  pluginInfo: PluginInfo
   commonOptions: RegisterClientFormFieldOptions
   videoFormOptions: RegisterClientVideoFieldOptions
 }
@@ -294,7 +296,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
     })
   }
 
-  private updatePluginFields () {
+  private async updatePluginFields () {
     this.pluginFields = this.pluginService.getRegisteredVideoFormFields(this.type)
 
     if (this.pluginFields.length === 0) return
@@ -305,6 +307,8 @@ export class VideoEditComponent implements OnInit, OnDestroy {
     const pluginDefaults: any = {}
 
     for (const setting of this.pluginFields) {
+      await this.pluginService.translateSetting(setting.pluginInfo.plugin.npmName, setting.commonOptions)
+
       const validator = (control: AbstractControl): ValidationErrors | null => {
         if (!setting.commonOptions.error) return null
 

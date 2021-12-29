@@ -5,6 +5,7 @@ import { BroadcastMessageLevel } from './broadcast-message-level.type'
 
 export interface ServerConfigPlugin {
   name: string
+  npmName: string
   version: string
   description: string
   clientScripts: { [name: string]: ClientScriptJSON }

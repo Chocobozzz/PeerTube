@@ -99,9 +99,11 @@ describe('Test plugins', function () {
 
     const theme = config.theme.registered.find(r => r.name === 'background-red')
     expect(theme).to.not.be.undefined
+    expect(theme.npmName).to.equal('peertube-theme-background-red')
 
     const plugin = config.plugin.registered.find(r => r.name === 'hello-world')
     expect(plugin).to.not.be.undefined
+    expect(plugin.npmName).to.equal('peertube-plugin-hello-world')
   })
 
   it('Should update the default theme in the configuration', async function () {
