@@ -10,7 +10,7 @@ import {
   MVideoFileVideo,
   MVideoUUID
 } from '@server/types/models'
-import { buildUUID } from '@shared/core-utils'
+import { buildUUID } from '@shared/extra-utils'
 import { VideoStorage } from '@shared/models'
 import { makeHLSFileAvailable, makeWebTorrentFileAvailable } from './object-storage'
 import { getHLSDirectory, getHLSRedundancyDirectory, getHlsResolutionPlaylistFilename } from './paths'

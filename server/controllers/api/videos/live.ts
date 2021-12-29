@@ -9,7 +9,7 @@ import { buildLocalVideoFromReq, buildVideoThumbnailsFromReq, setVideoTags } fro
 import { videoLiveAddValidator, videoLiveGetValidator, videoLiveUpdateValidator } from '@server/middlewares/validators/videos/video-live'
 import { VideoLiveModel } from '@server/models/video/video-live'
 import { MVideoDetails, MVideoFullLight } from '@server/types/models'
-import { buildUUID, uuidToShort } from '@shared/core-utils'
+import { buildUUID, uuidToShort } from '@shared/extra-utils'
 import { HttpStatusCode, LiveVideoCreate, LiveVideoUpdate, VideoState } from '@shared/models'
 import { logger } from '../../../helpers/logger'
 import { sequelizeTypescript } from '../../../initializers/database'

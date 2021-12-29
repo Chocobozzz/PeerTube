@@ -32,7 +32,8 @@ import { getHLSDirectory, getHLSRedundancyDirectory } from '@server/lib/paths'
 import { VideoPathManager } from '@server/lib/video-path-manager'
 import { getServerActor } from '@server/models/application/application'
 import { ModelCache } from '@server/models/model-cache'
-import { buildVideoEmbedPath, buildVideoWatchPath, pick, uuidToShort } from '@shared/core-utils'
+import { buildVideoEmbedPath, buildVideoWatchPath, pick } from '@shared/core-utils'
+import { uuidToShort } from '@shared/extra-utils'
 import {
   ResultList,
   ThumbnailType,

@@ -1,5 +1,5 @@
 import * as Sequelize from 'sequelize'
-import { buildUUID } from '@shared/core-utils'
+import { buildUUID } from '@shared/extra-utils'
 import { VideoPlaylistPrivacy, VideoPlaylistType } from '../../../shared/models/videos'
 import { WEBSERVER } from '../constants'
 

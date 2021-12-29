@@ -11,6 +11,7 @@ import { ServerService } from '@app/core/server/server.service'
 import { getDevLocale, isOnDevLocale } from '@app/helpers'
 import { CustomModalComponent } from '@app/modal/custom-modal.component'
 import { PluginInfo, PluginsManager } from '@root-helpers/plugins-manager'
+import { getKeys } from '@shared/core-utils'
 import { getCompleteLocale, isDefaultLocale, peertubeTranslate } from '@shared/core-utils/i18n'
 import {
   ClientHook,
@@ -134,7 +135,7 @@ export class PluginService implements ClientHook {
   }
 
   async translateSetting (npmName: string, setting: RegisterClientFormFieldOptions) {
-    for (const key of [ 'label', 'html', 'descriptionHTML' ]) {
+    for (const key of getKeys(setting, [ 'label', 'html', 'descriptionHTML' ])) {
       if (setting[key]) setting[key] = await this.translateBy(npmName, setting[key])
     }
 

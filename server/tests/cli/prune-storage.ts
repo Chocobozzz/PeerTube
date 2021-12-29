@@ -4,7 +4,8 @@ import 'mocha'
 import * as chai from 'chai'
 import { createFile, readdir } from 'fs-extra'
 import { join } from 'path'
-import { buildUUID, wait } from '@shared/core-utils'
+import { wait } from '@shared/core-utils'
+import { buildUUID } from '@shared/extra-utils'
 import { HttpStatusCode, VideoPlaylistPrivacy } from '@shared/models'
 import {
   cleanupTests,

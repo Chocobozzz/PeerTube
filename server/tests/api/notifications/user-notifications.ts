@@ -13,7 +13,8 @@ import {
   prepareNotificationsTest,
   uploadRandomVideoOnServers
 } from '@server/tests/shared'
-import { buildUUID, wait } from '@shared/core-utils'
+import { wait } from '@shared/core-utils'
+import { buildUUID } from '@shared/extra-utils'
 import { UserNotification, UserNotificationType, VideoPrivacy } from '@shared/models'
 import { cleanupTests, PeerTubeServer, waitJobs } from '@shared/server-commands'
 

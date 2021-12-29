@@ -10,6 +10,10 @@ function pick <O extends object, K extends keyof O> (object: O, keys: K[]): Pick
   return result
 }
 
+function getKeys <O extends object, K extends keyof O> (object: O, keys: K[]): K[] {
+  return (Object.keys(object) as K[]).filter(k => keys.includes(k))
+}
+
 function sortObjectComparator (key: string, order: 'asc' | 'desc') {
   return (a: any, b: any) => {
     if (a[key] < b[key]) {
@@ -26,5 +30,6 @@ function sortObjectComparator (key: string, order: 'asc' | 'desc') {
 
 export {
   pick,
+  getKeys,
   sortObjectComparator
 }

@@ -1,7 +1,7 @@
 import { Transaction } from 'sequelize/types'
 import { UserModel } from '@server/models/user/user'
 import { MActorDefault } from '@server/types/models/actor'
-import { buildUUID } from '@shared/core-utils'
+import { buildUUID } from '@shared/extra-utils'
 import { ActivityPubActorType } from '../../shared/models/activitypub'
 import { UserNotificationSetting, UserNotificationSettingValue } from '../../shared/models/users'
 import { SERVER_ACTOR_NAME, WEBSERVER } from '../initializers/constants'

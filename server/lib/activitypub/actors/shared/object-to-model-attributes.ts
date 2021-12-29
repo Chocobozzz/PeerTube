@@ -2,7 +2,8 @@ import { isActivityPubUrlValid } from '@server/helpers/custom-validators/activit
 import { MIMETYPES } from '@server/initializers/constants'
 import { ActorModel } from '@server/models/actor/actor'
 import { FilteredModelAttributes } from '@server/types'
-import { buildUUID, getLowercaseExtension } from '@shared/core-utils'
+import { getLowercaseExtension } from '@shared/core-utils'
+import { buildUUID } from '@shared/extra-utils'
 import { ActivityPubActor, ActorImageType } from '@shared/models'
 
 function getActorAttributesFromObject (

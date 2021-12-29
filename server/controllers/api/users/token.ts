@@ -7,7 +7,7 @@ import { handleOAuthToken } from '@server/lib/auth/oauth'
 import { BypassLogin, revokeToken } from '@server/lib/auth/oauth-model'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { asyncMiddleware, authenticate, openapiOperationDoc } from '@server/middlewares'
-import { buildUUID } from '@shared/core-utils'
+import { buildUUID } from '@shared/extra-utils'
 import { ScopedToken } from '@shared/models/users/user-scoped-token'
 
 const tokensRouter = express.Router()

@@ -1,7 +1,7 @@
 import { generateMagnetUri } from '@server/helpers/webtorrent'
 import { getLocalVideoFileMetadataUrl } from '@server/lib/video-urls'
 import { VideoViews } from '@server/lib/video-views'
-import { uuidToShort } from '@shared/core-utils'
+import { uuidToShort } from '@shared/extra-utils'
 import { VideoFile, VideosCommonQueryAfterSanitize } from '@shared/models'
 import { ActivityTagObject, ActivityUrlObject, VideoObject } from '../../../../shared/models/activitypub/objects'
 import { Video, VideoDetails, VideoInclude } from '../../../../shared/models/videos'

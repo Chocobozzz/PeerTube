@@ -1,4 +1,4 @@
-import { buildUUID } from '@shared/core-utils'
+import { buildUUID } from '@shared/extra-utils'
 import * as Sequelize from 'sequelize'
 
 async function up (utils: {

@@ -1,6 +1,7 @@
 import { copy, readFile, remove, rename } from 'fs-extra'
 import Jimp, { read } from 'jimp'
-import { buildUUID, getLowercaseExtension } from '@shared/core-utils'
+import { getLowercaseExtension } from '@shared/core-utils'
+import { buildUUID } from '@shared/extra-utils'
 import { convertWebPToJPG, processGIF } from './ffmpeg-utils'
 import { logger } from './logger'
 

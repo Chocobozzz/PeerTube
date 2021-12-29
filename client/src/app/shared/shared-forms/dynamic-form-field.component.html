@@ -1,4 +1,4 @@
-<div [formGroup]="form">
+<div *ngIf="form" [formGroup]="form">
   <label *ngIf="setting.label && setting.type !== 'input-checkbox'" [attr.for]="setting.name" [innerHTML]="setting.label"></label>
 
   <my-peertube-checkbox

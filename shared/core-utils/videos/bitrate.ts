@@ -1,4 +1,4 @@
-import { VideoResolution } from "@shared/models"
+import { VideoResolution } from '@shared/models'
 
 type BitPerPixel = { [ id in VideoResolution ]: number }
 
