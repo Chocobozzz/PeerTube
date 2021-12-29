@@ -1,6 +1,4 @@
-<div class="toggle-plugin-type">
-  <p-selectButton [options]="pluginTypeOptions" [(ngModel)]="pluginType" (ngModelChange)="reloadPlugins()"></p-selectButton>
-</div>
+<my-plugin-navigation [pluginType]="pluginType"></my-plugin-navigation>
 
 <div class="no-results" *ngIf="pagination.totalItems === 0">
   {{ getNoResultMessage() }}

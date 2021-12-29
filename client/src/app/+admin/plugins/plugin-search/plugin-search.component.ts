@@ -9,14 +9,10 @@ import { PeerTubePluginIndex, PluginType } from '@shared/models'
 @Component({
   selector: 'my-plugin-search',
   templateUrl: './plugin-search.component.html',
-  styleUrls: [
-    '../shared/toggle-plugin-type.scss',
-    './plugin-search.component.scss'
-  ]
+  styleUrls: [ './plugin-search.component.scss' ]
 })
 export class PluginSearchComponent implements OnInit {
-  pluginTypeOptions: { label: string, value: PluginType }[] = []
-  pluginType: PluginType = PluginType.PLUGIN
+  pluginType: PluginType
 
   pagination: ComponentPagination = {
     currentPage: 1,
@@ -44,24 +40,30 @@ export class PluginSearchComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute
   ) {
-    this.pluginTypeOptions = this.pluginApiService.getPluginTypeOptions()
   }
 
   ngOnInit () {
-    const query = this.route.snapshot.queryParams
-    if (query['pluginType']) this.pluginType = parseInt(query['pluginType'], 10)
+    if (!this.route.snapshot.queryParams['pluginType']) {
+      const queryParams = { pluginType: PluginType.PLUGIN }
+
+      this.router.navigate([], { queryParams })
+    }
+
+    this.route.queryParams.subscribe(query => {
+      if (!query['pluginType']) return
+
+      this.pluginType = parseInt(query['pluginType'], 10)
+      this.search = query['search'] || ''
+
+      this.reloadPlugins()
+    })
 
     this.searchSubject.asObservable()
         .pipe(
           debounceTime(400),
           distinctUntilChanged()
         )
-        .subscribe(search => {
-          this.search = search
-          this.reloadPlugins()
-        })
-
-    this.reloadPlugins()
+        .subscribe(search => this.router.navigate([], { queryParams: { search }, queryParamsHandling: 'merge' }))
   }
 
   onSearchChange (event: Event) {
@@ -73,8 +75,6 @@ export class PluginSearchComponent implements OnInit {
   reloadPlugins () {
     this.pagination.currentPage = 1
     this.plugins = []
-
-    this.router.navigate([], { queryParams: { pluginType: this.pluginType } })
 
     this.loadMorePlugins()
   }

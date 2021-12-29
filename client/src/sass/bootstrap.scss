@@ -334,6 +334,34 @@ ngb-tooltip-window {
   }
 }
 
+.btn-group {
+  font-weight: $font-semibold;
+
+  .active {
+    @include orange-button;
+  }
+
+  :not(.active) {
+    @include grey-button;
+  }
+
+  > * {
+    @include peertube-button-link;
+
+    box-shadow: none !important;
+
+    &:not(:first-child) {
+      border-top-left-radius: 0 !important;
+      border-bottom-left-radius: 0 !important;
+    }
+
+    &:not(:last-child) {
+      border-top-right-radius: 0 !important;
+      border-bottom-right-radius: 0 !important;
+    }
+  }
+}
+
 // input box-shadow on focus
 .form-control {
   font-size: 15px;

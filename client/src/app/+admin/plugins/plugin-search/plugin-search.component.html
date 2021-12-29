@@ -1,28 +1,27 @@
-<div class="toggle-plugin-type">
-  <p-selectButton [options]="pluginTypeOptions" [(ngModel)]="pluginType" (ngModelChange)="reloadPlugins()"></p-selectButton>
-</div>
-
-<div class="search-bar">
-  <input type="text" (input)="onSearchChange($event)" i18n-placeholder placeholder="Search..." myAutofocus />
-</div>
+<my-plugin-navigation [pluginType]="pluginType"></my-plugin-navigation>
 
 <div class="alert alert-info" i18n *ngIf="pluginInstalled">
   To load your new installed plugins or themes, refresh the page.
 </div>
 
-<div class="result-title" *ngIf="!isSearching">
+<div class="result-and-search">
   <ng-container *ngIf="!search">
     <my-global-icon iconName="trending" aria-hidden="true"></my-global-icon>
-    <ng-container i18n>Popular</ng-container>
+    <ng-container *ngIf="!isThemeSearch()" i18n>Popular plugins</ng-container>
+    <ng-container *ngIf="isThemeSearch()" i18n>Popular themes</ng-container>
   </ng-container>
 
-  <ng-container *ngIf="!!search">
+  <ng-container *ngIf="search && !isSearching">
     <my-global-icon iconName="search"></my-global-icon>
 
     <ng-container i18n>
       {{ pagination.totalItems }} {pagination.totalItems, plural, =1 {result} other {results}} for "{{ search }}"
     </ng-container>
   </ng-container>
+
+  <div class="search-bar">
+    <input type="text" (input)="onSearchChange($event)" i18n-placeholder placeholder="Search..." myAutofocus />
+  </div>
 </div>
 
 <div class="no-results" i18n *ngIf="pagination.totalItems === 0">

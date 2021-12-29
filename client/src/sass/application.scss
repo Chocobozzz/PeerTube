@@ -261,28 +261,6 @@ my-input-toggle-hidden ::ng-deep input {
   display: flex;
   align-items: center;
   margin-bottom: 30px;
-
-  .admin-sub-nav a {
-    @include disable-default-a-behaviour;
-
-    font-size: 16px;
-    color: pvar(--mainForegroundColor);
-    padding: 5px 15px;
-    border-radius: 0.25rem;
-    font-weight: $font-semibold;
-    opacity: 0.6;
-
-    &.active {
-      background-color: pvar(--submenuBackgroundColor);
-    }
-
-    &.active,
-    &:hover,
-    &:active,
-    &:focus {
-      opacity: 1;
-    }
-  }
 }
 
 // In tables, don't have a hover different background
@@ -402,19 +380,6 @@ ngx-loading-bar {
 
     .admin-sub-header {
       flex-direction: column;
-
-      .admin-sub-nav {
-        display: block;
-        overflow-x: auto;
-        white-space: nowrap;
-        height: 50px;
-        padding: 10px 0;
-        width: 100%;
-
-        a {
-          @include margin-left(5px);
-        }
-      }
     }
 
     my-markdown-textarea {

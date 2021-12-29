@@ -1,24 +1,24 @@
 @use '_variables' as *;
 @use '_mixins' as *;
 
-.search-bar {
-  display: flex;
-  justify-content: center;
-  margin: 30px 0;
-
-  input {
-    @include peertube-input-text(60%);
-    height: 35px;
-  }
-}
-
-.result-title {
+.result-and-search {
   font-size: 22px;
   font-weight: 600;
-  margin-bottom: 15px;
+  margin: 30px 0 15px;
+  display: flex;
 
   my-global-icon {
     @include margin-right(5px);
+  }
+}
+
+.search-bar {
+  margin-left: auto;
+
+  input {
+    @include peertube-input-text(500px);
+
+    height: 35px;
   }
 }
 

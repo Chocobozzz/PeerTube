@@ -10,14 +10,10 @@ import { PeerTubePlugin, PluginType } from '@shared/models'
 @Component({
   selector: 'my-plugin-list-installed',
   templateUrl: './plugin-list-installed.component.html',
-  styleUrls: [
-    '../shared/toggle-plugin-type.scss',
-    './plugin-list-installed.component.scss'
-  ]
+  styleUrls: [ './plugin-list-installed.component.scss' ]
 })
 export class PluginListInstalledComponent implements OnInit {
-  pluginTypeOptions: { label: string, value: PluginType }[] = []
-  pluginType: PluginType = PluginType.PLUGIN
+  pluginType: PluginType
 
   pagination: ComponentPagination = {
     currentPage: 1,
@@ -39,21 +35,27 @@ export class PluginListInstalledComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute
   ) {
-    this.pluginTypeOptions = this.pluginApiService.getPluginTypeOptions()
   }
 
   ngOnInit () {
-    const query = this.route.snapshot.queryParams
-    if (query['pluginType']) this.pluginType = parseInt(query['pluginType'], 10)
+    if (!this.route.snapshot.queryParams['pluginType']) {
+      const queryParams = { pluginType: PluginType.PLUGIN }
 
-    this.reloadPlugins()
+      this.router.navigate([], { queryParams })
+    }
+
+    this.route.queryParams.subscribe(query => {
+      if (!query['pluginType']) return
+
+      this.pluginType = parseInt(query['pluginType'], 10)
+
+      this.reloadPlugins()
+    })
   }
 
   reloadPlugins () {
     this.pagination.currentPage = 1
     this.plugins = []
-
-    this.router.navigate([], { queryParams: { pluginType: this.pluginType } })
 
     this.loadMorePlugins()
   }

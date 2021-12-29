@@ -1,5 +1,4 @@
 import { ChartModule } from 'primeng/chart'
-import { SelectButtonModule } from 'primeng/selectbutton'
 import { TableModule } from 'primeng/table'
 import { NgModule } from '@angular/core'
 import { SharedAbuseListModule } from '@app/shared/shared-abuse-list'
@@ -45,7 +44,7 @@ import {
   PluginApiService,
   PluginCardComponent,
   PluginListInstalledComponent,
-  PluginsComponent,
+  PluginNavigationComponent,
   PluginSearchComponent,
   PluginShowInstalledComponent
 } from './plugins'
@@ -70,7 +69,6 @@ import { JobsComponent } from './system/jobs/jobs.component'
     SharedTablesModule,
 
     TableModule,
-    SelectButtonModule,
     ChartModule
   ],
 
@@ -98,11 +96,11 @@ import { JobsComponent } from './system/jobs/jobs.component'
     InstanceServerBlocklistComponent,
     InstanceAccountBlocklistComponent,
 
-    PluginsComponent,
     PluginListInstalledComponent,
     PluginSearchComponent,
     PluginShowInstalledComponent,
     PluginCardComponent,
+    PluginNavigationComponent,
 
     JobsComponent,
     LogsComponent,

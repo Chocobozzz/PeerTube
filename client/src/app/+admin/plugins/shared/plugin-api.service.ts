@@ -25,19 +25,6 @@ export class PluginApiService {
     private pluginService: PluginService
   ) { }
 
-  getPluginTypeOptions () {
-    return [
-      {
-        label: $localize`Plugins`,
-        value: PluginType.PLUGIN
-      },
-      {
-        label: $localize`Themes`,
-        value: PluginType.THEME
-      }
-    ]
-  }
-
   getPluginTypeLabel (type: PluginType) {
     if (type === PluginType.PLUGIN) {
       return $localize`plugin`

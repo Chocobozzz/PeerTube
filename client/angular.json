@@ -302,11 +302,13 @@
   "defaultProject": "PeerTube",
   "schematics": {
     "@schematics/angular:component": {
-      "prefix": "app",
-      "style": "scss"
+      "prefix": "my",
+      "style": "scss",
+      "skipTests": true,
+      "flat": true
     },
     "@schematics/angular:directive": {
-      "prefix": "app"
+      "prefix": "my"
     }
   }
 }
