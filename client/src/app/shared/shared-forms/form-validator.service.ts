@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core'
-import { FormBuilder, FormControl, FormGroup, ValidatorFn } from '@angular/forms'
+import { AsyncValidatorFn, FormArray, FormBuilder, FormControl, FormGroup, ValidatorFn } from '@angular/forms'
 import { BuildFormArgument, BuildFormDefaultValues } from '../form-validators/form-validator.model'
 import { FormReactiveErrors, FormReactiveValidationMessages } from './form-reactive'
 
@@ -68,8 +68,20 @@ export class FormValidatorService {
 
       form.addControl(
         name,
-        new FormControl(defaultValue, field?.VALIDATORS as ValidatorFn[])
+        new FormControl(defaultValue, field?.VALIDATORS as ValidatorFn[], field?.ASYNC_VALIDATORS as AsyncValidatorFn[])
       )
+    }
+  }
+
+  updateTreeValidity (group: FormGroup | FormArray): void {
+    for (const key of Object.keys(group.controls)) {
+      const abstractControl = group.controls[key] as FormControl
+
+      if (abstractControl instanceof FormGroup || abstractControl instanceof FormArray) {
+        this.updateTreeValidity(abstractControl)
+      } else {
+        abstractControl.updateValueAndValidity({ emitEvent: false })
+      }
     }
   }
 

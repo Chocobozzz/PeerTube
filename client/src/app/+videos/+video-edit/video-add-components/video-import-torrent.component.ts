@@ -123,10 +123,8 @@ export class VideoImportTorrentComponent extends VideoSend implements OnInit, Af
       })
   }
 
-  updateSecondStep () {
-    if (this.checkForm() === false) {
-      return
-    }
+  async updateSecondStep () {
+    if (!await this.isFormValid()) return
 
     this.video.patch(this.form.value)
 

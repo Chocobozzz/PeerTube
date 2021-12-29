@@ -91,12 +91,6 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
     return { canDeactivate: this.formChanged === false, text }
   }
 
-  checkForm () {
-    this.forceCheck()
-
-    return this.form.valid
-  }
-
   isWaitTranscodingEnabled () {
     if (this.videoDetails.getFiles().length > 1) { // Already transcoded
       return false
@@ -109,8 +103,11 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
     return true
   }
 
-  update () {
-    if (this.checkForm() === false || this.isUpdatingVideo === true) {
+  async update () {
+    await this.waitPendingCheck()
+    this.forceCheck()
+
+    if (!this.form.valid || this.isUpdatingVideo === true) {
       return
     }
 

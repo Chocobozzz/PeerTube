@@ -63,11 +63,10 @@ describe('Plugins', () => {
     const checkbox = await getPluginCheckbox()
     await checkbox.click()
 
-    await browserSleep(5000)
-
     await expectSubmitState({ disabled: true })
 
     const error = await $('.form-error*=Should be enabled')
+
     expect(await error.isDisplayed()).toBeTruthy()
   })
 

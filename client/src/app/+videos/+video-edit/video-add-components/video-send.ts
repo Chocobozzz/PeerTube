@@ -60,12 +60,6 @@ export abstract class VideoSend extends FormReactive implements OnInit {
           })
   }
 
-  checkForm () {
-    this.forceCheck()
-
-    return this.form.valid
-  }
-
   protected updateVideoAndCaptions (video: VideoEdit) {
     this.loadingBar.useRef().start()
 
@@ -79,5 +73,12 @@ export abstract class VideoSend extends FormReactive implements OnInit {
             throw err
           })
         )
+  }
+
+  protected async isFormValid () {
+    await this.waitPendingCheck()
+    this.forceCheck()
+
+    return this.form.valid
   }
 }

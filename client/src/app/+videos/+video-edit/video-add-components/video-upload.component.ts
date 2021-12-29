@@ -226,7 +226,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
   }
 
   isPublishingButtonDisabled () {
-    return !this.checkForm() ||
+    return !this.form.valid ||
       this.isUpdatingVideo === true ||
       this.videoUploaded !== true ||
       !this.videoUploadedIds.id
@@ -239,10 +239,9 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     return $localize`Upload ${videofile.name}`
   }
 
-  updateSecondStep () {
-    if (this.isPublishingButtonDisabled()) {
-      return
-    }
+  async updateSecondStep () {
+    if (!await this.isFormValid()) return
+    if (this.isPublishingButtonDisabled()) return
 
     const video = new VideoEdit()
     video.patch(this.form.value)

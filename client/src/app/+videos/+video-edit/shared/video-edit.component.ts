@@ -2,7 +2,7 @@ import { forkJoin } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { SelectChannelItem } from 'src/types/select-options-item.model'
 import { ChangeDetectorRef, Component, EventEmitter, Input, NgZone, OnDestroy, OnInit, Output, ViewChild } from '@angular/core'
-import { AbstractControl, FormArray, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms'
+import { AbstractControl, FormArray, FormControl, FormGroup, Validators } from '@angular/forms'
 import { HooksService, PluginService, ServerService } from '@app/core'
 import { removeElementFromArray } from '@app/helpers'
 import { BuildFormValidator } from '@app/shared/form-validators'
@@ -309,10 +309,10 @@ export class VideoEditComponent implements OnInit, OnDestroy {
     for (const setting of this.pluginFields) {
       await this.pluginService.translateSetting(setting.pluginInfo.plugin.npmName, setting.commonOptions)
 
-      const validator = (control: AbstractControl): ValidationErrors | null => {
+      const validator = async (control: AbstractControl) => {
         if (!setting.commonOptions.error) return null
 
-        const error = setting.commonOptions.error({ formValues: this.form.value, value: control.value })
+        const error = await setting.commonOptions.error({ formValues: this.form.value, value: control.value })
 
         return error?.error ? { [setting.commonOptions.name]: error.text } : null
       }
@@ -320,7 +320,8 @@ export class VideoEditComponent implements OnInit, OnDestroy {
       const name = setting.commonOptions.name
 
       pluginObj[name] = {
-        VALIDATORS: [ validator ],
+        ASYNC_VALIDATORS: [ validator ],
+        VALIDATORS: [],
         MESSAGES: {}
       }
 
@@ -342,6 +343,9 @@ export class VideoEditComponent implements OnInit, OnDestroy {
 
     this.cd.detectChanges()
     this.pluginFieldsAdded.emit()
+
+    // Plugins may need other control values to calculate potential errors
+    this.form.valueChanges.subscribe(() => this.formValidatorService.updateTreeValidity(this.pluginDataFormGroup))
   }
 
   private trackPrivacyChange () {

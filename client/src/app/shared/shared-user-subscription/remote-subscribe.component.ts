@@ -27,7 +27,7 @@ export class RemoteSubscribeComponent extends FormReactive implements OnInit {
   }
 
   onValidKey () {
-    this.check()
+    this.forceCheck()
     if (!this.form.valid) return
 
     this.formValidated()

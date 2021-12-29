@@ -110,10 +110,8 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, AfterView
       })
   }
 
-  updateSecondStep () {
-    if (this.checkForm() === false) {
-      return
-    }
+  async updateSecondStep () {
+    if (!await this.isFormValid()) return
 
     const video = new VideoEdit()
     video.patch(this.form.value)

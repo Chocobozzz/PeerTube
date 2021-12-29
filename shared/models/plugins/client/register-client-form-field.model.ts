@@ -19,7 +19,7 @@ export type RegisterClientFormFieldOptions = {
 
   // Return undefined | null if there is no error or return a string with the detailed error
   // Not supported by plugin setting registration
-  error?: (options: any) => { error: boolean, text?: string }
+  error?: (options: any) => Promise<{ error: boolean, text?: string }>
 }
 
 export interface RegisterClientVideoFieldOptions {
