@@ -1,6 +1,12 @@
 <div class="video-edit" [formGroup]="form">
   <div ngbNav #nav="ngbNav" class="nav-tabs">
 
+    <ng-template #pluginSettingTemplate let-pluginSetting>
+      <div class="form-group" [hidden]="isPluginFieldHidden(pluginSetting)">
+        <my-dynamic-form-field [form]="pluginDataFormGroup" [formErrors]="formErrors['pluginData']" [setting]="pluginSetting.commonOptions"></my-dynamic-form-field>
+      </div>
+    </ng-template>
+
     <ng-container ngbNavItem>
       <a ngbNavLink i18n>Basic info</a>
 
@@ -146,12 +152,10 @@
               </ng-template>
             </my-peertube-checkbox>
 
-            <ng-container ngbNavItem *ngIf="getPluginsFields('main').length !== 0">
-
-              <div *ngFor="let pluginSetting of getPluginsFields('main')" class="form-group" [hidden]="isPluginFieldHidden(pluginSetting)">
-                <my-dynamic-form-field [form]="pluginDataFormGroup" [formErrors]="formErrors['pluginData']" [setting]="pluginSetting.commonOptions"></my-dynamic-form-field>
-              </div>
-
+            <ng-container
+              *ngFor="let pluginSetting of getPluginsFields('main')"
+              [ngTemplateOutlet]="pluginSettingTemplate" [ngTemplateOutletContext]="{ $implicit: pluginSetting }"
+            >
             </ng-container>
           </div>
         </div>
@@ -353,9 +357,11 @@
         <div class="row plugin-settings">
 
           <div class="col-md-12 col-xl-8">
-            <div *ngFor="let pluginSetting of getPluginsFields('plugin-settings')" class="form-group" [hidden]="isPluginFieldHidden(pluginSetting)">
-              <my-dynamic-form-field [form]="pluginDataFormGroup" [formErrors]="formErrors['pluginData']" [setting]="pluginSetting.commonOptions"></my-dynamic-form-field>
-            </div>
+            <ng-container
+              *ngFor="let pluginSetting of getPluginsFields('plugin-settings')"
+              [ngTemplateOutlet]="pluginSettingTemplate" [ngTemplateOutletContext]="{ $implicit: pluginSetting }"
+            >
+            </ng-container>
           </div>
 
         </div>
