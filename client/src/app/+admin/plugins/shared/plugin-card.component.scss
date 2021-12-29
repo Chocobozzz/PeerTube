@@ -36,11 +36,8 @@
 
   .buttons {
     @include margin-left(auto);
-    width: max-content;
 
-    > *:not(:last-child) {
-      @include margin-right(10px);
-    }
+    width: max-content;
   }
 }
 

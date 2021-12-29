@@ -12,7 +12,6 @@ import { PeerTubePlugin, PluginType } from '@shared/models'
   templateUrl: './plugin-list-installed.component.html',
   styleUrls: [
     '../shared/toggle-plugin-type.scss',
-    '../shared/plugin-list.component.scss',
     './plugin-list-installed.component.scss'
   ]
 })

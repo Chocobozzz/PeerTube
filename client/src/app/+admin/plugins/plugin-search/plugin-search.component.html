@@ -30,45 +30,29 @@
 </div>
 
 <div class="plugins" myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [dataObservable]="onDataSubject.asObservable()">
-  <div class="card plugin" *ngFor="let plugin of plugins">
-    <div class="card-body">
-      <div class="first-row">
-        <span class="plugin-name">{{ plugin.name }}</span>
-
-        <span class="plugin-version">{{ plugin.latestVersion }}</span>
-
-        <a class="plugin-icon" target="_blank" rel="noopener noreferrer" [href]="plugin.homepage" i18n-title title="Plugin homepage (new window)">
-          <my-global-icon iconName="home"></my-global-icon>
-        </a>
-
-        <a class="plugin-icon" target="_blank" rel="noopener noreferrer" [href]="getPluginOrThemeHref(plugin.name)" i18n-title title="Plugin npm package (new window)">
-          <my-global-icon iconName="npm"></my-global-icon>
-        </a>
-
-        <span *ngIf="plugin.installed" class="badge badge-success">Installed</span>
-
+  <ng-container *ngFor="let plugin of plugins" >
+    <my-plugin-card [plugin]="plugin" [version]="plugin.latestVersion" [pluginType]="pluginType">
+      <div ngProjectAs="badges">
+        <span i18n *ngIf="plugin.installed" class="badge badge-success">Installed</span>
 
         <span *ngIf="plugin.official" class="badge badge-primary" i18n i18n-title title="This plugin is developed by Framasoft">
           Official
         </span>
-
-        <div class="buttons">
-          <my-edit-button
-            *ngIf="plugin.installed === true && !isThemeSearch()" [routerLink]="getShowRouterLink(plugin)"
-            label="Settings" i18n-label [responsiveLabel]="true"
-          ></my-edit-button>
-
-          <my-button
-            class="update-button" *ngIf="plugin.installed === false" (click)="install(plugin)"
-            [loading]="isInstalling(plugin)" label="Install" [responsiveLabel]="true"
-            icon="cloud-download" [attr.disabled]="isInstalling(plugin)"
-          ></my-button>
-        </div>
       </div>
 
-      <div class="second-row">
-        <div class="description">{{ plugin.description }}</div>
+      <div ngProjectAs="buttons">
+        <my-edit-button
+          *ngIf="plugin.installed === true && !isThemeSearch()" [routerLink]="getShowRouterLink(plugin)"
+          label="Settings" i18n-label [responsiveLabel]="true"
+        ></my-edit-button>
+
+        <my-button
+          class="update-button" *ngIf="plugin.installed === false" (click)="install(plugin)"
+          [loading]="isInstalling(plugin)" label="Install" [responsiveLabel]="true"
+          icon="cloud-download" [attr.disabled]="isInstalling(plugin)"
+        ></my-button>
       </div>
-    </div>
-  </div>
+
+    </my-plugin-card>
+  </ng-container>
 </div>

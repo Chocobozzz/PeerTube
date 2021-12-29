@@ -11,7 +11,6 @@ import { PeerTubePluginIndex, PluginType } from '@shared/models'
   templateUrl: './plugin-search.component.html',
   styleUrls: [
     '../shared/toggle-plugin-type.scss',
-    '../shared/plugin-list.component.scss',
     './plugin-search.component.scss'
   ]
 })
@@ -113,10 +112,6 @@ export class PluginSearchComponent implements OnInit {
 
   isInstalling (plugin: PeerTubePluginIndex) {
     return !!this.installing[plugin.npmName]
-  }
-
-  getPluginOrThemeHref (name: string) {
-    return this.pluginApiService.getPluginOrThemeHref(this.pluginType, name)
   }
 
   getShowRouterLink (plugin: PeerTubePluginIndex) {

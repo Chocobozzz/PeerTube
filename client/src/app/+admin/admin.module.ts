@@ -41,11 +41,14 @@ import {
   VideoAdminService,
   VideoListComponent
 } from './overview'
-import { PluginListInstalledComponent } from './plugins/plugin-list-installed/plugin-list-installed.component'
-import { PluginSearchComponent } from './plugins/plugin-search/plugin-search.component'
-import { PluginShowInstalledComponent } from './plugins/plugin-show-installed/plugin-show-installed.component'
-import { PluginsComponent } from './plugins/plugins.component'
-import { PluginApiService } from './plugins/shared/plugin-api.service'
+import {
+  PluginApiService,
+  PluginCardComponent,
+  PluginListInstalledComponent,
+  PluginsComponent,
+  PluginSearchComponent,
+  PluginShowInstalledComponent
+} from './plugins'
 import { JobService, LogsComponent, LogsService } from './system'
 import { DebugComponent, DebugService } from './system/debug'
 import { JobsComponent } from './system/jobs/jobs.component'
@@ -99,6 +102,7 @@ import { JobsComponent } from './system/jobs/jobs.component'
     PluginListInstalledComponent,
     PluginSearchComponent,
     PluginShowInstalledComponent,
+    PluginCardComponent,
 
     JobsComponent,
     LogsComponent,
