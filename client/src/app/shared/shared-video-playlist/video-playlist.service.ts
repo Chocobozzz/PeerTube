@@ -1,11 +1,12 @@
 import * as debug from 'debug'
 import { merge, Observable, of, ReplaySubject, Subject } from 'rxjs'
 import { catchError, filter, map, share, switchMap, tap } from 'rxjs/operators'
-import { HttpClient, HttpParams } from '@angular/common/http'
+import { HttpClient, HttpContext, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { AuthUser, ComponentPaginationLight, RestExtractor, RestService, ServerService } from '@app/core'
 import { buildBulkObservable, objectToFormData } from '@app/helpers'
 import { Account, AccountService, VideoChannel, VideoChannelService } from '@app/shared/shared-main'
+import { NGX_LOADING_BAR_IGNORED } from '@ngx-loading-bar/http-client'
 import {
   ResultList,
   VideoExistInPlaylist,
@@ -350,7 +351,7 @@ export class VideoPlaylistService {
     let params = new HttpParams()
     params = this.restService.addObjectParams(params, { videoIds })
 
-    return this.authHttp.get<VideoExistInPlaylist>(url, { params, headers: { ignoreLoadingBar: '' } })
+    return this.authHttp.get<VideoExistInPlaylist>(url, { params, context: new HttpContext().set(NGX_LOADING_BAR_IGNORED, true) })
                .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 }
