@@ -997,7 +997,7 @@
       </trans-unit>
       <trans-unit id="7683705529753923369" datatype="html">
         <source>Player</source>
-        <target state="translated">Spieler</target>
+        <target state="translated">Abspieler</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">111</context></context-group>
       </trans-unit>
       <trans-unit id="2000016511993764346">
@@ -1040,7 +1040,7 @@
       </trans-unit>
       <trans-unit id="7222991934579313942" datatype="html">
         <source>of hosted video</source>
-        <target state="translated">eines bereitgestellten Videos</target>
+        <target state="translated">an bereitgestellten Videos</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-statistics.component.html</context><context context-type="linenumber">51</context></context-group>
       </trans-unit>
       <trans-unit id="8726138323871139597" datatype="html">
