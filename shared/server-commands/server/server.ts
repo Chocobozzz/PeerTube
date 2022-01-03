@@ -210,15 +210,17 @@ export class PeerTubeServer {
       Object.assign(env, options.env)
     }
 
+    const execArgv = options.nodeArgs || []
+    execArgv.push('--enable-source-maps')
+
     const forkOptions = {
       silent: true,
       env,
       detached: true,
-      execArgv: options.nodeArgs || []
+      execArgv
     }
 
     const peertubeArgs = options.peertubeArgs || []
-    peertubeArgs.push('--enable-source-maps')
 
     return new Promise<void>((res, rej) => {
       const self = this
