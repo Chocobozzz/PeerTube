@@ -4,7 +4,7 @@
     <body>
       <trans-unit id="ngb.alert.close" datatype="html">
         <source>Close</source>
-        <target state="new">Close</target>
+        <target state="translated">Fermer</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/alert/alert.ts</context>
           <context context-type="linenumber">76</context>
@@ -12,7 +12,7 @@
       </trans-unit>
       <trans-unit id="ngb.carousel.slide-number" datatype="html">
         <source>Slide <x id="INTERPOLATION" equiv-text="get wrap("/> of <x id="INTERPOLATION_1" equiv-text=".value; }"/> </source>
-        <target state="new"> Slide <x id="INTERPOLATION" equiv-text="get wrap("/> of <x id="INTERPOLATION_1" equiv-text=".value; }"/> </target>
+        <target state="translated">Diapositive <x id="INTERPOLATION" equiv-text="get wrap("/> de <x id="INTERPOLATION_1" equiv-text=".value; }"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/carousel/carousel.ts</context>
           <context context-type="linenumber">147,157</context>
@@ -21,7 +21,7 @@
       </trans-unit>
       <trans-unit id="ngb.carousel.previous" datatype="html">
         <source>Previous</source>
-        <target state="new">Previous</target>
+        <target state="translated">Précédent</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/carousel/carousel.ts</context>
           <context context-type="linenumber">174</context>
@@ -29,7 +29,7 @@
       </trans-unit>
       <trans-unit id="ngb.carousel.next" datatype="html">
         <source>Next</source>
-        <target state="new">Next</target>
+        <target state="translated">Suivant</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/carousel/carousel.ts</context>
           <context context-type="linenumber">191</context>
@@ -37,7 +37,7 @@
       </trans-unit>
       <trans-unit id="ngb.datepicker.select-month" datatype="html">
         <source>Select month</source>
-        <target state="new">Select month</target>
+        <target state="translated">Sélectionner le mois</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/datepicker/datepicker-navigation-select.ts</context>
           <context context-type="linenumber">74</context>
@@ -49,7 +49,7 @@
       </trans-unit>
       <trans-unit id="ngb.datepicker.select-year" datatype="html">
         <source>Select year</source>
-        <target state="new">Select year</target>
+        <target state="translated">Sélectionner l'année</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/datepicker/datepicker-navigation-select.ts</context>
           <context context-type="linenumber">74</context>
@@ -61,7 +61,7 @@
       </trans-unit>
       <trans-unit id="ngb.datepicker.previous-month" datatype="html">
         <source>Previous month</source>
-        <target state="new">Previous month</target>
+        <target state="translated">Mois précédent</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/datepicker/datepicker-navigation.ts</context>
           <context context-type="linenumber">69</context>
@@ -73,7 +73,7 @@
       </trans-unit>
       <trans-unit id="ngb.datepicker.next-month" datatype="html">
         <source>Next month</source>
-        <target state="new">Next month</target>
+        <target state="translated">Mois suivant</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/datepicker/datepicker-navigation.ts</context>
           <context context-type="linenumber">69</context>
@@ -117,7 +117,7 @@
       </trans-unit>
       <trans-unit id="ngb.pagination.first-aria" datatype="html">
         <source>First</source>
-        <target state="new">First</target>
+        <target state="translated">Premier</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/pagination/pagination.ts</context>
           <context context-type="linenumber">310,311</context>
@@ -125,7 +125,7 @@
       </trans-unit>
       <trans-unit id="ngb.pagination.previous-aria" datatype="html">
         <source>Previous</source>
-        <target state="new">Previous</target>
+        <target state="translated">Précédent</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/pagination/pagination.ts</context>
           <context context-type="linenumber">324,326</context>
@@ -133,7 +133,7 @@
       </trans-unit>
       <trans-unit id="ngb.pagination.next-aria" datatype="html">
         <source>Next</source>
-        <target state="new">Next</target>
+        <target state="translated">Suivant</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/pagination/pagination.ts</context>
           <context context-type="linenumber">337,338</context>
@@ -141,7 +141,7 @@
       </trans-unit>
       <trans-unit id="ngb.pagination.last-aria" datatype="html">
         <source>Last</source>
-        <target state="new">Last</target>
+        <target state="translated">Dernier</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/pagination/pagination.ts</context>
           <context context-type="linenumber">348,349</context>
@@ -165,7 +165,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.hours" datatype="html">
         <source>Hours</source>
-        <target state="new">Hours</target>
+        <target state="translated">Heures</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">151</context>
@@ -181,7 +181,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.minutes" datatype="html">
         <source>Minutes</source>
-        <target state="new">Minutes</target>
+        <target state="translated">Minutes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">182,183</context>
@@ -189,7 +189,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.increment-hours" datatype="html">
         <source>Increment hours</source>
-        <target state="new">Increment hours</target>
+        <target state="translated">Incrémenter les heures</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">197,198</context>
@@ -197,7 +197,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.decrement-hours" datatype="html">
         <source>Decrement hours</source>
-        <target state="new">Decrement hours</target>
+        <target state="translated">Décrémenter les heures</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">210</context>
@@ -205,7 +205,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.increment-minutes" datatype="html">
         <source>Increment minutes</source>
-        <target state="new">Increment minutes</target>
+        <target state="translated">Incrémenter les minutes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">229,230</context>
@@ -213,7 +213,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.decrement-minutes" datatype="html">
         <source>Decrement minutes</source>
-        <target state="new">Decrement minutes</target>
+        <target state="translated">Décrémenter les minutes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">245,249</context>
@@ -229,7 +229,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.seconds" datatype="html">
         <source>Seconds</source>
-        <target state="new">Seconds</target>
+        <target state="translated">Secondes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">279,283</context>
@@ -237,7 +237,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.increment-seconds" datatype="html">
         <source>Increment seconds</source>
-        <target state="new">Increment seconds</target>
+        <target state="translated">Incrémenter les secondes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">295</context>
@@ -245,7 +245,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.decrement-seconds" datatype="html">
         <source>Decrement seconds</source>
-        <target state="new">Decrement seconds</target>
+        <target state="translated">Décrémenter les secondes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">295</context>
@@ -269,7 +269,7 @@
       </trans-unit>
       <trans-unit id="ngb.toast.close-aria" datatype="html">
         <source>Close</source>
-        <target state="new">Close</target>
+        <target state="translated">Fermer</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/toast/toast.ts</context>
           <context context-type="linenumber">106</context>
@@ -3014,8 +3014,7 @@
       </trans-unit>
       <trans-unit id="6355398227384499371" datatype="html">
         <source>Move to external storage failed, this video may not work properly.</source>
-        <target state="new"> Move to external storage failed, this video may not work properly.
-</target>
+        <target state="translated">Le déplacement vers le stockage externe a échoué, cette vidéo peut ne pas fonctionner correctement.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.html</context>
           <context context-type="linenumber">5,7</context>
@@ -10865,7 +10864,7 @@
       </trans-unit>
       <trans-unit id="118687079501751948" datatype="html">
         <source>Move to external storage failed</source>
-        <target state="new">Move to external storage failed</target>
+        <target state="translated">Déplacement vers stockage externe échoué</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
           <context context-type="linenumber">183</context>
