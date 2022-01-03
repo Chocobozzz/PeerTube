@@ -217,11 +217,14 @@ export class PeerTubeServer {
       execArgv: options.nodeArgs || []
     }
 
+    const peertubeArgs = options.peertubeArgs || []
+    peertubeArgs.push('--enable-source-maps')
+
     return new Promise<void>((res, rej) => {
       const self = this
       let aggregatedLogs = ''
 
-      this.app = fork(join(root(), 'dist', 'server.js'), options.peertubeArgs || [], forkOptions)
+      this.app = fork(join(root(), 'dist', 'server.js'), peertubeArgs, forkOptions)
 
       const onPeerTubeExit = () => rej(new Error('Process exited:\n' + aggregatedLogs))
       const onParentExit = () => {

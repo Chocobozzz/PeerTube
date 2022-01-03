@@ -1,11 +1,6 @@
 import { registerTSPaths } from './server/helpers/register-ts-paths'
 registerTSPaths()
 
-import { isTestInstance } from './server/helpers/core-utils'
-if (isTestInstance()) {
-  require('source-map-support').install()
-}
-
 // ----------- Node modules -----------
 import express from 'express'
 import morgan, { token } from 'morgan'
@@ -19,7 +14,7 @@ import { program as cli } from 'commander'
 process.title = 'peertube'
 
 // Create our main app
-const app = express().disable("x-powered-by")
+const app = express().disable('x-powered-by')
 
 // ----------- Core checker -----------
 import { checkMissedConfig, checkFFmpeg, checkNodeVersion } from './server/initializers/checker-before-init'
@@ -135,6 +130,7 @@ import { HttpStatusCode } from './shared/models/http/http-error-codes'
 import { VideosTorrentCache } from '@server/lib/files-cache/videos-torrent-cache'
 import { ServerConfigManager } from '@server/lib/server-config-manager'
 import { VideoViews } from '@server/lib/video-views'
+import { isTestInstance } from './server/helpers/core-utils'
 
 // ----------- Command line -----------
 
