@@ -40,6 +40,8 @@ jobs:
       matrix: ${{ fromJson(needs.generate-matrix.outputs.matrix) }}
       fail-fast: false
 
+    name: ${{ matrix.tags }}
+
     steps:
       -
         name: Set up QEMU
