@@ -380,7 +380,7 @@ describe('Test multiple servers', function () {
 
   describe('Should seed the uploaded video', function () {
     it('Should add the file 1 by asking server 3', async function () {
-      this.timeout(10000)
+      this.timeout(30000)
 
       const { data } = await servers[2].videos.list()
 
@@ -396,7 +396,7 @@ describe('Test multiple servers', function () {
     })
 
     it('Should add the file 2 by asking server 1', async function () {
-      this.timeout(10000)
+      this.timeout(30000)
 
       const { data } = await servers[0].videos.list()
 
@@ -410,7 +410,7 @@ describe('Test multiple servers', function () {
     })
 
     it('Should add the file 3 by asking server 2', async function () {
-      this.timeout(10000)
+      this.timeout(30000)
 
       const { data } = await servers[1].videos.list()
 
@@ -424,7 +424,7 @@ describe('Test multiple servers', function () {
     })
 
     it('Should add the file 3-2 by asking server 1', async function () {
-      this.timeout(10000)
+      this.timeout(30000)
 
       const { data } = await servers[0].videos.list()
 
@@ -438,7 +438,7 @@ describe('Test multiple servers', function () {
     })
 
     it('Should add the file 2 in 360p by asking server 1', async function () {
-      this.timeout(10000)
+      this.timeout(30000)
 
       const { data } = await servers[0].videos.list()
 
@@ -595,7 +595,7 @@ describe('Test multiple servers', function () {
     let updatedAtMin: Date
 
     it('Should update video 3', async function () {
-      this.timeout(10000)
+      this.timeout(30000)
 
       const attributes = {
         name: 'my super video updated',
@@ -618,7 +618,7 @@ describe('Test multiple servers', function () {
     })
 
     it('Should have the video 3 updated on each server', async function () {
-      this.timeout(10000)
+      this.timeout(30000)
 
       for (const server of servers) {
         const { data } = await server.videos.list()
@@ -669,7 +669,7 @@ describe('Test multiple servers', function () {
     })
 
     it('Should only update thumbnail and update updatedAt attribute', async function () {
-      this.timeout(10000)
+      this.timeout(30000)
 
       const attributes = {
         thumbnailfile: 'thumbnail.jpg'
@@ -861,7 +861,7 @@ describe('Test multiple servers', function () {
     })
 
     it('Should delete a reply', async function () {
-      this.timeout(10000)
+      this.timeout(30000)
 
       await servers[2].comments.delete({ videoId: videoUUID, commentId: childOfFirstChild.comment.id })
 
@@ -892,7 +892,7 @@ describe('Test multiple servers', function () {
     })
 
     it('Should delete the thread comments', async function () {
-      this.timeout(10000)
+      this.timeout(30000)
 
       const { data } = await servers[0].comments.listThreads({ videoId: videoUUID })
       const commentId = data.find(c => c.text === 'my super first comment').id

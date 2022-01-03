@@ -96,7 +96,7 @@ describe('Test proxy', function () {
     }
 
     it('Should succeed import with the appropriate proxy config', async function () {
-      this.timeout(40000)
+      this.timeout(120000)
 
       await servers[0].kill()
       await servers[0].run({}, { env: goodEnv })
@@ -111,7 +111,7 @@ describe('Test proxy', function () {
     })
 
     it('Should fail import with a wrong proxy config', async function () {
-      this.timeout(40000)
+      this.timeout(120000)
 
       await servers[0].kill()
       await servers[0].run({}, { env: badEnv })
