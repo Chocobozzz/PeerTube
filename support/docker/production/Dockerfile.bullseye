@@ -23,7 +23,7 @@ USER peertube
 
 RUN yarn install --pure-lockfile --network-timeout 1200000 --network-concurrency 20 \
     && npm run build -- $NPM_RUN_BUILD_OPTS \
-    && rm -r ./node_modules ./client/node_modules \
+    && rm -r ./node_modules ./client/node_modules ./client/.angular \
     && yarn install --pure-lockfile --production --network-timeout 1200000 --network-concurrency 20 \
     && yarn cache clean
 
