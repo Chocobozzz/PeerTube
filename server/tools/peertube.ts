@@ -1,8 +1,5 @@
 #!/usr/bin/env node
 
-import { registerTSPaths } from '../helpers/register-ts-paths'
-registerTSPaths()
-
 import { CommandOptions, program } from 'commander'
 import { getSettings, version } from './cli'
 

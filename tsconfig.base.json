@@ -19,10 +19,6 @@
       "es2018",
       "es2019"
     ],
-    "typeRoots": [
-      "node_modules/@types",
-      "client/node_modules/@types"
-    ],
     "baseUrl": "./",
     "paths": {
       "@server/*": [ "server/*" ],

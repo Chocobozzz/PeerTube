@@ -1,6 +1,3 @@
-import { registerTSPaths } from '../helpers/register-ts-paths'
-registerTSPaths()
-
 import { program } from 'commander'
 import { access, constants } from 'fs-extra'
 import { isAbsolute } from 'path'

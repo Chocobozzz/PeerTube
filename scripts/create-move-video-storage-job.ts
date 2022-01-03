@@ -1,13 +1,10 @@
-import { registerTSPaths } from '../server/helpers/register-ts-paths'
-registerTSPaths()
-
 import { program } from 'commander'
-import { VideoModel } from '@server/models/video/video'
-import { initDatabaseModels } from '@server/initializers/database'
-import { VideoState, VideoStorage } from '@shared/models'
-import { moveToExternalStorageState } from '@server/lib/video-state'
-import { JobQueue } from '@server/lib/job-queue'
 import { CONFIG } from '@server/initializers/config'
+import { initDatabaseModels } from '@server/initializers/database'
+import { JobQueue } from '@server/lib/job-queue'
+import { moveToExternalStorageState } from '@server/lib/video-state'
+import { VideoModel } from '@server/models/video/video'
+import { VideoState, VideoStorage } from '@shared/models'
 
 program
   .description('Move videos to another storage.')

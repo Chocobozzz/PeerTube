@@ -3,6 +3,7 @@ import { readFile } from 'fs-extra'
 import { join } from 'path'
 import validator from 'validator'
 import { toCompleteUUID } from '@server/helpers/custom-validators/misc'
+import { root } from '@shared/core-utils'
 import { escapeHTML } from '@shared/core-utils/renderer'
 import { sha256 } from '@shared/extra-utils'
 import { HTMLServerConfig } from '@shared/models'
@@ -344,11 +345,11 @@ class ClientHtml {
       { cookie: req.cookies?.clientLanguage, paramLang, acceptLanguage: req.headers['accept-language'] }
     )
 
-    return join(__dirname, '../../../client/dist/' + buildFileLocale(lang) + '/index.html')
+    return join(root(), 'client', 'dist', buildFileLocale(lang), 'index.html')
   }
 
   private static getEmbedPath () {
-    return join(__dirname, '../../../client/dist/standalone/videos/embed.html')
+    return join(root(), 'client', 'dist', 'standalone', 'videos', 'embed.html')
   }
 
   private static addManifestContentHash (htmlStringPage: string) {

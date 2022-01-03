@@ -12,4 +12,5 @@ rm -rf ./dist/server/tools/
 mkdir -p "./dist/server/tools"
 cp -r "./server/tools/node_modules" "./dist/server/tools"
 
-npm run tsc -- --watch --sourceMap --project ./server/tools/tsconfig.json
+cd ./server/tools
+../../node_modules/.bin/tsc-watch --build --verbose --onSuccess 'sh -c "cd ../../ && npm run resolve-tspaths:all"'

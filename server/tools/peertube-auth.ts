@@ -1,12 +1,7 @@
-// eslint-disable @typescript-eslint/no-unnecessary-type-assertion
-
-import { registerTSPaths } from '../helpers/register-ts-paths'
-registerTSPaths()
-
-import { OptionValues, program } from 'commander'
-import { assignToken, buildServer, getNetrc, getSettings, writeSettings } from './cli'
-import { isUserUsernameValid } from '../helpers/custom-validators/users'
 import CliTable3 from 'cli-table3'
+import { OptionValues, program } from 'commander'
+import { isUserUsernameValid } from '../helpers/custom-validators/users'
+import { assignToken, buildServer, getNetrc, getSettings, writeSettings } from './cli'
 
 import prompt = require('prompt')
 

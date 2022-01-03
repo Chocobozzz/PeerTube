@@ -1,15 +1,12 @@
-import { registerTSPaths } from '../server/helpers/register-ts-paths'
-registerTSPaths()
-
 import { program } from 'commander'
-import { VideoModel } from '../server/models/video/video'
+import { isUUIDValid, toCompleteUUID } from '@server/helpers/custom-validators/misc'
+import { computeLowerResolutionsToTranscode } from '@server/helpers/ffprobe-utils'
+import { CONFIG } from '@server/initializers/config'
+import { addTranscodingJob } from '@server/lib/video'
+import { VideoState, VideoTranscodingPayload } from '@shared/models'
 import { initDatabaseModels } from '../server/initializers/database'
 import { JobQueue } from '../server/lib/job-queue'
-import { computeLowerResolutionsToTranscode } from '@server/helpers/ffprobe-utils'
-import { VideoState, VideoTranscodingPayload } from '@shared/models'
-import { CONFIG } from '@server/initializers/config'
-import { isUUIDValid, toCompleteUUID } from '@server/helpers/custom-validators/misc'
-import { addTranscodingJob } from '@server/lib/video'
+import { VideoModel } from '../server/models/video/video'
 
 program
   .option('-v, --video [videoUUID]', 'Video UUID')

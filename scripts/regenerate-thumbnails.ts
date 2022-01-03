@@ -1,13 +1,10 @@
-import { registerTSPaths } from '../server/helpers/register-ts-paths'
-registerTSPaths()
-
 import { map } from 'bluebird'
 import { program } from 'commander'
 import { pathExists, remove } from 'fs-extra'
 import { generateImageFilename, processImage } from '@server/helpers/image-utils'
 import { THUMBNAILS_SIZE } from '@server/initializers/constants'
-import { VideoModel } from '@server/models/video/video'
 import { initDatabaseModels } from '@server/initializers/database'
+import { VideoModel } from '@server/models/video/video'
 
 program
   .description('Regenerate local thumbnails using preview files')

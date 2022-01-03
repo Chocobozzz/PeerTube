@@ -14,15 +14,12 @@ mkdir -p "./client/dist"
 rm -rf "./client/dist/locale"
 cp -r "./client/src/locale" "./client/dist/locale"
 
-rm -rf "./dist"
-
-mkdir "./dist"
-cp "./tsconfig.json" "./dist"
+mkdir -p "./dist/server/lib"
 
 npm run tsc -- -b -v --incremental
+npm run resolve-tspaths:server
+
 cp -r ./server/static ./server/assets ./dist/server
 cp -r "./server/lib/emails" "./dist/server/lib"
 
-NODE_ENV=test node node_modules/.bin/concurrently -k \
-  "node_modules/.bin/nodemon --enable-source-maps --delay 1 --watch ./dist dist/server" \
-  "node_modules/.bin/tsc -b -w --preserveWatchOutput"
+./node_modules/.bin/tsc-watch --build --preserveWatchOutput --verbose --onSuccess 'sh -c "npm run resolve-tspaths:server && NODE_ENV=test node dist/server"'

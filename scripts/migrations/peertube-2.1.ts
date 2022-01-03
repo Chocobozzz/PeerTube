@@ -1,15 +1,12 @@
-import { registerTSPaths } from '../../server/helpers/register-ts-paths'
-registerTSPaths()
-
-import { initDatabaseModels, sequelizeTypescript } from '../../server/initializers/database'
-import * as Sequelize from 'sequelize'
-import { join } from 'path'
-import { HLS_STREAMING_PLAYLIST_DIRECTORY, STATIC_PATHS, WEBSERVER } from '@server/initializers/constants'
 import { pathExists, stat, writeFile } from 'fs-extra'
+import parseTorrent from 'parse-torrent'
+import { join } from 'path'
+import * as Sequelize from 'sequelize'
+import { logger } from '@server/helpers/logger'
 import { createTorrentPromise } from '@server/helpers/webtorrent'
 import { CONFIG } from '@server/initializers/config'
-import parseTorrent from 'parse-torrent'
-import { logger } from '@server/helpers/logger'
+import { HLS_STREAMING_PLAYLIST_DIRECTORY, STATIC_PATHS, WEBSERVER } from '@server/initializers/constants'
+import { initDatabaseModels, sequelizeTypescript } from '../../server/initializers/database'
 
 run()
   .then(() => process.exit(0))

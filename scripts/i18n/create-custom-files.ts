@@ -1,9 +1,7 @@
-import { registerTSPaths } from '../../server/helpers/register-ts-paths'
-registerTSPaths()
-
 import { writeJSON } from 'fs-extra'
 import { values } from 'lodash'
 import { join } from 'path'
+import { root } from '@shared/core-utils'
 import {
   buildLanguages,
   VIDEO_CATEGORIES,
@@ -16,7 +14,7 @@ import {
 } from '../../server/initializers/constants'
 import { I18N_LOCALES } from '../../shared/core-utils/i18n'
 
-const videojs = require(join(__dirname, '../../../client/src/locale/videojs.en-US.json'))
+const videojs = require(join(root(), 'client', 'src', 'locale', 'videojs.en-US.json'))
 const playerKeys = {
   'Quality': 'Quality',
   'Auto': 'Auto',
@@ -100,7 +98,7 @@ writeAll().catch(err => {
 })
 
 async function writeAll () {
-  const localePath = join(__dirname, '../../../client/src/locale')
+  const localePath = join(root(), 'client', 'src', 'locale')
 
   await writeJSON(join(localePath, 'player.en-US.json'), playerKeys, { spaces: 4 })
   await writeJSON(join(localePath, 'server.en-US.json'), serverKeys, { spaces: 4 })

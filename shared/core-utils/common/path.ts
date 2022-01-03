@@ -7,6 +7,8 @@ function root () {
 
   rootPath = __dirname
 
+  if (basename(rootPath) === 'tools') rootPath = resolve(rootPath, '..')
+  if (basename(rootPath) === 'scripts') rootPath = resolve(rootPath, '..')
   if (basename(rootPath) === 'common') rootPath = resolve(rootPath, '..')
   if (basename(rootPath) === 'core-utils') rootPath = resolve(rootPath, '..')
   if (basename(rootPath) === 'shared') rootPath = resolve(rootPath, '..')

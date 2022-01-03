@@ -1,13 +1,8 @@
-// eslint-disable @typescript-eslint/no-unnecessary-type-assertion
-
-import { registerTSPaths } from '../helpers/register-ts-paths'
-registerTSPaths()
-
-import { program, Command, OptionValues } from 'commander'
-import { assignToken, buildServer, getServerCredentials } from './cli'
-import { PluginType } from '../../shared/models'
-import { isAbsolute } from 'path'
 import CliTable3 from 'cli-table3'
+import { Command, OptionValues, program } from 'commander'
+import { isAbsolute } from 'path'
+import { PluginType } from '../../shared/models'
+import { assignToken, buildServer, getServerCredentials } from './cli'
 
 program
   .name('plugins')

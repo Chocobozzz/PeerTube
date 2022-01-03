@@ -1,6 +1,3 @@
-import { registerTSPaths } from '../server/helpers/register-ts-paths'
-registerTSPaths()
-
 import { CLICommand } from '@shared/server-commands'
 
 run()

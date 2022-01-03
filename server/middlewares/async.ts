@@ -1,7 +1,7 @@
 import { eachSeries } from 'async'
 import { NextFunction, Request, RequestHandler, Response } from 'express'
 import { ValidationChain } from 'express-validator'
-import { ExpressPromiseHandler } from '@server/types/express'
+import { ExpressPromiseHandler } from '@server/types/express-handler'
 import { retryTransactionWrapper } from '../helpers/database-utils'
 
 // Syntactic sugar to avoid try/catch in express controllers

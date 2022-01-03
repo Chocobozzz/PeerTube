@@ -76,7 +76,7 @@ rm -f "./client/dist/embed-stats.json"
                           "$directory_name/client/package.json" "$directory_name/config" \
                           "$directory_name/dist" "$directory_name/package.json" \
                           "$directory_name/scripts" "$directory_name/support" \
-                          "$directory_name/tsconfig.json" "$directory_name/yarn.lock")
+                          "$directory_name/yarn.lock")
 
   # temporary setup
   cd ..

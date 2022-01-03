@@ -1,6 +1,6 @@
 import express from 'express'
 import { body, param, query, ValidationChain } from 'express-validator'
-import { ExpressPromiseHandler } from '@server/types/express'
+import { ExpressPromiseHandler } from '@server/types/express-handler'
 import { MUserAccountId } from '@server/types/models'
 import {
   HttpStatusCode,

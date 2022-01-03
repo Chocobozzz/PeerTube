@@ -1,12 +1,10 @@
-import { registerTSPaths } from '../helpers/register-ts-paths'
-registerTSPaths()
-
 import { program } from 'commander'
 import { accessSync, constants } from 'fs'
 import { remove } from 'fs-extra'
 import { join } from 'path'
-import { sha256 } from '@shared/extra-utils'
+import { YoutubeDLCLI, YoutubeDLInfo, YoutubeDLInfoBuilder } from '@server/helpers/youtube-dl'
 import { wait } from '@shared/core-utils'
+import { sha256 } from '@shared/extra-utils'
 import { doRequestAndSaveToFile } from '../helpers/requests'
 import {
   assignToken,
@@ -16,7 +14,7 @@ import {
   getLogger,
   getServerCredentials
 } from './cli'
-import { YoutubeDLCLI, YoutubeDLInfo, YoutubeDLInfoBuilder } from '@server/helpers/youtube-dl'
+
 import prompt = require('prompt')
 
 const processOptions = {

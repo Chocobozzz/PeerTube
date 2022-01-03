@@ -1,15 +1,12 @@
-import { registerTSPaths } from '../server/helpers/register-ts-paths'
-registerTSPaths()
-
 import { program } from 'commander'
 import { createReadStream, readdir } from 'fs-extra'
 import { join } from 'path'
 import { createInterface } from 'readline'
+import { format as sqlFormat } from 'sql-formatter'
+import { inspect } from 'util'
 import * as winston from 'winston'
 import { labelFormatter, mtimeSortFilesDesc } from '../server/helpers/logger'
 import { CONFIG } from '../server/initializers/config'
-import { inspect } from 'util'
-import { format as sqlFormat } from 'sql-formatter'
 
 program
   .option('-l, --level [level]', 'Level log (debug/info/warn/error)')

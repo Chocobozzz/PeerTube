@@ -1,6 +1,3 @@
-import { registerTSPaths } from './server/helpers/register-ts-paths'
-registerTSPaths()
-
 // ----------- Node modules -----------
 import express from 'express'
 import morgan, { token } from 'morgan'

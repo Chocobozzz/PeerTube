@@ -1,10 +1,7 @@
-import { registerTSPaths } from '../server/helpers/register-ts-paths'
-registerTSPaths()
-
+import { updateTorrentMetadata } from '@server/helpers/webtorrent'
+import { getServerActor } from '@server/models/application/application'
 import { WEBSERVER } from '../server/initializers/constants'
-import { ActorFollowModel } from '../server/models/actor/actor-follow'
-import { VideoModel } from '../server/models/video/video'
-import { ActorModel } from '../server/models/actor/actor'
+import { initDatabaseModels } from '../server/initializers/database'
 import {
   getLocalAccountActivityPubUrl,
   getLocalVideoActivityPubUrl,
@@ -12,13 +9,13 @@ import {
   getLocalVideoChannelActivityPubUrl,
   getLocalVideoCommentActivityPubUrl
 } from '../server/lib/activitypub/url'
-import { VideoShareModel } from '../server/models/video/video-share'
-import { VideoCommentModel } from '../server/models/video/video-comment'
 import { AccountModel } from '../server/models/account/account'
+import { ActorModel } from '../server/models/actor/actor'
+import { ActorFollowModel } from '../server/models/actor/actor-follow'
+import { VideoModel } from '../server/models/video/video'
 import { VideoChannelModel } from '../server/models/video/video-channel'
-import { initDatabaseModels } from '../server/initializers/database'
-import { updateTorrentMetadata } from '@server/helpers/webtorrent'
-import { getServerActor } from '@server/models/application/application'
+import { VideoCommentModel } from '../server/models/video/video-comment'
+import { VideoShareModel } from '../server/models/video/video-share'
 
 run()
   .then(() => process.exit(0))
