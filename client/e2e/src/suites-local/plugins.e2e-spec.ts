@@ -1,7 +1,7 @@
 import { AdminPluginPage } from '../po/admin-plugin.po'
 import { LoginPage } from '../po/login.po'
 import { VideoUploadPage } from '../po/video-upload.po'
-import { browserSleep, getCheckbox, waitServerUp } from '../utils'
+import { getCheckbox, waitServerUp } from '../utils'
 
 describe('Plugins', () => {
   let videoUploadPage: VideoUploadPage
