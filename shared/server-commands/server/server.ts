@@ -211,7 +211,8 @@ export class PeerTubeServer {
     }
 
     const execArgv = options.nodeArgs || []
-    execArgv.push('--enable-source-maps')
+    // FIXME: too slow :/
+    // execArgv.push('--enable-source-maps')
 
     const forkOptions = {
       silent: true,

@@ -1,4 +1,4 @@
-import { createClient } from 'redis'
+import { createClient, RedisClientOptions, RedisModules } from 'redis'
 import { exists } from '@server/helpers/custom-validators/misc'
 import { sha256 } from '@shared/extra-utils'
 import { logger } from '../helpers/logger'
@@ -37,29 +37,43 @@ class Redis {
 
     this.client = createClient(Redis.getRedisClientOptions())
 
+    logger.info('Connecting to redis...')
+
     this.client.connect()
-      .then(() => { this.connected = true })
-      .catch(err => {
+      .then(() => {
+        logger.info('Connected to redis.')
+
+        this.connected = true
+      }).catch(err => {
         logger.error('Cannot connect to redis', { err })
         process.exit(-1)
       })
-
-    this.client.on('error', err => {
-      logger.error('Error in Redis client.', { err })
-      process.exit(-1)
-    })
 
     this.prefix = 'redis-' + WEBSERVER.HOST + '-'
   }
 
   static getRedisClientOptions () {
-    return Object.assign({},
-      CONFIG.REDIS.AUTH ? { password: CONFIG.REDIS.AUTH } : {},
-      (CONFIG.REDIS.DB) ? { db: CONFIG.REDIS.DB } : {},
-      (CONFIG.REDIS.HOSTNAME && CONFIG.REDIS.PORT)
-        ? { host: CONFIG.REDIS.HOSTNAME, port: CONFIG.REDIS.PORT }
-        : { path: CONFIG.REDIS.SOCKET }
-    )
+    let config: RedisClientOptions<RedisModules, {}> = {
+      socket: {
+        connectTimeout: 20000 // Could be slow since node use sync call to compile PeerTube
+      }
+    }
+
+    if (CONFIG.REDIS.AUTH) {
+      config = { ...config, password: CONFIG.REDIS.AUTH }
+    }
+
+    if (CONFIG.REDIS.DB) {
+      config = { ...config, database: CONFIG.REDIS.DB }
+    }
+
+    if (CONFIG.REDIS.HOSTNAME && CONFIG.REDIS.PORT) {
+      config.socket = { ...config.socket, host: CONFIG.REDIS.HOSTNAME, port: CONFIG.REDIS.PORT }
+    } else {
+      config.socket = { ...config.socket, path: CONFIG.REDIS.SOCKET }
+    }
+
+    return config
   }
 
   getClient () {
