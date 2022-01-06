@@ -1,16 +1,20 @@
-import { Response } from 'express'
+import { Request, Response } from 'express'
 import { loadVideo, VideoLoadType } from '@server/lib/model-loaders'
+import { authenticatePromiseIfNeeded } from '@server/middlewares/auth'
+import { VideoModel } from '@server/models/video/video'
 import { VideoChannelModel } from '@server/models/video/video-channel'
 import { VideoFileModel } from '@server/models/video/video-file'
 import {
   MUser,
   MUserAccountId,
+  MVideo,
   MVideoAccountLight,
   MVideoFormattableDetails,
   MVideoFullLight,
   MVideoId,
   MVideoImmutable,
-  MVideoThumbnail
+  MVideoThumbnail,
+  MVideoWithRights
 } from '@server/types/models'
 import { HttpStatusCode, UserRight } from '@shared/models'
 
@@ -89,6 +93,27 @@ async function doesVideoChannelOfAccountExist (channelId: number, user: MUserAcc
   return true
 }
 
+async function checkCanSeeVideoIfPrivate (req: Request, res: Response, video: MVideo, authenticateInQuery = false) {
+  if (!video.requiresAuth()) return true
+
+  const videoWithRights = await VideoModel.loadAndPopulateAccountAndServerAndTags(video.id)
+
+  return checkCanSeePrivateVideo(req, res, videoWithRights, authenticateInQuery)
+}
+
+async function checkCanSeePrivateVideo (req: Request, res: Response, video: MVideoWithRights, authenticateInQuery = false) {
+  await authenticatePromiseIfNeeded(req, res, authenticateInQuery)
+
+  const user = res.locals.oauth ? res.locals.oauth.token.User : null
+
+  // Only the owner or a user that have blocklist rights can see the video
+  if (!user || !user.canGetVideo(video)) {
+    return false
+  }
+
+  return true
+}
+
 function checkUserCanManageVideo (user: MUser, video: MVideoAccountLight, right: UserRight, res: Response, onlyOwned = true) {
   // Retrieve the user who did the request
   if (onlyOwned && video.isOwned() === false) {
@@ -120,5 +145,7 @@ export {
   doesVideoChannelOfAccountExist,
   doesVideoExist,
   doesVideoFileOfVideoExist,
-  checkUserCanManageVideo
+  checkUserCanManageVideo,
+  checkCanSeeVideoIfPrivate,
+  checkCanSeePrivateVideo
 }

@@ -10,13 +10,15 @@ import {
   ensureUserHasRight,
   videoFileMetadataGetValidator,
   videoFilesDeleteHLSValidator,
-  videoFilesDeleteWebTorrentValidator
+  videoFilesDeleteWebTorrentValidator,
+  videosGetValidator
 } from '../../../middlewares'
 
 const lTags = loggerTagsFactory('api', 'video')
 const filesRouter = express.Router()
 
 filesRouter.get('/:id/metadata/:videoFileId',
+  asyncMiddleware(videosGetValidator),
   asyncMiddleware(videoFileMetadataGetValidator),
   asyncMiddleware(getVideoFileMetadata)
 )
