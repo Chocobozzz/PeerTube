@@ -49,9 +49,9 @@ import { CONSTRAINTS_FIELDS, OVERVIEWS } from '../../../initializers/constants'
 import { isLocalVideoAccepted } from '../../../lib/moderation'
 import { Hooks } from '../../../lib/plugins/hooks'
 import { VideoModel } from '../../../models/video/video'
-import { authenticatePromiseIfNeeded } from '../../auth'
 import {
   areValidationErrors,
+  checkCanSeePrivateVideo,
   checkUserCanManageVideo,
   doesVideoChannelOfAccountExist,
   doesVideoExist,
@@ -315,19 +315,12 @@ const videosCustomGetValidator = (
 
       // Video private or blacklisted
       if (video.requiresAuth()) {
-        await authenticatePromiseIfNeeded(req, res, authenticateInQuery)
+        if (await checkCanSeePrivateVideo(req, res, video, authenticateInQuery)) return next()
 
-        const user = res.locals.oauth ? res.locals.oauth.token.User : null
-
-        // Only the owner or a user that have blocklist rights can see the video
-        if (!user || !user.canGetVideo(video)) {
-          return res.fail({
-            status: HttpStatusCode.FORBIDDEN_403,
-            message: 'Cannot get this private/internal or blocklisted video'
-          })
-        }
-
-        return next()
+        return res.fail({
+          status: HttpStatusCode.FORBIDDEN_403,
+          message: 'Cannot get this private/internal or blocklisted video'
+        })
       }
 
       // Video is public, anyone can access it

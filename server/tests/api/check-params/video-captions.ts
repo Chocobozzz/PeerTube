@@ -2,7 +2,7 @@
 
 import 'mocha'
 import { buildAbsoluteFixturePath } from '@shared/core-utils'
-import { HttpStatusCode, VideoCreateResult } from '@shared/models'
+import { HttpStatusCode, VideoCreateResult, VideoPrivacy } from '@shared/models'
 import {
   cleanupTests,
   createSingleServer,
@@ -19,6 +19,7 @@ describe('Test video captions API validator', function () {
   let server: PeerTubeServer
   let userAccessToken: string
   let video: VideoCreateResult
+  let privateVideo: VideoCreateResult
 
   // ---------------------------------------------------------------
 
@@ -30,6 +31,7 @@ describe('Test video captions API validator', function () {
     await setAccessTokensToServers([ server ])
 
     video = await server.videos.upload()
+    privateVideo = await server.videos.upload({ attributes: { privacy: VideoPrivacy.PRIVATE } })
 
     {
       const user = {
@@ -204,8 +206,32 @@ describe('Test video captions API validator', function () {
       })
     })
 
+    it('Should fail with a private video without token', async function () {
+      await makeGetRequest({
+        url: server.url,
+        path: path + privateVideo.shortUUID + '/captions',
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
+      })
+    })
+
+    it('Should fail with another user token', async function () {
+      await makeGetRequest({
+        url: server.url,
+        token: userAccessToken,
+        path: path + privateVideo.shortUUID + '/captions',
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
+    })
+
     it('Should success with the correct parameters', async function () {
       await makeGetRequest({ url: server.url, path: path + video.shortUUID + '/captions', expectedStatus: HttpStatusCode.OK_200 })
+
+      await makeGetRequest({
+        url: server.url,
+        path: path + privateVideo.shortUUID + '/captions',
+        token: server.accessToken,
+        expectedStatus: HttpStatusCode.OK_200
+      })
     })
   })
 

@@ -13,6 +13,7 @@ import { CONFIG } from '../../../initializers/config'
 import { CONSTRAINTS_FIELDS } from '../../../initializers/constants'
 import { areValidationErrors, doesVideoChannelOfAccountExist } from '../shared'
 import { getCommonVideoEditAttributes } from './videos'
+import { isValid as isIPValid, parse as parseIP } from 'ipaddr.js'
 
 const videoImportAddValidator = getCommonVideoEditAttributes().concat([
   body('channelId')
@@ -69,6 +70,23 @@ const videoImportAddValidator = getCommonVideoEditAttributes().concat([
       cleanUpReqFiles(req)
 
       return res.fail({ message: 'Should have a magnetUri or a targetUrl or a torrent file.' })
+    }
+
+    if (req.body.targetUrl) {
+      const hostname = new URL(req.body.targetUrl).hostname
+
+      if (isIPValid(hostname)) {
+        const parsed = parseIP(hostname)
+
+        if (parsed.range() !== 'unicast') {
+          cleanUpReqFiles(req)
+
+          return res.fail({
+            status: HttpStatusCode.FORBIDDEN_403,
+            message: 'Cannot use non unicast IP as targetUrl.'
+          })
+        }
+      }
     }
 
     if (!await isImportAccepted(req, res)) return cleanUpReqFiles(req)

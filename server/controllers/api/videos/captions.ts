@@ -49,7 +49,7 @@ export {
 // ---------------------------------------------------------------------------
 
 async function listVideoCaptions (req: express.Request, res: express.Response) {
-  const data = await VideoCaptionModel.listVideoCaptions(res.locals.videoId.id)
+  const data = await VideoCaptionModel.listVideoCaptions(res.locals.onlyVideo.id)
 
   return res.json(getFormattedObjects(data, data.length))
 }
