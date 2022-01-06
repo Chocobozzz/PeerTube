@@ -29,7 +29,7 @@ async function createTranscoding (req: express.Request, res: express.Response) {
 
   const body: VideoTranscodingCreate = req.body
 
-  const { resolution: maxResolution, isPortraitMode } = await video.getMaxQualityResolution()
+  const { resolution: maxResolution, isPortraitMode, audioStream } = await video.getMaxQualityFileInfo()
   const resolutions = computeLowerResolutionsToTranscode(maxResolution, 'vod').concat([ maxResolution ])
 
   video.state = VideoState.TO_TRANSCODE
@@ -42,6 +42,7 @@ async function createTranscoding (req: express.Request, res: express.Response) {
         videoUUID: video.uuid,
         resolution,
         isPortraitMode,
+        hasAudio: !!audioStream,
         copyCodecs: false,
         isNewVideo: false,
         autoDeleteWebTorrentIfNeeded: false,
@@ -53,6 +54,7 @@ async function createTranscoding (req: express.Request, res: express.Response) {
         videoUUID: video.uuid,
         isNewVideo: false,
         resolution: resolution,
+        hasAudio: !!audioStream,
         isPortraitMode
       })
     }

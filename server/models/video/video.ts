@@ -33,7 +33,7 @@ import { VideoPathManager } from '@server/lib/video-path-manager'
 import { getServerActor } from '@server/models/application/application'
 import { ModelCache } from '@server/models/model-cache'
 import { buildVideoEmbedPath, buildVideoWatchPath, pick } from '@shared/core-utils'
-import { uuidToShort } from '@shared/extra-utils'
+import { ffprobePromise, getAudioStream, uuidToShort } from '@shared/extra-utils'
 import {
   ResultList,
   ThumbnailType,
@@ -1678,12 +1678,20 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     return peertubeTruncate(this.description, { length: maxLength })
   }
 
-  getMaxQualityResolution () {
+  getMaxQualityFileInfo () {
     const file = this.getMaxQualityFile()
     const videoOrPlaylist = file.getVideoOrStreamingPlaylist()
 
-    return VideoPathManager.Instance.makeAvailableVideoFile(file.withVideoOrPlaylist(videoOrPlaylist), originalFilePath => {
-      return getVideoFileResolution(originalFilePath)
+    return VideoPathManager.Instance.makeAvailableVideoFile(file.withVideoOrPlaylist(videoOrPlaylist), async originalFilePath => {
+      const probe = await ffprobePromise(originalFilePath)
+
+      const { audioStream } = await getAudioStream(originalFilePath, probe)
+
+      return {
+        audioStream,
+
+        ...await getVideoFileResolution(originalFilePath, probe)
+      }
     })
   }
 

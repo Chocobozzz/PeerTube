@@ -103,9 +103,11 @@ interface BaseTranscodingPayload {
 
 export interface HLSTranscodingPayload extends BaseTranscodingPayload {
   type: 'new-resolution-to-hls'
-  isPortraitMode?: boolean
   resolution: VideoResolution
   copyCodecs: boolean
+
+  hasAudio: boolean
+  isPortraitMode?: boolean
 
   autoDeleteWebTorrentIfNeeded: boolean
   isMaxQuality: boolean
@@ -113,8 +115,11 @@ export interface HLSTranscodingPayload extends BaseTranscodingPayload {
 
 export interface NewResolutionTranscodingPayload extends BaseTranscodingPayload {
   type: 'new-resolution-to-webtorrent'
-  isPortraitMode?: boolean
   resolution: VideoResolution
+
+  hasAudio: boolean
+
+  isPortraitMode?: boolean
 }
 
 export interface MergeAudioTranscodingPayload extends BaseTranscodingPayload {
