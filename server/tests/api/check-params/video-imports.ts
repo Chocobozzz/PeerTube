@@ -108,6 +108,34 @@ describe('Test video imports API validator', function () {
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
+    it('Should fail with localhost', async function () {
+      const fields = { ...baseCorrectParams, targetUrl: 'http://localhost:8000' }
+
+      await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+    })
+
+    it('Should fail with a private IP target urls', async function () {
+      const targetUrls = [
+        'http://127.0.0.1:8000',
+        'http://127.0.0.1',
+        'http://127.0.0.1/hello',
+        'https://192.168.1.42',
+        'http://192.168.1.42'
+      ]
+
+      for (const targetUrl of targetUrls) {
+        const fields = { ...baseCorrectParams, targetUrl }
+
+        await makePostBodyRequest({
+          url: server.url,
+          path,
+          token: server.accessToken,
+          fields,
+          expectedStatus: HttpStatusCode.FORBIDDEN_403
+        })
+      }
+    })
+
     it('Should fail with a long name', async function () {
       const fields = { ...baseCorrectParams, name: 'super'.repeat(65) }
 
