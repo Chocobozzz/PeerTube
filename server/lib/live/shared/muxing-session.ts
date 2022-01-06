@@ -229,7 +229,7 @@ class MuxingSession extends EventEmitter {
 
     const playlistIdMatcher = /^([\d+])-/
 
-    const addHandler = async segmentPath => {
+    const addHandler = async (segmentPath: string) => {
       logger.debug('Live add handler of %s.', segmentPath, this.lTags())
 
       const playlistId = basename(segmentPath).match(playlistIdMatcher)[0]
