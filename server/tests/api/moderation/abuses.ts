@@ -468,7 +468,7 @@ describe('Test abuses', function () {
     })
 
     it('Should have 2 comment abuses on server 1 and 1 on server 2', async function () {
-      const commentServer2 = await getComment(servers[0], servers[1].store.videoCreated.id)
+      const commentServer2 = await getComment(servers[0], servers[1].store.videoCreated.shortUUID)
 
       {
         const body = await commands[0].getAdminList({ filter: 'comment' })
