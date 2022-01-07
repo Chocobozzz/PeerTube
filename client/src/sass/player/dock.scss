@@ -1,0 +1,53 @@
+@use 'sass:math';
+@use '_variables' as *;
+@use '_mixins' as *;
+@use './_player-variables' as *;
+
+.video-js.vjs-peertube-skin {
+  .vjs-dock-text {
+    @include padding-right(60px);
+
+    padding: $dock-padding;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, .6) 0, rgba(0, 0, 0, 0.2) 70%, rgba(0, 0, 0, 0) 100%);
+  }
+
+  .vjs-dock-title,
+  .vjs-dock-description {
+    text-shadow: 0 0 2px rgba(0, 0, 0, .5);
+  }
+
+  .vjs-dock-description {
+    font-size: 11px;
+
+    .text::before {
+      @include margin-right(4px);
+    }
+
+    .text::after {
+      @include margin-left(4px);
+      transform: scale(-1, 1);
+    }
+  }
+
+  @media screen and (max-width: $screen-width-750) {
+    .vjs-dock-text {
+      font-size: 16px;
+    }
+
+    .vjs-dock-description {
+      font-size: 9px;
+    }
+  }
+
+  @media screen and (max-width: $screen-width-570) {
+    .vjs-dock-text {
+      font-size: 14px;
+    }
+  }
+
+  @media screen and (max-width: $screen-width-350) {
+    .vjs-dock-text {
+      font-size: 13px;
+    }
+  }
+}
