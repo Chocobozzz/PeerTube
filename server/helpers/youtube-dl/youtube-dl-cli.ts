@@ -153,7 +153,8 @@ export class YoutubeDLCLI {
     completeArgs = this.wrapWithIPOptions(completeArgs)
     completeArgs = this.wrapWithFFmpegOptions(completeArgs)
 
-    const output = await execa('python', [ youtubeDLBinaryPath, ...completeArgs, url ], processOptions)
+    const { PYTHON_PATH } = CONFIG.IMPORT.VIDEOS.HTTP.YOUTUBE_DL_RELEASE
+    const output = await execa(PYTHON_PATH, [ youtubeDLBinaryPath, ...completeArgs, url ], processOptions)
 
     logger.debug('Runned youtube-dl command.', { command: output.command, ...lTags() })
 
