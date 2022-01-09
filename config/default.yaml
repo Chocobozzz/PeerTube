@@ -446,6 +446,9 @@ import:
         # yt-dlp is also supported
         name: 'youtube-dl'
 
+        # Path to the python binary to execute for youtube-dl or yt-dlp
+        python_path: '/usr/bin/python3'
+
       # IPv6 is very strongly rate-limited on most sites supported by youtube-dl
       force_ipv4: false
 

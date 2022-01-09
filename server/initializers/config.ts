@@ -333,7 +333,8 @@ const CONFIG = {
 
         YOUTUBE_DL_RELEASE: {
           get URL () { return config.get<string>('import.videos.http.youtube_dl_release.url') },
-          get NAME () { return config.get<string>('import.videos.http.youtube_dl_release.name') }
+          get NAME () { return config.get<string>('import.videos.http.youtube_dl_release.name') },
+          get PYTHON_PATH () { return config.get<string>('import.videos.http.youtube_dl_release.python_path') }
         },
 
         get FORCE_IPV4 () { return config.get<boolean>('import.videos.http.force_ipv4') }
