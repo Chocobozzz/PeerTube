@@ -16,11 +16,10 @@
     - [Add new transcoding profiles](#add-new-transcoding-profiles)
     - [Server helpers](#server-helpers)
   - [Client API (themes & plugins)](#client-api-themes--plugins)
-    - [Plugin static route](#plugin-static-route)
+    - [Get plugin static and router routes](#get-plugin-static-and-router-routes)
     - [Notifier](#notifier)
     - [Markdown Renderer](#markdown-renderer)
     - [Auth header](#auth-header)
-    - [Plugin router route](#plugin-router-route)
     - [Custom Modal](#custom-modal)
     - [Translate](#translate)
     - [Get public settings](#get-public-settings)
@@ -30,6 +29,7 @@
     - [Plugin selector on HTML elements](#plugin-selector-on-html-elements)
     - [HTML placeholder elements](#html-placeholder-elements)
     - [Add/remove left menu links](#addremove-left-menu-links)
+    - [Create client page](#create-client-page)
   - [Publishing](#publishing)
 - [Write a plugin/theme](#write-a-plugintheme)
   - [Clone the quickstart repository](#clone-the-quickstart-repository)
@@ -531,7 +531,7 @@ See the [plugin API reference](https://docs.joinpeertube.org/api-plugins) to see
 
 ### Client API (themes & plugins)
 
-#### Plugin static route
+#### Get plugin static and router routes
 
 To get your plugin static route:
 
@@ -541,6 +541,24 @@ function register (...) {
   const imageUrl = baseStaticUrl + '/images/chocobo.png'
 }
 ```
+
+And to get your plugin router route, use `peertubeHelpers.getBaseRouterRoute()`:
+
+```js
+function register (...) {
+  registerHook({
+    target: 'action:video-watch.video.loaded',
+    handler: ({ video }) => {
+      fetch(peertubeHelpers.getBaseRouterRoute() + '/my/plugin/api', {
+        method: 'GET',
+        headers: peertubeHelpers.getAuthHeader()
+      }).then(res => res.json())
+        .then(data => console.log('Hi %s.', data))
+    }
+  })
+}
+```
+
 
 #### Notifier
 
@@ -589,27 +607,6 @@ function register (...) {
         headers: peertubeHelpers.getAuthHeader()
       }).then(res => res.json())
         .then(data => console.log('Hi %s.', data.username))
-    }
-  })
-}
-```
-
-#### Plugin router route
-
-**PeerTube >= 3.3**
-
-To get your plugin router route, you can use `peertubeHelpers.getBaseRouterRoute()`:
-
-```js
-function register (...) {
-  registerHook({
-    target: 'action:video-watch.video.loaded',
-    handler: ({ video }) => {
-      fetch(peertubeHelpers.getBaseRouterRoute() + '/my/plugin/api', {
-        method: 'GET',
-        headers: peertubeHelpers.getAuthHeader()
-      }).then(res => res.json())
-        .then(data => console.log('Hi %s.', data))
     }
   })
 }
@@ -805,6 +802,21 @@ See the complete list on https://docs.joinpeertube.org/api-plugins
 #### Add/remove left menu links
 
 Left menu links can be filtered (add/remove a section or add/remove links) using the `filter:left-menu.links.create.result` client hook.
+
+#### Create client page
+
+To create a client page, register a new client route:
+
+```js
+function register ({ registerClientRoute }) {
+  registerClientRoute({
+    route: 'my-super/route',
+    onMount: ({ rootEl }) => {
+      rootEl.innerHTML = 'hello'
+    }
+  })
+}
+```
 
 
 ### Publishing
