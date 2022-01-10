@@ -96,7 +96,6 @@
     }
   }
 
-
   .vjs-play-control {
     @include disable-outline;
 
@@ -281,6 +280,11 @@
       max-width: $control-bar-icon-size;
       height: 100%;
       max-height: $control-bar-volume-slider-height;
+
+      &::before {
+        // Remove circle
+        content: '';
+      }
     }
 
     &:focus {

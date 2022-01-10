@@ -20,10 +20,6 @@ body {
   font-size: $font-size;
   color: pvar(--embedForegroundColor);
 
-  .vjs-volume-level::before {
-    content: ''; /* Remove Circle From Progress Bar */
-  }
-
   .vjs-audio-button {
     display: none;
   }
@@ -100,7 +96,6 @@ body {
   }
 
   .vjs-poster {
-    outline: none; /* Remove Blue Outline on Click*/
     outline: 0;
   }
 
