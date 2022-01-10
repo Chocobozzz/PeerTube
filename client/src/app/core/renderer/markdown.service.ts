@@ -153,8 +153,8 @@ export class MarkdownService {
       else token.attrs[targetIndex][1] = '_blank'
 
       const relIndex = token.attrIndex('rel')
-      if (relIndex < 0) token.attrPush([ 'rel', 'noopener noreferrer' ])
-      else token.attrs[relIndex][1] = 'noopener noreferrer'
+      if (relIndex < 0) token.attrPush([ 'rel', 'noopener noreferrer me' ])
+      else token.attrs[relIndex][1] = 'noopener noreferrer me'
 
       // pass token to default renderer.*
       return defaultRender(tokens, index, options, env, self)
