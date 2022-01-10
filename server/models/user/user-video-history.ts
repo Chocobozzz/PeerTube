@@ -4,7 +4,6 @@ import { MUserAccountId, MUserId } from '@server/types/models'
 import { AttributesOnly } from '@shared/typescript-utils'
 import { VideoModel } from '../video/video'
 import { UserModel } from './user'
-import { getServerActor } from '../application/application'
 
 @Table({
   tableName: 'userVideoHistory',
