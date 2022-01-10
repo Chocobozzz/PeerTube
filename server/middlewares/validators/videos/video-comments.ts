@@ -9,7 +9,14 @@ import { logger } from '../../../helpers/logger'
 import { AcceptResult, isLocalVideoCommentReplyAccepted, isLocalVideoThreadAccepted } from '../../../lib/moderation'
 import { Hooks } from '../../../lib/plugins/hooks'
 import { MCommentOwnerVideoReply, MVideo, MVideoFullLight } from '../../../types/models/video'
-import { areValidationErrors, doesVideoCommentExist, doesVideoCommentThreadExist, doesVideoExist, isValidVideoIdParam } from '../shared'
+import {
+  areValidationErrors,
+  checkCanSeeVideoIfPrivate,
+  doesVideoCommentExist,
+  doesVideoCommentThreadExist,
+  doesVideoExist,
+  isValidVideoIdParam
+} from '../shared'
 
 const listVideoCommentsValidator = [
   query('isLocal')
@@ -48,6 +55,13 @@ const listVideoCommentThreadsValidator = [
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.videoId, res, 'only-video')) return
 
+    if (!await checkCanSeeVideoIfPrivate(req, res, res.locals.onlyVideo)) {
+      return res.fail({
+        status: HttpStatusCode.FORBIDDEN_403,
+        message: 'Cannot list comments of private/internal/blocklisted video'
+      })
+    }
+
     return next()
   }
 ]
@@ -64,6 +78,13 @@ const listVideoThreadCommentsValidator = [
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.videoId, res, 'only-video')) return
     if (!await doesVideoCommentThreadExist(req.params.threadId, res.locals.onlyVideo, res)) return
+
+    if (!await checkCanSeeVideoIfPrivate(req, res, res.locals.onlyVideo)) {
+      return res.fail({
+        status: HttpStatusCode.FORBIDDEN_403,
+        message: 'Cannot list threads of private/internal/blocklisted video'
+      })
+    }
 
     return next()
   }
