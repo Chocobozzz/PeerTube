@@ -106,6 +106,9 @@ export type PeerTubeHelpers = {
       email: string
       blocked: boolean
       role: UserRole
+      Account: {
+        name: string
+      }
     } | undefined>
   }
 }
