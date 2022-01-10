@@ -62,14 +62,14 @@ export class MarkdownService {
 
   constructor (private htmlRenderer: HtmlRendererService) {}
 
-  textMarkdownToHTML (markdown: string, withHtml = false, withEmoji = false) {
-    if (withHtml) return this.render({ name: 'textWithHTMLMarkdownIt', markdown, withEmoji })
+  textMarkdownToHTML (markdown: string, withHtml = false, withEmoji = false, hasRelMe = false) {
+    if (withHtml) return this.render({ name: 'textWithHTMLMarkdownIt', markdown, withEmoji, hasRelMe });
 
-    return this.render({ name: 'textMarkdownIt', markdown, withEmoji })
+    return this.render({ name: 'textMarkdownIt', markdown, withEmoji, hasRelMe })
   }
 
   enhancedMarkdownToHTML (markdown: string, withHtml = false, withEmoji = false) {
-    if (withHtml) return this.render({ name: 'enhancedWithHTMLMarkdownIt', markdown, withEmoji })
+    if (withHtml) return this.render({ name: 'enhancedWithHTMLMarkdownIt', markdown, withEmoji });
 
     return this.render({ name: 'enhancedMarkdownIt', markdown, withEmoji })
   }
@@ -98,14 +98,15 @@ export class MarkdownService {
     name: keyof MarkdownParsers
     markdown: string
     withEmoji: boolean
+    hasRelMe?: boolean
     additionalAllowedTags?: string[]
   }) {
-    const { name, markdown, withEmoji, additionalAllowedTags } = options
+    const { name, markdown, withEmoji, hasRelMe, additionalAllowedTags } = options
     if (!markdown) return ''
 
     const config = this.parsersConfig[name]
     if (!this.markdownParsers[name]) {
-      this.markdownParsers[name] = await this.createMarkdownIt(config)
+      this.markdownParsers[name] = await this.createMarkdownIt(config, hasRelMe)
 
       if (withEmoji) {
         if (!this.emojiModule) {
@@ -124,7 +125,7 @@ export class MarkdownService {
     return html
   }
 
-  private async createMarkdownIt (config: MarkdownConfig) {
+  private async createMarkdownIt (config: MarkdownConfig, hasRelMe = false) {
     // FIXME: import('...') returns a struct module, containing a "default" field
     const MarkdownItClass: typeof import ('markdown-it') = (await import('markdown-it') as any).default
 
@@ -134,12 +135,12 @@ export class MarkdownService {
       markdownIt.enable(rule)
     }
 
-    this.setTargetToLinks(markdownIt)
+    this.setTargetToLinks(markdownIt, hasRelMe)
 
     return markdownIt
   }
 
-  private setTargetToLinks (markdownIt: MarkdownIt) {
+  private setTargetToLinks (markdownIt: MarkdownIt, hasRelMe = false) {
     // Snippet from markdown-it documentation: https://github.com/markdown-it/markdown-it/blob/master/docs/architecture.md#renderer
     const defaultRender = markdownIt.renderer.rules.link_open || function (tokens, idx, options, env, self) {
       return self.renderToken(tokens, idx, options)
@@ -153,8 +154,14 @@ export class MarkdownService {
       else token.attrs[targetIndex][1] = '_blank'
 
       const relIndex = token.attrIndex('rel')
-      if (relIndex < 0) token.attrPush([ 'rel', 'noopener noreferrer me' ])
-      else token.attrs[relIndex][1] = 'noopener noreferrer me'
+      if (hasRelMe) {
+        if (relIndex < 0) token.attrPush([ 'rel', 'noopener noreferrer me' ])
+        else token.attrs[relIndex][1] = 'noopener noreferrer me'
+      }
+      else {
+        if (relIndex < 0) token.attrPush([ 'rel', 'noopener noreferrer' ])
+        else token.attrs[relIndex][1] = 'noopener noreferrer'
+      }
 
       // pass token to default renderer.*
       return defaultRender(tokens, index, options, env, self)
