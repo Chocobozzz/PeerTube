@@ -6757,6 +6757,8 @@ components:
           $ref: '#/components/schemas/UserRole'
         adminFlags:
           $ref: '#/components/schemas/UserAdminFlags'
+        password:
+          $ref: '#/components/schemas/password'
     UpdateMe:
       # see shared/models/users/user-update-me.model.ts:
       properties:
@@ -7228,13 +7230,13 @@ components:
             - `13` NEW_INSTANCE_FOLLOWER
 
             - `14` AUTO_INSTANCE_FOLLOWING
-            
+
             - `15` ABUSE_STATE_CHANGE
-            
+
             - `16` ABUSE_NEW_MESSAGE
-            
+
             - `17` NEW_PLUGIN_VERSION
-            
+
             - `18` NEW_PEERTUBE_VERSION
         read:
           type: boolean

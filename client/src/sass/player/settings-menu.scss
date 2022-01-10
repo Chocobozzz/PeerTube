@@ -9,26 +9,6 @@ $setting-transition-easing: ease-out;
 
 .video-js {
 
-  .vjs-settings {
-    @include disable-outline;
-
-    cursor: pointer;
-    width: 33px;
-
-    .vjs-icon-placeholder {
-      display: inline-block;
-      width: 17px;
-      height: 17px;
-      vertical-align: middle;
-      background: url('#{$assets-path}/player/images/settings.svg') no-repeat;
-      background-size: contain;
-
-      &::before {
-        content: '';
-      }
-    }
-  }
-
   .vjs-settings-sub-menu-title {
     width: 4em;
     text-transform: initial;
