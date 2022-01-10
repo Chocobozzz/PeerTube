@@ -57,19 +57,14 @@ export class UserVideoHistoryModel extends Model<Partial<AttributesOnly<UserVide
   })
   User: UserModel
 
-  static async listForApi (user: MUserAccountId, start: number, count: number, search?: string) {
-    const serverActor = await getServerActor()
-
+  static listForApi (user: MUserAccountId, start: number, count: number, search?: string) {
     return VideoModel.listForApi({
       start,
       count,
       search,
       sort: '-"userVideoHistory"."updatedAt"',
       nsfw: null, // All
-      displayOnlyForFollower: {
-        actorId: serverActor.id,
-        orLocalVideos: true
-      },
+      displayOnlyForFollower: null,
       user,
       historyOfUser: user
     })
