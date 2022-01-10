@@ -40,6 +40,7 @@ class NextPreviousVideoButton extends Button {
 
   update () {
     const disabled = this.nextPreviousVideoButtonOptions.isDisabled()
+    console.log(disabled)
 
     if (disabled) this.addClass('vjs-disabled')
     else this.removeClass('vjs-disabled')

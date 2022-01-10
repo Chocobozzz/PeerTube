@@ -474,6 +474,14 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     })
   }
 
+  private hasNextVideo () {
+    if (this.playlist) {
+      return this.videoWatchPlaylist.hasNextVideo()
+    }
+
+    return true
+  }
+
   private playNextVideoInAngularZone () {
     if (this.playlist) {
       this.zone.run(() => this.videoWatchPlaylist.navigateToNextPlaylistVideo())
@@ -559,6 +567,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         autoplay: this.isAutoplay(),
         p2pEnabled: isP2PEnabled(video, this.serverConfig, loggedInOrAnonymousUser.p2pEnabled),
 
+        hasNextVideo: () => this.hasNextVideo(),
         nextVideo: () => this.playNextVideoInAngularZone(),
 
         playerElement: this.playerElement,
@@ -615,6 +624,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     // Only set this if we're in a playlist
     if (this.playlist) {
+      options.common.hasPreviousVideo = () => this.videoWatchPlaylist.hasPreviousVideo()
+
       options.common.previousVideo = () => {
         this.zone.run(() => this.videoWatchPlaylist.navigateToPreviousPlaylistVideo())
       }
