@@ -16,7 +16,7 @@ export class HtmlRendererService {
     const html = text.replace(/\r?\n/g, '<br />')
 
     return this.sanitizeHtml(html, {
-      allowedTags: [ 'br' ]
+      allowedTags: [ 'br', 'a' ]
     })
   }
 
