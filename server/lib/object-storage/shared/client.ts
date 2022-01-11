@@ -1,7 +1,22 @@
+import { NodeHttpHandler } from "@aws-sdk/node-http-handler";
+import { HttpsProxyAgent } from 'https-proxy-agent'
+import { getProxy, isProxyEnabled } from '@server/helpers/proxy'
 import { S3Client } from '@aws-sdk/client-s3'
 import { logger } from '@server/helpers/logger'
 import { CONFIG } from '@server/initializers/config'
 import { lTags } from './logger'
+
+function getProxyRequestHandler() {
+
+  if (!isProxyEnabled()) { return new NodeHttpHandler() }
+
+  const proxy = getProxy()
+
+  return new NodeHttpHandler({
+    httpAgent: new HttpsProxyAgent(proxy),
+    httpsAgent: new HttpsProxyAgent(proxy)
+  })
+}
 
 let endpointParsed: URL
 function getEndpointParsed () {
@@ -26,7 +41,8 @@ function getClient () {
         accessKeyId: OBJECT_STORAGE.CREDENTIALS.ACCESS_KEY_ID,
         secretAccessKey: OBJECT_STORAGE.CREDENTIALS.SECRET_ACCESS_KEY
       }
-      : undefined
+      : undefined,
+    requestHandler: getProxyRequestHandler()
   })
 
   logger.info('Initialized S3 client %s with region %s.', getEndpoint(), OBJECT_STORAGE.REGION, lTags())
