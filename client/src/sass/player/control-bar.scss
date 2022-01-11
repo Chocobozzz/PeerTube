@@ -403,6 +403,14 @@
     .vjs-theater-control {
       display: none;
     }
+
+    .vjs-peertube {
+      .icon,
+      .download-speed-text,
+      .upload-speed-text {
+        display: none !important;
+      }
+    }
   }
 
   @media screen and (max-width: $screen-width-570) {
