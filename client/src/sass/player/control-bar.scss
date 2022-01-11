@@ -104,7 +104,9 @@
 
     .vjs-icon-placeholder::before {
       font-size: $control-bar-play-font-size;
-      line-height: initial;
+      line-height: unset;
+      position: relative;
+      top: -1px;
     }
   }
 
