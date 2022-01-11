@@ -21,6 +21,7 @@ import './videojs-components/settings-panel'
 import './videojs-components/settings-panel-child'
 import './videojs-components/theater-button'
 import './playlist/playlist-plugin'
+import './mobile/peertube-mobile-plugin'
 import videojs from 'video.js'
 import { HlsJsEngineSettings } from '@peertube/p2p-media-loader-hlsjs'
 import { PluginsManager } from '@root-helpers/plugins-manager'
@@ -43,7 +44,7 @@ import {
   VideoJSPluginOptions
 } from './peertube-videojs-typings'
 import { TranslationsManager } from './translations-manager'
-import { buildVideoOrPlaylistEmbed, getRtcConfig, isIOS, isSafari } from './utils'
+import { buildVideoOrPlaylistEmbed, getRtcConfig, isIOS, isMobile, isSafari } from './utils'
 
 // Change 'Playback Rate' to 'Speed' (smaller for our settings menu)
 (videojs.getComponent('PlaybackRateMenuButton') as any).prototype.controlText_ = 'Speed'
@@ -189,7 +190,10 @@ export class PeertubePlayerManager {
           videoEmbedTitle: options.common.embedTitle
         })
 
+        if (isMobile()) player.peertubeMobile()
+
         player.bezels()
+
         player.stats({
           videoUUID: options.common.videoUUID,
           videoIsLive: options.common.isLive,

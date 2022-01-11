@@ -12,6 +12,9 @@ import {
 import { PeerTubePluginOptions, UserWatching, VideoJSCaption } from './peertube-videojs-typings'
 import { isMobile } from './utils'
 import { SettingsButton } from './videojs-components/settings-menu-button'
+import debug from 'debug'
+
+const logger = debug('peertube:player:peertube')
 
 const Plugin = videojs.getPlugin('plugin')
 
@@ -233,7 +236,7 @@ class PeerTubePlugin extends Plugin {
   }
 
   private alterInactivity () {
-    if (this.menuOpened || this.mouseInSettings || this.mouseInControlBar || this.isTouchEnabled()) {
+    if (this.menuOpened || this.mouseInSettings || this.mouseInControlBar) {
       this.setInactivityTimeout(0)
       return
     }
@@ -245,6 +248,8 @@ class PeerTubePlugin extends Plugin {
   private setInactivityTimeout (timeout: number) {
     (this.player as any).cache_.inactivityTimeout = timeout
     this.player.options_.inactivityTimeout = timeout
+
+    logger('Set player inactivity to ' + timeout)
   }
 
   private isTouchEnabled () {

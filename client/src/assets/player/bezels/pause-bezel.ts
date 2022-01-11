@@ -1,4 +1,5 @@
 import videojs from 'video.js'
+import { isMobile } from '../utils'
 
 function getPauseBezel () {
   return `
@@ -36,6 +37,9 @@ class PauseBezel extends Component {
 
   constructor (player: videojs.Player, options?: videojs.ComponentOptions) {
     super(player, options)
+
+    // Hide bezels on mobile since we already have our mobile overlay
+    if (isMobile()) return
 
     player.on('pause', (_: any) => {
       if (player.seeking() || player.ended()) return

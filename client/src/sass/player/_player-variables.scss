@@ -8,10 +8,13 @@ $font-size: 13px;
 $control-bar-height: 38px;
 $control-bar-icon-size: 26px;
 $control-bar-volume-slider-height: 14px;
+$control-bar-slider-top: -10px;
 $control-bar-font-size: 14px;
 $control-bar-play-font-size: 34px;
 $control-bar-next-previous-play-font-size: 14px;
 $control-bar-button-width: 38px;
+
+$control-bar-total-height: $control-bar-height - $control-bar-slider-top;
 
 $slider-bg-color: lighten($primary-background-color, 33%);
 

@@ -22,6 +22,7 @@ $setting-transition-easing: ease-out;
     opacity: $primary-foreground-opacity;
     margin: 0 auto;
     font-size: $font-size !important;
+    z-index: 100;
 
     width: auto;
     overflow: hidden;

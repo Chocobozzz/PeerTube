@@ -1,5 +1,7 @@
+@use 'sass:math';
 @use '_variables' as *;
 @use '_mixins' as *;
+@use './_player-variables' as *;
 
 /* Special mobile style */
 
@@ -11,6 +13,75 @@
         margin-top: -1px;
         opacity: 1;
       }
+    }
+  }
+}
+
+.vjs-mobile-buttons-overlay {
+  display: none;
+
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.4);
+  width: 100%;
+  height: 100%;
+  top: 0;
+
+  .vjs-user-active,
+  .vjs-paused {
+    display: block;
+  }
+
+  .main-button {
+    font-family: VideoJS;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 5em;
+    width: fit-content;
+    margin: auto;
+    position: relative;
+    top: calc(50% - 10px);
+    transform: translateY(-50%);
+  }
+}
+
+.vjs-paused {
+  .main-button {
+    &:before {
+      content: '\f101';
+    }
+  }
+}
+
+.vjs-playing {
+  .main-button {
+    &:before {
+      content: '\f103';
+    }
+  }
+}
+
+.vjs-ended {
+  .main-button {
+    &:before {
+      content: '\f116';
+    }
+  }
+}
+
+.vjs-has-started {
+
+  &.vjs-user-active,
+  &.vjs-paused {
+    .vjs-mobile-buttons-overlay {
+      display: block;
+    }
+  }
+
+  &.vjs-seeking,
+  &.vjs-scrubbing,
+  &.vjs-waiting {
+    .vjs-mobile-buttons-overlay {
+      display: none;
     }
   }
 }

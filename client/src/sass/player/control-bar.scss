@@ -4,6 +4,8 @@
 @use './_player-variables' as *;
 
 .video-js.vjs-peertube-skin .vjs-control-bar {
+  z-index: 100;
+
   height: $control-bar-height;
   background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.6));
   box-shadow: 0 -15px 40px 10px rgba(0, 0, 0, 0.2);
@@ -49,7 +51,7 @@
     @include margin-left($progress-margin);
 
     position: absolute;
-    top: -10px;
+    top: $control-bar-slider-top;
     z-index: 100; // On top of the progress bar
     width: calc(100% - (2 * #{$progress-margin}));
     height: 14px;

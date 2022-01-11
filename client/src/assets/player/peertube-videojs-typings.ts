@@ -42,6 +42,8 @@ declare module 'video.js' {
 
     bezels (): void
 
+    peertubeMobile (): void
+
     stats (options?: StatsCardOptions): StatsForNerdsPlugin
 
     textTracks (): TextTrackList & {
