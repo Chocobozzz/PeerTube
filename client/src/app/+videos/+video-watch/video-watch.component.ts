@@ -714,22 +714,28 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   private initHotkeys () {
     this.hotkeys = [
       // These hotkeys are managed by the player
-      new Hotkey('f', e => e, undefined, $localize`Enter/exit fullscreen (requires player focus)`),
-      new Hotkey('space', e => e, undefined, $localize`Play/Pause the video (requires player focus)`),
-      new Hotkey('m', e => e, undefined, $localize`Mute/unmute the video (requires player focus)`),
+      new Hotkey('f', e => e, undefined, $localize`Enter/exit fullscreen`),
+      new Hotkey('space', e => e, undefined, $localize`Play/Pause the video`),
+      new Hotkey('m', e => e, undefined, $localize`Mute/unmute the video`),
 
-      new Hotkey('0-9', e => e, undefined, $localize`Skip to a percentage of the video: 0 is 0% and 9 is 90% (requires player focus)`),
+      new Hotkey('0-9', e => e, undefined, $localize`Skip to a percentage of the video: 0 is 0% and 9 is 90%`),
 
-      new Hotkey('up', e => e, undefined, $localize`Increase the volume (requires player focus)`),
-      new Hotkey('down', e => e, undefined, $localize`Decrease the volume (requires player focus)`),
+      new Hotkey('up', e => e, undefined, $localize`Increase the volume`),
+      new Hotkey('down', e => e, undefined, $localize`Decrease the volume`),
 
-      new Hotkey('right', e => e, undefined, $localize`Seek the video forward (requires player focus)`),
-      new Hotkey('left', e => e, undefined, $localize`Seek the video backward (requires player focus)`),
+      new Hotkey('right', e => e, undefined, $localize`Seek the video forward`),
+      new Hotkey('left', e => e, undefined, $localize`Seek the video backward`),
 
-      new Hotkey('>', e => e, undefined, $localize`Increase playback rate (requires player focus)`),
-      new Hotkey('<', e => e, undefined, $localize`Decrease playback rate (requires player focus)`),
+      new Hotkey('>', e => e, undefined, $localize`Increase playback rate`),
+      new Hotkey('<', e => e, undefined, $localize`Decrease playback rate`),
 
-      new Hotkey('.', e => e, undefined, $localize`Navigate in the video frame by frame (requires player focus)`)
+      new Hotkey(',', e => e, undefined, $localize`Navigate in the video to the previous frame`),
+      new Hotkey('.', e => e, undefined, $localize`Navigate in the video to the next frame`),
+
+      new Hotkey('t', e => {
+        this.theaterEnabled = !this.theaterEnabled
+        return false
+      }, undefined, $localize`Toggle theater mode`)
     ]
 
     if (this.isUserLoggedIn()) {

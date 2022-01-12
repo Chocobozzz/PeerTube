@@ -687,9 +687,20 @@ export class PeertubePlayerManager {
               player.playbackRate(parseFloat(newValue.toFixed(2)))
             }
           },
-          frameByFrame: {
+          previousFrame: {
             key: function (event: KeyboardEvent) {
-              return isNaked(event, '.')
+              return event.key === ','
+            },
+            handler: function (player: videojs.Player) {
+              player.pause()
+              // Calculate movement distance (assuming 30 fps)
+              const dist = 1 / 30
+              player.currentTime(player.currentTime() - dist)
+            }
+          },
+          nextFrame: {
+            key: function (event: KeyboardEvent) {
+              return event.key === '.'
             },
             handler: function (player: videojs.Player) {
               player.pause()
