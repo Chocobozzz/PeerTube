@@ -50,7 +50,9 @@ const playerKeys = {
   'Buffer State': 'Buffer State',
   'Live Latency': 'Live Latency',
   'P2P': 'P2P',
+  '{1} seconds': '{1} seconds',
   'enabled': 'enabled',
+  'Playlist: {1}': 'Playlist: {1}',
   'disabled': 'disabled',
   '  off': '  off',
   'Player mode': 'Player mode'
