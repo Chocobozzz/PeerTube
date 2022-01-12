@@ -15,10 +15,10 @@ class PeerTubeMobilePlugin extends Plugin {
   private seekAmount = 0
 
   private lastTapEvent: TouchEvent
-  private tapTimeout: NodeJS.Timeout
+  private tapTimeout: ReturnType<typeof setTimeout>
   private newActiveState: boolean
 
-  private setCurrentTimeTimeout: NodeJS.Timeout
+  private setCurrentTimeTimeout: ReturnType<typeof setTimeout>
 
   constructor (player: videojs.Player, options: videojs.PlayerOptions) {
     super(player, options)
