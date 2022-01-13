@@ -90,6 +90,8 @@ export class MarkdownService {
         url: buildVideoLink({ shortUUID: videoShortUUID }),
         startTime: t
       })
+
+      // Sync class name with timestamp-route-transformer directive
       return `<a class="video-timestamp" href="${url}">${str}</a>`
     })
   }
