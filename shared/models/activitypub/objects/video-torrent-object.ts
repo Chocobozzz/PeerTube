@@ -33,8 +33,10 @@ export interface VideoObject {
   published: string
   originallyPublishedAt: string
   updated: string
+
   mediaType: 'text/markdown'
   content: string
+
   support: string
 
   icon: ActivityIconObject[]

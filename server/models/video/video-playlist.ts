@@ -679,6 +679,7 @@ export class VideoPlaylistModel extends Model<Partial<AttributesOnly<VideoPlayli
           type: 'Playlist' as 'Playlist',
           name: this.name,
           content: this.description,
+          mediaType: 'text/markdown' as 'text/markdown',
           uuid: this.uuid,
           published: this.createdAt.toISOString(),
           updated: this.updatedAt.toISOString(),

@@ -563,6 +563,7 @@ export class AbuseModel extends Model<Partial<AttributesOnly<AbuseModel>>> {
     return {
       type: 'Flag' as 'Flag',
       content: this.reason,
+      mediaType: 'text/markdown',
       object,
       tag: predefinedReasons.map(r => ({
         type: 'Hashtag' as 'Hashtag',

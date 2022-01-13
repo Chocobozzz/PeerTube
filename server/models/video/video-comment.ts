@@ -874,7 +874,10 @@ export class VideoCommentModel extends Model<Partial<AttributesOnly<VideoComment
     return {
       type: 'Note' as 'Note',
       id: this.url,
+
       content: this.text,
+      mediaType: 'text/markdown',
+
       inReplyTo,
       updated: this.updatedAt.toISOString(),
       published: this.createdAt.toISOString(),
