@@ -41,8 +41,8 @@ declare module 'video.js' {
     contextmenuUI (options: any): any
 
     bezels (): void
-
     peertubeMobile (): void
+    peerTubeHotkeysPlugin (): void
 
     stats (options?: StatsCardOptions): StatsForNerdsPlugin
 

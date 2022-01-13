@@ -131,7 +131,6 @@
     "typescript": "~4.4.4",
     "video.js": "^7",
     "videojs-dock": "^3.0.0",
-    "videojs-hotkeys": "^0.2.27",
     "videostream": "~3.2.1",
     "wdio-chromedriver-service": "^7.2.0",
     "wdio-geckodriver-service": "^2.0.3",

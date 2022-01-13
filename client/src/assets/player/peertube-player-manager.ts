@@ -1,4 +1,3 @@
-import 'videojs-hotkeys/videojs.hotkeys'
 import 'videojs-dock'
 import '@peertube/videojs-contextmenu'
 import './upnext/end-card'
@@ -23,6 +22,7 @@ import './videojs-components/theater-button'
 import './playlist/playlist-plugin'
 import './mobile/peertube-mobile-plugin'
 import './mobile/peertube-mobile-buttons'
+import './hotkeys/peertube-hotkeys-plugin'
 import videojs from 'video.js'
 import { HlsJsEngineSettings } from '@peertube/p2p-media-loader-hlsjs'
 import { PluginsManager } from '@root-helpers/plugins-manager'
@@ -192,6 +192,7 @@ export class PeertubePlayerManager {
         })
 
         if (isMobile()) player.peertubeMobile()
+        if (options.common.enableHotkeys === true) player.peerTubeHotkeysPlugin()
 
         player.bezels()
 
@@ -284,10 +285,6 @@ export class PeertubePlayerManager {
 
     if (commonOptions.playlist) {
       plugins.playlist = commonOptions.playlist
-    }
-
-    if (commonOptions.enableHotkeys === true) {
-      PeertubePlayerManager.addHotkeysOptions(plugins)
     }
 
     if (isHLS) {
@@ -636,82 +633,6 @@ export class PeertubePlayerManager {
 
     // adding the menu
     player.contextmenuUI({ content })
-  }
-
-  private static addHotkeysOptions (plugins: VideoJSPluginOptions) {
-    const isNaked = (event: KeyboardEvent, key: string) =>
-      (!event.ctrlKey && !event.altKey && !event.metaKey && !event.shiftKey && event.key === key)
-
-    Object.assign(plugins, {
-      hotkeys: {
-        skipInitialFocus: true,
-        enableInactiveFocus: false,
-        captureDocumentHotkeys: true,
-        documentHotkeysFocusElementFilter: (e: HTMLElement) => {
-          const tagName = e.tagName.toLowerCase()
-          return e.id === 'content' || tagName === 'body' || tagName === 'video'
-        },
-
-        enableVolumeScroll: false,
-        enableModifiersForNumbers: false,
-
-        rewindKey: function (event: KeyboardEvent) {
-          return isNaked(event, 'ArrowLeft')
-        },
-
-        forwardKey: function (event: KeyboardEvent) {
-          return isNaked(event, 'ArrowRight')
-        },
-
-        fullscreenKey: function (event: KeyboardEvent) {
-          // fullscreen with the f key or Ctrl+Enter
-          return isNaked(event, 'f') || (!event.altKey && event.ctrlKey && event.key === 'Enter')
-        },
-
-        customKeys: {
-          increasePlaybackRateKey: {
-            key: function (event: KeyboardEvent) {
-              return isNaked(event, '>')
-            },
-            handler: function (player: videojs.Player) {
-              const newValue = Math.min(player.playbackRate() + 0.1, 5)
-              player.playbackRate(parseFloat(newValue.toFixed(2)))
-            }
-          },
-          decreasePlaybackRateKey: {
-            key: function (event: KeyboardEvent) {
-              return isNaked(event, '<')
-            },
-            handler: function (player: videojs.Player) {
-              const newValue = Math.max(player.playbackRate() - 0.1, 0.10)
-              player.playbackRate(parseFloat(newValue.toFixed(2)))
-            }
-          },
-          previousFrame: {
-            key: function (event: KeyboardEvent) {
-              return event.key === ','
-            },
-            handler: function (player: videojs.Player) {
-              player.pause()
-              // Calculate movement distance (assuming 30 fps)
-              const dist = 1 / 30
-              player.currentTime(player.currentTime() - dist)
-            }
-          },
-          nextFrame: {
-            key: function (event: KeyboardEvent) {
-              return event.key === '.'
-            },
-            handler: function (player: videojs.Player) {
-              player.pause()
-              // Calculate movement distance (assuming 30 fps)
-              const dist = 1 / 30
-              player.currentTime(player.currentTime() + dist)
-            }
-          }
-        }
-      }
-    })
   }
 
   private static getAutoPlayValue (autoplay: any) {
