@@ -17,6 +17,7 @@ export class UserBanModalComponent extends FormReactive implements OnInit {
 
   private usersToBan: User | User[]
   private openedModal: NgbModalRef
+  public modalMessage: string = ""
 
   constructor (
     protected formValidatorService: FormValidatorService,
@@ -36,6 +37,12 @@ export class UserBanModalComponent extends FormReactive implements OnInit {
   openModal (user: User | User[]) {
     this.usersToBan = user
     this.openedModal = this.modalService.open(this.modal, { centered: true })
+
+    let isSingleUser = true
+    if (Array.isArray(this.usersToBan)) {
+      isSingleUser = this.usersToBan.length <= 1
+    }
+    this.modalMessage = isSingleUser ? "Ban this user" : "Ban these users"
   }
 
   hide () {
