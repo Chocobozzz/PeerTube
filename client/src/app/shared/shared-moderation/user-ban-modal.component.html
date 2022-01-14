@@ -27,7 +27,7 @@
           (click)="hide()" (key.enter)="hide()"
         >
 
-        <input type="submit" i18n-value value="Ban this user" class="peertube-button orange-button" [disabled]="!form.valid" />
+        <input type="submit" i18n-value [value]="modalMessage" class="peertube-button orange-button" [disabled]="!form.valid" />
       </div>
     </form>
   </div>
