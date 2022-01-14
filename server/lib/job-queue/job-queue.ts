@@ -22,7 +22,6 @@ import {
 } from '../../../shared/models'
 import { logger } from '../../helpers/logger'
 import { JOB_ATTEMPTS, JOB_COMPLETED_LIFETIME, JOB_CONCURRENCY, JOB_TTL, REPEAT_JOBS, WEBSERVER } from '../../initializers/constants'
-import { Redis } from '../redis'
 import { processActivityPubCleaner } from './handlers/activitypub-cleaner'
 import { processActivityPubFollow } from './handlers/activitypub-follow'
 import { processActivityPubHttpBroadcast } from './handlers/activitypub-http-broadcast'
@@ -114,9 +113,16 @@ class JobQueue {
     this.initialized = true
 
     this.jobRedisPrefix = 'bull-' + WEBSERVER.HOST
-    const queueOptions = {
+
+    const queueOptions: Bull.QueueOptions = {
       prefix: this.jobRedisPrefix,
-      redis: Redis.getRedisClientOptions(),
+      redis: {
+        password: CONFIG.REDIS.AUTH,
+        db: CONFIG.REDIS.DB,
+        host: CONFIG.REDIS.HOSTNAME,
+        port: CONFIG.REDIS.PORT,
+        path: CONFIG.REDIS.SOCKET
+      },
       settings: {
         maxStalledCount: 10 // transcoding could be long, so jobs can often be interrupted by restarts
       }
