@@ -42,7 +42,7 @@ export class UserBanModalComponent extends FormReactive implements OnInit {
     if (Array.isArray(this.usersToBan)) {
       isSingleUser = this.usersToBan.length <= 1
     }
-    this.modalMessage = isSingleUser ? "Ban this user" : "Ban these users"
+    this.modalMessage = isSingleUser ? $localize`Ban this user` : $localize`Ban these users`
   }
 
   hide () {
