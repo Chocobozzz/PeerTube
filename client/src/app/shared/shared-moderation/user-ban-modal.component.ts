@@ -17,7 +17,7 @@ export class UserBanModalComponent extends FormReactive implements OnInit {
 
   private usersToBan: User | User[]
   private openedModal: NgbModalRef
-  public modalMessage: string = ""
+  modalMessage = ''
 
   constructor (
     protected formValidatorService: FormValidatorService,
