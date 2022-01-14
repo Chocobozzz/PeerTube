@@ -126,7 +126,7 @@ You can get a complete PeerTube development setup with Gitpod, a free one-click 
 
 ### Server side
 
-You can find a documentation of the server code/architecture [here](https://docs.joinpeertube.org/#/contribute-architecture?id=server-code).
+You can find a documentation of the server code/architecture [here](https://docs.joinpeertube.org/contribute-architecture?id=server-code).
 
 To develop on the server-side:
 
@@ -141,7 +141,7 @@ restart.
 ### Client side
 
 You can find a documentation of the client code/architecture
-[here](https://docs.joinpeertube.org/#/contribute-architecture?id=client-code).
+[here](https://docs.joinpeertube.org/contribute-architecture?id=client-code).
 
 
 To develop on the client side:
@@ -220,4 +220,4 @@ To test emails with PeerTube:
 
 ## Plugins & Themes
 
-See the dedicated documentation: https://docs.joinpeertube.org/#/contribute-plugins
+See the dedicated documentation: https://docs.joinpeertube.org/contribute-plugins
