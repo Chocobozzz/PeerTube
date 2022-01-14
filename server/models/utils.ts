@@ -238,7 +238,8 @@ function searchAttribute (sourceField?: string, targetField?: string) {
 
   return {
     [targetField]: {
-      [Op.iLike]: `%${sourceField}%`
+      // FIXME: ts error
+      [Op.iLike as any]: `%${sourceField}%`
     }
   }
 }

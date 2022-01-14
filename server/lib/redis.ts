@@ -365,8 +365,10 @@ class Redis {
     return this.client.incr(this.prefix + key)
   }
 
-  private exists (key: string) {
-    return this.client.exists(this.prefix + key)
+  private async exists (key: string) {
+    const result = await this.client.exists(this.prefix + key)
+
+    return result !== 0
   }
 
   private setExpiration (key: string, ms: number) {

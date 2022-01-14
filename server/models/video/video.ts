@@ -1488,7 +1488,8 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
       required: false,
       where: {
         startDate: {
-          [Op.gte]: new Date(new Date().getTime() - (24 * 3600 * 1000) * trendingDays)
+          // FIXME: ts error
+          [Op.gte as any]: new Date(new Date().getTime() - (24 * 3600 * 1000) * trendingDays)
         }
       }
     }
