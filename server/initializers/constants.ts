@@ -265,7 +265,7 @@ const CONSTRAINTS_FIELDS = {
     CAPTION_FILE: {
       EXTNAME: [ '.vtt', '.srt' ],
       FILE_SIZE: {
-        max: 4 * 1024 * 1024 // 4MB
+        max: 20 * 1024 * 1024 // 20MB
       }
     }
   },
