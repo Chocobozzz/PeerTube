@@ -252,12 +252,6 @@ class PeerTubePlugin extends Plugin {
     logger('Set player inactivity to ' + timeout)
   }
 
-  private isTouchEnabled () {
-    return ('ontouchstart' in window) ||
-      navigator.maxTouchPoints > 0 ||
-      (navigator as any).msMaxTouchPoints > 0
-  }
-
   private initCaptions () {
     for (const caption of this.videoCaptions) {
       this.player.addRemoteTextTrack({
