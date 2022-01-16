@@ -3073,7 +3073,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="6390009909920475335" datatype="html">
         <source>View <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}" xid="2084023438878610739"/> from <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> and others </source>
-        <target state="translated"><x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, =1 {1 Antwort} other {{{ comment.totalReplies }} Antworten}}"/> von <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> und Anderen ansehen </target>
+        <target state="needs-translation"><x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}"/> von <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> und Anderen ansehen </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context><context context-type="linenumber">73</context></context-group>
       </trans-unit>
       <trans-unit id="4036338619293319383" datatype="html">
@@ -3085,7 +3085,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="127329338495775339" datatype="html">
         <source>View <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}" xid="2084023438878610739"/> from <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> </source>
-        <target state="needs-translation"><x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, =1 {1 Antwort} other {{{ comment.totalReplies }} Antworten}}"/> von <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> ansehen </target>
+        <target state="needs-translation"><x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}"/> von <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> ansehen </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context><context context-type="linenumber">76</context></context-group>
       </trans-unit>
       <trans-unit id="5535545444690528619" datatype="html">
@@ -3902,7 +3902,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="1258618443362430782" datatype="html">
         <source><x id="ICU" equiv-text="{abuse.countReportsForReporter, plural, =1 {1 report} other {{{ abuse.countReportsForReporter }} reports}}" xid="1879828604800763221"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;ml-1 glyphicon glyphicon-flag&quot;&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></source>
-        <target state="needs-translation"><x id="ICU" xid="1879828604800763221" equiv-text="{{abuse.countReportsForReportee, plural, =1 {1 Meldung} other {{{ abuse. countReportsForReportee }} Meldungen}}"/> <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;ml-1glyphicon glyphicon-flag&quot;&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></target>
+        <target state="needs-translation"><x id="ICU" equiv-text="{{abuse.countReportsForReportee, plural, =1 {1 Meldung} other {{{ abuse. countReportsForReportee }} Meldungen}}"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;ml-1 glyphicon glyphicon-flag&quot;&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.html</context><context context-type="linenumber">21</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.html</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
@@ -4145,7 +4145,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="1780056719120519633" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {result} other {results}}" xid="3148804384763272950"/> for "<x id="INTERPOLATION_1" equiv-text="{{ search }}"/>" </source>
-        <target state="needs-translation"><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/> <x id="ICU" xid="3148804384763272950" equiv-text="{pagination.totalItems, plural, =1 {Ergebnis} other {Ergebnisse}}"/> für " <x id="INTERPOLATION_1" equiv-text="{{ search }}"/>" </target>
+        <target state="needs-translation"><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {Ergebnis} other {Ergebnisse}}"/> für "<x id="INTERPOLATION_1" equiv-text="{{ search }}"/>" </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="3148804384763272950">
@@ -7353,12 +7353,12 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="9196775343330824083" datatype="html">
         <source>Messages with reporter</source>
-        <target state="translated">Nachricht an Melder</target>
+        <target state="needs-translation">Nachrichten unter Melder</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">248</context></context-group>
       </trans-unit>
       <trans-unit id="8770468575924421391" datatype="html">
         <source>Messages with moderators</source>
-        <target state="translated">Nachrichten an Moderatoren</target>
+        <target state="needs-translation">Nachrichten unter Moderatoren</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">249</context></context-group>
       </trans-unit>
       <trans-unit id="8528549800795985099" datatype="html">
@@ -8791,7 +8791,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="7804724824750282316" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {result} other {results}}" xid="3148804384763272950"/></source>
-        <target state="needs-translation"><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/> <x id="ICU" xid="3148804384763272950" equiv-text="{pagination.totalItems, plural, =1 {Ergebnis} other {Ergebnisse}}"/></target>
+        <target state="needs-translation"><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {Ergebnis} other {Ergebnisse}}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search.component.html</context>
           <context context-type="linenumber">5</context>
