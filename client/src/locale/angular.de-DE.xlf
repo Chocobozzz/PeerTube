@@ -3902,7 +3902,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="1258618443362430782" datatype="html">
         <source><x id="ICU" equiv-text="{abuse.countReportsForReporter, plural, =1 {1 report} other {{{ abuse.countReportsForReporter }} reports}}" xid="1879828604800763221"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;ml-1 glyphicon glyphicon-flag&quot;&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></source>
-        <target state="translated"><x id="ICU" equiv-text="{{abuse.countReportsForReportee, plural, =1 {1 Meldung} other {{{ abuse. countReportsForReportee }} Meldungen}}"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;ml-1 glyphicon glyphicon-flag&quot;&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></target>
+        <target state="needs-translation"><x id="ICU" xid="1879828604800763221" equiv-text="{{abuse.countReportsForReportee, plural, =1 {1 Meldung} other {{{ abuse. countReportsForReportee }} Meldungen}}"/> <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;ml-1 glyphicon glyphicon-flag&quot;&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.html</context><context context-type="linenumber">21</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.html</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
@@ -4145,7 +4145,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="1780056719120519633" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {result} other {results}}" xid="3148804384763272950"/> for "<x id="INTERPOLATION_1" equiv-text="{{ search }}"/>" </source>
-        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {Ergebnis} other {Ergebnisse}}"/> für "<x id="INTERPOLATION_1" equiv-text="{{ search }}"/>" </target>
+        <target state="needs-translation"><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/> <x id="ICU" xid="3148804384763272950" equiv-text="{pagination.totalItems, plural, =1 {Ergebnis} other {Ergebnisse}}"/> für " <x id="INTERPOLATION_1" equiv-text="{{ search }}"/>" </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="3148804384763272950">
@@ -5901,7 +5901,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="3030338154442300172" datatype="html">
         <source>Created <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {1 playlist} other {{{ pagination.totalItems }} playlists}}" xid="498463490165953744"/> </source>
-        <target state="translated">Erstellte <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {1 Playlist} other {{{ pagination.totalItems }} Playlists}}"/> </target>
+        <target state="needs-translation">Erstellte <x id="ICU" xid="498463490165953744" equiv-text="{pagination.totalItems, plural, =1 {1 Playlist} other {{{ pagination.totalItems }} Playlisten}}"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channel-playlists/video-channel-playlists.component.html</context><context context-type="linenumber">2</context></context-group>
       </trans-unit>
       <trans-unit id="3505845886770923767" datatype="html">
@@ -6049,7 +6049,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="8856905278208146821" datatype="html">
         <source><x id="ICU" equiv-text="{getTotalVideosOf(videoChannel), plural, =1 {1 videos} other {{{ getTotalVideosOf(videoChannel) }} videos}}" xid="8553183884518584864"/> </source>
-        <target state="translated"><x id="ICU" equiv-text="{getTotalVideosOf(videoChannel), plural, =1 {1 Video} other {{{ getTotalVideosOf(videoChannel) }} Videos}}"/> </target>
+        <target state="needs-translation"><x id="ICU" xid="8553183884518584864" equiv-text="{getTotalVideosOf(videoChannel), plural, =1 {1 Video} other {{{ getTotalVideosOf(videoChannel) }} Videos}}"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context><context context-type="linenumber">25</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.html</context><context context-type="linenumber">38</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.html</context><context context-type="linenumber">33</context></context-group>
@@ -8791,7 +8791,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="7804724824750282316" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {result} other {results}}" xid="3148804384763272950"/></source>
-        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {Ergebnis} other {Ergebnisse}}"/></target>
+        <target state="needs-translation"><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/> <x id="ICU" xid="3148804384763272950" equiv-text="{pagination.totalItems, plural, =1 {Ergebnis} other {Ergebnisse}}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search.component.html</context>
           <context context-type="linenumber">5</context>
