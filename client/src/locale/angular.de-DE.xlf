@@ -7057,7 +7057,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="2520968456492632777">
         <source><x id="PH"/> accepted in instance followers </source>
-        <target><x id="PH"/> bei Instanz-Abonnenten akzeptiert </target>
+        <target><x id="PH"/> als Instanz-Abonnenten akzeptiert </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="450530533730658004">
@@ -7072,12 +7072,12 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="2040902819815401278">
         <source><x id="PH"/> rejected from instance followers </source>
-        <target><x id="PH"/> für Instanz-Abonnent abgelehnt </target>
+        <target><x id="PH"/> als Instanz-Abonnent abgelehnt </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context><context context-type="linenumber">60</context></context-group>
       </trans-unit>
       <trans-unit id="3620117223790525725">
         <source>Do you really want to delete this follower?</source>
-        <target>Willst du diesen Abonnenten wirklich löschen?</target>
+        <target>Willst du dieses Abonnenten wirklich löschen?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context><context context-type="linenumber">73</context></context-group>
       </trans-unit>
       <trans-unit id="7022070615528435141" datatype="html">
