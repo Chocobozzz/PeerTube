@@ -1102,6 +1102,10 @@ function buildLanguages () {
   languages['oc'] = 'Occitan'
   languages['el'] = 'Greek'
 
+  // Chinese languages
+  languages['zh-Hans'] = 'Simplified Chinese'
+  languages['zh-Hant'] = 'Traditional Chinese'
+
   return languages
 }
 
