@@ -54,7 +54,7 @@
     top: $control-bar-slider-top;
     z-index: 100; // On top of the progress bar
     width: calc(100% - (2 * #{$progress-margin}));
-    height: 14px;
+    height: 20px;
 
     .vjs-slider {
       margin: 0;
