@@ -312,7 +312,7 @@
       </trans-unit>
       <trans-unit id="506794214492992969" datatype="html">
         <source><x id="START_LINK"/>A new video abuse<x id="CLOSE_LINK"/> has been created on video <x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></source>
-        <target state="translated"><x id="START_LINK"/>Un nouvel abus vidéo<x id="CLOSE_LINK"/> a été créé sur la vidéo <x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></target>
+        <target state="translated"><x id="START_LINK"/>Un nouveau signalement<x id="CLOSE_LINK"/> a été créé sur la vidéo <x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">49</context></context-group>
       </trans-unit>
       <trans-unit id="3487882822536102372" datatype="html">
@@ -322,22 +322,22 @@
       </trans-unit>
       <trans-unit id="7885094785640544496" datatype="html">
         <source><x id="START_LINK"/>A new account abuse<x id="CLOSE_LINK"/> has been created on account <x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></source>
-        <target state="translated"><x id="START_LINK"/>Un nouvel abus <x id="CLOSE_LINK"/> a été créé sur le compte <x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></target>
+        <target state="translated"><x id="START_LINK"/>Un nouveau signalement <x id="CLOSE_LINK"/> a été créé sur le compte <x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">57</context></context-group>
       </trans-unit>
       <trans-unit id="2008776855594205860" datatype="html">
         <source><x id="START_LINK"/>A new abuse<x id="CLOSE_LINK"/> has been created </source>
-        <target state="translated"><x id="START_LINK"/>Un nouvel abus<x id="CLOSE_LINK"/> a été créé </target>
+        <target state="translated"><x id="START_LINK"/>Un nouveau signalement<x id="CLOSE_LINK"/> a été créé </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">62</context></context-group>
       </trans-unit>
       <trans-unit id="8816959058080937679" datatype="html">
         <source><x id="START_LINK"/>Your abuse <x id="INTERPOLATION"/><x id="CLOSE_LINK"/> has been <x id="START_TAG_NG_CONTAINER"/>accepted<x id="CLOSE_TAG_NG_CONTAINER"/><x id="START_TAG_NG_CONTAINER_1"/>rejected<x id="CLOSE_TAG_NG_CONTAINER"/></source>
-        <target state="translated"><x id="START_LINK"/>Votre abus <x id="INTERPOLATION"/> <x id="CLOSE_LINK"/> a été <x id="START_TAG_NG-CONTAINER"/>accepté <x id="CLOSE_TAG_NG-CONTAINER"/><x id="START_TAG_NG-CONTAINER_1"/>rejected <x id="CLOSE_TAG_NG-CONTAINER"/></target>
+        <target state="translated"><x id="START_LINK"/>Votre signalement <x id="INTERPOLATION"/> <x id="CLOSE_LINK"/> a été <x id="START_TAG_NG-CONTAINER"/>accepté <x id="CLOSE_TAG_NG-CONTAINER"/><x id="START_TAG_NG-CONTAINER_1"/>rejeté<x id="CLOSE_TAG_NG-CONTAINER"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">70</context></context-group>
       </trans-unit>
       <trans-unit id="6464941273929604379" datatype="html">
         <source><x id="START_LINK"/>Abuse <x id="INTERPOLATION"/><x id="CLOSE_LINK"/> has a new message </source>
-        <target state="translated"><x id="START_LINK"/>L'abus <x id="INTERPOLATION"/><x id="CLOSE_LINK"/> a un nouveau message </target>
+        <target state="translated"><x id="START_LINK"/>Le signalement <x id="INTERPOLATION"/><x id="CLOSE_LINK"/> a un nouveau message </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">80</context></context-group>
       </trans-unit>
       <trans-unit id="420488506127153204" datatype="html">
@@ -3722,7 +3722,7 @@
       </trans-unit>
       <trans-unit id="1420624050293070194" datatype="html">
         <source>No abuses found matching current filters.</source>
-        <target state="translated">Aucun abus trouvé correspondant aux filtres actuels.</target>
+        <target state="translated">Aucun signalement trouvé correspondant aux filtres actuels.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context><context context-type="linenumber">152</context></context-group>
       </trans-unit>
       <trans-unit id="639328713281980021" datatype="html">
@@ -8002,7 +8002,7 @@
       </trans-unit>
       <trans-unit id="7130088765428829942" datatype="html">
         <source>New abuse</source>
-        <target state="translated">Nouvel abus</target>
+        <target state="translated">Nouveau signalement</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">34</context></context-group>
       </trans-unit>
       <trans-unit id="5618790697446401830" datatype="html">
@@ -10386,7 +10386,7 @@
       </trans-unit>
       <trans-unit id="8006612645824137458" datatype="html">
         <source>Contains abusive, racist or sexist language or iconography.</source>
-        <target state="translated">Contient un langage ou une iconographie abusif, raciste ou sexiste.</target>
+        <target state="translated">Contient un langage ou une iconographie abusive, raciste ou sexiste.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">145</context></context-group>
       </trans-unit>
       <trans-unit id="5413552012131573970" datatype="html">
