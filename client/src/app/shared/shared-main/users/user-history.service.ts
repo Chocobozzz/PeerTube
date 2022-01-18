@@ -18,7 +18,7 @@ export class UserHistoryService {
     private videoService: VideoService
   ) {}
 
-  getUserVideosHistory (historyPagination: ComponentPaginationLight, search?: string) {
+  list (historyPagination: ComponentPaginationLight, search?: string) {
     const pagination = this.restService.componentToRestPagination(historyPagination)
 
     let params = new HttpParams()
@@ -34,13 +34,13 @@ export class UserHistoryService {
                )
   }
 
-  deleteUserVideoHistoryElement (video: Video) {
+  deleteElement (video: Video) {
     return this.authHttp
                .delete(UserHistoryService.BASE_USER_VIDEOS_HISTORY_URL + '/' + video.id)
                .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
-  clearAllUserVideosHistory () {
+  clearAll () {
     return this.authHttp
                .post(UserHistoryService.BASE_USER_VIDEOS_HISTORY_URL + '/remove', {})
                .pipe(

@@ -95,7 +95,7 @@ export class MyHistoryComponent implements OnInit, DisableForReuseHook {
   getVideosObservable (page: number) {
     const newPagination = immutableAssign(this.pagination, { currentPage: page })
 
-    return this.userHistoryService.getUserVideosHistory(newPagination, this.search)
+    return this.userHistoryService.list(newPagination, this.search)
       .pipe(
         tap(res => this.pagination.totalItems = res.total)
       )
@@ -124,7 +124,7 @@ export class MyHistoryComponent implements OnInit, DisableForReuseHook {
   }
 
   deleteHistoryElement (video: Video) {
-    this.userHistoryService.deleteUserVideoHistoryElement(video)
+    this.userHistoryService.deleteElement(video)
       .subscribe({
         next: () => {
           this.videos = this.videos.filter(v => v.id !== video.id)
@@ -141,7 +141,7 @@ export class MyHistoryComponent implements OnInit, DisableForReuseHook {
     const res = await this.confirmService.confirm(message, title)
     if (res !== true) return
 
-    this.userHistoryService.clearAllUserVideosHistory()
+    this.userHistoryService.clearAll()
         .subscribe({
           next: () => {
             this.notifier.success($localize`Videos history deleted`)
