@@ -53,6 +53,11 @@
   @include row-blocks($column-responsive: false);
 }
 
+.action-button {
+  display: flex;
+  align-self: flex-end;
+}
+
 @media screen and (max-width: $small-view) {
   .top-buttons {
     grid-template-columns: auto 1fr auto;

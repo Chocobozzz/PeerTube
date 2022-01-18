@@ -13,9 +13,9 @@
     <label i18n>Track watch history</label>
   </div>
 
-  <button class="delete-history" (click)="deleteHistory()" i18n>
+  <button class="delete-history" (click)="clearAllHistory()" i18n>
     <my-global-icon iconName="delete" aria-hidden="true"></my-global-icon>
-    Delete history
+    Clear all history
   </button>
 </div>
 
@@ -30,4 +30,10 @@
   [enableSelection]="false"
   [disabled]="disabled"
   #videosSelection
-></my-videos-selection>
+>
+  <ng-template ptTemplate="rowButtons" let-video>
+    <div class="action-button">
+      <my-delete-button i18n-label label="Delete from history" (click)="deleteHistoryElement(video)"></my-delete-button>
+    </div>
+  </ng-template>
+</my-videos-selection>

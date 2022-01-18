@@ -3,7 +3,7 @@ import { AbstractCommand, OverrideCommandOptions } from '../shared'
 
 export class HistoryCommand extends AbstractCommand {
 
-  wathVideo (options: OverrideCommandOptions & {
+  watchVideo (options: OverrideCommandOptions & {
     videoId: number | string
     currentTime: number
   }) {
@@ -40,7 +40,22 @@ export class HistoryCommand extends AbstractCommand {
     })
   }
 
-  remove (options: OverrideCommandOptions & {
+  removeElement (options: OverrideCommandOptions & {
+    videoId: number
+  }) {
+    const { videoId } = options
+    const path = '/api/v1/users/me/history/videos/' + videoId
+
+    return this.deleteRequest({
+      ...options,
+
+      path,
+      implicitToken: true,
+      defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
+    })
+  }
+
+  removeAll (options: OverrideCommandOptions & {
     beforeDate?: string
   } = {}) {
     const { beforeDate } = options

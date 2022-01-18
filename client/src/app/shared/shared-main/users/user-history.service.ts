@@ -34,7 +34,13 @@ export class UserHistoryService {
                )
   }
 
-  deleteUserVideosHistory () {
+  deleteUserVideoHistoryElement (video: Video) {
+    return this.authHttp
+               .delete(UserHistoryService.BASE_USER_VIDEOS_HISTORY_URL + '/' + video.id)
+               .pipe(catchError(err => this.restExtractor.handleError(err)))
+  }
+
+  clearAllUserVideosHistory () {
     return this.authHttp
                .post(UserHistoryService.BASE_USER_VIDEOS_HISTORY_URL + '/remove', {})
                .pipe(

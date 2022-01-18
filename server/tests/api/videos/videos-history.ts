@@ -17,6 +17,7 @@ const expect = chai.expect
 
 describe('Test videos history', function () {
   let server: PeerTubeServer = null
+  let video1Id: number
   let video1UUID: string
   let video2UUID: string
   let video3UUID: string
@@ -34,8 +35,9 @@ describe('Test videos history', function () {
     command = server.history
 
     {
-      const { uuid } = await server.videos.upload({ attributes: { name: 'video 1' } })
+      const { id, uuid } = await server.videos.upload({ attributes: { name: 'video 1' } })
       video1UUID = uuid
+      video1Id = id
     }
 
     {
@@ -68,8 +70,8 @@ describe('Test videos history', function () {
   })
 
   it('Should watch the first and second video', async function () {
-    await command.wathVideo({ videoId: video2UUID, currentTime: 8 })
-    await command.wathVideo({ videoId: video1UUID, currentTime: 3 })
+    await command.watchVideo({ videoId: video2UUID, currentTime: 8 })
+    await command.watchVideo({ videoId: video1UUID, currentTime: 3 })
   })
 
   it('Should return the correct history when listing, searching and getting videos', async function () {
@@ -122,7 +124,7 @@ describe('Test videos history', function () {
 
   it('Should have these videos when listing my history', async function () {
     video3WatchedDate = new Date()
-    await command.wathVideo({ videoId: video3UUID, currentTime: 2 })
+    await command.watchVideo({ videoId: video3UUID, currentTime: 2 })
 
     const body = await command.list()
 
@@ -150,7 +152,7 @@ describe('Test videos history', function () {
   })
 
   it('Should clear my history', async function () {
-    await command.remove({ beforeDate: video3WatchedDate.toISOString() })
+    await command.removeAll({ beforeDate: video3WatchedDate.toISOString() })
   })
 
   it('Should have my history cleared', async function () {
@@ -166,7 +168,7 @@ describe('Test videos history', function () {
       videosHistoryEnabled: false
     })
 
-    await command.wathVideo({ videoId: video2UUID, currentTime: 8, expectedStatus: HttpStatusCode.CONFLICT_409 })
+    await command.watchVideo({ videoId: video2UUID, currentTime: 8, expectedStatus: HttpStatusCode.CONFLICT_409 })
   })
 
   it('Should re-enable videos history', async function () {
@@ -174,7 +176,7 @@ describe('Test videos history', function () {
       videosHistoryEnabled: true
     })
 
-    await command.wathVideo({ videoId: video1UUID, currentTime: 8 })
+    await command.watchVideo({ videoId: video1UUID, currentTime: 8 })
 
     const body = await command.list()
     expect(body.total).to.equal(2)
@@ -210,6 +212,26 @@ describe('Test videos history', function () {
 
     const body = await command.list()
     expect(body.total).to.equal(0)
+  })
+
+  it('Should delete a specific history element', async function () {
+    {
+      await command.watchVideo({ videoId: video1UUID, currentTime: 4 })
+      await command.watchVideo({ videoId: video2UUID, currentTime: 8 })
+    }
+
+    {
+      const body = await command.list()
+      expect(body.total).to.equal(2)
+    }
+
+    {
+      await command.removeElement({ videoId: video1Id })
+
+      const body = await command.list()
+      expect(body.total).to.equal(1)
+      expect(body.data[0].uuid).to.equal(video2UUID)
+    }
   })
 
   after(async function () {

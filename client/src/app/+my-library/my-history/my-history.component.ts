@@ -123,14 +123,25 @@ export class MyHistoryComponent implements OnInit, DisableForReuseHook {
       })
   }
 
-  async deleteHistory () {
+  deleteHistoryElement (video: Video) {
+    this.userHistoryService.deleteUserVideoHistoryElement(video)
+      .subscribe({
+        next: () => {
+          this.videos = this.videos.filter(v => v.id !== video.id)
+        },
+
+        error: err => this.notifier.error(err.message)
+      })
+  }
+
+  async clearAllHistory () {
     const title = $localize`Delete videos history`
     const message = $localize`Are you sure you want to delete all your videos history?`
 
     const res = await this.confirmService.confirm(message, title)
     if (res !== true) return
 
-    this.userHistoryService.deleteUserVideosHistory()
+    this.userHistoryService.clearAllUserVideosHistory()
         .subscribe({
           next: () => {
             this.notifier.success($localize`Videos history deleted`)

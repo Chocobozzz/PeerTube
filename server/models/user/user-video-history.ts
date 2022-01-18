@@ -69,6 +69,17 @@ export class UserVideoHistoryModel extends Model<Partial<AttributesOnly<UserVide
     })
   }
 
+  static removeUserHistoryElement (user: MUserId, videoId: number) {
+    const query: DestroyOptions = {
+      where: {
+        userId: user.id,
+        videoId
+      }
+    }
+
+    return UserVideoHistoryModel.destroy(query)
+  }
+
   static removeUserHistoryBefore (user: MUserId, beforeDate: string, t: Transaction) {
     const query: DestroyOptions = {
       where: {

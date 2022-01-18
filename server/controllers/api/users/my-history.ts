@@ -9,7 +9,8 @@ import {
   paginationValidator,
   setDefaultPagination,
   userHistoryListValidator,
-  userHistoryRemoveValidator
+  userHistoryRemoveAllValidator,
+  userHistoryRemoveElementValidator
 } from '../../../middlewares'
 import { UserVideoHistoryModel } from '../../../models/user/user-video-history'
 
@@ -23,10 +24,16 @@ myVideosHistoryRouter.get('/me/history/videos',
   asyncMiddleware(listMyVideosHistory)
 )
 
+myVideosHistoryRouter.delete('/me/history/videos/:videoId',
+  authenticate,
+  userHistoryRemoveElementValidator,
+  asyncMiddleware(removeUserHistoryElement)
+)
+
 myVideosHistoryRouter.post('/me/history/videos/remove',
   authenticate,
-  userHistoryRemoveValidator,
-  asyncRetryTransactionMiddleware(removeUserHistory)
+  userHistoryRemoveAllValidator,
+  asyncRetryTransactionMiddleware(removeAllUserHistory)
 )
 
 // ---------------------------------------------------------------------------
@@ -45,7 +52,15 @@ async function listMyVideosHistory (req: express.Request, res: express.Response)
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
-async function removeUserHistory (req: express.Request, res: express.Response) {
+async function removeUserHistoryElement (req: express.Request, res: express.Response) {
+  const user = res.locals.oauth.token.User
+
+  await UserVideoHistoryModel.removeUserHistoryElement(user, parseInt(req.params.videoId + ''))
+
+  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+}
+
+async function removeAllUserHistory (req: express.Request, res: express.Response) {
   const user = res.locals.oauth.token.User
   const beforeDate = req.body.beforeDate || null
 

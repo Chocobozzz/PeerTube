@@ -6,6 +6,7 @@ import { HttpStatusCode } from '@shared/models'
 import {
   cleanupTests,
   createSingleServer,
+  makeDeleteRequest,
   makeGetRequest,
   makePostBodyRequest,
   makePutBodyRequest,
@@ -18,6 +19,7 @@ describe('Test videos history API validator', function () {
   const myHistoryRemove = myHistoryPath + '/remove'
   let watchingPath: string
   let server: PeerTubeServer
+  let videoId: number
 
   // ---------------------------------------------------------------
 
@@ -28,8 +30,9 @@ describe('Test videos history API validator', function () {
 
     await setAccessTokensToServers([ server ])
 
-    const { uuid } = await server.videos.upload()
+    const { id, uuid } = await server.videos.upload()
     watchingPath = '/api/v1/videos/' + uuid + '/watching'
+    videoId = id
   })
 
   describe('When notifying a user is watching a video', function () {
@@ -106,7 +109,37 @@ describe('Test videos history API validator', function () {
     })
   })
 
-  describe('When removing user videos history', function () {
+  describe('When removing a specific user video history element', function () {
+    let path: string
+
+    before(function () {
+      path = myHistoryPath + '/' + videoId
+    })
+
+    it('Should fail with an unauthenticated user', async function () {
+      await makeDeleteRequest({ url: server.url, path, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
+    })
+
+    it('Should fail with a bad videoId parameter', async function () {
+      await makeDeleteRequest({
+        url: server.url,
+        token: server.accessToken,
+        path: myHistoryRemove + '/hi',
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+    })
+
+    it('Should succeed with the correct parameters', async function () {
+      await makeDeleteRequest({
+        url: server.url,
+        token: server.accessToken,
+        path,
+        expectedStatus: HttpStatusCode.NO_CONTENT_204
+      })
+    })
+  })
+
+  describe('When removing all user videos history', function () {
     it('Should fail with an unauthenticated user', async function () {
       await makePostBodyRequest({ url: server.url, path: myHistoryPath + '/remove', expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })

@@ -1476,6 +1476,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/VideoListResponse'
 
+  /users/me/history/videos/{videoId}:
+    delete:
+      summary: Delete history element
+      security:
+        - OAuth2: []
+      tags:
+        - My History
+      parameters:
+        - name: videoId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/Video/properties/id'
+      responses:
+        '204':
+          description: successful operation
+
   /users/me/history/videos/remove:
     post:
       summary: Clear video history
