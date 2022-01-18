@@ -73,16 +73,23 @@ function getRemoteObjectOrDie (
 ): { url: string, username: string, password: string } {
   const options = program.opts()
 
-  if (!options.url || !options.username || !options.password) {
-    // No remote and we don't have program parameters: quit
-    if (settings.remotes.length === 0 || Object.keys(netrc.machines).length === 0) {
-      if (!options.url) console.error('--url field is required.')
-      if (!options.username) console.error('--username field is required.')
-      if (!options.password) console.error('--password field is required.')
+  const manualOptionMode = options.url || options.username || options.password
 
-      return process.exit(-1)
+  // Check parameters validity
+  if (manualOptionMode || settings.remotes.length === 0 || Object.keys(netrc.machines).length === 0) {
+    let exit = false
+
+    for (const key of [ 'url', 'username', 'password' ]) {
+      if (!options[key]) {
+        console.error(`--${key} field is required`)
+        exit = true
+      }
     }
 
+    if (exit) process.exit(-1)
+  }
+
+  if (!manualOptionMode) {
     let url: string = options.url
     let username: string = options.username
     let password: string = options.password
