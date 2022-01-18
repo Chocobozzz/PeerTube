@@ -1129,7 +1129,7 @@
       </trans-unit>
       <trans-unit id="7312374115603954471" datatype="html">
         <source>This will ask remote instances to delete local videos</source>
-        <target state="translated">Esto le pedirá a las instancias remotas que eliminen los videos locales</target>
+        <target state="translated">Esto le pedirá a las instancias remotas que eliminen los vídeos locales</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context>
           <context context-type="linenumber">34</context>
@@ -5421,7 +5421,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="8481241275509347668" datatype="html">
         <source>Local videos (this instance)</source>
-        <target state="translated">Videos locales (esta instancia)</target>
+        <target state="translated">Vídeos locales (esta instancia)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">85</context>
@@ -10031,7 +10031,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="8929218224642530466" datatype="html">
         <source>Displayed</source>
-        <target state="translated">Moatrado</target>
+        <target state="translated">Mostrado</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context><context context-type="linenumber">55</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">233</context></context-group>
       </trans-unit>
