@@ -108,7 +108,7 @@
     "lodash-es": "^4.17.4",
     "markdown-it": "12.3.2",
     "mini-css-extract-plugin": "^2.2.0",
-    "ngx-uploadx": "^4.1.0",
+    "ngx-uploadx": "^5.0.0",
     "path-browserify": "^1.0.0",
     "postcss": "^8.3.11",
     "primeng": "^13.0.0-rc.1",

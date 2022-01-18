@@ -2040,10 +2040,10 @@
   resolved "https://registry.yarnpkg.com/@ungap/promise-all-settled/-/promise-all-settled-1.1.2.tgz#aa58042711d6e3275dd37dc597e5d31e8c290a44"
   integrity sha512-sL/cEvJWAnClXw0wHk85/2L0G6Sj8UB0Ctc1TEMbKSsmpRosqhwj9gWgFRZSrBr2f9tiXISwNhCPmlfqUqyb9Q==
 
-"@uploadx/core@^4.4.0":
-  version "4.5.0"
-  resolved "https://registry.yarnpkg.com/@uploadx/core/-/core-4.5.0.tgz#4575858a692c482becb579f283158eca8db4a32a"
-  integrity sha512-PQjEqU1zC4h9yjLt25dj9t+pixxaSiO0RG4hP4FS5P2tFA1oXGaDt23H4q1JJRHavgOTff6PJVR5aH1Bhc9wpQ==
+"@uploadx/core@^5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@uploadx/core/-/core-5.0.0.tgz#6d71683f67064a9223b9c1d0707991b618145375"
+  integrity sha512-7tHQt2TLzU1CfhOk3Nw5A+D+0nqrRuJPzJcCVrpbdvjwwmUvs5Wf623rwEqtLOBznDMevHxO/kXFw/jYXt3Vmg==
   dependencies:
     bytes "^3.1.0"
     debug "^4.3.1"

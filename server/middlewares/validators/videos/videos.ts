@@ -102,22 +102,6 @@ const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
   }
 ])
 
-const videosResumableUploadIdValidator = [
-  (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const user = res.locals.oauth.token.User
-    const uploadId = req.query.upload_id
-
-    if (uploadId.startsWith(user.id + '-') !== true) {
-      return res.fail({
-        status: HttpStatusCode.FORBIDDEN_403,
-        message: 'You cannot send chunks in another user upload'
-      })
-    }
-
-    return next()
-  }
-]
-
 /**
  * Gets called after the last PUT request
  */
@@ -566,7 +550,6 @@ export {
   videosAddLegacyValidator,
   videosAddResumableValidator,
   videosAddResumableInitValidator,
-  videosResumableUploadIdValidator,
 
   videosUpdateValidator,
   videosGetValidator,

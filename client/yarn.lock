@@ -8237,12 +8237,12 @@ next-event@^1.0.0:
   resolved "https://registry.yarnpkg.com/next-event/-/next-event-1.0.0.tgz#e7778acde2e55802e0ad1879c39cf6f75eda61d8"
   integrity sha1-53eKzeLlWALgrRh5w5z2917aYdg=
 
-ngx-uploadx@^4.1.0:
-  version "4.1.5"
-  resolved "https://registry.yarnpkg.com/ngx-uploadx/-/ngx-uploadx-4.1.5.tgz#6ea4e5db203d23185e44f41e71935906cce0d433"
-  integrity sha512-59uyAKMampdOOBWQQknEbALEl8+TvD8bkQ13O7deerP8+CkLtx7z1MyqxGLmgbhBrgsTjBlmnjzAt21vTSWFGA==
+ngx-uploadx@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/ngx-uploadx/-/ngx-uploadx-5.0.0.tgz#f88d13ec281ae3b418179d40cf3c8ab68305f2df"
+  integrity sha512-6+6hndxLmfJNOgYn/NIuZAHVZEFtp2bdZ3L9c+E6ryoNviKdwHf3brmW833/qmYtqP2hioA8EEfbHko/1IIE2Q==
   dependencies:
-    tslib "^1.9.0"
+    tslib "^2.2.0"
 
 nice-napi@^1.0.2:
   version "1.0.2"
@@ -11441,7 +11441,7 @@ tsconfig-paths@^3.12.0:
     minimist "^1.2.0"
     strip-bom "^3.0.0"
 
-tslib@2.3.1, tslib@^2.0.0, tslib@^2.0.1, tslib@^2.0.3, tslib@^2.1.0, tslib@^2.3.0, tslib@^2.3.1:
+tslib@2.3.1, tslib@^2.0.0, tslib@^2.0.1, tslib@^2.0.3, tslib@^2.1.0, tslib@^2.2.0, tslib@^2.3.0, tslib@^2.3.1:
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.3.1.tgz#e8a335add5ceae51aa261d32a490158ef042ef01"
   integrity sha512-77EbyPPpMz+FRFRuAFlWMtmgUWGe9UOG2Z25NqCwiIjRhOf5iKGuzSe5P2w1laq+FkRy4p+PCuVkJSGkzTEKVw==

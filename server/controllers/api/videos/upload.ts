@@ -40,8 +40,7 @@ import {
   authenticate,
   videosAddLegacyValidator,
   videosAddResumableInitValidator,
-  videosAddResumableValidator,
-  videosResumableUploadIdValidator
+  videosAddResumableValidator
 } from '../../../middlewares'
 import { ScheduleVideoUpdateModel } from '../../../models/video/schedule-video-update'
 import { VideoModel } from '../../../models/video/video'
@@ -88,7 +87,6 @@ uploadRouter.post('/upload-resumable',
 
 uploadRouter.delete('/upload-resumable',
   authenticate,
-  videosResumableUploadIdValidator,
   asyncMiddleware(deleteUploadResumableCache),
   uploadx.upload
 )
@@ -96,7 +94,6 @@ uploadRouter.delete('/upload-resumable',
 uploadRouter.put('/upload-resumable',
   openapiOperationDoc({ operationId: 'uploadResumable' }),
   authenticate,
-  videosResumableUploadIdValidator,
   uploadx.upload, // uploadx doesn't next() before the file upload completes
   asyncMiddleware(videosAddResumableValidator),
   asyncMiddleware(addVideoResumable)
