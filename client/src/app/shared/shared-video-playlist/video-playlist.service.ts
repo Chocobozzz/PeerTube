@@ -154,7 +154,6 @@ export class VideoPlaylistService {
 
     return this.authHttp.put(VideoPlaylistService.BASE_VIDEO_PLAYLIST_URL + videoPlaylist.id, data)
                .pipe(
-                 map(this.restExtractor.extractDataBool),
                  tap(() => {
                    if (!this.myAccountPlaylistCache) return
 
@@ -170,7 +169,6 @@ export class VideoPlaylistService {
   removeVideoPlaylist (videoPlaylist: VideoPlaylist) {
     return this.authHttp.delete(VideoPlaylistService.BASE_VIDEO_PLAYLIST_URL + videoPlaylist.id)
                .pipe(
-                 map(this.restExtractor.extractDataBool),
                  tap(() => {
                    if (!this.myAccountPlaylistCache) return
 
@@ -207,7 +205,6 @@ export class VideoPlaylistService {
   updateVideoOfPlaylist (playlistId: number, playlistElementId: number, body: VideoPlaylistElementUpdate, videoId: number) {
     return this.authHttp.put(VideoPlaylistService.BASE_VIDEO_PLAYLIST_URL + playlistId + '/videos/' + playlistElementId, body)
                .pipe(
-                 map(this.restExtractor.extractDataBool),
                  tap(() => {
                    const existsResult = this.videoExistsCache[videoId]
 
@@ -227,7 +224,6 @@ export class VideoPlaylistService {
   removeVideoFromPlaylist (playlistId: number, playlistElementId: number, videoId?: number) {
     return this.authHttp.delete(VideoPlaylistService.BASE_VIDEO_PLAYLIST_URL + playlistId + '/videos/' + playlistElementId)
                .pipe(
-                 map(this.restExtractor.extractDataBool),
                  tap(() => {
                    if (!videoId) return
 
@@ -249,10 +245,7 @@ export class VideoPlaylistService {
     }
 
     return this.authHttp.post(VideoPlaylistService.BASE_VIDEO_PLAYLIST_URL + playlistId + '/videos/reorder', body)
-               .pipe(
-                 map(this.restExtractor.extractDataBool),
-                 catchError(err => this.restExtractor.handleError(err))
-               )
+               .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
   getPlaylistVideos (options: {

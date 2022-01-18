@@ -1,4 +1,4 @@
-import { catchError, map, switchMap } from 'rxjs/operators'
+import { catchError, switchMap } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { ComponentPaginationLight, RestExtractor, RestService } from '@app/core'
@@ -43,9 +43,6 @@ export class UserHistoryService {
   clearAll () {
     return this.authHttp
                .post(UserHistoryService.BASE_USER_VIDEOS_HISTORY_URL + '/remove', {})
-               .pipe(
-                 map(() => this.restExtractor.extractDataBool()),
-                 catchError(err => this.restExtractor.handleError(err))
-               )
+               .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 }

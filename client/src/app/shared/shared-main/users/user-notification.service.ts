@@ -59,7 +59,6 @@ export class UserNotificationService {
 
     return this.authHttp.post(url, body, { context })
                .pipe(
-                 map(this.restExtractor.extractDataBool),
                  tap(() => this.peertubeSocket.dispatchNotificationEvent('read')),
                  catchError(res => this.restExtractor.handleError(res))
                )
@@ -71,7 +70,6 @@ export class UserNotificationService {
 
     return this.authHttp.post(url, {}, { context })
                .pipe(
-                 map(this.restExtractor.extractDataBool),
                  tap(() => this.peertubeSocket.dispatchNotificationEvent('read-all')),
                  catchError(res => this.restExtractor.handleError(res))
                )
@@ -81,10 +79,7 @@ export class UserNotificationService {
     const url = UserNotificationService.BASE_NOTIFICATION_SETTINGS
 
     return this.authHttp.put(url, settings)
-               .pipe(
-                 map(this.restExtractor.extractDataBool),
-                 catchError(res => this.restExtractor.handleError(res))
-               )
+               .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
   private formatNotification (notification: UserNotificationServer) {

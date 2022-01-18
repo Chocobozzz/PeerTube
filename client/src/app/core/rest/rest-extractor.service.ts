@@ -9,10 +9,6 @@ export class RestExtractor {
 
   constructor (private router: Router) { }
 
-  extractDataBool () {
-    return true
-  }
-
   applyToResultListData <T, A, U> (
     result: ResultList<T>,
     fun: (data: T, ...args: A[]) => U,

@@ -71,49 +71,34 @@ export class InstanceFollowService {
     }
 
     return this.authHttp.post(InstanceFollowService.BASE_APPLICATION_URL + '/following', body)
-               .pipe(
-                 map(this.restExtractor.extractDataBool),
-                 catchError(res => this.restExtractor.handleError(res))
-               )
+               .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
   unfollow (follow: ActorFollow) {
     const handle = follow.following.name + '@' + follow.following.host
 
     return this.authHttp.delete(InstanceFollowService.BASE_APPLICATION_URL + '/following/' + handle)
-               .pipe(
-                 map(this.restExtractor.extractDataBool),
-                 catchError(res => this.restExtractor.handleError(res))
-               )
+               .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
   acceptFollower (follow: ActorFollow) {
     const handle = follow.follower.name + '@' + follow.follower.host
 
     return this.authHttp.post(`${InstanceFollowService.BASE_APPLICATION_URL}/followers/${handle}/accept`, {})
-               .pipe(
-                 map(this.restExtractor.extractDataBool),
-                 catchError(res => this.restExtractor.handleError(res))
-               )
+               .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
   rejectFollower (follow: ActorFollow) {
     const handle = follow.follower.name + '@' + follow.follower.host
 
     return this.authHttp.post(`${InstanceFollowService.BASE_APPLICATION_URL}/followers/${handle}/reject`, {})
-               .pipe(
-                 map(this.restExtractor.extractDataBool),
-                 catchError(res => this.restExtractor.handleError(res))
-               )
+               .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
   removeFollower (follow: ActorFollow) {
     const handle = follow.follower.name + '@' + follow.follower.host
 
     return this.authHttp.delete(`${InstanceFollowService.BASE_APPLICATION_URL}/followers/${handle}`)
-               .pipe(
-                 map(this.restExtractor.extractDataBool),
-                 catchError(res => this.restExtractor.handleError(res))
-               )
+               .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 }

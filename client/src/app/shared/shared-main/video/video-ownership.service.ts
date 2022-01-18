@@ -25,10 +25,7 @@ export class VideoOwnershipService {
     }
 
     return this.authHttp.post(url, body)
-      .pipe(
-        map(this.restExtractor.extractDataBool),
-        catchError(res => this.restExtractor.handleError(res))
-      )
+      .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
   getOwnershipChanges (pagination: RestPagination, sort: SortMeta): Observable<ResultList<VideoChangeOwnership>> {
@@ -47,18 +44,12 @@ export class VideoOwnershipService {
   acceptOwnership (id: number, input: VideoChangeOwnershipAccept) {
     const url = VideoOwnershipService.BASE_VIDEO_CHANGE_OWNERSHIP_URL + 'ownership/' + id + '/accept'
     return this.authHttp.post(url, input)
-      .pipe(
-        map(this.restExtractor.extractDataBool),
-        catchError(this.restExtractor.handleError)
-      )
+      .pipe(catchError(this.restExtractor.handleError))
   }
 
   refuseOwnership (id: number) {
     const url = VideoOwnershipService.BASE_VIDEO_CHANGE_OWNERSHIP_URL + 'ownership/' + id + '/refuse'
     return this.authHttp.post(url, {})
-      .pipe(
-        map(this.restExtractor.extractDataBool),
-        catchError(this.restExtractor.handleError)
-      )
+      .pipe(catchError(this.restExtractor.handleError))
   }
 }

@@ -108,7 +108,6 @@ export class UserSubscriptionService {
 
     return this.authHttp.delete(url)
                .pipe(
-                 map(this.restExtractor.extractDataBool),
                  tap(() => {
                    this.myAccountSubscriptionCache[nameWithHost] = false
 
@@ -124,7 +123,6 @@ export class UserSubscriptionService {
     const body = { uri: nameWithHost }
     return this.authHttp.post(url, body)
                .pipe(
-                 map(this.restExtractor.extractDataBool),
                  tap(() => {
                    this.myAccountSubscriptionCache[nameWithHost] = true
 

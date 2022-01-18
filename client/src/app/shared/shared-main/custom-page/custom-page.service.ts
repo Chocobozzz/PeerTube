@@ -1,5 +1,5 @@
 import { of } from 'rxjs'
-import { catchError, map } from 'rxjs/operators'
+import { catchError } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { RestExtractor } from '@app/core'
@@ -30,9 +30,6 @@ export class CustomPageService {
 
   updateInstanceHomepage (content: string) {
     return this.authHttp.put(CustomPageService.BASE_INSTANCE_HOMEPAGE_URL, { content })
-      .pipe(
-        map(this.restExtractor.extractDataBool),
-        catchError(err => this.restExtractor.handleError(err))
-      )
+      .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 }

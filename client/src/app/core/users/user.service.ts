@@ -49,10 +49,7 @@ export class UserService {
     }
 
     return this.authHttp.put(url, body)
-               .pipe(
-                 map(this.restExtractor.extractDataBool),
-                 catchError(err => this.restExtractor.handleError(err))
-               )
+               .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
   changeEmail (password: string, newEmail: string) {
@@ -63,10 +60,7 @@ export class UserService {
     }
 
     return this.authHttp.put(url, body)
-               .pipe(
-                 map(this.restExtractor.extractDataBool),
-                 catchError(err => this.restExtractor.handleError(err))
-               )
+               .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
   // ---------------------------------------------------------------------------
@@ -90,20 +84,14 @@ export class UserService {
     const url = UserService.BASE_USERS_URL + 'me'
 
     return this.authHttp.put(url, profile)
-               .pipe(
-                 map(this.restExtractor.extractDataBool),
-                 catchError(err => this.restExtractor.handleError(err))
-               )
+               .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
   deleteMe () {
     const url = UserService.BASE_USERS_URL + 'me'
 
     return this.authHttp.delete(url)
-               .pipe(
-                 map(this.restExtractor.extractDataBool),
-                 catchError(err => this.restExtractor.handleError(err))
-               )
+               .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
   changeAvatar (avatarForm: FormData) {
@@ -117,16 +105,12 @@ export class UserService {
     const url = UserService.BASE_USERS_URL + 'me/avatar'
 
     return this.authHttp.delete(url)
-               .pipe(
-                 map(this.restExtractor.extractDataBool),
-                 catchError(err => this.restExtractor.handleError(err))
-               )
+               .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
   signup (userCreate: UserRegister) {
     return this.authHttp.post(UserService.BASE_USERS_URL + 'register', userCreate)
                .pipe(
-                 map(this.restExtractor.extractDataBool),
                  tap(() => this.signupInThisSession = true),
                  catchError(err => this.restExtractor.handleError(err))
                )
@@ -143,10 +127,7 @@ export class UserService {
     const url = UserService.BASE_USERS_URL + '/ask-reset-password'
 
     return this.authHttp.post(url, { email })
-               .pipe(
-                 map(this.restExtractor.extractDataBool),
-                 catchError(err => this.restExtractor.handleError(err))
-               )
+               .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
   resetPassword (userId: number, verificationString: string, password: string) {
@@ -157,10 +138,7 @@ export class UserService {
     }
 
     return this.authHttp.post(url, body)
-               .pipe(
-                 map(this.restExtractor.extractDataBool),
-                 catchError(res => this.restExtractor.handleError(res))
-               )
+               .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
   verifyEmail (userId: number, verificationString: string, isPendingEmail: boolean) {
@@ -171,20 +149,14 @@ export class UserService {
     }
 
     return this.authHttp.post(url, body)
-               .pipe(
-                 map(this.restExtractor.extractDataBool),
-                 catchError(res => this.restExtractor.handleError(res))
-               )
+               .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
   askSendVerifyEmail (email: string) {
     const url = UserService.BASE_USERS_URL + '/ask-send-verify-email'
 
     return this.authHttp.post(url, { email })
-               .pipe(
-                 map(this.restExtractor.extractDataBool),
-                 catchError(err => this.restExtractor.handleError(err))
-               )
+               .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
   autocomplete (search: string): Observable<string[]> {
@@ -216,18 +188,12 @@ export class UserService {
 
   addUser (userCreate: UserCreate) {
     return this.authHttp.post(UserService.BASE_USERS_URL, userCreate)
-               .pipe(
-                 map(this.restExtractor.extractDataBool),
-                 catchError(err => this.restExtractor.handleError(err))
-               )
+               .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
   updateUser (userId: number, userUpdate: UserUpdate) {
     return this.authHttp.put(UserService.BASE_USERS_URL + userId, userUpdate)
-               .pipe(
-                 map(this.restExtractor.extractDataBool),
-                 catchError(err => this.restExtractor.handleError(err))
-               )
+               .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
   updateUsers (users: UserServerModel[], userUpdate: UserUpdate) {

@@ -114,10 +114,7 @@ export class VideoCommentService {
 
     return this.authHttp
                .delete(url)
-               .pipe(
-                 map(this.restExtractor.extractDataBool),
-                 catchError(err => this.restExtractor.handleError(err))
-               )
+               .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
   deleteVideoComments (comments: { videoId: number | string, commentId: number }[]) {
