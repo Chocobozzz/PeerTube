@@ -65,7 +65,7 @@ async function run (url: string, username: string, password: string) {
   } catch (err) {
     const message = err.message || ''
     if (message.includes('413')) {
-      console.error('Aborted: the video file you try to upload it too big for this PeerTube instance.')
+      console.error('Aborted: user quota is exceeded or video file is too big for this PeerTube instance.')
     } else {
       console.error(require('util').inspect(err))
     }
