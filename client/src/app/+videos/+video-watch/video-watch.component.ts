@@ -688,9 +688,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   private handleLiveStateChange (newState: VideoState) {
     if (newState !== VideoState.PUBLISHED) return
 
-    const videoState = this.video.state.id
-    if (videoState !== VideoState.WAITING_FOR_LIVE && videoState !== VideoState.LIVE_ENDED) return
-
     console.log('Loading video after live update.')
 
     const videoUUID = this.video.uuid

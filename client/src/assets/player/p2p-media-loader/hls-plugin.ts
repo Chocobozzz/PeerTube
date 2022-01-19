@@ -89,6 +89,8 @@ class Html5Hlsjs {
   private readonly source: videojs.Tech.SourceObject
   private readonly vjs: typeof videojs
 
+  private maxNetworkErrorRecovery = 5
+
   private hls: Hlsjs
   private hlsjsConfig: Partial<HlsConfig & { cueHandler: any }> = null
 
@@ -225,7 +227,7 @@ class Html5Hlsjs {
   }
 
   private _handleNetworkError (error: any) {
-    if (this.errorCounts[Hlsjs.ErrorTypes.NETWORK_ERROR] <= 5) {
+    if (this.errorCounts[Hlsjs.ErrorTypes.NETWORK_ERROR] <= this.maxNetworkErrorRecovery) {
       console.info('trying to recover network error')
 
       // Wait 1 second and retry
@@ -371,6 +373,9 @@ class Html5Hlsjs {
       this.dvrDuration = data.details.totalduration
 
       this._duration = this.isLive ? Infinity : data.details.totalduration
+
+      // Increase network error recovery for lives since they can be broken (server restart, stream interruption etc)
+      if (this.isLive) this.maxNetworkErrorRecovery = 300
     })
 
     this.hls.once(Hlsjs.Events.FRAG_LOADED, () => {
