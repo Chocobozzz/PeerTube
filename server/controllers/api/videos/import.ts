@@ -19,7 +19,15 @@ import {
   MVideoWithBlacklistLight
 } from '@server/types/models'
 import { MVideoImportFormattable } from '@server/types/models/video/video-import'
-import { ServerErrorCode, ThumbnailType, VideoImportCreate, VideoImportState, VideoPrivacy, VideoState } from '@shared/models'
+import {
+  HttpStatusCode,
+  ServerErrorCode,
+  ThumbnailType,
+  VideoImportCreate,
+  VideoImportState,
+  VideoPrivacy,
+  VideoState
+} from '@shared/models'
 import { auditLoggerFactory, getAuditIdFromRes, VideoImportAuditView } from '../../../helpers/audit-logger'
 import { moveAndProcessCaptionFile } from '../../../helpers/captions-utils'
 import { isArray } from '../../../helpers/custom-validators/misc'
@@ -34,7 +42,14 @@ import { getLocalVideoActivityPubUrl } from '../../../lib/activitypub/url'
 import { JobQueue } from '../../../lib/job-queue/job-queue'
 import { updateVideoMiniatureFromExisting, updateVideoMiniatureFromUrl } from '../../../lib/thumbnail'
 import { autoBlacklistVideoIfNeeded } from '../../../lib/video-blacklist'
-import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate, videoImportAddValidator } from '../../../middlewares'
+import {
+  asyncMiddleware,
+  asyncRetryTransactionMiddleware,
+  authenticate,
+  videoImportAddValidator,
+  videoImportCancelValidator,
+  videoImportDeleteValidator
+} from '../../../middlewares'
 import { VideoModel } from '../../../models/video/video'
 import { VideoCaptionModel } from '../../../models/video/video-caption'
 import { VideoImportModel } from '../../../models/video/video-import'
@@ -59,6 +74,18 @@ videoImportsRouter.post('/imports',
   asyncRetryTransactionMiddleware(addVideoImport)
 )
 
+videoImportsRouter.post('/imports/:id/cancel',
+  authenticate,
+  asyncMiddleware(videoImportCancelValidator),
+  asyncRetryTransactionMiddleware(cancelVideoImport)
+)
+
+videoImportsRouter.delete('/imports/:id',
+  authenticate,
+  asyncMiddleware(videoImportDeleteValidator),
+  asyncRetryTransactionMiddleware(deleteVideoImport)
+)
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -66,6 +93,23 @@ export {
 }
 
 // ---------------------------------------------------------------------------
+
+async function deleteVideoImport (req: express.Request, res: express.Response) {
+  const videoImport = res.locals.videoImport
+
+  await videoImport.destroy()
+
+  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+}
+
+async function cancelVideoImport (req: express.Request, res: express.Response) {
+  const videoImport = res.locals.videoImport
+
+  videoImport.state = VideoImportState.CANCELLED
+  await videoImport.save()
+
+  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+}
 
 function addVideoImport (req: express.Request, res: express.Response) {
   if (req.body.targetUrl) return addYoutubeDLImport(req, res)

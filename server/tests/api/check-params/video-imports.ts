@@ -12,7 +12,9 @@ import {
   makePostBodyRequest,
   makeUploadRequest,
   PeerTubeServer,
-  setAccessTokensToServers
+  setAccessTokensToServers,
+  setDefaultVideoChannel,
+  waitJobs
 } from '@shared/server-commands'
 
 describe('Test video imports API validator', function () {
@@ -29,6 +31,7 @@ describe('Test video imports API validator', function () {
     server = await createSingleServer(1)
 
     await setAccessTokensToServers([ server ])
+    await setDefaultVideoChannel([ server ])
 
     const username = 'user1'
     const password = 'my super password'
@@ -344,6 +347,67 @@ describe('Test video imports API validator', function () {
         attaches,
         expectedStatus: HttpStatusCode.CONFLICT_409
       })
+    })
+  })
+
+  describe('Deleting/cancelling a video import', function () {
+    let importId: number
+
+    async function importVideo () {
+      const attributes = { channelId: server.store.channel.id, targetUrl: FIXTURE_URLS.goodVideo }
+      const res = await server.imports.importVideo({ attributes })
+
+      return res.id
+    }
+
+    before(async function () {
+      importId = await importVideo()
+    })
+
+    it('Should fail with an invalid import id', async function () {
+      await server.imports.cancel({ importId: 'artyom' as any, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+      await server.imports.delete({ importId: 'artyom' as any, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    })
+
+    it('Should fail with an unknown import id', async function () {
+      await server.imports.cancel({ importId: 42, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+      await server.imports.delete({ importId: 42, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+    })
+
+    it('Should fail without token', async function () {
+      await server.imports.cancel({ importId, token: null, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
+      await server.imports.delete({ importId, token: null, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
+    })
+
+    it('Should fail with another user token', async function () {
+      await server.imports.cancel({ importId, token: userAccessToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+      await server.imports.delete({ importId, token: userAccessToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+    })
+
+    it('Should fail to cancel non pending import', async function () {
+      this.timeout(60000)
+
+      await waitJobs([ server ])
+
+      await server.imports.cancel({ importId, expectedStatus: HttpStatusCode.CONFLICT_409 })
+    })
+
+    it('Should succeed to delete an import', async function () {
+      await server.imports.delete({ importId })
+    })
+
+    it('Should fail to delete a pending import', async function () {
+      await server.jobs.pauseJobQueue()
+
+      importId = await importVideo()
+
+      await server.imports.delete({ importId, expectedStatus: HttpStatusCode.CONFLICT_409 })
+    })
+
+    it('Should succeed to cancel an import', async function () {
+      importId = await importVideo()
+
+      await server.imports.cancel({ importId })
     })
   })
 

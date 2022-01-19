@@ -6,7 +6,7 @@ import { pathExists, readdir, remove } from 'fs-extra'
 import { join } from 'path'
 import { FIXTURE_URLS, testCaptionFile, testImage } from '@server/tests/shared'
 import { areHttpImportTestsDisabled } from '@shared/core-utils'
-import { VideoPrivacy, VideoResolution } from '@shared/models'
+import { HttpStatusCode, Video, VideoImportState, VideoPrivacy, VideoResolution, VideoState } from '@shared/models'
 import {
   cleanupTests,
   createMultipleServers,
@@ -381,6 +381,85 @@ describe('Test video imports', function () {
   runSuite('youtube-dl')
 
   runSuite('yt-dlp')
+
+  describe('Delete/cancel an import', function () {
+    let server: PeerTubeServer
+
+    let finishedImportId: number
+    let finishedVideo: Video
+    let pendingImportId: number
+
+    async function importVideo (name: string) {
+      const attributes = { name, channelId: server.store.channel.id, targetUrl: FIXTURE_URLS.goodVideo }
+      const res = await server.imports.importVideo({ attributes })
+
+      return res.id
+    }
+
+    before(async function () {
+      this.timeout(120_000)
+
+      server = await createSingleServer(1)
+
+      await setAccessTokensToServers([ server ])
+      await setDefaultVideoChannel([ server ])
+
+      finishedImportId = await importVideo('finished')
+      await waitJobs([ server ])
+
+      await server.jobs.pauseJobQueue()
+      pendingImportId = await importVideo('pending')
+
+      const { data } = await server.imports.getMyVideoImports()
+      expect(data).to.have.lengthOf(2)
+
+      finishedVideo = data.find(i => i.id === finishedImportId).video
+    })
+
+    it('Should delete a video import', async function () {
+      await server.imports.delete({ importId: finishedImportId })
+
+      const { data } = await server.imports.getMyVideoImports()
+      expect(data).to.have.lengthOf(1)
+      expect(data[0].id).to.equal(pendingImportId)
+      expect(data[0].state.id).to.equal(VideoImportState.PENDING)
+    })
+
+    it('Should not have deleted the associated video', async function () {
+      const video = await server.videos.get({ id: finishedVideo.id, token: server.accessToken, expectedStatus: HttpStatusCode.OK_200 })
+      expect(video.name).to.equal('finished')
+      expect(video.state.id).to.equal(VideoState.PUBLISHED)
+    })
+
+    it('Should cancel a video import', async function () {
+      await server.imports.cancel({ importId: pendingImportId })
+
+      const { data } = await server.imports.getMyVideoImports()
+      expect(data).to.have.lengthOf(1)
+      expect(data[0].id).to.equal(pendingImportId)
+      expect(data[0].state.id).to.equal(VideoImportState.CANCELLED)
+    })
+
+    it('Should not have processed the cancelled video import', async function () {
+      this.timeout(60_000)
+
+      await server.jobs.resumeJobQueue()
+
+      await waitJobs([ server ])
+
+      const { data } = await server.imports.getMyVideoImports()
+      expect(data).to.have.lengthOf(1)
+      expect(data[0].id).to.equal(pendingImportId)
+      expect(data[0].state.id).to.equal(VideoImportState.CANCELLED)
+      expect(data[0].video.state.id).to.equal(VideoState.TO_IMPORT)
+    })
+
+    it('Should delete the cancelled video import', async function () {
+      await server.imports.delete({ importId: pendingImportId })
+      const { data } = await server.imports.getMyVideoImports()
+      expect(data).to.have.lengthOf(0)
+    })
+  })
 
   describe('Auto update', function () {
     let server: PeerTubeServer

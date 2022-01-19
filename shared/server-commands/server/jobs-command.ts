@@ -14,6 +14,30 @@ export class JobsCommand extends AbstractCommand {
     return data[0]
   }
 
+  pauseJobQueue (options: OverrideCommandOptions = {}) {
+    const path = '/api/v1/jobs/pause'
+
+    return this.postBodyRequest({
+      ...options,
+
+      path,
+      implicitToken: true,
+      defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
+    })
+  }
+
+  resumeJobQueue (options: OverrideCommandOptions = {}) {
+    const path = '/api/v1/jobs/resume'
+
+    return this.postBodyRequest({
+      ...options,
+
+      path,
+      implicitToken: true,
+      defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
+    })
+  }
+
   list (options: OverrideCommandOptions & {
     state?: JobState
     jobType?: JobType

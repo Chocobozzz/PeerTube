@@ -1,5 +1,5 @@
-<span class="action-button" [ngClass]="getClasses()" [ngbTooltip]="getTitle()" tabindex="0">
-  <my-global-icon *ngIf="!loading" [iconName]="icon"></my-global-icon>
+<span class="action-button" [ngClass]="getClasses()" [ngbTooltip]="title" tabindex="0">
+  <my-global-icon *ngIf="icon && !loading" [iconName]="icon"></my-global-icon>
   <my-small-loader [loading]="loading"></my-small-loader>
 
   <span *ngIf="label" class="button-label">{{ label }}</span>

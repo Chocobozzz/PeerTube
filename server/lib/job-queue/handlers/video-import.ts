@@ -42,8 +42,17 @@ import { generateVideoMiniature } from '../../thumbnail'
 async function processVideoImport (job: Job) {
   const payload = job.data as VideoImportPayload
 
-  if (payload.type === 'youtube-dl') return processYoutubeDLImport(job, payload)
-  if (payload.type === 'magnet-uri' || payload.type === 'torrent-file') return processTorrentImport(job, payload)
+  const videoImport = await getVideoImportOrDie(payload.videoImportId)
+  if (videoImport.state === VideoImportState.CANCELLED) {
+    logger.info('Do not process import since it has been cancelled', { payload })
+    return
+  }
+
+  videoImport.state = VideoImportState.PROCESSING
+  await videoImport.save()
+
+  if (payload.type === 'youtube-dl') return processYoutubeDLImport(job, videoImport, payload)
+  if (payload.type === 'magnet-uri' || payload.type === 'torrent-file') return processTorrentImport(job, videoImport, payload)
 }
 
 // ---------------------------------------------------------------------------
@@ -54,15 +63,11 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function processTorrentImport (job: Job, payload: VideoImportTorrentPayload) {
+async function processTorrentImport (job: Job, videoImport: MVideoImportDefault, payload: VideoImportTorrentPayload) {
   logger.info('Processing torrent video import in job %d.', job.id)
 
-  const videoImport = await getVideoImportOrDie(payload.videoImportId)
+  const options = { type: payload.type, videoImportId: payload.videoImportId }
 
-  const options = {
-    type: payload.type,
-    videoImportId: payload.videoImportId
-  }
   const target = {
     torrentName: videoImport.torrentName ? getSecureTorrentName(videoImport.torrentName) : undefined,
     uri: videoImport.magnetUri
@@ -70,14 +75,10 @@ async function processTorrentImport (job: Job, payload: VideoImportTorrentPayloa
   return processFile(() => downloadWebTorrentVideo(target, VIDEO_IMPORT_TIMEOUT), videoImport, options)
 }
 
-async function processYoutubeDLImport (job: Job, payload: VideoImportYoutubeDLPayload) {
+async function processYoutubeDLImport (job: Job, videoImport: MVideoImportDefault, payload: VideoImportYoutubeDLPayload) {
   logger.info('Processing youtubeDL video import in job %d.', job.id)
 
-  const videoImport = await getVideoImportOrDie(payload.videoImportId)
-  const options = {
-    type: payload.type,
-    videoImportId: videoImport.id
-  }
+  const options = { type: payload.type, videoImportId: videoImport.id }
 
   const youtubeDL = new YoutubeDLWrapper(videoImport.targetUrl, ServerConfigManager.Instance.getEnabledResolutions('vod'))
 

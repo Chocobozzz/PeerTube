@@ -37,6 +37,8 @@ export class MyVideoImportsComponent extends RestTable implements OnInit {
         return 'badge-banned'
       case VideoImportState.PENDING:
         return 'badge-yellow'
+      case VideoImportState.PROCESSING:
+        return 'badge-blue'
       default:
         return 'badge-green'
     }
@@ -54,12 +56,34 @@ export class MyVideoImportsComponent extends RestTable implements OnInit {
     return videoImport.state.id === VideoImportState.FAILED
   }
 
+  isVideoImportCancelled (videoImport: VideoImport) {
+    return videoImport.state.id === VideoImportState.CANCELLED
+  }
+
   getVideoUrl (video: { uuid: string }) {
     return Video.buildWatchUrl(video)
   }
 
   getEditVideoUrl (video: { uuid: string }) {
     return Video.buildUpdateUrl(video)
+  }
+
+  deleteImport (videoImport: VideoImport) {
+    this.videoImportService.deleteVideoImport(videoImport)
+      .subscribe({
+        next: () => this.reloadData(),
+
+        error: err => this.notifier.error(err.message)
+      })
+  }
+
+  cancelImport (videoImport: VideoImport) {
+    this.videoImportService.cancelVideoImport(videoImport)
+      .subscribe({
+        next: () => this.reloadData(),
+
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   protected reloadData () {

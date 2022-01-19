@@ -252,6 +252,8 @@ tags:
 
       The import function is practical when the desired video/audio is available online. It makes PeerTube
       download it for you, saving you as much bandwidth and avoiding any instability or limitation your network might have.
+  - name: Video Imports
+    description: Operations dealing with listing, adding and removing video imports.
   - name: Video Captions
     description: Operations dealing with listing, adding and removing closed captions of a video.
   - name: Video Channels
@@ -306,6 +308,7 @@ x-tagGroups:
     tags:
       - Video
       - Video Upload
+      - Video Imports
       - Video Captions
       - Video Channels
       - Video Comments
@@ -583,6 +586,30 @@ paths:
                 content:
                   type: string
                   description: content of the homepage, that will be injected in the client
+      responses:
+        '204':
+          description: successful operation
+
+  /jobs/pause:
+    post:
+      summary: Pause job queue
+      security:
+        - OAuth2:
+          - admin
+      tags:
+        - Job
+      responses:
+        '204':
+          description: successful operation
+
+  /jobs/resume:
+    post:
+      summary: Resume job queue
+      security:
+        - OAuth2:
+          - admin
+      tags:
+        - Job
       responses:
         '204':
           description: successful operation
@@ -2166,7 +2193,7 @@ paths:
       security:
         - OAuth2: []
       tags:
-        - Video
+        - Video Imports
         - Video Upload
       requestBody:
         content:
@@ -2193,6 +2220,34 @@ paths:
           description: video didn't pass pre-import filter
         '409':
           description: HTTP or Torrent/magnetURI import not enabled
+
+  /videos/imports/{id}/cancel:
+    post:
+      summary: Cancel video import
+      description: Cancel a pending video import
+      security:
+        - OAuth2: []
+      tags:
+        - Video Imports
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        '204':
+          description: successful operation
+
+  /videos/imports/{id}:
+    delete:
+      summary: Delete video import
+      description: Delete ended video import
+      security:
+        - OAuth2: []
+      tags:
+        - Video Imports
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        '204':
+          description: successful operation
 
   /videos/live:
     post:
@@ -4767,7 +4822,7 @@ components:
       name: id
       in: path
       required: true
-      description: The user id
+      description: Entity id
       schema:
         $ref: '#/components/schemas/id'
     idOrUUID:

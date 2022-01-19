@@ -56,6 +56,16 @@ export class VideoImportService {
                )
   }
 
+  deleteVideoImport (videoImport: VideoImport) {
+    return this.authHttp.delete(VideoImportService.BASE_VIDEO_IMPORT_URL + videoImport.id)
+                        .pipe(catchError(err => this.restExtractor.handleError(err)))
+  }
+
+  cancelVideoImport (videoImport: VideoImport) {
+    return this.authHttp.post(VideoImportService.BASE_VIDEO_IMPORT_URL + videoImport.id + '/cancel', {})
+                        .pipe(catchError(err => this.restExtractor.handleError(err)))
+  }
+
   private buildImportVideoObject (video: VideoUpdate): VideoImportCreate {
     const language = video.language || null
     const licence = video.licence || null

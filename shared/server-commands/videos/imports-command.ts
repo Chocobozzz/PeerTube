@@ -26,6 +26,34 @@ export class ImportsCommand extends AbstractCommand {
     }))
   }
 
+  delete (options: OverrideCommandOptions & {
+    importId: number
+  }) {
+    const path = '/api/v1/videos/imports/' + options.importId
+
+    return this.deleteRequest({
+      ...options,
+
+      path,
+      implicitToken: true,
+      defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
+    })
+  }
+
+  cancel (options: OverrideCommandOptions & {
+    importId: number
+  }) {
+    const path = '/api/v1/videos/imports/' + options.importId + '/cancel'
+
+    return this.postBodyRequest({
+      ...options,
+
+      path,
+      implicitToken: true,
+      defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
+    })
+  }
+
   getMyVideoImports (options: OverrideCommandOptions & {
     sort?: string
   } = {}) {

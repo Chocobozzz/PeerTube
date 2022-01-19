@@ -257,7 +257,7 @@
 }
 
 @mixin peertube-button {
-  @include padding(0, 17px, 0, 13px);
+  padding: 0 13px;
 
   border: 0;
   font-weight: $font-semibold;
@@ -270,6 +270,10 @@
 
   text-align: center;
   cursor: pointer;
+
+  my-global-icon + * {
+    @include margin-right(4px);
+  }
 }
 
 @mixin peertube-button-link {

@@ -441,7 +441,9 @@ const VIDEO_IMPORT_STATES: { [ id in VideoImportState ]: string } = {
   [VideoImportState.FAILED]: 'Failed',
   [VideoImportState.PENDING]: 'Pending',
   [VideoImportState.SUCCESS]: 'Success',
-  [VideoImportState.REJECTED]: 'Rejected'
+  [VideoImportState.REJECTED]: 'Rejected',
+  [VideoImportState.CANCELLED]: 'Cancelled',
+  [VideoImportState.PROCESSING]: 'Processing'
 }
 
 const ABUSE_STATES: { [ id in AbuseState ]: string } = {

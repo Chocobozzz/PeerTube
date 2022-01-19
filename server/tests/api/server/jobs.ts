@@ -11,6 +11,7 @@ import {
   setAccessTokensToServers,
   waitJobs
 } from '@shared/server-commands'
+import { wait } from '@shared/core-utils'
 
 const expect = chai.expect
 
@@ -89,6 +90,30 @@ describe('Test jobs', function () {
     expect(jobs).to.have.length.above(2)
 
     expect(jobs.find(j => j.state === 'completed')).to.not.be.undefined
+  })
+
+  it('Should pause the job queue', async function () {
+    this.timeout(120000)
+
+    await servers[1].jobs.pauseJobQueue()
+
+    await servers[1].videos.upload({ attributes: { name: 'video2' } })
+
+    await wait(5000)
+
+    const body = await servers[1].jobs.list({ state: 'waiting', jobType: 'video-transcoding' })
+    expect(body.data).to.have.lengthOf(1)
+  })
+
+  it('Should resume the job queue', async function () {
+    this.timeout(120000)
+
+    await servers[1].jobs.resumeJobQueue()
+
+    await waitJobs(servers)
+
+    const body = await servers[1].jobs.list({ state: 'waiting', jobType: 'video-transcoding' })
+    expect(body.data).to.have.lengthOf(0)
   })
 
   after(async function () {

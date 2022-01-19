@@ -1,8 +1,10 @@
 import express from 'express'
-import { body } from 'express-validator'
+import { body, param } from 'express-validator'
+import { isValid as isIPValid, parse as parseIP } from 'ipaddr.js'
 import { isPreImportVideoAccepted } from '@server/lib/moderation'
 import { Hooks } from '@server/lib/plugins/hooks'
-import { HttpStatusCode } from '@shared/models'
+import { MUserAccountId, MVideoImport } from '@server/types/models'
+import { HttpStatusCode, UserRight, VideoImportState } from '@shared/models'
 import { VideoImportCreate } from '@shared/models/videos/import/video-import-create.model'
 import { isIdValid, toIntOrNull } from '../../../helpers/custom-validators/misc'
 import { isVideoImportTargetUrlValid, isVideoImportTorrentFile } from '../../../helpers/custom-validators/video-imports'
@@ -11,9 +13,8 @@ import { cleanUpReqFiles } from '../../../helpers/express-utils'
 import { logger } from '../../../helpers/logger'
 import { CONFIG } from '../../../initializers/config'
 import { CONSTRAINTS_FIELDS } from '../../../initializers/constants'
-import { areValidationErrors, doesVideoChannelOfAccountExist } from '../shared'
+import { areValidationErrors, doesVideoChannelOfAccountExist, doesVideoImportExist } from '../shared'
 import { getCommonVideoEditAttributes } from './videos'
-import { isValid as isIPValid, parse as parseIP } from 'ipaddr.js'
 
 const videoImportAddValidator = getCommonVideoEditAttributes().concat([
   body('channelId')
@@ -95,10 +96,58 @@ const videoImportAddValidator = getCommonVideoEditAttributes().concat([
   }
 ])
 
+const videoImportDeleteValidator = [
+  param('id')
+    .custom(isIdValid).withMessage('Should have correct import id'),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking videoImportDeleteValidator parameters', { parameters: req.params })
+
+    if (areValidationErrors(req, res)) return
+
+    if (!await doesVideoImportExist(parseInt(req.params.id), res)) return
+    if (!checkUserCanManageImport(res.locals.oauth.token.user, res.locals.videoImport, res)) return
+
+    if (res.locals.videoImport.state === VideoImportState.PENDING) {
+      return res.fail({
+        status: HttpStatusCode.CONFLICT_409,
+        message: 'Cannot delete a pending video import. Cancel it or wait for the end of the import first.'
+      })
+    }
+
+    return next()
+  }
+]
+
+const videoImportCancelValidator = [
+  param('id')
+    .custom(isIdValid).withMessage('Should have correct import id'),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking videoImportCancelValidator parameters', { parameters: req.params })
+
+    if (areValidationErrors(req, res)) return
+
+    if (!await doesVideoImportExist(parseInt(req.params.id), res)) return
+    if (!checkUserCanManageImport(res.locals.oauth.token.user, res.locals.videoImport, res)) return
+
+    if (res.locals.videoImport.state !== VideoImportState.PENDING) {
+      return res.fail({
+        status: HttpStatusCode.CONFLICT_409,
+        message: 'Cannot cancel a non pending video import.'
+      })
+    }
+
+    return next()
+  }
+]
+
 // ---------------------------------------------------------------------------
 
 export {
-  videoImportAddValidator
+  videoImportAddValidator,
+  videoImportCancelValidator,
+  videoImportDeleteValidator
 }
 
 // ---------------------------------------------------------------------------
@@ -126,6 +175,18 @@ async function isImportAccepted (req: express.Request, res: express.Response) {
     res.fail({
       status: HttpStatusCode.FORBIDDEN_403,
       message: acceptedResult.errorMessage || 'Refused to import video'
+    })
+    return false
+  }
+
+  return true
+}
+
+function checkUserCanManageImport (user: MUserAccountId, videoImport: MVideoImport, res: express.Response) {
+  if (user.hasRight(UserRight.MANAGE_VIDEO_IMPORTS) === false && videoImport.userId !== user.id) {
+    res.fail({
+      status: HttpStatusCode.FORBIDDEN_403,
+      message: 'Cannot manage video import of another user'
     })
     return false
   }

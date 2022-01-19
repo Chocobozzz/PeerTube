@@ -20,10 +20,6 @@ export class DeleteButtonComponent implements OnInit {
     // <my-delete-button label /> Use default label
     if (this.label === '') {
       this.label = $localize`Delete`
-
-      if (!this.title) {
-        this.title = this.label
-      }
     }
   }
 }

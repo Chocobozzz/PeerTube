@@ -162,6 +162,18 @@ class JobQueue {
     }
   }
 
+  async pause () {
+    for (const handler of Object.keys(this.queues)) {
+      await this.queues[handler].pause(true)
+    }
+  }
+
+  async resume () {
+    for (const handler of Object.keys(this.queues)) {
+      await this.queues[handler].resume(true)
+    }
+  }
+
   createJob (obj: CreateJobArgument, options: CreateJobOptions = {}): void {
     this.createJobWithPromise(obj, options)
         .catch(err => logger.error('Cannot create job.', { err, obj }))
