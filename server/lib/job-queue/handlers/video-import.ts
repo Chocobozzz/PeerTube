@@ -42,7 +42,7 @@ import { generateVideoMiniature } from '../../thumbnail'
 async function processVideoImport (job: Job) {
   const payload = job.data as VideoImportPayload
 
-  const videoImport = await getVideoImportOrDie(payload.videoImportId)
+  const videoImport = await getVideoImportOrDie(payload)
   if (videoImport.state === VideoImportState.CANCELLED) {
     logger.info('Do not process import since it has been cancelled', { payload })
     return
@@ -89,10 +89,10 @@ async function processYoutubeDLImport (job: Job, videoImport: MVideoImportDefaul
   )
 }
 
-async function getVideoImportOrDie (videoImportId: number) {
-  const videoImport = await VideoImportModel.loadAndPopulateVideo(videoImportId)
+async function getVideoImportOrDie (payload: VideoImportPayload) {
+  const videoImport = await VideoImportModel.loadAndPopulateVideo(payload.videoImportId)
   if (!videoImport || !videoImport.Video) {
-    throw new Error('Cannot import video %s: the video import or video linked to this import does not exist anymore.')
+    throw new Error(`Cannot import video ${payload.videoImportId}: the video import or video linked to this import does not exist anymore.`)
   }
 
   return videoImport

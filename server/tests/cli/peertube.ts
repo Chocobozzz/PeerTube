@@ -136,9 +136,26 @@ describe('Test CLI wrapper', function () {
       expect(videoDetails.channel.name).to.equal('user_channel')
       expect(videoDetails.support).to.equal('super support text')
       expect(videoDetails.nsfw).to.be.false
+    })
+
+    it('Should not import again the same video', async function () {
+      if (areHttpImportTestsDisabled()) return
+
+      this.timeout(60000)
+
+      const params = `--target-url ${FIXTURE_URLS.youtube} --channel-name user_channel`
+      await cliCommand.execWithEnv(`${cmd} import ${params}`)
+
+      await waitJobs([ server ])
+
+      const { total, data } = await server.videos.list()
+      expect(total).to.equal(2)
+
+      const videos = data.filter(v => v.name === 'small video - youtube')
+      expect(videos).to.have.lengthOf(1)
 
       // So we can reimport it
-      await server.videos.remove({ token: userAccessToken, id: video.id })
+      await server.videos.remove({ token: userAccessToken, id: videos[0].id })
     })
 
     it('Should import and override some imported attributes', async function () {

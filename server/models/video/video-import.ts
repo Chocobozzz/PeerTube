@@ -1,3 +1,4 @@
+import { WhereOptions } from 'sequelize'
 import {
   AfterUpdate,
   AllowNull,
@@ -125,7 +126,20 @@ export class VideoImportModel extends Model<Partial<AttributesOnly<VideoImportMo
     return VideoImportModel.findByPk(id)
   }
 
-  static listUserVideoImportsForApi (userId: number, start: number, count: number, sort: string) {
+  static listUserVideoImportsForApi (options: {
+    userId: number
+    start: number
+    count: number
+    sort: string
+
+    targetUrl?: string
+  }) {
+    const { userId, start, count, sort, targetUrl } = options
+
+    const where: WhereOptions = { userId }
+
+    if (targetUrl) where['targetUrl'] = targetUrl
+
     const query = {
       distinct: true,
       include: [
@@ -138,9 +152,7 @@ export class VideoImportModel extends Model<Partial<AttributesOnly<VideoImportMo
       offset: start,
       limit: count,
       order: getSort(sort),
-      where: {
-        userId
-      }
+      where
     }
 
     return VideoImportModel.findAndCountAll<MVideoImportDefault>(query)

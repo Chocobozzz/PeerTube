@@ -56,18 +56,16 @@ export class ImportsCommand extends AbstractCommand {
 
   getMyVideoImports (options: OverrideCommandOptions & {
     sort?: string
+    targetUrl?: string
   } = {}) {
-    const { sort } = options
+    const { sort, targetUrl } = options
     const path = '/api/v1/users/me/videos/imports'
-
-    const query = {}
-    if (sort) query['sort'] = sort
 
     return this.getRequestBody<ResultList<VideoImport>>({
       ...options,
 
       path,
-      query: { sort },
+      query: { sort, targetUrl },
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })

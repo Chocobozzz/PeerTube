@@ -219,6 +219,14 @@ describe('Test video imports', function () {
         expect(videoImports[0].video.name).to.equal('你好 世界 720p.mp4')
       })
 
+      it('Should filter my imports on target URL', async function () {
+        const { total, data: videoImports } = await servers[0].imports.getMyVideoImports({ targetUrl: FIXTURE_URLS.youtube })
+        expect(total).to.equal(1)
+        expect(videoImports).to.have.lengthOf(1)
+
+        expect(videoImports[0].targetUrl).to.equal(FIXTURE_URLS.youtube)
+      })
+
       it('Should have the video listed on the two instances', async function () {
         this.timeout(120_000)
 
@@ -458,6 +466,10 @@ describe('Test video imports', function () {
       await server.imports.delete({ importId: pendingImportId })
       const { data } = await server.imports.getMyVideoImports()
       expect(data).to.have.lengthOf(0)
+    })
+
+    after(async function () {
+      await cleanupTests([ server ])
     })
   })
 

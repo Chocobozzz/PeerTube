@@ -30,6 +30,7 @@ import { AccountVideoRateModel } from '../../../models/account/account-video-rat
 import { UserModel } from '../../../models/user/user'
 import { VideoModel } from '../../../models/video/video'
 import { VideoImportModel } from '../../../models/video/video-import'
+import { pick } from '@shared/core-utils'
 
 const auditLogger = auditLoggerFactory('users')
 
@@ -133,12 +134,11 @@ async function getUserVideos (req: express.Request, res: express.Response) {
 
 async function getUserVideoImports (req: express.Request, res: express.Response) {
   const user = res.locals.oauth.token.User
-  const resultList = await VideoImportModel.listUserVideoImportsForApi(
-    user.id,
-    req.query.start as number,
-    req.query.count as number,
-    req.query.sort
-  )
+  const resultList = await VideoImportModel.listUserVideoImportsForApi({
+    userId: user.id,
+
+    ...pick(req.query, [ 'targetUrl', 'start', 'count', 'sort' ])
+  })
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
