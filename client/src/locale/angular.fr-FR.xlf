@@ -728,7 +728,7 @@
       </trans-unit>
       <trans-unit id="3044142083883783523">
         <source>Updated <x id="INTERPOLATION"/></source>
-        <target>Mit à jour <x id="INTERPOLATION"/></target>
+        <target>Mis à jour <x id="INTERPOLATION"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-miniature.component.html</context><context context-type="linenumber">32</context></context-group>
       </trans-unit>
       <trans-unit id="5643561794785412000">
