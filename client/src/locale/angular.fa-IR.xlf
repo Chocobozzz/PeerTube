@@ -1723,17 +1723,17 @@
       </trans-unit>
       <trans-unit id="5856432243446401016" datatype="html">
         <source>Uploading an <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>avatar<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">Uploading an <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>avatar<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">در حال آپلود <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>آواتار<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt; /strong&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/account-setup-warning-modal.component.html</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="3221645359464920754" datatype="html">
         <source>Writing a <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>description<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">Writing a <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>description<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">نوشتن <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>توضیح<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt; /strong&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/account-setup-warning-modal.component.html</context><context context-type="linenumber">16</context></context-group>
       </trans-unit>
       <trans-unit id="2218100934178971211" datatype="html">
         <source>Don't show me this anymore</source>
-        <target state="new">Don't show me this anymore</target>
+        <target state="translated">اینو دیگه به من نشون نده</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/account-setup-warning-modal.component.html</context>
           <context context-type="linenumber">23</context>
@@ -1741,12 +1741,12 @@
       </trans-unit>
       <trans-unit id="4424964105331349857" datatype="html">
         <source>I'm a teapot</source>
-        <target state="new">I'm a teapot</target>
+        <target state="translated">من قوری هستم</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.ts</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="1597262876035959248" datatype="html">
         <source>That's an error.</source>
-        <target state="new">That's an error.</target>
+        <target state="translated">آن یک اشتباه است.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context>
           <context context-type="linenumber">4</context>
@@ -1754,7 +1754,7 @@
       </trans-unit>
       <trans-unit id="3343007694071351756" datatype="html">
         <source>We couldn't find any video tied to the URL <x id="INTERPOLATION" equiv-text="{{ pathname }}"/> you were looking for.</source>
-        <target state="new">We couldn't find any video tied to the URL <x id="INTERPOLATION" equiv-text="{{ pathname }}"/> you were looking for.</target>
+        <target state="translated">هیچ ویدیویی مرتبط با URL <x id="INTERPOLATION" equiv-text="{{ pathname }}"/> مورد نظر شما را پیدا نکردیم.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context>
           <context context-type="linenumber">7</context>
@@ -1762,7 +1762,7 @@
       </trans-unit>
       <trans-unit id="7366678433039425999" datatype="html">
         <source>We couldn't find any resource tied to the URL <x id="INTERPOLATION" equiv-text="{{ pathname }}"/> you were looking for.</source>
-        <target state="new">We couldn't find any resource tied to the URL <x id="INTERPOLATION" equiv-text="{{ pathname }}"/> you were looking for.</target>
+        <target state="translated">ما نتوانستیم هیچ منبع مرتبط با نشانی اینترنتی <x id="INTERPOLATION" equiv-text="{{ pathname }}"/> مورد نظر خود را پیدا کنیم.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context>
           <context context-type="linenumber">8</context>
@@ -1770,13 +1770,13 @@
       </trans-unit>
       <trans-unit id="3522707340816553139" datatype="html">
         <source>Possible reasons:</source>
-        <target state="new">Possible reasons:</target>
+        <target state="translated">دلایل ممکن:</target>
         <note priority="1" from="description">Possible reasons preceding a list of reasons a `Not Found` error page may occur</note>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context><context context-type="linenumber">12</context></context-group>
       </trans-unit>
       <trans-unit id="6925335998927745197" datatype="html">
         <source>You may have used an outdated or broken link</source>
-        <target state="new">You may have used an outdated or broken link</target>
+        <target state="translated">ممکن است از پیوند قدیمی یا خراب استفاده کرده باشید</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="1171455174603388942" datatype="html">
