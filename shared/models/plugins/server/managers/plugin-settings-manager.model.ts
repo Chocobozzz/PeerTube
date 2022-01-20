@@ -1,9 +1,17 @@
+export type SettingValue = string | boolean
+
+export interface SettingEntries {
+  [settingName: string]: SettingValue
+}
+
+export type SettingsChangeCallback = (settings: SettingEntries) => Promise<any>
+
 export interface PluginSettingsManager {
-  getSetting: (name: string) => Promise<string | boolean>
+  getSetting: (name: string) => Promise<SettingValue>
 
-  getSettings: (names: string[]) => Promise<{ [settingName: string]: string | boolean }>
+  getSettings: (names: string[]) => Promise<SettingEntries>
 
-  setSetting: (name: string, value: string) => Promise<any>
+  setSetting: (name: string, value: SettingValue) => Promise<any>
 
-  onSettingsChange: (cb: (names: string[]) => Promise<any>) => void
+  onSettingsChange: (cb: SettingsChangeCallback) => void
 }
