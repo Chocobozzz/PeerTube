@@ -58,6 +58,25 @@ function searchVideoPlaylists (req: express.Request, res: express.Response) {
   return searchVideoPlaylistsDB(query, res)
 }
 
+const normalizeSearchIndexResult = result => ({
+  ...result,
+  data: result.data.map(({
+    ownerAccount: { avatar: accountAvatar, ...ownerAccount },
+    videoChannel: { avatar: channelAvatar, ...videoChannel },
+    ...data
+  }) => ({
+    ...data,
+    ownerAccount: {
+      ...ownerAccount,
+      avatarMiniature: ownerAccount.avatarMiniature || accountAvatar
+    },
+    videoChannel: {
+      ...videoChannel,
+      avatarMiniature: videoChannel.avatarMiniature || channelAvatar
+    }
+  }))
+})
+
 async function searchVideoPlaylistsIndex (query: VideoPlaylistsSearchQueryAfterSanitize, res: express.Response) {
   const result = await buildMutedForSearchIndex(res)
 
@@ -69,7 +88,10 @@ async function searchVideoPlaylistsIndex (query: VideoPlaylistsSearchQueryAfterS
     logger.debug('Doing video playlists search index request on %s.', url, { body })
 
     const { body: searchIndexResult } = await doJSONRequest<ResultList<VideoPlaylist>>(url, { method: 'POST', json: body })
-    const jsonResult = await Hooks.wrapObject(searchIndexResult, 'filter:api.search.video-playlists.index.list.result')
+    const jsonResult = await Hooks.wrapObject(
+      normalizeSearchIndexResult(searchIndexResult),
+      'filter:api.search.video-playlists.index.list.result'
+    )
 
     return res.json(jsonResult)
   } catch (err) {
