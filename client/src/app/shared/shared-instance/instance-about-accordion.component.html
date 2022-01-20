@@ -49,5 +49,11 @@
         <div class="block" [innerHTML]="aboutHtml.codeOfConduct"></div>
       </ng-template>
     </ngb-panel>
+
+    <ngb-panel *ngFor="let pluginPanel of pluginPanels" [id]="pluginPanel.id" [title]="pluginPanel.title">
+      <ng-template ngbPanelContent>
+        <div class="block" [innerHTML]="pluginPanel.html"></div>
+      </ng-template>
+    </ngb-panel>
   </ng-container>
 </ngb-accordion>

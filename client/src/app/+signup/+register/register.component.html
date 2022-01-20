@@ -17,7 +17,10 @@
         <my-custom-stepper linear *ngIf="!signupDone">
           <cdk-step [stepControl]="formStepTerms" i18n-label="Stepper label for the registration page describing terms of service" label="Terms">
             <div class="instance-information">
-              <my-instance-about-accordion (init)="onInstanceAboutAccordionInit($event)" [panels]="instanceInformationPanels"></my-instance-about-accordion>
+              <my-instance-about-accordion
+                (init)="onInstanceAboutAccordionInit($event)" [panels]="instanceInformationPanels"
+                pluginScope="signup" pluginHook="filter:signup.instance-about-plugin-panels.create.result"
+              ></my-instance-about-accordion>
             </div>
 
             <my-register-step-terms

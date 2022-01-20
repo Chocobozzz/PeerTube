@@ -1,8 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
+import { HooksService, Notifier } from '@app/core'
 import { NgbAccordion } from '@ng-bootstrap/ng-bootstrap'
-import { InstanceService } from './instance.service'
-import { Notifier } from '@app/core'
+import { ClientFilterHookName, PluginClientScope } from '@shared/models/plugins'
 import { About } from '@shared/models/server'
+import { InstanceService } from './instance.service'
 
 @Component({
   selector: 'my-instance-about-accordion',
@@ -11,7 +12,11 @@ import { About } from '@shared/models/server'
 })
 export class InstanceAboutAccordionComponent implements OnInit {
   @ViewChild('accordion', { static: true }) accordion: NgbAccordion
+
   @Output() init: EventEmitter<InstanceAboutAccordionComponent> = new EventEmitter<InstanceAboutAccordionComponent>()
+
+  @Input() pluginScope: PluginClientScope
+  @Input() pluginHook: ClientFilterHookName
 
   @Input() panels = {
     features: true,
@@ -29,12 +34,15 @@ export class InstanceAboutAccordionComponent implements OnInit {
     administrator: ''
   }
 
+  pluginPanels: { id: string, title: string, html: string }[] = []
+
   constructor (
     private instanceService: InstanceService,
-    private notifier: Notifier
+    private notifier: Notifier,
+    private hookService: HooksService
   ) { }
 
-  ngOnInit (): void {
+  async ngOnInit () {
     this.instanceService.getAbout()
       .subscribe({
         next: async about => {
@@ -47,6 +55,8 @@ export class InstanceAboutAccordionComponent implements OnInit {
 
         error: err => this.notifier.error(err.message)
       })
+
+    this.pluginPanels = await this.hookService.wrapObject([], this.pluginScope, this.pluginHook)
   }
 
   getAdministratorsPanel () {

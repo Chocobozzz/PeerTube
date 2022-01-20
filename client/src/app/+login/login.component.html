@@ -85,7 +85,10 @@
       </div>
 
       <div #instanceInformation class="instance-information">
-        <my-instance-about-accordion (init)="onInstanceAboutAccordionInit($event)" [panels]="instanceInformationPanels"></my-instance-about-accordion>
+        <my-instance-about-accordion
+          (init)="onInstanceAboutAccordionInit($event)" [panels]="instanceInformationPanels"
+          pluginScope="login" pluginHook="filter:login.instance-about-plugin-panels.create.result"
+        ></my-instance-about-accordion>
       </div>
     </div>
   </ng-container>

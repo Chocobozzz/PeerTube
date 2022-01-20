@@ -65,6 +65,9 @@ export const clientFilterHookObject = {
   // Filter upload page alert messages
   'filter:upload.messages.create.result': true,
 
+  'filter:login.instance-about-plugin-panels.create.result': true,
+  'filter:signup.instance-about-plugin-panels.create.result': true,
+
   // Filter videojs options built for PeerTube player
   'filter:internal.player.videojs.options.result': true
 }
