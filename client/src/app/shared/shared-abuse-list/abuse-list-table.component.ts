@@ -171,6 +171,7 @@ export class AbuseListTableComponent extends RestTable implements OnInit {
 
   isLocalAbuse (abuse: AdminAbuse) {
     if (this.viewType === 'user') return true
+    if (!abuse.reporterAccount) return false
 
     return Actor.IS_LOCAL(abuse.reporterAccount.host)
   }

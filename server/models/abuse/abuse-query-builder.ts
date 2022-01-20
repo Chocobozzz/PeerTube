@@ -48,7 +48,10 @@ function buildAbuseListQuery (options: BuildAbusesQueryOptions, type: 'count' | 
   ]
 
   if (options.serverAccountId || options.userAccountId) {
-    whereAnd.push('"abuse"."reporterAccountId" NOT IN (' + buildBlockedAccountSQL([ options.serverAccountId, options.userAccountId ]) + ')')
+    whereAnd.push(
+      '"abuse"."reporterAccountId" IS NULL OR ' +
+      '"abuse"."reporterAccountId" NOT IN (' + buildBlockedAccountSQL([ options.serverAccountId, options.userAccountId ]) + ')'
+    )
   }
 
   if (options.reporterAccountId) {
