@@ -47,7 +47,7 @@ function stripExtraneousFromPeerTubeUrl (url: string) {
     ? url.indexOf('/', 8)
     : url.length
 
-  return url.substr(0, urlLength)
+  return url.substring(0, urlLength)
 }
 
 program
@@ -89,7 +89,7 @@ program
       // Check credentials
       try {
         // Strip out everything after the domain:port.
-        // @see https://github.com/Chocobozzz/PeerTube/issues/3520
+        // See https://github.com/Chocobozzz/PeerTube/issues/3520
         result.url = stripExtraneousFromPeerTubeUrl(result.url)
 
         const server = buildServer(result.url)

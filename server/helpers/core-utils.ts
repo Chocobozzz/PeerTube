@@ -153,7 +153,7 @@ function isProdInstance () {
 }
 
 function getAppNumber () {
-  return process.env.NODE_APP_INSTANCE
+  return process.env.NODE_APP_INSTANCE || ''
 }
 
 // ---------------------------------------------------------------------------

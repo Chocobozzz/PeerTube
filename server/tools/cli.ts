@@ -73,14 +73,13 @@ function getRemoteObjectOrDie (
 ): { url: string, username: string, password: string } {
   const options = program.opts()
 
-  const manualOptionMode = options.url || options.username || options.password
-
-  // Check parameters validity
-  if (manualOptionMode || settings.remotes.length === 0 || Object.keys(netrc.machines).length === 0) {
+  function exitIfNoOptions (options: string[], errorPrefix: string = '') {
     let exit = false
 
-    for (const key of [ 'url', 'username', 'password' ]) {
+    for (const key of options) {
       if (!options[key]) {
+        if (exit === false && errorPrefix) console.error(errorPrefix)
+
         console.error(`--${key} field is required`)
         exit = true
       }
@@ -89,26 +88,36 @@ function getRemoteObjectOrDie (
     if (exit) process.exit(-1)
   }
 
-  if (!manualOptionMode) {
-    let url: string = options.url
-    let username: string = options.username
-    let password: string = options.password
-
-    if (!url && settings.default !== -1) url = settings.remotes[settings.default]
-
-    const machine = netrc.machines[url]
-
-    if (!username && machine) username = machine.login
-    if (!password && machine) password = machine.password
-
-    return { url, username, password }
+  // If username or password are specified, both are mandatory
+  if (options.username || options.password) {
+    exitIfNoOptions([ 'username', 'password' ])
   }
 
-  return {
-    url: options.url,
-    username: options.username,
-    password: options.password
+  // If no available machines, url, username and password args are mandatory
+  if (Object.keys(netrc.machines).length === 0) {
+    exitIfNoOptions([ 'url', 'username', 'password' ], 'No account found in netrc')
   }
+
+  if (settings.remotes.length === 0 || settings.default === -1) {
+    exitIfNoOptions([ 'url' ], 'No default instance found')
+  }
+
+  let url: string = options.url
+  let username: string = options.username
+  let password: string = options.password
+
+  if (!url && settings.default !== -1) url = settings.remotes[settings.default]
+
+  const machine = netrc.machines[url]
+  if ((!username || !password) && !machine) {
+    console.error('Cannot find existing configuration for %s.', url)
+    process.exit(-1)
+  }
+
+  if (!username && machine) username = machine.login
+  if (!password && machine) password = machine.password
+
+  return { url, username, password }
 }
 
 function buildCommonVideoOptions (command: Command) {
