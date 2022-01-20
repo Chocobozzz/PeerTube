@@ -2,7 +2,7 @@ import { FindAndCountOptions, json, QueryTypes } from 'sequelize'
 import { AllowNull, Column, CreatedAt, DataType, DefaultScope, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import { MPlugin, MPluginFormattable } from '@server/types/models'
 import { AttributesOnly } from '@shared/typescript-utils'
-import { PeerTubePlugin, PluginType, RegisterServerSettingOptions } from '../../../shared/models'
+import { PeerTubePlugin, PluginType, RegisterServerSettingOptions, SettingEntries, SettingValue } from '../../../shared/models'
 import {
   isPluginDescriptionValid,
   isPluginHomepage,
@@ -148,7 +148,7 @@ export class PluginModel extends Model<Partial<AttributesOnly<PluginModel>>> {
 
     return PluginModel.findOne(query)
       .then(p => {
-        const result: { [settingName: string ]: string | boolean } = {}
+        const result: SettingEntries = {}
 
         for (const name of settingNames) {
           if (!p || !p.settings || p.settings[name] === undefined) {
@@ -166,7 +166,7 @@ export class PluginModel extends Model<Partial<AttributesOnly<PluginModel>>> {
       })
   }
 
-  static setSetting (pluginName: string, pluginType: PluginType, settingName: string, settingValue: string) {
+  static setSetting (pluginName: string, pluginType: PluginType, settingName: string, settingValue: SettingValue) {
     const query = {
       where: {
         name: pluginName,
@@ -273,7 +273,7 @@ export class PluginModel extends Model<Partial<AttributesOnly<PluginModel>>> {
   }
 
   getPublicSettings (registeredSettings: RegisterServerSettingOptions[]) {
-    const result: { [ name: string ]: string } = {}
+    const result: SettingEntries = {}
     const settings = this.settings || {}
 
     for (const r of registeredSettings) {

@@ -4,7 +4,7 @@ import {
   RegisterClientRouteOptions,
   RegisterClientSettingsScriptOptions,
   RegisterClientVideoFieldOptions,
-  ServerConfig
+  ServerConfig, SettingEntries
 } from '@shared/models'
 
 export type RegisterClientOptions = {
@@ -30,7 +30,7 @@ export type RegisterClientHelpers = {
 
   getAuthHeader: () => { 'Authorization': string } | undefined
 
-  getSettings: () => Promise<{ [ name: string ]: string }>
+  getSettings: () => Promise<SettingEntries>
 
   getServerConfig: () => Promise<ServerConfig>
 
