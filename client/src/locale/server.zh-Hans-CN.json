@@ -40,6 +40,8 @@
     "Success": "成功",
     "Failed": "失败",
     "Rejected": "已拒绝",
+    "Cancelled": "Cancelled",
+    "Processing": "Processing",
     "Regular": "正常",
     "Watch later": "稍后观看",
     "This video does not exist.": "此视频不存在。",
@@ -248,6 +250,8 @@
     "Chinese": "汉语",
     "Zulu": "祖鲁语",
     "No linguistic content": "无语言内容",
+    "Simplified Chinese": "Simplified Chinese",
+    "Traditional Chinese": "Traditional Chinese",
     "Normal mode": "一般模式",
     "Theater mode": "剧场模式"
 }

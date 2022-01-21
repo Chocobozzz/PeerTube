@@ -40,6 +40,8 @@
     "Success": "Gelukt",
     "Failed": "Mislukt",
     "Rejected": "Afgekeurd",
+    "Cancelled": "Cancelled",
+    "Processing": "Processing",
     "Regular": "Standaard",
     "Watch later": "Later bekijken",
     "This video does not exist.": "Deze video bestaat niet.",
@@ -248,6 +250,8 @@
     "Chinese": "Chinees",
     "Zulu": "Zoeloe",
     "No linguistic content": "No linguistic content",
+    "Simplified Chinese": "Simplified Chinese",
+    "Traditional Chinese": "Traditional Chinese",
     "Normal mode": "Normale modus",
     "Theater mode": "Theater modus"
 }

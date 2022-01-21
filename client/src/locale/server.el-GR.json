@@ -40,6 +40,8 @@
     "Success": "Επιτυχία",
     "Failed": "Αποτυχία",
     "Rejected": "Απορρίφθηκε",
+    "Cancelled": "Cancelled",
+    "Processing": "Processing",
     "Regular": "Κανονικό",
     "Watch later": "Δείτε αργότερα",
     "This video does not exist.": "Το βίντεο δεν υπάρχει.",
@@ -248,6 +250,8 @@
     "Chinese": "Chinese",
     "Zulu": "Zulu",
     "No linguistic content": "No linguistic content",
+    "Simplified Chinese": "Simplified Chinese",
+    "Traditional Chinese": "Traditional Chinese",
     "Normal mode": "Κανονική λειτουργία",
     "Theater mode": "Λειτουργία θεάτρου"
 }

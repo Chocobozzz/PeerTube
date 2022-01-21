@@ -40,6 +40,8 @@
     "Success": "完了",
     "Failed": "失敗",
     "Rejected": "却下",
+    "Cancelled": "Cancelled",
+    "Processing": "Processing",
     "Regular": "一般",
     "Watch later": "後で見る",
     "This video does not exist.": "この動画は存在しません。",
@@ -248,6 +250,8 @@
     "Chinese": "中国語",
     "Zulu": "ズールー語",
     "No linguistic content": "言語に依存しないコンテンツ",
+    "Simplified Chinese": "Simplified Chinese",
+    "Traditional Chinese": "Traditional Chinese",
     "Normal mode": "ノーマルモード",
     "Theater mode": "シアターモード"
 }

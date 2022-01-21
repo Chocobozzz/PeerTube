@@ -40,6 +40,8 @@
     "Success": "Завершено",
     "Failed": "Неудачно",
     "Rejected": "Отклонено",
+    "Cancelled": "Cancelled",
+    "Processing": "Processing",
     "Regular": "Обычно",
     "Watch later": "Посмотреть позже",
     "This video does not exist.": "Этого видео не существует.",
@@ -248,6 +250,8 @@
     "Chinese": "Китайский",
     "Zulu": "Зулу",
     "No linguistic content": "No linguistic content",
+    "Simplified Chinese": "Simplified Chinese",
+    "Traditional Chinese": "Traditional Chinese",
     "Normal mode": "Normal mode",
     "Theater mode": "Режим \"театр\""
 }

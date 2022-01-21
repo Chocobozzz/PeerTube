@@ -40,6 +40,8 @@
     "Success": "Successo",
     "Failed": "Fallito",
     "Rejected": "Rifiutato",
+    "Cancelled": "Cancelled",
+    "Processing": "Processing",
     "Regular": "Regolare",
     "Watch later": "Guarda più tardi",
     "This video does not exist.": "Questo video non esiste.",
@@ -248,6 +250,8 @@
     "Chinese": "Cinese",
     "Zulu": "Zulu",
     "No linguistic content": "No linguistic content",
+    "Simplified Chinese": "Simplified Chinese",
+    "Traditional Chinese": "Traditional Chinese",
     "Normal mode": "Normal mode",
     "Theater mode": "Modalità teatro"
 }

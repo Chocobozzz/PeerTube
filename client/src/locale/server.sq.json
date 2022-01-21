@@ -40,6 +40,8 @@
     "Success": "Sukses",
     "Failed": "Dështoi",
     "Rejected": "Hedhur poshtë",
+    "Cancelled": "Cancelled",
+    "Processing": "Processing",
     "Regular": "Zakonshme",
     "Watch later": "Shiheni më vonë",
     "This video does not exist.": "Kjo video s’ekziston.",
@@ -247,5 +249,7 @@
     "Zhuang": "Zhuang",
     "Chinese": "Kineze",
     "Zulu": "Zulu",
-    "No linguistic content": "No linguistic content"
+    "No linguistic content": "No linguistic content",
+    "Simplified Chinese": "Simplified Chinese",
+    "Traditional Chinese": "Traditional Chinese"
 }

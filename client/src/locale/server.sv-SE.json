@@ -40,6 +40,8 @@
     "Success": "Lyckades",
     "Failed": "Misslyckades",
     "Rejected": "Avslagen",
+    "Cancelled": "Cancelled",
+    "Processing": "Processing",
     "Regular": "Vanlig",
     "Watch later": "Titta senare",
     "This video does not exist.": "Videon finns inte.",
@@ -248,6 +250,8 @@
     "Chinese": "Kinesiska",
     "Zulu": "Zulu",
     "No linguistic content": "No linguistic content",
+    "Simplified Chinese": "Simplified Chinese",
+    "Traditional Chinese": "Traditional Chinese",
     "Normal mode": "Normal mode",
     "Theater mode": "Biografläge"
 }

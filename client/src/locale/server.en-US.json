@@ -40,6 +40,8 @@
     "Success": "Success",
     "Failed": "Failed",
     "Rejected": "Rejected",
+    "Cancelled": "Cancelled",
+    "Processing": "Processing",
     "Regular": "Regular",
     "Watch later": "Watch later",
     "This video does not exist.": "This video does not exist.",
@@ -247,5 +249,7 @@
     "Zhuang": "Zhuang",
     "Chinese": "Chinese",
     "Zulu": "Zulu",
-    "No linguistic content": "No linguistic content"
+    "No linguistic content": "No linguistic content",
+    "Simplified Chinese": "Simplified Chinese",
+    "Traditional Chinese": "Traditional Chinese"
 }

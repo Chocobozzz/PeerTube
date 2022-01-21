@@ -40,6 +40,8 @@
     "Success": "Vellukka",
     "Failed": "Mislukka",
     "Rejected": "Avslege",
+    "Cancelled": "Cancelled",
+    "Processing": "Processing",
     "Regular": "Vanleg",
     "Watch later": "Sjå seinare",
     "This video does not exist.": "Denne videoen finst ikkje.",
@@ -247,5 +249,7 @@
     "Zhuang": "Zhuang",
     "Chinese": "Kinesisk",
     "Zulu": "Zulu",
-    "No linguistic content": "No linguistic content"
+    "No linguistic content": "No linguistic content",
+    "Simplified Chinese": "Simplified Chinese",
+    "Traditional Chinese": "Traditional Chinese"
 }

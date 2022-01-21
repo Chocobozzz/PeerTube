@@ -40,6 +40,8 @@
     "Success": "Sikerült",
     "Failed": "Sikertelen",
     "Rejected": "Elutasított",
+    "Cancelled": "Cancelled",
+    "Processing": "Processing",
     "Regular": "Szokásos",
     "Watch later": "Megnézés később",
     "This video does not exist.": "Ez a videó nem létezik.",
@@ -248,6 +250,8 @@
     "Chinese": "Kínai",
     "Zulu": "Zulu",
     "No linguistic content": "No linguistic content",
+    "Simplified Chinese": "Simplified Chinese",
+    "Traditional Chinese": "Traditional Chinese",
     "Normal mode": "Normal mode",
     "Theater mode": "Színház mód"
 }

@@ -40,6 +40,8 @@
     "Success": "Thành công",
     "Failed": "Thất bại",
     "Rejected": "Đã từ chối",
+    "Cancelled": "Cancelled",
+    "Processing": "Processing",
     "Regular": "Thường",
     "Watch later": "Xem sau",
     "This video does not exist.": "Video không tồn tại.",
@@ -248,6 +250,8 @@
     "Chinese": "Trung Quốc",
     "Zulu": "Zulu",
     "No linguistic content": "No linguistic content",
+    "Simplified Chinese": "Simplified Chinese",
+    "Traditional Chinese": "Traditional Chinese",
     "Normal mode": "Chế độ bình thường",
     "Theater mode": "Chế độ chiếu rạp"
 }
