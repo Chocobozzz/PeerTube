@@ -1,7 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core'
-import { Notifier, UserService } from '@app/core'
+import { Notifier } from '@app/core'
 import { USER_PASSWORD_VALIDATOR } from '@app/shared/form-validators/user-validators'
 import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
+import { UserAdminService } from '@app/shared/shared-users'
 import { UserUpdate } from '@shared/models'
 
 @Component({
@@ -19,7 +20,7 @@ export class UserPasswordComponent extends FormReactive implements OnInit {
   constructor (
     protected formValidatorService: FormValidatorService,
     private notifier: Notifier,
-    private userService: UserService
+    private userAdminService: UserAdminService
   ) {
     super()
   }
@@ -35,7 +36,7 @@ export class UserPasswordComponent extends FormReactive implements OnInit {
 
     const userUpdate: UserUpdate = this.form.value
 
-    this.userService.updateUser(this.userId, userUpdate)
+    this.userAdminService.updateUser(this.userId, userUpdate)
       .subscribe({
         next: () => this.notifier.success($localize`Password changed for user ${this.username}.`),
 

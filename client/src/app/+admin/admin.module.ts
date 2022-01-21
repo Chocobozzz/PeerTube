@@ -10,6 +10,7 @@ import { SharedGlobalIconModule } from '@app/shared/shared-icons'
 import { SharedMainModule } from '@app/shared/shared-main'
 import { SharedModerationModule } from '@app/shared/shared-moderation'
 import { SharedTablesModule } from '@app/shared/shared-tables'
+import { SharedUsersModule } from '@app/shared/shared-users'
 import { SharedVideoCommentModule } from '@app/shared/shared-video-comment'
 import { SharedVideoMiniatureModule } from '@app/shared/shared-video-miniature'
 import { AdminRoutingModule } from './admin-routing.module'
@@ -67,6 +68,7 @@ import { JobsComponent } from './system/jobs/jobs.component'
     SharedCustomMarkupModule,
     SharedVideoMiniatureModule,
     SharedTablesModule,
+    SharedUsersModule,
 
     TableModule,
     ChartModule

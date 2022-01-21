@@ -10,6 +10,7 @@ import {
   USER_VIDEO_QUOTA_VALIDATOR
 } from '@app/shared/form-validators/user-validators'
 import { FormValidatorService } from '@app/shared/shared-forms'
+import { UserAdminService } from '@app/shared/shared-users'
 import { User as UserType, UserAdminFlag, UserRole, UserUpdate } from '@shared/models'
 import { UserEdit } from './user-edit'
 
@@ -32,7 +33,8 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private notifier: Notifier,
-    private userService: UserService
+    private userService: UserService,
+    private userAdminService: UserAdminService
   ) {
     super()
 
@@ -86,7 +88,7 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
 
     if (userUpdate.pluginAuth === 'null') userUpdate.pluginAuth = null
 
-    this.userService.updateUser(this.user.id, userUpdate)
+    this.userAdminService.updateUser(this.user.id, userUpdate)
       .subscribe({
         next: () => {
           this.notifier.success($localize`User ${this.user.username} updated.`)

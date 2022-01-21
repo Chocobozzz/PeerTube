@@ -2,7 +2,6 @@ import { concat, of } from 'rxjs'
 import { pairwise } from 'rxjs/operators'
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { FormGroup } from '@angular/forms'
-import { UserService } from '@app/core'
 import {
   USER_DISPLAY_NAME_REQUIRED_VALIDATOR,
   USER_EMAIL_VALIDATOR,
@@ -10,6 +9,7 @@ import {
   USER_USERNAME_VALIDATOR
 } from '@app/shared/form-validators/user-validators'
 import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
+import { UserSignupService } from '@app/shared/shared-users'
 
 @Component({
   selector: 'my-register-step-user',
@@ -23,7 +23,7 @@ export class RegisterStepUserComponent extends FormReactive implements OnInit {
 
   constructor (
     protected formValidatorService: FormValidatorService,
-    private userService: UserService
+    private userSignupService: UserSignupService
   ) {
     super()
   }
@@ -52,7 +52,7 @@ export class RegisterStepUserComponent extends FormReactive implements OnInit {
   private onDisplayNameChange (oldDisplayName: string, newDisplayName: string) {
     const username = this.form.value['username'] || ''
 
-    const newUsername = this.userService.getNewUsername(oldDisplayName, newDisplayName, username)
+    const newUsername = this.userSignupService.getNewUsername(oldDisplayName, newDisplayName, username)
     this.form.patchValue({ username: newUsername })
   }
 }

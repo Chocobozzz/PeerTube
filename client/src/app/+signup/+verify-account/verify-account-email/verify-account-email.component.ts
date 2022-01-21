@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
-import { AuthService, Notifier, UserService } from '@app/core'
+import { AuthService, Notifier } from '@app/core'
+import { UserSignupService } from '@app/shared/shared-users'
 
 @Component({
   selector: 'my-verify-account-email',
@@ -16,7 +17,7 @@ export class VerifyAccountEmailComponent implements OnInit {
   private verificationString: string
 
   constructor (
-    private userService: UserService,
+    private userSignupService: UserSignupService,
     private authService: AuthService,
     private notifier: Notifier,
     private route: ActivatedRoute
@@ -37,7 +38,7 @@ export class VerifyAccountEmailComponent implements OnInit {
   }
 
   verifyEmail () {
-    this.userService.verifyEmail(this.userId, this.verificationString, this.isPendingEmail)
+    this.userSignupService.verifyEmail(this.userId, this.verificationString, this.isPendingEmail)
       .subscribe({
         next: () => {
           if (this.authService.isLoggedIn()) {

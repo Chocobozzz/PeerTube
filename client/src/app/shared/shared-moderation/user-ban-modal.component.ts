@@ -1,10 +1,11 @@
 import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core'
-import { Notifier, UserService } from '@app/core'
+import { Notifier } from '@app/core'
 import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
 import { User } from '@shared/models'
 import { USER_BAN_REASON_VALIDATOR } from '../form-validators/user-validators'
+import { UserAdminService } from '../shared-users'
 
 @Component({
   selector: 'my-user-ban-modal',
@@ -23,7 +24,7 @@ export class UserBanModalComponent extends FormReactive implements OnInit {
     protected formValidatorService: FormValidatorService,
     private modalService: NgbModal,
     private notifier: Notifier,
-    private userService: UserService
+    private userAdminService: UserAdminService
   ) {
     super()
   }
@@ -50,7 +51,7 @@ export class UserBanModalComponent extends FormReactive implements OnInit {
   banUser () {
     const reason = this.form.value['reason'] || undefined
 
-    this.userService.banUsers(this.usersToBan, reason)
+    this.userAdminService.banUsers(this.usersToBan, reason)
       .subscribe({
         next: () => {
           const message = Array.isArray(this.usersToBan)

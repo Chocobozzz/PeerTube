@@ -1,7 +1,8 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from '@angular/core'
-import { AuthService, ConfirmService, Notifier, ServerService, UserService } from '@app/core'
+import { AuthService, ConfirmService, Notifier, ServerService } from '@app/core'
 import { Account, DropdownAction } from '@app/shared/shared-main'
 import { BulkRemoveCommentsOfBody, User, UserRight } from '@shared/models'
+import { UserAdminService } from '../shared-users'
 import { BlocklistService } from './blocklist.service'
 import { BulkService } from './bulk.service'
 import { UserBanModalComponent } from './user-ban-modal.component'
@@ -35,7 +36,7 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
     private notifier: Notifier,
     private confirmService: ConfirmService,
     private serverService: ServerService,
-    private userService: UserService,
+    private userAdminService: UserAdminService,
     private blocklistService: BlocklistService,
     private bulkService: BulkService
   ) { }
@@ -66,7 +67,7 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
     const res = await this.confirmService.confirm($localize`Do you really want to unban ${user.username}?`, $localize`Unban`)
     if (res === false) return
 
-    this.userService.unbanUsers(user)
+    this.userAdminService.unbanUsers(user)
         .subscribe({
           next: () => {
             this.notifier.success($localize`User ${user.username} unbanned.`)
@@ -87,7 +88,7 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
     const res = await this.confirmService.confirm(message, $localize`Delete ${user.username}`)
     if (res === false) return
 
-    this.userService.removeUser(user)
+    this.userAdminService.removeUser(user)
       .subscribe({
         next: () => {
           this.notifier.success($localize`User ${user.username} deleted.`)
@@ -99,7 +100,7 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
   }
 
   setEmailAsVerified (user: User) {
-    this.userService.updateUser(user.id, { emailVerified: true })
+    this.userAdminService.updateUser(user.id, { emailVerified: true })
       .subscribe({
         next: () => {
           this.notifier.success($localize`User ${user.username} email set as verified`)

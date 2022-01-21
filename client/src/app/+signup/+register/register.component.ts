@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core'
 import { FormGroup } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
-import { AuthService, UserService } from '@app/core'
+import { AuthService } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
+import { InstanceAboutAccordionComponent } from '@app/shared/shared-instance'
+import { UserSignupService } from '@app/shared/shared-users'
 import { NgbAccordion } from '@ng-bootstrap/ng-bootstrap'
 import { UserRegister } from '@shared/models'
 import { ServerConfig } from '@shared/models/server'
-import { InstanceAboutAccordionComponent } from '@app/shared/shared-instance'
 
 @Component({
   selector: 'my-register',
@@ -49,7 +50,7 @@ export class RegisterComponent implements OnInit {
   constructor (
     private route: ActivatedRoute,
     private authService: AuthService,
-    private userService: UserService,
+    private userSignupService: UserSignupService,
     private hooks: HooksService
   ) { }
 
@@ -128,7 +129,7 @@ export class RegisterComponent implements OnInit {
       'filter:api.signup.registration.create.params'
     )
 
-    this.userService.signup(body).subscribe({
+    this.userSignupService.signup(body).subscribe({
       next: () => {
         this.signupDone = true
 

@@ -2,9 +2,9 @@ import { concat, of } from 'rxjs'
 import { pairwise } from 'rxjs/operators'
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { FormGroup } from '@angular/forms'
-import { UserService } from '@app/core'
 import { VIDEO_CHANNEL_DISPLAY_NAME_VALIDATOR, VIDEO_CHANNEL_NAME_VALIDATOR } from '@app/shared/form-validators/video-channel-validators'
 import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
+import { UserSignupService } from '@app/shared/shared-users'
 
 @Component({
   selector: 'my-register-step-channel',
@@ -17,7 +17,7 @@ export class RegisterStepChannelComponent extends FormReactive implements OnInit
 
   constructor (
     protected formValidatorService: FormValidatorService,
-    private userService: UserService
+    private userSignupService: UserSignupService
   ) {
     super()
   }
@@ -48,7 +48,7 @@ export class RegisterStepChannelComponent extends FormReactive implements OnInit
   private onDisplayNameChange (oldDisplayName: string, newDisplayName: string) {
     const name = this.form.value['name'] || ''
 
-    const newName = this.userService.getNewUsername(oldDisplayName, newDisplayName, name)
+    const newName = this.userSignupService.getNewUsername(oldDisplayName, newDisplayName, name)
     this.form.patchValue({ name: newName })
   }
 }

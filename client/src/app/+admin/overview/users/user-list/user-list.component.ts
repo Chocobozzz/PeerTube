@@ -1,10 +1,11 @@
 import { SortMeta } from 'primeng/api'
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { AuthService, ConfirmService, Notifier, RestPagination, RestTable, ServerService, UserService } from '@app/core'
+import { AuthService, ConfirmService, Notifier, RestPagination, RestTable, ServerService } from '@app/core'
 import { AdvancedInputFilter } from '@app/shared/shared-forms'
 import { DropdownAction } from '@app/shared/shared-main'
 import { UserBanModalComponent } from '@app/shared/shared-moderation'
+import { UserAdminService } from '@app/shared/shared-users'
 import { User, UserRole } from '@shared/models'
 
 type UserForList = User & {
@@ -57,7 +58,7 @@ export class UserListComponent extends RestTable implements OnInit {
     private confirmService: ConfirmService,
     private serverService: ServerService,
     private auth: AuthService,
-    private userService: UserService
+    private userAdminService: UserAdminService
   ) {
     super()
   }
@@ -177,7 +178,7 @@ export class UserListComponent extends RestTable implements OnInit {
     const res = await this.confirmService.confirm($localize`Do you really want to unban ${users.length} users?`, $localize`Unban`)
     if (res === false) return
 
-    this.userService.unbanUsers(users)
+    this.userAdminService.unbanUsers(users)
         .subscribe({
           next: () => {
             this.notifier.success($localize`${users.length} users unbanned.`)
@@ -200,7 +201,7 @@ export class UserListComponent extends RestTable implements OnInit {
     const res = await this.confirmService.confirm(message, $localize`Delete`)
     if (res === false) return
 
-    this.userService.removeUser(users)
+    this.userAdminService.removeUser(users)
       .subscribe({
         next: () => {
           this.notifier.success($localize`${users.length} users deleted.`)
@@ -212,7 +213,7 @@ export class UserListComponent extends RestTable implements OnInit {
   }
 
   setEmailsAsVerified (users: User[]) {
-    this.userService.updateUsers(users, { emailVerified: true })
+    this.userAdminService.updateUsers(users, { emailVerified: true })
       .subscribe({
         next: () => {
           this.notifier.success($localize`${users.length} users email set as verified.`)
@@ -230,7 +231,7 @@ export class UserListComponent extends RestTable implements OnInit {
   protected reloadData () {
     this.selectedUsers = []
 
-    this.userService.getUsers({
+    this.userAdminService.getUsers({
       pagination: this.pagination,
       sort: this.sort,
       search: this.search

@@ -1,6 +1,6 @@
 import { CdkStepperModule } from '@angular/cdk/stepper'
 import { NgModule } from '@angular/core'
-import { SignupSharedModule } from '@app/+signup/shared/signup-shared.module'
+import { SharedSignupModule } from '@app/+signup/shared/shared-signup.module'
 import { SharedInstanceModule } from '@app/shared/shared-instance'
 import { CustomStepperComponent } from './custom-stepper.component'
 import { RegisterRoutingModule } from './register-routing.module'
@@ -15,7 +15,7 @@ import { RegisterComponent } from './register.component'
 
     CdkStepperModule,
 
-    SignupSharedModule,
+    SharedSignupModule,
 
     SharedInstanceModule
   ],
