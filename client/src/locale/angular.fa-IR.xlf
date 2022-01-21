@@ -1876,28 +1876,28 @@
       </trans-unit>
       <trans-unit id="3416071273413341159" datatype="html">
         <source>any instance</source>
-        <target state="new">any instance</target>
+        <target state="translated">هر نمونه</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">42</context></context-group>
       </trans-unit>
       <trans-unit id="1764675694412365696" datatype="html">
         <source>only followed instances</source>
-        <target state="new">only followed instances</target>
+        <target state="translated">فقط نمونه ها را دنبال می کنند</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">43</context></context-group>
       </trans-unit>
       <trans-unit id="6462732349450217281" datatype="html">
         <source>Determines whether you can resolve any distant content, or if this instance only allows doing so for instances it follows.</source>
-        <target state="new">Determines whether you can resolve any distant content, or if this instance only allows doing so for instances it follows.</target>
+        <target state="translated">تعیین می کند که آیا شما می توانید هر گونه محتوای دور را حل کنید، یا اگر این نمونه تنها اجازه می دهد تا این کار را برای موارد زیر انجام دهید.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="3710530516408401495" datatype="html">
         <source>will list the matching channel</source>
-        <target state="new">will list the matching channel</target>
+        <target state="translated">کانال تطبیق را فهرست می کند</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">50</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">53</context></context-group>
       </trans-unit>
       <trans-unit id="6913541939335935215" datatype="html">
         <source>will list the matching video</source>
-        <target state="new">will list the matching video</target>
+        <target state="translated">ویدیو تطبیق را فهرست می کند</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">56</context></context-group>
       </trans-unit>
       <trans-unit id="8854094932942190741">
@@ -1907,12 +1907,12 @@
       </trans-unit>
       <trans-unit id="2468689683507870964" datatype="html">
         <source>In this instance's network</source>
-        <target state="new">In this instance's network</target>
+        <target state="translated">در این شبکه نمونه</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/suggestion.component.html</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="4494942989613184609" datatype="html">
         <source>In the vidiverse</source>
-        <target state="new">In the vidiverse</target>
+        <target state="translated">در vidiviverse</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/suggestion.component.html</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="5146398958364876914">
@@ -1922,7 +1922,7 @@
       </trans-unit>
       <trans-unit id="4540121094340493564" datatype="html">
         <source>Display only</source>
-        <target state="new">Display only</target>
+        <target state="translated">نمایش فقط</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
           <context context-type="linenumber">21</context>
@@ -1935,17 +1935,17 @@
       </trans-unit>
       <trans-unit id="5038188980760269298" datatype="html">
         <source>Original publication year</source>
-        <target state="new">Original publication year</target>
+        <target state="translated">سال انتشار اصلی</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">73</context></context-group>
       </trans-unit>
       <trans-unit id="2316758236788716819" datatype="html">
         <source>After...</source>
-        <target state="new">After...</target>
+        <target state="translated">بعد از...</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">85</context></context-group>
       </trans-unit>
       <trans-unit id="5418443214217152433" datatype="html">
         <source>Before...</source>
-        <target state="new">Before...</target>
+        <target state="translated">قبل از...</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">95</context></context-group>
       </trans-unit>
       <trans-unit id="7410432243549869948">
@@ -1956,7 +1956,7 @@
       </trans-unit>
       <trans-unit id="3589238979642505685" datatype="html">
         <source>Display sensitive content</source>
-        <target state="new">Display sensitive content</target>
+        <target state="translated">محتوای حساس را نمایش می دهد</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">40</context></context-group>
       </trans-unit>
       <trans-unit id="2807800733729323332">
@@ -1978,7 +1978,7 @@
       </trans-unit>
       <trans-unit id="2199290266269383925" datatype="html">
         <source>Display all categories</source>
-        <target state="new">Display all categories</target>
+        <target state="translated">نمایش تمام دسته ها</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">127</context></context-group>
       </trans-unit>
       <trans-unit id="9065795501872450602">
@@ -1990,7 +1990,7 @@
       </trans-unit>
       <trans-unit id="4184995865179898060" datatype="html">
         <source>Display all licenses</source>
-        <target state="new">Display all licenses</target>
+        <target state="translated">نمایش تمام مجوزها</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">140</context></context-group>
       </trans-unit>
       <trans-unit id="2826581353496868063">
@@ -2003,22 +2003,22 @@
       </trans-unit>
       <trans-unit id="7904142744051432458" datatype="html">
         <source>Display all languages</source>
-        <target state="new">Display all languages</target>
+        <target state="translated">نمایش تمام زبان ها</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">153</context></context-group>
       </trans-unit>
       <trans-unit id="2252476112877289102" datatype="html">
         <source>All of these tags</source>
-        <target state="new">All of these tags</target>
+        <target state="translated">همه این برچسب ها</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">162</context></context-group>
       </trans-unit>
       <trans-unit id="4413784616961145955" datatype="html">
         <source>One of these tags</source>
-        <target state="new">One of these tags</target>
+        <target state="translated">یکی از این برچسب ها</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">170</context></context-group>
       </trans-unit>
       <trans-unit id="5143793904897598509" datatype="html">
         <source>PeerTube instance host</source>
-        <target state="new">PeerTube instance host</target>
+        <target state="translated">میزبان نمونه Peertube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
           <context context-type="linenumber">178</context>
@@ -2026,7 +2026,7 @@
       </trans-unit>
       <trans-unit id="8244789432276387088" datatype="html">
         <source>Result types</source>
-        <target state="new">Result types</target>
+        <target state="translated">انواع نتیجه</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
           <context context-type="linenumber">187</context>
@@ -2034,19 +2034,17 @@
       </trans-unit>
       <trans-unit id="283421392567624698" datatype="html">
         <source>Search target</source>
-        <target state="new">Search target</target>
+        <target state="translated">هدف جستجو</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">212</context></context-group>
       </trans-unit>
       <trans-unit id="2489767671380266270" datatype="html">
         <source>Vidiverse</source>
-        <target state="new">Vidiverse</target>
+        <target state="translated">vidivare</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">222</context></context-group>
       </trans-unit>
       <trans-unit id="5478121364779850827" datatype="html">
         <source>Reset</source>
-        <target state="new">
-      Reset
-    </target>
+        <target state="translated">بازنشانی کردن</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">8</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">22</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">41</context></context-group>
@@ -2068,106 +2066,95 @@
       </trans-unit>
       <trans-unit id="6479885129995567639" datatype="html">
         <source>Video channels</source>
-        <target state="new">Video channels</target>
+        <target state="translated">کانال های ویدئویی</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context><context context-type="linenumber">1</context></context-group>
       </trans-unit>
       <trans-unit id="1909308046360229945" datatype="html">
         <source>Add caption</source>
-        <target state="new">Add caption</target>
+        <target state="translated">عنوان اضافه کنید</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-caption-add-modal.component.html</context><context context-type="linenumber">5</context></context-group>
       </trans-unit>
       <trans-unit id="753928283782809091" datatype="html">
         <source>Select the caption file</source>
-        <target state="new">Select the caption file</target>
+        <target state="translated">فایل عنوان را انتخاب کنید</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-caption-add-modal.component.html</context><context context-type="linenumber">24</context></context-group>
       </trans-unit>
       <trans-unit id="4616828176080418150" datatype="html">
         <source>This will replace an existing caption!</source>
-        <target state="new">
-        This will replace an existing caption!
-      </target>
+        <target state="translated">این یک عنوان موجود را جایگزین خواهد کرد!</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-caption-add-modal.component.html</context><context context-type="linenumber">30</context></context-group>
       </trans-unit>
       <trans-unit id="2752121353049766867" datatype="html">
         <source>Add this caption</source>
-        <target state="new">Add this caption</target>
+        <target state="translated">اضافه کردن این عنوان</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-caption-add-modal.component.html</context><context context-type="linenumber">42</context></context-group>
       </trans-unit>
       <trans-unit id="5701618810648052610" datatype="html">
         <source>Title</source>
-        <target state="new">Title</target>
+        <target state="translated">عنوان</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="7886570921510760899" datatype="html">
         <source>Tags</source>
-        <target state="new">Tags</target>
+        <target state="translated">برچسب ها</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">25</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/metadata/video-attributes.component.html</context><context context-type="linenumber">52</context></context-group>
       </trans-unit>
       <trans-unit id="354332809647287722" datatype="html">
         <source>Tags could be used to suggest relevant recommendations. <x id="LINE_BREAK"/> There is a maximum of 5 tags. <x id="LINE_BREAK"/> Press <x id="START_TAG_KBD"/>Enter<x id="CLOSE_TAG_KBD"/> to add a new tag. </source>
-        <target state="new">
-                    Tags could be used to suggest relevant recommendations. 
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-                    There is a maximum of 5 tags. 
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-                    Press 
-          <x id="START_TAG_KBD" ctype="x-kbd" equiv-text="&lt;kbd&gt;"/>Enter
-          <x id="CLOSE_TAG_KBD" ctype="x-kbd" equiv-text="&lt;/kbd&gt;"/> to add a new tag.
-                  
-        </target>
+        <target state="translated">برچسب ها می توانند برای پیشنهاد توصیه های مربوطه استفاده شوند. &lt;x id = "line_break" ctype = "lb" equiv-text = "&amp; lt؛ br / &amp; gt؛" /&gt; حداکثر 5 برچسب وجود دارد. &lt;x id = "line_break" ctype = "lb" equiv-text = "&amp; lt؛ br / &amp; gt؛" /&gt; را فشار دهید &lt;x id = "START_TAG_KBD" CTYPE = "X-KBD" Equiv-text = "&amp; lt؛ KBD &amp; GT؛ "/&gt; وارد &lt;x id =" close_tag_kbd "ctype =" x-kbd "equiv-text =" &amp; lt؛ / kbd &amp; gt؛ "/&gt; برای اضافه کردن یک برچسب جدید.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="3265632123453688399" datatype="html">
         <source>Enter a new tag</source>
-        <target state="new">Enter a new tag</target>
+        <target state="translated">یک برچسب جدید وارد کنید</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/select/select-tags.component.ts</context><context context-type="linenumber">19</context></context-group>
       </trans-unit>
       <trans-unit id="6179532215548637839" datatype="html">
         <source>extensions</source>
-        <target state="new">extensions</target>
+        <target state="translated">پسوند</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-avatar-edit.component.ts</context><context context-type="linenumber">47</context></context-group>
       </trans-unit>
       <trans-unit id="8054921481196967348" datatype="html">
         <source>This image is too large.</source>
-        <target state="new">This image is too large.</target>
+        <target state="translated">این تصویر خیلی بزرگ است</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-avatar-edit.component.ts</context><context context-type="linenumber">55</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-banner-edit.component.ts</context><context context-type="linenumber">52</context></context-group>
       </trans-unit>
       <trans-unit id="6259523075362402245" datatype="html">
         <source>Upload a new banner</source>
-        <target state="new">Upload a new banner</target>
+        <target state="translated">یک بنر جدید را آپلود کنید</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-banner-edit.component.html</context><context context-type="linenumber">9</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-banner-edit.component.html</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="1117672957968812680" datatype="html">
         <source>Change your banner</source>
-        <target state="new">Change your banner</target>
+        <target state="translated">بنر خود را تغییر دهید</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-banner-edit.component.html</context><context context-type="linenumber">18</context></context-group>
       </trans-unit>
       <trans-unit id="3394080812181176794" datatype="html">
         <source>Remove banner</source>
-        <target state="new">Remove banner</target>
+        <target state="translated">حذف بنر</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-banner-edit.component.html</context><context context-type="linenumber">32</context></context-group>
       </trans-unit>
       <trans-unit id="7306351600905511107" datatype="html">
         <source>ratio 6/1, recommended size: 1920x317, max size: <x id="PH" equiv-text="getBytes(this.maxBannerSize)"/>, extensions: <x id="PH_1" equiv-text="this.bannerExtensions"/></source>
-        <target state="new">ratio 6/1, recommended size: 1920x317, max size: <x id="PH" equiv-text="getBytes(this.maxBannerSize)"/>, extensions: <x id="PH_1" equiv-text="this.bannerExtensions"/></target>
+        <target state="translated">نسبت 6/1، اندازه توصیه شده: 1920x317، حداکثر اندازه: <x id="pH" equiv-text="getBytes (this.maxBannersize)"/>، extensions: <x id="ph_1" equiv-text="این .bannerextensions "/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-banner-edit.component.ts</context><context context-type="linenumber">44</context></context-group>
       </trans-unit>
       <trans-unit id="3220184757632006830" datatype="html">
         <source>Account avatar</source>
-        <target state="new">Account avatar</target>
+        <target state="translated">حساب آواتار</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image/actor-avatar.component.ts</context><context context-type="linenumber">46</context></context-group>
       </trans-unit>
       <trans-unit id="1138964882426023395" datatype="html">
         <source>Channel avatar</source>
-        <target state="new">Channel avatar</target>
+        <target state="translated">آواتار کانال</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image/actor-avatar.component.ts</context><context context-type="linenumber">47</context></context-group>
       </trans-unit>
       <trans-unit id="1358902062258458923" datatype="html">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://en.wikipedia.org/wiki/Markdown#Example&quot; target=&quot;_blank&quot; rel=&quot;noreferer noopener&quot;&gt;"/>Markdown compatible<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> that also supports <x id="START_LINK_1" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/api-custom-client-markup&quot; target=&quot;_blank&quot; rel=&quot;noreferer noopener&quot;&gt;"/>custom PeerTube HTML tags<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <target state="new"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://en.wikipedia.org/wiki/Markdown#Example&quot; target=&quot;_blank&quot; rel=&quot;noreferer noopener&quot;&gt;"/>Markdown compatible<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> that also supports <x id="START_LINK_1" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/api-custom-client-markup&quot; target=&quot;_blank&quot; rel=&quot;noreferer noopener&quot;&gt;"/>custom PeerTube HTML tags<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
+        <target state="translated">&lt;x id = "start_link" ctype = "xa" equiv-text = "&amp; lt؛ href = &amp; quot؛ https: //en.wikipedia.org/wiki/markdown#Example&amp;quot؛ target = &amp; quot؛ _blank &amp; quot؛ rel = &amp; quot؛ noreferer noopener &amp; quot؛ &amp; gt؛ "/&gt; markdown compatible &lt;x id =" close_link "ctype =" xa "equiv-text =" &amp; lt؛ / a &amp; gt؛ "/&gt; که همچنین پشتیبانی از &lt;x id =" START_LINK_1 "Equiv-text =" &amp; lt؛ href = &amp; quot؛ https: //docs.joinpeertube.org/api-custom-client-markup&amp;quot؛ target = &amp; quot؛ _blank &amp; quot؛ rel = &amp; quot؛ noreferer noopener &amp; quot؛ &amp; gt؛ "/&gt; سفارشی Peertube HTML برچسب ها &lt;x id = "close_link" ctype = "xa" equiv-text = "&amp; lt؛ / a &amp; gt؛" /&gt;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-custom-markup/custom-markup-help.component.html</context>
           <context context-type="linenumber">2</context>
@@ -2175,7 +2162,7 @@
       </trans-unit>
       <trans-unit id="7976591803735140601" datatype="html">
         <source>Latest published video</source>
-        <target state="new">Latest published video</target>
+        <target state="translated">آخرین ویدیو منتشر شده</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/channel-miniature-markup.component.html</context>
           <context context-type="linenumber">24</context>
@@ -2183,7 +2170,7 @@
       </trans-unit>
       <trans-unit id="283609029522452529" datatype="html">
         <source>Error in channel miniature component: <x id="PH" equiv-text="err.message"/></source>
-        <target state="new">Error in channel miniature component: <x id="PH" equiv-text="err.message"/></target>
+        <target state="translated">خطا در کانال مینیاتوری کانال: <x id="pH" equiv-text="err.message"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/channel-miniature-markup.component.ts</context>
           <context context-type="linenumber">57</context>
@@ -2191,7 +2178,7 @@
       </trans-unit>
       <trans-unit id="3059355667050002541" datatype="html">
         <source>Error in playlist miniature component: <x id="PH" equiv-text="err.message"/></source>
-        <target state="new">Error in playlist miniature component: <x id="PH" equiv-text="err.message"/></target>
+        <target state="translated">خطا در جزء مینیاتوری لیست پخش: <x id="pH" equiv-text="err.message"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/playlist-miniature-markup.component.ts</context>
           <context context-type="linenumber">47</context>
@@ -2199,12 +2186,12 @@
       </trans-unit>
       <trans-unit id="863691161959989717" datatype="html">
         <source>Error in video miniature component: <x id="PH" equiv-text="err.message"/></source>
-        <target state="new">Error in video miniature component: <x id="PH" equiv-text="err.message"/></target>
+        <target state="translated">خطا در کامپوننت ویدئویی مینیاتوری: <x id="pH" equiv-text="err.message"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/video-miniature-markup.component.ts</context><context context-type="linenumber">60</context></context-group>
       </trans-unit>
       <trans-unit id="1247256698916587400" datatype="html">
         <source>Error in videos list component: <x id="PH" equiv-text="err.message"/></source>
-        <target state="new">Error in videos list component: <x id="PH" equiv-text="err.message"/></target>
+        <target state="translated">خطا در فیلم ها لیست جزء: <x id="pH" equiv-text="err.message"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/videos-list-markup.component.ts</context>
           <context context-type="linenumber">77</context>
@@ -2212,7 +2199,7 @@
       </trans-unit>
       <trans-unit id="1460134385691851101" datatype="html">
         <source>Advanced filters</source>
-        <target state="new">Advanced filters</target>
+        <target state="translated">فیلترهای پیشرفته</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context><context context-type="linenumber">30</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-comment-list/video-comment-list.component.ts</context><context context-type="linenumber">47</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">39</context></context-group>
@@ -2221,7 +2208,7 @@
       </trans-unit>
       <trans-unit id="2504502765849142619" datatype="html">
         <source>No items found</source>
-        <target state="new">No items found</target>
+        <target state="translated">موردی یافت نشد</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/select/select-checkbox.component.html</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="4902817035128594900">
@@ -2238,19 +2225,17 @@
       </trans-unit>
       <trans-unit id="8740951153302736329" datatype="html">
         <source>Video descriptions are truncated by default and require manual action to expand them.</source>
-        <target state="new">
-                    Video descriptions are truncated by default and require manual action to expand them.
-                  </target>
+        <target state="translated">توصیف های ویدئویی به طور پیش فرض قطع شده و نیاز به اقدام دستی برای گسترش آنها دارد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">48</context></context-group>
       </trans-unit>
       <trans-unit id="2090254132451149776" datatype="html">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://chooser-beta.creativecommons.org/&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>Choose<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> the appropriate licence for your work. </source>
-        <target state="new"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://chooser-beta.creativecommons.org/&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>Choose<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> the appropriate licence for your work. </target>
+        <target state="translated">&lt;x id = "start_link" ctype = "xa" equiv-text = "&amp; lt؛ a href = &amp; quot؛ https: //chooser-beta.creativecommons.org/&amp;quot؛ target = &amp; quot؛ requer &amp; quot؛ noopener noreferrer &amp; quot ؛ &amp; gt؛ "/&gt; انتخاب &lt;x id =" close_link "ctype =" xa "equiv-text =" &amp; lt؛ / a &amp; gt؛ "/&gt; مجوز مناسب برای کار شما.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">85</context></context-group>
       </trans-unit>
       <trans-unit id="5462361983940693567" datatype="html">
         <source>Channel</source>
-        <target state="new">Channel</target>
+        <target state="translated">کانال</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-edit.component.html</context><context context-type="linenumber">70</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-edit.component.html</context><context context-type="linenumber">70</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register.component.html</context><context context-type="linenumber">42</context></context-group>
@@ -2262,214 +2247,206 @@
       </trans-unit>
       <trans-unit id="2806917038528218276" datatype="html">
         <source>FAQ</source>
-        <target state="new">FAQ</target>
+        <target state="translated">پرسش و پاسخ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">143</context></context-group>
       </trans-unit>
       <trans-unit id="3620232640697554352" datatype="html">
         <source>Frequently asked questions about PeerTube</source>
-        <target state="new">Frequently asked questions about PeerTube</target>
+        <target state="translated">سوالات متداول در مورد Peertube</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">143</context></context-group>
       </trans-unit>
       <trans-unit id="8942351587754185907" datatype="html">
         <source>API</source>
-        <target state="new">API</target>
+        <target state="translated">api</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">145</context></context-group>
       </trans-unit>
       <trans-unit id="3722967224215437913" datatype="html">
         <source>API documentation</source>
-        <target state="new">API documentation</target>
+        <target state="translated">مستندات API</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">145</context></context-group>
       </trans-unit>
       <trans-unit id="9012879216268259096" datatype="html">
         <source>Schedule publication (<x id="INTERPOLATION"/>)</source>
-        <target state="new">Schedule publication (
-          <x id="INTERPOLATION" equiv-text="{{ calendarTimezone }}"/>)
-        </target>
+        <target state="translated">نشر برنامه (&lt;x id = "interpolation" equiv-text = "{{calendartimezone}} /&gt;)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">123</context></context-group>
       </trans-unit>
       <trans-unit id="9155449485123349070" datatype="html">
         <source>Contains sensitive content</source>
-        <target state="new">Contains sensitive content</target>
+        <target state="translated">حاوی محتوای حساس است</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">137</context></context-group>
       </trans-unit>
       <trans-unit id="4850841867094321899" datatype="html">
         <source>Some instances hide videos containing mature or explicit content by default.</source>
-        <target state="new">Some instances hide videos containing mature or explicit content by default.</target>
+        <target state="translated">بعضی از موارد، فیلم های حاوی محتوای بالغ یا صریح را به طور پیش فرض پنهان می کنند.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">141</context></context-group>
       </trans-unit>
       <trans-unit id="4895908242997839943" datatype="html">
         <source>Publish after transcoding</source>
-        <target state="new">Publish after transcoding</target>
+        <target state="translated">انتشار پس از transcoding</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">147</context></context-group>
       </trans-unit>
       <trans-unit id="5596242684708779591" datatype="html">
         <source>If you decide not to wait for transcoding before publishing the video, it could be unplayable until transcoding ends.</source>
-        <target state="new">If you decide not to wait for transcoding before publishing the video, it could be unplayable until transcoding ends.</target>
+        <target state="translated">اگر تصمیم بگیرید قبل از انتشار ویدیو، منتظر نباشید، تا زمانی که Transcoding به پایان برسد، می تواند غیر قابل پخش باشد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">151</context></context-group>
       </trans-unit>
       <trans-unit id="5984574397847510001" datatype="html">
         <source>Basic info</source>
-        <target state="new">Basic info</target>
+        <target state="translated">اطلاعات پایه</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="2142169012597585513" datatype="html">
         <source>Add another caption</source>
-        <target state="new">Add another caption</target>
+        <target state="translated">یک عنوان دیگر را اضافه کنید</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">174</context></context-group>
       </trans-unit>
       <trans-unit id="4525569337497033381" datatype="html">
         <source>See the subtitle file</source>
-        <target state="new">See the subtitle file</target>
+        <target state="translated">فایل زیرنویس را ببینید</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">183</context></context-group>
       </trans-unit>
       <trans-unit id="5600963353867835532" datatype="html">
         <source>Already uploaded ✔</source>
-        <target state="new">Already uploaded	✔</target>
+        <target state="translated">در حال حاضر آپلود شده ✔</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">187</context></context-group>
       </trans-unit>
       <trans-unit id="73284819990858102" datatype="html">
         <source>Will be created on update</source>
-        <target state="new">Will be created on update</target>
+        <target state="translated">در به روز رسانی ایجاد خواهد شد</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">195</context></context-group>
       </trans-unit>
       <trans-unit id="7044449271109607418" datatype="html">
         <source>Cancel create</source>
-        <target state="new">Cancel create</target>
+        <target state="translated">لغو ایجاد</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">197</context></context-group>
       </trans-unit>
       <trans-unit id="7879454016898626211" datatype="html">
         <source>Will be deleted on update</source>
-        <target state="new">Will be deleted on update</target>
+        <target state="translated">به روز رسانی حذف خواهد شد</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">203</context></context-group>
       </trans-unit>
       <trans-unit id="305832955565133216" datatype="html">
         <source>Cancel deletion</source>
-        <target state="new">Cancel deletion</target>
+        <target state="translated">لغو حذف</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">205</context></context-group>
       </trans-unit>
       <trans-unit id="360396717319152766" datatype="html">
         <source>No captions for now.</source>
-        <target state="new">
-            No captions for now.
-          </target>
+        <target state="translated">هیچ زیرنویس در حال حاضر</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">210</context></context-group>
       </trans-unit>
       <trans-unit id="8508836953540308271" datatype="html">
         <source>Live settings</source>
-        <target state="new">Live settings</target>
+        <target state="translated">تنظیمات زنده</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">219</context></context-group>
       </trans-unit>
       <trans-unit id="1212376766715456139" datatype="html">
         <source>⚠️ If you enable this option, your live will be terminated if you exceed your video quota</source>
-        <target state="new">⚠️ If you enable this option, your live will be terminated if you exceed your video quota</target>
+        <target state="translated">⚠️ اگر این گزینه را فعال کنید، اگر شما از سهمیه های ویدئویی خود فراتر رفته اید، زندگی می کنید</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">272</context></context-group>
       </trans-unit>
       <trans-unit id="8891497955962997247" datatype="html">
         <source>Automatically publish a replay when your live ends</source>
-        <target state="new">Automatically publish a replay when your live ends</target>
+        <target state="translated">هنگامی که شما به پایان می رسد، یک پخش را به صورت خودکار منتشر کنید</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">268</context></context-group>
       </trans-unit>
       <trans-unit id="1168086599577356916" datatype="html">
         <source>Video preview</source>
-        <target state="new">Video preview</target>
+        <target state="translated">پیش نمایش ویدیو</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">291</context></context-group>
       </trans-unit>
       <trans-unit id="2288513108450439427" datatype="html">
         <source>Support</source>
-        <target state="new">Support</target>
+        <target state="translated">حمایت کردن</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.html</context><context context-type="linenumber">17</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">300</context></context-group>
       </trans-unit>
       <trans-unit id="1359533927353954373" datatype="html">
         <source>View account</source>
-        <target state="new">View account</target>
+        <target state="translated">مشاهده حساب</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.html</context><context context-type="linenumber">30</context></context-group>
       </trans-unit>
       <trans-unit id="3799746968259478616" datatype="html">
         <source>View account</source>
-        <target state="new"> View account </target>
+        <target state="translated">مشاهده حساب</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.html</context><context context-type="linenumber">43</context></context-group>
       </trans-unit>
       <trans-unit id="6778225321073009261" datatype="html">
         <source>View owner account</source>
-        <target state="new"> View owner account </target>
+        <target state="translated">مشاهده حساب مالک</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.html</context><context context-type="linenumber">47</context></context-group>
       </trans-unit>
       <trans-unit id="8798391261676185924" datatype="html">
         <source>VIDEO CHANNEL</source>
-        <target state="new">VIDEO CHANNEL</target>
+        <target state="translated">کانال ویدئویی</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.html</context><context context-type="linenumber">57</context></context-group>
       </trans-unit>
       <trans-unit id="5121874940679887597" datatype="html">
         <source>Copy channel handle</source>
-        <target state="new">Copy channel handle</target>
+        <target state="translated">کپی کانال کپی</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.html</context><context context-type="linenumber">68</context></context-group>
       </trans-unit>
       <trans-unit id="2486917589932345430" datatype="html">
         <source>OWNER ACCOUNT</source>
-        <target state="new">OWNER ACCOUNT</target>
+        <target state="translated">حساب مالک</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.html</context><context context-type="linenumber">23</context></context-group>
       </trans-unit>
       <trans-unit id="1952020204339597057" datatype="html">
         <source>Short text to tell people how they can support you (membership platform...).</source>
-        <target state="new">
-                    Short text to tell people how they can support you (membership platform...).
-                  </target>
+        <target state="translated">متن کوتاه به مردم بگویید چگونه می توانند از شما حمایت کنند (پلت فرم عضویت ...).</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">303</context></context-group>
       </trans-unit>
       <trans-unit id="7958716262877895706" datatype="html">
         <source>Original publication date</source>
-        <target state="new">Original publication date</target>
+        <target state="translated">تاریخ انتشار اصلی</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">320</context></context-group>
       </trans-unit>
       <trans-unit id="50985514722149155" datatype="html">
         <source>This is the date when the content was originally published (e.g. the release date for a film)</source>
-        <target state="new">
-                    This is the date when the content was originally published (e.g. the release date for a film)
-                  </target>
+        <target state="translated">این تاریخ زمانی است که محتوای در ابتدا منتشر شد (به عنوان مثال تاریخ انتشار برای یک فیلم)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">323</context></context-group>
       </trans-unit>
       <trans-unit id="1669378369440073270" datatype="html">
         <source>Plugin settings</source>
-        <target state="new">Plugin settings</target>
+        <target state="translated">تنظیمات پلاگین</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">354</context></context-group>
       </trans-unit>
       <trans-unit id="8693603235657020323" datatype="html">
         <source>Other</source>
-        <target state="new">Other</target>
+        <target state="translated">دیگر</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context><context context-type="linenumber">188</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/select/select-languages.component.ts</context><context context-type="linenumber">50</context></context-group>
       </trans-unit>
       <trans-unit id="2200003513633568069" datatype="html">
         <source>Enable video comments</source>
-        <target state="new">Enable video comments</target>
+        <target state="translated">قابلیت های ویدئویی را فعال کنید</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">341</context></context-group>
       </trans-unit>
       <trans-unit id="8896564060463626070" datatype="html">
         <source>Enable download</source>
-        <target state="new">Enable download</target>
+        <target state="translated">فعال کردن دانلود</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">346</context></context-group>
       </trans-unit>
       <trans-unit id="8821221480638803282" datatype="html">
         <source>Advanced settings</source>
-        <target state="new">Advanced settings</target>
+        <target state="translated">تنظیمات پیشرفته</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">284</context></context-group>
       </trans-unit>
       <trans-unit id="2375260419993138758" datatype="html">
         <source>URL</source>
-        <target state="new">URL</target>
+        <target state="translated">url</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-url.component.html</context><context context-type="linenumber">6</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">24</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">92</context></context-group>
       </trans-unit>
       <trans-unit id="6760671759540007434" datatype="html">
         <source>You can import any URL <x id="START_LINK"/>supported by youtube-dl<x id="CLOSE_LINK"/> or URL that points to a media file. You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance. </source>
-        <target state="new"> You can import any URL <x id="START_LINK"/>supported by youtube-dl<x id="CLOSE_LINK"/> or URL that points to a media file. You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance. </target>
+        <target state="translated">شما می توانید هر URL &lt;x ID = "START_LINK" را وارد کنید /&gt; پشتیبانی شده توسط YOUTUBE-DL &lt;X ID = "CLOSE_LINK" /&gt; یا URL که به یک فایل رسانه ای اشاره می کند. شما باید اطمینان حاصل کنید که حقوق خود را در مورد محتوایی که به آن اشاره می کنید، داشته باشید، در غیر این صورت ممکن است باعث مشکل قانونی خود بر خود و نمونه شما شود.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-url.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="460353452916242022" datatype="html">
         <source>Sorry, but something went wrong</source>
-        <target state="new">Sorry, but something went wrong</target>
+        <target state="translated">با عرض پوزش، اما چیزی اشتباه رفت</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.html</context><context context-type="linenumber">43</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-torrent.component.html</context><context context-type="linenumber">51</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-url.component.html</context><context context-type="linenumber">44</context></context-group>
@@ -2477,32 +2454,28 @@
       </trans-unit>
       <trans-unit id="5359075917564707730" datatype="html">
         <source>Congratulations, the video behind <x id="INTERPOLATION"/> will be imported! You can already add information about this video. </source>
-        <target state="new">
-  Congratulations, the video behind 
-          <x id="INTERPOLATION" equiv-text="{{ targetUrl }}"/> will be imported! You can already add information about this video.
-
-        </target>
+        <target state="translated">تبریک، ویدیو پچت <x id="interpolation" equiv-text="{{targeturl}}"/> ورود مای روز! شماق قبلا می تونید مطرح شده با ایبوط به ایدیو رضا راز كنيد. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-url.component.html</context><context context-type="linenumber">48</context></context-group>
       </trans-unit>
       <trans-unit id="6722765664648523978" datatype="html">
         <source>Select the file to upload</source>
-        <target state="new">Select the file to upload</target>
+        <target state="translated">فایل را برای آپلود انتخاب کنید</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.html</context><context context-type="linenumber">6</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.html</context><context context-type="linenumber">8</context></context-group>
       </trans-unit>
       <trans-unit id="9172233176401579786" datatype="html">
         <source>Scheduled</source>
-        <target state="new">Scheduled</target>
+        <target state="translated">برنامه ریزی شده</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context><context context-type="linenumber">204</context></context-group>
       </trans-unit>
       <trans-unit id="1435317307066082710" datatype="html">
         <source>Hide the video until a specific date</source>
-        <target state="new">Hide the video until a specific date</target>
+        <target state="translated">مخفی کردن ویدیو تا تاریخ خاص</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context><context context-type="linenumber">205</context></context-group>
       </trans-unit>
       <trans-unit id="1087181129481039628" datatype="html">
         <source>Normal live</source>
-        <target state="new">Normal live</target>
+        <target state="translated">زندگی عادی</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.html</context>
           <context context-type="linenumber">22</context>
@@ -2510,7 +2483,7 @@
       </trans-unit>
       <trans-unit id="3517255641769192386" datatype="html">
         <source>Permanent/recurring live</source>
-        <target state="new">Permanent/recurring live</target>
+        <target state="translated">دائمی / تکراری زنده</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.html</context>
           <context context-type="linenumber">29</context>
@@ -2518,73 +2491,65 @@
       </trans-unit>
       <trans-unit id="6148369758871787018" datatype="html">
         <source>Video background image</source>
-        <target state="new">Video background image</target>
+        <target state="translated">تصویر پس زمینه ویدئو</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.html</context><context context-type="linenumber">34</context></context-group>
       </trans-unit>
       <trans-unit id="7099631707196015765" datatype="html">
         <source>Image that will be merged with your audio file. <x id="LINE_BREAK"/> The chosen image will be definitive and cannot be modified. </source>
-        <target state="new">
-          Image that will be merged with your audio file.
-          
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-          The chosen image will be definitive and cannot be modified.
-        
-        </target>
+        <target state="translated">تصویر که با فایل صوتی شما ادغام می شود. &lt;x id = "line_break" ctype = "lb" equiv-text = "&amp; lt؛ br / &amp; gt؛" /&gt; تصویر انتخاب شده قطعی خواهد بود و نمی تواند اصلاح شود.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.html</context><context context-type="linenumber">36</context></context-group>
       </trans-unit>
       <trans-unit id="4626927731329688072" datatype="html">
         <source>Total video uploaded</source>
-        <target state="new">Total video uploaded</target>
+        <target state="translated">کل ویدئو آپلود شده است</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.html</context><context context-type="linenumber">63</context></context-group>
       </trans-unit>
       <trans-unit id="1185207825965405436" datatype="html">
         <source>Processing…</source>
-        <target state="new">Processing…</target>
+        <target state="translated">در حال پردازش…</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.html</context><context context-type="linenumber">65</context></context-group>
       </trans-unit>
       <trans-unit id="7934833136974560675" datatype="html">
         <source>Retry</source>
-        <target state="new">Retry</target>
+        <target state="translated">دوباره امتحان کنید</target>
         <note priority="1" from="description">Retry failed upload of a video</note>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.html</context><context context-type="linenumber">80</context></context-group>
       </trans-unit>
       <trans-unit id="2127094963121208963" datatype="html">
         <source>Total video quota</source>
-        <target state="new">Total video quota</target>
+        <target state="translated">مجموع سهم ویدئو</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context><context context-type="linenumber">122</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-quota.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="1522676094837508187" datatype="html">
         <source>Congratulations! Your video is now available in your private library.</source>
-        <target state="new">
-  Congratulations! Your video is now available in your private library.
-</target>
+        <target state="translated">تبریک می گویم! ویدیوی شما در حال حاضر در کتابخانه خصوصی شما موجود است.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.html</context><context context-type="linenumber">90</context></context-group>
       </trans-unit>
       <trans-unit id="3768339632235914548" datatype="html">
         <source>Publish will be available when upload is finished</source>
-        <target state="new">Publish will be available when upload is finished</target>
+        <target state="translated">انتشار زمانی که آپلود به پایان رسید در دسترس خواهد بود</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.html</context><context context-type="linenumber">104</context></context-group>
       </trans-unit>
       <trans-unit id="7430416142942514215" datatype="html">
         <source>Publish</source>
-        <target state="new">Publish</target>
+        <target state="translated">انتشار</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.html</context><context context-type="linenumber">106</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/header.component.html</context><context context-type="linenumber">5</context></context-group>
       </trans-unit>
       <trans-unit id="6161604372916832458" datatype="html">
         <source>Upload on hold</source>
-        <target state="new">Upload on hold</target>
+        <target state="translated">آپلود در HOLD</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">177</context></context-group>
       </trans-unit>
       <trans-unit id="285180972645018518" datatype="html">
         <source>Sorry, the upload feature is disabled for your account. If you want to add videos, an admin must unlock your quota.</source>
-        <target state="new">Sorry, the upload feature is disabled for your account. If you want to add videos, an admin must unlock your quota.</target>
+        <target state="translated">با عرض پوزش، ویژگی آپلود برای حساب شما غیرفعال است. اگر می خواهید فیلم ها را اضافه کنید، یک مدیر باید سهمیه خود را باز کنید.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.ts</context><context context-type="linenumber">102</context></context-group>
       </trans-unit>
       <trans-unit id="1138810463037464722" datatype="html">
         <source>Uploaded videos are reviewed before publishing for your account. If you want to add videos without moderation review, an admin must turn off your videos auto-block.</source>
-        <target state="new">Uploaded videos are reviewed before publishing for your account. If you want to add videos without moderation review, an admin must turn off your videos auto-block.</target>
+        <target state="translated">فیلم های آپلود شده قبل از انتشار برای حساب کاربری شما بررسی می شوند. اگر می خواهید فیلم ها را بدون بررسی اعتدال اضافه کنید، یک مدیر باید ویدیوهای خود را خودکار بلوک کنید.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.ts</context>
           <context context-type="linenumber">104</context>
@@ -2592,7 +2557,7 @@
       </trans-unit>
       <trans-unit id="438743381693904838" datatype="html">
         <source>Your daily video quota is insufficient. If you want to add more videos, you must wait for 24 hours or an admin must increase your daily quota.</source>
-        <target state="new">Your daily video quota is insufficient. If you want to add more videos, you must wait for 24 hours or an admin must increase your daily quota.</target>
+        <target state="translated">سهمیه ویدئویی روزانه شما کافی نیست اگر می خواهید ویدیوهای بیشتری اضافه کنید، باید 24 ساعت صبر کنید یا یک مدیر باید سهمیه روزانه خود را افزایش دهید.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.ts</context>
           <context context-type="linenumber">106</context>
@@ -2600,7 +2565,7 @@
       </trans-unit>
       <trans-unit id="6796692581512042469" datatype="html">
         <source>Your video quota is insufficient. If you want to add more videos, an admin must increase your quota.</source>
-        <target state="new">Your video quota is insufficient. If you want to add more videos, an admin must increase your quota.</target>
+        <target state="translated">سهمیه ویدئو شما کافی نیست اگر می خواهید فیلم های بیشتری اضافه کنید، یک مدیر باید سهمیه خود را افزایش دهد.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.ts</context>
           <context context-type="linenumber">108</context>
@@ -2608,147 +2573,128 @@
       </trans-unit>
       <trans-unit id="2587226585711833549" datatype="html">
         <source>Read instance rules for help</source>
-        <target state="new">Read instance rules for help</target>
+        <target state="translated">قوانین نمونه را بخوانید</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.html</context><context context-type="linenumber">2</context></context-group>
       </trans-unit>
       <trans-unit id="3455474330346212563" datatype="html">
         <source>Select the torrent to import</source>
-        <target state="new">Select the torrent to import</target>
+        <target state="translated">Torrent را برای وارد کردن انتخاب کنید</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-torrent.component.html</context><context context-type="linenumber">6</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-torrent.component.html</context><context context-type="linenumber">8</context></context-group>
       </trans-unit>
       <trans-unit id="290735093992020324" datatype="html">
         <source>OR</source>
-        <target state="new">OR</target>
+        <target state="translated">یا</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-torrent.component.html</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="6173286379208830044" datatype="html">
         <source>Paste magnet URI</source>
-        <target state="new">Paste magnet URI</target>
+        <target state="translated">آهنگر مغناطیسی را وارد کنید</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-torrent.component.html</context><context context-type="linenumber">16</context></context-group>
       </trans-unit>
       <trans-unit id="2424051823705402833" datatype="html">
         <source>Congratulations, the video will be imported with BitTorrent! You can already add information about this video.</source>
-        <target state="new">
-  Congratulations, the video will be imported with BitTorrent! You can already add information about this video.
-</target>
+        <target state="translated">تبریک، ویدیو با BitTorrent وارد خواهد شد! شما قبلا می توانید اطلاعات مربوط به این ویدیو را اضافه کنید.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-torrent.component.html</context><context context-type="linenumber">55</context></context-group>
       </trans-unit>
       <trans-unit id="4422946962830681102" datatype="html">
         <source>Torrents with only 1 file are supported.</source>
-        <target state="new">Torrents with only 1 file are supported.</target>
+        <target state="translated">Torrents تنها 1 فایل پشتیبانی می شوند.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-torrent.component.ts</context><context context-type="linenumber">118</context></context-group>
       </trans-unit>
       <trans-unit id="7860848084471862305" datatype="html">
         <source>Cannot create live because this instance have too many created lives</source>
-        <target state="new">Cannot create live because this instance have too many created lives</target>
+        <target state="translated">نمی تواند زندگی کند، زیرا این نمونه بیش از حد بسیاری از زندگی ایجاد شده است</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">103</context></context-group>
       </trans-unit>
       <trans-unit id="1278564497286613571" datatype="html">
         <source>Cannot create live because you created too many lives</source>
-        <target state="new">Cannot create live because you created too many lives</target>
+        <target state="translated">نمی تواند زندگی کند، زیرا شما زندگی بیش از حد بسیاری را ایجاد کردید</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">105</context></context-group>
       </trans-unit>
       <trans-unit id="2621043320678012413" datatype="html">
         <source>Live published.</source>
-        <target state="new">Live published.</target>
+        <target state="translated">زنده منتشر شده است.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">134</context></context-group>
       </trans-unit>
       <trans-unit id="5872059367236038160" datatype="html">
         <source>Stream only once and save a replay of your live</source>
-        <target state="new">Stream only once and save a replay of your live</target>
+        <target state="translated">جریان تنها یک بار و ذخیره یک پخش از زندگی خود را</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">157</context></context-group>
       </trans-unit>
       <trans-unit id="2360261543675520397" datatype="html">
         <source>Stream only once</source>
-        <target state="new">Stream only once</target>
+        <target state="translated">جریان فقط یک بار</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">160</context></context-group>
       </trans-unit>
       <trans-unit id="5168540607709796871" datatype="html">
         <source>Stream multiple times, replays can't be saved</source>
-        <target state="new">Stream multiple times, replays can't be saved</target>
+        <target state="translated">جریان چند بار، پخش را نمی توان ذخیره کرد</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">165</context></context-group>
       </trans-unit>
       <trans-unit id="58134197356653483" datatype="html">
         <source>Stream multiple times using the same URL</source>
-        <target state="new">Stream multiple times using the same URL</target>
+        <target state="translated">جریان چند بار با استفاده از همان URL</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">168</context></context-group>
       </trans-unit>
       <trans-unit id="8218579597782287078" datatype="html">
         <source>Go Live</source>
-        <target state="new">Go Live</target>
+        <target state="translated">زنده ماندن</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.html</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
       <trans-unit id="3282368691598224543" datatype="html">
         <source>Max live duration is <x id="INTERPOLATION"/>. If your live reaches this limit, it will be automatically terminated. </source>
-        <target state="new"> Max live duration is <x id="INTERPOLATION"/>. If your live reaches this limit, it will be automatically terminated.
-</target>
+        <target state="translated">حداکثر مدت زمان زنده <x id="interpolation"/>. اگر زندگی شما به این حد برسد، به طور خودکار خاتمه خواهد یافت. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.html</context><context context-type="linenumber">47</context></context-group>
       </trans-unit>
       <trans-unit id="2993949426196989262" datatype="html">
         <source>We recommend you to not use the <x id="START_TAG_STRONG"/>root<x id="CLOSE_TAG_STRONG"/> user to publish your videos, since it's the super-admin account of your instance. <x id="LINE_BREAK"/> Instead, <x id="START_LINK"/>create a dedicated account<x id="CLOSE_LINK"/> to upload your videos. </source>
-        <target state="new">
-    We recommend you to not use the 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>root
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> user to publish your videos, since it's the super-admin account of your instance.
-    
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-    Instead, 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>create a dedicated account
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to upload your videos.
-  
-        </target>
+        <target state="translated">توصیه نمی کنیم از &lt;x id = "START_TAG_STRONG" CTYPE = "x-strong" استفاده نکنید text = "&amp; lt؛ / strong &amp; gt؛" /&gt; کاربر برای انتشار فیلم های شما، از آنجایی که این حساب فوق العاده مدیر از نمونه شماست. &lt;x id = "line_break" ctype = "lb" equiv-text = "&amp; lt؛ br / &amp; gt؛" /&gt; به جای آن، &lt;x id = "START_LINK" CTYPE = "xa" equiv-text = "&amp; lt؛ a &amp; gt؛" /&gt; ایجاد یک حساب اختصاصی &lt;x id = "close_link" ctype = "xa" equiv-text = "&amp; lt؛ / a &amp; gt؛" /&gt; برای آپلود فیلم های خود.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.html</context><context context-type="linenumber">33</context></context-group>
       </trans-unit>
       <trans-unit id="293476877021544115" datatype="html">
         <source>Import <x id="INTERPOLATION"/></source>
-        <target state="new">Import 
-          <x id="INTERPOLATION" equiv-text="{{ videoName }}"/>
-        </target>
+        <target state="translated">واردات <x id="interpolation" equiv-text="{{videoname}}"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.html</context><context context-type="linenumber">44</context></context-group>
       </trans-unit>
       <trans-unit id="4766833966971572147" datatype="html">
         <source>Upload <x id="INTERPOLATION"/></source>
-        <target state="new">Upload 
-          <x id="INTERPOLATION" equiv-text="{{ videoName }}"/>
-        </target>
+        <target state="translated">آپلود <x id="interpolation" equiv-text="{{videoName}}"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.html</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
       <trans-unit id="7003826819757856838" datatype="html">
         <source>Upload a file</source>
-        <target state="new">Upload a file</target>
+        <target state="translated">یک فایل را آپلود کنید</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.html</context><context context-type="linenumber">53</context></context-group>
       </trans-unit>
       <trans-unit id="2061223017941329156" datatype="html">
         <source>Import with URL</source>
-        <target state="new">Import with URL</target>
+        <target state="translated">واردات با URL</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.html</context><context context-type="linenumber">63</context></context-group>
       </trans-unit>
       <trans-unit id="8740142697043012403" datatype="html">
         <source>Import with torrent</source>
-        <target state="new">Import with torrent</target>
+        <target state="translated">واردات با تورنت</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.html</context><context context-type="linenumber">73</context></context-group>
       </trans-unit>
       <trans-unit id="6066940329544282265" datatype="html">
         <source>Go live</source>
-        <target state="new">Go live</target>
+        <target state="translated">زنده ماندن</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.html</context><context context-type="linenumber">83</context></context-group>
       </trans-unit>
       <trans-unit id="3907889591911208762" datatype="html">
         <source>Other videos</source>
-        <target state="new">
-        Other videos
-      </target>
+        <target state="translated">ویدیوهای دیگر</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/recommendations/recommended-videos.component.html</context><context context-type="linenumber">4</context></context-group>
       </trans-unit>
       <trans-unit id="2913936134410914576" datatype="html">
         <source>AUTOPLAY</source>
-        <target state="new">AUTOPLAY</target>
+        <target state="translated">صورت خودکار</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/recommendations/recommended-videos.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="2738123251363312498" datatype="html">
         <source>Next video to be played</source>
-        <target state="new">Next video to be played</target>
+        <target state="translated">ویدیوی بعدی بازی می شود</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/recommendations/recommended-videos.component.html</context>
           <context context-type="linenumber">16</context>
@@ -2756,23 +2702,23 @@
       </trans-unit>
       <trans-unit id="4619111912751495491" datatype="html">
         <source>Report this comment</source>
-        <target state="new">Report this comment</target>
+        <target state="translated">گزارش این نظر</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment.component.ts</context><context context-type="linenumber">178</context></context-group>
       </trans-unit>
       <trans-unit id="7419704019640008953" datatype="html">
         <source>Share</source>
-        <target state="new">Share</target>
+        <target state="translated">اشتراک گذاری</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-elements.component.html</context><context context-type="linenumber">12</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="6599497107591892109" datatype="html">
         <source>Share the playlist</source>
-        <target state="new">Share the playlist</target>
+        <target state="translated">لیست پخش را به اشتراک بگذارید</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="937533808893845780" datatype="html">
         <source>This playlist is private so you won't be able to share it with external users</source>
-        <target state="new">This playlist is private so you won't be able to share it with external users</target>
+        <target state="translated">این لیست پخش خصوصی است، بنابراین شما نمی توانید آن را با کاربران خارجی به اشتراک بگذارید</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">14</context>
@@ -2780,7 +2726,7 @@
       </trans-unit>
       <trans-unit id="5806907163449517166" datatype="html">
         <source>Update playlist privacy</source>
-        <target state="new"> Update playlist privacy </target>
+        <target state="translated">به روز رسانی حفظ حریم خصوصی لیست پخش</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">16,18</context>
@@ -2788,17 +2734,17 @@
       </trans-unit>
       <trans-unit id="6460270615876918310" datatype="html">
         <source>Share the playlist at this video position</source>
-        <target state="new">Share the playlist at this video position</target>
+        <target state="translated">لیست پخش را در این موقعیت ویدئویی به اشتراک بگذارید</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">71</context></context-group>
       </trans-unit>
       <trans-unit id="1253396341165671470" datatype="html">
         <source>Share the video</source>
-        <target state="new">Share the video</target>
+        <target state="translated">ویدیو را به اشتراک بگذارید</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">79</context></context-group>
       </trans-unit>
       <trans-unit id="5254843797242866315" datatype="html">
         <source>This video is private so you won't be able to share it with external users</source>
-        <target state="new">This video is private so you won't be able to share it with external users</target>
+        <target state="translated">این ویدیو خصوصی است، بنابراین شما نمی توانید آن را با کاربران خارجی به اشتراک بگذارید</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">82</context>
@@ -2806,7 +2752,7 @@
       </trans-unit>
       <trans-unit id="3201319007886576629" datatype="html">
         <source>Update video privacy</source>
-        <target state="new"> Update video privacy </target>
+        <target state="translated">به روز رسانی حریم خصوصی ویدئو</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">84,86</context>
@@ -2814,46 +2760,40 @@
       </trans-unit>
       <trans-unit id="1845599966367432388" datatype="html">
         <source>QR-Code</source>
-        <target state="new">QR-Code</target>
+        <target state="translated">کد QR</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">35</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">102</context></context-group>
       </trans-unit>
       <trans-unit id="1122876732223594710" datatype="html">
         <source>The url is not secured (no HTTPS), so the embed video won't work on HTTPS websites (web browsers block non secured HTTP requests on HTTPS websites).</source>
-        <target state="new">
-                The url is not secured (no HTTPS), so the embed video won't work on HTTPS websites (web browsers block non secured HTTP requests on HTTPS websites).
-              </target>
+        <target state="translated">URL امن نیست (بدون HTTPS)، بنابراین ویدئو قراردادی بر روی وب سایت های HTTPS کار نمی کند (مرورگرهای وب مسدود کردن درخواست های HTTP غیر امن در وب سایت های HTTPS).</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">54</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">121</context></context-group>
       </trans-unit>
       <trans-unit id="8151017381798767627" datatype="html">
         <source>Embed</source>
-        <target state="new">Embed</target>
+        <target state="translated">جاسازی کردن</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">45</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">112</context></context-group>
       </trans-unit>
       <trans-unit id="6375858514817734542" datatype="html">
         <source>Auto select subtitle</source>
-        <target state="new">Auto select subtitle</target>
+        <target state="translated">خودکار را انتخاب کنید زیرنویس</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">154</context></context-group>
       </trans-unit>
       <trans-unit id="2353402732767789211" datatype="html">
         <source>More customization</source>
-        <target state="new">
-              More customization
-            </target>
+        <target state="translated">سفارشی سازی بیشتر</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">255</context></context-group>
       </trans-unit>
       <trans-unit id="1284179134768564307" datatype="html">
         <source>Less customization</source>
-        <target state="new">
-              Less customization
-            </target>
+        <target state="translated">سفارشی سازی کمتر</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">263</context></context-group>
       </trans-unit>
       <trans-unit id="1290987288288099212" datatype="html">
         <source>Support <x id="INTERPOLATION" equiv-text="{{ displayName }}"/></source>
-        <target state="new">Support <x id="INTERPOLATION" equiv-text="{{ displayName }}"/></target>
+        <target state="translated">پشتیبانی از <x id="interpolation" equiv-text="{{displayname}}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-support-modal/support-modal.component.html</context>
           <context context-type="linenumber">3</context>
@@ -2861,7 +2801,7 @@
       </trans-unit>
       <trans-unit id="2454050363478003966" datatype="html">
         <source>Login</source>
-        <target state="new">Login</target>
+        <target state="translated">وارد شدن</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login-routing.module.ts</context><context context-type="linenumber">12</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">48</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">102</context></context-group>
@@ -2869,12 +2809,12 @@
       </trans-unit>
       <trans-unit id="1452803153270294110" datatype="html">
         <source>Autoplay</source>
-        <target state="new">Autoplay</target>
+        <target state="translated">صورت خودکار</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">185</context></context-group>
       </trans-unit>
       <trans-unit id="5336944753883027145" datatype="html">
         <source>Maybe later</source>
-        <target state="new">Maybe later</target>
+        <target state="translated">شاید بعدا</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-support-modal/support-modal.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="3959826834147169200" datatype="html">
