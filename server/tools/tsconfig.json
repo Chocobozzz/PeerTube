@@ -1,12 +1,7 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "baseUrl": "./",
-    "outDir": "../../dist/server/tools",
-    "paths": { // FIXME: https://github.com/benyap/resolve-tspaths/issues/10
-      "@server/*": [ "../../server/*" ],
-      "@shared/*": [ "../../shared/*" ]
-    }
+    "outDir": "../../dist/server/tools"
   },
   "include": [ ".", "../typings" ],
   "references": [
