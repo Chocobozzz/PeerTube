@@ -6071,9 +6071,7 @@ color: red;
       </trans-unit>
       <trans-unit id="7152797255397280410" datatype="html">
         <source>Do you really want to delete <x id="PH" equiv-text="videoChannel.displayName"/>? It will delete <x id="PH_1" equiv-text="videoChannel.videosCount"/> videos uploaded in this channel, and you will not be able to create another channel with the same name (<x id="PH_2" equiv-text="videoChannel.name"/>)!</source>
-        <target state="new">Do you really want to delete <x id="PH"/>?
-It will delete <x id="PH_1"/> videos uploaded in this channel, and you will not be able to create another
-channel with the same name (<x id="PH_2"/>)!</target>
+        <target state="translated">Ви справді хочете видалити <x id="PH" equiv-text="videoChannel.displayName"/>? Буде видалено <x id="PH_1" equiv-text="videoChannel.videosCount"/> відео, вивантажених у цей канал, і ви більше не зможете створити інший канал з такою ж назвою (<x id="PH_2" equiv-text="videoChannel.name"/>)!</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.ts</context><context context-type="linenumber">44</context></context-group>
       </trans-unit>
       <trans-unit id="4433306639366959484" datatype="html">
@@ -9190,7 +9188,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="3981804692726336204" datatype="html">
         <source>A subject is required.</source>
-        <target state="new">A subject is required.</target>
+        <target state="translated">Тема обов'язкова.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">32</context></context-group>
       </trans-unit>
       <trans-unit id="7787099349830266861" datatype="html">
@@ -9253,7 +9251,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="6288154707582132676" datatype="html">
         <source>Channel name is required.</source>
-        <target state="new">Channel name is required.</target>
+        <target state="translated">Назва каналу обов'язкова.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="8178814467139959283" datatype="html">
@@ -9279,13 +9277,13 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="1099684476181448167" datatype="html">
         <source>Password cannot be more than 255 characters long.</source>
-        <target state="new">Password cannot be more than 255 characters long.</target>
+        <target state="translated">Пароль не може бути довшим ніж 255 символів.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">73</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">84</context></context-group>
       </trans-unit>
       <trans-unit id="3392630942539073768" datatype="html">
         <source>The new password and the confirmed password do not correspond.</source>
-        <target state="new">The new password and the confirmed password do not correspond.</target>
+        <target state="translated">Новий пароль і пароль підтвердження відрізняються.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">91</context></context-group>
       </trans-unit>
       <trans-unit id="2027337371129904473" datatype="html">
