@@ -7088,7 +7088,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="3620117223790525725">
         <source>Do you really want to delete this follower?</source>
-        <target>Willst du dieses Abonnenten wirklich löschen?</target>
+        <target>Willst du diesen Abonnenten wirklich löschen?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context><context context-type="linenumber">73</context></context-group>
       </trans-unit>
       <trans-unit id="7022070615528435141" datatype="html">
