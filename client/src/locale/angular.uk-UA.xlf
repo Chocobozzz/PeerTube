@@ -373,7 +373,7 @@
       </trans-unit>
       <trans-unit id="3371351937331192777" datatype="html">
         <source>User <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> registered on your instance </source>
-        <target state="translated">Обліковий запис <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> зареєстровано на вашому екземплярі </target>
+        <target state="translated">Обліковий запис <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> зареєстровано на вашому сервері </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">139</context></context-group>
       </trans-unit>
       <trans-unit id="4404295482394146814" datatype="html">
@@ -391,12 +391,12 @@
       </trans-unit>
       <trans-unit id="5354239156470982824" datatype="html">
         <source>Your instance has <x id="START_LINK"/>a new follower<x id="CLOSE_LINK"/> (<x id="INTERPOLATION"/>) <x id="START_TAG_NG_CONTAINER"/> awaiting your approval<x id="CLOSE_TAG_NG_CONTAINER"/></source>
-        <target state="translated">У вашого екземпляра є <x id="START_LINK"/>новий підписник,<x id="CLOSE_LINK"/> (<x id="INTERPOLATION"/>) <x id="START_TAG_NG_CONTAINER"/> що очікує затвердження вами<x id="CLOSE_TAG_NG_CONTAINER"/></target>
+        <target state="translated">У вашого сервера є <x id="START_LINK"/>новий підписник,<x id="CLOSE_LINK"/> (<x id="INTERPOLATION"/>) <x id="START_TAG_NG_CONTAINER"/> що очікує затвердження вами<x id="CLOSE_TAG_NG_CONTAINER"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">180</context></context-group>
       </trans-unit>
       <trans-unit id="325842756252267394" datatype="html">
         <source>Your instance automatically followed <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></source>
-        <target state="translated">Ваш екземпляр автоматично стежить <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></target>
+        <target state="translated">Ваш сервер автоматично стежить <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">189</context></context-group>
       </trans-unit>
       <trans-unit id="363592786729553688" datatype="html">
@@ -594,7 +594,7 @@
       </trans-unit>
       <trans-unit id="8343217707114977013" datatype="html">
         <source>The contact form is not enabled on this instance.</source>
-        <target state="translated">Контактна форма не ввімкнена у цьому екземплярі.</target>
+        <target state="translated">Контактна форма не ввімкнена у цьому сервері.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/contact-admin-modal.component.html</context>
           <context context-type="linenumber">56</context>
@@ -818,7 +818,7 @@
       </trans-unit>
       <trans-unit id="6691897331062834756" datatype="html">
         <source>Subscribe with an account on this instance</source>
-        <target state="translated">Підписатися за допомогою облікового запису на цьому екземплярі</target>
+        <target state="translated">Підписатися за допомогою облікового запису на цьому сервері</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">57</context></context-group>
       </trans-unit>
       <trans-unit id="1740917574463702967">
@@ -833,7 +833,7 @@
       </trans-unit>
       <trans-unit id="8023282004085823427" datatype="html">
         <source><x id="PH" equiv-text="this.video.name"/> will be duplicated by your instance.</source>
-        <target state="translated"><x id="PH" equiv-text="this.video.name"/> продублюються у вашому екземплярі.</target>
+        <target state="translated"><x id="PH" equiv-text="this.video.name"/> продублюються на вашому сервері.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">240</context></context-group>
       </trans-unit>
       <trans-unit id="4140366911638662173" datatype="html">
@@ -890,12 +890,12 @@
       </trans-unit>
       <trans-unit id="6462281745850371027" datatype="html">
         <source>You can subscribe to the channel via any ActivityPub-capable fediverse instance (PeerTube, Mastodon or Pleroma for example).</source>
-        <target state="translated">Ви можете підписатися на канал через будь-який екземпляр Fediverse з підтримною ActivityPub (наприклад, PeerTube, Mastodon або Pleroma).</target>
+        <target state="translated">Ви можете підписатися на канал через будь-який сервер федіверсу з підтримною ActivityPub (наприклад, PeerTube, Mastodon або Pleroma).</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/remote-subscribe.component.html</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="20374890400263257" datatype="html">
         <source>You can interact with this via any ActivityPub-capable fediverse instance (PeerTube, Mastodon or Pleroma for example).</source>
-        <target state="translated">Ви можете взаємодіяти з ним через будь-який екземпляр Fediverse з підтримкою ActivityPub (наприклад, PeerTube, Mastodon або Pleroma).</target>
+        <target state="translated">Ви можете взаємодіяти з ним через будь-який сервер федіверсу з підтримкою ActivityPub (наприклад, PeerTube, Mastodon або Pleroma).</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/remote-subscribe.component.html</context><context context-type="linenumber">25</context></context-group>
       </trans-unit>
       <trans-unit id="6751395526297887552" datatype="html">
@@ -941,7 +941,7 @@
       </trans-unit>
       <trans-unit id="7864066132065250510" datatype="html">
         <source><x id="INTERPOLATION"/> per user / <x id="INTERPOLATION_1"/> per instance </source>
-        <target state="translated"><x id="INTERPOLATION"/> на користувача / <x id="INTERPOLATION_1"/> на екземпляр </target>
+        <target state="translated"><x id="INTERPOLATION"/> на користувача / <x id="INTERPOLATION_1"/> на сервер </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">86</context></context-group>
       </trans-unit>
       <trans-unit id="486979448055158839" datatype="html">
@@ -976,7 +976,7 @@
       </trans-unit>
       <trans-unit id="6276792241563504067" datatype="html">
         <source>You can import any torrent file that points to a media file. You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance.</source>
-        <target state="translated">Ви можете імпортувати будь-який torrent файл що вказує на медіафайл. Ви повинні бути впевнені що у вас є права на поширення вказаного контенту, інакше це може спричинити юридичні наслідки для вас і вашого екземпляра.</target>
+        <target state="translated">Ви можете імпортувати будь-який torrent файл, що вказує на медіафайл. Ви повинні бути впевнені, що у вас є права на поширення вказаного вмісту, інакше це може спричинити правові наслідки для вас і вашого сервера.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-torrent.component.html</context><context context-type="linenumber">19</context></context-group>
       </trans-unit>
       <trans-unit id="5812787579835788700" datatype="html">
@@ -1001,7 +1001,7 @@
       </trans-unit>
       <trans-unit id="4603134051700562542" datatype="html">
         <source>Loading instance statistics...</source>
-        <target state="translated">Завантаження статистики екземплярів...</target>
+        <target state="translated">Завантаження статистики сервера...</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-statistics.component.html</context><context context-type="linenumber">1</context></context-group>
       </trans-unit>
       <trans-unit id="2906587845957718064" datatype="html">
@@ -1131,7 +1131,7 @@
       </trans-unit>
       <trans-unit id="7312374115603954471" datatype="html">
         <source>This will ask remote instances to delete local videos</source>
-        <target state="translated">Буде надіслано запит на видалення локальних відео з віддалених екземплярів</target>
+        <target state="translated">Буде надіслано запит на видалення локальних відео з віддалених серверів</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context>
           <context context-type="linenumber">34</context>
@@ -1139,7 +1139,7 @@
       </trans-unit>
       <trans-unit id="2728722206183105047" datatype="html">
         <source>This will ask remote instances to delete this video</source>
-        <target state="translated">Буде надіслано запит на видалення цього відео з віддалених екземплярів</target>
+        <target state="translated">Буде надіслано запит на видалення цього відео з віддалених серверів</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context>
           <context context-type="linenumber">35</context>
@@ -1203,12 +1203,12 @@
       </trans-unit>
       <trans-unit id="7252854992688790751" datatype="html">
         <source>This instance allows registration. However, be careful to check the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;terms-anchor&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot; fragment=&quot;terms&quot;&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> before creating an account. You may also search for another instance to match your exact needs at: <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="START_LINK_2" equiv-text="&lt;a class=&quot;alert-link&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="translated">Цей екземпляр дозволяє реєстрацію. Однак будьте обережні, перевірте <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;terms-anchor&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>Умови<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot; fragment=&quot;terms&quot;&gt;"/>Умови<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> перед створенням облікового запису. Ви також можете знайти інший екземпляр, який точно задовольняє ваш потреби, на: <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="START_LINK_2" equiv-text="&lt;a class=&quot;alert-link&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target state="translated">Цей сервер дозволяє реєстрацію. Однак будьте обережні, перевірте <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;terms-anchor&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>Умови<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot; fragment=&quot;terms&quot;&gt;"/>Умови<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> перед створенням облікового запису. Ви також можете знайти інший сервер, який точно задовольняє ваш потреби, на: <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="START_LINK_2" equiv-text="&lt;a class=&quot;alert-link&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">64</context></context-group>
       </trans-unit>
       <trans-unit id="7215649348148521605" datatype="html">
         <source>Currently this instance doesn't allow for user registration, you may check the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more details or find an instance that gives you the possibility to sign up for an account and upload your videos there. Find yours among multiple instances at: <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt; "/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;alert-link&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="translated">Наразі цей екземпляр не дозволяє реєстрацію користувачів, перевірте <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>Умови<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> для отримання додаткової інформації, або знайдіть екземпляр який дасть вам змогу зареєструвати обліковий запис та вивантажувати свої відео. Знайдіть свій серед багатьох екземплярів на: <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt; "/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;alert-link&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target state="translated">Наразі цей сервер не дозволяє реєстрацію користувачів, перевірте <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>Умови<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> для отримання додаткової інформації, або знайдіть екземпляр який дасть вам змогу зареєструвати обліковий запис та вивантажувати свої відео. Знайдіть свій серед багатьох серверів на: <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt; "/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;alert-link&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">69</context></context-group>
       </trans-unit>
       <trans-unit id="2392488717875840729">
@@ -1267,7 +1267,7 @@
       </trans-unit>
       <trans-unit id="87327320394367488" datatype="html">
         <source>We are sorry, you cannot recover your password because your instance administrator did not configure the PeerTube email system.</source>
-        <target state="translated">Вибачте, але ви не можете відновити пароль, тому що адміністратор вашого екземпляра не налаштував систему на надсилання електронних листів PeerTube.</target>
+        <target state="translated">Вибачте, але ви не можете відновити пароль, тому що адміністратор вашого сервера не налаштував систему на надсилання електронних листів PeerTube.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">106</context></context-group>
       </trans-unit>
       <trans-unit id="3188014010833256853" datatype="html">
@@ -1306,7 +1306,7 @@
       </trans-unit>
       <trans-unit id="4319634264526091601" datatype="html">
         <source>on this instance</source>
-        <target state="translated">на цьому екземплярі</target>
+        <target state="translated">на цьому сервері</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search.component.html</context><context context-type="linenumber">7</context></context-group>
       </trans-unit>
       <trans-unit id="761579517995454927" datatype="html">
@@ -1398,7 +1398,7 @@
       </trans-unit>
       <trans-unit id="5910950876330656326" datatype="html">
         <source>Managing users, following other instances, dealing with spammers...</source>
-        <target state="translated">Керувати користувацьким обліковими записами, стежити за іншими екземплярами, боротися зі спамом...</target>
+        <target state="translated">Керувати користувацьким обліковими записами, стежити за іншими серверами, боротися зі спамом...</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context><context context-type="linenumber">22</context></context-group>
       </trans-unit>
       <trans-unit id="879127294610588497" datatype="html">
@@ -1423,22 +1423,22 @@
       </trans-unit>
       <trans-unit id="4614992717645869756" datatype="html">
         <source>Put your instance on the public PeerTube index: <x id="START_LINK"/>https://instances.joinpeertube.org/instances<x id="CLOSE_LINK"/></source>
-        <target state="translated">Додайте ваш екземпляр до переліку загальнодоступних на PeerTube: <x id="START_LINK"/>https://instances.joinpeertube.org/instances<x id="CLOSE_LINK"/></target>
+        <target state="translated">Додайте ваш сервер до переліку загальнодоступних на PeerTube: <x id="START_LINK"/>https://instances.joinpeertube.org/instances<x id="CLOSE_LINK"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
       <trans-unit id="2081626998027585315" datatype="html">
         <source>It's time to configure your instance!</source>
-        <target state="translated">Час налаштувати ваш екземпляр!</target>
+        <target state="translated">Час налаштувати ваш сервер!</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context><context context-type="linenumber">55</context></context-group>
       </trans-unit>
       <trans-unit id="5083058563861587027" datatype="html">
         <source>Choosing your <x id="START_TAG_STRONG"/>instance name<x id="CLOSE_TAG_STRONG"/>, <x id="START_TAG_STRONG"/>setting up a description<x id="CLOSE_TAG_STRONG"/>, specifying <x id="START_TAG_STRONG"/>who you are<x id="CLOSE_TAG_STRONG"/>, why <x id="START_TAG_STRONG"/>you created your instance<x id="CLOSE_TAG_STRONG"/> and <x id="START_TAG_STRONG"/>how long<x id="CLOSE_TAG_STRONG"/> you plan to <x id="START_TAG_STRONG"/>maintain your it<x id="CLOSE_TAG_STRONG"/> is very important for visitors to understand on what type of instance they are. </source>
-        <target state="translated">Оберіть <x id="START_TAG_STRONG"/>назву свого екземпляра<x id="CLOSE_TAG_STRONG"/>, <x id="START_TAG_STRONG"/>створіть опис<x id="CLOSE_TAG_STRONG"/>, вказавши <x id="START_TAG_STRONG"/>хто ви<x id="CLOSE_TAG_STRONG"/>, чому <x id="START_TAG_STRONG"/>ви створили цей екземпляр<x id="CLOSE_TAG_STRONG"/> та <x id="START_TAG_STRONG"/>як довго<x id="CLOSE_TAG_STRONG"/>ви плануєте <x id="START_TAG_STRONG"/>підтримувати його<x id="CLOSE_TAG_STRONG"/>, це дуже важливо відвідувачам для розуміння якого типу цей екземпляр. </target>
+        <target state="translated">Оберіть <x id="START_TAG_STRONG"/>назву свого сервера<x id="CLOSE_TAG_STRONG"/>, <x id="START_TAG_STRONG"/>створіть опис<x id="CLOSE_TAG_STRONG"/>, вказавши <x id="START_TAG_STRONG"/>хто ви<x id="CLOSE_TAG_STRONG"/>, чому <x id="START_TAG_STRONG"/>ви створили цей сервер<x id="CLOSE_TAG_STRONG"/> та <x id="START_TAG_STRONG"/>як довго<x id="CLOSE_TAG_STRONG"/>ви плануєте <x id="START_TAG_STRONG"/>підтримувати його<x id="CLOSE_TAG_STRONG"/>, це дуже важливо відвідувачам для розуміння якого типу цей сервер. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context><context context-type="linenumber">57</context></context-group>
       </trans-unit>
       <trans-unit id="5329436244765769292" datatype="html">
         <source>If you want to open registrations, please decide what <x id="START_TAG_STRONG"/>your moderation rules<x id="CLOSE_TAG_STRONG"/> and <x id="START_TAG_STRONG"/>instance terms of service<x id="CLOSE_TAG_STRONG"/> are, as well as specify the categories and languages and your moderators speak. This way, you will help users to register on <x id="START_TAG_STRONG"/>the appropriate<x id="CLOSE_TAG_STRONG"/> PeerTube instance. </source>
-        <target state="translated">Якщо ви бажаєте відкрити реєстрацію, визначте якими будуть <x id="START_TAG_STRONG"/>ваші правила модерації<x id="CLOSE_TAG_STRONG"/> та <x id="START_TAG_STRONG"/> умови обслуговування екземпляра <x id="CLOSE_TAG_STRONG"/>, також укажіть категорії та мови якими послуговуються ваші модератори. Таким чином ви допоможете користувачам зареєструватися на <x id="START_TAG_STRONG"/>відповідному<x id="CLOSE_TAG_STRONG"/> екземплярі PeerTube. </target>
+        <target state="translated">Якщо ви бажаєте відкрити реєстрацію, визначте якими будуть <x id="START_TAG_STRONG"/>ваші правила модерації<x id="CLOSE_TAG_STRONG"/> та <x id="START_TAG_STRONG"/> умови надання послуг сервера<x id="CLOSE_TAG_STRONG"/>, також укажіть категорії та мови якими послуговуються ваші модератори. Таким чином ви допоможете користувачам зареєструватися на <x id="START_TAG_STRONG"/>відповідному<x id="CLOSE_TAG_STRONG"/> сервері PeerTube. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context><context context-type="linenumber">63</context></context-group>
       </trans-unit>
       <trans-unit id="5704345824323933019" datatype="html">
@@ -1453,7 +1453,7 @@
       </trans-unit>
       <trans-unit id="9202089339019827574" datatype="html">
         <source>Configure my instance</source>
-        <target state="translated">Налаштувати мій екземпляр</target>
+        <target state="translated">Налаштувати мій сервер</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context><context context-type="linenumber">80</context></context-group>
       </trans-unit>
       <trans-unit id="9005121595859995793" datatype="html">
@@ -1463,17 +1463,17 @@
       </trans-unit>
       <trans-unit id="8901933019590352016" datatype="html">
         <source>You enabled user registration on your instance but did not configure the following fields:</source>
-        <target state="translated">Ви увімкнули реєстрацію користувачів на своєму екземплярі, але не налаштували такі поля:</target>
+        <target state="translated">Ви увімкнули реєстрацію користувачів на своєму сервері, але не налаштували такі поля:</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="8948444690892731948" datatype="html">
         <source>Instance name</source>
-        <target state="translated">Назва екземпляра</target>
+        <target state="translated">Назва сервера</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="966824924873033885" datatype="html">
         <source>Instance short description</source>
-        <target state="translated">Короткий опис екземпляра</target>
+        <target state="translated">Короткий опис сервера</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="1339481669904426442" datatype="html">
@@ -1483,12 +1483,12 @@
       </trans-unit>
       <trans-unit id="5026256683194518810" datatype="html">
         <source>How long you plan to maintain your instance</source>
-        <target state="translated">Як довго ви плануєте підтримувати свій екземпляр</target>
+        <target state="translated">Як довго ви плануєте підтримувати свій сервер</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="1909672990242291785" datatype="html">
         <source>How you plan to pay for keeping your instance running</source>
-        <target state="translated">Як ви плануєте платити за продовження роботи вашого екземпляра</target>
+        <target state="translated">Як ви плануєте платити за продовження роботи вашого сервера</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">18</context>
@@ -1496,12 +1496,12 @@
       </trans-unit>
       <trans-unit id="869943508869906576" datatype="html">
         <source>How you will moderate your instance</source>
-        <target state="translated">Як ви плануєте модерувати вміст свого екземпляра</target>
+        <target state="translated">Як ви плануєте модерувати вміст свого сервера</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">20</context></context-group>
       </trans-unit>
       <trans-unit id="5032335000394561521" datatype="html">
         <source>Instance terms</source>
-        <target state="translated">Умови користування екземпляром</target>
+        <target state="translated">Умови користування сервером</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">21</context></context-group>
       </trans-unit>
       <trans-unit id="4116024528500133384" datatype="html">
@@ -1512,7 +1512,7 @@
       </trans-unit>
       <trans-unit id="1420294365005204590" datatype="html">
         <source>These settings apply only to your session on this instance.</source>
-        <target state="translated">Ці налаштування застосовуються лише до вашого сеансу в цьому екземплярі.</target>
+        <target state="translated">Ці налаштування застосовуються лише до вашого сеансу на цьому сервері.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/quick-settings-modal.component.html</context>
           <context context-type="linenumber">8</context>
@@ -1520,7 +1520,7 @@
       </trans-unit>
       <trans-unit id="5330788940795142335" datatype="html">
         <source>Please consider configuring these fields to help people to choose <x id="START_TAG_STRONG"/>the appropriate instance<x id="CLOSE_TAG_STRONG"/>. Without them, your instance may not be referenced on the <x id="START_LINK"/>JoinPeerTube website<x id="CLOSE_LINK"/>. </source>
-        <target state="translated">Налаштуйте ці поля, щоб допомогти людям обрати <x id="START_TAG_STRONG"/>відповідний екземпляр<x id="CLOSE_TAG_STRONG"/>. Без них посилання на ваш екземпляр не буде додано на <x id="START_LINK"/>вебсайт JoinPeerTube<x id="CLOSE_LINK"/>. </target>
+        <target state="translated">Налаштуйте ці поля, щоб допомогти людям обрати <x id="START_TAG_STRONG"/>відповідний сервер<x id="CLOSE_TAG_STRONG"/>. Без них посилання на ваш сервер не буде додано на <x id="START_LINK"/>вебсайт JoinPeerTube<x id="CLOSE_LINK"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">24</context></context-group>
       </trans-unit>
       <trans-unit id="2728623642717111613" datatype="html">
@@ -1811,7 +1811,7 @@
       </trans-unit>
       <trans-unit id="6209939621665316894" datatype="html">
         <source>You might need to check your account is allowed by the video or instance owner.</source>
-        <target state="translated">Можливо, вам доведеться перевірити, чи дозволив власник відео чи екземпляра ваш обліковий запис.</target>
+        <target state="translated">Можливо, вам доведеться перевірити, чи дозволив власник відео чи сервера ваш обліковий запис.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context>
           <context context-type="linenumber">30</context>
@@ -1819,7 +1819,7 @@
       </trans-unit>
       <trans-unit id="3543381263966122204" datatype="html">
         <source>You might need to check your account is allowed by the resource or instance owner.</source>
-        <target state="translated">Можливо, вам доведеться перевірити, чи дозволив власник ресурсу або екземпляра ваш обліковий запис.</target>
+        <target state="translated">Можливо, вам доведеться перевірити, чи дозволив власник ресурсу або сервера ваш обліковий запис.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context>
           <context context-type="linenumber">31</context>
@@ -1872,17 +1872,17 @@
       </trans-unit>
       <trans-unit id="3416071273413341159" datatype="html">
         <source>any instance</source>
-        <target state="translated">будь-який екземпляр</target>
+        <target state="translated">будь-який сервер</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">42</context></context-group>
       </trans-unit>
       <trans-unit id="1764675694412365696" datatype="html">
         <source>only followed instances</source>
-        <target state="translated">лише відстежувані екземпляри</target>
+        <target state="translated">лише відстежувані сервери</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">43</context></context-group>
       </trans-unit>
       <trans-unit id="6462732349450217281" datatype="html">
         <source>Determines whether you can resolve any distant content, or if this instance only allows doing so for instances it follows.</source>
-        <target state="translated">Визначає, чи можна розв'язати будь-який віддалений вміст, чи цей екземпляр дозволяє це робити лише для серверів, за якими він стежить.</target>
+        <target state="translated">Визначає, чи можна розв'язати будь-який віддалений вміст, чи цей сервер дозволяє це робити лише для серверів, за якими він стежить.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="3710530516408401495" datatype="html">
@@ -1903,7 +1903,7 @@
       </trans-unit>
       <trans-unit id="2468689683507870964" datatype="html">
         <source>In this instance's network</source>
-        <target state="translated">На цьому екземплярі</target>
+        <target state="translated">На цьому сервері</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/suggestion.component.html</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="4494942989613184609" datatype="html">
@@ -2014,7 +2014,7 @@
       </trans-unit>
       <trans-unit id="5143793904897598509" datatype="html">
         <source>PeerTube instance host</source>
-        <target state="translated">Хост екземпляра PeerTube</target>
+        <target state="translated">Хост сервера PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
           <context context-type="linenumber">178</context>
@@ -2273,7 +2273,7 @@
       </trans-unit>
       <trans-unit id="4850841867094321899" datatype="html">
         <source>Some instances hide videos containing mature or explicit content by default.</source>
-        <target state="translated">Деякі екземпляри типово приховують відео з відвертим або вмістом для дорослих.</target>
+        <target state="translated">Деякі сервери типово приховують відео з відвертим або змістом для дорослих.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">141</context></context-group>
       </trans-unit>
       <trans-unit id="4895908242997839943" datatype="html">
@@ -2293,7 +2293,7 @@
       </trans-unit>
       <trans-unit id="2142169012597585513" datatype="html">
         <source>Add another caption</source>
-        <target state="translated">Додати ще один напис</target>
+        <target state="translated">Додати ще один підпис</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">174</context></context-group>
       </trans-unit>
       <trans-unit id="4525569337497033381" datatype="html">
@@ -2437,7 +2437,7 @@
       </trans-unit>
       <trans-unit id="6760671759540007434" datatype="html">
         <source>You can import any URL <x id="START_LINK"/>supported by youtube-dl<x id="CLOSE_LINK"/> or URL that points to a media file. You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance. </source>
-        <target state="translated">Ви можете імпортувати будь-яку URL-адресу <x id="START_LINK"/>, підтримувану youtube-dl<x id="CLOSE_LINK"/> або URL-адресу, яка вказує на медіафайл. Переконайтеся, що маєте права розповсюджувати вміст, на який вона вказує, інакше це може спричинити правові негаразди для вас та вашого екземпляра. </target>
+        <target state="translated">Ви можете імпортувати будь-яку URL-адресу <x id="START_LINK"/>, підтримувану youtube-dl<x id="CLOSE_LINK"/> або URL-адресу, яка вказує на медіафайл. Переконайтеся, що маєте права розповсюджувати вміст, на який вона вказує, інакше це може спричинити правові негаразди для вас та вашого сервера. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-url.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="460353452916242022" datatype="html">
@@ -2569,7 +2569,7 @@
       </trans-unit>
       <trans-unit id="2587226585711833549" datatype="html">
         <source>Read instance rules for help</source>
-        <target state="translated">Читайте правила екземпляра, щоб отримати допомогу</target>
+        <target state="translated">Читайте правила сервера, щоб отримати допомогу</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.html</context><context context-type="linenumber">2</context></context-group>
       </trans-unit>
       <trans-unit id="3455474330346212563" datatype="html">
@@ -2600,7 +2600,7 @@
       </trans-unit>
       <trans-unit id="7860848084471862305" datatype="html">
         <source>Cannot create live because this instance have too many created lives</source>
-        <target state="translated">Неможливо розпочати трансляцію, оскільки на цьому екземплярі відбувається забагато трансляцій</target>
+        <target state="translated">Неможливо розпочати трансляцію, оскільки на цьому сервері відбувається забагато трансляцій</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">103</context></context-group>
       </trans-unit>
       <trans-unit id="1278564497286613571" datatype="html">
@@ -2615,22 +2615,22 @@
       </trans-unit>
       <trans-unit id="5872059367236038160" datatype="html">
         <source>Stream only once and save a replay of your live</source>
-        <target state="new">Stream only once and save a replay of your live</target>
+        <target state="translated">Транслювати лише раз і зберегти повтор свого прямого ефіру</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">157</context></context-group>
       </trans-unit>
       <trans-unit id="2360261543675520397" datatype="html">
         <source>Stream only once</source>
-        <target state="new">Stream only once</target>
+        <target state="translated">Транслювати лише раз</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">160</context></context-group>
       </trans-unit>
       <trans-unit id="5168540607709796871" datatype="html">
         <source>Stream multiple times, replays can't be saved</source>
-        <target state="new">Stream multiple times, replays can't be saved</target>
+        <target state="translated">Транслювати кілька разів, повтори неможливо зберегти</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">165</context></context-group>
       </trans-unit>
       <trans-unit id="58134197356653483" datatype="html">
         <source>Stream multiple times using the same URL</source>
-        <target state="new">Stream multiple times using the same URL</target>
+        <target state="translated">Транслювати кілька разів за допомогою однакової URL-адреси</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">168</context></context-group>
       </trans-unit>
       <trans-unit id="8218579597782287078" datatype="html">
@@ -2645,7 +2645,7 @@
       </trans-unit>
       <trans-unit id="2993949426196989262" datatype="html">
         <source>We recommend you to not use the <x id="START_TAG_STRONG"/>root<x id="CLOSE_TAG_STRONG"/> user to publish your videos, since it's the super-admin account of your instance. <x id="LINE_BREAK"/> Instead, <x id="START_LINK"/>create a dedicated account<x id="CLOSE_LINK"/> to upload your videos. </source>
-        <target state="translated">Радимо не публікувати відео від імені <x id="START_TAG_STRONG"/>основного<x id="CLOSE_TAG_STRONG"/> користувача, оскільки це обліковий запис із розширеними правами керування екземпляром. <x id="LINE_BREAK"/> Натомість <x id="START_LINK"/>створіть спеціальний обліковий запис<x id="CLOSE_LINK"/> для завантаження своїх відео. </target>
+        <target state="translated">Радимо не публікувати відео від імені <x id="START_TAG_STRONG"/>основного<x id="CLOSE_TAG_STRONG"/> користувача, оскільки це обліковий запис із розширеними правами керування сервером. <x id="LINE_BREAK"/> Натомість <x id="START_LINK"/>створіть спеціальний обліковий запис<x id="CLOSE_LINK"/> для завантаження своїх відео. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.html</context><context context-type="linenumber">33</context></context-group>
       </trans-unit>
       <trans-unit id="293476877021544115" datatype="html">
@@ -2815,7 +2815,7 @@
       </trans-unit>
       <trans-unit id="3959826834147169200" datatype="html">
         <source>Muted</source>
-        <target state="translated">Заглушено</target>
+        <target state="translated">Вимкнено</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/account-block-badges.component.html</context><context context-type="linenumber">1</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">192</context></context-group>
       </trans-unit>
@@ -2826,7 +2826,7 @@
       </trans-unit>
       <trans-unit id="5908032061347078472" datatype="html">
         <source>Use origin instance URL</source>
-        <target state="translated">Використовувати оригінальну URL-адресу екземпляра</target>
+        <target state="translated">Використовувати оригінальну URL-адресу сервера</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">206</context></context-group>
       </trans-unit>
       <trans-unit id="6212841954039032241" datatype="html">
@@ -2949,7 +2949,7 @@
       </trans-unit>
       <trans-unit id="6981359593518942576" datatype="html">
         <source>Open the video on the origin instance</source>
-        <target state="translated">Відкрити відео в екземплярі походження</target>
+        <target state="translated">Відкрити відео на сервері походження</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/metadata/video-attributes.component.html</context>
           <context context-type="linenumber">14</context>
@@ -3093,12 +3093,12 @@
       </trans-unit>
       <trans-unit id="3691787517663044217" datatype="html">
         <source>The deletion will be sent to remote instances so they can reflect the change.</source>
-        <target state="translated">Видалення буде надіслано віддаленим екземплярам, щоб вони могли відбити зміни.</target>
+        <target state="translated">Видалення буде надіслано віддаленим серверам, щоб вони могли відбити зміни.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.ts</context><context context-type="linenumber">175</context></context-group>
       </trans-unit>
       <trans-unit id="7321800851971795962" datatype="html">
         <source>It is a remote comment, so the deletion will only be effective on your instance.</source>
-        <target state="translated">Це віддалений коментар, тому його буде видалено лише на вашому екземплярі.</target>
+        <target state="translated">Це віддалений коментар, тому його буде видалено лише з вашого сервера.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.ts</context><context context-type="linenumber">177</context></context-group>
       </trans-unit>
       <trans-unit id="5964038603724691720" datatype="html">
@@ -3349,7 +3349,7 @@
       </trans-unit>
       <trans-unit id="2117404838551056159" datatype="html">
         <source>Your instance doesn't have any follower.</source>
-        <target state="translated">Ніхто не стежить за вашим екземпляром.</target>
+        <target state="translated">Ніхто не стежить за вашим сервером.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">65</context></context-group>
       </trans-unit>
       <trans-unit id="2845798909207198924" datatype="html">
@@ -3364,7 +3364,7 @@
       </trans-unit>
       <trans-unit id="8246779176913476983" datatype="html">
         <source>Open instance in a new tab</source>
-        <target state="translated">Відкрити екземпляр у новій вкладці</target>
+        <target state="translated">Відкрити сервер у новій вкладці</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">44</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.html</context><context context-type="linenumber">42</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.html</context><context context-type="linenumber">42</context></context-group>
@@ -3376,7 +3376,7 @@
       </trans-unit>
       <trans-unit id="7274241885665071790" datatype="html">
         <source>Your instance is not following anyone.</source>
-        <target state="translated">Ваш екземпляр ні за ким не стежить.</target>
+        <target state="translated">Ваш сервер ні за ким не стежить.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">72</context></context-group>
       </trans-unit>
       <trans-unit id="4774348799569692380" datatype="html">
@@ -3401,12 +3401,12 @@
       </trans-unit>
       <trans-unit id="4937132637898470918" datatype="html">
         <source>My videos duplicated by remote instances</source>
-        <target state="translated">Мої відео дублюються віддаленими екземплярами</target>
+        <target state="translated">Мої відео дублюються віддаленими серверами</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">12</context></context-group>
       </trans-unit>
       <trans-unit id="4667534933980942398" datatype="html">
         <source>Remote videos duplicated by my instance</source>
-        <target state="translated">Віддалені відео дублюються моїм екземпляром</target>
+        <target state="translated">Віддалені відео дублюються моїм сервером</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="8363291180171434623" datatype="html">
@@ -3644,7 +3644,7 @@
       </trans-unit>
       <trans-unit id="7423116442791683693" datatype="html">
         <source>Your instance doesn't mirror any video.</source>
-        <target state="translated">Ваш екземпляр не віддзеркалює жодного відео.</target>
+        <target state="translated">Ваш сервер не віддзеркалює жодного відео.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">79</context></context-group>
       </trans-unit>
       <trans-unit id="1944582937285351613" datatype="html">
@@ -3931,7 +3931,7 @@
       </trans-unit>
       <trans-unit id="2381859602529023966" datatype="html">
         <source>Instance</source>
-        <target state="translated">Екземпляр</target>
+        <target state="translated">Сервер</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about.component.html</context><context context-type="linenumber">5</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">217</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.html</context><context context-type="linenumber">31</context></context-group>
@@ -3939,7 +3939,7 @@
       </trans-unit>
       <trans-unit id="1300704815627663264" datatype="html">
         <source>Muted at <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></source>
-        <target state="translated">Відімкнено о <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></target>
+        <target state="translated">Вимкнено о <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.html</context><context context-type="linenumber">24</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.html</context><context context-type="linenumber">24</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.html</context><context context-type="linenumber">32</context></context-group>
@@ -3967,7 +3967,7 @@
       </trans-unit>
       <trans-unit id="6250599179731937899" datatype="html">
         <source>Showing <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> muted instances</source>
-        <target state="translated">Показано <x id="INTERPOLATION"/> до <x id="INTERPOLATION_1"/> з <x id="INTERPOLATION_2"/> заблокованих екземплярів</target>
+        <target state="translated">Показано <x id="INTERPOLATION"/> до <x id="INTERPOLATION_1"/> з <x id="INTERPOLATION_2"/> вимкнених серверів</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.html</context><context context-type="linenumber">11</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
@@ -4020,7 +4020,7 @@
       </trans-unit>
       <trans-unit id="602667807232759122" datatype="html">
         <source>Showing <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> muted accounts</source>
-        <target state="translated">Показано <x id="INTERPOLATION"/> до <x id="INTERPOLATION_1"/> з <x id="INTERPOLATION_2"/> заблокованих облікових записів</target>
+        <target state="translated">Показано <x id="INTERPOLATION"/> до <x id="INTERPOLATION_1"/> з <x id="INTERPOLATION_2"/> вимкнених облікових записів</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.html</context><context context-type="linenumber">10</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
@@ -4336,7 +4336,7 @@
       </trans-unit>
       <trans-unit id="7396175500300709096" datatype="html">
         <source>INSTANCE</source>
-        <target state="translated">ЕКЗЕМПЛЯР</target>
+        <target state="translated">СЕРВЕР</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context><context context-type="linenumber">7</context></context-group>
       </trans-unit>
       <trans-unit id="8953033926734869941" datatype="html">
@@ -4353,7 +4353,7 @@
       </trans-unit>
       <trans-unit id="7794655859478571096" datatype="html">
         <source>Main instance categories</source>
-        <target state="translated">Основні категорії екземпляра</target>
+        <target state="translated">Основні категорії сервера</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context><context context-type="linenumber">50</context></context-group>
       </trans-unit>
       <trans-unit id="6588040559347368313" datatype="html">
@@ -4472,7 +4472,7 @@
       </trans-unit>
       <trans-unit id="2047672753819413550" datatype="html">
         <source>YOU AND YOUR INSTANCE</source>
-        <target state="translated">ВИ І ВАШ ЕКЗЕМПЛЯР</target>
+        <target state="translated">ВИ І ВАШ СЕРВЕР</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context><context context-type="linenumber">167</context></context-group>
       </trans-unit>
       <trans-unit id="3968335261686887328" datatype="html">
@@ -4487,7 +4487,7 @@
       </trans-unit>
       <trans-unit id="5480243297215266596" datatype="html">
         <source>Why did you create this instance?</source>
-        <target state="translated">Навіщо ви створили цей екземпляр?</target>
+        <target state="translated">Навіщо ви створили цей сервер?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context><context context-type="linenumber">185</context></context-group>
       </trans-unit>
       <trans-unit id="6995481962115300007" datatype="html">
@@ -4937,7 +4937,7 @@
       </trans-unit>
       <trans-unit id="5648651824279408711" datatype="html">
         <source>Instance allowed by Twitter</source>
-        <target state="translated">Екземпляр, дозволений Twitter</target>
+        <target state="translated">Сервер, дозволений Twitter</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">551</context></context-group>
       </trans-unit>
       <trans-unit id="2076338542820061819" datatype="html">
@@ -5454,7 +5454,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8481241275509347668" datatype="html">
         <source>Local videos (this instance)</source>
-        <target state="translated">Локальні відео (цей екземпляр)</target>
+        <target state="translated">Локальні відео (цей сервер)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">85</context>
@@ -5890,9 +5890,7 @@ color: red;
       </trans-unit>
       <trans-unit id="2427149618141327033" datatype="html">
         <source>Browse videos on PeerTube to add them in your playlist.</source>
-        <target state="new">
-        Browse videos on PeerTube to add them in your playlist.
-      </target>
+        <target state="translated">Переглядайте відео на PeerTube, щоб додати їх у свою добірку.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-elements.component.html</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="8901774330683812267" datatype="html">
@@ -6134,7 +6132,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="4068658588793749132" datatype="html">
         <source>This channel does not have playlists.</source>
-        <target state="new">This channel does not have playlists.</target>
+        <target state="translated">На цьому каналі немає добірок.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channel-playlists/video-channel-playlists.component.html</context><context context-type="linenumber">6</context></context-group>
       </trans-unit>
       <trans-unit id="5066829276646988805" datatype="html">
@@ -6507,7 +6505,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="4195286790385468087" datatype="html">
         <source>About this instance</source>
-        <target state="translated">Про цей екземпляр</target>
+        <target state="translated">Про цей сервер</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-routing.module.ts</context><context context-type="linenumber">24</context></context-group>
       </trans-unit>
       <trans-unit id="8773846522957677259" datatype="html">
@@ -6638,7 +6636,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="7440807341905682986" datatype="html">
         <source>I am at least <x id="INTERPOLATION" equiv-text="{{ minimumAge }}"/> years old and agree to the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;terms-anchor&quot; (click)=&quot;onTermsClick($event)&quot; href='#'&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;hasCodeOfConduct&quot;&gt;"/> and to the <x id="START_LINK_1" equiv-text="&lt;a (click)=&quot;onCodeOfConductClick($event)&quot; href='#'&gt;"/>Code of Conduct<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/> of this instance </source>
-        <target state="translated">Мені виповнилося <x id="INTERPOLATION" equiv-text="{{ minimumAge }}"/> років і я погоджуюся з <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;terms-anchor&quot; (click)=&quot;onTermsClick($event)&quot; href='#'&gt;"/>Умовами<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;hasCodeOfConduct&quot;&gt;"/> та <x id="START_LINK_1" equiv-text="&lt;a (click)=&quot;onCodeOfConductClick($event)&quot; href='#'&gt;"/>Правилами поведінки<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/> цього екземпляра </target>
+        <target state="translated">Мені виповнилося <x id="INTERPOLATION" equiv-text="{{ minimumAge }}"/> років і я погоджуюся з <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;terms-anchor&quot; (click)=&quot;onTermsClick($event)&quot; href='#'&gt;"/>Умовами<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;hasCodeOfConduct&quot;&gt;"/> та <x id="START_LINK_1" equiv-text="&lt;a (click)=&quot;onCodeOfConductClick($event)&quot; href='#'&gt;"/>Правилами поведінки<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/> цього сервера </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register-step-terms.component.html</context>
           <context context-type="linenumber">5,10</context>
@@ -6653,7 +6651,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="2770947245861951784" datatype="html">
         <source>Signup is not enabled on this instance.</source>
-        <target state="translated">Реєстрацію не увімкнено на цьому екземплярі.</target>
+        <target state="translated">Реєстрацію не увімкнено на цьому сервері.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">4</context>
@@ -6866,7 +6864,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="3642770981085338761" datatype="html">
         <source>Followers of your instance</source>
-        <target state="translated">Підписники вашого екземпляра</target>
+        <target state="translated">Підписники вашого сервера</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context>
           <context context-type="linenumber">3</context>
@@ -6966,7 +6964,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="6920964195632624609" datatype="html">
         <source>INSTANCE HOMEPAGE</source>
-        <target state="translated">ДОМІВКА ЕКЗЕМПЛЯРА</target>
+        <target state="translated">ДОМІВКА СЕРВЕРА</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-homepage.component.html</context>
           <context context-type="linenumber">7</context>
@@ -7770,7 +7768,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="7805059636749367886" datatype="html">
         <source>Muted instances</source>
-        <target state="translated">Вимкнені екземпляри</target>
+        <target state="translated">Вимкнені сервери</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/moderation.routes.ts</context><context context-type="linenumber">107</context></context-group>
       </trans-unit>
       <trans-unit id="5974506725502681113" datatype="html">
@@ -8122,7 +8120,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="3268838889659873892" datatype="html">
         <source>A new user registered on your instance</source>
-        <target state="translated">На вашому екземплярі зареєстровано нового користувача</target>
+        <target state="translated">На вашому сервері зареєстровано нового користувача</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">39</context></context-group>
       </trans-unit>
       <trans-unit id="7373104725413001009" datatype="html">
@@ -8250,7 +8248,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="8723777130353305761" datatype="html">
         <source>This name already exists on this instance.</source>
-        <target state="translated">Це ім'я вже існує на цьому екземплярі.</target>
+        <target state="translated">Це ім'я вже існує на цьому сервері.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+manage/video-channel-edit/video-channel-create.component.ts</context><context context-type="linenumber">72</context></context-group>
       </trans-unit>
       <trans-unit id="7589345916094713536" datatype="html">
@@ -9005,7 +9003,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="7784486624424057376" datatype="html">
         <source>Instance name is required.</source>
-        <target state="translated">Назва екземпляра обов'язкова.</target>
+        <target state="translated">Назва сервера обов'язкова.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">7</context></context-group>
       </trans-unit>
       <trans-unit id="3281212084219111058" datatype="html">
@@ -10093,7 +10091,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="2830831449226931729" datatype="html">
         <source>Instance languages</source>
-        <target state="translated">Мови екземпляра</target>
+        <target state="translated">Мови сервера</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context><context context-type="linenumber">191</context></context-group>
       </trans-unit>
       <trans-unit id="40119547597591062" datatype="html">
@@ -10601,7 +10599,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="2279527393438260622" datatype="html">
         <source>Search videos, playlists, channels…</source>
-        <target state="new">Search videos, playlists, channels…</target>
+        <target state="translated">Шукати відео, добірки, канали…</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">3</context>
@@ -11049,7 +11047,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="1425933035739773115" datatype="html">
         <source>Only users of this instance can see this video</source>
-        <target state="translated">Лише користувачі цього екземпляра можуть бачити це відео</target>
+        <target state="translated">Лише користувачі цього сервера можуть бачити це відео</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context><context context-type="linenumber">370</context></context-group>
       </trans-unit>
       <trans-unit id="8312101634344200207" datatype="html">
