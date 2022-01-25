@@ -5047,7 +5047,7 @@
       </trans-unit>
       <trans-unit id="7911929966701561067" datatype="html">
         <source>TRANSCODING</source>
-        <target state="new">TRANSCODING</target>
+        <target state="translated">ПЕРЕКОДУВАННЯ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">85</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
@@ -5058,17 +5058,17 @@
       </trans-unit>
       <trans-unit id="3444148141968928069" datatype="html">
         <source>Input formats</source>
-        <target state="new">Input formats</target>
+        <target state="translated">Вхідні формати</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">46</context></context-group>
       </trans-unit>
       <trans-unit id="4560217482714993155" datatype="html">
         <source>Transcoding enabled</source>
-        <target state="new">Transcoding enabled</target>
+        <target state="translated">Перекодування увімкнено</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">40</context></context-group>
       </trans-unit>
       <trans-unit id="7452751710576287271" datatype="html">
         <source>Allow additional extensions</source>
-        <target state="new">Allow additional extensions</target>
+        <target state="translated">Дозволити додаткові розширення</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">51</context></context-group>
       </trans-unit>
       <trans-unit id="5698272164915890247" datatype="html">
@@ -5096,12 +5096,12 @@
       </trans-unit>
       <trans-unit id="2036818807823848377" datatype="html">
         <source>Output formats</source>
-        <target state="new">Output formats</target>
+        <target state="translated">Вихідні формати</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">73</context></context-group>
       </trans-unit>
       <trans-unit id="522057769554096255" datatype="html">
         <source>WebTorrent enabled</source>
-        <target state="new">WebTorrent enabled</target>
+        <target state="translated">WebTorrent увімкнено</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">79</context></context-group>
       </trans-unit>
       <trans-unit id="8373385486403101567" datatype="html">
@@ -5114,7 +5114,7 @@
       </trans-unit>
       <trans-unit id="3839590624406770455" datatype="html">
         <source>HLS with P2P support enabled</source>
-        <target state="new">HLS with P2P support enabled</target>
+        <target state="translated">Підтримку HLS з P2P увімкнено</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">94</context></context-group>
       </trans-unit>
       <trans-unit id="7334484418359079994" datatype="html">
@@ -5450,7 +5450,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8383401711408398806" datatype="html">
         <source>Federated videos (this instance + followed instances)</source>
-        <target state="new">Federated videos (this instance + followed instances)</target>
+        <target state="translated">Відео федерації (цей сервер + відстежувані сервери)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">90</context>
@@ -5533,7 +5533,7 @@ color: red;
       </trans-unit>
       <trans-unit id="4409859601539810260" datatype="html">
         <source>Policy for sensitive videos</source>
-        <target state="new">Policy for sensitive videos</target>
+        <target state="translated">Політика щодо делікатних відео</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context><context context-type="linenumber">118</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
@@ -5576,17 +5576,17 @@ color: red;
       </trans-unit>
       <trans-unit id="4541462271161741535" datatype="html">
         <source>instance default</source>
-        <target state="new">instance default</target>
+        <target state="translated">типова сервера</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.html</context><context context-type="linenumber">8</context></context-group>
       </trans-unit>
       <trans-unit id="5192951216991773088" datatype="html">
         <source>peertube default</source>
-        <target state="new">peertube default</target>
+        <target state="translated">типова peertube</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.html</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
       <trans-unit id="4561174610228620528" datatype="html">
         <source>Select the next owner</source>
-        <target state="new">Select the next owner</target>
+        <target state="translated">Вибрати наступного власника</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/modals/video-change-ownership.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="1788875035518441092" datatype="html">
@@ -5641,7 +5641,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5611592591303869712" datatype="html">
         <source>Status</source>
-        <target state="new">Status</target>
+        <target state="translated">Стан</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-ownership/my-ownership.component.html</context><context context-type="linenumber">25</context></context-group>
       </trans-unit>
       <trans-unit id="5417361655914085905" datatype="html">
@@ -5652,7 +5652,7 @@ color: red;
       </trans-unit>
       <trans-unit id="2000373220662583633" datatype="html">
         <source>No ownership change request found.</source>
-        <target state="new">No ownership change request found.</target>
+        <target state="translated">Запит на зміну власника не знайдено.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-ownership/my-ownership.component.html</context><context context-type="linenumber">78</context></context-group>
       </trans-unit>
       <trans-unit id="4247400351982331798" datatype="html">
@@ -5726,7 +5726,7 @@ color: red;
       </trans-unit>
       <trans-unit id="4854396465510517671" datatype="html">
         <source>Target</source>
-        <target state="new">Target</target>
+        <target state="translated">Ціль</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.html</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="6376690302059877029" datatype="html">
@@ -5758,7 +5758,7 @@ color: red;
       </trans-unit>
       <trans-unit id="228548407872312756" datatype="html">
         <source>Owner account page</source>
-        <target state="new">Owner account page</target>
+        <target state="translated">Сторінка облікового запису власника</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-follows/my-subscriptions.component.html</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="4781078006040259916" datatype="html">
@@ -5768,7 +5768,7 @@ color: red;
       </trans-unit>
       <trans-unit id="989169929300254768" datatype="html">
         <source>Delete from history</source>
-        <target state="new">Delete from history</target>
+        <target state="translated">Видалити з історії</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.html</context>
           <context context-type="linenumber">36</context>
@@ -5814,17 +5814,17 @@ color: red;
       </trans-unit>
       <trans-unit id="751740263472313326" datatype="html">
         <source>Unread first</source>
-        <target state="new">Unread first</target>
+        <target state="translated">Спочатку непрочитані</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-notifications/my-account-notifications.component.html</context><context context-type="linenumber">12</context></context-group>
       </trans-unit>
       <trans-unit id="7679199047720825365" datatype="html">
         <source>All read</source>
-        <target state="new">All read</target>
+        <target state="translated">Усе прочитано</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-notifications/my-account-notifications.component.html</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="9167786874272926575" datatype="html">
         <source>Web</source>
-        <target state="new">Web</target>
+        <target state="translated">Веб</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.html</context><context context-type="linenumber">5</context></context-group>
       </trans-unit>
       <trans-unit id="1967081128372276674" datatype="html">
@@ -5908,7 +5908,7 @@ color: red;
       </trans-unit>
       <trans-unit id="3505845886770923767" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 playlist} other {<x id="INTERPOLATION"/> playlists}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {1 playlist} other {<x id="INTERPOLATION"/> playlists}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 добірка} few {<x id="INTERPOLATION"/> добірки} other {<x id="INTERPOLATION"/> добірок}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-channels/video-channel-playlists/video-channel-playlists.component.html</context>
           <context context-type="linenumber">3</context>
@@ -5916,9 +5916,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8746826171043347689" datatype="html">
         <source>Verify account email confirmation</source>
-        <target state="new">
-    Verify account email confirmation
-  </target>
+        <target state="translated">Підтвердити електронну пошту облікового запису</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-email/verify-account-email.component.html</context><context context-type="linenumber">2</context></context-group>
       </trans-unit>
       <trans-unit id="5705969545943613067" datatype="html">
@@ -5948,65 +5946,63 @@ color: red;
       </trans-unit>
       <trans-unit id="4302331889176439801" datatype="html">
         <source>Request email for account verification</source>
-        <target state="new">
-    Request email for account verification
-  </target>
+        <target state="translated">Запитати електронний лист для підтвердження облікового запису</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-ask-send-email/verify-account-ask-send-email.component.html</context><context context-type="linenumber">2</context></context-group>
       </trans-unit>
       <trans-unit id="4027779086550572813" datatype="html">
         <source>Send verification email</source>
-        <target state="new">Send verification email</target>
+        <target state="translated">Надіслати електронний лист для підтвердження</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-ask-send-email/verify-account-ask-send-email.component.html</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="8610022770999239699" datatype="html">
         <source>This instance does not require email verification.</source>
-        <target state="new">This instance does not require email verification.</target>
+        <target state="translated">Сервер не вимагає підтвердження електронної пошти.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-ask-send-email/verify-account-ask-send-email.component.html</context><context context-type="linenumber">20</context></context-group>
       </trans-unit>
       <trans-unit id="248731258067914565" datatype="html">
         <source>Verify account via email</source>
-        <target state="new">Verify account via email</target>
+        <target state="translated">Підтвердити обліковий запис електронною поштою</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-routing.module.ts</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="9197112111252826229" datatype="html">
         <source>Ask to send an email to verify you account</source>
-        <target state="new">Ask to send an email to verify you account</target>
+        <target state="translated">Попросити надіслати електронний лист для підтвердження облікового запису</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-routing.module.ts</context><context context-type="linenumber">24</context></context-group>
       </trans-unit>
       <trans-unit id="2999492056553212422" datatype="html">
         <source>Banned</source>
-        <target state="new">Banned</target>
+        <target state="translated">Заблоковано</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.html</context><context context-type="linenumber">21</context></context-group>
       </trans-unit>
       <trans-unit id="4572885137800697555" datatype="html">
         <source>Instance muted</source>
-        <target state="new">Instance muted</target>
+        <target state="translated">Сервер вимкнено</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/account-block-badges.component.html</context><context context-type="linenumber">2</context></context-group>
       </trans-unit>
       <trans-unit id="302022805144581075" datatype="html">
         <source>Muted by your instance</source>
-        <target state="new">Muted by your instance</target>
+        <target state="translated">Вимкнено вашим сервером</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/account-block-badges.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="6860866645734090311" datatype="html">
         <source>Instance muted by your instance</source>
-        <target state="new">Instance muted by your instance</target>
+        <target state="translated">Сервер вимкнено вашим сервером</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/account-block-badges.component.html</context><context context-type="linenumber">4</context></context-group>
       </trans-unit>
       <trans-unit id="8661266239199665830" datatype="html">
         <source>Copy account handle</source>
-        <target state="new">Copy account handle</target>
+        <target state="translated">Копіювати адресу облікового запису</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.html</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="3061133792040537550" datatype="html">
         <source>Show the complete description</source>
-        <target state="new">Show the complete description</target>
+        <target state="translated">Показати весь опис</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.html</context><context context-type="linenumber">53</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.html</context><context context-type="linenumber">96</context></context-group>
       </trans-unit>
       <trans-unit id="9098920722959201547" datatype="html">
         <source>Show more...</source>
-        <target state="new"> Show more... </target>
+        <target state="translated">Показати більше...</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.html</context><context context-type="linenumber">54</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.html</context><context context-type="linenumber">97</context></context-group>
       </trans-unit>
@@ -6017,7 +6013,7 @@ color: red;
       </trans-unit>
       <trans-unit id="1311667768861466464" datatype="html">
         <source>Search account videos</source>
-        <target state="new">Search account videos</target>
+        <target state="translated">Пошук відео облікового запису</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.html</context><context context-type="linenumber">78</context></context-group>
       </trans-unit>
       <trans-unit id="5512878593724620692" datatype="html">
@@ -6027,7 +6023,7 @@ color: red;
       </trans-unit>
       <trans-unit id="3666829335406793239" datatype="html">
         <source>This account does not have channels.</source>
-        <target state="new">This account does not have channels.</target>
+        <target state="translated">Цей обліковий запис не має каналів.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context><context context-type="linenumber">5</context></context-group>
       </trans-unit>
       <trans-unit id="403587185492002456" datatype="html">
@@ -6076,7 +6072,7 @@ color: red;
       </trans-unit>
       <trans-unit id="4433306639366959484" datatype="html">
         <source>Please type the name of the video channel (<x id="PH" equiv-text="videoChannel.name"/>) to confirm</source>
-        <target state="new">Please type the name of the video channel (<x id="PH" equiv-text="videoChannel.name"/>) to confirm</target>
+        <target state="translated">Введіть назву відеоканалу (<x id="PH" equiv-text="videoChannel.name"/>), щоб підтвердити</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.ts</context>
           <context context-type="linenumber">48</context>
@@ -6090,7 +6086,7 @@ color: red;
       </trans-unit>
       <trans-unit id="7828153032795614080" datatype="html">
         <source>See this video channel</source>
-        <target state="new">See this video channel</target>
+        <target state="translated">Переглянути цей відеоканал</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context><context context-type="linenumber">13</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context><context context-type="linenumber">17</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/channel-miniature-markup.component.html</context><context context-type="linenumber">4</context></context-group>
@@ -6098,17 +6094,17 @@ color: red;
       </trans-unit>
       <trans-unit id="1545109431751219382" datatype="html">
         <source>This channel doesn't have any videos.</source>
-        <target state="new">This channel doesn't have any videos.</target>
+        <target state="translated">На цьому каналі немає відео.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context><context context-type="linenumber">38</context></context-group>
       </trans-unit>
       <trans-unit id="2705478076887104088" datatype="html">
         <source>SHOW THIS CHANNEL &gt;</source>
-        <target state="new">SHOW THIS CHANNEL &gt;</target>
+        <target state="translated">ПОКАЗАТИ ЦЕЙ КАНАЛ &gt;</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context><context context-type="linenumber">46</context></context-group>
       </trans-unit>
       <trans-unit id="4088311569349098646" datatype="html">
         <source>Stats</source>
-        <target state="new">Stats</target>
+        <target state="translated">Статистика</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">144</context></context-group>
       </trans-unit>
       <trans-unit id="4068658588793749132" datatype="html">
@@ -6123,7 +6119,7 @@ color: red;
       </trans-unit>
       <trans-unit id="1415060111017347427" datatype="html">
         <source>Network</source>
-        <target state="new">Network</target>
+        <target state="translated">Мережа</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about.component.html</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
       <trans-unit id="3701439542279610547" datatype="html">
@@ -6160,7 +6156,7 @@ color: red;
       </trans-unit>
       <trans-unit id="9127604588498960753" datatype="html">
         <source>Subject</source>
-        <target state="new">Subject</target>
+        <target state="translated">Тема</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-instance/contact-admin-modal.component.html</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="1391056849737890767" datatype="html">
@@ -6204,17 +6200,17 @@ color: red;
       </trans-unit>
       <trans-unit id="4722135551130122302" datatype="html">
         <source>Why we created this instance</source>
-        <target state="new">Why we created this instance</target>
+        <target state="translated">Навіщо ми створили цей сервер</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context><context context-type="linenumber">58</context></context-group>
       </trans-unit>
       <trans-unit id="6434467346812189214" datatype="html">
         <source>How long we plan to maintain this instance</source>
-        <target state="new">How long we plan to maintain this instance</target>
+        <target state="translated">Як довго ми плануємо підтримувати цей сервер</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context><context context-type="linenumber">72</context></context-group>
       </trans-unit>
       <trans-unit id="8765504394950427814" datatype="html">
         <source>How we will pay for keeping our instance running</source>
-        <target state="new">How we will pay for keeping our instance running</target>
+        <target state="translated">Як ми оплачуватимемо підтримку роботи сервера</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">86</context>
@@ -6237,7 +6233,7 @@ color: red;
       </trans-unit>
       <trans-unit id="4281738631669138686" datatype="html">
         <source>Hardware information</source>
-        <target state="new">Hardware information</target>
+        <target state="translated">Інформація про обладнання</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context><context context-type="linenumber">198</context></context-group>
       </trans-unit>
       <trans-unit id="273909283347871" datatype="html">
@@ -6289,8 +6285,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5336387229608682776" datatype="html">
         <source>PeerTube Applications</source>
-        <target state="new">PeerTube
-            Applications</target>
+        <target state="translated">Застосунки PeerTube</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="7916664392219781729" datatype="html">
@@ -6315,7 +6310,7 @@ color: red;
       </trans-unit>
       <trans-unit id="185970110822844952" datatype="html">
         <source>P2P &amp; Privacy</source>
-        <target state="new">P2P &amp; Privacy</target>
+        <target state="translated">P2P і приватність</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">69</context></context-group>
       </trans-unit>
       <trans-unit id="442017645619017020" datatype="html">
