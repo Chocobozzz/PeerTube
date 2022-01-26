@@ -368,7 +368,7 @@
       </trans-unit>
       <trans-unit id="2099623308096969132" datatype="html">
         <source><x id="START_LINK"/>Your video import<x id="CLOSE_LINK"/> <x id="INTERPOLATION"/> failed </source>
-        <target state="translated"><x id="START_LINK"/>وارد کردن ویدیوی شما <x id="CLOSE_LINK"/> <x id="INTERPOLATION"/> با شکست مواجه شد </target>
+        <target state="translated"><x id="START_LINK"/>وارد کردن ویدیوی شما <x id="CLOSE_LINK"/> <x id="INTERPOLATION"/> با مشکل مواجه شد </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">132</context></context-group>
       </trans-unit>
       <trans-unit id="3371351937331192777" datatype="html">
@@ -986,7 +986,7 @@
       </trans-unit>
       <trans-unit id="4992364287704007430" datatype="html">
         <source>Torrent import</source>
-        <target state="translated">درون‌ریزی تورنت</target>
+        <target state="translated">وارد نمودن از تورنت</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">103</context></context-group>
       </trans-unit>
       <trans-unit id="7683705529753923369" datatype="html">
@@ -1001,7 +1001,7 @@
       </trans-unit>
       <trans-unit id="4603134051700562542" datatype="html">
         <source>Loading instance statistics...</source>
-        <target state="translated">در حال بار کردن آمار نمونه...</target>
+        <target state="translated">در حال بار گذاری آمار نمونه...</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-statistics.component.html</context><context context-type="linenumber">1</context></context-group>
       </trans-unit>
       <trans-unit id="2906587845957718064">
@@ -1073,12 +1073,12 @@
       </trans-unit>
       <trans-unit id="4499233456830047129" datatype="html">
         <source>The server encountered an error</source>
-        <target state="translated">کارساز با خطا مواجه شد</target>
+        <target state="translated">سرور با خطا مواجه شد</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/helpers/utils/upload.ts</context><context context-type="linenumber">19</context></context-group>
       </trans-unit>
       <trans-unit id="3334825601859787496" datatype="html">
         <source>Your <x id="PH" equiv-text="name"/> file couldn't be transferred before the set timeout (usually 10min)</source>
-        <target state="translated"><x id="PH" equiv-text="name"/> شما قبل از انجام زمانبندی قابل انتقال نیست (معمولا ده دقیقه ) فایل</target>
+        <target state="translated">فایل <x id="PH" equiv-text="name"/> شما قبل از زمان تعیین شده (معمولاً 10 دقیقه) قابل انتقال نیست.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/helpers/utils/upload.ts</context><context context-type="linenumber">22</context></context-group>
       </trans-unit>
       <trans-unit id="8530934870279569179" datatype="html">
