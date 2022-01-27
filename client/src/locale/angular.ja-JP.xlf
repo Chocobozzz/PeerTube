@@ -157,7 +157,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.HH" datatype="html">
         <source>HH</source>
-        <target state="new">HH</target>
+        <target state="translated">時間</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">131</context>
@@ -173,7 +173,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.MM" datatype="html">
         <source>MM</source>
-        <target state="translated">月</target>
+        <target state="translated">分</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">165,168</context>
@@ -312,17 +312,17 @@
       </trans-unit>
       <trans-unit id="506794214492992969" datatype="html">
         <source><x id="START_LINK"/>A new video abuse<x id="CLOSE_LINK"/> has been created on video <x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></source>
-        <target state="translated"><x id="START_LINK"/>動画への不正利用に関する通報<x id="CLOSE_LINK"/>が、新たにこの動画に対して作成されました。<x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></target>
+        <target state="translated"><x id="START_LINK"/>動画への不正行為に関する通報<x id="CLOSE_LINK"/>が、新たにこの動画に対して作成されました。<x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">49</context></context-group>
       </trans-unit>
       <trans-unit id="3487882822536102372" datatype="html">
         <source><x id="START_LINK"/>A new comment abuse<x id="CLOSE_LINK"/> has been created on video <x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></source>
-        <target state="translated"><x id="START_LINK"/>コメントへの不正利用に関する通報<x id="CLOSE_LINK"/>が、新たにこの動画に対して作成されました。<x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></target>
+        <target state="translated"><x id="START_LINK"/>コメントへの不正行為に関する通報<x id="CLOSE_LINK"/>が、新たにこの動画に対して作成されました。<x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">53</context></context-group>
       </trans-unit>
       <trans-unit id="7885094785640544496" datatype="html">
         <source><x id="START_LINK"/>A new account abuse<x id="CLOSE_LINK"/> has been created on account <x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></source>
-        <target state="translated"><x id="START_LINK"/>アカウントへの不正利用に関する通報<x id="CLOSE_LINK"/>が、新たにこのアカウントに対して作成されました。<x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></target>
+        <target state="translated"><x id="START_LINK"/>アカウントへの不正行為に関する通報<x id="CLOSE_LINK"/>が、新たにこのアカウントに対して作成されました。<x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">57</context></context-group>
       </trans-unit>
       <trans-unit id="2008776855594205860" datatype="html">
@@ -332,17 +332,17 @@
       </trans-unit>
       <trans-unit id="8816959058080937679" datatype="html">
         <source><x id="START_LINK"/>Your abuse <x id="INTERPOLATION"/><x id="CLOSE_LINK"/> has been <x id="START_TAG_NG_CONTAINER"/>accepted<x id="CLOSE_TAG_NG_CONTAINER"/><x id="START_TAG_NG_CONTAINER_1"/>rejected<x id="CLOSE_TAG_NG_CONTAINER"/></source>
-        <target state="translated"><x id="START_LINK"/>不正利用に関する通報<x id="INTERPOLATION"/><x id="CLOSE_LINK"/>が<x id="START_TAG_NG_CONTAINER"/>受理されました<x id="CLOSE_TAG_NG_CONTAINER"/><x id="START_TAG_NG_CONTAINER_1"/>却下されました<x id="CLOSE_TAG_NG_CONTAINER"/></target>
+        <target state="translated"><x id="START_LINK"/>不正行為に関する通報<x id="INTERPOLATION"/><x id="CLOSE_LINK"/>が<x id="START_TAG_NG_CONTAINER"/>受理されました<x id="CLOSE_TAG_NG_CONTAINER"/><x id="START_TAG_NG_CONTAINER_1"/>却下されました<x id="CLOSE_TAG_NG_CONTAINER"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">70</context></context-group>
       </trans-unit>
       <trans-unit id="6464941273929604379" datatype="html">
         <source><x id="START_LINK"/>Abuse <x id="INTERPOLATION"/><x id="CLOSE_LINK"/> has a new message </source>
-        <target state="needs-translation"><x id="START_LINK"/>Abuse <x id="INTERPOLATION"/><x id="CLOSE_LINK"/> has a new message </target>
+        <target state="translated"><x id="START_LINK"/>不正行為に関する通報<x id="INTERPOLATION"/><x id="CLOSE_LINK"/>にメッセージが届きました </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">80</context></context-group>
       </trans-unit>
       <trans-unit id="420488506127153204" datatype="html">
         <source>The recently added video <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> has been <x id="START_LINK_1"/>automatically blocked<x id="CLOSE_LINK"/></source>
-        <target state="needs-translation">The recently added video <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> has been <x id="START_LINK_1"/>automatically blocked<x id="CLOSE_LINK"/></target>
+        <target state="translated">最近追加した動画が<x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/><x id="START_LINK_1"/>自動的にブロック<x id="CLOSE_LINK"/>されました</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">87</context></context-group>
       </trans-unit>
       <trans-unit id="2740435661398285769" datatype="html">
@@ -501,8 +501,7 @@
       </trans-unit>
       <trans-unit id="2193037168694505715" datatype="html">
         <source>Short text to tell people how they can support the channel (membership platform...).&lt;br /&gt;&lt;br /&gt; When a video is uploaded in this channel, the video support field will be automatically filled by this text.</source>
-        <target state="new">Short text to tell people how they can support the channel (membership platform...).&lt;br /&gt;&lt;br /&gt;
-      When a video is uploaded in this channel, the video support field will be automatically filled by this text.</target>
+        <target state="translated">どうすれば動画の視聴者があなたのチャンネルを応援できるか(メンバーシップ制のサービス...など)を説明するための簡潔な文章を書きましょう。&lt;br /&gt;&lt;br /&gt;動画がチャンネルに投稿された時に、自動的に動画への応援欄に文章は埋め込まれます。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+manage/video-channel-edit/video-channel-edit.component.html</context>
           <context context-type="linenumber">67,68</context>
@@ -838,7 +837,7 @@
       </trans-unit>
       <trans-unit id="8023282004085823427" datatype="html">
         <source><x id="PH" equiv-text="this.video.name"/> will be duplicated by your instance.</source>
-        <target state="needs-translation"><x id="PH" equiv-text="this.video.name"/> will be duplicated by your instance.</target>
+        <target state="translated"><x id="PH" equiv-text="this.video.name"/>の動画が、あなたのインスタンスによって複製されました。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">240</context></context-group>
       </trans-unit>
       <trans-unit id="4140366911638662173" datatype="html">
@@ -1103,7 +1102,7 @@
       </trans-unit>
       <trans-unit id="7724943224457051042" datatype="html">
         <source>Ban these users</source>
-        <target state="new">Ban these users</target>
+        <target state="translated">これらのユーザーを凍結する</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-ban-modal.component.ts</context>
           <context context-type="linenumber">42</context>
@@ -1813,12 +1812,12 @@
       </trans-unit>
       <trans-unit id="3290262698447971494" datatype="html">
         <source>You are not authorized here.</source>
-        <target state="new">You are not authorized here.</target>
+        <target state="translated">あなたのアクセスは認められていません。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="6209939621665316894" datatype="html">
         <source>You might need to check your account is allowed by the video or instance owner.</source>
-        <target state="new">You might need to check your account is allowed by the video or instance owner.</target>
+        <target state="translated">あなたのアカウントが動画の所有者またはインスタンス運営者からアクセスを許可されているかどうか、確認する必要があるかもしれません。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context>
           <context context-type="linenumber">30</context>
@@ -1826,7 +1825,7 @@
       </trans-unit>
       <trans-unit id="3543381263966122204" datatype="html">
         <source>You might need to check your account is allowed by the resource or instance owner.</source>
-        <target state="needs-translation">You might need to check your account is allowed by the resource or instance owner.</target>
+        <target state="translated">あなたのアカウントがコンテンツの所有者またはインスタンス運営者からアクセスを許可されているかどうか、確認する必要があるかもしれません。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context>
           <context context-type="linenumber">31</context>
@@ -1861,7 +1860,7 @@
       </trans-unit>
       <trans-unit id="4070041848101291003" datatype="html">
         <source>Results will be augmented with those of a third-party index. Only data necessary to make the query will be sent.</source>
-        <target state="translated">検索結果の件数は、サードパーティの検索インデックスによって増加します。検索のために必要とするデータのみ、送信されます。</target>
+        <target state="translated">検索結果の件数は、サードパーティの検索インデックス次第で増加します。検索のために必要とするデータのみ送信されます。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">32</context></context-group>
       </trans-unit>
       <trans-unit id="2807610143550376912" datatype="html">
@@ -2157,7 +2156,7 @@
       </trans-unit>
       <trans-unit id="1358902062258458923" datatype="html">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://en.wikipedia.org/wiki/Markdown#Example&quot; target=&quot;_blank&quot; rel=&quot;noreferer noopener&quot;&gt;"/>Markdown compatible<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> that also supports <x id="START_LINK_1" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/api-custom-client-markup&quot; target=&quot;_blank&quot; rel=&quot;noreferer noopener&quot;&gt;"/>custom PeerTube HTML tags<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <target state="new"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://en.wikipedia.org/wiki/Markdown#Example&quot; target=&quot;_blank&quot; rel=&quot;noreferer noopener&quot;&gt;"/>Markdown compatible<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> that also supports <x id="START_LINK_1" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/api-custom-client-markup&quot; target=&quot;_blank&quot; rel=&quot;noreferer noopener&quot;&gt;"/>custom PeerTube HTML tags<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
+        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://en.wikipedia.org/wiki/Markdown#Example&quot; target=&quot;_blank&quot; rel=&quot;noreferer noopener&quot;&gt;"/>Markdown記法<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>は<x id="START_LINK_1" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/api-custom-client-markup&quot; target=&quot;_blank&quot; rel=&quot;noreferer noopener&quot;&gt;"/>PeerTubeのHTMLタグへのカスタマイズ<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>もサポートしています。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-custom-markup/custom-markup-help.component.html</context>
           <context context-type="linenumber">2</context>
@@ -2228,9 +2227,7 @@
       </trans-unit>
       <trans-unit id="8740951153302736329" datatype="html">
         <source>Video descriptions are truncated by default and require manual action to expand them.</source>
-        <target state="new">
-                    Video descriptions are truncated by default and require manual action to expand them.
-                  </target>
+        <target state="translated">デフォルトでは動画の説明文が長い場合はその一部が省かれるため、「もっと見る」を手動でクリックする必要があります。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">48</context></context-group>
       </trans-unit>
       <trans-unit id="2090254132451149776" datatype="html">
@@ -2364,7 +2361,7 @@
       </trans-unit>
       <trans-unit id="2288513108450439427">
         <source>Support</source>
-        <target>支援</target>
+        <target>応援</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.html</context><context context-type="linenumber">17</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">300</context></context-group>
       </trans-unit>
@@ -2400,7 +2397,7 @@
       </trans-unit>
       <trans-unit id="1952020204339597057" datatype="html">
         <source>Short text to tell people how they can support you (membership platform...).</source>
-        <target state="translated">どうすれば動画の視聴者があなたの活動を支援できるか(メンバーシップ制のサービス...など)を説明するための簡潔な文章を書きましょう。</target>
+        <target state="translated">どうすれば動画の視聴者があなたの活動を応援できるか(メンバーシップ制のサービス...など)を説明するための簡潔な文章を書きましょう。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">303</context></context-group>
       </trans-unit>
       <trans-unit id="7958716262877895706">
@@ -2503,7 +2500,7 @@
       </trans-unit>
       <trans-unit id="7099631707196015765" datatype="html">
         <source>Image that will be merged with your audio file. <x id="LINE_BREAK"/> The chosen image will be definitive and cannot be modified. </source>
-        <target state="needs-translation">Image that will be merged with your audio file. <x id="LINE_BREAK"/> The chosen image will be definitive and cannot be modified. </target>
+        <target state="translated">画像は音声ファイルに統合されます。<x id="LINE_BREAK"/> 選んだ画像は後で変更できず、また修正もできません。 </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.html</context><context context-type="linenumber">36</context></context-group>
       </trans-unit>
       <trans-unit id="4626927731329688072" datatype="html">
@@ -2802,7 +2799,7 @@
       </trans-unit>
       <trans-unit id="1290987288288099212" datatype="html">
         <source>Support <x id="INTERPOLATION" equiv-text="{{ displayName }}"/></source>
-        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ displayName }}"/>を支援する</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ displayName }}"/>を応援する</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-support-modal/support-modal.component.html</context>
           <context context-type="linenumber">3</context>
@@ -2887,7 +2884,7 @@
       </trans-unit>
       <trans-unit id="1813238393038053050" datatype="html">
         <source>SUPPORT</source>
-        <target state="translated">支援</target>
+        <target state="translated">応援</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/action-buttons/action-buttons.component.html</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="9219888125536520293" datatype="html">
@@ -2917,7 +2914,7 @@
       </trans-unit>
       <trans-unit id="4001371302469308813" datatype="html">
         <source>Support options for this video</source>
-        <target state="translated">この動画への支援方法</target>
+        <target state="translated">この動画への応援方法</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/action-buttons/action-buttons.component.ts</context><context context-type="linenumber">56</context></context-group>
       </trans-unit>
       <trans-unit id="687548610091961489">
@@ -2990,7 +2987,7 @@
       </trans-unit>
       <trans-unit id="3452334748875293295" datatype="html">
         <source>The video was blocked due to automatic blocking of new videos</source>
-        <target state="new">The video was blocked due to automatic blocking of new videos</target>
+        <target state="translated">新しく投稿された動画への自動ブロック機能により、この動画はブロックされました。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.html</context><context context-type="linenumber">50</context></context-group>
       </trans-unit>
       <trans-unit id="1465291804668949243" datatype="html">
@@ -3206,7 +3203,7 @@
       </trans-unit>
       <trans-unit id="658727060940996385" datatype="html">
         <source>Renewing the token will disallow previously configured clients from retrieving the feed until they use the new token. Proceed?</source>
-        <target state="new">Renewing the token will disallow previously configured clients from retrieving the feed until they use the new token. Proceed?</target>
+        <target state="translated">トークンを新しく生成することによって、現在のトークンによって設定されたRSSリーダーが新しいトークンによって設定されるまでは、フィードの読み込みはできなくなります。本当にトークンを新しく生成しますか？</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.ts</context><context context-type="linenumber">40</context></context-group>
       </trans-unit>
       <trans-unit id="3029923402309610616" datatype="html">
@@ -3298,7 +3295,7 @@
       </trans-unit>
       <trans-unit id="8898602327647937914" datatype="html">
         <source>Open actor page in a new tab</source>
-        <target state="new">Open actor page in a new tab</target>
+        <target state="translated">ユーザーのページを新しいタブで開く</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">42</context></context-group>
       </trans-unit>
       <trans-unit id="7317290694079257887">
@@ -3437,9 +3434,7 @@
       </trans-unit>
       <trans-unit id="8371296837649897723" datatype="html">
         <source>If you leave the password empty, an email will be sent to the user.</source>
-        <target state="new">
-              If you leave the password empty, an email will be sent to the user.
-            </target>
+        <target state="translated">パスワードを設定しなかった場合、ユーザーにメールが送信されます。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">120</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">120</context></context-group>
       </trans-unit>
@@ -3715,7 +3710,7 @@
       </trans-unit>
       <trans-unit id="1420624050293070194" datatype="html">
         <source>No abuses found matching current filters.</source>
-        <target state="new">No abuses found matching current filters.</target>
+        <target state="translated">現在のフィルター設定に一致する、不正行為に関する通報はありませんでした。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context><context context-type="linenumber">152</context></context-group>
       </trans-unit>
       <trans-unit id="639328713281980021" datatype="html">
@@ -4417,7 +4412,7 @@
       </trans-unit>
       <trans-unit id="1617785425462022303" datatype="html">
         <source>Strategy</source>
-        <target state="translated">今後の展開</target>
+        <target state="needs-translation">Strategy</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="2544569632476723854">
@@ -5103,7 +5098,7 @@
       </trans-unit>
       <trans-unit id="3839590624406770455" datatype="html">
         <source>HLS with P2P support enabled</source>
-        <target state="translated">HLSファイルへのP2P機能の有効化</target>
+        <target state="translated">HLSファイルへのP2P機能を有効にする</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">94</context></context-group>
       </trans-unit>
       <trans-unit id="7334484418359079994" datatype="html">
@@ -5116,12 +5111,12 @@
       </trans-unit>
       <trans-unit id="4748900450708089645" datatype="html">
         <source>Resolutions to generate per enabled format</source>
-        <target state="new">Resolutions to generate per enabled format</target>
+        <target state="translated">有効にしたフォーマットごとに生成される解像度</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">116</context></context-group>
       </trans-unit>
       <trans-unit id="5431196295724512251" datatype="html">
         <source>The original file resolution will be the default target if no option is selected.</source>
-        <target state="new"> The original file resolution will be the default target if no option is selected. </target>
+        <target state="translated">オプションが選択されていない場合、動画ファイルの元の解像度がデフォルトととなります。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">131</context></context-group>
       </trans-unit>
       <trans-unit id="1126867109775813762">
@@ -5690,7 +5685,7 @@
       </trans-unit>
       <trans-unit id="5278589041647101772" datatype="html">
         <source>Overwrite support field of all videos of this channel</source>
-        <target state="translated">このチャンネルにある全ての動画の支援メッセージを上書きする</target>
+        <target state="translated">このチャンネルにある全ての動画の応援メッセージを上書きする</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+manage/video-channel-edit/video-channel-edit.component.html</context><context context-type="linenumber">82</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+manage/video-channel-edit/video-channel-edit.component.html</context><context context-type="linenumber">82</context></context-group>
       </trans-unit>
@@ -6959,7 +6954,7 @@
       </trans-unit>
       <trans-unit id="1469559036084108672" datatype="html">
         <source>Hosts entered contain duplicates.</source>
-        <target state="new">Hosts entered contain duplicates.</target>
+        <target state="translated">重複したホストが入力されています。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/host-validators.ts</context>
           <context context-type="linenumber">94</context>
@@ -6975,7 +6970,7 @@
       </trans-unit>
       <trans-unit id="6759198394434886237" datatype="html">
         <source>Hosts or handles contain duplicates.</source>
-        <target state="new">Hosts or handles contain duplicates.</target>
+        <target state="translated">重複したホストまたはアカウントIDが入力されています。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/host-validators.ts</context>
           <context context-type="linenumber">103</context>
@@ -8023,7 +8018,7 @@
       </trans-unit>
       <trans-unit id="7130088765428829942" datatype="html">
         <source>New abuse</source>
-        <target state="translated">新しい不正利用に関する通報</target>
+        <target state="translated">新たな不正行為に関する通報</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">34</context></context-group>
       </trans-unit>
       <trans-unit id="5618790697446401830" datatype="html">
@@ -8076,12 +8071,12 @@
       </trans-unit>
       <trans-unit id="900099988467638766" datatype="html">
         <source>An abuse report received a new message</source>
-        <target state="translated">不正行為に関する通報に対して、新しいメッセージが届いた</target>
+        <target state="translated">不正行為に関する通報に対して、新しいメッセージを受けとりました</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">44</context></context-group>
       </trans-unit>
       <trans-unit id="2326816287669585542" datatype="html">
         <source>One of your abuse reports has been accepted or rejected by moderators</source>
-        <target state="translated">不正行為に関する通報がモデレーターによって受理または却下された</target>
+        <target state="translated">不正行為に関する通報の一つがモデレーターによって受理または却下されました</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
       <trans-unit id="2764971902180889905" datatype="html">
@@ -8515,7 +8510,7 @@
       </trans-unit>
       <trans-unit id="2687679787442328897">
         <source>An email with verification link will be sent to <x id="PH"/>.</source>
-        <target>認証リンクを記載したEメールが <x id="PH"/> に送信されます。</target>
+        <target>認証リンクを記載したEメールが<x id="PH"/>に送信されます。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-ask-send-email/verify-account-ask-send-email.component.ts</context><context context-type="linenumber">39</context></context-group>
       </trans-unit>
       <trans-unit id="4180693983967989981">
@@ -9367,17 +9362,17 @@
       </trans-unit>
       <trans-unit id="8835075531528610034" datatype="html">
         <source>Abuse message is required.</source>
-        <target state="needs-translation">Abuse message is required.</target>
+        <target state="translated">不正行為に関する通報へのメッセージは必須です。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context><context context-type="linenumber">25</context></context-group>
       </trans-unit>
       <trans-unit id="9034042966936514516" datatype="html">
         <source>Abuse message must be at least 2 characters long.</source>
-        <target state="needs-translation">Abuse message must be at least 2 characters long.</target>
+        <target state="translated">不正行為に関する通報へのメッセージは、少なくとも2文字必要です。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="7989186574443390119" datatype="html">
         <source>Abuse message cannot be more than 3000 characters long.</source>
-        <target state="needs-translation">Abuse message cannot be more than 3000 characters long.</target>
+        <target state="translated">不正行為に関する通報へのメッセージは、3,000文字以上は書けません。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="6700357678556223012">
@@ -9437,12 +9432,12 @@
       </trans-unit>
       <trans-unit id="6880459830525364741">
         <source>Support text must be at least 3 characters long.</source>
-        <target>支援コメントは、最低でも 3 文字必要です。</target>
+        <target>応援コメントは、最低でも 3 文字必要です。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">47</context></context-group>
       </trans-unit>
       <trans-unit id="6461548560008228165" datatype="html">
         <source>Support text cannot be more than 1000 characters long</source>
-        <target state="translated">支援コメントは、1,000文字以上は書けません</target>
+        <target state="translated">応援コメントは、1,000文字以上は書けません</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">48</context></context-group>
       </trans-unit>
       <trans-unit id="5637879201055173642" datatype="html">
@@ -9610,12 +9605,12 @@
       </trans-unit>
       <trans-unit id="4806300480558315727">
         <source>Video support must be at least 3 characters long.</source>
-        <target>動画への支援コメントは、最低でも 3 文字必要です。</target>
+        <target>動画への応援コメントは、最低でも 3 文字必要です。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">83</context></context-group>
       </trans-unit>
       <trans-unit id="6655773021893755977">
         <source>Video support cannot be more than 1000 characters long.</source>
-        <target>動画への支援コメントは、1,000 文字以上は書けません。</target>
+        <target>動画への応援コメントは、1,000 文字以上は書けません。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">84</context></context-group>
       </trans-unit>
       <trans-unit id="4246579596585402255">
