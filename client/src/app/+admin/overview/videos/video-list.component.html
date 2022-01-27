@@ -81,8 +81,8 @@
       </td>
 
       <td>
-        <span *ngIf="isHLS(video)" class="badge badge-blue">HLS</span>
-        <span *ngIf="isWebTorrent(video)" class="badge badge-blue">WebTorrent</span>
+        <span *ngIf="isHLS(video)" class="badge badge-blue">HLS ({{ video.streamingPlaylists.length }})</span>
+        <span *ngIf="isWebTorrent(video)" class="badge badge-blue">WebTorrent ({{ video.files.length }})</span>
         <span *ngIf="video.isLive" class="badge badge-blue">Live</span>
 
         <span *ngIf="!isImport(video) && !video.isLive && video.isLocal">{{ getFilesSize(video) | bytes: 1 }}</span>
@@ -112,11 +112,16 @@
           <div *ngIf="isHLS(video)">
             HLS:
 
-            <ul>
-              <li *ngFor="let file of video.streamingPlaylists[0].files">
-                {{ file.resolution.label }}: {{ file.size | bytes: 1 }}
-              </li>
-            </ul>
+            <div *ngFor="let playlist of video.streamingPlaylists; let i = index;" class="hls-playlist-list">
+              <strong>Playlist {{ playlist.id }}</strong>
+              <span *ngIf="i === video.streamingPlaylists.length - 1" class="badge badge-yellow">Active</span>
+
+              <ul>
+                <li *ngFor="let file of playlist.files">
+                  {{ file.resolution.label }}: {{ file.size | bytes: 1 }}
+                </li>
+              </ul>
+              </div>
           </div>
 
           <my-embed class="ml-auto" [video]="video"></my-embed>

@@ -26,10 +26,12 @@ export async function processMoveToObjectStorage (job: Job) {
 
   try {
     if (video.VideoFiles) {
+      logger.debug(`Moving ${video.VideoFiles.length} web torrent files.`)
       await moveWebTorrentFiles(video)
     }
 
     if (video.VideoStreamingPlaylists) {
+      logger.debug(`Moving ${video.VideoStreamingPlaylists.length} HLS files.`)
       await moveHLSFiles(video)
     }
 
@@ -91,7 +93,10 @@ async function doAfterLastJob (video: MVideoWithAllFiles, isNewVideo: boolean) {
     // Master playlist
     playlist.playlistUrl = await storeHLSFile(playlistWithVideo, playlist.playlistFilename)
     // Sha256 segments file
-    playlist.segmentsSha256Url = await storeHLSFile(playlistWithVideo, playlist.segmentsSha256Filename)
+    playlist.segmentsSha256Url = await storeHLSFile(
+      playlistWithVideo,
+      playlist.segmentsSha256Filename
+    )
 
     playlist.storage = VideoStorage.OBJECT_STORAGE
 

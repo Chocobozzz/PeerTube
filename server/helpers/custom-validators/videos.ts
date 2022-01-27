@@ -112,7 +112,7 @@ function isVideoOriginallyPublishedAtValid (value: string | null) {
 }
 
 function isVideoFileInfoHashValid (value: string | null | undefined) {
-  return exists(value) && validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.INFO_HASH)
+  return value === undefined || validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.INFO_HASH)
 }
 
 function isVideoFileResolutionValid (value: string) {
@@ -131,7 +131,7 @@ function isVideoMagnetUriValid (value: string) {
   if (!exists(value)) return false
 
   const parsed = magnetUtil.decode(value)
-  return parsed && isVideoFileInfoHashValid(parsed.infoHash)
+  return parsed && exists(parsed.infoHash) && isVideoFileInfoHashValid(parsed.infoHash)
 }
 
 // ---------------------------------------------------------------------------

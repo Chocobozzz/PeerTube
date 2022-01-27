@@ -14,8 +14,17 @@ my-embed {
 
 .video-info > div {
   display: flex;
+
+  > div {
+    width: 25%;
+  }
 }
 
 .loading {
   opacity: 0.5;
 }
+
+.hls-playlist-list {
+  padding-left: 15px;
+}
+

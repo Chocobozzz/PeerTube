@@ -189,6 +189,7 @@ async function generateHlsPlaylistResolutionFromTS (options: {
   resolution: VideoResolution
   isPortraitMode: boolean
   isAAC: boolean
+  videoPlaylistId: number
 }) {
   return generateHlsPlaylistCommon({
     video: options.video,
@@ -196,7 +197,8 @@ async function generateHlsPlaylistResolutionFromTS (options: {
     isPortraitMode: options.isPortraitMode,
     inputPath: options.concatenatedTsFilePath,
     type: 'hls-from-ts' as 'hls-from-ts',
-    isAAC: options.isAAC
+    isAAC: options.isAAC,
+    videoPlaylistId: options.videoPlaylistId
   })
 }
 
@@ -208,6 +210,7 @@ function generateHlsPlaylistResolution (options: {
   copyCodecs: boolean
   isPortraitMode: boolean
   job?: Job
+  videoPlaylistId: number
 }) {
   return generateHlsPlaylistCommon({
     video: options.video,
@@ -216,7 +219,8 @@ function generateHlsPlaylistResolution (options: {
     isPortraitMode: options.isPortraitMode,
     inputPath: options.videoInputPath,
     type: 'hls' as 'hls',
-    job: options.job
+    job: options.job,
+    videoPlaylistId: options.videoPlaylistId
   })
 }
 
@@ -264,6 +268,7 @@ async function generateHlsPlaylistCommon (options: {
   copyCodecs?: boolean
   isAAC?: boolean
   isPortraitMode: boolean
+  videoPlaylistId: number
 
   job?: Job
 }) {
@@ -302,7 +307,7 @@ async function generateHlsPlaylistCommon (options: {
   await transcode(transcodeOptions)
 
   // Create or update the playlist
-  const playlist = await VideoStreamingPlaylistModel.loadOrGenerate(video)
+  const playlist = await VideoStreamingPlaylistModel.loadWithVideo(options.videoPlaylistId)
 
   if (!playlist.playlistFilename) {
     playlist.playlistFilename = generateHLSMasterPlaylistFilename(video.isLive)

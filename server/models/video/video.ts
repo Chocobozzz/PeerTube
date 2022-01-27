@@ -1351,6 +1351,11 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     const queryBuilder = new VideoModelGetQueryBuilder(VideoModel.sequelize)
 
     return queryBuilder.queryVideo({ id, transaction, type: 'api', userId })
+      .then(video => {
+        video?.VideoStreamingPlaylists?.sort((c, p) => p.id - c.id)
+
+        return video
+      })
   }
 
   static async getStats () {

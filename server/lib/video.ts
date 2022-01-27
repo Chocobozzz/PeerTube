@@ -5,11 +5,30 @@ import { TagModel } from '@server/models/video/tag'
 import { VideoModel } from '@server/models/video/video'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info'
 import { FilteredModelAttributes } from '@server/types'
-import { MThumbnail, MUserId, MVideoFile, MVideoTag, MVideoThumbnail, MVideoUUID } from '@server/types/models'
-import { ThumbnailType, VideoCreate, VideoPrivacy, VideoTranscodingPayload } from '@shared/models'
+import {
+  MStreamingPlaylistFilesVideo,
+  MThumbnail,
+  MUserId,
+  MVideo,
+  MVideoFile,
+  MVideoTag,
+  MVideoThumbnail,
+  MVideoUUID
+} from '@server/types/models'
+import {
+  HLSTranscodingPayload,
+  ThumbnailType,
+  VideoCreate,
+  VideoPrivacy,
+  VideoStreamingPlaylistType,
+  VideoTranscodingPayload
+} from '@shared/models'
 import { CreateJobOptions, JobQueue } from './job-queue/job-queue'
 import { updateVideoMiniatureFromExisting } from './thumbnail'
 import { CONFIG } from '@server/initializers/config'
+import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist'
+import { pick } from '@shared/core-utils'
+import { logger } from '@server/helpers/logger'
 
 function buildLocalVideoFromReq (videoInfo: VideoCreate, channelId: number): FilteredModelAttributes<VideoModel> {
   return {
@@ -112,6 +131,48 @@ async function addTranscodingJob (payload: VideoTranscodingPayload, options: Cre
   return JobQueue.Instance.createJobWithPromise({ type: 'video-transcoding', payload: payload }, options)
 }
 
+async function addHlsJob (user: MUserId, payload: {
+  video: MVideo
+  resolution: number
+  hasAudio: boolean
+  isPortraitMode?: boolean
+  copyCodecs: boolean
+  isMaxQuality: boolean
+  isNewVideo?: boolean
+  autoDeleteWebTorrentIfNeeded?: boolean
+}) {
+  const playlist = new VideoStreamingPlaylistModel() as MStreamingPlaylistFilesVideo
+  playlist.Video = payload.video
+  playlist.videoId = payload.video.id
+  playlist.p2pMediaLoaderInfohashes = []
+  playlist.type = VideoStreamingPlaylistType.HLS
+
+  try {
+    await playlist.save()
+  } catch (err) {
+    logger.error('Cannot save playlist', { err })
+
+    throw err
+  }
+
+  const jobOptions = {
+    priority: await getTranscodingJobPriority(user)
+  }
+
+  const hlsTranscodingPayload: HLSTranscodingPayload = {
+    type: 'new-resolution-to-hls',
+    autoDeleteWebTorrentIfNeeded: true,
+    videoPlaylistId: playlist.id,
+    videoUUID: payload.video.uuid,
+
+    ...pick(payload, [
+      'resolution', 'isPortraitMode', 'copyCodecs', 'isMaxQuality', 'isNewVideo', 'hasAudio', 'autoDeleteWebTorrentIfNeeded'
+    ])
+  }
+
+  await addTranscodingJob(hlsTranscodingPayload, jobOptions)
+}
+
 async function addMoveToObjectStorageJob (video: MVideoUUID, isNewVideo = true) {
   await VideoJobInfoModel.increaseOrCreate(video.uuid, 'pendingMove')
 
@@ -136,6 +197,7 @@ export {
   setVideoTags,
   addOptimizeOrMergeAudioJob,
   addTranscodingJob,
+  addHlsJob,
   addMoveToObjectStorageJob,
   getTranscodingJobPriority
 }

@@ -99,6 +99,7 @@ export type VideoRedundancyPayload = {
 interface BaseTranscodingPayload {
   videoUUID: string
   isNewVideo?: boolean
+  videoPlaylistId?: number
 }
 
 export interface HLSTranscodingPayload extends BaseTranscodingPayload {
@@ -111,6 +112,8 @@ export interface HLSTranscodingPayload extends BaseTranscodingPayload {
 
   autoDeleteWebTorrentIfNeeded: boolean
   isMaxQuality: boolean
+
+  videoPlaylistId?: number
 }
 
 export interface NewResolutionTranscodingPayload extends BaseTranscodingPayload {

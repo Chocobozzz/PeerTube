@@ -45,7 +45,7 @@ import { VideoModel } from './video'
       fields: [ 'videoId' ]
     },
     {
-      fields: [ 'videoId', 'type' ],
+      fields: [ 'videoId', 'type', 'playlistFilename' ],
       unique: true
     },
     {
@@ -65,7 +65,7 @@ export class VideoStreamingPlaylistModel extends Model<Partial<AttributesOnly<Vi
   @Column
   type: VideoStreamingPlaylistType
 
-  @AllowNull(false)
+  @AllowNull(true)
   @Column
   playlistFilename: string
 
@@ -74,16 +74,16 @@ export class VideoStreamingPlaylistModel extends Model<Partial<AttributesOnly<Vi
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEOS.URL.max))
   playlistUrl: string
 
-  @AllowNull(false)
+  @AllowNull(true)
   @Is('VideoStreamingPlaylistInfoHashes', value => throwIfNotValid(value, v => isArrayOf(v, isVideoFileInfoHashValid), 'info hashes'))
   @Column(DataType.ARRAY(DataType.STRING))
   p2pMediaLoaderInfohashes: string[]
 
-  @AllowNull(false)
+  @AllowNull(true)
   @Column
   p2pMediaLoaderPeerVersion: number
 
-  @AllowNull(false)
+  @AllowNull(true)
   @Column
   segmentsSha256Filename: string
 
@@ -214,6 +214,10 @@ export class VideoStreamingPlaylistModel extends Model<Partial<AttributesOnly<Vi
   }
 
   getMasterPlaylistUrl (video: MVideo) {
+    if (!this.playlistFilename) {
+      return null
+    }
+
     if (this.storage === VideoStorage.OBJECT_STORAGE) {
       return getHLSPublicFileUrl(this.playlistUrl)
     }
@@ -224,6 +228,10 @@ export class VideoStreamingPlaylistModel extends Model<Partial<AttributesOnly<Vi
   }
 
   getSha256SegmentsUrl (video: MVideo) {
+    if (!this.segmentsSha256Filename) {
+      return null
+    }
+
     if (this.storage === VideoStorage.OBJECT_STORAGE) {
       return getHLSPublicFileUrl(this.segmentsSha256Url)
     }

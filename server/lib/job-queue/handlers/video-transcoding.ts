@@ -1,12 +1,11 @@
 import { Job } from 'bull'
 import { TranscodeOptionsType } from '@server/helpers/ffmpeg-utils'
-import { addTranscodingJob, getTranscodingJobPriority } from '@server/lib/video'
+import { addHlsJob, addTranscodingJob, getTranscodingJobPriority } from '@server/lib/video'
 import { VideoPathManager } from '@server/lib/video-path-manager'
 import { moveToFailedTranscodingState, moveToNextState } from '@server/lib/video-state'
 import { UserModel } from '@server/models/user/user'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info'
 import { MUser, MUserId, MVideo, MVideoFullLight, MVideoWithFile } from '@server/types/models'
-import { pick } from '@shared/core-utils'
 import {
   HLSTranscodingPayload,
   MergeAudioTranscodingPayload,
@@ -99,7 +98,8 @@ async function handleHLSJob (job: Job, payload: HLSTranscodingPayload, video: MV
       resolution: payload.resolution,
       copyCodecs: payload.copyCodecs,
       isPortraitMode: payload.isPortraitMode || false,
-      job
+      job,
+      videoPlaylistId: payload.videoPlaylistId
     })
   })
 
@@ -165,7 +165,8 @@ async function onHlsPlaylistGeneration (video: MVideoFullLight, user: MUser, pay
       isPortraitMode: payload.isPortraitMode,
       hasAudio: payload.hasAudio,
       isNewVideo: payload.isNewVideo ?? true,
-      type: 'hls'
+      type: 'hls',
+      videoPlaylistId: payload.videoPlaylistId
     })
   }
 
@@ -190,6 +191,7 @@ async function onVideoFirstWebTorrentTranscoding (
   const originalFileHLSPayload = {
     ...payload,
 
+    video: videoDatabase,
     isPortraitMode,
     hasAudio: !!audioStream,
     resolution: videoDatabase.getMaxQualityFile().resolution,
@@ -229,7 +231,7 @@ async function onNewWebTorrentFileResolution (
 // ---------------------------------------------------------------------------
 
 async function createHlsJobIfEnabled (user: MUserId, payload: {
-  videoUUID: string
+  video: MVideo
   resolution: number
   hasAudio: boolean
   isPortraitMode?: boolean
@@ -239,18 +241,7 @@ async function createHlsJobIfEnabled (user: MUserId, payload: {
 }) {
   if (!payload || CONFIG.TRANSCODING.ENABLED !== true || CONFIG.TRANSCODING.HLS.ENABLED !== true) return false
 
-  const jobOptions = {
-    priority: await getTranscodingJobPriority(user)
-  }
-
-  const hlsTranscodingPayload: HLSTranscodingPayload = {
-    type: 'new-resolution-to-hls',
-    autoDeleteWebTorrentIfNeeded: true,
-
-    ...pick(payload, [ 'videoUUID', 'resolution', 'isPortraitMode', 'copyCodecs', 'isMaxQuality', 'isNewVideo', 'hasAudio' ])
-  }
-
-  await addTranscodingJob(hlsTranscodingPayload, jobOptions)
+  await addHlsJob(user, payload)
 
   return true
 }
@@ -263,6 +254,7 @@ async function createLowerResolutionsJobs (options: {
   hasAudio: boolean
   isNewVideo: boolean
   type: 'hls' | 'webtorrent'
+  videoPlaylistId?: number
 }) {
   const { video, user, videoFileResolution, isPortraitMode, isNewVideo, hasAudio, type } = options
 
@@ -299,7 +291,8 @@ async function createLowerResolutionsJobs (options: {
         copyCodecs: false,
         isMaxQuality: false,
         autoDeleteWebTorrentIfNeeded: true,
-        isNewVideo
+        isNewVideo,
+        videoPlaylistId: options.videoPlaylistId
       }
 
       resolutionCreated.push('hls-' + resolution)

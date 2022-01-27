@@ -103,7 +103,8 @@ async function saveLive (video: MVideo, live: MVideoLive, streamingPlaylist: MSt
       concatenatedTsFilePath,
       resolution,
       isPortraitMode,
-      isAAC: audioStream?.codec_name === 'aac'
+      isAAC: audioStream?.codec_name === 'aac',
+      videoPlaylistId: hlsPlaylist.id
     })
 
     if (!durationDone) {

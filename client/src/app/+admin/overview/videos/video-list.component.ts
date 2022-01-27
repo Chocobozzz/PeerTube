@@ -167,7 +167,7 @@ export class VideoListComponent extends RestTable implements OnInit {
     let files = video.files
 
     if (this.isHLS(video)) {
-      files = files.concat(video.streamingPlaylists[0].files)
+      files = files.concat(...video.streamingPlaylists.map(p => p.files))
     }
 
     return files.reduce((p, f) => p += f.size, 0)

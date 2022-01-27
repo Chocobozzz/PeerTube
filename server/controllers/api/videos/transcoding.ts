@@ -1,7 +1,7 @@
 import express from 'express'
 import { computeLowerResolutionsToTranscode } from '@server/helpers/ffprobe-utils'
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
-import { addTranscodingJob } from '@server/lib/video'
+import { addHlsJob, addTranscodingJob } from '@server/lib/video'
 import { HttpStatusCode, UserRight, VideoState, VideoTranscodingCreate } from '@shared/models'
 import { asyncMiddleware, authenticate, createTranscodingValidator, ensureUserHasRight } from '../../../middlewares'
 
@@ -35,20 +35,19 @@ async function createTranscoding (req: express.Request, res: express.Response) {
   video.state = VideoState.TO_TRANSCODE
   await video.save()
 
-  for (const resolution of resolutions) {
-    if (body.transcodingType === 'hls') {
-      await addTranscodingJob({
-        type: 'new-resolution-to-hls',
-        videoUUID: video.uuid,
-        resolution,
-        isPortraitMode,
-        hasAudio: !!audioStream,
-        copyCodecs: false,
-        isNewVideo: false,
-        autoDeleteWebTorrentIfNeeded: false,
-        isMaxQuality: maxResolution === resolution
-      })
-    } else if (body.transcodingType === 'webtorrent') {
+  if (body.transcodingType === 'hls') {
+    await addHlsJob(res.locals.oauth.token.user, {
+      video,
+      resolution: maxResolution,
+      isPortraitMode,
+      hasAudio: !!audioStream,
+      copyCodecs: false,
+      isNewVideo: false,
+      autoDeleteWebTorrentIfNeeded: false,
+      isMaxQuality: true
+    })
+  } else if (body.transcodingType === 'webtorrent') {
+    for (const resolution of resolutions) {
       await addTranscodingJob({
         type: 'new-resolution-to-webtorrent',
         videoUUID: video.uuid,
