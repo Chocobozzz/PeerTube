@@ -146,14 +146,16 @@ async function handleWebTorrentOptimizeJob (job: Job, payload: OptimizeTranscodi
 // ---------------------------------------------------------------------------
 
 async function onHlsPlaylistGeneration (video: MVideoFullLight, user: MUser, payload: HLSTranscodingPayload) {
-  if (payload.isMaxQuality && payload.autoDeleteWebTorrentIfNeeded && CONFIG.TRANSCODING.WEBTORRENT.ENABLED === false) {
+  if (payload.isMaxQuality) {
     // Remove webtorrent files if not enabled
-    for (const file of video.VideoFiles) {
-      await video.removeWebTorrentFileAndTorrent(file)
-      await file.destroy()
-    }
+    if (payload.autoDeleteWebTorrentIfNeeded && CONFIG.TRANSCODING.WEBTORRENT.ENABLED === false) {
+      for (const file of video.VideoFiles) {
+        await video.removeWebTorrentFileAndTorrent(file)
+        await file.destroy()
+      }
 
-    video.VideoFiles = []
+      video.VideoFiles = []
+    }
 
     // Create HLS new resolution jobs
     await createLowerResolutionsJobs({
@@ -219,10 +221,6 @@ async function onNewWebTorrentFileResolution (
   user: MUserId,
   payload: NewResolutionTranscodingPayload | MergeAudioTranscodingPayload
 ) {
-  if (payload.isNewVideo) {
-    await createHlsJobIfEnabled(user, { hasAudio: true, copyCodecs: true, isMaxQuality: false, ...payload })
-  }
-
   await VideoJobInfoModel.decrease(video.uuid, 'pendingTranscode')
 
   await retryTransactionWrapper(moveToNextState, video, payload.isNewVideo)
