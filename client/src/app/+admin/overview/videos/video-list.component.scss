@@ -19,3 +19,16 @@ my-embed {
 .loading {
   opacity: 0.5;
 }
+
+.right-form {
+  display: flex;
+
+  > * {
+    margin-inline-end: 10px;
+
+    &:last-child {
+      margin-inline-end: 0;
+    }
+  }
+}
+

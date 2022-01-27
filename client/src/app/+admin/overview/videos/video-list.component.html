@@ -21,8 +21,12 @@
         </my-action-dropdown>
       </div>
 
-      <div class="ml-auto">
+      <div class="ml-auto right-form">
         <my-advanced-input-filter [filters]="inputFilters" (search)="onSearch($event)"></my-advanced-input-filter>
+
+        <div class="button-filter-block">
+          <my-button i18n-label label="Refresh" icon="refresh" (click)="reloadData()"></my-button>
+        </div>
       </div>
 
     </div>
