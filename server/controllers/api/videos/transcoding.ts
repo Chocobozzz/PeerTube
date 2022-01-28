@@ -25,7 +25,7 @@ export {
 
 async function createTranscoding (req: express.Request, res: express.Response) {
   const video = res.locals.videoAll
-  logger.info('Creating %s transcoding job for %s.', req.body.type, video.url, lTags())
+  logger.info('Creating %s transcoding job for %s.', req.body.transcodingType, video.url, lTags())
 
   const body: VideoTranscodingCreate = req.body
 

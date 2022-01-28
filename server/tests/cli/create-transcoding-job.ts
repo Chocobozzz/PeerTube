@@ -213,19 +213,17 @@ function runTests (objectStorage: boolean) {
     this.timeout(120000)
 
     await servers[0].config.enableTranscoding()
-    await servers[0].cli.execWithEnv(`npm run create-transcoding-job -- -v ${videosUUID[4]}`)
+    await servers[0].cli.execWithEnv(`npm run create-transcoding-job -- -v ${videosUUID[4]} --generate-hls`)
 
     await waitJobs(servers)
 
     for (const server of servers) {
       const videoDetails = await server.videos.get({ id: videosUUID[4] })
 
-      expect(videoDetails.files).to.have.lengthOf(5)
       expect(videoDetails.streamingPlaylists).to.have.lengthOf(1)
       expect(videoDetails.streamingPlaylists[0].files).to.have.lengthOf(5)
 
       if (objectStorage) {
-        await checkFilesInObjectStorage(videoDetails.files, 'webtorrent')
         await checkFilesInObjectStorage(videoDetails.streamingPlaylists[0].files, 'playlist')
       }
     }

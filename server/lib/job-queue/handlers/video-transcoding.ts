@@ -219,7 +219,10 @@ async function onNewWebTorrentFileResolution (
   user: MUserId,
   payload: NewResolutionTranscodingPayload | MergeAudioTranscodingPayload
 ) {
-  await createHlsJobIfEnabled(user, { hasAudio: true, copyCodecs: true, isMaxQuality: false, ...payload })
+  if (payload.isNewVideo) {
+    await createHlsJobIfEnabled(user, { hasAudio: true, copyCodecs: true, isMaxQuality: false, ...payload })
+  }
+
   await VideoJobInfoModel.decrease(video.uuid, 'pendingTranscode')
 
   await retryTransactionWrapper(moveToNextState, video, payload.isNewVideo)
