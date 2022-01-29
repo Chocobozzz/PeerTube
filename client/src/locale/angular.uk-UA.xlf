@@ -4510,7 +4510,7 @@
       </trans-unit>
       <trans-unit id="3447208665089679283" datatype="html">
         <source>What server/hardware does the instance run on?</source>
-        <target state="new">What server/hardware does the instance run on?</target>
+        <target state="translated">На якому обладнанні працює цей сервер?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context><context context-type="linenumber">231</context></context-group>
       </trans-unit>
       <trans-unit id="4739907951373047958" datatype="html">
@@ -4637,17 +4637,17 @@
       </trans-unit>
       <trans-unit id="4497115134891299867" datatype="html">
         <source>Signup requires email verification</source>
-        <target state="new">Signup requires email verification</target>
+        <target state="translated">Реєстрація вимагає підтвердження електронної пошти</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">173</context></context-group>
       </trans-unit>
       <trans-unit id="8133107840061687919" datatype="html">
         <source>Signup limit</source>
-        <target state="new">Signup limit</target>
+        <target state="translated">Обмеження реєстрацій</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">177</context></context-group>
       </trans-unit>
       <trans-unit id="8497774075394617130" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {user} other {users}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {user} other {users}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {користувач} few {користувача} other {користувачів}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">184</context></context-group>
       </trans-unit>
       <trans-unit id="5620049714977547431" datatype="html">
@@ -4662,7 +4662,7 @@
       </trans-unit>
       <trans-unit id="8342879272354516454" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {year old} other {years old}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {year old} other {years old}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {рік} few {роки} other {років}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">200</context></context-group>
       </trans-unit>
       <trans-unit id="7456307533995141215" datatype="html">
@@ -4768,7 +4768,7 @@
       </trans-unit>
       <trans-unit id="3840267063842708224" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {channel} other {channels}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {channel} other {channels}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {канал} few {канали} other {каналів}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">319</context></context-group>
       </trans-unit>
       <trans-unit id="3428986951244800347" datatype="html">
@@ -4848,7 +4848,7 @@
       </trans-unit>
       <trans-unit id="9119248927271669654" datatype="html">
         <source>Other instances can follow yours</source>
-        <target state="new">Other instances can follow yours</target>
+        <target state="translated">Інші сервери можуть стежити за вами</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">432</context></context-group>
       </trans-unit>
       <trans-unit id="7015551137649102649" datatype="html">
@@ -4905,7 +4905,7 @@
       </trans-unit>
       <trans-unit id="5926348345797688952" datatype="html">
         <source>VOD Transcoding</source>
-        <target state="new">VOD Transcoding</target>
+        <target state="translated">Перекодування VOD</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">38</context></context-group>
       </trans-unit>
       <trans-unit id="1765095834299337775" datatype="html">
@@ -4979,13 +4979,13 @@
       </trans-unit>
       <trans-unit id="6830777508073747241" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {live} other {lives}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {live} other {lives}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {трансляція} few {трансляції} other {трансляцій}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">46</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">59</context></context-group>
       </trans-unit>
       <trans-unit id="1521259619066122077" datatype="html">
         <source>Max live duration</source>
-        <target state="new">Max live duration</target>
+        <target state="translated">Максимальна тривалість трансляції</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">66</context></context-group>
       </trans-unit>
       <trans-unit id="5309195634424105927" datatype="html">
@@ -5042,7 +5042,7 @@
       </trans-unit>
       <trans-unit id="6201638315245239510" datatype="html">
         <source>Advanced</source>
-        <target state="new">Advanced</target>
+        <target state="translated">Додатково</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">56</context></context-group>
       </trans-unit>
       <trans-unit id="7911929966701561067" datatype="html">
@@ -5073,7 +5073,7 @@
       </trans-unit>
       <trans-unit id="5698272164915890247" datatype="html">
         <source>Allows users to upload videos with additional extensions than .mp4, .ogv and .webm (for example: .avi, .mov, .mkv etc).</source>
-        <target state="new">Allows users to upload videos with additional extensions than .mp4, .ogv and .webm (for example: .avi, .mov, .mkv etc).</target>
+        <target state="translated">Дозволяє користувачам вивантажувати відео з розширеннями іншими ніж .mp4, .ogv і .webm (наприклад: .avi, .mov, .mkv тощо).</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">54</context>
@@ -5081,12 +5081,12 @@
       </trans-unit>
       <trans-unit id="1823941382992046371" datatype="html">
         <source>Allow audio files upload</source>
-        <target state="new">Allow audio files upload</target>
+        <target state="translated">Дозволяє вивантажувати аудіофайли</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">62</context></context-group>
       </trans-unit>
       <trans-unit id="8340360585610503574" datatype="html">
         <source>Allows users to upload .mp3, .ogg, .wma, .flac, .aac, or .ac3 audio files.</source>
-        <target state="new">Allows users to upload .mp3, .ogg, .wma, .flac, .aac, or .ac3 audio files.</target>
+        <target state="translated">Дозволяє користувачам вивантажувати аудіофайли .mp3, .ogg, .wma, .flac, .aac, або .ac3.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">65</context></context-group>
       </trans-unit>
       <trans-unit id="5867513506373651775" datatype="html">
@@ -5199,7 +5199,7 @@
       </trans-unit>
       <trans-unit id="3710881484246327863" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {cached image} other {cached images}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {cached image} other {cached images}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {кешоване зображення} few {кешовані зображення} other {кешованих зображень}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">22</context>
@@ -5212,7 +5212,7 @@
       </trans-unit>
       <trans-unit id="6193666854590647323" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {cached caption} other {cached captions}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {cached caption} other {cached captions}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {кешований підпис} few {кешовані підписи} other {кешованих підписів}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">36</context>
@@ -5236,7 +5236,7 @@
       </trans-unit>
       <trans-unit id="2528135865630556778" datatype="html">
         <source>CUSTOMIZATIONS</source>
-        <target state="new">CUSTOMIZATIONS</target>
+        <target state="translated">ПРИСТОСУВАННЯ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context><context context-type="linenumber">63</context></context-group>
       </trans-unit>
       <trans-unit id="1714039296068260295" datatype="html">
@@ -6889,7 +6889,7 @@ color: red;
       </trans-unit>
       <trans-unit id="9035429011363248302" datatype="html">
         <source>Read guidelines</source>
-        <target state="new"> Read guidelines </target>
+        <target state="translated">Читати настанови</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">16</context></context-group>
       </trans-unit>
       <trans-unit id="2384409178337534505" datatype="html">
@@ -6899,12 +6899,12 @@ color: red;
       </trans-unit>
       <trans-unit id="1618463615802675111" datatype="html">
         <source>threads</source>
-        <target state="new">threads</target>
+        <target state="translated">потоків</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context><context context-type="linenumber">90</context></context-group>
       </trans-unit>
       <trans-unit id="593234948551881507" datatype="html">
         <source>thread</source>
-        <target state="new">thread</target>
+        <target state="translated">потік</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context><context context-type="linenumber">91</context></context-group>
       </trans-unit>
       <trans-unit id="709846045064893539" datatype="html">
@@ -8623,7 +8623,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="375263728166936544" datatype="html">
         <source>You need to reconnect.</source>
-        <target state="new">You need to reconnect.</target>
+        <target state="translated">Потрібно повторно під'єднатися.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/auth/auth.service.ts</context><context context-type="linenumber">221</context></context-group>
       </trans-unit>
       <trans-unit id="2206638022166154361" datatype="html">
@@ -8974,42 +8974,42 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="8198703669620791633" datatype="html">
         <source>Previews cache size is required.</source>
-        <target state="new">Previews cache size is required.</target>
+        <target state="translated">Розміру кешу попереднього перегляду обов'язковий.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="3971192070835972256" datatype="html">
         <source>Previews cache size must be greater than 1.</source>
-        <target state="new">Previews cache size must be greater than 1.</target>
+        <target state="translated">Розміру кешу попереднього перегляду повинен бути більше за 1.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="2903453036126968504" datatype="html">
         <source>Previews cache size must be a number.</source>
-        <target state="new">Previews cache size must be a number.</target>
+        <target state="translated">Розміру кешу попереднього перегляду повинен бути числом.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">30</context></context-group>
       </trans-unit>
       <trans-unit id="6941976540222684735" datatype="html">
         <source>Captions cache size is required.</source>
-        <target state="new">Captions cache size is required.</target>
+        <target state="translated">Розміру кешу підписів обов'язковий.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
       <trans-unit id="780869536819343075" datatype="html">
         <source>Captions cache size must be greater than 1.</source>
-        <target state="new">Captions cache size must be greater than 1.</target>
+        <target state="translated">Розміру кешу підписів повинен бути більшим за 1.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">38</context></context-group>
       </trans-unit>
       <trans-unit id="2498218540197718478" datatype="html">
         <source>Captions cache size must be a number.</source>
-        <target state="new">Captions cache size must be a number.</target>
+        <target state="translated">Розміру кешу підписів повинен бути числом.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">39</context></context-group>
       </trans-unit>
       <trans-unit id="818392297325723982" datatype="html">
         <source>Signup limit is required.</source>
-        <target state="new">Signup limit is required.</target>
+        <target state="translated">Ліміт реєстрацій обов'язковий.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">46</context></context-group>
       </trans-unit>
       <trans-unit id="5630311719329022718" datatype="html">
         <source>Signup limit must be greater than 1. Use -1 to disable it.</source>
-        <target state="new">Signup limit must be greater than 1. Use -1 to disable it.</target>
+        <target state="translated">Ліміт реєстрацій повинен бути більшим за 1. Використайте -1, щоб вимкнути його.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">47</context>
@@ -9017,12 +9017,12 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="2555843408410000965" datatype="html">
         <source>Signup limit must be a number.</source>
-        <target state="new">Signup limit must be a number.</target>
+        <target state="translated">Ліміт реєстрацій повинен бути числом.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">48</context></context-group>
       </trans-unit>
       <trans-unit id="346485141381099383" datatype="html">
         <source>Signup minimum age is required.</source>
-        <target state="new">Signup minimum age is required.</target>
+        <target state="translated">Мінімальний вік для реєстрації обов'язковий.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">55</context>
@@ -9030,7 +9030,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="4230672031132838318" datatype="html">
         <source>Signup minimum age must be greater than 1.</source>
-        <target state="new">Signup minimum age must be greater than 1.</target>
+        <target state="translated">Мінімальний вік для реєстрації повинен бути більшим за 1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">56</context>
@@ -9038,7 +9038,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="5929230001329133993" datatype="html">
         <source>Signup minimum age must be a number.</source>
-        <target state="new">Signup minimum age must be a number.</target>
+        <target state="translated">Мінімальний вік для реєстрації повинен бути числом.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">57</context>
@@ -9056,22 +9056,22 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="6172217783476989430" datatype="html">
         <source>Transcoding threads is required.</source>
-        <target state="translated">Перекодування потоків обов'язкове.</target>
+        <target state="translated">Кількість потоків перекодування обов'язкова.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">72</context></context-group>
       </trans-unit>
       <trans-unit id="5320424292625586941" datatype="html">
         <source>Transcoding threads must be greater or equal to 0.</source>
-        <target state="new">Transcoding threads must be greater or equal to 0.</target>
+        <target state="translated">Кількість потоків перекодування повинна бути більшою або дорівнювати 0.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">73</context></context-group>
       </trans-unit>
       <trans-unit id="8185661254949728718" datatype="html">
         <source>Max live duration is required.</source>
-        <target state="new">Max live duration is required.</target>
+        <target state="translated">Максимальна тривалість трансляції обов'язкова.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">80</context></context-group>
       </trans-unit>
       <trans-unit id="8892863662898651766" datatype="html">
         <source>Max live duration should be greater or equal to -1.</source>
-        <target state="new">Max live duration should be greater or equal to -1.</target>
+        <target state="translated">Максимальна тривалість трансляції повинна бути більшою або дорівнювати -1.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">81</context></context-group>
       </trans-unit>
       <trans-unit id="8196240396863235661" datatype="html">
@@ -9182,12 +9182,12 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="7787099349830266861" datatype="html">
         <source>The subject must be at least 1 character long.</source>
-        <target state="new">The subject must be at least 1 character long.</target>
+        <target state="translated">Тема повинна складатися принаймні з 1 символу.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">33</context></context-group>
       </trans-unit>
       <trans-unit id="5905189237950302829" datatype="html">
         <source>The subject cannot be more than 120 characters long.</source>
-        <target state="new">The subject cannot be more than 120 characters long.</target>
+        <target state="translated">Тема не може бути довшою за 120 символів.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">34</context></context-group>
       </trans-unit>
       <trans-unit id="847704400962945123" datatype="html">
@@ -9197,12 +9197,12 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="3871842658394273178" datatype="html">
         <source>The message must be at least 3 characters long.</source>
-        <target state="new">The message must be at least 3 characters long.</target>
+        <target state="translated">Повідомлення повинно складатися принаймні з 3 символів.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">46</context></context-group>
       </trans-unit>
       <trans-unit id="3731145759205895653" datatype="html">
         <source>The message cannot be more than 5000 characters long.</source>
-        <target state="new">The message cannot be more than 5000 characters long.</target>
+        <target state="translated">Повідомлення не може бути довшим за 5000 символів.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">47</context></context-group>
       </trans-unit>
       <trans-unit id="3868123820758341861" datatype="html">
@@ -9220,7 +9220,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="3152303769378345477" datatype="html">
         <source>Confirmation of the password is required.</source>
-        <target state="new">Confirmation of the password is required.</target>
+        <target state="translated">Підтвердження пароля обов'язкове.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/reset-password-validators.ts</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
       <trans-unit id="4786141633412279939" datatype="html">
@@ -9245,12 +9245,12 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="8178814467139959283" datatype="html">
         <source>Channel name must be at least 1 character long.</source>
-        <target state="new">Channel name must be at least 1 character long.</target>
+        <target state="translated">Назва каналу повинна складатися принаймні з одного символу.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">30</context></context-group>
       </trans-unit>
       <trans-unit id="8602785819772117007" datatype="html">
         <source>Channel name cannot be more than 50 characters long.</source>
-        <target state="new">Channel name cannot be more than 50 characters long.</target>
+        <target state="translated">Назва каналу не може бути довшою за 50 символів.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">31</context></context-group>
       </trans-unit>
       <trans-unit id="3419415520566928243" datatype="html">
@@ -10164,7 +10164,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="9208009623124569456" datatype="html">
         <source>If you remove user <x id="PH" equiv-text="user.username"/>, you won't be able to create another with the same username!</source>
-        <target state="new">If you remove user <x id="PH" equiv-text="user.username"/>, you won't be able to create another with the same username!</target>
+        <target state="translated">Якщо ви вилучите користувача <x id="PH" equiv-text="user.username"/>, ви не зможете створити іншого користувача з таким же іменем!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">86</context>
@@ -10367,7 +10367,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="3785095284194008197" datatype="html">
         <source>Remove comments from your instance</source>
-        <target state="new">Remove comments from your instance</target>
+        <target state="translated">Вилучити коментарі з вашого сервера</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">391</context></context-group>
       </trans-unit>
       <trans-unit id="4809327075591089709" datatype="html">
@@ -10377,7 +10377,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="6504240011224861621" datatype="html">
         <source>Instance moderation</source>
-        <target state="new">Instance moderation</target>
+        <target state="translated">Модерування сервера</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">401</context>
@@ -10413,7 +10413,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="5413552012131573970" datatype="html">
         <source>Spam, ad or false news</source>
-        <target state="new">Spam, ad or false news</target>
+        <target state="translated">Спам, реклама або неправдиві новини</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">134</context></context-group>
       </trans-unit>
       <trans-unit id="6374940465448453212" datatype="html">
@@ -10470,7 +10470,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="4965472196059235310" datatype="html">
         <source>Too many attempts, please try again later.</source>
-        <target state="new">Too many attempts, please try again later.</target>
+        <target state="translated">Забагато спроб, повторіть спробу пізніше.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/rest/rest-extractor.service.ts</context><context context-type="linenumber">68</context></context-group>
       </trans-unit>
       <trans-unit id="1693549688987384699" datatype="html">
@@ -10554,14 +10554,12 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="7754186870520534716" datatype="html">
         <source>Video added in <x id="PH"/> </source>
-        <target state="new">Video added in 
-          <x id="PH"/>
-        </target>
+        <target state="translated">Відео додано до <x id="PH"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-add-to-playlist.component.ts</context><context context-type="linenumber">375</context></context-group>
       </trans-unit>
       <trans-unit id="985751964589921228" datatype="html">
         <source>Timestamps updated</source>
-        <target state="new">Timestamps updated</target>
+        <target state="translated">Мітки часу оновлено</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-add-to-playlist.component.ts</context><context context-type="linenumber">274</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-element-miniature.component.ts</context><context context-type="linenumber">112</context></context-group>
       </trans-unit>
@@ -10708,7 +10706,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="6521421218398377925" datatype="html">
         <source>Run HLS transcoding</source>
-        <target state="new">Run HLS transcoding</target>
+        <target state="translated">Запустити перекодування HLS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">94</context>
@@ -10720,7 +10718,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="4956271014213477815" datatype="html">
         <source>Run WebTorrent transcoding</source>
-        <target state="new">Run WebTorrent transcoding</target>
+        <target state="translated">Запустити перекодування WebTorrent</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">100</context>
@@ -10901,7 +10899,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="118687079501751948" datatype="html">
         <source>Move to external storage failed</source>
-        <target state="new">Move to external storage failed</target>
+        <target state="translated">Не вдалося перемістити до зовнішнього сховища</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
           <context context-type="linenumber">183</context>
