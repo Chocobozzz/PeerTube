@@ -253,7 +253,8 @@ export class VideoStreamingPlaylistModel extends Model<Partial<AttributesOnly<Vi
 
   hasSameUniqueKeysThan (other: MStreamingPlaylist) {
     return this.type === other.type &&
-      this.videoId === other.videoId
+      this.videoId === other.videoId &&
+      this.playlistFilename === other.playlistFilename
   }
 
   withVideo (video: MVideo) {

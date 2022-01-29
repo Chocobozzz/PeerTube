@@ -36,7 +36,7 @@ async function createTranscoding (req: express.Request, res: express.Response) {
   await video.save()
 
   if (body.transcodingType === 'hls') {
-    await addHlsJob(res.locals.oauth.token.user, {
+    await addHlsJob({
       video,
       resolution: maxResolution,
       isPortraitMode,
@@ -45,7 +45,7 @@ async function createTranscoding (req: express.Request, res: express.Response) {
       isNewVideo: false,
       autoDeleteWebTorrentIfNeeded: false,
       isMaxQuality: true
-    })
+    }, res.locals.oauth.token.user)
   } else if (body.transcodingType === 'webtorrent') {
     for (const resolution of resolutions) {
       await addTranscodingJob({

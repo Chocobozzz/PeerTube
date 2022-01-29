@@ -241,7 +241,7 @@ async function createHlsJobIfEnabled (user: MUserId, payload: {
 }) {
   if (!payload || CONFIG.TRANSCODING.ENABLED !== true || CONFIG.TRANSCODING.HLS.ENABLED !== true) return false
 
-  await addHlsJob(user, payload)
+  await addHlsJob(payload, user)
 
   return true
 }
