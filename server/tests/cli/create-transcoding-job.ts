@@ -52,7 +52,7 @@ function runTests (objectStorage: boolean) {
 
     if (objectStorage) await ObjectStorageCommand.prepareDefaultBuckets()
 
-    for (let i = 1; i <= 5; i++) {
+    for (let i = 1; i <= 4; i++) {
       const { uuid, shortUUID } = await servers[0].videos.upload({ attributes: { name: 'video' + i } })
 
       await waitJobs(servers)
@@ -125,79 +125,15 @@ function runTests (objectStorage: boolean) {
     }
   })
 
-  it('Should run a transcoding job on video 1 with resolution', async function () {
-    this.timeout(60000)
-
-    await servers[0].cli.execWithEnv(`npm run create-transcoding-job -- -v ${videosUUID[0]} -r 480`)
-
-    await waitJobs(servers)
-
-    for (const server of servers) {
-      const { data } = await server.videos.list()
-      expect(data).to.have.lengthOf(videosUUID.length)
-
-      const videoDetails = await server.videos.get({ id: videosUUID[0] })
-
-      expect(videoDetails.files).to.have.lengthOf(2)
-      expect(videoDetails.files[0].resolution.id).to.equal(720)
-      expect(videoDetails.files[1].resolution.id).to.equal(480)
-
-      expect(videoDetails.streamingPlaylists).to.have.lengthOf(0)
-
-      if (objectStorage) await checkFilesInObjectStorage(videoDetails.files, 'webtorrent')
-    }
-  })
-
-  it('Should generate an HLS resolution', async function () {
-    this.timeout(120000)
-
-    await servers[0].cli.execWithEnv(`npm run create-transcoding-job -- -v ${videosUUID[2]} --generate-hls -r 480`)
-
-    await waitJobs(servers)
-
-    for (const server of servers) {
-      const videoDetails = await server.videos.get({ id: videosUUID[2] })
-
-      expect(videoDetails.files).to.have.lengthOf(1)
-      if (objectStorage) await checkFilesInObjectStorage(videoDetails.files, 'webtorrent')
-
-      expect(videoDetails.streamingPlaylists).to.have.lengthOf(1)
-
-      const files = videoDetails.streamingPlaylists[0].files
-      expect(files).to.have.lengthOf(1)
-      expect(files[0].resolution.id).to.equal(480)
-
-      if (objectStorage) await checkFilesInObjectStorage(files, 'playlist')
-    }
-  })
-
-  it('Should not duplicate an HLS resolution', async function () {
-    this.timeout(120000)
-
-    await servers[0].cli.execWithEnv(`npm run create-transcoding-job -- -v ${videosUUID[2]} --generate-hls -r 480`)
-
-    await waitJobs(servers)
-
-    for (const server of servers) {
-      const videoDetails = await server.videos.get({ id: videosUUID[2] })
-
-      const files = videoDetails.streamingPlaylists[0].files
-      expect(files).to.have.lengthOf(1)
-      expect(files[0].resolution.id).to.equal(480)
-
-      if (objectStorage) await checkFilesInObjectStorage(files, 'playlist')
-    }
-  })
-
   it('Should generate all HLS resolutions', async function () {
     this.timeout(120000)
 
-    await servers[0].cli.execWithEnv(`npm run create-transcoding-job -- -v ${videosUUID[3]} --generate-hls`)
+    await servers[0].cli.execWithEnv(`npm run create-transcoding-job -- -v ${videosUUID[2]} --generate-hls`)
 
     await waitJobs(servers)
 
     for (const server of servers) {
-      const videoDetails = await server.videos.get({ id: videosUUID[3] })
+      const videoDetails = await server.videos.get({ id: videosUUID[2] })
 
       expect(videoDetails.files).to.have.lengthOf(1)
       expect(videoDetails.streamingPlaylists).to.have.lengthOf(1)
@@ -213,12 +149,12 @@ function runTests (objectStorage: boolean) {
     this.timeout(120000)
 
     await servers[0].config.enableTranscoding()
-    await servers[0].cli.execWithEnv(`npm run create-transcoding-job -- -v ${videosUUID[4]} --generate-hls`)
+    await servers[0].cli.execWithEnv(`npm run create-transcoding-job -- -v ${videosUUID[3]} --generate-hls`)
 
     await waitJobs(servers)
 
     for (const server of servers) {
-      const videoDetails = await server.videos.get({ id: videosUUID[4] })
+      const videoDetails = await server.videos.get({ id: videosUUID[3] })
 
       expect(videoDetails.streamingPlaylists).to.have.lengthOf(1)
       expect(videoDetails.streamingPlaylists[0].files).to.have.lengthOf(5)

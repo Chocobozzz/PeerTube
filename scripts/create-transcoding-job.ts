@@ -9,7 +9,6 @@ import { VideoModel } from '../server/models/video/video'
 
 program
   .option('-v, --video [videoUUID]', 'Video UUID')
-  .option('-r, --resolution [resolution]', 'Video resolution (integer)')
   .option('--generate-hls', 'Generate HLS playlist')
   .parse(process.argv)
 
@@ -52,11 +51,9 @@ async function run () {
 
   // Generate HLS files
   if (options.generateHls || CONFIG.TRANSCODING.WEBTORRENT.ENABLED === false) {
-    const resolution = parseInt(options.resolution) || maxResolution
-
     await addHlsJob({
       video,
-      resolution,
+      resolution: maxResolution,
 
       // FIXME: check the file has audio and is not in portrait mode
       isPortraitMode: false,
@@ -64,7 +61,7 @@ async function run () {
 
       copyCodecs: false,
       isNewVideo: false,
-      isMaxQuality: resolution === maxResolution,
+      isMaxQuality: true,
       autoDeleteWebTorrentIfNeeded: false
     })
 
