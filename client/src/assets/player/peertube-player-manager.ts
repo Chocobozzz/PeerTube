@@ -167,16 +167,24 @@ export class PeertubePlayerManager {
       videojs(options.common.playerElement, videojsOptions, function (this: videojs.Player) {
         const player = this
 
+        const hasFallback = options.webtorrent.videoFiles.length > 0
         let alreadyFallback = false
 
-        player.tech(true).one('error', () => {
+        const handleFallback = () => {
           if (!alreadyFallback) self.maybeFallbackToWebTorrent(mode, player, options)
           alreadyFallback = true
+        }
+
+        player.tech(true).one('error', () => {
+          if (hasFallback) {
+            handleFallback()
+          }
         })
 
         player.one('error', () => {
-          if (!alreadyFallback) self.maybeFallbackToWebTorrent(mode, player, options)
-          alreadyFallback = true
+          if (hasFallback) {
+            handleFallback()
+          }
         })
 
         player.one('play', () => {
