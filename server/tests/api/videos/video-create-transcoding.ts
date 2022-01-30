@@ -127,6 +127,29 @@ function runTests (objectStorage: boolean) {
     }
   })
 
+  it('Should create a new playlist upon second HLS transcoding', async function () {
+    this.timeout(60000)
+
+    const { streamingPlaylists: [ { id: oldPlaylistId } ] } = await servers[0].videos.get({ id: videoUUID })
+
+    await servers[0].videos.runTranscoding({
+      videoId: videoUUID,
+      transcodingType: 'hls'
+    })
+
+    await waitJobs(servers)
+    await expectNoFailedTranscodingJob(servers[0])
+
+    for (const server of servers) {
+      const videoDetails = await server.videos.get({ id: videoUUID })
+
+      expect(videoDetails.streamingPlaylists).to.have.lengthOf(2)
+      expect(videoDetails.streamingPlaylists[0].id).to.not.equal(oldPlaylistId)
+
+      if (objectStorage) await checkFilesInObjectStorage(videoDetails)
+    }
+  })
+
   it('Should not have updated published at attributes', async function () {
     const video = await servers[0].videos.get({ id: videoUUID })
 
