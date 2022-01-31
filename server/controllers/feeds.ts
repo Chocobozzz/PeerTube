@@ -1,5 +1,6 @@
 import express from 'express'
 import Feed from 'pfeed'
+import { mdToPlainText, toSafeHtml } from '@server/helpers/markdown'
 import { getServerActor } from '@server/models/application/application'
 import { getCategoryLabel } from '@server/models/video/formatter/video-format-utils'
 import { VideoInclude } from '@shared/models'
@@ -119,7 +120,7 @@ async function generateVideoCommentsFeed (req: express.Request, res: express.Res
       title,
       id: comment.url,
       link,
-      content: comment.text,
+      content: toSafeHtml(comment.text),
       author,
       date: comment.createdAt
     })
@@ -235,7 +236,7 @@ function initFeed (parameters: {
 
   return new Feed({
     title: name,
-    description,
+    description: mdToPlainText(description),
     // updated: TODO: somehowGetLatestUpdate, // optional, default = today
     id: webserverUrl,
     link: webserverUrl,
@@ -298,8 +299,8 @@ function addVideosToFeed (feed, videos: VideoModel[]) {
       title: video.name,
       id: video.url,
       link: WEBSERVER.URL + video.getWatchStaticPath(),
-      description: video.getTruncatedDescription(),
-      content: video.description,
+      description: mdToPlainText(video.getTruncatedDescription()),
+      content: toSafeHtml(video.description),
       author: [
         {
           name: video.VideoChannel.Account.getDisplayName(),

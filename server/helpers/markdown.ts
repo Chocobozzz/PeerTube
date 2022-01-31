@@ -10,7 +10,7 @@ const markdownIt = new MarkdownItClass('default', { linkify: true, breaks: true,
 markdownIt.enable(TEXT_WITH_HTML_RULES)
 markdownIt.use(markdownItEmoji)
 
-const toSafeHtml = text => {
+const toSafeHtml = (text: string) => {
   if (!text) return ''
 
   // Restore line feed
@@ -23,7 +23,7 @@ const toSafeHtml = text => {
   return sanitizeHtml(html, sanitizeOptions)
 }
 
-const mdToPlainText = text => {
+const mdToPlainText = (text: string) => {
   if (!text) return ''
 
   // Convert possible markdown (emojis, emphasis and lists) to html
