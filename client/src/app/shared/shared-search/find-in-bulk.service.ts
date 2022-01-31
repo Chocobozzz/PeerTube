@@ -7,6 +7,7 @@ import { ResultList } from '@shared/models/common'
 import { Video, VideoChannel } from '../shared-main'
 import { VideoPlaylist } from '../shared-video-playlist'
 import { SearchService } from './search.service'
+import { AdvancedSearch } from './advanced-search.model'
 
 const logger = debug('peertube:search:FindInBulkService')
 
@@ -18,6 +19,8 @@ type BulkObservables <P extends number | string, R> = {
 @Injectable()
 export class FindInBulkService {
 
+  private advancedSearchForBulk: AdvancedSearch
+
   private getVideoInBulk: BulkObservables<string, ResultList<Video>>
   private getChannelInBulk: BulkObservables<string, ResultList<VideoChannel>>
   private getPlaylistInBulk: BulkObservables<string, ResultList<VideoPlaylist>>
@@ -28,6 +31,8 @@ export class FindInBulkService {
     this.getVideoInBulk = this.buildBulkObservableObject(this.getVideosInBulk.bind(this))
     this.getChannelInBulk = this.buildBulkObservableObject(this.getChannelsInBulk.bind(this))
     this.getPlaylistInBulk = this.buildBulkObservableObject(this.getPlaylistsInBulk.bind(this))
+
+    this.advancedSearchForBulk = new AdvancedSearch({ searchTarget: 'local' })
   }
 
   getVideo (uuid: string): Observable<Video> {
@@ -91,19 +96,31 @@ export class FindInBulkService {
   private getVideosInBulk (uuids: string[]) {
     logger('Fetching videos %s.', uuids.join(', '))
 
-    return this.searchService.searchVideos({ uuids, componentPagination: { itemsPerPage: uuids.length, currentPage: 1 } })
+    return this.searchService.searchVideos({
+      uuids,
+      componentPagination: { itemsPerPage: uuids.length, currentPage: 1 },
+      advancedSearch: this.advancedSearchForBulk
+    })
   }
 
   private getChannelsInBulk (handles: string[]) {
     logger('Fetching channels %s.', handles.join(', '))
 
-    return this.searchService.searchVideoChannels({ handles, componentPagination: { itemsPerPage: handles.length, currentPage: 1 } })
+    return this.searchService.searchVideoChannels({
+      handles,
+      componentPagination: { itemsPerPage: handles.length, currentPage: 1 },
+      advancedSearch: this.advancedSearchForBulk
+    })
   }
 
   private getPlaylistsInBulk (uuids: string[]) {
     logger('Fetching playlists %s.', uuids.join(', '))
 
-    return this.searchService.searchVideoPlaylists({ uuids, componentPagination: { itemsPerPage: uuids.length, currentPage: 1 } })
+    return this.searchService.searchVideoPlaylists({
+      uuids,
+      componentPagination: { itemsPerPage: uuids.length, currentPage: 1 },
+      advancedSearch: this.advancedSearchForBulk
+    })
   }
 
   private buildBulkObservableObject <P extends number | string, R> (bulkGet: (params: P[]) => Observable<R>) {
