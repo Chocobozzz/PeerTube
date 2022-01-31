@@ -83,6 +83,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   private hotkeys: Hotkey[] = []
 
+  private anonymousOrLoggedUser: User
+
+  private videojsDecodeErrors = 0
+
   constructor (
     private elementRef: ElementRef,
     private route: ActivatedRoute,
@@ -245,23 +249,14 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       this.userService.getAnonymousOrLoggedUser()
     ]).subscribe({
       next: ([ video, captionsResult, loggedInOrAnonymousUser ]) => {
-        const queryParams = this.route.snapshot.queryParams
+        this.anonymousOrLoggedUser = loggedInOrAnonymousUser
 
         const urlOptions = {
-          resume: queryParams.resume,
-
-          startTime: queryParams.start,
-          stopTime: queryParams.stop,
-
-          muted: queryParams.muted,
-          loop: queryParams.loop,
-          subtitle: queryParams.subtitle,
-
-          playerMode: queryParams.mode,
+          ...this.buildUrlOptions(),
           peertubeLink: false
         }
 
-        this.onVideoFetched({ video, videoCaptions: captionsResult.data, loggedInOrAnonymousUser, urlOptions })
+        this.onVideoFetched({ video, videoCaptions: captionsResult.data, urlOptions })
             .catch(err => this.handleGlobalError(err))
       },
 
@@ -328,17 +323,54 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.notifier.error(errorMessage)
   }
 
+  private buildUrlOptions () {
+    const queryParams = this.route.snapshot.queryParams
+    return {
+      resume: queryParams.resume,
+
+      startTime: queryParams.start,
+      stopTime: queryParams.stop,
+
+      muted: queryParams.muted,
+      loop: queryParams.loop,
+      subtitle: queryParams.subtitle,
+
+      playerMode: queryParams.mode,
+      peertubeLink: false
+    }
+  }
+
   private handleVideojsError (err: any) {
-    this.player.addClass('vjs-error-display-enabled')
+    switch (err.code) {
+      case 3: // Decode error
+        if (this.videojsDecodeErrors === 0) {
+          this.notifier.error($localize`The video failed to play, will try to fast forward.`)
+        }
+
+        if (this.videojsDecodeErrors === 20) {
+          this.player.addClass('vjs-error-display-enabled')
+          return
+        }
+
+        this.videojsDecodeErrors++
+
+        this.buildPlayer({
+          ...this.buildUrlOptions(),
+          startTime: this.player.currentTime() + 2
+        }, this.anonymousOrLoggedUser)
+
+        break
+      default:
+        this.player.addClass('vjs-error-display-enabled')
+    }
   }
 
   private async onVideoFetched (options: {
     video: VideoDetails
     videoCaptions: VideoCaption[]
     urlOptions: URLOptions
-    loggedInOrAnonymousUser: User
   }) {
-    const { video, videoCaptions, urlOptions, loggedInOrAnonymousUser } = options
+    const { video, videoCaptions, urlOptions } = options
 
     this.subscribeToLiveEventsIfNeeded(this.video, video)
 
@@ -358,7 +390,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       if (res === false) return this.location.back()
     }
 
-    this.buildPlayer(urlOptions, loggedInOrAnonymousUser)
+    this.buildPlayer(urlOptions, this.anonymousOrLoggedUser)
       .catch(err => console.error('Cannot build the player', err))
 
     this.setOpenGraphTags()
