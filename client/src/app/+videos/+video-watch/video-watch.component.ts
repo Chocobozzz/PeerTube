@@ -83,7 +83,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   private hotkeys: Hotkey[] = []
 
-  private anonymousOrLoggedUser: User
+  private loggedInOrAnonymousUser: User
 
   private videojsDecodeErrors = 0
 
@@ -249,7 +249,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       this.userService.getAnonymousOrLoggedUser()
     ]).subscribe({
       next: ([ video, captionsResult, loggedInOrAnonymousUser ]) => {
-        this.anonymousOrLoggedUser = loggedInOrAnonymousUser
+        this.loggedInOrAnonymousUser = loggedInOrAnonymousUser
 
         const urlOptions = {
           ...this.buildUrlOptions(),
@@ -357,7 +357,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         this.buildPlayer({
           ...this.buildUrlOptions(),
           startTime: this.player.currentTime() + 2
-        }, this.anonymousOrLoggedUser)
+        }, this.loggedInOrAnonymousUser)
 
         break
       default:
@@ -390,7 +390,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       if (res === false) return this.location.back()
     }
 
-    this.buildPlayer(urlOptions, this.anonymousOrLoggedUser)
+    this.buildPlayer(urlOptions, this.loggedInOrAnonymousUser)
       .catch(err => console.error('Cannot build the player', err))
 
     this.setOpenGraphTags()
