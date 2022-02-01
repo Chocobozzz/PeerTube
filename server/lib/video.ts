@@ -89,6 +89,7 @@ async function addOptimizeOrMergeAudioJob (video: MVideoUUID, videoFile: MVideoF
       type: 'merge-audio-to-webtorrent',
       resolution: DEFAULT_AUDIO_RESOLUTION,
       videoUUID: video.uuid,
+      createHLSIfNeeded: true,
       isNewVideo: true
     }
   } else {

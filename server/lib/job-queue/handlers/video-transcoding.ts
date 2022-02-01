@@ -10,7 +10,7 @@ import { pick } from '@shared/core-utils'
 import {
   HLSTranscodingPayload,
   MergeAudioTranscodingPayload,
-  NewResolutionTranscodingPayload,
+  NewWebTorrentResolutionTranscodingPayload,
   OptimizeTranscodingPayload,
   VideoResolution,
   VideoTranscodingPayload
@@ -110,7 +110,7 @@ async function handleHLSJob (job: Job, payload: HLSTranscodingPayload, video: MV
 
 async function handleNewWebTorrentResolutionJob (
   job: Job,
-  payload: NewResolutionTranscodingPayload,
+  payload: NewWebTorrentResolutionTranscodingPayload,
   video: MVideoFullLight,
   user: MUserId
 ) {
@@ -217,9 +217,12 @@ async function onVideoFirstWebTorrentTranscoding (
 async function onNewWebTorrentFileResolution (
   video: MVideo,
   user: MUserId,
-  payload: NewResolutionTranscodingPayload | MergeAudioTranscodingPayload
+  payload: NewWebTorrentResolutionTranscodingPayload | MergeAudioTranscodingPayload
 ) {
-  await createHlsJobIfEnabled(user, { hasAudio: true, copyCodecs: true, isMaxQuality: false, ...payload })
+  if (payload.createHLSIfNeeded) {
+    await createHlsJobIfEnabled(user, { hasAudio: true, copyCodecs: true, isMaxQuality: false, ...payload })
+  }
+
   await VideoJobInfoModel.decrease(video.uuid, 'pendingTranscode')
 
   await retryTransactionWrapper(moveToNextState, video, payload.isNewVideo)
@@ -282,6 +285,7 @@ async function createLowerResolutionsJobs (options: {
         resolution,
         isPortraitMode,
         hasAudio,
+        createHLSIfNeeded: true,
         isNewVideo
       }
 

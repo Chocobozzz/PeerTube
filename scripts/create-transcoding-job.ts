@@ -77,6 +77,8 @@ async function run () {
         type: 'new-resolution-to-webtorrent',
         videoUUID: video.uuid,
 
+        createHLSIfNeeded: true,
+
         // FIXME: check the file has audio
         hasAudio: true,
 

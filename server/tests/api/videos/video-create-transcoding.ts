@@ -25,7 +25,11 @@ async function checkFilesInObjectStorage (video: VideoDetails) {
     await makeRawRequest(file.fileUrl, HttpStatusCode.OK_200)
   }
 
-  for (const file of video.streamingPlaylists[0].files) {
+  const streamingPlaylistFiles = video.streamingPlaylists.length === 0
+    ? []
+    : video.streamingPlaylists[0].files
+
+  for (const file of streamingPlaylistFiles) {
     expectStartWith(file.fileUrl, ObjectStorageCommand.getPlaylistBaseUrl())
     await makeRawRequest(file.fileUrl, HttpStatusCode.OK_200)
   }
@@ -122,6 +126,25 @@ function runTests (objectStorage: boolean) {
       expect(videoDetails.files).to.have.lengthOf(5)
       expect(videoDetails.streamingPlaylists).to.have.lengthOf(1)
       expect(videoDetails.streamingPlaylists[0].files).to.have.lengthOf(5)
+
+      if (objectStorage) await checkFilesInObjectStorage(videoDetails)
+    }
+  })
+
+  it('Should only generate WebTorrent', async function () {
+    this.timeout(60000)
+
+    await servers[0].videos.removeHLSFiles({ videoId: videoUUID })
+    await waitJobs(servers)
+
+    await servers[0].videos.runTranscoding({ videoId: videoUUID, transcodingType: 'webtorrent' })
+    await waitJobs(servers)
+
+    for (const server of servers) {
+      const videoDetails = await server.videos.get({ id: videoUUID })
+
+      expect(videoDetails.files).to.have.lengthOf(5)
+      expect(videoDetails.streamingPlaylists).to.have.lengthOf(0)
 
       if (objectStorage) await checkFilesInObjectStorage(videoDetails)
     }
