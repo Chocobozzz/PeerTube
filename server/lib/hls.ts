@@ -3,6 +3,7 @@ import { flatten, uniq } from 'lodash'
 import { basename, dirname, join } from 'path'
 import { MStreamingPlaylistFilesVideo, MVideo, MVideoUUID } from '@server/types/models'
 import { sha256 } from '@shared/extra-utils'
+import { VideoStorage } from '@shared/models'
 import { getAudioStreamCodec, getVideoStreamCodec, getVideoStreamSize } from '../helpers/ffprobe-utils'
 import { logger } from '../helpers/logger'
 import { doRequest, doRequestAndSaveToFile } from '../helpers/requests'
@@ -12,6 +13,7 @@ import { P2P_MEDIA_LOADER_PEER_VERSION, REQUEST_TIMEOUTS } from '../initializers
 import { sequelizeTypescript } from '../initializers/database'
 import { VideoFileModel } from '../models/video/video-file'
 import { VideoStreamingPlaylistModel } from '../models/video/video-streaming-playlist'
+import { storeHLSFile } from './object-storage'
 import { getHlsResolutionPlaylistFilename } from './paths'
 import { VideoPathManager } from './video-path-manager'
 
@@ -58,8 +60,12 @@ async function updateMasterHLSPlaylist (video: MVideo, playlist: MStreamingPlayl
     })
   }
 
-  await VideoPathManager.Instance.makeAvailablePlaylistFile(playlist, playlist.playlistFilename, masterPlaylistPath => {
-    return writeFile(masterPlaylistPath, masterPlaylists.join('\n') + '\n')
+  await VideoPathManager.Instance.makeAvailablePlaylistFile(playlist, playlist.playlistFilename, async masterPlaylistPath => {
+    await writeFile(masterPlaylistPath, masterPlaylists.join('\n') + '\n')
+
+    if (playlist.storage === VideoStorage.OBJECT_STORAGE) {
+      await storeHLSFile(playlist, playlist.playlistFilename, masterPlaylistPath)
+    }
   })
 }
 
@@ -94,6 +100,11 @@ async function updateSha256VODSegments (video: MVideoUUID, playlist: MStreamingP
 
   const outputPath = VideoPathManager.Instance.getFSHLSOutputPath(video, playlist.segmentsSha256Filename)
   await outputJSON(outputPath, json)
+
+  if (playlist.storage === VideoStorage.OBJECT_STORAGE) {
+    await storeHLSFile(playlist, playlist.segmentsSha256Filename)
+    await remove(outputPath)
+  }
 }
 
 async function buildSha256Segment (segmentPath: string) {

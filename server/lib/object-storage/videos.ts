@@ -6,11 +6,9 @@ import { getHLSDirectory } from '../paths'
 import { generateHLSObjectBaseStorageKey, generateHLSObjectStorageKey, generateWebTorrentObjectStorageKey } from './keys'
 import { lTags, makeAvailable, removeObject, removePrefix, storeObject } from './shared'
 
-function storeHLSFile (playlist: MStreamingPlaylistVideo, filename: string) {
-  const baseHlsDirectory = getHLSDirectory(playlist.Video)
-
+function storeHLSFile (playlist: MStreamingPlaylistVideo, filename: string, path?: string) {
   return storeObject({
-    inputPath: join(baseHlsDirectory, filename),
+    inputPath: path ?? join(getHLSDirectory(playlist.Video), filename),
     objectStorageKey: generateHLSObjectStorageKey(playlist, filename),
     bucketInfo: CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS
   })

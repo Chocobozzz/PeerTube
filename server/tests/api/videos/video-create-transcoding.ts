@@ -2,11 +2,12 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { expectStartWith } from '@server/tests/shared'
+import { checkResolutionsInMasterPlaylist, expectStartWith } from '@server/tests/shared'
 import { areObjectStorageTestsDisabled } from '@shared/core-utils'
 import { HttpStatusCode, VideoDetails } from '@shared/models'
 import {
   cleanupTests,
+  ConfigCommand,
   createMultipleServers,
   doubleFollow,
   expectNoFailedTranscodingJob,
@@ -25,14 +26,19 @@ async function checkFilesInObjectStorage (video: VideoDetails) {
     await makeRawRequest(file.fileUrl, HttpStatusCode.OK_200)
   }
 
-  const streamingPlaylistFiles = video.streamingPlaylists.length === 0
-    ? []
-    : video.streamingPlaylists[0].files
+  if (video.streamingPlaylists.length === 0) return
 
-  for (const file of streamingPlaylistFiles) {
+  const hlsPlaylist = video.streamingPlaylists[0]
+  for (const file of hlsPlaylist.files) {
     expectStartWith(file.fileUrl, ObjectStorageCommand.getPlaylistBaseUrl())
     await makeRawRequest(file.fileUrl, HttpStatusCode.OK_200)
   }
+
+  expectStartWith(hlsPlaylist.playlistUrl, ObjectStorageCommand.getPlaylistBaseUrl())
+  await makeRawRequest(hlsPlaylist.playlistUrl, HttpStatusCode.OK_200)
+
+  expectStartWith(hlsPlaylist.segmentsSha256Url, ObjectStorageCommand.getPlaylistBaseUrl())
+  await makeRawRequest(hlsPlaylist.segmentsSha256Url, HttpStatusCode.OK_200)
 }
 
 function runTests (objectStorage: boolean) {
@@ -147,6 +153,75 @@ function runTests (objectStorage: boolean) {
       expect(videoDetails.streamingPlaylists).to.have.lengthOf(0)
 
       if (objectStorage) await checkFilesInObjectStorage(videoDetails)
+    }
+  })
+
+  it('Should correctly update HLS playlist on resolution change', async function () {
+    await servers[0].config.updateExistingSubConfig({
+      newConfig: {
+        transcoding: {
+          enabled: true,
+          resolutions: ConfigCommand.getCustomConfigResolutions(false),
+
+          webtorrent: {
+            enabled: true
+          },
+          hls: {
+            enabled: true
+          }
+        }
+      }
+    })
+
+    const { uuid } = await servers[0].videos.quickUpload({ name: 'quick' })
+
+    await waitJobs(servers)
+
+    for (const server of servers) {
+      const videoDetails = await server.videos.get({ id: uuid })
+
+      expect(videoDetails.files).to.have.lengthOf(1)
+      expect(videoDetails.streamingPlaylists).to.have.lengthOf(1)
+      expect(videoDetails.streamingPlaylists[0].files).to.have.lengthOf(1)
+
+      if (objectStorage) await checkFilesInObjectStorage(videoDetails)
+    }
+
+    await servers[0].config.updateExistingSubConfig({
+      newConfig: {
+        transcoding: {
+          enabled: true,
+          resolutions: ConfigCommand.getCustomConfigResolutions(true),
+
+          webtorrent: {
+            enabled: true
+          },
+          hls: {
+            enabled: true
+          }
+        }
+      }
+    })
+
+    await servers[0].videos.runTranscoding({ videoId: uuid, transcodingType: 'hls' })
+    await waitJobs(servers)
+
+    for (const server of servers) {
+      const videoDetails = await server.videos.get({ id: uuid })
+
+      expect(videoDetails.streamingPlaylists).to.have.lengthOf(1)
+      expect(videoDetails.streamingPlaylists[0].files).to.have.lengthOf(5)
+
+      if (objectStorage) {
+        await checkFilesInObjectStorage(videoDetails)
+
+        const hlsPlaylist = videoDetails.streamingPlaylists[0]
+        const resolutions = hlsPlaylist.files.map(f => f.resolution.id)
+        await checkResolutionsInMasterPlaylist({ server: servers[0], playlistUrl: hlsPlaylist.playlistUrl, resolutions })
+
+        const shaBody = await servers[0].streamingPlaylists.getSegmentSha256({ url: hlsPlaylist.segmentsSha256Url })
+        expect(Object.keys(shaBody)).to.have.lengthOf(5)
+      }
     }
   })
 

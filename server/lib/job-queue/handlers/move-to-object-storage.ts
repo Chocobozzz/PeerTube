@@ -1,7 +1,7 @@
 import { Job } from 'bull'
 import { remove } from 'fs-extra'
 import { join } from 'path'
-import { logger } from '@server/helpers/logger'
+import { logger, loggerTagsFactory } from '@server/helpers/logger'
 import { updateTorrentMetadata } from '@server/helpers/webtorrent'
 import { CONFIG } from '@server/initializers/config'
 import { P2P_MEDIA_LOADER_PEER_VERSION } from '@server/initializers/constants'
@@ -13,6 +13,8 @@ import { VideoJobInfoModel } from '@server/models/video/video-job-info'
 import { MStreamingPlaylistVideo, MVideo, MVideoFile, MVideoWithAllFiles } from '@server/types/models'
 import { MoveObjectStoragePayload, VideoStorage } from '@shared/models'
 
+const lTagsBase = loggerTagsFactory('move-object-storage')
+
 export async function processMoveToObjectStorage (job: Job) {
   const payload = job.data as MoveObjectStoragePayload
   logger.info('Moving video %s in job %d.', payload.videoUUID, job.id)
@@ -20,26 +22,33 @@ export async function processMoveToObjectStorage (job: Job) {
   const video = await VideoModel.loadWithFiles(payload.videoUUID)
   // No video, maybe deleted?
   if (!video) {
-    logger.info('Can\'t process job %d, video does not exist.', job.id)
+    logger.info('Can\'t process job %d, video does not exist.', job.id, lTagsBase(payload.videoUUID))
     return undefined
   }
 
+  const lTags = lTagsBase(video.uuid, video.url)
+
   try {
     if (video.VideoFiles) {
+      logger.debug('Moving %d webtorrent files for video %s.', video.VideoFiles.length, video.uuid, lTags)
+
       await moveWebTorrentFiles(video)
     }
 
     if (video.VideoStreamingPlaylists) {
+      logger.debug('Moving HLS playlist of %s.', video.uuid)
+
       await moveHLSFiles(video)
     }
 
     const pendingMove = await VideoJobInfoModel.decrease(video.uuid, 'pendingMove')
     if (pendingMove === 0) {
-      logger.info('Running cleanup after moving files to object storage (video %s in job %d)', video.uuid, job.id)
+      logger.info('Running cleanup after moving files to object storage (video %s in job %d)', video.uuid, job.id, lTags)
+
       await doAfterLastJob(video, payload.isNewVideo)
     }
   } catch (err) {
-    logger.error('Cannot move video %s to object storage.', video.url, { err })
+    logger.error('Cannot move video %s to object storage.', video.url, { err, ...lTags })
 
     await moveToFailedMoveToObjectStorageState(video)
     await VideoJobInfoModel.abortAllTasks(video.uuid, 'pendingMove')

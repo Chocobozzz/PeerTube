@@ -82,7 +82,7 @@
 
       <td>
         <span *ngIf="isHLS(video)" class="badge badge-blue">HLS</span>
-        <span *ngIf="isWebTorrent(video)" class="badge badge-blue">WebTorrent</span>
+        <span *ngIf="isWebTorrent(video)" class="badge badge-blue">WebTorrent ({{ video.files.length }})</span>
         <span *ngIf="video.isLive" class="badge badge-blue">Live</span>
 
         <span *ngIf="!isImport(video) && !video.isLive && video.isLocal">{{ getFilesSize(video) | bytes: 1 }}</span>

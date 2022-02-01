@@ -14,7 +14,7 @@ import {
   setAccessTokensToServers,
   waitJobs
 } from '@shared/server-commands'
-import { expectStartWith } from '../shared'
+import { checkResolutionsInMasterPlaylist, expectStartWith } from '../shared'
 
 const expect = chai.expect
 
@@ -163,11 +163,18 @@ function runTests (objectStorage: boolean) {
 
       expect(videoDetails.streamingPlaylists).to.have.lengthOf(1)
 
-      const files = videoDetails.streamingPlaylists[0].files
+      const hlsPlaylist = videoDetails.streamingPlaylists[0]
+
+      const files = hlsPlaylist.files
       expect(files).to.have.lengthOf(1)
       expect(files[0].resolution.id).to.equal(480)
 
-      if (objectStorage) await checkFilesInObjectStorage(files, 'playlist')
+      if (objectStorage) {
+        await checkFilesInObjectStorage(files, 'playlist')
+
+        const resolutions = files.map(f => f.resolution.id)
+        await checkResolutionsInMasterPlaylist({ server, playlistUrl: hlsPlaylist.playlistUrl, resolutions })
+      }
     }
   })
 
