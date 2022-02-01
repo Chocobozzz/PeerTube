@@ -17,6 +17,7 @@ import {
 } from '../initializers/constants'
 
 // Only used for typings
+// TODO: remove when https://github.com/microsoft/TypeScript/issues/37181 is fixed
 const redisClientWrapperForType = () => createClient<{}>()
 
 class Redis {

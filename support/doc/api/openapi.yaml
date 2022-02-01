@@ -1617,7 +1617,7 @@ paths:
         '403':
           description: cannot terminate an ownership change of another user
         '404':
-          description: video owneship change not found
+          description: video ownership change not found
 
   '/videos/ownership/{id}/refuse':
     post:
@@ -1634,7 +1634,7 @@ paths:
         '403':
           description: cannot terminate an ownership change of another user
         '404':
-          description: video owneship change not found
+          description: video ownership change not found
 
   '/videos/{id}/give-ownership':
     post:
