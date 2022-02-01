@@ -19,3 +19,12 @@ my-embed {
 .loading {
   opacity: 0.5;
 }
+
+.right-form {
+  display: flex;
+
+  > *:not(:last-child) {
+    @include margin-right(10px);
+  }
+}
+
