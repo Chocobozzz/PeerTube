@@ -23,12 +23,8 @@ my-embed {
 .right-form {
   display: flex;
 
-  > * {
-    margin-inline-end: 10px;
-
-    &:last-child {
-      margin-inline-end: 0;
-    }
+  > *:not(:last-child) {
+    @include margin-right(10px);
   }
 }
 
