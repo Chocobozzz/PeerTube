@@ -20,6 +20,14 @@
           [attr.title]="playlistElement.video.name"
         >{{ playlistElement.video.name }}</a>
 
+        <span class="video-miniature-created-at-views">
+          <my-date-toggle [date]="playlistElement.video.publishedAt"></my-date-toggle>
+
+          <span class="views" [title]="playlistElement.video.getExactNumberOfViews()">
+            • <my-video-views-counter [video]="playlistElement.video"></my-video-views-counter>
+          </span>
+        </span>
+
         <a *ngIf="accountLink" tabindex="-1" class="video-info-account" [routerLink]="[ '/a', playlistElement.video.byAccount ]">
           {{ playlistElement.video.byAccount }}
         </a>
