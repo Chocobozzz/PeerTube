@@ -14,7 +14,7 @@ import {
   VideoPlaylistElement,
   VideoStreamingPlaylistType
 } from '../../../../shared/models'
-import { P2PMediaLoaderOptions, PeertubePlayerManagerOptions, PlayerMode } from '../../assets/player/peertube-player-manager'
+import { P2PMediaLoaderOptions, PeertubePlayerManagerOptions, PlayerMode } from '../../assets/player'
 import { VideoJSCaption } from '../../assets/player/peertube-videojs-typings'
 import { TranslationsManager } from '../../assets/player/translations-manager'
 import { isP2PEnabled } from '../../assets/player/utils'
@@ -558,7 +558,11 @@ export class PeerTubeEmbed {
         serverUrl: window.location.origin,
         language: navigator.language,
         embedUrl: window.location.origin + videoInfo.embedPath,
-        embedTitle: videoInfo.name
+        embedTitle: videoInfo.name,
+
+        errorNotifier: () => {
+          // Empty, we don't have a notifier in the embed
+        }
       },
 
       webtorrent: {
@@ -664,7 +668,6 @@ export class PeerTubeEmbed {
       this.player.dispose()
       this.playerElement = null
       this.displayError('This video is not available because the remote instance is not responding.', translations)
-
     }
   }
 

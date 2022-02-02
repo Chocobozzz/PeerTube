@@ -55,7 +55,8 @@ const playerKeys = {
   'Playlist: {1}': 'Playlist: {1}',
   'disabled': 'disabled',
   '  off': '  off',
-  'Player mode': 'Player mode'
+  'Player mode': 'Player mode',
+  'The video failed to play, will try to fast forward.': 'The video failed to play, will try to fast forward.'
 }
 Object.assign(playerKeys, videojs)
 

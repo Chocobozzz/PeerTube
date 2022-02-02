@@ -174,6 +174,12 @@ class Html5Hlsjs {
   dispose () {
     this.videoElement.removeEventListener('play', this.handlers.play)
 
+    // FIXME: https://github.com/video-dev/hls.js/issues/4092
+    const untypedHLS = this.hls as any
+    untypedHLS.log = untypedHLS.warn = () => {
+      // empty
+    }
+
     this.hls.destroy()
   }
 

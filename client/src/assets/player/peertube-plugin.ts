@@ -122,6 +122,14 @@ class PeerTubePlugin extends Plugin {
     this.alterInactivity()
   }
 
+  displayFatalError () {
+    this.player.addClass('vjs-error-display-enabled')
+  }
+
+  hideFatalError () {
+    this.player.removeClass('vjs-error-display-enabled')
+  }
+
   private initializePlayer () {
     if (isMobile()) this.player.addClass('vjs-is-mobile')
 

@@ -33,7 +33,6 @@ import {
   VideoPrivacy,
   VideoState
 } from '@shared/models'
-import { cleanupVideoWatch, getStoredTheater, getStoredVideoWatchHistory } from '../../../assets/player/peertube-player-local-storage'
 import {
   CustomizationOptions,
   P2PMediaLoaderOptions,
@@ -41,7 +40,8 @@ import {
   PeertubePlayerManagerOptions,
   PlayerMode,
   videojs
-} from '../../../assets/player/peertube-player-manager'
+} from '../../../assets/player'
+import { cleanupVideoWatch, getStoredTheater, getStoredVideoWatchHistory } from '../../../assets/player/peertube-player-local-storage'
 import { environment } from '../../../environments/environment'
 import { VideoWatchPlaylistComponent } from './shared'
 
@@ -612,7 +612,9 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         videoCaptions: playerCaptions,
 
         videoShortUUID: video.shortUUID,
-        videoUUID: video.uuid
+        videoUUID: video.uuid,
+
+        errorNotifier: (message: string) => this.notifier.error(message)
       },
 
       webtorrent: {

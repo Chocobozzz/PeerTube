@@ -145,7 +145,7 @@ class WebTorrentPlugin extends Plugin {
     }
 
     // Do not display error to user because we will have multiple fallback
-    this.disableErrorDisplay();
+    this.player.peertube().hideFatalError();
 
     // Hack to "simulate" src link in video.js >= 6
     // Without this, we can't play the video after pausing it
@@ -524,7 +524,7 @@ class WebTorrentPlugin extends Plugin {
     this.torrent = null
 
     // Enable error display now this is our last fallback
-    this.player.one('error', () => this.enableErrorDisplay())
+    this.player.one('error', () => this.player.peertube().displayFatalError())
 
     const httpUrl = this.currentVideoFile.fileUrl
     this.player.src = this.savePlayerSrcFunction
@@ -547,14 +547,6 @@ class WebTorrentPlugin extends Plugin {
 
   private handleError (err: Error | string) {
     return this.player.trigger('customError', { err })
-  }
-
-  private enableErrorDisplay () {
-    this.player.addClass('vjs-error-display-enabled')
-  }
-
-  private disableErrorDisplay () {
-    this.player.removeClass('vjs-error-display-enabled')
   }
 
   private pickAverageVideoFile () {
