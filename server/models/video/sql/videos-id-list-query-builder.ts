@@ -545,7 +545,7 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
     '  EXISTS (' +
     '    SELECT 1 FROM "videoTag" ' +
     '    INNER JOIN "tag" ON "tag"."id" = "videoTag"."tagId" ' +
-    `    WHERE lower("tag"."name") = ${escapedSearch} ` +
+    `    WHERE lower("tag"."name") = lower(${escapedSearch}) ` +
     '    AND "video"."id" = "videoTag"."videoId"' +
     '  )'
 
