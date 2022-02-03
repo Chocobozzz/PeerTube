@@ -157,6 +157,8 @@ function runTests (objectStorage: boolean) {
   })
 
   it('Should correctly update HLS playlist on resolution change', async function () {
+    this.timeout(120000)
+
     await servers[0].config.updateExistingSubConfig({
       newConfig: {
         transcoding: {

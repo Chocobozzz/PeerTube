@@ -1,5 +1,103 @@
 # Changelog
 
+## v4.1.0-rc.1
+
+### IMPORTANT NOTES
+
+ * NodeJS 12 support is deprecated and will be removed in PeerTube 4.2
+
+### Plugins/Themes/Embed API
+
+ * Introduce ability for plugins to create client pages: https://docs.joinpeertube.org/contribute-plugins?id=create-client-page
+ * Plugins that register custom video fields can choose in which tab they want to display them and can report errors: https://docs.joinpeertube.org/contribute-plugins?id=add-custom-fields-to-video-form
+ * Add new client plugin id selectors
+   * Add `#plugin-selector-about-instance-moderation`, `#plugin-selector-about-instance-other-information`, `#plugin-selector-about-instance-features`, `#plugin-selector-about-instance-statistics`, `#plugin-selector-about-menu-instance`, `#plugin-selector-about-menu-peertube`, `#plugin-selector-about-menu-network` in about page [#4597](https://github.com/Chocobozzz/PeerTube/pull/4597)
+   * Add `#plugin-selector-menu-user-dropdown-language-item` in menu [#4597](https://github.com/Chocobozzz/PeerTube/pull/4597)
+ * Add client plugin hooks
+   * `filter:login.instance-about-plugin-panels.create.result` and `filter:signup.instance-about-plugin-panels.create.result` to add custom instance information in login/signup pages
+ * Add server plugin hooks
+   * `filter:api.server.stats.get.result`
+   * `filter:api.video.upload.video-attribute.result`, `filter:api.video.import-url.video-attribute.result`, `filter:api.video.import-torrent.video-attribute.result`, `filter:api.video.live.video-attribute.result` when creating a video object
+   * `action:api.video-caption.created` and `action:api.video-caption.deleted` [#4650](https://github.com/Chocobozzz/PeerTube/pull/4650)
+ * Server helpers
+   * `videos.getFiles(videoId: number)` to list video files (webtorrent, hls and thumbnail files)
+   * `videos.ffprobe(path: string)` to get `ffprobe` JSON result
+ * Publish [@peertube/peertube-type](https://www.npmjs.com/package/@peertube/peertube-types) NPM module that can be used by TypeScript plugins
+ * Add ability to disable P2P in embed using `p2p` query parameter in embed URL
+
+### Maintenance
+
+ * REST API
+   * Deprecate `webTorrentEnabled` in favour of `p2pEnabled` for user model
+   * Add ability to pause/resume the job queue
+ * Also publish stable releases on https://builds.joinpeertube.org/release
+ * Add ability for admins to specify `youtube-dl`/`yt-dlp` python binary path [#4706](https://github.com/Chocobozzz/PeerTube/pull/4706)
+ * PeerTube server startup is faster
+
+### CLI tools
+
+ * Also remove HLS files when using `prune-storage` script
+ * Support `--plugin-version` option when installing a plugin [#4599](https://github.com/Chocobozzz/PeerTube/pull/4599)
+
+### Features
+
+ * :tada: Player improvements
+   * Increase control bar size on desktop & mobile
+   * Add overlay on tap to easily play/pause the video on mobile
+   * Automatically move to landscape when full screen a video on mobile
+   * Add fast forward/rewind on double tap on mobile
+   * Cleanup, fix and add player hotkeys
+   * Keep control bar displayed when settings panel is opened
+   * Faster hiding transition for control bar
+   * Stop confusing *peer* indication in control bar when p2p is disabled
+   * Try to fast forward video on HLS decode error
+ * :tada: More admin customizations
+   * Specify default *Publish* video attributes (download enabled, comments enabled, privacy, licence)
+   * Choose to automatically redirect users on the external auth platform on login button click
+   * Set default P2P policy for the player
+ * Search improvements
+   * Add *Result type* filter in search (videos, channels or playlists)
+   * Display only video results when searching on video metadata (tags, categories etc)
+ * Video imports
+   * Users can cancel and delete video imports
+   * Add ability to filter video imports by target URL
+ * Add ability for users to delete individual elements in videos history
+ * Show date and views counter in playlist element miniature [#4396](https://github.com/Chocobozzz/PeerTube/issues/4396)
+ * Add *norsk* locale support
+ * Check mute status and display mute badges in channel and account pages
+ * Add *No linguistic content* video language option [#4631](https://github.com/Chocobozzz/PeerTube/pull/4631)
+ * Don't send notifications to admins/moderators if an admin/moderator reported an abuse
+ * Add ability for moderators/admins to edit any channel [#4608](https://github.com/Chocobozzz/PeerTube/pull/4608)
+ * Add a refresh button to admin videos overview page [#4753](https://github.com/Chocobozzz/PeerTube/pull/4753)
+ * Add *Official* badge to official plugins in admin plugin pages
+ * Automatically clean unavailable remote ActivityPub resources
+
+### Bug fixes
+
+ * Fix weird `require` bug on plugin upgrade
+ * Fix plugin storage return value when storing a JSON array [#4640](https://github.com/Chocobozzz/PeerTube/pull/4640)
+ * Decrease delay to cleanup resumable uploads (to 1 hour)
+ * Update torrent metadata on video update
+ * Fix HLS player with videos that have stream duration inconsistencies
+ * Fix player crash if the video contains only audio resolution
+ * Fix ffmpeg crash when using a transcoding plugin encoder that doesn't support PeerTube B-frame strategy
+ * Fix transcoding failure for audio only uploads
+ * Don't run HLS transcoding when running manually WebTorrent transcoding from the admin
+ * Don't run audio transcoding with video only file
+ * Correctly send new HLS files after re-transcoding to object storage
+ * Fix stuck state when move transcoding job failed
+ * Correctly display internal videos of internal subscriptions
+ * Correctly display all videos history to users
+ * Fix video upload with big preview file
+ * Fix description/comment timestamp click of external video
+ * Add missing `mediaType` information to AP objects
+ * Fix abuse list crash on deleted reporter account
+ * Convert markdown to HTML/plain text for RSS feeds
+ * Search on tags is now case insensitive
+ * Forbid comments/captions listing of private/internal videos
+ * Prevent video import on non unicast ips
+
+
 ## v4.0.0
 
 ### IMPORTANT NOTES
