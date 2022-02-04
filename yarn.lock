@@ -1449,6 +1449,13 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@peertube/feed@^5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@peertube/feed/-/feed-5.0.0.tgz#f8cbc1e526a7af3112fca6d1859362b0bea13024"
+  integrity sha512-YR78vHocVJsHWETz1US1+A4BZlu7Bykd0GuwCTdIQ1nfrfMXDBOiC/HM8+TYBqkp5oAqAbVyeVo6VxhpZzE3sw==
+  dependencies:
+    xml-js "^1.6.11"
+
 "@peertube/http-signature@^1.4.0":
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/@peertube/http-signature/-/http-signature-1.4.0.tgz#5d2bab08dfeca55490d926d145b3ec0cfb392d63"
@@ -5602,7 +5609,7 @@ lodash@4.17.19:
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.19.tgz#e48ddedbe30b3321783c5b4301fbd353bc1e4a4b"
   integrity sha512-JNvd8XER9GQX0v2qJgsaN/mzFCNA5BRe/j8JN9d+tWyGLSodKQHKFicdwNYzWwI3wjRnaKPsGj1XkBjx/F96DQ==
 
-lodash@>=4.17.13, lodash@^4.17.10, lodash@^4.17.15, lodash@^4.17.20, lodash@^4.17.21:
+lodash@>=4.17.13, lodash@^4.17.10, lodash@^4.17.20, lodash@^4.17.21:
   version "4.17.21"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
@@ -6653,14 +6660,6 @@ pem@^1.12.3:
     md5 "^2.2.1"
     os-tmpdir "^1.0.1"
     which "^2.0.2"
-
-pfeed@1.1.11:
-  version "1.1.11"
-  resolved "https://registry.yarnpkg.com/pfeed/-/pfeed-1.1.11.tgz#a52f6b18aa01dfd3c8ff3c7189c456dc1b66d28f"
-  integrity sha512-EheEV1A3xCQ61irXBvqy+V2vAEpeKjw7bTqH2Ck64LFMcGh9yOwncESreaWfUftRf6djRa0sXP6kkOnGWX/P7g==
-  dependencies:
-    lodash "^4.17.15"
-    xml "^1.0.1"
 
 pg-connection-string@^2.5.0:
   version "2.5.0"
@@ -8776,6 +8775,13 @@ xhr@^2.0.1:
     parse-headers "^2.0.0"
     xtend "^4.0.0"
 
+xml-js@^1.6.11:
+  version "1.6.11"
+  resolved "https://registry.yarnpkg.com/xml-js/-/xml-js-1.6.11.tgz#927d2f6947f7f1c19a316dd8eea3614e8b18f8e9"
+  integrity sha512-7rVi2KMfwfWFl+GpPg6m80IVMWXLRjO+PxTq7V2CDhoGak0wzYzFgUY2m4XJ47OGdXd8eLE8EmwfAmdjw7lC1g==
+  dependencies:
+    sax "^1.2.4"
+
 xml-parse-from-string@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/xml-parse-from-string/-/xml-parse-from-string-1.0.1.tgz#a9029e929d3dbcded169f3c6e28238d95a5d5a28"
@@ -8788,11 +8794,6 @@ xml2js@^0.4.23, xml2js@^0.4.5:
   dependencies:
     sax ">=0.6.0"
     xmlbuilder "~11.0.0"
-
-xml@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/xml/-/xml-1.0.1.tgz#78ba72020029c5bc87b8a81a3cfcd74b4a2fc1e5"
-  integrity sha1-eLpyAgApxbyHuKgaPPzXS0ovweU=
 
 xmlbuilder@~11.0.0:
   version "11.0.1"

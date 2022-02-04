@@ -1,12 +1,13 @@
 import express from 'express'
-import Feed from 'pfeed'
+import { Feed } from '@peertube/feed'
+import { extname } from 'path'
 import { mdToOneLinePlainText, toSafeHtml } from '@server/helpers/markdown'
 import { getServerActor } from '@server/models/application/application'
 import { getCategoryLabel } from '@server/models/video/formatter/video-format-utils'
 import { VideoInclude } from '@shared/models'
 import { buildNSFWFilter } from '../helpers/express-utils'
 import { CONFIG } from '../initializers/config'
-import { FEEDS, PREVIEWS_SIZE, ROUTE_CACHE_LIFETIME, WEBSERVER } from '../initializers/constants'
+import { FEEDS, MIMETYPES, PREVIEWS_SIZE, ROUTE_CACHE_LIFETIME, WEBSERVER } from '../initializers/constants'
 import {
   asyncMiddleware,
   commonVideosFiltersValidator,
@@ -258,10 +259,7 @@ function initFeed (parameters: {
   })
 }
 
-function addVideosToFeed (feed, videos: VideoModel[]) {
-  /**
-   * Adding video items to the feed object, one at a time
-   */
+function addVideosToFeed (feed: Feed, videos: VideoModel[]) {
   for (const video of videos) {
     const formattedVideoFiles = video.getFormattedVideoFilesJSON(false)
 
@@ -273,9 +271,9 @@ function addVideosToFeed (feed, videos: VideoModel[]) {
 
     const videos = formattedVideoFiles.map(videoFile => {
       const result = {
-        type: 'video/mp4',
+        type: MIMETYPES.VIDEO.EXT_MIMETYPE[extname(videoFile.fileUrl)],
         medium: 'video',
-        height: videoFile.resolution.label.replace('p', ''),
+        height: videoFile.resolution.id,
         fileSize: videoFile.size,
         url: videoFile.fileUrl,
         framerate: videoFile.fps,
@@ -309,8 +307,18 @@ function addVideosToFeed (feed, videos: VideoModel[]) {
       ],
       date: video.publishedAt,
       nsfw: video.nsfw,
-      torrent: torrents,
+      torrents,
+
+      // Enclosure
+      video: {
+        url: videos[0].url,
+        length: videos[0].fileSize,
+        type: videos[0].type
+      },
+
+      // Media RSS
       videos,
+
       embed: {
         url: video.getEmbedStaticPath(),
         allowFullscreen: true
@@ -324,7 +332,7 @@ function addVideosToFeed (feed, videos: VideoModel[]) {
           views: video.views
         }
       },
-      thumbnail: [
+      thumbnails: [
         {
           url: WEBSERVER.URL + video.getPreviewStaticPath(),
           height: PREVIEWS_SIZE.height,
@@ -335,7 +343,7 @@ function addVideosToFeed (feed, videos: VideoModel[]) {
   }
 }
 
-function sendFeed (feed, req: express.Request, res: express.Response) {
+function sendFeed (feed: Feed, req: express.Request, res: express.Response) {
   const format = req.params.format
 
   if (format === 'atom' || format === 'atom1') {

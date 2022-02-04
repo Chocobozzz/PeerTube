@@ -156,9 +156,10 @@ describe('Test syndication feeds', () => {
 
         const enclosure = xmlDoc.rss.channel.item[0].enclosure
         expect(enclosure).to.exist
-        expect(enclosure['@_type']).to.equal('application/x-bittorrent')
+
+        expect(enclosure['@_type']).to.equal('video/webm')
         expect(enclosure['@_length']).to.equal(218910)
-        expect(enclosure['@_url']).to.contain('720.torrent')
+        expect(enclosure['@_url']).to.contain('-720.webm')
       }
     })
 
@@ -274,8 +275,8 @@ describe('Test syndication feeds', () => {
 
         const jsonObj = JSON.parse(json)
         expect(jsonObj.items.length).to.be.equal(2)
-        expect(jsonObj.items[0].html_content).to.contain('<p>super comment 2</p>')
-        expect(jsonObj.items[1].html_content).to.contain('<p>super comment 1</p>')
+        expect(jsonObj.items[0].content_html).to.contain('<p>super comment 2</p>')
+        expect(jsonObj.items[1].content_html).to.contain('<p>super comment 1</p>')
       }
     })
 
