@@ -54,7 +54,7 @@ class PeerTubeMobilePlugin extends Plugin {
   }
 
   private initTouchStartEvents () {
-    this.player.on('touchstart', (event: TouchEvent) => {
+    const handleTouchStart = (event: TouchEvent) => {
       event.stopPropagation()
 
       if (this.tapTimeout) {
@@ -79,7 +79,16 @@ class PeerTubeMobilePlugin extends Plugin {
       }, PeerTubeMobilePlugin.DOUBLE_TAP_DELAY_MS)
 
       this.lastTapEvent = event
+    }
+
+    this.player.on('touchstart', (event: TouchEvent) => {
+      // Only enable user active on player touch, we listen event on peertube mobile buttons to disable it
+      if (this.player.userActive()) return
+
+      handleTouchStart(event)
     })
+
+    this.peerTubeMobileButtons.on('touchstart', handleTouchStart)
   }
 
   private onDoubleTap (event: TouchEvent) {
