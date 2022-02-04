@@ -12,7 +12,7 @@ import { HttpStatusCode } from '../../shared/models/http/http-error-codes'
 import { VideoPlaylistPrivacy, VideoPrivacy } from '../../shared/models/videos'
 import { isTestInstance } from '../helpers/core-utils'
 import { logger } from '../helpers/logger'
-import { mdToPlainText } from '../helpers/markdown'
+import { mdToOneLinePlainText } from '../helpers/markdown'
 import { CONFIG } from '../initializers/config'
 import {
   ACCEPT_HEADERS,
@@ -103,7 +103,7 @@ class ClientHtml {
       res.status(HttpStatusCode.NOT_FOUND_404)
       return html
     }
-    const description = mdToPlainText(video.description)
+    const description = mdToOneLinePlainText(video.description)
 
     let customHtml = ClientHtml.addTitleTag(html, video.name)
     customHtml = ClientHtml.addDescriptionTag(customHtml, description)
@@ -164,7 +164,7 @@ class ClientHtml {
       return html
     }
 
-    const description = mdToPlainText(videoPlaylist.description)
+    const description = mdToOneLinePlainText(videoPlaylist.description)
 
     let customHtml = ClientHtml.addTitleTag(html, videoPlaylist.name)
     customHtml = ClientHtml.addDescriptionTag(customHtml, description)
@@ -263,7 +263,7 @@ class ClientHtml {
       return ClientHtml.getIndexHTML(req, res)
     }
 
-    const description = mdToPlainText(entity.description)
+    const description = mdToOneLinePlainText(entity.description)
 
     let customHtml = ClientHtml.addTitleTag(html, entity.getDisplayName())
     customHtml = ClientHtml.addDescriptionTag(customHtml, description)

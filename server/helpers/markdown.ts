@@ -1,14 +1,14 @@
-import { getSanitizeOptions, TEXT_WITH_HTML_RULES } from '@shared/core-utils'
+import { getDefaultSanitizeOptions, getTextOnlySanitizeOptions, TEXT_WITH_HTML_RULES } from '@shared/core-utils'
 
-const sanitizeOptions = getSanitizeOptions()
+const defaultSanitizeOptions = getDefaultSanitizeOptions()
+const textOnlySanitizeOptions = getTextOnlySanitizeOptions()
 
 const sanitizeHtml = require('sanitize-html')
 const markdownItEmoji = require('markdown-it-emoji/light')
 const MarkdownItClass = require('markdown-it')
-const markdownIt = new MarkdownItClass('default', { linkify: true, breaks: true, html: true })
 
-markdownIt.enable(TEXT_WITH_HTML_RULES)
-markdownIt.use(markdownItEmoji)
+const markdownItWithHTML = new MarkdownItClass('default', { linkify: true, breaks: true, html: true })
+const markdownItWithoutHTML = new MarkdownItClass('default', { linkify: true, breaks: true, html: false })
 
 const toSafeHtml = (text: string) => {
   if (!text) return ''
@@ -17,29 +17,65 @@ const toSafeHtml = (text: string) => {
   const textWithLineFeed = text.replace(/<br.?\/?>/g, '\r\n')
 
   // Convert possible markdown (emojis, emphasis and lists) to html
-  const html = markdownIt.render(textWithLineFeed)
+  const html = markdownItWithHTML.enable(TEXT_WITH_HTML_RULES)
+                                 .use(markdownItEmoji)
+                                 .render(textWithLineFeed)
 
   // Convert to safe Html
-  return sanitizeHtml(html, sanitizeOptions)
+  return sanitizeHtml(html, defaultSanitizeOptions)
 }
 
-const mdToPlainText = (text: string) => {
+const mdToOneLinePlainText = (text: string) => {
   if (!text) return ''
 
-  // Convert possible markdown (emojis, emphasis and lists) to html
-  const html = markdownIt.render(text)
+  markdownItWithoutHTML.use(markdownItEmoji)
+                       .use(plainTextPlugin)
+                       .render(text)
 
   // Convert to safe Html
-  const safeHtml = sanitizeHtml(html, sanitizeOptions)
-
-  return safeHtml.replace(/<[^>]+>/g, '')
-                 .replace(/\n$/, '')
-                 .replace(/\n/g, ', ')
+  return sanitizeHtml(markdownItWithoutHTML.plainText, textOnlySanitizeOptions)
 }
 
 // ---------------------------------------------------------------------------
 
 export {
   toSafeHtml,
-  mdToPlainText
+  mdToOneLinePlainText
+}
+
+// ---------------------------------------------------------------------------
+
+// Thanks: https://github.com/wavesheep/markdown-it-plain-text
+function plainTextPlugin (markdownIt: any) {
+  let lastSeparator = ''
+
+  function plainTextRule (state: any) {
+    const text = scan(state.tokens)
+
+    markdownIt.plainText = text.replace(/\s+/g, ' ')
+  }
+
+  function scan (tokens: any[]) {
+    let text = ''
+
+    for (const token of tokens) {
+      if (token.children !== null) {
+        text += scan(token.children)
+        continue
+      }
+
+      if (token.type === 'list_item_close') {
+        lastSeparator = ', '
+      } else if (/[a-zA-Z]+_close/.test(token.type)) {
+        lastSeparator = ' '
+      } else if (token.content) {
+        text += lastSeparator
+        text += token.content
+      }
+    }
+
+    return text
+  }
+
+  markdownIt.core.ruler.push('plainText', plainTextRule)
 }

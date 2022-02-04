@@ -1,4 +1,4 @@
-export function getSanitizeOptions () {
+export function getDefaultSanitizeOptions () {
   return {
     allowedTags: [ 'a', 'p', 'span', 'br', 'strong', 'em', 'ul', 'ol', 'li' ],
     allowedSchemes: [ 'http', 'https' ],
@@ -23,8 +23,14 @@ export function getSanitizeOptions () {
   }
 }
 
+export function getTextOnlySanitizeOptions () {
+  return {
+    allowedTags: [] as string[]
+  }
+}
+
 export function getCustomMarkupSanitizeOptions (additionalAllowedTags: string[] = []) {
-  const base = getSanitizeOptions()
+  const base = getDefaultSanitizeOptions()
 
   return {
     allowedTags: [
