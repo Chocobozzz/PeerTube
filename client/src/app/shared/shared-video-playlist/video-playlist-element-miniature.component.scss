@@ -82,8 +82,19 @@ my-video-thumbnail,
       align-self: flex-start;
       min-width: 0;
 
-      a {
-        width: auto;
+      .video-info-header {
+        display: flex;
+        align-items: baseline;
+
+        a {
+          width: auto;
+          padding-right: 5px;
+        }
+
+        .badge {
+          @include peertube-badge;
+          margin-right: 5px;
+        }
       }
 
       .video-info-account,
