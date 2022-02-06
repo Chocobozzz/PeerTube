@@ -1638,7 +1638,7 @@
       </trans-unit>
       <trans-unit id="667372110624203230" datatype="html">
         <source>Import jobs concurrency</source>
-        <target state="new">Import jobs concurrency</target>
+        <target state="translated">動画の同時並行インポートのジョブ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">255</context></context-group>
       </trans-unit>
       <trans-unit id="2184839376696112704" datatype="html">
@@ -1648,7 +1648,7 @@
       </trans-unit>
       <trans-unit id="780513172839038392" datatype="html">
         <source>jobs in parallel</source>
-        <target state="translated">並行したジョブ</target>
+        <target state="translated">同時並行のジョブ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">260</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">171</context></context-group>
       </trans-unit>
@@ -3175,7 +3175,7 @@
       </trans-unit>
       <trans-unit id="9031514421077169181" datatype="html">
         <source>Video redundancies</source>
-        <target state="translated">動画の冗長性</target>
+        <target state="translated">動画の冗長化</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/admin.component.ts</context><context context-type="linenumber">77</context></context-group>
       </trans-unit>
       <trans-unit id="3516494528184217808">
@@ -3328,7 +3328,7 @@
       </trans-unit>
       <trans-unit id="6571718060636962350" datatype="html">
         <source>Redundancy allowed <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></source>
-        <target state="needs-translation">Redundancy allowed <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></target>
+        <target state="translated">冗長化<x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">34</context></context-group>
       </trans-unit>
       <trans-unit id="8246779176913476983" datatype="html">
@@ -3365,7 +3365,7 @@
       </trans-unit>
       <trans-unit id="5968342253366599875" datatype="html">
         <source>Videos redundancies</source>
-        <target state="translated">動画の冗長性</target>
+        <target state="translated">動画の冗長化</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="4937132637898470918" datatype="html">
@@ -3600,7 +3600,7 @@
       </trans-unit>
       <trans-unit id="4488103364313252005" datatype="html">
         <source>List redundancies</source>
-        <target state="translated">冗長性リスト</target>
+        <target state="translated">冗長化リスト</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
       <trans-unit id="7423116442791683693" datatype="html">
@@ -3615,14 +3615,12 @@
       </trans-unit>
       <trans-unit id="7292311893283564173" datatype="html">
         <source>Enabled strategies stats</source>
-        <target state="new">Enabled strategies stats</target>
+        <target state="translated">冗長性方針を有効にする</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">89</context></context-group>
       </trans-unit>
       <trans-unit id="7595922272001217567" datatype="html">
         <source>No redundancy strategy is enabled on your instance.</source>
-        <target state="new">
-      No redundancy strategy is enabled on your instance.
-    </target>
+        <target state="translated">あなたのインスタンスでは冗長性の方針は無効になっています。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">93</context></context-group>
       </trans-unit>
       <trans-unit id="7574091010118901399">
@@ -4247,12 +4245,12 @@
       </trans-unit>
       <trans-unit id="2713421326605345655" datatype="html">
         <source>No <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/><x id="INTERPOLATION" equiv-text="{{ jobType }}"/><x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt; "/> jobs found.</source>
-        <target state="new">No <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/><x id="INTERPOLATION" equiv-text="{{ jobType }}"/><x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt; "/> jobs found.</target>
+        <target state="translated"><x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/><x id="INTERPOLATION" equiv-text="{{ jobType }}"/><x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt; "/>ジョブは見つかりませんでした。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">106</context></context-group>
       </trans-unit>
       <trans-unit id="2384897339170501794" datatype="html">
         <source>No <x id="START_TAG_SPAN"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_SPAN"/> jobs found.</source>
-        <target state="new">No <x id="START_TAG_SPAN"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_SPAN"/> jobs found.</target>
+        <target state="translated"><x id="START_TAG_SPAN"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_SPAN"/>ジョブは見つかりませんでした。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">110</context></context-group>
       </trans-unit>
       <trans-unit id="4457061340457477073" datatype="html">
@@ -4401,7 +4399,7 @@
       </trans-unit>
       <trans-unit id="1617785425462022303" datatype="html">
         <source>Strategy</source>
-        <target state="needs-translation">Strategy</target>
+        <target state="translated">冗長性についての方針</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="2544569632476723854">
@@ -4546,7 +4544,7 @@
       </trans-unit>
       <trans-unit id="5444889468197427724" datatype="html">
         <source>Redirect users on single external auth when users click on the login button in menu</source>
-        <target state="new">Redirect users on single external auth when users click on the login button in menu</target>
+        <target state="translated">ユーザーがメニューのログインボタンをクリックした時に、外部認証画面へリダイレクトさせる</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">77</context>
@@ -4570,7 +4568,7 @@
       </trans-unit>
       <trans-unit id="4809162812315301010" datatype="html">
         <source>BROADCAST MESSAGE</source>
-        <target state="translated">アナウンスメッセージ発表</target>
+        <target state="translated">メッセージのアナウンス</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">94</context></context-group>
       </trans-unit>
       <trans-unit id="7097094470713539753" datatype="html">
@@ -4580,17 +4578,17 @@
       </trans-unit>
       <trans-unit id="4686199497574248459" datatype="html">
         <source>Enable broadcast message</source>
-        <target state="translated">アナウンスメッセージをONにする</target>
+        <target state="translated">メッセージのアナウンスを有効にする</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">107</context></context-group>
       </trans-unit>
       <trans-unit id="9192050065623241777" datatype="html">
         <source>Allow users to dismiss the broadcast message</source>
-        <target state="translated">ユーザーがアナウンスメッセージの解除を可能にする</target>
+        <target state="translated">ユーザーがメッセージを画面から消すことを許可する</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">114</context></context-group>
       </trans-unit>
       <trans-unit id="6582848618760132901" datatype="html">
         <source>Broadcast message level</source>
-        <target state="translated">アナウンスメッセージの段階</target>
+        <target state="translated">アナウンスメッセージの重要度</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">119</context></context-group>
       </trans-unit>
       <trans-unit id="8066608938393600549" datatype="html">
@@ -4776,12 +4774,12 @@
       </trans-unit>
       <trans-unit id="5273935530181504015" datatype="html">
         <source>⚠️ This functionality depends heavily on the moderation of instances followed by the search index you select.</source>
-        <target state="new">⚠️ This functionality depends heavily on the moderation of instances followed by the search index you select.</target>
+        <target state="translated">⚠️この機能は、あなたが選んだ検索インデックスからフォローされているインスタンスの運営者によるモデレーションに、大きく依存することになります。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">368</context></context-group>
       </trans-unit>
       <trans-unit id="1886227550697837417" datatype="html">
         <source>You should only use moderated search indexes in production, or <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://framagit.org/framasoft/peertube/search-index&quot;&gt;"/>host your own<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="new"> You should only use moderated search indexes in production, or <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://framagit.org/framasoft/peertube/search-index&quot;&gt;"/>host your own<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target state="translated">現在も稼働中で、よくモデレートされている検索インデックスを一つ選ぶべきでしょう。または<x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://framagit.org/framasoft/peertube/search-index&quot;&gt;"/>あなただけの検索インデックスをホストしましょう<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>。 </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">370</context></context-group>
       </trans-unit>
       <trans-unit id="2331464426553277323" datatype="html">
@@ -4791,12 +4789,12 @@
       </trans-unit>
       <trans-unit id="8524278911521465398" datatype="html">
         <source>Disable local search in search bar</source>
-        <target state="translated">検索バーでのローカルの検索を無効にする</target>
+        <target state="translated">検索バーでのローカル内検索を無効にする</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">390</context></context-group>
       </trans-unit>
       <trans-unit id="6568991917245875948" datatype="html">
         <source>Otherwise the local search stays used by default</source>
-        <target state="new">Otherwise the local search stays used by default</target>
+        <target state="translated">ローカル内検索を無効にしなかった場合、デフォルトではローカル内検索が有効のままになります</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">400</context></context-group>
       </trans-unit>
       <trans-unit id="4444955208013675027" datatype="html">
@@ -4853,7 +4851,7 @@
       </trans-unit>
       <trans-unit id="9076632742417302918" datatype="html">
         <source>See <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/admin-following-instances?id=automatically-follow-other-instances&quot; rel=&quot;noopener noreferer&quot; target=&quot;_blank&quot;&gt;"/>the documentation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> for more information about the expected URL </source>
-        <target state="new"> See <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/admin-following-instances?id=automatically-follow-other-instances&quot; rel=&quot;noopener noreferer&quot; target=&quot;_blank&quot;&gt;"/>the documentation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> for more information about the expected URL </target>
+        <target state="translated">自動的にフォローすると予想されるインスタンスについての詳しい情報は<x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/admin-following-instances?id=automatically-follow-other-instances&quot; rel=&quot;noopener noreferer&quot; target=&quot;_blank&quot;&gt;"/>ドキュメント<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/>をご覧下さい。 </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">470</context></context-group>
       </trans-unit>
       <trans-unit id="3946988229617310200" datatype="html">
@@ -4888,7 +4886,7 @@
       </trans-unit>
       <trans-unit id="3202133522706129143" datatype="html">
         <source>Provide the Twitter account representing your instance to improve link previews. If you don't have a Twitter account, just leave the default value.</source>
-        <target state="translated">あなたのインスタンスのコンテンツの（Twitter上での）リンクプレビューをより良くするために、インスタンス向けのTwitterアカウントを入力しましょう。Twitterアカウントが無い場合は、何も入力しないでおきましょう。</target>
+        <target state="translated">あなたのインスタンスのコンテンツの（Twitter上での）リンクプレビューをより良くするために、インスタンス専用のTwitterアカウントを入力しましょう。Twitterアカウントが無い場合は、何も入力しないでおきましょう。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">526</context></context-group>
       </trans-unit>
       <trans-unit id="4087837092261487511">
@@ -4898,7 +4896,7 @@
       </trans-unit>
       <trans-unit id="5648651824279408711" datatype="html">
         <source>Instance allowed by Twitter</source>
-        <target state="translated">あなたのインスタンスがTwitter社に認知されました</target>
+        <target state="translated">あなたのインスタンスがTwitterに認知されました</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">551</context></context-group>
       </trans-unit>
       <trans-unit id="2076338542820061819" datatype="html">
@@ -4947,7 +4945,7 @@
       </trans-unit>
       <trans-unit id="7210210728441530221" datatype="html">
         <source>Max simultaneous lives created per user <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;text-muted&quot;&gt;"/>(-1 for "unlimited")<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></source>
-        <target state="new"> Max simultaneous lives created per user <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;text-muted&quot;&gt;"/>(-1 for "unlimited")<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></target>
+        <target state="needs-translation">Max simultaneous lives created per user <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;text-muted&quot;&gt;"/>(-1 for "unlimited")<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">53</context></context-group>
       </trans-unit>
       <trans-unit id="6830777508073747241" datatype="html">
@@ -5015,7 +5013,7 @@
       </trans-unit>
       <trans-unit id="6201638315245239510" datatype="html">
         <source>Advanced</source>
-        <target state="new">Advanced</target>
+        <target state="translated">高度な設定</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">56</context></context-group>
       </trans-unit>
       <trans-unit id="7911929966701561067" datatype="html">
@@ -5131,7 +5129,7 @@
       </trans-unit>
       <trans-unit id="7185278676178506632" datatype="html">
         <source>Transcoding jobs concurrency</source>
-        <target state="new">Transcoding jobs concurrency</target>
+        <target state="translated">同時並行トランスコードのジョブ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">166</context>
@@ -5162,12 +5160,12 @@
       </trans-unit>
       <trans-unit id="5511334650211127631" datatype="html">
         <source>Some files are not federated, and fetched when necessary. Define their caching policies.</source>
-        <target state="new"> Some files are not federated, and fetched when necessary. Define their caching policies. </target>
+        <target state="translated">いくつかのファイルが連合されておらず、必要な時にそれらがフェッチされています。キャッシュポリシーを設定して下さい。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context><context context-type="linenumber">6</context></context-group>
       </trans-unit>
       <trans-unit id="4382565260112874406" datatype="html">
         <source>Number of previews to keep in cache</source>
-        <target state="new">Number of previews to keep in cache</target>
+        <target state="translated">動画プレビューの残存キャッシュ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="3710881484246327863" datatype="html">
@@ -5180,7 +5178,7 @@
       </trans-unit>
       <trans-unit id="2279905277031617076" datatype="html">
         <source>Number of video captions to keep in cache</source>
-        <target state="new">Number of video captions to keep in cache</target>
+        <target state="translated">動画字幕の残存キャッシュ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="6193666854590647323" datatype="html">
@@ -5193,7 +5191,7 @@
       </trans-unit>
       <trans-unit id="330647913034301472" datatype="html">
         <source>Number of video torrents to keep in cache</source>
-        <target state="new">Number of video torrents to keep in cache</target>
+        <target state="translated">動画torrentの残存キャッシュ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">43</context>
@@ -5214,7 +5212,7 @@
       </trans-unit>
       <trans-unit id="1714039296068260295" datatype="html">
         <source>Slight modifications to your PeerTube instance for when creating a plugin or theme is overkill.</source>
-        <target state="new"> Slight modifications to your PeerTube instance for when creating a plugin or theme is overkill. </target>
+        <target state="translated">作成したプラグインまたはテーマに問題があった場合に、PeerTubeインスタンスを微修正しましょう。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context><context context-type="linenumber">64</context></context-group>
       </trans-unit>
       <trans-unit id="6180346896314915203">
@@ -6519,14 +6517,12 @@
       </trans-unit>
       <trans-unit id="4665274432258993920" datatype="html">
         <source>A channel is an entity in which you upload your videos. Creating several of them helps you to organize and separate your content.<x id="LINE_BREAK"/> For example, you could decide to have a channel to publish your piano concerts, and another channel in which you publish your videos talking about ecology. </source>
-        <target state="needs-translation">A channel is an entity in which you upload your videos. Creating several of them helps you to organize and separate your content.<x id="LINE_BREAK"/> For example, you could decide to have a channel to publish your piano concerts, and another channel in which you publish your videos talking about ecology. </target>
+        <target state="translated">チャンネルは動画をアップロードする場です。チャンネルを複数作成することで、動画をチャンネルごとにまとめたり分ける時に役立ちます。<x id="LINE_BREAK"/>例えば、あなたのピアノコンサートの動画を投稿するチャンネルを作る一方、環境保護についてのトーク動画を投稿する別のチャンネルを作成することができます。 </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register-step-channel.component.html</context><context context-type="linenumber">4</context></context-group>
       </trans-unit>
       <trans-unit id="2254156021453506528" datatype="html">
         <source>Other users can decide to subscribe any channel they want, to be notified when you publish a new video.</source>
-        <target state="new">
-      Other users can decide to subscribe any channel they want, to be notified when you publish a new video.
-    </target>
+        <target state="translated">ユーザーはどのようなチャンネルでもチャンネル登録をすることができ、あなたが新しい動画を投稿した際にはあなたのチャンネルを登録しているユーザーに通知が送られます。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register-step-channel.component.html</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
       <trans-unit id="8583412279916132438" datatype="html">
@@ -6909,7 +6905,7 @@
       </trans-unit>
       <trans-unit id="6549061957433635758" datatype="html">
         <source>Process domains</source>
-        <target state="new">Process domains</target>
+        <target state="needs-translation">Process domains</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/batch-domains-modal.component.ts</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="1909009883731319373" datatype="html">
@@ -7065,22 +7061,22 @@
       </trans-unit>
       <trans-unit id="2520968456492632777" datatype="html">
         <source><x id="PH"/> accepted in instance followers </source>
-        <target state="needs-translation"><x id="PH"/> accepted in instance followers </target>
+        <target state="translated"><x id="PH"/>をインスタンスのフォロワーとして受け入れました </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="450530533730658004">
         <source>Do you really want to reject this follower?</source>
-        <target>このフォロワーを本当に拒否しますか？</target>
+        <target>このフォロワーを本当に受け入れないようにしますか？</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context><context context-type="linenumber">52</context></context-group>
       </trans-unit>
       <trans-unit id="7378878529334768232">
         <source>Reject</source>
-        <target>拒否する</target>
+        <target>受け入れない</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context><context context-type="linenumber">53</context></context-group>
       </trans-unit>
       <trans-unit id="2040902819815401278" datatype="html">
         <source><x id="PH"/> rejected from instance followers </source>
-        <target state="needs-translation"><x id="PH"/> rejected from instance followers </target>
+        <target state="translated"><x id="PH"/>をインスタンスのフォロワーとして受け入れませんでした </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context><context context-type="linenumber">60</context></context-group>
       </trans-unit>
       <trans-unit id="3620117223790525725">
@@ -7119,9 +7115,7 @@
       </trans-unit>
       <trans-unit id="2452034338905853167" datatype="html">
         <source><x id="PH"/> removed from instance followers </source>
-        <target state="new">
-          <x id="PH"/> removed from instance followers
-        </target>
+        <target state="translated"><x id="PH"/>をインスタンスのフォロワーから削除しました </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context><context context-type="linenumber">81</context></context-group>
       </trans-unit>
       <trans-unit id="6018246591673612412" datatype="html">
@@ -7201,27 +7195,27 @@
       </trans-unit>
       <trans-unit id="81585474102700882" datatype="html">
         <source>Used</source>
-        <target state="new">Used</target>
+        <target state="translated">利用中</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context><context context-type="linenumber">102</context></context-group>
       </trans-unit>
       <trans-unit id="3955868613858648955" datatype="html">
         <source>Available</source>
-        <target state="new">Available</target>
+        <target state="translated">利用可能</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context><context context-type="linenumber">102</context></context-group>
       </trans-unit>
       <trans-unit id="5875705095657098468" datatype="html">
         <source>Do you really want to remove this video redundancy?</source>
-        <target state="new">Do you really want to remove this video redundancy?</target>
+        <target state="translated">本当にこの動画の冗長化を取り消しますか？</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context><context context-type="linenumber">142</context></context-group>
       </trans-unit>
       <trans-unit id="9098272570113000349" datatype="html">
         <source>Remove redundancy</source>
-        <target state="new">Remove redundancy</target>
+        <target state="translated">冗長化を取り消す</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context><context context-type="linenumber">143</context></context-group>
       </trans-unit>
       <trans-unit id="6537102123107780785" datatype="html">
         <source>Video redundancies removed!</source>
-        <target state="new">Video redundancies removed!</target>
+        <target state="translated">動画の冗長化は取り消されました！</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context><context context-type="linenumber">149</context></context-group>
       </trans-unit>
       <trans-unit id="8639315630141911544">
@@ -7291,7 +7285,7 @@
       </trans-unit>
       <trans-unit id="6473213678768782133" datatype="html">
         <source>Internal actions</source>
-        <target state="new">Internal actions</target>
+        <target state="translated">運営側でのアクション</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context><context context-type="linenumber">59</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">244</context></context-group>
       </trans-unit>
@@ -7317,7 +7311,7 @@
       </trans-unit>
       <trans-unit id="4175703770051343108" datatype="html">
         <source>Add internal note</source>
-        <target state="translated">管理用ノートを追加する</target>
+        <target state="translated">運営用ノートを追加する</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">270</context></context-group>
       </trans-unit>
       <trans-unit id="296166371893775555" datatype="html">
@@ -7373,17 +7367,17 @@
       </trans-unit>
       <trans-unit id="8528549800795985099" datatype="html">
         <source>Update internal note</source>
-        <target state="translated">管理用ノートを更新する</target>
+        <target state="translated">運営用ノートを更新する</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">255</context></context-group>
       </trans-unit>
       <trans-unit id="3962242315365992494" datatype="html">
         <source>Switch video block to manual</source>
-        <target state="translated">動画のブロックを手動に変える</target>
+        <target state="translated">動画のブロック方法を手動ブロックに切り替える</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context><context context-type="linenumber">64</context></context-group>
       </trans-unit>
       <trans-unit id="6906423861055262169" datatype="html">
         <source>Video <x id="PH"/> switched to manual block.</source>
-        <target state="needs-translation">Video <x id="PH"/> switched to manual block.</target>
+        <target state="translated">動画<x id="PH"/>のブロック方法を手動ブロックに切り替えました。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context><context context-type="linenumber">70</context></context-group>
       </trans-unit>
       <trans-unit id="7293356040886494773" datatype="html">
@@ -7549,7 +7543,7 @@
       </trans-unit>
       <trans-unit id="8079826195972333513" datatype="html">
         <source>Views may not be counted correctly (reduced compared to what they should be)</source>
-        <target state="new">Views may not be counted correctly (reduced compared to what they should be)</target>
+        <target state="translated">再生回数が正確にカウントされないかもしれません(本来あるべき再生回数と比べると減っているかもしれません)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/debug/debug.component.html</context>
           <context context-type="linenumber">8</context>
@@ -7756,22 +7750,22 @@
       </trans-unit>
       <trans-unit id="5876109550513228304" datatype="html">
         <source>With WebTorrent</source>
-        <target state="translated">With WebTorrent</target>
+        <target state="translated">WebTorrentの有効</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context><context context-type="linenumber">63</context></context-group>
       </trans-unit>
       <trans-unit id="9036202975131076885" datatype="html">
         <source>Without WebTorrent</source>
-        <target state="translated">WebTorrent無し</target>
+        <target state="translated">WebTorrentの無効</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context><context context-type="linenumber">67</context></context-group>
       </trans-unit>
       <trans-unit id="7468888924775619361" datatype="html">
         <source>With HLS</source>
-        <target state="translated">With HLSファイル</target>
+        <target state="translated">HLSファイルを有効</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context><context context-type="linenumber">71</context></context-group>
       </trans-unit>
       <trans-unit id="5489331826268601489" datatype="html">
         <source>Without HLS</source>
-        <target state="translated">HLSファイル無し</target>
+        <target state="translated">HLSファイルを無効</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context><context context-type="linenumber">75</context></context-group>
       </trans-unit>
       <trans-unit id="7091163288887549392" datatype="html">
@@ -8939,7 +8933,7 @@
       </trans-unit>
       <trans-unit id="6033463036257195528">
         <source>Twitter username is required.</source>
-        <target>Twitter のユーザーネームは必須です。</target>
+        <target>Twitterのユーザーネームは必須です。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">21</context></context-group>
       </trans-unit>
       <trans-unit id="8198703669620791633">
@@ -9090,12 +9084,12 @@
       </trans-unit>
       <trans-unit id="5832601947705094130" datatype="html">
         <source>Concurrency is required.</source>
-        <target state="new">Concurrency is required.</target>
+        <target state="translated">同時並行処理の設定は必須です。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">113</context></context-group>
       </trans-unit>
       <trans-unit id="4751566092251132371" datatype="html">
         <source>Concurrency should be greater or equal to 1.</source>
-        <target state="new">Concurrency should be greater or equal to 1.</target>
+        <target state="translated">同時並行処理の設定値は-1の値より多いか、同じであるべきです。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">114</context></context-group>
       </trans-unit>
       <trans-unit id="75589896034107743" datatype="html">
@@ -11046,7 +11040,7 @@
       </trans-unit>
       <trans-unit id="3704292036525161260" datatype="html">
         <source>Placeholder image</source>
-        <target state="needs-translation">Placeholder image</target>
+        <target state="translated">プレースホルダー画像</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.html</context>
           <context context-type="linenumber">11</context>
@@ -11054,7 +11048,7 @@
       </trans-unit>
       <trans-unit id="961774488937452220" datatype="html">
         <source>This video is not available on this instance. Do you want to be redirected on the origin instance: &lt;a href="<x id="PH"/>"&gt;<x id="PH_1"/>&lt;/a&gt;?</source>
-        <target state="translated">動画はこのインスタンスにはありません。元の動画のあるインスタンス &lt;a href="<x id="PH"/>"&gt;<x id="PH_1"/>&lt;/a&gt;にリダイレクトしますか？</target>
+        <target state="translated">この動画はインスタンスにはありません。元の動画のあるインスタンス &lt;a href="<x id="PH"/>"&gt;<x id="PH_1"/>&lt;/a&gt;にリダイレクトしますか？</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">301</context></context-group>
       </trans-unit>
       <trans-unit id="5761611056224181752" datatype="html">
@@ -11158,12 +11152,12 @@
       </trans-unit>
       <trans-unit id="3860402955823859506" datatype="html">
         <source>Navigate in the video to the previous frame</source>
-        <target state="new">Navigate in the video to the previous frame</target>
+        <target state="translated">動画の前のフレームへ移動する</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">731</context></context-group>
       </trans-unit>
       <trans-unit id="8232494782895420700" datatype="html">
         <source>Navigate in the video to the next frame</source>
-        <target state="new">Navigate in the video to the next frame</target>
+        <target state="translated">動画の次のフレームへ移動する</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">732</context></context-group>
       </trans-unit>
       <trans-unit id="8223917068580581095" datatype="html">
