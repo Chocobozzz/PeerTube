@@ -56,7 +56,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   @Input() videoToUpdate: VideoDetails
 
   @Input() userVideoChannels: SelectChannelItem[] = []
-  @Input() schedulePublicationPossible = true
+  @Input() forbidScheduledPublication = true
 
   @Input() videoCaptions: (VideoCaptionEdit & { captionPath?: string })[] = []
 
@@ -198,13 +198,15 @@ export class VideoEditComponent implements OnInit, OnDestroy {
       .subscribe(privacies => {
         this.videoPrivacies = this.videoService.explainedPrivacyLabels(privacies).videoPrivacies
 
-        if (this.schedulePublicationPossible) {
-          this.videoPrivacies.push({
-            id: this.SPECIAL_SCHEDULED_PRIVACY,
-            label: $localize`Scheduled`,
-            description: $localize`Hide the video until a specific date`
-          })
-        }
+        // Can't schedule publication if private privacy is not available (could be deleted by a plugin)
+        const hasPrivatePrivacy = this.videoPrivacies.some(p => p.id === VideoPrivacy.PRIVATE)
+        if (this.forbidScheduledPublication || !hasPrivatePrivacy) return
+
+        this.videoPrivacies.push({
+          id: this.SPECIAL_SCHEDULED_PRIVACY,
+          label: $localize`Scheduled`,
+          description: $localize`Hide the video until a specific date`
+        })
       })
 
     this.initialVideoCaptions = this.videoCaptions.map(c => c.language.id)

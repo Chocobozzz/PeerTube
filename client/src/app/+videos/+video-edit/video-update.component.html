@@ -7,7 +7,7 @@
   <form novalidate [formGroup]="form">
 
     <my-video-edit
-      [form]="form" [formErrors]="formErrors" [schedulePublicationPossible]="schedulePublicationPossible"
+      [form]="form" [formErrors]="formErrors" [forbidScheduledPublication]="forbidScheduledPublication"
       [validationMessages]="validationMessages" [userVideoChannels]="userVideoChannels"
       [videoCaptions]="videoCaptions" [waitTranscodingEnabled]="isWaitTranscodingEnabled()"
       type="update" (pluginFieldsAdded)="hydratePluginFieldsFromVideo()"

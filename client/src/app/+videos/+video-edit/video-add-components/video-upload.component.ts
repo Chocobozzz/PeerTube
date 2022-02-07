@@ -47,8 +47,6 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
   error: string
   enableRetryAfterError: boolean
 
-  schedulePublicationPossible = false
-
   // So that it can be accessed in the template
   protected readonly BASE_VIDEO_UPLOAD_URL = VideoService.BASE_VIDEO_URL + '/upload-resumable'
 
@@ -107,8 +105,6 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
 
     this.resumableUploadService.events
       .subscribe(state => this.onUploadVideoOngoing(state))
-
-    this.schedulePublicationPossible = this.videoPrivacies.some(p => p.id === VideoPrivacy.PRIVATE)
   }
 
   ngAfterViewInit () {

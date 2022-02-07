@@ -24,7 +24,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
   liveVideo: LiveVideo
 
   isUpdatingVideo = false
-  schedulePublicationPossible = false
+  forbidScheduledPublication = false
   waitTranscodingEnabled = true
 
   private updateDone = false
@@ -55,7 +55,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
     this.videoCaptions = videoCaptions
     this.liveVideo = liveVideo
 
-    this.schedulePublicationPossible = this.video.privacy === VideoPrivacy.PRIVATE
+    this.forbidScheduledPublication = this.video.privacy !== VideoPrivacy.PRIVATE
   }
 
   onFormBuilt () {
