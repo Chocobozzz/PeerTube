@@ -1,6 +1,6 @@
 import express from 'express'
 import { body, param } from 'express-validator'
-import { isValid as isIPValid, parse as parseIP } from 'ipaddr.js'
+import { isResolvingToUnicastOnly } from '@server/helpers/dns'
 import { isPreImportVideoAccepted } from '@server/lib/moderation'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { MUserAccountId, MVideoImport } from '@server/types/models'
@@ -76,17 +76,13 @@ const videoImportAddValidator = getCommonVideoEditAttributes().concat([
     if (req.body.targetUrl) {
       const hostname = new URL(req.body.targetUrl).hostname
 
-      if (isIPValid(hostname)) {
-        const parsed = parseIP(hostname)
+      if (await isResolvingToUnicastOnly(hostname) !== true) {
+        cleanUpReqFiles(req)
 
-        if (parsed.range() !== 'unicast') {
-          cleanUpReqFiles(req)
-
-          return res.fail({
-            status: HttpStatusCode.FORBIDDEN_403,
-            message: 'Cannot use non unicast IP as targetUrl.'
-          })
-        }
+        return res.fail({
+          status: HttpStatusCode.FORBIDDEN_403,
+          message: 'Cannot use non unicast IP as targetUrl.'
+        })
       }
     }
 

@@ -120,7 +120,8 @@ describe('Test video imports API validator', function () {
         'http://127.0.0.1',
         'http://127.0.0.1/hello',
         'https://192.168.1.42',
-        'http://192.168.1.42'
+        'http://192.168.1.42',
+        'http://127.0.0.1.cpy.re'
       ]
 
       for (const targetUrl of targetUrls) {

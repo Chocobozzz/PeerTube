@@ -9,7 +9,7 @@ import { genericUploadErrorHandler, scrollToTop } from '@app/helpers'
 import { FormValidatorService } from '@app/shared/shared-forms'
 import { BytesPipe, Video, VideoCaptionService, VideoEdit, VideoService } from '@app/shared/shared-main'
 import { LoadingBarService } from '@ngx-loading-bar/core'
-import { HttpStatusCode, VideoCreateResult, VideoPrivacy } from '@shared/models'
+import { HttpStatusCode, VideoCreateResult } from '@shared/models'
 import { UploaderXFormData } from './uploaderx-form-data'
 import { VideoSend } from './video-send'
 
