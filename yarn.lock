@@ -1449,10 +1449,10 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@peertube/feed@^5.0.0":
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/@peertube/feed/-/feed-5.0.0.tgz#f8cbc1e526a7af3112fca6d1859362b0bea13024"
-  integrity sha512-YR78vHocVJsHWETz1US1+A4BZlu7Bykd0GuwCTdIQ1nfrfMXDBOiC/HM8+TYBqkp5oAqAbVyeVo6VxhpZzE3sw==
+"@peertube/feed@^5.0.1":
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/@peertube/feed/-/feed-5.0.1.tgz#8d0e188b1c0120efb0e7064933658f0894aa2e92"
+  integrity sha512-WQLcpBU2bqcrle6XAmIwQWKnmqNuEN1SiGuQzAMdHndLTEIMKD28qL1ONMFifo4s/OugbFftIyXdrZPZQcg8RA==
   dependencies:
     xml-js "^1.6.11"
 
