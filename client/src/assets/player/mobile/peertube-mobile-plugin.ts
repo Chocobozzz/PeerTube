@@ -23,7 +23,7 @@ class PeerTubeMobilePlugin extends Plugin {
   constructor (player: videojs.Player, options: videojs.PlayerOptions) {
     super(player, options)
 
-    this.peerTubeMobileButtons = player.addChild('PeerTubeMobileButtons') as PeerTubeMobileButtons
+    this.peerTubeMobileButtons = player.addChild('PeerTubeMobileButtons', { reportTouchActivity: false }) as PeerTubeMobileButtons
 
     if (videojs.browser.IS_ANDROID && screen.orientation) {
       this.handleFullscreenRotation()
@@ -55,8 +55,6 @@ class PeerTubeMobilePlugin extends Plugin {
 
   private initTouchStartEvents () {
     const handleTouchStart = (event: TouchEvent) => {
-      event.stopPropagation()
-
       if (this.tapTimeout) {
         clearTimeout(this.tapTimeout)
         this.tapTimeout = undefined
@@ -88,7 +86,12 @@ class PeerTubeMobilePlugin extends Plugin {
       handleTouchStart(event)
     })
 
-    this.peerTubeMobileButtons.on('touchstart', handleTouchStart)
+    this.peerTubeMobileButtons.el().addEventListener('touchstart', (event: TouchEvent) => {
+      // Prevent mousemove/click events firing on the player, that conflict with our user active logic
+      event.preventDefault()
+
+      handleTouchStart(event)
+    }, { passive: false })
   }
 
   private onDoubleTap (event: TouchEvent) {
@@ -115,7 +118,6 @@ class PeerTubeMobilePlugin extends Plugin {
     this.peerTubeMobileButtons.displayFastSeek(this.seekAmount)
 
     this.scheduleSetCurrentTime()
-
   }
 
   private findPlayerTarget (target: HTMLElement): HTMLElement {

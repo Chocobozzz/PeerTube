@@ -17,7 +17,7 @@ class PeerTubeMobileButtons extends Component {
       className: 'main-button'
     }) as HTMLDivElement
 
-    mainButton.addEventListener('click', e => {
+    mainButton.addEventListener('touchstart', e => {
       e.stopPropagation()
 
       if (this.player_.paused() || this.player_.ended()) {
