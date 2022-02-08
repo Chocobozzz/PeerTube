@@ -207,6 +207,8 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   loadMoreVideos (reset = false) {
+    if (reset) this.hasDoneFirstQuery = false
+
     this.getVideosObservableFunction(this.pagination, this.filters)
       .subscribe({
         next: ({ data }) => {

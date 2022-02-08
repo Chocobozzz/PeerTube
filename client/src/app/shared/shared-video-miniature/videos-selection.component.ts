@@ -110,6 +110,8 @@ export class VideosSelectionComponent implements AfterContentInit {
   }
 
   loadMoreVideos (reset = false) {
+    if (reset) this.hasDoneFirstQuery = false
+
     this.getVideosObservable(this.pagination.currentPage)
       .subscribe({
         next: ({ data }) => {
