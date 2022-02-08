@@ -39,6 +39,7 @@
     position: relative;
     top: calc(50% - 10px);
     transform: translateY(-50%);
+    user-select: none;
   }
 
   .main-button,
