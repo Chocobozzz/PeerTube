@@ -55,7 +55,7 @@
                 The url is not secured (no HTTPS), so the embed video won't work on HTTPS websites (web browsers block non secured HTTP requests on HTTPS websites).
               </div>
 
-              <div [innerHTML]="playlistEmbedHTML"></div>
+              <div class="embed" [innerHTML]="playlistEmbedHTML"></div>
             </div>
           </ng-template>
         </ng-container>
@@ -122,7 +122,7 @@
                 The url is not secured (no HTTPS), so the embed video won't work on HTTPS websites (web browsers block non secured HTTP requests on HTTPS websites).
               </div>
 
-              <div [innerHTML]="videoEmbedHTML"></div>
+              <div class="embed" [innerHTML]="videoEmbedHTML"></div>
             </div>
           </ng-template>
         </ng-container>
