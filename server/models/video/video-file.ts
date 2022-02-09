@@ -18,7 +18,7 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { Where } from 'sequelize/types/lib/utils'
+import { Where } from 'sequelize/types/utils'
 import validator from 'validator'
 import { buildRemoteVideoBaseUrl } from '@server/helpers/activitypub'
 import { logger } from '@server/helpers/logger'

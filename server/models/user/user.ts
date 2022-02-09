@@ -623,7 +623,7 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
     const query = {
       where: {
         [Op.or]: [
-          where(fn('lower', col('username')), fn('lower', username)),
+          where(fn('lower', col('username')), '=', fn('lower', username)),
 
           { email }
         ]

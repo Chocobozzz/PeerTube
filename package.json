@@ -78,7 +78,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.23.0",
-    "@babel/parser": "7.16.8",
+    "@babel/parser": "7.17.0",
     "@peertube/feed": "^5.0.1",
     "@peertube/http-signature": "^1.4.0",
     "@uploadx/core": "^5.0.0",
@@ -91,7 +91,7 @@
     "bull": "^4.1.0",
     "bytes": "^3.0.0",
     "chokidar": "^3.4.2",
-    "commander": "^8.0.0",
+    "commander": "^9.0.0",
     "config": "^3.0.0",
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.1",
@@ -117,7 +117,7 @@
     "js-yaml": "^4.0.0",
     "jsonld": "~5.2.0",
     "lodash": "^4.17.10",
-    "lru-cache": "^6.0.0",
+    "lru-cache": "^7.3.0",
     "magnet-uri": "^6.1.0",
     "markdown-it": "^12.0.4",
     "markdown-it-emoji": "^2.0.0",
@@ -137,7 +137,7 @@
     "redis": "^4.0.1",
     "reflect-metadata": "^0.1.12",
     "sanitize-html": "2.x",
-    "sequelize": "6.13.0",
+    "sequelize": "6.16.1",
     "sequelize-typescript": "^2.0.0-beta.1",
     "short-uuid": "^4.2.0",
     "sitemap": "^7.0.0",
@@ -150,7 +150,7 @@
     "validator": "^13.0.0",
     "webfinger.js": "^2.6.6",
     "webtorrent": "^1.0.0",
-    "winston": "3.4.0",
+    "winston": "3.5.1",
     "ws": "^8.0.0"
   },
   "devDependencies": {
@@ -208,12 +208,9 @@
     "socket.io-client": "^4.0.1",
     "supertest": "^6.0.1",
     "swagger-cli": "^4.0.2",
-    "ts-node": "10.4.0",
+    "ts-node": "10.5.0",
     "tsc-watch": "^4.6.0",
     "typescript": "^4.0.5"
-  },
-  "resolutions": {
-    "depcheck/@babel/parser": "7.16.4"
   },
   "bundlewatch": {
     "files": [

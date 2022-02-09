@@ -1,5 +1,5 @@
 import { literal, Op, OrderItem, Sequelize } from 'sequelize'
-import { Col } from 'sequelize/types/lib/utils'
+import { Col } from 'sequelize/types/utils'
 import validator from 'validator'
 
 type SortType = { sortModel: string, sortValue: string }
