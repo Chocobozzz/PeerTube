@@ -90,7 +90,7 @@ export class YoutubeDLCLI {
     format: string
     output: string
     processOptions: execa.NodeOptions
-    timeout: number
+    timeout?: number
     additionalYoutubeDLArgs?: string[]
   }) {
     return this.run({
