@@ -159,7 +159,7 @@
               "src/sass/application.scss"
             ],
             "allowedCommonJsDependencies": [
-              "qrcode",
+              "@cordobo/qrcode",
               "chart.js",
               "htmlparser2",
               "markdown-it-emoji/light",
@@ -169,7 +169,7 @@
               "debug",
               "@peertube/p2p-media-loader-hlsjs",
               "video.js",
-              "sha.js/sha1",
+              "sha.js",
               "postcss",
               "core-js/features/reflect"
             ],
