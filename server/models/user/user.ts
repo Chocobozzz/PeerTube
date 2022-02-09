@@ -48,14 +48,14 @@ import {
   isUserEmailVerifiedValid,
   isUserNoModal,
   isUserNSFWPolicyValid,
+  isUserP2PEnabledValid,
   isUserPasswordValid,
   isUserRoleValid,
   isUserUsernameValid,
   isUserVideoLanguages,
   isUserVideoQuotaDailyValid,
   isUserVideoQuotaValid,
-  isUserVideosHistoryEnabledValid,
-  isUserP2PEnabledValid
+  isUserVideosHistoryEnabledValid
 } from '../../helpers/custom-validators/users'
 import { comparePassword, cryptPassword } from '../../helpers/peertube-crypto'
 import { DEFAULT_USER_THEME_NAME, NSFW_POLICY_TYPES } from '../../initializers/constants'
@@ -623,7 +623,7 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
     const query = {
       where: {
         [Op.or]: [
-          where(fn('lower', col('username')), '=', fn('lower', username)),
+          where(fn('lower', col('username')), fn('lower', username) as any),
 
           { email }
         ]

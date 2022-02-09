@@ -5639,17 +5639,12 @@ lru-cache@4.1.x:
     pseudomap "^1.0.2"
     yallist "^2.1.2"
 
-lru-cache@^6.0.0:
+lru-cache@6, lru-cache@^6.0.0:
   version "6.0.0"
   resolved "https://registry.yarnpkg.com/lru-cache/-/lru-cache-6.0.0.tgz#6d6fe6570ebd96aaf90fcad1dafa3b2566db3a94"
   integrity sha512-Jo6dJ04CmSjuznwJSS3pUeWmd/H0ffTlkXXgwZi+eq1UCmqQwCh+eLsYOYCwY991i2Fah4h1BEMCx4qThGbsiA==
   dependencies:
     yallist "^4.0.0"
-
-lru-cache@^7.3.0:
-  version "7.3.0"
-  resolved "https://registry.yarnpkg.com/lru-cache/-/lru-cache-7.3.0.tgz#475ed4a39610204d8d23b243e902ed074dd8052d"
-  integrity sha512-itGqsGM9i3Jt0ZbEkYRKQ3K/Q61vOLNuUkmK0jyjt1VH76gfcvjHmPC6e9uvjSrKOP2aN3T9L1vN0nxQSkrAjA==
 
 lru-queue@^0.1.0:
   version "0.1.0"
@@ -7506,10 +7501,10 @@ sequelize-typescript@^2.0.0-beta.1:
   dependencies:
     glob "7.2.0"
 
-sequelize@6.16.1:
-  version "6.16.1"
-  resolved "https://registry.yarnpkg.com/sequelize/-/sequelize-6.16.1.tgz#2c84036ae0a64843cdfa52c8e3d0bee9c52ce116"
-  integrity sha512-YFGqrwkmEhSbpZBxay5+PRKMiZNNUJzgIixCyFkLm9+/5Rqq5jBADEjTAC8RYHzwsOGNboYh18imXrYNCjBZCQ==
+sequelize@6.15.1:
+  version "6.15.1"
+  resolved "https://registry.yarnpkg.com/sequelize/-/sequelize-6.15.1.tgz#6fa2515564b04c87d355d0b54bf94910e411d140"
+  integrity sha512-UR4LMSnZ13pYL4gNOXxbmreIX1pqanSgAKy4hWjQupHHLOzF3ryckg92axirB68QJy4gaVIaknjhoO3M8zKo8A==
   dependencies:
     "@types/debug" "^4.1.7"
     debug "^4.3.3"

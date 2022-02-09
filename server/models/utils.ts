@@ -1,5 +1,4 @@
 import { literal, Op, OrderItem, Sequelize } from 'sequelize'
-import { Col } from 'sequelize/types/utils'
 import validator from 'validator'
 
 type SortType = { sortModel: string, sortValue: string }
@@ -8,7 +7,7 @@ type SortType = { sortModel: string, sortValue: string }
 function getSort (value: string, lastSort: OrderItem = [ 'id', 'ASC' ]): OrderItem[] {
   const { direction, field } = buildDirectionAndField(value)
 
-  let finalField: string | Col
+  let finalField: string | ReturnType<typeof Sequelize.col>
 
   if (field.toLowerCase() === 'match') { // Search
     finalField = Sequelize.col('similarity')
@@ -65,7 +64,7 @@ function getVideoSort (value: string, lastSort: OrderItem = [ 'id', 'ASC' ]): Or
     ]
   }
 
-  let finalField: string | Col
+  let finalField: string | ReturnType<typeof Sequelize.col>
 
   // Alias
   if (field.toLowerCase() === 'match') { // Search

@@ -1,7 +1,7 @@
 import { remove } from 'fs-extra'
 import memoizee from 'memoizee'
 import { join } from 'path'
-import { FindOptions, Op, Transaction } from 'sequelize'
+import { FindOptions, Op, Transaction, WhereOptions } from 'sequelize'
 import {
   AllowNull,
   BelongsTo,
@@ -18,7 +18,6 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { Where } from 'sequelize/types/utils'
 import validator from 'validator'
 import { buildRemoteVideoBaseUrl } from '@server/helpers/activitypub'
 import { logger } from '@server/helpers/logger'
@@ -70,7 +69,7 @@ export enum ScopeNames {
       }
     ]
   },
-  [ScopeNames.WITH_VIDEO_OR_PLAYLIST]: (options: { whereVideo?: Where } = {}) => {
+  [ScopeNames.WITH_VIDEO_OR_PLAYLIST]: (options: { whereVideo?: WhereOptions } = {}) => {
     return {
       include: [
         {

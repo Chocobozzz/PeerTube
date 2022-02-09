@@ -9,9 +9,9 @@ import { UserAdminFlag } from '@shared/models/users/user-flag.model'
 import { UserRole } from '@shared/models/users/user-role'
 import { logger } from '../../helpers/logger'
 import { CONFIG } from '../../initializers/config'
-import { UserModel } from '../../models/user/user'
 import { OAuthClientModel } from '../../models/oauth/oauth-client'
 import { OAuthTokenModel } from '../../models/oauth/oauth-token'
+import { UserModel } from '../../models/user/user'
 import { createUserAccountAndChannelAndPlaylist } from '../user'
 import { TokensCache } from './tokens-cache'
 
@@ -116,6 +116,7 @@ async function getUser (usernameOrEmail?: string, password?: string, bypassLogin
   logger.debug('Getting User (username/email: ' + usernameOrEmail + ', password: ******).')
 
   const user = await UserModel.loadByUsernameOrEmail(usernameOrEmail)
+
   // If we don't find the user, or if the user belongs to a plugin
   if (!user || user.pluginAuth !== null || !password) return null
 
