@@ -98,7 +98,14 @@ async function getUser (usernameOrEmail?: string, password?: string, bypassLogin
     // Then we just go through a regular login process
     if (user.pluginAuth !== null) {
       // This user does not belong to this plugin, skip it
-      if (user.pluginAuth !== bypassLogin.pluginName) return null
+      if (user.pluginAuth !== bypassLogin.pluginName) {
+        logger.info(
+          'Cannot bypass oauth login by plugin %s because %s has another plugin auth method (%s).',
+          bypassLogin.pluginName, bypassLogin.user.email, user.pluginAuth
+        )
+
+        return null
+      }
 
       checkUserValidityOrThrow(user)
 
