@@ -814,7 +814,7 @@
       </trans-unit>
       <trans-unit id="8426539297729416784" datatype="html">
         <source>{VAR_SELECT, select, undefined {Unsubscribe} other {Unsubscribe from all channels} }</source>
-        <target state="translated">{VAR_SELECT, select, undefined {asefsex n umulteɣ} other {Asefsex n umulteɣ seg meṛṛa ibuda} }</target>
+        <target state="translated">{VAR_SELECT, select, undefined {Asefsex n umulteɣ} other {Asefsex n umulteɣ seg meṛṛa ibuda} }</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">34</context></context-group>
       </trans-unit>
       <trans-unit id="1779391511451594552" datatype="html">
@@ -1066,7 +1066,7 @@
       </trans-unit>
       <trans-unit id="853055819436340388" datatype="html">
         <source>video views</source>
-        <target state="translated">video views</target>
+        <target state="needs-translation">video views</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-statistics.component.html</context><context context-type="linenumber">31</context></context-group>
       </trans-unit>
       <trans-unit id="3055185920299594800" datatype="html">
@@ -1862,7 +1862,7 @@
       </trans-unit>
       <trans-unit id="403762424689874454" datatype="html">
         <source>View your notifications</source>
-        <target>Wali tilɣa-inek.m</target>
+        <target>Wali tilɣa-inek·m</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/notification.component.html</context><context context-type="linenumber">3</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/notification.component.html</context><context context-type="linenumber">11</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/notification.component.html</context><context context-type="linenumber">11</context></context-group>
@@ -3023,7 +3023,7 @@
       </trans-unit>
       <trans-unit id="1813238393038053050" datatype="html">
         <source>SUPPORT</source>
-        <target state="translated">SUPPORT</target>
+        <target state="translated">ƐIWEN</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/action-buttons/action-buttons.component.html</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="9219888125536520293" datatype="html">
@@ -3608,7 +3608,7 @@
       </trans-unit>
       <trans-unit id="8147229944654164397" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {Video} other {Videos} }</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {Video} other {Videos} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {n tvidyutt} other {n tvidyutin} }</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">24</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">24</context></context-group>
       </trans-unit>
@@ -3650,7 +3650,7 @@
       </trans-unit>
       <trans-unit id="5248717555542428023" datatype="html">
         <source>Username</source>
-        <target>Nom d'utilisateur</target>
+        <target>Isem n useqdac</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">83</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">83</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">117</context></context-group>
@@ -5218,7 +5218,7 @@
       </trans-unit>
       <trans-unit id="3839590624406770455" datatype="html">
         <source>HLS with P2P support enabled</source>
-        <target state="translated">Yettwarmed HLS s tallalt n P2P</target>
+        <target state="translated">HLS s tallalt n P2P yettwarmden</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">94</context></context-group>
       </trans-unit>
       <trans-unit id="7334484418359079994" datatype="html">
@@ -6545,7 +6545,7 @@
       </trans-unit>
       <trans-unit id="1504521795586863905" datatype="html">
         <source>VIDEOS</source>
-        <target state="translated">VIDEOS</target>
+        <target state="translated">TIVIDYUTIN</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context><context context-type="linenumber">83</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">245</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.ts</context><context context-type="linenumber">81</context></context-group>
@@ -7096,7 +7096,7 @@
       </trans-unit>
       <trans-unit id="8440128775129354214" datatype="html">
         <source>Privacy</source>
-        <target state="translated">Vie privée</target>
+        <target state="translated">Tabaḍnit</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-edit.component.html</context><context context-type="linenumber">57</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-edit.component.html</context><context context-type="linenumber">57</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">112</context></context-group>
@@ -8298,7 +8298,7 @@
       </trans-unit>
       <trans-unit id="3058024914967508975" datatype="html">
         <source>My videos</source>
-        <target state="translated">My videos</target>
+        <target state="translated">Tividyutin-iw</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-library-routing.module.ts</context><context context-type="linenumber">77</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context><context context-type="linenumber">4</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context><context context-type="linenumber">67</context></context-group>
