@@ -1,9 +1,11 @@
 import express from 'express'
-import { move, readFile } from 'fs-extra'
+import { move, readFile, remove } from 'fs-extra'
 import { decode } from 'magnet-uri'
 import parseTorrent, { Instance } from 'parse-torrent'
 import { join } from 'path'
+import { isVTTFileValid } from '@server/helpers/custom-validators/video-captions'
 import { isVideoFileExtnameValid } from '@server/helpers/custom-validators/videos'
+import { isResolvingToUnicastOnly } from '@server/helpers/dns'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { ServerConfigManager } from '@server/lib/server-config-manager'
 import { setVideoTags } from '@server/lib/video'
@@ -192,6 +194,13 @@ async function addYoutubeDLImport (req: express.Request, res: express.Response) 
       data: {
         targetUrl
       }
+    })
+  }
+
+  if (!await hasUnicastURLsOnly(youtubeDLInfo)) {
+    return res.fail({
+      status: HttpStatusCode.FORBIDDEN_403,
+      message: 'Cannot use non unicast IP as targetUrl.'
     })
   }
 
@@ -432,6 +441,11 @@ async function processYoutubeSubtitles (youtubeDL: YoutubeDLWrapper, targetUrl: 
     logger.info('Will create %s subtitles from youtube import %s.', subtitles.length, targetUrl)
 
     for (const subtitle of subtitles) {
+      if (!await isVTTFileValid(subtitle.path)) {
+        await remove(subtitle.path)
+        continue
+      }
+
       const videoCaption = new VideoCaptionModel({
         videoId,
         language: subtitle.language,
@@ -448,4 +462,17 @@ async function processYoutubeSubtitles (youtubeDL: YoutubeDLWrapper, targetUrl: 
   } catch (err) {
     logger.warn('Cannot get video subtitles.', { err })
   }
+}
+
+async function hasUnicastURLsOnly (youtubeDLInfo: YoutubeDLInfo) {
+  const hosts = youtubeDLInfo.urls.map(u => new URL(u).hostname)
+  const uniqHosts = new Set(hosts)
+
+  for (const h of uniqHosts) {
+    if (await isResolvingToUnicastOnly(h) !== true) {
+      return false
+    }
+  }
+
+  return true
 }

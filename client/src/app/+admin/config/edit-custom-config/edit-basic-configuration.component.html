@@ -267,14 +267,22 @@
             <my-peertube-checkbox
               inputName="importVideosHttpEnabled" formControlName="enabled"
               i18n-labelText labelText="Allow import with HTTP URL (e.g. YouTube)"
-            ></my-peertube-checkbox>
+            >
+            <ng-container ngProjectAs="description">
+              <span i18n>⚠️ If enabled, we recommend to use <a href="https://docs.joinpeertube.org/maintain-configuration?id=security">a HTTP proxy</a> to prevent private URL access from your PeerTube server</span>
+            </ng-container>
+          </my-peertube-checkbox>
           </div>
 
           <div class="form-group" formGroupName="torrent">
             <my-peertube-checkbox
               inputName="importVideosTorrentEnabled" formControlName="enabled"
               i18n-labelText labelText="Allow import with a torrent file or a magnet URI"
-            ></my-peertube-checkbox>
+            >
+            <ng-container ngProjectAs="description">
+              <span i18n>⚠️ We don't recommend to enable this feature if you don't trust your users</span>
+            </ng-container>
+          </my-peertube-checkbox>
           </div>
 
         </ng-container>

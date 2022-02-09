@@ -439,7 +439,10 @@ import:
     # Amount of import jobs to execute in parallel
     concurrency: 1
 
-    http: # Classic HTTP or all sites supported by youtube-dl https://rg3.github.io/youtube-dl/supportedsites.html
+    # Classic HTTP or all sites supported by youtube-dl https://rg3.github.io/youtube-dl/supportedsites.html
+    http:
+      # We recommend to use a HTTP proxy if you enable HTTP import to prevent private URL access from this server
+      # See https://docs.joinpeertube.org/maintain-configuration?id=security for more information
       enabled: false
 
       youtube_dl_release:
@@ -460,7 +463,10 @@ import:
       # IPv6 is very strongly rate-limited on most sites supported by youtube-dl
       force_ipv4: false
 
-    torrent: # Magnet URI or torrent file (use classic TCP/UDP/WebSeed to download the file)
+    # Magnet URI or torrent file (use classic TCP/UDP/WebSeed to download the file)
+    torrent:
+      # We recommend to only enable magnet URI/torrent import if you trust your users
+      # See https://docs.joinpeertube.org/maintain-configuration?id=security for more information
       enabled: false
 
 auto_blacklist:
