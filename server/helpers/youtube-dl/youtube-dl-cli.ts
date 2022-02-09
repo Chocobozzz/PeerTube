@@ -90,11 +90,13 @@ export class YoutubeDLCLI {
     format: string
     output: string
     processOptions: execa.NodeOptions
+    timeout: number
     additionalYoutubeDLArgs?: string[]
   }) {
     return this.run({
       url: options.url,
       processOptions: options.processOptions,
+      timeout: options.timeout,
       args: (options.additionalYoutubeDLArgs || []).concat([ '-f', options.format, '-o', options.output ])
     })
   }
@@ -145,16 +147,23 @@ export class YoutubeDLCLI {
   private async run (options: {
     url: string
     args: string[]
+    timeout?: number
     processOptions: execa.NodeOptions
   }) {
-    const { url, args, processOptions } = options
+    const { url, args, timeout, processOptions } = options
 
     let completeArgs = this.wrapWithProxyOptions(args)
     completeArgs = this.wrapWithIPOptions(completeArgs)
     completeArgs = this.wrapWithFFmpegOptions(completeArgs)
 
     const { PYTHON_PATH } = CONFIG.IMPORT.VIDEOS.HTTP.YOUTUBE_DL_RELEASE
-    const output = await execa(PYTHON_PATH, [ youtubeDLBinaryPath, ...completeArgs, url ], processOptions)
+    const subProcess = execa(PYTHON_PATH, [ youtubeDLBinaryPath, ...completeArgs, url ], processOptions)
+
+    if (timeout) {
+      setTimeout(() => subProcess.cancel(), timeout)
+    }
+
+    const output = await subProcess
 
     logger.debug('Runned youtube-dl command.', { command: output.command, ...lTags() })
 

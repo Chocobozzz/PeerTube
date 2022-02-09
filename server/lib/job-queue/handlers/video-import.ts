@@ -29,7 +29,7 @@ import { ffprobePromise, getDurationFromVideoFile, getVideoFileFPS, getVideoFile
 import { logger } from '../../../helpers/logger'
 import { getSecureTorrentName } from '../../../helpers/utils'
 import { createTorrentAndSetInfoHash, downloadWebTorrentVideo } from '../../../helpers/webtorrent'
-import { VIDEO_IMPORT_TIMEOUT } from '../../../initializers/constants'
+import { JOB_TTL } from '../../../initializers/constants'
 import { sequelizeTypescript } from '../../../initializers/database'
 import { VideoModel } from '../../../models/video/video'
 import { VideoFileModel } from '../../../models/video/video-file'
@@ -72,7 +72,7 @@ async function processTorrentImport (job: Job, videoImport: MVideoImportDefault,
     torrentName: videoImport.torrentName ? getSecureTorrentName(videoImport.torrentName) : undefined,
     uri: videoImport.magnetUri
   }
-  return processFile(() => downloadWebTorrentVideo(target, VIDEO_IMPORT_TIMEOUT), videoImport, options)
+  return processFile(() => downloadWebTorrentVideo(target, JOB_TTL['video-import']), videoImport, options)
 }
 
 async function processYoutubeDLImport (job: Job, videoImport: MVideoImportDefault, payload: VideoImportYoutubeDLPayload) {
@@ -83,7 +83,7 @@ async function processYoutubeDLImport (job: Job, videoImport: MVideoImportDefaul
   const youtubeDL = new YoutubeDLWrapper(videoImport.targetUrl, ServerConfigManager.Instance.getEnabledResolutions('vod'))
 
   return processFile(
-    () => youtubeDL.downloadVideo(payload.fileExt, VIDEO_IMPORT_TIMEOUT),
+    () => youtubeDL.downloadVideo(payload.fileExt, JOB_TTL['video-import']),
     videoImport,
     options
   )
