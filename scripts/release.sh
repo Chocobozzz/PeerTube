@@ -116,10 +116,10 @@ rm -f "./client/dist/embed-stats.json"
       git merge "$branch"
       git push origin master
       git checkout "$branch"
+
+      # Release types package
+      npm run generate-types-package "$version"
+      cd types/dist
+      npm publish --access public
   fi
 )
-
-# Release types package
-npm run generate-types-package
-cd types/dist
-npm publish --access public
