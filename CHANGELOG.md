@@ -1,6 +1,6 @@
 # Changelog
 
-## v4.1.0-rc.1 (unreleased)
+## v4.1.0-rc.1
 
 ### IMPORTANT NOTES
 
@@ -71,6 +71,9 @@
  * Add a refresh button to admin videos overview page [#4753](https://github.com/Chocobozzz/PeerTube/pull/4753)
  * Add *Official* badge to official plugins in admin plugin pages
  * Automatically clean unavailable remote ActivityPub resources
+ * Media RSS feed displays video file as default enclosure instead of torrent
+ * Use white background for PeerTube icons (instead of transparency)
+ * Show private badge for private videos in playlists [#4767](https://github.com/Chocobozzz/PeerTube/pull/4767)
 
 ### Bug fixes
 
@@ -96,6 +99,8 @@
  * Search on tags is now case insensitive
  * Forbid comments/captions listing of private/internal videos
  * Prevent video import on non unicast ips
+ * Improve markdown to plain text converter, especially when handling lists
+ * Fix scheduled publication on upload
 
 
 ## v4.0.0
