@@ -117,7 +117,7 @@
     "js-yaml": "^4.0.0",
     "jsonld": "~5.2.0",
     "lodash": "^4.17.10",
-    "lru-cache": "6",
+    "lru-cache": "7.3.1",
     "magnet-uri": "^6.1.0",
     "markdown-it": "^12.0.4",
     "markdown-it-emoji": "^2.0.0",
