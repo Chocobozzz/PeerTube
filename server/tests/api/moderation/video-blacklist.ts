@@ -32,7 +32,7 @@ describe('Test video blacklist', function () {
   }
 
   before(async function () {
-    this.timeout(50000)
+    this.timeout(120000)
 
     // Run servers
     servers = await createMultipleServers(2)
