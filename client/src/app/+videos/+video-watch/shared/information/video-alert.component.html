@@ -14,6 +14,10 @@
   The video is being transcoded, it may not work properly.
 </div>
 
+<div i18n class="alert alert-warning" *ngIf="isVideoToEdit()">
+  The video is being edited, it may not work properly.
+</div>
+
 <div i18n class="alert alert-warning" *ngIf="isVideoToMoveToExternalStorage()">
   The video is being moved to an external server, it may not work properly.
 </div>

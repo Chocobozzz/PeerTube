@@ -8,6 +8,7 @@ function areValidationErrors (req: express.Request, res: express.Response) {
 
   if (!errors.isEmpty()) {
     logger.warn('Incorrect request parameters', { path: req.originalUrl, err: errors.mapped() })
+
     res.fail({
       message: 'Incorrect request parameters: ' + Object.keys(errors.mapped()).join(', '),
       instance: req.originalUrl,

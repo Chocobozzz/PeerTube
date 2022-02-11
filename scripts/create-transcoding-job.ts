@@ -1,6 +1,6 @@
 import { program } from 'commander'
 import { isUUIDValid, toCompleteUUID } from '@server/helpers/custom-validators/misc'
-import { computeLowerResolutionsToTranscode } from '@server/helpers/ffprobe-utils'
+import { computeLowerResolutionsToTranscode } from '@server/helpers/ffmpeg'
 import { CONFIG } from '@server/initializers/config'
 import { addTranscodingJob } from '@server/lib/video'
 import { VideoState, VideoTranscodingPayload } from '@shared/models'

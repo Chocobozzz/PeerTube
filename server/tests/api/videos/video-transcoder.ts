@@ -3,10 +3,17 @@
 import 'mocha'
 import * as chai from 'chai'
 import { omit } from 'lodash'
-import { canDoQuickTranscode } from '@server/helpers/ffprobe-utils'
-import { generateHighBitrateVideo, generateVideoWithFramerate } from '@server/tests/shared'
+import { canDoQuickTranscode } from '@server/helpers/ffmpeg'
+import { generateHighBitrateVideo, generateVideoWithFramerate, getAllFiles } from '@server/tests/shared'
 import { buildAbsoluteFixturePath, getMaxBitrate, getMinLimitBitrate } from '@shared/core-utils'
-import { getAudioStream, getMetadataFromFile, getVideoFileBitrate, getVideoFileFPS, getVideoFileResolution } from '@shared/extra-utils'
+import {
+  getAudioStream,
+  buildFileMetadata,
+  getVideoStreamBitrate,
+  getVideoStreamFPS,
+  getVideoStreamDimensionsInfo,
+  hasAudioStream
+} from '@shared/extra-utils'
 import { HttpStatusCode, VideoState } from '@shared/models'
 import {
   cleanupTests,
@@ -287,8 +294,7 @@ describe('Test video transcoding', function () {
         const file = videoDetails.files.find(f => f.resolution.id === 240)
         const path = servers[1].servers.buildWebTorrentFilePath(file.fileUrl)
 
-        const probe = await getAudioStream(path)
-        expect(probe).to.not.have.property('audioStream')
+        expect(await hasAudioStream(path)).to.be.false
       }
     })
 
@@ -478,14 +484,14 @@ describe('Test video transcoding', function () {
         for (const resolution of [ 144, 240, 360, 480 ]) {
           const file = videoDetails.files.find(f => f.resolution.id === resolution)
           const path = servers[1].servers.buildWebTorrentFilePath(file.fileUrl)
-          const fps = await getVideoFileFPS(path)
+          const fps = await getVideoStreamFPS(path)
 
           expect(fps).to.be.below(31)
         }
 
         const file = videoDetails.files.find(f => f.resolution.id === 720)
         const path = servers[1].servers.buildWebTorrentFilePath(file.fileUrl)
-        const fps = await getVideoFileFPS(path)
+        const fps = await getVideoStreamFPS(path)
 
         expect(fps).to.be.above(58).and.below(62)
       }
@@ -499,7 +505,7 @@ describe('Test video transcoding', function () {
       {
         tempFixturePath = await generateVideoWithFramerate(59)
 
-        const fps = await getVideoFileFPS(tempFixturePath)
+        const fps = await getVideoStreamFPS(tempFixturePath)
         expect(fps).to.be.equal(59)
       }
 
@@ -522,14 +528,14 @@ describe('Test video transcoding', function () {
         {
           const file = video.files.find(f => f.resolution.id === 240)
           const path = servers[1].servers.buildWebTorrentFilePath(file.fileUrl)
-          const fps = await getVideoFileFPS(path)
+          const fps = await getVideoStreamFPS(path)
           expect(fps).to.be.equal(25)
         }
 
         {
           const file = video.files.find(f => f.resolution.id === 720)
           const path = servers[1].servers.buildWebTorrentFilePath(file.fileUrl)
-          const fps = await getVideoFileFPS(path)
+          const fps = await getVideoStreamFPS(path)
           expect(fps).to.be.equal(59)
         }
       }
@@ -563,9 +569,9 @@ describe('Test video transcoding', function () {
           const file = video.files.find(f => f.resolution.id === resolution)
           const path = servers[1].servers.buildWebTorrentFilePath(file.fileUrl)
 
-          const bitrate = await getVideoFileBitrate(path)
-          const fps = await getVideoFileFPS(path)
-          const dataResolution = await getVideoFileResolution(path)
+          const bitrate = await getVideoStreamBitrate(path)
+          const fps = await getVideoStreamFPS(path)
+          const dataResolution = await getVideoStreamDimensionsInfo(path)
 
           expect(resolution).to.equal(resolution)
 
@@ -613,7 +619,7 @@ describe('Test video transcoding', function () {
         const file = video.files.find(f => f.resolution.id === r)
 
         const path = servers[1].servers.buildWebTorrentFilePath(file.fileUrl)
-        const bitrate = await getVideoFileBitrate(path)
+        const bitrate = await getVideoStreamBitrate(path)
 
         const inputBitrate = 60_000
         const limit = getMinLimitBitrate({ fps: 10, ratio: 1, resolution: r })
@@ -637,7 +643,7 @@ describe('Test video transcoding', function () {
         const video = await servers[1].videos.get({ id: videoUUID })
         const file = video.files.find(f => f.resolution.id === 240)
         const path = servers[1].servers.buildWebTorrentFilePath(file.fileUrl)
-        const metadata = await getMetadataFromFile(path)
+        const metadata = await buildFileMetadata(path)
 
         // expected format properties
         for (const p of [
@@ -668,8 +674,7 @@ describe('Test video transcoding', function () {
       for (const server of servers) {
         const videoDetails = await server.videos.get({ id: videoUUID })
 
-        const videoFiles = videoDetails.files
-                                      .concat(videoDetails.streamingPlaylists[0].files)
+        const videoFiles = getAllFiles(videoDetails)
         expect(videoFiles).to.have.lengthOf(10)
 
         for (const file of videoFiles) {

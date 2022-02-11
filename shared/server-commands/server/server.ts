@@ -25,6 +25,7 @@ import {
   PlaylistsCommand,
   ServicesCommand,
   StreamingPlaylistsCommand,
+  VideoEditorCommand,
   VideosCommand
 } from '../videos'
 import { CommentsCommand } from '../videos/comments-command'
@@ -124,6 +125,7 @@ export class PeerTubeServer {
   login?: LoginCommand
   users?: UsersCommand
   objectStorage?: ObjectStorageCommand
+  videoEditor?: VideoEditorCommand
   videos?: VideosCommand
 
   constructor (options: { serverNumber: number } | { url: string }) {
@@ -394,5 +396,6 @@ export class PeerTubeServer {
     this.users = new UsersCommand(this)
     this.videos = new VideosCommand(this)
     this.objectStorage = new ObjectStorageCommand(this)
+    this.videoEditor = new VideoEditorCommand(this)
   }
 }

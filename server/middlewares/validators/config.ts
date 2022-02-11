@@ -57,6 +57,8 @@ const customConfigUpdateValidator = [
   body('transcoding.webtorrent.enabled').isBoolean().withMessage('Should have a valid webtorrent transcoding enabled boolean'),
   body('transcoding.hls.enabled').isBoolean().withMessage('Should have a valid hls transcoding enabled boolean'),
 
+  body('videoEditor.enabled').isBoolean().withMessage('Should have a valid video editor enabled boolean'),
+
   body('import.videos.concurrency').isInt({ min: 0 }).withMessage('Should have a valid import concurrency number'),
   body('import.videos.http.enabled').isBoolean().withMessage('Should have a valid import video http enabled boolean'),
   body('import.videos.torrent.enabled').isBoolean().withMessage('Should have a valid import video torrent enabled boolean'),
@@ -104,6 +106,7 @@ const customConfigUpdateValidator = [
     if (!checkInvalidConfigIfEmailDisabled(req.body, res)) return
     if (!checkInvalidTranscodingConfig(req.body, res)) return
     if (!checkInvalidLiveConfig(req.body, res)) return
+    if (!checkInvalidVideoEditorConfig(req.body, res)) return
 
     return next()
   }
@@ -154,6 +157,17 @@ function checkInvalidLiveConfig (customConfig: CustomConfig, res: express.Respon
 
   if (customConfig.live.allowReplay === true && customConfig.transcoding.enabled === false) {
     res.fail({ message: 'You cannot allow live replay if transcoding is not enabled' })
+    return false
+  }
+
+  return true
+}
+
+function checkInvalidVideoEditorConfig (customConfig: CustomConfig, res: express.Response) {
+  if (customConfig.videoEditor.enabled === false) return true
+
+  if (customConfig.videoEditor.enabled === true && customConfig.transcoding.enabled === false) {
+    res.fail({ message: 'You cannot enable video editor if transcoding is not enabled' })
     return false
   }
 

@@ -1,22 +1,21 @@
 import { FfprobeData } from 'fluent-ffmpeg'
 import { getMaxBitrate } from '@shared/core-utils'
-import { VideoResolution, VideoTranscodingFPS } from '../../shared/models/videos'
-import { CONFIG } from '../initializers/config'
-import { VIDEO_TRANSCODING_FPS } from '../initializers/constants'
-import { logger } from './logger'
 import {
-  canDoQuickAudioTranscode,
   ffprobePromise,
-  getDurationFromVideoFile,
   getAudioStream,
+  getVideoStreamDuration,
   getMaxAudioBitrate,
-  getMetadataFromFile,
-  getVideoFileBitrate,
-  getVideoFileFPS,
-  getVideoFileResolution,
-  getVideoStreamFromFile,
-  getVideoStreamSize
+  buildFileMetadata,
+  getVideoStreamBitrate,
+  getVideoStreamFPS,
+  getVideoStream,
+  getVideoStreamDimensionsInfo,
+  hasAudioStream
 } from '@shared/extra-utils/ffprobe'
+import { VideoResolution, VideoTranscodingFPS } from '@shared/models'
+import { CONFIG } from '../../initializers/config'
+import { VIDEO_TRANSCODING_FPS } from '../../initializers/constants'
+import { logger } from '../logger'
 
 /**
  *
@@ -24,9 +23,12 @@ import {
  *
  */
 
-async function getVideoStreamCodec (path: string) {
-  const videoStream = await getVideoStreamFromFile(path)
+// ---------------------------------------------------------------------------
+// Codecs
+// ---------------------------------------------------------------------------
 
+async function getVideoStreamCodec (path: string) {
+  const videoStream = await getVideoStream(path)
   if (!videoStream) return ''
 
   const videoCodec = videoStream.codec_tag_string
@@ -83,6 +85,10 @@ async function getAudioStreamCodec (path: string, existingProbe?: FfprobeData) {
   return 'mp4a.40.2' // Fallback
 }
 
+// ---------------------------------------------------------------------------
+// Resolutions
+// ---------------------------------------------------------------------------
+
 function computeLowerResolutionsToTranscode (videoFileResolution: number, type: 'vod' | 'live') {
   const configResolutions = type === 'vod'
     ? CONFIG.TRANSCODING.RESOLUTIONS
@@ -112,6 +118,10 @@ function computeLowerResolutionsToTranscode (videoFileResolution: number, type: 
   return resolutionsEnabled
 }
 
+// ---------------------------------------------------------------------------
+// Can quick transcode
+// ---------------------------------------------------------------------------
+
 async function canDoQuickTranscode (path: string): Promise<boolean> {
   if (CONFIG.TRANSCODING.PROFILE !== 'default') return false
 
@@ -121,17 +131,37 @@ async function canDoQuickTranscode (path: string): Promise<boolean> {
          await canDoQuickAudioTranscode(path, probe)
 }
 
+async function canDoQuickAudioTranscode (path: string, probe?: FfprobeData): Promise<boolean> {
+  const parsedAudio = await getAudioStream(path, probe)
+
+  if (!parsedAudio.audioStream) return true
+
+  if (parsedAudio.audioStream['codec_name'] !== 'aac') return false
+
+  const audioBitrate = parsedAudio.bitrate
+  if (!audioBitrate) return false
+
+  const maxAudioBitrate = getMaxAudioBitrate('aac', audioBitrate)
+  if (maxAudioBitrate !== -1 && audioBitrate > maxAudioBitrate) return false
+
+  const channelLayout = parsedAudio.audioStream['channel_layout']
+  // Causes playback issues with Chrome
+  if (!channelLayout || channelLayout === 'unknown') return false
+
+  return true
+}
+
 async function canDoQuickVideoTranscode (path: string, probe?: FfprobeData): Promise<boolean> {
-  const videoStream = await getVideoStreamFromFile(path, probe)
-  const fps = await getVideoFileFPS(path, probe)
-  const bitRate = await getVideoFileBitrate(path, probe)
-  const resolutionData = await getVideoFileResolution(path, probe)
+  const videoStream = await getVideoStream(path, probe)
+  const fps = await getVideoStreamFPS(path, probe)
+  const bitRate = await getVideoStreamBitrate(path, probe)
+  const resolutionData = await getVideoStreamDimensionsInfo(path, probe)
 
   // If ffprobe did not manage to guess the bitrate
   if (!bitRate) return false
 
   // check video params
-  if (videoStream == null) return false
+  if (!videoStream) return false
   if (videoStream['codec_name'] !== 'h264') return false
   if (videoStream['pix_fmt'] !== 'yuv420p') return false
   if (fps < VIDEO_TRANSCODING_FPS.MIN || fps > VIDEO_TRANSCODING_FPS.MAX) return false
@@ -139,6 +169,10 @@ async function canDoQuickVideoTranscode (path: string, probe?: FfprobeData): Pro
 
   return true
 }
+
+// ---------------------------------------------------------------------------
+// Framerate
+// ---------------------------------------------------------------------------
 
 function getClosestFramerateStandard <K extends keyof Pick<VideoTranscodingFPS, 'HD_STANDARD' | 'STANDARD'>> (fps: number, type: K) {
   return VIDEO_TRANSCODING_FPS[type].slice(0)
@@ -171,21 +205,26 @@ function computeFPS (fpsArg: number, resolution: VideoResolution) {
 // ---------------------------------------------------------------------------
 
 export {
+  // Re export ffprobe utils
+  getVideoStreamDimensionsInfo,
+  buildFileMetadata,
+  getMaxAudioBitrate,
+  getVideoStream,
+  getVideoStreamDuration,
+  getAudioStream,
+  hasAudioStream,
+  getVideoStreamFPS,
+  ffprobePromise,
+  getVideoStreamBitrate,
+
   getVideoStreamCodec,
   getAudioStreamCodec,
-  getVideoStreamSize,
-  getVideoFileResolution,
-  getMetadataFromFile,
-  getMaxAudioBitrate,
-  getVideoStreamFromFile,
-  getDurationFromVideoFile,
-  getAudioStream,
+
   computeFPS,
-  getVideoFileFPS,
-  ffprobePromise,
   getClosestFramerateStandard,
+
   computeLowerResolutionsToTranscode,
-  getVideoFileBitrate,
+
   canDoQuickTranscode,
   canDoQuickVideoTranscode,
   canDoQuickAudioTranscode

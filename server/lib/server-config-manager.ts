@@ -8,7 +8,7 @@ import { HTMLServerConfig, RegisteredExternalAuthConfig, RegisteredIdAndPassAuth
 import { Hooks } from './plugins/hooks'
 import { PluginManager } from './plugins/plugin-manager'
 import { getThemeOrDefault } from './plugins/theme-utils'
-import { VideoTranscodingProfilesManager } from './transcoding/video-transcoding-profiles'
+import { VideoTranscodingProfilesManager } from './transcoding/default-transcoding-profiles'
 
 /**
  *
@@ -150,6 +150,9 @@ class ServerConfigManager {
         rtmp: {
           port: CONFIG.LIVE.RTMP.PORT
         }
+      },
+      videoEditor: {
+        enabled: CONFIG.VIDEO_EDITOR.ENABLED
       },
       import: {
         videos: {

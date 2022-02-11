@@ -1,8 +1,8 @@
 import { program } from 'commander'
 import ffmpeg from 'fluent-ffmpeg'
 import { exit } from 'process'
-import { buildx264VODCommand, runCommand, TranscodeOptions } from '@server/helpers/ffmpeg-utils'
-import { VideoTranscodingProfilesManager } from '@server/lib/transcoding/video-transcoding-profiles'
+import { buildVODCommand, runCommand, TranscodeVODOptions } from '@server/helpers/ffmpeg'
+import { VideoTranscodingProfilesManager } from '@server/lib/transcoding/default-transcoding-profiles'
 
 program
   .arguments('<path>')
@@ -33,12 +33,12 @@ async function run (path: string, cmd: any) {
 
     resolution: +cmd.resolution,
     isPortraitMode: false
-  } as TranscodeOptions
+  } as TranscodeVODOptions
 
   let command = ffmpeg(options.inputPath)
                .output(options.outputPath)
 
-  command = await buildx264VODCommand(command, options)
+  command = await buildVODCommand(command, options)
 
   command.on('start', (cmdline) => {
     console.log(cmdline)

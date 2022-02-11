@@ -195,6 +195,10 @@ export class VideoMiniatureComponent implements OnInit {
       return $localize`To import`
     }
 
+    if (video.state.id === VideoState.TO_EDIT) {
+      return $localize`To edit`
+    }
+
     return ''
   }
 

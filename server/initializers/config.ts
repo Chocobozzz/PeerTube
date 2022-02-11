@@ -324,6 +324,9 @@ const CONFIG = {
       }
     }
   },
+  VIDEO_EDITOR: {
+    get ENABLED () { return config.get<boolean>('video_editor.enabled') }
+  },
   IMPORT: {
     VIDEOS: {
       get CONCURRENCY () { return config.get<number>('import.videos.concurrency') },

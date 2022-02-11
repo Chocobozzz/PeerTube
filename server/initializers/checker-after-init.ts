@@ -1,7 +1,7 @@
 import config from 'config'
 import { uniq } from 'lodash'
 import { URL } from 'url'
-import { getFFmpegVersion } from '@server/helpers/ffmpeg-utils'
+import { getFFmpegVersion } from '@server/helpers/ffmpeg'
 import { VideoRedundancyConfigFilter } from '@shared/models/redundancy/video-redundancy-config-filter.type'
 import { RecentlyAddedStrategy } from '../../shared/models/redundancy'
 import { isProdInstance, isTestInstance, parseSemVersion } from '../helpers/core-utils'
@@ -31,8 +31,7 @@ async function checkActivityPubUrls () {
   }
 }
 
-// Some checks on configuration files
-// Return an error message, or null if everything is okay
+// Some checks on configuration files or throw if there is an error
 function checkConfig () {
 
   // Moved configuration keys
@@ -40,157 +39,17 @@ function checkConfig () {
     logger.warn('services.csp-logger configuration has been renamed to csp.report_uri. Please update your configuration file.')
   }
 
-  // Email verification
-  if (!isEmailEnabled()) {
-    if (CONFIG.SIGNUP.ENABLED && CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION) {
-      return 'Emailer is disabled but you require signup email verification.'
-    }
-
-    if (CONFIG.CONTACT_FORM.ENABLED) {
-      logger.warn('Emailer is disabled so the contact form will not work.')
-    }
-  }
-
-  // NSFW policy
-  const defaultNSFWPolicy = CONFIG.INSTANCE.DEFAULT_NSFW_POLICY
-  {
-    const available = [ 'do_not_list', 'blur', 'display' ]
-    if (available.includes(defaultNSFWPolicy) === false) {
-      return 'NSFW policy setting should be ' + available.join(' or ') + ' instead of ' + defaultNSFWPolicy
-    }
-  }
-
-  // Redundancies
-  const redundancyVideos = CONFIG.REDUNDANCY.VIDEOS.STRATEGIES
-  if (isArray(redundancyVideos)) {
-    const available = [ 'most-views', 'trending', 'recently-added' ]
-    for (const r of redundancyVideos) {
-      if (available.includes(r.strategy) === false) {
-        return 'Videos redundancy should have ' + available.join(' or ') + ' strategy instead of ' + r.strategy
-      }
-
-      // Lifetime should not be < 10 hours
-      if (!isTestInstance() && r.minLifetime < 1000 * 3600 * 10) {
-        return 'Video redundancy minimum lifetime should be >= 10 hours for strategy ' + r.strategy
-      }
-    }
-
-    const filtered = uniq(redundancyVideos.map(r => r.strategy))
-    if (filtered.length !== redundancyVideos.length) {
-      return 'Redundancy video entries should have unique strategies'
-    }
-
-    const recentlyAddedStrategy = redundancyVideos.find(r => r.strategy === 'recently-added') as RecentlyAddedStrategy
-    if (recentlyAddedStrategy && isNaN(recentlyAddedStrategy.minViews)) {
-      return 'Min views in recently added strategy is not a number'
-    }
-  } else {
-    return 'Videos redundancy should be an array (you must uncomment lines containing - too)'
-  }
-
-  // Remote redundancies
-  const acceptFrom = CONFIG.REMOTE_REDUNDANCY.VIDEOS.ACCEPT_FROM
-  const acceptFromValues = new Set<VideoRedundancyConfigFilter>([ 'nobody', 'anybody', 'followings' ])
-  if (acceptFromValues.has(acceptFrom) === false) {
-    return 'remote_redundancy.videos.accept_from has an incorrect value'
-  }
-
-  // Check storage directory locations
-  if (isProdInstance()) {
-    const configStorage = config.get('storage')
-    for (const key of Object.keys(configStorage)) {
-      if (configStorage[key].startsWith('storage/')) {
-        logger.warn(
-          'Directory of %s should not be in the production directory of PeerTube. Please check your production configuration file.',
-          key
-        )
-      }
-    }
-  }
-
-  if (CONFIG.STORAGE.VIDEOS_DIR === CONFIG.STORAGE.REDUNDANCY_DIR) {
-    logger.warn('Redundancy directory should be different than the videos folder.')
-  }
-
-  // Transcoding
-  if (CONFIG.TRANSCODING.ENABLED) {
-    if (CONFIG.TRANSCODING.WEBTORRENT.ENABLED === false && CONFIG.TRANSCODING.HLS.ENABLED === false) {
-      return 'You need to enable at least WebTorrent transcoding or HLS transcoding.'
-    }
-
-    if (CONFIG.TRANSCODING.CONCURRENCY <= 0) {
-      return 'Transcoding concurrency should be > 0'
-    }
-  }
-
-  if (CONFIG.IMPORT.VIDEOS.HTTP.ENABLED || CONFIG.IMPORT.VIDEOS.TORRENT.ENABLED) {
-    if (CONFIG.IMPORT.VIDEOS.CONCURRENCY <= 0) {
-      return 'Video import concurrency should be > 0'
-    }
-  }
-
-  // Broadcast message
-  if (CONFIG.BROADCAST_MESSAGE.ENABLED) {
-    const currentLevel = CONFIG.BROADCAST_MESSAGE.LEVEL
-    const available = [ 'info', 'warning', 'error' ]
-
-    if (available.includes(currentLevel) === false) {
-      return 'Broadcast message level should be ' + available.join(' or ') + ' instead of ' + currentLevel
-    }
-  }
-
-  // Search index
-  if (CONFIG.SEARCH.SEARCH_INDEX.ENABLED === true) {
-    if (CONFIG.SEARCH.REMOTE_URI.USERS === false) {
-      return 'You cannot enable search index without enabling remote URI search for users.'
-    }
-  }
-
-  // Live
-  if (CONFIG.LIVE.ENABLED === true) {
-    if (CONFIG.LIVE.ALLOW_REPLAY === true && CONFIG.TRANSCODING.ENABLED === false) {
-      return 'Live allow replay cannot be enabled if transcoding is not enabled.'
-    }
-
-    if (CONFIG.LIVE.RTMP.ENABLED === false && CONFIG.LIVE.RTMPS.ENABLED === false) {
-      return 'You must enable at least RTMP or RTMPS'
-    }
-
-    if (CONFIG.LIVE.RTMPS.ENABLED) {
-      if (!CONFIG.LIVE.RTMPS.KEY_FILE) {
-        return 'You must specify a key file to enabled RTMPS'
-      }
-
-      if (!CONFIG.LIVE.RTMPS.CERT_FILE) {
-        return 'You must specify a cert file to enable RTMPS'
-      }
-    }
-  }
-
-  // Object storage
-  if (CONFIG.OBJECT_STORAGE.ENABLED === true) {
-
-    if (!CONFIG.OBJECT_STORAGE.VIDEOS.BUCKET_NAME) {
-      return 'videos_bucket should be set when object storage support is enabled.'
-    }
-
-    if (!CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.BUCKET_NAME) {
-      return 'streaming_playlists_bucket should be set when object storage support is enabled.'
-    }
-
-    if (
-      CONFIG.OBJECT_STORAGE.VIDEOS.BUCKET_NAME === CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.BUCKET_NAME &&
-      CONFIG.OBJECT_STORAGE.VIDEOS.PREFIX === CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.PREFIX
-    ) {
-      if (CONFIG.OBJECT_STORAGE.VIDEOS.PREFIX === '') {
-        return 'Object storage bucket prefixes should be set when the same bucket is used for both types of video.'
-      } else {
-        return 'Object storage bucket prefixes should be set to different values when the same bucket is used for both types of video.'
-      }
-    }
-  }
-
-  return null
+  checkEmailConfig()
+  checkNSFWPolicyConfig()
+  checkLocalRedundancyConfig()
+  checkRemoteRedundancyConfig()
+  checkStorageConfig()
+  checkTranscodingConfig()
+  checkBroadcastMessageConfig()
+  checkSearchConfig()
+  checkLiveConfig()
+  checkObjectStorageConfig()
+  checkVideoEditorConfig()
 }
 
 // We get db by param to not import it in this file (import orders)
@@ -232,4 +91,177 @@ export {
   usersExist,
   applicationExist,
   checkActivityPubUrls
+}
+
+// ---------------------------------------------------------------------------
+
+function checkEmailConfig () {
+  if (!isEmailEnabled()) {
+    if (CONFIG.SIGNUP.ENABLED && CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION) {
+      throw new Error('Emailer is disabled but you require signup email verification.')
+    }
+
+    if (CONFIG.CONTACT_FORM.ENABLED) {
+      logger.warn('Emailer is disabled so the contact form will not work.')
+    }
+  }
+}
+
+function checkNSFWPolicyConfig () {
+  const defaultNSFWPolicy = CONFIG.INSTANCE.DEFAULT_NSFW_POLICY
+
+  const available = [ 'do_not_list', 'blur', 'display' ]
+  if (available.includes(defaultNSFWPolicy) === false) {
+    throw new Error('NSFW policy setting should be ' + available.join(' or ') + ' instead of ' + defaultNSFWPolicy)
+  }
+}
+
+function checkLocalRedundancyConfig () {
+  const redundancyVideos = CONFIG.REDUNDANCY.VIDEOS.STRATEGIES
+
+  if (isArray(redundancyVideos)) {
+    const available = [ 'most-views', 'trending', 'recently-added' ]
+
+    for (const r of redundancyVideos) {
+      if (available.includes(r.strategy) === false) {
+        throw new Error('Videos redundancy should have ' + available.join(' or ') + ' strategy instead of ' + r.strategy)
+      }
+
+      // Lifetime should not be < 10 hours
+      if (!isTestInstance() && r.minLifetime < 1000 * 3600 * 10) {
+        throw new Error('Video redundancy minimum lifetime should be >= 10 hours for strategy ' + r.strategy)
+      }
+    }
+
+    const filtered = uniq(redundancyVideos.map(r => r.strategy))
+    if (filtered.length !== redundancyVideos.length) {
+      throw new Error('Redundancy video entries should have unique strategies')
+    }
+
+    const recentlyAddedStrategy = redundancyVideos.find(r => r.strategy === 'recently-added') as RecentlyAddedStrategy
+    if (recentlyAddedStrategy && isNaN(recentlyAddedStrategy.minViews)) {
+      throw new Error('Min views in recently added strategy is not a number')
+    }
+  } else {
+    throw new Error('Videos redundancy should be an array (you must uncomment lines containing - too)')
+  }
+}
+
+function checkRemoteRedundancyConfig () {
+  const acceptFrom = CONFIG.REMOTE_REDUNDANCY.VIDEOS.ACCEPT_FROM
+  const acceptFromValues = new Set<VideoRedundancyConfigFilter>([ 'nobody', 'anybody', 'followings' ])
+
+  if (acceptFromValues.has(acceptFrom) === false) {
+    throw new Error('remote_redundancy.videos.accept_from has an incorrect value')
+  }
+}
+
+function checkStorageConfig () {
+  // Check storage directory locations
+  if (isProdInstance()) {
+    const configStorage = config.get('storage')
+    for (const key of Object.keys(configStorage)) {
+      if (configStorage[key].startsWith('storage/')) {
+        logger.warn(
+          'Directory of %s should not be in the production directory of PeerTube. Please check your production configuration file.',
+          key
+        )
+      }
+    }
+  }
+
+  if (CONFIG.STORAGE.VIDEOS_DIR === CONFIG.STORAGE.REDUNDANCY_DIR) {
+    logger.warn('Redundancy directory should be different than the videos folder.')
+  }
+}
+
+function checkTranscodingConfig () {
+  if (CONFIG.TRANSCODING.ENABLED) {
+    if (CONFIG.TRANSCODING.WEBTORRENT.ENABLED === false && CONFIG.TRANSCODING.HLS.ENABLED === false) {
+      throw new Error('You need to enable at least WebTorrent transcoding or HLS transcoding.')
+    }
+
+    if (CONFIG.TRANSCODING.CONCURRENCY <= 0) {
+      throw new Error('Transcoding concurrency should be > 0')
+    }
+  }
+
+  if (CONFIG.IMPORT.VIDEOS.HTTP.ENABLED || CONFIG.IMPORT.VIDEOS.TORRENT.ENABLED) {
+    if (CONFIG.IMPORT.VIDEOS.CONCURRENCY <= 0) {
+      throw new Error('Video import concurrency should be > 0')
+    }
+  }
+}
+
+function checkBroadcastMessageConfig () {
+  if (CONFIG.BROADCAST_MESSAGE.ENABLED) {
+    const currentLevel = CONFIG.BROADCAST_MESSAGE.LEVEL
+    const available = [ 'info', 'warning', 'error' ]
+
+    if (available.includes(currentLevel) === false) {
+      throw new Error('Broadcast message level should be ' + available.join(' or ') + ' instead of ' + currentLevel)
+    }
+  }
+}
+
+function checkSearchConfig () {
+  if (CONFIG.SEARCH.SEARCH_INDEX.ENABLED === true) {
+    if (CONFIG.SEARCH.REMOTE_URI.USERS === false) {
+      throw new Error('You cannot enable search index without enabling remote URI search for users.')
+    }
+  }
+}
+
+function checkLiveConfig () {
+  if (CONFIG.LIVE.ENABLED === true) {
+    if (CONFIG.LIVE.ALLOW_REPLAY === true && CONFIG.TRANSCODING.ENABLED === false) {
+      throw new Error('Live allow replay cannot be enabled if transcoding is not enabled.')
+    }
+
+    if (CONFIG.LIVE.RTMP.ENABLED === false && CONFIG.LIVE.RTMPS.ENABLED === false) {
+      throw new Error('You must enable at least RTMP or RTMPS')
+    }
+
+    if (CONFIG.LIVE.RTMPS.ENABLED) {
+      if (!CONFIG.LIVE.RTMPS.KEY_FILE) {
+        throw new Error('You must specify a key file to enabled RTMPS')
+      }
+
+      if (!CONFIG.LIVE.RTMPS.CERT_FILE) {
+        throw new Error('You must specify a cert file to enable RTMPS')
+      }
+    }
+  }
+}
+
+function checkObjectStorageConfig () {
+  if (CONFIG.OBJECT_STORAGE.ENABLED === true) {
+
+    if (!CONFIG.OBJECT_STORAGE.VIDEOS.BUCKET_NAME) {
+      throw new Error('videos_bucket should be set when object storage support is enabled.')
+    }
+
+    if (!CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.BUCKET_NAME) {
+      throw new Error('streaming_playlists_bucket should be set when object storage support is enabled.')
+    }
+
+    if (
+      CONFIG.OBJECT_STORAGE.VIDEOS.BUCKET_NAME === CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.BUCKET_NAME &&
+      CONFIG.OBJECT_STORAGE.VIDEOS.PREFIX === CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.PREFIX
+    ) {
+      if (CONFIG.OBJECT_STORAGE.VIDEOS.PREFIX === '') {
+        throw new Error('Object storage bucket prefixes should be set when the same bucket is used for both types of video.')
+      }
+
+      throw new Error(
+        'Object storage bucket prefixes should be set to different values when the same bucket is used for both types of video.'
+      )
+    }
+  }
+}
+
+function checkVideoEditorConfig () {
+  if (CONFIG.VIDEO_EDITOR.ENABLED === true && CONFIG.TRANSCODING.ENABLED === false) {
+    throw new Error('Video editor cannot be enabled if transcoding is disabled')
+  }
 }

@@ -1,9 +1,12 @@
 import { copy, readFile, remove, rename } from 'fs-extra'
 import Jimp, { read } from 'jimp'
+import { join } from 'path'
 import { getLowercaseExtension } from '@shared/core-utils'
 import { buildUUID } from '@shared/extra-utils'
-import { convertWebPToJPG, processGIF } from './ffmpeg-utils'
-import { logger } from './logger'
+import { convertWebPToJPG, generateThumbnailFromVideo, processGIF } from './ffmpeg/ffmpeg-images'
+import { logger, loggerTagsFactory } from './logger'
+
+const lTags = loggerTagsFactory('image-utils')
 
 function generateImageFilename (extension = '.jpg') {
   return buildUUID() + extension
@@ -33,10 +36,31 @@ async function processImage (
   if (keepOriginal !== true) await remove(path)
 }
 
+async function generateImageFromVideoFile (fromPath: string, folder: string, imageName: string, size: { width: number, height: number }) {
+  const pendingImageName = 'pending-' + imageName
+  const pendingImagePath = join(folder, pendingImageName)
+
+  try {
+    await generateThumbnailFromVideo(fromPath, folder, imageName)
+
+    const destination = join(folder, imageName)
+    await processImage(pendingImagePath, destination, size)
+  } catch (err) {
+    logger.error('Cannot generate image from video %s.', fromPath, { err, ...lTags() })
+
+    try {
+      await remove(pendingImagePath)
+    } catch (err) {
+      logger.debug('Cannot remove pending image path after generation error.', { err, ...lTags() })
+    }
+  }
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   generateImageFilename,
+  generateImageFromVideoFile,
   processImage
 }
 

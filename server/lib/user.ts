@@ -19,6 +19,7 @@ import { buildActorInstance } from './local-actor'
 import { Redis } from './redis'
 import { createLocalVideoChannel } from './video-channel'
 import { createWatchLaterPlaylist } from './video-playlist'
+import { logger } from '@server/helpers/logger'
 
 type ChannelNames = { name: string, displayName: string }
 
@@ -158,6 +159,11 @@ async function isAbleToUploadVideo (userId: number, newVideoSize: number) {
 
   const uploadedTotal = newVideoSize + totalBytes
   const uploadedDaily = newVideoSize + totalBytesDaily
+
+  logger.debug(
+    'Check user %d quota to upload another video.', userId,
+    { totalBytes, totalBytesDaily, videoQuota: user.videoQuota, videoQuotaDaily: user.videoQuotaDaily, newVideoSize }
+  )
 
   if (user.videoQuotaDaily === -1) return uploadedTotal < user.videoQuota
   if (user.videoQuota === -1) return uploadedDaily < user.videoQuotaDaily

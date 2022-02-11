@@ -145,6 +145,9 @@ describe('Test config API validators', function () {
         }
       }
     },
+    videoEditor: {
+      enabled: true
+    },
     import: {
       videos: {
         concurrency: 1,

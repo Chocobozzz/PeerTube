@@ -1,12 +1,12 @@
 import { Job } from 'bull'
 import { pathExists, readdir, remove } from 'fs-extra'
 import { join } from 'path'
-import { ffprobePromise, getAudioStream, getDurationFromVideoFile, getVideoFileResolution } from '@server/helpers/ffprobe-utils'
+import { ffprobePromise, getAudioStream, getVideoStreamDuration, getVideoStreamDimensionsInfo } from '@server/helpers/ffmpeg'
 import { VIDEO_LIVE } from '@server/initializers/constants'
 import { buildConcatenatedName, cleanupLive, LiveSegmentShaStore } from '@server/lib/live'
 import { generateHLSMasterPlaylistFilename, generateHlsSha256SegmentsFilename, getLiveDirectory } from '@server/lib/paths'
 import { generateVideoMiniature } from '@server/lib/thumbnail'
-import { generateHlsPlaylistResolutionFromTS } from '@server/lib/transcoding/video-transcoding'
+import { generateHlsPlaylistResolutionFromTS } from '@server/lib/transcoding/transcoding'
 import { VideoPathManager } from '@server/lib/video-path-manager'
 import { moveToNextState } from '@server/lib/video-state'
 import { VideoModel } from '@server/models/video/video'
@@ -96,7 +96,7 @@ async function saveLive (video: MVideo, live: MVideoLive, streamingPlaylist: MSt
     const probe = await ffprobePromise(concatenatedTsFilePath)
     const { audioStream } = await getAudioStream(concatenatedTsFilePath, probe)
 
-    const { resolution, isPortraitMode } = await getVideoFileResolution(concatenatedTsFilePath, probe)
+    const { resolution, isPortraitMode } = await getVideoStreamDimensionsInfo(concatenatedTsFilePath, probe)
 
     const { resolutionPlaylistPath: outputPath } = await generateHlsPlaylistResolutionFromTS({
       video: videoWithFiles,
@@ -107,7 +107,7 @@ async function saveLive (video: MVideo, live: MVideoLive, streamingPlaylist: MSt
     })
 
     if (!durationDone) {
-      videoWithFiles.duration = await getDurationFromVideoFile(outputPath)
+      videoWithFiles.duration = await getVideoStreamDuration(outputPath)
       await videoWithFiles.save()
 
       durationDone = true

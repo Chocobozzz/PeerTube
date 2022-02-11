@@ -35,6 +35,7 @@ export class ActionButtonsComponent implements OnInit, OnChanges {
     playlist: false,
     download: true,
     update: true,
+    editor: true,
     blacklist: true,
     delete: true,
     report: true,

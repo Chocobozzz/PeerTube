@@ -45,11 +45,15 @@ describe('Playlist thumbnail', function () {
   before(async function () {
     this.timeout(120000)
 
-    servers = await createMultipleServers(2, { transcoding: { enabled: false } })
+    servers = await createMultipleServers(2)
 
     // Get the access tokens
     await setAccessTokensToServers(servers)
     await setDefaultVideoChannel(servers)
+
+    for (const server of servers) {
+      await server.config.disableTranscoding()
+    }
 
     // Server 1 and server 2 follow each other
     await doubleFollow(servers[0], servers[1])

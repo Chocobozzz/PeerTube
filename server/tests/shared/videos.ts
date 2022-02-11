@@ -240,6 +240,16 @@ async function uploadRandomVideoOnServers (
   return res
 }
 
+function getAllFiles (video: VideoDetails) {
+  const files = video.files
+
+  if (video.streamingPlaylists[0]) {
+    return files.concat(video.streamingPlaylists[0].files)
+  }
+
+  return files
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -247,5 +257,6 @@ export {
   checkUploadVideoParam,
   uploadRandomVideoOnServers,
   checkVideoFilesWereRemoved,
-  saveVideoInServers
+  saveVideoInServers,
+  getAllFiles
 }

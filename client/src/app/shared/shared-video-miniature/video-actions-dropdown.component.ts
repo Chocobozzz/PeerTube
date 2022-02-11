@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core'
-import { AuthService, ConfirmService, Notifier, ScreenService } from '@app/core'
+import { AuthService, ConfirmService, Notifier, ScreenService, ServerService } from '@app/core'
 import { BlocklistService, VideoBlockComponent, VideoBlockService, VideoReportComponent } from '@app/shared/shared-moderation'
 import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap'
-import { VideoCaption } from '@shared/models'
+import { VideoCaption, VideoState } from '@shared/models'
 import {
   Actor,
   DropdownAction,
@@ -29,6 +29,7 @@ export type VideoActionsDisplayType = {
   liveInfo?: boolean
   removeFiles?: boolean
   transcoding?: boolean
+  editor?: boolean
 }
 
 @Component({
@@ -59,7 +60,8 @@ export class VideoActionsDropdownComponent implements OnChanges {
     mute: true,
     liveInfo: false,
     removeFiles: false,
-    transcoding: false
+    transcoding: false,
+    editor: true
   }
   @Input() placement = 'left'
 
@@ -89,7 +91,8 @@ export class VideoActionsDropdownComponent implements OnChanges {
     private videoBlocklistService: VideoBlockService,
     private screenService: ScreenService,
     private videoService: VideoService,
-    private redundancyService: RedundancyService
+    private redundancyService: RedundancyService,
+    private serverService: ServerService
   ) { }
 
   get user () {
@@ -147,6 +150,12 @@ export class VideoActionsDropdownComponent implements OnChanges {
 
   isVideoUpdatable () {
     return this.video.isUpdatableBy(this.user)
+  }
+
+  isVideoEditable () {
+    return this.serverService.getHTMLConfig().videoEditor.enabled &&
+      this.video.state?.id === VideoState.PUBLISHED &&
+      this.video.isUpdatableBy(this.user)
   }
 
   isVideoRemovable () {
@@ -328,6 +337,12 @@ export class VideoActionsDropdownComponent implements OnChanges {
           linkBuilder: ({ video }) => [ '/videos/update', video.uuid ],
           iconName: 'edit',
           isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions.update && this.isVideoUpdatable()
+        },
+        {
+          label: $localize`Editor`,
+          linkBuilder: ({ video }) => [ '/video-editor/edit', video.uuid ],
+          iconName: 'film',
+          isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions.editor && this.isVideoEditable()
         },
         {
           label: $localize`Block`,

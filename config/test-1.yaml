@@ -37,6 +37,9 @@ signup:
 transcoding:
   enabled: false
 
+video_editor:
+  enabled: false
+
 live:
   rtmp:
     port: 1936

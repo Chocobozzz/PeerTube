@@ -256,6 +256,9 @@ function customConfig (): CustomConfig {
         }
       }
     },
+    videoEditor: {
+      enabled: CONFIG.VIDEO_EDITOR.ENABLED
+    },
     import: {
       videos: {
         concurrency: CONFIG.IMPORT.VIDEOS.CONCURRENCY,

@@ -54,12 +54,7 @@ const listVideoCommentThreadsValidator = [
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.videoId, res, 'only-video')) return
 
-    if (!await checkCanSeeVideoIfPrivate(req, res, res.locals.onlyVideo)) {
-      return res.fail({
-        status: HttpStatusCode.FORBIDDEN_403,
-        message: 'Cannot list comments of private/internal/blocklisted video'
-      })
-    }
+    if (!await checkCanSeeVideoIfPrivate(req, res, res.locals.onlyVideo)) return
 
     return next()
   }
@@ -78,12 +73,7 @@ const listVideoThreadCommentsValidator = [
     if (!await doesVideoExist(req.params.videoId, res, 'only-video')) return
     if (!await doesVideoCommentThreadExist(req.params.threadId, res.locals.onlyVideo, res)) return
 
-    if (!await checkCanSeeVideoIfPrivate(req, res, res.locals.onlyVideo)) {
-      return res.fail({
-        status: HttpStatusCode.FORBIDDEN_403,
-        message: 'Cannot list threads of private/internal/blocklisted video'
-      })
-    }
+    if (!await checkCanSeeVideoIfPrivate(req, res, res.locals.onlyVideo)) return
 
     return next()
   }

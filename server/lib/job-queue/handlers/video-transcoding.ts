@@ -1,5 +1,5 @@
 import { Job } from 'bull'
-import { TranscodeOptionsType } from '@server/helpers/ffmpeg-utils'
+import { TranscodeVODOptionsType } from '@server/helpers/ffmpeg'
 import { addTranscodingJob, getTranscodingJobPriority } from '@server/lib/video'
 import { VideoPathManager } from '@server/lib/video-path-manager'
 import { moveToFailedTranscodingState, moveToNextState } from '@server/lib/video-state'
@@ -16,7 +16,7 @@ import {
   VideoTranscodingPayload
 } from '@shared/models'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
-import { computeLowerResolutionsToTranscode } from '../../../helpers/ffprobe-utils'
+import { computeLowerResolutionsToTranscode } from '../../../helpers/ffmpeg'
 import { logger, loggerTagsFactory } from '../../../helpers/logger'
 import { CONFIG } from '../../../initializers/config'
 import { VideoModel } from '../../../models/video/video'
@@ -25,7 +25,7 @@ import {
   mergeAudioVideofile,
   optimizeOriginalVideofile,
   transcodeNewWebTorrentResolution
-} from '../../transcoding/video-transcoding'
+} from '../../transcoding/transcoding'
 
 type HandlerFunction = (job: Job, payload: VideoTranscodingPayload, video: MVideoFullLight, user: MUser) => Promise<void>
 
@@ -174,10 +174,10 @@ async function onHlsPlaylistGeneration (video: MVideoFullLight, user: MUser, pay
 async function onVideoFirstWebTorrentTranscoding (
   videoArg: MVideoWithFile,
   payload: OptimizeTranscodingPayload | MergeAudioTranscodingPayload,
-  transcodeType: TranscodeOptionsType,
+  transcodeType: TranscodeVODOptionsType,
   user: MUserId
 ) {
-  const { resolution, isPortraitMode, audioStream } = await videoArg.getMaxQualityFileInfo()
+  const { resolution, isPortraitMode, audioStream } = await videoArg.probeMaxQualityFile()
 
   // Maybe the video changed in database, refresh it
   const videoDatabase = await VideoModel.loadAndPopulateAccountAndServerAndTags(videoArg.uuid)

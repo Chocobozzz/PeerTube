@@ -1,6 +1,6 @@
 import express from 'express'
 import { join } from 'path'
-import { ffprobePromise } from '@server/helpers/ffprobe-utils'
+import { ffprobePromise } from '@server/helpers/ffmpeg/ffprobe-utils'
 import { buildLogger } from '@server/helpers/logger'
 import { CONFIG } from '@server/initializers/config'
 import { WEBSERVER } from '@server/initializers/constants'

@@ -1,9 +1,9 @@
 import express, { RequestHandler } from 'express'
 import multer, { diskStorage } from 'multer'
+import { getLowercaseExtension } from '@shared/core-utils'
 import { HttpStatusCode } from '../../shared/models/http/http-error-codes'
 import { CONFIG } from '../initializers/config'
 import { REMOTE_SCHEME } from '../initializers/constants'
-import { getLowercaseExtension } from '@shared/core-utils'
 import { isArray } from './custom-validators/misc'
 import { logger } from './logger'
 import { deleteFileAndCatch, generateRandomString } from './utils'
@@ -75,29 +75,8 @@ function createReqFiles (
       cb(null, destinations[file.fieldname])
     },
 
-    filename: async (req, file, cb) => {
-      let extension: string
-      const fileExtension = getLowercaseExtension(file.originalname)
-      const extensionFromMimetype = getExtFromMimetype(mimeTypes, file.mimetype)
-
-      // Take the file extension if we don't understand the mime type
-      if (!extensionFromMimetype) {
-        extension = fileExtension
-      } else {
-        // Take the first available extension for this mimetype
-        extension = extensionFromMimetype
-      }
-
-      let randomString = ''
-
-      try {
-        randomString = await generateRandomString(16)
-      } catch (err) {
-        logger.error('Cannot generate random string for file name.', { err })
-        randomString = 'fake-random-string'
-      }
-
-      cb(null, randomString + extension)
+    filename: (req, file, cb) => {
+      return generateReqFilename(file, mimeTypes, cb)
     }
   })
 
@@ -110,6 +89,24 @@ function createReqFiles (
   }
 
   return multer({ storage }).fields(fields)
+}
+
+function createAnyReqFiles (
+  mimeTypes: { [id: string]: string | string[] },
+  destinationDirectory: string,
+  fileFilter: (req: express.Request, file: Express.Multer.File, cb: (err: Error, result: boolean) => void) => void
+): RequestHandler {
+  const storage = diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, destinationDirectory)
+    },
+
+    filename: (req, file, cb) => {
+      return generateReqFilename(file, mimeTypes, cb)
+    }
+  })
+
+  return multer({ storage, fileFilter }).any()
 }
 
 function isUserAbleToSearchRemoteURI (res: express.Response) {
@@ -128,9 +125,41 @@ function getCountVideos (req: express.Request) {
 export {
   buildNSFWFilter,
   getHostWithPort,
+  createAnyReqFiles,
   isUserAbleToSearchRemoteURI,
   badRequest,
   createReqFiles,
   cleanUpReqFiles,
   getCountVideos
+}
+
+// ---------------------------------------------------------------------------
+
+async function generateReqFilename (
+  file: Express.Multer.File,
+  mimeTypes: { [id: string]: string | string[] },
+  cb: (err: Error, name: string) => void
+) {
+  let extension: string
+  const fileExtension = getLowercaseExtension(file.originalname)
+  const extensionFromMimetype = getExtFromMimetype(mimeTypes, file.mimetype)
+
+  // Take the file extension if we don't understand the mime type
+  if (!extensionFromMimetype) {
+    extension = fileExtension
+  } else {
+    // Take the first available extension for this mimetype
+    extension = extensionFromMimetype
+  }
+
+  let randomString = ''
+
+  try {
+    randomString = await generateRandomString(16)
+  } catch (err) {
+    logger.error('Cannot generate random string for file name.', { err })
+    randomString = 'fake-random-string'
+  }
+
+  cb(null, randomString + extension)
 }

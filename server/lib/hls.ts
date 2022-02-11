@@ -4,7 +4,7 @@ import { basename, dirname, join } from 'path'
 import { MStreamingPlaylistFilesVideo, MVideo, MVideoUUID } from '@server/types/models'
 import { sha256 } from '@shared/extra-utils'
 import { VideoStorage } from '@shared/models'
-import { getAudioStreamCodec, getVideoStreamCodec, getVideoStreamSize } from '../helpers/ffprobe-utils'
+import { getAudioStreamCodec, getVideoStreamCodec, getVideoStreamDimensionsInfo } from '../helpers/ffmpeg'
 import { logger } from '../helpers/logger'
 import { doRequest, doRequestAndSaveToFile } from '../helpers/requests'
 import { generateRandomString } from '../helpers/utils'
@@ -40,10 +40,10 @@ async function updateMasterHLSPlaylist (video: MVideo, playlist: MStreamingPlayl
     const playlistFilename = getHlsResolutionPlaylistFilename(file.filename)
 
     await VideoPathManager.Instance.makeAvailableVideoFile(file.withVideoOrPlaylist(playlist), async videoFilePath => {
-      const size = await getVideoStreamSize(videoFilePath)
+      const size = await getVideoStreamDimensionsInfo(videoFilePath)
 
       const bandwidth = 'BANDWIDTH=' + video.getBandwidthBits(file)
-      const resolution = `RESOLUTION=${size.width}x${size.height}`
+      const resolution = `RESOLUTION=${size?.width || 0}x${size?.height || 0}`
 
       let line = `#EXT-X-STREAM-INF:${bandwidth},${resolution}`
       if (file.fps) line += ',FRAME-RATE=' + file.fps

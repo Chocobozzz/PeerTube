@@ -14,6 +14,7 @@ import {
   JobType,
   MoveObjectStoragePayload,
   RefreshPayload,
+  VideoEditionPayload,
   VideoFileImportPayload,
   VideoImportPayload,
   VideoLiveEndingPayload,
@@ -31,6 +32,7 @@ import { refreshAPObject } from './handlers/activitypub-refresher'
 import { processActorKeys } from './handlers/actor-keys'
 import { processEmail } from './handlers/email'
 import { processMoveToObjectStorage } from './handlers/move-to-object-storage'
+import { processVideoEdition } from './handlers/video-edition'
 import { processVideoFileImport } from './handlers/video-file-import'
 import { processVideoImport } from './handlers/video-import'
 import { processVideoLiveEnding } from './handlers/video-live-ending'
@@ -53,6 +55,7 @@ type CreateJobArgument =
   { type: 'actor-keys', payload: ActorKeysPayload } |
   { type: 'video-redundancy', payload: VideoRedundancyPayload } |
   { type: 'delete-resumable-upload-meta-file', payload: DeleteResumableUploadMetaFilePayload } |
+  { type: 'video-edition', payload: VideoEditionPayload } |
   { type: 'move-to-object-storage', payload: MoveObjectStoragePayload }
 
 export type CreateJobOptions = {
@@ -75,7 +78,8 @@ const handlers: { [id in JobType]: (job: Job) => Promise<any> } = {
   'video-live-ending': processVideoLiveEnding,
   'actor-keys': processActorKeys,
   'video-redundancy': processVideoRedundancy,
-  'move-to-object-storage': processMoveToObjectStorage
+  'move-to-object-storage': processMoveToObjectStorage,
+  'video-edition': processVideoEdition
 }
 
 const jobTypes: JobType[] = [
@@ -93,7 +97,8 @@ const jobTypes: JobType[] = [
   'video-redundancy',
   'actor-keys',
   'video-live-ending',
-  'move-to-object-storage'
+  'move-to-object-storage',
+  'video-edition'
 ]
 
 class JobQueue {

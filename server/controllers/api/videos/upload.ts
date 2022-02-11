@@ -24,7 +24,7 @@ import { HttpStatusCode, VideoCreate, VideoResolution, VideoState } from '@share
 import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../helpers/audit-logger'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { createReqFiles } from '../../../helpers/express-utils'
-import { ffprobePromise, getMetadataFromFile, getVideoFileFPS, getVideoFileResolution } from '../../../helpers/ffprobe-utils'
+import { ffprobePromise, buildFileMetadata, getVideoStreamFPS, getVideoStreamDimensionsInfo } from '../../../helpers/ffmpeg'
 import { logger, loggerTagsFactory } from '../../../helpers/logger'
 import { CONFIG } from '../../../initializers/config'
 import { MIMETYPES } from '../../../initializers/constants'
@@ -246,7 +246,7 @@ async function buildNewFile (videoPhysicalFile: express.VideoUploadFile) {
     extname: getLowercaseExtension(videoPhysicalFile.filename),
     size: videoPhysicalFile.size,
     videoStreamingPlaylistId: null,
-    metadata: await getMetadataFromFile(videoPhysicalFile.path)
+    metadata: await buildFileMetadata(videoPhysicalFile.path)
   })
 
   const probe = await ffprobePromise(videoPhysicalFile.path)
@@ -254,8 +254,8 @@ async function buildNewFile (videoPhysicalFile: express.VideoUploadFile) {
   if (await isAudioFile(videoPhysicalFile.path, probe)) {
     videoFile.resolution = VideoResolution.H_NOVIDEO
   } else {
-    videoFile.fps = await getVideoFileFPS(videoPhysicalFile.path, probe)
-    videoFile.resolution = (await getVideoFileResolution(videoPhysicalFile.path, probe)).resolution
+    videoFile.fps = await getVideoStreamFPS(videoPhysicalFile.path, probe)
+    videoFile.resolution = (await getVideoStreamDimensionsInfo(videoPhysicalFile.path, probe)).resolution
   }
 
   videoFile.filename = generateWebTorrentVideoFilename(videoFile.resolution, videoFile.extname)

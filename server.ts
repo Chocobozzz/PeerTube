@@ -42,10 +42,7 @@ try {
 
 import { checkConfig, checkActivityPubUrls, checkFFmpegVersion } from './server/initializers/checker-after-init'
 
-const errorMessage = checkConfig()
-if (errorMessage !== null) {
-  throw new Error(errorMessage)
-}
+checkConfig()
 
 // Trust our proxy (IP forwarding...)
 app.set('trust proxy', CONFIG.TRUST_PROXY)

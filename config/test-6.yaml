@@ -30,3 +30,6 @@ admin:
 
 transcoding:
   enabled: false
+
+video_editor:
+  enabled: false

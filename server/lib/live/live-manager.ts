@@ -5,10 +5,10 @@ import { createServer as createServerTLS, Server as ServerTLS } from 'tls'
 import {
   computeLowerResolutionsToTranscode,
   ffprobePromise,
-  getVideoFileBitrate,
-  getVideoFileFPS,
-  getVideoFileResolution
-} from '@server/helpers/ffprobe-utils'
+  getVideoStreamBitrate,
+  getVideoStreamFPS,
+  getVideoStreamDimensionsInfo
+} from '@server/helpers/ffmpeg'
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
 import { CONFIG, registerConfigChangedHandler } from '@server/initializers/config'
 import { P2P_MEDIA_LOADER_PEER_VERSION, VIDEO_LIVE } from '@server/initializers/constants'
@@ -226,9 +226,9 @@ class LiveManager {
     const probe = await ffprobePromise(inputUrl)
 
     const [ { resolution, ratio }, fps, bitrate ] = await Promise.all([
-      getVideoFileResolution(inputUrl, probe),
-      getVideoFileFPS(inputUrl, probe),
-      getVideoFileBitrate(inputUrl, probe)
+      getVideoStreamDimensionsInfo(inputUrl, probe),
+      getVideoStreamFPS(inputUrl, probe),
+      getVideoStreamBitrate(inputUrl, probe)
     ])
 
     logger.info(

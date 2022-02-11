@@ -97,6 +97,8 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
   expect(data.live.transcoding.resolutions['1440p']).to.be.false
   expect(data.live.transcoding.resolutions['2160p']).to.be.false
 
+  expect(data.videoEditor.enabled).to.be.false
+
   expect(data.import.videos.concurrency).to.equal(2)
   expect(data.import.videos.http.enabled).to.be.true
   expect(data.import.videos.torrent.enabled).to.be.true
@@ -196,6 +198,8 @@ function checkUpdatedConfig (data: CustomConfig) {
   expect(data.live.transcoding.resolutions['720p']).to.be.true
   expect(data.live.transcoding.resolutions['1080p']).to.be.true
   expect(data.live.transcoding.resolutions['2160p']).to.be.true
+
+  expect(data.videoEditor.enabled).to.be.true
 
   expect(data.import.videos.concurrency).to.equal(4)
   expect(data.import.videos.http.enabled).to.be.false
@@ -340,6 +344,9 @@ const newCustomConfig: CustomConfig = {
         '2160p': true
       }
     }
+  },
+  videoEditor: {
+    enabled: true
   },
   import: {
     videos: {

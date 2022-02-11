@@ -410,13 +410,7 @@ describe('Test plugin filter hooks', function () {
     before(async function () {
       this.timeout(60000)
 
-      await servers[0].config.updateCustomSubConfig({
-        newConfig: {
-          transcoding: {
-            enabled: false
-          }
-        }
-      })
+      await servers[0].config.disableTranscoding()
 
       for (const name of [ 'bad embed', 'good embed' ]) {
         {
