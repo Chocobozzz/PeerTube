@@ -30,7 +30,7 @@ export class FormValidatorService {
 
       if (field?.MESSAGES) validationMessages[name] = field.MESSAGES as { [ name: string ]: string }
 
-      const defaultValue = defaultValues[name] || ''
+      const defaultValue = defaultValues[name] ?? ''
 
       if (field?.VALIDATORS) group[name] = [ defaultValue, field.VALIDATORS ]
       else group[name] = [ defaultValue ]

@@ -2,7 +2,8 @@
 
 import 'mocha'
 import { expect } from 'chai'
-import { getAudioStream, getVideoFileFPS, getVideoStreamFromFile } from '@server/helpers/ffprobe-utils'
+import { getAudioStream, getVideoStreamFPS, getVideoStream } from '@server/helpers/ffmpeg'
+import { VideoPrivacy } from '@shared/models'
 import {
   cleanupTests,
   createSingleServer,
@@ -13,7 +14,6 @@ import {
   testFfmpegStreamError,
   waitJobs
 } from '@shared/server-commands'
-import { VideoPrivacy } from '@shared/models'
 
 async function createLiveWrapper (server: PeerTubeServer) {
   const liveAttributes = {
@@ -92,7 +92,7 @@ describe('Test transcoding plugins', function () {
 
     async function checkLiveFPS (uuid: string, type: 'above' | 'below', fps: number) {
       const playlistUrl = `${server.url}/static/streaming-playlists/hls/${uuid}/0.m3u8`
-      const videoFPS = await getVideoFileFPS(playlistUrl)
+      const videoFPS = await getVideoStreamFPS(playlistUrl)
 
       if (type === 'above') {
         expect(videoFPS).to.be.above(fps)
@@ -252,7 +252,7 @@ describe('Test transcoding plugins', function () {
       const audioProbe = await getAudioStream(path)
       expect(audioProbe.audioStream.codec_name).to.equal('opus')
 
-      const videoProbe = await getVideoStreamFromFile(path)
+      const videoProbe = await getVideoStream(path)
       expect(videoProbe.codec_name).to.equal('vp9')
     })
 
@@ -269,7 +269,7 @@ describe('Test transcoding plugins', function () {
       const audioProbe = await getAudioStream(playlistUrl)
       expect(audioProbe.audioStream.codec_name).to.equal('opus')
 
-      const videoProbe = await getVideoStreamFromFile(playlistUrl)
+      const videoProbe = await getVideoStream(playlistUrl)
       expect(videoProbe.codec_name).to.equal('h264')
     })
   })

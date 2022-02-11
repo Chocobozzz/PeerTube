@@ -30,7 +30,7 @@ function checkMissedConfig () {
     'transcoding.profile', 'transcoding.concurrency',
     'transcoding.resolutions.0p', 'transcoding.resolutions.144p', 'transcoding.resolutions.240p', 'transcoding.resolutions.360p',
     'transcoding.resolutions.480p', 'transcoding.resolutions.720p', 'transcoding.resolutions.1080p', 'transcoding.resolutions.1440p',
-    'transcoding.resolutions.2160p',
+    'transcoding.resolutions.2160p', 'video_editor.enabled',
     'import.videos.http.enabled', 'import.videos.torrent.enabled', 'import.videos.concurrency', 'auto_blacklist.videos.of_users.enabled',
     'trending.videos.interval_days',
     'client.videos.miniature.prefer_author_display_name', 'client.menu.login.redirect_on_single_external_auth',

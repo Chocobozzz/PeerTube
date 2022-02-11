@@ -81,7 +81,7 @@ async function setVideoTags (options: {
   video.Tags = tagInstances
 }
 
-async function addOptimizeOrMergeAudioJob (video: MVideoUUID, videoFile: MVideoFile, user: MUserId) {
+async function addOptimizeOrMergeAudioJob (video: MVideoUUID, videoFile: MVideoFile, user: MUserId, isNewVideo = true) {
   let dataInput: VideoTranscodingPayload
 
   if (videoFile.isAudio()) {
@@ -90,13 +90,13 @@ async function addOptimizeOrMergeAudioJob (video: MVideoUUID, videoFile: MVideoF
       resolution: DEFAULT_AUDIO_RESOLUTION,
       videoUUID: video.uuid,
       createHLSIfNeeded: true,
-      isNewVideo: true
+      isNewVideo
     }
   } else {
     dataInput = {
       type: 'optimize-to-webtorrent',
       videoUUID: video.uuid,
-      isNewVideo: true
+      isNewVideo
     }
   }
 

@@ -21,7 +21,7 @@ import {
   VideoPlaylistPrivacy,
   VideoPrivacy
 } from '@shared/models'
-import { VideoTranscodingProfilesManager } from '../transcoding/video-transcoding-profiles'
+import { VideoTranscodingProfilesManager } from '../transcoding/default-transcoding-profiles'
 import { buildPluginHelpers } from './plugin-helpers-builder'
 
 export class RegisterHelpers {

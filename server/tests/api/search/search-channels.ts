@@ -26,7 +26,7 @@ describe('Test channels search', function () {
 
     const servers = await Promise.all([
       createSingleServer(1),
-      createSingleServer(2, { transcoding: { enabled: false } })
+      createSingleServer(2)
     ])
     server = servers[0]
     remoteServer = servers[1]
@@ -34,6 +34,8 @@ describe('Test channels search', function () {
     await setAccessTokensToServers([ server, remoteServer ])
     await setDefaultChannelAvatar(server)
     await setDefaultAccountAvatar(server)
+
+    await servers[1].config.disableTranscoding()
 
     {
       await server.users.create({ username: 'user1' })

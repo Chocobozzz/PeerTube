@@ -25,11 +25,15 @@ describe('Test AP refresher', function () {
   before(async function () {
     this.timeout(60000)
 
-    servers = await createMultipleServers(2, { transcoding: { enabled: false } })
+    servers = await createMultipleServers(2)
 
     // Get the access tokens
     await setAccessTokensToServers(servers)
     await setDefaultVideoChannel(servers)
+
+    for (const server of servers) {
+      await server.config.disableTranscoding()
+    }
 
     {
       videoUUID1 = (await servers[1].videos.quickUpload({ name: 'video1' })).uuid

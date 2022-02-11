@@ -1,5 +1,5 @@
 import express from 'express'
-import { computeLowerResolutionsToTranscode } from '@server/helpers/ffprobe-utils'
+import { computeLowerResolutionsToTranscode } from '@server/helpers/ffmpeg'
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
 import { addTranscodingJob } from '@server/lib/video'
 import { HttpStatusCode, UserRight, VideoState, VideoTranscodingCreate } from '@shared/models'
@@ -29,7 +29,7 @@ async function createTranscoding (req: express.Request, res: express.Response) {
 
   const body: VideoTranscodingCreate = req.body
 
-  const { resolution: maxResolution, isPortraitMode, audioStream } = await video.getMaxQualityFileInfo()
+  const { resolution: maxResolution, isPortraitMode, audioStream } = await video.probeMaxQualityFile()
   const resolutions = computeLowerResolutionsToTranscode(maxResolution, 'vod').concat([ maxResolution ])
 
   video.state = VideoState.TO_TRANSCODE

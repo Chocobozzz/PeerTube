@@ -18,6 +18,8 @@ export class TimestampInputComponent implements ControlValueAccessor, OnInit {
   @Input() maxTimestamp: number
   @Input() timestamp: number
   @Input() disabled = false
+  @Input() inputName: string
+  @Input() disableBorder = true
 
   @Output() inputBlur = new EventEmitter()
 

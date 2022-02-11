@@ -25,7 +25,7 @@ import {
   VideoResolution,
   VideoState
 } from '@shared/models'
-import { ffprobePromise, getDurationFromVideoFile, getVideoFileFPS, getVideoFileResolution } from '../../../helpers/ffprobe-utils'
+import { ffprobePromise, getVideoStreamDuration, getVideoStreamFPS, getVideoStreamDimensionsInfo } from '../../../helpers/ffmpeg'
 import { logger } from '../../../helpers/logger'
 import { getSecureTorrentName } from '../../../helpers/utils'
 import { createTorrentAndSetInfoHash, downloadWebTorrentVideo } from '../../../helpers/webtorrent'
@@ -121,10 +121,10 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
 
     const { resolution } = await isAudioFile(tempVideoPath, probe)
       ? { resolution: VideoResolution.H_NOVIDEO }
-      : await getVideoFileResolution(tempVideoPath)
+      : await getVideoStreamDimensionsInfo(tempVideoPath)
 
-    const fps = await getVideoFileFPS(tempVideoPath, probe)
-    const duration = await getDurationFromVideoFile(tempVideoPath, probe)
+    const fps = await getVideoStreamFPS(tempVideoPath, probe)
+    const duration = await getVideoStreamDuration(tempVideoPath, probe)
 
     // Prepare video file object for creation in database
     const fileExt = getLowercaseExtension(tempVideoPath)

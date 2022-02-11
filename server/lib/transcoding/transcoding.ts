@@ -6,8 +6,15 @@ import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
 import { MStreamingPlaylistFilesVideo, MVideoFile, MVideoFullLight } from '@server/types/models'
 import { VideoResolution, VideoStorage } from '../../../shared/models/videos'
 import { VideoStreamingPlaylistType } from '../../../shared/models/videos/video-streaming-playlist.type'
-import { transcode, TranscodeOptions, TranscodeOptionsType } from '../../helpers/ffmpeg-utils'
-import { canDoQuickTranscode, getDurationFromVideoFile, getMetadataFromFile, getVideoFileFPS } from '../../helpers/ffprobe-utils'
+import {
+  canDoQuickTranscode,
+  getVideoStreamDuration,
+  buildFileMetadata,
+  getVideoStreamFPS,
+  transcodeVOD,
+  TranscodeVODOptions,
+  TranscodeVODOptionsType
+} from '../../helpers/ffmpeg'
 import { CONFIG } from '../../initializers/config'
 import { P2P_MEDIA_LOADER_PEER_VERSION } from '../../initializers/constants'
 import { VideoFileModel } from '../../models/video/video-file'
@@ -21,7 +28,7 @@ import {
   getHlsResolutionPlaylistFilename
 } from '../paths'
 import { VideoPathManager } from '../video-path-manager'
-import { VideoTranscodingProfilesManager } from './video-transcoding-profiles'
+import { VideoTranscodingProfilesManager } from './default-transcoding-profiles'
 
 /**
  *
@@ -38,13 +45,13 @@ function optimizeOriginalVideofile (video: MVideoFullLight, inputVideoFile: MVid
   return VideoPathManager.Instance.makeAvailableVideoFile(inputVideoFile.withVideoOrPlaylist(video), async videoInputPath => {
     const videoTranscodedPath = join(transcodeDirectory, video.id + '-transcoded' + newExtname)
 
-    const transcodeType: TranscodeOptionsType = await canDoQuickTranscode(videoInputPath)
+    const transcodeType: TranscodeVODOptionsType = await canDoQuickTranscode(videoInputPath)
       ? 'quick-transcode'
       : 'video'
 
     const resolution = toEven(inputVideoFile.resolution)
 
-    const transcodeOptions: TranscodeOptions = {
+    const transcodeOptions: TranscodeVODOptions = {
       type: transcodeType,
 
       inputPath: videoInputPath,
@@ -59,7 +66,7 @@ function optimizeOriginalVideofile (video: MVideoFullLight, inputVideoFile: MVid
     }
 
     // Could be very long!
-    await transcode(transcodeOptions)
+    await transcodeVOD(transcodeOptions)
 
     // Important to do this before getVideoFilename() to take in account the new filename
     inputVideoFile.extname = newExtname
@@ -121,7 +128,7 @@ function transcodeNewWebTorrentResolution (video: MVideoFullLight, resolution: V
         job
       }
 
-    await transcode(transcodeOptions)
+    await transcodeVOD(transcodeOptions)
 
     return onWebTorrentVideoFileTranscoding(video, newVideoFile, videoTranscodedPath, videoOutputPath)
   })
@@ -158,7 +165,7 @@ function mergeAudioVideofile (video: MVideoFullLight, resolution: VideoResolutio
     }
 
     try {
-      await transcode(transcodeOptions)
+      await transcodeVOD(transcodeOptions)
 
       await remove(audioInputPath)
       await remove(tmpPreviewPath)
@@ -175,7 +182,7 @@ function mergeAudioVideofile (video: MVideoFullLight, resolution: VideoResolutio
     const videoOutputPath = VideoPathManager.Instance.getFSVideoFileOutputPath(video, inputVideoFile)
     // ffmpeg generated a new video file, so update the video duration
     // See https://trac.ffmpeg.org/ticket/5456
-    video.duration = await getDurationFromVideoFile(videoTranscodedPath)
+    video.duration = await getVideoStreamDuration(videoTranscodedPath)
     await video.save()
 
     return onWebTorrentVideoFileTranscoding(video, inputVideoFile, videoTranscodedPath, videoOutputPath)
@@ -239,8 +246,8 @@ async function onWebTorrentVideoFileTranscoding (
   outputPath: string
 ) {
   const stats = await stat(transcodingPath)
-  const fps = await getVideoFileFPS(transcodingPath)
-  const metadata = await getMetadataFromFile(transcodingPath)
+  const fps = await getVideoStreamFPS(transcodingPath)
+  const metadata = await buildFileMetadata(transcodingPath)
 
   await move(transcodingPath, outputPath, { overwrite: true })
 
@@ -299,7 +306,7 @@ async function generateHlsPlaylistCommon (options: {
     job
   }
 
-  await transcode(transcodeOptions)
+  await transcodeVOD(transcodeOptions)
 
   // Create or update the playlist
   const playlist = await VideoStreamingPlaylistModel.loadOrGenerate(video)
@@ -344,8 +351,8 @@ async function generateHlsPlaylistCommon (options: {
   const stats = await stat(videoFilePath)
 
   newVideoFile.size = stats.size
-  newVideoFile.fps = await getVideoFileFPS(videoFilePath)
-  newVideoFile.metadata = await getMetadataFromFile(videoFilePath)
+  newVideoFile.fps = await getVideoStreamFPS(videoFilePath)
+  newVideoFile.metadata = await buildFileMetadata(videoFilePath)
 
   await createTorrentAndSetInfoHash(playlist, newVideoFile)
 

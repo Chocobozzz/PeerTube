@@ -152,6 +152,7 @@ const JOB_ATTEMPTS: { [id in JobType]: number } = {
   'activitypub-refresher': 1,
   'video-redundancy': 1,
   'video-live-ending': 1,
+  'video-edition': 1,
   'move-to-object-storage': 3
 }
 // Excluded keys are jobs that can be configured by admins
@@ -168,6 +169,7 @@ const JOB_CONCURRENCY: { [id in Exclude<JobType, 'video-transcoding' | 'video-im
   'activitypub-refresher': 1,
   'video-redundancy': 1,
   'video-live-ending': 10,
+  'video-edition': 1,
   'move-to-object-storage': 1
 }
 const JOB_TTL: { [id in JobType]: number } = {
@@ -178,6 +180,7 @@ const JOB_TTL: { [id in JobType]: number } = {
   'activitypub-cleaner': 1000 * 3600, // 1 hour
   'video-file-import': 1000 * 3600, // 1 hour
   'video-transcoding': 1000 * 3600 * 48, // 2 days, transcoding could be long
+  'video-edition': 1000 * 3600 * 10, // 10 hours
   'video-import': 1000 * 3600 * 2, // 2 hours
   'email': 60000 * 10, // 10 minutes
   'actor-keys': 60000 * 20, // 20 minutes
@@ -351,6 +354,10 @@ const CONSTRAINTS_FIELDS = {
   },
   COMMONS: {
     URL: { min: 5, max: 2000 } // Length
+  },
+  VIDEO_EDITOR: {
+    TASKS: { min: 1, max: 10 }, // Number of tasks
+    CUT_TIME: { min: 0 } // Value
   }
 }
 
@@ -365,6 +372,7 @@ const VIDEO_TRANSCODING_FPS: VideoTranscodingFPS = {
   MIN: 1,
   STANDARD: [ 24, 25, 30 ],
   HD_STANDARD: [ 50, 60 ],
+  AUDIO_MERGE: 25,
   AVERAGE: 30,
   MAX: 60,
   KEEP_ORIGIN_FPS_RESOLUTION_MIN: 720 // We keep the original FPS on high resolutions (720 minimum)
@@ -434,7 +442,8 @@ const VIDEO_STATES: { [ id in VideoState ]: string } = {
   [VideoState.LIVE_ENDED]: 'Livestream ended',
   [VideoState.TO_MOVE_TO_EXTERNAL_STORAGE]: 'To move to an external storage',
   [VideoState.TRANSCODING_FAILED]: 'Transcoding failed',
-  [VideoState.TO_MOVE_TO_EXTERNAL_STORAGE_FAILED]: 'External storage move failed'
+  [VideoState.TO_MOVE_TO_EXTERNAL_STORAGE_FAILED]: 'External storage move failed',
+  [VideoState.TO_EDIT]: 'To edit*'
 }
 
 const VIDEO_IMPORT_STATES: { [ id in VideoImportState ]: string } = {
@@ -855,6 +864,16 @@ const FILES_CONTENT_HASH = {
 
 // ---------------------------------------------------------------------------
 
+const VIDEO_FILTERS = {
+  WATERMARK: {
+    SIZE_RATIO: 1 / 10,
+    HORIZONTAL_MARGIN_RATIO: 1 / 20,
+    VERTICAL_MARGIN_RATIO: 1 / 20
+  }
+}
+
+// ---------------------------------------------------------------------------
+
 export {
   WEBSERVER,
   API_VERSION,
@@ -893,6 +912,7 @@ export {
   PLUGIN_GLOBAL_CSS_FILE_NAME,
   PLUGIN_GLOBAL_CSS_PATH,
   PRIVATE_RSA_KEY_SIZE,
+  VIDEO_FILTERS,
   ROUTE_CACHE_LIFETIME,
   SORTABLE_COLUMNS,
   HLS_STREAMING_PLAYLIST_DIRECTORY,

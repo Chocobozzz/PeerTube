@@ -24,7 +24,7 @@ export abstract class FormReactive {
     this.formErrors = formErrors
     this.validationMessages = validationMessages
 
-    this.form.statusChanges.subscribe(async status => {
+    this.form.statusChanges.subscribe(async () => {
       // FIXME: remove when https://github.com/angular/angular/issues/41519 is fixed
       await this.waitPendingCheck()
 

@@ -61,7 +61,7 @@ import {
   isVideoStateValid,
   isVideoSupportValid
 } from '../../helpers/custom-validators/videos'
-import { getVideoFileResolution } from '../../helpers/ffprobe-utils'
+import { getVideoStreamDimensionsInfo } from '../../helpers/ffmpeg'
 import { logger } from '../../helpers/logger'
 import { CONFIG } from '../../initializers/config'
 import { ACTIVITY_PUB, API_VERSION, CONSTRAINTS_FIELDS, LAZY_STATIC_PATHS, STATIC_PATHS, WEBSERVER } from '../../initializers/constants'
@@ -1683,7 +1683,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     return peertubeTruncate(this.description, { length: maxLength })
   }
 
-  getMaxQualityFileInfo () {
+  probeMaxQualityFile () {
     const file = this.getMaxQualityFile()
     const videoOrPlaylist = file.getVideoOrStreamingPlaylist()
 
@@ -1695,7 +1695,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
       return {
         audioStream,
 
-        ...await getVideoFileResolution(originalFilePath, probe)
+        ...await getVideoStreamDimensionsInfo(originalFilePath, probe)
       }
     })
   }

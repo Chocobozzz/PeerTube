@@ -9,7 +9,7 @@ import { AdvancedInputFilter } from '@app/shared/shared-forms'
 import { DropdownAction, Video, VideoService } from '@app/shared/shared-main'
 import { LiveStreamInformationComponent } from '@app/shared/shared-video-live'
 import { MiniatureDisplayOptions, SelectionType, VideosSelectionComponent } from '@app/shared/shared-video-miniature'
-import { VideoChannel, VideoSortField } from '@shared/models'
+import { VideoChannel, VideoSortField, VideoState } from '@shared/models'
 import { VideoChangeOwnershipComponent } from './modals/video-change-ownership.component'
 
 @Component({
@@ -204,6 +204,12 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
 
   private buildActions () {
     this.videoActions = [
+      {
+        label: $localize`Editor`,
+        linkBuilder: ({ video }) => [ '/video-editor/edit', video.uuid ],
+        isDisplayed: ({ video }) => video.state.id === VideoState.PUBLISHED,
+        iconName: 'film'
+      },
       {
         label: $localize`Display live information`,
         handler: ({ video }) => this.displayLiveInformation(video),

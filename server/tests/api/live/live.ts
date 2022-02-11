@@ -3,7 +3,7 @@
 import 'mocha'
 import * as chai from 'chai'
 import { basename, join } from 'path'
-import { ffprobePromise, getVideoStreamFromFile } from '@server/helpers/ffprobe-utils'
+import { ffprobePromise, getVideoStream } from '@server/helpers/ffmpeg'
 import { checkLiveCleanupAfterSave, checkLiveSegmentHash, checkResolutionsInMasterPlaylist, testImage } from '@server/tests/shared'
 import { wait } from '@shared/core-utils'
 import {
@@ -562,7 +562,7 @@ describe('Test live', function () {
           const segmentPath = servers[0].servers.buildDirectory(join('streaming-playlists', 'hls', video.uuid, filename))
 
           const probe = await ffprobePromise(segmentPath)
-          const videoStream = await getVideoStreamFromFile(segmentPath, probe)
+          const videoStream = await getVideoStream(segmentPath, probe)
 
           expect(probe.format.bit_rate).to.be.below(maxBitrateLimits[videoStream.height])
           expect(probe.format.bit_rate).to.be.at.least(minBitrateLimits[videoStream.height])

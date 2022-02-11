@@ -59,6 +59,9 @@ export class ConfigCommand extends AbstractCommand {
       newConfig: {
         transcoding: {
           enabled: false
+        },
+        videoEditor: {
+          enabled: false
         }
       }
     })
@@ -69,7 +72,33 @@ export class ConfigCommand extends AbstractCommand {
       newConfig: {
         transcoding: {
           enabled: true,
+
+          allowAudioFiles: true,
+          allowAdditionalExtensions: true,
+
           resolutions: ConfigCommand.getCustomConfigResolutions(true),
+
+          webtorrent: {
+            enabled: webtorrent
+          },
+          hls: {
+            enabled: hls
+          }
+        }
+      }
+    })
+  }
+
+  enableMinimumTranscoding (webtorrent = true, hls = true) {
+    return this.updateExistingSubConfig({
+      newConfig: {
+        transcoding: {
+          enabled: true,
+          resolutions: {
+            ...ConfigCommand.getCustomConfigResolutions(false),
+
+            '240p': true
+          },
 
           webtorrent: {
             enabled: webtorrent
@@ -148,7 +177,7 @@ export class ConfigCommand extends AbstractCommand {
   async updateExistingSubConfig (options: OverrideCommandOptions & {
     newConfig: DeepPartial<CustomConfig>
   }) {
-    const existing = await this.getCustomConfig(options)
+    const existing = await this.getCustomConfig({ ...options, expectedStatus: HttpStatusCode.OK_200 })
 
     return this.updateCustomConfig({ ...options, newCustomConfig: merge({}, existing, options.newConfig) })
   }
@@ -281,6 +310,9 @@ export class ConfigCommand extends AbstractCommand {
             '2160p': true
           }
         }
+      },
+      videoEditor: {
+        enabled: false
       },
       import: {
         videos: {

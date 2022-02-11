@@ -167,6 +167,10 @@ export interface ServerConfig {
     }
   }
 
+  videoEditor: {
+    enabled: boolean
+  }
+
   import: {
     videos: {
       http: {

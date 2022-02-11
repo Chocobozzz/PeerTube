@@ -143,6 +143,10 @@ export interface CustomConfig {
     }
   }
 
+  videoEditor: {
+    enabled: boolean
+  }
+
   import: {
     videos: {
       concurrency: number

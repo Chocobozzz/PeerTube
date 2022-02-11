@@ -1,0 +1,76 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+.columns {
+  display: flex;
+
+  .information {
+    width: 100%;
+    margin-left: 50px;
+
+    > div {
+      margin-bottom: 30px;
+    }
+
+    @media screen and (max-width: $small-view) {
+      display: none;
+    }
+  }
+}
+
+h1 {
+  font-size: 20px;
+}
+
+h2 {
+  font-weight: $font-bold;
+  font-size: 16px;
+  color: pvar(--mainColor);
+  background-color: pvar(--mainBackgroundColor);
+  padding: 0 5px;
+  width: fit-content;
+  margin: -8px 0 0;
+}
+
+.section {
+  $min-width: 600px;
+
+  @include padding-left(10px);
+
+  min-width: $min-width;
+
+  margin-bottom: 50px;
+  border: 1px solid $separator-border-color;
+  border-radius: 5px;
+  width: fit-content;
+
+  .form-group,
+  .description {
+    @include margin-left(5px);
+  }
+
+  .description {
+    color: pvar(--greyForegroundColor);
+    margin-top: 5px;
+    margin-bottom: 15px;
+  }
+
+  @media screen and (max-width: $min-width) {
+    min-width: none;
+  }
+}
+
+my-timestamp-input {
+  display: block;
+}
+
+my-embed {
+  display: block;
+  max-width: 500px;
+  width: 100%;
+}
+
+my-reactive-file {
+  display: block;
+  width: fit-content;
+}

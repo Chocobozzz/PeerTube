@@ -2,7 +2,7 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { getAudioStream, getVideoStreamSize } from '@server/helpers/ffprobe-utils'
+import { getAudioStream, getVideoStreamDimensionsInfo } from '@server/helpers/ffmpeg'
 import {
   cleanupTests,
   createMultipleServers,
@@ -91,9 +91,8 @@ describe('Test audio only video transcoding', function () {
       expect(audioStream['codec_name']).to.be.equal('aac')
       expect(audioStream['bit_rate']).to.be.at.most(384 * 8000)
 
-      const size = await getVideoStreamSize(path)
-      expect(size.height).to.equal(0)
-      expect(size.width).to.equal(0)
+      const size = await getVideoStreamDimensionsInfo(path)
+      expect(size).to.not.exist
     }
   })
 

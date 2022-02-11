@@ -29,7 +29,7 @@ describe('Test playlists search', function () {
 
     const servers = await Promise.all([
       createSingleServer(1),
-      createSingleServer(2, { transcoding: { enabled: false } })
+      createSingleServer(2)
     ])
     server = servers[0]
     remoteServer = servers[1]
@@ -38,6 +38,8 @@ describe('Test playlists search', function () {
     await setDefaultVideoChannel([ remoteServer, server ])
     await setDefaultChannelAvatar([ remoteServer, server ])
     await setDefaultAccountAvatar([ remoteServer, server ])
+
+    await servers[1].config.disableTranscoding()
 
     {
       const videoId = (await server.videos.upload()).uuid

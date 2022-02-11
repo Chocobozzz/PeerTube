@@ -2,8 +2,14 @@
 import { logger } from '@server/helpers/logger'
 import { getAverageBitrate, getMinLimitBitrate } from '@shared/core-utils'
 import { AvailableEncoders, EncoderOptionsBuilder, EncoderOptionsBuilderParams, VideoResolution } from '../../../shared/models/videos'
-import { buildStreamSuffix, resetSupportedEncoders } from '../../helpers/ffmpeg-utils'
-import { canDoQuickAudioTranscode, ffprobePromise, getAudioStream, getMaxAudioBitrate } from '../../helpers/ffprobe-utils'
+import {
+  buildStreamSuffix,
+  canDoQuickAudioTranscode,
+  ffprobePromise,
+  getAudioStream,
+  getMaxAudioBitrate,
+  resetSupportedEncoders
+} from '../../helpers/ffmpeg'
 
 /**
  *
@@ -15,8 +21,14 @@ import { canDoQuickAudioTranscode, ffprobePromise, getAudioStream, getMaxAudioBi
  *  * https://trac.ffmpeg.org/wiki/Limiting%20the%20output%20bitrate
  */
 
+// ---------------------------------------------------------------------------
+// Default builders
+// ---------------------------------------------------------------------------
+
 const defaultX264VODOptionsBuilder: EncoderOptionsBuilder = (options: EncoderOptionsBuilderParams) => {
   const { fps, inputRatio, inputBitrate, resolution } = options
+
+  // TODO: remove in 4.2, fps is not optional anymore
   if (!fps) return { outputOptions: [ ] }
 
   const targetBitrate = getTargetBitrate({ inputBitrate, ratio: inputRatio, fps, resolution })
@@ -45,10 +57,10 @@ const defaultX264LiveOptionsBuilder: EncoderOptionsBuilder = (options: EncoderOp
   }
 }
 
-const defaultAACOptionsBuilder: EncoderOptionsBuilder = async ({ input, streamNum }) => {
+const defaultAACOptionsBuilder: EncoderOptionsBuilder = async ({ input, streamNum, canCopyAudio }) => {
   const probe = await ffprobePromise(input)
 
-  if (await canDoQuickAudioTranscode(input, probe)) {
+  if (canCopyAudio && await canDoQuickAudioTranscode(input, probe)) {
     logger.debug('Copy audio stream %s by AAC encoder.', input)
     return { copy: true, outputOptions: [ ] }
   }
@@ -75,7 +87,10 @@ const defaultLibFDKAACVODOptionsBuilder: EncoderOptionsBuilder = ({ streamNum })
   return { outputOptions: [ buildStreamSuffix('-q:a', streamNum), '5' ] }
 }
 
-// Used to get and update available encoders
+// ---------------------------------------------------------------------------
+// Profile manager to get and change default profiles
+// ---------------------------------------------------------------------------
+
 class VideoTranscodingProfilesManager {
   private static instance: VideoTranscodingProfilesManager
 

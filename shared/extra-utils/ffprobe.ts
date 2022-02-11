@@ -17,10 +17,20 @@ function ffprobePromise (path: string) {
   })
 }
 
+// ---------------------------------------------------------------------------
+// Audio
+// ---------------------------------------------------------------------------
+
 async function isAudioFile (path: string, existingProbe?: FfprobeData) {
-  const videoStream = await getVideoStreamFromFile(path, existingProbe)
+  const videoStream = await getVideoStream(path, existingProbe)
 
   return !videoStream
+}
+
+async function hasAudioStream (path: string, existingProbe?: FfprobeData) {
+  const { audioStream } = await getAudioStream(path, existingProbe)
+
+  return !!audioStream
 }
 
 async function getAudioStream (videoPath: string, existingProbe?: FfprobeData) {
@@ -78,29 +88,26 @@ function getMaxAudioBitrate (type: 'aac' | 'mp3' | string, bitrate: number) {
   }
 }
 
-async function getVideoStreamSize (path: string, existingProbe?: FfprobeData): Promise<{ width: number, height: number }> {
-  const videoStream = await getVideoStreamFromFile(path, existingProbe)
+// ---------------------------------------------------------------------------
+// Video
+// ---------------------------------------------------------------------------
 
-  return videoStream === null
-    ? { width: 0, height: 0 }
-    : { width: videoStream.width, height: videoStream.height }
-}
-
-async function getVideoFileResolution (path: string, existingProbe?: FfprobeData) {
-  const size = await getVideoStreamSize(path, existingProbe)
+async function getVideoStreamDimensionsInfo (path: string, existingProbe?: FfprobeData) {
+  const videoStream = await getVideoStream(path, existingProbe)
+  if (!videoStream) return undefined
 
   return {
-    width: size.width,
-    height: size.height,
-    ratio: Math.max(size.height, size.width) / Math.min(size.height, size.width),
-    resolution: Math.min(size.height, size.width),
-    isPortraitMode: size.height > size.width
+    width: videoStream.width,
+    height: videoStream.height,
+    ratio: Math.max(videoStream.height, videoStream.width) / Math.min(videoStream.height, videoStream.width),
+    resolution: Math.min(videoStream.height, videoStream.width),
+    isPortraitMode: videoStream.height > videoStream.width
   }
 }
 
-async function getVideoFileFPS (path: string, existingProbe?: FfprobeData) {
-  const videoStream = await getVideoStreamFromFile(path, existingProbe)
-  if (videoStream === null) return 0
+async function getVideoStreamFPS (path: string, existingProbe?: FfprobeData) {
+  const videoStream = await getVideoStream(path, existingProbe)
+  if (!videoStream) return 0
 
   for (const key of [ 'avg_frame_rate', 'r_frame_rate' ]) {
     const valuesText: string = videoStream[key]
@@ -116,19 +123,19 @@ async function getVideoFileFPS (path: string, existingProbe?: FfprobeData) {
   return 0
 }
 
-async function getMetadataFromFile (path: string, existingProbe?: FfprobeData) {
+async function buildFileMetadata (path: string, existingProbe?: FfprobeData) {
   const metadata = existingProbe || await ffprobePromise(path)
 
   return new VideoFileMetadata(metadata)
 }
 
-async function getVideoFileBitrate (path: string, existingProbe?: FfprobeData): Promise<number> {
-  const metadata = await getMetadataFromFile(path, existingProbe)
+async function getVideoStreamBitrate (path: string, existingProbe?: FfprobeData): Promise<number> {
+  const metadata = await buildFileMetadata(path, existingProbe)
 
   let bitrate = metadata.format.bit_rate as number
   if (bitrate && !isNaN(bitrate)) return bitrate
 
-  const videoStream = await getVideoStreamFromFile(path, existingProbe)
+  const videoStream = await getVideoStream(path, existingProbe)
   if (!videoStream) return undefined
 
   bitrate = videoStream?.bit_rate
@@ -137,51 +144,30 @@ async function getVideoFileBitrate (path: string, existingProbe?: FfprobeData): 
   return undefined
 }
 
-async function getDurationFromVideoFile (path: string, existingProbe?: FfprobeData) {
-  const metadata = await getMetadataFromFile(path, existingProbe)
+async function getVideoStreamDuration (path: string, existingProbe?: FfprobeData) {
+  const metadata = await buildFileMetadata(path, existingProbe)
 
   return Math.round(metadata.format.duration)
 }
 
-async function getVideoStreamFromFile (path: string, existingProbe?: FfprobeData) {
-  const metadata = await getMetadataFromFile(path, existingProbe)
+async function getVideoStream (path: string, existingProbe?: FfprobeData) {
+  const metadata = await buildFileMetadata(path, existingProbe)
 
-  return metadata.streams.find(s => s.codec_type === 'video') || null
-}
-
-async function canDoQuickAudioTranscode (path: string, probe?: FfprobeData): Promise<boolean> {
-  const parsedAudio = await getAudioStream(path, probe)
-
-  if (!parsedAudio.audioStream) return true
-
-  if (parsedAudio.audioStream['codec_name'] !== 'aac') return false
-
-  const audioBitrate = parsedAudio.bitrate
-  if (!audioBitrate) return false
-
-  const maxAudioBitrate = getMaxAudioBitrate('aac', audioBitrate)
-  if (maxAudioBitrate !== -1 && audioBitrate > maxAudioBitrate) return false
-
-  const channelLayout = parsedAudio.audioStream['channel_layout']
-  // Causes playback issues with Chrome
-  if (!channelLayout || channelLayout === 'unknown') return false
-
-  return true
+  return metadata.streams.find(s => s.codec_type === 'video')
 }
 
 // ---------------------------------------------------------------------------
 
 export {
-  getVideoStreamSize,
-  getVideoFileResolution,
-  getMetadataFromFile,
+  getVideoStreamDimensionsInfo,
+  buildFileMetadata,
   getMaxAudioBitrate,
-  getVideoStreamFromFile,
-  getDurationFromVideoFile,
+  getVideoStream,
+  getVideoStreamDuration,
   getAudioStream,
-  getVideoFileFPS,
+  getVideoStreamFPS,
   isAudioFile,
   ffprobePromise,
-  getVideoFileBitrate,
-  canDoQuickAudioTranscode
+  getVideoStreamBitrate,
+  hasAudioStream
 }

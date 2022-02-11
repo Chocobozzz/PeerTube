@@ -1,4 +1,5 @@
 import { ContextType } from '../activitypub/context'
+import { VideoEditorTaskCut } from '../videos/editor'
 import { VideoResolution } from '../videos/file/video-resolution.enum'
 import { SendEmailOptions } from './emailer.model'
 
@@ -20,6 +21,7 @@ export type JobType =
   | 'video-live-ending'
   | 'actor-keys'
   | 'move-to-object-storage'
+  | 'video-edition'
 
 export interface Job {
   id: number
@@ -154,4 +156,41 @@ export interface DeleteResumableUploadMetaFilePayload {
 export interface MoveObjectStoragePayload {
   videoUUID: string
   isNewVideo: boolean
+}
+
+export type VideoEditorTaskCutPayload = VideoEditorTaskCut
+
+export type VideoEditorTaskIntroPayload = {
+  name: 'add-intro'
+
+  options: {
+    file: string
+  }
+}
+
+export type VideoEditorTaskOutroPayload = {
+  name: 'add-outro'
+
+  options: {
+    file: string
+  }
+}
+
+export type VideoEditorTaskWatermarkPayload = {
+  name: 'add-watermark'
+
+  options: {
+    file: string
+  }
+}
+
+export type VideoEditionTaskPayload =
+  VideoEditorTaskCutPayload |
+  VideoEditorTaskIntroPayload |
+  VideoEditorTaskOutroPayload |
+  VideoEditorTaskWatermarkPayload
+
+export interface VideoEditionPayload {
+  videoUUID: string
+  tasks: VideoEditionTaskPayload[]
 }

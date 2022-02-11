@@ -433,6 +433,10 @@ live:
       1440p: false
       2160p: false
 
+video_editor:
+  # Enable video edition by users (cut, add intro/outro, add watermark etc)
+  enabled: false
+
 import:
   # Add ability for your users to import remote videos (from YouTube, torrent...)
   videos:

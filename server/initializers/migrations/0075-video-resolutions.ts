@@ -1,8 +1,8 @@
-import * as Sequelize from 'sequelize'
-import { join } from 'path'
-import { CONFIG } from '../../initializers/config'
-import { getVideoFileResolution } from '../../helpers/ffprobe-utils'
 import { readdir, rename } from 'fs-extra'
+import { join } from 'path'
+import * as Sequelize from 'sequelize'
+import { getVideoStreamDimensionsInfo } from '../../helpers/ffmpeg/ffprobe-utils'
+import { CONFIG } from '../../initializers/config'
 
 function up (utils: {
   transaction: Sequelize.Transaction
@@ -26,7 +26,7 @@ function up (utils: {
         const uuid = matches[1]
         const ext = matches[2]
 
-        const p = getVideoFileResolution(join(videoFileDir, videoFile))
+        const p = getVideoStreamDimensionsInfo(join(videoFileDir, videoFile))
           .then(async ({ resolution }) => {
             const oldTorrentName = uuid + '.torrent'
             const newTorrentName = uuid + '-' + resolution + '.torrent'

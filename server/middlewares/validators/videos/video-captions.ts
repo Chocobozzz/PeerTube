@@ -1,6 +1,6 @@
 import express from 'express'
 import { body, param } from 'express-validator'
-import { HttpStatusCode, UserRight } from '@shared/models'
+import { UserRight } from '@shared/models'
 import { isVideoCaptionFile, isVideoCaptionLanguageValid } from '../../../helpers/custom-validators/video-captions'
 import { cleanUpReqFiles } from '../../../helpers/express-utils'
 import { logger } from '../../../helpers/logger'
@@ -74,13 +74,7 @@ const listVideoCaptionsValidator = [
     if (!await doesVideoExist(req.params.videoId, res, 'only-video')) return
 
     const video = res.locals.onlyVideo
-
-    if (!await checkCanSeeVideoIfPrivate(req, res, video)) {
-      return res.fail({
-        status: HttpStatusCode.FORBIDDEN_403,
-        message: 'Cannot list captions of private/internal/blocklisted video'
-      })
-    }
+    if (!await checkCanSeeVideoIfPrivate(req, res, video)) return
 
     return next()
   }

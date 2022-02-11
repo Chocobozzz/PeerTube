@@ -164,3 +164,6 @@ views:
 
     local_buffer_update_interval: '5 seconds'
     ip_view_expiration: '1 second'
+
+video_editor:
+  enabled: true

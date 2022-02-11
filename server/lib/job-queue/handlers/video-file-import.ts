@@ -1,18 +1,18 @@
 import { Job } from 'bull'
 import { copy, stat } from 'fs-extra'
-import { getLowercaseExtension } from '@shared/core-utils'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
 import { CONFIG } from '@server/initializers/config'
 import { federateVideoIfNeeded } from '@server/lib/activitypub/videos'
 import { generateWebTorrentVideoFilename } from '@server/lib/paths'
 import { addMoveToObjectStorageJob } from '@server/lib/video'
 import { VideoPathManager } from '@server/lib/video-path-manager'
+import { VideoModel } from '@server/models/video/video'
+import { VideoFileModel } from '@server/models/video/video-file'
 import { MVideoFullLight } from '@server/types/models'
+import { getLowercaseExtension } from '@shared/core-utils'
 import { VideoFileImportPayload, VideoStorage } from '@shared/models'
-import { getVideoFileFPS, getVideoFileResolution } from '../../../helpers/ffprobe-utils'
+import { getVideoStreamFPS, getVideoStreamDimensionsInfo } from '../../../helpers/ffmpeg'
 import { logger } from '../../../helpers/logger'
-import { VideoModel } from '../../../models/video/video'
-import { VideoFileModel } from '../../../models/video/video-file'
 
 async function processVideoFileImport (job: Job) {
   const payload = job.data as VideoFileImportPayload
@@ -45,9 +45,9 @@ export {
 // ---------------------------------------------------------------------------
 
 async function updateVideoFile (video: MVideoFullLight, inputFilePath: string) {
-  const { resolution } = await getVideoFileResolution(inputFilePath)
+  const { resolution } = await getVideoStreamDimensionsInfo(inputFilePath)
   const { size } = await stat(inputFilePath)
-  const fps = await getVideoFileFPS(inputFilePath)
+  const fps = await getVideoStreamFPS(inputFilePath)
 
   const fileExt = getLowercaseExtension(inputFilePath)
 

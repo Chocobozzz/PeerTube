@@ -1,0 +1,88 @@
+<div class="margin-content">
+  <h1 class="title-page title-page-single" i18n>Edit {{ video.name }}</h1>
+
+  <div class="columns">
+    <form role="form" [formGroup]="form">
+
+      <div class="section cut" formGroupName="cut">
+        <h2 i18n>CUT VIDEO</h2>
+
+        <div i18n class="description">Set a new start/end.</div>
+
+        <div class="form-group">
+          <label i18n for="cutStart">New start</label>
+          <my-timestamp-input inputName="cutStart" [disableBorder]="false" [maxTimestamp]="video.duration" formControlName="start"></my-timestamp-input>
+        </div>
+
+        <div class="form-group">
+          <label i18n for="cutEnd">New end</label>
+          <my-timestamp-input inputName="cutEnd" [disableBorder]="false" [maxTimestamp]="video.duration" formControlName="end"></my-timestamp-input>
+        </div>
+      </div>
+
+      <div class="section" formGroupName="add-intro">
+        <h2 i18n>ADD INTRO</h2>
+
+        <div i18n class="description">Concatenate a file at the beginning of the video.</div>
+
+        <div class="form-group">
+          <my-reactive-file
+            formControlName="file" inputName="addIntroFile" i18n-inputLabel inputLabel="Select the intro video file"
+            [extensions]="videoExtensions" [displayFilename]="true"
+            [ngbTooltip]="getIntroOutroTooltip()"
+          ></my-reactive-file>
+        </div>
+      </div>
+
+      <div class="section" formGroupName="add-outro">
+        <h2 i18n>ADD OUTRO</h2>
+
+        <div i18n class="description">Concatenate a file at the end of the video.</div>
+
+        <div class="form-group">
+          <my-reactive-file
+            formControlName="file" inputName="addOutroFile" i18n-inputLabel inputLabel="Select the outro video file"
+            [extensions]="videoExtensions" [displayFilename]="true"
+            [ngbTooltip]="getIntroOutroTooltip()"
+          ></my-reactive-file>
+        </div>
+      </div>
+
+      <div class="section" formGroupName="add-watermark">
+        <h2 i18n>ADD WATERMARK</h2>
+
+        <div i18n class="description">Add a watermark image to the video.</div>
+
+        <div class="form-group">
+          <my-reactive-file
+            formControlName="file" inputName="addWatermarkFile" i18n-inputLabel inputLabel="Select watermark image file"
+            [extensions]="imageExtensions" [displayFilename]="true"
+            [ngbTooltip]="getWatermarkTooltip()"
+          ></my-reactive-file>
+        </div>
+      </div>
+
+      <my-button
+        className="orange-button" i18n-label label="Run video edition" icon="circle-tick"
+        (click)="runEdition()" (keydown.enter)="runEdition()"
+        [disabled]="!form.valid || isRunningEdition || noEdition()"
+      ></my-button>
+    </form>
+
+
+    <div class="information">
+      <div>
+        <label i18n>Video before edition</label>
+        <my-embed [video]="video"></my-embed>
+      </div>
+
+      <div *ngIf="!noEdition()">
+        <label i18n>Edition tasks:</label>
+
+        <ol>
+          <li *ngFor="let task of getTasksSummary()">{{ task }}</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>

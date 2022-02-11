@@ -40,7 +40,7 @@ import {
   MVideoRedundancyVideo,
   MVideoShareActor,
   MVideoThumbnail
-} from '../../types/models'
+} from './models'
 import { Writable } from 'stream'
 
 declare module 'express' {
@@ -60,6 +60,7 @@ declare module 'express' {
   export type UploadFileForCheck = {
     originalname: string
     mimetype: string
+    size: number
   }
 
   export type UploadFilesForCheck = {

@@ -230,13 +230,7 @@ describe('Test stats (excluding redundancy)', function () {
   it('Should have the correct AP stats', async function () {
     this.timeout(60000)
 
-    await servers[0].config.updateCustomSubConfig({
-      newConfig: {
-        transcoding: {
-          enabled: false
-        }
-      }
-    })
+    await servers[0].config.disableTranscoding()
 
     const first = await servers[1].stats.get()
 

@@ -91,6 +91,16 @@ async function downloadWebTorrentVideo (target: { uri: string, torrentName?: str
 }
 
 function createTorrentAndSetInfoHash (videoOrPlaylist: MVideo | MStreamingPlaylistVideo, videoFile: MVideoFile) {
+  return VideoPathManager.Instance.makeAvailableVideoFile(videoFile.withVideoOrPlaylist(videoOrPlaylist), videoPath => {
+    return createTorrentAndSetInfoHashFromPath(videoOrPlaylist, videoFile, videoPath)
+  })
+}
+
+async function createTorrentAndSetInfoHashFromPath (
+  videoOrPlaylist: MVideo | MStreamingPlaylistVideo,
+  videoFile: MVideoFile,
+  filePath: string
+) {
   const video = extractVideo(videoOrPlaylist)
 
   const options = {
@@ -101,24 +111,22 @@ function createTorrentAndSetInfoHash (videoOrPlaylist: MVideo | MStreamingPlayli
     urlList: buildUrlList(video, videoFile)
   }
 
-  return VideoPathManager.Instance.makeAvailableVideoFile(videoFile.withVideoOrPlaylist(videoOrPlaylist), async videoPath => {
-    const torrentContent = await createTorrentPromise(videoPath, options)
+  const torrentContent = await createTorrentPromise(filePath, options)
 
-    const torrentFilename = generateTorrentFileName(videoOrPlaylist, videoFile.resolution)
-    const torrentPath = join(CONFIG.STORAGE.TORRENTS_DIR, torrentFilename)
-    logger.info('Creating torrent %s.', torrentPath)
+  const torrentFilename = generateTorrentFileName(videoOrPlaylist, videoFile.resolution)
+  const torrentPath = join(CONFIG.STORAGE.TORRENTS_DIR, torrentFilename)
+  logger.info('Creating torrent %s.', torrentPath)
 
-    await writeFile(torrentPath, torrentContent)
+  await writeFile(torrentPath, torrentContent)
 
-    // Remove old torrent file if it existed
-    if (videoFile.hasTorrent()) {
-      await remove(join(CONFIG.STORAGE.TORRENTS_DIR, videoFile.torrentFilename))
-    }
+  // Remove old torrent file if it existed
+  if (videoFile.hasTorrent()) {
+    await remove(join(CONFIG.STORAGE.TORRENTS_DIR, videoFile.torrentFilename))
+  }
 
-    const parsedTorrent = parseTorrent(torrentContent)
-    videoFile.infoHash = parsedTorrent.infoHash
-    videoFile.torrentFilename = torrentFilename
-  })
+  const parsedTorrent = parseTorrent(torrentContent)
+  videoFile.infoHash = parsedTorrent.infoHash
+  videoFile.torrentFilename = torrentFilename
 }
 
 async function updateTorrentMetadata (videoOrPlaylist: MVideo | MStreamingPlaylistVideo, videoFile: MVideoFile) {
@@ -177,7 +185,10 @@ function generateMagnetUri (
 export {
   createTorrentPromise,
   updateTorrentMetadata,
+
   createTorrentAndSetInfoHash,
+  createTorrentAndSetInfoHashFromPath,
+
   generateMagnetUri,
   downloadWebTorrentVideo
 }

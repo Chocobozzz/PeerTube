@@ -143,6 +143,12 @@ const routes: Routes = [
     canActivateChild: [ MetaGuard ]
   },
 
+  {
+    path: 'video-editor',
+    loadChildren: () => import('./+video-editor/video-editor.module').then(m => m.VideoEditorModule),
+    canActivateChild: [ MetaGuard ]
+  },
+
   // Matches /@:actorName
   {
     matcher: (url): UrlMatchResult => {

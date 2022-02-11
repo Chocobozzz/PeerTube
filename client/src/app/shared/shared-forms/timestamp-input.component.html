@@ -1,4 +1,5 @@
 <p-inputMask
   [disabled]="disabled" [(ngModel)]="timestampString" (onBlur)="onBlur()"
-  mask="9:99:99" slotChar="0" (ngModelChange)="onModelChange()"
+  [ngClass]="{ 'border-disabled': disableBorder }"
+  mask="9:99:99" slotChar="0" (ngModelChange)="onModelChange()" [inputId]="inputName"
 ></p-inputMask>
