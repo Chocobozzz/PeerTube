@@ -1594,7 +1594,7 @@
       </trans-unit>
       <trans-unit id="6307374733149824815" datatype="html">
         <source>powered by PeerTube - CopyLeft 2015-2021</source>
-        <target state="translated">powered by PeerTube - CopyLeft 2015-2021</target>
+        <target state="translated">powered by PeerTube - CopyLeft 2015-2022</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">151</context></context-group>
       </trans-unit>
       <trans-unit id="7911416166208830577" datatype="html">
