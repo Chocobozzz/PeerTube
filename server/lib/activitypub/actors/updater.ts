@@ -1,6 +1,6 @@
 import { resetSequelizeInstance, runInReadCommittedTransaction } from '@server/helpers/database-utils'
 import { logger } from '@server/helpers/logger'
-import { generateAvatarMini } from '@server/lib/local-actor'
+import { generateSmallerAvatar } from '@server/lib/local-actor'
 import { AccountModel } from '@server/models/account/account'
 import { VideoChannelModel } from '@server/models/video/video-channel'
 import { MAccount, MActor, MActorFull, MChannel } from '@server/types/models'
@@ -30,9 +30,8 @@ export class APActorUpdater {
   }
 
   async update () {
-    const avatarInfo = getImageInfoFromObject(this.actorObject, ActorImageType.AVATAR)
-    const avatarMiniatureInfo = getImageInfoFromObject(this.actorObject, ActorImageType.AVATAR_MINIATURE)
-    const bannerInfo = getImageInfoFromObject(this.actorObject, ActorImageType.BANNER)
+    const avatarsInfo = getImageInfoFromObject(this.actorObject, ActorImageType.AVATAR)
+    const bannersInfo = getImageInfoFromObject(this.actorObject, ActorImageType.BANNER)
 
     try {
       await this.updateActorInstance(this.actor, this.actorObject)
@@ -49,14 +48,12 @@ export class APActorUpdater {
       }
 
       await runInReadCommittedTransaction(async t => {
-        await updateActorImageInstance(this.actor, ActorImageType.AVATAR, avatarInfo, t)
-        await updateActorImageInstance(this.actor, ActorImageType.BANNER, bannerInfo, t)
+        await updateActorImageInstance(this.actor, ActorImageType.BANNER, bannersInfo, t)
 
-        if (Array.isArray(this.actorObject.icon)) {
-          await updateActorImageInstance(this.actor, ActorImageType.AVATAR_MINIATURE, avatarMiniatureInfo, t)
-        } else if (this.actor.Avatar && this.actorObject.icon.url !== this.actor.Avatar.fileUrl) {
-          await generateAvatarMini(this.actor) // Backward compatibility for version < 4.1
+        if (Array.isArray(this.actorObject.icon) === false && this.actor.Avatars.length > 0) {
+          await generateSmallerAvatar(this.actor, null, t) // Backward compatibility for version < 4.1
         }
+        await updateActorImageInstance(this.actor, ActorImageType.AVATAR, avatarsInfo, t)
       })
 
       await runInReadCommittedTransaction(async t => {

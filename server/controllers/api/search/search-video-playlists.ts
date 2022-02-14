@@ -58,9 +58,9 @@ function searchVideoPlaylists (req: express.Request, res: express.Response) {
   return searchVideoPlaylistsDB(query, res)
 }
 
-const normalizeSearchIndexResult = result => ({
-  ...result,
-  data: result.data.map(({
+const normalizeSearchIndexResult = ({ body }: { body: ResultList<any> }): ResultList<VideoPlaylist> => ({
+  ...body,
+  data: body.data.map(({
     ownerAccount: { avatar: accountAvatar, ...ownerAccount },
     videoChannel: { avatar: channelAvatar, ...videoChannel },
     ...data
@@ -68,11 +68,11 @@ const normalizeSearchIndexResult = result => ({
     ...data,
     ownerAccount: {
       ...ownerAccount,
-      avatarMiniature: ownerAccount.avatarMiniature || accountAvatar
+      avatars: ownerAccount.avatars || [ accountAvatar ]
     },
     videoChannel: {
       ...videoChannel,
-      avatarMiniature: videoChannel.avatarMiniature || channelAvatar
+      avatars: videoChannel.avatars || [ channelAvatar ]
     }
   }))
 })
@@ -87,9 +87,11 @@ async function searchVideoPlaylistsIndex (query: VideoPlaylistsSearchQueryAfterS
   try {
     logger.debug('Doing video playlists search index request on %s.', url, { body })
 
-    const { body: searchIndexResult } = await doJSONRequest<ResultList<VideoPlaylist>>(url, { method: 'POST', json: body })
+    const searchIndexResult = normalizeSearchIndexResult(
+      await doJSONRequest<ResultList<any>>(url, { method: 'POST', json: body })
+    )
     const jsonResult = await Hooks.wrapObject(
-      normalizeSearchIndexResult(searchIndexResult),
+      searchIndexResult,
       'filter:api.search.video-playlists.index.list.result'
     )
 

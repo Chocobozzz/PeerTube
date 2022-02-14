@@ -84,7 +84,7 @@ export class Video implements VideoServerModel {
     displayName: string
     url: string
     host: string
-    avatar?: ActorImage
+    avatars: ActorImage[]
   }
 
   channel: {
@@ -93,7 +93,7 @@ export class Video implements VideoServerModel {
     displayName: string
     url: string
     host: string
-    avatar?: ActorImage
+    avatars: ActorImage[]
   }
 
   userHistory?: {

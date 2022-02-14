@@ -23,7 +23,7 @@ function listUserChannels (authService: AuthService) {
             id: c.id,
             label: c.displayName,
             support: c.support,
-            avatarPath: c.avatar?.path
+            avatarPath: c.avatars.sort((a, b) => a.width - b.width)[0]?.path
           }) as SelectChannelItem)
       })
     )

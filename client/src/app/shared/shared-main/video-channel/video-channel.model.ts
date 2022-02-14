@@ -12,7 +12,7 @@ export class VideoChannel extends Actor implements ServerVideoChannel {
   nameWithHost: string
   nameWithHostForced: string
 
-  banner: ActorImage
+  banners: ActorImage[]
   bannerUrl: string
 
   updatedAt: Date | string
@@ -24,28 +24,28 @@ export class VideoChannel extends Actor implements ServerVideoChannel {
 
   viewsPerDay?: ViewsPerDate[]
 
-  static GET_ACTOR_AVATAR_URL (actor: { avatar?: { url?: string, path: string } }) {
-    return Actor.GET_ACTOR_AVATAR_URL(actor)
+  static GET_ACTOR_AVATAR_URL (actor: { avatars: { width: number, url?: string, path: string }[] }, size: number) {
+    return Actor.GET_ACTOR_AVATAR_URL(actor, size)
   }
 
   static GET_ACTOR_BANNER_URL (channel: ServerVideoChannel) {
-    if (channel?.banner?.url) return channel.banner.url
+    if (channel?.banners[0]?.url) return channel.banners[0].url
 
-    if (channel?.banner) {
+    if (channel?.banners.length > 0) {
       const absoluteAPIUrl = getAbsoluteAPIUrl()
 
-      return absoluteAPIUrl + channel.banner.path
+      return absoluteAPIUrl + channel.banners[0].path
     }
 
     return ''
   }
 
-  static GET_DEFAULT_AVATAR_URL () {
-    return `${window.location.origin}/client/assets/images/default-avatar-video-channel.png`
-  }
+  static GET_DEFAULT_AVATAR_URL (size: number) {
+    if (size <= 48) {
+      return `${window.location.origin}/client/assets/images/default-avatar-video-channel-48x48.png`
+    }
 
-  static GET_DEFAULT_AVATAR_MINIATURE_URL () {
-    return `${window.location.origin}/client/assets/images/default-avatar-video-channel-48x48.png`
+    return `${window.location.origin}/client/assets/images/default-avatar-video-channel.png`
   }
 
   constructor (hash: Partial<ServerVideoChannel>) {
@@ -55,7 +55,7 @@ export class VideoChannel extends Actor implements ServerVideoChannel {
     this.description = hash.description
     this.support = hash.support
 
-    this.banner = hash.banner
+    this.banners = hash.banners
 
     this.isLocal = hash.isLocal
 
@@ -78,24 +78,24 @@ export class VideoChannel extends Actor implements ServerVideoChannel {
     this.updateComputedAttributes()
   }
 
-  updateAvatar (newAvatar: ActorImage) {
-    this.avatar = newAvatar
+  updateAvatar (newAvatars: ActorImage[]) {
+    this.avatars = newAvatars
 
     this.updateComputedAttributes()
   }
 
   resetAvatar () {
-    this.updateAvatar(null)
+    this.updateAvatar([])
   }
 
-  updateBanner (newBanner: ActorImage) {
-    this.banner = newBanner
+  updateBanner (newBanners: ActorImage[]) {
+    this.banners = newBanners
 
     this.updateComputedAttributes()
   }
 
   resetBanner () {
-    this.updateBanner(null)
+    this.updateBanner([])
   }
 
   updateComputedAttributes () {

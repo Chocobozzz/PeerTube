@@ -36,7 +36,7 @@ function buildActorWithAvatarInclude () {
     include: [
       {
         attributes: [ 'filename' ],
-        as: 'AvatarMini',
+        as: 'Avatars',
         model: ActorImageModel.unscoped(),
         required: false
       },
@@ -175,7 +175,7 @@ function buildAccountInclude (required: boolean, withActor = false) {
               },
               {
                 attributes: [ 'filename' ],
-                as: 'AvatarMini',
+                as: 'Avatars',
                 model: ActorImageModel.unscoped(),
                 required: false
               },
@@ -570,9 +570,12 @@ export class UserNotificationModel extends Model<Partial<AttributesOnly<UserNoti
           id: this.ActorFollow.ActorFollower.Account.id,
           displayName: this.ActorFollow.ActorFollower.Account.getDisplayName(),
           name: this.ActorFollow.ActorFollower.preferredUsername,
-          avatarMiniature: this.ActorFollow.ActorFollower.AvatarMini
-            ? { path: this.ActorFollow.ActorFollower.AvatarMini.getStaticPath() }
-            : undefined,
+          avatars: this.ActorFollow.ActorFollower.Avatars.map(a => ({
+            createdAt: a.createdAt.toISOString(),
+            path: a.getStaticPath(),
+            updatedAt: a.updatedAt.toISOString(),
+            width: a.width
+          })),
           host: this.ActorFollow.ActorFollower.getHost()
         },
         following: {
@@ -656,16 +659,17 @@ export class UserNotificationModel extends Model<Partial<AttributesOnly<UserNoti
     this: UserNotificationModelForApi,
     accountOrChannel: UserNotificationIncludes.AccountIncludeActor | UserNotificationIncludes.VideoChannelIncludeActor
   ) {
-    const avatarMiniature = accountOrChannel.Actor.AvatarMini
-      ? { path: accountOrChannel.Actor.AvatarMini.getStaticPath() }
-      : undefined
-
     return {
       id: accountOrChannel.id,
       displayName: accountOrChannel.getDisplayName(),
       name: accountOrChannel.Actor.preferredUsername,
       host: accountOrChannel.Actor.getHost(),
-      avatarMiniature
+      avatars: accountOrChannel.Actor.Avatars.map(a => ({
+        width: a.width,
+        path: a.getStaticPath(),
+        updatedAt: a.updatedAt.toISOString(),
+        createdAt: a.createdAt.toISOString()
+      }))
     }
   }
 }

@@ -39,10 +39,9 @@ function buildActorInstance (type: ActivityPubActorType, url: string, preferredU
 async function updateLocalActorImagesFile (
   accountOrChannel: MAccountDefault | MChannelDefault,
   imagePhysicalFile: Express.Multer.File,
-  types: ActorImageType[]
+  type: ActorImageType
 ) {
-  const results = await Promise.all(types.map(async type => {
-    const imageSize = ACTOR_IMAGES_SIZE[type]
+  const images = await Promise.all(ACTOR_IMAGES_SIZE[type].map(async imageSize => {
     const extension = getLowercaseExtension(imagePhysicalFile.filename)
 
     const imageName = buildUUID() + extension
@@ -58,28 +57,23 @@ async function updateLocalActorImagesFile (
 
   await remove(imagePhysicalFile.path)
 
-  return retryTransactionWrapper(() => sequelizeTypescript.transaction(async t =>
-    Promise.all(results.map(async ({ imageName, imageSize, type }) => {
-      const actorImageInfo = {
-        name: imageName,
-        fileUrl: null,
-        height: imageSize.height,
-        width: imageSize.width,
-        onDisk: true
-      }
-
-      const updatedActor = await updateActorImageInstance(accountOrChannel.Actor, type, actorImageInfo, t)
-      await updatedActor.save({ transaction: t })
-
-      await sendUpdateActor(accountOrChannel, t)
-
-      return type === ActorImageType.AVATAR
-        ? updatedActor.Avatar
-        : type === ActorImageType.AVATAR_MINIATURE
-          ? updatedActor.AvatarMini
-          : updatedActor.Banner
+  return retryTransactionWrapper(() => sequelizeTypescript.transaction(async t => {
+    const actorImagesInfo = images.map(({ imageName, imageSize, type }) => ({
+      name: imageName,
+      fileUrl: null,
+      height: imageSize.height,
+      width: imageSize.width,
+      onDisk: true
     }))
-  ))
+    const updatedActor = await updateActorImageInstance(accountOrChannel.Actor, type, actorImagesInfo, t)
+    await updatedActor.save({ transaction: t })
+
+    await sendUpdateActor(accountOrChannel, t)
+
+    return type === ActorImageType.AVATAR
+      ? updatedActor.Avatars
+      : updatedActor.Banners
+  }))
 }
 
 async function deleteLocalActorImageFile (accountOrChannel: MAccountDefault | MChannelDefault, type: ActorImageType) {
@@ -90,7 +84,7 @@ async function deleteLocalActorImageFile (accountOrChannel: MAccountDefault | MC
 
       await sendUpdateActor(accountOrChannel, t)
 
-      return updatedActor.Avatar
+      return updatedActor.Avatars
     })
   })
 }
@@ -98,11 +92,12 @@ async function deleteLocalActorImageFile (accountOrChannel: MAccountDefault | MC
 type DownloadImageQueueTask = { fileUrl: string, filename: string, type: ActorImageType }
 
 const downloadImageQueue = queue<DownloadImageQueueTask, Error>((task, cb) => {
-  const size = ACTOR_IMAGES_SIZE[task.type]
+  const sizes = ACTOR_IMAGES_SIZE[task.type]
 
-  downloadImage(task.fileUrl, CONFIG.STORAGE.ACTOR_IMAGES, task.filename, size)
+  Promise.all(sizes.map(size => downloadImage(task.fileUrl, CONFIG.STORAGE.ACTOR_IMAGES, task.filename, size)))
     .then(() => cb())
     .catch(err => cb(err))
+
 }, QUEUE_CONCURRENCY.ACTOR_PROCESS_IMAGE)
 
 function pushActorImageProcessInQueue (task: DownloadImageQueueTask) {
@@ -118,24 +113,27 @@ function pushActorImageProcessInQueue (task: DownloadImageQueueTask) {
 // Unsafe so could returns paths that does not exist anymore
 const actorImagePathUnsafeCache = new LRUCache<string, string>({ max: LRU_CACHE.ACTOR_IMAGE_STATIC.MAX_SIZE })
 
-async function generateAvatarMini
+async function generateSmallerAvatar
 (Actor: MActorDefault, afterCb?: (t: Transaction, updateActor: MActorImages) => Promise<any>, transaction?: Transaction) {
-  if (Actor.Avatar.onDisk === false) {
+  const bigAvatar = Actor.Avatars[0]
+
+  if (bigAvatar.onDisk === false) {
     try {
-      await pushActorImageProcessInQueue({ filename: Actor.Avatar.filename, fileUrl: Actor.Avatar.fileUrl, type: Actor.Avatar.type })
+      await pushActorImageProcessInQueue({ filename: bigAvatar.filename, fileUrl: bigAvatar.fileUrl, type: bigAvatar.type })
     } catch (err) {
-      logger.warn('Cannot process remote actor image %s.', Actor.Avatar.fileUrl, { err })
+      logger.warn('Cannot process remote actor image %s.', bigAvatar.fileUrl, { err })
 
       throw err
     }
 
-    Actor.Avatar.onDisk = true
-    Actor.Avatar.save()
+    bigAvatar.onDisk = true
+    bigAvatar.save()
       .catch(err => logger.error('Cannot save new actor image disk state.', { err }))
   }
 
-  const imageSize = ACTOR_IMAGES_SIZE[ActorImageType.AVATAR_MINIATURE]
-  const sourceFilename = Actor.Avatar.filename
+  const smallestAvatarWidth = Math.min(...ACTOR_IMAGES_SIZE[ActorImageType.AVATAR].map(({ width }) => width))
+  const imageSize = ACTOR_IMAGES_SIZE[ActorImageType.AVATAR].find(({ width }) => width === smallestAvatarWidth)
+  const sourceFilename = bigAvatar.filename
   const extension = getLowercaseExtension(sourceFilename)
 
   const imageName = buildUUID() + extension
@@ -153,7 +151,7 @@ async function generateAvatarMini
         onDisk: true
       }
 
-      const updatedActor = await updateActorImageInstance(Actor, ActorImageType.AVATAR_MINIATURE, actorImageInfo, t)
+      const updatedActor = await updateActorImageInstance(Actor, ActorImageType.AVATAR, [ actorImageInfo ], t)
 
       if (!transaction) {
         await updatedActor.save({ transaction: t })
@@ -178,5 +176,5 @@ export {
   deleteLocalActorImageFile,
   pushActorImageProcessInQueue,
   buildActorInstance,
-  generateAvatarMini
+  generateSmallerAvatar
 }

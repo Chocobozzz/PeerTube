@@ -45,12 +45,12 @@ export interface ActorInfo {
   displayName: string
   name: string
   host: string
-  avatar?: {
+  avatars: {
+    createdAt: string
+    updatedAt: string
+    width: number
     path: string
-  }
-  avatarMiniature?: {
-    path: string
-  }
+  }[]
 }
 
 export interface UserNotification {

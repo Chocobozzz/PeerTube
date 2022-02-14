@@ -230,7 +230,7 @@ export type ForAPIOptions = {
               },
               {
                 model: ActorImageModel.unscoped(),
-                as: 'AvatarMini',
+                as: 'Avatars',
                 required: false
               }
             ]
@@ -253,7 +253,7 @@ export type ForAPIOptions = {
                   },
                   {
                     model: ActorImageModel.unscoped(),
-                    as: 'AvatarMini',
+                    as: 'Avatars',
                     required: false
                   }
                 ]

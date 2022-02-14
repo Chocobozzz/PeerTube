@@ -186,11 +186,11 @@ async function updateVideoChannelBanner (req: express.Request, res: express.Resp
   const videoChannel = res.locals.videoChannel
   const oldVideoChannelAuditKeys = new VideoChannelAuditView(videoChannel.toFormattedJSON())
 
-  const [ banner ] = await updateLocalActorImageFile(videoChannel, bannerPhysicalFile, [ ActorImageType.BANNER ])
+  const banners = await updateLocalActorImageFile(videoChannel, bannerPhysicalFile, ActorImageType.BANNER)
 
   auditLogger.update(getAuditIdFromRes(res), new VideoChannelAuditView(videoChannel.toFormattedJSON()), oldVideoChannelAuditKeys)
 
-  return res.json({ banner: banner.toFormattedJSON() })
+  return res.json({ banners: banners.map(b => b.toFormattedJSON()) })
 }
 
 async function updateVideoChannelAvatar (req: express.Request, res: express.Response) {
@@ -198,23 +198,22 @@ async function updateVideoChannelAvatar (req: express.Request, res: express.Resp
   const videoChannel = res.locals.videoChannel
   const oldVideoChannelAuditKeys = new VideoChannelAuditView(videoChannel.toFormattedJSON())
 
-  const [ avatar, avatarMiniature ] = await updateLocalActorImageFile(
+  const avatars = await updateLocalActorImageFile(
     videoChannel, avatarPhysicalFile,
-    [ ActorImageType.AVATAR, ActorImageType.AVATAR_MINIATURE ]
+    ActorImageType.AVATAR
   )
 
   auditLogger.update(getAuditIdFromRes(res), new VideoChannelAuditView(videoChannel.toFormattedJSON()), oldVideoChannelAuditKeys)
 
-  return res.json({ avatar: avatar.toFormattedJSON(), avatarMiniature: avatarMiniature.toFormattedJSON })
+  return res.json({ avatars: avatars.map(a => a.toFormattedJSON()) })
 }
 
 async function deleteVideoChannelAvatar (req: express.Request, res: express.Response) {
   const videoChannel = res.locals.videoChannel
 
   await deleteLocalActorImageFile(videoChannel, ActorImageType.AVATAR)
-  await deleteLocalActorImageFile(videoChannel, ActorImageType.AVATAR_MINIATURE)
 
-  return res.status(HttpStatusCode.NO_CONTENT_204).end()
+  return res.json({ avatars: [] })
 }
 
 async function deleteVideoChannelBanner (req: express.Request, res: express.Response) {
@@ -222,7 +221,7 @@ async function deleteVideoChannelBanner (req: express.Request, res: express.Resp
 
   await deleteLocalActorImageFile(videoChannel, ActorImageType.BANNER)
 
-  return res.status(HttpStatusCode.NO_CONTENT_204).end()
+  return res.json({ banners: [] })
 }
 
 async function addVideoChannel (req: express.Request, res: express.Response) {

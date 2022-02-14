@@ -75,7 +75,7 @@ export type SummaryOptions = {
 
     const queryInclude: Includeable[] = [
       {
-        attributes: [ 'id', 'preferredUsername', 'url', 'serverId', 'avatarMiniatureId' ],
+        attributes: [ 'id', 'preferredUsername', 'url', 'serverId' ],
         model: ActorModel.unscoped(),
         required: options.actorRequired ?? true,
         where: options.whereActor,
@@ -84,7 +84,7 @@ export type SummaryOptions = {
 
           {
             model: ActorImageModel.unscoped(),
-            as: 'AvatarMini',
+            as: 'Avatars',
             required: false
           }
         ]
@@ -428,7 +428,7 @@ export class AccountModel extends Model<Partial<AttributesOnly<AccountModel>>> {
       displayName: this.getDisplayName(),
       url: actor.url,
       host: actor.host,
-      avatarMiniature: actor.avatarMiniature
+      avatars: actor.avatars
     }
   }
 

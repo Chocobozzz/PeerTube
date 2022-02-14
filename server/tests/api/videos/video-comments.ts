@@ -68,6 +68,7 @@ describe('Test video comments', function () {
     it('Should list threads of this video', async function () {
       const body = await command.listThreads({ videoId: videoUUID })
 
+      console.log(body.data)
       expect(body.total).to.equal(1)
       expect(body.totalNotDeletedComments).to.equal(1)
       expect(body.data).to.be.an('array')
@@ -81,7 +82,9 @@ describe('Test video comments', function () {
       expect(comment.account.name).to.equal('root')
       expect(comment.account.host).to.equal('localhost:' + server.port)
 
-      await testImage(server.url, 'avatar-resized', comment.account.avatar.path, '.png')
+      for (const avatar of comment.account.avatars) {
+        await testImage(server.url, `avatar-resized-${avatar.width}x${avatar.width}`, avatar.path, '.png')
+      }
 
       expect(comment.totalReplies).to.equal(0)
       expect(comment.totalRepliesFromVideoAuthor).to.equal(0)

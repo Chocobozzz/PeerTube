@@ -29,7 +29,7 @@ describe('Test users with multiple servers', function () {
 
   let videoUUID: string
   let userAccessToken: string
-  let userAvatarFilename: string
+  let userAvatarFilenames: string[]
 
   before(async function () {
     this.timeout(120_000)
@@ -97,9 +97,11 @@ describe('Test users with multiple servers', function () {
     await servers[0].users.updateMyAvatar({ fixture })
 
     user = await servers[0].users.getMyInfo()
-    userAvatarFilename = user.account.avatar.path
+    userAvatarFilenames = user.account.avatars.map(({ path }) => path)
 
-    await testImage(servers[0].url, 'avatar2-resized', userAvatarFilename, '.png')
+    for (const avatar of user.account.avatars) {
+      await testImage(servers[0].url, `avatar2-resized-${avatar.width}x${avatar.width}`, avatar.path, '.png')
+    }
 
     await waitJobs(servers)
   })
@@ -129,7 +131,9 @@ describe('Test users with multiple servers', function () {
         expect(account.userId).to.be.undefined
       }
 
-      await testImage(server.url, 'avatar2-resized', account.avatar.path, '.png')
+      for (const avatar of account.avatars) {
+        await testImage(server.url, 'avatar2-resized', avatar.path, '.png')
+      }
     }
   })
 
@@ -193,7 +197,9 @@ describe('Test users with multiple servers', function () {
 
   it('Should not have actor files', async () => {
     for (const server of servers) {
-      await checkActorFilesWereRemoved(userAvatarFilename, server.internalServerNumber)
+      for (const userAvatarFilename of userAvatarFilenames) {
+        await checkActorFilesWereRemoved(userAvatarFilename, server.internalServerNumber)
+      }
     }
   })
 

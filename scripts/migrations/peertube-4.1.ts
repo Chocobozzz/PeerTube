@@ -4,7 +4,7 @@ import { ActorModel } from '@server/models/actor/actor'
 import { VideoChannelModel } from '@server/models/video/video-channel'
 import { MAccountDefault, MActorImages, MChannelDefault } from '@server/types/models'
 import { JobQueue } from '@server/lib/job-queue'
-import { generateAvatarMini } from '@server/lib/local-actor'
+import { generateSmallerAvatar } from '@server/lib/local-actor'
 import { sendUpdateActor } from '@server/lib/activitypub/send'
 import { Transaction } from 'sequelize/types'
 
@@ -45,22 +45,22 @@ async function run () {
 
   for (const account of accounts) {
     console.log(`Processing account ${account.name} and it's ${account.VideoChannels.length} video channnels.`)
-    await generateAvatarMiniIfNeeded(account)
+    await generateSmallerAvatarIfNeeded(account)
 
     for (const videoChannel of account.VideoChannels) {
-      await generateAvatarMiniIfNeeded(videoChannel)
+      await generateSmallerAvatarIfNeeded(videoChannel)
     }
   }
 
   console.log('Generation finished!')
 }
 
-async function generateAvatarMiniIfNeeded (accountOrChannel: MAccountDefault | MChannelDefault) {
-  if (!accountOrChannel.Actor.Avatar || accountOrChannel.Actor.AvatarMini) {
+async function generateSmallerAvatarIfNeeded (accountOrChannel: MAccountDefault | MChannelDefault) {
+  if (accountOrChannel.Actor.Avatars.length !== 1) {
     return
   }
 
-  await generateAvatarMini(accountOrChannel.Actor, (t: Transaction, updateActor: MActorImages) => {
+  await generateSmallerAvatar(accountOrChannel.Actor, (t: Transaction, updateActor: MActorImages) => {
     accountOrChannel.Actor = Object.assign(updateActor, { Server: accountOrChannel.Actor.Server })
     return sendUpdateActor(accountOrChannel, t)
   })

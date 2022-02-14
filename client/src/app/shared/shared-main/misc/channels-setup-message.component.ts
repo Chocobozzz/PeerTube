@@ -19,7 +19,7 @@ export class ChannelsSetupMessageComponent implements OnInit {
   hasChannelNotConfigured () {
     if (!this.user.videoChannels) return false
 
-    return this.user.videoChannels.filter((channel: VideoChannel) => (!channel.avatar || !channel.description)).length > 0
+    return this.user.videoChannels.filter((channel: VideoChannel) => (channel.avatars.length === 0 || !channel.description)).length > 0
   }
 
   ngOnInit () {

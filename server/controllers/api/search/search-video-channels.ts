@@ -7,7 +7,7 @@ import { WEBSERVER } from '@server/initializers/constants'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { buildMutedForSearchIndex, isSearchIndexSearch, isURISearch } from '@server/lib/search'
 import { getServerActor } from '@server/models/application/application'
-import { HttpStatusCode, ResultList, VideoChannel } from '@shared/models'
+import { Account, HttpStatusCode, ResultList, VideoChannel } from '@shared/models'
 import { VideoChannelsSearchQueryAfterSanitize } from '../../../../shared/models/search'
 import { isUserAbleToSearchRemoteURI } from '../../../helpers/express-utils'
 import { logger } from '../../../helpers/logger'
@@ -78,7 +78,9 @@ async function searchVideoChannelsIndex (query: VideoChannelsSearchQueryAfterSan
   try {
     logger.debug('Doing video channels search index request on %s.', url, { body })
 
-    const { body: searchIndexResult } = await doJSONRequest<ResultList<VideoChannel>>(url, { method: 'POST', json: body })
+    const searchIndexResult = normalizeVideoChannelsResults(
+      await doJSONRequest<ResultList<VideoChannel>>(url, { method: 'POST', json: body }) as any
+    )
     const jsonResult = await Hooks.wrapObject(searchIndexResult, 'filter:api.search.video-channels.index.list.result')
 
     return res.json(jsonResult)
@@ -89,6 +91,22 @@ async function searchVideoChannelsIndex (query: VideoChannelsSearchQueryAfterSan
       status: HttpStatusCode.INTERNAL_SERVER_ERROR_500,
       message: 'Cannot use search index to make video channels search'
     })
+  }
+}
+
+function normalizeVideoChannelsResults ({ body }: {body: ResultList<
+VideoChannel & { avatar?: string, ownerAccount: Account & { avatar?: string } }
+>}) {
+  return {
+    ...body,
+    data: body.data.map(({ avatar, ownerAccount: { avatar: ownerAvatar, ...ownerAccount }, ...c }) => ({
+      ...c,
+      avatars: c.avatars || [ avatar ],
+      ownerAccount: {
+        ...ownerAccount,
+        avatars: ownerAccount.avatars || [ ownerAvatar ]
+      }
+    }))
   }
 }
 

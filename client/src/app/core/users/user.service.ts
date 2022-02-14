@@ -118,7 +118,7 @@ export class UserService {
   changeAvatar (avatarForm: FormData) {
     const url = UserService.BASE_USERS_URL + 'me/avatar/pick'
 
-    return this.authHttp.post<{ avatar: ActorImage }>(url, avatarForm)
+    return this.authHttp.post<{ avatars: ActorImage[] }>(url, avatarForm)
                .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 

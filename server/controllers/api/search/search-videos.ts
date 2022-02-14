@@ -74,11 +74,11 @@ const normalizeSearchIndexResult = result => ({
     ...data,
     account: {
       ...account,
-      avatarMiniature: account.avatarMiniature || accountAvatar
+      avatars: account.avatars || [ accountAvatar ]
     },
     channel: {
       ...channel,
-      avatarMiniature: channel.avatarMiniature || channelAvatar
+      avatars: channel.avatars || [ channelAvatar ]
     }
   }))
 })

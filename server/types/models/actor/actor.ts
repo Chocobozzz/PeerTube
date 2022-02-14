@@ -10,7 +10,7 @@ type UseOpt<K extends keyof ActorModel, M> = PickWithOpt<ActorModel, K, M>
 
 // ############################################################################
 
-export type MActor = Omit<ActorModel, 'Account' | 'VideoChannel' | 'ActorFollowing' | 'Avatar' | 'ActorFollowers' | 'Server' | 'Banner'>
+export type MActor = Omit<ActorModel, 'Account' | 'VideoChannel' | 'ActorFollowing' | 'ActorFollowers' | 'Server' | 'Banners'>
 
 // ############################################################################
 
@@ -35,8 +35,7 @@ export type MActorRedundancyAllowedOpt = PickWithOpt<ActorModel, 'Server', MServ
 export type MActorDefaultLight =
   MActorLight &
   Use<'Server', MServerHost> &
-  Use<'Avatar', MActorImage> &
-  Use<'AvatarMini', MActorImage>
+  Use<'Avatars', MActorImage[]>
 
 export type MActorAccountId =
   MActor &
@@ -79,14 +78,13 @@ export type MActorServer =
 
 export type MActorImages =
   MActor &
-  Use<'Avatar', MActorImage> &
-  UseOpt<'Banner', MActorImage> &
-  UseOpt<'AvatarMini', MActorImage>
+  Use<'Avatars', MActorImage[]> &
+  UseOpt<'Banners', MActorImage[]>
 
 export type MActorDefault =
   MActor &
   Use<'Server', MServer> &
-  Use<'Avatar', MActorImage>
+  Use<'Avatars', MActorImage[]>
 
 export type MActorDefaultChannelId =
   MActorDefault &
@@ -95,8 +93,8 @@ export type MActorDefaultChannelId =
 export type MActorDefaultBanner =
   MActor &
   Use<'Server', MServer> &
-  Use<'Avatar', MActorImage> &
-  Use<'Banner', MActorImage>
+  Use<'Avatars', MActorImage[]> &
+  Use<'Banners', MActorImage[]>
 
 // Actor with channel that is associated to an account and its actor
 // Actor -> VideoChannel -> Account -> Actor
@@ -107,8 +105,8 @@ export type MActorChannelAccountActor =
 export type MActorFull =
   MActor &
   Use<'Server', MServer> &
-  Use<'Avatar', MActorImage> &
-  Use<'Banner', MActorImage> &
+  Use<'Avatars', MActorImage[]> &
+  Use<'Banners', MActorImage[]> &
   Use<'Account', MAccount> &
   Use<'VideoChannel', MChannelAccountActor>
 
@@ -116,8 +114,8 @@ export type MActorFull =
 export type MActorFullActor =
   MActor &
   Use<'Server', MServer> &
-  Use<'Avatar', MActorImage> &
-  Use<'Banner', MActorImage> &
+  Use<'Avatars', MActorImage[]> &
+  Use<'Banners', MActorImage[]> &
   Use<'Account', MAccountDefault> &
   Use<'VideoChannel', MChannelAccountDefault>
 
@@ -127,9 +125,9 @@ export type MActorFullActor =
 
 export type MActorSummary =
   FunctionProperties<MActor> &
-  Pick<MActor, 'id' | 'preferredUsername' | 'url' | 'serverId' | 'avatarMiniatureId'> &
+  Pick<MActor, 'id' | 'preferredUsername' | 'url' | 'serverId'> &
   Use<'Server', MServerHost> &
-  Use<'AvatarMini', MActorImage>
+  Use<'Avatars', MActorImage[]>
 
 export type MActorSummaryBlocks =
   MActorSummary &
@@ -147,22 +145,22 @@ export type MActorSummaryFormattable =
   FunctionProperties<MActor> &
   Pick<MActor, 'url' | 'preferredUsername'> &
   Use<'Server', MServerHost> &
-  Use<'AvatarMini', MActorImageFormattable>
+  Use<'Avatars', MActorImageFormattable[]>
 
 export type MActorFormattable =
   MActorSummaryFormattable &
-  Pick<MActor, 'id' | 'followingCount' | 'followersCount' | 'createdAt' | 'updatedAt' | 'remoteCreatedAt' | 'bannerId' | 'avatarId'> &
+  Pick<MActor, 'id' | 'followingCount' | 'followersCount' | 'createdAt' | 'updatedAt' | 'remoteCreatedAt'> &
   Use<'Server', MServerHost & Partial<Pick<MServer, 'redundancyAllowed'>>> &
-  UseOpt<'Banner', MActorImageFormattable> &
-  UseOpt<'Avatar', MActorImageFormattable>
+  UseOpt<'Banners', MActorImageFormattable[]> &
+  UseOpt<'Avatars', MActorImageFormattable[]>
 
 type MActorAPBase =
   MActor &
-  Use<'Avatar', MActorImage>
+  Use<'Avatars', MActorImage[]>
 
 export type MActorAPAccount =
   MActorAPBase
 
 export type MActorAPChannel =
   MActorAPBase &
-  Use<'Banner', MActorImage>
+  Use<'Banners', MActorImage[]>

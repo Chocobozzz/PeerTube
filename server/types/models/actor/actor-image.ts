@@ -9,4 +9,4 @@ export type MActorImage = ActorImageModel
 
 export type MActorImageFormattable =
   FunctionProperties<MActorImage> &
-  Pick<MActorImage, 'filename' | 'createdAt' | 'updatedAt'>
+  Pick<MActorImage, 'width' | 'filename' | 'createdAt' | 'updatedAt'>

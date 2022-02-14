@@ -160,12 +160,12 @@ export type SummaryOptions = {
             },
             {
               model: ActorImageModel,
-              as: 'Avatar',
+              as: 'Avatars',
               required: false
             },
             {
               model: ActorImageModel,
-              as: 'Banner',
+              as: 'Banners',
               required: false
             }
           ]
@@ -189,7 +189,7 @@ export type SummaryOptions = {
   [ScopeNames.SUMMARY]: (options: SummaryOptions = {}) => {
     const include: Includeable[] = [
       {
-        attributes: [ 'id', 'preferredUsername', 'url', 'serverId', 'avatarMiniatureId' ],
+        attributes: [ 'id', 'preferredUsername', 'url', 'serverId' ],
         model: ActorModel.unscoped(),
         required: options.actorRequired ?? true,
         include: [
@@ -200,7 +200,7 @@ export type SummaryOptions = {
           },
           {
             model: ActorImageModel.unscoped(),
-            as: 'AvatarMini',
+            as: 'Avatars',
             required: false
           }
         ]
@@ -245,7 +245,7 @@ export type SummaryOptions = {
           {
             model: ActorImageModel,
             required: false,
-            as: 'Banner'
+            as: 'Banners'
           }
         ]
       }
@@ -621,7 +621,7 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
             {
               model: ActorImageModel,
               required: false,
-              as: 'Banner'
+              as: 'Banners'
             }
           ]
         }
@@ -655,7 +655,7 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
             {
               model: ActorImageModel,
               required: false,
-              as: 'Banner'
+              as: 'Banners'
             }
           ]
         }
@@ -685,7 +685,7 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
             {
               model: ActorImageModel,
               required: false,
-              as: 'Banner'
+              as: 'Banners'
             }
           ]
         }
@@ -706,7 +706,7 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
       displayName: this.getDisplayName(),
       url: actor.url,
       host: actor.host,
-      avatarMiniature: actor.avatarMiniature
+      avatars: actor.avatars
     }
   }
 
@@ -731,8 +731,7 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
     const actor = this.Actor.toFormattedJSON()
     const videoChannel = {
       id: this.id,
-      avatar: actor.avatar,
-      avatarMiniature: actor.avatarMiniature,
+      avatars: actor.avatars,
       displayName: this.getDisplayName(),
       description: this.description,
       support: this.support,

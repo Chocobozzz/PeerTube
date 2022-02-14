@@ -13,33 +13,19 @@ export abstract class Actor implements ServerActor {
 
   createdAt: Date | string
 
-  avatar: ActorImage
-  avatarMiniature: ActorImage
+  avatars: ActorImage[]
 
   isLocal: boolean
 
-  static GET_ACTOR_AVATAR_URL (actor: { avatar?: { url?: string, path: string } }) {
-    if (actor?.avatar?.url) return actor.avatar.url
+  static GET_ACTOR_AVATAR_URL (actor: { avatars: { width: number, url?: string, path: string }[] }, size: number) {
+    const avatar = actor.avatars.sort((a, b) => a.width - b.width).find(a => a.width >= size)
 
-    if (actor?.avatar) {
-      const absoluteAPIUrl = getAbsoluteAPIUrl()
+    if (!avatar) return ''
+    if (avatar.url) return avatar.url
 
-      return absoluteAPIUrl + actor.avatar.path
-    }
+    const absoluteAPIUrl = getAbsoluteAPIUrl()
 
-    return ''
-  }
-
-  static GET_ACTOR_AVATAR_MINIATURE_URL (actor: { avatarMiniature?: { url?: string, path: string } }) {
-    if (actor?.avatarMiniature?.url) return actor.avatarMiniature.url
-
-    if (actor?.avatarMiniature) {
-      const absoluteAPIUrl = getAbsoluteAPIUrl()
-
-      return absoluteAPIUrl + actor.avatarMiniature.path
-    }
-
-    return ''
+    return absoluteAPIUrl + avatar.path
   }
 
   static CREATE_BY_STRING (accountName: string, host: string, forceHostname = false) {
@@ -68,8 +54,7 @@ export abstract class Actor implements ServerActor {
 
     if (hash.createdAt) this.createdAt = new Date(hash.createdAt.toString())
 
-    this.avatar = hash.avatar
-    this.avatarMiniature = hash.avatarMiniature
+    this.avatars = hash.avatars
     this.isLocal = Actor.IS_LOCAL(this.host)
   }
 }

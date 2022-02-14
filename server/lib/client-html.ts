@@ -6,7 +6,7 @@ import { toCompleteUUID } from '@server/helpers/custom-validators/misc'
 import { root } from '@shared/core-utils'
 import { escapeHTML } from '@shared/core-utils/renderer'
 import { sha256 } from '@shared/extra-utils'
-import { ActorImageType, HTMLServerConfig } from '@shared/models'
+import { HTMLServerConfig } from '@shared/models'
 import { buildFileLocale, getDefaultLocale, is18nLocale, POSSIBLE_LOCALES } from '../../shared/core-utils/i18n/i18n'
 import { HttpStatusCode } from '../../shared/models/http/http-error-codes'
 import { VideoPlaylistPrivacy, VideoPrivacy } from '../../shared/models/videos'
@@ -16,7 +16,6 @@ import { mdToOneLinePlainText } from '../helpers/markdown'
 import { CONFIG } from '../initializers/config'
 import {
   ACCEPT_HEADERS,
-  ACTOR_IMAGES_SIZE,
   CUSTOM_HTML_TAG_COMMENTS,
   EMBED_SIZE,
   FILES_CONTENT_HASH,
@@ -30,6 +29,7 @@ import { VideoChannelModel } from '../models/video/video-channel'
 import { VideoPlaylistModel } from '../models/video/video-playlist'
 import { MAccountActor, MChannelActor } from '../types/models'
 import { ServerConfigManager } from './server-config-manager'
+import { ActorModel } from '@server/models/actor/actor'
 
 type Tags = {
   ogType: string
@@ -273,10 +273,11 @@ class ClientHtml {
     const siteName = CONFIG.INSTANCE.NAME
     const title = entity.getDisplayName()
 
+    const avatar = entity.Actor.getBiggestAvatar()
     const image = {
-      url: entity.Actor.getAvatarUrl(),
-      width: ACTOR_IMAGES_SIZE[ActorImageType.AVATAR].width,
-      height: ACTOR_IMAGES_SIZE[ActorImageType.AVATAR].height
+      url: ActorModel.getAvatarUrl(avatar),
+      width: avatar.width,
+      height: avatar.height
     }
 
     const ogType = 'website'

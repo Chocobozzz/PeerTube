@@ -274,21 +274,26 @@ describe('Test video channels', function () {
     await servers[0].channels.updateImage({
       channelName: 'second_video_channel',
       fixture,
-      type: 'avatar'
+      type: 'avatars'
     })
 
     await waitJobs(servers)
 
     for (const server of servers) {
       const videoChannel = await findChannel(server, secondVideoChannelId)
+      const expectedSizes = ACTOR_IMAGES_SIZE[ActorImageType.AVATAR]
 
-      avatarPaths[server.port] = videoChannel.avatar.path
-      await testImage(server.url, 'avatar-resized', avatarPaths[server.port], '.png')
-      await testFileExistsOrNot(server, 'avatars', basename(avatarPaths[server.port]), true)
+      expect(videoChannel.avatars.length).to.equal(expectedSizes.length, 'Expected avatars to be generated in all sizes')
 
-      const row = await server.sql.getActorImage(basename(avatarPaths[server.port]))
-      expect(row.height).to.equal(ACTOR_IMAGES_SIZE[ActorImageType.AVATAR].height)
-      expect(row.width).to.equal(ACTOR_IMAGES_SIZE[ActorImageType.AVATAR].width)
+      for (const avatar of videoChannel.avatars) {
+        avatarPaths[server.port] = avatar.path
+        await testImage(server.url, `avatar-resized-${avatar.width}x${avatar.width}`, avatarPaths[server.port], '.png')
+        await testFileExistsOrNot(server, 'avatars', basename(avatarPaths[server.port]), true)
+
+        const row = await server.sql.getActorImage(basename(avatarPaths[server.port]))
+
+        expect(expectedSizes.some(({ height, width }) => row.height === height && row.width === width)).to.equal(true)
+      }
     }
   })
 
@@ -300,7 +305,7 @@ describe('Test video channels', function () {
     await servers[0].channels.updateImage({
       channelName: 'second_video_channel',
       fixture,
-      type: 'banner'
+      type: 'banners'
     })
 
     await waitJobs(servers)
@@ -308,20 +313,20 @@ describe('Test video channels', function () {
     for (const server of servers) {
       const videoChannel = await server.channels.get({ channelName: 'second_video_channel@' + servers[0].host })
 
-      bannerPaths[server.port] = videoChannel.banner.path
+      bannerPaths[server.port] = videoChannel.banners[0].path
       await testImage(server.url, 'banner-resized', bannerPaths[server.port])
       await testFileExistsOrNot(server, 'avatars', basename(bannerPaths[server.port]), true)
 
       const row = await server.sql.getActorImage(basename(bannerPaths[server.port]))
-      expect(row.height).to.equal(ACTOR_IMAGES_SIZE[ActorImageType.BANNER].height)
-      expect(row.width).to.equal(ACTOR_IMAGES_SIZE[ActorImageType.BANNER].width)
+      expect(row.height).to.equal(ACTOR_IMAGES_SIZE[ActorImageType.BANNER][0].height)
+      expect(row.width).to.equal(ACTOR_IMAGES_SIZE[ActorImageType.BANNER][0].width)
     }
   })
 
   it('Should delete the video channel avatar', async function () {
     this.timeout(15000)
 
-    await servers[0].channels.deleteImage({ channelName: 'second_video_channel', type: 'avatar' })
+    await servers[0].channels.deleteImage({ channelName: 'second_video_channel', type: 'avatars' })
 
     await waitJobs(servers)
 
@@ -329,14 +334,14 @@ describe('Test video channels', function () {
       const videoChannel = await findChannel(server, secondVideoChannelId)
       await testFileExistsOrNot(server, 'avatars', basename(avatarPaths[server.port]), false)
 
-      expect(videoChannel.avatar).to.be.null
+      expect(videoChannel.avatars).to.be.empty
     }
   })
 
   it('Should delete the video channel banner', async function () {
     this.timeout(15000)
 
-    await servers[0].channels.deleteImage({ channelName: 'second_video_channel', type: 'banner' })
+    await servers[0].channels.deleteImage({ channelName: 'second_video_channel', type: 'banners' })
 
     await waitJobs(servers)
 
@@ -344,7 +349,7 @@ describe('Test video channels', function () {
       const videoChannel = await findChannel(server, secondVideoChannelId)
       await testFileExistsOrNot(server, 'avatars', basename(bannerPaths[server.port]), false)
 
-      expect(videoChannel.banner).to.be.null
+      expect(videoChannel.banners).to.be.empty
     }
   })
 

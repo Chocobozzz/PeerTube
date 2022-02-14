@@ -186,8 +186,7 @@ export class VideoTableAttributes {
       'id',
       'preferredUsername',
       'url',
-      'serverId',
-      'avatarId'
+      'serverId'
     ]
 
     if (this.mode === 'get') {
@@ -212,6 +211,7 @@ export class VideoTableAttributes {
   getAvatarAttributes () {
     let attributeKeys = [
       'id',
+      'width',
       'filename',
       'type',
       'fileUrl',

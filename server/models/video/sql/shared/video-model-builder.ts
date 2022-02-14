@@ -157,62 +157,76 @@ export class VideoModelBuilder {
   }
 
   private buildVideoAndAccount (row: SQLRow) {
-    if (this.videosMemo[row.id]) return
+    let videoModel
 
-    const videoModel = new VideoModel(this.grab(row, this.tables.getVideoAttributes(), ''), this.buildOpts)
+    if (!this.videosMemo[row.id]) {
+      videoModel = new VideoModel(this.grab(row, this.tables.getVideoAttributes(), ''), this.buildOpts)
 
-    videoModel.UserVideoHistories = []
-    videoModel.Thumbnails = []
-    videoModel.VideoFiles = []
-    videoModel.VideoStreamingPlaylists = []
-    videoModel.Tags = []
-    videoModel.Trackers = []
+      videoModel.UserVideoHistories = []
+      videoModel.Thumbnails = []
+      videoModel.VideoFiles = []
+      videoModel.VideoStreamingPlaylists = []
+      videoModel.Tags = []
+      videoModel.Trackers = []
+
+      this.videosMemo[row.id] = videoModel
+
+      // Keep rows order
+      this.videos.push(videoModel)
+    } else {
+      videoModel = this.videosMemo[row.id]
+    }
 
     this.buildAccount(row, videoModel)
-
-    this.videosMemo[row.id] = videoModel
-
-    // Keep rows order
-    this.videos.push(videoModel)
   }
 
   private buildAccount (row: SQLRow, videoModel: VideoModel) {
     const id = row['VideoChannel.Account.id']
     if (!id) return
 
-    const channelModel = new VideoChannelModel(this.grab(row, this.tables.getChannelAttributes(), 'VideoChannel'), this.buildOpts)
-    channelModel.Actor = this.buildActor(row, 'VideoChannel')
+    if (!videoModel.VideoChannel) {
+      const channelModel = new VideoChannelModel(this.grab(row, this.tables.getChannelAttributes(), 'VideoChannel'), this.buildOpts)
+      videoModel.VideoChannel = channelModel
+    }
+    this.buildActor(row, 'VideoChannel', videoModel.VideoChannel)
 
-    const accountModel = new AccountModel(this.grab(row, this.tables.getAccountAttributes(), 'VideoChannel.Account'), this.buildOpts)
-    accountModel.Actor = this.buildActor(row, 'VideoChannel.Account')
+    if (!videoModel.VideoChannel.Account) {
+      const accountModel = new AccountModel(this.grab(row, this.tables.getAccountAttributes(), 'VideoChannel.Account'), this.buildOpts)
+      accountModel.BlockedBy = []
 
-    accountModel.BlockedBy = []
-
-    channelModel.Account = accountModel
-
-    videoModel.VideoChannel = channelModel
+      videoModel.VideoChannel.Account = accountModel
+    }
+    this.buildActor(row, 'VideoChannel.Account', videoModel.VideoChannel.Account)
   }
 
-  private buildActor (row: SQLRow, prefix: string) {
+  private buildActor (row: SQLRow, prefix: string, parentModel: VideoChannelModel | AccountModel) {
     const actorPrefix = `${prefix}.Actor`
-    const avatarPrefix = `${actorPrefix}.AvatarMini`
     const serverPrefix = `${actorPrefix}.Server`
 
+    if (!parentModel.Actor) {
+      const serverModel = row[`${serverPrefix}.id`] !== null
+        ? new ServerModel(this.grab(row, this.tables.getServerAttributes(), serverPrefix), this.buildOpts)
+        : null
+
+      if (serverModel) serverModel.BlockedBy = []
+
+      parentModel.Actor = new ActorModel(this.grab(row, this.tables.getActorAttributes(), actorPrefix), this.buildOpts)
+      parentModel.Actor.Server = serverModel
+    }
+
+    this.buildActorAvatar(row, actorPrefix, parentModel.Actor)
+  }
+
+  private buildActorAvatar (row: SQLRow, prefix: string, actorModel: ActorModel) {
+    const avatarPrefix = `${prefix}.Avatars`
     const avatarModel = row[`${avatarPrefix}.id`] !== null
       ? new ActorImageModel(this.grab(row, this.tables.getAvatarAttributes(), avatarPrefix), this.buildOpts)
       : null
+    actorModel.Avatars = actorModel.Avatars || []
 
-    const serverModel = row[`${serverPrefix}.id`] !== null
-      ? new ServerModel(this.grab(row, this.tables.getServerAttributes(), serverPrefix), this.buildOpts)
-      : null
-
-    if (serverModel) serverModel.BlockedBy = []
-
-    const actorModel = new ActorModel(this.grab(row, this.tables.getActorAttributes(), actorPrefix), this.buildOpts)
-    actorModel.AvatarMini = avatarModel
-    actorModel.Server = serverModel
-
-    return actorModel
+    if (avatarModel && !actorModel.Avatars.find(a => a.id === avatarModel.id)) {
+      actorModel.Avatars.push(avatarModel)
+    }
   }
 
   private setUserHistory (row: SQLRow, videoModel: VideoModel) {

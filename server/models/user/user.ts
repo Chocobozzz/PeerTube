@@ -106,7 +106,7 @@ enum ScopeNames {
                 include: [
                   {
                     model: ActorImageModel,
-                    as: 'Banner',
+                    as: 'Banners',
                     required: false
                   }
                 ]

@@ -12,38 +12,39 @@ type ImageInfo = {
   onDisk?: boolean
 }
 
-async function updateActorImageInstance (actor: MActorImages, type: ActorImageType, imageInfo: ImageInfo | null, t: Transaction) {
-  const oldImageModel = type === ActorImageType.AVATAR
-    ? actor.Avatar
-    : type === ActorImageType.AVATAR_MINIATURE
-      ? actor.AvatarMini
-      : actor.Banner
+async function updateActorImageInstance (actor: MActorImages, type: ActorImageType, imagesInfo: ImageInfo[] | null, t: Transaction) {
+  const avatarsOrBanners = type === ActorImageType.AVATAR ? actor.Avatars : actor.Banners
 
-  if (oldImageModel) {
-    // Don't update the avatar if the file URL did not change
-    if (imageInfo?.fileUrl && oldImageModel.fileUrl === imageInfo.fileUrl) return actor
+  await Promise.all(imagesInfo.map(async imageInfo => {
+    const oldImageModel = avatarsOrBanners.find(i => i.width === imageInfo.width)
 
-    try {
-      await oldImageModel.destroy({ transaction: t })
-
-      setActorImage(actor, type, null)
-    } catch (err) {
-      logger.error('Cannot remove old actor image of actor %s.', actor.url, { err })
+    if (imageInfo?.fileUrl && oldImageModel.fileUrl === imageInfo.fileUrl) {
+      logger.info('Dont update avatar/banner since the fileUrl did not change.')
+      return actor
     }
-  }
 
-  if (imageInfo) {
+    if (oldImageModel) {
+      try {
+        await oldImageModel.destroy({ transaction: t })
+
+        setActorImage(actor, type, null)
+      } catch (err) {
+        logger.error('Cannot remove old actor image of actor %s.', actor.url, { err })
+      }
+    }
+
     const imageModel = await ActorImageModel.create({
       filename: imageInfo.name,
       onDisk: imageInfo.onDisk ?? false,
       fileUrl: imageInfo.fileUrl,
       height: imageInfo.height,
       width: imageInfo.width,
-      type
+      type,
+      actorId: actor.id
     }, { transaction: t })
 
     setActorImage(actor, type, imageModel)
-  }
+  }))
 
   return actor
 }
@@ -52,22 +53,18 @@ async function deleteActorImageInstance (actor: MActorImages, type: ActorImageTy
   try {
     switch (type) {
       case ActorImageType.AVATAR:
-        await actor.Avatar.destroy({ transaction: t })
+        for (const avatar of actor.Avatars) {
+          await avatar.destroy({ transaction: t })
+        }
 
-        actor.avatarId = null
-        actor.Avatar = null
+        actor.Avatars = []
         break
       case ActorImageType.BANNER:
-        await actor.Banner.destroy({ transaction: t })
+        for (const banner of actor.Banners) {
+          await banner.destroy({ transaction: t })
+        }
 
-        actor.bannerId = null
-        actor.Banner = null
-        break
-      case ActorImageType.AVATAR_MINIATURE:
-        await actor.AvatarMini.destroy({ transaction: t })
-
-        actor.AvatarMini = null
-        actor.AvatarMini = null
+        actor.Banners = []
         break
     }
   } catch (err) {
@@ -89,22 +86,12 @@ export {
 // ---------------------------------------------------------------------------
 
 function setActorImage (actorModel: MActorImages, type: ActorImageType, imageModel: MActorImage) {
-  const id = imageModel
-    ? imageModel.id
-    : null
-
   switch (type) {
     case ActorImageType.AVATAR:
-      actorModel.avatarId = id
-      actorModel.Avatar = imageModel
+      actorModel.Avatars = [ ...actorModel.Avatars.filter(a => a.width !== imageModel.width), imageModel ]
       break
     case ActorImageType.BANNER:
-      actorModel.bannerId = id
-      actorModel.Banner = imageModel
-      break
-    case ActorImageType.AVATAR_MINIATURE:
-      actorModel.avatarMiniatureId = id
-      actorModel.AvatarMini = imageModel
+      actorModel.Banners = [ ...actorModel.Banners.filter(a => a.width !== imageModel.width), imageModel ]
       break
   }
 
