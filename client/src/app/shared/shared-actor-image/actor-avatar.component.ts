@@ -23,7 +23,7 @@ export class ActorAvatarComponent {
 
   @Input() previewImage: string
 
-  @Input() size: ActorAvatarSize
+  @Input() size: ActorAvatarSize = '32'
 
   // Use an external link
   @Input() href: string
