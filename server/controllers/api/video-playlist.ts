@@ -453,13 +453,19 @@ async function getVideoPlaylistVideos (req: express.Request, res: express.Respon
   const user = res.locals.oauth ? res.locals.oauth.token.User : undefined
   const server = await getServerActor()
 
-  const resultList = await VideoPlaylistElementModel.listForApi({
+  const apiOptions = await Hooks.wrapObject({
     start: req.query.start,
     count: req.query.count,
     videoPlaylistId: videoPlaylistInstance.id,
     serverAccount: server.Account,
     user
-  })
+  }, 'filter:api.video-playlist.videos.list.params')
+
+  const resultList = await Hooks.wrapPromiseFun(
+    VideoPlaylistElementModel.listForApi,
+    apiOptions,
+    'filter:api.video-playlist.videos.list.result'
+  )
 
   const options = {
     displayNSFW: buildNSFWFilter(res, req.query.nsfw),
