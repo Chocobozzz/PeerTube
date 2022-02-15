@@ -77,12 +77,14 @@ sudo systemctl start redis postgresql
 1. Run:
 
 ```
+sudo pacman-mirrors -g && sudo pacman -Syyu
 sudo pacman -S nodejs-lts-fermium yarn ffmpeg postgresql openssl redis git wget unzip python base-devel npm nginx
 ```
 
 Now that dependencies are installed, before running PeerTube you should start PostgreSQL and Redis:
 
 ```
+su - postgres -c "initdb --locale en_US.UTF-8 -E UTF8 -D '/var/lib/postgres/data'"
 sudo systemctl start redis postgresql
 ```
 
