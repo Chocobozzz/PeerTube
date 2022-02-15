@@ -22,6 +22,7 @@ describe('Test plugin filter hooks', function () {
   let servers: PeerTubeServer[]
   let videoUUID: string
   let threadId: number
+  let videoPlaylistUUID: string
 
   before(async function () {
     this.timeout(60000)
@@ -33,9 +34,20 @@ describe('Test plugin filter hooks', function () {
 
     await servers[0].plugins.install({ path: PluginsCommand.getPluginTestPath() })
     await servers[0].plugins.install({ path: PluginsCommand.getPluginTestPath('-filter-translations') })
+    {
+      ({ uuid: videoPlaylistUUID } = await servers[0].playlists.create({
+        attributes: {
+          displayName: 'my super playlist',
+          privacy: VideoPlaylistPrivacy.PUBLIC,
+          description: 'my super description',
+          videoChannelId: servers[0].store.channel.id
+        }
+      }))
+    }
 
     for (let i = 0; i < 10; i++) {
-      await servers[0].videos.upload({ attributes: { name: 'default video ' + i } })
+      const video = await servers[0].videos.upload({ attributes: { name: 'default video ' + i } })
+      await servers[0].playlists.addElement({ playlistId: videoPlaylistUUID, attributes: { videoId: video.id } })
     }
 
     const { data } = await servers[0].videos.list()
@@ -64,6 +76,26 @@ describe('Test plugin filter hooks', function () {
 
   it('Should run filter:api.videos.list.result', async function () {
     const { total } = await servers[0].videos.list({ start: 0, count: 0 })
+
+    // Plugin do +1 to the total result
+    expect(total).to.equal(11)
+  })
+
+  it('Should run filter:api.video-playlist.videos.list.params', async function () {
+    const { data } = await servers[0].playlists.listVideos({
+      count: 2,
+      playlistId: videoPlaylistUUID
+    })
+
+    // 1 plugin do +1 to the count parameter
+    expect(data).to.have.lengthOf(3)
+  })
+
+  it('Should run filter:api.video-playlist.videos.list.result', async function () {
+    const { total } = await servers[0].playlists.listVideos({
+      count: 0,
+      playlistId: videoPlaylistUUID
+    })
 
     // Plugin do +1 to the total result
     expect(total).to.equal(11)

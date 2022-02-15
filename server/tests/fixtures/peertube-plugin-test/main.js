@@ -45,6 +45,16 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
   })
 
   registerHook({
+    target: 'filter:api.video-playlist.videos.list.params',
+    handler: obj => addToCount(obj)
+  })
+
+  registerHook({
+    target: 'filter:api.video-playlist.videos.list.result',
+    handler: obj => addToTotal(obj)
+  })
+
+  registerHook({
     target: 'filter:api.accounts.videos.list.params',
     handler: obj => addToCount(obj)
   })
