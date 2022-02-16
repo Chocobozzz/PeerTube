@@ -1432,7 +1432,7 @@
       </trans-unit>
       <trans-unit id="5329436244765769292" datatype="html">
         <source>If you want to open registrations, please decide what <x id="START_TAG_STRONG"/>your moderation rules<x id="CLOSE_TAG_STRONG"/> and <x id="START_TAG_STRONG"/>instance terms of service<x id="CLOSE_TAG_STRONG"/> are, as well as specify the categories and languages and your moderators speak. This way, you will help users to register on <x id="START_TAG_STRONG"/>the appropriate<x id="CLOSE_TAG_STRONG"/> PeerTube instance. </source>
-        <target state="new"> If you want to open registrations, please decide what <x id="START_TAG_STRONG"/>your moderation rules<x id="CLOSE_TAG_STRONG"/> and <x id="START_TAG_STRONG"/>instance terms of service<x id="CLOSE_TAG_STRONG"/> are, as well as specify the categories and languages and your moderators speak. This way, you will help users to register on <x id="START_TAG_STRONG"/>the appropriate<x id="CLOSE_TAG_STRONG"/> PeerTube instance. </target>
+        <target state="translated">アカウント作成を開放したい場合、インスタンスのカテゴリーや設定言語やモデレーターが話す言語だけでなく<x id="START_TAG_STRONG"/>モデレーションルール<x id="CLOSE_TAG_STRONG"/>や<x id="START_TAG_STRONG"/>インスタンスの利用規約<x id="CLOSE_TAG_STRONG"/>の内容を決めましょう。これらの設定を決めることで、PeerTubeを利用しようとする様々なユーザーが<x id="START_TAG_STRONG"/>自分に合った<x id="CLOSE_TAG_STRONG"/>PeerTubeインスタンスにアカウント作成をするための手助けになるでしょう。 </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context><context context-type="linenumber">63</context></context-group>
       </trans-unit>
       <trans-unit id="5704345824323933019" datatype="html">
@@ -1514,7 +1514,7 @@
       </trans-unit>
       <trans-unit id="5330788940795142335" datatype="html">
         <source>Please consider configuring these fields to help people to choose <x id="START_TAG_STRONG"/>the appropriate instance<x id="CLOSE_TAG_STRONG"/>. Without them, your instance may not be referenced on the <x id="START_LINK"/>JoinPeerTube website<x id="CLOSE_LINK"/>. </source>
-        <target state="needs-translation">Please consider configuring these fields to help people to choose <x id="START_TAG_STRONG"/>the appropriate instance<x id="CLOSE_TAG_STRONG"/>. Without them, your instance may not be referenced on the <x id="START_LINK"/>JoinPeerTube website<x id="CLOSE_LINK"/>. </target>
+        <target state="translated">PeerTubeを利用しようとする様々なユーザーが<x id="START_TAG_STRONG"/>それぞれにふさわしいインスタンス<x id="CLOSE_TAG_STRONG"/>を選べるように、以下の項目を設定することを検討して下さい。 設定がされていない場合、あなたのインスタンスは<x id="START_LINK"/>PeerTubeの公式サイト「JoinPeerTube」<x id="CLOSE_LINK"/>で表示されないかもしれません。 </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">24</context></context-group>
       </trans-unit>
       <trans-unit id="2728623642717111613" datatype="html">
@@ -1659,7 +1659,7 @@
       </trans-unit>
       <trans-unit id="2095604754338363597" datatype="html">
         <source>⚠️ If enabled, we recommend to use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/maintain-configuration?id=security&quot;&gt;"/>a HTTP proxy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to prevent private URL access from your PeerTube server</source>
-        <target state="new">⚠️ If enabled, we recommend to use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/maintain-configuration?id=security&quot;&gt;"/>a HTTP proxy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to prevent private URL access from your PeerTube server</target>
+        <target state="translated">⚠️ この設定を有効にした場合、あなたのPeerTubeサーバーからプライべートURLへのアクセスを防ぐため、<x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/maintain-configuration?id=security&quot;&gt;"/>HTTPプロキシ<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>の利用を推奨します。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">272</context>
@@ -2441,7 +2441,7 @@
       </trans-unit>
       <trans-unit id="6760671759540007434" datatype="html">
         <source>You can import any URL <x id="START_LINK"/>supported by youtube-dl<x id="CLOSE_LINK"/> or URL that points to a media file. You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance. </source>
-        <target state="new"> You can import any URL <x id="START_LINK"/>supported by youtube-dl<x id="CLOSE_LINK"/> or URL that points to a media file. You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance. </target>
+        <target state="translated"><x id="START_LINK"/>youtube-dlがサポートしている<x id="CLOSE_LINK"/>動画URL、またはメディアファイルを指しているURLを利用して動画のインポートができます。ただし、動画URLやメディアファイルを配布する権利が本当にあなたにあるかどうかを確認すべきです。さもなければ、あなた自身やあなたが属するインスタンスに法的なトラブルをもたらしかねないでしょう。 </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-url.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="460353452916242022">
@@ -2651,7 +2651,7 @@
       </trans-unit>
       <trans-unit id="2993949426196989262" datatype="html">
         <source>We recommend you to not use the <x id="START_TAG_STRONG"/>root<x id="CLOSE_TAG_STRONG"/> user to publish your videos, since it's the super-admin account of your instance. <x id="LINE_BREAK"/> Instead, <x id="START_LINK"/>create a dedicated account<x id="CLOSE_LINK"/> to upload your videos. </source>
-        <target state="needs-translation">We recommend you to not use the <x id="START_TAG_STRONG"/>root<x id="CLOSE_TAG_STRONG"/> user to publish your videos, since it's the super-admin account of your instance. <x id="LINE_BREAK"/> Instead, <x id="START_LINK"/>create a dedicated account<x id="CLOSE_LINK"/> to upload your videos. </target>
+        <target state="translated">PeerTubeは<x id="START_TAG_STRONG"/>root<x id="CLOSE_TAG_STRONG"/>ユーザーであなたの動画を投稿することを推奨しません。rootユーザーはあなたのインスタンスにおける、システム管理権限を有したアカウントだからです。<x id="LINE_BREAK"/>その代わりに、<x id="START_LINK"/>専用アカウントを作成して<x id="CLOSE_LINK"/>動画を投稿しましょう。 </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.html</context><context context-type="linenumber">33</context></context-group>
       </trans-unit>
       <trans-unit id="293476877021544115">
