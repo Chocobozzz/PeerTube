@@ -796,7 +796,7 @@
       </trans-unit>
       <trans-unit id="8644431249513874405" datatype="html">
         <source>&lt;a href="https://en.wikipedia.org/wiki/Markdown#Example" target="_blank" rel="noopener noreferrer"&gt;Markdown&lt;/a&gt; compatible that supports:</source>
-        <target state="translated">&lt;a href="https://en.wikipedia.org/wiki/Markdown#Example" target="_blank" rel="noopener noreferrer"&gt;マークダウン記法&lt;/a&gt;で以下の事が可能です:</target>
+        <target state="translated">&lt;a href="https://en.wikipedia.org/wiki/Markdown#Example" target="_blank" rel="noopener noreferrer"&gt;マークダウン記法&lt;/a&gt;で以下のことが可能です:</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/misc/help.component.ts</context><context context-type="linenumber">75</context></context-group>
       </trans-unit>
       <trans-unit id="146235964740293376" datatype="html">
@@ -1250,7 +1250,7 @@
       </trans-unit>
       <trans-unit id="2101170466365500913" datatype="html">
         <source>Logging into an account lets you publish content</source>
-        <target state="translated">自分のアカウントでログインする事で、あなただけの動画を投稿することができます</target>
+        <target state="translated">自分のアカウントでログインすることで、あなただけの動画を投稿することができます</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">60</context></context-group>
       </trans-unit>
       <trans-unit id="3183213940445113677" datatype="html">
@@ -1643,7 +1643,7 @@
       </trans-unit>
       <trans-unit id="2184839376696112704" datatype="html">
         <source>allows to import multiple videos in parallel. ⚠️ Requires a PeerTube restart.</source>
-        <target state="translated">複数の動画を並行してインポートする事を許可する。 ⚠️ PeerTubeの再起動が必要です。</target>
+        <target state="translated">複数の動画を並行してインポートすることを許可する。 ⚠️ PeerTubeの再起動が必要です。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">256</context></context-group>
       </trans-unit>
       <trans-unit id="780513172839038392" datatype="html">
@@ -1659,7 +1659,7 @@
       </trans-unit>
       <trans-unit id="2095604754338363597" datatype="html">
         <source>⚠️ If enabled, we recommend to use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/maintain-configuration?id=security&quot;&gt;"/>a HTTP proxy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to prevent private URL access from your PeerTube server</source>
-        <target state="translated">⚠️ この設定を有効にした場合、あなたのPeerTubeサーバーからプライべートURLへのアクセスを防ぐため、<x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/maintain-configuration?id=security&quot;&gt;"/>HTTPプロキシ<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>の利用を推奨します。</target>
+        <target state="translated">⚠️ この設定を有効にした場合、あなたのPeerTubeサーバーからプライべートURLへのアクセスを防ぐため、<x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/maintain-configuration?id=security&quot;&gt;"/>HTTPプロキシ<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>の利用を推奨します</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">272</context>
@@ -1724,7 +1724,7 @@
       </trans-unit>
       <trans-unit id="7239874680342223476" datatype="html">
         <source>Help moderators and other users to know <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>who you are<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> by:</source>
-        <target state="translated">モデレーターや他のユーザーに<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>あなたが誰か<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>を知ってもらうために、下記の事をしましょう:</target>
+        <target state="translated">モデレーターや他のユーザーに<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>あなたが誰か<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>を知ってもらうために、下記のことをしましょう:</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/account-setup-warning-modal.component.html</context><context context-type="linenumber">12</context></context-group>
       </trans-unit>
       <trans-unit id="5856432243446401016" datatype="html">
@@ -2973,7 +2973,7 @@
       </trans-unit>
       <trans-unit id="2935783216050341269" datatype="html">
         <source>the sharing system used for this video implies that some technical information about your system (such as a public IP address) can be sent to other peers.</source>
-        <target state="translated">動画再生の際に使用されるP2P機能は、あなたのシステムの技術的情報（例えば、公開IPアドレスなど）が他のピアに送信される事を暗に意味しています。</target>
+        <target state="translated">動画再生の際に使用されるP2P機能は、あなたのシステムの技術的情報（例えば、公開IPアドレスなど）が他のピアに送信されることを暗に意味しています。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/privacy-concerns.component.html</context><context context-type="linenumber">5</context></context-group>
       </trans-unit>
       <trans-unit id="4619188387782427495">
@@ -3070,7 +3070,7 @@
       </trans-unit>
       <trans-unit id="6390009909920475335" datatype="html">
         <source>View <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}" xid="2084023438878610739"/> from <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> and others </source>
-        <target state="translated"><x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/>とその他のユーザーからの<x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}"/>を見る </target>
+        <target state="translated"><x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/>とその他のユーザーからの<x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, =1 {1 返信} other {{{ comment.totalReplies }} 返信}}"/>を見る </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context><context context-type="linenumber">73</context></context-group>
       </trans-unit>
       <trans-unit id="4036338619293319383" datatype="html">
@@ -3082,7 +3082,7 @@
       </trans-unit>
       <trans-unit id="127329338495775339" datatype="html">
         <source>View <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}" xid="2084023438878610739"/> from <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> </source>
-        <target state="translated"><x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> からの<x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}"/>を見る </target>
+        <target state="translated"><x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> からの<x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, =1 {1 返信} other {{{ comment.totalReplies }} 返信}}"/>を見る </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context><context context-type="linenumber">76</context></context-group>
       </trans-unit>
       <trans-unit id="5535545444690528619" datatype="html">
@@ -3107,7 +3107,7 @@
       </trans-unit>
       <trans-unit id="5793595564950675122" datatype="html">
         <source>Markdown compatible that supports:</source>
-        <target state="translated">マークダウン記法で以下の事が可能です:</target>
+        <target state="translated">マークダウン記法で以下のことが可能です:</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context><context context-type="linenumber">18</context></context-group>
       </trans-unit>
       <trans-unit id="8422216333877786919" datatype="html">
@@ -3633,7 +3633,7 @@
       </trans-unit>
       <trans-unit id="4824046935922837124" datatype="html">
         <source>Used (<x id="PH" equiv-text="this.bytesToHuman(stats.totalUsed)"/>)</source>
-        <target state="new">Used (<x id="PH" equiv-text="this.bytesToHuman(stats.totalUsed)"/>)</target>
+        <target state="translated">利用中 (<x id="PH" equiv-text="this.bytesToHuman(stats.totalUsed)"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context>
           <context context-type="linenumber">99</context>
@@ -3641,7 +3641,7 @@
       </trans-unit>
       <trans-unit id="5874809640561431793" datatype="html">
         <source>Available (<x id="PH" equiv-text="this.bytesToHuman(totalAvailable)"/>)</source>
-        <target state="new">Available (<x id="PH" equiv-text="this.bytesToHuman(totalAvailable)"/>)</target>
+        <target state="translated">利用可能 (<x id="PH" equiv-text="this.bytesToHuman(totalAvailable)"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context>
           <context context-type="linenumber">105</context>
@@ -3841,7 +3841,7 @@
       </trans-unit>
       <trans-unit id="5021295327106206941" datatype="html">
         <source>by <x id="INTERPOLATION"/> on <x id="INTERPOLATION_1"/> </source>
-        <target state="needs-translation">by <x id="INTERPOLATION"/> on <x id="INTERPOLATION_1"/> </target>
+        <target state="translated"><x id="INTERPOLATION_1"/>の動画 <x id="INTERPOLATION"/>によって </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context><context context-type="linenumber">85</context></context-group>
       </trans-unit>
       <trans-unit id="1443698606045744844" datatype="html">
@@ -3958,9 +3958,7 @@
       </trans-unit>
       <trans-unit id="4917252294930256268" datatype="html">
         <source>It seems that you are not on a HTTPS server. Your webserver needs to have TLS activated in order to follow servers.</source>
-        <target state="new">
-      It seems that you are not on a HTTPS server. Your webserver needs to have TLS activated in order to follow servers.
-    </target>
+        <target state="translated">あなたのWebサーバーはHTTPSに対応していないようです。インスタンスをフォローするためには、WebサーバーがTLSを有効にしている必要があります。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/follow-modal.component.html</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="4058814854824495833" datatype="html">
@@ -4022,7 +4020,7 @@
       </trans-unit>
       <trans-unit id="6185935497147252048" datatype="html">
         <source>This plugin is developed by Framasoft</source>
-        <target state="new">This plugin is developed by Framasoft</target>
+        <target state="translated">このプラグインはFramasoftによって開発されました</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">37</context>
@@ -4199,7 +4197,7 @@
       </trans-unit>
       <trans-unit id="289582790179344391" datatype="html">
         <source>This view also shows comments from muted accounts.</source>
-        <target state="needs-translation">This view also shows comments from muted accounts.</target>
+        <target state="translated">コメント数にはミュートしたアカウントからのコメントも反映されます。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-comment-list/video-comment-list.component.html</context>
           <context context-type="linenumber">8</context>
@@ -4248,7 +4246,7 @@
       </trans-unit>
       <trans-unit id="3901868627411944813" datatype="html">
         <source>Priority <x id="START_SMALL_TEXT" ctype="x-small" equiv-text="&lt;small&gt;"/>(1 = highest priority)<x id="CLOSE_SMALL_TEXT" ctype="x-small" equiv-text="&lt;/small&gt;"/></source>
-        <target state="new">Priority <x id="START_SMALL_TEXT" ctype="x-small" equiv-text="&lt;small&gt;"/>(1 = highest priority)<x id="CLOSE_SMALL_TEXT" ctype="x-small" equiv-text="&lt;/small&gt;"/></target>
+        <target state="translated">優先度<x id="START_SMALL_TEXT" ctype="x-small" equiv-text="&lt;small&gt;"/>(1 = 最も優先度が高い)<x id="CLOSE_SMALL_TEXT" ctype="x-small" equiv-text="&lt;/small&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">47</context>
@@ -4350,7 +4348,7 @@
       </trans-unit>
       <trans-unit id="8953934448427251062" datatype="html">
         <source>The <x id="START_LINK"/>sharing system<x id="CLOSE_LINK"/> implies that some technical information about your system (such as a public IP address) can be sent to other peers, but greatly helps to reduce server load.</source>
-        <target state="translated"><x id="START_LINK"/>P2P機能<x id="CLOSE_LINK"/>は、あなたのシステムの技術的情報（例えば、公開IPアドレスなど）が他のピアに送信される事を暗に意味していますが、サーバーへの負荷を軽減することへの大きな助けとなります。</target>
+        <target state="translated"><x id="START_LINK"/>P2P機能<x id="CLOSE_LINK"/>は、あなたのシステムの技術的情報（例えば、公開IPアドレスなど）が他のピアに送信されることを暗に意味していますが、サーバーへの負荷を軽減することへの大きな助けとなります。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
       <trans-unit id="34094919610906740" datatype="html">
@@ -4520,7 +4518,7 @@
       </trans-unit>
       <trans-unit id="2107098695989136934" datatype="html">
         <source>Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/plugins&quot;&gt;"/>plugins &amp; themes<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more involved changes, or <x id="START_LINK_1" equiv-text="&lt;a routerLink=&quot;/admin/config/edit-custom&quot; fragment=&quot;advanced-configuration&quot;&gt;"/>add slight customizations<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="new"> Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/plugins&quot;&gt;"/>plugins &amp; themes<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more involved changes, or <x id="START_LINK_1" equiv-text="&lt;a routerLink=&quot;/admin/config/edit-custom&quot; fragment=&quot;advanced-configuration&quot;&gt;"/>add slight customizations<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/plugins&quot;&gt;"/>プラグイン&amp;テーマ<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>を利用して大幅にカスタマイズするか、<x id="START_LINK_1" equiv-text="&lt;a routerLink=&quot;/admin/config/edit-custom&quot; fragment=&quot;advanced-configuration&quot;&gt;"/>微調整を加えましょう<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>。 </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">5</context></context-group>
       </trans-unit>
       <trans-unit id="6855462350544488601" datatype="html">
@@ -4748,7 +4746,7 @@
       </trans-unit>
       <trans-unit id="6801844913630625451" datatype="html">
         <source>⚠️ We don't recommend to enable this feature if you don't trust your users</source>
-        <target state="new">⚠️ We don't recommend to enable this feature if you don't trust your users</target>
+        <target state="translated">⚠️ インスタンスのユーザーを信頼できない場合、この機能を有効にすることをPeerTubeは推奨しません</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">283</context>
@@ -4756,7 +4754,7 @@
       </trans-unit>
       <trans-unit id="3950258704315544174" datatype="html">
         <source>Unless a user is marked as trusted, their videos will stay private until a moderator reviews them.</source>
-        <target state="new">Unless a user is marked as trusted, their videos will stay private until a moderator reviews them.</target>
+        <target state="translated">特定のユーザーを運営者が信頼できると見なすまでは、モデレーターが審査するまでの間、ユーザーの動画は非公開となります。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">301</context></context-group>
       </trans-unit>
       <trans-unit id="424703522835656806" datatype="html">
@@ -4962,7 +4960,7 @@
       </trans-unit>
       <trans-unit id="6421580347313273983" datatype="html">
         <source>Allow your users to automatically publish a replay of their live</source>
-        <target state="translated">ユーザーがライブ配信終了時に、自動的にライブ配信の動画を投稿する事を許可する</target>
+        <target state="translated">ユーザーがライブ配信終了時に、自動的にライブ配信の動画を投稿することを許可する</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">31</context></context-group>
       </trans-unit>
       <trans-unit id="3472969629566153023" datatype="html">
@@ -6316,15 +6314,12 @@
       </trans-unit>
       <trans-unit id="6868048887248005916">
         <source>What are the consequences?</source>
-        <target>その結果は何ですか?</target>
+        <target>結論としてはどうでしょうか？</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">83</context></context-group>
       </trans-unit>
       <trans-unit id="1411398404280870617" datatype="html">
         <source>In theory, someone with enough technical skills could create a script that tracks which IP is downloading which video. In practice, this is much more difficult because:</source>
-        <target state="new">
-        In theory, someone with enough technical skills could create a script that tracks which IP is downloading which video.
-        In practice, this is much more difficult because:
-      </target>
+        <target state="translated">理論上、十分な技術的スキルを持っていれば、どのIPアドレスが動画をダウンロードしているかを追跡するスクリプトを作成することはできるでしょう。しかし、そのようなスクリプトを作ることは、実際にはかなり難しいと言えます。なぜなら:</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">85</context></context-group>
       </trans-unit>
       <trans-unit id="6870500454322981404" datatype="html">
@@ -6361,9 +6356,7 @@
       </trans-unit>
       <trans-unit id="7196664247366401915" datatype="html">
         <source>The IP address is a vague information: usually, it regularly changes and can represent many persons or entities</source>
-        <target state="new">
-          The IP address is a vague information: usually, it regularly changes and can represent many persons or entities
-        </target>
+        <target state="translated">IPアドレスは漠然とした情報です。通常は定期的に変更され、また多数の人や団体の情報だと示すことができます</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">111</context></context-group>
       </trans-unit>
       <trans-unit id="1120376809358109718" datatype="html">
@@ -6373,15 +6366,12 @@
       </trans-unit>
       <trans-unit id="7812408733559506009" datatype="html">
         <source>The worst-case scenario of an average person spying on their friends is quite unlikely. There are much more effective ways to get that kind of information.</source>
-        <target state="new">
-        The worst-case scenario of an average person spying on their friends is quite unlikely.
-        There are much more effective ways to get that kind of information.
-      </target>
+        <target state="translated">また、普通の人がその友人達をひそかに監視しているという、最悪のケースは考えにくいでしょう。技術的にセンシティブな情報を手に入れるには、より効果的な方法がありますから。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">123</context></context-group>
       </trans-unit>
       <trans-unit id="8484650229450883706">
         <source>How does PeerTube compare with YouTube?</source>
-        <target>PeerTube は YouTube とどう違うのですか?</target>
+        <target>この問題について、PeerTubeはYouTubeと比べるとどう違いますか？</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">128</context></context-group>
       </trans-unit>
       <trans-unit id="6213340208914097303" datatype="html">
@@ -6395,7 +6385,7 @@
       </trans-unit>
       <trans-unit id="2676074687792256808">
         <source>What can I do to limit the exposure of my IP address?</source>
-        <target>IPアドレスの暴露を抑えるために何ができますか?</target>
+        <target>IPアドレスの暴露を抑えるために何ができるでしょうか？</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">136</context></context-group>
       </trans-unit>
       <trans-unit id="8804946818315976118" datatype="html">
@@ -6415,20 +6405,17 @@
       </trans-unit>
       <trans-unit id="7404776804526394585" datatype="html">
         <source>PeerTube wants to deliver the best countermeasures possible, to give you more choice and render attacks less likely. Here is what we put in place so far:</source>
-        <target state="new">
-        PeerTube wants to deliver the best countermeasures possible, to give you more choice
-        and render attacks less likely. Here is what we put in place so far:
-      </target>
+        <target state="translated">PeerTubeは、あなたに選択肢を増やすことや攻撃される可能性を低くするために、できる限りのベストを尽くした対抗策を提供したいと考えています。以下が今までに導入された機能です。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">147</context></context-group>
       </trans-unit>
       <trans-unit id="8635362984201852982" datatype="html">
         <source>We set a limit to the number of peers sent by the tracker</source>
-        <target state="new">We set a limit to the number of peers sent by the tracker</target>
+        <target state="translated">トラッカーから情報が送信されるピア数の制限</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">153</context></context-group>
       </trans-unit>
       <trans-unit id="8903417899533541365" datatype="html">
         <source>We set a limit on the request frequency received by the tracker</source>
-        <target state="new">We set a limit on the request frequency received by the tracker</target>
+        <target state="translated">トラッカーから受け取ったリクエスト頻度への制限</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">154</context></context-group>
       </trans-unit>
       <trans-unit id="2470460396724373169" datatype="html">
@@ -6438,10 +6425,7 @@
       </trans-unit>
       <trans-unit id="5991790391344625653" datatype="html">
         <source>Ultimately, remember you can always disable P2P by toggling it in the video player, or just by disabling WebRTC in your browser.</source>
-        <target state="new">
-        Ultimately, remember you can always disable P2P by toggling it in the video player, or just by disabling
-        WebRTC in your browser.
-      </target>
+        <target state="translated">結局のところ、あなたはいつでも再生プレイヤー上でP2P機能について設定することで、またはブラウザーの設定でWebRTCを無効にするだけで、P2P機能を無効にできることを覚えておいて下さい。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">158</context></context-group>
       </trans-unit>
       <trans-unit id="3857357852909495917" datatype="html">
@@ -10954,7 +10938,7 @@
       </trans-unit>
       <trans-unit id="6767380569816110388" datatype="html">
         <source>Only shareable via a private link</source>
-        <target state="translated">未収載動画のURLを他人と共有する以外の方法では、動画を再生する事はできません</target>
+        <target state="translated">未収載動画のURLを他人と共有する以外の方法では、動画を再生することはできません</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context><context context-type="linenumber">368</context></context-group>
       </trans-unit>
       <trans-unit id="6828965264297239528">
