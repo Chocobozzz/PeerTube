@@ -38,7 +38,8 @@ function buildActorWithAvatarInclude () {
         attributes: [ 'filename' ],
         as: 'Avatars',
         model: ActorImageModel.unscoped(),
-        required: false
+        required: false,
+        duplicating: false
       },
       {
         attributes: [ 'host' ],
@@ -177,7 +178,8 @@ function buildAccountInclude (required: boolean, withActor = false) {
                 attributes: [ 'filename' ],
                 as: 'Avatars',
                 model: ActorImageModel.unscoped(),
-                required: false
+                required: false,
+                duplicating: false
               },
               {
                 attributes: [ 'host' ],
@@ -570,7 +572,7 @@ export class UserNotificationModel extends Model<Partial<AttributesOnly<UserNoti
           id: this.ActorFollow.ActorFollower.Account.id,
           displayName: this.ActorFollow.ActorFollower.Account.getDisplayName(),
           name: this.ActorFollow.ActorFollower.preferredUsername,
-          avatars: this.ActorFollow.ActorFollower.Avatars.map(a => ({
+          avatars: this.ActorFollow.ActorFollower.Avatars?.map(a => ({
             createdAt: a.createdAt.toISOString(),
             path: a.getStaticPath(),
             updatedAt: a.updatedAt.toISOString(),
@@ -664,7 +666,7 @@ export class UserNotificationModel extends Model<Partial<AttributesOnly<UserNoti
       displayName: accountOrChannel.getDisplayName(),
       name: accountOrChannel.Actor.preferredUsername,
       host: accountOrChannel.Actor.getHost(),
-      avatars: accountOrChannel.Actor.Avatars.map(a => ({
+      avatars: accountOrChannel.Actor.Avatars?.map(a => ({
         width: a.width,
         path: a.getStaticPath(),
         updatedAt: a.updatedAt.toISOString(),

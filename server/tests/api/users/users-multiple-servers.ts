@@ -132,7 +132,7 @@ describe('Test users with multiple servers', function () {
       }
 
       for (const avatar of account.avatars) {
-        await testImage(server.url, 'avatar2-resized', avatar.path, '.png')
+        await testImage(server.url, `avatar2-resized-${avatar.width}x${avatar.width}`, avatar.path, '.png')
       }
     }
   })

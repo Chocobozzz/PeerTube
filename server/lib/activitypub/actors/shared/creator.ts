@@ -28,14 +28,16 @@ export class APActorCreator {
     return sequelizeTypescript.transaction(async t => {
       const server = await this.setServer(actorInstance, t)
 
-      await this.setImageIfNeeded(actorInstance, ActorImageType.AVATAR, t)
-      await this.setImageIfNeeded(actorInstance, ActorImageType.BANNER, t)
-
-      if (Array.isArray(this.actorObject.icon) === false && actorInstance.Avatars.length > 0) {
-        await generateSmallerAvatar(actorInstance, null, t) // Backward compatibility for version < 4.1
-      }
-
       const { actorCreated, created } = await this.saveActor(actorInstance, t)
+
+      actorCreated.Avatars = actorCreated.Avatars || []
+      actorCreated.Banners = actorCreated.Banners || []
+      await this.setImageIfNeeded(actorCreated, ActorImageType.AVATAR, t)
+      await this.setImageIfNeeded(actorCreated, ActorImageType.BANNER, t)
+
+      if (Array.isArray(this.actorObject.icon) === false && actorCreated.Avatars?.length > 0) {
+        await generateSmallerAvatar(actorCreated, null, t) // Backward compatibility for version < 4.1
+      }
 
       await this.tryToFixActorUrlIfNeeded(actorCreated, actorInstance, created, t)
 

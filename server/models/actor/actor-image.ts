@@ -30,6 +30,10 @@ import { ActorModel } from './actor'
     {
       fields: [ 'filename' ],
       unique: true
+    },
+    {
+      fields: [ 'actorId', 'type', 'width' ],
+      unique: true
     }
   ]
 })

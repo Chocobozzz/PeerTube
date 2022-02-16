@@ -35,7 +35,7 @@ import { ActivityPubActorType } from '@shared/models'
 import { FollowState } from '../../../shared/models/actors'
 import { ActorFollow } from '../../../shared/models/actors/follow.model'
 import { logger } from '../../helpers/logger'
-import { ACTOR_FOLLOW_SCORE, CONSTRAINTS_FIELDS, FOLLOW_STATES, SERVER_ACTOR_NAME } from '../../initializers/constants'
+import { ACTOR_FOLLOW_SCORE, CONSTRAINTS_FIELDS, FOLLOW_STATES, SERVER_ACTOR_NAME, SORTABLE_COLUMNS } from '../../initializers/constants'
 import { AccountModel } from '../account/account'
 import { ServerModel } from '../server/server'
 import { doesExist } from '../shared/query'
@@ -498,7 +498,7 @@ export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowMo
     }
 
     const query = {
-      attributes: [],
+      attributes: SORTABLE_COLUMNS.USER_SUBSCRIPTIONS, // Alt use this method instead https://github.com/sequelize/sequelize/issues/4553
       distinct: true,
       offset: start,
       limit: count,

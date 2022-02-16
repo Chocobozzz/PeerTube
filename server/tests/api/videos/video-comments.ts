@@ -68,7 +68,6 @@ describe('Test video comments', function () {
     it('Should list threads of this video', async function () {
       const body = await command.listThreads({ videoId: videoUUID })
 
-      console.log(body.data)
       expect(body.total).to.equal(1)
       expect(body.totalNotDeletedComments).to.equal(1)
       expect(body.data).to.be.an('array')

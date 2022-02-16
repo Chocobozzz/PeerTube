@@ -368,6 +368,8 @@ export class VideoCommentModel extends Model<Partial<AttributesOnly<VideoComment
       limit: count,
       order: getCommentSort(sort),
       where,
+      distinct: true,
+      col: 'id',
       include: [
         {
           model: AccountModel.unscoped(),
@@ -423,6 +425,8 @@ export class VideoCommentModel extends Model<Partial<AttributesOnly<VideoComment
       offset: start,
       limit: count,
       order: getCommentSort(sort),
+      distinct: true,
+      col: 'VideoCommentModel.id',
       where: {
         [Op.and]: [
           {
@@ -478,6 +482,8 @@ export class VideoCommentModel extends Model<Partial<AttributesOnly<VideoComment
 
     const query = {
       order: [ [ 'createdAt', 'ASC' ], [ 'updatedAt', 'ASC' ] ] as Order,
+      distinct: true,
+      col: 'VideoCommentModel.id',
       where: {
         videoId,
         [Op.and]: [
@@ -554,6 +560,8 @@ export class VideoCommentModel extends Model<Partial<AttributesOnly<VideoComment
       order: [ [ 'createdAt', 'ASC' ] ] as Order,
       offset: start,
       limit: count,
+      distinct: true,
+      col: 'VideoCommentModel.id',
       where: {
         videoId: video.id,
         accountId: {

@@ -161,12 +161,14 @@ export type SummaryOptions = {
             {
               model: ActorImageModel,
               as: 'Avatars',
-              required: false
+              required: false,
+              duplicating: false
             },
             {
               model: ActorImageModel,
               as: 'Banners',
-              required: false
+              required: false,
+              duplicating: false
             }
           ]
         },
@@ -515,6 +517,7 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
       },
       offset: options.start,
       limit: options.count,
+      subQuery: false,
       order: getSort(options.sort),
       where
     }
@@ -590,7 +593,7 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
       include: [
         {
           attributes: [],
-          model: AccountModel,
+          model: AccountModel.unscoped(),
           where: {
             id: accountId
           },

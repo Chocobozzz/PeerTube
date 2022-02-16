@@ -13,21 +13,24 @@ type ImageInfo = {
 }
 
 async function updateActorImageInstance (actor: MActorImages, type: ActorImageType, imagesInfo: ImageInfo[] | null, t: Transaction) {
-  const avatarsOrBanners = type === ActorImageType.AVATAR ? actor.Avatars : actor.Banners
+  const typeStr = type === ActorImageType.AVATAR ? 'Avatars' : 'Banners'
+  const avatarsOrBanners = actor[typeStr]
+
+  if (imagesInfo.length === 0) {
+    await Promise.all(avatarsOrBanners.map(a => a.destroy({ transaction: t })))
+    actor[typeStr] = []
+  }
 
   await Promise.all(imagesInfo.map(async imageInfo => {
-    const oldImageModel = avatarsOrBanners.find(i => i.width === imageInfo.width)
-
-    if (imageInfo?.fileUrl && oldImageModel.fileUrl === imageInfo.fileUrl) {
-      logger.info('Dont update avatar/banner since the fileUrl did not change.')
-      return actor
-    }
+    const oldImageModel = (avatarsOrBanners || []).find(i => i.width === imageInfo.width)
 
     if (oldImageModel) {
+      if (imageInfo?.fileUrl && oldImageModel.fileUrl === imageInfo.fileUrl) {
+        return actor
+      }
+
       try {
         await oldImageModel.destroy({ transaction: t })
-
-        setActorImage(actor, type, null)
       } catch (err) {
         logger.error('Cannot remove old actor image of actor %s.', actor.url, { err })
       }
@@ -94,6 +97,4 @@ function setActorImage (actorModel: MActorImages, type: ActorImageType, imageMod
       actorModel.Banners = [ ...actorModel.Banners.filter(a => a.width !== imageModel.width), imageModel ]
       break
   }
-
-  return actorModel
 }

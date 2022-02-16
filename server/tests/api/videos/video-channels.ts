@@ -274,7 +274,7 @@ describe('Test video channels', function () {
     await servers[0].channels.updateImage({
       channelName: 'second_video_channel',
       fixture,
-      type: 'avatars'
+      type: 'avatar'
     })
 
     await waitJobs(servers)
@@ -305,7 +305,7 @@ describe('Test video channels', function () {
     await servers[0].channels.updateImage({
       channelName: 'second_video_channel',
       fixture,
-      type: 'banners'
+      type: 'banner'
     })
 
     await waitJobs(servers)
@@ -325,8 +325,7 @@ describe('Test video channels', function () {
 
   it('Should delete the video channel avatar', async function () {
     this.timeout(15000)
-
-    await servers[0].channels.deleteImage({ channelName: 'second_video_channel', type: 'avatars' })
+    await servers[0].channels.deleteImage({ channelName: 'second_video_channel', type: 'avatar' })
 
     await waitJobs(servers)
 
@@ -341,7 +340,7 @@ describe('Test video channels', function () {
   it('Should delete the video channel banner', async function () {
     this.timeout(15000)
 
-    await servers[0].channels.deleteImage({ channelName: 'second_video_channel', type: 'banners' })
+    await servers[0].channels.deleteImage({ channelName: 'second_video_channel', type: 'banner' })
 
     await waitJobs(servers)
 

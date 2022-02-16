@@ -49,11 +49,11 @@ export class APActorUpdater {
 
       await runInReadCommittedTransaction(async t => {
         await updateActorImageInstance(this.actor, ActorImageType.BANNER, bannersInfo, t)
+        await updateActorImageInstance(this.actor, ActorImageType.AVATAR, avatarsInfo, t)
 
-        if (Array.isArray(this.actorObject.icon) === false && this.actor.Avatars.length > 0) {
+        if (Array.isArray(this.actorObject.icon) === false && avatarsInfo.length > 0) {
           await generateSmallerAvatar(this.actor, null, t) // Backward compatibility for version < 4.1
         }
-        await updateActorImageInstance(this.actor, ActorImageType.AVATAR, avatarsInfo, t)
       })
 
       await runInReadCommittedTransaction(async t => {

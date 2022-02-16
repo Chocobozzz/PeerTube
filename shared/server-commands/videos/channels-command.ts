@@ -125,7 +125,7 @@ export class ChannelsCommand extends AbstractCommand {
   updateImage (options: OverrideCommandOptions & {
     fixture: string
     channelName: string | number
-    type: 'avatars' | 'banners'
+    type: 'avatar' | 'banner'
   }) {
     const { channelName, fixture, type } = options
 
@@ -145,7 +145,7 @@ export class ChannelsCommand extends AbstractCommand {
 
   deleteImage (options: OverrideCommandOptions & {
     channelName: string | number
-    type: 'avatars' | 'banners'
+    type: 'avatar' | 'banner'
   }) {
     const { channelName, type } = options
 

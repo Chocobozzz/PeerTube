@@ -83,6 +83,7 @@ export const unusedActorAttributesForAPI = [
       model: ActorImageModel,
       as: 'Avatars',
       required: false,
+      duplicating: false,
       where: {
         type: ActorImageType.AVATAR
       }
@@ -114,6 +115,7 @@ export const unusedActorAttributesForAPI = [
         model: ActorImageModel,
         as: 'Avatars',
         required: false,
+        duplicating: false,
         where: {
           type: ActorImageType.AVATAR
         }
@@ -122,6 +124,7 @@ export const unusedActorAttributesForAPI = [
         model: ActorImageModel,
         as: 'Banners',
         required: false,
+        duplicating: false,
         where: {
           type: ActorImageType.BANNER
         }
@@ -350,7 +353,8 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
       transaction
     }
 
-    return ActorModel.unscoped().findOne(query)
+    return ActorModel.unscoped().findAll(query) // Fix so that all avatars are returned
+      .then(([ actor ]) => actor)
   }
 
   static isActorUrlExist (url: string) {
@@ -388,8 +392,8 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
         transaction
       }
 
-      return ActorModel.scope(ScopeNames.FULL)
-                       .findOne(query)
+      return ActorModel.scope(ScopeNames.FULL).findAll(query) // Fix so that all avatars are returned
+        .then(([ actor ]) => actor)
     }
 
     return ModelCache.Instance.doCache({
@@ -412,8 +416,8 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
         transaction
       }
 
-      return ActorModel.unscoped()
-                       .findOne(query)
+      return ActorModel.unscoped().findAll(query) // Fix so that all avatars are returned
+        .then(([ actor ]) => actor)
     }
 
     return ModelCache.Instance.doCache({
@@ -441,7 +445,8 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
       ]
     }
 
-    return ActorModel.scope(ScopeNames.FULL).findOne(query)
+    return ActorModel.scope(ScopeNames.FULL).findAll(query) // Fix so that all avatars are returned
+      .then(([ actor ]) => actor)
   }
 
   static loadByUrl (url: string, transaction?: Transaction): Promise<MActorAccountChannelId> {
@@ -464,7 +469,8 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
       ]
     }
 
-    return ActorModel.unscoped().findOne(query)
+    return ActorModel.unscoped().findAll(query) // Fix so that all avatars are returned
+      .then(([ actor ]) => actor)
   }
 
   static loadByUrlAndPopulateAccountAndChannel (url: string, transaction?: Transaction): Promise<MActorFull> {
@@ -475,7 +481,8 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
       transaction
     }
 
-    return ActorModel.scope(ScopeNames.FULL).findOne(query)
+    return ActorModel.scope(ScopeNames.FULL).findAll(query) // Fix so that all avatars are returned
+      .then(([ actor ]) => actor)
   }
 
   static rebuildFollowsCount (ofId: number, type: 'followers' | 'following', transaction?: Transaction) {
@@ -678,11 +685,11 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
   }
 
   static getAvatarUrl (avatar) {
-    return WEBSERVER.URL + avatar.getStaticPath()
+    return !avatar ? undefined : WEBSERVER.URL + avatar.getStaticPath()
   }
 
   static getBannerUrl (banner) {
-    return WEBSERVER.URL + banner.getStaticPath()
+    return !banner ? undefined : WEBSERVER.URL + banner.getStaticPath()
   }
 
   isOutdated () {

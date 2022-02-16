@@ -213,7 +213,7 @@ async function deleteVideoChannelAvatar (req: express.Request, res: express.Resp
 
   await deleteLocalActorImageFile(videoChannel, ActorImageType.AVATAR)
 
-  return res.json({ avatars: [] })
+  return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
 async function deleteVideoChannelBanner (req: express.Request, res: express.Response) {
@@ -221,7 +221,7 @@ async function deleteVideoChannelBanner (req: express.Request, res: express.Resp
 
   await deleteLocalActorImageFile(videoChannel, ActorImageType.BANNER)
 
-  return res.json({ banners: [] })
+  return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
 async function addVideoChannel (req: express.Request, res: express.Response) {

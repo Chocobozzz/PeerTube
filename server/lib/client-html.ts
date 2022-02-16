@@ -276,8 +276,8 @@ class ClientHtml {
     const avatar = entity.Actor.getBiggestAvatar()
     const image = {
       url: ActorModel.getAvatarUrl(avatar),
-      width: avatar.width,
-      height: avatar.height
+      width: avatar?.width,
+      height: avatar?.height
     }
 
     const ogType = 'website'

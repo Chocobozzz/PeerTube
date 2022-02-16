@@ -37,7 +37,7 @@ function normalizeIconOrImage (icon: ActivityIconObject | ActivityIconObject[]):
 }
 
 function getImageInfoFromObject (actorObject: ActivityPubActor, type: ActorImageType) {
-  const iconsOrImages = ActorImageType.AVATAR ? actorObject.icon : actorObject.image
+  const iconsOrImages = type === ActorImageType.AVATAR ? actorObject.icon : actorObject.image
 
   return normalizeIconOrImage(iconsOrImages).map(iconOrImage => {
     const mimetypes = MIMETYPES.IMAGE
@@ -64,6 +64,7 @@ function getImageInfoFromObject (actorObject: ActivityPubActor, type: ActorImage
       type
     }
   })
+  .filter(i => !!i)
 }
 
 function getActorDisplayNameFromObject (actorObject: ActivityPubActor) {

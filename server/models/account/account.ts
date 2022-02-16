@@ -283,12 +283,22 @@ export class AccountModel extends Model<Partial<AttributesOnly<AccountModel>>> {
             required: true,
             where: {
               preferredUsername: name
-            }
+            },
+            include: [
+              {
+                attributes: [ 'filename', 'fileUrl', 'height', 'type', 'width' ],
+                model: ActorImageModel,
+                as: 'Avatars',
+                required: false,
+                duplicating: false
+              }
+            ]
           }
         ]
       }
 
-      return AccountModel.findOne(query)
+      return AccountModel.findAll(query) // findAll is needed to return all avatars
+        .then(([ account ]) => account)
     }
 
     return ModelCache.Instance.doCache({

@@ -89,12 +89,15 @@ async function deleteLocalActorImageFile (accountOrChannel: MAccountDefault | MC
   })
 }
 
-type DownloadImageQueueTask = { fileUrl: string, filename: string, type: ActorImageType }
+type DownloadImageQueueTask = {
+  fileUrl: string
+  filename: string
+  type: ActorImageType
+  size: typeof ACTOR_IMAGES_SIZE[ActorImageType][number]
+}
 
 const downloadImageQueue = queue<DownloadImageQueueTask, Error>((task, cb) => {
-  const sizes = ACTOR_IMAGES_SIZE[task.type]
-
-  Promise.all(sizes.map(size => downloadImage(task.fileUrl, CONFIG.STORAGE.ACTOR_IMAGES, task.filename, size)))
+  downloadImage(task.fileUrl, CONFIG.STORAGE.ACTOR_IMAGES, task.filename, task.size)
     .then(() => cb())
     .catch(err => cb(err))
 
@@ -114,12 +117,21 @@ function pushActorImageProcessInQueue (task: DownloadImageQueueTask) {
 const actorImagePathUnsafeCache = new LRUCache<string, string>({ max: LRU_CACHE.ACTOR_IMAGE_STATIC.MAX_SIZE })
 
 async function generateSmallerAvatar
-(Actor: MActorDefault, afterCb?: (t: Transaction, updateActor: MActorImages) => Promise<any>, transaction?: Transaction) {
+(Actor: MActorDefault, afterCb?: (t: Transaction, updateActor: MActorImages) => Promise<any>, transaction?: Transaction):
+Promise<MActorImages> {
   const bigAvatar = Actor.Avatars[0]
 
   if (bigAvatar.onDisk === false) {
     try {
-      await pushActorImageProcessInQueue({ filename: bigAvatar.filename, fileUrl: bigAvatar.fileUrl, type: bigAvatar.type })
+      await pushActorImageProcessInQueue({
+        filename: bigAvatar.filename,
+        fileUrl: bigAvatar.fileUrl,
+        size: {
+          height: bigAvatar.height,
+          width: bigAvatar.width
+        },
+        type: bigAvatar.type
+      })
     } catch (err) {
       logger.warn('Cannot process remote actor image %s.', bigAvatar.fileUrl, { err })
 
@@ -153,20 +165,20 @@ async function generateSmallerAvatar
 
       const updatedActor = await updateActorImageInstance(Actor, ActorImageType.AVATAR, [ actorImageInfo ], t)
 
-      if (!transaction) {
-        await updatedActor.save({ transaction: t })
-      }
+      await updatedActor.save({ transaction: t })
 
       if (afterCb) {
         await afterCb(t, updatedActor)
       }
+
+      return updatedActor
     }
 
     if (transaction) {
-      await save(transaction)
-    } else {
-      await sequelizeTypescript.transaction(save)
+      return await save(transaction)
     }
+
+    return await sequelizeTypescript.transaction(save)
   })
 }
 
