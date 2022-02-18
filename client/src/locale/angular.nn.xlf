@@ -531,6 +531,7 @@
       </trans-unit>
       <trans-unit id="8674693181203168033" datatype="html">
         <source>Discover how to setup your account, what is a channel, how to create a playlist and more!</source>
+        <target>Finn ut korleis du set opp brukarkontoen din, kva ein kanal er, korleis du lagar ei speleliste og meir!</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">32</context></context-group>
       </trans-unit>
       <trans-unit id="5336387229608682776" datatype="html">
@@ -542,6 +543,7 @@
       </trans-unit>
       <trans-unit id="7916664392219781729" datatype="html">
         <source>Discover unofficial Android applications or browser addons!</source>
+        <target>Sjå dei uoffisielle Android-appane eller nettlesartillegg!</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
       <trans-unit id="4093735071527927163" datatype="html">
@@ -1251,6 +1253,7 @@
       </trans-unit>
       <trans-unit id="8524278911521465398" datatype="html">
         <source>Disable local search in search bar</source>
+        <target>Skru av lokalt søk i søkjefeltet</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">398</context></context-group>
       </trans-unit>
       <trans-unit id="4444955208013675027" datatype="html">
@@ -1259,6 +1262,7 @@
       </trans-unit>
       <trans-unit id="6568991917245875948" datatype="html">
         <source>Otherwise the local search stays used by default</source>
+        <target>Elles blir det lokale søket brukt som standard</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">408</context></context-group>
       </trans-unit>
       <trans-unit id="836183323506117145" datatype="html">
@@ -2659,7 +2663,7 @@
       </trans-unit>
       <trans-unit id="4604870995665811499" datatype="html">
         <source>Local comments</source>
-        <target state="new">Local comments</target>
+        <target state="translated">Lokale kommentarar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-comment-list/video-comment-list.component.ts</context>
           <context context-type="linenumber">51</context>
@@ -3242,6 +3246,7 @@
       </trans-unit>
       <trans-unit id="588099657508661970" datatype="html">
         <source>None (local authentication)</source>
+        <target>Ingen (lokal innlogging)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">192</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">192</context></context-group>
       </trans-unit>
@@ -6720,6 +6725,7 @@
       </trans-unit>
       <trans-unit id="7627544798203088407" datatype="html">
         <source>Discover</source>
+        <target>Oppdag</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/video-list/overview/video-overview.component.html</context><context context-type="linenumber">1</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/menu/menu.service.ts</context><context context-type="linenumber">125</context></context-group>
       </trans-unit>
@@ -6755,6 +6761,7 @@
       </trans-unit>
       <trans-unit id="8681933925782924101" datatype="html">
         <source>Local videos</source>
+        <target>Lokale filmar</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context><context context-type="linenumber">89</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/video-list/videos-list-common-page.component.ts</context><context context-type="linenumber">189</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/menu/menu.service.ts</context><context context-type="linenumber">142</context></context-group>
@@ -6823,6 +6830,7 @@
       </trans-unit>
       <trans-unit id="4668975178372693951" datatype="html">
         <source>Discover videos</source>
+        <target>Oppdag filmar</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/videos-routing.module.ts</context><context context-type="linenumber">17</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/menu/menu.service.ts</context><context context-type="linenumber">124</context></context-group>
       </trans-unit>
@@ -6876,6 +6884,7 @@
       </trans-unit>
       <trans-unit id="5409372033656550095" datatype="html">
         <source>Go to the discover videos page</source>
+        <target>Gå til sida for å oppdaga filmar</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.ts</context><context context-type="linenumber">284</context></context-group>
       </trans-unit>
       <trans-unit id="4278050445961255445" datatype="html">
@@ -6889,6 +6898,7 @@
       </trans-unit>
       <trans-unit id="2887122197778293919" datatype="html">
         <source>Go to the local videos page</source>
+        <target>Gå til sida for lokale filmar</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.ts</context><context context-type="linenumber">299</context></context-group>
       </trans-unit>
       <trans-unit id="8009065619559214982" datatype="html">
@@ -7529,6 +7539,7 @@
       </trans-unit>
       <trans-unit id="3848077896245199337" datatype="html">
         <source>Setup your account, managing video playlists, discover third-party applications...</source>
+        <target>Set opp kontoen din, handter spelelister og finn tredjepartsprogram...</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="6284442506490785579" datatype="html">
@@ -8148,6 +8159,7 @@
       </trans-unit>
       <trans-unit id="3954099618513992825" datatype="html">
         <source>You can only transfer ownership to a local account</source>
+        <target>Du kan berre overføra eigarskapen til ein lokal konto</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-ownership-change-validators.ts</context>
           <context context-type="linenumber">15</context>
@@ -9068,6 +9080,7 @@
       </trans-unit>
       <trans-unit id="2906587845957718064" datatype="html">
         <source>Local</source>
+        <target>Lokalt</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-statistics.component.html</context><context context-type="linenumber">4</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">126</context></context-group>
       </trans-unit>
@@ -9973,7 +9986,7 @@
       </trans-unit>
       <trans-unit id="7312374115603954471" datatype="html">
         <source>This will ask remote instances to delete local videos</source>
-        <target state="new">This will ask remote instances to delete local videos</target>
+        <target state="translated">Dette vil be andre nettstader om å sletta lokale filmar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context>
           <context context-type="linenumber">34</context>
@@ -10319,6 +10332,7 @@
       </trans-unit>
       <trans-unit id="1740917574463702967" datatype="html">
         <source>Subscribe with your local account</source>
+        <target>Abonner med den lokale brukarkontoen din</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">58</context>
@@ -10910,7 +10924,7 @@
       </trans-unit>
       <trans-unit id="8481241275509347668" datatype="html">
         <source>Local videos (this instance)</source>
-        <target state="new">Local videos (this instance)</target>
+        <target state="translated">Lokale filmar (på denne nettstaden)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">85</context>
