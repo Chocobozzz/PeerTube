@@ -6305,7 +6305,7 @@
       </trans-unit>
       <trans-unit id="6314880288843792309" datatype="html">
         <source>The main threat to your privacy induced by BitTorrent lies in your IP address being stored in the instance's BitTorrent tracker as long as you download or watch the video.</source>
-        <target state="translated">BitTorrentによって引き起こされるプライバシーに関わる主な脅威は、動画をダウンロードまたは視聴している限りはインスタンスのBitTorrentトラッカー内に保存される、あなたのIPアドレス自体についてです。</target>
+        <target state="translated">BitTorrentによって引き起こされるプライバシーに関わる主な脅威は、動画をダウンロードまたは視聴している限りはインスタンスのBitTorrentトラッカー内に保存される、あなたのIPアドレスについてです。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">78</context></context-group>
       </trans-unit>
       <trans-unit id="6868048887248005916">
@@ -6330,22 +6330,22 @@
       </trans-unit>
       <trans-unit id="8817667841110447397" datatype="html">
         <source>Those requests have to be sent regularly to know who starts/stops watching a video. It is easy to detect that kind of behaviour</source>
-        <target state="translated">誰が動画視聴を再生または停止するかを知るために、HTTPリクエストは定期的に送信されなければなりません。しかし、このようなリクエストの送信行為は簡単に検出することができます</target>
+        <target state="translated">誰が動画を再生または停止するかを知るために、HTTPリクエストは定期的に送信されなければなりません。しかし、このようなリクエストのサーバーへの送信行為は簡単に見つけることができます</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">102</context></context-group>
       </trans-unit>
       <trans-unit id="4100327951517495019" datatype="html">
         <source>If an IP address is stored in the tracker, it doesn't mean that the person behind the IP (if this person exists) has watched the video</source>
-        <target state="translated">仮にIPアドレスがトラッカー内に保存されたとしても、IPアドレスを利用して動画を視聴している裏で、IPアドレスの所持者が存在することを意味しません（その所持者がこの世に存在しているとしても）</target>
+        <target state="translated">仮にIPアドレスがトラッカー内に保存されたとしても、必ずしもIPアドレスを利用して動画を視聴する行為の背後にIPアドレスの所持者が存在することを意味しません（その所持者がこの世のどこかに存在しているとしても）</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">106</context></context-group>
       </trans-unit>
       <trans-unit id="7196664247366401915" datatype="html">
         <source>The IP address is a vague information: usually, it regularly changes and can represent many persons or entities</source>
-        <target state="translated">IPアドレスは漠然とした情報です。通常は定期的に変更され、また多くの人や団体の情報であると示すことができます</target>
+        <target state="translated">IPアドレスは漠然とした情報です。通常は定期的に変更されます。また、多くの人や団体を表すことができる情報です</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">111</context></context-group>
       </trans-unit>
       <trans-unit id="1120376809358109718" datatype="html">
         <source>Web peers are not publicly accessible: because we use the websocket transport, the protocol is different from classic BitTorrent tracker. When you are in a web browser, you send a signal containing your IP address to the tracker that will randomly choose other peers to forward the information to. See <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/yciabaud/webtorrent/blob/beps/bep_webrtc.rst&quot;&gt;"/>this document<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> for more information </source>
-        <target state="translated">Web上のピアは公的にはアクセスできません。なぜなら、PeerTubeはWebSocketプロトコルを利用しており、これはクラシックなBitTorrentのトラッカーとは異なるからです。あなたがPeerTubeをWebブラウザーで利用するとき、情報を転送するためのあなた以外の他のピアをランダムに選ぶトラッカーに向けて、あなたのIPアドレスを含んだ信号を送信します。詳しくは<x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/yciabaud/webtorrent/blob/beps/bep_webrtc.rst&quot;&gt;"/>こちらのドキュメント<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/>を読んで下さい。 </target>
+        <target state="translated">Web上のピアには公的にはアクセスできません。なぜなら、PeerTubeはWebSocketプロトコルを利用しており、クラシックなBitTorrentのトラッカーとは異なるからです。あなたがPeerTubeをWebブラウザーで利用するとき、情報を転送するための他のピアをランダムに選ぶトラッカーに向けて、あなたは自身のIPアドレスを含んだ信号を送信します。詳しくは<x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/yciabaud/webtorrent/blob/beps/bep_webrtc.rst&quot;&gt;"/>こちらのドキュメント<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/>を読んで下さい。 </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">115</context></context-group>
       </trans-unit>
       <trans-unit id="7812408733559506009" datatype="html">
@@ -6355,16 +6355,12 @@
       </trans-unit>
       <trans-unit id="8484650229450883706">
         <source>How does PeerTube compare with YouTube?</source>
-        <target>この問題について、PeerTubeはYouTubeと比べるとどう違いますか？</target>
+        <target>この脅威について、PeerTubeはYouTubeと比べるとどう違いますか？</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">128</context></context-group>
       </trans-unit>
       <trans-unit id="6213340208914097303" datatype="html">
         <source>The threats to privacy with YouTube are different from PeerTube's. In YouTube's case, the platform gathers a huge amount of your personal information (not only your IP) to analyze them and track you. Moreover, YouTube is owned by Google/Alphabet, a company that tracks you across many websites (via AdSense or Google Analytics).</source>
-        <target state="new">
-        The threats to privacy with YouTube are different from PeerTube's.
-        In YouTube's case, the platform gathers a huge amount of your personal information (not only your IP) to analyze them and track you.
-        Moreover, YouTube is owned by Google/Alphabet, a company that tracks you across many websites (via AdSense or Google Analytics).
-      </target>
+        <target state="translated">Youtubeにおけるプライバシーへの脅威は、PeerTubeのそれとは異なります。Youtubeの場合、非常に多くの個人情報（IPアドレスだけでなく）を収集しており、それらは分析されるために、またはあなたをトラッキングするために行われています。その上、YoutubeはGoogle(Alphabet)に所有されており、この会社は多くのウェブサイト（上のAdSenseまたはGoogle Analyticsを経由して）であなたをトラッキングしています。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">130</context></context-group>
       </trans-unit>
       <trans-unit id="2676074687792256808">
@@ -6374,17 +6370,12 @@
       </trans-unit>
       <trans-unit id="8804946818315976118" datatype="html">
         <source>Your IP address is public so every time you consult a website, there is a number of actors (in addition to the final website) seeing your IP in their connection logs: ISP/routers/trackers/CDN and more. PeerTube is transparent about it: we warn you that if you want to keep your IP private, you must use a VPN or Tor Browser. Thinking that removing P2P from PeerTube will give you back anonymity doesn't make sense.</source>
-        <target state="new">
-        Your IP address is public so every time you consult a website, there is a number of actors (in addition to the final website) seeing
-        your IP in their connection logs: ISP/routers/trackers/CDN and more.
-        PeerTube is transparent about it: we warn you that if you want to keep your IP private, you must use a VPN or Tor Browser.
-        Thinking that removing P2P from PeerTube will give you back anonymity doesn't make sense.
-      </target>
+        <target state="translated">Webサイトを閲覧する度にあなたのIPアドレスはおおやけに公開され、（最後に訪れたWebサイトに加えて）多くのアクターが接続ログであなたのIPアドレスを見ています。ISP、ルーター、トラッカー、CDNなど。この点についてはPeerTubeには透明性がありますが、もしあなたが自分のIPアドレスを守りたい場合、VPNまたはTorブラウザーを使用する必要があることを警告します。PeerTubeを利用する際にP2P機能を利用しないことで自分の匿名性が戻ってくるという考えは、意味を成しません。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">138</context></context-group>
       </trans-unit>
       <trans-unit id="401806741040118292">
         <source>What will be done to mitigate this problem?</source>
-        <target>この問題のリスクを軽減するために、何らかの対策を行う予定はありますか？</target>
+        <target>この脅威のリスクを軽減するために、何らかの対策を行う予定はありますか？</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">145</context></context-group>
       </trans-unit>
       <trans-unit id="7404776804526394585" datatype="html">
