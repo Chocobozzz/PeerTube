@@ -4028,7 +4028,7 @@
       </trans-unit>
       <trans-unit id="8336721444092720377" datatype="html">
         <source>Official</source>
-        <target state="new"> Official </target>
+        <target state="translated">公式</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">37,39</context>
@@ -6295,73 +6295,57 @@
       </trans-unit>
       <trans-unit id="185970110822844952">
         <source>P2P &amp; Privacy</source>
-        <target>P2Pとプライバシー</target>
+        <target>P2P機能とプライバシー</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">69</context></context-group>
       </trans-unit>
       <trans-unit id="442017645619017020" datatype="html">
         <source>PeerTube uses the BitTorrent protocol to share bandwidth between users by default to help lower the load on the server, but ultimately leaves you the choice to switch back to regular streaming exclusively from the server of the video. What follows applies only if you want to keep using the P2P mode of PeerTube.</source>
-        <target state="new">
-        PeerTube uses the BitTorrent protocol to share bandwidth between users by default to help lower the load on the server,
-        but ultimately leaves you the choice to switch back to regular streaming exclusively from the server of the video. What
-        follows applies only if you want to keep using the P2P mode of PeerTube.
-      </target>
+        <target state="translated">PeerTubeは初期設定ではサーバーの負荷を減らすために、ユーザー間で帯域幅を共有するBitTorenntプロトコルを利用しています。しかし、最終的にはユーザーにはPeerTubeのサーバーからの動画に限って、通常の配信方法に切り替えるための選択肢が与えられてます。あなたがPeerTubeのP2Pモードを継続して利用したい場合は、そのための設定のみが適用されます。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">72</context></context-group>
       </trans-unit>
       <trans-unit id="6314880288843792309" datatype="html">
         <source>The main threat to your privacy induced by BitTorrent lies in your IP address being stored in the instance's BitTorrent tracker as long as you download or watch the video.</source>
-        <target state="new"> The main threat to your privacy induced by BitTorrent lies in your IP address being stored in the instance's BitTorrent tracker as long as you download or watch the video. </target>
+        <target state="translated">BitTorrentによって引き起こされるプライバシーに関わる主な脅威は、動画をダウンロードまたは視聴している限りはインスタンスのBitTorrentトラッカー内に保存される、あなたのIPアドレス自体についてです。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">78</context></context-group>
       </trans-unit>
       <trans-unit id="6868048887248005916">
         <source>What are the consequences?</source>
-        <target>結論としてはどうでしょうか？</target>
+        <target>この脅威に関する結論</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">83</context></context-group>
       </trans-unit>
       <trans-unit id="1411398404280870617" datatype="html">
         <source>In theory, someone with enough technical skills could create a script that tracks which IP is downloading which video. In practice, this is much more difficult because:</source>
-        <target state="translated">理論上、十分な技術的スキルを持っていれば、どのIPアドレスが動画をダウンロードしているかを追跡するスクリプトを作成することはできるでしょう。しかし、そのようなスクリプトを作ることは、実際にはかなり難しいと言えます。なぜなら:</target>
+        <target state="translated">理論上、十分な技術スキルを持っていれば、どのIPアドレスがどの動画をダウンロードしているかをトラッキングするスクリプトを作成することはできるでしょう。しかし、実際にはそのようなスクリプトを作ることはかなり難しいと言えます。なぜなら...</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">85</context></context-group>
       </trans-unit>
       <trans-unit id="6870500454322981404" datatype="html">
         <source>An HTTP request has to be sent on each tracker for each video to spy. If we want to spy all PeerTube's videos, we have to send as many requests as there are videos (so potentially a lot)</source>
-        <target state="new">
-          An HTTP request has to be sent on each tracker for each video to spy.
-          If we want to spy all PeerTube's videos, we have to send as many requests as there are videos (so potentially a lot)
-        </target>
+        <target state="translated">全てのIPアドレスを監視するためには、それぞれの動画へのトラッカーにHTTPリクエストが送信されなければなりません。もしPeerTubeの全ての動画を監視したい場合、動画の数に応じて（多くの動画が存在する可能性があります）大量のリクエストを送信しなければなりません</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">91</context></context-group>
       </trans-unit>
       <trans-unit id="4042605201005159699" datatype="html">
         <source>For each request sent, the tracker returns random peers at a limited number. For instance, if there are 1000 peers in the swarm and the tracker sends only 20 peers for each request, there must be at least 50 requests sent to know every peer in the swarm</source>
-        <target state="new">
-          For each request sent, the tracker returns random peers at a limited number.
-          For instance, if there are 1000 peers in the swarm and the tracker sends only 20 peers for each request, there must be at least 50
-          requests sent to know every peer in the swarm
-        </target>
+        <target state="translated">一つ一つのリクエストが送信される度に、トラッカーはランダムに限られた数のピアの情報を返します。例えば、スウォーム内に1000ピアについての情報があり、トラッカーがそれぞれのリクエストへ20ピアの情報だけ返した場合、スウォーム内の全てのピアの情報を知るためには少なくとも50リクエストを送信しなければなりません</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">96</context></context-group>
       </trans-unit>
       <trans-unit id="8817667841110447397" datatype="html">
         <source>Those requests have to be sent regularly to know who starts/stops watching a video. It is easy to detect that kind of behaviour</source>
-        <target state="new">
-          Those requests have to be sent regularly to know who starts/stops watching a video. It is easy to detect that kind of behaviour
-        </target>
+        <target state="translated">誰が動画視聴を再生または停止するかを知るために、HTTPリクエストは定期的に送信されなければなりません。しかし、このようなリクエストの送信行為は簡単に検出することができます</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">102</context></context-group>
       </trans-unit>
       <trans-unit id="4100327951517495019" datatype="html">
         <source>If an IP address is stored in the tracker, it doesn't mean that the person behind the IP (if this person exists) has watched the video</source>
-        <target state="new">
-          If an IP address is stored in the tracker, it doesn't mean that the person behind the IP (if this person exists) has watched the
-          video
-        </target>
+        <target state="translated">仮にIPアドレスがトラッカー内に保存されたとしても、IPアドレスを利用して動画を視聴している裏で、IPアドレスの所持者が存在することを意味しません（その所持者がこの世に存在しているとしても）</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">106</context></context-group>
       </trans-unit>
       <trans-unit id="7196664247366401915" datatype="html">
         <source>The IP address is a vague information: usually, it regularly changes and can represent many persons or entities</source>
-        <target state="translated">IPアドレスは漠然とした情報です。通常は定期的に変更され、また多数の人や団体の情報だと示すことができます</target>
+        <target state="translated">IPアドレスは漠然とした情報です。通常は定期的に変更され、また多くの人や団体の情報であると示すことができます</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">111</context></context-group>
       </trans-unit>
       <trans-unit id="1120376809358109718" datatype="html">
         <source>Web peers are not publicly accessible: because we use the websocket transport, the protocol is different from classic BitTorrent tracker. When you are in a web browser, you send a signal containing your IP address to the tracker that will randomly choose other peers to forward the information to. See <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/yciabaud/webtorrent/blob/beps/bep_webrtc.rst&quot;&gt;"/>this document<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> for more information </source>
-        <target state="new"> Web peers are not publicly accessible: because we use the websocket transport, the protocol is different from classic BitTorrent tracker. When you are in a web browser, you send a signal containing your IP address to the tracker that will randomly choose other peers to forward the information to. See <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/yciabaud/webtorrent/blob/beps/bep_webrtc.rst&quot;&gt;"/>this document<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> for more information </target>
+        <target state="translated">Web上のピアは公的にはアクセスできません。なぜなら、PeerTubeはWebSocketプロトコルを利用しており、これはクラシックなBitTorrentのトラッカーとは異なるからです。あなたがPeerTubeをWebブラウザーで利用するとき、情報を転送するためのあなた以外の他のピアをランダムに選ぶトラッカーに向けて、あなたのIPアドレスを含んだ信号を送信します。詳しくは<x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/yciabaud/webtorrent/blob/beps/bep_webrtc.rst&quot;&gt;"/>こちらのドキュメント<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/>を読んで下さい。 </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">115</context></context-group>
       </trans-unit>
       <trans-unit id="7812408733559506009" datatype="html">
