@@ -1130,7 +1130,7 @@
       </trans-unit>
       <trans-unit id="1663379405062033606" datatype="html">
         <source>Minimum required age to create an account</source>
-        <target state="new">Minimum required age to create an account</target>
+        <target state="translated">Minstealder for å få lov å laga brukarkonto</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">193</context>
@@ -1328,6 +1328,7 @@
       </trans-unit>
       <trans-unit id="3202133522706129143" datatype="html">
         <source>Provide the Twitter account representing your instance to improve link previews. If you don't have a Twitter account, just leave the default value.</source>
+        <target>Skriv inn Twitter-kontoen for nettstaden din for å få betre førehandsvising av lenker. Viss du ikkje har nokon twitterkonto, kan du la standardverdien stå.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">534</context></context-group>
       </trans-unit>
       <trans-unit id="4087837092261487511" datatype="html">
@@ -2276,7 +2277,7 @@
       </trans-unit>
       <trans-unit id="3596798855644241001" datatype="html">
         <source>1 host (without "http://"), account handle or channel handle per line</source>
-        <target state="new">1 host (without "http://"), account handle or channel handle per line</target>
+        <target state="translated">1 vert (utan "https://"), kontohandtak eller kanalhandtak per line</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/follow-modal.component.html</context>
           <context context-type="linenumber">11</context>
@@ -2608,6 +2609,7 @@
       </trans-unit>
       <trans-unit id="289582790179344391" datatype="html">
         <source>This view also shows comments from muted accounts.</source>
+        <target>Denne visinga syner òg kommentarar frå dempa kontoar.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-comment-list/video-comment-list.component.html</context>
           <context context-type="linenumber">8</context>
@@ -2631,6 +2633,7 @@
       </trans-unit>
       <trans-unit id="4086606389696938932" datatype="html">
         <source>Account</source>
+        <target>Konto</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-comment-list/video-comment-list.component.html</context><context context-type="linenumber">41</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.html</context><context context-type="linenumber">23</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.html</context><context context-type="linenumber">23</context></context-group>
@@ -2656,6 +2659,7 @@
       </trans-unit>
       <trans-unit id="2348557406282409966" datatype="html">
         <source>Open account in a new tab</source>
+        <target>Opna brukarkontoen i ny fane</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-comment-list/video-comment-list.component.html</context><context context-type="linenumber">67</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context><context context-type="linenumber">93</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-ownership/my-ownership.component.html</context><context context-type="linenumber">38</context></context-group>
@@ -2697,6 +2701,7 @@
       </trans-unit>
       <trans-unit id="3327751240218085797" datatype="html">
         <source>Delete all comments of this account</source>
+        <target>Slett alle kommentarane frå denne kontoen</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-comment-list/video-comment-list.component.ts</context><context context-type="linenumber">86</context></context-group>
       </trans-unit>
       <trans-unit id="2850960459131251840" datatype="html">
