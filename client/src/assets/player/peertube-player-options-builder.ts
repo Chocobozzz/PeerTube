@@ -19,6 +19,7 @@ import {
   VideoJSPluginOptions
 } from './peertube-videojs-typings'
 import { buildVideoOrPlaylistEmbed, getRtcConfig, isIOS, isSafari } from './utils'
+import { HybridLoaderSettings } from '@peertube/p2p-media-loader-core'
 
 export type PlayerMode = 'webtorrent' | 'p2p-media-loader'
 
@@ -198,9 +199,6 @@ export class PeertubePlayerOptionsBuilder {
     const p2pMediaLoaderOptions = this.options.p2pMediaLoader
     const commonOptions = this.options.common
 
-    const trackerAnnounce = p2pMediaLoaderOptions.trackerAnnounce
-                                                 .filter(t => t.startsWith('ws'))
-
     const redundancyUrlManager = new RedundancyUrlManager(this.options.p2pMediaLoader.redundancyBaseUrls)
 
     const p2pMediaLoader: P2PMediaLoaderPluginOptions = {
@@ -210,23 +208,8 @@ export class PeertubePlayerOptionsBuilder {
       src: p2pMediaLoaderOptions.playlistUrl
     }
 
-    let consumeOnly = false
-    if ((navigator as any)?.connection?.type === 'cellular') {
-      console.log('We are on a cellular connection: disabling seeding.')
-      consumeOnly = true
-    }
-
     const p2pMediaLoaderConfig: HlsJsEngineSettings = {
-      loader: {
-        trackerAnnounce,
-        segmentValidator: segmentValidatorFactory(this.options.p2pMediaLoader.segmentsSha256Url, this.options.common.isLive),
-        rtcConfig: getRtcConfig(),
-        requiredSegmentsPriority: 1,
-        simultaneousHttpDownloads: 1,
-        segmentUrlBuilder: segmentUrlBuilderFactory(redundancyUrlManager, 1),
-        useP2P: commonOptions.p2pEnabled,
-        consumeOnly
-      },
+      loader: this.getP2PMediaLoaderOptions(redundancyUrlManager),
       segments: {
         swarmId: p2pMediaLoaderOptions.playlistUrl
       }
@@ -254,6 +237,46 @@ export class PeertubePlayerOptionsBuilder {
     Object.assign(plugins, toAssign)
 
     return toAssign
+  }
+
+  private getP2PMediaLoaderOptions (redundancyUrlManager: RedundancyUrlManager): Partial<HybridLoaderSettings> {
+    let consumeOnly = false
+    if ((navigator as any)?.connection?.type === 'cellular') {
+      console.log('We are on a cellular connection: disabling seeding.')
+      consumeOnly = true
+    }
+
+    const trackerAnnounce = this.options.p2pMediaLoader.trackerAnnounce
+                                                 .filter(t => t.startsWith('ws'))
+
+    const specificLiveOrVODOptions = this.options.common.isLive
+      ? { // Live
+        requiredSegmentsPriority: 1
+      }
+      : { // VOD
+        requiredSegmentsPriority: 3,
+
+        cachedSegmentExpiration: 86400000,
+        cachedSegmentsCount: 100,
+
+        httpDownloadMaxPriority: 9,
+        httpDownloadProbability: 0.06,
+        httpDownloadProbabilitySkipIfNoPeers: true,
+
+        p2pDownloadMaxPriority: 50
+      }
+
+    return {
+      trackerAnnounce,
+      segmentValidator: segmentValidatorFactory(this.options.p2pMediaLoader.segmentsSha256Url, this.options.common.isLive),
+      rtcConfig: getRtcConfig(),
+      simultaneousHttpDownloads: 1,
+      segmentUrlBuilder: segmentUrlBuilderFactory(redundancyUrlManager, 1),
+      useP2P: this.options.common.p2pEnabled,
+      consumeOnly,
+
+      ...specificLiveOrVODOptions
+    }
   }
 
   private getHLSOptions (p2pMediaLoaderConfig: HlsJsEngineSettings) {

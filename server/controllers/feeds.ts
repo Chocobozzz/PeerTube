@@ -104,7 +104,7 @@ async function generateVideoCommentsFeed (req: express.Request, res: express.Res
 
   // Adding video items to the feed, one at a time
   for (const comment of comments) {
-    const link = WEBSERVER.URL + comment.getCommentStaticPath()
+    const localLink = WEBSERVER.URL + comment.getCommentStaticPath()
 
     let title = comment.Video.name
     const author: { name: string, link: string }[] = []
@@ -119,8 +119,8 @@ async function generateVideoCommentsFeed (req: express.Request, res: express.Res
 
     feed.addItem({
       title,
-      id: comment.url,
-      link,
+      id: localLink,
+      link: localLink,
       content: toSafeHtml(comment.text),
       author,
       date: comment.createdAt
@@ -269,7 +269,7 @@ function addVideosToFeed (feed: Feed, videos: VideoModel[]) {
       size_in_bytes: videoFile.size
     }))
 
-    const videos = formattedVideoFiles.map(videoFile => {
+    const videoFiles = formattedVideoFiles.map(videoFile => {
       const result = {
         type: MIMETYPES.VIDEO.EXT_MIMETYPE[extname(videoFile.fileUrl)],
         medium: 'video',
@@ -293,10 +293,12 @@ function addVideosToFeed (feed: Feed, videos: VideoModel[]) {
       })
     }
 
+    const localLink = WEBSERVER.URL + video.getWatchStaticPath()
+
     feed.addItem({
       title: video.name,
-      id: video.url,
-      link: WEBSERVER.URL + video.getWatchStaticPath(),
+      id: localLink,
+      link: localLink,
       description: mdToOneLinePlainText(video.getTruncatedDescription()),
       content: toSafeHtml(video.description),
       author: [
@@ -311,20 +313,20 @@ function addVideosToFeed (feed: Feed, videos: VideoModel[]) {
 
       // Enclosure
       video: {
-        url: videos[0].url,
-        length: videos[0].fileSize,
-        type: videos[0].type
+        url: videoFiles[0].url,
+        length: videoFiles[0].fileSize,
+        type: videoFiles[0].type
       },
 
       // Media RSS
-      videos,
+      videos: videoFiles,
 
       embed: {
-        url: video.getEmbedStaticPath(),
+        url: WEBSERVER.URL + video.getEmbedStaticPath(),
         allowFullscreen: true
       },
       player: {
-        url: video.getWatchStaticPath()
+        url: WEBSERVER.URL + video.getWatchStaticPath()
       },
       categories,
       community: {

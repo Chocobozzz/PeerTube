@@ -1,4 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core'
+import { HtmlRendererService } from '@app/core'
 import { ConfirmService } from '@app/core/confirm/confirm.service'
 import { POP_STATE_MODAL_DISMISS } from '@app/helpers'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
@@ -24,6 +25,7 @@ export class ConfirmComponent implements OnInit {
 
   constructor (
     private modalService: NgbModal,
+    private html: HtmlRendererService,
     private confirmService: ConfirmService
   ) { }
 
@@ -31,14 +33,18 @@ export class ConfirmComponent implements OnInit {
     this.confirmService.showConfirm.subscribe(
       ({ title, message, expectedInputValue, inputLabel, confirmButtonText }) => {
         this.title = title
-        this.message = message
 
         this.inputLabel = inputLabel
         this.expectedInputValue = expectedInputValue
 
         this.confirmButtonText = confirmButtonText || $localize`Confirm`
 
-        this.showModal()
+        this.html.toSafeHtml(message)
+          .then(message => {
+            this.message = message
+
+            this.showModal()
+          })
       }
     )
   }
