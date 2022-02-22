@@ -16,7 +16,7 @@ export type YoutubeDLSubs = {
 }[]
 
 const processOptions = {
-  maxBuffer: 1024 * 1024 * 10 // 10MB
+  maxBuffer: 1024 * 1024 * 30 // 30MB
 }
 
 class YoutubeDLWrapper {
