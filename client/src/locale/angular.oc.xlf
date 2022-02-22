@@ -8046,31 +8046,45 @@ channel with the same name (<x id="PH_2"/>)!</target>
         <target>Senhal actualizat.</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-password/my-account-change-password.component.ts</context><context context-type="linenumber">53</context></context-group></trans-unit>
-      <trans-unit id="5179099584732142331" datatype="html">
-        <source>Are you sure you want to delete your account? This will delete all your data, including channels, videos and comments. Content cached by other servers and other third-parties might make longer to be deleted.</source>
-        <target state="new">Are you sure you want to delete your account? This will delete all your data, including channels, videos and comments. Content cached by other servers and other third-parties might make longer to be deleted.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context><context context-type="linenumber">23</context></context-group></trans-unit>
+      
       <trans-unit id="6897292459203320054">
         <source>Type your username to confirm</source>
         <target>Picatz vòstre nom d’utilizaire per confirmar</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context><context context-type="linenumber">24</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context><context context-type="linenumber">29</context></context-group></trans-unit>
       <trans-unit id="3122895472333547524" datatype="html">
         <source>Delete your account</source>
         <target state="new">Delete your account</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.html</context><context context-type="linenumber">4</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context><context context-type="linenumber">26</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.html</context><context context-type="linenumber">4</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context><context context-type="linenumber">31</context></context-group></trans-unit><trans-unit id="577064441120663273" datatype="html">
+        <source>Are you sure you want to delete your account?</source><target state="new">Are you sure you want to delete your account?</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+      </trans-unit><trans-unit id="2740531699780274491" datatype="html">
+        <source>This will delete all your data, including channels, videos, comments and you won't be able to create another user on this instance with "<x id="PH" equiv-text="this.user.username"/>" username.</source><target state="new">This will delete all your data, including channels, videos, comments and you won't be able to create another user on this instance with "<x id="PH" equiv-text="this.user.username"/>" username.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context>
+          <context context-type="linenumber">25</context>
+        </context-group>
+      </trans-unit><trans-unit id="5422897685524094185" datatype="html">
+        <source>Content cached by other servers and other third-parties might make longer to be deleted.</source><target state="new">Content cached by other servers and other third-parties might make longer to be deleted.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context>
+          <context context-type="linenumber">27</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="2520605306994744004">
         <source>Delete my account</source>
         <target>Suprimir vòstre compte</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context><context context-type="linenumber">27</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context><context context-type="linenumber">32</context></context-group></trans-unit>
       <trans-unit id="3902597758945766483">
         <source>Your account is deleted.</source>
         <target>Vòstre compte es suprimit.</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context><context context-type="linenumber">34</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context><context context-type="linenumber">39</context></context-group></trans-unit>
       <trans-unit id="4776289814033837037">
         <source>Interface settings updated.</source>
         <target>Paramètres de l’interfàcia actualizats.</target>
@@ -8968,8 +8982,8 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       <trans-unit id="9178182467454450952">
         <source>Confirm</source>
         <target>Confirmar</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/modal/confirm.component.ts</context><context context-type="linenumber">39</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/modal/confirm.component.ts</context><context context-type="linenumber">40</context></context-group></trans-unit>
       <trans-unit id="7784486624424057376">
         <source>Instance name is required.</source>
         <target>Lo nom de l’instància es requesit.</target>
@@ -10525,7 +10539,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         </target>
         
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-add-to-playlist.component.ts</context><context context-type="linenumber">306</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-element-miniature.component.ts</context><context context-type="linenumber">97</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-add-to-playlist.component.ts</context><context context-type="linenumber">309</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-element-miniature.component.ts</context><context context-type="linenumber">97</context></context-group></trans-unit>
       <trans-unit id="1056145626640340519">
         <source>Video added in <x id="PH"/> at timestamps <x id="PH_1"/></source>
         <target>Vidèo ajustada a 
@@ -10533,20 +10547,20 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <x id="PH_1"/>
         </target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-add-to-playlist.component.ts</context><context context-type="linenumber">374</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-add-to-playlist.component.ts</context><context context-type="linenumber">379</context></context-group></trans-unit>
       <trans-unit id="7754186870520534716">
         <source>Video added in <x id="PH"/> </source>
         <target>Vidèo ajustada 
           <x id="PH"/>
         </target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-add-to-playlist.component.ts</context><context context-type="linenumber">375</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-add-to-playlist.component.ts</context><context context-type="linenumber">380</context></context-group></trans-unit>
       <trans-unit id="985751964589921228">
         <source>Timestamps updated</source>
         <target>Data actualizada</target>
         
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-add-to-playlist.component.ts</context><context context-type="linenumber">274</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-element-miniature.component.ts</context><context context-type="linenumber">116</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-add-to-playlist.component.ts</context><context context-type="linenumber">277</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-element-miniature.component.ts</context><context context-type="linenumber">116</context></context-group></trans-unit>
       <trans-unit id="6421445850411984665" datatype="html">
         <source>Starts at</source>
         <target state="new">Starts at </target>

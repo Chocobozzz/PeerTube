@@ -7890,32 +7890,46 @@ channel with the same name (<x id="PH_2" equiv-text="videoChannel.name"/>)!</sou
         <target>パスワードは変更されました。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-password/my-account-change-password.component.ts</context><context context-type="linenumber">53</context></context-group>
       </trans-unit>
-      <trans-unit id="5179099584732142331" datatype="html">
-        <source>Are you sure you want to delete your account? This will delete all your data, including channels, videos and comments. Content cached by other servers and other third-parties might make longer to be deleted.</source>
-        <target state="translated">本当にアカウントを削除しますか？チャンネル、動画、コメントを含めた全てのデータが削除されます。外部のサーバーやサードパーティーのサービスによってキャッシュされたコンテンツは、削除されるのに時間がかかるかもしれません。</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context><context context-type="linenumber">23</context></context-group>
-      </trans-unit>
+      
       <trans-unit id="6897292459203320054">
         <source>Type your username to confirm</source>
         <target>確認のためにユーザーネームを入力してください</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context><context context-type="linenumber">24</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context><context context-type="linenumber">29</context></context-group></trans-unit>
       <trans-unit id="3122895472333547524" datatype="html">
         <source>Delete your account</source>
         <target state="translated">アカウントを削除する</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.html</context><context context-type="linenumber">4</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context><context context-type="linenumber">26</context></context-group>
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.html</context><context context-type="linenumber">4</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context><context context-type="linenumber">31</context></context-group></trans-unit><trans-unit id="577064441120663273" datatype="html">
+        <source>Are you sure you want to delete your account?</source><target state="new">Are you sure you want to delete your account?</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+      </trans-unit><trans-unit id="2740531699780274491" datatype="html">
+        <source>This will delete all your data, including channels, videos, comments and you won't be able to create another user on this instance with "<x id="PH" equiv-text="this.user.username"/>" username.</source><target state="new">This will delete all your data, including channels, videos, comments and you won't be able to create another user on this instance with "<x id="PH" equiv-text="this.user.username"/>" username.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context>
+          <context context-type="linenumber">25</context>
+        </context-group>
+      </trans-unit><trans-unit id="5422897685524094185" datatype="html">
+        <source>Content cached by other servers and other third-parties might make longer to be deleted.</source><target state="new">Content cached by other servers and other third-parties might make longer to be deleted.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context>
+          <context context-type="linenumber">27</context>
+        </context-group>
       </trans-unit>
       <trans-unit id="2520605306994744004">
         <source>Delete my account</source>
         <target>アカウントを削除する</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context><context context-type="linenumber">27</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context><context context-type="linenumber">32</context></context-group></trans-unit>
       <trans-unit id="3902597758945766483">
         <source>Your account is deleted.</source>
         <target>あなたのアカウントは削除されました。</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context><context context-type="linenumber">34</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context><context context-type="linenumber">39</context></context-group></trans-unit>
       <trans-unit id="4776289814033837037" datatype="html">
         <source>Interface settings updated.</source>
         <target state="translated">外観設定を更新しました。</target>
@@ -8853,8 +8867,8 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       <trans-unit id="9178182467454450952">
         <source>Confirm</source>
         <target>確認</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/modal/confirm.component.ts</context><context context-type="linenumber">39</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/modal/confirm.component.ts</context><context context-type="linenumber">40</context></context-group></trans-unit>
       <trans-unit id="7784486624424057376">
         <source>Instance name is required.</source>
         <target>インスタンス名は必須です。</target>
@@ -10434,25 +10448,25 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       <trans-unit id="3723085768598852106">
         <source>Video removed from <x id="PH"/> </source>
         <target>動画は <x id="PH"/> から削除されました。 </target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-add-to-playlist.component.ts</context><context context-type="linenumber">306</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-element-miniature.component.ts</context><context context-type="linenumber">97</context></context-group>
-      </trans-unit>
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-add-to-playlist.component.ts</context><context context-type="linenumber">309</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-element-miniature.component.ts</context><context context-type="linenumber">97</context></context-group></trans-unit>
       <trans-unit id="1056145626640340519">
         <source>Video added in <x id="PH"/> at timestamps <x id="PH_1"/></source>
         <target state="translated">動画が追加されました<x id="PH"/> 追加日時<x id="PH_1"/></target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-add-to-playlist.component.ts</context><context context-type="linenumber">374</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-add-to-playlist.component.ts</context><context context-type="linenumber">379</context></context-group></trans-unit>
       <trans-unit id="7754186870520534716">
         <source>Video added in <x id="PH"/> </source>
         <target>動画は <x id="PH"/> に追加されました。 </target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-add-to-playlist.component.ts</context><context context-type="linenumber">375</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-add-to-playlist.component.ts</context><context context-type="linenumber">380</context></context-group></trans-unit>
       <trans-unit id="985751964589921228">
         <source>Timestamps updated</source>
         <target>追加日時を更新しました</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-add-to-playlist.component.ts</context><context context-type="linenumber">274</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-element-miniature.component.ts</context><context context-type="linenumber">116</context></context-group>
-      </trans-unit>
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-add-to-playlist.component.ts</context><context context-type="linenumber">277</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-element-miniature.component.ts</context><context context-type="linenumber">116</context></context-group></trans-unit>
       <trans-unit id="6421445850411984665" datatype="html">
         <source>Starts at</source>
         <target state="translated">動画再生の開始位置</target>
