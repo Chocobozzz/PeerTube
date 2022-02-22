@@ -8,7 +8,7 @@ import { isRatingValid } from '../../../helpers/custom-validators/video-rates'
 import { isVideoRatingTypeValid } from '../../../helpers/custom-validators/videos'
 import { logger } from '../../../helpers/logger'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
-import { areValidationErrors, doesVideoExist, isValidVideoIdParam } from '../shared'
+import { areValidationErrors, checkCanSeeVideoIfPrivate, doesVideoExist, isValidVideoIdParam } from '../shared'
 
 const videoUpdateRateValidator = [
   isValidVideoIdParam('id'),
@@ -20,6 +20,13 @@ const videoUpdateRateValidator = [
 
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.id, res)) return
+
+    if (!await checkCanSeeVideoIfPrivate(req, res, res.locals.videoAll)) {
+      return res.fail({
+        status: HttpStatusCode.FORBIDDEN_403,
+        message: 'Cannot access to this ressource'
+      })
+    }
 
     return next()
   }

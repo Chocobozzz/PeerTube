@@ -100,6 +100,14 @@ const addVideoCommentThreadValidator = [
 
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.videoId, res)) return
+
+    if (!await checkCanSeeVideoIfPrivate(req, res, res.locals.videoAll)) {
+      return res.fail({
+        status: HttpStatusCode.FORBIDDEN_403,
+        message: 'Cannot access to this ressource'
+      })
+    }
+
     if (!isVideoCommentsEnabled(res.locals.videoAll, res)) return
     if (!await isVideoCommentAccepted(req, res, res.locals.videoAll, false)) return
 
@@ -119,6 +127,14 @@ const addVideoCommentReplyValidator = [
 
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.videoId, res)) return
+
+    if (!await checkCanSeeVideoIfPrivate(req, res, res.locals.videoAll)) {
+      return res.fail({
+        status: HttpStatusCode.FORBIDDEN_403,
+        message: 'Cannot access to this ressource'
+      })
+    }
+
     if (!isVideoCommentsEnabled(res.locals.videoAll, res)) return
     if (!await doesVideoCommentExist(req.params.commentId, res.locals.videoAll, res)) return
     if (!await isVideoCommentAccepted(req, res, res.locals.videoAll, true)) return

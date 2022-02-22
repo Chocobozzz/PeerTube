@@ -28,6 +28,7 @@ describe('Test videos API validator', function () {
   let channelId: number
   let channelName: string
   let video: VideoCreateResult
+  let privateVideo: VideoCreateResult
 
   // ---------------------------------------------------------------
 
@@ -48,6 +49,10 @@ describe('Test videos API validator', function () {
       channelId = body.videoChannels[0].id
       channelName = body.videoChannels[0].name
       accountName = body.account.name + '@' + body.account.host
+    }
+
+    {
+      privateVideo = await server.videos.quickUpload({ name: 'private video', privacy: VideoPrivacy.PRIVATE })
     }
   })
 
@@ -781,6 +786,19 @@ describe('Test videos API validator', function () {
         rating: 'likes'
       }
       await makePutBodyRequest({ url: server.url, path: path + videoId + '/rate', token: server.accessToken, fields })
+    })
+
+    it('Should fail with a private video of another user', async function () {
+      const fields = {
+        rating: 'like'
+      }
+      await makePutBodyRequest({
+        url: server.url,
+        path: path + privateVideo.uuid + '/rate',
+        token: userAccessToken,
+        fields,
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
     })
 
     it('Should succeed with the correct parameters', async function () {

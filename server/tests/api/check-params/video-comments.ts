@@ -19,10 +19,14 @@ const expect = chai.expect
 describe('Test video comments API validator', function () {
   let pathThread: string
   let pathComment: string
+
   let server: PeerTubeServer
+
   let video: VideoCreateResult
+
   let userAccessToken: string
   let userAccessToken2: string
+
   let commentId: number
   let privateCommentId: number
   let privateVideo: VideoCreateResult
@@ -203,9 +207,8 @@ describe('Test video comments API validator', function () {
 
     it('Should fail with an incorrect video', async function () {
       const path = '/api/v1/videos/ba708d62-e3d7-45d9-9d73-41b9097cc02d/comment-threads'
-      const fields = {
-        text: 'super comment'
-      }
+      const fields = { text: 'super comment' }
+
       await makePostBodyRequest({
         url: server.url,
         path,
@@ -215,10 +218,21 @@ describe('Test video comments API validator', function () {
       })
     })
 
+    it('Should fail with a private video of another user', async function () {
+      const fields = { text: 'super comment' }
+
+      await makePostBodyRequest({
+        url: server.url,
+        path: '/api/v1/videos/' + privateVideo.shortUUID + '/comment-threads',
+        token: userAccessToken,
+        fields,
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
+    })
+
     it('Should succeed with the correct parameters', async function () {
-      const fields = {
-        text: 'super comment'
-      }
+      const fields = { text: 'super comment' }
+
       await makePostBodyRequest({
         url: server.url,
         path: pathThread,
@@ -230,6 +244,7 @@ describe('Test video comments API validator', function () {
   })
 
   describe('When adding a comment to a thread', function () {
+
     it('Should fail with a non authenticated user', async function () {
       const fields = {
         text: 'text'
@@ -273,6 +288,18 @@ describe('Test video comments API validator', function () {
         token: server.accessToken,
         fields,
         expectedStatus: HttpStatusCode.NOT_FOUND_404
+      })
+    })
+
+    it('Should fail with a private video of another user', async function () {
+      const fields = { text: 'super comment' }
+
+      await makePostBodyRequest({
+        url: server.url,
+        path: '/api/v1/videos/' + privateVideo.uuid + '/comments/' + privateCommentId,
+        token: userAccessToken,
+        fields,
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
       })
     })
 
