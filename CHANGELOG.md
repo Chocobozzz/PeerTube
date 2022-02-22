@@ -34,6 +34,11 @@
  * Add ability for admins to specify `youtube-dl`/`yt-dlp` python binary path [#4706](https://github.com/Chocobozzz/PeerTube/pull/4706)
  * PeerTube server startup is faster
 
+### Security
+
+  * Check video privacy before listing or accepting captions, comments or rates
+  * Check video import target URL does not resolve to internal IP. This technique has some limits so if you have private HTTP services on your server/network publicly accessible, we recommend to use a proxy or a dedicated interface for PeerTube
+
 ### CLI tools
 
  * Also remove HLS files when using `prune-storage` script
@@ -101,6 +106,9 @@
  * Prevent video import on non unicast ips
  * Improve markdown to plain text converter, especially when handling lists
  * Fix scheduled publication on upload
+ * Fix youtube-dl max buffer size error
+ * Hide remote subscribe if user is logged in
+ * Fix video file `storage` column inconsistency
 
 
 ## v4.0.0
