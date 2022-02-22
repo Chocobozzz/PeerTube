@@ -168,6 +168,10 @@ export class SubscribeButtonComponent implements OnInit, OnChanges {
     return Array.from(this.subscribed.values()).every(v => v === true)
   }
 
+  isRemoteSubscribeAvailable () {
+    return !this.isUserLoggedIn()
+  }
+
   private getChannelHandler (videoChannel: VideoChannel) {
     return videoChannel.name + '@' + videoChannel.host
   }
