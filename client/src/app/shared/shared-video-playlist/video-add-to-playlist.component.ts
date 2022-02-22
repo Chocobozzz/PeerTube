@@ -56,6 +56,8 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
   private listenToPlaylistChangeSub: Subscription
   private playlistsData: CachedPlaylist[] = []
 
+  private pendingAddId: number
+
   constructor (
     protected formValidatorService: FormValidatorService,
     private authService: AuthService,
@@ -215,8 +217,9 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
   }
 
   isPrimaryCheckboxChecked (playlist: PlaylistSummary) {
-    return playlist.elements.filter(e => e.enabled)
-                            .length !== 0
+    // Reduce latency when adding a video to a playlist using pendingAddId
+    return this.pendingAddId === playlist.id ||
+      playlist.elements.filter(e => e.enabled).length !== 0
   }
 
   toggleOptionalRow (playlist: PlaylistSummary) {
@@ -367,6 +370,8 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
     if (element.startTimestamp) body.startTimestamp = element.startTimestamp
     if (element.stopTimestamp && element.stopTimestamp !== this.video.duration) body.stopTimestamp = element.stopTimestamp
 
+    this.pendingAddId = playlist.id
+
     this.videoPlaylistService.addVideoInPlaylist(playlist.id, body)
       .subscribe({
         next: res => {
@@ -379,9 +384,17 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
           if (element) element.playlistElementId = res.videoPlaylistElement.id
         },
 
-        error: err => this.notifier.error(err.message),
+        error: err => {
+          this.pendingAddId = undefined
+          this.cd.markForCheck()
 
-        complete: () => this.cd.markForCheck()
+          this.notifier.error(err.message)
+        },
+
+        complete: () => {
+          this.pendingAddId = undefined
+          this.cd.markForCheck()
+        }
       })
   }
 
