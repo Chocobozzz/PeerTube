@@ -83,7 +83,7 @@
     "buffer": "^6.0.3",
     "cache-chunk-store": "^3.0.0",
     "chart.js": "^3.5.1",
-    "chromedriver": "^98.0.0",
+    "chromedriver": "^98.0.1",
     "core-js": "^3.1.4",
     "css-loader": "^6.2.0",
     "debug": "^4.3.1",
