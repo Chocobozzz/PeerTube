@@ -4,7 +4,7 @@
 
 ### IMPORTANT NOTES
 
- * NodeJS 12 support is deprecated and will be removed in PeerTube 4.2
+ * PeerTube does not support NodeJS 12 anymore
 
 ### Plugins/Themes/Embed API
 
