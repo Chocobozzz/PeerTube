@@ -36,7 +36,7 @@ export class APActorCreator {
       await this.setImageIfNeeded(actorCreated, ActorImageType.BANNER, t)
 
       if (Array.isArray(this.actorObject.icon) === false && actorCreated.Avatars?.length > 0) {
-        await generateSmallerAvatar(actorCreated, null, t) // Backward compatibility for version < 4.1
+        await generateSmallerAvatar(actorCreated, null, t) // Backward compatibility for version < 4.2
       }
 
       await this.tryToFixActorUrlIfNeeded(actorCreated, actorInstance, created, t)

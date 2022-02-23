@@ -52,7 +52,7 @@ export class APActorUpdater {
         await updateActorImageInstance(this.actor, ActorImageType.AVATAR, avatarsInfo, t)
 
         if (Array.isArray(this.actorObject.icon) === false && avatarsInfo.length > 0) {
-          await generateSmallerAvatar(this.actor, null, t) // Backward compatibility for version < 4.1
+          await generateSmallerAvatar(this.actor, null, t) // Backward compatibility for version < 4.2
         }
       })
 
