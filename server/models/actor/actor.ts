@@ -16,10 +16,11 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
+import { getBiggestActorImage } from '@server/lib/actor-image'
 import { ModelCache } from '@server/models/model-cache'
 import { getLowercaseExtension } from '@shared/core-utils'
+import { ActivityIconObject, ActivityPubActorType, ActorImageType } from '@shared/models'
 import { AttributesOnly } from '@shared/typescript-utils'
-import { ActivityIconObject, ActivityPubActorType } from '../../../shared/models/activitypub'
 import { activityPubContextify } from '../../helpers/activitypub'
 import {
   isActorFollowersCountValid,
@@ -57,7 +58,6 @@ import { VideoModel } from '../video/video'
 import { VideoChannelModel } from '../video/video-channel'
 import { ActorFollowModel } from './actor-follow'
 import { ActorImageModel } from './actor-image'
-import { ActorImageType } from '@shared/models'
 
 enum ScopeNames {
   FULL = 'FULL'
@@ -82,11 +82,7 @@ export const unusedActorAttributesForAPI = [
     {
       model: ActorImageModel,
       as: 'Avatars',
-      required: false,
-      duplicating: false,
-      where: {
-        type: ActorImageType.AVATAR
-      }
+      required: false
     }
   ]
 }))
@@ -114,20 +110,12 @@ export const unusedActorAttributesForAPI = [
       {
         model: ActorImageModel,
         as: 'Avatars',
-        required: false,
-        duplicating: false,
-        where: {
-          type: ActorImageType.AVATAR
-        }
+        required: false
       },
       {
         model: ActorImageModel,
         as: 'Banners',
-        required: false,
-        duplicating: false,
-        where: {
-          type: ActorImageType.BANNER
-        }
+        required: false
       }
     ]
   }
@@ -353,8 +341,7 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
       transaction
     }
 
-    return ActorModel.unscoped().findAll(query) // Fix so that all avatars are returned
-      .then(([ actor ]) => actor)
+    return ActorModel.unscoped().findOne(query)
   }
 
   static isActorUrlExist (url: string) {
@@ -392,8 +379,7 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
         transaction
       }
 
-      return ActorModel.scope(ScopeNames.FULL).findAll(query) // Fix so that all avatars are returned
-        .then(([ actor ]) => actor)
+      return ActorModel.scope(ScopeNames.FULL).findOne(query)
     }
 
     return ModelCache.Instance.doCache({
@@ -416,8 +402,7 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
         transaction
       }
 
-      return ActorModel.unscoped().findAll(query) // Fix so that all avatars are returned
-        .then(([ actor ]) => actor)
+      return ActorModel.unscoped().findOne(query)
     }
 
     return ModelCache.Instance.doCache({
@@ -445,8 +430,7 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
       ]
     }
 
-    return ActorModel.scope(ScopeNames.FULL).findAll(query) // Fix so that all avatars are returned
-      .then(([ actor ]) => actor)
+    return ActorModel.scope(ScopeNames.FULL).findOne(query)
   }
 
   static loadByUrl (url: string, transaction?: Transaction): Promise<MActorAccountChannelId> {
@@ -469,8 +453,7 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
       ]
     }
 
-    return ActorModel.unscoped().findAll(query) // Fix so that all avatars are returned
-      .then(([ actor ]) => actor)
+    return ActorModel.unscoped().findOne(query)
   }
 
   static loadByUrlAndPopulateAccountAndChannel (url: string, transaction?: Transaction): Promise<MActorFull> {
@@ -481,8 +464,7 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
       transaction
     }
 
-    return ActorModel.scope(ScopeNames.FULL).findAll(query) // Fix so that all avatars are returned
-      .then(([ actor ]) => actor)
+    return ActorModel.scope(ScopeNames.FULL).findOne(query)
   }
 
   static rebuildFollowsCount (ofId: number, type: 'followers' | 'following', transaction?: Transaction) {
@@ -540,54 +522,51 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
     return this.sharedInboxUrl || this.inboxUrl
   }
 
-  getBiggestAvatar (this: MActor | MActorAPChannel | MActorAPAccount) {
-    return this.Avatars.reduce((prev, current) =>
-      prev.width > current.width ? prev : current
-    , this.Avatars[0])
-  }
-
   toFormattedSummaryJSON (this: MActorSummaryFormattable) {
     return {
       url: this.url,
       name: this.preferredUsername,
       host: this.getHost(),
-      avatars: (this.Avatars || []).map(a => a.toFormattedJSON())
+      avatars: (this.Avatars || []).map(a => a.toFormattedJSON()),
+
+      // TODO: remove, deprecated in 4.2
+      avatar: this.hasImage(ActorImageType.AVATAR)
+        ? this.Avatars[0].toFormattedJSON()
+        : undefined
     }
   }
 
   toFormattedJSON (this: MActorFormattable) {
-    const base = this.toFormattedSummaryJSON()
+    return {
+      ...this.toFormattedSummaryJSON(),
 
-    return Object.assign(base, {
       id: this.id,
       hostRedundancyAllowed: this.getRedundancyAllowed(),
       followingCount: this.followingCount,
       followersCount: this.followersCount,
+      createdAt: this.getCreatedAt(),
+
       banners: (this.Banners || []).map(b => b.toFormattedJSON()),
-      createdAt: this.getCreatedAt()
-    })
+
+      // TODO: remove, deprecated in 4.2
+      banner: this.hasImage(ActorImageType.BANNER)
+        ? this.Banners[0].toFormattedJSON()
+        : undefined
+    }
   }
 
   toActivityPubObject (this: MActorAPChannel | MActorAPAccount, name: string) {
     let icon: ActivityIconObject
+    let icons: ActivityIconObject[]
     let image: ActivityIconObject
 
-    if (this.getBiggestAvatar()) {
-      const extension = getLowercaseExtension(this.getBiggestAvatar().filename)
-
-      icon = {
-        type: 'Image',
-        mediaType: MIMETYPES.IMAGE.EXT_MIMETYPE[extension],
-        height: this.getBiggestAvatar().height,
-        width: this.getBiggestAvatar().width,
-        url: ActorModel.getAvatarUrl(this.getBiggestAvatar())
-      }
+    if (this.hasImage(ActorImageType.AVATAR)) {
+      icon = getBiggestActorImage(this.Avatars).toActivityPubObject()
+      icons = this.Avatars.map(a => a.toActivityPubObject())
     }
 
-    const banners = (this as any).Banners
-
-    if (banners && banners.length > 0) {
-      const banner = banners[0]
+    if (this.hasImage(ActorImageType.BANNER)) {
+      const banner = getBiggestActorImage((this as MActorAPChannel).Banners)
       const extension = getLowercaseExtension(banner.filename)
 
       image = {
@@ -595,7 +574,7 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
         mediaType: MIMETYPES.IMAGE.EXT_MIMETYPE[extension],
         height: banner.height,
         width: banner.width,
-        url: ActorModel.getBannerUrl(banner)
+        url: ActorImageModel.getImageUrl(banner)
       }
     }
 
@@ -619,7 +598,10 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
         publicKeyPem: this.publicKey
       },
       published: this.getCreatedAt().toISOString(),
+
       icon,
+      icons,
+
       image
     }
 
@@ -684,12 +666,12 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
     return this.Server ? this.Server.redundancyAllowed : false
   }
 
-  static getAvatarUrl (avatar) {
-    return !avatar ? undefined : WEBSERVER.URL + avatar.getStaticPath()
-  }
+  hasImage (type: ActorImageType) {
+    const images = type === ActorImageType.AVATAR
+      ? this.Avatars
+      : this.Banners
 
-  static getBannerUrl (banner) {
-    return !banner ? undefined : WEBSERVER.URL + banner.getStaticPath()
+    return Array.isArray(images) && images.length !== 0
   }
 
   isOutdated () {

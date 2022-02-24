@@ -12,7 +12,11 @@ export class VideoChannel extends Actor implements ServerVideoChannel {
   nameWithHost: string
   nameWithHostForced: string
 
+  // TODO: remove, deprecated in 4.2
+  banner: never
+
   banners: ActorImage[]
+
   bannerUrl: string
 
   updatedAt: Date | string
@@ -29,15 +33,13 @@ export class VideoChannel extends Actor implements ServerVideoChannel {
   }
 
   static GET_ACTOR_BANNER_URL (channel: ServerVideoChannel) {
-    if (channel?.banners[0]?.url) return channel.banners[0].url
+    if (!channel) return ''
 
-    if (channel?.banners.length > 0) {
-      const absoluteAPIUrl = getAbsoluteAPIUrl()
+    const banner = channel.banners[0]
+    if (!banner) return ''
 
-      return absoluteAPIUrl + channel.banners[0].path
-    }
-
-    return ''
+    if (banner.url) return banner.url
+    return getAbsoluteAPIUrl() + banner.path
   }
 
   static GET_DEFAULT_AVATAR_URL (size: number) {

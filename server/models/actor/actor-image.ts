@@ -13,14 +13,15 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { MActorImageFormattable } from '@server/types/models'
+import { MActorImage, MActorImageFormattable } from '@server/types/models'
+import { getLowercaseExtension } from '@shared/core-utils'
+import { ActivityIconObject, ActorImageType } from '@shared/models'
 import { AttributesOnly } from '@shared/typescript-utils'
-import { ActorImageType } from '@shared/models'
 import { ActorImage } from '../../../shared/models/actors/actor-image.model'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import { logger } from '../../helpers/logger'
 import { CONFIG } from '../../initializers/config'
-import { LAZY_STATIC_PATHS } from '../../initializers/constants'
+import { LAZY_STATIC_PATHS, MIMETYPES, WEBSERVER } from '../../initializers/constants'
 import { throwIfNotValid } from '../utils'
 import { ActorModel } from './actor'
 
@@ -72,17 +73,14 @@ export class ActorImageModel extends Model<Partial<AttributesOnly<ActorImageMode
   @UpdatedAt
   updatedAt: Date
 
-  @AllowNull(false)
   @ForeignKey(() => ActorModel)
   @Column
   actorId: number
 
   @BelongsTo(() => ActorModel, {
     foreignKey: {
-      name: 'actorId',
       allowNull: false
     },
-    as: 'Actor',
     onDelete: 'CASCADE'
   })
   Actor: ActorModel
@@ -106,6 +104,12 @@ export class ActorImageModel extends Model<Partial<AttributesOnly<ActorImageMode
     return ActorImageModel.findOne(query)
   }
 
+  static getImageUrl (image: MActorImage) {
+    if (!image) return undefined
+
+    return WEBSERVER.URL + image.getStaticPath()
+  }
+
   toFormattedJSON (this: MActorImageFormattable): ActorImage {
     return {
       width: this.width,
@@ -115,11 +119,24 @@ export class ActorImageModel extends Model<Partial<AttributesOnly<ActorImageMode
     }
   }
 
+  toActivityPubObject (): ActivityIconObject {
+    const extension = getLowercaseExtension(this.filename)
+
+    return {
+      type: 'Image',
+      mediaType: MIMETYPES.IMAGE.EXT_MIMETYPE[extension],
+      height: this.height,
+      width: this.width,
+      url: ActorImageModel.getImageUrl(this)
+    }
+  }
+
   getStaticPath () {
     switch (this.type) {
       case ActorImageType.AVATAR:
         return join(LAZY_STATIC_PATHS.AVATARS, this.filename)
-      default:
+
+      case ActorImageType.BANNER:
         return join(LAZY_STATIC_PATHS.BANNERS, this.filename)
     }
   }

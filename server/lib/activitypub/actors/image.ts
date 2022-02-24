@@ -12,28 +12,25 @@ type ImageInfo = {
   onDisk?: boolean
 }
 
-async function updateActorImageInstance (actor: MActorImages, type: ActorImageType, imagesInfo: ImageInfo[] | null, t: Transaction) {
-  const typeStr = type === ActorImageType.AVATAR ? 'Avatars' : 'Banners'
-  const avatarsOrBanners = actor[typeStr]
+async function updateActorImages (actor: MActorImages, type: ActorImageType, imagesInfo: ImageInfo[], t: Transaction) {
+  const avatarsOrBanners = type === ActorImageType.AVATAR
+    ? actor.Avatars
+    : actor.Banners
 
   if (imagesInfo.length === 0) {
-    await Promise.all(avatarsOrBanners.map(a => a.destroy({ transaction: t })))
-    actor[typeStr] = []
+    await deleteActorImages(actor, type, t)
   }
 
-  await Promise.all(imagesInfo.map(async imageInfo => {
+  for (const imageInfo of imagesInfo) {
     const oldImageModel = (avatarsOrBanners || []).find(i => i.width === imageInfo.width)
 
     if (oldImageModel) {
+      // Don't update the avatar if the file URL did not change
       if (imageInfo?.fileUrl && oldImageModel.fileUrl === imageInfo.fileUrl) {
-        return actor
+        continue
       }
 
-      try {
-        await oldImageModel.destroy({ transaction: t })
-      } catch (err) {
-        logger.error('Cannot remove old actor image of actor %s.', actor.url, { err })
-      }
+      await safeDeleteActorImage(actor, oldImageModel, type, t)
     }
 
     const imageModel = await ActorImageModel.create({
@@ -46,30 +43,21 @@ async function updateActorImageInstance (actor: MActorImages, type: ActorImageTy
       actorId: actor.id
     }, { transaction: t })
 
-    setActorImage(actor, type, imageModel)
-  }))
+    addActorImage(actor, type, imageModel)
+  }
 
   return actor
 }
 
-async function deleteActorImageInstance (actor: MActorImages, type: ActorImageType, t: Transaction) {
+async function deleteActorImages (actor: MActorImages, type: ActorImageType, t: Transaction) {
   try {
-    switch (type) {
-      case ActorImageType.AVATAR:
-        for (const avatar of actor.Avatars) {
-          await avatar.destroy({ transaction: t })
-        }
+    const association = buildAssociationName(type)
 
-        actor.Avatars = []
-        break
-      case ActorImageType.BANNER:
-        for (const banner of actor.Banners) {
-          await banner.destroy({ transaction: t })
-        }
-
-        actor.Banners = []
-        break
+    for (const image of actor[association]) {
+      await image.destroy({ transaction: t })
     }
+
+    actor[association] = []
   } catch (err) {
     logger.error('Cannot remove old image of actor %s.', actor.url, { err })
   }
@@ -77,24 +65,37 @@ async function deleteActorImageInstance (actor: MActorImages, type: ActorImageTy
   return actor
 }
 
+async function safeDeleteActorImage (actor: MActorImages, toDelete: MActorImage, type: ActorImageType, t: Transaction) {
+  try {
+    await toDelete.destroy({ transaction: t })
+
+    const association = buildAssociationName(type)
+    actor[association] = actor[association].filter(image => image.id !== toDelete.id)
+  } catch (err) {
+    logger.error('Cannot remove old actor image of actor %s.', actor.url, { err })
+  }
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   ImageInfo,
 
-  updateActorImageInstance,
-  deleteActorImageInstance
+  updateActorImages,
+  deleteActorImages
 }
 
 // ---------------------------------------------------------------------------
 
-function setActorImage (actorModel: MActorImages, type: ActorImageType, imageModel: MActorImage) {
-  switch (type) {
-    case ActorImageType.AVATAR:
-      actorModel.Avatars = [ ...actorModel.Avatars.filter(a => a.width !== imageModel.width), imageModel ]
-      break
-    case ActorImageType.BANNER:
-      actorModel.Banners = [ ...actorModel.Banners.filter(a => a.width !== imageModel.width), imageModel ]
-      break
-  }
+function addActorImage (actor: MActorImages, type: ActorImageType, imageModel: MActorImage) {
+  const association = buildAssociationName(type)
+  if (!actor[association]) actor[association] = []
+
+  actor[association].push(imageModel)
+}
+
+function buildAssociationName (type: ActorImageType) {
+  return type === ActorImageType.AVATAR
+    ? 'Avatars'
+    : 'Banners'
 }

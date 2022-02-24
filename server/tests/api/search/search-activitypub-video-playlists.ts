@@ -10,6 +10,7 @@ import {
   PeerTubeServer,
   SearchCommand,
   setAccessTokensToServers,
+  setDefaultAccountAvatar,
   setDefaultVideoChannel,
   waitJobs
 } from '@shared/server-commands'
@@ -31,6 +32,7 @@ describe('Test ActivityPub playlists search', function () {
 
     await setAccessTokensToServers(servers)
     await setDefaultVideoChannel(servers)
+    await setDefaultAccountAvatar(servers)
 
     {
       const video1 = (await servers[0].videos.quickUpload({ name: 'video 1' })).uuid

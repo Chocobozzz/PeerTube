@@ -114,9 +114,13 @@ import {
   videoModelToFormattedJSON
 } from './formatter/video-format-utils'
 import { ScheduleVideoUpdateModel } from './schedule-video-update'
-import { VideoModelGetQueryBuilder } from './sql/video-model-get-query-builder'
-import { BuildVideosListQueryOptions, DisplayOnlyForFollowerOptions, VideosIdListQueryBuilder } from './sql/videos-id-list-query-builder'
-import { VideosModelListQueryBuilder } from './sql/videos-model-list-query-builder'
+import {
+  BuildVideosListQueryOptions,
+  DisplayOnlyForFollowerOptions,
+  VideoModelGetQueryBuilder,
+  VideosIdListQueryBuilder,
+  VideosModelListQueryBuilder
+} from './sql/video'
 import { TagModel } from './tag'
 import { ThumbnailModel } from './thumbnail'
 import { VideoBlacklistModel } from './video-blacklist'
@@ -229,7 +233,7 @@ export type ForAPIOptions = {
                 required: false
               },
               {
-                model: ActorImageModel.unscoped(),
+                model: ActorImageModel,
                 as: 'Avatars',
                 required: false
               }
@@ -252,7 +256,7 @@ export type ForAPIOptions = {
                     required: false
                   },
                   {
-                    model: ActorImageModel.unscoped(),
+                    model: ActorImageModel,
                     as: 'Avatars',
                     required: false
                   }

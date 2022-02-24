@@ -3,6 +3,7 @@
 import 'mocha'
 import { expect } from 'chai'
 import { pick } from '@shared/core-utils'
+import { HttpStatusCode, UserRole, Video, VideoDetails, VideoInclude, VideoPrivacy } from '@shared/models'
 import {
   cleanupTests,
   createMultipleServers,
@@ -10,10 +11,10 @@ import {
   makeGetRequest,
   PeerTubeServer,
   setAccessTokensToServers,
+  setDefaultAccountAvatar,
   setDefaultVideoChannel,
   waitJobs
 } from '@shared/server-commands'
-import { HttpStatusCode, UserRole, Video, VideoDetails, VideoInclude, VideoPrivacy } from '@shared/models'
 
 describe('Test videos filter', function () {
   let servers: PeerTubeServer[]
@@ -29,6 +30,7 @@ describe('Test videos filter', function () {
 
     await setAccessTokensToServers(servers)
     await setDefaultVideoChannel(servers)
+    await setDefaultAccountAvatar(servers)
 
     for (const server of servers) {
       const moderator = { username: 'moderator', password: 'my super password' }

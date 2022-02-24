@@ -155,13 +155,10 @@ export class VideoImportModel extends Model<Partial<AttributesOnly<VideoImportMo
       where
     }
 
-    return VideoImportModel.findAndCountAll<MVideoImportDefault>(query)
-                           .then(({ rows, count }) => {
-                             return {
-                               data: rows,
-                               total: count
-                             }
-                           })
+    return Promise.all([
+      VideoImportModel.unscoped().count(query),
+      VideoImportModel.findAll<MVideoImportDefault>(query)
+    ]).then(([ total, data ]) => ({ total, data }))
   }
 
   getTargetIdentifier () {

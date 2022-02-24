@@ -1,7 +1,7 @@
 import { SelectChannelItem } from 'src/types/select-options-item.model'
 import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core'
 import { AuthService, Notifier } from '@app/core'
-import { listUserChannels } from '@app/helpers'
+import { listUserChannelsForSelect } from '@app/helpers'
 import { OWNERSHIP_CHANGE_CHANNEL_VALIDATOR } from '@app/shared/form-validators/video-ownership-change-validators'
 import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
 import { VideoOwnershipService } from '@app/shared/shared-main'
@@ -36,7 +36,7 @@ export class MyAcceptOwnershipComponent extends FormReactive implements OnInit {
   ngOnInit () {
     this.videoChannels = []
 
-    listUserChannels(this.authService)
+    listUserChannelsForSelect(this.authService)
       .subscribe(channels => this.videoChannels = channels)
 
     this.buildForm({

@@ -121,29 +121,40 @@ export class AccountVideoRateModel extends Model<Partial<AttributesOnly<AccountV
     type?: string
     accountId: number
   }) {
-    const query: FindOptions = {
-      offset: options.start,
-      limit: options.count,
-      order: getSort(options.sort),
-      where: {
-        accountId: options.accountId
-      },
-      include: [
-        {
-          model: VideoModel,
-          required: true,
-          include: [
-            {
-              model: VideoChannelModel.scope({ method: [ VideoChannelScopeNames.SUMMARY, { withAccount: true } as SummaryOptions ] }),
-              required: true
-            }
-          ]
+    const getQuery = (forCount: boolean) => {
+      const query: FindOptions = {
+        offset: options.start,
+        limit: options.count,
+        order: getSort(options.sort),
+        where: {
+          accountId: options.accountId
         }
-      ]
-    }
-    if (options.type) query.where['type'] = options.type
+      }
 
-    return AccountVideoRateModel.findAndCountAll(query)
+      if (options.type) query.where['type'] = options.type
+
+      if (forCount !== true) {
+        query.include = [
+          {
+            model: VideoModel,
+            required: true,
+            include: [
+              {
+                model: VideoChannelModel.scope({ method: [ VideoChannelScopeNames.SUMMARY, { withAccount: true } as SummaryOptions ] }),
+                required: true
+              }
+            ]
+          }
+        ]
+      }
+
+      return query
+    }
+
+    return Promise.all([
+      AccountVideoRateModel.count(getQuery(true)),
+      AccountVideoRateModel.findAll(getQuery(false))
+    ]).then(([ total, data ]) => ({ total, data }))
   }
 
   static listRemoteRateUrlsOfLocalVideos () {
@@ -232,7 +243,10 @@ export class AccountVideoRateModel extends Model<Partial<AttributesOnly<AccountV
       ]
     }
 
-    return AccountVideoRateModel.findAndCountAll<MAccountVideoRateAccountUrl>(query)
+    return Promise.all([
+      AccountVideoRateModel.count(query),
+      AccountVideoRateModel.findAll<MAccountVideoRateAccountUrl>(query)
+    ]).then(([ total, data ]) => ({ total, data }))
   }
 
   static cleanOldRatesOf (videoId: number, type: VideoRateType, beforeUpdatedAt: Date) {

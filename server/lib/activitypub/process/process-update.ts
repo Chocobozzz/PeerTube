@@ -99,6 +99,8 @@ async function processUpdateCacheFile (byActor: MActorSignature, activity: Activ
 async function processUpdateActor (actor: MActorFull, activity: ActivityUpdate) {
   const actorObject = activity.object as ActivityPubActor
 
+  logger.debug('Updating remote account "%s".', actorObject.url)
+
   const updater = new APActorUpdater(actorObject, actor)
   return updater.update()
 }

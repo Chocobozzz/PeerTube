@@ -31,6 +31,7 @@ import {
 import { CONSTRAINTS_FIELDS, WEBSERVER } from '../../initializers/constants'
 import { sendDeleteActor } from '../../lib/activitypub/send'
 import {
+  MChannel,
   MChannelActor,
   MChannelAP,
   MChannelBannerAccountDefault,
@@ -62,6 +63,7 @@ type AvailableForListOptions = {
   search?: string
   host?: string
   handles?: string[]
+  forCount?: boolean
 }
 
 type AvailableWithStatsOptions = {
@@ -116,72 +118,91 @@ export type SummaryOptions = {
       })
     }
 
-    let rootWhere: WhereOptions
-    if (options.handles) {
-      const or: WhereOptions[] = []
+    if (Array.isArray(options.handles) && options.handles.length !== 0) {
+      const or: string[] = []
 
       for (const handle of options.handles || []) {
         const [ preferredUsername, host ] = handle.split('@')
 
         if (!host || host === WEBSERVER.HOST) {
-          or.push({
-            '$Actor.preferredUsername$': preferredUsername,
-            '$Actor.serverId$': null
-          })
+          or.push(`("preferredUsername" = ${VideoChannelModel.sequelize.escape(preferredUsername)} AND "serverId" IS NULL)`)
         } else {
-          or.push({
-            '$Actor.preferredUsername$': preferredUsername,
-            '$Actor.Server.host$': host
-          })
+          or.push(
+            `(` +
+              `"preferredUsername" = ${VideoChannelModel.sequelize.escape(preferredUsername)} ` +
+              `AND "host" = ${VideoChannelModel.sequelize.escape(host)}` +
+            `)`
+          )
         }
       }
 
-      rootWhere = {
-        [Op.or]: or
-      }
+      whereActorAnd.push({
+        id: {
+          [Op.in]: literal(`(SELECT "actor".id FROM actor LEFT JOIN server on server.id = actor."serverId" WHERE ${or.join(' OR ')})`)
+        }
+      })
+    }
+
+    const channelInclude: Includeable[] = []
+    const accountInclude: Includeable[] = []
+
+    if (options.forCount !== true) {
+      accountInclude.push({
+        model: ServerModel,
+        required: false
+      })
+
+      accountInclude.push({
+        model: ActorImageModel,
+        as: 'Avatars',
+        required: false
+      })
+
+      channelInclude.push({
+        model: ActorImageModel,
+        as: 'Avatars',
+        required: false
+      })
+
+      channelInclude.push({
+        model: ActorImageModel,
+        as: 'Banners',
+        required: false
+      })
+    }
+
+    if (options.forCount !== true || serverRequired) {
+      channelInclude.push({
+        model: ServerModel,
+        duplicating: false,
+        required: serverRequired,
+        where: whereServer
+      })
     }
 
     return {
-      where: rootWhere,
       include: [
         {
           attributes: {
             exclude: unusedActorAttributesForAPI
           },
-          model: ActorModel,
+          model: ActorModel.unscoped(),
           where: {
             [Op.and]: whereActorAnd
           },
-          include: [
-            {
-              model: ServerModel,
-              required: serverRequired,
-              where: whereServer
-            },
-            {
-              model: ActorImageModel,
-              as: 'Avatars',
-              required: false,
-              duplicating: false
-            },
-            {
-              model: ActorImageModel,
-              as: 'Banners',
-              required: false,
-              duplicating: false
-            }
-          ]
+          include: channelInclude
         },
         {
-          model: AccountModel,
+          model: AccountModel.unscoped(),
           required: true,
           include: [
             {
               attributes: {
                 exclude: unusedActorAttributesForAPI
               },
-              model: ActorModel, // Default scope includes avatar and server
-              required: true
+              model: ActorModel.unscoped(),
+              required: true,
+              include: accountInclude
             }
           ]
         }
@@ -201,7 +222,7 @@ export type SummaryOptions = {
             required: false
           },
           {
-            model: ActorImageModel.unscoped(),
+            model: ActorImageModel,
             as: 'Avatars',
             required: false
           }
@@ -476,14 +497,14 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
       order: getSort(parameters.sort)
     }
 
-    return VideoChannelModel
-      .scope({
-        method: [ ScopeNames.FOR_API, { actorId } as AvailableForListOptions ]
-      })
-      .findAndCountAll(query)
-      .then(({ rows, count }) => {
-        return { total: count, data: rows }
-      })
+    const getScope = (forCount: boolean) => {
+      return { method: [ ScopeNames.FOR_API, { actorId, forCount } as AvailableForListOptions ] }
+    }
+
+    return Promise.all([
+      VideoChannelModel.scope(getScope(true)).count(),
+      VideoChannelModel.scope(getScope(false)).findAll(query)
+    ]).then(([ total, data ]) => ({ total, data }))
   }
 
   static searchForApi (options: Pick<AvailableForListOptions, 'actorId' | 'search' | 'host' | 'handles'> & {
@@ -517,19 +538,26 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
       },
       offset: options.start,
       limit: options.count,
-      subQuery: false,
       order: getSort(options.sort),
       where
     }
 
-    return VideoChannelModel
-      .scope({
-        method: [ ScopeNames.FOR_API, pick(options, [ 'actorId', 'host', 'handles' ]) as AvailableForListOptions ]
-      })
-      .findAndCountAll(query)
-      .then(({ rows, count }) => {
-        return { total: count, data: rows }
-      })
+    const getScope = (forCount: boolean) => {
+      return {
+        method: [
+          ScopeNames.FOR_API, {
+            ...pick(options, [ 'actorId', 'host', 'handles' ]),
+
+            forCount
+          } as AvailableForListOptions
+        ]
+      }
+    }
+
+    return Promise.all([
+      VideoChannelModel.scope(getScope(true)).count(query),
+      VideoChannelModel.scope(getScope(false)).findAll(query)
+    ]).then(([ total, data ]) => ({ total, data }))
   }
 
   static listByAccountForAPI (options: {
@@ -555,20 +583,26 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
       }
       : null
 
-    const query = {
-      offset: options.start,
-      limit: options.count,
-      order: getSort(options.sort),
-      include: [
-        {
-          model: AccountModel,
-          where: {
-            id: options.accountId
-          },
-          required: true
-        }
-      ],
-      where
+    const getQuery = (forCount: boolean) => {
+      const accountModel = forCount
+        ? AccountModel.unscoped()
+        : AccountModel
+
+      return {
+        offset: options.start,
+        limit: options.count,
+        order: getSort(options.sort),
+        include: [
+          {
+            model: accountModel,
+            where: {
+              id: options.accountId
+            },
+            required: true
+          }
+        ],
+        where
+      }
     }
 
     const scopes: string | ScopeOptions | (string | ScopeOptions)[] = [ ScopeNames.WITH_ACTOR_BANNER ]
@@ -579,15 +613,13 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
       })
     }
 
-    return VideoChannelModel
-      .scope(scopes)
-      .findAndCountAll(query)
-      .then(({ rows, count }) => {
-        return { total: count, data: rows }
-      })
+    return Promise.all([
+      VideoChannelModel.scope(scopes).count(getQuery(true)),
+      VideoChannelModel.scope(scopes).findAll(getQuery(false))
+    ]).then(([ total, data ]) => ({ total, data }))
   }
 
-  static listAllByAccount (accountId: number) {
+  static listAllByAccount (accountId: number): Promise<MChannel[]> {
     const query = {
       limit: CONFIG.VIDEO_CHANNELS.MAX_PER_USER,
       include: [
@@ -709,7 +741,10 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
       displayName: this.getDisplayName(),
       url: actor.url,
       host: actor.host,
-      avatars: actor.avatars
+      avatars: actor.avatars,
+
+      // TODO: remove, deprecated in 4.2
+      avatar: actor.avatar
     }
   }
 
@@ -734,15 +769,21 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
     const actor = this.Actor.toFormattedJSON()
     const videoChannel = {
       id: this.id,
-      avatars: actor.avatars,
       displayName: this.getDisplayName(),
       description: this.description,
       support: this.support,
       isLocal: this.Actor.isOwned(),
       updatedAt: this.updatedAt,
+
       ownerAccount: undefined,
+
       videosCount,
-      viewsPerDay
+      viewsPerDay,
+
+      avatars: actor.avatars,
+
+      // TODO: remove, deprecated in 4.2
+      avatar: actor.avatar
     }
 
     if (this.Account) videoChannel.ownerAccount = this.Account.toFormattedJSON()

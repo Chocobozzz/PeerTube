@@ -13,6 +13,7 @@ import {
   doubleFollow,
   PeerTubeServer,
   setAccessTokensToServers,
+  setDefaultAccountAvatar,
   setDefaultVideoChannel,
   waitJobs
 } from '@shared/server-commands'
@@ -44,6 +45,7 @@ describe('Test video channels', function () {
 
     await setAccessTokensToServers(servers)
     await setDefaultVideoChannel(servers)
+    await setDefaultAccountAvatar(servers)
 
     await doubleFollow(servers[0], servers[1])
   })

@@ -38,6 +38,9 @@ function getContextData (type: ContextType) {
         sensitive: 'as:sensitive',
         language: 'sc:inLanguage',
 
+        // TODO: remove in a few versions, introduced in 4.2
+        icons: 'as:icon',
+
         isLiveBroadcast: 'sc:isLiveBroadcast',
         liveSaveReplay: {
           '@type': 'sc:Boolean',

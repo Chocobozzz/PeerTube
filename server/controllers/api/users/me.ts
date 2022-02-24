@@ -1,7 +1,9 @@
 import 'multer'
 import express from 'express'
 import { auditLoggerFactory, getAuditIdFromRes, UserAuditView } from '@server/helpers/audit-logger'
+import { getBiggestActorImage } from '@server/lib/actor-image'
 import { Hooks } from '@server/lib/plugins/hooks'
+import { pick } from '@shared/core-utils'
 import { ActorImageType, HttpStatusCode, UserUpdateMe, UserVideoQuota, UserVideoRate as FormattedUserVideoRate } from '@shared/models'
 import { AttributesOnly } from '@shared/typescript-utils'
 import { createReqFiles } from '../../../helpers/express-utils'
@@ -10,7 +12,7 @@ import { CONFIG } from '../../../initializers/config'
 import { MIMETYPES } from '../../../initializers/constants'
 import { sequelizeTypescript } from '../../../initializers/database'
 import { sendUpdateActor } from '../../../lib/activitypub/send'
-import { deleteLocalActorImageFile, updateLocalActorImageFile } from '../../../lib/local-actor'
+import { deleteLocalActorImageFile, updateLocalActorImageFiles } from '../../../lib/local-actor'
 import { getOriginalVideoFileTotalDailyFromUser, getOriginalVideoFileTotalFromUser, sendVerifyUserEmail } from '../../../lib/user'
 import {
   asyncMiddleware,
@@ -30,7 +32,6 @@ import { AccountVideoRateModel } from '../../../models/account/account-video-rat
 import { UserModel } from '../../../models/user/user'
 import { VideoModel } from '../../../models/video/video'
 import { VideoImportModel } from '../../../models/video/video-import'
-import { pick } from '@shared/core-utils'
 
 const auditLogger = auditLoggerFactory('users')
 
@@ -253,13 +254,15 @@ async function updateMyAvatar (req: express.Request, res: express.Response) {
 
   const userAccount = await AccountModel.load(user.Account.id)
 
-  const avatars = await updateLocalActorImageFile(
+  const avatars = await updateLocalActorImageFiles(
     userAccount,
     avatarPhysicalFile,
     ActorImageType.AVATAR
   )
 
   return res.json({
+    // TODO: remove, deprecated in 4.2
+    avatar: getBiggestActorImage(avatars).toFormattedJSON(),
     avatars: avatars.map(avatar => avatar.toFormattedJSON())
   })
 }

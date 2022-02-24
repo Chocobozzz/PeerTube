@@ -6,10 +6,9 @@ import { ServerModel } from '@server/models/server/server'
 import { VideoChannelModel } from '@server/models/video/video-channel'
 import { MAccount, MAccountDefault, MActor, MActorFullActor, MActorId, MActorImages, MChannel, MServer } from '@server/types/models'
 import { ActivityPubActor, ActorImageType } from '@shared/models'
-import { updateActorImageInstance } from '../image'
-import { getActorAttributesFromObject, getActorDisplayNameFromObject, getImageInfoFromObject } from './object-to-model-attributes'
+import { updateActorImages } from '../image'
+import { getActorAttributesFromObject, getActorDisplayNameFromObject, getImagesInfoFromObject } from './object-to-model-attributes'
 import { fetchActorFollowsCount } from './url-to-object'
-import { generateSmallerAvatar } from '@server/lib/local-actor'
 
 export class APActorCreator {
 
@@ -30,14 +29,8 @@ export class APActorCreator {
 
       const { actorCreated, created } = await this.saveActor(actorInstance, t)
 
-      actorCreated.Avatars = actorCreated.Avatars || []
-      actorCreated.Banners = actorCreated.Banners || []
       await this.setImageIfNeeded(actorCreated, ActorImageType.AVATAR, t)
       await this.setImageIfNeeded(actorCreated, ActorImageType.BANNER, t)
-
-      if (Array.isArray(this.actorObject.icon) === false && actorCreated.Avatars?.length > 0) {
-        await generateSmallerAvatar(actorCreated, null, t) // Backward compatibility for version < 4.2
-      }
 
       await this.tryToFixActorUrlIfNeeded(actorCreated, actorInstance, created, t)
 
@@ -78,10 +71,10 @@ export class APActorCreator {
   }
 
   private async setImageIfNeeded (actor: MActor, type: ActorImageType, t: Transaction) {
-    const imagesInfo = getImageInfoFromObject(this.actorObject, type)
+    const imagesInfo = getImagesInfoFromObject(this.actorObject, type)
     if (imagesInfo.length === 0) return
 
-    return updateActorImageInstance(actor as MActorImages, type, imagesInfo, t)
+    return updateActorImages(actor as MActorImages, type, imagesInfo, t)
   }
 
   private async saveActor (actor: MActor, t: Transaction) {

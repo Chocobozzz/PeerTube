@@ -10,7 +10,14 @@ import {
   UserNotificationSettingValue,
   UserNotificationType
 } from '@shared/models'
-import { createMultipleServers, doubleFollow, PeerTubeServer, setAccessTokensToServers } from '@shared/server-commands'
+import {
+  createMultipleServers,
+  doubleFollow,
+  PeerTubeServer,
+  setAccessTokensToServers,
+  setDefaultAccountAvatar,
+  setDefaultChannelAvatar
+} from '@shared/server-commands'
 import { MockSmtpServer } from './mock-servers'
 
 type CheckerBaseParams = {
@@ -646,6 +653,8 @@ async function prepareNotificationsTest (serversCount = 3, overrideConfigArg: an
   const servers = await createMultipleServers(serversCount, Object.assign(overrideConfig, overrideConfigArg))
 
   await setAccessTokensToServers(servers)
+  await setDefaultChannelAvatar(servers)
+  await setDefaultAccountAvatar(servers)
 
   if (serversCount > 1) {
     await doubleFollow(servers[0], servers[1])

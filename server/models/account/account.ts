@@ -54,6 +54,7 @@ export type SummaryOptions = {
   whereActor?: WhereOptions
   whereServer?: WhereOptions
   withAccountBlockerIds?: number[]
+  forCount?: boolean
 }
 
 @DefaultScope(() => ({
@@ -73,22 +74,24 @@ export type SummaryOptions = {
       where: options.whereServer
     }
 
-    const queryInclude: Includeable[] = [
-      {
-        attributes: [ 'id', 'preferredUsername', 'url', 'serverId' ],
-        model: ActorModel.unscoped(),
-        required: options.actorRequired ?? true,
-        where: options.whereActor,
-        include: [
-          serverInclude,
+    const actorInclude: Includeable = {
+      attributes: [ 'id', 'preferredUsername', 'url', 'serverId' ],
+      model: ActorModel.unscoped(),
+      required: options.actorRequired ?? true,
+      where: options.whereActor,
+      include: [ serverInclude ]
+    }
 
-          {
-            model: ActorImageModel.unscoped(),
-            as: 'Avatars',
-            required: false
-          }
-        ]
-      }
+    if (options.forCount !== true) {
+      actorInclude.include.push({
+        model: ActorImageModel,
+        as: 'Avatars',
+        required: false
+      })
+    }
+
+    const queryInclude: Includeable[] = [
+      actorInclude
     ]
 
     const query: FindOptions = {
@@ -283,22 +286,12 @@ export class AccountModel extends Model<Partial<AttributesOnly<AccountModel>>> {
             required: true,
             where: {
               preferredUsername: name
-            },
-            include: [
-              {
-                attributes: [ 'filename', 'fileUrl', 'height', 'type', 'width' ],
-                model: ActorImageModel,
-                as: 'Avatars',
-                required: false,
-                duplicating: false
-              }
-            ]
+            }
           }
         ]
       }
 
-      return AccountModel.findAll(query) // findAll is needed to return all avatars
-        .then(([ account ]) => account)
+      return AccountModel.findOne(query)
     }
 
     return ModelCache.Instance.doCache({
@@ -359,13 +352,10 @@ export class AccountModel extends Model<Partial<AttributesOnly<AccountModel>>> {
       order: getSort(sort)
     }
 
-    return AccountModel.findAndCountAll(query)
-      .then(({ rows, count }) => {
-        return {
-          data: rows,
-          total: count
-        }
-      })
+    return Promise.all([
+      AccountModel.count(),
+      AccountModel.findAll(query)
+    ]).then(([ total, data ]) => ({ total, data }))
   }
 
   static loadAccountIdFromVideo (videoId: number): Promise<MAccount> {
@@ -417,16 +407,15 @@ export class AccountModel extends Model<Partial<AttributesOnly<AccountModel>>> {
   }
 
   toFormattedJSON (this: MAccountFormattable): Account {
-    const actor = this.Actor.toFormattedJSON()
-    const account = {
+    return {
+      ...this.Actor.toFormattedJSON(),
+
       id: this.id,
       displayName: this.getDisplayName(),
       description: this.description,
       updatedAt: this.updatedAt,
-      userId: this.userId ? this.userId : undefined
+      userId: this.userId ?? undefined
     }
-
-    return Object.assign(actor, account)
   }
 
   toFormattedSummaryJSON (this: MAccountSummaryFormattable): AccountSummary {
@@ -434,11 +423,15 @@ export class AccountModel extends Model<Partial<AttributesOnly<AccountModel>>> {
 
     return {
       id: this.id,
-      name: actor.name,
       displayName: this.getDisplayName(),
+
+      name: actor.name,
       url: actor.url,
       host: actor.host,
-      avatars: actor.avatars
+      avatars: actor.avatars,
+
+      // TODO: remove, deprecated in 4.2
+      avatar: actor.avatar
     }
   }
 

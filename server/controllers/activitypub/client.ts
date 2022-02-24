@@ -18,10 +18,10 @@ import {
 } from '../../lib/activitypub/url'
 import {
   asyncMiddleware,
+  ensureIsLocalChannel,
   executeIfActivityPub,
   localAccountValidator,
   videoChannelsNameWithHostValidator,
-  ensureIsLocalChannel,
   videosCustomGetValidator,
   videosShareValidator
 } from '../../middlewares'
@@ -265,8 +265,8 @@ async function videoAnnouncesController (req: express.Request, res: express.Resp
   const handler = async (start: number, count: number) => {
     const result = await VideoShareModel.listAndCountByVideoId(video.id, start, count)
     return {
-      total: result.count,
-      data: result.rows.map(r => r.url)
+      total: result.total,
+      data: result.data.map(r => r.url)
     }
   }
   const json = await activityPubCollectionPagination(getLocalVideoSharesActivityPubUrl(video), handler, req.query.page)
@@ -301,9 +301,10 @@ async function videoCommentsController (req: express.Request, res: express.Respo
 
   const handler = async (start: number, count: number) => {
     const result = await VideoCommentModel.listAndCountByVideoForAP(video, start, count)
+
     return {
-      total: result.count,
-      data: result.rows.map(r => r.url)
+      total: result.total,
+      data: result.data.map(r => r.url)
     }
   }
   const json = await activityPubCollectionPagination(getLocalVideoCommentsActivityPubUrl(video), handler, req.query.page)
@@ -425,8 +426,8 @@ function videoRates (req: express.Request, rateType: VideoRateType, video: MVide
   const handler = async (start: number, count: number) => {
     const result = await AccountVideoRateModel.listAndCountAccountUrlsByVideoId(rateType, video.id, start, count)
     return {
-      total: result.count,
-      data: result.rows.map(r => r.url)
+      total: result.total,
+      data: result.data.map(r => r.url)
     }
   }
   return activityPubCollectionPagination(url, handler, req.query.page)

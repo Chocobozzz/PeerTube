@@ -1,14 +1,13 @@
 import { resetSequelizeInstance, runInReadCommittedTransaction } from '@server/helpers/database-utils'
 import { logger } from '@server/helpers/logger'
-import { generateSmallerAvatar } from '@server/lib/local-actor'
 import { AccountModel } from '@server/models/account/account'
 import { VideoChannelModel } from '@server/models/video/video-channel'
 import { MAccount, MActor, MActorFull, MChannel } from '@server/types/models'
 import { ActivityPubActor, ActorImageType } from '@shared/models'
 import { getOrCreateAPOwner } from './get'
-import { updateActorImageInstance } from './image'
+import { updateActorImages } from './image'
 import { fetchActorFollowsCount } from './shared'
-import { getImageInfoFromObject } from './shared/object-to-model-attributes'
+import { getImagesInfoFromObject } from './shared/object-to-model-attributes'
 
 export class APActorUpdater {
 
@@ -30,8 +29,8 @@ export class APActorUpdater {
   }
 
   async update () {
-    const avatarsInfo = getImageInfoFromObject(this.actorObject, ActorImageType.AVATAR)
-    const bannersInfo = getImageInfoFromObject(this.actorObject, ActorImageType.BANNER)
+    const avatarsInfo = getImagesInfoFromObject(this.actorObject, ActorImageType.AVATAR)
+    const bannersInfo = getImagesInfoFromObject(this.actorObject, ActorImageType.BANNER)
 
     try {
       await this.updateActorInstance(this.actor, this.actorObject)
@@ -48,12 +47,8 @@ export class APActorUpdater {
       }
 
       await runInReadCommittedTransaction(async t => {
-        await updateActorImageInstance(this.actor, ActorImageType.BANNER, bannersInfo, t)
-        await updateActorImageInstance(this.actor, ActorImageType.AVATAR, avatarsInfo, t)
-
-        if (Array.isArray(this.actorObject.icon) === false && avatarsInfo.length > 0) {
-          await generateSmallerAvatar(this.actor, null, t) // Backward compatibility for version < 4.2
-        }
+        await updateActorImages(this.actor, ActorImageType.BANNER, bannersInfo, t)
+        await updateActorImages(this.actor, ActorImageType.AVATAR, avatarsInfo, t)
       })
 
       await runInReadCommittedTransaction(async t => {

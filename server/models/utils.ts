@@ -181,7 +181,7 @@ function buildServerIdsFollowedBy (actorId: any) {
     'SELECT "actor"."serverId" FROM "actorFollow" ' +
     'INNER JOIN "actor" ON actor.id = "actorFollow"."targetActorId" ' +
     'WHERE "actorFollow"."actorId" = ' + actorIdNumber +
-    ')'
+  ')'
 }
 
 function buildWhereIdOrUUID (id: number | string) {

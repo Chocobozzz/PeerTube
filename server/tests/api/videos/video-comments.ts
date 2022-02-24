@@ -3,7 +3,15 @@
 import 'mocha'
 import * as chai from 'chai'
 import { dateIsValid, testImage } from '@server/tests/shared'
-import { cleanupTests, CommentsCommand, createSingleServer, PeerTubeServer, setAccessTokensToServers } from '@shared/server-commands'
+import {
+  cleanupTests,
+  CommentsCommand,
+  createSingleServer,
+  PeerTubeServer,
+  setAccessTokensToServers,
+  setDefaultAccountAvatar,
+  setDefaultChannelAvatar
+} from '@shared/server-commands'
 
 const expect = chai.expect
 
@@ -29,7 +37,8 @@ describe('Test video comments', function () {
     videoUUID = uuid
     videoId = id
 
-    await server.users.updateMyAvatar({ fixture: 'avatar.png' })
+    await setDefaultChannelAvatar(server)
+    await setDefaultAccountAvatar(server)
 
     userAccessTokenServer1 = await server.users.generateUserAndToken('user1')
 

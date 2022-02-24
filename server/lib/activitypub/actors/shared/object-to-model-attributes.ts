@@ -30,19 +30,15 @@ function getActorAttributesFromObject (
   }
 }
 
-function normalizeIconOrImage (icon: ActivityIconObject | ActivityIconObject[]): ActivityIconObject[] {
-  if (Array.isArray(icon) === true) return icon as ActivityIconObject[]
-
-  return [ icon ] as ActivityIconObject[]
-}
-
-function getImageInfoFromObject (actorObject: ActivityPubActor, type: ActorImageType) {
-  const iconsOrImages = type === ActorImageType.AVATAR ? actorObject.icon : actorObject.image
+function getImagesInfoFromObject (actorObject: ActivityPubActor, type: ActorImageType) {
+  const iconsOrImages = type === ActorImageType.AVATAR
+    ? actorObject.icons || actorObject.icon
+    : actorObject.image
 
   return normalizeIconOrImage(iconsOrImages).map(iconOrImage => {
     const mimetypes = MIMETYPES.IMAGE
 
-    if (!iconOrImage || iconOrImage.type !== 'Image' || !isActivityPubUrlValid(iconOrImage.url)) return undefined
+    if (iconOrImage.type !== 'Image' || !isActivityPubUrlValid(iconOrImage.url)) return undefined
 
     let extension: string
 
@@ -64,7 +60,6 @@ function getImageInfoFromObject (actorObject: ActivityPubActor, type: ActorImage
       type
     }
   })
-  .filter(i => !!i)
 }
 
 function getActorDisplayNameFromObject (actorObject: ActivityPubActor) {
@@ -73,6 +68,15 @@ function getActorDisplayNameFromObject (actorObject: ActivityPubActor) {
 
 export {
   getActorAttributesFromObject,
-  getImageInfoFromObject,
+  getImagesInfoFromObject,
   getActorDisplayNameFromObject
+}
+
+// ---------------------------------------------------------------------------
+
+function normalizeIconOrImage (icon: ActivityIconObject | ActivityIconObject[]): ActivityIconObject[] {
+  if (Array.isArray(icon)) return icon
+  if (icon) return [ icon ]
+
+  return []
 }

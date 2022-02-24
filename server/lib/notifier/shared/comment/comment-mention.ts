@@ -77,7 +77,7 @@ export class CommentMention extends AbstractNotification <MCommentOwnerVideo, MU
       userId: user.id,
       commentId: this.payload.id
     })
-    notification.Comment = this.payload
+    notification.VideoComment = this.payload
 
     return notification
   }

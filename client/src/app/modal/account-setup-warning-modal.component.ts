@@ -32,7 +32,7 @@ export class AccountSetupWarningModalComponent {
   }
 
   hasAccountAvatar (user: User) {
-    return !!user.account.avatars.length
+    return user.account.avatars.length !== 0
   }
 
   hasAccountDescription (user: User) {

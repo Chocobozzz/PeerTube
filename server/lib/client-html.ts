@@ -3,6 +3,7 @@ import { readFile } from 'fs-extra'
 import { join } from 'path'
 import validator from 'validator'
 import { toCompleteUUID } from '@server/helpers/custom-validators/misc'
+import { ActorImageModel } from '@server/models/actor/actor-image'
 import { root } from '@shared/core-utils'
 import { escapeHTML } from '@shared/core-utils/renderer'
 import { sha256 } from '@shared/extra-utils'
@@ -28,8 +29,8 @@ import { VideoModel } from '../models/video/video'
 import { VideoChannelModel } from '../models/video/video-channel'
 import { VideoPlaylistModel } from '../models/video/video-playlist'
 import { MAccountActor, MChannelActor } from '../types/models'
+import { getBiggestActorImage } from './actor-image'
 import { ServerConfigManager } from './server-config-manager'
-import { ActorModel } from '@server/models/actor/actor'
 
 type Tags = {
   ogType: string
@@ -273,9 +274,9 @@ class ClientHtml {
     const siteName = CONFIG.INSTANCE.NAME
     const title = entity.getDisplayName()
 
-    const avatar = entity.Actor.getBiggestAvatar()
+    const avatar = getBiggestActorImage(entity.Actor.Avatars)
     const image = {
-      url: ActorModel.getAvatarUrl(avatar),
+      url: ActorImageModel.getImageUrl(avatar),
       width: avatar?.width,
       height: avatar?.height
     }

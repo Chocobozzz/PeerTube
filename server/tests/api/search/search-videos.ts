@@ -2,6 +2,8 @@
 
 import 'mocha'
 import * as chai from 'chai'
+import { wait } from '@shared/core-utils'
+import { VideoPrivacy } from '@shared/models'
 import {
   cleanupTests,
   createSingleServer,
@@ -9,11 +11,11 @@ import {
   PeerTubeServer,
   SearchCommand,
   setAccessTokensToServers,
+  setDefaultAccountAvatar,
+  setDefaultChannelAvatar,
   setDefaultVideoChannel,
   stopFfmpeg
 } from '@shared/server-commands'
-import { VideoPrivacy } from '@shared/models'
-import { wait } from '@shared/core-utils'
 
 const expect = chai.expect
 
@@ -38,6 +40,8 @@ describe('Test videos search', function () {
 
     await setAccessTokensToServers([ server, remoteServer ])
     await setDefaultVideoChannel([ server, remoteServer ])
+    await setDefaultChannelAvatar(server)
+    await setDefaultAccountAvatar(servers)
 
     {
       const attributes1 = {

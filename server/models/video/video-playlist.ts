@@ -1,5 +1,5 @@
 import { join } from 'path'
-import { FindOptions, literal, Op, ScopeOptions, Sequelize, Transaction, WhereOptions } from 'sequelize'
+import { FindOptions, Includeable, literal, Op, ScopeOptions, Sequelize, Transaction, WhereOptions } from 'sequelize'
 import {
   AllowNull,
   BelongsTo,
@@ -86,6 +86,7 @@ type AvailableForListOptions = {
   host?: string
   uuids?: string[]
   withVideos?: boolean
+  forCount?: boolean
 }
 
 function getVideoLengthSelect () {
@@ -239,23 +240,28 @@ function getVideoLengthSelect () {
       [Op.and]: whereAnd
     }
 
+    const include: Includeable[] = [
+      {
+        model: AccountModel.scope({
+          method: [ AccountScopeNames.SUMMARY, { whereActor, whereServer, forCount: options.forCount } as SummaryOptions ]
+        }),
+        required: true
+      }
+    ]
+
+    if (options.forCount !== true) {
+      include.push({
+        model: VideoChannelModel.scope(VideoChannelScopeNames.SUMMARY),
+        required: false
+      })
+    }
+
     return {
       attributes: {
         include: attributesInclude
       },
       where,
-      include: [
-        {
-          model: AccountModel.scope({
-            method: [ AccountScopeNames.SUMMARY, { whereActor, whereServer } as SummaryOptions ]
-          }),
-          required: true
-        },
-        {
-          model: VideoChannelModel.scope(VideoChannelScopeNames.SUMMARY),
-          required: false
-        }
-      ]
+      include
     } as FindOptions
   }
 }))
@@ -369,12 +375,23 @@ export class VideoPlaylistModel extends Model<Partial<AttributesOnly<VideoPlayli
       order: getPlaylistSort(options.sort)
     }
 
-    const scopes: (string | ScopeOptions)[] = [
+    const commonAvailableForListOptions = pick(options, [
+      'type',
+      'followerActorId',
+      'accountId',
+      'videoChannelId',
+      'listMyPlaylists',
+      'search',
+      'host',
+      'uuids'
+    ])
+
+    const scopesFind: (string | ScopeOptions)[] = [
       {
         method: [
           ScopeNames.AVAILABLE_FOR_LIST,
           {
-            ...pick(options, [ 'type', 'followerActorId', 'accountId', 'videoChannelId', 'listMyPlaylists', 'search', 'host', 'uuids' ]),
+            ...commonAvailableForListOptions,
 
             withVideos: options.withVideos || false
           } as AvailableForListOptions
@@ -384,12 +401,26 @@ export class VideoPlaylistModel extends Model<Partial<AttributesOnly<VideoPlayli
       ScopeNames.WITH_THUMBNAIL
     ]
 
-    return VideoPlaylistModel
-      .scope(scopes)
-      .findAndCountAll(query)
-      .then(({ rows, count }) => {
-        return { total: count, data: rows }
-      })
+    const scopesCount: (string | ScopeOptions)[] = [
+      {
+        method: [
+          ScopeNames.AVAILABLE_FOR_LIST,
+
+          {
+            ...commonAvailableForListOptions,
+
+            withVideos: options.withVideos || false,
+            forCount: true
+          } as AvailableForListOptions
+        ]
+      },
+      ScopeNames.WITH_VIDEOS_LENGTH
+    ]
+
+    return Promise.all([
+      VideoPlaylistModel.scope(scopesCount).count(),
+      VideoPlaylistModel.scope(scopesFind).findAll(query)
+    ]).then(([ count, rows ]) => ({ total: count, data: rows }))
   }
 
   static searchForApi (options: Pick<AvailableForListOptions, 'followerActorId' | 'search'| 'host'| 'uuids'> & {
@@ -419,17 +450,24 @@ export class VideoPlaylistModel extends Model<Partial<AttributesOnly<VideoPlayli
       Object.assign(where, { videoChannelId: options.channel.id })
     }
 
-    const query = {
-      attributes: [ 'url' ],
-      offset: start,
-      limit: count,
-      where
+    const getQuery = (forCount: boolean) => {
+      return {
+        attributes: forCount === true
+          ? []
+          : [ 'url' ],
+        offset: start,
+        limit: count,
+        where
+      }
     }
 
-    return VideoPlaylistModel.findAndCountAll(query)
-                             .then(({ rows, count }) => {
-                               return { total: count, data: rows.map(p => p.url) }
-                             })
+    return Promise.all([
+      VideoPlaylistModel.count(getQuery(true)),
+      VideoPlaylistModel.findAll(getQuery(false))
+    ]).then(([ total, rows ]) => ({
+      total,
+      data: rows.map(p => p.url)
+    }))
   }
 
   static listPlaylistIdsOf (accountId: number, videoIds: number[]): Promise<MVideoPlaylistIdWithElements[]> {
