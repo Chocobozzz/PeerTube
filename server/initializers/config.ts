@@ -297,12 +297,14 @@ const CONFIG = {
 
     RTMP: {
       get ENABLED () { return config.get<boolean>('live.rtmp.enabled') },
-      get PORT () { return config.get<number>('live.rtmp.port') }
+      get PORT () { return config.get<number>('live.rtmp.port') },
+      get HOSTNAME () { return config.get<number>('live.rtmp.hostname') }
     },
 
     RTMPS: {
       get ENABLED () { return config.get<boolean>('live.rtmps.enabled') },
       get PORT () { return config.get<number>('live.rtmps.port') },
+      get HOSTNAME () { return config.get<number>('live.rtmps.hostname') },
       get KEY_FILE () { return config.get<string>('live.rtmps.key_file') },
       get CERT_FILE () { return config.get<string>('live.rtmps.cert_file') }
     },
