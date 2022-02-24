@@ -58,7 +58,8 @@ function searchVideoPlaylists (req: express.Request, res: express.Response) {
   return searchVideoPlaylistsDB(query, res)
 }
 
-const normalizeSearchIndexResult = ({ body }: { body: ResultList<any> }): ResultList<VideoPlaylist> => ({
+const normalizeSearchIndexResult = ({ body }:
+{ body: ResultList<VideoPlaylist & { ownerAccount: { avatar }, videoChannel: { avatar } }> }): ResultList<VideoPlaylist> => ({
   ...body,
   data: body.data.map(({
     ownerAccount: { avatar: accountAvatar, ...ownerAccount },
