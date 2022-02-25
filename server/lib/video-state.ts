@@ -8,7 +8,7 @@ import { MVideo, MVideoFullLight, MVideoUUID } from '@server/types/models'
 import { VideoState } from '@shared/models'
 import { federateVideoIfNeeded } from './activitypub/videos'
 import { Notifier } from './notifier'
-import { addMoveToObjectStorageJob } from './video'
+import { addMoveToObjectStorageJob, addVideoValidateJob } from './video'
 
 function buildNextVideoState (currentState?: VideoState) {
   if (currentState === VideoState.PUBLISHED) {
@@ -16,11 +16,19 @@ function buildNextVideoState (currentState?: VideoState) {
   }
 
   if (
+    currentState !== VideoState.TO_VALIDATE_VIDEO_FILES &&
     currentState !== VideoState.TO_TRANSCODE &&
     currentState !== VideoState.TO_MOVE_TO_EXTERNAL_STORAGE &&
     CONFIG.TRANSCODING.ENABLED
   ) {
     return VideoState.TO_TRANSCODE
+  }
+
+  if (
+    currentState !== VideoState.TO_VALIDATE_VIDEO_FILES &&
+    currentState !== VideoState.TO_MOVE_TO_EXTERNAL_STORAGE
+  ) {
+    return VideoState.TO_VALIDATE_VIDEO_FILES
   }
 
   if (
@@ -51,19 +59,39 @@ function moveToNextState (video: MVideoUUID, isNewVideo = true) {
       return moveToPublishedState(videoDatabase, isNewVideo, t)
     }
 
+    if (newState === VideoState.TO_VALIDATE_VIDEO_FILES) {
+      return moveToValidateVideoFileState(videoDatabase, isNewVideo, t)
+    }
+
     if (newState === VideoState.TO_MOVE_TO_EXTERNAL_STORAGE) {
       return moveToExternalStorageState(videoDatabase, isNewVideo, t)
     }
   })
 }
 
-async function moveToExternalStorageState (video: MVideoFullLight, isNewVideo: boolean, transaction: Transaction) {
+async function moveToValidateVideoFileState (video: MVideoFullLight, isNewVideo: boolean, transaction: Transaction) {
   const videoJobInfo = await VideoJobInfoModel.load(video.id, transaction)
   const pendingTranscode = videoJobInfo?.pendingTranscode || 0
 
-  // We want to wait all transcoding jobs before moving the video on an external storage
+  // We want to wait all transcoding jobs before updating the state
   if (pendingTranscode !== 0) return false
 
+  await video.setNewState(VideoState.TO_TRANSCODE, isNewVideo, transaction)
+
+  logger.info('Creating video validaty check job for video %s.', video.uuid, { tags: [ video.uuid ] })
+
+  try {
+    addVideoValidateJob(video)
+
+    return true
+  } catch (err) {
+    logger.error('Cannot add video validate job', { err })
+
+    return false
+  }
+}
+
+async function moveToExternalStorageState (video: MVideoFullLight, isNewVideo: boolean, transaction: Transaction) {
   await video.setNewState(VideoState.TO_MOVE_TO_EXTERNAL_STORAGE, isNewVideo, transaction)
 
   logger.info('Creating external storage move job for video %s.', video.uuid, { tags: [ video.uuid ] })

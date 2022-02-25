@@ -3,7 +3,7 @@ import { AllowNull, BelongsTo, Column, CreatedAt, Default, ForeignKey, IsInt, Mo
 import { AttributesOnly } from '@shared/typescript-utils'
 import { VideoModel } from './video'
 
-export type VideoJobInfoColumnType = 'pendingMove' | 'pendingTranscode'
+export type VideoJobInfoColumnType = 'pendingMove' | 'pendingTranscode' | 'pendingValidateVideo'
 
 @Table({
   tableName: 'videoJobInfo',
@@ -37,6 +37,12 @@ export class VideoJobInfoModel extends Model<Partial<AttributesOnly<VideoJobInfo
   @IsInt
   @Column
   pendingTranscode: number
+
+  @AllowNull(false)
+  @Default(0)
+  @IsInt
+  @Column
+  pendingValidateVideo: number
 
   @ForeignKey(() => VideoModel)
   @Unique

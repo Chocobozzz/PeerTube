@@ -15,6 +15,7 @@ import {
   MoveObjectStoragePayload,
   RefreshPayload,
   VideoEditionPayload,
+  ValidateVideoFilePayload,
   VideoFileImportPayload,
   VideoImportPayload,
   VideoLiveEndingPayload,
@@ -38,6 +39,7 @@ import { processVideoImport } from './handlers/video-import'
 import { processVideoLiveEnding } from './handlers/video-live-ending'
 import { processVideoTranscoding } from './handlers/video-transcoding'
 import { processVideosViewsStats } from './handlers/video-views-stats'
+import { processVideoValidityCheck } from './handlers/video-validity-check'
 
 type CreateJobArgument =
   { type: 'activitypub-http-broadcast', payload: ActivitypubHttpBroadcastPayload } |
@@ -56,7 +58,8 @@ type CreateJobArgument =
   { type: 'video-redundancy', payload: VideoRedundancyPayload } |
   { type: 'delete-resumable-upload-meta-file', payload: DeleteResumableUploadMetaFilePayload } |
   { type: 'video-edition', payload: VideoEditionPayload } |
-  { type: 'move-to-object-storage', payload: MoveObjectStoragePayload }
+  { type: 'move-to-object-storage', payload: MoveObjectStoragePayload } |
+  { type: 'validate-video-file', payload: ValidateVideoFilePayload }
 
 export type CreateJobOptions = {
   delay?: number
@@ -79,7 +82,8 @@ const handlers: { [id in JobType]: (job: Job) => Promise<any> } = {
   'actor-keys': processActorKeys,
   'video-redundancy': processVideoRedundancy,
   'move-to-object-storage': processMoveToObjectStorage,
-  'video-edition': processVideoEdition
+  'video-edition': processVideoEdition,
+  'validate-video-file': processVideoValidityCheck
 }
 
 const jobTypes: JobType[] = [
@@ -98,7 +102,8 @@ const jobTypes: JobType[] = [
   'actor-keys',
   'video-live-ending',
   'move-to-object-storage',
-  'video-edition'
+  'video-edition',
+  'validate-video-file'
 ]
 
 class JobQueue {

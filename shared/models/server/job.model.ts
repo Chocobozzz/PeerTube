@@ -22,6 +22,7 @@ export type JobType =
   | 'actor-keys'
   | 'move-to-object-storage'
   | 'video-edition'
+  | 'validate-video-file'
 
 export interface Job {
   id: number
@@ -153,6 +154,10 @@ export interface DeleteResumableUploadMetaFilePayload {
   filepath: string
 }
 
+export interface ValidateVideoFilePayload {
+  videoUUID: string
+}
+
 export interface MoveObjectStoragePayload {
   videoUUID: string
   isNewVideo: boolean
@@ -193,4 +198,9 @@ export type VideoEditionTaskPayload =
 export interface VideoEditionPayload {
   videoUUID: string
   tasks: VideoEditionTaskPayload[]
+}
+
+export interface VideoValidityCheckPayload {
+  resolution: VideoResolution
+  videoUUID: string
 }

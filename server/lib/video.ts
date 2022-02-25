@@ -113,6 +113,11 @@ async function addTranscodingJob (payload: VideoTranscodingPayload, options: Cre
   return JobQueue.Instance.createJobWithPromise({ type: 'video-transcoding', payload: payload }, options)
 }
 
+function addVideoValidateJob (video: MVideoUUID) {
+  const dataInput = { videoUUID: video.uuid }
+  return JobQueue.Instance.createJobWithPromise({ type: 'validate-video-file', payload: dataInput })
+}
+
 async function addMoveToObjectStorageJob (video: MVideoUUID, isNewVideo = true) {
   await VideoJobInfoModel.increaseOrCreate(video.uuid, 'pendingMove')
 
@@ -137,6 +142,7 @@ export {
   setVideoTags,
   addOptimizeOrMergeAudioJob,
   addTranscodingJob,
+  addVideoValidateJob,
   addMoveToObjectStorageJob,
   getTranscodingJobPriority
 }

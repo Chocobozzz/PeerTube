@@ -153,7 +153,8 @@ const JOB_ATTEMPTS: { [id in JobType]: number } = {
   'video-redundancy': 1,
   'video-live-ending': 1,
   'video-edition': 1,
-  'move-to-object-storage': 3
+  'move-to-object-storage': 3,
+  'validate-video-file': 1
 }
 // Excluded keys are jobs that can be configured by admins
 const JOB_CONCURRENCY: { [id in Exclude<JobType, 'video-transcoding' | 'video-import'>]: number } = {
@@ -170,7 +171,8 @@ const JOB_CONCURRENCY: { [id in Exclude<JobType, 'video-transcoding' | 'video-im
   'video-redundancy': 1,
   'video-live-ending': 10,
   'video-edition': 1,
-  'move-to-object-storage': 1
+  'move-to-object-storage': 1,
+  'validate-video-file': 1 // Should this be synced with video-transcoding concurrency?
 }
 const JOB_TTL: { [id in JobType]: number } = {
   'activitypub-http-broadcast': 60000 * 10, // 10 minutes
@@ -188,7 +190,8 @@ const JOB_TTL: { [id in JobType]: number } = {
   'activitypub-refresher': 60000 * 10, // 10 minutes
   'video-redundancy': 1000 * 3600 * 3, // 3 hours
   'video-live-ending': 1000 * 60 * 10, // 10 minutes
-  'move-to-object-storage': 1000 * 60 * 60 * 3 // 3 hours
+  'move-to-object-storage': 1000 * 60 * 60 * 3, // 3 hours,
+  'validate-video-file': 1000 * 3600 * 48 // 2 days, transcoding could be long
 }
 const REPEAT_JOBS: { [ id in JobType ]?: EveryRepeatOptions | CronRepeatOptions } = {
   'videos-views-stats': {
@@ -443,7 +446,8 @@ const VIDEO_STATES: { [ id in VideoState ]: string } = {
   [VideoState.TO_MOVE_TO_EXTERNAL_STORAGE]: 'To move to an external storage',
   [VideoState.TRANSCODING_FAILED]: 'Transcoding failed',
   [VideoState.TO_MOVE_TO_EXTERNAL_STORAGE_FAILED]: 'External storage move failed',
-  [VideoState.TO_EDIT]: 'To edit*'
+  [VideoState.TO_EDIT]: 'To edit*',
+  [VideoState.TO_VALIDATE_VIDEO_FILES]: 'To validate video files'
 }
 
 const VIDEO_IMPORT_STATES: { [ id in VideoImportState ]: string } = {

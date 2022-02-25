@@ -32,6 +32,7 @@ import {
   RegistrationForModerators,
   UnblacklistForOwner
 } from './shared'
+import { VideoValidationFailed } from './shared/video-publication/video-validation-failed'
 
 class Notifier {
 
@@ -53,7 +54,8 @@ class Notifier {
     abuseStateChange: [ AbuseStateChangeForReporter ],
     newAbuseMessage: [ NewAbuseMessageForReporter, NewAbuseMessageForModerators ],
     newPeertubeVersion: [ NewPeerTubeVersionForAdmins ],
-    newPluginVersion: [ NewPluginVersionForAdmins ]
+    newPluginVersion: [ NewPluginVersionForAdmins ],
+    videoValidationFailed: [ VideoValidationFailed ]
   }
 
   private static instance: Notifier
@@ -89,6 +91,13 @@ class Notifier {
       .catch(err => {
         logger.error('Cannot notify owner that its video %s has been published after removed from auto-blacklist.', video.url, { err })
       })
+  }
+
+  notifyOnVideoValidationFailed (video: MVideoFullLight): void {
+    const models = this.notificationModels.videoValidationFailed
+
+    this.sendNotifications(models, video)
+      .catch(err => logger.error('Cannot notify of video validation failed.', video.url, { err }))
   }
 
   notifyOnNewComment (comment: MCommentOwnerVideo): void {
