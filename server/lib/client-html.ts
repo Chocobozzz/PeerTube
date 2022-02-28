@@ -1,5 +1,6 @@
 import express from 'express'
 import { readFile } from 'fs-extra'
+import memoizee from 'memoizee'
 import { join } from 'path'
 import validator from 'validator'
 import { toCompleteUUID } from '@server/helpers/custom-validators/misc'
@@ -20,6 +21,8 @@ import {
   CUSTOM_HTML_TAG_COMMENTS,
   EMBED_SIZE,
   FILES_CONTENT_HASH,
+  MEMOIZE_LENGTH,
+  MEMOIZE_TTL,
   PLUGIN_GLOBAL_CSS_PATH,
   WEBSERVER
 } from '../initializers/constants'
@@ -31,6 +34,11 @@ import { VideoPlaylistModel } from '../models/video/video-playlist'
 import { MAccountActor, MChannelActor } from '../types/models'
 import { getBiggestActorImage } from './actor-image'
 import { ServerConfigManager } from './server-config-manager'
+
+const getPlainTextDescriptionCached = memoizee(mdToOneLinePlainText, {
+  maxAge: MEMOIZE_TTL.MD_TO_PLAIN_TEXT_CLIENT_HTML,
+  max: MEMOIZE_LENGTH.MD_TO_PLAIN_TEXT_CLIENT_HTML
+})
 
 type Tags = {
   ogType: string
@@ -104,7 +112,7 @@ class ClientHtml {
       res.status(HttpStatusCode.NOT_FOUND_404)
       return html
     }
-    const description = mdToOneLinePlainText(video.description)
+    const description = getPlainTextDescriptionCached(video.description)
 
     let customHtml = ClientHtml.addTitleTag(html, video.name)
     customHtml = ClientHtml.addDescriptionTag(customHtml, description)
@@ -165,7 +173,7 @@ class ClientHtml {
       return html
     }
 
-    const description = mdToOneLinePlainText(videoPlaylist.description)
+    const description = getPlainTextDescriptionCached(videoPlaylist.description)
 
     let customHtml = ClientHtml.addTitleTag(html, videoPlaylist.name)
     customHtml = ClientHtml.addDescriptionTag(customHtml, description)
@@ -264,7 +272,7 @@ class ClientHtml {
       return ClientHtml.getIndexHTML(req, res)
     }
 
-    const description = mdToOneLinePlainText(entity.description)
+    const description = getPlainTextDescriptionCached(entity.description)
 
     let customHtml = ClientHtml.addTitleTag(html, entity.getDisplayName())
     customHtml = ClientHtml.addDescriptionTag(customHtml, description)

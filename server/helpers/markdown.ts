@@ -8,7 +8,7 @@ const markdownItEmoji = require('markdown-it-emoji/light')
 const MarkdownItClass = require('markdown-it')
 
 const markdownItWithHTML = new MarkdownItClass('default', { linkify: true, breaks: true, html: true })
-const markdownItWithoutHTML = new MarkdownItClass('default', { linkify: true, breaks: true, html: false })
+const markdownItWithoutHTML = new MarkdownItClass('default', { linkify: false, breaks: true, html: false })
 
 const toSafeHtml = (text: string) => {
   if (!text) return ''
@@ -66,7 +66,7 @@ function plainTextPlugin (markdownIt: any) {
 
       if (token.type === 'list_item_close') {
         lastSeparator = ', '
-      } else if (/[a-zA-Z]+_close/.test(token.type)) {
+      } else if (token.type.endsWith('_close')) {
         lastSeparator = ' '
       } else if (token.content) {
         text += lastSeparator
