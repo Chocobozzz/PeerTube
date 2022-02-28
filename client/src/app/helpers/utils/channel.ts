@@ -24,7 +24,7 @@ function listUserChannelsForSelect (authService: AuthService) {
             id: c.id,
             label: c.displayName,
             support: c.support,
-            avatarPath: minBy(c.avatars, 'width')[0]?.path
+            avatarPath: minBy(c.avatars, 'width')?.[0]?.path
           }) as SelectChannelItem)
       })
     )
