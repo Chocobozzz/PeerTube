@@ -94,6 +94,12 @@ elif [ "$1" = "api-4" ]; then
     activitypubFiles=$(findTestFiles ./dist/server/tests/api/activitypub)
 
     MOCHA_PARALLEL=true runTest "$1" 2 $moderationFiles $redundancyFiles $activitypubFiles $objectStorageFiles
+elif [ "$1" = "api-5" ]; then
+    npm run build:server
+
+    transcodingFiles=$(findTestFiles ./dist/server/tests/api/transcoding)
+
+    MOCHA_PARALLEL=true runTest "$1" 2 $transcodingFiles
 elif [ "$1" = "external-plugins" ]; then
     npm run build:server
 
