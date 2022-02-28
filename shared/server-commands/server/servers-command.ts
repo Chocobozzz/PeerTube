@@ -30,10 +30,12 @@ export class ServersCommand extends AbstractCommand {
     })
   }
 
-  async cleanupTests () {
-    const p: Promise<any>[] = []
+  cleanupTests () {
+    const promises: Promise<any>[] = []
 
-    if (isGithubCI()) {
+    const saveGithubLogsIfNeeded = async () => {
+      if (!isGithubCI()) return
+
       await ensureDir('artifacts')
 
       const origin = this.buildDirectory('logs/peertube.log')
@@ -44,14 +46,17 @@ export class ServersCommand extends AbstractCommand {
     }
 
     if (this.server.parallel) {
-      p.push(ServersCommand.flushTests(this.server.internalServerNumber))
+      const promise = saveGithubLogsIfNeeded()
+                        .then(() => ServersCommand.flushTests(this.server.internalServerNumber))
+
+      promises.push(promise)
     }
 
     if (this.server.customConfigFile) {
-      p.push(remove(this.server.customConfigFile))
+      promises.push(remove(this.server.customConfigFile))
     }
 
-    return p
+    return promises
   }
 
   async waitUntilLog (str: string, count = 1, strictCount = true) {
