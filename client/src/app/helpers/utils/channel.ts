@@ -1,8 +1,9 @@
+import { minBy } from 'lodash-es'
 import { first, map } from 'rxjs/operators'
 import { SelectChannelItem } from 'src/types/select-options-item.model'
 import { AuthService } from '../../core/auth'
 
-function listUserChannels (authService: AuthService) {
+function listUserChannelsForSelect (authService: AuthService) {
   return authService.userInformationLoaded
     .pipe(
       first(),
@@ -23,12 +24,12 @@ function listUserChannels (authService: AuthService) {
             id: c.id,
             label: c.displayName,
             support: c.support,
-            avatarPath: c.avatar?.path
+            avatarPath: minBy(c.avatars, 'width')[0]?.path
           }) as SelectChannelItem)
       })
     )
 }
 
 export {
-  listUserChannels
+  listUserChannelsForSelect
 }

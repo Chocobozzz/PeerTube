@@ -3,6 +3,7 @@
 import 'mocha'
 import * as chai from 'chai'
 import { XMLParser, XMLValidator } from 'fast-xml-parser'
+import { HttpStatusCode, VideoPrivacy } from '@shared/models'
 import {
   cleanupTests,
   createMultipleServers,
@@ -11,9 +12,9 @@ import {
   makeGetRequest,
   PeerTubeServer,
   setAccessTokensToServers,
+  setDefaultChannelAvatar,
   waitJobs
 } from '@shared/server-commands'
-import { HttpStatusCode, VideoPrivacy } from '@shared/models'
 
 chai.use(require('chai-xml'))
 chai.use(require('chai-json-schema'))
@@ -44,6 +45,7 @@ describe('Test syndication feeds', () => {
     })
 
     await setAccessTokensToServers([ ...servers, serverHLSOnly ])
+    await setDefaultChannelAvatar(servers[0])
     await doubleFollow(servers[0], servers[1])
 
     {

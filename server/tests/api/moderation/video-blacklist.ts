@@ -13,6 +13,7 @@ import {
   killallServers,
   PeerTubeServer,
   setAccessTokensToServers,
+  setDefaultChannelAvatar,
   waitJobs
 } from '@shared/server-commands'
 
@@ -42,6 +43,7 @@ describe('Test video blacklist', function () {
 
     // Server 1 and server 2 follow each other
     await doubleFollow(servers[0], servers[1])
+    await setDefaultChannelAvatar(servers[0])
 
     // Upload 2 videos on server 2
     await servers[1].videos.upload({ attributes: { name: 'My 1st video', description: 'A video on server 2' } })

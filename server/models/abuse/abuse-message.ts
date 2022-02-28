@@ -1,11 +1,12 @@
 import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import { isAbuseMessageValid } from '@server/helpers/custom-validators/abuses'
 import { MAbuseMessage, MAbuseMessageFormattable } from '@server/types/models'
-import { AttributesOnly } from '@shared/typescript-utils'
 import { AbuseMessage } from '@shared/models'
+import { AttributesOnly } from '@shared/typescript-utils'
 import { AccountModel, ScopeNames as AccountScopeNames } from '../account/account'
 import { getSort, throwIfNotValid } from '../utils'
 import { AbuseModel } from './abuse'
+import { FindOptions } from 'sequelize/dist'
 
 @Table({
   tableName: 'abuseMessage',
@@ -62,21 +63,28 @@ export class AbuseMessageModel extends Model<Partial<AttributesOnly<AbuseMessage
   Abuse: AbuseModel
 
   static listForApi (abuseId: number) {
-    const options = {
-      where: { abuseId },
+    const getQuery = (forCount: boolean) => {
+      const query: FindOptions = {
+        where: { abuseId },
+        order: getSort('createdAt')
+      }
 
-      order: getSort('createdAt'),
+      if (forCount !== true) {
+        query.include = [
+          {
+            model: AccountModel.scope(AccountScopeNames.SUMMARY),
+            required: false
+          }
+        ]
+      }
 
-      include: [
-        {
-          model: AccountModel.scope(AccountScopeNames.SUMMARY),
-          required: false
-        }
-      ]
+      return query
     }
 
-    return AbuseMessageModel.findAndCountAll(options)
-      .then(({ rows, count }) => ({ data: rows, total: count }))
+    return Promise.all([
+      AbuseMessageModel.count(getQuery(true)),
+      AbuseMessageModel.findAll(getQuery(false))
+    ]).then(([ total, data ]) => ({ total, data }))
   }
 
   static loadByIdAndAbuseId (messageId: number, abuseId: number): Promise<MAbuseMessage> {

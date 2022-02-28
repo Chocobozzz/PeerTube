@@ -52,7 +52,6 @@
         align-items: center;
 
         my-actor-avatar {
-          @include actor-avatar-size(28px);
           @include margin-right(8px);
 
           font-size: initial;

@@ -9,15 +9,15 @@ import { ServerBlocklistModel } from '@server/models/server/server-blocklist'
 import { TrackerModel } from '@server/models/server/tracker'
 import { UserVideoHistoryModel } from '@server/models/user/user-video-history'
 import { VideoInclude } from '@shared/models'
-import { ScheduleVideoUpdateModel } from '../../schedule-video-update'
-import { TagModel } from '../../tag'
-import { ThumbnailModel } from '../../thumbnail'
-import { VideoModel } from '../../video'
-import { VideoBlacklistModel } from '../../video-blacklist'
-import { VideoChannelModel } from '../../video-channel'
-import { VideoFileModel } from '../../video-file'
-import { VideoLiveModel } from '../../video-live'
-import { VideoStreamingPlaylistModel } from '../../video-streaming-playlist'
+import { ScheduleVideoUpdateModel } from '../../../schedule-video-update'
+import { TagModel } from '../../../tag'
+import { ThumbnailModel } from '../../../thumbnail'
+import { VideoModel } from '../../../video'
+import { VideoBlacklistModel } from '../../../video-blacklist'
+import { VideoChannelModel } from '../../../video-channel'
+import { VideoFileModel } from '../../../video-file'
+import { VideoLiveModel } from '../../../video-live'
+import { VideoStreamingPlaylistModel } from '../../../video-streaming-playlist'
 import { VideoTableAttributes } from './video-table-attributes'
 
 type SQLRow = { [id: string]: string | number }
@@ -34,6 +34,7 @@ export class VideoModelBuilder {
   private videoFileMemo: { [ id: number ]: VideoFileModel }
 
   private thumbnailsDone: Set<any>
+  private actorImagesDone: Set<any>
   private historyDone: Set<any>
   private blacklistDone: Set<any>
   private accountBlocklistDone: Set<any>
@@ -69,10 +70,20 @@ export class VideoModelBuilder {
     for (const row of rows) {
       this.buildVideoAndAccount(row)
 
-      const videoModel = this.videosMemo[row.id]
+      const videoModel = this.videosMemo[row.id as number]
 
       this.setUserHistory(row, videoModel)
       this.addThumbnail(row, videoModel)
+
+      const channelActor = videoModel.VideoChannel?.Actor
+      if (channelActor) {
+        this.addActorAvatar(row, 'VideoChannel.Actor', channelActor)
+      }
+
+      const accountActor = videoModel.VideoChannel?.Account?.Actor
+      if (accountActor) {
+        this.addActorAvatar(row, 'VideoChannel.Account.Actor', accountActor)
+      }
 
       if (!rowsWebTorrentFiles) {
         this.addWebTorrentFile(row, videoModel)
@@ -113,6 +124,7 @@ export class VideoModelBuilder {
     this.videoFileMemo = {}
 
     this.thumbnailsDone = new Set()
+    this.actorImagesDone = new Set()
     this.historyDone = new Set()
     this.blacklistDone = new Set()
     this.liveDone = new Set()
@@ -195,12 +207,7 @@ export class VideoModelBuilder {
 
   private buildActor (row: SQLRow, prefix: string) {
     const actorPrefix = `${prefix}.Actor`
-    const avatarPrefix = `${actorPrefix}.Avatar`
     const serverPrefix = `${actorPrefix}.Server`
-
-    const avatarModel = row[`${avatarPrefix}.id`] !== null
-      ? new ActorImageModel(this.grab(row, this.tables.getAvatarAttributes(), avatarPrefix), this.buildOpts)
-      : null
 
     const serverModel = row[`${serverPrefix}.id`] !== null
       ? new ServerModel(this.grab(row, this.tables.getServerAttributes(), serverPrefix), this.buildOpts)
@@ -209,8 +216,8 @@ export class VideoModelBuilder {
     if (serverModel) serverModel.BlockedBy = []
 
     const actorModel = new ActorModel(this.grab(row, this.tables.getActorAttributes(), actorPrefix), this.buildOpts)
-    actorModel.Avatar = avatarModel
     actorModel.Server = serverModel
+    actorModel.Avatars = []
 
     return actorModel
   }
@@ -224,6 +231,18 @@ export class VideoModelBuilder {
     videoModel.UserVideoHistories.push(historyModel)
 
     this.historyDone.add(id)
+  }
+
+  private addActorAvatar (row: SQLRow, actorPrefix: string, actor: ActorModel) {
+    const avatarPrefix = `${actorPrefix}.Avatar`
+    const id = row[`${avatarPrefix}.id`]
+    if (!id || this.actorImagesDone.has(id)) return
+
+    const attributes = this.grab(row, this.tables.getAvatarAttributes(), avatarPrefix)
+    const avatarModel = new ActorImageModel(attributes, this.buildOpts)
+    actor.Avatars.push(avatarModel)
+
+    this.actorImagesDone.add(id)
   }
 
   private addThumbnail (row: SQLRow, videoModel: VideoModel) {

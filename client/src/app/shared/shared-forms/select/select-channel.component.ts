@@ -31,7 +31,7 @@ export class SelectChannelComponent implements ControlValueAccessor, OnChanges {
     this.channels = this.items.map(c => {
       const avatarPath = c.avatarPath
         ? c.avatarPath
-        : VideoChannel.GET_DEFAULT_AVATAR_URL()
+        : VideoChannel.GET_DEFAULT_AVATAR_URL(20)
 
       return Object.assign({}, c, { avatarPath })
     })

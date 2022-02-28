@@ -213,7 +213,7 @@ async function listAccountRatings (req: express.Request, res: express.Response) 
     sort: req.query.sort,
     type: req.query.rating
   })
-  return res.json(getFormattedObjects(resultList.rows, resultList.count))
+  return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
 async function listAccountFollowers (req: express.Request, res: express.Response) {

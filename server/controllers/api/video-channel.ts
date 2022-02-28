@@ -1,5 +1,6 @@
 import express from 'express'
 import { pickCommonVideoQuery } from '@server/helpers/query'
+import { getBiggestActorImage } from '@server/lib/actor-image'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { ActorFollowModel } from '@server/models/actor/actor-follow'
 import { getServerActor } from '@server/models/application/application'
@@ -16,7 +17,7 @@ import { MIMETYPES } from '../../initializers/constants'
 import { sequelizeTypescript } from '../../initializers/database'
 import { sendUpdateActor } from '../../lib/activitypub/send'
 import { JobQueue } from '../../lib/job-queue'
-import { deleteLocalActorImageFile, updateLocalActorImageFile } from '../../lib/local-actor'
+import { deleteLocalActorImageFile, updateLocalActorImageFiles } from '../../lib/local-actor'
 import { createLocalVideoChannel, federateAllVideosOfChannel } from '../../lib/video-channel'
 import {
   asyncMiddleware,
@@ -186,11 +187,15 @@ async function updateVideoChannelBanner (req: express.Request, res: express.Resp
   const videoChannel = res.locals.videoChannel
   const oldVideoChannelAuditKeys = new VideoChannelAuditView(videoChannel.toFormattedJSON())
 
-  const banner = await updateLocalActorImageFile(videoChannel, bannerPhysicalFile, ActorImageType.BANNER)
+  const banners = await updateLocalActorImageFiles(videoChannel, bannerPhysicalFile, ActorImageType.BANNER)
 
   auditLogger.update(getAuditIdFromRes(res), new VideoChannelAuditView(videoChannel.toFormattedJSON()), oldVideoChannelAuditKeys)
 
-  return res.json({ banner: banner.toFormattedJSON() })
+  return res.json({
+    // TODO: remove, deprecated in 4.2
+    banner: getBiggestActorImage(banners).toFormattedJSON(),
+    banners: banners.map(b => b.toFormattedJSON())
+  })
 }
 
 async function updateVideoChannelAvatar (req: express.Request, res: express.Response) {
@@ -198,11 +203,14 @@ async function updateVideoChannelAvatar (req: express.Request, res: express.Resp
   const videoChannel = res.locals.videoChannel
   const oldVideoChannelAuditKeys = new VideoChannelAuditView(videoChannel.toFormattedJSON())
 
-  const avatar = await updateLocalActorImageFile(videoChannel, avatarPhysicalFile, ActorImageType.AVATAR)
-
+  const avatars = await updateLocalActorImageFiles(videoChannel, avatarPhysicalFile, ActorImageType.AVATAR)
   auditLogger.update(getAuditIdFromRes(res), new VideoChannelAuditView(videoChannel.toFormattedJSON()), oldVideoChannelAuditKeys)
 
-  return res.json({ avatar: avatar.toFormattedJSON() })
+  return res.json({
+    // TODO: remove, deprecated in 4.2
+    avatar: getBiggestActorImage(avatars).toFormattedJSON(),
+    avatars: avatars.map(a => a.toFormattedJSON())
+  })
 }
 
 async function deleteVideoChannelAvatar (req: express.Request, res: express.Response) {

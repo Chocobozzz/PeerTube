@@ -111,7 +111,7 @@ export class VideoChannelUpdateComponent extends VideoChannelEdit implements OnI
           next: data => {
             this.notifier.success($localize`Avatar changed.`)
 
-            this.videoChannel.updateAvatar(data.avatar)
+            this.videoChannel.updateAvatar(data.avatars)
           },
 
           error: (err: HttpErrorResponse) => genericUploadErrorHandler({
@@ -141,7 +141,7 @@ export class VideoChannelUpdateComponent extends VideoChannelEdit implements OnI
           next: data => {
             this.notifier.success($localize`Banner changed.`)
 
-            this.videoChannel.updateBanner(data.banner)
+            this.videoChannel.updateBanner(data.banners)
           },
 
           error: (err: HttpErrorResponse) => genericUploadErrorHandler({

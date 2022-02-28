@@ -8,5 +8,9 @@ export interface Actor {
   followingCount: number
   followersCount: number
   createdAt: Date | string
-  avatar?: ActorImage
+
+  avatars: ActorImage[]
+
+  // TODO: remove, deprecated in 4.2
+  avatar: ActorImage
 }

@@ -4,11 +4,11 @@ import { Account } from '../shared-main/account/account.model'
 
 type ActorInput = {
   name: string
-  avatar?: { url?: string, path: string }
+  avatars: { width: number, url?: string, path: string }[]
   url: string
 }
 
-export type ActorAvatarSize = '18' | '25' | '32' | '34' | '36' | '40' | '100' | '120'
+export type ActorAvatarSize = '18' | '25' | '28' | '32' | '34' | '35' | '36' | '40' | '48' | '75' | '80' | '100' | '120'
 
 @Component({
   selector: 'my-actor-avatar',
@@ -23,7 +23,7 @@ export class ActorAvatarComponent {
 
   @Input() previewImage: string
 
-  @Input() size: ActorAvatarSize
+  @Input() size: ActorAvatarSize = '32'
 
   // Use an external link
   @Input() href: string
@@ -50,14 +50,13 @@ export class ActorAvatarComponent {
   }
 
   get defaultAvatarUrl () {
-    if (this.channel) return VideoChannel.GET_DEFAULT_AVATAR_URL()
-
-    return Account.GET_DEFAULT_AVATAR_URL()
+    if (this.account) return Account.GET_DEFAULT_AVATAR_URL(+this.size)
+    if (this.channel) return VideoChannel.GET_DEFAULT_AVATAR_URL(+this.size)
   }
 
   get avatarUrl () {
-    if (this.account) return Account.GET_ACTOR_AVATAR_URL(this.account)
-    if (this.channel) return VideoChannel.GET_ACTOR_AVATAR_URL(this.channel)
+    if (this.account) return Account.GET_ACTOR_AVATAR_URL(this.account, +this.size)
+    if (this.channel) return VideoChannel.GET_ACTOR_AVATAR_URL(this.channel, +this.size)
 
     return ''
   }

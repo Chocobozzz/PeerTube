@@ -1556,8 +1556,10 @@ paths:
               schema:
                 type: object
                 properties:
-                  avatar:
-                    $ref: '#/components/schemas/ActorImage'
+                  avatars:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ActorImage'
         '413':
           description: image file too large
           headers:
@@ -2878,7 +2880,7 @@ paths:
                     type: object
                     properties:
                       id:
-                        $ref: '#/components/schemas/VideoChannel/properties/id'
+                        $ref: '#/components/schemas/id'
       requestBody:
         content:
           application/json:
@@ -3010,8 +3012,10 @@ paths:
               schema:
                 type: object
                 properties:
-                  avatar:
-                    $ref: '#/components/schemas/ActorImage'
+                  avatars:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ActorImage'
         '413':
           description: image file too large
           headers:
@@ -3064,8 +3068,10 @@ paths:
               schema:
                 type: object
                 properties:
-                  banner:
-                    $ref: '#/components/schemas/ActorImage'
+                  banners:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ActorImage'
         '413':
           description: image file too large
           headers:
@@ -5364,10 +5370,10 @@ components:
         host:
           type: string
           format: hostname
-        avatar:
-          nullable: true
-          allOf:
-            - $ref: '#/components/schemas/ActorImage'
+        avatars:
+          type: array
+          items:
+            $ref: '#/components/schemas/ActorImage'
     VideoChannelSummary:
       properties:
         id:
@@ -5382,10 +5388,10 @@ components:
         host:
           type: string
           format: hostname
-        avatar:
-          nullable: true
-          allOf:
-            - $ref: '#/components/schemas/ActorImage'
+        avatars:
+          type: array
+          items:
+            $ref: '#/components/schemas/ActorImage'
     PlaylistElement:
       properties:
         position:
@@ -5969,6 +5975,8 @@ components:
       properties:
         path:
           type: string
+        width:
+          type: integer
         createdAt:
           type: string
           format: date-time
@@ -5986,12 +5994,10 @@ components:
         host:
           type: string
           format: hostname
-        avatar:
-          nullable: true
-          type: object
-          properties:
-            path:
-              type: string
+        avatars:
+          type: array
+          items:
+            $ref: '#/components/schemas/ActorImage'
     Actor:
       properties:
         id:
@@ -6024,8 +6030,6 @@ components:
         updatedAt:
           type: string
           format: date-time
-        avatar:
-          $ref: '#/components/schemas/ActorImage'
     Account:
       allOf:
         - $ref: '#/components/schemas/Actor'
@@ -6934,7 +6938,7 @@ components:
             name:
               $ref: '#/components/schemas/usernameChannel'
             displayName:
-              $ref: '#/components/schemas/VideoChannel/properties/displayName'
+              type: string
       required:
         - username
         - password
@@ -6996,46 +7000,47 @@ components:
         - refresh_token
 
     VideoChannel:
-      properties:
-        # GET/POST/PUT properties
-        displayName:
-          type: string
-          description: editable name of the channel, displayed in its representations
-          example: Videos of Framasoft
-          minLength: 1
-          maxLength: 120
-        description:
-          type: string
-          example: Videos made with <3 by Framasoft
-          minLength: 3
-          maxLength: 1000
-        support:
-          type: string
-          description: text shown by default on all videos of this channel, to tell the audience how to support it
-          example: Please support our work on https://soutenir.framasoft.org/en/ <3
-          minLength: 3
-          maxLength: 1000
-        # GET-only properties
-        id:
-          readOnly: true
-          allOf:
-            - $ref: '#/components/schemas/id'
-        isLocal:
-          readOnly: true
-          type: boolean
-        updatedAt:
-          readOnly: true
-          type: string
-          format: date-time
-        ownerAccount:
-          readOnly: true
-          nullable: true
-          type: object
+      allOf:
+        - $ref: '#/components/schemas/Actor'
+        - type: object
           properties:
-            id:
-              type: integer
-            uuid:
-              $ref: '#/components/schemas/UUIDv4'
+            displayName:
+              type: string
+              description: editable name of the channel, displayed in its representations
+              example: Videos of Framasoft
+              minLength: 1
+              maxLength: 120
+            description:
+              type: string
+              example: Videos made with <3 by Framasoft
+              minLength: 3
+              maxLength: 1000
+            support:
+              type: string
+              description: text shown by default on all videos of this channel, to tell the audience how to support it
+              example: Please support our work on https://soutenir.framasoft.org/en/ <3
+              minLength: 3
+              maxLength: 1000
+            isLocal:
+              readOnly: true
+              type: boolean
+            updatedAt:
+              readOnly: true
+              type: string
+              format: date-time
+            banners:
+              type: array
+              items:
+                $ref: '#/components/schemas/ActorImage'
+            ownerAccount:
+              readOnly: true
+              nullable: true
+              type: object
+              properties:
+                id:
+                  type: integer
+                uuid:
+                  $ref: '#/components/schemas/UUIDv4'
     VideoChannelCreate:
       allOf:
         - $ref: '#/components/schemas/VideoChannel'

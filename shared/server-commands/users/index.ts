@@ -1,4 +1,5 @@
 export * from './accounts-command'
+export * from './accounts'
 export * from './blocklist-command'
 export * from './login'
 export * from './login-command'

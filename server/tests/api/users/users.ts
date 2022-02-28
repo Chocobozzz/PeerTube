@@ -604,7 +604,9 @@ describe('Test users', function () {
       await server.users.updateMyAvatar({ token: userToken, fixture })
 
       const user = await server.users.getMyInfo({ token: userToken })
-      await testImage(server.url, 'avatar-resized', user.account.avatar.path, '.gif')
+      for (const avatar of user.account.avatars) {
+        await testImage(server.url, `avatar-resized-${avatar.width}x${avatar.width}`, avatar.path, '.gif')
+      }
     })
 
     it('Should be able to update my avatar with a gif, and then a png', async function () {
@@ -614,7 +616,9 @@ describe('Test users', function () {
         await server.users.updateMyAvatar({ token: userToken, fixture })
 
         const user = await server.users.getMyInfo({ token: userToken })
-        await testImage(server.url, 'avatar-resized', user.account.avatar.path, extension)
+        for (const avatar of user.account.avatars) {
+          await testImage(server.url, `avatar-resized-${avatar.width}x${avatar.width}`, avatar.path, extension)
+        }
       }
     })
 

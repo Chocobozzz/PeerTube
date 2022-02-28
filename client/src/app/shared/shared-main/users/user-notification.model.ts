@@ -254,11 +254,11 @@ export class UserNotification implements UserNotificationServer {
     return [ this.buildVideoUrl(comment.video), { threadId: comment.threadId } ]
   }
 
-  private setAccountAvatarUrl (actor: { avatarUrl?: string, avatar?: { url?: string, path: string } }) {
-    actor.avatarUrl = Account.GET_ACTOR_AVATAR_URL(actor) || Account.GET_DEFAULT_AVATAR_URL()
+  private setAccountAvatarUrl (actor: { avatarUrl?: string, avatars: { width: number, url?: string, path: string }[] }) {
+    actor.avatarUrl = VideoChannel.GET_ACTOR_AVATAR_URL(actor, 48) || Account.GET_DEFAULT_AVATAR_URL(48)
   }
 
-  private setVideoChannelAvatarUrl (actor: { avatarUrl?: string, avatar?: { url?: string, path: string } }) {
-    actor.avatarUrl = VideoChannel.GET_ACTOR_AVATAR_URL(actor) || VideoChannel.GET_DEFAULT_AVATAR_URL()
+  private setVideoChannelAvatarUrl (actor: { avatarUrl?: string, avatars: { width: number, url?: string, path: string }[] }) {
+    actor.avatarUrl = VideoChannel.GET_ACTOR_AVATAR_URL(actor, 48) || VideoChannel.GET_DEFAULT_AVATAR_URL(48)
   }
 }

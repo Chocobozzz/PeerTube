@@ -132,8 +132,8 @@ export class User implements UserServerModel {
     }
   }
 
-  updateAccountAvatar (newAccountAvatar?: ActorImage) {
-    if (newAccountAvatar) this.account.updateAvatar(newAccountAvatar)
+  updateAccountAvatar (newAccountAvatars?: ActorImage[]) {
+    if (newAccountAvatars) this.account.updateAvatar(newAccountAvatars)
     else this.account.resetAvatar()
   }
 

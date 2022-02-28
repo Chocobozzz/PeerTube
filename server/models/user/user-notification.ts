@@ -1,5 +1,6 @@
-import { FindOptions, ModelIndexesOptions, Op, WhereOptions } from 'sequelize'
-import { AllowNull, BelongsTo, Column, CreatedAt, Default, ForeignKey, Is, Model, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
+import { ModelIndexesOptions, Op, WhereOptions } from 'sequelize'
+import { AllowNull, BelongsTo, Column, CreatedAt, Default, ForeignKey, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { getBiggestActorImage } from '@server/lib/actor-image'
 import { UserNotificationIncludes, UserNotificationModelForApi } from '@server/types/models/user'
 import { uuidToShort } from '@shared/extra-utils'
 import { UserNotification, UserNotificationType } from '@shared/models'
@@ -7,207 +8,18 @@ import { AttributesOnly } from '@shared/typescript-utils'
 import { isBooleanValid } from '../../helpers/custom-validators/misc'
 import { isUserNotificationTypeValid } from '../../helpers/custom-validators/user-notifications'
 import { AbuseModel } from '../abuse/abuse'
-import { VideoAbuseModel } from '../abuse/video-abuse'
-import { VideoCommentAbuseModel } from '../abuse/video-comment-abuse'
 import { AccountModel } from '../account/account'
-import { ActorModel } from '../actor/actor'
 import { ActorFollowModel } from '../actor/actor-follow'
-import { ActorImageModel } from '../actor/actor-image'
 import { ApplicationModel } from '../application/application'
 import { PluginModel } from '../server/plugin'
-import { ServerModel } from '../server/server'
-import { getSort, throwIfNotValid } from '../utils'
+import { throwIfNotValid } from '../utils'
 import { VideoModel } from '../video/video'
 import { VideoBlacklistModel } from '../video/video-blacklist'
-import { VideoChannelModel } from '../video/video-channel'
 import { VideoCommentModel } from '../video/video-comment'
 import { VideoImportModel } from '../video/video-import'
+import { UserNotificationListQueryBuilder } from './sql/user-notitication-list-query-builder'
 import { UserModel } from './user'
 
-enum ScopeNames {
-  WITH_ALL = 'WITH_ALL'
-}
-
-function buildActorWithAvatarInclude () {
-  return {
-    attributes: [ 'preferredUsername' ],
-    model: ActorModel.unscoped(),
-    required: true,
-    include: [
-      {
-        attributes: [ 'filename' ],
-        as: 'Avatar',
-        model: ActorImageModel.unscoped(),
-        required: false
-      },
-      {
-        attributes: [ 'host' ],
-        model: ServerModel.unscoped(),
-        required: false
-      }
-    ]
-  }
-}
-
-function buildVideoInclude (required: boolean) {
-  return {
-    attributes: [ 'id', 'uuid', 'name' ],
-    model: VideoModel.unscoped(),
-    required
-  }
-}
-
-function buildChannelInclude (required: boolean, withActor = false) {
-  return {
-    required,
-    attributes: [ 'id', 'name' ],
-    model: VideoChannelModel.unscoped(),
-    include: withActor === true ? [ buildActorWithAvatarInclude() ] : []
-  }
-}
-
-function buildAccountInclude (required: boolean, withActor = false) {
-  return {
-    required,
-    attributes: [ 'id', 'name' ],
-    model: AccountModel.unscoped(),
-    include: withActor === true ? [ buildActorWithAvatarInclude() ] : []
-  }
-}
-
-@Scopes(() => ({
-  [ScopeNames.WITH_ALL]: {
-    include: [
-      Object.assign(buildVideoInclude(false), {
-        include: [ buildChannelInclude(true, true) ]
-      }),
-
-      {
-        attributes: [ 'id', 'originCommentId' ],
-        model: VideoCommentModel.unscoped(),
-        required: false,
-        include: [
-          buildAccountInclude(true, true),
-          buildVideoInclude(true)
-        ]
-      },
-
-      {
-        attributes: [ 'id', 'state' ],
-        model: AbuseModel.unscoped(),
-        required: false,
-        include: [
-          {
-            attributes: [ 'id' ],
-            model: VideoAbuseModel.unscoped(),
-            required: false,
-            include: [ buildVideoInclude(false) ]
-          },
-          {
-            attributes: [ 'id' ],
-            model: VideoCommentAbuseModel.unscoped(),
-            required: false,
-            include: [
-              {
-                attributes: [ 'id', 'originCommentId' ],
-                model: VideoCommentModel.unscoped(),
-                required: false,
-                include: [
-                  {
-                    attributes: [ 'id', 'name', 'uuid' ],
-                    model: VideoModel.unscoped(),
-                    required: false
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            model: AccountModel,
-            as: 'FlaggedAccount',
-            required: false,
-            include: [ buildActorWithAvatarInclude() ]
-          }
-        ]
-      },
-
-      {
-        attributes: [ 'id' ],
-        model: VideoBlacklistModel.unscoped(),
-        required: false,
-        include: [ buildVideoInclude(true) ]
-      },
-
-      {
-        attributes: [ 'id', 'magnetUri', 'targetUrl', 'torrentName' ],
-        model: VideoImportModel.unscoped(),
-        required: false,
-        include: [ buildVideoInclude(false) ]
-      },
-
-      {
-        attributes: [ 'id', 'name', 'type', 'latestVersion' ],
-        model: PluginModel.unscoped(),
-        required: false
-      },
-
-      {
-        attributes: [ 'id', 'latestPeerTubeVersion' ],
-        model: ApplicationModel.unscoped(),
-        required: false
-      },
-
-      {
-        attributes: [ 'id', 'state' ],
-        model: ActorFollowModel.unscoped(),
-        required: false,
-        include: [
-          {
-            attributes: [ 'preferredUsername' ],
-            model: ActorModel.unscoped(),
-            required: true,
-            as: 'ActorFollower',
-            include: [
-              {
-                attributes: [ 'id', 'name' ],
-                model: AccountModel.unscoped(),
-                required: true
-              },
-              {
-                attributes: [ 'filename' ],
-                as: 'Avatar',
-                model: ActorImageModel.unscoped(),
-                required: false
-              },
-              {
-                attributes: [ 'host' ],
-                model: ServerModel.unscoped(),
-                required: false
-              }
-            ]
-          },
-          {
-            attributes: [ 'preferredUsername', 'type' ],
-            model: ActorModel.unscoped(),
-            required: true,
-            as: 'ActorFollowing',
-            include: [
-              buildChannelInclude(false),
-              buildAccountInclude(false),
-              {
-                attributes: [ 'host' ],
-                model: ServerModel.unscoped(),
-                required: false
-              }
-            ]
-          }
-        ]
-      },
-
-      buildAccountInclude(false, true)
-    ]
-  }
-}))
 @Table({
   tableName: 'userNotification',
   indexes: [
@@ -342,7 +154,7 @@ export class UserNotificationModel extends Model<Partial<AttributesOnly<UserNoti
     },
     onDelete: 'cascade'
   })
-  Comment: VideoCommentModel
+  VideoComment: VideoCommentModel
 
   @ForeignKey(() => AbuseModel)
   @Column
@@ -431,11 +243,14 @@ export class UserNotificationModel extends Model<Partial<AttributesOnly<UserNoti
   static listForApi (userId: number, start: number, count: number, sort: string, unread?: boolean) {
     const where = { userId }
 
-    const query: FindOptions = {
+    const query = {
+      userId,
+      unread,
       offset: start,
       limit: count,
-      order: getSort(sort),
-      where
+      sort,
+      where,
+      sequelize: this.sequelize
     }
 
     if (unread !== undefined) query.where['read'] = !unread
@@ -445,8 +260,8 @@ export class UserNotificationModel extends Model<Partial<AttributesOnly<UserNoti
         .then(count => count || 0),
 
       count === 0
-        ? []
-        : UserNotificationModel.scope(ScopeNames.WITH_ALL).findAll(query)
+        ? [] as UserNotificationModelForApi[]
+        : new UserNotificationListQueryBuilder(query).listNotifications()
     ]).then(([ total, data ]) => ({ total, data }))
   }
 
@@ -524,25 +339,31 @@ export class UserNotificationModel extends Model<Partial<AttributesOnly<UserNoti
 
   toFormattedJSON (this: UserNotificationModelForApi): UserNotification {
     const video = this.Video
-      ? Object.assign(this.formatVideo(this.Video), { channel: this.formatActor(this.Video.VideoChannel) })
+      ? {
+        ...this.formatVideo(this.Video),
+
+        channel: this.formatActor(this.Video.VideoChannel)
+      }
       : undefined
 
     const videoImport = this.VideoImport
       ? {
         id: this.VideoImport.id,
-        video: this.VideoImport.Video ? this.formatVideo(this.VideoImport.Video) : undefined,
+        video: this.VideoImport.Video
+          ? this.formatVideo(this.VideoImport.Video)
+          : undefined,
         torrentName: this.VideoImport.torrentName,
         magnetUri: this.VideoImport.magnetUri,
         targetUrl: this.VideoImport.targetUrl
       }
       : undefined
 
-    const comment = this.Comment
+    const comment = this.VideoComment
       ? {
-        id: this.Comment.id,
-        threadId: this.Comment.getThreadId(),
-        account: this.formatActor(this.Comment.Account),
-        video: this.formatVideo(this.Comment.Video)
+        id: this.VideoComment.id,
+        threadId: this.VideoComment.getThreadId(),
+        account: this.formatActor(this.VideoComment.Account),
+        video: this.formatVideo(this.VideoComment.Video)
       }
       : undefined
 
@@ -570,8 +391,9 @@ export class UserNotificationModel extends Model<Partial<AttributesOnly<UserNoti
           id: this.ActorFollow.ActorFollower.Account.id,
           displayName: this.ActorFollow.ActorFollower.Account.getDisplayName(),
           name: this.ActorFollow.ActorFollower.preferredUsername,
-          avatar: this.ActorFollow.ActorFollower.Avatar ? { path: this.ActorFollow.ActorFollower.Avatar.getStaticPath() } : undefined,
-          host: this.ActorFollow.ActorFollower.getHost()
+          host: this.ActorFollow.ActorFollower.getHost(),
+
+          ...this.formatAvatars(this.ActorFollow.ActorFollower.Avatars)
         },
         following: {
           type: actorFollowingType[this.ActorFollow.ActorFollowing.type],
@@ -612,7 +434,7 @@ export class UserNotificationModel extends Model<Partial<AttributesOnly<UserNoti
     }
   }
 
-  formatVideo (this: UserNotificationModelForApi, video: UserNotificationIncludes.VideoInclude) {
+  formatVideo (video: UserNotificationIncludes.VideoInclude) {
     return {
       id: video.id,
       uuid: video.uuid,
@@ -621,7 +443,7 @@ export class UserNotificationModel extends Model<Partial<AttributesOnly<UserNoti
     }
   }
 
-  formatAbuse (this: UserNotificationModelForApi, abuse: UserNotificationIncludes.AbuseInclude) {
+  formatAbuse (abuse: UserNotificationIncludes.AbuseInclude) {
     const commentAbuse = abuse.VideoCommentAbuse?.VideoComment
       ? {
         threadId: abuse.VideoCommentAbuse.VideoComment.getThreadId(),
@@ -637,9 +459,13 @@ export class UserNotificationModel extends Model<Partial<AttributesOnly<UserNoti
       }
       : undefined
 
-    const videoAbuse = abuse.VideoAbuse?.Video ? this.formatVideo(abuse.VideoAbuse.Video) : undefined
+    const videoAbuse = abuse.VideoAbuse?.Video
+      ? this.formatVideo(abuse.VideoAbuse.Video)
+      : undefined
 
-    const accountAbuse = (!commentAbuse && !videoAbuse && abuse.FlaggedAccount) ? this.formatActor(abuse.FlaggedAccount) : undefined
+    const accountAbuse = (!commentAbuse && !videoAbuse && abuse.FlaggedAccount)
+      ? this.formatActor(abuse.FlaggedAccount)
+      : undefined
 
     return {
       id: abuse.id,
@@ -651,19 +477,32 @@ export class UserNotificationModel extends Model<Partial<AttributesOnly<UserNoti
   }
 
   formatActor (
-    this: UserNotificationModelForApi,
     accountOrChannel: UserNotificationIncludes.AccountIncludeActor | UserNotificationIncludes.VideoChannelIncludeActor
   ) {
-    const avatar = accountOrChannel.Actor.Avatar
-      ? { path: accountOrChannel.Actor.Avatar.getStaticPath() }
-      : undefined
-
     return {
       id: accountOrChannel.id,
       displayName: accountOrChannel.getDisplayName(),
       name: accountOrChannel.Actor.preferredUsername,
       host: accountOrChannel.Actor.getHost(),
-      avatar
+
+      ...this.formatAvatars(accountOrChannel.Actor.Avatars)
+    }
+  }
+
+  formatAvatars (avatars: UserNotificationIncludes.ActorImageInclude[]) {
+    if (!avatars || avatars.length === 0) return { avatar: undefined, avatars: [] }
+
+    return {
+      avatar: this.formatAvatar(getBiggestActorImage(avatars)),
+
+      avatars: avatars.map(a => this.formatAvatar(a))
+    }
+  }
+
+  formatAvatar (a: UserNotificationIncludes.ActorImageInclude) {
+    return {
+      path: a.getStaticPath(),
+      width: a.width
     }
   }
 }

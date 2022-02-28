@@ -13,11 +13,13 @@
         <my-actor-avatar
           *ngIf="displayOptions.avatar && displayOwnerVideoChannel() && !displayAsRow" [title]="channelLinkTitle"
           [channel]="video.channel" [size]="actorImageSize" [internalHref]="[ '/c', video.byVideoChannel ]"
+          size="32"
         ></my-actor-avatar>
 
         <my-actor-avatar
           *ngIf="displayOptions.avatar && displayOwnerAccount() && !displayAsRow" [title]="channelLinkTitle"
           [account]="video.account" [size]="actorImageSize" [internalHref]="[ '/c', video.byVideoChannel ]"
+          size="32"
         ></my-actor-avatar>
 
         <div class="w-100 d-flex flex-column">

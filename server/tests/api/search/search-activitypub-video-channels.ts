@@ -10,6 +10,8 @@ import {
   PeerTubeServer,
   SearchCommand,
   setAccessTokensToServers,
+  setDefaultAccountAvatar,
+  setDefaultVideoChannel,
   waitJobs
 } from '@shared/server-commands'
 
@@ -28,6 +30,8 @@ describe('Test ActivityPub video channels search', function () {
     servers = await createMultipleServers(2)
 
     await setAccessTokensToServers(servers)
+    await setDefaultVideoChannel(servers)
+    await setDefaultAccountAvatar(servers)
 
     {
       await servers[0].users.create({ username: 'user1_server1', password: 'password' })

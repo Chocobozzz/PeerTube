@@ -72,7 +72,7 @@ export class ActorAvatarEditComponent implements OnInit {
   }
 
   hasAvatar () {
-    return !!this.preview || !!this.actor.avatar
+    return !!this.preview || this.actor.avatars.length !== 0
   }
 
   isChannel () {

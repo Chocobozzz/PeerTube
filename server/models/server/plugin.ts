@@ -239,11 +239,10 @@ export class PluginModel extends Model<Partial<AttributesOnly<PluginModel>>> {
 
     if (options.pluginType) query.where['type'] = options.pluginType
 
-    return PluginModel
-      .findAndCountAll<MPlugin>(query)
-      .then(({ rows, count }) => {
-        return { total: count, data: rows }
-      })
+    return Promise.all([
+      PluginModel.count(query),
+      PluginModel.findAll<MPlugin>(query)
+    ]).then(([ total, data ]) => ({ total, data }))
   }
 
   static listInstalled (): Promise<MPlugin[]> {

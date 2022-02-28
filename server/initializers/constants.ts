@@ -14,7 +14,7 @@ import {
   VideoTranscodingFPS
 } from '../../shared/models'
 import { ActivityPubActorType } from '../../shared/models/activitypub'
-import { FollowState } from '../../shared/models/actors'
+import { ActorImageType, FollowState } from '../../shared/models/actors'
 import { NSFWPolicyType } from '../../shared/models/videos/nsfw-policy.type'
 import { VideoPlaylistPrivacy } from '../../shared/models/videos/playlist/video-playlist-privacy.model'
 import { VideoPlaylistType } from '../../shared/models/videos/playlist/video-playlist-type.model'
@@ -24,7 +24,7 @@ import { CONFIG, registerConfigChangedHandler } from './config'
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 680
+const LAST_MIGRATION_VERSION = 685
 
 // ---------------------------------------------------------------------------
 
@@ -633,15 +633,23 @@ const PREVIEWS_SIZE = {
   height: 480,
   minWidth: 400
 }
-const ACTOR_IMAGES_SIZE = {
-  AVATARS: {
-    width: 120,
-    height: 120
-  },
-  BANNERS: {
-    width: 1920,
-    height: 317 // 6/1 ratio
-  }
+const ACTOR_IMAGES_SIZE: { [key in ActorImageType]: { width: number, height: number }[]} = {
+  [ActorImageType.AVATAR]: [
+    {
+      width: 120,
+      height: 120
+    },
+    {
+      width: 48,
+      height: 48
+    }
+  ],
+  [ActorImageType.BANNER]: [
+    {
+      width: 1920,
+      height: 317 // 6/1 ratio
+    }
+  ]
 }
 
 const EMBED_SIZE = {

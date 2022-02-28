@@ -2,6 +2,7 @@
 
 import 'mocha'
 import * as chai from 'chai'
+import { VideoPlaylistPrivacy } from '@shared/models'
 import {
   cleanupTests,
   createSingleServer,
@@ -9,9 +10,10 @@ import {
   PeerTubeServer,
   SearchCommand,
   setAccessTokensToServers,
+  setDefaultAccountAvatar,
+  setDefaultChannelAvatar,
   setDefaultVideoChannel
 } from '@shared/server-commands'
-import { VideoPlaylistPrivacy } from '@shared/models'
 
 const expect = chai.expect
 
@@ -34,6 +36,8 @@ describe('Test playlists search', function () {
 
     await setAccessTokensToServers([ remoteServer, server ])
     await setDefaultVideoChannel([ remoteServer, server ])
+    await setDefaultChannelAvatar([ remoteServer, server ])
+    await setDefaultAccountAvatar([ remoteServer, server ])
 
     {
       const videoId = (await server.videos.upload()).uuid

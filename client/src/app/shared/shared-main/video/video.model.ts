@@ -84,7 +84,11 @@ export class Video implements VideoServerModel {
     displayName: string
     url: string
     host: string
-    avatar?: ActorImage
+
+    // TODO: remove, deprecated in 4.2
+    avatar: ActorImage
+
+    avatars: ActorImage[]
   }
 
   channel: {
@@ -93,7 +97,11 @@ export class Video implements VideoServerModel {
     displayName: string
     url: string
     host: string
-    avatar?: ActorImage
+
+    // TODO: remove, deprecated in 4.2
+    avatar: ActorImage
+
+    avatars: ActorImage[]
   }
 
   userHistory?: {

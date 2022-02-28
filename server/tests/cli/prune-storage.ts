@@ -51,7 +51,7 @@ async function assertCountAreOkay (servers: PeerTubeServer[]) {
     expect(thumbnailsCount).to.equal(6)
 
     const avatarsCount = await countFiles(server, 'avatars')
-    expect(avatarsCount).to.equal(2)
+    expect(avatarsCount).to.equal(4)
 
     const hlsRootCount = await countFiles(server, 'streaming-playlists/hls')
     expect(hlsRootCount).to.equal(2)
@@ -87,23 +87,28 @@ describe('Test prune storage scripts', function () {
 
     await doubleFollow(servers[0], servers[1])
 
-    // Lazy load the remote avatar
+    // Lazy load the remote avatars
     {
       const account = await servers[0].accounts.get({ accountName: 'root@localhost:' + servers[1].port })
-      await makeGetRequest({
-        url: servers[0].url,
-        path: account.avatar.path,
-        expectedStatus: HttpStatusCode.OK_200
-      })
+
+      for (const avatar of account.avatars) {
+        await makeGetRequest({
+          url: servers[0].url,
+          path: avatar.path,
+          expectedStatus: HttpStatusCode.OK_200
+        })
+      }
     }
 
     {
       const account = await servers[1].accounts.get({ accountName: 'root@localhost:' + servers[0].port })
-      await makeGetRequest({
-        url: servers[1].url,
-        path: account.avatar.path,
-        expectedStatus: HttpStatusCode.OK_200
-      })
+      for (const avatar of account.avatars) {
+        await makeGetRequest({
+          url: servers[1].url,
+          path: avatar.path,
+          expectedStatus: HttpStatusCode.OK_200
+        })
+      }
     }
 
     await wait(1000)

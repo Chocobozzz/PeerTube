@@ -2,7 +2,7 @@ import { catchError, switchMap, tap } from 'rxjs/operators'
 import { SelectChannelItem } from 'src/types/select-options-item.model'
 import { Directive, EventEmitter, OnInit } from '@angular/core'
 import { AuthService, CanComponentDeactivateResult, Notifier, ServerService } from '@app/core'
-import { listUserChannels } from '@app/helpers'
+import { listUserChannelsForSelect } from '@app/helpers'
 import { FormReactive } from '@app/shared/shared-forms'
 import { VideoCaptionEdit, VideoCaptionService, VideoEdit, VideoService } from '@app/shared/shared-main'
 import { LoadingBarService } from '@ngx-loading-bar/core'
@@ -38,7 +38,7 @@ export abstract class VideoSend extends FormReactive implements OnInit {
   ngOnInit () {
     this.buildForm({})
 
-    listUserChannels(this.authService)
+    listUserChannelsForSelect(this.authService)
       .subscribe(channels => {
         this.userVideoChannels = channels
         this.firstStepChannelId = this.userVideoChannels[0].id

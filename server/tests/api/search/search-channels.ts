@@ -2,15 +2,17 @@
 
 import 'mocha'
 import * as chai from 'chai'
+import { VideoChannel } from '@shared/models'
 import {
   cleanupTests,
   createSingleServer,
   doubleFollow,
   PeerTubeServer,
   SearchCommand,
-  setAccessTokensToServers
+  setAccessTokensToServers,
+  setDefaultAccountAvatar,
+  setDefaultChannelAvatar
 } from '@shared/server-commands'
-import { VideoChannel } from '@shared/models'
 
 const expect = chai.expect
 
@@ -30,6 +32,8 @@ describe('Test channels search', function () {
     remoteServer = servers[1]
 
     await setAccessTokensToServers([ server, remoteServer ])
+    await setDefaultChannelAvatar(server)
+    await setDefaultAccountAvatar(server)
 
     {
       await server.users.create({ username: 'user1' })

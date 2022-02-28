@@ -20,6 +20,7 @@ import {
   PeerTubeServer,
   PlaylistsCommand,
   setAccessTokensToServers,
+  setDefaultAccountAvatar,
   setDefaultVideoChannel,
   waitJobs
 } from '@shared/server-commands'
@@ -79,6 +80,7 @@ describe('Test video playlists', function () {
     // Get the access tokens
     await setAccessTokensToServers(servers)
     await setDefaultVideoChannel(servers)
+    await setDefaultAccountAvatar(servers)
 
     // Server 1 and server 2 follow each other
     await doubleFollow(servers[0], servers[1])

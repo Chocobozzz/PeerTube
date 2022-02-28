@@ -17,11 +17,15 @@ export class Account extends Actor implements ServerAccount {
 
   userId?: number
 
-  static GET_ACTOR_AVATAR_URL (actor: { avatar?: { url?: string, path: string } }) {
-    return Actor.GET_ACTOR_AVATAR_URL(actor)
+  static GET_ACTOR_AVATAR_URL (actor: { avatars: { width: number, url?: string, path: string }[] }, size: number) {
+    return Actor.GET_ACTOR_AVATAR_URL(actor, size)
   }
 
-  static GET_DEFAULT_AVATAR_URL () {
+  static GET_DEFAULT_AVATAR_URL (size: number) {
+    if (size <= 48) {
+      return `${window.location.origin}/client/assets/images/default-avatar-account-48x48.png`
+    }
+
     return `${window.location.origin}/client/assets/images/default-avatar-account.png`
   }
 
@@ -42,12 +46,12 @@ export class Account extends Actor implements ServerAccount {
     this.mutedServerByInstance = false
   }
 
-  updateAvatar (newAvatar: ActorImage) {
-    this.avatar = newAvatar
+  updateAvatar (newAvatars: ActorImage[]) {
+    this.avatars = newAvatars
   }
 
   resetAvatar () {
-    this.avatar = null
+    this.avatars = []
   }
 
   updateBlockStatus (blockStatus: BlockStatus) {

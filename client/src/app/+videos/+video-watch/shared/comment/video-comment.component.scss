@@ -25,10 +25,6 @@
   }
 }
 
-my-actor-avatar {
-  @include actor-avatar-size(36px);
-}
-
 .comment {
   flex-grow: 1;
   // Fix word-wrap with flex
@@ -160,11 +156,6 @@ my-video-comment-add {
 }
 
 .is-child {
-  // Reduce avatars size for replies
-  my-actor-avatar {
-    @include actor-avatar-size(25px);
-  }
-
   .left {
     @include margin-right(6px);
   }

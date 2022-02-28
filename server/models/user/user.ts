@@ -106,7 +106,7 @@ enum ScopeNames {
                 include: [
                   {
                     model: ActorImageModel,
-                    as: 'Banner',
+                    as: 'Banners',
                     required: false
                   }
                 ]
@@ -495,13 +495,10 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
       where
     }
 
-    return UserModel.findAndCountAll(query)
-                    .then(({ rows, count }) => {
-                      return {
-                        data: rows,
-                        total: count
-                      }
-                    })
+    return Promise.all([
+      UserModel.unscoped().count(query),
+      UserModel.findAll(query)
+    ]).then(([ total, data ]) => ({ total, data }))
   }
 
   static listWithRight (right: UserRight): Promise<MUserDefault[]> {

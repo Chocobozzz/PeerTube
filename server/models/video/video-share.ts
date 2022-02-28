@@ -183,7 +183,10 @@ export class VideoShareModel extends Model<Partial<AttributesOnly<VideoShareMode
       transaction: t
     }
 
-    return VideoShareModel.findAndCountAll(query)
+    return Promise.all([
+      VideoShareModel.count(query),
+      VideoShareModel.findAll(query)
+    ]).then(([ total, data ]) => ({ total, data }))
   }
 
   static listRemoteShareUrlsOfLocalVideos () {

@@ -26,8 +26,6 @@
   }
 
   my-actor-avatar {
-    @include actor-avatar-size(75px);
-
     grid-column: 1;
     grid-row: 1 / 4;
   }

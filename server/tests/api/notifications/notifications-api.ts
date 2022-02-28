@@ -38,6 +38,16 @@ describe('Test notifications API', function () {
     await waitJobs([ server ])
   })
 
+  describe('Notification list & count', function () {
+
+    it('Should correctly list notifications', async function () {
+      const { data, total } = await server.notifications.list({ token: userToken, start: 0, count: 2 })
+
+      expect(data).to.have.lengthOf(2)
+      expect(total).to.equal(10)
+    })
+  })
+
   describe('Mark as read', function () {
 
     it('Should mark as read some notifications', async function () {

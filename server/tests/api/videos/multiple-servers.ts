@@ -19,6 +19,8 @@ import {
   doubleFollow,
   PeerTubeServer,
   setAccessTokensToServers,
+  setDefaultAccountAvatar,
+  setDefaultChannelAvatar,
   waitJobs,
   webtorrentAdd
 } from '@shared/server-commands'
@@ -46,6 +48,9 @@ describe('Test multiple servers', function () {
         description: 'super channel'
       }
       await servers[0].channels.create({ attributes: videoChannel })
+      await setDefaultChannelAvatar(servers[0], videoChannel.name)
+      await setDefaultAccountAvatar(servers)
+
       const { data } = await servers[0].channels.list({ start: 0, count: 1 })
       videoChannelId = data[0].id
     }
@@ -207,7 +212,7 @@ describe('Test multiple servers', function () {
             },
             {
               resolution: 720,
-              size: 788000
+              size: 750000
             }
           ],
           thumbnailfile: 'thumbnail',

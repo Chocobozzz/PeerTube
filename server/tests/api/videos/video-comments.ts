@@ -3,7 +3,15 @@
 import 'mocha'
 import * as chai from 'chai'
 import { dateIsValid, testImage } from '@server/tests/shared'
-import { cleanupTests, CommentsCommand, createSingleServer, PeerTubeServer, setAccessTokensToServers } from '@shared/server-commands'
+import {
+  cleanupTests,
+  CommentsCommand,
+  createSingleServer,
+  PeerTubeServer,
+  setAccessTokensToServers,
+  setDefaultAccountAvatar,
+  setDefaultChannelAvatar
+} from '@shared/server-commands'
 
 const expect = chai.expect
 
@@ -29,7 +37,8 @@ describe('Test video comments', function () {
     videoUUID = uuid
     videoId = id
 
-    await server.users.updateMyAvatar({ fixture: 'avatar.png' })
+    await setDefaultChannelAvatar(server)
+    await setDefaultAccountAvatar(server)
 
     userAccessTokenServer1 = await server.users.generateUserAndToken('user1')
 
@@ -81,7 +90,9 @@ describe('Test video comments', function () {
       expect(comment.account.name).to.equal('root')
       expect(comment.account.host).to.equal('localhost:' + server.port)
 
-      await testImage(server.url, 'avatar-resized', comment.account.avatar.path, '.png')
+      for (const avatar of comment.account.avatars) {
+        await testImage(server.url, `avatar-resized-${avatar.width}x${avatar.width}`, avatar.path, '.png')
+      }
 
       expect(comment.totalReplies).to.equal(0)
       expect(comment.totalRepliesFromVideoAuthor).to.equal(0)

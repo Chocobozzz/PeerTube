@@ -5,7 +5,14 @@ import * as chai from 'chai'
 import { checkVideoFilesWereRemoved, completeVideoCheck, testImage } from '@server/tests/shared'
 import { wait } from '@shared/core-utils'
 import { Video, VideoPrivacy } from '@shared/models'
-import { cleanupTests, createSingleServer, PeerTubeServer, setAccessTokensToServers } from '@shared/server-commands'
+import {
+  cleanupTests,
+  createSingleServer,
+  PeerTubeServer,
+  setAccessTokensToServers,
+  setDefaultAccountAvatar,
+  setDefaultChannelAvatar
+} from '@shared/server-commands'
 
 const expect = chai.expect
 
@@ -90,6 +97,8 @@ describe('Test a single server', function () {
       server = await createSingleServer(1)
 
       await setAccessTokensToServers([ server ])
+      await setDefaultChannelAvatar(server)
+      await setDefaultAccountAvatar(server)
     })
 
     it('Should list video categories', async function () {

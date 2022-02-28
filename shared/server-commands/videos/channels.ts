@@ -13,6 +13,17 @@ function setDefaultVideoChannel (servers: PeerTubeServer[]) {
   return Promise.all(tasks)
 }
 
+async function setDefaultChannelAvatar (serversArg: PeerTubeServer | PeerTubeServer[], channelName: string = 'root_channel') {
+  const servers = Array.isArray(serversArg)
+    ? serversArg
+    : [ serversArg ]
+
+  for (const server of servers) {
+    await server.channels.updateImage({ channelName, fixture: 'avatar.png', type: 'avatar' })
+  }
+}
+
 export {
-  setDefaultVideoChannel
+  setDefaultVideoChannel,
+  setDefaultChannelAvatar
 }

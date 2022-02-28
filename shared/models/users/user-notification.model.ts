@@ -40,14 +40,19 @@ export interface VideoInfo {
   name: string
 }
 
+export interface AvatarInfo {
+  width: number
+  path: string
+}
+
 export interface ActorInfo {
   id: number
   displayName: string
   name: string
   host: string
-  avatar?: {
-    path: string
-  }
+
+  avatars: AvatarInfo[]
+  avatar: AvatarInfo
 }
 
 export interface UserNotification {

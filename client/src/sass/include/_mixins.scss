@@ -887,7 +887,7 @@
     height: $avatar-height;
 
     my-actor-avatar {
-      @include actor-avatar-size($avatar-height);
+      display: inline-block;
     }
 
     div {

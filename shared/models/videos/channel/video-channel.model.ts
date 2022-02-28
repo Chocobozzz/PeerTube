@@ -1,5 +1,5 @@
-import { Actor } from '../../actors/actor.model'
 import { Account, ActorImage } from '../../actors'
+import { Actor } from '../../actors/actor.model'
 
 export type ViewsPerDate = {
   date: Date
@@ -19,7 +19,10 @@ export interface VideoChannel extends Actor {
   videosCount?: number
   viewsPerDay?: ViewsPerDate[] // chronologically ordered
 
-  banner?: ActorImage
+  banners: ActorImage[]
+
+  // TODO: remove, deprecated in 4.2
+  banner: ActorImage
 }
 
 export interface VideoChannelSummary {
@@ -28,5 +31,9 @@ export interface VideoChannelSummary {
   displayName: string
   url: string
   host: string
-  avatar?: ActorImage
+
+  avatars: ActorImage[]
+
+  // TODO: remove, deprecated in 4.2
+  avatar: ActorImage
 }

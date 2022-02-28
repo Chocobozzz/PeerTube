@@ -1,5 +1,6 @@
 import { createSafeIn } from '@server/models/utils'
 import { MUserAccountId } from '@server/types/models'
+import { ActorImageType } from '@shared/models'
 import validator from 'validator'
 import { AbstractRunQuery } from './abstract-run-query'
 import { VideoTableAttributes } from './video-table-attributes'
@@ -42,8 +43,9 @@ export class AbstractVideoQueryBuilder extends AbstractRunQuery {
     )
 
     this.addJoin(
-      'LEFT OUTER JOIN "actorImage" AS "VideoChannel->Actor->Avatar" ' +
-        'ON "VideoChannel->Actor"."avatarId" = "VideoChannel->Actor->Avatar"."id"'
+      'LEFT OUTER JOIN "actorImage" AS "VideoChannel->Actor->Avatars" ' +
+        'ON "VideoChannel->Actor"."id" = "VideoChannel->Actor->Avatars"."actorId" ' +
+        `AND "VideoChannel->Actor->Avatars"."type" = ${ActorImageType.AVATAR}`
     )
 
     this.attributes = {
@@ -51,7 +53,7 @@ export class AbstractVideoQueryBuilder extends AbstractRunQuery {
 
       ...this.buildAttributesObject('VideoChannel', this.tables.getChannelAttributes()),
       ...this.buildActorInclude('VideoChannel->Actor'),
-      ...this.buildAvatarInclude('VideoChannel->Actor->Avatar'),
+      ...this.buildAvatarInclude('VideoChannel->Actor->Avatars'),
       ...this.buildServerInclude('VideoChannel->Actor->Server')
     }
   }
@@ -68,8 +70,9 @@ export class AbstractVideoQueryBuilder extends AbstractRunQuery {
     )
 
     this.addJoin(
-      'LEFT OUTER JOIN "actorImage" AS "VideoChannel->Account->Actor->Avatar" ' +
-        'ON "VideoChannel->Account->Actor"."avatarId" = "VideoChannel->Account->Actor->Avatar"."id"'
+      'LEFT OUTER JOIN "actorImage" AS "VideoChannel->Account->Actor->Avatars" ' +
+        'ON "VideoChannel->Account"."actorId"= "VideoChannel->Account->Actor->Avatars"."actorId" ' +
+        `AND "VideoChannel->Account->Actor->Avatars"."type" = ${ActorImageType.AVATAR}`
     )
 
     this.attributes = {
@@ -77,7 +80,7 @@ export class AbstractVideoQueryBuilder extends AbstractRunQuery {
 
       ...this.buildAttributesObject('VideoChannel->Account', this.tables.getAccountAttributes()),
       ...this.buildActorInclude('VideoChannel->Account->Actor'),
-      ...this.buildAvatarInclude('VideoChannel->Account->Actor->Avatar'),
+      ...this.buildAvatarInclude('VideoChannel->Account->Actor->Avatars'),
       ...this.buildServerInclude('VideoChannel->Account->Actor->Server')
     }
   }

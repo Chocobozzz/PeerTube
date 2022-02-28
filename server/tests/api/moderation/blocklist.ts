@@ -2,6 +2,7 @@
 
 import 'mocha'
 import * as chai from 'chai'
+import { UserNotificationType } from '@shared/models'
 import {
   BlocklistCommand,
   cleanupTests,
@@ -10,9 +11,9 @@ import {
   doubleFollow,
   PeerTubeServer,
   setAccessTokensToServers,
+  setDefaultAccountAvatar,
   waitJobs
 } from '@shared/server-commands'
-import { UserNotificationType } from '@shared/models'
 
 const expect = chai.expect
 
@@ -79,6 +80,7 @@ describe('Test blocklist', function () {
 
     servers = await createMultipleServers(3)
     await setAccessTokensToServers(servers)
+    await setDefaultAccountAvatar(servers)
 
     command = servers[0].blocklist
     commentsCommand = servers.map(s => s.comments)

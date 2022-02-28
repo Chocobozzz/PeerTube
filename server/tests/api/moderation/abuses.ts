@@ -2,6 +2,7 @@
 
 import 'mocha'
 import * as chai from 'chai'
+import { AbuseMessage, AbusePredefinedReasonsString, AbuseState, AdminAbuse, UserAbuse } from '@shared/models'
 import {
   AbusesCommand,
   cleanupTests,
@@ -9,9 +10,10 @@ import {
   doubleFollow,
   PeerTubeServer,
   setAccessTokensToServers,
+  setDefaultAccountAvatar,
+  setDefaultChannelAvatar,
   waitJobs
 } from '@shared/server-commands'
-import { AbuseMessage, AbusePredefinedReasonsString, AbuseState, AdminAbuse, UserAbuse } from '@shared/models'
 
 const expect = chai.expect
 
@@ -27,8 +29,9 @@ describe('Test abuses', function () {
     // Run servers
     servers = await createMultipleServers(2)
 
-    // Get the access tokens
     await setAccessTokensToServers(servers)
+    await setDefaultChannelAvatar(servers)
+    await setDefaultAccountAvatar(servers)
 
     // Server 1 and server 2 follow each other
     await doubleFollow(servers[0], servers[1])

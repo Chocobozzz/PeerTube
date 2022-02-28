@@ -6,8 +6,8 @@ import { ServerModel } from '@server/models/server/server'
 import { VideoChannelModel } from '@server/models/video/video-channel'
 import { MAccount, MAccountDefault, MActor, MActorFullActor, MActorId, MActorImages, MChannel, MServer } from '@server/types/models'
 import { ActivityPubActor, ActorImageType } from '@shared/models'
-import { updateActorImageInstance } from '../image'
-import { getActorAttributesFromObject, getActorDisplayNameFromObject, getImageInfoFromObject } from './object-to-model-attributes'
+import { updateActorImages } from '../image'
+import { getActorAttributesFromObject, getActorDisplayNameFromObject, getImagesInfoFromObject } from './object-to-model-attributes'
 import { fetchActorFollowsCount } from './url-to-object'
 
 export class APActorCreator {
@@ -27,10 +27,10 @@ export class APActorCreator {
     return sequelizeTypescript.transaction(async t => {
       const server = await this.setServer(actorInstance, t)
 
-      await this.setImageIfNeeded(actorInstance, ActorImageType.AVATAR, t)
-      await this.setImageIfNeeded(actorInstance, ActorImageType.BANNER, t)
-
       const { actorCreated, created } = await this.saveActor(actorInstance, t)
+
+      await this.setImageIfNeeded(actorCreated, ActorImageType.AVATAR, t)
+      await this.setImageIfNeeded(actorCreated, ActorImageType.BANNER, t)
 
       await this.tryToFixActorUrlIfNeeded(actorCreated, actorInstance, created, t)
 
@@ -71,10 +71,10 @@ export class APActorCreator {
   }
 
   private async setImageIfNeeded (actor: MActor, type: ActorImageType, t: Transaction) {
-    const imageInfo = getImageInfoFromObject(this.actorObject, type)
-    if (!imageInfo) return
+    const imagesInfo = getImagesInfoFromObject(this.actorObject, type)
+    if (imagesInfo.length === 0) return
 
-    return updateActorImageInstance(actor as MActorImages, type, imageInfo, t)
+    return updateActorImages(actor as MActorImages, type, imagesInfo, t)
   }
 
   private async saveActor (actor: MActor, t: Transaction) {

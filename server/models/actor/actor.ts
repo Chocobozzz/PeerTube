@@ -16,11 +16,11 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
+import { getBiggestActorImage } from '@server/lib/actor-image'
 import { ModelCache } from '@server/models/model-cache'
 import { getLowercaseExtension } from '@shared/core-utils'
+import { ActivityIconObject, ActivityPubActorType, ActorImageType } from '@shared/models'
 import { AttributesOnly } from '@shared/typescript-utils'
-import { ActivityIconObject, ActivityPubActorType } from '../../../shared/models/activitypub'
-import { ActorImage } from '../../../shared/models/actors/actor-image.model'
 import { activityPubContextify } from '../../helpers/activitypub'
 import {
   isActorFollowersCountValid,
@@ -81,7 +81,7 @@ export const unusedActorAttributesForAPI = [
     },
     {
       model: ActorImageModel,
-      as: 'Avatar',
+      as: 'Avatars',
       required: false
     }
   ]
@@ -109,12 +109,12 @@ export const unusedActorAttributesForAPI = [
       },
       {
         model: ActorImageModel,
-        as: 'Avatar',
+        as: 'Avatars',
         required: false
       },
       {
         model: ActorImageModel,
-        as: 'Banner',
+        as: 'Banners',
         required: false
       }
     ]
@@ -151,9 +151,6 @@ export const unusedActorAttributesForAPI = [
     },
     {
       fields: [ 'serverId' ]
-    },
-    {
-      fields: [ 'avatarId' ]
     },
     {
       fields: [ 'followersUrl' ]
@@ -231,35 +228,31 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
   @UpdatedAt
   updatedAt: Date
 
-  @ForeignKey(() => ActorImageModel)
-  @Column
-  avatarId: number
-
-  @ForeignKey(() => ActorImageModel)
-  @Column
-  bannerId: number
-
-  @BelongsTo(() => ActorImageModel, {
+  @HasMany(() => ActorImageModel, {
+    as: 'Avatars',
+    onDelete: 'cascade',
+    hooks: true,
     foreignKey: {
-      name: 'avatarId',
-      allowNull: true
+      allowNull: false
     },
-    as: 'Avatar',
-    onDelete: 'set null',
-    hooks: true
+    scope: {
+      type: ActorImageType.AVATAR
+    }
   })
-  Avatar: ActorImageModel
+  Avatars: ActorImageModel[]
 
-  @BelongsTo(() => ActorImageModel, {
+  @HasMany(() => ActorImageModel, {
+    as: 'Banners',
+    onDelete: 'cascade',
+    hooks: true,
     foreignKey: {
-      name: 'bannerId',
-      allowNull: true
+      allowNull: false
     },
-    as: 'Banner',
-    onDelete: 'set null',
-    hooks: true
+    scope: {
+      type: ActorImageType.BANNER
+    }
   })
-  Banner: ActorImageModel
+  Banners: ActorImageModel[]
 
   @HasMany(() => ActorFollowModel, {
     foreignKey: {
@@ -386,8 +379,7 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
         transaction
       }
 
-      return ActorModel.scope(ScopeNames.FULL)
-                       .findOne(query)
+      return ActorModel.scope(ScopeNames.FULL).findOne(query)
     }
 
     return ModelCache.Instance.doCache({
@@ -410,8 +402,7 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
         transaction
       }
 
-      return ActorModel.unscoped()
-                       .findOne(query)
+      return ActorModel.unscoped().findOne(query)
     }
 
     return ModelCache.Instance.doCache({
@@ -532,55 +523,50 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
   }
 
   toFormattedSummaryJSON (this: MActorSummaryFormattable) {
-    let avatar: ActorImage = null
-    if (this.Avatar) {
-      avatar = this.Avatar.toFormattedJSON()
-    }
-
     return {
       url: this.url,
       name: this.preferredUsername,
       host: this.getHost(),
-      avatar
+      avatars: (this.Avatars || []).map(a => a.toFormattedJSON()),
+
+      // TODO: remove, deprecated in 4.2
+      avatar: this.hasImage(ActorImageType.AVATAR)
+        ? this.Avatars[0].toFormattedJSON()
+        : undefined
     }
   }
 
   toFormattedJSON (this: MActorFormattable) {
-    const base = this.toFormattedSummaryJSON()
+    return {
+      ...this.toFormattedSummaryJSON(),
 
-    let banner: ActorImage = null
-    if (this.Banner) {
-      banner = this.Banner.toFormattedJSON()
-    }
-
-    return Object.assign(base, {
       id: this.id,
       hostRedundancyAllowed: this.getRedundancyAllowed(),
       followingCount: this.followingCount,
       followersCount: this.followersCount,
-      banner,
-      createdAt: this.getCreatedAt()
-    })
+      createdAt: this.getCreatedAt(),
+
+      banners: (this.Banners || []).map(b => b.toFormattedJSON()),
+
+      // TODO: remove, deprecated in 4.2
+      banner: this.hasImage(ActorImageType.BANNER)
+        ? this.Banners[0].toFormattedJSON()
+        : undefined
+    }
   }
 
   toActivityPubObject (this: MActorAPChannel | MActorAPAccount, name: string) {
     let icon: ActivityIconObject
+    let icons: ActivityIconObject[]
     let image: ActivityIconObject
 
-    if (this.avatarId) {
-      const extension = getLowercaseExtension(this.Avatar.filename)
-
-      icon = {
-        type: 'Image',
-        mediaType: MIMETYPES.IMAGE.EXT_MIMETYPE[extension],
-        height: this.Avatar.height,
-        width: this.Avatar.width,
-        url: this.getAvatarUrl()
-      }
+    if (this.hasImage(ActorImageType.AVATAR)) {
+      icon = getBiggestActorImage(this.Avatars).toActivityPubObject()
+      icons = this.Avatars.map(a => a.toActivityPubObject())
     }
 
-    if (this.bannerId) {
-      const banner = (this as MActorAPChannel).Banner
+    if (this.hasImage(ActorImageType.BANNER)) {
+      const banner = getBiggestActorImage((this as MActorAPChannel).Banners)
       const extension = getLowercaseExtension(banner.filename)
 
       image = {
@@ -588,7 +574,7 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
         mediaType: MIMETYPES.IMAGE.EXT_MIMETYPE[extension],
         height: banner.height,
         width: banner.width,
-        url: this.getBannerUrl()
+        url: ActorImageModel.getImageUrl(banner)
       }
     }
 
@@ -612,7 +598,10 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
         publicKeyPem: this.publicKey
       },
       published: this.getCreatedAt().toISOString(),
+
       icon,
+      icons,
+
       image
     }
 
@@ -677,16 +666,12 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
     return this.Server ? this.Server.redundancyAllowed : false
   }
 
-  getAvatarUrl () {
-    if (!this.avatarId) return undefined
+  hasImage (type: ActorImageType) {
+    const images = type === ActorImageType.AVATAR
+      ? this.Avatars
+      : this.Banners
 
-    return WEBSERVER.URL + this.Avatar.getStaticPath()
-  }
-
-  getBannerUrl () {
-    if (!this.bannerId) return undefined
-
-    return WEBSERVER.URL + this.Banner.getStaticPath()
+    return Array.isArray(images) && images.length !== 0
   }
 
   isOutdated () {

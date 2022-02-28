@@ -1,34 +1,13 @@
-import { Op, QueryTypes } from 'sequelize'
-import { BelongsTo, Column, CreatedAt, ForeignKey, Model, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
+import { FindOptions, Op, QueryTypes } from 'sequelize'
+import { BelongsTo, Column, CreatedAt, ForeignKey, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import { handlesToNameAndHost } from '@server/helpers/actors'
-import { MAccountBlocklist, MAccountBlocklistAccounts, MAccountBlocklistFormattable } from '@server/types/models'
+import { MAccountBlocklist, MAccountBlocklistFormattable } from '@server/types/models'
 import { AttributesOnly } from '@shared/typescript-utils'
 import { AccountBlock } from '../../../shared/models'
 import { ActorModel } from '../actor/actor'
 import { ServerModel } from '../server/server'
 import { createSafeIn, getSort, searchAttribute } from '../utils'
 import { AccountModel } from './account'
-
-enum ScopeNames {
-  WITH_ACCOUNTS = 'WITH_ACCOUNTS'
-}
-
-@Scopes(() => ({
-  [ScopeNames.WITH_ACCOUNTS]: {
-    include: [
-      {
-        model: AccountModel,
-        required: true,
-        as: 'ByAccount'
-      },
-      {
-        model: AccountModel,
-        required: true,
-        as: 'BlockedAccount'
-      }
-    ]
-  }
-}))
 
 @Table({
   tableName: 'accountBlocklist',
@@ -123,33 +102,45 @@ export class AccountBlocklistModel extends Model<Partial<AttributesOnly<AccountB
   }) {
     const { start, count, sort, search, accountId } = parameters
 
-    const query = {
-      offset: start,
-      limit: count,
-      order: getSort(sort)
-    }
+    const getQuery = (forCount: boolean) => {
+      const query: FindOptions = {
+        offset: start,
+        limit: count,
+        order: getSort(sort),
+        where: { accountId }
+      }
 
-    const where = {
-      accountId
-    }
+      if (search) {
+        Object.assign(query.where, {
+          [Op.or]: [
+            searchAttribute(search, '$BlockedAccount.name$'),
+            searchAttribute(search, '$BlockedAccount.Actor.url$')
+          ]
+        })
+      }
 
-    if (search) {
-      Object.assign(where, {
-        [Op.or]: [
-          searchAttribute(search, '$BlockedAccount.name$'),
-          searchAttribute(search, '$BlockedAccount.Actor.url$')
+      if (forCount !== true) {
+        query.include = [
+          {
+            model: AccountModel,
+            required: true,
+            as: 'ByAccount'
+          },
+          {
+            model: AccountModel,
+            required: true,
+            as: 'BlockedAccount'
+          }
         ]
-      })
+      }
+
+      return query
     }
 
-    Object.assign(query, { where })
-
-    return AccountBlocklistModel
-      .scope([ ScopeNames.WITH_ACCOUNTS ])
-      .findAndCountAll<MAccountBlocklistAccounts>(query)
-      .then(({ rows, count }) => {
-        return { total: count, data: rows }
-      })
+    return Promise.all([
+      AccountBlocklistModel.count(getQuery(true)),
+      AccountBlocklistModel.findAll(getQuery(false))
+    ]).then(([ total, data ]) => ({ total, data }))
   }
 
   static listHandlesBlockedBy (accountIds: number[]): Promise<string[]> {

@@ -3,6 +3,7 @@ import { readFile } from 'fs-extra'
 import { join } from 'path'
 import validator from 'validator'
 import { toCompleteUUID } from '@server/helpers/custom-validators/misc'
+import { ActorImageModel } from '@server/models/actor/actor-image'
 import { root } from '@shared/core-utils'
 import { escapeHTML } from '@shared/core-utils/renderer'
 import { sha256 } from '@shared/extra-utils'
@@ -16,7 +17,6 @@ import { mdToOneLinePlainText } from '../helpers/markdown'
 import { CONFIG } from '../initializers/config'
 import {
   ACCEPT_HEADERS,
-  ACTOR_IMAGES_SIZE,
   CUSTOM_HTML_TAG_COMMENTS,
   EMBED_SIZE,
   FILES_CONTENT_HASH,
@@ -29,6 +29,7 @@ import { VideoModel } from '../models/video/video'
 import { VideoChannelModel } from '../models/video/video-channel'
 import { VideoPlaylistModel } from '../models/video/video-playlist'
 import { MAccountActor, MChannelActor } from '../types/models'
+import { getBiggestActorImage } from './actor-image'
 import { ServerConfigManager } from './server-config-manager'
 
 type Tags = {
@@ -273,10 +274,11 @@ class ClientHtml {
     const siteName = CONFIG.INSTANCE.NAME
     const title = entity.getDisplayName()
 
+    const avatar = getBiggestActorImage(entity.Actor.Avatars)
     const image = {
-      url: entity.Actor.getAvatarUrl(),
-      width: ACTOR_IMAGES_SIZE.AVATARS.width,
-      height: ACTOR_IMAGES_SIZE.AVATARS.height
+      url: ActorImageModel.getImageUrl(avatar),
+      width: avatar?.width,
+      height: avatar?.height
     }
 
     const ogType = 'website'

@@ -24,7 +24,6 @@ my-edit-button {
   padding-bottom: 0;
 
   my-actor-avatar {
-    @include actor-avatar-size(80px);
     @include margin-right(10px);
   }
 }

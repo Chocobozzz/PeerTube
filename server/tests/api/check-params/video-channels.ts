@@ -228,7 +228,7 @@ describe('Test video channels API validator', function () {
     })
   })
 
-  describe('When updating video channel avatar/banner', function () {
+  describe('When updating video channel avatars/banners', function () {
     const types = [ 'avatar', 'banner' ]
     let path: string
 
