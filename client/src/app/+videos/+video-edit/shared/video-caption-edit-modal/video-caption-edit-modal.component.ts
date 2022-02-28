@@ -1,5 +1,4 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
-
 import { VIDEO_CAPTION_FILE_CONTENT_VALIDATOR } from '@app/shared/form-validators/video-captions-validators'
 import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
 import { VideoCaptionEdit, VideoCaptionService, VideoCaptionWithPathEdit } from '@app/shared/shared-main'
@@ -23,7 +22,6 @@ export class VideoCaptionEditModalComponent extends FormReactive implements OnIn
 
   videoCaptionLanguages: VideoConstant<string>[] = []
   private openedModal: NgbModalRef
-  private closingModal = false
 
   constructor (
     protected formValidatorService: FormValidatorService,
@@ -44,25 +42,21 @@ export class VideoCaptionEditModalComponent extends FormReactive implements OnIn
 
   loadCaptionContent () {
     const { captionPath } = this.videoCaption
-    if (captionPath) {
-      this.videoCaptionService.getCaptionContent({
-        captionPath
-      }).subscribe((res) => {
+    if (!captionPath) return
+
+    this.videoCaptionService.getCaptionContent({ captionPath })
+      .subscribe(res => {
         this.form.patchValue({
           captionFileContent: res
         })
       })
-    }
   }
 
   show () {
-    this.closingModal = false
-
     this.openedModal = this.modalService.open(this.modal, { centered: true, keyboard: false })
   }
 
   hide () {
-    this.closingModal = true
     this.openedModal.close()
   }
 
@@ -70,14 +64,11 @@ export class VideoCaptionEditModalComponent extends FormReactive implements OnIn
     this.hide()
   }
 
-  isReplacingExistingCaption () {
-    return true
-  }
-
   updateCaption () {
     const format = 'vtt'
     const languageId = this.videoCaption.language.id
     const languageObject = this.videoCaptionLanguages.find(l => l.id === languageId)
+
     this.captionEdited.emit({
       language: languageObject,
       captionfile: new File([ this.form.value['captionFileContent'] ], `${languageId}.${format}`, {
