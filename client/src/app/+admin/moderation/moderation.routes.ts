@@ -2,7 +2,6 @@ import { Routes } from '@angular/router'
 import { AbuseListComponent } from '@app/+admin/moderation/abuse-list'
 import { InstanceAccountBlocklistComponent, InstanceServerBlocklistComponent } from '@app/+admin/moderation/instance-blocklist'
 import { VideoBlockListComponent } from '@app/+admin/moderation/video-block-list'
-import { VideoCommentListComponent } from './video-comment-list'
 import { UserRightGuard } from '@app/core'
 import { UserRight } from '@shared/models'
 
@@ -69,6 +68,7 @@ export const ModerationRoutes: Routes = [
         }
       },
 
+      // We move this component in admin overview pages
       {
         path: 'video-comments',
         redirectTo: 'video-comments/list',
@@ -76,14 +76,8 @@ export const ModerationRoutes: Routes = [
       },
       {
         path: 'video-comments/list',
-        component: VideoCommentListComponent,
-        canActivate: [ UserRightGuard ],
-        data: {
-          userRight: UserRight.SEE_ALL_COMMENTS,
-          meta: {
-            title: $localize`Video comments`
-          }
-        }
+        redirectTo: '/admin/comments/list',
+        pathMatch: 'full'
       },
 
       {

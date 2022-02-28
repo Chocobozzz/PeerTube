@@ -32,13 +32,13 @@ import { RedundancyCheckboxComponent } from './follows/shared/redundancy-checkbo
 import { VideoRedundancyInformationComponent } from './follows/video-redundancies-list/video-redundancy-information.component'
 import { AbuseListComponent, VideoBlockListComponent } from './moderation'
 import { InstanceAccountBlocklistComponent, InstanceServerBlocklistComponent } from './moderation/instance-blocklist'
-import { VideoCommentListComponent } from './moderation/video-comment-list'
 import {
   UserCreateComponent,
   UserListComponent,
   UserPasswordComponent,
   UserUpdateComponent,
   VideoAdminService,
+  VideoCommentListComponent,
   VideoListComponent
 } from './overview'
 import {

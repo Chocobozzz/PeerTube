@@ -1,14 +1,14 @@
 import { Routes } from '@angular/router'
 import { UserRightGuard } from '@app/core'
 import { UserRight } from '@shared/models'
-import { VideoListComponent } from './video-list.component'
+import { VideoCommentListComponent } from './video-comment-list.component'
 
-export const videosRoutes: Routes = [
+export const commentRoutes: Routes = [
   {
-    path: 'videos',
+    path: 'comments',
     canActivate: [ UserRightGuard ],
     data: {
-      userRight: UserRight.SEE_ALL_VIDEOS
+      userRight: UserRight.SEE_ALL_COMMENTS
     },
     children: [
       {
@@ -18,10 +18,10 @@ export const videosRoutes: Routes = [
       },
       {
         path: 'list',
-        component: VideoListComponent,
+        component: VideoCommentListComponent,
         data: {
           meta: {
-            title: $localize`Videos list`
+            title: $localize`Comments list`
           }
         }
       }

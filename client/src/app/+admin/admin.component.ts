@@ -52,6 +52,14 @@ export class AdminComponent implements OnInit {
       })
     }
 
+    if (this.hasVideoCommentsRight()) {
+      overviewItems.children.push({
+        label: $localize`Comments`,
+        routerLink: '/admin/comments',
+        iconName: 'message-circle'
+      })
+    }
+
     if (overviewItems.children.length !== 0) {
       this.menuEntries.push(overviewItems)
     }
@@ -101,14 +109,6 @@ export class AdminComponent implements OnInit {
         label: $localize`Video blocks`,
         routerLink: '/admin/moderation/video-blocks/list',
         iconName: 'cross'
-      })
-    }
-
-    if (this.hasVideoCommentsRight()) {
-      moderationItems.children.push({
-        label: $localize`Video comments`,
-        routerLink: '/admin/moderation/video-comments/list',
-        iconName: 'message-circle'
       })
     }
 
