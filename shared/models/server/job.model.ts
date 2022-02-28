@@ -1,3 +1,4 @@
+import { VideoType } from '..'
 import { ContextType } from '../activitypub/context'
 import { VideoEditorTaskCut } from '../videos/editor'
 import { VideoResolution } from '../videos/file/video-resolution.enum'
@@ -200,7 +201,9 @@ export interface VideoEditionPayload {
   tasks: VideoEditionTaskPayload[]
 }
 
-export interface VideoValidityCheckPayload {
+export interface VideoValidatePayload {
+  isNewVideo: boolean
+  type: VideoType
   resolution: VideoResolution
   videoUUID: string
 }

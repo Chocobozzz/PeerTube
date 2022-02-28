@@ -6,7 +6,15 @@ import { VideoModel } from '@server/models/video/video'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info'
 import { FilteredModelAttributes } from '@server/types'
 import { MThumbnail, MUserId, MVideoFile, MVideoTag, MVideoThumbnail, MVideoUUID } from '@server/types/models'
-import { ThumbnailType, VideoCreate, VideoPrivacy, VideoTranscodingPayload } from '@shared/models'
+import {
+  ThumbnailType,
+  VideoCreate,
+  VideoPrivacy,
+  VideoResolution,
+  VideoTranscodingPayload,
+  VideoType,
+  VideoValidatePayload
+} from '@shared/models'
 import { CreateJobOptions, JobQueue } from './job-queue/job-queue'
 import { updateVideoMiniatureFromExisting } from './thumbnail'
 import { CONFIG } from '@server/initializers/config'
@@ -113,8 +121,10 @@ async function addTranscodingJob (payload: VideoTranscodingPayload, options: Cre
   return JobQueue.Instance.createJobWithPromise({ type: 'video-transcoding', payload: payload }, options)
 }
 
-function addVideoValidateJob (video: MVideoUUID) {
-  const dataInput = { videoUUID: video.uuid }
+async function addVideoValidateJob (video: MVideoUUID, resolution: VideoResolution, type: VideoType, isNewVideo: boolean) {
+  await VideoJobInfoModel.increaseOrCreate(video.uuid, 'pendingValidateVideo')
+
+  const dataInput: VideoValidatePayload = { isNewVideo, resolution, type, videoUUID: video.uuid }
   return JobQueue.Instance.createJobWithPromise({ type: 'validate-video-file', payload: dataInput })
 }
 

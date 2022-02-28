@@ -39,7 +39,7 @@ import { processVideoImport } from './handlers/video-import'
 import { processVideoLiveEnding } from './handlers/video-live-ending'
 import { processVideoTranscoding } from './handlers/video-transcoding'
 import { processVideosViewsStats } from './handlers/video-views-stats'
-import { processVideoValidityCheck } from './handlers/video-validity-check'
+import { processVideoValidate } from './handlers/video-validate'
 
 type CreateJobArgument =
   { type: 'activitypub-http-broadcast', payload: ActivitypubHttpBroadcastPayload } |
@@ -83,7 +83,7 @@ const handlers: { [id in JobType]: (job: Job) => Promise<any> } = {
   'video-redundancy': processVideoRedundancy,
   'move-to-object-storage': processMoveToObjectStorage,
   'video-edition': processVideoEdition,
-  'validate-video-file': processVideoValidityCheck
+  'validate-video-file': processVideoValidate
 }
 
 const jobTypes: JobType[] = [
@@ -267,6 +267,11 @@ class JobQueue {
     return total
   }
 
+  async getJobs (queue: JobType, states: JobState[]) {
+    return this.queues[queue].getJobs(states)
+    .then(jobs => jobs.filter(job => job.finishedOn === undefined))
+  }
+
   async removeOldJobs () {
     for (const key of Object.keys(this.queues)) {
       const queue = this.queues[key]
@@ -293,7 +298,7 @@ class JobQueue {
   }
 
   private getJobConcurrency (jobType: JobType) {
-    if (jobType === 'video-transcoding') return CONFIG.TRANSCODING.CONCURRENCY
+    if ([ 'video-transcoding', 'validate-video-file' ].includes(jobType)) return CONFIG.TRANSCODING.CONCURRENCY
     if (jobType === 'video-import') return CONFIG.IMPORT.VIDEOS.CONCURRENCY
 
     return JOB_CONCURRENCY[jobType]

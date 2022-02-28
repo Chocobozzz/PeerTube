@@ -1,6 +1,6 @@
 import { Job } from 'bull'
 import { TranscodeVODOptionsType } from '@server/helpers/ffmpeg'
-import { addTranscodingJob, getTranscodingJobPriority } from '@server/lib/video'
+import { addTranscodingJob, addVideoValidateJob, getTranscodingJobPriority } from '@server/lib/video'
 import { VideoPathManager } from '@server/lib/video-path-manager'
 import { moveToFailedTranscodingState, moveToNextState } from '@server/lib/video-state'
 import { UserModel } from '@server/models/user/user'
@@ -63,6 +63,11 @@ async function processVideoTranscoding (job: Job) {
 
   try {
     await handler(job, payload, video, user)
+
+    if ('resolution' in payload) {
+      const videoType = payload.type === 'new-resolution-to-hls' ? 'hls' : 'webtorrent'
+      await addVideoValidateJob(video, payload.resolution, videoType, payload.isNewVideo)
+    }
   } catch (error) {
     await moveToFailedTranscodingState(video)
 

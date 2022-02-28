@@ -24,7 +24,7 @@ import { CONFIG, registerConfigChangedHandler } from './config'
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 685
+const LAST_MIGRATION_VERSION = 690
 
 // ---------------------------------------------------------------------------
 
@@ -157,7 +157,7 @@ const JOB_ATTEMPTS: { [id in JobType]: number } = {
   'validate-video-file': 1
 }
 // Excluded keys are jobs that can be configured by admins
-const JOB_CONCURRENCY: { [id in Exclude<JobType, 'video-transcoding' | 'video-import'>]: number } = {
+const JOB_CONCURRENCY: { [id in Exclude<JobType, 'validate-video-file' | 'video-transcoding' | 'video-import'>]: number } = {
   'activitypub-http-broadcast': 1,
   'activitypub-http-unicast': 10,
   'activitypub-http-fetcher': 3,
@@ -171,8 +171,7 @@ const JOB_CONCURRENCY: { [id in Exclude<JobType, 'video-transcoding' | 'video-im
   'video-redundancy': 1,
   'video-live-ending': 10,
   'video-edition': 1,
-  'move-to-object-storage': 1,
-  'validate-video-file': 1 // Should this be synced with video-transcoding concurrency?
+  'move-to-object-storage': 1
 }
 const JOB_TTL: { [id in JobType]: number } = {
   'activitypub-http-broadcast': 60000 * 10, // 10 minutes

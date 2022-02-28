@@ -8,9 +8,9 @@ import { MVideo, MVideoFullLight, MVideoUUID } from '@server/types/models'
 import { VideoState } from '@shared/models'
 import { federateVideoIfNeeded } from './activitypub/videos'
 import { Notifier } from './notifier'
-import { addMoveToObjectStorageJob, addVideoValidateJob } from './video'
+import { addMoveToObjectStorageJob } from './video'
 
-function buildNextVideoState (currentState?: VideoState) {
+function buildNextVideoState (currentState?: VideoState, videoJob?: VideoJobInfoModel) {
   if (currentState === VideoState.PUBLISHED) {
     throw new Error('Video is already in its final state')
   }
@@ -26,6 +26,7 @@ function buildNextVideoState (currentState?: VideoState) {
 
   if (
     currentState !== VideoState.TO_VALIDATE_VIDEO_FILES &&
+    videoJob?.pendingValidateVideo > 0 &&
     currentState !== VideoState.TO_MOVE_TO_EXTERNAL_STORAGE
   ) {
     return VideoState.TO_VALIDATE_VIDEO_FILES
@@ -53,14 +54,15 @@ function moveToNextState (video: MVideoUUID, isNewVideo = true) {
       return federateVideoIfNeeded(videoDatabase, false, t)
     }
 
-    const newState = buildNextVideoState(videoDatabase.state)
+    const videoJobInfo = await VideoJobInfoModel.load(videoDatabase.id, t)
+    const newState = buildNextVideoState(videoDatabase.state, videoJobInfo)
 
     if (newState === VideoState.PUBLISHED) {
       return moveToPublishedState(videoDatabase, isNewVideo, t)
     }
 
     if (newState === VideoState.TO_VALIDATE_VIDEO_FILES) {
-      return moveToValidateVideoFileState(videoDatabase, isNewVideo, t)
+      return moveToValidateVideoFileState(videoDatabase, isNewVideo, videoJobInfo, t)
     }
 
     if (newState === VideoState.TO_MOVE_TO_EXTERNAL_STORAGE) {
@@ -69,26 +71,14 @@ function moveToNextState (video: MVideoUUID, isNewVideo = true) {
   })
 }
 
-async function moveToValidateVideoFileState (video: MVideoFullLight, isNewVideo: boolean, transaction: Transaction) {
-  const videoJobInfo = await VideoJobInfoModel.load(video.id, transaction)
+async function moveToValidateVideoFileState
+(video: MVideoFullLight, isNewVideo: boolean, videoJobInfo: VideoJobInfoModel, transaction: Transaction) {
   const pendingTranscode = videoJobInfo?.pendingTranscode || 0
 
   // We want to wait all transcoding jobs before updating the state
   if (pendingTranscode !== 0) return false
 
-  await video.setNewState(VideoState.TO_TRANSCODE, isNewVideo, transaction)
-
-  logger.info('Creating video validaty check job for video %s.', video.uuid, { tags: [ video.uuid ] })
-
-  try {
-    addVideoValidateJob(video)
-
-    return true
-  } catch (err) {
-    logger.error('Cannot add video validate job', { err })
-
-    return false
-  }
+  await video.setNewState(VideoState.TO_VALIDATE_VIDEO_FILES, isNewVideo, transaction)
 }
 
 async function moveToExternalStorageState (video: MVideoFullLight, isNewVideo: boolean, transaction: Transaction) {
