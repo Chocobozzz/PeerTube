@@ -62,10 +62,10 @@
         </div>
       </th>
       <th *ngIf="isSelected('username')" pResizableColumn  pSortableColumn="username">{{ getColumn('username').label }} <p-sortIcon field="username"></p-sortIcon></th>
+      <th *ngIf="isSelected('role')" style="width: 120px;"  pSortableColumn="role">{{ getColumn('role').label }} <p-sortIcon field="role"></p-sortIcon></th>
       <th *ngIf="isSelected('email')">{{ getColumn('email').label }}</th>
       <th *ngIf="isSelected('quota')" style="width: 160px;"  pSortableColumn="videoQuotaUsed">{{ getColumn('quota').label }} <p-sortIcon field="videoQuotaUsed"></p-sortIcon></th>
       <th *ngIf="isSelected('quotaDaily')" style="width: 160px;">{{ getColumn('quotaDaily').label }}</th>
-      <th *ngIf="isSelected('role')" style="width: 120px;"  pSortableColumn="role">{{ getColumn('role').label }} <p-sortIcon field="role"></p-sortIcon></th>
       <th *ngIf="isSelected('pluginAuth')" style="width: 140px;" pResizableColumn >{{ getColumn('pluginAuth').label }}</th>
       <th *ngIf="isSelected('createdAt')" style="width: 150px;"  pSortableColumn="createdAt">{{ getColumn('createdAt').label }} <p-sortIcon field="createdAt"></p-sortIcon></th>
       <th *ngIf="isSelected('lastLoginDate')" style="width: 150px;"  pSortableColumn="lastLoginDate">{{ getColumn('lastLoginDate').label }} <p-sortIcon field="lastLoginDate"></p-sortIcon></th>
@@ -84,8 +84,9 @@
       </td>
 
       <td class="action-cell">
-        <my-user-moderation-dropdown *ngIf="!isInSelectionMode()" [user]="user" container="body"
-          (userChanged)="onUserChanged()" (userDeleted)="onUserChanged()">
+        <my-user-moderation-dropdown
+          *ngIf="!isInSelectionMode()" [user]="user" [account]="user.accountMutedStatus" [displayOptions]="userModerationDisplayOptions"
+          container="body" (userChanged)="onUserChanged()" (userDeleted)="onUserChanged()">
         </my-user-moderation-dropdown>
       </td>
 
@@ -99,6 +100,14 @@
             </div>
           </div>
         </a>
+
+        <div *ngIf="user.accountMutedStatus.mutedByInstance" class="badges-username badge badge-red" i18n>Muted</div>
+        <div *ngIf="user.blocked" class="badges-username badge badge-red" i18n>Banned</div>
+      </td>
+
+      <td *ngIf="isSelected('role')">
+        <span *ngIf="user.blocked" class="badge badge-banned" i18n-title title="The user was banned">{{ user.roleLabel }}</span>
+        <span *ngIf="!user.blocked" class="badge" [ngClass]="getRoleClass(user.role)">{{ user.roleLabel }}</span>
       </td>
 
       <td *ngIf="isSelected('email')" [title]="user.email">
@@ -136,11 +145,6 @@
           <span>{{ user.videoQuotaUsedDaily }}</span>
           <span>{{ user.videoQuotaDaily }}</span>
         </div>
-      </td>
-
-      <td *ngIf="isSelected('role')">
-        <span *ngIf="user.blocked" class="badge badge-banned" i18n-title title="The user was banned">{{ user.roleLabel }}</span>
-        <span *ngIf="!user.blocked" class="badge" [ngClass]="getRoleClass(user.role)">{{ user.roleLabel }}</span>
       </td>
 
       <td *ngIf="isSelected('pluginAuth')">

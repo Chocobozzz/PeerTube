@@ -2,9 +2,10 @@ import { SortMeta } from 'primeng/api'
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, ConfirmService, Notifier, RestPagination, RestTable, ServerService } from '@app/core'
+import { getAPIHost } from '@app/helpers'
 import { AdvancedInputFilter } from '@app/shared/shared-forms'
-import { DropdownAction } from '@app/shared/shared-main'
-import { UserBanModalComponent } from '@app/shared/shared-moderation'
+import { Actor, DropdownAction } from '@app/shared/shared-main'
+import { AccountMutedStatus, BlocklistService, UserBanModalComponent, UserModerationDisplayType } from '@app/shared/shared-moderation'
 import { UserAdminService } from '@app/shared/shared-users'
 import { User, UserRole } from '@shared/models'
 
@@ -23,7 +24,7 @@ type UserForList = User & {
 export class UserListComponent extends RestTable implements OnInit {
   @ViewChild('userBanModal', { static: true }) userBanModal: UserBanModalComponent
 
-  users: User[] = []
+  users: (User & { accountMutedStatus: AccountMutedStatus })[] = []
 
   totalRecords = 0
   sort: SortMeta = { field: 'createdAt', order: 1 }
@@ -47,6 +48,12 @@ export class UserListComponent extends RestTable implements OnInit {
     }
   ]
 
+  userModerationDisplayOptions: UserModerationDisplayType = {
+    instanceAccount: true,
+    instanceUser: true,
+    myAccount: false
+  }
+
   requiresEmailVerification = false
 
   private _selectedColumns: string[]
@@ -58,6 +65,7 @@ export class UserListComponent extends RestTable implements OnInit {
     private confirmService: ConfirmService,
     private serverService: ServerService,
     private auth: AuthService,
+    private blocklist: BlocklistService,
     private userAdminService: UserAdminService
   ) {
     super()
@@ -115,9 +123,9 @@ export class UserListComponent extends RestTable implements OnInit {
 
     this.columns = [
       { id: 'username', label: $localize`Username` },
+      { id: 'role', label: $localize`Role` },
       { id: 'email', label: $localize`Email` },
       { id: 'quota', label: $localize`Video quota` },
-      { id: 'role', label: $localize`Role` },
       { id: 'createdAt', label: $localize`Created` }
     ]
 
@@ -237,11 +245,35 @@ export class UserListComponent extends RestTable implements OnInit {
       search: this.search
     }).subscribe({
       next: resultList => {
-        this.users = resultList.data
+        this.users = resultList.data.map(u => ({
+          ...u,
+
+          accountMutedStatus: {
+            ...u.account,
+
+            nameWithHost: Actor.CREATE_BY_STRING(u.account.name, u.account.host),
+
+            mutedByInstance: false,
+            mutedByUser: false,
+            mutedServerByInstance: false,
+            mutedServerByUser: false
+          }
+        }))
         this.totalRecords = resultList.total
+
+        this.loadMutedStatus()
       },
 
       error: err => this.notifier.error(err.message)
     })
+  }
+
+  private loadMutedStatus () {
+    this.blocklist.getStatus({ accounts: this.users.map(u => u.username + '@' + getAPIHost()) })
+      .subscribe(blockStatus => {
+        for (const user of this.users) {
+          user.accountMutedStatus.mutedByInstance = blockStatus.accounts[user.username + '@' + getAPIHost()].blockedByServer
+        }
+      })
   }
 }
