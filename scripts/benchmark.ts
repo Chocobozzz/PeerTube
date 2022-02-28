@@ -1,4 +1,5 @@
 import autocannon, { printResult } from 'autocannon'
+import { program } from 'commander'
 import { writeJson } from 'fs-extra'
 import { Video, VideoPrivacy } from '@shared/models'
 import { createSingleServer, killallServers, PeerTubeServer, setAccessTokensToServers } from '@shared/server-commands'
@@ -7,7 +8,15 @@ let server: PeerTubeServer
 let video: Video
 let threadId: number
 
-const outfile = process.argv[2]
+program
+  .option('-o, --outfile [outfile]', 'Outfile')
+  .option('--grep [string]', 'Filter tests you want to execute')
+  .description('Run API REST benchmark')
+  .parse(process.argv)
+
+const options = program.opts()
+
+const outfile = options.outfile
 
 run()
   .catch(err => console.error(err))
@@ -135,7 +144,11 @@ async function run () {
         return status === 200 && body.startsWith('{"client":')
       }
     }
-  ]
+  ].filter(t => {
+    if (!options.grep) return true
+
+    return t.title.includes(options.grep)
+  })
 
   const finalResult: any[] = []
 

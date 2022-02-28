@@ -71,7 +71,7 @@ jobs:
 
       - name: Run benchmark
         run: |
-          node dist/scripts/benchmark.js benchmark.json
+          node dist/scripts/benchmark.js -o benchmark.json
 
       - name: Display result
         run: |
