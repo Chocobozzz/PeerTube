@@ -89,9 +89,11 @@ export class ActorAvatarComponent {
   }
 
   private getColorTheme () {
+    const initialLowercase = this.initial.toLowerCase()
+
     // Keep consistency with CSS
     const themes = {
-      abc: 'blue',
+      '0123456789abc': 'blue',
       def: 'green',
       ghi: 'purple',
       jkl: 'gray',
@@ -102,7 +104,7 @@ export class ActorAvatarComponent {
     }
 
     const theme = Object.keys(themes)
-                        .find(chars => chars.includes(this.initial))
+                        .find(chars => chars.includes(initialLowercase))
 
     return themes[theme]
   }
