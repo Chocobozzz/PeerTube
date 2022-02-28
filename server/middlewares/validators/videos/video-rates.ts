@@ -21,12 +21,7 @@ const videoUpdateRateValidator = [
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.id, res)) return
 
-    if (!await checkCanSeeVideoIfPrivate(req, res, res.locals.videoAll)) {
-      return res.fail({
-        status: HttpStatusCode.FORBIDDEN_403,
-        message: 'Cannot access to this ressource'
-      })
-    }
+    if (!await checkCanSeeVideoIfPrivate(req, res, res.locals.videoAll)) return
 
     return next()
   }
