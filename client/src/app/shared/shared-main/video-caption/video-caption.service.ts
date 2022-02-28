@@ -7,8 +7,8 @@ import { objectToFormData, sortBy } from '@app/helpers'
 import { VideoService } from '@app/shared/shared-main/video'
 import { peertubeTranslate } from '@shared/core-utils/i18n'
 import { ResultList, VideoCaption } from '@shared/models'
-import { VideoCaptionEdit } from './video-caption-edit.model'
 import { environment } from '../../../../environments/environment'
+import { VideoCaptionEdit } from './video-caption-edit.model'
 
 @Injectable()
 export class VideoCaptionService {
@@ -69,6 +69,6 @@ export class VideoCaptionService {
   }
 
   getCaptionContent ({ captionPath }: Pick<VideoCaption, 'captionPath'>) {
-    return this.authHttp.get(`${environment.originServerUrl}${captionPath}`, { responseType: 'text' })
+    return this.authHttp.get(environment.originServerUrl + captionPath, { responseType: 'text' })
   }
 }

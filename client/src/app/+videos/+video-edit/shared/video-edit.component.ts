@@ -59,7 +59,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   @Input() userVideoChannels: SelectChannelItem[] = []
   @Input() forbidScheduledPublication = true
 
-  @Input() videoCaptions: (VideoCaptionWithPathEdit)[] = []
+  @Input() videoCaptions: VideoCaptionWithPathEdit[] = []
 
   @Input() waitTranscodingEnabled = true
   @Input() type: VideoEditType
