@@ -45,6 +45,14 @@ my-global-icon {
   }
 }
 
+.right-form {
+  display: flex;
+
+  > *:not(:last-child) {
+    @include margin-right(10px);
+  }
+}
+
 @media screen and (max-width: $primeng-breakpoint) {
   .video {
     align-items: flex-start !important;

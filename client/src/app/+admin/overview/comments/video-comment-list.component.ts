@@ -117,7 +117,7 @@ export class VideoCommentListComponent extends RestTable implements OnInit {
     return this.selectedComments.length !== 0
   }
 
-  protected reloadData () {
+  reloadData () {
     this.videoCommentService.getAdminVideoComments({
       pagination: this.pagination,
       sort: this.sort,
