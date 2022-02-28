@@ -396,7 +396,7 @@ live:
   rtmp:
     enabled: true
     port: 1935
-    hostname: '' # Defaults to webserver.hostname
+    hostname: 'localhost'
 
   rtmps:
     enabled: false
@@ -405,7 +405,7 @@ live:
     key_file: ''
     # Absolute path
     cert_file: ''
-    hostname: '' # Defaults to webserver.hostname
+    hostname: 'localhost'
 
   # Allow to transcode the live streaming in multiple live resolutions
   transcoding:
