@@ -23,6 +23,10 @@ tr.banned > td {
   font-weight: $font-semibold;
 }
 
+.badges-username {
+  margin-left: 15px;
+}
+
 .user-table-primary-text .glyphicon {
   @include margin-left(0.1rem);
 

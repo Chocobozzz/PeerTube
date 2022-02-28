@@ -1,4 +1,4 @@
-import { getAbsoluteAPIUrl } from '@app/helpers'
+import { getAbsoluteAPIUrl, getAPIHost } from '@app/helpers'
 import { Actor as ServerActor, ActorImage } from '@shared/models'
 
 export abstract class Actor implements ServerActor {
@@ -32,8 +32,7 @@ export abstract class Actor implements ServerActor {
   }
 
   static CREATE_BY_STRING (accountName: string, host: string, forceHostname = false) {
-    const absoluteAPIUrl = getAbsoluteAPIUrl()
-    const thisHost = new URL(absoluteAPIUrl).host
+    const thisHost = getAPIHost()
 
     if (host.trim() === thisHost && !forceHostname) return accountName
 
@@ -41,8 +40,7 @@ export abstract class Actor implements ServerActor {
   }
 
   static IS_LOCAL (host: string) {
-    const absoluteAPIUrl = getAbsoluteAPIUrl()
-    const thisHost = new URL(absoluteAPIUrl).host
+    const thisHost = getAPIHost()
 
     return host.trim() === thisHost
   }
