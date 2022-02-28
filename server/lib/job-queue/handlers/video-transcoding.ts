@@ -13,7 +13,8 @@ import {
   NewWebTorrentResolutionTranscodingPayload,
   OptimizeTranscodingPayload,
   VideoResolution,
-  VideoTranscodingPayload
+  VideoTranscodingPayload,
+  VideoType
 } from '@shared/models'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { computeLowerResolutionsToTranscode } from '../../../helpers/ffmpeg'
@@ -264,7 +265,7 @@ async function createLowerResolutionsJobs (options: {
   isPortraitMode: boolean
   hasAudio: boolean
   isNewVideo: boolean
-  type: 'hls' | 'webtorrent'
+  type: VideoType
 }) {
   const { video, user, videoFileResolution, isPortraitMode, isNewVideo, hasAudio, type } = options
 

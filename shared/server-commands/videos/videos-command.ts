@@ -18,7 +18,8 @@ import {
   VideoFileMetadata,
   VideoPrivacy,
   VideosCommonQuery,
-  VideoTranscodingCreate
+  VideoTranscodingCreate,
+  VideoType
 } from '@shared/models'
 import { unwrapBody } from '../requests'
 import { waitJobs } from '../server'
@@ -624,7 +625,7 @@ export class VideosCommand extends AbstractCommand {
 
   runTranscoding (options: OverrideCommandOptions & {
     videoId: number | string
-    transcodingType: 'hls' | 'webtorrent'
+    transcodingType: VideoType
   }) {
     const path = '/api/v1/videos/' + options.videoId + '/transcoding'
 

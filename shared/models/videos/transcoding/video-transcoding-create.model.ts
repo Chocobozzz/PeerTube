@@ -1,3 +1,5 @@
+import { VideoType } from '..'
+
 export interface VideoTranscodingCreate {
-  transcodingType: 'hls' | 'webtorrent'
+  transcodingType: VideoType
 }

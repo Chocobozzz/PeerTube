@@ -7,7 +7,7 @@ import { AdvancedInputFilter } from '@app/shared/shared-forms'
 import { DropdownAction, Video, VideoService } from '@app/shared/shared-main'
 import { VideoBlockComponent, VideoBlockService } from '@app/shared/shared-moderation'
 import { VideoActionsDisplayType } from '@app/shared/shared-video-miniature'
-import { UserRight, VideoPrivacy, VideoState, VideoStreamingPlaylistType } from '@shared/models'
+import { UserRight, VideoPrivacy, VideoState, VideoStreamingPlaylistType, VideoType } from '@shared/models'
 import { VideoAdminService } from './video-admin.service'
 
 @Component({
@@ -221,7 +221,7 @@ export class VideoListComponent extends RestTable implements OnInit {
       })
   }
 
-  private async removeVideoFiles (videos: Video[], type: 'hls' | 'webtorrent') {
+  private async removeVideoFiles (videos: Video[], type: VideoType) {
     const message = type === 'hls'
       ? $localize`Are you sure you want to delete ${videos.length} HLS streaming playlists?`
       : $localize`Are you sure you want to delete WebTorrent files of ${videos.length} videos?`
@@ -240,7 +240,7 @@ export class VideoListComponent extends RestTable implements OnInit {
       })
   }
 
-  private runTranscoding (videos: Video[], type: 'hls' | 'webtorrent') {
+  private runTranscoding (videos: Video[], type: VideoType) {
     this.videoService.runTranscoding(videos.map(v => v.id), type)
       .subscribe({
         next: () => {

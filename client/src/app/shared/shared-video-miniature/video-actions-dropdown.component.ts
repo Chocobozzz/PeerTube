@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from '@a
 import { AuthService, ConfirmService, Notifier, ScreenService, ServerService } from '@app/core'
 import { BlocklistService, VideoBlockComponent, VideoBlockService, VideoReportComponent } from '@app/shared/shared-moderation'
 import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap'
-import { VideoCaption, VideoState } from '@shared/models'
+import { VideoCaption, VideoState, VideoType } from '@shared/models'
 import {
   Actor,
   DropdownAction,
@@ -268,7 +268,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
         })
   }
 
-  async removeVideoFiles (video: Video, type: 'hls' | 'webtorrent') {
+  async removeVideoFiles (video: Video, type: VideoType) {
     const confirmMessage = $localize`Do you really want to remove "${this.video.name}" files?`
 
     const res = await this.confirmService.confirm(confirmMessage, $localize`Remove "${this.video.name}" files`)
@@ -285,7 +285,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
       })
   }
 
-  runTranscoding (video: Video, type: 'hls' | 'webtorrent') {
+  runTranscoding (video: Video, type: VideoType) {
     this.videoService.runTranscoding([ video.id ], type)
       .subscribe({
         next: () => {

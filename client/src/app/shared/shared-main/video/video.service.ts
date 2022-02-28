@@ -22,6 +22,7 @@ import {
   VideoPrivacy,
   VideoSortField,
   VideoTranscodingCreate,
+  VideoType,
   VideoUpdate
 } from '@shared/models'
 import { environment } from '../../../../environments/environment'
@@ -297,7 +298,7 @@ export class VideoService {
       )
   }
 
-  removeVideoFiles (videoIds: (number | string)[], type: 'hls' | 'webtorrent') {
+  removeVideoFiles (videoIds: (number | string)[], type: VideoType) {
     return from(videoIds)
       .pipe(
         concatMap(id => this.authHttp.delete(VideoService.BASE_VIDEO_URL + '/' + id + '/' + type)),
@@ -306,7 +307,7 @@ export class VideoService {
       )
   }
 
-  runTranscoding (videoIds: (number | string)[], type: 'hls' | 'webtorrent') {
+  runTranscoding (videoIds: (number | string)[], type: VideoType) {
     const body: VideoTranscodingCreate = { transcodingType: type }
 
     return from(videoIds)
