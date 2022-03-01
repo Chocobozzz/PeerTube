@@ -11,11 +11,7 @@
       <img class="placeholder-image" *ngIf="playerPlaceholderImgSrc" [src]="playerPlaceholderImgSrc" alt="Placeholder image" i18n-alt>
     </div>
 
-    <my-video-watch-playlist
-      #videoWatchPlaylist
-      [playlist]="playlist" class="playlist"
-      (videoFound)="onPlaylistVideoFound($event)"
-    ></my-video-watch-playlist>
+    <my-video-watch-playlist #videoWatchPlaylist [playlist]="playlist" (videoFound)="onPlaylistVideoFound($event)"></my-video-watch-playlist>
 
     <my-plugin-placeholder pluginId="player-next"></my-plugin-placeholder>
   </div>

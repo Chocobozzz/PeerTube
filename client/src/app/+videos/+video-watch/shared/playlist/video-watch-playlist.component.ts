@@ -1,9 +1,10 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core'
 import { Router } from '@angular/router'
 import { AuthService, ComponentPagination, HooksService, Notifier, SessionStorageService, UserService } from '@app/core'
+import { isInViewport } from '@app/helpers'
 import { VideoPlaylist, VideoPlaylistElement, VideoPlaylistService } from '@app/shared/shared-video-playlist'
-import { peertubeSessionStorage } from '@root-helpers/peertube-web-storage'
 import { getBoolOrDefault } from '@root-helpers/local-storage-utils'
+import { peertubeSessionStorage } from '@root-helpers/peertube-web-storage'
 import { VideoPlaylistPrivacy } from '@shared/models'
 
 @Component({
@@ -132,7 +133,12 @@ export class VideoWatchPlaylistComponent {
         this.videoFound.emit(playlistElement.video.uuid)
 
         setTimeout(() => {
-          document.querySelector('.element-' + this.currentPlaylistPosition).scrollIntoView(false)
+          const element = document.querySelector<HTMLElement>('.element-' + this.currentPlaylistPosition)
+          const container = document.querySelector<HTMLElement>('.playlist')
+
+          if (isInViewport(element, container)) return
+
+          container.scrollTop = element.offsetTop
         })
 
         return

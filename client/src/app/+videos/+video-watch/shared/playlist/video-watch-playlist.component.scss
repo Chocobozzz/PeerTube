@@ -4,6 +4,7 @@
 @use '_miniature' as *;
 
 .playlist {
+  position: relative;
   min-width: 200px;
   max-width: 470px;
   height: 66vh;
