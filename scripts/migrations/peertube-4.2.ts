@@ -1,6 +1,6 @@
 import { minBy } from 'lodash'
 import { join } from 'path'
-import { processImage } from '@server/helpers/image-utils'
+import { getImageSize, processImage } from '@server/helpers/image-utils'
 import { CONFIG } from '@server/initializers/config'
 import { ACTOR_IMAGES_SIZE } from '@server/initializers/constants'
 import { updateActorImages } from '@server/lib/activitypub/actors'
@@ -51,6 +51,7 @@ async function run () {
 
   for (const account of accounts) {
     try {
+      await fillAvatarSizeIfNeeded(account)
       await generateSmallerAvatarIfNeeded(account)
     } catch (err) {
       console.error(`Cannot process account avatar ${account.name}`, err)
@@ -66,6 +67,22 @@ async function run () {
   }
 
   console.log('Generation finished!')
+}
+
+async function fillAvatarSizeIfNeeded (accountOrChannel: MAccountDefault | MChannelDefault) {
+  const avatars = accountOrChannel.Actor.Avatars
+
+  for (const avatar of avatars) {
+    if (avatar.width && avatar.height) continue
+
+    console.log('Filling size of avatars of %s.', accountOrChannel.name)
+
+    const { width, height } = await getImageSize(join(CONFIG.STORAGE.ACTOR_IMAGES, avatar.filename))
+    avatar.width = width
+    avatar.height = height
+
+    await avatar.save()
+  }
 }
 
 async function generateSmallerAvatarIfNeeded (accountOrChannel: MAccountDefault | MChannelDefault) {

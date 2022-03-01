@@ -1,5 +1,5 @@
 import { copy, readFile, remove, rename } from 'fs-extra'
-import Jimp, { read } from 'jimp'
+import Jimp, { read as jimpRead } from 'jimp'
 import { join } from 'path'
 import { getLowercaseExtension } from '@shared/core-utils'
 import { buildUUID } from '@shared/extra-utils'
@@ -56,12 +56,26 @@ async function generateImageFromVideoFile (fromPath: string, folder: string, ima
   }
 }
 
+async function getImageSize (path: string) {
+  const inputBuffer = await readFile(path)
+
+  const image = await jimpRead(inputBuffer)
+
+  return {
+    width: image.getWidth(),
+    height: image.getHeight()
+  }
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   generateImageFilename,
   generateImageFromVideoFile,
-  processImage
+
+  processImage,
+
+  getImageSize
 }
 
 // ---------------------------------------------------------------------------
@@ -71,7 +85,7 @@ async function jimpProcessor (path: string, destination: string, newSize: { widt
   const inputBuffer = await readFile(path)
 
   try {
-    sourceImage = await read(inputBuffer)
+    sourceImage = await jimpRead(inputBuffer)
   } catch (err) {
     logger.debug('Cannot read %s with jimp. Try to convert the image using ffmpeg first.', path, { err })
 
@@ -79,7 +93,7 @@ async function jimpProcessor (path: string, destination: string, newSize: { widt
     await convertWebPToJPG(path, newName)
     await rename(newName, path)
 
-    sourceImage = await read(path)
+    sourceImage = await jimpRead(path)
   }
 
   await remove(destination)
