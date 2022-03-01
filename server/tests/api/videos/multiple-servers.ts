@@ -2,7 +2,6 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { and } from 'sequelize/dist'
 import request from 'supertest'
 import {
   checkTmpIsEmpty,
