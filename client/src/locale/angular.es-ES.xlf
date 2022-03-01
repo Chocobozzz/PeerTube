@@ -8484,7 +8484,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="3742657416068781599" datatype="html">
         <source>Editor</source>
-        <target state="new">Editor</target>
+        <target state="translated">Editor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context>
           <context context-type="linenumber">208</context>
@@ -8709,7 +8709,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="3463158361655332380" datatype="html">
         <source>ADD WATERMARK</source>
-        <target state="new">ADD WATERMARK</target>
+        <target state="translated">AGREGAR MARCA DE AGUA</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.html</context>
           <context context-type="linenumber">52</context>
@@ -8717,7 +8717,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="4472450670859114703" datatype="html">
         <source>Add a watermark image to the video.</source>
-        <target state="new">Add a watermark image to the video.</target>
+        <target state="translated">Agregue una imagen de marca de agua al video.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.html</context>
           <context context-type="linenumber">54</context>
@@ -8725,7 +8725,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="155510305759087510" datatype="html">
         <source>Select watermark image file</source>
-        <target state="new">Select watermark image file</target>
+        <target state="translated">Seleccionar archivo de imagen de marca de agua</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.html</context>
           <context context-type="linenumber">58</context>
@@ -8733,7 +8733,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="3926035808219061063" datatype="html">
         <source>Run video edition</source>
-        <target state="new">Run video edition</target>
+        <target state="translated">Ejecutar edición de video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.html</context>
           <context context-type="linenumber">66</context>
@@ -8741,7 +8741,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="1514792472513458403" datatype="html">
         <source>Video before edition</source>
-        <target state="new">Video before edition</target>
+        <target state="translated">Vídeo antes de editar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.html</context>
           <context context-type="linenumber">75</context>
@@ -8749,7 +8749,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="1109043661443571733" datatype="html">
         <source>Edition tasks:</source>
-        <target state="new">Edition tasks:</target>
+        <target state="translated">Tareas de edición:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.html</context>
           <context context-type="linenumber">80</context>
@@ -8757,7 +8757,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="3541115907775840269" datatype="html">
         <source>Are you sure you want to edit "<x id="PH" equiv-text="this.video.name"/>"?</source>
-        <target state="new">Are you sure you want to edit "<x id="PH" equiv-text="this.video.name"/>"?</target>
+        <target state="translated">¿Está seguro de que desea editar "<x id="PH" equiv-text="this.video.name"/>"?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.ts</context>
           <context context-type="linenumber">72</context>
@@ -8765,7 +8765,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="3858880927114551513" datatype="html">
         <source>The current video will be overwritten by this edited video and &lt;strong&gt;you won't be able to recover it&lt;/strong&gt;.&lt;br /&gt;&lt;br /&gt;</source>
-        <target state="new">The current video will be overwritten by this edited video and &lt;strong&gt;you won't be able to recover it&lt;/strong&gt;.&lt;br /&gt;&lt;br /&gt;</target>
+        <target state="translated">El video actual será sobrescrito por este video editado y &lt;strong&gt;no podrás recuperarlo&lt;/strong&gt;.&lt;br&gt;&lt;br /&gt;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.ts</context>
           <context context-type="linenumber">76</context>
@@ -8773,7 +8773,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="4876327655498234453" datatype="html">
         <source>As a reminder, the following tasks will be executed: &lt;ol&gt;<x id="PH" equiv-text="listHTML"/>&lt;/ol&gt;</source>
-        <target state="new">As a reminder, the following tasks will be executed: &lt;ol&gt;<x id="PH" equiv-text="listHTML"/>&lt;/ol&gt;</target>
+        <target state="translated">Como recordatorio, se ejecutarán las siguientes tareas: &lt;ol&gt;<x id="PH" equiv-text="listHTML"/>&lt;/ol&gt;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.ts</context>
           <context context-type="linenumber">77</context>
@@ -9653,7 +9653,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="9145435275110757909" datatype="html">
         <source>Caption content is required.</source>
-        <target state="new">Caption content is required.</target>
+        <target state="translated">El contenido del subtítulo es obligatorio.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-captions-validators.ts</context>
           <context context-type="linenumber">21</context>
@@ -10405,7 +10405,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="3160979325245958752" datatype="html">
         <source>Ban <x id="PH" equiv-text="this.usersToBan.length"/> users</source>
-        <target state="new">Ban <x id="PH" equiv-text="this.usersToBan.length"/> users</target>
+        <target state="translated">Prohibir <x id="PH" equiv-text="this.usersToBan.length"/> usuarios</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-ban-modal.component.ts</context>
           <context context-type="linenumber">82</context>
@@ -10413,7 +10413,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="8088707210191809175" datatype="html">
         <source>Ban "<x id="PH" equiv-text="this.usersToBan.username"/>"</source>
-        <target state="new">Ban "<x id="PH" equiv-text="this.usersToBan.username"/>"</target>
+        <target state="translated">Prohibir "<x id="PH" equiv-text="this.usersToBan.username"/>"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-ban-modal.component.ts</context>
           <context context-type="linenumber">84</context>
@@ -11162,7 +11162,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="6963802198225789806" datatype="html">
         <source>To edit</source>
-        <target state="new">To edit</target>
+        <target state="translated">Para editar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
           <context context-type="linenumber">199</context>
@@ -11281,7 +11281,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="5609201297201028750" datatype="html">
         <source>(extensions: <x id="PH" equiv-text="this.videoExtensions.join(', ')"/>)</source>
-        <target state="new">(extensions: <x id="PH" equiv-text="this.videoExtensions.join(', ')"/>)</target>
+        <target state="translated">(extensiones: <x id="PH" equiv-text="this.videoExtensions.join(', ')"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.ts</context>
           <context context-type="linenumber">104</context>
@@ -11293,7 +11293,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="2196899015955367634" datatype="html">
         <source>"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" will be added at the beggining of the video</source>
-        <target state="new">"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" will be added at the beggining of the video</target>
+        <target state="translated">"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" se agregará al comienzo del video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.ts</context>
           <context context-type="linenumber">120</context>
@@ -11301,7 +11301,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="4952096817126306891" datatype="html">
         <source>"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" will be added at the end of the video</source>
-        <target state="new">"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" will be added at the end of the video</target>
+        <target state="translated">"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" se agregará al final del video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.ts</context>
           <context context-type="linenumber">124</context>
@@ -11309,7 +11309,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="665518679871959619" datatype="html">
         <source>"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" image watermark will be added to the video</source>
-        <target state="new">"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" image watermark will be added to the video</target>
+        <target state="translated">Se agregará la marca de agua de imagen "<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" al video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.ts</context>
           <context context-type="linenumber">128</context>
@@ -11317,7 +11317,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="2677581013897190613" datatype="html">
         <source>Video will begin at <x id="PH" equiv-text="secondsToTime(start)"/> and stop at <x id="PH_1" equiv-text="secondsToTime(end)"/></source>
-        <target state="new">Video will begin at <x id="PH" equiv-text="secondsToTime(start)"/> and stop at <x id="PH_1" equiv-text="secondsToTime(end)"/></target>
+        <target state="translated">El video comenzará en <x id="PH" equiv-text="secondsToTime(start)"/> y se detendrá en <x id="PH_1" equiv-text="secondsToTime(end)"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.ts</context>
           <context context-type="linenumber">135</context>
@@ -11325,7 +11325,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="2299077646120636288" datatype="html">
         <source>Video will begin at <x id="PH" equiv-text="secondsToTime(start)"/></source>
-        <target state="new">Video will begin at <x id="PH" equiv-text="secondsToTime(start)"/></target>
+        <target state="translated">El video comenzará en <x id="PH" equiv-text="secondsToTime(start)"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.ts</context>
           <context context-type="linenumber">139</context>
@@ -11333,7 +11333,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="7209039243783736285" datatype="html">
         <source>Video will stop at <x id="PH" equiv-text="secondsToTime(end)"/></source>
-        <target state="new">Video will stop at <x id="PH" equiv-text="secondsToTime(end)"/></target>
+        <target state="translated">El video se detendrá en <x id="PH" equiv-text="secondsToTime(end)"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.ts</context>
           <context context-type="linenumber">143</context>
@@ -11341,7 +11341,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="9127817756370915850" datatype="html">
         <source>Edit video</source>
-        <target state="new">Edit video</target>
+        <target state="translated">Editar video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/video-editor-routing.module.ts</context>
           <context context-type="linenumber">15</context>
