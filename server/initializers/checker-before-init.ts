@@ -117,12 +117,8 @@ function checkNodeVersion () {
 
   logger.debug('Checking NodeJS version %s.', v)
 
-  if (major <= 10) {
-    throw new Error('Your NodeJS version ' + v + ' is not supported. Please upgrade.')
-  }
-
   if (major <= 12) {
-    logger.warn('Your NodeJS version ' + v + ' is deprecated. Please upgrade.')
+    throw new Error('Your NodeJS version ' + v + ' is not supported. Please upgrade.')
   }
 }
 
