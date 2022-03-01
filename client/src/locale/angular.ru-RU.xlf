@@ -11139,7 +11139,7 @@
       </trans-unit>
       <trans-unit id="6963802198225789806" datatype="html">
         <source>To edit</source>
-        <target state="translated">Редактировать</target>
+        <target state="translated">Обработка</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
           <context context-type="linenumber">199</context>
