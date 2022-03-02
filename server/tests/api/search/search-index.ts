@@ -398,14 +398,14 @@ describe('Test index search', function () {
       expect(videoPlaylist.ownerAccount.host).to.equal('peertube2.cpy.re')
       // TODO: remove, deprecated in 4.2
       expect(videoPlaylist.ownerAccount.avatar).to.exist
-      expect(videoPlaylist.ownerAccount.avatars.length).to.equal(1, 'Account should have two avatar images')
+      expect(videoPlaylist.ownerAccount.avatars.length).to.equal(2, 'Account should have two avatar images')
 
       expect(videoPlaylist.videoChannel.url).to.equal('https://peertube2.cpy.re/video-channels/chocobozzz_channel')
       expect(videoPlaylist.videoChannel.name).to.equal('chocobozzz_channel')
       expect(videoPlaylist.videoChannel.host).to.equal('peertube2.cpy.re')
       // TODO: remove, deprecated in 4.2
       expect(videoPlaylist.videoChannel.avatar).to.exist
-      expect(videoPlaylist.videoChannel.avatars.length).to.equal(1, 'Channel should have two avatar images')
+      expect(videoPlaylist.videoChannel.avatars.length).to.equal(2, 'Channel should have two avatar images')
     }
 
     it('Should make a simple search and not have results', async function () {
