@@ -44,7 +44,6 @@ export class VideoMiniatureComponent implements OnInit {
     views: true,
     by: true,
     avatar: false,
-
     privacyLabel: false,
     privacyText: false,
     state: false,
