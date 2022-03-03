@@ -268,10 +268,14 @@ export class PeertubePlayerOptionsBuilder {
 
     return {
       trackerAnnounce,
-      segmentValidator: segmentValidatorFactory(this.options.p2pMediaLoader.segmentsSha256Url, this.options.common.isLive),
       rtcConfig: getRtcConfig(),
+
       simultaneousHttpDownloads: 1,
+      httpFailedSegmentTimeout: 1000,
+
+      segmentValidator: segmentValidatorFactory(this.options.p2pMediaLoader.segmentsSha256Url, this.options.common.isLive),
       segmentUrlBuilder: segmentUrlBuilderFactory(redundancyUrlManager, 1),
+
       useP2P: this.options.common.p2pEnabled,
       consumeOnly,
 
