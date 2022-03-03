@@ -12,7 +12,7 @@ export class VideoFileQueryBuilder extends AbstractVideoQueryBuilder {
   protected attributes: { [key: string]: string }
 
   constructor (protected readonly sequelize: Sequelize) {
-    super('get')
+    super(sequelize, 'get')
   }
 
   queryWebTorrentVideos (options: BuildVideoGetQueryOptions) {

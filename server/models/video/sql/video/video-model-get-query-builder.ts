@@ -110,7 +110,7 @@ export class VideosModelGetQuerySubBuilder extends AbstractVideoQueryBuilder {
   ])
 
   constructor (protected readonly sequelize: Sequelize) {
-    super('get')
+    super(sequelize, 'get')
   }
 
   queryVideos (options: BuildVideoGetQueryOptions) {

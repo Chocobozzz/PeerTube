@@ -17,6 +17,7 @@ import {
   cleanupTests,
   createMultipleServers,
   doubleFollow,
+  makeGetRequest,
   PeerTubeServer,
   setAccessTokensToServers,
   setDefaultAccountAvatar,
@@ -138,6 +139,22 @@ describe('Test multiple servers', function () {
 
         await completeVideoCheck(server, video, checkAttributes)
         publishedAt = video.publishedAt as string
+
+        expect(video.channel.avatars).to.have.lengthOf(2)
+        expect(video.account.avatars).to.have.lengthOf(2)
+
+        for (const image of [ ...video.channel.avatars, ...video.account.avatars ]) {
+          expect(image.createdAt).to.exist
+          expect(image.updatedAt).to.exist
+          expect(image.width).to.be.above(20).and.below(1000)
+          expect(image.path).to.exist
+
+          await makeGetRequest({
+            url: server.url,
+            path: image.path,
+            expectedStatus: HttpStatusCode.OK_200
+          })
+        }
       }
     })
 

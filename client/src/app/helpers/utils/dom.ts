@@ -6,14 +6,24 @@ function scrollToTop (behavior: 'auto' | 'smooth' = 'auto') {
   })
 }
 
-function isInViewport (el: HTMLElement) {
-  const bounding = el.getBoundingClientRect()
-  return (
-    bounding.top >= 0 &&
-      bounding.left >= 0 &&
-      bounding.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-      bounding.right <= (window.innerWidth || document.documentElement.clientWidth)
-  )
+function isInViewport (el: HTMLElement, container: HTMLElement = document.documentElement) {
+  const boundingEl = el.getBoundingClientRect()
+  const boundingContainer = container.getBoundingClientRect()
+
+  const relativePos = {
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0
+  }
+
+  relativePos.top = boundingEl.top - boundingContainer.top
+  relativePos.left = boundingEl.left - boundingContainer.left
+
+  return relativePos.top >= 0 &&
+    relativePos.left >= 0 &&
+    boundingEl.bottom <= boundingContainer.bottom &&
+    boundingEl.right <= boundingContainer.right
 }
 
 function isXPercentInViewport (el: HTMLElement, percentVisible: number) {

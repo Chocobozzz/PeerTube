@@ -6,7 +6,7 @@
  */
 export class VideoTableAttributes {
 
-  constructor (readonly mode: 'get' | 'list') {
+  constructor (private readonly mode: 'get' | 'list') {
 
   }
 

@@ -17,6 +17,10 @@
             "translation": "src/locale/angular.ar.xlf",
             "baseHref": "/client/ar/"
           },
+          "fa": {
+            "translation": "src/locale/angular.fa-IR.xlf",
+            "baseHref": "/client/fa-IR/"
+          },
           "hu": {
             "translation": "src/locale/angular.hu-HU.xlf",
             "baseHref": "/client/hu-HU/"

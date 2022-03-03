@@ -50,7 +50,8 @@ function checkMissedConfig () {
     'search.remote_uri.users', 'search.remote_uri.anonymous', 'search.search_index.enabled', 'search.search_index.url',
     'search.search_index.disable_local_search', 'search.search_index.is_default_search',
     'live.enabled', 'live.allow_replay', 'live.max_duration', 'live.max_user_lives', 'live.max_instance_lives',
-    'live.rtmp.enabled', 'live.rtmp.port', 'live.rtmps.enabled', 'live.rtmps.port', 'live.rtmps.key_file', 'live.rtmps.cert_file',
+    'live.rtmp.enabled', 'live.rtmp.port', 'live.rtmp.hostname',
+    'live.rtmps.enabled', 'live.rtmps.port', 'live.rtmps.hostname', 'live.rtmps.key_file', 'live.rtmps.cert_file',
     'live.transcoding.enabled', 'live.transcoding.threads', 'live.transcoding.profile',
     'live.transcoding.resolutions.144p', 'live.transcoding.resolutions.240p', 'live.transcoding.resolutions.360p',
     'live.transcoding.resolutions.480p', 'live.transcoding.resolutions.720p', 'live.transcoding.resolutions.1080p',
@@ -117,12 +118,8 @@ function checkNodeVersion () {
 
   logger.debug('Checking NodeJS version %s.', v)
 
-  if (major <= 10) {
-    throw new Error('Your NodeJS version ' + v + ' is not supported. Please upgrade.')
-  }
-
   if (major <= 12) {
-    logger.warn('Your NodeJS version ' + v + ' is deprecated. Please upgrade.')
+    throw new Error('Your NodeJS version ' + v + ' is not supported. Please upgrade.')
   }
 }
 

@@ -7,18 +7,20 @@ import { QueryTypes, Sequelize, Transaction } from 'sequelize'
  */
 
 export class AbstractRunQuery {
-  protected sequelize: Sequelize
-
   protected query: string
   protected replacements: any = {}
 
-  protected runQuery (options: { transaction?: Transaction, logging?: boolean } = {}) {
+  constructor (protected readonly sequelize: Sequelize) {
+
+  }
+
+  protected runQuery (options: { nest?: boolean, transaction?: Transaction, logging?: boolean } = {}) {
     const queryOptions = {
       transaction: options.transaction,
       logging: options.logging,
       replacements: this.replacements,
       type: QueryTypes.SELECT as QueryTypes.SELECT,
-      nest: false
+      nest: options.nest ?? false
     }
 
     return this.sequelize.query<any>(this.query, queryOptions)

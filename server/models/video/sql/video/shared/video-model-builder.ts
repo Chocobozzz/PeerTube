@@ -51,8 +51,8 @@ export class VideoModelBuilder {
   private readonly buildOpts = { raw: true, isNewRecord: false }
 
   constructor (
-    readonly mode: 'get' | 'list',
-    readonly tables: VideoTableAttributes
+    private readonly mode: 'get' | 'list',
+    private readonly tables: VideoTableAttributes
   ) {
 
   }
@@ -234,15 +234,17 @@ export class VideoModelBuilder {
   }
 
   private addActorAvatar (row: SQLRow, actorPrefix: string, actor: ActorModel) {
-    const avatarPrefix = `${actorPrefix}.Avatar`
+    const avatarPrefix = `${actorPrefix}.Avatars`
     const id = row[`${avatarPrefix}.id`]
-    if (!id || this.actorImagesDone.has(id)) return
+    const key = `${row.id}${id}`
+
+    if (!id || this.actorImagesDone.has(key)) return
 
     const attributes = this.grab(row, this.tables.getAvatarAttributes(), avatarPrefix)
     const avatarModel = new ActorImageModel(attributes, this.buildOpts)
     actor.Avatars.push(avatarModel)
 
-    this.actorImagesDone.add(id)
+    this.actorImagesDone.add(key)
   }
 
   private addThumbnail (row: SQLRow, videoModel: VideoModel) {

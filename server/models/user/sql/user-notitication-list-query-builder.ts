@@ -1,5 +1,5 @@
-import { QueryTypes, Sequelize } from 'sequelize'
-import { ModelBuilder } from '@server/models/shared'
+import { Sequelize } from 'sequelize'
+import { AbstractRunQuery, ModelBuilder } from '@server/models/shared'
 import { getSort } from '@server/models/utils'
 import { UserNotificationModelForApi } from '@server/types/models'
 import { ActorImageType } from '@shared/models'
@@ -10,28 +10,23 @@ export interface ListNotificationsOptions {
   sort: string
   offset: number
   limit: number
-  sequelize: Sequelize
 }
 
-export class UserNotificationListQueryBuilder {
+export class UserNotificationListQueryBuilder extends AbstractRunQuery {
   private innerQuery: string
-  private replacements: any = {}
-  private query: string
 
-  constructor (private readonly options: ListNotificationsOptions) {
-
+  constructor (
+    protected readonly sequelize: Sequelize,
+    private readonly options: ListNotificationsOptions
+  ) {
+    super(sequelize)
   }
 
   async listNotifications () {
     this.buildQuery()
 
-    const results = await this.options.sequelize.query(this.query, {
-      replacements: this.replacements,
-      type: QueryTypes.SELECT,
-      nest: true
-    })
-
-    const modelBuilder = new ModelBuilder<UserNotificationModelForApi>(this.options.sequelize)
+    const results = await this.runQuery({ nest: true })
+    const modelBuilder = new ModelBuilder<UserNotificationModelForApi>(this.sequelize)
 
     return modelBuilder.createModels(results, 'UserNotification')
   }

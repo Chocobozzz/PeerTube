@@ -1,6 +1,7 @@
 import { minBy } from 'lodash-es'
 import { first, map } from 'rxjs/operators'
 import { SelectChannelItem } from 'src/types/select-options-item.model'
+import { VideoChannel } from '@shared/models'
 import { AuthService } from '../../core/auth'
 
 function listUserChannelsForSelect (authService: AuthService) {
@@ -24,7 +25,7 @@ function listUserChannelsForSelect (authService: AuthService) {
             id: c.id,
             label: c.displayName,
             support: c.support,
-            avatarPath: minBy(c.avatars, 'width')?.[0]?.path
+            avatarPath: getAvatarPath(c)
           }) as SelectChannelItem)
       })
     )
@@ -32,4 +33,12 @@ function listUserChannelsForSelect (authService: AuthService) {
 
 export {
   listUserChannelsForSelect
+}
+
+// ---------------------------------------------------------------------------
+
+function getAvatarPath (c: VideoChannel) {
+  if (!c.avatars || c.avatars.length === 0) return undefined
+
+  return minBy(c.avatars, 'width').path
 }

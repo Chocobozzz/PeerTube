@@ -19,7 +19,7 @@ export class VideosModelListQueryBuilder extends AbstractVideoQueryBuilder {
   private readonly videoModelBuilder: VideoModelBuilder
 
   constructor (protected readonly sequelize: Sequelize) {
-    super('list')
+    super(sequelize, 'list')
 
     this.videoModelBuilder = new VideoModelBuilder(this.mode, this.tables)
   }
