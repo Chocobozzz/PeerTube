@@ -3,7 +3,16 @@ import { fromEvent, Observable, Subject, Subscription } from 'rxjs'
 import { debounceTime, switchMap } from 'rxjs/operators'
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
-import { AuthService, ComponentPaginationLight, Notifier, PeerTubeRouterService, ScreenService, User, UserService } from '@app/core'
+import {
+  AuthService,
+  ComponentPaginationLight,
+  Notifier,
+  PeerTubeRouterService,
+  ScreenService,
+  ServerService,
+  User,
+  UserService
+} from '@app/core'
 import { GlobalIconName } from '@app/shared/shared-icons'
 import { isLastMonth, isLastWeek, isThisMonth, isToday, isYesterday } from '@shared/core-utils'
 import { ResultList, UserRight, VideoSortField } from '@shared/models'
@@ -61,16 +70,7 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() hideScopeFilter = false
 
-  @Input() displayOptions: MiniatureDisplayOptions = {
-    date: true,
-    views: true,
-    by: true,
-    avatar: true,
-    privacyLabel: true,
-    privacyText: false,
-    state: false,
-    blacklistInfo: false
-  }
+  @Input() displayOptions: MiniatureDisplayOptions
 
   @Input() disabled = false
 
@@ -85,6 +85,16 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
 
   userMiniature: User
 
+  private defaultDisplayOptions: MiniatureDisplayOptions = {
+    date: true,
+    views: true,
+    by: true,
+    avatar: false,
+    privacyLabel: true,
+    privacyText: false,
+    state: false,
+    blacklistInfo: false
+  }
   private routeSub: Subscription
   private userSub: Subscription
   private resizeSub: Subscription
@@ -105,7 +115,8 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
     private userService: UserService,
     private route: ActivatedRoute,
     private screenService: ScreenService,
-    private peertubeRouter: PeerTubeRouterService
+    private peertubeRouter: PeerTubeRouterService,
+    private serverService: ServerService
   ) {
 
   }
@@ -161,6 +172,14 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnChanges (changes: SimpleChanges) {
+    if (changes['displayOptions'] || !this.displayOptions) {
+      this.displayOptions = {
+        ...this.defaultDisplayOptions,
+        avatar: this.serverService.getHTMLConfig().client.videos.miniature.displayAvatar,
+        ...changes['displayOptions']
+      }
+    }
+
     if (!this.filters) return
 
     let updated = false

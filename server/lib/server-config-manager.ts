@@ -46,6 +46,7 @@ class ServerConfigManager {
       client: {
         videos: {
           miniature: {
+            displayAvatar: CONFIG.CLIENT.VIDEOS.MINIATURE.DISPLAY_AVATAR,
             preferAuthorDisplayName: CONFIG.CLIENT.VIDEOS.MINIATURE.PREFER_AUTHOR_DISPLAY_NAME
           }
         },

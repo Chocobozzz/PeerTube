@@ -622,6 +622,7 @@ client:
     miniature:
       # By default PeerTube client displays author username
       prefer_author_display_name: false
+      display_avatar: false
 
   menu:
     login:

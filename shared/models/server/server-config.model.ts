@@ -38,6 +38,7 @@ export interface ServerConfig {
   client: {
     videos: {
       miniature: {
+        displayAvatar: boolean
         preferAuthorDisplayName: boolean
       }
     }
