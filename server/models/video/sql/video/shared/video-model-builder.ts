@@ -234,15 +234,15 @@ export class VideoModelBuilder {
   }
 
   private addActorAvatar (row: SQLRow, actorPrefix: string, actor: ActorModel) {
-    const avatarPrefix = `${actorPrefix}.Avatars`
+    const avatarPrefix = `${actorPrefix}.Avatar`
     const id = row[`${avatarPrefix}.id`]
-    if (!id || this.actorImagesDone.has(`${row.id}${id}`)) return
+    if (!id || this.actorImagesDone.has(id)) return
 
     const attributes = this.grab(row, this.tables.getAvatarAttributes(), avatarPrefix)
     const avatarModel = new ActorImageModel(attributes, this.buildOpts)
     actor.Avatars.push(avatarModel)
 
-    this.actorImagesDone.add(`${row.id}${id}`)
+    this.actorImagesDone.add(id)
   }
 
   private addThumbnail (row: SQLRow, videoModel: VideoModel) {
