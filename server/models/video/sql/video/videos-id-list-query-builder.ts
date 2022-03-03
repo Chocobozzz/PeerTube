@@ -5,7 +5,7 @@ import { WEBSERVER } from '@server/initializers/constants'
 import { buildDirectionAndField, createSafeIn } from '@server/models/utils'
 import { MUserAccountId, MUserId } from '@server/types/models'
 import { VideoInclude, VideoPrivacy, VideoState } from '@shared/models'
-import { AbstractRunQuery } from './shared/abstract-run-query'
+import { AbstractRunQuery } from '../../../shared/abstract-run-query'
 
 /**
  *
@@ -93,7 +93,7 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
   private offset = ''
 
   constructor (protected readonly sequelize: Sequelize) {
-    super()
+    super(sequelize)
   }
 
   queryVideoIds (options: BuildVideosListQueryOptions) {

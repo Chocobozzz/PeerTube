@@ -249,8 +249,7 @@ export class UserNotificationModel extends Model<Partial<AttributesOnly<UserNoti
       offset: start,
       limit: count,
       sort,
-      where,
-      sequelize: this.sequelize
+      where
     }
 
     if (unread !== undefined) query.where['read'] = !unread
@@ -261,7 +260,7 @@ export class UserNotificationModel extends Model<Partial<AttributesOnly<UserNoti
 
       count === 0
         ? [] as UserNotificationModelForApi[]
-        : new UserNotificationListQueryBuilder(query).listNotifications()
+        : new UserNotificationListQueryBuilder(this.sequelize, query).listNotifications()
     ]).then(([ total, data ]) => ({ total, data }))
   }
 

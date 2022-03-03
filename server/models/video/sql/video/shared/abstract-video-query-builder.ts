@@ -1,8 +1,9 @@
+import { Sequelize } from 'sequelize'
+import validator from 'validator'
 import { createSafeIn } from '@server/models/utils'
 import { MUserAccountId } from '@server/types/models'
 import { ActorImageType } from '@shared/models'
-import validator from 'validator'
-import { AbstractRunQuery } from './abstract-run-query'
+import { AbstractRunQuery } from '../../../../shared/abstract-run-query'
 import { VideoTableAttributes } from './video-table-attributes'
 
 /**
@@ -19,8 +20,11 @@ export class AbstractVideoQueryBuilder extends AbstractRunQuery {
 
   protected tables: VideoTableAttributes
 
-  constructor (protected readonly mode: 'list' | 'get') {
-    super()
+  constructor (
+    protected readonly sequelize: Sequelize,
+    protected readonly mode: 'list' | 'get'
+  ) {
+    super(sequelize)
 
     this.tables = new VideoTableAttributes(this.mode)
   }

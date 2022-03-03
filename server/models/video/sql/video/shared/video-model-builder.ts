@@ -51,8 +51,8 @@ export class VideoModelBuilder {
   private readonly buildOpts = { raw: true, isNewRecord: false }
 
   constructor (
-    readonly mode: 'get' | 'list',
-    readonly tables: VideoTableAttributes
+    private readonly mode: 'get' | 'list',
+    private readonly tables: VideoTableAttributes
   ) {
 
   }
