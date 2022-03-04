@@ -1,9 +1,10 @@
 import videojs from 'video.js'
+import { HybridLoaderSettings } from '@peertube/p2p-media-loader-core'
 import { HlsJsEngineSettings } from '@peertube/p2p-media-loader-hlsjs'
 import { PluginsManager } from '@root-helpers/plugins-manager'
 import { buildVideoLink, decorateVideoLink } from '@shared/core-utils'
 import { isDefaultLocale } from '@shared/core-utils/i18n'
-import { VideoFile } from '@shared/models'
+import { LiveVideoLatencyMode, VideoFile } from '@shared/models'
 import { copyToClipboard } from '../../root-helpers/utils'
 import { RedundancyUrlManager } from './p2p-media-loader/redundancy-url-manager'
 import { segmentUrlBuilderFactory } from './p2p-media-loader/segment-url-builder'
@@ -19,7 +20,6 @@ import {
   VideoJSPluginOptions
 } from './peertube-videojs-typings'
 import { buildVideoOrPlaylistEmbed, getRtcConfig, isIOS, isSafari } from './utils'
-import { HybridLoaderSettings } from '@peertube/p2p-media-loader-core'
 
 export type PlayerMode = 'webtorrent' | 'p2p-media-loader'
 
@@ -76,6 +76,9 @@ export interface CommonOptions extends CustomizationOptions {
   embedTitle: string
 
   isLive: boolean
+  liveOptions?: {
+    latencyMode: LiveVideoLatencyMode
+  }
 
   language?: string
 
@@ -250,21 +253,8 @@ export class PeertubePlayerOptionsBuilder {
                                                  .filter(t => t.startsWith('ws'))
 
     const specificLiveOrVODOptions = this.options.common.isLive
-      ? { // Live
-        requiredSegmentsPriority: 1
-      }
-      : { // VOD
-        requiredSegmentsPriority: 3,
-
-        cachedSegmentExpiration: 86400000,
-        cachedSegmentsCount: 100,
-
-        httpDownloadMaxPriority: 9,
-        httpDownloadProbability: 0.06,
-        httpDownloadProbabilitySkipIfNoPeers: true,
-
-        p2pDownloadMaxPriority: 50
-      }
+      ? this.getP2PMediaLoaderLiveOptions()
+      : this.getP2PMediaLoaderVODOptions()
 
     return {
       trackerAnnounce,
@@ -283,13 +273,57 @@ export class PeertubePlayerOptionsBuilder {
     }
   }
 
+  private getP2PMediaLoaderLiveOptions (): Partial<HybridLoaderSettings> {
+    const base = {
+      requiredSegmentsPriority: 1
+    }
+
+    const latencyMode = this.options.common.liveOptions.latencyMode
+
+    switch (latencyMode) {
+      case LiveVideoLatencyMode.SMALL_LATENCY:
+        return {
+          ...base,
+
+          useP2P: false,
+          httpDownloadProbability: 1
+        }
+
+      case LiveVideoLatencyMode.HIGH_LATENCY:
+        return base
+
+      default:
+        return base
+    }
+  }
+
+  private getP2PMediaLoaderVODOptions (): Partial<HybridLoaderSettings> {
+    return {
+      requiredSegmentsPriority: 3,
+
+      cachedSegmentExpiration: 86400000,
+      cachedSegmentsCount: 100,
+
+      httpDownloadMaxPriority: 9,
+      httpDownloadProbability: 0.06,
+      httpDownloadProbabilitySkipIfNoPeers: true,
+
+      p2pDownloadMaxPriority: 50
+    }
+  }
+
   private getHLSOptions (p2pMediaLoaderConfig: HlsJsEngineSettings) {
+    const specificLiveOrVODOptions = this.options.common.isLive
+      ? this.getHLSLiveOptions()
+      : this.getHLSVODOptions()
+
     const base = {
       capLevelToPlayerSize: true,
       autoStartLoad: false,
-      liveSyncDurationCount: 5,
 
-      loader: new this.p2pMediaLoaderModule.Engine(p2pMediaLoaderConfig).createLoaderClass()
+      loader: new this.p2pMediaLoaderModule.Engine(p2pMediaLoaderConfig).createLoaderClass(),
+
+      ...specificLiveOrVODOptions
     }
 
     const averageBandwidth = getAverageBandwidthInStore()
@@ -302,6 +336,33 @@ export class PeertubePlayerOptionsBuilder {
       startLevel: -1,
       testBandwidth: false,
       debug: false
+    }
+  }
+
+  private getHLSLiveOptions () {
+    const latencyMode = this.options.common.liveOptions.latencyMode
+
+    switch (latencyMode) {
+      case LiveVideoLatencyMode.SMALL_LATENCY:
+        return {
+          liveSyncDurationCount: 2
+        }
+
+      case LiveVideoLatencyMode.HIGH_LATENCY:
+        return {
+          liveSyncDurationCount: 10
+        }
+
+      default:
+        return {
+          liveSyncDurationCount: 5
+        }
+    }
+  }
+
+  private getHLSVODOptions () {
+    return {
+      liveSyncDurationCount: 5
     }
   }
 

@@ -289,6 +289,17 @@
                 </ng-container>
               </my-peertube-checkbox>
             </div>
+
+            <div class="form-group" *ngIf="isLatencyModeEnabled()">
+              <label i18n for="latencyMode">Latency mode</label>
+              <my-select-options
+                labelForId="latencyMode" [items]="latencyModes" formControlName="latencyMode" [clearable]="true"
+              ></my-select-options>
+
+              <div *ngIf="formErrors.latencyMode" class="form-error">
+                {{ formErrors.latencyMode }}
+              </div>
+            </div>
           </div>
         </div>
       </ng-template>

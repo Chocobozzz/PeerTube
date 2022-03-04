@@ -1,10 +1,11 @@
 import validator from 'validator'
 import { logger } from '@server/helpers/logger'
 import { ActivityTrackerUrlObject, ActivityVideoFileMetadataUrlObject } from '@shared/models'
-import { VideoState } from '../../../../shared/models/videos'
+import { LiveVideoLatencyMode, VideoState } from '../../../../shared/models/videos'
 import { ACTIVITY_PUB, CONSTRAINTS_FIELDS } from '../../../initializers/constants'
 import { peertubeTruncate } from '../../core-utils'
 import { exists, isArray, isBooleanValid, isDateValid, isUUIDValid } from '../misc'
+import { isLiveLatencyModeValid } from '../video-lives'
 import {
   isVideoDurationValid,
   isVideoNameValid,
@@ -65,6 +66,7 @@ function sanitizeAndCheckVideoTorrentObject (video: any) {
   if (!isBooleanValid(video.isLiveBroadcast)) video.isLiveBroadcast = false
   if (!isBooleanValid(video.liveSaveReplay)) video.liveSaveReplay = false
   if (!isBooleanValid(video.permanentLive)) video.permanentLive = false
+  if (!isLiveLatencyModeValid(video.latencyMode)) video.latencyMode = LiveVideoLatencyMode.DEFAULT
 
   return isActivityPubUrlValid(video.id) &&
     isVideoNameValid(video.name) &&

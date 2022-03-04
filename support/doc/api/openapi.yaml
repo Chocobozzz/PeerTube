@@ -2295,6 +2295,9 @@ paths:
                 permanentLive:
                   description: User can stream multiple times in a permanent live
                   type: boolean
+                latencyMode:
+                  description: User can select live latency mode if enabled by the instance
+                  $ref: '#/components/schemas/LiveVideoLatencyMode'
                 thumbnailfile:
                   description: Live video/replay thumbnail file
                   type: string
@@ -5291,6 +5294,14 @@ components:
       description: 'Admin flags for the user (None = `0`, Bypass video blocklist = `1`)'
       example: 1
 
+    LiveVideoLatencyMode:
+      type: integer
+      enum:
+        - 1
+        - 2
+        - 3
+      description: 'The live latency mode (Default = `1`, HIght latency = `2`, Small Latency = `3`)'
+
     VideoStateConstant:
       properties:
         id:
@@ -7482,6 +7493,9 @@ components:
         permanentLive:
           description: User can stream multiple times in a permanent live
           type: boolean
+        latencyMode:
+          description: User can select live latency mode if enabled by the instance
+          $ref: '#/components/schemas/LiveVideoLatencyMode'
 
     LiveVideoResponse:
       properties:
@@ -7497,8 +7511,9 @@ components:
         permanentLive:
           description: User can stream multiple times in a permanent live
           type: boolean
-
-
+        latencyMode:
+          description: User can select live latency mode if enabled by the instance
+          $ref: '#/components/schemas/LiveVideoLatencyMode'
 
   callbacks:
     searchIndex:

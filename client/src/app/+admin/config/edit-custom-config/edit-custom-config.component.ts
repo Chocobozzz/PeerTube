@@ -189,6 +189,9 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
         maxInstanceLives: MAX_INSTANCE_LIVES_VALIDATOR,
         maxUserLives: MAX_USER_LIVES_VALIDATOR,
         allowReplay: null,
+        latencySetting: {
+          enabled: null
+        },
 
         transcoding: {
           enabled: null,

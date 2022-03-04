@@ -1,11 +1,11 @@
 import { AllowNull, BelongsTo, Column, CreatedAt, DataType, DefaultScope, ForeignKey, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { CONFIG } from '@server/initializers/config'
 import { WEBSERVER } from '@server/initializers/constants'
 import { MVideoLive, MVideoLiveVideo } from '@server/types/models'
+import { LiveVideo, LiveVideoLatencyMode, VideoState } from '@shared/models'
 import { AttributesOnly } from '@shared/typescript-utils'
-import { LiveVideo, VideoState } from '@shared/models'
 import { VideoModel } from './video'
 import { VideoBlacklistModel } from './video-blacklist'
-import { CONFIG } from '@server/initializers/config'
 
 @DefaultScope(() => ({
   include: [
@@ -43,6 +43,10 @@ export class VideoLiveModel extends Model<Partial<AttributesOnly<VideoLiveModel>
   @AllowNull(false)
   @Column
   permanentLive: boolean
+
+  @AllowNull(false)
+  @Column
+  latencyMode: LiveVideoLatencyMode
 
   @CreatedAt
   createdAt: Date
@@ -113,7 +117,8 @@ export class VideoLiveModel extends Model<Partial<AttributesOnly<VideoLiveModel>
 
       streamKey: this.streamKey,
       permanentLive: this.permanentLive,
-      saveReplay: this.saveReplay
+      saveReplay: this.saveReplay,
+      latencyMode: this.latencyMode
     }
   }
 }

@@ -5,7 +5,7 @@ import {
   ActivityTagObject,
   ActivityUrlObject
 } from './common-objects'
-import { VideoState } from '../../videos'
+import { LiveVideoLatencyMode, VideoState } from '../../videos'
 
 export interface VideoObject {
   type: 'Video'
@@ -25,6 +25,7 @@ export interface VideoObject {
   isLiveBroadcast: boolean
   liveSaveReplay: boolean
   permanentLive: boolean
+  latencyMode: LiveVideoLatencyMode
 
   commentsEnabled: boolean
   downloadEnabled: boolean
