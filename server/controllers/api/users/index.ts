@@ -3,8 +3,9 @@ import RateLimit from 'express-rate-limit'
 import { tokensRouter } from '@server/controllers/api/users/token'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { OAuthTokenModel } from '@server/models/oauth/oauth-token'
-import { MUser, MUserAccountDefault } from '@server/types/models'
-import { HttpStatusCode, UserAdminFlag, UserCreate, UserCreateResult, UserRegister, UserRight, UserRole, UserUpdate } from '@shared/models'
+import { MUserAccountDefault } from '@server/types/models'
+import { pick } from '@shared/core-utils'
+import { HttpStatusCode, UserCreate, UserCreateResult, UserRegister, UserRight, UserUpdate } from '@shared/models'
 import { auditLoggerFactory, getAuditIdFromRes, UserAuditView } from '../../../helpers/audit-logger'
 import { logger } from '../../../helpers/logger'
 import { generateRandomString, getFormattedObjects } from '../../../helpers/utils'
@@ -14,7 +15,7 @@ import { sequelizeTypescript } from '../../../initializers/database'
 import { Emailer } from '../../../lib/emailer'
 import { Notifier } from '../../../lib/notifier'
 import { Redis } from '../../../lib/redis'
-import { createUserAccountAndChannelAndPlaylist, sendVerifyUserEmail } from '../../../lib/user'
+import { buildUser, createUserAccountAndChannelAndPlaylist, sendVerifyUserEmail } from '../../../lib/user'
 import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
@@ -175,18 +176,11 @@ export {
 async function createUser (req: express.Request, res: express.Response) {
   const body: UserCreate = req.body
 
-  const userToCreate = new UserModel({
-    username: body.username,
-    password: body.password,
-    email: body.email,
-    nsfwPolicy: CONFIG.INSTANCE.DEFAULT_NSFW_POLICY,
-    p2pEnabled: CONFIG.DEFAULTS.P2P.WEBAPP.ENABLED,
-    autoPlayVideo: true,
-    role: body.role,
-    videoQuota: body.videoQuota,
-    videoQuotaDaily: body.videoQuotaDaily,
-    adminFlags: body.adminFlags || UserAdminFlag.NONE
-  }) as MUser
+  const userToCreate = buildUser({
+    ...pick(body, [ 'username', 'password', 'email', 'role', 'videoQuota', 'videoQuotaDaily', 'adminFlags' ]),
+
+    emailVerified: null
+  })
 
   // NB: due to the validator usersAddValidator, password==='' can only be true if we can send the mail.
   const createPassword = userToCreate.password === ''
@@ -225,16 +219,9 @@ async function createUser (req: express.Request, res: express.Response) {
 async function registerUser (req: express.Request, res: express.Response) {
   const body: UserRegister = req.body
 
-  const userToCreate = new UserModel({
-    username: body.username,
-    password: body.password,
-    email: body.email,
-    nsfwPolicy: CONFIG.INSTANCE.DEFAULT_NSFW_POLICY,
-    p2pEnabled: CONFIG.DEFAULTS.P2P.WEBAPP.ENABLED,
-    autoPlayVideo: true,
-    role: UserRole.USER,
-    videoQuota: CONFIG.USER.VIDEO_QUOTA,
-    videoQuotaDaily: CONFIG.USER.VIDEO_QUOTA_DAILY,
+  const userToCreate = buildUser({
+    ...pick(body, [ 'username', 'password', 'email' ]),
+
     emailVerified: CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION ? false : null
   })
 

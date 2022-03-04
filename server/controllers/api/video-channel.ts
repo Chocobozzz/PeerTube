@@ -12,7 +12,6 @@ import { resetSequelizeInstance } from '../../helpers/database-utils'
 import { buildNSFWFilter, createReqFiles, getCountVideos, isUserAbleToSearchRemoteURI } from '../../helpers/express-utils'
 import { logger } from '../../helpers/logger'
 import { getFormattedObjects } from '../../helpers/utils'
-import { CONFIG } from '../../initializers/config'
 import { MIMETYPES } from '../../initializers/constants'
 import { sequelizeTypescript } from '../../initializers/database'
 import { sendUpdateActor } from '../../lib/activitypub/send'
@@ -51,8 +50,8 @@ import { VideoChannelModel } from '../../models/video/video-channel'
 import { VideoPlaylistModel } from '../../models/video/video-playlist'
 
 const auditLogger = auditLoggerFactory('channels')
-const reqAvatarFile = createReqFiles([ 'avatarfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT, { avatarfile: CONFIG.STORAGE.TMP_DIR })
-const reqBannerFile = createReqFiles([ 'bannerfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT, { bannerfile: CONFIG.STORAGE.TMP_DIR })
+const reqAvatarFile = createReqFiles([ 'avatarfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT)
+const reqBannerFile = createReqFiles([ 'bannerfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT)
 
 const videoChannelRouter = express.Router()
 

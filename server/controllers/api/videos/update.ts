@@ -11,7 +11,6 @@ import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../
 import { resetSequelizeInstance } from '../../../helpers/database-utils'
 import { createReqFiles } from '../../../helpers/express-utils'
 import { logger, loggerTagsFactory } from '../../../helpers/logger'
-import { CONFIG } from '../../../initializers/config'
 import { MIMETYPES } from '../../../initializers/constants'
 import { sequelizeTypescript } from '../../../initializers/database'
 import { federateVideoIfNeeded } from '../../../lib/activitypub/videos'
@@ -26,14 +25,7 @@ const lTags = loggerTagsFactory('api', 'video')
 const auditLogger = auditLoggerFactory('videos')
 const updateRouter = express.Router()
 
-const reqVideoFileUpdate = createReqFiles(
-  [ 'thumbnailfile', 'previewfile' ],
-  MIMETYPES.IMAGE.MIMETYPE_EXT,
-  {
-    thumbnailfile: CONFIG.STORAGE.TMP_DIR,
-    previewfile: CONFIG.STORAGE.TMP_DIR
-  }
-)
+const reqVideoFileUpdate = createReqFiles([ 'thumbnailfile', 'previewfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT)
 
 updateRouter.put('/:id',
   openapiOperationDoc({ operationId: 'putVideo' }),

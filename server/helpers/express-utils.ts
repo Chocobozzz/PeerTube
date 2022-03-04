@@ -68,11 +68,11 @@ function badRequest (_req: express.Request, res: express.Response) {
 function createReqFiles (
   fieldNames: string[],
   mimeTypes: { [id: string]: string | string[] },
-  destinations: { [fieldName: string]: string }
+  destination = CONFIG.STORAGE.TMP_DIR
 ): RequestHandler {
   const storage = diskStorage({
     destination: (req, file, cb) => {
-      cb(null, destinations[file.fieldname])
+      cb(null, destination)
     },
 
     filename: (req, file, cb) => {
@@ -93,12 +93,11 @@ function createReqFiles (
 
 function createAnyReqFiles (
   mimeTypes: { [id: string]: string | string[] },
-  destinationDirectory: string,
   fileFilter: (req: express.Request, file: Express.Multer.File, cb: (err: Error, result: boolean) => void) => void
 ): RequestHandler {
   const storage = diskStorage({
     destination: (req, file, cb) => {
-      cb(null, destinationDirectory)
+      cb(null, CONFIG.STORAGE.TMP_DIR)
     },
 
     filename: (req, file, cb) => {

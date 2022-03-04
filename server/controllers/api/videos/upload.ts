@@ -24,9 +24,8 @@ import { HttpStatusCode, VideoCreate, VideoResolution, VideoState } from '@share
 import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../helpers/audit-logger'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { createReqFiles } from '../../../helpers/express-utils'
-import { ffprobePromise, buildFileMetadata, getVideoStreamFPS, getVideoStreamDimensionsInfo } from '../../../helpers/ffmpeg'
+import { buildFileMetadata, ffprobePromise, getVideoStreamDimensionsInfo, getVideoStreamFPS } from '../../../helpers/ffmpeg'
 import { logger, loggerTagsFactory } from '../../../helpers/logger'
-import { CONFIG } from '../../../initializers/config'
 import { MIMETYPES } from '../../../initializers/constants'
 import { sequelizeTypescript } from '../../../initializers/database'
 import { federateVideoIfNeeded } from '../../../lib/activitypub/videos'
@@ -52,21 +51,13 @@ const uploadRouter = express.Router()
 
 const reqVideoFileAdd = createReqFiles(
   [ 'videofile', 'thumbnailfile', 'previewfile' ],
-  Object.assign({}, MIMETYPES.VIDEO.MIMETYPE_EXT, MIMETYPES.IMAGE.MIMETYPE_EXT),
-  {
-    videofile: CONFIG.STORAGE.TMP_DIR,
-    thumbnailfile: CONFIG.STORAGE.TMP_DIR,
-    previewfile: CONFIG.STORAGE.TMP_DIR
-  }
+  { ...MIMETYPES.VIDEO.MIMETYPE_EXT, ...MIMETYPES.IMAGE.MIMETYPE_EXT }
 )
 
 const reqVideoFileAddResumable = createReqFiles(
   [ 'thumbnailfile', 'previewfile' ],
   MIMETYPES.IMAGE.MIMETYPE_EXT,
-  {
-    thumbnailfile: getResumableUploadPath(),
-    previewfile: getResumableUploadPath()
-  }
+  getResumableUploadPath()
 )
 
 uploadRouter.post('/upload',

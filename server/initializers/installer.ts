@@ -2,10 +2,9 @@ import { ensureDir, remove } from 'fs-extra'
 import passwordGenerator from 'password-generator'
 import { UserRole } from '@shared/models'
 import { logger } from '../helpers/logger'
-import { createApplicationActor, createUserAccountAndChannelAndPlaylist } from '../lib/user'
+import { buildUser, createApplicationActor, createUserAccountAndChannelAndPlaylist } from '../lib/user'
 import { ApplicationModel } from '../models/application/application'
 import { OAuthClientModel } from '../models/oauth/oauth-client'
-import { UserModel } from '../models/user/user'
 import { applicationExist, clientsExist, usersExist } from './checker-after-init'
 import { CONFIG } from './config'
 import { FILES_CACHE, HLS_STREAMING_PLAYLIST_DIRECTORY, LAST_MIGRATION_VERSION, RESUMABLE_UPLOAD_DIRECTORY } from './constants'
@@ -137,18 +136,15 @@ async function createOAuthAdminIfNotExist () {
     password = passwordGenerator(16, true)
   }
 
-  const userData = {
+  const user = buildUser({
     username,
     email,
     password,
     role,
-    verified: true,
-    nsfwPolicy: CONFIG.INSTANCE.DEFAULT_NSFW_POLICY,
-    p2pEnabled: CONFIG.DEFAULTS.P2P.WEBAPP.ENABLED,
+    emailVerified: true,
     videoQuota: -1,
     videoQuotaDaily: -1
-  }
-  const user = new UserModel(userData)
+  })
 
   await createUserAccountAndChannelAndPlaylist({ userToCreate: user, channelNames: undefined, validateUser: validatePassword })
   logger.info('Username: ' + username)

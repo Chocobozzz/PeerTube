@@ -1,6 +1,5 @@
 import express from 'express'
 import { createReqFiles } from '@server/helpers/express-utils'
-import { CONFIG } from '@server/initializers/config'
 import { ASSETS_PATH, MIMETYPES } from '@server/initializers/constants'
 import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url'
 import { federateVideoIfNeeded } from '@server/lib/activitypub/videos'
@@ -19,14 +18,7 @@ import { VideoModel } from '../../../models/video/video'
 
 const liveRouter = express.Router()
 
-const reqVideoFileLive = createReqFiles(
-  [ 'thumbnailfile', 'previewfile' ],
-  MIMETYPES.IMAGE.MIMETYPE_EXT,
-  {
-    thumbnailfile: CONFIG.STORAGE.TMP_DIR,
-    previewfile: CONFIG.STORAGE.TMP_DIR
-  }
-)
+const reqVideoFileLive = createReqFiles([ 'thumbnailfile', 'previewfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT)
 
 liveRouter.post('/live',
   authenticate,

@@ -47,7 +47,7 @@ import { AccountModel } from '../../models/account/account'
 import { VideoPlaylistModel } from '../../models/video/video-playlist'
 import { VideoPlaylistElementModel } from '../../models/video/video-playlist-element'
 
-const reqThumbnailFile = createReqFiles([ 'thumbnailfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT, { thumbnailfile: CONFIG.STORAGE.TMP_DIR })
+const reqThumbnailFile = createReqFiles([ 'thumbnailfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT)
 
 const videoPlaylistRouter = express.Router()
 

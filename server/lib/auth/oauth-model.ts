@@ -5,14 +5,14 @@ import { ActorModel } from '@server/models/actor/actor'
 import { MOAuthClient } from '@server/types/models'
 import { MOAuthTokenUser } from '@server/types/models/oauth/oauth-token'
 import { MUser } from '@server/types/models/user/user'
-import { UserAdminFlag } from '@shared/models/users/user-flag.model'
+import { pick } from '@shared/core-utils'
 import { UserRole } from '@shared/models/users/user-role'
 import { logger } from '../../helpers/logger'
 import { CONFIG } from '../../initializers/config'
 import { OAuthClientModel } from '../../models/oauth/oauth-client'
 import { OAuthTokenModel } from '../../models/oauth/oauth-token'
 import { UserModel } from '../../models/user/user'
-import { createUserAccountAndChannelAndPlaylist } from '../user'
+import { buildUser, createUserAccountAndChannelAndPlaylist } from '../user'
 import { TokensCache } from './tokens-cache'
 
 type TokenInfo = {
@@ -229,19 +229,13 @@ async function createUserFromExternal (pluginAuth: string, options: {
   const actor = await ActorModel.loadLocalByName(options.username)
   if (actor) return null
 
-  const userToCreate = new UserModel({
-    username: options.username,
+  const userToCreate = buildUser({
+    ...pick(options, [ 'username', 'email', 'role' ]),
+
+    emailVerified: null,
     password: null,
-    email: options.email,
-    nsfwPolicy: CONFIG.INSTANCE.DEFAULT_NSFW_POLICY,
-    p2pEnabled: CONFIG.DEFAULTS.P2P.WEBAPP.ENABLED,
-    autoPlayVideo: true,
-    role: options.role,
-    videoQuota: CONFIG.USER.VIDEO_QUOTA,
-    videoQuotaDaily: CONFIG.USER.VIDEO_QUOTA_DAILY,
-    adminFlags: UserAdminFlag.NONE,
     pluginAuth
-  }) as MUser
+  })
 
   const { user } = await createUserAccountAndChannelAndPlaylist({
     userToCreate,

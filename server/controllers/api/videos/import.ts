@@ -61,12 +61,7 @@ const videoImportsRouter = express.Router()
 
 const reqVideoFileImport = createReqFiles(
   [ 'thumbnailfile', 'previewfile', 'torrentfile' ],
-  Object.assign({}, MIMETYPES.TORRENT.MIMETYPE_EXT, MIMETYPES.IMAGE.MIMETYPE_EXT),
-  {
-    thumbnailfile: CONFIG.STORAGE.TMP_DIR,
-    previewfile: CONFIG.STORAGE.TMP_DIR,
-    torrentfile: CONFIG.STORAGE.TMP_DIR
-  }
+  { ...MIMETYPES.TORRENT.MIMETYPE_EXT, ...MIMETYPES.IMAGE.MIMETYPE_EXT }
 )
 
 videoImportsRouter.post('/imports',

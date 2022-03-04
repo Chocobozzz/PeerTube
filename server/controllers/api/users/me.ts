@@ -35,7 +35,7 @@ import { VideoImportModel } from '../../../models/video/video-import'
 
 const auditLogger = auditLoggerFactory('users')
 
-const reqAvatarFile = createReqFiles([ 'avatarfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT, { avatarfile: CONFIG.STORAGE.TMP_DIR })
+const reqAvatarFile = createReqFiles([ 'avatarfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT)
 
 const meRouter = express.Router()
 

@@ -1,9 +1,11 @@
 import { Transaction } from 'sequelize/types'
+import { logger } from '@server/helpers/logger'
+import { CONFIG } from '@server/initializers/config'
 import { UserModel } from '@server/models/user/user'
 import { MActorDefault } from '@server/types/models/actor'
 import { buildUUID } from '@shared/extra-utils'
 import { ActivityPubActorType } from '../../shared/models/activitypub'
-import { UserNotificationSetting, UserNotificationSettingValue } from '../../shared/models/users'
+import { UserAdminFlag, UserNotificationSetting, UserNotificationSettingValue, UserRole } from '../../shared/models/users'
 import { SERVER_ACTOR_NAME, WEBSERVER } from '../initializers/constants'
 import { sequelizeTypescript } from '../initializers/database'
 import { AccountModel } from '../models/account/account'
@@ -19,9 +21,55 @@ import { buildActorInstance } from './local-actor'
 import { Redis } from './redis'
 import { createLocalVideoChannel } from './video-channel'
 import { createWatchLaterPlaylist } from './video-playlist'
-import { logger } from '@server/helpers/logger'
 
 type ChannelNames = { name: string, displayName: string }
+
+function buildUser (options: {
+  username: string
+  password: string
+  email: string
+
+  role?: UserRole // Default to UserRole.User
+  adminFlags?: UserAdminFlag // Default to UserAdminFlag.NONE
+
+  emailVerified: boolean | null
+
+  videoQuota?: number // Default to CONFIG.USER.VIDEO_QUOTA
+  videoQuotaDaily?: number // Default to CONFIG.USER.VIDEO_QUOTA_DAILY
+
+  pluginAuth?: string
+}): MUser {
+  const {
+    username,
+    password,
+    email,
+    role = UserRole.USER,
+    emailVerified,
+    videoQuota = CONFIG.USER.VIDEO_QUOTA,
+    videoQuotaDaily = CONFIG.USER.VIDEO_QUOTA_DAILY,
+    adminFlags = UserAdminFlag.NONE,
+    pluginAuth
+  } = options
+
+  return new UserModel({
+    username,
+    password,
+    email,
+
+    nsfwPolicy: CONFIG.INSTANCE.DEFAULT_NSFW_POLICY,
+    p2pEnabled: CONFIG.DEFAULTS.P2P.WEBAPP.ENABLED,
+    autoPlayVideo: true,
+
+    role,
+    emailVerified,
+    adminFlags,
+
+    videoQuota: videoQuota,
+    videoQuotaDaily: videoQuotaDaily,
+
+    pluginAuth
+  })
+}
 
 async function createUserAccountAndChannelAndPlaylist (parameters: {
   userToCreate: MUser
@@ -118,7 +166,7 @@ async function sendVerifyUserEmail (user: MUser, isPendingEmail = false) {
   const email = isPendingEmail ? user.pendingEmail : user.email
   const username = user.username
 
-  await Emailer.Instance.addVerifyEmailJob(username, email, url)
+  Emailer.Instance.addVerifyEmailJob(username, email, url)
 }
 
 async function getOriginalVideoFileTotalFromUser (user: MUserId) {
@@ -180,7 +228,8 @@ export {
   createUserAccountAndChannelAndPlaylist,
   createLocalAccountWithoutKeys,
   sendVerifyUserEmail,
-  isAbleToUploadVideo
+  isAbleToUploadVideo,
+  buildUser
 }
 
 // ---------------------------------------------------------------------------

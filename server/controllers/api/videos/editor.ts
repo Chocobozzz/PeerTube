@@ -1,6 +1,5 @@
 import express from 'express'
 import { createAnyReqFiles } from '@server/helpers/express-utils'
-import { CONFIG } from '@server/initializers/config'
 import { MIMETYPES } from '@server/initializers/constants'
 import { JobQueue } from '@server/lib/job-queue'
 import { buildTaskFileFieldname, getTaskFile } from '@server/lib/video-editor'
@@ -21,7 +20,6 @@ const editorRouter = express.Router()
 
 const tasksFiles = createAnyReqFiles(
   MIMETYPES.VIDEO.MIMETYPE_EXT,
-  CONFIG.STORAGE.TMP_DIR,
   (req: express.Request, file: Express.Multer.File, cb: (err: Error, result?: boolean) => void) => {
     const body = req.body as VideoEditorCreateEdition
 

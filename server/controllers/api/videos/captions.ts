@@ -1,26 +1,19 @@
 import express from 'express'
+import { Hooks } from '@server/lib/plugins/hooks'
 import { MVideoCaption } from '@server/types/models'
 import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
 import { moveAndProcessCaptionFile } from '../../../helpers/captions-utils'
 import { createReqFiles } from '../../../helpers/express-utils'
 import { logger } from '../../../helpers/logger'
 import { getFormattedObjects } from '../../../helpers/utils'
-import { CONFIG } from '../../../initializers/config'
 import { MIMETYPES } from '../../../initializers/constants'
 import { sequelizeTypescript } from '../../../initializers/database'
 import { federateVideoIfNeeded } from '../../../lib/activitypub/videos'
 import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate } from '../../../middlewares'
 import { addVideoCaptionValidator, deleteVideoCaptionValidator, listVideoCaptionsValidator } from '../../../middlewares/validators'
 import { VideoCaptionModel } from '../../../models/video/video-caption'
-import { Hooks } from '@server/lib/plugins/hooks'
 
-const reqVideoCaptionAdd = createReqFiles(
-  [ 'captionfile' ],
-  MIMETYPES.VIDEO_CAPTIONS.MIMETYPE_EXT,
-  {
-    captionfile: CONFIG.STORAGE.CAPTIONS_DIR
-  }
-)
+const reqVideoCaptionAdd = createReqFiles([ 'captionfile' ], MIMETYPES.VIDEO_CAPTIONS.MIMETYPE_EXT)
 
 const videoCaptionsRouter = express.Router()
 
