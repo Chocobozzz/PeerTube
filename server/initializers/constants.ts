@@ -24,7 +24,7 @@ import { CONFIG, registerConfigChangedHandler } from './config'
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 685
+const LAST_MIGRATION_VERSION = 690
 
 // ---------------------------------------------------------------------------
 
@@ -700,7 +700,10 @@ const RESUMABLE_UPLOAD_SESSION_LIFETIME = SCHEDULER_INTERVALS_MS.REMOVE_DANGLING
 const VIDEO_LIVE = {
   EXTENSION: '.ts',
   CLEANUP_DELAY: 1000 * 60 * 5, // 5 minutes
-  SEGMENT_TIME_SECONDS: 4, // 4 seconds
+  SEGMENT_TIME_SECONDS: {
+    DEFAULT_LATENCY: 4, // 4 seconds
+    SMALL_LATENCY: 2 // 2 seconds
+  },
   SEGMENTS_LIST_SIZE: 15, // 15 maximum segments in live playlist
   REPLAY_DIRECTORY: 'replay',
   EDGE_LIVE_DELAY_SEGMENTS_NOTIFICATION: 4,
@@ -842,7 +845,8 @@ if (isTestInstance() === true) {
   PLUGIN_EXTERNAL_AUTH_TOKEN_LIFETIME = 5000
 
   VIDEO_LIVE.CLEANUP_DELAY = 5000
-  VIDEO_LIVE.SEGMENT_TIME_SECONDS = 2
+  VIDEO_LIVE.SEGMENT_TIME_SECONDS.DEFAULT_LATENCY = 2
+  VIDEO_LIVE.SEGMENT_TIME_SECONDS.SMALL_LATENCY = 1
   VIDEO_LIVE.EDGE_LIVE_DELAY_SEGMENTS_NOTIFICATION = 1
 }
 

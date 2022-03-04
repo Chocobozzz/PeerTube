@@ -158,6 +158,7 @@ export class VideoTableAttributes {
       'streamKey',
       'saveReplay',
       'permanentLive',
+      'latencyMode',
       'videoId',
       'createdAt',
       'updatedAt'

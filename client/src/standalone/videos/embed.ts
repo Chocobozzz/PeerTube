@@ -4,6 +4,7 @@ import { peertubeTranslate } from '../../../../shared/core-utils/i18n'
 import {
   HTMLServerConfig,
   HttpStatusCode,
+  LiveVideo,
   OAuth2ErrorCode,
   ResultList,
   UserRefreshToken,
@@ -92,6 +93,10 @@ export class PeerTubeEmbed {
     return window.location.origin + '/api/v1/videos/' + id
   }
 
+  getLiveUrl (videoId: string) {
+    return window.location.origin + '/api/v1/videos/live/' + videoId
+  }
+
   refreshFetch (url: string, options?: RequestInit) {
     return fetch(url, options)
       .then((res: Response) => {
@@ -162,6 +167,12 @@ export class PeerTubeEmbed {
 
   loadVideoCaptions (videoId: string): Promise<Response> {
     return this.refreshFetch(this.getVideoUrl(videoId) + '/captions', { headers: this.headers })
+  }
+
+  loadWithLive (video: VideoDetails) {
+    return this.refreshFetch(this.getLiveUrl(video.uuid), { headers: this.headers })
+      .then(res => res.json())
+      .then((live: LiveVideo) => ({ video, live }))
   }
 
   loadPlaylistInfo (playlistId: string): Promise<Response> {
@@ -473,13 +484,15 @@ export class PeerTubeEmbed {
         .then(res => res.json())
     }
 
-    const videoInfoPromise = videoResponse.json()
+    const videoInfoPromise: Promise<{ video: VideoDetails, live?: LiveVideo }> = videoResponse.json()
       .then((videoInfo: VideoDetails) => {
         this.loadParams(videoInfo)
 
-        if (!alreadyHadPlayer && !this.autoplay) this.loadPlaceholder(videoInfo)
+        if (!alreadyHadPlayer && !this.autoplay) this.buildPlaceholder(videoInfo)
 
-        return videoInfo
+        if (!videoInfo.isLive) return { video: videoInfo }
+
+        return this.loadWithLive(videoInfo)
       })
 
     const [ videoInfoTmp, serverTranslations, captionsResponse, PeertubePlayerManagerModule ] = await Promise.all([
@@ -491,10 +504,14 @@ export class PeerTubeEmbed {
 
     await this.loadPlugins(serverTranslations)
 
-    const videoInfo: VideoDetails = videoInfoTmp
+    const { video: videoInfo, live } = videoInfoTmp
 
     const PeertubePlayerManager = PeertubePlayerManagerModule.PeertubePlayerManager
     const videoCaptions = await this.buildCaptions(serverTranslations, captionsResponse)
+
+    const liveOptions = videoInfo.isLive
+      ? { latencyMode: live.latencyMode }
+      : undefined
 
     const playlistPlugin = this.currentPlaylistElement
       ? {
@@ -543,6 +560,7 @@ export class PeerTubeEmbed {
         videoUUID: videoInfo.uuid,
 
         isLive: videoInfo.isLive,
+        liveOptions,
 
         playerElement: this.playerElement,
         onPlayerElementChange: (element: HTMLVideoElement) => {
@@ -717,7 +735,7 @@ export class PeerTubeEmbed {
     return []
   }
 
-  private loadPlaceholder (video: VideoDetails) {
+  private buildPlaceholder (video: VideoDetails) {
     const placeholder = this.getPlaceholderElement()
 
     const url = window.location.origin + video.previewPath

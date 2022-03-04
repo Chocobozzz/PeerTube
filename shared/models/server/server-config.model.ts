@@ -149,10 +149,14 @@ export interface ServerConfig {
   live: {
     enabled: boolean
 
+    allowReplay: boolean
+    latencySetting: {
+      enabled: boolean
+    }
+
     maxDuration: number
     maxInstanceLives: number
     maxUserLives: number
-    allowReplay: boolean
 
     transcoding: {
       enabled: boolean

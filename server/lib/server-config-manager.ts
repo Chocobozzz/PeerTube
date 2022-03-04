@@ -137,6 +137,10 @@ class ServerConfigManager {
         enabled: CONFIG.LIVE.ENABLED,
 
         allowReplay: CONFIG.LIVE.ALLOW_REPLAY,
+        latencySetting: {
+          enabled: CONFIG.LIVE.LATENCY_SETTING.ENABLED
+        },
+
         maxDuration: CONFIG.LIVE.MAX_DURATION,
         maxInstanceLives: CONFIG.LIVE.MAX_INSTANCE_LIVES,
         maxUserLives: CONFIG.LIVE.MAX_USER_LIVES,

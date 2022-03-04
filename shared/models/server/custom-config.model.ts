@@ -131,6 +131,10 @@ export interface CustomConfig {
 
     allowReplay: boolean
 
+    latencySetting: {
+      enabled: boolean
+    }
+
     maxDuration: number
     maxInstanceLives: number
     maxUserLives: number

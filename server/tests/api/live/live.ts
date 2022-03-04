@@ -10,6 +10,7 @@ import {
   HttpStatusCode,
   LiveVideo,
   LiveVideoCreate,
+  LiveVideoLatencyMode,
   VideoDetails,
   VideoPrivacy,
   VideoState,
@@ -52,6 +53,9 @@ describe('Test live', function () {
         live: {
           enabled: true,
           allowReplay: true,
+          latencySetting: {
+            enabled: true
+          },
           transcoding: {
             enabled: false
           }
@@ -85,6 +89,7 @@ describe('Test live', function () {
         commentsEnabled: false,
         downloadEnabled: false,
         saveReplay: true,
+        latencyMode: LiveVideoLatencyMode.SMALL_LATENCY,
         privacy: VideoPrivacy.PUBLIC,
         previewfile: 'video_short1-preview.webm.jpg',
         thumbnailfile: 'video_short1.webm.jpg'
@@ -131,6 +136,7 @@ describe('Test live', function () {
         }
 
         expect(live.saveReplay).to.be.true
+        expect(live.latencyMode).to.equal(LiveVideoLatencyMode.SMALL_LATENCY)
       }
     })
 
@@ -175,7 +181,7 @@ describe('Test live', function () {
     it('Should update the live', async function () {
       this.timeout(10000)
 
-      await commands[0].update({ videoId: liveVideoUUID, fields: { saveReplay: false } })
+      await commands[0].update({ videoId: liveVideoUUID, fields: { saveReplay: false, latencyMode: LiveVideoLatencyMode.DEFAULT } })
       await waitJobs(servers)
     })
 
@@ -192,6 +198,7 @@ describe('Test live', function () {
         }
 
         expect(live.saveReplay).to.be.false
+        expect(live.latencyMode).to.equal(LiveVideoLatencyMode.DEFAULT)
       }
     })
 

@@ -292,6 +292,9 @@ export class ConfigCommand extends AbstractCommand {
       live: {
         enabled: true,
         allowReplay: false,
+        latencySetting: {
+          enabled: false
+        },
         maxDuration: -1,
         maxInstanceLives: -1,
         maxUserLives: 50,

@@ -64,6 +64,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
     if (this.liveVideo) {
       this.form.patchValue({
         saveReplay: this.liveVideo.saveReplay,
+        latencyMode: this.liveVideo.latencyMode,
         permanentLive: this.liveVideo.permanentLive
       })
     }
@@ -127,7 +128,8 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
 
             const liveVideoUpdate: LiveVideoUpdate = {
               saveReplay: !!this.form.value.saveReplay,
-              permanentLive: !!this.form.value.permanentLive
+              permanentLive: !!this.form.value.permanentLive,
+              latencyMode: this.form.value.latencyMode
             }
 
             // Don't update live attributes if they did not change

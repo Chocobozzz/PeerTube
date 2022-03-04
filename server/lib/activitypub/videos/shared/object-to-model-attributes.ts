@@ -151,6 +151,7 @@ function getLiveAttributesFromObject (video: MVideoId, videoObject: VideoObject)
   return {
     saveReplay: videoObject.liveSaveReplay,
     permanentLive: videoObject.permanentLive,
+    latencyMode: videoObject.latencyMode,
     videoId: video.id
   }
 }

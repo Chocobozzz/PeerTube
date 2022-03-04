@@ -4,9 +4,9 @@ import { dirname, join } from 'path'
 import { decacheModule } from '@server/helpers/decache'
 import { VideoRedundancyConfigFilter } from '@shared/models/redundancy/video-redundancy-config-filter.type'
 import { BroadcastMessageLevel } from '@shared/models/server'
+import { buildPath, root } from '../../shared/core-utils'
 import { VideoPrivacy, VideosRedundancyStrategy } from '../../shared/models'
 import { NSFWPolicyType } from '../../shared/models/videos/nsfw-policy.type'
-import { buildPath, root } from '../../shared/core-utils'
 import { parseBytes, parseDurationToMs } from '../helpers/core-utils'
 
 // Use a variable to reload the configuration if we need
@@ -295,6 +295,10 @@ const CONFIG = {
     get MAX_USER_LIVES () { return config.get<number>('live.max_user_lives') },
 
     get ALLOW_REPLAY () { return config.get<boolean>('live.allow_replay') },
+
+    LATENCY_SETTING: {
+      get ENABLED () { return config.get<boolean>('live.latency_setting.enabled') }
+    },
 
     RTMP: {
       get ENABLED () { return config.get<boolean>('live.rtmp.enabled') },
