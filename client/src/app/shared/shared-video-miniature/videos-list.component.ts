@@ -175,7 +175,7 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
     if (changes['displayOptions'] || !this.displayOptions) {
       this.displayOptions = {
         ...this.defaultDisplayOptions,
-        avatar: this.serverService.getHTMLConfig().client.videos.miniature.displayAvatar,
+        avatar: this.serverService.getHTMLConfig().client.videos.miniature.displayAuthorAvatar,
         ...changes['displayOptions']
       }
     }
