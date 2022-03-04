@@ -8,12 +8,16 @@
     @include padding-right(60px);
 
     padding: $dock-padding;
-    background: linear-gradient(to bottom, rgba(0, 0, 0, .6) 0, rgba(0, 0, 0, 0.2) 70%, rgba(0, 0, 0, 0) 100%);
+    background: linear-gradient(to bottom, rgba(20, 20, 20, .7) 0, rgba(20, 20, 20, 0));
+  }
+
+  .vjs-dock-title {
+    font-weight: $font-semibold;
   }
 
   .vjs-dock-title,
   .vjs-dock-description {
-    text-shadow: 0 0 2px rgba(0, 0, 0, .5);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, .5);
   }
 
   .vjs-dock-description {
