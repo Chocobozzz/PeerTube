@@ -147,7 +147,9 @@ async function updateVideo (req: express.Request, res: express.Response) {
       return { videoInstanceUpdated, isNewVideo }
     })
 
-    if (videoInfoToUpdate.name) await updateTorrentsMetadata(videoInstanceUpdated)
+    if (videoInstanceUpdated.isLive !== true && videoInfoToUpdate.name) {
+      await updateTorrentsMetadata(videoInstanceUpdated)
+    }
 
     await sequelizeTypescript.transaction(t => federateVideoIfNeeded(videoInstanceUpdated, isNewVideo, t))
 
