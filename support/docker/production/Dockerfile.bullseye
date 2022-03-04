@@ -2,7 +2,7 @@ FROM node:14-bullseye-slim
 
 # Install dependencies
 RUN apt update \
- && apt install -y --no-install-recommends openssl ffmpeg python ca-certificates gnupg gosu build-essential curl \
+ && apt install -y --no-install-recommends openssl ffmpeg python3 ca-certificates gnupg gosu build-essential curl \
  && gosu nobody true \
  && rm /var/lib/apt/lists/* -fR
 
@@ -16,7 +16,9 @@ WORKDIR /app
 
 USER peertube
 
-RUN yarn install --pure-lockfile --network-timeout 1200000 --network-concurrency 20 \
+# Install manually client dependencies to apply our network timeout option
+RUN cd client && yarn install --pure-lockfile --network-timeout 1200000 && cd ../ \
+    && yarn install --pure-lockfile --network-timeout 1200000 \
     && npm run build \
     && rm -r ./node_modules ./client/node_modules ./client/.angular \
     && yarn install --pure-lockfile --production --network-timeout 1200000 --network-concurrency 20 \
