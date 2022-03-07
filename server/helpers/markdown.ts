@@ -51,7 +51,6 @@ function plainTextPlugin (markdownIt: any) {
   function plainTextRule (state: any) {
     const text = scan(state.tokens)
 
-    // markdownIt.plainText = text.replace(/\s+/g, ' ')
     markdownIt.plainText = text
   }
 
