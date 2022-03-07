@@ -30,5 +30,11 @@ describe('Markdown helpers', function () {
 
       expect(result).to.equal('Hello coucou')
     })
+
+    it('Should convert tags to plain text', function () {
+      const result = mdToOneLinePlainText(`#déconversion\n#newage\n#histoire`)
+
+      expect(result).to.equal('#déconversion #newage #histoire')
+    })
   })
 })
