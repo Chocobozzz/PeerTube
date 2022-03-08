@@ -4,7 +4,7 @@
 
 ### Security
 
- * Strip EXIF data and processing images
+ * Strip EXIF data when processing images
 
 ### Docker
 
