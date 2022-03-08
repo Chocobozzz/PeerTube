@@ -215,7 +215,7 @@ async function prepare () {
     language: 'fr',
     privacy: VideoPrivacy.PUBLIC,
     support: 'please give me a coffee',
-    description: 'my super description'.repeat(10),
+    description: 'my super description\n'.repeat(10) + ' * list1\n * list 2\n * list 3',
     tags: [ 'tag1', 'tag2', 'tag3' ]
   }
 

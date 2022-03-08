@@ -1,9 +1,9 @@
 import express from 'express'
 import { readFile } from 'fs-extra'
-import memoizee from 'memoizee'
 import { join } from 'path'
 import validator from 'validator'
 import { toCompleteUUID } from '@server/helpers/custom-validators/misc'
+import { mdToOneLinePlainText } from '@server/helpers/markdown'
 import { ActorImageModel } from '@server/models/actor/actor-image'
 import { root } from '@shared/core-utils'
 import { escapeHTML } from '@shared/core-utils/renderer'
@@ -14,15 +14,12 @@ import { HttpStatusCode } from '../../shared/models/http/http-error-codes'
 import { VideoPlaylistPrivacy, VideoPrivacy } from '../../shared/models/videos'
 import { isTestInstance } from '../helpers/core-utils'
 import { logger } from '../helpers/logger'
-import { mdToOneLinePlainText } from '../helpers/markdown'
 import { CONFIG } from '../initializers/config'
 import {
   ACCEPT_HEADERS,
   CUSTOM_HTML_TAG_COMMENTS,
   EMBED_SIZE,
   FILES_CONTENT_HASH,
-  MEMOIZE_LENGTH,
-  MEMOIZE_TTL,
   PLUGIN_GLOBAL_CSS_PATH,
   WEBSERVER
 } from '../initializers/constants'
@@ -34,11 +31,6 @@ import { VideoPlaylistModel } from '../models/video/video-playlist'
 import { MAccountActor, MChannelActor } from '../types/models'
 import { getBiggestActorImage } from './actor-image'
 import { ServerConfigManager } from './server-config-manager'
-
-const getPlainTextDescriptionCached = memoizee(mdToOneLinePlainText, {
-  maxAge: MEMOIZE_TTL.MD_TO_PLAIN_TEXT_CLIENT_HTML,
-  max: MEMOIZE_LENGTH.MD_TO_PLAIN_TEXT_CLIENT_HTML
-})
 
 type Tags = {
   ogType: string
@@ -112,7 +104,7 @@ class ClientHtml {
       res.status(HttpStatusCode.NOT_FOUND_404)
       return html
     }
-    const description = getPlainTextDescriptionCached(video.description)
+    const description = mdToOneLinePlainText(video.description)
 
     let customHtml = ClientHtml.addTitleTag(html, video.name)
     customHtml = ClientHtml.addDescriptionTag(customHtml, description)
@@ -173,7 +165,7 @@ class ClientHtml {
       return html
     }
 
-    const description = getPlainTextDescriptionCached(videoPlaylist.description)
+    const description = mdToOneLinePlainText(videoPlaylist.description)
 
     let customHtml = ClientHtml.addTitleTag(html, videoPlaylist.name)
     customHtml = ClientHtml.addDescriptionTag(customHtml, description)
@@ -272,7 +264,7 @@ class ClientHtml {
       return ClientHtml.getIndexHTML(req, res)
     }
 
-    const description = getPlainTextDescriptionCached(entity.description)
+    const description = mdToOneLinePlainText(entity.description)
 
     let customHtml = ClientHtml.addTitleTag(html, entity.getDisplayName())
     customHtml = ClientHtml.addDescriptionTag(customHtml, description)
