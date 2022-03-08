@@ -37,7 +37,7 @@ const createTranscodingValidator = [
 
     // Prefer using job info table instead of video state because before 4.0 failed transcoded video were stuck in "TO_TRANSCODE" state
     const info = await VideoJobInfoModel.load(video.id)
-    if (info && info.pendingTranscode !== 0) {
+    if (info && info.pendingTranscode > 0) {
       return res.fail({
         status: HttpStatusCode.CONFLICT_409,
         message: 'This video is already being transcoded'

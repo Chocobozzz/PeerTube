@@ -25,21 +25,21 @@ async function expectLogDoesNotContain (server: PeerTubeServer, str: string) {
   expect(content.toString()).to.not.contain(str)
 }
 
-async function testImage (url: string, imageName: string, imagePath: string, extension = '.jpg') {
+async function testImage (url: string, imageName: string, imageHTTPPath: string, extension = '.jpg') {
   const res = await makeGetRequest({
     url,
-    path: imagePath,
+    path: imageHTTPPath,
     expectedStatus: HttpStatusCode.OK_200
   })
 
   const body = res.body
 
   const data = await readFile(join(root(), 'server', 'tests', 'fixtures', imageName + extension))
-  const minLength = body.length - ((30 * body.length) / 100)
-  const maxLength = body.length + ((30 * body.length) / 100)
+  const minLength = data.length - ((40 * data.length) / 100)
+  const maxLength = data.length + ((40 * data.length) / 100)
 
-  expect(data.length).to.be.above(minLength, 'the generated image is way smaller than the recorded fixture')
-  expect(data.length).to.be.below(maxLength, 'the generated image is way larger than the recorded fixture')
+  expect(body.length).to.be.above(minLength, 'the generated image is way smaller than the recorded fixture')
+  expect(body.length).to.be.below(maxLength, 'the generated image is way larger than the recorded fixture')
 }
 
 async function testFileExistsOrNot (server: PeerTubeServer, directory: string, filePath: string, exist: boolean) {

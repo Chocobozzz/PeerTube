@@ -118,6 +118,8 @@ async function autoResize (options: {
   const sourceIsPortrait = sourceImage.getWidth() < sourceImage.getHeight()
   const destIsPortraitOrSquare = newSize.width <= newSize.height
 
+  removeExif(sourceImage)
+
   if (sourceIsPortrait && !destIsPortraitOrSquare) {
     const baseImage = sourceImage.cloneQuiet().cover(newSize.width, newSize.height)
                                               .color([ { apply: 'shade', params: [ 50 ] } ])
@@ -144,6 +146,7 @@ function skipProcessing (options: {
   const { sourceImage, newSize, imageBytes, inputExt, outputExt } = options
   const { width, height } = newSize
 
+  if (hasExif(sourceImage)) return false
   if (sourceImage.getWidth() > width || sourceImage.getHeight() > height) return false
   if (inputExt !== outputExt) return false
 
@@ -153,4 +156,12 @@ function skipProcessing (options: {
   if (height >= 500) return imageBytes <= 100 * kB
 
   return imageBytes <= 15 * kB
+}
+
+function hasExif (image: Jimp) {
+  return !!(image.bitmap as any).exifBuffer
+}
+
+function removeExif (image: Jimp) {
+  (image.bitmap as any).exifBuffer = null
 }

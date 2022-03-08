@@ -1,5 +1,23 @@
 # Changelog
 
+## v4.1.1
+
+### Security
+
+ * Strip EXIF data when processing images
+
+### Docker
+
+ * Fix videos import by installing python 3
+ * Install `git` package (may be needed to install some plugins)
+
+### Bug fixes
+
+ * Fix error when updating a live
+ * Fix performance regression when rendering HTML and feeds
+ * Fix player stuck by HTTP request error
+
+
 ## v4.1.0
 
 ### IMPORTANT NOTES

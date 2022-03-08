@@ -8,7 +8,7 @@ runs:
     - name: Setup system dependencies
       shell: bash
       run: |
-        sudo apt-get install postgresql-client-common redis-tools parallel
+        sudo apt-get install postgresql-client-common redis-tools parallel libimage-exiftool-perl
         wget --quiet --no-check-certificate "https://download.cpy.re/ffmpeg/ffmpeg-release-4.3.1-64bit-static.tar.xz"
         tar xf ffmpeg-release-4.3.1-64bit-static.tar.xz
         mkdir -p $HOME/bin

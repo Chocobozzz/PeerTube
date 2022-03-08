@@ -7,8 +7,13 @@ const sanitizeHtml = require('sanitize-html')
 const markdownItEmoji = require('markdown-it-emoji/light')
 const MarkdownItClass = require('markdown-it')
 
-const markdownItWithHTML = new MarkdownItClass('default', { linkify: true, breaks: true, html: true })
-const markdownItWithoutHTML = new MarkdownItClass('default', { linkify: false, breaks: true, html: false })
+const markdownItForSafeHtml = new MarkdownItClass('default', { linkify: true, breaks: true, html: true })
+  .enable(TEXT_WITH_HTML_RULES)
+  .use(markdownItEmoji)
+
+const markdownItForPlainText = new MarkdownItClass('default', { linkify: false, breaks: true, html: false })
+  .use(markdownItEmoji)
+  .use(plainTextPlugin)
 
 const toSafeHtml = (text: string) => {
   if (!text) return ''
@@ -17,9 +22,7 @@ const toSafeHtml = (text: string) => {
   const textWithLineFeed = text.replace(/<br.?\/?>/g, '\r\n')
 
   // Convert possible markdown (emojis, emphasis and lists) to html
-  const html = markdownItWithHTML.enable(TEXT_WITH_HTML_RULES)
-                                 .use(markdownItEmoji)
-                                 .render(textWithLineFeed)
+  const html = markdownItForSafeHtml.render(textWithLineFeed)
 
   // Convert to safe Html
   return sanitizeHtml(html, defaultSanitizeOptions)
@@ -28,12 +31,10 @@ const toSafeHtml = (text: string) => {
 const mdToOneLinePlainText = (text: string) => {
   if (!text) return ''
 
-  markdownItWithoutHTML.use(markdownItEmoji)
-                       .use(plainTextPlugin)
-                       .render(text)
+  markdownItForPlainText.render(text)
 
   // Convert to safe Html
-  return sanitizeHtml(markdownItWithoutHTML.plainText, textOnlySanitizeOptions)
+  return sanitizeHtml(markdownItForPlainText.plainText, textOnlySanitizeOptions)
 }
 
 // ---------------------------------------------------------------------------
@@ -47,30 +48,38 @@ export {
 
 // Thanks: https://github.com/wavesheep/markdown-it-plain-text
 function plainTextPlugin (markdownIt: any) {
-  let lastSeparator = ''
-
   function plainTextRule (state: any) {
     const text = scan(state.tokens)
 
-    markdownIt.plainText = text.replace(/\s+/g, ' ')
+    markdownIt.plainText = text
   }
 
   function scan (tokens: any[]) {
+    let lastSeparator = ''
     let text = ''
 
-    for (const token of tokens) {
-      if (token.children !== null) {
-        text += scan(token.children)
-        continue
-      }
-
+    function buildSeparator (token: any) {
       if (token.type === 'list_item_close') {
         lastSeparator = ', '
-      } else if (token.type.endsWith('_close')) {
+      }
+
+      if (token.tag === 'br' || token.type === 'paragraph_close') {
         lastSeparator = ' '
-      } else if (token.content) {
-        text += lastSeparator
-        text += token.content
+      }
+    }
+
+    for (const token of tokens) {
+      buildSeparator(token)
+
+      if (token.type !== 'inline') continue
+
+      for (const child of token.children) {
+        buildSeparator(child)
+
+        if (!child.content) continue
+
+        text += lastSeparator + child.content
+        lastSeparator = ''
       }
     }
 

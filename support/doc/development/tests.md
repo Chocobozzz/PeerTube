@@ -31,6 +31,12 @@ $ sudo docker run -p 9444:9000 chocobozzz/s3-ninja
 $ sudo docker run -p 10389:10389 chocobozzz/docker-test-openldap
 ```
 
+Ensure you also have these commands:
+
+```
+$ exiftool --help
+```
+
 ### Test
 
 To run all test suites:
@@ -39,7 +45,7 @@ To run all test suites:
 $ npm run test # See scripts/test.sh to run a particular suite
 ```
 
-Most of tests can be runned using:
+Most of tests can be run using:
 
 ```bash
 TS_NODE_TRANSPILE_ONLY=true npm run mocha -- --timeout 30000 --exit -r ts-node/register -r tsconfig-paths/register --bail server/tests/api/videos/video-transcoder.ts
