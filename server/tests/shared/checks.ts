@@ -35,8 +35,8 @@ async function testImage (url: string, imageName: string, imageHTTPPath: string,
   const body = res.body
 
   const data = await readFile(join(root(), 'server', 'tests', 'fixtures', imageName + extension))
-  const minLength = data.length - ((30 * data.length) / 100)
-  const maxLength = data.length + ((30 * data.length) / 100)
+  const minLength = data.length - ((40 * data.length) / 100)
+  const maxLength = data.length + ((40 * data.length) / 100)
 
   expect(body.length).to.be.above(minLength, 'the generated image is way smaller than the recorded fixture')
   expect(body.length).to.be.below(maxLength, 'the generated image is way larger than the recorded fixture')

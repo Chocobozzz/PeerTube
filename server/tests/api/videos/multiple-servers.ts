@@ -207,7 +207,7 @@ describe('Test multiple servers', function () {
             },
             {
               resolution: 720,
-              size: 788000
+              size: 750000
             }
           ],
           thumbnailfile: 'thumbnail',
