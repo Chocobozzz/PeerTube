@@ -260,7 +260,7 @@ $ tail -f /var/log/peertube/peertube.log
 
 ### :technologist: Administrator
 
-The administrator password is automatically generated and can be found in the PeerTube
+The administrator username is `root` and the password is automatically generated. It can be found in PeerTube
 logs (path defined in `production.yaml`). You can also set another password with:
 
 ```bash
