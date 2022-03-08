@@ -5224,7 +5224,7 @@
       </trans-unit>
       <trans-unit id="4078329985026583770" datatype="html">
         <source>Allows your users to edit their video (cut, add intro/outro, add a watermark etc)</source>
-        <target state="new"> Allows your users to edit their video (cut, add intro/outro, add a watermark etc) </target>
+        <target state="translated">Permítelle ás usuarias editar os vídeos (cortar, engadir intro/coda, engadir marca de auga, etc)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">199,201</context>
@@ -5232,7 +5232,7 @@
       </trans-unit>
       <trans-unit id="6675276142886460097" datatype="html">
         <source>Enable video editor</source>
-        <target state="new">Enable video editor</target>
+        <target state="translated">Activar editor de vídeo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">210</context>
@@ -5240,7 +5240,7 @@
       </trans-unit>
       <trans-unit id="1618687984822075464" datatype="html">
         <source>⚠️ You need to enable transcoding first to enable video editor</source>
-        <target state="new">⚠️ You need to enable transcoding first to enable video editor</target>
+        <target state="translated">⚠️ Primeiro tes que activar a transcodificación para activar o editor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">213</context>
@@ -8015,7 +8015,7 @@
       </trans-unit>
       <trans-unit id="577064441120663273" datatype="html">
         <source>Are you sure you want to delete your account?</source>
-        <target state="new">Are you sure you want to delete your account?</target>
+        <target state="translated">Tes certeza de querer eliminar a túa conta?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context>
           <context context-type="linenumber">22</context>
@@ -8023,7 +8023,7 @@
       </trans-unit>
       <trans-unit id="2740531699780274491" datatype="html">
         <source>This will delete all your data, including channels, videos, comments and you won't be able to create another user on this instance with "<x id="PH" equiv-text="this.user.username"/>" username.</source>
-        <target state="new">This will delete all your data, including channels, videos, comments and you won't be able to create another user on this instance with "<x id="PH" equiv-text="this.user.username"/>" username.</target>
+        <target state="translated">Esto vai eliminar tódolos teus datos, incluíndo canles, vídeos, comentarios e non poderás crear outra usuaria nesta instancia usando <x id="PH" equiv-text="this.user.username"/> como identificador.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context>
           <context context-type="linenumber">25</context>
