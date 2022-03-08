@@ -968,7 +968,7 @@
       </trans-unit>
       <trans-unit id="5975923297757530070" datatype="html">
         <source><x id="START_TAG_DIV"/>Default NSFW/sensitive videos policy<x id="CLOSE_TAG_DIV"/><x id="START_TAG_DIV_1"/>can be redefined by the users<x id="CLOSE_TAG_DIV"/></source>
-        <target state="new"/>
+        <target state="translated"><x id="START_TAG_DIV"/>NSFW/arkaluonteisten videoiden oletuskäytäntö<x id="CLOSE_TAG_DIV"/><x id="START_TAG_DIV_1"/>voi käyttäjät määritellä uudelleen<x id="CLOSE_TAG_DIV"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="3386631781603205915">
@@ -1027,12 +1027,7 @@
       </trans-unit>
       <trans-unit id="1502595455339510144">
         <source>Unlimited <x id="START_TAG_NG_CONTAINER"/>(<x id="INTERPOLATION"/> per day)<x id="CLOSE_TAG_NG_CONTAINER"/></source>
-        <target>
-          Rajoittamaton 
-          <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/>(
-          <x id="INTERPOLATION" equiv-text="{{ dailyUserVideoQuota | bytes: 0 }}"/> päivässä)
-          <x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>
-        </target>
+        <target>Rajoittamaton <x id="START_TAG_NG_CONTAINER"/>(<x id="INTERPOLATION"/> päivässä)<x id="CLOSE_TAG_NG_CONTAINER"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">60</context></context-group>
       </trans-unit>
       <trans-unit id="1071721880474488785">
@@ -1456,13 +1451,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="5340005218109333045">
         <source>Filters <x id="START_TAG_SPAN"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_SPAN"/></source>
-        <target>
-          Suodata
-          
-          <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>
-          <x id="INTERPOLATION" equiv-text="{{ numberOfFilters() }}"/>
-          <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
-        </target>
+        <target>Suodata <x id="START_TAG_SPAN"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_SPAN"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search.component.html</context><context context-type="linenumber">18</context></context-group>
       </trans-unit>
       <trans-unit id="2236371857137398396">
@@ -1533,7 +1522,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="5083058563861587027" datatype="html">
         <source>Choosing your <x id="START_TAG_STRONG"/>instance name<x id="CLOSE_TAG_STRONG"/>, <x id="START_TAG_STRONG"/>setting up a description<x id="CLOSE_TAG_STRONG"/>, specifying <x id="START_TAG_STRONG"/>who you are<x id="CLOSE_TAG_STRONG"/>, why <x id="START_TAG_STRONG"/>you created your instance<x id="CLOSE_TAG_STRONG"/> and <x id="START_TAG_STRONG"/>how long<x id="CLOSE_TAG_STRONG"/> you plan to <x id="START_TAG_STRONG"/>maintain your it<x id="CLOSE_TAG_STRONG"/> is very important for visitors to understand on what type of instance they are. </source>
-        <target state="new"/>
+        <target state="translated">Palvelimen <x id="START_TAG_STRONG"/>nimen valitseminen<x id="CLOSE_TAG_STRONG"/>, <x id="START_TAG_STRONG"/>kuvauksen asettaminen<x id="CLOSE_TAG_STRONG"/>, kertomalla <x id="START_TAG_STRONG"/>kuka olet<x id="CLOSE_TAG_STRONG"/>, sekä miksi <x id="START_TAG_STRONG"/>loit oman palvelimen<x id="CLOSE_TAG_STRONG"/> ja <x id="START_TAG_STRONG"/>miten kauaksi aikaa<x id="CLOSE_TAG_STRONG"/> suunnittelet <x id="START_TAG_STRONG"/>ylläpitoa<x id="CLOSE_TAG_STRONG"/> ovat tärkeitä tietoja kävijöille, jotta he tietävät millaisella palvelimella ovat. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context><context context-type="linenumber">57</context></context-group>
       </trans-unit>
       <trans-unit id="5329436244765769292" datatype="html">
@@ -2422,9 +2411,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="9012879216268259096">
         <source>Schedule publication (<x id="INTERPOLATION"/>)</source>
-        <target>Ajoita julkaisu (
-          <x id="INTERPOLATION" equiv-text="{{ calendarTimezone }}"/>)
-        </target>
+        <target>Ajoita julkaisu (<x id="INTERPOLATION"/>)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">123</context></context-group>
       </trans-unit>
       <trans-unit id="9155449485123349070" datatype="html">
@@ -2677,7 +2664,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="7099631707196015765" datatype="html">
         <source>Image that will be merged with your audio file. <x id="LINE_BREAK"/> The chosen image will be definitive and cannot be modified. </source>
-        <target state="new"/>
+        <target state="translated">Kuva joka tullaan yhdistämään audiotiedostoosi. <x id="LINE_BREAK"/> Valittu kuva on lopullinen, eikä sitä voi muuttaa. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.html</context><context context-type="linenumber">36</context></context-group>
       </trans-unit>
       <trans-unit id="4626927731329688072" datatype="html">
@@ -2850,12 +2837,12 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="293476877021544115">
         <source>Import <x id="INTERPOLATION"/></source>
-        <target>Tuo <x id="INTERPOLATION" equiv-text="{{ videoName }}"/></target>
+        <target>Tuo <x id="INTERPOLATION"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.html</context><context context-type="linenumber">44</context></context-group>
       </trans-unit>
       <trans-unit id="4766833966971572147">
         <source>Upload <x id="INTERPOLATION"/></source>
-        <target>Lataa <x id="INTERPOLATION" equiv-text="{{ videoName }}"/></target>
+        <target>Lataa <x id="INTERPOLATION"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.html</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
       <trans-unit id="7003826819757856838">
@@ -3118,7 +3105,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="687548610091961489">
         <source>By <x id="INTERPOLATION"/></source>
-        <target><x id="INTERPOLATION" equiv-text="{{ video.byAccount }}"/></target>
+        <target><x id="INTERPOLATION"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">67</context></context-group>
       </trans-unit>
       <trans-unit id="1144407473317535723" datatype="html">
@@ -6326,7 +6313,7 @@ color: red;
       </trans-unit>
       <trans-unit id="4027779086550572813">
         <source>Send verification email</source>
-        <target>Lähetä vahvistus-sähköpostiviesti.</target>
+        <target>Lähetä vahvistussähköpostiviesti</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-ask-send-email/verify-account-ask-send-email.component.html</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="8610022770999239699">
@@ -7043,7 +7030,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="2072135752262464360">
         <source>You already sent this form recently</source>
-        <target>Lähetit jo tämän lomakkeen vasta.</target>
+        <target>Olet äskettäin lähettänyt tämän lomakkeen</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-instance/contact-admin-modal.component.ts</context><context context-type="linenumber">94</context></context-group>
       </trans-unit>
       <trans-unit id="1097932116708163073" datatype="html">
@@ -7631,9 +7618,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="3935234189109112926">
         <source>You are not following <x id="PH"/> anymore.</source>
-        <target>Et seuraa 
-          <x id="PH"/> enään.
-        </target>
+        <target>Et seuraa <x id="PH"/> enää.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.ts</context><context context-type="linenumber">54</context></context-group>
       </trans-unit>
       <trans-unit id="397182597341363053" datatype="html">
@@ -7766,12 +7751,12 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="1679841953757186358">
         <source>Mark as accepted</source>
-        <target>Merkitse hyvätyksi.</target>
+        <target>Hyväksy</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">260</context></context-group>
       </trans-unit>
       <trans-unit id="7993358694073742566">
         <source>Mark as rejected</source>
-        <target>Merkitse ei hyvätyksi.</target>
+        <target>Hylkää</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">265</context></context-group>
       </trans-unit>
       <trans-unit id="4175703770051343108" datatype="html">
@@ -8138,9 +8123,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="1886888801485703107">
         <source>User <x id="PH"/> created.</source>
-        <target>Käyttäjä 
-          <x id="PH"/> luotiin.
-        </target>
+        <target>Käyttäjä <x id="PH"/> luotu.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-create.component.ts</context><context context-type="linenumber">78</context></context-group>
       </trans-unit>
       <trans-unit id="8286337167859377104" datatype="html">
@@ -8161,9 +8144,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="5974506725502681113">
         <source>Password changed for user <x id="PH"/>.</source>
-        <target>Salasana vaihdettu käyttäjälle 
-          <x id="PH"/>.
-        </target>
+        <target>Salasana vaihdettu käyttäjälle <x id="PH"/>.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-password.component.ts</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="149953821752893163">
@@ -8367,12 +8348,12 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="5551551295632950210">
         <source>Videos history is enabled</source>
-        <target>Videohistoria asetettu päälle.</target>
+        <target>Videohistoria käytössä</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context><context context-type="linenumber">96</context></context-group>
       </trans-unit>
       <trans-unit id="9136227503281311926">
         <source>Videos history is disabled</source>
-        <target>Videohistoria poistettu päältä.</target>
+        <target>Videohistoria poissa käytöstä</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context><context context-type="linenumber">97</context></context-group>
       </trans-unit>
       <trans-unit id="8966726118414892732">
@@ -8655,9 +8636,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="1137937154872046253">
         <source>Video channel <x id="PH"/> created.</source>
-        <target>Videokanava 
-          <x id="PH"/> luotiin.
-        </target>
+        <target>Videokanava <x id="PH"/> luotu.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+manage/video-channel-edit/video-channel-create.component.ts</context><context context-type="linenumber">66</context></context-group>
       </trans-unit>
       <trans-unit id="8723777130353305761">
@@ -8667,9 +8646,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="7589345916094713536">
         <source>Video channel <x id="PH"/> updated.</source>
-        <target>Videokanava 
-          <x id="PH"/> päivitetty.
-        </target>
+        <target>Videokanava <x id="PH"/> päivitetty.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+manage/video-channel-edit/video-channel-update.component.ts</context><context context-type="linenumber">97</context></context-group>
       </trans-unit>
       <trans-unit id="8407755843502300957" datatype="html">
@@ -8799,9 +8776,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="5032453707232754344">
         <source>Playlist <x id="PH"/> created.</source>
-        <target>Luotiin soittolista 
-          <x id="PH"/>.
-        </target>
+        <target>Soittolista <x id="PH"/> luotu.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-create.component.ts</context><context context-type="linenumber">77</context></context-group>
       </trans-unit>
       <trans-unit id="5674286808255988565" datatype="html">
@@ -8871,7 +8846,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="8197117721861453263" datatype="html">
         <source>Do you really want to delete <x id="PH"/> videos?</source>
-        <target state="translated">Do you really want to delete <x id="PH"/> videos?</target>
+        <target state="translated">Haluatko varmasti poistaa <x id="PH"/> videota?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context><context context-type="linenumber">150</context></context-group>
       </trans-unit>
       <trans-unit id="2728855911908920537">
@@ -10873,9 +10848,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="6301381219225831298">
         <source>User <x id="PH"/> deleted.</source>
-        <target>Käyttäjä 
-          <x id="PH"/> poistettu.
-        </target>
+        <target>Käyttäjä <x id="PH"/> poistettu.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">110</context></context-group>
       </trans-unit>
       <trans-unit id="3896582359861826661" datatype="html">
@@ -10999,7 +10972,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="1888272455383898478">
         <source>Mute this account</source>
-        <target>Mykistä tämä käyttäjä.</target>
+        <target>Mykistä tämä käyttäjä</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">295</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">373</context></context-group>
       </trans-unit>
