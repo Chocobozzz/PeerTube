@@ -10941,7 +10941,7 @@ verror@1.10.0:
     core-util-is "1.0.2"
     extsprintf "^1.2.0"
 
-"video.js@^6 || ^7", video.js@^7, video.js@^7.17.0, video.js@^7.6.0:
+"video.js@^6 || ^7", video.js@^7, video.js@^7.6.0:
   version "7.17.0"
   resolved "https://registry.yarnpkg.com/video.js/-/video.js-7.17.0.tgz#35918cc03748a5680f5d5f1da410e06eeea7786e"
   integrity sha512-8RbLu9+Pdpep9OTPncUHIvZXFgn/7hKdPnSTE/lGSnlFSucXtTUBp41R7NDwncscMLQ0WgazUbmFlvr4MNWMbA==
@@ -10959,14 +10959,6 @@ verror@1.10.0:
     safe-json-parse "4.0.0"
     videojs-font "3.2.0"
     videojs-vtt.js "^0.15.3"
-
-videojs-dock@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/videojs-dock/-/videojs-dock-3.0.0.tgz#fd343934be410c525cfc6106d6eef8a1b6c21189"
-  integrity sha512-v4NCw5mM2BO2pJqJQzjGq9BaEpnqPInNRNXzCBRrDTTxNwPHMG9zSoldpsUMj7lOlboAuB9pSiva/XX1eMWXDA==
-  dependencies:
-    global "^4.4.0"
-    video.js "^7.17.0"
 
 videojs-font@3.2.0:
   version "3.2.0"

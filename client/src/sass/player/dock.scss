@@ -4,24 +4,62 @@
 @use './_player-variables' as *;
 
 .video-js.vjs-peertube-skin {
-  .vjs-dock-text {
+
+  .peertube-dock {
+    --avatarSize: 48px;
+
     @include padding-right(60px);
 
+    transition: opacity 0.1s;
+
+    display: flex;
+    align-items: center;
+    pointer-events: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+
+    font-size: 23px;
     padding: $dock-padding;
     background: linear-gradient(to bottom, rgba(20, 20, 20, .7) 0, rgba(20, 20, 20, 0));
   }
 
-  .vjs-dock-title {
-    font-weight: $font-semibold;
+  .peertube-dock-avatar {
+    border-radius: 50%;
+    margin-right: 10px;
+    min-width: var(--avatarSize);
+    min-height: var(--avatarSize);
+    max-height: var(--avatarSize);
+    max-height: var(--avatarSize);
   }
 
-  .vjs-dock-title,
-  .vjs-dock-description {
+  .peertube-dock-title-description {
+    // For ellipsis
+    min-width: 0;
+  }
+
+  .peertube-dock-title {
+    font-weight: $font-semibold;
+    letter-spacing: 1px;
+    line-height: normal;
+    min-width: 0;
+  }
+
+  .peertube-dock-title,
+  .peertube-dock-description {
+    @include ellipsis;
+
     text-shadow: 0 1px 3px rgba(0, 0, 0, .5);
   }
 
-  .vjs-dock-description {
+  .peertube-dock-title + .peertube-dock-description {
+    margin-top: 3px;
+  }
+
+  .peertube-dock-description {
     font-size: 11px;
+    line-height: 1.5;
 
     .text::before {
       @include margin-right(4px);
@@ -34,24 +72,41 @@
   }
 
   @media screen and (max-width: $screen-width-750) {
-    .vjs-dock-text {
+    .peertube-dock-avatar {
+      --avatarSize: 40px;
+    }
+
+    .peertube-dock {
       font-size: 16px;
     }
 
-    .vjs-dock-description {
+    .peertube-dock-description {
       font-size: 9px;
     }
   }
 
   @media screen and (max-width: $screen-width-570) {
-    .vjs-dock-text {
+    .peertube-dock-avatar {
+      --avatarSize: 35px;
+    }
+
+    .peertube-dock {
       font-size: 14px;
     }
   }
 
   @media screen and (max-width: $screen-width-350) {
-    .vjs-dock-text {
+    .peertube-dock-avatar {
+      --avatarSize: 30px;
+    }
+
+    .peertube-dock {
       font-size: 13px;
     }
+  }
+
+  &.vjs-playing.vjs-user-inactive {
+    opacity: 0;
+    transition: opacity 1s;
   }
 }

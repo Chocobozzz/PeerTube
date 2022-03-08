@@ -1,7 +1,6 @@
 @use '_variables' as *;
 @use '_mixins' as *;
 @use 'video.js/dist/video-js';
-@use 'videojs-dock/dist/videojs-dock';
 
 $assets-path: '../../assets/';
 @use '../../sass/player/index';

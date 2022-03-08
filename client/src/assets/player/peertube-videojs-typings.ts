@@ -1,6 +1,7 @@
 import { HlsConfig, Level } from 'hls.js'
 import videojs from 'video.js'
 import { VideoFile, VideoPlaylist, VideoPlaylistElement } from '@shared/models'
+import { PeerTubeDockPluginOptions } from './dock/peertube-dock-plugin'
 import { Html5Hlsjs } from './p2p-media-loader/hls-plugin'
 import { P2pMediaLoaderPlugin } from './p2p-media-loader/p2p-media-loader-plugin'
 import { RedundancyUrlManager } from './p2p-media-loader/redundancy-url-manager'
@@ -50,7 +51,7 @@ declare module 'video.js' {
       tracks_: (TextTrack & { id: string, label: string, src: string })[]
     }
 
-    dock (options: { title: string, description: string }): void
+    peertubeDock (options: PeerTubeDockPluginOptions): void
 
     upnext (options: Partial<EndCardOptions>): void
 

@@ -130,7 +130,6 @@
     "typescript": "~4.4.4",
     "url": "^0.11.0",
     "video.js": "^7",
-    "videojs-dock": "^3.0.0",
     "videostream": "~3.2.1",
     "wdio-chromedriver-service": "^7.2.0",
     "wdio-geckodriver-service": "^2.0.3",

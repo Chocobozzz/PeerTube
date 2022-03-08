@@ -1,4 +1,6 @@
 import './embed.scss'
+import '../../assets/player/dock/peertube-dock-component'
+import '../../assets/player/dock/peertube-dock-plugin'
 import videojs from 'video.js'
 import { peertubeTranslate } from '../../../../shared/core-utils/i18n'
 import {
@@ -678,15 +680,22 @@ export class PeerTubeEmbed {
     if (!this.player.player_) return
 
     const title = this.title ? videoInfo.name : undefined
-
     const description = this.warningTitle && this.p2pEnabled
       ? '<span class="text">' + peertubeTranslate('Watching this video may reveal your IP address to others.') + '</span>'
       : undefined
 
+    const availableAvatars = videoInfo.channel.avatars.filter(a => a.width < 50)
+    const avatar = availableAvatars.length !== 0
+      ? availableAvatars[0]
+      : undefined
+
     if (title || description) {
-      this.player.dock({
+      this.player.peertubeDock({
         title,
-        description
+        description,
+        avatarUrl: title && avatar
+          ? avatar.path
+          : undefined
       })
     }
   }

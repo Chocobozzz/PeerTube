@@ -1,4 +1,3 @@
-import 'videojs-dock'
 import '@peertube/videojs-contextmenu'
 import './upnext/end-card'
 import './upnext/upnext-plugin'
