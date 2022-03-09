@@ -9,7 +9,7 @@
       </trans-unit>
       <trans-unit id="ngb.carousel.slide-number" datatype="html">
         <source>Slide <x id="INTERPOLATION" equiv-text="get wrap("/> of <x id="INTERPOLATION_1" equiv-text=".value; }"/> </source>
-        <target state="new"> Slide <x id="INTERPOLATION" equiv-text="get wrap("/> of <x id="INTERPOLATION_1" equiv-text=".value; }"/> </target>
+        <target state="translated">Dia <x id="INTERPOLATION" equiv-text="get wrap("/> / <x id="INTERPOLATION_1" equiv-text=".value; }"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/carousel/carousel.ts</context>
           <context context-type="linenumber">147,157</context>
@@ -84,17 +84,17 @@
       </trans-unit>
       <trans-unit id="ngb.pagination.previous" datatype="html">
         <source>«</source>
-        <target state="new">«</target>
+        <target state="translated">«</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/src/pagination/pagination.ts</context><context context-type="linenumber">266</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.pagination.next" datatype="html">
         <source>»</source>
-        <target state="new">»</target>
+        <target state="translated">»</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/src/pagination/pagination.ts</context><context context-type="linenumber">285</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.pagination.last" datatype="html">
         <source>»»</source>
-        <target state="new">»»</target>
+        <target state="translated">»»</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/src/pagination/pagination.ts</context><context context-type="linenumber">305</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.pagination.first-aria" datatype="html">
@@ -109,7 +109,7 @@
       </trans-unit>
       <trans-unit id="ngb.pagination.next-aria" datatype="html">
         <source>Next</source>
-        <target state="new">Next</target>
+        <target state="translated">Seuraava</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/src/pagination/pagination.ts</context><context context-type="linenumber">347</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.pagination.last-aria" datatype="html">
@@ -703,9 +703,7 @@
       </trans-unit>
       <trans-unit id="7688104409544625220" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 view} other {<x id="INTERPOLATION"/> views}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {1 view} other {
-          <x id="INTERPOLATION" equiv-text="{{ video.views | myNumberFormatter }}"/> views} }
-        </target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 näyttökerta} other { <x id="INTERPOLATION" equiv-text="{{ video.views | myNumberFormatter }}"/> näyttökertaa} }</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video/video-views-counter.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="8562063050145802350" datatype="html">
@@ -1978,7 +1976,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="3801957940570333397" datatype="html">
         <source>ADVANCED SEARCH</source>
-        <target state="new">ADVANCED SEARCH</target>
+        <target state="translated">TARKENNETTU HAKU</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">39</context></context-group>
       </trans-unit>
       <trans-unit id="3416071273413341159" datatype="html">
@@ -9345,7 +9343,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="5073473933031004097" datatype="html">
         <source>This week</source>
-        <target state="new">This week</target>
+        <target state="translated">Tällä viikolla</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/videos-list.component.ts</context><context context-type="linenumber">136</context></context-group>
       </trans-unit>
       <trans-unit id="842657237693374355" datatype="html">
@@ -11221,7 +11219,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="2279527393438260622" datatype="html">
         <source>Search videos, playlists, channels…</source>
-        <target state="new">Search videos, playlists, channels…</target>
+        <target state="translated">Hae videoita, soittolistoja, kanavia…</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">3</context>
@@ -11958,7 +11956,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="8223917068580581095" datatype="html">
         <source>Toggle theater mode</source>
-        <target state="new">Toggle theater mode</target>
+        <target state="translated">Teatteritila</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">737</context></context-group>
       </trans-unit>
       <trans-unit id="8025996572234182184">
@@ -11973,12 +11971,12 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="1729036051846673606" datatype="html">
         <source>When active, the next video is automatically played after the current one.</source>
-        <target state="new">When active, the next video is automatically played after the current one.</target>
+        <target state="translated">Kun aktiivinen, seuraava video toistetaan automaattisesti nykyisen jälkeen.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/recommendations/recommended-videos.component.ts</context><context context-type="linenumber">50</context></context-group>
       </trans-unit>
       <trans-unit id="2431286785954354122" datatype="html">
         <source>Recently added</source>
-        <target state="new">Recently added</target>
+        <target state="translated">Viimeksi lisätty</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/video-list/videos-list-common-page.component.ts</context><context context-type="linenumber">195</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/menu/menu.service.ts</context><context context-type="linenumber">137</context></context-group>
       </trans-unit>
@@ -11989,7 +11987,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="1812379335568847528" datatype="html">
         <source>Subscriptions</source>
-        <target state="new">Subscriptions</target>
+        <target state="translated">Tilaukset</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-library.component.ts</context><context context-type="linenumber">67</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/video-list/video-user-subscriptions.component.ts</context><context context-type="linenumber">25</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/videos-routing.module.ts</context><context context-type="linenumber">56</context></context-group>
@@ -11997,7 +11995,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="186236568870281953" datatype="html">
         <source>History</source>
-        <target state="new">History</target>
+        <target state="translated">Historia</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-library.component.ts</context><context context-type="linenumber">80</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/menu/menu.service.ts</context><context context-type="linenumber">97</context></context-group>
       </trans-unit>
@@ -12074,7 +12072,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="7590784934397800835" datatype="html">
         <source>Edit a video</source>
-        <target state="new">Edit a video</target>
+        <target state="translated">Muokkaa videota</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/app-routing.module.ts</context><context context-type="linenumber">110</context></context-group>
       </trans-unit>
     </body>
