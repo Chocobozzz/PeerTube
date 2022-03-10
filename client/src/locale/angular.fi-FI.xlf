@@ -190,7 +190,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.PM" datatype="html">
         <source><x id="INTERPOLATION"/></source>
-        <target state="new"><x id="INTERPOLATION"/></target>
+        <target state="translated"><x id="INTERPOLATION"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">295</context>
@@ -198,7 +198,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.AM" datatype="html">
         <source><x id="INTERPOLATION"/></source>
-        <target state="new"><x id="INTERPOLATION"/></target>
+        <target state="translated"><x id="INTERPOLATION"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">295</context>
@@ -231,9 +231,7 @@
       </trans-unit>
       <trans-unit id="3861380964267994829" datatype="html">
         <source>The notification concerns a video now unavailable</source>
-        <target state="new">
-            The notification concerns a video now unavailable
-          </target>
+        <target state="translated">Ilmoitus koskee videota, jota ei ole enää saatavilla</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">23</context></context-group>
       </trans-unit>
       <trans-unit id="5067946665521007036" datatype="html">
@@ -243,7 +241,7 @@
       </trans-unit>
       <trans-unit id="7127745751169269971" datatype="html">
         <source>Your video <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> has been blocked </source>
-        <target state="needs-translation">Your video <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> has been blocked </target>
+        <target state="translated">Videosi <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> on estetty </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">40</context></context-group>
       </trans-unit>
       <trans-unit id="506794214492992969" datatype="html">
@@ -586,7 +584,7 @@
       </trans-unit>
       <trans-unit id="8562063050145802350" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 viewer} other {<x id="INTERPOLATION"/> viewers}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {1 viewer} other {<x id="INTERPOLATION"/> viewers}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 katselija} other {<x id="INTERPOLATION"/> katselijaa}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-views-counter.component.html</context>
           <context context-type="linenumber">7</context>
@@ -642,7 +640,7 @@
       </trans-unit>
       <trans-unit id="1571742433738679426" datatype="html">
         <source>Files were removed.</source>
-        <target state="new">Files were removed.</target>
+        <target state="translated">Tiedotot poistettiin.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">235</context>
@@ -789,17 +787,17 @@
       </trans-unit>
       <trans-unit id="4140366911638662173" datatype="html">
         <source>Do you really want to remove "<x id="PH" equiv-text="this.video.name"/>" files?</source>
-        <target state="new">Do you really want to remove "<x id="PH" equiv-text="this.video.name"/>" files?</target>
+        <target state="translated">Haluatko varmasti poistaa "<x id="PH" equiv-text="this.video.name"/>" tiedostot?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">272</context></context-group>
       </trans-unit>
       <trans-unit id="2955645766721124100" datatype="html">
         <source>Remove "<x id="PH" equiv-text="this.video.name"/>" files</source>
-        <target state="new">Remove "<x id="PH" equiv-text="this.video.name"/>" files</target>
+        <target state="translated">Poista "<x id="PH" equiv-text="this.video.name"/>" tiedostot</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">274</context></context-group>
       </trans-unit>
       <trans-unit id="7758350391886784213" datatype="html">
         <source>Removed files of <x id="PH" equiv-text="video.name"/>.</source>
-        <target state="new">Removed files of <x id="PH" equiv-text="video.name"/>.</target>
+        <target state="translated">Tiedostot poistettu kohteelta <x id="PH" equiv-text="video.name"/>.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">280</context></context-group>
       </trans-unit>
       <trans-unit id="6279087330074580345" datatype="html">
@@ -1084,7 +1082,7 @@
       </trans-unit>
       <trans-unit id="7312374115603954471" datatype="html">
         <source>This will ask remote instances to delete local videos</source>
-        <target state="new">This will ask remote instances to delete local videos</target>
+        <target state="translated">Tämä pyytää ulkoisien instanssien poistamaan paikalliset videot</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context>
           <context context-type="linenumber">34</context>
@@ -1092,7 +1090,7 @@
       </trans-unit>
       <trans-unit id="2728722206183105047" datatype="html">
         <source>This will ask remote instances to delete this video</source>
-        <target state="new">This will ask remote instances to delete this video</target>
+        <target state="translated">Tämä pyytää ulkoisien instanssien poistamaan tämän videon</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context>
           <context context-type="linenumber">35</context>
@@ -1100,7 +1098,7 @@
       </trans-unit>
       <trans-unit id="3849007546028672808" datatype="html">
         <source>Blocking a live will automatically terminate the live stream.</source>
-        <target state="new"> Blocking a live will automatically terminate the live stream. </target>
+        <target state="translated">Livestriimin estäminen automaattisesti sulkee livestriimin.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context>
           <context context-type="linenumber">40,42</context>
@@ -1108,7 +1106,7 @@
       </trans-unit>
       <trans-unit id="4195458579645833046" datatype="html">
         <source>Blocked <x id="PH" equiv-text="this.videos.length"/> videos.</source>
-        <target state="new">Blocked <x id="PH" equiv-text="this.videos.length"/> videos.</target>
+        <target state="translated">Estetty <x id="PH" equiv-text="this.videos.length"/> videota.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.ts</context>
           <context context-type="linenumber">84</context>
@@ -1116,7 +1114,7 @@
       </trans-unit>
       <trans-unit id="8507506914483467943" datatype="html">
         <source>Blocked <x id="PH" equiv-text="this.getSingleVideo().name"/></source>
-        <target state="new">Blocked <x id="PH" equiv-text="this.getSingleVideo().name"/></target>
+        <target state="translated">Estetty <x id="PH" equiv-text="this.getSingleVideo().name"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.ts</context>
           <context context-type="linenumber">85</context>
@@ -1618,7 +1616,7 @@
       </trans-unit>
       <trans-unit id="2095604754338363597" datatype="html">
         <source>⚠️ If enabled, we recommend to use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/maintain-configuration?id=security&quot;&gt;"/>a HTTP proxy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to prevent private URL access from your PeerTube server</source>
-        <target state="new">⚠️ If enabled, we recommend to use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/maintain-configuration?id=security&quot;&gt;"/>a HTTP proxy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to prevent private URL access from your PeerTube server</target>
+        <target state="translated">⚠️ Jos käytössä, suosittelemme <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/maintain-configuration?id=security&quot;&gt;"/>HTTP-välityspalvelimen<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> käyttöä estääksesi PeerTube-palvelimeltasi tapahtuvien yksityisten URL-osoitteiden vierailua</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">272</context>
@@ -3028,8 +3026,7 @@
       </trans-unit>
       <trans-unit id="6355398227384499371" datatype="html">
         <source>Move to external storage failed, this video may not work properly.</source>
-        <target state="new"> Move to external storage failed, this video may not work properly.
-</target>
+        <target state="translated">Siirto ulkoiseen tallennustilaan epäonnistui, tämä video ei välttämättä toimi oikein.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.html</context>
           <context context-type="linenumber">5,7</context>
@@ -3107,19 +3104,19 @@
       </trans-unit>
       <trans-unit id="4036338619293319383" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 reply} other {<x id="INTERPOLATION"/> replies}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {1 reply} other {<x id="INTERPOLATION"/> replies}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 vastaus} other {<x id="INTERPOLATION"/> vastausta}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context><context context-type="linenumber">74</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context><context context-type="linenumber">77</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context><context context-type="linenumber">81</context></context-group>
       </trans-unit>
       <trans-unit id="127329338495775339" datatype="html">
         <source>View <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}" xid="2084023438878610739"/> from <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> </source>
-        <target state="needs-translation">View <x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}"/> from <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> </target>
+        <target state="translated">Katso <x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, =1 {1 vastaus} other {{{ comment.totalReplies }} vastausta}}"/> käyttäjältä <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context><context context-type="linenumber">76</context></context-group>
       </trans-unit>
       <trans-unit id="5535545444690528619" datatype="html">
         <source>View <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}" xid="2084023438878610739"/></source>
-        <target state="needs-translation">View <x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}"/></target>
+        <target state="translated">Katso <x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, =1 {1 vastaus} other {{{ comment.totalReplies }} vastausta}}"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context><context context-type="linenumber">81</context></context-group>
       </trans-unit>
       <trans-unit id="1055254162789146714">
@@ -3673,7 +3670,7 @@
       </trans-unit>
       <trans-unit id="4824046935922837124" datatype="html">
         <source>Used (<x id="PH" equiv-text="this.bytesToHuman(stats.totalUsed)"/>)</source>
-        <target state="new">Used (<x id="PH" equiv-text="this.bytesToHuman(stats.totalUsed)"/>)</target>
+        <target state="translated">Käytetty (<x id="PH" equiv-text="this.bytesToHuman(stats.totalUsed)"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context>
           <context context-type="linenumber">99</context>
@@ -3681,7 +3678,7 @@
       </trans-unit>
       <trans-unit id="5874809640561431793" datatype="html">
         <source>Available (<x id="PH" equiv-text="this.bytesToHuman(totalAvailable)"/>)</source>
-        <target state="new">Available (<x id="PH" equiv-text="this.bytesToHuman(totalAvailable)"/>)</target>
+        <target state="translated">Saatavilla (<x id="PH" equiv-text="this.bytesToHuman(totalAvailable)"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context>
           <context context-type="linenumber">105</context>
@@ -3935,13 +3932,13 @@
       </trans-unit>
       <trans-unit id="1258618443362430782" datatype="html">
         <source><x id="ICU" equiv-text="{abuse.countReportsForReporter, plural, =1 {1 report} other {{{ abuse.countReportsForReporter }} reports}}" xid="1879828604800763221"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;ml-1 glyphicon glyphicon-flag&quot;&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></source>
-        <target state="needs-translation"><x id="ICU" xid="1879828604800763221" equiv-text="{abuse.countReportsForReporter, plural, =1 {1 report} other {{{ abuse.countReportsForReporter }} reports}}"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;ml-1 glyphicon glyphicon-flag&quot;&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></target>
+        <target state="translated"><x id="ICU" xid="1879828604800763221" equiv-text="{abuse.countReportsForReporter, plural, =1 {1 raportointi} other {{{ abuse.countReportsForReporter }} raportointia}}"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;ml-1 glyphicon glyphicon-flag&quot;&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.html</context><context context-type="linenumber">21</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.html</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="6540177673229220400" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 report} other {<x id="INTERPOLATION"/> reports}}</source>
-        <target state="needs-translation">{VAR_PLURAL, plural, =1 {1 report} other {<x id="INTERPOLATION"/> reports}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 raportointi} other {<x id="INTERPOLATION"/> raportointia}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.html</context><context context-type="linenumber">22</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.html</context><context context-type="linenumber">42</context></context-group>
       </trans-unit>
@@ -4064,7 +4061,7 @@
       </trans-unit>
       <trans-unit id="6185935497147252048" datatype="html">
         <source>This plugin is developed by Framasoft</source>
-        <target state="new">This plugin is developed by Framasoft</target>
+        <target state="translated">Tämä lisäosa on Framasoftin kehittämä</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">37</context>
@@ -4072,7 +4069,7 @@
       </trans-unit>
       <trans-unit id="8336721444092720377" datatype="html">
         <source>Official</source>
-        <target state="new"> Official </target>
+        <target state="translated">Virallinen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">37,39</context>
@@ -4099,7 +4096,7 @@
       </trans-unit>
       <trans-unit id="3300472325769888962" datatype="html">
         <source>Plugins &amp; Themes</source>
-        <target state="new">Plugins &amp; Themes</target>
+        <target state="translated">Lisäosat ja teemat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">133</context>
@@ -4164,7 +4161,7 @@
       </trans-unit>
       <trans-unit id="7577430199525157466" datatype="html">
         <source>Popular plugins</source>
-        <target state="new">Popular plugins</target>
+        <target state="translated">Suositut lisäosat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">10</context>
@@ -4172,7 +4169,7 @@
       </trans-unit>
       <trans-unit id="830877982972543118" datatype="html">
         <source>Popular themes</source>
-        <target state="new">Popular themes</target>
+        <target state="translated">Suositut teemat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">11</context>
@@ -4180,12 +4177,12 @@
       </trans-unit>
       <trans-unit id="1780056719120519633" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {result} other {results}}" xid="3148804384763272950"/> for "<x id="INTERPOLATION_1" equiv-text="{{ search }}"/>" </source>
-        <target state="needs-translation"><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/> <x id="ICU" xid="3148804384763272950" equiv-text="{pagination.totalItems, plural, =1 {result} other {results}}"/> for "<x id="INTERPOLATION_1" equiv-text="{{ search }}"/>" </target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/> <x id="ICU" xid="3148804384763272950" equiv-text="{pagination.totalItems, plural, =1 {tulos} other {tulosta}}"/> haulle "<x id="INTERPOLATION_1" equiv-text="{{ search }}"/>" </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="3148804384763272950">
         <source>{VAR_PLURAL, plural, =1 {result} other {results} }</source>
-        <target>{VAR_PLURAL, plural, =1 {result} other {results} }</target>
+        <target>{VAR_PLURAL, plural, =1 {tulos} other {tulosta} }</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context><context context-type="linenumber">18</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search.component.html</context><context context-type="linenumber">5</context></context-group>
       </trans-unit>
@@ -4626,7 +4623,7 @@
       </trans-unit>
       <trans-unit id="2138469194506455231" datatype="html">
         <source>⚠️ You don't have any external auth plugin enabled.</source>
-        <target state="new">⚠️ You don't have any external auth plugin enabled.</target>
+        <target state="translated">⚠️ Ei ole yhtään ulkoista tunnistautumislisäosaa käytössä.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">80</context>
@@ -4634,7 +4631,7 @@
       </trans-unit>
       <trans-unit id="6608125149782412086" datatype="html">
         <source>⚠️ You have multiple external auth plugins enabled.</source>
-        <target state="new">⚠️ You have multiple external auth plugins enabled.</target>
+        <target state="translated">⚠️ Useampia ulkoisia tunnistautumislisäosia käytössä.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">81</context>
@@ -4692,7 +4689,7 @@
       </trans-unit>
       <trans-unit id="8497774075394617130" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {user} other {users}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {user} other {users}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {käyttäjä} other {käyttäjää}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">184</context></context-group>
       </trans-unit>
       <trans-unit id="5620049714977547431" datatype="html">
@@ -4707,7 +4704,7 @@
       </trans-unit>
       <trans-unit id="8342879272354516454" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {year old} other {years old}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {year old} other {years old}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {vuoden vanha} other {vuotta vanha}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">200</context></context-group>
       </trans-unit>
       <trans-unit id="7456307533995141215" datatype="html">
@@ -4725,7 +4722,7 @@
       </trans-unit>
       <trans-unit id="3807699453257291879" datatype="html">
         <source>Comments</source>
-        <target state="new">Comments</target>
+        <target state="translated">Kommentit</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">57</context>
@@ -4733,19 +4730,19 @@
       </trans-unit>
       <trans-unit id="8147229944654164397" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {Video} other {Videos} }</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {Video} other {Videos} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {video} other {videota} }</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">24</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">24</context></context-group>
       </trans-unit>
       <trans-unit id="2068564237394270744" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {Channel} other {Channels} }</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {Channel} other {Channels} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {kanava} other {kanavaa} }</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">30</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">30</context></context-group>
       </trans-unit>
       <trans-unit id="407487463718398437" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {Subscriber} other {Subscribers} }</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {Subscriber} other {Subscribers} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {tilaaja} other {tilaajaa} }</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">36</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">36</context></context-group>
       </trans-unit>
@@ -4763,7 +4760,7 @@
       </trans-unit>
       <trans-unit id="3094586852616580737" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {Comment} other {Comments} }</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {Comment} other {Comments} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {kommentti} other {kommenttia} }</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">54</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">54</context></context-group>
       </trans-unit>
@@ -4806,7 +4803,7 @@
       </trans-unit>
       <trans-unit id="6801844913630625451" datatype="html">
         <source>⚠️ We don't recommend to enable this feature if you don't trust your users</source>
-        <target state="new">⚠️ We don't recommend to enable this feature if you don't trust your users</target>
+        <target state="translated">⚠️ Emme suosittele ominaisuuden käyttöönottoa mikäli et luota käyttäjiisi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">283</context>
@@ -4829,7 +4826,7 @@
       </trans-unit>
       <trans-unit id="3840267063842708224" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {channel} other {channels}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {channel} other {channels}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {kanava} other {kanavaa}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">327</context></context-group>
       </trans-unit>
       <trans-unit id="3428986951244800347" datatype="html">
@@ -5040,7 +5037,7 @@
       </trans-unit>
       <trans-unit id="6830777508073747241" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {live} other {lives}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {live} other {lives}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {live} other {liveä}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">46</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">59</context></context-group>
       </trans-unit>
@@ -5292,7 +5289,7 @@
       </trans-unit>
       <trans-unit id="3710881484246327863" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {cached image} other {cached images}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {cached image} other {cached images}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {välimuistissa oleva kuva} other {välimuistissa olevia kuvia}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">22</context>
@@ -5788,7 +5785,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5013100494982905528" datatype="html">
         <source>Banner image of the channel</source>
-        <target state="new">Banner image of the channel</target>
+        <target state="translated">Kanavan kansikuva</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+manage/video-channel-edit/video-channel-edit.component.html</context>
           <context context-type="linenumber">13</context>
@@ -5863,7 +5860,7 @@ color: red;
       </trans-unit>
       <trans-unit id="989169929300254768" datatype="html">
         <source>Delete from history</source>
-        <target state="new">Delete from history</target>
+        <target state="translated">Poista historiasta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.html</context>
           <context context-type="linenumber">36</context>
@@ -6000,12 +5997,12 @@ color: red;
       </trans-unit>
       <trans-unit id="3030338154442300172" datatype="html">
         <source>Created <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {1 playlist} other {{{ pagination.totalItems }} playlists}}" xid="498463490165953744"/> </source>
-        <target state="needs-translation">Created <x id="ICU" xid="498463490165953744" equiv-text="{pagination.totalItems, plural, =1 {1 playlist} other {{{ pagination.totalItems }} playlists}}"/> </target>
+        <target state="translated">Luotiin <x id="ICU" xid="498463490165953744" equiv-text="{pagination.totalItems, plural, =1 {1 soittolista} other {{{ pagination.totalItems }} soittolistaa}}"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channel-playlists/video-channel-playlists.component.html</context><context context-type="linenumber">2</context></context-group>
       </trans-unit>
       <trans-unit id="3505845886770923767" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 playlist} other {<x id="INTERPOLATION"/> playlists}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {1 playlist} other {<x id="INTERPOLATION"/> playlists}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 soittolista} other {<x id="INTERPOLATION"/> soittolistaa}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-channels/video-channel-playlists/video-channel-playlists.component.html</context>
           <context context-type="linenumber">3</context>
@@ -6130,7 +6127,7 @@ color: red;
       </trans-unit>
       <trans-unit id="403587185492002456" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 subscriber} other {<x id="INTERPOLATION"/> subscribers}}</source>
-        <target state="needs-translation">{VAR_PLURAL, plural, =1 {1 subscriber} other {<x id="INTERPOLATION"/> subscribers}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 tilaaja} other {<x id="INTERPOLATION"/> tilaajaa}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context><context context-type="linenumber">26</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.html</context><context context-type="linenumber">36</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.html</context><context context-type="linenumber">34</context></context-group>
@@ -6139,7 +6136,7 @@ color: red;
       </trans-unit>
       <trans-unit id="3068011377000255023" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 videos} other {<x id="INTERPOLATION"/> videos}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {1 videos} other {<x id="INTERPOLATION"/> videos}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 video} other {<x id="INTERPOLATION"/> videota}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context><context context-type="linenumber">29</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.html</context><context context-type="linenumber">39</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.html</context><context context-type="linenumber">78</context></context-group>
@@ -6147,7 +6144,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8856905278208146821" datatype="html">
         <source><x id="ICU" equiv-text="{getTotalVideosOf(videoChannel), plural, =1 {1 videos} other {{{ getTotalVideosOf(videoChannel) }} videos}}" xid="8553183884518584864"/> </source>
-        <target state="needs-translation"><x id="ICU" xid="8553183884518584864" equiv-text="{getTotalVideosOf(videoChannel), plural, =1 {1 videos} other {{{ getTotalVideosOf(videoChannel) }} videos}}"/> </target>
+        <target state="translated"><x id="ICU" xid="8553183884518584864" equiv-text="{getTotalVideosOf(videoChannel), plural, =1 {1 video} other {{{ getTotalVideosOf(videoChannel) }} videota}}"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context><context context-type="linenumber">28</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.html</context><context context-type="linenumber">38</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.html</context><context context-type="linenumber">33</context></context-group>
@@ -6163,7 +6160,7 @@ color: red;
       </trans-unit>
       <trans-unit id="7766488542631150871" datatype="html">
         <source>{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} other {<x id="INTERPOLATION"/> videos}}</source>
-        <target state="needs-translation">{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} other {<x id="INTERPOLATION"/> videos}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Ei videoita} =1 {1 video} other {<x id="INTERPOLATION"/> videoita}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.html</context><context context-type="linenumber">37</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-miniature.component.html</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
@@ -6733,7 +6730,7 @@ color: red;
       </trans-unit>
       <trans-unit id="2770947245861951784" datatype="html">
         <source>Signup is not enabled on this instance.</source>
-        <target state="new">Signup is not enabled on this instance.</target>
+        <target state="translated">Rekisteröityminen ei ole käytössä tällä instanssilla.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">4</context>
@@ -6859,7 +6856,7 @@ color: red;
       </trans-unit>
       <trans-unit id="2614607010577950577" datatype="html">
         <source>Overview</source>
-        <target state="new">Overview</target>
+        <target state="translated">Yleiskatsaus</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">35</context>
@@ -6900,7 +6897,7 @@ color: red;
       </trans-unit>
       <trans-unit id="7756250490108954499" datatype="html">
         <source>144p</source>
-        <target state="new">144p</target>
+        <target state="translated">144p</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context>
           <context context-type="linenumber">22</context>
@@ -8140,7 +8137,7 @@ color: red;
       </trans-unit>
       <trans-unit id="577064441120663273" datatype="html">
         <source>Are you sure you want to delete your account?</source>
-        <target state="new">Are you sure you want to delete your account?</target>
+        <target state="translated">Haluatko varmasti poistaa tilisi?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context>
           <context context-type="linenumber">22</context>
@@ -8195,7 +8192,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5618790697446401830" datatype="html">
         <source>An automatically blocked video is awaiting review</source>
-        <target state="new">An automatically blocked video is awaiting review</target>
+        <target state="translated">Automaattisesti estetty video odottaa tarkistusta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">35</context>
@@ -8277,7 +8274,7 @@ color: red;
       </trans-unit>
       <trans-unit id="1852164487280647902" datatype="html">
         <source>Your videos</source>
-        <target state="new">Your videos</target>
+        <target state="translated">Videosi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">60</context>
@@ -8756,7 +8753,7 @@ color: red;
       </trans-unit>
       <trans-unit id="2502254344085150809" datatype="html">
         <source>ADD INTRO</source>
-        <target state="new">ADD INTRO</target>
+        <target state="translated">LISÄÄ INTRO</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.html</context>
           <context context-type="linenumber">24</context>
@@ -8804,7 +8801,7 @@ color: red;
       </trans-unit>
       <trans-unit id="3463158361655332380" datatype="html">
         <source>ADD WATERMARK</source>
-        <target state="new">ADD WATERMARK</target>
+        <target state="translated">LISÄÄ VESILEIMA</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.html</context>
           <context context-type="linenumber">52</context>
@@ -8812,7 +8809,7 @@ color: red;
       </trans-unit>
       <trans-unit id="4472450670859114703" datatype="html">
         <source>Add a watermark image to the video.</source>
-        <target state="new">Add a watermark image to the video.</target>
+        <target state="translated">Lisää vesileimakuva videoon.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.html</context>
           <context context-type="linenumber">54</context>
@@ -8820,7 +8817,7 @@ color: red;
       </trans-unit>
       <trans-unit id="155510305759087510" datatype="html">
         <source>Select watermark image file</source>
-        <target state="new">Select watermark image file</target>
+        <target state="translated">Valitse kuvatiedosto vesileimaksi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.html</context>
           <context context-type="linenumber">58</context>
@@ -8836,7 +8833,7 @@ color: red;
       </trans-unit>
       <trans-unit id="1514792472513458403" datatype="html">
         <source>Video before edition</source>
-        <target state="new">Video before edition</target>
+        <target state="translated">Video ennen muokkausta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.html</context>
           <context context-type="linenumber">75</context>
@@ -8852,7 +8849,7 @@ color: red;
       </trans-unit>
       <trans-unit id="3541115907775840269" datatype="html">
         <source>Are you sure you want to edit "<x id="PH" equiv-text="this.video.name"/>"?</source>
-        <target state="new">Are you sure you want to edit "<x id="PH" equiv-text="this.video.name"/>"?</target>
+        <target state="translated">Haluatko varmasti muokata videota "<x id="PH" equiv-text="this.video.name"/>"?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.ts</context>
           <context context-type="linenumber">72</context>
@@ -8868,7 +8865,7 @@ color: red;
       </trans-unit>
       <trans-unit id="4876327655498234453" datatype="html">
         <source>As a reminder, the following tasks will be executed: &lt;ol&gt;<x id="PH" equiv-text="listHTML"/>&lt;/ol&gt;</source>
-        <target state="new">As a reminder, the following tasks will be executed: &lt;ol&gt;<x id="PH" equiv-text="listHTML"/>&lt;/ol&gt;</target>
+        <target state="translated">Muistutuksena, seuraavat tehtävät tullaan suorittamaan: &lt;ol&gt;<x id="PH" equiv-text="listHTML"/>&lt;/ol&gt;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.ts</context>
           <context context-type="linenumber">77</context>
@@ -9158,7 +9155,7 @@ color: red;
       </trans-unit>
       <trans-unit id="7804724824750282316" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {result} other {results}}" xid="3148804384763272950"/></source>
-        <target state="needs-translation"><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/> <x id="ICU" xid="3148804384763272950" equiv-text="{pagination.totalItems, plural, =1 {result} other {results}}"/></target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/> <x id="ICU" xid="3148804384763272950" equiv-text="{pagination.totalItems, plural, =1 {tulos} other {tulosta}}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search.component.html</context>
           <context context-type="linenumber">5</context>
@@ -10051,7 +10048,7 @@ color: red;
       </trans-unit>
       <trans-unit id="1391351050292665308" datatype="html">
         <source>Sun</source>
-        <target state="new">Sun</target>
+        <target state="translated">su</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">20</context>
@@ -10061,7 +10058,7 @@ color: red;
       </trans-unit>
       <trans-unit id="7037142944838911104" datatype="html">
         <source>Mon</source>
-        <target state="new">Mon</target>
+        <target state="translated">ma</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">21</context>
@@ -10071,7 +10068,7 @@ color: red;
       </trans-unit>
       <trans-unit id="4051951828654963549" datatype="html">
         <source>Tue</source>
-        <target state="new">Tue</target>
+        <target state="translated">ti</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">22</context>
@@ -10081,7 +10078,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5265738215297391426" datatype="html">
         <source>Wed</source>
-        <target state="new">Wed</target>
+        <target state="translated">ke</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">23</context>
@@ -10091,7 +10088,7 @@ color: red;
       </trans-unit>
       <trans-unit id="1370330981433231150" datatype="html">
         <source>Thu</source>
-        <target state="new">Thu</target>
+        <target state="translated">to</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">24</context>
@@ -10101,7 +10098,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8713535243933137493" datatype="html">
         <source>Fri</source>
-        <target state="new">Fri</target>
+        <target state="translated">pe</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">25</context>
@@ -10111,7 +10108,7 @@ color: red;
       </trans-unit>
       <trans-unit id="3547824477629753314" datatype="html">
         <source>Sat</source>
-        <target state="new">Sat</target>
+        <target state="translated">la</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">26</context>
@@ -10121,7 +10118,7 @@ color: red;
       </trans-unit>
       <trans-unit id="6115403217651453591" datatype="html">
         <source>Su</source>
-        <target state="new">Su</target>
+        <target state="translated">su</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">30</context>
@@ -10131,7 +10128,7 @@ color: red;
       </trans-unit>
       <trans-unit id="3797918310510782582" datatype="html">
         <source>Mo</source>
-        <target state="new">Mo</target>
+        <target state="translated">ma</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">31</context>
@@ -10141,7 +10138,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8011371911136291436" datatype="html">
         <source>Tu</source>
-        <target state="new">Tu</target>
+        <target state="translated">ti</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">32</context>
@@ -10151,7 +10148,7 @@ color: red;
       </trans-unit>
       <trans-unit id="1673380870543456256" datatype="html">
         <source>We</source>
-        <target state="new">We</target>
+        <target state="translated">ke</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">33</context>
@@ -10161,7 +10158,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8502005439670299526" datatype="html">
         <source>Th</source>
-        <target state="new">Th</target>
+        <target state="translated">to</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">34</context>
@@ -10171,7 +10168,7 @@ color: red;
       </trans-unit>
       <trans-unit id="2800261787799336637" datatype="html">
         <source>Fr</source>
-        <target state="new">Fr</target>
+        <target state="translated">pe</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">35</context>
@@ -10181,7 +10178,7 @@ color: red;
       </trans-unit>
       <trans-unit id="2045915324506422459" datatype="html">
         <source>Sa</source>
-        <target state="new">Sa</target>
+        <target state="translated">la</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">36</context>
@@ -10251,7 +10248,7 @@ color: red;
       </trans-unit>
       <trans-unit id="1799348348510504995" datatype="html">
         <source>Jan</source>
-        <target state="new">Jan</target>
+        <target state="translated">tammi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">55</context>
@@ -10261,7 +10258,7 @@ color: red;
       </trans-unit>
       <trans-unit id="2980544278361296608" datatype="html">
         <source>Feb</source>
-        <target state="new">Feb</target>
+        <target state="translated">helmi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">56</context>
@@ -10271,7 +10268,7 @@ color: red;
       </trans-unit>
       <trans-unit id="3124926955462217092" datatype="html">
         <source>Mar</source>
-        <target state="new">Mar</target>
+        <target state="translated">maalis</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">57</context>
@@ -10281,7 +10278,7 @@ color: red;
       </trans-unit>
       <trans-unit id="9658641661863772" datatype="html">
         <source>Apr</source>
-        <target state="new">Apr</target>
+        <target state="translated">huhti</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">58</context>
@@ -10291,7 +10288,7 @@ color: red;
       </trans-unit>
       <trans-unit id="502512326533496869" datatype="html">
         <source>May</source>
-        <target state="new">May</target>
+        <target state="translated">touko</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">59</context>
@@ -10301,7 +10298,7 @@ color: red;
       </trans-unit>
       <trans-unit id="3044090977322782161" datatype="html">
         <source>Jun</source>
-        <target state="new">Jun</target>
+        <target state="translated">kesä</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">60</context>
@@ -10311,7 +10308,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8066434078267346927" datatype="html">
         <source>Jul</source>
-        <target state="new">Jul</target>
+        <target state="translated">heinä</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">61</context>
@@ -10321,7 +10318,7 @@ color: red;
       </trans-unit>
       <trans-unit id="1796563865253467834" datatype="html">
         <source>Aug</source>
-        <target state="new">Aug</target>
+        <target state="translated">elo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">62</context>
@@ -10331,7 +10328,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5865190625753625986" datatype="html">
         <source>Sep</source>
-        <target state="new">Sep</target>
+        <target state="translated">syys</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">63</context>
@@ -10341,7 +10338,7 @@ color: red;
       </trans-unit>
       <trans-unit id="4011114601374284323" datatype="html">
         <source>Oct</source>
-        <target state="new">Oct</target>
+        <target state="translated">loka</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">64</context>
@@ -10351,7 +10348,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5063734982204786445" datatype="html">
         <source>Nov</source>
-        <target state="new">Nov</target>
+        <target state="translated">marras</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">65</context>
@@ -10361,7 +10358,7 @@ color: red;
       </trans-unit>
       <trans-unit id="4789897150069082503" datatype="html">
         <source>Dec</source>
-        <target state="new">Dec</target>
+        <target state="translated">joulu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">66</context>
@@ -10501,7 +10498,7 @@ color: red;
       </trans-unit>
       <trans-unit id="3160979325245958752" datatype="html">
         <source>Ban <x id="PH" equiv-text="this.usersToBan.length"/> users</source>
-        <target state="new">Ban <x id="PH" equiv-text="this.usersToBan.length"/> users</target>
+        <target state="translated">Estä <x id="PH" equiv-text="this.usersToBan.length"/> käyttäjää</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-ban-modal.component.ts</context>
           <context context-type="linenumber">82</context>
@@ -10509,7 +10506,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8088707210191809175" datatype="html">
         <source>Ban "<x id="PH" equiv-text="this.usersToBan.username"/>"</source>
-        <target state="new">Ban "<x id="PH" equiv-text="this.usersToBan.username"/>"</target>
+        <target state="translated">Estä "<x id="PH" equiv-text="this.usersToBan.username"/>"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-ban-modal.component.ts</context>
           <context context-type="linenumber">84</context>
@@ -10532,7 +10529,7 @@ color: red;
       </trans-unit>
       <trans-unit id="6307826440781941134" datatype="html">
         <source>Delete <x id="PH" equiv-text="user.username"/></source>
-        <target state="new">Delete <x id="PH" equiv-text="user.username"/></target>
+        <target state="translated">Poista <x id="PH" equiv-text="user.username"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">104</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">231</context></context-group>
       </trans-unit>
@@ -10554,7 +10551,7 @@ color: red;
       </trans-unit>
       <trans-unit id="1598375456114200087" datatype="html">
         <source>Instance <x id="PH" equiv-text="domain"/> muted.</source>
-        <target state="needs-translation">Instance <x id="PH" equiv-text="domain"/> muted.</target>
+        <target state="translated">Instanssi <x id="PH" equiv-text="domain"/> hiljennetty.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.ts</context><context context-type="linenumber">68</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">162</context></context-group>
       </trans-unit>
@@ -10596,9 +10593,7 @@ color: red;
       </trans-unit>
       <trans-unit id="4379430340167561220" datatype="html">
         <source>Instance <x id="PH"/> unmuted by the instance.</source>
-        <target state="new">Instance 
-          <x id="PH"/> unmuted by the instance.
-        </target>
+        <target state="needs-translation">Instance <x id="PH"/> unmuted by the instance.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">232</context></context-group>
       </trans-unit>
       <trans-unit id="8173437618471379044" datatype="html">
@@ -10741,7 +10736,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8546847443058492245" datatype="html">
         <source>Block <x id="INTERPOLATION" equiv-text="{{ videos.length }}"/> videos</source>
-        <target state="new">Block <x id="INTERPOLATION" equiv-text="{{ videos.length }}"/> videos</target>
+        <target state="translated">Estä <x id="INTERPOLATION" equiv-text="{{ videos.length }}"/> videota</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context>
           <context context-type="linenumber">4</context>
@@ -10836,16 +10831,12 @@ color: red;
       </trans-unit>
       <trans-unit id="5927402622550505067" datatype="html">
         <source>Subscribed to all current channels of <x id="PH"/>. You will be notified of all their new videos.</source>
-        <target state="new">Subscribed to all current channels of 
-          <x id="PH"/>. You will be notified of all their new videos.
-        </target>
+        <target state="needs-translation">Subscribed to all current channels of <x id="PH"/>. You will be notified of all their new videos.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context><context context-type="linenumber">109</context></context-group>
       </trans-unit>
       <trans-unit id="2780460651686172544" datatype="html">
         <source>Subscribed to <x id="PH"/>. You will be notified of all their new videos.</source>
-        <target state="new">Subscribed to 
-          <x id="PH"/>. You will be notified of all their new videos.
-        </target>
+        <target state="translated">Tilataan kohdetta <x id="PH"/>. Saat ilmoituksen heidän kaikista uusista videoista.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context><context context-type="linenumber">110</context></context-group>
       </trans-unit>
       <trans-unit id="7019115336138470191">
@@ -10911,10 +10902,7 @@ color: red;
       </trans-unit>
       <trans-unit id="1056145626640340519" datatype="html">
         <source>Video added in <x id="PH"/> at timestamps <x id="PH_1"/></source>
-        <target state="new">Video added in 
-          <x id="PH"/> at timestamps 
-          <x id="PH_1"/>
-        </target>
+        <target state="needs-translation">Video added in <x id="PH"/> at timestamps <x id="PH_1"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-add-to-playlist.component.ts</context><context context-type="linenumber">379</context></context-group>
       </trans-unit>
       <trans-unit id="7754186870520534716" datatype="html">
@@ -11073,25 +11061,25 @@ color: red;
       </trans-unit>
       <trans-unit id="6521421218398377925" datatype="html">
         <source>Run HLS transcoding</source>
-        <target state="new">Run HLS transcoding</target>
+        <target state="translated">Suorita HLS transkoodaaminen</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">94</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">380</context></context-group>
       </trans-unit>
       <trans-unit id="4956271014213477815" datatype="html">
         <source>Run WebTorrent transcoding</source>
-        <target state="new">Run WebTorrent transcoding</target>
+        <target state="translated">Suorita WebTorrent transkoodaaminen</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">100</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">386</context></context-group>
       </trans-unit>
       <trans-unit id="5972374600810542430" datatype="html">
         <source>Delete HLS files</source>
-        <target state="new">Delete HLS files</target>
+        <target state="translated">Poista HLS tiedostot</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">106</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">392</context></context-group>
       </trans-unit>
       <trans-unit id="3844238590532933757" datatype="html">
         <source>Delete WebTorrent files</source>
-        <target state="new">Delete WebTorrent files</target>
+        <target state="translated">Poista WebTorrent tiedostot</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">112</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">398</context></context-group>
       </trans-unit>
@@ -11139,7 +11127,7 @@ color: red;
       </trans-unit>
       <trans-unit id="992317512448454409" datatype="html">
         <source>{VAR_PLURAL, plural, =0 {Comments} =1 {1 Comment} other {<x id="INTERPOLATION"/> Comments}}</source>
-        <target state="new">{VAR_PLURAL, plural, =0 {Comments} =1 {1 Comment} other {<x id="INTERPOLATION"/> Comments}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {kommenttia} =1 {1 kommentti} other {<x id="INTERPOLATION"/> kommenttia}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context><context context-type="linenumber">4</context></context-group>
       </trans-unit>
       <trans-unit id="4903651219400691248" datatype="html">
@@ -11244,7 +11232,7 @@ color: red;
       </trans-unit>
       <trans-unit id="118687079501751948" datatype="html">
         <source>Move to external storage failed</source>
-        <target state="new">Move to external storage failed</target>
+        <target state="translated">Siirto ulkoiseen tallennustilaan epäonnistui</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
           <context context-type="linenumber">183</context>
@@ -11396,7 +11384,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5609201297201028750" datatype="html">
         <source>(extensions: <x id="PH" equiv-text="this.videoExtensions.join(', ')"/>)</source>
-        <target state="new">(extensions: <x id="PH" equiv-text="this.videoExtensions.join(', ')"/>)</target>
+        <target state="translated">(lisäosat: <x id="PH" equiv-text="this.videoExtensions.join(', ')"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.ts</context>
           <context context-type="linenumber">104</context>
@@ -11408,7 +11396,7 @@ color: red;
       </trans-unit>
       <trans-unit id="2196899015955367634" datatype="html">
         <source>"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" will be added at the beggining of the video</source>
-        <target state="new">"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" will be added at the beggining of the video</target>
+        <target state="translated">"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" lisätään videon alkuun</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.ts</context>
           <context context-type="linenumber">120</context>
@@ -11416,7 +11404,7 @@ color: red;
       </trans-unit>
       <trans-unit id="4952096817126306891" datatype="html">
         <source>"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" will be added at the end of the video</source>
-        <target state="new">"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" will be added at the end of the video</target>
+        <target state="translated">"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" lisätään videon loppuun</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.ts</context>
           <context context-type="linenumber">124</context>
@@ -11424,7 +11412,7 @@ color: red;
       </trans-unit>
       <trans-unit id="665518679871959619" datatype="html">
         <source>"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" image watermark will be added to the video</source>
-        <target state="new">"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" image watermark will be added to the video</target>
+        <target state="translated">"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" kuva-vesileima lisätään videoon</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.ts</context>
           <context context-type="linenumber">128</context>
@@ -11432,7 +11420,7 @@ color: red;
       </trans-unit>
       <trans-unit id="2677581013897190613" datatype="html">
         <source>Video will begin at <x id="PH" equiv-text="secondsToTime(start)"/> and stop at <x id="PH_1" equiv-text="secondsToTime(end)"/></source>
-        <target state="new">Video will begin at <x id="PH" equiv-text="secondsToTime(start)"/> and stop at <x id="PH_1" equiv-text="secondsToTime(end)"/></target>
+        <target state="translated">Video alkaa kohdasta <x id="PH" equiv-text="secondsToTime(start)"/> ja loppuu kohtaan <x id="PH_1" equiv-text="secondsToTime(end)"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.ts</context>
           <context context-type="linenumber">135</context>
@@ -11440,7 +11428,7 @@ color: red;
       </trans-unit>
       <trans-unit id="2299077646120636288" datatype="html">
         <source>Video will begin at <x id="PH" equiv-text="secondsToTime(start)"/></source>
-        <target state="new">Video will begin at <x id="PH" equiv-text="secondsToTime(start)"/></target>
+        <target state="translated">Video alkaa kohdasta <x id="PH" equiv-text="secondsToTime(start)"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.ts</context>
           <context context-type="linenumber">139</context>
@@ -11448,7 +11436,7 @@ color: red;
       </trans-unit>
       <trans-unit id="7209039243783736285" datatype="html">
         <source>Video will stop at <x id="PH" equiv-text="secondsToTime(end)"/></source>
-        <target state="new">Video will stop at <x id="PH" equiv-text="secondsToTime(end)"/></target>
+        <target state="translated">Video pysähtyy kohdassa <x id="PH" equiv-text="secondsToTime(end)"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.ts</context>
           <context context-type="linenumber">143</context>
@@ -11456,7 +11444,7 @@ color: red;
       </trans-unit>
       <trans-unit id="9127817756370915850" datatype="html">
         <source>Edit video</source>
-        <target state="new">Edit video</target>
+        <target state="translated">Muokkaa videota</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/video-editor-routing.module.ts</context>
           <context context-type="linenumber">15</context>
@@ -11464,7 +11452,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5512208811126492983" datatype="html">
         <source>Report comment</source>
-        <target state="new">Report comment</target>
+        <target state="translated">Raportoi kommentti</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/comment-report.component.ts</context><context context-type="linenumber">51</context></context-group>
       </trans-unit>
       <trans-unit id="3691787517663044217" datatype="html">
@@ -11537,7 +11525,7 @@ color: red;
       </trans-unit>
       <trans-unit id="1755474755114288376" datatype="html">
         <source>Up Next</source>
-        <target state="new">Up Next</target>
+        <target state="translated">Seuraavaksi</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">424</context></context-group>
       </trans-unit>
       <trans-unit id="2159130950882492111" datatype="html">
@@ -11572,62 +11560,62 @@ color: red;
       </trans-unit>
       <trans-unit id="5856931617181450881" datatype="html">
         <source>Enter/exit fullscreen</source>
-        <target state="new">Enter/exit fullscreen</target>
+        <target state="translated">Siirry tai poistu koko ruudun tilasta</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">716</context></context-group>
       </trans-unit>
       <trans-unit id="2971009377468404076" datatype="html">
         <source>Play/Pause the video</source>
-        <target state="new">Play/Pause the video</target>
+        <target state="translated">Toista tai pysäytä video</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">717</context></context-group>
       </trans-unit>
       <trans-unit id="4147087312411482964" datatype="html">
         <source>Mute/unmute the video</source>
-        <target state="new">Mute/unmute the video</target>
+        <target state="translated">Mykistä tai poista mykistys</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">718</context></context-group>
       </trans-unit>
       <trans-unit id="4791956574676305640" datatype="html">
         <source>Skip to a percentage of the video: 0 is 0% and 9 is 90%</source>
-        <target state="new">Skip to a percentage of the video: 0 is 0% and 9 is 90%</target>
+        <target state="translated">Hyppää prosenttiin videosta: 0 on 0% ja 9 on 90%</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">720</context></context-group>
       </trans-unit>
       <trans-unit id="3887762369650091344" datatype="html">
         <source>Increase the volume</source>
-        <target state="new">Increase the volume</target>
+        <target state="translated">Lisää äänenvoimakkuutta</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">722</context></context-group>
       </trans-unit>
       <trans-unit id="1363382131573461910" datatype="html">
         <source>Decrease the volume</source>
-        <target state="new">Decrease the volume</target>
+        <target state="translated">Alenna äänenvoimakkuutta</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">723</context></context-group>
       </trans-unit>
       <trans-unit id="2541031516422557760" datatype="html">
         <source>Seek the video forward</source>
-        <target state="new">Seek the video forward</target>
+        <target state="translated">Kelaa videota eteenpäin</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">725</context></context-group>
       </trans-unit>
       <trans-unit id="8813023402019364882" datatype="html">
         <source>Seek the video backward</source>
-        <target state="new">Seek the video backward</target>
+        <target state="translated">Kelaa videota taaksepäin</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">726</context></context-group>
       </trans-unit>
       <trans-unit id="581757752202843950" datatype="html">
         <source>Increase playback rate</source>
-        <target state="new">Increase playback rate</target>
+        <target state="translated">Nopeuta videontoistoa</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">728</context></context-group>
       </trans-unit>
       <trans-unit id="5467642834854681120" datatype="html">
         <source>Decrease playback rate</source>
-        <target state="new">Decrease playback rate</target>
+        <target state="translated">Hidasta videontoistoa</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">729</context></context-group>
       </trans-unit>
       <trans-unit id="3860402955823859506" datatype="html">
         <source>Navigate in the video to the previous frame</source>
-        <target state="new">Navigate in the video to the previous frame</target>
+        <target state="translated">Siirry aikaisempaan kehykseen</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">731</context></context-group>
       </trans-unit>
       <trans-unit id="8232494782895420700" datatype="html">
         <source>Navigate in the video to the next frame</source>
-        <target state="new">Navigate in the video to the next frame</target>
+        <target state="translated">Siirry seuraavaan kehykseen</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">732</context></context-group>
       </trans-unit>
       <trans-unit id="8223917068580581095" datatype="html">
@@ -11677,7 +11665,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5237588857224999862" datatype="html">
         <source>Open actions</source>
-        <target state="new">Open actions</target>
+        <target state="translated">Avaa toiminnot</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/buttons/action-dropdown.component.html</context>
           <context context-type="linenumber">4</context>
@@ -11693,7 +11681,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5668077948386857930" datatype="html">
         <source>Exclude</source>
-        <target state="new">Exclude</target>
+        <target state="translated">Poissulje</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context><context context-type="linenumber">95</context></context-group>
       </trans-unit>
       <trans-unit id="7147755274837297932" datatype="html">
@@ -11727,23 +11715,23 @@ color: red;
       </trans-unit>
       <trans-unit id="4668975178372693951" datatype="html">
         <source>Discover videos</source>
-        <target state="new">Discover videos</target>
+        <target state="translated">Löydä videoita</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/videos-routing.module.ts</context><context context-type="linenumber">17</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/menu/menu.service.ts</context><context context-type="linenumber">124</context></context-group>
       </trans-unit>
       <trans-unit id="8067135025051844577" datatype="html">
         <source>Trending videos</source>
-        <target state="new">Trending videos</target>
+        <target state="translated">Trendaavat videot</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/menu/menu.service.ts</context><context context-type="linenumber">130</context></context-group>
       </trans-unit>
       <trans-unit id="664221386829541948" datatype="html">
         <source>Recently added videos</source>
-        <target state="new">Recently added videos</target>
+        <target state="translated">Viimeksi lisätyt videot</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/menu/menu.service.ts</context><context context-type="linenumber">136</context></context-group>
       </trans-unit>
       <trans-unit id="8212906256415538361" datatype="html">
         <source>Upload a video</source>
-        <target state="new">Upload a video</target>
+        <target state="translated">Lataa video</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/app-routing.module.ts</context><context context-type="linenumber">101</context></context-group>
       </trans-unit>
       <trans-unit id="7590784934397800835" datatype="html">
