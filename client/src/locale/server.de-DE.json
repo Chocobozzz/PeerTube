@@ -51,7 +51,7 @@
     "This video is not available because the remote instance is not responding.": "Dieses Video ist nicht verfügbar, weil die entfernte Instanz nicht erreichbar ist.",
     "This playlist does not exist": "Diese Playlist existiert nicht",
     "We cannot fetch the playlist. Please try again later.": "Die Playlist kann nicht geladen werden. Versuchen Sie es später erneut.",
-    "Playlist: {1}": "Playlist: {1}",
+    "Playlist: {1}": "Wiedergabeliste: {1}",
     "By {1}": "By {1}",
     "Unavailable video": "Nicht verfügbares Video",
     "Misc": "Verschiedenes",
@@ -254,5 +254,5 @@
     "Simplified Chinese": "Simplified Chinese",
     "Traditional Chinese": "Traditional Chinese",
     "Normal mode": "Normal Modus",
-    "Theater mode": "Theater Modus"
+    "Theater mode": "Theater-Modus"
 }
