@@ -3,7 +3,7 @@
 import 'mocha'
 import { omit } from 'lodash'
 import { buildAbsoluteFixturePath } from '@shared/core-utils'
-import { HttpStatusCode, VideoCreateResult, VideoPrivacy } from '@shared/models'
+import { HttpStatusCode, LiveVideoLatencyMode, VideoCreateResult, VideoPrivacy } from '@shared/models'
 import {
   cleanupTests,
   createSingleServer,
@@ -38,6 +38,9 @@ describe('Test video lives API validator', function () {
       newConfig: {
         live: {
           enabled: true,
+          latencySetting: {
+            enabled: false
+          },
           maxInstanceLives: 20,
           maxUserLives: 20,
           allowReplay: true
@@ -81,7 +84,8 @@ describe('Test video lives API validator', function () {
         privacy: VideoPrivacy.PUBLIC,
         channelId,
         saveReplay: false,
-        permanentLive: false
+        permanentLive: false,
+        latencyMode: LiveVideoLatencyMode.DEFAULT
       }
     })
 
@@ -212,6 +216,18 @@ describe('Test video lives API validator', function () {
       const fields = { ...baseCorrectParams, saveReplay: true, permanentLive: true }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+    })
+
+    it('Should fail with bad latency setting', async function () {
+      const fields = { ...baseCorrectParams, latencyMode: 42 }
+
+      await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+    })
+
+    it('Should fail to set latency if the server does not allow it', async function () {
+      const fields = { ...baseCorrectParams, latencyMode: LiveVideoLatencyMode.HIGH_LATENCY }
+
+      await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
     })
 
     it('Should succeed with the correct parameters', async function () {
@@ -391,6 +407,18 @@ describe('Test video lives API validator', function () {
       const fields = { saveReplay: true, permanentLive: true }
 
       await command.update({ videoId: video.id, fields, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    })
+
+    it('Should fail with bad latency setting', async function () {
+      const fields = { latencyMode: 42 }
+
+      await command.update({ videoId: video.id, fields, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    })
+
+    it('Should fail to set latency if the server does not allow it', async function () {
+      const fields = { latencyMode: LiveVideoLatencyMode.HIGH_LATENCY }
+
+      await command.update({ videoId: video.id, fields, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
     })
 
     it('Should succeed with the correct params', async function () {

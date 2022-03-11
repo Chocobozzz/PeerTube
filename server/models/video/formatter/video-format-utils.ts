@@ -411,15 +411,6 @@ function videoModelToActivityPubObject (video: MVideoAP): VideoObject {
     views: video.views,
     sensitive: video.nsfw,
     waitTranscoding: video.waitTranscoding,
-    isLiveBroadcast: video.isLive,
-
-    liveSaveReplay: video.isLive
-      ? video.VideoLive.saveReplay
-      : null,
-
-    permanentLive: video.isLive
-      ? video.VideoLive.permanentLive
-      : null,
 
     state: video.state,
     commentsEnabled: video.commentsEnabled,
@@ -431,10 +422,13 @@ function videoModelToActivityPubObject (video: MVideoAP): VideoObject {
       : null,
 
     updated: video.updatedAt.toISOString(),
+
     mediaType: 'text/markdown',
     content: video.description,
     support: video.support,
+
     subtitleLanguage,
+
     icon: icons.map(i => ({
       type: 'Image',
       url: i.getFileUrl(video),
@@ -442,11 +436,14 @@ function videoModelToActivityPubObject (video: MVideoAP): VideoObject {
       width: i.width,
       height: i.height
     })),
+
     url,
+
     likes: getLocalVideoLikesActivityPubUrl(video),
     dislikes: getLocalVideoDislikesActivityPubUrl(video),
     shares: getLocalVideoSharesActivityPubUrl(video),
     comments: getLocalVideoCommentsActivityPubUrl(video),
+
     attributedTo: [
       {
         type: 'Person',
@@ -456,7 +453,9 @@ function videoModelToActivityPubObject (video: MVideoAP): VideoObject {
         type: 'Group',
         id: video.VideoChannel.Actor.url
       }
-    ]
+    ],
+
+    ...buildLiveAPAttributes(video)
   }
 }
 
@@ -499,4 +498,24 @@ export {
   getLanguageLabel,
   getPrivacyLabel,
   getStateLabel
+}
+
+// ---------------------------------------------------------------------------
+
+function buildLiveAPAttributes (video: MVideoAP) {
+  if (!video.isLive) {
+    return {
+      isLiveBroadcast: false,
+      liveSaveReplay: null,
+      permanentLive: null,
+      latencyMode: null
+    }
+  }
+
+  return {
+    isLiveBroadcast: true,
+    liveSaveReplay: video.VideoLive.saveReplay,
+    permanentLive: video.VideoLive.permanentLive,
+    latencyMode: video.VideoLive.latencyMode
+  }
 }

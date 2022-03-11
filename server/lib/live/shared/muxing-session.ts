@@ -125,6 +125,8 @@ class MuxingSession extends EventEmitter {
         outPath,
         masterPlaylistName: this.streamingPlaylist.playlistFilename,
 
+        latencyMode: this.videoLive.latencyMode,
+
         resolutions: this.allResolutions,
         fps: this.fps,
         bitrate: this.bitrate,
@@ -133,7 +135,12 @@ class MuxingSession extends EventEmitter {
         availableEncoders: VideoTranscodingProfilesManager.Instance.getAvailableEncoders(),
         profile: CONFIG.LIVE.TRANSCODING.PROFILE
       })
-      : getLiveMuxingCommand(this.inputUrl, outPath, this.streamingPlaylist.playlistFilename)
+      : getLiveMuxingCommand({
+        inputUrl: this.inputUrl,
+        outPath,
+        masterPlaylistName: this.streamingPlaylist.playlistFilename,
+        latencyMode: this.videoLive.latencyMode
+      })
 
     logger.info('Running live muxing/transcoding for %s.', this.videoUUID, this.lTags())
 
