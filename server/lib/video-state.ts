@@ -16,10 +16,10 @@ function buildNextVideoState (currentState?: VideoState, videoJob?: VideoJobInfo
   }
 
   if (
-    currentState !== VideoState.TO_VALIDATE_VIDEO_FILES &&
-    currentState !== VideoState.TO_TRANSCODE &&
+    videoJob?.pendingTranscode > 0 ||
+    (currentState !== VideoState.TO_TRANSCODE &&
     currentState !== VideoState.TO_MOVE_TO_EXTERNAL_STORAGE &&
-    CONFIG.TRANSCODING.ENABLED
+    CONFIG.TRANSCODING.ENABLED)
   ) {
     return VideoState.TO_TRANSCODE
   }
