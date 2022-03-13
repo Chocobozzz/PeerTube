@@ -457,7 +457,7 @@
       </trans-unit>
       <trans-unit id="7513076467032912668" datatype="html">
         <source>Format</source>
-        <target state="new">Format</target>
+        <target state="needs-translation">Format</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.html</context><context context-type="linenumber">74</context></context-group>
       </trans-unit>
       <trans-unit id="7385834259346199883" datatype="html">
