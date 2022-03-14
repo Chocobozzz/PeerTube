@@ -105,7 +105,7 @@
     }
   }
 
-  &.vjs-playing.vjs-user-inactive {
+  &.vjs-playing.vjs-user-inactive .peertube-dock {
     opacity: 0;
     transition: opacity 1s;
   }
